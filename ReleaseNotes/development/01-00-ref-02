@@ -1,0 +1,23 @@
+
+                       geant4-01-00-ref-02
+                       ===================
+
+geant4-01-00-ref-02 is geant4-01-00-ref-01 plus:
+
+greps-V01-00-00       - Added G4Polyhedron::Transform and InvertFacets.
+source-gmk-V01-00-00  - Added null operator (:) to each line so that
+                        exit status is always OK.
+global-V01-00-00      - Syncronized changes with HEAD (mainly CVS headers).
+                      - Fixed truncation problem in G4Poisson.hh.
+                      - Removed tphdict_test.cc and tvhdict_test.cc in
+                        STLInterface/test.
+                      - Added wrapper for HP-aCC for missing <fstream>
+                        standard header.
+                      - Removed G4USE_STL from globals.hh and
+                        G4Timer[.hh.cc].
+config-V01-00-00      - Syncronized with HEAD.
+                      - Cosmetic improvement to echo line in binmake.gmk.
+examples-V01-00-00    - N02, N03: Introduced ExN0nSteppingVerbose.
+                      - N04: Introduced 10 TeV mu- in
+                        exampleN04.EMtest.in.
+                      - All reference files updated.

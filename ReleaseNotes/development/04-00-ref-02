@@ -1,0 +1,179 @@
+
+                       geant4-04-00-ref-02
+                       ===================
+
+Some of the fixes/development included are:
+
+  o Critical fix to G4KaonMinus for decay.
+  o Fix to energy-loss EM processes for correct use of cuts in range.
+  o Relevant fixes to G4BREPSolidPolyhedra shape and tested robustness.
+  o Relevant fixes in pre-equilibrium and de-excitation hadronic models.
+  o Integrated fixes for WIN32-VC architecture.
+  o Fixes for optimisation in materials, tracking and EM processes.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config					config-V04-00-01
+------
+- liblist.c: added flags __CYGWIN__ and __CYGWIN32__ for triggering proper
+  parsing algorithm on Windows systems, also on most recent versions of
+  Cygwin.
+- WIN32-VC.gmk: use g77 instead of f77 as default fortran compiler.
+
+event					event-V04-00-01
+-----
+- Optimised implementation of SetNewValue() in G4ParticleGunMessenger and 
+  G4GeneralParticleSourceMessenger to allow porting on WIN32-VC for optimised
+  compilation. 
+
+geometry/management			geommng-V04-00-01
+-------------------
+- G4GeometryManager.cc: fixed handling of ios manipulators and precision
+  to reset to their original state in G4GeometryManager::ReportVoxelStats().
+  Fixes problem report #343.
+
+geometry/volumes			geomvol-V04-00-03
+----------------
+- G4GeometryMessenger.cc: fixed local variable name not to clash with
+  class data member. 
+
+geometry/solids/Boolean			geom-bool-V04-00-02
+-----------------------
+- G4ReflectionFactory.cc: fixed bug causing repetition of daughter volumes.
+- G4ReflectedSolid[.hh.cc]: 
+  o Defined new methods Set/GetTransform3D() and Set/GetDirectTransform3D() 
+    for defining/accessing the reflected transformation.
+  o Moved utility methods for G4AffineTransform to protected.
+
+geometry/solids/BREPS			breps-V04-00-04
+---------------------
+- Bug fixes to G4BREPSolidPolyhedra: 
+  o Added enhancement allowing to define RMIN and RMAX to be zero with the 
+    exception of forbidden two consecutive zero RMAX values. 
+  o Refactoring in constructor gained two new private methods for creation
+    of trapezoidal and triangular side planes of G4BREPSolidPolyhedra. 
+  o Rewritten code for delta phi >= 2*PI case with full classification of
+    possible cases. 
+  o Fixed sense of end planes. 
+  o Fixed delta phi < 2*PI case where some old code remained after bug
+    fix #266. 
+  o Added new private method for creation of planar surfaces gained 
+    after code refactoring in constructor. 
+  o Fixed bug for problem report #354 by adding the code handling the
+    cases where user supplies for the same z-section different RMIN or
+    RMAX values.
+  o Added more preconditions checks 
+  o Added code forbidding "teeth" in polyhedra.
+- G4ConvexHull.hh: moved initialisation of 'next' to constructor's body. 
+
+geometry/solids/CSG			geom-csg-V04-00-02
+-------------------
+- G4Sphere.cc: bug-fix in Inside() function. Fixes problem report #216. 
+- G4Para.cc: fixed bug in G4Para::Inside() in calculation of xt,
+  according to problem report #357.
+
+geometry/solids/STEPinterface		stepinterface-V04-00-00
+-----------------------------
+- G4RepresentationRelationshipCreator.cc: fixed unsafe usage of '<' operator. 
+
+interfaces			interfaces-V04-00-00
+----------
+- Fixed for odd behavior of G4UIcsh in Windows systems.
+
+materials			materials-V04-00-01
+---------
+- Optimised implementation of GetIndex() for fIndexTable in G4Material,
+  G4Element and G4Isotope.
+
+particles			particles-V04-00-00
+---------
+- Fixed bug in the decay table for G4KaonMinus.
+
+processes/decay			decay-V04-00-01
+---------------
+- Removed a physics table from G4Decay.
+
+processes/electromagnetic/muons			muons-V04-00-00
+-------------------------------
+- Fixed bug in G4VMuEnergyLoss:
+  o Adopt MinDeltaCut in-range instead of in-energy !
+
+processes/electromagnetic/standard		stand-V04-00-00
+----------------------------------
+- Fixed bug in G4Ve(h)EnergyLoss:
+  o Adopt MinDeltaCut in-range instead of in-energy !
+
+processes/electromagnetic/utils			utils-V04-00-02
+-------------------------------
+- G4VEnergyLoss:
+  o Set subSecFlag to false. NO default subcutoff generation.
+  o Set finalRange to 1mm as default (the actual value is computed in
+    G4VeEnergyLoss, G4VhEnergyLoss and G4VMuEnergyLoss).
+
+processes/hadronic/models/generator	pre_eq-V03-03-00, hadgen-util-V04-00-00,
+-----------------------------------     de_excitation-V03-03-00
+- Fixes in pre-equilibrium and de-excitation generator models.
+- Optimised implementation in G4Fancy3DNucleus.cc to allow porting on
+  WIN32-VC for optimised compilation. 
+
+processes/hadronic/models/chiral_inv_phase_space/body	chips-body-V04-00-01
+-----------------------------------------------------
+- CHIPS model: fixed accuracy problem.
+
+processes/hadronic/models/neutron_hp	neu-V04-00-00
+------------------------------------
+- Fixed bug in doppler broadening in neutron-transport model:
+  o Fixed sign error in calculation of effective luminosity.
+
+processes/hadronic/stopping		stop-V04-00-00
+---------------------------
+- Stopping: trivial bug-fix in pi-absorption at rest. 
+
+processes/hadronic/utils		had_util-V04-00-01
+------------------------
+- Trivial bug-fix, affecting K-absorption at rest.
+- G4Nucleus: moved definition of constructors/destructor from header to
+  source implementation file. Unresolved symbols were detected at link
+  time on SUN-CC for static constants used to initialise members in
+  inline constructors. 
+
+track				track-V04-00-02
+-----
+- Added G4Track::CopyTrackInfo().
+- Optimised G4ParticleChange::AddSecondary() to properly use touchable
+  handles.
+- Fixed a bug of changing parent weight in
+  G4ParticleChange::UpdateStepForAlongStep().
+- Optimised implementation in G4Track::GetVelocity().
+- Removed event biasing mechanism from track category (now moved to
+  hadronic/models).
+
+tracking			tracking-V04-00-04
+--------
+- G4SteppingManager2.cc:
+  o fix for extra steps when the ApplyCuts flag is set 
+  o G4SteppingManager.hh: changed scope for 'SizeOfSelectedDoItVector'
+    to allow porting on WIN-VC compiler.
+- Fix in G4SteppingManager::SetInitialStep() for applyCuts. 
+
+visualization			vis-V04-00-02
+-------------
+- HepRep: added check for missing hierarchy layers in HepRepXMLWriter. 
+- Bug fix in modeling: removed Begin/EndPrimitives from G4HitsModel and
+  G4TrajectoriesModel. This was causing nested calls to Begin/EndPrimitives
+  (and thus to glNewList/EndList in OpenGL stored mode), since the
+  trajectories and hits Draw methods themselves have Begin/EndPrimitives.
+
+examples			examples-V04-00-01
+--------
+- extended/electromagnetic/testem1,3,4,5:
+  o Improvements in PrimaryGenerator and macros.
+- novice/N03:
+  o New macros for tutorials/exercises.
+- Updated reference outputs.
+
+tests                           tests-V04-00-01
+-----
+- Updated reference outputs.

@@ -1,0 +1,110 @@
+
+                       geant4-03-02-ref-05
+                       ===================
+
+Some of the fixes/development included since the last reference
+tag are:
+
+  o Removed obsolete electromagnetic/integral module. 
+  o Implemented store/retrieve PhysicsTables in EM processes. 
+  o Fixed old outstanding bug in G4EnergyLossTables, responsible for
+    causing negative energy deposit in some rare occasions. 
+  o Introduced fluorescence according to the new design into e- ionisation.
+  o Introduced "Shell variables" for UI command handling and new
+    UI commands.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+analysis				analysis-V03-02-00
+--------
+- G4VAnalysisMAnager.hh: removal of inclusion of cstring.h.
+
+config                                  config-V03-02-06a
+------
+- binmake.gmk: removed include path for processes/electromagnetic/integral
+  according to tag "em-V03-02-02".
+
+intercoms				intercoms-V03-02-13
+---------
+- In Batch mode, comment lines are now displayed only for verbose level=2. 
+  Fixes problem report #296. 
+- Introduced "Shell variables" for UI command handling. Added
+  class G4UIaliasList.
+- Included correction for string parameter starting with a space.
+- Renamed CVT method in G4UIcommandTree to avoid conflicts.
+- Introduced loop execution of a macro file, recursive expansion of aliased 
+  variables, and some other new features in G4UImanager and related classes.
+  New commands: /control/shell, /control/foreach, /control/loop,
+                /control/createHTML.
+
+particles                               particles-V03-02-05
+---------
+- Made all static inline methods from particles/management, boson and
+  leptons non-inlined.
+
+processes/electromagnetic		em-V03-02-02
+-------------------------
+- Removed obsolete "integral" module. 
+
+processes/electromagnetic/lowenergy     emlowen-V03-02-25
+-----------------------------------
+- Introduced fluorescence according to the new design into e- ionisation.
+- Modified G4CrossSectionHandler to inherit from base class
+- Minor design iteration in G4VEMDataSet and G4VDataSetAlgorithm
+- Encapsulated range test to generate secondaries into a strategy pattern;
+  implemented in photon processes
+
+processes/electromagnetic/muons		muons-V03-02-06
+-------------------------------
+- Modifications to cope with migration of Materials to STL vector. 
+- Implemented store/retrieve PhysicsTables in MuIonis, MuBrems, MuPairProd. 
+- G4MuIonisation: new function ComputeRestrictedMeandEdx() and cleanup. 
+- G4VMuEnergyLoss: subcutoff delta-rays mechanism implemented. 
+- G4VxEnergyLoss: min.delta cut is set as rcut/100 + some optimisation. 
+- Fix in MuPairProduction::ComputeMicroscopicCrossSection().
+
+processes/electromagnetic/standard	stand-V03-02-10
+----------------------------------
+- Modifications to cope with migration of Materials to STL vector. 
+- Implemented store/retrieve PhysicsTables in photelec, compton,
+  gamaconv, annihil, eIonisa, eBrems, mulscat, hIonisa processes. 
+- G4eIonisation: new function ComputeRestrictedMeandEdx(). 
+- G4hIonisation: new function ComputeRestrictedMeandEdx() and cleanup. 
+- G4hIonisation::PostStepDoIt() modified 'grecj' term for spin to 1/2. 
+- G4VhEnergyLoss+G4VeEnergyLoss: bugfix in subcutoff delta generation. 
+- G4VxEnergyLoss: min.delta cut is set as rcut/100 + some optimisation. 
+- DoIt: fminimalEnergy = 1*eV in phot,comp,conv,anni processes.
+- Activated buildDEDXTable() in G4hIonisation::retrievePhysicsTable()
+
+processes/electromagnetic/utils		utils-V03-02-07
+-------------------------------
+- Modifications to cope with migration of Materials to STL vector. 
+- G4MultipleScattering: added methods to store/retrieve PhysicsTable. 
+- New angle and z(geom. pathlength) distributions, energy (step)
+  dependence has been reduced. 
+- Deleted obsolete TrueToGeomTransformation() method. 
+- Fixed old outstanding bug in G4EnergyLossTables, responsible for
+  causing negative energy deposit in some occasions. 
+- Changed value of data member 'factlim' in msc process.
+
+processes/electromagnetic/xrays		xrays-V03-02-00
+-------------------------------
+- Modifications to cope with migration of Materials to STL vector.
+
+run                                     run-V03-02-04
+---
+- Modified G4VUserPhysicsList to fix retrieving of physics tables for muons. 
+
+examples				examples-V03-02-00
+--------
+- Updated reference outputs.
+- exampleN03: synchronised with CVS HEAD and updated vis macros.
+
+tests                                   tests-V03-02-03
+-----
+- Updated reference outputs.
+- test06: removed references to "intergral" processes according to
+  tag "em-V03-02-02".
+- test20: Fixes for STL migration of materials.

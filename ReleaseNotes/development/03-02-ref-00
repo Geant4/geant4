@@ -1,0 +1,161 @@
+
+			geant4-03-02-ref-00
+			===================
+
+Tags included in geant4-03-02-ref-00 since the last reference tag:
+
+config - config-V03-01-10
+------
+- Introduced changes for persistency: common.gmk is now split in three, 
+  one general, and one for specific for transient and persistent each.
+  Dependencies now much better handled in persistency. 
+- A few bug fixes in binmake.gmk, common_objy.gmk, sys/SUN-CC5.gmk,
+  sys/Linux-g++.gmk, sys/Win32-g++.gmk. 
+- Removed G4_NO_CBRT flag from WIN32-VC.gmk 
+- Added G4VIS_BUILD_GAGTREE_DRIVER and G4VIS_USE_GAGTREE.
+- Introduced 'Configure' script for installation
+
+global - global-V03-01-02
+------
+- Added contructor to G4DataVector with additional argument 
+  for initialising values of collection. 
+- globals.hh: removed definition of cbrt() to allow ANSI compilation
+  on Linux-g++ architecture with new compiler gcc-2.95-2.
+
+event - event-V03-01-01
+-----
+- G4GeneralParticleSource, G4GeneralParticleSourceMessenger:
+  o minor fixes to comments for Soft.Ref.Manual. 
+  o added CVS headers, #ifdef protections to headers.
+
+materials - materials-V03-01-01
+---------
+- Cleared warnings detected on HP-aCC: explicitly initialising
+  to zero values of G4DataVector used to fill sandia-table.
+
+geometry/solids/BREPS - breps-V03-01-02
+---------------------
+- Fixes to allow -ansi compilation on Linux-g++, gcc-2.95-2 compiler: 
+  o G4Ray.cc: changed usage of hypot(x,y) to sqrt(x*x+y*y). 
+  o G4Hyperbola[.icc.cc]: changed usage of atanh(x) to 0.5*log((1+x)/(1-x)). 
+- G4ProjectedSurface.cc: corrected initialisation of temporary G4Point3D 
+  objects, to use the correct constructor, according to new CLHEP syntax.
+
+geometry/solids/STEP - STEP-V03-01-00
+--------------------
+- Fix for porting on Linux-g++ 2.95-2 -ansi: 
+  dirobj.cc: removed usage of strdup(), Replaced with existing
+  solution for __O3DB__.
+
+graphics_reps - greps-V03-01-05
+-------------
+- Explicit initialization for G4Point3D according to new CLHEP syntax.
+
+persistency - persistency-V03-01-00
+-----------
+- Updated to new 'config' setup for persistency.
+- Changed NULL to 0.
+
+processes/electromagnetic/lowenergy - emlowen-V03-00-19
+-----------------------------------
+- Bug fix in antiproton ionisation.
+- Bug fix in G4LowEnergyPolarizedCompton.
+
+processes/hadronic - had-V03-02-01
+------------------
+  - Migration to STL vector of the pre-compound and evaporation codes and
+    removal of most warnings detected by Linux ANSI pedantic setup.
+  - Generator models:
+    o Upgrade of angular distributions and fission yields in pre-compound
+      and evaporation models.
+    o Kinetic model: fixed exceptional condition for inelastic scattering
+      off Hydrogene. No recoil required. 
+  - Utilities:
+    o Fixed bug in nuclear reactions for light ions. 
+
+processes/hadronic/models/generator/de_excitation - de_excitation-V03-01-01
+-------------------------------------------------
+- Interface adjustment in G4ParaFissionModel.
+
+processes/hadronic/models/generator/string_common - had_modgen_strcom-V03-01-00
+-------------------------------------------------
+- Explicit initialization of 'Qmomentum' according to new CLHEP syntax.
+
+processes/hadronic/models/generator/util - hadgen_util-V03-01-00
+----------------------------------------
+- G4FermiMomentum.hh: defined local cbrt() to allow porting 
+  on gcc-2.95-2 ANSI setup. 
+
+processes/hadronic/models/high_energy - had_mod_high-V03-01-05
+-------------------------------------
+- Energy- OR Momentum- conservation, can be chosen by the user.
+- Added production of Evaporation particles.
+- Better description of experimental data, mainly in Strange
+  Particle Production.    
+- Cleared compilation warnings on Linux-g++.
+- Minor bug-fix in G4HEPionMinusInelastic.
+- Introduced temporary workaround in G4HEInelastic for high energy
+  problem (number of particles created in one event larger than
+  allocation).
+- Missing initialization of strangeness corrected, removing energy
+  non-conservation in rare cases.
+
+processes/hadronic/models/low_energy - low_energy-V03-01-00
+------------------------------------
+- Removed 'static_cast' not supported on SUN-CC (non-ISO).
+
+processes/hadronic/models/neutron_hp - neu-V03-01-03
+------------------------------------
+- New code revision: requires new set of data, G4NDL3.0 or later.
+- Includes also an upgrade of the doppler broadening.
+  Allows for running on 0K data, and doing exact doppler broadening
+  on the fly (according to the temperature specified in G4Material),
+  with good performance up to about 5000K.
+- Bug fix in G4NeutronHPInelasticCompFS to get the correct Q-value
+  for Lithium (the bug was introduced in recent development).
+
+processes/transportation - transport-V03-01-02
+------------------------
+- Corrected 'spin-update' in G4Transportation.cc from overwriting
+  the value of the spin for photons and other non-charged particles.
+
+run - run-V03-01-00
+---
+- Added binary mode for G4VUserPhysicsList::Retrieve/StorePhysicsTable().
+- Added G4VUserPhysicsList::RetrieveCutValues and related.
+- Added G4VUserPhysicsList::Set/ResetStoredInAscii() 
+  to switch on ascii mode for Retrieve/StorePhysicsTable().
+- Added setStoredInAscii command in G4UserPhysicsList .
+- Changed date in G4RunManager.cc for release 3.2.
+
+tracking - tracking-V03-01-02
+--------
+- Cleared warnings on G4SteppingManager detected on HP-aCC:
+  Explicitly initialised values in STL collections members. 
+
+visualization - vis-V03-01-07
+-------------
+- Added /vis/drawTree.
+- Introduced first version of G4GAGTree to dump geometry hierarchy
+  to GAG GUI system.
+  This requires two new environment variables:
+  G4VIS_BUILD_GAGTREE_DRIVER and G4VIS_USE_GAGTREE.
+- Removed OS dependence from the DAWN-network driver. 
+  * gethostname() removed 
+  * removed G4SocketConfig.hh and G4SocketMacro.hh. 
+  NOTE: now "setenv G4DAWN_HOST_NAME hostname" is mandatory to use 
+        the DAWN-network driver. 
+
+examples
+--------
+- advanced/xray_telescope (xraytel-v02-00-11)
+  o minor updates.
+- extended/analysis/AnaEx01
+  o minor updates.
+- extended/persistency (PersistentEx01-V03-01-00, PersistentEx02-V03-01-00)
+  o Updated to new 'config' scheme.
+
+tests
+-----
+- New reference output for test17.
+- Added new test for polarised LowE processes: test20.

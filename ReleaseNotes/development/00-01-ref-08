@@ -1,0 +1,103 @@
+
+                         geant4-00-01-ref-08
+                         ===================
+
+Many changes are for the Software Reference Manual (SRM).
+
+geant4-00-01-ref-08 is the RW-G4RW-migrated version of
+geant4-00-01-ref-06 plus the RW-G4RW-migrated versions of the
+following tags:
+
+op-V00-01-02        - Header files for SRM.
+examples-V00-01-10  - ExN06: cosmetic changes. 
+                    - New .out file for xrays-V00-01-02 (but see note
+                       1a below).
+breps-V00-01-00 and stepinterface-V00-01-00:
+                     - First step for decoupling BREPS from NIST STEP
+                       reader + some files moved (details in note 2
+                       below).
+particles-V00-01-02  - For next release, hash dictionary -> map and
+                       headers for SRM (details in note 3 below).
+vis-V00-01-07        - New: /vis/viewer/update. 
+                     - Hash dictionary -> STL map. 
+                     - Bug fixes.
+track-V00-01-01       )
+procman-V00-01-01     )
+run-V00-01-03         )  Headers for SRM.        
+event-V00-01-01       )
+readout-V00-01-00     )
+digits+hits-V00-01-00 ) (Draw() and Print() non-const).
+intercoms-V00-01-01   )
+examples-V00-01-11   - Visualization improvements in N03.
+materials-V00-01-01  - Hash dictionary, headers for SRM;
+materials-V00-01-02  - Fix misuse of typename.
+global-V00-01-05     - Fix for DEC in STL Interface: HashFun(const
+                       unsigned long&)
+                     - RW_NPOS -> G4std::string::npos
+examples-V00-01-12   - ExN03 for new vis commands (but see note 1b).
+config-V00-01-05     - Various developments and fixes - see note 4 below.
+global-V00-01-06     - Temporarly redefined RW_NPOS.
+config-V00-01-06     - OODBMS (persistency) changes.
+examples-V00-01-13   - Archived E01/2/3, added extended/electromagnetic
+                       and persistency.
+
+
+--------------------------------------------------------------
+
+Note 1(a): although examples-V00-01-10 includes changes for
+xrays-V00-01-02, the latter has not yet been included and tested.  It
+is high up the use-chain, so it gets tested late.  Unfortunately the
+changes to examples got tagged early before the release process
+started.  It affects only exampleN06 as far as I know.  It will be
+back in synchronisation soon.
+
+Note 1(b): again, examples-V00-01-12 includes changes in exampleN03
+which only work correctly with vis-V00-01-08 which is not yet included
+and tested.
+
+------------------------------------------------------------
+Note 2 - breps-V00-01-00 and stepinterface-V00-01-00
+
+ I made available new tags for testing of geometry/solids/BREPS and
+ geometry/solids/STEPinterface. These new tags include changes for
+ decoupling BREPS from the STEP (STEP reader) module. A dependency
+ which needs to be evaluated carefully is still present and documented
+ in the History file. Please, see below the extract from the History
+ files. Tested on SUN-CC.
+
++++ BREPS +++ breps-V00-01-00
+
+- First step for decoupling BREPS from NIST STEP reader:
+   - Moved G4NISTStepReader[.hh.cc] and G4StepFileReader[.hh] to
+     STEPinterface.
+   - Removed unused references to STEP in G4KnotVector and G4PointRat.
+   >> Still remaining: reference to STEPaggregate in G4PointRat;
+                       reference to instMgr in G4BREPSolid.cc.
+
++++ STEPinterface +++ stepinterface-V00-01-00
+
+- Added files G4NISTStepReader[.hh.cc] and G4StepFileReader[.hh]
+  from BREPS.
+- Added inclusion of STEPcomplex.h in G4BoundedSurfaceCreator.cc,
+  G4GeometryCreator.cc and G4RepresentationRelationshipCreator.cc.
+
+------------------------------------------------------------------
+Note 3 - particles-V00-01-02
+
+- Implemented STL map version of G4ParticleTable 
+- Fixed bugs in G4DynamicParticle::RemoveElectrons (bug report #30)
+- Fixed particle name for G4RhoPlus (bug report #26)
+- Modified top-level GNUmakefile to fix G4barions to G4baryons for the
+  "gmake global" target.
+ 
+  In addition, many comments are added for "Software Reference Manual"
+
+----------------------------------------------------------------
+Note 4 - config-V00-01-05
+
+- binmake.gmk: added path to HEPNumerics/include which was missing.
+- architecture.gmk, interactivity.gmk: introduced
+  "G4_OPACS_WIDGET_SET lesstif" logic to handle the case
+  of using, on Linux, the bugged lesstif with the non bugged OPACS.
+- Introduced fixes for shared library setup. Modified files:
+  architecture.gmk, common.gmk, globlib.gmk, makeshlib.sh.

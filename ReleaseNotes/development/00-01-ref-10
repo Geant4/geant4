@@ -1,0 +1,11 @@
+
+                       geant4-00-01-ref-10
+                       ===================
+
+geant4-00-01-ref-10 is geant4-00-01-ref-09 plus the RW-G4RW-migrated
+versions of:
+
+interfaces-V00-01-02  For next release.  Also RWT -> STL for hash
+                      dict. and tvordvec.
+interfaces-V00-01-03  Added less<G4String> and other STD changes.
+envs-V00-01-00        OPACS only.

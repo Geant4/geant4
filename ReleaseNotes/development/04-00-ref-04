@@ -1,0 +1,152 @@
+
+                       geant4-04-00-ref-04
+                       ===================
+
+Some of the development/fixes included are:
+
+  o New module for event biasing by importance region and scoring.
+    Added new extended examples. Preliminary documentation can be found
+    in http://cern.ch/dressel/Biasing.html.
+  o Added new commands to G4GeometryMessenger for detecting overlapping
+    regions in dectector geometry.
+  o New parametrisation for angle distribution in G4MultipleScattering.
+  o Added G4TauLeptonicDecayChannel for tau leptonic decay.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                  config-V04-00-05
+------
+- binmake.gmk: added entry for new module geometry/biasing. 
+
+geometry                                geometry-V04-00-03
+--------
+- First release of module for importance biasing.
+  Preliminary documentation can be found in the geometry Working
+  Group page on Web, or directly here:
+  http://cern.ch/dressel/Biasing.html.
+
+- geometry/management                   geommng-V04-00-03 
+  -------------------
+  - Moved inline constructors/destructors to no inline. 
+  - Enhanced behavior for destructors of volumes/solids stores.
+    o Added locking mechanism for preventing conflicts when destroying
+      stores and deregistering pointers. Now destructors of stores will
+      also explicitely delete pointers (and therefore allocated
+      volumes/solids) dynamically allocated in the user application. 
+    o Added Clean() static method to volumes/solids stores to
+      explicitely delete pointed objects in the stores and clear all
+      entries. 
+  - G4VSolid[.hh.cc]: modified G4VSolid::ClipPoligon() to consider
+    clipping related to a single axis. 
+
+- geometry/volumes                      geomvol-V04-00-06 
+  ----------------
+  - G4GeometryMessenger[.hh.cc]: added new commands to exploit more 
+    features of the G4GeomTestVolume class for detecting geometry
+    overlaps: 
+    o /geometry/test/grid_test
+      - runs the default grid test, same as "run". 
+    o /geometry/test/recursive_test 
+      - runs the grid test in recursive mode. 
+    o /geometry/test/cylinder_test 
+      - to shoot lines in a cylindrical pattern. 
+    o /geometry/test/line_test 
+      - to shoot a line according to position/direction.
+  - Moved inline constructors and destructors to no inline. 
+
+- geometry/verification                 geomver-V04-00-00 
+  ---------------------
+  - Moved inline constructors and destructors to no inline. 
+
+- geometry/solids/Boolean               geom-bool-V04-00-04
+  -----------------------
+  - G4ReflectedSolid.cc: enhanced algorithm for CalculateExtent(). 
+
+- geometry/solids/BREPS                 breps-V04-00-05 
+  ---------------------
+  - G4BREPSolidPCone.cc: added sanity check of delta phi section value
+    and exception is thrown saying about this unsupported feature if
+    delta phi is less than 2*PI. 
+
+- geometry/solids/CSG                   geom-csg-V04-00-03
+  -------------------
+  - G4Tubs.cc: restored original "vertices" algorithm for
+    CalculateExtent() which was temporarly disabled. 
+
+global                                  global-V04-00-05
+------
+- Added more verbosity to G4Exception.
+- G4String: use G4std::string instead of internal type 'std_string' 
+  in signatures of public methods. No functional or interface changes. 
+
+materials                               materials-V04-00-02
+---------
+- G4StaticSandiaData: bug fixed in Pb, added comma after 15.861
+- G4Material: added G4Exception for deprecated constructor with
+  chemical formula.
+
+particles                               particles-V04-00-02
+---------
+- Added G4TauLeptonicDecayChannel for tau leptonic decay.
+
+processes/electromagnetic/lowenergy     emlowen-V04-00-05
+-----------------------------------
+- Added option to activate atomic deexcitation in ionisation processes.
+- Fix in G4LowEnergyPhotoElectric and G4VCrossSectionHandler for
+  MeanFreePath calculation.
+- Fixed compilation warnings; added pointer protection in
+  G4eLowEnergyLoss.
+
+processes/electromagnetic/standard      stand-V04-00-07
+----------------------------------
+- G4ComptonScattering: set LowestEnergyLimit to 1*keV.
+- G4PhotoElectric: keep only Sandia crossSections, removed call to
+  BuildPhysicsTables. Simplified public interface.     
+
+processes/electromagnetic/utils         utils-V04-00-03
+-------------------------------
+- G4MultipleScattering: new parametrisation for angle distribution. 
+  Modified boundary algorithm and some other minor fixes.
+
+processes/management                    procman-V04-00-00
+--------------------
+- Added method G4VProcess::GetCurrentInteractionLength().
+- Fixed bug in PostStepDoIt() when MeanFreePath is equal to DBL_MAX.
+
+processes/optical                       op-V04-00-02
+-----------------
+- Added public inline method GetStatus() and make enum
+  G4OpBoundaryProcessStatus public in G4OpBoundaryProcess.
+
+processes/transportation                transport-V04-00-05
+------------------------
+- Added new classes for management of biasing transportation and
+  scoring.
+- Added G4DEBUG_TRANSPORT flag in GNUmakefile and replaced to
+  G4VERBOSE in G4Transportation::PostStepDoIt() for extra-check on
+  volume boundary. Issues addressed by problem report #130 should now
+  be resolved. 
+
+visualization                           vis-V04-00-04
+-------------
+- Prevent copying of autoRefresh status with /vis/viewer/set/all
+  command.
+- Corrected out of date advice about /vis/set/culling, etc.
+- Workaround for pseudo-parallel/orthogonal projection in Ray Tracer.
+- Updated OpenGL to compile on Windows if
+  G4VIS_BUILD_OPENGLWIN32_DRIVER is set.
+- Removed redundant code in GNUmakefiles in OPACS, OpenGL,
+  OpenInventor, VRML.
+- Improved README.adding_graphics_system.
+
+examples                                examples-V04-00-04
+--------
+- extended/biasing:
+  o Created 7 new examples for importance biasing and scoring
+- Updated reference outputs.
+
+tests                                   tests-V04-00-03
+-----
+- Updated reference outputs.

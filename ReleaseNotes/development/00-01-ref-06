@@ -1,0 +1,36 @@
+
+                    geant4-00-01-ref-06
+                    ===================
+
+geant4-00-01-ref-06 is geant4-00-01-ref-05 plus:
+
+em-V00-01-01                 For next release (see below).
+emlowen-V00-01-00            Bug fix to the above.
+photolepton_hadron-00-01-00  Bug fix.
+examples-V00-01-09           Changes to .out files for the above.
+
+------------------------------------------------------
+em-V00-01-01:
+
+electromagnetic/standard:
+    muls: Fine tuning and bug fixed for low energy e-.
+          Inclusion of nuclear size effect for high energy
+           (e > 100 Mev, h > 1 GeV)
+
+    IonisationPlus: production version for electrons and hadrons.
+
+    Eloss fluctuation: use G4Poisson instead of CLHEP.
+
+    PAI model: bugs fixed
+
+electromagnetic/lowEnergy:
+   hadron ionisation implemented.
+   ion    ionisation implemented.
+   minor bug fixed in photo electric. 
+
+electromagnetic/xrays:
+   bug fixed in cerenkov.
+
+electromagnetic/test:
+  TestEm6 for low energy hadron.
+  All tests moved in examples/extended/electromagnetic.

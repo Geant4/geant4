@@ -1,0 +1,15 @@
+
+			geant4-00-01-ref-00
+			===================
+
+run-V00-01-00
+
+It contains the modifications of G4RunManager and
+G4RunMessenger so that now the status of the
+random number engine can be stored in separate files.
+
+materials-V00-01-00
+
+- new Material constructors with chemical formula
+  for low energy physics
+- few cleanup between G4cout and G4cerr

@@ -1,0 +1,54 @@
+
+                       geant4-02-00-ref-03
+                       ===================
+
+Some of the improvements and fixes included since the last reference
+tag are:
+    - fixes and new developments in low-energy electromagnetic
+      processes.
+    - fix in memory management for Boolean solids.
+    - fix in tracking when PiMinusAbsorptionAtRest and Decay
+      processes are deactivated.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+
+electromagnetic processes (low-energy)
+--------------------------------------
+- Bug fix on electron energy loss fluctuations.
+- Some minor cosmetics in hadron classes, no new features. 
+- New features on antiproton ionisation, extending the model for
+  application to generic materials. 
+- Const cast in G4hLowEnergyIonisation (const G4Material* into G4Material*) 
+  This modification was required to avoid compilation errors on DEC; 
+  it is meant to be temporary. 
+- Fix in G4hICRU49He::StoppingPower - a1 changed into e1
+  to remove compilation problems on DEC.
+- Fix in G4hLowEnergyLoss, eliminated two protected variables 
+  G4Proton* theProton and G4AntiProton* theAntiProton 
+  to resolve compilation problems on DEC.
+- Modifications in hadron classes (renaming of classes).
+
+geometry
+--------
+- Boolean solids, management:
+  o G4SubtractionSolid.cc: relaxed behavior in SurfaceNormal(p), 
+    where it is now allowed for a point to be inside the solid. 
+    A message is thrown to cerr instead of a G4Exception. 
+  o Fixed bug in destructor of G4SolidStore. Memory corruption at
+    application exit was occuring when Boolean solids were involved.
+- BREPS solids:
+  General reorganisation and code cleanup. No functional changes:
+  o Created .icc files and moved inline methods implementation. 
+  o Added comments to headers for Software Reference Manual. 
+  o Fixes for virtual destructors, inline virtual functions and
+    operators, const methods and arguments. 
+- specific solids:
+  o Organised comments to headers for Software Reference Manual.
+
+tracking
+--------
+- Fix for report #137, added protection when PiMinusAbsorptionAtRest
+  and Decay processes are deactivated.

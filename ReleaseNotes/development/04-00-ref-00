@@ -1,0 +1,247 @@
+
+			geant4-04-00-ref-00
+			===================
+
+Tags included in geant4-04-00-ref-00 since the last reference tag:
+
+source/analysis					analysis-V03-02-01
+---------------
+- Removed analysis module. AIDA 2.2 or higher should now be adopted.
+
+source/geometry/magneticfield			field-V03-02-08
+-----------------------------
+- Minor fixes:
+  o G4CashKarpRKF45: fixed deletion of unassigned pointer/array in
+    destructor.
+  o G4EqMagElectricField: fixed formula for inverse velocity.
+- G4FieldManager: added fFieldChangesEnergy data member and get/set
+  methods (required to allow transportation to know how to calculate
+  end-time, enabling the integration of time only for electric fields).
+- Fixed interface to virtual functions in the inheritance chain.
+  Added 'virtual' qualifier to destructor and GetFieldValue() for
+  subclasses of G4Field which may act as base class for user-defined
+  fields.
+  Modified files: G4MagneticField.hh, G4UniformElectricField[.hh.cc],
+                  G4UniformMagField.hh.
+- G4ChordFinder.cc: the unphysical curve length exception has been
+  moved to inside #ifdef G4DEBUG_FIELD. Other #ifdef renamed to
+  G4DEBUG_FIELD.
+- G4LineSection[.hh.cc]: correction for A=B when the distance from P
+  to A is returned.
+
+source/geometry/solids/STEP			STEP-V03-02-01
+---------------------------
+- Fixes for compilation on gcc-2.96.98 and gcc-3.0.2 compilers to
+  overcome warnings produced and fix std namespace problems in
+  sdaiString.cc.
+
+source/geometry/solids/STEPinterface		stepinterface-V03-02-01
+------------------------------------
+- Fix to GNUmakefile for compilation on gcc-2.96.98 and gcc-3.0.2
+  compilers to overcome warnings produced by strict ANSI compilation.
+
+source/geometry/volumes				geomvol-V03-02-08
+-----------------------
+- G4PropagatorInField:
+  o Added thresholds for number of steps with get/Set methods
+  o Modified choice of subsequent step size in case of Zero steps
+    - decrease quickly at first to try to ensure that the first/second
+      "re-steps" are enough in most cases.
+    - utilise addition threshold parameters (for # of steps) to slow
+      down the rate of decrease of the step size for the 'difficult'
+      cases which do not converse after a few steps.                           
+  o Added use of new Largest Acceptable Step data member.
+  o Protected, in reseting of Proposed Step length, against
+    making it bigger in cases where several zero steps seen.
+  o Several debugging prints added. (only in G4Verbose, ...)
+  o Added GetCurrentFieldManager() method.
+  o Added 'maximum' epsilon value in G4PropagatorInField, as some
+    ill-conditions appear to be due to large proposed relative errors.
+- G4Navigator:
+  o Fixed mirroring of the input argument for global direction into
+    local variable in LocateGlobalPointAndSetup().
+  o Added ResetState() method (that only reset state - not stack).
+  o Added optional argument for direction to
+    LocateGlobalPointAndSetup().
+  o State is now resetted when touchable history is used to
+    re-initialise it.
+  o Direction in LocateGlobalPointAndSetup() methods is now used.
+  o Added kNormal and Copy Number to NewLevel (Navigation Level) for
+    Normal Navigation. Now all TouchableHistory objects should have a
+    valid entry in ReplicaNumber:
+    - in the case of a placement volume it will be the copy number
+    - in replicated volumes it will be the replica number.
+
+source/global					global-V03-02-07
+-------------
+- Fixed warnings on gcc-3.0.2 for G4DataVector.cc and
+  G4PhysicsVector.cc.
+- Minor fixes to G4String[.hh.icc] for avoiding compilation warnings
+  on WIN32-VC and gcc-3.0.2.
+
+source/interfaces				interfaces-V03-02-04
+-----------------
+- G4VInteractorManager::RemoveDispatcher : change the "std::remove"
+  logic in order to fix a disfunctionning with vis/OpenInventor driver.
+- Fix ro G4UIGAG for alias command.
+- Cleared compilation warnings on gcc-2.95.2.
+
+source/materials				materials-V03-02-07
+----------------
+- Fixed declaration of ostream attributes to use standard 'fmtflags'
+  type for ANSI compilers. Fixes compilation error on gcc-3.0.2.
+  Modified files: G4Isotope.cc, G4Element.cc, G4Material.cc.
+
+source/persistency				persistency-V03-02-02
+------------------
+- Added G4Pglobals.hh to G4PVHits and G4PVDigits to fix problem
+  on gcc-2.95.2.
+
+source/processes/electromagnetic/lowenergy	emlowen-V03-02-51
+------------------------------------------
+- Major physics improvement in electron processes.
+  Significant improvement of performance
+- New version of data G4EMLOW0.5 required.
+- To reduce warnings increased majorant in delta-electron spectrum
+  produced by electrons.
+- Added method to deactivate fluorescence in ionisation if needed.
+
+source/processes/hadronic/cross_sections	cross-V03-02-03
+----------------------------------------
+- Fixes for compilation on Windows/VC++.
+
+source/processes/hadronic/management		man_had-V03-02-10
+------------------------------------
+- Bug fix in G4InelasticInteraction process.
+
+source/processes/hadronic/models/chiral_inv_phase_space/interface
+-----------------------------------------------------------------
+						Chips-int-V03-02-00
+- Fixed compilation errors on Windows/VC++ and removed debug
+  statements.
+
+source/processes/hadronic/models/generator/de_excitation
+--------------------------------------------------------
+						de_excitation-V03-02-01
+- Fix for porting on gcc-3.0.2 in G4ExcitationHandler.cc: 
+  use lists instead of vectors for storing fragments.
+
+source/processes/hadronic/models/generator/pre_equilibrium
+----------------------------------------------------------
+						pre_eq-V03-02-02
+- Fix for porting on gcc-3.0.2 in G4VPreCompoundFragment.cc
+
+source/processes/hadronic/models/generator/quark_gluon_string
+-------------------------------------------------------------
+						qgs-V03-02-10
+- Fixed parameter that was left at wrong value.
+
+source/processes/hadronic/models/generator/util	hadgen-util-V03-02-00
+-----------------------------------------------
+- Fix for compilation on gcc-3.0.2 in G4Fragment.cc.
+
+source/processes/hadronic/models/neutron_hp	neu-V03-02-06
+-------------------------------------------
+- Fix in G4NeutronHPVector.cc for the initialisation of 'theData'
+  member in constructor.
+
+source/processes/transportation			transport-V03-02-07
+-------------------------------
+- Activated the killing of 'looping' particles -- to be used also to
+  abandon (kill) particles that are stuck (eg at boundaries).
+- Fix for the new updating of the time for fields. It now keeps into
+  account whether the field changes the energy (and therefore the
+  velocity) in the field manager.
+
+source/processes/GNUmakefile			processes-gmk-V03-02-02
+----------------------------
+- Removed duplicated entries.
+
+source/readout					readout-V03-02-00
+--------------
+- Cleared warnings on gcc-2.95.2.
+
+source/run					run-V03-02-11
+----------
+- Added rndmSaveThisRun() and rndmSaveThisEvent() methods to
+  G4RunManager.
+- Added /random/ commands to G4RunMessenger.
+- G4RunManager.cc: fixed new date for the December public release.
+
+source/track					track-V03-02-08
+------------
+- Fixed bug in assignment operator of G4Track: initialised
+  fCurrentStepNumber to 0.
+- Modified G4ParticleChange::AddSecondary to correctly use
+  touchable handle.
+
+source/tracking					tracking-V03-02-05
+---------------
+- G4SteppingVerbose.cc: removed trigraph warning on Linux-g++.
+- Correction to the use the touchable Handle for secondary tracks,
+  when it is available. Now the direction is used in locating a
+  particle (primary or secondary) in SetInitialStep(). This is in
+  order to assist in starting particles that are on/near-to boundaries
+  in the correct volume. 
+
+source/visualization				vis-V03-02-21
+--------------------
+- Cleared most warnings on gcc-2.95.2.
+- Moved G4FRSceneFunc.icc to include directory.
+- Fixed pointer initialisation for porting on Windows/VC++ in
+  G4VisCommandsSceneAdd.cc.
+
+source/visualization/management			visman-V03-02-01
+-------------------------------
+- Fix for porting on Windows/VC++.
+
+source/GNUmakefile				source-gmk-V03-02-03
+------------------
+- Removed "analysis" module.
+- Fixed ../ path to $G4INSTALL
+
+config						config-V03-02-15
+------
+- analysis.gmk: added flags to use an AIDA 2.2 compliant analysis
+  system. 
+- G4VIS_USE.gmk : -lG4HepRep replaced by -lG4visHepRep.
+- architecture.gmk:
+  o updated list of supported compilers
+  o removed obsolete setup for STL ObjectSpace and STLport for
+    Win/VC++.
+- New version of the Configure script for installation.
+- architecture.gmk:
+  o updated list of supported compilers
+  o removed obsolete setup for STL ObjectSpace and STLport for
+    Win/VC++.
+- binmake.gmk: activated mechanism for using $G4INCLUDE effectively for
+  building examples/applications. Currently activated only for global
+  compound libraries; for granular libraries it requires re-engineering
+  of liblist, feature which will be added in future.
+  This mechanism allows to considerably reduce the compilation/linking
+  command length and the number of -I options fed to the compiler.
+- Added G4PROFILE options to Linux-g++ and Linux-egcs setups.
+- Removed binmake.EXTRALIBS.README, now part of User's Guide.
+- Updated sources for Configure installation script.
+
+examples					examples-V03-02-04
+--------
+examples/novice/N03				exampleN03-V03-02-07
+examples/extended/analysis/AnaEx01		AnaEx01-V03-02-01
+examples/extended/electromagnetic/TestEm1	testem1-V03-02-02
+examples/extended/electromagnetic/TestEm2	testem2-V03-02-04
+examples/extended/electromagnetic/TestEm3	testem3-V03-02-03
+examples/extended/electromagnetic/TestEm4	testem4-V03-02-02
+examples/extended/electromagnetic/TestEm5	testem5-V03-02-02
+examples/extended/field/field02			field02-V03-02-01
+examples/advanced/gammaray_telescope		GammaRayTel-V03-02-02
+examples/advanced/underground_physics		dmx-V03-02-10
+examples/advanced/xray_fluorescence		xray_fluo-V03-02-02
+examples/advanced/xray_telescope		xraytel-V03-02-03
+
+tests						tests-V03-02-06
+-----
+tests/test05					test05-V03-02-00
+tests/test14					test14-V03-02-01
+tests/test17					test17-V03-02-04
+tests/test21					test21-V03-02-01

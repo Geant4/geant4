@@ -1,0 +1,47 @@
+
+	                     geant4-00-01-ref-04
+        	             ===================
+
+geant4-00-01-ref-04 is geant4-00-01-ref-03 plus:
+
+run-V00-01-01          Removed graphics_reps from GNUmakefile (no longer nec.).
+global-V00-01-01       - New class: G4Integrator. 
+                       - Fixes to STL Interface and HEPRandom.
+interfaces-V00-01-00a  Protection for zero length strings for Sun.
+particles-V00-01-00b   New features agreed at Workshop - see below.
+track-V00-01-00        New features agreed at Workshop - see below.
+config-V00-01-02       - Removed G4USE_EXPLICIT_TYPES_IN_TEMPLATES
+                       - Suppress printing for G4ODBMS if CPPVERBOSE
+                         is not defined.
+global-V00-01-02       STLInterface: Improved cstring.h, removed
+                         G4USE_EXPLICIT_TYPES_IN_TEMPLATES
+examples-V00-01-06     - Define G4OODDLX_BOOT in E02/GNUmakefile. 
+                       - Updated .out files for geant4-00-01-ref-04.
+persistency-V00-01-01  Small bug fixes.
+
+==========================================
+New Features of particles-V00-01-00b:
+
+- Change 'static const  G4String' array to  'static const char*' array
+  (shortlived-V00-01-01)
+
+- New naming scheme for ions in G4IonTable::GetIonName() (partman-V00-01-02)
+- Modified G4IonTable::GetIon methods and related 
+- Added  G4VIsotopeTable and G4IsotopeProperty
+- Added theDynamicalCharge and theElectronOccupancy in G4DynamicParticle 
+- Added G4PDGCodeChecker and modified G4ParticleDefinition::FillQuarkContents
+- Added G4NucleiPropertiesTheoreticalTable to describe excess Masses from
+  Meyer-Swiatecky fromula
+- Modified G4NucleiProperties and G4NucleiPropertiesTable
+
+
+New Features of track-V00-01-00:
+-  Added mass/charge change in G4ParticleChange
+-  Modified G4ParticleChange::CheckIt
+-  Separate implementation of inline functions to G4Track.icc and G4Step.icc
+
+The following tags are also in geant4-00-01-ref-04:
+
+vis-V00-01-05          Implemented /vis/scene/add/logicalVolume.
+intercoms-V00-01-00    Augmented G4VGraphicsScene.
+particles-V00-01-01

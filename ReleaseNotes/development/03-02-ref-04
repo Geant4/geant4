@@ -1,0 +1,102 @@
+
+                       geant4-03-02-ref-04
+                       ===================
+
+Some of the fixes/development included since the last reference
+tag are:
+
+  o Added new parameterisation models for describing X-ray transition
+    radiation generation inside radiators.
+  o Major revision of G4LowEnergyCompton, G4LowEnergyRayleigh and
+    G4LowEnergyGammaConversion low-energy electromagnetic processes:
+    re-implementation according to the design iteration in the data domain.
+  o Introduced first development release of HepRep graphics driver.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config					config-V03-02-06
+------
+- Introduced HepRep graphics driver environment setup:
+  G4VIS_BUILD_HEPREP_DRIVER, G4VIS_USE_HEPREP.
+
+geometry/solids/STEP			STEP-V03-02-00
+-----------------------
+- SdaiCONFIG_CONTROL_DESIGN.cc: cleaned up warnings issued on SUN-CC. 
+- dirobj.cc: restored usage of strdup() and forced non-ANSI setup.
+
+geometry/solids/STEPinterface		stepinterface-V03-02-00
+-----------------------------
+- G4Axis2Placement3dCreator::CreateG4Geometry(): added check to attribute
+  validity for 'direction'.
+
+graphics_reps				greps-V03-02-04
+-------------
+- Added G4Scale::GuidanceString.
+
+parameterisations			parmodels-V03-02-00
+-----------------
+- Added new classes describing X-ray transition radiation generation
+  inside radiators (i.e. just along incident particle track):
+  G4FoamXTRdEdx[.hh.cc], G4GamDistrXTRdEdx[.hh.cc], G4IrregularXTRdEdx[.hh.cc],
+  G4PlateIrrGasXTRdEdx[.hh.cc], G4RegularXTRdEdx[.hh.cc], G4VXTRdEdx[.hh.cc]
+  and G4VXrayTRadModel[.hh.cc]
+- Removed all references to RW wrappers. Migrated to STL vectors.
+
+particles				particles-V03-02-03
+---------
+- Modifications to cope with migration of Materials to STL vector.
+- Introduced G4NeutronBetaDecayChannel and added to G4Neutron.
+- Allow MassDifference in case of nucleon decay.
+- Modify to use G4Material::GetNumberOfMaterials().
+ 
+processes/optical			op-V03-02-00
+---------------
+- Changed process name for G4OpRayleigh, G4OpBoundary and G4OpAbsorption;
+  changed to 'OpRayleigh', 'OpBoundary' and 'OpAbsorption' respectively.
+  This addresses problem report #293.
+
+processes/electromagnetic/lowenergy	emlowen-V03-02-22
+-----------------------------------
+- Modifications to cope with migration of Materials to STL vector.
+- Cleared compilation warnings in G4AtomicTransitionManager
+- Bug fix in G4CrossSectionHandler.
+- Major revision of G4LowEnergyCompton, G4LowEnergyRayleigh and
+  G4LowEnergyGammaConversion: re-implementation according to the design
+  iteration in the data domain.
+- Fix in G4CrossSectionHandler::Clear() curing an infinite loop occurring
+  in test14.
+- Update to the fluorescence domain consistent with the new design.
+- New class to generate shell vacancies in continuous part of processes.
+- Added protection in G4LowEnergyPhotoElectric to avoid generation of
+  photons causing negative energy balance.
+
+processes/management			procman-V03-02-03
+--------------------
+- Modifications to cope with migration of Materials to STL vector.
+- Added Set/GetProcessManager() to G4VProcess and modified 
+  G4ProcessManager::AddProcess() to invoke SetProcessManager().
+
+run					run-V03-02-03
+---
+- Modifications to cope with migration of Materials to STL vector.
+
+track					track-V03-02-02
+-----
+- Modifications to cope with migration of Materials to STL vector.
+
+tracking				tracking-V03-02-01
+--------
+- Added protection for tracks placed outside the world volume
+  at the initial point. This addresses problem report #265. 
+
+visualization				vis-V03-02-13
+-------------
+- First development release of HepRep graphics driver.
+
+tests					tests-V03-02-01
+-----
+- Updated reference outputs.
+- test14: modifications to cope with migration of Materials to STL vector.
+- test201: removed obsolete file test201Templates.hh.

@@ -1,0 +1,81 @@
+
+                       geant4-01-01-ref-03
+                       ===================
+
+Some of the improvements and fixes included since the last
+recommended reference tag are:
+    - major restructure of geometry/solids/CSG module.
+      Created new module solids/specific for generic shapes.
+    - new developments in low-energy electromagnetic processes.
+    - ability to visualise Boolean solids through G4Polyhedron
+      objects.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the full list of changes is the following:
+
+config
+------
+- Added path to new geometry modue geometry/solids/specific.
+- Updated filtering script for STEP files g4step_correct.pl.
+
+hadronics
+---------
+- hadronic/models/neutron_hp: bug-fixes and improvements concerning
+  Q-values on Lithium-6, gamma production on Iron56, and triton
+  production on B-10.
+
+electromagnetic processes
+-------------------------
+- Low-energies processes:
+  o modifications for integration of cross sections, corrections of
+    fluorescence transition probabilities to take into account
+    non-radiative transitions.
+  o fixes in G4LowEnergyBremsstrahlung for continuous energy loss.
+  o updated system test test14 and extended-example testem6.
+
+geometry
+--------
+- magneticfield:
+  o corrected signature to function DumbStepper() in classes:
+    G4HelixExplicitEuler, G4HelixHeum, G4HelixImplicitEuler,
+    G4HelixSimpleRunge and G4MagHelicalStepper.
+  o corrected signature and implementation of function
+    MagFieldEvaluate() in G4MagHelicalStepper, to use Field (as
+    ThreeVector) in place of dydx.
+  o made Richardson extrapolation optional in G4MagHelicalStepper.
+  o updated unit test testPropagateMagField and reference output.
+  o fix in G4LineSection to prevent divisions by 0 and sqrt(<0).
+- management:
+  o design change in G4VSolid, changed pure virtual method
+    G4VSolid::GetExtent() to virtual. Added default implementation
+    based on CalculateExtent().
+- solids:
+  o fixes to G4Tubes and G4Hype.
+  o removed implementations of GetExtent() in most sub-classes
+    of G4VSolid.
+  o fixed implementations of visualization utility method
+    DescribeYourselfTo().
+  o restructured CSG directory and created new module solids/specific.
+  o added new shape in solids/specific: G4EllipticalTube.
+  o created new directory solids/test and moved test suites "SBT"
+    and "Fred" therein.
+- solids/Boolean:
+  o CreatePolyhedron implemented for BooleanSolids.
+  o G4DisplacedSolid: reversed implementation of GetFrameRotation and
+    GetObjectRotation, removing inappropriate invertion.
+  o G4DisplacedSolid::GetConstituentMovedSolid() made const.
+
+visualization
+-------------
+- Added ability to visualise boolean solids through G4Polyhedron
+  objects:
+  o Made G4PhysicalVolumeModel::DescribeSolid() virtual. No longer
+    deals with composite solids - now programmed into
+    CompositeSolid::CreatePolyhedron().
+  o G4PhysicalVolumeModel::DescribeSolid() no longer deals with
+    displaced solids - now programmed into
+    G4DisplacedSolid::CreatePolyhedron().
+  o Added G4LogicalVolumeModel::DescribeSolid(), which explicitly adds
+    components of composite solids as white forced-wireframe objects.
+  o Removed unnecessary #includes from G4VSceneHandler.hh.

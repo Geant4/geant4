@@ -1,0 +1,65 @@
+
+			geant4-03-01-ref-00
+			===================
+
+Tags included in geant4-03-01-ref-00 since the last reference tag:
+
+global - global-V03-00-11
+------
+- Fixed minor bug in constructor of G4PhysicsLinearVector, 
+  G4PhysicsLnVector and G4PhysicsLogVector. 
+
+materials - materials-V03-00-07
+---------
+- Removed warning to cerr in GetIsotope(name), GetElement(name), 
+  and GetMaterial(name). 
+- fnulcof added as data member in G4SandiaTable. 
+
+geometry/magneticfield - field-V03-00-05
+----------------------
+- Fixed G4MagHelicalStepper::AdvanceHelix for momentum, allowing
+  the possibility of (correct) use of all Helical Steppers. 
+- Corrected field components in G4UniformElectricField. 
+
+geometry/solids/specific - geom-solids-specific-V03-00-01
+------------------------
+- Minor fix in G4IntersectingCone: make small adjustment to
+  help with roundoff error in LineHitsCone1() and LineHitsCone2().
+
+geometry/volumes - geomvol-V03-00-03
+----------------
+- Modified G4PropagatorInField to use new G4FieldTrack methods, 
+  in place of obsolete calls.
+
+processes/electromagnetic/muons - muons-V03-00-05
+-------------------------------
+- Commented out Rostislav correction in G4MuIonisation.
+
+processes/electromagnetic/standard - stand-V03-00-05
+----------------------------------
+- Suppressed few printing at initialization.
+ 
+processes/electromagnetic/utils - utils-V03-00-06
+-------------------------------
+- Fixed bug in G4VEnergyLoss on fluctuation at PeV region
+  for very small step.
+
+processes/hadronic/models/generator/de_excitation - de_excitation-V03-00-01
+-------------------------------------------------
+- Moved inline implmentation of G4Solver from G4Solver.templates.cc
+  to G4Solver.icc. 
+
+processes/parameterisation - param-V03-00-00
+--------------------------
+- Modified G4FastSimulationManagerProcess call to PropagatorInField
+  ComputeStep to use new interface with G4FieldTrack.
+
+processes/transportation - transport-V03-00-01
+------------------------
+- Modified G4Transportation to use new G4FieldTrack, and get Kinetic
+  Energy from it. This implements integration in Momentum (*c-light)
+  instead of velocity. 
+
+visualization - vis-V03-00-09
+-------------
+- Minor fixes to suppress warnings on DEC platform.

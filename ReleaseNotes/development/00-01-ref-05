@@ -1,0 +1,45 @@
+
+	                     geant4-00-01-ref-05
+        	             ===================
+
+geant4-00-01-ref-05 is geant4-00-01-ref-04 plus:
+
+string_fragmentation-V00-01-00 Limit for number of attempts to
+                       fragment strings
+tracking-V00-01-01     Fix for SteppingManager::Stepping() with User Limits
+interfaces-V00-01-01   - speed up of OGLSXm with new G4Xt.cc 
+                       - default X resources set by G4Xt.cc
+field-V00-01-02 and geomvol-01-01-01a
+                         i) precision issues in the case of long (or
+                            "infinite") attempted steps which also
+                            helped cause:
+                        ii) infrequent race condition between the
+                            volume entered and one that is crossed by
+                            the continuation of a track.
+                       iii) Fix for order of static object
+                            instantiation.
+geomsolids-V00-01-02   Corrections for: 
+                       - corner of G4Tubs
+                       - visualising Brep Polyhedra (CMS) 
+                       - Boolean solids (some problems seen by Atlas, and
+                         cleanup) 
+                       - OpenPcone (new, in use in CMS)
+xrays-V00-01-00        == to >= in G4Cerenkov.cc.
+particles-V00-01-01    New G4IonTable.cc and minor bug fixes.
+op-V00-01-01           Fixes to G4OpBoundaryProcess.hh and
+                       G4OpBoundaryProcess.cc
+global-V00-01-03       Preliminary ISO-ANSI changes.
+config-V00-01-03       - Changes for G4ODBMS to support Objy 5.1 and
+                         HepODBMS 0.3.0.1.
+                       - Removal of AIX-xlC as default platform for
+                         G4SYSTEM (replaced by SUN-CC).
+g3tog4-V00-01-01       G3MatTable.cc: introduced G4String matid (a(3,lngth))
+                       to help STL Interface.
+examples-V00-01-07     E02 (persistency): Created g4odbms_setup.sh and
+                       modified for Objy 5.1 and HepODBMS 0.3.0.1.
+config-V00-01-04       - Removed G4STREAM and
+                         G4STREAM_STREAMBUF_IMPLEMENTATION. 
+                       - Augmented liblist.
+global-V00-01-04       - Removed G4STREAM implementation from G4ios and
+                         G4strstreambuf.
+examples-V00-01-08     Updated exampleN04 .out files for geant4-00-01-ref-05.

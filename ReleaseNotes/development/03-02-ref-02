@@ -1,0 +1,90 @@
+
+                       geant4-03-02-ref-02
+                       ===================
+
+Summarised, the list of changes is the following:
+
+config                          config-V03-02-03
+------
+- architecture.gmk:
+  o updated list of supported systems/compilers.
+  o made Linux-g++ architecture the default G4SYSTEM.
+- Added Linux-egcs for old Linux architectures based on egcs-1.1.2 compiler.
+- Made Linux-g++.gmk specific to gcc-2.95.2 compiler, from now on the default
+  compiler on Linux systems.
+- Added SUN-CC4.gmk for old SUN architectures based on CC-4.2 compiler.
+- Made SUN-CC.gmk a copy of SUN-CC5.gmk (kept for backwards compatibility,
+  will be removed soon). CC-5.2 compiler is now the default compiler on
+  SUN systems.
+- Introduced environment variable G4VIS_NONE that, if set, no visualization
+  drivers are built and no vis libraries are built, not even
+  libG4vis_management.  (libG4modeling is still built.)  The C-pre-processor
+  variables G4VIS_BUILD and G4VIS_USE are *not* set.
+- Removed the need to specify environment variables for visualization drivers
+  which do not need external packages or libraries, namely :
+      G4VIS_BUILD_DAWNFILE_DRIVER
+      G4VIS_BUILD_RAYTRACER_DRIVER
+      G4VIS_BUILD_VRMLFILE_DRIVER
+      G4VIS_BUILD_ASCIITREE_DRIVER
+      G4VIS_BUILD_GAGTREE_DRIVER
+    with associated G4VIS_USE environment variables:
+      G4VIS_USE_DAWNFILE
+      G4VIS_USE_RAYTRACER
+      G4VIS_USE_VRMLFILE
+      G4VIS_USE_ASCIITREE
+      G4VIS_USE_GAGTREE
+  For backwards compatibility, unless G4VIS_NONE is set, the corresponding
+  C-pre-processor variables are automatically set.  Also, the C-pre-processor
+  variables G4VIS_BUILD and G4VIS_USE are set.
+- As before, environment variables for other drivers (depending on
+  external packages) still need positive setting of their G4VIS_BUILD and
+  G4VIS_USE environment variables.  In this category are:
+      G4VIS_BUILD_DAWN_DRIVER
+      G4VIS_BUILD_OPACS_DRIVER
+      G4VIS_BUILD_OPENGLX_DRIVER
+      G4VIS_BUILD_OPENGLWIN32_DRIVER
+      G4VIS_BUILD_OPENGLXM_DRIVER
+      G4VIS_BUILD_OIX_DRIVER
+      G4VIS_BUILD_OIWIN32_DRIVER
+      G4VIS_BUILD_VRML_DRIVER
+    with associated G4VIS_USE environment variables:
+      G4VIS_USE_DAWN
+      G4VIS_USE_OPACS
+      G4VIS_USE_OPENGLX
+      G4VIS_USE_OPENGLWIN32
+      G4VIS_USE_OPENGLXM
+      G4VIS_USE_OIX
+      G4VIS_USE_OIWIN32
+      G4VIS_USE_VRML
+  In this case G4VIS_NONE must *not* be set.
+- Added binmake.EXTRALIBS.README.
+
+graphics_reps                   greps-V03-02-01
+-------------
+- Improvements to comments and layout in G4VisExtent.
+- Added G4Scale class.
+
+intercoms                       intercoms-V03-02-02
+---------
+- Added G4VGraphicsScene::AddPrimitive(const G4Scale&).
+
+visualization                   vis-V03-02-08
+-------------
+- Minor fix to G4DAWNFILEViewer.
+- PostScript command "showpage" is always added to g4_XX.eps
+  so that it is printable (it can also be inserted into
+  LaTeX documents).
+- Added /vis/scene/add/scale command.
+- Added G4ScaleModel.
+- Fixed bug in G4BoundingSphereScene::::Accrue().
+- Added G4VModel::SetExtent(const G4VisExtent&).
+- Cosmetic improvements to G4BoundingSphereScene.
+- Improved auto-refreshing.
+- Force rebuild of graphics "stores" (graphical databases) and,
+  if auto-refresh is true, refresh of all views
+  (/vis/scene/notifyHandlers) after an addition to scene.
+- Improved access to models (modeling-V03-02-03).
+- Made G4VSceneHandler::fpModel non-const G4VModel* for convenience.
+- Removed the need to specify environment variables for visualization drivers
+  which do not need external packages or libraries. According
+  to "config" tag above.

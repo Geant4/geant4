@@ -1,0 +1,107 @@
+
+                       geant4-01-00-ref-04
+                       ===================
+
+   This is the first of a regular series of recommended reference tags
+ that we plan to 'publish' each month. These versions of the Geant4
+ toolkit are released to the experiments and other groups within the
+ collaboration. The aim is to aid in regularly obtaining an up-to-date 
+ tested version of the Geant4 toolkit.  These versions will include
+ all tested fixes, major or minor, and those developments that have
+ been tested and have passed our testing procedure.
+
+ Note that this reference-tag includes the recent ISO/ANSI migration.
+ 
+ Some of the improvements and fixes included are
+     - extension of the anti-proton energy loss down to 1 keV
+     - correction of a truncation problem in G4Poisson.hh
+     - CSG/G4Trap: fixed error in DistanceToIn(p,v).
+
+ Compiler versions for ISO/ANSI
+ ------------------------------
+
+ You can choose to compile utilising an ISO/ANSI compiler (or compiler
+ option), as this reference-tag includes the recent ISO/ANSI migration.
+ In order to test your code with strict-ansi setup, you need to do
+ the following:
+
+ - on DEC-cxx (dxplus.cern.ch, cxx version 6.1):   (*)
+
+   unsetenv G4USE_OSPACE  <--- if set. To allow use of the Native STL
+   setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
+
+   Selecting the ISO installation of CLHEP is required and will
+   become soon the default on DEC.
+
+ - on SUN-CC (version 5.0):                        (**)
+
+   setenv G4SYSTEM SUN-CC5
+   unsetenv G4USE_OSPACE  <--- if set. To allow use of the Native STL
+   remove the default /opt/SUNWspro/bin from your $PATH
+   and substitute it with /opt/SUNWspro50/bin
+
+   An ISO installation of CLHEP is already located in the usual
+   area set by the default CLHEP_BASE_DIR.
+
+ Notes:
+ (*)  a bug in cin.getline() system function causes an anomalous
+      behavior when running in interactive-mode on DEC-cxx 6.1. We
+      tested the bug has been fixed in the new compiler version 6.2.
+ (**) on SUN-CC 5.0 some files cannot be compiled if optimisation is
+      turned on (the default), set G4DEBUG instead.
+      A bug report is being filed with SUN support.
+
+ - Other compilers which support ISO/ANSI are:
+     o HP-aCC (hpplus.cern.ch, A.01.18 or greater) with Native STL.
+     o Win/NT-VC++ 6.0 with Native STL.
+   Please, refer to the release notes of the recent public release
+   1.0 for the complete list of supported compilers and setups
+   (ISO/non-ISO).
+ 
+---------- Reference-tag 'Release Notes' -----------
+
+In detail, the full list of changes is:
+
+event
+-----
+- G4EventManager becomes a singleton, to allow access to it directly, 
+  rather than through G4RunManager.
+- Minor correction for null pointer protection in G4StackManager.
+
+geometry
+--------
+- CSG/G4Trap: fixed bug in DistanceToIn(p,v).
+- G4DrawVoxels.cc: added protection in GetSlice().
+
+global
+------
+- G4Poisson:  Fixed truncation problem in Poisson distribution
+  implementation
+- globals.hh:   added check on definition of CLHEP_MAX_MIN_DEFINED.
+- G4UnitsTable: added constructor to G4BestUnit for 3vectors.
+
+low-energy electromagnetics
+---------------------------
+- anti-proton energy loss updated to provide simulation down to 1 keV 
+   (in previous version it's lower limit was 0.5 MeV).
+- G4ionLowEnergyIonisation: minor bug fix.
+
+visualization
+-------------
+- Added some protections for no viewer, no voxelisation. 
+- Added /vis/viewer/refresh. 
+- Fix for ISO in VRML. 
+- General handling of displaced solid, introduced /vis/viewer/show.
+
+graphics representations
+------------------------
+- Fix for spheres with small dtheta.
+- Added G4Polyhedron::Transform and InvertFacets.
+
+examples
+--------
+- N02, N03: Introduced ExN0nSteppingVerbose.
+- N04: Introduced 10 TeV mu- in exampleN04.EMtest.in. 
+- All reference files updated.
+- In extended/electromagnetic (testem-V01-00-00):
+  - new TestEm6 (low energy): tests protons, anti_protons, ionC12.

@@ -1,0 +1,105 @@
+
+                       geant4-04-00-ref-01
+                       ===================
+
+Some of the fixes/development included are:
+
+  o Critical fix to G4AuxiliaryNavServices, to avoid erroneous
+    condition frequently occurring in the new usage of Locate with
+    direction to initialise a step.  
+  o Fix in G4Navigator to properly reset blocked volume when
+    locating 'within volume'.
+  o Fix in G4strstreambuf to properly handling flushing of buffer
+    in gcc-3.X compilers.
+  o Added check for primary track outside of the world in
+    G4SteppingManager.
+  o Fix in HepRepXMLWriter for correctly handling of already open
+    files.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config				config-V04-00-00
+------
+- HP-aCC.gmk: removed include path to obsolete std wrappers.
+
+event				event-V04-00-00
+-----
+- G4PrimaryTransformer: removed check whether the primary vertex is
+  inside the world volume. The check has been moved to G4SteppingManager.
+
+geometry			geometry-V04-00-00
+--------
+- magnetic field:
+  o Activated G4DEBUG_FIELD in GNUmakefile.
+  o G4MagHelicalStepper.cc: renamed local variables "*Momentum*"
+    to "*Velocity*". 
+- management:
+  o G4AffineTransform.icc: fixed trivial compilation warning for gcc-2.95.2.
+- volumes:			geomvol-V04-00-02
+  o G4AuxiliaryNavServices: critical fix, to only consider whether a
+    'ray' (Point,Direction) is on the surface (it was erroneously also
+    checking for those inside volumes). This erroneous condition occurred
+    frequently in the new usage of Locate with Direction to initialise a
+    step.  
+  o G4Navigator: reset blocked volume when locating 'within volume',
+    after ensuring that it does not get called when ComputeSafety() is at
+    a boundary. Fixes cases of longstanding 'Point P is Inside' errors.
+  o Activated mechanism in GNUmakefile for allowing compilation with
+    G4DEBUG_FIELD or G4DEBUG_NAVIGATION flags.
+- solids/Boolean:
+  o Moved all verbosity mode warnings to G4BOOLDEBUG.
+  o Activated G4BOOLDEBUG mechanism in GNUmakefile.
+- solids/BREPS:
+  o G4BREPSolidPCone: bugfix for problem report #320.
+    Fixed missing use-case in constructor when RMAX and RMIN have been
+    changed for 2 consecutive equal z-values. Now it creates correctly
+    2 planar surfaces as expected.
+    Added private method ComputePlanarSurface() gained
+    by refactoring of some part of the code in the constructor.
+  o G4FPlane: fixed first constructor adding new argument for setting
+    explicitly the sense of a surface if required.
+    Fixed G4FPlane::Intersect() method which incorrectly ignored a special
+    case of a hit on surface point with ray direction opposite to surface
+    normal.
+- solids/CSG:
+  o G4Sphere.cc: fixed a problem with tolerances in the case of large Radius.
+  o Moved all verbosity mode warnings to G4CSGDEBUG.
+  o Activated G4CSGDEBUG mechanism in GNUmakefile.
+
+global				global-V04-00-02
+------
+- G4strstreambuf: plugged memory leak in destructor for buffer deletion.
+  Temporary fix to G4strstream::overflow(c) for GNU gcc-3.X compilers
+  (also problem report #342), which require returning of character 'c' in
+  case of buffer flushing for <CR>.
+- Replaced 'NULL' with '0' in G4Allocator.hh, G4strstreambuf.icc
+  and G4Timer.cc.
+- Removed obsolete inline definitions in g4std/wrappers/DEC-cxx/cmath.
+- Removed obsolete wrappers files for HP-aCC in g4std/wrappers.
+
+track				track-V04-00-00
+-----
+- G4Track: corrected initialization of fStepLength in constructors.
+  Fixed bug in assignment operator for fStepLength.
+
+tracking			tracking-V04-00-02
+--------
+- G4SteppingManager:
+  o fix safe comparison between floating numbers
+  o added check for primary track outside of the world
+  o bug fix for particles below threshold to avoid double steps
+
+visualization			vis-V03-02-22
+-------------
+- Corrected handling for already open file in HepRepXMLWriter.
+
+examples			examples-V04-00-00
+--------
+- Novice: syncronised files with CVS HEAD. No functional changes to code.
+- Updated reference outputs.
+
+tests				tests-V04-00-00
+-----
+- Updated reference outputs.

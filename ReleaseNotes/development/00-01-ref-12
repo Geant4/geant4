@@ -1,0 +1,36 @@
+
+                    geant4-00-01-ref-12
+                    ===================
+
+geant4-00-01-ref-12 is geant4-00-01-ref-11 plus:
+
+persistency-V00-01-06     - Fix for RW->G4RW changes
+                          - Fix of GNUmakefile for dependency handling
+                          - Fixes for circular dependencies
+                          - More bug fixes
+PersistentEx01-V00-01-01  - Standalone application "readDB".  See the
+                            README files.
+config-V00-01-12          - Recent changes for persistency and the fix to
+                            liblist.c
+vis-V00-01-09             - Bug fix for G4Trap in G4FRSceneFunc
+intercoms-V00-01-02       - Headers for SRM
+config-V00-01-13          - Added ISO-ANSI setup for DEC, activated if native
+                            STL is used.
+global-V00-01-11          - Implementaion of ISO-ANSI migration for global.
+                          - Virtual destructors in STL interface.
+persistency-V00-01-07     - more bug fixes
+                          - Use Geant4 schema name space (required by HepODBMS)
+                          - Introduced G4PersistencyMessenger and digits
+PersistentEx01-V00-01-02  - use interactive and batch mode
+                          - bug fix in PersEx01EventAction
+                          - updated README, PersistentEx01.in/out
+                          - GNUmakefile fix in readDB
+greps-V00-01-01           - Headers for SRM
+geometry-V00-01-02        - Added initialisation to Eside "side" variable in
+                            DistanceToOut(p,v) in CSG solids.
+                          - Added a check in G4Trap Makeplane.
+                          - Calculate extent of DisplacedSolid
+                            corrected plus additional tests for these
+                            methods added to all Boolean tests.
+global-V00-01-12          - STLInterface: changes for ISO/ANSI C++ support.
+                          - Header file comments for SRM.

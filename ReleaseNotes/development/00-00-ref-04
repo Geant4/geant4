@@ -1,0 +1,207 @@
+
+			geant4-00-00-ref-04
+			===================
+
+geant4-00-ref-04 is geant4-00-ref-03 plus:
+
+particles-01-00-05/05a/06: 1) Fixed mass formulae for ions(G4IonTable).
+                           2) Added invocation of
+                                G4VUserPhysicsTable::BuildPhysicsTable
+                                for ions created on the fly.
+                           3) Cleaned up some codes according to the
+                                messages by CodeWarrier.
+                           05a) includes some bug fix in
+                                G4ParticleWithCuts to
+                                ensure unit independence.
+                           06) Includes correct mass formulae for ions
+                                as in particles-01-00-03.
+
+run-01-00-01/2/3/4, event-01-00-01/2, tracking-01-00-03:
+
+  Unification of having constant pointers for all user action classes,
+    decoupling of particle definitions in PhysicsList for granular
+    libraries.
+  Trajectory and trajectory point classes become derivable.
+  PLEASE NOTE that these modifications affect on ALL examples and test
+    programs.
+  Removed G4VPhysicsList::ConstructAllParticles and related methods to
+    resolve dependencies on all particle granular libraries.
+  Modified SetCuts method (SetCuts take no argument now).
+
+config-01-00-03:
+
+  Ability to use granular libraries, introduced OBJY_LDLIB and
+    G4USE_STL.  (Note: granular library building and using not system
+    tested yet.)
+
+track-01-00-05:  bug fix for granular libraries
+
+examples-01-00-03 and tests-01-00-03: Changes for new UserAction methods.
+
+  Note: geant4-00-ref-04 includes new examples and tests .out files.
+
+=====================================================================
+
+
+Comments on adopting the geant4-00-ref-04 tag
+=============================================
+
+                                         Makoto Asai
+
+For using geant4-00-ref-04 tag, the following two modifications
+MUST be applied to each of your "local" test program. In case you 
+find shortages of explanation (I presume so), I'm afraid to say but
+please consult to the geant4/examples and/or geant4/tests codes
+because they have already been updated, or header files in our
+geant4/source directory.
+
+1] G4VUserPhysicsList 
+
+ To make Geant4 executable program smaller, we had agreed to 
+have granular libraries. For the case of particles, we have
+6 granular libraries for bosons, leptons, mesons, barions, ions
+and so-called short-lived particles, besides of management
+library of the particle category. To make unnecessary type(s)
+of particles unlinked to an executable, we eliminated several
+service methods for defining particles from the base class
+implementation of G4VUserPhysicsList. Instead, particle
+constructor classes are newly introduced and they are placed
+at the respective particle sub-categories. Thus, in your
+concrete PhysicsList class implementation (I mean in .cc
+file), you have to include some of the following header files
+according to the type(s) of particles you need for your test.
+
+#include "G4BosonConstructor.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BarionConstructor.hh"
+#include "G4IonConstructor.hh"
+#include "G4ShortLivedConstructor.hh"
+
+ For example, G4BosonConstructor is a class which provides a
+method named ConstructParticle() which defines all bosons,
+and the header file and the source code can be found at
+geant4/particles/bosons directory. In case you need bosons
+in your test program (this must be the most probable case),
+implement ConstructAllBosons() method in your concrete
+G4VUserPhysicsList class as follows:
+
+#include "G4BosonConstructor.hh"
+
+void MyPhysicsList::ConstructAllBosons()
+{
+  // Construct all bosons
+  G4BosonConstructor pConstructor;
+  pConstructor.ConstructParticle();
+}
+
+ If you define particles explicitly one by one in your
+PhysicsList class, you need not to touch anything.
+
+2] User action classes
+
+ According to the agreement of the last TSB meeting held in
+March, many user action methods have been changed by their
+signature to have a const pointer of appropriate class object.
+The affected classes and methods are the follows.
+
+ G4UserRunAction
+   BeginOfRunAction(const G4Run*);
+   EndOfRunAction(const G4Run*);
+
+ G4UserEventAction
+   BeginOfEventAction(const G4Event*);
+   EndOfEventAction(const G4Event*);
+
+ G4UserStackingAction
+   ClassifyNewTrack(const G4Track*);
+   NewStage();
+   PrepareNewEvent();
+
+ G4UserTrackingAction
+   PreUserTrackingAction(const G4Track*);
+   PostUserTrackingAction(const G4Track*);
+
+ G4UserSteppingAction
+   UserSteppingAction(const G4Step*);
+
+ Please note that G4VUserPrimaryGeneratorAction class still
+has a method which takes non-const pointer, that is,
+   GeneratePrimaries(G4Event*);
+because, obviously, the user has to SET the primary particles
+to the G4Event object.
+
+ According to my experience of correcting all of "global"
+examples and tests, the followings are most probable cases
+you have to change your code.
+
+0) In all action classes
+
+ Remove the line of getting the G4Event/G4Track/G4Step object,
+of course.
+
+1) RunAction
+
+ Now G4RunManager automatically sets the run ID. You need not
+set the run ID in your RunAction. Currently, run ID starts
+with zero and increases by one. Soon G4RunManager will have
+a Set method for run ID (not yet done, sorry).
+
+ To print out the run ID, use GetRunID() method of G4Run class.
+
+2) TrackingAction and SteppingAction
+
+ In case your code extracts a volume or some other information
+from G4Track object, make sure that you get them by const
+pointers and also make sure that you invoke only the Get methods
+to these information.
+
+ Of course, in case you surely have to Set something, you have
+to cast the const pointer to non-const pointer of G4Track or
+G4Step and then invoke the Set method. In Test09, I found this 
+case of setting the polarization to a track.
+
+  ((G4Track*)aTrack)->SetPolarization(newPol);
+
+1'] G4VUserPhysicsList 			- Hisaya Kusarige
+
+ "G4VUserPhysicsList::SetCuts" method is a "pure virtual" method. You should 
+implement this method in your concrete PhysicsList class in order to set cut 
+values for all particle types in your test programs.
+
+ For "geant4-00" release (and beta releases), this method is defined as 
+      virtual void G4VUserPhysicsList::SetCuts(G4double aCut) = 0.
+Here, the cut value in range is assumed to be unique for all particles and 
+the G4double value of "aCut" is used. G4VUserPhysicsList has a member of
+"defaultCutValue" and this value is given to SetCuts in most cases. 
+You can change this defaultCutValue by using UI commands of
+"/run/particle/SetCuts".
+
+ This idea of "unique cut value in range" is one of important features of
+Geant4 to handle cut values in a coherent manner. It is also true, however,
+that some application need to define different cut values in range for
+different particle types (for example, see novice/N03).
+ So, now (from run-01-00-03 tag) SetCuts method has no argument, i.e.
+is is defined as
+      virtual void G4VUserPhysicsList::SetCuts() = 0.
+
+ You need to fit your test programs with above modification. If you adopt 
+"unique cut value in range" (this must be the most probable case), you only
+need to use G4VUserPhysicsList::SetCutsWithDefault() in your SetCuts method,
+i.e.
+      void MyPhysicsList::SetCuts() 
+      {
+        if (verboseLevel >1){
+          G4cout << "ExN02PhysicsList::SetCuts:";
+        }  
+        //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+        //   the default cut value for all particle types 
+        SetCutsWithDefault();   
+      }
+
+ I want to add one more comment if you want to set different cut values. 
+You need to take care of order of particle types in setting cut vales because 
+some particle requires cut values of other particle types in building physics 
+tables . The rule of ordering is 
+(1) gamma, (2) electron, (3) positron, (4) proton and antiproton, and
+(5) others. Please see  ExN03PhysicsList::SetCuts() as a example.

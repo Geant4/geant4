@@ -1,0 +1,18 @@
+
+                   geant4-00-01-ref-13
+                   ===================
+
+geant4-00-01-ref-13 is geant4-00-01-ref-12 plus:
+
+vis-V00-01-10        - Header files for SRM.
+config-V00-01-14     - Tidying.
+transport-V00-01-01  - transportation.cc: Added protection for the case
+                       of a zero step (when there is a field).
+                     - UserSpecialCuts: Protection to use min range
+                       and min kinE only for charged particles.
+global-V00-01-13     - inline STL Interface template member functions again. 
+                     - rationalise STLInterface cstring.h.
+geomvol-V00-01-01    - G4TouchableHistory: made GetTranslation and
+                       GetRotation non-inline.
+                     - G4PropagatorInField: Initialised fVerboseLevel
+                       in constructor.

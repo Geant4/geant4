@@ -1,0 +1,199 @@
+
+                       geant4-03-02-ref-03
+                       ===================
+
+Some of the fixes/development included since the last reference
+tag are:
+
+  o Suppression of the production threshold in Phot, Compt, Conv
+    and Annih standard electromagnetic processes.
+  o First step of design iteration in fluorescence for low-energy
+    electromagnetic processes.
+  o Improved user commands in G4GeneralParticleSource.
+  o Added a new feature for the user to increase the number of
+    waiting stacks.
+  o Re-engineered G4UI variables.
+  o Re-implemented verbosity control in visualization.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                          config-V03-02-04
+------
+- Re-engineered G4UI variables.
+- Introduced environment variable G4UI_NONE that, if set, no UI
+  sessions nor any UI libraries are built.
+  (This would only happen in a pure batch job or, perhaps, in a user
+  framework having its own UI system.)
+- Removed the need to specify environment variables for UI sessions
+  which do not need external packages or libraries, namely :
+    G4UI_BUILD_GAG_SESSION, G4UI_BUILD_TERMINAL_SESSION
+  with associated G4UI_USE environment variables:
+    G4UI_USE_GAG, G4UI_USE_TCSH, G4UI_USE_TERMINAL
+  The above environment variables become redundant and are ignored.
+- As before, environment variables for other sessions still need
+  positive setting of their G4UI_BUILD and G4UI_USE environment
+  variables. In this category are:
+    G4UI_BUILD_WIN32_SESSION, G4UI_BUILD_WO_SESSION,
+    G4UI_BUILD_XAW_SESSION, G4UI_BUILD_XM_SESSION
+  with associated G4UI_USE environment variables:
+    G4UI_USE_WIN32, G4UI_USE_WO, G4UI_USE_XAW, G4UI_USE_XM
+- Note: The user must still instantiate and SessionStart only *one*
+  session, but if it is to be one in the category needing external
+  packages or libraries, the corresponding G4UI_USE must be set to
+  trigger inclusion of libraries.  Otherwise the user needs not set any
+  environment variables.
+
+event                           event-V03-02-05
+-----
+- G4PrimaryParticle now stores the proper trackID.
+- Added a new feature for the user to increase the number of waiting
+  stacks.
+- In G4GeneralParticleSource (GPS):
+  Most commands under G4ParticleGun class are now available.
+  Implemented co-ordinates rotation for angular distribution.
+  User defined co-ordinates was an option available to user in the
+  messenger but not implemented internally in the older version gps.
+  Source angular distribution coupled with positional distribution can
+  lead to rather strange combinations. To avoid this I used a simple
+  scheme in this implementation:
+  o For cos-law angular distribution the default maxtheta is set to
+    pi/2. instead of pi. The user can of course re-set this to any
+    number between 0 - pi.
+  o Added user defined histogram re-set method. After re-set user can
+    redefine all the histograms. To use: /gps/resethist  'histname'
+  o Bug fixed in generating theta, and in calculating the weight.
+  o Added further guidance in the messenger for the definition of
+    pre-defined energy distributions.
+- Bug fix in G4EventManager in case G4_STORETRAJECTORY is off. 
+  Fixes problem report #289.
+
+geometry/solids/Boolean         geom-solids-bool-V03-02-00
+-----------------------
+- Introduced G4BOOLDEBUG flag and relaxed G4Exception calls with
+  warnings to G4cerr for rare occurences of anomalous conditions.
+
+geometry/solids/BREPS           breps-V03-02-03
+---------------------
+- G4BREPSolidPolyhedra.cc: fixed situation when phi1 = 0 dphi1 = 2*pi
+  and all RMINs = 0.0. In this case the inner planes are not created.
+  More than 2 z-planes and inner planes are not created whenever two
+  consecutive RMINs are = 0.0.
+  Fixes problem report #266.
+
+geometry/solids/CSG             geom-solids-csg-V03-02-00
+-------------------
+- G4Sphere.cc: bug fixed in G4Sphere::SurfaceNormal for the case
+  kNETheta. Fixes problem report #290.
+
+graphics_reps                   greps-V03-02-03
+-------------
+- Added G4Polyline::transform.                       
+- Fixed pedantic warnings in G4NURBS.
+- Made typedef's public in G4Point3DList.hh and G4Polyline.hh.
+
+intercoms                       intercoms-V03-02-06
+---------
+- Moved default value of argument G4Transform3D::Identity from
+  G4VSceneHandler::BeginPrimitives to G4VGraphicsScene::BeginPrimitives.
+- Added G4VisManager::Draw(const G4Scale&,...).
+- G4UIbatch now displays (G4cerr) the error message.
+  Fixes problem report #294.
+
+interfaces                      interfaces-V03-02-00
+----------
+- Re-engineered G4UI variables:
+  o Changed GNUmakefile so that GAG, TERMINAL and TCSH built by default.
+  o Nothing built if G4UI_NONE is set.
+
+particles                       particles-V03-02-00
+---------
+- Fixed bugs in copy constructor of G4DecayProduct.
+- Synchronised files with CVS head.
+
+processes/decay                         decay-V03-02-01
+---------------
+- Code cleanup.
+- Fixed problems of verboselevel not initialized.
+
+processes/electromagnetic/lowenergy     emlowen-V03-02-07
+-----------------------------------
+- Fixed a problem of continuity of ion effective charge.
+- Fix to GammaConversion process.
+- First step of design iteration in fluorescence.
+- Fixed energy conservation problems for small range cuts in
+  G4LowEnergyIonisation.
+- Added files resulting from design iteration in the data domain.
+
+processes/electromagnetic/standard      stand-V03-02-00
+----------------------------------
+- Clean up compilation warnings for Linux ANSI mode.
+- GammaConversion::PostStepDoIt : sample epsil->power (rndm,0.333333).
+- Suppression of the production threshold in phot, compt, conv, annih
+  processes.
+
+processes/management                    procman-V03-02-01
+--------------------
+- Extended arguments for Retrieve/StorePhysicsTable methods.
+- Fixed bug in copy constructor of G4ProcessManager.
+
+run                             run-V03-02-02
+---
+- Fixed bugs in G4VUserPhysicsList.
+- Modify Store/RetrievePhysicsTable for new G4VProcess.
+- Fixed bugs in StoreMaterialInfor and StoreCutValues methods
+  when used in binary mode.
+- Added a new feature for the user to increase the number of waiting
+  stacks.
+- Added Set/GetApplyCuts methods in G4VUserPhysicsList.
+- Added /run/particle/applyCuts command in G4UserPhysicsListMessenger.
+
+track                           track-V03-02-01
+-----
+- Code cleanup.
+- Fixed bug for velocity in method G4Step::UpdateTrack().
+
+visualization                   vis-V03-02-13
+-------------
+- Eliminated view parameters from G4VisManager.
+  Now, each view maintains its own parameters.
+  Can be copied from one view to another with:
+    /vis/viewer/set/all <from-viewer-name>
+    Copies view parameters from from-viewer to current viewer.
+    Affects current viewer.
+- Removed redundant methods from G4VisManager, mostly to do with
+  old-style commands.
+- Added README.quick, a quick installation guide.
+- Re-implemented verbosity control.  Output statements wherever possible
+  are controlled by the verbosity in a simple graded message scheme:
+    enum Verbosity {
+      quiet,         // Nothing is printed.
+      startup,       // Startup and endup messages are printed...
+      errors,        // ...and errors...
+      warnings,      // ...and warnings...
+      confirmations, // ...and confirming messages...
+      parameters,    // ...and parameters of scenes and views...
+      all            // ...and everything available.
+    };
+- Moved default value G4Transform3D::Identity of argument from
+  G4VSceneHandler::BeginPrimitives to G4VGraphicsScene::BeginPrimitives.
+- Fixed bug in G4VSceneHandler::AddPrimitive(const G4Scale&).
+- Added sceneHandler.Begin/EndPrimitives messages to models.
+- Removed "dummy" graphics systems in G4VisManager.
+- Improved robustness and timeliness of invocation of some commands.
+- Improved support for multiple viewers (see OpenGL/History).
+- Added G4VisManager::Draw(const G4Scale&,...).
+- Added template graphics system XXX.
+- Improved verbosity guidance and READMEs.
+- Fixed bugs in G4VisManager::GeometryHasChanged.                        
+- Separated out G4Scene::CalculateExtent.                                
+- Reduced warnings from OpenGL - see OpenGL/History.
+- Added explicit invocation of base class methods to avoid warnings
+  about hiding of base class methods.
+
+tests                   tests-V03-02-00
+-----
+- Removed obsolete files in directories "results" and "tools".
+  Synchronised with CVS head.
+- Updated test201.

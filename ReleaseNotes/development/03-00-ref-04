@@ -1,0 +1,193 @@
+
+                       geant4-03-00-ref-04
+                       ===================
+
+Some of the fixes/development included since the last reference
+tag are:
+    - Fixes in G4ReplicaNavigation::ComputeStep() and
+      ComputeTransformation() for replicas in Phi.
+    - Completed migration to STL vector for "global" category:
+      migrated classes G4PhysicsTable, G4UnitsTable and G4StateManager.
+    - Introduced Store/RetrievePhysicsTable methods in G4PhysicsTable. 
+    - Bug fix in calculation of electron energy in G4MuDecayChannel.
+    - Introduced new module 'integral' for integral EM processes.
+    - Visualization: changed rotation of phi-replicas to ensure
+      correspondence with rule that phi=0 bisects the replica. 
+      Added many new commands.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config				config-V03-00-03
+------
+- Added path to processes/electromagnetic/integral/include in
+  binmake.gmk.
+- Added/enabled code in configuration files to store path to dynamic
+  library from example/test directory in the executable.
+
+geometry/management		geommng-V03-00-01
+-------------------
+- Corrected comments in G4PVPlacement and G4AssemblyVolume headers.
+
+geometry/solids/Boolean		geom-solid-bool-V03-00-03
+-----------------------
+- G4IntersectionSolid:
+  o Fix in CalculateExtent() for computation of 'pMin'
+    and 'pMax', to avoid assignment in case CalculateExtent() of one
+    component solid fails. 
+  o Fix in Inside() to return 'kOutside' in case first component
+    solid's Inside() returns 'kOutside'. 
+- G4UnionSolid:
+  o Fix in CalculateExtent() for computation of 'pMin' and 'pMax':
+    initialised local variables.
+
+geometry/volumes		geomvol-V03-00-02
+----------------
+- Fix in G4ReplicaNavigation::ComputeTransformation() to consider
+  'pVol' for SetPhiTransformation() in the kPhi case.
+- Fix in G4ReplicaNavigation::ComputeStep() to initialise 'ourStep'
+  to kCarTolerance.
+
+global				global-V03-00-08
+------
+- Migration to STL vector for G4PhysicsTable.
+- Migration to STL vector for classes G4UnitsTable and G4StateManager.
+- Added new unit 'parsec' to SystemOfUnits.h 
+- Removed file G4UnitsTest.hh now replaced by G4SIunits.hh.
+- Fixed bug in constructor of G4PhysicsLnVector: initialised
+  'dataVector' to zero. 
+- Added Store/RetrievePhysicsTable methods in G4PhysicsTable. 
+- Added Store/Retrieve and GetType methods in G4PhysicsVector and
+  related. 
+- Introduced G4PhysicsVectorType class (enumeration). 
+- Added unit test PhysicsTableTest.cc.
+
+intercoms			intercoms-V03-00-02
+---------
+- Changed usage of entries() to size() in G4UIcommand.cc 
+  according to migration to STL vectors of G4UnitsTable. 
+
+materials			materials-V03-00-06
+---------
+- Added protection in GetSandiaCofForMaterial().
+- Revision of destructor, copy constructor, assignement operator in 
+  G4IonisParam, G4Isotope, G4Element and G4Material, according to
+  problem report #106.
+
+particles			particles-V03-00-03
+---------
+- Bug fix in calculation of electron energy in G4MuDecayChannel.
+  Fixes problem report #224.
+- Fixed a bug in G4DynamicParticle::SetDefinition() for problem
+  report #228.
+- Added RestoreCuts() methods to G4ParticleWithCuts class.
+
+persistency			persistency-V03-00-01
+-----------
+- replaced reference to G4UnitsTest.hh with G4SIUnits.hh.
+- G4PDCofThisEvent.ddl: fixed a bug in GetNumberOfCollections(). 
+
+processes/decay					decay-V03-00-03
+---------------
+- Added abstract class G4VExtDecayer for external decayer and modified
+  G4Decay accordingly.
+
+processes/electromagnetic			em-V03-00-04
+-------------------------
+- Suppressed protection in PhotoElectric process.
+- Adopt fStopButAlive in eplusAnnihilation process.
+- Introduced new module 'integral' for integral processes: moved
+  existing integral processes (G4I*, G4VI*) therein.
+
+processes/hadronic/cross_sections		cross-V03-00-00
+---------------------------------
+- Bug fix for very low energy ion cross-sections; should have no
+  visible effect.
+
+processes/hadronic/models/neutron_hp		neu-V03-00-03
+------------------------------------
+- Modified filling of physics table according to recent migration 
+  of G4PhysicsTable to STL vectors
+  (affected files:G4NeutronHPCaptureData.cc, G4NeutronHPElasticData.cc,
+   G4NeutronHPFissionData.cc, G4NeutronHPInelasticData.cc).
+
+processes/management				procman-V03-00-00
+--------------------
+- Modified Store/RetrievePhysicsTable() methods: added a bool argument
+  to specify ascii/binary mode.
+
+processes/transportation			transport-V03-00-00
+-------------------------
+- Improved calculation of energy at the end of the field.
+
+track			track-V03-00-04
+-----
+- Fix in case momentum is zero, (even if energy>0.0 and very small)
+  to overcome problems due to precision issues.
+
+visualization			vis-V03-00-08
+-------------
+- Changed rotation of phi-replicas in G4PhysicalVolumeModel.cc to
+  ensure correspondence with rule that phi=0 bisects the replica. 
+
+  WARNING: Prior to this fix the graphics did NOT correspond to the
+  replica navigation. If you have been relying on the graphics to
+  position daughter volumes in a phi-replica, navigation will have
+  been incorrect, possibly without causing a crash. The above fix
+  will change the apparent position as shown by the graphics and you
+  will have to correct the positioning of daughters. Make sure the 
+  daughters are all properly enclosed within the replica. Graphics 
+  and navigation now correspond. 
+- Added auto-refresh facility for OpenGL. 
+- Bug fixes for problems: 
+  #120: improved up vector calculation to avoid view "flipping"
+        at (90, 90). 
+  #157: fixed crash when viewer was defined before scene. 
+  #204: fixed failure to change number of sides per circle. 
+- Fixed problem when requested physical volume was at depth 2 or more. 
+- Removed all references to RW wrappers. 
+- Introduced many new commands (listed below). Old commands print a
+  DEPRECATED warning. 
+  o New compound command: 
+    /vis/drawView [<theta-deg>] [<phi-deg>] 
+                  [<pan-right>] [<pan-up>] [<pan-unit>] 
+                  [<zoom-factor>] [<dolly>] [<dolly-unit>]
+  o New primitive commands: 
+    /vis/enable [true|false] 
+    /vis/disable 
+    /vis/verbose [] 
+    /vis/viewer/set/lineSegmentsPerCircle [] 
+    /vis/viewer/set/sectionPlane ... 
+    /vis/viewer/set/autoRefresh 
+    /vis/viewer/set/projection 
+    /vis/viewer/dolly 
+    /vis/viewer/dollyTo 
+    /vis/viewer/lightsThetaPhi 
+    /vis/viewer/lightsVector 
+    /vis/viewer/pan 
+    /vis/viewer/panTo 
+    /vis/viewer/viewpointThetaPhi 
+    /vis/viewer/viewpointVector 
+    /vis/viewer/zoom 
+    /vis/viewer/zoomTo 
+    /vis/viewer/set/hiddenMarker 
+    /vis/viewer/set/lightsMove 
+
+g3tog4				g3tog4-V03-00-02
+------
+- G3toG4MakeSolid.cc: fixed bug in construction of G4Sphere where
+  'theta' and 'phi' parameters were reversed according to G4Sphere
+  constructor. Fixes problem report #230. 
+- G3Division.cc: correction for "PARA". Slices are placed with
+  G4PVPlacement instead of G4PVReplica for this particular case. 
+
+examples			examples-V03-00-01
+--------
+- Added G4MuonMinusCaptureAtRest in physics list of ExampleN04.
+- Updated reference outputs.
+
+tests				tests-V03-00-03
+-----
+- Added G4MuonMinusCaptureAtRest in physicslist of test02.
+- Updated reference outputs.

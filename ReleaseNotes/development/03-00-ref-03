@@ -1,0 +1,100 @@
+
+                       geant4-03-00-ref-03
+                       ===================
+
+Some of the fixes/development included since the last reference
+tag are:
+    - Fixes in G4Tubs::CalculateExtent() and G4Tubs::Inside(p) in
+      computation of pPhi for points at phi = 0.
+    - Introduced new helper class G4AssemblyVolume: allows combining
+      volumes together in arbitrary way in the 3D space.
+    - Fixes in G4StepPoint::GetVelocity() to return correct value
+      in case of optical-photons.
+    - Full migration to STL vectors for categories: run, event,
+      digits+hits, intercoms, readout, tracking.
+    - Added pre-assignedDecayTime to G4DynamicParticle.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config			config-V03-00-01
+------
+- Added path to processes/photolepton_hadron/include in binmake.gmk.
+
+digits+hits		hitsDigits-V03-00-01
+-----------
+- Full migration to STL vectors.
+
+event			event-V03-00-03
+-----
+- Full migration to STL vectors.
+- Added proper time to G4PrimaryParticle.
+- Fixed bug in G4GeneralParticleSource.
+
+intercoms		intercoms-V03-00-01
+---------
+- Full migration to STL vectors.
+
+geometry/management	geommng-V03-00-00
+-------------------
+- Introduced G4AssemblyVolume: helper class to combine several volumes
+  together in an arbitrary way in the 3D space. 
+  o Added files:
+    G4AssemblyVolume[.hh.icc.cc], G4AssemblyTriplet[.hh.icc]. 
+  o Added unit test suite for G4AssemblyVolume class:
+    TestAssemblyVolume. 
+- Minor fix to assignment operator in G4LogicalSurface. 
+
+geometry/solids/CSG	geom-solids-csg-V03-00-03
+-------------------
+- Fixes in G4Tubs 
+  o Fixed bug in function Inside(p) in computation of pPhi 
+    for points at phi = 0 if the (start phi)+(delta phi) is at phi = 0. 
+  o Temporarly modified CalculateExtent(...), now simply based
+    on G4Box::CalculateExtent(...).
+  o Updated unit test testG4Tubs.cc. 
+
+materials		materials-V03-00-04
+---------
+- Added new method G4Material::GetNuclearInterLength().
+- Bug fix concerning units in G4SandiaTable::GetSandiaCofPerAtom().
+  Reimplemented G4SandiaTable::ComputeMatSandiaMatrix().
+
+particles		particles-V03-00-00
+---------
+- Added pre-assignedDecayTime to G4DynamicParticle.
+
+readout			readout-V03-00-01
+-------
+- Full migration to STL vectors.
+
+run			run-V03-00-01
+---
+- Full migration to STL vectors.
+
+track			track-V03-00-03
+-----
+- Added copy constructor for G4Track.
+- Fix in G4Track::GetVelocity() for Gamma
+- Fixes to G4StepPoint::GetVelocity() for problem report #208
+  and to return correct value in case of optical-photon.
+- Added call to SetVelocity() in G4Step::InitializeStep().
+
+tracking		tracking-V03-00-05
+--------
+- Full migration to STL vectors.
+
+g3tog4				g3tog4-V03-00-00
+------
+- Added support for replicated "PARA" shapes in
+  G3Division::CreateSolid(...). 
+
+examples
+--------
+- Updated reference outputs.
+
+tests
+-----
+- Full migration to STL vectors.
+- Updated reference outputs.

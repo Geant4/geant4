@@ -1,0 +1,270 @@
+
+                       geant4-03-02-ref-08
+                       ===================
+
+Some of the fixes/development included are:
+
+  o New HepRepFile graphics driver.
+  o New hadronic models: evaporation cascade, CHIPS, coherent-elastic.
+  o Introduced mechanism for reference-counting of touchables.
+  o Introduced ability for time-dependent fields and setting fields
+    per volume with extended examples.
+  o Added Beam option for generating accelerator beams.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                  config-V03-02-12
+------
+- Added paths in binmake.gmk including new hadronic models for cascade,
+  CHIPS and coherent_elastic.
+- Included references to HepRepFile.
+
+event                                   event-V03-02-09
+-----
+- Code changes to remove compilation warnings un gcc-2.95.2
+- Added Beam option for generating accelerator beams
+- Add check whether the primary vertex is inside of the world volume.
+- Move set method of position and time from G4ParticleGun to
+  G4VPrimaryGenerator so that G4HEPEvtInterface can accept the primary
+  vertex position
+- G4PrimaryTransformer.cc: now considering case where a primary is
+  placed on the boundary of the world volume. Added units.
+
+geometry/magneticfield                 field-V03-02-05 
+----------------------
+- Fixes in G4MagIntegratorDriver:
+  o Now respecting its minimum driver step size in AccurateAdvance.
+  o Modified maximum number of steps, lowering by factor of 10;
+    it should reduce the time spent integrating low energy particles.
+- Motivated by the use case of an Electric Field in order to achieve
+  reasonable accuracy in time integration, and to enable fields that
+  vary with the global time:
+  o Modified G4Field to allow the time in the GetFieldValue method.
+  o Modified EquationOfMotion to provide the time to the GetFieldValue
+    method of G4Field.
+- Added the global time as variable to be integrated over in the 
+  case of an Electric Field.
+- Fixed warnings on gcc-2.95.2.
+- Included unit tests field01, field02, field03.
+- Protected verbose warnings with G4DEBUG_FIELD flag in G4ChordFinder
+  and G4MagIntegratorDriver.
+
+geometry/management                    geommng-V03-02-03
+-------------------
+- Fixed comments for reference manual in G4TouchableHandle.hh.
+- Initialise noNodes to 1 in G4SmartVoxelHeader::BuildNodes() in case
+  computed nodes for smartless happen to be zero.
+
+geometry/solids/Boolean                geom-solid-bool-V03-02-02 
+-----------------------
+- Fix for verbosity in G4ReflectionFactory. Reduced of one level.
+
+geometry/volumes                       geomvol-V03-02-00c 
+----------------
+- Added handles for reference counting: G4GRSSolidHandle,
+  G4GRSVolumeHandle, G4TouchableHistoryHandle.
+- Modified G4Navigator for reference counted touchables.
+  Introduced new methods CreateTouchableHistoryHandle() and
+  LocateGlobalPointAndUpdateTouchableHandle(...).
+- New unit tests testG4ParameterisedMaterial.cc and
+  testG4TouchableHandle.cc.
+
+global                                  global-V03-02-06
+------
+- New optimised revision of G4ReferenceCountedHandle to reflect
+  new design. Updated also unit test testReferenceCountedHandle.cc.
+
+intercoms                               intercoms-V03-02-15
+---------
+- Fixed a problem for commands with doubled slash.
+
+interfaces                              interfaces-V03-02-01
+----------
+- Fix G4UIterminal to display a command line AFTER solving aliases
+  in case the command caused "command not found".
+
+materials                               materials-V03-02-06
+---------
+- Added new function G4Materials::SetChemicalFormula().
+- Fixed pointer initialisation in
+  G4MaterialPropertyVector::RemoveElement().
+  Fixes compilation problem on Windows/VC++.
+
+parameterisations                       parmodels-V03-02-02 
+-----------------
+- Introduced changes in G4VClusterModel[.hh.cc] for reference-counted
+  touchables.
+
+particles                               particles-V03-02-10 
+---------
+- Introduced changes to allow multiple cuts per material (temporary). 
+
+processes/electromagnetic/lowenergy     emlowen-V03-02-48
+-----------------------------------
+- New database version G4EMLOW0.4 required.
+- Fix for compilation on Windows/VC++.
+- Removed static inline methods to non inline.
+- Bug fix in G4FluoData.
+- Physics improvement in Bremsstrahlung.
+- Introduced changes to allow multiple cuts per material (temporary). 
+- Performance improvement in electron processes.
+- Some code clean up.
+- First implementation of a generic unit test with AIDA/Lizard
+  analysis.
+- Introduced PIXE in G4hLowEnergyIonisation.
+
+processes/electromagnetic/standard      stand-V03-02-14
+----------------------------------
+- Moved ParticleMass and Charge to local variables.
+- Code cleanup in G4hEnergyLoss[.hh.cc].
+- Removed static inline methods to non inline.
+- Introduced changes to allow multiple cuts per material (temporary).
+  Modified: Ve(h)EnergyLoss, e(h)Ionisation, eBremsstrahlung,
+  PAIEnergyLoss, PAIonisation, SynchrotronRadiation.
+
+processes/electromagnetic/muons         muons-V03-02-10
+-------------------------------
+- Moved ParticleMass and Charge to local variables.
+- Added correction to Tmax+xsection computation.
+- Removed static inline methods to non inline.
+- Introduced changes to allow multiple cuts per material (temporary).
+- Introduced changes to G4VMuEnergyLoss.cc for reference-counted
+  touchables.
+
+processes/electromagnetic/utils         utils-V03-02-11 
+-------------------------------
+- G4VEnergyLoss: some data members and functions are no more static.
+- Bug fixed in G4MultipleScattering::PostStepDoIt().
+- Removed static inline methods to non inline.
+- Introduced changes to allow multiple cuts per material (temporary).
+- StorePhysicsTable: ParticleName included in FileName.
+
+processes/electromagnetic/xrays         xrays-V03-02-02 
+-------------------------------
+- Introduced changes to allow multiple cuts per material (temporary).
+  Modified G4ForwardXrayTR.cc.
+- Modified G4Cerenkov.cc and G4Scintillator.cc for reference-counted
+  touchables.
+- G4Cerenkov.cc: added check on
+  CerenkovAngleIntegrals->IsFilledVectorExist()
+  in method GetAverageNumberOfPhotons() and a test for MeanNumPhotons
+  in DoIt().
+
+processes/hadronic                      based on had-V03-02-09
+------------------
+- New cascade models (evaporation & utils modules).
+- New chiral_inv_phase_space model (body & interface modules). 
+- New coherent_elastic model.
+- Fixes in: cross_sections, management, kinetic_model,
+  quark_gluon_string, string_common, string_fragmentation,
+  generator/util, processes and util. 
+- Includes "radiative_decay-V03-02-03" 
+- models/neutron_hp:
+  o Fixed asymmetry in the angular distributions for elastic scattering
+    in the case of isotropic distributions.
+- models/generator/quark_gluon_String:
+  o Fixed semi-infinite loop in sampling the parton density distributions. 
+- models/chiral_inv_space:
+  o Fixed miscalculation on masses for strange nuclei. 
+- models/isotope_production:
+  o Fixed exception in cases where this is used on materials that
+    are mixtures.
+- models/generator:
+  o Resolved case, where multiple soft and diffractive collisions in
+    one single interaction lead, due to energy transfer in diffraction,
+    to a case, where the parton density functions could not be sampled
+    any more to satisfy the pre-calculated number of pomeron exchanged
+    in soft collisions, energy conservation, and the minimum
+    string-mass constraint. 
+- Performance optimization to improve the speed for doppler broadening
+  by an integer factor. 
+
+processes/transportation                transport-V03-02-05 
+------------------------
+- Motivated by the use case of an Electric Field, in order to achieve
+  reasonable accuracy in time integration, and to enable fields that
+  vary with the global time:
+  o G4Transportation now try obtaining the delta_time from
+    G4FieldTrack.
+- Introduced changes to G4Transportation for reference-counted
+  touchables. Added methods GetFreeTouchable() and
+  SetTheOtherTouchableFree(G4VTouchable*).
+- Added protection in G4Transportation::AlongStepGPIL for messaging
+  "ResestStepEstimate" of G4ChordFinder for the case there is no global
+  field.
+
+run                                     run-V03-02-09
+---
+- Added GetVersionString() method to G4RunManager.
+
+track                                   track-V03-02-06
+-----
+- Fixed bug in assignment operator of G4Track.
+- Added SetParentWeightByProcess() method.
+- Added SetSecondaryWeightByProcess() method.
+- Removed static inline methods to non inline.
+- Introduced changes for reference-counted touchables mechanism.
+
+tracking                                tracking-V03-02-02
+--------
+- Introduced changes for reference-counted touchables.
+- Cleaned warnings from gcc-2.95.2.
+- Some code reformatting.
+
+visualization                           based on vis-V03-02-20
+-------------
+- Added commands:
+  - /vis/viewer/flush = refresh + update.
+  - /vis/viewer/set/upThetaPhi and upVector.
+  - refresh|flush option to /vis/scene/notifyHandlers.
+- Moved /vis/viewer/lights and viewpoint to /vis/viewer/set.
+- Moved HepRepFile classes to HepRep/ directory and removed HepRep
+  classes therein.
+- Updated G4RTJpegMaker for porting Windows systems. 
+- New HepRepFile driver:
+  o HepRep Type names now come from Physical Volume names.
+  o Added many HepRep Attributes for other volume properties.
+- OpenInventor : move HEPVis/SoWindow under vis/OpenInventor/G4SoWindow
+  to prepare HEPVis/6.0. (HEPVis/SoWindow will disappear from
+  HEPVis/6.0).
+- Added README.built_in_commands file.
+- Fixed bug in G4VisManager::EndOfEvent.
+- Moved code from G4VisManagerRegisterMessengers.cc to G4VisManager.cc
+  and removed G4VisManagerRegisterMessengers.cc.
+- Fix for compilation error on Windows/VC++: fixed initialisation of
+  local pointer in G4VisCommandsSceneAdd.cc 
+
+g3tog4 tool                             g3tog4-V03-02-03
+-----------
+- Implemented reflection of CSG solids through G4ReflectionFactory
+  class and G4ReflectedSolid. Added G3G4_NO_REFLECTION flag to exclude
+  it if needed for cases not yet covered.
+- Added limited support for MANY volumes through adoption of boolean
+  solids. New files: G3toG4MANY[.hh.cc], G4gsbool.cc.
+- Changed G3Division::CreatePVReplica() to return a
+  G4PhysicalVolumesPair.
+
+examples                                based on examples-V03-02-03
+--------
+- Novice:
+  o cleared warnings on gcc-2.95.2.
+  o updated visualization macros.
+  o updated vis-managers.
+- Extended:
+  o new electromagnetic example "TestEm10" for exercising
+    specific parameterisation models.    
+  o general cleanup of field tests: field01, field02, field03.
+  o updated vis-managers.
+- Advanced:
+  o new release of "brachytherapy" application (brachy-V03-02-00).
+  o updated vis-managers.
+
+tests                                   based on tests-V03-02-05
+-----
+- New tests "test21" and "test22" for integration of new hadronic
+  models.
+- Updated vis-managers.
+- Updated input macros and reference outputs.
+

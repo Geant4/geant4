@@ -1,0 +1,41 @@
+
+			geant4-00-00-ref-06
+			===================
+
+geant4-00-ref-06 is geant4-00-ref-05 plus:
+
+config-01-00-04: For CLHEP version 1.4: CLHEP_BASE_DIR has been
+    temporarly moved to
+    /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/new.  From Gabriele: By
+    using "config-01-00-04" you'll compile your code against the new
+    CLHEP version 1.4 now installed at CERN. It requires a complete
+    re-compilation of the G4 code.  In this version CLHEP_BASE_DIR has
+    been temporarly moved to
+    /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/new it will be moved
+    back to "pro" (where the "pro" link will be updated) as soon as
+    your tests will be completed.  Note that for DEC-cxx I installed a
+    customized version of the CLHEP library where I explicitly
+    disabled the ISO-ANSI features which are activated by default (for
+    DEC and Win/NT) in the CLHEP installation setup.
+
+persistency-01-00-01: Removed overlapping definition of HepRefVArray
+    for G4PVPhysicalVolume in G4PGeometryObjectMap.cc, fixed a typo in
+    G4PersistentGeomMan.cc.
+
+procman-01-00-03: Removes procman-emutils dependency.
+
+em-01-00-04: Removes procman-emutils dependency and fixes bug in
+    integral approach.
+
+source-gmk-01-00-02: source/GNUmakefile: Always remake library map.
+
+procman-01-00-03a: two new methods of
+    G4ProcessManager::GetProcessActivation.
+
+em-01-00-04a: Fix for problem with G4PhysicsLogVector in integral
+    approach.
+
+global-01-00-00: Code Wizard cleanup in Units, prototype STL Interface
+    (details below).
+
+geometry-01-00-03: Bug fixes and fixes for STL Interface.

@@ -1,0 +1,58 @@
+
+			geant4-00-01-ref-02
+			===================
+
+geant4-00-01-ref-02 is geant4-00-01 plus:
+
+track-01-00-07         G4MARS5GeVMechanism.cc: == -> =.
+config-V00-01-00       Added EXTRA_LINK_DEPENDENCIES to binmake.gmk.
+STLInterface-V00-01-00 Implementation of RWCString::hash(const RWCString&)
+examples-V00-01-00     - Eliminated references to G4Ray in
+                         ExN02VisManager.cc and N03.
+                       - Updated exampleN04.EMtest.out and
+                         exampleN04.out to correspond to SUN version
+                         of geant4-00-01.
+g3tog4-V00-01-00       Fix for non-contiguous material, media and rotation
+                         matrix ids.
+global-V00-01-00       - Initialised pointer in first constructor of
+                         G4DataInterpolation.
+                       - Includes STLInterface-V00-01-00.
+vis-V00-01-00          Improved README
+vis-V00-01-01          InModeling protection in G4FRSceneFunc.icc.
+vis-V00-01-02          - Removed residual references to G4Ray. 
+                       - Improved some informational printing. 
+                       - Improved README.
+vis-V00-01-03          Modified GNUmakefile to prevent building of global
+                         libraries.
+run-V00-01-00          The status of the random number engine can be stored in
+                         separate files.
+materials-V00-01-00    - new Material constructors with chemical formula
+                         for low energy physics.
+                       - few cleanup between G4cout and G4cerr.
+examples-V00-01-01     Updated exampleN02.out for geant4-00-01-ref-01.
+examples-V00-01-02     New macros and other files for visualization.
+examples-V00-01-03     New .out files for geant4-00-01-ref-02.
+em-V00-01-00 - standard : EnergyLoss + Ionisation + MultipleScaterring
+             - muons : EnergyLoss + Ionisation
+             - lowenergy: hIonisation (new),
+                 Rayleigh + PhotoElectric + Compton,
+                 eIonisation + Brems
+             - test     : all TestEm
+
+hadrons-V00-01-00
+
+This is a new tag for particles/hadrons.
+From this tag, class name and method name using 'Barion' have been changed to
+use 'Baryon'.
+For example, G4Barion is renamed to G4Baryon, and 'ConstructAllBarion' of
+PhysicsList is renamed to 'ConstructAllBaryon' 
+
+This change does not imply changes in algorithm but affects examples and test
+programs. In addition, you may need to change your 'category tests'.
+
+Please use following tags in your development and testing.   
+
+ hadrons-V00-01-00
+ shortlived-V00-01-00
+ examples-V00-01-04
+ tests-V00-01-00 

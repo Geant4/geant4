@@ -1,0 +1,113 @@
+
+                       geant4-02-00-ref-04
+                       ===================
+
+Some of the improvements and fixes included since the last reference
+tag are:
+    - introduction of ParticleGun for Ions and weights for
+      primary vertex and particle.
+    - fix in G4Decay to avoid direct modification of G4Track by
+      the Decay process.
+    - fix in G4Cerenkov and G4Scintillation to correct usage of
+      the step length to position the origins of secondaries.
+    - fixes in CSGs G4Cons and G4Tubs to improve stability of roots
+      of quadratic equations.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+
+decay physics process
+---------------------
+- Bug fix in G4Decay to avoid direct modification of G4Track by
+  the Decay process.
+
+optical physics processes
+-------------------------
+- G4OpAbsorption.cc:
+  o commented out the warning - "No Absorption length specified" 
+    NOTE: this will change the output of example/novice/N06 in 
+    that these warnings are no longer going to be there.
+
+electromagnetic processes (standard)
+------------------------------------
+- Bug fix in G4Cerenkov and G4Scintillation: corrected usage of
+  the 'step length' to position the origins of secondaries.
+
+hadronic processes
+------------------
+- G4RadioactiveDecay: fix to const-ness of G4DynamicParticle to
+  co-work with latest changes in 'track' module.
+
+event
+-----
+- Introduced ParticleGun for Ions and weights for primary vertex
+  and particle:
+  o G4ParticleGun: added Set/GetParticleCharge methods for ions. 
+  o G4ParticleGunMessenger: added new command of /gun/ion;
+    modified command of /gun/particle.
+  o G4PrimaryParticle: add Set/GetCharge methods, added weight.
+  o G4PrimaryVertex: added weight.
+  o G4PrimaryTransformer: use G4PrimaryParticle::GetCharge to give
+    dynamic charge in G4DynamicParticle; set weight of G4Track.
+
+geometry
+--------
+- CSG solids
+  o Fix to G4Tubs and G4Cons in DistanceToIn/DistanceToOut: 
+    + fixes to DistanceToOut(p,v,...) to make roots of quadratic
+      equations more stable.
+    + added check against negative distance returned.
+  o Fixes to G4Cons:
+    + corrected condition on conical surface to consider a real
+      projection of the conical surface thickness on XY plane
+      (0.5*kCarTolerance*secRMin instead of 0.5*kCarTolerance),
+      when dealing with cons with large opening angle.
+    + fix in constructor to check if one of the Rmin different than 0,
+      to avoid degenerated cones.
+  o G4Torus: introduced Newton-based numerical method for computing
+    roots of equations in DistanceToIn() and DistanceToOut().
+- specific solids
+  Fix in G4IntersectingCone.cc: the check for a zero radical has been
+  adjusted to be less sensitive to round off error in LineHitsCone1(),
+  LineHitsCone2().
+
+particles
+---------
+- Some bug fixes according to CodeWizard's suggestions.
+- Added const to G4DynamicParticle::GetPreAssignedDecayProducts.
+- Added method G4IonTable::GetElementNumber.
+- Added comment in case of G4Exception in G4IonTable.cc.
+- Added neutron life time.
+- Fixed stable flag for G4PionMinus.
+
+track
+-----
+- Bug fixes in copy constructor of G4ParticleChange.
+- Added "const" to G4DynamicParticle pointer of returned value of 
+  G4Track::GetDynamicParticle (track-V02-00-00) 
+
+visualization
+-------------
+- G4PhysicalVolumeModel: added protection against volumes without
+  material.
+- Removed /vis/viewer/update from compound commands /vis/drawVolume
+  and /vis/specify.
+
+config
+------
+- Introduced changes to handle analysis module.
+  o added analysis.gmk.
+  o sys/Linux-g++.gmk: added macro DLDLIBS for library dynamic loading.
+  o binmake.gmk: added inclusion of analysis.gmk.
+  o binmake.gmk: place LDLIBS3 += $(ANALYSISLIBS)
+    after LDLIBS3 += $(INTYLIBS).
+- Incorporated building of shared libraries into .gmk files
+  (not yet operative, still under testing)
+  o merged building shared libraries into makefiles.
+    The MAKESHLIB script is no longer used.
+  o Introduced new variables steering the building of static/shared libs.
+    (static still default).
+  o Introduced new variable (G4LIB_USE_GRANULAR) to force using of
+    granular libraries.

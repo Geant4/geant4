@@ -1,0 +1,139 @@
+
+                       geant4-03-01-ref-02
+                       ===================
+
+Some of the fixes/development included since the last reference
+tag are:
+
+  o Extended G4PropagatorInField to enable the use of different
+    field managers for different parts of the detector.
+    This first implementation allows a volume that has a field
+    manager to override the global one
+  o Fixes to G4AuxiliaryNavServices and G4ReplicaNavigation to
+    properly handle cases on boundaries.
+  o Fixes and extensions of BooleanProcessor to covering unforeseen
+    cases in visualization during preselection of faces without
+    intersection.
+  o Introduced new EM low-energy process for polarised Compton
+    scattering.
+  o First round of fixes for clearing pedantic warnings detected
+    on Linux ANSI setup.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+geometry/magneticfield		field-V03-01-02
+----------------------
+- Updated G4Mag_SpinEqRhs.hh and G4Mag_SpinEqRhs.cc for correction
+  to spin tracking.
+- Fixed G4FieldManager constructors to give default values to delta 
+  parameters. 
+
+geometry/management             geommng-V03-01-04
+-------------------
+- Adopt explicit initialisation for 'minExtents' and 'maxExtents' 
+  in G4SmartVoxelHeader::BuildNodes(...). 
+
+geometry/solids			geom-solids-csg-V03-01-02
+---------------
+- Added G4CSGDEBUG preprocessor flag to discriminate for debug
+  verbosity specific to CSG solids. Included in G4Exception of
+  DistanceToOut() for "point p is outside" in G4Box, G4Cons, G4Tubs.
+
+geometry/volumes		geomvol-V03-01-08
+----------------
+- G4AuxiliaryNavServices::CheckPointOnSurface(): added additional
+  check to resolve endless looping of G4Navigator in case the track
+  is passing through a point, edge or surface shared by two solids. 
+  Fixes problem report #185. 
+- Fixes in G4ReplicaNavigation for bug reports #253 and #254: 
+  o in VoxelLocate(...), treated particular case of rotational
+    symmetry  with extent over 360 degrees. 
+  o in DistanceToOutPhi(...), fix to correctly handle cases where
+    the starting point is on boundary of replicas and direction is
+    along boundary. 
+- Enabled the use of different field managers for different parts
+  of the detector. This first implementation allows a volume that
+  has a field manager to override the global one. 
+  o Note: All field managers currently must refer to fields
+          in global coordinates. 
+  o New ability: setting of the delta accuracy parameters differently
+          in different volumes (even while maintaining the same
+          field as the global one).
+- Added new parameter to G4PropagatorInField 'fEpsilonMin' which is
+  the minimal relative accuracy for MF driving. 
+
+graphics_reps			greps-V03-01-03
+-------------
+- Now covering unforeseen earlier situation during preselection of
+  faces without intersection.
+- Fixed pedantic warnings detected on Linux ANSI setup.
+- Made GetNumberOfRotationSteps() static and public.
+- Migrated to STL vector. Removed references to RW wrappers.
+- Added GetSurfaceArea() and GetVolume() to HepPolyhedron. 
+- Bug fix in BooleanProcessor to address problem report #153. 
+
+intercoms			intercoms-V03-01-00
+---------
+- Fixed pedantic warnings detected on Linux ANSI setup.
+
+materials			materials-V03-01-00
+---------
+- Fixed pedantic warnings detected on Linux ANSI setup.
+
+particles			particles-V03-01-00
+---------
+- Fixed pedantic warnings detected on Linux ANSI setup.
+
+processes/electromagnetic/lowenergy	emlowen-V03-01-16
+-----------------------------------
+- Migration to STL vector. Removed references to RW wrappers.
+- Fixed pedantic warnings detected on Linux ANSI setup.
+- Added new process for polarised Compton scattering.
+
+processes/electromagnetic/util		utils-V03-01-00
+------------------------------
+- Fixed pedantic warnings detected on Linux ANSI setup.
+
+processes/hadronic/models/high_energy	had_mod_high-V03-01-03
+-------------------------------------
+- Updates and fixes.
+
+processes/management			procman-V03-01-00
+--------------------
+- Fixed pedantic warnings detected on Linux ANSI setup.
+
+tracking			tracking-V03-01-01
+--------
+- Migration to STL vector. Removed references to RW wrappers.
+- Moved G4TrackingMessenger* messenger to the class scope in
+  G4TrackingManager.
+- Fixed problem of vertex information loss for suspended tracks.
+  Fixes problem report #240.
+
+visualization			vis-V03-01-01
+-------------
+- Migration to STL vector. Removed references to RW wrappers.
+- Improvements in /vis/scene/add/volume.
+- Added /vis/drawTree.
+
+g3tog4				g3tog4-V03-01-00
+------
+- Fix in GNUmakefile: G4MAKESHLIB replaced with G4LIB_BUILD_SHARED
+  to allow building of shared library according to the new mechanism.
+- Fix in G3toG4BuildTree for a case of the placement a volume in
+  cloned mothers. G3toG4BuildTree() has been split in two methods
+  G3toG4BuildLVTree() and G3toG4BuildPVTree(), the first creating
+  logical volumes only, the second performing placements afterwards.
+
+examples
+--------
+- exampleN05: fix for migration to STL vector of visualization code.
+
+tests			tests-V03-01-02
+-----
+- Added new test 'test20' testing new low-energy process for
+  polarised Compton scattering.
+- test17: Updated according to new developments in EM-lowenergy;
+  added new reference output and cleared compilation warnings.

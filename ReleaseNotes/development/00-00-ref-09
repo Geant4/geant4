@@ -1,0 +1,55 @@
+
+                        geant4-00-00-ref-09
+                        ===================
+
+geant4-00-ref-09 is geant4-00-ref-08 plus:
+
+Miscellaneous fixes for STL Interface - see below.
+
+particles/management/include/G4NucleiPropertiesTable.hh r1.3:
+  Bug fixed in GetAtomicMass due to substraction of electron mass for
+  getting the nuclear masses.
+
+interfaces-01-00-02: Code polishing and work for NT. 
+
+interfaces-01-00-03: Protected G4VBasicShell.cc: if( tempPath.length()>0 ).
+
+greps-01-00-06: Fixes for compilation warnings.
+
+intercoms-01-00-04: Code Wizard fixes for G4VVisManager.
+
+intercoms-01-00-05: Protected G4UIcommand.cc: if (aToken.length()>0...
+
+examples-01-00-05:
+  - Removed #ifdef GNU_GCC in exampleN03.cc. 
+  - Updated .out files.
+  - ExN05CalorimeterHit.hh: Added correct delete operators for preallocation.
+  - E02: Minor update for Sun.
+
+processes/hadronic/models/generator/de_excitation/src/G4NuclearLevelManager.cc:
+  r1.5: Avoid compilation warnings with Sun.
+
+=========================================================================
+
+Details of Miscellaneous fixes for STL Interface.
+
+G4RunManager.cc
+In G4RunManager.cc, moved G4Timer.hh to prevent conflict with ObjectSpace
+on Sun when using the STL Interface.
+
+G4NavigationLevel[.hh.icc]
+Made deletes ISO compliant and protected against non ISO compilers
+Changed operator delete to have a default second argument
+Changed new,delete to void* for preallocation
+Changed operator new for benefit of Sun.
+
+G4Navigator.cc
+Changed cout -> G4cout
+Changed protection for printing of Physical volume name:
+(because of warning on SUN.  same functionality)
+
+G4SolidStore.cc
+Changed while ((!isEmpty()) delete first() to clearAndDestroy()
+
+G4ParticleTable.cc
+Fixed cleanup for STL

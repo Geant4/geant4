@@ -1,0 +1,49 @@
+
+			geant4-00-00-ref-07
+			===================
+
+geant4-00-ref-07 is geant4-00-ref-06 plus:
+
+had01-00-01_fix3:
+    models/generator/de_excitation/src/G4DiscreteGammaTransition.cc:
+    Fix to PhotonEvaporation data, etc.
+
+had-01-00-01a: had-01-00-01 + fixes 1, 2, 3 above + head of
+    data/PhotonEvaporation.
+
+hadgen-01-00-01: models/generator/management and util: resolves
+    circular dependency.
+
+had-01-00-01_fix4: stopping/src/G4PiMinusAbsorptionAtRest.cc: Use
+    different G4DynamicParticle constructor.
+
+intercoms-01-00-03: Added newVal.resize( parameter.entries() ) to
+    G4UIcommand::SetParameter.
+
+config: HEAD at 15:20 MET: Incorporates latest code for STL Interface
+    commissioning and definition of GREP.
+
+source-gmk-01-00-03: Changed grep to $(GREP).
+
+global: Incorporates latest code for STL Interface commissioning.
+
+examples-01-00-04: Removed /vis/clear/scene from exampleN03.in.
+
+partman-01-00-07: Bug fixes in G4DynamicParticle and
+    G4IonTable::GetNucleusMass
+
+
+===========================================================
+
+Details of global-01-00-00:
+
+- Updates to STL interface ISO/ANSI headers
+- Added G4Exception call with STL strings in globals.hh and
+  G4Exception.cc
+- Moved SystemOfUnits.SI.h to G4UnitsTest.hh in management/include.
+  This file is used only for test purposes and will not be tagged
+  for public versions.
+- CodeWizard cleanup in G4UnitsTable. Fixed definition of operator=.
+- globals.hh: Added #ifdef G4USE_STL, changed position of
+  #include <rw/cstring.h>.
+- Added first version of STL interface.

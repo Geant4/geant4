@@ -1,0 +1,125 @@
+
+                       geant4-03-00-ref-02
+                       ===================
+
+Some of the fixes included since the last reference tag are:
+    - Fixes in G4Box to the algorithm for computation of rotated 
+      vertices in CalculateExtent(). 
+    - Migration to STL vectors for G4DataVector and G4OrderedTable.
+    - Bug fix in G4MuBremstrahlung::PostStepDoIt() in sampling energy
+      of generated photons. 
+    - Fixes in the DoIt of G4OpRayleigh process in computation of
+      sin/cos(theta).
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+global 			global-V03-00-04
+------
+- Added generic class G4PolynomialSolver in HEPNumerics module, 
+  extracting logic from class G4Torus in geometry/solids/CSG. 
+- STL migration for G4DataVector and G4OrderedTable. 
+- In G4OrderedTable, G4ValVector type has been removed and is now 
+  replaced with G4DataVector. 
+- Removed from G4PhysicsVector dependency over G4PhysicsTable. 
+  Removed methods: LinkPhysicsTable(), IsLinkedTableExist() and 
+  GetNextTable(). Removed data-member ptrNextTable. 
+- Updated all related subclasses. 
+- Updated unit tests in management/test.
+
+geometry/magneticfield	field-V03-00-00
+----------------------
+- Minor fix to G4MagneticField.hh: added explicit call to G4Field()
+  in copy constructor. Fixes problem report #205.
+
+geometry/solids/BREPS	breps-V03-00-00
+---------------------
+- Changes for STL migration of G4OrderedTable and G4DataVector.
+
+geometry/solids/CSG	geom-solids-csg-V03-00-02
+-------------------
+- G4Box: introduced checks against negative (or <2*kCarTolerance)
+  dimensions in methods SetXHalfLength(), SetYHalfLength() and
+  SetZHalfLength().
+- G4Box: introduced fixes to algorithm for computation of rotated 
+  vertices in CalculateExtent() as previously committed in tag 
+  geom-solids-csg-V02-00-10. 
+- G4Torus: extracted logic for G4PolynomialSolver now included
+  in global/HEPNumerics. 
+- Added dependency to global/HEPNumerics in GNUmakefile. 
+
+geometry/solids/Boolean		geom-solid-bool-V03-00-02
+-----------------------
+- Fix in G4UnionSolid::DistanceToOut(p,v,...) for assignment of
+  argument *n.
+
+graphics_reps			greps-V03-00-01
+-------------
+- Tidying for CodeWizard. Added virtual destructors to
+  HepPolyhedronBox, etc. Also made all constructors non-inline. 
+- Removed G4Circle.icc and G4VVisPrim.icc.
+
+materials			materials-V03-00-03
+---------
+- Changes for STL migration of G4OrderedTable and G4DataVector
+  in G4SandiaTable class.
+
+processes/electromagnetic/lowenergy		emlowen-V03-00-00
+-----------------------------------
+- Changes for STL migration of G4OrderedTable and G4DataVector.
+  Removed obsolete class G4Data.
+
+processes/electromagnetic/standard		stand-V03-00-02
+----------------------------------
+- Changes for STL migration of G4OrderedTable and G4DataVector.
+
+processes/electromagnetic/muons			muons-V03-00-02 
+-------------------------------
+- Bug fixed in G4MuBremstrahlung::PostStepDoIt() in sampling energy
+  of generated photons. Fixes the problem sometimes occuring of
+  negative interaction length detected.
+- Changes for STL migration of G4OrderedTable and G4DataVector.
+
+processes/electromagnetic/utils			utils-V03-00-01 
+-------------------------------
+- Fix at small cut value for error in loss fluctuations 
+  (for example in Al 100 microns).
+
+processes/hadronic/models/generator/de_excitation de_excitation-V03-00-00 
+-------------------------------------------------
+- Changes for STL migration of G4OrderedTable and G4DataVector.
+
+processes/optical				op-V03-00-05
+-----------------
+- Fixes in the DoIt of G4OpRayleigh: to allow for positive and negative
+  CosTheta and to force the new momentum direction of the photon after
+  scattering to be in the same plane as the new and old polarization 
+  vectors. Still part of bug report #207.
+
+processes/photolepton_hadron	photolepton_hadron-V03-00-00
+----------------------------
+- Changes for STL migration of G4OrderedTable and G4DataVector.
+
+tracking			tracking-V03-00-02
+--------
+- Changes for STL migration of G4OrderedTable and G4DataVector.
+- Added comments to headers for the Software Reference Manual. 
+
+g3tog4				g3tog4-V03-00-00
+------
+- Fixed bug in G3toG4BuildTree(G3VolTableEntry*, G3VolTableEntry*) 
+  when positioning volume copies. Index is now decremented. 
+  Added -DG3G4DEBUG to CPPFLAGS in GNUmakefile.
+  Fixes bug report #188.
+
+examples
+--------
+- Introduced modular Physics List in exampleN04.
+- ExampleN02: fix to ExN02ChamberParameterisation and
+  ExN02DetectorConstruction to cope with bug report #186.
+- Updated reference outputs.
+
+tests
+-----
+- Updated reference outputs.

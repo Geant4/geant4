@@ -1,0 +1,26 @@
+
+                  geant4-00-01-ref-15
+                  ===================
+
+geant4-00-01-ref-15 is geant4-00-01-ref-14 plus:
+
+run-V00-01-04             - Version (tag name) & date printed.
+geomvol-V00-01-02         - G4TransportationManager: improved singleton
+                            implementation.
+photolepton_hadronV01-00-00  - Fix for warnings.
+persistency-V00-01-10     - bug fix in G4PHCofThisEvent, G4PHCofThisEvent,
+                            G4PersistentEventMan
+PersistentEx01-V00-01-04  - Added short example of using HepODBMS tag
+                            database (createTag, readTag)
+                          - Bug fixes
+PersistentEx02-V00-01-02  - added readDB example
+                          - more bug fixes (TrackerSD)
+config-V00-01-16          - architecture.gmk: set G4_HAVE_BOOL for SUN-CC5. 
+                          - common.gmk: fixed minor typo in
+                            G4OODDLX_SCHEMA_NAME
+g3tog4-V00-01-cand03      - Candidate release version, dictionary-migrated.
+config-V00-01-17          - architecture.gmk: fixes for WIN/NT.
+                            o fixed path for OSPACELIBS
+                            o removed -DG4NOT_ISO_DELETES flag
+examples-V00-01-17        - Include PersistentEx tags above.
+                          - Correct vacuum in ExN02.

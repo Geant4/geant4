@@ -1,0 +1,98 @@
+
+                       geant4-03-01-ref-01
+                       ===================
+
+Some of the fixes/development included since the last reference
+tag are:
+
+  - Migration of 'geometry' code to STL vector, removed
+    all references to RW wrappers.
+  - Extended implementation of HepPolyhedron to cover unforeseen
+    cases during preselection of faces without intersection. 
+  - Fixes for run-time memory leaks of hadronic processes.
+  - Fixes in G4ParticleDefinition::GetPDGIsospin().
+  - Introduced first version of visualization ASCIITree to
+    dump geometry hierarchy to standard output as ASCII stream. 
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                          config-V03-01-00
+------
+- Added G4VIS_BUILD_ASCIITREE_DRIVER and G4VIS_USE_ASCIITREE to
+  G4VIS*.gmk.
+
+geometry                        geometry-V03-01-00
+--------
+- Migrated code to native STL vector. Removed all references to
+  Rogue-Wave wrappers.
+- G4Trap: fixed memory leak in CalculateExtent() for creation of
+  vertices in case of finite rotation. 
+
+graphics_reps                   greps-V03-01-00
+-------------
+- Fixes in HepPolyhedron:
+  o Extended implementation to cover unforeseen earlier situation 
+    during preselection of faces without intersection. 
+  o Fixed warnings about possible use of uninitialized variables. 
+  o Made GetNumberOfRotationSteps() static and public.
+
+particles/management            partman-V03-00-04
+--------------------
+- Added a0(980),f0(400-1200),f0(980).
+- Fixed bugs in G4ParticleDefinition::GetPDGIsospin().
+- Fixed element name in G4IonTable.
+- Fixed PDG encoding for excited Lambdas.
+- Added special treatment for Lamdas in G4PDGCodeChecker.
+
+persistency                     persistency_STL-V03-01-00
+-----------
+- Removed useless declaration of typedef G4ThreeVectorList.
+
+processes/hadronic/management   hadronic_man-V03-01-00
+-----------------------------
+- Fixes memory leak in G4InelasticInteraction:
+  o systematic search for leaks - energy scan 50MeV-10GeV. 
+
+processes/hadronic/model/high_energy    had_mod_high-V03-01-00
+------------------------------------
+- Introduced temporary workaround in G4HEInelastic for high energy
+  problem (number of particles created in one event larger than
+  allocation). 
+
+processes/hadronic/model/generator/pre_equilibrium    preequ-V03-00-01
+--------------------------------------------------
+- Introduced many improvements on angular distributions.
+
+processes/hadronic/model/radiative_decay     radiative_decay-V03-01-00
+----------------------------------------
+- Fixes to cowork with STL vector migration of 'geometry'.
+processes/hadronic/util         hadronic_util-V03-01-01
+-----------------------
+- Fixed memory leak in G4ReactionDynamics:
+  o systematic search for leaks - energy scan verification 50MeV-10GeV 
+
+event                   event-V03-01-00
+-----
+- Fixes to cowork with STL vector migration of 'geometry'.
+
+visualization                   vis-V03-01-00
+-------------
+- Added two new commands:
+    /vis/scene/add/text
+    /vis/scene/add/axes
+- Introduced first version of ASCIITree to dump geometry hierarchy
+  to standard output as ASCII stream. 
+  This requires two new environment variables:
+  G4VIS_BUILD_ASCIITREE_DRIVER and G4VIS_USE_ASCIITREE.
+
+examples                        examples-V03-01-00
+--------
+- Updated reference outputs.
+- Migrated novice/N05 to STL vector.
+- Added new interactive commands in extended/electromagnetic/TestEm5.
+
+tests                           tests-V03-01-01
+-----
+- Updated reference outputs.

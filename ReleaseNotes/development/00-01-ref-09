@@ -1,0 +1,40 @@
+
+                      geant4-00-01-ref-09
+                      ===================
+
+geant4-00-01-ref-09 is RW-G4RW-migrated and is geant4-00-01-ref-08
+plus the RW-G4RW-migrated versions of:
+
+xrays-V00-01-02        - Units bug fix in G4Cerenkov.cc.  Header files for
+                         SRM.
+breps-V00-01-00 and stepinterface-V00-01-00:
+                       - First step for decoupling BREPS from NIST
+                         STEP reader + some files moved (details in
+                         note 2 below).
+em-V00-01-02           - Incorporates emlowen-V00-01-01, new bug fixes in xrays
+                         and some header files for SRM.
+em-V00-01-03           - RWT hash dictionary removed in G4EnergyLossTables +
+                         antiproton update in
+                         G4hLowEnergyIonisation.cc.
+vis-V00-01-07          - New: /vis/viewer/update. 
+                       - Hash dictionary -> STL map. 
+                       - Bug fixes.
+param-V00-01-02        - Header files for SRM.
+persistency-V00-01-04  - Added association of
+                         HitsCollection,PrimaryVertex to G4PEvent
+                       - Added Boolean Solid Types
+                       - minor bug fixes
+                       - Use ODMG compliant d_Ref<> smart pointer
+geometry-V00-01-01     - For the Release (details to follow)
+vis-V00-01-08          - Ability to view Boolean solids.
+                       - Bug fix to preserve OGL lists.
+em-V00-01-04a          - RW hash dict --> STL map in utils/G4EnergyLossTables.
+config-V00-01-07 )   (  -RW -> G4RW refinements; no change of functionality.
+global-V00-01-07 )   (
+config-V00-01-08 )   ( - Changes for persistency
+global-V00-01-08 )   ( - Bug fix for RW -> G4RW.
+source-gmk-V00-01-01   - Introduced G4USE_HEPODBMS.
+xrays-V00-01-03        - Bug fix for units-independence.
+materials-V00-01-03    - Removed #include "g4rw/tphdict.h"
+examples-V00-01-14     - Updated exampleN03.out and exampleN06.out for
+                         geant4-00-01-ref-09 and Sun debug.

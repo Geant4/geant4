@@ -1,0 +1,105 @@
+
+                       geant4-02-00-ref-02
+                       ===================
+
+Some of the improvements and fixes included since the last reference
+tag are:
+    - fix for event reproducibility; use new Gaussian random
+      distribution and shootBit function from CLHEP
+    - fix for 3-momentum vector rotation in hadronic high-energy model.
+    - new cross-section and energy-loss parameterisation in
+      G4eBremsstrahlung standard-EM process; corrections to
+      G4VhEnergyLoss and G4hIonisation.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the full list of changes is the following:
+
+
+low-energy electromagnetic processes
+------------------------------------
+- Fix for reproducibility of events: Changed RandGauss to G4RandGauss.
+- Bug fix to G4hLowEnergyIonisation, relevant for particles with
+  absolute charge value greater than 1.
+
+hadronic processes
+------------------
+- High-energy model: G4HEVector - fix in rotation of 3-momentum
+  vectors.
+- Fix for reproducibility of events in modules: models/low_energy,
+  models/generator.de_excitation, util.
+
+standard electromagnetic processes
+----------------------------------
+- Fix for reproducibility of events in modules: standard, muons,
+  xrays, utils.
+- G4eBremsstrahlung : new cross section and energy-loss parametrisation.
+- Update to G4VhEnergyLoss.cc, G4VhEnergyLoss.hh, G4hIonisation.cc 
+  in order to simulate energy losses of ions; correction to cross
+  section for particles with spin 1.
+- Removed class G4ionIonisation.
+- Added initialisation of pointers in constructor of G4IhIonisation.
+  Fix required for porting on Win/NT.
+- Fix in G4VhEnergyLoss and G4ionIonisation in AlongStepDoIt 
+  for particles with Charge^2 > 1
+- Stopped very low energy photons in photo electric effect.
+- Moved ElossMessenger moved to G4VEnergyLoss
+
+photolepton-hadron processes
+----------------------------
+- Fix for reproducibility of events.
+
+parameterisation processes
+--------------------------
+- Fix for reproducibility of events.
+
+optical processes
+-----------------
+- Fix for reproducibility of events.
+
+geometry
+--------
+- CSG: replaced G4Exception in G4Box::DistanceToOut(p) with simple
+  warning.
+
+global
+------
+- Defined G4RandGauss to invoke CLHEP's RandGaussQ, 
+  needed to fix general events' reproducibility problem. 
+- Added STL wrapper for in management/include/g4std.
+
+interfaces
+----------
+- Fixes for porting on Win/NT.
+  Removed warnings detected on HP-aCC system.
+
+materials
+---------
+- Fixed initialization of pointers in G4SandiaTable constructor
+  and corrected deletion of fPhotoAbsorptionCof in destructor.
+
+visualization
+-------------
+- Fixed bug in /vis/lights/direction - now does not refresh view. 
+- Other minor cosmetic improvements. 
+
+configuration
+-------------
+- Added unsupported configuration WIN32-g++ 
+  for Windows/NT/9X and Cygwin with g++ compiler.
+- Changed -MM to -M in dependency file making in binmake.gmk 
+  and common.gmk. This causes dependencies of both #include "..." 
+  and #include <...> to be followed. 
+- globlib.gmk: fix for protection from infinite loops when 
+  a dir does not exist.
+
+examples, tests
+---------------
+- Updates for G4hIonisation to supercede G4ionIonisation.
+- Updated reference outputs.
+
+g3tog4 tool
+-----------
+- Fixed initialisation of pDPhi for CONS in G3toG4MakeSolid.cc. 
+- Updated README file and removed src/README.
+

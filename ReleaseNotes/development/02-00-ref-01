@@ -1,0 +1,56 @@
+
+                       geant4-02-00-ref-01
+                       ===================
+
+Some of the improvements and fixes included since the last release are:
+    - fix for problem of energu non-conservation observed in
+      hadronic high-energies physics processes.
+    - modified G4UImanager to become state-dependent, in order to
+      correctly handle new "abort" state when a G4Exception is
+      thrown.
+    - improvements to G4UIterminal and sessions.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the full list of changes is the following:
+
+
+low-energy electromagnetic processes
+------------------------------------
+- Bug fix to G4hLowEnergyIonisation, relevant for particles 
+  with absolute charge value greater than 1.
+
+hadronic processes
+------------------
+- Fixed bug for reported energy non-conservation problem in the
+  high-energy model.
+
+event
+-----
+- Added some new Set methods to G4PrimaryVertex and
+  G4PrimaryParticle classes. 
+
+interfaces
+----------
+- Modified G4UIterminal, G4VUIshell, G4UIcsh and G4UItcsh to display
+  the break status as a prompt characters.
+
+run, global, intercoms
+----------------------
+- Moved G4VStateDependent and G4StateManager classes into
+  global/management from intercoms. 
+- Added "Abort" state is added G4ApplicationState. 
+- Modified G4Exception to change Geant4 status to "Abort". 
+- Bug fix of "double deleting" in the destructor of G4StateManager.
+- Modified G4RunManager and G4RunMessenger: eliminated 
+  G4StateManager::Pause().
+- Made G4UImanager state dependent.
+
+g3tog4 tool
+-----------
+o Moved tests clGeometry and cltog4 from source/g3tog4/test to
+  examples/extended/g3tog4. Default build mechanism is now used.
+o Fixed bug to g3tog4/GNUmakefile for allowing building of shared
+  libraries. Adapted to work with granular libraries mechanism.
+o Bug-fix in destructor for G3RotTable.
+o Added handling of ELTU (Elliptical Tube) solid.

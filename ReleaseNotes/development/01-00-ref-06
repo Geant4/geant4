@@ -1,0 +1,65 @@
+
+                       geant4-01-00-ref-06
+                       ===================
+
+ Some of the improvements and fixes included since the last
+ recommended reference tag are:
+     - first stand-alone implementation of G4RayTracer
+     - re-implementation of G4Polyhedron, now based on HepPolyhedron
+     - corrections for trajectories of suspended tracks
+     - fixes to STLInterface wrappers
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the full list of changes is the following:
+
+config
+------
+- Added control for the Ray-tracer driver (G4VIS_USE_RAYTRACER and
+  G4VIS_BUILD_RAYTRACER_DRIVER).
+- Added G4NO_OPTIMISE for compilation with no optimisation level,
+  and added G4DEBUG and G4OPTIMISE to CPPFLAGS.
+- Fixed dependency linking order for compound libraries.
+
+event
+-----
+- Corrections for trajectories of suspended tracks. 
+
+global
+------
+- Fixes to STLInterface wrappers: G4String::toUpper/toLower bug fix
+  and boundary checking in access operators for vectors.
+- Added string identifier to G4UserLimits.
+
+graphics representations
+------------------------
+- Added HepPolyhedron and re-implemented G4Polyhedron using this
+  new class (which will become part of CLHEP).
+
+hadronics
+---------
+- Fix for the 'no data' problem seen in the neutron transport tests.
+
+low-energy electromagnetics
+---------------------------
+- Fixes to electron and photon low energy processes.
+- Fixes for ISO compliance.
+
+particles
+---------
+- Fixes in G4IsotopeTable classes.
+
+tracking & track
+----------------
+- Added protection for null pointers in
+  G4SteppingManager::SetUserAction().
+- Fixed bug in track weight in G4VParticleChange.
+
+visualization
+-------------
+- Introduced first implementation of standalone G4RayTracer. 
+
+examples
+--------
+- Introduced large_N input macros.
+- Updated N03.out and N04.EMtest.out.

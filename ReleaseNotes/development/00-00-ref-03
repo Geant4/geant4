@@ -1,0 +1,49 @@
+
+			geant4-00-00-ref-03
+			===================
+
+geant4-00-ref-03 is geant4-00-ref-02 plus:
+
+  track-01-00-04:  Code polishing according to the messages by CodeWizard.
+
+  procman-01-00-02a:  Small bug fixes and some code polish according to the
+                      messages by CodeWizard.
+
+  decay-01-00-02:  Small bug fixes and some code polish according to the
+                   messages by CodeWizard.
+
+  materials-01-00-01/2: 01) A few corrections after CodeWizard inspection.
+                        02) A few provisional, backward tools in SandiaTable.
+
+  geometry-01-00-02: Small fixes to solids and Code Wizard fixes to field.
+
+  em-01-00-03: 01) New subdirectory: lowenergy, bug fixes and improved
+                   versions in standard and muons, extensive developments
+                   in test.
+               02) Bug fix to 01.
+               03) Supercedes 01, 02.  Note the subdirectory
+                   electromagnetic/test must be part of the tag.
+
+*** track-01-00-04  ***
+
+It includes following new features (after geant4-00-ref-01): 
+
+ track-01-00-03
+-  Removed G4Step::ShowStep() to resolve circular dependencies between "track"
+   and "process"
+-  Fixed small bugs in G4ParticleChange.icc
+
+ track-01-00-04
+-  Added new virtual method of G4bool CheckIt(const G4Track&) in
+   G4VParticleChange
+-  Code polishing according to the messages by CodeWizard
+
+*** procman-01-00-02a  ***
+
+The tag has been accepted by the STT and is included in geant4-00-ref-03.
+
+It includes following new features (after geant4-00-ref-01): 
+- Code polishing according to the messages by CodeWizard
+- fixes bugs in BIGSTEP initialization for G4IVContinousDiscreteProcess
+  and G4IVRestDiscreteProcess
+- G4cout is used instead of G4cerr for some messages 

@@ -1,0 +1,175 @@
+
+                       geant4-03-02-ref-07
+                       ===================
+
+Some of the fixes/development included since "geant4-03-02-ref-05" reference
+tag are:
+
+  o Removed STLInterface module. Full migration to STL completed.
+  o Introduced new geometry module "verification" for checking of
+    geometry volumes overlaps. Added geometry messenger to kernel.
+  o Added utility to geometry manager to print CPU statistics for
+    geometry optimisation.
+  o Fixed irreproducibility problem due to internal state in mag-field
+    management.
+  o Introduced ability to reflect volumes and hierarchies of volumes
+    for placements based on CSG solids.
+  o Introduced fluorescence in ionisation for low energy EM processes.
+  o Major updates and fixes in the hadronic domain.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+analysis				analysis-V03-02-00
+--------
+- G4VAnalysisMAnager.hh: removal of inclusion of cstring.h.
+
+config                                  config-V03-02-08
+------
+- Removed references to STLInterface module in architecture.gmk
+  and architecture setups. 
+- binmake.gmk: added include path for geometry/verification module.
+
+event                                   event-V03-02-06
+-----
+- Minor fixes to comply with removal of STLInterface.
+
+geometry                                geometry-V03-02-01
+--------
+- Introduced geometry/verification module for checking geometry for
+  volumes overlaps.
+- Magnetic field:
+  added method in G4ChordFinder to erase/reset the state of the
+  StepEstimate. This is unwanted internal state that was carried
+  between tracks and events as a side effect.
+  Calling this at the start of each track, it is now possible to
+  eliminate a reported problem of non-repeatability.
+- Management:                          (geommng-V03-02-01)
+  o Added definition of G4TouchableHandle.
+  o Added class G4SmartVoxelStat for statistics on geometry optimisation
+    of volumes through voxelisation.
+  o Modified G4GeometryManager to make use of G4SmartVoxelStat when run
+    in verbose mode:
+    - added argument to CloseGeometry() method for verbosity
+    - added ReportVoxelStats() method for reporting optimisation statistics.
+- Solids/Boolean:
+  o Introduced first implementation of classes G4ReflectedSolid and
+    G4ReflectionFactory for reflections of positioned volumes.
+  o Fixed bug in G4ReflectedSolid::CreatePolyhedron().
+- Volumes:                             (geomvol-V03-02-00b)
+  o Fixed initialisation of fEpsilonMin in G4PropagatorInField 
+    constructor.
+  o Introduced G4GeometryMessenger associated to G4TransportationManager
+    with following commands defined:
+    - geometry/test/run - to start verification of geometry for overlapping
+                          regions based on standard grid setup.
+    - geometry/test/line_test - to activate test along a specified direction
+                                and position user defined.
+    - geometry/test/position - to specify position for the line_test.
+    - geometry/test/direction - to specify direction for the line_test.
+    - geometry/test/tolerance - to customise test precision.
+    - geometry/navigator/reset - for resetting navigation history
+                                 and position.
+
+global                                  global-V03-02-05
+------
+- Removed STLinterface module:
+  o renamed cstring[.h.icc] to G4String[.hh.icc] and placed
+    in management/include.
+  o renamed ctoken.h to G4Tokenizer.hh and placed in management/include.
+- Introduced G4ReferenceCountedHandle templated class.
+- Added <deque> wrapper in include/g4std.
+
+intercoms				intercoms-V03-02-14
+---------
+- Minor fixes to comply with removal of STLInterface.
+
+materials                               materials-V03-02-04
+---------
+- Removed references to RW wrappers. STL migration completed.
+- Fixed printing of property name and check for NULL property vector 
+  pointer in G4MaterialPropertiesTable:DumpTable. Corrected warning
+  message in RemoveEntry() method.
+- Improved printing in G4MaterialPropertyVector::DumpVector().
+- G4Isotope, G4Element, G4Material: IndexInTable is now obtained
+  dynamically via GetIndex().
+- An Isotope, Element, Material can be deleted.
+  Added fCountUse to count the # of materials referencing a given element.
+  (similarly for elements with isotopes) 
+- Removed all static inline methods in G4Isotope, G4Element, G4Material
+  and G4SandiaTable.
+- Fixed memory leak in G4SandiaTable::ComputeMatSandiaMatrix(),
+  for deletion of temporary vectors Z, tmp1, tmp2.
+- Moved definitions of G4IsotopeVector and G4ElementVector
+  G4ElementTable and G4MaterialTable to the appropriate headers.
+- Replaced NULL with 0 whereever needed.
+
+processes/management                    procman-V03-02-04
+--------------------
+- Minor fixes to comply with removal of STLInterface.
+
+processes/electromagnetic/lowenergy     emlowen-V03-02-38
+-----------------------------------
+- Minor fixes to comply with removal of STLInterface.
+- Included implementation of design iteration for electrons.
+- Added member function in G4eLowEnergyLoss and G4VLowEnergyIonisationVI
+  for generation of atomic deexcitation products in the continuous part.
+- G4LowEnergyPolarizedCompton process moved to new design.
+- Bug fixes in G4eIonisationParameters and G4BremsstrahlungParameters.
+- New classes for shell cross sections for proton-induced fluorescence. 
+- Fluorescence introduced in G4hLowEnergyIonisation, in the continuous
+  part of electron ionisation in G4eLowEnergyLoss and in
+  G4LowEnergyIonisationVI.
+
+processes/electromagnetic/standard	stand-V03-02-11
+----------------------------------
+- Minor fixes to comply with removal of STLInterface.
+
+processes/hadronic                      had-V03-02-05
+------------------
+- Migration to STL vector implemented in all modules
+- General updates, fixes, new development.
+
+processes/optical                       op-V03-02-01
+-----------------
+- Fixed warnings detected on gcc-2.95.2 compiler.
+- Minor fixes to comply with removal of STLInterface.
+
+processes/parameterisation              param-V03-02-00
+--------------------------
+- Fixed warnings detected on gcc-2.95.2 compiler.
+
+processes/photolepton_hadron            photolepton_hadron-V03-02-01
+----------------------------
+- Minor fixes to comply with removal of STLInterface.
+- Fixed warnings detected on gcc-2.95.2 compiler.
+- Synchronised files with CVS HEAD.
+
+run                                     run-V03-02-07
+---
+- Minor fixes to comply with removal of STLInterface.
+- Modified call to G4GeometryManager::CloseGeometry() to add verbosity
+  level argument.
+
+track                                   track-V03-02-02a
+-----
+- Added implementation to assignment operator in
+  G4ParticleChangeForRadDecay.hh
+
+tracking                                tracking-V03-02-00
+--------
+- Minor fix to comply with removal of STLInterface.
+
+g3tog4 tool                             g3tog4-V03-02-01
+-----------
+- Minor fixes to comply with removal of STLInterface.
+
+examples				examples-V03-02-01
+--------
+- Minor fixes to comply with removal of STLInterface.
+- Synchronised with HEAD of repository.
+
+tests                                   tests-V03-02-04
+-----
+- Minor fixes to comply with removal of STLInterface.

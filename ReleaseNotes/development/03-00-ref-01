@@ -1,0 +1,85 @@
+
+                       geant4-03-00-ref-01
+                       ===================
+
+Some of the fixes included since the last reference tag are:
+    - Fixes in e/hEnergyLoss standard EM processes: AlongStepDoIt()
+      and cut in range.
+    - Fix in parametrisation of energy loss in eBrem EM process.
+    - Bug fix in materials/G4IonisParamMat affecting density
+      correction parameters in the energy loss (dE/dx) computation.
+    - Fixes in G4Tubs::Inside(p) concerning phi-section algorithm.
+    - Fixes in DistanceToOut(p,v,...) for G4UnionSolid and G4Hype.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+global 			global-V03-00-01
+------
+- First step of migration to STL vectors: 
+  migrated G4PhysicsVector class and related sub-classes. 
+- Fix to G4Allocator destructor: bug report #181.
+
+geometry/solids/CSG	geom-solids-csg-V03-00-00
+-------------------
+- G4Tubs.cc: corrections in phi-section algorithm of Inside(p). 
+- Fixed condition from (pPhi<0) to (pPhi<-0.5*kAngleTolerance) 
+  in G4Tubs::Inside(p). Fixes problem report #198.
+
+geometry/solids/specific	geom-solids-specific-V03-00-00
+------------------------
+- Fix in G4Hype::DistanceToOut(p,v,...):
+  added protection against zero v.z.
+
+geometry/solids/Boolean		geom-solid-bool-V03-00-01
+-----------------------
+- Fix in G4UnionSolid::DistanceToOut(p,v,...) for assignment of
+  argument *n to happen only if calcNorm is false. 
+- Minor fix to labels in G4Exception calls.
+  Fixes problem report #200. 
+- Updated unit tests testG4IntersectionSolid.cc, 
+  testG4SubtractionSolid.cc and testG4UnionSolid.cc. 
+
+materials			materials-V03-00-01
+---------
+- Bug fixed in G4IonisParamMat.cc : E100eV instead of E100keV
+  This bug affected the values of the density correction parameters
+  in the energy loss (dE/dx) computation: ~3-5 % error in dE/dx in
+  the energy range 1 MeV - 50 MeV !
+
+processes/electromagnetic/standard		stand-V03-00-01
+----------------------------------
+- Small corrections in e/hEnergyLoss to ensure consistency between
+  cut in range and step limitation due to energy loss (finalRange
+  data member <-> cut in range)
+- Change in energy loss computation in eBrems process.
+  Parametrisation of energy loss due to soft brems has been corrected
+  for big cut values.
+- Bug-fix in e/hEnergyLoss processes for AlongStepDoIt().
+  Do not use PostStep information in AlongStepDoIt() when generating
+  sub-cutoff delta rays.
+
+processes/electromagnetic/muons			muons-V03-00-00 
+-------------------------------
+- Small corrections in MuEnergyLoss process.
+
+processes/electromagnetic/utils			utils-V03-00-00 
+-------------------------------
+- Bug fixed in MultipleScattering: there was an error in computation
+  of the transport cross section, the cross section was too small for
+  low energy (below few MeV for electrons).
+
+processes/optical				op-V03-00-03
+-----------------
+- Modified G4OpRayleigh to allow for Rayleigh scattering length to
+  be defined for arbitrary material through the use of 
+  G4MaterialPropertyTable. This deals with bug report #199.
+
+examples			examples-V03-00-00
+--------
+- Updated reference outputs.
+
+tests				tests-V03-00-00
+-----
+- Updated reference outputs.

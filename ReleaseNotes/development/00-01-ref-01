@@ -1,0 +1,75 @@
+
+	                  geant4-00-01-ref-01
+        	          ===================
+
+It is geant4-00-01-ref-00 (which is geant4-00-01 plus some tests
+directories) plus:
+
+track-01-00-07:         G4MARS5GeVMechanism.cc: == -> =.
+config-V00-01-00:       Added EXTRA_LINK_DEPENDENCIES to binmake.gmk.
+STLInterface-V00-01-00: Implementation of RWCString::hash(const RWCString&)
+                          (needed for g3tog4).
+examples-V00-01-00:     - Eliminated references to G4Ray in ExN02VisManager.cc
+                            and N03. 
+                        - Updated exampleN04.EMtest.out and exampleN04.out to
+                            correspond to SUN version of geant4-00-01.
+run-V00-01-00:          The status of the random number engine can be stored in
+                          separate files*.
+materials-V00-01-00:    - new Material constructors with chemical formula for
+                            low energy physics. 
+                        - few cleanup between G4cout and G4cerr**.
+examples-V00-01-01:     Updated exampleN02.out for geant4-00-01-ref-01.
+
+-----------------------------------------------
+* Details of new run commands:
+
+Command /run/storeRandomNumberStatus
+Guidance :
+Store the status of the random number engine to a file.
+See CLHEP manual for detail.
+Frequency : 0 - not stored
+            1 - begining of each run
+           -1 - begining of each run (file overwritten)
+            2 - begining of each event before generating primaries
+           -2 - begining of each event before generating primaries
+	        (file overwritten)
+Stored status can be restored by 
+  /run/restoreRandomNumberStatus command.
+In case Frequency is negative, a output file (file name RandEngine.stat)
+  is overwitten every time.
+In case Frequency is 1, file names are RandEngineRxxx.stat,
+  where xxx is the run number.
+In case Frequency is 2, file names are RandEngineRxxxEyyy.stat,
+  where xxx is the run number and yyy is the event number.
+
+Command /run/restoreRandomNumberStatus
+Guidance :
+Restore the status of the random number engine from a file.
+See CLHEP manual for detail.
+The engine status must be stored beforehand.
+
+--------------------------------------------
+** A warning has moved from G4cout to G4cerr, seen in exampleN02 and test08:
+
+---warning from G4Material--
+ The state conditions of the gas: Vacuum are not consistent.
+ density  = 1e-17 mg/cm3	 pressure = 1 atmosphere
+ temperature = 273.15 kelvin
+ rho*(T/P) would be of the order of: 12.1865 (mg/cm3)*(kelvin/atmosphere).
+ The energy loss calculation maybe be affected 
+
+--------------------------------------------
+electromagnetic subdirectory tagged as em-V00-01-00
+
+ standard : EnergyLoss + Ionisation + MultipleScaterring
+ muons    : EnergyLoss + Ionisation
+ lowenergy: hIonisation (new, Vladimir Ivanchenko)
+            Rayleigh + PhotoElectric + Compton (Alessendra)
+            eIonisation + Brems (Alessendra)
+ test     : all TestEm
+            
+--------------------------------------------
+param-V00-01-00
+
+New tag param-V00-01-00 fix a bug in G4FastStep::CheckIt()
+with was issueing a false warning in a very special case. 

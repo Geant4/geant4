@@ -1,0 +1,116 @@
+
+                       geant4-03-02-ref-01
+                       ===================
+
+Some of the fixes/development included since the last reference
+tag are:
+
+  o Modified G4Exception behavior, now setting G4StateManager to
+    "abort" state instead of aborting the application.
+  o Cleanup of pedantic warnings in Linux-g++ ANSI setup for several
+    modules.
+  o Migration to STL vector for the "persistency" and "g3tog4" modules.
+  o Removed old-style visualization commands and fixed bug for replica
+    rotation matrix which was causing crashes in replica tracking with
+    visualisation.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config				config-V03-02-00
+------
+- Linux-g++.gmk, SUN-CC.gmk, SUN-CC5.gmk: added -DG4std in G4DDLX_FLAGS
+- Minor fixes for 'Configure' script.
+
+event				event-V03-02-00
+-----
+- Cleanup of pedantic warnings in Linux-g++ ANSI setup. 
+- Corrected "int" to "G4int".
+- Corrected "NULL" to "0". 
+- Synchronised all files with HEAD after inclusion of the disclaimer of
+  warranty. 
+
+geometry			geometry-V03-02-00
+--------
+- Fixes in BREPS (breps-V03-02-02) for overloading ambiguity on SUN-CC
+  with new CLHEP-1.7. Fix in G4BSplineCurve::Init() for initialisation
+  of point vector. 
+- Synchronised files with HEAD after inclusion of the disclaimer of
+  warranty.
+
+global				global-V03-02-01
+------
+- Modified G4Exception behavior, now setting G4StateManager to
+  "abort" state instead of aborting the application.
+- Synchronised all files with HEAD after inclusion of the disclaimer of
+  warranty.
+
+intercoms			intercoms-V03-02-01
+---------
+- Introduced new feature of suppressing the program abortion due to
+  G4Exception.
+- Fixed parsing of quoted (") tokens in current value for null or
+  defaulted parameters in loop over previous parameters in
+  G4UIcommand::DoIt().
+
+persistency			persistency-V03-02-00
+-----------
+- Migration to STL vector, removed usage of Rogue-Wave wrappers.
+  Modified files: G4Pglobals.hh, G4PGeometryObjectMap.ddl,
+                  G4PGeometryObjectMap.cc.
+  Removed files: G4VPhysVolRefArray.hh, G4LogVolRefArray.hh,
+                 G4VSolidRefArray.hh.
+
+processes/hadronic/models/generator/de_excitation  de_excitation-V03-02-00
+-------------------------------------------------
+- Fix in G4VGammaDeexcitation.cc for overloading ambiguity on SUN-CC
+  with new CLHEP-1.7.
+- Sychronized all files with HEAD after inclusion of the disclaimer of
+  warranty.
+
+processes/hadronic/models/neutron_hp		   neu-V03-02-00
+------------------------------------
+- Minor fix in G4NeutronHPVector.cc for porting on gcc-2.95-2. 
+- Sychronized all files with HEAD after inclusion of the disclaimer of
+  warranty.
+
+processes/transportation	transport-V03-02-00
+------------------------
+- Sychronized all files with HEAD after inclusion of the disclaimer of
+  warranty.
+- Updated author list in G4Transportation.hh.
+
+run				run-V03-02-00
+---
+- Cleanup of pedantic warnings in Linux-g++ ANSI setup. 
+- Corrected "NULL" to "0". 
+- Synchronised all files with HEAD after inclusion of the disclaimer of
+  warranty. 
+
+visualization			vis-V03-02-02
+-------------
+- Removed old-style commands. 
+- Minor cosmetics to raytracer module.
+- Minor changes in G4OpenGLXViewer.cc to eliminate pedantic ISO C++
+  warnings. 
+- Fixed crash in optimised mode: added Initialise() to viewers so 
+  that windows are opened after viewers are fully constructed. 
+- Removed maintenance of G4VisManager's G4ViewParameters object (this 
+  will be removed soon). 
+- Corrected mistake which could cause crash if user specified a
+  non-existent scene handler in /vis/sceneHandler/remove. 
+- Fix for replica rotation matrix. It Fixes observed crashes in replica
+  tracking with visualisation.
+- Synchronised files with HEAD after inclusion of the disclaimer of
+  warranty. 
+
+g3tog4				g3tog4-V03-02-00
+------
+- Migration to STL vector, removed references to Rogue-Wave Tools.h++ 
+  wrappers. Modified files: 
+  G3EleTable[.hh.cc], G3MatTable[.hh.cc], G3MedTable[.hh.cc], 
+  G3RotTable[.hh.cc], G3VolTableEntry[.hh.cc], G3SensVolVector.hh, 
+  G3toG4BuildTree.cc, G4gsatt.cc, clparse.cc. 
+- Replaced usage of "NULL" with "0". 
+- Replaced usage of "int" with "G4int".

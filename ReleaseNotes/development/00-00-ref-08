@@ -1,0 +1,84 @@
+
+                   geant4-00-00-ref-08
+                   ===================
+
+geant4-00-ref-08 is geant4-00-ref-07 plus:
+
+g3tog4-01-00-02:
+  The material/mixtures handling in G3toG4 has been updated to create
+  materials and mixtures in the Geant4 paradigm (based on elements). I
+  provided some updated examples from bbsim's SVT geometry (svt.dat
+  and svtwaf.dat). The code has been tested on SunOS at SLAC and
+  hpplus at CERN. The good news is that I can track without bombing
+  through the full SVT geometry, including support elements made up of
+  G4Polycones and G4Polyhedra.  The (somewhat) bad news is that it
+  takes quite awhile to close the geometry, although the situation is
+  now much better than it was a few months ago.
+  I've also updated the clGeometry example (based on N03) to display
+  tracks.  At some point, when all the features of G3toG4 are working,
+  clGeometry should be migrated to the examples/novice area.
+  As far as divisions is concerned, I've temporarily disabled them
+  until I've had a chance to review and update the algorithms.
+
+g3tog4-01-00-03 has been tested on HP-aCC and Sun-CC:
+  1. rztog4 has been updated to generate G4gsmixt call list
+     instruction when a G3 mixture is encountered.
+  2. When a G4gsmixt instruction is encountered, a G4 material will be
+     buit from the component elements.
+  3. References to RWGDlist class have been replaced with
+     RWTPtrOrderedVector in most (but not yet all) methods.
+  4. The code to handle G3 divisions has been temporarily disabled
+     until the algorithms can be updated.
+
+track-01-00-06:
+  G4VParticleChange and derived classes: "accuracyForWarning" and
+  "accuracyForException" are 1.0e-9 and 1.0e-3 respectively in
+  CheckIt.
+
+vis-01-00-10: Code Wizard fixes.
+
+photolepton_hadron-01-00-00: Memory overwriting fix.
+
+em-01-00-05:
+  Small improvements in G4IeIonisation.hh,.cc and
+  G4IeBremsstrahlung.hh,.cc; fix in muons (memory overwriting).
+  EnergyLossMessenger initialized in G4MuEnergyLoss.cc; small
+  improvement in the energy loss fluctuation code + bug fixed in
+  "LossPlus.cc" (unit independence).
+
+had-01-00-02:
+  A consolidation tag of hadf-01-00-01 with already accepted fixes
+  (see previous announcement), plus a fix in
+  G4HadronicInteractionRegistry.hh and a fix for strstream.h in
+  G4NuclearLevelManager.cc.
+
+param-01-00-04:
+  G4FastStep::CheckIt method to care with accuracyForWarning and
+  accuracyForException settings.
+
+greps-01-00-05:
+  Code Wizard fixes.
+
+vis-01-00-11:
+  - G4VSceneHandler : ClearTransientStore.
+  - G4VisCommandsSceneHandler : protect against a null pointer. 
+  - OpenInventor : use HEPVis/SoWindow to create windows (needed on NT).
+    Implement the a "transient scene graph" for "event" things. Use fXxx
+    convention for fields. 
+  - G4TrajectoriesModeling : do not draw a "marker" at each step by default. 
+
+geometry-01-00-04:
+  G4Navigator: only issue warning in the case of small inaccuracies. 
+  VolumeStores: compatibility with RW/STL. 
+  G4BREPSolidPolyhedra (constructor convention and improvement). 
+  G4FPlane: consistent normals
+
+config-01-00-05:
+  Mainly architecture updates for STL Interface.
+
+global-01-00-01:
+  G4Poisson.hh plus development for STL Interface.
+  It includes the implementation of the global function
+  "G4long G4Poisson(G4double)" which reproduces the GPOISS algorithm
+  adopted in Geant3. Uses the CLHEP standard engines as basic random
+  generators.

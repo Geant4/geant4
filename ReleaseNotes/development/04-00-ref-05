@@ -1,0 +1,191 @@
+
+                       geant4-04-00-ref-05
+                       ===================
+
+Some of the development/fixes included are:
+
+  o Introduced optional 3D geometry optimisation for parameterised volumes.
+  o Introduced ability to optionally disable optimisation of hierarchies of
+    geometry volume placements, through G4LogicalVolume.
+  o Enhanced reflection of volumes to cover all CSG and CSG-like solids.
+  o Fix in G4MagIntegratorDriver to update the field track for small steps.
+  o New electromagnetic process G4GammaConversionToMuons for gamma conversion
+    into muon pairs.
+  o Improvements and performance optimisation in G4MultipleScattering.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                  config-V04-00-06
+------
+- liblist.c: added patch to port code on MacOS-X.
+  Defined buffer[BUFSIZE] as "char static".
+- Added Darwin-g++.gmk configuration file for MacOS-X systems running
+  with GNU g++ compiler.
+- Removed SUN-CC4.gmk configuration file, no longer supported.
+- Updated description header to system configuration files.
+
+event                                   event-V04-00-02
+-----
+- Introducing new G4TrajectoryContainer class which aggregates STL vector,
+  instead of deriving from STL vector.
+
+geometry/magneticfield                  field-V04-00-02
+----------------------
+- G4MagIntegratorDriver: fix to update the field track for steps smaller
+  than the chord finder's minstep. 
+- Fixed LinearStep in G4MagHelicalStepper (expected unit direction), 
+  that had not been updated for new integration variable (momentum).
+- Changed maximum number of steps in driver, 
+    halving from 500/order to 250/order.
+- Added new unit test "OtherField" with application of Delphi, Quadropole...
+  fields. Updated unit tests reference outputs.
+- Update of unit test field02 to utilise new features:
+  o for Electric Field, to signal that a field modifies the energy
+  o updating of time by integration, for time dependent fields
+
+geometry/management                     geommng-V04-00-06
+-------------------
+- G4VSolid: use polygon clipping for limited voxel when != pAxis.
+- G4GeometryManager:
+  o added method IsGeometryClosed() for detecting status (open/closed)
+    of geometry.
+- G4LogicalVolumeStore, G4PhysicalVolumeStore, G4SolidStore:
+  o added protection to Clean() method for checking if geometry is closed.
+- G4SmartVoxelHeader:
+  o added utility method GetParamAxis() to retrieve suggested axis for
+    optimisation of parametrised geometry
+  o enhanced BuildReplicaVoxels() to apply 3D voxelisation for non-consuming
+    nodes if undefined axis ('kUndefined') is specified for parametrised
+    volumes. In such case, optimisation for parameterised volumes is applied
+    similarly to normal placements
+  o cosmetics and formatting cleanup
+- G4PVReplica.cc:
+  o deal with 'kUndefined' EAxis
+- Added ability to optionally optimise/non-optimise detector regions
+  using logical volumes:
+  o G4LogicalVolume:
+    - Introduced additional bool argument to constructor,
+      set to 'true' by default.
+    - Added method IsToOptimise() with corresponding bool flag attribute.
+  o G4GeometryManager:
+    - Adapted BuildOptimisations() method to consider optional optimisation
+      flag from G4LogicalVolume.
+
+geometry/volumes                        geomvol-V04-00-07
+----------------
+- G4ParameterisedNavigation:
+  o introduced 3D voxelisation technique for parameterised volumes with
+    unspecified axis. Changed to become subclass of G4VoxelNavigation and
+    adopt the same voxel location algorithms for optimised navigation
+- G4VoxelNavigation:
+  o changed to become base class for optimised navigation
+  o cosmetics and reformatting
+- G4NormalNavigation.icc, G4ReplicaNavigation.icc, G4VoxelNavigation.icc:
+  o minor optimisations
+  o cosmetics and reformatting
+- G4Navigator.cc:
+  o invoke specific VoxelLocate() call for parameterised navigation
+
+geometry/solids/Boolean                 geom-bool-V04-00-05
+-----------------------
+- G4ReflectedSolid.cc:
+  o adopt bounding-box like algorithm for CalculateExtent().
+
+geometry/solids/CSG                     geom-csg-V04-00-04
+-------------------
+- G4Trap.cc, G4Tubs.cc:
+  o changed local enum 'kUndefined' to 'kUndef'.
+    'kUndefined' is now defined for EAxis.
+
+geometry/solids/specific                geom-solids-specific-V04-00-01
+------------------------
+- Implemented G4EllipticalTube::CreatePolyhedron().
+
+global                                  global-V04-00-07
+------
+- Introduced temporary modifications for porting on gcc-3.1 compiler:
+  o g4std/strstream: deactivate gcc-3.1 specific __DEPRECATED flag.
+  o G4strstreambuf.icc: correct patch for overflow() to be specific only to
+    gcc-3.0.X versions of the compiler. Behavior now fixed in gcc-3.1.
+  o G4llocator.hh: use pointer to member data to compute offset in FreeSingle().
+    for gcc-3.1 compiler. gcc-3.1 complains and does not correctly handle
+    offsets computed from non-POD types. Pointers to member data should be
+    used instead. This advanced C++ feature seems not to work on earlier
+    versions of the same compiler or on other system configurations.
+- Cosmetics for Software Reference Manual on G4Allocator related headers.
+- G4UnitsTable.cc: fixed bug in operator<< to use the argument 'flux'
+  instead of G4cout.
+- geomdefs.hh: added 'kUndefined' key to specify undefined EAxis.
+
+intercoms                               intercoms-V04-00-03
+---------
+- Introduce limit to the number of stored command string.
+- Eliminate naive usage of G4String type arguments from classes:
+  G4UIparameter G4UImanager G4UIbatch G4UIaliasList G4UIcmdWithAnInteger
+  G4UIcmdWithADoubleAndUnit G4UIcmdWithADouble G4UIcmdWithABool
+  G4UIcmdWith3VectorAndUnit G4UIcmdWith3Vector G4UIcommand G4UIcommandTree.
+
+interfaces                              interfaces-V04-00-01
+----------
+- Fixed usage of G4String as argument in G4VUIshell.cc, G4VBasicShell.cc
+  and G4UIGAG.cc.
+
+materials                               materials-V04-00-03
+---------
+- G4Material.cc: removed check of the ideal gas state equation.
+
+processes/electromagnetic/standard      stand-V04-00-10
+----------------------------------
+- Introduced new process G4GammaConversionToMuons for gamma conversion
+  into muon pairs.
+- G4PhotoElectricEffect: generate theta angle of the photoelectron from
+  Sauter-Gravila distribution.
+
+processes/electromagnetic/utils         utils-V04-00-06
+-------------------------------
+- G4MultipleScattering[.hh.cc]:
+  o bug fixed in GetContinuousStepLimit()
+  o changes in boundary algorithm to improve backscattering and overall
+    performance by ~10%, with the same physics
+
+processes/electromagnetic/xrays         xrays-V04-00-04
+-------------------------------
+- G4Scintillation:
+  o change inheritance from G4VRestDiscreteProcess. G4Scintillation/G4Cerenkov
+    now only suspend the track when it is still 'fAlive'
+  o changed method DoIt() so that origin of optical photons is the
+    PostStepPoint location in case energy is lost to the medium by a neutral
+    particle.
+  o changed method IsApplicable() to return false when it is called for an
+    optical photon.
+
+run                                     run-V04-00-02
+---
+- Modified G4RunManager to re-open geometry when G4 changes to QUIT state.
+
+tracking                                tracking-V04-00-05
+--------
+- G4TrackingManager.cc: implemented EventAborted() method.
+
+visualization                           vis-V04-00-07
+-------------
+- Minor changes to warning messages and README.built_in_commands.
+- Added test fro G4EllipticalTube to unit test.
+- Deprecated /vis/viewer/set/autoRefresh.
+- Fixed usage of G4String as argument in G4VisCommandsViewer.cc,
+  G4VisCommandsCompound.cc and G4VisManager.cc.
+
+examples                                examples-V04-00-05
+--------
+- Introduced first implementation of two examples for parallellism, derived
+  from novice examples N02/N04 in examples/extended/parallel.
+- Fixed usage of G4UImanager::ApplyCommand() in examples/extended/biasing
+  and exampleN01.
+- examples/novice/N06: added G4Scintillation process.
+- Updated reference outputs.
+
+tests                                   tests-V04-00-04
+-----
+- Updated reference outputs.

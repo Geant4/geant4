@@ -1,0 +1,75 @@
+
+                       geant4-04-00-ref-03
+                       ===================
+
+Some of the development/fixes included are:
+
+  o Introduced new models for the description of X-ray transition
+    radiation as continuous process.
+  o EM standard processes: fixes to hadron ionisation/energy-loss
+    processes for delta-electron spectra of GenericIons.
+  o EM low-energy processes: fixes in ion ionisation, hadron
+    fluorescence and deexcitation.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                  config-V04-00-04
+------
+- Fixed bug in G4VIS_USE.gmk for G4VIS_USE_OPENGLWIN32. 
+- Corrected perl script g4sort_step_file.pl to specify correct
+  path for perl. 
+
+geometry/volumes                        geomvol-V04-00-04
+----------------
+- Added Set/Get methods for Maximum Epsilon Step.
+
+geometry/solids/Boolean                 geom-bool-V04-00-03
+-----------------------
+- G4ReflectedSolid.cc: improved implementation of CalculateExtent() to 
+  properly consider transformation of reflected extent. 
+
+global                                  global-V04-00-03
+------
+- G4String: use G4std::string instead of internal type 'std_string' 
+  in signatures of public methods. No functional or interface changes. 
+
+processes/electromagnetic/lowenergy     emlowen-V04-00-01
+-----------------------------------
+- Bug fixes in ion ionisation, hadron fluorescence and deexcitation.
+
+processes/electromagnetic/muons         muons-V04-00-01
+-------------------------------
+- G4VMuEnergyLoss for touchable: fixed usage of TouchebleHandle to
+  consider PreStepPoint.
+
+processes/electromagnetic/standard      stand-V04-00-06
+----------------------------------
+- G4eIonisation: fixed access to energy cuts in BuildLossTables.
+- Modifications in G4PAIxSection allowing to get additional information on
+  transverse and longitudinal excitations at atomic frequences.
+- Bug fix in G4GammaConversion::DoIt() for e+e- angular distribution.
+  Fixes problem report #363.
+- Fix to G4VhEnergyLoss, G4hIonisation for delta-electron spectra of
+  GenericIons.
+- G4VeEnergyLoss, G4VhEnergyLoss: fixed usage of TouchebleHandle to consider 
+  PreStepPoint.
+
+processes/electromagnetic/xrays         xrays-V04-00-01
+-------------------------------
+- New classes (G4VXTRenergyLoss, G4GammaXTRadiator and G4RegularXTRadiator)
+  for the description of X-ray transition radiation as continuous process.
+
+examples                                examples-V04-00-02
+--------
+- extended/electromagnetic/testem1,5:
+  o PhysicsList: normalisation of the
+- novice/N03:
+  o PhysicsList: removed cutForGamma.
+- Updated reference outputs.
+
+tests                                   tests-V04-00-02
+-----
+- test17: extended to exercise GenericIons.
+- Updated reference outputs.
