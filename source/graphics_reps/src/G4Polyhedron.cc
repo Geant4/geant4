@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedron.cc,v 1.6 1999-12-16 15:26:04 johna Exp $
+// $Id: G4Polyhedron.cc,v 1.7 2000-01-11 17:35:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1299,6 +1299,7 @@ G4PolyhedronSphere::G4PolyhedronSphere(G4double rmin, G4double rmax,
 
   G4int ns = (GetNumberOfRotationSteps() + 1) / 2;
   G4int np1 = G4int(dthe*ns/M_PI+.5) + 1;
+  if (np1 <= 1) np1 = 2;
   G4int np2 = rmin < perMillion ? 1 : np1;
 
   G4double *zz, *rr;
