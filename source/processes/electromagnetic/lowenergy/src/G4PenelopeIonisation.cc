@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisation.cc,v 1.4 2003-07-10 08:43:12 pandola Exp $
+// $Id: G4PenelopeIonisation.cc,v 1.5 2003-11-06 19:04:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -216,7 +216,7 @@ void G4PenelopeIonisation::BuildLossTable(
     // the cut cannot be below lowest limit
     G4double tCut = 0.0;
     tCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[m];
-    tCut = G4std::min(tCut,highKineticEnergy);
+    tCut = std::min(tCut,highKineticEnergy);
 
     cutForDelta.push_back(tCut);
 
@@ -984,14 +984,14 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForPositrons(G4double ene,G
     }
   
   if (sdLong > 0) {
-    sdTrans = G4std::max(log(gamma2)-beta2-delta,0.0);
+    sdTrans = std::max(log(gamma2)-beta2-delta,0.0);
     sdDist = sdTrans + sdLong;
     if (cutoff > resEne) sPower = sdDist;
   }
 
 
   // Close collisions (Bhabha's cross section)
-  G4double wl = G4std::max(cutoff,resEne);
+  G4double wl = std::max(cutoff,resEne);
   G4double wu = ene;
  
   if (wl < (wu-1*eV)) wu=wl;
@@ -1028,7 +1028,7 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
   G4double bha4 = amol*pow(gamma-1.0,2)/pow(gamma+1.0,2);
   
   G4double delta = CalculateDeltaFermi(ene,Z,electronVolumeDensity);
-  G4double distantTransvCS0 = G4std::max(log(gamma2)-beta2-delta,0.0);
+  G4double distantTransvCS0 = std::max(log(gamma2)-beta2-delta,0.0);
 
   G4double rl,rl1;
   G4DataVector* qm = new G4DataVector();
@@ -1427,7 +1427,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForPositrons(G4double ene,G4dou
     }
   
   if (sdLong > 0) {
-    sdTrans = G4std::max(log(gamma2)-beta2-delta,0.0);
+    sdTrans = std::max(log(gamma2)-beta2-delta,0.0);
     sdDist = sdTrans + sdLong;
     if (cutoff > resEne) 
       {
@@ -1441,7 +1441,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForPositrons(G4double ene,G4dou
 
 
   // Close collisions (Bhabha's cross section)
-  G4double wl = G4std::max(cutoff,resEne);
+  G4double wl = std::max(cutoff,resEne);
   G4double wu = ene;
  
   if (wl < (wu-1*eV)) {

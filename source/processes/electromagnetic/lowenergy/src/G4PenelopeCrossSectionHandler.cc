@@ -69,7 +69,7 @@ std::vector<G4VEMDataSet*>* G4PenelopeCrossSectionHandler::BuildCrossSectionsFor
                         const G4DataVector* energyCuts)
 {
   G4int verbose = 0;
-  G4std::vector<G4VEMDataSet*>* set = new G4std::vector<G4VEMDataSet*>;
+  std::vector<G4VEMDataSet*>* set = new std::vector<G4VEMDataSet*>;
 
   G4DataVector* energies;
   G4DataVector* cs;
