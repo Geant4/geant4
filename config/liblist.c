@@ -1,18 +1,28 @@
-/* $Id: liblist.c,v 1.4 1999-04-09 04:49:55 fbehner Exp $ */
+/* $Id: liblist.c,v 1.5 1999-04-12 11:13:44 johna Exp $ */
+
 /*
-Given libname.map file and a list of .d dependency files liblist produces:
-  a) with no options, a library list ordered according to the libname.map,
+Given a "libname.map" file on standard input and a list or directory
+of .d dependency files liblist produces:
+  a) without -l option, a library list ordered according to the libname.map,
      giving a warning if conflicting dependencies are found in the .d files.
   b) with -l option, another libname.map, ordered according firstly to the
      original libname.map file, then reordered according to the dependencies
      found in the .d files.  This option is used for compiling the file
      libname.map from all the dependencies.
-The .d files are arguments; the libname.map is from standard input.
+The .d files are specfied in the argument(s).
+The libname.map is on standard input.
+
 Usage:
   liblist *.d < libname.map
-Frank Behner, John Allison  13th February 1999.
-*/
+  liblist -d <ddir> < libname.map
+  liblist -l *.d < libname.map
+  liblist -ld <ddir> < libname.map
+  liblist -l -d <ddir> < libname.map
+where <ddir> is a directory name of a directory which is recursively
+searched for dependency files.
 
+Frank Behner, John Allison 13th February 1999.
+*/
 
 #include <stdio.h>
 #include <string.h>
@@ -90,7 +100,7 @@ char** parsedir(char *directory,int *argc)
 	    }
 	}
       else
-	perror("No status");
+	perror("  No status");
     }
 
   if(buffer) free(buffer);
@@ -102,10 +112,10 @@ char** parsedir(char *directory,int *argc)
  
 int main (int argc, char** argv) {
 
-  char buffer[BUFSIZE],*bufferPtr,buf[256];
+  char buffer[BUFSIZE],*bufferPtr,workbuf[256];
   char *ptr,*p,**pp,**pp1,**pp2,*directory=0;
   char **rargv;
-  int i,dbegin=1,optl=0,swapping,c,rargc;
+  int i,optl=0,swapping,c,rargc;
   FILE *fp;
 
   struct libmap_
@@ -120,21 +130,12 @@ int main (int argc, char** argv) {
   struct libmap_ *libmap=0,*libmapPtr=0,*libmapPtr1=0,*libmapPtr2=0,
     *prevPtr1,*prevPtr2,*tmpp,*userLibmapPtr;
 
-  /*
-  if(argc==1)
-    {
-      printf("You have not supplied any command line arguments.\n");
-      exit(1);
-    }
-  */
-
   while((c=getopt(argc,argv,"ld:"))!=EOF)
     {
       switch(c)
 	{
 	case 'l':
 	  optl=1;
-	  dbegin++;
 	  break;
 	case 'd':
 	  directory=strdup(optarg);
@@ -159,17 +160,16 @@ int main (int argc, char** argv) {
     {
       if(rargc==0)
 	{
-	  dbegin=0;
 	  rargv=parsedir(directory,&rargc);
 	}
       else
 	{
-	  fprintf(stderr,"If you specify a directory don't also specify files\n");
+	  fprintf(stderr,"  If you specify a directory don't also specify files\n");
 	  exit(-1);
 	}
     }
 
-  if(optl)fprintf(stderr,"Reading library name map file...\n");
+  if(optl)fprintf(stderr,"  Reading library name map file...\n");
   while (!feof(stdin))
     {
       /* Get library name... */
@@ -210,21 +210,36 @@ int main (int argc, char** argv) {
       /* Get directory name... */
       gets(buffer);
       ptr=strtok(buffer,"/");
-      while(strcmp (ptr,"source"))ptr=strtok(NULL,"/");
+      if(!ptr)
+	{
+	  fprintf(stderr,"  \"/\" before \"source\" expected.\n");
+	  exit(1);
+	}
+      while(ptr&&strcmp (ptr,"source"))ptr=strtok(NULL,"/");
       ptr=strtok(NULL,"/");
+      if(!ptr)
+	{
+	  fprintf(stderr,"  \"source\" expected.\n");
+	  exit(1);
+	}
       libmapPtr->trigger=(char*)malloc(TRIGSIZE);
       strcpy(libmapPtr->trigger,ptr);
       ptr=strtok(NULL,"/");
-      while(strcmp(ptr,"GNUmakefile"))
+      while(ptr&&strcmp(ptr,"GNUmakefile"))
 	{
 	  strcat(libmapPtr->trigger,"/");
 	  strcat(libmapPtr->trigger,ptr);
 	  ptr=strtok(NULL,"/");
 	}
+      if(!ptr)
+	{
+	  fprintf(stderr,"  \"source/<unique-sub-path>/GNUmakefile\" expected.\n");
+	  exit(1);
+	}
     }
 
-  if(optl)fprintf(stderr,"Reading dependency files...\n");
-  for(i=dbegin;i<rargc;i++)
+  if(optl)fprintf(stderr,"  Reading dependency files...\n");
+  for(i=0;i<rargc;i++)
     {
       fp=fopen(rargv[i],"r");
       fgets(buffer,BUFSIZE,fp);
@@ -235,7 +250,10 @@ int main (int argc, char** argv) {
       /* Look for a "user" library... */
       for(libmapPtr=libmap;libmapPtr;libmapPtr=libmapPtr->next)
 	{
-	  if(strstr(ptr,libmapPtr->lib)) break;
+	  strcpy(workbuf,libmapPtr->lib);
+	  /* Add trailing "/" to distinguish track/ and tracking/, etc. */
+	  strcat(workbuf,"/");
+	  if(strstr(ptr,workbuf)) break;
 	}
       if(libmapPtr)
 	{
@@ -251,9 +269,9 @@ int main (int argc, char** argv) {
 	{
 	  for(libmapPtr=libmap;libmapPtr;libmapPtr=libmapPtr->next)
 	    {
-	      strcpy(buf,libmapPtr->trigger);
-	      strcat(buf,"/include");
-	      ptr=strstr(buffer,buf);
+	      strcpy(workbuf,libmapPtr->trigger);
+	      strcat(workbuf,"/include");
+	      ptr=strstr(buffer,workbuf);
 	      if(ptr)
 		{
 		  libmapPtr->used=1;
@@ -275,7 +293,7 @@ int main (int argc, char** argv) {
   if(optl) /* This option is used for compiling the file libname.map
 	      from all the dependencies. */
     {
-      fprintf(stderr,"Checking for circular dependencies...\n");
+      fprintf(stderr,"  Checking for circular dependencies...\n");
       for(libmapPtr=libmap;libmapPtr;libmapPtr=libmapPtr->next)
 	{
 	  for(pp=libmapPtr->uses;*pp;pp++)
@@ -293,7 +311,7 @@ int main (int argc, char** argv) {
 			{
 			  fprintf
 			    (stderr,
-			     "WARNING: %s and %s use each other.\n",
+			     "  WARNING: %s and %s use each other.\n",
 			     libmapPtr->lib,
 			     libmapPtr1->lib);
 			}
@@ -310,7 +328,7 @@ int main (int argc, char** argv) {
 				{
 				  fprintf
 				    (stderr,
-				     "WARNING: triangular dependecy:\n"
+				     "  WARNING: triangular dependecy:\n"
 				     "  %s uses %s uses %s uses %s.\n",
 				     libmapPtr->lib,
 				     libmapPtr1->lib,
@@ -325,7 +343,7 @@ int main (int argc, char** argv) {
 	    }
 	}
 
-      fprintf(stderr,"Reordering according to dependencies...\n");
+      fprintf(stderr,"  Reordering according to dependencies...\n");
       do
 	{
 	  swapping=0;
@@ -389,7 +407,7 @@ int main (int argc, char** argv) {
 	    }
 	}while(swapping);
 
-      fprintf(stderr,"Writing new library map file...\n");
+      fprintf(stderr,"  Writing new library map file...\n");
       for(libmapPtr=libmap;libmapPtr;libmapPtr=libmapPtr->next)
 	{
 	  printf("%s:",libmapPtr->lib);
