@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01PrimaryGeneratorAction.cc,v 1.3 2002-04-19 12:01:45 gcosmo Exp $
+// $Id: B01PrimaryGeneratorAction.cc,v 1.4 2002-05-15 02:48:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,18 +31,17 @@
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
-#include "G4UImanager.hh"
+#include "G4Neutron.hh"
+#include "G4ThreeVector.hh"
 
 B01PrimaryGeneratorAction::B01PrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   particleGun = new G4ParticleGun(n_particle);
-
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  UI->ApplyCommand("/gun/particle neutron");
-  UI->ApplyCommand("/gun/energy 10.0 MeV");
-  UI->ApplyCommand("/gun/position 0.0 0.0 -15.0005 cm");
-  UI->ApplyCommand("/gun/direction 0. 0. 1.");
+  particleGun->SetParticleDefinition(G4Neutron::NeutronDefinition());
+  particleGun->SetParticleEnergy(10.0*MeV);
+  particleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -15.0005*cm));
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.0, 0.0, 1.0));
 }
 
 B01PrimaryGeneratorAction::~B01PrimaryGeneratorAction()

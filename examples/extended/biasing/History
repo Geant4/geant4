@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2002-04-19 10:54:23 gcosmo Exp $
+$Id: History,v 1.8 2002-05-15 02:48:42 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 15th, 2002 M.Asai - exbiasing-V04-00-05
+- Eliminated all UI commands from generator actions
 
 April 19th, 2002 G.Cosmo - exbiasing-V04-00-04
 - Added disclaimer of liability and minor cosmetics...
