@@ -32,7 +32,7 @@
 #include <iostream>
 #if __GNUC__ < 3
 #if __GNUC_MINOR__ < 96
-#if __GNUC_PATCHLEVEL__ < 4
+#if __GNUC_PATCHLEVEL__ < 3
 #define G4HEPREP_SSTREAM 1
 #endif
 #endif
