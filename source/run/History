@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2001-11-23 16:20:29 maire Exp $
+$Id: History,v 1.49 2001-11-27 17:17:17 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 27, 2001 M.Asai (run-V03-02-10)
+- Change implementation in rndmSaveThisRun() and rndmSaveThisEvent().
      
 Nov 23, 2001 M.Maire
 - Add rndmSaveThisRun() and rndmSaveThisEvent() methods to G4RunManager.

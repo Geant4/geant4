@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.38 2001-11-23 16:20:30 maire Exp $
+// $Id: G4RunManager.cc,v 1.39 2001-11-27 17:17:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -427,58 +427,42 @@ void G4RunManager::rndmSaveThisRun()
   G4int runNumber = runIDCounter;
   if(currentRun == 0) runNumber--;        //state Idle; decrease runNumber
   if(!storeRandomNumberStatus || runNumber < 0) {
-     G4cout << "---> warning from G4RunManager::rndmSaveThisRun():"
-          "there is no currentRun or its RandomEngineStatus is not available." 
-	  << G4endl;
+     G4cerr << "Warning from G4RunManager::rndmSaveThisRun():"
+          << " there is no currentRun or its RandomEngineStatus is not available." 
+	  << G4endl << "Command ignored." << G4endl;
      return;
   }
   
   G4String fileIn  = randomNumberStatusDir + "currentRun.rndm";
-  G4std::ifstream In(fileIn);
-  if (!In) {
-     G4cout << "---> warning from G4RunManager::rndmSaveThisRun()"     	       
-               " there is no file: " << fileIn << G4endl;
-     return;
-  }
-  
+ 
   G4std::ostrstream os;
   os << "run" << runNumber << ".rndm" << '\0';
   G4String fileOut = randomNumberStatusDir + os.str();  
-  G4std::ofstream Out(fileOut);
-  
-  //ready to copy file
-  char c;
-  while(In.get(c)) Out.put(c);
-  G4cout << "---> currentRun.rndm copied on file: " << fileOut << G4endl;    
+
+  G4String copCmd = "/control/shell cp "+fileIn+" "+fileOut;
+  G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
+  if(verboseLevel>0) G4cout << "currentRun.rndm is copied to file: " << fileOut << G4endl;    
 }
 
 void G4RunManager::rndmSaveThisEvent()
 {
   if(!storeRandomNumberStatus || currentEvent == 0) {
-     G4cout << "---> warning from G4RunManager::rndmSaveThisEvent():"
-       " there is no currentEvent or its RandomEngineStatus is not available."
-       << G4endl;
+     G4cerr << "Warning from G4RunManager::rndmSaveThisEvent():"
+          << " there is no currentEvent or its RandomEngineStatus is not available."
+	  << G4endl << "Command ignored." << G4endl;
      return;
   }
   
   G4String fileIn  = randomNumberStatusDir + "currentEvent.rndm";
-  G4std::ifstream In(fileIn);
-  if (!In) {
-     G4cout << "---> warning from G4RunManager::rndmSaveThisEvent()"     	       
-               " there is no file: " << fileIn << G4endl;
-     return;
-  }     	              	       
 
   G4std::ostrstream os;
   os << "run" << currentRun->GetRunID() << "evt" << currentEvent->GetEventID()
      << ".rndm" << '\0';
   G4String fileOut = randomNumberStatusDir + os.str();       
-  G4std::ofstream Out(fileOut);
-  
-  //ready to copy file
-  char c;
-  while(In.get(c)) Out.put(c);  
-  G4cout << "---> currentEvent.rndm copied on file: " << fileOut << G4endl;  
+
+  G4String copCmd = "/control/shell cp "+fileIn+" "+fileOut;
+  G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
+  if(verboseLevel>0) G4cout << "currentEvent.rndm is copied to file: " << fileOut << G4endl;  
 }
   
 void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
@@ -490,7 +474,7 @@ void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
   { fileNameWithDirectory = fileN; }
   
   HepRandom::restoreEngineStatus(fileNameWithDirectory);
-  G4cout << "---> RandomNumberEngineStatus restored from file: "
+  if(verboseLevel>0) G4cout << "RandomNumberEngineStatus restored from file: "
          << fileNameWithDirectory << G4endl;
   HepRandom::showEngineStatus();	 
-  }
+}
