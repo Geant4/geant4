@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.16 2000-01-17 11:58:41 stesting Exp $
+# $Id: GNUmakefile,v 1.17 2000-01-20 16:51:42 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -9,14 +9,19 @@ endif
  
 include $(G4INSTALL)/config/architecture.gmk
 
-# Symbolic links to novice examples...
+# Symbolic links to novice examples using test101, etc...
 EXAMPLES = 01 02 03 04 05 06
 
-# Symbolic links to persistency examples...
+# Symbolic links to extended electromagnetic examples using test501, etc...
+ELECTROMAGNETIC += 6 ## Low energy electromagnetic processes.
+ELECTROMAGNETIC += 8 ## Transistion radiation and PAI (photoabsorption
+                     ## ionisation) model.
+
+# Symbolic links to extended persistency examples using test401, etc...
 PERSISTENCY += 01 02
 
 # System Tests...
-SUBDIRS  = test01 ## Geometry - CSG solids and navigator.
+SUBDIRS += test01 ## Geometry - CSG solids and navigator.
                   ## (Action? Augment, plus Booleans.)
 SUBDIRS += test02 ## Standard em processes.  Low energy and high energy
                   ## hadronic processes and stopping, including coherent
@@ -62,6 +67,9 @@ all:
 	@for nn in $(EXAMPLES); do \
 	  (cd test1$$nn; $(MAKE)); \
 	done;:
+	@for nn in $(ELECTROMAGNETIC); do \
+	  (cd test50$$nn; $(MAKE)); \
+	done;:
 ifdef G4USE_HEPODBMS
 	@for nn in $(PERSISTENCY); do \
 	  (cd test4$$nn; $(MAKE)); \
@@ -104,6 +112,17 @@ examples_links_source:
 	done;:
 	@ln -s exampleN04.EMtest.in test104/test104.EMtest.in
 	@ln -s exampleN04.EMtest.out test104/test104.EMtest.out
+	@for nn in $(ELECTROMAGNETIC); do \
+	  testdir=test50$$nn; \
+	  testin=test50$$nn.in; \
+	  testout=test50$$nn.out; \
+	  exdir=$(G4INSTALL)/examples/extended/electromagnetic/TestEm$$nn; \
+	  exin=TestEm$$nn.in; \
+	  exout=TestEm$$nn.out; \
+	  ln -s $$exdir $$testdir; \
+	  ln -s $$exin $$testdir/$$testin; \
+	  ln -s $$exout $$testdir/$$testout; \
+	done;:
 	@for nn in $(PERSISTENCY); do \
 	  testdir=test4$$nn; \
 	  testin=test4$$nn.in; \
@@ -120,6 +139,9 @@ examples_links_binaries:
 	@$(MAKE) clean_examples_links_binaries
 	@for nn in $(EXAMPLES); do \
 	  ln -s exampleN$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test1$$nn; \
+	done;:
+	@for nn in $(ELECTROMAGNETIC); do \
+	  ln -s TestEm$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test50$$nn; \
 	done;:
 	@for nn in $(PERSISTENCY); do \
 	  exdir=$(G4INSTALL)/examples/extended/persistency/PersistentEx$$nn; \
@@ -139,6 +161,15 @@ clean_examples_links_source:
 	  rm -f $$testdir/$$testout; \
 	  rm -f $$testdir; \
 	done;:
+	@for nn in $(ELECTROMAGNETIC); do \
+	  testdir=test50$$nn; \
+	  testin=test50$$nn.in; \
+	  testout=test50$$nn.out; \
+	  exdir=$(G4INSTALL)/examples/extended/electromagnetic/TestEm$$nn; \
+	  rm -f $$testdir/$$testin; \
+	  rm -f $$testdir/$$testout; \
+	  rm -f $$testdir; \
+	done;:
 	@for nn in $(PERSISTENCY); do \
 	  testdir=test4$$nn; \
 	  testin=test4$$nn.in; \
@@ -152,6 +183,9 @@ clean_examples_links_source:
 clean_examples_links_binaries:
 	@for nn in $(EXAMPLES); do \
 	  rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test1$$nn; \
+	done;:
+	@for nn in $(ELECTROMAGNETIC); do \
+	  rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test50$$nn; \
 	done;:
 	@for nn in $(PERSISTENCY); do \
 	  rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test4$$nn; \
