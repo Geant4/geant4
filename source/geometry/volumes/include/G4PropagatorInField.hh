@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.hh,v 1.4 1999-07-23 11:42:45 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.5 1999-07-27 20:56:12 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -175,6 +175,13 @@ class G4PropagatorInField {
    static const G4double  fDefault_Delta_Intersection_Val; // = 0.1 * mm;
 
    G4int  fmax_loop_count;
+
+   //  Variables to keep track of "abnormal" case - which causes loop
+   G4int     fNoZeroStep;                //  Counter of zeroStep
+   G4int     fThresholdNo_ZeroSteps;    //  Threshold: above this - action
+                       // G4double  fMidPoint_CurveLen_of_LastAttempt= -1;
+   G4double  fFull_CurveLen_of_LastAttempt; 
+   G4double  fLast_ProposedStepLength; 
 }; // End of class G4PropagatorInField {
 
 //  Defines the constructor.

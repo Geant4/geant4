@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.icc,v 1.3 1999-07-23 11:47:48 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.4 1999-07-27 20:56:13 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,13 +30,19 @@ G4PropagatorInField( G4Navigator    *theNavigator,
 		     G4FieldManager *detectorFieldMgr) :
     fNavigator(theNavigator),
     fDetectorFieldMgr(detectorFieldMgr), 
-    fmax_loop_count(1000),
+    fmax_loop_count(10000),
     End_PointAndTangent(G4ThreeVector(0.,0.,0.),
 			G4ThreeVector(0.,0.,0.),0.0,0.0),
     fDelta_One_Step_Value(fDefault_Delta_One_Step_Value),
     fDelta_Intersection_Val(fDefault_Delta_Intersection_Val)
 {
-   // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
+     // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
+
+     fNoZeroStep=0;                
+     fThresholdNo_ZeroSteps= 2; 
+     // fMidPoint_CurveLen_of_LastAttempt= -1;
+     fFull_CurveLen_of_LastAttempt= -1; 
+     fLast_ProposedStepLength= -1; 
 }
 
 inline
