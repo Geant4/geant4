@@ -196,7 +196,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=97s Real=1.2e+02s Sys=15s
+  User=93s Real=1.2e+02s Sys=15s
 
  nb tracks/event   neutral:    27.4000   charged:   688.9400
  nb  steps/event   neutral:   145.5700   charged:  4748.9500

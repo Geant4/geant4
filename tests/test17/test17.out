@@ -243,7 +243,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.52s Real=7.25s Sys=1.72s
+  User=5.55s Real=7.41s Sys=1.85s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
@@ -286,7 +286,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.52s Real=7.23s Sys=1.71s
+  User=5.69s Real=7.47s Sys=1.76s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV
@@ -326,7 +326,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=8.89s Real=11.09s Sys=2.2s
+  User=9.18s Real=11.42s Sys=2.24s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for IonC12 with Ekin = 6 MeV
@@ -368,7 +368,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=37.01s Real=37.18s Sys=0.17s
+  User=37.64s Real=38.09s Sys=0.15s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV
@@ -412,7 +412,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=37.85s Real=38.06s Sys=0.21s
+  User=38.48s Real=38.66s Sys=0.16s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV

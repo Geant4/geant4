@@ -157,7 +157,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=57.64s Real=71.48s Sys=0.88s
+  User=52.5s Real=58.68s Sys=0.82s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 

@@ -20,6 +20,7 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 /run/verbose 2
+/tracking/verbose 0
 #
 ##/testem/phys/addPhysics  g4v52
 /testem/phys/addPhysics  standard
@@ -204,7 +205,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=100.04s Real=118.34s Sys=6.29s
+  User=100.42s Real=111.77s Sys=6.31s
 
 -------------------------------------------------------------
                                    total energy dep                total tracklen       mean energy leaving per layer 

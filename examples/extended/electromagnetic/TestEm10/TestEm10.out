@@ -225,7 +225,7 @@ Regular X-ray TR  radiator EM process is called
 48	fGamma = 8.085e+04	sumE = 21.04
 49	fGamma = 9.283e+04	sumE = 21.05
 
-total time for build X-ray TR energy loss tables = 214.98 s
+total time for build X-ray TR energy loss tables = 212.86 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em10PhysicsList::SetCuts:CutLength : 1 mm 
@@ -343,7 +343,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=215.5s Real=215.79s Sys=0.29s
+  User=219.64s Real=219.93s Sys=0.28s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=68.4534 +- 2.63717  mm  
@@ -359,7 +359,7 @@ Run Summary
 
    mean number of e-s =1.227  and e+s =0
 
-(number) transmission coeff=0.651  reflection coeff=0.007
+(number) transmission coeff=0.407  reflection coeff=0.387
 
 
 --------- Ranecu engine status ---------

@@ -233,20 +233,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=513.96s Real=673.44s Sys=74.36s
+  User=468.42s Real=702.88s Sys=74.25s
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
-tally 0: 	 	10.6015 GeV	0.662592 % 	0.000212318 Gy
-tally 1: 	 	7.37866 GeV	0.461166 % 	0.000147774 Gy
-tally 2: 	 	3.01378 GeV	0.188361 % 	6.03576e-05 Gy
-tally 3: 	 	1.36952 GeV	0.0855947 % 	2.74276e-05 Gy
+tally 0: 	 	10.4962 GeV	0.656011 % 	0.000210209 Gy
+tally 1: 	 	7.50598 GeV	0.469124 % 	0.000150324 Gy
+tally 2: 	 	3.04074 GeV	0.190046 % 	6.08976e-05 Gy
+tally 3: 	 	1.39586 GeV	0.0872414 % 	2.79552e-05 Gy
 
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 577067192, 1158262039
+ Current couple of seeds = 595184325, 961500994
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
