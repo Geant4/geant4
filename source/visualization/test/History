@@ -1,9 +1,12 @@
-$Id: History,v 1.17 2002-08-12 10:14:23 johna Exp $
+$Id: History,v 1.18 2002-08-12 10:16:54 johna Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.17  2002/08/12 10:14:23  johna
+Further test of dollar Log.
+
 Revision 1.16  2002/08/12 10:12:27  johna
 Added dollar Log for fun.
 
