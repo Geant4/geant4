@@ -89,6 +89,7 @@ Unless otherwise stated, commands affect the current scene only.
 /vis/scene/add/axes [<x0>] [<y0>] [<z0>] [<length>] [<unit>]
   default:             0      0      0       1         m
   Draws axes at (x0, y0, z0) of given length.
+  The x, y and z axes are red, green and blue respectively.
 
 NI /vis/scene/add/ghost [<particle>] [<physical-volume-name>]
 NI                      [<copy-no>] [<depth>]
