@@ -1,4 +1,4 @@
-# $Id: INSTALL,v 1.2 2002-05-31 17:44:40 radoone Exp $
+# $Id: INSTALL,v 1.3 2002-06-10 11:57:38 radoone Exp $
 GDML Processor for Geant4 setup and build instructions
 ======================================================
 
@@ -9,7 +9,7 @@ Set the environment variable XERCESCROOT:
 
 For example AFS users can do:
 
-export XERCESROOT=/afs/cern.ch/sw/geant4/dev/XercesC/$G4SYSTEM
+export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/$G4SYSTEM
 
 Build GDML Processor
 --------------------

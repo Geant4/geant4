@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1.1.1 2002-05-31 00:34:43 radoone Exp $
+# $Id: GNUmakefile,v 1.2 2002-06-10 11:59:45 radoone Exp $
 # --------------------------------------------------------------
 # GNUmakefile for GDML sample module. Radovan Chytracek, 30/05/2002.
 # --------------------------------------------------------------
@@ -11,7 +11,7 @@ ifndef G4INSTALL
   G4INSTALL = ../../../..
 endif
 
-GDMLINSTALL := $(G4INSTALL)/examples/advanced/gdml
+GDMLINSTALL := $(G4INSTALL)/examples/extended/gdml
 GDMLLIBROOT := $(GDMLINSTALL)/libgdml
 
 CPPFLAGS    += \
