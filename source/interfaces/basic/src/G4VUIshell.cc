@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUIshell.cc,v 1.5 2001-07-11 10:01:21 gunter Exp $
+// $Id: G4VUIshell.cc,v 1.6 2001-11-26 19:15:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -66,7 +66,7 @@ void G4VUIshell::MakePrompt(const char* msg)
 
   promptString="";
   G4int i;
-  for(i=0; i<promptSetting.length()-1; i++){
+  for(i=0; i<G4int(promptSetting.length())-1; i++){
     if(promptSetting[(size_t)i]=='%'){
       switch (promptSetting[(size_t)(i+1)]) {
       case 's':  // current application status
@@ -97,7 +97,7 @@ void G4VUIshell::MakePrompt(const char* msg)
   }
 
   // append last chaacter
-  if(i == promptSetting.length()-1) 
+  if(i == G4int(promptSetting.length())-1) 
     promptString.append(G4String(promptSetting[(size_t)i]));
 }
 
@@ -121,9 +121,9 @@ G4UIcommandTree* G4VUIshell::GetCommandTree(const G4String& input) const
   if(absPath[absPath.length()-1] != '/') return NULL; // error??
   if(absPath=="/") return cmdTree;
 
-  for(G4int indx=1; indx<absPath.length()-1; ) {
+  for(G4int indx=1; indx<G4int(absPath.length())-1; ) {
     G4int jslash= absPath.index("/", indx);  // search index begin with "/" 
-    if(jslash != G4String::npos) {
+    if(jslash != G4int(G4String::npos)) {
       if(cmdTree != NULL)
         cmdTree= cmdTree-> GetTree(absPath(0,jslash+1));
     }
@@ -147,14 +147,14 @@ G4String G4VUIshell::GetAbsCommandDirPath(const G4String& apath) const
 
   // parsing...
   G4String absPath= "/";
-  for(G4int indx=1; indx<=bpath.length()-1; ) {
+  for(G4int indx=1; indx<=G4int(bpath.length())-1; ) {
     G4int jslash= bpath.index("/", indx);  // search index begin with "/"
-    if(jslash != G4String::npos) {
+    if(jslash != G4int(G4String::npos)) {
       if(bpath(indx,jslash-indx) == ".."){  // directory up
         if(absPath.length() >=1) {
           absPath.remove(absPath.length()-1);  // remove last  "/"
           G4int jpre= absPath.last('/');
-          if(jpre != G4String::npos) absPath.remove(jpre+1);
+          if(jpre != G4int(G4String::npos)) absPath.remove(jpre+1);
         }
       } else if(bpath(indx,jslash-indx) == "."){  // nothing to do
       } else { // add

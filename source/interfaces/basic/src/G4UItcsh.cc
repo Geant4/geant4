@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.cc,v 1.6 2001-07-11 10:01:21 gunter Exp $
+// $Id: G4UItcsh.cc,v 1.7 2001-11-26 19:15:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -217,8 +217,8 @@ void G4UItcsh::ClearLine()
   // display...
   G4int i;
   for(i= cursorPosition; i>=2; i--) G4cout << AsciiBS;
-  for(i=1; i<=commandLine.length(); i++) G4cout << ' ';
-  for(i=1; i<=commandLine.length(); i++) G4cout << AsciiBS;
+  for(i=1; i<=G4int(commandLine.length()); i++) G4cout << ' ';
+  for(i=1; i<=G4int(commandLine.length()); i++) G4cout << AsciiBS;
   G4cout << G4std::flush;
   
   // command line string...
@@ -234,7 +234,7 @@ void G4UItcsh::ClearAfterCursor()
 
   // display...
   G4int i;
-  for(i=cursorPosition; i<=commandLine.length(); i++) G4cout << ' ';
+  for(i=cursorPosition; i<=G4int(commandLine.length()); i++) G4cout << ' ';
   for(i=commandLine.length(); i>=cursorPosition; i--) G4cout << AsciiBS;
   G4cout << G4std::flush;
 
@@ -349,7 +349,7 @@ void G4UItcsh::ListMatchedCommand()
   G4String input= G4String(commandLine).strip(G4String::leading);
   // target token is last token
   G4int jhead= input.last(' ');
-  if(jhead != G4String::npos) {
+  if(jhead != G4int(G4String::npos)) {
     input.remove(0, jhead);
     input= input.strip(G4String::leading);
   }
@@ -386,7 +386,7 @@ void G4UItcsh::CompleteCommand()
   G4String input= G4String(commandLine).strip(G4String::leading);
   // target token is last token
   G4int jhead= input.last(' ');
-  if(jhead != G4String::npos) {
+  if(jhead != G4int(G4String::npos)) {
     input.remove(0, jhead);
     input= input.strip(G4String::leading);
   }
@@ -457,20 +457,20 @@ void G4UItcsh::CompleteCommand()
   input= commandLine;
   // target token is last token
   jhead= input.last(' ');
-  if(jhead == G4String::npos) jhead=0;
+  if(jhead == G4int(G4String::npos)) jhead=0;
   else jhead++;
 
   G4int jt= input.find_last_of('/');
   if(jt<jhead) jt=G4String::npos;
 
-  if(jt==G4String::npos) jt= jhead;
+  if(jt==G4int(G4String::npos)) jt= jhead;
   else jt++;
 
   G4String dspstr; 
   G4int i;
-  for(i=jt; i<=input.length()-1; i++) dspstr+= G4String(AsciiBS); // cleanup
-  for(i=jt; i<=input.length()-1; i++) dspstr+= G4String(' '); 
-  for(i=jt; i<=input.length()-1; i++) dspstr+= G4String(AsciiBS); 
+  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(AsciiBS); // cleanup
+  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(' '); 
+  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(AsciiBS); 
 
   dspstr+= stream;
   G4cout << dspstr << G4std::flush; 
@@ -639,7 +639,7 @@ G4String G4UItcsh::GetFirstMatchedString(const G4String& str1,
   int nmin = nlen1<nlen2 ? nlen1 : nlen2;
 
   G4String strMatched;
-  for(size_t i=0; i<nmin; i++){
+  for(size_t i=0; G4int(i)<nmin; i++){
     if(str1[i]==str2[i]) {
       strMatched+= str1[i];
     } else {

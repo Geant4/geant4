@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.hh,v 1.4 2001-11-24 18:55:52 asaim Exp $
+// $Id: G4UItcsh.hh,v 1.5 2001-11-26 19:15:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -69,8 +69,8 @@ class G4UItcsh : public G4VUIshell {
 protected:
   virtual void MakePrompt(const char* msg=0);
 
-  G4int cursorPosition;    // cursor position 
   G4String commandLine;    // command line string;
+  G4int cursorPosition;    // cursor position 
   G4String commandLineBuf; // temp. command line;
   G4bool IsCursorLast() const; 
                            // Is cursor position at the last of command line ?

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.cc,v 1.16 2001-11-24 18:55:52 asaim Exp $
+// $Id: G4UIterminal.cc,v 1.17 2001-11-26 19:15:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,7 +40,6 @@ G4UIterminal::G4UIterminal(G4VUIshell* aShell)
   UI= G4UImanager::GetUIpointer();
   UI-> SetSession(this);
   UI-> SetCoutDestination(this);
-  G4StateManager* statM= G4StateManager::GetStateManager();
 
   iExit= FALSE;
   iCont= FALSE;
@@ -74,7 +73,6 @@ G4UIsession* G4UIterminal::SessionStart()
 /////////////////////////////////////////
 {
   iExit= TRUE;
-  G4StateManager* statM= G4StateManager::GetStateManager();
 
   G4String newCommand= GetCommand();
   while(iExit){

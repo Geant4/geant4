@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUIshell.hh,v 1.4 2001-07-11 10:01:20 gunter Exp $
+// $Id: G4VUIshell.hh,v 1.5 2001-11-26 19:15:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,8 +55,8 @@ class G4UIcommandTree;
 
 class G4VUIshell {
 protected:
-  G4String promptString;
   G4String promptSetting; // including %-directive
+  G4String promptString;
   virtual void MakePrompt(const char* msg=0);  // make prompt string
   G4int nColumn;  // column size of terminal (default=80)
 
