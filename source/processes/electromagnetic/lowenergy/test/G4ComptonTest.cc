@@ -2,21 +2,21 @@
 // from: geant4/source/processes/electromagnetic/lowenergy/test/
 //
 // execute the following lines _before_ gmake, 
-// select the Anaphe version you want to use (3.6.3-sec for RH61 "old" compiler,
-// 3.6.3 for RH61, new compiler (gcc-2.95.2)):
+// select the Anaphe version you want to use (3.6.4-sec for RH61 "old" compiler,
+// 3.6.4 for RH61, new compiler (gcc-2.95.2)):
 //
-// export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/3.6.3-sec/bin
-// source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.3-sec/install/sharedstart.sh
+// export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/3.6.4-sec/bin
+// source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.4-sec/install/sharedstart.sh
 //
 // (for the new compiler, use (sh derivates):
-// export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/3.6.3/bin
-// source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.3/install/sharedstart.sh
+// export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/3.6.4/bin
+// source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.4/install/sharedstart.sh
 // )
 //
-// or, for [t]csh fans (still "old" compiler):
+// or, for [t]csh fans:
 //
-// setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/3.6.3-sec/bin
-// source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.3-sec/install/sharedstart.csh
+// setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/3.6.4-sec/bin
+// source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.4-sec/install/sharedstart.csh
 //
 // [gmake and run your simulation]
 //
@@ -47,7 +47,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonTest.cc,v 1.14 2001-10-12 13:10:55 pia Exp $
+// $Id: G4ComptonTest.cc,v 1.15 2001-11-30 01:26:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,13 +97,6 @@
 #include "G4GRSVolume.hh"
 #include "G4UnitsTable.hh"
 
-// In order to fix a "feature" in the creating the dependencies, you need
-// to do the following (after sourcing the line on top of this file):
-// mkdir Interfaces ; cd Interfaces 
-// ln -s $LHCXX_REL_DIR/include/Interfaces/*.h .
-// ln -s . Interfaces
-// cd ..
-
 // New Histogramming (from AIDA and Anaphe):
 #include "Interfaces/IHistoManager.h"
 #include "Interfaces/IHistogram1D.h"
@@ -145,19 +138,15 @@ int main()
   // ---- primary ntuple ------
   //-old Tuple* ntuple1 = hbookManager->ntuple("Primary Ntuple");
 
-  // NOTE:
-  // Presently (Anaphe-3.6.3) each ntuple needs to be in a separate
-  // file (and different from the histograms). This will be fixed
-  // as of the next release.
 
   // ntuple-name is composition of <fileName>:<dirName>:<ntupleID>
-  NTuple* ntuple1 = factory->createC( "comptonhisto1.hbook::1" );
+  NTuple* ntuple1 = factory->createC( "comptonhisto.hbook::1" );
   // Check if successful
   assert ( ntuple1 != 0 );
 
   // ---- secondary ntuple ------   
   //-old HepTuple* ntuple2 = hbookManager->ntuple("Secondary Ntuple");
-  NTuple* ntuple2 = factory->createC( "comptonhisto2.hbook::2" );
+  NTuple* ntuple2 = factory->createC( "comptonhisto.hbook::2" );
   // Check if successful
   assert ( ntuple2 != 0 );
 
