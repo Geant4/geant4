@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2002-11-06 02:24:32 tsasaki Exp $
+$Id: History,v 1.48 2002-11-07 18:59:33 tsasaki Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 07, 2002, T,Sasaki (tracking-V04-01-07)
+- Fix for the problem with optical processes
 Nov 05, 2002, T,Sasaki (tracking-V04-01-06)
 - clean up G4SteppingManager.hh and G4VSterppinVerbose.cc
 
