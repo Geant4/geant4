@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 1999-06-02 08:10:28 stesting Exp $
+# $Id: GNUmakefile,v 1.4 1999-06-03 16:17:26 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -10,7 +10,7 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 #Genuine tests...
-SUBDIRS = test01 ## test02 test03
+SUBDIRS = test01 test02 test03
 # SUBDIRS += test04 ## Persistency.
 SUBDIRS += test05 test06 test07 test08 test09 test10
 SUBDIRS += test11 test12
