@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.13 2001-09-17 17:18:59 maire Exp $
+// $Id: G4MultipleScattering.cc,v 1.14 2001-09-27 07:04:26 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -39,6 +39,7 @@
 // 13-09-01 corr. in ComputeTransportCrossSection, L.Urban
 // 14-09-01 protection in GetContinuousStepLimit, L.Urban
 // 17-09-01 migration of Materials to pure STL (mma)
+// 27-09-01 value of data member factlim changed, L.Urban
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +66,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
        tLast (0.0),
        zLast (0.0),
        boundary(true),
-       factlim(0.75),
+       factlim(1.00),
        valueGPILSelectionMSC(NotCandidateForSelection),
        pcz(0.17),zmean(0.),
        palfa(0.9698),pbeta(0.4138),pgamma(2.0001),
