@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2003-10-12 20:20:48 perl Exp $
+$Id: History,v 1.10 2003-10-13 01:55:52 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,11 @@ $Id: History,v 1.9 2003-10-12 20:20:48 perl Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------
+12th October 2003 Makoto Asai
+- Move G4ANALYSIS_USE ifdef blocks so that event summary is printed out
+  regardless of this flag. Only the AIDA part in A01EventAction is 
+  blocked.
+
 12th October 2003 Joseph Perl
 - Modify G4TrackingAction to use G4Trajectory rather than A01Trajectory.
   This allows trajectories to pick up physics attributes.

@@ -20,14 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EventAction.cc,v 1.5 2003-08-14 23:27:26 duns Exp $
+// $Id: A01EventAction.cc,v 1.6 2003-10-13 01:55:54 asaim Exp $
 // --------------------------------------------------------------
 //
-#ifdef G4ANALYSIS_USE
 
 #include "A01EventAction.hh"
 #include "A01EventActionMessenger.hh"
+#ifdef G4ANALYSIS_USE
 #include "A01AnalysisManager.hh"
+#endif // G4ANALYSIS_USE
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -64,6 +65,7 @@ A01EventAction::A01EventAction()
   verboseLevel = 1;
   messenger = new A01EventActionMessenger(this);
 
+#ifdef G4ANALYSIS_USE
   plotter = 0;
   tuple = 0;
   dc1Hits = dc2Hits = 0;
@@ -105,11 +107,14 @@ A01EventAction::A01EventAction()
   {
      tuple = tFactory->create("MyTuple","MyTuple","int dc1Hits, dc2Hits, double ECEnergy, HCEnergy, time1, time2","");
   }
+#endif // G4ANALYSIS_USE
 }
 
 A01EventAction::~A01EventAction()
 {
+#ifdef G4ANALYSIS_USE
   A01AnalysisManager::dispose();
+#endif // G4ANALYSIS_USE
   delete messenger;
 }
 
@@ -136,6 +141,7 @@ void A01EventAction::EndOfEventAction(const G4Event* evt)
     HCHC = (A01HadCalorimeterHitsCollection*)(HCE->GetHC(HCHCID));
   }
 
+#ifdef G4ANALYSIS_USE
   // Fill some histograms
 
   if (DHC1 && dc1Hits)
@@ -217,6 +223,7 @@ void A01EventAction::EndOfEventAction(const G4Event* evt)
 	tuple->addRow();
   }
   if (plotter) plotter->refresh();
+#endif // G4ANALYSIS_USE
 
 
   // Diagnostics
@@ -311,5 +318,4 @@ void A01EventAction::EndOfEventAction(const G4Event* evt)
   }
 }
 
-#endif // G4ANALYSIS_USE
 
