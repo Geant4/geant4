@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.cc,v 1.6 1999-10-14 05:39:50 tsasaki Exp $
+// $Id: G4SteppingManager.cc,v 1.7 1999-10-22 03:21:47 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,7 +55,7 @@ G4SteppingManager::G4SteppingManager()
    else { 
       fVerbose = G4VSteppingVerbose::GetInstance();
       fVerbose -> SetManager(this);
-      KillVerbose = false;
+	  KillVerbose = false;
    }
 #endif
    fSelectedAtRestDoItVector 
@@ -120,6 +120,8 @@ G4StepStatus G4SteppingManager::Stepping()
    fN2ndariesAlongStepDoIt = 0;
    fN2ndariesPostStepDoIt = 0;
 
+//JA Set the volume before it is used (in DefineStepLength() for User Limit) 
+   fCurrentVolume = fStep->GetPreStepPoint()->GetPhysicalVolume();
 
 //-----------------
 // AtRest Processes

@@ -1,4 +1,4 @@
-$Id: History,v 1.7 1999-10-14 05:38:17 tsasaki Exp $
+$Id: History,v 1.8 1999-10-22 03:20:48 tsasaki Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+Oct 22, 99 T.Sasaki G4SteppingMangaer.cc fixed the UserLmit problem     
 Oct 13, 99 T.Sasaki updated G4SteppingVerbose and G4VSteppingVerbose 
 Jun 29, 99 G.Folger have the ctor always assign a SteppingVerbose to fVerbose
 Apr 15, 99 M.Asai (tracking-01-00-03)
