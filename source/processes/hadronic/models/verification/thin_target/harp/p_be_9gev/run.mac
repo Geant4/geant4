@@ -17,9 +17,9 @@ Be
 #energy(MeV)
 8850.4
 #emax(MeV)
-9000.
+10000.
 #nbins
-90
+100
 //--------
 #generator
 binary

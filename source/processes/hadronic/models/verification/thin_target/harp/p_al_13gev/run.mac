@@ -17,9 +17,9 @@ Al
 #energy(MeV)
 12865.8
 #emax(MeV)
-13000.
+14000.
 #nbins
-130
+140
 //--------
 #generator
 binary
