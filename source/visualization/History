@@ -1,4 +1,4 @@
-$Id: History,v 1.102 2001-02-04 01:38:48 johna Exp $
+$Id: History,v 1.103 2001-02-04 20:27:59 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,17 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+4th February 2001  John Allison
+- Added "auto refresh" to view parameters.
+- Added "default" view parameters to viewers.
+- Made OpenGL viewers "auto refresh" by default.
+- Added "/vis/viewer/set/autoRefresh".
+- Added compound command:
+  /vis/drawView [<theta-deg>] [<phi-deg>]
+                [<pan-right>] [<pan-up>] [<pan-unit>]
+                [<zoom-factor>]
+                [<dolly>] [<dolly-unit>]
 
 4th February 2001  John Allison  (vis-V03-00-03)
 - Added several new vis commands:
