@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KnotVector.hh,v 1.1 1999-01-07 16:07:32 gunter Exp $
+// $Id: G4KnotVector.hh,v 1.2 1999-11-08 09:50:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __KNOTVECTOR_H
 #define __KNOTVECTOR_H
 #include <math.h>
-#include "STEPaggregate.h"
+//#include "STEPaggregate.h"
 #include "geomdefs.hh"
 
 
@@ -20,8 +20,8 @@ class G4KnotVector
  public:
  
   G4KnotVector();
-  G4KnotVector(const int Size, const int* MultiList, STEPaggregate& Aggr);
-  G4KnotVector(const int Size, STEPaggregate& Aggr);
+//  G4KnotVector(const int Size, const int* MultiList, STEPaggregate& Aggr);
+//  G4KnotVector(const int Size, STEPaggregate& Aggr);
   G4KnotVector(const int sz);
   G4KnotVector(const G4KnotVector& old_kv);
   ~G4KnotVector();
@@ -76,36 +76,3 @@ class G4KnotVector
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

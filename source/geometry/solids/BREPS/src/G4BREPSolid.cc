@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolid.cc,v 1.8 1999-06-10 09:49:30 sgiani Exp $
+// $Id: G4BREPSolid.cc,v 1.9 1999-11-08 09:50:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4BREPSolid.hh"
@@ -19,6 +19,7 @@
 #include "G4BSplineSurface.hh"
 #include "G4ToroidalSurface.hh"
 #include "G4SphericalSurface.hh"
+#include "instmgr.h"
 
 G4Ray G4BREPSolid::Track;
 G4double G4BREPSolid::ShortestDistance= kInfinity;

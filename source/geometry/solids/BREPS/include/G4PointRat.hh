@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PointRat.hh,v 1.2 1999-05-21 18:40:34 japost Exp $
+// $Id: G4PointRat.hh,v 1.3 1999-11-08 09:50:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -25,10 +25,7 @@
 
 // L. Broglia
 // Before included in G4Point.hh
-#include "STEPentity.h"
 #include "STEPaggregate.h"
-#include "STEPcomplex.h"
-#include "instmgr.h"
 #include "G4Plane.hh"
 #include "G4UVHit.hh"
 #define SQRT_SMALL_FASTF 1.0e-18
