@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc,v 1.20 2002-10-30 00:50:26 asaim Exp $
+// $Id: G4UIcommand.cc,v 1.21 2002-12-05 16:25:34 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,12 +57,12 @@ G4UIcommand::G4UIcommand(const char * theCommandPath,
   G4UIcommandCommonConstructorCode (comStr);
   G4String nullString;
   availabelStateList.clear();
-  availabelStateList.push_back(PreInit);
-  availabelStateList.push_back(Init);
-  availabelStateList.push_back(Idle);
-  availabelStateList.push_back(GeomClosed);
-  availabelStateList.push_back(EventProc);
-  availabelStateList.push_back(Abort);
+  availabelStateList.push_back(G4State_PreInit);
+  availabelStateList.push_back(G4State_Init);
+  availabelStateList.push_back(G4State_Idle);
+  availabelStateList.push_back(G4State_GeomClosed);
+  availabelStateList.push_back(G4State_EventProc);
+  availabelStateList.push_back(G4State_Abort);
 }
 
 void G4UIcommand::G4UIcommandCommonConstructorCode
