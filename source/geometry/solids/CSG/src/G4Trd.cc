@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.17 2003-11-03 18:17:32 gcosmo Exp $
+// $Id: G4Trd.cc,v 1.18 2004-01-25 14:20:37 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1121,7 +1121,8 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p,
       default:
         DumpInfo();
         G4Exception("G4Trd::DistanceToOut()",
-                    "LogicError", FatalException,
+		    //  "LogicError", FatalException,
+                 "Notification", JustWarning, 
                     "Undefined side for valid surface normal to solid.");
         break;
     }
@@ -1152,7 +1153,8 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4Exception("G4Trd::DistanceToOut(p)",
-                 "Notification", JustWarning, "Point p is outside !?" );
+                 "Notification", JustWarning, 
+                 "Point p is outside !?" );
   }
 #endif
 

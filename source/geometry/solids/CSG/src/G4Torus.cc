@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.33 2003-11-03 18:17:32 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.34 2004-01-25 14:20:36 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -2072,7 +2072,8 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = " << snxt/mm << " mm" << G4endl << G4endl;
         G4Exception("G4Torus::DistanceToOut()",
-                    "LogicError", FatalException,
+		    //  "LogicError", FatalException,
+                 "Notification", JustWarning, 
                     "Undefined side for valid surface normal to solid.");
         break;
     }

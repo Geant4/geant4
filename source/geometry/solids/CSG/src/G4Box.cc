@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.24 2003-11-03 18:17:31 gcosmo Exp $
+// $Id: G4Box.cc,v 1.25 2004-01-25 14:20:35 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -717,7 +717,8 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
         G4Exception("G4Box::DistanceToOut()",
-                    "LogicError", FatalException,
+		    //  "LogicError", FatalException,
+                 "Notification", JustWarning, 
                     "Undefined side for valid surface normal to solid.");
         break;
     }
@@ -745,7 +746,8 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4Exception("G4Box::DistanceToOut(p)",
-                 "Notification", JustWarning, "Point p is outside !?" );
+                 "Notification", JustWarning, 
+                 "Point p is outside !?" );
   }
 #endif
 

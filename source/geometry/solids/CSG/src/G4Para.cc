@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.18 2003-11-03 18:17:32 gcosmo Exp $
+// $Id: G4Para.cc,v 1.19 2004-01-25 14:20:38 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -978,7 +978,9 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
         break;
       default:
         DumpInfo();
-        G4Exception("G4Para::DistanceToOut()", "LogicError", FatalException,
+        G4Exception("G4Para::DistanceToOut()", 
+		    //   "LogicError", FatalException,
+                 "Notification", JustWarning, 
                     "Undefined side for valid surface normal to solid.");
         break;
     }
