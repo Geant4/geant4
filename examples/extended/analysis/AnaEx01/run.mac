@@ -13,6 +13,7 @@
 # muon 300 MeV to the direction (1.,0.,0.)
 # 3 events
 #
-/gun/particle mu+
+#/gun/particle mu+
+/gun/particle e+
 /gun/energy 300 MeV
-/run/beamOn 3
+/run/beamOn 100
