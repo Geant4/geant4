@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 1999-12-08 16:30:55 stesting Exp $
+# $Id: GNUmakefile,v 1.4 2001-11-04 10:47:09 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -14,9 +14,6 @@ endif
 
 .PHONY: all tools
  
-tools:
-	cd ../tools/lib; $(MAKE)
-	$(MAKE) all
 
 all: lib bin
 
