@@ -1,4 +1,4 @@
-$Id: History,v 1.3 1999-02-03 16:26:41 johna Exp $
+$Id: History,v 1.4 1999-02-06 10:14:12 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Feb 6, 99   H.Kurashige (particles-01-00-02 ,partman-01-00-02)
+- Migrate G4ParticleTypes.hh into process/management
+- Remove using G4ParticleMomentum
 
 - Feb 4, 99  H.Kurashige (particles-01-00-01)
 - Re-fixed bugs in destrction of ions  (Hisaya)
