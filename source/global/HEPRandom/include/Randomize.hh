@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Randomize.hh,v 1.3 2000-08-02 10:48:21 gcosmo Exp $
+// $Id: Randomize.hh,v 1.4 2000-08-02 15:21:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef randomize_h
@@ -22,6 +22,7 @@
 #include <CLHEP/Random/RandLandau.h>
 #include <CLHEP/Random/RandBit.h>
 
+#define G4RandGauss RandGaussQ
 #define G4UniformRand() HepRandom::getTheEngine()->flat()
 
 #endif // randomize_h 
