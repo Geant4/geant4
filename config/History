@@ -1,4 +1,4 @@
-$Id: History,v 1.132 2001-03-06 07:46:12 gcosmo Exp $
+$Id: History,v 1.133 2001-03-26 08:34:18 gunter Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 March 2001 Gunter Folger (config-V03-00-03)
+- binmake.gmk, only store in executable PATH to libs from example/test; 
+  other libs should be taken/found from LD_LIBRARY_PATH
+- sys/{Linux-g++,SUN-CC}.gmk: enable storing of PATH to libs in executable 
 
 06th March 2001 Gabriele Cosmo (config-V03-00-02)
 - binmake.gmk: added include path for processes/electromagnetic/integral

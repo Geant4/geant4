@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.56 2001-03-06 07:45:42 gcosmo Exp $
+# $Id: binmake.gmk,v 1.57 2001-03-26 08:34:18 gunter Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -117,12 +117,6 @@ endif
 CPPFLAGS += $(INCFLAGS)
 LDFLAGS += -L$(G4LIBDIR)
 
-ifdef SHAREDLIBS
-  ifdef G4RUNPATHOPTION
-    LDFLAGS += $(G4RUNPATHOPTION)$(G4LIBDIR)
-  endif
-endif
-
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(G4TARGET)
 G4BINDIR := $(G4BIN)/$(G4SYSTEM)
 
@@ -131,6 +125,8 @@ ifdef G4EXLIB
   LDFLAGS += -L$(G4LIBDIR)
   ifdef SHAREDLIBS
     ifdef G4RUNPATHOPTION
+#        for the example dependant directory, keep the path to the shared lib 
+#          in the executable.
       LDFLAGS += $(G4RUNPATHOPTION)$(G4LIBDIR)
     endif
   endif
