@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AffineTransform.icc,v 1.5 2001-12-20 20:14:54 radoone Exp $
+// $Id: G4AffineTransform.icc,v 1.6 2002-01-08 12:38:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -336,10 +336,9 @@ G4double G4AffineTransform::operator [] (const G4int n) const
 		case 3:
 		case 7:
 		case 11:
-			v=0;
 			break;
 		case 15:
-			v=1;
+			v=1.0;
 			break;
 		}
 	return v;
