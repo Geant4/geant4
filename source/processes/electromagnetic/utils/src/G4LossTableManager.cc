@@ -55,6 +55,7 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4ProcessManager.hh"
 #include "G4Electron.hh"
+#include "G4VMultipleScattering.hh"
 
 G4LossTableManager* G4LossTableManager::theInstance = 0;
 
@@ -72,6 +73,13 @@ G4LossTableManager* G4LossTableManager::Instance()
 
 G4LossTableManager::~G4LossTableManager()
 {
+  for (G4int i=0; i<n_loss; i++) {
+    if( loss_vector[i] ) delete loss_vector[i];
+  }
+  size_t msc = msc_vector.size();
+  for (size_t j=0; j<msc; j++) {
+    if(msc_vector[j] ) delete msc_vector[j];
+  }  Clear();
   delete theMessenger;
   delete tableBuilder;
 }
@@ -114,13 +122,6 @@ void G4LossTableManager::Clear()
   currentParticle = 0;
   if(n_loss)
     {
-      for(G4int i=0; i<n_loss; i++)
-        {
-          if(dedx_vector[i]) dedx_vector[i]->clearAndDestroy();
-          if(range_vector[i]) range_vector[i]->clearAndDestroy();
-          if(inv_range_vector[i]) inv_range_vector[i]->clearAndDestroy();
-	}
-
       dedx_vector.clear();
       range_vector.clear();
       inv_range_vector.clear();
@@ -150,18 +151,29 @@ void G4LossTableManager::Register(G4VEnergyLossSTD* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::DeRegister(G4VEnergyLossSTD*)
-{}
+void G4LossTableManager::DeRegister(G4VEnergyLossSTD* p)
+{
+  for (G4int i=0; i<n_loss; i++) {
+    if(loss_vector[i] == p) loss_vector[i] = 0;
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::Register(G4VMultipleScattering*)
-{}
+void G4LossTableManager::Register(G4VMultipleScattering* p)
+{
+  msc_vector.push_back(p);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::DeRegister(G4VMultipleScattering*)
-{}
+void G4LossTableManager::DeRegister(G4VMultipleScattering* p)
+{
+  size_t msc = msc_vector.size();
+  for (size_t i=0; i<msc; i++) {
+    if(msc_vector[i] == p) msc_vector[i] = 0;
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -178,7 +190,7 @@ G4EnergyLossMessenger* G4LossTableManager::GetMessenger()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-  
+
 void G4LossTableManager::ParticleHaveNoLoss(const G4ParticleDefinition* aParticle)
 {
   G4String s = "G4LossTableManager:: dE/dx table not found for "

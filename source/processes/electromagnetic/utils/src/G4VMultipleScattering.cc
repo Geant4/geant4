@@ -92,6 +92,7 @@ G4VMultipleScattering::~G4VMultipleScattering()
     theLambdaTable->clearAndDestroy();
     delete theLambdaTable;
   }
+  (G4LossTableManager::Instance())->DeRegister(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -133,8 +133,6 @@ G4VEnergyLossSTD::~G4VEnergyLossSTD()
 {
   Clear();
 
-  (G4LossTableManager::Instance())->Clear();
-
   if (nSCoffRegions) {
     for (G4int i=0; i<nSCoffRegions; i++) {
       if (scoffProcessors[i]) {
@@ -148,6 +146,7 @@ G4VEnergyLossSTD::~G4VEnergyLossSTD()
     scoffRegions.clear();
   }
   delete modelManager;
+  (G4LossTableManager::Instance())->DeRegister(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -251,6 +250,8 @@ void G4VEnergyLossSTD::Initialise()
 void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
   currentCouple = 0;
+  oldTrackID = -1;
+  preStepLambda = 0.0;
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::BuildPhysicsTable() for "
            << GetProcessName()
@@ -667,7 +668,7 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
   G4double postStepScaledEnergy = finalT*massRatio;
 
   // Integral approach
-  if(integral) {
+  if (integral) {
     G4bool b;
     G4double postStepLambda = chargeSqRatio*
       (((*theLambdaTable)[currentMaterialIndex])->GetValue(postStepScaledEnergy,b));

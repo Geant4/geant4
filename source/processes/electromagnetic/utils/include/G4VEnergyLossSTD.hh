@@ -310,6 +310,7 @@ private:
   const G4Material*           currentMaterial;
   const G4MaterialCutsCouple* currentCouple;
   size_t                      currentMaterialIndex;
+  G4int                       oldTrackID;
 
   G4int    nDEDXBins;
   G4int    nLambdaBins;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.cc,v 1.22 2003-04-04 14:33:34 vnivanch Exp $
+// $Id: G4EnergyLossTables.cc,v 1.23 2003-04-07 17:13:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -126,7 +126,7 @@ const G4PhysicsTable* G4EnergyLossTables::GetRangeTable(
 {
   helper_map::iterator it;
   if((it=dict.find(p))==dict.end()) return 0;
-  return (*it).second.theRangeTable;  
+  return (*it).second.theRangeTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -136,7 +136,7 @@ const G4PhysicsTable* G4EnergyLossTables::GetInverseRangeTable(
 {
   helper_map::iterator it;
   if((it=dict.find(p))==dict.end()) return 0;
-  return (*it).second.theInverseRangeTable;  
+  return (*it).second.theInverseRangeTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -146,7 +146,7 @@ const G4PhysicsTable* G4EnergyLossTables::GetLabTimeTable(
 {
   helper_map::iterator it;
   if((it=dict.find(p))==dict.end()) return 0;
-  return (*it).second.theLabTimeTable;  
+  return (*it).second.theLabTimeTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -166,6 +166,7 @@ G4EnergyLossTablesHelper G4EnergyLossTables::GetTables(
 {
   helper_map::iterator it;
   if((it=dict.find(p))==dict.end()) {
+    G4cout << "Table is not found out for " << p->GetParticleName() << G4endl;
     G4Exception("G4EnergyLossTables::GetTables: table not found!");
     exit(1);
   }

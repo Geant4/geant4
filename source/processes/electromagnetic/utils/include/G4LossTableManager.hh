@@ -133,7 +133,7 @@ public:
   void SetMaxEnergy(G4double val);
 
   void SetStepLimits(G4double v1, G4double v2);
-  
+
   G4EnergyLossMessenger* GetMessenger();
 
 private:
@@ -145,9 +145,6 @@ private:
   G4VEnergyLossSTD* BuildTables(const G4ParticleDefinition* aParticle);
 
   void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle);
-
-  //  G4LossTableManager(const G4LossTableManager&);
-  //  const G4LossTableManager& operator=(const G4LossTableManager& right);
 
 private:
 
