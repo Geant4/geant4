@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectricOld.hh,v 1.1 2001-09-21 08:48:08 pia Exp $
+// $Id: G4LowEnergyPhotoElectricOld.hh,v 1.2 2001-09-23 17:46:42 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,8 +38,8 @@
 
 // ************************************************************
 
-#ifndef G4LowEnergyPhotoElectric_h
-#define G4LowEnergyPhotoElectric_h 1
+#ifndef G4LowEnergyPhotoElectricOLD_h
+#define G4LowEnergyPhotoElectricOLD_h 1
 
 // Base Class Headers
 #include "G4VDiscreteProcess.hh"
