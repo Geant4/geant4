@@ -14,6 +14,9 @@ if ( $Tag =~ m/tags(\d+)/ ) {
    print "Failed to extract tagset number from OnTest configuration file\n";
    exit(1);
 }
+$CVSModifieds=0; 
+$CVSConflicts=0;
+$LogLevel=1;
 $logfilesize=(-s $UpdateLog);
 print "$UpdateLog is $logfilesize characters\n";
 open(ULOG,"$UpdateLog") || die "Failed to open (read) $UpdateLog $!";
@@ -23,7 +26,7 @@ while ($line = <ULOG> ) {
     if ( $line =~ /^cvs update / ) {
         $CVSCommand = $line;
         $CVSCommands++;
-        print "Command  $line\n";
+        print "Command  $line\n" if ( $LogLevel > 1);
         next;
     }
     if ( $line =~ /^U / ) {
@@ -46,24 +49,24 @@ while ($line = <ULOG> ) {
         $Questionable++;
         if ( $line =~ /rndm$/ ) { $Passrndm++; next}
         if ( $line =~ /ir.out$/ ) { $Passirout++; next}
+        if ( $line =~ /\.log$/ ) { $Passdotlog++; next}
         if ( $line =~ m#tests/tools/bin# ) { $Passtools++; next}
-        print "Updating $CVSUpdating Questionable file $line\n";
+        print "Updating $CVSUpdating      Questionable file $line\n";
         next;
     }
 # cvs update: warning: source/run/src/G4RunManager.cc was lost
     if ( $line =~ /cvs update: warning:\s+(.*)\s+was lost/ ) {
-        print "Lost:   $line\n";
         $CVSLost++;
         if ( $1 =~ /G4RunManager.cc/ ) { $CVSLostOK++; next}
-        print "Lost:   $line\n";
+        print "Lost:   $line\n" if ( $LogLevel > 1);
         next;
     }
     if ( $line =~ /^C / ) {
         $CVSConflict = $line;
         $CVSConflict =~ s/^C //;
         $CVSConflicts++;
-        print "$line\n";
-        print "Conflict: $CVSConflict\n";
+        print "$line\n" if ( $LogLevel > 1);
+        print "Conflict: $CVSConflict\n" if ( $LogLevel > 0);
         push(@Conflict,$CVSConflict);
         next;
     }
@@ -71,8 +74,8 @@ while ($line = <ULOG> ) {
         $CVSModified = $line;
         $CVSModified =~ s/^C //;
         $CVSModifieds++;
-        print "$line\n";
-        print "Modified: $CVSModified\n";
+        print "$line\n"  if ( $LogLevel > 1);
+        print "Modified: $CVSModified\n" if ( $LogLevel > 0);
         push(@Modified,$CVSModified);
         next;
     }
@@ -83,7 +86,7 @@ while ($line = <ULOG> ) {
 }
 close(ULOG);
 
-$QOk=$Passrndm+$Passirout+$Passtools;
+$QOk=$Passrndm+$Passirout+$Passtools+$Passdotlog;
 print "\n\n";
 print "Review update log for tagset $1\n";
 print "Displayed:           $displayed lines of $lines\n";
@@ -95,5 +98,6 @@ print "Was lost:            $CVSLostOK normal (G4RunManager.cc) of $CVSLost\n";
 print "Modified:            $CVSModifieds  investigate if not 0\n";
 print "Conflicts:           $CVSConflicts  investigate if not 0\n";
 
+foreach (@Conflict) { print "$_\n"; }
 
 
