@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.26 2004-01-26 09:03:19 gcosmo Exp $
+// $Id: G4Box.cc,v 1.27 2004-09-22 08:25:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,6 +100,7 @@ void G4Box::SetXHalfLength(G4double dx)
     G4Exception("G4Box::SetXHalfLength()", "InvalidSetup",
                 FatalException, "Invalid dimensions. Too small.");
   }
+  fCubicVolume= 0.;
 } 
 
 void G4Box::SetYHalfLength(G4double dy) 
@@ -114,6 +115,7 @@ void G4Box::SetYHalfLength(G4double dy)
     G4Exception("G4Box::SetYHalfLength()", "InvalidSetup",
                 FatalException, "Invalid dimensions. Too small.");
   }
+  fCubicVolume= 0.;
 } 
 
 void G4Box::SetZHalfLength(G4double dz) 
@@ -128,6 +130,7 @@ void G4Box::SetZHalfLength(G4double dz)
     G4Exception("G4Box::SetZHalfLength()", "InvalidSetup",
                 FatalException, "Invalid dimensions. Too small.");
   }
+  fCubicVolume= 0.;
 } 
     
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.icc,v 1.2 2004-09-13 16:26:53 grichine Exp $
+// $Id: G4Trap.icc,v 1.3 2004-09-22 08:25:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -106,12 +106,13 @@ TrapSidePlane G4Trap::GetSidePlane( G4int n ) const
 
 ///////////////////////////////////////////////////
 //
-// a bit modified Trd
+// Return the volume as a bit modified Trd
 
 inline
 G4double G4Trap::GetCubicVolume()
 {
   if(fCubicVolume != 0.) ;
-  else   fCubicVolume = fDz*( (fDx1+fDx2+fDx3+fDx4)*(fDy1+fDy2) + (fDx4+fDx3-fDx2-fDx1)*(fDy2-fDy1)/3 ); 
+  else   fCubicVolume = fDz*( (fDx1+fDx2+fDx3+fDx4)*(fDy1+fDy2)
+                            + (fDx4+fDx3-fDx2-fDx1)*(fDy2-fDy1)/3 ); 
   return fCubicVolume;
 }

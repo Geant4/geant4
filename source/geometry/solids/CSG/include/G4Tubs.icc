@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.icc,v 1.2 2004-09-08 15:13:52 grichine Exp $
+// $Id: G4Tubs.icc,v 1.3 2004-09-22 08:25:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -66,30 +66,35 @@ inline
 void G4Tubs::SetInnerRadius (G4double newRMin)
 {
   fRMin= newRMin;
+  fCubicVolume= 0.;
 }
 
 inline
 void G4Tubs::SetOuterRadius (G4double newRMax)
 {
   fRMax= newRMax;
+  fCubicVolume= 0.;
 }
 
 inline
 void G4Tubs::SetZHalfLength (G4double newDz)
 {
   fDz= newDz;
+  fCubicVolume= 0.;
 }
 
 inline
 void G4Tubs::SetStartPhiAngle (G4double newSPhi)
 {
   fSPhi= newSPhi;
+  fCubicVolume= 0.;
 }
 
 inline
 void G4Tubs::SetDeltaPhiAngle (G4double newDPhi)
 {
   fDPhi= newDPhi;
+  fCubicVolume= 0.;
 }
 
 //  Older names for access functions

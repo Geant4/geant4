@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.24 2004-01-26 09:03:20 gcosmo Exp $
+// $Id: G4Trap.cc,v 1.25 2004-09-22 08:25:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -30,7 +30,7 @@
 //
 // History:
 // 21.03.95 P.Kent: Modified for `tolerant' geometry
-// 09.09.96 V. Grichine: Final modifications before to commit
+// 09.09.96 V.Grichine: Final modifications before to commit
 // 01.11.96 V.Grichine: Costructor for Right Angular Wedge from STEP, G4Trd/Para
 // 08.12.97 J.Allison: Added "nominal" constructor and method SetAllParameters.
 // 04.06.99 S.Giani: Fixed CalculateExtent in rotated case. 
@@ -528,6 +528,7 @@ void G4Trap::SetAllParameters ( G4double pDz,
                                 G4double pDx4,
                                 G4double pAlp2 )
 {
+  fCubicVolume= 0.;
   if ( pDz>0 && pDy1>0 && pDx1>0 && pDx2>0 && pDy2>0 && pDx3>0 && pDx4>0 )
   {
     fDz=pDz;

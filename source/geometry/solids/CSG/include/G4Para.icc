@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.icc,v 1.2 2004-09-13 16:26:53 grichine Exp $
+// $Id: G4Para.icc,v 1.3 2004-09-22 08:25:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -71,30 +71,35 @@ inline
 void G4Para::SetXHalfLength(G4double val)
 {
   fDx= val;
+  fCubicVolume= 0.;
 }
 
 inline
 void G4Para::SetYHalfLength(G4double val)
 {
   fDy= val;
+  fCubicVolume= 0.;
 }
 
 inline
 void G4Para::SetZHalfLength(G4double val)
 {
   fDz= val;
+  fCubicVolume= 0.;
 }
 
 inline
 void G4Para::SetAlpha(G4double alpha)
 {
   fTalpha= tan(alpha);
+  fCubicVolume= 0.;
 }
 
 inline
 void G4Para::SetTanAlpha(G4double val)
 {
   fTalpha= val;
+  fCubicVolume= 0.;
 }
 
 inline
@@ -102,6 +107,7 @@ void G4Para::SetThetaAndPhi(double pTheta, double pPhi)
 {
   fTthetaCphi=tan(pTheta)*cos(pPhi);
   fTthetaSphi=tan(pTheta)*sin(pPhi);
+  fCubicVolume= 0.;
 }
 
 ///////////////////////////////////////////////////
