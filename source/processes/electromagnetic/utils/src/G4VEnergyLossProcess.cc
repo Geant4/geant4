@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.1 2003-11-12 16:18:10 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.2 2003-11-25 18:01:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -185,8 +185,8 @@ void G4VEnergyLossProcess::Clear()
     if(theInverseRangeTable) theInverseRangeTable->clearAndDestroy();
     if(theLambdaTable) theLambdaTable->clearAndDestroy();
     if(theSubLambdaTable) theSubLambdaTable->clearAndDestroy();
-    if(theDEDXAtMaxEnergy) delete theDEDXAtMaxEnergy;
-    if(theRangeAtMaxEnergy) delete theRangeAtMaxEnergy;
+    if(theDEDXAtMaxEnergy) delete [] theDEDXAtMaxEnergy;
+    if(theRangeAtMaxEnergy) delete [] theRangeAtMaxEnergy;
   }
 
   theDEDXTable = 0;
@@ -839,6 +839,7 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
 
 void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p)
 {
+  if(theDEDXTable) theDEDXTable->clearAndDestroy();
   theDEDXTable = p;
 }
 
@@ -846,24 +847,26 @@ void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p)
 
 void G4VEnergyLossProcess::SetRangeTable(G4PhysicsTable* p)
 {
+  if(theRangeTable) theRangeTable->clearAndDestroy();
   theRangeTable = p;
   size_t n = p->length();
-  G4PhysicsVector* pv = (*p)[0];
-  G4bool b;
-  size_t nbins = pv->GetVectorLength();
-  highKinEnergyForRange = pv->GetLowEdgeEnergy(nbins);
-  theDEDXAtMaxEnergy = new G4double [n];
-  theRangeAtMaxEnergy = new G4double [n];
+  if(0 < n) {
+    G4PhysicsVector* pv = (*p)[0];
+    G4bool b;
+    size_t nbins = pv->GetVectorLength();
+    highKinEnergyForRange = pv->GetLowEdgeEnergy(nbins);
+    theDEDXAtMaxEnergy = new G4double [n];
+    theRangeAtMaxEnergy = new G4double [n];
 
-  for (size_t i=0; i<n; i++) {
-    pv = (*p)[i];
-    G4double e2 = pv->GetLowEdgeEnergy(nbins);
-    G4double r2 = pv->GetValue(e2, b);
-    G4double dedx = ((*theDEDXTable)[i])->GetValue(e2,b);
-    theDEDXAtMaxEnergy[i] = dedx;
-    theRangeAtMaxEnergy[i] = r2;
-    //G4cout << "i= " << i << " e2= " << e2 << " r2= " << r2 
-    //<< " dedx= " << dedx << G4endl;
+    for (size_t i=0; i<n; i++) {
+      pv = (*p)[i];
+      G4double r2 = pv->GetValue(highKinEnergyForRange, b);
+      G4double dedx = ((*theDEDXTable)[i])->GetValue(highKinEnergyForRange,b);
+      theDEDXAtMaxEnergy[i] = dedx;
+      theRangeAtMaxEnergy[i] = r2;
+      //G4cout << "i= " << i << " e2= " << e2 << " r2= " << r2 
+      //<< " dedx= " << dedx << G4endl;
+    }
   }
 }
 
@@ -878,6 +881,7 @@ void G4VEnergyLossProcess::SetSecondaryRangeTable(G4PhysicsTable* p)
 
 void G4VEnergyLossProcess::SetInverseRangeTable(G4PhysicsTable* p)
 {
+  if(theInverseRangeTable) theInverseRangeTable->clearAndDestroy();
   theInverseRangeTable = p;
 }
 
@@ -885,6 +889,7 @@ void G4VEnergyLossProcess::SetInverseRangeTable(G4PhysicsTable* p)
 
 void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
 {
+  if(theLambdaTable) theLambdaTable->clearAndDestroy();
   theLambdaTable = p;
   tablesAreBuilt = true;
 }
@@ -893,6 +898,7 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
 
 void G4VEnergyLossProcess::SetSubLambdaTable(G4PhysicsTable* p)
 {
+  if(theSubLambdaTable) theSubLambdaTable->clearAndDestroy();
   theSubLambdaTable = p;
   if (nSCoffRegions) {
     for (G4int i=0; i<nSCoffRegions; i++) {

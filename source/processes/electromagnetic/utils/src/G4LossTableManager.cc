@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.35 2003-11-24 12:12:53 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.36 2003-11-25 18:01:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,7 +97,7 @@ G4LossTableManager::~G4LossTableManager()
   for (size_t k=0; k<emp; k++) {
     if(emp_vector[k] ) delete emp_vector[k];
   }
- Clear();
+  Clear();
   delete theMessenger;
   delete tableBuilder;
 }
@@ -585,7 +585,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
     }
     G4PhysicsTable* dedxForRange = newlist[0];
     if (1 < n_dedx) dedxForRange = tableBuilder->BuildDEDXTable(newlist);
-    range = tableBuilder->BuildRangeTable(dedx);
+    range = tableBuilder->BuildRangeTable(dedxForRange);
     for(G4int j=0; j<n_dedx; j++) {
       newlist[j]->clearAndDestroy();
     }
