@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.7 1999-07-01 17:37:26 aforti Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.8 1999-07-05 14:30:53 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,6 +66,11 @@ public:
 			   G4ForceCondition* condition ) ;
 
   inline G4double GetTransitionShell(G4int k){return(thePrimShVec(k));};
+
+  G4double GetContinuousStepLimit(const G4Track& track,
+                                    G4double previousStepSize,
+                                    G4double currentMinimumStep,
+                                    G4double& currentSafety);
 
   G4VParticleChange* AlongStepDoIt(const G4Track& track,
 				   const G4Step& Step) ;

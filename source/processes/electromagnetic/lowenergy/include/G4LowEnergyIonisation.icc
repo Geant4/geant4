@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.icc,v 1.4 1999-06-28 15:47:35 aforti Exp $
+// $Id: G4LowEnergyIonisation.icc,v 1.5 1999-07-05 14:31:18 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,6 +72,30 @@ inline G4double G4LowEnergyIonisation::GetMeanFreePath(
   }
 
   return MeanFreePath ;
+}
+
+inline G4double G4LowEnergyIonisation::GetContinuousStepLimit(
+                                               const G4Track& track,
+                                               G4double,
+                                               G4double currentMinimumStep,
+                                               G4double&)
+{
+ 
+  G4double kinEn = track.GetDynamicParticle()->GetKineticEnergy();
+  G4double Step;
+	
+  if(kinEn <= 250*eV){
+
+    Step = 0.1*nanometer;
+
+  }
+  else{
+
+    Step = DBL_MAX;
+  }
+
+  if ((Step>0.0)&&(Step<currentMinimumStep)) currentMinimumStep = Step;
+  return Step ;
 }
 
 
