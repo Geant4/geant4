@@ -11,9 +11,9 @@
 #  and type "help".
 #
 #    % g4rootio.pl
-#    fadscpp> help
-#    fadscpp> set help
-#    fadscpp> quit
+#    g4rootio> help
+#    g4rootio> set help
+#    g4rootio> quit
 #
 #  To run in batchmode, specify the name of the file which contains
 #  the *.rootio file information.
