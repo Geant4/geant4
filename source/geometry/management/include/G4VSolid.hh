@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSolid.hh,v 1.4 1999-12-15 14:49:52 gunter Exp $
+// $Id: G4VSolid.hh,v 1.5 2000-04-11 16:18:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,7 +108,7 @@
 //    virtual void DescribeYourselfTo (G4VGraphicsScene& scene) const = 0;
 //      A "double dispatch" function which identifies the solid
 //        to the graphics scene.
-//    virtual G4VisExtent GetExtent() const = 0;
+//    virtual G4VisExtent GetExtent() const;
 //      Provides extent (bounding box) as possible hint to graphics view.
 //    virtual G4Polyhedron* CreatePolyhedron () const;
 //    virtual G4NURBS*      CreateNURBS      () const;
@@ -205,6 +205,8 @@
 //   Name for this solid.
 //
 // History:
+// 12.04.00 J.Allison     Implemented default GetExtent in terms of
+//                          CalculateExrent.
 // 17.06.98 J.Apostolakis Added pure virtual function GetEntityType()
 // 26.07.96 P.Kent        Added ComputeDimensions for replication mechanism.
 // 27.03.96 J.Allison     Methods for visualisation 
@@ -274,7 +276,7 @@ public: // With description
     virtual G4GeometryType  GetEntityType() const = 0;
 
     virtual void DescribeYourselfTo (G4VGraphicsScene& scene) const = 0;
-    virtual G4VisExtent   GetExtent        () const = 0;
+    virtual G4VisExtent   GetExtent        () const;
     virtual G4Polyhedron* CreatePolyhedron () const;
     virtual G4NURBS*      CreateNURBS      () const;
 

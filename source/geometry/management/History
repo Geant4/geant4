@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2000-01-19 19:07:04 gcosmo Exp $
+$Id: History,v 1.8 2000-04-11 16:18:08 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 11, 2000   J. Allison
+
+- Made virtual G4VisExtent G4VSolid::GetExtent() non-pure and implemented
+    a default in terms of CalculateExtent.
 
 January 19, 00       G. Cosmo              geommng-V01-00-00
 
