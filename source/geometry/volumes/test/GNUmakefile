@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2001-03-16 16:42:24 radoone Exp $
+# $Id: GNUmakefile,v 1.5 2001-12-20 20:07:11 radoone Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -27,10 +27,12 @@ INCFLAGS := -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/intercoms/include
 
-LDLIBS   := -lG4csg  -lG4volumes -lG4magneticfield \
-            -lG4geometrymng \
+LDLIBS   := -lG4csg -lG4volumes -lG4magneticfield \
+            -lG4geomver -lG4geometrymng \
             -lG4graphics_reps \
-            -lG4globman -lG4intercoms
+            -lG4intercoms -lG4UIbasic -lG4UIcommon \
+            -lG4globman 
+            
 
 include $(G4INSTALL)/config/binmake.gmk
 
