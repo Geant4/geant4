@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.cc,v 1.14 2002-05-31 16:06:54 maire Exp $
+// $Id: Em2RunAction.cc,v 1.15 2002-06-03 14:07:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -164,7 +164,6 @@ void Em2RunAction::cleanHisto()
   tree->close();        // and closing the tree (and the file)
 
   delete tree;
-  delete [] histo;
 #endif  
 }
 
