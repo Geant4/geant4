@@ -139,21 +139,26 @@ echo "STT:SETUPDirectories Finished"
 # Build&run all
 ################################
 cd ${G4WORKDIR}
-. ${G4STTDIR}/bin/limit.sh
+. ${G4STTDIR}/bin/blimit.sh
 
 if [ X$ACTION = Xbuild -o X$ACTION = Xall  ]
 then
   . ${G4STTDIR}/bin/tmpenv.sh
+  ${G4STTDIR}/bin/geant4-unix.pl --start
   echo "STT:BUILD Started"
   ${G4STTDIR}/bin/build.sh $ACTARG1 $ACTARG2
   echo "STT:BUILD Finished"
+  ${G4STTDIR}/bin/geant4-unix.pl --end
+    sleep 60
 fi
 
 if [ X$ACTION = Xrun -o X$ACTION = Xall  ]
 then
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test tests
   echo "STT:RUN Started"
   ${G4STTDIR}/bin/run.sh $ACTARG3
   echo "STT:RUN Finished"
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test tests
 fi
 ####################################################################
 

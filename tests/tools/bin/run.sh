@@ -77,29 +77,28 @@ if [ $1 = "all" ] ; then
   nice $G4STTDIR/bin/run.sh test01
   nice $G4STTDIR/bin/run.sh test02
   nice $G4STTDIR/bin/run.sh test02.hadron
-#  nice $G4STTDIR/bin/run.sh test03
-#  nice $G4STTDIR/bin/run.sh test04
   nice $G4STTDIR/bin/run.sh test05
   nice $G4STTDIR/bin/run.sh test06
   nice $G4STTDIR/bin/run.sh test07
-#  nice $G4STTDIR/bin/run.sh test08
   nice $G4STTDIR/bin/run.sh test09
   nice $G4STTDIR/bin/run.sh test10
 #
-# NDL
-# default value!
-#export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.4
+# NDL # Following tag 'neu-V03-02-02'
+# On Thu, 26 Jul 2001, Hans-Peter Wellisch wrote:
+# Please use G4NDL3.4 for test11, and G4NDL0.2 for the other tests.
+# set default to G4NDL0.2 in setup scripts
+
+  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.4;export NeutronHPCrossSections
+  echo "STT:NeutronHPCrossSections G4NDL3.4";
   nice $G4STTDIR/bin/run.sh test11
+
+  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2;export NeutronHPCrossSections
+  echo "STT:NeutronHPCrossSections G4NDL0.2";
   nice $G4STTDIR/bin/run.sh test12
+
   nice $G4STTDIR/bin/run.sh test13
   nice $G4STTDIR/bin/run.sh test14
-#
-# NDL
-# back to old data!
-  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2;export NeutronHPCrossSections
   nice $G4STTDIR/bin/run.sh test15
-# ...and back again to original! 
-  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.4;export NeutronHPCrossSections
   nice $G4STTDIR/bin/run.sh test16
   nice $G4STTDIR/bin/run.sh test17
   nice $G4STTDIR/bin/run.sh test18
@@ -117,7 +116,6 @@ if [ $1 = "all" ] ; then
   nice $G4STTDIR/bin/run.sh test503
   nice $G4STTDIR/bin/run.sh test504
   nice $G4STTDIR/bin/run.sh test505
-#   nice $G4STTDIR/bin/run.sh test506
   nice $G4STTDIR/bin/run.sh test508
   if [ $G4USE_HEPODBMS ] ; then
     nice $G4STTDIR/bin/run.sh test401
@@ -126,6 +124,9 @@ if [ $1 = "all" ] ; then
   nice $G4STTDIR/bin/run.sh test601
   nice $G4STTDIR/bin/run.sh test602
 
+#  nice $G4STTDIR/bin/run.sh test701
+#  nice $G4STTDIR/bin/run.sh test702
+#  nice $G4STTDIR/bin/run.sh test703
 else
 
   if [ $1 = "test201" ] ; then 
@@ -170,16 +171,24 @@ else
       if [ $1 = test02.hadron -o $1 = test11 -o $1 = test12 -o $1 = test13 \
         -o $1 = test15 -o $1 = test16 ]
       then
+        if [ $1 = test11 ]; then
+          NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.4
+          export NeutronHPCrossSections
+          echo "STT:hadrons! NeutronHPCrossSections G4NDL3.4";
+        fi
         rm -f $dir/$1.exerciser$dot_G4LARGE_N.in
         $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser $G4LARGE_N \
         > $dir/$1.exerciser$dot_G4LARGE_N.in
-#       echo "quick fix for dxplus02 coredump"
-#       ulimit -c 200000
         rm -f $dir/$1$dot_G4LARGE_N.out
         rm -f $dir/$1$dot_G4LARGE_N.err
         time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
         $dir/$1.exerciser$dot_G4LARGE_N.in \
         > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
+        if [ $1 = test11 ]; then
+          NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2
+          export NeutronHPCrossSections
+          echo "STT:hadrons! NeutronHPCrossSections G4NDL0.2";
+        fi
 
       elif [ $1 = test601 -o $1 = test602 ] 
       then
