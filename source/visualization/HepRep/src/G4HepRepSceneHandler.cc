@@ -503,6 +503,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
         setColor(face, GetColor(polyhedron));
         if (isEventData()) setColor(face, GetColor(polyhedron), G4String("FillColor"));
 
+	setAttribute(face, "PickParent", true);
+
         notLastFace = polyhedron.GetNextNormal (surfaceNormal);
 
         G4int edgeFlag = 1;
@@ -1034,6 +1036,8 @@ HepRepType* G4HepRepSceneHandler::getGeometryRootType() {
         _geometryRootType->addAttValue("FillColor", 0.8, 0.8, 0.8, 1.0);
         _geometryRootType->addAttValue("LineWidth", 1.0);
         _geometryRootType->addAttValue("DrawAs", G4String("Polygon"));
+        _geometryRootType->addAttValue("PickParent", false);
+        _geometryRootType->addAttValue("ShowParentAttributes", true);
         
         _geometryRootType->addAttValue("MarkSizeMultiplier", 4.0);
         _geometryRootType->addAttValue("LineWidthMultiplier", 1.0);
@@ -1133,6 +1137,8 @@ HepRepType* G4HepRepSceneHandler::getEventType() {
         _eventType->addAttValue("FillColor", 1.0, 1.0, 1.0, 1.0);
         _eventType->addAttValue("LineWidth", 1.0);
         _eventType->addAttValue("HasFrame", true);
+        _eventType->addAttValue("PickParent", false);
+        _eventType->addAttValue("ShowParentAttributes", false);
 
         _eventType->addAttValue("MarkSizeMultiplier", 4.0);
         _eventType->addAttValue("LineWidthMultiplier", 1.0);

@@ -1,4 +1,4 @@
-.$Id: History,v 1.52 2003-11-18 07:53:06 duns Exp $
+.$Id: History,v 1.53 2003-11-19 22:26:01 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+19 November 2003 Joseph Perl (vis-HepRep-05-02-07)
+- Set two additional attributes to get correct pick response within client,
+  PickParent and ShowParentAttributes.
+  Fixes GEANT-38
+
 17 November 2003 Mark Donszelmann (vis-HepRep-05-02-06)
 - Removed dependency on sstream which made compilation fail on Linux-g++2.95.2
   and on Solaris 5.2. 
