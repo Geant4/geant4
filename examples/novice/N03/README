@@ -1,4 +1,4 @@
-$Id: README,v 1.13 2003-12-01 14:49:38 maire Exp $
+$Id: README,v 1.14 2003-12-01 21:09:23 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -57,6 +57,25 @@ $Id: README,v 1.13 2003-12-01 14:49:38 maire Exp $
  	The initialisation of the drawing is done via a set of /vis/ commands
         in the macro vis.mac. This macro is automatically read from 
  	the main in case of interactive running mode.
+
+        By default, vis.mac opens a DAWNFILE, suitable for viewing in DAWN.
+        You can switch to other graphics systems by commenting out this line
+        and instead uncommenting one of the other /vis/open statements, such as
+        OGLIX, HepRepFile or HepRepXML.
+	
+	The DAWNFILE, HepRepFile and HepRepXML drivers are always available (since
+	they require no external libraries), but the OGLIX driver requires:
+	    1- the visualisation & interfaces categories have been compiled
+	       with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
+	    2- exampleN03.cc has been compiled with G4VIS_USE_OPENGLX.
+
+	The HepRepXML driver outputs a zip file that can be unzipped into several
+        individual HepRep files, each viewable in WIRED.
+
+	For more information on visualization, including information on how to
+	install and run DAWN, OpenGL and WIRED, see the visualization tutorials on
+	the Geant4 Workshop Tutorial CD available at:
+	http://geant4.slac.stanford.edu/g4cd/Welcome.html
  	
  	The detector has a default view which is a longitudinal view of the 
  	calorimeter.
@@ -64,24 +83,14 @@ $Id: README,v 1.13 2003-12-01 14:49:38 maire Exp $
  	The tracks are drawn at the end of event, and erased at the end of run.
  	Optionaly one can choose to draw all particles, only the charged,
  	or neutral or none. This command is build in EventActionMessenger class.
-	
-	NB 1: the visualization (with OpenGL driver) assumes two things:
-	    1- the visualisation & interfaces categories have been compiled
-	       with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
-	    2- exampleN03.cc has been compiled with G4VIS_USE_OPENGLX.   
-
-	NB 2: the visualization (with DAWNFILE driver) assumes two things:
-	    1- the visualisation & interfaces categories have been compiled
-	       with the environment variable G4VIS_BUILD_DAWNFILE_DRIVER.
-	    2- exampleN03.cc has been compiled with G4VIS_USE_DAWNFILE.   
  	
-	NN 3: The macros "visTutor/exN03VisX.mac" are tutorial macros for 
-              visualization.  They can be tried as:
+	Additional visualization tutorial macros are available in the visTutor
+	subdirectory.  They can be tried as:
                % $G4BINDIR/exampleN03
 	       idle > /control/execute visTutor/exN03VisX.mac
-              For details, see comment lines  described in the macro files.
-              These macros are designed to help your understanding the 
-              User's Guide.    
+        For details, see comment lines  described in the macro files.
+        These macros are designed to help your understanding the User's Guide.
+
 
  4- PHYSICS DEMO
  
