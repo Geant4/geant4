@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.5 2003-10-10 10:42:39 maire Exp $
+// $Id: RunAction.cc,v 1.6 2004-03-15 11:23:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,13 +33,16 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 
 #include "Randomize.hh"
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  #include "AIDA/AIDA.h"
+#endif
+
+#ifdef USE_ROOT
+ #include "TFile.h"
+ #include "TH1F.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,7 +61,7 @@ RunAction::~RunAction()
 
 void RunAction::bookHisto()
 {
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  // Creating the analysis factory
  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
@@ -84,19 +87,38 @@ void RunAction::bookHisto()
  delete hf;
  delete tf;
  delete af;     
-#endif   
+#endif
+
+#ifdef USE_ROOT
+ // Create a ROOT file
+ tree = new TFile("testem7.root","recreate");
+ 
+ // Create the histogram
+ histo[0] = new TH1F("1","1/(1+(theta+[g]+)**2)",100, 0 ,1.);
+ histo[1] = new TH1F("2","log10(theta+ [g]+)",   100,-3.,1.);
+ histo[2] = new TH1F("3","log10(theta- [g]-)",   100,-3.,1.);
+ histo[3] = new TH1F("4","log10(theta+ [g]+ -theta- [g]-)",100,-3.,1.);
+ histo[4] = new TH1F("5","xPlus" ,100,0.,1.);
+ histo[5] = new TH1F("6","xMinus",100,0.,1.); 
+#endif
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::cleanHisto()
 {
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
   tree->commit();       // Writing the histograms to the file
-  tree->close();        // and closing the tree (and the file)
-  
+  tree->close();        // and closing the tree (and the file)  
   delete tree;
-#endif   
+#endif
+  
+#ifdef USE_ROOT
+  tree->Write();        // Writing the histograms to the file
+  tree->Close();        // and closing the file  
+  delete tree;
+#endif     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -112,19 +134,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //histograms
   //
   if (aRun->GetRunID() == 0) bookHisto();
-    
-  if (G4VVisManager::GetConcreteInstance())
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-   //draw the events
-  if (G4VVisManager::GetConcreteInstance()) 
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-
   // show Rndm status
   HepRandom::showEngineStatus();
 }

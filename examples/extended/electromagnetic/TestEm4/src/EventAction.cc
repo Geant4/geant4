@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.3 2004-02-27 14:59:06 maire Exp $
+// $Id: EventAction.cc,v 1.4 2004-03-15 11:20:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@
 #ifdef USE_ROOT
   #include "TH1F.h"
 #endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction(RunAction* run)

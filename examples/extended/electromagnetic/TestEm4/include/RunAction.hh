@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.3 2004-02-27 14:59:06 maire Exp $
+// $Id: RunAction.hh,v 1.4 2004-03-15 11:20:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,6 +50,8 @@ namespace AIDA {
   class TFile;
   class TH1F;  
 #endif
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {

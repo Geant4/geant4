@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.3 2003-10-10 10:42:40 maire Exp $
+// $Id: SteppingAction.cc,v 1.4 2004-03-15 11:23:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,8 +35,12 @@
 #include "G4VProcess.hh"
 #include "G4ParticleTypes.hh"
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  #include "AIDA/IHistogram1D.h"
+#endif
+
+#ifdef USE_ROOT
+  #include "TH1F.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,15 +81,15 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  }
  G4double xPlus = Eplus/EGamma, xMinus = Eminus/EGamma;
  G4double thetaPlus = PGamma.angle(Pplus), thetaMinus = PGamma.angle(Pminus);
-	   
-#ifdef G4ANALYSIS_USE
+ 
  static const G4double muonMass=G4MuonPlus::MuonPlus()->GetPDGMass();
-  
  G4double GammaPlus=EGamma*xPlus/muonMass;
+ G4double GammaMinus=EGamma*xMinus/muonMass;
+   	   
+#ifdef USE_AIDA
  runAction->GetHisto(0)->fill(1./(1.+pow(thetaPlus*GammaPlus,2)));
  runAction->GetHisto(1)->fill(log10(thetaPlus*GammaPlus));
 
- G4double GammaMinus=EGamma*xMinus/muonMass;
  runAction->GetHisto(2)->fill(log10(thetaMinus*GammaMinus));
  runAction->GetHisto(3)->fill(log10(fabs(thetaPlus *GammaPlus
                                               -thetaMinus*GammaMinus)));
@@ -93,6 +97,19 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  runAction->GetHisto(4)->fill(xPlus);
  runAction->GetHisto(5)->fill(xMinus); 
 #endif
+   	   
+#ifdef USE_ROOT
+ runAction->GetHisto(0)->Fill(1./(1.+pow(thetaPlus*GammaPlus,2)));
+ runAction->GetHisto(1)->Fill(log10(thetaPlus*GammaPlus));
+
+ runAction->GetHisto(2)->Fill(log10(thetaMinus*GammaMinus));
+ runAction->GetHisto(3)->Fill(log10(fabs(thetaPlus *GammaPlus
+                                              -thetaMinus*GammaMinus)));
+ 
+ runAction->GetHisto(4)->Fill(xPlus);
+ runAction->GetHisto(5)->Fill(xMinus); 
+#endif
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2004-03-10 12:32:48 maire Exp $
+$Id: README,v 1.4 2004-03-15 11:25:34 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -113,7 +113,7 @@ $Id: README,v 1.3 2004-03-10 12:32:48 maire Exp $
      The total energy deposited is plotted in MeV/mm.  
 
      Note that, by default, histograms are disabled. To activate them, uncomment
-     the flag USE_AIDA or USE_ROOT in GNUmakefile.
+     G4ANALYSIS_USE and USE_AIDA or USE_ROOT (exclusive or) in GNUmakefile.
      
   7- DOSE IN 'TEST-VOLUMES'
   
