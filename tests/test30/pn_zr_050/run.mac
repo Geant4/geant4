@@ -42,7 +42,7 @@ CHIPS
 #paw
 chips.paw
 #run
-generator
+#generator
 kinetic
 #paw
 kin.paw
