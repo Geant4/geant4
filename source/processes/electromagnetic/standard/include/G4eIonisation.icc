@@ -21,21 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.icc,v 1.8 2001-08-14 10:01:25 maire Exp $
+// $Id: G4eIonisation.icc,v 1.9 2001-09-28 15:38:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-//      ------------ G4eIonisation physics process ------------
+//----------------- G4eIonisation physics process ---------------------
 //                  by Laszlo Urban, 20 March 1997
-// ---------------------------------------------------------------
+//------------------------------------------------------------------------------
 //
 // 24-11-97: correction on MeanFreePath for KinEnergy > HighestLimit
 // 28-05-01: V.Ivanchenko minor changes to provide ANSI -wall compilation 
 //
-// ---------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4bool G4eIonisation::IsApplicable(const G4ParticleDefinition& particle)
 {
@@ -43,7 +43,7 @@ inline G4bool G4eIonisation::IsApplicable(const G4ParticleDefinition& particle)
           ||(&particle == G4Positron::Positron()) );
 }
          
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4eIonisation::GetMeanFreePath(const G4Track& track, G4double,
                                                G4ForceCondition*) 
@@ -63,7 +63,7 @@ inline G4double G4eIonisation::GetMeanFreePath(const G4Track& track, G4double,
  return MeanFreePath;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline 
 G4double G4eIonisation::GetLambda(G4double KineticEnergy, G4Material* material)
@@ -73,4 +73,4 @@ G4double G4eIonisation::GetLambda(G4double KineticEnergy, G4Material* material)
                                            GetValue(KineticEnergy,isOut);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

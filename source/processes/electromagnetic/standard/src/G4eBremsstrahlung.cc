@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.cc,v 1.20 2001-09-17 17:07:13 maire Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.21 2001-09-28 15:38:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,7 +42,8 @@
 // 21-09-00 : corrections in the LPM implementation, L.Urban
 // 28-05-01 : V.Ivanchenko minor changes to provide ANSI -wall compilation
 // 09-08-01 : new methods Store/Retrieve PhysicsTable (mma)
-// 17-09-01 : migration of Materials to pure STL (mma)  
+// 17-09-01 : migration of Materials to pure STL (mma)
+// 21-09-01  completion of RetrievePhysicsTable() (mma)  
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -387,7 +388,8 @@ G4double G4eBremsstrahlung::ComputePositronCorrFactorLoss(
       
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
-void G4eBremsstrahlung::BuildLambdaTable(const G4ParticleDefinition& ParticleType)
+void G4eBremsstrahlung::BuildLambdaTable(
+                                      const G4ParticleDefinition& ParticleType)
 
 // Build  mean free path tables for the gamma emission by e- or e+.
 // tables are Build for MATERIALS. 
@@ -966,7 +968,7 @@ G4double G4eBremsstrahlung::SupressionFunction(const G4Material* aMaterial,
   return supr;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G4eBremsstrahlung::StorePhysicsTable(G4ParticleDefinition* particle,
 				              const G4String& directory, 
@@ -981,6 +983,7 @@ G4bool G4eBremsstrahlung::StorePhysicsTable(G4ParticleDefinition* particle,
            << G4endl;
     return false;
   }
+  
   // store mean free path table
   filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
   if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
@@ -989,12 +992,21 @@ G4bool G4eBremsstrahlung::StorePhysicsTable(G4ParticleDefinition* particle,
     return false;
   }
   
-  G4cout << GetProcessName() << ": Success in storing the PhysicsTables in "  
+  // store PartialSumSigma table (G4OrderedTable)
+  filename = GetPhysicsTableFileName(particle,directory,"PartSumSigma",ascii);
+  if ( !PartialSumSigma.Store(filename, ascii) ){
+    G4cout << " FAIL PartialSumSigma.store in " << filename
+           << G4endl;
+    return false;
+  }
+    
+  G4cout << GetProcessName() << " for " << particle->GetParticleName()
+         << ": Success to store the PhysicsTables in "  
          << directory << G4endl;
   return true;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G4eBremsstrahlung::RetrievePhysicsTable(G4ParticleDefinition* particle,
 					         const G4String& directory, 
@@ -1010,6 +1022,13 @@ G4bool G4eBremsstrahlung::RetrievePhysicsTable(G4ParticleDefinition* particle,
     delete theMeanFreePathTable;
   }
 
+  if (&PartialSumSigma != 0) PartialSumSigma.clear();
+  
+    // get bining from EnergyLoss
+    LowestKineticEnergy  = GetLowerBoundEloss();
+    HighestKineticEnergy = GetUpperBoundEloss();
+    TotBin               = GetNbinEloss();
+    
   G4String filename;
   
   // retreive stopping power table
@@ -1030,23 +1049,47 @@ G4bool G4eBremsstrahlung::RetrievePhysicsTable(G4ParticleDefinition* particle,
     return false;
   }
   
-  G4cout << GetProcessName() << ": Success in retrieving the PhysicsTables from "
+  // retrieve PartialSumSigma table (G4OrderedTable)
+  filename = GetPhysicsTableFileName(particle,directory,"PartSumSigma",ascii);
+  if ( !PartialSumSigma.Retrieve(filename, ascii) ){
+    G4cout << " FAIL PartialSumSigma.retrieve in " << filename
+           << G4endl;
+    return false;
+  }
+    
+  G4cout << GetProcessName() << " for " << particle->GetParticleName()
+         << ": Success to retrieve the PhysicsTables from "
          << directory << G4endl;
+	   
+  if (particle==G4Electron::Electron())
+   {
+    RecorderOfElectronProcess[CounterOfElectronProcess] = (*this).theLossTable;
+    CounterOfElectronProcess++;
+   }
+  else
+   {
+    RecorderOfPositronProcess[CounterOfPositronProcess] = (*this).theLossTable;
+    CounterOfPositronProcess++;
+   }
+   
+  BuildDEDXTable (*particle);
+       
   return true;
 }
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4eBremsstrahlung::PrintInfoDefinition()
 {
-  G4String comments = "Total cross sections from a NEW parametrisation based on the EEDL data library. ";
-          // comments += "Good description from 10 KeV to 100 GeV.\n";
-           comments += "\n Good description from 1 KeV to 100 GeV.\n";
-           comments += "        log scale extrapolation above 100 GeV \n";
-           comments += "        Gamma energy sampled from a parametrised formula.";
+  G4String comments = "Total cross sections from a NEW parametrisation"
+            " based on the EEDL data library. "
+            "\n Good description from 1 KeV to 100 GeV.\n"
+            "        log scale extrapolation above 100 GeV \n"
+            "        Gamma energy sampled from a parametrised formula.";
                      
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "\n        PhysicsTables from " << G4BestUnit(LowerBoundLambda,"Energy")
+         << "\n        PhysicsTables from "
+	 << G4BestUnit(LowerBoundLambda,"Energy")
          << " to " << G4BestUnit(UpperBoundLambda,"Energy") 
          << " in " << NbinLambda << " bins. \n";
 }         

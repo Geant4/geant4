@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.hh,v 1.9 2001-09-10 14:04:33 urban Exp $
+// $Id: G4VhEnergyLoss.hh,v 1.10 2001-09-28 15:38:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -170,16 +170,6 @@ class G4VhEnergyLoss : public G4VEnergyLoss
   protected:
 
     static void BuildDEDXTable(const G4ParticleDefinition& aParticleType);
-
-
-  private:
-
-    static const G4Proton* theProton ;
-    static const G4AntiProton* theAntiProton ;
-
-// ====================================================================
-
-  public:
 
   protected:
 

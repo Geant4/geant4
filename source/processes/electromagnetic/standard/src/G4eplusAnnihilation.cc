@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.cc,v 1.11 2001-09-21 09:50:54 maire Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.12 2001-09-28 15:38:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -337,7 +337,8 @@ G4bool G4eplusAnnihilation::StorePhysicsTable(G4ParticleDefinition* particle,
     return false;
   }
   
-  G4cout << GetProcessName() << ": Success to store the PhysicsTables in "  
+  G4cout << GetProcessName() << " for " << particle->GetParticleName()
+         << ": Success to store the PhysicsTables in "  
          << directory << G4endl;
   return true;
 }
@@ -378,7 +379,8 @@ G4bool G4eplusAnnihilation::RetrievePhysicsTable(G4ParticleDefinition* particle,
     return false;
   }
   
-  G4cout << GetProcessName() << ": Success to retrieve the PhysicsTables from "
+  G4cout << GetProcessName() << " for " << particle->GetParticleName()
+         << ": Success to retrieve the PhysicsTables from "
          << directory << G4endl;
   return true;
 }

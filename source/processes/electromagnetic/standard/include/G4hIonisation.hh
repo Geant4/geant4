@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.hh,v 1.14 2001-09-21 09:50:53 maire Exp $
+// $Id: G4hIonisation.hh,v 1.15 2001-09-28 15:38:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ---------- G4hIonisation physics process -----------
+//      ---------- G4hIonisation physics process ---------------------
 //                 by Laszlo Urban, 30 May 1997 
 // -----------------------------------------------------------------------------
 //

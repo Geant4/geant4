@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.hh,v 1.13 2001-09-21 09:50:53 maire Exp $
+// $Id: G4eIonisation.hh,v 1.14 2001-09-28 15:38:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ---------- G4eIonisation physics process -----------
+//--------------- G4eIonisation physics process -----------------------
 //                by Laszlo Urban, 20 March 1997 
 //
 // 10-02-00 modifications , new e.m. structure, L.Urban
@@ -32,7 +32,7 @@
 // 13-08-01 new function ComputeRestrictedMeandEdx() (mma)
 // 19-09-01 come back to previous ProcessName "eIoni"
 //
-// ------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // Class description
 //
@@ -41,15 +41,15 @@
 //
 // Class description - end
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 #ifndef G4eIonisation_h
 #define G4eIonisation_h 1
  
 #include "G4VeEnergyLoss.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 class G4eIonisation : public G4VeEnergyLoss 
  
@@ -159,6 +159,8 @@ class G4eIonisation : public G4VeEnergyLoss
         // get the parameters of the mean free path table.
 	
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 #include "G4eIonisation.icc"
  

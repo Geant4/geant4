@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.23 2001-09-17 17:07:13 maire Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.24 2001-09-28 15:38:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -90,9 +90,6 @@ G4PhysicsTable* G4VhEnergyLoss::thepbarRangeCoeffBTable = NULL ;
 G4PhysicsTable* G4VhEnergyLoss::thepbarRangeCoeffCTable = NULL ;
 
 G4PhysicsTable* G4VhEnergyLoss::theDEDXTable = NULL ;
-
-const G4Proton* G4VhEnergyLoss::theProton=G4Proton::Proton() ;
-const G4AntiProton* G4VhEnergyLoss::theAntiProton=G4AntiProton::AntiProton() ;
 
 G4double G4VhEnergyLoss::ptableElectronCutInRange = 0.0*mm ;
 G4double G4VhEnergyLoss::pbartableElectronCutInRange = 0.0*mm ;
@@ -406,16 +403,16 @@ G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
 
      if(Charge>0.)
      {
-       fRangeNow = G4EnergyLossTables::GetRange( theProton,
+       fRangeNow = G4EnergyLossTables::GetRange( G4Proton::Proton(),
                                             Tscaled,aMaterial) ;
-        fdEdx     = G4EnergyLossTables::GetDEDX( theProton,
+        fdEdx     = G4EnergyLossTables::GetDEDX( G4Proton::Proton(),
                                             Tscaled,aMaterial) ;
      }
      else
      {
-       fRangeNow = G4EnergyLossTables::GetRange( theAntiProton,
+       fRangeNow = G4EnergyLossTables::GetRange( G4AntiProton::AntiProton(),
                                              Tscaled,aMaterial) ;
-       fdEdx     = G4EnergyLossTables::GetDEDX( theAntiProton,
+       fdEdx     = G4EnergyLossTables::GetDEDX( G4AntiProton::AntiProton(),
                                              Tscaled,aMaterial) ;
      }
      fdEdx     *= ChargeSquare ;
@@ -479,19 +476,19 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
         if(Charge>0.)
         {
           MeanLoss = G4EnergyLossTables::GetPreciseEnergyFromRange(
-                                         theProton,
+                                         G4Proton::Proton(),
                                          rscaled        ,aMaterial) -
                      G4EnergyLossTables::GetPreciseEnergyFromRange(
-                                         theProton,
+                                         G4Proton::Proton(),
                                          rscaled-sscaled,aMaterial) ;
         }
         else
         {
           MeanLoss = G4EnergyLossTables::GetPreciseEnergyFromRange(
-                                         theAntiProton,
+                                         G4AntiProton::AntiProton(),
                                          rscaled        ,aMaterial) -
                      G4EnergyLossTables::GetPreciseEnergyFromRange(
-                                         theAntiProton,
+                                         G4AntiProton::AntiProton(),
                                          rscaled-sscaled,aMaterial) ;
         }
         MeanLoss /= massratio ;

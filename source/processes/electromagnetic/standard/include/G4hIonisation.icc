@@ -21,24 +21,24 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.icc,v 1.5 2001-08-14 17:31:05 maire Exp $
+// $Id: G4hIonisation.icc,v 1.6 2001-09-28 15:38:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //      GEANT 4 class inlined methods file 
 //
-//      ------------ G4hIonisation physics process ------------
+//------------------ G4hIonisation physics process ------------------
 //                   by Laszlo Urban, 30 May 1997
-// ---------------------------------------------------------------
+//------------------------------------------------------------------------------
 //
 // 24/09/97: corrected by L.Urban
 // 20/11/97: correction on MeanFreePath for KineticEnergy > HighestLimit
 // 14-08-01: 'cleanup' of GetMeanFreePath (mma)
 // 
-// ---------------------------------------------------------------
+//---------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4bool G4hIonisation::IsApplicable(
                             const G4ParticleDefinition& particle)
@@ -46,7 +46,7 @@ inline G4bool G4hIonisation::IsApplicable(
    return(particle.GetPDGCharge() != 0.);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....         
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4hIonisation::GetMeanFreePath(const G4Track& track, G4double,
                                                G4ForceCondition*) 
@@ -66,5 +66,5 @@ inline G4double G4hIonisation::GetMeanFreePath(const G4Track& track, G4double,
  return MeanFreePath;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
