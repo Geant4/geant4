@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2002-05-17 07:08:58 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2002-07-11 16:10:47 dressel Exp $
 # ------------------------------------------------------------
 # GNUmakefile for transportation library.  G.Folger 10-Dec-97.
 # ------------------------------------------------------------
@@ -11,7 +11,8 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -I$(G4BASE)/global/management/include \
+CPPFLAGS += \
+	    -I$(G4BASE)/global/management/include \
 	    -I$(G4BASE)/global/HEPRandom/include \
 	    -I$(G4BASE)/global/HEPGeometry/include \
 	    -I$(G4BASE)/geometry/management/include \
