@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.8 2002-11-07 18:58:40 tsasaki Exp $
+// $Id: G4SteppingManager2.cc,v 1.9 2002-11-07 21:31:57 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -511,8 +511,8 @@ void G4SteppingManager::InvokePostStepDoItProcs()
      // but extra treatment for processes with Strongly Forced flag
      if(fTrack->GetTrackStatus() == fStopAndKill) {
        for(size_t np1=np+1; np1 < MAXofPostStepLoops; np1++){ 
-	 G4int Cond = (*fSelectedPostStepDoItVector)[MAXofPostStepLoops-np1-1];
-	 if (Cond == StronglyForced) {
+	 G4int Cond2 = (*fSelectedPostStepDoItVector)[MAXofPostStepLoops-np1-1];
+	 if (Cond2 == StronglyForced) {
 	   InvokePSDIP(np1);
          }
        }
