@@ -83,7 +83,7 @@ G4double G4Generator2BS::PolarAngle(const G4double initial_energy,
   EnergyRatio = finalTotalEnergy/initialTotalEnergy;
   G4double gMaxEnergy = (M_PI*initialTotalEnergy)*(M_PI*initialTotalEnergy);
 
-  G4double Zeff = sqrt( ( (G4double)Z) * ( (G4double)(Z)) + 1.0 ) );
+  G4double Zeff = sqrt(static_cast<G4double>(Z) * (static_cast<G4double>(Z) + 1.0));
   z = (0.00008116224*(pow(Zeff,0.3333333)));
 
   // Rejection arguments
