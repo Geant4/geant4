@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.18 2001-07-17 02:16:41 gum Exp $
+// $Id: G4Transportation.cc,v 1.19 2001-07-19 13:27:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -131,7 +131,6 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
   // Get initial Energy/Momentum of the track
   
   const G4DynamicParticle*  pParticle  = track.GetDynamicParticle() ;
-  G4double      startEnergy            = pParticle->GetKineticEnergy() ;
   G4ThreeVector startMomentumDir       = pParticle->GetMomentumDirection() ;
   G4ThreeVector startPosition          = track.GetPosition() ;
 
