@@ -1,0 +1,21 @@
+            Problems and Fixes with geant4-02-00-cand-01
+            ============================================
+
+geant4-02-00-cand-01 is geant4-02-00-ref-04 plus:
+
+./config                                config-V02-00-04
+./source/geometry/magneticfield         field-V02-00-00
+./source/geometry/management            geommng-V02-00-01
+./source/geometry/solids/CSG            geom-solids-csg-V02-00-07
+./source/geometry/volumes               geomvol-V02-00-00
+./source/global         global-V02-00-04
+./source/processes/electromagnetic/standard             stand-V02-00-02
+./source/processes/hadronic/models/radiative_decay              radiative_decay-V02-00-02
+./source/GNUmakefile    source-gmk-V02-00-00
+./tests/test14            test14-V02-00-00
+
+No Problems Fixed and no New Problems and Features and no Large_N tests performed.
+
+It noted that we did not record test18 fails on DEC NONISO tests,
+   since June 2000. Details were logged in the problem reporting system.
+

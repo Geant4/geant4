@@ -1,0 +1,20 @@
+            Problems and Fixes with geant4-02-00-cand-02
+            ============================================
+
+geant4-02-00-cand-02 is geant4-02-00-cand-01 plus:
+
+./examples/novice/N02           exampleN02-V02-00-00
+./source/geometry/magneticfield         field-V02-00-01
+./source/geometry/management            geommng-V02-00-02
+./source/geometry/solids/Boolean                geom-solid-bool-V02-00-01
+./source/materials              materials-V02-00-01
+./source/processes/electromagnetic/lowenergy            emlowen-V02-00-15
+./source/processes/management           procman-V02-00-01
+./source/visualization          vis-V02-00-02
+
+For operational reasons concerning sun machines the reference output
+are not yet produced and updated (13-Nov-2000).
+
+As yet, 
+No Problems Fixed and no New Problems and Features and no Large_N tests performed.
+
