@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.2 2001-11-29 14:45:12 gcosmo Exp $
+// $Id: G4String.hh,v 1.3 2002-03-25 15:32:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,11 +116,11 @@ public:
   inline G4String ( const char * );
   inline G4String ( const G4String& );
   inline G4String ( const G4SubString& );
-  inline G4String ( const std_string& );
+  inline G4String ( const G4std::string & );
   virtual ~G4String () {}
 
   inline G4String& operator=(const G4String&);
-  inline G4String& operator=(const std_string&);
+  inline G4String& operator=(const G4std::string &);
   inline G4String& operator=(const char*);
 
   inline char operator () (str_size) const; 
@@ -128,7 +128,7 @@ public:
 
   inline G4String& operator+=(const G4SubString&);
   inline G4String& operator+=(const char*);
-  inline G4String& operator+=(const std_string&);
+  inline G4String& operator+=(const G4std::string &);
   inline G4String& operator+=(const char&);
   inline G4bool operator==(const G4String&) const;
   inline G4bool operator==(const char*) const;
@@ -157,7 +157,7 @@ public:
   inline G4int first(char) const;
   inline G4int last(char) const;
 
-  inline G4bool contains(std_string) const;
+  inline G4bool contains(G4std::string) const;
   inline G4bool contains(char) const;
 
   // stripType = 0 beginning

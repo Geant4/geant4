@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc,v 1.2 2001-11-29 14:45:12 gcosmo Exp $
+// $Id: G4String.icc,v 1.3 2002-03-25 15:32:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -150,7 +150,7 @@ G4String::G4String ( const G4String& s )
 G4String::G4String ( const G4SubString& s )
  : std_string(*(s.mystring),s.mystart,s.extent) {}
 
-G4String::G4String ( const std_string& s )
+G4String::G4String ( const G4std::string &s )
  : std_string(s) {}
 
 G4String& G4String::operator=(const G4String& s)
@@ -159,7 +159,7 @@ G4String& G4String::operator=(const G4String& s)
   return *this;
 }
 
-G4String& G4String::operator=(const std_string& s)
+G4String& G4String::operator=(const G4std::string &s)
 {
   std_string::operator=(s);
   return *this;
@@ -199,7 +199,7 @@ G4String& G4String::operator+=(const char*s)
   return *this;
 }
 
-G4String& G4String::operator+=(const std_string &s)
+G4String& G4String::operator+=(const G4std::string &s)
 {
   std_string::operator+=(s);
   return *this;
@@ -344,7 +344,7 @@ G4int G4String::last(char c) const
   return rfind(c);
 }
 
-G4bool G4String::contains(std_string s) const
+G4bool G4String::contains(G4std::string s) const
 {
   G4int i=std_string::find(s);
   if(i != G4int(std_string::npos))

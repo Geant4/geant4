@@ -1,4 +1,4 @@
-$Id: History,v 1.95 2002-01-28 17:51:57 gcosmo Exp $
+$Id: History,v 1.96 2002-03-25 15:32:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 25, 2002 G.Cosmo (global-V04-00-03)
+- G4String[.hh.icc]: use G4std::string instead of internal type 'std_string'
+  in signatures of public methods.
 
 January 28, 2002 G.Cosmo (global-V04-00-02)
 - G4strstream.icc: temporary fix to G4strstream::overflow(int) for GNU gcc-3.0.X
