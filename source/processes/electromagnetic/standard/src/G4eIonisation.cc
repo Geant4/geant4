@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.33 2003-08-29 07:33:27 vnivanch Exp $
+// $Id: G4eIonisation.cc,v 1.34 2003-10-24 13:59:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,7 +66,7 @@
 #include "G4Electron.hh"
 #include "G4MollerBhabhaModel.hh"
 #include "G4UniversalFluctuation.hh"
-#include "G4BohrFluctuations.hh"
+//#include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -96,7 +96,8 @@ void G4eIonisation::InitialiseProcess()
   SetSecondaryParticle(theElectron);
 
   if(IsIntegral()) {
-    flucModel = new G4BohrFluctuations();
+    //    flucModel = new G4BohrFluctuations();
+    flucModel = new G4UniversalFluctuation();
     SetStepFunction(1.0, 1.0*mm);
 
   } else {

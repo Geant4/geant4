@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.hh,v 1.18 2003-10-17 17:58:17 vnivanch Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.19 2003-10-24 13:59:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -99,7 +99,7 @@ public:
                                    G4double&,
                                    G4double&);
 
-  void PrintInfoDefinition();
+  virtual void PrintInfoDefinition();
   // Print out of the class parameters
 
 protected:
