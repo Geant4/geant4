@@ -31,9 +31,9 @@ esac
 case "$g4install" in
 '')
 	if [ X$HOME = X/ ] ; then
-	G4HOME=""
+	HOME=""
 	fi
-	g4install=$G4HOME/geant4
+	g4install=$HOME/geant4
 	;;
 esac
 
@@ -51,7 +51,8 @@ esac
 
 case "$g4include" in
 '')
-	g4include=$g4install/include
+#	g4include=$g4install/include
+	g4include=''
 	;;
 esac
 
