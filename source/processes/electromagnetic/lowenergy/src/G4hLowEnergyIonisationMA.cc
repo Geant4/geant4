@@ -121,6 +121,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4BohrFluctuations.hh"
 #include "G4IonFluctuations.hh"
+#include "G4UniversalFluctuation.hh"
 #include "G4Region.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -135,6 +136,8 @@ G4hLowEnergyIonisationMA::G4hLowEnergyIonisationMA(const G4String& processName)
     currentParticle(0),
     theParticle(0),
     theBaseParticle(0),
+    chargeLowLimit(0.1),
+    paramStepLimit(0.005),
     fluobins(20),
     theBarkas(true),
     theFluo(false),
@@ -143,6 +146,7 @@ G4hLowEnergyIonisationMA::G4hLowEnergyIonisationMA(const G4String& processName)
   highEnergy         = 2.*MeV;
   minGammaEnergy     = 25.*keV;
   minElectronEnergy  = 25.*keV;
+  energyLowLimit     = 25.*MeV;
   verboseLevel       = 0;
   SetDEDXBinning(360);
   SetLambdaBinning(360);
@@ -192,7 +196,8 @@ void G4hLowEnergyIonisationMA::InitialiseProcess()
   if(theParticle->GetPDGCharge()/eplus > 1.5 ||
      theParticle->GetParticleName() == "GenericIon")
                   flucModel = new G4IonFluctuations();
-  else            flucModel = new G4BohrFluctuations();
+  else            flucModel = new G4UniversalFluctuation();
+  //else            flucModel = new G4BohrFluctuations();
 
   SetSecondaryParticle(G4Electron::Electron());
 
@@ -212,10 +217,8 @@ void G4hLowEnergyIonisationMA::InitialiseProcess()
   AddEmModel(2, em1, flucModel);
 
   SetIntegral(true);
-  chargeLowLimit = 0.1;
-  energyLowLimit = 250.*MeV;
   SetLinearLossLimit(0.15);
-  SetStepLimits(0.1, 0.1*mm);
+  SetStepLimits(0.2, 1.0*mm);
 
   isInitialised = true;
 
@@ -360,6 +363,22 @@ void G4hLowEnergyIonisationMA::BuildDataForFluorescence()
   delete bVector;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4hLowEnergyIonisationMA::GetContinuousStepLimit(const G4Track& track,
+                         G4double r1, G4double r2, G4double& r3)
+{
+  G4double x = G4VEnergyLossProcess::GetContinuousStepLimit(track,r1,r2,r3);
+  G4double rangeLim = GetRange(highEnergy, track.GetMaterialCutsCouple());
+  G4double r = GetCurrentRange() - 0.9*rangeLim;
+  if(track.GetKineticEnergy() >= highEnergy) {
+    if(x > r ) x = r;
+  } else {
+    G4double y = rangeLim*paramStepLimit;
+    if(y < x) x = y;
+  }
+  return x;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -133,9 +133,11 @@ void G4hParametrisedLossModel::InitializeMe()
              << modelName << ">" << " is used for Electronic Stopping"
              << G4endl;
   }
+      /*
       G4cout << "G4hParametrisedLossModel: the model <"
              << modelName << ">" << " is used for Electronic Stopping"
              << G4endl;
+*/
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

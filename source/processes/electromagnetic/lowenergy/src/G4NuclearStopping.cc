@@ -42,6 +42,7 @@
 #include "G4NuclearStopping.hh"
 #include "G4UnitsTable.hh"
 #include "G4Material.hh"
+#include "G4ProcessManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -50,7 +51,8 @@ G4NuclearStopping::G4NuclearStopping(const G4String& processName, G4ProcessType 
     theTable("ICRU_49"),
     model(0),
     fluctuations(true),
-    initialised(false)
+    initialised(false),
+    factorsAreActive(false)
 {
   lowEnergy        = 0.1*keV;
   highEnergy       = 10.*MeV;
@@ -106,34 +108,51 @@ void G4NuclearStopping::SetNuclearStoppingPowerModel(const G4String& dedxTable)
 
 void G4NuclearStopping::AddSaturationFactor(const G4Material* material, G4double val)
 {
-  if(val > 0.0 && val < 1.0) factors[material] = val;
+  if(val > 0.0 && val < 1.0) {
+    factors[material] = val;
+    factorsAreActive  = true;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VParticleChange * G4NuclearStopping::AlongStepDoIt(const G4Track& track, 
+G4VParticleChange * G4NuclearStopping::AlongStepDoIt(const G4Track& track,
                                                      const G4Step& step)
 {
   fParticleChange.InitializeForAlongStep(track);
+  G4double tkin = track.GetKineticEnergy();
+  if(tkin > highEnergy) return &fParticleChange;
+
   G4double length = step.GetStepLength();
   G4double eloss  = 0.0;
-  G4double dedx   = StoppingPower(track);
-  eloss = 0.5*length*(dedx + preStepDEDX);
-  G4double tkin = track.GetKineticEnergy();
-  if(eloss > tkin ) eloss = tkin;
-  tkin -= eloss;
+  if (tkin > 0.0) eloss = length*preStepDEDX;
+
+  if(eloss >= tkin ) {
+    eloss = tkin;
+    tkin = 0.0;
+    if(track.GetDynamicParticle()->GetDefinition()->
+             GetProcessManager()->GetAtRestProcessVector()->size())
+               fParticleChange.SetStatusChange(fStopButAlive);
+
+    else       fParticleChange.SetStatusChange(fStopAndKill);
+
+  } else {
+    tkin -= eloss;
+  }
   fParticleChange.SetProposedKineticEnergy(tkin);
-  G4double factor = 1.0;
-  const G4Material* material = track.GetMaterial();
 
-  std::map<const G4Material*,G4double,std::less<const G4Material*> >::const_iterator pos;
-  for (pos = factors.begin(); pos != factors.end(); pos++)
-    {
+  if (factorsAreActive) {
+     G4double factor = 1.0;
+     const G4Material* material = track.GetMaterial();
+     std::map<const G4Material*,G4double,std::less<const G4Material*> >::const_iterator pos;
+     for (pos = factors.begin(); pos != factors.end(); pos++) {
       if((*pos).first == material) factor = (*pos).second;
-    }
+     }
 
-  eloss *= factor;
+     eloss *= factor;
+  }
   fParticleChange.SetLocalEnergyDeposit(eloss);
+
   return &fParticleChange;
 }
 
