@@ -42,8 +42,7 @@ using namespace HEPREP;
 using namespace std;
 
 G4HepRepViewer::G4HepRepViewer (G4VSceneHandler& sceneHandler, const G4String& name)
-        : G4VViewer (sceneHandler, sceneHandler.IncrementViewCount(), name),
-          drawn(false) {
+        : G4VViewer (sceneHandler, sceneHandler.IncrementViewCount(), name) {
 
 #ifdef DEBUG
     cout << "G4HepRepViewer::G4HepRepViewer " << name << endl;
@@ -91,9 +90,6 @@ void G4HepRepViewer::DrawView () {
 #ifdef DEBUG
     cout << "G4HepRepViewer::DrawView" << endl;
 #endif
-// draws the geometry
-//    NeedKernelVisit();
-//    ProcessView();
 }
 
 void G4HepRepViewer::ShowView () {
@@ -115,3 +111,8 @@ void G4HepRepViewer::FinishView () {
     G4VViewer::FinishView();
 }
 
+void G4HepRepViewer::ProcessScene() {
+// draws the geometry
+    NeedKernelVisit();
+    ProcessView();
+}

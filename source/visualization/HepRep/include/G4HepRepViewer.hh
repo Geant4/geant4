@@ -45,8 +45,8 @@ class G4HepRepViewer: public G4VViewer {
         void ShowView ();
         void FinishView ();
 
-    private:
-        bool drawn;
+        // Added to allow us to call protected ProcessView
+        void ProcessScene();
 };
 
 #endif

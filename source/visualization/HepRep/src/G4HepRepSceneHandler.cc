@@ -65,6 +65,7 @@
 // This
 #include "G4HepRep.hh"
 #include "G4HepRepSceneHandler.hh"
+#include "G4HepRepViewer.hh"
 
 
 using namespace HEPREP;
@@ -139,6 +140,8 @@ void G4HepRepSceneHandler::OpenHepRep() {
     if (heprep != NULL) return;
 //    cout << "GeomTypeWriter " << geomTypeWriter << endl;
 //    cout << "GeomInstanceWriter " << geomInstanceWriter << endl;
+
+    heprepEmpty = true;
 
     // Create the HepRep that holds the Trees.
     heprep = factory->createHepRep();
@@ -226,15 +229,21 @@ bool G4HepRepSceneHandler::CloseHepRep() {
 
     if (heprep == NULL) return true;
 
-    // FIXME add provision for not writing empty heprep
-    // FIXME add geometry to each event
-    char eventName[255];
-    sprintf(eventName, "event%010d.heprep", eventNumber);
-    writer->write(heprep, eventName);
-    eventNumber++;
+    if (!heprepEmpty) {
+        // add geometry to the heprep
+        G4HepRepViewer* viewer = dynamic_cast<G4HepRepViewer*>(GetCurrentViewer());
+        viewer->ProcessScene();
+
+        // write out the heprep
+        char eventName[255];
+        sprintf(eventName, "event%010d.heprep", eventNumber);
+        writer->write(heprep, eventName);
+        eventNumber++;
+    }
 
     delete heprep;
     heprep = NULL;
+    heprepEmpty = true;
 
     return true;
 }
@@ -512,6 +521,7 @@ void G4HepRepSceneHandler::BeginPrimitives (const G4Transform3D& objectTransform
 
     G4VSceneHandler::BeginPrimitives (objectTransformation);
     transform = objectTransformation;
+    heprepEmpty = false;
 }
 
 

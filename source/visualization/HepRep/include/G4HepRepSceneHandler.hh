@@ -96,6 +96,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
     private:
         static G4int sceneCount;
         G4int eventNumber;
+        bool heprepEmpty;
 
         G4int currentDepth;
         G4VPhysicalVolume* currentPV;
