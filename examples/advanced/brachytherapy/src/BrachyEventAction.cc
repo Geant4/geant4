@@ -29,7 +29,7 @@
 #include "BrachyEventAction.hh"
 #include "BrachyWaterBoxHit.hh"
 #include "BrachyWaterBoxSD.hh"
-
+#include "BrachyDetectorConstruction.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -40,26 +40,53 @@
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
-
+#include "G4VVisManager.hh"
+//#include"BrachyAnalysisManager.hh"
 //....
 
-BrachyEventAction::BrachyEventAction(G4float *pVoxel,G4int NumVoxelX,G4int NumVoxelZ) :
-	m_NumVoxelX(NumVoxelX),m_NumVoxelZ(NumVoxelZ)
+BrachyEventAction::BrachyEventAction(G4String &SDName) :
+ drawFlag("all" ),printModulo(1)      
 {
  m_HitsCollectionID = -1;
- m_pVoxel = pVoxel;
+
+ SDname=SDName;
+ pDetector=new BrachyDetectorConstruction(SDname);
+ 
+   m_NumVoxelX=pDetector-> GetNumVoxelX();
+  m_NumVoxelZ=pDetector->GetNumVoxelZ();
+  if (!m_pVoxel){
+                m_pVoxel=new G4float[ m_NumVoxelX * m_NumVoxelZ];
+                for (G4int i=0;i<m_NumVoxelX * m_NumVoxelZ;i++)
+		  { m_pVoxel[i]=0;}
+  }
 }
 
 //....
 
 BrachyEventAction::~BrachyEventAction()
 {
+ delete pDetector;
+ if(m_pVoxel)delete[]m_pVoxel;
 }
+
+
+G4int BrachyEventAction::GetEventno()
+{
+  G4int evno = fpEventManager->GetConstCurrentEvent()->GetEventID() ;
+  return evno ;
+}
+
+
+G4double BrachyEventAction::GetEnergy(G4int k) const
+{ return m_pVoxel[k];}
+
+
 
 //....
 
-void BrachyEventAction::BeginOfEventAction(const G4Event*)
+void BrachyEventAction::BeginOfEventAction(const G4Event* aEvent)
 {
+
  G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
  if(m_HitsCollectionID == -1)
  	m_HitsCollectionID = pSDManager->GetCollectionID("WaterBoxHitsCollection");
@@ -85,13 +112,38 @@ void BrachyEventAction::EndOfEventAction(const G4Event* evt)
 		// Fill voxel matrix with energy deposit data
 		G4int HitCount = CHC->entries();
 		for (G4int h=0; h<HitCount; h++)
-			m_pVoxel[((*CHC)[h])->GetZID() + ((*CHC)[h])->GetXID()*m_NumVoxelX] += (*CHC)[h]->GetEdep();
+                {
+		j=((*CHC)[h])->GetZID() + ((*CHC)[h])->GetXID()*m_NumVoxelX;
+                m_pVoxel[j]+=(*CHC)[h]->GetEdep();
 		}
-	}	
+		}
+     }
+
+
+
+  // extract the trajectories and draw them
+
+  if (G4VVisManager::GetConcreteInstance())
+    {
+     G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
+     G4int n_trajectories = 0;
+     if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+
+     for (G4int i=0; i<n_trajectories; i++) 
+        { G4Trajectory* trj = (G4Trajectory*)((*(evt->
+						 GetTrajectoryContainer()))[i]);
+
+ 
+ if (drawFlag == "all") trj->DrawTrajectory(50);
+          else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
+                                  trj->DrawTrajectory(50);
+          else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
+                                  trj->DrawTrajectory(50);	     	     
+	}
+    }
+ 
+
 }
-
-
-
 
 
 

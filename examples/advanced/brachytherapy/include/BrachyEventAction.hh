@@ -31,27 +31,36 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
-
+class BrachyDetectorConstruction; 
 class BrachyEventAction : public G4UserEventAction
 {
   public:
-    BrachyEventAction(G4float *pVoxel,G4int NumVoxelX,G4int NumVoxelZ);
+    BrachyEventAction(G4String&);
     ~BrachyEventAction();
 
   public:
     void BeginOfEventAction(const G4Event*);
     void EndOfEventAction(const G4Event*);
-
+G4int    GetEventno();
+  G4double GetEnergy(G4int) const;
+  G4int    GetHits(G4int ) const ;
+ 
 
 
   private:
     
-    const G4int m_NumVoxelX;
-    const G4int m_NumVoxelZ;
+     G4int m_NumVoxelX;
+     G4int m_NumVoxelZ;
     G4float *m_pVoxel;
-
-  private:
+  BrachyDetectorConstruction *pDetector;
+  
+ 
+ private:
     G4int m_HitsCollectionID;
+    G4String       drawFlag;
+    G4int          j;
+    G4String      SDname;
+    G4int  printModulo;      
    
 };
 
