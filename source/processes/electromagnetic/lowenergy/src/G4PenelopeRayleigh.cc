@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.9 2003-06-16 17:00:23 gunter Exp $
+// $Id: G4PenelopeRayleigh.cc,v 1.10 2004-03-17 10:48:06 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
@@ -33,6 +33,7 @@
 //                            from SUN
 // 10 Mar 2003 V.Ivanchenko   Remove CutPerMaterial warning
 // 12 Mar 2003 L.Pandola      Code "cleaned" - Cuts per region 
+// 17 Mar 2004 L.Pandola      Removed unnecessary calls to pow(a,b)
 // --------------------------------------------------------------------
 
 #include "G4PenelopeRayleigh.hh"
@@ -140,16 +141,17 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& )
 	{
 	  energies->push_back(energyVector[bin]);
 	  G4double ec=std::min(energyVector[bin],0.5*IZZ);
-	  facte=k1*pow(ec/electron_mass_c2,2);
+	  G4double energyRatio = ec/electron_mass_c2;
+	  facte = k1*energyRatio*energyRatio;
 	  G4double cs=0;
 	  G4PenelopeIntegrator<G4PenelopeRayleigh,G4double(G4PenelopeRayleigh::*)(G4double)> theIntegrator;
 	  cs =
 	    theIntegrator.Calculate(this,&G4PenelopeRayleigh::DifferentialCrossSection,-1.0,0.90,1e-06);
 	  cs += theIntegrator.Calculate(this,&G4PenelopeRayleigh::DifferentialCrossSection,0.90,0.9999999,1e-06);
-	  cs = cs*pow((ec/energyVector[bin]),2)*pi*pow(classic_electr_radius,2);
+	  cs = cs*(ec/energyVector[bin])*(ec/energyVector[bin])*pi*classic_electr_radius*classic_electr_radius;
 	  const G4double* vector_of_atoms = material->GetVecNbOfAtomsPerVolume();
 	  const G4int* stechiometric = material->GetAtomsVector();
-	  G4double density;
+	  G4double density=0.;
 	  if (stechiometric)
 	    {
 	      density = vector_of_atoms[iright]/stechiometric[iright]; //number of molecules per volume
@@ -463,7 +465,8 @@ G4double G4PenelopeRayleigh::MolecularFormFactor(G4double y)
   for (G4int i=0;i<nElements;i++){
     G4int Z = (G4int) (*elementVector)[i]->GetZ();
     if (Z>ntot) Z=95;
-    fa=Z*(1+y*(RA1[Z-1]+x*(RA2[Z-1]+x*RA3[Z-1])))/pow((1+y*(RA4[Z-1]+y*RA5[Z-1])),2);
+    G4double denomin = 1+y*(RA4[Z-1]+y*RA5[Z-1]);
+    fa=Z*(1+y*(RA1[Z-1]+x*(RA2[Z-1]+x*RA3[Z-1])))/(denomin*denomin);
     G4bool a = ((Z>10) && (fa>2.0));
     if (a) 
       {
@@ -471,7 +474,7 @@ G4double G4PenelopeRayleigh::MolecularFormFactor(G4double y)
 	G4double k1=0.3125;
 	G4double k2=2.426311e-02;
 	Pa=(Z-k1)*fine_structure_const;
-	Pg=sqrt(1-pow(Pa,2));
+	Pg=sqrt(1-(Pa*Pa));
 	Pq=k2*x/Pa;
 	fb=sin(2*Pg*atan(Pq))/(Pg*Pq*pow((1+Pq*Pq),Pg));
 	fa=std::max(fa,fb);
