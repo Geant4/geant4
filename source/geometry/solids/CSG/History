@@ -1,4 +1,4 @@
-$Id: History,v 1.6 1999-05-21 19:32:36 japost Exp $
+$Id: History,v 1.7 1999-11-10 17:10:14 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 10,   99   J. Apostolakis             geom-solids-csg-01-00-02-cand
+
+  - Included  David Williams' modifications to 
+        G4IntersectingCone.cc, G4PolyconeSide.cc and G4VCSGfaceted.cc
+
+     and to  test/SBT/SBT.cc  and  test/SBT/polycone.geant4
+
+
+Nov 10,   99   J. Apostolakis             geom-solids-csg-01-00-01
+
+  - Tagged
+
 
 May 18,   99   David Wiliams
   Replaced 1/DBL_MAX with DBL_MIN (valid correction, seen in tests for STL) 
