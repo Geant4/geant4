@@ -347,6 +347,9 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       G4double partialProb = G4UniformRand();
       // G4int augerOriginatingShellId = 0;
       
+      G4int numberOfPossibleAuger = 
+	  (anAugerTransition->AugerTransitionProbabilities(transitionRandomShellId))->size();
+
       while (transitionRandomShellIndex < transitionSize) {
 
         std::vector<G4int>::const_iterator pos = 
@@ -355,8 +358,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
         transitionRandomShellId = *(pos+transitionRandomShellIndex);
         
         //  G4int transitionRandomShellId = *(anAugerTransition->TransitionOriginatingShellIds())[transitionRandomShellIndex];
-        G4int numberOfPossibleAuger = 
-            (anAugerTransition->AugerTransitionProbabilities(transitionRandomShellId))->size();
+
 
 	augerIndex = 0;
 
@@ -373,48 +375,49 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
         if (partSum >= (partialProb/totalVacancyAugerProbability) ) {break;}
         transitionRandomShellIndex++;
       }
+
       // Now we have the index of the shell from wich comes the auger electron (augerIndex), 
       // and the id of the shell, from which the transition e- come (transitionRandomShellid)  
-
+      
+      
       // Isotropic angular distribution for the outcoming e-
       G4double newcosTh = 1.-2.*G4UniformRand();
       G4double  newsinTh = std::sqrt(1.-newcosTh*newcosTh);
-     G4double newPhi = twopi*G4UniformRand();
-  
-     G4double xDir =  newsinTh*std::sin(newPhi);
-     G4double yDir = newsinTh*std::cos(newPhi);
-     G4double zDir = newcosTh;
-  
-     G4ThreeVector newElectronDirection(xDir,yDir,zDir);
+      G4double newPhi = twopi*G4UniformRand();
+      
+      G4double xDir =  newsinTh*std::sin(newPhi);
+      G4double yDir = newsinTh*std::cos(newPhi);
+      G4double zDir = newcosTh;
+      
+      G4ThreeVector newElectronDirection(xDir,yDir,zDir);
+      
+      // energy of the auger electron emitted
+      
+      
+      G4double transitionEnergy = anAugerTransition->AugerTransitionEnergy(augerIndex, transitionRandomShellId);
+      /*
+	G4cout << "AUger TransitionId " << anAugerTransition->FinalShellId() << G4endl;
+	G4cout << "augerIndex: " << augerIndex << G4endl;
+	G4cout << "transitionShellId: " << transitionRandomShellId << G4endl;
+      */
+      
+      // This is the shell where the new vacancy is: it is the same
+      // shell where the electron came from
+      newShellId = transitionRandomShellId;
+      
+      
+      G4DynamicParticle* newPart = new G4DynamicParticle(G4Electron::Electron(), 
+							 newElectronDirection,
+							 transitionEnergy);
+      return newPart;
 
-     // energy of the auger electron emitted
-
-
-     G4double transitionEnergy = 
-              anAugerTransition->AugerTransitionEnergy(augerIndex, transitionRandomShellId);
-     /*
-     G4cout << "AUger TransitionId " << anAugerTransition->FinalShellId() << G4endl;
-     G4cout << "augerIndex: " << augerIndex << G4endl;
-     G4cout << "transitionShellId: " << transitionRandomShellId << G4endl;
-     */
-
-     // This is the shell where the new vacancy is: it is the same
-     // shell where the electron came from
-     newShellId = transitionRandomShellId;
-  
-  
-     G4DynamicParticle* newPart = new G4DynamicParticle(G4Electron::Electron(), 
-                                                        newElectronDirection,
-                                                        transitionEnergy);
-     return newPart;
-
-}
+    }
   else 
     {
       //G4Exception("G4AtomicDeexcitation: no auger transition found");
       return 0;
     }
-
+  
 }
 
 void G4AtomicDeexcitation::SetCutForSecondaryPhotons(G4double cut)

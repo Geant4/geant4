@@ -51,7 +51,7 @@ int main() {
     
     G4cout<<  vectorOfParticles->size()<<" particles in the vector "<<G4endl;
     
-    for (G4int k=0; k< vectorOfParticles->size();k++)
+    for (size_t k=0; k< vectorOfParticles->size();k++)
       {
 	G4DynamicParticle* newParticle = (*vectorOfParticles)[k];
 	if ( newParticle->GetDefinition()->GetParticleName() == "e-" )
