@@ -845,6 +845,8 @@ int main(int argc, char** argv)
 	    h[1]->fill(9.0, 1.0);
 	  }
 	}
+       delete sec;
+       	 
 //        if(i<n) delete aChange->GetSecondary(i);
       }
 
