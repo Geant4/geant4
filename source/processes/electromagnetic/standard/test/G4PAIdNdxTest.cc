@@ -21,15 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIdNdxTest.cc,v 1.2 2002-05-17 09:18:15 grichine Exp $
+// $Id: G4PAIdNdxTest.cc,v 1.3 2002-10-14 17:35:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //
 //  
 //
-//  Test routine for G4PAIxSection class code 
-//  allowing to see Cherenkov and Bohr cross sections
+//  Test routine for G4PAIxSection class code
 //
 // History:
 //
@@ -55,7 +54,7 @@ int main()
    G4std::ofstream outFile("PAIdNdx.out", G4std::ios::out ) ;
    outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
-   G4std::ofstream fileOut("PAICerenkovPlasmon.out", G4std::ios::out ) ;
+   G4std::ofstream fileOut("PAICrenkovPlasmon.out", G4std::ios::out ) ;
    fileOut.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
    //  G4std::ifstream fileRead("exp.dat", G4std::ios::out ) ;
@@ -167,14 +166,6 @@ int main()
 
   ***************************************************** */
 
-  // Diamond detectors
-
-  density = 3.5*g/cm3;
-  G4Material* Diamond = new G4Material(name="Diamond",density, nel=1);
-  Diamond->AddElement(elC,1);
-
-  
-
   a = 26.98159*g/mole;
   density = 2.7*g/cm3;
   G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
@@ -185,6 +176,7 @@ int main()
   a = 28.0855*g/mole;
   G4Material* Si = new G4Material(name="Silicon", z=14., a, density);
 
+  /* ****************************************
   density = 7.870*g/cm3;
   a = 55.85*g/mole;
   G4Material* Fe = new G4Material(name="Iron"   , z=26., a, density);
@@ -225,6 +217,11 @@ int main()
   GaAs->AddElement(elGa,1);
   GaAs->AddElement(elAs,1);
 
+  // Diamond detectors
+
+  density = 3.5*g/cm3;
+  G4Material* Diamond = new G4Material(name="Diamond",density, nel=1);
+  Diamond->AddElement(elC,1);
 
   G4double TRT_Xe_density = 5.485*mg/cm3;
   G4Material* TRT_Xe = new G4Material(name="TRT_Xe", TRT_Xe_density, nel=1,
@@ -407,7 +404,7 @@ int main()
   He20CO2->AddMaterial( He,              fractionmass = 0.265 ) ;
   He20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.735 ) ;
 
- 
+  */ //////////////////////
 
 
   //  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -419,7 +416,7 @@ int main()
   G4int i, j, k, numOfMaterials, iSan, nbOfElements, sanIndex, row ;
   G4double maxEnergyTransfer, kineticEnergy ;
   G4double tau, gamma, bg2, beta2, rateMass, Tmax, Tmin, Tkin ;
-  G4double dNdxC, dNdxP, dNdx ;
+
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
 
   numOfMaterials = theMaterialTable->size();
@@ -434,11 +431,11 @@ int main()
   }
   G4String testName ;
   G4cout<<"Enter material name for test : "<<G4std::flush ;
-  G4cin>>testName ;
+  //  G4cin>>testName ;
 
   for(k=0;k<numOfMaterials;k++)
   {
-     if((*theMaterialTable)[k]->GetName() != testName) continue ;
+    //    if((*theMaterialTable)[k]->GetName() != testName) continue ;
 
      outFile << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
      G4cout << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
@@ -487,29 +484,13 @@ int main()
 
      G4PAIxSection testPAI(k,maxEnergyTransfer,bg2) ;
 
-     G4cout<<"Interval no."<<"\t"<<"Energy interval"<<"\t"
-         <<"Integral term"<<"\t"
-         <<"Dif PAI"<<"\t"
-           <<G4endl<<G4endl ;
-
-
-     outFile<<"Interval no."<<"\t"<<"Energy interval"<<"\t"
-           <<"Integral term"<<"\t"
-            <<"Dif PAI"<<"\t"
-            <<G4endl<<G4endl ;
+     G4cout<<"Interval no."<<"\t"<<"Energy interval"<<G4endl<<G4endl ;
+     outFile<<"Interval no."<<"\t"<<"Energy interval"<<G4endl<<G4endl ;
 
      for(j=1;j<=testPAI.GetIntervalNumber();j++)
      {
-       G4cout<<j<<"\t\t"<<testPAI.GetEnergyInterval(j)/keV<<"\t"
-             <<testPAI.GetIntegralTerm(j)<<"\t"
-             <<testPAI.GetDifPAIxSection(j)*keV*cm<<"\t"
-             <<G4endl ;
-
-
-       outFile<<j<<"\t\t"<<testPAI.GetEnergyInterval(j)/keV<<"\t"
-	    <<testPAI.GetIntegralTerm(j)<<"\t"
-              <<testPAI.GetDifPAIxSection(j)*keV*cm<<"\t"
-              <<G4endl ;
+       G4cout<<j<<"\t\t"<<testPAI.GetEnergyInterval(j)/keV<<G4endl ;
+       outFile<<j<<"\t\t"<<testPAI.GetEnergyInterval(j)/keV<<G4endl ;
      }
      G4cout<<G4endl ;
      outFile<<G4endl ;
@@ -521,37 +502,6 @@ int main()
      G4cout << "Actual spline size = "<<testPAI.GetSplineSize()<<G4endl ;
      G4cout <<"Normalization Cof = "<<testPAI.GetNormalizationCof()<<G4endl ;
      G4cout << G4endl ;
-
-     G4cout<<"Spline no."<<"\t"<<"Spline energy"<<"\t"
-           <<"Normalised term"<<"\t"
-           <<"Dif PAI 1/keV/cm"<<"\t"
-            <<"IntegralP, 1/cm"<<"\t"
-           <<G4endl<<G4endl ;
-
-
-     outFile<<"Spline no."<<"\t"<<"Spline energy"<<"\t"
-            <<"Normalised term"<<"\t"
-            <<"Dif PAI 1/keV/cm"<<"\t"
-            <<"IntegralP, 1/cm"<<"\t"
-            <<G4endl<<G4endl ;
-
-     for(j=1;j<=testPAI.GetSplineSize();j++)
-     {
-       G4cout<<j<<"\t\t"<<testPAI.GetSplineEnergy(j)/keV<<"\t"
-             <<testPAI.GetNormalisedTerm(j)<<"\t"
-             <<testPAI.GetDifPAIxSection(j)*keV*cm<<"\t"
-             <<testPAI.GetIntegralPlasmon(j)*cm<<"\t"
-             <<G4endl ;
-
-
-       outFile<<j<<"\t\t"<<testPAI.GetSplineEnergy(j)/keV<<"\t"
-              <<testPAI.GetNormalisedTerm(j)<<"\t"
-              <<testPAI.GetDifPAIxSection(j)*keV*cm<<"\t"
-             <<testPAI.GetIntegralPlasmon(j)*cm<<"\t"
-              <<G4endl ;
-     }
-     G4cout<<G4endl ;
-     outFile<<G4endl ;
 
      Tmin     = sandia.GetPhotoAbsorpCof(1,0) ;  // 0.02*keV ;
      G4cout<<"Tmin = "<<Tmin/eV<<" eV"<<G4endl;
@@ -577,7 +527,7 @@ int main()
 
      //   G4PAIxSection testPAIproton(k,maxEnergyTransfer) ;
 
-     kineticEnergy = 7100*MeV ; // 10.0*keV ;  
+     kineticEnergy = 10.0*keV ;  // 110*MeV ;
 
      //     for(j=1;j<testPAIproton.GetNumberOfGammas();j++)
 
@@ -629,7 +579,7 @@ int main()
        //          <<testPAIproton.GetPAItable(0,j)*cm/keV<<"\t\t"
        //  	      <<testPAIproton.GetPAItable(1,j)*cm<<"\t\t"<<G4endl ;
 
-       kineticEnergy *= 1.141 ;   // was 1.4 ; 1.5 ;
+       kineticEnergy *= 1.41 ;   // was 1.4 ; 1.5 ;
      }
      G4cout<<G4endl ;
      outFile<<G4endl ;
