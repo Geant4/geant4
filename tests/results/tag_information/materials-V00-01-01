@@ -1,0 +1,33 @@
+I have made the following commits to the HEAD of
+source/material/include:
+
+G4MPVEntry.hh
+G4MaterialPropertyVector.hh
+G4OpticalSurface.hh
+
+These files now include comments (a la Katsuya) and no longer refer to
+RD44 - comment changes only.
+
+G4MaterialPropertiesTable.hh
+
+The above, and the migration from RWTPtrHashDictionary to STL map;
+thanks to John and Gabriele.
+
+I have also made the following commits to the HEAD of
+source/material/src:
+
+G4MPVEntry.cc
+G4MaterialPropertyVector.cc
+G4OpticalSurface.cc
+
+no longer refer to RD44 - comment changes only.
+
+G4MaterialPropertiesTable.cc
+
+The above, and the migration from RWTPtrHashDictionary to STL map;
+thanks to John and Gabriele.
+
+The /source/material HEAD should be tagged for the next global tag for
+the STT.
+
+Thanks, Peter.
