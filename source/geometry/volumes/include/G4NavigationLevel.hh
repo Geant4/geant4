@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationLevel.hh,v 1.3 1999-05-12 19:09:44 japost Exp $
+// $Id: G4NavigationLevel.hh,v 1.4 1999-05-12 19:54:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NavigationLevel
@@ -70,12 +70,12 @@ class G4NavigationLevel
 
    // Override "new" and "delete" to use "G4Allocator".
    inline void *operator new(size_t);
-   inline void operator delete(void *aTrack);
+   inline void operator delete(void *aLevel);
 
    // Pre-allocated 'new' and 'delete' for use with STL 
    //    - do not (directly) use Allocator              F.Behner/J.Apostolakis
-   inline void *operator new(size_t, void*);
-   inline void operator delete(void *, void*);
+   inline void *operator new(size_t, G4NavigationLevel *);       // void*);
+   // inline void operator delete(void *ptr, void*);  // Not accepted Sun/HP
 
  //  Data members: 
  // 
