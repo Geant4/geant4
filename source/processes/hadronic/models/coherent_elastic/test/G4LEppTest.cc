@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEppTest.cc,v 1.6 2001-11-12 03:28:27 fjones Exp $
+// $Id: G4LEppTest.cc,v 1.7 2001-11-15 17:28:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4ios.hh"
@@ -34,7 +34,7 @@
 #include "G4ProcessManager.hh"
 #include "G4HadronElasticProcess.hh"
  
-#include "G4LEpp.hh"
+#include "G4LEnp.hh"
 
 #include "G4DynamicParticle.hh"
 #include "G4LeptonConstructor.hh"
@@ -70,7 +70,7 @@ G4int sortEnergies(const double Px, const double Py, const double Pz,
 int main()
 {
 
-   theHbookManager.SetFilename("G4LEppTest.hbook");
+   theHbookManager.SetFilename("G4LEnpTest.hbook");
 
    G4String name, symbol;
    G4double a, iz, z, density;
@@ -122,7 +122,7 @@ int main()
    // ----------- now get all particles of interest ---------
    G4int numberOfParticles = 1;
    G4ParticleDefinition* theParticles[1];
-   G4ParticleDefinition* theProton = G4Proton::ProtonDefinition();
+   G4ParticleDefinition* theProton = G4Neutron::NeutronDefinition();
    theParticles[0] = theProton;
    
    //------ here all the particles are Done ----------
@@ -135,7 +135,7 @@ int main()
    G4ProcessManager* theProtonProcessManager = new G4ProcessManager(theProton);
    theProton->SetProcessManager(theProtonProcessManager);
    G4HadronElasticProcess theProcess; 
-   G4LEpp theModel;
+   G4LEnp theModel;
 
    //   theModel.SetCoulombSuppression(0);
 
@@ -212,17 +212,18 @@ int main()
          G4double Tfinal = aParticleChange->GetEnergyChange();
          G4ThreeVector Pfinal = 
                         *(aParticleChange->GetMomentumDirectionChange())
-                *sqrt(Tfinal*Tfinal + Tfinal*aParticleChange->GetMassChange());
+                *sqrt(Tfinal*Tfinal + 2.*Tfinal*aParticleChange->GetMassChange());
          G4cout << "FINAL STATE kinetic energy (GeV) = " << Tfinal/GeV 
                 << G4endl;
          G4cout << "FINAL STATE momentum (GeV/c) = " 
                 << Pfinal*(1./GeV) << G4endl;
-         G4Track* second;
+	 G4Track* second;
          const G4DynamicParticle* aSec;
          G4double eventEnergy;
          G4int Nsec = aParticleChange->GetNumberOfSecondaries();
          HNsec->accumulate((G4float)Nsec);
          if (Nsec == 1) {
+            G4cout << "HPW" <<" 1 "<<Tfinal << " " << Pfinal<<G4endl;
             HPx1->accumulate(Pfinal.x()/GeV);
             HPy1->accumulate(Pfinal.y()/GeV);
             HPz1->accumulate(Pfinal.z()/GeV);
@@ -267,6 +268,7 @@ int main()
             G4cout << aSec->GetKineticEnergy()/GeV;
             G4cout << aSec->GetMomentum()*(1./GeV);
             G4cout << G4endl;
+            G4cout <<"HPW" <<" 2 "<< aSec->GetKineticEnergy() << " " << aSec->GetMomentum()<<G4endl;
          }
 
          G4cout << "TOTAL ENERGY IN EVENT = " << eventEnergy/GeV << G4endl;

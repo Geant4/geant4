@@ -31,6 +31,7 @@
 
 // Initialization of static data arrays:
 #include "G4LEnpData.hh"
+#include "Randomize.hh"
 
 
 G4LEnp::G4LEnp() :
@@ -309,34 +310,36 @@ G4LEnp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
            << (newP->GetMomentum()+targetParticle->GetMomentum()).mag()/GeV
            << G4endl;
     }
+    G4cout << "ERR " << newP->GetMomentum() <<" "<<targetParticle->GetMomentum()<<G4endl;
+    G4cout << "ERR " << newP->GetDefinition()->GetParticleName() 
+                     <<" "<<targetParticle->GetDefinition()->GetParticleName()<<G4endl;
 
-    //    if (theta < pi/2.) {
+    // charge symmetry....
+    if(G4UniformRand()<.5)
+    {
       theParticleChange.SetNumberOfSecondaries(1);
-      //  G4double p = newP->GetMomentum().mag();
-      //      G4ThreeVector m = newP->GetMomentum();
-      //      if (p > DBL_MIN)
-      //        theParticleChange.SetMomentumChange(m.x()/p, m.y()/p, m.z()/p);
-      //      else
-      //        theParticleChange.SetMomentumChange(0., 0., 0.);
-      theParticleChange.SetMomentumDirectionChange(
-                                              newP->GetMomentumDirection());
+      theParticleChange.SetMomentumChange(newP->GetMomentumDirection());
       theParticleChange.SetEnergyChange(newP->GetKineticEnergy());
       delete newP;
-      //    }
-      //    else {
-      //      // charge exchange
-      //      theParticleChange.SetNumberOfSecondaries(2);
-      //      theParticleChange.AddSecondary(newP);
-      //      theParticleChange.SetStatusChange(fStopAndKill);
-      //      //      theParticleChange.SetEnergyChange(0.0);
-      //    }
-
-    // Recoil particle
-    G4DynamicParticle* p1 = new G4DynamicParticle;
-    p1->SetDefinition(targetParticle->GetDefinition());
-    p1->SetMomentum(targetParticle->GetMomentum());
-    theParticleChange.AddSecondary(p1);    
-    
+      G4DynamicParticle* p1 = new G4DynamicParticle;
+      p1->SetDefinition(targetParticle->GetDefinition());
+      p1->SetMomentum(targetParticle->GetMomentum());
+      theParticleChange.AddSecondary(p1);    
+    }
+    else
+    {
+      theParticleChange.SetNumberOfSecondaries(2);
+      theParticleChange.SetStatusChange(fStopAndKill);
+      G4DynamicParticle * pA = new G4DynamicParticle;
+      pA->SetDefinition(targetParticle->GetDefinition());
+      pA->SetMomentum(newP->GetMomentum());
+      G4DynamicParticle * pB = new G4DynamicParticle;
+      pB->SetDefinition(newP->GetDefinition());
+      pB->SetMomentum(targetParticle->GetMomentum());
+      delete newP;
+      theParticleChange.AddSecondary(pA);    
+      theParticleChange.AddSecondary(pB);    
+    }
     return &theParticleChange;
 }
 
