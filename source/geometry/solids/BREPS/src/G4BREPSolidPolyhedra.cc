@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.4 1999-01-20 07:36:02 broglia Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.5 1999-01-20 12:57:44 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -71,6 +71,10 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(G4String name,
       PointList[1] = LocalOrigin + (RMIN[a] * TmpAxis);   
 	  
       SurfaceVec[Count] = new G4FPlane( &PointList);
+      
+      // set sense of the surface
+      SurfaceVec[Count]->SetSameSense(0);
+
       Count++;
       
       // Rotate axis back for the other surface point calculation
@@ -87,6 +91,10 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(G4String name,
       PointList2[1] = LocalOrigin + (RMAX[a] * TmpAxis);	  
            
       SurfaceVec[Count] = new G4FPlane(&PointList2);
+
+      // set sense of the surface
+      SurfaceVec[b]->SetSameSense(1);
+
       Count++;
     }
     
@@ -352,7 +360,9 @@ G4ThreeVector G4BREPSolidPolyhedra::SurfaceNormal
 	break;
   }
   
+  // the surfaces are planes, so in fact the function return NormalX
   norm = SurfaceVec[iplane]->SurfaceNormal(Pt);
+ 
   norm = norm.unit();
 
   return norm;
@@ -444,10 +454,8 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(register const G4ThreeVector& Pt,
     wb = fabs( SurfaceVec[a]->HowNear(Ptv) );
   
     //  If we are on a surface and exiting it return Zero
-    if ( (wb < halfTolerance) && (V.dot(SurfaceVec[a]->Normal(Ptv))>0) ) 
-    {
+    if ( (wb < halfTolerance) && (V.dot(SurfaceVec[a]->SurfaceNormal(Ptv))>0) )
       return (0.0);
-    }
   }
   
   if(validNorm)

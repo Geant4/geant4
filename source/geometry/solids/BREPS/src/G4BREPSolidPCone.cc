@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.5 1999-01-20 07:36:01 broglia Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.6 1999-01-20 12:57:44 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4BREPSolidPCone.hh"
@@ -157,6 +157,8 @@ G4BREPSolidPCone::G4BREPSolidPCone(G4String name,
 	  
 	  SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis, Length, 
 						RMIN[a+1], RMIN[a]);
+	  // set sense of the surface
+	  SurfaceVec[b]->SetSameSense(0);  
 	}
 	else
 	{      
@@ -166,6 +168,9 @@ G4BREPSolidPCone::G4BREPSolidPCone(G4String name,
 	  
 	  SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis2, 
 						Length, RMIN[a], RMIN[a+1]); 
+	  
+	  // set sense of the surface
+	  SurfaceVec[b]->SetSameSense(0);
 	}
       
 	b++;  
@@ -185,6 +190,10 @@ G4BREPSolidPCone::G4BREPSolidPCone(G4String name,
 	  
 	  SurfaceVec[b] = new G4FCylindricalSurface(CylOrigin, Axis, 
 						    RMIN[a], Length );
+
+	  // set sense of the surface
+	  SurfaceVec[b]->SetSameSense(0);
+
 	  b++;
 	}	    
       }
@@ -199,6 +208,9 @@ G4BREPSolidPCone::G4BREPSolidPCone(G4String name,
 	  
 	  SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis, 
 						Length, RMAX[a+1], RMAX[a]);
+
+	  // set sense of the surface
+	  SurfaceVec[b]->SetSameSense(1);
 	}
 	else
 	{
@@ -208,6 +220,9 @@ G4BREPSolidPCone::G4BREPSolidPCone(G4String name,
 
 	  SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis2, 
 						Length, RMAX[a], RMAX[a+1]);
+
+	  // set sense of the surface
+	  SurfaceVec[b]->SetSameSense(1);
 	}
 	
 	b++;
@@ -230,6 +245,10 @@ G4BREPSolidPCone::G4BREPSolidPCone(G4String name,
 	  
 	  SurfaceVec[b] = new G4FCylindricalSurface(CylOrigin, Axis, 
 						    RMAX[a], Length );
+
+	  // set sense of the surface
+	  SurfaceVec[b]->SetSameSense(1);
+
 	  b++;
 	}	  	
       }
@@ -424,6 +443,7 @@ G4ThreeVector G4BREPSolidPCone::SurfaceNormal(const G4ThreeVector& Pt) const
   norm =  SurfaceVec[iplane]->SurfaceNormal(Pt);
 
   n = G4ThreeVector ( norm.x(), norm.y(), norm.z());
+  
   n = n.unit();
 
   return n;
@@ -515,10 +535,10 @@ G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt,
     wb = fabs( SurfaceVec[a]->HowNear(Ptv) );
   
     //  If we are on a surface and exiting it return Zero
-    if ( (wb < halfTolerance) && (V.dot(SurfaceVec[a]->Normal(Ptv))>0) ) 
-    {
+    // here, surface are cylinder or cone so calculate the normal at the point
+    if ( (wb < halfTolerance) && (V.dot(SurfaceVec[a]->SurfaceNormal(Ptv))>0) )
       return (0.0);
-    }
+    
   }
   
   if(validNorm)
