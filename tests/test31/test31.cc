@@ -41,11 +41,11 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "test31VisManager.hh"
+#include "VisManager.hh"
 #endif
 
 #include "test31DetectorConstruction.hh"
-#include "test31PhysicsList.hh"
+#include "PhysicsList.hh"
 #include "test31PrimaryGeneratorAction.hh"
 #include "test31EventAction.hh"
 #include "test31TrackingAction.hh"
@@ -69,13 +69,13 @@ int main(int argc,char** argv) {
   det->SetVerbose(verbose);
   if(verbose >0) G4cout << "Detector Construction is defined" << G4endl;
   
-  runManager->SetUserInitialization(new test31PhysicsList());
+  runManager->SetUserInitialization(new PhysicsList());
   if(verbose >0) G4cout << "Physics List is defined" << G4endl;
 
 #ifdef G4VIS_USE
   G4cout << "VisManager will be inicialized" << G4endl;
   // visualization manager
-  G4VisManager* visManager = new test31VisManager;
+  G4VisManager* visManager = new VisManager;
   visManager->Initialize();
 #endif 
 
