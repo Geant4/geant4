@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.6 2001-07-11 09:59:20 gunter Exp $
+// $Id: G4AssemblyVolume.cc,v 1.7 2002-06-05 18:18:50 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,16 +51,25 @@ G4AssemblyVolume::G4AssemblyVolume()
 //
 G4AssemblyVolume::~G4AssemblyVolume()
 {
+  unsigned int howmany = fTriplets.size();
+  if( howmany != 0 ) {
+    for( unsigned int i = 0; i < howmany; i++ ) {
+      G4RotationMatrix* pRotToClean = fTriplets[i].GetRotation();
+      if( pRotToClean != 0 ) {
+        delete pRotToClean;
+      }
+    }
+  }
   fTriplets.clear();
   
-  unsigned int howmany = fPVStore.size();
-  if( howmany != 0 )
-  {
-    for( unsigned int i = 0; i < howmany; i++ )
-    {
-      G4RotationMatrix* pRotToClean = fPVStore[i]->GetRotation();
-      if( pRotToClean != 0 ) delete pRotToClean;
-      delete fPVStore[i];
+  howmany = fPVStore.size();
+  if( howmany != 0 ) {
+    for( unsigned int j = 0; j < howmany; j++ ) {
+      G4RotationMatrix* pRotToClean = fPVStore[j]->GetRotation();
+      if( pRotToClean != 0 ) {
+        delete pRotToClean;
+      }
+      delete fPVStore[j];
     }
   }
   
@@ -75,7 +84,13 @@ void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
                                         G4ThreeVector&    translation,
                                         G4RotationMatrix* pRotation )
 {
-  G4AssemblyTriplet toAdd( pVolume, translation, pRotation );
+  G4RotationMatrix*  toStore  = new G4RotationMatrix;
+  
+  if( pRotation != 0 ) {
+    *toStore = *pRotation;
+  }
+  
+  G4AssemblyTriplet toAdd( pVolume, translation, toStore );
   fTriplets.push_back( toAdd );
 }
 
@@ -84,9 +99,11 @@ void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
 void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
                                         G4Transform3D&    transformation )
 {
-  G4ThreeVector v   = transformation.getTranslation();
-  G4RotationMatrix r = transformation.getRotation();
-  G4AssemblyTriplet toAdd( pVolume, v, &r );
+  G4ThreeVector      v = transformation.getTranslation();
+  G4RotationMatrix*  r = new G4RotationMatrix;
+                    *r = transformation.getRotation();
+  
+  G4AssemblyTriplet toAdd( pVolume, v, r );
   fTriplets.push_back( toAdd );
 }
 
