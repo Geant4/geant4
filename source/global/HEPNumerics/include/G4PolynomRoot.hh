@@ -51,9 +51,11 @@
 //
 //    G4int num = trapEq.FindRoots(coef,7,zr,zi);
 //
+// Translation of TOMS493 from FORTRAN to C by C. Bond.  All rights reserved.
 //
 // Author: Oliver.Link@cern.ch
-//
+//   Translation to c++
+//   Use of STL vectors instead of dynamic memory vectors
 //
 // G4PolynomRoot
 //
