@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.15 2000-06-28 10:25:54 gcosmo Exp $
+// $Id: G4RunManager.cc,v 1.16 2000-07-22 10:37:44 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,7 +52,7 @@ G4RunManager::G4RunManager()
  currentRun(NULL),currentEvent(NULL),n_perviousEventsToBeStored(0),
  geometryInitialized(false),physicsInitialized(false),cutoffInitialized(false),
  geometryNeedsToBeClosed(true),initializedAtLeastOnce(false),
- runAborted(false),pauseAtBeginOfEvent(false),pauseAtEndOfEvent(false),
+ runAborted(false),
  geometryToBeOptimized(true),verboseLevel(0),DCtable(NULL),runIDCounter(0),
  storeRandomNumberStatus(0)
 {
@@ -228,8 +228,6 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
   {
     stateManager->SetNewState(EventProc);
 
-    if(pauseAtBeginOfEvent) stateManager->Pause("BeginOfEvent");
-
     currentEvent = GenerateEvent(i_event);
 
     eventManager->ProcessOneEvent(currentEvent);
@@ -237,7 +235,6 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
     AnalyzeEvent(currentEvent);
 
     if(i_event<n_select) G4UImanager::GetUIpointer()->ApplyCommand(msg);
-    if(pauseAtEndOfEvent) stateManager->Pause("EndOfEvent");
     stateManager->SetNewState(GeomClosed);
     StackPreviousEvent(currentEvent);
     currentEvent = NULL;

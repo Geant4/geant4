@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunMessenger.cc,v 1.5 1999-12-15 14:53:54 gunter Exp $
+// $Id: G4RunMessenger.cc,v 1.6 2000-07-22 10:37:45 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -18,6 +18,7 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
+#include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "g4std/strstream"
 
@@ -169,9 +170,9 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   else if( command==optCmd )
   { runManager->SetGeometryToBeOptimized(optCmd->GetNewBoolValue(newValue)); }
   else if( command==brkBoECmd )
-  { runManager->SetPauseAtBeginOfEvent(brkBoECmd->GetNewBoolValue(newValue)); }
+  { G4UImanager::GetUIpointer()->SetPauseAtBeginOfEvent(brkBoECmd->GetNewBoolValue(newValue)); }
   else if( command==brkEoECmd )
-  { runManager->SetPauseAtEndOfEvent(brkEoECmd->GetNewBoolValue(newValue)); }
+  { G4UImanager::GetUIpointer()->SetPauseAtEndOfEvent(brkEoECmd->GetNewBoolValue(newValue)); }
   else if( command==abortCmd )
   { runManager->AbortRun(); }
   else if( command==initCmd )

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.hh,v 1.11 2000-04-25 15:38:20 asaim Exp $
+// $Id: G4RunManager.hh,v 1.12 2000-07-22 10:37:40 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -184,9 +184,6 @@ class G4RunManager
     G4bool initializedAtLeastOnce;
     G4bool geometryToBeOptimized;
 
-    G4bool pauseAtBeginOfEvent;
-    G4bool pauseAtEndOfEvent;
-
     G4int runIDCounter;
     G4int verboseLevel;
     G4Timer * timer;
@@ -266,13 +263,6 @@ class G4RunManager
     // in case the user changes his/her detector geometry or cut off value(s) after
     // Initialize() metho has been invoked. Then, at the begining of the next BeamOn(),
     // all necessary re-initialization will be done.
-    inline void SetPauseAtBeginOfEvent(G4bool vl)
-    { pauseAtBeginOfEvent = vl; }
-    inline void SetPauseAtEndOfEvent(G4bool vl)
-    { pauseAtEndOfEvent = vl; }
-    //  If the boolean flags are true, Pause() method of G4StateManager is invoked
-    // at the very begining (before generating a G4Event object) or at the end of
-    // each event. So that, in case a (G)UI session is defined, the user can interact.
 
   public:
     inline void SetVerboseLevel(G4int vl)
