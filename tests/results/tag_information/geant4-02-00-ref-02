@@ -1,0 +1,26 @@
+                      geant4-02-00-ref-02
+                      ===================
+
+geant4-02-00-ref-02 is geant4-02-00-ref-01  plus:
+
+./config		config-V02-00-02
+./examples		examples-V02-00-03
+./source/g3tog4		g3tog4-V02-00-03
+./source/geometry/solids/CSG		geom-solids-csg-V02-00-00b
+./source/global		global-V02-00-02
+./source/interfaces		interfaces-V02-00-01
+./source/materials		materials-V02-00-00
+./source/processes/electromagnetic/lowenergy		emlowen-V02-00-02r
+./source/processes/electromagnetic/muons		muons-V02-00-01
+./source/processes/electromagnetic/standard		stand-V02-00-01
+./source/processes/electromagnetic/utils		utils-V02-00-01
+./source/processes/electromagnetic/xrays		xrays-V02-00-01
+./source/processes/hadronic/models/generator/de_excitation		de_excitation-V02-00-00r
+./source/processes/hadronic/models/high_energy		high_energy-V02-00-01
+./source/processes/hadronic/models/low_energy		low_energy-V02-00-00r
+./source/processes/hadronic/util		had_util-V02-00-00r
+./source/processes/optical		op-V02-00-00r
+./source/processes/parameterisation		param-V02-00-00r
+./source/processes/photolepton_hadron		photolepton_hadron-V02-00-00r
+./source/visualization		vis-V02-00-00
+./tests		tests-V02-00-03
