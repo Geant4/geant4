@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.10 2004-08-13 10:08:00 maire Exp $
+// $Id: RunAction.cc,v 1.11 2004-09-27 14:42:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,7 @@
 #include "Randomize.hh"
 
 #ifdef G4ANALYSIS_USE
-#include <memory> // for the auto_ptr(T>
+#include <memory> 	// for the auto_ptr<T>
 #include "AIDA/AIDA.h"
 #endif
 
@@ -48,11 +48,16 @@
 
 RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
                      PrimaryGeneratorAction* kin)
-:detector(det), physics(phys), kinematic(kin)
+:detector(det), physics(phys), kinematic(kin), af(0), tree(0)
 { 
   tallyEdep = new G4double[MaxTally];
   binLength = offsetX = 0.;
   histo[0] = 0;
+  
+#ifdef G4ANALYSIS_USE
+ // Creating the analysis factory
+ af = AIDA_createAnalysisFactory();
+#endif  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,6 +65,10 @@ RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
 RunAction::~RunAction()
 {
   delete tallyEdep;
+  
+#ifdef G4ANALYSIS_USE
+  delete af;  
+#endif      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,10 +84,7 @@ void RunAction::bookHisto()
   offsetX   = 0.5*length;
  
 #ifdef G4ANALYSIS_USE
-  G4cout << "\n----> Histogram Tree opened on file testem7.paw" << G4endl;
-  
-  // Create the analysis factory
-  std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+  G4cout << "\n----> Histogram Tree opened" << G4endl;
 
   // Create the tree factory
   std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
@@ -86,7 +92,9 @@ void RunAction::bookHisto()
   // Create a tree mapped to an hbook file.
   G4bool readOnly  = false;
   G4bool createNew = true;
-  tree = tf->create("testem7.paw", "hbook", readOnly, createNew);
+  tree = tf->create("testem7.paw", "hbook", readOnly, createNew, "uncompress");
+  //tree = tf->create("testem4.root", "root",readOnly, createNew, "uncompress");
+  //tree = tf->create("testem4.aida", "XML" ,readOnly, createNew, "uncompress");
 
   // Create a histogram factory, whose histograms will be handled by the tree
   std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory(*tree) );
@@ -107,7 +115,7 @@ void RunAction::cleanHisto()
   tree->close();        // and closing the tree (and the file)
   delete tree;
   
-  G4cout << "\n----> Histogram Tree saved on file testem7.paw" << G4endl;  
+  G4cout << "\n----> Histogram Tree saved" << G4endl;  
 #endif
 }
 
@@ -189,8 +197,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     G4cout << "\n---------------------------------------------------------\n"; 
   }
 
-  // normalize histogram
 #ifdef G4ANALYSIS_USE
+  // normalize histogram
   G4double fac = (mm/MeV)/(NbofEvents *  binLength);
   histo[0]->scale(fac);
 #endif

@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: TestEm7.cc,v 1.2 2004-07-08 16:21:07 maire Exp $
+// $Id: TestEm7.cc,v 1.3 2004-09-27 14:42:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

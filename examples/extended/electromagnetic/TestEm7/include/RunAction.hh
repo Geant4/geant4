@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.7 2004-08-13 10:07:59 maire Exp $
+// $Id: RunAction.hh,v 1.8 2004-09-27 14:42:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +38,7 @@ class PrimaryGeneratorAction;
 class G4Run;
 
 namespace AIDA {
+ class IAnalysisFactory;
  class ITree;
  class IHistogram1D;
 } 
@@ -73,8 +74,9 @@ class RunAction : public G4UserRunAction
     G4double*               tallyEdep;   
     G4double                binLength;
     G4double                offsetX;
-    G4double                projRange, projRange2;         
-
+    G4double                projRange, projRange2;
+             
+    AIDA::IAnalysisFactory* af;  
     AIDA::ITree*            tree;
     AIDA::IHistogram1D*     histo[1];        
 };

@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2004-08-13 10:07:57 maire Exp $
+$Id: README,v 1.10 2004-09-27 14:42:22 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -151,3 +151,6 @@ gmake
 Before running the example the command should be issued:
 
 eval `aida-config --runtime csh`
+
+It is possible to choose the format of the histogram file (hbook, root, XML):
+comment/uncomment 1 line in  RunAction::bookHisto().

@@ -20,8 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListIonBinaryCascade.cc,v 1.3 2004-07-08 17:14:02 maire Exp $
+// $Id: PhysListIonBinaryCascade.cc,v 1.4 2004-09-27 14:42:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListIonBinaryCascade.hh"
 #include "G4ParticleDefinition.hh"
