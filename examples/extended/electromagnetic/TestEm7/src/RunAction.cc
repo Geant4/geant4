@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.4 2003-11-19 10:16:18 vnivanch Exp $
+// $Id: RunAction.cc,v 1.5 2004-03-10 12:32:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,15 +34,18 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
 #include "Randomize.hh"
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  #include "AIDA/AIDA.h"
+#endif
+
+#ifdef USE_ROOT
+ #include "TFile.h"
+ #include "TH1F.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,6 +55,7 @@ RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
 :detector(det), physics(phys), kinematic(kin)
 { 
   tallyEdep = new G4double[MaxTally];
+  binLength = offsetX = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,22 +70,7 @@ RunAction::~RunAction()
 
 void RunAction::bookHisto()
 {
-#ifdef G4ANALYSIS_USE
- // Creating the analysis factory
- AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
 
- // Creating the tree factory
- AIDA::ITreeFactory* tf = af->createTreeFactory();
-
- // Creating a tree mapped to an hbook file.
- G4bool readOnly  = false;
- G4bool createNew = true;
- tree = tf->create("testem7.paw", "hbook", readOnly, createNew);
-
- // Creating a histogram factory, whose histograms will be handled by the tree
- AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
-
- // Creating histograms
  G4double length  = detector->GetAbsorSizeX();
  G4double stepMax = physics->GetStepMaxProcess()->GetMaxStep();
  const G4int nbmin = 100;
@@ -89,24 +78,54 @@ void RunAction::bookHisto()
  if (nbBins < nbmin) nbBins = nbmin;
  binLength = length/nbBins;
  offsetX   = 0.5*length;
+ 
+#ifdef USE_AIDA
+ // Create the analysis factory
+ AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
+
+ // Create the tree factory
+ AIDA::ITreeFactory* tf = af->createTreeFactory();
+
+ // Create a tree mapped to an hbook file.
+ G4bool readOnly  = false;
+ G4bool createNew = true;
+ tree = tf->create("testem7.paw", "hbook", readOnly, createNew);
+
+ // Create a histogram factory, whose histograms will be handled by the tree
+ AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
+
+ // Create histograms
  histo[0] = hf->createHistogram1D("1","Edep (MeV/mm)",nbBins, 0,length);
 
  delete hf;
  delete tf;
  delete af;
 #endif
+
+#ifdef USE_ROOT
+ // Create a ROOT file
+ tree = new TFile("testem7.root","recreate");
+ 
+ // Create histograms
+ histo[0] = new TH1F("1","Edep (MeV/mm)",nbBins, 0,length); 
+#endif 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::cleanHisto()
 {
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
-
-//  delete tree;
+  delete tree;
 #endif
+
+#ifdef USE_ROOT
+  tree->Write();        // Writing the histograms to the file
+  tree->Close();        // and closing the file  
+  delete tree;
+#endif   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -125,11 +144,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     bookHisto();
     for (G4int j=0; j<MaxTally; j++) tallyEdep[j] = 0.;
   }  
-  
-  //refresh visualisation
-  //  
-  if (G4VVisManager::GetConcreteInstance())
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -154,10 +168,6 @@ void RunAction::EndOfRunAction(const G4Run*)
    }
   G4cout << "\n---------------------------------------------------------\n"; 
  }
-      
- //draw the events
- if (G4VVisManager::GetConcreteInstance()) 
-   G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
 
  // show Rndm status
  HepRandom::showEngineStatus();

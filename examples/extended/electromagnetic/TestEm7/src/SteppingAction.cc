@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.2 2003-10-10 16:21:32 maire Exp $
+// $Id: SteppingAction.cc,v 1.3 2004-03-10 12:32:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,8 +33,12 @@
 #include "G4VProcess.hh"
 #include "G4ParticleTypes.hh"
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  #include "AIDA/IHistogram1D.h"
+#endif
+
+#ifdef USE_ROOT
+ #include "TH1F.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,10 +59,16 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  G4double edep = aStep->GetTotalEnergyDeposit();
  if (edep <= 0.) return;
  	   
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  G4double x = aStep->GetTrack()->GetPosition().x() + runAction->GetOffsetX();
  G4double binLength = runAction->GetBinLength();
  runAction->GetHisto(0)->fill(x, (edep/binLength)/(MeV/mm));
+#endif
+
+#ifdef USE_ROOT
+ G4double x = aStep->GetTrack()->GetPosition().x() + runAction->GetOffsetX();
+ G4double binLength = runAction->GetBinLength();
+ runAction->GetHisto(0)->Fill(x, (edep/binLength)/(MeV/mm));
 #endif
  
  //fill tallies

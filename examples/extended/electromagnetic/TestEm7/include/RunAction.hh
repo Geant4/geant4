@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.2 2003-10-10 16:21:27 maire Exp $
+// $Id: RunAction.hh,v 1.3 2004-03-10 12:32:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,11 +37,16 @@ class PhysicsList;
 class PrimaryGeneratorAction;
 class G4Run;
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
 namespace AIDA {
  class ITree;
  class IHistogram1D;
 } 
+#endif
+
+#ifdef USE_ROOT
+  class TFile;
+  class TH1F;  
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,12 +63,16 @@ class RunAction : public G4UserRunAction
     
     G4double* GetTallyEdep() {return tallyEdep;};
     
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
     AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
+#endif
     
+#ifdef USE_ROOT
+    TH1F* GetHisto(G4int id) {return histo[id];}
+#endif
+        
     G4double GetBinLength() {return binLength;};
     G4double GetOffsetX()   {return offsetX;} 
-#endif
            
   private:  
     void bookHisto();
@@ -75,14 +84,19 @@ class RunAction : public G4UserRunAction
     PrimaryGeneratorAction* kinematic;
     G4double*               tallyEdep;   
 
-#ifdef G4ANALYSIS_USE
-  private:        
+  private:
+#ifdef USE_AIDA          
     AIDA::ITree* tree;
     AIDA::IHistogram1D* histo[1];
-    
+#endif
+
+#ifdef USE_ROOT         
+    TFile* tree;
+    TH1F*  histo[1];
+#endif 
+            
     G4double binLength;
-    G4double offsetX;
-#endif                     
+    G4double offsetX;                   
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
