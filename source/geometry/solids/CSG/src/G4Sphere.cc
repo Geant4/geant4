@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.35 2005-03-03 16:06:06 allison Exp $
+// $Id: G4Sphere.cc,v 1.36 2005-03-29 13:40:04 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -544,103 +544,90 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   G4double distRMin,distRMax,distSPhi,distEPhi,
            distSTheta,distETheta,distMin;
 
-  rho2=p.x()*p.x()+p.y()*p.y();
-  rad=std::sqrt(rho2+p.z()*p.z());
-  rho=std::sqrt(rho2);
+  rho2 = p.x()*p.x()+p.y()*p.y();
+  rad  = std::sqrt(rho2+p.z()*p.z());
+  rho  = std::sqrt(rho2);
 
-  //
-  // Distance to r shells
-  //
+              distRMax = std::fabs(rad-fRmax);
+  if (fRmin)  distRMin = std::fabs(rad-fRmin);
+    
+  pPhi = std::atan2(p.y(),p.x());
+  if ( pPhi < 0 ) pPhi += twopi;
 
-  distRMax=std::fabs(rad-fRmax);
+  if ( fDPhi < twopi ) // && rho ) // old limitation against (0,0,z)
+  {
+    if ( fSPhi < 0 )  distSPhi = std::fabs( pPhi - (fSPhi + twopi) )*rho;
+    else              distSPhi = std::fabs( pPhi - fSPhi )*rho;
+
+                      distEPhi = std::fabs(pPhi-fSPhi-fDPhi)*rho;
+  }        
+  if ( fDTheta < pi ) // && rad ) // old limitation against (0,0,0)
+  {
+    pTheta     = std::atan2(rho,p.z());
+    distSTheta = std::fabs(pTheta-fSTheta)*rad;
+    distETheta = std::fabs(pTheta-fSTheta-fDTheta)*rad;
+  }
+
+#ifndef G4NEW_SURF_NORMAL
+
+  // Search for side
+  //
   if (fRmin)
   {
-    distRMin=std::fabs(rad-fRmin);
-      
-    if (distRMin<distRMax)
+    if (distRMin < distRMax)
     {
-      distMin=distRMin;
-      side=kNRMin;
+      distMin = distRMin;
+      side    = kNRMin;
     }
     else
     {   
-      distMin=distRMax;
-      side=kNRMax;
+      distMin = distRMax;
+      side    = kNRMax;
     }
   }
   else
   {
-    distMin=distRMax;
-    side=kNRMax;
+    distMin = distRMax;
+    side    = kNRMax;
   }
 
-  //
-  // Distance to phi planes
-  //
-  // Protected against (0,0,z) 
-    
-  pPhi = std::atan2(p.y(),p.x());
-  if (pPhi<0) pPhi += twopi;
-
-  if (fDPhi<twopi&&rho)
+  if (fDPhi < twopi && rho )
   {
-    if (fSPhi<0)
-    {
-      distSPhi=std::fabs(pPhi-(fSPhi+twopi))*rho;
-    }
-    else
-    {
-      distSPhi=std::fabs(pPhi-fSPhi)*rho;
-    }
-
-    distEPhi=std::fabs(pPhi-fSPhi-fDPhi)*rho;
-
     // Find new minimum
     //
-    if (distSPhi<distEPhi)
+    if (distSPhi < distEPhi)
     {
-      if (distSPhi<distMin)
+      if (distSPhi < distMin)
       {
-        distMin=distSPhi;
-        side=kNSPhi;
+        distMin = distSPhi;
+        side    = kNSPhi;
       }
     }
     else
     {
-      if (distEPhi<distMin)
+      if (distEPhi < distMin)
       {
-        distMin=distEPhi;
-        side=kNEPhi;
+        distMin = distEPhi;
+        side    = kNEPhi;
       }
     }
   }
-
-  //
-  // Distance to theta planes
-  //
-
-  if (fDTheta<pi&&rad)
+  if ( fDTheta < pi && rad )
   {
-    pTheta=std::atan2(rho,p.z());
-    distSTheta=std::fabs(pTheta-fSTheta)*rad;
-    distETheta=std::fabs(pTheta-fSTheta-fDTheta)*rad;
-
-    // Find new minimum
-    //
-    if (distSTheta<distETheta)
+    if (distSTheta < distETheta)
     {
-      if (distSTheta<distMin)
+      if (distSTheta < distMin)
       {
         distMin = distSTheta ;
-        side = kNSTheta ;
+        side    = kNSTheta ;
       }
     }
     else
     {
-      if (distETheta<distMin)
+      if (distETheta < distMin)
       {
         distMin = distETheta ;
-        side = kNETheta ;
+        side    = kNETheta ;
       }
     }
   }
@@ -688,6 +675,272 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
                   "Undefined side for valid surface normal to solid.");
       break;    
   } // end case
+
+#else  // algorithm supporting edges/vertices
+
+  G4double delta = 0.5*kCarTolerance;
+  G4ThreeVector nR, nr, nPs, nPe, nTs, nTe;
+  if( rad )
+  {
+                nR = G4ThreeVector(p.x()/rad,p.y()/rad,p.z()/rad);
+    if( fRmin ) nr = G4ThreeVector(-p.x()/rad,-p.y()/rad,-p.z()/rad);
+  }
+  if ( fDPhi < twopi )
+  {
+    nPs = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
+    nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
+  }        
+  if ( fDTheta < pi )
+  {
+    nTs = G4ThreeVector(-std::cos(fSTheta)*std::cos(pPhi),
+                        -std::cos(fSTheta)*std::sin(pPhi),
+                         std::sin(fSTheta)               );
+    nTe = G4ThreeVector( std::cos(fSTheta+fDTheta)*std::cos(pPhi),
+                         std::cos(fSTheta+fDTheta)*std::sin(pPhi),
+                        -std::sin(fSTheta+fDTheta)               );
+  }
+  // search
+
+  if(distRMax <= delta) // R, Phi, Theta
+  {
+    if( fDPhi < twopi )
+    {
+      if ( distSPhi <= delta )
+      {    
+        if( fDTheta < pi )
+	{
+          if ( distSTheta <= delta )   norm = ( nR + nPs + nTs).unit();
+          else
+	  {
+            if ( distETheta <= delta ) norm = ( nR + nPs + nTe).unit();
+            else                       norm = ( nR + nPs ).unit();
+	  } 
+	}
+        else                           norm = ( nR + nPs ).unit();
+      }
+      else
+      {
+        if (distEPhi <= delta)  
+	{    
+          if( fDTheta < pi )
+	  {
+            if ( distSTheta <= delta )   norm = ( nR + nPe + nTs).unit();
+            else
+	    {
+              if ( distETheta <= delta ) norm = ( nR + nPe + nTe).unit();
+              else                       norm = ( nR + nPe ).unit();
+	    } 
+	  }
+          else                           norm = ( nR + nPe ).unit();
+	}
+        else                        norm = nR; 
+      }
+    }
+    else
+    {                        
+      if( fDTheta < pi )
+      {
+        if ( distSTheta <= delta )   norm = ( nR + nTs).unit();
+        else
+	{
+          if ( distETheta <= delta ) norm = ( nR + nTe).unit();
+          else                       norm = nR;
+	} 
+      }
+      else                           norm = nR;
+    }
+  }
+  else // r, Phi, Theta
+  {
+    if(fRmin)
+    {
+      if( distRMin <= delta)
+      {
+        if( fDPhi < twopi )
+        {
+          if ( distSPhi <= delta )
+          {    
+            if( fDTheta < pi )
+	    {
+              if ( distSTheta <= delta )   norm = ( nr + nPs + nTs).unit();
+              else
+	      {
+                if ( distETheta <= delta ) norm = ( nr + nPs + nTe).unit();
+                else                       norm = ( nr + nPs ).unit();
+	      } 
+	    }
+            else                           norm = ( nr + nPs ).unit();
+          }
+          else
+          {
+            if (distEPhi <= delta)  
+	    {    
+              if( fDTheta < pi )
+	      {
+                if ( distSTheta <= delta )   norm = ( nr + nPe + nTs).unit();
+                else
+	        {
+                  if ( distETheta <= delta ) norm = ( nr + nPe + nTe).unit();
+                  else                       norm = ( nr + nPe ).unit();
+	        } 
+	      }
+              else                           norm = ( nr + nPe ).unit();
+	    }
+            else                        norm = nr; 
+          }
+        }
+        else
+        {                        
+          if( fDTheta < pi )
+          {
+            if ( distSTheta <= delta )   norm = ( nr + nTs).unit();
+            else
+	    {
+              if ( distETheta <= delta ) norm = ( nr + nTe).unit();
+              else                       norm = nr;
+	    } 
+          }
+          else                           norm = nr;
+        }
+      }
+      else // Phi, Theta
+      {
+        if( fDPhi < twopi )
+        {
+          if ( distSPhi <= delta )
+          {    
+            if( fDTheta < pi )
+	    {
+              if ( distSTheta <= delta )   norm = ( nPs + nTs).unit();
+              else
+	      {
+                if ( distETheta <= delta ) norm = ( nPs + nTe).unit();
+                else                       norm = nPs;
+	      } 
+	    }
+            else                           norm = nPs;
+          }
+          else
+          {
+            if (distEPhi <= delta)  
+	    {    
+              if( fDTheta < pi )
+	      {
+                if ( distSTheta <= delta )   norm = ( nPe + nTs).unit();
+                else
+	        {
+                  if ( distETheta <= delta ) norm = ( nPe + nTe).unit();
+                  else                       norm = nPe;
+	        } 
+	      }
+              else                           norm = nPe;
+	    }
+            else // exception 
+	    {
+              G4Exception("G4Sphere::SurfaceNormal()", "Notification", JustWarning,
+                          "Point p is out of surface");
+	    } 
+          }
+        }
+        else
+        {                        
+          if( fDTheta < pi )
+          {
+            if ( distSTheta <= delta )   norm = nTs;
+            else
+	    {
+              if ( distETheta <= delta ) norm = nTe;
+              else 
+	      {
+                G4Exception("G4Sphere::SurfaceNormal()", "Notification", JustWarning,
+                            "Point p is out of surface");
+	      }
+	    } 
+          }
+          else
+	  {
+            G4Exception("G4Sphere::SurfaceNormal()", "Notification", JustWarning,
+                        "Point p is out of surface");
+	  }
+        }
+      }
+    }
+    else // Phi, Theta
+    {
+      if( fDPhi < twopi )
+      {
+        if ( distSPhi <= delta )
+        {    
+          if( fDTheta < pi )
+	  {
+            if ( distSTheta <= delta )
+	    {
+              if (distEPhi <= delta) norm = ( nPs + nPe + nTs + nTe).unit(); 
+	      else                   norm = ( nPs + nTs).unit();
+	    }
+            else
+	    {
+              if ( distETheta <= delta ) norm = ( nPs + nTe).unit();
+              else                       norm = nPs;
+	    } 
+	  }
+          else     
+	  {
+            if (distEPhi <= delta)        norm = ( nPs + nPe).unit();
+	    else                          norm = nPs;
+	  }
+        }
+        else  
+        {
+          if (distEPhi <= delta)  
+	  {    
+            if( fDTheta < pi )
+	    {
+              if ( distSTheta <= delta )   norm = ( nPe + nTs).unit();
+              else
+	      {
+                if ( distETheta <= delta ) norm = ( nPe + nTe).unit();
+                else                       norm = nPe;
+	      } 
+	    }
+            else                           norm = nPe;
+	  }
+          else // exception 
+	  {
+            G4Exception("G4Sphere::SurfaceNormal()", "Notification", JustWarning,
+                        "Point p is out of surface");
+	  } 
+        }
+      }
+      else  // theta only, if any
+      {                        
+        if( fDTheta < pi )
+        {
+          if ( distSTheta <= delta )   
+	  {
+            if ( distETheta <= delta ) norm = ( nTs + nTe ).unit();   
+	    else                       norm = nTs;
+	  }
+          else
+	  {
+            if ( distETheta <= delta ) norm = nTe;
+            else 
+	    {
+              G4Exception("G4Sphere::SurfaceNormal()", "Notification", JustWarning,
+                          "Point p is out of surface");
+	    }
+	  } 
+        }
+        else
+	{
+          G4Exception("G4Sphere::SurfaceNormal()", "Notification", JustWarning,
+                      "Point p is out of surface");
+	}
+      }
+    }
+  }
+
+#endif
 
   return norm;
 }
