@@ -1,5 +1,5 @@
 #
-# Macro file 'TestEm10.large_N.in' for testing "TestEm10"
+# Macro file 'TestEm10.in' for testing "TestEm10"
 #
 #
 /run/initialize
@@ -8,35 +8,36 @@
 /gun/energy 9000.0 MeV
 
 # Test  G4FoamXrayTRmodel
-/XTRdetector/setModel 1
-/run/beamOn 1000
+#/XTRdetector/setModel 1
+#/run/beamOn 1000
 # Test G4FoamXTRdEdx
-/XTRdetector/setModel 2
-/run/beamOn 1000
-# Test G4GamDistrXrayTRmodel
-/XTRdetector/setModel 3
-/run/beamOn 1000
-# Test G4GamDistrXTRdEdx
-/XTRdetector/setModel 4
-/run/beamOn 1000
+#/XTRdetector/setModel 2
+#/run/beamOn 10
+## Test G4GamDistrXrayTRmodel
+#/XTRdetector/setModel 3
+#/run/beamOn 10
+## Test G4GamDistrXTRdEdx
+#/XTRdetector/setModel 4
+#/run/beamOn 10
 # Test G4IrregularXrayTRmodel
-/XTRdetector/setModel 5
-/run/beamOn 1000
+#/XTRdetector/setModel 5
+#/run/beamOn 10
 # Test  G4IrregularXTRdEdx
-/XTRdetector/setModel 6
-/run/beamOn 1000
+#/XTRdetector/setModel 6
+#/run/beamOn 10
 # Test G4PlateIrrGasXrayTRmodel
-/XTRdetector/setModel 7
-/run/beamOn 1000
+#/XTRdetector/setModel 7
+#/run/beamOn 10
 # Test G4PlateIrrGasXTRdEdx
-/XTRdetector/setModel 8
-/run/beamOn 1000
+#/XTRdetector/setModel 8
+#/run/beamOn 10
 # Test G4RegularXrayTRmodel
-/XTRdetector/setModel 9
-/run/beamOn 1000
+#/XTRdetector/setModel 9
+#/run/beamOn 10
 # Test G4RegularXTRdEdx
-/XTRdetector/setModel 10
-/run/beamOn 1000
+#/XTRdetector/setModel 10
+/run/beamOn 10000
+
 
 
 
