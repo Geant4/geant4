@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.10 2003-11-06 16:28:57 urban Exp $
+// $Id: G4MscModel.cc,v 1.11 2003-11-10 13:40:28 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,6 +47,9 @@
 // 06-11-03 precision problems solved for high energy (PeV) particles
 //          change in the tail of the angular distribution
 //          highKinEnergy is set to 100 PeV (L.Urban) 
+//
+// 10-11-03 highKinEnergy is set back to 100 TeV, some tail tuning +
+//          cleaning (L.Urban) 
 //
 
 // Class Description:
@@ -82,8 +85,7 @@ G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
   facxsi(m_facxsi),
   samplez(m_samplez)
 {
- // highKinEnergy = 10.0*TeV;
-  highKinEnergy = 100.0*PeV;
+  highKinEnergy = 100.0*TeV;
   lowKinEnergy  = 0.1*keV;
   stepmin       = 1.e-6*mm;
 }
@@ -106,7 +108,7 @@ void G4MscModel::Initialise(const G4ParticleDefinition* p,
                               const G4DataVector&)
 {
   // set values of some data members
-  xsi = facxsi*2.25  ;
+  xsi = facxsi*2.8215  ;
   b = 1. ;
   sigmafactor = twopi*classic_electr_radius*classic_electr_radius;
   particle = p;
@@ -211,7 +213,6 @@ G4double G4MscModel::ComputeTransportCrossSection(
            {65.87,59.06,15.87,7.570,5.567,3.650,2.682,2.182,
             1.939,1.579,1.325,1.178,1.108,1.014,0.965,0.947,
             0.941,0.938,0.940,0.944,0.946,0.954,1.1922     },
-          // {45.60,47.34,15.92,7.810,5.755,3.767,2.760,2.239, // paper.....
            {55.60,47.34,15.92,7.810,5.755,3.767,2.760,2.239,
             1.985,1.609,1.343,1.188,1.113,1.013,0.960,0.939,
             0.933,0.930,0.933,0.936,0.939,0.949,1.2026     }};
@@ -517,15 +518,13 @@ G4double G4MscModel::TrueStepLength(G4double geomStepLength)
 
 G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
 {
-  G4double cth = 1.;
+  G4double cth = 1. ;
   currentTau = trueStepLength/lambda0;
   if(trueStepLength < stepmin)
     cth = exp(-currentTau) ;
   else
   {
-   // if (currentTau > taubig) cth = -1.+2.*G4UniformRand();
-    if (currentTau > taubig) 
-       cth = -1.+2.*G4UniformRand();
+    if (currentTau > taubig) cth = -1.+2.*G4UniformRand();
     else if (currentTau >= tausmall)
     {
       if(lambda1 > 0.)
@@ -536,12 +535,9 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
           currentTau = -log(cthm)-alam*
                        log(1.-(trueStepLength-0.5*tPathLength)/alam)/lambdam ;
       }
-     // if(currentTau > taubig) cth = -1.+2.*G4UniformRand();
-    if (currentTau > taubig) 
-       cth = -1.+2.*G4UniformRand();
+      if(currentTau > taubig) cth = -1.+2.*G4UniformRand();
       else
       {
-       // const G4double tau0 = 0.02, tau1 = 1.e-4  ;
         const G4double c_highland = 13.6*MeV, corr_highland=0.038 ;
 
         G4double a ;
@@ -558,7 +554,7 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
         G4double beta=sqrt(currentKinEnergy*(currentKinEnergy+2.*mass))/
                       (currentKinEnergy+mass) ;
 
-        // corrs to Highland for small t/X0
+        // corr to Highland for small thickness (t/X0)
         const G4double xx0lim1=1.e-3,xx0lim2=0.055,
                        corr1=0.88, corr2=-0.03 ;
         G4double corr = 1. ;
@@ -569,6 +565,7 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
         }
 
 
+        // corr to Highland for nonrelativistic particles
         const G4double blim = 0.400, corr3 = 1.733 ,
                    corr4 = 1.+blim*corr3 ;
         G4double corrbeta = 1. ;
@@ -590,12 +587,21 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
         const G4double x1fac2 = (1.-(1.+xsi)*x1fac1)/(1.-x1fac1) ;
         const G4double x1fac3 = 1.3      ; // x1fac3 >= 1.  !!!!!!!!!
 
-        G4double xmean1,xmean2,eaa,b1,bx,qprob,prob;
-        G4double c=1., c1=0., eb1=0., ebx=0. ;
+       // G4double xmean1,xmean2,eaa,b1,bx,qprob,prob;
+       // G4double c=1., c1=0., eb1=0., ebx=0. ;
+       // G4double x0 = 1.-xsi/a;
+       // G4double oneminusx0=xsi/a ;
+       // G4double oneplusx0=2.+xsi/a ;
+       // G4double ea = 0.;
+
+	G4double ea,eaa,xmean1 ;
+	G4double b1 = 2., bx = 2., c = 1., c1 = 0.,
+	         eb1 = 0., ebx = 0., xmean2 = 0. ;
+        G4double prob = 1., qprob ;		 
         G4double x0 = 1.-xsi/a;
       	G4double oneminusx0=xsi/a ;
 	G4double oneplusx0=2.+xsi/a ;
-        G4double ea = 0.;
+
 
         if (x0 <= -1.)
         {
@@ -611,14 +617,14 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
           ea = exp(-a*oneminusx0);
           eaa = 1.-ea ;
           xmean1 = 1.-1./a+oneminusx0*ea/eaa ;
-
-	  b = 1. ; 
-          b1 = 2. ;
-          bx = b1 ;
-          xmean2 = 0. ;
-
-          prob = 1. ;
           qprob = xmeanth/xmean1 ;
+
+	//  b = 1. ; 
+        //  b1 = 2. ;
+        //  bx = b1 ;
+        //  xmean2 = 0. ;
+
+        //  prob = 1. ;
         }
         else
         {
@@ -636,12 +642,12 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
           eaa = 1.-ea ;
           xmean1 = 1.-x1fac2/a ;
 
-	  b = 1.+xmeanth1/a ; // ??????? empirical     
+	  b = xmean1 ;
           b1 = b+1. ;
-	  bx = (xsi+xmeanth1)/a ; 
+	  bx = (xsi/eaa-1.)/a ;
 	  
           // c from continuity of the 1st derivative
-	  c = xsi+xmeanth1 ; 
+	  c = xsi/eaa-1. ;
           if(c == 2.)
           {
             xmean2 = b-b1*bx*log(b1/bx)/oneplusx0  ;
@@ -689,7 +695,8 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
       }
     }
   }
-  return cth;
+
+  return cth ;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

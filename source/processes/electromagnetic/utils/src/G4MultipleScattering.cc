@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.44 2003-11-06 16:28:57 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.45 2003-11-10 13:40:28 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -60,7 +60,6 @@
 //          method
 // 28-03-03 Move to model design (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
-// 06-11-03 highKineticEnergy= 100.*PeV, totBins=120 (L.Urban)
 //
 // -----------------------------------------------------------------------------
 //
@@ -74,7 +73,6 @@
 
 G4MultipleScattering::G4MultipleScattering(const G4String& processName)
      : G4VMultipleScattering(processName),
-      // totBins(100),
        totBins(120),
        facrange(0.199),
        dtrl(0.15),
@@ -87,8 +85,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
        samplez(true)
 {
   lowKineticEnergy = 0.1*keV;
- // highKineticEnergy= 100.*TeV;
-  highKineticEnergy= 100.*PeV;
+  highKineticEnergy= 100.*TeV;
   
   tlimit           = 1.e10*mm;
   tlimitmin        = 1.e-7*mm;
@@ -160,6 +157,7 @@ G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
       }
     }
   }
+
   return tPathLength;
 }
 
