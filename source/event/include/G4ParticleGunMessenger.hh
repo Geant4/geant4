@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleGunMessenger.hh,v 1.4 2000-10-18 12:41:21 kurasige Exp $
+// $Id: G4ParticleGunMessenger.hh,v 1.5 2000-10-19 13:29:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,10 +62,11 @@ class G4ParticleGunMessenger: public G4UImessenger
     G4UIcommand *               ionCmd;
 
   private: // for ion shooting
-    G4bool fShootIon; 
-    G4int  fAtomicNumber;
-    G4int  fAtomicMass;
-    G4int  fIonCharge;
+    G4bool   fShootIon; 
+    G4int    fAtomicNumber;
+    G4int    fAtomicMass;
+    G4int    fIonCharge;
+    G4double fIonExciteEnergy;
 };
 
 #endif

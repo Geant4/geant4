@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleGunMessenger.cc,v 1.3 2000-10-18 12:41:25 kurasige Exp $
+// $Id: G4ParticleGunMessenger.cc,v 1.4 2000-10-19 13:29:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -99,7 +99,9 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   ionCmd->SetGuidance("[usage] /gun/ion Z A Q");
   ionCmd->SetGuidance("        Z:(int) AtomicNumber");
   ionCmd->SetGuidance("        A:(int) AtomicMass");
-  ionCmd->SetGuidance("        Q:(int) Charge of Ion");
+  ionCmd->SetGuidance("        Q:(int) Charge of Ion (in unit of e)");
+  ionCmd->SetGuidance("        E:(double) Excitation energy (in keV)");
+  
   G4UIparameter* param;
   param = new G4UIparameter("Z",'i',false);
   param->SetDefaultValue("1");
@@ -109,6 +111,9 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   ionCmd->SetParameter(param);
   param = new G4UIparameter("Q",'i',true);
   param->SetDefaultValue("0");
+  ionCmd->SetParameter(param);
+  param = new G4UIparameter("E",'d',true);
+  param->SetDefaultValue("0.0");
   ionCmd->SetParameter(param);
   
   // set initial value to G4ParticleGun
@@ -171,10 +176,16 @@ void G4ParticleGunMessenger::SetNewValue(G4UIcommand * command,G4String newValue
 	fIonCharge = fAtomicNumber;
       } else {
 	fIonCharge = StoI(sQ);
+        sQ = next();
+        if (sQ.isNull()) {
+          fIonExciteEnergy = 0.0;
+        } else {
+          fIonExciteEnergy = StoD(sQ) * keV;
+        }
       }
 
       G4ParticleDefinition* ion;
-      ion =  particleTable->GetIon( fAtomicNumber, fAtomicMass, 0.);
+      ion =  particleTable->GetIon( fAtomicNumber, fAtomicMass, fIonExciteEnergy);
       if (ion==0) {
 	G4cout << "Ion with Z=" << fAtomicNumber;
 	G4cout << " A=" << fAtomicMass << "is not be defined" << G4endl;    
