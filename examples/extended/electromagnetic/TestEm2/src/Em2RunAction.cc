@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.cc,v 1.13 2001-11-28 18:57:24 maire Exp $
+// $Id: Em2RunAction.cc,v 1.14 2002-05-31 16:06:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +49,15 @@
 #include "Randomize.hh"
 
 #ifndef G4NOHIST
- #include "CLHEP/Hist/HBookFile.h"
+ #include "AIDA/IAnalysisFactory.h"
+ #include "AIDA/ITreeFactory.h"
+ #include "AIDA/ITree.h"
+ #include "AIDA/IHistogramFactory.h"
+ #include "AIDA/IHistogram1D.h"
+ #include "AIDA/IAxis.h"
+ #include "AIDA/IAnnotation.h"
+ #include "AIDA/ITupleFactory.h"
+ #include "AIDA/ITuple.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,11 +83,6 @@ Em2RunAction::Em2RunAction(Em2DetectorConstruction*   det,
   sumERadialCumul.resize(nRbin, 0.0);
   sumE2Radial.resize(nRbin, 0.0);
   sumE2RadialCumul.resize(nRbin, 0.0);
-  
-#ifndef G4NOHIST
-   hbookManager = NULL;
-#endif
-    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -94,50 +97,62 @@ Em2RunAction::~Em2RunAction()
 void Em2RunAction::bookHisto()
 {
 #ifndef G4NOHIST
-  hbookManager = new HBookFile("TestEm2.paw", 68);
-  assert (hbookManager != 0);
-  
+ // Creating the analysis factory
+ IAnalysisFactory* af = AIDA_createAnalysisFactory();
+ 
+ // Creating the tree factory
+ ITreeFactory* tf = af->createTreeFactory();
+ 
+ // Creating a tree mapped to an hbook file.
+ tree = tf->create("testem2.paw", false, false, "hbook");
+
+ // Creating a histogram factory, whose histograms will be handled by the tree
+ IHistogramFactory* hf = af->createHistogramFactory(*tree);  
   G4double Ekin = Em2Kin->GetParticleGun()->GetParticleEnergy();
   G4double dLradl = Em2Det->GetdLradl();
   G4double dRradl = Em2Det->GetdRradl();
   
-  histo1 = hbookManager->histogram("total energy deposit (percent of E inc)",
+  histo[0] = hf->create1D( "1","total energy deposit (percent of E inc)",
                                     100,0.,100.);
                                     
-  histo2 = hbookManager->histogram("total charged tracklength (radl)",
+  histo[1] = hf->create1D( "2","total charged tracklength (radl)",
                                     100,0.,100.*Ekin/GeV);
                                     
-  histo3 = hbookManager->histogram("total neutral tracklength (radl)",
+  histo[2] = hf->create1D( "3","total neutral tracklength (radl)",
                                     100,0.,1000.*Ekin/GeV);
                                     
-  histo4 = hbookManager->histogram("longit energy profile (% of E inc)",
+  histo[3] = hf->create1D( "4","longit energy profile (% of E inc)",
                                     nLbin,0.,nLbin*dLradl);
                                     
   G4double Zmin=0.5*dLradl, Zmax=Zmin+nLbin*dLradl;
-  histo5 = hbookManager->histogram("cumul longit energy dep (% of E inc)",
+  histo[4] = hf->create1D( "5","cumul longit energy dep (% of E inc)",
                                     nLbin,Zmin,Zmax);
                                     
-  histo6 = hbookManager->histogram("rms on cumul longit Edep (% of E inc)",
+  histo[5] = hf->create1D( "6","rms on cumul longit Edep (% of E inc)",
                                     nLbin,Zmin,Zmax);
                                     
-  histo7 = hbookManager->histogram("nb of gamma per plane",
+  histo[6] = hf->create1D( "7","nb of gamma per plane",
                                     nLbin,Zmin,Zmax);
                                     
-  histo8 = hbookManager->histogram("nb of positron per plane",
+  histo[7] = hf->create1D( "8","nb of positron per plane",
                                     nLbin,Zmin,Zmax);
                                     
-  histo9 = hbookManager->histogram("nb of electron per plane",
+  histo[8] = hf->create1D( "9","nb of electron per plane",
                                     nLbin,Zmin,Zmax);
                                     
-  hist10 = hbookManager->histogram("radial energy profile (% of E inc)",
+  histo[9] = hf->create1D("10","radial energy profile (% of E inc)",
                                     nRbin,0.,nRbin*dRradl);
                                     
   G4double Rmin=0.5*dRradl, Rmax=Rmin+nRbin*dRradl;
-  hist11 = hbookManager->histogram("cumul radial energy dep (% of E inc)",
+  histo[10]= hf->create1D("11","cumul radial energy dep (% of E inc)",
                                     nRbin,Rmin,Rmax);
                                     
-  hist12 = hbookManager->histogram("rms on cumul radial Edep (% of E inc)",
+  histo[11]= hf->create1D("12","rms on cumul radial Edep (% of E inc)",
                                     nRbin,Rmin,Rmax);
+				    
+  delete hf;
+  delete tf;
+  delete af;				    
 #endif
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -145,14 +160,11 @@ void Em2RunAction::bookHisto()
 void Em2RunAction::cleanHisto()
 {
 #ifndef G4NOHIST
-  // Write histogram file 
-  hbookManager->write();
+  tree->commit();       // Writing the histograms to the file
+  tree->close();        // and closing the tree (and the file)
 
-  delete histo1; delete histo2; delete histo3;
-  delete histo4; delete histo5; delete histo6;
-  delete histo7; delete histo8; delete histo9;
-  delete hist10; delete hist11; delete hist12;
-  delete hbookManager;
+  delete tree;
+  delete [] histo;
 #endif  
 }
 
@@ -253,9 +265,9 @@ void Em2RunAction::fillPerEvent()
   G4double mass=Em2Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
   G4double radl=Em2Det->GetMaterial()->GetRadlen();
   
-  histo1->accumulate(100.*dLCumul/(Ekin+mass));
-  histo2->accumulate(ChargTrLength/radl);
-  histo3->accumulate(NeutrTrLength/radl);
+  histo[0]->fill(100.*dLCumul/(Ekin+mass));
+  histo[1]->fill(ChargTrLength/radl);
+  histo[2]->fill(NeutrTrLength/radl);
 #endif      
 }
 
@@ -299,14 +311,14 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
 
 #ifndef G4NOHIST                                    
     bin = i*dLradl;                                
-    histo4->accumulate(bin,MeanELongit[i]/dLradl);
+    histo[3]->fill(bin,MeanELongit[i]/dLradl);
     bin = (i+1)*dLradl;
-    histo5->accumulate(bin,MeanELongitCumul[i]);
-    histo6->accumulate(bin, rmsELongitCumul[i]);
+    histo[4]->fill(bin,MeanELongitCumul[i]);
+    histo[5]->fill(bin, rmsELongitCumul[i]);
     
-    histo7->accumulate(bin, gammaFlux[i]);
-    histo8->accumulate(bin, positronFlux[i]);
-    histo9->accumulate(bin, electronFlux[i]);
+    histo[6]->fill(bin, gammaFlux[i]);
+    histo[7]->fill(bin, positronFlux[i]);
+    histo[8]->fill(bin, electronFlux[i]);
 #endif                                            
    }
    
@@ -329,10 +341,10 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
                                  
 #ifndef G4NOHIST                                     
     bin = i*dRradl;                                
-    hist10->accumulate(bin,MeanERadial[i]/dRradl);
+    histo[ 9]->fill(bin,MeanERadial[i]/dRradl);
     bin = (i+1)*dRradl;
-    hist11->accumulate(bin,MeanERadialCumul[i]);
-    hist12->accumulate(bin, rmsERadialCumul[i]);
+    histo[10]->fill(bin,MeanERadialCumul[i]);
+    histo[11]->fill(bin, rmsERadialCumul[i]);
 #endif                                           
    }
 

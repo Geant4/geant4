@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.hh,v 1.10 2001-11-28 18:57:24 maire Exp $
+// $Id: Em2RunAction.hh,v 1.11 2002-05-31 16:06:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,8 +54,8 @@ class Em2PrimaryGeneratorAction;
 class G4Run;
 
 #ifndef G4NOHIST
- class HepTupleManager;
- class HepHistogram;
+ class ITree;
+ class IHistogram1D;
 #endif
 
 class Em2RunAction : public G4UserRunAction
@@ -110,12 +110,9 @@ class Em2RunAction : public G4UserRunAction
     G4double sumNeutrTrLength;
     G4double sum2NeutrTrLength;
                   
-#ifndef G4NOHIST        
-    HepTupleManager* hbookManager;
-    HepHistogram *histo1, *histo2, *histo3;    
-    HepHistogram *histo4, *histo5, *histo6;
-    HepHistogram *histo7, *histo8, *histo9;
-    HepHistogram *hist10, *hist11, *hist12;
+#ifndef G4NOHIST
+    ITree* tree;               // the tree should only be deleted at the end
+    IHistogram1D* histo[12];    // (after writing the histos to file)        
 #endif
     
 };
