@@ -37,6 +37,7 @@
 
 # Add the world volume to the current scene
 /vis/scene/add/volume
+#/vis/scene/add/volume Layer
 #/vis/scene/add/trajectories
 /tracking/storeTrajectory 1
 
