@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.6 1999-11-12 19:19:38 morita Exp $
+# $Id: globlib.gmk,v 1.7 1999-11-14 16:09:50 morita Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -26,7 +26,6 @@ else
 	@echo Copying tmp schema file to $(G4SCHEMA_DIR) for FDID $(G4SCHEMA_FDID)
 	@$(HEP_ODBMS_DIR)/etc/getdb $(G4TMPSCHEMA_BOOT) \
 	  $(G4SCHEMA_DIR)/G4SCHEMA $(G4SCHEMA_FDID)
-	@(cd $(G4INSTALL)/source; $(MAKE) libmap)
 endif
 
 ifndef G4ODBMS
