@@ -42,6 +42,7 @@
 // 09 August 2000 V.Ivanchenko Add GetContinuousStepLimit
 // 17 August 2000 V.Ivanchenko Add IonFluctuationModel
 // 23 Oct    2000 V.Ivanchenko Renew comments
+// 30 Oct    2000 V.Ivanchenko Add minGammaEnergy and minElectronEnergy
 // ------------------------------------------------------------
  
 // Class Description:
@@ -174,6 +175,13 @@ public: // With description
                              G4double kineticEnergy);
   // This method returns electronic dE/dx for protons or antiproton.
 
+  void SetCutForSecondaryPhotons(G4double cut);
+  // Set threshold energy for fluorescence 
+
+  void SetCutForAugerElectrons(G4double cut);
+  // Set threshold energy for Auger electron production
+
+
 protected:
 
 private:
@@ -233,10 +241,9 @@ private:
   // Function to sample electronic losses
 
   G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4Material* material,
-						  G4double incidentEnergy,
-						  G4double eLoss,
-						  G4double hMass,
-						  G4double hMomentum);
+					          G4double incidentEnergy,
+					          G4double hMass,
+					          G4double eLoss);
 
   G4int SelectRandomAtom(const G4Material* material, 
                                G4double kineticEnergy) const;
@@ -271,7 +278,9 @@ private:
   G4bool theBarkas;
 
   G4DataVector cutForDelta;
-  G4double* gammaCutInEnergy;
+  G4DataVector cutForGamma;
+  G4double minGammaEnergy;
+  G4double minElectronEnergy;
   G4PhysicsTable* theMeanFreePathTable;
   
   const G4double paramStepLimit; // parameter limits the step at low energy
@@ -288,7 +297,33 @@ private:
 
 };
 
-#include "G4hLowEnergyIonisationVI.icc"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+         
+inline G4double G4hLowEnergyIonisationVI::GetContinuousStepLimit(
+                                        const G4Track& track,
+                                              G4double,
+                                              G4double currentMinimumStep,
+                                              G4double&)
+{ 
+  G4double Step =
+    GetConstraints(track.GetDynamicParticle(),track.GetMaterial()) ;
+
+  if((Step>0.0)&&(Step<currentMinimumStep))
+     currentMinimumStep = Step ;
+
+  return Step ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4hLowEnergyIonisationVI::IsApplicable(
+                                const G4ParticleDefinition& particle) 
+{
+   return(particle.GetPDGCharge() != 0.0 
+       && particle.GetPDGMass() > proton_mass_c2*0.1);
+}
+         
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
  

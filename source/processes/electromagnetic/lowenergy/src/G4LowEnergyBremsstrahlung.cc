@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.51 2001-10-29 09:24:55 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.52 2001-10-30 19:50:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -322,12 +322,12 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& track,
 
 void G4LowEnergyBremsstrahlung::PrintInfoDefinition()
 {
-  G4String comments = "Total cross sections from EEDL database,";
-  comments += "\n Gamma energy sampled from a parameterised formula.";
-  comments += "\n Implementation of the continuous dE/dx part.";  
-  comments += "\n At present it can be used for electrons ";
-  comments += " in the energy range [250eV,100GeV]";
-  comments += "\n the process must work with G4LowEnergyIonisation";
+  G4String comments = "Total cross sections from EEDL database.";
+  comments += "\n      Gamma energy sampled from a parameterised formula.";
+  comments += "\n      Implementation of the continuous dE/dx part.";  
+  comments += "\n      At present it can be used for electrons ";
+  comments += "in the energy range [250eV,100GeV].";
+  comments += "\n      The process must work with G4LowEnergyIonisation.";
   
   G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
 }         
