@@ -1,3 +1,13 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4IntersectionSolid.cc,v 1.6 2000-04-27 09:59:40 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // Implementation of methods for the class G4IntersectionSolid
 //
 // History:

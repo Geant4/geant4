@@ -1,9 +1,22 @@
-// Class description
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
 //
-//  A displaced solid is a solid that has been shifted from its original
-//   frame of reference to a new one.   It is meant to be used only for
-//   simplifying the implementation of "Boolean solids". 
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
 //
+// $Id: G4DisplacedSolid.hh,v 1.7 2000-04-27 09:59:36 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4DisplacedSolid
+//
+// Class description:
+//
+// A displaced solid is a solid that has been shifted from its original
+// frame of reference to a new one. It is meant to be used only for
+// simplifying the implementation of "Boolean solids". 
+
 // History:
 //
 // 28.10.98 V.Grichine, creation according J. Apostolakis's recommendations
@@ -17,36 +30,36 @@
 #include "G4Transform3D.hh"
 #include "G4AffineTransform.hh"
 
-class G4DisplacedSolid    : public G4VSolid
+class G4DisplacedSolid : public G4VSolid
 {
-public:  // With description 
-                  G4DisplacedSolid( const G4String& pName,
-                                       G4VSolid* pSolid ,
-                                       G4RotationMatrix* rotMatrix,
-                                 const G4ThreeVector& transVector  ) ;
+  public:  // with description
 
-                  G4DisplacedSolid( const G4String& pName,
-                                       G4VSolid* pSolid ,
-                                 const G4Transform3D& transform  ) ;
+    G4DisplacedSolid( const G4String& pName,
+                            G4VSolid* pSolid ,
+                            G4RotationMatrix* rotMatrix,
+                      const G4ThreeVector& transVector  ) ;
 
-public: 
-                  G4DisplacedSolid( const G4String& pName,
-                                    G4VSolid* pSolid ,
-				    const G4AffineTransform directTransform );
-         // For use in instantiating a transient instance from a persistent one:
+    G4DisplacedSolid( const G4String& pName,
+                            G4VSolid* pSolid ,
+                      const G4Transform3D& transform  ) ;
 
-public:  // With description 
-         virtual ~G4DisplacedSolid() ;
-  // 
-  // It also has all the methods that a solid requires, eg. 
-    EInside Inside( const G4ThreeVector& p ) const ;
+    G4DisplacedSolid( const G4String& pName,
+                            G4VSolid* pSolid ,
+		      const G4AffineTransform directTransform );
+      // For use in instantiating a transient instance from a persistent one.
 
-public: 
-     G4bool CalculateExtent(const EAxis pAxis,
-			    const G4VoxelLimits& pVoxelLimit,
-			    const G4AffineTransform& pTransform,
-				  G4double& pMin, G4double& pMax) const ;
-       
+    virtual ~G4DisplacedSolid() ;
+
+  public:  // without description 
+
+    // It also has all the methods that a solid requires, eg.
+
+    EInside Inside( const G4ThreeVector& p ) const ; 
+
+    G4bool CalculateExtent(const EAxis pAxis,
+			   const G4VoxelLimits& pVoxelLimit,
+			   const G4AffineTransform& pTransform,
+				 G4double& pMin, G4double& pMax) const ;
 
     G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const ;
 
@@ -68,42 +81,46 @@ public:
 	                    const G4int n,
                             const G4VPhysicalVolume* pRep ) ;
                                    
-public:  // With description 
+  public:  // with description 
 
-    virtual G4GeometryType  GetEntityType() const 
-    { return G4String("G4DisplacedSolid"); }
+    virtual G4GeometryType  GetEntityType() const;
 
-    // If the Solid is a "G4DisplacedSolid", return a self pointer
-    //  else return 0
     virtual const G4DisplacedSolid* GetDisplacedSolidPtr() const   ;
     virtual       G4DisplacedSolid* GetDisplacedSolidPtr();
+      // If the Solid is a "G4DisplacedSolid",
+      // return a self pointer else return 0.
 
-    // Access methods
     G4VSolid*                GetConstituentMovedSolid() const;
     G4AffineTransform        GetTransform() const; 
     G4AffineTransform        GetDirectTransform() const; 
-    
-    // Get the rotation/translation, as applied to the frame of reference
+      // Access methods.
+
     G4RotationMatrix         GetFrameRotation() const;
     G4ThreeVector            GetFrameTranslation() const; 
+      // Get the rotation/translation, as applied to the frame of reference.
 
-    // Get the rotation/translation, as applied to the object
     G4RotationMatrix         GetObjectRotation() const;
     G4ThreeVector            GetObjectTranslation() const; 
+      // Get the rotation/translation, as applied to the object.
 
-public:
-    // For creating graphical representations   (ie for visualisation)
+  public:  // without description
+
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
     G4NURBS*      CreateNURBS      () const ;
+      // For creating graphical representations (ie for visualisation).
 
-protected:
-                  G4VSolid* fPtrSolid ;
-                  G4AffineTransform* fPtrTransform ;
-                  G4AffineTransform* fDirectTransform ;
+  protected:
+
+    G4VSolid* fPtrSolid ;
+    G4AffineTransform* fPtrTransform ;
+    G4AffineTransform* fDirectTransform ;
               
-private:
-
 } ;
+
+inline G4GeometryType G4DisplacedSolid::GetEntityType() const 
+{
+   return G4String("G4DisplacedSolid");
+}
 
 #endif

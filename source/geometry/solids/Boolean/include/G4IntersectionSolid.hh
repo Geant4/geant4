@@ -1,5 +1,20 @@
-// Class for description of intersection of two CSG solids
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
 //
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4IntersectionSolid.hh,v 1.3 2000-04-27 09:59:36 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4IntersectionSolid
+//
+// Class description:
+//
+// Class for description of intersection of two CSG solids.
+
 // History: 
 //
 // 12.09.98 V. Grichine, initial design according to J.Apostolakis's
@@ -11,38 +26,41 @@
 
 #include "G4BooleanSolid.hh"
 #include "G4VSolid.hh"
-// #include "G4PlacedSolid.hh"
 
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
 #include "G4Transform3D.hh"
 #include "G4AffineTransform.hh"
 
-class G4IntersectionSolid: public G4BooleanSolid
+class G4IntersectionSolid : public G4BooleanSolid
 {
-public:
-                  G4IntersectionSolid( const G4String& pName,
-                                             G4VSolid* pSolidA ,
-                                             G4VSolid* pSolidB   ) ;
+  public:  // with description
 
-                  G4IntersectionSolid( const G4String& pName,
-                                             G4VSolid* pSolidA ,
-                                             G4VSolid* pSolidB, 
-                                             G4RotationMatrix* rotMatrix,
-                                       const G4ThreeVector& transVector   ) ;
+    G4IntersectionSolid( const G4String& pName,
+                               G4VSolid* pSolidA ,
+                               G4VSolid* pSolidB   ) ;
 
-                  G4IntersectionSolid( const G4String& pName,
-                                             G4VSolid* pSolidA ,
-                                             G4VSolid* pSolidB,
-                                       const G4Transform3D& transform    ) ;
+    G4IntersectionSolid( const G4String& pName,
+                               G4VSolid* pSolidA ,
+                               G4VSolid* pSolidB, 
+                               G4RotationMatrix* rotMatrix,
+                         const G4ThreeVector& transVector   ) ;
 
-                 virtual ~G4IntersectionSolid() ;
+    G4IntersectionSolid( const G4String& pName,
+                               G4VSolid* pSolidA ,
+                               G4VSolid* pSolidB,
+                         const G4Transform3D& transform    ) ;
 
+    virtual ~G4IntersectionSolid() ;
 
-     G4bool CalculateExtent(const EAxis pAxis,
-				   const G4VoxelLimits& pVoxelLimit,
-				   const G4AffineTransform& pTransform,
-				   G4double& pMin, G4double& pMax) const ;
+    virtual G4GeometryType  GetEntityType() const;
+
+  public:  // without description
+
+    G4bool CalculateExtent( const EAxis pAxis,
+			    const G4VoxelLimits& pVoxelLimit,
+			    const G4AffineTransform& pTransform,
+				  G4double& pMin, G4double& pMax) const ;
        
     EInside Inside( const G4ThreeVector& p ) const ;
 
@@ -66,18 +84,16 @@ public:
 	                    const G4int n,
                             const G4VPhysicalVolume* pRep ) ;
                                    
-    virtual G4GeometryType  GetEntityType() const 
-    { return G4String("G4IntersectionSolid"); }
-
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
     G4NURBS*      CreateNURBS      () const ;
 
-protected:
-
-private:
-
 } ;
+
+inline G4GeometryType G4IntersectionSolid::GetEntityType() const 
+{
+  return G4String("G4IntersectionSolid");
+}
 
 #endif
 

@@ -1,5 +1,5 @@
 
-$Id: History,v 1.7 2000-04-12 08:37:17 gcosmo Exp $
+$Id: History,v 1.8 2000-04-27 09:59:34 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Apr 27   2000  Gabriele Cosmo
+
+  - Reorganised comments for the Software Reference Manual.
+  - Added CVS headers and standard G4 header where missing.
 
  Apr 11   2000  John Allison
 
