@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2001-12-04 13:23:51 flongo Exp $
+# $Id: GNUmakefile,v 1.9 2001-12-06 20:37:18 pfeiffer Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -16,39 +16,27 @@ all: lib bin
 
 include $(G4INSTALL)/config/architecture.gmk
 
-#
-# NEW: this requires the env-var LHCXX_REL_DIR to be set up correctly,
-# see the first lines in G4ComptonTest.cc
-#
 
-ifdef G4ANALYSIS_USE
+# Check whether to use AIDA (default) or not.
+# Copy the GammaRayTelAnalysis files according to which version
+# is selected. For this the target tmpana has been created.
+# This part of the makefile will be obsolete soon (see also below).
 
-   CPPFLAGS  += -I$(LHCXX_REL_DIR)/include
-
-ifdef G4ANALYSIS_USE_NTUPLE
-  CPPFLAGS += -DG4ANALYSIS_USE_NTUPLE
+ifdef G4ANALYSIS_AIDA_CONFIG_CFLAGS
+# AIDA (version 2.2 for now) selected
+tmpana:
+	cp include/GammaRayTelAnalysis.hh-AIDA include/GammaRayTelAnalysis.hh
+	cp src/GammaRayTelAnalysis.cc-AIDA src/GammaRayTelAnalysis.cc
+else
+# Anaphe selected (will be obsolete as soon as Anaphe is AIDA 2.2 compliant)
+include anaphe.gmk
+tmpana:
+	cp include/GammaRayTelAnalysis.hh-Anaphe include/GammaRayTelAnalysis.hh
+	cp src/GammaRayTelAnalysis.cc-Anaphe src/GammaRayTelAnalysis.cc
 endif
 
-#   C_FLAGS 	 += -I$(LHCXX_REL_DIR)/include
-   LDFLAGS  += -L$(LHCXX_REL_DIR)/lib
-# general stuff:	
-   LOADLIBS += -lHepUtilities -lAIDA_Annotation
-# add for Histograms: 
-   LOADLIBS += -lAIDA_HBook 
-# add for Vectors:
-   LOADLIBS += -lVector 
-# add for Plotter:
-   LOADLIBS += -lAIDA_Plotter -lqp -lqpview -lqt-mt -lqutil -lqt 
-# add for Ntuples:
-   LOADLIBS += -lAIDA_Ntuple -lNtupleTag -lNtupleTag_HBook 
-# ... and finally system stuff and to deal with the "Fortran legacy":
-   LOADLIBS += -lCHBook -ldl -lg2c 
-# Xm Xt
-   LDFLAGS  += -L$/usr/local/lib -lXm -L/usr/X11R6/lib -lXt
+# End check for AIDA.
 
-
-
-endif
 
 include $(G4INSTALL)/config/binmake.gmk
 
