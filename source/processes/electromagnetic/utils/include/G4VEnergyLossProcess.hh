@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.21 2004-05-17 09:46:56 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.22 2004-06-29 13:59:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -93,7 +93,7 @@ public:
   G4VEnergyLossProcess(const G4String& name = "EnergyLoss",
                          G4ProcessType type = fElectromagnetic);
 
- ~G4VEnergyLossProcess();
+  virtual ~G4VEnergyLossProcess();
 
   void Initialise();
 

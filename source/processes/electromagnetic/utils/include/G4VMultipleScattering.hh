@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.19 2004-05-25 11:30:08 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.20 2004-06-29 13:59:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,7 +79,7 @@ public:
   G4VMultipleScattering(const G4String& name = "msc",
                               G4ProcessType type = fElectromagnetic);
 
- ~G4VMultipleScattering();
+  virtual ~G4VMultipleScattering();
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
     // True for all charged particles
