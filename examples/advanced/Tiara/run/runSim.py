@@ -39,7 +39,7 @@ particleCut = {"neutron" : 3 * G4Kernel.MeV,
 beamEnergy = 43
 shieldWidth = 150 * G4Kernel.cm
 
-totalTime = 3 * myUtils.min
+totalTime = 5 * myUtils.min
 timeForOneRun = 1 * myUtils.min
 
 # available physics lists: TiaraPhysicsList, LHEP_LEAD_HP, LHEP_PRECO_HP
