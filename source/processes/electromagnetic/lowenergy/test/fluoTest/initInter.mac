@@ -15,7 +15,11 @@
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
 #
-/vis/open OGLIX
+#/vis/open OGLIX
+
+#/vis/open VRML1FILE
+
+#/vis/open VRML2FILE
 #/vis/open DAWNFILE
 #
 # draw scene
