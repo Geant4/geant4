@@ -1,4 +1,4 @@
-# $Id: G4UI_USE.gmk,v 1.4 2001-11-06 13:18:54 johna Exp $
+# $Id: G4UI_USE.gmk,v 1.5 2001-11-13 16:00:44 johna Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for interfaces USE phase.
 #   John Allison, 6th July 1998.
@@ -6,10 +6,21 @@
 ########################### interfaces/basic #######################
 
 ifndef G4UI_NONE
-G4UI_USE   = 1
+
 UILIBS :=
 
-# Not needing external packages or libraries...
+# Sessions not needing external packages or libraries.  These
+# libraries are always built (see G4UI_BUILD.gmk) and linked so the
+# user can instantiate one of these sessions without rebuilding the
+# libraries.  For backwards compatibility with user code, as typified
+# by geant4/examples main programs, the C-pre-processor variables
+# corresponding to the original environment variables are set, but
+# there is no dependency in the Geant4 kernel; a user may instantiate
+# a session from this list without setting any environment variables.
+# However, if he/she sets no environment variables, then the
+# C-pre-processor variable G4UI_USE_TERMINAL is set by default, although
+# there is no need to use it.
+
 CPPFLAGS += -I$(G4BASE)/interfaces/basic/include
 UILIBS   += -lG4UIbasic
 CPPFLAGS += -I$(G4BASE)/interfaces/common/include
@@ -17,7 +28,26 @@ UILIBS   += -lG4UIcommon
 CPPFLAGS += -I$(G4BASE)/interfaces/GAG/include
 UILIBS   += -lG4UIGAG
 
+ifdef G4UI_USE_TERMINAL
+  G4UI_USE  = 1
+  CPPFLAGS += -DG4UI_USE_TERMINAL
+endif
+
+ifdef G4UI_USE_TCSH
+  G4UI_USE  = 1
+  CPPFLAGS += -DG4UI_USE_TCSH
+endif
+
+ifdef G4UI_USE_GAG
+  G4UI_USE  = 1
+  CPPFLAGS += -DG4UI_USE_GAG
+endif
+
+# Other sessions: environment variables *must* be used to control the build
+# and the usage, becuase they need external packages or libraries.
+
 ifdef G4UI_USE_XM
+  G4UI_USE  = 1
   G4INTY_USE_XT = 1
   INC_XM    = 1
   LOAD_XM   = 1
@@ -25,6 +55,7 @@ ifdef G4UI_USE_XM
 endif
 
 ifdef G4UI_USE_XAW
+  G4UI_USE  = 1
   G4INTY_USE_XT = 1
   INC_XAW   = 1
   LOAD_XAW  = 1
@@ -32,6 +63,7 @@ ifdef G4UI_USE_XAW
 endif
 
 ifdef G4UI_USE_WIN32
+  G4UI_USE  = 1
   G4INTY_USE_WIN32 = 1
   CPPFLAGS    += -DG4UI_USE_WIN32
 endif
@@ -39,6 +71,7 @@ endif
 ########################### interfaces/OPACS #######################
 
 ifdef G4UI_USE_WO
+  G4UI_USE  = 1
   G4INTY_USE_XT  = 1
   CPPFLAGS  += -DG4UI_USE_WO
   CPPFLAGS  += -I$(G4BASE)/interfaces/OPACS/include
@@ -48,5 +81,13 @@ ifdef G4UI_USE_WO
 endif
 
 ########################### interfaces/XVT - not currently implemented #####
+
+##################### Default to TERMINAL if no environment variables set ##
+##################### (No need actually to use it - see above.) ############
+
+ifndef G4UI_USE
+  G4UI_USE  = 1
+  CPPFLAGS += -DG4UI_USE_TERMINAL
+endif
 
 endif #G4UI_NONE
