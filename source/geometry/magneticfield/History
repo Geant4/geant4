@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2000-11-20 17:29:03 gcosmo Exp $
+$Id: History,v 1.25 2001-01-29 10:27:10 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan 29th, 2000  G. Cosmo - field-V03-00-00
+
+- Minor fix to G4MagneticField.hh: added explicit call to G4Field() in
+  copy constructor. Fixes report #205.
 
 Nov 20th, 2000  G. Cosmo - field-V02-00-02
 
