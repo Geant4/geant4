@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2002-07-11 16:10:47 dressel Exp $
+# $Id: GNUmakefile,v 1.6 2002-10-16 16:26:57 dressel Exp $
 # ------------------------------------------------------------
 # GNUmakefile for transportation library.  G.Folger 10-Dec-97.
 # ------------------------------------------------------------
@@ -23,7 +23,8 @@ CPPFLAGS += \
 	    -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
 	    -I$(G4BASE)/particles/management/include \
-	    -I$(G4BASE)/materials/include
+	    -I$(G4BASE)/materials/include \
+	    -I$(G4BASE)/intercoms/include
 
 ifdef G4DEBUG_TRANSPORT
   CPPFLAGS += -DG4DEBUG_TRANSPORT
