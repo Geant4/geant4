@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2003-10-02 13:24:54 stesting Exp $
+# $Id: GNUmakefile,v 1.8 2003-10-02 17:57:10 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------

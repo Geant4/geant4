@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.40 2003-10-02 15:48:44 stesting Exp $
+# $Id: Configure,v 1.41 2003-10-02 17:57:03 stesting Exp $
 #
-# Generated on Thu Oct  2 17:47:09 CEST 2003 [metaconfig 3.0 PL70]
+# Generated on Thu Oct  2 19:52:13 CEST 2003 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2366,8 +2366,8 @@ winpath=`echo $ans|cut -d"/" -f4-`
 fullwinpath="$windrive:/$winpath"
 ans=$fullwinpath
 
-fi
-fi
+fi # if cygwin syntax is used
+fi # if Win
 
 rp="$orig_rp"
 dflt="$orig_dflt"
@@ -2418,9 +2418,6 @@ g4install=$fullwinpath
 
 fi
 fi
-
-
-
 	;;
 esac
 
@@ -2436,12 +2433,6 @@ case "$g4includes_flag" in
 	;;
 esac
 
-case "$g4include" in
-'')
-	g4include=$g4install/include
-#	g4include=''
-	;;
-esac
 
 g4message=`cat << EOM
 
@@ -2470,6 +2461,13 @@ rp=$g4message
 g4includes_flag=$ans
 
 if [ X$g4includes_flag = Xy ] ; then
+
+case "$g4include" in
+'')
+	g4include=$g4install/include
+#	g4include=''
+	;;
+esac
 
 g4message=`cat << EOM
 
@@ -4283,12 +4281,17 @@ rp=$g4message
 . ./getfile
 g4vis_oglhome=$ans
 
+if test "X$g4osname" = "XLinux"; then 
+
 if test "X$g4vis_oglhome" = "X/usr" -o "X$g4vis_oglhome" = "X/usr/local"; then
 g4vis_oglhome=""
 fi
 
+fi # if platform (Linux vs SUN)
+
 fi # if need
-fi # if platform
+fi # if platform (Unix vs Win)
+
 echo " "
 case "$g4wlib_build_g3tog4" in
 '')
