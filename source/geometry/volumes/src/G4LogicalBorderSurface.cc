@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.cc,v 1.11 2003-11-28 00:41:20 gum Exp $
+// $Id: G4LogicalBorderSurface.cc,v 1.12 2003-12-01 14:53:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -34,11 +34,10 @@
 // Created:     1997-06-26
 // Author:      John Apostolakis (John.Apostolakis@cern.ch)
 //
-//              27-11-2003: Fan Lei
-//                - chnanged to use G4SurfaceProperty insdead of G4OpticalSurface
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 #include "G4LogicalBorderSurface.hh"
+#include "G4VPhysicalVolume.hh"
 
 G4LogicalBorderSurfaceTable G4LogicalBorderSurface::theBorderSurfaceTable;
 

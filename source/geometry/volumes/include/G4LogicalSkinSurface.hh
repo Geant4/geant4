@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.hh,v 1.11 2003-11-28 00:35:47 gum Exp $
+// $Id: G4LogicalSkinSurface.hh,v 1.12 2003-12-01 14:53:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4LogicalSkinSurface
@@ -36,17 +36,15 @@
 // Created:     1997-06-16
 // Author:      John Apostolakis (John.Apostolakis@cern.ch)
 //
-//              27-11-2003: Fan Lei
-//                - chnanged to use G4SurfaceProperty insdead of G4OpticalSurface
-// ********************************************************************
-
+// ----------------------------------------------------------------------
 #ifndef G4LogicalSkinSurface_h
 #define G4LogicalSkinSurface_h 1
 
-#include "G4LogicalSurface.hh"
-#include "G4LogicalVolume.hh"
-
 #include <vector>
+
+#include "G4LogicalSurface.hh"
+
+class G4LogicalVolume;
 
 class G4LogicalSkinSurface : public G4LogicalSurface 
 {

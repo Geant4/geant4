@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.icc,v 1.7 2003-11-28 00:36:25 gum Exp $
+// $Id: G4LogicalBorderSurface.icc,v 1.8 2003-12-01 14:53:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4LogicalBorderSurface inline implementation
 //
-// ********************************************************************
+// ----------------------------------------------------------------------
 
 inline
 void G4LogicalBorderSurface::SetPhysicalVolumes( G4VPhysicalVolume* vol1,
