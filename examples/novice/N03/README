@@ -1,4 +1,4 @@
-$Id: README,v 1.11 2003-09-15 15:38:08 maire Exp $
+$Id: README,v 1.12 2003-11-25 16:50:10 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -149,7 +149,11 @@ $Id: README,v 1.11 2003-09-15 15:38:08 maire Exp $
  	- execute N03 in 'interactive mode' with visualization
  		% exampleN03
  		....
- 		Idle> type your commands. For instance:
+ 		Idle>      ---> type your commands. For instance:
+		Idle> /run/beamOn 
+		Idle> /vis/viewer/flush      ---> mandatory between run
+		Idle> /run/beamOn 10
+		....				
  		Idle> /control/execute newgeom.mac
  		....
  		Idle> exit

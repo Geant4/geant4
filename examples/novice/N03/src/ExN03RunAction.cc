@@ -21,12 +21,9 @@
 // ********************************************************************
 //
 //
-
-// $Id: ExN03RunAction.cc,v 1.14 2003-11-06 14:50:06 johna Exp $
+// $Id: ExN03RunAction.cc,v 1.15 2003-11-25 16:50:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -34,9 +31,6 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
-#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
