@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.15 2005-03-03 16:06:06 allison Exp $
+// $Id: G4VCSGfaceted.cc,v 1.16 2005-03-23 17:16:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,6 +71,7 @@ G4VCSGfaceted::G4VCSGfaceted( G4String name )
 G4VCSGfaceted::~G4VCSGfaceted()
 {
   DeleteStuff();
+  delete fpPolyhedron;
 }
 
 
@@ -475,9 +476,12 @@ G4double G4VCSGfaceted::GetCubicVolume()
 
 G4Polyhedron* G4VCSGfaceted::GetPolyhedron () const
 {
-  if (!fpPolyhedron)
-  {
-    fpPolyhedron = CreatePolyhedron();
-  }
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron();
+    }
   return fpPolyhedron;
 }

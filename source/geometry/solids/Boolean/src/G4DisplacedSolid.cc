@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.22 2005-03-03 16:06:06 allison Exp $
+// $Id: G4DisplacedSolid.cc,v 1.23 2005-03-23 17:16:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4DisplacedSolid class for boolean 
@@ -103,6 +103,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
 G4DisplacedSolid::~G4DisplacedSolid() 
 {
   CleanTransformations();
+  delete fpPolyhedron;
 }
 
 G4GeometryType G4DisplacedSolid::GetEntityType() const 
@@ -395,9 +396,12 @@ G4DisplacedSolid::CreateNURBS () const
 
 G4Polyhedron* G4DisplacedSolid::GetPolyhedron () const
 {
-  if (!fpPolyhedron)
-  {
-    fpPolyhedron = CreatePolyhedron();
-  }
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron();
+    }
   return fpPolyhedron;
 }

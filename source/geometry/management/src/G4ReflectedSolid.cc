@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.4 2005-03-22 15:04:21 allison Exp $
+// $Id: G4ReflectedSolid.cc,v 1.5 2005-03-23 17:16:31 allison Exp $
 //
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -83,6 +83,7 @@ G4ReflectedSolid::~G4ReflectedSolid()
     delete fPtrTransform3D; fPtrTransform3D=0;
     delete fDirectTransform3D; fDirectTransform3D=0;
   }
+  delete fpPolyhedron;
 }
 
 G4GeometryType G4ReflectedSolid::GetEntityType() const 
@@ -559,9 +560,12 @@ G4ReflectedSolid::CreateNURBS      () const
 G4Polyhedron*
 G4ReflectedSolid::GetPolyhedron () const
 {
-  if (!fpPolyhedron)
-  {
-    fpPolyhedron = CreatePolyhedron ();
-  }
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron ();
+    }
   return fpPolyhedron;
 }

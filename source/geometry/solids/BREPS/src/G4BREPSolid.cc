@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.32 2005-03-03 16:06:06 allison Exp $
+// $Id: G4BREPSolid.cc,v 1.33 2005-03-23 17:16:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -83,6 +83,8 @@ G4BREPSolid::~G4BREPSolid()
   
   if( nb_of_surfaces > 0 && SurfaceVec != 0 )
     delete [] SurfaceVec;
+
+  delete fpPolyhedron;
 }
 
 void G4BREPSolid::Initialize()
@@ -1446,9 +1448,12 @@ std::ostream& G4BREPSolid::StreamInfo(std::ostream& os) const
 
 G4Polyhedron* G4BREPSolid::GetPolyhedron () const
 {
-  if (!fpPolyhedron)
-  {
-    fpPolyhedron = CreatePolyhedron();
-  }
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron();
+    }
   return fpPolyhedron;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.17 2005-03-03 16:06:06 allison Exp $
+// $Id: G4Hype.cc,v 1.18 2005-03-23 17:16:31 allison Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -140,6 +140,7 @@ G4Hype::G4Hype(const G4String& pName,
 //
 G4Hype::~G4Hype()
 {
+     delete fpPolyhedron;
 }
 
 
@@ -1374,9 +1375,12 @@ G4double G4Hype::GetCubicVolume()
 
 G4Polyhedron* G4Hype::GetPolyhedron () const
 {
-  if (!fpPolyhedron)
-  {
-    fpPolyhedron = CreatePolyhedron();
-  }
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron();
+    }
   return fpPolyhedron;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.14 2004-10-13 13:19:06 gcosmo Exp $
+// $Id: G4BooleanSolid.cc,v 1.15 2005-03-23 17:16:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
@@ -34,7 +34,8 @@
 // --------------------------------------------------------------------
 
 #include "G4BooleanSolid.hh"
-#include "G4VSolid.hh"
+
+#include "G4Polyhedron.hh"
 
 //////////////////////////////////////////////////////////////////
 //
@@ -91,6 +92,7 @@ G4BooleanSolid::~G4BooleanSolid()
   {
     ((G4DisplacedSolid*)fPtrSolidB)->CleanTransformations();
   }
+  delete fpPolyhedron;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -171,9 +173,12 @@ std::ostream& G4BooleanSolid::StreamInfo(std::ostream& os) const
 
 G4Polyhedron* G4BooleanSolid::GetPolyhedron () const
 {
-  if (!fpPolyhedron)
-  {
-    fpPolyhedron = CreatePolyhedron();
-  }
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron();
+    }
   return fpPolyhedron;
 }
