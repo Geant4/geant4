@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.60 2004-06-29 09:33:29 stesting Exp $
+# $Id: Configure,v 1.61 2004-12-03 01:01:30 stesting Exp $
 #
-# Generated on Tue Jun 29 11:27:51 CEST 2004 [metaconfig 3.0 PL70]
+# Generated on Fri Dec  3 01:45:40 CET 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -158,6 +158,7 @@ contains=''
 d_portable=''
 g4base=''
 g4conf=''
+g4final_install=''
 g4include=''
 g4includes_flag=''
 g4install=''
@@ -445,6 +446,7 @@ while test $# -gt 0; do
 	-d) shift; fastread=yes;;
 	-e) shift; alldone=cont;;
 	-install) shift; install=yes;;
+	-build) shift; g4build=yes;;
 	-ldlibs) shift; g4ldlibs=yes;;
 	-ldflags) shift; g4ldflags=yes;;
 	-cppflags) shift; g4cppflags=yes;;
@@ -504,11 +506,12 @@ done
 case "$error" in
 true)
 	cat >&2 <<EOM
-Usage: $me [-dehrsEKOSV] [-install] [-libs] [-f config.sh] [-D symbol] [-D symbol=value]
+Usage: $me [-dehrsEKOSV] [-install] [-build] [-libs] [-f config.sh] [-D symbol] [-D symbol=value]
                  [-U symbol] [-U symbol=]
   -d : use defaults for all answers.
   -e : go on without questioning past the production of config.sh.
-  -install : start configuration AND installation of Geant4 libraries. 
+  -install : start installation of Geant4 libraries. 
+  -build : start configuration AND build of Geant4 libraries. 
   -ldlibs : retrieve the list of libraries to link
   -ldflags : retrieve the list of directories where libraries are placed
   -cxxflags : retrieve the list of cxxflags
@@ -1659,7 +1662,7 @@ case  "$g4compiler" in
 	esac
 esac
 
-if [ X$install = Xyes ] ; then
+if [ X$g4build = Xyes ] ; then
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
@@ -1813,8 +1816,12 @@ newmyuname="$myuname"
 dflt=n
 
 cd ../..
-if [ X$install = X ] ; then
 
+echo g4build=$g4build
+
+if [ X$g4build = X ] ; then
+
+echo HUY
 
 	if test -f $src/.config/bin/$g4system/env.sh; then
 
@@ -1824,6 +1831,18 @@ if [ X$g4ldlibs != X -o X$g4ldflags != X -o X$g4cxxflags != X -o X$g4cppflags !=
 	g4non_display=yes
 #	echo g4non_display=$g4non_display
 fi
+
+	if [ X$install = Xyes ] ; then
+
+	. $src/.config/bin/$g4system/env.sh
+
+	$rm -rf .config/UU
+	
+	. $src/.config/bin/$g4system/move.sh
+
+	exit 1
+
+	fi #end of cppflags
 
 	if [ X$g4cppflags = Xyes ] ; then
 
@@ -2427,6 +2446,12 @@ fi
 	;;
 esac
 
+case "$g4final_install" in
+'')
+	g4final_install=$g4final_install
+	;;
+esac
+
 case "$g4workdir" in
 '')
 	g4workdir=$g4install
@@ -2442,7 +2467,7 @@ esac
 
 g4message=`cat << EOM
 
-Where is Geant4 installed?
+Where is Geant4 source installed?
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
@@ -2452,7 +2477,23 @@ rp=$g4message
 . ./getfile
 g4install=$ans
 g4workdir=$g4install
+#################################
+g4message=`cat << EOM
 
+Where is Geant4 libraries and source should be installed?
+
+It will be \$(your_prefix)/geant4/lib and \$(your_prefix)/geant4.
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt=$g4install
+fn='d~'
+rp=$g4message
+. ./getfile
+g4final_install=$ans
+#g4workdir=$g4install
+
+##################################
 g4message=`cat << EOM
 
 Do you want to copy all Geant4 headers 
@@ -2874,6 +2915,17 @@ gans=$ans
 	esac
 done
 
+if test "X$g4clhep_base_dir" = "X/usr" -o "X$g4clhep_base_dir" = "X/usr/local"; then
+g4clhep_base_dir=""
+fi
+
+if test "X$g4clhep_include_dir" = "X/usr/include" -o "X$g4clhep_include_dir" = "X/usr/local/include"; then
+g4clhep_include_dir=""
+fi
+
+if test "X$g4clhep_lib_dir" = "X/usr/lib" -o "X$g4clhep_lib_dir" = "X/usr/local/lib"; then
+g4clhep_lib_dir=""
+fi
 
 echo " "
 
@@ -4515,6 +4567,7 @@ g4conf='$g4conf'
 g4data='$g4data'
 g4debug='$g4debug'
 g4elasticdata='$g4elasticdata'
+g4final_install='$g4final_install'
 g4global='$g4global'
 g4granular='$g4granular'
 g4include='$g4include'
@@ -4693,11 +4746,16 @@ EOM
 elif test -f [Mm]akefile; then
 	echo " "
 	echo "Now you must run a make."
-elif test -f $g4conf/install.sh; then
+elif [ -f $g4conf/install.sh -a X$g4build = Xyes ] ; then
+	echo " "
+	echo "Now starting Geant4 libraries build..."
+	echo " "
+	. $g4conf/install.sh
+elif [ -f $g4conf/install.sh -a X$install = Xyes ] ; then
 	echo " "
 	echo "Now starting Geant4 libraries installation..."
 	echo " "
-	. $g4conf/install.sh
+	. $g4conf/move.sh
 else
 	echo " "
 	echo "WARNING: Geant4 is NOT installed yet!"
