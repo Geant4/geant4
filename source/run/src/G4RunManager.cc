@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.53 2002-12-05 16:19:32 asaim Exp $
+// $Id: G4RunManager.cc,v 1.54 2002-12-12 08:33:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,7 +97,7 @@ G4RunManager::G4RunManager()
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
-  versionString = " Geant4 version $Name: not supported by cvs2svn $\n                                (31-Jul-2002)";
+  versionString = " Geant4 version $Name: not supported by cvs2svn $\n                                (13-Dec-2002)";
   G4cout 
   << "**********************************************" << G4endl
   << versionString << G4endl
