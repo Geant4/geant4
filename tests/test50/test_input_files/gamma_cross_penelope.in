@@ -4,28 +4,30 @@
 /tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
-/physics/addPhysics photon-epdl
+/physics/addPhysics photon-penelope
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
 /run/initialize
 /process/list
-#/process/inactivate LowEnPhotoElec 
-/process/inactivate  LowEnCompton
-/process/inactivate  LowEnRayleigh
-/process/inactivate  LowEnConversion 
+#/process/inactivate PenPhotoElec 
+/process/inactivate  PenCompton
+/process/inactivate  PenConversion
+/process/inactivate  PenRayleigh
 /target/setTargetMat Aluminium
 /target/update
 /physics/cutE 1. micrometer
 /gun/particle gamma
-/target/setTargetThick 0.0005 mm
+/gun/energy 50. keV
+/target/setTargetThick 0.005 mm
 /target/update
+/run/beamOn  10000
 /gun/energy 100. keV
 /run/beamOn  10000
-/target/setTargetThick 0.003 mm
+/target/setTargetThick 0.03 mm
 /target/update
 /gun/energy 1. MeV
 /run/beamOn  10000
-/target/setTargetThick 0.005 mm
+/target/setTargetThick 0.05 mm
 /target/update
 /gun/energy 10. MeV
 /run/beamOn  10000

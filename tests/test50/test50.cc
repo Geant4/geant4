@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.22 2003-05-15 16:00:58 guatelli Exp $
+// $Id: test50.cc,v 1.23 2003-05-17 12:31:48 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,7 +109,7 @@ int main(int argc,char** argv) {
       session = new G4UIterminal();
 #endif    
 
-      UI->ApplyCommand("/control/execute ");
+      UI->ApplyCommand("/control/execute default.mac");
       session->SessionStart();
       delete session;
     }
@@ -118,7 +118,7 @@ int main(int argc,char** argv) {
     {     
       G4String command =("/control/execute ");
       G4String fileName = argv[1];
-      G4cout << fileName << G4endl;
+      G4cout <<"macro --> "<< fileName << G4endl;
       UI->ApplyCommand(command+fileName);
     }
  
