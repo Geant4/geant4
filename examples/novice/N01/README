@@ -1,4 +1,4 @@
-$Id: README,v 1.1 1999-01-07 16:05:40 gunter Exp $
+$Id: README,v 1.2 2000-03-14 10:15:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,23 +13,23 @@ a tracker tube and a sandwitch calorimeter made of boxes. It shoots a
 geantino (pseudo-particle which has no "real" physics interaction) per 
 one event. This example demonstrates how the basic GEANT4 framework works.
 
-1. Detector descreption
+1. Detector description
 
  The detector is defined in ExN01DetectorConstruction.cc. Argon gas,
-alminum and lead are defined first, where all of them are single element
-material. Though materials are assigned for each volume, they will not
-affect to the trajectory of a geantino.
+aluminum and lead are defined first, where all of them are single element
+materials. Though materials are assigned for each volume, they will not
+affect the trajectory of a geantino.
 
- The experimental hall, which is the world volume, is made of alminum
+ The experimental hall, which is the world volume, is made of aluminum
 and it is a box. The tracker tube made of argon gas is placed at 
 (-1m,0m,0m) respect to the origin of the world volume. The calorimeter
-block made of lead and it has 19 layers of alminum plates inside.
+block made of lead and it has 19 layers of aluminum plates inside.
 
 2. Physics processes
 
- ExN01PhysicsList.cc defines only a geantino and a transprotation
+ ExN01PhysicsList.cc defines only a geantino and a transportation
 process. Though cutoff will not be applied onto geantino, a dummy
-valume must be set.
+value must be set.
 
 3. Event generation
 
@@ -40,18 +40,18 @@ G4ParticleGun is accessed to generate a primary particle (geantino).
  Please note that the direction of the primary particle is set
 just before shooting, i.e. GeneratePrimaryVertex() method invokation.
 G4ParticleGun class itself does not have any capability of randomizing
-the energy nor momentum of the primary particle. Thus the user should
-implement randomizing code in GeneratePrimaries() method.
+the energy nor the momentum of the primary particle. Therefore the user
+should implement randomizing code in the GeneratePrimaries() method.
 
 4. main()
 
- exampleN01.cc has the main() method. In this main() method, three
+ exampleN01.cc has the main() method. In the main() method, three
 mandatory user classes described above are constructed and set to
-the G4RunManager object. Then, "Initialize()" method of G4RunManager
+the G4RunManager object. Then, the "Initialize()" method of G4RunManager
 is invoked. 
  Some UI commands for setting verbosity are applied via hardly coded
 "ApplyCommand()" method of G4UImanager class.
- "BeamOn()" method triggers the event loop. The argument of this
-method is the number of event in this run.
+ The "BeamOn()" method triggers the event loop. The argument of this
+method is the number of event in the run.
 
 
