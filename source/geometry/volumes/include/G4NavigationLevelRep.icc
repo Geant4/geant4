@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationLevelRep.icc,v 1.3 2000-11-01 16:51:07 gcosmo Exp $
+// $Id: G4NavigationLevelRep.icc,v 1.4 2000-11-20 18:59:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  1 October 1997 J.Apostolakis Initial version. 
@@ -19,20 +19,20 @@ G4NavigationLevelRep::G4NavigationLevelRep(G4VPhysicalVolume* pPhysVol,
 				     const G4AffineTransform& afTransform,
 				     EVolume            volTp,
 				     G4int              repNo)
-   :  sPhysicalVolumePtr(pPhysVol),
-      sTransform(afTransform),
-      sVolumeType(volTp),
+   :  sTransform(afTransform),
+      sPhysicalVolumePtr(pPhysVol),
       sReplicaNo(repNo),
+      sVolumeType(volTp),
       fCountRef(1) 
 {
 }
 
 inline
 G4NavigationLevelRep::G4NavigationLevelRep()
-   :  sPhysicalVolumePtr(0),
-      sTransform(), 
-      sVolumeType(kReplica),
+   :  sTransform(),
+      sPhysicalVolumePtr(0),
       sReplicaNo(-1),
+      sVolumeType(kReplica),
       fCountRef(1) 
 {
 }

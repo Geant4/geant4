@@ -5,12 +5,23 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BlockingList.icc,v 1.2 1999-12-15 14:50:21 gunter Exp $
+// $Id: G4BlockingList.icc,v 1.3 2000-11-20 18:59:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4BlockingList  Inlined Implementation
 //
+
+inline G4BlockingList::G4BlockingList(G4int maxDefault,G4int stride)
+  : fStride(stride), fBlockingList(maxDefault)
+{
+	FullyReset();
+}
+
+// Do nothing destructor
+inline G4BlockingList::~G4BlockingList()
+{
+}
 
 inline G4int G4BlockingList::Length() const
 {
@@ -53,15 +64,3 @@ inline void G4BlockingList::Enlarge(const G4int nv)
 				}
 		}
 }
-
-inline G4BlockingList::G4BlockingList(G4int maxDefault,G4int stride) :
-fBlockingList(maxDefault),fStride(stride)
-{
-	FullyReset();
-}
-
-// Do nothing destructor
-inline G4BlockingList::~G4BlockingList()
-{
-}
-

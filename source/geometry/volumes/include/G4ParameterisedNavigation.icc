@@ -5,15 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParameterisedNavigation.icc,v 1.2 1999-12-15 14:50:23 gunter Exp $
+// $Id: G4ParameterisedNavigation.icc,v 1.3 2000-11-20 18:59:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4ParameterisedNavigation Inline implementation
 
 
-inline G4ParameterisedNavigation::G4ParameterisedNavigation() :
-    fVoxelNode(0),fVoxelHeader(0)
+inline G4ParameterisedNavigation::G4ParameterisedNavigation()
+   : fVoxelHeader(0), fVoxelNode(0)
 {
 }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReplicaNavigation.icc,v 1.2 1999-12-15 14:50:25 gunter Exp $
+// $Id: G4ReplicaNavigation.icc,v 1.3 2000-11-20 18:59:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,7 +16,8 @@ inline G4int G4ReplicaNavigation::VoxelLocate(const G4SmartVoxelHeader *pHead,
 					      const G4int blocked) const
 {
   EAxis targetHeaderAxis;
-  G4double coord,targetHeaderMin;
+  G4double coord=0.;
+  G4double targetHeaderMin;
   G4double targetHeaderNodeWidth,targetNodePos;
   G4int targetHeaderNoSlices,targetNodeNo;
   

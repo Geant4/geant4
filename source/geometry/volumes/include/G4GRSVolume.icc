@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GRSVolume.icc,v 1.4 2000-11-01 16:51:06 gcosmo Exp $
+// $Id: G4GRSVolume.icc,v 1.5 2000-11-20 18:59:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,7 +14,8 @@
 inline G4GRSVolume::G4GRSVolume(G4VPhysicalVolume *pVol,
 			 const G4RotationMatrix *pRot,
 			 const G4ThreeVector &tlate)
-  : fvol(pVol),ftlate(tlate), G4VTouchable()
+  : G4VTouchable(),
+    fvol(pVol), ftlate(tlate)
 {
   if (pRot)
     {
@@ -30,7 +31,8 @@ inline G4GRSVolume::G4GRSVolume(G4VPhysicalVolume *pVol,
 inline G4GRSVolume::G4GRSVolume(G4VPhysicalVolume *pVol,
 			 const G4RotationMatrix &rot,
 			 const G4ThreeVector &tlate)
-  : fvol(pVol),ftlate(tlate), G4VTouchable()
+  : G4VTouchable(),
+    fvol(pVol), ftlate(tlate)
 {
   frot=new G4RotationMatrix(rot);
   if (!frot) G4Exception ("G4GRSVolume::G4GRSVolume cannot alloc G4RotationMatrix");

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TouchableHistory.icc,v 1.4 2000-11-01 16:51:07 gcosmo Exp $
+// $Id: G4TouchableHistory.icc,v 1.5 2000-11-20 18:59:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,7 +13,7 @@
 
 inline
 G4TouchableHistory::G4TouchableHistory()
-  : fhistory(), ftlate(G4ThreeVector(0.,0.,0.)), frot(G4RotationMatrix())
+  : frot(G4RotationMatrix()), ftlate(G4ThreeVector(0.,0.,0.)), fhistory()
 {
 }
 
