@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.96 2004-09-01 09:45:28 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.97 2004-09-03 14:40:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -331,22 +331,22 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& )
         G4double esp = energySpectrum->Excitation(Z, lowEdgeEnergy);
         ionloss   += esp * theAtomicNumDensityVector[iel];
 
-	// density correction
-        G4double dedx = 0.0;
-        G4double tau  = lowEdgeEnergy/electron_mass_c2;
-        G4double gam  = tau + 1.0;
-        G4double bg2  = tau * (tau+2.0);
-        G4double beta2= bg2/(gam*gam);
-
-	G4double x = log(bg2)/twoln10;
-        if ( x >= x0den ) {
-	  dedx -= twoln10*x - cden ;
-	  if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
-	}
-        ionloss += dedx*twopi_mc2_rcl2*eDensity/beta2;
-
-
       }
+      /*
+      // density correction
+      G4double dedx = 0.0;
+      G4double tau  = lowEdgeEnergy/electron_mass_c2;
+      G4double gam  = tau + 1.0;
+      G4double bg2  = tau * (tau+2.0);
+      G4double beta2= bg2/(gam*gam);
+
+      G4double x = log(bg2)/twoln10;
+      if ( x >= x0den ) {
+	dedx -= twoln10*x - cden ;
+	if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
+      }
+      ionloss += dedx*twopi_mc2_rcl2*eDensity/beta2;
+      */
       if(verboseLevel > 1 || (m == 0 && lowEdgeEnergy>=1. && lowEdgeEnergy<=0.)) {
             G4cout << "Sum: "
                    << " E(keV)= " << lowEdgeEnergy/keV

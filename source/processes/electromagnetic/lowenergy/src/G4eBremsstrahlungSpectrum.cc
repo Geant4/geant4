@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungSpectrum.cc,v 1.12 2004-09-01 10:19:01 vnivanch Exp $
+// $Id: G4eBremsstrahlungSpectrum.cc,v 1.13 2004-09-03 14:40:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -81,7 +81,7 @@ G4double G4eBremsstrahlungSpectrum::Probability(G4int Z,
   t0 /= e;
   tm /= e;
 
-  G4double z = lowestE/e;
+  G4double z0 = lowestE/e;
   G4DataVector p;
 
   // Access parameters
@@ -90,7 +90,7 @@ G4double G4eBremsstrahlungSpectrum::Probability(G4int Z,
   }
 
   G4double x  = IntSpectrum(t0, tm, p);
-  G4double y  = IntSpectrum(z, 1.0, p);
+  G4double y  = IntSpectrum(z0, 1.0, p);
 
 
   if(1 < verbose) {
@@ -99,7 +99,7 @@ G4double G4eBremsstrahlungSpectrum::Probability(G4int Z,
            << "; t0= " << t0
            << "; tm= " << tm
            << "; xp[0]= " << xp[0]
-           << "; z= " << z
+           << "; z= " << z0
            << "; val= " << x
            << "; nor= " << y
            << G4endl;
@@ -144,8 +144,7 @@ G4double G4eBremsstrahlungSpectrum::AverageEnergy(G4int Z,
   G4double zmin = tmin/e;
   if(zmin < t0) {
     G4double c  = sqrt(theBRparam->ParameterC(Z));
-    G4double f  = Function(zmin, p);
-    x += f*(t0 - zmin - c*(atan(t0/c) - atan(zmin/c)));
+    x += p[0]*(t0 - zmin - c*(atan(t0/c) - atan(zmin/c)));
   }
   x *= e;
 
