@@ -9,4 +9,3 @@ do
   $G4WORKDIR/bin/$G4SYSTEM/$j >> test.out 2>&1;
 done
 
-

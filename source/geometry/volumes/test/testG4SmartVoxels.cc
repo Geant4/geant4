@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4SmartVoxels.cc,v 1.3 2001-07-11 10:00:36 gunter Exp $
+// $Id: testG4SmartVoxels.cc,v 1.4 2003-11-02 16:06:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,6 +32,7 @@
 #include <assert.h>
 
 #include "globals.hh"
+#include "voxeldefs.hh"
 
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -43,6 +44,7 @@
 #include "G4SolidStore.hh"
 
 #include "G4SmartVoxelNode.hh"
+#include "G4SmartVoxelHeader.hh"
 
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
@@ -171,8 +173,8 @@ G4bool testG4ReplicaVoxels()
 
 
     G4SmartVoxelHeader *vHead=myDaughter1Log.GetVoxelHeader();
-    G4SmartVoxelProxy *vProxy;
-    G4SmartVoxelNode *vNode;
+    G4SmartVoxelProxy *vProxy=0;
+    G4SmartVoxelNode *vNode=0;
     assert(vHead->GetAxis()==kZAxis);
     assert(vHead->GetMinExtent()==-50);
     assert(vHead->GetMaxExtent()==50);

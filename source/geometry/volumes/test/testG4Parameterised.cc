@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Parameterised.cc,v 1.5 2002-01-08 13:15:22 gcosmo Exp $
+// $Id: testG4Parameterised.cc,v 1.6 2003-11-02 16:06:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,13 +78,47 @@ private:
   }
   
   virtual void ComputeDimensions(G4Box &pBox,
-				 const G4int n,
-				 const G4VPhysicalVolume* pRep) const
+				 const G4int,
+				 const G4VPhysicalVolume*) const
   {
     pBox.SetXHalfLength(10);
     pBox.SetYHalfLength(10);
     pBox.SetZHalfLength(10);
   }
+
+  virtual void ComputeDimensions(G4Tubs &,
+				 const G4int ,
+                                 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Trd &, 
+				 const G4int,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Cons &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Trap &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Hype &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Orb &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Sphere &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Torus &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Para &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Polycone &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Polyhedra &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
  private:
     G4RotationMatrix *fRotationVec;
     G4double fTwistAngle;

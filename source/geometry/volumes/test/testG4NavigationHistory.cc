@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NavigationHistory.cc,v 1.5 2001-12-20 20:09:04 radoone Exp $
+// $Id: testG4NavigationHistory.cc,v 1.6 2003-11-02 16:06:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -82,28 +82,26 @@ G4bool testG4NavigationHistory()
     assert(nHist.GetDepth()==0);
     assert(nHist.GetMaxDepth()>0);
     assert(nHist.GetTransform(0)==G4AffineTransform(vorigin));
-    assert(nHist.GetReplicaNo(0)==-1);
+    assert(nHist.GetReplicaNo(0)==0);
     assert(nHist.GetVolume(0)==&detectorPhys);
 
-    offXPhys.Setup(&detectorPhys);
     nHist.NewLevel(&offXPhys);
     assert(nHist.GetDepth()==1);
     assert(nHist.GetTransform(1)==G4AffineTransform(vmx));
-    assert(nHist.GetReplicaNo(1)==-1);
+    // assert(nHist.GetReplicaNo(1)==0);
     assert(nHist.GetVolume(0)==&detectorPhys);
     assert(nHist.GetVolume(1)==&offXPhys);
 
     nHist.BackLevel();
     assert(nHist.GetDepth()==0);
     assert(nHist.GetTransform(0)==G4AffineTransform(vorigin));
-    assert(nHist.GetReplicaNo(0)==-1);
+    assert(nHist.GetReplicaNo(0)==0);
     assert(nHist.GetVolume(0)==&detectorPhys);
 
-    offMXPhys.Setup(&detectorPhys);
     nHist.NewLevel(&offMXPhys);
     assert(nHist.GetDepth()==1);
     assert(nHist.GetTransform(1)==G4AffineTransform(vx));
-    assert(nHist.GetReplicaNo(1)==-1);
+    // assert(nHist.GetReplicaNo(1)==0);
     assert(nHist.GetVolume(0)==&detectorPhys);
     assert(nHist.GetVolume(1)==&offMXPhys);
     
@@ -113,7 +111,7 @@ G4bool testG4NavigationHistory()
     return true;
 }
 
-int main( unsigned int argc, char* argv[] )
+int main()
 {
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");
@@ -121,8 +119,4 @@ int main( unsigned int argc, char* argv[] )
     assert(testG4NavigationHistory());
     return 0;
 }
-
-
-
-
 

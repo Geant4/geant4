@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Volumes.cc,v 1.8 2003-06-16 16:55:04 gunter Exp $
+// $Id: testG4Volumes.cc,v 1.9 2003-11-02 16:06:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,13 +109,10 @@ G4bool testG4PVPlacement()
     assert(offsetx.GetTranslation()==vmx);
     assert(offsetx.GetRotation()==0);
     assert(offsetx.GetLogicalVolume()==&myDaughter);
-    assert(offsetx.GetMother()==0);
     assert(offsetx.GetName()=="Target 1");
     assert(offsetx.IsMany()==false);
     assert(offsetx.IsReplicated()==false);
 
-    offsetx.Setup(0);
-    assert(offsetx.GetMother()==0);
     assert(offsetx.GetTranslation()==vmx);
     assert(offsetx.GetRotation()==0);
 
@@ -145,7 +142,6 @@ G4bool testG4PVReplica()
 			kXAxis,2,10);
 
     assert(replicaX.GetLogicalVolume()==&myDaughter);
-    assert(replicaX.GetMother()==0);
     assert(replicaX.GetName()=="Target 1");
     assert(replicaX.IsMany()==false);
     assert(replicaX.GetCopyNo()== (-1));
@@ -157,9 +153,6 @@ G4bool testG4PVReplica()
     G4bool consuming;
     replicaX.GetReplicationData(axis,n,width,offset,consuming);
     assert(axis==kXAxis&&n==2&&width==10&&offset==0&&consuming==true);
-
-    replicaX.Setup(0);
-    assert(replicaX.GetMother()==0);
 
     return true;
 }
@@ -192,8 +185,8 @@ G4bool testG4Volumes()
 			      &myDetectorPhys,false,0);
 
 // Assert on navigation links
-    assert(offXPhys.GetMother()==&myDetectorPhys);
-    assert(offMXPhys.GetMother()==&myDetectorPhys);
+    assert(offXPhys.GetMotherLogical()==&myDetectorLog);
+    assert(offMXPhys.GetMotherLogical()==&myDetectorLog);
 
     assert(myDetectorPhys.GetLogicalVolume()==&myDetectorLog);
     assert(myDetectorLog.GetNoDaughters()==2);
@@ -216,8 +209,7 @@ G4bool testG4Volumes()
     assert(exists);
 
 // Check setup set mother ok
-    offXPhys.Setup(&myDetectorPhys);
-    assert(offXPhys.GetMother()==&myDetectorPhys);
+    assert(offXPhys.GetMotherLogical()==&myDetectorLog);
     assert(offXPhys.GetTranslation()==G4ThreeVector(-15,0,0));
     assert(offXPhys.GetRotation()==0);
 

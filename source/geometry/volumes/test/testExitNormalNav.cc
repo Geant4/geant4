@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testExitNormalNav.cc,v 1.2 2002-10-22 12:40:30 japost Exp $
+// $Id: testExitNormalNav.cc,v 1.3 2003-11-02 16:06:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   Testing the product of Exit Normal of the Navigator for
@@ -371,6 +371,7 @@ G4bool testExitNormal(G4VPhysicalVolume *pTopNode,
 	 G4cout << " Location after is " << located->GetName() << G4endl; 
 	 G4cout << " localNorm  = "  << localNormal << G4endl;
 	 G4cout << " globalNorm = " << globalNormal << G4endl;
+	 G4cout << " expectedExitNorm = " << expectedExitNorm << G4endl;
        }
        assert( ApproxEqual( globalNormal, expectedExitNorm ) );
 
@@ -379,16 +380,16 @@ G4bool testExitNormal(G4VPhysicalVolume *pTopNode,
     return true; 
 }
 
-int main()
+G4bool testExitNormalNav()
 {
     G4VPhysicalVolume *myTopNode;
     const G4ThreeVector xHat(1,0,0),yHat(0,1,0),zHat(0,0,1);
     const G4ThreeVector mxHat(-1,0,0),myHat(0,-1,0),mzHat(0,0,-1);
-
+    
     G4ThreeVector initPointMinusX(-50.0*cm,0.01*cm,0.);
     G4ThreeVector initPointPluxX(50.0*cm, -0.01*cm,0.);
-
-    myTopNode=BuildGeometry();	// Build the geometry
+    
+    myTopNode=BuildGeometry();  // Build the geometry
     G4GeometryManager::GetInstance()->CloseGeometry(false);
     testG4Navigator1(myTopNode);
     testExitNormal(myTopNode, initPointMinusX, xHat,  xHat);
@@ -404,11 +405,13 @@ int main()
     testExitNormal(myTopNode, initPointPluxX, mxHat, mxHat);
     testExitNormal(myTopNode, G4ThreeVector(-50.0*cm,2.0*cm,0.0),  xHat, xHat);
     testExitNormal(myTopNode, G4ThreeVector(-50.0*cm,-2.0*cm,0.0), xHat, xHat);
-
     G4GeometryManager::GetInstance()->OpenGeometry();
-    return 0;
+    return true;
 }
 
-
-
+int main()
+{
+    assert(testExitNormalNav());
+    return 0;
+}
 

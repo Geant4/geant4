@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ParameterisedSolid1.cc,v 1.7 2003-06-16 16:55:02 gunter Exp $
+// $Id: testG4ParameterisedSolid1.cc,v 1.8 2003-11-02 16:06:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,7 +79,7 @@ class BoxesAndSpheres : public G4VPVParameterisation
   void     SetTwistAngle(G4double newAngle ) { fTwistAngle= newAngle; }
 
   virtual G4VSolid* ComputeSolid(const G4int n,
-				 G4VPhysicalVolume* pRep) 
+				 G4VPhysicalVolume*) 
   {
     G4VSolid* mySolid=0;
     if( n < fNumBoxes ) {
@@ -108,8 +108,8 @@ class BoxesAndSpheres : public G4VPVParameterisation
   }
   
   virtual void ComputeDimensions(G4Box &pBox,
-				 const G4int n,
-				 const G4VPhysicalVolume* pRep) const
+				 const G4int,
+				 const G4VPhysicalVolume*) const
   {
     if( &pBox != fBox ){
       G4cerr << " Got another Box in ComputeDimensions(G4Box, , )" << G4endl;
@@ -121,7 +121,7 @@ class BoxesAndSpheres : public G4VPVParameterisation
   
   virtual void ComputeDimensions(G4Sphere &pSphere,
 				 const G4int n,
-				 const G4VPhysicalVolume* pRep) const
+				 const G4VPhysicalVolume*) const
   {
     if( &pSphere != fSphere )
     {
@@ -136,7 +136,37 @@ class BoxesAndSpheres : public G4VPVParameterisation
     pSphere.SetStartThetaAngle(0);
     pSphere.SetDeltaThetaAngle(M_PI);
   }
-  
+ 
+  virtual void ComputeDimensions(G4Tubs &,
+				 const G4int ,
+                                 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Trd &, 
+				 const G4int,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Cons &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Trap &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Hype &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Orb &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Torus &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Para &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Polycone &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Polyhedra &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
  private:
     G4RotationMatrix *fRotationVec;
     G4double  fTwistAngle;

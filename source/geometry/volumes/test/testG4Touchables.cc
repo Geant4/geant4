@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Touchables.cc,v 1.6 2002-10-22 12:38:25 japost Exp $
+// $Id: testG4Touchables.cc,v 1.7 2003-11-02 16:06:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,12 +55,46 @@ class G4LinScale : public G4VPVParameterisation
   
   virtual void ComputeDimensions(G4Box &pBox,
 				 const G4int n,
-				 const G4VPhysicalVolume *pRep) const
+				 const G4VPhysicalVolume *) const
   {
     pBox.SetXHalfLength(n+1);
     pBox.SetYHalfLength(n+1);
     pBox.SetZHalfLength(n+1);
   }
+
+  virtual void ComputeDimensions(G4Tubs &,
+				 const G4int ,
+                                 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Trd &, 
+				 const G4int,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Cons &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Trap &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Hype &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Orb &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Sphere &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Torus &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Para &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Polycone &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Polyhedra &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
 };
 
 G4LinScale myParam;
@@ -153,8 +187,7 @@ G4bool testTouchableHistory(G4Navigator& nav)
 
   pvol=nav.LocateGlobalPointAndSetup(pos);
   assert(pvol->GetName()=="PosPhys2");
-  assert(pvol->GetMother()->GetName()=="PosPhys1");
-  assert(pvol->GetMother()->GetMother()->GetName()=="WorldPhys");
+  assert(pvol->GetMotherLogical()->GetName()=="PosLog");
 
 //  G4TouchableHistory *touch=nav.CreateTouchableHistory();
   G4TouchableHistoryHandle touch=nav.CreateTouchableHistory();
@@ -167,8 +200,7 @@ G4bool testTouchableHistory(G4Navigator& nav)
 
   pvol=nav.LocateGlobalPointAndSetup(-pos);
   assert(pvol->GetName()=="RepPhys");
-  assert(pvol->GetMother()->GetName()=="PosPhys3");
-  assert(pvol->GetMother()->GetMother()->GetName()=="WorldPhys");
+  assert(pvol->GetMotherLogical()->GetName()=="Pos3Log");
   assert(ApproxEqual(nav.GetCurrentLocalCoordinate(),G4ThreeVector(-1,-1,-1)));
 
 //  G4TouchableHistory *touch2=nav.CreateTouchableHistory();
@@ -182,8 +214,7 @@ G4bool testTouchableHistory(G4Navigator& nav)
 
   pvol=nav.LocateGlobalPointAndSetup(pos2);
   assert(pvol->GetName()=="ParamPhys");
-  assert(pvol->GetMother()->GetName()=="PosPhys4");
-  assert(pvol->GetMother()->GetMother()->GetName()=="WorldPhys");
+  assert(pvol->GetMotherLogical()->GetName()=="Pos4Log");
   assert(ApproxEqual(nav.GetCurrentLocalCoordinate(),G4ThreeVector(1,1,1)));
 
 //  G4TouchableHistory *touch3=nav.CreateTouchableHistory();
@@ -203,21 +234,18 @@ G4bool testTouchableHistory(G4Navigator& nav)
   pvol=nav.LocateGlobalPointAndSetup(pos, dir, *((G4TouchableHistory*)touch()));
   assert(ApproxEqual(nav.GetCurrentLocalCoordinate(),G4ThreeVector(1,1,1)));
   assert(pvol->GetName()=="PosPhys2");
-  assert(pvol->GetMother()->GetName()=="PosPhys1");
-  assert(pvol->GetMother()->GetMother()->GetName()=="WorldPhys");
+  assert(pvol->GetMotherLogical()->GetName()=="PosLog");
   assert(ApproxEqual(nav.NetTranslation(),G4ThreeVector(10,11,12)));
 
   pvol=nav.LocateGlobalPointAndSetup(-pos, dir, *((G4TouchableHistory*)touch2()));
   assert(ApproxEqual(nav.GetCurrentLocalCoordinate(),G4ThreeVector(-1,-1,-1)));
   assert(pvol->GetName()=="RepPhys");
-  assert(pvol->GetMother()->GetName()=="PosPhys3");
-  assert(pvol->GetMother()->GetMother()->GetName()=="WorldPhys");
+  assert(pvol->GetMotherLogical()->GetName()=="Pos3Log");
   assert(ApproxEqual(nav.NetTranslation(),G4ThreeVector(-10,-11,-12)));
 
   pvol=nav.LocateGlobalPointAndSetup(pos2, dir, *((G4TouchableHistory*)touch3()));
   assert(pvol->GetName()=="ParamPhys");
-  assert(pvol->GetMother()->GetName()=="PosPhys4");
-  assert(pvol->GetMother()->GetMother()->GetName()=="WorldPhys");
+  assert(pvol->GetMotherLogical()->GetName()=="Pos4Log");
   assert(ApproxEqual(nav.NetTranslation(),G4ThreeVector(8,-2,-2)));
 
   //delete touch;
