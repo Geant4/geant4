@@ -1,4 +1,4 @@
-# $Id: swig.gmk,v 1.2 2003-06-13 16:05:33 dressel Exp $
+# $Id: swig.gmk,v 1.3 2003-06-17 07:33:35 dressel Exp $
 # --------------------------------------------------------------
 # swig.gmk   Michael Dressel
 # --------------------------------------------------------------
@@ -37,7 +37,6 @@ $(SWIGSO): $(objectfilesWrapper) $(SWIG_OBJ_DEP)
 	$(CXX) -Wl,-soname,$(@F) -shared $(LDFLAGS) $(objectfilesWrapper) $(SWIG_OBJ_DEP) $(MYLIBS) -lc -o $(SWIGSO)
 
 src/%_wrap.cc: include/%.i
-	@echo SWIGFLAGS: $(SWIGFLAGS)
 	$(SWIG) -python -c++ -shadow -no_default $(SWIGFLAGS) \
 	-o $@ $<
 	@mv src/$(moduleName).py ./
