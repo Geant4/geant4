@@ -1,4 +1,4 @@
-$Id: History,v 1.62 2001-10-25 05:46:18 kurasige Exp $
+$Id: History,v 1.63 2001-10-30 20:15:25 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Oct 30, 2001    H.Kurashige (particles-V03-02-09)
+- TAG FOR CUT FOR MATERIAL -
+-------- partman-V03-02-09
+-------- bosons-V03-02-09
+-------- leptons-V03-02-09
+-------- hadrons-V03-02-09
+- Modify CalcEnergyCuts method
+
 - Oct 25, 2001    H.Kurashige (particles-V03-02-08)
 - TAG FOR CUT FOR MATERIAL -
 - STL migartion in test directory 
