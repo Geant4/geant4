@@ -46,6 +46,8 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   counter++;
   G4cerr << "Reaction number "<< counter << " "<<aTrack.GetDynamicParticle()->GetDefinition()->GetParticleName()<<" "<< aTrack.GetDynamicParticle()->GetKineticEnergy()<<G4endl;
 #endif
+
+
   
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadeInterface::ApplyYourself" << G4endl;
@@ -94,7 +96,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
     if (verboseLevel > 2) {
       G4cout << "Target:  " << G4endl;  
-      targetH->printParticle();
+      target->printParticle();
     }
   }
 
