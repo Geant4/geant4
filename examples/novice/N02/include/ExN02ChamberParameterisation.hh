@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02ChamberParameterisation.hh,v 1.7 2003-05-28 09:54:09 gcosmo Exp $
+// $Id: ExN02ChamberParameterisation.hh,v 1.8 2003-10-30 10:03:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,6 +45,7 @@ class G4Box;
 class G4Trd;
 class G4Trap;
 class G4Cons;
+class G4Orb;
 class G4Sphere;
 class G4Torus;
 class G4Para;
@@ -79,6 +80,7 @@ class ExN02ChamberParameterisation : public G4VPVParameterisation
     void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
