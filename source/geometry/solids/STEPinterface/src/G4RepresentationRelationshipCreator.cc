@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RepresentationRelationshipCreator.cc,v 1.7 2001-07-11 10:00:11 gunter Exp $
+// $Id: G4RepresentationRelationshipCreator.cc,v 1.8 2002-02-07 10:12:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -156,7 +156,7 @@ void G4RepresentationRelationshipCreator::CreateG4Geometry(STEPentity& Ent)
   G4int entr = tmpsldV->size();
   for(G4int a = 0; a < entr; a++)
   {
-    if (0 < a < places->size())
+    if ((0 < a) && (a < places->size()))
       place = (G4Axis2Placement3D*)((*places)[a]);
     tmpsld = (*tmpsldV)[a];
     if (tmpsld)
