@@ -5,18 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserSpecialCuts.hh,v 1.1 1999-01-07 16:14:11 gunter Exp $
+// $Id: G4UserSpecialCuts.hh,v 1.2 1999-11-22 15:50:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	For information related to this code contact:
-//	CERN, CN Division, ASD group
 // ------------------------------------------------------------
 //                  15 April 1998  M.Maire
 // ------------------------------------------------------------
+//
+// class description
+//
+// a "process" to be registered to the process manager of each particle,
+// in the UserPhysicsList, in order to take account the user limits defined in the 
+// G4UserLimits attached to a logical volume.
+//
 
 #ifndef G4UserSpecialCuts_h
 #define G4UserSpecialCuts_h 1
@@ -25,14 +25,16 @@
 #include "globals.hh"
 #include "G4VProcess.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4UserSpecialCuts : public G4VProcess 
 {
-  public:     
+  public:  //with description     
 
      G4UserSpecialCuts(const G4String& processName ="UserSpecialCut" );
 
-     ~G4UserSpecialCuts();
+    ~G4UserSpecialCuts();
 
      virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
@@ -45,6 +47,8 @@ class G4UserSpecialCuts : public G4VProcess
 			     const G4Step& 
 			    );
 			    
+  public:  //without description 
+     			    
      //  no operation in  AtRestGPIL
      virtual G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& ,
