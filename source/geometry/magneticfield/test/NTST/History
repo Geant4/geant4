@@ -1,0 +1,24 @@
+$Id: History,v 1.1 2003-11-07 21:30:27 japost Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    ExampleNTST History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+ May 27th, 2003  John Apostolakis
+ - Ported to gcc 3.2
+     * deleted all Bgs classes 
+
+(After July 1998 David Williams)
+
+- Started from ExampleN02 

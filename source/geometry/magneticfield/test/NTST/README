@@ -1,0 +1,144 @@
+$Id: README,v 1.1 2003-11-07 21:30:27 japost Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            ExampleNTST
+                            -----------
+
+	This example simulates the BaBar silicon vertex tracker and 40-layer
+        drift chamber. This example also runs either the standard G4 
+        transportation code (default) or BgsG4Extension (files in src/
+        and include/ prepended with 'Bgs').
+	
+ 1- GEOMETRY DEFINITION
+
+        The geometry consists of the active elements (wafers) of the BaBar
+        silicon vertex tracker (SVT) and the 40-layer drift chamber (DCH). 
+        There is a detector messenger class (NTSTDetectorMessenger) to set 
+	geometry options. 
+
+	Command directory path : /NTST/
+
+	Guidance :
+	NTST detector control.
+
+	 Sub-directories : 
+	 Commands : 
+	   setInputFile * Set input file name
+	   disable * disable detetector
+	   setDebug * Set debug flag.
+	   setNSubLayer * Set the number of SVT sublayers.
+	   setOuterRadius * Set outer radius of the SVT mother volume
+	   getFieldStats * Return number calls to field routine
+ 	    
+ 2- GENERATORS
+
+	There is a generator action class which generates events according
+	to two possible generators and optionally print the event. 
+	The generator and print options are controlled by 
+	NTSTGeneratorMessenger class, which has the following options
+	available:
+
+ 	Commands : 
+   	choose * Choose the generator to use.
+   	print * print events (true) or not (false).
+
+	There are currently two generators available for use: 
+
+	- NTSTGunGenerator ('gun'):
+	generates single particle events containing 1 or more particles of a 
+	specified type over a range of momenta and solid angle. This class
+	has an associated messenger, NTSTGunMessenger, which allows the user 
+        to issue the commands :
+ 
+	   List * List available particles.
+	   particle * Set particle to be generated.
+	   vertex * Set vertex position (with unit, def: mm).
+	   spotsize * Set vertex size (with unit, def: mm).
+	   plow * Set low momentum limit (with unit, def: GeV).
+ 	   phigh * Set high momentum limit (with unit, def: GeV).
+	   coslow * Set lower cosine limit.
+	   coshigh * Set upper cosine limit.
+	   philow * Set low phi limit (with unit, def: degree).
+	   phihigh * Set high phi limit (with unit, def: degree).
+	   t0 * Set initial t0 of the particle (with unit, def: ns).
+	   polarization * Set polarization.
+	   number * Set number of particles to be generated.
+
+	- NTSTBabarEvtReadGenerator ('evt'):
+	reads an ascii file of events which have been generated previously by
+	GenFwkInt, the BaBar generator framework interface. A file,
+	babarevt.out, contains 1000 B-Bbar events generated at the Upsilon 4S
+	and boosted into the BaBar detector rest frame (recall that in this
+	frame, the e- and e+ beams collide with momenta of +9 and -3.1 GeV,
+	respectively. The beam axis is rotated by -20.5mr from the z-axis in
+	the x-z plane and the interaction point is sampled from a beam
+	spot of approximately 100 microns (x), 4.6 microns (y) and 1 cm (z)).
+	There is no messenger associated with this generator.
+ 	
+ 	A RUN is a set of events.
+ 	
+ 3- PHYSICS PROCESSES
+
+	The physics processes are set in a class called NTSTPhysicsList. 
+	There is a messenger which controls the settings of some of the 
+	processes. The commands available to the user are listed in /run:
+
+	 Sub-directories : 
+	   /run/particle/   Commands for G4VUserPhysicsList.
+	 Commands : 
+	   initialize * Initialize G4 kernel.
+	   beamOn * Start a Run.
+	   verbose * Set the Verbose level of G4RunManager.
+	   optimizeGeometry * Set the optimization flag for geometry.
+	   breakAtBeginOfEvent * Set a break point at the begining of every event.
+	   breakAtEndOfEvent * Set a break point at the end of every event.
+	   abort * Abort current run processing.
+	   geometryModified * Force geometry to be closed again.
+	   cutoffModified * Force closssection tables to be calculated again.
+	   storeRandomNumberStatus * Store the status of the random number engine to a file.
+	   restoreRandomNumberStatus * Restore the status of the random number engine from a file.
+	   setEmProcess * select electromagnetic processes
+	   useBgsTran * True if BgsTransportation to be used
+	   minEcut * ParticleWithCuts minimum energy cut (with unit, def: MeV)
+	   maxEcut * ParticleWithCuts maximum energy cut (with unit, def: MeV)
+	   cut * new cut value (with unit, def: mm)
+	   looperCut * Kill loopers below this cut (with unit, def: MeV)
+
+ 3- DETECTOR RESPONSE
+	No hits/digis are currently scored.
+ 
+ 4- VISUALIZATION
+ 	
+ 6- HOW TO START ?
+ 
+ 	- compile and link to generate an executable
+ 		% cd NTST
+ 		% gmake
+ 		
+ 	- execute NTST in 'interactive mode' with visualization
+		% exampleNTST
+ 		% exampleNTST
+ 		....
+ 		Idle> type your commands
+ 		....
+ 		Idle> exit
+	- or use the supplied macro files:
+
+file    	Transportation	 range cut	looper cut	e-cut
+---------------------------------------------------------------------------
+run2a.mac	G4Transportation 2 mm		< 200 MeV	< 1 MeV
+run2b.mac		"	 2 mm 		< 200 MeV	not applied
+run2c.mac		"	 2 mm		not applied	not applied
+---------------------------------------------------------------------------
+		% exampleNTST run2c.mac will run G4 using G4Transportation
+					with the default range/energy cuts
+					using the 'evt' generator.
+
+
+
+
+
