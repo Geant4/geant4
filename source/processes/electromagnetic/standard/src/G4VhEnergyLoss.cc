@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.27 2001-11-08 08:17:17 urban Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.28 2001-11-08 15:28:12 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -733,9 +733,9 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
                ParticleDirection = ParticleDirectionnew;
 
                G4Track* deltaTrack =
-                        new G4Track(theDelta,DeltaTime,DeltaPosition);
+                   new G4Track(theDelta,DeltaTime,DeltaPosition);
                deltaTrack->
-                SetTouchable(stepData.GetPostStepPoint()->GetTouchable()) ;
+                   SetTouchableHandle(stepData.GetPostStepPoint()->GetTouchableHandle()) ;
 
                deltaTrack->SetParentID(trackData.GetTrackID()) ;
 
