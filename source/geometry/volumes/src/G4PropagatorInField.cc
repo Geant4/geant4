@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.36 2002-07-29 14:36:35 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.37 2002-08-06 10:35:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -608,7 +608,7 @@ G4PropagatorInField::LocateIntersectionPoint(
          G4cout << G4endl
                 << "The final curve point is not further along"
                 << " than the original!" << G4endl;
-         G4Exception("G4PropagatorInField::LocateIntersectionPoint()");
+         G4Exception("ERROR - G4PropagatorInField::LocateIntersectionPoint()");
        }
      } // EndIf ( E is close enough to the curve, ie point F. )
        // tests ChordAF_Vector.mag() <= maximum_lateral_displacement 

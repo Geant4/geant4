@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.6 2002-05-15 10:23:41 gcosmo Exp $
+// $Id: G4ParameterisedNavigation.cc,v 1.7 2002-08-06 10:35:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4ParameterisedNavigation Implementation
+//
+// Author: P.Kent, 1996
 //
 // ********************************************************************
 

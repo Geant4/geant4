@@ -21,11 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc,v 1.5 2002-04-19 08:22:09 gcosmo Exp $
+// $Id: G4NavigationHistory.cc,v 1.6 2002-08-06 10:35:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// G4NavigationHistory Implementation P.Kent August 96
+// G4NavigationHistory Implementation
+//
+// Author: P.Kent, August 96
+//
+// ********************************************************************
 
 #include "G4NavigationHistory.hh"
 #include "G4ios.hh"
@@ -33,7 +37,7 @@
 G4NavigationHistory::G4NavigationHistory()
   : fNavHistory(kHistoryMax), fStackDepth(0)
 {
-  Reset();	// Reset depth
+  Reset();  // Reset depth
   Clear();
 }
 
@@ -44,38 +48,40 @@ G4NavigationHistory::G4NavigationHistory(const G4NavigationHistory &h)
 
 G4NavigationHistory::~G4NavigationHistory()
 {
-  Reset();	// To delete all but one current entries!
+  Reset();  // To delete all but one current entries!
   // delete fNavHistory(0);
 }
 
 G4std::ostream&
 operator << (G4std::ostream& os, const G4NavigationHistory& nav)
 {
-  G4cout << "History depth="<<nav.GetDepth()<< G4endl;
-  for (G4int i=0;i<=nav.GetDepth();i++)
+  G4cout << "History depth=" << nav.GetDepth() << G4endl;
+  for ( G4int i=0; i<=nav.GetDepth(); i++ )
   {
-      os << "Level=["<<i<<"]: " ;
-      if( nav.GetVolume(i) != 0 ) {
-	 os   << "Phys Name=["<< nav.GetVolume(i)->GetName()
-	      << "] Type=[";
-	 switch(nav.GetVolumeType(i))
-	   {
-	   case kNormal:
-	     os <<"N";
-	     break;
-	   case kReplica:
-	     os <<"R" << nav.GetReplicaNo(i);
-	     break;
-	   case kParameterised:
-	     os <<"P" << nav.GetReplicaNo(i);
-	     break;
-	   }
-	 os << "]";
-      }else{
-	 os << "Phys = <Null>";
+    os << "Level=["<<i<<"]: ";
+    if( nav.GetVolume(i) != 0 )
+    {
+      os << "Phys Name=["<< nav.GetVolume(i)->GetName()
+         << "] Type=[";
+      switch(nav.GetVolumeType(i))
+      {
+        case kNormal:
+          os << "N";
+          break;
+        case kReplica:
+          os << "R" << nav.GetReplicaNo(i);
+          break;
+        case kParameterised:
+          os << "P" << nav.GetReplicaNo(i);
+          break;
       }
-      os << G4endl;
+      os << "]";
+    }
+    else
+    {
+      os << "Phys = <Null>";
+    }
+    os << G4endl;
   }
   return os;
 }
-

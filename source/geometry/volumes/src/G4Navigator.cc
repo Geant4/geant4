@@ -21,10 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.32 2002-06-12 09:22:02 japost Exp $
+// $Id: G4Navigator.cc,v 1.33 2002-08-06 10:35:56 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
-// class G4Navigator Implementation  Paul Kent July 95/96
+// class G4Navigator Implementation
+//
+// Author: Paul Kent, July 95/96
 //
 // ********************************************************************
 
@@ -354,8 +356,10 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       //
       fBlockedPhysicalVolume = 0;
       fBlockedReplicaNo = -1;
+
       // fEntering should be false -- else blockedVolume is assumed good.
-      // fEnteredDaughter is used for ExitNormal -- 
+      // fEnteredDaughter is used for ExitNormal
+      //
       fEntering = false;
       fEnteredDaughter = true;
     }
@@ -432,7 +436,7 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
          break;
 
        case kReplica:
-         G4Exception("ERROR in G4Navigator::LocateGlobalPointWithinVolume()");
+         G4Exception("ERROR - G4Navigator::LocateGlobalPointWithinVolume()");
          break;
      }
    }
@@ -688,7 +692,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
                                      fBlockedReplicaNo);
         break;
       case kReplica:
-        G4Exception("Logic Error in G4Navigator::ComputeStep()");
+        G4Exception("ERROR - G4Navigator::ComputeStep()");
         break;
     }
   }
@@ -937,7 +941,7 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
           newSafety = fparamNav.ComputeSafety(localPoint,fHistory,pMaxLength);
           break;
         case kReplica:
-          G4Exception("Logic Error in G4Navigator::ComputeSafety()");
+          G4Exception("ERROR - G4Navigator::ComputeSafety()");
           break;
       }
     }

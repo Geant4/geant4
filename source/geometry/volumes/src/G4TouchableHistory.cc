@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.cc,v 1.5 2001-07-11 10:00:34 gunter Exp $
+// $Id: G4TouchableHistory.cc,v 1.6 2002-08-06 10:35:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4TouchableHistory Implementation
+//
+// ********************************************************************
 
 #include "G4TouchableHistory.hh"
 
@@ -36,31 +38,37 @@ G4TouchableHistory::~G4TouchableHistory()
 const G4ThreeVector&
 G4TouchableHistory::GetTranslation(G4int depth) const
 {
-   // The value returned will change at the next call
-   //  Copy it if you want to use it!
-   //   
-   static G4ThreeVector currTranslation;
-   if(depth==0.0) {
-      return ftlate;
-   }else{
-      currTranslation =
-         fhistory.GetTransform(CalculateHistoryIndex(depth)).NetTranslation();
-      return currTranslation;
-   }
+  // The value returned will change at the next call
+  // Copy it if you want to use it!
+  //
+  static G4ThreeVector currTranslation;
+  if(depth==0.0)
+  {
+    return ftlate;
+  }
+  else
+  {
+    currTranslation =
+      fhistory.GetTransform(CalculateHistoryIndex(depth)).NetTranslation();
+    return currTranslation;
+  }
 }
 
 const G4RotationMatrix*
 G4TouchableHistory::GetRotation(G4int depth) const
 {
-   // The value returned will change at the next call
-   //  Copy it if you want to use it!
-   //
-   static G4RotationMatrix rotM;
+  // The value returned will change at the next call
+  // Copy it if you want to use it!
+  //
+  static G4RotationMatrix rotM;
 
-   if(depth==0.0) {
-      return &frot;
-   }else{
-      rotM = fhistory.GetTransform(CalculateHistoryIndex(depth)).NetRotation();
-      return &rotM;
-   }
+  if(depth==0.0)
+  {
+    return &frot;
+  }
+  else
+  {
+    rotM = fhistory.GetTransform(CalculateHistoryIndex(depth)).NetRotation();
+    return &rotM;
+  }
 }
