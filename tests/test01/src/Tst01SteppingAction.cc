@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst01SteppingAction.cc,v 1.1 1999-01-08 16:34:31 gunter Exp $
+// $Id: Tst01SteppingAction.cc,v 1.2 1999-04-17 04:05:09 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,11 +39,8 @@ Tst01SteppingAction::~Tst01SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Tst01SteppingAction::UserSteppingAction()
+void Tst01SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-
-  G4Step* aStep = GetSteppingManager()->GetStep();
-
   Steplength.accumulate(aStep->GetStepLength());
 
   G4double phi = aStep->GetDeltaPosition().phi();
@@ -53,6 +50,17 @@ void Tst01SteppingAction::UserSteppingAction()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+
+
+
+
+
+
+
+
 
 
 
