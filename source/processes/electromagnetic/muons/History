@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2001-11-12 11:08:20 maire Exp $
+$Id: History,v 1.27 2002-02-11 15:16:50 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+10 fev 02: mma (muons-V04-00-00)
+- G4VMuEnergyLoss : error in SetMindeltaCutInRange, was set in energy !
+         
 12 nov 01: mma (muons-V03-02-10)
 - ParticleMass and Charge: local variables
 - merge 09 + 06a
