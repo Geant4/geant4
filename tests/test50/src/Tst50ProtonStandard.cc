@@ -51,9 +51,9 @@ void Tst50ProtonStandard::ConstructProcess()
      
       if (particleName == "proton") 
 	{
-	  G4VProcess*  multipleScattering= new G4MultipleScattering(); 
+	  //G4VProcess*  multipleScattering= new G4MultipleScattering(); 
 	  manager->AddProcess(new G4hIonisation(),-1,2,2);
-	  manager->AddProcess(multipleScattering,-1,1,1);  	
+	  //manager->AddProcess(multipleScattering,-1,1,1);  	
 
 	}
     }
