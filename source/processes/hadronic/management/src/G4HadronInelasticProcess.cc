@@ -38,12 +38,11 @@
 #include "G4GenericIon.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
+#include "G4HadronicException.hh"
   
  void G4HadronInelasticProcess::BuildThePhysicsTable()
   {
     if (!G4HadronicProcess::GetCrossSectionDataStore()) {
-     //      G4Exception("G4HadronInelasticProcess::BuildThePhysicsTable: "
-     //                  "no CrossSectionDataStore");
       return;
     }
     G4HadronicProcess::GetCrossSectionDataStore()->BuildPhysicsTable(*theParticle);
@@ -91,9 +90,11 @@
   {
     // returns the microscopic cross section in GEANT4 internal units
     
-   if (!G4HadronicProcess::GetCrossSectionDataStore()) {
-      G4Exception("G4HadronInelasticProcess::GetMicroscopicCrossSection:"
-                  "no CrossSectionDataStore");
+   if (!G4HadronicProcess::GetCrossSectionDataStore()) 
+   {
+      throw(G4HadronicException(__FILE__, __LINE__, 
+      "G4HadronInelasticProcess::GetMicroscopicCrossSection: "
+                  "no CrossSectionDataStore") );
       return DBL_MIN;
    }
    return G4HadronicProcess::GetCrossSectionDataStore()->GetCrossSection(aParticle, anElement, aTemp);

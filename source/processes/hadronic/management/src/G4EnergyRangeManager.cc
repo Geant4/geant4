@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyRangeManager.cc,v 1.9 2003-11-01 11:50:29 hpw Exp $
+// $Id: G4EnergyRangeManager.cc,v 1.10 2003-11-01 16:19:07 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Energy Range Manager
@@ -33,7 +33,6 @@
  
 #include "G4EnergyRangeManager.hh"
 #include "Randomize.hh"
-#include "G4NoModelFound.hh"
 #include "G4HadronicException.hh"
 
  G4EnergyRangeManager::G4EnergyRangeManager(

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mars5GeV.cc,v 1.6 2003-07-01 16:28:45 hpw Exp $
+// $Id: G4Mars5GeV.cc,v 1.7 2003-11-01 16:22:11 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -410,7 +410,8 @@ void G4Mars5GeV::AddSecondary()
 
   Trans(&pin, &pout);
   if (numberOfSecondaries>=FastVectorSize) {
-    G4Exception(" G4Mars5GeV::AddSecondary() too many secondaries");
+    G4String text = " G4Mars5GeV::AddSecondary() too many secondaries";
+    throw(G4HadronicException(__FILE__, __LINE__, text) );
   }
 
   // create seconday Dynamic Particle

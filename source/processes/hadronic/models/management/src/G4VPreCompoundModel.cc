@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.cc,v 1.1 2003-10-07 12:38:36 hpw Exp $
+// $Id: G4VPreCompoundModel.cc,v 1.2 2003-11-01 16:21:02 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4VPreCompoundModel.hh"
+#include "G4HadronicException.hh"
 
 G4VPreCompoundModel::G4VPreCompoundModel(G4ExcitationHandler *const value):
   theExcitationHandler(value)
@@ -36,7 +37,8 @@ G4VPreCompoundModel::G4VPreCompoundModel(G4ExcitationHandler *const value):
 const G4VPreCompoundModel & 
 G4VPreCompoundModel::operator=(const G4VPreCompoundModel &)
 {
-  G4Exception("G4VPreCompoundModel::operator= meant to not be accessable");
+  G4String text = "G4VPreCompoundModel::operator= meant to not be accessable";
+  throw( G4HadronicException(__FILE__, __LINE__, text) ); 
   return *this;
 }
 

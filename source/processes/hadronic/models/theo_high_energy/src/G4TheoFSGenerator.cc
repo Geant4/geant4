@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.cc,v 1.1 2003-10-07 11:38:02 hpw Exp $
+// $Id: G4TheoFSGenerator.cc,v 1.2 2003-11-01 16:22:54 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TheoFSGenerator
@@ -48,7 +48,8 @@ G4TheoFSGenerator::~G4TheoFSGenerator()
 
 const G4TheoFSGenerator & G4TheoFSGenerator::operator=(const G4TheoFSGenerator &)
 {
-  G4Exception("G4CrossSectionBase::operator= meant to not be accessable");
+  G4String text = "G4CrossSectionBase::operator= meant to not be accessable";
+  throw(G4HadronicException(__FILE__, __LINE__, text) );
   return *this;
 }
 

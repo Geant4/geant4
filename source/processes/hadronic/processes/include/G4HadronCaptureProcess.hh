@@ -71,8 +71,6 @@ public:
       return G4HadronicProcess::GeneralPostStepDoIt(aTrack, aStep);
    }
 
-   void BuildThePhysicsTable(G4ParticleDefinition& aParticleType);
-
    G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
 
    void DumpPhysicsTable(const G4ParticleDefinition& aParticleType);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.1 2003-10-07 11:34:42 hpw Exp $
+// $Id: G4HadronicInteraction.hh,v 1.2 2003-11-01 16:21:02 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Interaction  abstract base class
@@ -53,16 +53,15 @@
 #include "G4Track.hh"
 #include "G4HadProjectile.hh"
 #include "G4HadronicInteractionRegistry.hh"
+#include "G4HadronicException.hh"
 
  class G4HadronicInteraction
  {
  public:
     
     G4HadronicInteraction() :
-      verboseLevel(0), theMinEnergy(0.0*GeV), theMaxEnergy(25.0*GeV), isBlocked(false),
-      theMinCounter(0), theMaxCounter(0), theBlockedCounter(0), 
-      theMinCounterElements(0), theMaxCounterElements(0),
-      theBlockedCounterElements(0)
+      verboseLevel(0), theMinEnergy(0.0*GeV), 
+      theMaxEnergy(25.0*GeV), isBlocked(false)
     { 
       G4HadronicInteractionRegistry::RegisterMe(this);
     }
@@ -81,7 +80,8 @@
     inline const G4HadronicInteraction & operator=(
      const G4HadronicInteraction &right )
     { 
-     if(this!=&right) G4Exception("unintended use of G4HadronicInteraction::operator=");
+     G4String text = "unintended use of G4HadronicInteraction::operator=";
+     throw( G4HadronicException(__FILE__, __LINE__, text) ); 
      return right;
     }
     
@@ -189,34 +189,13 @@ public: // Without description
     G4bool isBlocked;
     
  private:
-    
-    enum { MAX_LIST_SIZE = 500 };
-    
-    // the following allow for restrictions/additions for specific materials
-    
-    G4double theMinEnergyList[ MAX_LIST_SIZE ];
-    G4Material *theMinMaterials[ MAX_LIST_SIZE ];
-    G4int theMinCounter;
-    
-    G4double theMaxEnergyList[ MAX_LIST_SIZE ];
-    G4Material *theMaxMaterials[ MAX_LIST_SIZE ];
-    G4int theMaxCounter;
-
-    G4Material *theBlockedList[ MAX_LIST_SIZE ];
-    G4int theBlockedCounter;
-
-    // the following allow for restrictions/additions for specific elements
-
-    G4double theMinEnergyListElements[ MAX_LIST_SIZE ];
-    G4Element *theMinElements[ MAX_LIST_SIZE ];
-    G4int theMinCounterElements;
-    
-    G4double theMaxEnergyListElements[ MAX_LIST_SIZE ];
-    G4Element *theMaxElements[ MAX_LIST_SIZE ];
-    G4int theMaxCounterElements;
-
-    G4Element *theBlockedListElements[ MAX_LIST_SIZE ];
-    G4int theBlockedCounterElements;
+        
+    std::vector<std::pair<G4double, G4Material *> > theMinEnergyList;
+    std::vector<std::pair<G4double, G4Material *> > theMaxEnergyList;
+    std::vector<std::pair<G4double, G4Element *> > theMinEnergyListElements;
+    std::vector<std::pair<G4double, G4Element *> > theMaxEnergyListElements;
+    std::vector<G4Material *> theBlockedList;
+    std::vector<G4Element *> theBlockedListElements;
  };
  
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiKaonZeroInelastic.cc,v 1.5 2003-10-31 18:04:16 hpw Exp $
+// $Id: G4LEAntiKaonZeroInelastic.cc,v 1.6 2003-11-01 16:22:33 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy KaonZeroLong Inelastic Process
@@ -31,7 +31,8 @@
  
 #include "G4LEAntiKaonZeroInelastic.hh"
 #include "Randomize.hh"
- 
+#include "G4HadReentrentException.hh"
+
  G4HadFinalState *
   G4LEAntiKaonZeroInelastic::ApplyYourself( const G4HadProjectile &aTrack,
                                          G4Nucleus &targetNucleus )
@@ -103,11 +104,18 @@
                originalIncident, currentParticle, targetParticle,
                incidentHasChanged, targetHasChanged, quasiElastic );
     
-    CalculateMomenta( vec, vecLen,
+    try
+    {
+        CalculateMomenta( vec, vecLen,
                       originalIncident, originalTarget, modifiedOriginal,
                       targetNucleus, currentParticle, targetParticle,
                       incidentHasChanged, targetHasChanged, quasiElastic );
-    
+    }
+    catch(G4HadReentrentException aR)
+    {
+      aR.Report(G4cout);
+      throw(G4HadReentrentException(__FILE__, __LINE__, "Bailing out"));
+    }
     SetUpChange( vec, vecLen,
                  currentParticle, targetParticle,
                  incidentHasChanged );

@@ -42,6 +42,7 @@
 #include "Randomize.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
+#include "G4HadronicException.hh"
 
 
 class G4ParticleDefinition;
@@ -253,7 +254,11 @@ inline G4int G4Fragment::GetNumberOfCharged()  const
 inline void G4Fragment::SetNumberOfCharged(const G4int value)
 {
   if (value <= numberOfParticles) numberOfCharged = value;
-  else G4Exception("G4Fragment::SetNumberOfCharged: Number of charged particles can't be greater than number of particles");
+  else 
+  {
+  G4String text = "G4Fragment::SetNumberOfCharged: Number of charged particles can't be greater than number of particles";
+	  throw(G4HadronicException(__FILE__, __LINE__, text) );
+  }
 }
 
 inline G4int G4Fragment::GetNumberOfParticles()  const

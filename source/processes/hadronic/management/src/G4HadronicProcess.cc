@@ -31,7 +31,6 @@
 #include <stdlib.h>
 #include "G4HadronicProcess.hh"
 #include "G4EffectiveCharge.hh"
-#include "G4NoModelFound.hh"
 #include "G4HadProjectile.hh"
 #include "G4ElementVector.hh"
 #include "G4Track.hh"
@@ -45,6 +44,7 @@
 
 #include "G4HadLeadBias.hh"
 #include "G4HadronicException.hh"
+#include "G4HadReentrentException.hh"
 
 //@@ add model name info, once typeinfo available #include <typeinfo.h>
  
@@ -86,12 +86,16 @@
    catch(G4HadronicException & aE)
    {
      aE.Report(std::cout);
-     G4Exception("Could not register G4HadronicInteraction");
+     G4Exception("G4HadronicProcess", "007", FatalException,
+                 "Could not register G4HadronicInteraction");
    }
  }
 
- G4double G4HadronicProcess::
- GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
+G4double G4HadronicProcess::
+GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
+{ 
+  G4double sigma = 0.0;
+  try
   {
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
     if( !IsApplicable(*aParticle->GetDefinition()))
@@ -107,9 +111,10 @@
       }
       G4cout << "for kinetic energy "<<aParticle->GetKineticEnergy()<<G4endl;
       G4cout << "and material "<<aTrack.GetMaterial()->GetName()<<G4endl;
-      G4Exception( this->GetProcessName()+
+      G4Exception("G4HadronicProcess", "007", FatalException,
+                   std::string(this->GetProcessName()+
                    " was called for "+
-                   aParticle->GetDefinition()->GetParticleName() );
+                   aParticle->GetDefinition()->GetParticleName()).c_str() );
     }
     G4Material *aMaterial = aTrack.GetMaterial();
     G4int nElements = aMaterial->GetNumberOfElements();
@@ -121,7 +126,6 @@
     
     G4double aTemp = aMaterial->GetTemperature();
         
-    G4double sigma = 0.0;
     for( G4int i=0; i<nElements; ++i )
     {
       G4double xSection =
@@ -130,11 +134,18 @@
     }
     sigma *= aScaleFactor;
     theLastCrossSection = sigma;
-    if( sigma > 0.0 )
-      return 1.0/sigma;
-    else
-      return DBL_MAX;
   }
+  catch(G4HadronicException aR)
+  { 
+    aR.Report(G4cout); 
+    G4Exception("G4HadronicProcess", "007", FatalException,
+                "G4HadronicProcess::GetMeanFreePath failed");
+  } 
+  if( sigma > 0.0 )
+    return 1.0/sigma;
+  else
+    return DBL_MAX;
+}
 
  G4double G4HadronicProcess::GetDistanceToBoundary(const G4Track & aT)
  {
@@ -202,7 +213,22 @@
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
     G4Material *aMaterial = aTrack.GetMaterial();
     G4double kineticEnergy = aParticle->GetKineticEnergy();
-    G4Element * anElement = ChooseAandZ( aParticle, aMaterial );
+    G4Element * anElement = 0;
+    try
+    {
+      anElement = ChooseAandZ( aParticle, aMaterial );
+    }
+    catch(G4HadronicException & aR)
+    {
+      aR.Report(G4cout);
+      G4cout << "Unrecoverable error for:"<<G4endl;
+      G4cout << " - Particle energy[GeV] = "<< kineticEnergy/GeV<<G4endl;
+      G4cout << " - Material = "<<aMaterial->GetName()<<G4endl;
+      G4cout << " - Particle type = "
+             <<aParticle->GetDefinition()->GetParticleName()<<G4endl;
+      G4Exception("G4HadronicProcess", "007", FatalException,
+                  "GeneralPostStepDoIt failed on element selection.");
+    }
     try
     {
     theInteraction = ChooseHadronicInteraction( kineticEnergy,
@@ -215,11 +241,45 @@
       G4cout << " - Particle energy[GeV] = "<< kineticEnergy/GeV<<G4endl;
       G4cout << " - Material = "<<aMaterial->GetName()<<G4endl;
       G4cout << " - Particle type = "<<aParticle->GetDefinition()->GetParticleName()<<G4endl;
-      G4Exception("GetHadronicProcess: ChooseHadronicInteraction failed.");
+      G4Exception("G4HadronicProcess", "007", FatalException,
+                  "ChooseHadronicInteraction failed.");
     }
     G4HadProjectile thePro(aTrack);
-    G4HadFinalState *result =
-      theInteraction->ApplyYourself( thePro, targetNucleus);
+    
+    G4HadFinalState *result = 0;
+    G4int reentryCount = 0;
+    do
+    {
+      try
+      {
+         result = theInteraction->ApplyYourself( thePro, targetNucleus);
+      }
+      catch(G4HadReentrentException aR)
+      {
+        aR.Report(G4cout);
+	G4cout << " G4HadronicProcess re-entering the ApplyYourself call for"<<G4endl;
+        G4cout << " - Particle energy[GeV] = "<< kineticEnergy/GeV<<G4endl;
+        G4cout << " - Material = "<<aMaterial->GetName()<<G4endl;
+        G4cout << " - Particle type = "<<aParticle->GetDefinition()->GetParticleName()<<G4endl;
+	result = 0;
+	if(reentryCount>100)
+	{
+           G4Exception("G4HadronicProcess", "007", FatalException,
+	  "GetHadronicProcess: Reentering ApplyYourself too often - GeneralPostStepDoIt failed.");  
+	}
+      }
+      catch(G4HadronicException aR)
+      {
+        aR.Report(G4cout);
+	G4cout << " G4HadronicProcess failed in ApplyYourself call for"<<G4endl;
+        G4cout << " - Particle energy[GeV] = "<< kineticEnergy/GeV<<G4endl;
+        G4cout << " - Material = "<<aMaterial->GetName()<<G4endl;
+        G4cout << " - Particle type = "<<aParticle->GetDefinition()->GetParticleName()<<G4endl;
+        G4Exception("G4HadronicProcess", "007", FatalException,
+	            "GeneralPostStepDoIt failed.");
+      }
+    }
+    while(!result);
     if(result->GetStatusChange() == isAlive && thePro.GetDefinition() != aTrack.GetDefinition())
     {
       G4DynamicParticle * aP = const_cast<G4DynamicParticle *>(aTrack.GetDynamicParticle());
@@ -423,7 +483,8 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
         theTotalResult->SetStatusChange(fSuspend);
 	if(xBiasOn)
 	{
-	  G4Exception("Cannot cross-section bias a process that suspends tracks.");
+          G4Exception("G4HadronicProcess", "007", FatalException,
+	              "Cannot cross-section bias a process that suspends tracks.");
 	}
       }
       if(aR->GetStatusChange()!=stopAndKill )

@@ -37,6 +37,7 @@
 #include "Randomize.hh"
 #include "G4ios.hh"
 #include <algorithm>
+#include "G4HadronicException.hh"
 
 G4Fancy3DNucleus::G4Fancy3DNucleus()
  : nucleondistance(0.8*fermi)
@@ -464,7 +465,11 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 			   best=aNucleon;
 			}
 		}
-		if ( best < 0 )  G4Exception( "G4Fancy3DNucleus.cc: Logic error in ReduceSum()");
+		if ( best < 0 )  
+		{
+		  G4String text = "G4Fancy3DNucleus.cc: Logic error in ReduceSum()";
+  	          throw(G4HadronicException(__FILE__, __LINE__, text) );
+		}
 		momentum[testSums[best].index()]-=testSums[best].vector();
 		momentum[myA-1]=testSums[best].vector()-sum;
 

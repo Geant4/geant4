@@ -62,7 +62,6 @@ void G4HadronElasticProcess::
 BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
    if (!G4HadronicProcess::GetCrossSectionDataStore()) {
-      G4Exception("G4HadronElasticProcess: no cross section data set");
       return;
    }
    G4HadronicProcess::GetCrossSectionDataStore()->BuildPhysicsTable(aParticleType);
@@ -75,7 +74,8 @@ GetMicroscopicCrossSection(
 {
    // gives the microscopic cross section in GEANT4 internal units
    if (!G4HadronicProcess::GetCrossSectionDataStore()) {
-      G4Exception("G4HadronElasticProcess: no cross section data Store");
+      G4Exception("G4HadronElasticProcess", "007", FatalException,
+                  "no cross section data Store");
       return DBL_MIN;
    }
    return G4HadronicProcess::GetCrossSectionDataStore()
@@ -123,7 +123,7 @@ G4HadronElasticProcess::
 DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
    if (!G4HadronicProcess::GetCrossSectionDataStore()) {
-      G4Exception("G4HadronElasticProcess: no cross section data set");
+      G4Exception("G4HadronElasticProcess", "111", JustWarning, "G4HadronElasticProcess: no cross section data set");
       return;
    }
 

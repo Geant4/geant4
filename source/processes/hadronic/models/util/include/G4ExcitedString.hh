@@ -42,6 +42,7 @@
 #include "G4Parton.hh"
 #include "G4PartonVector.hh"
 #include "G4KineticTrack.hh"
+#include "G4HadronicException.hh"
 #include <algorithm>
 
 class G4ExcitedString 
@@ -163,7 +164,8 @@ void G4ExcitedString::InsertParton(G4Parton *aParton, const G4Parton * addafter)
 	   insert_index=std::find(thePartons.begin(), thePartons.end(), addafter);
 	   if (insert_index == thePartons.end())		// No object addafter in thePartons
 	   {
-	   	G4Exception("G4ExcitedString::InsertParton called with invalid second argument");
+	      G4String text = "G4ExcitedString::InsertParton called with invalid second argument";
+  	      throw(G4HadronicException(__FILE__, __LINE__, text) );
 	   }
 	}
 	

@@ -132,7 +132,11 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
 
   G4double pionEnergy = stoppedHadron->GetTotalEnergy();
   G4double excitation = pionEnergy - stopAbsorption.Energy();
-  if (excitation < 0.) G4Exception("G4PiMinusAbsorptionAtRest::AtRestDoIt -- excitation energy < 0");
+  if (excitation < 0.) 
+  {
+    G4Exception("G4PiMinusAbsorptionAtRest", "007", FatalException,
+                "AtRestDoIt -- excitation energy < 0");
+  }
   if (verboseLevel>0) { G4cout << " excitation " << excitation << G4endl; }
 
   G4StopDeexcitationAlgorithm* nucleusAlgorithm = LoadNucleusAlgorithm();

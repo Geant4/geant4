@@ -26,6 +26,7 @@
 // by V. Lara (May 1998)
 
 #include "G4Fragment.hh"
+#include "G4HadronicException.hh"
 
 
 // Default constructor
@@ -94,7 +95,8 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector aMome
     {
       G4cout << "A, Z, momentum, theExcitationEnergy"<<
            A<<" "<<Z<<" "<<aMomentum<<" "<<theExcitationEnergy<<G4endl;
-      G4Exception( "G4Fragment::G4Fragment Excitation Energy < 0.0!" );
+      G4String text = "G4Fragment::G4Fragment Excitation Energy < 0.0!";
+      throw(G4HadronicException(__FILE__, __LINE__, text) );
     }
 }
 

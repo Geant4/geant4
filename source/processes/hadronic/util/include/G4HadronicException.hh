@@ -14,7 +14,7 @@ class G4HadronicException : public std::exception
     theName = in;
     theLine = at;
   }
-  ~G4HadronicException() throw () {}
+  virtual ~G4HadronicException() throw () {}
   
   void Report(std::ostream & aS)
   {

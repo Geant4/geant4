@@ -39,6 +39,7 @@
  
 #include "G4InelasticInteraction.hh"
 #include "Randomize.hh"
+#include "G4HadReentrentException.hh"
  
  G4double
   G4InelasticInteraction::Pmltpc(      // used in Cascade functions
@@ -278,12 +279,20 @@
                                                 modifiedOriginal, currentParticle,
                                                 targetParticle, targetNucleus,
                                                 incidentHasChanged, targetHasChanged );
+      try
+      {
       finishedTwoClu = theReactionDynamics.TwoCluster( vec, vecLen,
                                                        modifiedOriginal, originalIncident,
                                                        currentParticle, targetParticle,
                                                        targetNucleus, incidentHasChanged,
                                                        targetHasChanged, leadFlag,
                                                        leadingStrangeParticle );
+       }
+       catch(G4HadReentrentException aC)
+       {
+         aC.Report(G4cout);
+	 throw(G4HadReentrentException(__FILE__, __LINE__, "Failing to calculate momenta"));
+       }
     }
     if( finishedTwoClu )
     {

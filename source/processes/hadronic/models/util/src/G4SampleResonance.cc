@@ -36,7 +36,7 @@
 #include "G4SampleResonance.hh"
 #include "G4DecayTable.hh"
 #include "Randomize.hh"
-
+#include "G4HadronicException.hh"
 
 G4SampleResonance::minMassMapType G4SampleResonance::minMassCache;
 
@@ -113,7 +113,8 @@ G4double G4SampleResonance::SampleMass(const G4double poleMass,
 
   if ( minMass > maxMass ) 
     {
-      G4Exception("SampleResonanceMass: mass range negative (minMass>maxMass)");
+      throw(G4HadronicException(__FILE__, __LINE__,
+           "SampleResonanceMass: mass range negative (minMass>maxMass)") );
     }
 
   G4double returnMass;

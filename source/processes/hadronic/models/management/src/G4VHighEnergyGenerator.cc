@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHighEnergyGenerator.cc,v 1.1 2003-10-07 12:38:35 hpw Exp $
+// $Id: G4VHighEnergyGenerator.cc,v 1.2 2003-11-01 16:21:02 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VHighEnergyGenerator
 #include "G4VHighEnergyGenerator.hh"
+#include "G4HadronicException.hh"
 
 G4VHighEnergyGenerator::G4VHighEnergyGenerator()
 {
@@ -43,7 +44,8 @@ G4VHighEnergyGenerator::~G4VHighEnergyGenerator()
 
 const G4VHighEnergyGenerator & G4VHighEnergyGenerator::operator=(const G4VHighEnergyGenerator &)
 {
-  G4Exception("G4VHighEnergyGenerator::operator= meant to not be accessable");
+  G4String text = "G4VHighEnergyGenerator::operator= meant to not be accessable";
+  throw( G4HadronicException(__FILE__, __LINE__, text) ); 
   return *this;
 }
 

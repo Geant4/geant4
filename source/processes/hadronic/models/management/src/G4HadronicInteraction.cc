@@ -25,6 +25,7 @@
  // original by H.P. Wellisch
  // modified by J.L. Chuma, TRIUMF, 21-Mar-1997
  // Last modified: 04-Apr-1997
+ // reimplemented 1.11.2003 JPW.
  
 #include "G4HadronicInteraction.hh"
  
@@ -32,16 +33,16 @@
   G4HadronicInteraction::GetMinEnergy(
    const G4Material *aMaterial, const G4Element *anElement ) const
   {
-    G4int i;
+    size_t i;
     if( IsBlocked(aMaterial) )return 0.*GeV;
     if( IsBlocked(anElement) )return 0.*GeV;
-    for( i=0; i<theMinCounterElements; ++i )
+    for( i=0; i<theMinEnergyListElements.size(); ++i )
     {
-      if( anElement == theMinElements[i] )return theMinEnergyListElements[i];
+      if( anElement == theMinEnergyListElements[i].second )return theMinEnergyListElements[i].first;
     }
-    for( i=0; i<theMinCounter; ++i )
+    for( i=0; i<theMinEnergyList.size(); ++i )
     {
-      if( aMaterial == theMinMaterials[i] )return theMinEnergyList[i];
+      if( aMaterial == theMinEnergyList[i].second )return theMinEnergyList[i].first;
     }
     if(IsBlocked()) return 0.*GeV;
     if( verboseLevel > 0 )
@@ -61,18 +62,15 @@
            << "    The model is not active for the Element  "
            << anElement->GetName() << "." << G4endl;
     
-    for( G4int i=0; i<theMinCounterElements; ++i )
+    for( size_t i=0; i<theMinEnergyListElements.size(); ++i )
     {
-      if( anElement == theMinElements[i] )
+      if( anElement == theMinEnergyListElements[i].second )
       {
-        theMinEnergyListElements[i] = anEnergy;
+        theMinEnergyListElements[i].first = anEnergy;
         return;
       }
     }
-    if( theMinCounterElements == MAX_LIST_SIZE )
-      G4Exception("SetMinEnergy: exceeded size of min energy element List");
-    theMinElements[theMinCounterElements] = anElement;
-    theMinEnergyListElements[theMinCounterElements++] = anEnergy;
+    theMinEnergyListElements.push_back(std::pair<G4double, G4Element *>(anEnergy, anElement));
   }
  
  void
@@ -85,34 +83,31 @@
            << "    The model is not active for the Material "
            << aMaterial->GetName() << "." << G4endl;
     
-    for( G4int i=0; i<theMinCounter; ++i )
+    for( size_t i=0; i<theMinEnergyList.size(); ++i )
     {
-      if( aMaterial == theMinMaterials[i] )
+      if( aMaterial == theMinEnergyList[i].second )
       {
-        theMinEnergyList[i] = anEnergy;
+        theMinEnergyList[i].first = anEnergy;
         return;
       }
     }
-    if( theMinCounter == MAX_LIST_SIZE )
-      G4Exception("SetMinEnergy: exceeded size of min energy material List");
-    theMinMaterials[theMinCounter] = aMaterial;
-    theMinEnergyList[theMinCounter++] = anEnergy;
+    theMinEnergyList.push_back(std::pair<G4double, G4Material *>(anEnergy, aMaterial));
   }
  
  G4double
   G4HadronicInteraction::GetMaxEnergy(
    const G4Material *aMaterial, const G4Element *anElement ) const
   {
-    G4int i;
+    size_t i;
     if( IsBlocked(aMaterial) )return 0.0*GeV;
     if( IsBlocked(anElement) )return 0.0*GeV;
-    for( i=0; i<theMaxCounterElements; ++i )
+    for( i=0; i<theMaxEnergyListElements.size(); ++i )
     {
-      if( anElement == theMaxElements[i] )return theMaxEnergyListElements[i];
+      if( anElement == theMaxEnergyListElements[i].second )return theMaxEnergyListElements[i].first;
     }
-    for( i=0; i<theMaxCounter; ++i )
+    for( i=0; i<theMaxEnergyList.size(); ++i )
     {
-      if( aMaterial == theMaxMaterials[i] )return theMaxEnergyList[i];
+      if( aMaterial == theMaxEnergyList[i].second )return theMaxEnergyList[i].first;
     }
     if(IsBlocked()) return 0.*GeV;
     if( verboseLevel > 0 )
@@ -133,18 +128,15 @@
            << "Warning: The model is not active for the Element  "
            << anElement->GetName() << "." << G4endl;
     
-    for( G4int i=0; i<theMaxCounterElements; ++i )
+    for( size_t i=0; i<theMaxEnergyListElements.size(); ++i )
     {
-      if( anElement == theMaxElements[i] )
+      if( anElement == theMaxEnergyListElements[i].second )
       {
-        theMaxEnergyListElements[i] = anEnergy;
+        theMaxEnergyListElements[i].first = anEnergy;
         return;
       }
     }
-    if( theMaxCounterElements == MAX_LIST_SIZE )
-      G4Exception("SetMaxEnergy: exceeded size of max energy element List");
-    theMaxElements[theMaxCounterElements] = anElement;
-    theMaxEnergyListElements[theMaxCounterElements++] = anEnergy;
+    theMaxEnergyListElements.push_back(std::pair<G4double, G4Element *>(anEnergy, anElement));
   }
 
  void
@@ -157,64 +149,53 @@
            << "Warning: The model is not active for the Material "
            << aMaterial->GetName() << "." << G4endl;
     
-    for( G4int i=0; i<theMaxCounter; ++i )
+    for( size_t i=0; i<theMaxEnergyList.size(); ++i )
     {
-      if( aMaterial == theMaxMaterials[i] )
+      if( aMaterial == theMaxEnergyList[i].second )
       {
-        theMaxEnergyList[i] = anEnergy;
+        theMaxEnergyList[i].first = anEnergy;
         return;
       }
     }
-    if( theMaxCounter == MAX_LIST_SIZE )
-      G4Exception("SetMaxEnergy: exceeded size of max energy material List");
-    theMaxMaterials[theMaxCounter] = aMaterial;
-    theMaxEnergyList[theMaxCounter++] = anEnergy;
+    theMaxEnergyList.push_back(std::pair<G4double, G4Material *>(anEnergy, aMaterial));
   }
 
  void 
   G4HadronicInteraction::DeActivateFor( G4Material *aMaterial )
   {
-    if( theBlockedCounter == MAX_LIST_SIZE )
-      G4Exception("DeActivateFor: exceeded size of blocked material List");
-    theBlockedList[ theBlockedCounter++ ] = aMaterial;
+    theBlockedList.push_back(aMaterial);
   }
 
  void 
   G4HadronicInteraction::DeActivateFor( G4Element *anElement )
   {
-    if( theBlockedCounterElements == MAX_LIST_SIZE )
-      G4Exception("DeActivateFor: exceeded size of blocked elements List");
-    theBlockedListElements[ theBlockedCounterElements++ ] = anElement;
+    theBlockedListElements.push_back(anElement);
   }
 
  G4bool 
   G4HadronicInteraction::IsBlocked( const G4Material *aMaterial ) const
   {
-    G4bool tt = false;
-    for( G4int i=0; i<theBlockedCounter; ++i )
+    for( size_t i=0; i<theBlockedList.size(); ++i )
     {
       if( aMaterial == theBlockedList[i] )
       {
-        tt = true;
-        break;
+        return true;
       }
     }
-    return tt;
+    return false;
   }
  
  G4bool 
   G4HadronicInteraction::IsBlocked( const G4Element *anElement ) const
   {
-    G4bool tt = false;
-    for( G4int i=0; i<theBlockedCounterElements; ++i )
+    for( size_t i=0; i<theBlockedListElements.size(); ++i )
     {
       if( anElement == theBlockedListElements[i] )
       {
-        tt = true;
-        break;
+        return true;
       }
     }
-    return tt;
+    return false;
   }
  
  /* end of file */

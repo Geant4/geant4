@@ -53,6 +53,8 @@
 #include "G4AntiNeutron.hh"
 #include "Randomize.hh"
 #include <iostream>
+#include "G4HadReentrentException.hh"
+
 // #include "DumpFrame.hh"
 
 /* 	   G4double GetQValue(G4ReactionProduct * aSec)
@@ -442,7 +444,10 @@
                 vec[i]->GetDefinition() == G4PionPlus::PionPlus() ||
                 vec[i]->GetDefinition() == G4PionZero::PionZero() )
             {
-              G4Exception("G4ReactionDynamics::GenerateXandPt : a pion has been counted as a backward nucleon");
+              for(G4int i=0; i<vecLen; i++) delete vec[i];
+   	      vecLen = 0;
+              throw(G4HadReentrentException(__FILE__, __LINE__,
+	      "G4ReactionDynamics::GenerateXandPt : a pion has been counted as a backward nucleon") );
             }
             vec[i]->SetSide( -3 );
             ++backwardNucleonCount;
@@ -1474,7 +1479,13 @@
       currentParticle = *vec[0];
       targetParticle = *vec[1];
       for( i=0; i<(vecLen-2); ++i )*vec[i] = *vec[i+2];
-      if(vecLen<2) G4Exception("G4ReactionDynamics::TwoCluster: Negative number of particles");
+      if(vecLen<2) 
+      {
+        for(G4int i=0; i<vecLen; i++) delete vec[i];
+	vecLen = 0;
+        throw(G4HadReentrentException(__FILE__, __LINE__,
+	"G4ReactionDynamics::TwoCluster: Negative number of particles") );
+      }
       delete vec[vecLen-1];
       delete vec[vecLen-2];
       vecLen -= 2;
@@ -2326,7 +2337,11 @@
       pf = pf*pf - 4*cmEnergy*cmEnergy*targetMass*targetMass;
       
       if( pf < 0.001 )
-        G4Exception("G4ReactionDynamics::TwoBody: pf is too small ");
+      {
+        for(G4int i=0; i<vecLen; i++) delete vec[i];
+        vecLen = 0;
+	throw(G4HadronicException(__FILE__, __LINE__, "G4ReactionDynamics::TwoBody: pf is too small ") );
+      }
       
       pf = sqrt( pf ) / ( 2.0*cmEnergy );
       //
@@ -3779,8 +3794,10 @@
       }
     }
     if( index == 9 )  // loop continued to the end
-      G4Exception("G4ReactionDynamics::NuclearReaction: inelastic reaction kinematically not possible");
-    
+    {
+      throw(G4HadronicException(__FILE__, __LINE__,
+           "G4ReactionDynamics::NuclearReaction: inelastic reaction kinematically not possible") );
+    }
     G4double ke = currentParticle.GetKineticEnergy()/GeV;
     G4int nt = 2;
     if( (index>=6) || (G4UniformRand()<std::min(0.5,ke*10.0)) )nt = 3;

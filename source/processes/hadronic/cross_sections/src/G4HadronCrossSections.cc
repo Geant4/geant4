@@ -1605,7 +1605,8 @@ G4HadronCrossSections::GetParticleCode(const G4DynamicParticle* aParticle)
    else if (aParticleType == G4OmegaMinus::OmegaMinus()) ipart = 33;
    else if (aParticleType == G4AntiOmegaMinus::AntiOmegaMinus()) ipart = 34;
    else {
-      G4Exception("G4HadronCrossSections: unsupported particle");
+      G4Exception("G4HadronCrossSections", "007", FatalException,
+                  "GetParticleCode: unsupported particle");
       return 0;
    }
    return ipart;

@@ -1,4 +1,5 @@
 #include "G4HadFinalState.hh"
+#include "G4HadronicException.hh"
 
    G4HadFinalState::G4HadFinalState()
    : theDirection(0,0,1), theEnergy(-1), theStat(isAlive), 
@@ -9,7 +10,10 @@
    void G4HadFinalState::SetEnergyChange(G4double anEnergy) 
    {
      theEnergy=anEnergy;
-     if(theEnergy<0) G4Exception("G4HadFinalState: fatal - negative energy");
+     if(theEnergy<0) 
+     {
+       throw(G4HadronicException(__FILE__, __LINE__, "G4HadFinalState: fatal - negative energy"));
+     }
    }
 
    G4double G4HadFinalState::GetEnergyChange() {return theEnergy;}
@@ -21,8 +25,8 @@
      theDirection = G4ThreeVector(x,y,z);
      if(fabs(theDirection.mag()-1)>0.001) 
      {
-       G4cout <<"What is theDirection.mag() "<<theDirection.mag()<<G4endl;
-       G4Exception("");
+       G4cout <<"We have negative theDirection.mag() "<<theDirection.mag()<<G4endl;
+       throw(G4HadronicException(__FILE__, __LINE__, "G4HadFinalState: fatal - negative direction.mag()."));
      }
    }
 
@@ -69,7 +73,8 @@
    {
      if(i>theSecs.size())
      {
-       G4Exception("G4HadFinalState::GetSecondary no way this can work");
+       throw(G4HadronicException(__FILE__, __LINE__, 
+            "Trying direct access to secondary beyond end of list"));
      }
      return theSecs[i];
    }
