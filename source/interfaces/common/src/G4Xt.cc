@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Xt.cc,v 1.3 1999-10-21 14:40:47 johna Exp $
+// $Id: G4Xt.cc,v 1.4 1999-10-27 14:15:18 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -14,6 +14,10 @@
 
 #include <stdlib.h>
 #include <string.h>
+
+#include <X11/Intrinsic.h>
+#include <X11/Shell.h>
+
 #include "G4ios.hh"
 
 #include "G4Xt.hh"
@@ -80,10 +84,12 @@ G4Xt::G4Xt (
     int          argc;
     argc         = a_argn;
 #endif
+    Arg          xargs[1];
+    XtSetArg     (xargs[0],XtNgeometry,"100x100"); 
     topWidget    = XtAppInitialize (&appContext,a_class,
 				    NULL,(Cardinal)0,
 				    &argc,a_args,NULL,
-				    NULL,(Cardinal)0);
+				    xargs,1);
     if(topWidget==NULL) {
       G4cout        << "G4Xt : Unable to init Xt." << endl;
     }
@@ -130,6 +136,7 @@ void* G4Xt::GetEvent (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   static XEvent  event;
+  if(appContext==NULL) return NULL;
   if(topWidget==NULL) return NULL;
   XtAppNextEvent (appContext, &event);
   return         &event;
