@@ -15,6 +15,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23 November, 02   Y.Morita
+- new abstract interface for persistency for release 5.0.
+- for actual implementation of HepODBMS and ROOT I/O, see
+  $G4INSTALL/examples/extended/persistency/README.
+
 7 December, 01    Y.Morita (persistency-V03-02-02)
 - added G4Pglobals.hh to G4PVHits and G4PVDigits for g++ 2.95.2 headers
 
