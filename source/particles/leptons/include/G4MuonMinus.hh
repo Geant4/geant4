@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinus.hh,v 1.5 2001-07-11 10:01:52 gunter Exp $
+// $Id: G4MuonMinus.hh,v 1.6 2001-10-15 10:03:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,6 @@ class G4MuonMinus : public G4VLepton
 {
  private:
    static G4MuonMinus  theMuonMinus;
-   static G4double theMuonMinusLengthCut; 
-   static G4double* theMuonMinusKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4MuonMinus(
@@ -75,29 +73,8 @@ class G4MuonMinus : public G4VLepton
 
    static G4MuonMinus* MuonMinusDefinition();
    static G4MuonMinus* MuonMinus();
-   static G4double GetCuts() {return theMuonMinusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theMuonMinusKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
       
 };
-
-inline void G4MuonMinus::SetCuts(G4double aCut)
-{
-   CalcEnergyCuts(aCut);
-   theMuonMinusLengthCut = theCutInMaxInteractionLength;  
-   theMuonMinusKineticEnergyCuts = theKineticEnergyCuts;  
-}
-
-inline void G4MuonMinus::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-   theMuonMinusLengthCut = theCutInMaxInteractionLength;  
-   theMuonMinusKineticEnergyCuts = theKineticEnergyCuts;
-}
 
 
 inline  G4MuonMinus*  G4MuonMinus::MuonMinus()

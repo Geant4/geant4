@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Electron.hh,v 1.5 2001-07-11 10:01:52 gunter Exp $
+// $Id: G4Electron.hh,v 1.6 2001-10-15 10:03:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,8 +56,6 @@ class G4Electron : public G4VLepton
  friend class G4Positron;
  private:
    static G4Electron theElectron;
-   static G4double theElectronLengthCut;
-   static G4double* theElectronKineticEnergyCuts;
 
  protected:  
    G4double ComputeLoss(G4double AtomicNumber, G4double KineticEnergy) const;
@@ -87,30 +85,9 @@ class G4Electron : public G4VLepton
 
    static G4Electron* ElectronDefinition();
    static G4Electron* Electron();
-   static G4double GetCuts() {return theElectronLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theElectronKineticEnergyCuts;};
 
-   virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
-      
 };
 
-inline void G4Electron::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theElectronLengthCut = theCutInMaxInteractionLength;  
-  theElectronKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
-
-inline void G4Electron::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theElectronLengthCut = theCutInMaxInteractionLength;  
-  theElectronKineticEnergyCuts = theKineticEnergyCuts;
-}
 
 inline G4Electron* G4Electron::Electron()
 {  return &theElectron; }

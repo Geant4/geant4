@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutrinoE.hh,v 1.4 2001-07-11 10:01:51 gunter Exp $
+// $Id: G4AntiNeutrinoE.hh,v 1.5 2001-10-15 10:03:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,6 @@ class G4AntiNeutrinoE : public G4VLepton
 {
  private:
    static G4AntiNeutrinoE theAntiNeutrinoE;
-   static G4double  theAntiNeutrinoELengthCut;
-   static G4double* theAntiNeutrinoEKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4AntiNeutrinoE(
@@ -76,8 +74,6 @@ class G4AntiNeutrinoE : public G4VLepton
  
    static G4AntiNeutrinoE* AntiNeutrinoEDefinition();
    static G4AntiNeutrinoE* AntiNeutrinoE(){return &theAntiNeutrinoE;}
-   static G4double  GetCuts() {return theAntiNeutrinoELengthCut;}   
-   static G4double* GetCutsInEnergy() {return theAntiNeutrinoEKineticEnergyCuts;};
 
    virtual void SetCuts(G4double aCut); 
 };

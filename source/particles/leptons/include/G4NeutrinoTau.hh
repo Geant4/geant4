@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoTau.hh,v 1.4 2001-07-11 10:01:52 gunter Exp $
+// $Id: G4NeutrinoTau.hh,v 1.5 2001-10-15 10:03:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,8 +53,6 @@ class G4NeutrinoTau : public G4VLepton
 {
  private:
    static G4NeutrinoTau theNeutrinoTau;
-   static G4double  theNeutrinoTauLengthCut;
-   static G4double* theNeutrinoTauKineticEnergyCuts;
 
  private:
    G4NeutrinoTau(
@@ -74,8 +72,6 @@ class G4NeutrinoTau : public G4VLepton
 
    static G4NeutrinoTau* NeutrinoTauDefinition();
    static G4NeutrinoTau* NeutrinoTau() {return &theNeutrinoTau;}
-   static G4double  GetCuts() {return theNeutrinoTauLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theNeutrinoTauKineticEnergyCuts;};
 
    virtual void SetCuts(G4double aCut); 
 };

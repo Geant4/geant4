@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Positron.hh,v 1.5 2001-07-11 10:01:52 gunter Exp $
+// $Id: G4Positron.hh,v 1.6 2001-10-15 10:03:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,9 +59,7 @@ class G4Positron : public G4VLepton
 {
  private:
    static G4Positron thePositron;
-   static G4double  thePositronLengthCut;
-   static G4double* thePositronKineticEnergyCuts;
-        
+ 
  protected:  
    G4double ComputeLoss(G4double AtomicNumber, G4double KineticEnergy) const;
 
@@ -99,28 +97,8 @@ class G4Positron : public G4VLepton
  
    static G4Positron* PositronDefinition();
    static G4Positron* Positron();
-   static G4double GetCuts() {return thePositronLengthCut;}
-   static G4double* GetCutsInEnergy() {return thePositronKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
 };
 
-inline void G4Positron::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  thePositronLengthCut = theCutInMaxInteractionLength;  
-  thePositronKineticEnergyCuts = theKineticEnergyCuts;
-}
-
-inline void G4Positron::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  thePositronLengthCut = theCutInMaxInteractionLength;  
-  thePositronKineticEnergyCuts = theKineticEnergyCuts;
-}
 
 inline G4Positron*  G4Positron::Positron()
 {  return &thePositron; }
