@@ -1,4 +1,4 @@
-$Id: History,v 1.102 2001-09-23 21:21:42 pia Exp $
+$Id: History,v 1.103 2001-09-23 23:07:26 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24.09.2001 - MGP, tag emlowen-V03-02-20
+             Minor modifications to make the lowenergy category co-work
+             with both materials-V03-02-03 and materials as 
+             in geant4-03-02-ref-03
+
 23.09.2001 - MGP, tag emlowen-V03-02-19
-             Same as previous one + migration to materials-V03-02-02 (STL)
+             Same as previous one + migration to materials-V03-02-03 (STL)
 
 23.09.2001 - MGP, tag emlowen-V03-02-18
              New class to generate shell vacancies in continuous part
