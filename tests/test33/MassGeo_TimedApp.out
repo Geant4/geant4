@@ -1,0 +1,735 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (31-Jul-2002)
+             Copyright : Geant4 Collaboration
+**********************************************
+
+phot:  Total cross sections from Sandia parametrisation. 
+Tst33PhysicsList::SetCuts:CutLength : 1 (mm)
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: MScoreProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: MassImportanceProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   MassImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MassImportanceProcess
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsLastDoIt: for: neutron
+  ProcessName: WeightCutOffProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   MassImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MassImportanceProcess
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   MassImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MassImportanceProcess
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   WeightCutOffProcess
+================================================
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1012 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0.0657438, error= 0.247851, fom*time= 16.2787, time= 1012, n= 65
+Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
+cell_01_rep:0............ |           1 |          78 |          85 |          77 |          77 |     8.40393 |     9.22863 |           1 |
+cell_02_rep:0............ |           2 |          57 |          98 |         152 |          76 |     7.51159 |     9.05429 |           1 |
+cell_03_rep:0............ |           4 |          65 |         124 |         173 |       43.25 |     7.08551 |     8.70506 |           1 |
+cell_04_rep:0............ |           8 |          75 |         136 |         168 |          21 |     8.47779 |      8.9378 |           1 |
+cell_05_rep:0............ |          16 |          77 |         141 |         181 |     11.3125 |     7.64909 |     8.82089 |           1 |
+cell_06_rep:0............ |          32 |          81 |         143 |         196 |       6.125 |     7.92708 |     8.84239 |           1 |
+cell_07_rep:0............ |          64 |         108 |         189 |         218 |     3.40625 |     8.13391 |     9.01115 |           1 |
+cell_08_rep:0............ |         128 |         120 |         221 |         252 |     1.96875 |     8.42129 |     8.78997 |           1 |
+cell_09_rep:0............ |         256 |         154 |         269 |         310 |     1.21094 |     8.06886 |     8.60317 |           1 |
+cell_10_rep:0............ |         512 |         168 |         313 |         403 |    0.787109 |     8.05733 |     8.45025 |           1 |
+cell_11_rep:0............ |        1024 |         196 |         381 |         500 |    0.488281 |     7.81206 |     8.31494 |           1 |
+cell_12_rep:0............ |        2048 |         210 |         387 |         523 |    0.255371 |     7.22916 |     8.07334 |           1 |
+cell_13_rep:0............ |        4096 |         250 |         460 |         596 |    0.145508 |     6.90016 |     7.92765 |           1 |
+cell_14_rep:0............ |        8192 |         282 |         514 |         729 |   0.0889893 |     6.27501 |     7.62066 |           1 |
+cell_15_rep:0............ |       16384 |         315 |         570 |         804 |   0.0490723 |     5.97244 |     7.47136 |           1 |
+cell_16_rep:0............ |       32768 |         335 |         623 |         954 |   0.0291138 |     5.61178 |     7.28903 |           1 |
+cell_17_rep:0............ |       65536 |         361 |         676 |        1065 |   0.0162506 |     5.52488 |     7.23371 |           1 |
+cell_18_rep:0............ |      131072 |         329 |         670 |        1024 |   0.0078125 |     5.32888 |     7.07121 |           1 |
+cell_19_rep:0............ |      131072 |         358 |         358 |           0 |           0 |           0 |           0 |           0 |
+shieldWorld_rep:-1....... |           1 |           9 |           9 |           0 |           0 |          10 |          10 |           1 |
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: MassImportanceProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   MassImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MassImportanceProcess
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   WeightCutOffProcess
+  The final Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   WeightCutOffProcess
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: MScoreProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   WeightCutOffProcess
+  The final Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   WeightCutOffProcess
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: WeightCutOffProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   WeightCutOffProcess
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: MScoreProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: MassImportanceProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   MassImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MassImportanceProcess
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1015 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0.0485182, error= 0.274814, fom*time= 13.2411, time= 1015, n= 88
+Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
+cell_01_rep:0............ |           1 |         103 |         117 |          96 |          96 |     8.73558 |     9.44033 |           1 |
+cell_02_rep:0............ |           2 |          71 |         137 |         153 |        76.5 |     8.91693 |     9.19195 |           1 |
+cell_03_rep:0............ |           4 |          92 |         161 |         192 |          48 |     7.02877 |     8.96364 |           1 |
+cell_04_rep:0............ |           8 |          97 |         170 |         261 |      32.625 |     6.84975 |     8.79312 |           1 |
+cell_05_rep:0............ |          16 |         118 |         214 |         275 |     17.1875 |     6.95261 |      8.9175 |           1 |
+cell_06_rep:0............ |          32 |         137 |         234 |         313 |     9.78125 |      6.4261 |     8.58626 |           1 |
+cell_07_rep:0............ |          64 |         134 |         246 |         356 |      5.5625 |     6.74858 |     8.72519 |           1 |
+cell_08_rep:0............ |         128 |         151 |         265 |         388 |     3.03125 |     6.44415 |     8.56207 |           1 |
+cell_09_rep:0............ |         256 |         171 |         331 |         455 |     1.77734 |     7.00707 |     8.60801 |           1 |
+cell_10_rep:0............ |         512 |         172 |         313 |         417 |    0.814453 |     7.40201 |     8.64743 |           1 |
+cell_11_rep:0............ |        1024 |         192 |         351 |         420 |    0.410156 |     7.63271 |     8.57948 |           1 |
+cell_12_rep:0............ |        2048 |         227 |         424 |         549 |    0.268066 |     7.42609 |     8.22632 |           1 |
+cell_13_rep:0............ |        4096 |         247 |         436 |         600 |    0.146484 |     7.29537 |     7.92558 |           1 |
+cell_14_rep:0............ |        8192 |         251 |         491 |         657 |   0.0802002 |     7.41146 |     7.88986 |           1 |
+cell_15_rep:0............ |       16384 |         277 |         518 |         727 |   0.0443726 |     5.65889 |     7.66514 |           1 |
+cell_16_rep:0............ |       32768 |         299 |         551 |         774 |   0.0236206 |     6.84962 |     7.63747 |           1 |
+cell_17_rep:0............ |       65536 |         316 |         571 |         814 |   0.0124207 |     6.37495 |      7.3766 |           1 |
+cell_18_rep:0............ |      131072 |         298 |         637 |         963 |  0.00734711 |       6.232 |     7.26681 |           1 |
+cell_19_rep:0............ |      131072 |         302 |         302 |           0 |           0 |           0 |           0 |           0 |
+shieldWorld_rep:-1....... |           1 |           6 |           6 |           0 |           0 |          10 |          10 |           1 |
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: MassImportanceProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   MassImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MassImportanceProcess
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: MScoreProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: MScoreProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0, error= -1, fom*time= 0, time= 1000, n= 2366
+Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
+cell_01_rep:0............ |           1 |        2518 |        2812 |        2720 |        2720 |     9.01923 |     9.54592 |           1 |
+cell_02_rep:0............ |           1 |        1599 |        1809 |        1929 |        1929 |      8.7084 |     9.33601 |           1 |
+cell_03_rep:0............ |           1 |         980 |        1093 |        1182 |        1182 |     8.40673 |     9.16501 |           1 |
+cell_04_rep:0............ |           1 |         590 |         661 |         771 |         771 |     8.07663 |     9.12407 |           1 |
+cell_05_rep:0............ |           1 |         336 |         391 |         509 |         509 |     7.86513 |      8.8413 |           1 |
+cell_06_rep:0............ |           1 |         198 |         232 |         287 |         287 |     7.57606 |     8.69636 |           1 |
+cell_07_rep:0............ |           1 |         116 |         133 |         150 |         150 |      8.3863 |     8.82163 |           1 |
+cell_08_rep:0............ |           1 |          62 |          72 |          85 |          85 |     8.47404 |     8.70485 |           1 |
+cell_09_rep:0............ |           1 |          37 |          44 |          54 |          54 |     8.13418 |     8.37144 |           1 |
+cell_10_rep:0............ |           1 |          18 |          19 |          25 |          25 |     8.95901 |     9.11509 |           1 |
+cell_11_rep:0............ |           1 |           8 |           8 |           6 |           6 |     9.57804 |     9.59647 |           1 |
+cell_12_rep:0............ |           1 |           4 |           6 |           6 |           6 |      9.6719 |     9.68612 |           1 |
+cell_13_rep:0............ |           1 |           2 |           2 |           0 |           0 |          10 |          10 |           1 |
+cell_14_rep:0............ |           1 |           2 |           2 |           1 |           1 |          10 |          10 |           1 |
+cell_15_rep:0............ |           1 |           2 |           2 |           1 |           1 |          10 |          10 |           1 |
+cell_16_rep:0............ |           1 |           2 |           4 |           3 |           3 |     7.44471 |     7.56657 |           1 |
+cell_17_rep:0............ |           1 |           1 |           1 |           1 |           1 |     6.39232 |     6.39232 |           1 |
+cell_18_rep:0............ |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+cell_19_rep:0............ |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+shieldWorld_rep:-1....... |           1 |         197 |         197 |           0 |           0 |          10 |          10 |           1 |
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: MScoreProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  ProcessName: MassImportanceProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MassImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MassImportanceProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1014 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0, error= -1, fom*time= 0, time= 1014, n= 0
+Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: MassImportanceProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   MassImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   MassImportanceProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
+=== G4ProcessPlacer::AddProcessAsLastDoIt: for: neutron
+  ProcessName: WeightCutOffProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   WeightCutOffProcess
+================================================
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
+Tst33TimedEventAction::CalculateFOM(): FOM: 
+    mean= 0, error= -1, fom*time= 0, time= 1000, n= 0
+Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: WeightCutOffProcess, will be removed!
+  The initial Vectors: 
+GPIL Vector: 
+   WeightCutOffProcess
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+   WeightCutOffProcess
+  The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
