@@ -1,4 +1,4 @@
-# $Id: ionC12.mac,v 1.10 2004-08-06 09:26:32 vnivanch Exp $
+# $Id: ionC12.mac,v 1.11 2004-08-06 11:35:29 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -19,7 +19,7 @@
 ####/testem/phys/addPhysics  binary_ion		#hadronic physics
 ####/testem/phys/addPhysics  elastic		#hadronic physics
 #
-/testem/phys/setCuts    0.1 mm
+/testem/phys/setCuts    1.0 mm
 /testem/stepMax         0.5 mm
 #
 /run/initialize
@@ -30,5 +30,5 @@
 #
 /testem/event/printModulo 1000
 #
-/run/beamOn 10000
+/run/beamOn 1000
 #

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.5 2004-07-08 16:15:44 maire Exp $
+// $Id: RunAction.hh,v 1.6 2004-08-06 11:35:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@ class RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
     
-    G4double* GetTallyEdep() {return tallyEdep;};
+    void FillTallyEdep(G4int n, G4double e) {tallyEdep[n] += e;};
        
     G4double GetBinLength() {return binLength;};
     G4double GetOffsetX()   {return offsetX;} 

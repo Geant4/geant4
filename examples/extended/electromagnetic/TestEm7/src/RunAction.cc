@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.8 2004-07-08 16:15:17 maire Exp $
+// $Id: RunAction.cc,v 1.9 2004-08-06 11:35:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,8 @@
 #include "Randomize.hh"
 
 #ifdef G4ANALYSIS_USE
- #include "AIDA/AIDA.h"
+#include <memory> // for the auto_ptr(T>
+#include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,45 +59,42 @@ RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
 
 RunAction::~RunAction()
 {
- delete tallyEdep;
+  delete tallyEdep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::bookHisto()
 {
-
- G4double length  = detector->GetAbsorSizeX();
- G4double stepMax = physics->GetStepMaxProcess()->GetMaxStep();
- const G4int nbmin = 100;
- G4int nbBins = (int)(0.5 + length/stepMax);
- if (nbBins < nbmin) nbBins = nbmin;
- binLength = length/nbBins;
- offsetX   = 0.5*length;
+  G4double length  = detector->GetAbsorSizeX();
+  G4double stepMax = physics->GetStepMaxProcess()->GetMaxStep();
+  const G4int nbmin = 100;
+  G4int nbBins = (int)(0.5 + length/stepMax);
+  if (nbBins < nbmin) nbBins = nbmin;
+  binLength = length/nbBins;
+  offsetX   = 0.5*length;
  
 #ifdef G4ANALYSIS_USE
- G4cout << "\n----> Histogram Tree opened on file testem7.paw" << G4endl;
+  G4cout << "\n----> Histogram Tree opened on file testem7.paw" << G4endl;
   
- // Create the analysis factory
- AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
+  // Create the analysis factory
+  std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
 
- // Create the tree factory
- AIDA::ITreeFactory* tf = af->createTreeFactory();
+  // Create the tree factory
+  std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
- // Create a tree mapped to an hbook file.
- G4bool readOnly  = false;
- G4bool createNew = true;
- tree = tf->create("testem7.paw", "hbook", readOnly, createNew);
+  // Create a tree mapped to an hbook file.
+  G4bool readOnly  = false;
+  G4bool createNew = true;
+  tree = tf->create("testem7.paw", "hbook", readOnly, createNew);
 
- // Create a histogram factory, whose histograms will be handled by the tree
- AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
+  // Create a histogram factory, whose histograms will be handled by the tree
+  std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory(*tree) );
 
- // Create histograms
- histo[0] = hf->createHistogram1D("1","Edep (MeV/mm)",nbBins, 0,length);
+  // Create histograms
+  histo[0] = hf->createHistogram1D("1","Edep (MeV/mm) along absorber (mm)",
+             nbBins, 0, length/mm);
 
- delete hf;
- delete tf;
- delete af;
 #endif
 }
 
@@ -161,41 +159,48 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	 << material->GetName() << " (density: " 
 	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
 	 
- //compute projected range and straggling
- //
- projRange /= NbofEvents; projRange2 /= NbofEvents;
- G4double rms = projRange2 - projRange*projRange;        
- if (rms>0.) rms = sqrt(rms); else rms = 0.;
- 
- G4cout.precision(5);       
- G4cout << "\n projected Range= "<< G4BestUnit(projRange,"Length")
-        << "   rms= "            << G4BestUnit( rms,"Length")
-        << G4endl;
+  //compute projected range and straggling
+  //
+  projRange /= NbofEvents; projRange2 /= NbofEvents;
+  G4double rms = projRange2 - projRange*projRange;        
+  if (rms>0.) rms = sqrt(rms); else rms = 0.;
+
+  G4cout.precision(5);       
+  G4cout << "\n projected Range= "<< G4BestUnit(projRange,"Length")
+         << "   rms= "            << G4BestUnit( rms,"Length")
+         << G4endl;
      
- //print dose in tallies
- //
- G4int tallyNumber = detector->GetTallyNumber();
- if (tallyNumber > 0) {
-   G4double tallyMass = detector->GetTallyMass();
-   G4double Ebeam = kinematic->GetEbeamCumul();
-   G4cout << "\n---------------------------------------------------------\n";
-   G4cout << " Cumulated Doses : \tEdep      \tEdep/Ebeam \tDose" << G4endl;
-   for (G4int j=0; j<tallyNumber; j++) {
+  //print dose in tallies
+  //
+  G4int tallyNumber = detector->GetTallyNumber();
+  if (tallyNumber > 0) {
+    G4double tallyMass = detector->GetTallyMass();
+    G4double Ebeam = kinematic->GetEbeamCumul();
+    G4cout << "\n---------------------------------------------------------\n";
+    G4cout << " Cumulated Doses : \tEdep      \tEdep/Ebeam \tDose" << G4endl;
+    for (G4int j=0; j<tallyNumber; j++) {
       G4double Edep = tallyEdep[j], ratio = 100*Edep/Ebeam;
       G4double Dose = Edep/tallyMass;
       G4cout << "tally " << j << ": \t \t"
              << G4BestUnit(Edep,"Energy") << "\t"
 	     << ratio << " % \t"
 	     << G4BestUnit(Dose,"Dose")   << G4endl;
-   }
-  G4cout << "\n---------------------------------------------------------\n"; 
- }
+    }
+    G4cout << "\n---------------------------------------------------------\n"; 
+  }
+
+  // normalize histogram
+#ifdef G4ANALYSIS_USE
+  G4double fac = (mm/MeV)/(NbofEvents *  binLength);
+  histo[0]->scale(fac);
+#endif
+  
  
- // save and clean histo
- cleanHisto();
+  // save and clean histo
+  cleanHisto();
  
- // show Rndm status
- HepRandom::showEngineStatus();
+  // show Rndm status
+  HepRandom::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

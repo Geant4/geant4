@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.5 2004-07-08 16:15:18 maire Exp $
+// $Id: SteppingAction.cc,v 1.6 2004-08-06 11:35:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,18 +52,20 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  if (edep <= 0.) return;
  
  //Bragg curve
- //	   
- G4double x = aStep->GetTrack()->GetPosition().x() + runAction->GetOffsetX();
- G4double binLength = runAction->GetBinLength();
- runAction->FillHisto(0, x, (edep/binLength)/(MeV/mm));
+ //	
+
+ G4StepPoint* prePoint  = aStep->GetPreStepPoint();
+ G4StepPoint* postPoint = aStep->GetPostStepPoint();
+   
+ G4double x = (prePoint->GetPosition().x() + postPoint->GetPosition().x()) * 0.5;
+ x += runAction->GetOffsetX();
+ runAction->FillHisto(0, x/mm , edep);
 
  //fill tallies
  //
- G4VPhysicalVolume* pVolume = aStep->GetTrack()->GetVolume();
- if (pVolume->GetLogicalVolume() == detector->GetLogicalTally()) {
-   G4double* tallyEdep = runAction->GetTallyEdep();
-   tallyEdep[pVolume->GetCopyNo()] += edep;
- } 
+ G4VPhysicalVolume* pVolume = prePoint->GetPhysicalVolume();
+ if (pVolume->GetLogicalVolume() == detector->GetLogicalTally()) 
+    runAction->FillTallyEdep(pVolume->GetCopyNo(), edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
