@@ -1,4 +1,4 @@
-$Id: History,v 1.10 1999-05-03 17:26:10 japost Exp $
+$Id: History,v 1.11 1999-05-17 13:12:48 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May      17, 99      J. Allison.
+   In G4NavigationLevel, changed operator new(size_t, G4NavigationLevel *)
+   to operator new(size_t, G4NavigationLevel *) because the former gives
+   Sun indigestion with STL Interface.
 
 May       3, 99      J. Apostolakis 
    testG4ReplicaNavigation.cc
