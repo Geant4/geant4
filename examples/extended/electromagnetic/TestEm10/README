@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2000-07-14 15:50:28 grichine Exp $
+$Id: README,v 1.2 2001-11-21 18:48:56 mverderi Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,18 @@ $Id: README,v 1.1 2000-07-14 15:50:28 grichine Exp $
 
     Test for investigation of ionisation in thin absorbers, transition 
     and synchrotron radiations.
+
+
+ 0- Update on 21 Nov. 2001
+	
+	The parameterisations models can be changed simply with:
+
+	Idle> /XTRdetector/setModel i (i = 1 to 10)
+
+	It is NOT needed (and not recommended) to issue the command
+	/XTRdetector/update if just the model is changed.
+
+	See macro file "TestEm10.in" for an example.
 
 	
  1- GEOMETRY DEFINITION

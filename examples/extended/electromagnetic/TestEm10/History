@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2001-11-21 11:57:06 mverderi Exp $
+$Id: History,v 1.3 2001-11-21 18:48:55 mverderi Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 Nov. 2001 Marc Verderi (TestEm10-V03-02-00)
+- Define a new TestEm10.in (and .out) which tests
+  all XTR models, shooting 10 particles for each run.
+  Required some modification in the detector construction
+  and messenger.
+- Define a new TestEm10.large_N.in (and .out)
+  shooting 1000 particles/run.
+
 
 21 Nov. 2001 Marc Verderi
 - Taken for the HEAD and made compliant with

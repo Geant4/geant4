@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorMessenger.cc,v 1.4 2001-07-11 09:57:23 gunter Exp $
+// $Id: Em10DetectorMessenger.cc,v 1.5 2001-11-21 18:48:56 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,7 +59,8 @@ Em10DetectorMessenger::Em10DetectorMessenger(Em10DetectorConstruction * Em10Det)
   ModelCmd->SetGuidance("Select Model for XTR");
   ModelCmd->SetParameterName("choice",true);
   ModelCmd->SetDefaultValue(0);
-  ModelCmd->AvailableForStates(PreInit,Idle);
+  // ModelCmd->AvailableForStates(PreInit,Idle);
+  ModelCmd->AvailableForStates(Idle);
 
   FoilNumCmd = new G4UIcmdWithAnInteger("/XTRdetector/setFoilNum",this);
   FoilNumCmd->SetGuidance("Select foil number for XTR");
@@ -80,14 +81,14 @@ Em10DetectorMessenger::Em10DetectorMessenger(Em10DetectorConstruction * Em10Det)
   AbsThickCmd->SetRange("SizeZ>0.");
   AbsThickCmd->AvailableForStates(Idle);
 
-RadiatorThickCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setRadThick",this);
+  RadiatorThickCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setRadThick",this);
   RadiatorThickCmd->SetGuidance("Set Thickness of XTR radiator");
   RadiatorThickCmd->SetParameterName("SizeZ",false,false);
   RadiatorThickCmd->SetDefaultUnit("mm");
   RadiatorThickCmd->SetRange("SizeZ>0.");
   RadiatorThickCmd->AvailableForStates(Idle);
 
-GasGapThickCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setGasGapThick",this);
+  GasGapThickCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setGasGapThick",this);
   GasGapThickCmd->SetGuidance("Set Thickness of XTR gas gaps");
   GasGapThickCmd->SetParameterName("SizeZ",false,false);
   GasGapThickCmd->SetDefaultUnit("mm");
@@ -162,10 +163,10 @@ Em10DetectorMessenger::~Em10DetectorMessenger()
 void Em10DetectorMessenger::SetNewValue(G4UIcommand* command,G4int newValue)
 { 
   if( command == ModelCmd )
-  { 
-    Em10Detector->SetParametrisationModel(newValue);
-    Em10Detector->Construct();
-  }
+    { 
+      Em10Detector->SetParametrisationModel(newValue);
+      Em10Detector->Construct();
+    }
 }
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -176,6 +177,7 @@ void Em10DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == ModelCmd )
   { 
     Em10Detector->SetParametrisationModel(ModelCmd->GetNewIntValue(newValue));
+    Em10Detector->ParametrisationModel();
   }
   if( command == FoilNumCmd )
   { 

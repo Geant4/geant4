@@ -1,53 +1,42 @@
 #
-# Macro file 'run11.mac' for the initialization phase of "TestEm8.cc"
+# Macro file 'TestEm10.large_N.in' for testing "TestEm10"
 #
-# It creates the default geometry (simple absorber cylinder )        
-#
-/control/verbose 2
-#
-#control/saveHistory
-#
-/run/verbose 2
-#
-/run/initialize
-#
-#/calor/setAbsMat Xenon
-#  
-#/calor/setAbsThick  20.0 mm 
-# 
-#/calor/setAbsRad 100.0 mm
-#
-#/calor/update
-#
-#  hist file name
-#
-#/plots/sethistName g4.p11
-#
-#  PLOT: energy deposit distribution in absorber
-#
-#/plots/setnbinEn 95
-#/plots/setEnlow 0.0 MeV
-#/plots/setEnhigh 0.1  MeV  
-#
-#/calor/cutG 3.0 mm    
-#
-#/calor/cutE 3.0 mm
 #
 /run/initialize
 /run/particle/dumpCutValues
-#
 /gun/particle e-
-# 
-#/gun/energy 200.00 GeV
-#
 /gun/energy 9000.0 MeV
-#
-#/tracking/verbose 2
-#
-/run/beamOn 10000
-#
-#
 
+# Test  G4FoamXrayTRmodel
+/XTRdetector/setModel 1
+/run/beamOn 1000
+# Test G4FoamXTRdEdx
+/XTRdetector/setModel 2
+/run/beamOn 1000
+# Test G4GamDistrXrayTRmodel
+/XTRdetector/setModel 3
+/run/beamOn 1000
+# Test G4GamDistrXTRdEdx
+/XTRdetector/setModel 4
+/run/beamOn 1000
+# Test G4IrregularXrayTRmodel
+/XTRdetector/setModel 5
+/run/beamOn 1000
+# Test  G4IrregularXTRdEdx
+/XTRdetector/setModel 6
+/run/beamOn 1000
+# Test G4PlateIrrGasXrayTRmodel
+/XTRdetector/setModel 7
+/run/beamOn 1000
+# Test G4PlateIrrGasXTRdEdx
+/XTRdetector/setModel 8
+/run/beamOn 1000
+# Test G4RegularXrayTRmodel
+/XTRdetector/setModel 9
+/run/beamOn 1000
+# Test G4RegularXTRdEdx
+/XTRdetector/setModel 10
+/run/beamOn 1000
 
 
 

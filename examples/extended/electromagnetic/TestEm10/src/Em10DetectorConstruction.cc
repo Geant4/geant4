@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.6 2001-11-21 11:57:13 mverderi Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.7 2001-11-21 18:48:56 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,7 @@
 #include "G4TransportationManager.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
+#include "G4FastSimulationManager.hh"
 
 #include "G4ios.hh"
 
@@ -623,7 +624,12 @@ void Em10DetectorConstruction::ParametrisationModel()
   G4double alphaPlate = 160.0 ;
   G4double alphaGas   = 160.0 ;
 
-  if(fXTRModel) delete fXTRModel;  
+  if(fXTRModel) {
+    // Remove first the model from the envelope:
+    logicRadiator->GetFastSimulationManager()->RemoveFastSimulationModel(fXTRModel);
+    // Then delete it:
+    delete fXTRModel;
+  }
 
   switch(fModelNumber)
   {
