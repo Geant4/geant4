@@ -27,7 +27,11 @@ G4IsoResult * G4NeutronIsotopeProduction::
 GetIsotope(const G4Track& aTrack,
            const G4Nucleus & aNucleus)
 {
+  // is applicable?
   if(aTrack.GetDynamicParticle()->GetDefinition() != G4Neutron::Neutron()) return NULL;
+  if(aTrack.GetKineticEnergy()>100*MeV) return NULL;
+
+  // get the isotope
   G4Material * theMaterial = aTrack.GetMaterial();
   G4double nEleInMat = theMaterial->GetNumberOfElements();
   G4int index;
