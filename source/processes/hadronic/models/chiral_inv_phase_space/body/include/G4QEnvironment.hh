@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.17 2003-11-24 10:15:11 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.18 2003-11-28 08:45:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -95,7 +95,7 @@ private:
   // Output hadrons
   G4QHadronVector    theQHadrons;     // Vector of generated secondary hadrons
   // Internal working parameters
-  G4QCHIPSWorld      theWorld;        // the CHIPS World
+  G4QCHIPSWorld*     theWorld;        // the CHIPS World
   G4int              nBarClust;       // Maximum barion number of clusters (Calc. @ Interaction)
   G4double           f2all;           // Ratio of free nucleons to free+dense nucleons (do we need it in Quasmon?)
   G4QuasmonVector    theQuasmons;     // Intermediate vector of Quasmons before fragmentation (***delete***)

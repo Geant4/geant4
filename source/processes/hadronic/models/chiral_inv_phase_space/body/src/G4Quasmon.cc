@@ -23,7 +23,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.64 2003-11-26 15:34:31 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.65 2003-11-28 08:45:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -46,7 +46,8 @@ G4Quasmon::G4Quasmon(G4QContent qQCont, G4LorentzVector q4M, G4LorentzVector ph4
   G4cout<<"G4Quasmon:Constructor:QC="<<qQCont<<",Q4M="<<q4M<<",photonE="<<ph4M.e()<<G4endl;
 #endif
   if(phot4M.e()>0.) q4Mom+=phot4M; // InCaseOf CaptureByQuark it will be subtracted back
-  G4int nP= theWorld.GetQPEntries();      // A#of initialized particles in CHIPS World
+  theWorld= G4QCHIPSWorld::Get();  // Get a pointer to the CHIPS World
+  G4int nP= theWorld->GetQPEntries(); // A#of initialized particles in CHIPS World
   //@@ Make special parametyer to cut high resonances !!
   G4int          nMesons  = 45;
   if     (nP<24) nMesons  =  9;
@@ -2223,7 +2224,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
         G4double sMM=G4QPDGCode(sPDG).GetMass();
         if(sWi)                                      // Hadron is a resonance
 		{
-          G4double mmm=theWorld.GetQParticle(G4QPDGCode(sPDG))->MinMassOfFragm();
+          G4double mmm=theWorld->GetQParticle(G4QPDGCode(sPDG))->MinMassOfFragm();
           G4double ddm=quasM-rMass;                  // Minimum mass of the sHadron
           if(fabs(sMM-ddm)<1.5*sWi-.001 && ddm>mmm)
           {
@@ -4259,24 +4260,26 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
 		G4cout<<"G4Q::CHP:cPDG="<<cPDG<<",comb="<<comb<<",rPDG="<<resPDG<<curQ<<", tM="
               <<totMass<<">"<<frM-CB+resTM<<"=fM="<<frM<<"+RM="<<resTM<<"-CB="<<CB<<G4endl;
 #endif
-        if(comb&&resPDG && totMass>frM-CB+resTM &&(resPDG>80000000&&resPDG!=90000000||resPDG<10000))
+        if(comb&&resPDG && totMass>frM-CB+resTM &&
+           (resPDG>80000000&&resPDG!=90000000 || resPDG<10000))
 	    {
 #ifdef pdebug
           if(aPDG<10000&&aPDG%10<3)
           //if(aPDG<10000&&aPDG%10<5)
-		  G4cout<<"G4Q::CHP:ind="<<index<<",Q="<<valQ<<mQ<<",c="<<cPDG<<",r="<<resPDG<<curQ<<G4endl;
+		  G4cout<<"G4Q::CHP:ind="<<index<<",Q="<<valQ<<mQ<<",c="<<cPDG<<",r="<<resPDG<<curQ
+                <<G4endl;
 #endif
           if(resPDG!=10)resM=G4QPDGCode(resPDG).GetMass();// PDG mass for the resid. hadron
-          else resM=G4QChipolino(curQ).GetMass();  // Chipolino mass for the residual hadron
+          else resM=G4QChipolino(curQ).GetMass();  // Chipolino mass for theResidualHadron
           G4int resQCode=G4QPDGCode(curQ).GetQCode();
 #ifdef pdebug
           if(aPDG<10000&&aPDG%10<3)
           //if(aPDG<10000&&aPDG%10<5)
-          G4cout<<"G4Q::CHP: RQMass/QC="<<resM<<curQ<<",ePDG="<<envPDGC<<",rQC="<<resQCode<<G4endl;
+          G4cout<<"G4Q::CHP:rM/QC="<<resM<<curQ<<",E="<<envPDGC<<",rQC="<<resQCode<<G4endl;
 #endif
           //if(envPDGC>80000000 && envPDGC!=90000000 && resM>0. && aPDG>1000 && // @@??
           if(envPDGC>80000000 && envPDGC!=90000000 && resM>0. &&
-             resPDG!=10 && resPDG!=1114 && resPDG!=2224) // => Take into account the Environment
+             resPDG!=10 && resPDG!=1114 && resPDG!=2224) //=>TakeIntoAccount theEnvironment
           { 
             G4QContent rtQC=curQ+envQC;            // Total Residual Quark Content
             G4QNucleus rtN(rtQC);                  // Create a pseudo-nucleus for residual
@@ -4290,6 +4293,11 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
             // ***VRQ***
             if(bnRQ<resM) resM=bnRQ;
           }
+#ifdef pdebug
+          if(aPDG<10000&&aPDG%10<3)
+          //if(aPDG<10000&&aPDG%10<5)
+          G4cout<<"G4Q::CHP: resM="<<resM<<", resQCode="<<resQCode<<G4endl;
+#endif
           if(resM>0. && resQCode>-2)
 	      {
             G4double limM=mQ-resM;
@@ -4656,7 +4664,7 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
   G4LorentzVector t = qHadron->Get4Momentum();        // Get 4-momentum of decaying hadron
   G4double m = t.m();                                 // Get the mass value of decaying Hadron
   // --- Randomize a channel of decay
-  G4QDecayChanVector decV = theWorld.GetQParticle(theQPDG)->GetDecayVector();
+  G4QDecayChanVector decV = theWorld->GetQParticle(theQPDG)->GetDecayVector();
   G4int nChan = decV.size();
 #ifdef pdebug
   G4cout<<"G4Quasmon::DecayOutHadron: PDG="<<thePDG<<", m="<<m<<",("<<nChan<<" channels)"<<G4endl;
@@ -4708,21 +4716,21 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
         if(cV[0]->GetWidth()==0.)
 	    { // Randomize only the second Hardon or none
           fHadr = new G4QHadron(cV[0]->GetPDGCode());   // the First Hadron is created *1*
-          if(cV[1]->GetWidth()==0.)sHadr = new G4QHadron(sPDG);// the Second Hadron is created *2*
+          if(cV[1]->GetWidth()==0.)sHadr = new G4QHadron(sPDG);//theSecondHadron is created
           else
 		  {
-            G4QParticle* sPart=theWorld.GetQParticle(cV[1]);// Particle for the Second Hadron
-            G4double sdm = m - fHadr->GetMass();          // MaxMassLimit for the 2-nd Hadron
-            sHadr = new G4QHadron(sPart,sdm);             // the Second Hadron is created *2*
+            G4QParticle* sPart=theWorld->GetQParticle(cV[1]);// Pt for theSecondHadron
+            G4double sdm = m - fHadr->GetMass();        // MaxMassLimit for the 2-nd Hadron
+            sHadr = new G4QHadron(sPart,sdm);           // the Second Hadron is created *2*
             if(sPDG<0) sHadr->MakeAntiHadron();
           }
 	    }
-        else                                              // Randomize masses of both Hadrons
+        else                                              // Randomize masses ofBothHadrons
 	    {
-          G4QParticle* sPart=theWorld.GetQParticle(cV[1]);// Particle for the Second Hadron
-          G4double mim = sPart->MinMassOfFragm();         // MinMassLimit for the Second Hadron
-          G4double fdm = m - mim;                         // MaxMassLimit for the First Hadron
-          G4QParticle* fPart=theWorld.GetQParticle(cV[0]);// Particle for the First Hadron
+          G4QParticle* sPart=theWorld->GetQParticle(cV[1]);// Pt for theSecondHadron
+          G4double mim = sPart->MinMassOfFragm();         // MinMassLimit for theSecondHadr
+          G4double fdm = m - mim;                         // MaxMassLimit for theFirstHadr
+          G4QParticle* fPart=theWorld->GetQParticle(cV[0]);// Pt for the First Hadron
           fHadr = new G4QHadron(fPart,fdm);               // the 1-st Hadron is initialized *1*
           if(fPDG<0) fHadr->MakeAntiHadron();
           G4double fm=fHadr->GetMass();                   // Mass of the first hadron
@@ -4785,56 +4793,56 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
       //The radiative decays of the GS hadrons In3 are open
       if(3>2 || DFlag)
       {
-        if(cV[0]->GetWidth()==0.)                        // Don't randomize the First Hardon
+        if(cV[0]->GetWidth()==0.)                        // Don't randomize theFirstHardon
 	    {
-          fHadr = new G4QHadron(fPDG);                   // the First Hadron is created  *1*
+          fHadr = new G4QHadron(fPDG);                   // theFirst Hadron is created  *1*
           if(cV[1]->GetWidth()==0.)
           {
-            sHadr = new G4QHadron(sPDG);                         // the Second Hadron is created *2*
-            if(cV[2]->GetWidth()==0.)tHadr = new G4QHadron(tPDG);//the Third Hadron is created *3*
+            sHadr = new G4QHadron(sPDG);                 // theSecond Hadron is created *2*
+            if(cV[2]->GetWidth()==0.)tHadr = new G4QHadron(tPDG);//theThirdHadron isCreated
             else
 		    {
-              G4QParticle* tPart=theWorld.GetQParticle(cV[2]);   // Particle for the 3-rd Hadron
-              G4double tdm = m-fHadr->GetMass()-sHadr->GetMass();// MaxMassLimit for the 2d Hadron
-              tHadr = new G4QHadron(tPart,tdm);                  // the 3-rd Hadron is created *3*
+              G4QParticle* tPart=theWorld->GetQParticle(cV[2]);// Pt for the3-rdH
+              G4double tdm = m-fHadr->GetMass()-sHadr->GetMass();// MaxMass for the 2d Hadr
+              tHadr = new G4QHadron(tPart,tdm);                  //the3rdHadron is created
               if(tPDG<0) tHadr->MakeAntiHadron();
 		    }
           }
           else                                              // Randomize 2nd & 3rd Hadrons
 		  {
-            m-=fHadr->GetMass();                            // Reduce the residual MaxMassLimit
-            G4QParticle* tPart=theWorld.GetQParticle(cV[2]);// Particle for the 3-rd Hadron
-            G4double mim = tPart->MinMassOfFragm();         // MinMassLimit for the 3rd Hadron
-            G4double sdm = m - mim;                         // MaxMassLimit for the 2nd Hadron
-            G4QParticle* sPart=theWorld.GetQParticle(cV[1]);// Particle for the 2-nd Hadron
-            sHadr = new G4QHadron(sPart,sdm);               // the Second Hadron is created *2*
+            m-=fHadr->GetMass();                            // Reduce the residual MaxMass
+            G4QParticle* tPart=theWorld->GetQParticle(cV[2]);// Pt for the 3-rd Hadron
+            G4double mim = tPart->MinMassOfFragm();         // MinMassLimit for the 3rd Hd
+            G4double sdm = m - mim;                         // MaxMassLimit for the 2nd Hd
+            G4QParticle* sPart=theWorld->GetQParticle(cV[1]);// Pt for the 2-nd Hadron
+            sHadr = new G4QHadron(sPart,sdm);               // theSecondHadron is created
             if(sPDG<0) sHadr->MakeAntiHadron();
-            G4double tdm = m - sHadr->GetMass();            // MaxMassLimit for the 3-rd Hadron
-            tHadr = new G4QHadron(tPart,tdm);               // the Third Hadron is created *3*
+            G4double tdm = m - sHadr->GetMass();            // MaxMassLimit for the 3-rd H
+            tHadr = new G4QHadron(tPart,tdm);               // the Third Hadron is created
             if(tPDG<0) tHadr->MakeAntiHadron();
           }
 	    }
         else  // Randomize masses of all three Hadrons
 	    {
-          G4QParticle* sPart=theWorld.GetQParticle(cV[1]);   // Particle for the Second Hadron
-          G4double smim = sPart->MinMassOfFragm();           // MinMassLimit for the Second Hadron
-          G4QParticle* tPart=theWorld.GetQParticle(cV[2]);   // Particle for the Third Hadron
-          G4double tmim = tPart->MinMassOfFragm();           // MinMassLimit for the Third Hadron
-          G4double fdm = m - smim - tmim;                    // MaxMassLimit for the First Hadron
-          G4QParticle* fPart=theWorld.GetQParticle(cV[0]);   // Particle for the First Hadron
-          fHadr = new G4QHadron(fPart,fdm);                  // the First Hadron is created *1*
+          G4QParticle* sPart=theWorld->GetQParticle(cV[1]);//Pt for theSecondHadr
+          G4double smim = sPart->MinMassOfFragm();        // MinMassLim for theSecondHadron
+          G4QParticle* tPart=theWorld->GetQParticle(cV[2]); // Pt for the Third Hadron
+          G4double tmim = tPart->MinMassOfFragm();           // MinMassLimit for theThirdHd
+          G4double fdm = m - smim - tmim;                    // MaxMassLimit for theFirstHd
+          G4QParticle* fPart=theWorld->GetQParticle(cV[0]); // Pt for the First Hadron
+          fHadr = new G4QHadron(fPart,fdm);                  // the First Hadron is created
           if(fPDG<0) fHadr->MakeAntiHadron();
-          m-=fHadr->GetMass();                               // Reduce the residual MaxMassLimit !
-          G4double  sdm = m - tmim;                          // MaxMassLimit for the Second Hadron
-          sHadr = new G4QHadron(sPart,sdm);                  // the Second Hadron is created *2*
+          m-=fHadr->GetMass();                               // Reduce the residual MaxMass
+          G4double  sdm = m - tmim;                          // MaxMassLimit for theSecondH
+          sHadr = new G4QHadron(sPart,sdm);                  // theSecondHadron is created
           if(sPDG<0) sHadr->MakeAntiHadron();
-          G4double  tdm = m - sHadr->GetMass();              // MaxMassLimit for the Third Hadron
-          tHadr = new G4QHadron(tPart,tdm);                  // the Third Hadron is created *3*
+          G4double  tdm = m - sHadr->GetMass();              // MaxMassLimit for theThird H
+          tHadr = new G4QHadron(tPart,tdm);                  // the Third Hadron is created
           if(tPDG<0) tHadr->MakeAntiHadron();
         }     
 #ifdef pdebug
-        G4cout<<"G4Quasmon::DecayOutHadron:3Dec. m1="<<fHadr->GetMass()<<",m2="<<sHadr->GetMass()
-            <<",m3="<<tHadr->GetMass()<<G4endl;
+        G4cout<<"G4Quasmon::DecayOutHadron:3Dec. m1="<<fHadr->GetMass()
+              <<",m2="<<sHadr->GetMass()<<",m3="<<tHadr->GetMass()<<G4endl;
 #endif
         if(pap)
         {
