@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLossPlus.hh,v 1.3 1999-04-28 15:07:52 urban Exp $
+// $Id: G4eEnergyLossPlus.hh,v 1.4 1999-11-08 10:26:50 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -18,16 +18,6 @@
 //      2nd December 1995, G.Cosmo
 //      ---------- G4eEnergyLossPlus physics process -----------
 //                by Laszlo Urban, 20 March 1997 
-// ************************************************************             
-// It is the first implementation of the new unified Energy Loss process.
-// It calculates the continuous energy loss for e+/e-.
-// Processes giving contribution to the continuous loss :
-//   ionisation (= cont.ion.loss + delta ray production)
-//   bremsstrahlung (= cont.loss due to sooft brems+discrete bremsstrahlung)
-//   can be added more easily ..........
-// This class creates static dE/dx and range tables for e+ and e-,
-// which tables can be used by other processes.
-// ---------------------------------------------------------------
 // 18/11/98  , L. Urban
 //  It is a modified version of G4eEnergyLoss:
 //  continuous energy loss with generation of subcutoff delta rays
@@ -55,6 +45,23 @@
 
 class G4EnergyLossMessenger;
  
+// Class description:
+// This class is the implementation of the unified Energy Loss process
+// with generation of subcutoff secondaries , see description of 
+// *****************************************
+//  the AlongStepDoIt method.
+// It calculates the continuous energy loss for e+/e-.
+// The following processes give contributions to the continuous
+// energy loss (by default) :
+//  ---	 ionisation (= cont.ion.loss + delta ray production)
+//  --- bremsstrahlung (= cont.loss due to soft brems+discrete bremsstrahlung)
+//   more can be added	 ..........
+// This class creates static dE/dx and range tables for e+ and e-,
+// which tables can be used by other processes , too.
+// G4eEnergyLoss is the base class for the processes giving contribution
+// to the (continuous) energy loss of e+/e- .
+// Class description - end
+
  
 class G4eEnergyLossPlus : public G4VContinuousDiscreteProcess
  
@@ -65,27 +72,45 @@ class G4eEnergyLossPlus : public G4VContinuousDiscreteProcess
 
    ~G4eEnergyLossPlus();
 
+  public: // With description
+
     G4bool IsApplicable(const G4ParticleDefinition&);
+    //	true for e+/e- , false otherwise
 
-
-  public:
-  
     void BuildDEDXTable(const G4ParticleDefinition& aParticleType);
+    //	It builds dE/dx and range tables for aParticleType and
+    //	for every material contained in the materialtable.
 
     G4double GetContinuousStepLimit(const G4Track& track,
                                     G4double previousStepSize,
                                     G4double currentMinimumStep,
                                     G4double& currentSafety);
+    // Computes the steplimit due to the energy loss process.
 
     G4VParticleChange* AlongStepDoIt(const G4Track& track,
                                      const G4Step& Step) ;
+    // --- Performs the computation of the mean energy loss
+    //     after the step .
+    // --- Compares the value of the safety to the value
+    //     of the cut in range.
+    // --- If safety < cut in range , generates secondaries
+    //     with kinetic energy in the interval [Tsafety,Tcut],
+    //     where  Tsafety corresponds to range safety,
+    //            Tcut is the cut in energy.
+    // --- Updates the value of the mean energy loss and
+    //     the direction of the primary
+    // --- Computes the energy loss fluctuation.   
 
     virtual G4double GetMeanFreePath(const G4Track& track,
                                      G4double previousStepSize,
                                      G4ForceCondition* condition) = 0;
+    // Virtual function to be overridden in the derived classes
+    // ( ionisation and bremsstrahlung) .
 
     virtual G4VParticleChange* PostStepDoIt(const G4Track& track,
                                             const G4Step& Step) = 0;
+    // Virtual function to be overridden in the derived classes
+    // ( ionisation and bremsstrahlung) .
                                             
                                             
   private:
@@ -239,24 +264,45 @@ class G4eEnergyLossPlus : public G4VContinuousDiscreteProcess
 
     static G4EnergyLossMessenger* eLossMessenger;
          
-  public:
+  public: // With description
      
     static void  SetNbOfProcesses(G4int nb) {NbOfProcesses=nb;};
+    // Sets number of processes giving contribution to the energy loss
+
     static void  PlusNbOfProcesses()        {NbOfProcesses++ ;};
+    // Increases number of processes giving contribution to the energy loss
+
     static void  MinusNbOfProcesses()       {NbOfProcesses-- ;};                                      
+    // Decreases number of processes giving contribution to the energy loss
+
     static G4int GetNbOfProcesses()         {return NbOfProcesses;};
-    
+    // Gets number of processes giving contribution to the energy loss
+    // ( default value = 2)
+
     static void SetRndmStep     (G4bool   value) {rndmStepFlag   = value;}
+    // use / do not use randomisation in energy loss steplimit
+    // ( default = no randomisation)
+
     static void SetEnlossFluc   (G4bool   value) {EnlossFlucFlag = value;}
+    // compute energy loss with/without fluctuation
+    // ( default : with fluctuation)
+
     static void SetStepFunction (G4double c1, G4double c2)
                                {dRoverRange = c1; finalRange = c2;
                                 c1lim=dRoverRange ;
                                 c2lim=2.*(1-dRoverRange)*finalRange;
                                 c3lim=-(1.-dRoverRange)*finalRange*finalRange;
                                }
+    // sets values for data members used to compute the step limit:
+    //	 dRoverRange : max. relative range change in one step,
+    //	 finalRange  : if range <= finalRange --> last step for the particle.
+ 
 
     static void SetMinDeltaCutInRange(G4double value)
                                     {MinDeltaCutInRange = value;}
+    // sets minimal cut value for the subcutoff secondaries
+    // (i.e. the kinetic energy of these secondaries can not be
+    //  smaller than the energy corresponds to MinDeltaCutInRange).
 };
  
 #include "G4eEnergyLossPlus.icc"
