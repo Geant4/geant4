@@ -166,9 +166,10 @@ private:
                            G4double chargeSquare) const; 
   // Function to compute the Bloch term	
 
-  G4double GetLossWithFluct(const G4DynamicParticle* particle,
-                            const G4Material* material,
-                                  G4double    MeanLoss) const;
+  G4double ElectronicLossFluctuation(const G4DynamicParticle* particle,
+                                     const G4Material* material,
+                                           G4double chargeSquare,
+                                           G4double meanLoss) const;
   // Function to sample electronic losses
 
   G4double NuclearLossFluctuation(const G4DynamicParticle* particle,

@@ -625,8 +625,8 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
     if((EnlossFlucFlag) && (finalT < kineticEnergy)  
                         && (kineticEnergy > LowestKineticEnergy)) {
       
-      eloss = GetLossWithFluct(particle, material, eloss/chargeSquare)
-	    * chargeSquare ;
+      eloss = ElectronicLossFluctuation(particle, material, 
+                                        chargeSquare, eloss) ;
       if(nStopping) {
         nloss = NuclearLossFluctuation(particle, material, nloss) ;
       }
@@ -1048,12 +1048,14 @@ G4double G4hLowEnergyIonisation::BlochTerm(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4hLowEnergyIonisation::GetLossWithFluct(
+G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
                                  const G4DynamicParticle* particle,
                                  const G4Material* material,
-                                       G4double    MeanLoss) const
+                                       G4double chargeSquare,
+                                       G4double    meanLoss) const
 //  calculate actual loss from the mean loss
-//  The model used to get the fluctuation is essentially the same as in Glandz in Geant3.
+//  The model used to get the fluctuation is essentially the same 
+// as in Glandz in Geant3.
 {
    static const G4double minLoss = 1.*eV ;
    static const G4double probLim = 0.01 ;
@@ -1063,7 +1065,6 @@ G4double G4hLowEnergyIonisation::GetLossWithFluct(
 
 
 // check if the material has changed ( cache mechanism) - is not used 
-
 //  if (material != lastMaterial)
 //    {
 //      lastMaterial = material;
@@ -1094,9 +1095,10 @@ G4double G4hLowEnergyIonisation::GetLossWithFluct(
 
   // get particle data
   G4double Tkin   = particle->GetKineticEnergy();
-  ParticleMass = particle->GetMass() ;
+  G4double ParticleMass = particle->GetMass() ;
   G4double DeltaCutInKineticEnergyNow = 
            deltaCutInKineticEnergy[material->GetIndex()];
+  G4double MeanLoss = meanLoss/ChargeSquare;
 
   // Validity range for delta electron cross section
   threshold = G4std::max(DeltaCutInKineticEnergyNow,excEnergy);
@@ -1114,7 +1116,7 @@ G4double G4hLowEnergyIonisation::GetLossWithFluct(
   if(MeanLoss >= kappa*Tm)
   {
     siga = sqrt(MeanLoss*Tm*(1.-0.5*beta2)) ;
-    loss = RandGauss::shoot(MeanLoss,siga) ;
+    loss = G4RandGauss::shoot(MeanLoss,siga) ;
     if(loss < 0.) loss = 0. ;
     return loss ;
   }
@@ -1150,7 +1152,7 @@ G4double G4hLowEnergyIonisation::GetLossWithFluct(
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
+          p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
         }
         else
           p3 = G4Poisson(a3);
@@ -1169,7 +1171,7 @@ G4double G4hLowEnergyIonisation::GetLossWithFluct(
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
+          p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
         }
         else
           p3 = G4Poisson(a3);
@@ -1198,7 +1200,7 @@ G4double G4hLowEnergyIonisation::GetLossWithFluct(
       if(a1>alim)
       {
         siga=sqrt(a1) ;
-        p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
+        p1 = G4std::max(0,int(G4RandGauss::shoot(a1,siga)+0.5));
       }
       else
        p1 = G4Poisson(a1);
@@ -1207,7 +1209,7 @@ G4double G4hLowEnergyIonisation::GetLossWithFluct(
       if(a2>alim)
       {
         siga=sqrt(a2) ;
-        p2 = G4std::max(0,int(RandGauss::shoot(a2,siga)+0.5));
+        p2 = G4std::max(0,int(G4RandGauss::shoot(a2,siga)+0.5));
       }
       else
         p2 = G4Poisson(a2);
@@ -1226,7 +1228,7 @@ G4double G4hLowEnergyIonisation::GetLossWithFluct(
       if(a3>alim)
       {
         siga=sqrt(a3) ;
-        p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
+        p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
       }
       else
         p3 = G4Poisson(a3);
@@ -1242,14 +1244,14 @@ G4double G4hLowEnergyIonisation::GetLossWithFluct(
           rfac       = dp3/(G4float(nmaxCont2)+dp3);
           namean     = G4float(p3)*rfac;
           sa         = G4float(nmaxCont1)*rfac;
-          na         = RandGauss::shoot(namean,sa);
+          na         = G4RandGauss::shoot(namean,sa);
           if (na > 0.)
           {
             alfa   = w1*G4float(nmaxCont2+p3)/(w1*G4float(nmaxCont2)+G4float(p3));
             alfa1  = alfa*log(alfa)/(alfa-1.);
             ea     = na*ipotFluct*alfa1;
             sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
-            lossc += RandGauss::shoot(ea,sea);
+            lossc += G4RandGauss::shoot(ea,sea);
           }
         }
 
@@ -1264,6 +1266,7 @@ G4double G4hLowEnergyIonisation::GetLossWithFluct(
       loss += lossc;  
      }
     } 
+  loss *= ChargeSquare;
 
   return loss ;
 }
