@@ -43,6 +43,7 @@
 #include "g4std/iomanip"
 
 #include "G4Material.hh"
+#include "G4ElementVector.hh"
 #include "Test30Material.hh"
 #include "Test30Physics.hh"
 #include "G4VContinuousDiscreteProcess.hh"
@@ -50,7 +51,9 @@
 #include "G4VParticleChange.hh"
 #include "G4ParticleChange.hh"
 #include "G4HadronCrossSections.hh"
-
+#include "G4VCrossSectionDataSet.hh"
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4NeutronInelasticCrossSection.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
@@ -95,13 +98,22 @@ int main(int argc, char** argv)
   G4bool    usepaw   = false;
   G4int     verbose  = 0;
   G4double  energy   = 100.*MeV;
+  G4double  elim     = 30.*MeV;
   G4int     nevt     = 1000;
   G4int     nbins    = 100;
-  G4int     nbinsa   = 18;
+  G4int     nbinsa   = 40;
+  G4int     nbinse   = 80;
+  G4int     nbinsd   = 20;
   G4String hFile     = "";
   G4double theStep   = 0.01*micrometer;
   G4double range     = 1.0*micrometer;
+  G4double  emax     = 160.*MeV;
   G4Material* material = 0; 
+
+  G4double ang[13] = {0.,11.,24.,35.,45.,56.,69.,82.,95.,106.,121.,134.,145.};
+  G4double bng[14] = {0.,6.,18.,30.,40.,50.,62.,75.,88.,100.,114.,127.,140.,180.};
+  G4double cng[13];
+
 
   // Track 
   G4ThreeVector aPosition = G4ThreeVector(0.,0.,0.);
@@ -151,8 +163,11 @@ int main(int argc, char** argv)
   G4cout << "Available commands are: " << G4endl;
   G4cout << "#events" << G4endl;
   G4cout << "#nbins" << G4endl;
+  G4cout << "#nbinsa" << G4endl;
+  G4cout << "#nbinse" << G4endl;
   G4cout << "#particle" << G4endl;
   G4cout << "#energy(MeV)" << G4endl;
+  G4cout << "#emax(MeV)" << G4endl;
   G4cout << "#range(mm)" << G4endl;
   G4cout << "#step(mm)" << G4endl;
   G4cout << "#material" << G4endl;
@@ -178,10 +193,17 @@ int main(int argc, char** argv)
       } else if(line == "#energy(MeV)") {
         (*fin) >> energy;
         energy *= MeV;
+      } else if(line == "#emax(MeV)") {
+        (*fin) >> emax;
+        emax *= MeV;
       } else if(line == "#events") {
         (*fin) >> nevt;
-      } else if(line == "#events") {
+      } else if(line == "#nbins") {
         (*fin) >> nbins;
+      } else if(line == "#nbinse") {
+        (*fin) >> nbinse;
+      } else if(line == "#nbinsa") {
+        (*fin) >> nbinsa;
       } else if(line == "#range(mm)") {
         (*fin) >> range;
         range *= mm;
@@ -251,18 +273,21 @@ int main(int argc, char** argv)
 	     << G4endl;			
 	     exit(1);
     }
+
+    G4int maxn = (G4int)((*(material->GetElementVector()))[0]->GetN()) + 2; 
 		
     G4cout << "The particle:  " << part->GetParticleName() << G4endl;
-    G4cout << "The material:  " << material->GetName() << G4endl;
+    G4cout << "The material:  " << material->GetName() << "  Amax= " << maxn << G4endl;
     G4cout << "The step:      " << theStep/mm << " mm" << G4endl;
     G4cout << "The position:  " << aPosition/mm << " mm" << G4endl;
     G4cout << "The direction: " << aDirection << G4endl;
     G4cout << "The time:      " << aTime/ns << " ns" << G4endl;
- 
+
 
     // -------------------------------------------------------------------
     // ---- HBOOK initialization
-    HepHistogram* h[26];
+    G4int nhisto = 40; 
+    HepHistogram* h[nhisto];
     G4double mass = part->GetPDGMass();
     G4double pmax = sqrt(energy*(energy + 2.0*mass));
 		
@@ -297,13 +322,29 @@ int main(int argc, char** argv)
       h[19]=hbookManager->histogram("Pz (MeV) for pi0",100,-pmax,pmax);
       h[20]=hbookManager->histogram("Pt (MeV) for pi0",100,0.,pmax);
       
-      h[21]=hbookManager->histogram("E(MeV) protons",nbins,0.,energy);
-      h[22]=hbookManager->histogram("E(MeV) neutrons",nbins,0.,energy);
+      h[21]=hbookManager->histogram("E(MeV) protons",nbinse,0.,emax);
+      h[22]=hbookManager->histogram("E(MeV) neutrons",nbinse,0.,emax);
 
       h[23]=hbookManager->histogram("Phi(degrees) of neutrons",90,-180.0,180.0);
 
-      h[24]=hbookManager->histogram("theta(degrees) protons",nbinsa,0.,180.);
-      h[25]=hbookManager->histogram("theta(degrees) neutrons",nbinsa,0.,180.);
+      h[24]=hbookManager->histogram("cos(theta) protons",nbinsa,-1.,1.);
+      h[25]=hbookManager->histogram("cos(theta) neutrons",nbinsa,-1.,1.);
+
+      h[26]=hbookManager->histogram("Baryon charge",maxn,-0.5,(G4double)maxn + 0.5);
+
+      h[27]=hbookManager->histogram("ds/dE at theta = 0",nbinsd,0.,emax);
+      h[28]=hbookManager->histogram("ds/dE at theta = 1",nbinsd,0.,emax);
+      h[29]=hbookManager->histogram("ds/dE at theta = 2",nbinsd,0.,emax);
+      h[30]=hbookManager->histogram("ds/dE at theta = 3",nbinsd,0.,emax);
+      h[31]=hbookManager->histogram("ds/dE at theta = 4",nbinsd,0.,emax);
+      h[32]=hbookManager->histogram("ds/dE at theta = 5",nbinsd,0.,emax);
+      h[33]=hbookManager->histogram("ds/dE at theta = 6",nbinsd,0.,emax);
+      h[34]=hbookManager->histogram("ds/dE at theta = 7",nbinsd,0.,emax);
+      h[35]=hbookManager->histogram("ds/dE at theta = 8",nbinsd,0.,emax);
+      h[36]=hbookManager->histogram("ds/dE at theta = 9",nbinsd,0.,emax);
+      h[37]=hbookManager->histogram("ds/dE at theta = 10",nbinsd,0.,emax);
+      h[38]=hbookManager->histogram("ds/dE at theta = 11",nbinsd,0.,emax);
+      h[39]=hbookManager->histogram("ds/dE at theta = 12",nbinsd,0.,emax);
       	
       G4cout << "Histograms is initialised nbins=" << nbins
              << G4endl;
@@ -311,15 +352,33 @@ int main(int argc, char** argv)
     // Create a DynamicParticle  
   
     G4DynamicParticle dParticle(part,aDirection,energy);
+    G4VCrossSectionDataSet* cs = 0;
+    G4double cross_sec = 0.0;
 
-    G4double cross_sec = (G4HadronCrossSections::Instance())->
-      GetInelasticCrossSection(&dParticle, material->GetElement(0));
+    if(part == proton) {
+      cs = new G4ProtonInelasticCrossSection();
+    } else if(part == neutron) {
+      cs = new G4NeutronInelasticCrossSection();
+    }
+    if(cs) {
+      cs->BuildPhysicsTable(*part);
+      cross_sec = cs->GetCrossSection(&dParticle, material->GetElement(0));
+    } else {
+      cross_sec = (G4HadronCrossSections::Instance())->
+        GetInelasticCrossSection(&dParticle, material->GetElement(0));
+    }
+
     G4double factor = cross_sec*MeV*1000.0*(G4double)nbins/(energy*barn*(G4double)nevt);
     G4double factora= cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*pi*barn*(G4double)nevt);
     G4cout << "### factor  = " << factor
            << "### factora = " << factor 
            << "    cross(b)= " << cross_sec/barn << G4endl;
     G4double dtet = pi/(G4int)nbinsa;
+
+    for(G4int k=0; k<13; k++) {
+      cng[k] = cross_sec*MeV*1000.0*(G4double)nbinsd/
+         (twopi*(cos(degree*bng[k]) - cos(degree*bng[k+1]))*barn*emax*(G4double)nevt);
+    }
 
     G4Track* gTrack;
     gTrack = new G4Track(&dParticle,aTime,aPosition);
@@ -436,6 +495,9 @@ int main(int argc, char** argv)
  
 
 	if(usepaw) {
+
+          if(pd) h[26]->accumulate((G4double)pd->GetBaryonNumber(), 1.0);
+
           if(pd == proton) { 
 						
             h[1]->accumulate(1.0, 1.0);						
@@ -445,7 +507,7 @@ int main(int argc, char** argv)
             h[11]->accumulate(e/MeV, 1.0);
 	    //    h[18]->accumulate(e/MeV, 1.0);
 	    h[21]->accumulate(e/MeV, factor);
-	    h[24]->accumulate(theta/degree, factora/sint);
+	    h[24]->accumulate(cos(theta), factora/sint);
 		
           } else if(pd == pin) {
     
@@ -476,7 +538,12 @@ int main(int argc, char** argv)
             h[14]->accumulate(e/MeV, 1.0);
             //h[22]->accumulate(e/MeV, 1.0);
 	    h[22]->accumulate(e/MeV, factor);
-	    h[25]->accumulate(theta/degree, factora/sint);
+	    if(e >= elim) h[25]->accumulate(cos(theta), factora/sint);
+            theta /= degree;
+            for(k=0; k<13; k++) {
+              if(theta <= bng[k+1]) break;
+	    }
+            h[27+k]->accumulate(e/MeV, cng[k]); 
 
 	  } else if(pd == deu) {
 	    h[1]->accumulate(6.0, 1.0);	
@@ -488,7 +555,8 @@ int main(int argc, char** argv)
 	    h[1]->accumulate(9.0, 1.0);	
 	  }
 	}
-      }			
+        if(i<n) delete aChange->GetSecondary(i);
+      }
 								
       if(verbose > 0) {
         G4cout << "Energy/Momentum balance= " << labv << G4endl;
@@ -507,6 +575,7 @@ int main(int argc, char** argv)
 	h[16]->accumulate(pz/GeV, 1.0);
 	h[17]->accumulate(pt/GeV, 1.0);
       }	
+      //      delete aChange;
       aChange->Clear();
 	
     }
@@ -518,6 +587,9 @@ int main(int argc, char** argv)
     if(usepaw) {
       hbookManager->write();
       G4cout << "# hbook is writed" << G4endl;
+      for(G4int i=0; i<nhisto; i++) {
+        if(h[i]) delete h[i];
+      }
       delete hbookManager;    
       G4cout << "# hbook is deleted" << G4endl;
     }
