@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.16 2004-04-05 08:00:19 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.17 2004-04-26 16:10:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,6 +97,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 //  calculate actual loss from the mean loss
 //  The model used to get the fluctuation is essentially the same
 // as in Glandz in Geant3.
+// G4cout << "### Mean  loss= " << meanLoss << G4endl;
   
   // shortcut for very very small loss 
   if(meanLoss < minLoss) return meanLoss;
@@ -109,13 +110,14 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 
   ipotFluct = material->GetIonisation()->GetMeanExcitationEnergy();
 
-  G4double gam   = (dp->GetKineticEnergy())/particleMass + 1.0;
+  G4double tau   = dp->GetKineticEnergy()/particleMass;
+  G4double gam   = tau + 1.0;
   G4double gam2  = gam*gam;
-  G4double beta2 = 1.0 - 1.0/gam2;
+  G4double beta2 = tau*(tau + 2.0)/gam2;
 
   // Validity range for delta electron cross section
   G4double loss, siga;
-  // G4cout << "### tmax= " << tmax << " kappa= " << minNumberInteractionsBohr << " l= " << length << G4endl;
+  // G4cout << "tmax= " << tmax << " kappa= " << minNumberInteractionsBohr << " l= " << length << G4endl;
   // Gaussian fluctuation
   if(meanLoss >= minNumberInteractionsBohr*tmax || tmax <= ipotFluct*minNumberInteractionsBohr)
   {
@@ -135,7 +137,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
        loss = G4RandGauss::shoot(meanLoss,siga);
       } while (loss < 0. || loss > twomeanLoss);
     }
-    //    G4cout << "de= " << meanLoss << "  fluc= " << loss-meanLoss << " sig= " << siga << G4endl; 
+    //G4cout << "### meanLoss= " << meanLoss << "  fluc= " << loss-meanLoss << " sig= " << siga << G4endl; 
 
     return loss;
   }
@@ -157,7 +159,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   G4double p1,p2,p3;
 
   G4double w1 = tmax/ipotFluct;
-  G4double w2 = log(2.*electron_mass_c2*(gam2 - 1.0));
+  G4double w2 = log(2.*electron_mass_c2*beta2*gam2);
 
   G4double C = meanLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
 
@@ -168,12 +170,13 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   if(a2 < 0.) a2 = 0.;
   if(a3 < 0.) a3 = 0.;
 
-  G4double suma = a1+a2+a3;
 
   loss = 0. ;
-
+  /*
+  G4double suma = a1+a2+a3;
   if(suma < sumalim)             // very small Step
     {
+      //G4cout << "A very small step" << G4endl; 
       G4double e0 = material->GetIonisation()->GetEnergy0fluct();
 
       if(tmax == ipotFluct)
@@ -218,6 +221,8 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
       }
     // Not so small Step
     } else {        
+  */
+      //G4cout << "Excitation alim= " << alim << " a1= " << a1 << " a2= " << a2 << G4endl; 
       // excitation type 1
       if(a1>alim) {
         siga=sqrt(a1) ;
@@ -278,8 +283,8 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
         }        
         loss += lossc;  
       }
-    } 
-
+      //    } 
+  //G4cout << "### Final loss= " << loss << G4endl;
   return loss;
 }
 
