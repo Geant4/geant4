@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauMinus.cc,v 1.6 2001-10-15 10:04:23 kurasige Exp $
+// $Id: G4TauMinus.cc,v 1.7 2001-10-16 08:16:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,7 +122,10 @@ G4TauMinus G4TauMinus::theTauMinus(
 );
 
 G4TauMinus* G4TauMinus::TauMinusDefinition() {return &theTauMinus;}
-// initialization for static cut values
 
+G4TauMinus*  G4TauMinus::TauMinus()
+{ 
+  return &theTauMinus; 
+}
 
 

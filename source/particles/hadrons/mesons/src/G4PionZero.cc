@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionZero.cc,v 1.8 2001-10-15 10:08:26 kurasige Exp $
+// $Id: G4PionZero.cc,v 1.9 2001-10-16 08:16:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,6 +108,7 @@ G4PionZero G4PionZero::thePionZero(
 
 G4PionZero* G4PionZero::PionZeroDefinition(){return &thePionZero;}
 
+G4PionZero* G4PionZero::PionZero(){return &thePionZero;}
 // **********************************************************************
 // **************************** SetCuts *********************************
 // **********************************************************************

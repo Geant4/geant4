@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Gamma.cc,v 1.6 2001-10-15 10:02:35 kurasige Exp $
+// $Id: G4Gamma.cc,v 1.7 2001-10-16 08:15:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -269,4 +269,10 @@ G4double
     }
     return T3;
   }
+}
+
+
+G4Gamma* G4Gamma::Gamma()
+{
+  return &theGamma; 
 }

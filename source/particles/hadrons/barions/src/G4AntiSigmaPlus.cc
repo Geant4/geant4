@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmaPlus.cc,v 1.7 2001-10-15 10:10:53 kurasige Exp $
+// $Id: G4AntiSigmaPlus.cc,v 1.8 2001-10-16 08:15:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,6 +99,11 @@ G4AntiSigmaPlus G4AntiSigmaPlus::theAntiSigmaPlus(
 );
 
 G4AntiSigmaPlus* G4AntiSigmaPlus::AntiSigmaPlusDefinition()
+{
+  return &theAntiSigmaPlus;
+}
+
+G4AntiSigmaPlus* G4AntiSigmaPlus::AntiSigmaPlus()
 {
   return &theAntiSigmaPlus;
 }

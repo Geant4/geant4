@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.cc,v 1.10 2001-10-15 10:10:55 kurasige Exp $
+// $Id: G4Neutron.cc,v 1.11 2001-10-16 08:15:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,6 +92,7 @@ G4Neutron G4Neutron::theNeutron(
 );
 
 G4Neutron* G4Neutron::NeutronDefinition(){return &theNeutron;}
+G4Neutron* G4Neutron::Neutron(){return &theNeutron;}
 
 // **********************************************************************
 // **************************** SetCuts *********************************

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalPhoton.cc,v 1.7 2001-10-15 10:02:36 kurasige Exp $
+// $Id: G4OpticalPhoton.cc,v 1.8 2001-10-16 08:15:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,7 +101,10 @@ void G4OpticalPhoton::SetCuts(G4double aCut)
 }
 
 
-
+G4OpticalPhoton* G4OpticalPhoton::OpticalPhoton()
+{ 
+  return &theOpticalPhoton; 
+}
 
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Eta.cc,v 1.8 2001-10-15 10:08:24 kurasige Exp $
+// $Id: G4Eta.cc,v 1.9 2001-10-16 08:16:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,6 +107,7 @@ G4Eta G4Eta::theEta(
 );
 
 G4Eta*    G4Eta::EtaDefinition(){return &theEta;}
+G4Eta*    G4Eta::Eta(){return &theEta;}
 
 // **********************************************************************
 // **************************** SetCuts *********************************

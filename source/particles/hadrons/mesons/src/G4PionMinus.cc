@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionMinus.cc,v 1.6 2001-10-15 10:08:26 kurasige Exp $
+// $Id: G4PionMinus.cc,v 1.7 2001-10-16 08:16:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,6 +97,8 @@ G4PionMinus G4PionMinus::thePionMinus(
 );
 
 G4PionMinus* G4PionMinus::PionMinusDefinition(){return &thePionMinus;}
+
+G4PionMinus* G4PionMinus::PionMinus(){return &thePionMinus;}
 
 
 

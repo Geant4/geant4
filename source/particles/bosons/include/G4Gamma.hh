@@ -19,7 +19,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//// $Id: G4Gamma.hh,v 1.6 2001-10-15 10:02:34 kurasige Exp $
+//// $Id: G4Gamma.hh,v 1.7 2001-10-16 08:15:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,9 +116,6 @@ class G4Gamma : public G4VBoson
    static G4Gamma* Gamma();
 };
 
-
-inline G4Gamma* G4Gamma::Gamma()
-{ return &theGamma; }
 
 #endif
 

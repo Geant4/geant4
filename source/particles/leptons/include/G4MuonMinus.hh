@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinus.hh,v 1.6 2001-10-15 10:03:40 kurasige Exp $
+// $Id: G4MuonMinus.hh,v 1.7 2001-10-16 08:16:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,9 +76,6 @@ class G4MuonMinus : public G4VLepton
       
 };
 
-
-inline  G4MuonMinus*  G4MuonMinus::MuonMinus()
-{ return &theMuonMinus; }
 
 #endif
 

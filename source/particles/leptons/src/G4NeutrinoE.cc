@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoE.cc,v 1.7 2001-10-15 10:04:23 kurasige Exp $
+// $Id: G4NeutrinoE.cc,v 1.8 2001-10-16 08:16:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,6 +79,7 @@ G4NeutrinoE G4NeutrinoE::theNeutrinoE(
 );
 
 G4NeutrinoE* G4NeutrinoE::NeutrinoEDefinition() {return &theNeutrinoE;}
+G4NeutrinoE* G4NeutrinoE::NeutrinoE() {return &theNeutrinoE;}
 
 // **********************************************************************
 // **************************** SetCuts *********************************

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargedGeantino.hh,v 1.5 2001-10-15 10:02:33 kurasige Exp $
+// $Id: G4ChargedGeantino.hh,v 1.6 2001-10-16 08:15:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,8 +78,5 @@ class G4ChargedGeantino : public G4VBoson
   virtual void SetCuts(G4double aCut);
 
 };
-
-inline G4ChargedGeantino* G4ChargedGeantino::ChargedGeantino()
-{  return &theChargedGeantino; }
 
 #endif

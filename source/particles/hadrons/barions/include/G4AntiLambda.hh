@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiLambda.hh,v 1.6 2001-10-15 10:09:24 kurasige Exp $
+// $Id: G4AntiLambda.hh,v 1.7 2001-10-16 08:15:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ class G4AntiLambda : public G4VBaryon
    virtual  ~G4AntiLambda(){}
 
    static G4AntiLambda* AntiLambdaDefinition();
-   static G4AntiLambda* AntiLambda(){return &theAntiLambda;}
+   static G4AntiLambda* AntiLambda();
 
    virtual void SetCuts(G4double aCut); 
 };

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Electron.cc,v 1.6 2001-10-15 10:04:22 kurasige Exp $
+// $Id: G4Electron.cc,v 1.7 2001-10-16 08:16:17 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -202,10 +202,11 @@ void G4Electron::BuildRangeVector(const G4Material* aMaterial,
   }
 } 
 
-
-
-
-
+G4Electron* G4Electron::Electron()
+{  
+  return &theElectron; 
+}
+ 
 
 
 

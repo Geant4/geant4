@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinus.hh,v 1.6 2001-10-15 10:06:13 kurasige Exp $
+// $Id: G4KaonMinus.hh,v 1.7 2001-10-16 08:16:09 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,6 @@
 // ****************************************************************
 //  Added particle definitions, H.Kurashige, 19 April 1996
 //  Revised, G.Cosmo, 6 June 1996
-//  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
 // ----------------------------------------------------------------
 
 // Each class inheriting from G4VMeson
@@ -73,7 +72,7 @@ class G4KaonMinus : public G4VMeson
    virtual ~G4KaonMinus(){}
 
    static G4KaonMinus* KaonMinusDefinition();
-   static G4KaonMinus* KaonMinus() {return &theKaonMinus;}
+   static G4KaonMinus* KaonMinus();
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiProton.cc,v 1.6 2001-10-15 10:10:53 kurasige Exp $
+// $Id: G4AntiProton.cc,v 1.7 2001-10-16 08:15:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,6 +79,8 @@ G4AntiProton G4AntiProton::theAntiProton(
 );
 
 G4AntiProton* G4AntiProton::AntiProtonDefinition(){return &theAntiProton;}
+G4AntiProton* G4AntiProton::AntiProton(){return &theAntiProton;}
+
 
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.cc,v 1.8 2001-10-15 10:10:53 kurasige Exp $
+// $Id: G4AntiNeutron.cc,v 1.9 2001-10-16 08:15:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,6 +77,7 @@ G4AntiNeutron G4AntiNeutron::theAntiNeutron(
 		 true,            -1.0,          NULL
 );
 G4AntiNeutron* G4AntiNeutron::AntiNeutronDefinition(){return &theAntiNeutron;}
+G4AntiNeutron* G4AntiNeutron::AntiNeutron(){return &theAntiNeutron;}
 
 // **********************************************************************
 // **************************** SetCuts *********************************

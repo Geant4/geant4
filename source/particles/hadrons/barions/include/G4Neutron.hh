@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.hh,v 1.8 2001-10-15 10:09:27 kurasige Exp $
+// $Id: G4Neutron.hh,v 1.9 2001-10-16 08:15:49 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,6 @@
 // ****************************************************************
 //  Added particle definitions, H.Kurashige, 19 April 1996
 //  Revised, G.Cosmo, 6 June 1996
-//  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
 //----------------------------------------------------------------
 
 // Each class inheriting from G4VBaryon
@@ -73,7 +72,7 @@ class G4Neutron : public G4VBaryon
    virtual ~G4Neutron(){}
 
    static G4Neutron* NeutronDefinition();
-   static G4Neutron* Neutron(){return &theNeutron;} 
+   static G4Neutron* Neutron();
 
  public:  //With Description
    G4int    GetAtomicNumber() const;

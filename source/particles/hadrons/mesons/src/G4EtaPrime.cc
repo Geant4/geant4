@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EtaPrime.cc,v 1.8 2001-10-15 10:08:25 kurasige Exp $
+// $Id: G4EtaPrime.cc,v 1.9 2001-10-16 08:16:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,6 +104,7 @@ G4EtaPrime G4EtaPrime::theEtaPrime(
 );
 
 G4EtaPrime*    G4EtaPrime::EtaPrimeDefinition(){return &theEtaPrime;}
+G4EtaPrime*    G4EtaPrime::EtaPrime(){return &theEtaPrime;}
 
 // **********************************************************************
 // **************************** SetCuts *********************************

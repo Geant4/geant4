@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XiMinus.cc,v 1.7 2001-10-15 10:10:57 kurasige Exp $
+// $Id: G4XiMinus.cc,v 1.8 2001-10-16 08:16:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,3 +97,5 @@ G4XiMinus G4XiMinus::theXiMinus(
 );
 
 G4XiMinus* G4XiMinus::XiMinusDefinition(){return &theXiMinus;}
+
+G4XiMinus* G4XiMinus::XiMinus(){return &theXiMinus;}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3.cc,v 1.5 2001-10-15 10:05:19 kurasige Exp $
+// $Id: G4He3.cc,v 1.6 2001-10-16 08:16:08 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,3 +82,4 @@ G4He3 G4He3::theHe3(
 );
 
 G4He3* G4He3::He3Definition(){return &theHe3;}
+G4He3* G4He3::He3(){return &theHe3;}

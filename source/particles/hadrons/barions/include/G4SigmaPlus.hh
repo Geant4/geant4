@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaPlus.hh,v 1.6 2001-10-15 10:09:28 kurasige Exp $
+// $Id: G4SigmaPlus.hh,v 1.7 2001-10-16 08:15:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ class G4SigmaPlus : public G4VBaryon
    virtual ~G4SigmaPlus(){}
 
    static G4SigmaPlus* SigmaPlusDefinition();
-   static G4SigmaPlus* SigmaPlus() {return &theSigmaPlus;}
+   static G4SigmaPlus* SigmaPlus();
 };
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiOmegaMinus.hh,v 1.6 2001-10-15 10:09:24 kurasige Exp $
+// $Id: G4AntiOmegaMinus.hh,v 1.7 2001-10-16 08:15:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ class G4AntiOmegaMinus : public G4VBaryon
    virtual ~G4AntiOmegaMinus(){}
 
    static G4AntiOmegaMinus* AntiOmegaMinusDefinition();
-   static G4AntiOmegaMinus* AntiOmegaMinus() {return &theAntiOmegaMinus;}
+   static G4AntiOmegaMinus* AntiOmegaMinus();
 };
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoE.hh,v 1.5 2001-10-15 10:03:40 kurasige Exp $
+// $Id: G4NeutrinoE.hh,v 1.6 2001-10-16 08:16:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,7 @@ class G4NeutrinoE : public G4VLepton
    virtual ~G4NeutrinoE(){}
 
    static G4NeutrinoE* NeutrinoEDefinition();
-   static G4NeutrinoE* NeutrinoE(){return &theNeutrinoE;}
+   static G4NeutrinoE* NeutrinoE();
 
    virtual void SetCuts(G4double aCut); 
 };

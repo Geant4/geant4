@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXiZero.hh,v 1.6 2001-10-15 10:09:26 kurasige Exp $
+// $Id: G4AntiXiZero.hh,v 1.7 2001-10-16 08:15:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ class G4AntiXiZero : public G4VBaryon
    virtual  ~G4AntiXiZero(){}
 
    static G4AntiXiZero* AntiXiZeroDefinition();
-   static G4AntiXiZero* AntiXiZero() {return &theAntiXiZero;}
+   static G4AntiXiZero* AntiXiZero();
    
    virtual void SetCuts(G4double aCut); 
 };

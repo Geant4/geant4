@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.hh,v 1.7 2001-10-15 10:09:24 kurasige Exp $
+// $Id: G4AntiNeutron.hh,v 1.8 2001-10-16 08:15:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,6 @@
 // ****************************************************************
 //  Added particle definitions, H.Kurashige, 19 April 1996
 //  Revised, G.Cosmo, 6 June 1996
-//  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
 // ----------------------------------------------------------------
 
 // Each class inheriting from G4VBaryon
@@ -73,7 +72,7 @@ class G4AntiNeutron : public G4VBaryon
    virtual ~G4AntiNeutron(){}
 
    static G4AntiNeutron* AntiNeutronDefinition();
-   static G4AntiNeutron* AntiNeutron(){return &theAntiNeutron;}
+   static G4AntiNeutron* AntiNeutron();
 
    virtual void SetCuts(G4double aCut); 
 };

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XiZero.cc,v 1.9 2001-10-15 10:10:58 kurasige Exp $
+// $Id: G4XiZero.cc,v 1.10 2001-10-16 08:16:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,6 +97,7 @@ G4XiZero G4XiZero::theXiZero(
 );
 
 G4XiZero* G4XiZero::XiZeroDefinition(){return &theXiZero;}
+G4XiZero* G4XiZero::XiZero(){return &theXiZero;}
 
 // **********************************************************************
 // **************************** SetCuts *********************************

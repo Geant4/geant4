@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauPlus.hh,v 1.6 2001-10-15 10:03:41 kurasige Exp $
+// $Id: G4TauPlus.hh,v 1.7 2001-10-16 08:16:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,9 +78,6 @@ class G4TauPlus : public G4VLepton
 
 };
 
-
-inline G4TauPlus*  G4TauPlus::TauPlus()
-{  return &theTauPlus; }
 
 #endif
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Positron.cc,v 1.5 2001-10-15 10:04:23 kurasige Exp $
+// $Id: G4Positron.cc,v 1.6 2001-10-16 08:16:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -159,4 +159,9 @@ void G4Positron::BuildRangeVector(const G4Material* aMaterial,
 			      maxEnergy,
 			      aMass,
                               rangeVector);
+}
+
+G4Positron*  G4Positron::Positron()
+{
+  return &thePositron; 
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutrinoMu.hh,v 1.5 2001-10-15 10:03:39 kurasige Exp $
+// $Id: G4AntiNeutrinoMu.hh,v 1.6 2001-10-16 08:16:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,7 @@ class G4AntiNeutrinoMu : public G4VLepton
    virtual ~G4AntiNeutrinoMu(){}
 
    static G4AntiNeutrinoMu* AntiNeutrinoMuDefinition();
-   static G4AntiNeutrinoMu* AntiNeutrinoMu() {return &theAntiNeutrinoMu;}
+   static G4AntiNeutrinoMu* AntiNeutrinoMu();
 
    virtual void SetCuts(G4double aCut); 
 };

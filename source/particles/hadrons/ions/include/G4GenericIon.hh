@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericIon.hh,v 1.6 2001-10-15 10:05:16 kurasige Exp $
+// $Id: G4GenericIon.hh,v 1.7 2001-10-16 08:16:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,7 @@ class G4GenericIon : public G4VIon
    virtual ~G4GenericIon();
 
    static G4GenericIon*    GenericIonDefinition();
-   static G4GenericIon*    GenericIon(){return &theGenericIon;}
+   static G4GenericIon*    GenericIon();
 };
 
 #endif

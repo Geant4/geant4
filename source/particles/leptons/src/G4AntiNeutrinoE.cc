@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutrinoE.cc,v 1.7 2001-10-15 10:04:22 kurasige Exp $
+// $Id: G4AntiNeutrinoE.cc,v 1.8 2001-10-16 08:16:17 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,6 +77,10 @@ G4AntiNeutrinoE G4AntiNeutrinoE::theAntiNeutrinoE(
 );
 
 G4AntiNeutrinoE* G4AntiNeutrinoE::AntiNeutrinoEDefinition()
+{
+  return &theAntiNeutrinoE;
+}
+G4AntiNeutrinoE* G4AntiNeutrinoE::AntiNeutrinoE()
 {
   return &theAntiNeutrinoE;
 }

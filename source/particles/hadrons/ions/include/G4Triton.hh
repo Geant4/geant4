@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.hh,v 1.6 2001-10-15 10:05:16 kurasige Exp $
+// $Id: G4Triton.hh,v 1.7 2001-10-16 08:16:06 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,7 +72,8 @@ class G4Triton : public G4VIon
    virtual   ~G4Triton();
 
    static G4Triton*   TritonDefinition();
-   static G4Triton*   Triton() {return &theTriton;}
+   static G4Triton*   Triton();
+  
 };
 
 

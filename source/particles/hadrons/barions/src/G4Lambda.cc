@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Lambda.cc,v 1.9 2001-10-15 10:10:55 kurasige Exp $
+// $Id: G4Lambda.cc,v 1.10 2001-10-16 08:15:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,6 +99,8 @@ G4Lambda G4Lambda::theLambda(
 );
 
 G4Lambda* G4Lambda::LambdaDefinition(){return &theLambda;}
+
+G4Lambda* G4Lambda::Lambda() {return &theLambda;}
 
 // **********************************************************************
 // **************************** SetCuts *********************************

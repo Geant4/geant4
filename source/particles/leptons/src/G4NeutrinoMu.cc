@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoMu.cc,v 1.7 2001-10-15 10:04:23 kurasige Exp $
+// $Id: G4NeutrinoMu.cc,v 1.8 2001-10-16 08:16:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,6 +79,11 @@ G4NeutrinoMu G4NeutrinoMu::theNeutrinoMu(
 );
 
 G4NeutrinoMu* G4NeutrinoMu::NeutrinoMuDefinition()
+{
+  return &theNeutrinoMu;
+}
+
+G4NeutrinoMu* G4NeutrinoMu::NeutrinoMu()
 {
   return &theNeutrinoMu;
 }

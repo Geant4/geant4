@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinus.cc,v 1.6 2001-10-15 10:08:25 kurasige Exp $
+// $Id: G4KaonMinus.cc,v 1.7 2001-10-16 08:16:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,3 +107,4 @@ G4KaonMinus G4KaonMinus::theKaonMinus(
 );
 
 G4KaonMinus* G4KaonMinus::KaonMinusDefinition(){return &theKaonMinus;}
+G4KaonMinus* G4KaonMinus::KaonMinus(){return &theKaonMinus;}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.cc,v 1.8 2001-10-15 09:58:34 kurasige Exp $
+// $Id: G4NucleiProperties.cc,v 1.9 2001-10-16 08:16:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -264,3 +264,10 @@ G4double G4NucleiProperties::GetBindingEnergy(const G4int A, const G4int Z)
 
   }
 }
+
+
+G4double G4NucleiProperties::MassExcess(G4double A, G4double Z) 
+{
+  return GetAtomicMass(A,Z) - A*amu_c2;
+}
+	

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Alpha.hh,v 1.6 2001-10-15 10:05:16 kurasige Exp $
+// $Id: G4Alpha.hh,v 1.7 2001-10-16 08:16:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ class G4Alpha : public G4VIon
    virtual ~G4Alpha();
   
    static G4Alpha*    AlphaDefinition();
-   static G4Alpha*    Alpha(){return &theAlpha;}
+   static G4Alpha*    Alpha();
 };
 
 #endif

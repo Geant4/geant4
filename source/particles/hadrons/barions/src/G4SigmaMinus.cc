@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaMinus.cc,v 1.7 2001-10-15 10:10:56 kurasige Exp $
+// $Id: G4SigmaMinus.cc,v 1.8 2001-10-16 08:15:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,3 +97,5 @@ G4SigmaMinus G4SigmaMinus::theSigmaMinus(
 );
 
 G4SigmaMinus* G4SigmaMinus::SigmaMinusDefinition(){return &theSigmaMinus;}
+
+G4SigmaMinus* G4SigmaMinus::SigmaMinus(){return &theSigmaMinus;}

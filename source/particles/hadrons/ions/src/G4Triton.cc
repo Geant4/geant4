@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.cc,v 1.5 2001-10-15 10:05:19 kurasige Exp $
+// $Id: G4Triton.cc,v 1.6 2001-10-16 08:16:08 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,3 +84,4 @@ G4Triton G4Triton::theTriton(
 );
 
 G4Triton* G4Triton::TritonDefinition(){return &theTriton;}
+G4Triton* G4Triton::Triton(){return &theTriton;}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaZero.cc,v 1.9 2001-10-15 10:10:56 kurasige Exp $
+// $Id: G4SigmaZero.cc,v 1.10 2001-10-16 08:16:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,6 +94,7 @@ G4SigmaZero G4SigmaZero::theSigmaZero(
 );
 
 G4SigmaZero* G4SigmaZero::SigmaZeroDefinition(){return &theSigmaZero;}
+G4SigmaZero* G4SigmaZero::SigmaZero(){return &theSigmaZero;}
 
 // **********************************************************************
 // **************************** SetCuts *********************************

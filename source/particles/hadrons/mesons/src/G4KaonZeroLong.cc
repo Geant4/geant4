@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonZeroLong.cc,v 1.8 2001-10-15 10:08:26 kurasige Exp $
+// $Id: G4KaonZeroLong.cc,v 1.9 2001-10-16 08:16:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,6 +108,7 @@ G4KaonZeroLong G4KaonZeroLong::theKaonZeroLong(
 );
 
 G4KaonZeroLong* G4KaonZeroLong::KaonZeroLongDefinition(){return &theKaonZeroLong;}
+G4KaonZeroLong* G4KaonZeroLong::KaonZeroLong(){return &theKaonZeroLong;}
 
 // **********************************************************************
 // **************************** SetCuts *********************************

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Deuteron.hh,v 1.6 2001-10-15 10:05:16 kurasige Exp $
+// $Id: G4Deuteron.hh,v 1.7 2001-10-16 08:16:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ class G4Deuteron : public G4VIon
    virtual ~G4Deuteron();
 
    static G4Deuteron* DeuteronDefinition();
-   static G4Deuteron* Deuteron(){return &theDeuteron;}
+   static G4Deuteron* Deuteron();
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Alpha.cc,v 1.5 2001-10-15 10:05:19 kurasige Exp $
+// $Id: G4Alpha.cc,v 1.6 2001-10-16 08:16:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,3 +85,4 @@ G4Alpha G4Alpha::theAlpha(
 );
 
 G4Alpha* G4Alpha::AlphaDefinition(){return &theAlpha;}
+G4Alpha* G4Alpha::Alpha(){return &theAlpha;}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutrinoTau.cc,v 1.7 2001-10-15 10:04:22 kurasige Exp $
+// $Id: G4AntiNeutrinoTau.cc,v 1.8 2001-10-16 08:16:17 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,6 +79,11 @@ G4AntiNeutrinoTau G4AntiNeutrinoTau::theAntiNeutrinoTau(
 );
 
 G4AntiNeutrinoTau* G4AntiNeutrinoTau::AntiNeutrinoTauDefinition()
+{
+  return &theAntiNeutrinoTau;
+}
+
+G4AntiNeutrinoTau* G4AntiNeutrinoTau::AntiNeutrinoTau()
 {
   return &theAntiNeutrinoTau;
 }
