@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2000-04-08 11:15:23 hpw Exp $
+# $Id: GNUmakefile,v 1.4 2001-10-26 09:54:20 gcosmo Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -37,7 +37,6 @@ INCFLAGS := \
             -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/tracking/include \
-            -I$(G4BASE)/particle+matter/general/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/particles/management/include \
