@@ -1,4 +1,4 @@
-$Id: History,v 1.18 1999-09-14 11:03:37 gcosmo Exp $
+$Id: History,v 1.19 1999-10-07 17:26:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 6th, 99 G.Cosmo (global-V00-01-01)
+- STLInterface: Changed tolower/toupper to old implementation in cstring.h
+  (by F.Behner)
+ 
 September 14, 99 G.Cosmo
 - STLInterface: renamed classes HashPtr and Hash to G4HashPtr and G4Hash in
   tphdict and tvhdict to make them compliant with G4 coding standards and
