@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.15 2002-11-07 13:47:59 dressel Exp $
+// $Id: exampleB01.cc,v 1.16 2002-11-07 13:50:29 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,11 +95,6 @@ int main(int argc, char **argv)
   mgs.PrepareScoring(&scorer);
   mgs.PrepareImportanceSampling(&aIstore, 0);
   mgs.Configure();
-
-  G4UImanager* UI;
-
-  UI = G4UImanager::GetUIpointer();
-  UI->ApplyCommand("/control/execute init.mac");   
 
   runManager->BeamOn(numberOfEvent);
 

@@ -21,29 +21,33 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.hh,v 1.4 2002-10-22 14:09:02 dressel Exp $
+// $Id: B01DetectorConstruction.hh,v 1.5 2002-11-07 13:47:59 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef B01DetectorConstruction_hh
 #define B01DetectorConstruction_hh B01DetectorConstruction_hh
 
-class G4VPhysicalVolume;
-
+#include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
+
+class G4VPhysicalVolume;
+class G4IStore;
 
 class B01DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-  explicit B01DetectorConstruction(G4VPhysicalVolume &worldvol);
-  virtual ~B01DetectorConstruction();
+  B01DetectorConstruction();
+  ~B01DetectorConstruction();
   
-  virtual G4VPhysicalVolume* Construct();
+  G4VPhysicalVolume* Construct();
+  G4IStore* GetIStore();
+  
+  G4String GetCellName(G4int i);
+
 
 private:
-  B01DetectorConstruction(const B01DetectorConstruction &);
-  B01DetectorConstruction &operator=(const B01DetectorConstruction &);
-  G4VPhysicalVolume* fWorldVolume;
+  G4IStore *fIStore;
 };
 
 #endif
