@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2000-10-19 12:22:29 stanaka Exp $
+$Id: History,v 1.27 2000-10-19 12:24:23 stanaka Exp $
 --------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-October 19, 2000  Satoshi Tanaka  (exampleN03-V02-00-01)
+October 19, 2000  Satoshi Tanaka  (exampleN03-V02-00-04)
 - Updated exN03Vis0-4.mac, incorporating recent development 
   of vis commands
 - Updated format of comments in exN03Vis0-4.mac.
