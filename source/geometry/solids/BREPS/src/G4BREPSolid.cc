@@ -1,4 +1,5 @@
 #include "G4BREPSolid.hh"
+#include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
@@ -500,319 +501,298 @@ G4bool G4BREPSolid::CalculateExtent(const     EAxis pAxis,
   
   G4ThreeVector VMin(Min.x(),Min.y(),Min.z());
   G4ThreeVector VMax(Max.x(),Max.y(),Max.z());  
+
+  // Stefano MAGNI	
+  // Inizio modifica
+  //
+  	
+	
+  G4double xoffset,xMin,xMax;
+  G4double yoffset,yMin,yMax;
+  G4double zoffset,zMin,zMax;
+  
+  xoffset = pTransform.NetTranslation().x();
+  xMin = xoffset + Min.x();
+  xMax = xoffset + Max.x();
+  
+  if (pVoxelLimit.IsXLimited())
+  {
+    if ( xMin > pVoxelLimit.GetMaxXExtent() ||
+	 xMax < pVoxelLimit.GetMinXExtent()    )
+      return false;
+    else
+    {
+      if (xMin<pVoxelLimit.GetMinXExtent())
+	xMin = pVoxelLimit.GetMinXExtent();
+    
+      if (xMax>pVoxelLimit.GetMaxXExtent())
+	xMax = pVoxelLimit.GetMaxXExtent();
+    }
+  }
+
+  yoffset = pTransform.NetTranslation().y();
+  yMin = yoffset + Min.y();
+  yMax = yoffset + Max.y();
+  
+  if (pVoxelLimit.IsYLimited())
+  {
+    if ( yMin > pVoxelLimit.GetMaxYExtent() ||
+	 yMax < pVoxelLimit.GetMinYExtent()    )
+      return false;
+    else
+    {
+      if (yMin < pVoxelLimit.GetMinYExtent())
+	yMin = pVoxelLimit.GetMinYExtent();
+	
+      if (yMax > pVoxelLimit.GetMaxYExtent())
+	yMax = pVoxelLimit.GetMaxYExtent();	
+    }
+  }
+  
+  zoffset = pTransform.NetTranslation().z();
+  zMin = zoffset+Min.z();
+  zMax = zoffset+Max.z();
+  
+  if (pVoxelLimit.IsZLimited())
+  {
+    if ( zMin > pVoxelLimit.GetMaxZExtent() ||
+	 zMax < pVoxelLimit.GetMinZExtent()    )
+      return false;
+    else
+    {
+      if (zMin < pVoxelLimit.GetMinZExtent())
+	zMin = pVoxelLimit.GetMinZExtent();
+	
+      if (zMax > pVoxelLimit.GetMaxZExtent())
+	zMax = pVoxelLimit.GetMaxZExtent();  
+    }
+  }
   
   switch (pAxis)
   {
-  case kXAxis:
-    pMin=Min.x();
-    pMax=Max.x();
-    break;
-
-  case kYAxis:
-    pMin=Min.y();
-    pMax=Max.y();
-    break;
-
-  case kZAxis:
-    pMin=Min.z();
-    pMax=Max.z();
-    break;
+    case kXAxis:
+      pMin = xMin;
+      pMax = xMax;
+      break;
+    
+    case kYAxis:
+      pMin = yMin;
+      pMax = yMax;
+      break;
+    
+    case kZAxis:
+      pMin = zMin;
+      pMax = zMax;
+      break;
   }
   
-  pMin-=kCarTolerance;
-  pMax+=kCarTolerance;
+  pMin -= kCarTolerance;
+  pMax += kCarTolerance;
   
   return true;
-
-  /*
-     if (!pTransform.IsRotated())
-     {
-     //      if(pVoxelLimit.Inside(VMin))
-     //	if(pVoxelLimit.Inside(VMax))
-     {
-     switch (pAxis)
-     {
-     case kXAxis:
-     pMin=VMin.x();
-     pMax=VMax.x();
-     break;
-     case kYAxis:
-     pMin=VMin.y();
-     pMax=VMax.y();
-     break;
-     case kZAxis:
-     pMin=VMin.z();
-     pMax=VMax.z();
-     break;
-     }
-
-     //	    pMin-=kCarTolerance;
-     //	    pMax+=kCarTolerance;
-     return true;
-     }
-     //      else
-     {
-     //	  return false;
-     }
-     }
-     //  else
-     {
-     //      return false;
-     }
-
-     return false;*/
 }
 
 
 EInside G4BREPSolid::Inside(register const G4ThreeVector& Pt)const
 {
+  // This function find if the point Pt is inside, 
+  // outside or on the surface of the solid
 
-  G4cout<<"\n Solid Id="<<GetId();
 
-  // Tolerance has also to be considered i.e. the cases
-  // where the Point is very close to the box. -1 is 
-  // returned when the Point is within the boundary.
-  Reset();  
+  G4double halfTolerance = kCarTolerance*0.5;
 
-  // Get the bounding box extents
-  const G4Point3D min = bbox->GetBoxMin();
-  const G4Point3D max = bbox->GetBoxMax();
+  G4Vector3D v(1, 0, 0.01);
+  G4Vector3D Pttmp(Pt);
+  G4Vector3D Vtmp(v);
+  G4Ray r(Pttmp, Vtmp);
   
-  // First check if the point is Inside the bbox
-  // of the solid.
-  if((Pt.x() < min.x() || Pt.x() > max.x())||
-     (Pt.y() < min.y() || Pt.y() > max.y())||
-     (Pt.z() < min.z() || Pt.z() > max.z()))    
+  // Check if point is inside the PCone bounding box
+  if( !GetBBox()->Inside(Pttmp) )
     return kOutside;
 
-  // If the point is Inside the bbox, it is possibly Inside 
-  // the solid
-  
-  // Create the ray.
-  G4Vector3D v(0,0,1);
-  Track.Init( Pt, v);
-  
-  // Check the bboxes of the surfaces first to get the favorable 
-  // surfaces to process.
-  TestSurfaceBBoxes( Track );
-
-  // At this point it might be useful to have a routine that checks
-  // if the point is outside all the face bboxes, Inside any of them
-  // or Inside all of them. The last case would mean Inside the solid for
-  // sure. Also should be considered if various types of solids should be 
-  // handled separately i.e. convex polyhedras versus b-spline solids.
-  int Hits = 0;
-  
-  // Continue by shooting an arbitrary ray (G4Vector3D = v) starting from Point
-  // Repeat this until no more hits are found. The amount of hits gives the 
-  // answer (par : outside; odd : inside)
-  // Tolerance is a problem as there might be cases where we don't
-  // get the actual intersection on the surface and the Step is not long
-  // enough to jump over the real boundary. 
-  G4double Tolerance = 0.0001;
-  G4double Dist=Tolerance+1;
-  
-  const G4Vector3D& RayDir = Track.GetDir();    
-  
-  while(Intersect( Track ))    
-    if(FinalEvaluation( Track ))      
-    {
-      // Step over the tolerance and shoot again in the same
-      // direction using the Hit point as a starting point
-      // for the new ray 
-      Hits++;	
-	
-      // Tolerance Step
-      if(Hits==1) 
-	Dist=ShortestDistance;
-      
-      const G4Point3D& NewStart = intersection_point+(Tolerance*RayDir);
-      
-      // Set ray starting point
-      Track.SetStart(NewStart);	  
-      
-      Reset();
-      
-      // To make the routine more robust a check could be made that
-      // Hits doesn't grow too much say > 10. If this happens
-      // v could be changed to be something else. This may avoid
-      // situations where the direction chosen for the test
-      // is not plausible since at that direction there are many
-      // faces very close to each other or a face is highly complex or 
-      // the direction is in the direction of the face.
-      //if(Hits > 10)
-      // 	{
-      //	r.SetStart(Point);Hits = 0;
-      //	r.set_G4Vector3D(G4Vector3D(1,0,0));
-      //	while(first_intersect( r ))
-      //	{
-      //		Hits++;	
-      //		intersection_point.X() += Tolerance;
-      //	      	r.SetStart(intersection_point);
-      //	}
-      //	}
-    }
-    // else
-    //  break;
-  
   // Set the surfaces to active again
-  G4Surface* Srf;
+  Reset();
   
-  for(G4int a=0;a<nb_of_surfaces;a++)
-  {
-    Srf = SurfaceVec[a];
-    Srf->Reset();
-  }
+  // Test if the bounding box of each surface is intersected
+  // by the ray. If not, the surface become deactive.
+  TestSurfaceBBoxes(r);
+  
+  G4int hits=0, samehit=0;
 
-  //    G4cout << "\n Inside::Hits = " << Hits << "\n";
-  if(Dist < (0.5*kCarTolerance))
-    return kSurface;
-  
-  // Take the mod of hits with 2
-  if(Hits&1)
-    // Inside
+  for(G4int a=0; a < nb_of_surfaces; a++)
+  {
+    if(SurfaceVec[a]->Active())
+    {
+      // count the number of intersections.
+      // if this number is odd, the start of the ray is 
+      // inside the volume bounded by the surfaces, so 
+      // increment the number of intersection by 1 if the 
+      // point is not on the surface and if this intersection 
+      // was not founded before
+      if( (SurfaceVec[a]->Intersect(r)) & 1 )
+      {
+	// test if the point is on the surface
+	if(SurfaceVec[a]->Distance() < kCarTolerance)
+	  return kSurface;
+	
+	// test if this intersection was founded before
+	for(G4int i=0; i<a; i++)
+	  if(SurfaceVec[a]->Distance() == SurfaceVec[i]->Distance())
+	  {
+	    samehit++;
+	    break;
+	  }
+	
+	// count the number of surfaces intersected by the ray
+	if(!samehit)
+	  hits++;
+      }
+    }
+  }
+   
+  // if the number of surfaces intersected is odd,
+  // the point is inside the solid
+  if(hits&1)
     return kInside;
   else
-    // Outside
     return kOutside;
 }
 
 
-G4ThreeVector G4BREPSolid::SurfaceNormal(const G4ThreeVector& GetStart)const
+G4ThreeVector G4BREPSolid::SurfaceNormal(const G4ThreeVector& Pt)const
 {  
-  return GetStart;;
+  // This function calculates the normal of the surface
+  // at a point on the surface
+  // Note : the sense of the normal depends on the sense of the surface 
+
+  G4Vector3D   n(0,0,0);
+  G4int        iplane;
+    
+  G4Vector3D norm;
+  G4Ray r( Pt, G4Vector3D(1, 0, 0) );
+
+  // Find on which surface the point is
+  for(iplane = 0; iplane < nb_of_surfaces; iplane++)
+  {
+    if(SurfaceVec[iplane]->HowNear(Pt) < kCarTolerance)
+      // the point is on this surface
+      break;
+  }
+  
+  // calcul of the normal at this point
+  norm = SurfaceVec[iplane]->SurfaceNormal(Pt);
+
+  n = G4ThreeVector ( norm.x(), norm.y(), norm.z() );
+  n = n.unit();
+
+  return n;
 }
 
 
 G4double G4BREPSolid::DistanceToIn(const G4ThreeVector& Pt)const
 {
-  // This function calculates the approximative distance 
-  // of a point from a surface. For exemple, the DistanceToIn
-  // from a point to a G4FPlane is the closest distance
+  // Calculates the shortest distance ("safety") from a point
+  // outside the solid to any boundary of this solid.
+  // Return 0 if the point is already inside.
 
-  G4cout<<"\n Solid Id="<<GetId();
-  
-  Reset();  
-  
-  G4double halfTolerance = kCarTolerance*0.5;
-  G4Surface* srf;
-  G4double PointDistance = INFINITY;
-  G4double TmpDistance = 0;
-  
-  for(G4int a=0; a<nb_of_surfaces;a++)
-  {
-    srf = SurfaceVec[a];
-    TmpDistance = fabs(srf->ClosestDistanceToPoint(Pt));
 
-    if( (TmpDistance < PointDistance) && (TmpDistance > halfTolerance) )
-      PointDistance = TmpDistance;
-    else if(TmpDistance < halfTolerance)
-      PointDistance = 0; // the point is on the surface, 
-                         // but maybe not into the boundary 
+  G4double *dists = new G4double[nb_of_surfaces];
+  G4double halfTolerance = kCarTolerance*0.5;  
+  G4int a;
+
+  // Set the surfaces to active again
+  Reset();
   
-    if(PointDistance < ShortestDistance)
-      ShortestDistance = PointDistance;
-  }
+  // calcul of the shortest distance of the point to each surfaces
+  // Be carreful : it's a signed value
+  for(a=0; a< nb_of_surfaces; a++)  
+    dists[a] = SurfaceVec[a]->HowNear(Pt);
+     
+  G4double Dist = kInfinity;
   
-  return ShortestDistance;
+  // if dists[] is positive, the point is outside
+  // so take the shortest of the shortest positive distances
+  // dists[] can be equal to 0 : point on a surface
+  // ( Problem with the G4FPlane : there is no inside and no outside...
+  //   So, to test if the point is inside to return 0, utilize the Inside
+  //   function. But I don`t know if it is really needed because dToIn is 
+  //   called only if the point is outside )
+  for(a = 0; a < nb_of_surfaces; a++)
+    if( fabs(Dist) > fabs(dists[a]) ) 
+      //if( dists[a] >= 0)
+	Dist = dists[a];
+  
+  delete[] dists;
+
+  if(Dist == kInfinity)
+    // the point is inside the solid or on a surface
+    return 0;
+  else 
+    //return Dist;
+    return fabs(Dist);
 }
 
 
 G4double G4BREPSolid::DistanceToIn(register const G4ThreeVector& Pt, 
 				   register const G4ThreeVector& V  )const
 {
-  G4cout<<"\n Solid Id="<<GetId();
+  // Calculates the distance from a point outside the solid
+  // to the solid`s boundary along a specified direction vector.
+  // 	
+  // Note : Intersections with boundaries less than the 
+  //	    tolerance must be ignored if the direction 
+  // 	    is away from the boundary
   
-#ifdef G4VERBOSE
-  if(V.mag2() == 0.0)
-    G4Exception("Error in G4BREPSolid::DistanceToIn(Pt, Vec) : Vec = 0");
-#endif
+  G4int a;
   
-  Reset();
-  G4double halfTolerance = kCarTolerance*0.5;  
-  Track.Init(G4Point3D(Pt),V);
-  
-  
-  if(!bbox->Test(Track))	
-    return kInfinity;
-
-/*  
-  if(AxisBox)
-  {
-    ShortestDistance = bbox->GetDistance();
-    
-    if(ShortestDistance > halfTolerance)
-      return ShortestDistance;
-
-    //  L. Broglia
-    // Do not see this surface
-    //else
-      // ShortestDistance = kInfinity;
-      //return 0; // the point is on the surface
-  }
-*/
-
-  TestSurfaceBBoxes(Track);
-  
-  if(Intersect( Track ))
-    if(FinalEvaluation(Track,1))
-      return sqrt(ShortestDistance);
- 
-  return kInfinity;
-  
-  /*
-     G4Vector3D Pttmp(Pt);
-     G4Vector3D Vtmp(V);   
-     //  G4double kInfinity = 10e20;
-     G4Ray r(Pttmp, Vtmp);
-     if(!bbox->Test3dBBox(r))	
-     return kInfinity;
-     if(AxisBox)
-     {
-     ShortestDistance = bbox->GetDistance();
-     if(ShortestDistance > halfTolerance)
-     return ShortestDistance;
-     else
-     ShortestDistance = kInfinity;	  
-     }
-     //  if(number_of_Surfaces>75)
-     //    RemoveHiddenFaces(r, 1);
-     TestSurfaceBBoxes(r);
-     if(Intersect( r ))
-     if(FinalEvaluation(r,1))
-     return sqrt(ShortestDistance);
-     return kInfinity;
-     */
-}
-
-
-G4double G4BREPSolid::DistanceToOut(const G4ThreeVector& Pt)const
-{
-
-  G4cout<<"\n Solid Id="<<GetId();
-  
+  // Set the surfaces to active again
   Reset();
   
-  G4double halfTolerance = kCarTolerance*0.5;  
-  G4Surface* srf;
-  G4double PointDistance = INFINITY;
-  G4double TmpDistance = 0;
+  G4double halfTolerance = kCarTolerance*0.5;    
+  G4Vector3D Pttmp(Pt);
+  G4Vector3D Vtmp(V);   
+  G4Ray r(Pttmp, Vtmp);
+
+  // Test if the bounding box of each surface is intersected
+  // by the ray. If not, the surface become deactive.
+  TestSurfaceBBoxes(r);
   
-  for(G4int a=0; a<nb_of_surfaces;a++)
+  ShortestDistance = kInfinity;
+  
+  for(a=0; a< nb_of_surfaces; a++)
   {
-    srf = SurfaceVec[a];
-    TmpDistance = fabs(srf->ClosestDistanceToPoint(Pt));
-    
-    if( (TmpDistance < PointDistance) && (TmpDistance > halfTolerance) )
-      PointDistance = TmpDistance; 
-    else if(TmpDistance < halfTolerance)
-      PointDistance = 0 ; // the point is on the surface
+    if(SurfaceVec[a]->Active())
+    {
+      // test if the ray intersect the surface
+      if( (SurfaceVec[a]->Intersect(r)) )
+      {
+	// if more than 1 surface is intersected,
+	// take the nearest one
+	if( SurfaceVec[a]->Distance() < ShortestDistance )
+	  if( SurfaceVec[a]->Distance() > halfTolerance )
+	  {
+	    ShortestDistance = SurfaceVec[a]->Distance();
+	  }
+	  else
+	  {
+	    // the point is within the boundary
+	    // ignored it if the direction is away from the boundary	     
+	    G4Vector3D Norm = SurfaceVec[a]->SurfaceNormal(Pttmp);
+
+	    if( (Norm * Vtmp) < 0 )
+	      ShortestDistance = SurfaceVec[a]->Distance();
+	  }
+      }
+    }
   }
   
-  if(PointDistance < ShortestDistance) 
-    ShortestDistance = PointDistance;
- 
-  return ShortestDistance;
+  // Be carreful !
+  // SurfaceVec->Distance is in fact the squared distance
+  if(ShortestDistance != kInfinity)
+    return sqrt(ShortestDistance);
+  else
+    // no intersection, return kInfinity
+    return kInfinity; 
 }
 
 
@@ -822,28 +802,111 @@ G4double G4BREPSolid::DistanceToOut(register const G4ThreeVector& P,
 				    G4bool *validNorm, 
 				    G4ThreeVector *n                ) const
 {
-  G4cout<<"\n Solid Id="<<GetId();
-  
-  if(validNorm)
-    *validNorm = false;
+  // Calculates the distance from a point inside the solid
+  // to the solid`s boundary along a specified direction vector.
+  // Return 0 if the point is already outside.
+  //
+  // Note : If the shortest distance to a boundary is less 
+  // 	    than the tolerance, it is ignored. This allows
+  // 	    for a point within a tolerant boundary to leave
+  //	    immediately
 
-#ifdef G4VERBOSE
-  if(D.mag2() == 0.0)
-    G4Exception("Error in G4BREPSolid::DistanceToOut(Pt, Vec) : Vec = 0");
-#endif
-     
+  // Set the surfaces to active again
+  Reset();
+
+  const G4double halfTolerance = kCarTolerance*0.5;    
+  G4Vector3D Ptv = P;
+  G4int a;
+
+  // I don`t understand this line
+  if(validNorm)
+    *validNorm=false;
+
+  G4Vector3D Pttmp(Ptv);
+  G4Vector3D Vtmp(D);   
+  
+  G4Ray r(Pttmp, Vtmp);
+
+  // Test if the bounding box of each surface is intersected
+  // by the ray. If not, the surface become deactive.
+  TestSurfaceBBoxes(r);
+  
+  ShortestDistance = kInfinity;
+ 
+  for(a=0; a< nb_of_surfaces; a++)
+  {
+    if(SurfaceVec[a]->Active())
+    {
+      // test if the ray intersect the surface
+      if( (SurfaceVec[a]->Intersect(r)) )
+      {
+	// if more than 1 surface is intersected,
+	// take the nearest one
+	if( SurfaceVec[a]->Distance() < ShortestDistance )
+	  if( SurfaceVec[a]->Distance() > halfTolerance )
+	  {
+	    ShortestDistance = SurfaceVec[a]->Distance();
+	  }
+	  else
+	  {
+	    // the point is within the boundary: ignored it
+	  }
+      }
+    }
+  }
+
+  // Be carreful !
+  // SurfaceVec->Distance is in fact the squared distance
+  if(ShortestDistance != kInfinity)
+    return sqrt(ShortestDistance);
+  else
+    // if no intersection is founded, the point is outside
+    // so return 0
+    return 0.0;  
+}
+
+
+G4double G4BREPSolid::DistanceToOut(const G4ThreeVector& Pt)const
+{
+  // Calculates the shortest distance ("safety") from a point
+  // inside the solid to any boundary of this solid.
+  // Return 0 if the point is already outside.	
+
+  G4double *dists = new G4double[nb_of_surfaces];
+  G4double halfTolerance = kCarTolerance*0.5;  
+  G4int a;
+
+  // Set the surfaces to active again
   Reset();
   
-  Track.Init(G4Point3D(P),D);
- 
-  TestSurfaceBBoxes(Track);
- 
-  if(Intersect(Track))
-    if(FinalEvaluation(Track))
-      if(ShortestDistance > kCarTolerance/2) // if d=0, do not see the surface
-	return sqrt(ShortestDistance);
+  // calcul of the shortest distance of the point to each surfaces
+  // Be carreful : it's a signed value
+  for(a=0; a< nb_of_surfaces; a++)
+    dists[a] = SurfaceVec[a]->HowNear(Pt);  
+
+  G4double Dist = kInfinity;
   
-  return kInfinity; // This should never happen
+  // if dists[] is negative, the point is inside
+  // so take the shortest of the shortest negative distances
+  // dists[] can be equal to 0 : point on a surface
+  // ( Problem with the G4FPlane : there is no inside and no outside...
+  //   So, to test if the point is outside to return 0, utilize the Inside
+  //   function. But I don`t know if it is really needed because dToOut is 
+  //   called only if the point is inside )
+
+  for(a = 0; a < nb_of_surfaces; a++)
+    if( fabs(Dist) > fabs(dists[a]) ) 
+      //if( dists[a] <= 0)
+	Dist = dists[a];
+  
+  delete[] dists;
+
+  if(Dist == kInfinity)
+    // the point is ouside the solid or on a surface
+    return 0;
+  else
+    // return Dist;
+    return fabs(Dist);
 }
 
 
@@ -937,6 +1000,7 @@ void G4BREPSolid::CalcBBoxes()
 	// Find max and min of face bboxes to make 
 	// solids bbox.
 	
+	// replace by Extend
 	// max < box_max;
         if(max.x() < box_max.x()) max.setX(box_max.x()); 
         if(max.y() < box_max.y()) max.setY(box_max.y()); 
@@ -1086,20 +1150,7 @@ int G4BREPSolid::Intersect(register const G4Ray& rayref) const
       {
 	register G4Surface* tmp;
 	   
-	// L. Broglia
-	// What is the utility of this test ?
-	// If only 1 surface is intersected, it return 0
-	// instead the intersection exist
- 
-	/*
-	if((a+1)<nb_of_surfaces)
-	  tmp = SurfaceVec[a+1];		
-	else
-	  tmp = 0;
 	
-	if((tmp)  && ( tmp->Active()))
-	{      
-	*/
 
 	// Get the evaluated point on the surface
 	G4Point3D& closest_point = srf->closest_hit;
