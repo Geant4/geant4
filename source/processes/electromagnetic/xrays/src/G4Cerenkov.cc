@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cerenkov.cc,v 1.1 1999-01-07 16:11:29 gunter Exp $
+// $Id: G4Cerenkov.cc,v 1.2 1999-10-28 00:03:06 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -403,7 +403,7 @@ G4Cerenkov::GetContinuousStepLimit(const G4Track& aTrack,
 	G4double MeanNumPhotons = 
                  GetAverageNumberOfPhotons(aParticle,aMaterial,Rindex);
 
-        if(MeanNumPhotons == 0.0) return DBL_MAX;
+        if(MeanNumPhotons <= 0.0) return DBL_MAX;
 
 	G4double StepLimit = fMaxPhotons / MeanNumPhotons;
 
