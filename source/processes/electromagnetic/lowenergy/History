@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2001-09-19 12:43:57 pia Exp $
+$Id: History,v 1.99 2001-09-21 08:55:27 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21.09.2001 - MGP, tag emlowen-V03-02-17
+             G4LowEnergyPhotoElectric moved to the implementation
+             according to the new fluo+data design 
+             [Test version G4LowEnergyPhotoElectricMG removed]
+             Fixed warning for energy outside allowed range in G4EMDataSet
+             Minor cosmetics
 
 19.09.2001 - MGP, tag emlowen-V03-02-16
              Same as previous one, but test/GNUmakefile, G4ComptonTest.cc
