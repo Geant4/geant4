@@ -164,6 +164,11 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
   // small difference in Tmax connected with RateMass
   // RateMass = electron_mass_c2 / (aParticleType.GetPDGMass()) ;
 
+  // get bining from EnergyLoss
+  LowestKineticEnergy  = GetLowerBoundEloss() ;
+  HighestKineticEnergy = GetUpperBoundEloss() ;
+  TotBin	       = GetNbinEloss() ;
+
   // cuts for  electron ....................
   DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
   
@@ -401,9 +406,9 @@ void G4hLowEnergyIonisation::BuildLambdaTable(const G4ParticleDefinition& aParti
     { 
       //create physics vector then fill it ....
       
-      G4PhysicsLogVector* aVector = new G4PhysicsLogVector(LowestKineticEnergy, 
-                                                           HighestKineticEnergy, 
-                                                           TotBin);
+      G4PhysicsLogVector* aVector = new G4PhysicsLogVector(LowerBoundLambda, 
+                                                           UpperBoundLambda, 
+                                                           NbinLambda);
       
       // compute the (macroscopic) cross section first
       
