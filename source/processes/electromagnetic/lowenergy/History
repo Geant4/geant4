@@ -1,4 +1,4 @@
-$Id: History,v 1.114 2001-10-18 15:47:25 pia Exp $
+$Id: History,v 1.115 2001-10-24 07:42:12 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18.10.2001 - MGP, tag emlowen-V03-02-32
+             Same as previous one, with on top fixes to G4BremsstrahlungParameters.cc
+	     and G4eIonisationParameters.cc by G. Cosmo for compatibility with 
+             geant4-03-02-ref-06 in view of STL migration
 
 18.10.2001 - MGP, tag emlowen-V03-02-31
              Added member function in G4eLowEnergyLoss and G4VLowEnergyIonisationVI
