@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.cc,v 1.6 2001-10-09 11:23:28 vnivanch Exp $
+// $Id: G4ShellEMDataSet.cc,v 1.7 2001-10-11 14:10:40 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -104,7 +104,7 @@ void G4ShellEMDataSet::LoadData(const G4String& fileName)
   char nameChar[100] = {""};
   G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
   
-  if(z)  ost << fileName << z << ".dat";
+  if (z != 0)  ost << fileName << z << ".dat";
   else   ost << fileName << ".dat";
 
   G4String name(nameChar);
