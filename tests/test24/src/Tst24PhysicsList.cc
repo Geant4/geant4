@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst24PhysicsList.cc,v 1.3 2003-06-16 17:15:41 gunter Exp $
+// $Id: Tst24PhysicsList.cc,v 1.4 2003-11-19 17:52:10 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -318,7 +318,7 @@ void Tst24PhysicsList::ConstructHad()
     theTheoModel->SetMinEnergy(19*GeV);
     theTheoModel->SetMaxEnergy(100*TeV);
     
-    G4BinaryCascade * theKM = new G4BinaryCascade;
+    G4BinaryCascade * theBC = new G4BinaryCascade;
 
       G4VLongitudinalStringDecay * theFragmentation = new G4QGSMFragmentation;
       G4ExcitedStringDecay * theStringDecay = new G4ExcitedStringDecay(theFragmentation);
@@ -341,9 +341,7 @@ void Tst24PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4PionPlusInelasticProcess* theInelasticProcess = 
                                 new G4PionPlusInelasticProcess("inelastic");
-         G4LEPionPlusInelastic* theInelasticModel = 
-                                new G4LEPionPlusInelastic;
-         theInelasticProcess->RegisterMe(theInelasticModel);
+         theInelasticProcess->RegisterMe(theBC);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
@@ -351,9 +349,7 @@ void Tst24PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4PionMinusInelasticProcess* theInelasticProcess = 
                                 new G4PionMinusInelasticProcess("inelastic");
-         G4LEPionMinusInelastic* theInelasticModel = 
-                                new G4LEPionMinusInelastic;
-         theInelasticProcess->RegisterMe(theInelasticModel);
+         theInelasticProcess->RegisterMe(theBC);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
@@ -400,7 +396,7 @@ void Tst24PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4ProtonInelasticProcess* theInelasticProcess = 
                                     new G4ProtonInelasticProcess("inelastic");
-         theInelasticProcess->RegisterMe(theKM);
+         theInelasticProcess->RegisterMe(theBC);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
@@ -423,7 +419,7 @@ void Tst24PhysicsList::ConstructHad()
           // inelastic scattering
          G4NeutronInelasticProcess* theInelasticProcess = 
                                     new G4NeutronInelasticProcess("inelastic");
-         theInelasticProcess->RegisterMe(theKM);
+         theInelasticProcess->RegisterMe(theBC);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
           // fission
