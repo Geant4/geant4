@@ -139,315 +139,218 @@ otherwise mentioned.
 </table>
 
 <table BORDER WIDTH="100%" NOSAVE >
-<caption>&nbsp;
-<br><b><font size=+2>Development Tags after geant4-01-00-ref-01</font></b></caption>
-
-<tr>
-<td><b>Tag</b></td>
-
-<td><b>Global Tag</b></td>
-
-<td><b>Depends on/ Coworks with</b></td>
-
-<td><b>Features</b></td>
-
-<td><b>Notified by</b></td>
-
-<td><b>Date</b></td>
-
-<td><b><font size=+1>#</font></b></td>
-
-<td><b>Status</b></td>
-</tr>
-
-<tr>
-<td>greps-V01-00-00</td>
-
-<td>geant4-01-00-ref-02</td>
-
-<td></td>
-
-<td>Added G4Polyhedron::Transform and InvertFacets.</td>
-
-<td>Evgeni Chernaev</td>
-
-<td>991216</td>
-
-<td>1</td>
-
-<td>accepted</td>
-</tr>
-
-<tr>
-<td>source-gmk-
-<br>V01-00-00</td>
-
-<td>geant4-01-00-ref-02</td>
-
-<td></td>
-
-<td>Added null operator (:) to each line so that exit status is always
-OK.</td>
-
-<td>John Allison</td>
-
-<td>991216</td>
-
-<td>1</td>
-
-<td>accepted</td>
-</tr>
-
-<tr>
-<td>global-V01-00-00</td>
-
-<td>geant4-01-00-ref-02</td>
-
-<td></td>
-
-<td>Synchronized with HEAD, <a href="tag_information/global-V01-00-00">etc.</a></td>
-
-<td>Gabriele Cosmo</td>
-
-<td>000106</td>
-
-<td>1</td>
-
-<td>accepted</td>
-</tr>
-
-<tr>
-<td>config-V01-00-00</td>
-
-<td>geant4-01-00-ref-02</td>
-
-<td></td>
-
-<td>Synchronized with HEAD, <a href="tag_information/config-V01-00-00">etc.</a></td>
-
-<td>Gabriele Cosmo</td>
-
-<td>000106</td>
-
-<td>1</td>
-
-<td>accepted</td>
-</tr>
-
-<tr>
-<td>vis-V01-00-00/1/2</td>
-
-<td>geant4-01-00-cand-03</td>
-
-<td></td>
-
-<td>0) Added /vis/viewer/refresh.
-<br>1) Fix for ISO in VRML.
-<br>2) General handling of displaced solid, introduced /vis/viewer/show</td>
-
-<td>Satoshi Tanaka, John Allison</td>
-
-<td>000111</td>
-
-<td>2</td>
-
-<td>accepted</td>
-</tr>
-
-<tr>
-<td>greps-V01-00-01</td>
-
-<td>geant4-01-00-cand-03</td>
-
-<td></td>
-
-<td>Fix for spheres with small dtheta.</td>
-
-<td>John Allison</td>
-
-<td>000111</td>
-
-<td>2</td>
-
-<td>accepted</td>
-</tr>
-
-<tr>
-<td>event-V01-00-00</td>
-
-<td>geant4-01-00-cand-03</td>
-
-<td></td>
-
-<td><a href="tag_information/event-V01-00-00">G4EventManager becomes a
-singleton.</a></td>
-
-<td>Makoto Asai</td>
-
-<td>000112</td>
-
-<td>2</td>
-
-<td>accepted</td>
-</tr>
-
-<tr>
-<td>examples-V01-00-00</td>
-
-<td>geant4-01-00-ref-02</td>
-
-<td></td>
-
-<td>- N02, N03: Introduced ExN0nSteppingVerbose (Michel Maire).
-<br>- N04: Introduced 10 TeV mu- in exampleN04.EMtest.in (John Apostolakis).
-<br>- All reference files updated.</td>
-
-<td>John Allison</td>
-
-<td>000114</td>
-
-<td>1</td>
-
-<td>accepted</td>
-</tr>
-
-<tr>
-<td>vis-V01-00-03</td>
-
-<td>geant4-01-00-cand-03</td>
-
-<td></td>
-
-<td>- Added some protections for no viewer, no voxelisation.
-<br>- Corrected endl -> G4endl</td>
-
-<td>John Allison</td>
-
-<td>000117</td>
-
-<td>2</td>
-
-<td>accepted</td>
-</tr>
-
-<tr>
-<td>global-V01-00-01</td>
-
-<td></td>
-
-<td></td>
-
-<td>- G4UnitsTable[.hh.cc]: added constructor to G4BestUnit for 3vectors
-(M.Maire).
-<br>- globals.hh: added check on definition of CLHEP_MAX_MIN_DEFINED.</td>
-
-<td>Gabriele Cosmo</td>
-
-<td>000119</td>
-
-<td>3</td>
-
-<td>testing in dev1</td>
-</tr>
-
-<tr>
-<td>geometry-V01-00-00</td>
-
-<td></td>
-
-<td></td>
-
-<td><a href="tag_information/geometry-V01-00-00">- CSG/G4Trap: fixed bug
-in DistanceToIn(p,v). (V.Grichine).</a>
-<br><a href="tag_information/geometry-V01-00-00">- Protection of GetSlice
-in G4DrawVoxels.cc. (J.Allison)</a></td>
-
-<td>Gabriele Cosmo</td>
-
-<td>000120</td>
-
-<td>3</td>
-
-<td>testing in dev1</td>
-</tr>
-
-<tr>
-<td>testem-V01-00-00</td>
-
-<td></td>
-
-<td></td>
-
-<td>examples/extended/electromagnetic:
-<br>- implemented G4NOHIST .
-<br>- new TestEm6 (low energy) (Vladimir Ivanchenko); TestEm6.in contains
-protons, anti_protons, ionC12.</td>
-
-<td>Michel Maire</td>
-
-<td>000121</td>
-
-<td>3</td>
-
-<td>testing in dev1</td>
-</tr>
-
-<tr>
-<td>emlowen-V01-00-00</td>
-
-<td></td>
-
-<td></td>
-
-<td><a href="tag_information/emlowen-V01-00-00">- Anti-proton energy loss
-down to 1 keV.</a>
-<br><a href="tag_information/emlowen-V01-00-00">- Small bug fixes.</a></td>
-
-<td>Vladimr Ivanchenko</td>
-
-<td>000121</td>
-
-<td>3</td>
-
-<td>testing in dev1</td>
-</tr>
-
-<tr>
-<td>tracking-V01-00-00</td>
-
-<td></td>
-
-<td></td>
-
-<td>- GetCurrentValue() in G4TrackingMessenger.cc have a return value.
-<br>- SetUserAction in G4SteppingManager.hh: protected null pointers.</td>
-
-<td>Takashi Sasaki</td>
-
-<td>000124</td>
-
-<td>4</td>
-
-<td>testing in dev2</td>
-</tr>
-
-<tr>
-<td>neu-V01-00-01</td>
-
-<td></td>
-
-<td></td>
-
-<td>Fix the 'no data' problem seen in the neutron transport tests.</td>
-
-<td>Hans-Peter Wellisch</td>
-
-<td>000125</td>
-
-<td>4</td>
-
-<td>testing in dev2</td>
-</tr>
+  <caption>&nbsp; <br>
+  <b><font size=+2>Development Tags after geant4-01-00-ref-01</font></b></caption>
+  <tr> 
+    <td><b>Tag</b></td>
+    <td><b>Global Tag</b></td>
+    <td><b>Depends on/ Coworks with</b></td>
+    <td><b>Features</b></td>
+    <td><b>Notified by</b></td>
+    <td><b>Date</b></td>
+    <td><b><font size=+1>#</font></b></td>
+    <td><b>Status</b></td>
+  </tr>
+  <tr> 
+    <td>greps-V01-00-00</td>
+    <td>geant4-01-00-ref-02</td>
+    <td></td>
+    <td>Added G4Polyhedron::Transform and InvertFacets.</td>
+    <td>Evgeni Chernaev</td>
+    <td>991216</td>
+    <td>1</td>
+    <td>accepted</td>
+  </tr>
+  <tr> 
+    <td>source-gmk- <br>
+      V01-00-00</td>
+    <td>geant4-01-00-ref-02</td>
+    <td></td>
+    <td>Added null operator (:) to each line so that exit status is always OK.</td>
+    <td>John Allison</td>
+    <td>991216</td>
+    <td>1</td>
+    <td>accepted</td>
+  </tr>
+  <tr> 
+    <td>global-V01-00-00</td>
+    <td>geant4-01-00-ref-02</td>
+    <td></td>
+    <td>Synchronized with HEAD, <a href="tag_information/global-V01-00-00">etc.</a></td>
+    <td>Gabriele Cosmo</td>
+    <td>000106</td>
+    <td>1</td>
+    <td>accepted</td>
+  </tr>
+  <tr> 
+    <td>config-V01-00-00</td>
+    <td>geant4-01-00-ref-02</td>
+    <td></td>
+    <td>Synchronized with HEAD, <a href="tag_information/config-V01-00-00">etc.</a></td>
+    <td>Gabriele Cosmo</td>
+    <td>000106</td>
+    <td>1</td>
+    <td>accepted</td>
+  </tr>
+  <tr> 
+    <td>vis-V01-00-00/1/2</td>
+    <td>geant4-01-00-cand-03</td>
+    <td></td>
+    <td>0) Added /vis/viewer/refresh. <br>
+      1) Fix for ISO in VRML. <br>
+      2) General handling of displaced solid, introduced /vis/viewer/show</td>
+    <td>Satoshi Tanaka, John Allison</td>
+    <td>000111</td>
+    <td>2</td>
+    <td>accepted</td>
+  </tr>
+  <tr> 
+    <td>greps-V01-00-01</td>
+    <td>geant4-01-00-cand-03</td>
+    <td></td>
+    <td>Fix for spheres with small dtheta.</td>
+    <td>John Allison</td>
+    <td>000111</td>
+    <td>2</td>
+    <td>accepted</td>
+  </tr>
+  <tr> 
+    <td>event-V01-00-00</td>
+    <td>geant4-01-00-cand-03</td>
+    <td></td>
+    <td><a href="tag_information/event-V01-00-00">G4EventManager becomes a singleton.</a></td>
+    <td>Makoto Asai</td>
+    <td>000112</td>
+    <td>2</td>
+    <td>accepted</td>
+  </tr>
+  <tr> 
+    <td>examples-V01-00-00</td>
+    <td>geant4-01-00-ref-02</td>
+    <td></td>
+    <td>- N02, N03: Introduced ExN0nSteppingVerbose (Michel Maire). <br>
+      - N04: Introduced 10 TeV mu- in exampleN04.EMtest.in (John Apostolakis). 
+      <br>
+      - All reference files updated.</td>
+    <td>John Allison</td>
+    <td>000114</td>
+    <td>1</td>
+    <td>accepted</td>
+  </tr>
+  <tr> 
+    <td>vis-V01-00-03</td>
+    <td>geant4-01-00-cand-03</td>
+    <td></td>
+    <td>- Added some protections for no viewer, no voxelisation. <br>
+      - Corrected endl -> G4endl</td>
+    <td>John Allison</td>
+    <td>000117</td>
+    <td>2</td>
+    <td>accepted</td>
+  </tr>
+  <tr> 
+    <td>global-V01-00-01</td>
+    <td></td>
+    <td></td>
+    <td>- G4UnitsTable[.hh.cc]: added constructor to G4BestUnit for 3vectors (M.Maire). 
+      <br>
+      - globals.hh: added check on definition of CLHEP_MAX_MIN_DEFINED.</td>
+    <td>Gabriele Cosmo</td>
+    <td>000119</td>
+    <td>3</td>
+    <td>testing in dev1</td>
+  </tr>
+  <tr> 
+    <td>geometry-V01-00-00</td>
+    <td></td>
+    <td></td>
+    <td><a href="tag_information/geometry-V01-00-00">- CSG/G4Trap: fixed bug in 
+      DistanceToIn(p,v). (V.Grichine).</a> <br>
+      <a href="tag_information/geometry-V01-00-00">- Protection of GetSlice in 
+      G4DrawVoxels.cc. (J.Allison)</a></td>
+    <td>Gabriele Cosmo</td>
+    <td>000120</td>
+    <td>3</td>
+    <td>testing in dev1</td>
+  </tr>
+  <tr> 
+    <td>testem-V01-00-00</td>
+    <td></td>
+    <td></td>
+    <td>examples/extended/electromagnetic: <br>
+      - implemented G4NOHIST . <br>
+      - new TestEm6 (low energy) (Vladimir Ivanchenko); TestEm6.in contains protons, 
+      anti_protons, ionC12.</td>
+    <td>Michel Maire</td>
+    <td>000121</td>
+    <td>3</td>
+    <td>testing in dev1</td>
+  </tr>
+  <tr> 
+    <td>emlowen-V01-00-00</td>
+    <td></td>
+    <td></td>
+    <td><a href="tag_information/emlowen-V01-00-00">- Anti-proton energy loss 
+      down to 1 keV.</a> <br>
+      <a href="tag_information/emlowen-V01-00-00">- Small bug fixes.</a></td>
+    <td>Vladimr Ivanchenko</td>
+    <td>000121</td>
+    <td>3</td>
+    <td>testing in dev1</td>
+  </tr>
+  <tr> 
+    <td height="79">tracking-V01-00-00</td>
+    <td height="79"></td>
+    <td height="79"></td>
+    <td height="79">- GetCurrentValue() in G4TrackingMessenger.cc have a return 
+      value. <br>
+      - SetUserAction in G4SteppingManager.hh: protected null pointers.</td>
+    <td height="79">Takashi Sasaki</td>
+    <td height="79">000124</td>
+    <td height="79">4</td>
+    <td height="79">testing in dev2</td>
+  </tr>
+  <tr> 
+    <td>neu-V01-00-01</td>
+    <td></td>
+    <td></td>
+    <td>Fix the 'no data' problem seen in the neutron transport tests.</td>
+    <td>Hans-Peter Wellisch</td>
+    <td>000125</td>
+    <td>4</td>
+    <td>testing in dev2</td>
+  </tr>
+  <tr>
+    <td>event-V01-00-01</td>
+    <td></td>
+    <td>tracking-V01-00-01</td>
+    <td>corrections for trajectories of suspended tracks</td>
+    <td>Makoto Asai</td>
+    <td>000126</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>tracking-V01-00-01</td>
+    <td></td>
+    <td></td>
+    <td>SetUserAction methods in G4SteppingManager.hh and G4TrackingManger.hh 
+      is changed for the ray tracer by Makoto</td>
+    <td>Takashi Sasaki</td>
+    <td>000126</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>track-V01-00-00</td>
+    <td></td>
+    <td></td>
+    <td>Bugs related track weight in G4VParticleChange have been fixed</td>
+    <td>Hisaya Kurashige</td>
+    <td>000126</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
 </table>
 
 <table BORDER WIDTH="100%" NOSAVE >
