@@ -73,13 +73,14 @@ CLHEP_INCLUDE_DIR
 CLHEP_LIB_DIR			
 CLHEP_LIB		
 
-You will be asked about customizing these next.
+You can customise these settings next.
 EOM`
 
 else
 
 g4message=`cat << EOM
 
+Could not find CLHEP installed on this system!
 Please, specify where CLHEP is installed (set by default):
 
 CLHEP_BASE_DIR:			$g4clhep_base_dir
