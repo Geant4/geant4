@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTJpegMaker.cc,v 1.6 2001-11-12 17:28:13 stanaka Exp $
+// $Id: G4RTJpegMaker.cc,v 1.7 2001-11-22 17:29:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,7 +30,7 @@
 #include "G4RTJpeg.hh"
 #include "G4RTJpegMaker.hh"
 #include "G4RTJpegCoder.hh"
-#include <g4std/fstream>
+#include "g4std/fstream"
 
 G4RTJpegMaker::G4RTJpegMaker()
 {;}
@@ -63,8 +63,11 @@ void G4RTJpegMaker::CreateFigureFile(G4String fileName,
         aFigure.GetJpegData(&jpegAddress,jpegSize);
 
         G4std::ofstream ofs;
-	//        ofs.open(fileName,G4std::ios::out);
+#ifdef G4USE_STD_NAMESPACE
         ofs.open(fileName,G4std::ios::out|G4std::ios::trunc|G4std::ios::binary);
+#else
+	ofs.open(fileName,ios::out|ios::trunc);
+#endif
         ofs.write(jpegAddress,jpegSize);
         ofs.close();
 
