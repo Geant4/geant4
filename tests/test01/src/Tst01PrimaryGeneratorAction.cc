@@ -1,4 +1,9 @@
 
+//
+//
+//
+//
+
 #include "Tst01PrimaryGeneratorAction.hh"
 
 #include "Tst01PrimaryGeneratorMessenger.hh"
@@ -10,8 +15,13 @@
 #include "globals.hh"
 #include "CLHEP/Random/RandFlat.h"
 
+////////////////////////////////////////////////////////////////////////
+//
+//
+
 Tst01PrimaryGeneratorAction::Tst01PrimaryGeneratorAction():
   generatorAction (standardGun),
+  fGunPosition(0.0, 0.0, 0.0),
   particleGun (0),
   messenger (0),
   worldVolume (0)
@@ -37,11 +47,31 @@ Tst01PrimaryGeneratorAction::Tst01PrimaryGeneratorAction():
   // world extent
 
   worldVolume = G4TransportationManager::GetTransportationManager ()
-    -> GetNavigatorForTracking () -> GetWorldVolume ();
-  if (worldVolume) worldExtent = worldVolume -> GetLogicalVolume ()
-		     -> GetSolid () -> GetExtent ();
+              -> GetNavigatorForTracking () -> GetWorldVolume ()     ;
+  if (worldVolume) 
+  {  
+    worldExtent = worldVolume -> GetLogicalVolume () -> 
+                                         GetSolid () -> GetExtent ();
 
+    fSize = sqrt( ( worldExtent.GetXmax() - worldExtent.GetXmin() )*
+                  ( worldExtent.GetXmax() - worldExtent.GetXmin() ) +
+
+                  ( worldExtent.GetYmax() - worldExtent.GetYmin() )*
+                  ( worldExtent.GetYmax() - worldExtent.GetYmin() ) +
+
+                  ( worldExtent.GetZmax() - worldExtent.GetZmin() )* 
+                  ( worldExtent.GetZmax() - worldExtent.GetZmin() )     ) ;
+  }
+  else
+  {
+    fSize = 0.0 ;
+  }
+  G4cout<<"fSize = "<<fSize<<endl ;
 }
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Destructor: delets pointers
 
 Tst01PrimaryGeneratorAction::~Tst01PrimaryGeneratorAction()
 {
@@ -49,30 +79,36 @@ Tst01PrimaryGeneratorAction::~Tst01PrimaryGeneratorAction()
   delete messenger;
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+//
+
 void Tst01PrimaryGeneratorAction::SelectPrimaryGeneratorAction
 (Action action)
 {
   generatorAction = action;
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+//
+
 void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   G4VPhysicalVolume* currentWorldVolume;
+  G4ThreeVector direction, position ;
+  G4double costheta, sintheta, phi, cosphi, sinphi ;
+  G4double rho;
 
-  double costheta;
-  double sintheta;
-  double phi;
-  double cosphi;
-  double sinphi;
+  switch (generatorAction) 
+  {
 
-  switch (generatorAction) {
-
-  case standardGun:
+    case standardGun:  
 
     particleGun->GeneratePrimaryVertex(anEvent);
     break;
-
-  case randomDirectionGun:
+//...................................................................
+    case randomDirectionGun:   
 
     costheta = RandFlat::shoot (-1., 1.);
     sintheta = sqrt (1. - costheta * costheta);
@@ -84,14 +120,16 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     particleGun->GeneratePrimaryVertex(anEvent);
     break;
-
-  case randomPositionGun:
+//......................................................................
+    case randomPositionGun:   
 
     // Check if world is in place or has changed.
     currentWorldVolume = 
       G4TransportationManager::GetTransportationManager ()
       -> GetNavigatorForTracking () -> GetWorldVolume ();
-    if (!worldVolume ||	worldVolume != currentWorldVolume) {
+
+    if (!worldVolume ||	worldVolume != currentWorldVolume) 
+    {
       worldVolume = currentWorldVolume;
       if (worldVolume) worldExtent = worldVolume -> GetLogicalVolume ()
 			 -> GetSolid () -> GetExtent ();
@@ -105,14 +143,16 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     particleGun->GeneratePrimaryVertex(anEvent);
     break;
-
-  case randomPositionAndDirectionGun:
+//.................................................................
+    case randomPositionAndDirectionGun:  
 
     // Check if world is in place or has changed.
     currentWorldVolume =
       G4TransportationManager::GetTransportationManager ()
       -> GetNavigatorForTracking () -> GetWorldVolume ();
-    if (!worldVolume ||	worldVolume != currentWorldVolume) {
+
+    if (!worldVolume ||	worldVolume != currentWorldVolume) 
+    {
       worldVolume = currentWorldVolume;
       if (worldVolume) worldExtent = worldVolume -> GetLogicalVolume ()
 			 -> GetSolid () -> GetExtent ();
@@ -134,6 +174,70 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     particleGun->GeneratePrimaryVertex(anEvent);
     break;
+//.................................................................
+    case viewerGun:
 
+    particleGun->SetParticlePosition(fGunPosition) ;
+    if(fPosition)
+    {
+      direction = G4ThreeVector( -fGunPosition.x()/fPosition ,
+                                 -fGunPosition.y()/fPosition ,
+                                 -fGunPosition.z()/fPosition    ) ;
+
+      costheta = RandFlat::shoot (fPosition/sqrt(fPosition*fPosition +
+                                                  fSize*fSize), 1.);
+      sintheta = sqrt (1. - costheta * costheta);
+      phi      = RandFlat::shoot (twopi);
+      cosphi   = cos (phi) ;
+      sinphi   = sin (phi) ;
+      position = G4ThreeVector (sintheta * cosphi, 
+                                sintheta * sinphi, costheta) ;
+
+      position.rotateUz(direction) ;
+
+      particleGun->SetParticleMomentumDirection(position);      
+    }
+    else
+    {
+      costheta = RandFlat::shoot (-1., 1.);
+      sintheta = sqrt (1. - costheta * costheta);
+      phi      = RandFlat::shoot (twopi);
+      cosphi   = cos (phi);
+      sinphi   = sin (phi);
+      particleGun->SetParticleMomentumDirection
+      (G4ThreeVector (sintheta * cosphi, sintheta * sinphi, costheta));
+    }
+    particleGun->GeneratePrimaryVertex(anEvent) ;
+    break ;
+//..................................................................
+    case planeGun:
+
+    if(fPosition)
+    {
+      direction = G4ThreeVector( -fGunPosition.x()/fPosition ,
+                                 -fGunPosition.y()/fPosition ,
+                                 -fGunPosition.z()/fPosition    ) ;
+      particleGun->SetParticleMomentumDirection(direction) ;
+
+   // rho = fSize*randFlat::shoot(0.0,1.0) ; phi = RandFlat::shoot (twopi) ; 
+   // cosphi   = cos (phi); sinphi   = sin (phi);
+   // position = G4ThreeVector(rho*cosphi,rho*sinphi,0.0) ;
+
+      position = G4ThreeVector(RandFlat::shoot (-0.5*fSize,0.5*fSize) ,
+                               RandFlat::shoot (-0.5*fSize,0.5*fSize) , 0.0 ) ;
+      position.rotateUz(direction) ;
+      particleGun->SetParticlePosition(fGunPosition+position) ;
+    }
+    else
+    {
+      G4Exception("Invalid setting for plane gun in Tst01PrimaryGeneratorAction::GeneratePrimaries") ;
+    }
+    particleGun->GeneratePrimaryVertex(anEvent);
+    break ;
   }
 }
+
+
+//
+//
+/////////////////////////////////////////////////////////////////////////

@@ -7,17 +7,19 @@
 
 Tst01RunAction::Tst01RunAction()
 {
+  runIDcounter = 0;
 }
 
 Tst01RunAction::~Tst01RunAction()
 {
 }
 
-void Tst01RunAction::BeginOfRunAction(const G4Run*)
+void Tst01RunAction::BeginOfRunAction(G4Run* aRun)
 {
+  aRun->SetRunID(runIDcounter++);
 }
 
-void Tst01RunAction::EndOfRunAction(const G4Run*)
+void Tst01RunAction::EndOfRunAction(G4Run* aRun)
 {
 }
 

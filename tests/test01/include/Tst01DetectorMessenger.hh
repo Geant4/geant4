@@ -12,14 +12,30 @@ class G4UIcmdWithAString;
 class Tst01DetectorMessenger: public G4UImessenger
 {
   public:
-    Tst01DetectorMessenger(Tst01DetectorConstruction * myDC);
-    void SetNewValue(G4UIcommand * command,G4String newValues);
+
+    Tst01DetectorMessenger(Tst01DetectorConstruction* myDC) ;
+
+    void SetNewValue(G4UIcommand* command, G4String newValues) ;
+
   private:
-    Tst01DetectorConstruction * myDetector;
-    G4UIdirectory *      mydetDir;
-    G4UIcmdWithAString * selDetCmd;
-    G4UIcmdWithAString * switchCmd;
-    G4UIcmdWithAString * selMatCmd;
+
+    Tst01DetectorConstruction* myDetector ;
+
+    G4UIdirectory*      mydetDir ;
+
+    G4UIcmdWithAString* selDetCmd ;
+    G4UIcmdWithAString* switchCmd ;
+    G4UIcmdWithAString* selMatCmd ;
+
+  // Select CSG/Boolean
+
+    G4UIcmdWithAString* selCSGcmd ;
+    G4UIcmdWithAString* switchCSGcmd ;
+
+  // Switch CSG/Boolean
+
+    G4UIcmdWithAString* selBoolCmd ;
+    G4UIcmdWithAString* switchBoolCmd ;
 
 };
 

@@ -1,4 +1,4 @@
-$Id: README,v 1.2 1999-11-12 19:27:03 japost Exp $
+$Id: README,v 1.3 1999-11-26 09:49:10 grichine Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -6,7 +6,24 @@ $Id: README,v 1.2 1999-11-12 19:27:03 japost Exp $
      =========================================================
 
                             Test01
-                            ------
+                            ----------
 
-  The purpose of this test is to exercise the geometry, and attempt
-to validate its.
+  The purpose of this test is to exercise the CSG as well as boolean solids 
+  extensively using the full apparatus of the G4 geometry.
+
+  Author: Vladimir Grichine
+  Contributors: Simone Giani, John Apostolakis
+
+  To run it you can use
+
+    g4test *.in or *.mac
+
+ which will compile, run it and check its output, 
+ or compile it and say:
+
+ ./AIX-AFS/test01 < test01.in | tee test01.newout
+ diff test01.out test01.newout
+
+ to run it and check the output yourself.
+
+    J. Apostolakis, July 5th, 1998

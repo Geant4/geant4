@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test01.cc,v 1.1 1999-01-08 16:34:28 gunter Exp $
+// $Id: test01.cc,v 1.2 1999-11-26 09:46:58 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -4,6 +4,7 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
+class G4VSolid ;
 class G4Material;
 class Tst01DetectorMessenger;
 
@@ -13,30 +14,56 @@ class Tst01DetectorMessenger;
 class Tst01DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-    Tst01DetectorConstruction();
+
+     Tst01DetectorConstruction();
     ~Tst01DetectorConstruction();
 
-  public:
      G4VPhysicalVolume* Construct();
-     void SwitchDetector();
-     void SelectDetector(G4String val);
-     void SelectMaterial(G4String val);
+
+     void SelectDetector(G4String val) ;
+     void SwitchDetector() ;
+
+     void SelectMaterial(G4String val) ;
+
+  // Select/Switch CSG/Boolean
+
+     void SelectCSG(G4String name) ;
+     void SwitchCSG() ;
+
+     void SelectBoolean(G4String name) ;
+     void SwitchBoolean() ;
 
   private:
+
+  // Private functions
+
      G4VPhysicalVolume* SelectDetector();
      void ConstructDetectors();
      void SelectMaterialPointer();
 
-     G4LogicalVolume*   simpleBoxLog;
-     G4VPhysicalVolume* simpleBoxDetector;
-     G4VPhysicalVolume* honeycombDetector;
-     G4Material* Air;
-     G4Material* Al;
-     G4Material* Pb;
-     G4Material* selectedMaterial;
-     G4int detectorChoice;
-     G4String materialChoice;
-     Tst01DetectorMessenger * detectorMessenger;
+  // Class members
+
+     Tst01DetectorMessenger* detectorMessenger ;
+
+     G4LogicalVolume*   simpleBoxLog ;
+     G4VPhysicalVolume* simpleBoxDetector ;
+     G4VPhysicalVolume* honeycombDetector ;
+     G4VPhysicalVolume* fWorldPhysVol ;
+
+     G4VSolid* fTestCSG ;
+     G4LogicalVolume*   fTestLog ;
+     G4VPhysicalVolume* fTestVol ;
+
+     G4Material* Air ;
+     G4Material* Al ;
+     G4Material* Pb ;
+     G4Material* selectedMaterial ;
+
+     G4int       detectorChoice ;
+     G4String    materialChoice ;
+
+     G4int       fChoiceCSG ;
+     G4int       fChoiceBool ;
 };
 
 #endif

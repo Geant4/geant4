@@ -5,61 +5,81 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst01SteppingAction.cc,v 1.2 1999-04-17 04:05:09 kurasige Exp $
+// $Id: Tst01SteppingAction.cc,v 1.3 1999-11-26 09:47:36 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+////////////////////////////////////////////////////////////////////////////
+//
+//
 
 #include "Tst01SteppingAction.hh"
 #include "G4SteppingManager.hh"
 #include "math.h"
 #include <fstream.h>
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+////////////////////////////////////////////////////////////////////////////
+//
+//
 
 Tst01SteppingAction::Tst01SteppingAction() : Steplength(100,0.,100.),
-SteplengthProfile(100,0.,2*M_PI)
+SteplengthProfile(100,0.,2*M_PI),fNumberOfTracks(10,0.,10.0)
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//////////////////////////////////////////////////////////////////////////////
+//
+//
 
 Tst01SteppingAction::~Tst01SteppingAction()
 {
-  ofstream o("test01.stepLength.plt");
-  Steplength.output(o);
+  ofstream o("NumberOfTracks.plt");
+  fNumberOfTracks.output(o);
   o.close();
-  o.open("test01.stepLengthProfile.plt");
-  SteplengthProfile.output(o);
-  o.close();
+
+
+  //  ofstream o("test01.stepLength.plt");
+  //  Steplength.output(o);
+  //  o.close();
+  //  o.open("test01.stepLengthProfile.plt");
+  //  SteplengthProfile.output(o);
+  //  o.close();
  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Tst01SteppingAction::UserSteppingAction(const G4Step* aStep)
+
+/////////////////////////////////////////////////////////////////////////
+//
+//
+
+void Tst01SteppingAction::UserSteppingAction()
 {
-  Steplength.accumulate(aStep->GetStepLength());
+  G4Step* aStep = fpSteppingManager->GetStep() ;
 
-  G4double phi = aStep->GetDeltaPosition().phi();
-  if (phi < 0.) phi = phi + twopi;
-  SteplengthProfile.accumulate(phi,aStep->GetStepLength());
+  //  const G4Track* aTrack = GetSteppingManager()->GetTrack() ;
+
+  // Get the number of steps ? from the track
+
+  if( fpSteppingManager->GetTrack()->GetTrackStatus() != fAlive )
+  {
+     // Add this to an histogram of number of steps 
+
+     fNumberOfTracks.accumulate((G4double)fpSteppingManager->GetTrack()->
+                                                      GetCurrentStepNumber()) ;
+  }
+
+  // Steplength.accumulate(aStep->GetStepLength());
+
+  // G4double phi = aStep->GetDeltaPosition().phi();
+  // if (phi < 0.) phi = phi + twopi;
+  // SteplengthProfile.accumulate(phi,aStep->GetStepLength());
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
-
-
-
+//
+//
+/////////////////////////////////////////////////////////////////////////////
 
 
 

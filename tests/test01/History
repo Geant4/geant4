@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-04-17 04:07:19 kurasige Exp $
+$Id: History,v 1.3 1999-11-26 09:49:00 grichine Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,22 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-17 Apr., 1999 H.Kurashige 
-- Modify SetCuts() and ConstructParticle() in Tst01PhysicsList
-- Modify BeginOfRunAction() and EndOfRunAction() in Tst01RunAction
-- Modify UserSteppingAction() in Tst01SteppingAction
 
+November 25, 99  V.Grichine and J. Apostolakis     -  
 
-July  5, 98 J. Apostolakis   tst01-ver0.1
+Created second (with booleans) version of this test, starting from RayGunTest.cc
+Renamed  RayGunTest.cc to test01.cc
 
-9th August 1998  John Allison
-- Changed G4UIterminal to G4UIGAG.
+April 22, 98  V.Grichine and J. Apostolakis     -  rgt-01-00-01
 
-- Created first version. 
-  * I started from the old run/test_skeleton code.
-  * I renamed all classes from "MyXX" to "Tst01XX".
-
-
-June 27, 98 G. Cosmo
-- Created directory and "empty" test01.cc.
-
+Created first version of this test, starting from tests/test01.
+Renamed test01.cc to RayGunTest.cc

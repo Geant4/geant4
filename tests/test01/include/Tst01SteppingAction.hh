@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst01SteppingAction.hh,v 1.2 1999-04-17 04:05:05 kurasige Exp $
+// $Id: Tst01SteppingAction.hh,v 1.3 1999-11-26 09:47:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,22 +16,24 @@
 #ifndef Tst01SteppingAction_h
 #define Tst01SteppingAction_h 1
 
-#include "math.h"
 #include "G4UserSteppingAction.hh"
 #include "Histo.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+/////////////////////////////////////////////////////////////////////////
+//
+//
 
 class Tst01SteppingAction : public G4UserSteppingAction
 {
   public:
     Tst01SteppingAction();
-    virtual ~Tst01SteppingAction();
+   ~Tst01SteppingAction();
 
-    virtual void UserSteppingAction(const G4Step*);
+    void UserSteppingAction();
 private:
   odHisto Steplength;
   odHisto SteplengthProfile;
+  odHisto fNumberOfTracks;
 };
 
 #endif
