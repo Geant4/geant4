@@ -204,7 +204,8 @@ G4VParticleChange* G4AntiNeutronAnnihilationAtRest::AtRestDoIt(
     localtime = globalTime + gkin[isec].GetTOF();
 
     G4Track* aNewTrack = new G4Track( aNewParticle, localtime*s, position );
-    aParticleChange.AddSecondary( aNewTrack );
+		aNewTrack->SetTouchableHandle(track.GetTouchableHandle());
+    aParticleChange.AddSecondary( aNewTrack ); 
 
   }
 

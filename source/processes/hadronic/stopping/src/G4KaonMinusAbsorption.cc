@@ -204,6 +204,7 @@ G4VParticleChange* G4KaonMinusAbsorption::AtRestDoIt(
     localtime = globalTime + gkin[isec].GetTOF();
 
     G4Track* aNewTrack = new G4Track( aNewParticle, localtime*s, position );
+		aNewTrack->SetTouchableHandle(track.GetTouchableHandle());
     aParticleChange.AddSecondary( aNewTrack );
 
   }

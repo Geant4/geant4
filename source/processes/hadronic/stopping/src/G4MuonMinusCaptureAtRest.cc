@@ -193,6 +193,7 @@ AtRestDoIt(const G4Track& track,const G4Step&)
       aNewParticle->SetMomentum(itV.vect());
       G4double localtime = globalTime + tDelay + aParticle->GetTOF();
       G4Track* aNewTrack = new G4Track( aNewParticle, localtime, position);
+	  	aNewTrack->SetTouchableHandle(track.GetTouchableHandle());
       aParticleChange.AddSecondary( aNewTrack );
     }
   }
@@ -211,6 +212,7 @@ AtRestDoIt(const G4Track& track,const G4Step&)
         aNewParticle->SetMomentum( Cascade[isec].GetMomentum() );
 
         G4Track* aNewTrack = new G4Track( aNewParticle, localtime, position );
+		    aNewTrack->SetTouchableHandle(track.GetTouchableHandle());
         aParticleChange.AddSecondary( aNewTrack );
       }
     }
