@@ -20,27 +20,58 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#ifndef GammaRayTelPhysicsList_h
-#define GammaRayTelPhysicsList_h 1
+//
+// $Id: GammaRayTelGeneralPhysics.hh,v 1.1 2003-05-28 13:54:14 flongo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ------------------------------------------------------------
+//	GEANT 4 class header file 
+// Class Description:
+//      This class is an derived class of G4VPhysicsConstructor
+//
+// ------------------------------------------- 
+//	History
+//        first version                   12 Nov. 2000 by H.Kurashige 
+// ------------------------------------------------------------
+#ifndef GammaRayTelGeneralPhysics_h
+#define GammaRayTelGeneralPhysics_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "G4ios.hh"
 
-class GammaRayTelPhysicsList: public G4VModularPhysicsList
+#include "G4VPhysicsConstructor.hh"
+
+
+#include "G4Decay.hh"
+
+class GammaRayTelGeneralPhysics : public G4VPhysicsConstructor
 {
-public:
-  GammaRayTelPhysicsList();
-  virtual ~GammaRayTelPhysicsList();
-  
-public:
-  // SetCuts() 
-  virtual void SetCuts();
+  public: 
+    GammaRayTelGeneralPhysics(const G4String& name = "general");
+    virtual ~GammaRayTelGeneralPhysics();
 
+  public: 
+    // This method will be invoked in the Construct() method. 
+    // each particle type will be instantiated
+    virtual void ConstructParticle();
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    virtual void ConstructProcess();
 
+  protected:
+    G4Decay fDecayProcess;
 };
 
 
 #endif
+
+
+
+
+
 
 
 

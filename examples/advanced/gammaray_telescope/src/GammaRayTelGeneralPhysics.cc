@@ -20,27 +20,52 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#ifndef GammaRayTelPhysicsList_h
-#define GammaRayTelPhysicsList_h 1
+//
+// 
 
-#include "G4VModularPhysicsList.hh"
+#include "GammaRayTelGeneralPhysics.hh"
+
 #include "globals.hh"
+#include "G4ios.hh"
+#include "g4std/iomanip"   
 
-class GammaRayTelPhysicsList: public G4VModularPhysicsList
+GammaRayTelGeneralPhysics::GammaRayTelGeneralPhysics(const G4String& name)
+                     :  G4VPhysicsConstructor(name)
 {
-public:
-  GammaRayTelPhysicsList();
-  virtual ~GammaRayTelPhysicsList();
-  
-public:
-  // SetCuts() 
-  virtual void SetCuts();
+}
 
+GammaRayTelGeneralPhysics::~GammaRayTelGeneralPhysics()
+{
+}
 
-};
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
+// Bosons
+#include "G4ChargedGeantino.hh"
+#include "G4Geantino.hh"
 
+void GammaRayTelGeneralPhysics::ConstructParticle()
+{
+  // pseudo-particles
+  G4Geantino::GeantinoDefinition();
+  G4ChargedGeantino::ChargedGeantinoDefinition();  
+}
 
-#endif
+void GammaRayTelGeneralPhysics::ConstructProcess()
+{
+  // Add Decay Process
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+    if (fDecayProcess.IsApplicable(*particle)) { 
+      pmanager ->AddProcess(&fDecayProcess);
+      // set ordering for PostStepDoIt and AtRestDoIt
+      pmanager ->SetProcessOrdering(&fDecayProcess, idxPostStep);
+      pmanager ->SetProcessOrdering(&fDecayProcess, idxAtRest);
+    }
+  }
+}
 
 
 
