@@ -319,7 +319,7 @@ G4ThreeVector SurfacePosition = G4ThreeVector(0*m,0*m,1.5*m) ;
 
 // Rotate reflecting surface by 45. degrees around the OX axis.
 
-G4RotationMatrix *Surfrot = new G4RotationMatrix(G4ThreeVector(1.0,0.0,0.0),-M_PI/4.);
+G4RotationMatrix *Surfrot = new G4RotationMatrix(G4ThreeVector(1.0,0.0,0.0),-pi/4.);
 
 G4VPhysicalVolume *physMirror ;
 physMirror = new G4PVPlacement(Surfrot,SurfacePosition,"MirrorPV",logMirror,World_phys,false,0);
@@ -378,7 +378,7 @@ G4ThreeVector SurfacePosition = G4ThreeVector(0*m,0*m,1.5*m) ;
 
 // Rotate reflecting surface by 45. degrees around the OX axis.
 
-G4RotationMatrix *Surfrot = new G4RotationMatrix(G4ThreeVector(1.0,0.0,0.0),-M_PI/4.);
+G4RotationMatrix *Surfrot = new G4RotationMatrix(G4ThreeVector(1.0,0.0,0.0),-pi/4.);
 
 G4VPhysicalVolume *physGround ;
 physGround = new G4PVPlacement(Surfrot,SurfacePosition,"GroundPV",logGround,World_phys,false,0);
@@ -447,7 +447,7 @@ G4Material* Al = G4Material::GetMaterial(name = "Aluminum");
 
 
 G4Tubs *solidUVscope = 
- new G4Tubs("UVscopeSolid",UVscopeInnerRadius,UVscopeOuterRadius,UVscopeHeight/2.0,0.0,2.0*M_PI) ;
+ new G4Tubs("UVscopeSolid",UVscopeInnerRadius,UVscopeOuterRadius,UVscopeHeight/2.0,0.0,twopi) ;
 G4LogicalVolume *logicUVscope =
  new G4LogicalVolume(solidUVscope,Al,"UVscopeLV",0,0,0);
 G4VPhysicalVolume *physicalUVscope =
@@ -459,7 +459,7 @@ G4VPhysicalVolume *physicalUVscope =
 //////////////////////////////////////
 
 G4Tubs *solidUVscopeBack = 
- new G4Tubs("UVscopeBackSolid",0.0,UVscopeOuterRadius,UVscopeThickness/2.0,0.0,2.0*M_PI) ;
+ new G4Tubs("UVscopeBackSolid",0.0,UVscopeOuterRadius,UVscopeThickness/2.0,0.0,twopi) ;
 
 G4LogicalVolume *logicUVscopeBack = 
  new G4LogicalVolume(solidUVscopeBack,Al,"UVscopeBackLV",0,0,0);
@@ -495,7 +495,7 @@ UltraFresnelLens *FresnelLens = new UltraFresnelLens(LensDiameter,LensNumOfGroov
 // Lens supporting ring (aluminum)
 ///////////////////////////////////
 
-G4Tubs *solidLensFrame = new G4Tubs("LensFrame",LensDiameter/2.0,UVscopeInnerRadius,LensBorderThickness/2.0,0.0,2.0*M_PI) ;
+G4Tubs *solidLensFrame = new G4Tubs("LensFrame",LensDiameter/2.0,UVscopeInnerRadius,LensBorderThickness/2.0,0.0,twopi) ;
 G4LogicalVolume *logicLensFrame = new G4LogicalVolume(solidLensFrame,Al,"LensFrameLV",0,0,0);
 
 G4ThreeVector LensFramePosition ;
@@ -516,11 +516,11 @@ G4VPhysicalVolume *physicalLensFrame =
 
 G4double PMT_thick   =   1.0*mm ; // Thickness of PMT window
 G4double PMT_curv    =  65.5*mm ; // Radius of curvature of PMT window
-G4double StartTheta  = (180.0-31.2)*M_PI/180. ;
-G4double EndTheta    = 31.2*M_PI/180. ;
+G4double StartTheta  = (180.0-31.2)*pi/180. ;
+G4double EndTheta    = 31.2*pi/180. ;
 
 G4Sphere *solidPMT ;
-solidPMT = new G4Sphere("PMT_solid",PMT_curv-PMT_thick,PMT_curv,0.0,2.0*M_PI,StartTheta,EndTheta);
+solidPMT = new G4Sphere("PMT_solid",PMT_curv-PMT_thick,PMT_curv,0.0,twopi,StartTheta,EndTheta);
 
 G4Material* Quartz = G4Material::GetMaterial(name = "Quartz");
 G4LogicalVolume * logicalPMT ;
@@ -533,7 +533,7 @@ G4ThreeVector PMTpos = LensPosition + G4ThreeVector(0.0*cm,0.0*cm,-(LensFocalLen
 
 // Rotate PMT window through the axis OX by an angle = 180. degrees
 
-G4RotationMatrix *PMTrot = new G4RotationMatrix(G4ThreeVector(1.0,0.0,0.0),M_PI);
+G4RotationMatrix *PMTrot = new G4RotationMatrix(G4ThreeVector(1.0,0.0,0.0),pi);
 G4VPhysicalVolume *physPMT ;
 physPMT  = new G4PVPlacement(PMTrot,PMTpos,"PMT1",logicalPMT,World_phys,false,0);
 

@@ -103,7 +103,7 @@
     (GyroPack_tub_o, Al6061, "GyroPack_log_o");
   G4VPhysicalVolume* GyroPack_phys_o = new G4PVPlacement(0, spacecraft_pos
     + GyroPack_pos, "GyroPack_phys_o", GyroPack_log_o, wld_phys, false, 0);
-  f = std::pow(1.-1.00/(2.70*M_PI*(0.5*89.)*(0.5*89.)*85.)*1E6, 1./3.);
+  f = std::pow(1.-1.00/(2.70*pi*(0.5*89.)*(0.5*89.)*85.)*1E6, 1./3.);
   //  G4cout << "f: " << f << G4endl;
   G4Tubs* GyroPack_tub_i = new G4Tubs("GyroPack_tub_i", 
     0., f*0.5*89.*mm, f*0.5*85.*mm, 0., 360.*deg);

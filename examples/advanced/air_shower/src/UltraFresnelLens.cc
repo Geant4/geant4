@@ -83,7 +83,7 @@ UltraFresnelLens::~UltraFresnelLens(  )
 void UltraFresnelLens::BuildLens(G4VPhysicalVolume *MotherPV){
 
 G4double StartPhi = 0.0 ;
-G4double DeltaPhi = 2.0*M_PI ;
+G4double DeltaPhi = twopi ;
 
 G4double  LensMotherDz = LensThickness ;
 
