@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2001-10-19 04:51:08 stesting Exp $
+$Id: History,v 1.7 2004-03-16 15:16:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,27 +15,31 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Oct 18, 2001  Steve O'Neale (tests-V03-02-03)
+Mar 16th, 2004  Gabriele Cosmo
+- Fixed compilation warnings.
+- Replaced usage of NULL with 0.
+
+Oct 18th, 2001  Steve O'Neale (tests-V03-02-03)
 - Update reference output
 
-15th Feb 2001 Steve O'Neale Update reference output
+Feb 15th, 2001  Steve O'Neale
+- Update reference output
 
-25th November 2000 Steve O'Neale (tagset210)
+Nov 25th, 2000  Steve O'Neale (tagset210)
 - Update test outputs for min.delta energy cut
 
-June 17, 2000  John Allison  (test09-V01-01-00)
+Jun 17th, 2000  John Allison (test09-V01-01-00)
 - Updated test09.out for geant4-01-01-ref-06.
 
-17 Apr., 1999 H.Kurashige 
+Apr 17th, 1999  Hisaya Kurashige 
 - Modify SetCuts() and ConstructParticle() in Tst09PhysicsList
 - Modify BeginOfRunAction() and EndOfRunAction() in Tst09RunAction
 - Modify PreUserTrackingAction() in Tst09TrackingAction
 - Modify UserSteppingAction() in Tst09SteppingAction
 
-
-14 Dec. 1998 Hisaya
+Dec 14th, 1998  Hisaya Kurashige
 - Added Tst09TrackingAction for adding polarization for gammas
 
-30th November 1998  John Allison
+Nov 30th, 1998  John Allison
 - Copied from test02 with a physics list for polarised Compton,
   G4PhotoAbsorption and synchrotron radiation.
