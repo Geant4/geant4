@@ -8,7 +8,7 @@
 
 #include "CCalVOrganization.hh"
 
-#include <map>
+#include "g4std/map"
 #include "globals.hh"
 #include "G4VSensitiveDetector.hh"
 
@@ -25,7 +25,7 @@ private:
   CCalSensAssign();
 
   static CCalSensAssign* theInstance;
-  map<G4String,G4VSensitiveDetector*> sens_;
+  G4std::map<G4String,G4VSensitiveDetector*> sens_;
 
 };
 #endif

@@ -5,7 +5,7 @@
 
 #include "CCalDetector.hh"
 
-#include <fstream>
+#include "g4std/fstream"
 #include "CCalGeometryConfiguration.hh"
 #include "CCalutils.hh"
 
@@ -77,17 +77,17 @@ int CCalDetector::buildFromFile() {
 
 //========================================================================
 //Global operators
-ostream& operator<<(ostream& os, const CCalDetector& det) {
+G4std::ostream& operator<<(G4std::ostream& os, const CCalDetector& det) {
   os << "Detector \"" << det.detectorName 
-     << "\" read from " << det.fileName << "." << endl;
+     << "\" read from " << det.fileName << "." << G4endl;
 
   os << "With " << det.theDetectorsInside.size() 
-     << " detectors inside { "<< endl;
+     << " detectors inside { "<< G4endl;
 
   for (unsigned int i=0; i<det.theDetectorsInside.size(); i++)
-    os << det.theDetectorsInside[i] << endl;
+    os << det.theDetectorsInside[i] << G4endl;
 
-  os << "}" << endl;
+  os << "}" << G4endl;
 
   return os;
 }

@@ -16,48 +16,48 @@ CCalSensitiveDetectors* CCalSensitiveDetectors::getInstance() {
 }
 
 
-void CCalSensitiveDetectors::registerVolume (const string& string, 
+void CCalSensitiveDetectors::registerVolume (const G4String& string, 
 					     G4LogicalVolume* logv) {
 
   theLVs.insert(mmslv::value_type(string, logv));
 #ifdef debug
-  cout << "CCalSensitiveDetectors : Register " << logv->GetName() 
-       << " in category " << string << endl;
+  G4cout << "CCalSensitiveDetectors : Register " << logv->GetName() 
+       << " in category " << string << G4endl;
 #endif
 }
 
-vector<G4LogicalVolume*> CCalSensitiveDetectors::getVolumes (const string& string, 
+G4std::vector<G4LogicalVolume*> CCalSensitiveDetectors::getVolumes (const G4String& string, 
 							     bool exist) {
 
   mmslv::const_iterator mmscite;
-  pair<mmslv::iterator, mmslv::iterator> mmsdi;
+  G4std::pair<mmslv::iterator, mmslv::iterator> mmsdi;
   mmsdi = theLVs.equal_range(string);
-  vector<G4LogicalVolume*> lvs;
+  G4std::vector<G4LogicalVolume*> lvs;
   for (mmscite = mmsdi.first; mmscite != mmsdi.second; mmscite++ ) {
     lvs.push_back(const_cast<G4LogicalVolume*>((*mmscite).second));
   }
 
-  if (exist) cout << "CCalSensitiveDetector : " << lvs.size() 
-		  << " detectors for " << string << endl;
+  if (exist) G4cout << "CCalSensitiveDetector : " << lvs.size() 
+		  << " detectors for " << string << G4endl;
   
   return lvs;
 }
 
 
-bool CCalSensitiveDetectors::setSensitive(const string& string, 
+bool CCalSensitiveDetectors::setSensitive(const G4String& string, 
 					  G4VSensitiveDetector* sens) {
 
   bool result=false;
   mmslv::const_iterator mmscite;
-  pair<mmslv::iterator, mmslv::iterator> mmsdi;
+  G4std::pair<mmslv::iterator, mmslv::iterator> mmsdi;
   mmsdi = theLVs.equal_range(string);
   for (mmscite = mmsdi.first; mmscite != mmsdi.second; mmscite++ ) {
     G4LogicalVolume* lv = const_cast<G4LogicalVolume*>((*mmscite).second);
     lv ->SetSensitiveDetector(sens);
     result = true;
 #ifdef debug
-    cout << " Associate SD " << sens->GetName() << " to " << lv->GetName() 
-	 << endl;
+    G4cout << " Associate SD " << sens->GetName() << " to " << lv->GetName() 
+	 << G4endl;
 #endif
   }
   return result;

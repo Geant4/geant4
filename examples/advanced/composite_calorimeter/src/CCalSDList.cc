@@ -29,8 +29,8 @@ void CCalSDList::addTracker(nameType name){
 nameType CCalSDList::getCaloSDName(int i){
   
   if (i>=theList->getNumberOfCaloSD() || i<0) {
-    cout << "CCalSDList invalid calo SD no: " << i << " max is "
-	 << theList->getNumberOfCaloSD() << endl;
+    G4cout << "CCalSDList invalid calo SD no: " << i << " max is "
+	   << theList->getNumberOfCaloSD() << G4endl;
     return " ";
   } else 
     return theList->caloSD[i];
@@ -39,8 +39,8 @@ nameType CCalSDList::getCaloSDName(int i){
 nameType CCalSDList::getTrackerSDName(int i){
 
   if (i>=theList->getNumberOfTrackerSD() || i<0) {
-    cout << "CCalSDList invalid tracker SD no: " << i << " max is "
-	 << theList->getNumberOfTrackerSD() << endl;
+    G4cout << "CCalSDList invalid tracker SD no: " << i << " max is "
+	   << theList->getNumberOfTrackerSD() << G4endl;
     return " ";
   }   
   else 

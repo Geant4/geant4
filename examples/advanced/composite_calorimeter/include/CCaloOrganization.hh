@@ -7,7 +7,8 @@
 #ifndef CCaloOrganization_h
 #define CCaloOrganization_h
 
-#include <map>
+#include "g4std/map"
+#include "globals.hh"
 
 class CCaloOrganization{
 
@@ -24,11 +25,11 @@ public:
 public:
       
   // additional tool:
-  int getUnitWithMaxEnergy(map<int,float,less<int> >& themap);
+  int getUnitWithMaxEnergy(G4std::map<int,float,G4std::less<int> >& themap);
 
   float  energyInMatrix(int nCellInEta, int nCellInPhi, 
 			int crystalWithMaxEnergy, 
-			map<int,float,less<int> >& themap); 
+			G4std::map<int,float,G4std::less<int> >& themap); 
 
 
 };

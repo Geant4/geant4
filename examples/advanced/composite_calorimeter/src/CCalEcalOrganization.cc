@@ -9,7 +9,7 @@
 #include "SystemOfUnits.h"
 
 CCalEcalOrganization::~CCalEcalOrganization(){
-  cout << " Deleting CCalEcalOrganization" << endl;
+  G4cout << " Deleting CCalEcalOrganization" << G4endl;
 }
 
 

@@ -5,13 +5,13 @@
 #include "CCalutils.hh"
 #include "G4UnitsTable.hh"
 
-#include <strstream>
+#include "g4std/strstream"
 
 G4String operator+(const G4String& str, const int i) {
   int l = str.length() + 15; //How long can an integer be?
   char *cname = new char[l];
   cname[0]='\0';
-  ostrstream os(cname, l);
+  G4std::ostrstream os(cname, l);
   os << str << i <<'\0';
   G4String back(cname);  
   delete[] cname;
@@ -22,14 +22,14 @@ G4String operator+(const G4String& str, const double i) {
   int l = str.length() + 15; //How long can an double be?
   char *cname = new char[l];
   cname[0]='\0';
-  ostrstream os(cname, l);
+  G4std::ostrstream os(cname, l);
   os << str << i <<'\0';
   G4String back(cname);  
   delete[] cname;
   return back;
 }
 
-istream& readName(istream& is, G4String& name){
+G4std::istream& readName(G4std::istream& is, G4String& name){
   is >> name;
   if (name!="*ENDDO") {
     while (name.index("#.")==0) { //It is a comment. Skip line.
@@ -47,7 +47,7 @@ istream& readName(istream& is, G4String& name){
   return is;
 }
 
-istream& findDO(istream& is, const G4String& str){
+G4std::istream& findDO(G4std::istream& is, const G4String& str){
   // Loop until *DO str is found
   G4String firstwd, dowhat;
   dowhat = "";
@@ -63,12 +63,12 @@ istream& findDO(istream& is, const G4String& str){
   return is;
 }
 
-ostream& tab(ostream& os) {
+G4std::ostream& tab(G4std::ostream& os) {
   os << '\t';
   return os;
 }
 
-istream& jump(istream& is) {
+G4std::istream& jump(G4std::istream& is) {
   char first, second;
   is.ignore(999,'\n');
   do {
@@ -88,7 +88,7 @@ istream& jump(istream& is) {
 }
 
 
-bool openGeomFile(ifstream& is, 
+bool openGeomFile(G4std::ifstream& is, 
 		  const G4String& pathname, const G4String& filename) {
   //Check first if the file exists loacally
   is.open(filename);
@@ -98,7 +98,7 @@ bool openGeomFile(ifstream& is,
     G4String fullname = pathname+"/"+filename;
     is.open(fullname);
     if (!is) {
-      cerr << "ERROR: Could not open file " << filename << endl;
+      G4cerr << "ERROR: Could not open file " << filename << G4endl;
       return false;
     }
   }

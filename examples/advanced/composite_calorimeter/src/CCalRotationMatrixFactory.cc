@@ -7,7 +7,7 @@
 
 #include "CCalutils.hh"
 
-#include <fstream.h>
+#include "g4std/fstream"
 #include <stdlib.h>
 
 //#define debug
@@ -23,8 +23,8 @@ CCalRotationMatrixFactory* CCalRotationMatrixFactory::getInstance(const G4String
     file=rotfile;
     return getInstance();
   } else {
-    cerr << "ERROR: Trying to get Rotation Matrices from " << rotfile 
-	 << " when previously were retrieved from " << file <<"." << endl;
+    G4cerr << "ERROR: Trying to get Rotation Matrices from " << rotfile 
+	 << " when previously were retrieved from " << file <<"." << G4endl;
     return 0;
   }
 }
@@ -32,8 +32,8 @@ CCalRotationMatrixFactory* CCalRotationMatrixFactory::getInstance(const G4String
 
 CCalRotationMatrixFactory* CCalRotationMatrixFactory::getInstance(){
   if (file=="") {
-    cerr << "ERROR: You haven't defined which file to use for materials in "
-	 << "CCalRotationMatrixFactory::getInstance(G4String)" << endl;
+    G4cerr << "ERROR: You haven't defined which file to use for materials in "
+	 << "CCalRotationMatrixFactory::getInstance(G4String)" << G4endl;
     return 0;
   }
 
@@ -47,9 +47,9 @@ CCalRotationMatrixFactory* CCalRotationMatrixFactory::getInstance(){
 
 void CCalRotationMatrixFactory::setFileName(const G4String& rotfile) {
   if (rotfile!=file && file!="") {
-    cerr << "ERROR: Trying to change Rotation Matrices file name to " 
-	 << rotfile << "." << endl;
-    cerr << "       Using previous file: " << file << endl;
+    G4cerr << "ERROR: Trying to change Rotation Matrices file name to " 
+	 << rotfile << "." << G4endl;
+    G4cerr << "       Using previous file: " << file << G4endl;
   }
   file=rotfile;
 }
@@ -167,21 +167,21 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
   Hep3Vector zprime(sinth3*cosph3,sinth3*sinph3,costh3);
 
 #ifdef ddebug
-  cout << xprime << '\t';    cout << yprime << '\t';    cout << zprime << endl;
+  G4cout << xprime << '\t';    G4cout << yprime << '\t';    G4cout << zprime << G4endl;
 #endif
   G4RotationMatrix *rotMat = new G4RotationMatrix();
   rotMat->rotateAxes(xprime, yprime, zprime);
   if (*rotMat == G4RotationMatrix()) {
-    //	cerr << "WARNING: Matrix " << name << " will not be created as a rotation matrix." 
-    cerr << "WARNING: Matrix " << name << " is = identity matrix. It will not be created as a rotation matrix." 
-	 << endl;
+    //	G4cerr << "WARNING: Matrix " << name << " will not be created as a rotation matrix." 
+    G4cerr << "WARNING: Matrix " << name << " is = identity matrix. It will not be created as a rotation matrix." 
+	 << G4endl;
     delete rotMat;
     rotMat=0;
   } else {
     rotMat->invert();
     theMatrices[name]=rotMat;
 #ifdef ddebug
-    cout << *rotMat << endl;
+    G4cout << *rotMat << G4endl;
 #endif
   }
 
@@ -191,11 +191,11 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
 CCalRotationMatrixFactory::CCalRotationMatrixFactory():theMatrices(){
   
   G4String path = getenv("CCAL_GLOBALPATH");
-  cout << " ==> Opening file " << file << "..." << endl;
-  ifstream is;
+  G4cout << " ==> Opening file " << file << "..." << G4endl;
+  G4std::ifstream is;
   bool ok = openGeomFile(is, path, file);
   if (!ok) {
-    cerr << "ERROR: Could not open file " << file << " ... Exiting!" << endl;
+    G4cerr << "ERROR: Could not open file " << file << " ... Exiting!" << G4endl;
     exit(-1);
   }
 
@@ -207,8 +207,8 @@ CCalRotationMatrixFactory::CCalRotationMatrixFactory():theMatrices(){
   G4String name;
 
 #ifdef debug
-  cout << "     ==> Reading Rotation Matrices... " << endl;
-  cout << "       Name\tTheta1\tPhi1\tTheta2\tPhi2\tTheta3\tPhi3"<< endl;
+  G4cout << "     ==> Reading Rotation Matrices... " << G4endl;
+  G4cout << "       Name\tTheta1\tPhi1\tTheta2\tPhi2\tTheta3\tPhi3"<< G4endl;
 #endif
   
   is >> name;
@@ -217,28 +217,28 @@ CCalRotationMatrixFactory::CCalRotationMatrixFactory():theMatrices(){
       is.getline(rubish,256,'\n');
     } else {
 #ifdef debug
-      cout << "       " << name <<'\t';
+      G4cout << "       " << name <<'\t';
 #endif
       G4double th1, phi1, th2, phi2, th3, phi3;
       //Get xprime axis angles
       is >> th1 >> phi1;
 #ifdef debug
-      cout << th1 << '\t' << phi1 << '\t';
+      G4cout << th1 << '\t' << phi1 << '\t';
 #endif
       //Get yprime axis angles
       is >> th2 >> phi2;
 #ifdef debug
-      cout << th2 << '\t' << phi2 << '\t';
+      G4cout << th2 << '\t' << phi2 << '\t';
 #endif
       //Get zprime axis angles
       is >> th3 >> phi3;
 #ifdef debug
-      cout << th3 << '\t' << phi3 << '\t';
+      G4cout << th3 << '\t' << phi3 << '\t';
 #endif
 
       is.getline(rubish,256,'\n');
 #ifdef debug
-      cout << rubish << endl;
+      G4cout << rubish << G4endl;
 #endif
 
       AddMatrix(name, th1*deg, phi1*deg, th2*deg, phi2*deg, th3*deg, phi3*deg);
@@ -248,18 +248,18 @@ CCalRotationMatrixFactory::CCalRotationMatrixFactory():theMatrices(){
   };
 
   is.close();
-  cout << "       "  << theMatrices.size() << " rotation matrices read in." << endl;
+  G4cout << "       "  << theMatrices.size() << " rotation matrices read in." << G4endl;
 }
 
-ostream& operator<<(ostream& os , const G4RotationMatrix & rot){
-  //  os << "( " << rot.xx() << tab << rot.xy() << tab << rot.xz() << " )" << endl;
-  //  os << "( " << rot.yx() << tab << rot.yy() << tab << rot.yz() << " )" << endl;
-  //  os << "( " << rot.zx() << tab << rot.zy() << tab << rot.zz() << " )" << endl;
+G4std::ostream& operator<<(G4std::ostream& os , const G4RotationMatrix & rot){
+  //  os << "( " << rot.xx() << tab << rot.xy() << tab << rot.xz() << " )" << G4endl;
+  //  os << "( " << rot.yx() << tab << rot.yy() << tab << rot.yz() << " )" << G4endl;
+  //  os << "( " << rot.zx() << tab << rot.zy() << tab << rot.zz() << " )" << G4endl;
 
   os << "[" 
      << rot.thetaX()/deg << tab << rot.phiX()/deg << tab
      << rot.thetaY()/deg << tab << rot.phiY()/deg << tab
      << rot.thetaZ()/deg << tab << rot.phiZ()/deg << "]"
-     << endl;
+     << G4endl;
   return os;
 }

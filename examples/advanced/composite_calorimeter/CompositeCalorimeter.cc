@@ -73,7 +73,7 @@ int main(int argc,char** argv) {
       session = new G4UIterminal;
 #endif
 
-    cout <<" Run initializing ..."<<endl;
+    G4cout <<" Run initializing ..."<<G4endl;
     UI->ApplyCommand("/process/verbose 0");
     UI->ApplyCommand("/run/verbose 2");
     UI->ApplyCommand("/run/initialize");
@@ -100,7 +100,7 @@ int main(int argc,char** argv) {
     // Customize the G4UIXm menubar with a macro file :
     UI->ApplyCommand("/control/execute gui.mac");
 #else
-    cout <<"Now, please, apply beamOn command..."<<endl;
+    G4cout <<"Now, please, apply beamOn command..."<<G4endl;
 #endif
 
     session->SessionStart();    

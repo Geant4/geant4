@@ -4,7 +4,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalEcal.hh"
 
-#include <fstream>
+#include "g4std/fstream"
 #include "CCalutils.hh"
 
 //#define debug
@@ -14,10 +14,10 @@ CCalEcal::~CCalEcal() {}
 int CCalEcal::readFile() {
   ///////////////////////////////////////////////////////////////
   //Let's open the file
-  cout << " ==> Opening file " << File() << " to read elements..."
-       << endl;
+  G4cout << " ==> Opening file " << File() << " to read elements..."
+       << G4endl;
 
-  ifstream is;
+  G4std::ifstream is;
   bool ok = openGeomFile(is, pathName, File());
   if (!ok)
     return 0;
@@ -30,11 +30,11 @@ int CCalEcal::readFile() {
   is >> widBox >> lengBox >> xpos >> ypos >> zpos >> thetaX >> phiX
      >> thetaY >> phiY >> thetaZ >> phiZ >> jump;
 #ifdef debug
-  cout << tab << "General material: " << genMat << "\tBox dimensions "
-       << widBox << ", " << lengBox << endl;
-  cout << tab << "Positioned at (" << xpos << ", " << ypos << ", " << zpos
+  G4cout << tab << "General material: " << genMat << "\tBox dimensions "
+       << widBox << ", " << lengBox << G4endl;
+  G4cout << tab << "Positioned at (" << xpos << ", " << ypos << ", " << zpos
        << ") with rotation (" << thetaX << ", " << phiX << ", " << thetaY
-       << ", " << phiY << ", " << thetaZ << ", " << phiZ << ")" << endl;
+       << ", " << phiY << ", " << thetaZ << ", " << phiZ << ")" << G4endl;
 #endif
 
   //Then the layer positions
@@ -44,12 +44,12 @@ int CCalEcal::readFile() {
   for (i=0; i<5; i++) 
     is >> layPar[i];
 #ifdef debug
-  cout << tab << "Layer material: " << layMat << " Number " << layNum
+  G4cout << tab << "Layer material: " << layMat << " Number " << layNum
        << " Radius " << layRadius << " Angle " << layAngle/deg 
        << " front dist " << lengFront << " Parameters ";
   for (i=0; i<5; i++)
-    cout << layPar[i] << " ";
-  cout << endl;
+    G4cout << layPar[i] << " ";
+  G4cout << G4endl;
 #endif
 
   //Then the crystal positions
@@ -58,25 +58,25 @@ int CCalEcal::readFile() {
   for (i=0; i<5; i++) 
     is >> crystPar[i];
 #ifdef debug
-  cout << tab << "Crystal material: " << crystMat << " Number " << crystNum
+  G4cout << tab << "Crystal material: " << crystMat << " Number " << crystNum
        << " Length " << crystLength << " Tolerance " << crystTol
        << " Parameters ";
   for (i=0; i<5; i++)
-    cout << crystPar[i] << " ";
-  cout << endl;
+    G4cout << crystPar[i] << " ";
+  G4cout << G4endl;
 #endif
 
   //Then the support material
   readName(is,suppMat);
   is >> dxSupp >> dySupp >> dzSupp >> distSupp >> jump;
 #ifdef debug
-  cout << tab << "Support material: " << suppMat << " Dimensions " << dxSupp
-       << ", " << dySupp << ", " << dzSupp << " Distance " << distSupp << endl;
+  G4cout << tab << "Support material: " << suppMat << " Dimensions " << dxSupp
+       << ", " << dySupp << ", " << dzSupp << " Distance " << distSupp << G4endl;
 #endif
    
   ///////////////////////////////////////////////////////////////
   // Close the file
-  cout << " ==> Closing file " << File() << endl;
+  G4cout << " ==> Closing file " << File() << G4endl;
   is.close();
 
   return 1;

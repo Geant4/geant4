@@ -7,7 +7,7 @@
 #ifndef CCalSDList_h
 #define CCalSDList_h 1
 
-#include <vector>
+#include "g4std/vector"
 #include "globals.hh"
 
 typedef G4String nameType;
@@ -33,8 +33,8 @@ public:
   
 private:
   static CCalSDList* theList;
-  vector<nameType> caloSD;
-  vector<nameType> trackerSD;
+  G4std::vector<nameType> caloSD;
+  G4std::vector<nameType> trackerSD;
   
 private:
   CCalSDList& operator=(CCalSDList&);   

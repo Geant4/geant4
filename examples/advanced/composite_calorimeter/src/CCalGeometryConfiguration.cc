@@ -5,7 +5,7 @@
 
 #include "CCalGeometryConfiguration.hh"
 
-#include <fstream>
+#include "g4std/fstream"
 
 //Comment/Uncomment next line to hide/show debug information
 //#define debug
@@ -27,9 +27,9 @@ int CCalGeometryConfiguration::getConstructFlag(const G4String& n) /*const*/ {
   if (it != theConfiguration.end())
     flag = (*it).second.ConstructFlag;
   else {
-    cerr << "ERROR: In CCalGeometryConfiguration::getConstructFlag(const G4String& n)" 
-	 << endl 
-	 << "       " << n << " not found in configuration file" << endl;
+    G4cerr << "ERROR: In CCalGeometryConfiguration::getConstructFlag(const G4String& n)" 
+	 << G4endl 
+	 << "       " << n << " not found in configuration file" << G4endl;
   }
 
   return flag;
@@ -42,9 +42,9 @@ G4String CCalGeometryConfiguration::getFileName(const G4String& n) /*const*/ {
   if (it != theConfiguration.end())
     fn = (*it).second.FileName;
   else {
-    cerr << "ERROR: In CCalGeometryConfiguration::getConstructFlag(const G4String& n)" 
-	 << endl 
-	 << "       " << n << " not found in configuration file" << endl;
+    G4cerr << "ERROR: In CCalGeometryConfiguration::getConstructFlag(const G4String& n)" 
+	 << G4endl 
+	 << "       " << n << " not found in configuration file" << G4endl;
   }
 
   return fn;
@@ -58,13 +58,13 @@ CCalGeometryConfiguration::CCalGeometryConfiguration():
   G4String pathName = getenv("CCAL_CONFPATH");
   G4String fileenv  = getenv("CCAL_GEOMETRYCONF");
   if (!pathName || !fileenv) {
-    cerr << "ERROR: CCAL_GEOMETRYCONF and/or CCAL_CONFPATH not set" << endl
-	 << "       Set them to the geometry configuration file/path" << endl;
+    G4cerr << "ERROR: CCAL_GEOMETRYCONF and/or CCAL_CONFPATH not set" << G4endl
+	 << "       Set them to the geometry configuration file/path" << G4endl;
     exit(-2);
   }
 
-  cout << " ==> Opening file " << fileenv << "..." << endl;
-  ifstream is;
+  G4cout << " ==> Opening file " << fileenv << "..." << G4endl;
+  G4std::ifstream is;
   bool ok = openGeomFile(is, pathName, fileenv);
   if (!ok)
     exit(-1);
@@ -77,9 +77,9 @@ CCalGeometryConfiguration::CCalGeometryConfiguration():
     readName(is, gcinfo.FileName);
     is >> gcinfo.ConstructFlag >> jump;
 #ifdef debug
-    cout << "CCalGeometryConfiguration constructor: Read \"" << name 
+    G4cout << "CCalGeometryConfiguration constructor: Read \"" << name 
 	 << "\" \"" << gcinfo.FileName << "\"" << tab << gcinfo.ConstructFlag 
-	 << endl;
+	 << G4endl;
 #endif
     theConfiguration[name] = gcinfo;
   }
@@ -89,5 +89,5 @@ CCalGeometryConfiguration::CCalGeometryConfiguration():
   ///////////////////////////////////////////////////////////////
   // Close the file  
   is.close();
-  cout << " <== Closed file " << fileenv << endl;
+  G4cout << " <== Closed file " << fileenv << G4endl;
 }

@@ -3,6 +3,9 @@
 // Description: CCalAnalysis is a singleton class and interfaces all user
 //              analysis code
 ///////////////////////////////////////////////////////////////////////////////
+
+#ifdef G4ANALYSIS_USE
+
 #ifndef CCalAnalysis_h 
 #define CCalAnalysis_h 1
 
@@ -68,3 +71,4 @@ private:
 
 #endif
 
+#endif

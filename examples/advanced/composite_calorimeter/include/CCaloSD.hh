@@ -24,8 +24,8 @@
 #include "G4TransportationManager.hh"
 #include "G4VSensitiveDetector.hh"
 
-#include <iostream>
-#include <fstream>
+#include "g4std/iostream"
+#include "g4std/fstream"
 
 class CCalVOrganization;
 

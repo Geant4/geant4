@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.5 2002-10-30 20:00:16 ribon Exp $
+$Id: README,v 1.6 2002-12-05 18:09:07 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -48,7 +48,8 @@ $Id: README,v 1.5 2002-10-30 20:00:16 ribon Exp $
 ---------------------------------------
 
  The user should first setup, as "usual", the Geant4 environmental
- variables (in particular, the variable G4ANALYSIS_USE must be set to 1).
+ variables (in particular, the variable G4ANALYSIS_USE must be set
+ if you want to have the histograms and the ntuple).
  Then the specific setup for this example should be run:
  
      >  source envExample.csh      in the case of C-shell
@@ -56,10 +57,18 @@ $Id: README,v 1.5 2002-10-30 20:00:16 ribon Exp $
      >  . envExample.sh            in the case of bash-shell
  
  The analysis part is based on:
-        ***  AIDA version 3.0  &  Anaphe version 5.0.1  *** 
+        ***  AIDA version 3.0  &  Anaphe version 5.0.1  ***
+ 
+ NB) Be careful that if you want to have this analysis part,
+     you have not only to set the variable G4ANALYSIS_USE but 
+     also to edit the above script file (envExample.csh or envExample.sh)
+     and remove the comments "#" on the setup of AIDA/Anaphe,
+     because, by default, the analysis is not done (the reason being
+     that, in some platform, such AIDA/Anaphe setup does not work).
+  
  Please take a look to the Anaphe/Lizard web page
  	http://anaphe.web.cern.ch/anaphe
- 
+
 
 2. Sample run
 -------------

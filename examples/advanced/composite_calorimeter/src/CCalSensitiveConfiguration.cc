@@ -5,7 +5,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalSensitiveConfiguration.hh"
 
-#include <fstream.h>
+#include "g4std/fstream"
 #include <stdlib.h>
 
 
@@ -29,9 +29,9 @@ int CCalSensitiveConfiguration::getSensitiveFlag(const G4String& n) /*const*/ {
   if (it != theConfiguration.end())
     flag = (*it).second.SensitiveFlag;
   else {
-    cerr << "ERROR: In CCalSensitiveConfiguration::getConstructFlag(const "
-	 << "G4String& n)" << endl 
-	 << "       " << n << " not found in configuration file" << endl;
+    G4cerr << "ERROR: In CCalSensitiveConfiguration::getConstructFlag(const "
+	 << "G4String& n)" << G4endl 
+	 << "       " << n << " not found in configuration file" << G4endl;
   }
 
   return flag;
@@ -44,9 +44,9 @@ G4String CCalSensitiveConfiguration::getFileName(const G4String& n) /*const*/ {
   if (it != theConfiguration.end())
     fn = (*it).second.FileName;
   else {
-    cerr << "ERROR: In CCalSensitiveConfiguration::getConstructFlag(const "
-	 << "G4String& n)" << endl 
-	 << "       " << n << " not found in configuration file" << endl;
+    G4cerr << "ERROR: In CCalSensitiveConfiguration::getConstructFlag(const "
+	 << "G4String& n)" << G4endl 
+	 << "       " << n << " not found in configuration file" << G4endl;
   }
 
   return fn;
@@ -60,13 +60,13 @@ CCalSensitiveConfiguration::CCalSensitiveConfiguration():
   G4String pathName = getenv("CCAL_CONFPATH");
   G4String fileenv  = getenv("CCAL_SENSITIVECONF");
   if (!pathName || !fileenv) {
-    cerr << "ERROR: CCAL_SENSITIVECONF and/or CCAL_CONFPATH not set" << endl
-	 << "       Set them to the sensitive configuration file/path" << endl;
+    G4cerr << "ERROR: CCAL_SENSITIVECONF and/or CCAL_CONFPATH not set" << G4endl
+	 << "       Set them to the sensitive configuration file/path" << G4endl;
     exit(-2);
   }
 
-  cout << " ==> Opening file " << fileenv << "..." << endl;
-  ifstream is;
+  G4cout << " ==> Opening file " << fileenv << "..." << G4endl;
+  G4std::ifstream is;
   bool ok = openGeomFile(is, pathName, fileenv);
   if (!ok)
     exit(-1);
@@ -79,9 +79,9 @@ CCalSensitiveConfiguration::CCalSensitiveConfiguration():
     readName(is, gcinfo.FileName);
     is >> gcinfo.SensitiveFlag >> jump;
 #ifdef debug
-    cout << "CCalSensitiveConfiguration constructor: Read \"" << name 
+    G4cout << "CCalSensitiveConfiguration constructor: Read \"" << name 
 	 << "\" \"" << gcinfo.FileName << "\"" << tab << gcinfo.SensitiveFlag 
-	 << endl;
+	 << G4endl;
 #endif
     theConfiguration[name] = gcinfo;
   }
@@ -90,5 +90,5 @@ CCalSensitiveConfiguration::CCalSensitiveConfiguration():
   ///////////////////////////////////////////////////////////////
   // Close the file  
   is.close();
-  cout << " <== Closed file " << fileenv << endl;
+  G4cout << " <== Closed file " << fileenv << G4endl;
 }

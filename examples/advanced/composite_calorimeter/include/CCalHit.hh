@@ -19,12 +19,14 @@
 #ifndef CCalHit_h
 #define CCalHit_h 1
 
-#include <CLHEP/Vector/ThreeVector.h>
-#include <iostream>
+#include "g4std/iostream"
+#include "CLHEP/Vector/ThreeVector.h"
+#include "globals.hh"
+
 
 class CCalHit {
 
-  friend ostream& operator<< (ostream&, const CCalHit&);
+  friend G4std::ostream& operator<< (G4std::ostream&, const CCalHit&);
   
 public:
   

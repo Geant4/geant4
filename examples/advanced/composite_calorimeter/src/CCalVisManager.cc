@@ -3,7 +3,7 @@
 // Description: CCalVisManager visualisation manager for the example
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <iostream>
+#include "g4std/iostream"
 
 #ifdef G4VIS_USE
 #include "CCalVisManager.hh"
@@ -107,9 +107,9 @@ void CCalVisManager::RegisterGraphicsSystems () {
 #endif
 
   if (fVerbose > 0) {
-    cout <<
+    G4cout <<
       "\nYou have successfully chosen to use the following graphics systems."
-	 << endl;
+	 << G4endl;
     PrintAvailableGraphicsSystems ();
   }
 }

@@ -9,21 +9,21 @@
 #ifndef CCalDetector_h
 #define CCalDetector_h 1
 
-#include <iostream>
-#include <vector>
+#include "g4std/iostream"
+#include "g4std/vector"
 #include "globals.hh"
 
 //Forward declartion for the CCalDetectorTable typedef
 class CCalDetector;
 
 //A table to hold a list of pointers to CMS Detectors
-typedef  vector<CCalDetector*> CCalDetectorTable;
+typedef G4std::vector<CCalDetector*> CCalDetectorTable;
 
 ////////////////////
 //At last the class
 class CCalDetector {
 
-  friend ostream& operator<<(ostream&, const CCalDetector&);
+  friend G4std::ostream& operator<<(G4std::ostream&, const CCalDetector&);
 
 public:
   ////////////////////////////////////////////////////////////////

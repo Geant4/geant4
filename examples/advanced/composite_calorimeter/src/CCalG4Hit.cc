@@ -4,7 +4,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "CCalG4Hit.hh"
-#include <iostream.h>
+#include "g4std/iostream"
 
 
 CCalG4Hit::CCalG4Hit() : CCalHit(), 
@@ -46,17 +46,17 @@ void CCalG4Hit::addEnergyDeposit(double em, double hd) {
 
 
 void CCalG4Hit::Print() {
-  cout << (*this);
+  G4cout << (*this);
 }
 
 
-ostream& operator<< (ostream& os, const CCalG4Hit& hit) {
+G4std::ostream& operator<< (G4std::ostream& os, const CCalG4Hit& hit) {
   os << static_cast<CCalHit>(hit);
-  os << " Data specific of this CCalG4Hit are:" << endl
+  os << " Data specific of this CCalG4Hit are:" << G4endl
      << " \t EnergyDeposit of EM particles = " << hit.getEM() 
-     << " (MeV)" << endl
+     << " (MeV)" << G4endl
      << " \t EnergyDeposit of HD particles = " << hit.getHadr() 
-     << " (MeV)" << endl;
+     << " (MeV)" << G4endl;
   return os;
 }
 

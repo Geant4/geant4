@@ -1,5 +1,5 @@
 # --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.4 2002-10-30 20:00:16 ribon Exp $
+# $Id: GNUmakefile,v 1.5 2002-12-05 18:09:07 ribon Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -8,8 +8,6 @@ name := CompositeCalorimeter
 
 G4TARGET := $(name)
 G4EXLIB := true
-
-G4ANALYSIS_USE = 1
 
 ifndef G4INSTALL
   G4INSTALL = ../../../
@@ -20,8 +18,9 @@ all: lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
 
-CPPFLAGS += `aida-config --include`
-LDFLAGS  += `aida-config --lib`
-LOADLIBS  += `aida-config --lib`
-
+ifdef G4ANALYSIS_USE  
+  CPPFLAGS += `aida-config --include`
+  LDFLAGS  += `aida-config --lib`
+  LOADLIBS += `aida-config --lib`
+endif
 

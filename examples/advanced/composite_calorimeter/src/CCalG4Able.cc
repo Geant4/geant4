@@ -20,6 +20,7 @@
 #include "G4Color.hh"
 #include "G4VisAttributes.hh"
 
+
 CCalG4Able::CCalG4Able(G4String name):
   detPhysicalVolume(0), g4ableName(name), sensitivity(false),
   visProperties(CCalSensitiveConfiguration::getInstance()->getFileName(name)+".vis") {
@@ -48,7 +49,7 @@ G4VPhysicalVolume* CCalG4Able::PhysicalVolume(G4VPhysicalVolume* pv) {
       if (sensitivity) {
 #ifdef debug
 	G4cout << "==> Making " << detPhysicalVolume->GetName() << " sensitive..." 
-	       << endl;
+	       << G4endl;
 #endif
 	constructSensitive();
       } //if sensitivity
@@ -56,12 +57,12 @@ G4VPhysicalVolume* CCalG4Able::PhysicalVolume(G4VPhysicalVolume* pv) {
   } //if construct
   else {
     G4cout << "NOTE: You decided to skip the construction of " 
-	   << G4Name() << endl;
+	   << G4Name() << G4endl;
   }
 #ifdef ddebug
   timer.Stop();
   G4cout << tab << "CCalG4Able::PhysicalVolume(...) --> time spent: " 
-	 << timer << endl;
+	 << timer << G4endl;
 #endif
   return detPhysicalVolume;
 }
@@ -74,7 +75,7 @@ void CCalG4Able::setVisType(CCalVisualisable::visType vt, G4LogicalVolume* log) 
   if (!g4VisAtt[vt]) {
 #ifdef debug
     G4cout << "CCalG4Able::setVisType: Constructing G4VisAttributes for " 
-	   << log->GetName() << " as " << vt << endl;
+	   << log->GetName() << " as " << vt << G4endl;
 #endif
     G4Color col(visProperties.colorRed(vt),
 		visProperties.colorGreen(vt),
@@ -88,7 +89,7 @@ void CCalG4Able::setVisType(CCalVisualisable::visType vt, G4LogicalVolume* log) 
 	   << visProperties.colorGreen(vt) << ", "
 	   << visProperties.colorBlue(vt)  << tab
 	   << "Wireframe: " << wf << tab
-	   << "Visible: " << visible << endl;
+	   << "Visible: " << visible << G4endl;
 #endif
     g4VisAtt[vt] = new G4VisAttributes(col);
     g4VisAtt[vt]->SetForceWireframe(wf);
@@ -110,16 +111,16 @@ G4bool CCalG4Able::operator==(const CCalG4Able& right) const {
 
 //========================================================================
 //Global operators
-ostream& operator<<(ostream& os, const CCalG4Able& det) {
+G4std::ostream& operator<<(G4std::ostream& os, const CCalG4Able& det) {
   if (det.detPhysicalVolume)
-    os << "Physical volume already constructed." << endl;
+    os << "Physical volume already constructed." << G4endl;
   else
-    os << "Physical volume still not constructed." << endl;
+    os << "Physical volume still not constructed." << G4endl;
 
   if (det.isSensitive())
-    os << "and it is Sensitive" << endl;
+    os << "and it is Sensitive" << G4endl;
   else
-    os << "and it is not Sensitive" << endl;
+    os << "and it is not Sensitive" << G4endl;
   
   return os;
 }

@@ -8,7 +8,7 @@
 #ifndef CCalMaterialFactory_h
 #define CCalMaterialFactory_h 1
 
-#include <fstream>
+#include "g4std/fstream"
 
 #include "CCalMaterial.hh"
 #include "CCalAMaterial.hh"
@@ -16,8 +16,8 @@
 #include "G4MaterialTable.hh"
 #include "G4ElementTable.hh"
 
-typedef vector<CCalMaterial*>  CCalMaterialTable;
-typedef vector<CCalAMaterial*> CCalAMaterialTable;
+typedef G4std::vector<CCalMaterial*>  CCalMaterialTable;
+typedef G4std::vector<CCalAMaterial*> CCalAMaterialTable;
 
 class CCalMaterialFactory {
 public:
@@ -44,8 +44,8 @@ public:
   void readMaterials(const G4String&);
 
 protected:
-  void readElements(ifstream&);
-  void readMaterials(ifstream&);
+  void readElements(G4std::ifstream&);
+  void readMaterials(G4std::ifstream&);
 
 private:
   //Constructor

@@ -15,8 +15,8 @@
 ###  . $LHCXXTOP/share/LHCXX/$LHCXXVERS/install/sharedstart.sh
 # 
 # --- Aida 3.0 , Anaphe 5.0.1 ---
-. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.1/scripts/setupAnaphe
-export PATH=$PATH:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.1/scripts/
+#. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.1/scripts/setupAnaphe
+#export PATH=$PATH:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.1/scripts/
 #
 # --- Specific setup for this test-beam example ---
 export CCAL_CONFPATH=./dataconf

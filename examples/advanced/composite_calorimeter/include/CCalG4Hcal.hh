@@ -8,7 +8,7 @@
 
 #include "CCalHcal.hh"
 #include "CCalG4Able.hh"
-#include <vector>
+#include "g4std/vector"
 
 typedef G4LogicalVolume* ptrG4Log;
 
@@ -37,7 +37,7 @@ private:
   ptrG4Log*        absLog;
 
   // Logical volumes for sensitive detectors
-  vector<ptrG4Log> allSensitiveLogs;
+  G4std::vector<ptrG4Log> allSensitiveLogs;
 };
 
 #endif

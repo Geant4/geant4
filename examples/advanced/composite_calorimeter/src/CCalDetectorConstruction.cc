@@ -37,12 +37,12 @@ G4VPhysicalVolume* CCalDetectorConstruction::Construct() {
   /////////
   //Instantiate for the first time the materials and rotations
 #ifdef debug
-  cout << "Retrieving materials...." << endl;
+  G4cout << "Retrieving materials...." << G4endl;
 #endif
   CCalMaterialFactory::getInstance("material.cms");
 
 #ifdef debug
-  cout << "Retrieving rotation matrices....." << endl;
+  G4cout << "Retrieving rotation matrices....." << G4endl;
 #endif
   CCalRotationMatrixFactory::getInstance("rotation.cms");
 
@@ -57,18 +57,18 @@ G4VPhysicalVolume* CCalDetectorConstruction::Construct() {
     G4double field = ccalField->GetConstantFieldvalue();
     if (field == 0) {
       ccalField = NULL;
-      cout << "***************************" << endl
-           << "*                         *" << endl
-           << "*  Magnetic Field is off  *" << endl
-           << "*                         *" << endl
-	   << "***************************" << endl;
+      G4cout << "***************************" << G4endl
+	     << "*                         *" << G4endl
+	     << "*  Magnetic Field is off  *" << G4endl
+	     << "*                         *" << G4endl
+	     << "***************************" << G4endl;
     } else {
-      cout << "***************************" << endl
-           << "*                         *" << endl
-           << "*  Magnetic Field is on   *" << endl
-           << "*                         *" << endl
-	   << "***************************" << endl << endl
-	   << " Field Value " << tab << field << endl;
+      G4cout << "***************************" << G4endl
+	     << "*                         *" << G4endl
+	     << "*  Magnetic Field is on   *" << G4endl
+	     << "*                         *" << G4endl
+	     << "***************************" << G4endl << G4endl
+	     << " Field Value " << tab << field << G4endl;
     }
     G4FieldManager* fieldMgr
       = G4TransportationManager::GetTransportationManager()->GetFieldManager();
@@ -83,7 +83,7 @@ G4VPhysicalVolume* CCalDetectorConstruction::Construct() {
 
 #ifdef debug
   G4cout << tab << "CCalDetectorConstruction: Starting timer!!!" 
-         << endl;
+         << G4endl;
   G4Timer timer;
   timer.Start();
 #endif
@@ -94,7 +94,7 @@ G4VPhysicalVolume* CCalDetectorConstruction::Construct() {
 #ifdef debug
   timer.Stop();
   G4cout << tab << "CCalDetectorConstruction: Total time to "
-         << "construct the geometry: " << timer << endl;
+         << "construct the geometry: " << timer << G4endl;
 #endif //debug
   G4VPhysicalVolume* volume = testBeamHCal96->PhysicalVolume(0);
 

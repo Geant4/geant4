@@ -3,7 +3,6 @@
 // Description: CCalEndOfEventAction provides User actions at end of event
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalEndOfEventAction.hh"
-#include "CCalAnalysis.hh"
 #include "CCaloSD.hh"
 #include "CCalPrimaryGeneratorAction.hh"
 #include "CCalG4HitCollection.hh"
@@ -16,14 +15,18 @@
 #include "G4Event.hh"
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
-#include <iostream>
-#include <map>
+#include "g4std/iostream"
+#include "g4std/map"
 #include "G4RunManager.hh"
 #include "G4UserSteppingAction.hh"
 
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
+
+#ifdef G4ANALYSIS_USE
+#include "CCalAnalysis.hh"
+#endif
 
 //#define debug
 //#define ddebug
@@ -34,15 +37,15 @@ CCalEndOfEventAction::CCalEndOfEventAction (CCalPrimaryGeneratorAction* pg):
 
   primaryGenerator = pg;
 #ifdef debug
-  cout << "Instantiate CCalEndOfEventAction" << endl;
+  G4cout << "Instantiate CCalEndOfEventAction" << G4endl;
 #endif
 
-  cout << "Now Instantiate stepping action" << endl;
+  G4cout << "Now Instantiate stepping action" << G4endl;
   instanciateSteppingAction();
   
-  cout << "Get Calorimter organisation" << endl;
+  G4cout << "Get Calorimter organisation" << G4endl;
   theOrg = new CCaloOrganization;
-  cout << "end of instantiation of EndofEventAction" << endl;
+  G4cout << "end of instantiation of EndofEventAction" << G4endl;
 }
 
 
@@ -52,7 +55,7 @@ CCalEndOfEventAction::~CCalEndOfEventAction() {
     delete theOrg;
   if (SDnames)
     delete SDnames;
-  cout << "Deleting CCalEndOfEventAction" << endl;
+  G4cout << "Deleting CCalEndOfEventAction" << G4endl;
 }
 
 
@@ -61,16 +64,16 @@ void CCalEndOfEventAction::initialize() {
   isInitialized = true;
   numberOfSD = CCalSDList::getInstance()->getNumberOfCaloSD();
 #ifdef debug
-  cout << "CCalEndOfEventAction look for " << numberOfSD 
-       << " calorimeter-like SD" << endl;
+  G4cout << "CCalEndOfEventAction look for " << numberOfSD 
+       << " calorimeter-like SD" << G4endl;
 #endif
   if (numberOfSD > 0)
     SDnames = new nameType[numberOfSD];
   for (int i=0; i<numberOfSD; i++) {
     SDnames[i] = G4String(CCalSDList::getInstance()->getCaloSDName(i));
 #ifdef debug
-    cout << "CCalEndOfEventAction: found SD " << i << " name "
-	 << SDnames[i] << endl;
+    G4cout << "CCalEndOfEventAction: found SD " << i << " name "
+	 << SDnames[i] << G4endl;
 #endif
   }       
 }
@@ -84,7 +87,7 @@ void CCalEndOfEventAction::StartOfEventAction(const G4Event* evt) {
 void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
 
 #ifdef debug
-  cout << endl << "=== Begin of EndOfEventAction === " << endl;
+  G4cout << G4endl << "=== Begin of EndOfEventAction === " << G4endl;
 #endif
 
   if (!isInitialized) initialize();
@@ -97,8 +100,8 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
   G4HCofThisEvent* allHC = evt->GetHCofThisEvent();
   if (allHC == 0) {
 #ifdef debug
-    cout << "CCalEndOfEventAction: No Hit Collection in this event" 
-	 << endl;
+    G4cout << "CCalEndOfEventAction: No Hit Collection in this event" 
+	 << G4endl;
 #endif
     return;
   }
@@ -129,8 +132,8 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
 
       G4int nentries = theHC->entries();
 #ifdef debug
-      cout << " There are " << nentries << " hits in " << SDnames[i] << " :" 
-	   << endl;
+      G4cout << " There are " << nentries << " hits in " << SDnames[i] << " :" 
+	   << G4endl;
 #endif
 
       if (nentries > 0) {
@@ -138,7 +141,7 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
 	int j;
 	for (j=0; j<nentries; j++){
 #ifdef ddebug
-	  cout << "Considering hit " << j << endl;
+	  G4cout << "Considering hit " << j << G4endl;
 #endif
 	  CCalG4Hit* aHit =  (*theHC)[j];
 	  float En = aHit->getEnergyDeposit();
@@ -157,16 +160,16 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
 	    }
 	  }
 #ifdef ddebug
-	  cout << "Seeing Energy = " << En/MeV << " MeV in Unit " << unitID 
-	       << " " << id << endl;
+	  G4cout << "Seeing Energy = " << En/MeV << " MeV in Unit " << unitID 
+	       << " " << id << G4endl;
 #endif
 	  fullE   += En/GeV;
 	  edep[i] += En/GeV;
 	  nhit++;
 	}
 #ifdef ddebug
-	cout << " ===> Total Energy Deposit in this Calorimeter = " 
-	     << edep[i]*1000.0 << "  MeV " << endl; 
+	G4cout << " ===> Total Energy Deposit in this Calorimeter = " 
+	     << edep[i]*1000.0 << "  MeV " << G4endl; 
 #endif
       }
     }
@@ -181,12 +184,14 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
   float edhc = edep[0];
   delete[] edep;
 
+#ifdef G4ANALYSIS_USE
   CCalAnalysis* analysis = CCalAnalysis::getInstance();
   analysis->InsertEnergy(fullE);
   analysis->InsertEnergyHcal(hcalE);
   analysis->InsertEnergyEcal(ecalE);
   analysis->setNtuple(hcalE, ecalE, ener, x, y, z, fullE, edec, edhc);
   analysis->EndOfEvent(nhit);
+#endif
 
   //A.R. Add to visualize tracks
   // extract the trajectories and draw them
@@ -211,8 +216,8 @@ void CCalEndOfEventAction::instanciateSteppingAction(){
         
   if (theUA == 0) {
 #ifdef debug
-    cout << " CCalEndOfEventAction::instanciateSteppingAction creates"
-	 << " CCalSteppingAction" << endl;
+    G4cout << " CCalEndOfEventAction::instanciateSteppingAction creates"
+	 << " CCalSteppingAction" << G4endl;
 #endif
     theSteppingAction = new CCalSteppingAction;  
     G4RunManager::GetRunManager()->SetUserAction(theSteppingAction);

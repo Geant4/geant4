@@ -6,20 +6,20 @@
 #ifndef CCalSensitiveDetectors_h
 #define CCalSensitiveDetectors_h 1
 
-#include <vector>
-#include <map>
+#include "g4std/vector"
+#include "g4std/map"
 #include "G4VSensitiveDetector.hh"
 #include "G4LogicalVolume.hh"
 
-typedef multimap< string, G4LogicalVolume*, less<string> > mmslv;
+typedef G4std::multimap< G4String, G4LogicalVolume*, G4std::less<G4String> > mmslv;
 
 class CCalSensitiveDetectors {
 
 public:    
   ~CCalSensitiveDetectors(){};
-  vector<G4LogicalVolume*> getVolumes (const string& name, bool exists = 0);
-  void registerVolume (const string& name, G4LogicalVolume*);
-  bool setSensitive(const string& string, G4VSensitiveDetector* sens);
+  G4std::vector<G4LogicalVolume*> getVolumes (const G4String& name, bool exists = 0);
+  void registerVolume (const G4String& name, G4LogicalVolume*);
+  bool setSensitive(const G4String& string, G4VSensitiveDetector* sens);
   static CCalSensitiveDetectors* getInstance();
 private:
   CCalSensitiveDetectors(){};

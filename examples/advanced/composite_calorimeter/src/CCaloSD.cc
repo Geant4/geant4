@@ -10,7 +10,7 @@
 #include "CCalVOrganization.hh"
 #include "CCalSDList.hh"
 
-#include<iostream>
+#include "g4std/iostream"
 
 //#define debug
 //#define ddebug
@@ -23,11 +23,11 @@ CCaloSD::CCaloSD(G4String name, CCalVOrganization* numberingScheme):
   
   collectionName.insert(name);
   
-  cout << "*******************************************************" << endl;
-  cout << "*                                                     *" << endl;
-  cout << "* Constructing a CCaloSD  with name " << name            << endl;  
-  cout << "*                                                     *" << endl;
-  cout << "*******************************************************" << endl;
+  G4cout << "*******************************************************" << G4endl;
+  G4cout << "*                                                     *" << G4endl;
+  G4cout << "* Constructing a CCaloSD  with name " << name            << G4endl;  
+  G4cout << "*                                                     *" << G4endl;
+  G4cout << "*******************************************************" << G4endl;
 
   CCalSDList::getInstance()->addCalo(name);
 }
@@ -42,7 +42,7 @@ CCaloSD::~CCaloSD() {
 void CCaloSD::Initialize(G4HCofThisEvent*HCE) {
 
 #ifdef debug
-  cout << "CCaloSD : Initialize called for " << SDname << endl;
+  G4cout << "CCaloSD : Initialize called for " << SDname << G4endl;
 #endif
   //This initialization is performed at the beginning of an event
   //------------------------------------------------------------
@@ -106,7 +106,7 @@ G4bool CCaloSD::hitExists() {
   if (PrimaryID<1) {
     G4cerr << "***** CCaloSD error: PrimaryID = " << PrimaryID
 	   << " Maybe detector name changed"
-	   << endl;
+	   << G4endl;
   }
    
       
@@ -156,7 +156,7 @@ void CCaloSD::StoreHit(CCalG4Hit* hit){
 
   if (PrimID<0) return;
   if (hit == 0 ) {
-    cout << "CCaloSD: hit to be stored is NULL !!" <<endl;
+    G4cout << "CCaloSD: hit to be stored is NULL !!" <<G4endl;
     return;
   }
 
@@ -167,28 +167,28 @@ void CCaloSD::StoreHit(CCalG4Hit* hit){
 void CCaloSD::createNewHit() {
 
 #ifdef debug
-  cout << "CCaloSD createNewHit for"
+  G4cout << "CCaloSD createNewHit for"
        << " PV "     << CurrentPV->GetName()
        << " PVid = " << CurrentPV->GetCopyNo()
        << " MVid = " << CurrentPV->GetMother()->GetCopyNo()
-       << " Unit "   << UnitID <<endl;
-  cout << " primary "    << PrimaryID
+       << " Unit "   << UnitID <<G4endl;
+  G4cout << " primary "    << PrimaryID
        << " time slice " << TSliceID 
        << " For Track  " << theTrack->GetTrackID()
        << " which is a " <<  theTrack->GetDefinition()->GetParticleName();
 	   
   if (theTrack->GetTrackID()==1) {
-    cout << " of energy "     << theTrack->GetTotalEnergy();
+    G4cout << " of energy "     << theTrack->GetTotalEnergy();
   } else {
-    cout << " daughter of part. " << theTrack->GetParentID();
+    G4cout << " daughter of part. " << theTrack->GetParentID();
   }
 
-  cout  << " and created by " ;
+  G4cout  << " and created by " ;
   if (theTrack->GetCreatorProcess()!=NULL)
-    cout << theTrack->GetCreatorProcess()->GetProcessName() ;
+    G4cout << theTrack->GetCreatorProcess()->GetProcessName() ;
   else 
-    cout << "NO process";
-  cout << endl;
+    G4cout << "NO process";
+  G4cout << G4endl;
 #endif          
     
 
@@ -209,8 +209,8 @@ void CCaloSD::updateHit() {
   if (EdepositEM+EdepositEHAD != 0) {
     CurrentHit->addEnergyDeposit(EdepositEM,EdepositEHAD);
 #ifdef debug
-    cout << "Energy deposit in Unit " << UnitID << " em " << EdepositEM/MeV
-	 << " hadronic " << EdepositEHAD/MeV << " MeV" << endl;
+    G4cout << "Energy deposit in Unit " << UnitID << " em " << EdepositEM/MeV
+	 << " hadronic " << EdepositEHAD/MeV << " MeV" << G4endl;
 #endif
   }
 
@@ -251,7 +251,7 @@ void CCaloSD::DrawAll() {
 
 
 void CCaloSD::PrintAll() {
-  cout << "CCaloSD: Collection " << theHC->GetName() << endl;
+  G4cout << "CCaloSD: Collection " << theHC->GetName() << G4endl;
   theHC->PrintAllHits();
 } 
 

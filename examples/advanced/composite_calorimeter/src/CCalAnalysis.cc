@@ -3,6 +3,8 @@
 // Description: CCalAnalysis interfaces all user analysis code
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifdef G4ANALYSIS_USE
+
 #include "G4RunManager.hh" 
 
 #include "CCalAnalysis.hh"
@@ -360,4 +362,4 @@ void CCalAnalysis::EndOfEvent(G4int flag) {
   if (!flag) return;
 }
 
-
+#endif

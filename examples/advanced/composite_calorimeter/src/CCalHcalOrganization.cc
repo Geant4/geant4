@@ -10,7 +10,7 @@
 #include "SystemOfUnits.h"
 
 CCalHcalOrganization::~CCalHcalOrganization() {
-  cout << " Deleting CCalHcalOrganization" << endl;
+  G4cout << " Deleting CCalHcalOrganization" << G4endl;
 }
 
 

@@ -16,8 +16,8 @@ class CCalGeometryConfiguration {
     int      ConstructFlag;
   };
 
-  typedef G4std::map<G4String, GCInfo, less<G4String> > CCalGeometryConfTable;
-  typedef G4std::map<G4String, GCInfo, less<G4String> >::iterator CCalGeometryConfIterator;
+  typedef G4std::map<G4String, GCInfo, G4std::less<G4String> > CCalGeometryConfTable;
+  typedef G4std::map<G4String, GCInfo, G4std::less<G4String> >::iterator CCalGeometryConfIterator;
 		    
   
 public:

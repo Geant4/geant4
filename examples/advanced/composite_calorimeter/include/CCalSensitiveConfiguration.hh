@@ -17,8 +17,8 @@ class CCalSensitiveConfiguration {
     int      SensitiveFlag;
   };
 
-   typedef G4std::map<G4String, GCInfo, less<G4String> > CCalSensitiveConfTable;
-   typedef G4std::map<G4String, GCInfo, less<G4String> >::iterator CCalSensitiveConfIterator;
+   typedef G4std::map<G4String, GCInfo, G4std::less<G4String> > CCalSensitiveConfTable;
+   typedef G4std::map<G4String, GCInfo, G4std::less<G4String> >::iterator CCalSensitiveConfIterator;
 		    
   
 public:

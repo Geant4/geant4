@@ -35,7 +35,7 @@ CCalG4Hall::~CCalG4Hall() {}
 
 G4VPhysicalVolume* CCalG4Hall::constructIn(G4VPhysicalVolume* mother) {
 
-  cout << "==>> Constructing CCalG4Hall..." << endl;
+  G4cout << "==>> Constructing CCalG4Hall..." << G4endl;
 
   ///////////////////////////////////////////////////////////////
   //Pointers to the Rotation Matrices and to the Materials
@@ -43,15 +43,15 @@ G4VPhysicalVolume* CCalG4Hall::constructIn(G4VPhysicalVolume* mother) {
 
   //Experimental Hall. The mother volume....
 #ifdef debug
-  cout << tab << "Building experimental Hall geometry...." << endl;
+  G4cout << tab << "Building experimental Hall geometry...." << G4endl;
 #endif
 
   G4Box* solid = new G4Box(Name(), getDx_2Hall()*mm, getDy_2Hall()*mm,
 			   getDy_2Hall()*mm);
 #ifdef debug
-  cout << solid->GetName() << " made of " << getMaterial() << " of dimension " 
+  G4cout << solid->GetName() << " made of " << getMaterial() << " of dimension " 
        << getDx_2Hall()*mm << " " << getDy_2Hall()*mm << " " 
-       << getDy_2Hall()*mm << " (all in mm)" << endl;
+       << getDy_2Hall()*mm << " (all in mm)" << G4endl;
 #endif
 
   G4Material* matter = matfact->findMaterial(getMaterial());
@@ -63,11 +63,11 @@ G4VPhysicalVolume* CCalG4Hall::constructIn(G4VPhysicalVolume* mother) {
 #ifdef pdebug
   G4String name("Null");
   if (mother != 0) name = mother->GetName();
-  cout << glog->GetName() << " number 1 positioned in " << name
-       << " at (0,0,0) with no rotation" << endl;
+  G4cout << glog->GetName() << " number 1 positioned in " << name
+       << " at (0,0,0) with no rotation" << G4endl;
 #endif  
 
-  cout << "<<== End of CCalG4Hall construction ..." << endl;
+  G4cout << "<<== End of CCalG4Hall construction ..." << G4endl;
 
   return volume;
 }

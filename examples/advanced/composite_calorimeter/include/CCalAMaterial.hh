@@ -11,7 +11,7 @@
 #include "G4Element.hh"
 
 class CCalAMaterial : public CCalMaterial {
-  friend ostream& operator<<(ostream&, const CCalAMaterial&);
+  friend G4std::ostream& operator<<(G4std::ostream&, const CCalAMaterial&);
 
 public:
   //Construct from list of constituents

@@ -133,7 +133,7 @@ void CCalMaterial::closeMaterial() {
     }
 
 #ifdef debug    
-    cout << "\tGoing from " << nElem <<" constituents to " << trueConst << endl;
+    G4cout << "\tGoing from " << nElem <<" constituents to " << trueConst << G4endl;
 #endif
     nElem=trueConst;
     
@@ -149,11 +149,11 @@ void CCalMaterial::closeMaterial() {
   }
 }
 
-ostream& operator<<(ostream& os, const CCalMaterial& mat) {
-  os << mat.name << endl;
+G4std::ostream& operator<<(G4std::ostream& os, const CCalMaterial& mat) {
+  os << mat.name << G4endl;
   os << "Density= " << mat.density << " g/cm3. Number of Elements: "
-     << mat.nElem << endl;
+     << mat.nElem << G4endl;
   for (int i=0; i<mat.nElem; i++)
-    os << '\t' << mat.theElements[i] << '\t' << mat.theWeights[i] << endl;
+    os << '\t' << mat.theElements[i] << '\t' << mat.theWeights[i] << G4endl;
   return os;
 }

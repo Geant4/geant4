@@ -19,8 +19,8 @@ unsigned int CCaloOrganization::packindex(int det, int z, int eta,
   idx+=(eta&1023)<<10;             //bits 10-19
   idx+=(phi&1023);                 //bits  0-9
 #ifdef debug
-  cout << " ECAL packing " << det << " " << z << " " << eta << " " << phi 
-       << "  into " << idx << endl;
+  G4cout << " ECAL packing " << det << " " << z << " " << eta << " " << phi 
+       << "  into " << idx << G4endl;
 #endif
   return idx;
 }
@@ -38,8 +38,8 @@ unsigned int CCaloOrganization::packindex(int det, int depth, int z, int eta,
   idx+=(eta&1023)<<10;            //bits 10-19
   idx+=(phi&1023);                //bits  0-9
 #ifdef debug
-  cout << " HCAL packing " << det << " " << depth << " " << z << " " << eta 
-       << " " << phi  << "  into " << idx << endl;
+  G4cout << " HCAL packing " << det << " " << depth << " " << z << " " << eta 
+       << " " << phi  << "  into " << idx << G4endl;
 #endif
   return idx;
 }
@@ -66,13 +66,13 @@ void CCaloOrganization::unpackindex(const unsigned int& idx, int& det,
 }
 
 
-int CCaloOrganization::getUnitWithMaxEnergy(map<int,float,less<int> >& themap){
+int CCaloOrganization::getUnitWithMaxEnergy(G4std::map<int,float,G4std::less<int> >& themap){
 
   //look for max
   int UnitWithMaxEnergy = 0;
   float maxEnergy = 0.;
 	
-  for(map<int,float,less<int> >::iterator iter = themap.begin();
+  for(G4std::map<int,float,G4std::less<int> >::iterator iter = themap.begin();
       iter != themap.end(); iter++){
 	    
     if(	maxEnergy < (*iter).second) {
@@ -80,12 +80,12 @@ int CCaloOrganization::getUnitWithMaxEnergy(map<int,float,less<int> >& themap){
       UnitWithMaxEnergy = (*iter).first;
     }				
   }	
-  cout << " *** max energy of " << maxEnergy << " MeV was found in Unit id "
+  G4cout << " *** max energy of " << maxEnergy << " MeV was found in Unit id "
        << UnitWithMaxEnergy;
   int det,z,eta,phi;
   unpackindex(UnitWithMaxEnergy, det, z, eta, phi);
-  cout << " corresponding to z= " << z << " eta= " << eta << " phi = " << phi
-       << endl;
+  G4cout << " corresponding to z= " << z << " eta= " << eta << " phi = " << phi
+       << G4endl;
   return UnitWithMaxEnergy;
 
 }
@@ -93,7 +93,7 @@ int CCaloOrganization::getUnitWithMaxEnergy(map<int,float,less<int> >& themap){
 
 float CCaloOrganization::energyInMatrix(int nCellInEta, int nCellInPhi,
 					int crystalWithMaxEnergy, 
-					map<int,float,less<int> >& themap){
+					G4std::map<int,float,G4std::less<int> >& themap){
 
   int det,z,eta,phi;
   this->unpackindex(crystalWithMaxEnergy, det, z, eta, phi);
@@ -112,16 +112,16 @@ float CCaloOrganization::energyInMatrix(int nCellInEta, int nCellInPhi,
       int index = this->packindex(det,z,ieta,iphi);
       totalEnergy += themap[index];
       ncristals+=1;
-      cout<<"ieta - iphi - E = "<<ieta<<"  "<<iphi<<" "<<themap[index]<<endl;
+      G4cout<<"ieta - iphi - E = "<<ieta<<"  "<<iphi<<" "<<themap[index]<<G4endl;
     }
   }
 	
     
       	
-  cout<<"energy in "<<nCellInEta<<" cells in eta times "
+  G4cout<<"energy in "<<nCellInEta<<" cells in eta times "
       <<nCellInPhi<<" cells in phi matrix = "<<totalEnergy
       <<" for "<<ncristals<<" cristals"
-      <<endl;			
+      <<G4endl;			
   return totalEnergy;
 
 }   

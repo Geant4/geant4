@@ -4,7 +4,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "CCalHit.hh"
-#include <iostream.h>
+#include "g4std/iostream"
 
 
 CCalHit::CCalHit() : 
@@ -72,17 +72,17 @@ void  CCalHit::addEnergyDeposit(const double e) {
 
 
 void CCalHit::print() {
-  cout << (*this);
+  G4cout << (*this);
 }
 
 
-ostream& operator<<(ostream& os, const CCalHit& hit) {
-  os << " Data of this CCalHit are:"<<endl
-     << " \t Time slice ID: " << hit.getTimeSliceID() << endl
+G4std::ostream& operator<<(G4std::ostream& os, const CCalHit& hit) {
+  os << " Data of this CCalHit are:"<< G4endl
+     << " \t Time slice ID: " << hit.getTimeSliceID() << G4endl
      << " \t Energy of primary particle (ID = " << hit.getTrackID()
-     << ") = " << hit.getIncidentEnergy() << " (MeV)"<<endl
+     << ") = " << hit.getIncidentEnergy() << " (MeV)"<< G4endl
      << " \t Entry point in Calorimeter unit number " << hit.getUnitID()
-     << " is: " << hit.getEntry() << " (mm)" << endl
-     << " \t EnergyDeposit = " << hit.getEnergyDeposit() << " (MeV)" << endl;
+     << " is: " << hit.getEntry() << " (mm)" << G4endl
+     << " \t EnergyDeposit = " << hit.getEnergyDeposit() << " (MeV)" << G4endl;
   return os;
 }
