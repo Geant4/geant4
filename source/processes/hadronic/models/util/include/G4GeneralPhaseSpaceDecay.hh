@@ -37,6 +37,7 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4VDecayChannel.hh"
+#include "G4HadronicException.hh"
 
 class G4GeneralPhaseSpaceDecay : public G4VDecayChannel
 {
@@ -59,6 +60,15 @@ class G4GeneralPhaseSpaceDecay : public G4VDecayChannel
 			       const G4String& theDaughterName2 = "",
 			       const G4String& theDaughterName3 = "");
 
+      G4GeneralPhaseSpaceDecay(const G4String& theParentName,
+                               G4double        theParentMass,
+			       G4double        theBR,
+			       G4int           theNumberOfDaughters,
+			       const G4String& theDaughterName1,
+			       const G4String& theDaughterName2 ,
+			       const G4String& theDaughterName3 ,
+			       const G4double * masses);
+
     //  Destructor
       virtual ~G4GeneralPhaseSpaceDecay();
 
@@ -76,6 +86,7 @@ class G4GeneralPhaseSpaceDecay : public G4VDecayChannel
      
   private:
      G4double parentmass;
+     const G4double * theDaughterMasses;
     
 };  
 
@@ -97,6 +108,10 @@ inline
  G4double G4GeneralPhaseSpaceDecay::Pmx(G4double e, G4double p1, G4double p2)
 {
    // calculate momentum of daughter particles in two-body decay
+   if (e-p1-p2 < 0 )
+   {  
+        G4HadronicException(__FILE__, __LINE__, "G4GeneralPhaseSpaceDecay::Pmx energy in cms > mass1+mass2");	
+   }
    G4double ppp = (e+p1+p2)*(e+p1-p2)*(e-p1+p2)*(e-p1-p2)/(4.0*e*e);
    if (ppp>0) return sqrt(ppp);
    else       return -1.;

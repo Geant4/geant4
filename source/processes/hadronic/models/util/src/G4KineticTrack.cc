@@ -491,6 +491,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
  
  G4int chargeBalance = G4lrint(theDefinition->GetPDGCharge() );     
  G4int baryonBalance = G4lrint(theDefinition->GetBaryonNumber() );
+ G4LorentzVector energyMomentumBalance(Get4Momentum());
  G4double theTotalActualWidth = this->EvaluateTotalActualWidth();
  if (theTotalActualWidth !=0)
     {
@@ -545,11 +546,28 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      G4double theParentMass = this->GetActualMass();
      G4double theBR = theActualWidth[index];
      //     cout << "**BR*** DECAYNEW  " << theBR << G4endl;
-     //     cout << "**PMass*** DECAYNEW  " << theParentMass << G4endl;
      G4int theNumberOfDaughters = theDecayChannel->GetNumberOfDaughters();
      G4String theDaughtersName1 = "";
      G4String theDaughtersName2 = "";
-     G4String theDaughtersName3 = "";     
+     G4String theDaughtersName3 = "";
+     
+     G4double masses[3]={0.,0.,0.};
+     G4int shortlivedDaughters[3];
+     G4int numberOfShortliveds(0);
+     G4double SumLongLivedMass(0);
+     for (G4int aD=0; aD < theNumberOfDaughters ; aD++)
+     {
+        G4ParticleDefinition* aDaughter = theDecayChannel->GetDaughter(aD);
+        masses[aD] = aDaughter->GetPDGMass();
+        if ( aDaughter->IsShortLived() ) 
+	{
+	    shortlivedDaughters[numberOfShortliveds]=aD;
+	    numberOfShortliveds++;
+	} else {
+	    SumLongLivedMass += aDaughter->GetPDGMass();
+	}
+		
+     }    
      switch (theNumberOfDaughters)
         {
          case 0:
@@ -560,14 +578,37 @@ G4KineticTrackVector* G4KineticTrack::Decay()
             theDaughtersName3 = "";
             break;
          case 2:    
-            theDaughtersName1 = theDecayChannel->GetDaughterName(0);
+            theDaughtersName1 = theDecayChannel->GetDaughterName(0);	    
             theDaughtersName2 = theDecayChannel->GetDaughterName(1);
             theDaughtersName3 = "";
+	    if (  numberOfShortliveds == 1) 
+	    {   G4SampleResonance aSampler;
+                G4double massmax=theParentMass - SumLongLivedMass;
+		G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[0]);	    
+	        masses[shortlivedDaughters[0]]= aSampler.SampleMass(aDaughter,massmax);
+	    } else if (  numberOfShortliveds == 2) {
+	        // choose masses one after the other, start with randomly choosen
+	        G4int zero= (G4UniformRand() > 0.5) ? 0 : 1;
+		G4int one = 1-zero;
+		G4SampleResonance aSampler;
+		G4double massmax=theParentMass - aSampler.GetMinimumMass(theDecayChannel->GetDaughter(shortlivedDaughters[one]));
+		G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[zero]);	    
+		masses[shortlivedDaughters[zero]]=aSampler.SampleMass(aDaughter,massmax);
+		massmax=theParentMass - masses[shortlivedDaughters[zero]];
+		aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[one]);
+		masses[shortlivedDaughters[one]]=aSampler.SampleMass(aDaughter,massmax);
+	    }
 	    break;		
 	 default:    
             theDaughtersName1 = theDecayChannel->GetDaughterName(0);
             theDaughtersName2 = theDecayChannel->GetDaughterName(1);
             theDaughtersName3 = theDecayChannel->GetDaughterName(2);
+	    if (  numberOfShortliveds == 1) 
+	    {   G4SampleResonance aSampler;
+                G4double massmax=theParentMass - SumLongLivedMass;
+		G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[0]);	    
+	        masses[shortlivedDaughters[0]]= aSampler.SampleMass(aDaughter,massmax);
+	    }
 	    break;
 	}
 
@@ -581,7 +622,8 @@ G4KineticTrackVector* G4KineticTrack::Decay()
                                                         theNumberOfDaughters,
                                                         theDaughtersName1,                  
 		                                        theDaughtersName2,
-		                                        theDaughtersName3);
+		                                        theDaughtersName3,
+							masses);
      G4DecayProducts* theDecayProducts = thePhaseSpaceDecayChannel.DecayIt();
      if(!theDecayProducts)
      {
@@ -602,6 +644,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      G4double theFormationTime = 0.0;
      G4ThreeVector thePosition = this->GetPosition();
      G4LorentzVector momentum;
+     G4LorentzVector momentumBalanceCMS(0);
      G4KineticTrackVector* theDecayProductList = new G4KineticTrackVector;
      G4int dEntries = theDecayProducts->entries();
      G4ParticleDefinition * aProduct = 0;
@@ -611,7 +654,9 @@ G4KineticTrackVector* G4KineticTrack::Decay()
          aProduct = theDynamicParticle->GetDefinition();
          chargeBalance -= G4lrint(aProduct->GetPDGCharge() );
          baryonBalance -= G4lrint(aProduct->GetBaryonNumber() );
+	 momentumBalanceCMS += theDynamicParticle->Get4Momentum();
          momentum = toMoving*theDynamicParticle->Get4Momentum();
+         energyMomentumBalance -= momentum;
          theDecayProductList->push_back(new G4KineticTrack (aProduct,
                                                          theFormationTime,
                                                          thePosition,
@@ -621,7 +666,9 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      delete theDecayProducts;
      delete [] theCumActualWidth;
      if(getenv("DecayEnergyBalanceCheck"))
-       std::cout << "DEBUGGING energy balance D: "
+       std::cout << "DEBUGGING energy balance in cms and lab, charge baryon balance : "
+       	         << momentumBalanceCMS << " " 
+  	         <<energyMomentumBalance << " " 
   	         <<chargeBalance<<" "
 	         <<baryonBalance<<" "
   	         <<G4endl;
