@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2000-11-09 17:33:47 gcosmo Exp $
+$Id: History,v 1.8 2000-11-13 08:21:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov   13th, 2000   G. Cosmo                -  geomsolids-V02-00-01
+
+- Collects tags breps-V02-00-02, geom-solids-csg-V02-00-09, stepinterface-V02-00-01
+  and geom-solids-specific-V02-00-03 on top of the previous tag.
 
 Nov   09th, 2000   G. Cosmo                -  geomsolids-V02-00-00
 
