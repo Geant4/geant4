@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.24 2000-12-07 15:13:57 grichine Exp $
+// $Id: G4Tubs.cc,v 1.25 2001-01-18 14:40:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -356,7 +356,7 @@ EInside G4Tubs::Inside(const G4ThreeVector& p) const
 
         pPhi = atan2(p.y(),p.x()) ;
 
-	if ( pPhi < 0 ) pPhi += 2*M_PI ; // 0<=pPhi<2pi
+	if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ; // 0<=pPhi<2pi
 
 	if ( fSPhi >= 0 )
 	{
@@ -397,7 +397,7 @@ EInside G4Tubs::Inside(const G4ThreeVector& p) const
 	{
 	  pPhi = atan2(p.y(),p.x()) ;
 
-	  if ( pPhi < 0 ) pPhi += 2*M_PI ; // 0<=pPhi<2pi
+	  if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ; // 0<=pPhi<2pi
 
 	  if ( fSPhi >= 0 )
 	  {
@@ -433,7 +433,7 @@ EInside G4Tubs::Inside(const G4ThreeVector& p) const
       {
 	pPhi = atan2(p.y(),p.x()) ;
 
-	if ( pPhi < 0 ) pPhi += 2*M_PI ;		// 0<=pPhi<2pi
+	if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ;   // 0<=pPhi<2pi
 
 	if ( fSPhi >= 0 )
 	{

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Tubs.cc,v 1.6 2000-12-07 15:13:02 grichine Exp $
+// $Id: testG4Tubs.cc,v 1.7 2001-01-18 14:38:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -136,6 +136,11 @@ G4bool testG4Tubs()
 
     assert(t1.Inside(pzero)==kInside);
     assert(t1.Inside(pbigx)==kOutside);
+
+    EInside in = t5.Inside(G4ThreeVector(60,-0.001*kCarTolerance,0)) ;
+    assert(in == kSurface);
+    //    G4cout<<"t5.Inside(G4ThreeVector(60,-0.001*kCarTolerance,0)) = "
+    //     <<OutputInside(in)<<G4endl;
 
 // Check Surface Normal
     G4ThreeVector normal;
