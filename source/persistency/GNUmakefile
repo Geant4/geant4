@@ -42,9 +42,9 @@ all:
 	exit 1
 endif
 
-cleandb: clean newdb
+cleandb: cleanall newdb
 
-clean:
+cleanall:
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done
 
 newdb:
