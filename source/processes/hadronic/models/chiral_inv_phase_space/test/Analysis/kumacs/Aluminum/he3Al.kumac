@@ -1,0 +1,53 @@
+fo/file 66 he3al.ps
+meta 66 -111
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79   ITEP-79-6'
+ opt liny
+ve/cr q(004)
+ve/cr v(4,004)
+ve/in v(1:4,001)      2.2000E-01     0.0000E+00     5.1000E-03     1.0000E-03
+ve/in v(1:4,002)      2.7000E-01     0.0000E+00     2.3000E-03     5.0000E-04
+ve/in v(1:4,003)      2.9000E-01     0.0000E+00     1.6000E-03     4.0000E-04
+ve/in v(1:4,004)      3.3000E-01     0.0000E+00     7.3000E-04     1.1000E-04
+ve/copy v(1,1:004) x
+ve/copy v(2,1:004) q
+ve/copy v(3,1:004) y
+ve/copy v(4,1:004) e
+ null   0.209000   0.341000    7.20000E-05    6.64800E-03
+exec ../analyse ../../logs/liste.p_al.he3.90degree.p_al
+/GRAPHICS/HPLOT/ERRORS x y q e 004 24 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.275000     6.31920E-03 'RE   P AL --> HE3 X' 0.3
+ text    0.275000     5.99040E-03 'E IN GEV   400.00' 0.3
+ text    0.275000     5.66160E-03 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ text    0.275000     5.33280E-03 'A   26.98' 0.3
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79   ITEP-79-6'
+ opt liny
+ve/cr q(001)
+ve/cr v(4,001)
+ve/in v(1:4,001)      1.6000E-01     0.0000E+00     6.0000E-03     2.0000E-03
+ve/copy v(1,1:001) x
+ve/copy v(2,1:001) q
+ve/copy v(3,1:001) y
+ve/copy v(4,1:001) e
+ null   0.160000   0.160000    3.60000E-03    8.40000E-03
+exec ../analyse ../../logs/liste.p_al.he3.118degree.p_al
+/GRAPHICS/HPLOT/ERRORS x y q e 001 24 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.160000     8.16000E-03 'RE   P AL --> HE3 X' 0.3
+ text    0.160000     7.92000E-03 'E IN GEV   400.00' 0.3
+ text    0.160000     7.68000E-03 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
+ text    0.160000     7.44000E-03 'A   26.98' 0.3
+close 66
+

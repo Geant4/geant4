@@ -1,0 +1,10 @@
+opt pto
+fo/file 67 allC.ps
+meta 67 -111
+exec pC.kumac
+exec pipC.kumac
+exec dC.kumac
+exec tC.kumac
+exec he3C.kumac
+exec he4C.kumac
+close 67

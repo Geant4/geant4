@@ -1,0 +1,29 @@
+fo/file 66 he4al.ps
+meta 66 -111
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79   ITEP-79-6'
+ opt liny
+ve/cr q(004)
+ve/cr v(4,004)
+ve/in v(1:4,001)      1.9000E-01     0.0000E+00     1.2000E-03     6.0000E-04
+ve/in v(1:4,002)      2.2000E-01     0.0000E+00     1.8000E-03     6.0000E-04
+ve/in v(1:4,003)      2.4000E-01     0.0000E+00     1.0000E-03     4.0000E-04
+ve/in v(1:4,004)      2.7000E-01     0.0000E+00     4.5000E-04     1.1000E-04
+ve/copy v(1,1:004) x
+ve/copy v(2,1:004) q
+ve/copy v(3,1:004) y
+ve/copy v(4,1:004) e
+ null   0.182000   0.278000    1.34000E-04    2.60600E-03
+exec ../analyse ../../logs/liste.p_al.he4.90degree.p_al
+/GRAPHICS/HPLOT/ERRORS x y q e 004 24 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.230000     2.48240E-03 'RE   P AL --> HE X' 0.3
+ text    0.230000     2.35880E-03 'E IN GEV   400.00' 0.3
+ text    0.230000     2.23520E-03 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ text    0.230000     2.11160E-03 'A   26.98' 0.3
+close 66

@@ -1,0 +1,11 @@
+opt pto
+fo/file 67 allcu.ps
+meta 67 -111
+exec pCu.kumac
+exec pipCu.kumac
+exec dCu.kumac
+exec tCu.kumac
+exec he3Cu.kumac
+exec he4Cu.kumac
+close 67
+
