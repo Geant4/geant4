@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.20 2001-10-29 13:53:19 maire Exp $
+// $Id: G4MuIonisation.cc,v 1.21 2001-11-05 15:22:28 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------- G4MuIonisation physics process ------------------------------
@@ -363,8 +363,10 @@ G4double G4MuIonisation::ComputeCrossSectionPerAtom(
      
  ParticleMass = aParticleType.GetPDGMass();     
  G4double TotalEnergy = KineticEnergy + ParticleMass;
- G4double masspar = 0.5*ParticleMass*ParticleMass/electron_mass_c2;
- G4double KnockonMaxEnergy = TotalEnergy/(1.+masspar/TotalEnergy);
+ G4double tempvar = ParticleMass+electron_mass_c2;
+ G4double KnockonMaxEnergy = 2.*electron_mass_c2*KineticEnergy
+                     *(TotalEnergy+ParticleMass)
+                     /(tempvar*tempvar+2.*electron_mass_c2*KineticEnergy);
 
  G4double TotalCrossSection = 0.;
  if (KnockonMaxEnergy <= DeltaThreshold) return TotalCrossSection;
@@ -408,18 +410,22 @@ G4double G4MuIonisation::ComputeDifCrossSectionPerAtom(
  // Calculates the differential cross section per atom
  //   using the cross section formula of R.P. Kokoulin (10/98)
 {
-  const G4double masspar=0.5*ParticleMass*ParticleMass/electron_mass_c2;
   const G4double alphaprime = fine_structure_const/twopi;
   G4double TotalEnergy = KineticEnergy + ParticleMass;
-  G4double KnockonMaxEnergy = TotalEnergy/(1.+masspar/TotalEnergy);
+  G4double betasquare = KineticEnergy*(TotalEnergy+ParticleMass)
+                      /(TotalEnergy*TotalEnergy);
+  G4double tempvar = ParticleMass+electron_mass_c2;
+  G4double KnockonMaxEnergy = 2.*electron_mass_c2*KineticEnergy
+                     *(TotalEnergy+ParticleMass)
+                     /(tempvar*tempvar+2.*electron_mass_c2*KineticEnergy);
 
   G4double DifCrossSection = 0.;
   if(KnockonEnergy >=  KnockonMaxEnergy)  return DifCrossSection;
 
   G4double v = KnockonEnergy/TotalEnergy;
   DifCrossSection = twopi_mc2_rcl2*AtomicNumber*
-                   (1.-KnockonEnergy/KnockonMaxEnergy+0.5*v*v)/
-                   (KnockonEnergy*KnockonEnergy);
+                   (1.-betasquare*KnockonEnergy/KnockonMaxEnergy+0.5*v*v)/
+                   (betasquare*KnockonEnergy*KnockonEnergy);
   G4double a1 = log(1.+2.*KnockonEnergy/electron_mass_c2);
   G4double a3 = log(4.*TotalEnergy*(TotalEnergy-KnockonEnergy)/
                     (ParticleMass*ParticleMass));
