@@ -1,0 +1,104 @@
+?RCS: $Id: spitshell.U,v 1.1 2002-06-26 11:35:06 sadilov Exp $
+?RCS:
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS:
+?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 3.0.1.4  1997/02/28  16:22:12  ram
+?RCS: patch61: removed useless chatter as this is now done very early
+?RCS:
+?RCS: Revision 3.0.1.3  1995/01/11  15:37:01  ram
+?RCS: patch45: use 'test -f' instead of 'test -r' for exec-only cat progs (WED)
+?RCS: patch45: protected "sh -c" within backquotes for Linux and SGI
+?RCS:
+?RCS: Revision 3.0.1.2  1994/08/29  16:33:00  ram
+?RCS: patch32: don't create spitshell under the UU directory
+?RCS: patch32: allow for cat in /bin or /usr/bin
+?RCS:
+?RCS: Revision 3.0.1.1  1993/09/13  16:12:58  ram
+?RCS: patch10: made #!-failure message more friendly (WAD)
+?RCS:
+?RCS: Revision 3.0  1993/08/18  12:09:49  ram
+?RCS: Baseline for dist 3.0 netwide release.
+?RCS:
+?MAKE:spitshell shsharp sharpbang: eunicefix sh
+?MAKE:	-pick add $@ %<
+?S:spitshell:
+?S:	This variable contains the command necessary to spit out a runnable
+?S:	shell on this system.  It is either cat or a grep -v for # comments.
+?S:.
+?S:shsharp:
+?S:	This variable tells further Configure units whether your sh can
+?S:	handle # comments.
+?S:.
+?S:sharpbang:
+?S:	This variable contains the string #! if this system supports that
+?S:	construct.
+?S:.
+?T:xcat
+: see if sh knows # comments
+?X: This is loaded up early, so avoid being chatty.
+?X: echo " "
+?X: echo "Checking your $sh to see if it knows about # comments..." >&2
+if `$sh -c '#' >/dev/null 2>&1`; then
+?X:	echo "Your $sh handles # comments correctly."
+	shsharp=true
+	spitshell=cat
+?X:	echo " "
+?X:	echo "Okay, let's see if #! works on this system..."
+	xcat=/bin/cat
+	test -f $xcat || xcat=/usr/bin/cat
+	echo "#!$xcat" >try
+	$eunicefix try
+	chmod +x try
+#
+# $xcat is wrong on WIN32: there is no /bin/cat and /usr/bin/cat by default.
+# But we are sure that sharpbang is to be '#!' and let 'today' will be !=0.
+#
+#	./try > today
+	echo "#!$xcat" >today
+
+	if test -s today; then
+?X:		echo "It does."
+		sharpbang='#!'
+	else
+		echo "#! $xcat" > try
+		$eunicefix try
+		chmod +x try
+#
+# $xcat is wrong on WIN32: there is no /bin/cat and /usr/bin/cat by default.
+# But we are sure that sharpbang is to be '#!' and let 'today' will be !=0.
+#
+#	./try > today
+	echo "#!$xcat" >today
+
+		if test -s today; then
+?X:			echo "It does."
+			sharpbang='#! '
+		else
+?X:			echo "Okay, let's see if #! works on this system..."
+?X:			echo "It's just a comment."
+			sharpbang=': use '
+		fi
+	fi
+else
+	echo " "
+	echo "Your $sh doesn't grok # comments--I will strip them later on."
+	shsharp=false
+?X: The spitshell script will be perused, so leave it out the UU directory
+	cd ..
+	echo "exec grep -v '^[ 	]*#'" >spitshell
+	chmod +x spitshell
+	$eunicefix spitshell
+	spitshell=`pwd`/spitshell
+	cd UU
+	echo "I presume that if # doesn't work, #! won't work either!"
+	sharpbang=': use '
+fi
+rm -f try today
+
