@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIGAG.cc,v 1.3 1999-04-15 17:41:44 johna Exp $
+// $Id: G4UIGAG.cc,v 1.4 1999-09-02 07:40:55 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UIGAG.cc
@@ -174,8 +174,9 @@ G4String G4UIGAG::GetCommand()
     }else{
       G4cout << "@@Ready" << endl;
     }
-    newCommand.readLine( cin );
+    newCommand.readLine( cin, FALSE );
     if (!cin.good()) { cin.clear(); newCommand = nullString; iExit=false;break;}
+    newCommand = newCommand.strip(G4String::leading);
     while( newCommand(newCommand.length()-1) == '_' )
     {
       G4String newLine;
