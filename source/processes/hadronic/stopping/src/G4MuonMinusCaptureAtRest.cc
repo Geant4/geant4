@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.4 2000-07-12 09:17:11 hpw Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.5 2000-07-12 09:19:53 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -230,6 +230,7 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(
 //     corresponding member in G4Track
 
   aParticleChange.Initialize(track);
+  nGkine = 0;
 
 //   Store some global quantities that depend on current material and particle
 
