@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2000-06-22 13:39:05 maire Exp $
+$Id: History,v 1.3 2000-08-03 08:20:45 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 aug 00: gc
+- fixed problem for event reproducibility: changed RandGauss to G4RandGauss
+  in G4VEnergyLoss.cc. Needs tag "global-V02-00-02" to cowork with.
+
 22 jun 00: mma  (utils-V01-01-03)
 - muls: do not nuclear size correction for electron
 - move Eloss messenger --> G4VEnergyLoss
