@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2001-02-20 15:46:26 stesting Exp $
+$Id: History,v 1.17 2001-02-22 11:18:07 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+February 25 2001 S.W.O'Neale (exampleN04-V03-00-06)
+- Add exampleN04.EMtest.large_N.out reference output and remove
+  some empty "reference" .err files
+
 February 20 2001 S.W.O'Neale (exampleN04-V03-00-05)
 - Update reference outputs following materials-V03-00-04  
 
