@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Torus.cc,v 1.5 2002-01-08 16:16:57 gcosmo Exp $
+// $Id: testG4Torus.cc,v 1.6 2003-02-13 15:51:48 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -148,11 +148,12 @@ G4bool testG4Torus()
     assert(ApproxEqual(Dist,80));
     Dist=t1.DistanceToOut(ponrmax);
     assert(ApproxEqual(Dist,0));
+    /* // later: why it was introduced, while they are outside (see above)
     Dist=t2.DistanceToOut(ponphi1);
     assert(ApproxEqual(Dist,0));
     Dist=t2.DistanceToOut(ponphi2);
     assert(ApproxEqual(Dist,0));
-
+    */
 // DistanceToOut(P,V)
     Dist=t1.DistanceToOut(ponrmax,vx,calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(Dist,0)&&ApproxEqual(pNorm->unit(),vx)&&*pgoodNorm);

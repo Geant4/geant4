@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: testG4Sphere.cc,v 1.8 2002-12-05 09:28:55 grichine Exp $
+
+// $Id: testG4Sphere.cc,v 1.9 2003-02-13 15:51:48 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -329,8 +329,8 @@ G4ThreeVector s9v(-0.6542770611918751,
     Dist=b216.DistanceToOut(p216,v216,calcNorm,pgoodNorm,pNorm);
     G4cout<<"b216.DistanceToOut(p216,v216,... = "<<Dist<<G4endl;
 
-    Dist=s9.DistanceToOut(s9p,s9v,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"s9.DistanceToOut(s9p,s9v,... = "<<Dist<<G4endl;
+    // Dist=s9.DistanceToIn(s9p,s9v);
+    // G4cout<<"s9.DistanceToIn(s9p,s9v,... = "<<Dist<<G4endl;
 
      
 // Checking G4Sphere::DistanceToIn(P)

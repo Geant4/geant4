@@ -83,10 +83,12 @@ int main()
 	
   G4cout << "-----------------" << G4std::endl;
   G4cout << "Voxel test 1 " << G4std::endl;
+  /*
   G4cout << "Should be: "
 	 << G4std::setw(7) << true
 	 << G4std::setw(10) << 800
 	 << G4std::setw(10) << ">1000" << G4std::endl;
+  
   G4cout << "G4Tubs:    "
 	 << G4std::setw(7) << answer3
 	 << G4std::setw(10) << min3
@@ -95,7 +97,8 @@ int main()
 	 << G4std::setw(7) << answer4
 	 << G4std::setw(10) << min4
 	 << G4std::setw(10) << max4 << G4std::endl;
-	
+  */
+
 	
 // Here is a voxel limit that starts and ends in the solid
 	
@@ -118,10 +121,12 @@ int main()
 	
 	G4cout << "-----------------" << G4std::endl;
 	G4cout << "Voxel test 2 " << G4std::endl;
+	/*
 	G4cout << "Should be: "
 	       << G4std::setw(7) << true
 	       << G4std::setw(10) << -800
 	       << G4std::setw(10) << 800 << G4std::endl;
+	
 	G4cout << "G4Tubs:    "
 	       << G4std::setw(7) << answer3
 	       << G4std::setw(10) << min3
@@ -130,6 +135,7 @@ int main()
 	       << G4std::setw(7) << answer4
 	       << G4std::setw(10) << min4
 	       << G4std::setw(10) << max4 << G4std::endl;
+	*/
 	
 	
 // Here is a tiny voxel that just skims the solid.
@@ -154,6 +160,7 @@ int main()
 	
         G4cout << "-----------------" << G4std::endl;
 	G4cout << "Voxel test 3 " << G4std::endl;
+	/*
 	G4cout << "Should be: "
 	       << G4std::setw(7) << true
 	       << G4std::setw(10) << 998
@@ -166,4 +173,6 @@ int main()
 	       << G4std::setw(7) << answer4
 	       << G4std::setw(10) << min4
 	       << G4std::setw(10) << max4 << G4std::endl;
+	*/
+
 }
