@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.37 2003-06-20 08:54:32 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.38 2003-06-20 22:42:38 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,7 +104,8 @@ G4MagInt_Driver::~G4MagInt_Driver()
 G4bool
 G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 		                 G4double     hstep,
-		                 G4double     eps    )
+		                 G4double     eps,
+				 G4double hinitial )
 //		     const G4double dydx[6],    // We could may add this ??
 
 // Runge-Kutta driver with adaptive stepsize control. Integrate starting
@@ -141,9 +142,16 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
   y_current.DumpToArray( ystart );
   x1= y_current.GetCurveLength();
   x2= x1 + hstep;
- 
-  //  Initial Step size "h" is the full interval
-  h = hstep;   
+
+  if( (hinitial > 0.0) 
+      && (hinitial < hstep)
+      && (hinitial > perMillion * hstep) ){
+     h = hinitial;
+  }else{
+     //  Initial Step size "h" defaults to the full interval
+     h = hstep;
+  }
+
   x = x1;
 
   for(i=0;i<nvar;i++) y[i] = ystart[i] ;
@@ -514,6 +522,31 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
 
 }   // end of  OneGoodStep .............................
 
+//----------------------------------------------------------------------
+
+#ifdef QUIK_ADVANCE_NEW2
+// QuickAdvance just tries one Step - it does not ensure accuracy
+//
+//   This original interface does not return individual element errors
+//    It is kept only for compatibility, and will be obsolete as of G4 6.0
+//
+G4bool  G4MagInt_Driver::QuickAdvance(       
+			    G4FieldTrack& y_posvel,         // INOUT
+		            const G4double     dydx[],  
+		                  G4double     hstep,       // In
+			          G4double&    dchord_step,
+			          G4double&    dyerr )
+{
+    G4double dyerr_pos_sq=0.0, dyerr_mom_rel_sq=0.0; // dyerr_ener_sq=0.0;
+    G4double dyerr_pos; 
+
+    QuickAdvance( y_posvel,  dydx,  hstep,      
+		  dchord_step, dyerr_pos_sq, dyerr_mom_rel_sq);
+                          //  , dyerr_ener_sq ); 
+    ... 
+    // Calculate dyerr from the above -- as at the end of the func below
+}
+#endif
 
 //----------------------------------------------------------------------
 // QuickAdvance just tries one Step - it does not ensure accuracy
@@ -523,12 +556,31 @@ G4bool  G4MagInt_Driver::QuickAdvance(
 		            const G4double     dydx[],  
 		                  G4double     hstep,       // In
 			          G4double&    dchord_step,
-			          G4double&    dyerr )  
+   			          G4double&    dyerr_pos_sq,
+			          G4double&    dyerr_mom_rel_sq
+			    //    G4double&    dyerr_ener_sq // Future
+ )  
 {
+      G4Exception("Not implemented in this version"); 
+
+      // Use the parameters of this method, to please compiler
+      dchord_step = dyerr_pos_sq = hstep * hstep * dydx[0]; 
+      dyerr_mom_rel_sq = y_posvel.GetPosition().mag2();
+      return true;
+}
+
+G4bool  G4MagInt_Driver::QuickAdvance(       
+			    G4FieldTrack& y_posvel,         // INOUT
+		            const G4double     dydx[],  
+		                  G4double     hstep,       // In
+			          G4double&    dchord_step,
+			          G4double&    dyerr )
+{
+    G4double   dyerr_pos_sq,  dyerr_mom_rel_sq;  
     G4double yerr_vec[G4FieldTrack::ncompSVEC], yarrin[G4FieldTrack::ncompSVEC], yarrout[G4FieldTrack::ncompSVEC]; 
     G4double s_start;
-    G4double dyerr_len=0.0;  // , dyerr_vel, vel_mag;
-    G4double dyerr_len_sq, dyerr_vel_sq, vel_mag_sq;
+    // G4double dyerr_len=0.0;  // , dyerr_vel, vel_mag;
+    G4double dyerr_mom_sq, vel_mag_sq, inv_vel_mag_sq;
 
     static G4int no_call=0; 
     no_call ++; 
@@ -551,18 +603,16 @@ G4bool  G4MagInt_Driver::QuickAdvance(
 
     // A single measure of the error   
     //      TO-DO :  account for  energy,  spin, ... ? 
-    dyerr_len_sq = ( sqr(yerr_vec[0])+sqr(yerr_vec[1])+sqr(yerr_vec[2]));
-    dyerr_vel_sq = ( sqr(yerr_vec[3])+sqr(yerr_vec[4])+sqr(yerr_vec[5]));
     vel_mag_sq   = ( sqr(yarrout[3])+sqr(yarrout[4])+sqr(yarrout[5]) );
+    inv_vel_mag_sq = 1.0 / vel_mag_sq; 
+    dyerr_pos_sq = ( sqr(yerr_vec[0])+sqr(yerr_vec[1])+sqr(yerr_vec[2]));
+    dyerr_mom_sq = ( sqr(yerr_vec[3])+sqr(yerr_vec[4])+sqr(yerr_vec[5]));
 
-    if( (dyerr_len_sq * vel_mag_sq ) > ( dyerr_vel_sq * sqr(hstep) ) ) {
-       dyerr = dyerr_len = sqrt(dyerr_len_sq);
-    }else{
-       // Scale it to the position - for now
-       dyerr = sqrt(dyerr_vel_sq / vel_mag_sq) * hstep;
-       // err_vel_rel = sqrt(dyerr_vel_sq / vel_mag_sq);
-       // dyerr = err_vel_rel * hstep;
-  }
+    dyerr_mom_rel_sq =  dyerr_mom_sq * inv_vel_mag_sq;
+
+    //// Calculate also the change in the momentum squared also ???
+    // G4double veloc_square = y_posvel.GetVelocity().mag2();
+    // ...
 
 #ifdef RETURN_A_NEW_STEP_LENGTH
     // The following step cannot be done here because "eps" is not known.
@@ -572,17 +622,21 @@ G4bool  G4MagInt_Driver::QuickAdvance(
     // Look at the velocity deviation ?
     //  sqr(yerr_vec[3])+sqr(yerr_vec[4])+sqr(yerr_vec[5]));
 
-    // Look at the change in the velocity (squared maybe ..)
-    G4double veloc_square = y_posvel.GetVelocity().mag2();
-
-    // Set suggested new step
+   // Set suggested new step
     hstep= ComputeNewStepSize( dyerr_len, hstep);
 #endif
+
+    if( dyerr_pos_sq > ( dyerr_mom_rel_sq * sqr(hstep) ) ) {
+       dyerr = sqrt(dyerr_pos_sq);
+    }else{
+       // Scale it to the current step size - for now
+       dyerr = sqrt(dyerr_mom_rel_sq) * hstep;
+    }
 
     return true;
 }
 
-#ifdef QUICK_ADV_TWO
+#ifdef QUICK_ADV_ARRAY_IN_AND_OUT
 G4bool  G4MagInt_Driver::QuickAdvance(       
 				  G4double     yarrin[],        // IN
 		            const G4double     dydx[],  
