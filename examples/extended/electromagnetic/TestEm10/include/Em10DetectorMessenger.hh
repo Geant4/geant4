@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em10DetectorMessenger.hh,v 1.1 2000-07-14 15:51:14 grichine Exp $
+// $Id: Em10DetectorMessenger.hh,v 1.2 2001-03-19 17:59:25 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,7 +26,6 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Em10DetectorMessenger: public G4UImessenger
 {
@@ -35,15 +34,24 @@ class Em10DetectorMessenger: public G4UImessenger
    ~Em10DetectorMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4int);
     
   private:
     Em10DetectorConstruction*   Em10Detector;
     
     G4UIdirectory*             Em10detDir;
 
+    G4UIcmdWithAnInteger*       ModelCmd;
+    G4UIcmdWithAnInteger*       FoilNumCmd;
+
     G4UIcmdWithAString*        AbsMaterCmd;
     G4UIcmdWithADoubleAndUnit* AbsThickCmd;
     G4UIcmdWithADoubleAndUnit* AbsRadCmd;
+
+    G4UIcmdWithAString*        RadiatorMaterCmd;
+    G4UIcmdWithADoubleAndUnit* RadiatorThickCmd;
+
+    G4UIcmdWithADoubleAndUnit* GasGapThickCmd;
 
     G4UIcmdWithADoubleAndUnit* AbsZposCmd;
 
