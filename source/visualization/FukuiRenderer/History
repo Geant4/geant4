@@ -1,3 +1,6 @@
+DAWN-V00-01-07 
+- Removed implicit casting from the previous updation
+
 DAWN-V00-01-06  Satoshi TANAKA  Nov 30, 1999
 - Fixing improper definition of alpha1, alpha2
 
