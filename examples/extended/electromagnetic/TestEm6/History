@@ -12,6 +12,7 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+03.03.2000 - rename thePhysicsTable as theEm6PhysicsTable by V.Ivanchenko
 
 01.03.2000 - warning in RunAction is fixed by V.Ivanchenko
      

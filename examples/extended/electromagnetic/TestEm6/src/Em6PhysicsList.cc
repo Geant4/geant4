@@ -377,7 +377,7 @@ void Em6PhysicsList::SetProtonCut(G4double val)
 
 void Em6PhysicsList::SetCutsByEnergy(G4double val)
 {
-  G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
+  G4ParticleTable* theEm6ParticleTable =  G4ParticleTable::GetParticleTable();
   G4Material* currMat = pDet->GetAbsorberMaterial();
 
   // set cut values for gamma at first and for e- second and next for e+,
@@ -385,21 +385,21 @@ void Em6PhysicsList::SetCutsByEnergy(G4double val)
   G4ParticleDefinition* part;
   G4double cut;
 
-  part = theParticleTable->FindParticle("e-");
+  part = theEm6ParticleTable->FindParticle("e-");
   cut = G4EnergyLossTables::GetRange(part,val,currMat);
   SetCutValue(cut, "e-");
 
-  part = theParticleTable->FindParticle("e+");
+  part = theEm6ParticleTable->FindParticle("e+");
   cut = G4EnergyLossTables::GetRange(part,val,currMat);
   SetCutValue(cut, "e+");
 
   // set cut values for proton and anti_proton before all other hadrons
   // because some processes for hadrons need cut values for proton/anti_proton
-  part = theParticleTable->FindParticle("proton");
+  part = theEm6ParticleTable->FindParticle("proton");
   cut = G4EnergyLossTables::GetRange(part,val,currMat);
   SetCutValue(cut, "proton");
 
-  part = theParticleTable->FindParticle("anti_proton");
+  part = theEm6ParticleTable->FindParticle("anti_proton");
   cut = G4EnergyLossTables::GetRange(part,val,currMat);
   SetCutValue(cut, "anti_proton");
 
@@ -410,12 +410,12 @@ void Em6PhysicsList::SetCutsByEnergy(G4double val)
 
 void Em6PhysicsList::GetRange(G4double val)
 {
-  G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
+  G4ParticleTable* theEm6ParticleTable =  G4ParticleTable::GetParticleTable();
   G4Material* currMat = pDet->GetAbsorberMaterial();
 
   G4ParticleDefinition* part;
   G4double cut;
-  part = theParticleTable->FindParticle("e-");
+  part = theEm6ParticleTable->FindParticle("e-");
   cut = G4EnergyLossTables::GetRange(part,val,currMat);
   G4cout << "material : " << currMat->GetName() << G4endl;
   G4cout << "particle : " << part->GetParticleName() << G4endl;
