@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2004-11-24 17:22:47 gcosmo Exp $
+$Id: History,v 1.50 2004-11-29 16:55:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29-Nov-2004, O.Link (geom-specific-V06-02-06)
+- G4TwistedTrapSide, G4TwistedBoxSide: improved (analytical) version
+  of GetPhiUAtX() method.
 
 24-Nov-2004, O.Link (geom-specific-V06-02-05)
 - Fixed bug in description of twisted trapezoid side.
