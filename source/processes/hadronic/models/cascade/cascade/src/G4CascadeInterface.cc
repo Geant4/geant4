@@ -160,7 +160,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
         output = collider->collide(bullet, target ); 
       }
       while(   output.getOutgoingParticles().size()+output.getNucleiFragments().size() < 2.5  
-           && output.getOutgoingParticles().type()==bullet.type() );
+           && output.getOutgoingParticles().begin()->type()==bullet->type() );
     }
 
   if (verboseLevel > 1) 
