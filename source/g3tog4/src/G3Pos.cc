@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3Pos.cc,v 1.6 1999-12-15 14:49:43 gunter Exp $
+// $Id: G3Pos.cc,v 1.7 2000-03-02 17:54:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 13.10.99
@@ -25,36 +25,38 @@ G3Pos::G3Pos(G4String motherName, G4int C, G4ThreeVector* Position, G4int irot,
     // warning when MANY position is created
     G4String text = "G3Pos warning: Not supported MANY option has been encountered.\n";
     text = text +   "               It may cause overlapping volumes.";
-    G4cerr << text << G4endl;;
+    G4cerr << text << G4endl;
   }
-};
+}
 
-G3Pos::~G3Pos(){;};
+G3Pos::~G3Pos(){;}
 
 G4bool 
 G3Pos::operator == ( const G3Pos& lv) const {
   return (this==&lv) ? true : false;
-};
+}
 
 G4String&
 G3Pos::GetMotherName() {
   return _MotherName;
-};
+}
 
 G4int
 G3Pos::GetIrot() {
   return _Irot;
-};
+}
 
 G4int
 G3Pos::GetCopy() {
   return _Copy;
-};
+}
 
 G4ThreeVector* 
 G3Pos::GetPos() {
   return _Position;
-};
+}
 
-
-
+G4String&
+G3Pos::GetOnly() {
+  return _Only;
+}

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3DetTableEntry.cc,v 1.2 1999-12-05 17:50:08 gcosmo Exp $
+// $Id: G3DetTableEntry.cc,v 1.3 2000-03-02 17:54:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -18,7 +18,7 @@ G3DetTableEntry::G3DetTableEntry(G4String& set, G4String& det, G4int id,
   _det = det;
   _id  = id;
   _detpt = D;
-};
+}
 
 G3DetTableEntry::~G3DetTableEntry(){;}
 

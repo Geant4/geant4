@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.cc,v 1.18 1999-12-15 14:49:43 gunter Exp $
+// $Id: G3VolTable.cc,v 1.19 2000-03-02 17:54:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 13.10.99
@@ -20,7 +20,7 @@ typedef G4std::map<G4String, G3VolTableEntry*, G4std::less<G4String> >
 
 G3VolTable::G3VolTable() 
   : G3toG4TopVTE(0), _FirstKey("UnDefined"), _NG3Pos(0){
-};
+}
 
 G3VolTable::~G3VolTable(){
   if (VTD.size()>0){
@@ -30,13 +30,14 @@ G3VolTable::~G3VolTable(){
     }
     VTD.clear();
   }
-};
+}
 
 G3VolTableEntry*
 G3VolTable::GetVTE(const G4String& Vname) {
   VTDiterator i = VTD.find(Vname);
-  return (*i).second;
-};
+  if (i == VTD.end()) return 0;
+  else                return (*i).second;
+}
 
 void 
 G3VolTable::PrintAll(){
@@ -67,7 +68,7 @@ G3VolTable::PutVTE(G3VolTableEntry* aG3VolTableEntry){
     VTD[HashID] = aG3VolTableEntry;
   }
   return GetVTE(aG3VolTableEntry->GetName());
-};
+}
 
 void 
 G3VolTable::CountG3Pos(){
@@ -87,7 +88,7 @@ G3VolTable::SetFirstVTE(){
 G3VolTableEntry*
 G3VolTable::GetFirstVTE() {
   return G3toG4TopVTE;
-};
+}
 
 void
 G3VolTable::VTEStat() {
@@ -95,3 +96,16 @@ G3VolTable::VTEStat() {
     " volume table entries \n" 
  	 << "                      " << _NG3Pos << " positions." << G4endl;
 }
+
+void 
+G3VolTable::Clear() {
+  if (VTD.size()>0){
+    for (VTDiterator i=VTD.begin(); i != VTD.end(); i++) {
+      delete (*i).second;
+    }
+    VTD.clear();
+  }
+  G3toG4TopVTE = 0;
+  _FirstKey = "UnDefined";
+  _NG3Pos = 0;
+}  

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3EleTable.cc,v 1.8 1999-12-15 14:49:43 gunter Exp $
+// $Id: G3EleTable.cc,v 1.9 2000-03-02 17:54:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -23,7 +23,7 @@ G3EleTable::G3EleTable() :_MaxEle(109){
 G3EleTable::~G3EleTable(){
   delete [] _EleNames;
   delete [] _Ele;
-};
+}
 
 G4Element* 
 G3EleTable::GetEle(G4double Z){
@@ -52,7 +52,7 @@ G3EleTable::parse(G4double& Z, char* name, char* sym, G4double& A){
     rc = -1;
   }
   return rc;
-};
+}
 
 void
 G3EleTable::LoadUp(){

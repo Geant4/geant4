@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3Pos.hh,v 1.7 1999-12-09 01:27:45 lockman Exp $
+// $Id: G3Pos.hh,v 1.8 2000-03-02 17:54:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 13.10.99
@@ -38,6 +38,8 @@ public:
   G4ThreeVector* GetPos();
 
   G4int GetCopy();
+
+  G4String& GetOnly();
 };
 #endif
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3PartTable.cc,v 1.8 1999-12-15 14:49:43 gunter Exp $
+// $Id: G3PartTable.cc,v 1.9 2000-03-02 17:54:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,14 +35,14 @@ G3PartTable::Get(G4int partid){
   HashID(partid, ShashID);
   PTDiterator i = PTD.find(ShashID);
   return (*i).second;
-};
+}
 
 void 
 G3PartTable::Put(G4int partid, G4ParticleDefinition *partpt){
   G4String ShashID; // static
   HashID(partid, ShashID);
   PTD[ShashID]=partpt;
-};
+}
 
 void
 G3PartTable::HashID(G4int partid, G4String& theHashID){
@@ -50,12 +50,12 @@ G3PartTable::HashID(G4int partid, G4String& theHashID){
   G4std::ostrstream ostr(s, sizeof s);
   ostr << "Part" << partid << G4std::ends;
   theHashID = s;
-};
+}
 
 void 
 G3PartTable::HashID(G4int partid, G4String* theHashID){
   HashID(partid, *theHashID);
-};
+}
 
 void
 G3PartTable::PrintAll(){

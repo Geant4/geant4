@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTableEntry.cc,v 1.3 1999-12-15 14:49:43 gunter Exp $
+// $Id: G3VolTableEntry.cc,v 1.4 2000-03-02 17:54:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 13.10.99
@@ -38,7 +38,7 @@ G3VolTableEntry::~G3VolTableEntry(){
 inline G4bool 
 G3VolTableEntry::operator == ( const G3VolTableEntry& lv) const {
   return (this==&lv) ? true : false;
-};
+}
 
 void 
 G3VolTableEntry::AddG3Pos(G3Pos* aG3Pos){
@@ -105,7 +105,7 @@ G3VolTableEntry::FindDaughter(const G4String& Dname){
     if (GetDaughter(idau)->GetName() == Dname) return GetDaughter(idau);
   }
   return 0;
-};
+}
 
 G3VolTableEntry*
 G3VolTableEntry::FindMother(const G4String& Mname){
@@ -114,7 +114,7 @@ G3VolTableEntry::FindMother(const G4String& Mname){
     if (mvte->GetName() == Mname) return mvte;
   }
   return 0;
-};
+}
 
 G3VolTableEntry*
 G3VolTableEntry::FindClone(const G4String& Cname){
@@ -123,7 +123,7 @@ G3VolTableEntry::FindClone(const G4String& Cname){
     if (cvte->GetName() == Cname) return cvte;
   }
   return 0;
-};
+}
 
 void G3VolTableEntry::PrintSolidInfo() {
 // only parameters related to solid definition
@@ -140,12 +140,12 @@ void G3VolTableEntry::PrintSolidInfo() {
 void
 G3VolTableEntry::SetName(G4String name){
   fVname = name;
-};
+}
 
 void
 G3VolTableEntry::SetLV(G4LogicalVolume* lv){
   fLV = lv;
-};
+}
 
 void 
 G3VolTableEntry::SetSolid(G4VSolid* solid){
@@ -172,32 +172,32 @@ void G3VolTableEntry::SetHasNegPars(G4bool hasNegPars) {
 G4String
 G3VolTableEntry::GetName() {
   return fVname;
-};
+}
 
 G4String
 G3VolTableEntry::GetShape() {
   return fShape;
-};
+}
 
 G4int
 G3VolTableEntry::GetNmed() {
   return fNmed;
-};
+}
 
 G4int 
 G3VolTableEntry::GetNpar() {
   return fNpar;
-};
+}
 
 G4double* 
 G3VolTableEntry::GetRpar() {
   return fRpar;
-};
+}
 
 G4int 
 G3VolTableEntry::NPCopies() {
   return fG3Pos.entries();
-};
+}
 
 G3Pos* 
 G3VolTableEntry::GetG3PosCopy(G4int copy) {
@@ -210,22 +210,22 @@ G3VolTableEntry::GetG3PosCopy(G4int copy) {
 G4bool 
 G3VolTableEntry::HasNegPars(){
   return fHasNegPars;
-};
+}
 
 G4VSolid*
 G3VolTableEntry::GetSolid() {
   return fSolid;
-};
+}
 
 G4LogicalVolume* 
 G3VolTableEntry::GetLV() {
   return fLV;
-};
+}
 
 G4int
 G3VolTableEntry::GetNoDaughters() {
   return fDaughters.entries();
-};
+}
 
 G4int
 G3VolTableEntry::GetNoMothers() {
@@ -243,7 +243,7 @@ G3VolTableEntry::GetDaughter(G4int i) {
     return fDaughters[i];
   else 
     return 0;
-};
+}
 
 G3VolTableEntry*
 G3VolTableEntry::GetMother(G4int i){
@@ -251,7 +251,7 @@ G3VolTableEntry::GetMother(G4int i){
     return fMothers[i];
   else
     return 0;
-};
+}
 
 // to be removed
 G3VolTableEntry*
@@ -260,7 +260,7 @@ G3VolTableEntry::GetMother(){
     return fMothers[0];
   else
     return 0;  
-};
+}
 
 G3VolTableEntry*
 G3VolTableEntry::GetClone(G4int i){
@@ -268,7 +268,7 @@ G3VolTableEntry::GetClone(G4int i){
     return fClones[i];
   else
     return 0;
-};
+}
 
 G3VolTableEntry*
 G3VolTableEntry::GetMasterClone(){
@@ -282,4 +282,4 @@ G3VolTableEntry::GetMasterClone(){
     master = this;
 
   return master;
-};
+}

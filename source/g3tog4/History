@@ -1,14 +1,30 @@
-$Id: History,v 1.29 1999-12-09 01:27:41 lockman Exp $
+$Id: History,v 1.30 2000-03-02 17:53:58 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 
-g3tog4- 06-Dec-1999 W.Lockman
+g3tog4-V01-00-00 02-Mar-2000 G.Cosmo
+- included fixes by Ivana:
+  o G3VolTable:
+  - added tests VTD.size()>0
+  - corrected G3VolTable::GetVTE() 
+  - added back G3VolTable::Clear()
+  o G3Pos:
+  - added G3Pos::GetOnly() 
+  o G3Division:
+  - corrected G3Division::CreateSolid() for
+    the case ( shape == "TUBS") && ( fIAxis == 1 )
+- fixed warnings for extraneous semicolons on DEC (ISO mode).
+- syncronized with HEAD (mainly CVS headers changed from the recent
+  ISO-ANSI C++ migration.
+
+06-Dec-1999 W.Lockman
 - removed G3fillParams.cc
 - G3Eletable.cc: cast double Z to int
 - added G3toG4Debug() global function (yuch)
 - removed G4.cc.omit
 - made sure all header files are protected with #ifndef ... #endif
+- G3toG4BuildTree.cc: avoid placement of the top-level logical volume
 
 g3tog4-V00-01-cand03 05-Dec-1999  G.Cosmo
 - Merged HEAD of main trunk with tag "wsl-991205" which now includes

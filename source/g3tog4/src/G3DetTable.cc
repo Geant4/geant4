@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3DetTable.cc,v 1.8 1999-12-15 14:49:42 gunter Exp $
+// $Id: G3DetTable.cc,v 1.9 2000-03-02 17:54:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -30,7 +30,7 @@ G3DetTable::~G3DetTable(){
     }
     DTD.clear();
   }
-};
+}
 
 G4VSensitiveDetector* 
 G3DetTable::GetSD(G4String& set, G4String& det){

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3Division.cc,v 1.5 1999-12-15 14:49:43 gunter Exp $
+// $Id: G3Division.cc,v 1.6 2000-03-02 17:54:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
@@ -611,6 +611,7 @@ void G3Division::CreateSolid(G4String shape, G4double par[], G4int npar)
     else if ( shape == "TUBS" ) {
       if ( fIAxis == 1 ) {
         Rpar[1] = Rpar[0] + fWidth/cm;
+        fOffset = Rpar[0]*cm;
       }
       else if ( fIAxis == 2 ) {
          fOffset = Rpar[3]*deg; 

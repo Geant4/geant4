@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.hh,v 1.13 1999-12-15 14:49:42 gunter Exp $
+// $Id: G3VolTable.hh,v 1.14 2000-03-02 17:54:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 13.10.99
@@ -38,18 +38,7 @@ public:
   void SetFirstVTE();
   void VTEStat();
   void CountG3Pos();
+  void Clear();
 };
 extern G3VolTable G3Vol;
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
