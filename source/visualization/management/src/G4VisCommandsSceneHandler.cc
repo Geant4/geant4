@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.10 1999-12-16 17:19:33 johna Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.11 2000-02-21 16:51:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -39,7 +39,10 @@ void G4VVisCommandSceneHandler::UpdateCandidateLists () {
   sceneHandlerNameCommandsIterator i;
   for (i = sceneHandlerNameCommands.begin ();
        i != sceneHandlerNameCommands.end (); ++i) {
-    (*i)->GetParameter (0) -> SetParameterCandidates (sceneHandlerNameList);
+    G4String candidates = sceneHandlerNameList;
+    if ((*i) -> GetCommandPath () == G4String ("/vis/sceneHandler/list"))
+      candidates += " all";
+    (*i) -> GetParameter (0) -> SetParameterCandidates (candidates);
   }
 }
 
@@ -272,6 +275,9 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
 
   //Create scene handler.
   fpVisManager -> CreateSceneHandler (newName);
+  if (fpVisManager -> GetCurrentSceneHandler () -> GetName () != newName)
+    return;
+
   G4cout << "New scene handler \"" << newName << "\" created." << G4endl;
 
   // Attach scene.
@@ -302,6 +308,7 @@ G4VisCommandSceneHandlerList::G4VisCommandSceneHandlerList () {
 				 omitable = true);
   parameter -> SetCurrentAsDefault (false);
   parameter -> SetDefaultValue (0);
+  fpCommand -> SetParameter (parameter);
   sceneHandlerNameCommands.push_back (fpCommand);
 }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.11 1999-12-15 18:27:14 gcosmo Exp $
+// $Id: G4VisManager.hh,v 1.12 2000-02-21 16:51:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,8 +98,12 @@ class G4VisManager: public G4VVisManager {
   // G4VVisManager::GetConcreteInstance (), always testing for
   // non-zero.
 
+  // Odd friends that need access to various methods of the G4VisManager...
   friend void G4OpenGLXmViewerSecondaryLoopPostAction ();  // Mmmm!
+  friend class G4RTSteppingAction;
+  friend class G4RayTrajectory;
 
+  // Management friends...
   friend class G4VSceneHandler;
   friend class G4VViewer;
 

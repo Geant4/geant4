@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.12 2000-01-17 10:29:37 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.13 2000-02-21 16:51:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -194,9 +194,10 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
 
   // Create viewer.
   fpVisManager -> CreateViewer (newName);
-  G4cout << "New viewer \"" << newName << "\" created." << G4endl;
-
-  UpdateCandidateLists ();
+  if (fpVisManager -> GetCurrentViewer () -> GetName () != newName) {
+    G4cout << "New viewer \"" << newName << "\" created." << G4endl;
+    UpdateCandidateLists ();
+  }
 }
 
 ////////////// /vis/viewer/list ///////////////////////////////////////
@@ -363,19 +364,18 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
     }
   }
 
-  G4cout << "Viewer \"" << refreshName << "\"";
   if (found) {
     viewer -> ClearView ();
     viewer -> SetViewParameters (fpVisManager -> GetCurrentViewParameters ());
     viewer -> DrawView ();
-    viewer -> ShowView ();
-    G4cout << " refreshed.";
+    G4cout << "Viewer \"" << refreshName << "\"" << " refreshed."
+	   "\n  (You might also need \"/vis/viewer/show\".)" << G4endl;
   }
   else {
-    G4cout << " not found - \"/vis/viewer/list\""
-      "\n  to see possibilities.";
+    G4cout << "Viewer \"" << refreshName << "\"" <<
+      " not found - \"/vis/viewer/list\"\n  to see possibilities."
+	   << G4endl;
   }
-  G4cout << G4endl;
 }
 
 ////////////// /vis/viewer/remove ///////////////////////////////////////

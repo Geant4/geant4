@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.14 2000-01-29 00:43:10 asaim Exp $
+// $Id: G4VisManager.cc,v 1.15 2000-02-21 16:51:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -440,13 +440,9 @@ void G4VisManager::CreateSceneHandler (G4String name) {
     }
     else {
       G4cout << "Error in G4VisManager::CreateSceneHandler during "
-	   << fpGraphicsSystem -> GetName ()
-	   << " scene creation."
-	   << G4endl;
-      fpSceneHandler = 0;
-      fpViewer  = 0;
-      // Make it impossible for user action code to Draw.
-      fpConcreteInstance = 0;
+	     << fpGraphicsSystem -> GetName ()
+	     << " scene creation.\n  No action taken."
+	     << G4endl;
     }
   }
   else PrintInvalidPointers ();
@@ -491,7 +487,12 @@ void G4VisManager::CreateViewer (G4String name) {
 	G4cout << "\n  Also see other \"/vis~/set\" commands."
 	     << G4endl;
       }
-
+    }
+    else {
+      G4cout << "Error in G4VisManager::CreateViewer during "
+	     << fpGraphicsSystem -> GetName ()
+	     <<	" viewer creation.\n  No action taken."
+	     << G4endl;
     }
   }
   else PrintInvalidPointers ();
@@ -664,7 +665,7 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
     for (iSH = nSH - 1; iSH >= 0; iSH--) {
       if (sceneHandlerList [iSH] -> GetGraphicsSystem () == pSystem) break;
     }
-    if (iSH >= nSH) {
+    if (iSH >= 0) {
       fpSceneHandler = sceneHandlerList [iSH];
       G4cout << "\n  Scene Handler now "
 	     << fpSceneHandler -> GetName ();
@@ -683,7 +684,7 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
       fpSceneHandler = 0;
       fpViewer = 0;
       // Make it impossible for user action code to Draw.
-    fpConcreteInstance = 0;
+      fpConcreteInstance = 0;
     }
   }
   G4cout << G4endl;
