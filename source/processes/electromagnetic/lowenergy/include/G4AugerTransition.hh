@@ -46,9 +46,9 @@ class G4AugerTransition {
 public:
 
   G4AugerTransition(G4int finalShell, G4std::vector<G4int> transIds,
-				       const G4std::map<G4int, G4std::vector<G4int>, G4std::less<G4int> >* idMap,
-				       const G4std::map<G4int, G4DataVector, G4std::less<G4int> >* energyMap,
-				       const G4std::map<G4int, G4DataVector, G4std::less<G4int> >* probabilityMap);
+		    const G4std::map<G4int, G4std::vector<G4int>, G4std::less<G4int> >* idMap,
+		    const G4std::map<G4int, G4DataVector, G4std::less<G4int> >* energyMap,
+		    const G4std::map<G4int, G4DataVector, G4std::less<G4int> >* probabilityMap);
 
   ~G4AugerTransition();
   
@@ -60,7 +60,6 @@ public:
 // from wich the transition electron comes from.
 
   const G4std::vector<G4int>* AugerOriginatingShellIds(G4int startShellId) const;
-
 
 // Returns the ids of the shells from wich an electron cuuld fill the vacancy in finalShellId
 
@@ -81,7 +80,7 @@ public:
   const G4int FinalShellId() const;
 
 // Returns the id of the shell from wich come the auger electron , given the shell
-// from wich the transition electron comes from and the index number of the shell originating auger electron.
+// from wich the transition electron comes from and the index number.
 
   G4int AugerOriginatingShellId(G4int index, G4int startShellId) const;
 

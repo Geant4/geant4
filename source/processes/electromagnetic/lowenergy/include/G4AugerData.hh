@@ -22,6 +22,8 @@
 
 //
 //
+// $Id: G4FluoData.hh,v 1.1 ?????
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -68,11 +70,12 @@ public:
   //shells starting from wich an electron can fill the vacancy
   size_t NumberOfTransitions(G4int Z, G4int vacancyIndex) const;
 
-  // Given the atomic number Z, the Index of the initial vacancy shell and the index of the starting shell for the 
-  // transition, returns the identity of the shell
-  G4int StartShellId(G4int Z, G4int initialVacancyId, G4int transitionShellIndex) const;
+  // Given the atomic number Z, the Index of the initial vacancy shell 
+  // and the index of the starting shell for the 
+  // transition, returns the identity of the shell originating the electron transition
+  G4int StartShellId(G4int Z, G4int initialVacancyIndex, G4int transitionShellIndex) const;
 
-  // Given the atomic number indexes of the starting, the auger originating shell index, 
+  // Given the atomic number , the indexes of the starting, the auger originating shell, 
   // and the transition shell Id, returns the transition energy
   G4double StartShellEnergy(G4int Z, G4int vacancyIndex, G4int transitionId, G4int augerIndex) const;
 
@@ -109,7 +112,7 @@ private:
   // G4std::map<G4int,G4DataVector*,G4std::less<G4int> > idMap;
 
   typedef G4std::map<G4int,G4std::vector<G4AugerTransition>,G4std::less<G4int> > trans_Table;
-  trans_Table augerTransitionTable;
+   trans_Table augerTransitionTable;
 
   /*
   G4std::map<G4int,G4std::map<G4Int,G4DataVector*,G4std::less<G4int> >,G4std::less<G4int> > transProbabilityMap;
@@ -118,11 +121,6 @@ private:
 
   G4std::vector<G4int> nInitShells;
   G4std::vector<G4int> numberOfVacancies;
-
-  // Dato che le prime 5 posizioni non sono mai usate, le riempio con delg i zeri, 
-  // perche' non so il comportamento dei vettori come interagiscono quando cerco di scrivere qualcosa e non oh cose prima.
-  // Non so nemno come funzione [] sui vettori (come le matrici?)
- 
   
 };
 

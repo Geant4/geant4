@@ -55,7 +55,7 @@ G4AugerData::G4AugerData()
 
 G4AugerData::~G4AugerData()
 { 
-  /*  
+  /*
   G4std::map<G4int,G4std::vector<G4AugerTransition>,G4std::less<G4int> >::iterator pos;
 
   for (pos = augerTransitionTable.begin(); pos != augerTransitionTable.end(); pos++)
@@ -63,10 +63,9 @@ G4AugerData::~G4AugerData()
       G4std::vector<G4AugerTransition> dataSet = (*pos).second;
       delete dataSet;
     }
-
   for (pos = energyMap.begin(); pos != energyMap.end(); pos++)
     {
-      G4std::map<G4int,G4DataVector*,G4std::less<G4int>>* dataMap = (*pos).second;
+      G4std::map<G4Int,G4DataVector*,G4std::less<G4int>>* dataMap = (*pos).second;
       for (pos2 = newIdProbabilityMap.begin(); pos2 != idMap.end(); pos2++)
 	{
 	  G4DataVector* dataSet = (*pos2).second;
@@ -82,7 +81,6 @@ G4AugerData::~G4AugerData()
 	  delete dataSet;
 	}
     }
-  
   for (pos2 = newIdMap.begin(); pos2 != idMap.end(); pos2++)
     {
       G4DataVector* dataSet = (*pos2).second;
@@ -99,6 +97,7 @@ G4AugerData::~G4AugerData()
       delete dataSet;
     }
   */
+
 }
 
 size_t G4AugerData::NumberOfVacancies(G4int Z) const
@@ -289,15 +288,33 @@ G4std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 	if (s == 0)
 	  {
 	    // End of a shell data set
-	    	    
+	    
+	    
+	    
 	    G4std::vector<G4int>::iterator vectorIndex = initIds->begin();
+
 	    vacId = *vectorIndex;
 	    
+       	    //initIds->erase(vectorIndex);
 	    
-	    initIds->erase(vectorIndex);
+
+
+	    G4std::vector<G4int> identifiers;
+	    for (vectorIndex = initIds->begin()+1 ; vectorIndex != initIds->end(); ++vectorIndex){
+
+	      identifiers.push_back(*vectorIndex);
+	    }
+
+	    vectorIndex = (initIds->end())-1;
+
+	    G4int augerShellId = *(vectorIndex);
 	    
-	    augerTransitionVector.push_back(G4AugerTransition(vacId, *initIds, newIdMap, 
-                                                              newEnergyMap, newProbabilityMap));
+	    
+	    (*newIdMap)[augerShellId] = *newIds;
+	    (*newEnergyMap)[augerShellId] = *transEnergies;
+	    (*newProbabilityMap)[augerShellId] = *transProbabilities;
+
+	    augerTransitionVector.push_back(G4AugerTransition(vacId, identifiers, newIdMap, newEnergyMap, newProbabilityMap));
 
 	    // Now deleting all the variables I used, and creating new ones for the next shell
 
@@ -351,9 +368,13 @@ G4std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 	  k++;}
 	else if(k%nColumns == 2){	 
 	  // 2nd column is new auger vacancy
+
+	  // 2nd column is new auger vacancy
+
 	  G4int l = (G4int)a;
 	  newIds->push_back(l);
-	  
+
+
 	  k++;
 	  }
 	else if (k%nColumns == 1)
@@ -426,16 +447,18 @@ void G4AugerData::BuildAugerTransitionTable()
   //  trans_Table::iterator pos = augerTransitionTable.begin();
 
 
-  for (G4int element = 6; element<99; element++)
+  for (G4int element = 6; element < 99; element++)
     { 
       augerTransitionTable.insert(trans_Table::value_type(element,LoadData(element)));
-      //G4cout << "G4AugerData for Element no. " << element << " are loaded" << G4endl;
-
-    }
       
-  G4cout << "AugerTransitionTable complete" << G4endl;
-}
+      //G4cout << "G4AugerData for Element no. " << element << " are loaded" << G4endl;
+      
+      
+    }
   
+  G4cout << "AugerTransitionTable complete"<< G4endl;
+}
+
 void G4AugerData::PrintData(G4int Z) 
 {
   

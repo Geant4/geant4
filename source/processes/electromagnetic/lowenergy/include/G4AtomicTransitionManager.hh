@@ -21,6 +21,8 @@
 // ********************************************************************
 //
 //
+// $Id: G4AtomicTransitionManager.hh,v 1.2 ????
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -48,7 +50,7 @@
 #include "G4AugerData.hh"
 #include "G4FluoTransition.hh"
 #include "G4AtomicShell.hh"
-#include "g4std/map"
+// #include "g4std/map"
 #include "g4std/vector"
 #include "globals.hh"
 
@@ -63,41 +65,45 @@ public:
  
   // Z is the atomic number of the element, shellIndex is the 
   // index (in EADL) of the shell
-  const G4AtomicShell* Shell(G4int Z, size_t shellIndex) const;
+  G4AtomicShell* Shell(G4int Z, size_t shellIndex) const;
    
   // Z is the atomic number of the element, shellIndex is the 
   // index (in EADL) of the final shell for the transition
   // This function gives, upon Z and the Index of the initial shell where te vacancy is, 
   // the radiative transition that can happen (originating shell, energy, probability)
-  const G4FluoTransition* ReachableShell(G4int Z, size_t shellIndex) const;
+  const G4FluoTransition* ReachableShell(G4int Z, size_t shellIndex) const ;
 
   // This function gives, upon Z and the Index of the initial shell where te vacancy is, 
-  // the NON-radiative transition that can happen with originating shell for 
-  // the transition, and the data for the possible auger electrons emitted 
-  // (originating vacancy, energy amnd probability)
-  const G4AugerTransition* ReachableAugerShell(G4int Z, G4int shellIndex) const;
+  // the NON-radiative transition that can happen with originating shell for the transition, and the
+  // data for the possible auger electrons emitted (originating vacancy, energy amnd probability)
+  
+  const G4AugerTransition* ReachableAugerShell(G4int Z, G4int shellIndex) const ;
   
   // This function returns the number of shells of the element
   // whose atomic number is Z
   G4int NumberOfShells(G4int Z) const;
-    
-  // This function returns the number of possible radiative transitions for 
-  // the atom with atomic number Z, i.e. the number of shell in wich a vacancy 
-  // can be filled with a radiative transition 
-  G4int NumberOfReachableShells(G4int Z) const;
+  
+  // This function returns the number of those shells of the element
+  // whose atomic number is Z which are reachable through a radiative
+  // transition
+  
+  // This function returns the number of possible radiative transitions for the atom with atomic number Z
+  // i.e. the number of shell in wich a vacancy can be filled with a radiative transition 
+  
+  G4int NumberOfReachableShells(G4int Z)const ;
 
-  // This function returns the number of possible NON-radiative transitions 
-  // for the atom with atomic number Z, i.e. the number of shell in wich 
-  // a vacancy can be filled by a NON-radiative transition 
-  G4int NumberOfReachableAugerShells(G4int Z) const;
+// This function returns the number of possible NON-radiative transitions for the atom with atomic number Z
+// i.e. the number of shell in wich a vacancy can be filled by a NON-radiative transition 
+
+  G4int NumberOfReachableAugerShells(G4int Z)const ;
 
   // Gives the sum of the probabilities of radiative transition towards the
   // shell whose index is shellIndex
-  G4double TotalRadiativeTransitionProbability(G4int Z, size_t shellIndex) const;
+  G4double TotalRadiativeTransitionProbability(G4int Z, size_t shellIndex);
   
   // Gives the sum of the probabilities of non radiative transition from the
   // shell whose index is shellIndex
-  G4double TotalNonRadiativeTransitionProbability(G4int Z, size_t shellIndex) const;
+  G4double TotalNonRadiativeTransitionProbability(G4int Z, size_t shellIndex);
    
 protected:
 
@@ -120,8 +126,8 @@ private:
   // the second element is a vector of G4AtomicTransition*.
   G4std::map<G4int,G4std::vector<G4FluoTransition*>,G4std::less<G4int> > transitionTable;
  
-  // since Auger effect data are stored as a table in G4AugerData, 
-  // we have here a pointer to an element of that class itself.
+  // since Augereffect data r stored as a table in G4AugerData, we have here a pointer to an element of that class itself.
+
   G4AugerData* augerData;
 
   // Minimum and maximum Z in EADL table containing identities and binding
