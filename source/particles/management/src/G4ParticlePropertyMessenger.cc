@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticlePropertyMessenger.cc,v 1.4 2001-07-11 10:02:03 gunter Exp $
+// $Id: G4ParticlePropertyMessenger.cc,v 1.5 2002-12-04 18:36:45 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,7 +73,7 @@ G4ParticlePropertyMessenger::G4ParticlePropertyMessenger(G4ParticleTable* pTable
   stableCmd->SetGuidance("Set stable flag.");
   stableCmd->SetGuidance("  false: Unstable   true: Stable");
   stableCmd->SetParameterName("stable",false);
-  stableCmd->AvailableForStates(PreInit,Idle,GeomClosed);
+  stableCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
 
   //particle/property/lifetime
   lifetimeCmd = new G4UIcmdWithADoubleAndUnit("/particle/property/lifetime",this);
@@ -86,7 +86,7 @@ G4ParticlePropertyMessenger::G4ParticlePropertyMessenger(G4ParticleTable* pTable
   //lifetimeCmd->SetUnitCategory("Time");
   //lifetimeCmd->SetUnitCandidates("s ms ns");
   lifetimeCmd->SetDefaultUnit("ns");
-  lifetimeCmd->AvailableForStates(PreInit,Idle,GeomClosed);
+  lifetimeCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
 
   // -- particle/property/Verbose ---
   verboseCmd = new G4UIcmdWithAnInteger("/particle/property/verbose",this);
