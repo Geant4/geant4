@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ParameterisedSolid1.cc,v 1.4 2001-07-11 10:00:36 gunter Exp $
+// $Id: testG4ParameterisedSolid1.cc,v 1.5 2002-01-08 13:15:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,7 @@ class BoxesAndSpheres : public G4VPVParameterisation
     fRotationVec= new G4RotationMatrix();
   }
 
-  ~BoxesAndSpheres() { delete fRotationVec; }
+  virtual ~BoxesAndSpheres() { delete fRotationVec; }
 
   G4double GetTwistAngle() { return fTwistAngle; }
   void     SetTwistAngle(G4double newAngle ) { fTwistAngle= newAngle; }
@@ -76,7 +76,7 @@ class BoxesAndSpheres : public G4VPVParameterisation
   virtual G4VSolid* ComputeSolid(const G4int n,
 				 G4VPhysicalVolume* pRep) 
   {
-    G4VSolid* mySolid;
+    G4VSolid* mySolid=0;
     if( n < fNumBoxes ) {
        if( n >= 0 ) {
           mySolid = &fBox;
@@ -167,7 +167,8 @@ G4VPhysicalVolume* BuildGeometry()
     G4LogicalVolume *boxLog=new G4LogicalVolume(myBox,0,
 						"Rotating Box",0,0,0);
 
-    G4PVParameterised *paramP=new G4PVParameterised("Rotating Block Or Sphere",
+//  G4PVParameterised *paramP=
+                              new G4PVParameterised("Rotating Block Or Sphere",
 						    boxLog,
 						    worldPhys, //OR worldLog,
 						    kXAxis,

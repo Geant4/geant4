@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Parameterised.cc,v 1.4 2001-07-11 10:00:36 gunter Exp $
+// $Id: testG4Parameterised.cc,v 1.5 2002-01-08 13:15:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ class MoveNRotate : public G4VPVParameterisation
     fRotationVec= new G4RotationMatrix();
   }
 
-  ~MoveNRotate() { delete fRotationVec; }
+  virtual ~MoveNRotate() { delete fRotationVec; }
 
   G4double GetTwistAngle() { return fTwistAngle; }
   void     SetTwistAngle(G4double newAngle ) { fTwistAngle= newAngle; }
@@ -119,7 +119,8 @@ G4VPhysicalVolume* BuildGeometry()
     G4LogicalVolume *boxLog=new G4LogicalVolume(myBox,0,
 						"Rotating Box",0,0,0);
 
-    G4PVParameterised *paramP=new G4PVParameterised("Rotating Blocks",
+//  G4PVParameterised *paramP=
+                              new G4PVParameterised("Rotating Blocks",
 						    boxLog,
 						    worldPhys, //OR worldLog,
 						    kYAxis,

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator6.cc,v 1.4 2001-07-11 10:00:35 gunter Exp $
+// $Id: testG4Navigator6.cc,v 1.5 2002-01-08 13:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,7 +111,8 @@ G4VPhysicalVolume* BuildGeometry()
 	    for (row=0;row<kTubeNoRow;row++)
 		{
 		    
-		    G4PVPlacement *calPhys=new G4PVPlacement(
+//		    G4PVPlacement *calPhys=
+		    new G4PVPlacement(
 			0,G4ThreeVector(bigXStart+row*kTubeRadius*2.0,bigYStart+column*yDelta,0),
 			tname,calTubLog,
 			myDetectorPhys,false,copyNo++);
@@ -124,7 +125,8 @@ G4VPhysicalVolume* BuildGeometry()
 	    for (row=0;row<kTubeNoRow-1;row++)
 		{
 		    
-		    G4PVPlacement *calPhys=new G4PVPlacement(
+//		    G4PVPlacement *calPhys=
+		    new G4PVPlacement(
 			0,G4ThreeVector(smallXStart+row*kTubeRadius*2.0,smallYStart+column*yDelta),
 			tname,calTubLog,
 			myDetectorPhys,false,copyNo++);

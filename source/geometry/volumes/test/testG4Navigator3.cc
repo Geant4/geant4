@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator3.cc,v 1.5 2001-07-11 10:00:35 gunter Exp $
+// $Id: testG4Navigator3.cc,v 1.6 2002-01-08 13:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,18 +70,21 @@ G4VPhysicalVolume* BuildGeometry()
     
     G4RotationMatrix *rot1=new G4RotationMatrix();
     rot1->rotateZ(M_PI*0.5);
-    G4PVPlacement *cubPhys1=new G4PVPlacement(rot1,G4ThreeVector(0,0,10),
+//  G4PVPlacement *cubPhys1=
+                            new G4PVPlacement(rot1,G4ThreeVector(0,0,10),
 					      "Target 1",cubLog,
 					      worldPhys,false,0);
 
     G4RotationMatrix *rot2=new G4RotationMatrix();
     rot2->rotateX(M_PI*0.5);
-    G4PVPlacement *cubPhys2=new G4PVPlacement(rot2,G4ThreeVector(-30,0,10),
+//  G4PVPlacement *cubPhys2=
+                            new G4PVPlacement(rot2,G4ThreeVector(-30,0,10),
 					      "Target 2",cubLog,
 					      worldPhys,false,0);
     G4RotationMatrix *rot3=new G4RotationMatrix();
     rot3->rotateY(M_PI*0.5);
-    G4PVPlacement *cubPhys3=new G4PVPlacement(rot3,G4ThreeVector(30,0,10),
+//  G4PVPlacement *cubPhys3=
+                            new G4PVPlacement(rot3,G4ThreeVector(30,0,10),
 					      "Target 3",cubLog,
 					      worldPhys,false,0);
     return worldPhys;

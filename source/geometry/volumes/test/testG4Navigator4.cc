@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator4.cc,v 1.5 2001-07-11 10:00:35 gunter Exp $
+// $Id: testG4Navigator4.cc,v 1.6 2002-01-08 13:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,7 +80,8 @@ G4VPhysicalVolume* BuildGeometry()
 					     worldPhys,false,0);
     G4LogicalVolume *repLog=new G4LogicalVolume(mySlab,0,
 						"Slab",0,0,0);
-    G4PVReplica *slabPhys=new G4PVReplica("Slab",
+//  G4PVReplica *slabPhys=
+                          new G4PVReplica("Slab",
 					  repLog,boxPhys,
 					  kXAxis,4,12.5);
 
@@ -100,7 +101,8 @@ G4VPhysicalVolume* BuildGeometry()
 					   kYAxis,4,5);
     G4LogicalVolume *rep3Log=new G4LogicalVolume(mySlab3,0,
 						 "Slab3",0,0,0);
-    G4PVReplica *slab3Phys=new G4PVReplica("Slab3",
+//  G4PVReplica *slab3Phys=
+                           new G4PVReplica("Slab3",
 					   rep3Log,slab2Phys,
 					   kXAxis,4,5);
 
@@ -129,7 +131,8 @@ G4VPhysicalVolume* BuildGeometry()
 					   kXAxis,4,5);
     G4LogicalVolume  *targetLog=new G4LogicalVolume(myTargetBox,0,
 						    "Target",0,0,0);
-    G4PVPlacement *targetPhys=new G4PVPlacement(0,G4ThreeVector(0,0,0),
+//  G4PVPlacement *targetPhys=
+                              new G4PVPlacement(0,G4ThreeVector(0,0,0),
 						"Target",targetLog,
 						slab5Phys,false,0);
 

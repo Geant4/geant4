@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Touchables.cc,v 1.4 2001-12-20 20:13:06 radoone Exp $
+// $Id: testG4Touchables.cc,v 1.5 2002-01-08 13:15:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,7 +92,8 @@ G4VPhysicalVolume* BuildGeometry()
   G4PVPlacement *posPhys1=new G4PVPlacement(0,G4ThreeVector(10,11,12),
 					    "PosPhys1",posLog,worldPhys,
 					    false,0);
-  G4PVPlacement *posPhys2=new G4PVPlacement(0,G4ThreeVector(0,0,0),
+//  G4PVPlacement *posPhys2=
+                          new G4PVPlacement(0,G4ThreeVector(0,0,0),
 					    "PosPhys2",pos2Log,posPhys1,
 					    false,0);
   G4PVPlacement *posPhys3=new G4PVPlacement(0,G4ThreeVector(-10,-11,-12),
@@ -101,10 +102,12 @@ G4VPhysicalVolume* BuildGeometry()
   G4PVPlacement *posPhys4=new G4PVPlacement(0,G4ThreeVector(10,0,0),
 					    "PosPhys4",pos4Log,worldPhys,
 					    false,0);
-  G4PVReplica *repPhys=new G4PVReplica("RepPhys",posSliceLog,posPhys3,
-				      kZAxis,5,4);
+//  G4PVReplica *repPhys=
+                       new G4PVReplica("RepPhys",posSliceLog,posPhys3,
+				       kZAxis,5,4);
 
-  G4PVParameterised *paramPhys=new G4PVParameterised("ParamPhys",
+//  G4PVParameterised *paramPhys=
+                               new G4PVParameterised("ParamPhys",
 						     paramLog,
 						     posPhys4,
 						     kXAxis,2,&myParam);

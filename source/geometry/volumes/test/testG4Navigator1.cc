@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator1.cc,v 1.4 2001-07-11 10:00:35 gunter Exp $
+// $Id: testG4Navigator1.cc,v 1.5 2002-01-08 13:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,10 +93,12 @@ G4VPhysicalVolume* BuildGeometry()
 						"Crystal Box",0,0,0);
     G4LogicalVolume *slabLog=new G4LogicalVolume(mySlab,0,
 						 "Crystal Slab",0,0,0);
-    G4PVPlacement *offMXYPhys=new G4PVPlacement(0,G4ThreeVector(-15,15,-10),
+//  G4PVPlacement *offMXYPhys=
+                              new G4PVPlacement(0,G4ThreeVector(-15,15,-10),
 						"Target 1",boxLog,
 						worldPhys,false,0);
-    G4PVPlacement *offMXMYPhys=new G4PVPlacement(0,G4ThreeVector(-15,-15,-10),
+//  G4PVPlacement *offMXMYPhys=
+                               new G4PVPlacement(0,G4ThreeVector(-15,-15,-10),
 						 "Target 2",boxLog,
 						 worldPhys,false,0);
 
@@ -104,17 +106,20 @@ G4VPhysicalVolume* BuildGeometry()
 					      "Target 3",slabLog,
 					      worldPhys,false,0);
 
-    G4PVPlacement *offYZPhys=new G4PVPlacement(0,G4ThreeVector(0,15,10),
+//  G4PVPlacement *offYZPhys=
+                             new G4PVPlacement(0,G4ThreeVector(0,15,10),
 					       "Target 4",boxLog,
 					       worldPhys,false,0);
-    G4PVPlacement *offMYZPhys=new G4PVPlacement(0,G4ThreeVector(0,-15,10),
+//  G4PVPlacement *offMYZPhys=
+                              new G4PVPlacement(0,G4ThreeVector(0,-15,10),
 						"Target 5",boxLog,
 						worldPhys,false,0);
 
 
     G4LogicalVolume *variLog=new G4LogicalVolume(myVariableBox,0,
 					         "Variable Blocks",0,0,0);
-    G4PVParameterised *paramPhys=new G4PVParameterised("Vari' Blocks",
+//  G4PVParameterised *paramPhys=
+                                 new G4PVParameterised("Vari' Blocks",
 						       variLog,
 						       offYPhys,
 						       kYAxis,

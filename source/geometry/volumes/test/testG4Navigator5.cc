@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator5.cc,v 1.4 2001-07-11 10:00:35 gunter Exp $
+// $Id: testG4Navigator5.cc,v 1.5 2002-01-08 13:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,7 +92,8 @@ G4VPhysicalVolume* BuildGeometry()
 							  0,
 							  "Slice",
 							  0,0,0);
-    G4PVReplica *fullTubeSlicePhys=new G4PVReplica("TubeSlice",
+//  G4PVReplica *fullTubeSlicePhys=
+                          new G4PVReplica("TubeSlice",
 					  fullTubeSliceLog,fullTubePhys,
 					  kRho,5,2,0);
 
@@ -111,7 +112,8 @@ G4VPhysicalVolume* BuildGeometry()
 							    0,
 							    "Slice",
 							    0,0,0);
-    G4PVReplica *hollowTubeSlicePhys=new G4PVReplica("HollowTubeSlice",
+//  G4PVReplica *hollowTubeSlicePhys=
+                          new G4PVReplica("HollowTubeSlice",
 					  hollowTubeSliceLog,hollowTubePhys,
 					  kRho,3,2,2);
 
@@ -130,7 +132,8 @@ G4VPhysicalVolume* BuildGeometry()
 							  0,
 							  "Slice",
 							  0,0,0);
-    G4PVReplica *hphiTubeSlicePhys=new G4PVReplica("hphiTubeSlice",
+//  G4PVReplica *hphiTubeSlicePhys=
+                          new G4PVReplica("hphiTubeSlice",
 					  hphiTubeSliceLog,hphiTubePhys,
 					  kPhi,4,M_PI*0.25,-M_PI*0.5);
 
@@ -167,7 +170,8 @@ G4VPhysicalVolume* BuildGeometry()
 							    0,
 							    "Slice",
 							    0,0,0);
-    G4PVReplica *allTubeZRPSlicePhys=new G4PVReplica("allTubeZRPSlice",
+//  G4PVReplica *allTubeZRPSlicePhys=
+                                     new G4PVReplica("allTubeZRPSlice",
 						     allTubeZRPSliceLog,
 						     allTubeZRSlicePhys,
 						     kPhi,4,M_PI*0.5,-M_PI*0.25);
