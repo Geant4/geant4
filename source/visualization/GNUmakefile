@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.16 2004-06-01 15:41:14 gcosmo Exp $
+# $Id: GNUmakefile,v 1.17 2004-06-02 09:51:12 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -54,14 +54,13 @@ endif #G4VIS_BUILD
 
 .PHONY: granular glob global clean
 
+glob global: granular
+
 granular:
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done
 
 includes:
 	@for dir in $(SUBDIRS); do (cd $$dir && $(MAKE) $@ ); done
-
-glob global:
-	@echo "ERROR: The global target not relevant for the visualization category."
 
 clean clean_libs:
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) $@); done
