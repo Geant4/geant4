@@ -1,4 +1,4 @@
-$Id: History,v 1.3 1999-02-15 19:19:28 japost Exp $
+$Id: History,v 1.4 1999-03-19 11:42:20 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,13 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-February 15, 99             J. A        geomvol-01-00-01
+March    19, 99      J. Apostolakis        geomvol-01-00-02
+
+   New tag for replica fix.
+
+
+March    18, 99      J. Apostolakis
+
+   A fix for looping in Replicas:
+        In the case where a zero step is done in Replicas, we must allow
+    ReplicaNavigator to handle the case itself - or else we loop.
+
+
+February 15, 99      J. Apostolakis        geomvol-01-00-01
 
    Only fixes in G4Navigator's incorporated.
 
    GNUmakefile corrected (for SUN-CC).
 
-January      99,            J. Apostolakis
+January      99,     J. Apostolakis
 
 Fix for ComputeSafety in Navigator:                              G4Navigator.cc
             the voxel information that was used was incorrect       v 1.3
