@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.icc,v 1.5 2002-04-29 14:22:08 gcosmo Exp $
+// $Id: G4ParameterisedNavigation.icc,v 1.6 2002-05-03 10:26:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,8 +34,9 @@
 // ********************************************************************
 //
 inline
-G4SmartVoxelNode* G4ParameterisedNavigation::
-  VoxelLocate(G4SmartVoxelHeader *pHead, const G4ThreeVector &localPoint)
+G4SmartVoxelNode*
+G4ParameterisedNavigation::VoxelLocate( G4SmartVoxelHeader *pHead,
+                                        const G4ThreeVector &localPoint )
 {
   EAxis targetHeaderAxis;
   G4double targetHeaderMin, targetHeaderNodeWidth;
@@ -195,15 +196,14 @@ G4bool G4ParameterisedNavigation::LevelLocate(G4NavigationHistory& history,
   motherVoxelNode = VoxelLocate(motherVoxelHeader,localPoint);
   
   voxelNoDaughters = motherVoxelNode->GetNoContained();
-  if ( voxelNoDaughters==0 )
-    return false;
+  if ( voxelNoDaughters==0 )  return false;
   
   pPhysical = motherLogical->GetDaughter(0);
   pParam = pPhysical->GetParameterisation();
 
   // Search replicated daughter volume
   //
-  for (sampleNo=voxelNoDaughters-1; sampleNo>=0; sampleNo--)
+  for ( sampleNo=voxelNoDaughters-1; sampleNo>=0; sampleNo-- )
   {
     replicaNo = motherVoxelNode->GetVolume(sampleNo);
     if ( (replicaNo!=blockedNum) || (pPhysical!=blockedVol) )
