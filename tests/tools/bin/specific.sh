@@ -8,9 +8,8 @@
 ####################################################
 #
 # Specfy CLHEP 1.5 as new, run persistance tests 401,402
-# Use /tmp for G4TMP on all dxplus,
-# retain dev1/dev2/prod and debug/optim oso/noniso identity
-# but n.b. there is only enought space for 1 stream comfortably
+# Use /tmp for G4TMP on dxplus01,02,03,04,
+# Use /tmp for G4TMP on all dxplus, retain dev1/dev2/prod identity
 #
 
 REF=undefined
@@ -130,13 +129,13 @@ if [ `uname -n | grep sundev` ]; then
        export G4EXAMPLE_FDID=207
     fi
   else
-    export G4SYSTEM=SUN-CC
+    export G4SYSTEM=SUN-CC5
     export DEBOPT=${DEBOPT}_ISO
     unset G4USE_OSPACE
     export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
     # No Persistency tonight ...
     unset G4USE_HEPODBMS
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/pro
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC5/pro
   fi
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
@@ -151,6 +150,7 @@ if [ `uname -n | grep sundev` ]; then
 fi
 
 
+
 if [ `uname -n | grep suncmsb` ]; then
   export G4USE_OSPACE=1
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
@@ -162,6 +162,7 @@ if [ `uname -n | grep suncmsb` ]; then
 #
   export CLHEP_BASE_DIR=/afs/cern.ch/user/s/stesting/work/clhep
   export CLHEP_LIB=CLHEP-CC
+  export RWBASE=/afs/cern.ch/user/s/stesting/work/rogue
   # G4 build flags :
   #######export G4UI_BUILD_XM_SESSION=1
   #######export G4VIS_BUILD_OPENGLXM_DRIVER=1
@@ -193,10 +194,9 @@ if [ `uname -n | grep sungeant` ]; then
     export PATH=`echo $PATH | sed s/SUNWspro/SUNWspro50/`
     export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
     # No Persistency...
-    # unset G4USE_HEPODBMS
+    unset G4USE_HEPODBMS
     # Persistency...
 #   if [ X$G4USE_HEPODBMS = Xaaa ]; then
-#   is this intended to stop the setup from being run twice ?
     if [ X$G4USE_HEPODBMS = Xaaa ]; then
        . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
        export G4EXAMPLE_FDID=207
@@ -266,7 +266,7 @@ if [ X`uname -n | grep dxplus` != X  -o "$UNAMEN" = "dcosf01" ]; then
   export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  export G4TMP=/tmp/g4stt$REF-$DEBOPT
+  export G4TMP=/tmp/g4stt$REF
   if [ ! -d $G4TMP ]; then
     mkdir $G4TMP
   fi
@@ -318,6 +318,28 @@ fi
 UNAMEN=`uname -n `
 echo UNAMEN $UNAMEN
 if [ $UNAMEN = pcg4speed ]; then
+  export DEBOPT=${DEBOPT}_NEWGCC
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
+  export G4SYSTEM=Linux-g++
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4LIB=$G4WORKDIR/lib
+  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/pro
+
+  # Shareable library
+  #####################
+  export G4LIB_BUILD_SHARED=1
+  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM
+  
+  # G4 build flags :
+  ######export G4UI_BUILD_XM_SESSION=1
+#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
+#  export G4VIS_BUILD_OPENGLX_DRIVER=1
+#  export G4VIS_BUILD_OIX_DRIVER=1
+fi
+
+if [ $UNAMEN = pcitapi22 ]; then
   export DEBOPT=${DEBOPT}_NEWGCC
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-g++
@@ -423,6 +445,8 @@ export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/pro
 #/usr/local/CLHEP1.3/CLHEP
 export CLHEP_LIB=CLHEP
 #CLHEP-c++
+export RWBASE=/usr/local
+export RWINC=/usr/local/include
 export OGLHOME=/usr/local
 fi
 export XM_INSTALLED=1
@@ -477,6 +501,7 @@ export G4VIS_USE_OPENGLXM=1
 export G4VIS_USE_OPENGLX=1
 export G4VIS_USE_OIX=1
 # Specific :
+export RWBASE=/geant4/OSF1
 export CLHEP_BASE_DIR=/geant4/OSF1
 export OGLHOME=/geant4/OSF1
 export OIVHOME=/geant4/OpenInventor2.4.1
