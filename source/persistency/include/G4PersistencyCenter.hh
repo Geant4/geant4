@@ -1,4 +1,4 @@
-// $Id: G4PersistencyCenter.hh,v 1.4 2002-12-04 13:57:29 morita Exp $
+// $Id: G4PersistencyCenter.hh,v 1.5 2002-12-04 14:32:07 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyCenter.hh
@@ -111,16 +111,16 @@ class G4PersistencyCenter
       G4PersistencyManager* CurrentPersistencyManager() { return f_currentManager; };
       // returns the pointer of the currnet G4PersistencyManager.
 
-      void SetG4PersistencyManager(G4PersistencyManager* pm, G4std::string name);
+      void SetPersistencyManager(G4PersistencyManager* pm, G4std::string name);
       // returns the pointer of the currnet G4PersistencyManager.
 
       G4PersistencyManager* GetPersistencyManager(G4std::string nam);
       // returns the pointer of the currnet G4PersistencyManager with name.
 
-      void RegisterG4PersistencyManager(G4PersistencyManager* pm);
+      void RegisterPersistencyManager(G4PersistencyManager* pm);
       // registers the persistency manager to the runtime catalog.
 
-      void DeleteG4PersistencyManager();
+      void DeletePersistencyManager();
       // deletes the current G4PersistencyManager.
 
       void SetVerboseLevel(int v);

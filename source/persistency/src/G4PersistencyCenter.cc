@@ -1,4 +1,4 @@
-// $Id: G4PersistencyCenter.cc,v 1.5 2002-12-04 13:57:29 morita Exp $
+// $Id: G4PersistencyCenter.cc,v 1.6 2002-12-04 14:32:07 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyCenter.cc
@@ -352,8 +352,8 @@ void G4PersistencyCenter::PrintAll()
   }
 }
 
-// Implementation of SetG4PersistencyManager
-void G4PersistencyCenter::SetG4PersistencyManager(G4PersistencyManager* pm,
+// Implementation of SetPersistencyManager
+void G4PersistencyCenter::SetPersistencyManager(G4PersistencyManager* pm,
                                                   G4std::string name)
 {
   f_currentManager=pm;
@@ -368,14 +368,14 @@ G4PersistencyManager* G4PersistencyCenter::GetPersistencyManager(G4std::string n
   return 0;
 }
 
-// Implementation of RegisterG4PersistencyManager
-void G4PersistencyCenter::RegisterG4PersistencyManager(G4PersistencyManager* pm)
+// Implementation of RegisterPersistencyManager
+void G4PersistencyCenter::RegisterPersistencyManager(G4PersistencyManager* pm)
 {
   f_theCatalog[pm->GetName()]=pm;
 }
 
-// Implementation of DeleteG4PersistencyManager
-void G4PersistencyCenter::DeleteG4PersistencyManager()
+// Implementation of DeletePersistencyManager
+void G4PersistencyCenter::DeletePersistencyManager()
 {
   if (f_currentManager!=0) delete f_currentManager;
   f_currentManager=0;

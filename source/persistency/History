@@ -19,6 +19,7 @@ committal in the CVS repository !
 - G4PersistencyManager.cc: protect for default persistency manager
 - G4PersistencyCenter.cc: bug fixes, disable HepMC/MCTruth printout
 - GetG4->Get, CurrentG4->Current
+- SetG4->Set, RegisterG4->Register, DeleteG4->Delete
 
 04 December, 02   G.Cosmo (persistency-V04-01-01)
 - Corrections to comply to G4 coding rules:

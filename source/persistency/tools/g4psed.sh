@@ -43,6 +43,9 @@ cat $file | sed \
 -e 's/G4VG4/G4V/g' \
 -e 's/GetG4/Get/g' \
 -e 's/CurrentG4/Current/g' \
+-e 's/SetG4PersistencyManager/SetPersistencyManager/g' \
+-e 's/RegisterG4PersistencyManager/RegisterPersistencyManager/g' \
+-e 's/DeleteG4PersistencyManager/DeletePersistencyManager/g' \
 -e 's/FADS\/Goofy tag/GEANT4 tag/g' \
   > $tmpfile
 
