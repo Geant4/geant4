@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.11 1999-08-19 08:18:30 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.12 1999-08-19 08:23:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -302,7 +302,7 @@ G4ParticleDefinition* G4IonTable::GetLightIon(G4int Z, G4int A) const
 G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A) const
 {
   // calculate nucleus mass
-  G4ParticleDefinition* ion=GetLightIon(A, Z);
+  G4ParticleDefinition* ion=GetLightIon(Z, A);
   G4double mass;
 
   if (ion!=0) {
@@ -310,15 +310,9 @@ G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A) const
 
   } else {
 
-    // This routine returns mass of nuclei (w/o including electron mass) 
-    //   mass = Z*proton_mass + (A-Z)*neutron_mass - binding energy
+    // use G4NucleiProperties::GetNuclearMass
+    mass = G4NucleiProperties::GetNuclearMass(A, Z);
 
-    G4double protonMass = GetProtonMass();
-    G4double neutronMass = GetNeutronMass();
-
-    G4double bindingEnergy = G4NucleiProperties::GetNuclearMass(Z, A);
-    
-     mass = G4double(Z)*protonMass + G4double(A-Z)*neutronMass - bindingEnergy;
   }
 
   return mass;
