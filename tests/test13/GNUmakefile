@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-08 16:35:43 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-11-29 15:57:07 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -15,3 +15,14 @@ endif
 all: lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
+
+CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
+CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
+
+ifeq ($(G4SYSTEM),Linux-g++)
+COMPILER := $(shell g++ -v 2>&1 | grep version | grep egcs)
+ifeq ($(findstring 1.1,$(COMPILER)),1.1)
+$(G4TMP)/$(G4SYSTEM)/$(name)/Tst13PhysicsList.o: src/Tst13PhysicsList.cc
+	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/Tst13PhysicsList.cc
+endif
+endif
