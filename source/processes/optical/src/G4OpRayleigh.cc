@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpRayleigh.cc,v 1.3 2001-01-23 20:11:01 gum Exp $
+// $Id: G4OpRayleigh.cc,v 1.4 2001-01-29 23:05:07 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,9 @@
 // Version:     1.0
 // Created:     1996-05-31  
 // Author:      Juliet Armstrong
-// Updated:     1997-04-09 by Peter Gumplinger
+// Updated:     2001-01-29 by Peter Gumplinger
+//              > fix calculation of SinTheta (from CosTheta)
+//              1997-04-09 by Peter Gumplinger
 //              > new physics/tracking scheme
 // mail:        gum@triumf.ca
 //
@@ -101,7 +103,7 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	G4double rand = G4UniformRand();
 
 	G4double CosTheta = pow(rand, 1./3.);
-	G4double SinTheta = 1.-CosTheta*CosTheta;
+	G4double SinTheta = sqrt(1.-CosTheta*CosTheta);
 
 	// find azimuthal angle w.r.t old polarization vector 
 
