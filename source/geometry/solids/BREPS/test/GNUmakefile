@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2000-02-28 15:17:22 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2000-02-28 15:38:27 gcosmo Exp $
 # ------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ------------------------------------------------------
@@ -25,12 +25,9 @@ INCFLAGS := \
 	    -I$(G4BASE)/geometry/solids/Boolean/include \
 	    -I$(G4BASE)/geometry/solids/STEPinterface/include \
 	    -I$(G4BASE)/geometry/solids/BREPS/include \
-	    -I$(G4BASE)/materials/include \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include
-# Try to move STEP interface tests to that test dir --> remove dir here
-# Try to delete materials from test -> remove here
 
 LDLIBS   := \
 	    -lG4stepinterface \
