@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.15 2001-10-18 14:15:27 pia Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.16 2001-10-24 08:12:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -50,6 +50,7 @@
 // 20/09/00  update fluctuations V.Ivanchenko
 // 18/10/01  add fluorescence AlongStepDoIt V.Ivanchenko
 // 18/10/01  Revision to improve code quality and consistency with design, MGP
+// 19/10/01  update according to new design, V.Ivanchenko
 //
 // --------------------------------------------------------------
  
@@ -391,24 +392,46 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   G4double edep = E - finalT;
 
   fParticleChange.SetEnergyChange(finalT);
-  fParticleChange.SetLocalEnergyDeposit(edep);
-
   
-  /*
-  G4std::vector<G4Track*>* vt = SecondariesAlongStep(stepData, edep);
+  // Deexcitation of ionised atoms
+  G4std::vector<G4DynamicParticle*>* newpart = DeexciteAtom(aMaterial,E,edep);
 
-  if(vt) {
+  if(newpart) {
 
-    size_t nSecondaries = vt->size();
-    G4cout << "nSecondaries= " << nSecondaries << G4endl;
+    size_t nSecondaries = newpart->size();
+
     fParticleChange.SetNumberOfSecondaries(nSecondaries);
+    G4Track* newtrack = 0;
+    const G4StepPoint* preStep = stepData.GetPreStepPoint();
+    const G4StepPoint* postStep = stepData.GetPostStepPoint();
+    G4ThreeVector r = preStep->GetPosition();
+    G4ThreeVector deltaR = postStep->GetPosition();
+    deltaR -= r;
+    G4double t = preStep->GetGlobalTime();
+    G4double deltaT = postStep->GetGlobalTime();
+    deltaT -= t;
+    G4double time, q, e;
+    G4ThreeVector position;
+    G4DynamicParticle* part = 0;
+
     for(size_t i=0; i<nSecondaries; i++) {
-      fParticleChange.AddSecondary((*vt)[i]);
+    G4cout << "i= " << i << G4endl;
+      part = (*newpart)[i]; 
+      if(part) {
+        edep -= part->GetKineticEnergy();
+        q = G4UniformRand();
+        time = deltaT*q + t;
+        position  = deltaR*q;
+        position += r;
+        newtrack = new G4Track((*newpart)[i], time, position);
+        fParticleChange.AddSecondary(newtrack);
+      }
     }
-    delete vt;   
+    delete newpart;   
 
   }
-  */
+
+  fParticleChange.SetLocalEnergyDeposit(edep);
   
   return &fParticleChange;
 }

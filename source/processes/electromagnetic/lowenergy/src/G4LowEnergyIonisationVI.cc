@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisationVI.cc,v 1.7 2001-10-18 15:48:53 pia Exp $
+// $Id: G4LowEnergyIonisationVI.cc,v 1.8 2001-10-24 08:12:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -74,9 +74,12 @@
 //                          compilation warnings and extra protection to
 //                          prevent from accessing a null pointer        
 // 29.09.01 V.Ivanchenko    revision based on design iteration
-// 10.10.01 MGP             Revision to improve code quality and consistency with design
+// 10.10.01 MGP             Revision to improve code quality and 
+//                          consistency with design
 // 18.10.01 V.Ivanchenko    Add fluorescence AlongStepDoIt
-// 18.10.01 MGP             Revision to improve code quality and consistency with design
+// 18.10.01 MGP             Revision to improve code quality and 
+//                          consistency with design
+// 19.10.01 V.Ivanchenko    update according to new design, V.Ivanchenko
 //
 // --------------------------------------------------------------
 
@@ -232,14 +235,11 @@ void G4LowEnergyIonisationVI::BuildLossTable(
   G4DataVector* energy = 0;
   size_t binForFluo = totBin/10;
 
-  // Do you really need to create a G4PhysicsLogVector object just for the modest
-  // service of calculating the bin coordinate? 
-  // Waste of memory and loss of performance.
-  // - MGP -
   G4PhysicsLogVector* bVector = new G4PhysicsLogVector(lowKineticEnergy,
 		                		       highKineticEnergy,
 						       binForFluo);
-  G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
+  G4AtomicTransitionManager* transitionManager = 
+                             G4AtomicTransitionManager::Instance();
   
   // Clean up the vector of cuts
 
@@ -366,21 +366,20 @@ G4VParticleChange* G4LowEnergyIonisationVI::PostStepDoIt(const G4Track& track,
   const G4Material* material = track.GetMaterial();
   G4double kineticEnergy = track.GetKineticEnergy();
 
-  G4int index = material->GetIndex();
-  G4double tCut = cutForDelta[index];
-
-  G4double tmax = energySpectrum->MaxEnergyOfSecondaries(kineticEnergy);
-
   // Select atom and shell
 
   G4int Z = crossSectionHandler->SelectRandomAtom(material, kineticEnergy);
   G4int shell = crossSectionHandler->SelectRandomShell(Z, kineticEnergy);
-  const G4AtomicShell* atomicShell = (G4AtomicTransitionManager::Instance())->Shell(Z, shell);
+  const G4AtomicShell* atomicShell = 
+                (G4AtomicTransitionManager::Instance())->Shell(Z, shell);
   G4double bindingEnergy = atomicShell->BindingEnergy();
   G4int shellId = atomicShell->ShellId();
 
   // Sample delta energy
 
+  G4int    index  = material->GetIndex();
+  G4double tCut   = cutForDelta[index];
+  G4double tmax   = energySpectrum->MaxEnergyOfSecondaries(kineticEnergy);
   G4double tDelta = energySpectrum->SampleEnergy(Z, tCut, tmax, 
                                                  kineticEnergy, shell);
 
@@ -438,18 +437,17 @@ G4VParticleChange* G4LowEnergyIonisationVI::PostStepDoIt(const G4Track& track,
      
   G4double theEnergyDeposit = bindingEnergy;
 
-
   // Generation of Fluorescence and Auger
   size_t nSecondaries = 0;
   size_t totalNumber  = 1;
   G4std::vector<G4DynamicParticle*>* secondaryVector = 0;
   G4DynamicParticle* aSecondary = 0;
   G4ParticleDefinition* type = 0;
-  G4double em = G4std::min(bindingEnergy, theEnergyDeposit);
  
   // Fluorescence data start from element 6
 
-  if (Z > 5 && (em >= cutForPhotons || em >= cutForElectrons)) {
+  if (Z > 5 && (bindingEnergy >= cutForPhotons 
+            ||  bindingEnergy >= cutForElectrons)) {
 
     secondaryVector = deexcitationManager.GenerateParticles(Z, shellId);
 
@@ -540,19 +538,17 @@ G4bool G4LowEnergyIonisationVI::IsApplicable(const G4ParticleDefinition& particl
    return ( (&particle == G4Electron::Electron()) );
 }
 
-/*
-G4std::vector<G4Track*>* G4LowEnergyIonisationVI::SecondariesAlongStep(
-                                            const G4Step& step,
-                                                  G4double edep) 
+G4std::vector<G4DynamicParticle*>* 
+G4LowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
+				            G4double incidentEnergy,
+				            G4double eLoss)
 {
-  if(edep < cutForPhotons && edep < cutForElectrons) return 0;
+
+  if(eLoss < cutForPhotons && eLoss < cutForElectrons) return 0;
 
   G4AtomicTransitionManager* transitionManager = 
                              G4AtomicTransitionManager::Instance();
 
-  // material
-
-  const G4Material* material = (step.GetTrack())->GetMaterial();
   size_t nElements = material->GetNumberOfElements();
   const G4ElementVector* theElementVector = material->GetElementVector();
   G4bool stop = true;
@@ -570,34 +566,23 @@ G4std::vector<G4Track*>* G4LowEnergyIonisationVI::SecondariesAlongStep(
 
   if(stop) return 0;
 
-  // Step parameters
-
-  const G4ParticleDefinition* part = (step.GetTrack())->GetDefinition();
-  const G4StepPoint* preStep = step.GetPreStepPoint();
-  const G4StepPoint* postStep = step.GetPostStepPoint();
-  G4ThreeVector r = preStep->GetPosition();
-  G4ThreeVector deltaR = postStep->GetPosition();
-  deltaR -= r;
-  G4double t = preStep->GetGlobalTime();
-  G4double deltaT = postStep->GetGlobalTime();
-  deltaT -= t;
-  G4double inEnergy = preStep->GetKineticEnergy();
-
   // create vector of tracks of secondary particles
 
-  G4std::vector<G4Track*>* vectorTracks = new G4std::vector<G4Track*>;
-  G4Track* track = 0;
+  G4std::vector<G4DynamicParticle*>* partVector = 
+                                 new G4std::vector<G4DynamicParticle*>;
   G4std::vector<G4DynamicParticle*>* secVector = 0;
   G4DynamicParticle* aSecondary = 0;
   G4ParticleDefinition* type = 0;
-  G4double e, time, q;
+  G4double e;
   G4ThreeVector position;
   G4int shell, shellId;
 
   // sample secondaries
- 
+
+  G4double etot = 0.0; 
   G4std::vector<G4int> n = shellVacancy->GenerateNumberOfIonisations(material,
-                                         inEnergy, edep);
+                                         incidentEnergy, eLoss);
+
   for (size_t i=0; i<nElements; i++) {
 
     size_t nVacancies = n[i];
@@ -608,11 +593,10 @@ G4std::vector<G4Track*>* G4LowEnergyIonisationVI::SecondariesAlongStep(
 
       for(size_t j=0; j<nVacancies; j++) {
      
-        q = G4UniformRand();
-        shell = crossSectionHandler->SelectRandomShell(Z, inEnergy - q*edep);
+        shell = crossSectionHandler->SelectRandomShell(Z, incidentEnergy);
         shellId = transitionManager->Shell(Z, shell)->ShellId();
         G4double maxE = transitionManager->Shell(Z, shell)->BindingEnergy();
- 
+
         if (maxE>cutForPhotons || maxE>cutForElectrons ) {
           secVector = deexcitationManager.GenerateParticles(Z, shellId);
 	} else {
@@ -621,10 +605,6 @@ G4std::vector<G4Track*>* G4LowEnergyIonisationVI::SecondariesAlongStep(
 
         if (secVector) {	
 
-          time = deltaT*q + t;
-          position  = deltaR*q;
-          position += r;
-
           for (size_t l = 0; l<secVector->size(); l++) {
 
             aSecondary = (*secVector)[l];
@@ -632,11 +612,12 @@ G4std::vector<G4Track*>* G4LowEnergyIonisationVI::SecondariesAlongStep(
 	  
               e = aSecondary->GetKineticEnergy();
               type = aSecondary->GetDefinition();
-              if ( (type == G4Gamma::Gamma() && e > cutForPhotons ) || 
+              if ( etot + e <= eLoss &&
+                   (type == G4Gamma::Gamma() && e > cutForPhotons ) || 
                    (type == G4Electron::Electron() && e > cutForElectrons) ) {
-                     
-                     track = new G4Track(aSecondary, time, position);
-                     vectorTracks->push_back(track);
+                   
+                     etot += e;  
+                     partVector->push_back(aSecondary);
 
 	      } else {
                      delete aSecondary;
@@ -648,22 +629,14 @@ G4std::vector<G4Track*>* G4LowEnergyIonisationVI::SecondariesAlongStep(
       }
     }
   }
-  if(vectorTracks->size()==0) {
-    delete vectorTracks;
+
+
+  if(partVector->size()==0) {
+    delete partVector;
     return 0;
   }
-  return vectorTracks;
-}
-*/
 
-G4std::vector<G4DynamicParticle*>* 
-G4LowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
-				      G4double incidentEnergy,
-				      G4double eLoss)
-{
-  // Dummy implementation
-
-  return 0;
+  return partVector;
 }
 
 G4double G4LowEnergyIonisationVI::GetMeanFreePath(const G4Track& track,
