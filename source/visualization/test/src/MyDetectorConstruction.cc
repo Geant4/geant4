@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyDetectorConstruction.cc,v 1.10 2000-04-12 12:53:03 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.11 2000-05-02 13:51:19 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,7 @@
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
+#include "G4VisExtent.hh"
 
 MyDetectorConstruction::MyDetectorConstruction()
 {
@@ -62,7 +63,11 @@ MyDetectorConstruction::MyDetectorConstruction()
 }
 
 MyDetectorConstruction::~MyDetectorConstruction()
-{;}
+{
+  for (G4int i = 0; i < materialPointerStore.size(); i++) {
+    delete materialPointerStore[i];
+  }
+}
 
 G4VPhysicalVolume* MyDetectorConstruction::Construct()
 {
@@ -80,24 +85,29 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
   density = 1.29e-03*g/cm3;
   G4Material* Air = new G4Material(name="Air", density, nel=2);
+  materialPointerStore.push_back(Air);
   Air->AddElement(elN, .7);
   Air->AddElement(elO, .3);
 
   a = 207.19*g/mole;
   density = 11.35*g/cm3;
   G4Material* Pb = new G4Material(name="Lead", z=82., a, density);
+  materialPointerStore.push_back(Pb);
 
   a = 39.95*g/mole;
   density = 1.782e-03*g/cm3;
   G4Material* Ar = new G4Material(name="ArgonGas", z=18., a, density);
+  materialPointerStore.push_back(Ar);
 
   a = 26.98*g/mole;
   density = 2.7*g/cm3;
   G4Material* Al = new G4Material(name="Aluminum", z=13., a, density);
+  materialPointerStore.push_back(Al);
 
   a = 55.85*g/mole;
   density = 7.87*g/cm3;
   G4Material* Fe = new G4Material(name="Iron", z=26., a, density);
+  materialPointerStore.push_back(Fe);
 
   //------------------------------------------------------ volumes
 
@@ -149,6 +159,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
     ("displaced_box",undisplaced_box,
      G4Transform3D(G4RotationMatrix().rotateZ(20.*deg),
 		   G4ThreeVector(200.*cm,0.,0.)));
+  G4cout << "Displaced box extent:\n" << displaced_box->GetExtent() << G4endl;
   G4LogicalVolume * displaced_box_log
     = new G4LogicalVolume(displaced_box,Ar,"displaced_box_L",0,0,0);
   new G4PVPlacement(0,G4ThreeVector(0.*cm,-200.*cm,0.*cm),
@@ -160,7 +171,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
   G4Tubs* cylinder1 = new G4Tubs("Cylinder #1",20*cm,50*cm,30*cm,0,2*M_PI);
   G4Box* box1 = new G4Box("Box #1",20*cm,30*cm,40*cm);
-  G4Box* box2 = new G4Box("Box #2",10*cm,20*cm,30*cm);
+  G4Box* box2 = new G4Box("Box #2",10*cm,20*cm,35*cm);
   G4RotationMatrix* rm1 = new G4RotationMatrix;
   rm1->rotateZ(20*deg);
   G4RotationMatrix* rm2 = new G4RotationMatrix;
@@ -169,9 +180,13 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   G4IntersectionSolid* cyl1Ibox1 =
     new G4IntersectionSolid("cylinder1-intersection-box1", cylinder1, box1,
 		     rm1,G4ThreeVector(30.*cm,30.*cm,0.));
+  G4cout << "cylinder1-intersection-box1 extent:\n"
+	 << cyl1Ibox1->GetExtent() << G4endl;
   G4IntersectionSolid* cyl1Ibox1Ibox2 =
     new G4IntersectionSolid("cylinder1-intersection-box1-intersection-box2", cyl1Ibox1, box2,
 		     rm2,G4ThreeVector(0.,40*cm,0.));
+  G4cout << "cylinder1-intersection-box1-intersection-box2 extent:\n"
+	 << cyl1Ibox1Ibox2->GetExtent() << G4endl;
   G4LogicalVolume * intersection_log
     = new G4LogicalVolume(cyl1Ibox1Ibox2,Ar,"intersection_L",0,0,0);
   const G4VisAttributes* bool_red =
@@ -179,14 +194,22 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   intersection_log->SetVisAttributes(bool_red);
   new G4PVPlacement(0,G4ThreeVector(100.*cm,-50*cm,0.*cm),
                     "intersection_phys",intersection_log,experimentalHall_phys,
-                    false,0);
+                    true,0);
+
+  G4Tubs* cylinder1s = new G4Tubs("Cylinder #1",20*cm,50*cm,30*cm,0,2*M_PI);
+  G4Box* box1s = new G4Box("Box #1",20*cm,30*cm,40*cm);
+  G4Box* box2s = new G4Box("Box #2",10*cm,20*cm,35*cm);
+  G4RotationMatrix* rm1s = new G4RotationMatrix;
+  rm1s->rotateZ(20*deg);
+  G4RotationMatrix* rm2s = new G4RotationMatrix;
+  rm2s->rotateZ(60*deg);
 
   G4SubtractionSolid* cyl1Sbox1 =
-    new G4SubtractionSolid("cylinder1-subtraction-box1", cylinder1, box1,
-		     rm1,G4ThreeVector(30.*cm,30.*cm,0.));
+    new G4SubtractionSolid("cylinder1-subtraction-box1", cylinder1s, box1s,
+		     rm1s,G4ThreeVector(30.*cm,30.*cm,0.));
   G4SubtractionSolid* cyl1Sbox1Sbox2 =
-    new G4SubtractionSolid("cylinder1-subtraction-box1-subtraction-box2", cyl1Sbox1, box2,
-		     rm2,G4ThreeVector(0.,40*cm,0.));
+    new G4SubtractionSolid("cylinder1-subtraction-box1-subtraction-box2", cyl1Sbox1, box2s,
+		     rm2s,G4ThreeVector(0.,40*cm,0.));
   G4LogicalVolume * subtraction_log
     = new G4LogicalVolume(cyl1Sbox1Sbox2,Ar,"subtraction_L",0,0,0);
   const G4VisAttributes* bool_green =
@@ -194,22 +217,30 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   subtraction_log->SetVisAttributes(bool_green);
   new G4PVPlacement(0,G4ThreeVector(200.*cm,-50*cm,0.*cm),
                     "subtraction_phys",subtraction_log,experimentalHall_phys,
-                    false,0);
+                    true,0);
+
+  G4Tubs* cylinder1u = new G4Tubs("Cylinder #1",20*cm,50*cm,30*cm,0,2*M_PI);
+  G4Box* box1u = new G4Box("Box #1",20*cm,30*cm,40*cm);
+  G4Box* box2u = new G4Box("Box #2",10*cm,20*cm,35*cm);
+  G4RotationMatrix* rm1u = new G4RotationMatrix;
+  rm1u->rotateZ(20*deg);
+  G4RotationMatrix* rm2u = new G4RotationMatrix;
+  rm2u->rotateZ(60*deg);
 
   G4UnionSolid* cyl1Ubox1 =
-    new G4UnionSolid("cylinder1-union-box1", cylinder1, box1,
-		     rm1,G4ThreeVector(30.*cm,30.*cm,0.));
+    new G4UnionSolid("cylinder1-union-box1", cylinder1u, box1u,
+		     rm1u,G4ThreeVector(30.*cm,30.*cm,0.));
   G4UnionSolid* cyl1Ubox1Ubox2 =
-    new G4UnionSolid("cylinder1-union-box1-union-box2", cyl1Ubox1, box2,
-		     rm2,G4ThreeVector(0.,40*cm,0.));
+    new G4UnionSolid("cylinder1-union-box1-union-box2", cyl1Ubox1, box2u,
+		     rm2u,G4ThreeVector(0.,40*cm,0.));
   G4LogicalVolume * union_log
     = new G4LogicalVolume(cyl1Ubox1Ubox2,Ar,"union_L",0,0,0);
   const G4VisAttributes* bool_blue =
     new G4VisAttributes(G4Colour(0.,0.,1.));
   union_log->SetVisAttributes(bool_blue);
-  new G4PVPlacement(0,G4ThreeVector(300.*cm,-50*cm,0.*cm),
+  new G4PVPlacement(0,G4ThreeVector(350.*cm,-50*cm,0.*cm),
                     "union_phys",union_log,experimentalHall_phys,
-                    false,0);
+                    true,0);
 
   //----------- Tubes, replicas(!?) and daughter boxes
 
