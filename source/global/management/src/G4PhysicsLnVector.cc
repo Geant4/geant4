@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLnVector.cc,v 1.6 2001-01-09 11:27:02 gcosmo Exp $
+// $Id: G4PhysicsLnVector.cc,v 1.7 2001-02-02 16:23:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,6 @@ G4PhysicsLnVector::G4PhysicsLnVector(size_t theNbin)
   dataVector.reserve(theNbin+1);
   binVector.reserve(theNbin+1); 
 
-  ptrNextTable = 0;
   numberOfBin = theNbin;
   dBin = 0.;
   baseBin = 0.;
@@ -63,7 +62,6 @@ G4PhysicsLnVector::G4PhysicsLnVector(G4double theEmin,
   dataVector.reserve(theNbin+1);
   binVector.reserve(theNbin+1); 
 
-  ptrNextTable = 0;
   numberOfBin = theNbin;
   dBin = log(theEmax/theEmin) / numberOfBin;
   baseBin = log(theEmin)/dBin;

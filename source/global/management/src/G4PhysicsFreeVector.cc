@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsFreeVector.cc,v 1.5 2001-01-09 11:27:01 gcosmo Exp $
+// $Id: G4PhysicsFreeVector.cc,v 1.6 2001-02-02 16:23:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,10 +16,10 @@
 //
 //  History:
 //    02 Dec. 1995, G.Cosmo : Structure created based on object model
-//    06 June 1996, K.Amako : The 1st version of implemented.
+//    06 June 1996, K.Amako : The 1st version of implemented
 //    01 Jul. 1996, K.Amako : Cache mechanism and hidden bin from the 
-//                            user introduced.
-//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added.
+//                            user introduced
+//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
 //    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
 //
 //--------------------------------------------------------------------
@@ -29,7 +29,6 @@
 
 G4PhysicsFreeVector::G4PhysicsFreeVector()
 {
-  ptrNextTable = 0;
   edgeMin = 0.0;
   edgeMax = 0.0;
   numberOfBin = 0;
@@ -49,7 +48,6 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(size_t theNbin)
      binVector.push_back(0.0);
      dataVector.push_back(0.0);
   }
-  ptrNextTable = 0;
 
   edgeMin = 0.;
   edgeMax = 0.;
@@ -64,14 +62,12 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(size_t theNbin)
 G4PhysicsFreeVector::G4PhysicsFreeVector(const G4DataVector& theBinVector, 
                                          const G4DataVector& theDataVector)
 {
-  numberOfBin = theBinVector.entries();
+  numberOfBin = theBinVector.size();
 
   // Add extra one bin (hidden to user) to handle correctly when 
   // Energy=theEmax in getValue.
   dataVector.reserve(numberOfBin+1);
   binVector.reserve(numberOfBin+1);
-
-  ptrNextTable = 0;
 
   for (size_t i=0; i<numberOfBin; i++) {
      binVector.push_back(theBinVector[i]);

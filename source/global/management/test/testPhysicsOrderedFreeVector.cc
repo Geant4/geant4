@@ -5,10 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testPhysicsOrderedFreeVector.cc,v 1.3 1999-11-23 15:00:06 gcosmo Exp $
+// $Id: testPhysicsOrderedFreeVector.cc,v 1.4 2001-02-02 16:23:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#include "g4templates.hh"
+#include "globals.hh"
 #include "G4PhysicsOrderedFreeVector.hh"
 
 void LoopUntilPressEnter();

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: OrderedTableTest.cc,v 1.3 1999-11-23 15:00:06 gcosmo Exp $
+// $Id: OrderedTableTest.cc,v 1.4 2001-02-02 16:23:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,31 +17,35 @@
 #include "G4ios.hh"
 #include "G4OrderedTable.hh"
 
-G4int main() {
-
-  G4int Imax=10;
+int main()
+{
+  size_t I, J;
+  const size_t Imax=10;
   G4cout.precision(3); 
 
  //
  // Create a G4OrderedTable object
  // 
 
-  G4OrderedTable  aTable(Imax); 
+  G4OrderedTable aTable(Imax);
+  G4OrderedTable::iterator pl = aTable.begin();
 
-  for(G4int I=0; I<Imax; I++){
-    aTable(I) = new G4ValVector(I+1);    // aTable.insertAt(I,new G4ValVector(I+1));
-    for(G4int J=0; J<=I; J++) {
-      (*aTable(I))(J) = G4double(J);     // aTable(I)->insertAt(J,G4double(J));
-    }
+  for(I=0; I<Imax; I++)
+  {
+    G4DataVector* aVector = new G4DataVector(I+1);
+    *pl++ = aVector;
+//    pl = aTable.insert(pl, aVector); ++pl;
+    for(J=0; J<=I; J++)
+      aVector->insertAt(J, G4double(J));
   }
 
  // Now access the data contained in the table
 
-  for (I=0; I<Imax; I++){
+  for (I=0; I<Imax; I++)
+  {
     G4cout << G4endl << G4endl << " I= " << I << "  Data= ";
-    for(G4int J=0; J<=I; J++) {
-      G4cout << (*aTable(I))(J) << " ";
-    }
+    for(J=0; J<=I; J++)
+      G4cout << (*aTable[I])[J] << " ";
   }
 
  //
@@ -49,24 +53,29 @@ G4int main() {
  //
 
   G4OrderedTable*  aTablePtr = new G4OrderedTable(Imax); 
+  pl = aTablePtr->begin();
 
-  for(I=0; I<Imax; I++){
-    (*aTablePtr)(I) = new G4ValVector(I+1);  // aTablePtr->insertAt(I,new G4ValVector(I+1))
-    for(G4int J=0; J<=I; J++) {
-      (*(*aTablePtr)(I))(J) = G4double(J);   // (*aTablePtr)(I)->insertAt(J,G4double(J))
-    }
+  for(I=0; I<Imax; I++)
+  {
+    G4DataVector* aVector = new G4DataVector(I+1);
+    *pl++ = aVector;
+//  pl = aTablePtr->insert(pl, aVector); ++pl;
+    for(J=0; J<=I; J++)
+      aVector->insertAt(J, G4double(J));
   }
 
  // Now access the data contained in the table 
 
-  for (I=0; I<Imax; I++){
+  for (I=0; I<Imax; I++)
+  {
     G4cout << G4endl << G4endl << " I= " << I << "   Data= ";
-    for(G4int J=0; J<=I; J++) {
-      G4cout << (*(*aTablePtr)(I))(J) << " ";
-    }
+    for(J=0; J<=I; J++)
+      G4cout << (*(*aTablePtr)[I])[J] << " ";
   }
   G4cout << G4endl;
 
+  aTable.clearAndDestroy();
+  aTablePtr->clearAndDestroy();
+
   return EXIT_SUCCESS;
 }
-

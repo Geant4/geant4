@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.5 2001-01-09 11:27:01 gcosmo Exp $
+// $Id: G4LPhysicsFreeVector.cc,v 1.6 2001-02-02 16:23:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,7 +26,6 @@
 
 G4LPhysicsFreeVector::G4LPhysicsFreeVector()
 {
-   ptrNextTable = 0;
    edgeMin = 0.0;
    edgeMax = 0.0;
    numberOfBin = 0;
@@ -44,7 +43,6 @@ G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin, G4double binmin,
    lastBin = 0;
    binVector.reserve(nbin);
    dataVector.reserve(nbin);
-   ptrNextTable = 0;
    verboseLevel = 0;
    for (size_t i=0; i<numberOfBin; i++) {
      binVector.push_back(0.0);
