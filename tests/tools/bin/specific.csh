@@ -188,9 +188,13 @@ setenv G4VIS_USE_OIX               1
 # Specific :
 setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/HP-UX-aCC
 setenv OGLHOME        /lal/Mesa/3.0/HP-UX
-setenv OIVHOME        /lal/SoFree/v2r3
-setenv OIVFLAGS       "-I$OIVHOME/include -I/lal/HEPVis/v5r0-06-LAL/include"
-setenv OIVLIBS        "-L/lal/HEPVis/v5r0-06-LAL/HP-UX-aCC-SF -lHEPVis -L$OIVHOME/HP-UX-aCC -lSoFree"
+setenv OGLLIBS        "-L$OGLHOME/lib -lGLU -lGL"
+#setenv OIVHOME        /lal/SoFree/v2r3
+#setenv HEPVISHOME     /lal/HEPVis/v5r0-06-LAL
+setenv OIVHOME        /projects/SoFree
+setenv HEPVISHOME     /projects/HEPVis
+setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
+setenv OIVLIBS        "-L$HEPVISHOME/HP-UX-aCC-SF -lHEPVis -L$OIVHOME/HP-UX-aCC -lSoFree"
 setenv SOFREEUSER     $OIVHOME/user/
 # OPACS :
 setenv G4UI_BUILD_WO_SESSION       1
@@ -204,6 +208,7 @@ setenv CPPVERBOSE 1
 endif
 #---------------------------------------------------
 if ( `uname -n` == asc ) then
+# In CLHEP-default.h : //#define HEP_USE_STD 1
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
 setenv G4INSTALL /geant4/dev/geant4
 setenv G4LIB     /geant4/dev/lib
@@ -234,8 +239,9 @@ setenv RWBASE         /lal/rogue/6.1/OSF1-cxx
 setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/OSF1-cxx
 setenv OGLHOME        /lal/Mesa/3.0/OSF1
 setenv OIVHOME        /lal/OpenInventor/2.5
-setenv OIVFLAGS       "-I$OIVHOME/include -I/lal/HEPVis/v5r0-06-LAL/include"
-setenv OIVLIBS        "-L/lal/HEPVis/v5r0-06-LAL/OSF1-cxx-TGS -lHEPVis  -L$OIVHOME/lib -lInventorXt -lInventor -limage"
+setenv HEPVISHOME     /projects/HEPVis
+setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
+setenv OIVLIBS        "-L$HEPVISHOME/OSF1-cxx-TGS -lHEPVis -L$OIVHOME/lib -lInventorXt -lInventor -limage"
 setenv XENVIRONMENT   $OIVHOME/app-defaults/Inventor
 # OPACS :
 setenv G4UI_BUILD_WO_SESSION       1
@@ -276,9 +282,12 @@ setenv G4VIS_USE_OIX               1
 setenv RWBASE         /lal/rogue/6.1/Linux-gxx
 setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/Linux-gxx
 setenv OGLHOME        /lal/Mesa/3.0/Linux
-setenv OIVHOME        /lal/SoFree/v2r3
-setenv OIVFLAGS       "-I$OIVHOME/include -I/lal/HEPVis/v5r0-06-LAL/include"
-setenv OIVLIBS        "-L/lal/HEPVis/v5r0-06-LAL/Linux-egcs-SF -lHEPVis -L$OIVHOME/Linux-egcs -lSoFree"
+#setenv OIVHOME        /lal/SoFree/v2r3
+#setenv HEPVISHOME     /lal/HEPVis/v5r0-06-LAL
+setenv OIVHOME        /projects/SoFree
+setenv HEPVISHOME     /projects/HEPVis
+setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
+setenv OIVLIBS        "-L$HEPVISHOME/Linux-egcs-SF -lHEPVis -L$OIVHOME/Linux-egcs -lSoFree"
 setenv SOFREEUSER     $OIVHOME/user/
 # OPACS :
 setenv G4UI_BUILD_WO_SESSION       1
