@@ -1,0 +1,11 @@
+- Change 'static const  G4String' array to  'static const char*' array
+(shortlived-V00-01-01)
+
+- New naming scheme for ions in G4IonTable::GetIonName() (partman-V00-01-02)
+- Modified G4IonTable::GetIon methods and related 
+- Added  G4VIsotopeTable and G4IsotopeProperty
+- Added theDynamicalCharge and theElectronOccupancy in G4DynamicParticle 
+- Added G4PDGCodeChecker and modified G4ParticleDefinition::FillQuarkContents
+- Added G4NucleiPropertiesTheoreticalTable to describe excess Masses from
+Meyer-Swiatecky fromula
+- Modified G4NucleiProperties and G4NucleiPropertiesTable  (Vicente)

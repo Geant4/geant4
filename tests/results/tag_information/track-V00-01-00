@@ -1,0 +1,3 @@
+-  Added mass/charge change in G4ParticleChange
+-  Modified G4ParticleChange::CheckIt
+-  Separate implementation of inline functions to G4Track.icc and G4Step.icc
