@@ -78,6 +78,9 @@ Fdependencies = $(patsubst %.o,%.d,$(Fbinobjects) $(Flibobjects))
 ifdef G3G4DEBUG
   CPPFLAGS += -DG3G4DEBUG
 endif
+ifdef G3G4_NO_REFLECTION
+  CPPFLAGS += -DG3G4_NO_REFLECTION
+endif
 
 ###############################################################################
 ### user beware! .rz files made with cernlib v 95a cannot be read with later

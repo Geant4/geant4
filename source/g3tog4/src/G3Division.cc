@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3Division.cc,v 1.13 2001-11-08 16:07:59 gcosmo Exp $
+// $Id: G3Division.cc,v 1.14 2001-11-21 14:25:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
@@ -35,6 +35,9 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
+#ifndef G3G4_NO_REFLECTION
+#include "G4ReflectionFactory.hh"
+#endif
 
 G3VolTableEntry* G4CreateVTE(G4String vname, G4String shape, G4int nmed,
                                G4double Rpar[], G4int npar);
@@ -117,7 +120,7 @@ void G3Division::UpdateVTE()
   }  
 }
 
-G4PhysicalVolumesPair G3Division::CreatePVReplica()
+void G3Division::CreatePVReplica()
 {
   G4String name = fVTE->GetName();
   G4LogicalVolume* lv =  fVTE->GetLV();
@@ -136,23 +139,20 @@ G4PhysicalVolumesPair G3Division::CreatePVReplica()
        if (position.y()!=0.) 
          position.setX(position.y()*((G4Para*)lv->GetSolid())->GetTanAlpha());
 
+       #ifndef G3G4_NO_REFLECTION
        G4ReflectionFactory::Instance()
-	 ->Place(G4Translate3D(position), name, lv, mlv, 0, i);
+         ->Place(G4Translate3D(position), name, lv, mlv, 0, i);
 
-       //new G4PVPlacement(0, position, lv, name, mlv, 0, i);
+       #else  
+       new G4PVPlacement(0, position, lv, name, mlv, 0, i);
+
+       #endif
     }
     
-    // no G4PVReplica was created - return 0
-    return G4PhysicalVolumesPair(0,0);   
+    // G4PVReplica cannot be created
+    return;   
   }     
   
-  G4PhysicalVolumesPair pvol
-    = G4ReflectionFactory::Instance()
-        ->Replicate(name, lv, mlv, fAxis, fNofDivisions, fWidth, fOffset);
-  
-  //G4PVReplica* pvol 
-  //  = new G4PVReplica(name, lv, mlv, fAxis, fNofDivisions, fWidth, fOffset);
-
   #ifdef G3G4DEBUG
     G4cout << "Create G4PVReplica name " << name << " logical volume name " 
 	   << lv->GetName() << " mother logical volme name "
@@ -161,7 +161,14 @@ G4PhysicalVolumesPair G3Division::CreatePVReplica()
 	   << fOffset << G4endl;
   #endif
 
-  return pvol;
+  #ifndef G3G4_NO_REFLECTION
+  G4ReflectionFactory::Instance()
+    ->Replicate(name, lv, mlv, fAxis, fNofDivisions, fWidth, fOffset);
+
+  #else    
+  new G4PVReplica(name, lv, mlv, fAxis, fNofDivisions, fWidth, fOffset);
+
+  #endif
 }
 
 // private methods
