@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>System Testing report on large-N tests</title>
+<!-- Changed by: Serguei SADILOV, 26-Nov-2001 -->
 </head>
 
 <body>
@@ -15,39 +16,45 @@ Report on Errors and Warnings arising from system testing on the
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
       for all platforms. 
 <pre>
+              OK        OK        OK         13          OK        |          OK         OK         11+15    check     OK         OK
+              ^         ^         ^          ^           ^         ^          ^          ^           ^       later      ^          ^
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
            | SUN-CC  | SUN-CC  |Linux-egcs|Linux-egcs|Linux-g++ |Linux-g++ | HP-aCC   | HP-aCC   | DEC-cxx | DEC-cxx | DEC-cxx | DEC-cxx |
            |optim_ISO|debug_ISO|egcs.optim|egcs.debug|opt.NEWGCC|deb.NEWGCC| optim    | debug    |optim_ISO|debug_ISO|optim_NON|debug_NON|
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test01     | No-diff |         |          |          |          |          |          |          |         |         |         |         |
-test02     | Warn 1.1| Warn1.1 |          |          |          |          | OK       |          |         |         |         |         |
-test02.h   | OK      | Warn 3  | Warn 2&3 |          | Err 4    | Warn 3   |          | Warn 3   |  Err 5  | Warn 3  | Err 5   |         |
-test05     |(anno)   |         |          |          |          |          |          |          |         |         |         |         |
+test01     |         |         |          |          |          |          |          |          |         |         |         |         |
+test02     |         |         |          |          |          |          |          |          |         |         |         |         |
+test02.h   | Warn 6  | Warn 6  | Warn 6   | Warn 6   | Warn 6   | Warn 6   | Warn 6   |          |  abend  | Warn 3  | Err 9   | Warn 6  |
+test05     |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test06     |Warn 1.2 |         |          |          |          |          | Warn 1   | Warn 1   |         |         |         |         |
-test07     |(anno)   |         |          |          |          |          |          |          |         |         |         |         |
-test09     |(anno)   |Err 3.1  |          |          |          |          | Warn 5+1 | Warn 5   |         |         |         |         |
-test10     |(anno)   |         |          |          |          |          |          |          |         |         |         |         |
+test06     |         |         |          |          |          |          |          |          |         |         |         |         |
+test07     |         |         |          |          |          |          |          |          |         |         |         |         |
+test09     |         |         |          |          |          |          |          |          |         |         |         |         |
+test10     |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test11     |Err 1.1  |         | abend    | abend    | abend    | abend    | Err 1    | Err 1    | Err 1   | Err 1   | Err 1   | Err 1   |
-test12     |(anno)   |         |          | Warn 2   | Err 4    | Warn 2   |          | Warn 2   | abend   |         | abend   |         |
-test13     |Warn 2.1 | Perf    |          |          | Err 4    | Err  6   | loop     | loop     | abend   |         | abend   |         |
-test14     |anno+2nds|         |          |          |          |          |          |          |         |         |cxx fail |cxx fail |
-test15     |         |         | abend    | abend    | abend    | abend    |          |          | Err 1   | Err 1   | Err 1   | Err 1   |
+test11     | Err 10  | Err 10  | abend    | abend    | abend    | abend    | Err 10   | Err 10   | dis/ch  | Err 1   | Err 10  | Err 10  |
+test12     | Warn 6  | Warn 6  | Warn 6   | Warn 6   | Warn 2+6 | Warn 2+6 | Warn 2+6 | Warn 2+6 | abend   |         | abend   |         |
+test13     | W2+6 E6 | W2+6 E6 | Warn 6   | dis/ch   | Warn 6   | Warn 6   | Warn 2+6 | Warn 2+6 | abend   |         | abend   |         |
+test14     |         |         |          |          |          |          |          |          |         |         |         |         |
+test15     | link    | Warn 6  | abend    | abend    | abend    | abend    | Warn 6   | Warn 6   | dis/ch  | Err 1   | abend   | Warn 6  |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test16     |Warn 3.1 |OK + anno| Warn 3   | Warn 2   | Err 4    | Warn 2   | Warn 3   | Warn 3   | abend   | Warn 3  | abend   |         |
-test17     | OK      |         |          |          |          |          |          |          |         |         |cxx fail |cxx fail |
-test18     |OK (anno)|         |          |          |          |          |          |          |         |
-test20     |OK (anno)|         |          |          |          |          |          |          |         |         |cxx fail |cxx fail |
+test16     | Warn 6  | Warn 6  | Warn 6   | Warn 6   | Warn 6   | Warn 6   | Warn 6   | Warn 6   | W6 abend| Warn 3  | W6 abend|         |
+test17     |         |         |          |          |          |          |          |          |         |         |         |         |
+test18     |         |         |          |          |          |          |          |          |         |         |         |         |
+test20     |         |         |          |          |          |          |          |          |         |         |         |         |
+test21     | W6 loop?| W6 loop?| Warn 6   | Warn 6   | Warn 6   | Warn 6   | loop?    | Warn 6   | abend   |         | abend   | abend   |
+test22     |         |         | abend    | abend    | abend    | abend    |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test103    |........ |Warn 4.1 | Warn 1   |          |          |          |          | Warn 1   |         |         |         |         |
-test104    |........ |Warn 4.1 |          |          |          | Warn 3   |          | Warn 4   | abend   | abend   | abend   | abend   |
-test104.Em | Perf    |Perf     | Perf     | Perf     |          |          |          |          |         |         |         |         |
+test103    |........ |         |          |          |          |          |          |          |         |         |         |         |
+test104    |........ |         |          |          |          |          |          | Warn 4   | abend   | abend   | abend   | abend   |
+test104.Em | Perf    | Perf    | Perf     | Perf     |          |          |          |          |         |         |         |         |
 test502    |         |         | Err  8   | Err  8   | Err  8   | Err  8   |          |          |         |         |         |         |
-test508    |Err  2.1 | Err  2  |          | Err  2   |          | Err  2   |          |          |         |         |         |         |
+test508    |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 
  (anno) change in annotation, layout and formatting.
+ dis/ch - test was disabled, but is checking now
+ abend  - crash without clue
 
  Errors 2,4 and 5 require some debugging work.
  Error  1         requires changes to the test so it may complete in a reasonable time.
@@ -60,6 +67,7 @@ test508    |Err  2.1 | Err  2  |          | Err  2   |          | Err  2   |    
  Err  4  negative currentInteractionLength
  Err  5  Momentum Change is not unit vector (leading to exception).
  Err  6  Error in G4HEInelastic::GenerateNBodyEvent
+ Err 10  *** G4Exception: Aborting execution ***
 
 
  It would be really nice to get rid of these warnings, particularly for the Large_N tests.
@@ -70,6 +78,7 @@ test508    |Err  2.1 | Err  2  |          | Err  2   |          | Err  2   |    
  Warn 4  G4PropagatorInField::LocateIntersectionPoint:   
          Warning: Integration inaccuracy requires an adjustment in the step's endpoint
  Warn 5  G4VParticleChange::SetNumberOfSecondaries() Warning  theListOfSecondaries is not empty G4VParticleChange::SetNumberOfSecondaries()
+ Warn 6  G4HadronInelasticProcess: called for final state, while cross-section was zero
 
  cxx-fail - 
 
@@ -199,7 +208,27 @@ Command exited with non-zero status 1
 G4 Err 8  Linux-*   test502
 ---------------------------
 
-"SOMETIMES IT CRASHES"
+It crashes in unpredictable way in printing stat:
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   35 kByte
+    Total CPU time elapsed for geometry optimisation: 0.07 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+
+
+
+G4 Err 10
+----------
+
+In case the data sets are at present not available in the neutron data library, 
+please contact Hans-Peter.Wellisch@cern.ch
+
+*** G4Exception: Aborting execution ***
 
 
 G4Warn 1  SUN-CC.optim_ISO test02
@@ -352,6 +381,15 @@ G4PropagatorInField::LocateIntersectionPoint:   Warning: Integration inaccuracy 
 G4Warn 5 HP-aCC.optim test09
 (stderr)
 G4VParticleChange::SetNumberOfSecondaries() Warning  theListOfSecondaries is not empty G4VParticleChange::SetNumberOfSecondaries() Warning  ...
+
+
+G4Warn 6  
+----------------------------------
+
+G4HadronInelasticProcess: called for final state, while cross-section was zero
+                          Returning empty particle change....
+                          current MeanFreePath is 1.79769e+308
+
 
 
 Perf
