@@ -1,0 +1,163 @@
+%%
+%% This is file `10pt.rtx',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% revtex4.dtx  (with options: `10pt')
+%% 
+%% This file is part of the APS files in the REVTeX 4 distribution.
+%% For the version number, search on the string 
+%% Original version by David Carlisle
+%% Modified by Arthur Ogawa (mailto:ogawa@teleport.com)
+%% 
+%% Copyright (c) 1999 The American Physical Society.
+%% http://publish.aps.org/revtex4/
+%% mailto:revtex4@aps.org
+%% 
+%% See the REVTeX 4 README file for restrictions and more information.
+%% 
+\ProvidesFile{10pt.rtx}
+          [2001/08/03 v4.0 (http://publish.aps.org/revtex4/ for documentation)]%FileInfo
+\def\normalsize{%
+   \@setfontsize\normalsize\@xpt{11.5}%
+   \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
+   \belowdisplayskip \abovedisplayskip
+   \abovedisplayshortskip  \abovedisplayskip
+   \belowdisplayshortskip \abovedisplayskip
+   \let\@listi\@listI
+}%
+\def\small{%
+  \@setfontsize\small\@ixpt{10.5}%
+  \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
+  \belowdisplayskip \abovedisplayskip
+  \abovedisplayshortskip \z@ \@plus2\p@
+  \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
+  \def\@listi{%
+    \leftmargin\leftmargini
+    \topsep 4\p@ \@plus2\p@ \@minus2\p@
+    \parsep 2\p@ \@plus\p@ \@minus\p@
+    \itemsep \parsep
+  }%
+}%
+\def\footnotesize{%
+  \@setfontsize\footnotesize\@viiipt{9.5pt}%
+  \abovedisplayskip 6\p@ \@plus2\p@ \@minus4\p@
+  \belowdisplayskip \abovedisplayskip
+  \abovedisplayshortskip \z@ \@plus\p@
+  \belowdisplayshortskip 3\p@ \@plus\p@ \@minus2\p@
+  \def\@listi{%
+    \leftmargin\leftmargini
+    \topsep 3\p@ \@plus\p@ \@minus\p@
+    \parsep 2\p@ \@plus\p@ \@minus\p@
+    \itemsep \parsep
+  }%
+}%
+\def\scriptsize{%
+ \@setfontsize\scriptsize\@viipt\@viiipt
+}%
+\def\tiny{%
+ \@setfontsize\tiny\@vpt\@vipt
+}%
+\def\large{%
+ \@setfontsize\large\@xiipt{14pt}%
+}%
+\def\Large{%
+ \@setfontsize\Large\@xivpt{18pt}%
+}%
+\def\LARGE{%
+ \@setfontsize\LARGE\@xviipt{22pt}%
+}%
+\def\huge{%
+ \@setfontsize\huge\@xxpt{25pt}%
+}%
+\def\Huge{%
+ \@setfontsize\Huge\@xxvpt{30pt}%
+}%
+ \@ifxundefined\twoside@sw{\@booleanfalse\twoside@sw}{}%
+ \twoside@sw{%
+    \oddsidemargin  -20pt
+    \evensidemargin -20pt
+    \marginparwidth 107pt
+ }{%
+    \oddsidemargin  -.25in
+    \evensidemargin -.25in
+    \marginparwidth 30pt
+ }%
+\marginparsep 6pt
+\topmargin -61pt
+\headheight 25pt
+\headsep 16pt
+\topskip 10pt
+\footskip 30pt
+ \textheight = 56pc
+\textwidth42.5pc
+\columnsep 1.5pc
+\columnseprule 0pt
+\footnotesep 1pt
+\skip\footins 39pt plus 4pt minus 2pt
+\def\footnoterule{\kern-19pt\hrule width.5in\kern18.6pt\relax}%
+\floatsep 12pt plus 2pt minus 2pt
+\textfloatsep 20pt plus 2pt minus 4pt
+\intextsep 12pt plus 2pt minus 2pt
+\dblfloatsep 12pt plus 2pt minus 2pt
+\dbltextfloatsep 20pt plus 2pt minus 4pt
+\@fptop 0pt plus 1fil
+\@fpsep 8pt plus 2fil
+\@fpbot 0pt plus 1fil
+\@dblfptop 0pt plus 1fil
+\@dblfpsep 8pt plus 2fil
+\@dblfpbot 0pt plus 1fil
+\marginparpush 5pt
+\parskip 0pt plus 1pt
+\parindent 10pt
+\emergencystretch8\p@
+\partopsep 2pt plus 1pt minus 1pt
+\leftmargini 25pt
+\leftmarginii 22pt
+\leftmarginiii 18.7pt
+\leftmarginiv 17pt
+\leftmarginv 10pt
+\leftmarginvi 10pt
+\def\@listI{%
+  \leftmargin\leftmargini
+  \parsep 4\p@ plus2\p@ minus\p@
+  \topsep 8\p@ plus2\p@ minus4\p@
+  \itemsep 4\p@ plus2\p@ minus\p@
+}%
+\labelsep 4pt
+\def\@listii{%
+  \leftmargin\leftmarginii
+  \labelwidth\leftmarginii
+  \advance\labelwidth-\labelsep
+  \topsep 4\p@ plus2\p@ minus\p@
+  \parsep 2\p@ plus\p@ minus\p@
+  \itemsep \parsep
+}%
+\def\@listiii{%
+  \leftmargin\leftmarginiii
+  \labelwidth\leftmarginiii
+  \advance\labelwidth-\labelsep
+  \topsep 2\p@ plus\p@ minus\p@
+  \parsep \z@
+  \partopsep \p@ plus\z@ minus\p@
+  \itemsep \topsep
+}%
+\def\@listiv{%
+  \leftmargin\leftmarginiv
+  \labelwidth\leftmarginiv
+  \advance\labelwidth-\labelsep
+}%
+\def\@listv{%
+  \leftmargin\leftmarginv
+  \labelwidth\leftmarginv
+  \advance\labelwidth-\labelsep
+}%
+\def\@listvi{%
+  \leftmargin\leftmarginvi
+  \labelwidth\leftmarginvi
+  \advance\labelwidth-\labelsep
+}%
+\endinput
+%%
+%% End of file `10pt.rtx'.
