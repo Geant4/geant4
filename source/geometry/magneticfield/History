@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2002-12-06 19:22:56 gcosmo Exp $
+$Id: History,v 1.69 2002-12-12 08:21:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 12th, 2002     G. Cosmo - field-V04-01-06
+---------------------------
+- Moved unused variable 'nStpPr' to debug section in G4MagIntegratorDriver.cc,
+  method AccurateAdvance().
 
 Dec 06th, 2002     G. Cosmo - field-V04-01-05
 ---------------------------
