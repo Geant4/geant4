@@ -26,11 +26,19 @@ if ( $Age > 0 ) {
 open(BONSAI,"bonsai.sdb") || die "Failed to open read bonsai.sdb $!";
 # extract the reference tag (e.g. geant4-01-01-ref-05 )
 $line = <BONSAI>;
-if ( $line =~ m/^\.\s+(geant4-\d+-\d+-ref-\d+)/ ) {
+#
+# fixup for database problem
+# geant4-01-00-cand-00
+# 
+if ( $line =~ m/geant4-01-00-cand-00/ ) {
+    $line =~ s/geant4-01-00-cand-00/geant4-02-00-cand-00/;
+    print "Fixup for database problem\n$line\n";
+}
+if ( $line =~ m/^\.\s+(geant4-\d+-\d+-(ref|cand)-\d+)/ ) {
     print "Last reference tag was $1\n" if ($verbose);
     $reftag=$1;
 } else { 
-    print "bonsai.sdb does not start with reference global tag\n";
+    print "bonsai.sdb does not start with a recognised reference global tag\n";
     exit(1);
 }
 $reftagsdb="$reftag.sdb";
@@ -66,6 +74,10 @@ open(NEXT,">$NextShot") || die "Failed to open write next bonsai.sdb $NextShot $
 open(BONSAI,"bonsai.sdb") || die "Failed to open read bonsai.sdb on second pass $!";
 while ($line = <BONSAI>) {
     chomp($line);
+    if ( $line =~ m/geant4-01-00-cand-00/ ) {
+        $line =~ s/geant4-01-00-cand-00/geant4-02-00-cand-00/;
+        print "Fixup for database problem\n$line\n";
+    }
     ($dir,$tag)=split(' ',$line);
     $dir=substr($dir,2);            # neater without the leading ./
     printf ("%-25s ",$tag);
