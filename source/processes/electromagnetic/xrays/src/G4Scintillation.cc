@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.19 2004-08-05 23:47:55 gum Exp $
+// $Id: G4Scintillation.cc,v 1.20 2004-10-19 01:37:50 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -200,7 +200,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	if (fTrackSecondariesFirst) {
            if (aTrack.GetTrackStatus() == fAlive )
-	  	   aParticleChange.SetStatusChange(fSuspend);
+	  	   aParticleChange.ProposeTrackStatus(fSuspend);
         }
 	
 	////////////////////////////////////////////////////////////////

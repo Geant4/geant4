@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.14 2003-02-12 08:52:55 gcosmo Exp $
+// $Id: G4Cerenkov.cc,v 1.15 2004-10-19 01:37:39 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -181,7 +181,7 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         if (fTrackSecondariesFirst) {
            if (aTrack.GetTrackStatus() == fAlive )
-                   aParticleChange.SetStatusChange(fSuspend);
+                   aParticleChange.ProposeTrackStatus(fSuspend);
         }
 	
 	////////////////////////////////////////////////////////////////
