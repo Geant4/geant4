@@ -227,10 +227,11 @@ void Test17PhysicsList::ConstructEM()
       // Standard ionisation
       //       G4hIonisation* hIon = new G4hIonisation() ;
 
-      // Standard ionisation with low energy extantion
+      // Standard ionisation with low energy extention
       G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
       hIon->SetNuclearStoppingOff() ;
-      hIon->SetBarkasOff() ;
+      hIon->SetAntiProtonStoppingOff() ;
+      //      hIon->SetBarkasOff() ;
       //      hIon->SetNuclearStoppingOn() ;
 
        //hIon->SetStoppingPowerTableName("Ziegler1977He") ;
