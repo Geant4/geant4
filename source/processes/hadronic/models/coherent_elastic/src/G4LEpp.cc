@@ -32,7 +32,6 @@
 // Initialization of static data arrays:
 #include "G4LEppData.hh"
 
-
 G4LEpp::G4LEpp() :
   G4HadronicInteraction()
 {
@@ -44,6 +43,27 @@ G4LEpp::G4LEpp() :
 
   SetMinEnergy(0.);
   SetMaxEnergy(1200.*GeV);
+
+  theHbookManager.SetFilename("G4LEpp.hbook");
+
+   HPxCM = new HbookHistogram("PxCM", 80, -2., 2.);
+   HPyCM = new HbookHistogram("PyCM", 80, -2., 2.);
+   HPzCM = new HbookHistogram("PzCM", 80, -2., 2.);
+   HPx1 = new HbookHistogram("Px1", 80, -2., 2.);
+   HPy1 = new HbookHistogram("Py1", 80, -2., 2.);
+   HPz1 = new HbookHistogram("Pz1", 80, -2., 2.);
+   HPx2 = new HbookHistogram("Px2", 80, -2., 2.);
+   HPy2 = new HbookHistogram("Py2", 80, -2., 2.);
+   HPz2 = new HbookHistogram("Pz2", 80, -2., 2.);
+
+  HAngCM = new HbookHistogram("CM angle", 80, -180., 180.);
+   HAng1 = new HbookHistogram("Lab angle 1", 80, -180., 180.);
+   HAng2 = new HbookHistogram("Lab angle 2", 80, -180., 180.);
+
+   HNsec = new HbookHistogram("Number of secondaries", 4, -0.5, 3.5);
+
+  RawData = fopen("G4LEpp.raw", "w");
+
 }
 
 G4LEpp::~G4LEpp()
@@ -183,6 +203,8 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
     G4double kint = rc*sample + b;
     G4double theta = (0.5 + kint)*pi/180.;
 
+    HAngCM->accumulate(theta/degree);
+
     //    G4int k;
     //abs(sample-sig[j][ke1]) < abs(sample-sig[j][ke2]) ? k = ke1 : k = ke2;
     //    G4double theta = (0.5 + k)*pi/180.;
@@ -248,6 +270,10 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       pz = pznew;
     }
 
+    HPxCM->accumulate(px/GeV);
+    HPyCM->accumulate(py/GeV);
+    HPzCM->accumulate(pz/GeV);
+
     if (verboseLevel > 1) {
       cout << "  AFTER SCATTER..." << G4endl;
       cout << "  particle 1 momentum in CM " << px/GeV << " " << py/GeV << " "
@@ -296,6 +322,12 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
     newP->SetDefinition(aParticle->GetDefinition());
     newP->SetMomentum(G4ThreeVector(PB[1], PB[2], PB[3]));
 
+    HPx1->accumulate(PB[1]/GeV);
+    HPy1->accumulate(PB[2]/GeV);
+    HPz1->accumulate(PB[3]/GeV);
+    HAng1->accumulate(newP->GetMomentumDirection().
+                            angle(aParticle->GetMomentumDirection())/degree);
+
     //The target particle...
 
     PA[1] = -px;
@@ -312,6 +344,17 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
     PB[4] = (PA[4] - BETPA) * BETA[4];
 
     targetParticle->SetMomentum(G4ThreeVector(PB[1], PB[2], PB[3]));
+
+    HPx2->accumulate(PB[1]/GeV);
+    HPy2->accumulate(PB[2]/GeV);
+    HPz2->accumulate(PB[3]/GeV);
+
+    HAng2->accumulate(targetParticle->GetMomentumDirection().
+                            angle(aParticle->GetMomentumDirection())/degree);
+
+    G4double ektotal = newP->GetKineticEnergy() + 
+                       targetParticle->GetKineticEnergy();
+    fprintf(RawData, "%f  %f\n", theta/degree, ektotal/GeV);
 
     if (verboseLevel > 1) {
       cout << "  particle 1 momentum in LAB " 
@@ -335,10 +378,12 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       //        theParticleChange.SetMomentumChange(m.x()/p, m.y()/p, m.z()/p);
       //      else
       //        theParticleChange.SetMomentumChange(0., 0., 0.);
+
       theParticleChange.SetMomentumDirectionChange(
                                               newP->GetMomentumDirection());
       theParticleChange.SetEnergyChange(newP->GetKineticEnergy());
       delete newP;
+
       //    }
       //    else {
       //      // charge exchange
@@ -354,6 +399,8 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
     p1->SetMomentum(targetParticle->GetMomentum());
     theParticleChange.AddSecondary(p1);    
     
+    HNsec->accumulate(1.);
+
     return &theParticleChange;
 }
 
