@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.6 2003-11-26 14:45:48 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.7 2004-02-09 12:00:12 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -135,12 +135,6 @@ inline
 void G4PropagatorInField::SetDeltaIntersection( G4double valDeltaIntersection )
 {
   fDetectorFieldMgr->SetDeltaIntersection(valDeltaIntersection);
-}
-
-inline
-G4int G4PropagatorInField::SetVerboseLevel( G4int Verbose )
-{
-  return fVerboseLevel = Verbose;
 }
 
 inline

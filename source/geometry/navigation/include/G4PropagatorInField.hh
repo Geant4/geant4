@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.7 2003-11-26 14:45:04 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.8 2004-02-09 12:00:29 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -94,7 +94,7 @@ class G4PropagatorInField
  
    inline G4ChordFinder* GetChordFinder();
 
-   inline G4int  SetVerboseLevel( G4int verbose );
+          G4int  SetVerboseLevel( G4int verbose );
    inline G4int  GetVerboseLevel() const;
    inline G4int  Verbose() const;
 
