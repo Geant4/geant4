@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1st December 2003 Peter Gumplinger (op-V05-02-02)
+                G4OpBoundaryProcess.cc: modified to adopt G4SurfaceProperty.
+                Requires tag "materials-V05-02-00".
+		Replaced usage of NULL with 0.
+
 4th October 2003 Gabriele Cosmo (op-V05-02-01)
                 Modified GNUmakefile: added dependency to new module
                 "geometry/navigation".
