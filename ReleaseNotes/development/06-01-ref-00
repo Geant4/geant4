@@ -98,7 +98,7 @@ processes/electromagnetic/utils                  utils-V06-00-08
 
 processes/hadronic                               ghad-V06-00-06
 ------------------
-- management & utils (ghad-man-V06-00-06, ghad-util-V06-00-06)
+- management & utils (ghad-man-V06-00-06, ghad-util-V06-00-08)
   o Added a white-board functionality to allow for in-core inspection of
     reaction conditions in optimized.
   o Added a signal-handler (for SIGSEGV) that prints the reaction 
@@ -129,7 +129,7 @@ processes/hadronic                               ghad-V06-00-06
     Delta-Delta-,(k*n) under (k+2)*n+2pi- threshold and Delta++,Delta++,(k*p)
     under  (k+2)*p+2pi+ threshold possible fragmentation states. 
   o Bug fixes and porting in the interface classses
-- models/im_r_matrix
+- models/im_r_matrix (ghad-im_r-V06-00-06)
   o Improved configuration and configurability, using TMPs.
 - models/leading_particle
   o Added constructor message, specifying what code is used.
