@@ -5,7 +5,7 @@
 #include "G4VImportanceSampler.hh"
 #include "G4Nsplit_Weight.hh"
 
-#include <strstream>
+#include "g4std/strstream"
 
 void G4ImportancePostStepDoIt::DoIt(const G4Track& aTrack, 
 				    G4ParticleChange *aParticleChange,
