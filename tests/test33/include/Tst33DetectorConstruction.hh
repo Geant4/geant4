@@ -21,9 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33DetectorConstruction.hh,v 1.1 2002-10-29 15:43:04 dressel Exp $
+// $Id: Tst33DetectorConstruction.hh,v 1.2 2002-11-20 09:38:25 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// Class Tst33DetectorConstruction
+//
+// Class description:
+// This class only takes a pointer to the world volume and gives it
+// to the Geant4 kernel when asked for it. The detector construction
+// is done elsewhere.
 
 #ifndef Tst33DetectorConstruction_hh
 #define Tst33DetectorConstruction_hh Tst33DetectorConstruction_hh

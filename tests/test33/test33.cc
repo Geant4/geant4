@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test33.cc,v 1.1 2002-10-29 15:43:03 dressel Exp $
+// $Id: test33.cc,v 1.2 2002-11-20 09:38:25 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,9 +29,9 @@
 //      GEANT 4 - test33
 //
 // --------------------------------------------------------------
-// Comments
-//
-// 
+// Comments:
+// The main function may be given a macro to execute file as argument. 
+// If no argument is given a session is started.
 // --------------------------------------------------------------
 
 #include "CLHEP/Random/Random.h"

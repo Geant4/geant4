@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33PVolumeStore.cc,v 1.3 2002-11-04 10:57:48 dressel Exp $
+// $Id: Tst33PVolumeStore.cc,v 1.4 2002-11-20 09:38:26 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -55,39 +55,35 @@ void Tst33PVolumeStore::AddPVolume(const G4GeometryCell &cell){
     
 }
 
-const G4VPhysicalVolume *Tst33PVolumeStore::
-GetPVolume(const G4String &name) const {
-  const G4VPhysicalVolume *pvol = 0;
+G4GeometryCell Tst33PVolumeStore::
+GetGeometryCell(G4int i) const {
+  Tst33SetGeometryCell::const_iterator  pCell(fSetGeometryCell.end());
+  G4String cellName(GetCellName(i));
+
   for (Tst33SetGeometryCell::const_iterator it = fSetGeometryCell.begin();
        it != fSetGeometryCell.end(); ++it) {
     const G4VPhysicalVolume &vol = it->GetPhysicalVolume();
-    if (vol.GetName() == name) {
-      pvol =  &vol;
+    if (vol.GetName() == cellName) {
+      pCell = it;
     } 
   }
-  if (!pvol) {
-    G4cout << "Tst33PVolumeStore::GetPVolume: no physical volume named: " 
-	   << name << ", found" << G4endl;
+  if (pCell == fSetGeometryCell.end()) {
+    G4cout << "Tst33PVolumeStore::GetGeometryCell: no G4GeometryCell named: " 
+	   << cellName << ", found" << G4endl;
+    G4Exception("G4GeometryCell not found");
   }
-  return pvol;
+  return *pCell;
 }
 
-G4String Tst33PVolumeStore::GetPNames() const {
-  G4String NameString;
-  for (Tst33SetGeometryCell::const_iterator it = fSetGeometryCell.begin();
-       it != fSetGeometryCell.end(); ++it) {
-    const G4VPhysicalVolume &vol = it->GetPhysicalVolume();
-    char st[200];
-    G4std::ostrstream os(st,200);
-    os << vol.GetName() << "_" << it->GetReplicaNumber() 
-       << "\n" << '\0';
-    G4String cellname(st);
-    
-    //    G4String cellname(vol.GetName());
-    //    cellname += G4String("_");
-    //    cellname += G4std::str(it->GetReplicaNumber());
-
-    NameString += cellname;
+G4String Tst33PVolumeStore::GetCellName(G4int i) const {
+  char st[200];
+  G4std::ostrstream os(st,200);
+  os << "cell_";
+  if (i<10) {
+    os << "0";
   }
-  return NameString;
+  os << i 
+     << '\0';
+  G4String name(st);
+  return name;
 }

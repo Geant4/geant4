@@ -21,15 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33IStoreBuilder.hh,v 1.2 2002-10-29 16:37:09 dressel Exp $
+// $Id: Tst33IStoreBuilder.hh,v 1.3 2002-11-20 09:38:25 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
 // Class Tst33IStoreBuilder
 //
 // Class description:
-//
-// ...
+// Creats the importance store and sets the importance
+// values. 
+// 
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ParallelGeometry.cc,v 1.4 2002-11-04 10:57:48 dressel Exp $
+// $Id: Tst33ParallelGeometry.cc,v 1.5 2002-11-20 09:38:26 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -114,7 +114,7 @@ void Tst33ParallelGeometry::Construct(){
   G4double startz = -85*cm; 
   for (i=1; i<=18; ++i) {
    
-    name = GetCellName(i);
+    name = fPVolumeStore.GetCellName(i);
     
     G4double pos_x = 0*cm;
     G4double pos_y = 0*cm;
@@ -149,7 +149,7 @@ void Tst33ParallelGeometry::Construct(){
   
   G4LogicalVolume *aRest_log = 
     new G4LogicalVolume(aRest, fGalactic, "aRest_log");
-  name = GetCellName(19);
+  name = fPVolumeStore.GetCellName(19);
     
   G4double pos_x = 0*cm;
   G4double pos_y = 0*cm;
@@ -173,26 +173,6 @@ G4VPhysicalVolume &Tst33ParallelGeometry::GetWorldVolume() const{
 }
 
 
-const G4VPhysicalVolume *Tst33ParallelGeometry::
-GetPhysicalVolumeByName(const G4String& name) const {
-  return fPVolumeStore.GetPVolume(name);
-}
-
-
-G4String Tst33ParallelGeometry::ListPhysNamesAsG4String() const { 
-  G4String names(fPVolumeStore.GetPNames());
-  return names;
-}
-
-G4String Tst33ParallelGeometry::GetCellName(G4int i) {
-  char st[200];
-  G4std::ostrstream os(st,200);
-  os << "cell_";
-  if (i<10) {
-    os << "0";
-  }
-  os << i 
-     << '\0';
-  G4String name(st);
-  return name;
+G4GeometryCell Tst33ParallelGeometry::GetGeometryCell(G4int i) const {
+  return fPVolumeStore.GetGeometryCell(i);
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33PVolumeStore.hh,v 1.2 2002-10-29 16:37:09 dressel Exp $
+// $Id: Tst33PVolumeStore.hh,v 1.3 2002-11-20 09:38:25 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -29,7 +29,8 @@
 //
 // Class description:
 //
-// ...
+// This class sotres G4GeometryCell objects and returns
+// physical volumes by name.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -50,8 +51,8 @@ public:
   ~Tst33PVolumeStore();
   
   void AddPVolume(const G4GeometryCell &cell);
-  const G4VPhysicalVolume *GetPVolume(const G4String &name) const;
-  G4String GetPNames() const;
+  G4GeometryCell GetGeometryCell(G4int i) const;
+  G4String GetCellName(G4int i) const;
 
 private:
   Tst33SetGeometryCell fSetGeometryCell;

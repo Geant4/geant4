@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33IStoreBuilder.cc,v 1.4 2002-11-04 10:57:48 dressel Exp $
+// $Id: Tst33IStoreBuilder.cc,v 1.5 2002-11-20 09:38:26 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -59,18 +59,12 @@ G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo) {
   
   G4int i(1);
   for (i=1; i <= 19; ++i) {
-    G4String volname = samplegeo->GetCellName(i);
     G4double imp = G4std::pow(2,i-1);
     if (i==19) {
 	imp = G4std::pow(2,17);
     }
-    const G4VPhysicalVolume *pvol(0);
-    pvol = samplegeo->
-      GetPhysicalVolumeByName(volname);
-    if (pvol) {
-      G4GeometryCell gCell(*pvol, 0);
-      istore->AddImportanceGeometryCell(imp, gCell);
-    }
+    G4GeometryCell gCell(samplegeo->GetGeometryCell(i));
+    istore->AddImportanceGeometryCell(imp, gCell);
   }
   return istore;
 }
