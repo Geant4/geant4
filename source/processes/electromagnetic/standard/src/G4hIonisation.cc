@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.cc,v 1.1 1999-01-07 16:11:26 gunter Exp $
+// $Id: G4hIonisation.cc,v 1.2 1999-02-16 13:40:19 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -25,6 +25,7 @@
 // several bugs corrected by L.Urban on 13/01/98
 // 07-04-98: remove 'tracking cut' of the ionizing particle, MMa
 // 22/10/98: cleanup L.Urban
+// 02/02/99: bugs fixed , L.Urban
 // --------------------------------------------------------------
  
 
@@ -66,13 +67,16 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
   ParticleMass = aParticleType.GetPDGMass() ;
 
-  G4double Charge = aParticleType.GetPDGCharge();
+  Charge = aParticleType.GetPDGCharge();
 
-  G4double newCutInRange = aParticleType.GetLengthCuts(); 
+  G4double ElectronCutInRange = G4Electron::Electron()->GetCuts(); 
+
+  DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
 
   if(Charge>0.)
   {
-    if( (CutInRange != newCutInRange) || (theDEDXpTable == NULL))
+    if( (ptableElectronCutInRange != ElectronCutInRange)  
+                       || (theDEDXpTable == NULL))
     {
       BuildLossTable(aParticleType) ;
       RecorderOfpProcess[CounterOfpProcess] = theLossTable ;
@@ -81,35 +85,27 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
   }
   else
   {
-    if( (CutInRange != newCutInRange) || (theDEDXpbarTable == NULL))
+    if( (pbartableElectronCutInRange != ElectronCutInRange)  
+                        || (theDEDXpbarTable == NULL))
     {
       BuildLossTable(aParticleType) ;
       RecorderOfpbarProcess[CounterOfpbarProcess] = theLossTable ;
       CounterOfpbarProcess++;
     }
   }
-
-  G4double saveCutInRange = CutInRange ;
-  CutInRange = newCutInRange ;
+ 
   BuildLambdaTable(aParticleType) ;
-  CutInRange = saveCutInRange ;
 
   BuildDEDXTable(aParticleType) ;
 
   if(&aParticleType == G4Proton::Proton())
     PrintInfoDefinition();
+
 }
 
 void G4hIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 {
-  G4double Charge = aParticleType.GetPDGCharge() ;
-
-  // cuts for p/pbar and electron ....................
-  if(Charge>0.)
-    ParticleCutInKineticEnergy = theProton->GetCutsInEnergy() ;
-  else
-    ParticleCutInKineticEnergy = theAntiProton->GetCutsInEnergy() ;
-
+  // cuts for  electron ....................
   DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
 
   G4double LowEdgeEnergy , ionloss ;
@@ -142,7 +138,7 @@ void G4hIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 
     G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
                     LowestKineticEnergy, HighestKineticEnergy, TotBin);
-  
+ 
     // get material parameters needed for the energy loss calculation
 
     G4double ElectronDensity,Eexc,Eexc2,Cden,Mden,Aden,X0den,X1den,taul ;
@@ -257,6 +253,7 @@ void G4hIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 
         ionloss -= delta + sh ;
         ionloss *= Factor*ElectronDensity/beta2 ;
+
       }
       if ( ionloss <= 0.)
         ionloss = 0. ;
@@ -283,7 +280,6 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 
       G4int numOfMaterials = theMaterialTable->length();
 
-
       if (theMeanFreePathTable) {
         theMeanFreePathTable->clearAndDestroy();
         delete theMeanFreePathTable;
@@ -295,8 +291,6 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 
       DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
  
-      ParticleCutInKineticEnergy = aParticleType.GetEnergyCuts() ;
-
   // loop for materials 
 
       for (G4int J=0 ; J < numOfMaterials; J++)
@@ -387,10 +381,14 @@ G4double G4hIonisation::ComputeMicroscopicCrossSection(
        tempvar=DeltaCutInKineticEnergyNow/MaxKineticEnergyTransfer;
        TotalCrossSection = (1.-tempvar*(1.-betasquare*log(tempvar)))
                            /DeltaCutInKineticEnergyNow;
+
   // +term for spin=1/2 particle
-     if(aParticleType.GetPDGSpin() == 1)
+     if(aParticleType.GetPDGSpin() == 0.5)
      {
        TotalCrossSection +=  0.5
+                       *(MaxKineticEnergyTransfer-DeltaCutInKineticEnergyNow)
+                       /(TotalEnergy*TotalEnergy);
+       G4double  Section =  0.5
                        *(MaxKineticEnergyTransfer-DeltaCutInKineticEnergyNow)
                        /(TotalEnergy*TotalEnergy);
      }
@@ -399,7 +397,7 @@ G4double G4hIonisation::ComputeMicroscopicCrossSection(
     }
     else
        TotalCrossSection= 0. ;
- 
+
     return TotalCrossSection ;
 }
  
@@ -424,7 +422,7 @@ G4VParticleChange* G4hIonisation::PostStepDoIt(
 
   aParticle = trackData.GetDynamicParticle() ;
 
-  G4double Charge=aParticle->GetDefinition()->GetPDGCharge();
+  ParticleMass=aParticle->GetDefinition()->GetPDGMass();
   KineticEnergy=aParticle->GetKineticEnergy();
   TotalEnergy=KineticEnergy + ParticleMass ;
   Psquare=KineticEnergy*(TotalEnergy+ParticleMass) ;
@@ -432,9 +430,7 @@ G4VParticleChange* G4hIonisation::PostStepDoIt(
   summass = ParticleMass + electron_mass_c2 ;    
   G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection() ;
 
-  //  get kinetic energy cut for particle and for the electron....
-  ParticleCutInKineticEnergyNow = 
-                            ParticleCutInKineticEnergy[aMaterial->GetIndex()];
+  //  get kinetic energy cut for the electron....
   DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[aMaterial->GetIndex()];
 
   // some kinematics......................
@@ -509,7 +505,9 @@ G4VParticleChange* G4hIonisation::PostStepDoIt(
 
    // fill aParticleChange 
    finalKineticEnergy = KineticEnergy - DeltaKineticEnergy ;
-   if (finalKineticEnergy > 0.)
+   G4double Edep = 0 ;
+
+   if (finalKineticEnergy > MinKineticEnergy)
      {
        // changed energy and momentum of the actual particle
        finalMomentum=sqrt(finalKineticEnergy*
@@ -527,6 +525,7 @@ G4VParticleChange* G4hIonisation::PostStepDoIt(
    else
      {
        finalKineticEnergy = 0. ;
+       Edep = finalKineticEnergy ;
        if (aParticle->GetDefinition()->GetParticleName() == "proton")
              aParticleChange.SetStatusChange(fStopAndKill);
        else  aParticleChange.SetStatusChange(fStopButAlive);
@@ -535,7 +534,7 @@ G4VParticleChange* G4hIonisation::PostStepDoIt(
    aParticleChange.SetEnergyChange( finalKineticEnergy );
    aParticleChange.SetNumberOfSecondaries(1);   
    aParticleChange.AddSecondary( theDeltaRay );
-   aParticleChange.SetLocalEnergyDeposit (0.);
+   aParticleChange.SetLocalEnergyDeposit (Edep);
       
    //ResetNumberOfInteractionLengthLeft();
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);

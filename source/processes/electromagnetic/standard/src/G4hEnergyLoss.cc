@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.cc,v 1.1 1999-01-07 16:11:26 gunter Exp $
+// $Id: G4hEnergyLoss.cc,v 1.2 1999-02-16 13:40:18 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -27,6 +27,7 @@
 // 7/10/98: bug fixes + some cleanup , L.Urban 
 // 22/10/98 : cleanup , L.Urban
 // 07/12/98 : works for ions as well+ bug corrected, L.Urban
+// 02/02/99 : several bugs fixed, L.Urban
 // --------------------------------------------------------------
 
 #include "G4hEnergyLoss.hh"
@@ -88,6 +89,8 @@ const G4Proton* G4hEnergyLoss::theProton=G4Proton::Proton() ;
 const G4AntiProton* G4hEnergyLoss::theAntiProton=G4AntiProton::AntiProton() ;
 
 G4double G4hEnergyLoss::ParticleMass;
+G4double G4hEnergyLoss::ptableElectronCutInRange = 0.0*mm ;
+G4double G4hEnergyLoss::pbartableElectronCutInRange = 0.0*mm ;
 
 G4double G4hEnergyLoss::Mass,
          G4hEnergyLoss::taulow, 
@@ -95,10 +98,14 @@ G4double G4hEnergyLoss::Mass,
          G4hEnergyLoss::ltaulow, 
          G4hEnergyLoss::ltauhigh; 
 
-G4double G4hEnergyLoss::CutInRange = 0. ;
-
 G4double G4hEnergyLoss::dRoverRange = 0.20 ;
 G4double G4hEnergyLoss::finalRange = 200.*micrometer ;
+
+G4double     G4hEnergyLoss::c1lim = dRoverRange ;
+G4double     G4hEnergyLoss::c2lim = 2.*(1.-dRoverRange)*finalRange ;
+G4double     G4hEnergyLoss::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
+
+G4double         G4hEnergyLoss::Charge ;   
 
 G4bool   G4hEnergyLoss::rndmStepFlag   = false ;
 G4bool   G4hEnergyLoss::EnlossFlucFlag = true ;
@@ -113,6 +120,8 @@ G4double G4hEnergyLoss::RTable,G4hEnergyLoss::LOGRTable;
 G4hEnergyLoss::G4hEnergyLoss(const G4String& processName)
    : G4VContinuousDiscreteProcess (processName),
      theLossTable (NULL),
+     MinKineticEnergy(1.*eV), 
+     linLossLimit(0.02),
      lastMaterial (NULL),
      MaxExcitationNumber (1.e6),
      probLimFluct (0.01),
@@ -138,10 +147,10 @@ void G4hEnergyLoss::BuildDEDXTable(
   G4double binning = 2.*dRoverRange;
   lrate = log(HighestKineticEnergy/LowestKineticEnergy) ;
   nbin = G4int((lrate/log(1.+binning) + lrate/log(1.+2.*binning))/2.);
-  nbin = (nbin+25)/50 ;
-  TotBin = 50*nbin ;
-  if(TotBin<50)
-    TotBin = 50 ;
+  nbin = (nbin+50)/100 ;
+  TotBin = 100*nbin ;
+  if(TotBin<100)
+    TotBin = 100 ;
   if(TotBin>500)
     TotBin = 500 ;
   LOGRTable=lrate/TotBin;
@@ -150,31 +159,33 @@ void G4hEnergyLoss::BuildDEDXTable(
   // create table if there is no table or there is a new cut value
   G4bool MakeTable = false ;
      
-  ParticleMass = aParticleType.GetPDGMass() ;
-
-  G4double newCutInRange = aParticleType.GetLengthCuts();
+  G4double ElectronCutInRange = G4Electron::Electron()->GetCuts();
 
   // create/fill proton or antiproton tables depending on the charge 
-  G4double Charge = aParticleType.GetPDGCharge();
+  Charge = aParticleType.GetPDGCharge();
+  ParticleMass = aParticleType.GetPDGMass() ;
 
   if (Charge>0.) {theDEDXTable= theDEDXpTable;}
   else           {theDEDXTable= theDEDXpbarTable;}
 
-  if ((CutInRange != newCutInRange) || (theDEDXTable==NULL)) 
-  {
-    MakeTable = true ;
-    CutInRange = newCutInRange ;
-  }
+  if(
+     ((Charge>0.) && ((theDEDXTable==NULL) || 
+     (ElectronCutInRange != ptableElectronCutInRange)))
+     ||  
+     ((Charge<0.) && ((theDEDXTable==NULL) || 
+     (ElectronCutInRange != pbartableElectronCutInRange)))
+    )
+      MakeTable = true ;
   
+  const G4MaterialTable* theMaterialTable=
+                                   G4Material::GetMaterialTable();
+  G4int numOfMaterials = theMaterialTable->length();
+
   if( MakeTable )
   {
 
   // Build energy loss table as a sum of the energy loss due to the
   //              different processes.                                           
-    const G4MaterialTable* theMaterialTable=
-                                     G4Material::GetMaterialTable();
-    G4int numOfMaterials = theMaterialTable->length();
-
     if( Charge >0.)    
     {
       RecorderOfProcess=RecorderOfpProcess;
@@ -187,6 +198,7 @@ void G4hEnergyLoss::BuildDEDXTable(
           delete theDEDXpTable; }
         theDEDXpTable = new G4PhysicsTable(numOfMaterials);
         theDEDXTable = theDEDXpTable;
+        ptableElectronCutInRange = ElectronCutInRange ;
       }
     }
     else
@@ -201,6 +213,7 @@ void G4hEnergyLoss::BuildDEDXTable(
           delete theDEDXpbarTable; }
         theDEDXpbarTable = new G4PhysicsTable(numOfMaterials);
         theDEDXTable = theDEDXpbarTable;
+        pbartableElectronCutInRange = ElectronCutInRange ;
       }
     }
 
@@ -230,12 +243,13 @@ void G4hEnergyLoss::BuildDEDXTable(
             Value += (*pointer)[J]->
                                GetValue(LowEdgeEnergy,isOutRange) ;
           }
+
           aVector->PutValue(i,Value) ; 
         }
 
         theDEDXTable->insert(aVector) ;
       }
-
+      
       //  reset counter to zero ..................
       if( Charge >0.)    
         CounterOfpProcess=0 ;
@@ -274,13 +288,13 @@ void G4hEnergyLoss::BuildDEDXTable(
       theProperTimepTable: theProperTimepbarTable,
     lowestKineticEnergy, highestKineticEnergy,
     proton_mass_c2/aParticleType.GetPDGMass(),TotBin);
+
 }
       
 void G4hEnergyLoss::BuildRangeTable(
                              const G4ParticleDefinition& aParticleType)
 // Build range table from the energy loss table
 {
-   G4double Charge = aParticleType.GetPDGCharge() ;
    Mass = proton_mass_c2; 
    const G4MaterialTable* theMaterialTable=
                                  G4Material::GetMaterialTable();
@@ -430,6 +444,7 @@ void G4hEnergyLoss::BuildRangeVector(G4int materialIndex,
         Value += RangeIntLog(physicsVector,nbin);
       }
     }
+
     rangeVector->PutValue(i,Value);
     oldValue = Value ;
     tauold = tau ;
@@ -699,7 +714,6 @@ void G4hEnergyLoss::BuildRangeCoeffATable(
   const G4MaterialTable* theMaterialTable=
                                 G4Material::GetMaterialTable();
   G4int numOfMaterials = theMaterialTable->length();
-  G4double Charge = aParticleType.GetPDGCharge() ;
 
   if(Charge>0.)
   {
@@ -772,7 +786,6 @@ void G4hEnergyLoss::BuildRangeCoeffBTable(
   const G4MaterialTable* theMaterialTable=
                                G4Material::GetMaterialTable();
   G4int numOfMaterials = theMaterialTable->length();
-  G4double Charge = aParticleType.GetPDGCharge() ;
 
   if(Charge>0.)
   {
@@ -843,7 +856,6 @@ void G4hEnergyLoss::BuildRangeCoeffCTable(
   const G4MaterialTable* theMaterialTable=
                                 G4Material::GetMaterialTable();
   G4int numOfMaterials = theMaterialTable->length();
-  G4double Charge = aParticleType.GetPDGCharge() ;
 
   if(Charge>0.)
   {
@@ -1016,41 +1028,39 @@ G4double G4hEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
   // it calculates dEdx and the range as well....
 
   G4double KineticEnergy,StepLimit;
+  G4bool isOut ;
 
-  G4double Charge = aParticle->GetDefinition()->GetPDGCharge() ;
-
-  const G4double c1=dRoverRange, c2=2.*(1.-dRoverRange)*finalRange,
-                 c3=-(1.-dRoverRange)*finalRange*finalRange;
+  Charge = aParticle->GetDefinition()->GetPDGCharge() ;
 
   KineticEnergy = aParticle->GetKineticEnergy();
 
-     G4double massratio=proton_mass_c2/
-               aParticle->GetDefinition()->GetPDGMass() ;
+  G4double massratio=proton_mass_c2/
+           aParticle->GetDefinition()->GetPDGMass() ;
 
-     G4double Tscaled= KineticEnergy*massratio ; 
-     G4double ChargeSquare = Charge*Charge ;
+  G4double Tscaled= KineticEnergy*massratio ; 
+  G4double ChargeSquare = Charge*Charge ;
 
      if(Charge>0.)
      {
-       fRangeNow = G4EnergyLossTables::GetRange( theProton,                   
+       fRangeNow = G4EnergyLossTables::GetRange( theProton,
                                             Tscaled,aMaterial) ;
-        fdEdx     = G4EnergyLossTables::GetDEDX( theProton,                  
+        fdEdx     = G4EnergyLossTables::GetDEDX( theProton,
                                             Tscaled,aMaterial) ;
      }
      else
      {
-       fRangeNow = G4EnergyLossTables::GetRange( theAntiProton,                 
+       fRangeNow = G4EnergyLossTables::GetRange( theAntiProton,
                                              Tscaled,aMaterial) ;
-       fdEdx     = G4EnergyLossTables::GetDEDX( theAntiProton,                  
+       fdEdx     = G4EnergyLossTables::GetDEDX( theAntiProton,
                                              Tscaled,aMaterial) ;
      }
      fdEdx     *= ChargeSquare ;
-     fRangeNow /= (ChargeSquare*massratio) ; 
+     fRangeNow /= (ChargeSquare*massratio) ;
 
   // compute the (random) Step limit ..............
   if(fRangeNow > finalRange)
   {
-    StepLimit = (c1*fRangeNow+c2+c3/fRangeNow) ;
+    StepLimit = (c1lim*fRangeNow+c2lim+c3lim/fRangeNow) ;
 
     //  randomise this value
     if(rndmStepFlag) StepLimit = 
@@ -1069,97 +1079,70 @@ G4VParticleChange* G4hEnergyLoss::AlongStepDoIt(
 {
   const G4DynamicParticle* aParticle;
   G4Material* aMaterial;
-  G4bool isOut;
-  G4double E,finalT,Step,Charge,ChargeSquare,MeanLoss ;
-  G4int index ;
-
-  // do not track further if kin.energy < 1. eV
-  const G4double MinKineticEnergy = 1.*eV ;
- 
-  const G4double stepoverrangelimit = 0.02 ;
+  G4double E,finalT,Step,ChargeSquare,MeanLoss ;
 
   aParticleChange.Initialize(trackData) ;
   aMaterial = trackData.GetMaterial() ;
-
+  
   // get the actual (true) Step length from stepData 
   Step = stepData.GetStepLength() ;
 
-  // there is no loss for Step=0. !
-  if( Step == 0.)
-    return &aParticleChange ;  
-
   aParticle = trackData.GetDynamicParticle() ;
-  Charge = aParticle->GetDefinition()->GetPDGCharge() ;
   ChargeSquare = Charge*Charge ;
 
-  index = aMaterial->GetIndex() ;
+  G4int index = aMaterial->GetIndex() ;
   E = aParticle->GetKineticEnergy() ;
 
-  if(E < MinKineticEnergy) 
-  {
-    finalT = 0.;
-    MeanLoss = E ;
-  }
+  if(E < MinKineticEnergy) MeanLoss = E ;
   else
   {
-    if(Step >= fRangeNow )
-    {
-      finalT = 0.0;
-      MeanLoss = E ;
-    }
-    else if( E > HighestKineticEnergy) 
-    {
-      MeanLoss = Step*fdEdx ;
-      if(MeanLoss > E) MeanLoss = E ;
+    if(Step >= fRangeNow ) MeanLoss = E ;
 
-      finalT = E - MeanLoss ;
-    }
+    else if( E > HighestKineticEnergy) MeanLoss = Step*fdEdx ; 
+     
     else
     {
-      if(Step>stepoverrangelimit*fRangeNow)
+      if(Step>linLossLimit*fRangeNow)
       {
-
-          G4double massratio=proton_mass_c2/
+        G4double massratio=proton_mass_c2/
                  aParticle->GetDefinition()->GetPDGMass() ;
 
-          G4double rscaled= fRangeNow*massratio*ChargeSquare ;
-          G4double sscaled=   Step   *massratio*ChargeSquare ;
+        G4double rscaled= fRangeNow*massratio*ChargeSquare ;
+        G4double sscaled=   Step   *massratio*ChargeSquare ;
 
-          if(Charge>0.)
-          {
-            MeanLoss = G4EnergyLossTables::GetPreciseEnergyFromRange(
-                                           theProton,
-                                           rscaled        ,aMaterial) -
-                       G4EnergyLossTables::GetPreciseEnergyFromRange(
-                                           theProton,
-                                           rscaled-sscaled,aMaterial) ;
-          }
-          else
-          {
-            MeanLoss = G4EnergyLossTables::GetPreciseEnergyFromRange(
-                                           theAntiProton,
-                                           rscaled        ,aMaterial) -
-                       G4EnergyLossTables::GetPreciseEnergyFromRange(
-                                           theAntiProton,
-                                           rscaled-sscaled,aMaterial) ;
-          }
-      
-          MeanLoss /= (massratio*ChargeSquare) ;
+        if(Charge>0.)
+        {
+          MeanLoss = G4EnergyLossTables::GetPreciseEnergyFromRange(
+                                         theProton,
+                                         rscaled        ,aMaterial) -
+                     G4EnergyLossTables::GetPreciseEnergyFromRange(
+                                         theProton,
+                                         rscaled-sscaled,aMaterial) ;
+        }
+        else
+        {
+          MeanLoss = G4EnergyLossTables::GetPreciseEnergyFromRange(
+                                         theAntiProton,
+                                         rscaled        ,aMaterial) -
+                     G4EnergyLossTables::GetPreciseEnergyFromRange(
+                                         theAntiProton,
+                                         rscaled-sscaled,aMaterial) ;
+        }
+        MeanLoss /= (massratio*ChargeSquare) ;
       }
-      else
-      {
-        MeanLoss = Step*fdEdx ;
-      }
-      finalT = E - MeanLoss ;
+      else MeanLoss = Step*fdEdx ;
     }
   } 
+  finalT = E - MeanLoss ;
+
+  if(finalT < MinKineticEnergy) finalT = 0. ;
 
   //  now the loss with fluctuation
-  if((EnlossFlucFlag) && (MeanLoss > 0.) && (MeanLoss < E))
+  if((EnlossFlucFlag) && (finalT > 0.) && (finalT < E))
   {
     MeanLoss /= ChargeSquare ;
     finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss)*ChargeSquare ;
-    if (finalT < 0.) finalT = 0. ;
+    if (finalT < 0.) finalT = E-MeanLoss ;
   }
 
   //  kill the particle if the kinetic energy <= 0  
@@ -1172,7 +1155,6 @@ G4VParticleChange* G4hEnergyLoss::AlongStepDoIt(
       aParticleChange.SetStatusChange(fStopButAlive); 
   } 
 
-  aParticleChange.SetNumberOfSecondaries(0);
   aParticleChange.SetEnergyChange( finalT ) ;
   aParticleChange.SetLocalEnergyDeposit(E-finalT) ;
 
@@ -1211,7 +1193,6 @@ G4double G4hEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 
   // get particle data
   G4double Tkin   = aParticle->GetKineticEnergy();
-  G4double charge = aParticle->GetDefinition()->GetPDGCharge();
   threshold =((*G4Electron::Electron()).GetCutsInEnergy())[imat];
 
   G4double rmass = electron_mass_c2/ParticleMass;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisation.cc,v 1.1 1999-01-07 16:11:25 gunter Exp $
+// $Id: G4eIonisation.cc,v 1.2 1999-02-16 13:40:16 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,6 +26,7 @@
 // 07-04-98: remove 'tracking cut' of the ionizing particle, MMa 
 // 04-09-98: new methods SetBining() PrintInfo()
 // 07-09-98: Cleanup
+// 02/02/99: correction inDoIt , L.Urban
 // --------------------------------------------------------------
  
 
@@ -316,7 +317,6 @@ G4VParticleChange* G4eIonisation::PostStepDoIt( const G4Track& trackData,
   G4Material*               aMaterial = trackData.GetMaterial() ;
   const G4DynamicParticle*  aParticle = trackData.GetDynamicParticle() ;
 
-  G4double Charge = aParticle->GetDefinition()->GetPDGCharge();
   ParticleMass = aParticle->GetDefinition()->GetPDGMass();
   G4double KineticEnergy = aParticle->GetKineticEnergy();
   G4double TotalEnergy = KineticEnergy + ParticleMass;
@@ -407,7 +407,9 @@ G4VParticleChange* G4eIonisation::PostStepDoIt( const G4Track& trackData,
   // changed energy and momentum of the actual particle
   G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy;
   
-  if (finalKineticEnergy > 0.)
+  G4double Edep = 0. ;
+
+  if (finalKineticEnergy > MinKineticEnergy)
     {
       G4double finalMomentum=sqrt(finalKineticEnergy*
                          (finalKineticEnergy+2.*ParticleMass));
@@ -424,6 +426,7 @@ G4VParticleChange* G4eIonisation::PostStepDoIt( const G4Track& trackData,
   else
     {
       finalKineticEnergy = 0.;
+      Edep = finalKineticEnergy ;
       if (Charge < 0.) aParticleChange.SetStatusChange(fStopAndKill);
       else             aParticleChange.SetStatusChange(fStopButAlive);
     }
@@ -431,7 +434,7 @@ G4VParticleChange* G4eIonisation::PostStepDoIt( const G4Track& trackData,
   aParticleChange.SetEnergyChange( finalKineticEnergy );
   aParticleChange.SetNumberOfSecondaries(1);  
   aParticleChange.AddSecondary( theDeltaRay );
-  aParticleChange.SetLocalEnergyDeposit (0.);
+  aParticleChange.SetLocalEnergyDeposit (Edep);
       
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }

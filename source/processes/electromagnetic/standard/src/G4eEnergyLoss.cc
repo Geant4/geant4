@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLoss.cc,v 1.1 1999-01-07 16:11:24 gunter Exp $
+// $Id: G4eEnergyLoss.cc,v 1.2 1999-02-16 13:40:14 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // $Id: 
@@ -31,10 +31,10 @@
 // 24-09-98: rndmStepFlag false by default (no randomization of the step)
 // 14-10-98: messenger file added.
 // 16-10-98: public method SetStepFunction() 
+// 20-01-99: important correction in AlongStepDoIt , L.Urban
 // --------------------------------------------------------------
  
 #include "G4eEnergyLoss.hh"
-#include "G4EnergyLossTables.hh"
 #include "G4EnergyLossMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -62,6 +62,9 @@ G4bool           G4eEnergyLoss::rndmStepFlag   = false;
 G4bool           G4eEnergyLoss::EnlossFlucFlag = true;
 G4double         G4eEnergyLoss::dRoverRange    = 20*perCent;
 G4double         G4eEnergyLoss::finalRange     = 200*micrometer;                                           
+G4double     G4eEnergyLoss::c1lim = dRoverRange ;
+G4double     G4eEnergyLoss::c2lim = 2.*(1.-dRoverRange)*finalRange ;
+G4double     G4eEnergyLoss::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
 G4PhysicsTable*  G4eEnergyLoss::theDEDXElectronTable         = NULL;
 G4PhysicsTable*  G4eEnergyLoss::theDEDXPositronTable         = NULL;
@@ -90,12 +93,18 @@ G4EnergyLossMessenger* G4eEnergyLoss::eLossMessenger         = NULL;
 G4eEnergyLoss::G4eEnergyLoss(const G4String& processName)
    : G4VContinuousDiscreteProcess (processName),
      theLossTable(NULL),
+     Charge(-1.),lastCharge(0.),
+     theDEDXTable(NULL),theRangeTable(NULL),
      theRangeCoeffATable(NULL),
      theRangeCoeffBTable(NULL),
      theRangeCoeffCTable(NULL),
      lastMaterial(NULL),                      
-     LowestKineticEnergy(1.00*keV),
-     HighestKineticEnergy(100.*TeV),
+     LowestKineticEnergy(1.00*eV),
+   //  LowestKineticEnergy(1.00*keV),
+     HighestKineticEnergy(100.*MeV),
+    // HighestKineticEnergy(100.*TeV),
+     MinKineticEnergy(1.*eV),
+     linLossLimit(0.01),
      MaxExcitationNumber (1.e6),
      probLimFluct (0.01),
      nmaxDirectFluct (100),
@@ -890,83 +899,6 @@ void G4eEnergyLoss::InvertRangeVector(G4int materialIndex,
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
          
-G4double G4eEnergyLoss::GetConstraints(const G4DynamicParticle* aParticle,
-                                              G4Material* aMaterial) 
-{
-  // returns the Step limit 
-  // dRoverRange is the max. allowed relative range loss in one Step
-  // it calculates dEdx and the range as well....
-
-  G4double CutInRange,StepLimit; 
-  G4bool isOutRange;
-
-  if (aParticle->GetDefinition()->GetPDGCharge() < 0.)
-    {
-      CutInRange = G4Electron::Electron()->GetCuts();
-      theDEDXTable        = theDEDXElectronTable;
-      theRangeTable       = theRangeElectronTable;
-      theRangeCoeffATable = theeRangeCoeffATable;
-      theRangeCoeffBTable = theeRangeCoeffBTable;
-      theRangeCoeffCTable = theeRangeCoeffCTable;
-    }
-  else
-    {
-      CutInRange = G4Positron::Positron()->GetCuts();
-      theDEDXTable        = theDEDXPositronTable;
-      theRangeTable       = theRangePositronTable;
-      theRangeCoeffATable = thepRangeCoeffATable;
-      theRangeCoeffBTable = thepRangeCoeffBTable;
-      theRangeCoeffCTable = thepRangeCoeffCTable;
-    }
-
-  G4double Thigh = HighestKineticEnergy/RTable;
-  G4double KineticEnergy = aParticle->GetKineticEnergy();
-  EnergyBinNumber = G4int(log(KineticEnergy/LowestKineticEnergy)/LOGRTable);
-  
-  G4double c1=dRoverRange , c2=2.*(1.-dRoverRange)*finalRange,
-                 c3=-(1.-dRoverRange)*finalRange*finalRange;
-
-  G4int index = aMaterial->GetIndex();
- 
-  if (KineticEnergy < LowestKineticEnergy)
-    {
-      // extrapolation for very low energy 
-      fdEdx = sqrt(KineticEnergy/LowestKineticEnergy)*
-             (*theDEDXTable)(index)->GetValue(LowestKineticEnergy,isOutRange);       
-      fRangeNow = sqrt(KineticEnergy/LowestKineticEnergy)*
-                  (*theRangeTable)(index)->GetValue(LowestKineticEnergy,isOutRange);
-      StepLimit = fRangeNow;
-    }
-  else if ( KineticEnergy > Thigh)
-    {
-      // extrapolation for very high energy 
-      fdEdx = (*theDEDXTable)(index)->GetValue(Thigh,isOutRange);
-      fRangeNow = (*theRangeTable)(index)->GetValue(Thigh,isOutRange);
-      if (fdEdx > 0.) fRangeNow += (KineticEnergy-Thigh)/fdEdx;
-      StepLimit = c1*fRangeNow;
-    }
-  else
-    {
-      // LowestKineticEnergy <= KineticEnergy <= HighestKineticEnergy 
-      fdEdx = (*theDEDXTable)(index)->GetValue(KineticEnergy,isOutRange);
-      G4double RgCoefA = (*(*theRangeCoeffATable)(index))(EnergyBinNumber);
-      G4double RgCoefB = (*(*theRangeCoeffBTable)(index))(EnergyBinNumber);
-      G4double RgCoefC = (*(*theRangeCoeffCTable)(index))(EnergyBinNumber);
-      fRangeNow = (RgCoefA*KineticEnergy+RgCoefB)*KineticEnergy+RgCoefC;         
-
-      // compute the (random) Step limit
-       if (fRangeNow>finalRange)
-         {
-           StepLimit = c1*fRangeNow+c2+c3/fRangeNow;
-           //randomise this value
-           if (rndmStepFlag) StepLimit = finalRange + (StepLimit-finalRange)*G4UniformRand();
-           if (StepLimit > fRangeNow) StepLimit = fRangeNow;
-         }
-       else StepLimit = fRangeNow;
-     }  
-
-  return StepLimit; 
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -978,7 +910,6 @@ G4VParticleChange* G4eEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   // get particle and material pointers from trackData 
   const G4DynamicParticle* aParticle = trackData.GetDynamicParticle();
   G4double E      = aParticle->GetKineticEnergy() ;
-  G4double charge = aParticle->GetDefinition()->GetPDGCharge();
   
   G4Material* aMaterial = trackData.GetMaterial();
   G4int index = aMaterial->GetIndex();
@@ -987,60 +918,50 @@ G4VParticleChange* G4eEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   
   fParticleChange.Initialize(trackData);  
   
-  // do not track further if kin.energy < 1. eV
-  const G4double MinKineticEnergy = 1.*eV;
-   
   G4double MeanLoss, finalT; 
   
-  if (E < MinKineticEnergy)   { finalT = 0.; MeanLoss = E;}
+  if (E < MinKineticEnergy)   finalT = 0.; 
   
-  else if (EnergyBinNumber <= 0)   
-     {
-       if (Step >= fRangeNow) { finalT = 0.; MeanLoss = E;}
-       else
-         {
-           finalT = E*(1.-Step/fRangeNow)*(1.-Step/fRangeNow);
-           if (finalT < MinKineticEnergy) finalT = 0.;
-           MeanLoss = E - finalT;
-         }
-     }
+  else if (E<LowestKineticEnergy)  
+  {
+    if (Step >= fRangeNow)  finalT = 0.; 
+    else finalT = E - Step*fdEdx ;
+  }
     
-  else if (EnergyBinNumber >= (TotBin-1))
-     {
-       // simple solution for the moment: loss = Step*dE/dx (dE/dx const)
-       MeanLoss = Step*fdEdx;
-       if (MeanLoss > E) MeanLoss = E;
-       finalT = E - MeanLoss;
-       if (finalT < MinKineticEnergy) { finalT = 0.; MeanLoss = E;}  
-     }
+  else if (E>=HighestKineticEnergy) finalT = E - Step*fdEdx;
      
-  else if (Step >= fRangeNow) { finalT = 0.; MeanLoss = E;}
+  else if (Step >= fRangeNow)  finalT = 0.; 
   
   else
-     {
-       if (charge<0.) finalT = G4EnergyLossTables::GetPreciseEnergyFromRange
-                              (G4Electron::Electron(),fRangeNow-Step,aMaterial);
-       else           finalT = G4EnergyLossTables::GetPreciseEnergyFromRange
-                              (G4Positron::Positron(),fRangeNow-Step,aMaterial);
-       if (finalT < MinKineticEnergy) finalT = 0.;
-       MeanLoss = E-finalT;
-       if (MeanLoss < 0.) { MeanLoss = 0.; finalT = E;}
-       
-       //now the loss with fluctuation
-       if ((EnlossFlucFlag) && (MeanLoss > 0.) && (MeanLoss < E))
-         {
-           finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
-           if (finalT < 0.) finalT = E-MeanLoss;
-         }
+  {
+    if(Step/fRangeNow < linLossLimit) finalT = E-Step*fdEdx ;
+    else
+    {
+      if (Charge<0.) finalT = G4EnergyLossTables::GetPreciseEnergyFromRange
+                             (G4Electron::Electron(),fRangeNow-Step,aMaterial);
+      else           finalT = G4EnergyLossTables::GetPreciseEnergyFromRange
+                             (G4Positron::Positron(),fRangeNow-Step,aMaterial);
      }
+  }
+
+  if(finalT < MinKineticEnergy) finalT = 0. ;
+
+  MeanLoss = E-finalT ;  
+
+  //now the loss with fluctuation
+  if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E))
+  {
+    finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
+    if (finalT < 0.) finalT = E-MeanLoss;
+  }
 
   // kill the particle if the kinetic energy <= 0  
   if (finalT <= 0. )
-    {
-      finalT = 0.;
-      if (charge < 0.) fParticleChange.SetStatusChange(fStopAndKill);
-      else             fParticleChange.SetStatusChange(fStopButAlive); 
-    } 
+  {
+    finalT = 0.;
+    if (Charge < 0.) fParticleChange.SetStatusChange(fStopAndKill);
+    else             fParticleChange.SetStatusChange(fStopButAlive); 
+  } 
 
   fParticleChange.SetEnergyChange(finalT);
   fParticleChange.SetLocalEnergyDeposit(E-finalT);
@@ -1080,11 +1001,12 @@ G4double G4eEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4int nb;
   G4double Corrfac, na,alfa,rfac,namean,sa,alfa1,ea,sea;
   G4double dp1,dnmaxDirectFluct,dp3,dnmaxCont2;
+  G4double siga ;
+  static const G4double alim=10.;
 
   // get particle data
   G4double Tkin   = aParticle->GetKineticEnergy();
-  G4double charge = aParticle->GetDefinition()->GetPDGCharge();
-  if (charge<0.) threshold =((*G4Electron::Electron()).GetCutsInEnergy())[imat];
+  if (Charge<0.) threshold =((*G4Electron::Electron()).GetCutsInEnergy())[imat];
   else           threshold =((*G4Positron::Positron()).GetCutsInEnergy())[imat];
 
   G4double rmass = electron_mass_c2/ParticleMass;
@@ -1107,7 +1029,7 @@ G4double G4eEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   if (Tm > 0.) a3 = rateFluct*MeanLoss*Tm/(ipotFluct*w1*log(w2));
   else { a1 /= rateFluct; a2 /= rateFluct; a3 = 0.;}
   suma = a1+a2+a3;
-  
+
   //no fluctuation if the loss is too big
   if (suma > MaxExcitationNumber)  return  MeanLoss;
 
@@ -1119,14 +1041,26 @@ G4double G4eEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if (Tm <= 0.)
         {
           a1 = MeanLoss/e0;
-          p1 = RandPoisson::shoot(a1);
+          if(a1>alim)
+          {
+            siga=sqrt(a1) ;
+            p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
+          }
+          else
+            p1 = RandPoisson::shoot(a1);
           loss = p1*e0 ;
         }
      else
         {
           Em = Tm+e0;
           a1 = MeanLoss*(Em-e0)/(Em*e0*log(Em/e0));
-          p1 = RandPoisson::shoot(a1);
+          if(a1>alim)
+          {
+            siga=sqrt(a1) ;
+            p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
+          }
+          else
+            p1 = RandPoisson::shoot(a1);
           w  = (Em-e0)/Em;
           // just to save time 
           if (p1 > nmaxDirectFluct)
@@ -1147,11 +1081,29 @@ G4double G4eEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
     
   else                              // not so small Step
     {
-      p1 = RandPoisson::shoot(a1);
-      p2 = RandPoisson::shoot(a2);
+      if(a1>alim)
+      {
+        siga=sqrt(a1) ;
+        p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
+      }
+      else
+       p1 = RandPoisson::shoot(a1);
+      if(a2>alim)
+      {
+        siga=sqrt(a2) ;
+        p2 = max(0,int(RandGauss::shoot(a2,siga)+0.5));
+      }
+      else
+        p2 = RandPoisson::shoot(a2);
       loss = p1*e1Fluct+p2*e2Fluct;
       if (loss>0.) loss += (1.-2.*G4UniformRand())*e1Fluct;   
-      p3 = RandPoisson::shoot(a3);
+      if(a3>alim)
+      {
+        siga=sqrt(a3) ;
+        p3 = max(0,int(RandGauss::shoot(a3,siga)+0.5));
+      }
+      else
+        p3 = RandPoisson::shoot(a3);
 
       lossc = 0.; na = 0.; alfa = 1.;
       if (p3 > nmaxCont2)

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.1 1999-01-07 16:11:22 gunter Exp $
+// $Id: G4MultipleScattering.cc,v 1.2 1999-02-16 13:40:13 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -29,8 +29,13 @@
      : G4VContinuousDiscreteProcess(processName),
        theTransportMeanFreePathTable(NULL),
        lastMaterial(NULL),
-       lastKineticEnergy(-1.*MeV),
+       lastKineticEnergy(0.),
+       materialIndex(0),
        fTransportMeanFreePath (1.e12),
+       range(1.e10*mm),
+       alpha1(5.),
+       stepFlag(0),
+       biglambda (1.e10*mm), 
        LowestKineticEnergy(0.1*keV),
        HighestKineticEnergy(100.*TeV),
        TotBin(100),
@@ -38,7 +43,11 @@
        thePositron(G4Positron::Positron()),
        tLast (0.0),
        zLast (0.0),
-       tuning (1.00)
+       Tlimit(100.*keV),
+       scatteringparameter(1.0),
+       tuning (1.00),
+       cpar (0.0),
+       fLatDisplFlag(true) 
   { }
 
   G4MultipleScattering::~G4MultipleScattering()
@@ -57,9 +66,6 @@
 
   //   tables are built for MATERIALS
   {
-
-    const G4MaterialTable* theMaterialTable =
-                       G4Material::GetMaterialTable() ;
     const G4double sigmafactor = twopi*classic_electr_radius*
                                        classic_electr_radius ;
     G4double KineticEnergy,AtomicNumber,sigma,lambda ;
@@ -73,6 +79,8 @@
     }
 
   //  create table
+    const G4MaterialTable* theMaterialTable=
+                                   G4Material::GetMaterialTable();
     G4int numOfMaterials = theMaterialTable->length() ;
 
     theTransportMeanFreePathTable = new G4PhysicsTable(numOfMaterials) ;
@@ -138,9 +146,6 @@
                                Bohr_radius*Bohr_radius/(hbarc*hbarc) ;
     const G4double epsmin = 1.e-4 , epsmax = 1.e10 ;
 
-    // +++++++++++++++++++++++++++
-    const G4double cpar=1.50 ;
-    // ---------------------------
 
     const G4double Zdat[15] = {4.,6.,13.,20.,26.,29.,32.,38.,47.,
                                50.,56.,64.,74.,79.,82. } ;
@@ -361,16 +366,11 @@
                                                const G4Track& trackData,
                                                const G4Step& stepData)
   {
-    const G4double scatteringparameter=1.00  ;
-    const G4double lowexp = 0.4 ;
     const G4double  taulim = 1.e-10 , randlim = 0.25*taulim*taulim ;
-
     const G4double tausmall = 5.e-5,taubig =50.,
           kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1. ;
-
     const G4DynamicParticle* aParticle ;
     G4Material* aMaterial ;
-    G4int materialIndex ;
     G4double KineticEnergy,truestep,tau,prob,cth,sth,phi,
              dirx,diry,dirz,w,w1,etau,rmean,safetyminustolerance,
              xnew,ynew,znew ;
@@ -379,52 +379,29 @@
 
     fParticleChange.Initialize(trackData) ;
 
-    aMaterial = stepData.GetPreStepPoint()->GetMaterial() ;
-
     truestep = stepData.GetStepLength() ;
 
-   // there is no scattering for truestep=0. !
-    if(truestep == 0.)
-      return &fParticleChange ;
- 
     aParticle = trackData.GetDynamicParticle() ;
 
-    materialIndex = aMaterial->GetIndex() ;
     KineticEnergy = aParticle->GetKineticEnergy() ;
 
-  // shortcut if the particle is not Alive (e.g. stopped in energy loss)
-    if(trackData.GetTrackStatus() != fAlive)
-       return &fParticleChange ;
-
-  if ((lastMaterial == aMaterial) && (lastKineticEnergy == KineticEnergy))
-  {
-    ;
-  }
-  else
-  {
-    lastMaterial=aMaterial;
-    lastKineticEnergy=KineticEnergy;
-
-    if(KineticEnergy<LowestKineticEnergy)
+    if(stepFlag == 0)
     {
-       fTransportMeanFreePath = 
-                           exp(lowexp*log(KineticEnergy/LowestKineticEnergy))*
-                          (*theTransportMeanFreePathTable)
-                          (materialIndex)->GetValue(LowestKineticEnergy,isOut);
-    }
-    else 
-    {
-      if(KineticEnergy>HighestKineticEnergy)
-         KineticEnergy = HighestKineticEnergy ;
-
-      fTransportMeanFreePath = (*theTransportMeanFreePathTable)
-                              (materialIndex)->GetValue(KineticEnergy,isOut);
-    }
-  }
+       fTransportMeanFreePath = (*theTransportMeanFreePathTable)
+                               (materialIndex)->GetValue(KineticEnergy,isOut);
+    } 
 
   //  change direction first ( scattering ) ..........................
-    tau = truestep/fTransportMeanFreePath ;
-    prob = exp(-tau)*(1.+scatteringparameter*tau) ;
+    if(stepFlag == 0)
+    {
+      tau = truestep/fTransportMeanFreePath ;
+      prob = exp(-tau)*(1.+scatteringparameter*tau) ;
+    }
+    else
+    {
+      tau = truestep/range ;
+      prob = exp((alpha1-1.)*log(1.-tau))*(1.+scatteringparameter*tau) ;
+    }
 
     if(G4UniformRand()<prob)
     {
@@ -464,61 +441,67 @@
                                       newDirection.y(),
                                       newDirection.z()) ;
 
-   //  compute mean lateral displacement ...............
-   //  only for safety > tolerance !!!!!!!!!
-    safetyminustolerance = stepData.GetPostStepPoint()->GetSafety()
-                           -kCarTolerance ;
-
-    if(safetyminustolerance > 0.)
+    if(fLatDisplFlag)
     {
-      if(tau<tausmall)
-        rmean = 5.*tau*tau*tau/12. ;
-      else
+      //  compute mean lateral displacement ...............
+      //  only for safety > tolerance !!!!!!!!!
+      safetyminustolerance = stepData.GetPostStepPoint()->GetSafety()
+                             -kCarTolerance ;
+
+      if(safetyminustolerance > 0.)
       {
-        if(tau<taubig)
-          etau = exp(-tau) ;
+        if(tau<tausmall)
+          rmean = 5.*tau*tau*tau/12. ;
         else
-          etau = 0. ;
-        rmean = -kappa*tau ;
-        rmean = -exp(rmean)/(kappa*kappami1) ;
-        rmean += tau-kappapl1/kappa+kappa*etau/kappami1 ;
+        {
+          if(tau<taubig)
+            etau = exp(-tau) ;
+          else
+            etau = 0. ;
+          rmean = -kappa*tau ;
+          rmean = -exp(rmean)/(kappa*kappami1) ;
+          rmean += tau-kappapl1/kappa+kappa*etau/kappami1 ;
+        }
+
+        if(rmean>0.)
+          rmean = 2.*fTransportMeanFreePath*sqrt(rmean/3.) ;
+        else
+          rmean = 0. ;
+
+        // for rmean > 0) only
+        if(rmean>0.)
+        {
+          if(rmean>safetyminustolerance)
+            rmean = safetyminustolerance ;
+
+          //  sample direction of lateral displacement
+          phi = twopi*G4UniformRand() ;
+
+          dirx = cos(phi) ;
+          diry = sin(phi) ;
+          dirz = 0. ;
+
+          G4ThreeVector latDirection(dirx,diry,dirz);
+
+          latDirection.rotateUz(ParticleDirection) ;
+
+          // compute new endpoint of the Step
+          xnew = stepData.GetPostStepPoint()->GetPosition().x()+
+                                         rmean*latDirection.x() ;
+          ynew = stepData.GetPostStepPoint()->GetPosition().y()+
+                                         rmean*latDirection.y() ;
+          znew = stepData.GetPostStepPoint()->GetPosition().z()+
+                                         rmean*latDirection.z() ;
+
+          fParticleChange.SetPositionChange(xnew,ynew,znew) ;
+        }
       }
-
-      if(rmean>0.)
-        rmean = 2.*fTransportMeanFreePath*sqrt(rmean/3.) ;
-      else
-        rmean = 0. ;
-
-      fMeanLateralDisplacement = rmean ;
-
-      if(rmean>safetyminustolerance)
-        rmean = safetyminustolerance ;
-
-      //  sample direction of lateral displacement
-      phi = twopi*G4UniformRand() ;
-
-      dirx = cos(phi) ;
-      diry = sin(phi) ;
-      dirz = 0. ;
-
-      G4ThreeVector latDirection(dirx,diry,dirz);
-
-      latDirection.rotateUz(ParticleDirection) ;
-
-      // compute new endpoint of the Step
-      xnew = stepData.GetPostStepPoint()->GetPosition().x()+
-                         rmean*latDirection.x() ;
-      ynew = stepData.GetPostStepPoint()->GetPosition().y()+
-                         rmean*latDirection.y() ;
-      znew = stepData.GetPostStepPoint()->GetPosition().z()+
-                         rmean*latDirection.z() ;
-
-      fParticleChange.SetPositionChange(xnew,ynew,znew) ;
     }
 
     return &fParticleChange ;
-  
-  } 
+ 
+  }
+
   
 void G4MultipleScattering::PrintInfoDefinition()
 {
