@@ -1,0 +1,126 @@
+macro g4g4.kumac
+*
+set * ; opt * 
+*
+filecase keep
+h/file 1 05may00.paw
+h/file 2 10nov99.paw
+*h/file 2 ../../geant3/results/run01/01jun99.paw
+
+*meta 10 -114
+
+set *fon -40
+set mscf 1.5
+
+set ygti 0.5  ; set gsiz 0.35 ; set ymgu 1.5
+set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
+set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2 
+
+title 'PbWO4  e- 5 GeV   G4Std-G4Std comparison'
+
+zone 1 2
+
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/4
+key 16 10 1  'G4 may00' ! l
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl //lun2/4 s
+key 16  9 2  'G4 nov99' ! l
+atitle L/Radl (1/E0)(dE/dRadl)
+exec Redraw-Axis
+
+opt logy
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/10
+key 4 100 1 'G4 may00' ! l 
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl //lun2/10 s
+key 4 60  2 'G4 nov99' ! l
+atitle R/Radl (1/E0)(dE/dRadl)
+exec Redraw-Axis
+
+next
+zone 2 2
+
+opt liny
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/5
+key 16 30 1  'G4 may00' ! l
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl //lun2/5 s
+key 16 20 2  'G4 nov99' ! l
+atitle L/Radl Ecumul/E0
+exec Redraw-Axis
+
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/6
+key 16 10 1  'G4 may00' ! l
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl //lun2/6 s
+key 16  9 2  'G4 nov99' ! l
+atitle L/Radl rms/E0
+exec Redraw-Axis
+
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/11
+key 4 30 1 'G4 may00' ! l 
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl //lun2/11 s
+key 4 20  2 'G4 nov99' ! l
+atitle R/Radl Ecumul/E0
+exec Redraw-Axis
+
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/12
+key 4 2.5 1 'G4 may00' ! l 
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl //lun2/12 s
+key 4 2.2  2 'G4 nov99' ! l
+atitle R/Radl rms/E0
+exec Redraw-Axis
+
+next
+zone 1 3
+
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/1
+key 20 100 1 'G4 may00' ! l 
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl //lun2/1 s
+key 20 60 2 'G4 nov99' ! l
+atitle ' ' #evt
+
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/2
+key 100 100 1 'G4 may00' ! l 
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl //lun2/2 s
+key 100 60  2 'G4 nov99' ! l
+atitle ' ' #evt
+
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/3
+key 1000 40 1 'G4 may00' ! l 
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl //lun2/3 s
+key 1000 25  2 'G4 nov99' ! l
+atitle ' ' #evt
+exec Redraw-Axis
+
+*close 0
+return
+
+Macro Redraw-Axis
+set plci 1
+   X1 = $GRAFINFO('WNXMIN')
+   X2 = $GRAFINFO('WNXMAX')
+   Y1 = $GRAFINFO('WNYMIN')
+   Y2 = $GRAFINFO('WNYMAX')
+   IS = $GRAFINFO('?FAIS')
+   IC = $GRAFINFO('?FACI')
+   Set FAIS 0 ; Set FACI 1
+   Box [X1] [X2] [Y1] [Y2]
+   Set FAIS [IS] ; Set FACI [IC]
+   Tick XL [X1] !
+*   Tick YB ! [Y1]
+   Return
