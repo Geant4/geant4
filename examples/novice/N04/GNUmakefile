@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2001-12-18 14:48:00 gcosmo Exp $
+# $Id: GNUmakefile,v 1.7 2004-12-02 14:28:03 santin Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -11,21 +11,17 @@ ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
 
+include hadronic_lists.gmk
+
+
 .PHONY: all
-all: lib bin
+all:  had_list lib bin
+
+had_list:
+	@echo "This example (novice/N04) uses the QGSP 'educated guess physics list'"
+	@echo "(see http://cmsdoc.cern.ch/~hpw/GHAD/HomePage)."
+	@echo "The Hadronic Physics lists should be compiled before compiling this example." 
+	@echo "If you haven't done so yet, please see the README file for detailed compilation instructions"
 
 include $(G4INSTALL)/config/binmake.gmk
-
-CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
-CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
-
-# On HP-acc optimization has to be turned off to compile ExN04HadronPhysics.
-#
-ifeq ($(G4SYSTEM),HP-aCC)
-COMPILER := $(shell aCC -V 2>&1)
-ifeq ($(COMPILER), aCC: HP ANSI C++ B3910B A.01.15)
-$(G4TMP)/$(G4SYSTEM)/$(name)/ExN04HadronPhysics.o: src/ExN04HadronPhysics.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/ExN04HadronPhysics.cc
-endif
-endif
 
