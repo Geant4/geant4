@@ -23,7 +23,7 @@ ODBMS package. How to store and retrieve Geant4 events, hits and geometry
 objects is explained in documentation.
 
 For setting this you should have an ODMG compliant database
-(Objectivity) installed and running on your system!
+(e.g. Objectivity/DB) installed and running on your system!
 EOM`
 
 dflt=$g4use_hepodbms
