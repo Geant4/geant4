@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.icc,v 1.5 2002-01-29 09:27:55 gcosmo Exp $
+// $Id: G4strstreambuf.icc,v 1.6 2002-05-24 15:01:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,11 +84,11 @@ G4int G4strstreambuf::overflow(G4int c)
   {
     result = sync();
 
-    // temporary fix for GNU gcc-3.X.X compilers. The return value
-    // for cout, cerr overflow() function has to be c instead of 0
-    // when buffer is flushed for carriage-return.
+    // Fix to overcome a bug on GNU gcc-3.0.X compilers. The return value
+    // for cout, cerr overflow() function has to be c instead of 0 when
+    // buffer is flushed for carriage-return.
     //
-    #if defined(GNU_GCC) && defined(G4USE_STD_NAMESPACE) && (__GNUC__ > 2)
+    #if defined(GNU_GCC) && defined(G4USE_STD_NAMESPACE) && (__GNUC__==3) && (__GNUC_MINOR__==0)
         if (this == & G4coutbuf || this == & G4cerrbuf)  result = c;
     #endif
   }
