@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.8 1999-05-25 17:51:43 sgiani Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.9 1999-05-28 08:49:12 sgiani Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Corrections by S.Giani:
@@ -516,12 +516,15 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(register const G4ThreeVector& Pt,
 {
   // Calculates the distance from a point inside the solid
   // to the solid`s boundary along a specified direction vector.
-  // Return 0 if the point is already outside.
+  // Return 0 if the point is already outside (even number of
+  // intersections greater than the tolerance).
   //
   // Note : If the shortest distance to a boundary is less 
   // 	    than the tolerance, it is ignored. This allows
   // 	    for a point within a tolerant boundary to leave
   //	    immediately
+
+  G4int parity = 0;
 
   // Set the surfaces to active again
   Reset();
@@ -543,25 +546,28 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(register const G4ThreeVector& Pt,
   // by the ray. If not, the surface become deactive.
   TestSurfaceBBoxes(r);
   
-  ShortestDistance = kInfinity;
+  ShortestDistance = kInfinity; // this is actually the square of the distance
  
   for(a=0; a< nb_of_surfaces; a++)
   {
     if(SurfaceVec[a]->Active())
     {
-      // test if the ray intersect the surface
+      // test if the ray intersects the surface
       if( (SurfaceVec[a]->Intersect(r)) )
       {
+        parity += 1;
+	
 	// if more than 1 surface is intersected,
 	// take the nearest one
 	if( SurfaceVec[a]->Distance() < ShortestDistance )
-	  if( SurfaceVec[a]->Distance() > halfTolerance )
+	  if( SurfaceVec[a]->Distance() > halfTolerance*halfTolerance )
 	  {
 	    ShortestDistance = SurfaceVec[a]->Distance();
 	  }
 	  else
 	  {
-	    // the point is within the boundary: ignored it
+	    // the point is within the boundary: ignore it
+	    parity -= 1;
 	  }
       }
     }
@@ -569,10 +575,10 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(register const G4ThreeVector& Pt,
 
   // Be carreful !
   // SurfaceVec->Distance is in fact the squared distance
-  if(ShortestDistance != kInfinity)
+  if((ShortestDistance != kInfinity) && (parity&1))
     return sqrt(ShortestDistance);
   else
-    // if no intersection is founded, the point is outside
+    // if no intersection is found, the point is outside
     // so return 0
     return 0; 
 }
