@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.14 2001-08-13 10:24:25 grichine Exp $
+// $Id: G4IntersectionSolid.cc,v 1.15 2001-08-13 14:03:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -172,11 +172,11 @@ G4IntersectionSolid::SurfaceNormal( const G4ThreeVector& p ) const
   // if( Inside(p) == kOutside )
   if( (insideA == kOutside) || (insideB == kOutside) )
   {
-    G4cerr << "WARNING - Invalid call in G4IntersectionSolid::SurfaceNormal(p),
-                      point p is outside" << G4endl;
+    G4cerr << "WARNING - Invalid call in G4IntersectionSolid::SurfaceNormal(p),"
+           << " point p is outside" << G4endl;
     G4cerr << "          p = " << p << G4endl;
     #ifdef G4BOOLDEBUG
-G4Exception("Invalid call in G4IntersectionSolid::SurfaceNormal(p), p is outside") ;
+       G4Exception("Invalid call in G4IntersectionSolid::SurfaceNormal(p), p is outside") ;
     #endif
   }
 
@@ -202,11 +202,11 @@ G4Exception("Invalid call in G4IntersectionSolid::SurfaceNormal(p), p is outside
 	 normal= fPtrSolidA->SurfaceNormal(p) ;   
       else
 	 normal= fPtrSolidB->SurfaceNormal(p) ;   
-      G4cerr << "WARNING - Invalid call in G4IntersectionSolid::SurfaceNormal(p),
-                      point p is outsurface" << G4endl;
+      G4cerr << "WARNING - Invalid call in G4IntersectionSolid::SurfaceNormal(p),"
+             << " point p is outsurface" << G4endl;
       G4cerr << "          p = " << p << G4endl;
       #ifdef G4BOOLDEBUG
-G4Exception("Invalid call in G4IntersectionSolid::SurfaceNormal(p), p is outsurface") ;
+         G4Exception("Invalid call in G4IntersectionSolid::SurfaceNormal(p), p is outsurface") ;
       #endif
     }
 
@@ -224,12 +224,12 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
   G4double dist = 0.0, disTmp = 0.0 ;
   if( Inside(p) == kInside )
   {
-    G4cerr << "WARNING - Invalid call in G4IntersectionSolid::DistanceToIn(p,v),
-                      point p is inside" << G4endl;
+    G4cerr << "WARNING - Invalid call in G4IntersectionSolid::DistanceToIn(p,v),"
+           << " point p is inside" << G4endl;
     G4cerr << "          p = " << p << G4endl;
     G4cerr << "          v = " << v << G4endl;
     #ifdef G4BOOLDEBUG
-G4Exception("Invalid call in G4IntersectionSolid::DistanceToIn(p,v), p is inside") ;
+      G4Exception("Invalid call in G4IntersectionSolid::DistanceToIn(p,v), p is inside") ;
     #endif
   }
   else
@@ -387,11 +387,11 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p) const
 {
   if( Inside(p) == kInside )
   {
-    G4cerr << "WARNING - Invalid call in G4IntersectionSolid::DistanceToIn(p),
-                      point p is inside" << G4endl;
+    G4cerr << "WARNING - Invalid call in G4IntersectionSolid::DistanceToIn(p),"
+           << " point p is inside" << G4endl;
     G4cerr << "          p = " << p << G4endl;
     #ifdef G4BOOLDEBUG
-G4Exception("Invalid call in G4IntersectionSolid::DistanceToIn(p), p is inside") ;
+      G4Exception("Invalid call in G4IntersectionSolid::DistanceToIn(p), p is inside") ;
     #endif
   }
   EInside sideA = fPtrSolidA->Inside(p) ;
@@ -441,12 +441,12 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p,
     G4cout << "v.x() = "   << v.x() << G4endl;
     G4cout << "v.y() = "   << v.y() << G4endl;
     G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-    G4cerr << "WARNING - Invalid call in G4IntersectionSolid::DistanceToOut(p,v),
-                      point p is outside" << G4endl;
+    G4cerr << "WARNING - Invalid call in G4IntersectionSolid::DistanceToOut(p,v),"
+           << " point p is outside" << G4endl;
     G4cerr << "          p = " << p << G4endl;
     G4cerr << "          v = " << v << G4endl;
     #ifdef G4BOOLDEBUG
-G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p,v), p is outside") ;
+      G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p,v), p is outside") ;
     #endif
   }
   G4double distA = fPtrSolidA->DistanceToOut(p,v,calcNorm,&validNormA,&nA) ;
@@ -478,11 +478,11 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p ) const
 {
   if( Inside(p) == kOutside )
   {
-    G4cerr << "WARNING - Invalid call in G4IntersectionSolid::DistanceToOut(p),
-                      point p is outside" << G4endl;
+    G4cerr << "WARNING - Invalid call in G4IntersectionSolid::DistanceToOut(p),"
+           << " point p is outside" << G4endl;
     G4cerr << "          p = " << p << G4endl;
     #ifdef G4BOOLDEBUG
-G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p), p is outside") ;
+      G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p), p is outside") ;
     #endif
   }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc,v 1.18 2001-08-13 10:24:25 grichine Exp $
+// $Id: G4UnionSolid.cc,v 1.19 2001-08-13 14:03:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -170,11 +170,11 @@ G4UnionSolid::SurfaceNormal( const G4ThreeVector& p ) const
 
     if( Inside(p) == kOutside )
     {
-    G4cerr << "WARNING - Invalid call in G4UnionSolid::SurfaceNormal(p),
-                      point p is outside" << G4endl;
+    G4cerr << "WARNING - Invalid call in G4UnionSolid::SurfaceNormal(p),"
+           << " point p is outside" << G4endl;
     G4cerr << "          p = " << p << G4endl;
     #ifdef G4BOOLDEBUG
-    G4Exception("Invalid call in G4UnionSolid::SurfaceNormal(p), p is outside") ;
+      G4Exception("Invalid call in G4UnionSolid::SurfaceNormal(p), p is outside") ;
     #endif
     }
 
@@ -190,11 +190,11 @@ G4UnionSolid::SurfaceNormal( const G4ThreeVector& p ) const
     else 
     {
       normal= fPtrSolidA->SurfaceNormal(p) ;
-      G4cerr << "WARNING - Invalid call in G4UnionSolid::SurfaceNormal(p),
-                      point p is inside" << G4endl;
+      G4cerr << "WARNING - Invalid call in G4UnionSolid::SurfaceNormal(p),"
+             << " point p is inside" << G4endl;
       G4cerr << "          p = " << p << G4endl;
       #ifdef G4BOOLDEBUG
-      G4Exception("Invalid call in G4UnionSolid::SurfaceNormal(p), p is inside") ;
+        G4Exception("Invalid call in G4UnionSolid::SurfaceNormal(p), p is inside") ;
       #endif
     }
     return normal;
@@ -210,12 +210,12 @@ G4UnionSolid::DistanceToIn( const G4ThreeVector& p,
 {
   if( Inside(p) == kInside )
   {
-    G4cerr << "WARNING - Invalid call in G4UnionSolid::DistanceToIn(p,v),
-                      point p is inside" << G4endl;
+    G4cerr << "WARNING - Invalid call in G4UnionSolid::DistanceToIn(p,v),"
+           << " point p is inside" << G4endl;
     G4cerr << "          p = " << p << G4endl;
     G4cerr << "          v = " << v << G4endl;
     #ifdef G4BOOLDEBUG
-G4Exception("Invalid call in G4UnionSolid::DistanceToIn(p,v),  point p is intside");
+      G4Exception("Invalid call in G4UnionSolid::DistanceToIn(p,v),  point p is intside");
     #endif
   }
   return G4std::min(fPtrSolidA->DistanceToIn(p,v),
@@ -232,12 +232,12 @@ G4UnionSolid::DistanceToIn( const G4ThreeVector& p) const
 {
   if( Inside(p) == kInside )
   {
-    G4cerr << "WARNING - Invalid call in G4UnionSolid::DistanceToIn(p),
-                      point p is inside" << G4endl;
+    G4cerr << "WARNING - Invalid call in G4UnionSolid::DistanceToIn(p),"
+           << " point p is inside" << G4endl;
     G4cerr << "          p = " << p << G4endl;
 
     #ifdef G4BOOLDEBUG
-    G4Exception("Invalid call in G4UnionSolid::DistanceToIn(p), p is inside") ;
+      G4Exception("Invalid call in G4UnionSolid::DistanceToIn(p), p is inside") ;
     #endif
   }
   G4double distA = fPtrSolidA->DistanceToIn(p) ;
@@ -264,20 +264,20 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
 
   if( Inside(p) == kOutside )
   {
-    G4cout << "Position:"  << G4endl << G4endl;
-    G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
-    G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
-    G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-    G4cout << "Direction:" << G4endl << G4endl;
-    G4cout << "v.x() = "   << v.x() << G4endl;
-    G4cout << "v.y() = "   << v.y() << G4endl;
-    G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-    G4cerr << "WARNING - Invalid call in G4UnionSolid::DistanceToOut(p,v),
-                      point p is outside" << G4endl;
+    G4cerr << "WARNING - Invalid call in G4UnionSolid::DistanceToOut(p,v),"
+           << " point p is outside" << G4endl;
     G4cerr << "          p = " << p << G4endl;
     G4cerr << "          v = " << v << G4endl;
     #ifdef G4BOOLDEBUG
-G4Exception("Invalid call in G4UnionSolid::DistanceToOut(p,v),  point p is outside");
+      G4cout << "Position:"  << G4endl << G4endl;
+      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
+      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
+      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
+      G4cout << "Direction:" << G4endl << G4endl;
+      G4cout << "v.x() = "   << v.x() << G4endl;
+      G4cout << "v.y() = "   << v.y() << G4endl;
+      G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
+      G4Exception("Invalid call in G4UnionSolid::DistanceToOut(p,v),  point p is outside");
     #endif
   }
   else
@@ -342,11 +342,11 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p ) const
   G4double distout = kInfinity;
   if( Inside(p) == kOutside )
   {
-    G4cerr << "WARNING - Invalid call in G4UnionSolid::DistanceToOut(p),
-                      point p is outside" << G4endl;
+    G4cerr << "WARNING - Invalid call in G4UnionSolid::DistanceToOut(p),"
+           << " point p is outside" << G4endl;
     G4cerr << "          p = " << p << G4endl;
     #ifdef G4BOOLDEBUG
-G4Exception("Invalid call in G4UnionSolid::DistanceToOut(p), p is outtside");
+      G4Exception("Invalid call in G4UnionSolid::DistanceToOut(p), p is outtside");
     #endif
   }
   else
