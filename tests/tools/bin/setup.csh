@@ -73,6 +73,7 @@ alias g4tail    "tail -f $G4WORKDIR/stt/$G4SYSTEM/gmake.log"
 alias g4filter  "$G4INSTALL/tests/tools/bin/filter.sh $G4SYSTEM | more"
 #
 alias test201 "$G4WORKDIR/bin/$G4SYSTEM/test201"
+alias N03     "$G4WORKDIR/bin/$G4SYSTEM/exampleN03"
 alias ANA01   "$G4WORKDIR/bin/$G4SYSTEM/AnaEx01"
 #
 #alias search "$G4INSTALL/tests/search.sh"
