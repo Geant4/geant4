@@ -1,7 +1,7 @@
 #
 # Macro file for the initialization phase of "test17" based on "TestEm6.cc"
 #
-# It creates the default geometry (simple absorber cylinder )        
+# It creates the default geometry (simple absorber box )        
 #
 /control/verbose 2
 /event/setverbose 0

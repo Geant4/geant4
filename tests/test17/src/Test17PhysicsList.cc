@@ -229,16 +229,17 @@ void Test17PhysicsList::ConstructEM()
 
       // Standard ionisation with low energy extention
       G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
-      hIon->SetNuclearStoppingOff() ;
-      hIon->SetAntiProtonStoppingOff() ;
+      //      hIon->SetNuclearStoppingOff() ;
+      //         hIon->SetBarkasOff() 
+      // hIon->SetNuclearStoppingOff() ;
+      // hIon->SetAntiProtonStoppingOff() ;
       //      hIon->SetBarkasOff() ;
       //      hIon->SetNuclearStoppingOn() ;
 
-       //hIon->SetStoppingPowerTableName("Ziegler1977He") ;
-       //hIon->SetStoppingPowerTableName("Ziegler1977H") ;
-      //  hIon->SetStoppingPowerTableName("ICRU_R49p") ;
-       //hIon->SetStoppingPowerTableName("ICRU_R49He") ;
-       //hIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
+      //hIon->SetStoppingPowerTableName("Ziegler1977He") ;
+     //   hIon->SetElectronicStoppingPowerModel(particle,"Ziegler1977p") ;
+      //       hIon->SetNuclearStoppingPowerModel("ICRU_R49Mollere") ;
+      //   hIon->SetElectronicStoppingPowerModel(particle,"ICRU_R49p") ;
 
       pmanager->AddProcess(hIon,-1,2,2);
       
