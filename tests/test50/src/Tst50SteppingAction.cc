@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.18 2003-02-05 13:05:45 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.19 2003-02-05 16:23:38 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -111,8 +111,24 @@ IDnow = run_ID+1000*evno+10000*(Step->GetTrack()->GetTrackID())+
     //prendo l'energia cinetica della particella  	
     KinE = Step->GetTrack()->GetKineticEnergy();
 
+    // energy deposit
     G4double EnergyDeposit = Step->GetTotalEnergyDeposit();
     eventaction->CalculateEnergyDeposit(EnergyDeposit);
+
+if(0 == Step->GetTrack()->GetParentID() ) 
+  {
+G4double EnergyDepositPrimary = Step->GetTotalEnergyDeposit();
+    eventaction->CalculateEnergyDepositPrimary(EnergyDepositPrimary);
+
+  }
+
+if(0 != Step->GetTrack()->GetParentID() ) 
+  {
+G4double EnergyDepositSecondary= Step->GetTotalEnergyDeposit();
+    eventaction->CalculateEnergyDepositSecondary(EnergyDepositSecondary);
+
+  }
+
 
     XIMD=0.;
     YIMD=0.;

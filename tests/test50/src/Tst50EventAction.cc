@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.9 2003-02-05 13:05:45 guatelli Exp $
+// $Id: Tst50EventAction.cc,v 1.10 2003-02-05 16:23:38 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +65,9 @@ Tst50EventAction::~Tst50EventAction()
 void Tst50EventAction::BeginOfEventAction(const G4Event*)
 { 
  energyDep=0.;
- energy=0.;
+ energy=0.; 
+ energyDepPrimary=0.;
+ energyDepSecondary=0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,6 +83,10 @@ void Tst50EventAction::EndOfEventAction(const G4Event* evt)
 	    Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 	    if(energyDep!=0)
 	        analysis->energy_deposit(energyDep);
+            if(energyDepPrimary!=0)
+	        analysis->energy_depositPrimary(energyDepPrimary);
+           if(energyDepSecondary!=0)
+	        analysis->energy_depositSecondary(energyDepSecondary);
 #endif
 	
 
@@ -138,6 +144,18 @@ G4double Tst50EventAction::RadiationYield(G4double energyLost)
 void Tst50EventAction::CalculateEnergyDeposit(G4double deposit)
 {
   energyDep += deposit;
+
+ 
+}
+void Tst50EventAction::CalculateEnergyDepositPrimary(G4double deposit_primary)
+{
+  energyDepPrimary += deposit_primary;
+
+ 
+}
+void Tst50EventAction::CalculateEnergyDepositSecondary(G4double deposit_secondary)
+{
+  energyDepSecondary += deposit_secondary;
 
  
 }

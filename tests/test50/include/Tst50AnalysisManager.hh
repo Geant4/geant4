@@ -25,7 +25,7 @@
 // S.Guatelli
 //
 //
-// $Id: Tst50AnalysisManager.hh,v 1.9 2003-02-05 13:05:44 guatelli Exp $
+// $Id: Tst50AnalysisManager.hh,v 1.10 2003-02-05 16:23:37 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -71,6 +71,8 @@ void finish();
 static Tst50AnalysisManager* getInstance();
 
 void energy_deposit(G4double);
+void energy_depositPrimary(G4double);
+void energy_depositSecondary(G4double);
   void energy_transmitted(G4double);
   void fill_data(G4double,G4double, G4double);
   void energy_backscatter(G4double);
@@ -99,6 +101,9 @@ AIDA::IHistogram1D *h3;
 AIDA::IHistogram1D *h4;
 AIDA::IHistogram2D *h6;
 AIDA::IHistogram1D *h5;
+AIDA::IHistogram1D *h7;
+AIDA::IHistogram1D *h8;
+
 private:
   Tst50PrimaryGeneratorAction* p_Primary;
  
