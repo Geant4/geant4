@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.49 2003-02-27 18:30:04 gcosmo Exp $
+# $Id: GNUmakefile,v 1.50 2003-02-27 18:42:50 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -37,47 +37,38 @@ OLAP += 01
 BIAS += 01 02 03 04 05 06 07
 
 # System Tests...
-SUBDIRS += test01 ## Geometry - CSG solids and navigator.
-                  ## (Action? Augment, plus Booleans.)
-SUBDIRS += test02 ## Standard em processes.  Low energy and high energy
-                  ## hadronic processes and stopping, including coherent
-                  ## elastic scattering.  (Derived originally from ExN04.)
-                  ## (Action? Split into (a) em, (b) had with higher em cuts.)
+SUBDIRS += test01
+SUBDIRS += test02
 # SUBDIRS += test03 ## Optical Processes.  (Derived originally from ExN06.)
                     ## Archived (cvs rm) - was indentical to ExN06 and no
                     ## longer maintained.
 # SUBDIRS += test04 ## Persistency.  Retired.
-SUBDIRS += test05 ## BREPS and STEP Interface.
-SUBDIRS += test06 ## Integral approach electromagnetic processes.  Simple box.
-                  ## (Action?  Add muon test script.)
-SUBDIRS += test07 ## Statistical evaluation prototype.  (Derived originally
-                  ## from ExN03.)
+SUBDIRS += test05
+SUBDIRS += test06
+SUBDIRS += test07
 # SUBDIRS += test08 ## Old em test.  Archived (cvs rm) for now.
                     ## (Action? Replace with transition radiation
                     ## and PAI (photoabsorption ionisation) model.)  (Derived
                     ## from TestEm8.)
-SUBDIRS += test09 ## Basic e.m. processes, Polarised Compton, new photelectric
-                  ## effect, synchrotron radiation, simple box.  (Action?  Add
-                  ## magnetic field, ElossPLus, muon test script.)
-SUBDIRS += test10 ## Uses optical photons to test geometry.
-SUBDIRS += test11 ## Neutron transport
-SUBDIRS += test12 ## FTF String Model
-SUBDIRS += test13 ## Dual Parton Model
-SUBDIRS += test14 ## LowEnergy em (photons and electrons).  (Derived from
-                  ## TestEm5.)
-SUBDIRS += test15 ## Isotope Production
-SUBDIRS += test16 ## n and p Cross-Sections
-SUBDIRS += test17 ## LowEnergy em (protons, antiprotons and ions). 
-SUBDIRS += test18 ## Radioactive decay.
-SUBDIRS += test20 ## Polarised LowE processes.
-SUBDIRS += test21 ## CHIPS as intra-nuclear transport replacement.
-SUBDIRS += test22 ## Gamma and electro-nuclear physics.
-SUBDIRS += test23 ## Cut per material and persistency of physics table.
-SUBDIRS += test24 ## Binary cascade hadronic model.
-SUBDIRS += test25 ## Classical cascade hadronic model.
-SUBDIRS += test26 ## Cuts by region modelling
-SUBDIRS += test32 ## Leading_particle biasing model of G4Mars5Ge on MARS13.
-SUBDIRS += test33 ## Importance biasing and scoring.
+SUBDIRS += test09
+SUBDIRS += test10
+SUBDIRS += test11
+SUBDIRS += test12
+SUBDIRS += test13
+SUBDIRS += test14
+SUBDIRS += test15
+SUBDIRS += test16
+SUBDIRS += test17
+SUBDIRS += test18
+SUBDIRS += test20
+SUBDIRS += test21
+SUBDIRS += test22
+SUBDIRS += test23
+SUBDIRS += test24
+SUBDIRS += test25
+SUBDIRS += test26
+SUBDIRS += test32
+SUBDIRS += test33
 
 # Tests with hadronic exercisers.
 HADEXERDIRS = test02 test11 test12 test13 test15 test16 test21 
