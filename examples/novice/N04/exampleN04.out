@@ -17,7 +17,7 @@ phot:  Total cross sections from a parametrisation. Good description from 10 KeV
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100  eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
@@ -40,7 +40,7 @@ hIoni:    Knock-on electron cross sections .
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100  eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
@@ -50,7 +50,7 @@ MuIoni:  knock-on electron cross sections .
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100  eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
@@ -63,9 +63,9 @@ Idle> #
 Idle> Idle> Idle> Idle> Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     118 hits are stored in ExN04TrackerHitsCollection.
-     57 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.744281 (GeV)
+     129 hits are stored in ExN04TrackerHitsCollection.
+     45 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.717346 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.
 ++++++++ event aborted
@@ -75,12 +75,11 @@ Stage 0->1 : 0 hits found in the muon chamber.
      Total energy deposition in calorimeter : 0 (GeV)
      0 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
-Stage 1->2 : 0 isolated muon found.
-++++++++ event aborted
+Stage 1->2 : 1 isolated muon found.
 >>> Event 2
-     103 hits are stored in ExN04TrackerHitsCollection.
-     13 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.340484 (GeV)
+     127 hits are stored in ExN04TrackerHitsCollection.
+     54 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.852516 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Idle> #
 Idle> 
