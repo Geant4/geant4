@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2000-05-22 05:41:41 johna Exp $
+$Id: History,v 1.23 2000-05-26 07:21:10 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20th May 2000  Evgeni Chernaev
+20th May 2000  Evgeni Chernaev (greps-V01-01-03)
 - Temporary workaround to avoid caseIE() and caseEE.
 
 13th May 2000  John Allison (greps-V01-01-02)
