@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRenderer.cc,v 1.4 1999-12-15 14:54:01 gunter Exp $
+// $Id: G4FukuiRenderer.cc,v 1.5 2000-08-19 18:34:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,7 +77,7 @@ G4VSceneHandler* G4FukuiRenderer::CreateSceneHandler (const G4String& name)
 	if(!flag_connected) { delete p ;  p = NULL ; }
 
 	G4cout	<< G4FukuiRendererSceneHandler::GetSceneCount ()
-		<< ' ' << fName << " scenes extanct." << G4endl;
+		<< ' ' << fName << " scene handlers extanct." << G4endl;
 
 	return p;
 }

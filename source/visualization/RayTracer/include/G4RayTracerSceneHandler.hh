@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTracerSceneHandler.hh,v 1.2 2000-02-28 15:19:49 johna Exp $
+// $Id: G4RayTracerSceneHandler.hh,v 1.3 2000-08-19 18:34:47 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // John Allison  17th March 2000
@@ -47,7 +47,7 @@ public:
 
 private:
   static G4int    fSceneIdCount;  // Counter for RayTracer scene handlers.
-  static G4int    fSceneCount;    // No. of extanct scenes.
+  static G4int    fSceneCount;    // No. of extanct scene handlers.
 };
 
 #endif

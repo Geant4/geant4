@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventor.cc,v 1.6 1999-12-15 14:54:12 gunter Exp $
+// $Id: G4OpenInventor.cc,v 1.7 2000-08-19 18:34:44 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
@@ -44,7 +44,7 @@ G4VInteractorManager* G4OpenInventor::GetInteractorManager () {
 G4VSceneHandler* G4OpenInventor::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* p = new G4OpenInventorSceneHandler (*this, name);
   G4cout << G4OpenInventorSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scenes extanct." << G4endl;
+       << ' ' << fName << " scene handlers extanct." << G4endl;
   return    p;
 }
 

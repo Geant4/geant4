@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.3 1999-12-15 14:54:03 gunter Exp $
+// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.4 2000-08-19 18:34:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@ public:
 
 private:
   static G4int    fSceneIdCount;  // static counter for OpenGLImmediate scenes.
-  static G4int    fSceneCount;    // No. of extanct scenes.
+  static G4int    fSceneCount;    // No. of extanct scene handlers.
 };
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.7 1999-12-15 14:54:04 gunter Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.8 2000-08-19 18:34:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@ friend class G4OpenGLStoredViewer;
   void ClearStore ();
   void RequestPrimitives (const G4VSolid& solid);
   static G4int    fSceneIdCount;   // static counter for OpenGLStored scenes.
-  static G4int    fSceneCount;     // No. of extanct scenes.
+  static G4int    fSceneCount;     // No. of extanct scene handlers.
   G4int           fDisplayListId;  // Workspace.
   
   // PODL = Persistent Object Display List.

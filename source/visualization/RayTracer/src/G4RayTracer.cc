@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTracer.cc,v 1.6 2000-06-07 02:52:45 asaim Exp $
+// $Id: G4RayTracer.cc,v 1.7 2000-08-19 18:34:51 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -116,7 +116,7 @@ void G4RayTracer::Trace(G4String fileName)
 G4VSceneHandler* G4RayTracer::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4RayTracerSceneHandler (*this, name);
   G4cout << G4RayTracerSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scenes extanct." << G4endl;
+       << ' ' << fName << " scene handlers extanct." << G4endl;
   return pScene;
 }
 

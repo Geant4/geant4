@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateWin32.cc,v 1.4 1999-12-15 14:54:07 gunter Exp $
+// $Id: G4OpenGLImmediateWin32.cc,v 1.5 2000-08-19 18:34:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,7 @@ G4OpenGLImmediateWin32::G4OpenGLImmediateWin32 ():
 G4VSceneHandler* G4OpenGLImmediateWin32::CreateSceneHandler () {
   G4VSceneHandler* pScene = new G4OpenGLImmediateSceneHandler (*this);
   G4cout << G4OpenGLImmediateSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scenes extanct." << G4endl;
+       << ' ' << fName << " scene handlers extanct." << G4endl;
   return    pScene;
 }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.8 1999-12-16 17:25:08 johna Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.9 2000-08-19 18:34:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ private:
   void 		ClearTransientStore ();
   void 		RequestPrimitives (const G4VSolid& solid);
   static 	G4int    fSceneIdCount;   // static counter for OpenInventor scenes.
-  static 	G4int    fSceneCount;     // No. of extanct scenes.
+  static 	G4int    fSceneCount;     // No. of extanct scene handlers.
   G4double  	GetMarkerSize    ( const G4VMarker&  mark ) ;
 
   //
