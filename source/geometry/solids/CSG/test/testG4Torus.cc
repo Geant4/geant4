@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Torus.cc,v 1.2 1999-12-15 14:50:09 gunter Exp $
+// $Id: testG4Torus.cc,v 1.3 2000-05-26 13:14:38 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,58 +34,75 @@
 
 G4bool testG4Torus()
 {
-    G4ThreeVector pzero(0,0,0);
+   G4int num, i ;
+   G4double Rtor = 100 ;
+   G4double Rmax = Rtor*0.9 ;
+   G4double Rmin = Rtor*0.1 ;
 
-    G4ThreeVector pbigx(240,0,0),pbigy(0,240,0),pbigz(0,0,240);
-    G4ThreeVector pbigmx(-240,0,0),pbigmy(0,-240,0),pbigmz(0,0,-240);
+//G4double z = atof ( argv[2] );
+   G4double x; 
+   G4double z;
+ 
+   G4double Dist;
+   G4ThreeVector *pNorm,norm;
+   G4bool *pgoodNorm,goodNorm,calcNorm=true;
 
-    G4ThreeVector ponrmax(190,0,0);
-    G4ThreeVector ponrmin(0,110,0);
-    G4ThreeVector ponrtor(0,100,0);
-    G4ThreeVector ponphi1(100/sqrt(2.),100/sqrt(2.),0) ;
-    G4ThreeVector ponphi2(-100/sqrt(2.),100/sqrt(2.),0) ;
-    G4ThreeVector ponphi12(120/sqrt(2.),120/sqrt(2.),0) ;
-    G4ThreeVector ponphi22(-120/sqrt(2.),120/sqrt(2.),0) ;
-    G4ThreeVector ponphi23(-120/sqrt(2.)+0.5,120/sqrt(2.),0) ;
+   pNorm=&norm;
+   pgoodNorm=&goodNorm;
+   
+   G4ThreeVector pzero(0,0,0);
+
+   G4ThreeVector pbigx(240,0,0),pbigy(0,240,0),pbigz(0,0,240);
+   G4ThreeVector pbigmx(-240,0,0),pbigmy(0,-240,0),pbigmz(0,0,-240);
+
+   G4ThreeVector ponrmax(190,0,0);
+   G4ThreeVector ponrmin(0,110,0);
+   G4ThreeVector ponrtor(0,100,0);
+   G4ThreeVector ponphi1(100/sqrt(2.),100/sqrt(2.),0) ;
+   G4ThreeVector ponphi2(-100/sqrt(2.),100/sqrt(2.),0) ;
+   G4ThreeVector ponphi12(120/sqrt(2.),120/sqrt(2.),0) ;
+   G4ThreeVector ponphi22(-120/sqrt(2.),120/sqrt(2.),0) ;
+   G4ThreeVector ponphi23(-120/sqrt(2.)+0.5,120/sqrt(2.),0) ;
     
 
-    G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
-    G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
-    G4ThreeVector vxy(1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxy(-1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxmy(-1/sqrt(2.0),-1/sqrt(2.0),0);
-    G4ThreeVector vxmy(1/sqrt(2.0),-1/sqrt(2.0),0);
+   G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
+   G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
+   G4ThreeVector vxy(1/sqrt(2.0),1/sqrt(2.0),0);
+   G4ThreeVector vmxy(-1/sqrt(2.0),1/sqrt(2.0),0);
+   G4ThreeVector vmxmy(-1/sqrt(2.0),-1/sqrt(2.0),0);
+   G4ThreeVector vxmy(1/sqrt(2.0),-1/sqrt(2.0),0);
 
-    G4double Dist;
-    G4ThreeVector *pNorm,norm;
-    G4bool *pgoodNorm,goodNorm,calcNorm=true;
-
-    pNorm=&norm;
-    pgoodNorm=&goodNorm;
+   G4ThreeVector pstart((Rtor+Rmax)/sqrt(2.0),(Rtor+Rmax)/sqrt(2.0),0) ;
+   G4ThreeVector vdirect(1/sqrt(2.0),-1/sqrt(2.0),0) ;
+   
+   G4ThreeVector pother(110,0,0);
+   vdirect = vdirect.unit() ;
+   G4ThreeVector p1;
+   G4ThreeVector v1(1,0,0);
+   v1 = v1.unit();
 
 //    G4Torus t2("Hole Torus #2",45,50,50,0,360);
 // Check name
    // assert(t1.GetName()=="Solid Torus #1");
 
 // Check torus roots
-   G4int num ;
-   G4double Rtor = 100 ;
-   G4double Rmax = Rtor*0.9 ;
-   G4double Rmin = Rtor*0.1 ;
    
    G4Torus t1("Solid Torus #1",0,Rmax,Rtor,0,2*M_PI);
    G4Torus t2("Hole cutted Torus #2",Rmin,Rmax,Rtor,M_PI/4,M_PI/2);
    G4Torus t3("Hole cutted Torus #3",4*Rmin,Rmax,Rtor,M_PI/2-M_PI/24,M_PI/12);
-   G4Torus t4("Solid Torus #4",0,Rtor,Rtor,0,2*M_PI);
-   G4Torus t5("Solid cutted Torus #5",0,Rtor,Rtor,M_PI/4,M_PI/2);
+   G4Torus t4("Solid Torus #4",0,Rtor-3*kCarTolerance,Rtor,0,2*M_PI);
+   G4Torus t5("Solid cutted Torus #5",0,Rtor-3*kCarTolerance,Rtor,M_PI/4,M_PI/2);
    
-   G4ThreeVector pstart((Rtor+Rmax)/sqrt(2.0),(Rtor+Rmax)/sqrt(2.0),0) ;
-   G4ThreeVector vdirect(1/sqrt(2.0),-1/sqrt(2.0),0) ;
+   G4Torus * aTub = new G4Torus("Ring1", 0*cm, 10*cm, 
+                                         1*m, 0*deg, 360*deg ); 
    
-   G4ThreeVector pother(110,0,0);
-   vdirect = vdirect.unit() ;
-   
+  
    G4double Ri = t1.GetRmax() ;
+
+ 
+
+
+
 //   num = t1.TorusRoots(Ri,pstart,vdirect) ;
 //   num = t1.TorusRoots(Ri,pother,vx) ;
     
@@ -131,6 +148,7 @@ G4bool testG4Torus()
     Dist=t1.DistanceToOut(ponrmax,vx,calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(Dist,0)&&ApproxEqual(pNorm->unit(),vx)&&*pgoodNorm);
     Dist=t1.DistanceToOut(ponphi1,vz,calcNorm,pgoodNorm,pNorm);
+    // G4cout<<"t1.DistanceToOut(ponphi1,vz,...) = "<<Dist<<G4endl ;
     assert(ApproxEqual(Dist,90)&&ApproxEqual(pNorm->unit(),vz)&&*pgoodNorm);
     
     Dist=t1.DistanceToOut(ponrmin,vy,calcNorm,pgoodNorm,pNorm);
@@ -155,6 +173,31 @@ G4bool testG4Torus()
     assert(ApproxEqual(Dist,0.353553)&&ApproxEqual(pNorm->unit(),vmxmy)
 	   &&*pgoodNorm);
   
+
+// Check for Distance to Out ( start from an internal point )
+
+  for ( i=0; i<12; i++ ) 
+  {
+    x = -1050;
+    z = G4double(i)/10;
+    p1 = G4ThreeVector(x,0,z);
+    //    G4cout << p1 << " - " << v1 << G4endl;
+
+    Dist = aTub->DistanceToIn (p1,v1); 
+    //    G4cout << "Distance to in dir: " << Dist ;
+
+    Dist = aTub->DistanceToOut (p1,v1) ;
+    //    G4cout << "   Distance to out dir: " << Dist << G4endl ;
+
+    //    G4cout << "Distance to in : " << aTub->DistanceToIn (p1);
+    //    G4cout << "   Distance to out : " << aTub->DistanceToOut (p1)
+    //           << G4endl;
+    //    G4cout << "   Inside : " << aTub->Inside (p1);
+    //    G4cout << G4endl;
+  }
+
+
+
 //DistanceToIn(P)
     Dist=t1.DistanceToIn(pbigx);
     assert(ApproxEqual(Dist,50));
@@ -218,6 +261,28 @@ G4bool testG4Torus()
     assert(ApproxEqual(Dist,kInfinity));
     Dist=t3.DistanceToIn(ponrtor,vmx);
     assert(ApproxEqual(Dist,kInfinity));
+
+// Check for Distance to In ( start from an external point )
+
+   for ( i=0; i<12; i++ ) 
+   {
+     x = -1200;
+     z = G4double(i)/10;
+     p1 = G4ThreeVector(x,0,z);
+     //     G4cout << p1 << " - " << v1 << G4endl;
+
+     Dist = aTub->DistanceToIn (p1,v1) ;
+     //     G4cout << "Distance to in dir: " << Dist ;
+
+     Dist = aTub->DistanceToOut (p1,v1) ;
+     //     G4cout << "   Distance to out dir: " << Dist << G4endl ;
+
+     // G4cout << "Distance to in : " << aTub->DistanceToIn (p1);
+     //  G4cout << "   Distance to out : " << aTub->DistanceToOut (p1)
+     //    << G4endl;
+     //     G4cout << "   Inside : " << aTub->Inside (p1);
+     //     G4cout << G4endl;
+   }
     
     
 // CalculateExtent
@@ -275,14 +340,14 @@ G4bool testG4Torus()
     assert(min<=-5&&max>=5);
 
     assert(t5.CalculateExtent(kXAxis,allClip,tGen,min,max));
-    G4cout<<"min = "<<min<<"    max = "<<max<<G4endl;
+    //  G4cout<<"min = "<<min<<"    max = "<<max<<G4endl;
     assert(t5.CalculateExtent(kYAxis,allClip,tGen,min,max));
-    G4cout<<"min = "<<min<<"    max = "<<max<<G4endl;
+    //  G4cout<<"min = "<<min<<"    max = "<<max<<G4endl;
     assert(t5.CalculateExtent(kZAxis,allClip,tGen,min,max));
-    G4cout<<"min = "<<min<<"    max = "<<max<<G4endl;
+    //  G4cout<<"min = "<<min<<"    max = "<<max<<G4endl;
 
     t1.CalculateExtent(kZAxis,allClip,tGen,min,max);
-    G4cout<<"min = "<<min<<"    max = "<<max<<G4endl;
+    //  G4cout<<"min = "<<min<<"    max = "<<max<<G4endl;
 
 // Test z clipping ok
     for (G4double zTest=-200;zTest<200;zTest+=9)
