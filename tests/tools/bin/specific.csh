@@ -396,14 +396,16 @@ if ( `uname -n` == "NB-BARRAND" ) then
   set prompt='g4-6.0-VC7> ' 
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv CVS_RSH ssh
-  setenv G4INSTALL /cygdrive/c/barrand/geant4/geant4.6.0
+  # Path should be <drive>:<path at the UNIX format>
+  setenv G4INSTALL C:/barrand/geant4/geant4.6.0
   setenv G4WORKDIR $G4INSTALL/VisualC
   setenv G4STTDIR  $G4WORKDIR/stt
   setenv G4LIB     $G4WORKDIR/lib
   setenv G4SYSTEM  WIN32-VC7
+  #setenv G4SYSTEM  WIN32-g++
   setenv CPPVERBOSE 1
   # Specific :
-  setenv CLHEP_BASE_DIR /cygdrive/c/barrand/CLHEP/1.8.1.0/VisualC
+  setenv CLHEP_BASE_DIR C:/barrand/CLHEP/1.8.1.0/VisualC
   # Does not compile with VisualC++ :
   unsetenv G4VIS_BUILD_DAWN_DRIVER     1
   unsetenv G4VIS_BUILD_DAWNFILE_DRIVER 1
