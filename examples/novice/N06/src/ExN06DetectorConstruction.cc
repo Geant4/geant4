@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06DetectorConstruction.cc,v 1.11 2003-04-17 21:11:13 gum Exp $
+// $Id: ExN06DetectorConstruction.cc,v 1.12 2003-10-06 09:00:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,20 +68,20 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
 
 // Air
 // 
-  G4Element* elN = new G4Element("Nitrogen", "N", z=7 , a=14.01*g/mole);
-  G4Element* elO = new G4Element("Oxygen"  , "O", z=8 , a=16.00*g/mole);
+  G4Element* N = new G4Element("Nitrogen", "N", z=7 , a=14.01*g/mole);
+  G4Element* O = new G4Element("Oxygen"  , "O", z=8 , a=16.00*g/mole);
 
   G4Material* Air = new G4Material("Air", density=1.29*mg/cm3, nelements=2);
-  Air->AddElement(elN, 70*perCent);
-  Air->AddElement(elO, 30*perCent);
+  Air->AddElement(N, 70.*perCent);
+  Air->AddElement(O, 30.*perCent);
 
 // Water
 // 
-  G4Element* elH = new G4Element("Hydrogen", "H", z=1 , a=1.01*g/mole);
+  G4Element* H = new G4Element("Hydrogen", "H", z=1 , a=1.01*g/mole);
 
   G4Material* Water = new G4Material("Water", density= 1.0*g/cm3, nelements=2);
-  Water->AddElement(elH, 2);
-  Water->AddElement(elO, 1);
+  Water->AddElement(H, 2);
+  Water->AddElement(O, 1);
 
 //
 // ------------ Generate & Add Material Properties Table ------------
