@@ -31,6 +31,7 @@
 
 #include <algorithm>
 #include <numeric>
+#include <functional>
 
 
 std::vector<G4LorentzVector*> *
