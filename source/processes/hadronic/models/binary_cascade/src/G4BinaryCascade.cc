@@ -159,6 +159,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 // try untill an interaction will happen
   G4ReactionProductVector * products = 0;
   G4double radius = the3DNucleus->GetOuterRadius()+3*fermi;
+  G4int interactionCounter = 0;
   do
   {
 // reset status that could be changed in previous loop event
@@ -191,8 +192,16 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 //  if(1)
 //    return &theParticleChange;
 //  --------- end debug
+    if(++interactionCounter>99) break;
   } while(products->size() == 0);  // ...untill we find an ALLOWED collision
 
+  if(products->size()==0)
+  {
+    theParticleChange.SetStatusChange(isAlive);
+    theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+    return &theParticleChange;
+  }
 //  G4cout << "HKM Applyyourself: number of products " << products->size() << G4endl;
 
 // Fill the G4ParticleChange * with products
