@@ -165,51 +165,62 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   G4BigBanger*                     bigb = new G4BigBanger;
   G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
 
-  if (G4int(theNucleusA) == 1) { 
-      G4float cutElastic[8];
-      cutElastic[proton   ] = 1.0; // GeV
-      cutElastic[neutron  ] = 1.0;
-      cutElastic[pionPlus ] = 0.6;
-      cutElastic[pionMinus] = 0.2;
-      cutElastic[pionZero ] = 0.2;
-      G4double cut = cutElastic[bulletType];
 
-      G4bool condition = false; // condition to allow elastic collisions
-      if (  momentumBullet[3] > cut) { // accepting only nonelastic collisions
-	condition = output.getOutgoingParticles().size() < 3.5  && 
-	  (output.getOutgoingParticles().size() == 2 && 
-	   output.getOutgoingParticles().begin()->type()==bulletType || 
-	   output.getOutgoingParticles().begin()->type()== proton);
-      } else { 
-	condition = false;
-      }
+      G4int  maxTries = 10; // maximum tries for inelastic collision to avoid infinite loop
+      G4int  nTries   = 0;  // try counter
 
-      do {
-	targetH = new G4InuclElementaryParticle(targetMomentum, 1); 
-	output = collider->collide(bullet, targetH);  // h + H(1,1) collision forced to inelestic if possible
-      } while(condition);
 
-      sumBaryon += 1;
+      if (G4int(theNucleusA) == 1) { // special treatment for target H(1,1) (proton)
+	targetH = new G4InuclElementaryParticle(targetMomentum, 1);
 
-      std::vector<G4double>  bmom = bullet->getMomentum();
-      eInit = sqrt(bmom[0] * bmom[0]);
-      std::vector<G4double> tmom = targetH->getMomentum();
-      eInit += sqrt(tmom[0] * tmom[0]);
+	G4float cutElastic[7];
+	cutElastic[proton   ] = 1.0; // GeV
+	cutElastic[neutron  ] = 1.0;
+	cutElastic[pionPlus ] = 0.6;
+	cutElastic[pionMinus] = 0.2;
+	cutElastic[pionZero ] = 0.2;
 
-      if (verboseLevel > 2) {
-	G4cout << "Target:  " << G4endl;  
-	targetH->printParticle();
-      }
+	if (momentumBullet[3] > cutElastic[bulletType]) { // inelastic collision possible
 
-    } else {
-      do
-	{
-	  // actual nonelstic collision forced (exept hydrogen H(1,1) case) 
-	  output = collider->collide(bullet, target ); 
+	  do {   // we try to create inelastic interaction
+	    output = collider->collide(bullet, targetH);
+	    nTries++;
+	  } while(
+		  (nTries < maxTries)                                           &&
+		  (output.getOutgoingParticles().size() == 2                    && // elastic: bullet + p = H(1,1) coming out
+		   (output.getOutgoingParticles().begin()->type() == bulletType ||
+		    output.getOutgoingParticles().begin()->type() == proton)
+		   )
+		  );
+
+	} else { // only elastic collision is energetically possible
+	  output = collider->collide(bullet, targetH);
 	}
-      while(   output.getOutgoingParticles().size()+output.getNucleiFragments().size() < 2.5  
-	       && output.getOutgoingParticles().begin()->type()==bullet->type() );
-    }
+
+	sumBaryon += 1;
+
+	std::vector<G4double> bmom = bullet->getMomentum();
+	eInit = sqrt(bmom[0] * bmom[0]);
+	std::vector<G4double> tmom = targetH->getMomentum();
+	eInit += sqrt(tmom[0] * tmom[0]);
+
+	if (verboseLevel > 2) {
+	  G4cout << "Target:  " << G4endl;
+	  targetH->printParticle();
+	}
+
+      } else {  // treat all other targets excepet H(1,1)
+
+	do  // we try to create inelastic interaction
+	  {
+	    output = collider->collide(bullet, target );
+	    nTries++;
+	  } while(
+		  (nTries < maxTries)                                                               &&
+		  (output.getOutgoingParticles().size() + output.getNucleiFragments().size() < 2.5) &&
+		  output.getOutgoingParticles().begin()->type()==bullet->type()
+		  );
+      }
 
   if (verboseLevel > 1) 
     {
