@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.1 2003-08-11 10:14:07 maire Exp $
+// $Id: PhysicsList.hh,v 1.2 2004-04-19 18:30:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,6 @@
 #include "globals.hh"
 
 class G4VPhysicsConstructor;
-class DetectorConstruction;
 class StepMax;
 class PhysicsListMessenger;
 
@@ -47,38 +46,36 @@ class PhysicsListMessenger;
 class PhysicsList: public G4VModularPhysicsList
 {
   public:
-    PhysicsList(DetectorConstruction*);
+    PhysicsList();
    ~PhysicsList();
 
     void ConstructParticle();
     
     void SetCuts();
-    void SetCutForGamma   (G4double);
+    void SetCutForGamma(G4double);
     void SetCutForElectron(G4double);
     void SetCutForPositron(G4double);
-    
-    void AddPhysicsList(const G4String& name);    
+        
+    void AddPhysicsList(const G4String& name);
     void ConstructProcess();
     
-    void AddStepMax();
-    StepMax* GetStepMaxProcess() {return stepMaxProcess;}
-    
-    G4double GetRange(G4double);
-    
+    void AddStepMax();       
+    StepMax* GetStepMaxProcess() {return stepMaxProcess;};
 
   private:
     G4double cutForGamma;
     G4double cutForElectron;
     G4double cutForPositron;
+
+    G4VPhysicsConstructor*  emPhysicsList;
+    G4VPhysicsConstructor*  generalPhysicsList;
+    G4VPhysicsConstructor*  particleList;
+    std::vector<G4VPhysicsConstructor*>  hadronPhys;
+    G4String emName;
     
-    DetectorConstruction* pDet;        
+    StepMax* stepMaxProcess;
+    
     PhysicsListMessenger* pMessenger;
-        
-    G4VPhysicsConstructor* particleList;
-    G4VPhysicsConstructor* generalPhysicsList;    
-    G4VPhysicsConstructor* emPhysicsList;
-    G4String               emName;
-    StepMax*            stepMaxProcess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

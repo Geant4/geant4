@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmG4v52.cc,v 1.1 2003-10-07 11:58:31 maire Exp $
+// $Id: PhysListEmG4v52.cc,v 1.2 2004-04-19 18:30:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,23 +79,17 @@ void PhysListEmG4v52::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      G4MultipleScattering52* emuls = new G4MultipleScattering52;
-      pmanager->AddProcess(emuls,                      -1, 1,1);
+      pmanager->AddProcess(new G4MultipleScattering52, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation52,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung52,    -1,-1,3);
-      
-      emuls->SetFacrange(0.2);
-      	    
+	    
     } else if (particleName == "e+") {
       //positron
-      G4MultipleScattering52* pmuls = new G4MultipleScattering52;      
-      pmanager->AddProcess(pmuls,                      -1, 1,1);      
+      pmanager->AddProcess(new G4MultipleScattering52, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation52,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung52,    -1,-1,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,     0,-1,4);
+      pmanager->AddProcess(new G4eplusAnnihilation,      0,-1,4);
       
-      pmuls->SetFacrange(0.2);
-            
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmG4v52.hh,v 1.1 2003-10-07 11:58:29 maire Exp $
+// $Id: PhysListEmG4v52.hh,v 1.2 2004-04-19 18:30:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.hh,v 1.2 2003-10-07 11:58:29 maire Exp $
+// $Id: PhysicsListMessenger.hh,v 1.3 2004-04-19 18:30:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,8 +32,8 @@
 #ifndef PhysicsListMessenger_h
 #define PhysicsListMessenger_h 1
 
-#include "G4UImessenger.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
 class PhysicsList;
 class G4UIcmdWithADoubleAndUnit;
@@ -56,9 +56,8 @@ class PhysicsListMessenger: public G4UImessenger
     
     G4UIcmdWithADoubleAndUnit* gammaCutCmd;
     G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* positCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;
-    G4UIcmdWithADoubleAndUnit* rangeCmd;       
+    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
+    G4UIcmdWithADoubleAndUnit* allCutCmd;    
     G4UIcmdWithAString*        pListCmd;
     
 };

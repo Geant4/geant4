@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListParticles.hh,v 1.2 2003-10-07 11:58:29 maire Exp $
+// $Id: PhysListParticles.hh,v 1.3 2004-04-19 18:30:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

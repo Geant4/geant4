@@ -21,9 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.5 2004-02-19 18:18:53 maire Exp $
+// $Id: PhysicsList.cc,v 1.6 2004-04-19 18:30:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,24 +35,26 @@
 #include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
 #include "PhysListEmG4v52.hh"
-#include "DetectorConstruction.hh"
+#include "PhysListHadronElastic.hh"
+#include "PhysListBinaryCascade.hh"
+#include "PhysListIonBinaryCascade.hh"
 
+#include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList(DetectorConstruction* p) 
-: G4VModularPhysicsList()
+PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
-  pDet = p;
-  
-  defaultCutValue = 1.0*mm;
+  G4LossTableManager::Instance();
+  defaultCutValue = 1.*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
 
+  stepMaxProcess  = 0;
+
   pMessenger = new PhysicsListMessenger(this);
-  stepMaxProcess = 0;
 
   SetVerboseLevel(1);
 
@@ -73,6 +75,9 @@ PhysicsList::PhysicsList(DetectorConstruction* p)
 PhysicsList::~PhysicsList()
 {
   delete pMessenger;
+  delete generalPhysicsList;
+  delete emPhysicsList;
+  for(size_t i=0; i<hadronPhys.size(); i++) delete hadronPhys[i];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,6 +94,7 @@ void PhysicsList::ConstructProcess()
   AddTransportation();
   generalPhysicsList->ConstructProcess();
   emPhysicsList->ConstructProcess();
+  for(size_t i=0; i<hadronPhys.size(); i++) hadronPhys[i]->ConstructProcess();
   AddStepMax();
 }
 
@@ -96,7 +102,7 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>1) {
+  if (verboseLevel>-1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
@@ -113,6 +119,18 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmG4v52(name);
+
+  } else if (name == "elastic") {
+
+    hadronPhys.push_back( new PhysListHadronElastic(name));
+
+  } else if (name == "binary") {
+
+    hadronPhys.push_back( new PhysListBinaryCascade(name));
+
+  } else if (name == "binary_ion") {
+
+    hadronPhys.push_back( new PhysListIonBinaryCascade(name));
 
   } else {
 
@@ -133,19 +151,19 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddStepMax()
-{  
+{
   // Step limitation seen as a process
   stepMaxProcess = new StepMax();
-  
+
   theParticleIterator->reset();
   while ((*theParticleIterator)()){
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
-	
+
       if (stepMaxProcess->IsApplicable(*particle))
-        { 
-          pmanager ->AddDiscreteProcess(stepMaxProcess);
-        }	
+        {
+	  pmanager ->AddDiscreteProcess(stepMaxProcess);
+        }
   }
 }
 
@@ -156,17 +174,18 @@ void PhysicsList::AddStepMax()
 #include "G4Positron.hh"
 
 void PhysicsList::SetCuts()
-{    
+{
+
   if (verboseLevel >0){
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
+  }
 
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");   
+  SetCutValue(cutForPositron, "e+");
 
   if (verboseLevel>0) DumpCutValuesTable();
 }
@@ -197,22 +216,3 @@ void PhysicsList::SetCutForPositron(G4double cut)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4LossTableManager.hh"
-
-G4double PhysicsList::GetRange(G4double val)
-{
-  G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
-  const G4MaterialCutsCouple* couple = pDet->GetAbsorbMaterialCut();
-
-  G4ParticleDefinition* part = theParticleTable->FindParticle("e-");
-  G4double range = G4LossTableManager::Instance()->GetRange(part,val,couple);
-
-  G4cout << "material : " << couple->GetMaterial()->GetName() << G4endl;
-  G4cout << "particle : " << part->GetParticleName() << G4endl;
-  G4cout << "energy   : " << G4BestUnit(val,  "Energy") << G4endl;
-  G4cout << "range    : " << G4BestUnit(range,"Length") << G4endl;
-  
-  return range;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
