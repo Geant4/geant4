@@ -1,4 +1,4 @@
-# $Id: test32.in,v 1.1 2002-06-13 12:16:35 jwellisc Exp $
+# $Id: test32.in,v 1.2 2004-03-18 15:57:42 gcosmo Exp $
 #
 /control/verbose 2
 #
@@ -12,6 +12,8 @@
 #
 #/event/verbose 1
 #/tracking/verbose 1
+#/run/verbose 1
+#/hits/verbose 1
 /gun/particle neutron
 /run/beamOn 1000
 #

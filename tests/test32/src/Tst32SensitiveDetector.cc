@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst32SensitiveDetector.cc,v 1.3 2004-03-16 16:20:40 gcosmo Exp $
+// $Id: Tst32SensitiveDetector.cc,v 1.4 2004-03-18 15:57:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,7 +36,7 @@
 #include "G4ios.hh"
 
 Tst32SensitiveDetector::Tst32SensitiveDetector(G4String name)
-  :G4VSensitiveDetector(name)
+  : G4VSensitiveDetector(name), HitCollection(0)
 {
   G4String HCname="HitsCollection";
   collectionName.insert(HCname);
@@ -50,17 +50,17 @@ void Tst32SensitiveDetector::Initialize(G4HCofThisEvent*)
 {
   HitCollection = new Tst32HitsCollection
                       (SensitiveDetectorName,collectionName[0]);
-  for (size_t idx=0; idx<10; idx++) {
+  for (size_t idx=0; idx<10; idx++)
+  {
     Tst32Hit* hit = new Tst32Hit(idx);
     hit->SetEdep( 0.0 );
     HitCollection->insert( hit );
   }
 }
 
-G4bool Tst32SensitiveDetector::ProcessHits(G4Step*aStep,
+G4bool Tst32SensitiveDetector::ProcessHits(G4Step* aStep,
 					   G4TouchableHistory*)
 {
-
   G4double edep = aStep->GetTotalEnergyDeposit();
   G4Track * aTrack = aStep->GetTrack();
   G4double weight = aTrack->GetWeight();
@@ -68,23 +68,23 @@ G4bool Tst32SensitiveDetector::ProcessHits(G4Step*aStep,
 
   edep *= weight;
 
-//  const G4VPhysicalVolume* physVol 
-//    = aStep->GetPreStepPoint()->GetPhysicalVolume();
-//  int copyID = physVol->GetCopyNo();
-  
-//  (*HitCollection)[copyID]->AddEdep( edep );
+  G4int copyID = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber();
+  (*HitCollection)[copyID%10]->AddEdep( edep );
 
-//  if(verboseLevel>0) {
-//    G4cout << " Energy added to CellID " << copyID << G4endl; 
-//  }
+  if (verboseLevel>0)
+    G4cout << " Energy of: " << edep
+           << " MeV, added to CellID " << copyID%10 << G4endl;
 
   return true;
 }
 
-void Tst32SensitiveDetector::EndOfEvent(G4HCofThisEvent*HCE)
+void Tst32SensitiveDetector::EndOfEvent(G4HCofThisEvent* HCE)
 {
-  if(HCID<0)
-  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
+  static G4int HCID = -1;
+  if (HCID<0)
+  {
+    HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
+  }
   HCE->AddHitsCollection( HCID, HitCollection );
 }
 

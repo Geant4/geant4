@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst32SensitiveDetector.hh,v 1.1 2002-06-13 12:16:35 jwellisc Exp $
+// $Id: Tst32SensitiveDetector.hh,v 1.2 2004-03-18 15:57:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -49,11 +49,6 @@ class Tst32SensitiveDetector : public G4VSensitiveDetector
 
   private:
       Tst32HitsCollection *HitCollection;
-      int HCID;
 };
 
-
-
-
 #endif
-
