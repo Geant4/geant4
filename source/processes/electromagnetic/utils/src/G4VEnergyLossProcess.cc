@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.17 2004-05-05 18:54:44 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.18 2004-05-06 06:24:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1246,7 +1246,7 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
       if(res) PrintInfoDefinition();
       else {
         G4cout << "### BuildPhysicsTable will be requested for " <<  GetProcessName() 
-               << " for " << particleName << G4endl; 
+               << " for " << particleName << G4endl;
       }
     }
     tablesAreBuilt = true;
@@ -1259,12 +1259,12 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void ActivateFluorescence(G4bool, const G4Region*)
+void G4VEnergyLossProcess::ActivateFluorescence(G4bool, const G4Region*)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void ActivateAugerElectronProduction(G4bool, const G4Region*)
+void G4VEnergyLossProcess::ActivateAugerElectronProduction(G4bool, const G4Region*)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
