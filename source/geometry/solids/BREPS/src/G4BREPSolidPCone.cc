@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.21 2001-07-20 11:52:43 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.22 2002-01-16 01:54:20 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,6 +41,8 @@
 #include "G4FConicalSurface.hh"
 #include "G4CircularCurve.hh"
 #include "G4FPlane.hh"
+
+#include <cstdio>
 
 
 G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
@@ -89,79 +91,99 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
       || (RMIN[0] > RMAX[0]) ) 
       G4Exception("RMAX must be greater or equal to RMIN at the ends.");
 
-  ///////////////////////////////////////////////////
-  // Create cylindrical et conical surfaces
-  
-  for(a=0; a<sections; a++)
+  // Create surfaces
+  for( a = 0; a < sections; a++)
   {
     // Surface length
     Length = z_values[a+1] - z_values[a];
-    
-    if (Length == 0)
-    {
-      // The surface to create is planar
 
-      G4double R1, R2;
-      // test where is the plane surface
-      if(RMAX[a] != RMAX[a+1])
+    if( Length == 0 )
+    {
+      // We need to create planar surface(s)
+      if( RMAX[a] != RMAX[a+1] && RMIN[a] != RMIN[a+1] )
       {
-	R1 = RMAX[a];
-	R2 = RMAX[a+1];
-      }
-      else if(RMIN[a] != RMIN[a+1])
-      {
-	R1 = RMIN[a];
-	R2 = RMIN[a+1];
+        // We can have the 8 following configurations here:
+        //
+        // 1.     2.     3.     4.    
+        // --+      +--  --+      +--   
+        // xx|      |xx  xx|      |xx   
+        // xx+--  --+xx  --+      +--   
+        // xxxxx  xxxxx    |      |     
+        // xxxxx  xxxxx    +--  --+   
+        // xx+--  --+xx    |xx  xx|   
+        // xx|      |xx    +--  --+   
+        // --+      +--  
+        // -------------------------- Z axis
+        //
+        //////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////
+        //
+        // 5.     6.     7.     8.
+        // --+      +--  --+      +--
+        // xx|      |xx  xx|      |xx
+        // --+--  --+--  xx+--  --+xx
+        //   |xx  xx|    xxxxx  xxxxx
+        //   +--  --+    --+xx  xx+--
+        //                 |xx  xx|  
+        //                 +--  --+  
+        // -------------------------- Z axis
+        //
+        // NOTE: The pictures shows only one half of polycone!
+        //       The configuration No. 3 and 4 are not valid solids!
+        
+        // Eliminate the invalid cases 3 and 4.
+        // At this point is guaranteed that each RMIN[i] < RMAX[i]
+        // where i in in interval 0 < i < num_z_planes-1. So:
+        if( RMIN[a] > RMAX[a+1] || RMAX[a] < RMIN[a+1] ) {
+          char msgbuf[512];
+          sprintf( msgbuf,
+                   "\nThe values of RMIN[%d] & RMAX[%d] or RMAX[%d] & RMIN[%d] \
+                    make invalid configuration of G4BREPSolidPCone %s!\n",
+                   a, a+1, a, a+1, name.c_str() );
+          G4Exception( msgbuf );
+        }
+        
+        SurfaceVec[b++]  = ComputePlanarSurface( RMAX[a], RMAX[a+1], LocalOrigin, PlaneAxis, PlaneDir );
+        SurfaceVec[b++]  = ComputePlanarSurface( RMIN[a], RMIN[a+1], LocalOrigin, PlaneAxis, PlaneDir );
       }
       else
       {
-        G4cerr << "Error in construction of G4BREPSolidPCone. \n"
-               << "Exactly the same z, rmin and rmax given for \n"
-               << "consecutive indices, " << a << " and " << a+1 << G4endl;
-        continue; 
+        // The original code creating single planar surface
+        // in case where only either RMAX or RMIN have changed at the same Z value
+        // e.g.:
+        //
+        //     RMAX          RMIN
+        //    change        change
+        // --+      +--  -----  -----
+        // 00|      |00  00000  00000
+        // 00+--  --+00  --+00  00+--
+        // 00000  00000    |00  00|
+        //                 +--  --+
+        // --------------------------- Z axis
+        //
+        // NOTE: The picture shows only one half of polycone!
+        
+        G4double R1, R2;
+        
+        // test where is the plane surface
+        if( RMAX[a] != RMAX[a+1] ) {
+	        R1 = RMAX[a];
+          R2 = RMAX[a+1];
+        } else if(RMIN[a] != RMIN[a+1]) {
+	        R1 = RMIN[a];
+          R2 = RMIN[a+1];
+        } else   {
+          G4cerr << "Error in construction of G4BREPSolidPCone. \n"
+                 << "Exactly the same z, rmin and rmax given for \n"
+                 << "consecutive indices, " << a << " and " << a+1 << G4endl;
+          continue; 
+        }
+        
+        SurfaceVec[b++] = ComputePlanarSurface( R1, R2, LocalOrigin, PlaneAxis, PlaneDir );
+        
+        //      SurfaceVec[b]->SetSameSense(1);
+        nb_of_surfaces--;
       }
-
-      // Create plane surface
-      G4Point3D ArcStart1 = G4Point3D( LocalOrigin + (R1*PlaneDir) );
-      G4Point3D ArcStart2 = G4Point3D( LocalOrigin + (R2*PlaneDir) );
-      
-      G4CurveVector cv1;
-      G4CircularCurve *tmp1, *tmp2;
-      
-      if(R1 != 0)  
-      {
-	tmp1 = new G4CircularCurve;
-	tmp1->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, LocalOrigin), R1);
-	tmp1->SetBounds(ArcStart1, ArcStart1);
-	if(R1>R2)
-	  tmp1->SetSameSense(1);
-	else
-	  tmp1->SetSameSense(0);
-
-	cv1.push_back(tmp1);
-      }
-
-      if(R2 != 0)  
-      {
-	tmp2 = new G4CircularCurve;
-	tmp2->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, LocalOrigin), R2);
-	tmp2->SetBounds(ArcStart2, ArcStart2);
-	if(R1>R2)
-	  tmp2->SetSameSense(0);
-	else
-	  tmp2->SetSameSense(1);
-	cv1.push_back(tmp2);
-      }
-	
-      SurfaceVec[b]   = new G4FPlane(PlaneDir, PlaneAxis, LocalOrigin);
-      SurfaceVec[b]->SetBoundaries(&cv1);
-      
-      // set sense of the surface
-      //      SurfaceVec[b]->SetSameSense(1);
-
-      nb_of_surfaces--;
-      b++;
-
     }
     else
     {
@@ -170,107 +192,67 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
       // Inner PCone
       if(RMIN[a] != RMIN[a+1])
       {
-	// Create cone
-	if(RMIN[a] > RMIN[a+1])
-	{
-	  G4Vector3D ConeOrigin = G4Vector3D(LocalOrigin) ; 
-	  
-	  SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis, Length, 
-						RMIN[a+1], RMIN[a]);
-	  // set sense of the surface
-	  SurfaceVec[b]->SetSameSense(0);  
-	}
-	else
-	{      
-	  G4Vector3D Axis2 = G4Vector3D( -1*Axis );
-	  G4Vector3D LocalOrigin2 = G4Vector3D( LocalOrigin + (Length*Axis) );
-	  G4Vector3D ConeOrigin = LocalOrigin2; 
-	  
-	  SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis2, 
-						Length, RMIN[a], RMIN[a+1]); 
-	  
-	  // set sense of the surface
-	  SurfaceVec[b]->SetSameSense(0);
-	}
-      
-	b++;  
+	      // Create cone
+	      if(RMIN[a] > RMIN[a+1]) {
+	        G4Vector3D ConeOrigin = G4Vector3D(LocalOrigin) ; 
+	        SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis, Length, RMIN[a+1], RMIN[a]);
+	        SurfaceVec[b]->SetSameSense(0);
+	      } else {      
+	        G4Vector3D Axis2 = G4Vector3D( -1*Axis );
+	        G4Vector3D LocalOrigin2 = G4Vector3D( LocalOrigin + (Length*Axis) );
+	        G4Vector3D ConeOrigin = LocalOrigin2; 
+	        SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis2, Length, RMIN[a], RMIN[a+1]); 
+	        SurfaceVec[b]->SetSameSense(0);
+	      }
+	      b++;  
       }
       else
       {
-	if (RMIN[a] == 0)
-	{
-	  // Do not create any surface
-	  // and decrease nb_of_surfaces
-	  nb_of_surfaces--;
-	}
-	else
-	{
-	  // Create cylinder
-	  G4Vector3D CylOrigin = G4Vector3D( LocalOrigin ); 
-	  
-	  SurfaceVec[b] = new G4FCylindricalSurface(CylOrigin, Axis, 
-						    RMIN[a], Length );
-
-	  // set sense of the surface
-	  SurfaceVec[b]->SetSameSense(0);
-
-	  b++;
-	}	    
+	      if( RMIN[a] == 0 ) {
+	        // Do not create any surface and decrease nb_of_surfaces
+	        nb_of_surfaces--;
+	      } else {
+	        // Create cylinder
+	        G4Vector3D CylOrigin = G4Vector3D( LocalOrigin ); 
+	        SurfaceVec[b] = new G4FCylindricalSurface(CylOrigin, Axis, RMIN[a], Length );
+	        SurfaceVec[b]->SetSameSense(0);
+	        b++;
+	      }	    
       }
-    
+
       // Outer PCone
       if(RMAX[a] != RMAX[a+1])
       {
-	// Create cone
-	if(RMAX[a] > RMAX[a+1])
-	{
-	  G4Vector3D ConeOrigin = G4Vector3D( LocalOrigin );
-	  
-	  SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis, 
-						Length, RMAX[a+1], RMAX[a]);
+	      // Create cone
+	      if(RMAX[a] > RMAX[a+1]) {
+	        G4Vector3D ConeOrigin = G4Vector3D( LocalOrigin );
+	        SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis, Length, RMAX[a+1], RMAX[a]);
+	        SurfaceVec[b]->SetSameSense(1);
+	      } else {
+	        G4Vector3D Axis2 = G4Vector3D( -1*Axis );
+	        G4Vector3D LocalOrigin2 = G4Vector3D( LocalOrigin + (Length*Axis) );
+	        G4Vector3D ConeOrigin = LocalOrigin2 ;
 
-	  // set sense of the surface
-	  SurfaceVec[b]->SetSameSense(1);
-	}
-	else
-	{
-	  G4Vector3D Axis2 = G4Vector3D( -1*Axis );
-	  G4Vector3D LocalOrigin2 = G4Vector3D( LocalOrigin + (Length*Axis) );
-	  G4Vector3D ConeOrigin = LocalOrigin2 ;
-
-	  SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis2, 
-						Length, RMAX[a], RMAX[a+1]);
-
-	  // set sense of the surface
-	  SurfaceVec[b]->SetSameSense(1);
-	}
-	
-	b++;
+	        SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis2, Length, RMAX[a], RMAX[a+1]);
+	        SurfaceVec[b]->SetSameSense(1);
+	      }
+	      b++;
       }
       else
       {
-	// Create cylinder
-	G4Vector3D CylOrigin = G4Vector3D( LocalOrigin );
-	
-	if (RMAX[a] == 0)
-	{
-	  // Do not create any surface
-	  // and decrease nb_of_surfaces
-	  nb_of_surfaces--;
-	}
-	else
-	{
-	  // Create cylinder
-	  G4Vector3D CylOrigin = G4Vector3D( LocalOrigin ); 
-	  
-	  SurfaceVec[b] = new G4FCylindricalSurface(CylOrigin, Axis, 
-						    RMAX[a], Length );
+	      // Create cylinder
+	      G4Vector3D CylOrigin = G4Vector3D( LocalOrigin );
 
-	  // set sense of the surface
-	  SurfaceVec[b]->SetSameSense(1);
-
-	  b++;
-	}	  	
+	      if (RMAX[a] == 0) {
+	        // Do not create any surface and decrease nb_of_surfaces
+	        nb_of_surfaces--;
+	      } else {
+	        // Create cylinder
+	        G4Vector3D CylOrigin = G4Vector3D( LocalOrigin ); 
+	        SurfaceVec[b] = new G4FCylindricalSurface(CylOrigin, Axis, RMAX[a], Length );
+	        SurfaceVec[b]->SetSameSense(1);
+	        b++;
+	      }	  	
       }
     }
 
@@ -304,12 +286,9 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 
     SurfaceVec[nb_of_surfaces-2] = new G4FPlane(PlaneDir, -PlaneAxis, Origin);
     SurfaceVec[nb_of_surfaces-2]->SetBoundaries(&cv);
-
-    // set sense of the surface
     SurfaceVec[nb_of_surfaces-2]->SetSameSense(0);
-  }else{
-    // RMIN[0] == RMAX[0] 
-    //  no surface is needed, it is a line!
+  } else {
+    // RMIN[0] == RMAX[0] so no surface is needed, it is a line!
     nb_of_surfaces--;    
   }
 
@@ -340,9 +319,8 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
   
     // set sense of the surface
     SurfaceVec[nb_of_surfaces-1]->SetSameSense(0);
-  }else{
-    // RMIN[0] == RMAX[0] 
-    //  no surface is needed, it is a line!
+  } else {
+    // RMIN[0] == RMAX[0] so no surface is needed, it is a line!
     nb_of_surfaces--;    
   }
 
@@ -719,6 +697,55 @@ void G4BREPSolidPCone::Reset() const
     SurfaceVec[a]->Reset();
   ShortestDistance = kInfinity;
 }
+
+G4Surface* G4BREPSolidPCone::ComputePlanarSurface( G4double r1, G4double r2,
+                                                         G4ThreeVector origin,
+                                                         G4ThreeVector planeAxis, G4ThreeVector planeDirection )
+{
+  // The planar surface to return
+  G4Surface* planarFace = 0;
+  
+  G4CurveVector    cv1;
+  G4CircularCurve  *tmp1, *tmp2;
+  
+  // Create plane surface
+  G4Point3D ArcStart1 = G4Point3D( origin + (r1 * planeDirection) );
+  G4Point3D ArcStart2 = G4Point3D( origin + (r2 * planeDirection) );
+
+  if(r1 != 0)  
+  {
+	  tmp1 = new G4CircularCurve;
+	  tmp1->Init(G4Axis2Placement3D( planeDirection, planeAxis, origin), r1);
+	  tmp1->SetBounds(ArcStart1, ArcStart1);
+    
+	  if( r1 > r2 )
+	    tmp1->SetSameSense(1);
+	  else
+	    tmp1->SetSameSense(0);
+
+	  cv1.push_back(tmp1);
+  }
+
+  if(r2 != 0)  
+  {
+	  tmp2 = new G4CircularCurve;
+	  tmp2->Init(G4Axis2Placement3D( planeDirection, planeAxis, origin), r2);
+	  tmp2->SetBounds(ArcStart2, ArcStart2);
+    
+	  if( r1 > r2 )
+	    tmp2->SetSameSense(0);
+	  else
+	    tmp2->SetSameSense(1);
+    
+	  cv1.push_back(tmp2);
+  }
+
+  planarFace   = new G4FPlane( planeDirection, planeAxis, origin);
+  
+  planarFace->SetBoundaries(&cv1);
+
+  return planarFace;
+}              
 
 //  In graphics_reps:   
 
