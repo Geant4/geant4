@@ -1,0 +1,11 @@
+                      geant4-02-00-ref-03
+                      ===================
+
+geant4-02-00-ref-03 is geant4-02-00-ref-02  plus:
+
+./source/geometry/management		geommng-V02-00-00
+./source/geometry/solids/BREPS		breps-V02-00-00
+./source/geometry/solids/Boolean		geom-solid-bool-V02-00-00
+./source/geometry/solids/specific		geom-solids-specific-V02-00-00
+./source/processes/electromagnetic/lowenergy		emlowen-V02-00-11
+./source/tracking		tracking-V02-00-01
