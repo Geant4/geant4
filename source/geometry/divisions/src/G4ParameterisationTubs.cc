@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTubs.cc,v 1.1 2003-06-16 15:11:42 gcosmo Exp $
+// $Id: G4ParameterisationTubs.cc,v 1.2 2003-10-16 10:42:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTubs Implementation file
@@ -55,6 +55,7 @@ G4ParameterisationTubsRho( EAxis axis, G4int nDiv,
   }
   else if( divType == DivNDIV )
   {
+    G4cout << " calculate width "<< G4endl;
     G4Tubs* msol = (G4Tubs*)(msolid);
     fwidth = CalculateWidth( msol->GetOuterRadius() - msol->GetInnerRadius(),
                              nDiv, offset );
@@ -65,7 +66,8 @@ G4ParameterisationTubsRho( EAxis axis, G4int nDiv,
     G4cout << " G4ParameterisationTubsRho - no divisions " << fnDiv << " = "
            << nDiv << G4endl
 	   << " Offset " << foffset << " = " << offset << G4endl
-	   << " Width " << fwidth << " = " << width << G4endl;
+	   << " Width " << fwidth << " = " << width << G4endl
+	   << " DivType " << divType << G4endl;
   }
 }
 
@@ -204,7 +206,7 @@ ComputeDimensions( G4Tubs& tubs, const G4int,
   G4double pRMax = msol->GetOuterRadius();
   G4double pDz = msol->GetZHalfLength();
   //- already rotated  G4double pSPhi = foffset + copyNo*fwidth;
-  G4double pSPhi = msol->GetStartPhiAngle();
+  G4double pSPhi = foffset + msol->GetStartPhiAngle();
   G4double pDPhi = fwidth;
 
   tubs.SetInnerRadius( pRMin );

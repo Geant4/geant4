@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc,v 1.1 2003-06-16 15:11:42 gcosmo Exp $
+// $Id: G4VDivisionParameterisation.cc,v 1.2 2003-10-16 10:42:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation Implementation file
@@ -53,6 +53,9 @@ G4VDivisionParameterisation( EAxis axis, G4int nDiv,
            << " step " << fwidth << " = " << step << G4endl;
   }
   theVoluFirstCopyNo = 1;
+
+  CheckAxisIsValid();
+
 }
 
 //--------------------------------------------------------------------------
@@ -109,6 +112,7 @@ CalculateNDiv( G4double motherDim, G4double width, G4double offset ) const
 G4double
 G4VDivisionParameterisation::
 CalculateWidth( G4double motherDim, G4int nDiv, G4double offset ) const
-{
+{ 
+  G4cout << " CalculateWidth " << ( motherDim - offset ) / nDiv << " " << motherDim << " " << offset << " " << nDiv << G4endl;
   return ( motherDim - offset ) / nDiv;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationCons.cc,v 1.1 2003-06-16 15:11:42 gcosmo Exp $
+// $Id: G4ParameterisationCons.cc,v 1.2 2003-10-16 10:42:42 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationCons Implementation file
@@ -120,12 +120,12 @@ ComputeDimensions( G4Cons& cons, const G4int copyNo,
 
   G4double pRMin1 = msol->GetInnerRadiusMinusZ() + fwidth * copyNo;
   G4double pRMax1 = msol->GetInnerRadiusMinusZ() + fwidth * (copyNo+1);
-  G4double fwidthPlus = 0.;
-  if( msol->GetInnerRadiusMinusZ() != 0. )
-  {
-    fwidthPlus = fwidth * msol->GetInnerRadiusPlusZ()
-               / msol->GetInnerRadiusMinusZ();
-  }
+ 
+  //width at Z Plus
+  //- G4double fwidthPlus = fwidth * ( msol->GetOuterRadiusPlusZ()/ msol->GetInnerRadiusPlusZ())
+  //-  / ( msol->GetOuterRadiusMinusZ() - msol->GetInnerRadiusMinusZ());
+  G4double fwidthPlus = CalculateWidth( msol->GetOuterRadiusPlusZ()
+                           - msol->GetInnerRadiusPlusZ(), fnDiv, foffset );
   G4double pRMin2 = msol->GetInnerRadiusPlusZ() + fwidthPlus * copyNo;
   G4double pRMax2 = msol->GetInnerRadiusPlusZ() + fwidthPlus * (copyNo+1);
   G4double pDz = msol->GetZHalfLength();
@@ -145,7 +145,7 @@ ComputeDimensions( G4Cons& cons, const G4int copyNo,
   {
     G4cout << " G4ParameterisationConsRho::ComputeDimensions()" << G4endl
            << " pRMin: " << pRMin1 << " - pRMax: " << pRMax1 << G4endl;
-    cons.DumpInfo();
+    if( verbose >= 4 ) cons.DumpInfo();
   }
 }
 
@@ -198,18 +198,12 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
   if( verbose >= 2 )
   {
     G4cout << " G4ParameterisationConsPhi - position: " << posi/deg << G4endl
-           << " copyNo: " << copyNo << " - foffset: " << foffset/deg
-           << " - fwidth: " << fwidth/deg << G4endl;
+	   << " Origin: " << origin << " copyNo: " << copyNo << " - foffset: " << foffset/deg
+           << " - fwidth: " << fwidth/deg << G4endl
+           << " - Axis: " << faxis << G4endl;
   }
   ChangeRotMatrix( physVol, -posi );
 
-  if( verbose >= 2 )
-  {
-    G4cout << std::setprecision(8) << " G4ParameterisationConsPhi " << copyNo
-           << G4endl
-           << " Position: " << origin << " - Width: " << fwidth
-           << " - Axis: " << faxis << G4endl;
-  }
 }
 
 //--------------------------------------------------------------------------
@@ -227,7 +221,7 @@ ComputeDimensions( G4Cons& cons, const G4int,
   G4double pDz = msol->GetZHalfLength();
 
   //- already rotated  double pSPhi = foffset + copyNo*fwidth;
-  G4double pSPhi = msol->GetStartPhiAngle();
+  G4double pSPhi = foffset + msol->GetStartPhiAngle();
   G4double pDPhi = fwidth;
 
   cons.SetInnerRadiusMinusZ( pRMin1 );
@@ -242,7 +236,7 @@ ComputeDimensions( G4Cons& cons, const G4int,
   {
     G4cout << " G4ParameterisationConsPhi::ComputeDimensions" << G4endl
            << " pSPhi: " << pSPhi << " - pDPhi: " << pDPhi << G4endl;
-    cons.DumpInfo();
+    if( verbose >= 4 ) cons.DumpInfo();
   }
 }
 
@@ -271,7 +265,8 @@ G4ParameterisationConsZ( EAxis axis, G4int nDiv,
     G4cout << " G4ParameterisationConsZ: # divisions " << fnDiv << " = "
            << nDiv << G4endl
            << " Offset " << foffset << " = " << offset << G4endl
-           << " Width " << fwidth << " = " << width << G4endl;
+           << " Width " << fwidth << " = " << width << G4endl
+           << " - Axis: " << faxis << G4endl;
   }
 }
 
@@ -296,42 +291,50 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
   if( verbose >= 2 )
   {
     G4cout << " G4ParameterisationConsZ::ComputeTransformation()" << G4endl
-           << " Position: " << posi << " - copyNo: " << copyNo << G4endl
-           << " foffset: " << foffset/deg << " - fwidth: " << fwidth/deg
+           << " Origin: " << origin << " - copyNo: " << copyNo << G4endl
+           << " foffset: " << foffset/deg << " - fwidth: " << fwidth
            << G4endl;
   }
   ChangeRotMatrix( physVol );
 
-  if( verbose >= 2 )
-  {
-    G4cout << std::setprecision(8) << " G4ParameterisationConsZ " << copyNo
-           << G4endl
-           << " Position: " << origin << " - Width: " << fwidth
-           << " - Axis: " << faxis << G4endl;
-  }
 }
 
 
 //--------------------------------------------------------------------------
 void
 G4ParameterisationConsZ::
-ComputeDimensions( G4Cons& cons, const G4int,
+ComputeDimensions( G4Cons& cons, const G4int copyNo,
                    const G4VPhysicalVolume* ) const
 {
   G4Cons* msol = (G4Cons*)(fmotherSolid);
 
-  G4double pRMin1 = msol->GetInnerRadiusMinusZ();
-  G4double pRMax1 = msol->GetOuterRadiusMinusZ();
-  G4double pRMin2 = msol->GetInnerRadiusPlusZ();
-  G4double pRMax2 = msol->GetOuterRadiusPlusZ();
-  G4double pDz = fwidth/2;
+  G4double mHalfLength;
+  G4double aRInner = (msol->GetInnerRadiusPlusZ() - msol->GetInnerRadiusMinusZ()) / (2*mHalfLength);
+  G4double bRInner = (msol->GetInnerRadiusPlusZ() + msol->GetInnerRadiusMinusZ()) / (2);
+  G4double aROuter = (msol->GetOuterRadiusPlusZ() - msol->GetOuterRadiusMinusZ()) / (2*mHalfLength);
+  G4double bROuter = (msol->GetOuterRadiusPlusZ() + msol->GetOuterRadiusMinusZ()) / (2);
+  G4double xMinusZ = -mHalfLength + foffset + fwidth*copyNo;
+  G4double xPlusZ = -mHalfLength + foffset + fwidth*(copyNo+1);
+  cons.SetInnerRadiusMinusZ( aRInner * xMinusZ + bRInner );
+  cons.SetOuterRadiusMinusZ( aROuter * xMinusZ + bROuter );
+  cons.SetInnerRadiusPlusZ( aRInner * xPlusZ + bRInner );
+  cons.SetOuterRadiusPlusZ( aROuter * xPlusZ + bROuter );
+ 
+  /*
+  G4double pRInner1 = msol->GetInnerRadiusMinusZ();
+  G4double pROuter1 = msol->GetOuterRadiusMinusZ();
+  G4double DRInner = (msol->GetInnerRadiusPlusZ() - pRInner1) / fnDiv;
+  G4double DROuter = (msol->GetOuterRadiusPlusZ() - pROuter1 ) / fnDiv;
+
+  cons.SetInnerRadiusMinusZ( pRInner1 + DRInner*copyNo);
+  cons.SetOuterRadiusMinusZ( pROuter1 + DROuter*copyNo );
+  cons.SetInnerRadiusPlusZ( pRInner1 + DRInner*(copyNo+1) );
+  cons.SetOuterRadiusPlusZ( pROuter1 + DROuter*(copyNo+1) );
+  */
+  G4double pDz = fwidth / 2.;
   G4double pSPhi = msol->GetStartPhiAngle();
   G4double pDPhi = msol->GetDeltaPhiAngle();
 
-  cons.SetInnerRadiusMinusZ( pRMin1 );
-  cons.SetOuterRadiusMinusZ( pRMax1 );
-  cons.SetInnerRadiusPlusZ( pRMin2 );
-  cons.SetOuterRadiusPlusZ( pRMax2 );
   cons.SetZHalfLength( pDz );
   cons.SetStartPhiAngle( pSPhi );
   cons.SetDeltaPhiAngle( pDPhi );
@@ -339,6 +342,6 @@ ComputeDimensions( G4Cons& cons, const G4int,
   {
     G4cout << " G4ParameterisationConsZ::ComputeDimensions()" << G4endl
            << " pDz: " << pDz << G4endl;
-    cons.DumpInfo();
+    if( verbose >= 4 ) cons.DumpInfo();
   }
 }

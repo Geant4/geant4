@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.hh,v 1.1 2003-06-16 15:11:41 gcosmo Exp $
+// $Id: G4ParameterisationTrd.hh,v 1.2 2003-10-16 10:42:42 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // classes G4ParameterisationTrdX
@@ -47,7 +47,6 @@ class G4VPhysicalVolume;
 
 // Dummy declarations to get rid of warnings ...
 class G4Cons;
-class G4Trap;
 class G4Cons;
 class G4Sphere;
 class G4Torus;
@@ -68,8 +67,6 @@ class G4ParameterisationTrdX : public G4VDivisionParameterisation
 
     virtual void ComputeTransformation(const G4int copyNo,
                                              G4VPhysicalVolume* physVol) const;
-    void ComputeDimensions(G4Trap& trap, const G4int copyNo,
-                           const G4VPhysicalVolume* physVol) const;
 
     void ComputeDimensions(G4Trd& trd, const G4int copyNo,
                            const G4VPhysicalVolume* pv) const;
@@ -81,10 +78,14 @@ class G4ParameterisationTrdX : public G4VDivisionParameterisation
     void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
+ 
+    virtual void CheckAxisIsValid();
+
 };
 
 
@@ -99,8 +100,6 @@ class G4ParameterisationTrdY : public G4VDivisionParameterisation
 
     virtual void ComputeTransformation(const G4int copyNo,
                                        G4VPhysicalVolume *physVol) const;
-    void ComputeDimensions(G4Trap& trap, const G4int copyNo,
-                           const G4VPhysicalVolume* physVol) const;
  
     void ComputeDimensions(G4Trd& trd, const G4int copyNo,
                            const G4VPhysicalVolume* pv) const;
@@ -112,10 +111,14 @@ class G4ParameterisationTrdY : public G4VDivisionParameterisation
     void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
+
+    virtual void CheckAxisIsValid();
+
 };
 
 

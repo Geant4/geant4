@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPara.cc,v 1.1 2003-06-16 15:11:42 gcosmo Exp $
+// $Id: G4ParameterisationPara.cc,v 1.2 2003-10-16 10:42:42 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPara Implementation file
@@ -38,143 +38,6 @@
 #include "G4RotationMatrix.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Para.hh"
-
-//--------------------------------------------------------------------------
-G4ParameterisationParaX::
-G4ParameterisationParaX( EAxis axis, G4int nDiv,
-                         G4double width, G4double offset,
-                         G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
-{
-  SetType( "DivisionParaX" );
-
-  if( divType == DivWIDTH )
-  {
-    G4Para* mbox = (G4Para*)(msolid);
-    fnDiv = CalculateNDiv( 2*mbox->GetXHalfLength(), width, offset );
-  }
-  else if( divType == DivNDIV )
-  {
-    G4Para* mbox = (G4Para*)(msolid);
-    fwidth = CalculateWidth( 2*mbox->GetXHalfLength(), nDiv, offset );
-  }
-  if( verbose >= 1 )
-  {
-    G4cout << " G4ParameterisationParaX - # divisions " << fnDiv
-           << " = " << nDiv << G4endl
-           << " Offset " << foffset << " = " << offset << G4endl
-           << " Width " << fwidth << " = " << width << G4endl;
-  }
-}
-
-//------------------------------------------------------------------------
-G4ParameterisationParaX::~G4ParameterisationParaX()
-{
-}
-
-//------------------------------------------------------------------------
-void
-G4ParameterisationParaX::
-ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
-{
-  G4Para* msol = (G4Para*)(fmotherSolid );
-  G4double mdx = msol->GetXHalfLength( );
-
-  //----- translation 
-  G4ThreeVector origin(0.,0.,0.); 
-  G4double posi = -mdx + foffset+(copyNo+0.5)*fwidth;
-
-  if( faxis == kXAxis )
-  {
-    origin.setX( posi ); 
-  }
-  else
-  { 
-    G4cerr << "ERROR - G4ParameterisationParaX::ComputeTransformation()"
-           << G4endl
-           << "        Axis is along " << faxis << " !" << G4endl;
-    G4Exception("G4ParameterisationParaX - Only axes along X are allowed !");
-  }
-
-  if( verbose >= 2 )
-  {
-    G4cout << std::setprecision(8) << " G4ParameterisationParaX "
-           << copyNo << G4endl
-           << " Position: " << origin << " - Axis: " << faxis << G4endl;
-  }
-
-  //----- set translation 
-  physVol->SetTranslation( origin );
-}
-
-//------------------------------------------------------------------------
-G4ParameterisationParaY::
-G4ParameterisationParaY( EAxis axis, G4int nDiv,
-                         G4double width, G4double offset,
-                         G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
-{
-  SetType( "DivisionParaY" );
-
-  if( divType == DivWIDTH )
-  {
-    G4Para* mbox = (G4Para*)(msolid);
-    fnDiv = CalculateNDiv( 2*mbox->GetYHalfLength(), width, offset );
-  }
-  else if( divType == DivNDIV )
-  {
-    G4Para* mbox = (G4Para*)(msolid);
-    fwidth = CalculateWidth( 2*mbox->GetYHalfLength(), nDiv, offset );
-  }
-
-  if( verbose >= 1 )
-  {
-    G4cout << " G4ParameterisationParaY - # divisions " << fnDiv
-           << " = " << nDiv << G4endl
-           << " Offset " << foffset << " = " << offset << G4endl
-           << " Width " << fwidth << " = " << width << G4endl;
-  }
-}
-
-//------------------------------------------------------------------------
-G4ParameterisationParaY::~G4ParameterisationParaY()
-{
-}
-
-//------------------------------------------------------------------------
-void
-G4ParameterisationParaY::
-ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
-{
-  G4Para* msol = (G4Para*)(fmotherSolid );
-  G4double mdy = msol->GetYHalfLength( );
-
-  //----- translation 
-  G4ThreeVector origin(0.,0.,0.); 
-  G4double posi = -mdy + foffset + (copyNo+0.5)*fwidth;
-  if( faxis == kYAxis )
-  {
-    origin.setY( posi ); 
-  }
-  else
-  { 
-    G4cerr << "ERROR - G4ParameterisationParaY::ComputeTransformation()"
-           << G4endl
-           << "        Axis is along " << faxis << " !" << G4endl;
-    G4Exception("G4ParameterisationParaY - Only axes along Y are allowed !");
-  }
-
-  if( verbose >= 2 )
-  {
-    G4cout << std::setprecision(8) << " G4ParameterisationParaY "
-           << copyNo << G4endl
-           << " Position: " << origin << " - Axis: " << faxis << G4endl;
-  }
-
-  //----- set translation 
-  physVol->SetTranslation( origin );
-}
-
 
 //------------------------------------------------------------------------
 G4ParameterisationParaZ::
@@ -196,7 +59,7 @@ G4ParameterisationParaZ( EAxis axis, G4int nDiv,
     fwidth = CalculateWidth( 2*mbox->GetZHalfLength(), nDiv, offset );
   }
 
-  if( verbose >= 1 )
+  if( verbose >= -1 )
   {
     G4cout << " G4ParameterisationParaZ - # divisions " << fnDiv
            << " = " << nDiv << G4endl
@@ -219,13 +82,11 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
   G4double mdz = msol->GetZHalfLength( );
 
   //----- translation 
-  G4ThreeVector origin(0.,0.,0.); 
   G4double posi = -mdz + foffset + (copyNo+0.5)*fwidth;
-  if( faxis == kZAxis )
-  {
-    origin.setZ( posi ); 
-  }
-  else
+  G4ThreeVector symAxis = msol->GetSymAxis();
+  G4ThreeVector origin( symAxis * posi / symAxis.z() ); 
+  
+  if( faxis != kZAxis )
   { 
     G4cerr << "ERROR - G4ParameterisationParaZ::ComputeTransformation()"
            << G4endl
@@ -233,7 +94,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
     G4Exception("G4ParameterisationParaZ - Only axes along Z are allowed !");
   }
 
-  if( verbose >= 2 )
+  if( verbose >= -2 )
   {
     G4cout << std::setprecision(8) << " G4ParameterisationParaZ "
            << copyNo << G4endl
@@ -242,4 +103,34 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
 
   //----- set translation 
   physVol->SetTranslation( origin );
+}
+
+//--------------------------------------------------------------------------
+void
+G4ParameterisationParaZ::
+ComputeDimensions(G4Para& para, const G4int copyNo,
+                  const G4VPhysicalVolume*) const
+{
+  //---- The division along Z of a Para will result a Para
+  G4Para* msol = (G4Para*)(fmotherSolid);
+
+  //---- Get
+  G4double pDx = msol->GetXHalfLength();
+  G4double pDy = msol->GetYHalfLength();
+  G4double pAlpha = atan(msol->GetTanAlpha());
+  G4double pTheta = msol->GetSymAxis().theta();
+  G4double pPhi = msol->GetSymAxis().phi();
+  G4double pDz = fwidth/2.;
+ 
+  para.SetAllParameters ( pDx, pDy, pDz, pAlpha, pTheta, pPhi );
+
+  if( verbose >= -1 )
+  {
+    G4cout << " G4ParameterisationParaZ::ComputeDimensions(G4Para)"
+           << " - Mother PARA " << G4endl;
+    msol->DumpInfo();
+    G4cout << " - Parameterised PARA: "
+           << copyNo << G4endl;
+    para.DumpInfo();
+  }
 }
