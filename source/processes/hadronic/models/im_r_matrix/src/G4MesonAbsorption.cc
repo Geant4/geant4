@@ -31,8 +31,11 @@ GetCollisions(G4KineticTrack * aProjectile,
       G4KineticTrackVector aTarget;
       aTarget.push_back(*j);
       FindAndFillCluster(aTarget, aProjectile, someCandidates);
-      theCollisions.push_back(
+      if(aTarget.size()>=2)
+      {
+        theCollisions.push_back(
         new G4CollisionInitialState(collisionTime+aCurrentTime, aProjectile, aTarget, this) );
+      }
     }
   }
   return theCollisions;
@@ -65,6 +68,7 @@ FindAndFillCluster(G4KineticTrackVector & result,
     }
   }
   if(partner) result.push_back(partner);
+  else result.clear();
 }
 
 

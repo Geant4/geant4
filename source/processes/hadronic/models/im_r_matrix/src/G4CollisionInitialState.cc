@@ -32,10 +32,9 @@
 // Class G4CollisionInitialState 
 
 G4CollisionInitialState::G4CollisionInitialState() :
-   theCollisionTime(DBL_MAX), thePrimary(NULL), theTarget(NULL)
+   theCollisionTime(DBL_MAX), thePrimary(0), theTarget(0), theFSGenerator(0)
 {
 }
-
 
 
 G4CollisionInitialState::G4CollisionInitialState(G4double time, 
@@ -45,6 +44,7 @@ G4CollisionInitialState::G4CollisionInitialState(G4double time,
    thePrimary       = aPrimary;
    theTarget        = aTarget;
    theTs.clear();
+   theFSGenerator = 0;
 }
 
 // +new interface post pion:
@@ -63,11 +63,14 @@ G4CollisionInitialState::G4CollisionInitialState(G4double time,
 
 G4CollisionInitialState::G4CollisionInitialState(G4CollisionInitialState & right)
 {
-   theCollisionTime = right.theCollisionTime;
-   thePrimary       = right.thePrimary;
-   theTarget        = right.theTarget;
-   for (size_t i=0; i<right.theTs.size(); i++) theTs.push_back(right.theTs[i]);
-   
+   if (this != &right)
+   {
+     theCollisionTime = right.theCollisionTime;
+     thePrimary       = right.thePrimary;
+     theTarget        = right.theTarget;
+     for (size_t i=0; i<right.theTs.size(); i++) theTs.push_back(right.theTs[i]);
+     theFSGenerator   = right.theFSGenerator;
+   }
 }
 
 const G4CollisionInitialState & G4CollisionInitialState::
@@ -80,14 +83,20 @@ const G4CollisionInitialState & G4CollisionInitialState::
       theTarget        = right.theTarget;
       for (size_t i=0; i<right.theTs.size(); i++)
           theTs.push_back(right.theTs[i]);
+      theFSGenerator   = right.theFSGenerator;
    }
 
    return *this;
 }
 
+//#include <typeinfo>
+
   G4KineticTrackVector * G4CollisionInitialState::
   GetFinalState()
   {
+//    G4cerr << "what is the FS generator? "
+//           << typeid(*theFSGenerator).name()
+//	   <<G4endl;
     return theFSGenerator->GetFinalState(thePrimary, theTs);
   }
 
