@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.3 1999-12-15 14:49:21 gunter Exp $
+// $Id: ExN02DetectorConstruction.cc,v 1.4 2000-05-15 14:02:10 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,7 +96,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 
 //--------- Sizes of the principal geometrical components (solids)  ---------
   
-  fDetectorLength = 750.*cm ;       // Full length of the detector
+  fDetectorLength = 1250.*cm ;       // Full length of the detector
   fTrackerLength = 500. * cm;       // Full length of the Tracker
   fTargetLength = 5.0 * cm;         // Full length of the Target
   
