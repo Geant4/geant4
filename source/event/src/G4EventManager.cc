@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.13 2003-05-21 20:52:53 asaim Exp $
+// $Id: G4EventManager.cc,v 1.14 2003-08-01 19:30:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,6 +34,8 @@
 #include "G4UserEventAction.hh"
 #include "G4UserStackingAction.hh"
 #include "G4SDManager.hh"
+#include "G4StateManager.hh"
+#include "G4ApplicationState.hh"
 
 G4EventManager* G4EventManager::fpEventManager = 0;
 G4EventManager* G4EventManager::GetEventManager()
@@ -87,6 +89,18 @@ G4int G4EventManager::operator!=(const G4EventManager &right) const { }
 
 void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 {
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState currentState = stateManager->GetCurrentState();
+  if(currentState!=G4State_GeomClosed)
+  {
+    G4Exception("G4EventManager::ProcessOneEvent",
+                "IllegalApplicationState",
+                JustWarning,
+                "Geometry is not closed : cannot process an event.");
+    return;
+  }
+  stateManager->SetNewState(G4State_EventProc);
+
   currentEvent = anEvent;
   G4Track * track;
   G4TrackStatus istop;
@@ -226,6 +240,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   if(userEventAction) userEventAction->EndOfEventAction(currentEvent);
   currentEvent = 0;
 
+  stateManager->SetNewState(G4State_GeomClosed);
 }
 
 void G4EventManager::StackTracks(G4TrackVector *trackVector,G4bool IDhasAlreadySet)
