@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListIonBinaryCascade.cc,v 1.3 2005-03-16 12:08:22 maire Exp $
+// $Id: PhysListIonBinaryCascade.cc,v 1.4 2005-03-16 13:30:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,18 +29,11 @@
 #include "PhysListIonBinaryCascade.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "G4LFission.hh"
-#include "G4LCapture.hh"
+
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
 #include "G4Alpha.hh"
 #include "G4GenericIon.hh"
-
-#include "G4ExcitationHandler.hh"
-#include "G4Evaporation.hh"
-#include "G4FermiBreakUp.hh"
-#include "G4StatMF.hh"
-#include "G4GeneratorPrecompoundInterface.hh"
 
 #include "G4HadronInelasticProcess.hh"
 #include "G4BinaryLightIonReaction.hh"
