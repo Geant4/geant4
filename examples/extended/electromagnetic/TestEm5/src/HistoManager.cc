@@ -21,32 +21,38 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.cc,v 1.1 2003-08-11 10:20:33 maire Exp $
+// $Id: HistoManager.cc,v 1.2 2003-10-28 18:29:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifdef G4ANALYSIS_USE
 
 #include "HistoManager.hh"
 #include "HistoMessenger.hh"
 
-#include "AIDA/AIDA.h"
 #include "G4UnitsTable.hh"
+
+#ifdef G4ANALYSIS_USE
+#include <memory> // for the auto_ptr(T>
+#include "AIDA/AIDA.h"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
-:tree(0),hf(0),factoryOn(false)
+:factoryOn(false)
 {
+#ifdef G4ANALYSIS_USE
   histoMessenger = new HistoMessenger(this);
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::~HistoManager()
 { 
+#ifdef G4ANALYSIS_USE
   if (factoryOn) { 
     tree->commit();       // Writing the histograms to the file
     tree->close();        // and closing the tree (and the file)
@@ -55,11 +61,13 @@ HistoManager::~HistoManager()
     delete tree;
     factoryOn = false;
   }
-
   delete histoMessenger;  
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#ifdef G4ANALYSIS_USE
 
 void HistoManager::SetFactory(G4String fileName)
 { 
@@ -70,25 +78,28 @@ void HistoManager::SetFactory(G4String fileName)
   }
     	   
  // Creating the analysis factory
- AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
+  std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+  // AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
  // Creating the tree factory
-  AIDA::ITreeFactory* tf = af->createTreeFactory();
+  std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
+  //  AIDA::ITreeFactory* tf = af->createTreeFactory();
  
  // Creating a tree mapped to an hbook file.
- G4bool readOnly  = false;
- G4bool createNew = true;
- tree = tf->create(fileName, "hbook", readOnly, createNew);
+  G4bool readOnly  = false;
+  G4bool createNew = false;
+  tree = tf->create(fileName, "hbook", readOnly, createNew);
 
  // Creating a histogram factory, whose histograms will be handled by the tree
- hf = af->createHistogramFactory(*tree);
+  std::auto_ptr< AIDA::IHistogramFactory > hf(af->createHistogramFactory( *tree ));
+  // hf = af->createHistogramFactory(*tree);
  
  // histograms
- for (G4int k=0; k<MaxHisto; k++) { histo[k] = 0; histoUnit[k] = 1.;}
+  for (G4int k=0; k<MaxHisto; k++) { histo[k] = 0; histoUnit[k] = 1.;}
   
- delete tf;
- delete af;
- factoryOn = true;  
+ //delete tf;
+ // delete af;
+  factoryOn = true;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
