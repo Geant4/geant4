@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Para.hh,v 1.1 1999-01-07 16:07:52 gunter Exp $
+// $Id: G4Para.hh,v 1.2 1999-11-19 16:06:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -40,6 +40,7 @@
 // History:
 // 21.3.94 P.Kent Old C++ code converted to tolerant geometry
 // 31.10.96 V.Grichine Modifications according G4Box/Tubs before to commit
+// 18.11.99 V.Grichine , kUndefined was added to ESide
 
 #ifndef G4Para_HH
 #define G4Para_HH
@@ -167,3 +168,12 @@ private:
 };
    	
 #endif
+
+
+
+
+
+
+
+
+

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hype.hh,v 1.1 1999-01-07 16:07:52 gunter Exp $
+// $Id: G4Hype.hh,v 1.2 1999-11-19 16:06:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,6 +58,9 @@
 //   Create the List of transformed vertices in the format required
 //   for G4VSolid:: ClipCrossSection and ClipBetweenSections.
 //
+// History:
+// 1998/06/09 F.Safai, first version
+// 18.11.99 , V.Grichine, kUndefined was added in ESide
 
 #ifndef G4HYPE_HH
 #define G4HYPE_HH
@@ -170,7 +173,7 @@ protected:
   double endOuterRadius; // endcap Outer Radius
   
   // Used by distanceToOut
-  enum ESide {outerFace,innerFace,leftCap, rightCap};
+  enum ESide {kUndefined,outerFace,innerFace,leftCap, rightCap};
 };
    	
 #endif

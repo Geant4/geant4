@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trd.hh,v 1.1 1999-01-07 16:07:54 gunter Exp $
+// $Id: G4Trd.hh,v 1.2 1999-11-19 16:06:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,6 +57,7 @@
 //     fDz     Half-length along z axis
 //
 // History:
+// 19.11.99 V.Grichine, kUndefined was added to Eside enum 
 // 21.04.97 J. Apostolakis         Added Set Methods.
 // 19.08.96 P. Kent, V. Grichine ->Fs in accordance with G4Box
 // 17.02.95 P.Kent Exiting normal return
@@ -67,9 +68,9 @@
 
 #include "G4CSGSolid.hh"
 
-class G4Trd : public G4CSGSolid {
-
-public:
+class G4Trd : public G4CSGSolid 
+{
+  public:
 
     G4Trd( const G4String& pName,
            G4double pdx1, G4double pdx2,
@@ -179,7 +180,8 @@ protected:
     G4double fDx1,fDx2,fDy1,fDy2,fDz;
 
 // Codes for faces (kPX=plus x face,kMY= minus y face etc)
-  enum ESide {kPX,kMX,kPY,kMY,kPZ,kMZ};
+
+  enum ESide {kUndefined, kPX,kMX,kPY,kMY,kPZ,kMZ};
 
 };
 
