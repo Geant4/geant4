@@ -1,4 +1,4 @@
-$Id: History,v 1.90 2004-11-26 14:03:06 gcosmo Exp $
+$Id: History,v 1.91 2004-12-16 19:01:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16th December 2004  Gabriele Cosmo (examples-V06-02-06)
+- Updated reference outputs according to reference tag geant4-07-00-ref-00
+- Includes tags: air_shower-V06-02-02, brachy-V06-02-01, ccal-V06-02-02,
+                 cosmicray_charging-V06-02-03, gammaraytel-V06-02-01, hadrontherapy-V06-02-01,
+                 lAr_calorimeter-V06-02-02, medical_linac-V06-02-00, purtag-V06-02-01,
+                 radioprotection-V06-02-00, Rich-V06-02-02, Tiara-V06-02-02, DMX-V06-02-02,
+                 XrayFluo-V06-02-01, exampleA01-V06-02-03, testem1-V06-02-07,
+                 testem2-V06-02-05, testem3-V06-02-06, exgps-V06-02-01, fieldex-V06-02-00,
+                 exgdml-V06-02-00, DICOM-V06-02-02, gtherapy-V06-02-07, exparallel-V06-02-00,
+                 exrdm-V06-02-02, exampleRE01-V06-02-02, exampleN04-V06-02-03,
+                 exampleN05-V06-02-02.
 
 26th November 2004  Gabriele Cosmo (examples-V06-02-05)
 - Updated reference outputs according to reference tag geant4-06-02-ref-05
