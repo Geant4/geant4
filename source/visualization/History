@@ -1,4 +1,4 @@
-$Id: History,v 1.259 2004-08-03 15:57:35 johna Exp $
+$Id: History,v 1.260 2004-09-13 21:20:56 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,25 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+13th September 2004  John Allison  (vis-V06-02-03)
+- vistree-V06-02-00: Improved ASCIITree:
+  verbosity >= 3: prints volume, density of all volumes in hierarchy.
+  verbosity >= 4: calculates the mass of the complete geometry tree taking
+    into account daughters up to the depth specified for each physical
+    volume in the current scene.  Culling is ignored so that all volumes
+    are processed.  The calculation is quite tricky, since it involves
+    subtracting the mass of that part of the mother that is occupied by
+    each daughter and then adding the mass of the daughter, and so on
+    down the heirarchy.  Uses G4PhysicalVolumeMassScene - see below.
+  Added option to write to file (/vis/ASCIITree/set/outFile).
+- modeling-V06-02-00: Added G4PhysicalVolumeMassScene and improvements
+  to G4PhysicalVolumeModel.  See modeling/History for more details.
+- Removed obsolete file: G4VisToOldVisCommands.hh
+- Corrected mistake in /vis/viewer/set/*Vector commands.
+- Augmented ParameterisedBox and rotated a tracker tube in test directory.
+- Brought README.built_in_commands up to date for Geant4 6.2.  Removed all
+  references to old commands.'
 
 3rd August 2004  John Allison
 - Rationalised vis command code (uses G4UIcommand static conversion
