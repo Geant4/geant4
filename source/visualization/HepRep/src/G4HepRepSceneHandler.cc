@@ -751,7 +751,7 @@ HepRep* G4HepRepSceneHandler::getHepRep() {
 
 HepRepInstanceTree* G4HepRepSceneHandler::getGeometryInstanceTree() {
     if (_geometryInstanceTree == NULL) {
-        // Create the Goemetry InstanceTree.
+        // Create the Geometry InstanceTree.
         _geometryInstanceTree = factory->createHepRepInstanceTree("G4GeometryData", "1.0", getGeometryTypeTree());
         getHepRep()->addInstanceTree(_geometryInstanceTree);
     }
@@ -903,6 +903,7 @@ HepRepInstanceTree* G4HepRepSceneHandler::getEventInstanceTree() {
     if (_eventInstanceTree == NULL) {
         // Create the Event InstanceTree.
         _eventInstanceTree = factory->createHepRepInstanceTree("G4EventData", "1.0", getEventTypeTree());
+        _eventInstanceTree->addInstanceTree(getGeometryInstanceTree());
         getHepRep()->addInstanceTree(_eventInstanceTree);
     }
     return _eventInstanceTree;
