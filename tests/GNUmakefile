@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 1999-06-09 13:20:34 stesting Exp $
+# $Id: GNUmakefile,v 1.6 1999-11-18 11:31:26 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -58,8 +58,8 @@ all:
 
 clean:
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done
-	@rm test104/test104.EMtest.in
-	@rm test104/test104.EMtest.out
+	@rm -f test104/test104.EMtest.in
+	@rm -f test104/test104.EMtest.out
 	@for example in $(EXAMPLES); do \
 	  testdir=test1$$example; \
 	  exdir=$(G4INSTALL)/examples/novice/N$$example; \
@@ -80,8 +80,8 @@ clean:
 
 clean_libs:
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean_libs); done
-	@rm test104/test104.EMtest.in
-	@rm test104/test104.EMtest.out
+	@rm -f test104/test104.EMtest.in
+	@rm -f test104/test104.EMtest.out
 	@for example in $(EXAMPLES); do \
 	  testdir=test1$$example; \
 	  exdir=$(G4INSTALL)/examples/novice/N$$example; \
