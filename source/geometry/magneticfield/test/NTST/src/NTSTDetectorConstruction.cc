@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: NTSTDetectorConstruction.cc,v 1.1 2003-11-07 21:30:29 japost Exp $
+// $Id: NTSTDetectorConstruction.cc,v 1.2 2003-11-08 02:21:26 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -180,6 +180,7 @@ NTSTDetectorConstruction::Construct()
   fpChordFinder= new G4ChordFinder( (G4MagneticField *)&field, 
 				    fMinChordStep,
                                     pStepper );
+  fpChordFinder->SetVerbose(1); 
   globalFieldManager->SetChordFinder( fpChordFinder );
 
   //------------------------------------------------------ materials

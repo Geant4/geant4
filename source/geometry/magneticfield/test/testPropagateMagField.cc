@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.25 2003-11-03 17:21:36 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.26 2003-11-08 02:25:29 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -269,6 +269,7 @@ G4FieldManager* SetupField(G4int type)
     pChordFinder = new G4ChordFinder( &myMagField,
 				      1.0e-2 * mm,
 				      pStepper);
+    pChordFinder->SetVerbose(1);  // ity();
 
     pFieldMgr->SetChordFinder( pChordFinder );
 
