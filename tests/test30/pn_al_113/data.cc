@@ -78,6 +78,16 @@ int main(int argc, char** argv)
   string fname3 = "dsdedtet.dat";
   fout_c->open(fname3.c_str(), std::ios::out|std::ios::trunc);
 
+  ofstream* fout_a1 = new ofstream();
+  string fname4 = "dsde.out";
+  fout_a1->open(fname4.c_str(), std::ios::out|std::ios::trunc);
+  ofstream* fout_b1 = new ofstream();
+  string fname5 = "dsdtet.out";
+  fout_b1->open(fname5.c_str(), std::ios::out|std::ios::trunc);
+  ofstream* fout_c1 = new ofstream();
+  string fname6 = "dsdedtet.out";
+  fout_c1->open(fname6.c_str(), std::ios::out|std::ios::trunc);
+
   //there can't be lines longer than nmax characters
   const int nmax = 200;
   char line[nmax]; 
@@ -147,10 +157,15 @@ int main(int argc, char** argv)
             (*fout_c) << "#####..Result.of.parcing..####### n= " << nbin 
                       << " Angle(degree)= " << (*angle)[angle->size()-1]/degree
                       << G4endl;
+            (*fout_c1) << "#####..Result.of.parcing..####### n= " << nbin 
+                      << " Angle(degree)= " << (*angle)[angle->size()-1]/degree
+                      << G4endl;
             for(int i=0; i<nbin; i++) {
                (*fout_c) << "e(MeV)= " << (*energy)[i]  
                          << " cross(mb/MeV/sr)= " << (*cross)[i] << endl;
+               (*fout_c1) << (*cross)[i] << " ";
 	    }
+	    (*fout_c1) << " " << endl;
           }  
 	}
 
@@ -183,6 +198,18 @@ int main(int argc, char** argv)
         (*fout_b) << "#####..Result.of.integration..#####.. Elim(MeV)= " 
                   << elim0/MeV
                   << G4endl;
+        (*fout_a1) << "#####..Result.of.integration..Energy points"
+                   << G4endl;
+        (*fout_b1) << "#####..Result.of.integration..#####.. Elim(MeV)= " 
+                  << elim0/MeV
+                  << G4endl;
+
+        for(int ii=0; ii<nbin; ii++) {
+          (*fout_a1) << (*energy)[ii] << " ";
+	}
+        (*fout_a1) << G4endl;
+        (*fout_a1) << "#####..Result.of.integration" << G4endl;
+
         for(int i=0; i<nbin; i++) {
         
           x = 0.0;
@@ -211,7 +238,10 @@ int main(int argc, char** argv)
           x *= twopi;
           (*fout_a) << "e(MeV)= " << (*energy)[i] 
                     << " cross(mb/MeV)= " << x << endl;
+          (*fout_a1) << x << " ";
         }
+
+        (*fout_a1) << G4endl;
 
         for(int j=0; j<na-1; j++) {
           f1  = cs[j];  
@@ -230,7 +260,9 @@ int main(int argc, char** argv)
           }
           (*fout_b) << "cos(theta)= " << an 
                     << " cross(mb/sr)= " << x << endl;
+          (*fout_b1) << x << " ";
         }
+        (*fout_b1) << G4endl ;
       }
     }
   } while (end);
