@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2001-03-12 06:10:49 kurasige Exp $
+$Id: History,v 1.50 2001-04-03 06:42:52 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Apr. 03, 01 H.Kurashige 
+- Fixed bugs in G4ParticleDefinition::GetPDGIsospin()
+
 -  Mar. 09, 01 H.Kurashige   (particles-V03-00-03)
 ------- partman-V03-00-03
 - Added RestoreCuts methods to G4ParticleWithCuts 
