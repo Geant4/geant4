@@ -59,7 +59,7 @@ class G4LEpp : public G4HadronicInteraction
    G4VParticleChange* ApplyYourself(const G4Track& aTrack,
                                     G4Nucleus& targetNucleus);
 
-   void SetCoulombSuppression(G4int State);
+   void SetCoulombEffects(G4int State);
   
  private:
 
