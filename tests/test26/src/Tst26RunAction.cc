@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26RunAction.cc,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
+// $Id: Tst26RunAction.cc,v 1.4 2003-05-15 09:02:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 /////////////////////////////////////////////////////////////////////////
@@ -93,7 +93,7 @@ void Tst26RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Tst26RunAction::EndOfRunAction(const G4Run* aRun)
+void Tst26RunAction::EndOfRunAction(const G4Run*)
 {
   const G4String pn = Tst26Kin->GetParticleGun()
                       ->GetParticleDefinition()->GetParticleName();   
