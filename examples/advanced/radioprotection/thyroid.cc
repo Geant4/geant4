@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: thyroid.cc,v 1.2 2002-06-13 09:25:36 francy Exp $
+// $Id: thyroid.cc,v 1.3 2002-06-28 13:25:36 castrovillari Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -89,7 +89,8 @@ int main(int argc ,char ** argv)
 
 
  // Set mandatory initialization classes
- ThyroidDetectorConstruction *pDetectorConstruction;
+ G4String SDName = "Thyroid"
+ThyroidDetectorConstruction *pDetectorConstruction;
  pRunManager->SetUserInitialization(pDetectorConstruction = new
 ThyroidDetectorConstruction); 
 pRunManager->SetUserInitialization(new ThyroidPhysicsList);
