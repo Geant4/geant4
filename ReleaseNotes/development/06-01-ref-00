@@ -166,5 +166,7 @@ examples                                         examples-V06-00-02
 tests                                            tests-V06-00-02
 -----
 - Updated reference outputs.
+- tests/test32 (test32-V06-00-00)
+  o Fixed processing of hits in sensitive detector.
 - tests/test50 (test50-V06-00-00)
   o Removed reference output.
