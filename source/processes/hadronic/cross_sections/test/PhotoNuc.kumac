@@ -11,23 +11,29 @@ macro run que=513-2-asd
   first=1
   last=6
 * define the file name for the output
-  for/fil 99 photonuclear.ps
+**  for/fil 99 photonuclear.ps
+  for/fil 99 photonuclear.eps
 * define the metafile type to assemble the pictures
   ***************meta -99 -[npx][npy][pln]
-  meta 99 -112
+* this is for the Lanscape ps file
+**  meta 99 -112
+* this is for the eps file
+  meta 99 -113
   zone 2 3
 *           TITLE  NAME NTH NEX XMIN XMAX YMIN YMAX XTXT YTXT
-  exec phot ^1!H   h1   227 326 150. 4.e7 0.03 0.60 1.e4 0.18
-  exec phot ^2!H   h2   227 310   2. 2.e4 0.04 4.00 1.e3  0.6
-  exec phot ^12!C  c12  227 396  12. 1.e5 0.10 30.0 2.e3  2.0
-  exec phot ^27!Al al27 227 303  10. 1.e4 0.30 90.0 800.   6.
-  exec phot Cu     cu   227 144   8. 2.e5 2.00 120. 2.e3  20.
-  exec phot Pb     pb   227 185   7. 1.e5 7.00 700. 2.e3 100.
+  exec phot ^1!H   h1   227 326 150. 4.e7 0.03 0.60 1.e4 0.15
+  exec phot ^2!H   h2   227 310  23. 4.e7 0.04 4.00 1.e3  0.5
+  exec phot ^12!C  c12  227 396  13. 4.e7 0.10 30.0 2.e3  2.0
+  exec phot ^27!Al al27 227 303   9. 4.e7 0.30 90.0 800.   6.
+  exec phot Cu     cu   227 144   7. 4.e7 2.00 120. 2.e3  20.
+  exec phot Pb     pb   227 185  7.4 4.e7 7.00 700. 2.e3 100.
 print:
   meta 0
   for/clo 99
-  mess '*** PhotoNucl.kumac is printing photonuclear.ps file on: '//[que]
-  shell xprint -h -P [que] photonuclear.ps
+**  mess '*** PhotoNucl.kumac is printing photonuclear.ps file on: '//[que]
+**  shell xprint -h -P [que] photonuclear.ps
+  mess '*** PhotoNucl.kumac is printing photonuclear.eps file on: '//[que]
+  shell xprint -h -P [que] photonuclear.eps
 return
 
 macro phot targ=^12!C file=h1 nth=227 nex=326 xmin=1 _

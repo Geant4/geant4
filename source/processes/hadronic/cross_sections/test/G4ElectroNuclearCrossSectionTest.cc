@@ -42,8 +42,8 @@ int main()
   fileCu.setf( ios::scientific, ios::floatfield );
   ofstream filePb("pb_e.out", ios::out);
   filePb.setf( ios::scientific, ios::floatfield );
-  G4double low[nN]={140. , 2.22, 12. , 10. , 8.  , 7. };
-  G4double high[nN]={4.e7, 2.e4, 1.e5, 1.e5, 2.e5, 1.e5};
+  G4double low[nN]={137. , 2.22, 12.5 , 8.3 , 7.  , 7.35};
+  G4double high[nN]={4.e7, 4.e7, 4.e7, 4.e7, 4.e7, 4.e7};
   G4Element* theElement[nN]={new G4Element("Hydrogen", "H", 1, 1.*g/mole),
 							 new G4Element("Deuterium", "D", 1, 2.*g/mole),
 							 new G4Element("Carbon", "C", 6, 12.*g/mole),

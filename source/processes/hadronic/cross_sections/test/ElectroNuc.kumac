@@ -1,6 +1,8 @@
 macro run que=513-2-asd
 * Start the G4PhotoNuclearCrossSectionTest (Is geant4/bin in the PATH? Did you rehash?)
   shell G4PhotoNuclearCrossSectionTest
+* Start the G4ElectroNuclearCrossSectionTest (Is geant4/bin in the PATH? Did you rehash?)
+  shell G4ElectroNuclearCrossSectionTest
   pi/del *
 * pln=4 - portret, pln=5 - landscape
   pln = 4
@@ -16,13 +18,13 @@ macro run que=513-2-asd
   ***************meta -99 -[npx][npy][pln]
   meta 99 -112
   zone 2 3
-*           TITLE  NAME   NTH NEX XMIN XMAX YMIN  YMAX  XTXT YTXT
-  exec phot ^1!H   h1_e   227 326 150. 4.e7 1.e-8 6.e-2 1.e6 1.e-7
-  exec phot ^2!H   h2_e   227 310   2. 2.e4 2.e-5 2.e-1 1.e3 1.e-4
-  exec phot ^12!C  c12_e  227 396  12. 1.e5 1.e-7 6.e-1 1.e4 1.e-6
-  exec phot ^27!Al al27_e 227 303  10. 1.e4 2.e-4    1. 1.e3 1.e-3
-  exec phot Cu     cu_e   227 144   8. 2.e5 1.e-3  100. 1.e4  0.01
-  exec phot Pb     pb_e   227 185   7. 1.e5 3.e-4   15. 1.e4 0.002
+*           TITLE  NAME ENAME  NTH XMIN XMAX YMIN  YMAX  XTXT YTXT
+  exec phot ^1!H   h1   h1_e   227   1. 4.e7 1.e-5 1001. 1.e5 1.e-4
+  exec phot ^2!H   h2   h2_e   227   1. 4.e7 1.e-5 1001. 1.e5 1.e-4
+  exec phot ^12!C  c12  c12_e  227   1. 4.e7 1.e-5 1001. 1.e5 1.e-4
+  exec phot ^27!Al al27 al27_e 227   1. 4.e7 1.e-5 1001. 1.e5 1.e-4
+  exec phot Cu     cu   cu_e   227   1. 4.e7 1.e-5 1001. 1.e5 1.e-4
+  exec phot Pb     pb   pb_e   227   1. 4.e7 1.e-5 1001. 1.e5 1.e-4
 print:
   meta 0
   for/clo 99
@@ -30,16 +32,13 @@ print:
   shell xprint -h -P [que] photonuclear.ps
 return
 
-macro phot targ=^12!C file=h1 nth=227 nex=326 xmin=1 _
+macro phot targ=^12!C file=h1 efile=h1_e nth=227 xmin=1 _
            xmax=4.e7 ymin=0.03 ymax=700 xt=8. yt=10.
 *
 ******  dir = ./
   hi/del *
   ve/del *
   ve/cr de(999) R 999*0.
-*****  clr
-*****  opt zfl
-*****  swi gz
   opt utit
 * Switch to high quality picture
   gr/opt ndat
@@ -57,31 +56,26 @@ macro phot targ=^12!C file=h1 nth=227 nex=326 xmin=1 _
   opt logy
 ***  opt liny
   null [xmin] [xmax] [ymin] [ymax]
-* Switch to standard quality picture
-*  set pass 1
-*  igset lwid 1.
-*  set bwid 1.
-*  set fwid 1.
-*  set hwid 1.
 *
   ****atitle ' ' '[s]?abs! (mb)'
   title ' ' u
   ****title ' '
-  set dmod 3
   igset MTYP 20
   SET TXFP -20
   SET LTYP 1
-*  ve/re eg,ex,er [file].dat
-*  igset PMCI 1
-*  igset PLCI 1
-*  gra/hp/errors eg ex de er [nex] 20 .1 1
   SET CHHE 1.
   igset txci 1
   itx [xt] [yt]  [targ]
-  ve/re e,ap [file].out
+  ve/re p,ps [file].out
   igset PLCI 1
-  igset LWID 1
-  gra/prim/graph [nth] e ap C 
+  set   DMOD 2
+  igset LWID 5
+  gra/prim/graph [nth] p ps C 
+  ve/re e,es [efile].out
+  igset PLCI 1
+  set   DMOD 1
+  igset LWID 5
+  gra/prim/graph [nth] e es C 
   igset LWID 1
 return
 
