@@ -43,11 +43,11 @@ void DicomEventAction::EndOfEventAction(const G4Event* evt)
   if (G4VVisManager::GetConcreteInstance())
     {
       G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-      G4int n_trajectories = 0;
-      if (trajectoryContainer)
-	n_trajectories = trajectoryContainer->entries();
+      G4int nTrajectories = 0;
+      if ( trajectoryContainer )
+	nTrajectories = trajectoryContainer->entries();
 
-      for (G4int i=0; i<n_trajectories; i++)
+      for ( G4int i = 0;i < nTrajectories; i++ )
         {
 	  G4Trajectory* trj = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
 	  if (drawFlag == "all")

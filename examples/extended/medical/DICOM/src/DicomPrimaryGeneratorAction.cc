@@ -10,8 +10,8 @@
 
 DicomPrimaryGeneratorAction::DicomPrimaryGeneratorAction()
 {
-  G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);  	     
+  G4int nParticle = 1;
+  particleGun  = new G4ParticleGun(nParticle);  	     
 }
 
 DicomPrimaryGeneratorAction::~DicomPrimaryGeneratorAction()

@@ -3,7 +3,7 @@
 #visualisation
 /vis/scene/create
 /vis/open OGLIX
-/vis/drawVolume
-/vis/viewer/update
+/vis/viewer/zoom 3
+#/vis/viewer/update
 #beamOn
 /run/beamOn 3

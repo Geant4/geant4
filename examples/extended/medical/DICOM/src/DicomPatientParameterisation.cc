@@ -161,8 +161,6 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int, // NoVoxels,
   compression = atoi(compressionBuf);
     
   GetDensity( maxDensity , minDensity );
-
- 
 }
 
 DicomPatientParameterisation::~DicomPatientParameterisation()
@@ -212,55 +210,55 @@ G4Material*  DicomPatientParameterisation::ComputeMaterial(const G4int copyNo,G4
 {
   if ( density[copyNo] >= 0.207 && density[copyNo] <= 0.227 )
     {
-      physVol->SetName("Physical_LungINhale");
+      physVol->SetName("PhysicalLungINhale");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeLungINhale );
       return lungInhale;
     }
   else if ( density[copyNo] >= 0.481 && density[copyNo] <= 0.534 )
     {
-      physVol->SetName("Physical_LungEXhale");
+      physVol->SetName("PhysicalLungEXhale");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeLungEXhale );
       return lungExhale;
     }
   else if ( density[copyNo] >= 0.919 && density[copyNo] <= 0.979 )
     {
-      physVol->SetName("Physical_Adipose");
+      physVol->SetName("PhysicalAdipose");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeAdipose );
       return adiposeTissue;
     }
   else if ( density[copyNo] > 0.979 && density[copyNo] <= 1.004 )
     {
-      physVol->SetName("Physical_Breast");
+      physVol->SetName("PhysicalBreast");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeBreast );
       return breastTissue;
     }
   else if ( density[copyNo] > 1.004 && density[copyNo] <= 1.043 )
     {
-      physVol->SetName("Physical_Phantom");
+      physVol->SetName("PhysicalPhantom");
       physVol->GetLogicalVolume()->SetVisAttributes( attributePhantom );
       return phantomTissue;
     }
   else if ( density[copyNo] > 1.043 && density[copyNo] <= 1.109 )
     {
-      physVol->SetName("Physical_Muscle");
+      physVol->SetName("PhysicalMuscle");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeMuscle );
       return muscleTissue;
     }
   else if ( density[copyNo] > 1.109 && density[copyNo] <= 1.113 )
     {
-      physVol->SetName("Physical_Liver");
+      physVol->SetName("PhysicalLiver");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeLiver );
       return liverTissue;
     }
   else if ( density[copyNo] > 1.113 && density[copyNo] <= 1.217 )
     {
-      physVol->SetName("Physical_TrabecularBone");
+      physVol->SetName("PhysicalTrabecularBone");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeTrabecularBone );
       return trabecularBoneTissue;
     }
   else if ( density[copyNo] > 1.496 && density[copyNo] <= 1.654 )
     {
-      physVol->SetName("Physical_DenseBone");
+      physVol->SetName("PhysicalDenseBone");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeDenseBone );
       return denseBoneTissue;
     }

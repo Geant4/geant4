@@ -121,7 +121,7 @@ void DicomGeometry::InitialisationOfMaterials()
   G4int numberofElements;
 
   // Trabecular Bone 
-  trabecularBone = new G4Material( "Skeleton_Spongiosa", 
+  trabecularBone = new G4Material( "SkeletonSpongiosa", 
 				   density = 1159*kg/m3, 
 				   numberofElements = 12 );
   trabecularBone->AddElement(elH,0.085);
@@ -138,7 +138,7 @@ void DicomGeometry::InitialisationOfMaterials()
   trabecularBone->AddElement(elFe,0.001);
   
   // dense Bone
-  denseBone = new G4Material( "Skeleton_ribs", 
+  denseBone = new G4Material( "SkeletonRibs", 
                               density = 1575*kg/m3, 
                               numberofElements = 11 );
   denseBone->AddElement(elH,0.056);
@@ -203,7 +203,7 @@ void DicomGeometry::InitialisationOfMaterials()
   breast->AddElement(elCl,0.001); 
 
   // Adipose tissue
-  adiposeTissue = new G4Material( "adipose_tissue", 
+  adiposeTissue = new G4Material( "adiposeTissue", 
                                   density = 967*kg/m3, 
                                   numberofElements = 7);
   adiposeTissue->AddElement(elH,0.114);
@@ -214,7 +214,7 @@ void DicomGeometry::InitialisationOfMaterials()
   adiposeTissue->AddElement(elS,0.001);
   adiposeTissue->AddElement(elCl,0.001);
 
-  lungexhale = new G4Material( "Lung_Exhale", 
+  lungexhale = new G4Material( "lungExhale", 
                                density = 508*kg/m3, 
                                numberofElements = 9 );
   lungexhale->AddElement(elH,0.103);
@@ -228,7 +228,7 @@ void DicomGeometry::InitialisationOfMaterials()
   lungexhale->AddElement(elK,0.003);
 
   //  LungINhale
-  lunginhale = new G4Material( "Lung_Inhale", 
+  lunginhale = new G4Material( "lungInhale", 
                                density = 217*kg/m3, 
                                numberofElements = 9);
   lunginhale->AddElement(elH,0.103);
