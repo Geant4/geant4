@@ -133,14 +133,11 @@
       G4LorentzVector tmp = aNew->Get4Momentum();
       if(swapped)
       {
-        tmp*=toBreit;
+        tmp*=toBreit.inverse();
       }    
-      tmp *= toLab.inverse();
+      tmp *= toLab;
       aNew->Set4Momentum(tmp);
       theParticleChange.AddSecondary(aNew);
     }
     return &theResult;
   }
-
-
-
