@@ -3,7 +3,7 @@
 
 #include "g4std/map"
 #include "globals.hh"
-#include <iostream>
+#include "g4std/iostream"
 #include "G4PTouchableKey.hh"
 
 class G4Sigma;

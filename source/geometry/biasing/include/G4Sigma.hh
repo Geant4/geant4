@@ -1,7 +1,7 @@
 #ifndef G4Sigma_hh
 #define G4Sigma_hh 1
 #include "globals.hh"
-#include <iostream>
+#include "g4std/iostream"
 
 
 class G4Sigma { 

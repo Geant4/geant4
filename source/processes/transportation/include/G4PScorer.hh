@@ -4,7 +4,7 @@
 #include "G4VPScorer.hh"
 #include "G4PMapPtkTallys.hh"
 
-#include <iostream>
+#include "g4std/iostream"
 
 class G4Step;
 class G4PStep;
