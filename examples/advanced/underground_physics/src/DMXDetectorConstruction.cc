@@ -211,7 +211,6 @@ void DMXDetectorConstruction::DefineMaterials() {
   metalPb->AddElement(Pb, 1);
 
 
-  /*
   // Americium:
   G4Isotope* Am241 = new G4Isotope
     (name="Americium241", iz= 95, in=241, a=241.0*g/mole);
@@ -221,18 +220,6 @@ void DMXDetectorConstruction::DefineMaterials() {
   G4Material* sourceAm = new G4Material
     (name="AmericiumSource", density=13.61*g/cm3, ncomponents=1);
   sourceAm->AddElement(Am, 1);
-  */
-
-  // using Uranium because Americium not yet defined for RDM
-  G4Isotope* U235 = new G4Isotope
-    (name="Uranium235", iz= 92, in=235, a=235.0*g/mole);
-  G4Element* U = new G4Element
-    (name="Uranium", "U", ncomponents=1);
-  U->AddIsotope(U235, abundance=1);
-  G4Material* sourceAm = new G4Material
-    (name="UraniumSource", density=13.61*g/cm3, ncomponents=1);
-  sourceAm->AddElement(U, 1);
-
 
   // air
   G4Element* N = new G4Element
