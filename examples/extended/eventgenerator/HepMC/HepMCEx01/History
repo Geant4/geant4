@@ -1,12 +1,12 @@
-$Id: History,v 1.1 2002-04-29 20:43:19 asaim Exp $
+$Id: History,v 1.2 2002-05-28 14:05:17 murakami Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    Example N04 History file
-                    ------------------------
+                    Example HepMCEx01 History file
+                    ------------------------------
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
 track of all tags.
@@ -15,9 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May. 28, 2002  K.Murakami
+- rename classes and filenames.
+
 Apr. 15, 2002  K.Murakami
-- Add HepMC interface
-- Resize the world volume
+- Creared.
+- Replace N04PrimaryGeneatorAction with HepMC-interface version.
+- Resize the world volume.
+
+                    Example N04 History file
+                    ------------------------
 
 December 18, 2001  Gabriele Cosmo (exampleN04-V04-00-00)
 - ExN04PhysicsList.cc: added call to DumpCutValuesTable().

@@ -1,22 +1,24 @@
-$Id: README,v 1.1 2002-04-29 20:43:19 asaim Exp $
+$Id: README,v 1.2 2002-05-28 14:05:17 murakami Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                            ExampleN04
-                            ----------
+                            HepMCEx01
+                            ---------
 
- ExampleN04 has a simplified collider detector geometry. This example
-demonstrates the following features.
+ HepMCEx01 is based on ExampleN04, which has a simplified collider detector 
+geometry. Only part of the primary generator action is replaced with new one. 
+This example demonstrates the following features.
 
 1. HepMC interface
 
- ExN04PrimaryGeneratorAction has G4HepMCInterface as the generator.
+ ExN04PrimaryGeneratorAction has HepMCG4Interface as the generator.
 There are two types of generators provided as samples. One generator reads 
-primary information from a HepMC Acii file (data/example_MyPythia.dat).
-The other one directly calls PYTHIA routines.
+primary information from a HepMC Ascii file (data/example_MyPythia.dat).
+The other one generates primaries directly invoking PYTHIA routines 
+in every event.
 
 2. Readout geometry
 
@@ -25,7 +27,7 @@ geometry, tracker made of cylindrical tubes, calorimeter made of
 cylindrical tubes, and muon trackers made of planes.
  Cylindrical calorimeter is made of tubes of lead and scintirator
 without cut in phi nor z direction. Energy deposition in scintirator
-is accumurated by ExN04CalorimeterSD sensitive detector, which has
+is accumulated by ExN04CalorimeterSD sensitive detector, which has
 a readout geometry to find the phi-z cell.
 
 3. Full set of "ordinary" physics processes
