@@ -74,7 +74,7 @@ public:
   G4eBremsstrahlungSTD(const G4String& name = "eBrem");
 
   ~G4eBremsstrahlungSTD();
- 
+
   G4bool IsApplicable(const G4ParticleDefinition& p) 
     {return (&p == G4Electron::Electron() || &p == G4Positron::Positron());};
 

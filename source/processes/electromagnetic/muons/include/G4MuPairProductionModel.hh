@@ -102,6 +102,7 @@ public:
 
   virtual G4double MaxSecondaryEnergy(
 				const G4DynamicParticle* dynParticle);
+
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,

@@ -181,6 +181,8 @@ private:
   G4bool integralActive;
   G4bool all_tables_are_stored;
   G4bool buildPreciseRange;
+  G4bool minEnergyActive;
+  G4bool maxEnergyActive;
 
   G4double minSubRange;
   G4double maxRangeVariation;

@@ -74,7 +74,12 @@ G4eIonisationSTD::G4eIonisationSTD(const G4String& name)
     subCutoff(false),
     isElectron(true),
     isInitialised(false)
-{}
+{
+  SetDEDXBinning(120);
+  SetLambdaBinning(120);
+  SetMinKinEnergy(0.1*keV);
+  SetMaxKinEnergy(100.0*TeV);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -86,14 +91,9 @@ G4eIonisationSTD::~G4eIonisationSTD()
 void G4eIonisationSTD::InitialiseProcess()
 {
   SetSecondaryParticle(theElectron);
-  DefineIntegral(integrl);
-  SetDEDXBinning(120);
-  SetLambdaBinning(120);
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*TeV);
 
-  if(integrl) flucModel = new G4BohrFluctuations();
-  else        flucModel = new G4UniversalFluctuation();
+  if(IsIntegral()) flucModel = new G4BohrFluctuations();
+  else             flucModel = new G4UniversalFluctuation();
 
   G4VEmModel* em = new G4MollerBhabhaModel();
   em->SetLowEnergyLimit(0.1*keV);
@@ -127,14 +127,6 @@ void G4eIonisationSTD::PrintInfoDefinition()
 void G4eIonisationSTD::SetSubCutoff(G4bool val)
 {
   subCutoff = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4eIonisationSTD::SetIntegral(G4bool val)
-{
-  integrl = val;
-  DefineIntegral(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

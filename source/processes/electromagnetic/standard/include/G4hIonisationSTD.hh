@@ -100,8 +100,6 @@ public:
 
   void SetSubCutoff(G4bool val);
 
-  void SetIntegral(G4bool val); 
-
   void PrintInfoDefinition();
   // Print out of the class parameters
 
@@ -128,7 +126,6 @@ private:
 
   G4bool                      subCutoff;
   G4bool                      isInitialised;
-  G4bool                      integrl;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -112,6 +112,8 @@ G4LossTableManager::G4LossTableManager()
   integral = true;
   integralActive = false;
   buildPreciseRange = false;
+  minEnergyActive = false;
+  maxEnergyActive = false;
   verbose = 0;
 }
 
@@ -152,6 +154,8 @@ void G4LossTableManager::Register(G4VEnergyLossSTD* p)
   tables_are_built.push_back(false);
   all_tables_are_built = false;
   if(integralActive) p->SetIntegral(integral);
+  if(minEnergyActive) p->SetMinKinEnergy(minKinEnergy);
+  if(maxEnergyActive) p->SetMaxKinEnergy(maxKinEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -589,6 +593,7 @@ void G4LossTableManager::SetRandomStep(G4bool val)
 
 void G4LossTableManager::SetMinEnergy(G4double val)
 {
+  minEnergyActive = true;
   minKinEnergy = val;
   for(G4int i=0; i<n_loss; i++) {
     loss_vector[i]->SetMinKinEnergy(val);
@@ -599,6 +604,7 @@ void G4LossTableManager::SetMinEnergy(G4double val)
 
 void G4LossTableManager::SetMaxEnergy(G4double val)
 {
+  maxEnergyActive = true;
   maxKinEnergy = val;
   for(G4int i=0; i<n_loss; i++) {
     loss_vector[i]->SetMaxKinEnergy(val);

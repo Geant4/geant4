@@ -133,16 +133,14 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   integral(true),
   meanFreePath(true)
 {
+  // default dRoverRange and finalRange
+  SetStepLimits(0.2, 1.0*mm);
+  //SetVerboseLevel(0);
+
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);
   scoffProcessors.clear();
   scoffRegions.clear();
-
-  // default dRoverRange and finalRange
-  SetIntegral(integral);
-  SetStepLimits(0.2, 1.0*mm);
-
-  //  SetVerboseLevel(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -813,7 +811,7 @@ void G4VEnergyLossSTD::PrintInfoDefinition()
     G4cout << "Tables are built for " << particle->GetParticleName()
            << " IntegralFlag= " <<  integral
            << G4endl;
- 
+
     if(2 < verboseLevel) {
       G4cout << "DEDXTable address= " << theDEDXTable << G4endl;
       if(theDEDXTable) G4cout << (*theDEDXTable) << G4endl;
@@ -1237,13 +1235,6 @@ void G4VEnergyLossSTD::SetRangeCoeff(G4double val)
     if (val < 1.0) rangeCoeff = val;
     else           rangeCoeff = 1.0;
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEnergyLossSTD::SetIntegral(G4bool val) 
-{
-  integral = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

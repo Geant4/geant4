@@ -79,7 +79,12 @@ G4MuIonisationSTD::G4MuIonisationSTD(const G4String& name)
     theBaseParticle(0),
     subCutoff(false),
     isInitialised(false)
-{}
+{
+  SetDEDXBinning(120);
+  SetLambdaBinning(120);
+  SetMinKinEnergy(0.1*keV);
+  SetMaxKinEnergy(100.0*TeV);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -91,15 +96,9 @@ G4MuIonisationSTD::~G4MuIonisationSTD()
 void G4MuIonisationSTD::InitialiseProcess()
 {
   SetSecondaryParticle(G4Electron::Electron());
-  DefineIntegral(integrl);
 
-  SetDEDXBinning(120);
-  SetLambdaBinning(120);
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*TeV);
-
-  if(integrl) flucModel = new G4BohrFluctuations();
-  else        flucModel = new G4UniversalFluctuation();
+  if(IsIntegral()) flucModel = new G4BohrFluctuations();
+  else             flucModel = new G4UniversalFluctuation();
 
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
@@ -149,14 +148,6 @@ void G4MuIonisationSTD::SetSubCutoff(G4bool val)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4MuIonisationSTD::SetIntegral(G4bool val)
-{
-  integrl = val;
-  DefineIntegral(val);
-}
-
-///....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 
