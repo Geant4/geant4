@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-06-14 14:25:39 johna Exp $
+$Id: History,v 1.2 1999-06-14 14:30:15 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+14th June 1999  John Allison (em-01-00-05b)
+- Muon corrections in G4MultipleScattering.cc, G4MuBremsstrahlung.cc
+  and G4MuPairProduction.cc by Laszlo Urban, Pedro Arce.
+  (Also in rocesses/photoleplon_hadron/src/G4MuNuclearInteraction.cc.)
 
 5th June 1999  John Allison
 - standard/GNUmakefile: Force non-optimised compliation of some
