@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorViewer.cc,v 1.8 2001-11-14 14:56:12 barrand Exp $
+// $Id: G4OpenInventorViewer.cc,v 1.9 2002-11-27 12:46:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -105,7 +105,7 @@ void G4OpenInventorViewer::KernelVisitDecision () {
  
 G4bool G4OpenInventorViewer::CompareForKernelVisit
 (G4ViewParameters& lastVP) {
-  G4bool need = false;
+
   if (
       (fLastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
       (fLastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
@@ -114,25 +114,25 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit
       (fLastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
       (fLastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
       (fLastVP.IsSection ()          != fVP.IsSection ())          ||
-
+      // No need to visit kernel if section plane changes.
       (fLastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
       (fLastVP.GetCutawayPlanes ().size () !=
                                  fVP.GetCutawayPlanes ().size ()) ||
-
+      // No need to visit kernel if cutaway planes change.
       (fLastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (fLastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())
       ) {
-      need = true;;
+      return true;;
   }
-  if (!need && fLastVP.IsDensityCulling () &&
+  if (fLastVP.IsDensityCulling () &&
       (fLastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
-    need = true;
+    return true;
 
-  if (!need && fLastVP.IsExplode () &&
+  if (fLastVP.IsExplode () &&
       (fLastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
-    need = true;
+    return true;
       
-  return need;
+  return false;
 }
 
 G4OpenInventorViewer::G4OpenInventorViewer

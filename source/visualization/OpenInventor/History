@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2001-08-14 18:38:30 johna Exp $
+$Id: History,v 1.2 2002-11-27 12:46:07 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+27th November 2002  John Allison  (vis-V04-01-08)
+- Improved algorithm of CompareForKernelVisit.
 
 14th August 2001  John Allison  (vis-V03-02-11)
 - Improved KernelVisitDecision - but see note therein.
