@@ -14,7 +14,7 @@
 /calor/setAbsThick 10. cm
 #
 /calor/setGapMat Air
-/calor/setGapThick  0. cm
+/calor/setGapThick  0.1 cm
 #
 /calor/setSizeYZ   10. cm
 #
@@ -22,6 +22,5 @@
 #
 /calor/setField 5 tesla
 #
-/vis/scene/notifyHandlers
-/vis/viewer/update
-
+/vis/drawVolume
+/vis/scene/add/trajectories
