@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIclusterModel.cc,v 1.5 2001-09-18 09:02:03 gcosmo Exp $
+// $Id: G4PAIclusterModel.cc,v 1.6 2001-09-18 09:30:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -151,8 +151,8 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
       clusterPosition = globalStartPosition  + stepSum*globalDirection ;    
       energyTransfer  = fPAIonisation->GetRandomEnergyTransfer(scaledTkin) ;
 
-      fClusterPositionVector.insert(clusterPosition) ;      
-      fClusterEnergyVector.insert(energyTransfer) ;
+      fClusterPositionVector.push_back(clusterPosition) ;      
+      fClusterEnergyVector.push_back(energyTransfer) ;
 
       step = RandExponential::shoot(lambda) ;
       // if (step < 0.0) step = 0.0 ;

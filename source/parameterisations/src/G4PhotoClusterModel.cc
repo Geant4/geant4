@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoClusterModel.cc,v 1.2 2001-07-11 10:01:31 gunter Exp $
+// $Id: G4PhotoClusterModel.cc,v 1.3 2001-09-18 09:30:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -137,8 +137,8 @@ void G4PhotoClusterModel::DoIt( const G4FastTrack& fastTrack ,
     //                  stepSum*direction ;  
   
     clusterPosition = globalStartPosition  + step*globalDirection ;   
-    fClusterPositionVector.insert(clusterPosition) ;      
-    fClusterEnergyVector.insert(energy) ;
+    fClusterPositionVector.push_back(clusterPosition) ;      
+    fClusterEnergyVector.push_back(energy) ;
 
     fastStep.KillPrimaryTrack();
     fastStep.SetPrimaryTrackPathLength(step);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VClusterModel.hh,v 1.2 2001-07-11 10:01:30 gunter Exp $
+// $Id: G4VClusterModel.hh,v 1.3 2001-09-18 09:30:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
-#include <g4rw/tvordvec.h>
+#include "g4std/vector"
 
 
 class G4VClusterModel : public G4VFastSimulationModel
@@ -82,8 +82,8 @@ protected:
   G4Navigator*    fNavigator ;
   G4bool          fNavigatorSetup ;
 
-  G4RWTValOrderedVector<G4ThreeVector> fClusterPositionVector ; 
-  G4RWTValOrderedVector<G4double>      fClusterEnergyVector ; 
+  G4std::vector<G4ThreeVector> fClusterPositionVector ; 
+  G4std::vector<G4double>      fClusterEnergyVector ; 
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VClusterModel.cc,v 1.3 2001-09-18 09:02:03 gcosmo Exp $
+// $Id: G4VClusterModel.cc,v 1.4 2001-09-18 09:30:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -74,7 +74,7 @@ G4VClusterModel::~G4VClusterModel()
 
 void G4VClusterModel::BuildDetectorResponse()
 {
-  for( size_t i = 0 ; i < fClusterEnergyVector.entries() ; i++ )
+  for( size_t i = 0 ; i < fClusterEnergyVector.size() ; i++ )
   {
     AssignClusterHit(fClusterPositionVector[i],fClusterEnergyVector[i]) ;
   }
