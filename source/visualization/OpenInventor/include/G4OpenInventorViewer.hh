@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorViewer.hh,v 1.9 2001-08-14 18:38:34 johna Exp $
+// $Id: G4OpenInventorViewer.hh,v 1.10 2001-11-14 14:56:11 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 
 class SoXtComponent;
 class SoSelection;
-class SoWindow;
+class G4SoWindow;
 class G4OpenInventorSceneHandler;
 class G4VInteractorManager;
 
@@ -64,7 +64,7 @@ private:
   G4OpenInventorSceneHandler& fG4OpenInventorSceneHandler;
   G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
   Widget fShell;
-  SoWindow* fWindow;
+  G4SoWindow* fWindow;
   SoXtComponent* fViewer;	  // The Inventor Viewer
   SoSelection* fSelection;
   G4VInteractorManager* fInteractorManager;

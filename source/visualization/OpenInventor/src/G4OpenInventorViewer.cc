@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorViewer.cc,v 1.7 2001-08-14 18:38:35 johna Exp $
+// $Id: G4OpenInventorViewer.cc,v 1.8 2001-11-14 14:56:12 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -36,7 +36,7 @@
 #include <Inventor/nodes/SoSelection.h>
 #include <Inventor/nodes/SoSelection.h>
 
-#include <HEPVis/viewers/SoWindow.h>
+#include "G4SoWindow.hh"
 
 #ifdef WIN32
 #include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
@@ -172,7 +172,7 @@ G4OpenInventorViewer::G4OpenInventorViewer
 
 #define SIZE 400
   if(parent==NULL) {  //Create a shell window :
-    fWindow = new SoWindow(wname);
+    fWindow = new G4SoWindow(wname);
     fWindow->setTitle(wname);
     fWindow->setSize(SbVec2s(SIZE,SIZE));
     fShell = parent = fWindow->getWidget();
