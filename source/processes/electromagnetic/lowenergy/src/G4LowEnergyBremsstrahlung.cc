@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.63 2003-06-16 17:00:10 gunter Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.64 2003-07-21 13:53:19 silvarod Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -64,6 +64,8 @@
 #include "G4BremsstrahlungCrossSectionHandler.hh"
 #include "G4VBremAngularDistribution.hh"
 #include "G4ModifiedTsai.hh"
+#include "G4Generator2BS.hh"
+#include "G4Generator2BN.hh"
 #include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4VEMDataSet.hh"
@@ -305,13 +307,8 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& track,
 
   G4double tGamma = energySpectrum->SampleEnergy(Z, tCut, kineticEnergy, kineticEnergy);
   G4double totalEnergy = kineticEnergy + electron_mass_c2;
-  G4double initial_momentum = sqrt((totalEnergy + electron_mass_c2)*kineticEnergy);
-
   G4double finalEnergy = kineticEnergy - tGamma; // electron/positron final energy  
-  G4double totalFinalEnergy = finalEnergy +  electron_mass_c2;
-  G4double final_momentum =  sqrt((totalFinalEnergy + electron_mass_c2)*finalEnergy);
-
-  G4double theta = angularDistribution->PolarAngle(kineticEnergy,initial_momentum,finalEnergy,final_momentum,Z);
+  G4double theta = angularDistribution->PolarAngle(kineticEnergy,finalEnergy,Z);
 
   G4double phi   = twopi * G4UniformRand();
   G4double dirZ  = cos(theta);

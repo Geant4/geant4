@@ -22,7 +22,7 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.33 2003-05-20 23:33:25 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.34 2003-07-21 13:53:19 silvarod Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti

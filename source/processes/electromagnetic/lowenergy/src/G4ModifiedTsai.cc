@@ -63,10 +63,8 @@ G4ModifiedTsai::~G4ModifiedTsai()
 //
 
 G4double G4ModifiedTsai::PolarAngle(const G4double initial_energy,
-				    const G4double, // initial_momentum
 				    const G4double, // final_energy
-				    const G4double, // final_momentum
-				    const G4int ) const // Z
+				    const G4int ) // Z
 {
 
   // Sample gamma angle (Z - axis along the parent particle).
