@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2002-12-03 14:44:32 gcosmo Exp $
+$Id: History,v 1.54 2002-12-03 17:04:22 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 03 2002, M.Asai (event-V04-01-09)
+- Fix memory leak caused by deleting stacked tracks.
 
 Dec 03 2002, G.Cosmo (event-V04-01-08)
 - Protect code defining interface to HepMC from compilation on Windows systems.

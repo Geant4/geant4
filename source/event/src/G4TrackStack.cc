@@ -21,21 +21,35 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackStack.cc,v 1.4 2001-07-13 15:01:55 gcosmo Exp $
+// $Id: G4TrackStack.cc,v 1.5 2002-12-03 17:04:22 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-//  Last Modification : 09/Dec/96 M.Asai
 //
 
 #include "G4TrackStack.hh"
+#include "G4VTrajectory.hh"
 
 G4TrackStack::G4TrackStack()
 :n_stackedTrack(0),firstStackedTrack(0),lastStackedTrack(0)
 {;}
 
 G4TrackStack::~G4TrackStack()
-{;}
+{
+  if( n_stackedTrack != 0 )
+  {
+    G4StackedTrack * aStackedTrack = firstStackedTrack;
+    G4StackedTrack * nextStackedTrack;
+
+    // delete tracks in the stack
+    while( aStackedTrack != 0 )
+    {
+      nextStackedTrack = aStackedTrack->GetNext();
+      delete aStackedTrack->GetTrack();
+      delete aStackedTrack->GetTrajectory();
+      delete aStackedTrack;
+      aStackedTrack = nextStackedTrack;
+    }
+  }
+}
 
 const G4TrackStack & G4TrackStack::operator=(const G4TrackStack &right) 
 {
@@ -140,6 +154,7 @@ void G4TrackStack::clear()
   {
     nextStackedTrack = aStackedTrack->GetNext();
     delete aStackedTrack->GetTrack();
+    delete aStackedTrack->GetTrajectory();
     delete aStackedTrack;
     aStackedTrack = nextStackedTrack;
   }
