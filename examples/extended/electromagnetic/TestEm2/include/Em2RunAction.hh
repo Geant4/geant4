@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.hh,v 1.11 2002-05-31 16:06:54 maire Exp $
+// $Id: Em2RunAction.hh,v 1.12 2002-12-11 17:12:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,8 +54,10 @@ class Em2PrimaryGeneratorAction;
 class G4Run;
 
 #ifndef G4NOHIST
+namespace AIDA {
  class ITree;
  class IHistogram1D;
+} 
 #endif
 
 class Em2RunAction : public G4UserRunAction
@@ -111,10 +113,9 @@ class Em2RunAction : public G4UserRunAction
     G4double sum2NeutrTrLength;
                   
 #ifndef G4NOHIST
-    ITree* tree;               // the tree should only be deleted at the end
-    IHistogram1D* histo[12];    // (after writing the histos to file)        
-#endif
-    
+    AIDA::ITree* tree;             // the tree should only be deleted at the end
+    AIDA::IHistogram1D* histo[12];   // (after writing the histos to file)
+#endif    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

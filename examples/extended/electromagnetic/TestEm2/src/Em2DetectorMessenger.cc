@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorMessenger.cc,v 1.8 2002-12-06 16:51:42 gcosmo Exp $
+// $Id: Em2DetectorMessenger.cc,v 1.9 2002-12-11 17:12:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,8 +43,8 @@
 Em2DetectorMessenger::Em2DetectorMessenger(Em2DetectorConstruction * Det)
 :Em2Detector(Det)
 { 
-  Em2detDir = new G4UIdirectory("/testem/");
-  Em2detDir->SetGuidance("Em2 detector control.");
+  testemDir = new G4UIdirectory("/testem/");
+  testemDir->SetGuidance("Em2 detector control.");
       
   MaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
   MaterCmd->SetGuidance("Select Material.");
@@ -88,7 +88,7 @@ Em2DetectorMessenger::~Em2DetectorMessenger()
   delete RBinCmd;
   delete FieldCmd;  
   delete UpdateCmd;
-  delete Em2detDir;
+  delete testemDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

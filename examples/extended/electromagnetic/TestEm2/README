@@ -1,4 +1,4 @@
-$Id: README,v 1.8 2002-10-31 13:58:28 maire Exp $
+$Id: README,v 1.9 2002-12-11 17:12:20 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -117,23 +117,18 @@ $Id: README,v 1.8 2002-10-31 13:58:28 maire Exp $
  Note that histograms are disabled via the flag G4NOHIST in the GNUmakefile.
  
 
- 8- Using the Anaphe implementation of the AIDA 2.2 histograms:
+ 8- Using the Anaphe implementation of the AIDA 3.0 histograms:
  --------------------------------------------------------------
 
- In order to use the Anaphe implementation of the AIDA 2.2 interfaces, 
- prepare some environment variables by source-ing one of the following 
- startup scripts (depending on your compiler version):
+ In order to use the Anaphe implementation of the AIDA 3.0 interfaces, 
+ the 'aida-config' command (which is used in the GNUmakefile) is 
+ available at:
+ /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/aida-config 
 
- # gcc-2.95.2
- source $LHCXXTOP/share/LHCXX/4.0.1/install/sharedstart.sh or .csh
+ In order to run the executable, you need to source the following
+ script (once):
+ $HOME/bin/setupAnaphe.csh  (or $HOME/bin/setupAnaphe)
 
- # egcs_1.1.2 (aka gcc 2.91.66)
- source $LHCXXTOP/share/LHCXX/4.0.1-sec/install/sharedstart.sh or .csh
-
- At CERN, $LHCXXTOP is /afs/cern.ch/sw/lhcxx, you may want to use a
- more recent release, check http:/cern.ch/anaphe for more information.
-
- After this, you will have access to the 'aida-config' command which
- is used in the GNUmakefile.
-
- 
+ At cern 'setupAnaphe' is available at: 
+ /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe.csh
+ (or /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe)

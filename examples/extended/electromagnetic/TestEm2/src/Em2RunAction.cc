@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.cc,v 1.17 2002-12-05 16:50:25 gcosmo Exp $
+// $Id: Em2RunAction.cc,v 1.18 2002-12-11 17:12:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,15 +49,7 @@
 #include "Randomize.hh"
 
 #ifndef G4NOHIST
- #include "AIDA/IAnalysisFactory.h"
- #include "AIDA/ITreeFactory.h"
- #include "AIDA/ITree.h"
- #include "AIDA/IHistogramFactory.h"
- #include "AIDA/IHistogram1D.h"
- #include "AIDA/IAxis.h"
- #include "AIDA/IAnnotation.h"
- #include "AIDA/ITupleFactory.h"
- #include "AIDA/ITuple.h"
+ #include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,56 +90,58 @@ void Em2RunAction::bookHisto()
 {
 #ifndef G4NOHIST
  // Creating the analysis factory
- IAnalysisFactory* af = AIDA_createAnalysisFactory();
+ AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
  // Creating the tree factory
- ITreeFactory* tf = af->createTreeFactory();
+ AIDA::ITreeFactory* tf = af->createTreeFactory();
  
  // Creating a tree mapped to an hbook file.
- tree = tf->create("testem2.paw", false, false, "hbook");
+ G4bool readOnly  = false;
+ G4bool createNew = true;
+ tree = tf->create("testem2.paw", "hbook", readOnly, createNew);
 
  // Creating a histogram factory, whose histograms will be handled by the tree
- IHistogramFactory* hf = af->createHistogramFactory(*tree);  
+ AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);  
   G4double Ekin = Em2Kin->GetParticleGun()->GetParticleEnergy();
   G4double dLradl = Em2Det->GetdLradl();
   G4double dRradl = Em2Det->GetdRradl();
   
-  histo[0] = hf->create1D( "1","total energy deposit (percent of E inc)",
+  histo[0] = hf->createHistogram1D( "1","total energy deposit(percent of Einc)",
                                     100,0.,100.);
                                     
-  histo[1] = hf->create1D( "2","total charged tracklength (radl)",
+  histo[1] = hf->createHistogram1D( "2","total charged tracklength (radl)",
                                     100,0.,100.*Ekin/GeV);
                                     
-  histo[2] = hf->create1D( "3","total neutral tracklength (radl)",
+  histo[2] = hf->createHistogram1D( "3","total neutral tracklength (radl)",
                                     100,0.,1000.*Ekin/GeV);
                                     
-  histo[3] = hf->create1D( "4","longit energy profile (% of E inc)",
+  histo[3] = hf->createHistogram1D( "4","longit energy profile (% of E inc)",
                                     nLbin,0.,nLbin*dLradl);
                                     
   G4double Zmin=0.5*dLradl, Zmax=Zmin+nLbin*dLradl;
-  histo[4] = hf->create1D( "5","cumul longit energy dep (% of E inc)",
+  histo[4] = hf->createHistogram1D( "5","cumul longit energy dep (% of E inc)",
                                     nLbin,Zmin,Zmax);
                                     
-  histo[5] = hf->create1D( "6","rms on cumul longit Edep (% of E inc)",
+  histo[5] = hf->createHistogram1D( "6","rms on cumul longit Edep (% of E inc)",
                                     nLbin,Zmin,Zmax);
                                     
-  histo[6] = hf->create1D( "7","nb of gamma per plane",
+  histo[6] = hf->createHistogram1D( "7","nb of gamma per plane",
                                     nLbin,Zmin,Zmax);
                                     
-  histo[7] = hf->create1D( "8","nb of positron per plane",
+  histo[7] = hf->createHistogram1D( "8","nb of positron per plane",
                                     nLbin,Zmin,Zmax);
                                     
-  histo[8] = hf->create1D( "9","nb of electron per plane",
+  histo[8] = hf->createHistogram1D( "9","nb of electron per plane",
                                     nLbin,Zmin,Zmax);
                                     
-  histo[9] = hf->create1D("10","radial energy profile (% of E inc)",
+  histo[9] = hf->createHistogram1D("10","radial energy profile (% of E inc)",
                                     nRbin,0.,nRbin*dRradl);
                                     
   G4double Rmin=0.5*dRradl, Rmax=Rmin+nRbin*dRradl;
-  histo[10]= hf->create1D("11","cumul radial energy dep (% of E inc)",
+  histo[10]= hf->createHistogram1D("11","cumul radial energy dep (% of E inc)",
                                     nRbin,Rmin,Rmax);
                                     
-  histo[11]= hf->create1D("12","rms on cumul radial Edep (% of E inc)",
+  histo[11]= hf->createHistogram1D("12","rms on cumul radial Edep (% of E inc)",
                                     nRbin,Rmin,Rmax);
 				    
   delete hf;
