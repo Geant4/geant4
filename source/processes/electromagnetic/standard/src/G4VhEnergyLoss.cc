@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.cc,v 1.12 2000-08-18 17:37:30 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.13 2000-10-30 07:01:09 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -74,10 +74,6 @@ const G4AntiProton* G4VhEnergyLoss::theAntiProton=G4AntiProton::AntiProton() ;
 
 G4double G4VhEnergyLoss::ptableElectronCutInRange = 0.0*mm ;
 G4double G4VhEnergyLoss::pbartableElectronCutInRange = 0.0*mm ;
-
-G4double         G4VhEnergyLoss::MinDeltaCutInRange = 0.1*mm ;
-G4double*        G4VhEnergyLoss::MinDeltaEnergy     = NULL   ;
-G4bool		 G4VhEnergyLoss::setMinDeltaCutInRange = false ;
 
 G4double         G4VhEnergyLoss::Charge ;   
 
@@ -319,7 +315,7 @@ void G4VhEnergyLoss::BuildDEDXTable(
    if(!setMinDeltaCutInRange)
      MinDeltaCutInRange = G4Electron::Electron()->GetCuts()/10.;
 
-  if(aParticleType.GetParticleName()=="proton")
+  if((subSecFlag) && (aParticleType.GetParticleName()=="proton"))
   {
     G4cout << G4endl;
     G4cout.precision(5) ;
@@ -332,9 +328,13 @@ void G4VhEnergyLoss::BuildDEDXTable(
 
     if(MinDeltaEnergy) delete MinDeltaEnergy ;
     MinDeltaEnergy = new G4double [numOfMaterials] ;
+    if(LowerLimitForced) delete LowerLimitForced ;
+     LowerLimitForced = new G4bool [numOfMaterials] ;
     G4double Tlowerlimit = 1.*keV ;
     for(G4int mat=0; mat<numOfMaterials; mat++)
     {
+      LowerLimitForced[mat] = false ;
+
       MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
                             G4Electron::Electron(),MinDeltaCutInRange,
                                        (*theMaterialTable)(mat)) ;
@@ -343,9 +343,15 @@ void G4VhEnergyLoss::BuildDEDXTable(
       if(MinDeltaEnergy[mat]>G4Electron::Electron()->GetCutsInEnergy()[mat])
         MinDeltaEnergy[mat]=G4Electron::Electron()->GetCutsInEnergy()[mat] ;
 
-     if(aParticleType.GetParticleName()=="proton")
+     if((subSecFlag) && (aParticleType.GetParticleName()=="proton"))
+     {
        G4cout << G4std::setw(20) << (*theMaterialTable)(mat)->GetName()
-              << G4std::setw(15) << MinDeltaEnergy[mat]/keV << G4endl;
+	      << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
+	   if(LowerLimitForced[mat])
+	 	G4cout << "  lower limit forced." << G4endl;
+	   else
+	 	G4cout << G4endl ;
+     }
     }
 }
       
@@ -554,7 +560,9 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
                                              aMaterial) ;
 
         // absolute lower limit for T0
-        if(T0<MinDeltaEnergyNow) T0=MinDeltaEnergyNow ;
+       // if(T0<MinDeltaEnergyNow) T0=MinDeltaEnergyNow ;
+   	if((T0<MinDeltaEnergyNow)||(LowerLimitForced[aMaterial->GetIndex()]))
+                             T0=MinDeltaEnergyNow ;
 
         // compute nb of delta rays to be generated
         G4int N=int(fragment*(c0N/(E*T0)+c1N/T0-(c2N+c3N*T0)/Tc)* 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeEnergyLoss.hh,v 1.4 2000-06-22 13:26:03 maire Exp $
+// $Id: G4VeEnergyLoss.hh,v 1.5 2000-10-30 06:56:19 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -201,11 +201,6 @@ class G4VeEnergyLoss : public G4VEnergyLoss
     static G4PhysicsTable** RecorderOfElectronProcess;
     static G4PhysicsTable** RecorderOfPositronProcess;
     
-    static G4double MinDeltaCutInRange; // minimum cut for delta rays
-    static G4double* MinDeltaEnergy ;  
-
-    static G4bool setMinDeltaCutInRange ;
-
   private:
      
     static G4int NbinEloss;               // number of bins in table,
@@ -227,12 +222,6 @@ class G4VeEnergyLoss : public G4VEnergyLoss
 
   public: // With description
      
-    static void SetMinDeltaCutInRange(G4double value)
-                                    {MinDeltaCutInRange = value;
-                                     setMinDeltaCutInRange = true ;}
-    // sets minimal cut value for the subcutoff secondaries
-    // (i.e. the kinetic energy of these secondaries can not be
-    //  smaller than the energy corresponds to MinDeltaCutInRange).
 };
  
 #include "G4VeEnergyLoss.icc"

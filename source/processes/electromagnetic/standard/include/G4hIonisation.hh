@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.hh,v 1.9 2000-05-23 14:46:35 urban Exp $
+// $Id: G4hIonisation.hh,v 1.10 2000-10-30 06:56:19 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,6 +78,8 @@ class G4hIonisation : public G4VhEnergyLoss
                             G4double KineticEnergy,
                             G4double AtomicNumber);
 
+    G4PhysicsTable* theMeanFreePathTable;
+
   private:
 
   // hide assignment operator 
@@ -87,7 +89,7 @@ class G4hIonisation : public G4VhEnergyLoss
   private:
   //  private data members ...............................
 
-    G4PhysicsTable* theMeanFreePathTable;
+   // G4PhysicsTable* theMeanFreePathTable;
 
     // particles , cuts in kinetic energy ........
     const G4Electron* theElectron;

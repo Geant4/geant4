@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisation.hh,v 1.6 2000-04-25 14:33:05 maire Exp $
+// $Id: G4eIonisation.hh,v 1.7 2000-10-30 06:56:19 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,6 +81,8 @@ class G4eIonisation : public G4VeEnergyLoss
                             G4double AtomicNumber,
                             G4double DeltaThreshold);
                             
+    G4PhysicsTable* theMeanFreePathTable;
+
   private:
 
   // hide assignment operator 
@@ -89,7 +91,7 @@ class G4eIonisation : public G4VeEnergyLoss
 
   private:
 
-    G4PhysicsTable* theMeanFreePathTable;
+ //   G4PhysicsTable* theMeanFreePathTable;
 
     static G4double LowerBoundLambda ; // bining for lambda table
     static G4double UpperBoundLambda ;

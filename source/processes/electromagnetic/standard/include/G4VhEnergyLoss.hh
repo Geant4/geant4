@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.hh,v 1.6 2000-08-15 09:42:14 urban Exp $
+// $Id: G4VhEnergyLoss.hh,v 1.7 2000-10-30 06:56:19 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -143,10 +143,6 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     // ( default value = 1)
  
 
-    static void SetMinDeltaCutInRange(G4double value)
-                                    {MinDeltaCutInRange = value;
-                                     setMinDeltaCutInRange = true ;}
-
     static void SetLowerBoundEloss(G4double val) {LowerBoundEloss=val;};
     static void SetUpperBoundEloss(G4double val) {UpperBoundEloss=val;};
     static void SetNbinEloss(G4int nb)           {NbinEloss=nb;};
@@ -199,10 +195,6 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     // cut in range
     static G4double ptableElectronCutInRange;
     static G4double pbartableElectronCutInRange;
-
-    static G4double MinDeltaCutInRange; // minimum cut for delta rays
-    static G4double* MinDeltaEnergy ;
-    static G4bool setMinDeltaCutInRange ;
 
     static G4double Charge ;
 
