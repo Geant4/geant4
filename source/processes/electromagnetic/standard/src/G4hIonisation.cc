@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.29 2002-05-01 16:05:37 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.30 2002-06-10 15:50:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process -------------------------------
@@ -48,6 +48,7 @@
 // 08-11-01 Charge renamed zparticle; added to the dedx
 // 27-03-02 Bug fix in scaling of lambda table (V.Ivanchenko)
 // 09-04-02 Update calculation of tables for GenericIons (V.Ivanchenko)
+// 10-06-02 bug fixed for stopping hadrons, V.Ivanchenko
 //
 //------------------------------------------------------------------------------
 
@@ -577,7 +578,7 @@ G4VParticleChange* G4hIonisation::PostStepDoIt(const G4Track& trackData,
    {
      Edep = finalKineticEnergy;
      finalKineticEnergy = 0.;
-     if (!aParticle->GetDefinition()->GetProcessManager()->GetAtRestProcessVector())
+     if (!aParticle->GetDefinition()->GetProcessManager()->GetAtRestProcessVector()->size())
            aParticleChange.SetStatusChange(fStopAndKill);
      else  aParticleChange.SetStatusChange(fStopButAlive);
    }
