@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerViewer.cc,v 1.9 2001-11-12 18:22:10 johna Exp $
+// $Id: G4RayTracerViewer.cc,v 1.10 2002-04-22 14:14:38 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerViewer.hh"
@@ -76,12 +76,21 @@ void G4RayTracerViewer::ClearView() {}
 
 void G4RayTracerViewer::DrawView() {
   if (fVP.GetFieldHalfAngle() == 0.) { // Orthogonal (parallel) projection.
+    G4double fieldHalfAngle = perMillion;
+    fVP.SetFieldHalfAngle(fieldHalfAngle);
     G4cout << 
-      "G4RayTracerViewer::SetView: orthogonal projection not yet implemented."
+      "WARNING: G4RayTracerViewer::DrawView: true orthogonal projection"
+      "\n  not yet implemented.  Doing a \"long shot\", i.e., a perspective"
+      "\n  projection with a half field angle of "
+	   << fieldHalfAngle <<
+      " radians."
 	   << G4endl;
-    return;
+    SetView();  // Special graphics system - bypass ProcessView().
+    fVP.SetFieldHalfAngle(0.);
   }
-  SetView();  // Special graphics system - bypass ProcessView().
+  else {
+    SetView();  // Special graphics system - bypass ProcessView().
+  }
   G4RayTracer* theTracer = 
     (G4RayTracer*) fSceneHandler.GetGraphicsSystem();
   char fileName [100];
