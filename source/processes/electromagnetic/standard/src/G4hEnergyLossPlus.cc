@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.cc,v 1.18 2000-02-10 09:06:29 urban Exp $
+// $Id: G4hEnergyLossPlus.cc,v 1.19 2000-03-21 11:24:32 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -299,8 +299,6 @@ void G4hEnergyLossPlus::BuildDEDXTable(
 
   }
   // make the energy loss and the range table available
-  const G4double LowerBoundEloss(1.00*keV);
-  const G4double UpperBoundEloss(100.*TeV);
 
   G4EnergyLossTables::Register(&aParticleType,  
     (Charge>0)?

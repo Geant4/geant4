@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLoss.cc,v 1.13 2000-02-17 09:07:26 urban Exp $
+// $Id: G4eEnergyLoss.cc,v 1.14 2000-03-21 11:24:31 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -97,7 +97,8 @@ G4eEnergyLoss::G4eEnergyLoss(const G4String& processName)
      theDEDXTable(NULL),
      Charge(-1.),lastCharge(0.),
      MinKineticEnergy(1.*eV),
-     linLossLimit(0.02)
+     //linLossLimit(0.02)
+     linLossLimit(0.05)
 {
  //create (only once) EnergyLoss messenger 
  if(!eLossMessenger) eLossMessenger = new G4EnergyLossMessenger();
@@ -327,7 +328,8 @@ G4VParticleChange* G4eEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   else if ( E< faclow*LowerBoundEloss)  
   {
     if (Step >= fRangeNow)  finalT = 0.; 
-    else finalT = E*(1.-Step/fRangeNow) ;
+   //  else finalT = E*(1.-Step/fRangeNow) ;
+    else finalT = E*(1.-sqrt(Step/fRangeNow)) ;
   }
     
   else if (E>=UpperBoundEloss) finalT = E - Step*fdEdx;

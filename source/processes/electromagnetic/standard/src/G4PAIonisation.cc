@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.cc,v 1.5 2000-01-07 09:33:12 grichine Exp $
+// $Id: G4PAIonisation.cc,v 1.6 2000-03-21 11:24:33 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -195,7 +195,7 @@ G4PAIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
    G4double  Charge = aParticleType.GetPDGCharge() ;
 
    G4double LowEdgeEnergy , ionloss ;
-   G4double ParticleMass , RateMass ;
+   G4double  RateMass ;
    G4bool isOutRange ;
    static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
    const G4double SmallIonLoss = DBL_MIN ;
@@ -437,7 +437,7 @@ ComputeMicroscopicCrossSection( const G4ParticleDefinition& aParticleType,
                                       G4double KineticEnergy ,
                                       G4double AtomicNumber               )
 {
-    G4double TotalEnergy, ParticleMass, betasquare,
+    G4double TotalEnergy, betasquare,
              MaxKineticEnergyTransfer,
 	     TotalCrossSection, tempvar ;
     const G4double SmallCrossSection = DBL_MIN;
@@ -489,7 +489,7 @@ G4PAIonisation::PostStepDoIt( const G4Track& trackData,
 {
    const G4DynamicParticle* aParticle ;
    G4Material* aMaterial;
-   G4double KineticEnergy, TotalEnergy, ParticleMass, TotalMomentum,
+   G4double KineticEnergy, TotalEnergy, TotalMomentum,
            betasquare, MaxKineticEnergyTransfer, DeltaKineticEnergy, 
 	   DeltaTotalMomentum, costheta, sintheta, phi, dirx, diry, 
 	   dirz, finalKineticEnergy, finalPx, finalPy, finalPz, x, xc, 

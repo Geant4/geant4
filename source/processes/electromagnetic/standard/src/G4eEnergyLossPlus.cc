@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLossPlus.cc,v 1.20 2000-03-07 17:33:22 maire Exp $
+// $Id: G4eEnergyLossPlus.cc,v 1.21 2000-03-21 11:24:32 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -87,7 +87,7 @@ G4eEnergyLossPlus::G4eEnergyLossPlus(const G4String& processName)
      theDEDXTable(NULL),
      Charge(-1.),lastCharge(0.),
      MinKineticEnergy(1.*eV),
-     linLossLimit(0.02),
+     linLossLimit(0.05),
      c1N(2.86e-23*MeV*mm*mm),
      c2N(c1N*MeV/10.),
      Ndeltamax(100)
@@ -280,8 +280,6 @@ void G4eEnergyLossPlus::BuildDEDXTable(
      }
 
      // make the energy loss and the range table available
-     const G4double LowerBoundEloss (1.00*keV);
-     const G4double UpperBoundEloss(100.*TeV);
      G4EnergyLossTables::Register(&aParticleType,  
        (&aParticleType==G4Electron::Electron())?
        theDEDXElectronTable: theDEDXPositronTable,
@@ -353,7 +351,8 @@ G4VParticleChange* G4eEnergyLossPlus::AlongStepDoIt( const G4Track& trackData,
   else if (E<faclow*LowerBoundEloss)
   {
     if (Step >= fRangeNow)  finalT = 0.;
-    else finalT = E*(1.-Step/fRangeNow) ;
+   // else finalT = E*(1.-Step/fRangeNow) ;
+    else finalT = E*(1.-sqrt(Step/fRangeNow)) ;
   }
    
   else if (E>=UpperBoundEloss) finalT = E - Step*fdEdx;
