@@ -616,9 +616,13 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 		 <<aR->GetSecondary(i)->GetParticle()<<" "
 		 <<G4endl;*/
 	track->SetWeight(newWeight);
-	if(track->GetKineticEnergy()<0)
+	G4double trackDeb = track->GetKineticEnergy();
+	if(   trackDeb<0 
+	   || (trackDeb>aT.GetKineticEnergy()+1*GeV))
 	{
-	  G4cout << "Debugging hadronin processes"<<track->GetKineticEnergy()<<G4endl;
+	  G4cout << "Debugging hadronic processes: "<<track->GetKineticEnergy()
+	         <<" "<<aT.GetKineticEnergy()
+		 <<" "<<GetProcessName()<<G4endl;
 	}
 	/*if(GetProcessName()=="PhotonInelastic")
 	{
@@ -628,6 +632,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 	   G4cout << "=======> Neutrons from gamma-nuclear "<<pinelcount<<G4endl;
 	  }
 	}*/
+	
 	theTotalResult->AddSecondary(track);
       }
       return;
