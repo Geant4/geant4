@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.icc,v 1.8 2001-11-13 05:13:38 kurasige Exp $
+// $Id: G4VParticleChange.icc,v 1.9 2001-12-24 05:14:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //----------------------------------------------------------------
@@ -50,7 +50,8 @@ inline
  G4Step* G4VParticleChange::UpdateStepForAlongStep(G4Step* Step)
 {
   if (!fSetParentWeightByProcess){
-    Step->GetPostStepPoint()->SetWeight( theParentWeight );
+    G4double newWeight= theParentWeight/(Step->GetPreStepPoint()->GetWeight())*(Step->GetPostStepPoint()->GetWeight());
+    Step->GetPostStepPoint()->SetWeight( newWeight );
   }
   return UpdateStepInfo(Step);
 }

@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2001-12-14 09:59:35 kurasige Exp $
+$Id: History,v 1.44 2001-12-24 05:14:27 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,11 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Dec. 14 ,01   H.Kurashige
+Dec. 24 ,01   H.Kurashige (track-V04-00-01)
 - Remove event biasing mechanism from track category
   ( it is moved to hadronic/models )
 - Add G4Track::CopyTrackInfo 
 - Modified G4ParticleChange::AddSecondary to use touchable handle 
+- Fixed a bug of changing parent weight in G4ParticleChange::UpdateStepForAlongStep
 
 Dec. 12, 01  H.Kurashige (track-V04-00-00)
 - Added initialization of fStepLength in constructors.
