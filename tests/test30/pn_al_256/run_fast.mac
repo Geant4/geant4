@@ -40,10 +40,12 @@ Al
 //#GEMEvaporation
 #generator
 binary
+//LEparametrisation
+//binary
 //binary_no_pc
 //binary
-#paw
-kin.paw
+//#paw
+//kin.paw
 #run
 //--------
 //#generator
