@@ -190,6 +190,7 @@ Some migrations are necessary in different areas of the user code in
 order to upgrade from release 6.2 to release 7.0,
 a full recompilation and/or reinstallation of libraries and user
 applications is moreover required.
+
 <P> </P>
 <B>Direct usage of <TT>&lt;cmath&gt;</TT> for standard mathematical functions</B>
 <P> </P>
@@ -219,6 +220,18 @@ As part of this migration also standard headers like:
     </PRE>
 are no longer indirectly included. This may require the user code to include
 them if/where necessary.
+
+<P> </P>
+<B>New Installation procedure for the <TT>Configure</TT> script</B>
+<P> </P>
+The installation procedure of the kernel libraries using the <TT>Configure</TT> has
+been changed. It is now required to specify the final area of installation for the
+libraries, headers and sources; libraries are now first build in the local directory
+where the source has been dowloaded and unpacked; and will be later-on installed
+in the specified installation area (requiring <TT>root</TT> priviledges if
+necessary).
+See the <A href="http://cern.ch/geant4/G4UsersDocuments/UsersGuides/InstallationGuide/html">Installation
+Guide</A> for the details.
 
 <P> </P>
 <B>Migration for usage of the <TT>G4VParticleChange</TT> class</B>
@@ -283,6 +296,13 @@ No change is required for the user who is NOT using <TT>G4UserLimits</TT> for th
 purpose of maximum step limitation.
 
 <P> </P>
+<B>Killing of a particle</B>
+<P> </P>
+Energy-loss processes do not change any longer the track status for <TT>AlongStep</TT>.
+In order to kill a particle in the <TT>AlongStepDoIt()</TT> it is now just required
+to propose zero kinetic energy for the particle.
+
+<P> </P>
 <B>Future migration for <TT>G4GeneralParticleSource</TT> class</B>
 <P> </P>
 A 'tree-structured' command format is implemented in this release for
@@ -308,6 +328,15 @@ please refer to the related History files provided in most packages):
 <A NAME="conf-notes">
 <H3><I>Configuration</I></H3></A>
 <UL>
+<LI><TT>Configure</TT> script: now installing libraries in specified
+    installation area. Installation happens now in two steps: libraries are
+    first built locally and later-on installed. Defined new commands:
+    <UL>
+    <LI><TT>Configure -build</TT>: to start the configuration process and
+        locally build the libraries.</LI>
+    <LI><TT>Configure -install</TT>: to install libraries and sources in
+        the specified installation area.</LI>
+    </UL></LI>
 <LI>Archived setup for Windows/VC++6 and removed WIN32-VC7 G4SYSTEM tag,
     now replaced by WIN32-VC, setup for VC++ .NET.</LI>
 <LI>Relaxed compilation options for SUN-CC.</LI>
@@ -381,7 +410,7 @@ please refer to the related History files provided in most packages):
    </UL></LI>   
 <LI><B>All EnergyLoss processes</B>
    <UL>
-   <LI>Removed <TT>ProposeTrackStatus</TT> from AlongStep for EnergyLoss processes, 
+   <LI>Removed <TT>ProposeTrackStatus()</TT> from AlongStep for EnergyLoss processes, 
        this action becomes under responsibility of <TT>G4SteppingManager</TT>.</LI>
    </UL></LI>   
 <LI><B>Pair production by muon</B>
