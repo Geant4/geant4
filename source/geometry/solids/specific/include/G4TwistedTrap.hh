@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.hh,v 1.1 2004-11-10 18:05:41 link Exp $
+// $Id: G4TwistedTrap.hh,v 1.2 2004-11-13 17:46:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,16 +33,12 @@
 //
 // Class description:
 //
-//  G4TwistedTrap is a sort of twisted trapezoid.
-//
+//  G4TwistedTrap is a trapezoid defined with caps of the sames shape
+//  and size, an twisted along the Z axis.
+
 // Author:
 //                 O.Link (Oliver.Link@cern.ch)
 //
-// History:
-//   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
-//                 from original version in Jupiter-2.5.02 application.
-//                 see: Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
-//   04-Nov-2004   replace twisted Box code by twisted trapezoid
 // --------------------------------------------------------------------
 
 #ifndef __G4TWISTEDTRAP__

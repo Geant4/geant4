@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBox.hh,v 1.1 2004-11-10 18:05:39 link Exp $
+// $Id: G4TwistedBox.hh,v 1.2 2004-11-13 17:46:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,12 +33,11 @@
 //
 // Class description:
 //
-//  G4TwistedBox is a sort of twisted box.
-//
+//  G4TwistedBox is box twisted along the Z axis.
+
 // Author:
 //                 O.Link (Oliver.Link@cern.ch)
 //
-// History:
 // --------------------------------------------------------------------
 
 #ifndef __G4TWISTEDBOX__
