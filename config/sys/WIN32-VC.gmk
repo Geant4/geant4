@@ -22,10 +22,10 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     OGLFLAGS  :=
   endif
   ifndef OGLLIBS
-    OGLLIBS   := '-libpath:'-lglu32 '-libpath:'-lopengl32
+    OGLLIBS   := glu32.lib opengl32.lib
   endif
   ifndef UI32LIBS
-    UI32LIBS  := '-libpath:'-lgdi32 '-libpath:'-luser32
+    UI32LIBS  := gdi32.lib user32.lib
   endif
 
   define build-granular-shared-lib
