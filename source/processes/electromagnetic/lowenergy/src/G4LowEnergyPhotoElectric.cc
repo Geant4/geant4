@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.6 1999-05-31 17:01:22 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.7 1999-06-01 22:40:50 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,12 +87,12 @@ G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()
    }
 
    if (theFluorTransitionTable) {
-      theFluorTransitionTable->clearAndDestroy();
+     //theFluorTransitionTable->clearAndDestroy();
       delete theFluorTransitionTable;
    }
 
    if (theAugerTransitionTable) {
-      theAugerTransitionTable->clearAndDestroy();
+     // theAugerTransitionTable->clearAndDestroy();
       delete theAugerTransitionTable;
    }
    //delete PEManager;
@@ -176,60 +176,71 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
     // theTable[i][j][k] 
     // i = subshell, j = type of information (second shell, transition energy , 
     // transition probability), k = previous vectors.
-    BuildFluorTransitionTable(AtomNum);
+
+    if(AtomNum > 5){
+      
+      G4bool ThereAreShells = TRUE;
+      G4int NumPar = 3;
+      oneAtomTable* oneAtomFluorTrans = BuildTables(AtomNum-1, NumPar, "fl-tr-pr-");
+      
+      //    BuildFluorTransitionTable(AtomNum);
     
-    G4bool ThereAreShells = TRUE;
-
-    while(ThereAreShells == TRUE){
+      //G4bool ThereAreShells = TRUE;
       
-      // Select the second transition from another subshell
-      // fluorPar[0] = SubShell 
-      // fluorPar[1] = Sec SubShell (if there is), 
-      // fluorPar[2] = Transition Probability
-      // fluorPar[3] = Transition Energy
-      // the same for augerPar
-
-      G4double fluorPar[4] = {0};
-      ThereAreShells = SelectRandomTransition(thePrimaryShell, fluorPar, theFluorTransitionTable);
-
-      // Daugther dynamic particle
-      G4DynamicParticle* newPart;
-      
-      // Direction of the outcoming particle isotropic selection
-      G4double newcosTh = 1-2*G4UniformRand();
-      G4double newsinTh = sqrt(1-newcosTh*newcosTh);
-      G4double newPhi = twopi*G4UniformRand();
-      
-      G4double dirx, diry, dirz;
-      dirz = newcosTh;
-      diry = newsinTh*cos(newPhi);
-      dirx = newsinTh*sin(newPhi);
-      G4ThreeVector newPartDirection(dirx, diry, dirz);
-      
-      if(ThereAreShells != FALSE){
-
-	thePrimaryShell = fluorPar[0];
-	newPart = new G4DynamicParticle (G4Gamma::Gamma(), newPartDirection, fluorPar[3]) ;
-	photvec.append(newPart);
-	theEnergyDeposit -= fluorPar[3]*MeV;
+      while(ThereAreShells == TRUE){
 	
-      }
-      else{
-
-      
-	G4int k = 0;
-	while(thePrimaryShell != theBindEnVec->GetLowEdgeEnergy(k)) k++;
-
-	G4double lastTransEnergy = (*theBindEnVec)(k);
-
-	newPart = new G4DynamicParticle (G4Gamma::Gamma(), newPartDirection, lastTransEnergy) ;
-	photvec.append(newPart);
-	thePrimaryShell = fluorPar[0];
-	theEnergyDeposit -= lastTransEnergy*MeV;
+	// Select the second transition from another subshell
+	// fluorPar[0] = SubShell 
+	// fluorPar[1] = Sec SubShell (if there is), 
+	// fluorPar[2] = Transition Probability
+	// fluorPar[3] = Transition Energy
+	// the same for augerPar
 	
+	G4double fluorPar[4] = {0};
+	ThereAreShells = SelectRandomTransition(thePrimaryShell, fluorPar, oneAtomFluorTrans);
+	
+	// Daugther dynamic particle
+	G4DynamicParticle* newPart;
+	
+	// Direction of the outcoming particle isotropic selection
+	G4double newcosTh = 1-2*G4UniformRand();
+	G4double newsinTh = sqrt(1-newcosTh*newcosTh);
+	G4double newPhi = twopi*G4UniformRand();
+	
+	G4double dirx, diry, dirz;
+	dirz = newcosTh;
+	diry = newsinTh*cos(newPhi);
+	dirx = newsinTh*sin(newPhi);
+	G4ThreeVector newPartDirection(dirx, diry, dirz);
+	
+	if(ThereAreShells != FALSE){
+	  
+	  thePrimaryShell = fluorPar[0];
+	  newPart = new G4DynamicParticle (G4Gamma::Gamma(), newPartDirection, fluorPar[3]) ;
+	  photvec.append(newPart);
+	  theEnergyDeposit -= fluorPar[3]*MeV;
+	  
+	}
+	else{
+	  
+	  
+	  G4int k = 0;
+	  while(thePrimaryShell != theBindEnVec->GetLowEdgeEnergy(k)) k++;
+	  
+	  G4double lastTransEnergy = (*theBindEnVec)(k);
+	  
+	  newPart = new G4DynamicParticle (G4Gamma::Gamma(), newPartDirection, lastTransEnergy) ;
+	  photvec.append(newPart);
+	  thePrimaryShell = fluorPar[0];
+	  theEnergyDeposit -= lastTransEnergy*MeV;
+	  
+	}
       }
-    }
-
+     
+      // oneAtomFluorTrans->clearAndDestroy();
+      delete oneAtomFluorTrans;
+    } //END OF THE CHECK ON ATOMIC NUMBER
+    
     //controllare se il setnumberofsecondaries  si puo' cambiare
     G4int numOfElec = elecvec.entries(), numOfPhot = photvec.entries();
     G4int numOfDau = numOfElec + numOfPhot;
@@ -278,7 +289,8 @@ void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
  
   if (theCrossSectionTable) {
     
-    theCrossSectionTable->clearAndDestroy(); delete theCrossSectionTable; 
+    theCrossSectionTable->clearAndDestroy(); 
+    delete theCrossSectionTable; 
   }
   cout<<"************** PE CS ****************"<<endl;
   G4int par[4] = {73, 0, 0, 0}; G4String name("epdl97");
@@ -293,7 +305,8 @@ void G4LowEnergyPhotoElectric::BuildBindingEnergyTable(){
  
   if (theBindingEnergyTable) {
     
-    theBindingEnergyTable->clearAndDestroy(); delete theBindingEnergyTable; 
+    theBindingEnergyTable->clearAndDestroy(); 
+    delete theBindingEnergyTable; 
   }
 
   cout<<"************** PE BE ****************"<<endl;
@@ -305,11 +318,98 @@ void G4LowEnergyPhotoElectric::BuildBindingEnergyTable(){
 
 }
 
+oneAtomTable* G4LowEnergyPhotoElectric::BuildTables(const G4int TableInd, 
+						    const G4int ParNum, 
+						    const char* prename){
+
+  HepString Znum(TableInd+1);
+  HepString name = prename + Znum + ".dat"; 
+  
+  char* path = getenv("G4LEDATA");
+  if(!path){ 
+    
+    G4Exception("G4LEDATA environment variable not set");
+  }
+  
+  HepString path_string(path);
+  HepString dir_file = path_string + "/" + name;
+  ifstream file(dir_file);
+  filebuf* lsdp = file.rdbuf();
+  
+  if(!lsdp->is_open()){
+    
+      HepString excep = "Error!!!! data file: " + dir_file + " NOT found";
+      G4Exception(excep);
+  }
+  
+  oneAtomTable* oneAtomPar = new oneAtomTable();
+  oneShellTable* oneShellPar = new oneShellTable();
+  
+  for(G4int j = 0; j < ParNum; j++){ 
+    
+    oneShellPar->insertAt(j,new G4Data());
+  }
+  
+  G4double a = 0;
+  G4int k = 1, s = 0;
+  
+  do{
+    
+    file>>a;
+    
+    if(a == -1){
+      
+      if(s == 0){
+	
+	oneAtomPar->insert(oneShellPar);
+	oneShellPar = new oneShellTable();
+	
+	for(G4int j = 0; j < ParNum; j++){ 
+	  
+	  oneShellPar->insertAt(j,new G4Data());
+	}
+      }
+      
+      s++;
+      
+      if(s == ParNum){
+	
+	s = 0;
+      }
+    }
+
+    else if(a == -2){
+      
+      //      oneShellPar->clearAndDestroy();
+      delete oneShellPar;
+    }
+
+    else{
+      
+      if(k%ParNum != 0){	
+	
+	(*oneShellPar)[k-1]->insert(a);
+	k++;
+      }
+      else if(k%ParNum == 0){
+	
+	(*oneShellPar)[k-1]->insert(a);
+	k = 1;
+      }
+    }
+
+  }while(a != -2); //end for on file
+  
+  file.close();
+  return oneAtomPar;
+}
+
 void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(G4int atomNum){
  
   if (theFluorTransitionTable) {
   
-    theFluorTransitionTable->clearAndDestroy(); delete theFluorTransitionTable;
+    // theFluorTransitionTable->clearAndDestroy(); 
+    delete theFluorTransitionTable;
   }
   cout<<"************** PE FL ****************"<<endl;
 
@@ -318,28 +418,30 @@ void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(G4int atomNum){
   G4Epdl89File File(name,par);
 
   G4EpdlTables table(File);
-  table.FillTheTable(atomNum);
-  theFluorTransitionTable = table.GetGlobalList() ;
+  //  table.FillTheTable(atomNum);
+  theFluorTransitionTable = table.FillTheTable(atomNum);
 }
 
 void G4LowEnergyPhotoElectric::BuildAugerTransitionTable(G4int  atomNum){
  
   if (theAugerTransitionTable) {
     
-    theAugerTransitionTable->clearAndDestroy(); delete theAugerTransitionTable; 
+    //  theAugerTransitionTable->clearAndDestroy(); 
+    delete theAugerTransitionTable; 
   }
 
   G4int par[4] = {92, 932, 91, 0}; G4String name("eadl.asc");
   G4Epdl89File File(name,par);
   G4EpdlTables table(File);
-  table.FillTheTable(atomNum);
-  theAugerTransitionTable = table.GetGlobalList() ;
+  theAugerTransitionTable = table.FillTheTable(atomNum);
+
 }
 
 void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
 
   if (theMeanFreePathTable) {
-    theMeanFreePathTable->clearAndDestroy(); delete theMeanFreePathTable; }
+    theMeanFreePathTable->clearAndDestroy(); 
+    delete theMeanFreePathTable; }
 
   // material
   G4double NumbOfMaterials = G4Material::GetNumberOfMaterials();
@@ -432,7 +534,7 @@ G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhot
 
 G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell, 
 							G4double* TransParam,
-							RWTPtrSlist< RWTPtrSlist<G4DataVector> >* TransitionTable){
+							const oneAtomTable* TransitionTable){
   
   G4int SubShellCol, SecShellCol, ProbCol, EnergyCol;
 
