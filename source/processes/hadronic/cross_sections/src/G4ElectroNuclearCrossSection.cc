@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.20 2003-09-29 15:37:20 mkossov Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.21 2003-11-17 16:49:16 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -2363,8 +2363,13 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
 	G4cout<<"G4EleNucCS::GetEfPhE:HighEnergy lphE="<<phLE<<G4endl;
 #endif
   }
-  if(phLE>lastLE)G4cerr<<"***G4ElectroNuclearCrossSection::GetEquPhotE:"<<phLE<<">"<<lastLE<<",S="
-   <<lastSig<<",ris="<<ris<<",B="<<lastF<<",E="<<lastL<<",Y="<<Y[lastL]<<G4endl;
+  if(phLE>lastLE)
+  {
+    G4cerr<<"***G4ElectroNuclearCrossSection::GetEquPhotE:"<<phLE<<">"<<lastLE<<",S="
+          <<lastSig<<",ris="<<ris<<",B="<<lastF<<",E="<<lastL<<",Y="<<Y[lastL]<<G4endl;
+    if(lastLE<7.2) phLE=log(exp(lastLE)-.511);
+    else phLE=7.;
+  }
   return exp(phLE);
 }
 

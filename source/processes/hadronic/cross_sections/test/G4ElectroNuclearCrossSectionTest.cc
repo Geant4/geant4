@@ -84,7 +84,7 @@ int main()
 	    G4double phE = eACrossSection.GetEquivalentPhotonEnergy();
 	    G4double phQ2= eACrossSection.GetEquivalentPhotonQ2(phE);
 	    G4double x = phQ2/1878./phE;
-        G4cout<<"G4ElNucCSTest:............eE="<<ekin<<", phE="<<phE<<", phQ2="<<phQ2<<", x="<<x<<G4endl;
+        G4cout<<"G4ElNucCSTest:.......eE="<<ekin<<", phE="<<phE<<", phQ2="<<phQ2<<", x="<<x<<G4endl;
 	  }
 #endif
       if(!n) fileH1<<ekin<<" "<<sig<<G4endl;
