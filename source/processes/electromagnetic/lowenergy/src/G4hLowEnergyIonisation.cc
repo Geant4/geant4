@@ -58,6 +58,7 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     HighestKineticEnergy = 100.*TeV ;
     TotBin = 200 ;
     MassRatio = 1.0 ;
+    DeltaCutInKineticEnergy = 0; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -2270,13 +2271,12 @@ void G4hLowEnergyIonisation::PrintInfoDefinition()
   comments += "         delta ray energy sampled from  differential Xsection.";
   
   G4cout << endl << GetProcessName() << ":  " << comments
-         << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,
-							  "Energy")
-         << " to " << G4BestUnit(HighestKineticEnergy,"Energy")
+         << "\n        PhysicsTables from " << LowestKineticEnergy / eV << " eV " 
+         << " to " << HighestKineticEnergy / TeV << " TeV "
          << " in " << TotBin << " bins."
          << "\n        Low energy losses approximation is taken from  " << DEDXtable
-         << "\n        from " << G4BestUnit(ParamLowEnergy,"Energy")
-         << " to " << G4BestUnit(ParamHighEnergy,"Energy") << "." << endl ;
+         << "\n        from " << ParamLowEnergy / keV << " keV "
+         << " to " << ParamHighEnergy / MeV << " MeV " << "." << endl ;
   if(nStopping) {
     G4cout << "        Simulation of nuclear stopping is switched on.  \n" << endl ; 
   }

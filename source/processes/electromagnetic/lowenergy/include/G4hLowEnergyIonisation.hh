@@ -242,6 +242,10 @@ protected:
   G4double ZieglerFactor; // Factor to convert the Stopping Power 
   // unit [ev/(10^15 atoms/cm^2]
   // into the Geant4 dE/dx unit
+
+  G4double LowestKineticEnergy;
+  G4double HighestKineticEnergy;
+  G4double TotBin;
     
 };
 

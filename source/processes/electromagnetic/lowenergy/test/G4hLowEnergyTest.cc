@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyTest.cc,v 1.2 1999-11-09 20:04:04 chauvie Exp $
+// $Id: G4hLowEnergyTest.cc,v 1.3 1999-11-09 21:08:02 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // KaonMinusAtRestTest.cc 
@@ -26,6 +26,7 @@
 //
 // -------------------------------------------------------------------
 
+#include "globals.hh"
 #include "G4ios.hh"
 #include <fstream.h>
 #include <iomanip.h>
@@ -33,6 +34,7 @@
 #include "G4Material.hh"
 #include "G4ProcessManager.hh"
 #include "G4hIonisation.hh"
+#include "G4hLowEnergyIonisation.hh"
 #include "G4VParticleChange.hh"
 #include "G4ParticleChange.hh"
 #include "G4DynamicParticle.hh"
@@ -48,7 +50,7 @@
 #include "G4Step.hh"
 #include "G4GRSVolume.hh"
 
-#include  "G4UnitsTable.hh"
+#include "G4UnitsTable.hh"
 #include "CLHEP/Hist/TupleManager.h"
 #include "CLHEP/Hist/HBookFile.h"
 #include "CLHEP/Hist/Histogram.h"
@@ -185,10 +187,10 @@ main()
   G4ProcessManager* theAntiProtonProcessManager = new G4ProcessManager(antiproton);
   antiproton->SetProcessManager(theAntiProtonProcessManager);
 
-  G4hIonisation hIonisationProcess;
-  theProtonProcessManager->AddProcess(&hIonisationProcess);
-  theProtonProcessManager->SetProcessOrdering(&hIonisationProcess,idxAlongStep,1);
-  theProtonProcessManager->SetProcessOrdering(&hIonisationProcess,idxPostStep,1);
+  G4hLowEnergyIonisation* hIonisationProcess = new G4hLowEnergyIonisation;
+  theProtonProcessManager->AddProcess(hIonisationProcess);
+  theProtonProcessManager->SetProcessOrdering(hIonisationProcess,idxAlongStep,1);
+  theProtonProcessManager->SetProcessOrdering(hIonisationProcess,idxPostStep,1);
 
   // ready for being exploited by antiproton
   //G4hIonisation hIonisationProcess;
@@ -242,17 +244,16 @@ main()
   G4ParticleDefinition* ProtonDefinition = p.GetDefinition();
   G4ParticleDefinition* AntiProtonDefinition = pbar.GetDefinition();
 
-  if(! (hIonisationProcess.IsApplicable(*ProtonDefinition)
-	|| hIonisationProcess.IsApplicable(*AntiProtonDefinition)) )
+  if(! (hIonisationProcess->IsApplicable(*ProtonDefinition)
+	|| hIonisationProcess->IsApplicable(*AntiProtonDefinition)) )
     {
       G4Exception("FAIL: *** Not Applicable ***\n");
     }
 
   // Initialize the physics tables for ALL processes
 
-  // my adda 8:50
-  hIonisationProcess.SetPhysicsTableBining(0.5*keV, 3*MeV, 100);
-  hIonisationProcess.BuildPhysicsTable(*proton);
+  hIonisationProcess->BuildPhysicsTable(*ProtonDefinition);
+  hIonisationProcess->SetPhysicsTableBining(0.5*keV, 3*MeV, 100);
 
   //hIonisationProcess.BuildPhysicsTable(*antiproton);
 
@@ -275,7 +276,7 @@ main()
   G4String aParticleName;  
 
   do {
-    adummy = hIonisationProcess.PostStepDoIt(aTrack, aStep);
+    adummy = hIonisationProcess->PostStepDoIt(aTrack, aStep);
   
     G4ParticleChange* aParticleChange = (G4ParticleChange*) adummy;
   

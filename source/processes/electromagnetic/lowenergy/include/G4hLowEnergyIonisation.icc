@@ -68,3 +68,4 @@ inline G4double G4hLowEnergyIonisation::GetFreeElectronGasLoss(G4double paramA, 
      return ionl ;
 }
          
+
