@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.8 1999-11-17 11:04:53 morita Exp $
+# $Id: common.gmk,v 1.9 1999-11-20 15:49:30 morita Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -13,8 +13,10 @@ G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
 
 ifdef G4ODBMS_INSTALLATION
   G4SCHEMA_HEADER_DIR := $(G4TMPSCHEMA_INCLUDE)
+  G4OODDLX_SCHEMA_NAME := "-schema Geant4"
 else
   G4SCHEMA_HEADER_DIR := $(G4TMPDIR)
+  G4OODDLX_SCHEMA_NAME := " "
 endif
 G4SCHEMA_SRC_DIR    := $(G4TMPDIR)
 
@@ -100,14 +102,16 @@ endif
 	@if [ ! -d $(G4SCHEMA_HEADER_DIR) ] ; then mkdir $(G4SCHEMA_HEADER_DIR) ;fi
 	@if [ ! -d $(G4SCHEMA_SRC_DIR) ] ; then mkdir $(G4SCHEMA_SRC_DIR) ;fi
 ifdef CPPVERBOSE
-	ooddlx -notitle -header_suffix .hh -ref_suffix _ref.hh -c++_suffix _ddl.cc \
-	-DTEMPLATEP_HIDES_FNCD \
-	$(CPPFLAGS) $< $(G4OODDLX_BOOT)
+	ooddlx -notitle $(G4OODDLX_SCHEMA_NAME) \
+	  -header_suffix .hh -ref_suffix _ref.hh -c++_suffix _ddl.cc \
+	  -DTEMPLATEP_HIDES_FNCD \
+	  $(CPPFLAGS) $< $(G4OODDLX_BOOT)
 else
 	@echo Preprocessing $< ...
-	@ooddlx -notitle -header_suffix .hh -ref_suffix _ref.hh -c++_suffix _ddl.cc \
-	-DTEMPLATEP_HIDES_FNCD \
-	$(CPPFLAGS) $< $(G4OODDLX_BOOT)
+	@ooddlx -notitle $(G4OODDLX_SCHEMA_NAME) \
+	  -header_suffix .hh -ref_suffix _ref.hh -c++_suffix _ddl.cc \
+	  -DTEMPLATEP_HIDES_FNCD \
+	  $(CPPFLAGS) $< $(G4OODDLX_BOOT)
 endif
 	@mv -f $*.hh $(G4SCHEMA_HEADER_DIR)/
 	@mv -f $*_ref.hh $(G4SCHEMA_HEADER_DIR)/

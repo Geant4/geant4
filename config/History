@@ -1,4 +1,4 @@
-$Id: History,v 1.78 1999-11-19 18:02:30 morita Exp $
+$Id: History,v 1.79 1999-11-20 15:49:29 morita Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20th November 1999  Youhei Morita
+- common.gmk: added G4OODDLX_SCHEMA_NAME to use Geant4 named schema
 
 19th November 1999  Youhei Morita
 - liblist.c: avoid coredumps when it was given non-existing directly.
