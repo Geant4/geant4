@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.29 2004-06-02 09:46:54 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.30 2004-07-01 09:34:51 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -73,10 +73,9 @@ Tst50DetectorConstruction::Tst50DetectorConstruction()
  
   theUserLimitsForTarget = 0; 
   fUseUserLimits = false;
-  theMaxStepInTarget = 0.000000001*micrometer;
+  theMaxStepInTarget = 1.*micrometer;
 
   messenger = new Tst50DetectorMessenger(this);
-
 }
 
 Tst50DetectorConstruction::~Tst50DetectorConstruction()

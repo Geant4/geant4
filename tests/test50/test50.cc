@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.29 2003-07-28 15:05:51 guatelli Exp $
+// $Id: test50.cc,v 1.30 2004-07-01 09:34:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,7 +79,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(tst50SteppingAction);
 
   Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
-  analysis->book();
+  analysis->book(argv[1]);
   
   //get the pointer to the User Interface manager 
   G4UImanager * UI = G4UImanager::GetUIpointer();  

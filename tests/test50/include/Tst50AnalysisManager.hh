@@ -64,7 +64,7 @@ public:
   
   ~Tst50AnalysisManager();
   static Tst50AnalysisManager* getInstance();
-  void book();
+  void book(G4String);
   void bookHistograms(); 
   void AttenuationGammaCoeffiecient(G4int,G4double,G4double,G4double);
   void StoppingPower(G4int,G4double,G4double);

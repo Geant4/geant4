@@ -26,7 +26,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.26 2003-07-30 12:23:31 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.27 2004-07-01 09:34:51 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -90,9 +90,10 @@ Tst50AnalysisManager* Tst50AnalysisManager::getInstance()
   return instance;
 }
 
-void Tst50AnalysisManager::book() 
+void Tst50AnalysisManager::book(G4String name) 
 {
-  theTree = treeFact -> create("test50.xml","xml",false, true,"uncompress");
+  theTree = treeFact -> create(name + "output" + ".xml",
+                               "xml",false, true,"uncompress");
   
   //Create the factories for dataPoint and histograms
   dataPointFactory = aFact -> createDataPointSetFactory(*theTree); 
