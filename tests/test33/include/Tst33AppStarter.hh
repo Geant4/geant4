@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.hh,v 1.6 2003-08-15 15:34:33 dressel Exp $
+// $Id: Tst33AppStarter.hh,v 1.7 2003-08-19 15:16:21 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -42,6 +42,7 @@
 #include "globals.hh"
 #include "Tst33AppStarterMessenger.hh"
 #include "G4RunManager.hh"
+#include "G4PlaceOfAction.hh"
 
 class Tst33DetectorConstruction;
 class Tst33VGeometry;
@@ -55,6 +56,7 @@ class G4UserRunAction;
 class Tst33VEventAction;
 class G4ProcessPlacer;
 class Tst33WeightChangeProcess;
+class G4VWeightWindowAlgorithm;
 
 class Tst33AppStarter {
 public:
@@ -68,7 +70,8 @@ public:
   void PostRun();
   void CreateScorer();
   void CreateIStore();
-  void CreateWeightWindowStore();
+  void CreateWeightWindowStore(G4PlaceOfAction poa,
+			       G4bool zeroWindow);
   void CreateWeightRoulette(G4int mode);
   void ClearSampling();
   void Run(G4int nevents);
@@ -107,6 +110,7 @@ private:
   G4int fTime;
   G4ProcessPlacer *fChangeWeightPlacer;
   Tst33WeightChangeProcess *fWeightChangeProcess;;
+  G4VWeightWindowAlgorithm *fWWAlg;
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33WeightWindowStoreBuilder.cc,v 1.1 2003-08-15 15:35:54 dressel Exp $
+// $Id: Tst33WeightWindowStoreBuilder.cc,v 1.2 2003-08-19 15:16:21 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -83,8 +83,8 @@ G4VWeightWindowStore *Tst33WeightWindowStoreBuilder::CreateWeightWindowStore(Tst
     }
 
     lowerWeights.push_back(lowerWeight);
-    lowerWeights.push_back(lowerWeight/2);
-    lowerWeights.push_back(lowerWeight/4);
+    lowerWeights.push_back(lowerWeight);
+    lowerWeights.push_back(lowerWeight);
 
     if (i!=19)  {
       G4GeometryCell gCellMinus(samplegeo->GetGeometryCell(i, "I1-"));

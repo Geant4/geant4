@@ -1,14 +1,7 @@
 # test mass geometry with timed application
 /Tst33/MassGeometry
-/Tst33/Timed 100000
+/Tst33/Timed 1000
 
-/Tst33/Scoring   
-/Tst33/WeightWindow
-/Tst33/ConfigureSampling
-/Tst33/Run 3000
-/Tst33/PostRun
-
-
-#/control/execute SamplingChange.mac
+/control/execute SamplingChange.mac
 
 

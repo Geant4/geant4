@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.cc,v 1.8 2003-08-15 15:34:33 dressel Exp $
+// $Id: Tst33AppStarter.cc,v 1.9 2003-08-19 15:16:21 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -59,6 +59,8 @@
 #include "G4ProcessPlacer.hh"
 #include "Tst33WeightChangeProcess.hh"
 #include "G4PlaceOfAction.hh"
+#include "G4WeightWindowAlgorithm.hh"
+#include "G4VWeightWindowStore.hh"
 
 Tst33AppStarter::Tst33AppStarter()
   : 
@@ -77,7 +79,8 @@ Tst33AppStarter::Tst33AppStarter()
   fWeightroulette(false),
   fTime(0),
   fChangeWeightPlacer(0),
-  fWeightChangeProcess(0)
+  fWeightChangeProcess(0),
+  fWWAlg(0)
 {
   if (!fDetectorConstruction) {
     NewFailed("Tst33AppStarter", "Tst33DetectorConstruction");
@@ -100,6 +103,9 @@ Tst33AppStarter::~Tst33AppStarter()
     fWeightChangeProcess = 0;
     delete fChangeWeightPlacer;
     fChangeWeightPlacer = 0;
+  }
+  if (fWWAlg) {
+    delete fWWAlg;
   }
 }
 
@@ -229,11 +235,21 @@ void Tst33AppStarter::CreateIStore() {
   }
 }
 
-void Tst33AppStarter::CreateWeightWindowStore() {
+void Tst33AppStarter::CreateWeightWindowStore(G4PlaceOfAction poa,
+					      G4bool zeroWindow) {
   if (CheckCreateWeightWindowStore()) {
+    
     Tst33WeightWindowStoreBuilder wb;
     fWWStore = wb.CreateWeightWindowStore(fSampleGeometry);
-    fSampler->PrepareWeightWindow(fWWStore,0,onBoundary);
+    if (zeroWindow) {
+      fWWAlg = new G4WeightWindowAlgorithm(1,1,100);
+    }
+    else {
+      fWWAlg = new G4WeightWindowAlgorithm(5,3,5);
+    }
+    fSampler->PrepareWeightWindow(fWWStore,
+				  fWWAlg,
+				  poa);
   }
 }
 
@@ -335,6 +351,21 @@ void Tst33AppStarter::ClearSampling() {
       fWeightChangeProcess = 0;
       delete fChangeWeightPlacer;
       fChangeWeightPlacer = 0;
+    }
+    if (fWeightChangeProcess) {
+      fChangeWeightPlacer->RemoveProcess(fWeightChangeProcess);
+      delete fWeightChangeProcess;
+      fWeightChangeProcess = 0;
+      delete fChangeWeightPlacer;
+      fChangeWeightPlacer = 0;
+    }
+    if (fWWStore) {
+      delete fWWStore;
+      fWWStore = 0;
+    }
+    if (fWWAlg) {
+      delete fWWAlg;
+      fWWAlg = 0;
     }
     fWeightroulette = false;
     fConfigured = false;

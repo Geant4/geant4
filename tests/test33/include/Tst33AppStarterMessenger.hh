@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarterMessenger.hh,v 1.6 2003-08-15 15:34:33 dressel Exp $
+// $Id: Tst33AppStarterMessenger.hh,v 1.7 2003-08-19 15:16:21 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -41,6 +41,7 @@
 #include "G4UImessenger.hh"
 
 class G4UIcmdWithAnInteger;
+class G4UIcmdWithAString;
 class Tst33AppStarter;
 class Tst33VApplication;
 
@@ -60,7 +61,7 @@ private:
   G4UIcommand *fParallelGeoCmd;
   G4UIcommand *fScoringCmd;
   G4UIcommand *fImpCmd;
-  G4UIcommand *fWWCmd;
+  G4UIcmdWithAString *fWWCmd;
   G4UIcmdWithAnInteger *fWWRCmd;
   G4UIcommand *fClearSmaplingCmd;
   G4UIcommand *fConfigureSamplingCmd;
@@ -68,6 +69,7 @@ private:
   G4UIcmdWithAnInteger *fTimedAppComand;
   G4UIcommand *fPostRunCmd;
   G4UIcmdWithAnInteger *fRunCmd;
+  G4UIcommand *fWeightChangerCmd;
 };
 
 #endif

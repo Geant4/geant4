@@ -1,5 +1,48 @@
 
-#sample with all options
+#sample with weight window, onBoundary and degenerate window (zero window size)
+/Tst33/Scoring   
+/Tst33/WeightWindow 1 1
+/Tst33/ConfigureSampling
+/Tst33/Run 30
+/Tst33/PostRun
+
+#sample with weight window, onBoundary and default window size
+/Tst33/ClearSampling
+/Tst33/Scoring   
+/Tst33/WeightWindow 1 0
+/Tst33/ConfigureSampling
+/Tst33/Run 30
+/Tst33/PostRun
+
+
+#sample with weight window, onCollision and default window size
+/Tst33/ClearSampling
+/Tst33/Scoring   
+/Tst33/WeightWindow 2 0
+/Tst33/ConfigureSampling
+/Tst33/Run 30
+/Tst33/PostRun
+
+#sample with weight window, onBoundaryAndCollision and default window size
+/Tst33/ClearSampling
+/Tst33/Scoring   
+/Tst33/WeightWindow 3 0
+/Tst33/ConfigureSampling
+/Tst33/Run 30
+/Tst33/PostRun
+
+#sample with weight window, onBoundaryAndCollision and default window size and weight changer
+/Tst33/ClearSampling
+/Tst33/AddWeightChanger
+/Tst33/Scoring   
+/Tst33/WeightWindow 3 0
+/Tst33/ConfigureSampling
+/Tst33/Run 30
+/Tst33/PostRun
+
+
+#sample with importance biasing options
+/Tst33/ClearSampling
 /Tst33/Scoring   
 /Tst33/ImportanceSampling
 /Tst33/WeightRoulette 0

@@ -1,4 +1,9 @@
 # test parallel geometry with timed application
 /Tst33/ParallelGeometry
 /Tst33/Timed 1000
+
+#/run/verbose 1
+#/event/verbose 1
+#/tracking/verbose 2
+
 /control/execute SamplingChange.mac
