@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.19 2001-12-14 12:17:51 sadilov Exp $
+# $Id: Configure,v 1.20 2001-12-14 12:19:57 sadilov Exp $
 #
-# Generated on Fri Dec 14 13:17:42 CET 2001 [metaconfig 3.0 PL70]
+# Generated on Fri Dec 14 13:19:47 CET 2001 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -1753,7 +1753,6 @@ or
 
 . env.sh
 
-They will source in your shell Geant4 environments.
 It will also check G4WORKDIR setting and set it to
 your HOME if needed.
 You can use these files also for further modifications

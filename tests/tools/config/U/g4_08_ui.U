@@ -220,7 +220,7 @@ g4message=`cat << EOM
   G4UI_USE_XM
 
   Specifies to include and use the XM Motif based user interfaces.
-  The XM Motif exteansions are required to activate and build this
+  The XM Motif extensions are required to activate and build this
   driver.
 
 EOM`
@@ -277,7 +277,7 @@ g4message=`cat << EOM
 
   Specifies to include in kernel library and use the OPACS WO terminal
   interface for the OPACS system. The OPACS tool must be installed
-  to activate this driver !
+  to activate and build this driver !
 
 EOM`
 
