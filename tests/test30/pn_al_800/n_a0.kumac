@@ -11,50 +11,48 @@ set NDVY 010205
  zone
  opt logy
  
- null 0 800 0.01 100
- atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+ null 0 800 0.001 100
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 7.5 degree'
  
- 
-* hi/file 1 prec.paw
-* set dmod 3
-* hi/pl 28 shist
-* line 100 1.6 110 1.6
-* itx 115 35 'PREC'
-* close 1
+ hi/file 1 prec.paw
+ set dmod 3
+ hi/pl 28 shist
+ line 100 1.6 110 1.6
+ itx 115 35 'PREC'
+ close 1
  
  
  hi/file 1 kin.paw
  set dmod 1
  hi/pl 28 shist
- line 380 1.2 410 1.2
- itx 415 15 'KIN'
+ line 100 1.2 110 1.2
+ itx 115 15 'KIN'
  close 1
  
-  ve/create X(81) R 17 19 21 23 25 27 29 35 45 55 65 75 85 95 105 115 125 135 145 155 165 175 185 195 205 215 225 235 245 255 265 275 285 295 305 315 325 335 345 355 365 375 385 395 405 415 425 435 445 455 465 475 485 495 505 515 525 535 545 555 565 575 585 595 605 615 625 635 645 655 665 675 685 695 705 715 725 735 745 755 765 
-  
-  ve/create Y(81) R 4.39 1.08 0.75 0.61 0.58 0.54 0.56 0.49 0.45 0.42 0.41 0.4 0.39 0.39 0.38 0.38 0.37 0.38 0.38 0.39 0.4 0.4 0.41 0.42 0.42 0.44 0.45 0.46 0.48 0.49 0.5 0.52 0.54 0.56 0.58 0.61 0.64 0.67 0.7 0.73 0.77 0.79 0.82 0.83 0.85 0.84 0.83 0.81 0.78 0.74 0.69 0.64 0.58 0.53 0.48 0.43 0.4 0.38 0.38 0.39 0.41 0.44 0.49 0.56 0.64 0.75 0.86 0.94 0.97 0.89 0.73 0.51 0.3 0.15 0.059 0.02 0.0047 0.0013 0.00039 0.00023
-gr/h/symb X Y 81 21 0.2
+ve/create X(28) R 25 35 45 55 65 75 85 95 105 115 125 135 145 155 165 175 185 195 205 215 225 235 245 255 265 275 285 295
+ve/create Y(28) R 0.465 0.402 0.356 0.329 0.315 0.309 0.304 0.289 0.276 0.274 0.293 0.317 0.357 0.41 0.488 0.596 0.793 1.087 1.462 1.346 0.39 0.0589 0.0193 0.0176 0.0176 0.0135 0.00022 0.000002
+* gr/h/symb X Y 28 21 0.2
  
 
  exe ../prf n_a0 eps
 
-  null 0 800 0.01 100
- atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+  null 0 800 0.001 100
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 7.5 degree'
  
- gr/h/symb X Y 81 21 0.2
+* gr/h/symb X Y 28 21 0.2
 
   hi/file 1 par.paw
  set dmod 3
  hi/pl 28 shist
- line 380 1.8 410 1.8
- itx 415 60 'LEPAR'
+ line 100 1.8 110 1.8
+ itx 115 60 'LEPAR'
  close 1
  
   hi/file 1 chips.paw
  set dmod 1
  hi/pl 28 shist
- line 380 1.4 410 1.4
- itx 415 22 'CHIPS'
+ line 100 1.4 110 1.4
+ itx 115 22 'CHIPS'
  close 1
 
  

@@ -11,44 +11,48 @@ set NDVY 010205
  zone
  opt logy
  
- null 0 800 0.001 1000
- atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+ null 0 800 0.001 100
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 7.5 degree'
  
- 
-* hi/file 1 prec.paw
-* set dmod 3
-* hi/pl 28 shist
-* line 100 1.6 110 1.6
-* itx 115 35 'PREC'
-* close 1
+ hi/file 1 prec.paw
+ set dmod 3
+ hi/pl 28 shist
+ line 100 1.6 110 1.6
+ itx 115 35 'PREC'
+ close 1
  
  
  hi/file 1 kin.paw
  set dmod 1
  hi/pl 28 shist
- line 380 1.2 410 1.2
- itx 415 15 'KIN'
+ line 100 1.2 110 1.2
+ itx 115 15 'KIN'
  close 1
+ 
+ve/create X(28) R 25 35 45 55 65 75 85 95 105 115 125 135 145 155 165 175 185 195 205 215 225 235 245 255 265 275 285 295
+ve/create Y(28) R 0.465 0.402 0.356 0.329 0.315 0.309 0.304 0.289 0.276 0.274 0.293 0.317 0.357 0.41 0.488 0.596 0.793 1.087 1.462 1.346 0.39 0.0589 0.0193 0.0176 0.0176 0.0135 0.00022 0.000002
+* gr/h/symb X Y 28 21 0.2
  
 
  exe ../prf n_a0 eps
 
-  null 0 800 0.001 1000
- atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+  null 0 800 0.001 100
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 7.5 degree'
  
+* gr/h/symb X Y 28 21 0.2
 
   hi/file 1 par.paw
  set dmod 3
  hi/pl 28 shist
- line 380 1.8 410 1.8
- itx 415 60 'LEPAR'
+ line 100 1.8 110 1.8
+ itx 115 60 'LEPAR'
  close 1
  
   hi/file 1 chips.paw
  set dmod 1
  hi/pl 28 shist
- line 380 1.4 410 1.4
- itx 415 22 'CHIPS'
+ line 100 1.4 110 1.4
+ itx 115 22 'CHIPS'
  close 1
 
  
