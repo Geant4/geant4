@@ -176,7 +176,8 @@ sub CreateHostsFile {
         chomp;
         if ( /^#/) { print HOSTFILE "$_\n"; next}
         if ( /^%/) { print HOSTFILE "$_\n"; next}
-        ($host,$platform,$option,@fiveargs)=split(' ');
+        ($teststream,$host,$platform,$option,@fiveargs)=split(' ');
+        next if ( "$_[2]" ne "$teststream" );
         printf HOSTFILE ("%-8s %-4s  %-10s %s  %s %s %s %s %s\n",$host,$_[2],$option,$sttdir,@fiveargs);
     }
     close(HOSTFILE);
