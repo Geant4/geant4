@@ -1,4 +1,4 @@
-$Id: History,v 1.139 2001-06-19 16:21:11 gcosmo Exp $
+$Id: History,v 1.140 2001-06-19 20:40:20 johna Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -18,7 +18,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20th June 2001 Youhei Morita (config-V03-01-02)
+19th June 2001 John Allison (config-V03-01-03)
+- Added GAG_TREE to G4VIS_BUILD.gmk and G4VIS_USE.gmk.
+
+20th June 2001 (Japan Time - still 19th in Europe!)
+               Youhei Morita (config-V03-01-02)
 - a few bug fixes in binmake.gmk, common_objy.gmk, sys/SUN-CC5.gmk,
   sys/Linux-g++.gmk, sys/Win32-g++.gmk.
 
