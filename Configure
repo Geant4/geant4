@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.39 2003-10-02 15:38:00 stesting Exp $
+# $Id: Configure,v 1.40 2003-10-02 15:48:44 stesting Exp $
 #
-# Generated on Thu Oct  2 17:36:57 CEST 2003 [metaconfig 3.0 PL70]
+# Generated on Thu Oct  2 17:47:09 CEST 2003 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -159,6 +159,7 @@ d_portable=''
 g4base=''
 g4conf=''
 g4include=''
+g4includes_flag=''
 g4install=''
 g4workdir=''
 g4bin=''
@@ -2437,8 +2438,8 @@ esac
 
 case "$g4include" in
 '')
-#	g4include=$g4install/include
-	g4include=''
+	g4include=$g4install/include
+#	g4include=''
 	;;
 esac
 
@@ -2476,7 +2477,8 @@ Where will be directory to copy all Geant4 headers?
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
-dflt=$g4install/include
+###dflt=$g4install/include
+dflt=$g4include
 fn='d~+'
 rp=$g4message
 . ./getfile
@@ -4496,6 +4498,7 @@ g4debug='$g4debug'
 g4global='$g4global'
 g4granular='$g4granular'
 g4include='$g4include'
+g4includes_flag='$g4includes_flag'
 g4install='$g4install'
 g4ledata='$g4ledata'
 g4levelgammadata='$g4levelgammadata'
