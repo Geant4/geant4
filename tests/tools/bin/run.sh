@@ -107,6 +107,10 @@ else
     cd $G4INSTALL/tests/$shortname
     /bin/rm -f $dir/$1.out
     /bin/rm -f $dir/$1.diff
+#
+# Echo marks
+#
+echo "Starting $1 in $G4WORKDIR `date`"
     if [ $1 = test02.hadron -o $1 = test11 -o $1 = test12 -o $1 = test13 ]
     then
       $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser \
@@ -119,6 +123,7 @@ else
       < $G4INSTALL/tests/$shortname/$1.in \
       > $dir/$1.out 2> $dir/$1.err
     fi
+echo "Finished $1 in $G4WORKDIR `date`"
     diff -w $1.out $dir/$1.out > $dir/$1.diff 2> $dir/$1.diff_err
     #cat $dir/$1.diff
 

@@ -34,7 +34,8 @@ do
     then
 	echo "String is comment!"
     else
-	echo $command
-	$command&
+	echo "______________________" >>  $host.$devprod.$debopt.log 2>&1 
+	echo $command >>  $host.$devprod.$debopt.log 2>&1 
+	$command >> $host.$devprod.$debopt.log 2>&1 &
      fi	
 done
