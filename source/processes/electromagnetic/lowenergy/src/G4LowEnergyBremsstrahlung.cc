@@ -27,23 +27,31 @@
 //
 // File name:     G4LowEnergyBremsstrahlung
 //
-// Author:        V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
+// Author:        Alessandra Forti
 // 
-// Creation date: 27 September 2001
+// Creation date: March 1999
 //
-// Modifications: 
+// Modifications:
+// 18.04.2000 V.L. 
+//  - First implementation of continuous energy loss.
+// 17.02.2000 Veronique Lefebure
+//  - correct bug : the gamma energy was not deposited when the gamma was 
+//    not produced when its energy was < cutForLowEnergySecondaryPhotons
 //
+// Added Livermore data table construction methods A. Forti
+// Modified BuildMeanFreePath to read new data tables A. Forti
+// Modified PostStepDoIt to insert sampling with with EEDL data A. Forti
+// Added SelectRandomAtom A. Forti
+// Added map of the elements A. Forti
+// 20.09.00 update printout V.Ivanchenko
+// 24.04.01 V.Ivanchenko remove RogueWave 
+// 29.09.2001 V.Ivanchenko: revision based on design iteration
+// 10.10.2001 MGP Revision to improve code quality and consistency with design
 // --------------------------------------------------------------
-//
-// Class Description: 
-//
-// Bremsstrahlung process based on the model developed  
-// by Alessandra Forti, 1999, and Veronique Lefebure, 2000 
-//
-// --------------------------------------------------------------
-//
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// --------------------------------------------------------------
+
 
 #include "G4LowEnergyBremsstrahlung.hh"
 #include "G4BremsstrahlungElectronSpectrum.hh"
@@ -55,32 +63,28 @@
 #include "G4UnitsTable.hh"
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
- 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& nam)
   : G4eLowEnergyLoss(nam), 
-    theBR(0),
-    crossSectionHandler(0),
-    theMeanFreePath(0)
+  crossSectionHandler(0),
+  theMeanFreePath(0),
+  energySpectrum(0)
 {
   verboseLevel = 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
 G4LowEnergyBremsstrahlung::~G4LowEnergyBremsstrahlung()
 {
   delete crossSectionHandler;
-  delete theBR;
+  delete energySpectrum;
   delete theMeanFreePath;
   cutForSecondaryPhotons.clear();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LowEnergyBremsstrahlung::BuildPhysicsTable(
-                            const G4ParticleDefinition& aParticleType)
+void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
   if(verboseLevel > 0) {
     G4cout << "G4LowEnergyBremsstrahlung::BuildPhysicsTable start"
@@ -90,8 +94,8 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(
   cutForSecondaryPhotons.clear();
 
   // Create and fill BremsstrahlungParameters once
-  if( theBR ) delete theBR;
-  theBR = new G4BremsstrahlungElectronSpectrum();
+  if( energySpectrum ) delete energySpectrum;
+  energySpectrum = new G4BremsstrahlungElectronSpectrum();
 
   if(verboseLevel > 0) {
     G4cout << "G4LowEnergyBremsstrahlungSpectrum is initialized"
@@ -105,9 +109,8 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(
   G4double lowKineticEnergy  = GetLowerBoundEloss();
   G4double highKineticEnergy = GetUpperBoundEloss();
   G4int    totBin = GetNbinEloss();
-  crossSectionHandler = new 
-           G4BremsstrahlungCrossSectionHandler(theBR, interpolation,
-                       lowKineticEnergy, highKineticEnergy, totBin);
+  crossSectionHandler = new G4BremsstrahlungCrossSectionHandler(energySpectrum, interpolation);
+  crossSectionHandler->Initialise(0,lowKineticEnergy, highKineticEnergy, totBin);
   crossSectionHandler->LoadShellData("brem/br-cs-");
 
   if (verboseLevel > 0) {
@@ -117,7 +120,7 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(
     crossSectionHandler->PrintData();
     G4cout << "Parameters: " 
            << G4endl;
-    theBR->PrintData();
+    energySpectrum->PrintData();
   }
 
   // Build loss table for Bremsstrahlung
@@ -163,7 +166,6 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(
  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4LowEnergyBremsstrahlung::BuildLossTable(
                           const G4ParticleDefinition& aParticleType)
@@ -173,7 +175,7 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(
 
   G4double lowKineticEnergy  = GetLowerBoundEloss();
   G4double highKineticEnergy = GetUpperBoundEloss();
-  G4int    totBin = GetNbinEloss();
+  size_t totBin = GetNbinEloss();
  
   //  create table
   
@@ -203,13 +205,13 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(
 
     // the cut cannot be below lowest limit
     G4double tcut = G4std::min(highKineticEnergy,
-                             ((G4Gamma::Gamma())->GetCutsInEnergy())[J]);
+			       ((G4Gamma::Gamma())->GetCutsInEnergy())[J]);
     cutForSecondaryPhotons[J] = tcut;
 
     const G4ElementVector* theElementVector = material->GetElementVector();
-    G4int NumberOfElements = material->GetNumberOfElements() ;
+    size_t NumberOfElements = material->GetNumberOfElements() ;
     const G4double* theAtomicNumDensityVector = 
-                    material->GetAtomicNumDensityVector();
+      material->GetAtomicNumDensityVector();
     if(verboseLevel > 1) {
       G4cout << "Energy loss for material # " << J
              << " tcut(keV)= " << tcut/keV
@@ -225,8 +227,8 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(
       // loop for elements in the material
       for (size_t iel=0; iel<NumberOfElements; iel++ ) {
         G4int Z = (G4int)((*theElementVector)[iel]->GetZ());
-        G4double e = theBR->AverageEnergy(Z, 0.0, tcut, lowEdgeEnergy); 
-        G4double pro = theBR->Probability(Z, 0.0, tcut, lowEdgeEnergy); 
+        G4double e = energySpectrum->AverageEnergy(Z, 0.0, tcut, lowEdgeEnergy); 
+        G4double pro = energySpectrum->Probability(Z, 0.0, tcut, lowEdgeEnergy); 
         G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy);
         ionloss   += e * cs * pro * theAtomicNumDensityVector[iel];
         if(verboseLevel > 1) {
@@ -246,11 +248,9 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(
-                                                 const G4Track& track,
-                                                 const G4Step&  step)
+G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& track,
+							   const G4Step& step)
 {
   aParticleChange.Initialize(track);
 
@@ -265,7 +265,7 @@ inline G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(
 
   G4int Z = crossSectionHandler->SelectRandomAtom(mat, kineticEnergy);
 
-  G4double tgam = theBR->SampleEnergy(Z, tcut, kineticEnergy, kineticEnergy);
+  G4double tgam = energySpectrum->SampleEnergy(Z, tcut, kineticEnergy, kineticEnergy);
 
   // Sample gamma angle (Z - axis along the parent particle).
   // Universal distribution suggested by L. Urban (Geant3 manual (1993) 
@@ -321,23 +321,36 @@ inline G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(
   return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4LowEnergyBremsstrahlung::PrintInfoDefinition()
 {
   G4String comments = "Total cross sections from EEDL database,";
-           comments += "Gamma energy sampled from a parametrised formula.";
-           comments += "Implementation of the continuous dE/dx part.";  
-           comments += "\n At present it can be used for electrons ";
-           comments += " in the energy range [250eV,100GeV]";
-           comments += 
-  "\n the process must work with G4LowEnergyIonisation";
-                     
-	   G4cout << G4endl << GetProcessName() << ":  " << comments<<G4endl;
-
+  comments += "Gamma energy sampled from a parameterised formula.";
+  comments += "Implementation of the continuous dE/dx part.";  
+  comments += "\n At present it can be used for electrons ";
+  comments += " in the energy range [250eV,100GeV]";
+  comments += "\n the process must work with G4LowEnergyIonisation";
+  
+  G4cout << G4endl << GetProcessName() << ":  " << comments<<G4endl;
 }         
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+G4bool G4LowEnergyBremsstrahlung::IsApplicable(const G4ParticleDefinition& particle)
+{
+   return (  (&particle == G4Electron::Electron())  );
+}
+
+
+G4double G4LowEnergyBremsstrahlung::GetMeanFreePath(const G4Track& track,
+						    G4double previousStepSize,
+						    G4ForceCondition* cond)
+{
+   *cond = NotForced;
+   G4int index = (track.GetMaterial())->GetIndex();
+   const G4VEMDataSet* data = theMeanFreePath->GetComponent(index);
+   G4double meanFreePath = data->FindValue(track.GetKineticEnergy());
+   return meanFreePath; 
+} 
+
 
 
 

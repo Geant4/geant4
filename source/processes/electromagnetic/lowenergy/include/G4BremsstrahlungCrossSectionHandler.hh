@@ -61,19 +61,15 @@ class G4BremsstrahlungCrossSectionHandler : public G4VCrossSectionHandler
 
 public:
 
-  G4BremsstrahlungCrossSectionHandler(const G4VEnergySpectrum* spec,
-                                            G4VDataSetAlgorithm* alg,
-                                            G4double emin, 
-                                            G4double emax, 
-                                            G4int nbin);
+  G4BremsstrahlungCrossSectionHandler(const G4VEnergySpectrum* spectrum,
+				      G4VDataSetAlgorithm* interpolation);
 
   ~G4BremsstrahlungCrossSectionHandler();
  
 protected:
 
-  G4std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(
-                                const G4DataVector& energyVector, 
-				const G4DataVector* energyCuts);
+  G4std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
+							       const G4DataVector* energyCuts);
 
 
 private:

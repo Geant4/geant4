@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.hh,v 1.8 2001-10-09 15:34:57 pia Exp $
+// $Id: G4VCrossSectionHandler.hh,v 1.9 2001-10-10 09:49:29 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -82,6 +82,10 @@ public:
 
   G4VEMDataSet* BuildMeanFreePathForMaterials(const G4DataVector* energyCuts = 0);
  
+  G4double FindValue(G4int Z, G4double e) const;
+
+  G4double FindValue(G4int Z, G4double e, G4int shellIndex) const;
+
   void LoadData(const G4String& dataFile);
 
   void LoadShellData(const G4String& dataFile);
@@ -92,11 +96,7 @@ public:
 
 protected: 
    
-  //  G4int NumberOfComponents(G4int Z) const;
-
-  G4double FindValue(G4int Z, G4double e) const;
-
-  G4double FindValue(G4int Z, G4double e, G4int shellIndex) const;
+  G4int NumberOfComponents(G4int Z) const;
 
   G4double ValueForMaterial(const G4Material* material, G4double e) const;
 

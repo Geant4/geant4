@@ -37,7 +37,6 @@
 //
 // -------------------------------------------------------------------
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4BremsstrahlungCrossSectionHandler.hh"
 #include "G4BremsstrahlungElectronSpectrum.hh"
@@ -50,30 +49,24 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4BremsstrahlungCrossSectionHandler::G4BremsstrahlungCrossSectionHandler(
-    const G4VEnergySpectrum* spec, G4VDataSetAlgorithm* alg, 
-    G4double emin, G4double emax, G4int nbin)
- :  G4VCrossSectionHandler(),
-    theBR(spec)
+G4BremsstrahlungCrossSectionHandler::G4BremsstrahlungCrossSectionHandler(const G4VEnergySpectrum* spec, 
+									 G4VDataSetAlgorithm* alg)
+  : theBR(spec)
 {
   interp = new G4SemiLogInterpolation();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4BremsstrahlungCrossSectionHandler::~G4BremsstrahlungCrossSectionHandler() 
 {
   delete interp;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4std::vector<G4VEMDataSet*>* 
-       G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(
-                                const G4DataVector& energyVector, 
-				const G4DataVector* energyCuts)
+G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
+								    const G4DataVector* energyCuts)
 {
   G4std::vector<G4VEMDataSet*>* set = new G4std::vector<G4VEMDataSet*>;
 
@@ -129,7 +122,6 @@ G4std::vector<G4VEMDataSet*>*
   return set;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 
