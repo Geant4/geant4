@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.cc,v 1.10 1999-07-27 10:41:33 urban Exp $
+// $Id: G4hEnergyLoss.cc,v 1.11 1999-07-28 07:56:56 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -265,8 +265,8 @@ void G4hEnergyLoss::BuildDEDXTable(
     }
   }
   // make the energy loss and the range table available
-  const G4double lowestKineticEnergy(1.00*keV);
-  const G4double highestKineticEnergy(100.*TeV);
+  // const G4double lowestKineticEnergy(1.00*keV);
+  // const G4double highestKineticEnergy(100.*TeV);
 
   G4EnergyLossTables::Register(&aParticleType,  
     (Charge>0)?
@@ -279,7 +279,8 @@ void G4hEnergyLoss::BuildDEDXTable(
       theLabTimepTable: theLabTimepbarTable,
     (Charge>0)?
       theProperTimepTable: theProperTimepbarTable,
-    lowestKineticEnergy, highestKineticEnergy,
+    // lowestKineticEnergy, highestKineticEnergy,
+    LowestKineticEnergy, HighestKineticEnergy,
     proton_mass_c2/aParticleType.GetPDGMass(),TotBin);
 
 }
