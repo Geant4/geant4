@@ -21,27 +21,28 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModularPhysicsList.hh,v 1.3 2002-05-29 03:48:04 kurasige Exp $
+// $Id: G4VModularPhysicsList.hh,v 1.4 2002-05-29 12:11:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
-// Class Description:
-//      This class is an derived class of G4VUserPhysicsList.     
-//       User should regsiter his/her physics constructors 
-//      by using 
-//         G4VModularPhysicsList::RegsiterPhysics() 
-//      to construt particles and processes.
-//       In addition User must implement following four virtual methods
-//      in his own concrete class derived from this class. 
-//        G4VModularPhysicsList::SetCuts()
-//           set cut values in range to all particles
-//           (and rebuilding physics table will be invoked )
 //
-// ------------------------------------------- 
-//	History
-//        first version                   12 Nov. 2000 by H.Kurashige 
+// Class Description:
+//   This class is a subclass of G4VUserPhysicsList.     
+//   The user should register his/her physics constructors 
+//   by using 
+//         G4VModularPhysicsList::RegsiterPhysics() 
+//   to construt particles and processes.
+//   In addition the user must implement the four virtual methods
+//   in his own concrete class derived from this class. 
+//        G4VModularPhysicsList::SetCuts()
+//   to set cut values in range to all particles
+//   (rebuild of physics table will be invoked).
+
+// ------------------------------------------------------------ 
+// History
+// - first version                   12 Nov 2000 by H.Kurashige 
 // ------------------------------------------------------------
 #ifndef G4VModularPhysicsList_h
 #define G4VModularPhysicsList_h 1
@@ -80,8 +81,8 @@ class G4VModularPhysicsList: public virtual G4VUserPhysicsList
     const G4VPhysicsConstructor* GetPhysics(G4int index) const;
     const G4VPhysicsConstructor* GetPhysics(const G4String& name) const;
 
-    
   /////////////////////////////////////
+
   protected: // with description
    // vector of pointers to G4VPhysicsConstructor
    typedef G4std::vector<G4VPhysicsConstructor*> G4PhysConstVector;

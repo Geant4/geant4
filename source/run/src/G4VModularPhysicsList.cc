@@ -21,34 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModularPhysicsList.cc,v 1.1 2002-05-29 03:48:00 kurasige Exp $
+// $Id: G4VModularPhysicsList.cc,v 1.2 2002-05-29 12:11:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
-//	GEANT 4 class header file 
-// Class Description:
-//      This class is an derived class of G4VUserPhysicsList.     
-//       User should regsiter his/her physics constructors 
-//      by using 
-//         G4VModularPhysicsList::RegsiterPhysics() 
-//      to construt particles and processes.
-//       In addition User must implement following four virtual methods
-//      in his own concrete class derived from this class. 
-//        G4VModularPhysicsList::SetCuts()
-//           set cut values in range to all particles
-//           (and rebuilding physics table will be invoked )
-//
-// ------------------------------------------- 
-//	History
-//        first version                   12 Nov. 2000 by H.Kurashige 
+//	GEANT 4 class implementation file 
 // ------------------------------------------------------------
-#include "globals.hh"
-#include "G4ios.hh"
-#include "g4std/vector"
 
 #include "G4VModularPhysicsList.hh"
-
 
 G4VModularPhysicsList::G4VModularPhysicsList()
                   : G4VUserPhysicsList()
