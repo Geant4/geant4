@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.17 2000-08-08 10:03:16 grichine Exp $
+// $Id: G4Tubs.cc,v 1.18 2000-08-16 09:44:34 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1518,11 +1518,19 @@ G4double G4Tubs::DistanceToOut(const G4ThreeVector& p) const
   if( Inside(p) == kOutside )
   {
     G4cout.precision(16) ;
+    G4cout << G4endl ;
+    G4cout << "Tubs parameters:" << G4endl << G4endl ;
+    G4cout << "fRMin = "   << fRMin/mm << " mm" << G4endl ;
+    G4cout << "fRMax = "   << fRMax/mm << " mm" << G4endl ;
+    G4cout << "fDz = "   << fDz/mm << " mm" << G4endl ;
+    G4cout << "fSPhi = "   << fSPhi/degree << " degree" << G4endl ;
+    G4cout << "fDPhi = "   << fDPhi/degree << " degree" << G4endl<<G4endl ;
     G4cout << "Position:"  << G4endl << G4endl ;
     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-    G4Exception("Invalid call in G4Tubs::DistanceToOut(p),  point p is outside") ;
+ // G4Exception("Invalid call in G4Tubs::DistanceToOut(p),  point p is outside") ;
+    G4cout << "G4Tubs::DistanceToOut(p), point p is outside !?" << G4endl ;
   }
 
   if ( fRMin )
