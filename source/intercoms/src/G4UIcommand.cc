@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommand.cc,v 1.7 2001-03-08 17:00:32 gcosmo Exp $
+// $Id: G4UIcommand.cc,v 1.8 2001-05-18 17:08:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -243,7 +243,7 @@ G4String G4UIcommand::UnitsList(G4String unitCategory)
 {
   G4String retStr;
   G4UnitsTable& UTbl = G4UnitDefinition::GetUnitsTable();
-  G4int i;
+  size_t i;
   for(i=0;i<UTbl.size();i++)
   { if(UTbl[i]->GetName()==unitCategory) break; }
   if(i==UTbl.size())
@@ -777,7 +777,7 @@ Eval2(yystype arg1, int op, yystype arg2)
 int G4UIcommand::
 CompareInt(int arg1, int op, int arg2)
 {   
-    int result;
+    int result=-1;
     G4String opr;
     switch (op) {
        case GT:  result = ( arg1 >  arg2); opr= ">" ;  break;
@@ -802,7 +802,7 @@ CompareInt(int arg1, int op, int arg2)
 int G4UIcommand::
 CompareDouble(double arg1, int op, double arg2)
 {   
-    int result;
+    int result=-1;
     G4String opr;
     switch (op) {
         case GT:  result = ( arg1 >  arg2); opr= ">";   break;

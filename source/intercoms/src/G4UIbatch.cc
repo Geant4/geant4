@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIbatch.cc,v 1.2 1999-12-15 14:50:40 gunter Exp $
+// $Id: G4UIbatch.cc,v 1.3 2001-05-18 17:08:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -14,8 +14,8 @@
 #include "G4ios.hh"
 
 G4UIbatch::G4UIbatch(G4String fileName,G4UIsession* prevSession) 
-:macroFileName(fileName),previousSession(prevSession),
- openFailed(false)
+ : previousSession(prevSession), macroFileName(fileName),
+   openFailed(false)
 {
   const char* theFileName = fileName;
   UImanager = G4UImanager::GetUIpointer();

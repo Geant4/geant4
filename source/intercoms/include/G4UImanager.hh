@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImanager.hh,v 1.7 2001-02-08 06:07:18 asaim Exp $
+// $Id: G4UImanager.hh,v 1.8 2001-05-18 17:08:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -172,7 +172,7 @@ class G4UImanager : public G4VStateDependent
       inline G4String GetPreviousCommand(G4int i) const
       { 
         G4String st;
-        if(i>=0 && i<histVec.size())
+        if(i>=0 && i<G4int(histVec.size()))
         { st = histVec[i]; }
         return st;
       }

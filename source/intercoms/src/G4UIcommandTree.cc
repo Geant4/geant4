@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommandTree.cc,v 1.5 2001-02-08 06:07:20 asaim Exp $
+// $Id: G4UIcommandTree.cc,v 1.6 2001-05-18 17:08:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,7 +57,7 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand *newCommand)
     return;
   }
   int i = remainingPath.first('/');
-  if( i == G4std::string::npos )
+  if( i == int(G4std::string::npos) )
   {
     // Find command
     int n_commandEntry = command.size();
@@ -102,7 +102,7 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand *aCommand)
   else
   {
     int i = remainingPath.first('/');
-    if( i == G4std::string::npos )
+    if( i == int(G4std::string::npos) )
     {
       // Find command
       int n_commandEntry = command.size();
@@ -147,7 +147,7 @@ G4UIcommand * G4UIcommandTree::FindPath(G4String commandPath)
   G4String remainingPath = commandPath;
   remainingPath.remove(0,pathName.length());
   int i = remainingPath.first('/');
-  if( i == G4std::string::npos )
+  if( i == int(G4std::string::npos) )
   {
     // Find command
     int n_commandEntry = command.size();
@@ -176,7 +176,6 @@ void G4UIcommandTree::ListCurrent()
 {
   G4cout << "Command directory path : " << pathName << G4endl;
   if( guidance != NULL ) guidance->List();
-  int i = 0;
   G4cout << " Sub-directories : " << G4endl;
   int n_treeEntry = tree.size();
   for( int i_thTree = 0; i_thTree < n_treeEntry; i_thTree++ )

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommandTree.hh,v 1.6 2001-02-08 06:07:18 asaim Exp $
+// $Id: G4UIcommandTree.hh,v 1.7 2001-05-18 17:08:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,7 +61,7 @@ class G4UIcommandTree
       { return tree[i-1]; };
       inline G4UIcommandTree * GetTree(G4String comName)
       { 
-        for( int i=0; i < tree.size(); i++)
+        for( size_t i=0; i < tree.size(); i++)
         {
           if( comName == tree[i]->GetPathName() )
           { return tree[i]; }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImanager.cc,v 1.7 2001-02-08 06:07:20 asaim Exp $
+// $Id: G4UImanager.cc,v 1.8 2001-05-18 17:08:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -212,7 +212,7 @@ int G4UImanager::ApplyCommand(G4String aCommand)
   G4String commandString;
   G4String commandParameter;
   int i = aCommand.index(" ");
-  if( i != G4std::string::npos )
+  if( i != int(G4std::string::npos) )
   {
     commandString = aCommand(0,i);
     commandParameter = aCommand(i+1,aCommand.length()-(i+1));
@@ -282,7 +282,7 @@ G4UIcommandTree* G4UImanager::FindDirectory(const char* dirName)
   if( targetDir == "/" )
   { return comTree; }
   int idx = 1;
-  while( idx < targetDir.length()-1 )
+  while( idx < int(targetDir.length())-1 )
   {
     int i = targetDir.index("/",idx);
     comTree = comTree->GetTree(targetDir(0,i+1));

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIparameter.cc,v 1.4 1999-12-15 14:50:42 gunter Exp $
+// $Id: G4UIparameter.cc,v 1.5 2001-05-18 17:08:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -537,7 +537,7 @@ Eval2(yystype arg1, int op, yystype arg2)
     if( (arg1.type != IDENTIFIER) && (arg2.type != IDENTIFIER)) {
         G4cerr << parameterName
              << ": meaningless comparison "
-             << arg1.type << " " << arg2.type << G4endl;
+             << int(arg1.type) << " " << int(arg2.type) << G4endl;
         paramERR = 1;
     }
     char type = toupper( parameterType );
@@ -590,7 +590,7 @@ Eval2(yystype arg1, int op, yystype arg2)
 int G4UIparameter::
 CompareInt(int arg1, int op, int arg2)
 {   
-    int result;
+    int result=-1;
     G4String opr;
     switch (op) {
        case GT:  result = ( arg1 >  arg2); opr= ">" ;  break;
@@ -615,7 +615,7 @@ CompareInt(int arg1, int op, int arg2)
 int G4UIparameter::
 CompareDouble(double arg1, int op, double arg2)
 {   
-    int result;
+    int result=-1;
     G4String opr;
     switch (op) {
         case GT:  result = ( arg1 >  arg2); opr= ">";   break;
