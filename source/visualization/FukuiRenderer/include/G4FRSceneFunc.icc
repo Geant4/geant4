@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRSceneFunc.icc,v 1.7 2005-01-27 20:04:24 johna Exp $
+// $Id: G4FRSceneFunc.icc,v 1.8 2005-02-23 11:15:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -306,11 +306,13 @@ void G4FRSCENEHANDLER::AddPrimitive ( const G4Polyhedron& polyhedron )
 			break;
 		default:
 			G4cerr <<
-	"ERROR G4FRSCENEHANDLER::AddPrimitive(G4Polyhedron)\n"
+	"ERROR G4FRSCENEHANDLER::AddPrimitive(G4Polyhedron)\n";
+       if (fpCurrentPV) G4cerr <<
 	"Volume " << fpCurrentPV->GetName() <<
 	", Solid " << fpCurrentLV->GetSolid()->GetName() <<
-	" (" << fpCurrentLV->GetSolid()->GetEntityType() <<
-	"\nG4Polyhedron facet with " << i << " edges\n";	
+	" (" << fpCurrentLV->GetSolid()->GetEntityType();
+                        G4cerr <<
+	"\nG4Polyhedron facet with " << i << " edges" << G4endl;	
 		}
 	}
 
@@ -1452,6 +1454,11 @@ void G4FRSCENEHANDLER::SendDouble( G4double	val    )
 void G4FRSCENEHANDLER::ClearTransientStore() 
 {
   G4VSceneHandler::ClearTransientStore ();
+  /*
+  ClearTransientStore should restrict itself to its job.  In other
+  places, a draw command follows, so it is not needed here.  In fact
+  it can cause a double recursive descent into DrawView, so the following
+  has been commented out (JA - 23/Jan/05).
   // This is typically called after an update and before drawing hits
   // of the next event.  To simulate the clearing of "transients"
   // (hits, etc.) the detector is redrawn...
@@ -1460,5 +1467,6 @@ void G4FRSCENEHANDLER::ClearTransientStore()
     fpViewer -> ClearView ();
     fpViewer -> DrawView ();
   }
+  */
 }
 

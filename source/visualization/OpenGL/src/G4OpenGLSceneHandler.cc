@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.30 2005-01-27 20:04:58 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.31 2005-02-23 11:15:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -462,11 +462,15 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     }
     if (edgeCount > 4) {
       G4cerr <<
-	"G4OpenGLSceneHandler::AddPrimitive(G4Polyhedron): WARNING"
+	"G4OpenGLSceneHandler::AddPrimitive(G4Polyhedron): WARNING";
+      if (fpCurrentPV) {
+	G4cerr <<
 	"\n  Volume " << fpCurrentPV->GetName() <<
 	", Solid " << fpCurrentLV->GetSolid()->GetName() <<
-	" (" << fpCurrentLV->GetSolid()->GetEntityType() <<
-	"\n   G4Polyhedron facet with " << edgeCount << " edges";	
+	  " (" << fpCurrentLV->GetSolid()->GetEntityType();
+      }
+      G4cerr<<
+	"\n   G4Polyhedron facet with " << edgeCount << " edges" << G4endl;
     }
 
     // Do it all over again (twice) for hlr...
