@@ -1,4 +1,4 @@
-$Id: History,v 1.8 1999-10-22 03:20:48 tsasaki Exp $
+$Id: History,v 1.9 2000-01-23 09:51:16 tsasaki Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Jan 23, 00 T.Sasaki 
+- GetCurrentValue() in G4TrackingMessenger.cc have a return value
+- SetUserAction in G4SteppingManager.hh protected null pointers
 Oct 22, 99 T.Sasaki G4SteppingMangaer.cc fixed the UserLmit problem     
 Oct 13, 99 T.Sasaki updated G4SteppingVerbose and G4VSteppingVerbose 
 Jun 29, 99 G.Folger have the ctor always assign a SteppingVerbose to fVerbose

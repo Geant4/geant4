@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingMessenger.cc,v 1.5 1999-12-15 14:53:59 gunter Exp $
+// $Id: G4TrackingMessenger.cc,v 1.6 2000-01-23 09:51:36 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -135,6 +135,11 @@ G4String G4TrackingMessenger::GetCurrentValue(G4UIcommand * command)
     G4std::ostrstream os(line,100);
     os << trackingManager->GetVerboseLevel() << '\0';
     return G4String(line);
+  }
+  else if( command == StoreTrajectoryCmd ){
+    G4String ll = "0";
+    if(trackingManager->GetStoreTrajectory()) ll = "1";
+    return ll;
   }
   return G4String('\0');
 }
