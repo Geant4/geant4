@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2001-04-11 15:02:14 johna Exp $
+$Id: History,v 1.29 2001-04-11 15:03:29 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-11th April 2001  John Allison  (greps-V03-03-00)
+11th April 2001  John Allison  (greps-V03-01-00)
 - Some code has been added to cover unforeseen earlier situation
   during preselection of faces without intersection (Evgeni).
 - Moved #include <CLHEP/config/TemplateFunctions.h> and others from
