@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em4RunActionMessenger.cc,v 1.2 1999-12-15 14:49:06 gunter Exp $
+// $Id: Em4RunActionMessenger.cc,v 1.3 2000-01-20 17:27:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,15 +27,7 @@
 
 Em4RunActionMessenger::Em4RunActionMessenger(Em4RunAction* run)
 :Em4Run(run)
-{ 
-  SaveCmd = new G4UIcmdWithAString("/run/save",this);
-  SaveCmd->SetGuidance("Save run statistic");
-  SaveCmd->SetGuidance("  Choice : on(default),off");
-  SaveCmd->SetParameterName("choice",true);
-  SaveCmd->SetDefaultValue("on");
-  SaveCmd->SetCandidates("on off");
-  SaveCmd->AvailableForStates(Idle);
-  
+{   
   RndmDir = new G4UIdirectory("/rndm/");
   RndmDir->SetGuidance("Rndm status control.");
   
@@ -60,7 +52,6 @@ Em4RunActionMessenger::Em4RunActionMessenger(Em4RunAction* run)
 
 Em4RunActionMessenger::~Em4RunActionMessenger()
 {  
-  delete SaveCmd;
   delete RndmSaveCmd; delete RndmReadCmd; delete RndmDir;  
 }
 
@@ -68,8 +59,6 @@ Em4RunActionMessenger::~Em4RunActionMessenger()
 
 void Em4RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if (command == SaveCmd) Em4Run->SetSaveFlag(newValue);
-  
   if (command == RndmSaveCmd)
       Em4Run->SetRndmFreq(RndmSaveCmd->GetNewIntValue(newValue));
 		 

@@ -1,4 +1,4 @@
-$Id: README,v 1.1 1999-10-12 11:26:53 maire Exp $
+$Id: README,v 1.2 2000-01-20 17:27:55 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -41,7 +41,6 @@ $Id: README,v 1.1 1999-10-12 11:26:53 maire Exp $
  5- PHYSICS SURVEY
  
  	the energy deposited in C6F6 is histogramed (HEP Hist)
- 	the command '/run/save on' allows to save the histogram on file.
  	
  6- HOW TO START ?
  
