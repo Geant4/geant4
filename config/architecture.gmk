@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.18 1999-05-11 18:20:14 gcosmo Exp $
+# $Id: architecture.gmk,v 1.19 1999-05-11 18:54:13 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -474,7 +474,7 @@ ifeq ($(G4SYSTEM),HP-aCC)
     endif
   endif
   ifdef G4USE_STL
-    CPPFLAGS += -I$(G4BASE)/global/STLInterface/wrappers
+    CXXFLAGS += -ext
   endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_HPUX_10_20 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS -D__HPACC_NOEH
