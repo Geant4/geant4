@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh,v 1.8 2002-07-23 08:50:36 gcosmo Exp $
+// $Id: G4TransportationManager.hh,v 1.9 2003-06-13 09:30:06 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4TransportationManager
@@ -60,7 +60,7 @@ class G4TransportationManager
 
      inline void SetNavigatorForTracking( G4Navigator* newNavigator );
      inline void SetPropagatorInField( G4PropagatorInField* newFieldPropagator );
-     inline void SetFieldManager( G4FieldManager* newFieldManager );
+     void SetFieldManager( G4FieldManager* newFieldManager );
 
      ~G4TransportationManager(); 
 
