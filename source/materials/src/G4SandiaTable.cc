@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SandiaTable.cc,v 1.10 2001-04-03 12:32:54 maire Exp $
+// $Id: G4SandiaTable.cc,v 1.11 2001-06-06 09:19:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -122,7 +122,7 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
   fMatSandiaMatrix = new G4OrderedTable();
   G4int interval;
   for (interval=0; interval<interval2; interval++)
-     fMatSandiaMatrix->push_back(new G4DataVector(5));
+     fMatSandiaMatrix->push_back(new G4DataVector(5,0.));
         	         	
   //
   //ready to compute the Sandia coefs for the material
