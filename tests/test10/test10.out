@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (19-May-2003)
+                                (27-June-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 You select Sphere detector
@@ -21,8 +21,8 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 You select Sphere detector
 Tst10PhysicsList::SetCuts:CutLength : 1 (mm)
-         GenericIon,                 e-,              gamma,           geantino
-      opticalphoton,
+                 e-,              gamma,           geantino,      opticalphoton
+
 You select Cone detector
   A 10000 optical photons vertex has been generated at (-690.585,174.228,404.117)
 >>> Start Event 0

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (19-May-2003)
+                                (27-June-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of U
@@ -9,7 +9,7 @@ SLog is registered to the default region.
 physicsList->Construct() start.
 
 phot:  Total cross sections from Sandia parametrisation. 
-Thank you for using G4KineticCascade. 
+Thank you for using G4BinaryCascade. 
 physicsList->setCut() start.
 Tst24PhysicsList::SetCuts:CutLength : 1000 (mm)
 SimpleBox is now made of U
@@ -85,38 +85,237 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
-G4VDecayChannel::FillDaughters [ delta+ ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ delta+ ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ delta+ ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1440)+ ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1440)+ ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1440)+ ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ delta++ ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1440)+ ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1440)+ ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ delta0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ delta0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ delta0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1440)+ ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1440)+ ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1440)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1440)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1440)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ delta- ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1440)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1440)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1440)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1440)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
-G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=20s Real=26s Sys=1.2s
+SimpleBox is now made of U
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=13s Real=14s Sys=1.2s
+SimpleBox is now made of Cu
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [1e+03 (mm)]   is too big   for material  idx=2
+The cut in energy is set1.8e+305GeV 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 1e+02 GeV in 80 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=9.4s Real=13s Sys=2.6s
+SimpleBox is now made of Cu
+Start Run processing.
+WARNING! G4XPDGTotal::PDGTotal extrapolating cross section at 3 GeV outside the PDG fit range 3 - 4e+04 GeV 
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=7.4s Real=9.2s Sys=1.4s
+SimpleBox is now made of Si
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [1e+03 (mm)]   is too big   for material  idx=1
+The cut in energy is set1.8e+305GeV 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 1e+02 GeV in 80 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=4s Real=5.4s Sys=0.69s
+SimpleBox is now made of Si
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=3.7s Real=4s Sys=0.21s
+SimpleBox is now made of H
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 1e+02 GeV in 80 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=0s Real=0s Sys=0s
+SimpleBox is now made of H
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=0s Real=0s Sys=0s
+G4 kernel has come to Quit state.
+Deletion of G4 kernel class start.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManager is deleting.
