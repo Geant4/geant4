@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.icc,v 1.1 2001-07-22 00:49:37 johna Exp $
+// $Id: G4Scale.icc,v 1.2 2001-07-24 21:41:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,14 +42,14 @@ inline G4bool G4Scale::GetAutoPlacing() const {
   return fAutoPlacing;
 }
 
-inline G4double G4Scale::GetX() const {
-  return fX0;
+inline G4double G4Scale::GetXmid() const {
+  return fXmid;
 }
 
-inline G4double G4Scale::GetY() const {
-  return fY0;
+inline G4double G4Scale::GetYmid() const {
+  return fYmid;
 }
 
-inline G4double G4Scale::GetZ() const {
-  return fZ0;
+inline G4double G4Scale::GetZmid() const {
+  return fZmid;
 }

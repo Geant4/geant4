@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.cc,v 1.2 2001-07-23 18:22:17 johna Exp $
+// $Id: G4Scale.cc,v 1.3 2001-07-24 21:41:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,22 +32,12 @@
 G4Scale::G4Scale (G4double length, const G4String& annotation,
 		  G4Scale::Direction direction,
 		  G4bool autoPlacing,
-		  G4double x0, G4double y0, G4double z0):
+		  G4double xmid, G4double ymid, G4double zmid):
   fLength(length),
   fAnnotation(annotation),
   fDirection(direction),
   fAutoPlacing(autoPlacing),
-  fX0(x0), fY0(y0), fZ0(z0) {}
-
-G4Scale::G4Scale(const G4Scale& from) {
-  fLength = from.fLength;
-  fAnnotation = from.fAnnotation;
-  fDirection = from.fDirection;
-  fAutoPlacing = from.fAutoPlacing;
-  fX0 = from.fX0;
-  fY0 = from.fY0;
-  fZ0 = from.fZ0;
-}
+  fXmid(xmid), fYmid(ymid), fZmid(zmid) {}
 
 G4Scale::~G4Scale () {}
 
@@ -70,8 +60,8 @@ G4Scale & G4Scale::operator = (const G4Scale &from) {
   fAnnotation = from.fAnnotation;
   fDirection = from.fDirection;
   fAutoPlacing = from.fAutoPlacing;
-  fX0 = from.fX0;
-  fY0 = from.fY0;
-  fZ0 = from.fZ0;
+  fXmid = from.fXmid;
+  fYmid = from.fYmid;
+  fZmid = from.fZmid;
   return *this;
 }

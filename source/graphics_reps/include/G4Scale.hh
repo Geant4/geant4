@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.hh,v 1.1 2001-07-22 00:49:35 johna Exp $
+// $Id: G4Scale.hh,v 1.2 2001-07-24 21:41:41 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,23 +42,23 @@ public: // With description
   G4Scale (G4double length, const G4String& annotation = "",
 	   Direction direction = x,
 	   G4bool autoPlacing = true,
-	   G4double x0 = 0, G4double y0 = 0, G4double z0 = 0);
+	   G4double xmid = 0., G4double ymid = 0., G4double zmid = 0.);
   // This creates a representation of annotated line in the specified
   // direction with tick marks at the end.  If autoPlacing is true it
   // is required to be centred at the front, right, bottom corner of
-  // the world space, say, one tenth of the way in, i.e.,
-  // 
-  //   for a margin, of, say 1%, so that it is just inside viewing volume:
-  //   x = xmin + (1 - margin) * (xmax - xmin)
-  //   y = ymin + margin * (ymax - ymin)
-  //   z = zmin + (1 - margin) * (zmax - zmin)
-  //   if direction == "x" then (x - length,y,z) to (x,y,z)
-  //   if direction == "y" then (x,y,z) to (x,y + length,z)
-  //   if direction == "z" then (x,y,z - length) to (x,y,z)
+  // the world space, comfortably outside the existing bounding
+  // box/sphere so that existing objects do not obscure it.  Otherwise
+  // it is required to be drawn with mid-point at (xmid, ymid, zmid).
   //
-  // Otherwise it is required to be drawn at (x0, y0, z0).
+  // The auto placing algorithm might be:
+  //   x = xmin + (1 + comfort) * (xmax - xmin)
+  //   y = ymin - comfort * (ymax - ymin)
+  //   z = zmin + (1 + comfort) * (zmax - zmin)
+  //   if direction == x then (x - length,y,z) to (x,y,z)
+  //   if direction == y then (x,y,z) to (x,y + length,z)
+  //   if direction == z then (x,y,z - length) to (x,y,z)
 
-  G4Scale(const G4Scale&);
+  // Uses compiler-generated copy constructor.
 
   virtual ~G4Scale ();
 
@@ -71,16 +71,16 @@ public: // With description
   const G4String& GetAnnotation() const;
   Direction       GetDirection() const;
   G4bool          GetAutoPlacing() const;
-  G4double        GetX() const;
-  G4double        GetY() const;
-  G4double        GetZ() const;
+  G4double        GetXmid() const;
+  G4double        GetYmid() const;
+  G4double        GetZmid() const;
 
 private:
   G4double fLength;
   G4String fAnnotation;
   Direction fDirection;
   G4bool fAutoPlacing;
-  G4double fX0, fY0, fZ0;
+  G4double fXmid, fYmid, fZmid;
 };
 
 #include "G4Scale.icc"
