@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PDGCodeChecker.hh,v 1.2 1999-08-19 08:18:08 kurasige Exp $
+// $Id: G4PDGCodeChecker.hh,v 1.3 1999-10-20 10:37:32 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,9 +112,9 @@ inline
   G4int G4PDGCodeChecker::GetQuarkFlavor(G4int idx) const
 {
   G4int value = -1;
-  if (idx =0) value = quark1;
-  else if (idx =1) value = quark2;
-  else if (idx =2) value = quark3;
+  if (idx ==0) value = quark1;
+  else if (idx ==1) value = quark2;
+  else if (idx ==2) value = quark3;
   else ;
   return value;
 }
