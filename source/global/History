@@ -1,4 +1,4 @@
-$Id: History,v 1.24 1999-11-09 15:51:15 maire Exp $
+$Id: History,v 1.25 1999-11-10 14:49:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10, 99 G.Cosmo (global-V00-01-06)
+- Temporarly redefined RW_NPOS in STLInterface/rw/defs.h.
+  Will be removed in the RWT->G4RWT migration and replaced with
+  G4std::string::npos directly in the code.
+
 November 09, 99 G.Cosmo (global-V00-01-05)
-- Added unsigned long signature for HashDefault in STLInterface/rw/rwstlhash.h
+- Added new signature HashDefault(const unsigned long&) in STLInterface
+  rw/rwstlhash.h.
 
 October 28, 99 G.Cosmo (global-V00-01-04)
 - Removed G4STREAM implementation from G4ios and G4strstreambuf, no longer
