@@ -1,0 +1,11 @@
+/vis/open VRML1
+/vis/draw/current
+/fred/volume TORUS1
+/fred/gun G4
+/gun/position -50 -50 -50
+/gun/direction 5 5 0 
+/run/initialize 
+/vis~/create_view/new_graphics_system VRML1
+/vis~/camera/zoom 16
+/tracking/storeTrajectory 1
+/run/beamOn
