@@ -14,7 +14,6 @@ typedef std::ostringstream OutputStringStream ;
 
 #else
 
-// MD added include strstream.h (not strstream, since it does not exist on Solaris)
 #include <strstream>
 
 /** OutputStringStream is typedefed to ostringstream if sstream is

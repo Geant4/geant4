@@ -1,7 +1,7 @@
 
 #include "zipios++/zipios-config.h"
 
-#include <assert.h>
+#include <cassert>
 
 #include "zipios++/meta-iostreams.h"
 #include <string>
