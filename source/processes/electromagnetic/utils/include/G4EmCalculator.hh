@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.2 2004-07-05 13:36:31 vnivanch Exp $
+// $Id: G4EmCalculator.hh,v 1.3 2004-08-02 10:44:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,15 +74,22 @@ public:
   // Materials should exist in the list of the G4MaterialCutsCouple
 
   G4double GetDEDX(const G4ParticleDefinition*, const G4Material*, G4double kinEnergy);
+  G4double GetDEDX(const G4String&, const G4String&, G4double kinEnergy);
 
   G4double GetRange(const G4ParticleDefinition*, const G4Material*, G4double kinEnergy);
+  G4double GetRange(const G4String&, const G4String&, G4double kinEnergy);
 
   G4double GetKinEnergy(const G4ParticleDefinition*, const G4Material*, G4double range);
+  G4double GetKinEnergy(const G4String&, const G4String&, G4double range);
 
   G4double GetCrossSection(const G4ParticleDefinition*, const G4Material*,
                            const G4String& processName, G4double kinEnergy);
+  G4double GetCrossSection(const G4String&, const G4String&,
+                           const G4String& processName, G4double kinEnergy);
 
-  G4double GetMinFreePath(const G4ParticleDefinition*, const G4Material*,
+  G4double GetMeanFreePath(const G4ParticleDefinition*, const G4Material*,
+                           const G4String& processName, G4double kinEnergy);
+  G4double GetMeanFreePath(const G4String&, const G4String&,
                            const G4String& processName, G4double kinEnergy);
 
   void PrintDEDXTable(const G4ParticleDefinition*);
@@ -98,23 +105,37 @@ public:
                        const G4String& processName, G4double kinEnergy,
                              G4double cut = DBL_MAX,
 			     size_t idxRegion = 0);
+  G4double ComputeDEDX(const G4String&, const G4String&,
+                       const G4String& processName, G4double kinEnergy,
+                             G4double cut = DBL_MAX,
+			     size_t idxRegion = 0);
 
   G4double ComputeCrossSection(const G4ParticleDefinition*, const G4Material*,
                                const G4String& processName, G4double kinEnergy,
                                      G4double cut = 0.0,
   			             size_t idxRegion = 0);
+  G4double ComputeCrossSection(const G4String&, const G4String&,
+                               const G4String& processName, G4double kinEnergy,
+                                     G4double cut = 0.0,
+  			             size_t idxRegion = 0);
 
-  G4double ComputeMinFreePath(const G4ParticleDefinition*, const G4Material*,
-                              const G4String& processName, G4double kinEnergy,
-                                    G4double cut = 0.0,
-			            size_t idxRegion = 0);
+  G4double ComputeMeanFreePath(const G4ParticleDefinition*, const G4Material*,
+                               const G4String& processName, G4double kinEnergy,
+                                     G4double cut = 0.0,
+			             size_t idxRegion = 0);
+  G4double ComputeMeanFreePath(const G4String&, const G4String&,
+                               const G4String& processName, G4double kinEnergy,
+                                     G4double cut = 0.0,
+			             size_t idxRegion = 0);
 
 
 private:
 
   void UpdateParticle(const G4ParticleDefinition*, G4double kinEnergy);
+  const G4ParticleDefinition* FindParticle(const G4String&, G4double kinEnergy);
  
   void FindMaterial(const G4Material*);
+  const G4Material* FindMaterial(const G4String&);
 
   void FindCouple(const G4Material*, G4double cut);
 
@@ -151,6 +172,9 @@ private:
   G4double                     chargeSquare;
   G4double                     massRatio;
   G4bool                       isIon;
+
+  G4String                     currentParticleName;
+  G4String                     currentMaterialName;
 };
 
 //....oooOO0OOooo.......oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
