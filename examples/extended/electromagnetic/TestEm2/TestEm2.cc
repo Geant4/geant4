@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm2.cc,v 1.1 1999-10-11 15:08:24 maire Exp $
+// $Id: TestEm2.cc,v 1.2 1999-11-10 16:44:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Comments
@@ -29,12 +29,16 @@
 #include "Em2EventAction.hh"
 #include "Em2TrackingAction.hh"
 #include "Em2SteppingAction.hh"
+#include "Em2SteppingVerbose.hh"
 
 int main(int argc,char** argv) {
  
   //choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
-   
+  
+  //my Verbose output class
+  G4VSteppingVerbose::SetInstance(new Em2SteppingVerbose);
+     
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
