@@ -70,8 +70,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	  globalOutput.trivialise(bullet, target);
 
 	  return globalOutput;
-	}
-	else {
+	} else {
 	  convertToTargetRestFrame.setBullet(pbullet->getMomentum(),
 					     pbullet->getMass());   
 	  btype = pbullet->type();
@@ -140,9 +139,6 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	    G4cout << " After Cascade " << G4endl;
 
 	    output.printCollisionOutput();
-
-	    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++++++++ " << 
-	      G4endl;
 	  }
 	  
 	  // the rest, if any
@@ -154,7 +150,9 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 
 	    if(explosion(&cascad_rec_nuclei)) {
 
-	      G4cout << " big bang after cascade " << G4endl;
+	      if (verboseLevel > 3) {
+		G4cout << " big bang after cascade " << G4endl;
+	      };
 
 	      output = theBigBanger->collide(0,&cascad_rec_nuclei);
 	      TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
@@ -166,9 +164,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 		G4cout << " After NonEquilibriumEvaporator " << G4endl;
 
 		output.printCollisionOutput();
-
-		G4cout << " ++++++++++++++++++++++++++++++++++++++++++++++++++ " << G4endl;
-	      }
+	      };
 
 	      TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
 
@@ -180,9 +176,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 		G4cout << " After EquilibriumEvaporator " << G4endl;
 
 		output.printCollisionOutput();
-
-		G4cout << " ++++++++++++++++++++++++++++++++++++++++++++++++++ " << G4endl;
-	      }
+	      };
 
 	      TRFoutput.addOutgoingParticles(output.getOutgoingParticles());  
 	      TRFoutput.addTargetFragments(output.getNucleiFragments());         
@@ -260,8 +254,9 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
     }
     else {
 
-      G4cout << " InuclCollider -> inter case " << intcase << G4endl;
-
+      if (verboseLevel > 3) {
+	G4cout << " InuclCollider -> inter case " << intcase << G4endl;
+      };
     };       
   };
 
