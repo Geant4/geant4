@@ -27,6 +27,7 @@
       ENDIF
 *
 *     random in YZ ?
+      if ((pkine(8).lt.0.).or.(pkine(8).gt.1.)) pkine(8) = 0.
       rbeam = pkine(8)*0.5*calorYZ
       call GRNDM (rndm,2)
 *        
