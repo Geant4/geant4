@@ -40,7 +40,7 @@ Test17SteppingAction::Test17SteppingAction(Test17DetectorConstruction* DET,
                                            Test17EventAction* EA,
                                            Test17RunAction* RA)
 :detector(DET),eventaction (EA),runaction(RA),
- IDold(-1),IDnow(-2),prim(false)
+ IDnow(-2),IDold(-1),prim(false)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -52,7 +52,7 @@ Test17SteppingAction::~Test17SteppingAction()
 
 void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
-  G4double Edep,Theta,Thetaback,xend,yend,zend,rend,Tkin;
+  G4double Edep,Theta,xend,Tkin;
 
   G4double Tsec = aStep->GetPreStepPoint()->GetKineticEnergy();
   G4int evno = eventaction->GetEventNo() ; 

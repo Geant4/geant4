@@ -105,7 +105,7 @@ void Test17RunAction::EndOfRunAction(const G4Run* aRun)
   if(part0) name = part0->GetParticleName();
 
   G4cout << G4endl;
-  G4int prec = G4cout.precision(6);
+  //  G4int prec = G4cout.precision(6);
   G4cout << " end of Run TotNbofEvents = " <<  nEvents 
          << " for " <<  name
          << " with Ekin = " << kinEnergy0/MeV << " MeV" << G4endl ;

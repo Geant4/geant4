@@ -38,7 +38,7 @@
 
 class Test17DetectorConstruction;
 class Test17PhysicsListMessenger;
-class G4hLowEnergyIonisationVI;
+class G4hLowEnergyIonisation;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -88,7 +88,7 @@ public: // Without description
     
     G4double MaxChargedStep;    
 
-    G4std::vector<G4hLowEnergyIonisationVI*> hionVector;
+    G4std::vector<G4hLowEnergyIonisation*> hionVector;
 
     Test17DetectorConstruction* pDet;
     Test17PhysicsListMessenger* physicsListMessenger;
