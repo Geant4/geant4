@@ -48,8 +48,8 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   SHEXT   := dylib
   X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
-  XMFLAGS   := -I/usr/X11R6/include
-  XMLIBS    := -lXm -lXpm
+  XMFLAGS   := -I/sw/include
+  XMLIBS    := -L/sw/lib -lXm -lXpm
   DLDLIBS   := -ldl
   ifndef OGLHOME
     OGLHOME  := /usr/X11R6
@@ -60,16 +60,16 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
-  OIVFLAGS  += -I$(OIHOME)/include 
+  #OIVFLAGS  += -I$(OIHOME)/include 
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     g++ -dynamiclib -flat_namespace -undefined suppress -o $$libdir/$(@F) $(INTYLIBS) *.o
+     g++ -dynamiclib -flat_namespace -undefined suppress  -dynamic -single_module -o $$libdir/$(@F) $(INTYLIBS) *.o
   endef
   define build-global-shared-lib
     libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMP)/$(G4SYSTEM); \
-     g++ -dynamiclib -flat_namespace -undefined suppress -o $$libdir/$(@F) $(INTYLIBS) $(foreach dir,$(SUBLIBS),$(dir)/*.o);
+     g++ -dynamiclib -flat_namespace -undefined suppress  -dynamic -single_module -o $$libdir/$(@F) $(INTYLIBS) $(foreach dir,$(SUBLIBS),$(dir)/*.o);
   endef
 
 endif
