@@ -8,9 +8,9 @@
 /event/verbose 0
 /test31/verbose 0
 #
-/test31/physics/cutGamma     0.1 mm
+/test31/physics/cutGamma     0.1 cm
 #/test31/physics/cutGamma    100 cm
-/test31/physics/cutElectron  0.1 mm
+/test31/physics/cutElectron  0.1 cm
 #/test31/physics/cutElectron 100 mm
 #/test31/physics/MaxStep     0.1 mm
 /test31/physics/EMList       Standard
@@ -18,12 +18,12 @@
 /test31/AbsorberMaterial     Silicon
 /test31/AbsorberThick        10 mm
 /test31/NumberOfAbsorbers    60
-/test31/maxDeltaEnergy       1.0 MeV
+/test31/maxDeltaEnergy       10.0 MeV
 /test31/WorldMaterial        Vacuum
 #/test31/HistoName           hbook.paw 
 /test31/HistoName            el_st1000a.paw 
 /test31/HistoNumber          5
-/test31/NumberOfEvents       1
+/test31/NumberOfEvents       1000
 /test31/gun/beamE            1000.0 MeV
 #
 /gun/particle e-

@@ -4,7 +4,7 @@
 #================================================ 
 /control/verbose 2
 /run/verbose 2
-/tracking/verbose 0
+/tracking/verbose 2
 /event/verbose 0
 /test31/verbose 0
 #
@@ -20,10 +20,10 @@
 /test31/NumberOfAbsorbers   60
 /test31/maxDeltaEnergy      1.0 MeV
 /test31/WorldMaterial       Vacuum
-#/test31/HistoName           hbook.paw 
-/test31/HistoName           el_st.paw 
-/test31/HistoNumber         5
-/test31/NumberOfEvents      1000
+/test31/HistoName           hbook.paw 
+#/test31/HistoName           el_st.paw 
+/test31/HistoNumber         0
+/test31/NumberOfEvents      1
 /test31/gun/beamE           10.0 MeV
 #
 /gun/particle e-

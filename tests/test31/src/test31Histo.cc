@@ -208,7 +208,7 @@ void test31Histo::bookHisto()
     "Energy deposit (MeV) in absorber (mm)",NumberOfAbsorbers,0.0,zmax);
 
   if(1 < nHisto) histo[1] = hf->create1D("11",
-    "Energy (MeV) of delta-electrons",50,0.0,maxEnergy/MeV);
+    "Energy (MeV) of secondary electrons",50,0.0,maxEnergy/MeV);
 
   if(2 < nHisto) histo[2] = hf->create1D("12",
     "Theta (degrees) of delta-electrons",36,0.0,180.);
