@@ -43,8 +43,8 @@ public:
 
 private:
 
-  void crawldir(char*, char*);
-  void StripFile(char*, char*, char*); 
+  void Crawldir(char*, G4String&);
+  void G4StripFile(G4String&, char*, G4String&);
 
 };
 #endif

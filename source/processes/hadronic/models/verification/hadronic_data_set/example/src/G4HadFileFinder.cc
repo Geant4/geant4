@@ -21,6 +21,7 @@
 // ********************************************************************
 //
 
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -30,16 +31,17 @@
 #include <unistd.h>
 #include <string.h>
 
+
 #include <fstream>
-#include <strstream>
+#include <iomanip>
 #include <iostream>
-#include <iostream>
+#include <strstream> 
 #include <sstream>
 #include "globals.hh"
+#include "G4ios.hh"
 
 
 #include "G4HadFileFinder.hh"
-
 
 ////////////////////////////////////////////////////////////////
 //
@@ -54,49 +56,59 @@ G4HadFileFinder::G4HadFileFinder(G4String& currdir, G4String& G4filetofind)
   char directory;
   char* pdirectory=&directory;
 
-  char nameChar[100] = {""};
-
-  std::ostrstream ost(nameChar, 100, std::ios::out);
-  ost << G4filetofind ;
+  char nameChar[150] = {""};
+ 
+  std::ostrstream ost(nameChar, 150, std::ios::out);
+  ost << G4filetofind.c_str() ;
 
   pfiletofindone=nameChar;
 
+  char nameDir[150] = {""};
 
-  char nameDir[100] = {""};
-
-  std::ostrstream ostdir(nameDir, 100, std::ios::out);
-  ostdir << currdir;
+  std::ostrstream ostdir(nameDir, 150, std::ios::out);
+  ostdir << currdir.c_str();
 
   pdirectory=nameDir;
   
-
+  char* workingresults = getenv("G4HADWORKING");
+  G4int errnum = chdir(workingresults);
+  
+  
+  std::ofstream filecheck("G4HadQuery.txt", std::ios::out);
+  filecheck.close();
+  
   // G4cout<<currdir<<nameChar<<G4endl;
 
 
-  char* workingpath = getenv("G4HADWORKING");
+  char* workingpath = getenv("G4HADATASET");
   if ( !workingpath )
   {
     G4String excep = "";
-    excep += "G4HADWORKING environment variable not set";
+    excep += "G4HADATASET environment variable not set";
     G4Exception(excep);
   }
+  errnum = chdir(pdirectory);
 
-  int errnum=chdir(workingpath);
+  G4cout << "File to find " << G4filetofind << " " << pdirectory << G4endl;
 
-  G4cout << "File to find " << G4filetofind << G4endl;
+  Crawldir(pdirectory,G4filetofind);
 
-  crawldir(pdirectory,pfiletofindone);
-
-  errnum=chdir(workingpath);
+  errnum = chdir(workingresults);
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// Destructor
 
+G4HadFileFinder::~G4HadFileFinder()
+{
+}
 
 ////////////////////////////////////////////////////////////////
 //
 //
 
-void G4HadFileFinder::crawldir(char* currdir, char* filetofind)
+void G4HadFileFinder::Crawldir(char* currdir, G4String& filetofind)
 {
   /* Open the directory */
   DIR *dir;
@@ -105,455 +117,226 @@ void G4HadFileFinder::crawldir(char* currdir, char* filetofind)
   char* totaldir;
   char tempname[MAXNAMLEN];
 
-  char* helpme="HELPME";
+
+  G4String helpme="HELPME";
+
+  // char* helpme="HELPME";
 
   
-    if (strcmp(filetofind,helpme)!=0) 
+  if ( strcmp(filetofind,helpme) != 0 ) 
+  {
+    chdir (currdir);
+    totaldir = getcwd(tempname,MAXNAMLEN);
+    G4cout << totaldir << G4endl;  // what we see on screen each time, just for check
+    dir = opendir(".");
+
+    while ( (de = readdir(dir)) )
+    {
+      lstat( de->d_name, &st);
+
+      if (S_ISDIR(st.st_mode)) 
       {
-	chdir (currdir);
-	totaldir=getwd(tempname);
-	G4cout << totaldir << G4endl;
-	dir = opendir(".");
-	while (de = readdir(dir)) {
-	  lstat(de->d_name, &st);
-	  if (S_ISDIR(st.st_mode)) {
-	    if ((strcmp(de->d_name, ".") != 0) && (strcmp(de->d_name, "..") != 0)) {
-	      crawldir(de->d_name, filetofind);
-	    }
-	  }
-	  else {
-	    StripFile(de->d_name, totaldir, filetofind);
-	  }
+	if ((strcmp(de->d_name, ".") != 0) && (strcmp(de->d_name, "..") != 0)) 
+        {
+	      Crawldir(de->d_name, filetofind);
 	}
-	closedir(dir);
+      }
+      else 
+      {
+	 G4String tempfilename(de->d_name);
+	 G4StripFile(tempfilename, totaldir, filetofind);
+      }
+    }
+    closedir(dir);
 	//  G4cout<<'Switching back one dir level'<<G4endl;
 	chdir("..");
-      }
-    else
-      {
-	 char* workingpath = getenv("G4HADATASET");
-	 if ( !workingpath )
-	   {
-	     G4String excep = "G4HADATASET ";
-	     excep += "environment variable not set";
-	     G4Exception(excep);
-	   }
+  }
+  else
+  {
+    char* workingpath = getenv("G4HADATASET");
 
-	 int errnum=chdir(workingpath);
+    if ( !workingpath )
+    {
+       G4String excep = "G4HADATASET ";
+       excep += "environment variable not set";
+       G4Exception(excep);
+    }
+    //  G4int errnum = chdir(workingpath);
 
-	std::ifstream fin("G4HDSFileFinderREADME.txt");
-	std::filebuf* finbuf = fin.rdbuf();
+    std::ifstream fin("G4HDSFileFinderREADME.txt");
+    std::filebuf* finbuf = fin.rdbuf();
 	
-	if ( !( finbuf->is_open() ) )
-	  {
-	    G4String excep = "G4HadDataSet -  G4HDSFileFinderREADME.txt not found. Did you delete something?";
-	    excep +="The help file G4HDSFileFinderREADME.txt is no more where it should be";
-	    G4Exception(excep);
-	  }
-	else
-	  {
-	    G4String tmpString;
-	    while (!fin.eof())
-	      {
-		getline(fin,tmpString);
-		G4cout << tmpString << G4endl;
-	      }
-	  }
+    if ( !( finbuf->is_open() ) )
+    {
+      G4String excep = "G4HadDataSet -  G4HDSFileFinderREADME.txt not found. Did you delete something?";
+      excep +="The help file G4HDSFileFinderREADME.txt is no more where it should be";
+      G4Exception(excep);
+    }
+    else
+    {
+      G4String tmpString;
+
+      while (!fin.eof())
+      {
+	getline(fin,tmpString);
+	G4cout << tmpString << G4endl;
       }
+    }
+  }
 }
 
-///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //
 
-void G4HadFileFinder::StripFile(char* filename, char* dirposition, char* findmefile) 
+void G4HadFileFinder::G4StripFile(G4String& filename, char* dirposition, G4String& findmefile)
 {
-  /*
-  if (strcmp(filename,findmefile)==0) 
-    {
-      G4cout<< filename<<G4endl;
-      G4cout<< dirposition<<G4endl;
-      }
-  */
-  
-  char* controlA="A*";
-  char* controlZ="Z*";
-  char* control="*";
-  
-  char *condition;
-  char *pcontrolchar="<>";
-  char numbers[]="1234567890.";
-  char letters[]="qwertyuiopasdfghjklzxcvbnm";
-  int numberposition;
-  int letterposition;
+  G4String control = "*", pathfilename = "File not found", originalfile=filename;
+  G4String pathfile(dirposition);
+  G4String temp, process, A, Acondition, Z, Zcondition, target;
+  G4String oprocess, oA, oAcondition, oZ, oZcondition, otarget;
 
-  int length=strlen(findmefile);
-  char tempfilename[length];
-  char tempfilenameone[length];
-  char tempfilenametwo[length];
-  char copyfindmefile[length];
-  
+  G4int zposition = -1, aposition = -1, targetposition = -1, replacelength = -1;  
+  G4int processok = 0, Zok = 0, Aok = 0, targetok = 0, sumcheck = 0;
 
-  int lengthtwo=strlen(filename);
-  char copymainfile[lengthtwo];
-  char *ptempfilename=tempfilename;
-  char *ptempfilenameone=tempfilenameone;
-  char *ptempfilenametwo=tempfilenametwo;
-  char *pcopymainfile=copymainfile;
-  char *pcopyfindmefile=copyfindmefile;
+  G4double Zvalue = 0, Avalue = 0, oZvalue = 0, oAvalue = 0;
 
-  int pch=-1;
-  char* wherechar;
-  int position;
-    
-  double Zfindmefile;
-  double Afindmefile;
-  double Zfilename;
-  double Afilename;
-  char *Acharfilename;
-  char *Acharfindmefile;
-    
-  
-  //--------------------------------------------------------------------------
-  //
-  // Case when is looking for a specified file or for all the files
-  //
-  //
-  //--------------------------------------------------------------------------
 
-  if ((strcmp(filename,findmefile)==0)||(strcmp(findmefile,control)==0))
-    {
+  char* workingresults = getenv("G4HADWORKING");
+  G4int           errn = chdir(workingresults);
+  G4String filenameout = "G4HadQuery.txt";
+
+  // G4cout << filenameout << G4endl;
+
+  std::ofstream fileout(filenameout, std::ios::app);  // app
+
+  //  fileout.open(filenameout, std::ios::app);
+
+  if ( (filename == findmefile) || (findmefile == control) )
+  {
       G4cout << "File found in" << G4endl;
       G4cout<< dirposition << "/"<< filename << G4endl;
-    }
-
+      fileout<< dirposition << "/"<< filename << std::endl;
+  }
   else
-    pch=strcspn(findmefile,control);
-    strcpy(copymainfile,filename);
- 
+  {
 
-  //--------------------------------------------------------------------------
-  //
-  // Special case if there is a * in the findmefile for the process
-  //
-  //
-  //--------------------------------------------------------------------------   
-    
-    if (pch==0) 
-      {
-	ptempfilename=strtok(pcopymainfile,"Z");
-	ptempfilename=strtok(NULL,"\t");
-	strcpy(ptempfilenametwo,"*Z");
-	strcat(ptempfilenametwo,ptempfilename);
-	strcpy(copymainfile,ptempfilenametwo);
+       // findmefile analysis
 
-	wherechar=strstr(findmefile,controlZ);
-	if (wherechar==NULL)
-	  {
-	    wherechar=strstr(findmefile,controlA);
-	    if (wherechar!=NULL)
-	      {
-		strcpy(ptempfilenametwo,findmefile);
-		//strcpy(pcopyfindmefile,findmefile);
-		position=strcspn(copymainfile,"A");
-		strncpy(ptempfilenametwo,copymainfile,position);
-		// G4cout<< " help 1 " << ptempfilenametwo << " " << copymainfile << G4endl;
-		ptempfilenametwo=strtok(ptempfilenametwo,"A");		  
-		//G4cout<< " help 2" << ptempfilenametwo << G4endl;
-		strcat(ptempfilenametwo,"A*");
-		//G4cout<< " help 3" << ptempfilenametwo << G4endl;
-		
-		ptempfilenameone=strtok(copymainfile,"A");
-		ptempfilenameone=strtok(NULL,"\t");
-		letterposition=strspn(ptempfilenameone,numbers);
-		//G4cout<< " help 4 " << ptempfilenameone << " " << letterposition <<G4endl;
-		Acharfilename=strtok(ptempfilenameone,&ptempfilenameone[letterposition-1]);
-		//G4cout<< " help 4.5" << Acharfilename << G4endl;
-		Acharfilename=strtok(NULL,"\t");
-		//G4cout<< " help 5" << Acharfilename << G4endl;
-		
-		strcat(ptempfilenametwo,Acharfilename);
-		//G4cout<< " help 6" << ptempfilenametwo << G4endl;
-		
-		if (strcmp(ptempfilenametwo,findmefile)==0) 
-		  {
-		    G4cout << "File found in" << G4endl;
-		    G4cout<< dirposition << "/"<< filename << G4endl;
-		  }
-	      }
-	    else 
-	      if (strcmp(ptempfilenametwo,findmefile)==0) 
-		{
-		  G4cout << "File found in" << G4endl;
-		  G4cout<< dirposition << "/"<< filename << G4endl;  
-		} 
-	    
-	  }
-	else 
-	  {
-	    wherechar=strstr(findmefile,controlA);
-	    if (wherechar==NULL)
-	      {
-		strcpy(ptempfilenametwo,findmefile);
-		position=strcspn(copymainfile,"Z");
-		strncpy(ptempfilenametwo,copymainfile,position);
-		//	  G4cout<< " help " << ptempfilenametwo<< G4endl;
-		
-		ptempfilenametwo=strtok(ptempfilenametwo,"Z");
-		strcat(ptempfilenametwo,"Z*");
-		
-		//G4cout<< " help 1 " << ptempfilenametwo << " " << copymainfile << G4endl;
-		
-		ptempfilenameone=strtok(copymainfile,"Z");
-		ptempfilenameone=strtok(NULL,"\t");
-		
-		//  G4cout<< " help 4 " << ptempfilenameone << " " << letterposition <<G4endl;
-		
-		Acharfilename=strtok(ptempfilenameone,"A");
-		
-		//	  G4cout<< " help 4.5 " << Acharfilename << G4endl;
-		Acharfilename=strtok(NULL,"\t");
-		//	  G4cout<< " help 5" << Acharfilename << G4endl;
-		
-		strcat(ptempfilenametwo,"A");
-		strcat(ptempfilenametwo,Acharfilename);
-		
-		//G4cout<< " help " << ptempfilenametwo << G4endl;
-		if (strcmp(ptempfilenametwo,findmefile)==0) 
-		  {
-		    G4cout << "File found in" << G4endl;
-		    G4cout<< dirposition << "/"<< filename << G4endl;
-		  }
-	      }
-	      
-	  } 
-      }
-    
-  //--------------------------------------------------------------------------
-  //
-  // Special case if there is * in the findmefile for the for the Z or A
-  //
-  //--------------------------------------------------------------------------   
+    zposition=findmefile.first('Z');
+    process=findmefile.substr(0,zposition);
+       
+       //       G4cout << process << G4endl;
 
+    zposition=findmefile.find('Z');
+    aposition=findmefile.find('A');
+       
+       //G4cout << zposition << " " << aposition << G4endl;
+       
+    replacelength=(aposition-zposition)-1;
+    zposition+=1;
+
+    Z=findmefile.substr(zposition,replacelength);
+       //       G4cout << Z << G4endl;
+       
+    targetposition=findmefile.length()-3;
+    replacelength=(targetposition-aposition)-1;
+    aposition+=1;
+
+    A=findmefile.substr(aposition,replacelength);
+       //       G4cout << A << G4endl;
+
+    target=findmefile.substr(targetposition,3);
+       //       G4cout << target << G4endl;
+
+
+       // find from dir analysis
+
+    zposition=filename.first('Z');
+    oprocess=filename.substr(0,zposition);
+
+       //       G4cout << oprocess << G4endl;
+
+    zposition=filename.find('Z');
+    aposition=filename.find('A');
+       
+    replacelength=(aposition-zposition)-1;
+    zposition+=1;
+
+    oZ=filename.substr(zposition,replacelength);
+       //       G4cout << oZ << G4endl;
+       
+    targetposition=filename.length()-3;
+    replacelength=(targetposition-aposition)-1;
+    aposition+=1;
+
+    oA=filename.substr(aposition,replacelength);
+       //       G4cout << oA << G4endl;
+
+    otarget=filename.substr(targetposition,3);
+       //       G4cout << otarget << G4endl;
+
+       
+       // File names comparisons
+       
+    if ( (process == oprocess) || 
+         (process == control)     ) processok = 1;
+    else                            processok = 0;
+       
+    if (target == otarget)           targetok = 1;
+    else                             targetok = 0;
+       
+    if (Z == oZ)                          Zok = 1;
     else
+    {
+      if (Z.substr(0,1) == control)       Zok = 1;
+      else
       {
-      if (pch<=length)
-	{
-	  wherechar=strstr(findmefile,controlZ);
-	  if (wherechar==NULL)
-	    {
-	      wherechar=strstr(findmefile,controlA);
-	      if (wherechar!=NULL)
-		{
-		  strcpy(ptempfilenametwo,findmefile);
-		  //strcpy(pcopyfindmefile,findmefile);
-		  position=strcspn(copymainfile,"A");
-		  strncpy(ptempfilenametwo,copymainfile,position);
-		  // G4cout<< " help 1 " << ptempfilenametwo << " " << copymainfile << G4endl;
-		  ptempfilenametwo=strtok(ptempfilenametwo,"A");		  
-		  //G4cout<< " help 2" << ptempfilenametwo << G4endl;
-		  strcat(ptempfilenametwo,"A*");
-		  //G4cout<< " help 3" << ptempfilenametwo << G4endl;
-		
-		  ptempfilenameone=strtok(copymainfile,"A");
-		  ptempfilenameone=strtok(NULL,"\t");
-		  letterposition=strspn(ptempfilenameone,numbers);
-		  //G4cout<< " help 4 " << ptempfilenameone << " " << letterposition <<G4endl;
-		  Acharfilename=strtok(ptempfilenameone,&ptempfilenameone[letterposition-1]);
-		  //G4cout<< " help 4.5" << Acharfilename << G4endl;
-		  Acharfilename=strtok(NULL,"\t");
-		  //G4cout<< " help 5" << Acharfilename << G4endl;
-		  
-		  strcat(ptempfilenametwo,Acharfilename);
-		  //G4cout<< " help 6" << ptempfilenametwo << G4endl;
-		
-		  if (strcmp(ptempfilenametwo,findmefile)==0) 
-		    {
-		      G4cout << "File found in" << G4endl;
-		      G4cout<< dirposition << "/"<< filename << G4endl;
-		    }
-		}
-	    }
-	  else 
-	    {
-	      wherechar=strstr(findmefile,controlA);
-	      if (wherechar==NULL)
-		{
-		  strcpy(ptempfilenametwo,findmefile);
-		  position=strcspn(copymainfile,"Z");
-		  strncpy(ptempfilenametwo,copymainfile,position);
-		  //	  G4cout<< " help " << ptempfilenametwo<< G4endl;
-		  
-		  ptempfilenametwo=strtok(ptempfilenametwo,"Z");
-		  strcat(ptempfilenametwo,"Z*");
-		  
-		  //G4cout<< " help 1 " << ptempfilenametwo << " " << copymainfile << G4endl;
-	  
-		  ptempfilenameone=strtok(copymainfile,"Z");
-		  ptempfilenameone=strtok(NULL,"\t");
-		 
-		  //  G4cout<< " help 4 " << ptempfilenameone << " " << letterposition <<G4endl;
-		 
-		  Acharfilename=strtok(ptempfilenameone,"A");
-	
-		  //	  G4cout<< " help 4.5 " << Acharfilename << G4endl;
-		  Acharfilename=strtok(NULL,"\t");
-		  //	  G4cout<< " help 5" << Acharfilename << G4endl;
-	
-		  strcat(ptempfilenametwo,"A");
-		  strcat(ptempfilenametwo,Acharfilename);
-		  	 
-		  //G4cout<< " help " << ptempfilenametwo << G4endl;
-		  if (strcmp(ptempfilenametwo,findmefile)==0) 
-		    {
-		      G4cout << "File found in" << G4endl;
-		      G4cout<< dirposition << "/"<< filename << G4endl;
-		    }
-		}
-	      else if (wherechar!=NULL)
-		{
-		  strcpy(ptempfilenametwo,findmefile);
-		  position=strcspn(copymainfile,"Z");
-		  strncpy(ptempfilenametwo,copymainfile,position);
-		  
-		  ptempfilenametwo=strtok(ptempfilenametwo,"Z");
-		  strcat(ptempfilenametwo,"Z*A*");
+	oZvalue = atof(oZ);
+	temp    = Z.substr(1,Z.length());
+	Zvalue  = atof(temp);
 
-		  ptempfilenameone=strtok(copymainfile,"A");
-		  ptempfilenameone=strtok(NULL,"\t");
-		  letterposition=strspn(ptempfilenameone,numbers);
-		  G4cout<< " help 4 " << ptempfilenameone << " " << letterposition <<G4endl;
-		  Acharfilename=strtok(ptempfilenameone,&ptempfilenameone[letterposition-1]);
-		  G4cout<< " help 4.5" << Acharfilename << G4endl;
-		  Acharfilename=strtok(NULL,"\t");
-		  G4cout<< " help 5" << Acharfilename << G4endl;
-		  
-		  strcat(ptempfilenametwo,Acharfilename);
-		  G4cout<< " help 6" << ptempfilenametwo << G4endl;
-		
-
-		  if (strcmp(ptempfilenametwo,findmefile)==0) 
-		    {
-		      G4cout << "File found in" << G4endl;
-		      G4cout<< dirposition << "/"<< filename << G4endl;
-		    }
-		}
-	    }
-	}
-      // end special case
-      
-  //--------------------------------------------------------------------------
-  //
-  // Special case if there is a condition <> in the findmefile for the for the Z or A
-  //
-  //--------------------------------------------------------------------------   
-
-	      position=strcspn(findmefile,pcontrolchar);
-	      // G4cout << "I am in this position " << position << G4endl;
-	      if (position<length)
-		{
-		  strcpy(ptempfilenametwo,findmefile);
-		  
-		  // Looking for condition on Z
-		  if (ptempfilenametwo[position-1]=='Z') 
-		    {
-		      //      G4cout << "I am here " << G4endl;
-		      ptempfilenametwo=strtok(ptempfilenametwo,"Z");
-		      ptempfilenametwo=strtok(NULL,"A");
-		      
-		      ptempfilename=strtok(copymainfile,"Z");
-		      ptempfilename=strtok(NULL,"A");
-		      // G4cout << "Find this Z " << ptempfilename << G4endl;
-		      Zfilename=atof(ptempfilename);
-		      // G4cout << "Find this Z number " << Zfilename<< G4endl;
-		      
-		      // G4cout << "I am probably here " << ptempfilenametwo << G4endl;
-		      
-		      if (ptempfilenametwo[0]=='<')
-			{
-			  ptempfilenametwo=strtok(ptempfilenametwo,"<");
-			  Zfindmefile=atof(ptempfilenametwo);
-			  //   G4cout << "I am in this position <" << ptempfilenametwo << G4endl;
-			  // G4cout << " my Z " << Zfindmefile << G4endl;
-			  if (Zfilename<Zfindmefile)
-			    {
-			      G4cout << "File found in" << G4endl;
-			      G4cout<< dirposition << "/"<< filename << G4endl;
-			    }
-			}
-		      else 
-			if (ptempfilenametwo[0]=='>')
-			  {
-			    ptempfilenametwo=strtok(ptempfilenametwo,">");
-			    Zfindmefile=atof(ptempfilenametwo);
-			    //G4cout << "I am in this position >" << ptempfilenametwo << G4endl;
-			    //G4cout << " my Z " << Zfindmefile << G4endl;
-			    if (Zfilename>Zfindmefile)
-			      {
-				G4cout << "File found in" << G4endl;
-				G4cout<< dirposition << "/"<< filename << G4endl;
-			      }
-			  }
-		      // G4cout << "I am in this position " << ptempfilenametwo << G4endl;
-		    }
-		  else 
-		    
-		    
-		    // Looking for condition on A
-		    if (ptempfilenametwo[position-1]=='A') 
-		      {
-			//G4cout << "I am here " << G4endl;
-			ptempfilenametwo=strtok(ptempfilenametwo,"A");
-			ptempfilenametwo=strtok(NULL,"\t");
-			
-			ptempfilename=strtok(copymainfile,"A");
-			ptempfilename=strtok(NULL,"\t");			
-			//G4cout << "I don t like that " << ptempfilename << G4endl;
-			numberposition = strspn(ptempfilename,numbers);
-			//G4cout << "I don t like this " << numberposition << G4endl;
-			Acharfilename=strtok(ptempfilename,&ptempfilename[numberposition]);
-			//G4cout << "I don t like this " << Acharfilename<< G4endl;
-			Afilename=atof(Acharfilename);
-			
-			//G4cout << "Find this A number " << Afilename<< G4endl;
-			
-			//G4cout << "I am probably here " << ptempfilenametwo << G4endl;
-			
-			if (ptempfilenametwo[0]=='<')
-			  {
-			    ptempfilenametwo=strtok(ptempfilenametwo,"<");
-			    numberposition = strspn(ptempfilenametwo,numbers);
-			    Acharfindmefile=strtok(ptempfilenametwo,&ptempfilenametwo[numberposition]);
-			    Afindmefile=atof(Acharfindmefile);
-			    //  G4cout << " my A " << Afindmefile << G4endl;
-			    
-			  if (Afilename<Afindmefile)
-			    {
-			      G4cout << "File found in" << G4endl;
-			      G4cout<< dirposition << "/"<< filename << G4endl;
-			    }
-			  }
-			else 
-			  if (ptempfilenametwo[0]=='>')
-			    {
-			      ptempfilenametwo=strtok(ptempfilenametwo,">");
-			      //G4cout << "I don t like that " << ptempfilenametwo << G4endl;
-			      numberposition = strspn(ptempfilenametwo,numbers);
-			      Acharfindmefile=strtok(ptempfilenametwo,&ptempfilenametwo[numberposition]);
-			      //G4cout << "I don t like that too  " << Acharfindmefile << G4endl;
-			      Afindmefile=atof(Acharfindmefile);
-			      //G4cout << " my A " << Afindmefile << G4endl;
-			      if (Afilename>Afindmefile)
-				{
-				  G4cout << "File found in" << G4endl;
-				  G4cout<< dirposition << "/"<< filename << G4endl;
-				}
-			    }
-			//G4cout << "I am in this position " << ptempfilenametwo << G4endl;
-		      }
-		  
-		}
+	if (      (Z.substr(0,1) == ">" ) && (oZvalue > Zvalue) )  Zok = 1; 		 
+	else if ( (Z.substr(0,1) == "<" ) && (oZvalue < Zvalue) )  Zok = 1; 		 
+	else                                                       Zok = 0; 	 
       }
+    }  
+    if (A == oA)                  Aok = 1;
+    else
+    {
+      if (A.substr(0,1)==control) Aok = 1;
+      else
+      {
+	oAvalue = atof(oA);
+	temp    = A.substr(1,A.length());
+	Avalue  = atof(temp);
+
+	if      ( (A.substr(0,1) == ">") && (oAvalue > Avalue) )  Aok = 1; 
+		     
+	else if ( (A.substr(0,1) == "<") && (oAvalue < Avalue) )  Aok = 1; 
+		     
+        else                                                      Aok = 0;      
+      }   
+    }   
+    sumcheck = processok + targetok + Zok + Aok;
+	   
+    if ( sumcheck == 4 ) 
+    {
+      G4cout << "File found in" << G4endl;
+      pathfilename = pathfile + "/" + originalfile;
+
+      G4cout  << pathfilename << G4endl;
+      fileout << pathfilename << std::endl;
+      // fileout << "Check of fileout in StripFile method" << std::endl;
+    }
+    else
+    {
+       pathfilename="File not found";
+       // fileout.close();
+    }	   	   
+  }
+  fileout.close(); 
+  errn = chdir(dirposition);
 }
 
 
