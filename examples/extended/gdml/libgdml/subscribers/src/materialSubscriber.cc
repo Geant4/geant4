@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: materialSubscriber.cc,v 1.3 2002-06-03 12:09:35 radoone Exp $
+// $Id: materialSubscriber.cc,v 1.4 2002-08-19 07:38:49 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,9 @@
 #include "G4Material.hh"
 
 #include <iostream>
+
+extern const double defaultTemp;
+extern const double defaultPress;
 
 class materialSubscriber : virtual public SAXSubscriber
 {
@@ -79,8 +82,9 @@ public:
           double      z = 0.0;
           double      a = 0.0;
           double      d = 0.0;
-          double      t = STP_Temperature;
-          double      p = STP_Pressure;
+          double      t = defaultTemp;
+          double      p = defaultPress;
+          
           G4State     s = kStateUndefined;
           std::string f, str;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GDMLProcessor.hh,v 1.2 2002-06-03 12:09:31 radoone Exp $
+// $Id: GDMLProcessor.hh,v 1.3 2002-08-19 07:35:16 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,8 @@
 //
 #ifndef GDML_PROCESSOR_H
 #define GDML_PROCESSOR_H 1
+
+#include "globals.hh"
 
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
@@ -50,6 +52,10 @@
 // Added here in order to resolve properly link dependecies if G4 build system
 #include "G4BooleanSolid.hh"
 #include "G4CSGSolid.hh"
+
+// Workaround for SUN linker
+extern const double defaultTemp;
+extern const double defaultPress;
 
 class GDMLProcessor
 {
