@@ -4,7 +4,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tst2ParticleConstructor.hh,v 1.1 1999-06-17 04:42:06 kurasige Exp $
+// $Id: tst2ParticleConstructor.hh,v 1.2 1999-10-03 09:13:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,7 +23,7 @@ class tst2ParticleConstructor
 	void ConstructAllBosons();
 	void ConstructAllLeptons();
 	void ConstructAllMesons();
-	void ConstructAllBarions();
+	void ConstructAllBaryons();
 	void ConstructAllIons();
 	void ConstructAllShortLiveds();
 };

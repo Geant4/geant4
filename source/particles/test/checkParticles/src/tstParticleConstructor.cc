@@ -4,7 +4,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tstParticleConstructor.cc,v 1.1 1999-06-09 16:12:20 kurasige Exp $
+// $Id: tstParticleConstructor.cc,v 1.2 1999-10-03 09:13:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,7 +15,7 @@
 #include "G4BosonConstructor.hh"
 #include "G4LeptonConstructor.hh"
 #include "G4MesonConstructor.hh"
-#include "G4BarionConstructor.hh"
+#include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
@@ -40,10 +40,10 @@ void tstParticleConstructor::ConstructAllMesons()
   pConstructor.ConstructParticle();
 }
 
-void tstParticleConstructor::ConstructAllBarions()
+void tstParticleConstructor::ConstructAllBaryons()
 {
   //  Construct all barions
-  G4BarionConstructor pConstructor;
+  G4BaryonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
 
@@ -74,7 +74,7 @@ void tstParticleConstructor::ConstructParticle()
   ConstructAllBosons();
   ConstructAllLeptons();
   ConstructAllMesons();
-  ConstructAllBarions();
+  ConstructAllBaryons();
   ConstructAllIons();
   ConstructAllShortLiveds();
 }
