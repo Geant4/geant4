@@ -1,4 +1,4 @@
-/tracking/verbose 6
+#/tracking/verbose 6
 
 /gps/type Beam
 #/gps/centre -10 5.1 0
@@ -31,7 +31,7 @@
 
 #/run/beamOn 100
 
-/run/beamOn 500000
+/run/beamOn 1000000
 
 
 

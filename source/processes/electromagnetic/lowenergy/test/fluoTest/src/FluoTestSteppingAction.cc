@@ -55,7 +55,7 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	     ->GetDefinition()-> GetParticleName()) == "gamma" ) 
 	  {
 	    gammaLeavingSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
-	    
+	   
 #ifdef G4ANALYSIS_USE
 	    analysisManager->InsGamLeavSam(gammaLeavingSample/keV);  
 #endif
