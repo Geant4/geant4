@@ -1,4 +1,4 @@
-# $Id: TestEm3.in,v 1.10 2004-02-06 10:15:53 vnivanch Exp $
+# $Id: TestEm3.in,v 1.11 2004-03-15 11:57:36 maire Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -7,18 +7,16 @@
 #
 /control/verbose 2
 /run/verbose 2
-/tracking/verbose 0
 #
-##/testem/phys/addPhysics  g4v52
+#### /testem/phys/addPhysics  g4v52
 /testem/phys/addPhysics  standard
-#/process/eLoss/verbose  3
-/process/eLoss/preciseRange  true
 #
 /run/initialize
 #
 /gun/particle e-
 /gun/energy 1 GeV
 #
+/testem/run/setFileName testem3.paw
 /testem/run/setHisto 0 100 700. 1000. MeV
 /testem/run/setHisto 1 100   0.  300. MeV
 #
