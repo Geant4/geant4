@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst23MuonPhysics.hh,v 1.3 2004-03-05 15:23:18 mkossov Exp $
+// $Id: Tst23MuonPhysics.hh,v 1.4 2004-03-18 11:02:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,7 @@
 #include "G4hIonisation.hh"
 // CHIPS nuclear capture process manager
 #include "G4QCaptureAtRest.hh"
-//#include "G4MuonMinusCaptureAtRest.hh"
+#include "G4MuonMinusCaptureAtRest.hh"
 
 class Tst23MuonPhysics : public G4VPhysicsConstructor
 {
@@ -77,8 +77,8 @@ class Tst23MuonPhysics : public G4VPhysicsConstructor
    G4MuBremsstrahlung     fMuMinusBremsstrahlung ;
    G4MuPairProduction     fMuMinusPairProduction;
    G4MuIonisation         fMuMinusIonisation;
-   //G4MuonMinusCaptureAtRest fMuonMinusCaptureAtRest;
-   G4QCaptureAtRest       fMuonQCaptureAtRest;
+   //G4MuonMinusCaptureAtRest fMuonQCaptureAtRest; // GHAD process
+   G4QCaptureAtRest       fMuonQCaptureAtRest; // CHIPS process
    // Tau physics
    G4MultipleScattering   fTauPlusMultipleScattering;
    G4hIonisation          fTauPlusIonisation;

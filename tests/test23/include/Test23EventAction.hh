@@ -21,44 +21,47 @@
 // ********************************************************************
 //
 //
-// $Id: Tst23PrimaryGeneratorAction.cc,v 1.4 2004-03-18 11:02:27 mkossov Exp $
+// $Id: Test23EventAction.hh,v 1.1 2004-03-18 11:02:25 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//      ---------------- Test23EventAction header ----------------
+//                 by Mikhail Kossov, December 2003.
+//  Test23EventAction class of the CHIPS Test of G4QCaptureAtRest process in GEANT4
+// -----------------------------------------------------------------------------------
+// It informs about the current event number 
+// -----------------------------------------------------------------------------------
 
-#include "Tst23PrimaryGeneratorAction.hh"
+#ifndef Test23EventAction_h
+#define Test23EventAction_h 1
+
+#include "G4UserEventAction.hh"
 
 #include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "globals.hh"
 
-Tst23PrimaryGeneratorAction::Tst23PrimaryGeneratorAction()
+class Test23EventActionMessenger;
+
+class Test23EventAction : public G4UserEventAction
 {
-  G4int n_particle = 1;
-  particleGun = new G4ParticleGun(n_particle);
+public: // Without description
 
-// default particle
+    Test23EventAction();
+   ~Test23EventAction();
 
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4String particleName;
-  G4ParticleDefinition* particle 
-    = particleTable->FindParticle(particleName="mu-");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
-  particleGun->SetParticleEnergy(0.*GeV);
-  particleGun->SetParticlePosition(G4ThreeVector(0.1*cm,0.1*cm,0.1*cm));
+    void BeginOfEventAction(const G4Event*);
+    void   EndOfEventAction(const G4Event*);
 
-}
+    void SetDrawFlag(G4String val)  {drawFlag = val;};
+    void SetPrintModulo(G4int val)  {printModulo = val;};
 
-Tst23PrimaryGeneratorAction::~Tst23PrimaryGeneratorAction()
-{
-  delete particleGun;
-}
+  private:
 
-void Tst23PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
-  particleGun->GeneratePrimaryVertex(anEvent);
-}
+    G4int    nEvt;
+    G4int    printModulo;
+    G4int    verbose;
+    G4String drawFlag;
 
+    Test23EventActionMessenger*  eventMessenger;
+};
 
+#endif

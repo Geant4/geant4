@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2004-03-05 15:25:57 mkossov Exp $
+# $Id: GNUmakefile,v 1.5 2004-03-18 11:02:24 mkossov Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -17,16 +17,16 @@ all: lib bin
 
 include $(G4INSTALL)/config/architecture.gmk
 
-ifdef GLOBALLIBS
-  LDLIBS := -lG4global
-else
-  LDLIBS := -lG4globman
-endif
+#ifdef GLOBALLIBS
+#  LDLIBS := -lG4global
+#else
+#  LDLIBS := -lG4globman
+#endif
 
 # ---Temporary--- external CHIPS processes
-CPPFLAGS +=-I$(G4BASE)/processes/photolepton_hadron/cross-sections/include \
-           -I$(G4BASE)/processes/photolepton_hadron/processes/include
-EXTRALIBS += -lG4photoleptohadr_cs -lG4photoleptohadr_proc
+#CPPFLAGS +=-I$(G4BASE)/processes/photolepton_hadron/cross-sections/include \
+#           -I$(G4BASE)/processes/photolepton_hadron/processes/include
+#EXTRALIBS += -lG4photoleptohadr_cs -lG4photoleptohadr_proc
 
 include $(G4INSTALL)/config/binmake.gmk
 

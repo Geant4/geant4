@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst23DetectorConstruction.cc,v 1.3 2004-03-05 15:25:44 mkossov Exp $
+// $Id: Tst23DetectorConstruction.cc,v 1.4 2004-03-18 11:02:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,7 +44,7 @@ Tst23DetectorConstruction::Tst23DetectorConstruction()
 :simpleBoxLog(NULL),selectedMaterial(NULL),Air(NULL),Al(NULL),Pb(NULL)
 {
   detectorMessenger = new Tst23DetectorMessenger(this);
-  materialChoice = "Pb";
+  materialChoice = "Al";
 }
 
 Tst23DetectorConstruction::~Tst23DetectorConstruction()

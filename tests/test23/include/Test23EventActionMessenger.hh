@@ -21,44 +21,38 @@
 // ********************************************************************
 //
 //
-// $Id: Tst23PrimaryGeneratorAction.cc,v 1.4 2004-03-18 11:02:27 mkossov Exp $
+// $Id: Test23EventActionMessenger.hh,v 1.1 2004-03-18 11:02:25 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//      ---------------- Test23TrackingActionMessenger header ----------------
+//                 by Mikhail Kossov, December 2003.
+//  Test23TrackingActionMessenger class of CHIPS Test of G4QCaptureAtRest process in GEANT4
+// -----------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------
 
-#include "Tst23PrimaryGeneratorAction.hh"
+#ifndef Test23EventActionMessenger_h
+#define Test23EventActionMessenger_h 1
 
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-Tst23PrimaryGeneratorAction::Tst23PrimaryGeneratorAction()
+class Test23EventAction;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
+
+class Test23EventActionMessenger: public G4UImessenger
 {
-  G4int n_particle = 1;
-  particleGun = new G4ParticleGun(n_particle);
+public:
+  Test23EventActionMessenger(Test23EventAction*);
+  ~Test23EventActionMessenger();
+    
+  void SetNewValue(G4UIcommand*, G4String);
+    
+private:
 
-// default particle
+  Test23EventAction* eventAction;   
+  G4UIcmdWithAString* DrawCmd;
+  G4UIcmdWithAnInteger* PrintCmd;    
+};
 
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4String particleName;
-  G4ParticleDefinition* particle 
-    = particleTable->FindParticle(particleName="mu-");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
-  particleGun->SetParticleEnergy(0.*GeV);
-  particleGun->SetParticlePosition(G4ThreeVector(0.1*cm,0.1*cm,0.1*cm));
-
-}
-
-Tst23PrimaryGeneratorAction::~Tst23PrimaryGeneratorAction()
-{
-  delete particleGun;
-}
-
-void Tst23PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
-  particleGun->GeneratePrimaryVertex(anEvent);
-}
-
-
+#endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst23MuonPhysics.cc,v 1.3 2004-03-05 15:25:44 mkossov Exp $
+// $Id: Tst23MuonPhysics.cc,v 1.4 2004-03-18 11:02:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,6 +102,8 @@ void Tst23MuonPhysics::ConstructProcess()
   pManager->AddProcess(&fMuMinusMultipleScattering);
   pManager->SetProcessOrdering(&fMuMinusMultipleScattering, idxAlongStep,  1);
   pManager->SetProcessOrdering(&fMuMinusMultipleScattering, idxPostStep,  1);
+  pManager->AddRestProcess(&fMuonQCaptureAtRest); // universal CHIPS NuclearCapture prosess
+  //pManager->AddRestProcess(&fMuonMinusCaptureAtRest);
 
   // Tau Plus Physics
   pManager = G4TauPlus::TauPlus()->GetProcessManager();
@@ -111,8 +113,7 @@ void Tst23MuonPhysics::ConstructProcess()
   pManager->AddProcess(&fTauPlusMultipleScattering);
   pManager->SetProcessOrdering(&fTauPlusMultipleScattering, idxAlongStep,  1);
   pManager->SetProcessOrdering(&fTauPlusMultipleScattering, idxPostStep,  1);
-  pManager->AddRestProcess(&fMuonQCaptureAtRest);
-  //pManager->AddRestProcess(&fMuonMinusCaptureAtRest);
+
   // Tau Minus Physics
   pManager = G4TauMinus::TauMinus()->GetProcessManager();
    // add processes
