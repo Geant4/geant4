@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.3 2001-09-10 18:07:35 pia Exp $
+// $Id: G4EMDataSet.cc,v 1.4 2001-09-20 09:14:57 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -77,20 +77,20 @@ G4EMDataSet::~G4EMDataSet()
 G4double G4EMDataSet::FindValue(G4double e, G4int id) const
 {
   G4double value;
-
+  G4double e0 = (*energies)[0];
   // Protections
   size_t bin = FindBinLocation(e);
   if (bin == numberOfBins)
     {
-      //      G4cout << "WARNING - G4EMDataSet::LogLogInterpolation: energy outside upper boundary"
+      //      G4cout << "WARNING - G4EMDataSet::FindValue: energy outside upper boundary"
       //     << G4endl;
       value = (*data)[bin];
     }
-  else if (e <= (*energies)[0])
+  else if (e <= e0)
     {
-      G4cout << "WARNING - G4EMDataSet::LogLogInterpolation: energy outside lower boundary"
-	     << G4endl;
-      value = 0.;
+      //     G4cout << "WARNING - G4EMDataSet::FindValue: energy outside lower boundary"
+      //     << G4endl;
+      value = (*data)[0];
     }
   else
     {
@@ -103,14 +103,17 @@ G4double G4EMDataSet::FindValue(G4double e, G4int id) const
 G4int G4EMDataSet::FindBinLocation(G4double energy) const
 {
   // Protection against call outside allowed range
-  if (energy < (*energies)[0])
+  G4double e0 = (*energies)[0];
+  if (energy < e0)
     {
-      G4cout << z
-	     << " - WARNING - G4EMDataSet::FindBinLocation called with argument " << energy 
-	     << "outside lower limit " << (*energies)[0]
-	     << "; replaced with lower limit" 
-	     << G4endl;
-      energy = (*energies)[0];
+      //  G4cout << z
+      //     << " - WARNING - G4EMDataSet::FindBinLocation called with argument " 
+      //     << energy 
+      //    << " outside lower limit " 
+      //   << e0
+      //   << "; replaced with lower limit" 
+      //  << G4endl;
+      energy = e0;
     }
 
   size_t lowerBound = 0;
