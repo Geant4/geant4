@@ -417,7 +417,6 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" ) then
   setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
   setenv OIVLIBS        "-L$HEPVISHOME/Linux-gxx-SF -lHEPVis -L$OIVHOME/Linux-gxx -lSoFree"
   setenv SOFREEUSER     $OIVHOME/user/
-  setenv AIDAINCS       /projects/HCL/include
   # OPACS :
   setenv G4UI_BUILD_WO_SESSION       1
   setenv G4VIS_BUILD_OPACS_DRIVER    1
@@ -430,11 +429,14 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" ) then
 set jars=/lal/jas/2.0alpha4/release/lib
   setenv CLASSPATH ${CLASSPATH}:$jars/collections.jar:$jars/hep.jar:$jars/jas.jar
   # OpenScientist :
-  #source /projects/Lab/omake/setup.csh
+  source /projects/OpenScientist/v6r0/omake/setup.csh
+  setenv AIDAINCS $HCLHOME/include
   # Else :
   setenv XENVIRONMENT   g4Xt.xrm
   setenv PATH "${PATH}:/lal/DAWN/dawn_3_85a/Linux/bin"
   setenv CPPVERBOSE 1
+  alias g4ANA01 "cd $G4INSTALL/examples/extended/analysis/AnaEx01"
+  alias ana01   "$G4WORKDIR/bin/$G4SYSTEM/AnaEx01"
   set prompt='g4-pc-gbp> ' 
 endif
 #
