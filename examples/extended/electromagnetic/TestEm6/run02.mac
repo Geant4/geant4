@@ -1,18 +1,17 @@
-# $Id: run02.mac,v 1.2 2002-12-12 12:48:15 maire Exp $
+# $Id: run02.mac,v 1.3 2003-01-31 12:54:21 maire Exp $
 #
 # Macro file for "TestEm6.cc"
 # (can be run in batch, without graphic)
 #
 #
 /control/verbose 2
+/run/verbose 2
 #
 /run/initialize
 #
 /testem/det/setMat Beryllium
 /testem/det/setSize 10 km
 /testem/det/update
-#
-/run/verbose 2
 #
 /gun/particle gamma
 /gun/energy 100 TeV

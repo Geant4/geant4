@@ -1,0 +1,24 @@
+# $Id: run12.mac,v 1.1 2003-01-31 12:54:21 maire Exp $
+#
+# Macro file for "TestEm6.cc"
+# (can be run in batch, without graphic)
+#
+#
+/control/verbose 2
+/run/verbose 2
+#
+/run/initialize
+#
+/testem/det/setMat Carbon
+/testem/det/setSize 18.5 cm
+/testem/det/update
+#
+/testem/phys/SetGammaToMuPairFac  1000
+/testem/phys/SetAnnihiToMuPairFac 1000
+#
+/gun/particle e+
+/gun/energy 250 GeV
+#
+/testem/event/printModulo 1000
+#
+/run/beamOn 20000

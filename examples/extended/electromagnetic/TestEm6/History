@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2002-12-12 12:48:15 maire Exp $
+$Id: History,v 1.8 2003-01-31 12:54:20 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,13 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30-01-03 hbu
+ - PhysicsList: implementation of (e+,e-) annihilation to (mu+,mu-)
+ - macros run11.mac and run12.mac
      
 12-12-02 mma (testem6-V04-01-00)
--migration to aida 3.0
--UI directory /testem/
+ - migration to aida 3.0
+ - UI directory /testem/
      
 05-06-02 mma (testem6-V04-00-01)
--old histograming package clhep/hist replaced by AIDA 2.2/anaphe
+ - old histograming package clhep/hist replaced by AIDA 2.2/anaphe
 
 23-05-02 mma (testem6-V04-00-00)
--creation
+ - creation
