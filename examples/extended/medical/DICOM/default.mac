@@ -7,7 +7,7 @@
 /vis/viewer/update
 /vis/viewer/zoom 5
 /vis/viewer/set/viewpointThetaPhi 90 0
-/tracking/storeTrajectory 1
-/vis/scene/endOfEventAction accumulate
+#/tracking/storeTrajectory 1
+#/vis/scene/endOfEventAction accumulate
 #/run/beamOn 1000
 

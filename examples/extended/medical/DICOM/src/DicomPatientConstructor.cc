@@ -55,7 +55,7 @@ using namespace std;
 void DicomGeometry::patientConstruction()
 {
   DicomConfiguration* ReadConfiguration = new DicomConfiguration;
-  ReadConfiguration->Read_DataFile();					// images must have the same dimension
+  ReadConfiguration->ReadDataFile();					// images must have the same dimension
   ReadConfiguration->Read_g4File( ReadConfiguration->ListOfFile[0] );		//  open a .g4 file to read some values
 		
   PatientX = (ReadConfiguration->CompressionUsed*(ReadConfiguration->X_PixelSpacing)/2.0) *mm;
@@ -66,17 +66,19 @@ void DicomGeometry::patientConstruction()
   Attributes_param = new G4VisAttributes();
   Attributes_param->SetForceSolid(false);
   Attributes_param->SetColour(red=1.,green=0.,blue=0.,alpha=1.);
-  Parameterisation_Box = new G4Box("Parameterisation Mother",ReadConfiguration->TotalColumns*(ReadConfiguration->X_PixelSpacing)/2.*mm, ReadConfiguration->TotalRows*(ReadConfiguration->Y_PixelSpacing)/2.*mm, ReadConfiguration->TotalNumberOfFile*(ReadConfiguration->SliceTickness)/2.*mm);
+  G4int totalNumberOfFile = ReadConfiguration->GetTotalNumberOfFile(); 
+
+  Parameterisation_Box = new G4Box("Parameterisation Mother",ReadConfiguration->TotalColumns*(ReadConfiguration->X_PixelSpacing)/2.*mm, ReadConfiguration->TotalRows*(ReadConfiguration->Y_PixelSpacing)/2.*mm, totalNumberOfFile*(ReadConfiguration->SliceTickness)/2.*mm);
   logical_param = new G4LogicalVolume(Parameterisation_Box,air,"Parameterisation Mother (logical)");
   logical_param->SetVisAttributes(Attributes_param);
 
   double MiddleLocationValue=0;
-  for (int i=0;i<ReadConfiguration->TotalNumberOfFile;i++)
+  for (int i=0;i< totalNumberOfFile;i++)
     {
       ReadConfiguration->Read_g4File( ReadConfiguration->ListOfFile[i] );
       MiddleLocationValue=MiddleLocationValue+ReadConfiguration->SliceLocation;
     }
-  MiddleLocationValue=MiddleLocationValue/ReadConfiguration->TotalNumberOfFile;
+  MiddleLocationValue=MiddleLocationValue/totalNumberOfFile;
     
   G4ThreeVector origin( 0.*mm,0.*mm,MiddleLocationValue*mm );
   physical_param =  new G4PVPlacement(0,origin,logical_param,"Parameterisation Mother (placement)",logicWorld,false,0);

@@ -68,13 +68,14 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int NoVoxels, doubl
 							   G4Material* trabecular_bone)
 {
   DicomConfiguration* ReadConfiguration = new DicomConfiguration;
-  ReadConfiguration->Read_DataFile();					// images must have the same dimension
-  for (int i=0;i<ReadConfiguration->TotalNumberOfFile;i++)
+  ReadConfiguration->ReadDataFile();					// images must have the same dimension
+  G4int totalNumberOfFile = ReadConfiguration -> GetTotalNumberOfFile();
+  for (int i=0;i<totalNumberOfFile;i++)
     {
       ReadConfiguration->Read_g4File( ReadConfiguration->ListOfFile[i] );
       MiddleLocationValue=MiddleLocationValue+ReadConfiguration->SliceLocation;
     }
-  MiddleLocationValue=MiddleLocationValue/ReadConfiguration->TotalNumberOfFile;
+  MiddleLocationValue=MiddleLocationValue/totalNumberOfFile;
  
 
     
@@ -243,18 +244,19 @@ G4Material*  DicomPatientParameterisation::ComputeMaterial(const G4int copyNo, G
 void DicomPatientParameterisation::GetDensity(double maxdensity , double mindensity)
 {
   DicomConfiguration* ReadConfiguration = new DicomConfiguration;
-  ReadConfiguration->Read_DataFile();
+  ReadConfiguration->ReadDataFile();
 
-  int copy_counter=0;
-  for (int z=0;z<ReadConfiguration->TotalNumberOfFile;z++)
+  int copy_counter = 0;
+  G4int totalNumberOfFile = ReadConfiguration->GetTotalNumberOfFile();
+  for (int z=0;z<totalNumberOfFile;z++)
     {
 
 
       ReadConfiguration->Read_g4File( ReadConfiguration->ListOfFile[z] );
 
-
-      lenr=abs(rows/ReadConfiguration->CompressionValue);
-      lenc=abs(columns/ReadConfiguration->CompressionValue);
+      G4int compressionValue = ReadConfiguration->GetCompressionValue(); 
+      lenr=abs(rows/compressionValue);
+      lenc=abs(columns/compressionValue);
 
       int i=0;
       for (int j=1;j<=lenr;j++)//lenr

@@ -36,6 +36,7 @@
 #include <vector>
 #include <string>
 #include <stdio.h>
+#include "globals.hh"
 
 using namespace std;
 
@@ -43,13 +44,18 @@ class DicomConfiguration
 {
 public:
 
-	// This function reads <Data.dat>, return 0/1 if successfull or not
-	int Read_DataFile();
+  // This function reads <Data.dat>, return 0/1 if successfull or not
+  G4int ReadDataFile();
+  G4int GetCompressionValue(){return CompressionValue;}
+  G4int GetTotalNumberOfFile(){return TotalNumberOfFile;}
+
+private:
 	
-	// Public variables used in Read_DataFile(), those are the variables that contains informations
-	int CompressionValue;
-	int TotalNumberOfFile;
-	vector<string> ListOfFile;
+	G4int CompressionValue;
+	G4int TotalNumberOfFile;
+public:
+	
+	vector<G4String> ListOfFile;
 	
 	// This function reads one *.g4 given by char* g4File, return 0/1 if successfull or not
 	int Read_g4File(string g4File);
