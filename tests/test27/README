@@ -1,0 +1,14 @@
+$Id: README,v 1.1 2003-11-14 15:07:21 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test27
+                            ------
+
+Testing the binary cascade for light ions (G4BinaryLightIonReaction)
+in a simple setup.
+Target materials include H, Si, Cu, U
+

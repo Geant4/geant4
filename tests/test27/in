@@ -1,0 +1,23 @@
+#
+# Hand-generated test input file for test12 hadronics.
+#
+# /control/verbose 2
+/run/verbose 2
+/run/particle/setCut 1 m
+/run/initialize
+/gun/direction 1 0 0
+#
+# deuteron at 10 GeV in U
+#
+/gun/particle deuteron
+/gun/energy 2.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 0
+#
+# beyond what we really can do.... we think.
+# O(16,8) charge 2 at 2 GeV in U
+#
+/gun/ion 8 16 2
+/gun/energy 2.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 200
