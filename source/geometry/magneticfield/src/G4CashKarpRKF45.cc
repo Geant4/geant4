@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CashKarpRKF45.cc,v 1.6 2000-11-20 17:29:04 gcosmo Exp $
+// $Id: G4CashKarpRKF45.cc,v 1.7 2001-03-23 16:20:48 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
@@ -19,6 +19,7 @@
 //
 
 #include "G4CashKarpRKF45.hh"
+#include "G4LineSection.hh"
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -145,12 +146,20 @@ G4CashKarpRKF45::Stepper(const G4double yInput[],
 
     yErr[i] = Step*(dc1*dydx[i] + dc3*ak3[i] + dc4*ak4[i] +
               dc5*ak5[i] + dc6*ak6[i]) ;
+
+    fLastInitialVector[i] = yIn[i] ;
+    fLastFinalVector[i]   = yOut[i];
+    fLastDyDx[i]          = dydx[i];
  }
  // NormaliseTangentVector( yOut ); // Not wanted
 
+ fLastStepLength =Step;
+
  return ;
 
-}   // end of Stepper .......................................................
+} 
+
+///////////////////////////////////////////////////////////////////////////////
 
 void
 G4CashKarpRKF45::StepWithEst(const G4double yInput[],
@@ -283,5 +292,42 @@ G4CashKarpRKF45::StepWithEst(const G4double yInput[],
 
  return ;
 
-}   // end of StepWithEst ....................................................
+}
+
+/////////////////////////////////////////////////////////////////
+
+G4double  G4CashKarpRKF45::DistChord() 
+{
+  G4double distLine, distChord; 
+  G4ThreeVector initialPoint, finalPoint, midPoint;
+
+  // Store last initial and final points (they will be overwritten!)
+  initialPoint = G4ThreeVector( fLastInitialVector[0], 
+                                fLastInitialVector[1], fLastInitialVector[2]); 
+  finalPoint   = G4ThreeVector( fLastFinalVector[0],  
+                                fLastFinalVector[1],  fLastFinalVector[2]); 
+
+  // Do half a step using StepNoErr
+
+  Stepper( fLastInitialVector, fLastDyDx, 0.5 * fLastStepLength, 
+           fMidVector,   fMidError );
+
+  midPoint = G4ThreeVector( fMidVector[0], fMidVector[1], fMidVector[2]);       
+
+  // Use stored values of Initial and Endpoint + new Midpoint to evaluate
+  //  distance of Chord
+
+
+  if (initialPoint != finalPoint) 
+  {
+     distLine  = G4LineSection::Distline( midPoint, initialPoint, finalPoint );
+     distChord = distLine;
+  }
+  else
+  {
+     distChord = (midPoint-initialPoint).mag();
+  }
+  return distChord;
+}
+
 

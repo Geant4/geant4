@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CashKarpRKF45.hh,v 1.4 2000-11-01 15:15:48 gcosmo Exp $
+// $Id: G4CashKarpRKF45.hh,v 1.5 2001-03-23 16:20:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,8 +53,8 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
 
   public:  // without description
 
-   G4double  DistChord() const = 0 ; // This is not IMPLEMENTED yet. 
-                                     //  It must be done before it can work.
+   G4double  DistChord() ; 
+                                 
    G4int IntegratorOrder() const { return 4; }
 
   private:
@@ -67,6 +67,13 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
 
    G4int fNumberOfVariables ;
    G4double *ak2, *ak3, *ak4, *ak5, *ak6, *ak7, *yTemp, *yIn;  // scratch space
+
+  // for DistChord calculations
+
+  G4double fLastStepLength;
+  G4double fLastInitialVector[6], fLastFinalVector[6], 
+           fLastDyDx[6], fMidVector[6], fMidError[6];
+    
 };
 
 #endif /* G4CashKARP_RKF45 */
