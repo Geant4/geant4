@@ -235,7 +235,7 @@ void G4hLowEnergyIonisationVI::BuildPhysicsTable(
   //  create table
   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
-  cutForDelta.resize(numOfMaterials);
+  cutForDelta.clear();
   gammaCutInEnergy = (G4Gamma::Gamma())->GetCutsInEnergy();
 
   for (G4int j=0; j<numOfMaterials; j++) {
@@ -250,7 +250,7 @@ void G4hLowEnergyIonisationVI::BuildPhysicsTable(
     G4double excEnergy = material->GetIonisation()->GetMeanExcitationEnergy();
 
     tCut = G4std::max(tCut,excEnergy);
-    cutForDelta[j] = tCut;
+    cutForDelta.push_back(tCut);
   }
 
   if(verboseLevel > 0) {
