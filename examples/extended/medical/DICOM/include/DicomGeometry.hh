@@ -62,7 +62,7 @@ private:
 
   void InitialisationOfMaterials();
 
-public:
+private:
   // Air
   G4Material* air;
   G4Box *AirBox;
@@ -136,8 +136,10 @@ public:
   G4Box* Parameterisation_Box;
   G4LogicalVolume* logical_param;
   G4VPhysicalVolume *physical_param;
-  double alpha,red,green,blue;
+  G4double alpha,red,green,blue;
     
+
+public:
   // For the Primary Generator Action
   G4ThreeVector getWorldDim()
   {

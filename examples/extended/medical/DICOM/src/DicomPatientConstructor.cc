@@ -56,19 +56,18 @@ G4int DicomPatientConstructor::FindingNbOfVoxels(G4double MaxDensity , G4double 
 {
   FILE* lecturepref = fopen("Data.dat","r");
   fscanf(lecturepref,"%s",compressionbuf);
-  compression=atoi(compressionbuf);
+  compression = atoi(compressionbuf);
   fscanf(lecturepref,"%s",maxbuf);
-  max=atoi(maxbuf);    
-  int copy_counter=0;
-  for (int i=1;i<=max;i++)
+  G4int max = atoi(maxbuf);    
+  G4int copy_counter = 0;
+  for (G4int i=1;i<=max;i++)
     {
       fscanf(lecturepref,"%s",name);
       sprintf(fullname,"%s.g4",name);
-      readData =  fopen(fullname,"r");
-
+      readData = fopen(fullname,"r");
       fscanf(readData,"%s %s",rowsbuf,columnsbuf);
-      rows=atoi(rowsbuf);
-      columns=atoi(columnsbuf);
+      G4int rows=atoi(rowsbuf);
+      G4int columns=atoi(columnsbuf);
       fscanf(readData,"%s %s",pixel_spacing_Xbuf,pixel_spacing_Ybuf);
       pixel_spacing_X=atof(pixel_spacing_Xbuf);
       pixel_spacing_Y=atof(pixel_spacing_Ybuf);
@@ -80,9 +79,9 @@ G4int DicomPatientConstructor::FindingNbOfVoxels(G4double MaxDensity , G4double 
       compression=atoi(compressionbuf);
       lenr=abs(rows/compression);
       lenc=abs(columns/compression);
-      for (int j=1;j<=lenr;j++)
+      for (G4int j=1;j<=lenr;j++)
         {
-	  for (int w=1;w<=lenc;w++)
+	  for (G4int w=1;w<=lenc;w++)
             {
 	      if ( fscanf(readData,"%s",Densitybuf) != -1 )
                 {
@@ -112,18 +111,18 @@ void DicomPatientConstructor::readContour()
   // 	Flag = 1 -> contours definition, lenROI
   // 	Flag = 2 -> points definition, lenPOINTS
   // 	Flag = 3 -> curves definition, lenCURVE
-  int Flag=0, lenROI=0, lenPOINTS=0, lenPOINTSref=0, lenCURVE=0, lenCURVEref=0;
+  G4int Flag=0, lenROI=0, lenPOINTS=0, lenPOINTSref=0, lenCURVE=0, lenCURVEref=0;
   lenCURVE = 0;
   lenROI = 0;
   lenPOINTS = 0;
 
   readingContours = fopen("Plan.roi","r");
-  if ( (int *)readingContours == 0 )
+  if ( (G4int *)readingContours == 0 )
     {
       printf("### No contours file ('Plan.roi')\n");
       flag_contours=0;
     }
-  else if ( (int *)readingContours != 0 )
+  else if ( (G4int *)readingContours != 0 )
     {
       flag_contours=1;
       printf("### There is a contour file ('Plan.roi')\n");
@@ -174,7 +173,7 @@ void DicomPatientConstructor::readContour()
             }
 	  else
             {
-	      int x=0;
+	      G4int x=0;
 	      sscanf(ROIplanLine,"%s %s %s %s %s",Word_1,Word_2,Word_3,Word_4,Word_5);
 	      while( Word_1[x] != 0 )
                 {
@@ -217,12 +216,12 @@ void DicomPatientConstructor::readContour()
 // This function tell if the coordinates (X,Y,Z) is within one of the curves from plan.roi
 G4bool DicomPatientConstructor::isWithin(G4double X , G4double Y , G4double Z )
 {
-  int x,i,j;
-  int state=0;  // This variable = 0 if the point is outside curve
-  int lenPOINTS=-1;  // Number of points avaible in a curve, to be initialised each time!
+  G4int x,i,j;
+  G4int state=0;  // This variable = 0 if the point is outside curve
+  G4int lenPOINTS=-1;  // Number of points avaible in a curve, to be initialised each time!
   for(x=1;x<=MaxCurve;x++)
     {
-      lenPOINTS=(int)(ContoursX[x][0]);  // The number of points in the curve in the
+      lenPOINTS=(G4int)(ContoursX[x][0]);  // The number of points in the curve in the
       // first element of the array
       if (  ContoursZ[x][1] ==  Z )  // Z[x][1] is the same for all Z
         {
@@ -238,6 +237,6 @@ G4bool DicomPatientConstructor::isWithin(G4double X , G4double Y , G4double Z )
 
     }
 
-  return (bool)state;  // current state false=out, true=inside
+  return (G4bool)state;  // current state false=out, true=inside
 }
 
