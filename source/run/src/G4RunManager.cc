@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.17 2000-11-13 01:24:21 asaim Exp $
+// $Id: G4RunManager.cc,v 1.18 2000-12-14 10:38:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,7 +70,7 @@ G4RunManager::G4RunManager()
   G4cout 
   << "**********************************************" << G4endl
   << " Geant4 version $Name: not supported by cvs2svn $" << G4endl
-  << "                                (30-Jun-2000)" << G4endl
+  << "                                (15-Dec-2000)" << G4endl
   << "             Copyright : Geant4 Collaboration" << G4endl
   << "**********************************************" << G4endl;
 }
