@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectoryPoint.hh,v 1.7 2004-06-09 07:40:51 gcosmo Exp $
+// $Id: G4RayTrajectoryPoint.hh,v 1.8 2004-06-11 14:30:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,7 +77,7 @@ class G4RayTrajectoryPoint :public G4VTrajectoryPoint
     // Dummy function (not used) to satisfy base class pure virtual function.
 };
 
-#if defined G4RAY_TRAJECTORY_POINT_EXPORT
+#if defined G4VIS_ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4RayTrajectoryPoint> G4RayTrajectoryPointAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4RayTrajectoryPoint> G4RayTrajectoryPointAllocator;

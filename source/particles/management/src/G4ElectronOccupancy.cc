@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectronOccupancy.cc,v 1.7 2004-06-09 07:31:50 gcosmo Exp $
+// $Id: G4ElectronOccupancy.cc,v 1.8 2004-06-11 14:25:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,10 +34,6 @@
 //     This class has information of occupation of electrons 
 //     in atomic orbits
 // ---------------------------------------------------------------
-
-// Export extern symbols for DLLs build
-//
-#define G4ELECTRON_OCCUPANCY_EXPORT 1
 
 #include "G4ElectronOccupancy.hh"
 

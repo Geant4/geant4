@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2004-06-01 15:40:30 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2004-06-11 14:28:12 gcosmo Exp $
 # ----------------------------------------------------------
 # GNUmakefile for track library.  Gabriele Cosmo, 3/4/1997.
 # ----------------------------------------------------------
@@ -15,6 +15,7 @@ GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4TRACK_ALLOC_EXPORT
 CPPFLAGS += \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \

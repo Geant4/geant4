@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.hh,v 1.13 2004-06-09 07:40:51 gcosmo Exp $
+// $Id: G4RayTrajectory.hh,v 1.14 2004-06-11 14:30:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -87,7 +87,7 @@ class G4RayTrajectory : public G4VTrajectory
    std::vector<G4RayTrajectoryPoint*>* positionRecord;
 };
 
-#if defined G4RAY_TRAJECTORY_EXPORT
+#if defined G4VIS_ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4RayTrajectory> G4RayTrajectoryAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4RayTrajectory> G4RayTrajectoryAllocator;

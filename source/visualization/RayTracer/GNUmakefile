@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2004-06-03 11:40:13 gcosmo Exp $
+# $Id: GNUmakefile,v 1.9 2004-06-11 14:30:49 gcosmo Exp $
 
 name := G4RayTracer
 
@@ -16,6 +16,8 @@ GLOBLIBS += libG4intercoms.lib libG4global.lib
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
+
+CPPFLAGS += -DG4VIS_ALLOC_EXPORT
 
 CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
 CPPFLAGS += -I$(G4BASE)/visualization/management/include

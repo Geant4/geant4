@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.20 2004-06-09 07:35:34 gcosmo Exp $
+// $Id: G4Track.cc,v 1.21 2004-06-11 14:28:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,10 +33,6 @@
 //   Add copy constructor            Hisaya Feb. 07 01
 //   Fix GetVelocity                 Hisaya Feb. 17 01
 //   Modification for G4TouchableHandle             22 Oct. 2001  R.Chytracek//
-
-// Export extern symbols for DLLs build
-//
-#define G4TRACK_EXPORT 1
 
 #include "G4Track.hh"
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.hh,v 1.10 2004-06-09 07:31:47 gcosmo Exp $
+// $Id: G4DecayProducts.hh,v 1.11 2004-06-11 14:25:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -101,7 +101,7 @@ class G4DecayProducts
 
 };
 
-#if defined G4DECAY_PRODUCTS_EXPORT
+#if defined G4PARTICLES_ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4DecayProducts> aDecayProductsAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4DecayProducts> aDecayProductsAllocator;

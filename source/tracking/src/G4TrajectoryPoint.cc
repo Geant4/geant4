@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryPoint.cc,v 1.13 2004-06-09 07:37:56 gcosmo Exp $
+// $Id: G4TrajectoryPoint.cc,v 1.14 2004-06-11 14:30:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,10 +30,6 @@
 // G4TrajectoryPoint.cc
 //
 // ---------------------------------------------------------------
-
-// Export extern symbols for DLLs build
-//
-#define G4TRAJECTORY_POINT_EXPORT 1
 
 #include "G4TrajectoryPoint.hh"
 

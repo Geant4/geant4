@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.icc,v 1.12 2004-06-09 07:35:33 gcosmo Exp $
+// $Id: G4Track.icc,v 1.13 2004-06-11 14:28:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-----------------------------------------------------------------
@@ -29,7 +29,7 @@
 //-----------------------------------------------------------------
 //   change GetMaterial        16 Feb. 2000  H.Kurashige
 
-#if defined G4TRACK_EXPORT
+#if defined G4TRACK_ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4Track> aTrackAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4Track> aTrackAllocator;

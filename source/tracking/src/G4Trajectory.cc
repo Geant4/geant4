@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.cc,v 1.23 2004-06-09 07:37:56 gcosmo Exp $
+// $Id: G4Trajectory.cc,v 1.24 2004-06-11 14:30:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,10 +36,6 @@
 //     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
 //
 // ---------------------------------------------------------------
-
-// Export extern symbols for DLLs build
-//
-#define G4TRAJECTORY_EXPORT 1
 
 #include "G4Trajectory.hh"
 #include "G4TrajectoryPoint.hh"

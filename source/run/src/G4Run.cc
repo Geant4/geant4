@@ -21,13 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.cc,v 1.6 2004-06-09 07:34:18 gcosmo Exp $
+// $Id: G4Run.cc,v 1.7 2004-06-11 14:27:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
-// Export extern symbols for DLLs build
-//
-#define G4RUN_EXPORT 1
 
 #include "G4Run.hh"
 

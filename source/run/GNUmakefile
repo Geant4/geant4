@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2004-06-01 15:40:10 gcosmo Exp $
+# $Id: GNUmakefile,v 1.10 2004-06-11 14:27:44 gcosmo Exp $
 # ----------------------------------------------------------
 # GNUmakefile for run library.  Gabriele Cosmo, 3/4/1997.
 # ----------------------------------------------------------
@@ -17,6 +17,7 @@ GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4RUN_ALLOC_EXPORT
 CPPFLAGS += \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
