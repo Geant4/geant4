@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2001-07-18 18:06:24 asaim Exp $
+$Id: History,v 1.85 2001-09-17 08:33:51 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Sep 17, 2001 H.Kurashige
+- Added Store/Retreive method to G4DataVector
+- Added Store/Retreive method to G4OrderedTable
+ 
 
 July 18, 2001 M.Asai (global-V03-02-01)
 - Added a feature of suppressing program abortion due to G4Exception
