@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2000-02-28 15:11:24 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2000-02-28 15:17:22 gcosmo Exp $
 # ------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ------------------------------------------------------
@@ -51,5 +51,7 @@ clean_all:
 	(target=`basename $$i .cc`; \
 	echo  "Removing $$target ... "; \
 	$(MAKE) clean G4SKIP_DEPEND=1 G4TARGET=$$target); done
+	@echo  "Removing STEPTest ... "
+	@$(MAKE) clean G4SKIP_DEPEND=1 G4TARGET=STEPTest
 	@echo  "Wiping output files ... "
 	@$(RM) -rf *.newout*
