@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.3 2001-09-14 08:17:12 vnivanch Exp $
+// $Id: G4eIonisationParameters.cc,v 1.4 2001-10-09 11:23:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -30,13 +30,14 @@
 // -----------
 // 31 Jul 2001   MGP        Created
 // 12.09.01 V.Ivanchenko    Add param and interpolation of parameters  
+// 04.10.01 V.Ivanchenko    Add BindingEnergy method  
 //
 // -------------------------------------------------------------------
 
 #include "G4eIonisationParameters.hh"
 #include "G4VEMDataSet.hh"
-#include "G4EMDataSet.hh"
 #include "G4ShellEMDataSet.hh"
+#include "G4EMDataSet.hh"
 #include "G4SemiLogInterpolation.hh"
 #include "G4MaterialTable.hh"
 #include "G4DataVector.hh"
@@ -56,7 +57,20 @@ G4eIonisationParameters:: G4eIonisationParameters(G4int minZ, G4int maxZ)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eIonisationParameters::~G4eIonisationParameters()
-{ }
+{ 
+  // Reset the map of data sets: remove the data sets from the map 
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
+
+  for (pos = param.begin(); pos != param.end(); pos++)
+    {
+      G4VEMDataSet* dataSet = pos->second;
+      param.erase(pos);
+      delete dataSet;
+    }
+
+  activeZ.clear();
+  delete interpolation;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -70,14 +84,14 @@ G4double G4eIonisationParameters::Parameter(G4int Z, G4int shellIndex,
 
   pos = param.find(id);
   if (pos!= param.end()) {
-    G4VEMDataSet* dataSet = pos->second;
+    G4VEMDataSet* dataSet = (*pos).second;
     size_t nShells = dataSet->NumberOfComponents();
 
     if(shellIndex < nShells) { 
       const G4VEMDataSet* comp = dataSet->GetComponent(shellIndex);
       const G4DataVector ener = comp->GetEnergies(0);
       G4double ee = G4std::max(ener.front(),G4std::min(ener.back(),e));
-      G4double value = comp->FindValue(ee);
+      value = comp->FindValue(ee);
 
     } else {
       G4cout << "WARNING: G4IonisationParameters::FindParameters "
@@ -96,27 +110,17 @@ G4double G4eIonisationParameters::Parameter(G4int Z, G4int shellIndex,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const G4DataVector& G4eIonisationParameters::Parameters(G4int Z, 
-                                                       G4int shellIndex,
-                                                       G4double e) const
-{
-// To be implemented
-  G4DataVector* p = new G4DataVector();
-  return *p;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4eIonisationParameters::LoadData()
 {
   if(!interpolation)  interpolation  = new G4SemiLogInterpolation();
+
   // define active elements
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   if (materialTable == 0)
      G4Exception("G4CrossSectionHandler: no MaterialTable found)");
 
-  G4int nMaterials = materialTable->length();
+  G4int nMaterials = G4Material::GetNumberOfMaterials();
   
   for (G4int m=0; m<nMaterials; m++) {
 
@@ -143,11 +147,13 @@ void G4eIonisationParameters::LoadData()
 
   G4double energy;
   G4DataVector* e;
+  G4DataVector  q;
   G4VEMDataSet* set;
   G4std::vector<G4DataVector*> a;
   G4std::vector<G4ShellEMDataSet*> p;
   a.resize(length);
   p.resize(length);
+  q.resize(length);
 
   size_t nZ = activeZ.size();
 
@@ -183,15 +189,23 @@ void G4eIonisationParameters::LoadData()
       p[k] = new G4ShellEMDataSet(id, interpolation, 1., 1.);
     }
 
+    G4int shell = 0;
+
     do {
       file >> energy;
       if (energy == -2) break;
       if (energy >  -1) e->push_back(energy);
 
-      G4double x;
-      for (size_t j=0; j<length; j++) {
-          file >> x;    
-          if(energy > -1) a[j]->push_back(x);
+      size_t j;
+      for (j=0; j<length; j++) {
+        file >> q[j];
+      }    
+      if(q[14] == 0.)   q[14] = DBL_MAX;
+      if(q[15] < q[14]) q[15] = q[14];
+      if(q[15] == 0.)   q[15] = DBL_MAX;
+
+      for (j=0; j<length; j++) {
+        a[j]->push_back(q[j]);
       }
 
       // fill map
@@ -199,9 +213,9 @@ void G4eIonisationParameters::LoadData()
 
         G4int id;
         for(G4int k=0; k<length; k++) {
-            set = new G4EMDataSet(k, e, a[k], interpolation, 1., 1.);
-            p[k]->AddComponent(set);
             G4int id = Z*20 + k;
+            set = new G4EMDataSet(id, e, a[k], interpolation, 1., 1.);
+            p[k]->AddComponent(set);
         } 
 
 	// clear vectors
@@ -209,6 +223,7 @@ void G4eIonisationParameters::LoadData()
         for(size_t j2=0; j2<length; j2++) {
           a[j2] = new G4DataVector();
         } 
+        shell++;
       }
     } while (energy > -2);
 
@@ -225,6 +240,8 @@ void G4eIonisationParameters::LoadData()
       delete  a[j1];
     } 
   }
+  a.clear();
+  p.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.2 2001-09-14 08:17:13 vnivanch Exp $
+// $Id: G4BremsstrahlungParameters.cc,v 1.3 2001-10-09 11:23:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -29,7 +29,8 @@
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created
-// 13.09.01 V.Ivanchenko  Add paramA map
+// 12.09.01 V.Ivanchenko    Add activeZ and paramA
+// 25.09.01 V.Ivanchenko    Add parameter C and change interface to B
 //
 // -------------------------------------------------------------------
 
@@ -44,7 +45,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4BremsstrahlungParameters:: G4BremsstrahlungParameters(G4int minZ, G4int maxZ)
-  : zMin(minZ), zMax(maxZ)
+  : zMin(minZ), 
+    zMax(maxZ), 
+    interpolation(0)
 {
   LoadData();
 }
@@ -67,6 +70,7 @@ G4BremsstrahlungParameters::~G4BremsstrahlungParameters()
   delete interpolation;
   paramB0.clear();
   paramB1.clear();
+  paramC.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,7 +81,7 @@ G4double G4BremsstrahlungParameters::ParameterA(G4int Z, G4double energy) const
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
   pos = paramA.find(Z);
   if (pos!= paramA.end()) {
-    G4VEMDataSet* dataSet = pos->second;
+    G4VEMDataSet* dataSet = (*pos).second;
     value = dataSet->FindValue(energy);
   } else {
     G4String ex = "G4BremsstrahlungParameters::ParameterA - wrong Z=" + Z; 
@@ -88,24 +92,19 @@ G4double G4BremsstrahlungParameters::ParameterA(G4int Z, G4double energy) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BremsstrahlungParameters::ParameterB(G4int Z, G4int id) const
+G4double G4BremsstrahlungParameters::ParameterB(G4int Z, G4double energy) const
 {
-  if (Z < (zMin-1) || Z > (zMax-1)) {
+  if (Z < zMin || Z > zMax) {
     G4String ex = "G4BremsstrahlungParameters::ParameterB - wrong Z=" + Z; 
     G4Exception(ex);
   }
 
-  G4double value;
+  G4double b0  = paramB0[Z-1];
+  G4double b1  = paramB1[Z-1];
+  G4double b   = b0 + b1*log10(energy);
+  if(b < 0. || energy < 10.*eV) b = 0.;
 
-  if (id == 1) 
-    {
-      value = paramB0[Z-1];
-    }
-  else
-    {
-      value = paramB1[Z-1];
-    }
-  return value;
+  return b;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -122,7 +121,7 @@ void G4BremsstrahlungParameters::LoadData()
   if (materialTable == 0)
      G4Exception("G4CrossSectionHandler: no MaterialTable found)");
 
-  G4int nMaterials = materialTable->length();
+  G4int nMaterials = G4Material::GetNumberOfMaterials();
   
   for (G4int m=0; m<nMaterials; m++) {
 
@@ -137,6 +136,8 @@ void G4BremsstrahlungParameters::LoadData()
 	 activeZ.push_back(Z);
       }
     }
+    G4double x = 1.e-9;
+    paramC.push_back(x);
   }
 
   // Read parameters A
@@ -188,7 +189,7 @@ void G4BremsstrahlungParameters::LoadData()
 	// fill map
         if(z == (G4int)activeZ[i]) {
           G4VEMDataSet* dataSet = 
-                        new G4EMDataSet(z, energies, data, interpolation);
+                    new G4EMDataSet(z, energies, data, interpolation, 1., 1.);
           paramA[z] = dataSet;
           used = true;
 	}
@@ -235,31 +236,38 @@ void G4BremsstrahlungParameters::LoadData()
 
   G4int nParam = 2;
   a = 0;
-  G4int k = 1;
+  e = 0;
 
-  do
-    {
-      file >> a;
+  do {
+      file >> e >> a;
       // The file is organized into two columns:
       // 1st column is the energy
       // 2nd column is the corresponding value
       // The file terminates with the pattern: -1   -1
       //                                       -2   -2
 
-      if (k%nParam != 0)
-	{	
-	  paramB0.push_back(a);
-	  k++;
-	}
-      else if (k%nParam == 0)
-	{
+      if (e == -1 || e == -2) break;
+      else {
+	  paramB0.push_back(e);
 	  paramB1.push_back(a);
-	  k = 1;
 	}
-    } while (a != -2); // end of file
+    } while (e != -2); // end of file
   
   zMax = paramB0.size();
   file.close();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4BremsstrahlungParameters::ParameterC(G4int id) const
+{
+  G4double value = 0.;
+  if (id < 0 || id >= paramC.size()) {
+    G4String ex = "G4BremsstrahlungParameters::ParameterC - wrong id=" + id; 
+    G4Exception(ex);
+  }
+
+  return paramC[id];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

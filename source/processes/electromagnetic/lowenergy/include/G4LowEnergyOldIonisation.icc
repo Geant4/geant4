@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyIonisation.icc,v 1.17 2001-07-11 10:02:37 gunter Exp $
+// $Id: G4LowEnergyOldIonisation.icc,v 1.1 2001-10-09 11:25:32 vnivanch Exp $
 //
 // 
 // ---------------------------------------------------------------
 //      GEANT 4 class inlined methods file 
 //
-//      ------------ G4LowEnergyIonisation physics process ------------
+//      ------------ G4LowEnergyOldIonisation physics process ------------
 //
 //                  by Alessandra Forti , July 1999
 // ***************************************************************
@@ -42,11 +42,11 @@
 
 //    
 
-inline G4bool G4LowEnergyIonisation::IsApplicable(
+inline G4bool G4LowEnergyOldIonisation::IsApplicable(
                             const G4ParticleDefinition& particle)
 {
    if(&particle == G4Positron::Positron()) {
-     G4cout << "WARNING: G4LowEnergyIonisation is not applicable"
+     G4cout << "WARNING: G4LowEnergyOldIonisation is not applicable"
             << " for positron yet!" << G4endl;
    } 
    return(  (&particle == G4Electron::Electron())
@@ -56,7 +56,7 @@ inline G4bool G4LowEnergyIonisation::IsApplicable(
          
 //    
 
-inline G4double G4LowEnergyIonisation::GetMeanFreePath(
+inline G4double G4LowEnergyOldIonisation::GetMeanFreePath(
                                                const G4Track& track,
                                                G4double,
                                                G4ForceCondition*){

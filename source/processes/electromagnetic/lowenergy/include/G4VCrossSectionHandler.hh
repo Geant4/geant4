@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.hh,v 1.6 2001-10-08 07:45:35 pia Exp $
+// $Id: G4VCrossSectionHandler.hh,v 1.7 2001-10-09 11:23:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -90,6 +90,10 @@ public:
   
   G4double FindValue(G4int Z, G4double e) const;
 
+  G4double FindValue(G4int Z, G4double e, G4int shellIndex) const;
+
+  G4int NumberOfComponents(G4int Z) const;
+
   void Clear();
 
 
@@ -100,8 +104,9 @@ protected:
   void ActiveElements();
 
   // Factory method
-  virtual G4std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
-								       const G4DataVector* energyCuts = 0) = 0;
+  virtual G4std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(
+                                  const G4DataVector& energyVector, 
+				  const G4DataVector* energyCuts = 0) = 0;
 
   // Factory method
   virtual G4VDataSetAlgorithm* CreateInterpolation(); 

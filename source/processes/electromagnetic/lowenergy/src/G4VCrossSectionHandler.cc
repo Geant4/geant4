@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.5 2001-10-08 07:49:02 pia Exp $
+// $Id: G4VCrossSectionHandler.cc,v 1.6 2001-10-09 11:23:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -29,6 +29,8 @@
 // History:
 // -----------
 // 1 Aug 2001   MGP        Created
+// 09.10.01  V.Ivanchenko  Add FindValue with 3 parameters 
+//                          + NumberOfComponents
 //
 // -------------------------------------------------------------------
 
@@ -342,6 +344,42 @@ G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double energy) const
   return value;
 }
 
+G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double energy, 
+                                           G4int shellIndex) const
+{
+  G4double value = 0.;
+  
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
+  pos = dataMap.find(Z);
+  if (pos!= dataMap.end())
+    {
+      // The following is a workaround for STL ObjectSpace implementation, 
+      // which does not support the standard and does not accept 
+      // the syntax pos->first or pos->second
+      // G4VEMDataSet* dataSet = pos->second;
+      G4VEMDataSet* dataSet = (*pos).second;
+      if(shellIndex >= 0) {
+        if(shellIndex < dataSet->NumberOfComponents())
+          value = dataSet->GetComponent(shellIndex)->FindValue(energy);
+        else {
+          G4cout << "WARNING: G4VCrossSectionHandler::FindValue did not find"
+                 << " shellIndex= " << shellIndex
+                 << " for  Z= "
+                 << Z << G4endl;
+        }
+      } else {
+        value = dataSet->FindValue(energy);
+      }
+    }
+  else
+    {
+      G4cout << "WARNING: G4VCrossSectionHandler::FindValue did not find Z = "
+	     << Z << G4endl;
+    }
+  return value;
+}
+
+
 G4double G4VCrossSectionHandler::ValueForMaterial(const G4Material* material, 
 						  G4double energy) const
 {
@@ -363,7 +401,8 @@ G4double G4VCrossSectionHandler::ValueForMaterial(const G4Material* material,
 }
 
 
-G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4DataVector* energyCuts) 
+G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(
+                                      const G4DataVector* energyCuts) 
 {
   // Builds a CompositeDataSet containing the mean free path for each material
   // in the material table
@@ -396,7 +435,7 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
 	}
     }
 
-  crossSections = BuildCrossSectionsForMaterials(energyVector);
+  crossSections = BuildCrossSectionsForMaterials(energyVector, energyCuts);
 
   if (crossSections == 0) 
     G4Exception("G4VCrossSectionHandler::BuildMeanFreePathForMaterials, crossSections = 0");
@@ -420,12 +459,6 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
 	  G4VEMDataSet* matCrossSet = (*crossSections)[m];
 	  G4double materialCrossSection = matCrossSet->FindValue(energy);
   
-	  // MGP DEBUG
-	  //	  const G4Material* material= (*materialTable)[m];
-	  // 	  G4double materialCrossSection0 = ValueForMaterial(material,e);
-	  //      G4cout << materialCrossSection0 << " " << materialCrossSection << G4endl;
-	  // End debug
-
 	  if (materialCrossSection > 0.)
 	    {
 	      data->push_back(1./materialCrossSection);
@@ -593,5 +626,24 @@ G4VDataSetAlgorithm* G4VCrossSectionHandler::CreateInterpolation()
   return algorithm;
 }
 
+G4int G4VCrossSectionHandler::NumberOfComponents(G4int Z) const
+{
+  G4int n = 0;
+  
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
+  pos = dataMap.find(Z);
+  if (pos!= dataMap.end())
+    {
+      G4VEMDataSet* dataSet = (*pos).second;
+      n = dataSet->NumberOfComponents();
+    }
+  else
+    {
+      G4cout << "WARNING: G4VCrossSectionHandler::NumberOfComponents did not "
+             << "find Z = "
+             << Z << G4endl;
+    }
+  return n;
+}
 
 

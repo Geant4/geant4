@@ -21,81 +21,67 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.hh,v 1.3 2001-10-09 11:23:26 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// -------------------------------------------------------------------
 //
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//                          Values of the parameters from A. Forti's fit
+// GEANT4 Class file
 //
-// History:
-// -----------
-// 31 Jul 2001   MGP        Created
-// 12.09.01 V.Ivanchenko    Add param and interpolation of parameters  
-// 04.10.01 V.Ivanchenko    Add BindingEnergy method  
+//
+// File name:     G4eIonisationCrossSectionHandler
+//
+// Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
+// 
+// Creation date: 17 September 2001
+//
+// Modified: 
 //
 // -------------------------------------------------------------------
 
-// Class description:
-// Low Energy Electromagnetic Physics
-// Set of parameters for LowEnergyIonisation
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+// Class Description: 
+//
+// Provides build cross sections with cut for LowEnergyIonisation 
+//
+// Class Description: End 
 
 // -------------------------------------------------------------------
+//
 
-#ifndef G4IONISATIONPARAMETERS_HH
-#define G4IONISATIONPARAMETERS_HH 1
+#ifndef G4eIonisationCrossSectionHandler_h
+#define G4eIonisationCrossSectionHandler_h 1
 
+#include "G4VCrossSectionHandler.hh"
 #include "globals.hh"
-#include "G4DataVector.hh"
-#include "g4std/map"
 
-class G4VDataSetAlgorithm;
+class G4VEnergySpectrum;
+class G4DataVector;
 class G4VEMDataSet;
+class G4VDataSetAlgorithm;
 
-class G4eIonisationParameters {
- 
+class G4eIonisationCrossSectionHandler : public G4VCrossSectionHandler
+{
+
 public:
 
-  G4eIonisationParameters(G4int minZ = 1, G4int maxZ = 99);
+  G4eIonisationCrossSectionHandler(const G4VEnergySpectrum* spec,
+                                         G4VDataSetAlgorithm* alg,
+                                         G4double emin, 
+                                         G4double emax, 
+                                         G4int nbin);
 
-  ~G4eIonisationParameters();
+  ~G4eIonisationCrossSectionHandler();
  
-  G4double Parameter(G4int Z, G4int shellIndex, G4int parameterIndex,
-                     G4double e) const;
-  
-  void PrintData() const;
+protected:
+
+  G4std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(
+                                const G4DataVector& energyVector, 
+				const G4DataVector* energyCuts);
+
 
 private:
 
-  // hide assignment operator 
-  G4eIonisationParameters(const G4eIonisationParameters&);
-  G4eIonisationParameters & operator=(const G4eIonisationParameters &right);
+  const G4VEnergySpectrum* theParam;
 
-  void LoadData();
-
-  G4int zMin;
-  G4int zMax;
-
-  // Parameters of the energy spectra
-  G4DataVector activeZ;
-
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > param;
-
-  size_t length;
-
-  // The interpolation algorithm
-  G4VDataSetAlgorithm* interpolation;
+  G4VDataSetAlgorithm* interp;
 };
  
 #endif
- 
-
-
-
-
-
-
-
-
-
 

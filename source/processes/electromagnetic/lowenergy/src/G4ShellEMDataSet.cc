@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.cc,v 1.5 2001-10-08 07:49:02 pia Exp $
+// $Id: G4ShellEMDataSet.cc,v 1.6 2001-10-09 11:23:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -29,6 +29,7 @@
 // History:
 // -----------
 // 1 Aug 2001   MGP        Created
+// 09.10.01   V.Ivanchenko Add case z=0
 //
 // -------------------------------------------------------------------
 
@@ -103,8 +104,9 @@ void G4ShellEMDataSet::LoadData(const G4String& fileName)
   char nameChar[100] = {""};
   G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
   
-  ost << fileName << z << ".dat";
-  
+  if(z)  ost << fileName << z << ".dat";
+  else   ost << fileName << ".dat";
+
   G4String name(nameChar);
   
   char* path = getenv("G4LEDATA");

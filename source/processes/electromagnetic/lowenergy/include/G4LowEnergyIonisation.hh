@@ -20,164 +20,126 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4LowEnergyIonisation.hh,v 1.24 2001-10-01 12:45:36 guardi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
 // ------------------------------------------------------------
-//      GEANT 4 class header file 
+//      GEANT 4 class header file
+//      CERN Geneva Switzerland
 //
-//      --- G4LowEnergyIonisation physics process for electrons
-//                by Alessandra Forti July 1999
-// ************************************************************
+// Author:        V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
+// 
+// Creation date: 27 September 2001
 //
-//   07.04.2000 Veronique Lefebure + Laszlo Urban
-// - First implemention of continuous energy loss
-// 14/07/99: corrections , L.Urban
-// 20/09/00 update fluctuations V.Ivanchenko
+// Modifications: 
 //
-// Class description:
-// Low Energy Electromagnetic process, electron Ionisation
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+// Class Description: 
+//
+// Bremsstrahlung process based on the model developed  
+// by Alessandra Forti, 1999, and Veronique Lefebure, 2000 
+//
+// -------------------------------------------------------------------
 
-// ------------------------------------------------------------
- 
+// Class description:
+// Low Energy electromagnetic process,
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+//
+// Class Description: End 
+
+// -------------------------------------------------------------------
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #ifndef G4LowEnergyIonisation_h
 #define G4LowEnergyIonisation_h 1
 
-
-// Base Class Headers
 #include "G4eLowEnergyLoss.hh"
-
-// Contained Variables Headers
-#include "G4LowEnergyUtilities.hh"
 #include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4ShellData.hh"
-#include "G4AtomicDeexcitation.hh"
+#include "G4VEMDataSet.hh"
 
-typedef G4FirstLevel oneShellTable;
-typedef G4SecondLevel oneAtomTable;
-typedef G4ThirdLevel allAtomTable;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class G4LowEnergyIonisation : public G4eLowEnergyLoss{
+class G4Track;
+class G4Step;
+class G4ParticleDefinition;
+class G4VParticleChange;
+class G4VDataSetAlgorithm;
+class G4ParticleChange;
+class G4VEnergySpectrum;
+class G4VCrossSectionHandler;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+class G4LowEnergyIonisation : public G4eLowEnergyLoss
+
+{ 
 public:
-  
-  G4LowEnergyIonisation(const G4String& processName = "LowEnergyIoni"); 
+ 
+  G4LowEnergyIonisation(const G4String& processName = "eLowEnergyIon");
   
   ~G4LowEnergyIonisation();
   
-  G4bool IsApplicable(const G4ParticleDefinition&); 
-  
-  void SetCutForLowEnSecPhotons(G4double);
-
-  void SetCutForLowEnSecElectrons(G4double);
-
-  void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
-  
-  G4double GetMeanFreePath(const G4Track& track,
-			   G4double previousStepSize,
-			   G4ForceCondition* condition ) ;
-
-  inline G4double GetTransitionShell(G4int k){return(thePrimShVec[k]);};
-
-  G4VParticleChange *PostStepDoIt(const G4Track& track,         
-				  const G4Step& Step ) ;                 
+  G4bool IsApplicable(const G4ParticleDefinition&);
   
   void PrintInfoDefinition();
-
-  G4double GetShellCrossSection(const G4double AtomicNumber,
-                                const G4int subshellindex,
-                                const G4double KineticEnergy) ;
-  G4double GetShellCrossSectionwithCut(const G4double AtomicNumber,
-                                       const G4int subshellindex,
-                                       const G4double KineticEnergy,
-                                       const G4double Tcut) ;
-  G4double GetShellEnergyLosswithCut(const G4double AtomicNumber,
-                                     const G4int subshellindex,
-                                     const G4double KineticEnergy,
-                                     const G4double Tcut) ;
-  void SetLowEnergyLimit(G4double val) {if(val > 0.0) lEnergyLimit = val;};
   
-  private:
+  void BuildPhysicsTable(const G4ParticleDefinition& ParticleType);
   
-  virtual G4double ComputeCrossSection(const G4double AtomicNumber,
-				       const G4double IncEnergy);
-  G4double ComputeCrossSectionWithCut(const G4double AtomIndex,
-				      const G4double IncEnergy,
-		   	 	      const G4double CutEnergy);
-  G4double ComputeMicroscopicCrossSection(const G4double AtomIndex,
-				      const G4double IncEnergy,
-		   	 	      const G4double CutEnergy);
   
-  void BuildLossTable(const G4ParticleDefinition& aParticleType);
-  void BuildShellCrossSectionTable();
-  void BuildBindingEnergyTable();
-  void BuildFluorTransitionTable();
-  void BuildSamplingCoeffTable();
-  void BuildZVec();
-  void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
-
+  G4double GetMeanFreePath(const G4Track& track,
+			         G4double previousStepSize,
+			         G4ForceCondition* condition );
+ 
+  G4VParticleChange* PostStepDoIt(const G4Track& track,         
+				  const G4Step&  step);                 
+  
+    
 private:
+
+  // Hide copy constructor and assignment operator as private 
+  G4LowEnergyIonisation(const G4LowEnergyIonisation& );
+  G4LowEnergyIonisation& operator = 
+                             (const G4LowEnergyIonisation& right);
   
-  // hide assignment operator 
-  G4LowEnergyIonisation & operator=(const G4LowEnergyIonisation &right);
-  G4LowEnergyIonisation(const G4LowEnergyIonisation&);
+  void BuildLossTable(const G4ParticleDefinition& ParticleType);
   
 private:
-  
-  G4int SelectRandomShell(const G4int AtomIndex
-                        , const G4double IncEnergy
-			, const G4double CutEnergy);
-  
-  G4Element* SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton, 
-			      G4Material* aMaterial);
-  
-  G4bool SelectRandomTransition(G4int, G4double*, 
-				const oneAtomTable*);
 
+  G4VCrossSectionHandler* crossSectionHandler;
+  G4VEMDataSet* theMeanFreePath;
+  G4VEnergySpectrum* theParam;
 
+  // lower limit for generation of gamma in this model
+  G4DataVector cutForDelta;
 
-  G4double EnergySampling(const G4int AtomicNumber
-                        , const G4int ShellIndex
-			, const G4double KinEn
-			, const G4double deltaRayMinE = 0.1*eV);
-
-  allAtomTable* allAtomShellCrossSec;
-  allAtomTable* theFluorTransitionTable;
-  allAtomTable* theSamplingCoeffTable;
-  G4SecondLevel* theBindingEnergyTable;  
-  G4DataVector* ZNumVec;
-  G4DataVector* ZNumVecFluor;
-
-  G4PhysicsTable* theMeanFreePathTable;
-
-  G4double CutForLowEnergySecondaryPhotons;
-  G4double CutForLowEnergySecondaryElectrons;
-  G4double MeanFreePath;
-
-  G4double lowestKineticEnergy;
-  G4double highestKineticEnergy;
-  G4int TotBin;
-
-  G4LowEnergyUtilities util;
-
-  G4DataVector thePrimShVec;
-  G4double lEnergyLimit;
-  G4ShellData shellData;
-  G4AtomicDeexcitation deexcitationManager;
 };
- 
-#include "G4LowEnergyIonisation.icc"
- 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4LowEnergyIonisation::IsApplicable(
+                            const G4ParticleDefinition& particle)
+{
+   return(  (&particle == G4Electron::Electron())
+          /////////////||(&particle == G4Positron::Positron())
+	   );
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4LowEnergyIonisation::GetMeanFreePath(
+                            const G4Track& track,
+                                  G4double,
+                                  G4ForceCondition* cond)
+{
+   *cond = NotForced;
+   G4int index = (track.GetMaterial())->GetIndex();
+   const G4VEMDataSet* data = theMeanFreePath->GetComponent(index);
+   G4double meanFreePath = data->FindValue(track.GetKineticEnergy());
+   return meanFreePath; 
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
 #endif
  
-
-
-
-
 
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComplexTest.cc,v 1.8 2001-10-09 10:07:38 vnivanch Exp $
+// $Id: G4ComplexTest.cc,v 1.9 2001-10-09 11:23:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -186,7 +186,7 @@ int main(int argc,char** argv)
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
-  G4int nOfMaterials = G4Material::GetNumberOfMaterials();
+  G4int nMaterials = G4Material::GetNumberOfMaterials();
 
   G4cout << "Available materials are: " << G4endl;
   G4int mat;
