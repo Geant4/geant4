@@ -5,12 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonisParamMat.cc,v 1.4 2001-01-11 10:37:48 urban Exp $
+// $Id: G4IonisParamMat.cc,v 1.5 2001-01-16 16:56:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
+// 16-01-01, bug corrected in ComputeDensityEffect() E100eV (L.Urban)
 // 18-07-98, bug corrected in ComputeDensityEffect() for gas
 // 09-07-98, data moved from G4Material, M.Maire
 
