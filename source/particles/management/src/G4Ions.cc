@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.cc,v 1.7 2003-02-18 01:55:00 kurasige Exp $
+// $Id: G4Ions.cc,v 1.8 2003-03-11 05:49:41 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,7 +51,7 @@ G4Ions::G4Ions(
        G4int               baryon,       G4int               encoding,
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable )
- : G4ParticleWithCuts( aName,mass,width,charge,iSpin,iParity,
+  : G4ParticleDefinition( aName,mass,width,charge,iSpin,iParity,
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable )
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMeson.hh,v 1.3 2001-07-11 10:01:48 gunter Exp $
+// $Id: G4VMeson.hh,v 1.4 2003-03-11 05:49:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,9 +43,9 @@
 #include "G4Material.hh"
 
 #include "G4PhysicsLogVector.hh"
-#include "G4ParticleWithCuts.hh"
+#include "G4ParticleDefinition.hh"
 
-class G4VMeson : public G4ParticleWithCuts
+class G4VMeson : public G4ParticleDefinition
 {
   //  A virtual class for Mesons particles. It defines
   //  public methods which describe the behavior of a
@@ -74,7 +74,7 @@ class G4VMeson : public G4ParticleWithCuts
                G4bool           stable,
                G4double         lifetime,
                G4DecayTable     *decaytable)
-	: G4ParticleWithCuts(aName, mass, width, charge, iSpin, iParity,
+	: G4ParticleDefinition(aName, mass, width, charge, iSpin, iParity,
                                iConjugation, iIsospin, iIsospinZ, gParity,
                                pType, lepton, baryon, encoding, stable,
                                lifetime, decaytable) {};
