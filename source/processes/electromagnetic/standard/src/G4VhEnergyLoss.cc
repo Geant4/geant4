@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.33 2002-04-09 17:34:43 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.34 2002-05-29 12:25:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,6 +50,7 @@
 // 09-11-01 cosmetics; 80 columns everywhere (mma)
 // 06-02-02 bug fixed in MinDeltaCutInRange computation, L.Urban
 // 26-02-02 bug fixed in TouchebleHandle definition, V.Ivanchenko
+// 29-05-02 bug fixed in N of subcutoff delta, V.Ivanchenko
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -598,7 +599,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
           G4double deldedx=cN*aMaterial->GetDensity()*
                          ((E+mass)*(E+mass)*log(Tc/T0)/(E*(E+mass)));
           G4double delToverTc=1.-T0/Tc ;
-          G4double N = G4int(deldedx*fragment*delToverTc/(T0*log(Tc/T0))+0.5);
+          G4int N = G4int(deldedx*fragment*delToverTc/(T0*log(Tc/T0))+0.5);
           if(N > Ndeltamax) N = Ndeltamax;
 
           G4ThreeVector ParticleDirection = aParticle->GetMomentumDirection();
