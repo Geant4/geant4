@@ -33,12 +33,12 @@ public:
 
 private:
 
-  G4double CryostatRMin, CryostatRMax, CryostatLenght, StartingPhi, DPhi;
+  G4double CryostatRMin, CryostatRMax, CryostatLength, StartingPhi, DPhi;
 
-  G4double InsulationRMin, InsulationRMax, InsulationLenght;
+  G4double InsulationRMin, InsulationRMax, InsulationLength;
   G4double InsulationPosX, InsulationPosY, InsulationPosZ;
 
-  G4double LArgRMin, LArgRMax, LArgLenght;
+  G4double LArgRMin, LArgRMax, LArgLength;
   G4double LArgPosX, LArgPosY, LArgPosZ;
 
   G4double FrontExcluderSizeX, FrontExcluderSizeY, FrontExcluderSizeZ;
@@ -50,7 +50,7 @@ private:
   G4double BackExcluderPosX, BackExcluderPosY, BackExcluderPosZ,
            BackExcluderRotX;
 
-  G4double FCALEnvelopeRMin, FCALEnvelopeRMax, FCALEnvelopeLenght, 
+  G4double FCALEnvelopeRMin, FCALEnvelopeRMax, FCALEnvelopeLength, 
            FCALEnvelopeStartPhi, FCALEnvelopeDPhi;
   G4double FCALEnvelopePosX, FCALEnvelopePosY, FCALEnvelopePosZ,
            FCALEnvelopeRotX, FCALEnvelopeRotY;

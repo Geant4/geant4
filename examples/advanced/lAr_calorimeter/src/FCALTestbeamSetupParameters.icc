@@ -57,10 +57,10 @@ HoleCntrAlPosZ     = 291.5*cm;
 
 ScintHoleRmin      = 0.0*cm;
 ScintHoleRmax      = 2.5*cm;
-ScintHoleLenght    = 1.0*cm;
+ScintHoleLength    = 1.0*cm;
 AbsrbHoleRmin      = 0.0*cm;         // Absrb = Pb or Al
 AbsrbHoleRmax      = 2.75*cm;
-AbsrbHoleLenght    = 0.5*cm;
+AbsrbHoleLength    = 0.5*cm;
 HoleStartPhi	   = 0.;
 HoleDPhi           = 2.*pi;
 

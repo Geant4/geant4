@@ -62,7 +62,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
   // Cryostat
   //-----------------------------
   G4Tubs * SolidCryostat = 
-    new G4Tubs("CryostatSolid", CryostatRMin, CryostatRMax, CryostatLenght,
+    new G4Tubs("CryostatSolid", CryostatRMin, CryostatRMax, CryostatLength,
 	       StartingPhi, DPhi);
   G4LogicalVolume * LogicalCryostat = 
     new G4LogicalVolume(SolidCryostat,FCALMaterials->Material("Iron"),
@@ -77,7 +77,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
   //------------------------------
   G4Tubs * SolidInsulation = 
     new G4Tubs("InsulationSolid", InsulationRMin, InsulationRMax, 
-	       InsulationLenght, StartingPhi, DPhi);
+	       InsulationLength, StartingPhi, DPhi);
   G4LogicalVolume * LogicalInsulation = 
     new G4LogicalVolume(SolidInsulation, FCALMaterials->Material("Air"),
 			"InsulationLogical");
@@ -94,7 +94,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
   //-------------------------------------
   /*  
   G4Tubs * SolidAirCryostat = 
-    new G4Tubs("AirCryostatSolid", CryostatRMin, LArgRMax, CryostatLenght, 
+    new G4Tubs("AirCryostatSolid", CryostatRMin, LArgRMax, CryostatLength, 
 	       StartingPhi, DPhi);
   G4LogicalVolume * LogicalAirCryostat =
     new G4LogicalVolume(SolidAirCryostat, FCALMaterials->Material("Air"),
@@ -112,7 +112,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
   // Liquid Argon
   //--------------------
     G4Tubs * SolidLArg = 
-      new G4Tubs("LArgSolid", LArgRMin, LArgRMax, LArgLenght,StartingPhi,DPhi);
+      new G4Tubs("LArgSolid", LArgRMin, LArgRMax, LArgLength,StartingPhi,DPhi);
     G4LogicalVolume * LogicalLArg = 
       new G4LogicalVolume(SolidLArg, FCALMaterials->Material("LiquidArgon"),
 			"LArgLogical");
@@ -170,7 +170,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
   //------------------------
   G4Tubs * SolidFCALEnvelope = 
     new G4Tubs("FCALEnvelopeSolid", FCALEnvelopeRMin, FCALEnvelopeRMax, 
-	       FCALEnvelopeLenght, FCALEnvelopeStartPhi, FCALEnvelopeDPhi);
+	       FCALEnvelopeLength, FCALEnvelopeStartPhi, FCALEnvelopeDPhi);
   
   G4LogicalVolume * LogicalFCALEnvelope = 
     new G4LogicalVolume(SolidFCALEnvelope, FCALMaterials->Material("LiquidArgon"),

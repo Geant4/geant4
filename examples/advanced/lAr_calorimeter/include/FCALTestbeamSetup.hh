@@ -54,8 +54,8 @@ private:
   G4double HoleCntrScintPosX, HoleCntrScintPosY, HoleCntrScintPosZ;
   G4double HoleCntrPbPosX, HoleCntrPbPosY, HoleCntrPbPosZ;
   G4double HoleCntrAlPosX, HoleCntrAlPosY, HoleCntrAlPosZ;
-  G4double ScintHoleRmin, ScintHoleRmax, ScintHoleLenght;
-  G4double AbsrbHoleRmin, AbsrbHoleRmax, AbsrbHoleLenght;
+  G4double ScintHoleRmin, ScintHoleRmax, ScintHoleLength;
+  G4double AbsrbHoleRmin, AbsrbHoleRmax, AbsrbHoleLength;
   G4double HoleStartPhi, HoleDPhi;
   G4double HolePosX, HolePosY, HolePosZ;
 

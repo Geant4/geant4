@@ -93,7 +93,7 @@ G4LogicalVolume * FCALEMModule::Construct()
 // Logical to be returned (FCAL EM module)
 //-----------------------------------------
   G4Tubs * SolidEmModule =
-    new G4Tubs("EmModuleSold", EmModuleRMin, EmModuleRMax, EmModuleLenght,
+    new G4Tubs("EmModuleSold", EmModuleRMin, EmModuleRMax, EmModuleLength,
 	       EmModuleStartPhi,EmModuleDPhi);
   G4LogicalVolume * LogicalEmModule = 
     new G4LogicalVolume(SolidEmModule, FCALMaterials->Material("Copper"),
@@ -110,7 +110,7 @@ G4LogicalVolume * FCALEMModule::Construct()
 //---------------------
   G4Tubs * SolidF1CableTroff =
     new G4Tubs("F1CableTroffSolid", F1CableTroffRMin, F1CableTroffRMax,
-	       F1CableTroffLenght, F1CableTroffStartPhi, F1CableTroffDPhi);
+	       F1CableTroffLength, F1CableTroffStartPhi, F1CableTroffDPhi);
   G4LogicalVolume * LogicalF1CableTroff =
     new G4LogicalVolume(SolidF1CableTroff, FCALMaterials->Material("FCAL1CuArKap"),
 			"F1CableTroffLogical");
@@ -137,7 +137,7 @@ G4LogicalVolume * FCALEMModule::Construct()
    //----------------------
 
   G4Tubs * SolidF1LArGap = 
-    new G4Tubs("F1LArGapSolid",F1LArGapRmin, F1LArGapRmax, F1LArGapLenght, 
+    new G4Tubs("F1LArGapSolid",F1LArGapRmin, F1LArGapRmax, F1LArGapLength, 
 	       F1LArGapStartPhi,F1LArGapDPhi);
 	
    G4LogicalVolume * LogicalF1LArGap = 
