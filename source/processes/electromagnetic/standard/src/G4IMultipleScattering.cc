@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMultipleScattering.cc,v 1.1 1999-01-07 16:11:20 gunter Exp $
+// $Id: G4IMultipleScattering.cc,v 1.2 1999-04-15 07:47:46 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -515,7 +515,7 @@
      rat2 = rat2*rat2 ;
 
      Charge = aParticleType.GetPDGCharge() ;
-     ChargeSquare = Charge*Charge ;
+     ChargeSquare = Charge*Charge/(eplus*eplus) ;
 
      TotalEnergy = KineticEnergy + ParticleMass ;
 

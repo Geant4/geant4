@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ionIonisation.cc,v 1.1 1999-01-07 16:11:26 gunter Exp $
+// $Id: G4ionIonisation.cc,v 1.2 1999-04-15 07:47:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -51,7 +51,8 @@ G4ionIonisation::~G4ionIonisation()
 
    G4double KineticEnergy = aParticle->GetKineticEnergy() ;
    G4double ChargeSquare=(aParticle->GetDefinition()->GetPDGCharge())*
-                         (aParticle->GetDefinition()->GetPDGCharge());
+                         (aParticle->GetDefinition()->GetPDGCharge())/
+                         (eplus*eplus);
 
   // compute the (macroscopic) cross section first
  

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.cc,v 1.6 1999-04-13 09:01:13 urban Exp $
+// $Id: G4EnergyLossTables.cc,v 1.7 1999-04-15 07:46:27 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,6 +19,7 @@
 
 G4EnergyLossTablesHelper G4EnergyLossTables::t  ;
 const G4ParticleDefinition* G4EnergyLossTables::lastParticle = NULL ; 
+G4double G4EnergyLossTables::QQPositron = eplus*eplus ;
 G4double G4EnergyLossTables::Chargesquare ;
 G4int    G4EnergyLossTables::oldIndex = -1 ;
 G4double G4EnergyLossTables::rmin = 0. ;
@@ -46,7 +47,8 @@ void G4EnergyLossTables::Register(
            
   t = GetTables(p) ;    // important for cache !!!!!
   lastParticle = p ;
-  Chargesquare = (p->GetPDGCharge())*(p->GetPDGCharge());
+  Chargesquare = (p->GetPDGCharge())*(p->GetPDGCharge())/
+                  QQPositron ;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -61,7 +63,8 @@ void G4EnergyLossTables::Register(
     t= GetTables(aParticle);
     lastParticle = aParticle;
     Chargesquare = (aParticle->GetPDGCharge())*
-                   (aParticle->GetPDGCharge()) ;
+                   (aParticle->GetPDGCharge())/
+                    QQPositron ;
   }
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
 
@@ -100,7 +103,8 @@ void G4EnergyLossTables::Register(
     t= GetTables(aParticle);
     lastParticle = aParticle;
     Chargesquare = (aParticle->GetPDGCharge())*
-                   (aParticle->GetPDGCharge()) ;
+                   (aParticle->GetPDGCharge())/
+                    QQPositron ;
   }
   const G4PhysicsTable* rangeTable= t.theRangeTable;
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
