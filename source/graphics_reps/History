@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.43 2002-11-18 10:25:29 johna Exp $
+cvs log $Id: History,v 1.44 2002-11-20 14:19:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 20, 2002, G.Cosmo  (greps-V04-01-04)
+- Patched access to public static data in G4Scale and G4VisAttributes.
+  Added static accessors to be used in the kernel to allow porting on
+  Windows DLLs.
+- HepPolyhedron[.hh.cc]: changed inline static methods to not inlined.
 
 Nov 11, 2002, E.Chernaev  (greps-V04-01-03)
 - Minor bug fix in HepPolyhedron::GetFacet().
