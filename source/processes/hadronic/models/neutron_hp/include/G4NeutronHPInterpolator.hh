@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInterpolator.hh,v 1.12 2003-06-03 09:31:45 hpw Exp $
+// $Id: G4NeutronHPInterpolator.hh,v 1.13 2003-06-03 14:17:45 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPInterpolator_h
@@ -157,7 +157,7 @@ LogarithmicLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4doub
 }
 
 inline G4double G4NeutronHPInterpolator::
-Random(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
+Random(G4double , G4double , G4double , G4double y1, G4double y2) const
 {
   G4double result;
   result = y1+G4UniformRand()*(y2-y1);
