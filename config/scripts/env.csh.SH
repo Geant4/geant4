@@ -34,21 +34,34 @@ echo "On this machine the G4SYSTEM=\$G4SYSTEM"
 # g4dirs.U
 #
 #+
+if ( X$g4install != X$g4final_install ) then
 setenv G4INSTALL "$g4final_install/src/geant4"
 echo "On this machine the G4INSTALL=\$G4INSTALL"
+else
+setenv G4INSTALL "$g4install"
+echo "On this machine the G4INSTALL=\$G4INSTALL"
+endif
 
 #+
-if ( X$g4includes_flag != X ) then
+if ( X$g4includes_flag != Xn ) then
+if ( X$g4install != X$g4final_install ) then
 setenv G4INCLUDE "$g4final_install/include/geant4"
-echo "On this machine the G4INCLUDE=\$G4INCLUDE"
 else
-setenv G4BASE "$g4final_install/include/geant4/source"
-echo "On this machine the G4BASE=\$G4BASE"
+setenv G4INCLUDE "$g4final_install/include"
+endif
+echo "On this machine the G4INCLUDE=\$G4INCLUDE"
+#else
+#setenv G4BASE "$g4final_install/include/geant4/source"
+#echo "On this machine the G4BASE=\$G4BASE"
 endif
 
 #+
 if ( X$g4lib != X ) then
+if ( X$g4install != X$g4final_install ) then
 setenv G4LIB "$g4final_install/lib/geant4"
+else
+setenv G4LIB "$g4final_install/lib"
+endif
 echo "On this machine the G4LIB=\$G4LIB"
 endif
 

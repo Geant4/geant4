@@ -40,7 +40,7 @@ export G4INSTALL
 echo "On this machine the G4INSTALL=\$G4INSTALL"
 
 #+
-if [ X$g4include != X ] ; then
+if [ X$g4include != X -a X$g4include != Xn ] ; then
 G4INCLUDE="$g4include"
 export G4INCLUDE
 echo "On this machine the G4INCLUDE=\$G4INCLUDE"
