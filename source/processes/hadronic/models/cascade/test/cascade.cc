@@ -99,8 +99,15 @@ G4int testINC(G4int nCollisions, G4int bulletType, G4double momZ, G4double A, G4
   // Set target
   G4std::vector<G4double> targetMomentum(4, 0.0);
 
-  G4InuclNuclei * target = new G4InuclNuclei(0.0, A, Z);
-  target->setEnergy();
+    G4InuclNuclei*   target  = NULL;
+    G4InuclParticle* targIsH = NULL;
+
+    if ( A == 1 ) {
+      targIsH = new G4InuclElementaryParticle(0.0, 1);     
+    } else { 
+      target = new G4InuclNuclei(0.0, A, Z);
+      target->setEnergy();
+    }
 
   // Resigister collider
   G4ElementaryParticleCollider* collider = new G4ElementaryParticleCollider;
@@ -125,7 +132,12 @@ G4int testINC(G4int nCollisions, G4int bulletType, G4double momZ, G4double A, G4
       G4cout << "collision " << i << G4endl; 
     }
 
-    output =  cascader->collide(bullet, target); // Make INC
+    if ( A == 1 ) {
+      output = cascader->collide(bullet, targIsH); // standard method
+    } else {
+      output = cascader->collide(bullet, target); // Make INC    
+    }
+    
     printData(i);
   }
 
@@ -168,22 +180,33 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     // Set target
     G4std::vector<G4double> targetMomentum(4, 0.0);
 
-    G4InuclParticle* bull = new G4InuclElementaryParticle(momZ, bulletType);  
+    G4InuclParticle* bull = new G4InuclElementaryParticle(momZ, proton);  
 
-    G4InuclNuclei* targ = new G4InuclNuclei(0.0, A, Z);
-    targ->setEnergy(); 
+    G4InuclNuclei* targ = NULL;
+    G4InuclParticle* targIsH = NULL;
+
+    if ( A == 1 ) {
+      targIsH = new G4InuclElementaryParticle(0.0, 2.0);     
+    } else { 
+      targ = new G4InuclNuclei(0.0, A, Z);
+      targ->setEnergy();      
+    }
 
     if (verboseLevel > 2) {
       G4cout << " Event " << e+1 <<":" << G4endl;
     }
 
-    for (G4int i = 1; i <= nCollisions; i++){
+    for (G4int i = 1; i <= nCollisions; i++) {
 
-      if (verboseLevel > 1) {
+      if (verboseLevel > 3) {
 	G4cout << "collision " << i << G4endl; 
       }
 
+    if ( A == 1 ) {
+      output = collider->collide(bull, targIsH); // standard method
+    } else {
       output = collider->collide(bull, targ); // standard method
+    }
       printData(i);
     }
 
@@ -276,9 +299,9 @@ G4int printData(G4int i) {
 	  setw(6)  << i            << 
 	  setw(6)  << type         << 
 	  setw(11) << ekin         << 
-	  setw(11) << mom[0] * GeV << 
 	  setw(11) << mom[1] * GeV << 
 	  setw(11) << mom[2] * GeV << 
+	  setw(11) << mom[3] * GeV << 
 	  setw(13) << 0            << 
 	  setw(13) << 0            << 
 	  setw(13) << 0.0          << G4endl;
