@@ -1,0 +1,66 @@
+
+                       geant4-05-02-ref-01
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o First implementation of volume divisions based on parameterised
+    volumes. Completed shapes: G4Box, G4Tubs, G4Cons.
+  o Fixed configuration setup for Windows platforms causing problem in
+    reading external data files.
+  o Revision and cleanup of extended examples which were not complete
+    migrated after release 5.2.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+
+config                                  config-V05-02-00
+------
+- WIN32-VC.gmk, WIN32-VC7.gmk:
+  o reinstated options "-D_CONSOLE -D_WIN32 -DOS" to allow correct
+    treatment/opening of data files at run-time.
+- binmake.gmk:
+  o added entry for new module geometry/divisions.
+ 
+geometry/divisions                      geomdiv-V05-02-01
+------------------
+- First implementation of volume divisions for G4Box, G4Tubs, G4Cons
+  along the relevant axes, courtesy of P.Arce Dubois.
+- Added entry in geometry/GNUmakefile (geometry-gmk-V05-02-00).
+
+geometry/solids/specific                geom-specific-V05-02-00
+------------------------
+- Added accessors to original_parameters for G4Polycone and G4Polyhedra.
+  Made G4PolyconeHistorical and G4PolyhedraHistorical classes visible in
+  global scope (temporary solution).
+
+processes/electromagnetic/muons         muons-V05-02-00
+-------------------------------
+- Fixed bug of printout in G4MuIonisation.
+
+processes/hadronic/models/generator/de_excitation    ghad-deex-V05-02-00
+------------------------------------
+- Fixed usage of arguments to pow() function (porting on .NET 7.1 compiler). 
+
+processes/hadronic/models/neutron_hp    ghad-neu-V05-02-00
+------------------------------------
+- Bug fixes in G4NeutronHPInterpolator and G4NeutronHPFissionFS.
+
+examples
+--------
+- extended:
+  o eventgenerator/HepMC (exHepMC-V05-02-00)
+    + fixed compilation errors due to incorrect code migration from
+      g4std wrappers. 
+    + fixed pedantic compilation warnings on Linux-g++. 
+  o gdml (exgdml-V05-02-00)
+    + Fixed trivial compilation errors originated by recent g4std
+      migration. 
+    + Fixed pedantic compilation warnings on Linux-g++.
+  o g3tog4 (g3tog4Tests-V05-02-00)
+    + Fixed pedantic compilation warnings on Linux-g++.
+  o parallel (exparallel-V05-02-00)
+    + Fixed pedantic compilation warnings on Linux-g++.
