@@ -1,4 +1,4 @@
-$Id: History,v 1.116 2003-06-17 08:16:36 gcosmo Exp $
+$Id: History,v 1.117 2003-10-31 17:49:52 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 31, 2003  M.Asai (global-V05-02-01)
+- Fixed uninitialized variable in G4StateManager and protect null pointer 
+  of G4VExceptionHandler used in G4Exception
 
 June 17, 2003  G.Cosmo (global-V05-02-00)
 - Archived g4std wrappers. Removed definition of G4std in G4Types.hh.
