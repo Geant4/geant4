@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.16 2003-06-16 16:56:22 gunter Exp $
+// $Id: G4Element.cc,v 1.17 2003-06-18 08:12:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -354,13 +354,9 @@ G4int G4Element::operator!=(const G4Element& right) const
 
 std::ostream& operator<<(std::ostream& flux, G4Element* element)
 {
-#ifdef G4USE_STD_NAMESPACE
   std::ios::fmtflags mode = flux.flags();
   flux.setf(std::ios::fixed,std::ios::floatfield);
-#else 
-  long mode = flux.setf(std::ios::fixed,std::ios::floatfield);
-#endif
-  long prec = flux.precision(3);
+  G4long prec = flux.precision(3);
   
   flux
     << " Element: " << std::setw(8) << element->fName << std::setw(3)
