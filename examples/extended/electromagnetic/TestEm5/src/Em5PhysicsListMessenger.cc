@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsListMessenger.cc,v 1.4 2001-10-16 11:56:29 maire Exp $
+// $Id: Em5PhysicsListMessenger.cc,v 1.5 2001-11-05 17:58:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,35 +44,35 @@ Em5PhysicsListMessenger::Em5PhysicsListMessenger(Em5PhysicsList * List)
   cutGCmd->SetParameterName("range",false);
   cutGCmd->SetRange("range>0.");
   cutGCmd->SetUnitCategory("Length");
-  cutGCmd->AvailableForStates(Idle);
+  cutGCmd->AvailableForStates(PreInit,Idle);
 
   cutECmd = new G4UIcmdWithADoubleAndUnit("/calor/cutE",this);
   cutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
   cutECmd->SetParameterName("range",false);
   cutECmd->SetRange("range>0.");
   cutECmd->SetUnitCategory("Length");  
-  cutECmd->AvailableForStates(Idle);
+  cutECmd->AvailableForStates(PreInit,Idle);
 
   cutPCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutP",this);
   cutPCmd->SetGuidance("Set cut values by RANGE for proton and others.");
   cutPCmd->SetParameterName("range",false);
   cutPCmd->SetRange("range>0.");
   cutPCmd->SetUnitCategory("Length");    
-  cutPCmd->AvailableForStates(Idle);
+  cutPCmd->AvailableForStates(PreInit,Idle);
 
   eCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutEnergy",this);
   eCmd->SetGuidance("Set cut values by ENERGY for charged particles.");
   eCmd->SetParameterName("energy",false);
   eCmd->SetRange("energy>0.");
   eCmd->SetUnitCategory("Energy");   
-  eCmd->AvailableForStates(Idle);
+  eCmd->AvailableForStates(PreInit,Idle);
 
   rCmd = new G4UIcmdWithADoubleAndUnit("/calor/range",this);
   rCmd->SetGuidance("Display the RANGE of Electron for the current material.");
   rCmd->SetParameterName("energy",false);
   rCmd->SetRange("energy>0.");
   rCmd->SetUnitCategory("Energy");     
-  rCmd->AvailableForStates(Idle);
+  rCmd->AvailableForStates(PreInit,Idle);
 
   setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/step/setMaxStep",this);
   setMaxStepCmd->SetGuidance("Set max. step length in the detector");

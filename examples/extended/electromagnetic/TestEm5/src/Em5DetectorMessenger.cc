@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5DetectorMessenger.cc,v 1.4 2001-10-16 11:56:28 maire Exp $
+// $Id: Em5DetectorMessenger.cc,v 1.5 2001-11-05 17:58:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,46 +49,46 @@ Em5DetectorMessenger::Em5DetectorMessenger(Em5DetectorConstruction * Em5Det)
   AbsMaterCmd = new G4UIcmdWithAString("/calor/setAbsMat",this);
   AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
   AbsMaterCmd->SetParameterName("choice",false);
-  AbsMaterCmd->AvailableForStates(Idle);
+  AbsMaterCmd->AvailableForStates(PreInit,Idle);
   
   WorldMaterCmd = new G4UIcmdWithAString("/calor/setWorldMat",this);
   WorldMaterCmd->SetGuidance("Select Material of the World.");
   WorldMaterCmd->SetParameterName("wchoice",false);
-  WorldMaterCmd->AvailableForStates(Idle);
+  WorldMaterCmd->AvailableForStates(PreInit,Idle);
   
   AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsThick",this);
   AbsThickCmd->SetGuidance("Set Thickness of the Absorber");
   AbsThickCmd->SetParameterName("SizeZ",false);  
   AbsThickCmd->SetRange("SizeZ>0.");
   AbsThickCmd->SetUnitCategory("Length");  
-  AbsThickCmd->AvailableForStates(Idle);
+  AbsThickCmd->AvailableForStates(PreInit,Idle);
   
   AbsSizYZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsYZ",this);
   AbsSizYZCmd->SetGuidance("Set sizeYZ of the Absorber");
   AbsSizYZCmd->SetParameterName("SizeYZ",false);
   AbsSizYZCmd->SetRange("SizeYZ>0.");
   AbsSizYZCmd->SetUnitCategory("Length");
-  AbsSizYZCmd->AvailableForStates(Idle);
+  AbsSizYZCmd->AvailableForStates(PreInit,Idle);
   
   AbsXposCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsXpos",this);
   AbsXposCmd->SetGuidance("Set X pos. of the Absorber");
   AbsXposCmd->SetParameterName("Xpos",false);
   AbsXposCmd->SetUnitCategory("Length");
-  AbsXposCmd->AvailableForStates(Idle);
+  AbsXposCmd->AvailableForStates(PreInit,Idle);
   
   WorldXCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldX",this);
   WorldXCmd->SetGuidance("Set X size of the World");
   WorldXCmd->SetParameterName("WSizeX",false);
   WorldXCmd->SetRange("WSizeX>0.");
   WorldXCmd->SetUnitCategory("Length");
-  WorldXCmd->AvailableForStates(Idle);
+  WorldXCmd->AvailableForStates(PreInit,Idle);
   
   WorldYZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldYZ",this);
   WorldYZCmd->SetGuidance("Set sizeYZ of the World");
   WorldYZCmd->SetParameterName("WSizeYZ",false);
   WorldYZCmd->SetRange("WSizeYZ>0.");
   WorldYZCmd->SetUnitCategory("Length");
-  WorldYZCmd->AvailableForStates(Idle);
+  WorldYZCmd->AvailableForStates(PreInit,Idle);
   
   UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
@@ -101,7 +101,7 @@ Em5DetectorMessenger::Em5DetectorMessenger(Em5DetectorConstruction * Em5Det)
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false);
   MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(Idle);  
+  MagFieldCmd->AvailableForStates(PreInit,Idle);  
 
 }
 

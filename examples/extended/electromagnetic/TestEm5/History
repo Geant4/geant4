@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2001-10-19 05:46:53 stesting Exp $
+$Id: History,v 1.12 2001-11-05 17:57:58 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,8 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+05-11-01  mma (testem5-V03-02-01)
+- mods in TestEm3.cc: the initialisation and vis initialisation are
+  not done by default. --> inserted /run/initialize in all macros.
+- To get visualisation: > /control/execute vis.mac
 
-Oct 19, 2001  Steve O'Neale (examples-V03-02-00)
+        
+19-10-01 Steve O'Neale (examples-V03-02-00)
 - Update reference output
 
 16-10-01 mma (testem5-V03-02-00)

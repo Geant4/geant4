@@ -7,12 +7,9 @@
 #control/saveHistory
 /run/verbose 2
 #
-#  hist file name
-/plots/sethistName geant4.plot21
-#  PLOT: gamma energy at exit   
-/plots/setnbinGamma 80
-/plots/setElowGamma  0.1 MeV
-/plots/setEhighGamma 1. GeV
+/calor/cutG 1.00 mm
+/calor/cutE 5.0 mum
+/run/initialize
 #
 /calor/setAbsMat Aluminium 
 /calor/setAbsThick 5.30 mm  
@@ -20,10 +17,12 @@
 /calor/update
 /gun/setDefault
 #
-/calor/cutG 1.00 mm
-/calor/cutE 5.0 mum
-/run/initialize
-#
+#  hist file name
+/plots/sethistName geant4.plot21
+#  PLOT: gamma energy at exit   
+/plots/setnbinGamma 80
+/plots/setElowGamma  0.1 MeV
+/plots/setEhighGamma 1.0 GeV
 #
 /gun/particle e- 
 /gun/energy 25. GeV

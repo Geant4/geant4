@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm5.cc,v 1.6 2001-10-16 11:56:26 maire Exp $
+// $Id: TestEm5.cc,v 1.7 2001-11-05 17:57:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,11 +80,8 @@ int main(int argc,char** argv) {
 
   Em5SteppingAction* steppingaction = new Em5SteppingAction(detector,
                                                eventaction, runaction);
-  runManager->SetUserAction(steppingaction);
-  
-  //Initialize G4 kernel
-  runManager->Initialize();
-    
+  runManager->SetUserAction(steppingaction);    
+   
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
  
@@ -96,7 +93,6 @@ int main(int argc,char** argv) {
 #else
       session = new G4UIterminal();
 #endif                      
-     UI->ApplyCommand("/control/execute init.mac");    
      session->SessionStart();
      delete session;
     }

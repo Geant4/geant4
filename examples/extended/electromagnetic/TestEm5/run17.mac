@@ -6,6 +6,10 @@
 /control/verbose 2
 /run/verbose 2
 #
+/calor/cutG 100. mm    
+/calor/cutE 100. mm
+/run/initialize
+#
 /calor/setAbsMat NewArgonCO2   
 /calor/setAbsThick 15 mm  
 /calor/setAbsYZ    60 mm
@@ -19,10 +23,6 @@
 /plots/setnbinEn 60
 /plots/setEnlow   0. keV
 /plots/setEnhigh  6. keV  
-#
-/calor/cutG 100. mm    
-/calor/cutE 100. mm
-/run/initialize
 #
 #/gun/particle proton 
 #/gun/energy 24 GeV

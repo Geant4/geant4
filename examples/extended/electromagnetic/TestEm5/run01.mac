@@ -7,10 +7,15 @@
 #control/saveHistory
 /run/verbose 2
 #
+/calor/cutG 13.0 micrometer
+/calor/cutE 1.12 micrometer
+/run/initialize
+#
 /calor/setAbsMat Gold      
 /calor/setAbsThick 9.658 mum  
 /calor/setAbsYZ 10. cm
 /calor/update
+#
 /gun/setDefault
 #
 #  hist file name
@@ -20,15 +25,11 @@
 /plots/setThlow 0.0 deg
 /plots/setThhigh 10.0 deg
 #
-/calor/cutG 13.0 micrometer
-/calor/cutE 1.12 micrometer
-/run/initialize
-#
 #
 /gun/particle e- 
 /gun/energy 15.7 MeV
 #
-/run/beamOn 10000
+/run/beamOn 1000000
 #
 
 

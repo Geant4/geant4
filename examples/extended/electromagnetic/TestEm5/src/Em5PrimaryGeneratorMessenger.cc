@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PrimaryGeneratorMessenger.cc,v 1.4 2001-10-16 11:56:29 maire Exp $
+// $Id: Em5PrimaryGeneratorMessenger.cc,v 1.5 2001-11-05 17:58:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@ Em5PrimaryGeneratorMessenger::Em5PrimaryGeneratorMessenger(
 { 
  DefaultCmd = new G4UIcmdWithoutParameter("/gun/setDefault",this);
  DefaultCmd->SetGuidance("set/reset the kinematic defined in PrimaryGenerator");
- DefaultCmd->AvailableForStates(PreInit,Idle);
+ DefaultCmd->AvailableForStates(Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
