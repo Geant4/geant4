@@ -34,7 +34,7 @@ class FluoTestEventAction : public G4UserEventAction
       void SetPrintModulo(G4int    val)  {printModulo = val;};
     
   private:
-   G4int                       HPGeCollID;
+  //  G4int                       HPGeCollID;
    G4String                    drawFlag;
     G4int                       printModulo;                         
     FluoTestEventActionMessenger*  eventMessenger;

@@ -2,7 +2,7 @@
 
 #include "FluoTestDetectorConstruction.hh"
 #include "FluoTestDetectorMessenger.hh"
-#include "FluoTestHPGeSD.hh"
+//#include "FluoTestHPGeSD.hh"
 #include "G4Material.hh"
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
@@ -10,7 +10,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4TransportationManager.hh"
-#include "G4SDManager.hh"
+//#include "G4SDManager.hh"
 #include "G4RunManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
@@ -20,24 +20,25 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FluoTestDetectorConstruction::FluoTestDetectorConstruction()
-  :  sampleMaterial(0),SiMaterial(0),pixelMaterial(0),
+  :  sampleMaterial(0),
+  /*,SiMaterial(0),pixelMaterial(0),
      Dia1Material(0),Dia2Material(0),Dia3Material(0),
-     OhmicPosMaterial(0), OhmicNegMaterial(0),
+     OhmicPosMaterial(0), OhmicNegMaterial(0),*/
      defaultMaterial(0),  
-     DeviceSizeZ(0),DeviceSizeY(0),DeviceThickness(0),
+  /* DeviceSizeZ(0),DeviceSizeY(0),DeviceThickness(0),
      solidPixel(0),logicPixel(0), physiPixel(0), 
      solidOhmicPos(0),logicOhmicPos(0), physiOhmicPos(0), 
-     solidOhmicNeg(0),logicOhmicNeg(0), physiOhmicNeg(0),
+     solidOhmicNeg(0),logicOhmicNeg(0), physiOhmicNeg(0),*/
      solidWorld(0),logicWorld(0),physiWorld(0), 
-     solidSample (0),logicSample(0),physiSample (0), 
-     solidSi(0),logicSi(0),physiSi(0),
+     solidSample (0),logicSample(0),physiSample (0) 
+     /*solidSi(0),logicSi(0),physiSi(0),
      solidHPGe(0),logicHPGe(0),physiHPGe(0), 
      solidDia1(0),logicDia1(0),physiDia1(0),
      solidDia2(0),logicDia2(0),physiDia2(0),
      solidDia3(0),logicDia3(0),physiDia3(0), HPGeSD(0)
-    
+     */
 {  
-  OhmicNegThickness = 0.005*mm;
+  /*OhmicNegThickness = 0.005*mm;
   OhmicPosThickness = 0.005*mm;
   PixelCopyNb=0;
   NbOfPixelRows     =  1;
@@ -45,12 +46,12 @@ FluoTestDetectorConstruction::FluoTestDetectorConstruction()
   NbOfPixels        =  NbOfPixelRows*NbOfPixelColumns;
   PixelThickness =  1. * mm;
   PixelSizeYZ       = 0.5 * cm;
-  ContactSizeYZ     = 0.005*mm;
+  ContactSizeYZ     = 0.005*mm;*/
   SampleThickness = 0.125 * mm;
   //SampleThickness = 0.5 * cm;
-  SiThickness = 1.01* mm;
+  // SiThickness = 1.01* mm;
   SampleSizeYZ = 3. * cm;
-  SiSizeYZ = 1. * cm;
+  /*SiSizeYZ = 1. * cm;
   //ContactSizeYZ = 0.5 * cm;
   Dia1Thickness = 1. *mm;
   Dia1SizeYZ = 2. *cm;
@@ -77,7 +78,7 @@ FluoTestDetectorConstruction::FluoTestDetectorConstruction()
   PhiDia3 = 90. * deg;
   AlphaDia1 = 135. * deg;
   AlphaDia2 = 210. * deg;
-  AlphaDia3 = 180. * deg;
+  AlphaDia3 = 180. * deg;*/
   ComputeApparateParameters();
   
   // create commands for interactive definition of the apparate
@@ -104,7 +105,7 @@ void FluoTestDetectorConstruction::DefineMaterials()
   G4String name, symbol;             //a=mass of a mole;
   G4double a, z, density;            //z=mean number of protons;  
   
- 
+  /*
   a = 74.9216 * g/mole;
   G4Element * As = new G4Element( name="arsenic",symbol="As",z= 33.,a);
   
@@ -169,13 +170,13 @@ void FluoTestDetectorConstruction::DefineMaterials()
   G4Material* Sci = new G4Material(name="Scintillator", density, ncomponents=2);
   Sci->AddElement(C, natoms=9);
   Sci->AddElement(H, natoms=10);
-  
+  */
   //define aluminium
-  
+   G4double temperature, pressure;
   density = 2.700*g/cm3;
   a = 26.98*g/mole;
   G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
-  
+  /*
   //define lead
   
   density = 11.35*g/cm3;
@@ -195,7 +196,7 @@ void FluoTestDetectorConstruction::DefineMaterials()
   G4Material* Air = new G4Material(name="Air"  , density, ncomponents=2);
   Air->AddElement(N, fractionmass=0.7);
   Air->AddElement(O, fractionmass=0.3);
-  
+  */
   //define vacuum
   
   density     = universe_mean_density;    //from PhysicalConstants.h
@@ -209,14 +210,14 @@ void FluoTestDetectorConstruction::DefineMaterials()
   //default materials of the apparate
   
   sampleMaterial = Al;
-  SiMaterial = Si; 
+  /*SiMaterial = Si; 
   pixelMaterial = HPGe;
   //pixelMaterial =Al;
   Dia1Material = Pb;
   Dia2Material = Pb;
   Dia3Material = Pb;
   OhmicPosMaterial = Cu;
-  OhmicNegMaterial = Cu;
+  OhmicNegMaterial = Cu;*/
   defaultMaterial = Vacuum;
   
 }
@@ -246,7 +247,7 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
 				 0);			//copy number
   
   //SiDetector
-  
+  /*
   solidSi = 0;  physiSi = 0;  logicSi=0;
   
   if (SiThickness > 0.)  
@@ -378,7 +379,7 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
 	PixelCopyNb += PixelCopyNb;
       }
     } 
-  
+  */
     //Sample
     
     solidSample=0;  logicSample=0;  physiSample=0;
@@ -401,6 +402,7 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
 					0);		//copy number
 	
       }
+    /*
     //Diaphragm1
     
   solidDia1 = 0;  physiDia1 = 0;  logicDia1=0;
@@ -505,7 +507,7 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
     {
       logicPixel->SetSensitiveDetector(HPGeSD);
     }
-  
+    
   // Visualization attributes
   
    G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
@@ -526,13 +528,13 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
   logicOhmicPos->SetVisAttributes(yellow);
   //always return the physical World
   
-  
-  PrintApparateParameters();
+    */
+    //PrintApparateParameters();
   return physiWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+/*
 void FluoTestDetectorConstruction::PrintApparateParameters()
 {
   G4cout << "-----------------------------------------------------------------------"
@@ -558,7 +560,7 @@ void FluoTestDetectorConstruction::PrintApparateParameters()
 
 <<"-------------------------------------------------------------------------"
 	 << G4endl;
-}
+}*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 /*
 void FluoTestDetectorConstruction::SetSampleMaterial(G4String materialChoice)
@@ -909,6 +911,7 @@ void FluoTestDetectorConstruction::UpdateGeometry()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 
 
