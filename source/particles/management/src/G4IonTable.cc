@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.25 2000-02-25 07:36:23 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.26 2000-09-14 10:00:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -173,6 +173,7 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4double E, G4int J)
       G4cout << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << G4endl;
     }
 #endif
+    G4cerr << "G4IonTable::GetIon called with Z="<<Z<<", A="<<A<<G4endl;
     G4Exception("G4IonTable::GetIon : illegal atomic number/mass ");
   }
 
