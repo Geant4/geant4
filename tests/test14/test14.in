@@ -20,7 +20,8 @@
 /run/initialize
 /run/particle/dumpCutValues
 #
-/gun/direction 1 0 0
+#gun/direction 1 0 0
+/gun/direction 0 0 1
 #
 /gun/particle gamma
 #
@@ -28,25 +29,25 @@
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 10000
+/run/beamOn 1000
 # 
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 10000
+/run/beamOn 1000
 #
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 10000
+/run/beamOn 1000
 #
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 10000
+/run/beamOn 1000
 #
 /gun/particle e-
 #
@@ -88,25 +89,25 @@
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 10000
+/run/beamOn 1000
 # 
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 10000
+/run/beamOn 1000
 #
-/gun/energy 500 eV
+/gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 10000
+/run/beamOn 1000
 #
-/gun/energy 250 eV
+/gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 10000
+/run/beamOn 1000
 #
 /gun/particle e-
 #
