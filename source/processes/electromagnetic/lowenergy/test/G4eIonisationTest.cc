@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisationTest.cc,v 1.2 2000-06-20 21:33:46 pia Exp $
+// $Id: G4eIonisationTest.cc,v 1.3 2000-06-22 02:26:31 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,7 +59,7 @@
 
 HepTupleManager* hbookManager;
 
-main()
+int main()
 {
 
   // Setup

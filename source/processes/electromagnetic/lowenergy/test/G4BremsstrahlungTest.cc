@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BremsstrahlungTest.cc,v 1.1 2000-06-20 21:13:08 pia Exp $
+// $Id: G4BremsstrahlungTest.cc,v 1.2 2000-06-22 02:26:31 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,7 +59,7 @@
 
 HepTupleManager* hbookManager;
 
-main()
+int main()
 {
 
   // Setup
@@ -171,7 +171,7 @@ main()
 
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
-  G4int nMaterials = theMaterialTable->length();
+ G4int nMaterials = theMaterialTable->length();
 
   G4cout << "Available materials are: " << G4endl;
   for (G4int mat = 0; mat < nMaterials; mat++)
@@ -291,7 +291,9 @@ main()
   // --------- Test the DoIt 
 
   apttoMaterial = (*theMaterialTable)(materialId) ;
-  
+
+  G4cout << "DoIt in material " << apttoMaterial->GetName() << G4endl;
+
   LogicalFrame->SetMaterial(apttoMaterial); 
 
   G4int iteration = 0;   
@@ -307,7 +309,7 @@ main()
 
   for (G4int iter=0; iter<niter; iter++)
     {
-      (*step).SetStepLength(1*micrometer);
+      step->SetStepLength(1*micrometer);
 
       G4cout  <<  "Iteration = "  <<  iter 
 	      << "  -  Step Length = " 
@@ -318,13 +320,18 @@ main()
       // the Step Length is not accessible from
       // aTrack but you should use Step
  
+      G4cout  <<  "Iteration = "  <<  iter 
+	      << "  -  Step Length = " 
+	      << step->GetStepLength()/mm << " mm "
+	      << G4endl;
+
       //     G4cout << aTrack.GetStep()->GetStepLength()/mm 
       //	     << G4endl;
 
       //      bremProcess->GetConstraints(&el,apttoMaterial);
       
-      if (test == 1) dummy = bremProcess->AlongStepDoIt(aTrack, aStep);
-      if (test == 2) dummy = bremProcess->PostStepDoIt(aTrack, aStep);
+      if (test == 1) dummy = bremProcess->AlongStepDoIt(aTrack, *step);
+      if (test == 2) dummy = bremProcess->PostStepDoIt(aTrack, *step);
 
       G4ParticleChange* particleChange = (G4ParticleChange*) dummy;
       
@@ -459,27 +466,27 @@ main()
   delete hbookManager;
   
   // delete materials and elements
-  delete Be;
-  delete Graphite;
-  delete Al;
-  delete Si;
-  delete LAr;
-  delete Fe;
-  delete Cu;
-  delete W;
-  delete Pb;
-  delete U;
-  delete H;
-  delete maO;
-  delete C;
-  delete Cs;
-  delete I;
-  delete O;
-  delete water;
-  delete ethane;
-  delete csi;
+  //  delete Be;
+  //  delete Graphite;
+  //  delete Al;
+  //  delete Si;
+  //  delete LAr;
+  //  delete Fe;
+  //  delete Cu;
+  //  delete W;
+  //  delete Pb;
+  //  delete U;
+  //  delete H;
+  //  delete maO;
+  //  delete C;
+  //  delete Cs;
+  //  delete I;
+  //  delete O;
+  //  delete water;
+  //  delete ethane;
+  //  delete csi;
   delete step;
-  delete touche;
+  //  delete touche;
 
   cout << "END OF THE MAIN PROGRAM" << G4endl;
 }
