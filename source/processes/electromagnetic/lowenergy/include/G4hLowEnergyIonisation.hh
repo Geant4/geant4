@@ -187,9 +187,6 @@ public: // With description
   void SetCutForAugerElectrons(G4double cut);
   // Set threshold energy for Auger electron production
 
-  void ActivateFluorescence(G4bool val);
-  // Set fluorescence flag on/off
-
   void ActivateAugerElectronProduction(G4bool val);
   // Set Auger electron production flag on/off
 

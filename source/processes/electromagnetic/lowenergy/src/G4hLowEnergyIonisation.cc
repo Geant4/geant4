@@ -1957,13 +1957,6 @@ void G4hLowEnergyIonisation::SetCutForAugerElectrons(G4double cut)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4hLowEnergyIonisation::ActivateFluorescence(G4bool val)
-{
-  theFluo = true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4hLowEnergyIonisation::ActivateAugerElectronProduction(G4bool val)
 {
   deexcitationManager.ActivateAugerElectronProduction(val);
