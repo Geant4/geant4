@@ -21,6 +21,7 @@ ifeq ($(G4SYSTEM),HP-aCC)
   endif
   G4_HAVE_BOOL := yes
   FC      := f77
+  SHEXT   := sl
   FCFLAGS += +E6 +ppu
   CCFLAGS += -Ae +DAportable
   X11FLAGS  := -I/usr/include/X11/extensions -I/usr/contrib/X11R6/include
