@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2003-03-27 16:42:02 gcosmo Exp $
+$Id: History,v 1.112 2003-04-01 11:02:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 1, 2003  G.Cosmo (global-V05-00-04)
+- G4Allocator.hh: added protection for NULL pointer in FreeSingle().
+  Will be no more necessary to check for NULL pointers to objects allocated
+  with G4Allocator in the kernel, migration suggested and to be planned.
 
 March 27, 2003  G.Cosmo (global-V05-00-03)
 - Fixed compilation problem on WIN32-VC platform for G4strstreambuf.
