@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2004-01-29 16:10:12 gcosmo Exp $
+$Id: README,v 1.8 2004-04-27 09:16:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -44,6 +44,7 @@ test18 ## Radioactive decay.
 test20 ## Polarised LowE processes.
 test21 ## CHIPS as intra-nuclear transport replacement.
 test22 ## Gamma and electro-nuclear physics.
+test23 ## Muon capture for CHIPS
 test24 ## Binary cascade hadronic model.
 test25 ## Classical cascade hadronic model.
 test26 ## Cuts by region modelling.

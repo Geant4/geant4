@@ -84,7 +84,6 @@ visualization/OpenInventor   joe@cactus.phyast.pitt.edu      Joe Boudreau
 visualization/RayTracer      asai@slac.stanford.edu          Makoto Asai
 environments                 John.Allison@man.ac.uk          John Allison
 environments/Momo            yoshidah@naruto-u.ac.jp         Hajime Yoshida
-environments/OPACS           barrand@lal.in2p3.fr            Guy Barrand
 examples                     asai@slac.stanford.edu          Makoto Asai
 examples/novice/N01          asai@slac.stanford.edu          Makoto Asai
 examples/novice/N02          John.Apostolakis@cern.ch        John Apostolakis
@@ -141,7 +140,7 @@ tests                        Serguei.Sadilov@cern.ch         Serguei Sadilov
       test20                 MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
       test21                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
       test22                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-      test23                 kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
+      test23                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test24                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
       test25                 Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
       test26                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko

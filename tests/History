@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2004-03-25 18:15:29 gcosmo Exp $
+$Id: History,v 1.41 2004-04-27 09:16:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27th April 2004  Gabriele Cosmo
+- Added test23 for muon-capture in CHIPS.
+  Updated GNUmakefile, README and responsibles list.
 
 tests-V06-00-04 25th March 2004  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-06-01-ref-00.
