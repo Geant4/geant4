@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03DetectorConstruction.cc,v 1.4 2001-10-25 10:03:54 grichine Exp $
+// $Id: F03DetectorConstruction.cc,v 1.5 2001-10-26 13:42:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,7 +116,7 @@ void F03DetectorConstruction::DefineMaterials()
   G4double a, z, density ;            // z=mean number of protons;  
   G4int nel ;
   G4int ncomponents;
-  G4double fractionmass;
+  G4double fractionmass, pressure, temperature;
 
   //
   // define Elements
@@ -177,7 +177,11 @@ void F03DetectorConstruction::DefineMaterials()
 
   density  = 1.2928*mg/cm3 ;       // STP
   density *= 1.0e-8 ;       // pumped vacuum
-  G4Material* Air = new G4Material(name="Air"  , density, ncomponents=3);
+  temperature = STP_Temperature;
+  pressure = 1.0e-8*STP_Pressure;
+
+  G4Material* Air = new G4Material(name="Air"  , density, ncomponents=3,
+                                   kStateGas,temperature,pressure);
   Air->AddMaterial( Nitrogen, fractionmass = 0.7557 ) ;
   Air->AddMaterial( Oxygen,   fractionmass = 0.2315 ) ;
   Air->AddMaterial( Argon,    fractionmass = 0.0128 ) ;
