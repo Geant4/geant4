@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4LElasticTest.cc,v 1.5 2003-11-13 18:56:19 hpw Exp $
+// $Id: G4LElasticTest.cc,v 1.6 2004-06-01 05:35:38 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
 #include "G4ios.hh"
 #include <fstream>
 #include <iomanip>
-#include "G4LElastic.hh"
+#include "G4ElasticHadrNucleusHE.hh"
  
 #include "G4Material.hh"
  
@@ -147,7 +147,7 @@
    G4ProcessManager* theProtonProcessManager = new G4ProcessManager(theProton);
    theProton->SetProcessManager(theProtonProcessManager);
    G4HadronElasticProcess theInelasticProcess; 
-   G4LElastic theProtonModel;
+   G4ElasticHadrNucleusHE theProtonModel;
    theInelasticProcess.RegisterMe(&theProtonModel);
    theProtonProcessManager->AddDiscreteProcess(&theInelasticProcess);
    theProcesses[0] = &theInelasticProcess;
@@ -246,6 +246,19 @@ int j = 0;
 	     QValue += aFinalState->GetEnergyChange();
 	     if(theParticles[i]->GetBaryonNumber()<0) QValue+= 2.*theParticles[i]->GetPDGMass();
 	     G4cout << "Scattering Angle "<<*(aFinalState->GetMomentumChange())<<G4endl;
+             G4cout << aFinalState->GetEnergyChange()<<" ";
+	     G4ThreeVector mom = *aFinalState->GetMomentumChange();
+	     G4double e=aFinalState->GetEnergyChange();
+	     G4double m=aParticle->GetDefinition()->GetPDGMass();
+	     G4double MOM = sqrt((e+m)*(e-m));
+             G4cout << MOM*mom.x()<<" ";
+             G4cout << MOM*mom.y()<<" ";
+             G4cout << MOM*mom.z()<<" ";
+             G4cout << aParticle->GetDefinition()->GetPDGEncoding()<<" ";
+	     G4cout << 1111111111<<" ";
+	     G4cout << aParticle->GetDefinition()->GetParticleName()<<" ";
+             G4cout << "SECONDARIES info primary";
+	     G4cout << G4endl;
 	   }
            for(isec=0;isec<aFinalState->GetNumberOfSecondaries();isec++)
            {

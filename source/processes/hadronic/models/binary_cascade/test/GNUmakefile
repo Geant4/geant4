@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2003-08-05 12:49:18 gunter Exp $
+# $Id: GNUmakefile,v 1.5 2004-06-01 05:33:01 hpw Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -25,7 +25,7 @@ EXTRALIBS := -lpacklib $(FCLIBS)
     EXTRALIBS := -lpacklib -lw -lgen -lsocket -lnsl -lintl $(FCLIBS) 
   endif
 LDFLAGS += $(EXTRALIBDIR)
-LOADLIBS += $(EXTRALIBS) ecpt.o 
+LOADLIBS += $(EXTRALIBS)
 
 include $(G4INSTALL)/config/binmake.gmk
     

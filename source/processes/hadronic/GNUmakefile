@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.18 2004-05-28 12:44:52 hpw Exp $
+# $Id: GNUmakefile,v 1.19 2004-06-01 05:37:34 hpw Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic processes library.  G.Folger 10-Dec-97.
 # ----------------------------------------------------------------
@@ -12,6 +12,7 @@ SUBDIRS += cross_sections
 SUBDIRS += stopping
 
 
+SUBDIRS += models/abrasion
 SUBDIRS += models/binary_cascade
 SUBDIRS += models/cascade/evaporation
 SUBDIRS += models/cascade/utils
@@ -47,7 +48,8 @@ SUBDIRS += models/radioactive_decay
 SUBDIRS += models/theo_high_energy
 SUBDIRS += models/util
 
-SUBLIBS =  G4hadronic_xsect 
+SUBLIBS  =  G4hadronic_abrasion
+SUBLIBS +=  G4hadronic_xsect 
 SUBLIBS +=  G4hadronic_mgt
 SUBLIBS +=  G4hadronic_proc
 SUBLIBS +=  G4hadronic_stop

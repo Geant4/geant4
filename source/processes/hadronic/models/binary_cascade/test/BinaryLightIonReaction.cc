@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BinaryLightIonReaction.cc,v 1.9 2003-11-10 14:00:13 gunter Exp $
+// $Id: BinaryLightIonReaction.cc,v 1.10 2004-06-01 05:33:01 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -76,7 +76,7 @@
     return 0;
   }
 
-extern "C" int ecpt();
+// extern "C" int ecpt();
  
  int main()
   {
