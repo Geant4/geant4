@@ -66,7 +66,6 @@
 
 
 using namespace HEPREP;
-using namespace G4std;
 
 G4int G4HepRepSceneHandler::sceneCount = 0;
 G4int G4HepRepSceneHandler::sceneIdCount = 0;
@@ -101,8 +100,8 @@ void G4HepRepSceneHandler::open() {
     if (writer != NULL) return;
 
     char fname [256];
-    ostrstream ost(fname, 256);
-    ost << GetScene()->GetName() << ends;
+    G4std::ostrstream ost(fname, 256);
+    ost << GetScene()->GetName() << G4std::ends;
 
 #ifdef DEBUG
     G4cout << "G4HepRepSceneHandler::open(" << fname << ") " << G4endl;
@@ -114,7 +113,7 @@ void G4HepRepSceneHandler::open() {
         out = NULL;
         writer = heprepFactory->createHepRepWriter(&G4cerr);
     } else {
-        out = new ofstream(fname);
+        out = new G4std::ofstream(fname);
         writer = heprepFactory->createHepRepWriter(out);
     }
 
@@ -504,7 +503,7 @@ void G4HepRepSceneHandler::SetColour (HepRepAttribute *attribute, const G4Colour
                                   " green : " << color.GetGreen () <<
                                   " blue : " << color.GetBlue ()   << G4endl;
 #endif
-    vector<double> c;
+    G4std::vector<double> c;
     c.push_back(color.GetRed());
     c.push_back(color.GetGreen());
     c.push_back(color.GetBlue());
