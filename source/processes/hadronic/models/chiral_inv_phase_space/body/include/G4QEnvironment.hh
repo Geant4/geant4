@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.21 2004-03-10 12:41:09 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.22 2004-03-17 13:01:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -59,9 +59,6 @@ public:
   // Static functions
   static void SetParameters(G4double solAn=0.4,G4bool efFlag=false,G4double piThresh=141.4,
                             G4double mpisq=20000., G4double dinum=1880.);
-  // General purpose functions
-  G4ThreeVector    RndmDir();               // Randomize 3D direction (@@subst by libFunc)
-
 private:  
   G4QHadronVector* FSInteraction();         // Final State Interaction after Hadronization
   G4QHadronVector  HadronizeQEnvironment(); // Main HadronizationFunction used in Fragment
@@ -105,6 +102,10 @@ private:
   G4int              theTargetPDG;   // PDG of the target nucleus in the interaction
 };
 
+//General function makes Random Unit 3D-Vector
+G4ThreeVector RndmDir();
+
+// Inline functions
 inline G4bool G4QEnvironment::operator==(const G4QEnvironment &rhs) const
                                                                      {return this == &rhs;}
 inline G4bool G4QEnvironment::operator!=(const G4QEnvironment &rhs) const

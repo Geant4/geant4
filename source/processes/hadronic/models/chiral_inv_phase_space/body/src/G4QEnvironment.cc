@@ -23,7 +23,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.85 2004-03-12 17:50:15 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.86 2004-03-17 13:01:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -4505,24 +4505,6 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
 #endif
 } // End of EvaporateResidual
 
-//Make Random Unit 3D-Vector
-G4ThreeVector G4QEnvironment::RndmDir()
-{//  ==================================
-  G4double x = G4UniformRand();
-  G4double y = G4UniformRand();
-  G4double z = G4UniformRand();
-  G4double r2= x*x+y*y+z*z;
-  while(r2>1.||r2<.01)
-  {
-    x = G4UniformRand();
-    y = G4UniformRand();
-    z = G4UniformRand();
-    r2=x*x+y*y+z*z;
-  }
-  G4double r=sqrt(r2);
-  return G4ThreeVector(x/r,y/r,z/r);
-} // End of RndmDir
-
 //The public Hadronisation function with the Exception treatment (del respons. of User !)
 G4QHadronVector* G4QEnvironment::Fragment()
 {//              ==========================
@@ -7088,9 +7070,23 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
         mKaon=mK;
         kPDG=321;
       }
+      G4double sum=mR+mKaon;
+      if(sum>reM)                        // for GEANT4 (Can not decay in kaon and residual)
+	  {
+        if(kPDG==321)                    // *** Very seldom *** "K+->pi+ conversion"
+		{
+          kPDG=211;
+          mKaon=mPi;
+		}
+        else                             // *** Very seldom *** "K0(S=-1)->pi- conversion"
+		{
+          kPDG=111;
+          mKaon=mPi0;
+		}
+        sum=mR+mKaon;
+      }
       G4LorentzVector n4M(0.,0.,0.,mR);
       G4LorentzVector k4M(0.,0.,0.,mKaon);
-      G4double sum=mR+mKaon;
       if(fabs(reM-sum)<eps)
 	  {
         n4M=r4M*(mR/sum);
@@ -9129,7 +9125,7 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
   G4QContent reTQC=valQ;                        // Prototype QuarkContent of the ResidNucl
   G4LorentzVector reTLV=quasm->Get4Momentum();  // Prototyoe 4-Mom of the Residual Nucleus
 #ifdef cdebug
-  //if(resQPDG==89998004)
+   if(resQPDG==89998005)
    G4cout<<"G4QE::CGS:Q="<<valQ<<resQPDG<<",GM="<<resQMa<<",4M="<<reTLV<<reTLV.m()<<G4endl;
 #endif
   G4double resSMa=resQMa;                       // Prototype MinimalSplitMass of ResidNucl
@@ -9381,8 +9377,13 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
 		        }
               } // End of the KINEMATIC CHECK FOR THE PHOTON if
             } // End of nphot IF
+#ifdef cdebug
+            if(resQPDG==89998005)
+              G4cout<<"G4QE::CGS:S="<<resS<<",B="<<resB<<",C="<<resC<<",pi#"<<npip<<",E="
+                    <<envPDG<<G4endl;
+#endif
             //if(npip>=0&&resQPDG==89998004 || npim>=0&&resQPDG==90003998)// D+D+pi->N+N+pi
-            if(!resS&&resB>1&&(npip>=0&&resC==-2||npim>=0&&resC-resB==2))//DDnNpi->(n+2)Npi
+            if(envPDG==90000000&&!resS&&resB>1&&(npip>=0&&resC==-2||npim>=0&&resC-resB==2))
 			{
               G4int npi=npip;               // (Delta-)+(Delta-)+k*n+(pi+)->(k+2)*n+(pi-)
               G4int piPD=-211;
@@ -9403,6 +9404,11 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
               G4LorentzVector ch4M=curHadr->Get4Momentum(); // 4-Mom of the Pion
               G4LorentzVector tt4M=ch4M+reTLV;// (resQMa=GSMass of the ResidQuasmon(+Env.))
               G4double ttM=tt4M.m();          // Mass of the Pion+ResidQm compaund system
+#ifdef cdebug
+              if(resQPDG==89998005)
+                G4cout<<"G4QE::CGS:Sm="<<suM<<"<Tot="<<ttM<<tt4M
+                      <<",pi="<<ch4M<<",Q="<<reTLV.m()<<reTLV<<G4endl;
+#endif
               if(suM<ttM)                    // PANIC can be resolved with this Pion
 			  {
                 G4LorentzVector fn4M = G4LorentzVector(0.,0.,0.,suB);//First nucleon(s)
@@ -9411,7 +9417,7 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
                 if(!G4QHadron(tt4M).DecayIn3(fn4M,sn4M,pi4M))
                 {
 #ifdef cdebug
-                  //if(resQPDG==89998004)
+                  if(resQPDG==89998005)
                     G4cerr<<"***G4QEnv::CheckGS:DecayIn3 2N+Pi,tM="<<ttM<<","<<suM<<G4endl;
 #endif
                 }
@@ -9428,8 +9434,8 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
                   curHadr->Set4Momentum(pi4M);// Change 4M of the Pion (reduced by decay)
                   curHadr->SetQPDG(piQPDG);   // Change Charge of thePion
 #ifdef cdebug
-                  //if(resQPDG==89998004)
-                    G4cout<<"G4QE::CGS:1="<<nuPD<<fn4M<<",2="<<sn4M<<",pi="<<pi4M<<G4endl;
+                  if(resQPDG==89998005)
+                  G4cout<<"G4QE::CGS:1="<<nuPD<<fn4M<<rB<<",2="<<sn4M<<",p="<<pi4M<<G4endl;
 #endif
 
                   return true;
@@ -9735,3 +9741,39 @@ G4bool G4QEnvironment::DecayInEnvQ(G4Quasmon* quasm)
   else return false;                              // => "Environment is vacuum" case
   return true;
 } // End of "DecayInEnvQ"
+
+//General function makes Random Unit 3D-Vector
+G4ThreeVector RndmDir()
+{//  -------- =========
+  G4double x = G4UniformRand(), y = G4UniformRand(), z = G4UniformRand();
+  G4double r2= x*x+y*y+z*z;
+  while(r2>1.||r2<.000001)
+  {
+    x = G4UniformRand(); y = G4UniformRand(); z = G4UniformRand();
+    r2=x*x+y*y+z*z;
+  }
+  G4double r=sqrt(r2), quad=G4UniformRand();
+  if(quad>0.5)
+  {
+    if(quad>0.75)
+    {
+      if(quad>0.875)    return G4ThreeVector(-x/r,-y/r,-z/r);
+      else              return G4ThreeVector(-x/r,-y/r, z/r);
+	}
+    else
+    {
+      if(quad>0.625)    return G4ThreeVector(-x/r, y/r,-z/r);
+      else              return G4ThreeVector(-x/r, y/r, z/r);
+	}
+  }
+  else
+  {
+    if(quad>0.25)
+    {
+      if(quad>0.375)    return G4ThreeVector( x/r,-y/r,-z/r);
+      else              return G4ThreeVector( x/r,-y/r, z/r);
+	}
+    else if(quad>0.125) return G4ThreeVector( x/r, y/r,-z/r);
+  }
+  return                       G4ThreeVector( x/r, y/r, z/r);
+} // End of RndmDir
