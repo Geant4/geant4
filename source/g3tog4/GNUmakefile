@@ -34,6 +34,7 @@ CPPFLAGS  += \
              -I$(G4BASE)/geometry/volumes/include \
              -I$(G4BASE)/geometry/management/include \
              -I$(G4BASE)/geometry/solids/CSG/include \
+             -I$(G4BASE)/geometry/solids/specific/include \
              -I$(G4BASE)/geometry/solids/BREPS/include \
              -I$(G4BASE)/geometry/solids/STEP/include \
              -I$(G4BASE)/graphics_reps/include \

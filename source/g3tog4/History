@@ -1,7 +1,11 @@
-$Id: History,v 1.31 2000-03-07 10:51:40 stesting Exp $
+$Id: History,v 1.32 2000-04-07 13:28:46 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V01-01-00 05-Apr-2000 G.Cosmo
+- Added include path to directory geometry/solids/specific.
+  Modified files: g3tog4/GNUmakefile, g3tog4/test/GNUmakefile.
 
 g3tog4-V01-00-00a 07-Mar-2000 J.Allison
 - Changed char* to const char* where ISO compiler warned.
