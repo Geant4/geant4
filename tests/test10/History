@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2003-03-19 12:46:04 gcosmo Exp $
+$Id: History,v 1.7 2003-05-15 08:24:31 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 15, 2003  Gabriele Cosmo (test10-V05-01-00)
+- Fixed initialisation of world-volume for geometry update, according to the
+  new technique implemented in G4RunManager, tag run-V05-01-00.
 
 Mar 12, 2003  John Allison (test10-V05-00-01)
 - Added HepRep to vis manager.
