@@ -5,14 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedConstructor.cc,v 1.4 1999-12-15 14:51:17 gunter Exp $
+// $Id: G4ShortLivedConstructor.cc,v 1.5 2000-02-25 07:40:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
 //
-
+//      Add "rho0"                         25  Feb. 2000 H.Kurashige
 #include "G4ShortLivedConstructor.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -610,6 +610,23 @@ void G4ShortLivedConstructor::ConstructMesons()
   decayTable->Insert(mode);
   particle->SetDecayTable(decayTable);
   
+  // rho0
+  particle = new G4ExcitedMesons(            
+               "rho0",       770.0*MeV,     150.7*MeV,         0.0, 
+                    2,              -1,            -1,          
+                    2,               0,            +1,             
+              "meson",               0,             0,         113,
+                false,          0.0*ns,          NULL );
+  // create decay table
+  decayTable =  new G4DecayTable();
+  // create decay channel of rho0 -> pi+ + pi-
+  //                                   parent    BR     #daughters
+  mode  = new G4PhaseSpaceDecayChannel("rho0",1.000, 2,
+				                    "pi+","pi-");
+  // add decay table
+  decayTable->Insert(mode);
+  particle->SetDecayTable(decayTable);
+
   // k_star+
   particle = new G4ExcitedMesons(            
 	    "k_star+",       891.6*MeV,      50.8*MeV,    +1.0*eplus, 
