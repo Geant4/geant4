@@ -1,4 +1,4 @@
-?RCS: $Id: Config_sh.U,v 1.2 2001-12-09 23:55:02 sadilov Exp $
+?RCS: $Id: Config_sh.U,v 1.3 2001-12-12 21:19:57 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.2  2001/12/09 23:55:02  sadilov
+?RCS: Gabriele's changes.
+?RCS:
 ?RCS: Revision 1.1  2001/05/17 10:12:21  sadilov
 ?RCS: Import 'config'.
 ?RCS:
@@ -50,8 +53,8 @@
 ?F:!config.over
 ?T:file
 : back to where it started
-if test -d ../UU; then
-	cd ..
+if test -d ../../.config/UU; then
+	cd ../..
 fi
 
 : configuration may be patched via a 'config.over' file
@@ -59,7 +62,7 @@ if $test -f config.over; then
 	echo " "
 	dflt=y
 	rp='A config.over file exists.  Do you wish to load it?'
-	. UU/myread
+	. .config/UU/myread
 	case "$ans" in
 	n*) echo "OK, I'll ignore it.";;
 	*)	. ./config.over

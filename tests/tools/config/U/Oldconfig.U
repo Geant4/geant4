@@ -1,4 +1,4 @@
-?RCS: $Id: Oldconfig.U,v 1.5 2001-12-12 17:16:48 sadilov Exp $
+?RCS: $Id: Oldconfig.U,v 1.6 2001-12-12 21:23:35 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.5  2001/12/12 17:16:48  sadilov
+?RCS: Check existence 'hints' directory before using it.
+?RCS:
 ?RCS: Revision 1.4  2001/12/05 22:49:34  sadilov
 ?RCS: Copy env.[c]sh files to User current directory.
 ?RCS:
@@ -185,7 +188,7 @@ esac
 : Get old answers from old config file if Configure was run on the
 : same system, otherwise use the hints.
 hint=default
-cd ..
+cd ../..
 ?X: Since we are now at the root of the source tree, we must use $src
 ?X: to access the sources and not $rsrc. See src.U for details...
 
@@ -429,11 +432,11 @@ cd ..
 	else
 ?X: Try to identify sony's NEWS-OS (BSD unix)
 		if test -f /vmunix -a -f $src/hints/news_os.sh; then
-			(what /vmunix | UU/tr '[A-Z]' '[a-z]') > UU/kernel.what 2>&1
-			if $contains news-os UU/kernel.what >/dev/null 2>&1; then
+			(what /vmunix | .config/UU/tr '[A-Z]' '[a-z]') > .config/UU/kernel.what 2>&1
+			if $contains news-os .config/UU/kernel.what >/dev/null 2>&1; then
 				osname=news_os
 			fi
-			$rm -f UU/kernel.what
+			$rm -f .config/UU/kernel.what
 ?X: Maybe it's an OS/2
 		elif test -d c:/.; then
 			set X $myuname
@@ -489,12 +492,12 @@ If your OS version has no hints, DO NOT give a wrong version -- say "none".
 
 EOM
 	rp="Which of these apply, if any?"
-	. UU/myread
+	. .config/UU/myread
 	tans=$ans
 	for file in $tans; do
 		if $test -f $src/hints/$file.sh; then
 			. $src/hints/$file.sh
-			$cat $src/hints/$file.sh >> UU/config.sh
+			$cat $src/hints/$file.sh >> .config/UU/config.sh
 		elif $test X$tans = X -o X$tans = Xnone ; then
 			: nothing
 		else
@@ -502,11 +505,11 @@ EOM
 			echo "$file.sh does not exist"
 			dflt=$file
 			rp="hint to use instead?"
-			. UU/myread
+			. .config/UU/myread
 			for file in $ans; do
 				if $test -f "$src/hints/$file.sh"; then
 					. $src/hints/$file.sh
-					$cat $src/hints/$file.sh >> UU/config.sh
+					$cat $src/hints/$file.sh >> .config/UU/config.sh
 				elif $test X$ans = X -o X$ans = Xnone ; then
 					: nothing
 				else
@@ -603,7 +606,7 @@ EOM`
 
 dflt="Press [Enter] for default settings"
 rp=$g4message
-. UU/myread
+. .config/UU/myread
 gans=$ans
 
 	case $gans in
@@ -631,7 +634,7 @@ gans=$ans
 		esac
 		dflt=$g4osname
 		rp="What is your OS'?"
-		. UU/myread
+		. .config/UU/myread
 		tans=$ans
 
 		if test X$tans != X$g4osnamerec ; then
@@ -646,7 +649,7 @@ EOM
 
 		dflt=$tans
 		rp="Confirm your selection or set native '$g4osnamerec'!"
-		. UU/myread
+		. .config/UU/myread
 		tans=$ans
 		fi
 
@@ -675,7 +678,7 @@ EOM
 		esac
 		dflt=$g4compiler
 		rp="Which C++ compiler?"
-		. UU/myread
+		. .config/UU/myread
 		tans=$ans
 
 		if test X$tans != X$g4compilerrec ; then
@@ -690,7 +693,7 @@ EOM
 
 		dflt=$tans
 		rp="Confirm your selection or set recommended '$g4compilerrec'!"
-		. UU/myread
+		. .config/UU/myread
 		tans=$ans
 		fi
 
@@ -718,7 +721,7 @@ G4SYSTEM is now set to $g4system.
 
 EOM
 
-cd UU
+cd .config/UU
 
 ?X: indentation wrong on purpose--RAM
 ?X: Leave a white space between first two '(' for ksh. The sub-shell is needed
@@ -737,7 +740,7 @@ myuname=`echo $myuname | $sed -e 's/^[^=]*=//' -e 's/\///g' | \
 newmyuname="$myuname"
 dflt=n
 
-cd ..
+cd ../..
 if [ X$install = X ] ; then
 	if test -f $src/.config/bin/$g4system/env.sh; then
 	cat >&2 <<EOM
@@ -756,7 +759,7 @@ You can use these files for further modifications
 (adding your own environments).
 ---------------------------------------------------
 EOM
-	$rm -rf UU
+	$rm -rf .config/UU
 
 cp -i $src/.config/bin/$g4system/env.csh .
 cp -i $src/.config/bin/$g4system/env.sh  .
@@ -769,15 +772,15 @@ else
 	echo "should start with \$G4INSTALL/Configure -install."
 	echo "(where \$G4INSTALL is Geant4 install directory)."
 	echo " "
-	$rm -rf UU
+	$rm -rf .config/UU
 	exit 1
 	fi
 fi
-cd UU
+cd .config/UU
 
 case "$knowitall" in
 '')
-	cd ..
+	cd ../..
 	if test -f $src/.config/bin/$g4system/config.sh; then
 		if $contains myuname= $src/.config/bin/$g4system/config.sh >/dev/null 2>&1; then
 			eval "`grep myuname= $src/.config/bin/$g4system/config.sh`"
@@ -786,17 +789,17 @@ case "$knowitall" in
 			dflt=y
 		fi
 	fi
-	cd UU
+	cd .config/UU
 	;;
 *) dflt=y;;
 esac
 
-cd ..
+cd ../..
 
 if test -f $src/.config/bin/$g4system/config.sh; then
 	echo " "
 	rp="There exists a config.sh file. Shall I use it to set the defaults?"
-	. UU/myread
+	. .config/UU/myread
 	case "$ans" in
 	n*|N*) echo "OK, I'll ignore it."; mv $src/.config/bin/$g4system/config.sh $src/.config/bin/$g4system/config.sh.old;;
 	*)  echo "Fetching default answers from your old config.sh file..." >&4
@@ -804,7 +807,7 @@ if test -f $src/.config/bin/$g4system/config.sh; then
 		tmp_c="$c"
 		tmp_sh="$sh"
 		. $src/.config/bin/$g4system/config.sh
-		cp $src/.config/bin/$g4system/config.sh UU
+		cp $src/.config/bin/$g4system/config.sh .config/UU
 		n="$tmp_n"
 		c="$tmp_c"
 		: Older versions did not always set $sh.  Catch re-use of such
@@ -818,7 +821,7 @@ if test -f $src/.config/bin/$g4system/config.sh; then
 fi
 
 ?X:
-cd UU
+cd .config/UU
 ?X: From here on, we must use $rsrc instead of $src
 @else
 : Get old answers, if there is a config file out there
@@ -849,12 +852,12 @@ fi
 	echo "Fetching default answers from $config_sh..." >&4
 	tmp_n="$n"
 	tmp_c="$c"
-	cd ..
+	cd ../..
 ?X: preserve symbolic links, if any
 	cp $config_sh config.sh 2>/dev/null
 	chmod +w config.sh
 	. ./config.sh
-	cd UU
+	cd .config/UU
 	cp ../config.sh .
 	n="$tmp_n"
 	c="$tmp_c"

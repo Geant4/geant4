@@ -1,4 +1,4 @@
-?RCS: $Id: Oldsym.U,v 1.1 2001-05-17 10:12:22 sadilov Exp $
+?RCS: $Id: Oldsym.U,v 1.2 2001-12-12 21:24:14 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2001/05/17 10:12:22  sadilov
+?RCS: Import 'config'.
+?RCS:
 ?RCS: Revision 1.3  2000/12/19 07:23:32  sadilov
 ?RCS: Moving 'extracted files'+'config.sh' to '.config/bin/$g4system'
 ?RCS: (instead of [simple] 'bin/$g4system' previously).
@@ -47,18 +50,18 @@ awk '/^#define/ {printf "%s=%s\n",$2,$3}' $src/patchlevel.h >> $g4conf/config.sh
 echo "CONFIG=true" >> $g4conf/config.sh
 
 : propagate old symbols
-if $test -f UU/config.sh; then
+if $test -f .config/UU/config.sh; then
 ?X: Make sure each symbol is unique in oldconfig.sh
-	<UU/config.sh sort | uniq >UU/oldconfig.sh
+	<.config/UU/config.sh sort | uniq >.config/UU/oldconfig.sh
 ?X:
 ?X: All the symbols that appear twice come only from config.sh (hence the
 ?X: two config.sh in the command line). These symbols will be removed by
 ?X: the uniq -u command. The oldsyms file thus contains all the symbols
 ?X: that did not appear in the produced config.sh (Larry Wall).
 ?X:
-	sed -n 's/^\([a-zA-Z_0-9]*\)=.*/\1/p' config.sh config.sh UU/oldconfig.sh |\
-	sort | uniq -u >UU/oldsyms
-	set X `cat UU/oldsyms`
+	sed -n 's/^\([a-zA-Z_0-9]*\)=.*/\1/p' config.sh config.sh .config/UU/oldconfig.sh |\
+	sort | uniq -u >.config/UU/oldsyms
+	set X `cat .config/UU/oldsyms`
 	shift
 	case $# in
 	0) ;;
@@ -70,7 +73,7 @@ Hmm...You had some extra variables I don't know about...
 
 EOM
 		echo "# Variables propagated from previous config.sh file." >>.config/bin/$g4system/config.sh
-		for sym in `cat UU/oldsyms`; do
+		for sym in `cat .config/UU/oldsyms`; do
 			echo "    Propagating $hint variable "'$'"$sym..."
 			eval 'tmp="$'"${sym}"'"'
 			echo "$tmp" | \

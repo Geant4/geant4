@@ -13,9 +13,9 @@ echo " "
 #echo "SSS"
 
 if [ X$src = X. ] ; then
-	cd ..
+	cd ../..
 	abssrc=`pwd`
-	cd UU
+	cd .config/UU
 else
 	abssrc=$src
 fi

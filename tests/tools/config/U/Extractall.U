@@ -1,4 +1,4 @@
-?RCS: $Id: Extractall.U,v 1.1 2001-05-17 10:12:21 sadilov Exp $
+?RCS: $Id: Extractall.U,v 1.2 2001-12-12 21:21:10 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2001/05/17 10:12:21  sadilov
+?RCS: Import 'config'.
+?RCS:
 ?RCS: Revision 1.1.1.1  2000/12/06 16:04:56  sadilov
 ?RCS: Start g4conf.
 ?RCS:
@@ -50,9 +53,9 @@ true)
 	test "$override" && . ./optdef.sh
 	echo " "
 ?X: extract has to be run from the top directory, not within UU.
-	cd ..
-	. UU/extract
-	rm -rf UU
+	cd ../..
+	. .config/UU/extract
+	rm -rf .config/UU
 	echo "Done."
 	exit 0
 	;;

@@ -1,4 +1,4 @@
-?RCS: $Id: Options.U,v 1.1 2001-05-17 10:12:22 sadilov Exp $
+?RCS: $Id: Options.U,v 1.2 2001-12-12 21:24:29 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2001/05/17 10:12:22  sadilov
+?RCS: Import 'config'.
+?RCS:
 ?RCS: Revision 1.2  2000/12/12 23:38:18  sadilov
 ?RCS: Was added due to Gabriele's modification of Configure...
 ?RCS:
@@ -154,14 +157,14 @@ while test $# -gt 0; do
 	-install) shift; install=yes;;
 	-f)
 		shift
-		cd ..
+		cd ../..
 		if test -r "$1"; then
 			config_sh="$1"
 		else
 			echo "$me: cannot read config file $1." >&2
 			error=true
 		fi
-		cd UU
+		cd .config/UU
 		shift;;
 	-h) shift; error=true;;
 	-r) shift; reuseval=true;;
