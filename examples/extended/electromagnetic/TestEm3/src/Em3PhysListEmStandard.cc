@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PhysListEmStandard.cc,v 1.1 2003-02-26 16:12:36 vnivanch Exp $
+// $Id: Em3PhysListEmStandard.cc,v 1.2 2003-09-22 14:00:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,7 +71,7 @@ void Em3PhysListEmStandard::ConstructProcess()
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {
-      // gamma         
+      // gamma
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(new G4ComptonScattering);
       pmanager->AddDiscreteProcess(new G4GammaConversion);

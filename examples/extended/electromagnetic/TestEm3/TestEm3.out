@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (27-August-2003)
+                                (27-June-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
@@ -126,7 +126,6 @@ userDetector->Construct() start.
 -------------------------------------------------------------
 World is registered to the default region.
 physicsList->Construct() start.
-physicsList->Construct() start.
 
 phot:  Total cross sections from Sandia parametrisation. 
 physicsList->setCut() start.
@@ -194,9 +193,6 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-Region DefaultRegionForTheWorld
- Materials : Galactic Lead liquidArgon 
- Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
 ========= Table of registered couples ==============================
 
@@ -223,6 +219,12 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
@@ -240,12 +242,6 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     -------   --------     ------   ------   --------   ----------    ----------
       91.70          1k         1       50         50         0.01    Calorimeter
        8.30          0k         1        3          4         0.00    Layer
-### Run 0 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
-----------------------------------------
 Start Run processing.
 
 ---> Begin Of Event: 0
@@ -254,7 +250,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=41.04s Real=52.51s Sys=7.51s
+  User=43.58s Real=54.43s Sys=7.24s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
@@ -270,14 +266,14 @@ Run Summary
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
+G4 kernel has come to Quit state.
+Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-G4 kernel has come to Quit state.
 G4SDManager deleted.
 EventManager deleted.
 UImanager deleted.
 StateManager deleted.
-RunManagerKernel is deleted.
 RunManager is deleting.

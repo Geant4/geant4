@@ -1,4 +1,4 @@
-# $Id: TestEm3.in,v 1.6 2003-02-20 15:52:00 vnivanch Exp $
+# $Id: TestEm3.in,v 1.7 2003-09-22 14:00:45 maire Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -8,15 +8,17 @@
 /control/verbose 2
 /run/verbose 2
 #
-#  select EM PhysicsList
-#
 #/testem/phys/addPhysics  model
 /testem/phys/addPhysics  standard
 #
 /run/initialize
 #
-/testem/event/printModulo 50
-#
 /gun/particle e-
 /gun/energy 1 GeV
+#
+/testem/run/setHisto 0 100 700. 1000. MeV
+/testem/run/setHisto 1 100   0.  300. MeV
+#
+/testem/event/printModulo 50
+#
 /run/beamOn 100

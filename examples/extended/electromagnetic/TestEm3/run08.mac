@@ -1,4 +1,4 @@
-# $Id: run08.mac,v 1.4 2003-03-06 18:16:16 maire Exp $
+# $Id: run08.mac,v 1.5 2003-09-22 14:00:47 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -6,8 +6,7 @@
 # Iron 1 layer; proton 500 MeV
 #
 /control/verbose 2
-#
-#  select EM PhysicsList
+/run/verbose 2
 #
 #/testem/phys/addPhysics  model
 /testem/phys/addPhysics  standard
@@ -19,16 +18,18 @@
 /testem/det/setNbOfAbsor 1
 /testem/det/setAbsor 0 Iron 5 cm
 /testem/det/setSizeYZ 4 cm
-/testem/det/update
+#
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
 #
 /process/inactivate msc
-#
-/testem/gun/setDefault
-#
-/run/verbose 2
-/testem/event/printModulo 100
 /testem/tracking/stepMax 2 cm
 #
+/testem/gun/setDefault
 /gun/particle proton
 /gun/energy 500 MeV
+#
+/testem/event/printModulo 100
+#
 /run/beamOn 100

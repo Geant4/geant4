@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorConstruction.cc,v 1.17 2003-06-16 16:47:42 gunter Exp $
+// $Id: Em3DetectorConstruction.cc,v 1.18 2003-09-22 14:00:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -175,6 +175,10 @@ void Em3DetectorConstruction::DefineMaterials()
   a = 39.95*g/mole;
   ma = new G4Material(name="liquidArgon", z=18., a, density);
   G4Material* lAr = ma;
+  
+  density = 4.54*g/cm3;
+  a = 47.867*g/mole;
+  ma = new G4Material(name="Titanium"   , z=22., a, density);
 
   density = 7.870*g/cm3;
   a = 55.85*g/mole;
