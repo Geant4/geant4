@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Test17SteppingVerbose.cc,v 1.2 2001-02-09 02:34:50 tsasaki Exp $
+// $Id: Test17SteppingVerbose.cc,v 1.3 2001-05-23 12:57:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -99,7 +99,7 @@ void Test17SteppingVerbose::StepInfo()
 	       << " ---------------"
 	       << G4endl;
 
-	for(G4int lp1=(*fSecondary).size()-tN2ndariesTot; 
+	for(size_t lp1=(*fSecondary).size()-tN2ndariesTot; 
                         lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << G4std::setw(6)

@@ -27,9 +27,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Test17EventAction::Test17EventAction(Test17RunAction* Test17RA)
-: eventMessenger(NULL),
-  verboselevel(0),
+: eventMessenger(0),
   runaction(Test17RA),
+  verboselevel(0),
   drawFlag("all")
 {
   eventMessenger = new Test17EventActionMessenger(this);

@@ -22,16 +22,15 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Test17RunAction::Test17RunAction()
-  :nbinStep(0),nbinEn(0),nbinTt(0),nbinTb(0),
-   nbinTsec(0),nbinTh(0),nbinThback(0),nbinR(0),nbinGamma(0),
-   nbinvertexz(0),
-   theProton (G4Proton::Proton()),
-   theElectron ( G4Electron::Electron() ),
+Test17RunAction::Test17RunAction():
    LowestEnergy(0.01*keV),
    HighestEnergy(100.*TeV),
-   TotBin(200)
-
+   TotBin(200),
+   theProton (G4Proton::Proton()),
+   theElectron ( G4Electron::Electron() ),
+   nbinStep(0),nbinEn(0),nbinTt(0),nbinTb(0),
+   nbinTsec(0),nbinTh(0),nbinThback(0),nbinR(0),nbinGamma(0),
+   nbinvertexz(0)
 {
   //runMessenger = new Test17RunMessenger(this);
 
@@ -111,7 +110,7 @@ void Test17RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
-  G4UImanager* UI = G4UImanager::GetUIpointer();
+  //  G4UImanager* UI = G4UImanager::GetUIpointer();
          
   EnergySumAbs = 0. ;
   EnergySquareSumAbs = 0.;
@@ -278,33 +277,24 @@ void Test17RunAction::EndOfRunAction(const G4Run* aRun)
 
   nStepSumCharged /= TotNbofEvents ;
   sigstep = nStepSum2Charged/TotNbofEvents-nStepSumCharged*nStepSumCharged;
-  if(sigstep>0.)
-    sigstep = sqrt(sigstep/TotNbofEvents);
-  else
-    sigstep = 0.;
-  G4double sigch=sigstep ;
+  if(sigstep>0.) sigstep = sqrt(sigstep/TotNbofEvents);
+  else           sigstep = 0.;
   
   nStepSumNeutral /= TotNbofEvents ;
+
   sigstep = nStepSum2Neutral/TotNbofEvents-nStepSumNeutral*nStepSumNeutral;
-  if(sigstep>0.)
-    sigstep = sqrt(sigstep/TotNbofEvents);
-  else
-    sigstep = 0.;
-  G4double signe=sigstep ;
+  if(sigstep>0.) sigstep = sqrt(sigstep/TotNbofEvents);
+  else           sigstep = 0.;
   
   SumCharged /= TotNbofEvents;
   sigcharged = Sum2Charged/TotNbofEvents-SumCharged*SumCharged; 
-  if(sigcharged>0.)
-    sigcharged = sqrt(sigcharged/TotNbofEvents);
-  else
-    sigcharged = 0. ;
+  if(sigcharged>0.) sigcharged = sqrt(sigcharged/TotNbofEvents);
+  else              sigcharged = 0. ;
  
   SumNeutral /= TotNbofEvents;
   signeutral = Sum2Neutral/TotNbofEvents-SumNeutral*SumNeutral; 
-  if(signeutral>0.)
-    signeutral = sqrt(signeutral/TotNbofEvents);
-  else
-    signeutral = 0. ;
+  if(signeutral>0.) signeutral = sqrt(signeutral/TotNbofEvents);
+  else              signeutral = 0. ;
  
   Selectron /= TotNbofEvents ;
   Spositron /= TotNbofEvents ;
@@ -705,98 +695,54 @@ void Test17RunAction::AddTrRef(G4double tr,G4double ref)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17RunAction::FillNbOfSteps(G4double ns)
-{
-  const G4double eps = 1.e-10 ;
-  G4double n,bin ;
-  G4int ibin;
- 
-}
+void Test17RunAction::FillNbOfSteps(G4double)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17RunAction::FillEn(G4double En)
-{
-  G4double bin ;
-  G4int ibin;
-
-}
+void Test17RunAction::FillEn(G4double)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17RunAction::FillTt(G4double En)
-{
-  G4double bin ;
-  G4int ibin;
-}
+void Test17RunAction::FillTt(G4double)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17RunAction::FillTb(G4double En)
-{
-  G4double bin ;
-  G4int ibin;
-  
-}
+void Test17RunAction::FillTb(G4double)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17RunAction::FillTsec(G4double En)
-{
-  G4double bin ;
-  G4int ibin;
-
-}
+void Test17RunAction::FillTsec(G4double)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17RunAction::FillTh(G4double Th)
-{
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-void Test17RunAction::FillGammaSpectrum(G4double En)
-{
-  G4double bin ;
-  G4int ibin;
-
-}
+void Test17RunAction::FillTh(G4double)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17RunAction::FillThBack(G4double Th)
-{
-  G4double bin,Thbin,Th0 ;
-  G4int ibin;
 
-  Th0 = Th/deg ;
-
-
-}
+void Test17RunAction::FillGammaSpectrum(G4double)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17RunAction::FillR(G4double R )
-{
-  G4double bin, R0 ;
-  G4int ibin;
-
-  R0 = R/mm ;
-
-}
+void Test17RunAction::FillThBack(G4double)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17RunAction::Fillvertexz(G4double z )
-{
-  G4double bin, z0 ;
-  G4int ibin;
+void Test17RunAction::FillR(G4double)
+{}
 
-  z0 = z/mm ;
-  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-}
+void Test17RunAction::Fillvertexz(G4double)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

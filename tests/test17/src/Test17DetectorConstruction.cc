@@ -37,11 +37,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Test17DetectorConstruction::Test17DetectorConstruction()
-:solidWorld(NULL),logicWorld(NULL),physiWorld(NULL),
- solidAbsorber(NULL),logicAbsorber(NULL),physiAbsorber(NULL),
- AbsorberMaterial(NULL),WorldMaterial(NULL),
- magField(NULL),calorimeterSD(NULL),defaultWorld(true)
+Test17DetectorConstruction::Test17DetectorConstruction():
+  AbsorberMaterial(0),
+  WorldMaterial(0),
+  defaultWorld(true),
+  solidWorld(0),
+  logicWorld(0),
+  physiWorld(0),
+  solidAbsorber(0),
+  logicAbsorber(0),
+  physiAbsorber(0),
+  magField(0),
+  calorimeterSD(0)
 {
   // default parameter values of the calorimeter
   AbsorberThickness = 100.0*mm;
@@ -77,12 +84,9 @@ void Test17DetectorConstruction::DefineMaterials()
  
 G4String name, symbol;             //a=mass of a mole;
 G4double a, z, density;            //z=mean number of protons;  
-G4int iz, n;                       //iz=number of protons  in an isotope; 
-                                   // n=number of nucleons in an isotope;
 
 G4int    ncomponents, natoms;
-G4double abundance, fractionmass;
-G4double temperature, pressure;
+G4double fractionmass;
 
 //
 // define Elements
@@ -106,38 +110,47 @@ G4Element* elC  = new G4Element(name="Carbon"  ,symbol="C" , z= 6., a);
 density = 1.848*g/cm3;
 a = 9.01*g/mole;
 G4Material* Be = new G4Material(name="Beryllium", z=4., a, density);
+G4cout << "Matrial available: " << Be->GetName() << G4endl; 
 
 density = 2.700*g/cm3;
 a = 26.98*g/mole;
 G4Material* Al = new G4Material(name="Aluminum", z=13., a, density);
+G4cout << "Matrial available: " << Al->GetName() << G4endl; 
 
 density = 2.0*g/cm3;
 a = 12.0107*g/mole;
 G4Material* C = new G4Material(name="Carbon", z=6., a, density);
+G4cout << "Matrial available: " << C->GetName() << G4endl; 
 
 density = 2.330*g/cm3;
 a = 28.09*g/mole;
 G4Material* Si = new G4Material(name="Silicon", z=14., a, density);
+G4cout << "Matrial available: " << Si->GetName() << G4endl; 
 
 density = 1.390*g/cm3;
 a = 39.95*g/mole;
 G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
+G4cout << "Matrial available: " << lAr->GetName() << G4endl; 
 
 density = 7.870*g/cm3;
 a = 55.85*g/mole;
 G4Material* Fe = new G4Material(name="Iron"   , z=26., a, density);
+G4cout << "Matrial available: " << Fe->GetName() << G4endl; 
 
 density = 8.960*g/cm3;
 a = 63.55*g/mole;
 G4Material* Cu = new G4Material(name="Copper"   , z=29., a, density);
+G4cout << "Matrial available: " << Cu->GetName() << G4endl; 
 
 density = 19.32*g/cm3;
 a =196.97*g/mole;
 G4Material* Au = new G4Material(name="Gold"   , z=79., a, density);
+G4cout << "Matrial available: " << Au->GetName() << G4endl; 
 
 density = 11.35*g/cm3;
 a = 207.19*g/mole;
 G4Material* Pb = new G4Material(name="Lead"     , z=82., a, density);
+G4cout << "Matrial available: " << Pb->GetName() << G4endl; 
 
 //
 // define a material from elements.   case 1: chemical molecule
@@ -147,15 +160,18 @@ density = 1.000*g/cm3;
 G4Material* H2O = new G4Material(name="Water", symbol="H_2O", density, ncomponents=2);
 H2O->AddElement(elH, natoms=2);
 H2O->AddElement(elO, natoms=1);
+G4cout << "Matrial available: " << H2O->GetName() << G4endl; 
 
 density = 0.00066715*g/cm3;
 G4Material* CH4 = new G4Material(name="Methane", symbol="CH_4", density, ncomponents=2);
 CH4->AddElement(elH, natoms=4);
 CH4->AddElement(elC, natoms=1);
+G4cout << "Matrial available: " << CH4->GetName() << G4endl; 
 
 G4Material*  Graphite = new G4Material(name="Graphite", symbol="Graphite",
 				       density=2.265*g/cm3, ncomponents=1);
 Graphite->AddElement( elC, 1 );
+G4cout << "Matrial available: " << Graphite->GetName() << G4endl; 
 
 //
 // define a material from elements.   case 2: mixture by fractional mass
@@ -201,7 +217,7 @@ G4VPhysicalVolume* Test17DetectorConstruction::ConstructCalorimeter()
   				 G4ThreeVector(),	//no moving
                                  "World",		//its name
                                  logicWorld,		//its logical volume
-                                 NULL,			//its mother  volume
+                                 0,			//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
   
@@ -352,7 +368,7 @@ void Test17DetectorConstruction::SetMagField(G4double fieldValue)
     fieldMgr->SetDetectorField(magField);
     fieldMgr->CreateChordFinder(magField);
   } else {
-    magField = NULL;
+    magField = 0;
     fieldMgr->SetDetectorField(magField);
   }
 }

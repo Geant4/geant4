@@ -28,9 +28,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Test17SteppingAction::Test17SteppingAction(Test17DetectorConstruction* DET,
-                                     Test17EventAction* EA,
-                                     Test17RunAction* RA)
-:detector (DET),eventaction (EA),runaction (RA),steppingMessenger(NULL),
+                                           Test17EventAction* EA,
+                                           Test17RunAction* RA)
+:detector (DET),eventaction (EA),runaction (RA),steppingMessenger(0),
  IDold(-1) ,evnoold(-1)
 {
   steppingMessenger = new Test17SteppingMessenger(this);
@@ -48,7 +48,7 @@ Test17SteppingAction::~Test17SteppingAction()
 void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
 
-  G4double Edep,Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,xend,yend,zend,rend ;
+  G4double Edep,Theta,Thetaback,Tsec,xend,yend,zend,rend;
   G4double Tkin ;
   G4int evno = eventaction->GetEventno() ; 
 
@@ -111,7 +111,6 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
             runaction->SaveToTuple("TET",Theta/deg,1000.0);      
             runaction->AddnStepsCharged(xend) ;
     }
-    rend = sqrt(xend*xend + yend*yend) ;
 
   //secondary
   } else {

@@ -38,14 +38,14 @@ Test17CalorimeterSD::~Test17CalorimeterSD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
+void Test17CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
-  if(!HCE)G4cout << "Sensitive detector is inicialized" << G4endl;
+  //if(!HCE)G4cout << "Sensitive detector is inicialized" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool Test17CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool Test17CalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   
@@ -55,11 +55,11 @@ G4bool Test17CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist
       
   if ((edep==0.)&&(stepl==0.)) return false;      
 
-  G4TouchableHistory* theTouchable
-    = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
+  //  G4TouchableHistory* theTouchable
+  //  = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
     
-  G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
-  G4LogicalVolume* logVol = physVol->GetLogicalVolume();
+  // G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
+  // G4LogicalVolume* logVol = physVol->GetLogicalVolume();
   //theTouchable->MoveUpHistory();
     
   return true;
@@ -67,9 +67,9 @@ G4bool Test17CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17CalorimeterSD::EndOfEvent(G4HCofThisEvent* HCE)
+void Test17CalorimeterSD::EndOfEvent(G4HCofThisEvent*)
 {
-  if(!HCE)G4cout << "End of event" << G4endl;
+  //if(!HCE)G4cout << "End of event" << G4endl;
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
