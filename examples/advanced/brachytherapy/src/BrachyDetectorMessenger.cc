@@ -31,7 +31,7 @@
 //    *********************************
 //
 //
-// $Id: BrachyDetectorMessenger.cc,v 1.4 2002-11-18 15:18:37 guatelli Exp $
+// $Id: BrachyDetectorMessenger.cc,v 1.5 2002-12-06 16:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "BrachyDetectorMessenger.hh"
-#include"BrachyFactoryIr.hh"
+#include "BrachyFactoryIr.hh"
 #include "BrachyRunAction.hh"
 #include "BrachyDetectorConstruction.hh"
 #include "G4UIdirectory.hh"
@@ -60,7 +60,7 @@ BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* De
   AbsMaterCmd = new G4UIcmdWithAString("/detector/setMaterial",this);
   AbsMaterCmd->SetGuidance("Select Material of the detector.");
   AbsMaterCmd->SetParameterName("choice",false);
-  AbsMaterCmd->AvailableForStates(Idle);
+  AbsMaterCmd->AvailableForStates(G4State_Idle);
    selDetCmd = new G4UIcmdWithAString("/geom/select",this);
   
   mydetDir = new G4UIdirectory("/geom/");
@@ -73,7 +73,7 @@ BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* De
    selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("Iridium");
   selDetCmd->SetCandidates("Iridium / Iodium / Leipzig");
-  selDetCmd->AvailableForStates(PreInit,Idle);
+  selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   switchCmd = new G4UIcmdWithAString("/geom/switch",this);
   switchCmd->SetGuidance("Assign the selected geometry to G4RunManager.");
@@ -82,7 +82,7 @@ BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* De
   switchCmd->SetParameterName("choice",true);
   switchCmd->SetDefaultValue(" ");
   switchCmd->SetCandidates("Iridium Iodium Leipzig ");
-  switchCmd->AvailableForStates(PreInit,Idle);
+  switchCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
  
  }
@@ -115,13 +115,7 @@ void BrachyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue
       Detector->SelectDetector(newValue); 
       Detector->SwitchDetector();
        }
-
   }  
-  
-  
 }
-
-
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
