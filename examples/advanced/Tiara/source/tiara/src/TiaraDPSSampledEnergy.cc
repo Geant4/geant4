@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TiaraDPSSampledEnergy.cc,v 1.6 2003-11-07 12:39:11 vnivanch Exp $
+// $Id: TiaraDPSSampledEnergy.cc,v 1.7 2003-12-08 17:53:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -62,8 +62,10 @@ TiaraDPSSampledEnergy::TiaraDPSSampledEnergy(const G4String &eng,
     G4Exception("TiaraDPSSampledEnergy::TiaraDPSSampledEnergy: fMaxProb <= 0!");
   }
 }
-/*
-TiaraDPSSampledEnergy::TiaraDPSSampledEnergy(const TiaraDPSSampledEnergy& rhs) {
+
+TiaraDPSSampledEnergy::TiaraDPSSampledEnergy(const TiaraDPSSampledEnergy& rhs)
+  : TiaraVSourceEnergyGenerator()
+{
   *this = rhs;
 }
 
@@ -81,7 +83,7 @@ operator=(const TiaraDPSSampledEnergy& rhs) {
   }
   return *this;
 }
-*/
+
 TiaraDPSSampledEnergy::~TiaraDPSSampledEnergy(){
 }
 

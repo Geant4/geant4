@@ -1,4 +1,4 @@
-# $Id: README,v 1.14 2003-12-04 11:08:47 gcosmo Exp $
+# $Id: README,v 1.15 2003-12-08 17:53:25 gcosmo Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -27,8 +27,6 @@ See also "Geant4 User's Guide
 For Application Developers", Chapter "Toolkit Fundamentals"
 Section  "Event Biasing Techniques" and references there.
 
-
-
 The example has been tested on CERN RH 7.3 with the
 gcc-3.2 and gcc-2.95.2 compilers.
 
@@ -41,9 +39,9 @@ Note for system testing without analysis: see points 1, 1.3 and 3.2.
 ==========================
 
 You must compile Geant4 with:
-"G4LIB_BUILD_SHARED" set to 1.
+   "G4LIB_BUILD_SHARED" set to 1.
 You need to set:
-"NeutronHPCrossSections" (e.g. to ${G4INSTALL}/data/G4NDL3.7)
+   "NeutronHPCrossSections" (e.g. to ${G4INSTALL}/data/G4NDL3.7)
 
 
 Three examples are given of how to set environment variables
@@ -58,14 +56,14 @@ in the three cases:
 
    "ANAPHETOP" (e.g. /afs/cern.ch/sw/lhcxx)
    "AIDA_DIR"  (e.g. /afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp)
-   "ANAPHE_SCRIPTS" (e.g. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.4/scripts)
+   "ANAPHE_SCRIPTS" (e.g. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.6/scripts)
 
    Finally source the script envCommon.csh from the directory
    you have Tiara installed, e.g. ${G4INSTALL}/examples/advanced/Tiara
 
 
-1.2) No afs but a local Anphe and AIDA installation:
-----------------------------------------------------
+1.2) No afs but a local Anaphe and AIDA installation:
+-----------------------------------------------------
    You don't use afs but you have a local installation of Anaphe and AIDA
    (e.g. from http://anaphe.web.cern.ch/anaphe/.
    Set the following environment variables:
@@ -73,7 +71,7 @@ in the three cases:
  
    "ANAPHETOP" (e.g. <directory>/Anaphe/release)
    "AIDA_DIR"  (e.g. <directory>/AIDA/3.0.0/3.0.0/AIDA/3.0/src/cpp)
-   "ANAPHE_SCRIPTS" (e.g. ${ANAPHETOP}/share/LHCXX/5.0.5/scripts)
+   "ANAPHE_SCRIPTS" (e.g. ${ANAPHETOP}/share/LHCXX/5.0.6/scripts)
 
       here <directory> is a place holder for your directory with the
       respective installations of Anaphe and AIDA
@@ -82,8 +80,8 @@ in the three cases:
    you have Tiara installed, e.g. ${G4INSTALL}/examples/advanced/Tiara
 
 
-1.3) No afs and no Anaphe and no AIDA (e.g. for system testing):
-----------------------------------------------------------------
+1.3) No afs, no Anaphe and no AIDA (e.g. for system testing):
+-------------------------------------------------------------
    You don't want to use Anaphe and AIDA and you don't have afs access.
    Make sure "G4ANALYSIS_USE" is unset (e.g. unsetenv G4ANALYSIS_USE).
 
@@ -95,6 +93,7 @@ in the three cases:
    Set the following environment variables:
    "PYTHONVERSION" (2.2 or higher)
    "PYTHON_BASE_DIR" (e.g. to  /usr)
+   "SWIG_VERSION" (e.g. 1.3 or higher)
    "SWIG_BASE_DIR" (e.g. /usr)
    "CLHEP_BASE_DIR" (e.g. to  /opt/local)
 

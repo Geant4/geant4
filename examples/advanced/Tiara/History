@@ -1,4 +1,4 @@
-# $Id: History,v 1.16 2003-12-05 07:42:15 gcosmo Exp $
+# $Id: History,v 1.17 2003-12-08 17:53:25 gcosmo Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -18,6 +18,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec  8th, 2003 G.Cosmo - Tiara-V05-02-05
+- Restored some classes in physics_lists package and fixed setup
+  configuration.
 
 Dec  5th, 2003 G.Cosmo - Tiara-V05-02-04
 - Changed LISTS_BASE to G4LISTS_BASE for hadronic physics lists path.

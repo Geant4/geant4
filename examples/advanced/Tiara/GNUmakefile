@@ -1,4 +1,4 @@
-#  $Id: GNUmakefile,v 1.4 2003-12-04 11:08:47 gcosmo Exp $
+#  $Id: GNUmakefile,v 1.5 2003-12-08 17:53:25 gcosmo Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # --------------------------------------------------------------
@@ -23,6 +23,4 @@ tiaraClean:
 
 swigClean:
 	@for dir in $(TIARA_SRC_SWIG_DIRS); do ( cd source/$$dir && $(MAKE) swigClean); done;:
-
-include $(G4INSTALL)/config/binmake.gmk
 
