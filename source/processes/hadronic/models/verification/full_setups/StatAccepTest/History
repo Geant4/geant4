@@ -1,6 +1,14 @@
                  History file
                  ------------
 
+9-Nov-2004 - A.Ribon (statAccepTest-V06-02-03)
+- Added biasing in electromagnetic physics (i.e. for
+  gammas, electrons, and positrons). Also a cut on
+  low energy neutrons has been added. Changed also
+  the default production range cut, to 1 cm, and the
+  number of layers is now 20 (each with half lambda
+  of absorber), and radially 10, with 1/4 lambda size.
+
 8-Nov-2004 - A.Ribon (statAccepTest-V06-02-02)
 - Migration to PI_1_2_4 (so the temporary bug fix in 
   PI_1_2_3 has been removed).

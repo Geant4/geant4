@@ -40,7 +40,11 @@ void StatAccepTestSensitiveCalorimeter::Initialize(G4HCofThisEvent* HCE) {
 
 G4bool StatAccepTestSensitiveCalorimeter::
 ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist) {
-  G4double edep = aStep->GetTotalEnergyDeposit();
+
+  G4double edep = aStep->GetTotalEnergyDeposit() * aStep->GetTrack()->GetWeight();
+  // Multiply the energy deposit with the weight of the track,
+  // to allow the use of biasing.
+
   if( edep < 0.001*eV ) return false;
 
   G4int replica = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(1);

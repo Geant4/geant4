@@ -23,7 +23,10 @@ void StatAccepTestSteppingAction::UserSteppingAction(const G4Step * theStep) {
     }
   }
 
-  G4double edep = theStep->GetTotalEnergyDeposit();
+  G4double edep = theStep->GetTotalEnergyDeposit() * theStep->GetTrack()->GetWeight();
+  // Multiply the energy deposit with the weight of the track,
+  // to allow the use of biasing.
+
   if ( edep < 0.001*eV ) return;
  
   totalEdepAllParticles += edep;

@@ -11,6 +11,7 @@
 
 #include "StatAccepTestEventAction.hh"
 #include "StatAccepTestRunAction.hh"
+#include "StatAccepTestStackingAction.hh" 
 
 #include "G4UIterminal.hh"
 #ifdef G4UI_USE_TCSH
@@ -58,7 +59,7 @@ int main(int argc,char** argv) {
   // QGSP_BERT  *thePL = new QGSP_BERT;
   // QGSP_BIC   *thePL = new QGSP_BIC;
   // QGSP_GN    *thePL = new QGSP_GN;
-  // thePL->SetDefaultCutValue( 100.0*cm );
+  thePL->SetDefaultCutValue( 1.0*cm );
   //***endLOOKHERE***
 
   runManager->SetUserInitialization( thePL );
@@ -69,7 +70,8 @@ int main(int argc,char** argv) {
   // Set optional user action classes.
   runManager->SetUserAction( new StatAccepTestRunAction );  
   runManager->SetUserAction( new StatAccepTestEventAction );
-  
+  runManager->SetUserAction( new StatAccepTestStackingAction );
+
   // Initialize G4 kernel
   runManager->Initialize();
 

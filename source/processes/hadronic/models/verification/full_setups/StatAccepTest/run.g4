@@ -123,11 +123,11 @@
 #
 /mydet/isUnitInLambda 1
 /mydet/absorberTotalLength 10.0
-/mydet/activeLayerNumber 100
+/mydet/activeLayerNumber 20
 /mydet/activeLayerSize 4.0
 /mydet/isRadiusUnitInLambda 1
-/mydet/radiusBinSize 0.1
-/mydet/radiusBinNumber 30
+/mydet/radiusBinSize 0.25
+/mydet/radiusBinNumber 10
 #
 #=== III) UPDATE GEOMETRY : leave it always ON ! ===
 #
