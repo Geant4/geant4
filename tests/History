@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2004-03-16 15:53:52 gcosmo Exp $
+$Id: History,v 1.36 2004-03-16 16:21:51 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,7 @@ committal in the CVS repository !
 tests-V06-00-02 16th March 2004  Gabriele Cosmo
 - Fixed compilation warnings.
 - Replaced usage of NULL with 0.
+- Removed obsolete files in tools.
 
 tests-V06-00-01 26th February 2004  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-06-00-ref-02.
