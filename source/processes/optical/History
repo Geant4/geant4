@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23rd January 2001 Peter Gumplinger (op-V03-00-02)
+- G4OpRayleigh.cc: Allow for Rayleigh scattering length to be defined for 
+           arbitrary material through the use of G4MaterialPropertyTable.
+
 5th October 2000  Peter Gumplinger (op-V02-00-02)
 - G4OpAbsorption.cc: Comment out warning - No Absorption length specified.
 
