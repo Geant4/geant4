@@ -41,7 +41,9 @@
 class G4ChiralInvariantPhaseSpace 
 {
   public: 
-    G4VParticleChange * ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus);
+    G4VParticleChange * ApplyYourself(const G4Track& aTrack, 
+                                      G4Nucleus& aTargetNucleus, 
+				      G4ParticleChange * aChange = 0);
 
   private:
     G4ParticleChange theResult;
@@ -49,15 +51,24 @@ class G4ChiralInvariantPhaseSpace
 
 inline
 G4VParticleChange * G4ChiralInvariantPhaseSpace::
-ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
+ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus, G4ParticleChange * aChange)
 {
+  G4ParticleChange * aResult;
+  if(aChange != 0)
+  {
+    aResult = aChange;
+  }
+  else
+  {
+    aResult = & theResult;
+    aResult->Initialize(aTrack);
+  }
   //projectile properties needed in constructor of quasmon
   G4LorentzVector proj4Mom;
   proj4Mom = aTrack.GetDynamicParticle()->Get4Momentum();
   G4int projectilePDGCode = aTrack.GetDynamicParticle()
                                   ->GetDefinition()
 				  ->GetPDGEncoding();
-  
   
   //target properties needed in constructor of quasmon
   G4int targetZ = G4int(aTargetNucleus.GetZ()+0.5);
@@ -102,9 +113,9 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   delete pan;
   
   // Fill the particle change.
-  theResult.Initialize(aTrack);
-  theResult.SetStatusChange(fStopAndKill);
-  theResult.SetNumberOfSecondaries(output->size());
+  aResult->Initialize(aTrack);
+  aResult->SetStatusChange(fStopAndKill);
+  aResult->SetNumberOfSecondaries(output->size());
   G4DynamicParticle * theSec;
 #ifdef CHIPSdebug
   G4cout << "G4ChiralInvariantPhaseSpace: NEW EVENT #ofHadrons="<<output->size()<<endl;
@@ -141,11 +152,11 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
     }
     theSec->SetDefinition(theDefinition);
     theSec->SetMomentum(output->operator[](particle)->Get4Momentum().vect());
-    theResult.AddSecondary(theSec); 
+    aResult->AddSecondary(theSec); 
     delete output->operator[](particle);
   }
   delete output;
-  return & theResult;
+  return aResult;
 }
 
 #endif

@@ -30,8 +30,11 @@
 
 G4StringChipsInterface::G4StringChipsInterface()
 {
+#ifdef CHIPSdebug
   G4cout << "Please enter the energy loss per fermi in GeV"<<G4endl;
   G4cin >> theEnergyLossPerFermi;
+#endif
+
   theEnergyLossPerFermi *= GeV;
   // theEnergyLossPerFermi = 1.*GeV;
 }
@@ -68,9 +71,13 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   for(unsigned int secondary = 0; secondary<theSecondaries->size(); secondary++)
   {
     G4LorentzVector a4Mom = theSecondaries->operator[](secondary)->Get4Momentum();
+
+#ifdef CHIPSdebug
     G4cout <<"ALL STRING particles "<<theSecondaries->operator[](secondary)->GetDefinition()->GetPDGCharge()<<" "
            << theSecondaries->operator[](secondary)->GetDefinition()->GetPDGEncoding()<<" "
 	   << a4Mom <<G4endl; 
+#endif
+
     G4double toSort = a4Mom.rapidity();
     G4Pair<G4double, G4KineticTrack *> it;
     it.first = toSort;
@@ -109,8 +116,12 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4int particleCount = 0;
   G4LorentzVector theLow = theSorted.begin()->second->Get4Momentum();
   G4LorentzVector theHigh;
+
+#ifdef CHIPSdebug
   G4cout << "CHIPS ENERGY LOST "<<theEnergyLostInFragmentation<<G4endl;
   G4cout << "sorted rapidities event start"<<G4endl;
+#endif 
+
   G4ReactionProductVector * theResult = new G4ReactionProductVector;
   G4ReactionProduct * theSec;
   G4KineticTrackVector * secondaries;
@@ -155,14 +166,20 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     runningEnergy += current->second->Get4Momentum().t();
     if(runningEnergy > theEnergyLostInFragmentation) break;
     
+#ifdef CHIPSdebug
     G4cout <<"ABSORBED STRING particles "<<current->second->GetDefinition()->GetPDGCharge()<<" "
            << current->second->GetDefinition()->GetPDGEncoding()<<" "
 	   << current->second->Get4Momentum() <<G4endl; 
+#endif
+
     // projectile 4-momentum needed in constructor of quasmon
     particleCount++;
     theHigh = current->second->Get4Momentum(); 
     proj4Mom += current->second->Get4Momentum(); 
+
+#ifdef CHIPSdebug
     G4cout << "sorted rapidities "<<current->second->Get4Momentum().rapidity()<<G4endl;
+#endif
     
      // projectile quark contents needed for G4QContent construction (@@ ? -> G4QContent class)
     nD += current->second->GetDefinition()->GetQuarkContent(1);
@@ -173,10 +190,17 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     nAS += current->second->GetDefinition()->GetAntiQuarkContent(3);
   }
   // construct G4QContent
+
+#ifdef CHIPSdebug
   G4cout << "Quark content: d="<<nD<<", u="<<nU<< ", s="<< nS << G4endl;
   G4cout << "Anti-quark content: anit-d="<<nAD<<", anti-u="<<nAU<< ", anti-s="<< nAS << G4endl;
+#endif
+
   G4QContent theProjectiles(nD, nU, nS, nAD, nAU, nAS);
+
+#ifdef CHIPSdebug
   G4cout << "G4QContent is constructed"<<endl;
+#endif
   
   // target properties needed in constructor of quasmon
   // remove all hit nucleons to get Target code
@@ -223,6 +247,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4Quasmon::SetParameters(temperature,
                            halfTheStrangenessOfSee,
 			               etaToEtaPrime);
+
+#ifdef CHIPSdebug
   G4cout << "G4QNucleus parameters "<< fractionOfSingleQuasiFreeNucleons << " "
          << fractionOfPairedQuasiFreeNucleons << " "<< clusteringCoefficient << G4endl;
   G4cout << "G4Quasmon parameters "<< temperature << " "<< halfTheStrangenessOfSee << " "
@@ -230,6 +256,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4cout << "The Target PDG code = "<<targetPDGCode<<G4endl;
   G4cout << "The projectile momentum = "<<1./MeV*proj4Mom<<G4endl;
   G4cout << "The target momentum = "<<1./MeV*targ4Mom<<G4endl;
+#endif
 
   
   // Chips expects all in target rest frame, along z.
@@ -243,7 +270,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   toZ.rotateY(-1*proj4Mom.theta());
   proj4Mom = toZ*proj4Mom;
   G4LorentzRotation toLab(toZ.inverse());
+
+#ifdef CHIPSdebug
   G4cout << "a Boosted projectile vector along z"<<proj4Mom<<" "<<proj4Mom.mag()<<G4endl;
+#endif
   
   G4QHadron* iH = new G4QHadron(theProjectiles, 1./MeV*proj4Mom);
   projHV.push_back(iH);
@@ -264,7 +294,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   }
    
   // Fill the result.
+#ifdef CHIPSdebug
   G4cout << "NEXT EVENT"<<endl;
+#endif
   
   // first decay and add all escaping particles.
   for(current = firstEscaping; current!=theSorted.end(); current++)
@@ -306,8 +338,11 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   delete theSecondaries;
     
   // now add the quasmon output
+#ifdef CHIPSdebug
   G4cout << "Number of particles from string"<<theResult->size()<<G4endl;
   G4cout << "Number of particles from chips"<<output->size()<<G4endl;
+#endif
+
   for(unsigned int particle = 0; particle < output->size(); particle++)
   {
     if(output->operator[](particle)->GetNFragments() != 0) 
@@ -344,7 +379,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     {
       theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(output->operator[](particle)->GetPDGCode());
     }
+#ifdef CHIPSdebug
     G4cout << "Particle code produced = "<< pdgCode <<G4endl;
+#endif
+
     theSec = new G4ReactionProduct(theDefinition);
     G4LorentzVector current4Mom = output->operator[](particle)->Get4Momentum();
     current4Mom = toLab*current4Mom;
@@ -353,12 +391,16 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     theSec->SetMomentum(current4Mom.vect());
     theResult->push_back(theSec);
     
+#ifdef CHIPSdebug
     G4cout <<"CHIPS particles "<<theDefinition->GetPDGCharge()<<" "
            << theDefinition->GetPDGEncoding()<<" "
 	   << current4Mom <<G4endl; 
+#endif
+
     delete output->operator[](particle);
   }
   delete output;
+#ifdef CHIPSdebug
   G4cout << "Number of particles"<<theResult->size()<<G4endl;
   G4cout << G4endl;
   // @@ G4QContent has even the out option!
@@ -371,5 +413,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 	 << theLow<<" "
 	 << theHigh<<" "
 	 << G4endl;
+#endif
+
   return theResult;
 } 

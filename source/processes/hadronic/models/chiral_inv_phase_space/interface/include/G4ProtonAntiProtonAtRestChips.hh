@@ -102,6 +102,7 @@ AtRestGetPhysicalInteractionLength(const G4Track&track,
   ResetNumberOfInteractionLengthLeft();
   *condition = NotForced;
   currentInteractionLength = GetMeanLifeTime(track, condition);
+#ifdef CHIPSdebug
   if ((currentInteractionLength <0.0) || (verboseLevel>2))
   {
     G4cout << "G4ProtonAntiProtonAtRestChips::AtRestGetPhysicalInteractionLength ";
@@ -110,6 +111,7 @@ AtRestGetPhysicalInteractionLength(const G4Track&track,
     G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
     G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<G4endl;
   }
+#endif
   return theNumberOfInteractionLengthLeft * currentInteractionLength;
 }
 #endif

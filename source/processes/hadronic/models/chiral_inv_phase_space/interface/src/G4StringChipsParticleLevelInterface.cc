@@ -33,37 +33,41 @@
 
 G4StringChipsParticleLevelInterface::G4StringChipsParticleLevelInterface()
 {
-  G4cout << "Please enter the energy loss per fermi in GeV"<<G4endl;
-  G4cin >> theEnergyLossPerFermi;
-  theEnergyLossPerFermi *= GeV;
-  // theEnergyLossPerFermi = 1.*GeV;
-  G4cout << "Please enter nop"<<G4endl;
-  G4cin >> nop;
-  // G4int nop = 223; // ??????
-  G4cout << "Please enter the fractionOfSingleQuasiFreeNucleons"<<G4endl;
-  G4cin >> fractionOfSingleQuasiFreeNucleons;
-  // G4double fractionOfSingleQuasiFreeNucleons = 0.45;
-  G4cout << "Please enter the fractionOfPairedQuasiFreeNucleons"<<G4endl;
-  G4cin >> fractionOfPairedQuasiFreeNucleons;
-  // G4double fractionOfPairedQuasiFreeNucleons = 0.15;
-  G4cout << "Please enter the clusteringCoefficient"<<G4endl;
-  G4cin >> clusteringCoefficient;
-  //G4double clusteringCoefficient = 5.;
-  G4cout << "Please enter the temperature"<<G4endl;
-  G4cin >> temperature;
-  //G4double temperature = 180.;
-  G4cout << "Please enter halfTheStrangenessOfSee"<<G4endl;
-  G4cin >> halfTheStrangenessOfSee;
-  //G4double halfTheStrangenessOfSee = 0.1; // = s/d = s/u
-  G4cout << "Please enter the etaToEtaPrime"<<G4endl;
-  G4cin >> etaToEtaPrime;
-  //G4double etaToEtaPrime = 0.3;
-  G4cout << "Please enter the fusionToExchange"<<G4endl;
-  G4cin >> fusionToExchange;
-  //G4double fusionToExchange = 0.000001;
-  G4cout << "Please enter the cut-off for calculating the nuclear radius in percent"<<G4endl;
-  G4cin >> theInnerCoreDensityCut;
-  // theInnerCoreDensityCut = 50.;
+  theEnergyLossPerFermi = 0.7*GeV;
+  nop = 164; // ??????
+  fractionOfSingleQuasiFreeNucleons = 0.1;
+  fractionOfPairedQuasiFreeNucleons = 0.;
+  clusteringCoefficient = 2.7;
+  temperature = 180.;
+  halfTheStrangenessOfSee = 0.3; // = s/d = s/u
+  etaToEtaPrime = 0.3;
+  fusionToExchange = 100.;
+  theInnerCoreDensityCut = 50.;
+  
+  if(getenv("ChipsParameterTuning"))
+  {
+    G4cout << "Please enter the energy loss per fermi in GeV"<<G4endl;
+    G4cin >> theEnergyLossPerFermi;
+    theEnergyLossPerFermi *= GeV;
+    G4cout << "Please enter nop"<<G4endl;
+    G4cin >> nop;
+    G4cout << "Please enter the fractionOfSingleQuasiFreeNucleons"<<G4endl;
+    G4cin >> fractionOfSingleQuasiFreeNucleons;
+    G4cout << "Please enter the fractionOfPairedQuasiFreeNucleons"<<G4endl;
+    G4cin >> fractionOfPairedQuasiFreeNucleons;
+    G4cout << "Please enter the clusteringCoefficient"<<G4endl;
+    G4cin >> clusteringCoefficient;
+    G4cout << "Please enter the temperature"<<G4endl;
+    G4cin >> temperature;
+    G4cout << "Please enter halfTheStrangenessOfSee"<<G4endl;
+    G4cin >> halfTheStrangenessOfSee;
+    G4cout << "Please enter the etaToEtaPrime"<<G4endl;
+    G4cin >> etaToEtaPrime;
+    G4cout << "Please enter the fusionToExchange"<<G4endl;
+    G4cin >> fusionToExchange;
+    G4cout << "Please enter the cut-off for calculating the nuclear radius in percent"<<G4endl;
+    G4cin >> theInnerCoreDensityCut;
+  }
 }
 
 G4VParticleChange* G4StringChipsParticleLevelInterface::
@@ -129,9 +133,11 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   for(unsigned int secondary = 0; secondary<theSecondaries->size(); secondary++)
   {
     G4LorentzVector a4Mom = theSecondaries->operator[](secondary)->Get4Momentum();
+#ifdef CHIPSdebug
     G4cout <<"ALL STRING particles "<<theSecondaries->operator[](secondary)->GetDefinition()->GetPDGCharge()<<" "
            << theSecondaries->operator[](secondary)->GetDefinition()->GetPDGEncoding()<<" "
 	   << a4Mom <<G4endl; 
+#endif
     G4double toSort = a4Mom.rapidity();
     G4Pair<G4double, G4KineticTrack *> it;
     it.first = toSort;
@@ -164,8 +170,12 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4int particleCount = 0;
   G4LorentzVector theLow = theSorted.begin()->second->Get4Momentum();
   G4LorentzVector theHigh;
+
+#ifdef CHIPSdebug
   G4cout << "CHIPS ENERGY LOST "<<theEnergyLostInFragmentation<<G4endl;
   G4cout << "sorted rapidities event start"<<G4endl;
+#endif
+
   G4QHadronVector projHV;
   G4std::vector<G4QContent> theContents;
   G4std::vector<G4LorentzVector *> theMomenta;
@@ -216,12 +226,19 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       runningEnergy-=G4Proton::Proton()->GetPDGMass();
     if(current->second->GetDefinition() == G4Neutron::Neutron())
       runningEnergy-=G4Neutron::Neutron()->GetPDGMass();
+
+#ifdef CHIPSdebug
       G4cout << "sorted rapidities "<<current->second->Get4Momentum().rapidity()<<G4endl;  
+#endif
+
     if(runningEnergy > theEnergyLostInFragmentation) break;
     
+#ifdef CHIPSdebug
      G4cout <<"ABSORBED STRING particles "<<current->second->GetDefinition()->GetPDGCharge()<<" "
            << current->second->GetDefinition()->GetPDGEncoding()<<" "
 	   << current->second->Get4Momentum() <<G4endl; 
+#endif
+
    // projectile 4-momentum in target rest frame needed in constructor of QHadron
     particleCount++;
     theHigh = current->second->Get4Momentum(); 
@@ -292,6 +309,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4Quasmon::SetParameters(temperature,
                            halfTheStrangenessOfSee,
 			               etaToEtaPrime);
+
+#ifdef CHIPSdebug
   G4cout << "G4QNucleus parameters "<< fractionOfSingleQuasiFreeNucleons << " "
          << fractionOfPairedQuasiFreeNucleons << " "<< clusteringCoefficient << G4endl;
   G4cout << "G4Quasmon parameters "<< temperature << " "<< halfTheStrangenessOfSee << " "
@@ -299,6 +318,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4cout << "The Target PDG code = "<<targetPDGCode<<G4endl;
   G4cout << "The projectile momentum = "<<1./MeV*proj4Mom<<G4endl;
   G4cout << "The target momentum = "<<1./MeV*targ4Mom<<G4endl;
+#endif
 
   // now call chips with this info in place
   G4QHadronVector * output = 0;
@@ -318,7 +338,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   }
    
   // Fill the result.
+#ifdef CHIPSdebug
   G4cout << "NEXT EVENT"<<endl;
+#endif
+
   // first decay and add all escaping particles.
   for(current = firstEscaping; current!=theSorted.end(); current++)
   {
@@ -358,8 +381,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     
   // now add the quasmon output
   G4int maxParticle=output->size();
+#ifdef CHIPSdebug
   G4cout << "Number of particles from string"<<theResult->size()<<G4endl;
   G4cout << "Number of particles from chips"<<maxParticle<<G4endl;
+#endif
   for(G4int particle = 0; particle < maxParticle; particle++)
   {
     if(output->operator[](particle)->GetNFragments() != 0) 
@@ -371,7 +396,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     G4int pdgCode = output->operator[](particle)->GetPDGCode();
 
 
+#ifdef CHIPSdebug
     G4cerr << "PDG code of chips particle = "<<pdgCode<<G4endl;
+#endif
+
     G4ParticleDefinition * theDefinition;
     // Note that I still have to take care of strange nuclei
     // For this I need the mass calculation, and a changed interface
@@ -396,7 +424,11 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       else theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,anN+aZ,0,aZ);
     }    
     else theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(pdgCode);
+
+#ifdef CHIPSdebug
     G4cout << "Particle code produced = "<< pdgCode <<G4endl;
+#endif
+
     theSec = new G4ReactionProduct(theDefinition);
     G4LorentzVector current4Mom = output->operator[](particle)->Get4Momentum();
     current4Mom.boost(targ4Mom.boostVector());
@@ -404,12 +436,17 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     theSec->SetMomentum(current4Mom.vect());
     theResult->push_back(theSec);
     
+#ifdef CHIPSdebug
     G4cout <<"CHIPS particles "<<theDefinition->GetPDGCharge()<<" "
            << theDefinition->GetPDGEncoding()<<" "
 	   << current4Mom <<G4endl; 
+#endif
+
     delete output->operator[](particle);
   }
   delete output;
+
+#ifdef CHIPSdebug
   G4cout << "Number of particles"<<theResult->size()<<G4endl;
   G4cout << G4endl;
   G4cout << "QUASMON preparation info "
@@ -421,5 +458,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 	 << theLow<<" "
 	 << theHigh<<" "
 	 << G4endl;
+#endif
+
   return theResult;
 } 
