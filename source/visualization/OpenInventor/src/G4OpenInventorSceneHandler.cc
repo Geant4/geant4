@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.22 2004-11-12 18:18:20 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.23 2004-11-14 10:01:53 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -159,7 +159,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
   //
   const G4Colour& c = GetColour (line);
   SoMaterial* material = 
-    fStyleCache->getMaterial(c.GetRed(),c.GetGreen(),c.GetBlue());
+    fStyleCache->getMaterial((float)c.GetRed(),
+                             (float)c.GetGreen(),
+                             (float)c.GetBlue(),
+                             (float)(1-c.GetAlpha()));
   fCurrentSeparator->addChild(material);
   
   //
@@ -201,7 +204,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
 
   const G4Colour& c = GetColour (polymarker);
   SoMaterial* material = 
-    fStyleCache->getMaterial(c.GetRed(),c.GetGreen(),c.GetBlue());
+    fStyleCache->getMaterial((float)c.GetRed(),
+                             (float)c.GetGreen(),
+                             (float)c.GetBlue(),
+                             (float)(1-c.GetAlpha()));
   fCurrentSeparator->addChild(material);
   
   SoCoordinate3* coordinate3 = new SoCoordinate3;
@@ -243,7 +249,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text) {
   //
   const G4Colour& c = GetTextColour (text);
   SoMaterial* material = 
-    fStyleCache->getMaterial(c.GetRed(),c.GetGreen(),c.GetBlue());
+    fStyleCache->getMaterial((float)c.GetRed(),
+                             (float)c.GetGreen(),
+                             (float)c.GetBlue(),
+                             (float)(1-c.GetAlpha()));
   fCurrentSeparator->addChild(material);
 
   //
@@ -273,7 +282,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Circle& circle) {
   //
   const G4Colour& c = GetColour (circle);
   SoMaterial* material = 
-    fStyleCache->getMaterial(c.GetRed(),c.GetGreen(),c.GetBlue());
+    fStyleCache->getMaterial((float)c.GetRed(),
+                             (float)c.GetGreen(),
+                             (float)c.GetBlue(),
+                             (float)(1-c.GetAlpha()));
   fCurrentSeparator->addChild(material);
 
   //
@@ -314,7 +326,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& Square) {
   //
   const G4Colour& c = GetColour (Square);
   SoMaterial* material = 
-    fStyleCache->getMaterial(c.GetRed(),c.GetGreen(),c.GetBlue());
+    fStyleCache->getMaterial((float)c.GetRed(),
+                             (float)c.GetGreen(),
+                             (float)c.GetBlue(),
+                             (float)(1-c.GetAlpha()));
   fCurrentSeparator->addChild(material);
 
   //
@@ -350,7 +365,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   //
   const G4Colour& c = GetColour (polyhedron);
   SoMaterial* material = 
-    fStyleCache->getMaterial(c.GetRed(),c.GetGreen(),c.GetBlue());
+    fStyleCache->getMaterial((float)c.GetRed(),
+                             (float)c.GetGreen(),
+                             (float)c.GetBlue(),
+                             (float)(1-c.GetAlpha()));
   fCurrentSeparator->addChild(material);
 
   G4bool modelingSolid = false;
@@ -393,7 +411,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   //  
   const G4Colour& c = GetColour (nurb);
   SoMaterial* material = 
-    fStyleCache->getMaterial(c.GetRed(),c.GetGreen(),c.GetBlue());
+    fStyleCache->getMaterial((float)c.GetRed(),
+                             (float)c.GetGreen(),
+                             (float)c.GetBlue(),
+                             (float)(1-c.GetAlpha()));
   surfSep->addChild(material);
 
   //
@@ -625,9 +646,10 @@ void G4OpenInventorSceneHandler::PreAddThis
   const G4VisAttributes* pVisAttribs =
     fpViewer -> GetApplicableVisAttributes (&visAttribs);
   const G4Colour& g4Col =  pVisAttribs -> GetColour ();
-  const double red=g4Col.GetRed ();
-  const double green=g4Col.GetGreen ();
-  const double blue=g4Col.GetBlue ();
+  const double red = g4Col.GetRed ();
+  const double green = g4Col.GetGreen ();
+  const double blue = g4Col.GetBlue ();
+  double transparency = 1 - g4Col.GetAlpha();
   if(pVisAttribs->IsForceDrawingStyle()
     &&(pVisAttribs->GetForcedDrawingStyle()==G4VisAttributes::solid)) {
     fModelingSolid = true;
@@ -663,7 +685,11 @@ void G4OpenInventorSceneHandler::PreAddThis
       (SoSeparator*) g4DetectorTreeKit->getPart("fullSeparator",   TRUE);
     fullSeparator->renderCaching = SoSeparator::OFF;
 
-    SoMaterial* material = fStyleCache->getMaterial(red,green,blue);
+    SoMaterial* material = 
+      fStyleCache->getMaterial((float)red,
+                               (float)green,
+                               (float)blue,
+                               (float)transparency);
     g4DetectorTreeKit->setPart("appearance.material",material);
 
     SoLightModel* lightModel = 
@@ -736,7 +762,11 @@ void G4OpenInventorSceneHandler::PreAddThis
     // attributes will go under "fDetectorRoot"
     //
     if (!fCurrentSeparator) {
-      SoMaterial* material = fStyleCache->getMaterial(red,green,blue);
+      SoMaterial* material = 
+        fStyleCache->getMaterial((float)red,
+                                 (float)green,
+                                 (float)blue,
+                                 (float)transparency);
       fDetectorRoot->addChild(material);
 
       SoLightModel* lightModel = 
@@ -746,7 +776,11 @@ void G4OpenInventorSceneHandler::PreAddThis
 
       fCurrentSeparator = fDetectorRoot;
     } else {
-      SoMaterial* material = fStyleCache->getMaterial(red,green,blue);
+      SoMaterial* material = 
+        fStyleCache->getMaterial((float)red,
+                                 (float)green,
+                                 (float)blue,
+                                 (float)transparency);
       fCurrentSeparator->addChild(material);    
 
       SoLightModel* lightModel = 
