@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedTable.cc,v 1.4 1999-10-29 00:07:15 kurasige Exp $
+// $Id: G4ShortLivedTable.cc,v 1.5 1999-10-29 05:34:28 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@ G4ShortLivedTable::G4ShortLivedTable()
 G4ShortLivedTable::~G4ShortLivedTable()
 {
   // remove all contents in the short lived List and delete all particles  
-#ifdef G4USE_STL
+#ifdef G4USE_STL_MAP
   G4ShortLivedList::iterator i;
   for (i = fShortLivedList->begin(); i!= fShortLivedList->end(); ++i) {
     delete (*i);
@@ -65,7 +65,7 @@ G4bool G4ShortLivedTable::IsShortLived(G4ParticleDefinition* particle) const
 void G4ShortLivedTable::Insert(G4ParticleDefinition* particle)
 {
   if (IsShortLived(particle)) {
-#ifdef G4USE_STL
+#ifdef G4USE_STL_MAP
     fShortLivedList->push_back(particle);
 #else
     fShortLivedList->insert(particle);
@@ -83,7 +83,7 @@ void G4ShortLivedTable::Insert(G4ParticleDefinition* particle)
 void G4ShortLivedTable::Remove(G4ParticleDefinition* particle)
 {
   if (IsShortLived(particle)) {
-#ifdef G4USE_STL
+#ifdef G4USE_STL_MAP
     G4ShortLivedList::iterator idx;
     for (idx = fShortLivedList->begin(); idx!= fShortLivedList->end(); ++idx) {
       if ( particle == *idx) {
@@ -109,7 +109,7 @@ void G4ShortLivedTable::DumpTable(const G4String &particle_name) const
 {
   G4ParticleDefinition* particle;
 
-#ifdef G4USE_STL
+#ifdef G4USE_STL_MAP
   G4ShortLivedList::iterator idx;
   for (idx = fShortLivedList->begin(); idx!= fShortLivedList->end(); ++idx) {
     particle = *idx;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.hh,v 1.8 1999-10-29 00:06:33 kurasige Exp $
+// $Id: G4ParticleTable.hh,v 1.9 1999-10-29 05:34:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 
-#ifdef G4USE_STL
+#ifdef G4USE_STL_MAP
 #include "g4std/map"
 #include "G4ParticleTableIterator.hh"
 #else
@@ -58,7 +58,7 @@ class G4ParticleTable
  //   
 
  public:
-#ifdef G4USE_STL
+#ifdef G4USE_STL_MAP
    typedef G4std::map<G4String, G4ParticleDefinition* > G4PTblDictionary;
    typedef G4ParticleTableIterator<G4String, G4ParticleDefinition*> G4PTblDicIterator;
    typedef G4std::map<G4int, G4ParticleDefinition*> G4PTblEncodingDictionary;
@@ -174,7 +174,7 @@ class G4ParticleTable
    // remove all particles from G4ParticleTable and 
    // delete them if they were created dynamically  (i.e. not static objects) 
 
-#ifndef G4USE_STL
+#ifndef G4USE_STL_MAP
  protected:
    static unsigned HashFun(const G4String& particle_name);
    static unsigned EncodingHashFun(const G4int& aEndcoding);
