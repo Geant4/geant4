@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.10 2002-03-25 14:36:09 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.11 2002-06-06 17:32:50 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -477,15 +477,15 @@ void report_endPV(G4ThreeVector    Position,
     
     if( Step == 0 && verboseLevel <= 3 )
     {
-       G4cout.precision(3);
+       G4cout.precision(6);
        // G4cout.setf(ios_base::fixed,ios_base::floatfield);
        G4cout << G4std::setw( 5) << "Step#" << " "
             << G4std::setw( 9) << "X(mm)" << " "
             << G4std::setw( 9) << "Y(mm)" << " "  
             << G4std::setw( 9) << "Z(mm)" << " "
-            << G4std::setw( 7) << " N_x " << " "
-            << G4std::setw( 7) << " N_y " << " "
-            << G4std::setw( 7) << " N_z " << " "
+            << G4std::setw( 9) << " N_x " << " "
+            << G4std::setw( 9) << " N_y " << " "
+            << G4std::setw( 9) << " N_z " << " "
 	   // << G4std::setw( 9) << "KinE(MeV)" << " "
 	   // << G4std::setw( 9) << "dE(MeV)" << " "  
             << G4std::setw( 9) << "StepLen" << " "  
@@ -509,14 +509,14 @@ void report_endPV(G4ThreeVector    Position,
     }
     else // if( verboseLevel > 0 )
     {
-       G4cout.precision(3);
+       G4cout.precision(6);
        G4cout << G4std::setw( 5) << Step << " "
 	    << G4std::setw( 9) << Position.x() << " "
 	    << G4std::setw( 9) << Position.y() << " "
 	    << G4std::setw( 9) << Position.z() << " "
-	    << G4std::setw( 7) << EndUnitVelocity.x() << " "
-	    << G4std::setw( 7) << EndUnitVelocity.y() << " "
-	    << G4std::setw( 7) << EndUnitVelocity.z() << " "
+	    << G4std::setw( 9) << EndUnitVelocity.x() << " "
+	    << G4std::setw( 9) << EndUnitVelocity.y() << " "
+	    << G4std::setw( 9) << EndUnitVelocity.z() << " "
 	 //    << G4std::setw( 9) << KineticEnergy << " "
 	 //    << G4std::setw( 9) << EnergyDifference << " "
 	    << G4std::setw( 9) << step_len << " "
