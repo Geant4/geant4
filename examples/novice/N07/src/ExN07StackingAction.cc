@@ -27,6 +27,7 @@
 #include "G4ParticleTypes.hh"
 #include "G4TouchableHistory.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4VProcess.hh"
 
 G4int ExN07StackingAction::nGamma[6] = {0,0,0,0,0,0};
 G4int ExN07StackingAction::nElectron[6] = {0,0,0,0,0,0};
@@ -46,7 +47,7 @@ ExN07StackingAction::ClassifyNewTrack(const G4Track * aTrack)
 {
   G4TouchableHistory* theTouchable
    = (G4TouchableHistory*)(aTrack->GetTouchable());
-  if(theTouchable)
+  if(theTouchable&&theTouchable->GetHistoryDepth()>1)
   {
     G4VPhysicalVolume* calPhys = theTouchable->GetVolume(1);
     if(calPhys)
@@ -58,14 +59,23 @@ ExN07StackingAction::ClassifyNewTrack(const G4Track * aTrack)
       i += layerNumber%2;
       G4ParticleDefinition * particleType = aTrack->GetDefinition();
       if(particleType==G4Gamma::GammaDefinition())
-      { nGamma[i]++;
-        if(eMinGamma[i]>aTrack->GetKineticEnergy()) eMinGamma[i]=aTrack->GetKineticEnergy(); }
+      {
+        nGamma[i]++;
+        if(eMinGamma[i]>aTrack->GetKineticEnergy())
+        { eMinGamma[i]=aTrack->GetKineticEnergy(); }
+      }
       else if(particleType==G4Electron::ElectronDefinition())
-      { nElectron[i]++;
-        if(eMinElectron[i]>aTrack->GetKineticEnergy()) eMinElectron[i]=aTrack->GetKineticEnergy(); }
+      {
+        nElectron[i]++;
+        if(eMinElectron[i]>aTrack->GetKineticEnergy())
+        { eMinElectron[i]=aTrack->GetKineticEnergy(); }
+      }
       else if(particleType==G4Positron::PositronDefinition())
-      { nPositron[i]++;
-        if(eMinPositron[i]>aTrack->GetKineticEnergy()) eMinPositron[i]=aTrack->GetKineticEnergy(); }
+      {
+        nPositron[i]++;
+        if(eMinPositron[i]>aTrack->GetKineticEnergy())
+        { eMinPositron[i]=aTrack->GetKineticEnergy(); }
+      }
     }
   }
   return fUrgent;
