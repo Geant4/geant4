@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTest.cc,v 1.5 2001-10-30 08:35:52 pia Exp $
+// $Id: G4ProcessTest.cc,v 1.6 2001-11-01 17:26:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -49,6 +49,9 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "SystemOfUnits.h"
+
+#include "G4TestAnalyser.hh"
+#include "G4AnalyserHandler.hh"
 
 G4ProcessTest::G4ProcessTest() : 
   process(0), ioni(0), brem(0), eProcessManager(0), gProcessManager(0), def(0)
@@ -220,6 +223,8 @@ void G4ProcessTest::postStepTest(const G4Track& track,
 	  partType = 3;
 	  nPhotons++;
 	}
+      G4TestAnalyser* analyser = (G4TestAnalyser*) G4AnalyserHandler::getInstance();
+      analyser->analyse();
       
       delete particleChange->GetSecondary(i);
     }

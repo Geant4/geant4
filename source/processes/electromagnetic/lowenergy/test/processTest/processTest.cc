@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: processTest.cc,v 1.6 2001-10-29 12:03:15 pia Exp $
+// $Id: processTest.cc,v 1.7 2001-11-01 17:26:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,11 +52,25 @@
 #include "G4ParticleDefinition.hh"
 #include "G4TestFactory.hh"
 
+#include "G4Analyser.hh"
+#include "G4TestAnalyser.hh"
+#include "G4AnalyserFactory.hh"
+#include "G4TestAnalyserFactory.hh"
+#include "G4AnalyserHandler.hh"
+
+
 #include "G4TestUI.hh"
 
 int main()
 {
-  // Setup
+
+  // Initialise the analysis
+  G4AnalyserFactory* analysisFactory = new G4TestAnalyserFactory();
+  G4Analyser* analyser = G4AnalyserHandler::getInstance(analysisFactory);
+  analyser->book();
+  //  G4Analyser* analyser2 = new G4TestAnalyser;
+
+  // Configuration of the test set-up
 
   G4MaterialSetup materialSetup;
   materialSetup.makeMaterials();
@@ -71,13 +85,16 @@ int main()
   G4TestSetup setup(material,definition,eMin,eMax);
   setup.makeGeometry();
 
+  // Configuration of the physics testing
+
   G4TestFactory testSelector;
   G4String type = ui.getProcessType();
   G4String category = ui.getProcessCategory();
   G4bool polarised = ui.getPolarisationSelection();
   G4ProcessTest* test = testSelector.createTestProcess(type,category,polarised);
   test->buildTables(category,polarised);
-  // DoIt test
+
+  // Testing
 
   G4int nIterations = ui.getNumberOfIterations();
   for (G4int iter=0; iter<nIterations; iter++)
@@ -88,6 +105,10 @@ int main()
       test->postStepTest(*track,*step);
     }
 
+  analyser->finish();
+
   G4cout << "End of the test" << G4endl;
 }
+
+
 

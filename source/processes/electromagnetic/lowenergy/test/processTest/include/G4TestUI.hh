@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestUI.hh,v 1.2 2001-10-29 09:28:54 pia Exp $
+// $Id: G4TestUI.hh,v 1.3 2001-11-01 17:26:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,20 +54,33 @@ class G4TestUI
   virtual ~G4TestUI();
   
   void configure();
+
   void selectNumberOfIterations();
+
   void selectMaterial(); 
+
   void selectProcess();
+
   void selectTestTopic();  
+
   void selectEnergyRange();
 
   G4int getNumberOfIterations() const;
+
   const G4Material* getSelectedMaterial() const;
+
   const G4String& getProcessType() const;
+
   const G4String& getProcessCategory() const;
+
   const G4String& getTestTopic() const ;
+
   G4bool getPolarisationSelection() const;
+
   G4ParticleDefinition* getParticleDefinition() const;
+
   G4double getMinEnergy() const { return eMin; }
+
   G4double getMaxEnergy() const { return eMax; }
   
  private:
