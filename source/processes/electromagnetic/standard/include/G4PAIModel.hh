@@ -84,12 +84,12 @@ public:
 
   G4bool IsInCharge(const G4ParticleDefinition*);
 
-  G4double ComputeDEDX(const G4Material*,
+  G4double ComputeDEDX(const G4MaterialCutsCouple*,
                        const G4ParticleDefinition*,
                              G4double kineticEnergy,
                              G4double cutEnergy);
 
-  G4double CrossSection(const G4Material*,
+  G4double CrossSection(const G4MaterialCutsCouple*,
                         const G4ParticleDefinition*,
                               G4double kineticEnergy,
                               G4double cutEnergy,
@@ -125,7 +125,11 @@ public:
   void     BuildPAIonisationTable(); 
   void     BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple);
   G4double GetdNdxCut( G4int iPlace, G4double transferCut);
-
+  G4double GetdEdxCut( G4int iPlace, G4double transferCut);
+  G4double GetPostStepTransfer( G4double scaledTkin );
+  G4double G4PAIModel::GetEnergyTransfer( G4int iPlace, 
+                                          G4double position, 
+					  G4int iTransfer );
 
 
 
@@ -147,11 +151,16 @@ private:
   static const G4double      fLowestKineticEnergy;
   static const G4double      fHighestKineticEnergy;
   static G4int               fTotBin;
+  static G4int               fMeanNumber;
   static G4PhysicsLogVector* fProtonEnergyVector ;
+
+
 
   // vectors 
   G4PhysicsTable*                    fPAItransferBank;
   std::vector<G4PhysicsTable*>       fPAIxscBank;
+  G4PhysicsTable*                    fPAIdEdxTable;
+  std::vector<G4PhysicsTable*>       fPAIdEdxBank;
   std::vector<G4MaterialCutsCouple*> fMaterialCutsCoupleVector;
   std::vector<const G4Region*>       fPAIRegionVector;
   size_t                             fMatIndex ;  
