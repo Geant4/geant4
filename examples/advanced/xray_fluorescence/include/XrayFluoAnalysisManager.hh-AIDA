@@ -56,9 +56,9 @@ public:
  
   virtual ~XrayFluoAnalysisManager();
   
-  void BeginOfRun();
+  void book();
   
-  void EndOfRun();
+  void finish();
   
   //fill histograms with data from XrayFluoSteppingAction
   void analyseStepping(const G4Step* aStep);
