@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2004-06-10 14:04:15 maire Exp $
+$Id: History,v 1.44 2004-06-16 15:52:14 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16-06-04 mma (testem5-V06-01-03)
+- print rms of projected angle at exit.
      
 10-06-04 mma (testem5-V06-01-02)
 - modify HistoManager and its Messenger in order to allow a multirun job.

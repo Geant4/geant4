@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.4 2004-06-10 14:04:17 maire Exp $
+// $Id: RunAction.cc,v 1.5 2004-06-16 15:52:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,8 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   TrakLenNeutral = TrakLenNeutral2 = 0.;
   nbStepsCharged = nbStepsCharged2 = 0.;
   nbStepsNeutral = nbStepsNeutral2 = 0.;
-  
+  MscProjecTheta = MscProjecTheta2 = 0.;
+   
   nbGamma = nbElect = nbPosit = 0;
   
   Transmit[0] = Transmit[1] = Reflect[0] = Reflect[1] = 0;
@@ -89,32 +90,28 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4int TotNbofEvents = aRun->GetNumberOfEvent();
   if (TotNbofEvents == 0) return;
   
-  EnergyDeposit /= TotNbofEvents;
-  G4double rmsEdep = EnergyDeposit2/TotNbofEvents - EnergyDeposit*EnergyDeposit;
+  EnergyDeposit /= TotNbofEvents; EnergyDeposit2 /= TotNbofEvents;
+  G4double rmsEdep = EnergyDeposit2 - EnergyDeposit*EnergyDeposit;
   if (rmsEdep>0.) rmsEdep = sqrt(rmsEdep/TotNbofEvents);
   else            rmsEdep = 0.;
   
-  TrakLenCharged /= TotNbofEvents;
-  G4double rmsTLCh = TrakLenCharged2/TotNbofEvents 
-                                                - TrakLenCharged*TrakLenCharged;
+  TrakLenCharged /= TotNbofEvents; TrakLenCharged2 /= TotNbofEvents;
+  G4double rmsTLCh = TrakLenCharged2 - TrakLenCharged*TrakLenCharged;
   if (rmsTLCh>0.) rmsTLCh = sqrt(rmsTLCh/TotNbofEvents);
   else            rmsTLCh = 0.;
  
-  TrakLenNeutral /= TotNbofEvents;
-  G4double rmsTLNe = TrakLenNeutral2/TotNbofEvents 
-                                                - TrakLenNeutral*TrakLenNeutral;
+  TrakLenNeutral /= TotNbofEvents; TrakLenNeutral2 /= TotNbofEvents;
+  G4double rmsTLNe = TrakLenNeutral2 - TrakLenNeutral*TrakLenNeutral;
   if (rmsTLNe>0.) rmsTLNe = sqrt(rmsTLNe/TotNbofEvents);
   else            rmsTLNe = 0.;
   
-  nbStepsCharged /= TotNbofEvents;
-  G4double rmsStCh = nbStepsCharged2/TotNbofEvents 
-                                                - nbStepsCharged*nbStepsCharged;
+  nbStepsCharged /= TotNbofEvents; nbStepsCharged2 /= TotNbofEvents;
+  G4double rmsStCh = nbStepsCharged2 - nbStepsCharged*nbStepsCharged;
   if (rmsStCh>0.) rmsStCh = sqrt(rmsTLCh/TotNbofEvents);
   else            rmsStCh = 0.;  
   
-  nbStepsNeutral /= TotNbofEvents;
-  G4double rmsStNe = nbStepsNeutral2/TotNbofEvents 
-                                                - nbStepsNeutral*nbStepsNeutral;
+  nbStepsNeutral /= TotNbofEvents; nbStepsNeutral2 /= TotNbofEvents;
+  G4double rmsStNe = nbStepsNeutral2 - nbStepsNeutral*nbStepsNeutral;
   if (rmsStNe>0.) rmsStNe = sqrt(rmsTLCh/TotNbofEvents);
   else            rmsStNe = 0.;
   
@@ -129,6 +126,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double reflect[2];
   reflect[0] = 100.*Reflect[0]/TotNbofEvents;
   reflect[1] = 100.*Reflect[1]/TotNbofEvents;
+  
+  G4double rmsMsc = 0.;
+  if (Transmit[1] > 0) {
+    MscProjecTheta /= (2*Transmit[1]); MscProjecTheta2 /= (2*Transmit[1]);
+    rmsMsc = MscProjecTheta2 - MscProjecTheta*MscProjecTheta;
+    if (rmsMsc > 0.) rmsMsc = sqrt(rmsMsc);
+  }
        
  G4cout << "\n ======================== run summary ======================\n"; 
 
@@ -172,7 +176,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	
  // compute width of the Gaussian central part of the MultipleScattering
  //
- G4cout << "\n MultipleScattering: theta0 Highland = "	
+ G4cout << "\n MultipleScattering: rms proj angle of transmit primary particl= " 
+        << rmsMsc/mrad << " mrad" << G4endl;
+	 
+ G4cout << " MultipleScattering: computed theta0 (Highland formula)        = "	
 	<< ComputeMscHighland()/mrad << " mrad" << G4endl;
 					
  G4cout.precision(prec);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.2 2004-02-19 18:18:51 maire Exp $
+// $Id: RunAction.hh,v 1.3 2004-06-16 15:52:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,6 +68,9 @@ class RunAction : public G4UserRunAction
     void AddTrakLenNeutr (G4double length)
                  {TrakLenNeutral += length; TrakLenNeutral2 += length*length;};
 		 
+    void AddMscProjTheta (G4double theta)
+                 {MscProjecTheta += theta;  MscProjecTheta2 += theta*theta;};
+		 		 
     void CountStepsCharg (G4int nSteps)
                  {nbStepsCharged += nSteps; nbStepsCharged2 += nSteps*nSteps;};
 		 
@@ -95,6 +98,7 @@ class RunAction : public G4UserRunAction
     G4double TrakLenNeutral, TrakLenNeutral2;
     G4double nbStepsCharged, nbStepsCharged2;
     G4double nbStepsNeutral, nbStepsNeutral2;
+    G4double MscProjecTheta, MscProjecTheta2;
     G4int    nbGamma, nbElect, nbPosit;
     G4int    Transmit[2],   Reflect[2];
     

@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: TrackingAction.cc,v 1.5 2004-04-29 13:55:12 maire Exp $
+// $Id: TrackingAction.cc,v 1.6 2004-06-16 15:52:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,7 +115,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     histoManager->GetHisto(id)->fill(theta/unit,weight*unit*unit); 
   }
     
-  //projected angle distribution at exit
+  //projected angles distribution at exit
   //
        if (transmit && charged) id =  6;
   else if (transmit && neutral) id = 10;
@@ -136,7 +136,15 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     histoManager->GetHisto(id)->fill(position.y()/unit);
     histoManager->GetHisto(id)->fill(position.z()/unit);    
   }  
-#endif    
+#endif
+
+  //compute projected angles of transmitted primary particle
+  // 
+  if (transmit && (flag == 2)) {
+  G4ThreeVector moment = aTrack->GetMomentum();
+  runaction->AddMscProjTheta(atan(moment.y()/abs(moment.x())));
+  runaction->AddMscProjTheta(atan(moment.z()/abs(moment.x())));  
+  }   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
