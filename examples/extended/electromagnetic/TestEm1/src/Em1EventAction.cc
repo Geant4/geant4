@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1EventAction.cc,v 1.2 1999-12-15 14:48:56 gunter Exp $
+// $Id: Em1EventAction.cc,v 1.3 2001-02-20 15:45:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,10 +47,21 @@ Em1EventAction::~Em1EventAction()
 void Em1EventAction::BeginOfEventAction(const G4Event* evt)
 {
  G4int evtNb = evt->GetEventID();
+ 
+ //printing survey
  if (evtNb%printModulo == 0) 
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-    
- TotalEnergyDeposit = 0.;}
+  
+ //save rndm status
+ if (Em1Run->GetRndmFreq() == 2)
+   { 
+    HepRandom::saveEngineStatus("beginOfEvent.rndm");   
+    if (evtNb%printModulo == 0) HepRandom::showEngineStatus();
+   }
+ 
+ //additional initializations            
+ TotalEnergyDeposit = 0.;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -73,18 +84,6 @@ void Em1EventAction::EndOfEventAction(const G4Event* evt)
                                trj->DrawTrajectory(50); 
       }
   }
-  
-  //save rndm status
-  if (Em1Run->GetRndmFreq() == 2)
-    { 
-     HepRandom::saveEngineStatus("endOfEvent.rndm");   
-     G4int evtNb = evt->GetEventID();
-     if (evtNb%printModulo == 0)
-       { 
-        G4cout << "\n---> End of Event: " << evtNb << G4endl;
-        HepRandom::showEngineStatus();
-       }
-    }     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
