@@ -24,3 +24,5 @@
 /gui/addButton vis Vis6 "/control/execute exN03Vis6.mac"
 #
 #
+/event/printModulo 100
+#
