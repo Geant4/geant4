@@ -1,4 +1,4 @@
-$Id: History,v 1.35 1999-06-01 14:56:39 stesting Exp $
+$Id: History,v 1.36 1999-06-02 07:48:17 stesting Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+2nd June 1999  John Allison
+- Changed more occurrences of := to = to fix crash of liblist at startup.
 
 1st June 1999  John Allison
 - Changed LDLIBS2 := to LDLIBS2 = in binmake.gmk.
