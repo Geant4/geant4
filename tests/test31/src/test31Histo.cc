@@ -62,6 +62,7 @@ test31Histo::test31Histo()
   hbookManager = 0;
   ntup = 0;
   nHisto = 1;
+  maxEnergy = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
