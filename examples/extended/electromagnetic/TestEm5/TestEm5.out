@@ -96,10 +96,32 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
-eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+ eIoni   Minimum Delta cut in range=0.1  mm.
+
+           material       min.delta energy(keV) 
+
+           Beryllium         104.76
+           Aluminium         125.07
+             Silicon         116.08
+         liquidArgon         78.381
+                Iron         224.11
+              Copper         238.31
+                Gold         334.59
+                Lead         229.67
+               Water         81.518
+                 Air        0.27455
+            XenonGas         1.7521
+         CarbonicGas        0.54205
+            ArgonCO2        0.41855
+         NewArgonCO2        0.41855
+            ArgonCH4        0.36851
+ XenonMethanePropane          1.547
+            Galactic           0.25
+
+eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
         gamma energies sampled according Heitler
@@ -108,51 +130,73 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuBrems:  theoretical cross section 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuPairProd:  theoretical cross sections 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+ hIoni    Minimum Delta cut in range=0.1  mm.
+
+           material        min.delta energy(keV) 
+
+           Beryllium         104.76
+           Aluminium         125.07
+             Silicon         116.08
+         liquidArgon         78.381
+                Iron         224.11
+              Copper         238.31
+                Gold         334.59
+                Lead         229.67
+               Water         81.518
+                 Air        0.27455
+            XenonGas         1.7521
+         CarbonicGas        0.54205
+            ArgonCO2        0.41855
+         NewArgonCO2        0.41855
+            ArgonCH4        0.36851
+ XenonMethanePropane          1.547
+            Galactic           0.25
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
 Cut in range                  1 mm            1 mm            1 mm            1 mm             
 Cut in energy
-          Beryllium        1.99 keV         466 keV        4.28 MeV        11.5 MeV            
-          Aluminium        6.89 keV         597 keV        5.02 MeV        13.1 MeV            
-            Silicon        6.89 keV         541 keV        4.72 MeV        12.2 MeV            
-        liquidArgon        6.18 keV         343 keV        3.24 MeV        8.32 MeV            
-               Iron        20.8 keV        1.28 MeV        8.52 MeV          22 MeV            
-             Copper        24.6 keV         1.4 MeV        8.95 MeV          23 MeV            
-               Gold         111 keV        2.28 MeV        11.7 MeV        29.2 MeV            
-               Lead         101 keV        1.38 MeV        8.52 MeV        20.9 MeV            
-              Water         2.9 keV         347 keV        3.39 MeV        8.95 MeV            
-                Air         990 eV          990 eV         48.4 keV        83.2 keV            
-           XenonGas         990 eV         1.75 keV        81.2 keV        91.9 keV            
-        CarbonicGas         990 eV          990 eV         67.5 keV         136 keV            
-           ArgonCO2         990 eV          990 eV         54.1 keV        73.6 keV            
-        NewArgonCO2         990 eV          990 eV         54.1 keV        75.4 keV            
-           ArgonCH4         990 eV          990 eV         49.6 keV        60.4 keV            
- XenonMethanePropane         990 eV         1.55 keV        78.3 keV         101 keV            
-           Galactic         990 eV          990 eV          990 eV          990 eV             
+          Beryllium        1.99 keV         468 keV        4.32 MeV        11.4 MeV            
+          Aluminium        6.91 keV         595 keV        5.04 MeV        13.2 MeV            
+            Silicon        6.88 keV         546 keV        4.71 MeV        12.2 MeV            
+        liquidArgon        6.15 keV         347 keV        3.24 MeV        8.31 MeV            
+               Iron        20.7 keV        1.29 MeV        8.48 MeV          22 MeV            
+             Copper        24.8 keV        1.39 MeV        8.98 MeV        23.1 MeV            
+               Gold         112 keV        2.29 MeV        11.8 MeV        29.3 MeV            
+               Lead         101 keV        1.36 MeV        8.48 MeV        20.9 MeV            
+              Water        2.93 keV         351 keV         3.4 MeV        8.98 MeV            
+                Air         250 eV          275 eV         48.8 keV        83.6 keV            
+           XenonGas         250 eV         1.75 keV        80.4 keV        93.8 keV            
+        CarbonicGas         250 eV          542 eV         67.6 keV         135 keV            
+           ArgonCO2         250 eV          419 eV         53.7 keV        74.5 keV            
+        NewArgonCO2         250 eV          419 eV         53.7 keV        74.5 keV            
+           ArgonCH4         250 eV          369 eV         49.7 keV        59.1 keV            
+ XenonMethanePropane         250 eV         1.55 keV        78.9 keV         101 keV            
+           Galactic         250 eV          250 eV          250 eV          250 eV             
 ===================================================
 #
 # Macro file for the initialization phase of "TestEm5.cc"
@@ -170,8 +214,8 @@ Cut in energy
 /calor/setAbsYZ    10 cm
 /calor/update
 
- The  WORLD   is made of 31 mum of Galactic. The transverse size (YZ) of the world is 12 cm 
- The ABSORBER is made of 20 mum of Silicon. The transverse size (YZ) is 10 cm 
+ The  WORLD   is made of 30.75 mum of Galactic. The transverse size (YZ) of the world is 12 cm 
+ The ABSORBER is made of 20.5 mum of Silicon. The transverse size (YZ) is 10 cm 
  X position of the middle of the absorber 0 fm 
 /gun/setDefault
 #
@@ -199,25 +243,47 @@ phot:  Total cross sections from a parametrisation. Good description from 10 KeV
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
         Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
-        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+ eIoni   Minimum Delta cut in range=0.0007  mm.
+
+           material       min.delta energy(keV) 
+
+           Beryllium          6.226
+           Aluminium         6.8788
+             Silicon         6.3418
+         liquidArgon         4.0987
+                Iron         11.402
+              Copper         11.941
+                Gold         14.391
+                Lead         9.9278
+               Water         3.9978
+                 Air           0.25
+            XenonGas           0.25
+         CarbonicGas           0.25
+            ArgonCO2           0.25
+         NewArgonCO2           0.25
+            ArgonCH4           0.25
+ XenonMethanePropane           0.25
+            Galactic           0.25
+
+eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
         gamma energies sampled according Heitler
@@ -226,51 +292,73 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuBrems:  theoretical cross section 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuPairProd:  theoretical cross sections 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+ hIoni    Minimum Delta cut in range=0.0007  mm.
+
+           material        min.delta energy(keV) 
+
+           Beryllium          6.226
+           Aluminium         6.8788
+             Silicon         6.3418
+         liquidArgon         4.0987
+                Iron         11.402
+              Copper         11.941
+                Gold         14.391
+                Lead         9.9278
+               Water         3.9978
+                 Air           0.25
+            XenonGas           0.25
+         CarbonicGas           0.25
+            ArgonCO2           0.25
+         NewArgonCO2           0.25
+            ArgonCH4           0.25
+ XenonMethanePropane           0.25
+            Galactic           0.25
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
 Cut in range               2.13 mm            7 mum           1 mm            1 mm             
 Cut in energy
-          Beryllium        2.45 keV        7.99 keV        4.28 MeV        11.5 MeV            
-          Aluminium        9.84 keV        11.8 keV        5.02 MeV        13.1 MeV            
-            Silicon        9.94 keV        10.1 keV        4.72 MeV        12.2 MeV            
-        liquidArgon        8.91 keV        4.82 keV        3.24 MeV        8.32 MeV            
-               Iron        30.6 keV        47.2 keV        8.52 MeV          22 MeV            
-             Copper          37 keV        49.6 keV        8.95 MeV          23 MeV            
-               Gold         146 keV        65.1 keV        11.7 MeV        29.2 MeV            
-               Lead         123 keV        46.7 keV        8.52 MeV        20.9 MeV            
-              Water        3.99 keV        4.01 keV        3.39 MeV        8.95 MeV            
-                Air         990 eV          990 eV         48.4 keV        83.2 keV            
-           XenonGas         990 eV          990 eV         81.2 keV        91.9 keV            
-        CarbonicGas         990 eV          990 eV         67.5 keV         136 keV            
-           ArgonCO2         990 eV          990 eV         54.1 keV        73.6 keV            
-        NewArgonCO2         990 eV          990 eV         54.1 keV        75.4 keV            
-           ArgonCH4         990 eV          990 eV         49.6 keV        60.4 keV            
- XenonMethanePropane         990 eV          990 eV         78.3 keV         101 keV            
-           Galactic         990 eV          990 eV          990 eV          990 eV             
+          Beryllium        2.47 keV        8.08 keV        4.32 MeV        11.4 MeV            
+          Aluminium        9.83 keV        11.9 keV        5.04 MeV        13.2 MeV            
+            Silicon        9.89 keV        10.2 keV        4.71 MeV        12.2 MeV            
+        liquidArgon        8.97 keV        4.88 keV        3.24 MeV        8.31 MeV            
+               Iron        30.6 keV        47.4 keV        8.48 MeV          22 MeV            
+             Copper        37.1 keV        49.7 keV        8.98 MeV        23.1 MeV            
+               Gold         146 keV        65.1 keV        11.8 MeV        29.3 MeV            
+               Lead         123 keV        46.9 keV        8.48 MeV        20.9 MeV            
+              Water        4.03 keV           4 keV         3.4 MeV        8.98 MeV            
+                Air         250 eV          250 eV         48.8 keV        83.6 keV            
+           XenonGas         250 eV          250 eV         80.4 keV        93.8 keV            
+        CarbonicGas         250 eV          250 eV         67.6 keV         135 keV            
+           ArgonCO2         250 eV          250 eV         53.7 keV        74.5 keV            
+        NewArgonCO2         250 eV          250 eV         53.7 keV        74.5 keV            
+           ArgonCH4         250 eV          250 eV         49.7 keV        59.1 keV            
+ XenonMethanePropane         250 eV          250 eV         78.9 keV         101 keV            
+           Galactic         250 eV          250 eV          250 eV          250 eV             
 ===================================================
 #
 /gun/particle pi+ 
@@ -310,99 +398,99 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=2.4e+02s Real=2.6e+02s Sys=14s
+  User=242.39s Real=259.71s Sys=14.95s
  ================== run summary =====================
  end of Run TotNbofEvents = 100000
-    mean charged track length   in absorber=0.0210944 +- 1.73468e-05  mm  
+    mean charged track length   in absorber=0.0209265 +- 1.37984e-05  mm  
 
-            mean energy deposit in absorber=0.00681689 +- 2.25504e-05  MeV 
+            mean energy deposit in absorber=0.00675313 +- 2.06813e-05  MeV 
 
- mean number of steps in absorber (charged) =0.04 +- 0.000720833      
- mean number of steps in absorber (neutral) =2e-05 +- 1.4142e-05      
+ mean number of steps in absorber (charged) =0.03886 +- 0.000710985      
+ mean number of steps in absorber (neutral) =0 +- 0      
 
-   mean number of charged secondaries = 0.03739 +- 0.000633814
+   mean number of charged secondaries = 0.03646 +- 0.000624425
 
-   mean number of neutral secondaries = 2e-05 +- 1.4142e-05
+   mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.03739  and e+s =0
+   mean number of e-s =0.03646  and e+s =0
 
-(number) transmission coeff=1  reflection coeff=0.49969
+(number) transmission coeff=1  reflection coeff=0.49894
 
  energy deposit distribution 
-#entries=100000    #underflows=0    #overflows=5899
+#entries=100000    #underflows=0    #overflows=5844
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1    0.0002           0           0
     2    0.0004           0           0
     3    0.0006           0           0
-    4    0.0008           0           0
+    4    0.0008           1        0.05
     5     0.001           2         0.1
-    6    0.0012           5        0.25
-    7    0.0014          18         0.9
-    8    0.0016          48         2.4
-    9    0.0018         105        5.25
-   10     0.002         248        12.4
-   11    0.0022         431       21.55
-   12    0.0024         787       39.35
-   13    0.0026        1209       60.45
-   14    0.0028        1834        91.7
-   15     0.003        2398       119.9
-   16    0.0032        3152       157.6
-   17    0.0034        3809      190.45
-   18    0.0036        4277      213.85
-   19    0.0038        4583      229.15
-   20     0.004        4831      241.55
-   21    0.0042        4745      237.25
-   22    0.0044        4640         232
-   23    0.0046        4328       216.4
-   24    0.0048        4191      209.55
-   25     0.005        3651      182.55
-   26    0.0052        3552       177.6
-   27    0.0054        3176       158.8
-   28    0.0056        2933      146.65
-   29    0.0058        2689      134.45
-   30     0.006        2538       126.9
-   31    0.0062        2324       116.2
-   32    0.0064        2116       105.8
-   33    0.0066        1981       99.05
-   34    0.0068        1805       90.25
-   35     0.007        1858        92.9
-   36    0.0072        1679       83.95
-   37    0.0074        1531       76.55
-   38    0.0076        1414        70.7
-   39    0.0078        1335       66.75
-   40     0.008        1254        62.7
-   41    0.0082        1136        56.8
-   42    0.0084        1004        50.2
-   43    0.0086         957       47.85
-   44    0.0088         858        42.9
-   45     0.009         805       40.25
-   46    0.0092         743       37.15
-   47    0.0094         683       34.15
-   48    0.0096         655       32.75
-   49    0.0098         574        28.7
-   50      0.01         512        25.6
-   51    0.0102         515       25.75
-   52    0.0104         435       21.75
-   53    0.0106         427       21.35
-   54    0.0108         378        18.9
-   55     0.011         406        20.3
-   56    0.0112         369       18.45
-   57    0.0114         300          15
+    6    0.0012           6         0.3
+    7    0.0014          19        0.95
+    8    0.0016          57        2.85
+    9    0.0018         120           6
+   10     0.002         237       11.85
+   11    0.0022         417       20.85
+   12    0.0024         766        38.3
+   13    0.0026        1182        59.1
+   14    0.0028        1809       90.45
+   15     0.003        2458       122.9
+   16    0.0032        3111      155.55
+   17    0.0034        3716       185.8
+   18    0.0036        4281      214.05
+   19    0.0038        4566       228.3
+   20     0.004        4753      237.65
+   21    0.0042        4709      235.45
+   22    0.0044        4637      231.85
+   23    0.0046        4359      217.95
+   24    0.0048        4166       208.3
+   25     0.005        3758       187.9
+   26    0.0052        3518       175.9
+   27    0.0054        3163      158.15
+   28    0.0056        3008       150.4
+   29    0.0058        2749      137.45
+   30     0.006        2525      126.25
+   31    0.0062        2355      117.75
+   32    0.0064        2151      107.55
+   33    0.0066        1966        98.3
+   34    0.0068        1854        92.7
+   35     0.007        1789       89.45
+   36    0.0072        1684        84.2
+   37    0.0074        1548        77.4
+   38    0.0076        1408        70.4
+   39    0.0078        1338        66.9
+   40     0.008        1155       57.75
+   41    0.0082        1138        56.9
+   42    0.0084        1019       50.95
+   43    0.0086         978        48.9
+   44    0.0088         842        42.1
+   45     0.009         809       40.45
+   46    0.0092         727       36.35
+   47    0.0094         667       33.35
+   48    0.0096         658        32.9
+   49    0.0098         579       28.95
+   50      0.01         531       26.55
+   51    0.0102         550        27.5
+   52    0.0104         483       24.15
+   53    0.0106         430        21.5
+   54    0.0108         403       20.15
+   55     0.011         401       20.05
+   56    0.0112         386        19.3
+   57    0.0114         320          16
    58    0.0116         313       15.65
-   59    0.0118         303       15.15
-   60     0.012         289       14.45
-   61    0.0122         262        13.1
-   62    0.0124         245       12.25
-   63    0.0126         252        12.6
-   64    0.0128         203       10.15
+   59    0.0118         307       15.35
+   60     0.012         285       14.25
+   61    0.0122         271       13.55
+   62    0.0124         260          13
+   63    0.0126         231       11.55
+   64    0.0128         227       11.35
 
- Emp =           0.004   width=         0.0028  MeV 
+ Emp =           0.004   width=          0.003  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1883957036, 601595911
+ Current couple of seeds = 1546919864, 265575626
 ----------------------------------------
 #
 
