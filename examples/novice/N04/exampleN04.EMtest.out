@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (13-Dec-2002)
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -23,53 +23,8 @@ Current available graphics systems are:
 
 You are using the ExN04HadronPhysics
  - Note that this hadronic physics list is not optimized for any particular usage
- - If you which to have a starting point tailorer for particular area of work,
-   please visit the physics list WWW pages available from the geant4 home page.
-
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : Yes
- Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : Yes
- Material : Lead
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : Yes     recalculation needed : Yes
- Material : ArgonGas
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 3     used in the geometry : Yes     recalculation needed : Yes
- Material : Silicon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 4     used in the geometry : Yes     recalculation needed : Yes
- Material : Scintillator
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 5     used in the geometry : No      recalculation needed : Yes
- Material : dummyMat
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-====================================================================
+ - If you wish to have a starting point tailored for a particular area of work,
+   please one of the available physics lists by use-case.
 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
@@ -88,7 +43,8 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -107,6 +63,7 @@ hIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -130,118 +87,28 @@ msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
         PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 100.511 keV    e- 1.37814 MeV    e+ 1.28002 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : ArgonGas
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 540.718 keV    e+ 521.113 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 4     used in the geometry : Yes     recalculation needed : No 
- Material : Scintillator
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.36895 keV    e- 355.791 keV    e+ 347.138 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : dummyMat
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 589.38 keV    e+ 575.046 keV
-
-====================================================================
-
 ### Run 0 start.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     5 hits are stored in ExN04TrackerHitsCollection.
-     6 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.289532 (GeV)
+     6 hits are stored in ExN04TrackerHitsCollection.
+     5 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.228711 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 100.511 keV    e- 1.37814 MeV    e+ 1.28002 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : ArgonGas
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 540.718 keV    e+ 521.113 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 4     used in the geometry : Yes     recalculation needed : No 
- Material : Scintillator
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.36895 keV    e- 355.791 keV    e+ 347.138 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : dummyMat
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 589.38 keV    e+ 575.046 keV
-
-====================================================================
-
 ### Run 1 start.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     6 hits are stored in ExN04TrackerHitsCollection.
-     28 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 7.81344 (GeV)
+     12 hits are stored in ExN04TrackerHitsCollection.
+     34 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.49873 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 1
-     5 hits are stored in ExN04TrackerHitsCollection.
-     59 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 32.7724 (GeV)
+     16 hits are stored in ExN04TrackerHitsCollection.
+     19 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.79524 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -1,12 +1,12 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (13-Dec-2002)
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
-G4Material: Mean excitation energy is changed for CsI Iold= 491.166eV; Inew= 415.689 eV;
+G4Material: Mean excitation energy is changed for CsI Iold= 491.166eV; Inew= 553.1 eV;
 
-***** Table : Nb of materials = 22 *****
+***** Table : Nb of materials = 23 *****
 
  Material: liquidH2     density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.905 m  
    --->  Element: liquidH2      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -59,6 +59,11 @@ G4Material: Mean excitation energy is changed for CsI Iold= 491.166eV; Inew= 415
  Material:      CsI     density:  4.534 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.850 cm 
    --->  Element:   Cesium Cs   Z = 55.0   N = 132.9   A = 132.90 g/mole  fractionMass:  51.15 %  Abundance  50.00 %
    --->  Element:   Iodine  I   Z = 53.0   N = 126.9   A = 126.90 g/mole  fractionMass:  48.85 %  Abundance  50.00 %
+
+ Material:      BGO     density:  7.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm 
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.41 %  Abundance  63.16 %
+   --->  Element: Germanium Ge   Z = 32.0   N =  72.6   A =  72.59 g/mole  fractionMass:  17.48 %  Abundance  15.79 %
+   --->  Element:  Bismuth Bi   Z = 83.0   N = 209.0   A = 208.98 g/mole  fractionMass:  67.10 %  Abundance  21.05 %
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
@@ -124,127 +129,12 @@ physicsList->Construct() start.
 phot:  Total cross sections from Sandia parametrisation. 
 physicsList->setCut() start.
 Em3PhysicsList::SetCuts:CutLength : 1 mm 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : Yes
- Material : liquidH2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 1     used in the geometry : No      recalculation needed : Yes
- Material : Aluminium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 2     used in the geometry : Yes     recalculation needed : Yes
- Material : liquidArgon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 3     used in the geometry : No      recalculation needed : Yes
- Material : Iron
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 4     used in the geometry : No      recalculation needed : Yes
- Material : Copper
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 5     used in the geometry : No      recalculation needed : Yes
- Material : Tungsten
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 6     used in the geometry : No      recalculation needed : Yes
- Material : Gold
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 7     used in the geometry : Yes     recalculation needed : Yes
- Material : Lead
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : Yes
- Material : Uranium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 9     used in the geometry : No      recalculation needed : Yes
- Material : Water
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 10     used in the geometry : No      recalculation needed : Yes
- Material : Scintillator
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 11     used in the geometry : No      recalculation needed : Yes
- Material : Silicium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 12     used in the geometry : No      recalculation needed : Yes
- Material : quartz
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 13     used in the geometry : No      recalculation needed : Yes
- Material : NemaG10
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 14     used in the geometry : No      recalculation needed : Yes
- Material : CsI
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 15     used in the geometry : No      recalculation needed : Yes
- Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 16     used in the geometry : No      recalculation needed : Yes
- Material : Air20
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 17     used in the geometry : No      recalculation needed : Yes
- Material : Aerogel
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 18     used in the geometry : No      recalculation needed : Yes
- Material : CarbonicGas
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 19     used in the geometry : No      recalculation needed : Yes
- Material : WaterSteam
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 20     used in the geometry : Yes     recalculation needed : Yes
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 21     used in the geometry : No      recalculation needed : Yes
- Material : Beam
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-====================================================================
-
+#
+/testem/event/printModulo 50
+#
+/gun/particle e-
+/gun/energy 1 GeV
+/run/beamOn 100
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -261,7 +151,8 @@ msc:   Tables of transport mean free paths.
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -282,6 +173,7 @@ hIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -301,36 +193,21 @@ MuPairProd:  theoretical cross sections
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range            1 mm            1 mm            1 mm 
-            Galactic         990 eV          990 eV          990 eV 
-                Lead         101 keV        1.38 MeV        1.28 MeV
-         liquidArgon        6.18 keV         343 keV         335 keV
-=======================================================================
-
-#
-/testem/event/printModulo 50
-#
-/gun/particle e-
-/gun/energy 1 GeV
-/run/beamOn 100
-
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : liquidH2
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 107.795 keV    e+ 106.476 keV
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
+ Energy thresholds :  gamma 100.511 keV    e- 1.37814 MeV    e+ 1.28002 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : liquidArgon
@@ -339,119 +216,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 20.8323 keV    e- 1.28002 MeV    e+ 1.21851 MeV
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 24.6072 keV    e- 1.39521 MeV    e+ 1.31192 MeV
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Tungsten
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 105.401 keV    e- 2.31122 MeV    e+ 2.14666 MeV
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 111.408 keV    e- 2.28294 MeV    e+ 2.1204 MeV
-
-Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 100.511 keV    e- 1.37814 MeV    e+ 1.28002 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 125.723 keV    e- 2.1204 MeV    e+ 1.96942 MeV
-
-Index : 9     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.90186 keV    e- 347.138 keV    e+ 338.695 keV
-
-Index : 10     used in the geometry : No      recalculation needed : No 
- Material : Scintillator
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.36895 keV    e- 355.791 keV    e+ 347.138 keV
-
-Index : 11     used in the geometry : No      recalculation needed : No 
- Material : Silicium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 540.718 keV    e+ 521.113 keV
-
-Index : 12     used in the geometry : No      recalculation needed : No 
- Material : quartz
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 5.51637 keV    e- 534.102 keV    e+ 514.737 keV
-
-Index : 13     used in the geometry : No      recalculation needed : No 
- Material : NemaG10
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 4.18113 keV    e- 466.46 keV    e+ 449.547 keV
-
-Index : 14     used in the geometry : No      recalculation needed : No 
- Material : CsI
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 38.4052 keV    e- 691.669 keV    e+ 658.435 keV
-
-Index : 15     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 16     used in the geometry : No      recalculation needed : No 
- Material : Air20
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 17     used in the geometry : No      recalculation needed : No 
- Material : Aerogel
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 1.70631 keV    e- 118.951 keV    e+ 116.058 keV
-
-Index : 18     used in the geometry : No      recalculation needed : No 
- Material : CarbonicGas
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 36.4853 keV    e+ 36.0389 keV
-
-Index : 19     used in the geometry : No      recalculation needed : No 
- Material : WaterSteam
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 20     used in the geometry : Yes     recalculation needed : No 
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 21     used in the geometry : No      recalculation needed : No 
- Material : Beam
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
 ====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range            1 mm            1 mm            1 mm 
-            Galactic         990 eV          990 eV          990 eV 
-                Lead         101 keV        1.38 MeV        1.28 MeV
-         liquidArgon        6.18 keV         343 keV         335 keV
-=======================================================================
 
 ### Run 0 start.
 
@@ -484,19 +249,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=40.5s Real=50.11s Sys=7.81s
+  User=40.4s Real=81.35s Sys=7.73s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (        Lead) : 815.44 MeV +- 15.68 MeV       56.47 cm  +-  1.19 cm 
- Absorber1 ( liquidArgon) : 172.48 MeV +- 13.13 MeV       85.19 cm  +-  6.68 cm 
+ Absorber0 (        Lead) : 814.21 MeV +- 14.84 MeV       56.35 cm  +-  1.16 cm 
+ Absorber1 ( liquidArgon) : 173.44 MeV +- 12.26 MeV       85.79 cm  +-  6.20 cm 
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 70197102, 1487785703
+ Current couple of seeds = 1971361462, 1401170872
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

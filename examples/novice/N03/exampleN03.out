@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (13-Dec-2002)
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -80,82 +80,6 @@ Current available graphics systems are:
 phot:  Total cross sections from Sandia parametrisation. 
 ExN03PhysicsList::SetCuts:CutLength : 1 mm 
 
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : Yes
- Material : Aluminium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 1     used in the geometry : Yes     recalculation needed : Yes
- Material : liquidArgon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : Yes     recalculation needed : Yes
- Material : Lead
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 3     used in the geometry : No      recalculation needed : Yes
- Material : Water
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 4     used in the geometry : No      recalculation needed : Yes
- Material : Scintillator
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 5     used in the geometry : No      recalculation needed : Yes
- Material : Mylar
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 6     used in the geometry : No      recalculation needed : Yes
- Material : quartz
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 7     used in the geometry : No      recalculation needed : Yes
- Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 8     used in the geometry : No      recalculation needed : Yes
- Material : Aerogel
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 9     used in the geometry : No      recalculation needed : Yes
- Material : CarbonicGas
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 10     used in the geometry : No      recalculation needed : Yes
- Material : WaterSteam
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 11     used in the geometry : Yes     recalculation needed : Yes
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 12     used in the geometry : No      recalculation needed : Yes
- Material : Beam
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-====================================================================
-
-
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
@@ -171,7 +95,8 @@ msc:   Tables of transport mean free paths.
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -187,6 +112,7 @@ hIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -211,106 +137,30 @@ MuPairProd:  theoretical cross sections
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range            1 mm            1 mm            1 mm 
-            Galactic         990 eV          990 eV          990 eV 
-                Lead         101 keV        1.38 MeV        1.28 MeV
-         liquidArgon        6.18 keV         343 keV         335 keV
-=======================================================================
-
-
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.17835 keV    e- 342.891 keV    e+ 334.551 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 100.511 keV    e- 1.37814 MeV    e+ 1.28002 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.90186 keV    e- 347.138 keV    e+ 338.695 keV
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Scintillator
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.36895 keV    e- 355.791 keV    e+ 347.138 keV
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Mylar
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.97898 keV    e- 417.539 keV    e+ 402.4 keV
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : quartz
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 5.51637 keV    e- 534.102 keV    e+ 514.737 keV
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Aerogel
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 1.70631 keV    e- 118.951 keV    e+ 116.058 keV
-
-Index : 9     used in the geometry : No      recalculation needed : No 
- Material : CarbonicGas
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 36.4853 keV    e+ 36.0389 keV
-
-Index : 10     used in the geometry : No      recalculation needed : No 
- Material : WaterSteam
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 11     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 12     used in the geometry : No      recalculation needed : No 
- Material : Beam
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Energy thresholds :  gamma 100.511 keV    e- 1.37814 MeV    e+ 1.28002 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 6.17835 keV    e- 342.891 keV    e+ 334.551 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
 ====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range            1 mm            1 mm            1 mm 
-            Galactic         990 eV          990 eV          990 eV 
-                Lead         101 keV        1.38 MeV        1.28 MeV
-         liquidArgon        6.18 keV         343 keV         335 keV
-=======================================================================
 
 ### Run 0 start.
 
@@ -329,95 +179,6 @@ Threshold in range            1 mm            1 mm            1 mm
               eBrem,            annihil,               conv,              compt
                phot,             MuIoni,            MuBrems,         MuPairProd
               Decay
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.17835 keV    e- 342.891 keV    e+ 334.551 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 100.511 keV    e- 1.37814 MeV    e+ 1.28002 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.90186 keV    e- 347.138 keV    e+ 338.695 keV
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Scintillator
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.36895 keV    e- 355.791 keV    e+ 347.138 keV
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Mylar
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.97898 keV    e- 417.539 keV    e+ 402.4 keV
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : quartz
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 5.51637 keV    e- 534.102 keV    e+ 514.737 keV
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Aerogel
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 1.70631 keV    e- 118.951 keV    e+ 116.058 keV
-
-Index : 9     used in the geometry : No      recalculation needed : No 
- Material : CarbonicGas
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 36.4853 keV    e+ 36.0389 keV
-
-Index : 10     used in the geometry : No      recalculation needed : No 
- Material : WaterSteam
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 11     used in the geometry : Yes     recalculation needed : No 
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 12     used in the geometry : No      recalculation needed : No 
- Material : Beam
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range            1 mm            1 mm            1 mm 
-            Galactic         990 eV          990 eV          990 eV 
-                Lead         101 keV        1.38 MeV        1.28 MeV
-         liquidArgon        6.18 keV         343 keV         335 keV
-=======================================================================
-
 ### Run 1 start.
 
 ---> Begin of event: 0
@@ -444,94 +205,62 @@ Threshold in range            1 mm            1 mm            1 mm
 ---> The calorimeter is 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
 ------------------------------------------------------------
 
-========= Table of registered couples ==============================
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.17835 keV    e- 342.891 keV    e+ 334.551 keV
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 100.511 keV    e- 1.37814 MeV    e+ 1.28002 MeV
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.90186 keV    e- 347.138 keV    e+ 338.695 keV
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Scintillator
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.36895 keV    e- 355.791 keV    e+ 347.138 keV
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Mylar
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.97898 keV    e- 417.539 keV    e+ 402.4 keV
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : quartz
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 5.51637 keV    e- 534.102 keV    e+ 514.737 keV
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
-Index : 8     used in the geometry : Yes     recalculation needed : No 
- Material : Aerogel
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 1.70631 keV    e- 118.951 keV    e+ 116.058 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
-Index : 9     used in the geometry : No      recalculation needed : No 
- Material : CarbonicGas
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 36.4853 keV    e+ 36.0389 keV
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
-Index : 10     used in the geometry : No      recalculation needed : No 
- Material : WaterSteam
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 11     used in the geometry : Yes     recalculation needed : No 
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 12     used in the geometry : No      recalculation needed : No 
- Material : Beam
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range            1 mm            1 mm            1 mm 
-            Galactic         990 eV          990 eV          990 eV 
-           Aluminium        6.89 keV         597 keV         568 keV
-             Aerogel        1.71 keV         119 keV         116 keV
-=======================================================================
-
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 ### Run 2 start.
 
 ---> Begin of event: 0

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (13-Dec-2002)
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -134,187 +134,18 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 6.41 s
+total time for build X-ray TR tables = 6.38 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em8PhysicsList::SetCuts:CutLength : 1 mm 
 
 total time(SetCuts)=0 s 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : Yes
- Material : Aluminium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : Yes
- Material : Mylar
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : Yes
- Material : Polypropelene
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 3     used in the geometry : No      recalculation needed : Yes
- Material : Kr
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 4     used in the geometry : No      recalculation needed : Yes
- Material : Argon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 5     used in the geometry : No      recalculation needed : Yes
- Material : N2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 6     used in the geometry : No      recalculation needed : Yes
- Material : O2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 7     used in the geometry : Yes     recalculation needed : Yes
- Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : Yes
- Material : Xenon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 9     used in the geometry : No      recalculation needed : Yes
- Material : CO2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 10     used in the geometry : No      recalculation needed : Yes
- Material : Xe20CO2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-Index : 11     used in the geometry : Yes     recalculation needed : Yes
- Material : Kr20CO2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
-
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
-
-eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
-        delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-
-eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
- Good description from 1 KeV to 100 GeV.
-        log scale extrapolation above 100 GeV 
-        Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-
-hIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 #
 #control/saveHistory
 #
 /run/verbose 2
 #
 /run/initialize
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Mylar
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 3.48153 keV    e- 540.718 keV    e+ 527.568 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Polypropelene
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.74947 keV    e- 502.219 keV    e+ 484.009 keV
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : Kr
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 1.07368 keV    e+ 1.06054 keV
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Argon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : N2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : O2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Xenon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 1.94906 keV    e+ 1.92521 keV
-
-Index : 9     used in the geometry : No      recalculation needed : No 
- Material : CO2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 10     used in the geometry : No      recalculation needed : No 
- Material : Xe20CO2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 1.67154 keV    e+ 1.65109 keV
-
-Index : 11     used in the geometry : Yes     recalculation needed : No 
- Material : Kr20CO2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 1.08802 keV    e+ 1.07471 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 #
 #/calor/setAbsMat Xenon
 #  
@@ -339,79 +170,6 @@ Index : 11     used in the geometry : Yes     recalculation needed : No
 #/calor/cutE 3.0 mm
 #
 /run/initialize
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Mylar
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 3.48153 keV    e- 540.718 keV    e+ 527.568 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Polypropelene
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.74947 keV    e- 502.219 keV    e+ 484.009 keV
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : Kr
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 1.07368 keV    e+ 1.06054 keV
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Argon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : N2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : O2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Xenon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 1.94906 keV    e+ 1.92521 keV
-
-Index : 9     used in the geometry : No      recalculation needed : No 
- Material : CO2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 10     used in the geometry : No      recalculation needed : No 
- Material : Xe20CO2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 1.67154 keV    e+ 1.65109 keV
-
-Index : 11     used in the geometry : Yes     recalculation needed : No 
- Material : Kr20CO2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 1.08802 keV    e+ 1.07471 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 /run/particle/dumpCutValues
 #
 /gun/particle e-
@@ -424,12 +182,37 @@ Index : 11     used in the geometry : Yes     recalculation needed : No
 #
 /run/beamOn 1000
 
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
+ Material : Air
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -440,54 +223,14 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Polypropelene
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.74947 keV    e- 502.219 keV    e+ 484.009 keV
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : Kr
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 1.07368 keV    e+ 1.06054 keV
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Argon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : N2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : O2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Xenon
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 1.94906 keV    e+ 1.92521 keV
-
-Index : 9     used in the geometry : No      recalculation needed : No 
- Material : CO2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-Index : 10     used in the geometry : No      recalculation needed : No 
- Material : Xe20CO2
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 1.67154 keV    e+ 1.65109 keV
-
-Index : 11     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Kr20CO2
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
  Energy thresholds :  gamma 990 eV     e- 1.08802 keV    e+ 1.07471 keV
@@ -495,20 +238,6 @@ Index : 11     used in the geometry : Yes     recalculation needed : No
     DefaultRegionForTheWorld
 
 ====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range            1 mm            1 mm            1 mm 
-                 Air         990 eV          990 eV          990 eV 
-               Mylar        3.48 keV         541 keV         528 keV
-           Aluminium        6.89 keV         597 keV         568 keV
-             Kr20CO2         990 eV         1.09 keV        1.07 keV
-=======================================================================
 
 ### Run 0 start.
 
@@ -520,47 +249,47 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   11 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.01            0k World
+       0.00         0.00         0.00            0k World
        0.00         0.00         0.00           11k Radiator
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       96.00         11k         1      305        376         0.00    Radiator
-       4.00          0k         3        7         20         0.01    World
+       4.00          0k         3        7         20         0.00    World
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=124.29s Real=126.25s Sys=1.14s
+  User=106.81s Real=109.72s Sys=1.57s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=162.79 +- 4.11509  mm  
+    mean charged track length   in absorber=156.819 +- 4.20413  mm  
 
-            mean energy deposit in absorber=0.103834 +- 0.00108514  MeV 
+            mean energy deposit in absorber=0.0761217 +- 0.000931675  MeV 
 
- mean number of steps in absorber (charged) =434.158 +- 2.12389      
- mean number of steps in absorber (neutral) =5.199 +- 0.0735894      
+ mean number of steps in absorber (charged) =216.168 +- 0.573435      
+ mean number of steps in absorber (neutral) =5.143 +- 0.0734884      
 
-   mean number of charged secondaries = 1.554 +- 0.0383808
+   mean number of charged secondaries = 1.446 +- 0.0383547
 
-   mean number of neutral secondaries = 0.042 +- 0.00665101
+   mean number of neutral secondaries = 0.028 +- 0.0052169
 
-   mean number of e-s =1.554  and e+s =0
+   mean number of e-s =1.446  and e+s =0
 
-(number) transmission coeff=0.691  reflection coeff=0.034
+(number) transmission coeff=0.652  reflection coeff=0.039
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 756146621, 1911909952
+ Current couple of seeds = 48134664, 1729658316
 ----------------------------------------
 #
 #

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (13-Dec-2002)
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -35,6 +35,20 @@ Current available graphics systems are:
 
  The Box is 500 m   of Iron
 PhysicsList::SetCuts:CutLength : 1 km 
+#
+/testem/det/setMat Iron
+/testem/det/setSize 500 m
+/testem/det/update
+
+ The Box is 500 m   of Iron
+#
+/gun/particle gamma
+/gun/energy 100 TeV
+#
+/run/verbose 2
+/tracking/verbose 1
+#
+/run/beamOn 5
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1e+06 (mm)]   is too big  
 The cut in energy is set1.79769e+305GeV 
@@ -44,46 +58,6 @@ The cut in energy is set1.79769e+305GeV
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
 The cut in range [1e+06 (mm)]   is too big  
 The cut in energy is set1.79769e+305GeV 
-G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1e+06 (mm)]   is too big  
-The cut in energy is set1.79769e+305GeV 
-G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e-
-The cut in range [1e+06 (mm)]   is too big  
-The cut in energy is set1.79769e+305GeV 
-G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
-The cut in range [1e+06 (mm)]   is too big  
-The cut in energy is set1.79769e+305GeV 
-G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1e+06 (mm)]   is too big  
-The cut in energy is set1.79769e+305GeV 
-G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e-
-The cut in range [1e+06 (mm)]   is too big  
-The cut in energy is set1.79769e+305GeV 
-G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
-The cut in range [1e+06 (mm)]   is too big  
-The cut in energy is set1.79769e+305GeV 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : Yes
- Material : Beryllium
- Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
- Energy thresholds :  is not ready to print
-
-Index : 1     used in the geometry : No      recalculation needed : Yes
- Material : Carbon
- Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
- Energy thresholds :  is not ready to print
-
-Index : 2     used in the geometry : Yes     recalculation needed : Yes
- Material : Iron
- Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 
 GammaToMuPair:  gamma->mu+mu- Bethe Heitler process.
         good cross section parametrization from 422.634 MeV to 1e+12 GeV for all Z.
@@ -95,7 +69,8 @@ msc:   Tables of transport mean free paths.
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -124,44 +99,9 @@ MuPairProd:  theoretical cross sections
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range            1 km            1 km            1 km 
-                Iron   2.88e+295 J     2.88e+295 J     2.88e+295 J  
-=======================================================================
-
-#
-/testem/det/setMat Iron
-/testem/det/setSize 500 m
-/testem/det/update
-
- The Box is 500 m   of Iron
-#
-/gun/particle gamma
-/gun/energy 100 TeV
-#
-/run/verbose 2
-/tracking/verbose 1
-#
-/run/beamOn 5
-
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Carbon
- Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Iron
  Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
  Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
@@ -169,17 +109,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
     DefaultRegionForTheWorld
 
 ====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range            1 km            1 km            1 km 
-                Iron   2.88e+295 J     2.88e+295 J     2.88e+295 J  
-=======================================================================
 
 ### Run 0 start.
 
@@ -273,7 +202,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.01s Real=0.18s Sys=0s
+  User=0.02s Real=0.75s Sys=0.01s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

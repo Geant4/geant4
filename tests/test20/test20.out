@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (13-Dec-2002)
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 /run/verbose 2
@@ -49,65 +49,48 @@ userDetector->Construct() start.
 
 physicsList->Construct() start.
 physicsList->setCut() start.
+#
+/calor/setAbsThick 10 cm  
+/calor/setAbsRad 12.0 cm
+/calor/update
 
-========= Table of registered couples ==============================
+ The  WORLD   is made of 200mm of Air, the transverse size (R) of the world is 240 mm. 
+ The ABSORBER is made of 100mm of Lead, the transverse size (R) is 120 mm. 
+ Z position of the (middle of the) absorber 0  mm.
 
-Index : 0     used in the geometry : No      recalculation needed : Yes
- Material : Beryllium
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  is not ready to print
-
-Index : 1     used in the geometry : No      recalculation needed : Yes
- Material : Aluminium
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  is not ready to print
-
-Index : 2     used in the geometry : No      recalculation needed : Yes
- Material : Silicon
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  is not ready to print
-
-Index : 3     used in the geometry : No      recalculation needed : Yes
- Material : liquidArgon
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  is not ready to print
-
-Index : 4     used in the geometry : No      recalculation needed : Yes
- Material : Iron
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  is not ready to print
-
-Index : 5     used in the geometry : No      recalculation needed : Yes
- Material : Copper
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  is not ready to print
-
-Index : 6     used in the geometry : No      recalculation needed : Yes
- Material : Gold
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  is not ready to print
-
-Index : 7     used in the geometry : Yes     recalculation needed : Yes
- Material : Lead
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : Yes
- Material : Water
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  is not ready to print
-
-Index : 9     used in the geometry : Yes     recalculation needed : Yes
- Material : Air
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
+#
+/lowenergy/lowlimG 2.5e-4
+Tst20PhysicsList::SetCuts:Gamma cut in energy: 0.00025 (MeV)
+/lowenergy/lowlimE 2.5e-4
+Tst20PhysicsList::SetCuts:Electron cut in energy: 0.00025 (MeV)
+/lowenergy/cutG .01 micrometer
+G4VUserPhysicsList::ResetCuts() is obsolete. This method gives no effect and you can remove it. 
+/lowenergy/cutE .01 micrometer
+G4VUserPhysicsList::ResetCuts() is obsolete. This method gives no effect and you can remove it. 
+/lowenergy/secphotcut 10 eV
+Low energy secondary photons cut is now set to: 1e-05 (MeV)
+for LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation
+/run/initialize
+/process/list
+     Transportation,                msc,              eIoni,              eBrem
+            annihil,      LowEnergyIoni,          LowEnBrem,    polarLowEnCompt
+    LowEnConversion,     LowEnPhotoElec,      LowEnRayleigh
+/particle/list
+         GenericIon,                 e+,                 e-,              gamma
+           geantino,
+/run/particle/dumpCutValues
+#
+/gun/direction 0 0 1
+#
+/calor/setAbsMat Aluminium
+#=========================
+/gun/particle gamma
+#------------------
+# 
+/gun/energy 10 keV
+/gun/polarization 1. 0. 0.
+/tracking/verbose 2
+/run/beamOn 1
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -139,197 +122,24 @@ LowEnBrem:  Total cross sections from EEDL database.
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
-#
-/calor/setAbsThick 10 cm  
-/calor/setAbsRad 12.0 cm
-/calor/update
-
- The  WORLD   is made of 200mm of Air, the transverse size (R) of the world is 240 mm. 
- The ABSORBER is made of 100mm of Lead, the transverse size (R) is 120 mm. 
- Z position of the (middle of the) absorber 0  mm.
-
-#
-/lowenergy/lowlimG 2.5e-4
-Tst20PhysicsList::SetCuts:Gamma cut in energy: 0.00025 (MeV)
-/lowenergy/lowlimE 2.5e-4
-Tst20PhysicsList::SetCuts:Electron cut in energy: 0.00025 (MeV)
-/lowenergy/cutG .01 micrometer
-/lowenergy/cutE .01 micrometer
-/lowenergy/secphotcut 10 eV
-Low energy secondary photons cut is now set to: 1e-05 (MeV)
-for LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation
-/run/initialize
-physicsList->setCut() start.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : Yes
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  is not ready to print
-
-Index : 1     used in the geometry : No      recalculation needed : Yes
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  is not ready to print
-
-Index : 2     used in the geometry : No      recalculation needed : Yes
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  is not ready to print
-
-Index : 3     used in the geometry : No      recalculation needed : Yes
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  is not ready to print
-
-Index : 4     used in the geometry : No      recalculation needed : Yes
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  is not ready to print
-
-Index : 5     used in the geometry : No      recalculation needed : Yes
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  is not ready to print
-
-Index : 6     used in the geometry : No      recalculation needed : Yes
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  is not ready to print
-
-Index : 7     used in the geometry : Yes     recalculation needed : Yes
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : Yes
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  is not ready to print
-
-Index : 9     used in the geometry : Yes     recalculation needed : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  is not ready to print
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
-
-====================================================================
-
-
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
-
-LowEnergyIoni:  Total cross sections from EEDL database.
-      Gamma energy sampled from a parametrised formula.
-      Implementation of the continuous dE/dx part.
-      At present it can be used for electrons in the energy range [250eV,100GeV].
-      The process must work with G4LowEnergyBremsstrahlung.
-
-LowEnBrem:  Total cross sections from EEDL database.
-      Gamma energy sampled from a parameterised formula.
-      Implementation of the continuous dE/dx part.
-      At present it can be used for electrons in the energy range [250eV,100GeV].
-      The process must work with G4LowEnergyIonisation.
-
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
-/process/list
-     Transportation,                msc,              eIoni,              eBrem
-            annihil,      LowEnergyIoni,          LowEnBrem,    polarLowEnCompt
-    LowEnConversion,     LowEnPhotoElec,      LowEnRayleigh
-/particle/list
-                 e+,                 e-,              gamma,           geantino
-
-/run/particle/dumpCutValues
-#
-/gun/direction 0 0 1
-#
-/calor/setAbsMat Aluminium
-#=========================
-/gun/particle gamma
-#------------------
-# 
-/gun/energy 10 keV
-/gun/polarization 1. 0. 0.
-/tracking/verbose 2
-/run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.33111 keV    e- 130.147 keV    e+ 127.666 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-           Aluminium         250 eV          250 eV          250 eV 
-=======================================================================
 
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
@@ -355,237 +165,23 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0    -49.9   0.00988        0        0         0    Absorber initStep
-    1 0.000317 -0.000336    -49.9   0.00705  0.00209 0.000703  0.000703    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :  0.000317 -0.000336     -49.9   0.00075                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    2  0.00049 -0.000277    -49.9   0.00588 0.000815 0.000199  0.000902    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  2 ---------------
-    :   0.00049 -0.000277     -49.9  0.000346                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    3 0.000495 -0.000278    -49.9   0.00341 3.58e-05  5.9e-06  0.000908    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  3 ---------------
-    :  0.000495 -0.000278     -49.9   0.00244                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    4 0.000501 -0.000281    -49.9   0.00308 1.77e-05 6.84e-06  0.000915    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  4 ---------------
-    :  0.000501 -0.000281     -49.9  0.000311                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    5 0.000547 -0.000322    -49.9         0  0.00308 0.000213   0.00113    Absorber LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 0.000501 -0.000281    -49.9  0.000311        0        0         0    Absorber initStep
-    1 0.000503 -0.00028    -49.9         0 0.000311 7.84e-06  7.84e-06    Absorber LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 0.000495 -0.000278    -49.9   0.00244        0        0         0    Absorber initStep
-    1 0.000526 -0.000266    -49.9   0.00102 0.000662 4.09e-05  4.09e-05    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :  0.000526 -0.000266     -49.9  0.000755                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    2 0.000536 -0.000265    -49.9         0  0.00102 3.42e-05  7.52e-05    Absorber LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 5
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 0.000526 -0.000266    -49.9  0.000755        0        0         0    Absorber initStep
-    1 0.000527 -0.000262    -49.9         0 0.000755 2.19e-05  2.19e-05    Absorber LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0  0.00049 -0.000277    -49.9  0.000346        0        0         0    Absorber initStep
-    1  0.00049 -0.000275    -49.9         0 0.000346  8.7e-06   8.7e-06    Absorber LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 0.000317 -0.000336    -49.9   0.00075        0        0         0    Absorber initStep
-    1 0.000315 -0.000339    -49.9  0.000348 0.000128 3.99e-06  3.99e-06    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :  0.000315 -0.000339     -49.9  0.000274                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    2 0.000316 -0.000341    -49.9         0 0.000348 8.73e-06  1.27e-05    Absorber LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 3
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 0.000315 -0.000339    -49.9  0.000274        0        0         0    Absorber initStep
-    1 0.000314 -0.000338    -49.9         0 0.000274 6.97e-06  6.97e-06    Absorber LowEnergyIoni
+    1        0        0    -49.9         0  0.00988  0.00122   0.00122    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.03s Sys=0.02s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-           Aluminium         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2s Real=2.1s Sys=0.13s
+  User=0.45s Real=0.45s Sys=0s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
 /tracking/verbose 2
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-           Aluminium         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 
 *********************************************************************************************************
@@ -594,7 +190,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00155 0.000315  0.000315    Absorber LowEnPhotoElec
+    1        0        0      -50         0  0.00155 0.000334  0.000334    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50   0.00045                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -609,161 +205,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-           Aluminium         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.44s Real=0.45s Sys=0.01s
+  User=0.45s Real=0.46s Sys=0s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
 /tracking/verbose 2
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-           Aluminium         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 
 *********************************************************************************************************
@@ -772,9 +226,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000119  0.00227   0.00227    Absorber LowEnPhotoElec
+    1        0        0      -50         0 8.12e-05 0.000167  0.000167    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50  0.000481                 e-
+    :         0         0       -50  0.000519                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -782,166 +236,24 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000481        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000481 1.24e-05  1.24e-05    Absorber LowEnergyIoni
+    0        0        0      -50  0.000519        0        0         0    Absorber initStep
+    1        0        0      -50         0 0.000519 1.35e-05  1.35e-05    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-           Aluminium         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.4s Real=0.41s Sys=0s
+  User=0.43s Real=0.43s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
 /tracking/verbose 2
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-           Aluminium         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 
 *********************************************************************************************************
@@ -950,7 +262,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 8.07e-05  0.00018   0.00018    Absorber LowEnPhotoElec
+    1        0        0      -50         0 8.07e-05 0.000146  0.000146    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50  0.000219                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -965,85 +277,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-           Aluminium         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.42s Real=0.42s Sys=0s
+  User=0.43s Real=0.44s Sys=0s
 #
 /calor/setAbsMat Lead      
 #====================
@@ -1056,76 +297,26 @@ Run Summary
 /tracking/verbose 2
 /run/beamOn 1
 
-========= Table of registered couples ==============================
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
 
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+LowEnergyIoni:  Total cross sections from EEDL database.
+      Gamma energy sampled from a parametrised formula.
+      Implementation of the continuous dE/dx part.
+      At present it can be used for electrons in the energy range [250eV,100GeV].
+      The process must work with G4LowEnergyBremsstrahlung.
 
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+LowEnBrem:  Total cross sections from EEDL database.
+      Gamma energy sampled from a parameterised formula.
+      Implementation of the continuous dE/dx part.
+      At present it can be used for electrons in the energy range [250eV,100GeV].
+      The process must work with G4LowEnergyIonisation.
 
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-                Lead         250 eV          250 eV          250 eV 
-=======================================================================
-
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 Start Run processing.
 
 *********************************************************************************************************
@@ -1134,9 +325,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00259  0.00643   0.00643    Absorber LowEnPhotoElec
+    1        0        0      -50         0  2.6e-05  0.00715   0.00715    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50   0.00741                 e-
+    :         0         0       -50   0.00997                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -1144,202 +335,24 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00741        0        0         0    Absorber initStep
-    1 -7.21e-05 -6.45e-05      -50   0.00553   0.0014 0.000186  0.000186    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    : -7.21e-05 -6.45e-05       -50  0.000475                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    2 -7.55e-05 -7.09e-05      -50     0.005 0.000103 3.25e-05  0.000219    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  2 ---------------
-    : -7.55e-05 -7.09e-05       -50  0.000427                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    3 -7.1e-05 -7.26e-05      -50   0.00436 4.94e-05 7.21e-06  0.000226    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  3 ---------------
-    :  -7.1e-05 -7.26e-05       -50  0.000592                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    4 -6.32e-05 -6.84e-05      -50         0  0.00436 0.000233  0.000459    Absorber LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -7.1e-05 -7.26e-05      -50  0.000592        0        0         0    Absorber initStep
-    1 -7.09e-05 -7.52e-05      -50         0 0.000592 1.56e-05  1.56e-05    Absorber LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -7.55e-05 -7.09e-05      -50  0.000427        0        0         0    Absorber initStep
-    1 -7.58e-05 -6.84e-05      -50         0 0.000427 1.18e-05  1.18e-05    Absorber LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -7.21e-05 -6.45e-05      -50  0.000475        0        0         0    Absorber initStep
-    1 -7.23e-05 -6.23e-05      -50         0 0.000475 1.29e-05  1.29e-05    Absorber LowEnergyIoni
+    0        0        0      -50   0.00997        0        0         0    Absorber initStep
+    1        0        0      -50         0  0.00997 0.000644  0.000644    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-                Lead         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.4s Real=2.5s Sys=0.19s
+  User=0.61s Real=0.72s Sys=0s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
 /tracking/verbose 2
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-                Lead         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 
 *********************************************************************************************************
@@ -1348,7 +361,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000148  0.00101   0.00101    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000148 8.58e-05  8.58e-05    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50   0.00185                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -1359,165 +372,23 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50   0.00185        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00185 6.37e-05  6.37e-05    Absorber LowEnergyIoni
+    1        0        0      -50         0  0.00185 5.58e-05  5.58e-05    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=2.9s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-                Lead         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.81s Real=0.81s Sys=0s
+  User=0.56s Real=0.57s Sys=0s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
 /tracking/verbose 2
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-                Lead         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 
 *********************************************************************************************************
@@ -1526,9 +397,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000435 6.55e-05  6.55e-05    Absorber LowEnPhotoElec
+    1        0        0      -50         0  2.6e-05 2.35e-05  2.35e-05    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50  0.000165                 e-
+    :         0         0       -50  0.000574                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -1536,166 +407,24 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000165        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000165 6.64e-06  6.64e-06    Absorber LowEnergyIoni
+    0        0        0      -50  0.000574        0        0         0    Absorber initStep
+    1        0        0      -50         0 0.000574 1.52e-05  1.52e-05    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-                Lead         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.52s Real=0.52s Sys=0s
+  User=0.54s Real=0.55s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
 /tracking/verbose 2
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-                Lead         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 
 *********************************************************************************************************
@@ -1704,7 +433,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000153 7.22e-05  7.22e-05    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000153 0.000195  0.000195    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50  0.000147                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -1719,80 +448,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-                Lead         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
@@ -1810,76 +468,26 @@ Run Summary
 /tracking/verbose 2
 /run/beamOn 1
 
-========= Table of registered couples ==============================
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
 
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+LowEnergyIoni:  Total cross sections from EEDL database.
+      Gamma energy sampled from a parametrised formula.
+      Implementation of the continuous dE/dx part.
+      At present it can be used for electrons in the energy range [250eV,100GeV].
+      The process must work with G4LowEnergyBremsstrahlung.
 
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+LowEnBrem:  Total cross sections from EEDL database.
+      Gamma energy sampled from a parameterised formula.
+      Implementation of the continuous dE/dx part.
+      At present it can be used for electrons in the energy range [250eV,100GeV].
+      The process must work with G4LowEnergyIonisation.
 
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-               Water         250 eV          250 eV          250 eV 
-=======================================================================
-
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 Start Run processing.
 
 *********************************************************************************************************
@@ -1888,9 +496,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0    -48.3         0 0.000537     1.68      1.68    Absorber LowEnPhotoElec
+    1        0        0    -49.8         0 0.000537    0.178     0.178    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0     -48.3   0.00946                 e-
+    :         0         0     -49.8   0.00946                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -1898,191 +506,25 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0    -48.3   0.00946        0        0         0    Absorber initStep
-    1 1.14e-05 -3.03e-05    -48.3   0.00835 0.000178 0.000168  0.000168    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :  1.14e-05 -3.03e-05     -48.3  0.000937                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    2 -0.00088  0.00128    -48.3   0.00295  0.00513  0.00291   0.00308    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  2 ---------------
-    :  -0.00088   0.00128     -48.3  0.000268                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    3 -0.000839  0.00152    -48.3         0  0.00295 0.000808   0.00388    Absorber LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.00088  0.00128    -48.3  0.000268        0        0         0    Absorber initStep
-    1 -0.00259 0.000508    -48.3  0.000235 3.25e-05    0.508     0.508    Absorber LowEnergyIoni
-    2 -0.00259 0.000513    -48.3         0 0.000235    0.508      1.02    Absorber LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 1.14e-05 -3.03e-05    -48.3  0.000937        0        0         0    Absorber initStep
-    1 -1.55e-05  3.6e-06    -48.3         0 0.000937 0.000199  0.000199    Absorber LowEnergyIoni
+    0        0        0    -49.8   0.00946        0        0         0    Absorber initStep
+    1   0.0314  -0.0135    -49.8   0.00286   0.0066     0.37      0.37    Absorber LowEnergyIoni
+    2   0.0313  -0.0134    -49.8         0  0.00286     0.37      0.74    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-               Water         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.8s Real=6.2s Sys=0.29s
+  User=1.5s Real=1.6s Sys=0.11s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
 /tracking/verbose 2
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-               Water         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 
 *********************************************************************************************************
@@ -2091,9 +533,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 2.92e-05  0.00597   0.00597    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000537  0.00177   0.00177    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50   0.00197                 e-
+    :         0         0       -50   0.00146                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -2101,180 +543,24 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00197        0        0         0    Absorber initStep
-    1 -8.29e-05 -8.12e-06      -50  0.000598 0.000899 0.000163  0.000163    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    : -8.29e-05 -8.12e-06       -50  0.000474                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    2 -8.88e-05 -2.73e-05      -50         0 0.000598 0.000706  0.000869    Absorber LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -8.29e-05 -8.12e-06      -50  0.000474        0        0         0    Absorber initStep
-    1   0.0022  0.00208      -50  0.000277 0.000198    0.508     0.508    Absorber LowEnergyIoni
-    2 0.000883  0.00382      -50  9.48e-05 0.000182    0.508      1.02    Absorber LowEnergyIoni
-    3 0.000882  0.00382      -50         0 9.48e-05    0.508      1.52    Absorber LowEnergyIoni
+    0        0        0      -50   0.00146        0        0         0    Absorber initStep
+    1        0        0      -50         0  0.00146     0.37      0.37    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-               Water         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.2s Real=1.3s Sys=0.06s
+  User=1.4s Real=1.7s Sys=0.06s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
 /tracking/verbose 2
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-               Water         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 
 *********************************************************************************************************
@@ -2283,7 +569,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537  0.00101   0.00101    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000537  0.00248   0.00248    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50  6.27e-05                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -2294,166 +580,23 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  6.27e-05        0        0         0    Absorber initStep
-    1 -0.000403 -0.000925      -50  4.96e-05 1.31e-05    0.508     0.508    Absorber LowEnergyIoni
-    2 -0.000402 -0.000924      -50         0 4.96e-05    0.508      1.02    Absorber LowEnergyIoni
+    1        0        0      -50         0 6.27e-05     0.37      0.37    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-               Water         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.6s Real=2.7s Sys=0.13s
+  User=3.4s Real=3.7s Sys=0.18s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
 /tracking/verbose 2
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-               Water         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 
 *********************************************************************************************************
@@ -2462,9 +605,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 1.42e-05  0.00058   0.00058    Absorber LowEnPhotoElec
+    1        0        0      -50         0 2.92e-05 0.000679  0.000679    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50  0.000286                 e-
+    :         0         0       -50  0.000271                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -2472,90 +615,20 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000286        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000286    0.508     0.508    Absorber LowEnergyIoni
+    0        0        0      -50  0.000271        0        0         0    Absorber initStep
+    1 -3.61e-05 0.000671      -50  0.000198 7.26e-05     0.37      0.37    Absorber LowEnergyIoni
+    2 -3.99e-05 0.000669      -50         0 0.000198     0.37     0.739    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-               Water         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.8s Real=1.9s Sys=0.08s
+  User=1.9s Real=2s Sys=0.07s
 #
 /gun/particle gamma
 #------------------
@@ -2573,478 +646,52 @@ Run Summary
 /tracking/verbose 0
 /gun/energy 2 MeV
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-           Aluminium         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.3s Real=1.3s Sys=0.03s
+  User=0.94s Real=0.99s Sys=0.02s
 /gun/energy 100 MeV
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-           Aluminium         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.5s Real=0.5s Sys=0s
+  User=0.51s Real=0.51s Sys=0s
 /calor/setAbsMat Lead
 #======================
 /tracking/verbose 0
 /gun/energy 2 MeV
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-                Lead         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.1s Real=7.4s Sys=0.25s
+  User=4.3s Real=4.5s Sys=0.21s
 /gun/energy 100 MeV
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-                Lead         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.1s Real=3.2s Sys=0.11s
+  User=2.6s Real=2.8s Sys=0.13s
 /calor/setAbsMat Water
 #======================
 /tracking/verbose 0
 /gun/energy 2 MeV
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-               Water         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.55s Real=0.57s Sys=0.02s
+  User=0.55s Real=0.55s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Beryllium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Gold
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
-
-Index : 8     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 9     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10 nm     e- 10 nm     e+ 10 nm 
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range           10 nm           10 nm           10 nm 
-                 Air         250 eV          250 eV          250 eV 
-               Water         250 eV          250 eV          250 eV 
-=======================================================================
-
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.39s Real=0.39s Sys=0s
+  User=0.4s Real=0.4s Sys=0s
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
@@ -3052,37 +699,36 @@ UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4SDManager deleted.
-LowEnBrem for e- in Aluminium : 1 calls
-LowEnBrem for e- in Lead : 9 calls
-LowEnBrem for e- in Water : 263 calls
-LowEnConversion for gamma in Aluminium : 431 calls
-LowEnConversion for gamma in Lead : 1447 calls
-LowEnConversion for gamma in Water : 111 calls
-LowEnPhotoElec for gamma in Air : 18 calls
-LowEnPhotoElec for gamma in Aluminium : 4050 calls
-LowEnPhotoElec for gamma in Lead : 4024 calls
-LowEnPhotoElec for gamma in Water : 4047 calls
-LowEnRayleigh for gamma in Aluminium : 23 calls
-LowEnRayleigh for gamma in Lead : 40 calls
-LowEnRayleigh for gamma in Water : 43 calls
-LowEnergyIoni for e- in Air : 56 calls
-LowEnergyIoni for e- in Aluminium : 10156 calls
-LowEnergyIoni for e- in Lead : 11373 calls
-LowEnergyIoni for e- in Water : 17763 calls
-Transportation for e+ in Air : 1386 calls
-Transportation for e- in Air : 37428 calls
-Transportation for gamma in Air : 5249 calls
-Transportation for gamma in Aluminium : 2004 calls
-Transportation for gamma in Lead : 2004 calls
-Transportation for gamma in Water : 2005 calls
-annihil for e+ in Aluminium : 34 calls
-annihil for e+ in Lead : 564 calls
-annihil for e+ in Water : 5 calls
-msc for e- in Air : 2 calls
+LowEnBrem for e- in Water : 81 calls
+LowEnConversion for gamma in Air : 1 calls
+LowEnConversion for gamma in Aluminium : 465 calls
+LowEnConversion for gamma in Lead : 1552 calls
+LowEnConversion for gamma in Water : 121 calls
+LowEnPhotoElec for gamma in Air : 19 calls
+LowEnPhotoElec for gamma in Aluminium : 4055 calls
+LowEnPhotoElec for gamma in Lead : 4011 calls
+LowEnPhotoElec for gamma in Water : 4031 calls
+LowEnRayleigh for gamma in Aluminium : 35 calls
+LowEnRayleigh for gamma in Lead : 33 calls
+LowEnRayleigh for gamma in Water : 45 calls
+LowEnergyIoni for e- in Air : 68 calls
+LowEnergyIoni for e- in Aluminium : 4054 calls
+LowEnergyIoni for e- in Lead : 4011 calls
+LowEnergyIoni for e- in Water : 9547 calls
+Transportation for e+ in Air : 1408 calls
+Transportation for e- in Air : 6570 calls
+Transportation for gamma in Air : 5356 calls
+Transportation for gamma in Aluminium : 2003 calls
+Transportation for gamma in Lead : 2006 calls
+Transportation for gamma in Water : 2004 calls
+annihil for e+ in Aluminium : 35 calls
+annihil for e+ in Lead : 689 calls
+annihil for e+ in Water : 6 calls
+msc for e- in Air : 1 calls
 polarLowEnCompt for gamma in Air : 3 calls
-polarLowEnCompt for gamma in Aluminium : 3765 calls
-polarLowEnCompt for gamma in Lead : 36624 calls
-polarLowEnCompt for gamma in Water : 868 calls
+polarLowEnCompt for gamma in Aluminium : 3738 calls
+polarLowEnCompt for gamma in Lead : 40305 calls
+polarLowEnCompt for gamma in Water : 814 calls
 EventManager deleted.
 UImanager deleted.
 StateManager deleted.

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (13-Dec-2002)
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
@@ -10,9 +10,15 @@ MuonMinusCaptureAtRest is created
 # /run/verbose 2
 /run/particle/setCut 1 m
 /run/initialize
-G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1000 (mm)]   is too big  
-The cut in energy is set1.79769e+305GeV 
+/gun/direction 1 0 0
+#
+# proton at 100 GeV in Pb
+#
+/gun/particle proton
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+/run/beamOn 1
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big  
 The cut in energy is set1.79769e+305GeV 
@@ -22,28 +28,6 @@ The cut in energy is set1.79769e+305GeV
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
 The cut in range [1000 (mm)]   is too big  
 The cut in energy is set1.79769e+305GeV 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : Yes
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  is not ready to print
-
-Index : 1     used in the geometry : No      recalculation needed : Yes
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  is not ready to print
-
-Index : 2     used in the geometry : Yes     recalculation needed : Yes
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -61,7 +45,8 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -80,6 +65,7 @@ hIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -103,37 +89,6 @@ msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
         PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
-/gun/direction 1 0 0
-#
-# proton at 100 GeV in Pb
-#
-/gun/particle proton
-/gun/energy 100 GeV
-/mydet/SelectMaterial Pb
-SimpleBox is now made of Pb
-/run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 #
 # pi+ at 100 GeV in Pb
 #
@@ -142,28 +97,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 #
 # pi- at 100 GeV in Pb
 #
@@ -172,28 +105,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 #
 # kaon+ at 100 GeV in Pb
 #
@@ -202,28 +113,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 #
 # kaon- at 100 GeV in Pb
 #
@@ -232,28 +121,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 #
 # kaon0S at 100 GeV in Pb
 #
@@ -262,28 +129,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 #
 # kaon0L at 100 GeV in Pb
 #
@@ -292,28 +137,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 #
 # proton at 100 GeV in Al
 #
@@ -322,28 +145,70 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 1
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [1000 (mm)]   is too big  
+The cut in energy is set1.79769e+305GeV 
 
-========= Table of registered couples ==============================
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
-====================================================================
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 #
 # pi+ at 100 GeV in Al
 #
@@ -352,28 +217,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # pi- at 100 GeV in Al
 #
@@ -382,28 +225,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # kaon+ at 100 GeV in Al
 #
@@ -412,28 +233,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # kaon- at 100 GeV in Al
 #
@@ -442,28 +241,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # kaon0S at 100 GeV in Al
 #
@@ -472,28 +249,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # kaon0L at 100 GeV in Al
 #
@@ -502,28 +257,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # proton at 100 GeV in Air
 #
@@ -533,27 +266,66 @@ Index : 2     used in the geometry : No      recalculation needed : No
 SimpleBox is now made of Air
 /run/beamOn 1
 
-========= Table of registered couples ==============================
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
-====================================================================
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 #
 # pi+ at 100 GeV in Air
 #
@@ -562,28 +334,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # pi- at 100 GeV in Air
 #
@@ -592,28 +342,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # kaon+ at 100 GeV in Air
 #
@@ -622,28 +350,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # kaon- at 100 GeV in Air
 #
@@ -652,28 +358,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # kaon0S at 100 GeV in Air
 #
@@ -682,28 +366,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # kaon0L at 100 GeV in Air
 #
@@ -712,28 +374,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # proton at 500 MeV in Pb
 #
@@ -742,28 +382,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 #
 # neutron at 500 MeV in Pb
 #
@@ -772,28 +390,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 #
 # proton at 500 MeV in Al
 #
@@ -802,28 +398,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # neutron at 500 MeV in Al
 #
@@ -832,28 +406,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # proton at 500 MeV in Air
 #
@@ -862,28 +414,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # neutron at 500 MeV in Air
 #
@@ -892,28 +422,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # neutron at 100 MeV in Pb
 #
@@ -922,28 +430,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 #
 # triton at 100 MeV in Pb
 #
@@ -952,28 +438,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 #
 # deuteron at 100 MeV in Pb
 #
@@ -982,28 +446,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 #
 # alpha at 100 MeV in Pb
 #
@@ -1012,28 +454,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 #
 # neutron at 100 MeV in Al
 #
@@ -1042,28 +462,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # triton at 100 MeV in Al
 #
@@ -1072,28 +470,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # deuteron at 100 MeV in Al
 #
@@ -1102,28 +478,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # alpha at 100 MeV in Al
 #
@@ -1132,28 +486,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # neutron at 100 MeV in Air
 #
@@ -1162,28 +494,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # triton at 100 MeV in Air
 #
@@ -1192,28 +502,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # deuteron at 100 MeV in Air
 #
@@ -1222,28 +510,6 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-
 #
 # alpha at 100 MeV in Air
 #
@@ -1252,25 +518,3 @@ Index : 2     used in the geometry : No      recalculation needed : No
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 1
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
-
-====================================================================
-

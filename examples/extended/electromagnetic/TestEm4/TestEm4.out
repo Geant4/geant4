@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (13-Dec-2002)
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -23,18 +23,11 @@ Current available graphics systems are:
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em4PhysicsList::SetCuts:CutLength : 1 (mm)
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : Yes
- Material : FluorCarbonate
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
+#
+/run/verbose 2
+/testem/event/printModulo 10000
+#
+/run/beamOn 50000
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -51,7 +44,8 @@ msc:   Tables of transport mean free paths.
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -63,22 +57,6 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range            1 mm            1 mm            1 mm 
-      FluorCarbonate        3.61 keV         429 keV         417 keV
-=======================================================================
-
-#
-/run/verbose 2
-/testem/event/printModulo 10000
-#
-/run/beamOn 50000
-
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
@@ -89,17 +67,6 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
     DefaultRegionForTheWorld
 
 ====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range            1 mm            1 mm            1 mm 
-      FluorCarbonate        3.61 keV         429 keV         417 keV
-=======================================================================
 
 ### Run 0 start.
 
@@ -126,7 +93,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=24s Real=6.4e+02s Sys=40s
+  User=20s Real=6e+02s Sys=49s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (13-Dec-2002)
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
@@ -72,58 +72,13 @@ Absorber is 3.60564 m   of Water
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em2PhysicsList::SetCuts:CutLength : 1 mm 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : Yes
- Material : Air
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  is not ready to print
-
-Index : 1     used in the geometry : Yes     recalculation needed : Yes
- Material : Water
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : Yes
- Material : lAr
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  is not ready to print
-
-Index : 3     used in the geometry : No      recalculation needed : Yes
- Material : Al
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  is not ready to print
-
-Index : 4     used in the geometry : No      recalculation needed : Yes
- Material : Fe
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  is not ready to print
-
-Index : 5     used in the geometry : No      recalculation needed : Yes
- Material : BGO
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  is not ready to print
-
-Index : 6     used in the geometry : No      recalculation needed : Yes
- Material : PbWO4
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  is not ready to print
-
-Index : 7     used in the geometry : No      recalculation needed : Yes
- Material : Tungsten
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  is not ready to print
-
-Index : 8     used in the geometry : No      recalculation needed : Yes
- Material : Lead
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  is not ready to print
-
-====================================================================
-
+#/testem/det/update
+#
+/testem/event/printModulo 20
+#
+/gun/particle e-
+/gun/energy 1 GeV
+/run/beamOn 100
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -140,7 +95,8 @@ msc:   Tables of transport mean free paths.
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -161,6 +117,7 @@ hIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -180,85 +137,16 @@ MuPairProd:  theoretical cross sections
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range            5 mm            5 mm            5 mm 
-               Water        5.78 keV        1.16 MeV         1.1 MeV
-=======================================================================
-
-#/testem/det/update
-#
-/testem/event/printModulo 20
-#
-/gun/particle e-
-/gun/energy 1 GeV
-/run/beamOn 100
-
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  gamma 990 eV     e- 3.2397 keV    e+ 3.20006 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
  Energy thresholds :  gamma 5.78478 keV    e- 1.15997 MeV    e+ 1.10423 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : lAr
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  gamma 13.5776 keV    e- 1.15997 MeV    e+ 1.10423 MeV
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : Al
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  gamma 14.6203 keV    e- 2.31122 MeV    e+ 2.14666 MeV
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Fe
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  gamma 46.4433 keV    e- 6.11229 MeV    e+ 5.74741 MeV
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : BGO
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  gamma 125.956 keV    e- 4.71987 MeV    e+ 4.38381 MeV
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : PbWO4
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  gamma 137.419 keV    e- 5.33819 MeV    e+ 4.9581 MeV
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Tungsten
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  gamma 241.105 keV    e- 12.9518 MeV    e+ 12.0297 MeV
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  gamma 204.169 keV    e- 6.82843 MeV    e+ 6.34224 MeV
-
 ====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                                    gamma              e-              e+    
-Threshold in range            5 mm            5 mm            5 mm 
-               Water        5.78 keV        1.16 MeV         1.1 MeV
-=======================================================================
 
 ### Run 0 start.
 
@@ -280,7 +168,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=24.1s Real=43.22s Sys=3.04s
+  User=23.77s Real=40.12s Sys=2.87s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 

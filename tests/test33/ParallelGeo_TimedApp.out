@@ -1,90 +1,11 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (13-Dec-2002)
+                                (30-Apr-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 
 phot:  Total cross sections from Sandia parametrisation. 
 Tst33PhysicsList::SetCuts:CutLength : 1 (mm)
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : Yes
- Material : Concrete
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : Yes
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : Yes
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  is not ready to print
-
-====================================================================
-
-
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
-
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
-
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
-
-eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
-        delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-
-eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
- Good description from 1 KeV to 100 GeV.
-        log scale extrapolation above 100 GeV 
-        Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
-
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
-
-hIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
-
-MuIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-
-MuBrems:  theoretical cross section 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-
-MuPairProd:  theoretical cross sections 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 === G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
   ProcessName: PScoreProcess
 The initial Vectors: 
@@ -203,53 +124,122 @@ DoIt Vector:
    WeightCutOffProcess
 ================================================
 
-========= Table of registered couples ==============================
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Concrete
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 5.67841 keV    e- 508.439 keV    e+ 490.005 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
-====================================================================
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 131072
-Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1018 (mu)seconds
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1010 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0.0474497, error= 0.194439, fom*time= 26.4506, time= 1018, n= 197
+    mean= 0.0316237, error= 0.200044, fom*time= 24.9891, time= 1010, n= 174
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01_rep:0............ |           1 |         216 |         249 |         197 |         197 |      9.0375 |     9.52322 |           1 |
-cell_02_rep:0............ |           2 |         170 |         348 |         332 |         166 |     8.00394 |     8.83368 |           1 |
-cell_03_rep:0............ |           4 |         193 |         424 |         429 |      107.25 |     7.91569 |      8.8939 |           1 |
-cell_04_rep:0............ |           8 |         212 |         460 |         481 |      60.125 |     6.58567 |     8.70567 |           1 |
-cell_05_rep:0............ |          16 |         268 |         536 |         603 |     37.6875 |     7.37328 |     8.79812 |           1 |
-cell_06_rep:0............ |          32 |         305 |         668 |         705 |     22.0312 |     7.30186 |     8.85161 |           1 |
-cell_07_rep:0............ |          64 |         330 |         709 |         807 |     12.6094 |     7.21572 |     8.67897 |           1 |
-cell_08_rep:0............ |         128 |         355 |         791 |         881 |     6.88281 |     7.09067 |     8.65482 |           1 |
-cell_09_rep:0............ |         256 |         390 |         828 |         874 |     3.41406 |     6.82081 |     8.62742 |           1 |
-cell_10_rep:0............ |         512 |         411 |         904 |        1032 |     2.01562 |     6.60409 |     8.41679 |           1 |
-cell_11_rep:0............ |        1024 |         444 |         969 |        1121 |     1.09473 |     6.68227 |     8.38123 |           1 |
-cell_12_rep:0............ |        2048 |         472 |        1002 |        1104 |    0.539062 |     6.36781 |     8.15078 |           1 |
-cell_13_rep:0............ |        4096 |         519 |        1119 |        1353 |    0.330322 |     6.14505 |     7.91064 |           1 |
-cell_14_rep:0............ |        8192 |         604 |        1270 |        1574 |    0.192139 |     5.31388 |     7.67258 |           1 |
-cell_15_rep:0............ |       16384 |         631 |        1375 |        1806 |    0.110229 |     5.16257 |     7.48867 |           1 |
-cell_16_rep:0............ |       32768 |         679 |        1431 |        1752 |   0.0534668 |     5.06752 |     7.61063 |           1 |
-cell_17_rep:0............ |       65536 |         736 |        1585 |        2066 |   0.0315247 |     4.76357 |     7.31961 |           1 |
-cell_18_rep:0............ |      131072 |         697 |        1663 |        2179 |   0.0166245 |     4.49512 |     7.24741 |           1 |
-cell_19_rep:0............ |      131072 |         751 |         751 |           0 |           0 |           0 |           0 |           0 |
+cell_01I1+_rep:0......... |           1 |         148 |         155 |          39 |          39 |     8.28058 |     9.45932 |           1 |
+cell_01I1-_rep:0......... |           1 |         182 |         188 |          37 |          37 |     8.93933 |     9.55398 |           1 |
+cell_01_rep:0............ |           1 |         498 |         220 |         115 |         115 |     8.62505 |     9.47536 |           1 |
+cell_02I1+_rep:0......... |           2 |         173 |         181 |          52 |          26 |     7.35483 |     9.01822 |           1 |
+cell_02I1-_rep:0......... |           2 |         223 |         230 |          60 |          30 |      8.2806 |     9.33176 |           1 |
+cell_02_rep:0............ |           2 |         509 |         296 |         180 |          90 |     8.03161 |     9.21081 |           1 |
+cell_03I1+_rep:0......... |           4 |         190 |         201 |          80 |          20 |     8.68669 |     9.10658 |           1 |
+cell_03I1-_rep:0......... |           4 |         255 |         265 |          88 |          22 |     6.08269 |     8.63618 |           1 |
+cell_03_rep:0............ |           4 |         558 |         351 |         211 |       52.75 |     8.37578 |     9.06238 |           1 |
+cell_04I1+_rep:0......... |           8 |         201 |         210 |          66 |        8.25 |     9.00064 |     9.39132 |           1 |
+cell_04I1-_rep:0......... |           8 |         280 |         296 |          88 |          11 |     8.33947 |     9.14166 |           1 |
+cell_04_rep:0............ |           8 |         609 |         376 |         225 |      28.125 |     8.38989 |     9.04852 |           1 |
+cell_05I1+_rep:0......... |          16 |         243 |         252 |          62 |       3.875 |     8.20261 |     9.10173 |           1 |
+cell_05I1-_rep:0......... |          16 |         309 |         331 |          97 |      6.0625 |     7.59821 |     8.80413 |           1 |
+cell_05_rep:0............ |          16 |         724 |         437 |         267 |     16.6875 |     7.89879 |     8.85929 |           1 |
+cell_06I1+_rep:0......... |          32 |         248 |         258 |          74 |      2.3125 |     6.42301 |     8.96721 |           1 |
+cell_06I1-_rep:0......... |          32 |         373 |         396 |         116 |       3.625 |     7.48636 |     8.97768 |           1 |
+cell_06_rep:0............ |          32 |         796 |         537 |         351 |     10.9688 |     7.11336 |     8.68238 |           1 |
+cell_07I1+_rep:0......... |          64 |         255 |         268 |          71 |     1.10938 |     8.01832 |     9.01024 |           1 |
+cell_07I1-_rep:0......... |          64 |         360 |         378 |         119 |     1.85938 |     7.24713 |     8.88131 |           1 |
+cell_07_rep:0............ |          64 |         828 |         548 |         422 |     6.59375 |     6.70183 |     8.55188 |           1 |
+cell_08I1+_rep:0......... |         128 |         278 |         291 |          80 |       0.625 |     8.34618 |     9.02493 |           1 |
+cell_08I1-_rep:0......... |         128 |         383 |         405 |         134 |     1.04688 |     8.22545 |     8.91771 |           1 |
+cell_08_rep:0............ |         128 |         882 |         591 |         447 |     3.49219 |     6.88937 |     8.45833 |           1 |
+cell_09I1+_rep:0......... |         256 |         312 |         325 |         120 |     0.46875 |     7.75406 |     8.73942 |           1 |
+cell_09I1-_rep:0......... |         256 |         439 |         450 |         129 |    0.503906 |     8.03842 |     8.73541 |           1 |
+cell_09_rep:0............ |         256 |         977 |         644 |         484 |     1.89062 |     7.42726 |      8.3787 |           1 |
+cell_10I1+_rep:0......... |         512 |         293 |         299 |         107 |    0.208984 |     6.96757 |     8.36525 |           1 |
+cell_10I1-_rep:0......... |         512 |         429 |         442 |         149 |    0.291016 |     7.12594 |      8.4019 |           1 |
+cell_10_rep:0............ |         512 |         971 |         685 |         569 |     1.11133 |      6.7356 |     8.00296 |           1 |
+cell_11I1+_rep:0......... |        1024 |         311 |         317 |          98 |   0.0957031 |     6.69102 |     8.17783 |           1 |
+cell_11I1-_rep:0......... |        1024 |         410 |         424 |         128 |       0.125 |     6.62384 |     8.28807 |           1 |
+cell_11_rep:0............ |        1024 |         990 |         674 |         576 |      0.5625 |     6.33083 |     7.81328 |           1 |
+cell_12I1+_rep:0......... |        2048 |         299 |         307 |         120 |   0.0585938 |     6.60393 |     8.09797 |           1 |
+cell_12I1-_rep:0......... |        2048 |         424 |         428 |         165 |   0.0805664 |     6.40362 |     7.97345 |           1 |
+cell_12_rep:0............ |        2048 |        1009 |         729 |         618 |    0.301758 |     6.28958 |     7.61933 |           1 |
+cell_13I1+_rep:0......... |        4096 |         315 |         329 |         113 |   0.0275879 |     6.60961 |     8.04754 |           1 |
+cell_13I1-_rep:0......... |        4096 |         445 |         457 |         152 |   0.0371094 |     6.92116 |       8.004 |           1 |
+cell_13_rep:0............ |        4096 |        1075 |         805 |         720 |    0.175781 |     6.57825 |     7.70273 |           1 |
+cell_14I1+_rep:0......... |        8192 |         343 |         351 |         135 |   0.0164795 |     6.25906 |     7.91086 |           1 |
+cell_14I1-_rep:0......... |        8192 |         469 |         484 |         142 |    0.017334 |     6.80604 |     8.15972 |           1 |
+cell_14_rep:0............ |        8192 |        1168 |         884 |         801 |   0.0977783 |     6.69385 |     7.89153 |           1 |
+cell_15I1+_rep:0......... |       16384 |         342 |         357 |         132 |  0.00805664 |     5.44443 |     7.73128 |           1 |
+cell_15I1-_rep:0......... |       16384 |         493 |         498 |         150 |  0.00915527 |     7.03091 |     8.10539 |           1 |
+cell_15_rep:0............ |       16384 |        1230 |         986 |         949 |   0.0579224 |      6.4195 |      7.6974 |           1 |
+cell_16I1+_rep:0......... |       32768 |         358 |         370 |         128 |  0.00390625 |     6.32798 |     7.82571 |           1 |
+cell_16I1-_rep:0......... |       32768 |         496 |         507 |         181 |  0.00552368 |     5.60355 |     7.64687 |           1 |
+cell_16_rep:0............ |       32768 |        1292 |        1088 |        1063 |   0.0324402 |     6.02002 |     7.51137 |           1 |
+cell_17I1+_rep:0......... |       65536 |         397 |         410 |         139 |  0.00212097 |      5.8463 |     7.52014 |           1 |
+cell_17I1-_rep:0......... |       65536 |         564 |         580 |         205 |  0.00312805 |     6.00362 |     7.56988 |           1 |
+cell_17_rep:0............ |       65536 |        1407 |        1167 |        1099 |   0.0167694 |     6.24941 |     7.55373 |           1 |
+cell_18I1+_rep:0......... |      131072 |         388 |         404 |         133 |  0.00101471 |     6.38183 |     7.80903 |           1 |
+cell_18I1-_rep:0......... |      131072 |         531 |         553 |         162 |  0.00123596 |     6.06055 |     7.71222 |           1 |
+cell_18_rep:0............ |      131072 |        1334 |        1183 |        1171 |  0.00893402 |     6.15489 |     7.51221 |           1 |
+cell_19_rep:0............ |      262144 |         532 |         532 |           0 |           0 |           0 |           0 |           0 |
 parallelWorld_rep:-1..... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ParallelImportanceProcess, will be removed!
@@ -445,54 +435,66 @@ DoIt Vector:
    LCapture
    Decay
 ================================================
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Concrete
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 5.67841 keV    e- 508.439 keV    e+ 490.005 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-====================================================================
-
-WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 65536
-Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1038 (mu)seconds
+WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 131072
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1073 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0.0463918, error= 0.199966, fom*time= 25.0086, time= 1038, n= 212
+    mean= 0.0264156, error= 0.230232, fom*time= 18.8654, time= 1073, n= 193
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01_rep:0............ |           1 |         233 |         280 |         224 |         224 |     9.51572 |      9.5934 |           1 |
-cell_02_rep:0............ |           2 |         155 |         330 |         335 |       167.5 |     8.91114 |     9.32864 |           1 |
-cell_03_rep:0............ |           4 |         180 |         394 |         408 |         102 |     8.69328 |     9.31245 |           1 |
-cell_04_rep:0............ |           8 |         210 |         444 |         456 |          57 |     7.87469 |     9.13529 |           1 |
-cell_05_rep:0............ |          16 |         255 |         557 |         578 |      36.125 |     7.66154 |     8.91736 |           1 |
-cell_06_rep:0............ |          32 |         283 |         608 |         679 |     21.2188 |     6.83621 |     8.75517 |           1 |
-cell_07_rep:0............ |          64 |         315 |         671 |         799 |     12.4844 |     5.63163 |     8.47563 |           1 |
-cell_08_rep:0............ |         128 |         336 |         715 |         826 |     6.45312 |     6.28744 |     8.57269 |           1 |
-cell_09_rep:0............ |         256 |         382 |         825 |         962 |     3.75781 |     6.29664 |     8.40029 |           1 |
-cell_10_rep:0............ |         512 |         428 |         914 |        1073 |      2.0957 |     6.51572 |     8.21815 |           1 |
-cell_11_rep:0............ |        1024 |         459 |        1023 |        1246 |      1.2168 |     5.85891 |     8.00238 |           1 |
-cell_12_rep:0............ |        2048 |         491 |        1049 |        1310 |    0.639648 |     5.67376 |     7.87829 |           1 |
-cell_13_rep:0............ |        4096 |         534 |        1172 |        1387 |    0.338623 |     5.97063 |     7.91959 |           1 |
-cell_14_rep:0............ |        8192 |         600 |        1268 |        1584 |    0.193359 |     5.76698 |      7.7779 |           1 |
-cell_15_rep:0............ |       16384 |         699 |        1483 |        1877 |    0.114563 |     5.34185 |     7.47138 |           1 |
-cell_16_rep:0............ |       32768 |         769 |        1659 |        2205 |   0.0672913 |     5.02989 |     7.32565 |           1 |
-cell_17_rep:0............ |       65536 |         796 |        1750 |        2493 |   0.0380402 |     4.50615 |     7.05183 |           1 |
-cell_18_rep:0............ |      131072 |         730 |        1742 |        2445 |   0.0186539 |     4.20481 |     7.04096 |           1 |
-cell_19_rep:0............ |      131072 |         795 |         795 |           0 |           0 |           0 |           0 |           0 |
+cell_01I1+_rep:0......... |           1 |         165 |         173 |          39 |          39 |     8.75338 |     9.41241 |           1 |
+cell_01I1-_rep:0......... |           1 |         197 |         209 |          49 |          49 |     9.44081 |     9.69398 |           1 |
+cell_01_rep:0............ |           1 |         555 |         248 |         127 |         127 |     9.06574 |     9.55164 |           1 |
+cell_02I1+_rep:0......... |           2 |         195 |         202 |          55 |        27.5 |     8.96356 |     9.53744 |           1 |
+cell_02I1-_rep:0......... |           2 |         262 |         275 |          59 |        29.5 |     8.75843 |     9.39176 |           1 |
+cell_02_rep:0............ |           2 |         590 |         345 |         206 |         103 |     8.85779 |     9.45343 |           1 |
+cell_03I1+_rep:0......... |           4 |         236 |         244 |          78 |        19.5 |     8.34742 |     9.06714 |           1 |
+cell_03I1-_rep:0......... |           4 |         308 |         319 |         108 |          27 |     8.74258 |     9.28356 |           1 |
+cell_03_rep:0............ |           4 |         688 |         422 |         259 |       64.75 |     8.44479 |     9.10951 |           1 |
+cell_04I1+_rep:0......... |           8 |         267 |         276 |          81 |      10.125 |     8.25526 |      9.1103 |           1 |
+cell_04I1-_rep:0......... |           8 |         354 |         367 |         115 |      14.375 |     8.33498 |     8.92862 |           1 |
+cell_04_rep:0............ |           8 |         781 |         482 |         338 |       42.25 |     8.42115 |     8.96575 |           1 |
+cell_05I1+_rep:0......... |          16 |         259 |         268 |          87 |      5.4375 |     7.76313 |     8.90986 |           1 |
+cell_05I1-_rep:0......... |          16 |         347 |         359 |         108 |        6.75 |     7.72291 |     8.80336 |           1 |
+cell_05_rep:0............ |          16 |         790 |         499 |         379 |     23.6875 |     7.19354 |     8.57258 |           1 |
+cell_06I1+_rep:0......... |          32 |         267 |         273 |          87 |     2.71875 |     6.59198 |     8.52314 |           1 |
+cell_06I1-_rep:0......... |          32 |         358 |         370 |         104 |        3.25 |      7.6732 |     8.97442 |           1 |
+cell_06_rep:0............ |          32 |         813 |         515 |         351 |     10.9688 |     7.14831 |     8.55119 |           1 |
+cell_07I1+_rep:0......... |          64 |         299 |         313 |         136 |       2.125 |     4.98128 |     8.15675 |           1 |
+cell_07I1-_rep:0......... |          64 |         403 |         417 |         168 |       2.625 |     6.03211 |     8.08648 |           1 |
+cell_07_rep:0............ |          64 |         914 |         588 |         551 |     8.60938 |     5.28131 |     8.01575 |           1 |
+cell_08I1+_rep:0......... |         128 |         284 |         291 |         103 |    0.804688 |     7.29884 |     8.80513 |           1 |
+cell_08I1-_rep:0......... |         128 |         401 |         422 |         152 |      1.1875 |     6.30505 |     8.47302 |           1 |
+cell_08_rep:0............ |         128 |         928 |         647 |         561 |     4.38281 |     6.32976 |      8.2931 |           1 |
+cell_09I1+_rep:0......... |         256 |         315 |         336 |         111 |    0.433594 |     6.32167 |     8.51392 |           1 |
+cell_09I1-_rep:0......... |         256 |         435 |         457 |         155 |    0.605469 |     5.67725 |     8.69147 |           1 |
+cell_09_rep:0............ |         256 |        1039 |         740 |         666 |     2.60156 |      5.4011 |     7.90658 |           1 |
+cell_10I1+_rep:0......... |         512 |         330 |         342 |         129 |    0.251953 |     6.34632 |     8.16646 |           1 |
+cell_10I1-_rep:0......... |         512 |         445 |         459 |         137 |    0.267578 |     6.40593 |     8.39247 |           1 |
+cell_10_rep:0............ |         512 |        1076 |         756 |         661 |     1.29102 |     5.77127 |     7.63108 |           1 |
+cell_11I1+_rep:0......... |        1024 |         347 |         367 |         122 |    0.119141 |     7.12753 |     8.44458 |           1 |
+cell_11I1-_rep:0......... |        1024 |         451 |         464 |         126 |    0.123047 |     6.78048 |      8.5241 |           1 |
+cell_11_rep:0............ |        1024 |        1140 |         806 |         776 |    0.757812 |     5.83486 |     7.73967 |           1 |
+cell_12I1+_rep:0......... |        2048 |         345 |         353 |         141 |   0.0688477 |     5.51987 |     7.62203 |           1 |
+cell_12I1-_rep:0......... |        2048 |         479 |         501 |         176 |   0.0859375 |       6.832 |     8.20076 |           1 |
+cell_12_rep:0............ |        2048 |        1180 |         911 |         812 |    0.396484 |     5.61448 |     7.51001 |           1 |
+cell_13I1+_rep:0......... |        4096 |         320 |         321 |         112 |   0.0273438 |     5.95711 |     7.83379 |           1 |
+cell_13I1-_rep:0......... |        4096 |         478 |         504 |         197 |   0.0480957 |     5.61869 |     7.57618 |           1 |
+cell_13_rep:0............ |        4096 |        1181 |         992 |         997 |    0.243408 |     5.12799 |     7.15822 |           1 |
+cell_14I1+_rep:0......... |        8192 |         291 |         303 |         117 |   0.0142822 |     5.80777 |     7.57711 |           1 |
+cell_14I1-_rep:0......... |        8192 |         435 |         450 |         188 |   0.0229492 |     6.07122 |     7.73903 |           1 |
+cell_14_rep:0............ |        8192 |        1118 |         970 |        1037 |    0.126587 |     4.94128 |     7.00714 |           1 |
+cell_15I1+_rep:0......... |       16384 |         299 |         306 |          99 |  0.00604248 |     5.48634 |     7.49671 |           1 |
+cell_15I1-_rep:0......... |       16384 |         424 |         447 |         180 |   0.0109863 |     5.70278 |     7.63939 |           1 |
+cell_15_rep:0............ |       16384 |        1125 |         984 |         998 |   0.0609131 |     5.46733 |     7.16879 |           1 |
+cell_16I1+_rep:0......... |       32768 |         315 |         322 |         104 |  0.00317383 |     6.32303 |     7.89145 |           1 |
+cell_16I1-_rep:0......... |       32768 |         443 |         444 |         153 |  0.00466919 |     6.22147 |     7.74874 |           1 |
+cell_16_rep:0............ |       32768 |        1193 |        1027 |        1072 |   0.0327148 |     5.67174 |     7.31892 |           1 |
+cell_17I1+_rep:0......... |       65536 |         329 |         346 |         126 |  0.00192261 |     6.53001 |     7.83914 |           1 |
+cell_17I1-_rep:0......... |       65536 |         459 |         470 |         149 |  0.00227356 |     5.99883 |     7.75303 |           1 |
+cell_17_rep:0............ |       65536 |        1247 |        1112 |        1142 |   0.0174255 |     5.34536 |      7.1622 |           1 |
+cell_18I1+_rep:0......... |      131072 |         343 |         362 |         111 | 0.000846863 |     6.64097 |      7.6623 |           1 |
+cell_18I1-_rep:0......... |      131072 |         502 |         513 |         190 |  0.00144958 |     6.60659 |     7.79101 |           1 |
+cell_18_rep:0............ |      131072 |        1252 |        1139 |        1225 |  0.00934601 |     5.46795 |     7.08295 |           1 |
+cell_19_rep:0............ |      262144 |         493 |         493 |           0 |           0 |           0 |           0 |           0 |
 parallelWorld_rep:-1..... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ParallelImportanceProcess, will be removed!
@@ -645,53 +647,65 @@ DoIt Vector:
    LCapture
    Decay
 ================================================
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Concrete
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 5.67841 keV    e- 508.439 keV    e+ 490.005 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-====================================================================
-
 Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0.220527, error= 0.999902, fom*time= 1.0002, time= 1000, n= 5083
+    mean= 0, error= -1, fom*time= 0, time= 1000, n= 3450
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01_rep:0............ |           1 |        5418 |        6478 |        5872 |        5872 |     8.93517 |     9.47709 |           1 |
-cell_02_rep:0............ |           1 |        3458 |        4119 |        4108 |        4108 |     8.37275 |     9.27921 |           1 |
-cell_03_rep:0............ |           1 |        2078 |        2519 |        2724 |        2724 |     8.02875 |     9.18295 |           1 |
-cell_04_rep:0............ |           1 |        1194 |        1424 |        1566 |        1566 |     7.74478 |     9.03703 |           1 |
-cell_05_rep:0............ |           1 |         672 |         808 |         959 |         959 |     7.43141 |     8.84756 |           1 |
-cell_06_rep:0............ |           1 |         357 |         422 |         474 |         474 |     7.10863 |     8.66238 |           1 |
-cell_07_rep:0............ |           1 |         197 |         232 |         303 |         303 |      6.5288 |     8.42913 |           1 |
-cell_08_rep:0............ |           1 |         107 |         123 |         167 |         167 |     5.40396 |     7.92201 |           1 |
-cell_09_rep:0............ |           1 |          69 |          82 |          86 |          86 |      3.9474 |     7.56264 |           1 |
-cell_10_rep:0............ |           1 |          41 |          51 |          79 |          79 |     2.57117 |     6.33158 |           1 |
-cell_11_rep:0............ |           1 |          21 |          26 |          44 |          44 |      2.9229 |     6.53656 |           1 |
-cell_12_rep:0............ |           1 |          12 |          13 |          20 |          20 |     1.90105 |     6.39743 |           1 |
-cell_13_rep:0............ |           1 |           9 |           8 |          19 |          19 |     1.29345 |     4.89064 |           1 |
-cell_14_rep:0............ |           1 |           4 |           6 |          11 |          11 |     5.10529 |     5.56722 |           1 |
-cell_15_rep:0............ |           1 |           1 |           2 |           3 |           3 |     9.15696 |     9.15701 |           1 |
-cell_16_rep:0............ |           1 |           1 |           1 |           3 |           3 |       8.991 |       8.991 |           1 |
-cell_17_rep:0............ |           1 |           1 |           1 |           0 |           0 |       8.991 |       8.991 |           1 |
-cell_18_rep:0............ |           1 |           1 |           1 |           0 |           0 |       8.991 |       8.991 |           1 |
-cell_19_rep:0............ |           1 |           1 |           1 |           0 |           0 |           0 |           0 |           0 |
+cell_01I1+_rep:0......... |           1 |        2845 |        2969 |         736 |         736 |     8.89734 |     9.47048 |           1 |
+cell_01I1-_rep:0......... |           1 |        3533 |        3668 |         808 |         808 |     9.21098 |     9.60207 |           1 |
+cell_01_rep:0............ |           1 |        9618 |        4376 |        2461 |        2461 |     8.97079 |     9.50266 |           1 |
+cell_02I1+_rep:0......... |           1 |        1689 |        1756 |         477 |         477 |     8.48336 |     9.25171 |           1 |
+cell_02I1-_rep:0......... |           1 |        2195 |        2278 |         642 |         642 |     8.20764 |     9.26467 |           1 |
+cell_02_rep:0............ |           1 |        5920 |        2819 |        1834 |        1834 |     8.11744 |      9.1369 |           1 |
+cell_03I1+_rep:0......... |           1 |         992 |        1023 |         295 |         295 |     7.75569 |     9.08034 |           1 |
+cell_03I1-_rep:0......... |           1 |        1312 |        1360 |         415 |         415 |     7.69431 |     9.10338 |           1 |
+cell_03_rep:0............ |           1 |        3498 |        1635 |        1124 |        1124 |     7.57655 |     9.01962 |           1 |
+cell_04I1+_rep:0......... |           1 |         551 |         576 |         191 |         191 |     7.81724 |     8.97071 |           1 |
+cell_04I1-_rep:0......... |           1 |         748 |         772 |         211 |         211 |     8.00784 |     9.08553 |           1 |
+cell_04_rep:0............ |           1 |        1980 |         962 |         685 |         685 |     7.67045 |     9.05144 |           1 |
+cell_05I1+_rep:0......... |           1 |         305 |         316 |          93 |          93 |     8.65623 |     9.24248 |           1 |
+cell_05I1-_rep:0......... |           1 |         405 |         414 |         116 |         116 |     7.95365 |     9.03481 |           1 |
+cell_05_rep:0............ |           1 |        1108 |         531 |         368 |         368 |     7.97673 |     9.01362 |           1 |
+cell_06I1+_rep:0......... |           1 |         172 |         183 |          56 |          56 |     8.33536 |     8.92955 |           1 |
+cell_06I1-_rep:0......... |           1 |         237 |         246 |          86 |          86 |     7.24474 |     8.64353 |           1 |
+cell_06_rep:0............ |           1 |         642 |         316 |         251 |         251 |     8.17156 |     8.80137 |           1 |
+cell_07I1+_rep:0......... |           1 |          90 |          94 |          32 |          32 |     8.52514 |     8.78631 |           1 |
+cell_07I1-_rep:0......... |           1 |         130 |         138 |          33 |          33 |     8.77063 |     9.04032 |           1 |
+cell_07_rep:0............ |           1 |         344 |         184 |         137 |         137 |     7.97439 |     8.58517 |           1 |
+cell_08I1+_rep:0......... |           1 |          47 |          51 |          19 |          19 |     4.16206 |     8.06111 |           1 |
+cell_08I1-_rep:0......... |           1 |          62 |          65 |          22 |          22 |     8.85602 |      9.0474 |           1 |
+cell_08_rep:0............ |           1 |         173 |          88 |          56 |          56 |     6.64339 |     8.35059 |           1 |
+cell_09I1+_rep:0......... |           1 |          31 |          30 |          11 |          11 |     2.44943 |     7.63104 |           1 |
+cell_09I1-_rep:0......... |           1 |          36 |          38 |           9 |           9 |     3.74626 |     8.42179 |           1 |
+cell_09_rep:0............ |           1 |         105 |          55 |          47 |          47 |     4.39907 |     8.33449 |           1 |
+cell_10I1+_rep:0......... |           1 |          13 |          13 |           4 |           4 |     1.86669 |     7.09996 |           1 |
+cell_10I1-_rep:0......... |           1 |          18 |          18 |           5 |           5 |     1.17297 |     6.00902 |           1 |
+cell_10_rep:0............ |           1 |          56 |          30 |          29 |          29 |     2.47235 |      7.4534 |           1 |
+cell_11I1+_rep:0......... |           1 |           7 |           7 |           1 |           1 |     6.57733 |     7.27559 |           1 |
+cell_11I1-_rep:0......... |           1 |          11 |          11 |           3 |           3 |     6.92771 |     7.66489 |           1 |
+cell_11_rep:0............ |           1 |          34 |          21 |          23 |          23 |     1.97764 |     6.95519 |           1 |
+cell_12I1+_rep:0......... |           1 |           3 |           3 |           2 |           2 |     3.98904 |     4.70121 |           1 |
+cell_12I1-_rep:0......... |           1 |           4 |           4 |           2 |           2 |      6.4905 |     7.55117 |           1 |
+cell_12_rep:0............ |           1 |          16 |          11 |          14 |          14 |     1.25116 |     6.36418 |           1 |
+cell_13I1+_rep:0......... |           1 |           2 |           2 |           0 |           0 |     5.39385 |     6.46557 |           1 |
+cell_13I1-_rep:0......... |           1 |           2 |           2 |           1 |           1 |     4.22603 |     5.03514 |           1 |
+cell_13_rep:0............ |           1 |          11 |           6 |          18 |          18 |    0.877298 |     4.68243 |           1 |
+cell_14I1+_rep:0......... |           1 |           1 |           1 |           0 |           0 |          10 |          10 |           1 |
+cell_14I1-_rep:0......... |           1 |           1 |           1 |           0 |           0 |          10 |          10 |           1 |
+cell_14_rep:0............ |           1 |           4 |           2 |           3 |           3 |     4.48772 |     5.38489 |           1 |
+cell_15I1+_rep:0......... |           1 |           1 |           1 |           0 |           0 |          10 |          10 |           1 |
+cell_15I1-_rep:0......... |           1 |           1 |           1 |           1 |           1 |          10 |          10 |           1 |
+cell_15_rep:0............ |           1 |           3 |           1 |           0 |           0 |          10 |          10 |           1 |
+cell_16I1+_rep:0......... |           1 |           1 |           1 |           0 |           0 |          10 |          10 |           1 |
+cell_16I1-_rep:0......... |           1 |           1 |           1 |           0 |           0 |          10 |          10 |           1 |
+cell_16_rep:0............ |           1 |           3 |           1 |           1 |           1 |          10 |          10 |           1 |
+cell_17I1+_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+cell_17I1-_rep:0......... |           1 |           1 |           1 |           1 |           1 |          10 |          10 |           1 |
+cell_17_rep:0............ |           1 |           2 |           1 |           1 |           1 |          10 |          10 |           1 |
+cell_18I1+_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+cell_18I1-_rep:0......... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+cell_18_rep:0............ |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
+cell_19_rep:0............ |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
 parallelWorld_rep:-1..... |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ParallelTransport, will be removed!
@@ -802,34 +816,10 @@ DoIt Vector:
    LCapture
    Decay
 ================================================
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Concrete
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 5.67841 keV    e- 508.439 keV    e+ 490.005 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-====================================================================
-
-WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 131072
-Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1050 (mu)seconds
+WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 32768
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1069 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0, error= -1, fom*time= 0, time= 1050, n= 0
+    mean= 0, error= -1, fom*time= 0, time= 1069, n= 0
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ParallelImportanceProcess, will be removed!
@@ -943,30 +933,6 @@ DoIt Vector:
    Decay
    WeightCutOffProcess
 ================================================
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Concrete
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 5.67841 keV    e- 508.439 keV    e+ 490.005 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
-
-====================================================================
-
 Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
     mean= 0, error= -1, fom*time= 0, time= 1000, n= 0
