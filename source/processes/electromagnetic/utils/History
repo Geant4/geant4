@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2001-05-16 10:29:24 urban Exp $
+$Id: History,v 1.18 2001-05-16 14:14:00 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,33 +17,29 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
     
-16 may 01: L.Urban
+16 may 01: L.Urban (utils-V03-01-00)
 - value of the member cpar has been changed back to the original
   value 1.5 in G4MultipleScattering.cc. The same is done in
   G4MultipleScatteringx.cc (the data member name is cparm there).
   This change affects all the results for low energy (< 1 MeV
   for electrons).
+  
 15 may 01: L.Urban
-- NEW multiple scattering version committed under the class name
-  **************************************************************
-  G4MultipleScatteringx .It gives better msc angle distribution
-  *********************
+- new multiple scattering version committed under the class name
+  G4MultipleScatteringx. It gives better msc angle distribution
   than the standard G4MultipleScattering. It uses a distribution
   to simulate the geom./true pathlengths (standard : mean values
   only) and has a framework implemented in it to perform special
-  stepping near to a boundary (this algorithm works , but some
-  further development/tuning needed - this algorith is disabled
-  by default) .
-   This new version can be used after the change
- 
-    G4MultipleScattering  --> G4MultipleScatteringx 
-
+  stepping near to a boundary (this algorithm works, but some
+  further development/tuning needed - this algorithm is disabled
+  by default). This new version can be used after the change:
+       G4MultipleScattering  --> G4MultipleScatteringx 
   in the PhysicsList. 
      
 27 mar 01: L.Urban (utils-V03-00-06)
-- another bug fixed in G4VEnergyLoss.cc , in the fluct code.
+- another bug fixed in G4VEnergyLoss.cc, in the fluct code.
   The code gave in some cases (very rarely) small negative energy loss
-  for small (~ micrometer) step size , now it is cured.
+  for small (~ micrometer) step size, now it is cured.
 
 23 mar 01: L.Urban (utils-V03-00-05)
 - bug fixed in fluct in G4VEnergyLoss.cc
