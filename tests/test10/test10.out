@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (17-December-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -179,3 +179,31 @@ G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate
   A 10000 optical photons vertex has been generated at (400.14024,119.955,43.167196)
   A 10000 optical photons vertex has been generated at (731.24774,600.90308,187.27951)
   A 10000 optical photons vertex has been generated at (458.63858,485.7465,223.11684)
+
+ You selected a TwistedBox detector
+
+---> Begin of Event: 0
+  A 10000 optical photons vertex has been generated at (-651.96609,-430.67231,-480.08816)
+  A 10000 optical photons vertex has been generated at (83.402884,316.79494,303.0793)
+  A 10000 optical photons vertex has been generated at (606.56941,354.81392,-112.9575)
+  A 10000 optical photons vertex has been generated at (-590.23756,0.74772084,-392.49379)
+  A 10000 optical photons vertex has been generated at (-328.64819,-542.87704,-722.96412)
+  A 10000 optical photons vertex has been generated at (-930.09575,387.86862,-458.58929)
+  A 10000 optical photons vertex has been generated at (536.82543,860.69398,554.19434)
+  A 10000 optical photons vertex has been generated at (372.8979,888.02891,796.91125)
+  A 10000 optical photons vertex has been generated at (-458.74591,-156.02896,33.373101)
+  A 10000 optical photons vertex has been generated at (979.86841,463.59727,212.77282)
+
+ You selected a TwistedTrap detector
+
+---> Begin of Event: 0
+  A 10000 optical photons vertex has been generated at (-285.67704,990.78629,-987.5993)
+  A 10000 optical photons vertex has been generated at (837.84072,866.62502,887.87846)
+  A 10000 optical photons vertex has been generated at (959.73618,438.23938,-794.07359)
+  A 10000 optical photons vertex has been generated at (436.08797,-730.29162,-336.03205)
+  A 10000 optical photons vertex has been generated at (-449.1218,601.48974,948.24292)
+  A 10000 optical photons vertex has been generated at (75.004586,693.06377,790.75453)
+  A 10000 optical photons vertex has been generated at (582.9867,703.20017,331.90963)
+  A 10000 optical photons vertex has been generated at (-792.42021,727.75328,836.5816)
+  A 10000 optical photons vertex has been generated at (556.55345,42.344346,130.85577)
+  A 10000 optical photons vertex has been generated at (57.254888,-999.16925,996.01919)
