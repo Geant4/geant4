@@ -1,0 +1,44 @@
+$Id: History,v 1.1 2004-01-27 14:11:40 grichine Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 10  History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov 13th, 2003  John Allison
+- Removed OPACS from Vis Manager.
+
+May 15, 2003  Gabriele Cosmo (test10-V05-01-00)
+- Fixed initialisation of world-volume for geometry update, according to the
+  new technique implemented in G4RunManager, tag run-V05-01-00.
+
+Mar 12, 2003  John Allison (test10-V05-00-01)
+- Added HepRep to vis manager.
+
+Jan 30, 2003  Gabriele Cosmo (test10-V05-00-00)
+- Corrected technique to switch detector geometry, according to recent
+  developments in G4RunManager.
+
+Oct 18, 2001  Steve O'Neale (tests-V03-02-03)
+- Update reference output
+- test10.on to show particle list
+
+June 17, 2000  John Allison  (test10-V01-01-00)
+- Updated test10.out for geant4-01-01-ref-06.
+
+17 Apr., 1999 H.Kurashige 
+- Modify SetCuts() and ConstructParticle() in Tst10PhysicsList
+- Modify BeginOfRunAction() and EndOfRunAction() in Tst10RunAction
+- Modify BeginOfEventAction() and EndOfEventAction() in Tst10EventAct
+
+30th November 1998  John Allison

@@ -1,0 +1,271 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (12-December-2003)
+             Copyright : Geant4 Collaboration
+**********************************************
+You select Sphere detector
+Visualization init
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+You select Sphere detector
+Tst10PhysicsList::SetCuts:CutLength : 1 (mm)
+                 e-,              gamma,           geantino,      opticalphoton
+             proton,
+You select Torus detector
+
+---> Begin of Event: 0
+
+---> Begin of Event: 100000
+
+---> Begin of Event: 200000
+
+---> Begin of Event: 300000
+
+---> Begin of Event: 0
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     60.7    -27.3     37.5         1        0        0         0      Hall_P initStep
+
+ >>AlongStepDoIt (after all invocations):
+    ++List of invoked processes 
+      1) Transportation
+
+    ++G4Step Information 
+      Address of G4Track    : 0x841bc70
+      Step Length (mm)      : 32.8
+      Energy Deposit (MeV)  : 0
+      -----------------------------------------------------------------------
+        StepPoint Information               PreStep            PostStep
+      -----------------------------------------------------------------------
+         Position - x (mm)   :                 60.7                70.8
+         Position - y (mm)   :                -27.3           -3.55e-15
+         Position - z (mm)   :                 37.5                22.4
+         Global Time (ns)    :                    0               0.145
+         Local Time (ns)     :                    0               0.145
+         Proper Time (ns)    :                    0                   0
+         Momentum Direct - x :                0.306               0.306
+         Momentum Direct - y :                0.833               0.833
+         Momentum Direct - z :               -0.461              -0.461
+         Momentum - x (MeV/c):                0.306               0.306
+         Momentum - y (MeV/c):                0.833               0.833
+         Momentum - z (MeV/c):               -0.461              -0.461
+         Total Energy (MeV)  :                    1                   1
+         Kinetic Energy (MeV):                    1                   1
+         Velocity (mm/ns)    :                  225                 225
+         Volume Name         :               Hall_P              Hall_P
+         Safety (mm)         :                    0                   0
+         Polarization - x    :                    0                   0
+         Polarization - y    :               -0.484              -0.484
+         Polarization - Z    :               -0.875              -0.875
+         Weight              :                    1                   1
+         Step Status         :            Undefined          Geom Limit
+         Process defined Step:            Undefined      Transportation
+      -----------------------------------------------------------------------
+
+    ++List of secondaries generated (x,y,z,kE,t,PID):  No. of secodaries = 0
+
+#Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    1     70.8 -3.55e-15     22.4         1        0     32.8      32.8       Torus Transportation
+
+-----------------------------------------------------------
+    *** Dump for solid - aTorus ***
+    ===================================================
+ Solid type: G4Torus
+ Parameters: 
+    inner radius: 100 mm 
+    outer radius: 150 mm 
+    swept radius: 200 mm 
+    starting phi: 0 degrees 
+    delta phi   : 59.99999999999999 degrees 
+-----------------------------------------------------------
+Position:
+
+p.x() = 70.75950555416668 mm
+p.y() = -3.552713678800501e-15 mm
+p.z() = 22.37458414788935 mm
+
+
+*** G4Exception : Notification
+      issued by : G4Torus::DistanceToOut(p)
+Point p is outside !?
+*** This is just a warning message.
+
+ >>AlongStepDoIt (after all invocations):
+    ++List of invoked processes 
+      1) Transportation
+
+    ++G4Step Information 
+      Address of G4Track    : 0x841bc70
+      Step Length (mm)      : 56.9
+      Energy Deposit (MeV)  : 0
+      -----------------------------------------------------------------------
+        StepPoint Information               PreStep            PostStep
+      -----------------------------------------------------------------------
+         Position - x (mm)   :                 70.8                88.2
+         Position - y (mm)   :            -3.55e-15                47.4
+         Position - z (mm)   :                 22.4               -3.84
+         Global Time (ns)    :                0.145                1.09
+         Local Time (ns)     :                0.145                1.09
+         Proper Time (ns)    :                    0                   0
+         Momentum Direct - x :                0.306               0.306
+         Momentum Direct - y :                0.833               0.833
+         Momentum Direct - z :               -0.461              -0.461
+         Momentum - x (MeV/c):                0.306               0.306
+         Momentum - y (MeV/c):                0.833               0.833
+         Momentum - z (MeV/c):               -0.461              -0.461
+         Total Energy (MeV)  :                    1                   1
+         Kinetic Energy (MeV):                    1                   1
+         Velocity (mm/ns)    :                  225                  60
+         Volume Name         :                Torus               Torus
+         Safety (mm)         :                    0                   0
+         Polarization - x    :                    0                   0
+         Polarization - y    :               -0.484              -0.484
+         Polarization - Z    :               -0.875              -0.875
+         Weight              :                    1                   1
+         Step Status         :           Geom Limit          Geom Limit
+         Process defined Step:       Transportation      Transportation
+      -----------------------------------------------------------------------
+
+    ++List of secondaries generated (x,y,z,kE,t,PID):  No. of secodaries = 0
+
+#Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    2     88.2     47.4    -3.84         1        0     56.9      89.6      Hall_P Transportation
+
+ >>AlongStepDoIt (after all invocations):
+    ++List of invoked processes 
+      1) Transportation
+
+    ++G4Step Information 
+      Address of G4Track    : 0x841bc70
+      Step Length (mm)      : 183
+      Energy Deposit (MeV)  : 0
+      -----------------------------------------------------------------------
+        StepPoint Information               PreStep            PostStep
+      -----------------------------------------------------------------------
+         Position - x (mm)   :                 88.2                 144
+         Position - y (mm)   :                 47.4                 200
+         Position - z (mm)   :                -3.84               -88.4
+         Global Time (ns)    :                 1.09                1.91
+         Local Time (ns)     :                 1.09                1.91
+         Proper Time (ns)    :                    0                   0
+         Momentum Direct - x :                0.306               0.306
+         Momentum Direct - y :                0.833               0.833
+         Momentum Direct - z :               -0.461              -0.461
+         Momentum - x (MeV/c):                0.306               0.306
+         Momentum - y (MeV/c):                0.833               0.833
+         Momentum - z (MeV/c):               -0.461              -0.461
+         Total Energy (MeV)  :                    1                   1
+         Kinetic Energy (MeV):                    1                   1
+         Velocity (mm/ns)    :                   60                 225
+         Volume Name         :               Hall_P              Hall_P
+         Safety (mm)         :                    0                   0
+         Polarization - x    :                    0                   0
+         Polarization - y    :               -0.484              -0.484
+         Polarization - Z    :               -0.875              -0.875
+         Weight              :                    1                   1
+         Step Status         :           Geom Limit          Geom Limit
+         Process defined Step:       Transportation      Transportation
+      -----------------------------------------------------------------------
+
+    ++List of secondaries generated (x,y,z,kE,t,PID):  No. of secodaries = 0
+
+#Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    3      144      200    -88.4         1        0      183       273       Torus Transportation
+
+ >>AlongStepDoIt (after all invocations):
+    ++List of invoked processes 
+      1) Transportation
+
+    ++G4Step Information 
+      Address of G4Track    : 0x841bc70
+      Step Length (mm)      : 57.7
+      Energy Deposit (MeV)  : 0
+      -----------------------------------------------------------------------
+        StepPoint Information               PreStep            PostStep
+      -----------------------------------------------------------------------
+         Position - x (mm)   :                  144                 162
+         Position - y (mm)   :                  200                 248
+         Position - z (mm)   :                -88.4                -115
+         Global Time (ns)    :                 1.91                2.87
+         Local Time (ns)     :                 1.91                2.87
+         Proper Time (ns)    :                    0                   0
+         Momentum Direct - x :                0.306               0.306
+         Momentum Direct - y :                0.833               0.833
+         Momentum Direct - z :               -0.461              -0.461
+         Momentum - x (MeV/c):                0.306               0.306
+         Momentum - y (MeV/c):                0.833               0.833
+         Momentum - z (MeV/c):               -0.461              -0.461
+         Total Energy (MeV)  :                    1                   1
+         Kinetic Energy (MeV):                    1                   1
+         Velocity (mm/ns)    :                  225                  60
+         Volume Name         :                Torus               Torus
+         Safety (mm)         :                    0                   0
+         Polarization - x    :                    0                   0
+         Polarization - y    :               -0.484              -0.484
+         Polarization - Z    :               -0.875              -0.875
+         Weight              :                    1                   1
+         Step Status         :           Geom Limit          Geom Limit
+         Process defined Step:       Transportation      Transportation
+      -----------------------------------------------------------------------
+
+    ++List of secondaries generated (x,y,z,kE,t,PID):  No. of secodaries = 0
+
+#Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    4      162      248     -115         1        0     57.7       331      Hall_P Transportation
+
+ >>AlongStepDoIt (after all invocations):
+    ++List of invoked processes 
+      1) Transportation
+
+    ++G4Step Information 
+      Address of G4Track    : 0x841bc70
+      Step Length (mm)      : 3.06e+03
+      Energy Deposit (MeV)  : 0
+      -----------------------------------------------------------------------
+        StepPoint Information               PreStep            PostStep
+      -----------------------------------------------------------------------
+         Position - x (mm)   :                  162             1.1e+03
+         Position - y (mm)   :                  248             2.8e+03
+         Position - z (mm)   :                 -115           -1.53e+03
+         Global Time (ns)    :                 2.87                16.5
+         Local Time (ns)     :                 2.87                16.5
+         Proper Time (ns)    :                    0                   0
+         Momentum Direct - x :                0.306               0.306
+         Momentum Direct - y :                0.833               0.833
+         Momentum Direct - z :               -0.461              -0.461
+         Momentum - x (MeV/c):                0.306               0.306
+         Momentum - y (MeV/c):                0.833               0.833
+         Momentum - z (MeV/c):               -0.461              -0.461
+         Total Energy (MeV)  :                    1                   1
+         Kinetic Energy (MeV):                    1                   1
+         Velocity (mm/ns)    :                   60                 225
+         Volume Name         :               Hall_P              Hall_P
+         Safety (mm)         :                    0                   0
+         Polarization - x    :                    0                   0
+         Polarization - y    :               -0.484              -0.484
+         Polarization - Z    :               -0.875              -0.875
+         Weight              :                    1                   1
+         Step Status         :           Geom Limit          Geom Limit
+         Process defined Step:       Transportation      Transportation
+      -----------------------------------------------------------------------
+
+    ++List of secondaries generated (x,y,z,kE,t,PID):  No. of secodaries = 0
+
+#Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    5  1.1e+03  2.8e+03 -1.53e+03         1        0 3.06e+03  3.39e+03  OutOfWorld Transportation

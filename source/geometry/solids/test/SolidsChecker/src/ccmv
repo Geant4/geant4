@@ -1,0 +1,10 @@
+mv Tst10DetectorConstruction.cc Sc01DetectorConstruction.cc
+mv Tst10DetectorMessenger.cc Sc01DetectorMessenger.cc
+mv Tst10EventAction.cc Sc01EventAction.cc
+mv Tst10EventActionMessenger.cc Sc01EventActionMessenger.cc
+mv Tst10PhysicsList.cc Sc01PhysicsList.cc
+mv Tst10PrimaryGeneratorAction.cc Sc01PrimaryGeneratorAction.cc
+mv Tst10RunAction.cc Sc01RunAction.cc
+mv Tst10VisManager.cc Sc01VisManager.cc
+
+

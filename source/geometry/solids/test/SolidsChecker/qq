@@ -1,0 +1,20 @@
+mv F01CalorHit.cc F03CalorHit.cc
+mv F01CalorimeterSD.cc F03CalorimeterSD.cc
+mv F01DetectorConstruction.cc F03DetectorConstruction.cc
+mv F01DetectorMessenger.cc F03DetectorMessenger.cc
+mv F01ElectroMagneticField.cc F03ElectroMagneticField.cc
+mv F01EventAction.cc F03EventAction.cc
+mv F01EventActionMessenger.cc F03EventActionMessenger.cc
+mv F01PhysicsList.cc F03PhysicsList.cc
+mv F01PhysicsListMessenger.cc F03PhysicsListMessenger.cc
+mv F01PrimaryGeneratorAction.cc F03PrimaryGeneratorAction.cc
+mv F01PrimaryGeneratorMessenger.cc F03PrimaryGeneratorMessenger.cc
+mv F01RunAction.cc F03RunAction.cc
+mv F01RunMessenger.cc F03RunMessenger.cc
+mv F01StepCut.cc F03StepCut.cc
+mv F01SteppingAction.cc F03SteppingAction.cc
+mv F01SteppingMessenger.cc F03SteppingMessenger.cc
+mv F01SteppingVerbose.cc F03SteppingVerbose.cc
+mv F01VisManager.cc F03VisManager.cc
+
+

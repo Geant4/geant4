@@ -1,0 +1,24 @@
+#
+# Macro file of "test10.cc"
+# for Optical photons geometry test
+#
+/run/initialize
+#/geometry/test/recursive_test
+/particle/list
+#/tracking/verbose 1
+#
+#/mydet/SelectDetector Cone
+#
+/mydet/SelectDetector Torus
+#
+/event/printModulo 100000
+/run/beamOn 353561
+#/run/beamOn 6236
+/event/printModulo 1
+/tracking/verbose 3
+/run/beamOn 1
+#
+#/event/printModulo 10000
+#/run/beamOn 100000
+#/event/printModulo 100000
+#/run/beamOn 1000000
