@@ -1,0 +1,147 @@
+
+                       geant4-06-01-ref-01
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Multiple scattering model: new rewrite for transformations of true
+    path length to geometrical length.
+  o Major design iteration of G4GeneralParticleSource class.
+  o Modified G4ProductionCutsTable::RetrieveCutsTable() to allow
+    different ordering of materials and couples in a file.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                           config-V06-01-00
+------
+- architecture.gmk: added check for definition of LDFLAGS.
+  Fixes bug report #603.
+
+event                                            events-V06-01-02
+-----
+- Major design iteration of G4GeneralParticleSource.
+  The following new classes have been added: G4SingleParticleSource,
+  G4SPSEneDistribution, G4SPSAngDistribution, G4SPSPosDistribution,
+  G4SPSRandomGenerator.
+  See http://reat.space.qinetiq.com/gps for more details of the changes.
+
+global                                           global-V06-01-00
+------
+- HEPNumerics module: fixed bug in G4DataInterpolation::PolynomInterpolation()
+  for indexing in a for-loop.
+
+graphics_reps                                    greps-V06-01-00
+-------------
+- Implemented constructor and destructor for G4AttDefStore, to properly
+  delete objects in the static map, allocated through explicit calls to
+  GetInstance(). Made G4AttDefStore a singleton.
+
+interfaces                                       interfaces-V06-01-00
+----------
+- G4[UI]Win32[.hh.cc]: implemented changes to allow usage of
+  standard C main (and avoid WinMain).
+
+materials                                        materials-V06-01-00
+---------
+- G4SandiaTable: added new methods for sorting algorithm in PAI model.
+
+processes/cuts                                   procuts-V06-01-00
+--------------
+- Modified G4ProductionCutsTable::RetrieveCutsTable() to allow different
+  ordering of materials and couples in a file.
+
+processes/electromagnetic/utils                  utils-V06-01-03
+-------------------------------
+- Fluctuations: reduced aria of applicability of the model for simulation
+  of fluctuations at very small steps; smooth out sampling of Gaussian
+  fluctuations, when sigma is much bigger than energy loss. The purpose
+  of both changes is to provide less step dependent results. For
+  example, for steps down to 0.1 mkm in solid materials energy deposition
+  distribution in thin absorber is not depend on the step limit.
+- Multiple scattering model: transformations of true path
+  length to geometrical length and back have been completely rewritten;
+  the angular distribution for e+/e- updated to provide central part of
+  distribution correction to be fitted by the Highland formula. The purpose
+  is to remove step limit dependence of results, which was mainly
+  connected with simulation of multiple scattering of low energy
+  particles. It will affect the resolution of sampling calorimeters (for
+  ATLAS HEC roughly 3% reduction of the value of the resolution, compared
+  to what observed in Geant4 6.1 release).
+- G4VEnergyLossProcess: updated calculation of energy loss from tables
+  (important for proton energies about 1 MeV and for Bragg peak
+  simulation); fixed a problem of retrieving tables if PreciseRange
+  is absent; fixed a problem of energy below lowestKinEnergy (simulation
+  of energy loss of low energy particles in low density gases).
+
+processes/hadronic/models/binary_cascade         ghad-bin-V06-01-00
+----------------------------------------
+- Adding protections for a crash and an infinite loop.
+  Should solve problems reported in bug-reports #574 and #593.
+
+processes/hadronic/models/chiral_.../body        ghad-chips-body-V06-01-03
+-----------------------------------------
+- Added universal G4QCaptureAtRest process (temporary from the
+  photolepton_hadron directory) together with the G4QIsotope class which
+  chose N for Z(Element).
+- Fixed ppK+ "antistrange below mass shell" problem in G4QEnvironment.
+- Minor bug fixes in G4QEnvironment in (Sigma-)2n final state.
+- Fixed rare problem of decay in Del+Del+ with pi0 when pi- was found.
+- Minor bug fix in final multibaryon spit (3n->n+n+n).
+
+processes/optical                                op-V06-01-01
+-----------------
+- Fixes in G4OpBoundaryProcess for default class member assignments
+  in DoIt() method.
+- Added protection against NULL pointers in G4OpRayleigh process.
+  Do not overwrite Rayleigh scattering length for 'Water' material if it has
+  been specified by the user through a call to AddProperty("RAYLEIGH"...).
+
+visualization                                    vis-V06-01-01
+-------------
+- OpenGL: added G4OpenGL.hh wrapper file and adapted code to encapsulate
+  inclusion of gl/gl.h and gl/glu.h that may be platform dependent.
+  Cleared WIN32 ifdefs no longer necessary.
+- VRML (VRML-V06-01-00):
+  o Fixed typo in printout in G4VRML[1/2]FileSceneHandler.cc files.
+
+examples                                         examples-V06-01-00
+--------
+- Updated reference outputs.
+- extended
+  o electromagnetic/TestEm1 (testem1-V06-01-02)
+    + EmPhysicsList: set G4eBremsstrahlungCMS as default.
+  o electromagnetic/TestEm2 (testem2-V06-01-00)
+    + PhysListEmG4v52: back to G4MultipleScattering52.
+    + Removed UI vis commands from source code.
+  o electromagnetic/TestEm3 (testem3-V06-01-00)
+    + Reviewed setup for histogramming.  
+  o electromagnetic/TestEm4 (testem4-V06-01-00)
+    + Reviewed setup for histogramming.
+  o electromagnetic/TestEm5 (testem5-V06-01-00)
+    + New macro dedx.mac
+    + Corrected sign in ComputeMscHighland().
+  o electromagnetic/TestEm6 (testem6-V06-01-00)
+    + Reviewed setup for histogramming.
+  o electromagnetic/TestEm7 (testem7-V06-01-00)
+    + Reviewed setup for histogramming.
+- novice
+  o N02 (exampleN02-V06-01-00)
+    + Removed UI vis commands from run-action.
+    + Code cleanup in physics-list.
+    + Corrected definition of XenonGas in detector-contruction.
+  o N03 (exampleN03-V06-00-00)
+    + Code cleanup in physics-list
+  o N06 (exampleN06-V06-01-00)
+    + Change e+ anaergy in primary-generator to 500 keV.
+    + Removed UI vis commands from run-action.
+
+tests                                            tests-V06-01-00
+-----
+- Updated reference outputs.
+- test23 (test23-V06-00-01)
+  o New test for CHIPS nuclear capture at rest.
+- test27 (test27-V06-01-00)
+  o Added test with Water as target material, and C12 as projectile.
+    This combination produced the loop reported in bug-report #593.
