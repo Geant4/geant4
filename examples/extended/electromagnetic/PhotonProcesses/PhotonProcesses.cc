@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotonProcesses.cc,v 1.3 2004-06-30 11:13:56 maire Exp $
+// $Id: PhotonProcesses.cc,v 1.4 2004-06-30 16:13:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -102,14 +102,12 @@ int main(int argc,char** argv) {
      UI->ApplyCommand(command+fileName);
     }
 
-  // job termination
-#ifdef G4ANALYSIS_USE
-  delete histo;
-#endif      
+  // job termination     
 #ifdef G4VIS_USE
  delete visManager;
 #endif
- 
+
+  delete histo; 
   delete runManager;
 
   return 0;
