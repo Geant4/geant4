@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.hh,v 1.10 2001-07-11 10:03:40 gunter Exp $
+// $Id: G4VEnergyLoss.hh,v 1.11 2001-10-24 16:17:05 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -223,6 +223,10 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
                                   G4double Tmin,G4double Tmax,G4int nbin,
                        G4int materialIndex,G4PhysicsLogVector* rangeVector);
 
+
+  protected:
+   static G4bool EqualCutVectors( G4double* vec1, G4double* vec2 );	 
+   static G4double* CopyCutVectors( G4double* dest, G4double* source );
 
   // data members
   protected:

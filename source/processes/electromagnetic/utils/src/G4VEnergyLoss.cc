@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.23 2001-09-17 17:18:59 maire Exp $
+// $Id: G4VEnergyLoss.cc,v 1.24 2001-10-24 16:17:05 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -919,7 +919,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4double Tkin   = aParticle->GetKineticEnergy();
   ParticleMass = aParticle->GetMass() ;
 
-  threshold =((*G4Electron::Electron()).GetCutsInEnergy())[imat];
+  threshold =((G4Electron::Electron())->GetEnergyCuts())[imat];
   G4double rmass = electron_mass_c2/ParticleMass;
   G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
   G4double Tm    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);
@@ -1093,3 +1093,27 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
    
+G4bool G4VEnergyLoss::EqualCutVectors( G4double* vec1, G4double* vec2 )
+{
+  if ( (vec1==0 ) || (vec2==0) ) return false;
+  
+  G4bool flag = true;
+  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
+  
+  for (size_t j=0; flag && j<materialTable->length(); j++){
+    flag = (vec1[j] == vec2[j]);
+  }
+  
+  return flag;
+}
+
+G4double* G4VEnergyLoss::CopyCutVectors( G4double* dest, G4double* source )
+{
+  if ( dest != 0) delete [] dest;
+  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
+  dest = new G4double [materialTable->length()];
+  for (size_t j=0; j<materialTable->length(); j++){
+    dest[j] = source[j];
+  }
+  return dest;
+}
