@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.7 1999-07-27 20:30:21 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.8 1999-12-06 18:10:39 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -210,7 +210,7 @@ G4MagInt_Driver::WarnEndPointTooFar (G4double endPointDist,
 	if( isNewMax )
 	   maxRelError= endPointDist / h - 1.0; 
 
-        if( dbg &&  ( prNewMax || (endPointDist >= h*(1.+eps) ) ) ){ 
+        if( dbg && (h > 0) && ( prNewMax || (endPointDist >= h*(1.+eps) ) ) ){ 
            static G4int noWarnings = 0;
            if( (noWarnings ++ < 10) || (dbg>1) ){
  	      G4cerr << " Warning (G4MagIntegratorDriver): "
