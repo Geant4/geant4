@@ -6,6 +6,11 @@
 
 List of fixes included in this public patch since the public release 7.0:
 
+  o Configuration:
+    -------------
+    + Fix in Configure script for unnecessary check on setting of
+      CLHEP_BASE_DIR to /usr, /usr/local on Linux platforms.
+
   o Event:
     -----
     + Fixed bug on binning in G4SPSRandomGenerator.
