@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.17 2001-10-22 14:50:25 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.18 2001-11-28 16:44:41 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -138,6 +138,9 @@ class G4PropagatorInField
    inline G4double  GetMinimumEpsilonStep() const;
    inline void      SetMinimumEpsilonStep(G4double newEpsMin);
 
+     // 
+   inline void      SetLargestAcceptableStep(G4double newBigDist);
+   inline G4double  GetLargestAcceptableStep();
  public:  // without description
 
    // void  SetGlobalFieldMgr( G4FieldManager *detectorFieldMgr );
@@ -201,6 +204,7 @@ class G4PropagatorInField
                        // G4double  fMidPoint_CurveLen_of_LastAttempt= -1;
    G4double  fFull_CurveLen_of_LastAttempt; 
    G4double  fLast_ProposedStepLength; 
+   G4double  fLargestAcceptableStep;
 };
 
 //  Defines the constructor.

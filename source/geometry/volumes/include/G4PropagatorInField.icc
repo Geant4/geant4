@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.22 2001-10-22 14:53:02 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.23 2001-11-28 16:44:52 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,8 @@ G4PropagatorInField::G4PropagatorInField(G4Navigator    *theNavigator,
      // fMidPoint_CurveLen_of_LastAttempt= -1;
      fFull_CurveLen_of_LastAttempt= -1; 
      fLast_ProposedStepLength= -1; 
+
+     fLargestAcceptableStep= 1000.0 * meter;
 }
 
 inline
@@ -188,3 +190,9 @@ void      G4PropagatorInField::SetMinimumEpsilonStep(G4double newEpsMin)
   if( (newEpsMin > 0.0) && (fabs(1.0+newEpsMin)>1.0) )
     fEpsilonMin= newEpsMin;
 }
+
+inline void      G4PropagatorInField::SetLargestAcceptableStep(G4double newBigDist)
+{if(fLargestAcceptableStep>0.0) fLargestAcceptableStep= newBigDist; }
+
+inline G4double  G4PropagatorInField::GetLargestAcceptableStep()
+{return fLargestAcceptableStep;}
