@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.2 1999-06-01 18:33:48 stesting Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.3 1999-06-01 22:45:50 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -330,7 +330,7 @@ oneAtomTable* G4LowEnergyIonisation::BuildTables(const G4int TableInd,
   }while(a != -2); //end for on file
   
   file.close();
-  return new oneAtomTable((*oneAtomPar));
+  return oneAtomPar;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -388,7 +388,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   G4Material*               aMaterial = trackData.GetMaterial() ;
   const G4DynamicParticle*  aParticle = trackData.GetDynamicParticle() ;
 
-  G4double charge = aParticle->GetDefinition()->GetPDGCharge();
+  G4double Charge = aParticle->GetDefinition()->GetPDGCharge();
   ParticleMass = aParticle->GetDefinition()->GetPDGMass();
 
   // I need only this
@@ -404,7 +404,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
  
   // some kinematics
   G4double MaxKineticEnergyTransfer;
-  if (charge < 0.) MaxKineticEnergyTransfer = 0.5*KineticEnergy;
+  if (Charge < 0.) MaxKineticEnergyTransfer = 0.5*KineticEnergy;
   else             MaxKineticEnergyTransfer =     KineticEnergy;
 
   // sampling kinetic energy of the delta ray 
@@ -597,7 +597,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   else{
 
     finalKineticEnergy = 0.;
-    if (charge < 0.) aParticleChange.SetStatusChange(fStopAndKill);
+    if (Charge < 0.) aParticleChange.SetStatusChange(fStopAndKill);
     else             aParticleChange.SetStatusChange(fStopButAlive);
   }
       
