@@ -1,5 +1,5 @@
 //-----------------------------------------------------------
-// Renamed of the LHEP ufficial Physics List.
+// Renamed of the ufficial Physics List.
 //-----------------------------------------------------------
 #ifndef CCalPhysicsList_h
 #define CCalPhysicsList_h 1

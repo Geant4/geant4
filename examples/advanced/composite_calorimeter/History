@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.3 2002-10-24 12:20:44 ribon Exp $
+$Id: History,v 1.4 2002-10-24 18:12:35 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.3 2002-10-24 12:20:44 ribon Exp $
 
                       Example History file
                       ---------------------
+
+24.10.2002 - A.Ribon (ccal-V04-01-01)
+- Changed default physics list to QGSC, with the possibility
+  of easily switching to either LHEP or QGSP.
 
 24.10.2002 - A.Ribon (ccal-V04-01-00)
 - Replaced physics list with ufficial LHEP one;

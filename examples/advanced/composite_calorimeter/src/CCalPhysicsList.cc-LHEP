@@ -1,7 +1,7 @@
 //---------------------------------------------------
 // This file should be copied as CCalPhysicsList.cc
 // if you want to use the 
-//                        *** QGSC *** 
+//                        *** LHEP *** 
 // Physics List
 //---------------------------------------------------
 #include "CCalPhysicsList.hh"
@@ -22,7 +22,7 @@
 #include "GeneralPhysics.hh"
 #include "EMPhysics.hh"
 #include "MuonPhysics.hh"
-#include "HadronPhysicsQGSC.hh"
+#include "HadronPhysicsLHEP.hh"
 #include "IonPhysics.hh"
 
 CCalPhysicsList::CCalPhysicsList():  G4VModularPhysicsList()
@@ -42,7 +42,7 @@ CCalPhysicsList::CCalPhysicsList():  G4VModularPhysicsList()
   RegisterPhysics(  new MuonPhysics("muon"));
 
    // Hadron Physics
-  RegisterPhysics(  new HadronPhysicsQGSC("hadron"));
+  RegisterPhysics(  new HadronPhysicsLHEP("hadron"));
 
   // Ion Physics
   RegisterPhysics( new IonPhysics("ion"));

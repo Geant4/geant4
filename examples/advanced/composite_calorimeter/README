@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.2 2002-10-24 12:01:52 ribon Exp $
+$Id: README,v 1.3 2002-10-24 18:12:35 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -223,12 +223,24 @@ $Id: README,v 1.2 2002-10-24 12:01:52 ribon Exp $
 4. Physics processes
 --------------------
  
- The ufficial High Energy Physics List for Calorimetry, LHEP, has been
- used in this example. Please refer to the Web page:
+ By the default, one of the ufficial High Energy Physics List for 
+ Calorimetry, QGSC, is used in this example. However, it is 
+ very easy to use instead either LHEP or QGSP. To do so, it is
+ enough to copy one file (and then, of course, rebuild the executable)
+ as follows:
+     >  cp src/CCalPhysicsList.cc-LHEP src/CCalPhysicsList.cc
+ if you want to use LHEP, or 
+     >  cp src/CCalPhysicsList.cc-QGSP src/CCalPhysicsList.cc
+ if you want to use QGSP.
+ (The fact that by default QGSC is used means that the file
+  src/CCalPhysicsList.cc  that you find in the Repository is
+  a copy of src/CCalPhysicsList.cc-QGSC)
+
+ Please refer to the Web page:
 
       http://cmsdoc.cern.ch/~hpw/GHAD/HomePage/index.html
 
- for more information on this (and others) Physics List.
+ for more information on these (and others) Physics Lists.
  Please notice that, for the time being, some classes, which can be
  downloaded from the above Web page, have to be included in the 
  include/ and src/ subdirectories of this example. However, soon
@@ -493,18 +505,30 @@ No Noise and Digitization
   G4PrecoNeutronBuilder
   G4PrecoProtonBuilder
   G4ProtonBuilder
+  G4QGSCNeutronBuilder
+  G4QGSCPiKBuilder
+  G4QGSCProtonBuilder
+  G4QGSPNeutronBuilder
+  G4QGSPPiKBuilder
+  G4QGSPProtonBuilder
   G4StoppingHadronBuilder
   G4VNeutronBuilder
   G4VPiKBuilder
   G4VProtonBuilder
   GeneralPhysics
   HadronPhysicsLHEP
+  HadronPhysicsQGSC
+  HadronPhysicsQGSP
   IonPhysics
   MuonPhysics
 	Determination of particles and processes active in this example.
-        The standard High Energy Physics List for Calorimetry, LHEP has
-        been used. Most of these classes will be soon moved in the 
-        Geant4 kernel. 
+        The following three major Physics Lists for High Energy 
+        Calorimetry can been selected: LHEP, QGSC, QGSP. 
+        Most of these classes will be soon moved in the Geant4 kernel. 
+        Please refer to the Web page:
+            http://cmsdoc.cern.ch/~hpw/GHAD/HomePage/index.html
+        for more information of these (and others) Physics Lists,
+        and for eventual updated versions.
 
   CCalDetectorConstruction
   CCalAMaterial
