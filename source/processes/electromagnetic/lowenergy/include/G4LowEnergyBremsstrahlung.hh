@@ -20,36 +20,44 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.25 2001-10-11 12:01:08 pia Exp $
+// 
+// -------------------------------------------------------------------
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.26 2001-10-26 00:32:17 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//      CERN Geneva Switzerland
+// Author: A. Forti
 //
-//      ------------ G4LowEnergyBremsstrahlung physics process ------
-//                     by A.Forti  1999/03/27 19:18:13
+// History:
+// -----------
+// 02 Mar 1999  A. Forti        1st implementation
+// 27 Sep 2001  V. Ivanchenko   Major revision according to a design iteration
+// 10 Oct 2001  M.G. Pia        Revision to improve code quality and consistency with design
 //
-// 18.04.2000 V.Lefebure
-// - First implementation of continuous energy loss.
-//
-//
+// -------------------------------------------------------------------
+
 // Class description:
-// Low Energy electromagnetic process, Bremsstrahlung
+// Low Energy electromagnetic process, electron Bremsstrahlung
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
-// ************************************************************
+// --------------------------------------------------------------
 
-#ifndef G4LowEnergyBremsstrahlung_h
-#define G4LowEnergyBremsstrahlung_h 1
+
+#ifndef G4LOWENERGYBREMSSTRAHLUNG_HH
+#define G4LOWENERGYBREMSSTRAHLUNG_HH 1
 
 #include "G4eLowEnergyLoss.hh"
-#include "G4LowEnergyUtilities.hh"
+#include "G4DataVector.hh"
 
-class G4LowEnergyBremsstrahlung : public G4eLowEnergyLoss{
- 
+class G4Track;
+class G4Step;
+class G4ParticleDefinition;
+class G4VParticleChange;
+class G4VEMDataSet;
+class G4VEnergySpectrum;
+class G4VCrossSectionHandler;
+
+class G4LowEnergyBremsstrahlung : public G4eLowEnergyLoss
+{ 
 public:
  
   G4LowEnergyBremsstrahlung(const G4String& processName = "LowEnBrem");
@@ -57,80 +65,40 @@ public:
   ~G4LowEnergyBremsstrahlung();
   
   G4bool IsApplicable(const G4ParticleDefinition&);
-
-  void SetCutForLowEnSecPhotons(G4double);
+  
+  void BuildPhysicsTable(const G4ParticleDefinition& particleType);
+  
+  G4VParticleChange* PostStepDoIt(const G4Track& track,         
+				  const G4Step& step);                 
+ 
+  void SetCutForLowEnSecPhotons(G4double cut);
   
   void PrintInfoDefinition();
-  
-  void BuildPhysicsTable(const G4ParticleDefinition& ParticleType);
-  
-  void BuildLossTable(const G4ParticleDefinition& ParticleType);
-  
+        
+protected:
+
   G4double GetMeanFreePath(const G4Track& track,
 			   G4double previousStepSize,
 			   G4ForceCondition* condition );
  
-  G4VParticleChange* PostStepDoIt(const G4Track& track,         
-				  const G4Step&  step);                 
-  
-  
-  G4double GetEnergyLossWithCut(const G4double AtomicNumber,
-                                const G4double KineticEnergy,
-                                const G4double Tcut) ;
-  
 private:
-  
-  void BuildCrossSectionTable();
-  void BuildMeanFreePathTable();
-  void BuildATable();
-  void BuildBTable();
-  void BuildZVec();
-  void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
 
-  void ComputepartialSumSigma(const G4double KineticEnergy, 
-			      const G4Material* aMaterial,
-			      const G4double threshold);
+  // Hide copy constructor and assignment operator as private 
+  G4LowEnergyBremsstrahlung(const G4LowEnergyBremsstrahlung& );
+  G4LowEnergyBremsstrahlung& operator = (const G4LowEnergyBremsstrahlung& right);
   
-private:
+  void BuildLossTable(const G4ParticleDefinition& ParticleType);
   
-  G4double ComputeA(const G4int Z,const  G4double ElectKinEnergy); // interpolation
-  G4double ComputeB(const G4int Z,const  G4double ElectKinEnergy); // parametrized formula
-  G4double GetCrossSection(const G4double AtomicNumber,
-                           const G4double KineticEnergy) ;
-  G4double GetCrossSectionWithCut(const G4double AtomIndex,
-				  const G4double IncEnergy,
-		   	 	  const G4double CutEnergy);
-     
-  G4Element* SelectRandomAtom(G4Material* aMaterial) const;
+  G4VCrossSectionHandler* crossSectionHandler;
+  G4VEMDataSet* theMeanFreePath;
+  G4VEnergySpectrum* energySpectrum;
 
-  
-  G4LowEnergyBremsstrahlung & operator=(const G4LowEnergyBremsstrahlung &right);
-  
-  G4LowEnergyBremsstrahlung(const G4LowEnergyBremsstrahlung&);
-  
-private:
-  
-  G4SecondLevel* theCrossSectionTable ;              
-  G4PhysicsTable* theMeanFreePathTable ;              
-  
-  G4SecondLevel* ATable; 
-  G4FirstLevel* BTable;
-  G4DataVector* ZNumVec;
-
-  G4LowEnergyUtilities util;
-  // partial sum of total crosssection
-  G4OrderedTable partialSumSigma;
-  
-  G4double lowestKineticEnergy;      
-  G4double highestKineticEnergy;     
-  
-  G4double lowEnergyCut;    // lower limit of the energy sampling formula
-  G4int    totBin;                   // number of bins in the tables 
-  G4double cutForLowEnergySecondaryPhotons;
-
+  // Lower limit for generation of gamma in this model
+  G4DataVector cutForSecondaryPhotons;
+  G4double cutForPhotons;
 };
 
-#include "G4LowEnergyBremsstrahlung.icc"
+
   
 #endif
  

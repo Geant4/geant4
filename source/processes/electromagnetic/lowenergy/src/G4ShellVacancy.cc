@@ -48,6 +48,7 @@ G4ShellVacancy::~G4ShellVacancy()
   for (G4int k =0; k<size; k++)
     {
       delete xsis[k];
+      xsis[k] = 0;
     } 
 }
 

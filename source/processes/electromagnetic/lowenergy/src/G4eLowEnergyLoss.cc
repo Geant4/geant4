@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.20 2001-10-25 14:31:21 vnivanch Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.21 2001-10-26 00:30:24 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -447,7 +447,6 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
     delete deexcitationProducts;   
   } 
  
-
   aParticleChange.SetLocalEnergyDeposit(edep);
   
   return &aParticleChange;
