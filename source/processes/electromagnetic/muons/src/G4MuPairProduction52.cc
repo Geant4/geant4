@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction52.cc,v 1.1 2003-08-08 11:28:42 vnivanch Exp $
+// $Id: G4MuPairProduction52.cc,v 1.2 2004-10-25 08:32:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4MuPairProduction52 physics process ---------------------------
@@ -860,14 +860,14 @@ G4VParticleChange* G4MuPairProduction52::PostStepDoIt(const G4Track& trackData,
 
    G4double NewKinEnergy = KineticEnergy - ElectronEnergy - PositronEnergy;
 
-   aParticleChange.SetMomentumChange(ParticleDirection);
+   aParticleChange.ProposeMomentumDirection(ParticleDirection);
 
-   if (NewKinEnergy > 0.) aParticleChange.SetEnergyChange(NewKinEnergy);
-   else {                 aParticleChange.SetEnergyChange(0.);
-                          aParticleChange.SetStatusChange(fStopButAlive);
+   if (NewKinEnergy > 0.) aParticleChange.ProposeEnergy(NewKinEnergy);
+   else {                 aParticleChange.ProposeEnergy(0.);
+                          aParticleChange.ProposeTrackStatus(fStopButAlive);
         }
 
-   aParticleChange.SetLocalEnergyDeposit(LocalEnerDeposit);
+   aParticleChange.ProposeLocalEnergyDeposit(LocalEnerDeposit);
 
    //reset NumberOfinteractionLengthLeft()
    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);

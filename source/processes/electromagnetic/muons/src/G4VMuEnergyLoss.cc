@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.29 2003-06-16 17:01:52 gunter Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.30 2004-10-25 08:32:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -708,7 +708,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
 
              // update the particle direction and kinetic energy
               if(subdelta > 0)
-                aParticleChange.SetMomentumChange(Px,Py,Pz) ;
+                aParticleChange.ProposeMomentumDirection(Px,Py,Pz) ;
               E = Tkin ;
             }
           }
@@ -733,12 +733,12 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
   if (finalT <= 0. )
   {
       finalT = 0.;
-      aParticleChange.SetStatusChange(fStopButAlive);
+      aParticleChange.ProposeTrackStatus(fStopButAlive);
   }
 
  // aParticleChange.SetNumberOfSecondaries(0);
-  aParticleChange.SetEnergyChange(finalT);
-  aParticleChange.SetLocalEnergyDeposit(E-finalT);
+  aParticleChange.ProposeEnergy(finalT);
+  aParticleChange.ProposeLocalEnergyDeposit(E-finalT);
 
   return &aParticleChange;
 }
