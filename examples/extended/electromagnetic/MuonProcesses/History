@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2004-08-17 18:09:59 vnivanch Exp $
+$Id: History,v 1.5 2004-08-27 11:20:06 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27.06.04 V. Ivanchenko (muonprocesses-V06-02-02)
+- update for muons-V06-02-01 tag 
 
 17.06.04 V. Ivanchenko (muonprocesses-V06-02-01)
 - introduce MuNuclearBuilder and corresponding macro
