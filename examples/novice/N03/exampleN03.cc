@@ -21,17 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.17 2002-11-19 16:44:50 jacek Exp $
+// $Id: exampleN03.cc,v 1.18 2002-12-18 15:17:55 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// --------------------------------------------------------------
-//      GEANT 4 - exampleN03 
-//
-// --------------------------------------------------------------
-// Comments
-//
-// --------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -57,8 +52,7 @@
 #include "ExN03TrackingAction.hh"
 #include "ExN03SteppingVerbose.hh"
 
-#include "G4IdentityTrajectoryFilter.hh"
-#include "G4PropagatorInField.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
 
@@ -102,15 +96,9 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new ExN03PrimaryGeneratorAction(detector));
   runManager->SetUserAction(new ExN03RunAction);
   runManager->SetUserAction(new ExN03EventAction);
+  runManager->SetUserAction(new ExN03TrackingAction);  
   runManager->SetUserAction(new ExN03SteppingAction);
-  runManager->SetUserAction(new ExN03TrackingAction);
   
-  // Tracking Action is asking for SmoothTrajectories, therefore
-  // PropagatorInField MUST have an auxiliary point filter. There is
-  // probably a more sensible place for this to go (jacek 19/11/2002)
-
-  G4TransportationManager::GetTransportationManager()->GetPropagatorInField()->SetTrajectoryFilter( new G4IdentityTrajectoryFilter );
-
   //Initialize G4 kernel
   runManager->Initialize();
     
@@ -144,3 +132,4 @@ int main(int argc,char** argv) {
   return 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.12 2002-12-16 16:37:26 maire Exp $
+// $Id: ExN03DetectorConstruction.cc,v 1.13 2002-12-18 15:17:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,9 +39,11 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
-#include "G4UniformMagField.hh"
 #include "G4FieldManager.hh"
+#include "G4UniformMagField.hh"
 #include "G4TransportationManager.hh"
+#include "G4IdentityTrajectoryFilter.hh"
+#include "G4PropagatorInField.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 
@@ -463,6 +465,8 @@ void ExN03DetectorConstruction::SetMagField(G4double fieldValue)
   { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
     fieldMgr->SetDetectorField(magField);
     fieldMgr->CreateChordFinder(magField);
+    G4TransportationManager::GetTransportationManager()->GetPropagatorInField()
+                 ->SetTrajectoryFilter(new G4IdentityTrajectoryFilter);
   } else {
     magField = 0;
     fieldMgr->SetDetectorField(magField);

@@ -21,50 +21,33 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03TrackingAction.hh,v 1.1 2002-11-19 16:44:51 jacek Exp $
+// $Id: ExN03TrackingAction.hh,v 1.2 2002-12-18 15:17:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
 
-// class description:
-//
-//  This is a concrete class of G4UserTrackingAction. This class is used
-// by G4RayTracer for managing a ray tracked through volumes. An object
-// of this class is constructed by G4RayTracer and set to G4TrackingManager
-// with replacement of user defined tracking action during the period of
-// ray tracing.
-//
-
-///////////////////////
-//ExN03TrackingAction.hh
-///////////////////////
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN03TrackingAction_h
 #define ExN03TrackingAction_h
 
 #include "G4UserTrackingAction.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class G4Track;
 
-///////////////////////////
 class ExN03TrackingAction : public G4UserTrackingAction
-///////////////////////////
 {
+ public:
+   ExN03TrackingAction() {;}
+  ~ExN03TrackingAction() {;}
 
-//--------
-   public:
-//--------
-
-// Constructor & Destructor
-   ExN03TrackingAction(){;}
-   virtual ~ExN03TrackingAction(){;}
-
-// Member functions
-   virtual void PreUserTrackingAction(const G4Track* aTrack);
-   virtual void PostUserTrackingAction(const G4Track* aTrack){;}
-
+   void PreUserTrackingAction (const G4Track* aTrack);
+   void PostUserTrackingAction(const G4Track* aTrack) {;}
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

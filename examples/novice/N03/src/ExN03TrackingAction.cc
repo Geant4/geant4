@@ -21,25 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03TrackingAction.cc,v 1.2 2002-11-20 18:46:24 japost Exp $
+// $Id: ExN03TrackingAction.cc,v 1.3 2002-12-18 15:17:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-//
 
-///////////////////////
-// ExN03TrackingAction.cc
-///////////////////////
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN03TrackingAction.hh"
 #include "G4SmoothTrajectory.hh"
 #include "G4TrackingManager.hh"
-//#include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03TrackingAction :: PreUserTrackingAction(const G4Track* aTrack)
 {
-  fpTrackingManager->SetTrajectory( new G4SmoothTrajectory( aTrack) );
-  // cout << "spong ExN03TrackingAction :: PreUserTrackingAction" << endl;
+  fpTrackingManager->SetTrajectory(new G4SmoothTrajectory(aTrack));
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
