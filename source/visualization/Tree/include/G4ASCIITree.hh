@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ASCIITree.hh,v 1.2 2001-05-18 10:03:11 johna Exp $
+// $Id: G4ASCIITree.hh,v 1.3 2001-06-15 07:10:48 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

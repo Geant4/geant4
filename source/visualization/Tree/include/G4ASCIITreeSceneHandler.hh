@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ASCIITreeSceneHandler.hh,v 1.5 2001-06-05 09:59:15 johna Exp $
+// $Id: G4ASCIITreeSceneHandler.hh,v 1.6 2001-06-15 07:10:49 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
