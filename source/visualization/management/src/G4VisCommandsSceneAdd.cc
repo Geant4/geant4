@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.30 2002-06-19 15:49:34 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.31 2002-11-11 18:31:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -47,6 +47,7 @@
 #include "G4ApplicationState.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4ios.hh"
 #include "g4std/strstream"
@@ -617,8 +618,8 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand* command,
 G4VisCommandSceneAddText::G4VisCommandSceneAddText () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/text", this);
-  fpCommand -> SetGuidance 
-    ("Adds text at (x, y, z) unit font_size x_offset y_offset text.");
+  fpCommand -> SetGuidance
+    ("Adds text at (x*unit, y*unit, z*unit) with font_size x_offset y_offset.");
   fpCommand -> SetGuidance
     ("Font size and offsets in pixels.");
   G4UIparameter* parameter;
@@ -701,13 +702,26 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand* command,
 ////////////// /vis/scene/add/trajectories ///////////////////////////////////
 
 G4VisCommandSceneAddTrajectories::G4VisCommandSceneAddTrajectories () {
-  fpCommand = new G4UIcmdWithoutParameter
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithAnInteger
     ("/vis/scene/add/trajectories", this);
+  fpCommand -> SetGuidance
+    ("/vis/scene/add/trajectories [drawing-mode]");
+  fpCommand -> SetGuidance
+    ("Default integer parameter: 0");
   fpCommand -> SetGuidance
     ("Adds trajectories to current scene.");
   fpCommand -> SetGuidance
-    ("Trajectories are drawn at end of event when the scene in which"
-     " they are added is current.");
+    ("Causes trajectories, if any, to be drawn at the end of processiing an"
+     "\nevent. The drawing mode is an integer that is passed to the"
+     "\nDrawTrajectory method.  The default implementation in G4VTrajectory"
+     "\ndraws the trajectory as a polyline and, if drawing-mode>0, draws"
+     "\nmarkers of screen size drawing-mode/10 in pixels at each step and"
+     "\nauxiliary point, if any.  So drawing-mode == 50 is a good choice."
+     "\n(Enable storing with \"/tracking/storeTrajectory 1\".)"
+     "\nSee also \"/vis/scene/endOfEventAction\".");
+  fpCommand -> SetParameterName ("drawing-mode", omitable = true);
+  fpCommand -> SetDefaultValue (0);
 }
 
 G4VisCommandSceneAddTrajectories::~G4VisCommandSceneAddTrajectories () {
@@ -732,7 +746,11 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand* command,
     return;
   }
 
-  G4TrajectoriesModel* model = new G4TrajectoriesModel;
+  G4int drawingMode;
+  const char* s = newValue;
+  G4std::istrstream is ((char*)s);
+  is >> drawingMode;
+  G4TrajectoriesModel* model = new G4TrajectoriesModel(drawingMode);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddEndOfEventModel (model, warn);
   if (successful) {
