@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2001-05-30 14:32:18 vnivanch Exp $
+$Id: History,v 1.23 2001-07-17 14:21:33 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+17 jul 01: mma
+- suppression of the production threshold in phot,compt,conv,annih
+
+11 jul 01: mma
+- GammaConversion::PostStepDoIt : sample epsil->power (rndm,0.333333)
 
 29 may 01: V.Ivanchenko 
 - clean up againist Linux ANSI strict compilation mode.

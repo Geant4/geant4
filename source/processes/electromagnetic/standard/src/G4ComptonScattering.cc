@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.cc,v 1.6 2001-07-11 10:03:30 gunter Exp $
+// $Id: G4ComptonScattering.cc,v 1.7 2001-07-17 14:22:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,11 +40,11 @@
 // 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
 // 13-08-98, new methods SetBining()  PrintInfo()
 // 15-12-98, cross section=0 below 10 keV
-// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 13-07-01, DoIt: suppression of production cut for the electron (mma) 
 // --------------------------------------------------------------
 
 #include "G4ComptonScattering.hh"
-#include "G4EnergyLossTables.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -195,7 +195,6 @@ G4VParticleChange* G4ComptonScattering::PostStepDoIt(const G4Track& aTrack,
  
 {
    aParticleChange.Initialize(aTrack);
-   G4Material* aMaterial = aTrack.GetMaterial();
 
    const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
    G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
@@ -257,13 +256,8 @@ G4VParticleChange* G4ComptonScattering::PostStepDoIt(const G4Track& aTrack,
    //
 
    G4double ElecKineEnergy = GammaEnergy0 - GammaEnergy1 ;
-      
-     // condition changed!
-     if((G4EnergyLossTables::GetRange(G4Electron::Electron(),
-          ElecKineEnergy,aMaterial)>aStep.GetPostStepPoint()->GetSafety())
-         ||
-        (ElecKineEnergy > 
-        (G4Electron::Electron()->GetCutsInEnergy())[aMaterial->GetIndex()]))
+
+    if (ElecKineEnergy > 0.)	
       {
         G4double ElecMomentum = sqrt(ElecKineEnergy*(ElecKineEnergy+2.*electron_mass_c2));
         G4ThreeVector ElecDirection (
@@ -281,7 +275,7 @@ G4VParticleChange* G4ComptonScattering::PostStepDoIt(const G4Track& aTrack,
     else
        {
          aParticleChange.SetNumberOfSecondaries(0) ;
-         aParticleChange.SetLocalEnergyDeposit (ElecKineEnergy) ;
+         aParticleChange.SetLocalEnergyDeposit (0.) ;
        }
 
    //  Reset NbOfInteractionLengthLeft and return aParticleChange

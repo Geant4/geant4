@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.cc,v 1.5 2001-07-11 10:03:32 gunter Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.6 2001-07-17 14:22:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -31,7 +31,8 @@
 // 23-03-97, protection in BuildPhysicsTable, M.Maire
 // 31-08-98, new methods SetBining() and PrintInfo()
 // 22-02-01, postStepDoIt: fStopButAlive instead of kineEnergy == 0.  
-// 28-05-01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 28-05-01  V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 13-07-01, DoIt: suppression of production cut for the gamma (mma)  
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -183,9 +184,7 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
  
 {
    aParticleChange.Initialize(aTrack);
-   G4Material* aMaterial = aTrack.GetMaterial();
      
-
    const G4DynamicParticle* aDynamicPositron = aTrack.GetDynamicParticle();
    G4double PositKinEnergy = aDynamicPositron->GetKineticEnergy();
    G4ParticleMomentum PositDirection = aDynamicPositron->GetMomentumDirection();
@@ -228,54 +227,41 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
    // kinematic of the created pair
    //
 
-   G4double LocalEnerDeposit = 0. ;
    aParticleChange.SetNumberOfSecondaries(2) ; 
 
    G4double TotalAvailableEnergy = PositKinEnergy + 2*electron_mass_c2;
    G4double Phot1Energy = epsil*TotalAvailableEnergy;
-
-   G4double GammaCut= (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];
-
-   if (Phot1Energy > GammaCut)
-      {
-        G4ThreeVector Phot1Direction ( dirx, diry, dirz );
-        Phot1Direction.rotateUz(PositDirection);   
- 
-        // create G4DynamicParticle object for the particle1  
-        G4DynamicParticle* aParticle1= new G4DynamicParticle (G4Gamma::Gamma(),
+   if (Phot1Energy > 0.) {
+     G4ThreeVector Phot1Direction ( dirx, diry, dirz );
+     Phot1Direction.rotateUz(PositDirection);   
+     // create G4DynamicParticle object for the particle1  
+     G4DynamicParticle* aParticle1= new G4DynamicParticle (G4Gamma::Gamma(),
                                                  Phot1Direction, Phot1Energy);
-        aParticleChange.AddSecondary( aParticle1 ) ; 
-       }
-    else
-       { LocalEnerDeposit += Phot1Energy; }
+     aParticleChange.AddSecondary(aParticle1);
+   }   
 
-    G4double Phot2Energy =(1.-epsil)*TotalAvailableEnergy; 
-
-   if (Phot2Energy > GammaCut)
-      {
-        G4double Eratio = Phot1Energy/Phot2Energy;
-        G4double PositP = sqrt(PositKinEnergy*(PositKinEnergy+2.*electron_mass_c2));
-        G4ThreeVector Phot2Direction (-dirx*Eratio, -diry*Eratio,
-                                         (PositP-dirz*Phot1Energy)/Phot2Energy); 
-        Phot2Direction.rotateUz(PositDirection);
- 
-        // create G4DynamicParticle object for the particle2 
-        G4DynamicParticle* aParticle2= new G4DynamicParticle (G4Gamma::Gamma(),
+   G4double Phot2Energy =(1.-epsil)*TotalAvailableEnergy;
+   if (Phot2Energy > 0.) {
+     G4double Eratio = Phot1Energy/Phot2Energy;
+     G4double PositP = sqrt(PositKinEnergy*(PositKinEnergy+2.*electron_mass_c2));
+     G4ThreeVector Phot2Direction (-dirx*Eratio, -diry*Eratio,
+                                    (PositP-dirz*Phot1Energy)/Phot2Energy); 
+     Phot2Direction.rotateUz(PositDirection); 
+     // create G4DynamicParticle object for the particle2 
+     G4DynamicParticle* aParticle2= new G4DynamicParticle (G4Gamma::Gamma(),
                                                  Phot2Direction, Phot2Energy);
-        aParticleChange.AddSecondary( aParticle2 ) ; 
-       }
-    else
-       { LocalEnerDeposit += Phot2Energy; }
+     aParticleChange.AddSecondary(aParticle2);
+   }   
 
-   aParticleChange.SetLocalEnergyDeposit( LocalEnerDeposit ) ;
+   aParticleChange.SetLocalEnergyDeposit(0.) ;
 
    //
    // Kill the incident positron 
    //
 
    aParticleChange.SetMomentumChange( 0., 0., 0. ) ;
-   aParticleChange.SetEnergyChange( 0. ) ; 
-   aParticleChange.SetStatusChange( fStopAndKill ) ;
+   aParticleChange.SetEnergyChange(0.) ; 
+   aParticleChange.SetStatusChange(fStopAndKill) ;
 
    return &aParticleChange;
 }
@@ -294,29 +280,23 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
  
 {
    aParticleChange.Initialize(aTrack);
-   G4Material* aMaterial = aTrack.GetMaterial();
 
    aParticleChange.SetNumberOfSecondaries(2) ; 
 
-   if (electron_mass_c2 > (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()])
-      {
-        G4double cosTeta = 2*G4UniformRand()-1. , sinTeta = sqrt(1.-cosTeta*cosTeta);
-        G4double Phi     = twopi * G4UniformRand() ;
-        G4ThreeVector Direction (sinTeta*cos(Phi), sinTeta*sin(Phi), cosTeta);   
+   G4double cosTeta = 2*G4UniformRand()-1. , sinTeta = sqrt(1.-cosTeta*cosTeta);
+   G4double Phi     = twopi * G4UniformRand() ;
+   G4ThreeVector Direction (sinTeta*cos(Phi), sinTeta*sin(Phi), cosTeta);   
  
-        aParticleChange.AddSecondary( new G4DynamicParticle (G4Gamma::Gamma(),
-                                                 Direction, electron_mass_c2) );
-        aParticleChange.AddSecondary( new G4DynamicParticle (G4Gamma::Gamma(),
-                                                -Direction, electron_mass_c2) ); 
+   aParticleChange.AddSecondary( new G4DynamicParticle (G4Gamma::Gamma(),
+                                            Direction, electron_mass_c2) );
+   aParticleChange.AddSecondary( new G4DynamicParticle (G4Gamma::Gamma(),
+                                           -Direction, electron_mass_c2) ); 
 
-        aParticleChange.SetLocalEnergyDeposit(0.);
-       }
-   else
-      { aParticleChange.SetLocalEnergyDeposit( 2*electron_mass_c2 ); }
+   aParticleChange.SetLocalEnergyDeposit(0.);
 
    // Kill the incident positron 
    //
-   aParticleChange.SetStatusChange( fStopAndKill );
+   aParticleChange.SetStatusChange(fStopAndKill);
       
    return &aParticleChange;
 }

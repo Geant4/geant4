@@ -21,19 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.cc,v 1.6 2001-07-11 10:03:30 gunter Exp $
+// $Id: G4GammaConversion.cc,v 1.7 2001-07-17 14:22:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file
-//      CERN Geneva Switzerland
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      ------------ G4GammaConversion physics process --------
 //                   by Michel Maire, 24 May 1996
-// **************************************************************
+// --------------------------------------------------------------------
 // 11-06-96, Added SelectRandomAtom() method, M.Maire
 // 21-06-96, SetCuts implementation, M.Maire
 // 24-06-96, simplification in ComputeMicroscopicCrossSection, M.Maire
@@ -51,11 +44,12 @@
 // 19-06-97, correction in ComputeMicroscopicCrossSection, L.Urban
 // 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
 // 13-08-98, new methods SetBining() PrintInfo()
-// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
-// --------------------------------------------------------------
+// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 11-07-01, PostStepDoIt - sampling epsil: power(rndm,0.333333)
+// 13-07-01, DoIt: suppression of production cut for the (e-,e+) (mma)  
+// --------------------------------------------------------------------
 
 #include "G4GammaConversion.hh"
-#include "G4EnergyLossTables.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -277,7 +271,7 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
 
    do {
         if ( NormF1/(NormF1+NormF2) > G4UniformRand() )
-             { epsil = 0.5 - epsilrange*pow(G4UniformRand(), 1/3) ;
+             { epsil = 0.5 - epsilrange*pow(G4UniformRand(), 0.333333) ;
                screenvar = screenfac/(epsil*(1-epsil));
                greject = (ScreenFunction1(screenvar) - FZ)/F10 ;
              } 
@@ -328,54 +322,34 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
    // the electron and positron are assumed to have a symetric angular distribution
    // with respect to the Z axis along the parent photon.
 
-   G4double LocalEnerDeposit = 0. ;
    aParticleChange.SetNumberOfSecondaries(2) ; 
 
    G4double ElectKineEnergy = G4std::max(0.,ElectTotEnergy - electron_mass_c2) ;
-   //  condition changed !
-     if((G4EnergyLossTables::GetRange(G4Electron::Electron(),
-          ElectKineEnergy,aMaterial)>aStep.GetPostStepPoint()->GetSafety())
-         ||
-        (ElectKineEnergy >
-        (G4Electron::Electron()->GetCutsInEnergy())[aMaterial->GetIndex()]))
 
-      {
-        G4ThreeVector ElectDirection ( dirx, diry, dirz );
-        ElectDirection.rotateUz(GammaDirection);   
+   if (ElectKineEnergy > 0.)
+     {
+       G4ThreeVector ElectDirection ( dirx, diry, dirz );
+       ElectDirection.rotateUz(GammaDirection);   
  
-        // create G4DynamicParticle object for the particle1  
-        G4DynamicParticle* aParticle1= new G4DynamicParticle (G4Electron::Electron(),
+       // create G4DynamicParticle object for the particle1  
+       G4DynamicParticle* aParticle1= new G4DynamicParticle (G4Electron::Electron(),
                                                  ElectDirection, ElectKineEnergy);
-        aParticleChange.AddSecondary( aParticle1 ) ; 
-       }
-    else
-       { LocalEnerDeposit += ElectKineEnergy ; }
+       aParticleChange.AddSecondary( aParticle1 ) ; 
+     }
 
    // the e+ is always created (even with Ekine=0) for further annihilation.
 
    G4double PositKineEnergy = G4std::max(0.,PositTotEnergy - electron_mass_c2) ;
 
-  //  if (G4EnergyLossTables::GetRange(G4Positron::Positron(),PositKineEnergy,aMaterial)
-  //      < G4std::min(G4Positron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) )  
-     if((G4EnergyLossTables::GetRange(G4Positron::Positron(),
-          PositKineEnergy,aMaterial)<aStep.GetPostStepPoint()->GetSafety())
-         &&
-        (PositKineEnergy <
-        (G4Positron::Positron()->GetCutsInEnergy())[aMaterial->GetIndex()]))
-
-      {
-        LocalEnerDeposit += PositKineEnergy ;
-        PositKineEnergy = 0. ;
-      }
    G4ThreeVector PositDirection ( -dirx, -diry, dirz );
    PositDirection.rotateUz(GammaDirection);   
  
    // create G4DynamicParticle object for the particle2 
    G4DynamicParticle* aParticle2= new G4DynamicParticle (G4Positron::Positron(),
                                                  PositDirection, PositKineEnergy);
-   aParticleChange.AddSecondary( aParticle2 ) ; 
+   aParticleChange.AddSecondary(aParticle2) ; 
 
-   aParticleChange.SetLocalEnergyDeposit( LocalEnerDeposit ) ;
+   aParticleChange.SetLocalEnergyDeposit(0.) ;
 
    //
    // Kill the incident photon 

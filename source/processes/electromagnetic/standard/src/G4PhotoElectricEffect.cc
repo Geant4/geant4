@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.14 2001-07-11 10:03:30 gunter Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.15 2001-07-17 14:22:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -42,14 +42,13 @@
 // 21-06-00, in DoIt, killing photon: aParticleChange.SetEnergyChange(0.); mma
 // 22-06-00, in DoIt, absorbe very low energy photon (back to 20-05-99); mma
 // 22-02-01, back to 08-06-99 after correc in SandiaTable (materials-V03-00-05)  
-// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
-
+// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 13-07-01, DoIt: suppression of production cut of the electron (mma)
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4PhotoElectricEffect.hh"
-#include "G4EnergyLossTables.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -259,11 +258,8 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
    if (i==NbOfShells) return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
       
    G4double ElecKineEnergy = PhotonEnergy - anElement->GetAtomicShell(i);
-   if ((G4EnergyLossTables::GetRange(G4Electron::Electron(),
-        ElecKineEnergy,aMaterial)>aStep.GetPostStepPoint()->GetSafety())
-        ||
-       (ElecKineEnergy >
-       (G4Electron::Electron()->GetCutsInEnergy())[aMaterial->GetIndex()]))
+
+   if (ElecKineEnergy > 0.)
      {
       // the electron is created in the direction of the incident photon ...  
       G4DynamicParticle* aElectron= new G4DynamicParticle (G4Electron::Electron(),

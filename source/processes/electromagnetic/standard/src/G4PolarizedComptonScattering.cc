@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.5 2001-07-11 10:03:31 gunter Exp $
+// $Id: G4PolarizedComptonScattering.cc,v 1.6 2001-07-17 14:22:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -31,12 +31,13 @@
 // --------------------------------------------------------------
 // Corrections by Rui Curado da Silva (Nov. 2000)
 //    - Sampling of Phi
-//    - Depolarization probability 
+//    - Depolarization probability
+// 
+// 13-07-01, DoIt: suppression of production cut for the electron (mma) 
 //
 // --------------------------------------------------------------
 
 #include "G4PolarizedComptonScattering.hh"
-#include "G4EnergyLossTables.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -59,7 +60,6 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(const G4Track& aTr
  
 {
    aParticleChange.Initialize(aTrack);
-   G4Material* aMaterial = aTrack.GetMaterial();
 
    const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle(); 
    
@@ -176,11 +176,7 @@ while ((j < 100) && (abs(SetPhi(epsilon,sint2,middle,Rand)) > resolution))
 
    G4double ElecKineEnergy = GammaEnergy0 - GammaEnergy1 ;
       
-   if((G4EnergyLossTables::GetRange(G4Electron::Electron(),
-       ElecKineEnergy,aMaterial)>aStep.GetPostStepPoint()->GetSafety())
-       ||
-       (ElecKineEnergy > 
-       (G4Electron::Electron()->GetCutsInEnergy())[aMaterial->GetIndex()]))              
+   if (ElecKineEnergy > 0.)                     
       {
         G4double ElecMomentum = sqrt(ElecKineEnergy*(ElecKineEnergy+2.*electron_mass_c2));
         G4ThreeVector ElecDirection (
@@ -196,7 +192,7 @@ while ((j < 100) && (abs(SetPhi(epsilon,sint2,middle,Rand)) > resolution))
     else
        {
          aParticleChange.SetNumberOfSecondaries(0) ;
-         aParticleChange.SetLocalEnergyDeposit (ElecKineEnergy) ;
+         aParticleChange.SetLocalEnergyDeposit (0.) ;
        }
 
    //  Reset NbOfInteractionLengthLeft and return aParticleChange
