@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.7 2003-03-10 07:35:41 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.8 2003-03-10 08:08:04 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -122,7 +122,6 @@ void G4ProductionCutsTable::UpdateCoupleTable()
 
   // Update Material-Cut-Couple
   typedef G4std::vector<G4Region*>::iterator regionIterator;
-  G4Region* theWorldRegion = *(fG4RegionStore->begin());
   for(regionIterator rItr=fG4RegionStore->begin();rItr!=fG4RegionStore->end();rItr++)
   { 
     ///////////////////if(!((*rItr)->IsModified())) continue;
@@ -134,11 +133,12 @@ void G4ProductionCutsTable::UpdateCoupleTable()
     // The following part of the code should be removed once all EM processes
     // become "Region-aware"
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    if((*rItr)==theWorldRegion)
-    {
-      mItr = G4Material::GetMaterialTable()->begin();
-      nMaterial = G4Material::GetMaterialTable()->size();
-    }
+    ////////////////////G4Region* theWorldRegion = *(fG4RegionStore->begin());
+    //if((*rItr)==theWorldRegion)
+    //{
+    //  mItr = G4Material::GetMaterialTable()->begin();
+    //  nMaterial = G4Material::GetMaterialTable()->size();
+    //}
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     // The previous part of the code should be removed once all EM processes 
     // become "Region-aware"
@@ -173,17 +173,17 @@ void G4ProductionCutsTable::UpdateCoupleTable()
     // The following part of the code should be removed once all EM processes 
     // become "Region-aware"
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      if((*rItr)==theWorldRegion)
-      {
-        aCouple->SetUseFlag(false);
-        G4std::vector<G4Material*>::const_iterator mItr1 = (*rItr)->GetMaterialIterator();
-        size_t nMaterial1 = (*rItr)->GetNumberOfMaterials();
-        for(size_t iMate1=0;iMate1<nMaterial1;iMate1++)
-        {
-          if((*mItr1)==aCouple->GetMaterial()) aCouple->SetUseFlag();
-          mItr1++;
-        }
-      }
+    //  if((*rItr)==theWorldRegion)
+    //  {
+    //    aCouple->SetUseFlag(false);
+    //    G4std::vector<G4Material*>::const_iterator mItr1 = (*rItr)->GetMaterialIterator();
+    //    size_t nMaterial1 = (*rItr)->GetNumberOfMaterials();
+    //    for(size_t iMate1=0;iMate1<nMaterial1;iMate1++)
+    //    {
+    //      if((*mItr1)==aCouple->GetMaterial()) aCouple->SetUseFlag();
+    //      mItr1++;
+    //    }
+    //  }
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     // The previous part of the code should be removed once all EM processes 
     // become "Region-aware"
@@ -201,7 +201,7 @@ void G4ProductionCutsTable::UpdateCoupleTable()
     // The following part of the code should be removed once all EM processes 
     // become "Region-aware"
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        if(aR==theWorldRegion) aR = 0;
+    //    if(aR==theWorldRegion) aR = 0;
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     // The previous part of the code should be removed once all EM processes 
     // become "Region-aware"
