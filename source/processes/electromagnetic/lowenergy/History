@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2000-09-18 15:27:26 vnivanch Exp $
+$Id: History,v 1.40 2000-09-19 18:16:46 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18.09.2000 - V.Ivanchenko: A bug in G4hICRU49He was fixed.
+18.09.2000 - MGP, tag emlowen-V02-00-10
+             Improvements to the readability of the code by V. Ivanchenko
+
+17.09.2000 - MGP, tag emlowen-V02-00-09
+             New features on antiproton ionisation by Stephane Chauvie:
+             extension of the Quantum Harmonic Oscillator model to
+             generic materials, calculation of oscillator strengths for 
+             all elements
+             Antiproton model also moved to be compliant with the new design
+             iteration
 
 16.09.2000 - MGP, tag emlowen-V02-00-08	
              Const cast in G4hLowEnergyIonisation (const G4Material* into
