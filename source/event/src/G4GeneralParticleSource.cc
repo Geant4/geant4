@@ -38,7 +38,7 @@
 //       Technical Note (TN) on the physics and algorithms
 //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: G4GeneralParticleSource.cc,v 1.11 2001-07-13 11:50:57 gcosmo Exp $
+// $Id: G4GeneralParticleSource.cc,v 1.12 2001-07-13 15:01:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -94,7 +94,7 @@ G4GeneralParticleSource::G4GeneralParticleSource()
   // Position distribution Variables
 
   NumberOfParticlesToBeGenerated = 1;
-  particle_definition = NULL;
+  particle_definition = 0;
   G4ThreeVector zero;
   particle_momentum_direction = (G4ParticleMomentum)zero;
   particle_energy = 0.0;
@@ -113,7 +113,7 @@ G4GeneralParticleSource::G4GeneralParticleSource()
   ParAlpha = 0.;
   ParTheta = 0.;
   ParPhi = 0.;
-  CentreCoords = (0.,0.,0.);
+  CentreCoords = G4ThreeVector(0.,0.,0.);
   Rotx = HepXHat;
   Roty = HepYHat;
   Rotz = HepZHat;
@@ -127,9 +127,9 @@ G4GeneralParticleSource::G4GeneralParticleSource()
 
   // Angular distribution variables.
   AngDistType = "iso"; 
-  AngRef1 = (1.,0.,0.);
-  AngRef2 = (0.,1.,0.);
-  AngRef3 = (0.,0.,1.);
+  AngRef1 = G4ThreeVector(1.,0.,0.);
+  AngRef2 = G4ThreeVector(0.,1.,0.);
+  AngRef3 = G4ThreeVector(0.,0.,1.);
   MinTheta = 0.;
   MaxTheta = pi;
   MinPhi = 0.;
@@ -283,11 +283,11 @@ void G4GeneralParticleSource::ConfineSourceToVolume(G4String Vname)
   VolName = Vname;
   if(verbosityLevel == 2)
     G4cout << VolName << G4endl;
-  G4VPhysicalVolume *tempPV      = NULL;
+  G4VPhysicalVolume *tempPV      = 0;
   G4PhysicalVolumeStore *PVStore = 0;
   G4String theRequiredVolumeName = VolName;
   PVStore      = G4PhysicalVolumeStore::GetInstance();
-  G4int      i = 0;
+  size_t     i = 0;
   G4bool found = false;
   if(verbosityLevel == 2)
     G4cout << PVStore->size() << G4endl;
@@ -328,11 +328,10 @@ void G4GeneralParticleSource::GeneratePointSource()
 
 void G4GeneralParticleSource::GeneratePointsInPlane()
 {
-  G4double x, y, z;
+  G4double x=0.; G4double y=0.; G4double z=0.;
   G4double expression;
   G4ThreeVector RandPos;
   G4double tempx, tempy, tempz;
-  z = 0.;
 
   if(SourcePosType != "Plane" && verbosityLevel >= 1)
     G4cout << "Error: SourcePosType is not Plane" << G4endl;
@@ -447,22 +446,19 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
 {
   //Private method to create points on a surface
   G4double theta, phi;
-  G4double x, y, z;
+  G4double x=0; G4double y=0.; G4double z=0.;
   G4ThreeVector RandPos;
-  G4double tempx, tempy, tempz;
 
   if(SourcePosType != "Surface" && verbosityLevel >= 1)
     G4cout << "Error SourcePosType not Surface" << G4endl;
 
   if(Shape == "Sphere")
     {
-      G4double tantheta, tanphi;
       theta = GenRandTheta();
       phi = GenRandPhi();
 
       theta = acos(1. - 2.*theta); // theta isotropic
       phi = phi * 2. * pi;
-      tantheta = tan(theta);
       
       x = Radius * sin(theta) * cos(phi);
       y = Radius * sin(theta) * sin(phi);
@@ -483,7 +479,7 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
     }
   else if(Shape == "Ellipsoid")
     {
-      G4double testrand, theta, phi, minphi, maxphi, middlephi;
+      G4double theta, phi, minphi, maxphi, middlephi;
       G4double answer, constant;
 
       constant = pi/(halfx*halfx) + pi/(halfy*halfy) + 
@@ -853,7 +849,7 @@ void G4GeneralParticleSource::GeneratePointsInVolume()
 {
   G4ThreeVector RandPos;
   G4double tempx, tempy, tempz;
-  G4double x, y, z;
+  G4double x=0.; G4double y=0.; G4double z=0.;
 
   if(SourcePosType != "Volume" && verbosityLevel >= 1)
     G4cout << "Error SourcePosType not Volume" << G4endl;
@@ -1496,7 +1492,7 @@ void G4GeneralParticleSource::ArbEnergyHisto(G4ThreeVector input)
 
 void G4GeneralParticleSource::EpnEnergyHisto(G4ThreeVector input)
 {
-  G4double elo, ehi, val;
+  G4double ehi, val;
   ehi = input.x();
   val = input.y();
   if(verbosityLevel == 2)
@@ -1625,7 +1621,6 @@ void G4GeneralParticleSource::ArbInterpolate(G4String IType)
   if(EnergyDisType != "Arb")
     G4cout << "Error: this is for arbitrary distributions" << G4endl;
   IntType = IType;
-  G4int i=0;
 
   // Calcuate Emin and Emax, mainly for use in debugging
   G4int len = G4int(ArbEnergyH.GetVectorLength());
@@ -1665,7 +1660,7 @@ void G4GeneralParticleSource::LinearInterpolation()
     {
       // change currently stored values (emin etc) which are actually momenta
       // to energies.
-      if(particle_definition == NULL)
+      if(particle_definition == 0)
 	G4cout << "Error: particle not defined" << G4endl;
       else
 	{
@@ -1783,7 +1778,7 @@ void G4GeneralParticleSource::LogInterpolation()
     {
       // change currently stored values (emin etc) which are actually momenta
       // to energies.
-      if(particle_definition == NULL)
+      if(particle_definition == 0)
 	G4cout << "Error: particle not defined" << G4endl;
       else
 	{
@@ -1896,7 +1891,7 @@ void G4GeneralParticleSource::ExpInterpolation()
     {
       // change currently stored values (emin etc) which are actually momenta
       // to energies.
-      if(particle_definition == NULL)
+      if(particle_definition == 0)
 	G4cout << "Error: particle not defined" << G4endl;
       else
 	{
@@ -2000,7 +1995,7 @@ void G4GeneralParticleSource::SplineInterpolation()
     {
       // change currently stored values (emin etc) which are actually momenta
       // to energies.
-      if(particle_definition == NULL)
+      if(particle_definition == 0)
 	G4cout << "Error: particle not defined" << G4endl;
       else
 	{
@@ -2101,7 +2096,7 @@ void G4GeneralParticleSource::GenerateMonoEnergetic()
 
 void G4GeneralParticleSource::GenerateLinearEnergies()
 {
-  G4double energy, rndm;
+  G4double rndm;
   G4double emaxsq = pow(Emax,2.); //Emax squared
   G4double eminsq = pow(Emin,2.); //Emin squared
   G4double intersq = pow(cept,2.); //cept squared
@@ -2336,12 +2331,13 @@ void G4GeneralParticleSource::GenUserHistEnergies()
     {
       G4int ii;
       G4int maxbin = G4int(UDefEnergyH.GetVectorLength());
-      G4double bins[256], vals[256], sum;
+      G4double bins[256], vals[256];
+      G4double sum=0.;
       //      UDefEnergyH.DumpValues();
       G4double mass = particle_definition->GetPDGMass();
       //      G4cout << mass << G4endl;
       //      G4cout << EnergySpec << " " << DiffSpec << G4endl;
-      if((EnergySpec == false) && (particle_definition == NULL))
+      if((EnergySpec == false) && (particle_definition == 0))
 	G4cout << "Error: particle definition is NULL" << G4endl;
       
       if(maxbin > 256)
@@ -2530,7 +2526,7 @@ void G4GeneralParticleSource::ConvertEPNToEnergy()
   // currently stored histogram from energy/nucleon 
   // to energy.
   //  G4cout << "In ConvertEpntoEnergy " << G4endl;
-  if(particle_definition==NULL)
+  if(particle_definition==0)
     G4cout << "Error: particle not defined" << G4endl;
   else
     {
@@ -3013,7 +3009,7 @@ G4double G4GeneralParticleSource::GenRandEnergy()
 }
 
 // Verbosity
-void G4GeneralParticleSource::SetVerbosity(int vL)
+void G4GeneralParticleSource::SetVerbosity(G4int vL)
 {
   verbosityLevel = vL;
   G4cout << "Verbosity Set to: " << verbosityLevel << G4endl;
@@ -3032,7 +3028,7 @@ void G4GeneralParticleSource::SetParticleDefinition
 //  theIon = theIon1;
 
 //  G4IonTable *theIonTable = (G4IonTable *)(G4ParticleTable::GetParticleTable()->GetIonTable());
-//  G4ParticleDefinition *aIon = NULL;
+//  G4ParticleDefinition *aIon = 0;
 
 //  G4int A = theIon.GetA();
 //  G4int Z = theIon.GetZ();
@@ -3046,7 +3042,7 @@ void G4GeneralParticleSource::SetParticleDefinition
 
 void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
 {
-  if(particle_definition==NULL) return;
+  if(particle_definition==0) return;
 
   // Position stuff
   G4bool srcconf = false;
@@ -3151,7 +3147,7 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
 
     // Set bweight equal to the multiple of all non-zero weights
     bweight = 0.;
-    for(int bib=0; bib<6; bib++)
+    for(G4int bib=0; bib<6; bib++)
       {
 	if(bweights[bib] > 0. && bweight == 0.)
 	  bweight = bweight + bweights[bib];

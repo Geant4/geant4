@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.cc,v 1.4 2001-07-11 09:58:53 gunter Exp $
+// $Id: G4ParticleGun.cc,v 1.5 2001-07-13 15:01:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,7 +54,7 @@ G4ParticleGun::G4ParticleGun
 void G4ParticleGun::SetInitialValues()
 {
   NumberOfParticlesToBeGenerated = 1;
-  particle_definition = NULL;
+  particle_definition = 0;
   G4ThreeVector zero;
   particle_momentum_direction = (G4ParticleMomentum)zero;
   particle_energy = 0.0;
@@ -79,7 +79,7 @@ void G4ParticleGun::SetParticleDefinition
  
 void G4ParticleGun::SetParticleMomentum(G4ParticleMomentum aMomentum)
 {
-  if(particle_definition==NULL)
+  if(particle_definition==0)
   {
     G4cout <<"Particle Definition not defined yet for G4ParticleGun"<< G4endl;
     G4cout <<"Zero Mass is assumed"<<G4endl;
@@ -107,7 +107,7 @@ void G4ParticleGun::SetParticleMomentum(G4ParticleMomentum aMomentum)
 
 void G4ParticleGun::GeneratePrimaryVertex(G4Event* evt)
 {
-  if(particle_definition==NULL) return;
+  if(particle_definition==0) return;
 
   // create a new vertex
   G4PrimaryVertex* vertex = 
@@ -120,7 +120,7 @@ void G4ParticleGun::GeneratePrimaryVertex(G4Event* evt)
   G4double px = pmom*particle_momentum_direction.x();
   G4double py = pmom*particle_momentum_direction.y();
   G4double pz = pmom*particle_momentum_direction.z();
-  for( int i=0; i<NumberOfParticlesToBeGenerated; i++ )
+  for( G4int i=0; i<NumberOfParticlesToBeGenerated; i++ )
   {
     G4PrimaryParticle* particle =
       new G4PrimaryParticle(particle_definition,px,py,pz);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.9 2001-07-11 09:58:53 gunter Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.10 2001-07-13 15:01:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,12 +47,12 @@ G4PrimaryTransformer::~G4PrimaryTransformer()
 G4TrackVector* G4PrimaryTransformer::GimmePrimaries(G4Event* anEvent)
 {
   //TV.clearAndDestroy();
-  for( int ii=0; ii<TV.size();ii++)
+  for( size_t ii=0; ii<TV.size();ii++)
   { delete TV[ii]; }
   TV.clear();
   G4int n_vertex = anEvent->GetNumberOfPrimaryVertex();
-  if(n_vertex==0) return NULL; 
-  for( int i=0; i<n_vertex; i++ )
+  if(n_vertex==0) return 0; 
+  for( G4int i=0; i<n_vertex; i++ )
   { GenerateTracks( anEvent->GetPrimaryVertex(i) ); }
   return &TV;
 }
@@ -77,7 +77,7 @@ void G4PrimaryTransformer::GenerateTracks(G4PrimaryVertex* primaryVertex)
 #endif
 
   G4PrimaryParticle* primaryParticle = primaryVertex->GetPrimary();
-  while( primaryParticle != NULL )
+  while( primaryParticle != 0 )
   {
     GenerateSingleTrack( primaryParticle, X0, Y0, Z0, T0, WV );
     primaryParticle = primaryParticle->GetNext();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.6 2001-07-11 09:58:48 gunter Exp $
+// $Id: G4EventManager.hh,v 1.7 2001-07-13 15:01:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -84,7 +84,7 @@ class G4EventManager
       G4TrackingManager *trackManager;
       G4TrajectoryContainer *trajectoryContainer;
       G4int trackIDCounter;
-      int verboseLevel;
+      G4int verboseLevel;
       G4SDManager* sdManager;
       G4PrimaryTransformer* transformer;
       G4bool tracking;

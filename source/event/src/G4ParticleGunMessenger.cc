@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.cc,v 1.5 2001-07-11 09:58:53 gunter Exp $
+// $Id: G4ParticleGunMessenger.cc,v 1.6 2001-07-13 15:01:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -164,7 +164,7 @@ void G4ParticleGunMessenger::SetNewValue(G4UIcommand * command,G4String newValue
     } else {
       fShootIon = false;
       G4ParticleDefinition* pd = particleTable->FindParticle(newValues);
-      if(pd != NULL)
+      if(pd != 0)
       { fParticleGun->SetParticleDefinition( pd ); }
     }
   }

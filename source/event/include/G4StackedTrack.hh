@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackedTrack.hh,v 1.5 2001-07-11 09:58:49 gunter Exp $
+// $Id: G4StackedTrack.hh,v 1.6 2001-07-13 15:01:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,8 +54,8 @@ class G4StackedTrack
       ~G4StackedTrack();
 
       const G4StackedTrack & operator=(const G4StackedTrack &right);
-      int operator==(const G4StackedTrack &right) const;
-      int operator!=(const G4StackedTrack &right) const;
+      G4int operator==(const G4StackedTrack &right) const;
+      G4int operator!=(const G4StackedTrack &right) const;
 
   private:
       G4double priorityWeight;

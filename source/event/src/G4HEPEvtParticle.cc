@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtParticle.cc,v 1.3 2001-07-11 09:58:53 gunter Exp $
+// $Id: G4HEPEvtParticle.cc,v 1.4 2001-07-13 15:01:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,9 +45,9 @@ const G4HEPEvtParticle &
 G4HEPEvtParticle::operator=(const G4HEPEvtParticle &right)
 { return *this; }
 
-int G4HEPEvtParticle::operator==(const G4HEPEvtParticle &right) const
+G4int G4HEPEvtParticle::operator==(const G4HEPEvtParticle &right) const
 { return false; }
-int G4HEPEvtParticle::operator!=(const G4HEPEvtParticle &right) const
+G4int G4HEPEvtParticle::operator!=(const G4HEPEvtParticle &right) const
 { return true; }
 
 

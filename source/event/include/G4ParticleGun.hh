@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.hh,v 1.5 2001-07-11 09:58:48 gunter Exp $
+// $Id: G4ParticleGun.hh,v 1.6 2001-07-13 15:01:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -73,8 +73,8 @@ class G4ParticleGun:public G4VPrimaryGenerator
      G4ParticleGun(const G4ParticleGun &right);
 
      const G4ParticleGun & operator=(const G4ParticleGun &right);
-     int operator==(const G4ParticleGun &right) const;
-     int operator!=(const G4ParticleGun &right) const;
+     G4int operator==(const G4ParticleGun &right) const;
+     G4int operator!=(const G4ParticleGun &right) const;
 
   public: // with description
      virtual void GeneratePrimaryVertex(G4Event* evt);

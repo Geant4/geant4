@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtParticle.hh,v 1.4 2001-07-11 09:58:48 gunter Exp $
+// $Id: G4HEPEvtParticle.hh,v 1.5 2001-07-13 15:01:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,8 +51,8 @@ class G4HEPEvtParticle
       ~G4HEPEvtParticle();
 
       const G4HEPEvtParticle & operator=(const G4HEPEvtParticle &right);
-      int operator==(const G4HEPEvtParticle &right) const;
-      int operator!=(const G4HEPEvtParticle &right) const;
+      G4int operator==(const G4HEPEvtParticle &right) const;
+      G4int operator!=(const G4HEPEvtParticle &right) const;
 
   private:
       G4PrimaryParticle * theParticle;

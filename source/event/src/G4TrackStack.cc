@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackStack.cc,v 1.3 2001-07-11 09:58:54 gunter Exp $
+// $Id: G4TrackStack.cc,v 1.4 2001-07-13 15:01:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -31,7 +31,7 @@
 #include "G4TrackStack.hh"
 
 G4TrackStack::G4TrackStack()
-:n_stackedTrack(0),firstStackedTrack(NULL),lastStackedTrack(NULL)
+:n_stackedTrack(0),firstStackedTrack(0),lastStackedTrack(0)
 {;}
 
 G4TrackStack::~G4TrackStack()
@@ -67,13 +67,13 @@ void G4TrackStack::TransferTo(G4TrackStack * aStack)
   }
 
   n_stackedTrack = 0;
-  firstStackedTrack = NULL;
-  lastStackedTrack = NULL;
+  firstStackedTrack = 0;
+  lastStackedTrack = 0;
 }
 
 G4StackedTrack * G4TrackStack::PopFromStack()
 {
-  if( n_stackedTrack == 0 ) return NULL;
+  if( n_stackedTrack == 0 ) return 0;
   G4StackedTrack * aStackedTrack = lastStackedTrack;
   GrabFromStack( aStackedTrack );
   return aStackedTrack;
@@ -83,7 +83,7 @@ void G4TrackStack::PushToStack( G4StackedTrack * aStackedTrack )
 {
   if( n_stackedTrack == 0 )
   {
-    aStackedTrack->SetPrevious( NULL );
+    aStackedTrack->SetPrevious( 0 );
     firstStackedTrack = aStackedTrack;
   }
   else
@@ -99,22 +99,22 @@ void G4TrackStack::GrabFromStack( G4StackedTrack * aStackedTrack )
 {
   if( n_stackedTrack == 1 )
   {
-    firstStackedTrack = NULL;
-    lastStackedTrack = NULL;
+    firstStackedTrack = 0;
+    lastStackedTrack = 0;
   }
   else
   {
     if( aStackedTrack == firstStackedTrack )
     {
       firstStackedTrack = aStackedTrack->GetNext();
-      firstStackedTrack->SetPrevious( NULL );
+      firstStackedTrack->SetPrevious( 0 );
     }
     else
     {
       if( aStackedTrack == lastStackedTrack )
       {
         lastStackedTrack = aStackedTrack->GetPrevious();
-        lastStackedTrack->SetNext( NULL );
+        lastStackedTrack->SetNext( 0 );
       }
       else
       {
@@ -136,7 +136,7 @@ void G4TrackStack::clear()
   if ( n_stackedTrack == 0 ) return;
 
   // delete tracks in the stack
-  while( aStackedTrack != NULL )
+  while( aStackedTrack != 0 )
   {
     nextStackedTrack = aStackedTrack->GetNext();
     delete aStackedTrack->GetTrack();
@@ -144,8 +144,8 @@ void G4TrackStack::clear()
     aStackedTrack = nextStackedTrack;
   }
   n_stackedTrack = 0;
-  firstStackedTrack = NULL;
-  lastStackedTrack = NULL;
+  firstStackedTrack = 0;
+  lastStackedTrack = 0;
 }
 
 

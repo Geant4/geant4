@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackStack.hh,v 1.4 2001-07-11 09:58:49 gunter Exp $
+// $Id: G4TrackStack.hh,v 1.5 2001-07-13 15:01:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,8 +50,8 @@ class G4TrackStack
   private:
       const G4TrackStack & operator=
                           (const G4TrackStack &right);
-      int operator==(const G4TrackStack &right) const;
-      int operator!=(const G4TrackStack &right) const;
+      G4int operator==(const G4TrackStack &right) const;
+      G4int operator!=(const G4TrackStack &right) const;
 
   public:
       void PushToStack(G4StackedTrack * aStackedTrack);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.cc,v 1.4 2001-07-11 09:58:54 gunter Exp $
+// $Id: G4StackManager.cc,v 1.5 2001-07-13 15:01:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,7 +35,7 @@
 #include "G4ios.hh"
 
 G4StackManager::G4StackManager()
-:verboseLevel(0),userStackingAction(NULL)
+:userStackingAction(0),verboseLevel(0)
 {
   theMessenger = new G4StackingMessenger(this);
   urgentStack = new G4TrackStack;
@@ -54,9 +54,9 @@ G4StackManager::~G4StackManager()
 
 const G4StackManager & G4StackManager::operator=
 (const G4StackManager &) { return *this; }
-int G4StackManager::operator==(const G4StackManager &) 
+G4int G4StackManager::operator==(const G4StackManager &) 
 const{ return false; }
-int G4StackManager::operator!=(const G4StackManager &) 
+G4int G4StackManager::operator!=(const G4StackManager &) 
 const{ return true; }
 
 G4int G4StackManager::PushOneTrack(G4Track *newTrack,G4VTrajectory *newTrajectory)
@@ -126,7 +126,7 @@ G4Track * G4StackManager::PopNextTrack(G4VTrajectory**newTrajectory)
                       << " urgent tracks and " << GetNWaitingTrack()
                       << " waiting tracks." << G4endl;
 #endif
-    if( ( GetNUrgentTrack()==0 ) && ( GetNWaitingTrack()==0 ) ) return NULL;
+    if( ( GetNUrgentTrack()==0 ) && ( GetNWaitingTrack()==0 ) ) return 0;
   }
 
   G4StackedTrack * selectedStackedTrack = urgentStack->PopFromStack();
@@ -157,7 +157,7 @@ void G4StackManager::ReClassify()
   if( GetNUrgentTrack() == 0 ) return;
 
   urgentStack->TransferTo(&tmpStack);
-  while( (aStackedTrack=tmpStack.PopFromStack()) != NULL )
+  while( (aStackedTrack=tmpStack.PopFromStack()) != 0 )
   {
     G4ClassificationOfNewTrack classification = 
       userStackingAction->ClassifyNewTrack( aStackedTrack->GetTrack() );
@@ -202,10 +202,9 @@ G4int G4StackManager::PrepareNewEvent()
 
     postponeStack->TransferTo(&tmpStack);
 
-    while( (aStackedTrack=tmpStack.PopFromStack()) != NULL )
+    while( (aStackedTrack=tmpStack.PopFromStack()) != 0 )
     {
       G4Track* aTrack = aStackedTrack->GetTrack();
-      G4VTrajectory* aTrajectory = aStackedTrack->GetTrajectory();
       aTrack->SetParentID(-1);
       G4ClassificationOfNewTrack classification;
       if(userStackingAction) 

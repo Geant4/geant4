@@ -21,26 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryContainer.hh,v 1.7 2001-07-11 09:58:50 gunter Exp $
+// $Id: G4TrajectoryContainer.hh,v 1.8 2001-07-13 15:01:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-//	G4TrajectoryContainer
+// G4TrajectoryContainer
+//
+// Class description:
+//
+// This is a container of G4VTrajectory objects and the object of this
+// container will be associated to G4Event object.
 //
 
+// ********************************************************************
 #ifndef G4TrajectoryContainer_h
 #define G4TrajectoryContainer_h 1
 
 #include "G4VTrajectory.hh"
-// G4RWTPtrOrderedVector
-//#include "g4rw/tpordvec.h"
-
-// class description:
-//
-//  This is a container of G4VTrajectory objects and the object of this
-// container will be associated to G4Event object.
-
-//typedef G4RWTPtrOrderedVector<G4VTrajectory> G4TrajectoryContainer;
 
 class G4TrajectoryContainer : public G4std::vector<G4VTrajectory*>
 {
@@ -53,11 +50,8 @@ class G4TrajectoryContainer : public G4std::vector<G4VTrajectory*>
     inline G4bool insert(G4VTrajectory* p) { push_back(p); return true; }
     inline void clearAndDestroy()
     {
-      for(int i=0;i<size();i++)
-      { delete (*this)[i]; }
+      for(size_t i=0;i<size();i++) delete (*this)[i];
       clear();
     }
 };
 #endif
-
-

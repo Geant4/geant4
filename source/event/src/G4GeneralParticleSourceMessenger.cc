@@ -31,7 +31,7 @@
 // Customer:         ESA/ESTEC
 //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: G4GeneralParticleSourceMessenger.cc,v 1.6 2001-07-13 11:50:57 gcosmo Exp $
+// $Id: G4GeneralParticleSourceMessenger.cc,v 1.7 2001-07-13 15:01:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -611,7 +611,7 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
       } else {
 	fShootIon = false;
       G4ParticleDefinition* pd = particleTable->FindParticle(newValues);
-      if(pd != NULL)
+      if(pd != 0)
 	{ fParticleGun->SetParticleDefinition( pd ); }
       }
     }

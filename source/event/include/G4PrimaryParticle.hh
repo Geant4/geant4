@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.hh,v 1.9 2001-07-11 09:58:49 gunter Exp $
+// $Id: G4PrimaryParticle.hh,v 1.10 2001-07-13 15:01:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -76,8 +76,8 @@ class G4PrimaryParticle
       ~G4PrimaryParticle();
 
       const G4PrimaryParticle & operator=(const G4PrimaryParticle &right);
-      int operator==(const G4PrimaryParticle &right) const;
-      int operator!=(const G4PrimaryParticle &right) const;
+      G4int operator==(const G4PrimaryParticle &right) const;
+      G4int operator!=(const G4PrimaryParticle &right) const;
 
   public: // with description
       void Print() const;
@@ -156,14 +156,14 @@ class G4PrimaryParticle
       }
       inline void SetNext(G4PrimaryParticle * np)
       { 
-        if(nextParticle == NULL)
+        if(nextParticle == 0)
         { nextParticle = np; }
         else
         { nextParticle->SetNext(np); }
       }
       inline void SetDaughter(G4PrimaryParticle * np)
       { 
-        if(daughterParticle == NULL)
+        if(daughterParticle == 0)
         { daughterParticle = np; }
         else
         { daughterParticle->SetNext(np); }

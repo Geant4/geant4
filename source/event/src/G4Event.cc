@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.cc,v 1.3 2001-07-11 09:58:52 gunter Exp $
+// $Id: G4Event.cc,v 1.4 2001-07-13 15:01:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,14 +39,14 @@ G4Allocator<G4Event> anEventAllocator;
 
 G4Event::G4Event()
 :eventID(0),
- thePrimaryVertex(NULL),numberOfPrimaryVertex(0),
- DC(NULL),HC(NULL),trajectoryContainer(NULL)
+ thePrimaryVertex(0),numberOfPrimaryVertex(0),
+ HC(0),DC(0),trajectoryContainer(0)
 {;}
 
 G4Event::G4Event(G4int evID)
 :eventID(evID),
- thePrimaryVertex(NULL),numberOfPrimaryVertex(0),
- DC(NULL),HC(NULL),trajectoryContainer(NULL)
+ thePrimaryVertex(0),numberOfPrimaryVertex(0),
+ HC(0),DC(0),trajectoryContainer(0)
 {;}
 
 G4Event::~G4Event()
@@ -61,12 +61,12 @@ G4Event::~G4Event()
   }
 }
 
-int G4Event::operator==(const G4Event &right) const
+G4int G4Event::operator==(const G4Event &right) const
 {
   return ( eventID == right.eventID );
 }
 
-int G4Event::operator!=(const G4Event &right) const
+G4int G4Event::operator!=(const G4Event &right) const
 {
   return ( eventID != right.eventID );
 }
@@ -84,14 +84,14 @@ void G4Event::Draw() const
   if(trajectoryContainer)
   {
     G4int n_traj = trajectoryContainer->entries();
-    for(int i=0;i<n_traj;i++)
+    for(G4int i=0;i<n_traj;i++)
     { (*trajectoryContainer)[i]->DrawTrajectory(); }
   }
 
   if(HC)
   {
     G4int n_HC = HC->GetCapacity();
-    for(int j=0;j<n_HC;j++)
+    for(G4int j=0;j<n_HC;j++)
     {
       G4VHitsCollection * VHC = HC->GetHC(j);
       if(VHC) VHC->DrawAllHits();
@@ -101,7 +101,7 @@ void G4Event::Draw() const
   if(DC)
   {
     G4int n_DC = DC->GetCapacity();
-    for(int j=0;j<n_DC;j++)
+    for(G4int j=0;j<n_DC;j++)
     {
       G4VDigiCollection * VDC = DC->GetDC(j);
       if(VDC) VDC->DrawAllDigi();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.hh,v 1.6 2001-07-11 09:58:49 gunter Exp $
+// $Id: G4PrimaryVertex.hh,v 1.7 2001-07-13 15:01:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,8 +54,8 @@ class G4PrimaryVertex
       ~G4PrimaryVertex();
 
       const G4PrimaryVertex & operator=(const G4PrimaryVertex &right);
-      int operator==(const G4PrimaryVertex &right) const;
-      int operator!=(const G4PrimaryVertex &right) const;
+      G4int operator==(const G4PrimaryVertex &right) const;
+      G4int operator!=(const G4PrimaryVertex &right) const;
 
       void Print() const;
 
@@ -89,7 +89,7 @@ class G4PrimaryVertex
       { return numberOfParticle; }
       inline void SetPrimary(G4PrimaryParticle * pp)
       { 
-        if(theParticle == NULL)
+        if(theParticle == 0)
         { 
           theParticle = pp;
           theTail = pp;
@@ -108,19 +108,19 @@ class G4PrimaryVertex
         else if( i > 0 && i < numberOfParticle )
         {
           G4PrimaryParticle* particle = theParticle;
-          for( int j=0; j<i; j++ )
+          for( G4int j=0; j<i; j++ )
           { 
-            if( particle == NULL ) return NULL;
+            if( particle == 0 ) return 0;
             particle = particle->GetNext();
           }
           return particle;
         }
         else
-        { return NULL; }
+        { return 0; }
       }
       inline void SetNext(G4PrimaryVertex* nv)
       { 
-        if(nextVertex == NULL)
+        if(nextVertex == 0)
         { nextVertex = nv; }
         else
         { nextVertex->SetNext(nv); }

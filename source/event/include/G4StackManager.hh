@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.hh,v 1.6 2001-07-11 09:58:49 gunter Exp $
+// $Id: G4StackManager.hh,v 1.7 2001-07-13 15:01:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,11 +66,11 @@ class G4StackManager
   private:
       const G4StackManager & operator=
                           (const G4StackManager &right);
-      int operator==(const G4StackManager &right) const;
-      int operator!=(const G4StackManager &right) const;
+      G4int operator==(const G4StackManager &right) const;
+      G4int operator!=(const G4StackManager &right) const;
 
   public:
-      G4int PushOneTrack(G4Track *newTrack, G4VTrajectory *newTrajectory = NULL);
+      G4int PushOneTrack(G4Track *newTrack, G4VTrajectory *newTrajectory = 0);
       G4Track * PopNextTrack(G4VTrajectory**newTrajectory);
       G4int PrepareNewEvent();
 
@@ -86,7 +86,7 @@ class G4StackManager
 
   private:
       G4UserStackingAction * userStackingAction;
-      int verboseLevel;
+      G4int verboseLevel;
       G4TrackStack * urgentStack;
       G4TrackStack * waitingStack;
       G4TrackStack * postponeStack;
@@ -114,7 +114,7 @@ class G4StackManager
       { return waitingStack->GetNTrack(); }
       inline G4int GetNPostponedTrack() const
       { return postponeStack->GetNTrack(); }
-      inline void SetVerboseLevel( int const value )
+      inline void SetVerboseLevel( G4int const value )
       { verboseLevel = value; }
       inline void SetUserStackingAction(G4UserStackingAction* value)
       { 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.7 2001-07-11 09:58:52 gunter Exp $
+// $Id: G4EventManager.cc,v 1.8 2001-07-13 15:01:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,8 +40,8 @@ G4EventManager* G4EventManager::GetEventManager()
 { return fpEventManager; }
 
 G4EventManager::G4EventManager()
-:verboseLevel(0),trajectoryContainer(NULL),
- tracking(false),currentEvent(NULL)
+:currentEvent(0),trajectoryContainer(0),
+ verboseLevel(0),tracking(false)
 {
  if(fpEventManager)
  {
@@ -82,8 +82,8 @@ G4EventManager::~G4EventManager()
 /*
 const G4EventManager & G4EventManager::operator=(const G4EventManager &right)
 { }
-int G4EventManager::operator==(const G4EventManager &right) const { }
-int G4EventManager::operator!=(const G4EventManager &right) const { }
+G4int G4EventManager::operator==(const G4EventManager &right) const { }
+G4int G4EventManager::operator!=(const G4EventManager &right) const { }
 */
 
 
@@ -105,7 +105,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   trackIDCounter = trackContainer->PrepareNewEvent();
 
 #ifdef G4_STORE_TRAJECTORY
-  trajectoryContainer = NULL;
+  trajectoryContainer = 0;
 #endif
 
   sdManager = G4SDManager::GetSDMpointerIfExist();
@@ -134,7 +134,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 #endif
   
   G4VTrajectory* previousTrajectory;
-  while( ( track = trackContainer->PopNextTrack(&previousTrajectory) ) != NULL )
+  while( ( track = trackContainer->PopNextTrack(&previousTrajectory) ) != 0 )
   {
 
 #ifdef G4VERBOSE
@@ -203,7 +203,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
         //if( secondaries ) secondaries->clearAndDestroy();
         if( secondaries )
         {
-          for(G4int i=0;i<secondaries->size();i++)
+          for(size_t i=0;i<secondaries->size();i++)
           { delete (*secondaries)[i]; }
           secondaries->clear();
         }
@@ -228,7 +228,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 #endif
 
   if(userEventAction) userEventAction->EndOfEventAction(currentEvent);
-  currentEvent = NULL;
+  currentEvent = 0;
 
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackedTrack.cc,v 1.4 2001-07-11 09:58:54 gunter Exp $
+// $Id: G4StackedTrack.cc,v 1.5 2001-07-13 15:01:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,13 +33,13 @@
 G4Allocator<G4StackedTrack> aStackedTrackAllocator;
 
 G4StackedTrack::G4StackedTrack() 
-:track(NULL),trajectory(NULL),priorityWeight(0.),
- previousStackedTrack(NULL),nextStackedTrack(NULL)
+:priorityWeight(0.),track(0),trajectory(0),
+ previousStackedTrack(0),nextStackedTrack(0)
 { }
 
 G4StackedTrack::G4StackedTrack(G4Track * newTrack, G4VTrajectory * aTrajectory) 
-:track(newTrack),trajectory(aTrajectory),priorityWeight(0.),
- previousStackedTrack(NULL),nextStackedTrack(NULL)
+:priorityWeight(0.),track(newTrack),trajectory(aTrajectory),
+ previousStackedTrack(0),nextStackedTrack(0)
 { }
 
 G4StackedTrack::~G4StackedTrack()
@@ -47,9 +47,9 @@ G4StackedTrack::~G4StackedTrack()
 
 const G4StackedTrack & G4StackedTrack::operator=(const G4StackedTrack &right)
 { return *this; }
-int G4StackedTrack::operator==(const G4StackedTrack &right) const 
+G4int G4StackedTrack::operator==(const G4StackedTrack &right) const 
 { return false; }
-int G4StackedTrack::operator!=(const G4StackedTrack &right) const 
+G4int G4StackedTrack::operator!=(const G4StackedTrack &right) const 
 { return true; }
 
 

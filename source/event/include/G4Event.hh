@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh,v 1.4 2001-07-11 09:58:48 gunter Exp $
+// $Id: G4Event.hh,v 1.5 2001-07-13 15:01:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,8 +55,8 @@ class G4Event
       inline void *operator new(size_t);
       inline void operator delete(void* anEvent);
 
-      int operator==(const G4Event &right) const;
-      int operator!=(const G4Event &right) const;
+      G4int operator==(const G4Event &right) const;
+      G4int operator!=(const G4Event &right) const;
 
   public: // with description
       void Print() const;
@@ -98,7 +98,7 @@ class G4Event
       //  Returns the event ID
       inline void AddPrimaryVertex(G4PrimaryVertex* aPrimaryVertex)
       {
-        if( thePrimaryVertex == NULL )
+        if( thePrimaryVertex == 0 )
         { thePrimaryVertex = aPrimaryVertex; }
         else
         { thePrimaryVertex->SetNext( aPrimaryVertex ); }
@@ -116,15 +116,15 @@ class G4Event
         else if( i > 0 && i < numberOfPrimaryVertex )
         {
           G4PrimaryVertex* primaryVertex = thePrimaryVertex;
-          for( int j=0; j<i; j++ )
+          for( G4int j=0; j<i; j++ )
           {
-            if( primaryVertex == NULL ) return NULL; 
+            if( primaryVertex == 0 ) return 0; 
             primaryVertex = primaryVertex->GetNext();
           }
           return primaryVertex;
         }
         else
-        { return NULL; }
+        { return 0; }
       }
       //  Returns i-th primary vertex of the event.
       inline G4HCofThisEvent* GetHCofThisEvent()  const
