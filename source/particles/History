@@ -1,4 +1,4 @@
-$Id: History,v 1.30 1999-11-03 14:48:57 gcosmo Exp $
+$Id: History,v 1.31 1999-11-07 15:52:28 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Nov 07, 99 H.Kurashige (particles-V00-01-02)
+------ partman-V00-01-06
+- Bug fix in G4DynamicTable::RemoveElectron
+- Change G4USE_STL_MAP flag into G4USE_STL
 
-- Nov 03, 99   G.Cosmo
+- Nov 03, 99   G.Cosmo 
 - Modified top-level GNUmakefile to fix G4barions to G4baryons for
   the "gmake global" target.
 
