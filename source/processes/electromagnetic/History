@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2001-10-05 14:04:38 maire Exp $
+$Id: History,v 1.9 2001-10-11 16:21:31 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+11 oct 01 mma (em-V03-02-01)
+- Global tag including: emlowen-V03-02-22  muons-V03-02-06  stand-V03-02-08
+                          utils-V03-02-07  xrays-V03-02-00  
+       
 05 oct 01 mma (em-V03-02-00)
 - the code in subdirectory integral is deleted.
   the GNUmakefile is updated in accord with.
