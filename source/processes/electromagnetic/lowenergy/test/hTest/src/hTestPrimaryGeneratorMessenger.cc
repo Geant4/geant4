@@ -96,6 +96,21 @@ hTestPrimaryGeneratorMessenger::hTestPrimaryGeneratorMessenger(
   beamECmd->SetUnitCategory("Energy");
   beamECmd->AvailableForStates(PreInit,Idle);
 
+  beamBetaCmd = new G4UIcmdWithADouble("/hTest/gun/beamBeta",this);
+  beamBetaCmd->SetGuidance("Set the beam velocity");
+  beamBetaCmd->SetParameterName("beamBeta",false);
+  beamBetaCmd->AvailableForStates(PreInit,Idle);
+
+  sigmaBetaCmd = new G4UIcmdWithADouble("/hTest/gun/sigmaBeta",this);
+  sigmaBetaCmd->SetGuidance("Set the sigma velocity");
+  sigmaBetaCmd->SetParameterName("sigmaBeta",false);
+  sigmaBetaCmd->AvailableForStates(PreInit,Idle);
+
+  randCmd = new G4UIcmdWithAString("/hTest/gun/random",this);
+  randCmd->SetGuidance("Set the name of the random distribution (gauss,flat)");
+  randCmd->SetParameterName("rand",false);
+  randCmd->AvailableForStates(PreInit,Idle);
+
   partCmd = new G4UIcmdWithAString("/hTest/gun/particle",this);
   partCmd->SetGuidance("Set the name of the particle");
   partCmd->SetParameterName("part",false);
@@ -123,6 +138,9 @@ hTestPrimaryGeneratorMessenger::~hTestPrimaryGeneratorMessenger()
   delete beamECmd;
   delete maxThetaCmd;
   delete partCmd;
+  delete beamBetaCmd;
+  delete sigmaBetaCmd;
+  delete randCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -156,6 +174,14 @@ void hTestPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
     {theGen->SetBeamMinCosTheta(cos(maxThetaCmd->GetNewDoubleValue(newValue)));}
   if(command == partCmd)
     {(G4UImanager::GetUIpointer())->ApplyCommand("/gun/particle "+newValue);}
+  if(command == beamBetaCmd)
+    {theGen->SetBeamBeta(beamBetaCmd->GetNewDoubleValue(newValue));}
+  if(command == sigmaBetaCmd)
+    {theGen->SetSigmaBeta(sigmaBetaCmd->GetNewDoubleValue(newValue));}
+  if(command == randCmd)
+    {theGen->SetRandom(newValue);}
+
+
   if(0 < theGen->GetVerbose())
     {G4cout << "hTestPrimaryGeneratorMessenger: O'K " << G4endl;}
   }

@@ -68,20 +68,26 @@ class hTestPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void GeneratePrimaries(G4Event* anEvent);
 
   //Get/Set methods
-    inline void SetBeamX(G4double val) {x0 = val;};
-    inline void SetBeamY(G4double val) {y0 = val;};
-    inline void SetBeamZ(G4double val) {z0 = val;};
-    inline void SetBeamSigmaX(G4double val) {sigmaX = val;};
-    inline void SetBeamSigmaY(G4double val) {sigmaY = val;};
-    inline void SetBeamSigmaZ(G4double val) {sigmaY = val;};
-    inline void SetBeamSigmaE(G4double val) {sigmaE = val;};
-    inline void SetBeamEnergy(G4double val) {energy = val;};
-    inline void SetBeamMinCosTheta(G4double val) {minCosTheta = val;};
-    inline void SetVerbose(G4int val) {verbose = val;};
-    inline G4ThreeVector GetBeamPosition() const {return position;}; 
-    inline G4ThreeVector GetBeamDirection() const {return direction;};
-    inline G4ThreeVector GetBeamEnergy() const {return energy;};
-    inline G4int GetVerbose() const {return verbose;};
+    void SetBeamX(G4double val) {x0 = val;};
+    void SetBeamY(G4double val) {y0 = val;};
+    void SetBeamZ(G4double val) {z0 = val;};
+    void SetBeamSigmaX(G4double val) {sigmaX = val;};
+    void SetBeamSigmaY(G4double val) {sigmaY = val;};
+    void SetBeamSigmaZ(G4double val) {sigmaY = val;};
+    void SetBeamSigmaE(G4double val) {sigmaE = val;};
+    void SetBeamEnergy(G4double val) {energy = val;};
+    void SetBeamMinCosTheta(G4double val) {minCosTheta = val;};
+    void SetVerbose(G4int val) {verbose = val;};
+    G4ThreeVector GetBeamPosition() const {return position;}; 
+    G4ThreeVector GetBeamDirection() const {return direction;};
+    G4ThreeVector GetBeamEnergy() const {return energy;};
+    G4int GetVerbose() const {return verbose;};
+    void SetBeamBeta(G4double val);
+    void SetSigmaBeta(G4double val);
+    void SetRandom(const G4String& type) {
+                    if(type == "gauss") m_gauss = true;
+                    if(type == "flat")  m_gauss = false; }; 
+
 
   private:
 
@@ -100,6 +106,7 @@ class hTestPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double minCosTheta;
     G4ThreeVector position;
     G4ThreeVector direction;
+    G4bool m_gauss;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

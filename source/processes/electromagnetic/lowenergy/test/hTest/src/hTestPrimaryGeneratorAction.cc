@@ -71,6 +71,7 @@ void hTestPrimaryGeneratorAction::InitializeMe()
   energy = 10.0*MeV;
   position  = G4ThreeVector(x0,y0,z0);
   direction = G4ThreeVector(0.0,0.0,1.0);
+  m_gauss = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -118,7 +119,13 @@ void hTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   // Simulation of beam kinetic energy
   G4double kinEnergy = energy;
-  if(0.0 < sigmaE) kinEnergy += G4RandGauss::shoot(0.0,sigmaE);
+
+  if(0.0 < sigmaE) {
+
+    if(m_gauss) kinEnergy += G4RandGauss::shoot(0.0,sigmaE);
+    else        kinEnergy += (2.*G4UniformRand()-1.)*sigmaE;
+  } 
+
   if(0.0 > kinEnergy) kinEnergy = 0.0;
   particleGun->SetParticleEnergy(kinEnergy);
 
@@ -155,6 +162,23 @@ void hTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void SetBeamBeta(G4double val);
+{
+  G4ParticleDefinition* particle = particleGun->GetParticleDefinition();
+  G4double mass = particle->GetPDGMass();
+  if(val > 0. && val < 1.) energy = mass(1./sqrt(1.-val*val) - 1.);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void SetSigmaBeta(G4double val)
+{
+  G4ParticleDefinition* particle = particleGun->GetParticleDefinition();
+  G4double mass = particle->GetPDGMass();
+  if(val > 0. && val < 1.) sigmaE = mass(1./sqrt(1.-val*val) - 1.);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 

@@ -40,6 +40,7 @@
 #include "globals.hh"
 #include "G4UImessenger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
 
@@ -69,7 +70,10 @@ class hTestPrimaryGeneratorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* sigmaZCmd;
     G4UIcmdWithADoubleAndUnit* sigmaECmd;
     G4UIcmdWithADoubleAndUnit* maxThetaCmd;
+    G4UIcmdWithADouble* beamBetaCmd;
+    G4UIcmdWithADouble* sigmaBetaCmd;
     G4UIcmdWithAString* partCmd;
+    G4UIcmdWithAString* randCmd;
 
 };
 

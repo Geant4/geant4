@@ -58,6 +58,7 @@
 
 #include "G4hIonisation.hh"
 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 hTestStanPhysicsList::hTestStanPhysicsList()
@@ -122,7 +123,6 @@ void hTestStanPhysicsList::ConstructProcess()
       }
 
       G4hIonisation* hIon = new G4hIonisation() ;
-
       pmanager->AddProcess(hIon,-1,2,2);
    
     } else if (   particleName == "alpha"  
