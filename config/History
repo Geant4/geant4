@@ -1,5 +1,10 @@
-$Id: History,v 1.194 2002-07-04 16:05:23 gcosmo Exp $
+<<<<<<< History
+$Id: History,v 1.195 2002-07-08 14:32:14 johna Exp $
 $Name: not supported by cvs2svn $
+=======
+$Id: History,v 1.195 2002-07-08 14:32:14 johna Exp $
+$Name: not supported by cvs2svn $
+>>>>>>> 1.194
 
 -------------------------------------------------------------------
 
@@ -17,6 +22,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8th July 2002  John Allison
+- liblist.c: Added protection and warning for file/directory not found
+  in parsedir.  Also small cosmetic improvements.
 
 4th July 2002  Gabriele Cosmo (config-V04-01-00)
 - Upgraded WIN32-g++ to compile with -ansi and gcc-2.95.3 for most recent versions
