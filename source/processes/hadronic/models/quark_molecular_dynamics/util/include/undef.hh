@@ -4,14 +4,14 @@
 #pragma interface
 #endif
 
-#include <iostream.h>
+#include "g4std/iostream"
 
 enum joker { DUMMY = 32767 };
 
 template<class t>
 class undef
 {
-  friend istream& operator>>(istream& in,undef<t>&);
+  friend G4std::istream& operator>>(G4std::istream& in,undef<t>&);
   t val,def;
   bool valid;
 public:

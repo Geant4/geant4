@@ -2,10 +2,10 @@
 #include "Random.hh"
 #include "Geometry.hh"
 
-ostream& operator<<(ostream& o,const Metropolis& M) {
+G4std::ostream& operator<<(G4std::ostream& o,const Metropolis& M) {
   for (int i=0; i<M.N; i++) {
     o << M.getX(i)[1] << "  " << M.getX(i)[2] << "  " << M.getX(i)[3] << "  "
-      << M.getP(i)[1] << "  " << M.getP(i)[2] << "  " << M.getP(i)[3] << endl;
+      << M.getP(i)[1] << "  " << M.getP(i)[2] << "  " << M.getP(i)[3] << G4endl;
   }
   return o;
 }
@@ -35,7 +35,7 @@ void Metropolis::evaluate(long MAX_ITER)
   int M = 300,m0=0;
   double F = 0, F2 = 0;
   double S = 0,oldS=0,dS=0;
-  cerr << N << endl;
+  G4cerr << N << G4endl;
     long count = 0;
     k = 0;
     //    while ( fabs(S-oldS)>=dS ) {
@@ -53,7 +53,7 @@ void Metropolis::evaluate(long MAX_ITER)
 	  oldS = S;
 	  S = F/m0; 
 	  dS = sqrt((F2-m0*S*S)/(m0-1));
-	  //	  cerr << k << "  " << S << "  " << oldS << "  " << fabs(S-oldS) << "  " << dS << endl;
+	  //	  G4cerr << k << "  " << S << "  " << oldS << "  " << fabs(S-oldS) << "  " << dS << G4endl;
 	  F = 0;
 	  F2 = 0;
 	}

@@ -215,7 +215,7 @@ int main()
     assert(ApproxEqual(dist,0)&&ApproxEqual(*pNorm,vmx)); // &&*pgoodNorm);
 
     dist=b1.DistanceToOut(ponxside,vy,calcNorm,pgoodNorm,pNorm);
-//  cout<<"b1.DistanceToOut(ponxside,vy) = "<<dist<<endl;
+//  cout<<"b1.DistanceToOut(ponxside,vy) = "<<dist<<G4endl;
 //  assert(ApproxEqual(dist,0)&&ApproxEqual(*pNorm,vy)&&*pgoodNorm);
 
     dist=b1Sb2.DistanceToOut(ponb2mx,vmx,calcNorm,pgoodNorm,pNorm);
@@ -312,11 +312,11 @@ int main()
 
     dist=t2St3.DistanceToIn(G4ThreeVector(2.5,-52.5,0),vy) ;
     assert(ApproxEqual(dist,107.443));
-// G4cout<<"t2St3.DistanceToIn(G4ThreeVector(2.5,-52.5,0),vy) = "<<dist<<endl ;
+// G4cout<<"t2St3.DistanceToIn(G4ThreeVector(2.5,-52.5,0),vy) = "<<dist<<G4endl ;
 
     dist=t2St3.DistanceToIn(G4ThreeVector(2.5,-62.5,0),vy) ;
     assert(ApproxEqual(dist,2.55211));
-//    G4cout<<"t2St3.DistanceToIn(G4ThreeVector(2.5,-62.5,0),vy) = "<<dist<<endl ;
+//    G4cout<<"t2St3.DistanceToIn(G4ThreeVector(2.5,-62.5,0),vy) = "<<dist<<G4endl ;
 
     // With placement
 
@@ -332,7 +332,7 @@ int main()
     dist=t1Sb3.DistanceToIn(G4ThreeVector(0,36,0),vx);
     assert(ApproxEqual(dist,10));
 
-    cout<<"Tracking functions are OK"<<endl ;
+    cout<<"Tracking functions are OK"<<G4endl ;
 
 // CalculateExtent
 
@@ -355,9 +355,9 @@ int main()
 
     assert(b1Sb4.CalculateExtent(kYAxis,limit,origin,min,max));
     //  G4cout<<"min of b1Sb4.CalculateExtent(kYAxis,limit,origin,min,max) = "
-    //      <<min<<endl ;
+    //      <<min<<G4endl ;
     // G4cout<<"max of b1Sb4.CalculateExtent(kYAxis,limit,origin,min,max) = "
-    //      <<max<<endl ;
+    //      <<max<<G4endl ;
     assert(ApproxEqual(min,-30)&&ApproxEqual(max,30));
 
     assert(b1Sb4.CalculateExtent(kZAxis,limit,origin,min,max));
@@ -465,7 +465,7 @@ int main()
     assert(b1.CalculateExtent(kZAxis,buggyClip1,origin,min,max));
     assert(ApproxEqual(min,-40)&&ApproxEqual(max,40));
 
-    G4cout<<"CalculateExtent is OK "<<endl ;
+    G4cout<<"CalculateExtent is OK "<<G4endl ;
 
   G4int out =0 ;
   return out ;

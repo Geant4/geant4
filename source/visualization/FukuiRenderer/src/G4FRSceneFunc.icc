@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRSceneFunc.icc,v 1.9 1999-12-01 07:06:36 stanaka Exp $
+// $Id: G4FRSceneFunc.icc,v 1.10 1999-12-15 14:54:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -113,8 +113,8 @@ void G4FRSCENE::AddPrimitive ( const G4Text& text )
 		//----- create buffer and copy the string there
 	int   MAX_STR_LENGTH   =  COMMAND_BUF_SIZE - 100 ;
 	if  ( MAX_STR_LENGTH <= 0 ) { 
-		G4cerr << "ERROR (FukuiRenderer) : Not enough buffer size for data transferring." << endl;
-		G4cerr << "                        G4Text Visualization is aborted" << endl;
+		G4cerr << "ERROR (FukuiRenderer) : Not enough buffer size for data transferring." << G4endl;
+		G4cerr << "                        G4Text Visualization is aborted" << G4endl;
 		return ;
 	}
 	char*  buf  = new char [ (MAX_STR_LENGTH + 1) ] ; 
@@ -301,7 +301,7 @@ void G4FRSCENE::SendNdiv ( void )
 {
 //////////////////////////////////////////////////
 //#if defined DEBUG_FR_SCENE
-//	G4cerr << "***** SendNdiv() (/Ndiv)" << endl;
+//	G4cerr << "***** SendNdiv() (/Ndiv)" << G4endl;
 //#endif
 //////////////////////////////////////////////////
 
@@ -315,7 +315,7 @@ void G4FRSCENE::SendNdiv ( void )
 #if defined DEBUG_FR_SCENE
 	   G4cerr << "WARNING: GetNoOfSides() failed. " ;
 	   G4cerr << "The default value " << num_division ;
-	   G4cerr << " is assigned." << endl;
+	   G4cerr << " is assigned." << G4endl;
 #endif
 	}
 
@@ -324,7 +324,7 @@ void G4FRSCENE::SendNdiv ( void )
 
 //////////////////////////////////////////////////
 //#if defined DEBUG_FR_SCENE
-//	G4cerr << "Ndiv = " << num_division << endl;
+//	G4cerr << "Ndiv = " << num_division << G4endl;
 //#endif
 //////////////////////////////////////////////////
 
@@ -339,13 +339,13 @@ void G4FRSCENE::FREndModeling ()
 {
 		//----- 		
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** FREndModeling (called)" << endl;
+	G4cerr << "***** FREndModeling (called)" << G4endl;
 #endif
 	if( FRIsInModeling() ) {
 
 #if defined DEBUG_FR_SCENE
 		G4cerr << "***** FREndModeling (started) " ; 
-		G4cerr << "(/EndModeling, /DrawAll, /CloseDevice)" << endl;
+		G4cerr << "(/EndModeling, /DrawAll, /CloseDevice)" << G4endl;
 #endif
 
 		SendStr( "#--------------------" );	
@@ -653,9 +653,9 @@ void G4FRSCENE::AddThis (const G4Para& para)
 		//----- parameters preprocessing
 	G4double cosTheta                  = para.GetSymAxis().z() ;
 	if( cosTheta < epsilon ) {
-		G4cerr << "WARNING from FukuiRenderer (DAWN) driver:" << endl;
-		G4cerr << "  Invalid parameter for parallelepiped."   << endl;
-		G4cerr << "  Drawing is skipped."                     << endl;
+		G4cerr << "WARNING from FukuiRenderer (DAWN) driver:" << G4endl;
+		G4cerr << "  Invalid parameter for parallelepiped."   << G4endl;
+		G4cerr << "  Drawing is skipped."                     << G4endl;
 		return ;
 	}
 	G4double tanTheta_cosPhi_cosTheta  = para.GetSymAxis().x() ;
@@ -709,9 +709,9 @@ void G4FRSCENE::AddThis (const G4Trap& trap)
 		//----- parameters preprocessing
 	G4double cosTheta                  = trap.GetSymAxis().z() ;
 	if( cosTheta < epsilon ) {
-		G4cerr << "WARNING from FukuiRenderer (DAWN) driver:" << endl;
-		G4cerr << "  Invalid parameter for trap, 1" << endl;
-		G4cerr << "  Drawing is skipped."           << endl;
+		G4cerr << "WARNING from FukuiRenderer (DAWN) driver:" << G4endl;
+		G4cerr << "  Invalid parameter for trap, 1" << G4endl;
+		G4cerr << "  Drawing is skipped."           << G4endl;
 		return ;
 	}
 
@@ -897,7 +897,7 @@ G4bool G4FRSCENE::IsVisible()
 void G4FRSCENE::SendBoundingBox( void )
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** SendBoundingBox ()  (/BoundingBox)" << endl;
+	G4cerr << "***** SendBoundingBox ()  (/BoundingBox)" << G4endl;
 #endif
 
 		//----- (1A) CALC bounding box of the bounding sphere

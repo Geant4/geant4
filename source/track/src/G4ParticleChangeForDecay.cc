@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForDecay.cc,v 1.3 1999-05-06 11:42:55 kurasige Exp $
+// $Id: G4ParticleChangeForDecay.cc,v 1.4 1999-12-15 14:53:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@ G4ParticleChangeForDecay::G4ParticleChangeForDecay():G4VParticleChange()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cout << "G4ParticleChangeForDecay::G4ParticleChangeForDecay() " << endl;
+    G4cout << "G4ParticleChangeForDecay::G4ParticleChangeForDecay() " << G4endl;
   }
 #endif
 }
@@ -40,7 +40,7 @@ G4ParticleChangeForDecay::~G4ParticleChangeForDecay()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cout << "G4ParticleChangeForDecay::~G4ParticleChangeForDecay() " << endl;
+    G4cout << "G4ParticleChangeForDecay::~G4ParticleChangeForDecay() " << G4endl;
   }
 #endif
 }
@@ -135,8 +135,8 @@ void G4ParticleChangeForDecay::DumpInfo() const
 
   G4cout.precision(3);
   G4cout << "        Time (ns)           : " 
-       << setw(20) << theTimeChange/ns
-       << endl;
+       << G4std::setw(20) << theTimeChange/ns
+       << G4endl;
 }
 
 G4bool G4ParticleChangeForDecay::CheckIt(const G4Track& aTrack)
@@ -150,16 +150,16 @@ G4bool G4ParticleChangeForDecay::CheckIt(const G4Track& aTrack)
   accuracy = -1.0*(theTimeChange - aTrack.GetGlobalTime())/ns;
   if (accuracy > accuracyForWarning) {
     G4cout << "  G4ParticleChangeForDecay::CheckIt    : ";
-    G4cout << "the global time goes back  !!" << endl;
-    G4cout << "  Difference:  " << accuracy  << "[ns] " <<endl;
+    G4cout << "the global time goes back  !!" << G4endl;
+    G4cout << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
     itsOK = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
 
   // dump out information of this particle change
   if (!itsOK) { 
-    G4cout << " G4ParticleChangeForDecay::CheckIt " <<endl;
-    G4cout << " pointer : " << this <<endl ;
+    G4cout << " G4ParticleChangeForDecay::CheckIt " <<G4endl;
+    G4cout << " pointer : " << this <<G4endl ;
     DumpInfo();
   }
 

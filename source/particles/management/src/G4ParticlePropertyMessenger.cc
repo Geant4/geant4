@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticlePropertyMessenger.cc,v 1.2 1999-04-13 08:00:31 kurasige Exp $
+// $Id: G4ParticlePropertyMessenger.cc,v 1.3 1999-12-15 14:51:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,7 +36,7 @@
 #include "G4ParticlePropertyMessenger.hh"
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"                 // Include from 'system'
-#include <iomanip.h>                  // Include from 'system'
+#include "g4std/iomanip"                  // Include from 'system'
 
 G4ParticlePropertyMessenger::G4ParticlePropertyMessenger(G4ParticleTable* pTable)
                         :theParticleTable(pTable),
@@ -102,7 +102,7 @@ G4ParticlePropertyMessenger::~G4ParticlePropertyMessenger()
 void G4ParticlePropertyMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
   if (SetCurrentParticle()==0) {
-      G4cout << "Particle is not selected yet !! Command ignored." << endl;
+      G4cout << "Particle is not selected yet !! Command ignored." << G4endl;
       return;
   }
 
@@ -117,9 +117,9 @@ void G4ParticlePropertyMessenger::SetNewValue(G4UIcommand * command,G4String new
   } else if (command == stableCmd ) {
     //Commnad   /particle/property/stable
     if (currentParticle->GetPDGLifeTime()<0.0) {
-      G4cout << "Life time is negative! Command ignored." << endl; 
+      G4cout << "Life time is negative! Command ignored." << G4endl; 
     } else if (currentParticle->GetPDGMass()<=0.0) {
-      G4cout << "Zero Mass! Command ignored." << endl; 
+      G4cout << "Zero Mass! Command ignored." << G4endl; 
     } else {
       currentParticle->SetPDGStable(stableCmd->GetNewBoolValue(newValue));
     }

@@ -27,7 +27,7 @@ int main()
 
   G4String stepfile;
   int stepf;
-  cin>>stepf;
+  G4cin>>stepf;
   
   if(stepf == 1)
     stepfile = "stepfiles/G4cyl_v.stp";   
@@ -66,9 +66,9 @@ int main()
     EntityKeywordCount("Shape_Definition_Representation");   
 
 
-  G4cout<<"\n Advanced_Brep_Shape_Representation = "<<Advbrepshapes<<endl;
-  G4cout<<"\n Context_Dependent_Shape_Representation = "<<Condepshapes<<endl;
-  G4cout<<"\n Shape_Definition_Representation = "<<Shapedefreps<<endl;
+  G4cout<<"\n Advanced_Brep_Shape_Representation = "<<Advbrepshapes<<G4endl;
+  G4cout<<"\n Context_Dependent_Shape_Representation = "<<Condepshapes<<G4endl;
+  G4cout<<"\n Shape_Definition_Representation = "<<Shapedefreps<<G4endl;
   
   // Create the STEP entities into psv (which is a G4PlacedSolidVector*)
   // and after copy into G4GeometryCreator.createdObject (which is a void*)
@@ -94,7 +94,7 @@ int main()
   
   G4PlacedSolid* ps = 0;
   G4int solids = assembly->GetNumberOfSolids();
-  G4cout<<"Number of solids : "<<solids<<endl;
+  G4cout<<"Number of solids : "<<solids<<G4endl;
 
   // Check that BREP solids & surfaces build 
   // the solid specified by the reader output
@@ -130,17 +130,17 @@ int main()
     G4cout<<"\n     bbox max :"
 	  <<" x="<<sol->GetBBox()->GetBoxMax().x()
 	  <<" y="<<sol->GetBBox()->GetBoxMax().y()
-	  <<" z="<<sol->GetBBox()->GetBoxMax().z()<<endl;
+	  <<" z="<<sol->GetBBox()->GetBoxMax().z()<<G4endl;
 
-    G4cout<<"\n Get Translation"<<endl;
+    G4cout<<"\n Get Translation"<<G4endl;
     G4ThreeVector* tr = ps->GetTranslation();
     G4cout<<"   x="<<tr->x()<<" y="<<tr->y()<<" z="<<tr->z();
   
-    G4cout<<"\n\n Get Rotation"<<endl;
+    G4cout<<"\n\n Get Rotation"<<G4endl;
     HepRotation* hr = ps->GetRotation();
-    G4cout<<"   xx="<<hr->xx()<<" xy="<<hr->xy()<<" xz="<<hr->xz()<<endl;
-    G4cout<<"   yx="<<hr->yx()<<" yy="<<hr->yy()<<" yz="<<hr->yz()<<endl;
-    G4cout<<"   zx="<<hr->zx()<<" zy="<<hr->zy()<<" zz="<<hr->zz()<<endl;
+    G4cout<<"   xx="<<hr->xx()<<" xy="<<hr->xy()<<" xz="<<hr->xz()<<G4endl;
+    G4cout<<"   yx="<<hr->yx()<<" yy="<<hr->yy()<<" yz="<<hr->yz()<<G4endl;
+    G4cout<<"   zx="<<hr->zx()<<" zy="<<hr->zy()<<" zz="<<hr->zz()<<G4endl;
 
 
     // -> Check methods :
@@ -148,45 +148,45 @@ int main()
     //  - DistanceToIn
     //  - DistanceToOut
     
-    G4cout<<endl<<endl;
+    G4cout<<G4endl<<G4endl;
     
     for (G4int a = 0; a<4; a++)
     {
       in[a] = sol->Inside(Pt[a]);
       
-      G4cout<<"----------------------------"<<endl;
+      G4cout<<"----------------------------"<<G4endl;
       
       G4cout<<"x="<<Pt[a].x()
 	    <<"  y="<<Pt[a].y()<<"  z="<<Pt[a].z();
       
       if( in[a] == kInside )
       {
-	G4cout <<" is inside"<<endl;
+	G4cout <<" is inside"<<G4endl;
 	
 	dist[a][1] = sol->DistanceToOut(Pt[a]);
-	cout<<"\nDistance to out is :"<<dist[a][1]<<endl;
+	cout<<"\nDistance to out is :"<<dist[a][1]<<G4endl;
 	
 	cout << "\nDir   : x=" << Dir[a].x() 
 	     << " y=" << Dir[a].y() 
-	     << " z=" << Dir[a].z()<<endl;
+	     << " z=" << Dir[a].z()<<G4endl;
 	dist[a][2] = sol->DistanceToOut(Pt[a], Dir[a]);
-	cout<<"Distance to out is :"<<dist[a][2]<<endl;
+	cout<<"Distance to out is :"<<dist[a][2]<<G4endl;
       }
       else
       {
-	G4cout <<" is outside"<<endl;
+	G4cout <<" is outside"<<G4endl;
 
 	dist[a][1] = sol->DistanceToIn(Pt[a]);
 	cout<<"\nDistance to in is :"<<dist[a][1];
 	
 	cout << "\nDir   : x=" << Dir[a].x() 
 	     << " y=" << Dir[a].y() 
-	     << " z=" << Dir[a].z()<<endl;
+	     << " z=" << Dir[a].z()<<G4endl;
 	dist[a][2] = sol->DistanceToIn(Pt[a], Dir[a]);
 	cout<<"Distance to in is :"<<dist[a][2];
       }
       
-      cout<<endl;
+      cout<<G4endl;
     }  
   }
 

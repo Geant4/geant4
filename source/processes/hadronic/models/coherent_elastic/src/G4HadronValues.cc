@@ -26,7 +26,7 @@
 
    else { 
          G4cout << " There is not method for the hadron " <<
-                  dHadron->GetParticleName() << endl;
+                  dHadron->GetParticleName() << G4endl;
         }
 
        G4double mHadr      = aHadron->GetMass()/1000.;         // In GeV
@@ -35,7 +35,7 @@
        G4double sqrS  =    sqrt(sHadr);
 
 //  G4cout<<" From hadr. Cr.-Sec. E: "<<HadrEnergy<<" Mass "<<
-//                   mHadr<<" Nh "<<iHadron<<endl;
+//                   mHadr<<" Nh "<<iHadron<<G4endl;
 
         switch (iHadron)
         {

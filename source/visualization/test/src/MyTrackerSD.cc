@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyTrackerSD.cc,v 1.1 1999-04-16 10:32:38 johna Exp $
+// $Id: MyTrackerSD.cc,v 1.2 1999-12-15 14:54:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,7 +40,7 @@ G4bool MyTrackerSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
   G4double edep = 1.0;
 
   if(verboseLevel>0)
-  { G4cout << " New Tracker Hit at " << hitPoint << endl; }
+  { G4cout << " New Tracker Hit at " << hitPoint << G4endl; }
 
   MyTrackerHit newHit;
   newHit.SetEdep( edep );

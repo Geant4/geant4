@@ -1,4 +1,4 @@
-#include <strstream.h>
+#include "g4std/strstream"
 #include "globals.hh"
 #include "Random.hh"
 #include "reactionChannels.hh"
@@ -50,14 +50,14 @@ decayMode::decayMode(int C_,const vector<ParticleBase*>& P)
   }
 }
 
-decayMode::decayMode(istream& in,const vector<ParticleType*>& incoming) 
+decayMode::decayMode(G4std::istream& in,const vector<ParticleType*>& incoming) 
   : SumMass(0),isoSet(false),elastic(false)
 {
   String prods,Mode,Type;
   int k = -1;
   in >> prods >> Type >> Mode;
   if ( Type[1] != ':' ) {
-    istrstream in1((char*)Type);
+    G4std::istrstream in1((char*)Type);
     double f;
     in1 >> f;
     sigmaPart = new ConstantFunction(f);
@@ -116,7 +116,7 @@ bool decayMode::compareProducts(const vector<ParticleBase*>& P) const
   return compare(L,products);
 }
 */
-ostream& operator<<(ostream& o,decayMode& d)
+G4std::ostream& operator<<(G4std::ostream& o,decayMode& d)
 {
   for (int i=0; i<d.products.size(); i++) {
     o << d.products[i]->pp.Name();
@@ -207,7 +207,7 @@ void decayMode::performDecay(const vector<ParticleBase*>& p_list,double Etot,con
       jk[j] = products[j]->pp.Isospin();
     }
     Iso::Projections(N(),p.Isospin(),p.Iso3(),jk,iso3,isSet);
-    //	cerr << iso3 << endl;
+    //	G4cerr << iso3 << G4endl;
   }
   else {
     for (int j=0; j<N(); j++) 
@@ -218,7 +218,7 @@ void decayMode::performDecay(const vector<ParticleBase*>& p_list,double Etot,con
     jk[j] = products[j]->pp.Spin();
   }
   Iso::Projections(N(),p.Spin(),p.Spin3(),jk,spin3,isSet);
-  //      cerr << spin3 << endl;
+  //      G4cerr << spin3 << G4endl;
   Array<RGB> colors(N());
   if ( isDecomposition() ) {
     if ( N() == 2 ) {  // qq->q,q or M->q,q'
@@ -253,7 +253,7 @@ void decayMode::performDecay(const vector<ParticleBase*>& p_list,double Etot,con
     MomList = Decay.getMomenta(Etot);
   }
   else {
-    cerr << "ATTENTION: Forcing decay. Energy not conserved!!!\n";
+    G4cerr << "ATTENTION: Forcing decay. Energy not conserved!!!\n";
     for (int i=0; i<N(); i++)
       MomList.insert(MomList.end(),Vektor4(MassList[i],0,0,0));
   }
@@ -265,9 +265,9 @@ void decayMode::performDecay(const vector<ParticleBase*>& p_list,double Etot,con
     Prod->SetMass(MassList[i]);
     Prod->SetMomentum(spatial(MomList[i]));
     Prod->SetCoordinates(x);
-    cerr << Prod->Name() << " (" << MomList[i][0] << "), ";
+    G4cerr << Prod->Name() << " (" << MomList[i][0] << "), ";
     Ptot += spatial(MomList[i]);
   }}
-  cerr << endl << Ptot << "  " << p_list[0]->Momentum() << "  " << Etot << endl;
-  cerr << endl;
+  G4cerr << G4endl << Ptot << "  " << p_list[0]->Momentum() << "  " << Etot << G4endl;
+  G4cerr << G4endl;
 }

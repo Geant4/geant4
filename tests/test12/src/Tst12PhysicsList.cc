@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst12PhysicsList.cc,v 1.5 1999-11-18 15:37:51 hpw Exp $
+// $Id: Tst12PhysicsList.cc,v 1.6 1999-12-15 14:54:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -25,7 +25,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"                
 
 
 Tst12PhysicsList::Tst12PhysicsList():  G4VUserPhysicsList()
@@ -608,7 +608,7 @@ void Tst12PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
     G4cout << "Tst12PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << endl;
+    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }  
  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 

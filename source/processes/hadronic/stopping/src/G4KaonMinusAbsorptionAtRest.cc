@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -39,7 +39,7 @@ G4KaonMinusAbsorptionAtRest::G4KaonMinusAbsorptionAtRest(const G4String& process
   : G4VRestProcess (processName)
 {
   if (verboseLevel>0) {
-    G4cout << GetProcessName() << " is created "<< endl;
+    G4cout << GetProcessName() << " is created "<< G4endl;
   }
 
   // see Cohn et al, PLB27(1968) 527;
@@ -85,7 +85,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
 
   if (!IsApplicable(*(stoppedHadron->GetDefinition()))) 
     {
-      G4cerr  <<"G4KaonMinusAbsorptionAtRest:ERROR, particle must be a Kaon!" <<endl;
+      G4cerr  <<"G4KaonMinusAbsorptionAtRest:ERROR, particle must be a Kaon!" <<G4endl;
       return 0;
     }
   
@@ -126,7 +126,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
               delete thePion;
 	      if (verboseLevel > 1) 
 		G4cout << "G4KaonMinusAbsorption::AtRestDoIt: Pion absorbed in Nucleus" 
-		       << endl;
+		       << G4endl;
 	    }                 
 	}
     }
@@ -148,7 +148,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
 
 	    if (verboseLevel > 1) 
 	      G4cout << "G4KaonMinusAbsorption::AtRestDoIt: SigmaLambdaConversion Done" 
-		     << endl;
+		     << G4endl;
 	  }                 
 	}
     }
@@ -201,7 +201,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
 	     << Z
 	     << ", "
 	     << newZ
-	     << endl; 
+	     << G4endl; 
     }
 
   if (energyDeposit < 0.) 
@@ -375,7 +375,7 @@ G4DynamicParticleVector* G4KaonMinusAbsorptionAtRest::KaonNucleonReaction()
 	    << "G4KaonMinusAbsorption::KaonNucleonReaction: "
 	    << aNucleon.GetDefinition()->GetParticleName() 
 	    << " is not a good nucleon - check G4Nucleus::ReturnTargetParticle()!"
-	    << endl;
+	    << G4endl;
 	}
       return 0;
     }  
@@ -421,7 +421,7 @@ G4DynamicParticleVector* G4KaonMinusAbsorptionAtRest::KaonNucleonReaction()
 	<< "G4KaonMinusAbsorption::KaonNucleonReaction: Number of primaries = " 
 	<< products->entries()
 	<< ": " <<producedMesonDef->GetParticleName() 
-	<< ", " <<producedBaryonDef->GetParticleName() << endl;
+	<< ", " <<producedBaryonDef->GetParticleName() << G4endl;
     }
   
   return products;

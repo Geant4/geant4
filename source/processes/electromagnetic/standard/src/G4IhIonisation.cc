@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IhIonisation.cc,v 1.5 1999-07-30 10:16:06 urban Exp $
+// $Id: G4IhIonisation.cc,v 1.6 1999-12-15 14:51:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -136,21 +136,21 @@ void G4IhIonisation::TestOfInversion(
                           G4Material::GetMaterialTable();
   G4int numOfMaterials = theMaterialTable->length() ;
 
-  G4cout.setf(ios::scientific, ios::floatfield) ;
+  G4cout.setf(G4std::ios::scientific, G4std::ios::floatfield) ;
   if(printflag>1)
   {
-  G4cout << endl;
-  G4cout << "  particle=" << aParticleType.GetParticleName() << endl;
-  G4cout << "----------------------" << endl;
+  G4cout << G4endl;
+  G4cout << "  particle=" << aParticleType.GetParticleName() << G4endl;
+  G4cout << "----------------------" << G4endl;
   }
   for (G4int J=0; J<numOfMaterials; J++)
   {
    if(printflag>1)
    {
-    G4cout << endl;
-    G4cout << " material = " << (*theMaterialTable)[J]->GetName() << endl;
+    G4cout << G4endl;
+    G4cout << " material = " << (*theMaterialTable)[J]->GetName() << G4endl;
     G4cout << " mat.ind.=" << J << "  T           Nlambda         Tprime"
-         << "         (Tprime-T)/T(%)" << endl ;
+         << "         (Tprime-T)/T(%)" << G4endl ;
    }
 
     G4PhysicsLogVector* aVector ;
@@ -184,28 +184,28 @@ void G4IhIonisation::TestOfInversion(
       }
     if(printflag>1)
      {
-      G4cout << setw(18) << setprecision(6) << T << "  " <<
-              setw(14)<< setprecision(6) << Nlambda << "  " <<
-      setw(14) << setprecision(6) << Tprime << "      " <<
-              setw(12) << setprecision(3) << del << endl;
+      G4cout << G4std::setw(18) << G4std::setprecision(6) << T << "  " <<
+              G4std::setw(14)<< G4std::setprecision(6) << Nlambda << "  " <<
+      G4std::setw(14) << G4std::setprecision(6) << Tprime << "      " <<
+              G4std::setw(12) << G4std::setprecision(3) << del << G4endl;
     }
      }
     }
     if(printflag>0)
     {
-    G4cout << endl;
-    G4cout << "G4IhIonisation::TestOfInversion (T->Nlambda->Tprime) " << endl ;
+    G4cout << G4endl;
+    G4cout << "G4IhIonisation::TestOfInversion (T->Nlambda->Tprime) " << G4endl ;
     G4cout << "particle= " << aParticleType.GetParticleName() <<
-            "   material= " << (*theMaterialTable)[J]->GetName() << endl ;
-    G4cout << "max (Tprime-T)/T in % =" << setw(10) << setprecision(3) << delta
+            "   material= " << (*theMaterialTable)[J]->GetName() << G4endl ;
+    G4cout << "max (Tprime-T)/T in % =" << G4std::setw(10) << G4std::setprecision(3) << delta
 ;
-    G4cout << "  at a kinetic energy " << setw(10) << setprecision(3) <<
-            Tdelta/MeV << "  MeV" << endl;
+    G4cout << "  at a kinetic energy " << G4std::setw(10) << G4std::setprecision(3) <<
+            Tdelta/MeV << "  MeV" << G4endl;
     delmean /= sum ;
-    G4cout << "mean rel.diff. (Tprime-T)/T=" << setw(10) <<
-            setprecision(3) << delmean <<
-            " % (mean is calculated in abs. value)" << endl;
-    G4cout << endl;
+    G4cout << "mean rel.diff. (Tprime-T)/T=" << G4std::setw(10) <<
+            G4std::setprecision(3) << delmean <<
+            " % (mean is calculated in abs. value)" << G4endl;
+    G4cout << G4endl;
     }
   }
 
@@ -1068,7 +1068,7 @@ void G4IhIonisation::PrintInfoDefinition()
            comments += "\n         Good description above the mean excitation energy.\n";
            comments += "         delta ray energy sampled from  differential Xsection.";
 
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,
                                                   "Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy")

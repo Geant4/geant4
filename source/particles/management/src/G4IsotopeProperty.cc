@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IsotopeProperty.cc,v 1.1 1999-10-05 06:45:19 kurasige Exp $
+// $Id: G4IsotopeProperty.cc,v 1.2 1999-12-15 14:51:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,7 +18,7 @@
 //      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
 
 #include "G4ios.hh"
-#include <iomanip.h>
+#include "g4std/iomanip"
 
 #include "G4IsotopeProperty.hh"
 #include "G4DecayTable.hh"
@@ -85,15 +85,15 @@ G4int G4IsotopeProperty::operator!=(const G4IsotopeProperty &right) const
 
 void G4IsotopeProperty::DumpInfo() const
 {
-  G4cout << "AtomicNumber: " << fAtomicNumber << endl;
-  G4cout << "AtomicMass: " << fAtomicMass << endl;
-  G4cout << "Spin: " << fISpin << "/2" << endl;
-  G4cout << "Excited Energy: " << setprecision(1) << fEnergy/keV << "[keV]" << endl;
-  G4cout << "Life Time: " << fLifeTime/ns << "[ns]" << endl;
+  G4cout << "AtomicNumber: " << fAtomicNumber << G4endl;
+  G4cout << "AtomicMass: " << fAtomicMass << G4endl;
+  G4cout << "Spin: " << fISpin << "/2" << G4endl;
+  G4cout << "Excited Energy: " << G4std::setprecision(1) << fEnergy/keV << "[keV]" << G4endl;
+  G4cout << "Life Time: " << fLifeTime/ns << "[ns]" << G4endl;
   if (fDecayTable != 0) {
     fDecayTable->DumpInfo();
   } else {
-    G4cout << "Decay Table is not defined !" << endl;
+    G4cout << "Decay Table is not defined !" << G4endl;
   }
 }
 

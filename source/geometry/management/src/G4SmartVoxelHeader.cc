@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.4 1999-06-04 17:26:37 sgiani Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.5 1999-12-15 14:49:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,14 +72,14 @@ G4SmartVoxelHeader::G4SmartVoxelHeader(G4LogicalVolume* pVolume,
 
 {
 #ifdef G4GEOMETRY_VOXELDEBUG
-    G4cout << "**** G4SmartVoxelHeader::G4SmartVoxelHeader" << endl
-         << "     Limits " << pLimits << endl
+    G4cout << "**** G4SmartVoxelHeader::G4SmartVoxelHeader" << G4endl
+         << "     Limits " << pLimits << G4endl
          << "     Candidate #s = " ;
     for (G4int i=0;i<pCandidates->entries();i++)
 	{
 	    G4cout << pCandidates->at(i) << " ";
 	}
-    G4cout << endl;
+    G4cout << G4endl;
 #endif   
     BuildVoxelsWithinLimits(pVolume,pLimits,pCandidates);
 }
@@ -389,7 +389,7 @@ void G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
     faxis=goodSliceAxis;
 
 #ifdef G4GEOMETRY_VOXELDEBUG
-    G4cout << endl << "     Selected axis = " << faxis << endl;
+    G4cout << G4endl << "     Selected axis = " << faxis << G4endl;
     G4int islice;
     for (islice=0;islice<fslices.entries();islice++)
 	{
@@ -397,9 +397,9 @@ void G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
 	    G4cout << "     Node #" << islice << " = {";
 	    for (j=0;j<fslices(islice)->GetNode()->GetNoContained();j++)
 		{ G4cout << " " << fslices(islice)->GetNode()->GetVolume(j); }
-	    G4cout << " }" << endl;
+	    G4cout << " }" << G4endl;
 	}
-    G4cout << endl;
+    G4cout << G4endl;
 #endif
 
 // Calculate and set min and max extents given our axis
@@ -541,9 +541,9 @@ void G4SmartVoxelHeader::CollectEquivalentNodes()
 		{
 // Do collection between sliceNo and maxNo inclusive
 #ifdef G4GEOMETRY_VOXELDEBUG
-		    G4cout << "**** G4SmartVoxelHeader::CollectEquivalentNodes" << endl
+		    G4cout << "**** G4SmartVoxelHeader::CollectEquivalentNodes" << G4endl
 			 << "     Collecting Nodes = " 
-			 << sliceNo << " - " << maxNo << endl;
+			 << sliceNo << " - " << maxNo << G4endl;
 #endif
 		    for (equivNo=sliceNo+1;equivNo<=maxNo;equivNo++)
 			{
@@ -587,7 +587,7 @@ void G4SmartVoxelHeader::CollectEquivalentHeaders()
 // but may not have equal contents
 
 #ifdef G4GEOMETRY_VOXELDEBUG
-			    G4cout << "**** G4SmartVoxelHeader::CollectEquivalentHeaders" << endl
+			    G4cout << "**** G4SmartVoxelHeader::CollectEquivalentHeaders" << G4endl
 				<< "     Collecting Headers =";
 #endif
 			    for (equivNo=sliceNo+1;equivNo<=maxNo;equivNo++)
@@ -614,7 +614,7 @@ void G4SmartVoxelHeader::CollectEquivalentHeaders()
 
 				}
 #ifdef G4GEOMETRY_VOXELDEBUG
-			    G4cout << endl;
+			    G4cout << G4endl;
 #endif
 
 // Skip past examined slices
@@ -653,10 +653,10 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
     
     nCandidates=pCandidates->entries();
 #ifdef G4GEOMETRY_VOXELDEBUG
-    G4cout << "**** G4SmartVoxelHeader::BuildNodes" << endl
-	 << "     Limits = " << pLimits << endl
+    G4cout << "**** G4SmartVoxelHeader::BuildNodes" << G4endl
+	 << "     Limits = " << pLimits << G4endl
 	 << "     Axis = " << pAxis
-	 << " Candidates = " << nCandidates << endl;
+	 << " Candidates = " << nCandidates << G4endl;
 #endif
 
 // Compute extent of logical volume's solid along this axis
@@ -751,13 +751,13 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
 		    if (((motherMinExtent-minExtents(nVol))*100/width>kStraddlePercent)
 			||((maxExtents(nVol)-motherMaxExtent)*100/width>kStraddlePercent))
 			{
-			    G4cout << "**** G4SmartVoxelHeader::BuildNodes" << endl
+			    G4cout << "**** G4SmartVoxelHeader::BuildNodes" << G4endl
 				 << "     WARNING : Daughter # " << nVol
-				 << " Name = " << pDaughter->GetName() << endl
+				 << " Name = " << pDaughter->GetName() << G4endl
 				 << "     Crosses mother boundary of logical volume Name = " 
-				 << pVolume->GetName() << endl
+				 << pVolume->GetName() << G4endl
 				 << "     by more than " << kStraddlePercent 
-				 << "%" << endl;
+				 << "%" << G4endl;
 			}
 		}
 #endif
@@ -806,13 +806,13 @@ G4int    noNodes = ((noNodesSmart-noNodesExactI)>=0.5) ?
 
 #ifdef G4GEOMETRY_VOXELDEBUG
     G4cout << "     Min width = " << minWidth
-	 << " => # Nodes = " << noNodes << endl;
+	 << " => # Nodes = " << noNodes << G4endl;
 #endif   
     if (noNodes>kMaxVoxelNodes)
 	{
 	    noNodes=kMaxVoxelNodes;
 #ifdef G4GEOMETRY_VOXELDEBUG
-    G4cout << "     Nodes Clipped to = " << kMaxVoxelNodes << endl;
+    G4cout << "     Nodes Clipped to = " << kMaxVoxelNodes << G4endl;
 #endif   
 	}
     G4double nodeWidth=(motherMaxExtent-motherMinExtent)/noNodes;
@@ -956,11 +956,11 @@ G4double G4SmartVoxelHeader::CalculateQuality(G4ProxyVector *pSlice)
 	}
 
 #ifdef G4GEOMETRY_VOXELDEBUG
-    G4cout << "**** G4SmartVoxelHeader::CalculateQuality" << endl
-	 << "     Quality = " << quality << endl
+    G4cout << "**** G4SmartVoxelHeader::CalculateQuality" << G4endl
+	 << "     Quality = " << quality << G4endl
 	 << "     Nodes = " << nNodes 
-	 << " of which " << sumNonEmptyNodes << " non empty" << endl
-         << "     Max Contained = " << maxContained << endl;
+	 << " of which " << sumNonEmptyNodes << " non empty" << G4endl
+         << "     Max Contained = " << maxContained << G4endl;
 #endif
     return quality;
 }
@@ -1042,9 +1042,9 @@ void G4SmartVoxelHeader::RefineNodes(G4LogicalVolume* pVolume,
 			    maxNo=targetNode->GetMaxEquivalentSliceNo();
 #ifdef G4GEOMETRY_VOXELDEBUG
 			    G4cout << "**** G4SmartVoxelHeader::RefineNodes"
-				 << endl
+				 << G4endl
 				 << "     Refining nodes " << minNo 
-				 << " - " << maxNo << " inclusive" << endl;
+				 << " - " << maxNo << " inclusive" << G4endl;
 
 #endif
 // Delete node proxies at start of collected sets of nodes/headers
@@ -1116,9 +1116,9 @@ G4bool G4SmartVoxelHeader::AllSlicesEqual() const
 }
 
 // Output for debugging
-ostream& operator << (ostream&s, const G4SmartVoxelHeader& h)
+G4std::ostream& operator << (G4std::ostream&s, const G4SmartVoxelHeader& h)
 {
-    s << "Axis = " << h.faxis << endl;
+    s << "Axis = " << h.faxis << G4endl;
     G4SmartVoxelProxy *collectNode=0,*collectHead=0;
     G4int collectNodeNo,collectHeadNo,i,j;
     G4bool haveHeaders=false;
@@ -1133,13 +1133,13 @@ ostream& operator << (ostream&s, const G4SmartVoxelHeader& h)
 			    s << "{";
 			    for (G4int j=0;j<h.fslices(i)->GetNode()->GetNoContained();j++)
 				{ s << " " << h.fslices(i)->GetNode()->GetVolume(j); }
-			    s << " }" << endl;
+			    s << " }" << G4endl;
 			    collectNode=h.fslices(i);
 			    collectNodeNo=i;
 			}
 		    else
 			{
-			    s << "As slice #" << collectNodeNo << endl;
+			    s << "As slice #" << collectNodeNo << G4endl;
 			}
 		}
 	    else
@@ -1147,13 +1147,13 @@ ostream& operator << (ostream&s, const G4SmartVoxelHeader& h)
 		    haveHeaders=true;
 		    if (h.fslices(i)!=collectHead)
 			{
-			    s << "Header" << endl;
+			    s << "Header" << G4endl;
 			    collectHead=h.fslices(i);
 			    collectHeadNo=i;
 			}
 		    else
 			{
-			    s << "As slice #" << collectHeadNo << endl;
+			    s << "As slice #" << collectHeadNo << G4endl;
 			}
 		}
 	}
@@ -1169,14 +1169,14 @@ ostream& operator << (ostream&s, const G4SmartVoxelHeader& h)
 			    s << "Header at Slice #" << j << " = ";
 			    if (h.fslices(j)!=collectHead)
 				{
-				    s << endl 
+				    s << G4endl 
 				      << (*(h.fslices(j)->GetHeader()));
 				    collectHead=h.fslices(j);
 				    collectHeadNo=j;
 				}
 			    else
 				{
-				    s << "As slice #" << collectHeadNo << endl;
+				    s << "As slice #" << collectHeadNo << G4endl;
 				}
 			}
 		}

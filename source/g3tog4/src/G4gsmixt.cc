@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsmixt.cc,v 1.6 1999-12-05 17:50:14 gcosmo Exp $
+// $Id: G4gsmixt.cc,v 1.7 1999-12-15 14:49:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
@@ -121,21 +121,21 @@ void G4gsmixt(G4int imate, G4String name, G4double a[], G4double z[],
   } else {
     if (nlmat>0) {
       G4cerr << "G4gsmixt: for mixture '" << name 
-	     << "' some |weights|>1 : " << endl;
+	     << "' some |weights|>1 : " << G4endl;
       for (G4int i=0;i<nlmat; i++) {
-	G4cerr << "Component " << setw(3) << i+1 << " fraction: "
-	       << setw(10) << wmat[i] << endl;
+	G4cerr << "Component " << G4std::setw(3) << i+1 << " fraction: "
+	       << G4std::setw(10) << wmat[i] << G4endl;
       }
     } else if (nlmat<0) {
       G4cerr << "G4gsmixt: for mixture '" << name 
-	     << "' some #natoms are non-integer: " << endl;
+	     << "' some #natoms are non-integer: " << G4endl;
       for (G4int i=0;i<nlmat; i++) {
-	G4cerr << "Component " << setw(3) << i+1 << " #atoms "
-	       << setw(10) << wmat[i] << endl;
+	G4cerr << "Component " << G4std::setw(3) << i+1 << " #atoms "
+	       << G4std::setw(10) << wmat[i] << G4endl;
       }
     } else {
       G4cerr << "G4gsmixt: Number of components for mixture '" 
-	     << name << "' (" << nlmat << ") not allowed." << endl;
+	     << name << "' (" << nlmat << ") not allowed." << G4endl;
     }
   }
 }

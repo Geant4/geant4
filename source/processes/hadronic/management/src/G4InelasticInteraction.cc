@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -38,7 +38,7 @@
     for( i=2; i<=nm; i++ )nmf += log((double)i);
     for( i=2; i<=nz; i++ )nzf += log((double)i);
     G4double r;
-    r = min( expxu, max( expxl, -(np-nm+nz+b)*(np-nm+nz+b)/(2*c*c*n*n)-npf-nmf-nzf ) );
+    r = G4std::min( expxu, G4std::max( expxl, -(np-nm+nz+b)*(np-nm+nz+b)/(2*c*c*n*n)-npf-nmf-nzf ) );
     return exp(r);
   }
 
@@ -136,7 +136,7 @@
     for( G4int i=iBegin; i<=numSec; ++i )
     {
       temp = pi*i/(2.0*n*n);
-      test = exp( min( expxu, max( expxl, -(pi/4.0)*(i*i)/(n*n) ) ) );
+      test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(i*i)/(n*n) ) ) );
       if( temp < 1.0 )
       {
         if( test >= 1.0e-10 )anpn += temp*test;
@@ -199,7 +199,7 @@
       //
       G4double tkin = targetNucleus.EvaporationEffects( ek*GeV )/GeV;
       ek -= tkin;
-      ek = max( 0.0001, ek );
+      ek = G4std::max( 0.0001, ek );
       modifiedOriginal.SetKineticEnergy( ek*GeV );
       G4double amas = originalIncident->GetDefinition()->GetPDGMass()/GeV;
       G4double et = ek + amas;
@@ -267,8 +267,8 @@
     //     there is no kinetic energy available for either proton/neutron
     //     or for deuteron/triton/alpha black track particles
     // For diffraction scattering on heavy nuclei use elastic routines instead
-    //G4cerr << "*** Error in G4InelasticInteraction::CalculateMomenta" << endl;
-    //G4cerr << "*** the elastic scattering would be better here ***" <<endl;
+    //G4cerr << "*** Error in G4InelasticInteraction::CalculateMomenta" << G4endl;
+    //G4cerr << "*** the elastic scattering would be better here ***" <<G4endl;
     //}
     theReactionDynamics.TwoBody( vec, vecLen,
                                  modifiedOriginal, originalTarget,

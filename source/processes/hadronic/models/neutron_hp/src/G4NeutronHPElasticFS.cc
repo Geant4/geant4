@@ -29,7 +29,7 @@
       hasXsec = false;
       return;
     }
-    ifstream theData(filename, ios::in);
+    G4std::ifstream theData(filename, G4std::ios::in);
     theData >> repFlag >> targetMass >> frameFlag;
     if(repFlag==1)
     {
@@ -86,22 +86,22 @@
     }
     else
     {
-      G4cout << "unusable number for repFlag: repFlag="<<repFlag<<endl;
+      G4cout << "unusable number for repFlag: repFlag="<<repFlag<<G4endl;
       G4Exception("G4NeutronHPElasticFS::Init -- unusable number for repFlag");
     }
   }
   G4ParticleChange * G4NeutronHPElasticFS::ApplyYourself(const G4Track & theTrack)
   {  
     G4int i, ii, iii;
-//    G4cout << "G4NeutronHPElasticFS::ApplyYourself+"<<endl;
+//    G4cout << "G4NeutronHPElasticFS::ApplyYourself+"<<G4endl;
     theResult.Initialize(theTrack);   
     G4double eKinetic = theTrack.GetKineticEnergy();
     const G4DynamicParticle *incidentParticle = theTrack.GetDynamicParticle();
     G4ReactionProduct theNeutron( incidentParticle->GetDefinition() );
     theNeutron.SetMomentum( incidentParticle->GetMomentum() );
     theNeutron.SetKineticEnergy( eKinetic );
-//    G4cout << "G4NeutronHPElasticFS::ApplyYourself++"<<eKinetic<<" "<<endl;
-//    G4cout << "CMSVALUES 0 "<<theNeutron.GetTotalMomentum()<<endl;
+//    G4cout << "G4NeutronHPElasticFS::ApplyYourself++"<<eKinetic<<" "<<G4endl;
+//    G4cout << "CMSVALUES 0 "<<theNeutron.GetTotalMomentum()<<G4endl;
     G4double pold = theNeutron.GetTotalMomentum();
     
     G4ReactionProduct theTarget; 
@@ -110,7 +110,7 @@
 //     G4cout << "Nucleus-test"<<" "<<targetMass<<" ";
 //     G4cout << theTarget.GetMomentum().x()<<" ";
 //     G4cout << theTarget.GetMomentum().y()<<" ";
-//     G4cout << theTarget.GetMomentum().z()<<endl;
+//     G4cout << theTarget.GetMomentum().z()<<G4endl;
     
     // neutron and target defined as reaction products.
 
@@ -119,7 +119,7 @@
     G4ThreeVector the3Neutron = theNeutron.GetMomentum();
     G4double nEnergy = theNeutron.GetTotalEnergy();
     G4ThreeVector the3Target = theTarget.GetMomentum();
-//    cout << "@@@" << the3Target<<endl;
+//    cout << "@@@" << the3Target<<G4endl;
     G4double tEnergy = theTarget.GetTotalEnergy();
     G4ReactionProduct theCMS;
     G4double totE = nEnergy+tEnergy;
@@ -150,7 +150,7 @@
     }
     else
     {
-      G4cout << "unusable number for repFlag: repFlag="<<repFlag<<endl;
+      G4cout << "unusable number for repFlag: repFlag="<<repFlag<<G4endl;
       G4Exception("G4NeutronHPElasticFS::Init -- unusable number for repFlag");
     }
     if(cosTh<-1.1) return NULL;
@@ -246,7 +246,7 @@
     theRecoil->SetMomentum(theTarget.GetMomentum());
     theResult.SetNumberOfSecondaries(1);
     theResult.AddSecondary(theRecoil);
-//    G4cout << "G4NeutronHPElasticFS::ApplyYourself 10+"<<endl;
+//    G4cout << "G4NeutronHPElasticFS::ApplyYourself 10+"<<G4endl;
     // postpone the tracking of the primary neutron
      theResult.SetStatusChange(fSuspend);
     return &theResult;

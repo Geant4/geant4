@@ -100,7 +100,7 @@ int main()
 
      }  while (iteration < NumberEvents) ;
 
-    cout << " number of useful events " << nevhmf << endl; 
+    cout << " number of useful events " << nevhmf << G4endl; 
    
     G4double wgthmf = 20.94/nevhmf;
     if(incidentParticle.getName() == "KaonPlus") wgthmf = 17.72/nevhmf;

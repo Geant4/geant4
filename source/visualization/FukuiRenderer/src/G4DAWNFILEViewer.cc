@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.5 1999-11-02 03:23:19 stanaka Exp $
+// $Id: G4DAWNFILEViewer.cc,v 1.6 1999-12-15 14:54:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -81,7 +81,7 @@ G4DAWNFILEViewer::~G4DAWNFILEViewer ()
 void G4DAWNFILEViewer::SetView () 
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4DAWNFILEViewer::SetView(): No effects" << endl;
+  G4cerr << "***** G4DAWNFILEViewer::SetView(): No effects" << G4endl;
 #endif 
 // Do nothing, since DAWN is running as a different process.
 // SendViewParameters () will do this job instead.
@@ -93,7 +93,7 @@ void
 G4DAWNFILEViewer::ClearView( void )
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4DAWNFILEViewer::ClearView (): No effects " << endl;
+	G4cerr << "***** G4DAWNFILEViewer::ClearView (): No effects " << G4endl;
 #endif
 
 }
@@ -103,7 +103,7 @@ G4DAWNFILEViewer::ClearView( void )
 void G4DAWNFILEViewer::DrawView () 
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4DAWNFILEViewer::DrawView () " << endl;
+	G4cerr << "***** G4DAWNFILEViewer::DrawView () " << G4endl;
 #endif
 		//----- 
 	fSceneHandler.FRBeginModeling() ;
@@ -122,7 +122,7 @@ void G4DAWNFILEViewer::DrawView ()
 void G4DAWNFILEViewer::ShowView( void )
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4DAWNFILEViewer::ShowView () " << endl;
+	G4cerr << "***** G4DAWNFILEViewer::ShowView () " << G4endl;
 #endif
 
 	if( fSceneHandler.FRIsInModeling() ) 
@@ -151,19 +151,19 @@ void G4DAWNFILEViewer::ShowView( void )
 		if( false == G4FRofstream::DoesFileExist( fSceneHandler.GetG4PrimFileName() ) )   
 		{
 			G4cout << "ERROR: Failed to generate file  ";
-			G4cout << fSceneHandler.GetG4PrimFileName() << endl;
+			G4cout << fSceneHandler.GetG4PrimFileName() << G4endl;
 
 		} else 	if( strcmp( GetG4PrimViewerInvocation(), "" ) )  
 		{
 			G4cout << "File  " << fSceneHandler.GetG4PrimFileName() ;
-			G4cout << "  is generated." << endl;
-			G4cout << GetG4PrimViewerInvocation() << endl;
+			G4cout << "  is generated." << G4endl;
+			G4cout << GetG4PrimViewerInvocation() << G4endl;
 			system( GetG4PrimViewerInvocation() );
 
 		} else { // no view, i.e., only file generation
 			G4cout << "File  " << fSceneHandler.GetG4PrimFileName() ; 
-			G4cout << "  is generated." << endl;
-			G4cout << "No viewer is invoked." << endl;
+			G4cout << "  is generated." << G4endl;
+			G4cout << "No viewer is invoked." << G4endl;
 		}
 
 	}
@@ -171,12 +171,12 @@ void G4DAWNFILEViewer::ShowView( void )
 } // G4DAWNFILEViewer::ShowView()
 
 
-	//----- G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( ostream& out ) 
-void  G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( ostream& out ) 
+	//----- G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( G4std::ostream& out ) 
+void  G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( G4std::ostream& out ) 
 {
 ///////////////////////
 //#if defined DEBUG_FR_VIEW
-//  G4cerr << "***** G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI()" << endl;
+//  G4cerr << "***** G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI()" << G4endl;
 //#endif
 //////////////////////
 
@@ -188,17 +188,17 @@ void  G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( ostream& out )
 	switch( style )
 	{
 	  case G4ViewParameters::wireframe: 
-		out <<  FR_WIREFRAME << endl;
+		out <<  FR_WIREFRAME << G4endl;
 		break;
 	  case G4ViewParameters::hlr:
-		out <<  FR_HID2      << endl; // LINE
+		out <<  FR_HID2      << G4endl; // LINE
 		break;
 	  case G4ViewParameters::hsr:
 	  case G4ViewParameters::hlhsr:
-		out <<  FR_HID       << endl; // SURFACE
+		out <<  FR_HID       << G4endl; // SURFACE
 		break;
 	  default:
-		out <<  FR_WIREFRAME << endl;
+		out <<  FR_WIREFRAME << G4endl;
 		break;
 	}
 
@@ -215,7 +215,7 @@ void G4DAWNFILEViewer::SendViewParameters ()
 
 #if defined DEBUG_FR_VIEW
   G4cerr << "***** G4DAWNFILEViewer::SendViewParameters()  "; 
-  G4cerr << "(GUI parameters)" << endl;
+  G4cerr << "(GUI parameters)" << G4endl;
 #endif 
 
 		//----- Magic number to decide camera distance automatically
@@ -243,8 +243,8 @@ void G4DAWNFILEViewer::SendViewParameters ()
 	}
 
 	if ( camera_distance < radius ) { 
-		G4cerr << "WARNING from DAWNFILE driver:" << endl;
-		G4cerr << "  Camera cannot enter inside objects"      << endl;
+		G4cerr << "WARNING from DAWNFILE driver:" << G4endl;
+		G4cerr << "  Camera cannot enter inside objects"      << G4endl;
 		camera_distance = radius ; 
 	}
 
@@ -257,27 +257,27 @@ void G4DAWNFILEViewer::SendViewParameters ()
 
 	//########### Generation of the file .DAWN.history for DAWN GUI
 		//-----
-	ofstream gui_out (".DAWN_1.history") ; 
+	G4std::ofstream gui_out (".DAWN_1.history") ; 
 
 	// ######### P1 
 
 		//----- camera position
-	gui_out << camera_distance << endl;
-	gui_out << v_angle  << endl ;
-        gui_out << h_angle  << endl ;
-        gui_out << "0"  << endl     ; // auto target
+	gui_out << camera_distance << G4endl;
+	gui_out << v_angle  << G4endl ;
+        gui_out << h_angle  << G4endl ;
+        gui_out << "0"  << G4endl     ; // auto target
 
 		//----- target point 
 	const G4Point3D&  target_point = fVP.GetCurrentTargetPoint();
-	gui_out << target_point.x()          << endl ;
-	gui_out << target_point.y()          << endl ;
-	gui_out << target_point.z()          << endl ;
+	gui_out << target_point.x()          << G4endl ;
+	gui_out << target_point.y()          << G4endl ;
+	gui_out << target_point.z()          << G4endl ;
 
 		//----- Magnification
 	const G4double   zoom_factor  = fVP.GetZoomFactor();
 	if( half_view_angle < MIN_HALF_ANGLE ) {
 
-		gui_out << zoom_factor << endl;
+		gui_out << zoom_factor << G4endl;
 
 	} else {
 		const G4double FR_HALF_SCREEN_SIZE = 0.5 ;
@@ -285,33 +285,33 @@ void G4DAWNFILEViewer::SendViewParameters ()
 		  = FR_HALF_SCREEN_SIZE / tan( half_view_angle ); 
 		focal_distance *= zoom_factor ;
 
-		gui_out << "fd" << focal_distance << endl;
+		gui_out << "fd" << focal_distance << G4endl;
 
 	}
 	SendDrawingStyleToDAWNGUI( gui_out ) ; // gui_out, viewing mode
-	gui_out << "0.001" << endl           ; // 3D Tolerance 
-	gui_out << "0"     << endl           ; // not display parameters
+	gui_out << "0.001" << G4endl           ; // 3D Tolerance 
+	gui_out << "0"     << G4endl           ; // not display parameters
 
 
 	// ######### P2
-	gui_out << 1 << endl;   // Source light 
-	gui_out << 1 << endl;   
-	gui_out << 1 << endl;   
-	gui_out << 0.5 << endl; // Ambient light
-	gui_out << 0.5 << endl;
-	gui_out << 0.5 << endl;
-	gui_out << 19.0 << endl; // Light direction (Polar)
-	gui_out << 71.0 << endl; // Light direction (Azimuthal)
+	gui_out << 1 << G4endl;   // Source light 
+	gui_out << 1 << G4endl;   
+	gui_out << 1 << G4endl;   
+	gui_out << 0.5 << G4endl; // Ambient light
+	gui_out << 0.5 << G4endl;
+	gui_out << 0.5 << G4endl;
+	gui_out << 19.0 << G4endl; // Light direction (Polar)
+	gui_out << 71.0 << G4endl; // Light direction (Azimuthal)
 
 	// ######### P3
-	gui_out << 0.1 << endl;    // Real edge width
-	gui_out << 0.1 << endl;    // outline   width
-	gui_out << 0.1 << endl;    // aux edge  width
-	gui_out << 3   << endl;      // aux edge  style
-	gui_out << 70.0<< endl;   // aux-edge threshold angle
-	gui_out << 0.1 << endl;       // line width
-	gui_out << 0   << endl;        // haloing
-	gui_out << 1   << endl;        // Dashed edged for back faces
+	gui_out << 0.1 << G4endl;    // Real edge width
+	gui_out << 0.1 << G4endl;    // outline   width
+	gui_out << 0.1 << G4endl;    // aux edge  width
+	gui_out << 3   << G4endl;      // aux edge  style
+	gui_out << 70.0<< G4endl;   // aux-edge threshold angle
+	gui_out << 0.1 << G4endl;       // line width
+	gui_out << 0   << G4endl;        // haloing
+	gui_out << 1   << G4endl;        // Dashed edged for back faces
 
 	//######### P4
                //----- drawing device
@@ -321,14 +321,14 @@ void G4DAWNFILEViewer::SendViewParameters ()
             ( ( getenv( FR_ENV_MULTI_WINDOW2 ) != NULL        ) && \
               ( strcmp( getenv( FR_ENV_MULTI_WINDOW2 ),"0"  ) )      )     )
         {
-                gui_out << 2 << endl; // OpenWindow
+                gui_out << 2 << G4endl; // OpenWindow
         } else {
-                gui_out << 1 << endl; // Invoke PS viewer
+                gui_out << 1 << G4endl; // Invoke PS viewer
         }
 
-	gui_out << GetPSViewer() << endl; // PS viewer
-	gui_out << 0 << endl            ; // Do not add showpage 
-	gui_out << 0 << endl            ; // Non-append mode
+	gui_out << GetPSViewer() << G4endl; // PS viewer
+	gui_out << 0 << G4endl            ; // Do not add showpage 
+	gui_out << 0 << G4endl            ; // Non-append mode
 
 	gui_out.close();
 	//########### end of generating file .DAWN.history 

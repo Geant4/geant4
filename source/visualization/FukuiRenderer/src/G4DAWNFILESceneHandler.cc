@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILESceneHandler.cc,v 1.2 1999-11-01 02:40:47 stanaka Exp $
+// $Id: G4DAWNFILESceneHandler.cc,v 1.3 1999-12-15 14:54:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -22,7 +22,7 @@
 // #define DEBUG_FR_SCENE
 
      //----- header files
-#include <fstream.h>
+#include "g4std/fstream"
 #include <stdlib.h>
 #include <string.h>
 #include "globals.hh"
@@ -95,7 +95,7 @@ COMMAND_BUF_SIZE       (G4FRofstream::SEND_BUFMAX)
 G4DAWNFILESceneHandler::~G4DAWNFILESceneHandler () 
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** ~G4DAWNFILESceneHandler" << endl;
+	G4cerr << "***** ~G4DAWNFILESceneHandler" << G4endl;
 #endif 
   fSceneCount--;
   ClearStore (); // clear current scene
@@ -119,13 +119,13 @@ void	G4DAWNFILESceneHandler::SetG4PrimFileName()
 
 		// Message
 		if( fMaxFileNum > 1 && i == MAX_FILE_INDEX ) {
-		  G4cerr << "==========================================="   << endl; 
-		  G4cerr << "WARNING MESSAGE from DAWNFILE driver:      "   << endl;
-		  G4cerr << "  This file name is the final one in the   "   << endl;
-		  G4cerr << "  automatic updation of the output file name." << endl; 
-		  G4cerr << "  You may overwrite an existing file of   "    << endl; 
-                  G4cerr << "  the same name.                          "    << endl;
-		  G4cerr << "==========================================="   << endl; 
+		  G4cerr << "==========================================="   << G4endl; 
+		  G4cerr << "WARNING MESSAGE from DAWNFILE driver:      "   << G4endl;
+		  G4cerr << "  This file name is the final one in the   "   << G4endl;
+		  G4cerr << "  automatic updation of the output file name." << G4endl; 
+		  G4cerr << "  You may overwrite an existing file of   "    << G4endl; 
+                  G4cerr << "  the same name.                          "    << G4endl;
+		  G4cerr << "==========================================="   << G4endl; 
 		}
 
 		// re-determine file to G4DAWNFILE_DEST_DIR/g4_i.prim for i>0
@@ -134,7 +134,7 @@ void	G4DAWNFILESceneHandler::SetG4PrimFileName()
 		}
 
 		// check validity of the file name
-		ifstream  fin ; 
+		G4std::ifstream  fin ; 
 		fin.open(fG4PrimFileName) ;
 		if(!fin) { 
 			// new file	
@@ -147,11 +147,11 @@ void	G4DAWNFILESceneHandler::SetG4PrimFileName()
 
 	} // for 
 
-	G4cerr << "===========================================" << endl; 
-	G4cerr << "Output file: " <<    fG4PrimFileName         << endl; 
-	G4cerr << "Muximal number of file in the destination directory: " << fMaxFileNum << endl; 
-	G4cerr << "  (Customizable as: setenv G4DAWNFILE_MAX_FILE_NUM number) " << endl;
-	G4cerr << "===========================================" << endl; 
+	G4cerr << "===========================================" << G4endl; 
+	G4cerr << "Output file: " <<    fG4PrimFileName         << G4endl; 
+	G4cerr << "Muximal number of file in the destination directory: " << fMaxFileNum << G4endl; 
+	G4cerr << "  (Customizable as: setenv G4DAWNFILE_MAX_FILE_NUM number) " << G4endl;
+	G4cerr << "===========================================" << G4endl; 
 
 } // G4DAWNFILESceneHandler::SetG4PrimFileName()
 
@@ -167,7 +167,7 @@ void	G4DAWNFILESceneHandler::BeginSavingG4Prim( void )
 	{ 
 #if defined DEBUG_FR_SCENE
 	        G4cerr << "*****                   (started) " ;
-	        G4cerr << "(open g4.prim, ##)"  << endl;
+	        G4cerr << "(open g4.prim, ##)"  << G4endl;
 #endif
 		SetG4PrimFileName() ; // returned to fG4PrimFileName
 		fPrimDest.Open(fG4PrimFileName)   ;
@@ -186,7 +186,7 @@ void	G4DAWNFILESceneHandler::EndSavingG4Prim  ( void )
 	if(  IsSavingG4Prim() )
 	{
 #if defined DEBUG_FR_SCENE
-          G4cerr << "*****                 (started) (close g4.prim)" << endl;
+          G4cerr << "*****                 (started) (close g4.prim)" << G4endl;
 #endif
 		fPrimDest.Close()               ;
 		flag_saving_g4_prim = false ; 
@@ -200,7 +200,7 @@ void G4DAWNFILESceneHandler::FRBeginModeling( void )
 	if( !FRIsInModeling() )  	
 	{
 #if defined DEBUG_FR_SCENE
-	  G4cerr << "***** G4DAWNFILESceneHandler::FRBeginModeling (called & started)" << endl;
+	  G4cerr << "***** G4DAWNFILESceneHandler::FRBeginModeling (called & started)" << G4endl;
 #endif
 
 			//----- Send saving command and heading comment
@@ -211,19 +211,19 @@ void G4DAWNFILESceneHandler::FRBeginModeling( void )
 
 			//----- send SET_CAMERA command 
 #if defined DEBUG_FR_SCENE
-		G4cerr << "*****   (!SetCamera in FRBeginModeling())" << endl;
+		G4cerr << "*****   (!SetCamera in FRBeginModeling())" << G4endl;
 #endif
 		SendStr( FR_SET_CAMERA );
 
 		//----- open device
 #if defined DEBUG_FR_SCENE
-		G4cerr << "*****   (!OpenDevice in FRBeginModeling())" << endl;
+		G4cerr << "*****   (!OpenDevice in FRBeginModeling())" << G4endl;
 #endif
 		SendStr( FR_OPEN_DEVICE      );
 
 		//----- begin sending primitives
 #if defined DEBUG_FR_SCENE
-		G4cerr << "*****   (!BeginModeling in FRBeginModeling())" << endl;
+		G4cerr << "*****   (!BeginModeling in FRBeginModeling())" << G4endl;
 #endif
 		SendStr( FR_BEGIN_MODELING );  FRflag_in_modeling = true ;
 

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationLevel.hh,v 1.8 1999-05-17 13:51:51 fbehner Exp $
+// $Id: G4NavigationLevel.hh,v 1.9 1999-12-15 14:50:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NavigationLevel
@@ -30,7 +30,7 @@
 #include "G4NavigationLevelRep.hh"
 #include "G4Allocator.hh"
 
-class ostream;
+class G4std::ostream;
 
 class G4NavigationLevel
 {

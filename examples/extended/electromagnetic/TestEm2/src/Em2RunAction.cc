@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2RunAction.cc,v 1.2 1999-11-12 16:08:40 maire Exp $
+// $Id: Em2RunAction.cc,v 1.3 1999-12-15 14:49:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,7 +25,7 @@
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
-#include <iomanip.h>
+#include "g4std/iomanip"
 #include <assert.h>
 
 #include "Randomize.hh"
@@ -132,7 +132,7 @@ void Em2RunAction::cleanHisto()
 
 void Em2RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
   if (saveRndm > 0)
@@ -317,62 +317,62 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
   //print
   // 
 
-  G4long oldform = G4cout.setf(ios::fixed,ios::floatfield);
+  G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
   G4int  oldprec = G4cout.precision(2);
   
   G4cout << "                 LATERAL PROFILE                   "
-         << "      CUMULATIVE LATERAL PROFILE" << endl << endl;  
+         << "      CUMULATIVE LATERAL PROFILE" << G4endl << G4endl;  
      
   G4cout << "        bin   " << "           Mean         rms         " 
-         << "        bin "   << "           Mean      rms \n" << endl;
+         << "        bin "   << "           Mean      rms \n" << G4endl;
                                          
   for (i=0; i<nLbin; i++)
    {
      G4double inf=i*dLradl, sup=inf+dLradl;
        
-     G4cout << setw(8) << inf << "->" << setw(5) << sup << " radl: " 
-                                      << setw(7) << MeanELongit(i) << "%  " 
-                                      << setw(9) << rmsELongit(i) << "%       "                                  
-                       << "      0->" << setw(5) << sup << " radl: " 
-                                      << setw(7) << MeanELongitCumul(i) << "%  " 
-                                      << setw(7) << rmsELongitCumul(i) << "% " 
-            <<endl;
+     G4cout << G4std::setw(8) << inf << "->" << G4std::setw(5) << sup << " radl: " 
+                                      << G4std::setw(7) << MeanELongit(i) << "%  " 
+                                      << G4std::setw(9) << rmsELongit(i) << "%       "                                  
+                       << "      0->" << G4std::setw(5) << sup << " radl: " 
+                                      << G4std::setw(7) << MeanELongitCumul(i) << "%  " 
+                                      << G4std::setw(7) << rmsELongitCumul(i) << "% " 
+            <<G4endl;
    }
    
-  G4cout << endl << endl << endl;
+  G4cout << G4endl << G4endl << G4endl;
    
   G4cout << "                  RADIAL PROFILE                   "
-         << "      CUMULATIVE  RADIAL PROFILE" << endl << endl;  
+         << "      CUMULATIVE  RADIAL PROFILE" << G4endl << G4endl;  
      
   G4cout << "        bin   " << "           Mean         rms         " 
-         << "        bin "   << "           Mean      rms \n" << endl;
+         << "        bin "   << "           Mean      rms \n" << G4endl;
                                          
   for (i=0; i<nRbin; i++)
    {
      G4double inf=i*dRradl, sup=inf+dRradl;
        
-     G4cout << setw(8) << inf << "->" << setw(5) << sup << " radl: " 
-                                      << setw(7) << MeanERadial(i) << "%  " 
-                                      << setw(9) << rmsERadial(i) << "%       "                                  
-                       << "      0->" << setw(5) << sup << " radl: " 
-                                      << setw(7) << MeanERadialCumul(i) << "%  " 
-                                      << setw(7) << rmsERadialCumul(i) << "% " 
-            <<endl;
+     G4cout << G4std::setw(8) << inf << "->" << G4std::setw(5) << sup << " radl: " 
+                                      << G4std::setw(7) << MeanERadial(i) << "%  " 
+                                      << G4std::setw(9) << rmsERadial(i) << "%       "                                  
+                       << "      0->" << G4std::setw(5) << sup << " radl: " 
+                                      << G4std::setw(7) << MeanERadialCumul(i) << "%  " 
+                                      << G4std::setw(7) << rmsERadialCumul(i) << "% " 
+            <<G4endl;
    }  
-  G4cout << endl;
-  G4cout << setw(37) << "SUMMARY" << endl;
-  G4cout << setw(42) << "energy deposit : " 
-         << setw(7)  << MeanELongitCumul(nLbin-1) << " % E0 +- "
-         << setw(7)  <<  rmsELongitCumul(nLbin-1) << " % E0" << endl;
-  G4cout << setw(42) << "charged traklen: " 
-         << setw(7)  << MeanChargTrLength << " radl +- "
-         << setw(7)  <<  rmsChargTrLength << " radl" << endl;
-  G4cout << setw(42) << "neutral traklen: " 
-         << setw(7)  << MeanNeutrTrLength << " radl +- "
-         << setw(7)  <<  rmsNeutrTrLength << " radl" << endl;
+  G4cout << G4endl;
+  G4cout << G4std::setw(37) << "SUMMARY" << G4endl;
+  G4cout << G4std::setw(42) << "energy deposit : " 
+         << G4std::setw(7)  << MeanELongitCumul(nLbin-1) << " % E0 +- "
+         << G4std::setw(7)  <<  rmsELongitCumul(nLbin-1) << " % E0" << G4endl;
+  G4cout << G4std::setw(42) << "charged traklen: " 
+         << G4std::setw(7)  << MeanChargTrLength << " radl +- "
+         << G4std::setw(7)  <<  rmsChargTrLength << " radl" << G4endl;
+  G4cout << G4std::setw(42) << "neutral traklen: " 
+         << G4std::setw(7)  << MeanNeutrTrLength << " radl +- "
+         << G4std::setw(7)  <<  rmsNeutrTrLength << " radl" << G4endl;
                  
                 
-  G4cout.setf(oldform,ios::floatfield);
+  G4cout.setf(oldform,G4std::ios::floatfield);
   G4cout.precision(oldprec);
   
   // Write histogram file 

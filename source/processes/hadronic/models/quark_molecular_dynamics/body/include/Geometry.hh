@@ -31,7 +31,7 @@ public:
   virtual REAL hitSurface(const Vektor3& v,const Vektor3& x0,Vektor3&) = 0;
   virtual bool homogeneous(Vektor4&) = 0;
   virtual Matrize rotateFrame(const Vektor3&) = 0;
-  virtual void whatAmI(ostream& o) { o << "Error..."; }
+  virtual void whatAmI(G4std::ostream& o) { o << "Error..."; }
   virtual void reflect(Vektor3& x) const { }
   bool moveToSurface(Vektor4& x,const Vektor4& p);
   bool moveToSurface(Vektor4& x,Vektor4& p,Matrize&,Vektor3&);
@@ -54,7 +54,7 @@ public:
   Matrize rotateFrame(const Vektor3&);
   REAL size() const { return L; }
   REAL surface(const Vektor3&) const { return frontArea; }
-  void whatAmI(ostream& o) { o << "half space (L = " << L << ")"; }
+  void whatAmI(G4std::ostream& o) { o << "half space (L = " << L << ")"; }
   void newSize(REAL V_) { L = V_/frontArea; V = V_; }
   void adjustSize(REAL dV) { L *= shrinkVolume(dV); }
 
@@ -83,7 +83,7 @@ public:
   Matrize rotateFrame(const Vektor3&);
   REAL size() const { return L; }
   REAL surface(const Vektor3&) const { return 6*L*L; }
-  void whatAmI(ostream& o) { o << "Box (L = " << L << ")"; }
+  void whatAmI(G4std::ostream& o) { o << "Box (L = " << L << ")"; }
   void newSize(REAL V_) { L = pow(V,1.0/3.0); V = V_; }
   void adjustSize(REAL dV) { L *= shrinkVolume(dV); }
   virtual void reflect(Vektor3& x) const;
@@ -113,7 +113,7 @@ public:
   Matrize rotateFrame(const Vektor3&);
   REAL totalSurface() { return 4.0*mathConstants::Pi*R*R; }
   REAL surface(const Vektor3& x) const { return 4.0*mathConstants::Pi*square(x); }
-  void whatAmI(ostream& o) { o << "Sphere (R = " << R << ")"; }
+  void whatAmI(G4std::ostream& o) { o << "Sphere (R = " << R << ")"; }
   void adjustSize(REAL dV) { R *= shrinkVolume(dV); }
   void newSize(REAL V_) { R = pow(3.0/4.0/mathConstants::Pi*V_,1.0/3.0); V = V_; }
 protected:
@@ -131,7 +131,7 @@ public:
   REAL size() const { return R; }
   Matrize rotateFrame(const Vektor3&);
   REAL surface(const Vektor3&) const { return 2.0*mathConstants::Pi*R*(R+L); }
-  void whatAmI(ostream& o) { o << "Tube (R = " << R << ",L = " << L << ")"; }
+  void whatAmI(G4std::ostream& o) { o << "Tube (R = " << R << ",L = " << L << ")"; }
   void adjustSize(REAL dV) { REAL d = shrinkVolume(dV); R*=d; L*=d; }
 public:
   REAL dSize() { return 0.0; }

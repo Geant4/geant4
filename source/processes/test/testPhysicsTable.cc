@@ -89,20 +89,20 @@ void main()
 // Test G4Cerenkov Physics Table
 //////////////////////////////////
 
-  G4cout << "G4Cerenkov's Physics Table" << endl;
-  G4cout << "--------------------------" << endl;
+  G4cout << "G4Cerenkov's Physics Table" << G4endl;
+  G4cout << "--------------------------" << G4endl;
 
   theCerenkovProcess.DumpPhysicsTable();
   LoopUntilPressEnter();
 
-  G4cout << "G4OpAbsorption's Physics Table" << endl;
-  G4cout << "----------------------------" << endl;
+  G4cout << "G4OpAbsorption's Physics Table" << G4endl;
+  G4cout << "----------------------------" << G4endl;
 
   theAbsorptionProcess.DumpPhysicsTable();
   LoopUntilPressEnter();
 
-  G4cout << "G4OpRayleigh's Physics Table" << endl;
-  G4cout << "--------------------------" << endl;
+  G4cout << "G4OpRayleigh's Physics Table" << G4endl;
+  G4cout << "--------------------------" << G4endl;
 
   theRayleighProcess.DumpPhysicsTable();
   LoopUntilPressEnter();
@@ -114,10 +114,10 @@ void LoopUntilPressEnter()
         char ch;
 
         G4cout << "Press <Enter> to continue ... ";
-        while ( cin.get(ch) )
+        while ( G4cin.get(ch) )
         {
                 if (ch == '\n') break;
         }
-        G4cout << endl;
+        G4cout << G4endl;
 }
 

@@ -49,24 +49,24 @@
                  aParticle->SetMomentum(inVector);
 
 //        G4cout <<  "  inMom befor " <<inVector.x()<<" " << 
-//inVector.y()<<" "<<  inVector.z()<<" " << " Tkin " << Tkin << endl;
+//inVector.y()<<" "<<  inVector.z()<<" " << " Tkin " << Tkin << G4endl;
 
                 inVector =  aParticle->GetMomentum();
 //        G4cout <<  "  after inMom " <<inVector.x()<<" " << 
-//inVector.y()<<" "<<  inVector.z()<<" " << " Tkin " << Tkin << endl;
+//inVector.y()<<" "<<  inVector.z()<<" " << " Tkin " << Tkin << G4endl;
 
          G4double      Tkin2 = aTrack.GetKineticEnergy();
          G4double      TotE  = aTrack.GetTotalEnergy();
          G4ThreeVector DirM  = aTrack.GetMomentumDirection();
          G4ThreeVector Mom   = aTrack.GetMomentum();
 
-//         G4cout << " Tkin "<<Tkin2<<" TotE "<<TotE<< endl;
+//         G4cout << " Tkin "<<Tkin2<<" TotE "<<TotE<< G4endl;
 
 //         G4cout << " Direction " << DirM.x() << " " 
-//                 <<  DirM.y() << " " << DirM.z() << endl;
+//                 <<  DirM.y() << " " << DirM.z() << G4endl;
 
 //         G4cout  << " Direction Mom " << Mom.x() << " " 
-//                 <<  Mom.y() << " " << Mom.z() << endl;
+//                 <<  Mom.y() << " " << Mom.z() << G4endl;
 
                for(G4int i2=1; i2<1000; i2++)
                   {
@@ -83,11 +83,11 @@
              secTrack  =  aChange->GetSecondary(0);
    G4double  secEnergy =  secTrack->GetKineticEnergy();
 
-       G4cout<<"         "<<secEnergy<<"         "<< outE<<endl;
+       G4cout<<"         "<<secEnergy<<"         "<< outE<<G4endl;
 
 //             G4cout<< " outVector^2 "<<pow(outVector.x(),2)+
 //                      pow(outVector.y(),2)+
-//                      pow(outVector.z(),2)<<endl;
+//                      pow(outVector.z(),2)<<G4endl;
 
              Q2        =  pow(outE-TotE,2)-
                         pow((outVector.x()*outP-inVector.x()),2)-
@@ -98,7 +98,7 @@
 //    " outVector " <<sqrt(pow(outVector.x()*outP,2)+
 //                         pow(outVector.y()*outP,2)+
 //                         pow(outVector.z()*outP,2))/1000
-//   <<" Q2 " <<Q2<<endl<<endl;
+//   <<" Q2 " <<Q2<<G4endl<<G4endl;
 
                    }  //  i2
                }      //  i1

@@ -1,4 +1,4 @@
-#include <fstream.h>
+#include "g4std/fstream"
 #include <algo.h>
 #include "newvector.hh"
 #include "Random.hh"
@@ -63,14 +63,14 @@ ParticleBase* makeParticle(const ParticleType& h,const QuantumProjections& q,con
   }
 }
 
-void PotentialBase::print(ostream& o,double min,double max,int n)
+void PotentialBase::print(G4std::ostream& o,double min,double max,int n)
 {
   double dx=(max-min)/n;
   for (int i=0; i<n; i++) {
     double x = min+i*dx;
     o << x << "  " << V(x,1) << "  " << V(x,-1) << "  ";
     try {
-      o << V_inv(x,1) << endl;
+      o << V_inv(x,1) << G4endl;
     }
     catch ( ... ) { o << "*\n"; }
   }
@@ -120,7 +120,7 @@ ColorString::ColorString(const double& E,const Vektor3& ptot,const Vektor3& rtot
     throw "Something went wrong!";
   pp = array[0]+array[1];
   beta = Ptot/(-sqrt(Etot*Etot+Ptot*Ptot));
-  cerr << "STRING: " << Etot << " --> ";
+  G4cerr << "STRING: " << Etot << " --> ";
   if ( 1 || Etot < Cutoff ) {
     ParticleType& knot = Knot<ParticleType>::FindKnot((ParticleType&)(QuantumNumbers&)pp);
     ParticleType& h = knot.selectType(pp.C(),types,Etot);
@@ -129,11 +129,11 @@ ColorString::ColorString(const double& E,const Vektor3& ptot,const Vektor3& rtot
     H->SetMomentum(Ptot);
     H->SetCoordinates(Rtot);
     H->SetMass(Etot);
-    (*Output::fileout) << H->Time() << "  " << length(H->Coordinates()) << endl;
-    cerr << H->Name() << endl;
+    (*Output::fileout) << H->Time() << "  " << length(H->Coordinates()) << G4endl;
+    G4cerr << H->Name() << G4endl;
   }
   else {
-    cerr << "Too high!!!!\n";
+    G4cerr << "Too high!!!!\n";
   }
 }
 
@@ -153,7 +153,7 @@ void ColorString::breakUp()
     H->SetMass(Etot);
   }
   else {
-    cerr << "Etot = " << Etot << ":\n";
+    G4cerr << "Etot = " << Etot << ":\n";
   }
 }
 
@@ -327,7 +327,7 @@ ParticleType& Colour::selectQuark(criterion which)
     while ( x > FlavorFission[f] ) ++f;
     //  }
     //  while ( (*Quarks)[f]->B() > 0.5 );
-    cerr << "selected: " << f << endl;
+    G4cerr << "selected: " << f << G4endl;
   return *Quarks[f];
 }
 
@@ -492,7 +492,7 @@ void Colour::decomposition(int i)
     try {
       if ( d < decompDist ) {
 	CollisionTab::addEntry(Time(),*((ParticleBase*)List[i]),DECOMPOSITION);
-	cerr << "DECOMPOSITION: " << List[i]->Name() << "  " << d << endl;
+	G4cerr << "DECOMPOSITION: " << List[i]->Name() << "  " << d << G4endl;
 	break;
       }
     }
@@ -558,17 +558,17 @@ void Colour::one_step()
             }
             else {
               eps = 2*e_b;
-              cerr << "sigma=" << sigma << endl;
+              G4cerr << "sigma=" << sigma << G4endl;
             }
             if ( sigma>=0 ) {
               massTooHigh = false;
               lambda = Inverse(-eps);
-              if ( ToBeInverted(lambda)+eps != 0.0 ) { cerr << "WRONG! " << ToBeInverted(lambda)+eps << "\n"; lambda = -1; }
+              if ( ToBeInverted(lambda)+eps != 0.0 ) { G4cerr << "WRONG! " << ToBeInverted(lambda)+eps << "\n"; lambda = -1; }
               if ( lambda < 0 ) 
                 throw "Wrong Mass...";
               Vektor3 x0 = r_k+(lambda/lf)*f;
-              cerr << h.Name() << ": " << sigma << "  " 
-                   << lambda << "  " << x0 << "  " << f << endl;
+              G4cerr << h.Name() << ": " << sigma << "  " 
+                   << lambda << "  " << x0 << "  " << f << G4endl;
               if ( directHadrons ) {
                 ParticleBase* p_hadron = makeParticle(*had,pp_hadron,new_P,r_k);
                 ParticleBase* p_quark = makeParticle(h,pp_alpha,Pt,x0);
@@ -579,37 +579,37 @@ void Colour::one_step()
                 ParticleBase* p_new1 = makeParticle(h,pp_alpha,Pt,x0);
                 ParticleBase* p_new2 = makeParticle(h,pp_beta,-Pt,x1);
                 Nquark += 2;
-                cerr << "quarks created: " << length(xs) << endl;
+                G4cerr << "quarks created: " << length(xs) << G4endl;
               }
               firstCall = true;
             }
             else {
               massTooHigh = true;
               --n_try;
-            cerr << n_try << ": Mass to high. Trying again...!\n";
+            G4cerr << n_try << ": Mass to high. Trying again...!\n";
             }
           }  // of try
           catch ( char* s ) {
             massTooHigh = true;
             --n_try;
-            cerr << "Error: " << s << endl;
-            cerr << n_try << ": Mass to high. Trying again...!\n";
+            G4cerr << "Error: " << s << G4endl;
+            G4cerr << n_try << ": Mass to high. Trying again...!\n";
           }
           catch ( ... ) {
             massTooHigh = true;
             --n_try;
-            cerr << n_try << ": Mass to high. Trying again...!\n";
+            G4cerr << n_try << ": Mass to high. Trying again...!\n";
           }
       	}    // of do
       	while ( n_try && massTooHigh );
       	  if ( !n_try ) {
-      	    cerr << "Mass Too High!!! Giving up...\n";
+      	    G4cerr << "Mass Too High!!! Giving up...\n";
       	  }
       	for ( int j=0; j<List.size(); j++ )
       	  List[j]->reset();
       }
       if ( eraseList.size() ) {
-      	cerr << "ERASER:\n";
+      	G4cerr << "ERASER:\n";
       	Vektor3 Ptot(0,0,0);
       	Vektor3 Rtot(0,0,0);
       	double Mtot = 0;
@@ -643,13 +643,13 @@ void Colour::one_step()
       	}
       	Rtot *= 1.0/Mtot;
       	double ptot = sqrt(Ptot*Ptot);
-      	cerr << "Energy: " << eps << "  " << ptot << endl;
-      	cerr << "==> ";
+      	G4cerr << "Energy: " << eps << "  " << ptot << G4endl;
+      	G4cerr << "==> ";
       	while ( ptot >= eps ) {
       	  double borrowEnergy = ptot-eps+rand_gen::Random()*eps;
       	  eps += borrowEnergy;
       	  Ptot = Ptot*(borrowEnergy/ptot);
-      	  cerr << "Momentum conservation not fulfilled!!!\n";
+      	  G4cerr << "Momentum conservation not fulfilled!!!\n";
       	}
       	double p_mass = sqrt(eps*eps-ptot*ptot);
       	try {
@@ -659,7 +659,7 @@ void Colour::one_step()
       	  catch ( const ParticleType::undefinedParticle& ) {
       	    if ( !removeWhenUndefined ) 
       	      throw;
-      	    cerr << "Removing!!\n";
+      	    G4cerr << "Removing!!\n";
       	  }
       	  catch ( ...  ) { throw; }
       	  sort(eraseList.begin(),eraseList.end());
@@ -672,8 +672,8 @@ void Colour::one_step()
       	}
       	catch (...) { 
       	  for (int ii=0; ii<eraseList.size(); ii++)
-      	    cerr << List[eraseList[ii]]->Name() << ",";
-      	  cerr << "  : Combination not defined...\n";
+      	    G4cerr << List[eraseList[ii]]->Name() << ",";
+      	  G4cerr << "  : Combination not defined...\n";
       	}
       	eraseList.erase(eraseList.begin(),eraseList.end());
       }
@@ -686,7 +686,7 @@ void Colour::clusters(int i)
   Quark* q = (Quark*)List[i];
   int old_ptr[Nnext];
   double old_max[Nnext];
-  int Nn = min(Nnext,Nquark);
+  int Nn = G4std::min(Nnext,Nquark);
   for (int l=0; l<Nn; l++) {
     q->next[l].pointer = -1;
   }
@@ -721,20 +721,20 @@ void Colour::clusters(int i)
   catch ( ... ) {}
   if (Nmax<0 || Nmax>1 )
     return;
-  //    cerr << "NEXT (" << Nmax << "): ";
-  //    cerr << q->next[Nmax+1].dist/q->next[Nmax].dist << "  ";
-  //    cerr << q->next[Nmax].force << endl;
+  //    G4cerr << "NEXT (" << Nmax << "): ";
+  //    G4cerr << q->next[Nmax+1].dist/q->next[Nmax].dist << "  ";
+  //    G4cerr << q->next[Nmax].force << G4endl;
   if ( q->next[Nmax].force/(Nmax+2) < deconfined && q->next[Nmax+1].dist/q->next[Nmax].dist > minDist && q->next[Nmax+1].dist>decompDist ) {
-    cerr << Nmax << " : " << col << "  " << q->next[Nmax].force << "  " << q->next[Nmax+1].dist/q->next[Nmax].dist << endl;
-    cerr << *((ParticleBase*)q) << endl;
-    cerr << *List[q->next[0].pointer] << endl;
+    G4cerr << Nmax << " : " << col << "  " << q->next[Nmax].force << "  " << q->next[Nmax+1].dist/q->next[Nmax].dist << G4endl;
+    G4cerr << *((ParticleBase*)q) << G4endl;
+    G4cerr << *List[q->next[0].pointer] << G4endl;
       eraseList.insert(eraseList.end(),i);
-      cerr << "DECONFINED: " << List[i]->Name() << "," ; 
+      G4cerr << "DECONFINED: " << List[i]->Name() << "," ; 
       for (int i=0; i<=Nmax; i++) {
 	eraseList.insert(eraseList.end(),q->next[i].pointer);
-	cerr << List[q->next[i].pointer]->Name()  << ",";
+	G4cerr << List[q->next[i].pointer]->Name()  << ",";
       }
-      cerr << endl;
+      G4cerr << G4endl;
       q->next[Nmax+1].pointer = -1;
   }
   for (int k=0; k<Nnext-1; k++) {
@@ -781,16 +781,16 @@ id Colour::clusters(int i)
 	for (int k=0; k<=l; k++) {
 	  //	eraseList.insert(eraseList.end(),q->next[k].pointer);
 	  color = color+List[q->next[k].pointer]->Color();
-	  cerr << q->next[k].pointer << ",";
+	  G4cerr << q->next[k].pointer << ",";
 	}
-	cerr << " : " << q->next[l].force << "  " << q->next[l+1].dist/q->next[l].dist << endl;
+	G4cerr << " : " << q->next[l].force << "  " << q->next[l+1].dist/q->next[l].dist << G4endl;
 	eraseList.insert(eraseList.end(),i);
-	cerr << "DECONFINED: " << i << "," ;
+	G4cerr << "DECONFINED: " << i << "," ;
 	q->next[l+1].pointer = -1;
 	break;
       }
       catch ( ... ) { 
-	cerr << "Color-error caught!\n"; }
+	G4cerr << "Color-error caught!\n"; }
     }
   }
   for (int k=0; k<Nnext-1; k++) {
@@ -798,11 +798,11 @@ id Colour::clusters(int i)
   }
 }
 */
-void Colour::print(ostream& o) 
+void Colour::print(G4std::ostream& o) 
 { 
   o << "#  time=" << Time() << ", Npart=" << Npart <<
-    ",  Nquark=" << Nquark << endl;
-  for (int i=0; i<Npart; i++) { o << *List[i] << endl; }
+    ",  Nquark=" << Nquark << G4endl;
+  for (int i=0; i<Npart; i++) { o << *List[i] << G4endl; }
 }
 
 double Colour::field(const Vektor3& r) 
@@ -825,11 +825,11 @@ double Colour::field(const Vektor3& r)
   
 }
 
-void Colour::writeField(ostream& o,double x0,double x1,double dx,double y0,double y1,double dy)
+void Colour::writeField(G4std::ostream& o,double x0,double x1,double dx,double y0,double y1,double dy)
 {
   for (int i=0; i<Nquark; i++) {
     o << List[i]->Color() << "  " << List[i]->Coordinates() << "  " 
-      << List[i]->Force() << endl;
+      << List[i]->Force() << G4endl;
   }
 }
 
@@ -848,10 +848,10 @@ void Colour::Correlation()
     }
   }
   */
-  //  Output[1] << "# time = " << Time() << endl;
-  //  Output[1] << g << endl;
-  //  Output[2] << "# time = " << Time() << endl;
-  //  Output[2] << F << endl;
+  //  Output[1] << "# time = " << Time() << G4endl;
+  //  Output[1] << g << G4endl;
+  //  Output[2] << "# time = " << Time() << G4endl;
+  //  Output[2] << F << G4endl;
 }
 
 
@@ -882,7 +882,7 @@ void Radiation::one_step()
 	    massTooHigh = true;
 	    continue;
 	  }
-	  cerr << "PRODUCED --> " << h.Name() << endl;
+	  G4cerr << "PRODUCED --> " << h.Name() << G4endl;
 	  f = List[i]->Force();
 	  lf = length(f);
 	  r_k = List[i]->Coordinates();
@@ -901,7 +901,7 @@ void Radiation::one_step()
 	  do {
 	  try {
 	    ParticleType& had = had1.selectType(eps);
-	    cerr << had1.Name() << "  " << had.Name() << "  " << eps << endl;
+	    G4cerr << had1.Name() << "  " << had.Name() << "  " << eps << G4endl;
 	    double m_had = had.getMass(eps);
 	    Vektor4 x0(List[i]->Coordinates(),List[i]->Time());
 	    Vektor4 p0(List[i]->Momentum(),List[i]->E());
@@ -920,12 +920,12 @@ void Radiation::one_step()
 	  catch ( ... ) {
 	    massTooHigh = true;
 	    --n_try;
-	    cerr << n_try << ": Mass to high. Trying again...!\n";
+	    G4cerr << n_try << ": Mass to high. Trying again...!\n";
 	  }
 	}
 	while ( n_try && massTooHigh );
 	if ( !n_try ) {
-	  cerr << "Mass Too High!!! Giving up...\n";
+	  G4cerr << "Mass Too High!!! Giving up...\n";
 	}
 	for ( int j=0; j<List.size(); j++ )
 	  List[j]->reset();
@@ -979,7 +979,7 @@ void Radiation::FindCorrelations()
       }
       for (int j=0; j<Nquark; j++) {
 	if ( i!=j && find(erase.begin(),erase.end(),j) == erase.end() ) {
-	  //	cerr << List[j]->Momentum() << "  " << List[j]->E() << endl;
+	  //	G4cerr << List[j]->Momentum() << "  " << List[j]->E() << G4endl;
 	  Vektor3 d = dr(List[i]->Coordinates(),List[j]->Coordinates()-List[j]->Momentum()/List[j]->E()*List[j]->Time());
 	  double ld = length(d);
 	  int k=N;
@@ -1015,8 +1015,8 @@ void Radiation::FindCorrelations()
 	  double Pnew_2 = s-M*M;
 	  if ( Pnew_2 < 0 ) 
 	    throw "not possible...";
-	  cerr << had << endl;
-	  cerr << "s,M = " << sqrt(s) << ", " << M << endl;
+	  G4cerr << had << G4endl;
+	  G4cerr << "s,M = " << sqrt(s) << ", " << M << G4endl;
 	  ParticleBase* created = makeParticle(had,pp,M);
 	  created->SetMomentum(P*sqrt(Pnew_2/P_2));
 	  created->SetCoordinates(List[i]->Coordinates());
@@ -1032,7 +1032,7 @@ void Radiation::FindCorrelations()
     }
   if ( erase.size() ) {
     sort(erase.begin(),erase.end(),greater<int>());
-    cerr << "#  direct " << erase.size() << endl;
+    G4cerr << "#  direct " << erase.size() << G4endl;
     for (int j=0; j<erase.size(); j++) {
       delete List[erase[j]];
     }

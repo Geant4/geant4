@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst06PhysicsList.cc,v 1.4 1999-10-03 09:58:02 kurasige Exp $
+// $Id: Tst06PhysicsList.cc,v 1.5 1999-12-15 14:54:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -225,7 +225,7 @@ void Tst06PhysicsList::SetCuts()
 
   if (verboseLevel >0){
     G4cout << "Tst06PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
+    G4cout << "CutLength : " << cut/mm << " (mm)" << G4endl;
   }  
 
   // set cut values for gamma at first and for e- second and next for e+,

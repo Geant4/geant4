@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessSet.cc,v 1.5 1999-11-15 10:39:48 gunter Exp $
+// $Id: G4VisManMessSet.cc,v 1.6 1999-12-15 14:54:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -203,19 +203,19 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
     G4String choice;
     G4double density;  // Units in this section are g / cm3 - WARNING!!!
     const char* t = newValues;
-    istrstream is ((char*)t); is >> choice >> density;
+    G4std::istrstream is ((char*)t); is >> choice >> density;
     G4int iSelector = -1;
     if (choice.compareTo ("off",G4String::ignoreCase) == 0) iSelector = 0;
     if (choice.compareTo ("on",G4String::ignoreCase) == 0) iSelector = 1;
     if (iSelector < 0) {
-      G4cout << "Choice not recognised (on/off)." << endl;
+      G4cout << "Choice not recognised (on/off)." << G4endl;
       const G4ViewParameters& getVP = fpVMan -> GetCurrentViewParameters ();
       G4cout << "Culling by density is currently: ";
       if (getVP.IsDensityCulling ()) G4cout << "on";
       else                             G4cout << "off";
       G4cout << "\nDensity cut is currently: "
 	   << getVP.GetVisibleDensity () * cm3 / g << " g/cm3.";
-      G4cout << endl;
+      G4cout << G4endl;
     }
     else {
       G4ViewParameters& setVP = fpVMan -> SetCurrentViewParameters ();
@@ -235,7 +235,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       else                             G4cout << "off";
       G4cout << "\nDensity cut is now: "
 	   << getVP.GetVisibleDensity () * cm3 / g << " g/cm3.";
-      G4cout << endl;
+      G4cout << G4endl;
       G4VViewer* pView = fpVMan -> GetCurrentViewer ();
       if (pView) {
 	// Copy current view parameters into current view.
@@ -243,7 +243,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	// Recalculate projection matrices, etc.
 	pView -> SetView ();
       }
-      G4cout << "Issue Draw or refresh to see effect." << endl;
+      G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
   }
 
@@ -251,7 +251,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
   if (commandPath == "/vis~/set/drawing_style") {
     G4int iStyle;
     const char* aString = newValues;
-    istrstream is((char*) aString) ; is >> iStyle;
+    G4std::istrstream is((char*) aString) ; is >> iStyle;
     if (iStyle < 0 || iStyle > 3) {
       G4cout << "Available drawing styles:";
       G4cout << "\n  0) wireframe";
@@ -284,13 +284,13 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	  "\n/vis~/set/cull_invisible_objects on/off."
 	  "\nTo reset density culling, /vis~/set/cull_by_density off."
 	  "\nTo set density culling, e.g., /vis~/set/cull_by_density on 0.01."
-	     << endl;
+	     << G4endl;
 	if (fpVMan -> GetVerboseLevel () > 1) {
 	  fpVMan -> PrintCurrentView ();
 	}
       //}
       G4cout << "\nChoose by specifying integer parameter.";
-      G4cout << endl;
+      G4cout << G4endl;
     }
     else {
       G4ViewParameters& setVP = fpVMan -> SetCurrentViewParameters ();
@@ -335,7 +335,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	  "\n/vis~/set/cull_invisible_objects on/off."
 	  "\nTo reset density culling, /vis~/set/cull_by_density off."
 	  "\nTo set density culling, e.g., /vis~/set/cull_by_density on 0.01."
-	     << endl;
+	     << G4endl;
 	if (fpVMan -> GetVerboseLevel () > 1) {
 	  fpVMan -> PrintCurrentView ();
 	}
@@ -347,7 +347,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	// Recalculate projection matrices, etc.
 	pView -> SetView ();
       }
-      G4cout << "Issue Draw or refresh to see effect." << endl;
+      G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
   }
 
@@ -355,7 +355,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
   if (commandPath == "/vis~/set/marker_choices") {
     G4int iChoice;
     const char* aString = newValues;
-    istrstream is((char*) aString) ; is >> iChoice;
+    G4std::istrstream is((char*) aString) ; is >> iChoice;
     if (iChoice < 0 || iChoice > 1) {
       G4cout << "Available marker choices:";
       G4cout << "\n  0) not hidden";
@@ -367,7 +367,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	G4cout << " hidden by surfaces.";
       //}
       G4cout << "\nChoose by specifying integer parameter.";
-      G4cout << endl;
+      G4cout << G4endl;
     }
     else {
       G4ViewParameters& setVP = fpVMan -> SetCurrentViewParameters ();
@@ -384,7 +384,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       //if (fpVMan -> GetVerboseLevel () > 0) {
 	G4cout << "Marker choice is now: ";
 	if (getVP.IsMarkerNotHidden ()) G4cout << "not";
-	G4cout << " hidden by surfaces." << endl;
+	G4cout << " hidden by surfaces." << G4endl;
       //}
       G4VViewer* pView = fpVMan -> GetCurrentViewer ();
       if (pView) {
@@ -393,7 +393,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	// Recalculate projection matrices, etc.
 	pView -> SetView ();
       }
-      G4cout << "Issue Draw or refresh to see effect." << endl;
+      G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
   }
 
@@ -403,20 +403,20 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
     G4String choice, unit;
     G4double x, y, z, nx, ny, nz;
     const char* t = newValues;
-    istrstream is ((char*)t); is >> choice >> x >> y >> z >> unit
+    G4std::istrstream is ((char*)t); is >> choice >> x >> y >> z >> unit
 				  >> nx >> ny >> nz;
     G4int iSelector = -1;
     if (choice.compareTo ("off",G4String::ignoreCase) == 0) iSelector = 0;
     if (choice.compareTo ("on",G4String::ignoreCase) == 0) iSelector = 1;
     if (iSelector < 0) {
-      G4cout << "Choice not recognised (on/off)." << endl;
+      G4cout << "Choice not recognised (on/off)." << G4endl;
       const G4ViewParameters& getVP = fpVMan -> GetCurrentViewParameters ();
       G4cout << "Section drawing is currently: ";
       if (getVP.IsSection ()) G4cout << "on";
       else                    G4cout << "off";
       G4cout << "\nSection plane is currently: "
 	   << getVP.GetSectionPlane ();
-      G4cout << endl;
+      G4cout << G4endl;
     }
     else {
       G4ViewParameters& setVP = fpVMan -> SetCurrentViewParameters ();
@@ -440,7 +440,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       else                    G4cout << "off";
       G4cout << "\nSection plane is now: "
 	   << getVP.GetSectionPlane ();
-      G4cout << endl;
+      G4cout << G4endl;
       G4VViewer* pView = fpVMan -> GetCurrentViewer ();
       if (pView) {
 	// Copy current view parameters into current view.
@@ -448,7 +448,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	// Recalculate projection matrices, etc.
 	pView -> SetView ();
       }
-      G4cout << "Issue Draw or refresh to see effect." << endl;
+      G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
   }
 
@@ -456,9 +456,9 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
   if (commandPath == "/vis~/set/sides") {
     G4int nSides;
     const char* t = newValues;
-    istrstream is ((char*)t); is >> nSides;
+    G4std::istrstream is ((char*)t); is >> nSides;
     G4cout << "Number of sides per circle in polygon approximation is "
-	 << nSides << endl;
+	 << nSides << G4endl;
     fpVMan -> SetCurrentViewParameters ().SetNoOfSides (nSides);
   }
 
@@ -466,13 +466,13 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
   if (commandPath == "/vis~/set/rep_style") {
     G4int iStyle;
     const char* aString = newValues;
-    istrstream is((char*) aString) ; is >> iStyle;
+    G4std::istrstream is((char*) aString) ; is >> iStyle;
     if (iStyle < 0 || iStyle > 1) {
       G4cout << "Available representation styles:";
       G4cout << "\n  0) polyhedron";
       G4cout << "\n  1) NURBS";
       G4cout << "\nChoose by specifying integer parameter.";
-      G4cout << endl;
+      G4cout << G4endl;
     }
     else {
       G4ViewParameters::RepStyle repStyle;
@@ -483,7 +483,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       }
       fpVMan -> SetCurrentViewParameters ().SetRepStyle (repStyle);
       if (fpVMan -> GetVerboseLevel () > 0) {
-	G4cout << "Representation style changed to " << repStyle << endl;
+	G4cout << "Representation style changed to " << repStyle << G4endl;
 	if (fpVMan -> GetVerboseLevel () > 1) {
 	  fpVMan -> PrintCurrentView ();
 	}
@@ -495,7 +495,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	// Recalculate projection matrices, etc.
 	pView -> SetView ();
       }
-      G4cout << "Issue Draw or refresh to see effect." << endl;
+      G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
   }
 
@@ -505,7 +505,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
     static G4int nOptions = 2;
     G4int iSelector;
     const char* aString = newValues;
-    istrstream is((char*) aString) ; is >> iSelector;
+    G4std::istrstream is((char*) aString) ; is >> iSelector;
     switch (iState) {
     case 0:
       if (iSelector < 0 || iSelector > nOptions) {
@@ -513,18 +513,18 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	G4cout << "\n  0) reset selection algorithm";
 	G4cout << "\n  1) select physical volume";
 	G4cout << "\nChoose by specifying integer parameter.";
-	G4cout << endl;
+	G4cout << G4endl;
       }
       else {
 	switch (iSelector) {
 	default:
 	case 0:
-	  G4cout << "Resetting from state " << iState << endl;
+	  G4cout << "Resetting from state " << iState << G4endl;
 	  iState = 0; nOptions = 2;
 	  break;
 	case 1:
 	  G4cout << "Option " << iSelector
-	       << " selected from state " << iState << endl;
+	       << " selected from state " << iState << G4endl;
 	  iState = 1; nOptions = 1;
 	  break;
 	}
@@ -535,13 +535,13 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	G4cout << "Available options:";
 	G4cout << "\n  0) reset selection algorithm";
 	G4cout << "\nChoose by specifying integer parameter.";
-	G4cout << endl;
+	G4cout << G4endl;
       }
       else {
 	switch (iSelector) {
 	default:
 	case 0:
-	  G4cout << "Resetting from state " << iState << endl;
+	  G4cout << "Resetting from state " << iState << G4endl;
 	  iState = 0; nOptions = 2;
 	  break;
 	}
@@ -549,16 +549,16 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       break;
     }
     /****************************************************
-    cin.tie (&G4cout);  // Tie streams together so output is
+    G4cin.tie (&G4cout);  // Tie streams together so output is
                       // flushed before any input.
-    G4cout << "Temporary algorithm..." << endl;
+    G4cout << "Temporary algorithm..." << G4endl;
 
     G4VPhysicalVolume* pVPV =
       fpVMan -> GetCurrentScene ().GetPhysicalVolume ();
     G4VPhysicalVolume* pNewVPV = 0;
 
     if (pVPV) {
-      G4cout << "Current volume is " << pVPV -> GetName () << endl;
+      G4cout << "Current volume is " << pVPV -> GetName () << G4endl;
 
       G4VPhysicalVolume* pMother = pVPV -> GetMother ();
       if (pMother) {
@@ -566,8 +566,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	do {
 	  G4cout << "Its mother is " << pMother -> GetName ()
 	       << ".  Select? [y/n]: ";
-	  c = cin.get ();
-	  if (c != '\n') while (cin.get () != '\n');  // Read on to newline.
+	  c = G4cin.get ();
+	  if (c != '\n') while (G4cin.get () != '\n');  // Read on to newline.
 	} while (c != 'y' && c != 'Y' && 
 		 c != 'n' && c != 'N');
 	if (c == 'y' || c == 'Y') {
@@ -582,8 +582,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	  do {
 	    G4cout << "It has " << nDaughters << " daughters.  Select [0-"
 		 << nDaughters - 1 << "] (<0 to abandon): ";
-	    cin >> iDaughter;
-	    while (cin.get () != '\n');  // Read on to newline.
+	    G4cin >> iDaughter;
+	    while (G4cin.get () != '\n');  // Read on to newline.
 	  } while (iDaughter >= nDaughters);
 	  if (iDaughter >= 0) {
 	    G4VPhysicalVolume* pDaughter =
@@ -601,12 +601,12 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       }
       else {
 	if (fpVMan -> GetVerboseLevel () > 0) {
-	  G4cout << "Nothing selected; nothing changed." << endl;
+	  G4cout << "Nothing selected; nothing changed." << G4endl;
 	}
       }
     }
     else {
-      G4cerr << "No physical volume available." << endl;
+      G4cerr << "No physical volume available." << G4endl;
     }
     if (fpVMan -> GetVerboseLevel () > 1) {
       fpVMan -> PrintCurrentScene ();
@@ -618,13 +618,13 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
   if (commandPath == "/vis~/set/verbose") {
     G4int vLevel;
     const char* t = newValues;
-    istrstream is ((char*)t); is >> vLevel;
+    G4std::istrstream is ((char*)t); is >> vLevel;
     if (vLevel < 0 ) {
-      G4cout << "Verbosity is " << fpVMan -> GetVerboseLevel () << endl;
+      G4cout << "Verbosity is " << fpVMan -> GetVerboseLevel () << G4endl;
     }
     else {
       fpVMan -> SetVerboseLevel (vLevel);
-      G4cout << "Verbosity set to " << fpVMan -> GetVerboseLevel () << endl;
+      G4cout << "Verbosity set to " << fpVMan -> GetVerboseLevel () << G4endl;
     }
   }
 
@@ -645,13 +645,13 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       }
     }
     if (nViewTotal == 0) {
-      G4cerr << "No views to select." << endl;
+      G4cerr << "No views to select." << G4endl;
     }
     else {
       // Select view and make it current.
       G4int iSelect;
       const char* aString = newValues;
-      istrstream is((char*) aString) ; is >> iSelect;
+      G4std::istrstream is((char*) aString) ; is >> iSelect;
       if (iSelect < 0 || iSelect >= nViewTotal) {
 	G4cout << "Available views:";
 	for (int iView = 0; iView < nViewTotal; iView++) {
@@ -661,13 +661,13 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	  G4cout << "\n  " << iView << ") " << pView -> GetName ();
 	}
 	G4cout << "\nChoose by specifying integer parameter.";
-	G4cout << endl;
+	G4cout << G4endl;
       }
       else {
 	G4VViewer* pView = vList[iSelect];
 	fpVMan -> SetCurrentViewer (pView);
 	if (fpVMan -> GetVerboseLevel () > 0) {
-	  G4cout << "Current view now " << pView -> GetName () << endl;
+	  G4cout << "Current view now " << pView -> GetName () << G4endl;
 	  if (fpVMan -> GetVerboseLevel () > 1) {
 	    fpVMan -> PrintCurrentView ();
 	  }

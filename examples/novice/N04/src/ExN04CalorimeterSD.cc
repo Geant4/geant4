@@ -58,14 +58,14 @@ G4bool ExN04CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
     CellID[copyIDinZ][copyIDinPhi] = icell - 1;
     if(verboseLevel>0)
     { G4cout << " New Calorimeter Hit on CellID " 
-           << copyIDinZ << " " << copyIDinPhi << endl; }
+           << copyIDinZ << " " << copyIDinPhi << G4endl; }
   }
   else
   { 
     (*CalCollection)[CellID[copyIDinZ][copyIDinPhi]]->AddEdep(edep);
     if(verboseLevel>0)
     { G4cout << " Energy added to CellID " 
-           << copyIDinZ << " " << copyIDinPhi << endl; }
+           << copyIDinZ << " " << copyIDinPhi << G4endl; }
   }
 
   return true;

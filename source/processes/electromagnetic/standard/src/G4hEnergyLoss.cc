@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.cc,v 1.14 1999-09-08 15:15:21 maire Exp $
+// $Id: G4hEnergyLoss.cc,v 1.15 1999-12-15 14:51:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -1230,7 +1230,7 @@ G4double G4hEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
           if(a1>alim)
           {
             siga=sqrt(a1) ;
-            p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
+            p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
           }
           else
             p1 = G4Poisson(a1);
@@ -1243,7 +1243,7 @@ G4double G4hEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
           if(a1>alim)
           {
             siga=sqrt(a1) ;
-            p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
+            p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
           }
           else
             p1 = G4Poisson(a1);
@@ -1271,14 +1271,14 @@ G4double G4hEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a1>alim)
       {
         siga=sqrt(a1) ;
-        p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
+        p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
       }
       else
        p1 = G4Poisson(a1);
       if(a2>alim)
       {
         siga=sqrt(a2) ;
-        p2 = max(0,int(RandGauss::shoot(a2,siga)+0.5));
+        p2 = G4std::max(0,int(RandGauss::shoot(a2,siga)+0.5));
       }
       else
         p2 = G4Poisson(a2);
@@ -1287,7 +1287,7 @@ G4double G4hEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a3>alim)
       {
         siga=sqrt(a3) ;
-        p3 = max(0,int(RandGauss::shoot(a3,siga)+0.5));
+        p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
       }
       else
         p3 = G4Poisson(a3);

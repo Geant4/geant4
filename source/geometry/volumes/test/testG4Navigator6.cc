@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Navigator6.cc,v 1.2 1999-11-24 21:13:54 japost Exp $
+// $Id: testG4Navigator6.cc,v 1.3 1999-12-15 14:50:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -130,15 +130,15 @@ G4bool printShoot(G4VPhysicalVolume *pTopNode,
     myNav.SetWorldVolume(pTopNode);
 
     G4ThreeVector partLoc(pLoc);
-    G4cout << "Shooting from " << pLoc << " along " << pVec << endl;
+    G4cout << "Shooting from " << pLoc << " along " << pVec << G4endl;
     located=myNav.LocateGlobalPointAndSetup(partLoc);
     while (located)
 	{
 	    Step=myNav.ComputeStep(partLoc,pVec,physStep,safety);
 	    G4cout << "Physical Location=" << located->GetName()
-		 << " #" << located->GetCopyNo() << endl
+		 << " #" << located->GetCopyNo() << G4endl
 		 << "   Step=" << Step << "  Safety=" << safety
-		 << "  ---->" << endl;
+		 << "  ---->" << G4endl;
 
 	    partLoc+=Step*pVec;
 	    myNav.SetGeometricallyLimitedStep();
@@ -174,9 +174,9 @@ G4bool runLocate(G4VPhysicalVolume *pTopNode)
 
 G4bool runAll(G4VPhysicalVolume *pTopNode)
 {
-    G4cout << "Locating..." << endl;
+    G4cout << "Locating..." << G4endl;
     runLocate(pTopNode);
-    G4cout << "Done" << endl;
+    G4cout << "Done" << G4endl;
     return true;
 }
 
@@ -202,13 +202,13 @@ int main(int argc, char* argv[])
 		}
 	    else
 		{
-		    G4cout << "Unknown args" << endl;
+		    G4cout << "Unknown args" << G4endl;
 		    return EXIT_FAILURE;
 		}
 	}
     else
 	{
-	    G4cout << "Unknown args" << endl;
+	    G4cout << "Unknown args" << G4endl;
 	    return EXIT_FAILURE;
 	}
 
@@ -232,7 +232,7 @@ int main(int argc, char* argv[])
 	{
 	    G4cout << "No voxels ";
 	}
-    G4cout << timer << endl;
+    G4cout << timer << G4endl;
 
     printShoot(myTopNode,
  	       G4ThreeVector(-kBoxDx,0,0),
@@ -243,7 +243,7 @@ int main(int argc, char* argv[])
     timer.Start();
     runAll(myTopNode);
     timer.Stop();
-    G4cout << timer << endl;
+    G4cout << timer << G4endl;
 
     G4GeometryManager::GetInstance()->OpenGeometry();
     return EXIT_SUCCESS;

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelLimits.hh,v 1.1 1999-01-07 16:07:19 gunter Exp $
+// $Id: G4VoxelLimits.hh,v 1.2 1999-12-15 14:49:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VoxelLimits
@@ -80,7 +80,7 @@
 //
 // operators:
 //
-// ostream& operator << (ostream& os, const G4VoxelLimits& pLim);
+// G4std::ostream& operator << (G4std::ostream& os, const G4VoxelLimits& pLim);
 //
 // Print the limits to the stream in the form:
 //  "{(xmin,xmax) (ymin,ymax) (zmin,zmax)}" Replace (xmin,xmax) by (-,-)
@@ -103,7 +103,7 @@
 
 #include <assert.h>
 
-class ostream;
+class G4std::ostream;
 
 class G4VoxelLimits
 {
@@ -247,6 +247,6 @@ private:
     G4double fzAxisMin,fzAxisMax;
 };
 
-ostream& operator << (ostream& os, const G4VoxelLimits& pLim);
+G4std::ostream& operator << (G4std::ostream& os, const G4VoxelLimits& pLim);
 
 #endif

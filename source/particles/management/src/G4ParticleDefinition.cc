@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.cc,v 1.6 1999-08-19 08:18:32 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.7 1999-12-15 14:51:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,7 +95,7 @@ G4ParticleDefinition::G4ParticleDefinition(
        // cerr bnot G4cerr is used intentionally  
        // because G4ParticleDefinition constructor may be called 
        // before G4cerr object is instantiated !!
-       cerr << "Particle " << aName << " has a strange PDGEncoding " <<endl;
+       G4cerr << "Particle " << aName << " has a strange PDGEncoding " <<G4endl;
      }
    }
 #endif
@@ -164,7 +164,7 @@ G4int G4ParticleDefinition::FillQuarkContents()
 #ifdef G4VERBOSE
 	if (verboseLevel>1) {
 	  G4cout << " illegal charge (" << thePDGCharge/eplus;
-	  G4cout << " PDG code=" << thePDGEncoding <<endl;
+	  G4cout << " PDG code=" << thePDGEncoding <<G4endl;
 	}
 #endif
       }
@@ -174,7 +174,7 @@ G4int G4ParticleDefinition::FillQuarkContents()
 #ifdef G4VERBOSE
 	if (verboseLevel>1) {
 	  G4cout << " illegal SPIN (" << thePDGiSpin << "/2";
-	  G4cout << " PDG code=" << thePDGEncoding <<endl;
+	  G4cout << " PDG code=" << thePDGEncoding <<G4endl;
 	}
 #endif
       }
@@ -185,55 +185,55 @@ G4int G4ParticleDefinition::FillQuarkContents()
 
 void G4ParticleDefinition::DumpTable() const
 {
-  G4cout << endl;
-  G4cout << "--- G4ParticleDefinition ---" << endl;
-  G4cout << " Particle Name : " << theParticleName << endl;
+  G4cout << G4endl;
+  G4cout << "--- G4ParticleDefinition ---" << G4endl;
+  G4cout << " Particle Name : " << theParticleName << G4endl;
   G4cout << " PDG particle code : " << thePDGEncoding;
-  G4cout << " [PDG anti-particle code: " << this->GetAntiPDGEncoding() << "]"<< endl;
+  G4cout << " [PDG anti-particle code: " << this->GetAntiPDGEncoding() << "]"<< G4endl;
   G4cout << " Mass [GeV/c2] : " << thePDGMass/GeV ;
-  G4cout << "     Width : " << thePDGWidth/GeV << endl;
-  G4cout << " Lifetime [nsec] : " << thePDGLifeTime/ns << endl;
-  G4cout << " Charge [e]: " << thePDGCharge/eplus << endl;
-  G4cout << " Spin : " << thePDGiSpin << "/2" << endl;
-  G4cout << " Parity : " << thePDGiParity << endl;
-  G4cout << " Charge conjugation : " << thePDGiConjugation << endl;
+  G4cout << "     Width : " << thePDGWidth/GeV << G4endl;
+  G4cout << " Lifetime [nsec] : " << thePDGLifeTime/ns << G4endl;
+  G4cout << " Charge [e]: " << thePDGCharge/eplus << G4endl;
+  G4cout << " Spin : " << thePDGiSpin << "/2" << G4endl;
+  G4cout << " Parity : " << thePDGiParity << G4endl;
+  G4cout << " Charge conjugation : " << thePDGiConjugation << G4endl;
   G4cout << " Isospin : (I,Iz): (" << thePDGiIsospin <<"/2";
-  G4cout << " , " << thePDGiIsospin3 << "/2 ) " << endl;
-  G4cout << " GParity : " << thePDGiGParity << endl;
+  G4cout << " , " << thePDGiIsospin3 << "/2 ) " << G4endl;
+  G4cout << " GParity : " << thePDGiGParity << G4endl;
   G4cout << " Quark contents     (d,u,s,c,b,t) : " << theQuarkContent[0];
   G4cout << ", " << theQuarkContent[1];
   G4cout << ", " << theQuarkContent[2];
   G4cout << ", " << theQuarkContent[3];
   G4cout << ", " << theQuarkContent[4];
-  G4cout << ", " << theQuarkContent[5] << endl;
+  G4cout << ", " << theQuarkContent[5] << G4endl;
   G4cout << " AntiQuark contents               : " << theAntiQuarkContent[0];
   G4cout << ", " << theAntiQuarkContent[1];
   G4cout << ", " << theAntiQuarkContent[2];
   G4cout << ", " << theAntiQuarkContent[3];
   G4cout << ", " << theAntiQuarkContent[4];
-  G4cout << ", " << theAntiQuarkContent[5] << endl;
+  G4cout << ", " << theAntiQuarkContent[5] << G4endl;
   G4cout << " Lepton number : " << theLeptonNumber;
-  G4cout << " Baryon number : " << theBaryonNumber << endl;
-  G4cout << " Particle type : " << theParticleType << endl;
+  G4cout << " Baryon number : " << theBaryonNumber << G4endl;
+  G4cout << " Particle type : " << theParticleType << G4endl;
 
   if ( fShortLivedFlag ){
-    G4cout << " ShortLived : ON" << endl;
+    G4cout << " ShortLived : ON" << G4endl;
   }
 
   if ( thePDGStable ){
-    G4cout << " Stable : stable" << endl;
+    G4cout << " Stable : stable" << G4endl;
   } else {
     if( theDecayTable != 0 ){
       theDecayTable->DumpInfo();
     } else {
-      G4cout << "Decay Table is not defined !!" <<endl;
+      G4cout << "Decay Table is not defined !!" <<G4endl;
     }
   }
 
   if ( fApplyCutsFlag ){
-    G4cout << " ApplyCuts : ON" << endl;
+    G4cout << " ApplyCuts : ON" << G4endl;
   } else {
-    G4cout << " ApplyCuts : OFF" << endl;
+    G4cout << " ApplyCuts : OFF" << G4endl;
   }
 }
 

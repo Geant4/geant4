@@ -3,16 +3,16 @@
 
 #include "G4Cascade.hh"
 
-#include <iostream.h>
+#include "g4std/iostream"
 
 G4Cascade::G4Cascade():verboseLevel(0){};
 G4Cascade::~G4Cascade(){};
 
 G4int G4Cascade::go()
 {   
-if( verboseLevel > 1 ) G4cout << " Entering go" << endl;
+if( verboseLevel > 1 ) G4cout << " Entering go" << G4endl;
    rout1(); // AH Testing
-if( verboseLevel > 1 ) G4cout << " Leaving go" << endl;
+if( verboseLevel > 1 ) G4cout << " Leaving go" << G4endl;
 return 0;
 }
 void stor( G4float p0,   // AH implemetn this
@@ -1010,7 +1010,7 @@ G4float et[5];
  
  void G4Cascade::rout1()
   {
-if( verboseLevel > 1 ) G4cout << "   Entering rout1" << endl;
+if( verboseLevel > 1 ) G4cout << "   Entering rout1" << G4endl;
     out[11] = zee;
     G4float value2 = pow(zee,0.66666667);
 
@@ -1116,7 +1116,7 @@ if( verboseLevel > 1 ) G4cout << "   Entering rout1" << endl;
     // fermi momenta per cm. of protons(neutrons)
     //
     for ( i = 1; i < 5; i++ ) rands[i] = randi[i];
-    if( verboseLevel > 1 ) G4cout << "   Leaving rout1 " << endl;
+    if( verboseLevel > 1 ) G4cout << "   Leaving rout1 " << G4endl;
     return;
   }
  

@@ -6,7 +6,7 @@
 #endif
 
 #include "globals.hh"
-#include <vector.h>
+#include "g4std/vector"
 #include "String.hh"
 
 template<class t>
@@ -19,7 +19,7 @@ private:
   vector<t*> successors;
   String name;
 
-  void printTree(ostream&,int) const;
+  void printTree(G4std::ostream&,int) const;
   void find(const t&,vector<t*>& ) const;
   void find(const String&,vector<t*>& ) const;
   void findKnot(const t&,t*&) const;
@@ -33,10 +33,10 @@ protected:
   t& Successor(int i) const { return *successors[i]; }
   int NSuccessors() const { return successors.size(); }
   virtual double isEqualTo(const t& x) const { return 0; }
-  virtual void ClassInfo(ostream& o) const { }
+  virtual void ClassInfo(G4std::ostream& o) const { }
 public:
   vector<t*> getList() const;
-  void printTree(ostream& o) ;
+  void printTree(G4std::ostream& o) ;
   int countEntries();
   String Name() const { return name; }
   bool hasSuccessors() const { return successors.size() > 0; }

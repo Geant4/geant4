@@ -1,6 +1,6 @@
 //  The main program for G4IntegralHadrNucleus class
 #include "G4IntegralHadrNucleus.hh"
-#include <iostream.h>
+#include "g4std/iostream"
 #include "G4Proton.hh"
 #include "G4DynamicParticle.hh"
 
@@ -40,7 +40,7 @@
    InelasticCrossSec = IntegrDebug->GetInelasticCrossSection(aParticle, i1);
 //       CrossSection = Energy;
        G4cout << i1  <<" "<<  Energy<<" "  <<  CrossSection << " "
-       << ElasticCrossSec<<" "<<InelasticCrossSec<< " new "<< endl;
+       << ElasticCrossSec<<" "<<InelasticCrossSec<< " new "<< G4endl;
 
 //        fprintf(inFile,"  %d  %f8.2, %f8.2  \n", inew, Energy,
 //                          CrossSection);

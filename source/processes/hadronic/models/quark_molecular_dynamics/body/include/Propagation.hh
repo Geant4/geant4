@@ -1,7 +1,7 @@
 #ifndef __PROPAGATION__
 #define __PROPAGATION__
 
-#include <vector.h>
+#include "g4std/vector"
 #include "newvector.hh"
 #include "Nbody.hh"
 #include "ParticleType.hh"
@@ -14,12 +14,12 @@
 
 struct connect
 {
-  friend ostream& operator<<(ostream& o,connect& x) { o << x.pointer << "  " << x.dist<< "  " << x.max << "  "<< x.force << "  "; return o;}
+  friend G4std::ostream& operator<<(G4std::ostream& o,connect& x) { o << x.pointer << "  " << x.dist<< "  " << x.max << "  "<< x.force << "  "; return o;}
   int pointer;
   double dist,max,force;
   double t1,t2;
 public:
-  connect() : dist(1e30),pointer(0),max(0),force(0),t1(0),t2(0) {}
+  connect() : dist(1e30),pointer(0),G4std::max(0),force(0),t1(0),t2(0) {}
   void set(int i,double d) { pointer = i; dist = d;}
   void set(int i,double d,double m) { pointer = i; dist = d; max = m;}
   void reset() { dist=1e30; }
@@ -59,7 +59,7 @@ public:
   inline Vektor3 dHdx(int i);
   Vektor3 Ptot();
   void one_step();
-  virtual void print(ostream& o);
+  virtual void print(G4std::ostream& o);
   void Correlation();
   void clusters(int i);
   void decomposition(int i);
@@ -68,7 +68,7 @@ public:
   void decompose(ParticleBase*);
   void decomposeAll();
   double field(const Vektor3& r);
-  void writeField(ostream&,double,double,double,double,double,double);
+  void writeField(G4std::ostream&,double,double,double,double,double,double);
   static ParticleType& selectQuark(criterion = ALL);
   static double kappa;
   static double alpha;

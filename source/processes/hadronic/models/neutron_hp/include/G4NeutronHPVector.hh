@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPVector.hh,v 1.7 1999-11-19 18:47:39 hpw Exp $
+// $Id: G4NeutronHPVector.hh,v 1.8 1999-12-15 14:53:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPVector_h
@@ -18,7 +18,7 @@
 #include "G4NeutronHPInterpolator.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 #include "G4InterpolationManager.hh"
 #include "G4NeutronHPInterpolator.hh"
 #include <math.h>
@@ -63,7 +63,7 @@ class G4NeutronHPVector
     
   inline void SetData(G4int i, G4double x, G4double y) 
   { 
-//    G4cout <<"G4NeutronHPVector::SetData called"<<nPoints<<" "<<nEntries<<endl;
+//    G4cout <<"G4NeutronHPVector::SetData called"<<nPoints<<" "<<nEntries<<G4endl;
     Check(i);
     theData[i].SetData(x, y);
   }
@@ -110,12 +110,12 @@ class G4NeutronHPVector
 
   void Dump();
   
-  inline void InitInterpolation(ifstream & aDataFile)
+  inline void InitInterpolation(G4std::ifstream & aDataFile)
   {
     theManager.Init(aDataFile);
   }
   
-  void Init(ifstream & aDataFile, G4int total, G4double ux=1., G4double uy=1.)
+  void Init(G4std::ifstream & aDataFile, G4int total, G4double ux=1., G4double uy=1.)
   {
     G4double x,y;
     for (G4int i=0;i<total;i++)
@@ -127,7 +127,7 @@ class G4NeutronHPVector
     }
   }
   
-  void Init(ifstream & aDataFile,G4double ux=1., G4double uy=1.)
+  void Init(G4std::ifstream & aDataFile,G4double ux=1., G4double uy=1.)
   {
     if(theData!=NULL) delete [] theData;
     theData = new G4NeutronHPDataPoint[100]; 

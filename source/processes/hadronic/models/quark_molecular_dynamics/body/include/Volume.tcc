@@ -34,7 +34,7 @@ void Volume<t>::setSpecies(int r,int N,int Nbar,double frac)
 template<class t>
 void QuarkVolume<t>::setSpecies(int r,int Nq,int Nqq,double frac)
 {
-  int N_both = min(Nq,Nqq);
+  int N_both = G4std::min(Nq,Nqq);
   int N_add = Nq-Nqq;
   N_add -= N_add % 3; // ganze Baryonenzahl!!
   for (int i=0; i<N_both; i++) {

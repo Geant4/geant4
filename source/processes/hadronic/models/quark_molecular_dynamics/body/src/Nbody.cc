@@ -122,10 +122,10 @@ void Nbody::one_step()
 }
 
 
-void Nbody::print(ostream& o) 
+void Nbody::print(G4std::ostream& o) 
 { 
-  o << "#  time=" << Time() << ", Npart=" << Npart << endl;
-  for (int i=0; i<Npart; i++) { o << *List[i] << endl; }
+  o << "#  time=" << Time() << ", Npart=" << Npart << G4endl;
+  for (int i=0; i<Npart; i++) { o << *List[i] << G4endl; }
 }
 
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpticalSurface.cc,v 1.3 1999-11-05 21:13:56 gum Exp $
+// $Id: G4OpticalSurface.cc,v 1.4 1999-12-15 14:50:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -105,19 +105,19 @@ void G4OpticalSurface::DumpInfo() const
 	// Dump info for surface
 
 	G4cout << 
-        "  Surface type   = " << theType   << endl <<
-	"  Surface finish = " << theFinish << endl <<
-	"  Surface model  = " << theModel  << endl;
+        "  Surface type   = " << theType   << G4endl <<
+	"  Surface finish = " << theFinish << G4endl <<
+	"  Surface model  = " << theModel  << G4endl;
 
-	G4cout << endl;
+	G4cout << G4endl;
 
-	G4cout << "  Surface parameter " << endl;
-	G4cout << "  ----------------- " << endl;
+	G4cout << "  Surface parameter " << G4endl;
+	G4cout << "  ----------------- " << G4endl;
 	if (theModel == glisur ){
-		G4cout << polish      << endl;
+		G4cout << polish      << G4endl;
 	}
 	else {
-		G4cout << sigma_alpha << endl;
+		G4cout << sigma_alpha << G4endl;
 	}
-	G4cout << endl;
+	G4cout << G4endl;
 }

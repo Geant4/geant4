@@ -1,14 +1,14 @@
-#include <iomanip.h>
-#include <fstream.h>
-#include <strstream.h>
+#include "g4std/iomanip"
+#include "g4std/fstream"
+#include "g4std/strstream"
 
 #define maxLineLength 80
 
 template<class t>
-ostream& operator<<(ostream& o,ReadList<t>& L) 
+G4std::ostream& operator<<(G4std::ostream& o,ReadList<t>& L) 
 {
   for (vector<t>::iterator X=L.begin(); X != L.end(); X++) {
-    o << *X << endl;
+    o << *X << G4endl;
   }
   return o;
 }
@@ -16,7 +16,7 @@ ostream& operator<<(ostream& o,ReadList<t>& L)
 
 template<class t>
 ReadList<t>::ReadList(char* fileName) 
-  : vector<t>(),N(0),file(new ifstream(fileName) ) {}
+  : vector<t>(),N(0),file(new G4std::ifstream(fileName) ) {}
 
 template<class t>
 void ReadList<t>::readIn()
@@ -30,14 +30,14 @@ void ReadList<t>::readIn()
     int j=0;
     while ( Line[j] == ' ' ) j++;
     if ( Line[j] != '#' && Line[j] ) {
-      istrstream inputLine(Line,strlen(Line));
+      G4std::istrstream inputLine(Line,strlen(Line));
       try {
 	t h(inputLine);
 	bookIn(h);
 	++N;
       }
       catch (char*) { 
-	cerr << "Read Error in Line " << noLines << ":\n";
+	G4cerr << "Read Error in Line " << noLines << ":\n";
 	throw;
       }
     }
@@ -63,10 +63,10 @@ int ReadList<t>::getIndex(const t& h)
 // ----------------------------------------------------------------------
 
 template<class t>
-ostream& operator<<(ostream& o,ReadList_P<t>& L) 
+G4std::ostream& operator<<(G4std::ostream& o,ReadList_P<t>& L) 
 {
   for (vector<t>::iterator X=L.begin(); X != L.end(); X++) {
-    o << *(*X) << endl;
+    o << *(*X) << G4endl;
   }
   return o;
 }
@@ -74,7 +74,7 @@ ostream& operator<<(ostream& o,ReadList_P<t>& L)
 
 template<class t>
 ReadList_P<t>::ReadList_P(char* fileName) 
-  : vector<t*>(),N(0),file(new ifstream(fileName) ) {}
+  : vector<t*>(),N(0),file(new G4std::ifstream(fileName) ) {}
 
 template<class t>
 void ReadList_P<t>::readIn()
@@ -88,14 +88,14 @@ void ReadList_P<t>::readIn()
     int j=0;
     while ( Line[j] == ' ' ) j++;
     if ( Line[j] != '#' && Line[j] ) {
-      istrstream inputLine(Line,strlen(Line));
+      G4std::istrstream inputLine(Line,strlen(Line));
       try {
 	t* h = new t(inputLine);
 	bookIn(*h);
 	++N;
       }
       catch (char*) { 
-	cerr << "Read Error in Line " << noLines << ":\n";
+	G4cerr << "Read Error in Line " << noLines << ":\n";
 	throw;
       }
     }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.13 1999-11-05 12:10:47 urban Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.14 1999-12-15 14:51:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,9 +47,9 @@ G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
     NumbBinTable(200)
 {
    if (verboseLevel>0) {
-     G4cout << GetProcessName() << " is created "<< endl;
+     G4cout << GetProcessName() << " is created "<< G4endl;
      G4cout << "LowestEnergy: " << LowestEnergyLimit/keV << "keV ";
-     G4cout << "HighestEnergy: " << HighestEnergyLimit/TeV << "TeV " << endl;
+     G4cout << "HighestEnergy: " << HighestEnergyLimit/TeV << "TeV " << G4endl;
    }
 }
  
@@ -257,7 +257,7 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
 
   if(verboseLevel > 15){
 
-    G4cout<<"LE Rayleigh PostStepDoIt"<<endl;
+    G4cout<<"LE Rayleigh PostStepDoIt"<<G4endl;
   }
 #endif
 

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SphericalSurface.cc,v 1.1 1999-01-07 16:07:46 gunter Exp $
+// $Id: G4SphericalSurface.cc,v 1.2 1999-12-15 14:50:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  $Header: /private/Net/unixhub/u1/ea/liml/gismo/gismo-0.2/geometry/RCS/G4SphericalSurface.cc,v 1.10 1992/08   */
@@ -20,7 +20,7 @@
 //                            const G4Vector3D& zhat,
 //			      G4double r, G4double ph1, G4double ph2,
 //		              G4double th1, G4double th2 )
-//	G4SphericalSurface::PrintOn( ostream& os ) const
+//	G4SphericalSurface::PrintOn( G4std::ostream& os ) const
 //	G4SphericalSurface::HowNear( const G4Vector3D& x ) const
 //	G4SphericalSurface::distanceAlongRay( int which_way, const Ray* ry,
 //				     G4Vector3D& p ) const
@@ -162,9 +162,9 @@ G4SphericalSurface::G4SphericalSurface( const G4Vector3D& o,
 }
 
 
-void G4SphericalSurface::PrintOn( ostream& os ) const
+void G4SphericalSurface::PrintOn( G4std::ostream& os ) const
 {  
-  //  printing function using C++ ostream class
+  //  printing function using C++ G4std::ostream class
   os << "G4SphericalSurface surface with origin: " << origin << "\t"
      << "radius: " << radius << "\n"
      << "\t local x_axis: " << x_axis

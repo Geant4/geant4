@@ -8,7 +8,7 @@
 #include "G4NeutronHPLegendreStore.hh"
 #include "G4Electron.hh"
 
-G4bool G4NeutronHPPhotonDist::InitMean(ifstream & aDataFile)
+G4bool G4NeutronHPPhotonDist::InitMean(G4std::ifstream & aDataFile)
 {
   G4bool result = true;
   if(aDataFile >> repFlag)
@@ -63,7 +63,7 @@ G4bool G4NeutronHPPhotonDist::InitMean(ifstream & aDataFile)
     }
     else
     {
-      G4cout << "Data representation in G4NeutronHPPhotonDist: "<<repFlag<<endl;
+      G4cout << "Data representation in G4NeutronHPPhotonDist: "<<repFlag<<G4endl;
       G4Exception("G4NeutronHPPhotonDist: This data representation is not implemented.");
     }
   }
@@ -74,7 +74,7 @@ G4bool G4NeutronHPPhotonDist::InitMean(ifstream & aDataFile)
   return result;
 }
 
-void G4NeutronHPPhotonDist::InitAngular(ifstream & aDataFile)
+void G4NeutronHPPhotonDist::InitAngular(G4std::ifstream & aDataFile)
 {
   G4int i, ii;
   //angular distributions
@@ -122,7 +122,7 @@ void G4NeutronHPPhotonDist::InitAngular(ifstream & aDataFile)
       }
       else
       {
-        G4cout << "tabulation type: tabulationType"<<endl;
+        G4cout << "tabulation type: tabulationType"<<G4endl;
         G4Exception("cannot deal with this tabulation type for angular distributions.");
       }
     }
@@ -130,7 +130,7 @@ void G4NeutronHPPhotonDist::InitAngular(ifstream & aDataFile)
 }
 
 
-void G4NeutronHPPhotonDist::InitEnergies(ifstream & aDataFile)
+void G4NeutronHPPhotonDist::InitEnergies(G4std::ifstream & aDataFile)
 {
   G4int i, energyDistributionsNeeded = 0;
   for (i=0; i<nDiscrete; i++)
@@ -155,7 +155,7 @@ void G4NeutronHPPhotonDist::InitEnergies(ifstream & aDataFile)
   }
 }
 
-void G4NeutronHPPhotonDist::InitPartials(ifstream & aDataFile)
+void G4NeutronHPPhotonDist::InitPartials(G4std::ifstream & aDataFile)
 {
   aDataFile >> nDiscrete >> targetMass;
   if(nDiscrete != 1)
@@ -253,7 +253,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
 	G4double en = thePhotons->at(i)->GetTotalEnergy();
 	G4ThreeVector temp(en*sinth*cos(phi), en*sinth*sin(phi), en*cos(theta) );
 	thePhotons->at(i)->SetMomentum( temp ) ;
-  //      G4cout << "Isotropic distribution in PhotonDist"<<temp<<endl;
+  //      G4cout << "Isotropic distribution in PhotonDist"<<temp<<G4endl;
       }
     }
     else

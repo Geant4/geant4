@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test19.cc,v 1.1 1999-01-08 16:33:58 gunter Exp $
+// $Id: test19.cc,v 1.2 1999-12-15 14:54:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,8 +19,8 @@
 #include <stdlib.h>
 
 #include "globals.hh"
-ostream& g4cout = G4cout;
-ostream& g4cerr = G4cerr;
+G4std::ostream& g4cout = G4cout;
+G4std::ostream& g4cerr = G4cerr;
 #include "test19DetectorConstruction.hh"
 #include "MyPhysicsList.hh"
 #include "MyRunAction.hh"
@@ -101,7 +101,7 @@ int main (int argc, char** argv) {
   G4UImanager::GetUIpointer()->SetSession(session);  //So that Pause works..
 
   // Run manager
-  g4cout << "RunManager is constructing...." << endl;
+  g4cout << "RunManager is constructing...." << G4endl;
   G4RunManager * runManager = new G4RunManager;
 
   // User initialization classes
@@ -121,17 +121,17 @@ int main (int argc, char** argv) {
   G4UImanager* UI = G4UImanager::GetUIpointer ();
 
 #ifdef G4UI_USE_WIN32
-  g4cout << "Reading win32.g4m file...." << endl;
+  g4cout << "Reading win32.g4m file...." << G4endl;
   UI -> ApplyCommand ("/control/execute win32.g4m");
 #else
-  g4cout << "Reading test19.g4m file...." << endl;
+  g4cout << "Reading test19.g4m file...." << G4endl;
   UI -> ApplyCommand ("/control/execute test19.g4m");
 #endif
 
   g4cout << 
     "Choose a detector with /test19det/detector (or let default be"
     " constructed)."
-       << endl;
+       << G4endl;
 
   // Start an interactive session.
   session -> SessionStart();

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIxvtMessenger.cc,v 1.2 1999-04-13 01:25:03 yhajime Exp $
+// $Id: G4UIxvtMessenger.cc,v 1.3 1999-12-15 14:50:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef G4UI_BUILD_XVT_SESSION
@@ -60,7 +60,7 @@ void G4UIxvtMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     if(newValue=="EndOfEvent") id=2;
     if(newValue=="endOfRun") id=3;
     if(id<0)
-    { G4cout << "Unknown break point <" << newValue << "> ignored." << endl; }
+    { G4cout << "Unknown break point <" << newValue << "> ignored." << G4endl; }
     else
     { xvtptr->set_breakPointAt(id,true); }
   }

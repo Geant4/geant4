@@ -1,17 +1,17 @@
 #ifndef __GENREAD__
 #define __GENREAD__
 
-#include <iostream.h>
-#include <fstream.h>
+#include "g4std/iostream"
+#include "g4std/fstream"
 #include "String.hh"
 
 class genericRead
 {
-  istream* in;
+  G4std::istream* in;
   String Name;
-  virtual void readIn(istream&) = 0;
+  virtual void readIn(G4std::istream&) = 0;
 public:
-  genericRead(istream& i) : in(&i) {}
+  genericRead(G4std::istream& i) : in(&i) {}
   genericRead(char* file);
   virtual ~genericRead() { delete in; }
   void read();
@@ -20,7 +20,7 @@ public:
 template<class t>
 class FileRead : private genericRead
 {
-  virtual void readIn(istream& in) { t*x = new t(in); }
+  virtual void readIn(G4std::istream& in) { t*x = new t(in); }
 public:
   FileRead(const String& fileName) 
     : genericRead(fileName) { genericRead::read(); }

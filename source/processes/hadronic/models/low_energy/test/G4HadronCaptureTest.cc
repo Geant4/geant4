@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronCaptureTest.cc,v 1.1 1999-01-08 16:33:41 gunter Exp $
+// $Id: G4HadronCaptureTest.cc,v 1.2 1999-12-15 14:53:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -65,7 +65,7 @@ int main()
    G4Material Uranium("uranium 235", 92, 235.*g/mole, 18.95*g/cm3,
                       kStateSolid);
 
-//   G4cout << "Dumping material table info:" << endl;
+//   G4cout << "Dumping material table info:" << G4endl;
 //   Uranium.DumpInfo();
 
 // Particle definition
@@ -93,23 +93,23 @@ int main()
 
    G4double T;
    G4cout << "Enter neutron kinetic energy in GeV: ";
-   cin >> T;
+   G4cin >> T;
    aNeutron.SetKineticEnergy(T*GeV);
    G4double p = aNeutron.GetTotalMomentum()/GeV;
-   G4cout << "neutron momentum=" << p << endl;
+   G4cout << "neutron momentum=" << p << G4endl;
    G4double px, py, pz;
    G4cout << "Enter momentum direction px/p, py/p, pz/p: ";
-   cin >> px >> py >> pz;
+   G4cin >> px >> py >> pz;
    aNeutron.SetMomentumDirection(G4ParticleMomentum(px, py, pz));
    aNeutron.DumpInfo();
 
    G4double meanFreePath;
    meanFreePath = theLCaptureProcess.GetMeanFreePathBasic(&aNeutron, &Uranium);
-   G4cout << endl << "Neutron mean free path = " << meanFreePath << endl;
+   G4cout << G4endl << "Neutron mean free path = " << meanFreePath << G4endl;
 
    G4int nevent;
-   G4cout << endl << "Enter number of events: ";
-   cin >> nevent;
+   G4cout << G4endl << "Enter number of events: ";
+   G4cin >> nevent;
 
    G4Step aStep;
 
@@ -127,9 +127,9 @@ int main()
    pxg = pxg2 = pyg = pyg2 = pzg = pzg2 = 0.;
    ng = ng2 = 0;
 
-   if (nevent > 10) G4cout << "Printing first 10 events only" << endl;
-   G4cout << endl << "Event  sec#  type  Ek(MeV)  Px/P  Py/P  Pz/P"
-        << endl << endl;
+   if (nevent > 10) G4cout << "Printing first 10 events only" << G4endl;
+   G4cout << G4endl << "Event  sec#  type  Ek(MeV)  Px/P  Py/P  Pz/P"
+        << G4endl << G4endl;
 
 // Open HBOOK RZ file (not commissioned)
    //   int NWPAW = 10000;
@@ -142,7 +142,7 @@ int main()
    //   int ISTAT;
    //   hropen_(&LUN, CHTOP, CHFILE, CHOPT, &LREC, &ISTAT,
    //           strlen(CHTOP), strlen(CHFILE), strlen(CHOPT));
-   //   G4cout << "HROPEN ISTAT=" << ISTAT << endl;
+   //   G4cout << "HROPEN ISTAT=" << ISTAT << G4endl;
 
 // Book ntuple
    //   int ID = 10;
@@ -178,7 +178,7 @@ int main()
                   G4Gamma::GammaDefinition()) {
             ngnew++;
             eknew = theSecondary->GetKineticEnergy()/MeV;
-            //      G4cout << "eknew=" << eknew << endl;
+            //      G4cout << "eknew=" << eknew << G4endl;
             ekg += eknew;
             ekg2 += eknew*eknew;
             pnew = theSecondary->GetDynamicParticle()->GetTotalMomentum()/MeV;
@@ -198,7 +198,7 @@ int main()
             //            X[3] = pznew;
             //            hfn_(&ID, X);
             eknew4 = eknew;
-            //            G4cout << "eknew4=" << eknew4 << endl;
+            //            G4cout << "eknew4=" << eknew4 << G4endl;
             pxnew4 = pxnew;
             pynew4 = pynew;
             pznew4 = pznew;
@@ -223,13 +223,13 @@ int main()
    //   hrend_(CHTOP,
    //          strlen(CHTOP));
 
-   G4cout << endl << "GAMMA:" << endl;
-   G4cout << "  Total number     " << ng << endl;
-   G4cout << "  Number per event " << (G4double)ng/nevent << endl;
-   G4cout << "  Ek " << ekg/ng << endl;
-   G4cout << "  Px " << pxg/ng << endl;
-   G4cout << "  Py " << pyg/ng << endl;
-   G4cout << "  Pz " << pzg/ng << endl;
+   G4cout << G4endl << "GAMMA:" << G4endl;
+   G4cout << "  Total number     " << ng << G4endl;
+   G4cout << "  Number per event " << (G4double)ng/nevent << G4endl;
+   G4cout << "  Ek " << ekg/ng << G4endl;
+   G4cout << "  Px " << pxg/ng << G4endl;
+   G4cout << "  Py " << pyg/ng << G4endl;
+   G4cout << "  Pz " << pzg/ng << G4endl;
 
    //   return EXIT_SUCCESS;
 }

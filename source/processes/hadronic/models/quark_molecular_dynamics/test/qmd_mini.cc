@@ -1,4 +1,4 @@
-#include <fstream.h>
+#include "g4std/fstream"
 #include <algo.h>
 #include "newvector.H"
 #include "Random.H"
@@ -29,7 +29,7 @@
 #include "output.H"
 
 
-ostream* Output::fileout = 0;
+G4std::ostream* Output::fileout = 0;
 
 class q_Quark : public QuantumNumbers
 {
@@ -240,7 +240,7 @@ int main(int argc,char* argv[]) {
 
   Blob->whatAmI(cerr);
 
-  Output::fileout = new ofstream(Dir+"/output.out");
+  Output::fileout = new G4std::ofstream(Dir+"/output.out");
   *Output::fileout << "! Start\n";
   Output::fileout->flush();
 
@@ -260,7 +260,7 @@ int main(int argc,char* argv[]) {
     QuarkVolume<RelBoltzmann> QGP(*Blob,Quarks,T,mu,mus,num);
     double u_frac = (2.0*double(PtoN)+1.0)/(PtoN+1.0)/3.0;
     QGP.createParticles(u_frac);
-    cerr << " - Energy : " << QGP.Etot()/Blob->getVolume() << "  " << R << "  " << box.List.size() << endl;
+    G4cerr << " - Energy : " << QGP.Etot()/Blob->getVolume() << "  " << R << "  " << box.List.size() << G4endl;
 
     box.setup();
     setPhaseSpace(box.List,*Blob,T);
@@ -270,9 +270,9 @@ int main(int argc,char* argv[]) {
       run.kstart = 20000;
       Colour::allowDecay = false;
       Colour::allowClustering = false; 
-      cerr << "Thermalizing...";
+      G4cerr << "Thermalizing...";
       run.evaluate(21000);
-      cerr << "finished\n";
+      G4cerr << "finished\n";
     }
 
     if ( Initial == "bjorken" ) {
@@ -285,10 +285,10 @@ int main(int argc,char* argv[]) {
     Colour::allowClustering = (clu == "yes");
     Colour::directHadrons = (dir == "yes");
 
-    cout << "# Temperature " << T << endl;
-    cout << "#        mu_q " << mu << endl;
-    cout << "#        mu_s " << mus << endl;
-    cout << "#          pt " << pt << endl;
+    cout << "# Temperature " << T << G4endl;
+    cout << "#        mu_q " << mu << G4endl;
+    cout << "#        mu_s " << mus << G4endl;
+    cout << "#          pt " << pt << G4endl;
       
     const ParticleType& cq = Knot<ParticleType>::FindKnot("c");
     box.setup();
@@ -298,14 +298,14 @@ int main(int argc,char* argv[]) {
       while ( ((Time < 0) && (box.Nquark > 0)) || (box.Time() < Time) ) {
         double t1 = box.Time()+dt;
         if ( Time>0 ) 
-          t1 = min(t1,(double)Time);
+          t1 = G4std::min(t1,(double)Time);
 
         if ( box.Nquark ) {
           while ( box.Time() < t1 && ( box.Nquark>0 || Time>0 ) ) {
             box.one_step();
-            cerr << n << " :  " << box.Time() << " : " << "  " 
+            G4cerr << n << " :  " << box.Time() << " : " << "  " 
                  << box.Etot() << "  "
-                 << box.Npart << "  " << -box.Nquark+box.Npart << endl;
+                 << box.Npart << "  " << -box.Nquark+box.Npart << G4endl;
           }
         }
         else {
@@ -322,7 +322,7 @@ int main(int argc,char* argv[]) {
       Output::fileout->flush();
     }
     catch ( char *s ) {
-      cerr << "ERROR: " << s << endl;
+      G4cerr << "ERROR: " << s << G4endl;
     }
     int c = 1;
   }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LENeutronInelastic.cc,v 1.2 1999-03-29 09:55:24 hpw Exp $
+// $Id: G4LENeutronInelastic.cc,v 1.3 1999-12-15 14:53:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Low Energy Neutron Inelastic Process
@@ -31,11 +31,11 @@
     if( verboseLevel > 1 )
     {
       G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LENeutronInelastic::ApplyYourself called" << endl;
+      G4cout << "G4LENeutronInelastic::ApplyYourself called" << G4endl;
       G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << ", ";
       G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
-           << endl;
+           << G4endl;
     }
     if( originalIncident->GetKineticEnergy()/MeV < 0.000001 )
       G4Exception("G4LENeutronInelastic: should be capture process!");
@@ -155,7 +155,7 @@
         cost1 = -1.0 + 2.0*G4UniformRand();
         eka = 1.0 + 2.0*cost1*A + A*A;
       }
-      G4double cost = min( 1.0, max( -1.0, (A*cost1+1.0)/sqrt(eka) ) );
+      G4double cost = G4std::min( 1.0, G4std::max( -1.0, (A*cost1+1.0)/sqrt(eka) ) );
       eka /= (1.0+A)*(1.0+A);
       G4double ek = currentKinetic*MeV/GeV;
       G4double amas = currentMass*MeV/GeV;
@@ -292,7 +292,7 @@
       counter = -1;
       for( np=0; np<numSec/3; ++np )
       {
-        for( nm=max(0,np-1); nm<=(np+1); ++nm )
+        for( nm=G4std::max(0,np-1); nm<=(np+1); ++nm )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
@@ -355,7 +355,7 @@
       nm = np = nz = 0;
       if( targetParticle.GetDefinition() == aNeutron )
       {
-        test = exp( min( expxu, max( expxl, -(1.0+b[1])*(1.0+b[1])/(2.0*c*c) ) ) );
+        test = exp( G4std::min( expxu, G4std::max( expxl, -(1.0+b[1])*(1.0+b[1])/(2.0*c*c) ) ) );
         w0 = test/2.0;
         wm = test;
         if( G4UniformRand() < w0/(w0+wm) )
@@ -363,10 +363,10 @@
         else
           nm = 1;
       } else { // target is a proton
-        test = exp( min( expxu, max( expxl, -(1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
+        test = exp( G4std::min( expxu, G4std::max( expxl, -(1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
         w0 = test;
         wp = test/2.0;        
-        test = exp( min( expxu, max( expxl, -(-1.0+b[0])*(-1.0+b[0])/(2.0*c*c) ) ) );
+        test = exp( G4std::min( expxu, G4std::max( expxl, -(-1.0+b[0])*(-1.0+b[0])/(2.0*c*c) ) ) );
         wm = test/2.0;
         wt = w0+wp+wm;
         wp += w0;
@@ -388,7 +388,7 @@
         counter = -1;
         for( np=0; np<numSec/3 && ran>=excs; ++np )
         {
-          for( nm=max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
+          for( nm=G4std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
           {
             for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
             {
@@ -397,7 +397,7 @@
                 nt = np+nm+nz;
                 if( nt > 0 )
                 {
-                  test = exp( min( expxu, max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                   if( fabs(dum) < 1.0 ) {
                     if( test >= 1.0e-10 )excs += dum*test;
@@ -428,7 +428,7 @@
                 nt = np+nm+nz;
                 if( (nt>=1) && (nt<=numSec) )
                 {
-                  test = exp( min( expxu, max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                   if( fabs(dum) < 1.0 ) {
                     if( test >= 1.0e-10 )excs += dum*test;

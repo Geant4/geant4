@@ -7,14 +7,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VNeutronHPEnergyAngular.hh,v 1.3 1999-07-02 10:00:05 johna Exp $
+// $Id: G4VNeutronHPEnergyAngular.hh,v 1.4 1999-12-15 14:53:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4VNeutronHPEnergyAngular_h
 #define G4VNeutronHPEnergyAngular_h 1
 
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 #include "globals.hh"
 #include "G4ReactionProduct.hh"
 
@@ -32,7 +32,7 @@ class G4VNeutronHPEnergyAngular
   
   public:
   
-  virtual void Init(ifstream & aDataFile) = 0;
+  virtual void Init(G4std::ifstream & aDataFile) = 0;
   virtual G4ReactionProduct * Sample(G4double anEnergy, 
                                      G4double massCode, 
                                      G4double mass) = 0;

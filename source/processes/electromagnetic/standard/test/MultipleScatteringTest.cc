@@ -1,17 +1,17 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MultipleScatteringTest.cc,v 1.1 1999-01-08 16:32:25 gunter Exp $
+// $Id: MultipleScatteringTest.cc,v 1.2 1999-12-15 14:51:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------------------------------------------------------------
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 #include "globals.hh"
 #include "G4Timer.hh"
 #include "G4MultipleScattering.hh"
@@ -65,10 +65,10 @@ G4VPhysicalVolume* BuildVolume(G4Material* matworld)
 int main()
 {
   //-------- set output format-------
-   G4cout.setf( ios::scientific, ios::floatfield );
+   G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
   //---write results to the file msc.out-----
-   ofstream outFile("msc.out", ios::out ) ;
-   outFile.setf( ios::scientific, ios::floatfield );
+   G4std::ofstream outFile("msc.out", G4std::ios::out ) ;
+   outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
   //--------- Material definition ---------
   G4Timer theTimer ;
@@ -202,117 +202,117 @@ int main()
 
   NEWPARTICLE: ;
 
-  G4cout << "Do you want the electron as particle (yes/no)?" << flush;
-  cin >> confirm ;
+  G4cout << "Do you want the electron as particle (yes/no)?" << G4std::flush;
+  G4cin >> confirm ;
   if(confirm == "yes")
   {
     theParticle = theElectron ;
     theParticleMultipleScattering=&theElectronMultipleScattering;
     theParticleProcessManager=theElectronProcessManager;
-    outFile << " ----------particle = electron -------------" << endl;
+    outFile << " ----------particle = electron -------------" << G4endl;
   }
   else
   {    
-    G4cout << "Do you want the positron as particle (yes/no)?" << flush;
-    cin >> confirm ;
+    G4cout << "Do you want the positron as particle (yes/no)?" << G4std::flush;
+    G4cin >> confirm ;
     if(confirm == "yes")
     {
       theParticle = thePositron ;
       theParticleMultipleScattering=&thePositronMultipleScattering;
       theParticleProcessManager=thePositronProcessManager;
-      outFile << " ----------particle = positron -------------" << endl;
+      outFile << " ----------particle = positron -------------" << G4endl;
     }
     else
     {
-      G4cout << "Do you want the mu+ as particle (yes/no)?" << flush;
-      cin >> confirm ;
+      G4cout << "Do you want the mu+ as particle (yes/no)?" << G4std::flush;
+      G4cin >> confirm ;
       if(confirm == "yes")
       {
         theParticle = theMuonPlus ;
         theParticleMultipleScattering=&theMuonPlusMultipleScattering;
         theParticleProcessManager=theMuonPlusProcessManager;
-        outFile << " --------particle = mu+ -------------" << endl;
+        outFile << " --------particle = mu+ -------------" << G4endl;
       }
       else
       {
-        G4cout << "Do you want the mu- as particle (yes/no)?" << flush;
-        cin >> confirm ;
+        G4cout << "Do you want the mu- as particle (yes/no)?" << G4std::flush;
+        G4cin >> confirm ;
         if(confirm == "yes")
         {
           theParticle = theMuonMinus ;
           theParticleMultipleScattering=&theMuonMinusMultipleScattering;
           theParticleProcessManager=theMuonMinusProcessManager;
-          outFile << " --------particle = mu- -------------" << endl;
+          outFile << " --------particle = mu- -------------" << G4endl;
       }
       else
   {
-  G4cout << " Do you want the proton as particle (yes/no)? " << flush;
-  cin >> confirm ;
+  G4cout << " Do you want the proton as particle (yes/no)? " << G4std::flush;
+  G4cin >> confirm ;
   if(confirm == "yes")
   {
     theParticle = theProton;
     theParticleMultipleScattering=&theProtonMultipleScattering;
     theParticleProcessManager=theProtonProcessManager;
-    outFile << " ---------- particle = proton ----------------" << endl;
+    outFile << " ---------- particle = proton ----------------" << G4endl;
   }
   else
   {
-     G4cout << " Do you want the antiproton as particle (yes/no)? " << flush;
-     cin >> confirm ;
+     G4cout << " Do you want the antiproton as particle (yes/no)? " << G4std::flush;
+     G4cin >> confirm ;
      if(confirm == "yes")
      {
         theParticle = theAntiProton;
         theParticleMultipleScattering=&theAntiProtonMultipleScattering;
         theParticleProcessManager=theAntiProtonProcessManager;
-        outFile << " ---------- particle = antiproton ----------------" << endl;
+        outFile << " ---------- particle = antiproton ----------------" << G4endl;
      }
      else
      {
-      G4cout << " Do you want the pi+ as particle (yes/no)? " << flush;
-      cin >> confirm ;
+      G4cout << " Do you want the pi+ as particle (yes/no)? " << G4std::flush;
+      G4cin >> confirm ;
       if(confirm == "yes")
       {
       theParticle = thePionPlus;
       theParticleMultipleScattering=&thePionPlusMultipleScattering;
       theParticleProcessManager=thePionPlusProcessManager;
-      outFile << " ---------- particle = pi+ ----------------" << endl;
+      outFile << " ---------- particle = pi+ ----------------" << G4endl;
       }
       else
       {
-        G4cout << " Do you want the pi- as particle (yes/no)? " << flush;
-        cin >> confirm ;
+        G4cout << " Do you want the pi- as particle (yes/no)? " << G4std::flush;
+        G4cin >> confirm ;
         if(confirm == "yes")
         {
         theParticle = thePionMinus;
         theParticleMultipleScattering=&thePionMinusMultipleScattering;
         theParticleProcessManager=thePionMinusProcessManager;
-        outFile << " ---------- particle = pi- ----------------" << endl;
+        outFile << " ---------- particle = pi- ----------------" << G4endl;
         } 
         else
         {
-          G4cout << " Do you want the K+ as particle (yes/no)? " << flush;
-          cin >> confirm ;
+          G4cout << " Do you want the K+ as particle (yes/no)? " << G4std::flush;
+          G4cin >> confirm ;
           if(confirm == "yes")
           {
           theParticle = theKaonPlus;
           theParticleMultipleScattering=&theKaonPlusMultipleScattering;
           theParticleProcessManager=theKaonPlusProcessManager;
-          outFile << " ---------- particle = K+ ----------------" << endl;
+          outFile << " ---------- particle = K+ ----------------" << G4endl;
           }
           else
           {
-            G4cout << " Do you want the K- as particle (yes/no)? " << flush;
-            cin >> confirm ;
+            G4cout << " Do you want the K- as particle (yes/no)? " << G4std::flush;
+            G4cin >> confirm ;
             if(confirm == "yes")
             {
             theParticle = theKaonMinus;
             theParticleMultipleScattering=&theKaonMinusMultipleScattering;
             theParticleProcessManager=theKaonMinusProcessManager;
-            outFile << " ---------- particle = K- ----------------" << endl;
+            outFile << " ---------- particle = K- ----------------" << G4endl;
             }
             else
             {
-             G4cout << " There is no other particle in the test." << endl;
+             G4cout << " There is no other particle in the test." << G4endl;
              return EXIT_FAILURE;
             }
           }
@@ -338,54 +338,54 @@ int main()
   G4double cutinrange ;
 
 
-  G4cout << "give cuts in range" << endl ;
+  G4cout << "give cuts in range" << G4endl ;
 
   G4cout << "cut for GAMMA in mm =" ;
-  cin >> cutinrange ; 
+  G4cin >> cutinrange ; 
   theGamma->SetCuts(cutinrange) ;
-    G4cout << "gamma,cut in range(mm)=" << theGamma->GetCuts() << endl ;
-    outFile << "  ---------------------------------------" << endl ;
-    outFile << "  gamma,cut in range(mm)=" << theGamma->GetCuts() << endl ;
+    G4cout << "gamma,cut in range(mm)=" << theGamma->GetCuts() << G4endl ;
+    outFile << "  ---------------------------------------" << G4endl ;
+    outFile << "  gamma,cut in range(mm)=" << theGamma->GetCuts() << G4endl ;
 
   GammaKineticEnergyCuts = theGamma->GetCutsInEnergy() ;
   for (G4int icut=0; icut<theMaterialTable->length(); icut++)
   {
     G4cout << "material index=" << icut << "  kin.energy cut(MeV)=" << 
-         GammaKineticEnergyCuts[icut] << endl ;
+         GammaKineticEnergyCuts[icut] << G4endl ;
     outFile << "  material index=" << icut << "  kin.energy cut(MeV)=" << 
-         GammaKineticEnergyCuts[icut] << endl ;
+         GammaKineticEnergyCuts[icut] << G4endl ;
   }
 
   G4cout << "cut for ELECTRON in mm =" ;
-  cin >> cutinrange ; 
+  G4cin >> cutinrange ; 
   theElectron->SetCuts(cutinrange) ;
-    G4cout << "electron,cut in range(mm)=" << theElectron->GetCuts() << endl ;
-    outFile << "  ---------------------------------------" << endl ;
-    outFile << "  electron,cut in range(mm)=" << theElectron->GetCuts() << endl ;
+    G4cout << "electron,cut in range(mm)=" << theElectron->GetCuts() << G4endl ;
+    outFile << "  ---------------------------------------" << G4endl ;
+    outFile << "  electron,cut in range(mm)=" << theElectron->GetCuts() << G4endl ;
 
   ElectronKineticEnergyCuts = theElectron->GetCutsInEnergy() ;
   for ( icut=0; icut<theMaterialTable->length(); icut++)
   {
     G4cout << "material index=" << icut << "  kin.energy cut(MeV)=" << 
-         ElectronKineticEnergyCuts[icut] << endl ;
+         ElectronKineticEnergyCuts[icut] << G4endl ;
     outFile << "  material index=" << icut << "  kin.energy cut(MeV)=" << 
-         ElectronKineticEnergyCuts[icut] << endl ;
+         ElectronKineticEnergyCuts[icut] << G4endl ;
   }
 
   G4cout << "cut for POSITRON in mm =" ;
-  cin >> cutinrange ; 
+  G4cin >> cutinrange ; 
   thePositron->SetCuts(cutinrange) ;
-    G4cout << "positron,cut in range(mm)=" << thePositron->GetCuts() << endl ;
-    outFile << "  ---------------------------------------" << endl ;
-    outFile << "  positron,cut in range(mm)=" << thePositron->GetCuts() << endl ;
+    G4cout << "positron,cut in range(mm)=" << thePositron->GetCuts() << G4endl ;
+    outFile << "  ---------------------------------------" << G4endl ;
+    outFile << "  positron,cut in range(mm)=" << thePositron->GetCuts() << G4endl ;
 
   PositronKineticEnergyCuts = thePositron->GetCutsInEnergy() ;
   for ( icut=0; icut<theMaterialTable->length(); icut++)
   {
     G4cout << "material index=" << icut << "  kin.energy cut(MeV)=" << 
-         PositronKineticEnergyCuts[icut] << endl ;
+         PositronKineticEnergyCuts[icut] << G4endl ;
     outFile << "  material index=" << icut << "  kin.energy cut(MeV)=" << 
-         PositronKineticEnergyCuts[icut] << endl ;
+         PositronKineticEnergyCuts[icut] << G4endl ;
   }
 
 //****************************************************
@@ -393,22 +393,22 @@ int main()
  if((theParticle != theElectron) && (theParticle != thePositron))
  {
   G4cout << "cut for the selected particle in mm =" ;
-  cin >> cutinrange ; 
+  G4cin >> cutinrange ; 
   theParticle->SetCuts(cutinrange) ;
 
 
-    G4cout << "PARTICLE: cut in range(mm)=" << theParticle->GetLengthCuts() << endl ;
-    outFile << "  ---------------------------------------" << endl ;
-    outFile << "PARTICLE: cut in range(mm)=" << theParticle->GetLengthCuts() << endl ;
+    G4cout << "PARTICLE: cut in range(mm)=" << theParticle->GetLengthCuts() << G4endl ;
+    outFile << "  ---------------------------------------" << G4endl ;
+    outFile << "PARTICLE: cut in range(mm)=" << theParticle->GetLengthCuts() << G4endl ;
 
   ParticleKineticEnergyCuts = theParticle->GetEnergyCuts() ;
 
   for ( icut=0; icut<theMaterialTable->length(); icut++)
   {
     G4cout << "material index=" << icut << "  kin.energy cut(MeV)=" << 
-         ParticleKineticEnergyCuts[icut] << endl ;
+         ParticleKineticEnergyCuts[icut] << G4endl ;
     outFile << "  material index=" << icut << "  kin.energy cut(MeV)=" << 
-         ParticleKineticEnergyCuts[icut] << endl ;
+         ParticleKineticEnergyCuts[icut] << G4endl ;
   }
  }
          
@@ -426,9 +426,9 @@ int main()
     G4DynamicParticle aParticle(theParticle,energy,theMomentum);
     aParticle.SetKineticEnergy(energy-mass);
     
-    outFile << "  " << endl;
-    outFile << " M S C test **********************************************" << endl ;
-    outFile << "  " << endl;
+    outFile << "  " << G4endl;
+    outFile << " M S C test **********************************************" << G4endl ;
+    outFile << "  " << G4endl;
     palongget = aParticle.GetDefinition()->GetProcessManager()
                                  ->GetAlongStepProcessVector(0);
     ppostget = aParticle.GetDefinition()->GetProcessManager()
@@ -470,17 +470,17 @@ int main()
     NEXTMATERIAL: ;
     J = J+1 ;
     if ( J >= theMaterialTable->length() )
-      { G4cout << "that was the last material in the table --> STOP" << endl;
+      { G4cout << "that was the last material in the table --> STOP" << G4endl;
         return EXIT_FAILURE ; }  
 
     apttoMaterial = (*theMaterialTable)[ J ] ;
     MaterialName = apttoMaterial->GetName() ; 
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the MSC  Test for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the MSC  Test for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
     G4int icont ;
-    cin >> icont ;
+    G4cin >> icont ;
     if ( icont < 0 )
         goto NEXTMATERIAL ;
 
@@ -525,21 +525,21 @@ int main()
     G4double xc,yc,zc,later ; 
 //**************************************************************************
 
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  Along Step test" << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  Along Step test" << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
     G4cout << "kin.en.(MeV)    lambda(mm)    trueStep(mm)" ;
-    G4cout << "--->geomStep(mm)--->trueStep(mm)" << endl ;
-    G4cout << endl ;
+    G4cout << "--->geomStep(mm)--->trueStep(mm)" << G4endl ;
+    G4cout << G4endl ;
  
-    outFile <<  endl;
-    outFile <<"  " << MaterialName  << "  Along Step test" << endl ;
-    outFile << " +++++++++++++++++++++++++++++++++++++++++" << endl ;
-    outFile << endl ;
+    outFile <<  G4endl;
+    outFile <<"  " << MaterialName  << "  Along Step test" << G4endl ;
+    outFile << " +++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    outFile << G4endl ;
     outFile << "kin.en.(MeV)    lambda(mm)    trueStep(mm)" ;
-    outFile << "--->geomStep(mm)--->trueStep(mm)" << endl ;
-    outFile << endl ;
+    outFile << "--->geomStep(mm)--->trueStep(mm)" << G4endl ;
+    outFile << G4endl ;
  
 
     for ( G4int i=0 ; i<Nbin ; i++)
@@ -564,15 +564,15 @@ int main()
 
        G4cout <<" " <<  TkinMeV[i] << "  " << lambda/mm << "  " ;
        G4cout << trueStep/mm << "  " << geomStep/mm << "  " ;
-       G4cout << (*aParticleChange).GetTrueStepLength()/mm << endl ;
+       G4cout << (*aParticleChange).GetTrueStepLength()/mm << G4endl ;
 
        outFile <<" " <<  TkinMeV[i] << "  " << lambda/mm << "  " ;
        outFile << trueStep/mm << "  " << geomStep/mm << "  " ;
-       outFile << (*aParticleChange).GetTrueStepLength()/mm << endl ;
+       outFile << (*aParticleChange).GetTrueStepLength()/mm << G4endl ;
     }
 
-    G4cout <<  endl;
-    outFile << endl;
+    G4cout <<  G4endl;
+    outFile << G4endl;
 
    SCATTERING: ;
 
@@ -589,17 +589,17 @@ int main()
                         0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
                         0.,0.,0.,0.,0.,0.,0.,0.,0.,0.};
 
-    G4cout << endl ;
+    G4cout << G4endl ;
     G4cout << "test of PostStepDoIt (scattering+lateral displacement) comes" ;
-    G4cout << endl ;
-    G4cout << "type a positive number if you want it" << endl;
-    cin >> icont ;
+    G4cout << G4endl ;
+    G4cout << "type a positive number if you want it" << G4endl;
+    G4cin >> icont ;
     if ( icont<=0) goto TIMING ;
 
-    outFile << endl ;
-    outFile << "  " << MaterialName << "  PostStepDoIt (scattering) test " << endl ;
-    outFile << "  +++++++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    outFile << endl ;
+    outFile << G4endl ;
+    outFile << "  " << MaterialName << "  PostStepDoIt (scattering) test " << G4endl ;
+    outFile << "  +++++++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    outFile << G4endl ;
 
     G4double wg[100] ;
 
@@ -609,19 +609,19 @@ int main()
 
     G4cout << " give the kinetic energy in MeV: " ;
     G4double TMeV ;
-    cin >> TMeV ;
+    G4cin >> TMeV ;
 
     G4cout << " give the (geom.) Step in mm: " ;
     G4double gstepmm ;
-    cin >> gstepmm ;
+    G4cin >> gstepmm ;
   
     G4cout << " give number of events you want: " ;
     G4int events ;
-    cin >> events ;
+    G4cin >> events ;
 
     G4cout << " give width of the theta bin in degree:" ;
     G4double dthetadeg,dtheta ;
-    cin >> dthetadeg ;  
+    G4cin >> dthetadeg ;  
     dtheta = twopi*dthetadeg/360. ;
 
     fwg=twopi/(4.*180.*180.) ;
@@ -668,22 +668,22 @@ int main()
        later = sqrt(xc*xc+yc*yc+zc*zc) ; 
 
 
-   G4cout << endl ;
+   G4cout << G4endl ;
    G4cout << "kin.energy=" << TMeV << " MeV   " << "geom.Step=" << gstepmm << " mm" ;
-   G4cout << endl ;
-   G4cout << "  lateral displacement=" << later << " mm" << endl ;
-   outFile << "  mean lateral distribution -----------------" << endl ;
-   outFile << endl ;
+   G4cout << G4endl ;
+   G4cout << "  lateral displacement=" << later << " mm" << G4endl ;
+   outFile << "  mean lateral distribution -----------------" << G4endl ;
+   outFile << G4endl ;
    outFile << "kin.energy=" << TMeV << " MeV   " << "geom.Step=" << gstepmm << " mm" ;
-   outFile << endl ;
-   outFile << "  lateral displacement=" << later << " mm" << endl ;
+   outFile << G4endl ;
+   outFile << "  lateral displacement=" << later << " mm" << G4endl ;
 
    
    lambda = theParticleMultipleScattering->GetTransportMeanFreePath();
    G4cout << "true Step length(mm)=" << trueStep ;
-   G4cout << "   lambda(mm)=" << lambda << endl;
+   G4cout << "   lambda(mm)=" << lambda << G4endl;
    outFile << "true Step length(mm)=" << trueStep ;
-   outFile << "   lambda(mm)=" << lambda << endl;
+   outFile << "   lambda(mm)=" << lambda << G4endl;
 
   //  loop on events 
 
@@ -707,21 +707,21 @@ int main()
 
    theTimer.Stop() ;
  
-     G4cout << endl ;
+     G4cout << G4endl ;
      G4cout << "  theta distribution  kin.energy=" << TMeV << " MeV" ;
-     G4cout << "  geom.Step=" << gstepmm << " mm" << endl ;
-     G4cout << " nb of events=" << events << " nb of overflows=" << over << endl;
+     G4cout << "  geom.Step=" << gstepmm << " mm" << G4endl ;
+     G4cout << " nb of events=" << events << " nb of overflows=" << over << G4endl;
      G4cout << " execution time/event=" << theTimer.GetUserElapsed()/events
-          << " sec" << endl;
-     G4cout << endl ;
+          << " sec" << G4endl;
+     G4cout << G4endl ;
 
-     outFile << endl ;
+     outFile << G4endl ;
      outFile << "  theta distribution  kin.energy=" << TMeV << " MeV" ;
-     outFile << "  geom.Step=" << gstepmm << " mm" << endl ;
-     outFile << " nb of events=" << events << " nb of overflows=" << over << endl;
+     outFile << "  geom.Step=" << gstepmm << " mm" << G4endl ;
+     outFile << " nb of events=" << events << " nb of overflows=" << over << G4endl;
      outFile << " execution time/event=" << theTimer.GetUserElapsed()/events 
-             << " sec" << endl;
-     outFile << endl ;
+             << " sec" << G4endl;
+     outFile << G4endl ;
 
      theta1e=distr[0]/exp(1.) ;
      i1e=-1 ;
@@ -731,50 +731,50 @@ int main()
        theta=ib*dthetadeg ;
        if(distr[ib]>theta1e)
           i1e=ib ;
-       G4cout << " thetalow , distr.: " << theta << "   " << distr[ib] << endl;
-       outFile << " thetalow , distr.: " << theta << "   " << distr[ib] << endl;
+       G4cout << " thetalow , distr.: " << theta << "   " << distr[ib] << G4endl;
+       outFile << " thetalow , distr.: " << theta << "   " << distr[ib] << G4endl;
      }
      if(i1e>-1)
      {
        th1=i1e*dthetadeg ;
        th2=th1+dthetadeg ;
-       G4cout << endl ;
-       G4cout << "  " << th1 << " < theta(1/e) < " << th2 << endl ;
-       outFile << endl ;
-       outFile << "  " << th1 << " < theta(1/e) < " << th2 << endl ;
+       G4cout << G4endl ;
+       G4cout << "  " << th1 << " < theta(1/e) < " << th2 << G4endl ;
+       outFile << G4endl ;
+       outFile << "  " << th1 << " < theta(1/e) < " << th2 << G4endl ;
        dtheta=dthetadeg*3.1415927/180. ;
        th1=i1e*dtheta ;
        th2=th1+dtheta ;
-       G4cout << "  " << th1 << " < theta(1/e) < " << th2 << endl ;
-       outFile << "  " << th1 << " < theta(1/e) < " << th2 << endl; 
+       G4cout << "  " << th1 << " < theta(1/e) < " << th2 << G4endl ;
+       outFile << "  " << th1 << " < theta(1/e) < " << th2 << G4endl; 
      }
-     G4cout << endl ;
-     outFile << endl ;
+     G4cout << G4endl ;
+     outFile << G4endl ;
             
    goto SCATTERING ;
 
    TIMING: ;
  // timing test ............................................
 
-    G4cout << " timing test follows .............." << endl ;
-    G4cout << endl ;
-    G4cout << "type a positive number if you want it" << endl;
-    cin >> icont ;
+    G4cout << " timing test follows .............." << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "type a positive number if you want it" << G4endl;
+    G4cin >> icont ;
     if ( icont<=0) goto NEXTMATERIAL ;
 
-    outFile << endl ;
-    outFile << "  " << MaterialName << "  TIMING test  " << endl ;
-    outFile << "  +++++++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    outFile << endl ;
+    outFile << G4endl ;
+    outFile << "  " << MaterialName << "  TIMING test  " << G4endl ;
+    outFile << "  +++++++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    outFile << G4endl ;
 
     G4cout << " give the kinetic energy in MeV: " ;
-    cin >> TMeV ;
+    G4cin >> TMeV ;
 
     G4cout << " give the (geom.) Step in mm: " ;
-    cin >> gstepmm ;
+    G4cin >> gstepmm ;
   
     G4cout << " give number of events you want: " ;
-    cin >> events ;
+    G4cin >> events ;
 
    theTimer.Start() ;
 
@@ -820,27 +820,27 @@ int main()
  
    theTimer.Stop() ;
 
-     G4cout << endl ;
+     G4cout << G4endl ;
      G4cout << "  timing  test  kin.energy=" << TMeV << " MeV" ;
-     G4cout << "  geom.Step=" << gstepmm << " mm" << endl ;
-     G4cout << " nb of events=" << events <<  endl;
+     G4cout << "  geom.Step=" << gstepmm << " mm" << G4endl ;
+     G4cout << " nb of events=" << events <<  G4endl;
      G4cout << " execution time=/event" << theTimer.GetUserElapsed()/events
-          << " sec" << endl;
-     G4cout << endl ;
+          << " sec" << G4endl;
+     G4cout << G4endl ;
 
-     outFile << endl ;
+     outFile << G4endl ;
      outFile << "  timing test  kin.energy=" << TMeV << " MeV" ;
-     outFile << "  geom.Step=" << gstepmm << " mm" << endl ;
-     outFile << " nb of events=" << events <<  endl;
-     outFile << endl ;
-     outFile << " AlongStepGetPhysicalInteractionLength " << endl ;
-     outFile << " AlongStepDoIt " << endl ;
-     outFile << " PostStepGetPhysicalInteractionLength " << endl ;
-     outFile << " PostStepDoIt have been called for every events! " << endl ;
-     outFile << endl ;
+     outFile << "  geom.Step=" << gstepmm << " mm" << G4endl ;
+     outFile << " nb of events=" << events <<  G4endl;
+     outFile << G4endl ;
+     outFile << " AlongStepGetPhysicalInteractionLength " << G4endl ;
+     outFile << " AlongStepDoIt " << G4endl ;
+     outFile << " PostStepGetPhysicalInteractionLength " << G4endl ;
+     outFile << " PostStepDoIt have been called for every events! " << G4endl ;
+     outFile << G4endl ;
      outFile << " execution time/event=" << theTimer.GetUserElapsed()/events
-             << " sec" << endl;
-     outFile << endl ;
+             << " sec" << G4endl;
+     outFile << G4endl ;
 
   
    goto TIMING ;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3PartTable.cc,v 1.7 1999-12-05 17:50:10 gcosmo Exp $
+// $Id: G3PartTable.cc,v 1.8 1999-12-15 14:49:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -13,7 +13,7 @@
 #include "g4std/iomanip"
 #include "G3PartTable.hh"
 
-typedef G4std::map<G4String, G4ParticleDefinition*, less<G4String> >
+typedef G4std::map<G4String, G4ParticleDefinition*, G4std::less<G4String> >
 ::iterator PTDiterator;
 
 G3PartTable::G3PartTable(){
@@ -21,7 +21,7 @@ G3PartTable::G3PartTable(){
 
 G3PartTable::~G3PartTable(){
   if (PTD.size()>0){
-    //    G4cout << "Deleting PTD" << endl;
+    //    G4cout << "Deleting PTD" << G4endl;
     for (PTDiterator i=PTD.begin(); i != PTD.end(); i++) {
       delete (*i).second;
     }
@@ -47,8 +47,8 @@ G3PartTable::Put(G4int partid, G4ParticleDefinition *partpt){
 void
 G3PartTable::HashID(G4int partid, G4String& theHashID){
   char s[20];
-  ostrstream ostr(s, sizeof s);
-  ostr << "Part" << partid << ends;
+  G4std::ostrstream ostr(s, sizeof s);
+  ostr << "Part" << partid << G4std::ends;
   theHashID = s;
 };
 
@@ -61,12 +61,12 @@ void
 G3PartTable::PrintAll(){
   if (PTD.size()>0){
     G4int count=0;
-    G4cout << "Dump of PTD - " << PTD.size() << " entries: " << endl;
+    G4cout << "Dump of PTD - " << PTD.size() << " entries: " << G4endl;
     for (PTDiterator i=PTD.begin(); i != PTD.end(); i++) {
       count++;
       G4ParticleDefinition* aPTD = (*i).second;
-      G4cout << "PTD entry " << setw(3) << count << " particle name: " 
-	     << aPTD->GetParticleName() << endl;
+      G4cout << "PTD entry " << G4std::setw(3) << count << " particle name: " 
+	     << aPTD->GetParticleName() << G4endl;
     }
   }
 }

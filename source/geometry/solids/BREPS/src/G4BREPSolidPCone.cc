@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.12 1999-05-24 13:51:56 magni Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.13 1999-12-15 14:50:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -98,7 +98,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(G4String name,
       {
         G4cerr << "Error in construction of G4BREPSolidPCone "
                << "Exactly the same z, rmin and rmax given for "
-               << "consecutive indices, " << a << " and " << a+1 << endl;
+               << "consecutive indices, " << a << " and " << a+1 << G4endl;
         continue; 
       }
 
@@ -485,7 +485,7 @@ G4ThreeVector G4BREPSolidPCone::SurfaceNormal(const G4ThreeVector& Pt) const
 
     return n;
   } else {
-    cout << "Warning ... PCone not able to return normal .. " << endl;
+    cout << "Warning ... PCone not able to return normal .. " << G4endl;
     return ( G4ThreeVector(1,0,0));
   }
 }

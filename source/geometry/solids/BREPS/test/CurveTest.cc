@@ -47,7 +47,7 @@ int main()
   l.Init(G4Point3D(2, 3, 4), G4Vector3D(-1, -1, -1));
 
   l.SetBounds(-10, +10);
-  G4cout << "G4Line " << l.GetPnt() << " " << l.GetDir() << endl; 
+  G4cout << "G4Line " << l.GetPnt() << " " << l.GetDir() << G4endl; 
   TestCurve(&l);  
 
 
@@ -60,11 +60,11 @@ int main()
   c.Init(p, 5);
 
   c.SetBounds(0, 0);
-  G4cout << "G4CircularCurve with radius=" << c.GetRadius() << endl;
+  G4cout << "G4CircularCurve with radius=" << c.GetRadius() << G4endl;
   TestCurve(&c);
   
   c.SetBounds(pi/4, 3*pi/4);
-  G4cout << "G4CircularCurve again" << endl;
+  G4cout << "G4CircularCurve again" << G4endl;
   TestCurve(&c);
   
   
@@ -78,15 +78,15 @@ int main()
 
   e.SetBounds(0, 0);
   G4cout << "G4Ellipse " << e.GetSemiAxis1()
-	 << " " << e.GetSemiAxis2() << endl;
+	 << " " << e.GetSemiAxis2() << G4endl;
   TestCurve(&e);
  
   e.SetBounds(100, 100+8*pi);
-  G4cout << "G4Ellipse again" << endl;
+  G4cout << "G4Ellipse again" << G4endl;
   TestCurve(&e);
   
   e.SetBounds(3.21, 4.1);
-  G4cout << "G4Ellipse again" << endl;
+  G4cout << "G4Ellipse again" << G4endl;
   TestCurve(&e);    
 
 
@@ -99,15 +99,15 @@ int main()
   par.Init(p, 6);
 
   par.SetBounds(-100, 100);
-  G4cout << "G4Parabola " << par.GetFocalDist() << endl;
+  G4cout << "G4Parabola " << par.GetFocalDist() << G4endl;
   TestCurve(&par);
   
   par.SetBounds(-1, 10);
-  G4cout << "G4Parabola again" << endl;
+  G4cout << "G4Parabola again" << G4endl;
   TestCurve(&par);
   
   par.SetBounds(-6.2, -5.1);
-  G4cout << "G4Parabola again" << endl;
+  G4cout << "G4Parabola again" << G4endl;
   TestCurve(&par);
   
 
@@ -121,15 +121,15 @@ int main()
 
   h.SetBounds(-2, 2);
   G4cout << "G4Hyperbola " << h.GetSemiAxis()
-	 << " " << h.GetSemiImagAxis() << endl;
+	 << " " << h.GetSemiImagAxis() << G4endl;
   TestCurve(&h);
   
   h.SetBounds(1, 2);
-  G4cout << "G4Hyperbola again" << endl;
+  G4cout << "G4Hyperbola again" << G4endl;
   TestCurve(&h);
 
   h.SetBounds(-1, 0);
-  G4cout << "G4Hyperbola again" << endl;
+  G4cout << "G4Hyperbola again" << G4endl;
   TestCurve(&h);
 
 

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyDetectorMessenger.hh,v 1.1 1999-01-07 16:05:00 gunter Exp $
+// $Id: MyDetectorMessenger.hh,v 1.2 1999-12-15 14:48:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -16,11 +16,7 @@
 #include "G4UImessenger.hh"
 
 #include "G4ios.hh"
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 class G4UIcommand;
 class MyDetectorConstruction;

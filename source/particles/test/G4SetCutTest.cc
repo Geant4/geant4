@@ -1,18 +1,18 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SetCutTest.cc,v 1.1 1999-01-08 16:32:12 gunter Exp $
+// $Id: G4SetCutTest.cc,v 1.2 1999-12-15 14:51:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ---------------------------------------------------------------
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 #include "G4Timer.hh"
 #include "G4Element.hh"
 #include "G4Material.hh"
@@ -31,12 +31,12 @@
 int main()
 {
   //-------- set output format -------
-    G4cout.setf( ios::scientific, ios::floatfield );
-    G4cout << setprecision(4) << endl;
+    G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
+    G4cout << G4std::setprecision(4) << G4endl;
   //--- write results to the file setcut.out -----
-    ofstream outFile("setcut.out", ios::out );
-    outFile.setf( ios:: scientific, ios::floatfield );
-    outFile << setprecision(4) << endl;
+    G4std::ofstream outFile("setcut.out", G4std::ios::out );
+    outFile.setf( G4std::ios:: scientific, G4std::ios::floatfield );
+    outFile << G4std::setprecision(4) << G4endl;
 
   //--------- Material definition ---------
 
@@ -106,9 +106,9 @@ int main()
                   1.e4,2.e4,5.e4,1.e5,2.e5,5.e5,1.e6 };
 
 // ***************************************************************
-  outFile << "SetCutTest results for mu+,mu-,e+,e-,gamma" << endl;
-  outFile << "==========================================" << endl;
-  outFile << endl;
+  outFile << "SetCutTest results for mu+,mu-,e+,e-,gamma" << G4endl;
+  outFile << "==========================================" << G4endl;
+  outFile << G4endl;
   for (G4int irang=0 ; irang<nrang; irang++)
   {
     range=rgs[irang];
@@ -120,22 +120,22 @@ int main()
     theGamma->SetCuts(range);
     theTimer.Stop();
     G4cout << "     range/absorption length cut in mm = "
-         << range << endl;
-    outFile << endl;
-    outFile << endl;
+         << range << G4endl;
+    outFile << G4endl;
+    outFile << G4endl;
     outFile << "          range/absorption length cut in mm = "
-         << range << endl;
-    outFile << endl;
+         << range << G4endl;
+    outFile << G4endl;
     outFile << "          ";
-    outFile << "time(SetCut)=" << theTimer.GetUserElapsed() << endl;
-    outFile << endl;
-    outFile << "            cuts in kinetic energy (MeV)" << endl;
+    outFile << "time(SetCut)=" << theTimer.GetUserElapsed() << G4endl;
+    outFile << G4endl;
+    outFile << "            cuts in kinetic energy (MeV)" << G4endl;
 
-    outFile << endl;
+    outFile << G4endl;
     outFile << " material     mu+         mu-         e+          e-        gamma "
-            << endl;
+            << G4endl;
     outFile << "----------------------------------------------------------------------------"
-            << endl;
+            << G4endl;
     MuP = (*theMuonPlus).GetCutsInEnergy(); 
     MuM = (*theMuonMinus).GetCutsInEnergy(); 
     Po = (*thePositron).GetCutsInEnergy(); 
@@ -151,10 +151,10 @@ int main()
               << MuM[icut] << "  "
               << Po[icut] << "  "
               << El[icut] << "  "
-              << Ga[icut] << endl;
+              << Ga[icut] << G4endl;
     }
     outFile << "----------------------------------------------------------------------------"
-            << endl;
+            << G4endl;
   }
 
   return EXIT_SUCCESS;

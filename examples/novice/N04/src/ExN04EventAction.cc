@@ -45,7 +45,7 @@ void ExN04EventAction::BeginOfEventAction(const G4Event*)
 
 void ExN04EventAction::EndOfEventAction(const G4Event* evt)
 {
-  G4cout << ">>> Event " << evt->GetEventID() << endl;
+  G4cout << ">>> Event " << evt->GetEventID() << G4endl;
 
   if(trackerCollID<0||calorimeterCollID<0||muonCollID<0) return;
 
@@ -64,24 +64,24 @@ void ExN04EventAction::EndOfEventAction(const G4Event* evt)
   {
     int n_hit = THC->entries();
     G4cout << "     " << n_hit
-         << " hits are stored in ExN04TrackerHitsCollection." << endl;
+         << " hits are stored in ExN04TrackerHitsCollection." << G4endl;
   }
   if(CHC)
   {
     int n_hit = CHC->entries();
     G4cout << "     " << n_hit
-         << " hits are stored in ExN04CalorimeterHitsCollection." << endl;
+         << " hits are stored in ExN04CalorimeterHitsCollection." << G4endl;
     G4double totE = 0;
     for(int i=0;i<n_hit;i++)
     { totE += (*CHC)[i]->GetEdep(); }
     G4cout << "     Total energy deposition in calorimeter : "
-         << totE / GeV << " (GeV)" << endl;
+         << totE / GeV << " (GeV)" << G4endl;
   }
   if(MHC)
   {
     int n_hit = MHC->entries();
     G4cout << "     " << n_hit
-         << " hits are stored in ExN04MuonHitsCollection." << endl;
+         << " hits are stored in ExN04MuonHitsCollection." << G4endl;
   }
 
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();

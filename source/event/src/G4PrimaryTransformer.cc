@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryTransformer.cc,v 1.1 1999-01-07 16:06:39 gunter Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.2 1999-12-15 14:49:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,7 +52,7 @@ void G4PrimaryTransformer::GenerateTracks(G4PrimaryVertex* primaryVertex)
            << X0 / mm << "(mm),"
            << Y0 / mm << "(mm),"
            << Z0 / mm << "(mm),"
-           << T0 / nanosecond << "(nsec))" << endl;
+           << T0 / nanosecond << "(nsec))" << G4endl;
   }
 #endif
 
@@ -76,7 +76,7 @@ void G4PrimaryTransformer::GenerateSingleTrack
     if(verboseLevel>2)
     {
       G4cout << "Primary particle (PDGcode " << primaryParticle->GetPDGcode()
-             << ") --- Ignored" << endl;
+             << ") --- Ignored" << G4endl;
     }
 #endif 
     G4PrimaryParticle* daughter = primaryParticle->GetDaughter();
@@ -96,7 +96,7 @@ void G4PrimaryTransformer::GenerateSingleTrack
     {
       G4cout << "Primary particle (" << partDef->GetParticleName()
              << ") --- Transfered with momentum " << primaryParticle->GetMomentum()
-             << endl;
+             << G4endl;
     }
 #endif
     G4DynamicParticle* DP = 
@@ -135,7 +135,7 @@ void G4PrimaryTransformer::SetDecayProducts
       if(verboseLevel>2)
       {
         G4cout << " >> Decay product (PDGcode " << daughter->GetPDGcode()
-               << ") --- Ignored" << endl;
+               << ") --- Ignored" << G4endl;
       }
 #endif 
       SetDecayProducts(daughter,motherDP);
@@ -147,7 +147,7 @@ void G4PrimaryTransformer::SetDecayProducts
       {
         G4cout << " >> Decay product (" << partDef->GetParticleName()
                << ") --- Attached with momentum " << daughter->GetMomentum()
-               << endl;
+               << G4endl;
       }
 #endif
       G4DynamicParticle*DP 

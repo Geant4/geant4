@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronicInteraction.cc,v 1.1 1999-01-07 16:11:36 gunter Exp $
+// $Id: G4HadronicInteraction.cc,v 1.2 1999-12-15 14:52:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Interaction  base class
@@ -31,9 +31,9 @@
       if( aMaterial == theMinMaterials[i] )return theMinEnergyList[i];
     }
     if( verboseLevel > 0 )
-      G4cout << "*** Warning from HadronicInteraction::GetMinEnergy" << endl
+      G4cout << "*** Warning from HadronicInteraction::GetMinEnergy" << G4endl
            << "    material " << aMaterial->GetName()
-           << " not found in min energy List" << endl;
+           << " not found in min energy List" << G4endl;
     return theMinEnergy;
   }
  
@@ -43,9 +43,9 @@
    G4Element *anElement )
   {
     if( IsBlocked(anElement) )
-      G4cout << "*** Warning from HadronicInteraction::SetMinEnergy" << endl
+      G4cout << "*** Warning from HadronicInteraction::SetMinEnergy" << G4endl
            << "    The model is not active for the Element  "
-           << anElement->GetName() << "." << endl;
+           << anElement->GetName() << "." << G4endl;
     
     for( G4int i=0; i<theMinCounterElements; ++i )
     {
@@ -67,9 +67,9 @@
    G4Material *aMaterial )
   {
     if( IsBlocked(aMaterial) )
-      G4cout << "*** Warning from HadronicInteraction::SetMinEnergy" << endl
+      G4cout << "*** Warning from HadronicInteraction::SetMinEnergy" << G4endl
            << "    The model is not active for the Material "
-           << aMaterial->GetName() << "." << endl;
+           << aMaterial->GetName() << "." << G4endl;
     
     for( G4int i=0; i<theMinCounter; ++i )
     {
@@ -101,9 +101,9 @@
       if( aMaterial == theMaxMaterials[i] )return theMaxEnergyList[i];
     }
     if( verboseLevel > 0 )
-      G4cout << "*** Warning from HadronicInteraction::GetMaxEnergy" << endl
+      G4cout << "*** Warning from HadronicInteraction::GetMaxEnergy" << G4endl
            << "    material " << aMaterial->GetName()
-           << " not found in min energy List" << endl;
+           << " not found in min energy List" << G4endl;
     
     return theMaxEnergy;
   }
@@ -114,9 +114,9 @@
    G4Element *anElement ) 
   {
     if( IsBlocked(anElement) )
-      G4cout << "*** Warning from HadronicInteraction::SetMaxEnergy" << endl
+      G4cout << "*** Warning from HadronicInteraction::SetMaxEnergy" << G4endl
            << "Warning: The model is not active for the Element  "
-           << anElement->GetName() << "." << endl;
+           << anElement->GetName() << "." << G4endl;
     
     for( G4int i=0; i<theMaxCounterElements; ++i )
     {
@@ -138,9 +138,9 @@
    G4Material *aMaterial )
   {
     if( IsBlocked(aMaterial) ) 
-      G4cout << "*** Warning from HadronicInteraction::SetMaxEnergy" << endl
+      G4cout << "*** Warning from HadronicInteraction::SetMaxEnergy" << G4endl
            << "Warning: The model is not active for the Material "
-           << aMaterial->GetName() << "." << endl;
+           << aMaterial->GetName() << "." << G4endl;
     
     for( G4int i=0; i<theMaxCounter; ++i )
     {

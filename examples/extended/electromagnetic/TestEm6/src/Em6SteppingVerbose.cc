@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em6SteppingVerbose.cc,v 1.1 1999-11-10 17:58:51 maire Exp $
+// $Id: Em6SteppingVerbose.cc,v 1.2 1999-12-15 14:49:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,43 +50,43 @@ void Em6SteppingVerbose::StepInfo()
   if( verboseLevel >= 1 ){
     if( verboseLevel >= 4 ) VerboseTrack();
     if( verboseLevel >= 3 ){
-      G4cout << endl;    
-      G4cout << setw( 5) << "#Step#"     << " "
-	     << setw( 6) << "X"          << "    "
-	     << setw( 6) << "Y"          << "    "  
-	     << setw( 6) << "Z"          << "    "
-	     << setw( 9) << "KineE"      << " "
-	     << setw( 9) << "dEStep"     << " "  
-	     << setw(10) << "StepLeng"     
-	     << setw(10) << "TrakLeng" 
-	     << setw(10) << "NextVolu" 
-	     << setw(10) << "Process"   << endl;	          
+      G4cout << G4endl;    
+      G4cout << G4std::setw( 5) << "#Step#"     << " "
+	     << G4std::setw( 6) << "X"          << "    "
+	     << G4std::setw( 6) << "Y"          << "    "  
+	     << G4std::setw( 6) << "Z"          << "    "
+	     << G4std::setw( 9) << "KineE"      << " "
+	     << G4std::setw( 9) << "dEStep"     << " "  
+	     << G4std::setw(10) << "StepLeng"     
+	     << G4std::setw(10) << "TrakLeng" 
+	     << G4std::setw(10) << "NextVolu" 
+	     << G4std::setw(10) << "Process"   << G4endl;	          
     }
 
-    G4cout << setw( 5) << fTrack->GetCurrentStepNumber() << " "
-	   << setw( 6) << G4BestUnit(fTrack->GetPosition().x(),"Length")
-	   << setw( 6) << G4BestUnit(fTrack->GetPosition().y(),"Length")
-	   << setw( 6) << G4BestUnit(fTrack->GetPosition().z(),"Length")
-	   << setw( 6) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")
-	   << setw( 6) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy")
-	   << setw( 6) << G4BestUnit(fStep->GetStepLength(),"Length")
-	   << setw( 6) << G4BestUnit(fTrack->GetTrackLength(),"Length");
+    G4cout << G4std::setw( 5) << fTrack->GetCurrentStepNumber() << " "
+	   << G4std::setw( 6) << G4BestUnit(fTrack->GetPosition().x(),"Length")
+	   << G4std::setw( 6) << G4BestUnit(fTrack->GetPosition().y(),"Length")
+	   << G4std::setw( 6) << G4BestUnit(fTrack->GetPosition().z(),"Length")
+	   << G4std::setw( 6) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")
+	   << G4std::setw( 6) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy")
+	   << G4std::setw( 6) << G4BestUnit(fStep->GetStepLength(),"Length")
+	   << G4std::setw( 6) << G4BestUnit(fTrack->GetTrackLength(),"Length");
 
     // if( fStepStatus != fWorldBoundary){ 
     if( fTrack->GetNextVolume() != 0 ) { 
-      G4cout << setw(10) << fTrack->GetNextVolume()->GetName();
+      G4cout << G4std::setw(10) << fTrack->GetNextVolume()->GetName();
     } else {
-      G4cout << setw(10) << "OutOfWorld";
+      G4cout << G4std::setw(10) << "OutOfWorld";
     }
 
     if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
-      G4cout << setw(10) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
+      G4cout << G4std::setw(10) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
 	->GetProcessName();
     } else {
       G4cout << "User Limit";
     }
 
-    G4cout << endl;
+    G4cout << G4endl;
 
     if( verboseLevel == 2 ){
       G4int tN2ndariesTot = fN2ndariesAtRestDoIt +
@@ -94,35 +94,35 @@ void Em6SteppingVerbose::StepInfo()
 	                    fN2ndariesPostStepDoIt;
       if(tN2ndariesTot>0){
 	G4cout << "    :----- List of 2ndaries - "
-	       << "#SpawnInStep=" << setw(3) << tN2ndariesTot 
-	       << "(Rest="  << setw(2) << fN2ndariesAtRestDoIt
-	       << ",Along=" << setw(2) << fN2ndariesAlongStepDoIt
-	       << ",Post="  << setw(2) << fN2ndariesPostStepDoIt
+	       << "#SpawnInStep=" << G4std::setw(3) << tN2ndariesTot 
+	       << "(Rest="  << G4std::setw(2) << fN2ndariesAtRestDoIt
+	       << ",Along=" << G4std::setw(2) << fN2ndariesAlongStepDoIt
+	       << ",Post="  << G4std::setw(2) << fN2ndariesPostStepDoIt
 	       << "), "
-	       << "#SpawnTotal=" << setw(3) << (*fSecondary).entries()
+	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).entries()
 	       << " ---------------"
-	       << endl;
+	       << G4endl;
 
 	for(G4int lp1=(*fSecondary).entries()-tN2ndariesTot; 
                         lp1<(*fSecondary).entries(); lp1++){
 	  G4cout << "    : "
-		 << setw(6)
+		 << G4std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length")
-		 << setw(6)
+		 << G4std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().y(),"Length")
-		 << setw(6)
+		 << G4std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().z(),"Length")
-		 << setw(6)
+		 << G4std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(),"Energy")
-		 << setw(10)
+		 << G4std::setw(10)
 		 << (*fSecondary)[lp1]->GetDefinition()->GetParticleName();
-	  G4cout << endl;
+	  G4cout << G4endl;
 	}
               
 	G4cout << "    :-----------------------------"
 	       << "----------------------------------"
 	       << "-- EndOf2ndaries Info ---------------"
-	       << endl;
+	       << G4endl;
       }
     }
     
@@ -139,32 +139,32 @@ void Em6SteppingVerbose::TrackingStarted()
 G4int prec = G4cout.precision(3);
   if( verboseLevel > 0 ){
 
-    G4cout << setw( 5) << "Step#"      << " "
-           << setw( 6) << "X"          << "    "
-	   << setw( 6) << "Y"          << "    "  
-	   << setw( 6) << "Z"          << "    "
-	   << setw( 9) << "KineE"      << " "
-	   << setw( 9) << "dEStep"     << " "  
-	   << setw(10) << "StepLeng"  
-	   << setw(10) << "TrakLeng"
-	   << setw(10) << "NextVolu"
-	   << setw(10) << "Process"    << endl;	     
+    G4cout << G4std::setw( 5) << "Step#"      << " "
+           << G4std::setw( 6) << "X"          << "    "
+	   << G4std::setw( 6) << "Y"          << "    "  
+	   << G4std::setw( 6) << "Z"          << "    "
+	   << G4std::setw( 9) << "KineE"      << " "
+	   << G4std::setw( 9) << "dEStep"     << " "  
+	   << G4std::setw(10) << "StepLeng"  
+	   << G4std::setw(10) << "TrakLeng"
+	   << G4std::setw(10) << "NextVolu"
+	   << G4std::setw(10) << "Process"    << G4endl;	     
 
-    G4cout << setw( 5) << fTrack->GetCurrentStepNumber() << " "
-	   << setw( 6) << G4BestUnit(fTrack->GetPosition().x(),"Length")
-	   << setw( 6) << G4BestUnit(fTrack->GetPosition().y(),"Length")
-	   << setw( 6) << G4BestUnit(fTrack->GetPosition().z(),"Length")
-	   << setw( 6) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")
-	   << setw( 6) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy")
-	   << setw( 6) << G4BestUnit(fStep->GetStepLength(),"Length")
-	   << setw( 6) << G4BestUnit(fTrack->GetTrackLength(),"Length");
+    G4cout << G4std::setw( 5) << fTrack->GetCurrentStepNumber() << " "
+	   << G4std::setw( 6) << G4BestUnit(fTrack->GetPosition().x(),"Length")
+	   << G4std::setw( 6) << G4BestUnit(fTrack->GetPosition().y(),"Length")
+	   << G4std::setw( 6) << G4BestUnit(fTrack->GetPosition().z(),"Length")
+	   << G4std::setw( 6) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")
+	   << G4std::setw( 6) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy")
+	   << G4std::setw( 6) << G4BestUnit(fStep->GetStepLength(),"Length")
+	   << G4std::setw( 6) << G4BestUnit(fTrack->GetTrackLength(),"Length");
 
     if(fTrack->GetNextVolume()){
-      G4cout << setw(10) << fTrack->GetNextVolume()->GetName() << " ";
+      G4cout << G4std::setw(10) << fTrack->GetNextVolume()->GetName() << " ";
     } else {
-      G4cout << setw(10) << "OutOfWorld" << " ";
+      G4cout << G4std::setw(10) << "OutOfWorld" << " ";
     }
-    G4cout << setw(10) << "initStep" << endl;
+    G4cout << G4std::setw(10) << "initStep" << G4endl;
   }
   G4cout.precision(prec);
 }

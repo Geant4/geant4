@@ -1,6 +1,6 @@
 // This code is utilised in the GEANT4 detector simulation toolkit.
 //
-// $Id: STEPfile.cc,v 1.2 1999-05-21 20:20:51 japost Exp $
+// $Id: STEPfile.cc,v 1.3 1999-12-15 14:50:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,7 +36,7 @@
 #include <s_HEADER_SCHEMA.h>
 
 // STEPundefined contains
-// void PushPastString (istream& in, SCLstring &s, ErrorDescriptor *err)
+// void PushPastString (G4std::istream& in, SCLstring &s, ErrorDescriptor *err)
 #include <STEPundefined.h> 
 
 /***************************
@@ -79,21 +79,21 @@ STEPfile::SetFileName (const char* newName)
 /***************************
 function:     ReadHeader
 returns:      Severity
-parameters:   (istream&) The input stream from which the file is read.
+parameters:   (G4std::istream&) The input stream from which the file is read.
 description:
    This function reads in the header section of an exchange file. It
    can read it in either version (N279) or (Part 21, July 1992). It
    parses the header section, popluates the _headerInstances, and
    returns an error descriptor.
    It expects to find the "HEADER;" symbol at the beginning of the
-   istream.
+   G4std::istream.
 side effects: The function  gobbles all characters up to and including the
    next "ENDSEC;" from in. 
    The STEPfile::_headerInstances may change.
 ***************************/
 
 Severity 
-STEPfile::ReadHeader (istream& in) 
+STEPfile::ReadHeader (G4std::istream& in) 
 {
     SCLstring cmtStr;
 
@@ -129,7 +129,7 @@ STEPfile::ReadHeader (istream& in)
 	}
 	  
 	//check for user defined instances
-	//if it is userDefined, the '!' does not get put back on the istream
+	//if it is userDefined, the '!' does not get put back on the G4std::istream
 	in.get(c);
 	if (c == '!') { userDefined = 1; }
 	else          { in.putback(c);   }
@@ -201,12 +201,12 @@ STEPfile::ReadHeader (istream& in)
 			break;			    
 		}
 
-		//read the values from the istream
+		//read the values from the G4std::istream
 		objsev = obj->STEPread(fileid,0,(InstMgr*)0,in);
 		if( !cmtStr.is_null() )
 		    obj->AddP21Comment(cmtStr);
 
-		in >> ws;
+		in >> G4std::ws;
 		c = in.peek(); // check for semicolon or keyword 'ENDSEC'
 		if(c != 'E')
 		    in >> c; // read the semicolon
@@ -594,7 +594,7 @@ STEPfile::EntityWfState(char c)
     //  starts at the data section
 
 int
-STEPfile::ReadData1(istream& in)
+STEPfile::ReadData1(G4std::istream& in)
 {
     int endsec = 0;
     _entsNotCreated = 0;
@@ -650,7 +650,7 @@ STEPfile::ReadData1(istream& in)
 		tmpbuf.set_null();
 		FindStartOfInstance(in,tmpbuf);
 	       G4cout << "ERROR: trying to recover from invalid data. skipping: "
-		     << tmpbuf.chars() << endl;
+		     << tmpbuf.chars() << G4endl;
 		in >> c;
 		ReadTokenSeparator(in);
 	    }
@@ -726,7 +726,7 @@ STEPfile::ReadData1(istream& in)
 #if bzpoibujqoiwejsdlfj
 
 int
-STEPfile::ReadData1(istream& in)
+STEPfile::ReadData1(G4std::istream& in)
 {
     int endsec = 0;
     _entsNotCreated = 0;
@@ -756,7 +756,7 @@ STEPfile::ReadData1(istream& in)
 	}
 	else
 	{
-	    G4cout << "Invalid editing state character: " << c << endl;
+	    G4cout << "Invalid editing state character: " << c << G4endl;
 	    G4cout << "Assigning editing state to be INCOMPLETE\n";
 	    inst_state = incompleteSE;
 	}
@@ -769,7 +769,7 @@ STEPfile::ReadData1(istream& in)
 	tmpbuf.set_null();
 	SkipInstance(in,tmpbuf);
 	G4cout << "ERROR: trying to recover from invalid data. skipping: "
-	     << tmpbuf.chars() << endl;
+	     << tmpbuf.chars() << G4endl;
 	ReadTokenSeparator(in);
     }
 
@@ -833,7 +833,7 @@ STEPfile::ReadData1(istream& in)
 	    }
 	    if( !endsec && (c != ENTITY_NAME_DELIM) )
 	    {
-		G4cout << "Invalid editing state character: " << c << endl;
+		G4cout << "Invalid editing state character: " << c << G4endl;
 		G4cout << "Assigning editing state to be INCOMPLETE\n";
 		ReadTokenSeparator(in);
 		in >> c;		// read the ENTITY_NAME_DELIM
@@ -850,7 +850,7 @@ STEPfile::ReadData1(istream& in)
 		tmpbuf.set_null();
 		SkipInstance(in,tmpbuf);
 	       G4cout << "ERROR: trying to recover from invalid data. skipping: "
-		     << tmpbuf.chars() << endl;
+		     << tmpbuf.chars() << G4endl;
 		ReadTokenSeparator(in);
 	    }
 	    if( c == ENTITY_NAME_DELIM )
@@ -882,7 +882,7 @@ STEPfile::ReadData1(istream& in)
 #endif
 
 int
-STEPfile::ReadWorkingData1 (istream& in)
+STEPfile::ReadWorkingData1 (G4std::istream& in)
 {
     return ReadData1(in);
 
@@ -940,7 +940,7 @@ STEPfile::ReadWorkingData1 (istream& in)
 	      return instance_count;
 	  }
 
-	  in >> ws;
+	  in >> G4std::ws;
 	  in >> c;
 	  if( c != ENTITY_NAME_DELIM)
 	  {
@@ -1028,13 +1028,13 @@ STEPfile::ReadWorkingData1 (istream& in)
 
 /******************************************************************
  ** Procedure:  ReadData2
- ** Parameters:  istream
+ ** Parameters:  G4std::istream
  ** Returns:  number of valid instances read
  ** Description:  reads in the data portion of the instances 
  **               in an exchange file
  ******************************************************************/
 int
-STEPfile::ReadData2 (istream& in)
+STEPfile::ReadData2 (G4std::istream& in)
 {
     _entsInvalid = 0;
     _entsIncomplete = 0;
@@ -1078,7 +1078,7 @@ STEPfile::ReadData2 (istream& in)
 	    // don't need this error msg for the 2nd pass (it was Done on 1st)
 	    else
 	    {
-		G4cout << "Invalid editing state character: " << c << endl;
+		G4cout << "Invalid editing state character: " << c << G4endl;
 		G4cout << "Assigning editing state to be INCOMPLETE\n";
 		inst_state = incompleteSE;
 	    }
@@ -1095,7 +1095,7 @@ STEPfile::ReadData2 (istream& in)
 		tmpbuf.set_null();
 		FindStartOfInstance(in,tmpbuf);
 	       G4cout << "ERROR: trying to recover from invalid data. skipping: "
-		     << tmpbuf.chars() << endl;
+		     << tmpbuf.chars() << G4endl;
 		in >> c;
 		ReadTokenSeparator( in, &cmtStr );
 	    }
@@ -1161,7 +1161,7 @@ STEPfile::ReadData2 (istream& in)
 		"Second pass complete - instance summary:", total_instances, 
 		_entsInvalid, _entsIncomplete, "Warnings", 
 		_entsWarning);
-	G4cout << buf << endl;
+	G4cout << buf << G4endl;
 	_error.AppendToUserMsg(buf);
 	_error.AppendToDetailMsg(buf);
 	_error.GreaterSeverity(SEVERITY_WARNING);
@@ -1176,7 +1176,7 @@ STEPfile::ReadData2 (istream& in)
 
 #if xpqosdblkxfnvkbybbbbb
 int
-STEPfile::ReadData2 (istream& in)
+STEPfile::ReadData2 (G4std::istream& in)
 {
     _entsInvalid = 0;
     _entsIncomplete = 0;
@@ -1210,7 +1210,7 @@ STEPfile::ReadData2 (istream& in)
 	}
 	else if( c != ENTITY_NAME_DELIM )
 	{
-	    G4cout << "Invalid editing state character: " << c << endl;
+	    G4cout << "Invalid editing state character: " << c << G4endl;
 	    G4cout << "Assigning editing state to be INCOMPLETE\n";
 	    ReadTokenSeparator( in, &cmtStr );
 	    in >> c;		// read the ENTITY_NAME_DELIM
@@ -1280,7 +1280,7 @@ STEPfile::ReadData2 (istream& in)
 	    }
 	    else if( c != ENTITY_NAME_DELIM )
 	    {
-		G4cout << "Invalid editing state character: " << c << endl;
+		G4cout << "Invalid editing state character: " << c << G4endl;
 		G4cout << "Assigning editing state to be INCOMPLETE\n";
 		ReadTokenSeparator( in, &cmtStr );
 		in >> c;		// read the ENTITY_NAME_DELIM
@@ -1292,7 +1292,7 @@ STEPfile::ReadData2 (istream& in)
 	    tmpbuf.set_null();
 	    SkipInstance(in,tmpbuf);
 	    G4cout << "ERROR: trying to recover from invalid data. skipping: "
-		 << tmpbuf.chars() << endl;
+		 << tmpbuf.chars() << G4endl;
 	    ReadTokenSeparator(in);
 	}
 
@@ -1305,7 +1305,7 @@ STEPfile::ReadData2 (istream& in)
 		"Reading File 2nd pass instance summary:", total_instances, 
 		_entsInvalid, _entsIncomplete, _entsWarning, 
 		"issued warnings");
-//	G4cout << buf << endl;
+//	G4cout << buf << G4endl;
 	_error.AppendToUserMsg(buf);
 	_error.AppendToDetailMsg(buf);
 	_error.GreaterSeverity(SEVERITY_WARNING);
@@ -1322,7 +1322,7 @@ STEPfile::ReadData2 (istream& in)
 #ifdef junk
 // old version 8/23/94
 int
-STEPfile::ReadData2 (istream& in)
+STEPfile::ReadData2 (G4std::istream& in)
 {
     _errorCount = 0;  // reset error count
     _warningCount = 0;  // reset error count
@@ -1369,7 +1369,7 @@ STEPfile::ReadData2 (istream& in)
 #endif
 
 int
-STEPfile::ReadWorkingData2 (istream& in)
+STEPfile::ReadWorkingData2 (G4std::istream& in)
 {
     return ReadData2 (in);
 #ifdef junk
@@ -1452,7 +1452,7 @@ STEPfile::ReadWorkingData2 (istream& in)
  */
 
 int
-STEPfile::FindDataSection (istream& in)  
+STEPfile::FindDataSection (G4std::istream& in)  
 {
     ErrorDescriptor errs;
     SdaiString tmp;
@@ -1483,7 +1483,7 @@ STEPfile::FindDataSection (istream& in)
 		    if (c == 'A')
 		    {
 			in.get(c);	// read 'A'
-			in >> ws; // may want to skip comments or Print control directives?
+			in >> G4std::ws; // may want to skip comments or Print control directives?
 			c = in.peek();	// look for semicolon
 			if (c == ';')
 			{
@@ -1516,7 +1516,7 @@ STEPfile::FindDataSection (istream& in)
 }
 
 int
-STEPfile::FindHeaderSection (istream& in)  
+STEPfile::FindHeaderSection (G4std::istream& in)  
 {
     char buf[BUFSIZ];
     char *b = buf;
@@ -1545,23 +1545,23 @@ STEPfile::FindHeaderSection (istream& in)
 /***************************
  description:
     This function creates an instance based on the KEYWORD
-    read from the istream.
+    read from the G4std::istream.
     It expects an ENTITY_NAME (int) from the first set of
-    characters on the istream. If the (int) is not found,
+    characters on the G4std::istream. If the (int) is not found,
     ENTITY_NULL is returned.
 
   side effects:
-    The function leaves the istream set to the end of the stream 
+    The function leaves the G4std::istream set to the end of the stream 
     of characters representing the ENTITY_INSTANCE. It attempts to
     recover on errors by reading up to and including the next ';'.
 
 an ENTITY_INSTANCE consists of:
    '#'(int)'=' [SCOPE] SIMPLE_RECORD ';' ||
    '#'(int)'=' [SCOPE] SUBSUPER_RECORD ';'
-The '#' is read from the istream before CreateInstance is called.
+The '#' is read from the G4std::istream before CreateInstance is called.
 ***************************/
 STEPentity *
-STEPfile::CreateInstance(istream& in, ostream &out) 
+STEPfile::CreateInstance(G4std::istream& in, G4std::ostream &out) 
 {
     SCLstring tmpbuf;
     char errbuf[BUFSIZ];
@@ -1582,7 +1582,7 @@ STEPfile::CreateInstance(istream& in, ostream &out)
     {
 	SkipInstance(in, tmpbuf);
 	out <<  "ERROR: instance #" << fileid 
-	    << " already exists.\n\tData lost: " << tmpbuf << endl;
+	    << " already exists.\n\tData lost: " << tmpbuf << G4endl;
 	return ENTITY_NULL;
     }
     
@@ -1593,12 +1593,12 @@ STEPfile::CreateInstance(istream& in, ostream &out)
 	// ERROR: '=' expected
 	SkipInstance(in, tmpbuf);
 	out << "ERROR: instance #" << fileid 
-	    << " \'=\' expected.\n\tData lost: " << tmpbuf << endl;
+	    << " \'=\' expected.\n\tData lost: " << tmpbuf << G4endl;
 	return ENTITY_NULL;
     }
 
     ReadTokenSeparator(in);
-    c = in.peek(); // peek at the next character on the istream
+    c = in.peek(); // peek at the next character on the G4std::istream
 
     //check for optional "&SCOPE" Construct
     if (c == '&')  // TODO check this out
@@ -1607,7 +1607,7 @@ STEPfile::CreateInstance(istream& in, ostream &out)
 	if (s < SEVERITY_WARNING) 
 	    {  return ENTITY_NULL;  }
 	ReadTokenSeparator(in);
-	c = in.peek(); // peek at next char on istream again
+	c = in.peek(); // peek at next char on G4std::istream again
     }
 
     //check for subtype/supertype record
@@ -1642,7 +1642,7 @@ STEPfile::CreateInstance(istream& in, ostream &out)
 	    out << "WARNING: instance #" << fileid 
 		<< " User Defined Entity in DATA section ignored.\n"
 		<< "\tData lost: \'!" << objnm.chars() << "\': " << tmpbuf 
-		<< endl;
+		<< G4endl;
 	    return ENTITY_NULL;
 	}
 	else 
@@ -1677,15 +1677,15 @@ STEPfile::CreateInstance(istream& in, ostream &out)
     instance to the instance manager.
  side-effects:
     It first searches for "&SCOPE" and reads all characters
-    from the istream up to and including "ENDSCOPE"
+    from the G4std::istream up to and including "ENDSCOPE"
  returns: ErrorDescriptor
-    >= SEVERITY_WARNING: the istream was read up to and including the
+    >= SEVERITY_WARNING: the G4std::istream was read up to and including the
                       "ENDSCOPE" and the export List /#1, ... #N/
-    <  SEVERITY_WARNING: the istream was read up to and including the next ";"
+    <  SEVERITY_WARNING: the G4std::istream was read up to and including the next ";"
     < SEVERITY_BUG: fatal
 **************************************************/
 Severity
-STEPfile::CreateScopeInstances(istream& in, STEPentityH ** scopelist)
+STEPfile::CreateScopeInstances(G4std::istream& in, STEPentityH ** scopelist)
 {
     Severity rval = SEVERITY_NULL;
     STEPentity * se;
@@ -1787,7 +1787,7 @@ STEPfile::CreateScopeInstances(istream& in, STEPentityH ** scopelist)
 }
 
 STEPentity *
-STEPfile::CreateSubSuperInstance(istream& in, int fileid)
+STEPfile::CreateSubSuperInstance(G4std::istream& in, int fileid)
 {
     SCLstring tmpstr;
     char errbuf[BUFSIZ];
@@ -1801,7 +1801,7 @@ STEPfile::CreateSubSuperInstance(istream& in, int fileid)
     SCLstring *entNmArr[enaSize]; // array of entity type names
     int enaIndex = 0;
 
-    in >> ws;
+    in >> G4std::ws;
     in.get(c); // read the open paren
     c = in.peek(); // see if you have closed paren (ending the record)
     while(in.good() && (c != ')') && (enaIndex < enaSize) )
@@ -1819,7 +1819,7 @@ STEPfile::CreateSubSuperInstance(istream& in, int fileid)
 	    buf.set_null();
 	    enaIndex++;
 	}
-	in >> ws;
+	in >> G4std::ws;
 	c = in.peek(); // see if you have closed paren (ending the record)
 	  // If someone separates the entities with commas (or some other 
 	  // garbage or a comment) this will keep the read function from 
@@ -1848,13 +1848,13 @@ STEPfile::CreateSubSuperInstance(istream& in, int fileid)
 /**************************************************
  description:
     This function reads the SCOPE List for an entity instance,
-    and reads the values for each instance from the istream.
+    and reads the values for each instance from the G4std::istream.
  side-effects:
     It first searches for "&SCOPE" and reads all characters
-    from the istream up to and including "ENDSCOPE"
+    from the G4std::istream up to and including "ENDSCOPE"
 **************************************************/
 Severity
-STEPfile::ReadScopeInstances (istream& in)
+STEPfile::ReadScopeInstances (G4std::istream& in)
 {
     Severity rval = SEVERITY_NULL;
     STEPentity * se;
@@ -1940,7 +1940,7 @@ STEPfile::ReadScopeInstances (istream& in)
 
 /*
 Severity
-STEPfile::ReadSubSuperInstance (istream& in)
+STEPfile::ReadSubSuperInstance (G4std::istream& in)
 {
   SCLstring tmp;
   SkipInstance(in, tmp);
@@ -1950,7 +1950,7 @@ STEPfile::ReadSubSuperInstance (istream& in)
     
 #ifdef junk
 void
-ReadEntityError(char c, int i, istream& in)
+ReadEntityError(char c, int i, G4std::istream& in)
 {
     char errStr[BUFSIZ];
     errStr[0] = '\0';
@@ -1999,7 +1999,7 @@ ReadEntityError(char c, int i, istream& in)
 	}
 	if(in.good() && (c == ')') )
 	{
-	    in >> ws; // skip whitespace
+	    in >> G4std::ws; // skip whitespace
 	    in.get(c);
 	    tmp.Append(c);
 //	    G4cerr << c;
@@ -2020,14 +2020,14 @@ ReadEntityError(char c, int i, istream& in)
 /*****************************************************
  description:
  This function populates a STEPentity with the values read from 
- the istream.
+ the G4std::istream.
 
  This function must keeps track of error messages encountered when
  reading the STEPentity. It passes STEPentity error information onto
  the STEPfile ErrorDescriptor.
 *****************************************************/
 STEPentity *
-STEPfile::ReadInstance(istream& in, ostream& out, SCLstring &cmtStr)
+STEPfile::ReadInstance(G4std::istream& in, G4std::ostream& out, SCLstring &cmtStr)
 {
     Severity sev = SEVERITY_NULL;
 
@@ -2052,7 +2052,7 @@ STEPfile::ReadInstance(istream& in, ostream& out, SCLstring &cmtStr)
     {
 	SkipInstance(in, tmpbuf);
 	out << "\nERROR: in 2nd pass, instance #" << fileid 
-	    << " not found.\n\tData lost: " << tmpbuf << endl;
+	    << " not found.\n\tData lost: " << tmpbuf << G4endl;
 	return ENTITY_NULL;
     }
     else if ((_fileType != WORKING_SESSION) && (node->CurrState() != newSE))
@@ -2060,7 +2060,7 @@ STEPfile::ReadInstance(istream& in, ostream& out, SCLstring &cmtStr)
 	SkipInstance(in, tmpbuf);
 	out << "\nERROR: in 2nd pass, instance #" << fileid 
 	    << " already exists - ignoring duplicate.\n\tData lost: " 
-	    << tmpbuf << endl;
+	    << tmpbuf << G4endl;
 	return ENTITY_NULL;
     }
 
@@ -2072,13 +2072,13 @@ STEPfile::ReadInstance(istream& in, ostream& out, SCLstring &cmtStr)
 	//ERROR: '=' expected
 	SkipInstance(in, tmpbuf);
 	out << "ERROR: instance #" << fileid 
-	    << " \'=\' expected.\n\tData lost: " << tmpbuf << endl;
+	    << " \'=\' expected.\n\tData lost: " << tmpbuf << G4endl;
 	return ENTITY_NULL;
     }
 
     ReadTokenSeparator(in, &cmtStr);
 
-    //peek at the next character on the istream
+    //peek at the next character on the G4std::istream
     c = in.peek();
 
     //check for optional "&SCOPE" Construct
@@ -2265,7 +2265,7 @@ STEPfile::MakeBackupFile()
 /***************************
 ***************************/
 Severity
-STEPfile::WriteExchangeFile(ostream& out, int validate) 
+STEPfile::WriteExchangeFile(G4std::ostream& out, int validate) 
 {
     Severity rval = SEVERITY_NULL;
     SetFileType(VERSION_CURRENT);
@@ -2307,7 +2307,7 @@ STEPfile::WriteExchangeFile(const char* filename, int validate)
 	  }
     }
     
-    ostream* out =  OpenOutputFile(filename);
+    G4std::ostream* out =  OpenOutputFile(filename);
     if (_error.severity() < SEVERITY_WARNING) return _error.severity();
     rval = WriteExchangeFile(*out, 0);
     CloseOutputFile(out);
@@ -2389,7 +2389,7 @@ STEPfile::HeaderIdOld (const char* name)
 /***************************
 ***************************/
 void
-STEPfile::WriteHeader(ostream& out) 
+STEPfile::WriteHeader(G4std::ostream& out) 
 {
     out << "HEADER;\n";
 
@@ -2414,7 +2414,7 @@ STEPfile::WriteHeader(ostream& out)
 /***************************
 ***************************/
 void
-STEPfile::WriteHeaderInstance(STEPentity* obj, ostream& out)
+STEPfile::WriteHeaderInstance(STEPentity* obj, G4std::ostream& out)
 {
     SCLstring tmp;
     if(obj->P21CommentRep())
@@ -2432,7 +2432,7 @@ STEPfile::WriteHeaderInstance(STEPentity* obj, ostream& out)
 /***************************
 ***************************/
 void
-STEPfile::WriteHeaderInstanceFileName (ostream& out)
+STEPfile::WriteHeaderInstanceFileName (G4std::ostream& out)
 {
 // Get the FileName instance from _headerInstances
     STEPentity* se = _headerInstances->GetSTEPentity("File_Name");
@@ -2484,7 +2484,7 @@ STEPfile::WriteHeaderInstanceFileName (ostream& out)
 	  (STEPentity*)fn = _headerInstances->GetSTEPentity(mn);
       }
 
-// Write the values for the FileName instance to the ostream    
+// Write the values for the FileName instance to the G4std::ostream    
 	SCLstring tmp;
     out << StrToUpper (fn->EntityName()) << "(";
 
@@ -2536,7 +2536,7 @@ STEPfile::WriteHeaderInstanceFileName (ostream& out)
 
 
 void
-STEPfile::WriteHeaderInstanceFileDescription (ostream& out) 
+STEPfile::WriteHeaderInstanceFileDescription (G4std::ostream& out) 
 {
 // Get the FileDescription instance from _headerInstances
     STEPentity *se = _headerInstances->GetSTEPentity("File_Description");
@@ -2565,7 +2565,7 @@ STEPfile::WriteHeaderInstanceFileDescription (ostream& out)
       {
 	  (STEPentity*)fd = _headerInstances->GetSTEPentity(mn);
       }
-// Write the values for the FileDescription instance to the ostream    
+// Write the values for the FileDescription instance to the G4std::ostream    
     out << StrToUpper (fd->EntityName()) << "(";
 
     //write description
@@ -2582,7 +2582,7 @@ STEPfile::WriteHeaderInstanceFileDescription (ostream& out)
 }
 
 void
-STEPfile::WriteHeaderInstanceFileSchema (ostream& out) 
+STEPfile::WriteHeaderInstanceFileSchema (G4std::ostream& out) 
 {
 // Get the FileName instance from _headerInstances
     STEPentity *se = _headerInstances->GetSTEPentity("File_Schema");
@@ -2611,7 +2611,7 @@ STEPfile::WriteHeaderInstanceFileSchema (ostream& out)
       {
 	  (STEPentity*)fs = _headerInstances->GetSTEPentity(mn);
       }
-// Write the values for the FileName instance to the ostream    
+// Write the values for the FileName instance to the G4std::ostream    
     out << StrToUpper (fs->EntityName()) << "(";
 
     // write schema_identifiers
@@ -2626,7 +2626,7 @@ STEPfile::WriteHeaderInstanceFileSchema (ostream& out)
 ***************************/
 
 void
-STEPfile::WriteData(ostream& out)
+STEPfile::WriteData(G4std::ostream& out)
 {
     out << "DATA;\n";
 
@@ -2638,7 +2638,7 @@ STEPfile::WriteData(ostream& out)
 }    
 
 Severity 
-STEPfile::AppendFile (istream* in) 
+STEPfile::AppendFile (G4std::istream* in) 
 {
     Severity rval = SEVERITY_NULL;
     char errbuf[BUFSIZ];
@@ -2649,7 +2649,7 @@ STEPfile::AppendFile (istream* in)
     
     ReadTokenSeparator(*in);
     SCLstring keywd = GetKeyword(*in, "; #", _error);
-    // get the delimiter off the istream
+    // get the delimiter off the G4std::istream
     char c;
     in->get(c);
     
@@ -2702,7 +2702,7 @@ STEPfile::AppendFile (istream* in)
 		_errorCount, _warningCount);
 	G4cout << errbuf;
     }
-    else G4cout << endl;
+    else G4cout << G4endl;
     
     if (!FindDataSection (*in))
     {
@@ -2731,7 +2731,7 @@ STEPfile::AppendFile (istream* in)
 
     _errorCount = 0;  // reset the error count so you\'re not counting things twice
 //    delete in; // yikes -- deleted by caller
-    istream * in2;
+    G4std::istream * in2;
     if (! ((in2 = OpenInputFile ()) && (in2 -> good ())) )
       {  //  if the stream is not readable, there's an error
 	  _error.AppendToUserMsg ("Cannot open file for 2nd pass -- No data read.\n");
@@ -2793,7 +2793,7 @@ STEPfile::AppendFile (istream* in)
       {
 	  ReadTokenSeparator(*in2);
 	  keywd = GetKeyword (*in2,";", _error);
-	  //yank the ";" from the istream
+	  //yank the ";" from the G4std::istream
 	  //if (';' == in2->peek()) in2->get();
 	  char c; in2->get(c); if (c == ';') ;
       }
@@ -2816,7 +2816,7 @@ STEPfile::AppendFile (istream* in)
 /***************************
 ***************************/
 Severity
-STEPfile::WriteWorkingFile(ostream& out)
+STEPfile::WriteWorkingFile(G4std::ostream& out)
 {
     SetFileType (WORKING_SESSION);
     _error.ClearErrorMsg();
@@ -2843,7 +2843,7 @@ Severity
 STEPfile::WriteWorkingFile(const char* filename) 
 {
     _error.ClearErrorMsg();
-    ostream* out =  OpenOutputFile(filename);
+    G4std::ostream* out =  OpenOutputFile(filename);
     if (_error.severity() < SEVERITY_WARNING) return _error.severity();
     Severity rval = WriteWorkingFile(*out);
     CloseOutputFile(out);
@@ -2855,7 +2855,7 @@ STEPfile::WriteWorkingFile(const char* filename)
 /***************************
 ***************************/
 void
-STEPfile::WriteWorkingData(ostream& out) 
+STEPfile::WriteWorkingData(G4std::ostream& out) 
 {
     out << "DATA;\n";
 //    STEPentity* se;

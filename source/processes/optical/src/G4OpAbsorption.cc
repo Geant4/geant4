@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpAbsorption.cc,v 1.1 1999-01-07 16:14:01 gunter Exp $
+// $Id: G4OpAbsorption.cc,v 1.2 1999-12-15 14:53:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ G4OpAbsorption::G4OpAbsorption(const G4String& processName)
               : G4VDiscreteProcess(processName)
 {
         if (verboseLevel>0) {
-           G4cout << GetProcessName() << " is created " << endl;
+           G4cout << GetProcessName() << " is created " << G4endl;
         }
 }
 
@@ -80,7 +80,7 @@ G4OpAbsorption::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         aParticleChange.SetStatusChange(fStopAndKill);
 
         if (verboseLevel>0) {
-	   G4cout << "\n** Photon Absorbed! **" << endl;
+	   G4cout << "\n** Photon Absorbed! **" << G4endl;
         }
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
@@ -113,11 +113,11 @@ G4double G4OpAbsorption::GetMeanFreePath(const G4Track& aTrack,
                                          GetProperty (thePhotonMomentum);
            }
            else {
-             G4cout << "No Absorbtion length specified" << endl;
+             G4cout << "No Absorbtion length specified" << G4endl;
            }
         } 
         else {
-           G4cout << "No Absorbtion length specified" << endl;
+           G4cout << "No Absorbtion length specified" << G4endl;
         }	
 
         return AttenuationLength;

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.3 1999-02-07 17:17:10 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.4 1999-12-15 14:54:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,7 +90,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
     << ", size " << size
     << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
     << ", type " << sizeType
-    << endl;
+    << G4endl;
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {
@@ -122,7 +122,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {
     
   default:
     G4cerr << "Unrecognised fill style for G4Circle in G4OpenGLSceneHandler."
-	 << "\nUsing G4VMarker::filled." << endl;
+	 << "\nUsing G4VMarker::filled." << G4endl;
     glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
     break;
     
@@ -181,12 +181,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {
     //      }
     //    }
 
-    //    G4cout << "proj is : \n" << proj << endl;
+    //    G4cout << "proj is : \n" << proj << G4endl;
 
     //    proj.invert(ierr);
 
-    //    G4cout << "ierr is " << ierr << endl;
-    //    G4cout << "proj^-1 is : \n" << proj << endl;
+    //    G4cout << "ierr is " << ierr << G4endl;
+    //    G4cout << "proj^-1 is : \n" << proj << G4endl;
     
     //    for (col = 1; col < 5; col++) {
     //      for (row = 1; row < 5; row++) {
@@ -242,7 +242,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Square& Square) {
     
   default:
     G4cerr << "Unrecognised fill style for G4Square in G4OpenGLSceneHandler."
-	 << "\nUsing G4VMarker::filled." << endl;
+	 << "\nUsing G4VMarker::filled." << G4endl;
     glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
     break;
 
@@ -329,7 +329,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     
     //  case (G4ViewParameters::hlhsr):
     //    cout << "Hidden edge not implememented in G4OpenGL.\n"
-    // << "Using hidden surface removal." << endl;
+    // << "Using hidden surface removal." << G4endl;
     
   case (G4ViewParameters::hsr):
     {
@@ -501,7 +501,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
 
   case (G4ViewParameters::hlhsr):
     //    G4cout << "Hidden line removal not implememented in G4OpenGL.\n"
-    // << "Using hidden surface removal." << endl;
+    // << "Using hidden surface removal." << G4endl;
   case (G4ViewParameters::hsr):
     {
       glEnable (GL_LIGHTING);
@@ -520,7 +520,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
     }
   case (G4ViewParameters::hlr):
     //    G4cout << "Hidden line removal not implememented in G4OpenGL.\n"
-    // << "Using wireframe." << endl;
+    // << "Using wireframe." << G4endl;
   case (G4ViewParameters::wireframe):
   default:
     glDisable (GL_LIGHTING);

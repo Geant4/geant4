@@ -51,7 +51,7 @@ void CollisionTab::perform(double t,bool force) {
 	  }
 	}
 	catch ( char* s) {
-	  cerr << "Could not perform decay: " << s << endl;
+	  G4cerr << "Could not perform decay: " << s << G4endl;
 	}
 	delete Y;
       }
@@ -75,7 +75,7 @@ CollisionTab::Entry CollisionTab::exists(const ParticleBase* in)
 }
 
 void CollisionTab::addEntry(double t,const ParticleBase& in,selection which) {
-  //  cerr << "CollTab: " << in.Name() << endl;
+  //  G4cerr << "CollTab: " << in.Name() << G4endl;
   Entry y = exists(&in);
   Entry x = find(t);
   if ( x<y || y == Root.end() ) {
@@ -154,7 +154,7 @@ CollisionType::CollisionType(const ParticleType& P) : minimalMass(0)
   incoming.insert(incoming.end(),&(ParticleType&)P);
 }
 
-CollisionType::CollisionType(istream& in) : minimalMass(0)
+CollisionType::CollisionType(G4std::istream& in) : minimalMass(0)
 {
   String Name,CollName;
   try {
@@ -181,10 +181,10 @@ CollisionType::CollisionType(istream& in) : minimalMass(0)
   }
 }
 
-void CollisionType::print(ostream& o) const {
-  for (int i=0; i<incoming.size(); i++) { o << i << ". " << *incoming[i] << endl; }
+void CollisionType::print(G4std::ostream& o) const {
+  for (int i=0; i<incoming.size(); i++) { o << i << ". " << *incoming[i] << G4endl; }
   o << "channels: ";
-  for (int j=0; j<channels.size(); j++) { o << j << ". " << *channels[j] << endl; }
+  for (int j=0; j<channels.size(); j++) { o << j << ". " << *channels[j] << G4endl; }
 }
 
 double CollisionType::Crossection(double s) const 
@@ -319,7 +319,7 @@ void CollisionType::perform(const vector<ParticleBase*>& p,selection which,bool 
   if ( p.empty() ) 
     return;
   int valid = MAX_TRIES;
-  cerr << *p[0] << endl;
+  G4cerr << *p[0] << G4endl;
   double sqrt_s = p[0]->Mass();
   decayMode* y;
   do {
@@ -329,19 +329,19 @@ void CollisionType::perform(const vector<ParticleBase*>& p,selection which,bool 
       else 
 	y = &chooseMode(sqrt_s,selection(LOWEST+which),force);
       Vektor3 beta=(-1/p[0]->E())*p[0]->Momentum();
-      cerr << Name() << " --> (" << which << ") ";
+      G4cerr << Name() << " --> (" << which << ") ";
       y->performDecay(p,sqrt_s,beta,p[0]->Coordinates(),force);
       valid = -1;
     }
     catch ( char* s ) {
       if ( valid) {
-	cerr << valid << ". DECAY ERROR: " 
-	     << Name() << ": " << s << endl;
+	G4cerr << valid << ". DECAY ERROR: " 
+	     << Name() << ": " << s << G4endl;
 	--valid;
       }
       else {
-	cerr << "FATAL DECAY ERROR! :";
-	cerr << Name() << ": " << s << endl;
+	G4cerr << "FATAL DECAY ERROR! :";
+	G4cerr << Name() << ": " << s << G4endl;
 	throw;
       }
     }

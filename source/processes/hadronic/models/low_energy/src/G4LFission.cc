@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LFission.cc,v 1.2 1999-05-25 00:36:43 gcosmo Exp $
+// $Id: G4LFission.cc,v 1.3 1999-12-15 14:53:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,7 +59,7 @@ G4LFission::init()
    for (i = 1; i <= 10; i++) {
       spneut[i-1] = spneut[i-1]/spneut[9];
       if (verboseLevel > 1) G4cout << "G4LFission::init: i=" << i << 
-         " spneut=" << spneut[i-1] << endl;
+         " spneut=" << spneut[i-1] << G4endl;
    }
 }
 
@@ -85,22 +85,22 @@ G4LFission::ApplyYourself(const G4Track & aTrack,G4Nucleus & targetNucleus)
    G4double E0 = aParticle->GetDefinition()->GetPDGMass()/MeV;
    G4double Q = aParticle->GetDefinition()->GetPDGCharge();
    if (verboseLevel > 1) {
-      G4cout << "G4LFission:ApplyYourself: incident particle:" << endl;
-      G4cout << "P      " << P << " MeV/c" << endl;
-      G4cout << "Px     " << Px << " MeV/c" << endl;
-      G4cout << "Py     " << Py << " MeV/c" << endl;
-      G4cout << "Pz     " << Pz << " MeV/c" << endl;
-      G4cout << "E      " << E << " MeV" << endl;
-      G4cout << "mass   " << E0 << " MeV" << endl;
-      G4cout << "charge " << Q << endl;
+      G4cout << "G4LFission:ApplyYourself: incident particle:" << G4endl;
+      G4cout << "P      " << P << " MeV/c" << G4endl;
+      G4cout << "Px     " << Px << " MeV/c" << G4endl;
+      G4cout << "Py     " << Py << " MeV/c" << G4endl;
+      G4cout << "Pz     " << Pz << " MeV/c" << G4endl;
+      G4cout << "E      " << E << " MeV" << G4endl;
+      G4cout << "mass   " << E0 << " MeV" << G4endl;
+      G4cout << "charge " << Q << G4endl;
    }
 // GHEISHA ADD operation to get total energy, mass, charge:
    if (verboseLevel > 1) {
-      G4cout << "G4LFission:ApplyYourself: material:" << endl;
-      G4cout << "A      " << N << endl;
-      G4cout << "Z      " << Z << endl;
+      G4cout << "G4LFission:ApplyYourself: material:" << G4endl;
+      G4cout << "A      " << N << G4endl;
+      G4cout << "Z      " << Z << G4endl;
       G4cout << "atomic mass " << 
-        Atomas(N, Z) << "MeV" << endl;
+        Atomas(N, Z) << "MeV" << G4endl;
    }
    E = E + Atomas(N, Z);
    G4double E02 = E*E - P*P;
@@ -108,10 +108,10 @@ G4LFission::ApplyYourself(const G4Track & aTrack,G4Nucleus & targetNucleus)
    if (E02 < 0) E0 = -E0;
    Q = Q + Z;
    if (verboseLevel > 1) {
-      G4cout << "G4LFission:ApplyYourself: total:" << endl;
-      G4cout << "E      " << E << " MeV" << endl;
-      G4cout << "mass   " << E0 << " MeV" << endl;
-      G4cout << "charge " << Q << endl;
+      G4cout << "G4LFission:ApplyYourself: total:" << G4endl;
+      G4cout << "E      " << E << " MeV" << G4endl;
+      G4cout << "mass   " << E0 << " MeV" << G4endl;
+      G4cout << "charge " << Q << G4endl;
    }
    Px = -Px;
    Py = -Py;
@@ -184,15 +184,15 @@ G4LFission::ApplyYourself(const G4Track & aTrack,G4Nucleus & targetNucleus)
       G4double cost = -1. + 2.*ran1;
       G4double sint = sqrt(abs(1. - cost*cost));
       G4double phi = ran2*twopi;
-      //      G4cout << ran1 << " " << ran2 << endl;
-      //      G4cout << cost << " " << sint << " " << phi << endl;
+      //      G4cout << ran1 << " " << ran2 << G4endl;
+      //      G4cout << cost << " " << sint << " " << phi << G4endl;
       theSecondary = theParticleChange.GetSecondary(i - 1);
       G4double pp = theSecondary->GetDynamicParticle()->GetTotalMomentum()/MeV;
       G4double px = pp*sint*sin(phi);
       G4double py = pp*sint*cos(phi);
       G4double pz = pp*cost;
-      //      G4cout << pp << endl;
-      //      G4cout << px << " " << py << " " << pz << endl;
+      //      G4cout << pp << G4endl;
+      //      G4cout << px << " " << py << " " << pz << G4endl;
       G4double e = theSecondary->GetTotalEnergy()/MeV;
       G4double e0 = theSecondary->GetDefinition()->GetPDGMass()/MeV;
 

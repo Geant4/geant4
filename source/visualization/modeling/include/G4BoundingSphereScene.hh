@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BoundingSphereScene.hh,v 1.5 1999-10-04 15:32:02 johna Exp $
+// $Id: G4BoundingSphereScene.hh,v 1.6 1999-12-15 14:54:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.cc,v 1.2 1999-04-16 09:02:02 grichine Exp $
+// $Id: G4PAIonisation.cc,v 1.3 1999-12-15 14:51:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -75,7 +75,7 @@ G4PAIonisation::G4PAIonisation( const G4String& materialName,
   ComputeSandiaPhotoAbsCof() ;
 
 
-  // G4cout<<"G4PAIonisation constructor is called"<<endl ;
+  // G4cout<<"G4PAIonisation constructor is called"<<G4endl ;
   // BuildPAIonisationTable() ;
 }
 
@@ -287,7 +287,7 @@ G4PAIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 
       G4double tau,tau0,Tmax,gamma,bg2,beta2,rcut,delta,x,sh ;
 
-      // G4cout<<"Material no. = "<<J<<"\t"<<"TotBin = "<<TotBin<<endl ;
+      // G4cout<<"Material no. = "<<J<<"\t"<<"TotBin = "<<TotBin<<G4endl ;
 
       for (G4int i = 0 ; i < TotBin ; i++)  //The loop for the kinetic energy 
       {
@@ -304,7 +304,7 @@ G4PAIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 	       tau = 0.01 ;
 	    }
 	    gamma = tau +1. ;
-	    G4cout<<"gamma = "<<gamma<<endl ;
+	    G4cout<<"gamma = "<<gamma<<G4endl ;
             bg2 = tau*(tau+2.) ;
             beta2 = bg2/(gamma*gamma) ;
             Tmax = 2.*electron_mass_c2*bg2
@@ -319,10 +319,10 @@ G4PAIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 	    
 	    ionloss = protonPAI.GetMeanEnergyLoss() ;   //  total <dE/dx>
 
-	    G4cout<<"ionloss = "<<ionloss*cm/keV<<" keV/cm"<<endl ;
-  G4cout<<"n1 = "<<protonPAI.GetIntegralPAIxSection(1)*cm<<" 1/cm"<<endl ;
+	    G4cout<<"ionloss = "<<ionloss*cm/keV<<" keV/cm"<<G4endl ;
+  G4cout<<"n1 = "<<protonPAI.GetIntegralPAIxSection(1)*cm<<" 1/cm"<<G4endl ;
 	    // G4cout<<"protonPAI.GetSplineSize() = "<<
-            // protonPAI.GetSplineSize()<<endl ;
+            // protonPAI.GetSplineSize()<<G4endl ;
 
             transferVector = new 
                              G4PhysicsFreeVector(protonPAI.GetSplineSize()) ;
@@ -346,8 +346,8 @@ G4PAIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
       }                                        // end of Tkin loop
       theLossTable->insert(aVector);
    }                                           // end of material loop
-   // G4cout<<"G4PAIonisation::BuildPAIonisationTable() have been called"<<endl ;
-   // G4cout<<"G4PAIonisation::BuildLossTable() have been called"<<endl ;
+   // G4cout<<"G4PAIonisation::BuildPAIonisationTable() have been called"<<G4endl ;
+   // G4cout<<"G4PAIonisation::BuildLossTable() have been called"<<G4endl ;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -634,7 +634,7 @@ G4PAIonisation::PostStepDoIt( const G4Track& trackData,
 G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
                                                    const G4Step& stepData    ) 
 {
-  //  G4cout<<"G4PAIonisation::AlongStepDoIt is called"<<endl ;
+  //  G4cout<<"G4PAIonisation::AlongStepDoIt is called"<<G4endl ;
   
   const G4DynamicParticle* aParticle;
   G4Material* aMaterial;
@@ -656,7 +656,7 @@ G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
 
   if( Step == 0. || index != fMatIndex ) return &aParticleChange ; 
  
-  G4cout<<"step = "<<Step/mm<<" mm"<<endl ;
+  G4cout<<"step = "<<Step/mm<<" mm"<<G4endl ;
 
 
 
@@ -730,7 +730,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
   G4int       index = aMaterial->GetIndex() ;
   G4bool isOutRange ;
 
-  // G4cout<<"G4PAIenergyLoss::GetLossWithFluct"<<endl ;
+  // G4cout<<"G4PAIenergyLoss::GetLossWithFluct"<<G4endl ;
 
   G4double loss = 0.0 ;
   G4double transfer, position, E1, E2, W1, W2, W, firstMu, secondMu ;
@@ -751,7 +751,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
   }
   G4int iPlace = iTkin - 1 ; // index*(G4PAIonisation::GetBinNumber()) +
 
-  G4cout<<"iPlace = "<<iPlace<<endl ;
+  G4cout<<"iPlace = "<<iPlace<<G4endl ;
 
   G4PhysicsVector*  firstVector = (*fPAItransferBank)(iPlace)     ;
   G4PhysicsVector* secondVector = (*fPAItransferBank)(iPlace + 1) ;
@@ -760,7 +760,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
   {
     numOfCollisions = RandPoisson::shoot((*(*fPAItransferBank)(iPlace))(0)*Step) ;
 
-      G4cout<<"numOfCollisions = "<<numOfCollisions<<endl ;
+      G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
     while(numOfCollisions)
     {
@@ -781,7 +781,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
       numOfCollisions = RandPoisson::
                         shoot((*(*fPAItransferBank)(iPlace+1))(0)*Step) ;
 
-      G4cout<<"numOfCollisions = "<<numOfCollisions<<endl ;
+      G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
       while(numOfCollisions)
       {
@@ -804,15 +804,15 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
       W2 = (TkinScaled - E1)*W ;
 
       // G4cout<<"(*(*fPAItransferBank)(iPlace))(0) = "<<
-      //   (*(*fPAItransferBank)(iPlace))(0)<<endl ;
+      //   (*(*fPAItransferBank)(iPlace))(0)<<G4endl ;
       // G4cout<<"(*(*fPAItransferBank)(iPlace+1))(0) = "<<
-      //     (*(*fPAItransferBank)(iPlace+1))(0)<<endl ;
+      //     (*(*fPAItransferBank)(iPlace+1))(0)<<G4endl ;
 
       numOfCollisions = RandPoisson::shoot(
                      ( (*(*fPAItransferBank)(iPlace))(0)*W1 + 
                      (*(*fPAItransferBank)(iPlace+1))(0)*W2 )*Step) ;
 
-      G4cout<<"numOfCollisions = "<<numOfCollisions<<endl ;
+      G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
       while(numOfCollisions)
       {
@@ -835,7 +835,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
       }
     }
   } 
-  G4cout<<"PAI loss = "<<loss/keV<<" keV"<<endl ; 
+  G4cout<<"PAI loss = "<<loss/keV<<" keV"<<G4endl ; 
   return loss ;
 }
 

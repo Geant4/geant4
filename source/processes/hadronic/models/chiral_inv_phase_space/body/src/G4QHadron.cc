@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadron.cc,v 1.1 1999-11-17 11:04:17 hpw Exp $
+// $Id: G4QHadron.cc,v 1.2 1999-12-15 14:52:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -42,17 +42,17 @@ G4QHadron::G4QHadron(G4int PDGcode, G4double maxM) :
 PDGencoding(PDGcode),theMomentum(0.,0.,0.,0.)
 {
 #ifdef debug
-  cout<<"G4QHadron is called with PDG="<<PDGcode<<", maxM="<<maxM<<endl;
+  cout<<"G4QHadron is called with PDG="<<PDGcode<<", maxM="<<maxM<<G4endl;
 #endif
   SetDefinition(G4ParticleTable::GetParticleTable()->FindParticle(PDGcode));
   G4double meanM = theDefinition->GetPDGMass();
   G4double width = theDefinition->GetPDGWidth()/2.;
 #ifdef debug
-  cout<<"G4QHadron: meanM="<<meanM<<", halfWidth="<<width<<endl;
+  cout<<"G4QHadron: meanM="<<meanM<<", halfWidth="<<width<<G4endl;
 #endif
   if(width<=0.)
   {
-	cerr<<"***G4QHadron: width="<<width<<" <= 0, PDG="<<PDGcode<<endl;
+	G4cerr<<"***G4QHadron: width="<<width<<" <= 0, PDG="<<PDGcode<<G4endl;
 	G4Exception("G4QHadron: width of the Hadron <= 0");
   }
   G4int absPDG = abs(PDGcode);
@@ -65,7 +65,7 @@ PDGencoding(PDGcode),theMomentum(0.,0.,0.,0.)
   else if (absPDG==323) minM=628.66; // (K+*)  =>PI0+K+
   else
   {
-	cerr<<"***G4QHadron: unknown Hadron PDG="<<PDGcode<<endl;
+	G4cerr<<"***G4QHadron: unknown Hadron PDG="<<PDGcode<<G4endl;
 	G4Exception("G4QHadron: unknown Hadron");
   }
   //Now calculate the Breit-Wigner distribution with two cuts
@@ -73,7 +73,7 @@ PDGencoding(PDGcode),theMomentum(0.,0.,0.,0.)
   G4double v2=atan((maxM-meanM)/width);
   G4double dv=v2-v1;
 #ifdef debug
-  cout<<"G4QHadron: minM="<<minM<<", vMin="<<v1<<", vMax="<<v2<<", dv="<<dv<<endl;
+  cout<<"G4QHadron: minM="<<minM<<", vMin="<<v1<<", vMax="<<v2<<", dv="<<dv<<G4endl;
 #endif
   G4double theMass  = meanM+width*tan(v1+dv*G4UniformRand());
 
@@ -110,7 +110,7 @@ G4double G4QHadron::CalculateMass(G4double maxM, G4int PDG)
   G4double theMass = theDefinition->GetPDGMass();
   if (theMass>maxM)
   {
-	cerr << "***G4QHadron CalculateMass="<<theMass<<" > maxM="<<maxM << endl;
+	G4cerr << "***G4QHadron CalculateMass="<<theMass<<" > maxM="<<maxM << G4endl;
 	G4Exception("G4QHadron::CalculateMass(): Ask for a Hadron with mass above limit");
   }
   return theMass;
@@ -121,7 +121,7 @@ void G4QHadron::SetDefinition(G4ParticleDefinition* newDef)
   theDefinition=newDef;
   if (theDefinition == NULL)
   {
-	cerr << "***G4QHadron Encoding = " << PDGencoding << endl;
+	G4cerr << "***G4QHadron Encoding = " << PDGencoding << G4endl;
 	G4Exception("G4QHadron::GetDefinition(): Encoding not in particle table");
   }
 }

@@ -15,9 +15,9 @@
     filename = aFile.GetName();
 //    if(filename=="") return false;
 #ifndef WIN32
-    ifstream theChannel(filename);
+    G4std::ifstream theChannel(filename);
 #else
-    ifstream theChannel(filename,ios::in|ios::nocreate);
+    G4std::ifstream theChannel(filename,G4std::ios::in|G4std::ios::nocreate);
 #endif
     
     if(!theChannel) return false;
@@ -31,10 +31,10 @@
     G4int nData;
     theChannel >> nData;
     theChannelData->Init(theChannel, nData, eV, abundance*barn);
-//    G4cout << "Channel Data Statistics: "<<theChannelData->GetVectorLength()<<endl;
-//    G4cout << "Channel data"<<endl;
+//    G4cout << "Channel Data Statistics: "<<theChannelData->GetVectorLength()<<G4endl;
+//    G4cout << "Channel data"<<G4endl;
 //     G4int hpw;
-//     cin >> hpw;
+//     G4cin >> hpw;
 //    theChannelData->Dump();
     return result;
   }
@@ -69,17 +69,17 @@
     theInelasticData = theChannelData;
     theChannelData = NULL;
     
-//    if(theInelasticData!=NULL) G4cout << "Inelastic Data Statistics: "<<theInelasticData->GetVectorLength()<<endl;
-//    if(theElasticData!=NULL) G4cout << "Elastic Data Statistics: "<<theElasticData->GetVectorLength()<<endl;
-//    if(theCaptureData!=NULL) G4cout << "Capture Data Statistics: "<<theCaptureData->GetVectorLength()<<endl;
-//    if(theFissionData!=NULL) G4cout << "Fission Data Statistics: "<<theFissionData->GetVectorLength()<<endl;
-//  G4cout << "Inelastic data"<<endl;
+//    if(theInelasticData!=NULL) G4cout << "Inelastic Data Statistics: "<<theInelasticData->GetVectorLength()<<G4endl;
+//    if(theElasticData!=NULL) G4cout << "Elastic Data Statistics: "<<theElasticData->GetVectorLength()<<G4endl;
+//    if(theCaptureData!=NULL) G4cout << "Capture Data Statistics: "<<theCaptureData->GetVectorLength()<<G4endl;
+//    if(theFissionData!=NULL) G4cout << "Fission Data Statistics: "<<theFissionData->GetVectorLength()<<G4endl;
+//  G4cout << "Inelastic data"<<G4endl;
 //  if(theInelasticData!=NULL) theInelasticData->Dump();
-//  G4cout << "Elastic data"<<endl;
+//  G4cout << "Elastic data"<<G4endl;
 //  if(theElasticData!=NULL) theElasticData->Dump();
-//  G4cout << "Capture data"<<endl;
+//  G4cout << "Capture data"<<G4endl;
 //  if(theCaptureData!=NULL) theCaptureData->Dump();
-//  G4cout << "Fission data"<<endl;
+//  G4cout << "Fission data"<<G4endl;
 //  if(theFissionData!=NULL) theFissionData->Dump();
 
   }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.hh,v 1.4 1999-11-25 15:26:36 johna Exp $
+// $Id: G4VViewer.hh,v 1.5 1999-12-15 14:54:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,7 +28,7 @@ class G4VViewer {
 
 public: // With description
 
-  friend ostream& operator << (ostream& os, const G4VViewer& v);
+  friend G4std::ostream& operator << (G4std::ostream& os, const G4VViewer& v);
 
   G4VViewer (G4VSceneHandler& scene, G4int id, const G4String& name = "");
   virtual ~G4VViewer ();

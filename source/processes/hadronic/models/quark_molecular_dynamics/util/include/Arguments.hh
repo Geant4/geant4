@@ -10,7 +10,7 @@
 #include "Fallible.hh"
 
 class Arguments;
-class ostream;
+class G4std::ostream;
 
 class ArgumentEntryBase
 {
@@ -70,7 +70,7 @@ public:
     char ch;
     public:
       WrongOptionDeclarator(char c) : ch(c) {}
-      void writeMessage(ostream&) const;
+      void writeMessage(G4std::ostream&) const;
   };
 
   class IllegalOption : public Error
@@ -78,7 +78,7 @@ public:
     char* command,* option;
   public:
     IllegalOption(char* c,char* o);
-    void writeMessage(ostream&) const;
+    void writeMessage(G4std::ostream&) const;
   };
 
 private:

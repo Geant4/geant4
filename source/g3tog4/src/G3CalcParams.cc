@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3CalcParams.cc,v 1.2 1999-12-05 17:50:08 gcosmo Exp $ 
+// $Id: G3CalcParams.cc,v 1.3 1999-12-15 14:49:42 gunter Exp $ 
 // GEANT4 tag $Name: not supported by cvs2svn $ 
 //
 // Change: G3CalcParamsFn returns true only in case
@@ -114,7 +114,7 @@ G4bool G3CalcParamsFn(G4double *Rpar, G4int npar, G4double *Rparm,
 	if (Rpar[2] < 0) NegPresent = TRUE;
       }
       if (Rpar[0] < 0) {
-        if (Rparm != 0) Rpar[0] = min(Rparm[0],Rparm[1]) +
+        if (Rparm != 0) Rpar[0] = G4std::min(Rparm[0],Rparm[1]) +
                                   abs(Rparm[0]-Rparm[1])*.5*Rpar[2]/Rparm[3];
 	if (Rpar[0] < 0) NegPresent = TRUE;
       }
@@ -125,12 +125,12 @@ G4bool G3CalcParamsFn(G4double *Rpar, G4int npar, G4double *Rparm,
         if (Rpar[2]<0) NegPresent = TRUE;
       }
       if (Rpar[0] < 0) {
-        if (Rparm != 0) Rpar[0] = min(Rparm[0],Rparm[1]) +
+        if (Rparm != 0) Rpar[0] = G4std::min(Rparm[0],Rparm[1]) +
                                   abs(Rparm[0]-Rparm[1])*.5*Rpar[2]/Rparm[4];
         if (Rpar[0]<0) NegPresent = TRUE;
       }
       if (Rpar[1] < 0) {
-        if (Rparm != 0) Rpar[1] = min(Rparm[2],Rparm[3]) +
+        if (Rparm != 0) Rpar[1] = G4std::min(Rparm[2],Rparm[3]) +
                                   abs(Rparm[2]-Rparm[3])*.5*Rpar[2]/Rparm[4];
         if (Rpar[1]<0) NegPresent = TRUE;
       }
@@ -142,16 +142,16 @@ G4bool G3CalcParamsFn(G4double *Rpar, G4int npar, G4double *Rparm,
       }
       if (Rpar[0] < 0) {
         if (Rparm != 0) {
-          G4double xlo = min(Rparm[4],Rparm[8]) +
+          G4double xlo = G4std::min(Rparm[4],Rparm[8]) +
             abs(Rparm[4]-Rparm[8])*.5*Rpar[2]/Rparm[0];
-          G4double xhi = min(Rparm[5],Rparm[9]) +
+          G4double xhi = G4std::min(Rparm[5],Rparm[9]) +
             abs(Rparm[5]-Rparm[9])*.5*Rpar[2]/Rparm[0];
-          Rpar[0] = min(xlo,xhi);
+          Rpar[0] = G4std::min(xlo,xhi);
         }
         if (Rpar[0] < 0) NegPresent = TRUE;
       }
       if (Rpar[1] < 0) {
-        if (Rparm != 0) Rpar[1] = min(Rparm[3],Rparm[7]) +
+        if (Rparm != 0) Rpar[1] = G4std::min(Rparm[3],Rparm[7]) +
                         abs(Rparm[3]-Rparm[7])*.5*Rpar[2]/Rparm[0];
         if (Rpar[1] < 0) NegPresent = TRUE;
       }

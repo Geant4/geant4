@@ -27,9 +27,9 @@
       return;
     }
 #ifndef WIN32
-    ifstream theData(filename, ios::in);
+    G4std::ifstream theData(filename, G4std::ios::in);
 #else
-    ifstream theData(filename, ios::in|ios::nocreate);
+    G4std::ifstream theData(filename, G4std::ios::in|G4std::ios::nocreate);
 #endif
     // here it comes
     G4int infoType, dataType;
@@ -61,7 +61,7 @@
           if(dataType==1) theEnergyRelease.Init(theData); 
           break;
         default:
-          G4cout << "G4NeutronHPFSFissionFS::Init: unknown data type"<<dataType<<endl;
+          G4cout << "G4NeutronHPFSFissionFS::Init: unknown data type"<<dataType<<G4endl;
           G4Exception("G4NeutronHPFSFissionFS::Init: unknown data type");
           break;
       }

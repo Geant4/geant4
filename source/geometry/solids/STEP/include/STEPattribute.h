@@ -5,7 +5,7 @@
 
 
 //
-// $Id: STEPattribute.h,v 1.2 1999-05-21 20:20:30 japost Exp $
+// $Id: STEPattribute.h,v 1.3 1999-12-15 14:50:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef STEPATTRIBUTE_H
@@ -51,11 +51,7 @@ class TypeDescriptor;
 class AttrDescriptor;
 class EntityDescriptor;
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 #include <ExpDict.h>
 
 #define s_String	char *
@@ -65,12 +61,12 @@ extern int SetErrOnNull(const char *attrValue, ErrorDescriptor *error);
 ////////////////////
 
 extern Severity 
-CheckRemainingInput(istream &in, ErrorDescriptor *err, 
+CheckRemainingInput(G4std::istream &in, ErrorDescriptor *err, 
 		    const char *typeName, // used in error message
 		    const char *tokenList); // e.g. ",)"
 
 extern STEPentity *
-ReadEntityRef(istream &in, ErrorDescriptor *err, char *tokenList, 
+ReadEntityRef(G4std::istream &in, ErrorDescriptor *err, char *tokenList, 
 	      InstMgr * instances, int addFileId);
 
 extern STEPentity *
@@ -99,18 +95,18 @@ extern STEPentity *STEPread_reference (const char * s, ErrorDescriptor *err,
 				       InstMgr * instances, int addFileId);
 ////////////////////
 
-extern int   QuoteInString(istream& in);
+extern int   QuoteInString(G4std::istream& in);
 
 extern void  AppendChar(char c, int& index, char *&s, int& sSize);
 
 extern void 
-PushPastString (istream& in, SCLstring &s, ErrorDescriptor *err);
+PushPastString (G4std::istream& in, SCLstring &s, ErrorDescriptor *err);
 
 extern void 
-PushPastImbedAggr (istream& in, SCLstring &s, ErrorDescriptor *err);
+PushPastImbedAggr (G4std::istream& in, SCLstring &s, ErrorDescriptor *err);
 
 extern void 
-PushPastAggr1Dim(istream& in, SCLstring &s, ErrorDescriptor *err);
+PushPastAggr1Dim(G4std::istream& in, SCLstring &s, ErrorDescriptor *err);
 
 //extern  Severity ValidateEntityType(STEPentity *se, 
 //					const AttrDescriptor *ad, 
@@ -118,7 +114,7 @@ PushPastAggr1Dim(istream& in, SCLstring &s, ErrorDescriptor *err);
 
 class STEPattribute {
 
-    friend ostream &operator<< ( ostream&, STEPattribute& );
+    friend G4std::ostream &operator<< ( G4std::ostream&, STEPattribute& );
     friend class STEPentity;
     
   protected:
@@ -150,7 +146,7 @@ class STEPattribute {
 	} ptr;
 
   protected:
-    char SkipBadAttr(istream& in, char *StopChars);
+    char SkipBadAttr(G4std::istream& in, char *StopChars);
     void AddErrorInfo();
 
   public:
@@ -159,11 +155,11 @@ class STEPattribute {
 
     Severity StrToVal(const char *s, InstMgr *instances =0, 
 		      int addFileId =0);
-    Severity STEPread(istream& in = cin, InstMgr *instances =0, 
+    Severity STEPread(G4std::istream& in = G4cin, InstMgr *instances =0, 
 		      int addFileId =0);
 
     const char * asStr(SCLstring &) const; // return the attr value as a string
-    void STEPwrite(ostream& out = G4cout);
+    void STEPwrite(G4std::ostream& out = G4cout);
 
     BOOLEAN ShallowCopy(STEPattribute *sa);
 

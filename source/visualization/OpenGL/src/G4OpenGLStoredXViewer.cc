@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredXViewer.cc,v 1.2 1999-05-10 14:03:59 johna Exp $
+// $Id: G4OpenGLStoredXViewer.cc,v 1.3 1999-12-15 14:54:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
   if (!vi_stored) {
     fViewId = -1;  // This flags an error.
     G4cerr << "G4OpenGLStoredXViewer::G4OpenGLStoredXViewer -"
-      " G4OpenGLXViewer couldn't get a visual." << endl;
+      " G4OpenGLXViewer couldn't get a visual." << G4endl;
     return;
   }
 

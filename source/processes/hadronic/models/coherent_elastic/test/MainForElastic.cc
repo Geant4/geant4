@@ -52,7 +52,7 @@
                  Pcm = sqrt(Ecm*Ecm-hMassGeV*hMassGeV);
 
 //  G4cout << " Tkin "<<TkinGeV << " Mom " << MomGeV <<
-//            " Pcm " << PcmGeV << endl;
+//            " Pcm " << PcmGeV << G4endl;
 
                for(G4int i2=1; i2<100; i2++)
                   {
@@ -64,13 +64,13 @@
               TetCM = acos(1-Q2/1000/1000/2/Pcm/Pcm)*180/Pi1;
 
 //  G4cout << i1  <<" "<<  MomGeV <<" "  <<  Q2/1000 << " "
-//       << CrossSection*Pcm*Pcm/Pi1 << endl;
+//       << CrossSection*Pcm*Pcm/Pi1 << G4endl;
 
     G4cout <<" Mom "<<MomGeV<<" Ecm "<<Ecm<<" Pcm "<<Pcm<<" Q2 "<<
               Q2/1000/1000 << " Tet " << 
-               TetCM << " Cr.-Sec. "<< CrossSection   << endl;
+               TetCM << " Cr.-Sec. "<< CrossSection   << G4endl;
 
-//   G4cout<< CrossSection<<endl;
+//   G4cout<< CrossSection<<G4endl;
 
                    }  //  i2
                }      //  i1

@@ -7,14 +7,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPContEnergyAngular.hh,v 1.3 1999-07-02 09:58:34 johna Exp $
+// $Id: G4NeutronHPContEnergyAngular.hh,v 1.4 1999-12-15 14:53:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPContEnergyAngular_h
 #define G4NeutronHPContEnergyAngular_h 1
 
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 #include "globals.hh"
 #include "G4VNeutronHPEnergyAngular.hh"
 #include "G4NeutronHPContAngularPar.hh"
@@ -39,7 +39,7 @@ class G4NeutronHPContEnergyAngular : public G4VNeutronHPEnergyAngular
   
   public:
   
-  void Init(ifstream & aDataFile)
+  void Init(G4std::ifstream & aDataFile)
   {
     aDataFile >> theTargetCode >> theAngularRep >> theInterpolation >> nEnergy;
     theAngular = new G4NeutronHPContAngularPar[nEnergy];

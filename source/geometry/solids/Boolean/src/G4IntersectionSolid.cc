@@ -87,8 +87,8 @@ G4IntersectionSolid::CalculateExtent(const EAxis pAxis,
   retA= fPtrSolidA->CalculateExtent( pAxis, pVoxelLimit, pTransform, minA, maxA);
   retB= fPtrSolidB->CalculateExtent( pAxis, pVoxelLimit, pTransform, minB, maxB);
 
-  pMin = max( minA, minB ); 
-  pMax = min( maxA, maxB ); 
+  pMin = G4std::max( minA, minB ); 
+  pMax = G4std::min( maxA, maxB ); 
 
   return retA && retB ; // It exists in this slice only if both exist in it.
 }
@@ -317,7 +317,7 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p) const
     }
     else
     {
-      dist =  min(fPtrSolidA->DistanceToIn(p),
+      dist =  G4std::min(fPtrSolidA->DistanceToIn(p),
                     fPtrSolidB->DistanceToIn(p) ) ; 
     }
   }
@@ -341,7 +341,7 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p,
   }
   G4double distA = fPtrSolidA->DistanceToOut(p,v,calcNorm,validNorm,n) ;
   G4double distB = fPtrSolidB->DistanceToOut(p,v,calcNorm,validNorm,n) ;
-  G4double dist = min(distA,distB) ; 
+  G4double dist = G4std::min(distA,distB) ; 
   return dist ; 
   //  return min(fPtrSolidA->DistanceToOut(p,v,calcNorm,validNorm,n),
   //	     fPtrSolidB->DistanceToOut(p,v,calcNorm,validNorm,n) ) ; 

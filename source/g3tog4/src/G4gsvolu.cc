@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsvolu.cc,v 1.6 1999-12-05 17:50:14 gcosmo Exp $
+// $Id: G4gsvolu.cc,v 1.7 1999-12-15 14:49:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 13.10.99
@@ -58,8 +58,8 @@ void G4gsvolu(G4String vname, G4String shape, G4int nmed, G4double* Rpar,
   /*
   G4cout << "Creating logical volume " << vname << " shape " << shape
   	 << " nmed " << nmed << " #pars "<< npar << " parameters (cm): ";
-  for (int ipar=0; ipar< npar; ipar++) G4cout << setw(8) << Rpar[ipar];
-  G4cout << endl;
+  for (int ipar=0; ipar< npar; ipar++) G4cout << G4std::setw(8) << Rpar[ipar];
+  G4cout << G4endl;
   */
   if (G3Vol.GetVTE(vname)) {
     // abort if VTE with given name exists

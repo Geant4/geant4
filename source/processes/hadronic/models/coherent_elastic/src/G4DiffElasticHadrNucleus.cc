@@ -17,7 +17,7 @@
       G4int    Nucleus      = (int)aNucleus->GetN();
 
         if(Nucleus>42) {
-      G4cout << " This nucleus is rather heavy for this model" << endl;
+      G4cout << " This nucleus is rather heavy for this model" << G4endl;
                        }
 
       G4double  R0    = sqrt(0.99);                 // This is in fermi
@@ -35,7 +35,7 @@
       G4double    R1       = Rnucl*sqrt(MbToB*10);
 
 
-// G4cout<<" Hadr mass (elastic) "<<aHadron->GetMass()<<endl;
+// G4cout<<" Hadr mass (elastic) "<<aHadron->GetMass()<<G4endl;
 
       G4double    R2       = 7.5;
       G4double    Pnucl    = 0.8;
@@ -135,7 +135,7 @@
                                  2.568/4/Pi1;
 //   G4cout<<" R1 "<<R1<<" Tot "<<HadrTot<<" B "<<Bhad<<
 //            " Re/Im "<< HadrReIm<<" E "<<HadrEnergy/1000<<
-//         " Q2 "<<Q2<<" diffSec "<<DiffCrSec2<< "  (elastic)"<<endl;
+//         " Q2 "<<Q2<<" diffSec "<<DiffCrSec2<< "  (elastic)"<<G4endl;
       
              return DiffCrSec2;
           }   // function

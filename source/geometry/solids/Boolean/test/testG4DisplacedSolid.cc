@@ -99,10 +99,10 @@ int main()
     G4ThreeVector pRmaxPlus(50,1,0) ;
    
     dist = passRotT3.DistanceToIn(pRmaxPlus,vmx) ;
-    cout<<"passRotT3.DistanceToIn(pRmaxPlus,vmx) = "<<dist<<endl ;
+    cout<<"passRotT3.DistanceToIn(pRmaxPlus,vmx) = "<<dist<<G4endl ;
 
     dist = actiRotT3.DistanceToIn(pRmaxPlus,vmx) ;
-    cout<<"actiRotT3.DistanceToIn(pRmaxPlus,vmx) = "<<dist<<endl ;
+    cout<<"actiRotT3.DistanceToIn(pRmaxPlus,vmx) = "<<dist<<G4endl ;
 
 // Check Inside
 
@@ -192,7 +192,7 @@ int main()
                                  calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,50)&&ApproxEqual(norm,vmz)&&*pgoodNorm);
 
-//  cout<<"b1.DistanceToOut(ponxside,vy) = "<<dist<<endl;
+//  cout<<"b1.DistanceToOut(ponxside,vy) = "<<dist<<G4endl;
 //  assert(ApproxEqual(dist,0)&&ApproxEqual(*pNorm,vy)&&*pgoodNorm);
 
 
@@ -253,9 +253,9 @@ int main()
 
     assert(actiRotT3.CalculateExtent(kXAxis,limit,origin,min,max));
     G4cout<<"min of actiRotT3.CalculateExtent(kXAxis,limit,origin,min,max) = "
-          <<min<<endl ;
+          <<min<<G4endl ;
     G4cout<<"max of actiRotT3.CalculateExtent(kXAxis,limit,origin,min,max) = "
-          <<max<<endl ;
+          <<max<<G4endl ;
     //  assert(ApproxEqual(min,0)&&ApproxEqual(max,50));
 
     assert(actiRotB1.CalculateExtent(kXAxis,limit,origin,min,max));
@@ -269,9 +269,9 @@ int main()
 
     assert(actiRotT3.CalculateExtent(kXAxis,limit,tPosOnly,min,max));
     G4cout<<"min of actiRotT3.CalculateExtent(kXAxis,limit,tPosOnly,min,max) = "
-          <<min<<endl ;
+          <<min<<G4endl ;
     G4cout<<"max of actiRotT3.CalculateExtent(kXAxis,limit,tPosOnly,min,max) = "
-          <<max<<endl ;
+          <<max<<G4endl ;
     //  assert(ApproxEqual(min,-100)&&ApproxEqual(max,-50));
 
     assert(actiRotB1.CalculateExtent(kXAxis,limit,tPosOnly,min,max));

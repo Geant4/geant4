@@ -17,7 +17,7 @@ class InputReader {
     ~InputReader() {} 
     void setCommentLeader(const String& cl);
     InputReader& operator>>(InputItem& item);
-    friend istream& operator>>(istream& is, InputReader& reader);
+    friend G4std::istream& operator>>(G4std::istream& is, InputReader& reader);
     
     class ErrDuplicateItem 
       : public Error 
@@ -26,7 +26,7 @@ class InputReader {
         ErrDuplicateItem(const String& key);
         ErrDuplicateItem(const ErrDuplicateItem& );
         ~ErrDuplicateItem() {}
-        virtual void writeMessage(ostream& os) const;
+        virtual void writeMessage(G4std::ostream& os) const;
       private:      
         String theKey;
     };
@@ -38,7 +38,7 @@ class InputReader {
         ErrDuplicateInput(const String& key, int count);
         ErrDuplicateInput(const ErrDuplicateInput&);
         ~ErrDuplicateInput() {}
-        virtual void writeMessage(ostream& os) const;
+        virtual void writeMessage(G4std::ostream& os) const;
       private:      
         String theKey;
 	int theCount;
@@ -51,7 +51,7 @@ class InputReader {
         ErrReadFailed(const String& key, int count);
         ErrReadFailed(const ErrReadFailed& err);
         ~ErrReadFailed() {}
-        virtual void writeMessage(ostream& os) const;
+        virtual void writeMessage(G4std::ostream& os) const;
       private:      
         String theKey;
 	int theCount;
@@ -64,7 +64,7 @@ class InputReader {
         ErrNotKnown(const String& key, int count);
         ErrNotKnown(const ErrNotKnown& err);
         ~ErrNotKnown() {}
-        virtual void writeMessage(ostream& os) const;
+        virtual void writeMessage(G4std::ostream& os) const;
       private:      
         String theKey;
 	int theCount;

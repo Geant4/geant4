@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03EventAction.cc,v 1.6 1999-11-12 13:47:15 maire Exp $
+// $Id: ExN03EventAction.cc,v 1.7 1999-12-15 14:49:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@ void ExN03EventAction::BeginOfEventAction(const G4Event* evt)
  G4int evtNb = evt->GetEventID();
  if (evtNb%printModulo == 0)
    { 
-    G4cout << "\n---> Event: " << evtNb << endl;
+    G4cout << "\n---> Event: " << evtNb << G4endl;
     HepRandom::showEngineStatus();
    }
     
@@ -72,7 +72,7 @@ void ExN03EventAction::BeginOfEventAction(const G4Event* evt)
 
 void ExN03EventAction::EndOfEventAction(const G4Event* evt)
 {
-  G4cout << ">>> Event " << evt->GetEventID() << endl;
+  G4cout << ">>> Event " << evt->GetEventID() << G4endl;
   
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   ExN03CalorHitsCollection* CHC = NULL;
@@ -83,7 +83,7 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
    {
     int n_hit = CHC->entries();
     G4cout << "     " << n_hit
-         << " hits are stored in ExN03CalorHitsCollection." << endl;
+         << " hits are stored in ExN03CalorHitsCollection." << G4endl;
     G4double totEAbs=0, totLAbs=0, totEGap=0, totLGap=0;
     for (int i=0;i<n_hit;i++)
       { totEAbs += (*CHC)[i]->GetEdepAbs(); 
@@ -93,12 +93,12 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
         
       }
     G4cout
-       << "   Absorber: total energy: " << setw(7) << G4BestUnit(totEAbs,"Energy")
-       << "       total track length: " << setw(7) << G4BestUnit(totLAbs,"Length")
-       << endl
-       << "        Gap: total energy: " << setw(7) << G4BestUnit(totEGap,"Energy")
-       << "       total track length: " << setw(7) << G4BestUnit(totLGap,"Length")
-       << endl;           
+       << "   Absorber: total energy: " << G4std::setw(7) << G4BestUnit(totEAbs,"Energy")
+       << "       total track length: " << G4std::setw(7) << G4BestUnit(totLAbs,"Length")
+       << G4endl
+       << "        Gap: total energy: " << G4std::setw(7) << G4BestUnit(totEGap,"Energy")
+       << "       total track length: " << G4std::setw(7) << G4BestUnit(totLGap,"Length")
+       << G4endl;           
     }
 
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
@@ -106,7 +106,7 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
   if(trajectoryContainer)
   { n_trajectories = trajectoryContainer->entries(); }
   G4cout << "    " << n_trajectories 
-       << " trajectories stored in this event." << endl;
+       << " trajectories stored in this event." << G4endl;
 
   if(G4VVisManager::GetConcreteInstance())
   {

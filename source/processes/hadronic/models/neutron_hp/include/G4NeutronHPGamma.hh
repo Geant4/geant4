@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPGamma.hh,v 1.3 1999-07-02 09:59:08 johna Exp $
+// $Id: G4NeutronHPGamma.hh,v 1.4 1999-12-15 14:53:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPGamma_h
@@ -15,7 +15,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 #include "G4DynamicParticleVector.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Gamma.hh"
@@ -31,7 +31,7 @@ class G4NeutronHPGamma
   }
   ~G4NeutronHPGamma() {}
   
-  G4bool Init(ifstream & aDataFile);
+  G4bool Init(G4std::ifstream & aDataFile);
   
   inline void SetNext(G4NeutronHPLevel * aLevel)
   {

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.3 1999-07-02 12:27:15 hpw Exp $
+// $Id: G4NeutronHPInelastic.cc,v 1.4 1999-12-15 14:53:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NeutronHPInelastic.hh"
@@ -17,7 +17,7 @@
     SetMinEnergy( 0.0 );
     SetMaxEnergy( 20.*MeV );
     system("echo $NeutronHPCrossSections");
-//    G4cout << " entering G4NeutronHPInelastic constructor"<<endl;
+//    G4cout << " entering G4NeutronHPInelastic constructor"<<G4endl;
     if(!getenv("NeutronHPCrossSections")) 
        G4Exception("Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
     dirName = getenv("NeutronHPCrossSections");

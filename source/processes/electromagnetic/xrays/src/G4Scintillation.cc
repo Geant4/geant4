@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scintillation.cc,v 1.2 1999-05-06 00:23:37 gum Exp $
+// $Id: G4Scintillation.cc,v 1.3 1999-12-15 14:52:05 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@ G4Scintillation::G4Scintillation(const G4String& processName)
         thePhysicsTable = NULL;
 
 	if (verboseLevel>0) {
-           G4cout << GetProcessName() << " is created " << endl;
+           G4cout << GetProcessName() << " is created " << G4endl;
 	}
 
 	BuildThePhysicsTable();
@@ -163,8 +163,8 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                               ScintillationIntegral->GetEnergy(CIIvalue);
 
 		if (verboseLevel>1) {
-                   G4cout << "sampledMomentum = " << sampledMomentum << endl;
-		   G4cout << "CIIvalue =        " << CIIvalue << endl;
+                   G4cout << "sampledMomentum = " << sampledMomentum << G4endl;
+		   G4cout << "CIIvalue =        " << CIIvalue << G4endl;
 		}
 
 		// Generate random photon direction
@@ -241,7 +241,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	if (verboseLevel>0) {
 	G4cout << "\n Exiting from G4Scintillation::DoIt -- NumberOfSecondaries = " 
-	     << aParticleChange.GetNumberOfSecondaries() << endl;
+	     << aParticleChange.GetNumberOfSecondaries() << G4endl;
 	}
 
 	return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);

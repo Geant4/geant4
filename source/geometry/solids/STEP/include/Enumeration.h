@@ -5,7 +5,7 @@
 
 
 //
-// $Id: Enumeration.h,v 1.2 1999-05-21 20:20:29 japost Exp $
+// $Id: Enumeration.h,v 1.3 1999-12-15 14:50:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef ENUMERATION_H
@@ -34,7 +34,7 @@
 #define ENUM_NULL -1
 
 class STEPenumeration  {
-    friend     ostream &operator<< ( ostream&, const STEPenumeration& );
+    friend     G4std::ostream &operator<< ( G4std::ostream&, const STEPenumeration& );
   protected:
     int v;	//  integer value of enumeration instance 
 	//  mapped to a symbolic value in the elements
@@ -55,18 +55,18 @@ class STEPenumeration  {
 			    int optional, char *tokenList,
 			    int needDelims = 0, int clearError = 1);
 
-    Severity EnumValidLevel(istream &in, ErrorDescriptor *err, 
+    Severity EnumValidLevel(G4std::istream &in, ErrorDescriptor *err, 
 			    int optional, char *tokenList,
 			    int needDelims = 0, int clearError = 1);
 
     const int asInt () const {	return v;    }
     
     const char * asStr (SCLstring &s) const;
-    void STEPwrite (ostream& out = G4cout)  const;
+    void STEPwrite (G4std::ostream& out = G4cout)  const;
     const char * STEPwrite (SCLstring &s) const;
 
     Severity StrToVal (const char * s, ErrorDescriptor *err, int optional = 1);
-    Severity STEPread(istream& in, ErrorDescriptor *err, int optional = 1);
+    Severity STEPread(G4std::istream& in, ErrorDescriptor *err, int optional = 1);
     Severity STEPread(const char *s, ErrorDescriptor *err, int optional = 1);
 
     int put (int val)  {  return set_value (val);    }
@@ -76,9 +76,9 @@ class STEPenumeration  {
     STEPenumeration& operator= (const int);
     STEPenumeration& operator= (const STEPenumeration&);
         
-    void DebugDisplay (ostream& out =G4cout) const;
+    void DebugDisplay (G4std::ostream& out =G4cout) const;
   protected:
-    Severity ReadEnum(istream& in, ErrorDescriptor *err, int AssignVal = 1,
+    Severity ReadEnum(G4std::istream& in, ErrorDescriptor *err, int AssignVal = 1,
 		      int needDelims = 1);
 };
 

@@ -1,4 +1,4 @@
-// $Id: Tst01PhysicsList.cc,v 1.4 1999-11-26 09:47:33 grichine Exp $
+// $Id: Tst01PhysicsList.cc,v 1.5 1999-12-15 14:54:36 gunter Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -19,7 +19,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"                
 
 
 Tst01PhysicsList::Tst01PhysicsList():  G4VUserPhysicsList()
@@ -267,7 +267,7 @@ void Tst01PhysicsList::SetCuts()
   if (verboseLevel >0)
   {
     G4cout << "Tst01PhysicsList::SetCuts:";
-    // G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
+    // G4cout << "CutLength : " << cut/mm << " (mm)" << G4endl;
   }  
 
   // set cut values for gamma at first and for e- second and next for e+,

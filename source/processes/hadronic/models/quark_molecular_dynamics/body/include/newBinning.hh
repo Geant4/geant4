@@ -6,7 +6,7 @@
 
 class Binning
 {
-  friend ostream& operator<<(ostream& o,const Binning& B) { B._print(o); return o; }
+  friend G4std::ostream& operator<<(G4std::ostream& o,const Binning& B) { B._print(o); return o; }
   int n;
 protected:
   long Ntot;
@@ -15,7 +15,7 @@ protected:
   Vektor value;
   Vektor err;
   int getIndex(double x) const;
-  void _print(ostream&) const;
+  void _print(G4std::ostream&) const;
   virtual double normalize(double) const { return Ntot*dx; }
 public:
   Binning() : n(0) {}

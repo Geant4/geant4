@@ -1,19 +1,19 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4ForwardXrayTR.cc,v 1.1 1999-01-08 16:33:08 gunter Exp $
+// $Id: testG4ForwardXrayTR.cc,v 1.2 1999-12-15 14:52:05 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 
 
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 #include "g4templates.hh"
 #include "globals.hh"
 #include "G4Timer.hh"
@@ -84,10 +84,10 @@ G4VPhysicalVolume* BuildVolume(G4Material* matworld)
 int main()
 {
   //-------- set output format-------
-   G4cout.setf( ios::scientific, ios::floatfield );
+   G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
   //---write results to the file  hloss -----
-   ofstream outFile("XrayTR.cc", ios::out ) ;
-   outFile.setf( ios::scientific, ios::floatfield );
+   G4std::ofstream outFile("XrayTR.cc", G4std::ios::out ) ;
+   outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
   //--------- Material definition ---------
 
@@ -212,8 +212,8 @@ int main()
 
   G4String confirm ;
 
-  G4cout << " Do you want the proton as particle (yes/no)? " << flush;
-  //cin >> confirm ;
+  G4cout << " Do you want the proton as particle (yes/no)? " << G4std::flush;
+  //G4cin >> confirm ;
   confirm = "yes"  ;
   if(confirm == "yes")
   {
@@ -222,8 +222,8 @@ int main()
   }
   else
   {
-     G4cout << " Do you want the antiproton as particle (yes/no)? " << flush;
-     cin >> confirm ;
+     G4cout << " Do you want the antiproton as particle (yes/no)? " << G4std::flush;
+     G4cin >> confirm ;
      if(confirm == "yes")
      {
         mass=theAntiProton->GetPDGMass();
@@ -231,8 +231,8 @@ int main()
      }
      else
      {
-      G4cout << " Do you want the pi+ as particle (yes/no)? " << flush;
-      cin >> confirm ;
+      G4cout << " Do you want the pi+ as particle (yes/no)? " << G4std::flush;
+      G4cin >> confirm ;
       if(confirm == "yes")
       {
       mass=thePionPlus->GetPDGMass();
@@ -240,8 +240,8 @@ int main()
       }
       else
       {
-        G4cout << " Do you want the pi- as particle (yes/no)? " << flush;
-        cin >> confirm ;
+        G4cout << " Do you want the pi- as particle (yes/no)? " << G4std::flush;
+        G4cin >> confirm ;
         if(confirm == "yes")
         {
         mass=thePionMinus->GetPDGMass();
@@ -249,8 +249,8 @@ int main()
         } 
         else
         {
-          G4cout << " Do you want the K+ as particle (yes/no)? " << flush;
-          cin >> confirm ;
+          G4cout << " Do you want the K+ as particle (yes/no)? " << G4std::flush;
+          G4cin >> confirm ;
           if(confirm == "yes")
           {
           mass=theKaonPlus->GetPDGMass();
@@ -258,8 +258,8 @@ int main()
           }
           else
           {
-            G4cout << " Do you want the K- as particle (yes/no)? " << flush;
-            cin >> confirm ;
+            G4cout << " Do you want the K- as particle (yes/no)? " << G4std::flush;
+            G4cin >> confirm ;
             if(confirm == "yes")
             {
             mass=theKaonMinus->GetPDGMass();
@@ -267,7 +267,7 @@ int main()
             }
             else
             {
-             G4cout << " There is no other particle in the test." << endl;
+             G4cout << " There is no other particle in the test." << G4endl;
              return EXIT_FAILURE;
             }
           }
@@ -304,89 +304,89 @@ int main()
 
 
   G4cout << "cut for GAMMA in mm =" ;
-  // cin >> cutinrange ;
+  // G4cin >> cutinrange ;
   cutinrange = 0.1 ;
   theGamma->SetCuts(cutinrange) ;
-    G4cout << "gamma,cut in range(mm)=" << theGamma->GetCuts() << endl ;
-    outFile << "  ---------------------------------------" << endl ;
-    outFile << "  gamma,cut in range(mm)=" << theGamma->GetCuts() << endl ;
+    G4cout << "gamma,cut in range(mm)=" << theGamma->GetCuts() << G4endl ;
+    outFile << "  ---------------------------------------" << G4endl ;
+    outFile << "  gamma,cut in range(mm)=" << theGamma->GetCuts() << G4endl ;
 
   GammaKineticEnergyCuts = theGamma->GetCutsInEnergy() ;
   for (G4int icut=0; icut<theMaterialTable->length(); icut++)
   {
     G4cout << "material index=" << icut << "  kin.energy cut(MeV)=" << 
-         GammaKineticEnergyCuts[icut] << endl ;
+         GammaKineticEnergyCuts[icut] << G4endl ;
     outFile << "  material index=" << icut << "  kin.energy cut(MeV)=" << 
-         GammaKineticEnergyCuts[icut] << endl ;
+         GammaKineticEnergyCuts[icut] << G4endl ;
   }
 
 
   G4cout << "cut for ELECTRON in mm =" ;
-  // cin >> cutinrange ; 
+  // G4cin >> cutinrange ; 
   cutinrange = 1.0 ;
   CutInRangeele = cutinrange ;
   theElectron->SetCuts(cutinrange) ;
-    G4cout << "electron,cut in range(mm)=" << theElectron->GetCuts() << endl ;
-    outFile << "  ---------------------------------------" << endl ;
-    outFile << "  electron,cut in range(mm)=" << theElectron->GetCuts() << endl ;
+    G4cout << "electron,cut in range(mm)=" << theElectron->GetCuts() << G4endl ;
+    outFile << "  ---------------------------------------" << G4endl ;
+    outFile << "  electron,cut in range(mm)=" << theElectron->GetCuts() << G4endl ;
 
   ElectronKineticEnergyCuts = theElectron->GetCutsInEnergy() ;
   for ( icut=0; icut<theMaterialTable->length(); icut++)
   {
     G4cout << "material index=" << icut << "  kin.energy cut(MeV)=" << 
-         ElectronKineticEnergyCuts[icut] << endl ;
+         ElectronKineticEnergyCuts[icut] << G4endl ;
     outFile << "  material index=" << icut << "  kin.energy cut(MeV)=" << 
-         ElectronKineticEnergyCuts[icut] << endl ;
+         ElectronKineticEnergyCuts[icut] << G4endl ;
   }
 
   G4cout << "cut for POSITRON in mm =" ;
-  //  cin >> cutinrange ; 
+  //  G4cin >> cutinrange ; 
   cutinrange = 1.0 ;
   CutInRangepos = cutinrange ;
   thePositron->SetCuts(cutinrange) ;
-    G4cout << "positron,cut in range(mm)=" << thePositron->GetCuts() << endl ;
-    outFile << "  ---------------------------------------" << endl ;
-    outFile << "  positron,cut in range(mm)=" << thePositron->GetCuts() << endl ;
+    G4cout << "positron,cut in range(mm)=" << thePositron->GetCuts() << G4endl ;
+    outFile << "  ---------------------------------------" << G4endl ;
+    outFile << "  positron,cut in range(mm)=" << thePositron->GetCuts() << G4endl ;
 
   PositronKineticEnergyCuts = thePositron->GetCutsInEnergy() ;
   for ( icut=0; icut<theMaterialTable->length(); icut++)
   {
     G4cout << "material index=" << icut << "  kin.energy cut(MeV)=" << 
-         PositronKineticEnergyCuts[icut] << endl ;
+         PositronKineticEnergyCuts[icut] << G4endl ;
     outFile << "  material index=" << icut << "  kin.energy cut(MeV)=" << 
-         PositronKineticEnergyCuts[icut] << endl ;
+         PositronKineticEnergyCuts[icut] << G4endl ;
   }
 
   G4cout << "cut for hadrons in mm =" ;
-  //  cin >> cutinrange ; 
+  //  G4cin >> cutinrange ; 
   cutinrange = 1.0 ;
   theParticle->SetCuts(cutinrange) ;
-  G4cout << "after particle setcuts " << endl;
+  G4cout << "after particle setcuts " << G4endl;
 
 
-    G4cout << "cut in range(mm)=" << theParticle->GetLengthCuts() << endl ;
-    outFile << "  ---------------------------------------" << endl ;
-    outFile << "  cut in range(mm)=" << theParticle->GetLengthCuts() << endl ;
+    G4cout << "cut in range(mm)=" << theParticle->GetLengthCuts() << G4endl ;
+    outFile << "  ---------------------------------------" << G4endl ;
+    outFile << "  cut in range(mm)=" << theParticle->GetLengthCuts() << G4endl ;
 
   ParticleKineticEnergyCuts = theParticle->GetEnergyCuts() ;
 
   for ( icut=0; icut<theMaterialTable->length(); icut++)
   {
     G4cout << "material index=" << icut << "  kin.energy cut(MeV)=" << 
-         ParticleKineticEnergyCuts[icut] << endl ;
+         ParticleKineticEnergyCuts[icut] << G4endl ;
     outFile << "  material index=" << icut << "  kin.energy cut(MeV)=" << 
-         ParticleKineticEnergyCuts[icut] << endl ;
+         ParticleKineticEnergyCuts[icut] << G4endl ;
   }
 
-    G4cout << "  ------         ----- " << endl ;
-    outFile << "  " << endl;
+    G4cout << "  ------         ----- " << G4endl ;
+    outFile << "  " << G4endl;
 
     // Creation of X-ray transition radiation object
-    G4cout<<"Just before TR object creation"<<endl ;
+    G4cout<<"Just before TR object creation"<<G4endl ;
 
   G4ForwardXrayTR theXrayTR  ;
 
-    G4cout<<"Just after TR object creation"<<endl ;
+    G4cout<<"Just after TR object creation"<<G4endl ;
   theParticleProcessManager->AddProcess(&theXrayTR,-1,0,0) ;
 
 
@@ -407,35 +407,35 @@ int main()
       apttoMaterial = (*theMaterialTable)[materialIndex] ;
       MaterialName = apttoMaterial->GetName() ;
       outFile<<"PAI transfer data for the material = "
-             <<MaterialName<<endl<<endl ;
+             <<MaterialName<<G4endl<<G4endl ;
 
       outFile<<"Particle Tkin"<<"\t\t"
              <<"Transfer energy, keV"<<"\t"
-             <<"Primary ionisation, 1/mm"<<endl<<endl ;
+             <<"Primary ionisation, 1/mm"<<G4endl<<G4endl ;
 
-  //  G4cout<<"Read of TotBin ? TotBin = "<<G4PAIonisation::GetBinNumber()<<endl;
+  //  G4cout<<"Read of TotBin ? TotBin = "<<G4PAIonisation::GetBinNumber()<<G4endl;
 
       for(G4int iTkin=48;iTkin<G4PAIonisation::GetBinNumber();iTkin++)
       {
 
-        outFile<<aLogVector->GetLowEdgeEnergy(iTkin)<<endl<<endl ;
+        outFile<<aLogVector->GetLowEdgeEnergy(iTkin)<<G4endl<<G4endl ;
 
         G4PhysicsVector* trVec = (*G4PAIenergyLoss::GetPAItransferBank())
                        (materialIndex*G4PAIonisation::GetBinNumber() + iTkin) ;
 	G4cout<<materialIndex*G4PAIonisation::GetBinNumber() + iTkin
-	       <<"\t\t"<<trVec->GetVectorLength()<<endl ;
+	       <<"\t\t"<<trVec->GetVectorLength()<<G4endl ;
         for(G4int iTr=0;iTr<trVec->GetVectorLength();iTr++)
         {
           outFile<<"\t\t"<<trVec->GetLowEdgeEnergy(iTr)*1000.
-                 <<"\t\t"<<(*trVec)(iTr)<<endl ;
+                 <<"\t\t"<<(*trVec)(iTr)<<G4endl ;
         }
                
       }
-      outFile<<endl ;
+      outFile<<G4endl ;
     } 
 
 
-    G4cout<<"Start dE/dx distribution"<<endl ;
+    G4cout<<"Start dE/dx distribution"<<G4endl ;
     G4int iLoss, iStat, iStatMax = 10000;
     G4double energyLoss[200], delta ;
     G4int spectrum[200] ;
@@ -456,13 +456,13 @@ int main()
       spectrum[iLoss-1]++ ;
     }
     G4double meanLoss = 0.0 ;
-    outFile<<"Energy loss, keV"<<"\t\t"<<"Distribution"<<endl<<endl ;
+    outFile<<"Energy loss, keV"<<"\t\t"<<"Distribution"<<G4endl<<G4endl ;
     for(iLoss=0;iLoss<200;iLoss++)
     {
-      outFile<<energyLoss[iLoss]*1000.0<<"\t\t"<<spectrum[iLoss]<<endl ;
+      outFile<<energyLoss[iLoss]*1000.0<<"\t\t"<<spectrum[iLoss]<<G4endl ;
       meanLoss +=energyLoss[iLoss]*spectrum[iLoss] ;
     }
-    G4cout<<"Mean loss over spectrum = "<<meanLoss*1000./iStatMax<<" keV"<<endl ;
+    G4cout<<"Mean loss over spectrum = "<<meanLoss*1000./iStatMax<<" keV"<<G4endl ;
 
 
     ****************************************************************  */
@@ -484,10 +484,10 @@ int main()
          if(jMat < iMat)
 	 {
            outFile<<(*theMaterialTable)[iMat]->GetName()<<" -> "<<"\t\t"
-		  <<(*theMaterialTable)[jMat]->GetName()<<endl<<endl ;
+		  <<(*theMaterialTable)[jMat]->GetName()<<G4endl<<G4endl ;
            outFile<<"Lorentz Factor"<<"\t\t"
                <<"energy TR number"<<"\t\t"  
-		  <<"theta TR number"<<"\t\t"<<endl<<endl ;  
+		  <<"theta TR number"<<"\t\t"<<G4endl<<G4endl ;  
           for(iTkin=0;iTkin<G4ForwardXrayTR::GetTotBin();iTkin++)
 	   {
            iPlace =(iMat*(theMaterialTable->length()-1)+jMat)*
@@ -497,21 +497,21 @@ int main()
                  <<(*(*G4ForwardXrayTR::GetEnergyDistrTable())
                    (iPlace))(0)<<"\t\t"
                  <<(*(*G4ForwardXrayTR::GetAngleDistrTable())
-                   (iPlace))(0)<<endl ;
+                   (iPlace))(0)<<G4endl ;
           G4cout<<1+(vectorTkin->GetLowEdgeEnergy(iTkin)/proton_mass_c2)<<"\t\t"
                  <<(*(*G4ForwardXrayTR::GetEnergyDistrTable())
                    (iPlace))(0)<<"\t\t"
                  <<(*(*G4ForwardXrayTR::GetAngleDistrTable())
-                   (iPlace))(0)<<endl ;
+                   (iPlace))(0)<<G4endl ;
 	   }
 	 }
          else
 	 {
            outFile<<(*theMaterialTable)[iMat]->GetName()<<" -> "<<"\t\t"
-		  <<(*theMaterialTable)[jMat]->GetName()<<endl<<endl ;
+		  <<(*theMaterialTable)[jMat]->GetName()<<G4endl<<G4endl ;
            outFile<<"Lorentz Factor"<<"\t\t"
                <<"energy TR number"<<"\t\t"  
-		  <<"theta TR number"<<"\t\t"<<endl<<endl ;  
+		  <<"theta TR number"<<"\t\t"<<G4endl<<G4endl ;  
            for(iTkin=0;iTkin<G4ForwardXrayTR::GetTotBin();iTkin++)
 	   {
              iPlace =(iMat*(theMaterialTable->length()-1)+jMat-1)*
@@ -521,16 +521,16 @@ int main()
                  <<(*(*G4ForwardXrayTR::GetEnergyDistrTable())
                    (iPlace))(0)<<"\t\t"
                  <<(*(*G4ForwardXrayTR::GetAngleDistrTable())
-                   (iPlace))(0)<<endl ;
+                   (iPlace))(0)<<G4endl ;
           G4cout<<1+(vectorTkin->GetLowEdgeEnergy(iTkin)/proton_mass_c2)<<"\t\t"
                  <<(*(*G4ForwardXrayTR::GetEnergyDistrTable())
                    (iPlace))(0)<<"\t\t"
                  <<(*(*G4ForwardXrayTR::GetAngleDistrTable())
-                   (iPlace))(0)<<endl ;
+                   (iPlace))(0)<<G4endl ;
 	   }
 	 }
-         outFile<<endl ; 
-         G4cout<<endl ; 
+         outFile<<G4endl ; 
+         G4cout<<G4endl ; 
        } 
      } 
 
@@ -543,7 +543,7 @@ int main()
          if(jMat < iMat)
 	 {
            outFile<<(*theMaterialTable)[iMat]->GetName()<<" -> "<<"\t\t"
-		  <<(*theMaterialTable)[jMat]->GetName()<<endl<<endl ;
+		  <<(*theMaterialTable)[jMat]->GetName()<<G4endl<<G4endl ;
           for(iTkin=0;iTkin<G4ForwardXrayTR::GetTotBin();iTkin++)
 	   {
              if(iTkin == 9 || iTkin == 19 || iTkin == 29
@@ -552,11 +552,11 @@ int main()
 	       outFile<<"iTkin = "<<iTkin<<"\t\t"
                       <<"Lorentz factor = "
                       <<1+(vectorTkin->GetLowEdgeEnergy(iTkin)/proton_mass_c2)
-                      <<endl<<endl ;
+                      <<G4endl<<G4endl ;
            outFile<<"TR Energy"<<"\t\t"
                   <<" > energy TR number"<<"\t\t"
                   <<"TR ThetaSq"<<"\t\t"
-		  <<" > theta TR number"<<"\t\t"<<endl<<endl ;  
+		  <<" > theta TR number"<<"\t\t"<<G4endl<<G4endl ;  
                iPlace =(iMat*(theMaterialTable->length()-1)+jMat)*
                      G4ForwardXrayTR::GetTotBin()+iTkin           ;
 
@@ -569,7 +569,7 @@ int main()
                  <<(*G4ForwardXrayTR::GetAngleDistrTable())
                    (iPlace)->GetLowEdgeEnergy(iTR)<<"\t\t"
                  <<(*(*G4ForwardXrayTR::GetAngleDistrTable())
-                   (iPlace))(iTR)<<endl ;
+                   (iPlace))(iTR)<<G4endl ;
 	       }
 	     }
 	   }
@@ -577,7 +577,7 @@ int main()
          else
 	 {
            outFile<<(*theMaterialTable)[iMat]->GetName()<<" -> "<<"\t\t"
-		  <<(*theMaterialTable)[jMat]->GetName()<<endl<<endl ;
+		  <<(*theMaterialTable)[jMat]->GetName()<<G4endl<<G4endl ;
            for(iTkin=0;iTkin<G4ForwardXrayTR::GetTotBin();iTkin++)
 	   {
              if(iTkin == 9 || iTkin == 19 || iTkin == 29
@@ -586,11 +586,11 @@ int main()
 	       outFile<<"iTkin = "<<iTkin<<"\t\t"
                       <<"Lorentz factor = "
                       <<1+(vectorTkin->GetLowEdgeEnergy(iTkin)/proton_mass_c2)
-                      <<endl<<endl ;
+                      <<G4endl<<G4endl ;
            outFile<<"TR Energy"<<"\t\t"
                   <<" > energy TR number"<<"\t\t"
                   <<"TR ThetaSq"<<"\t\t"
-		  <<" > theta TR number"<<"\t\t"<<endl<<endl ;  
+		  <<" > theta TR number"<<"\t\t"<<G4endl<<G4endl ;  
                iPlace =(iMat*(theMaterialTable->length()-1)+jMat-1)*
                      G4ForwardXrayTR::GetTotBin()+iTkin               ;
 
@@ -603,17 +603,17 @@ int main()
                  <<(*G4ForwardXrayTR::GetAngleDistrTable())
                    (iPlace)->GetLowEdgeEnergy(iTR)<<"\t\t"
                  <<(*(*G4ForwardXrayTR::GetAngleDistrTable())
-                   (iPlace))(iTR)<<endl ;
+                   (iPlace))(iTR)<<G4endl ;
 	       }
 	     }
 	   }
 	 }
-         outFile<<endl ; 
-         G4cout<<endl ; 
+         outFile<<G4endl ; 
+         G4cout<<G4endl ; 
        } 
      } 
 
-    G4cout<<"Start TR energy distribution"<<endl ;
+    G4cout<<"Start TR energy distribution"<<G4endl ;
     G4int iLossTR, iStatTR, iStatMaxTR = 1000;
     G4double energyTR[200], deltaTR ;
     G4int spectrumTR[200] ;
@@ -634,19 +634,19 @@ int main()
       spectrumTR[iLossTR]++ ;
     }
     G4double meanLossTR = 0.0 ;
-    outFile<<"TR energy, keV"<<"\t\t"<<"Distribution"<<endl<<endl ;
+    outFile<<"TR energy, keV"<<"\t\t"<<"Distribution"<<G4endl<<G4endl ;
     for(iLossTR=0;iLossTR<200;iLossTR++)
     {
-      outFile<<energyTR[iLossTR]*1000.0<<"\t\t"<<spectrumTR[iLossTR]<<endl ;
+      outFile<<energyTR[iLossTR]*1000.0<<"\t\t"<<spectrumTR[iLossTR]<<G4endl ;
       meanLossTR +=energyTR[iLossTR]*spectrumTR[iLossTR] ;
     }
     G4cout<<"Mean TR energy over spectrum = "
-        <<meanLossTR*1000./iStatMaxTR<<" keV"<<endl ;
+        <<meanLossTR*1000./iStatMaxTR<<" keV"<<G4endl ;
 
 
     G4int message ;
-    G4cout<<"Continue ?(enter int>0)  Break ? (enter int<=0)"<<endl ;
-    cin>>message ;
+    G4cout<<"Continue ?(enter int>0)  Break ? (enter int<=0)"<<G4endl ;
+    G4cin>>message ;
     if(message<= 0)      // break program at this point
     {
       return 1 ;    
@@ -654,11 +654,11 @@ int main()
  
 
 
-    outFile << " ionisation test  **************************************" << endl ;
-    outFile << "  " << endl;
+    outFile << " ionisation test  **************************************" << G4endl ;
+    outFile << "  " << G4endl;
     outFile << "   particle = " << 
-             aParticle.GetDefinition()->GetParticleName() << endl ;
-    outFile << endl;
+             aParticle.GetDefinition()->GetParticleName() << G4endl ;
+    outFile << G4endl;
     
     palongget = aParticle.GetDefinition()->GetProcessManager()
                                  ->GetAlongStepProcessVector(typeGPIL);
@@ -702,17 +702,17 @@ int main()
     NEXTMATERIAL: ;
     J = J+1 ;
     if ( J >= theMaterialTable->length() )
-      { G4cout << "that was the last material in the table --> STOP" << endl;
+      { G4cout << "that was the last material in the table --> STOP" << G4endl;
         return EXIT_FAILURE ; }  
 
     apttoMaterial = (*theMaterialTable)[ J ] ;
     MaterialName = apttoMaterial->GetName() ; 
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the Energyloss test 1. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the Energyloss test 1. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
     G4int icont ;
-    cin >> icont ;
+    G4cin >> icont ;
     if ( icont < 0 )
         goto NEXTMATERIAL ;
 
@@ -747,19 +747,19 @@ int main()
    
 //**************************************************************************
 
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  Energyloss test 1." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
-    G4cout << "kin.en.(MeV)    dE/dx(MeV/mm)    range(mm)    Step(mm)" << endl ;
-    G4cout << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  Energyloss test 1." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "kin.en.(MeV)    dE/dx(MeV/mm)    range(mm)    Step(mm)" << G4endl ;
+    G4cout << G4endl ;
  
-    outFile <<  endl;
-    outFile <<"  " << MaterialName  << "  Energyloss test 1." << endl ;
-    outFile << " +++++++++++++++++++++++++++++++++++++++++" << endl ;
-    outFile << endl ;
-    outFile << "kin.en.(MeV)    dE/dx(MeV/mm)    range(mm)    Step(mm)" << endl ;
-    outFile << endl ;
+    outFile <<  G4endl;
+    outFile <<"  " << MaterialName  << "  Energyloss test 1." << G4endl ;
+    outFile << " +++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    outFile << G4endl ;
+    outFile << "kin.en.(MeV)    dE/dx(MeV/mm)    range(mm)    Step(mm)" << G4endl ;
+    outFile << G4endl ;
  
 
     G4GPILSelection* selection ;
@@ -782,23 +782,23 @@ int main()
       T = TkinMeV[i] ;
 
        G4cout <<" " <<  T << "  " << dEdx/mm << "  " ;
-       G4cout << range/mm << "  " << stepLimit/mm << endl ; 
+       G4cout << range/mm << "  " << stepLimit/mm << G4endl ; 
 
        outFile <<" " <<  T << "  " << dEdx/mm << "  " ;
-       outFile << range/mm << "  " << stepLimit/mm << endl ; 
+       outFile << range/mm << "  " << stepLimit/mm << G4endl ; 
 
     }
 
-    G4cout <<  endl;
-    outFile << endl;
+    G4cout <<  G4endl;
+    outFile << G4endl;
 
     ENERGYLOSS2: ;
 
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the Energyloss test 2. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
-    cin >> icont ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the Energyloss test 2. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
+    G4cin >> icont ;
     if ( icont < 0 )
         goto ENERGYLOSS3 ;
 
@@ -806,7 +806,7 @@ int main()
   
 
     G4cout << "give an energy value in MeV " ;
-    cin >> TMeV ;
+    G4cin >> TMeV ;
 
       trueStep = cutinrange ; 
       previousStepSize = cutinrange ;
@@ -819,9 +819,9 @@ int main()
                                               refsafety,
                                               selection);
 
-    G4cout << " give a steplength in mm , the max. meaningful Step is " << stepmx << " mm" <<endl;
+    G4cout << " give a steplength in mm , the max. meaningful Step is " << stepmx << " mm" <<G4endl;
     G4cout << "Step:" ;
-    cin >> stepmm ;
+    G4cin >> stepmm ;
  
    (*Step).SetTrack(tracke) ;
    (*Step).SetStepLength(stepmm);
@@ -832,38 +832,38 @@ int main()
       meanloss = theParticleIonisation.GetMeanLoss() ;
       lossnow = TMeV-(*aParticleChange).GetEnergyChange();
 
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  Energyloss test 2." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
-    G4cout << "kin.en.(MeV)    Step(mm)   meanloss(MeV)  act.loss(MeV)" << endl ;
-    G4cout << TMeV << "   " << stepmm << "  " << meanloss << "  " << lossnow << endl ;
-    G4cout << " status change:" << (*aParticleChange).GetStatusChange() << endl ;
-    G4cout << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  Energyloss test 2." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "kin.en.(MeV)    Step(mm)   meanloss(MeV)  act.loss(MeV)" << G4endl ;
+    G4cout << TMeV << "   " << stepmm << "  " << meanloss << "  " << lossnow << G4endl ;
+    G4cout << " status change:" << (*aParticleChange).GetStatusChange() << G4endl ;
+    G4cout << G4endl ;
  
-    outFile <<  endl;
-    outFile <<"  " << MaterialName  << "  Energyloss test 2." << endl ;
-    outFile << " +++++++++++++++++++++++++++++++++++++++++" << endl ;
-    outFile << endl ;
-    outFile << "kin.en.(MeV)    Step(mm)   meanloss(MeV)  act.loss(MeV)" << endl ;
-    outFile << TMeV << "   " << stepmm << "  " << meanloss << "  " << lossnow << endl ;
-    outFile << " status change:" << (*aParticleChange).GetStatusChange() << endl ;
-    outFile << endl ;
+    outFile <<  G4endl;
+    outFile <<"  " << MaterialName  << "  Energyloss test 2." << G4endl ;
+    outFile << " +++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    outFile << G4endl ;
+    outFile << "kin.en.(MeV)    Step(mm)   meanloss(MeV)  act.loss(MeV)" << G4endl ;
+    outFile << TMeV << "   " << stepmm << "  " << meanloss << "  " << lossnow << G4endl ;
+    outFile << " status change:" << (*aParticleChange).GetStatusChange() << G4endl ;
+    outFile << G4endl ;
  
     goto ENERGYLOSS2 ;
 
     ENERGYLOSS3: ;
 
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the Energyloss test 3. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
-    cin >> icont ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the Energyloss test 3. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
+    G4cin >> icont ;
     if ( icont < 0 )
         goto DELTARAY1 ;
 
     G4cout << "give an energy value in MeV " ;
-    cin >> TMeV ;
+    G4cin >> TMeV ;
 
       trueStep = cutinrange ; 
       previousStepSize = cutinrange ;
@@ -876,9 +876,9 @@ int main()
                                               refsafety,
                                               selection);
 
-    G4cout << " give a steplength in mm , the max. meaningful Step is " << stepmx << " mm" <<endl;
+    G4cout << " give a steplength in mm , the max. meaningful Step is " << stepmx << " mm" <<G4endl;
     G4cout << "Step:" ;
-    cin >> stepmm ;
+    G4cin >> stepmm ;
  
    (*Step).SetTrack(tracke) ;
    (*Step).SetStepLength(stepmm);
@@ -886,7 +886,7 @@ int main()
 
     G4cout << " give number of events you want " ;
     G4int nbev,ibev ;
-    cin >> nbev ;
+    G4cin >> nbev ;
 
     meanloss=0.;
     theTimer.Start();
@@ -902,49 +902,49 @@ int main()
 
     theTimer.Stop();
     meanloss /= nbev ;
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  Energyloss test 3." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
-    G4cout << "kin.en.(MeV)    Step(mm)   meanloss(MeV) time/event(sec) " << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  Energyloss test 3." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "kin.en.(MeV)    Step(mm)   meanloss(MeV) time/event(sec) " << G4endl ;
     G4cout << TMeV << "   " << stepmm << "  " << meanloss << "  " << 
-    theTimer.GetUserElapsed()/nbev << endl ;
-    G4cout << endl ;
+    theTimer.GetUserElapsed()/nbev << G4endl ;
+    G4cout << G4endl ;
  
-    outFile <<  endl;
-    outFile <<"  " << MaterialName  << "  Energyloss test 3." << endl ;
-    outFile << " +++++++++++++++++++++++++++++++++++++++++" << endl ;
-    outFile << endl ;
-    outFile << "kin.en.(MeV)    Step(mm)   meanloss(MeV) time/event(sec) " << endl ;
+    outFile <<  G4endl;
+    outFile <<"  " << MaterialName  << "  Energyloss test 3." << G4endl ;
+    outFile << " +++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    outFile << G4endl ;
+    outFile << "kin.en.(MeV)    Step(mm)   meanloss(MeV) time/event(sec) " << G4endl ;
     outFile << TMeV << "   " << stepmm << "  " << meanloss << "  " << 
-    theTimer.GetUserElapsed()/nbev << endl ;
-    outFile << endl ;
+    theTimer.GetUserElapsed()/nbev << G4endl ;
+    outFile << G4endl ;
  
     goto ENERGYLOSS3 ;
 
     DELTARAY1: ;
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the delta ray test 1. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
-    cin >> icont ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the delta ray test 1. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
+    G4cin >> icont ;
     if ( icont < 0 )
         goto DELTARAY2 ;
 
 
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  delta ray test 1." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
-    G4cout << "kin.en.(MeV)      mean free path(mm)" << endl ;
-    G4cout << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  delta ray test 1." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "kin.en.(MeV)      mean free path(mm)" << G4endl ;
+    G4cout << G4endl ;
  
-    outFile <<  endl;
-    outFile <<"  " << MaterialName  << "  delta ray test 1." << endl ;
-    outFile << " +++++++++++++++++++++++++++++++++++++++++" << endl ;
-    outFile << endl ;
-    outFile << "kin.en.(MeV)      mean free path(mm)" << endl ;
-    outFile << endl ;
+    outFile <<  G4endl;
+    outFile <<"  " << MaterialName  << "  delta ray test 1." << G4endl ;
+    outFile << " +++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    outFile << G4endl ;
+    outFile << "kin.en.(MeV)      mean free path(mm)" << G4endl ;
+    outFile << G4endl ;
 
     for ( i=0 ; i<Nbin ; i++)
     {
@@ -958,23 +958,23 @@ int main()
 
       T = TkinMeV[i] ;
 
-      G4cout <<" " <<  T << "      " <<  stepLimit/mm << endl ;
+      G4cout <<" " <<  T << "      " <<  stepLimit/mm << G4endl ;
 
-      outFile <<" " <<  T << "      " << stepLimit/mm << endl ;
+      outFile <<" " <<  T << "      " << stepLimit/mm << G4endl ;
  
     }
 
-    G4cout <<  endl;
-    outFile << endl;
+    G4cout <<  G4endl;
+    outFile << G4endl;
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     DELTARAY2: ;
 
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the deltaray test 2. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
-    cin >> icont ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the deltaray test 2. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
+    G4cin >> icont ;
 
     G4double newenergy,dx,dy,dz,Tdelta,ddx,ddy,ddz ;
     G4int nd ;
@@ -985,7 +985,7 @@ int main()
         goto BREMS1 ;  
 
     G4cout << "give an energy value in MeV " ;
-    cin >> TMeV ;
+    G4cin >> TMeV ;
                            
      stepmm = 1. ;
 
@@ -1014,31 +1014,31 @@ int main()
      ddz = (ddir).z();
     }
 
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  delta ray test 2." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
-    G4cout << "T=" << TMeV << "   newT=" << newenergy << "  (MeV)" << endl ;
-    G4cout << " status change:" << (*aParticleChange).GetStatusChange() << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  delta ray test 2." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "T=" << TMeV << "   newT=" << newenergy << "  (MeV)" << G4endl ;
+    G4cout << " status change:" << (*aParticleChange).GetStatusChange() << G4endl ;
     if(nd>0)
-    G4cout << "Tdelta=" << Tdelta << endl ;
-    G4cout << "new direction:" << dx << "  " << dy << "  " << dz << endl;
+    G4cout << "Tdelta=" << Tdelta << G4endl ;
+    G4cout << "new direction:" << dx << "  " << dy << "  " << dz << G4endl;
     if(nd>0)
-    G4cout << "delta direction:" << ddx << "  " << ddy << "  " << ddz << endl ;
-    G4cout << endl ;
+    G4cout << "delta direction:" << ddx << "  " << ddy << "  " << ddz << G4endl ;
+    G4cout << G4endl ;
  
-    outFile <<  endl;
-    outFile <<"  " << MaterialName  << "  delta ray test 2." << endl ;
-    outFile << " +++++++++++++++++++++++++++++++++++++++++" << endl ;
-    outFile << endl ;
-    outFile << "T=" << TMeV << "   newT=" << newenergy << "   (MeV)" << endl;
-    outFile << " status change:" << (*aParticleChange).GetStatusChange() << endl ;
+    outFile <<  G4endl;
+    outFile <<"  " << MaterialName  << "  delta ray test 2." << G4endl ;
+    outFile << " +++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    outFile << G4endl ;
+    outFile << "T=" << TMeV << "   newT=" << newenergy << "   (MeV)" << G4endl;
+    outFile << " status change:" << (*aParticleChange).GetStatusChange() << G4endl ;
     if(nd>0)
-    outFile << "Tdelta=" << Tdelta << endl ;
-    outFile << "new direction:" << dx << "  " << dy << "  " << dz << endl;
+    outFile << "Tdelta=" << Tdelta << G4endl ;
+    outFile << "new direction:" << dx << "  " << dy << "  " << dz << G4endl;
     if(nd>0)
-    outFile << "delta direction:" << ddx << "  " << ddy << "  " << ddz << endl ;
-    outFile << endl ;
+    outFile << "delta direction:" << ddx << "  " << ddy << "  " << ddz << G4endl ;
+    outFile << G4endl ;
 
     (*aParticleChange).Clear();
 

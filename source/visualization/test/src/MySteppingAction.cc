@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MySteppingAction.cc,v 1.3 1999-11-10 18:14:07 johna Exp $
+// $Id: MySteppingAction.cc,v 1.4 1999-12-15 14:54:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@ void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
   static int coutCount = 0;
   if (coutCount < 10) {
     coutCount++;
-    G4cout << "MySteppingAction::UserSteppingAction called." << endl;
+    G4cout << "MySteppingAction::UserSteppingAction called." << G4endl;
   }
   if(pVVisManager) {
     G4Polyline pl;
@@ -61,7 +61,7 @@ void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
     if (coutCount < 10) {
       coutCount++;
       G4cout << "MySteppingAction::UserSteppingAction: drawing "
-	   <<  pl << endl;
+	   <<  pl << G4endl;
     }
     pVVisManager -> Draw (pl);
     G4Circle intercept (pStep -> GetPostStepPoint () -> GetPosition ());

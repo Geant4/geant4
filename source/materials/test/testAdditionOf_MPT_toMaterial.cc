@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testAdditionOf_MPT_toMaterial.cc,v 1.2 1999-11-11 15:36:12 gunter Exp $
+// $Id: testAdditionOf_MPT_toMaterial.cc,v 1.3 1999-12-15 14:50:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -132,10 +132,10 @@ void LoopUntilPressEnter()
 {
         char ch;
 	G4cout << "Press <Enter> to continue ... ";
-        while ( cin.get(ch) )
+        while ( G4cin.get(ch) )
         {
                 if (ch == '\n') break;
         }       
-	G4cout << endl;
+	G4cout << G4endl;
 }
 

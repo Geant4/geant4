@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateWin32.cc,v 1.3 1999-01-11 00:47:43 allison Exp $
+// $Id: G4OpenGLImmediateWin32.cc,v 1.4 1999-12-15 14:54:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,7 @@ G4OpenGLImmediateWin32::G4OpenGLImmediateWin32 ():
 G4VSceneHandler* G4OpenGLImmediateWin32::CreateSceneHandler () {
   G4VSceneHandler* pScene = new G4OpenGLImmediateSceneHandler (*this);
   G4cout << G4OpenGLImmediateSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scenes extanct." << endl;
+       << ' ' << fName << " scenes extanct." << G4endl;
   return    pScene;
 }
 
@@ -45,14 +45,14 @@ G4VViewer* G4OpenGLImmediateWin32::CreateViewer (G4VSceneHandler& scene) {
       G4cerr << "G4OpenGLImmediateWin32::CreateViewer: error flagged by negative"
 	" view id in G4OpenGLImmediateWin32Viewer creation."
 	"\n Destroying view and returning null pointer."
-	   << endl;
+	   << G4endl;
       delete pView;
       pView = 0;
     }
   }
   else {
     G4cerr << "G4OpenGLImmediateWin32::CreateViewer: null pointer on"
-      " new G4OpenGLImmediateWin32Viewer." << endl;
+      " new G4OpenGLImmediateWin32Viewer." << G4endl;
   }
   return pView;
 }

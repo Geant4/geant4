@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastTrack.cc,v 1.2 1999-04-14 14:25:36 mora Exp $
+// $Id: G4FastTrack.cc,v 1.3 1999-12-15 14:53:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //$Id:
@@ -130,7 +130,7 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
   if ( !Done )
     {
       G4cout << "\n\nERROR !!! can't find Transform for " <<
-	fEnvelopePhysicalVolume->GetName() << "\n\n" << endl;
+	fEnvelopePhysicalVolume->GetName() << "\n\n" << G4endl;
     }
   else
     {

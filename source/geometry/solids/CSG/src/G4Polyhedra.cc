@@ -409,7 +409,7 @@ G4Polyhedron *G4Polyhedra::CreatePolyhedron() const
 					     original_parameters->Rmax);
 	}
 	else {
-		G4cerr << "G4Polyhedra: visualization of this type of G4Polyhedra is not supported at this time" << endl;
+		G4cerr << "G4Polyhedra: visualization of this type of G4Polyhedra is not supported at this time" << G4endl;
 		return 0;
 	}
 

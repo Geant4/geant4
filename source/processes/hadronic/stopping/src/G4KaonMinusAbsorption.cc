@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KaonMinusAbsorption.cc,v 1.1 1999-01-07 16:13:43 gunter Exp $
+// $Id: G4KaonMinusAbsorption.cc,v 1.2 1999-12-15 14:53:37 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -52,7 +52,7 @@ G4KaonMinusAbsorption::G4KaonMinusAbsorption(const G4String& processName)
   pdefAlpha(G4Alpha::Alpha())
 {
   if (verboseLevel>0) {
-    G4cout << GetProcessName() << " is created "<< endl;
+    G4cout << GetProcessName() << " is created "<< G4endl;
   }
 
   pv   = new G4GHEKinematicsVector [MAX_SECONDARIES+1];
@@ -106,10 +106,10 @@ G4double G4KaonMinusAbsorption::AtRestGetPhysicalInteractionLength(
 
   if ((currentInteractionLength <0.0) || (verboseLevel>2)){
     G4cout << "G4KaonMinusAbsorptionProcess::AtRestGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<endl;
+    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() <<endl;
-    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<endl;
+    G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
+    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<G4endl;
   }
 
   return theNumberOfInteractionLengthLeft * currentInteractionLength;
@@ -167,7 +167,7 @@ G4VParticleChange* G4KaonMinusAbsorption::AtRestDoIt(
   }
 
   if (verboseLevel>1) {
-    G4cout << "G4KaonMinusAbsorption::AtRestDoIt is invoked " <<endl;
+    G4cout << "G4KaonMinusAbsorption::AtRestDoIt is invoked " <<G4endl;
     }
 
   G4ParticleMomentum momentum;
@@ -264,7 +264,7 @@ void G4KaonMinusAbsorption::GenerateSecondaries()
   }
 
   // --- LIMIT THE VALUE OF NGKINE IN CASE OF OVERFLOW ---
-  ngkine = G4int(min(ngkine,G4int(MAX_SECONDARIES)));
+  ngkine = G4int(G4std::min(ngkine,G4int(MAX_SECONDARIES)));
 
 } // GenerateSecondaries
 

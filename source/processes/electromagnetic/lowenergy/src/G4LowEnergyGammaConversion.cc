@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.9 1999-06-28 15:46:00 aforti Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.10 1999-12-15 14:51:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@
 // 14-03-97, new Physics scheme for geant4alpha, M.Maire
 // 28-03-97, protection in BuildPhysicsTable, M.Maire
 // 19-06-97, correction in ComputeMicroscopicCrossSection, L.Urban
-// 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
+// 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
 // --------------------------------------------------------------
 
 // This Class Header
@@ -58,9 +58,9 @@ G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processNa
     NumbBinTable(200)
 {
    if (verboseLevel>0) {
-     G4cout << GetProcessName() << " is created "<< endl;
+     G4cout << GetProcessName() << " is created "<< G4endl;
      G4cout << "LowestEnergy: " << LowestEnergyLimit/keV << "keV ";
-     G4cout << "HighestEnergy: " << HighestEnergyLimit/GeV << "GeV " << endl;
+     G4cout << "HighestEnergy: " << HighestEnergyLimit/GeV << "GeV " << G4endl;
    }
 }
  
@@ -196,11 +196,11 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
     // limits of the screening variable
     G4double screenfac = 136.*epsil0/(anElement->GetIonisation()->GetZ3()) ;
     G4double screenmax = exp ((42.24 - FZ)/8.368) - 0.952 ;
-    G4double screenmin = min(4.*screenfac,screenmax) ;
+    G4double screenmin = G4std::min(4.*screenfac,screenmax) ;
     
     // limits of the energy sampling
     G4double epsil1 = 0.5 - 0.5*sqrt(1. - screenmin/screenmax) ;
-    G4double epsilmin = max(epsil0,epsil1) , epsilrange = 0.5 - epsilmin ;
+    G4double epsilmin = G4std::max(epsil0,epsil1) , epsilrange = 0.5 - epsilmin ;
     
     //
     // sample the energy rate of the created electron (or positron) 
@@ -209,7 +209,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
     G4double  screenvar, greject ;
     
     G4double F10 = ScreenFunction1(screenmin) - FZ , F20 = ScreenFunction2(screenmin) - FZ;
-    G4double NormF1 = max(F10*epsilrange*epsilrange,0.) ,  NormF2 = max(1.5*F20,0.);
+    G4double NormF1 = G4std::max(F10*epsilrange*epsilrange,0.) ,  NormF2 = G4std::max(1.5*F20,0.);
     
     do {
       if ( NormF1/(NormF1+NormF2) > G4UniformRand() ){ 
@@ -272,10 +272,10 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
   G4double LocalEnerDeposit = 0. ;
   aParticleChange.SetNumberOfSecondaries(2) ; 
   
-  G4double ElectKineEnergy = max(0.,ElectTotEnergy - electron_mass_c2) ;
+  G4double ElectKineEnergy = G4std::max(0.,ElectTotEnergy - electron_mass_c2) ;
 
   if (G4EnergyLossTables::GetRange(G4Electron::Electron(), ElectKineEnergy, aMaterial)
-      >= min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
+      >= G4std::min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
 
     G4ThreeVector ElectDirection ( dirx, diry, dirz );
     ElectDirection.rotateUz(GammaDirection);   
@@ -292,10 +292,10 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
 
 // the e+ is always created (even with Ekine=0) for further annihilation.
 
-  G4double PositKineEnergy = max(0.,PositTotEnergy - electron_mass_c2) ;
+  G4double PositKineEnergy = G4std::max(0.,PositTotEnergy - electron_mass_c2) ;
 
   if (G4EnergyLossTables::GetRange(G4Positron::Positron(),PositKineEnergy,aMaterial)
-        < min(G4Positron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
+        < G4std::min(G4Positron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
 
     LocalEnerDeposit += PositKineEnergy ;
     PositKineEnergy = 0. ;
@@ -320,7 +320,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
   aParticleChange.SetStatusChange( fStopAndKill ) ;
 #ifdef G4VERBOSE
   if(verboseLevel > 15){
-    G4cout<<"LE Gamma Conversion PostStepDoIt"<<endl;
+    G4cout<<"LE Gamma Conversion PostStepDoIt"<<G4endl;
   }
 #endif
   //  Reset NbOfInteractionLengthLeft and return aParticleChange
@@ -417,7 +417,7 @@ G4Element* G4LowEnergyGammaConversion::SelectRandomAtom(const G4DynamicParticle*
     if(rval <= PartialSumSigma) return ((*theElementVector)(i));
   }
   //  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-  //   << "' has no elements" << endl;
+  //   << "' has no elements" << G4endl;
   return (*theElementVector)(0);
 }
 

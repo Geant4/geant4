@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -57,7 +57,7 @@ void Em6EventAction::BeginOfEventAction(const G4Event* evt)
   } 
 
   if(verboselevel>1)
-    G4cout << "<<< Event  " << evt->GetEventID() << " started." << endl;
+    G4cout << "<<< Event  " << evt->GetEventID() << " started." << G4endl;
   nstep = 0. ;
   nstepCharged = 0. ;
   nstepNeutral = 0. ;
@@ -83,7 +83,7 @@ void Em6EventAction::EndOfEventAction(const G4Event* evt)
     int n_hit = CHC->entries();
    // if(verboselevel==2)
    // G4cout << "     " << n_hit
-   //      << " hits are stored in Em6CalorHitsCollection." << endl;
+   //      << " hits are stored in Em6CalorHitsCollection." << G4endl;
 
     G4double totEAbs=0, totLAbs=0;
     for (int i=0;i<n_hit;i++)
@@ -92,11 +92,11 @@ void Em6EventAction::EndOfEventAction(const G4Event* evt)
       }
   if(verboselevel==2)
     G4cout
-       << "   Absorber: total energy: " << setw(7) << 
+       << "   Absorber: total energy: " << G4std::setw(7) << 
                              G4BestUnit(totEAbs,"Energy")
-       << "       total track length: " << setw(7) <<
+       << "       total track length: " << G4std::setw(7) <<
                              G4BestUnit(totLAbs,"Length")
-       << endl;           
+       << G4endl;           
 
    // count event, add deposits to the sum ...
     runaction->CountEvent() ;
@@ -104,7 +104,7 @@ void Em6EventAction::EndOfEventAction(const G4Event* evt)
     runaction->AddnStepsCharged(nstepCharged) ;
     runaction->AddnStepsNeutral(nstepNeutral) ;
     if(verboselevel==2)
-      G4cout << " Ncharged=" << Nch << "  ,   Nneutral=" << Nne << endl;
+      G4cout << " Ncharged=" << Nch << "  ,   Nneutral=" << Nne << G4endl;
     runaction->CountParticles(Nch,Nne);
     runaction->AddEP(NE,NP);
     runaction->AddTrRef(Transmitted,Reflected) ;
@@ -131,7 +131,7 @@ void Em6EventAction::EndOfEventAction(const G4Event* evt)
   }  
 
   if(verboselevel>0)
-    G4cout << "<<< Event  " << evt->GetEventID() << " ended." << endl;
+    G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

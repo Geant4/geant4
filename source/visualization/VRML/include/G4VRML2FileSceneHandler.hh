@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2FileSceneHandler.hh,v 1.3 1999-11-04 02:38:36 stanaka Exp $
+// $Id: G4VRML2FileSceneHandler.hh,v 1.4 1999-12-15 14:54:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2FileSceneHandler.hh
@@ -16,7 +16,7 @@
 #ifndef G4VRML2FILE_SCENE_HANDLER_HH
 #define G4VRML2FILE_SCENE_HANDLER_HH
 
-#include <fstream.h>
+#include "g4std/fstream"
 
 #include "globals.hh"
 #include "G4LogicalVolume.hh"
@@ -108,7 +108,7 @@ private:
 	static G4int fSceneCount;    // No. of existing scenes.
 
 public: 
-	ofstream     fDest ;
+	G4std::ofstream     fDest ;
 
 };
 

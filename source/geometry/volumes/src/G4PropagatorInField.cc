@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.8 1999-10-29 16:40:32 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.9 1999-12-15 14:50:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,7 +25,7 @@
 
 #include "G4PropagatorInField.hh"
 #include "G4ios.hh"
-#include <iomanip.h>
+#include "g4std/iomanip"
  
 // Initialisation moved to G4TransportationManager.cc, to ensure
 //   correct order initialisation of static (class) data members
@@ -115,9 +115,9 @@ G4PropagatorInField::
 	if(   (stepTrial == 0.0) 
 	   || ( fNoZeroStep > 5*fThresholdNo_ZeroSteps ) ) { 
  	   G4cerr << " G4PropagatorInField::ComputeStep "
-		  << "  ERROR : attempting a zero step= " << stepTrial << endl
+		  << "  ERROR : attempting a zero step= " << stepTrial << G4endl
 		  << " and/or no progress after "  << fNoZeroStep 
-		  << " trial steps.  ABORTING." << endl;
+		  << " trial steps.  ABORTING." << G4endl;
 	   G4Exception("G4PropagatorInField::ComputeStep No progress - Looping with zero steps"); 
 	} 
      }
@@ -181,7 +181,7 @@ G4PropagatorInField::
      intersects= (LinearStepLength <= ChordAB_Length); 
      //   G4Navigator contracts to return k_infinity if len==asked
      //      and it did not find a surface boundary at that length
-     LinearStepLength = min( LinearStepLength, ChordAB_Length);
+     LinearStepLength = G4std::min( LinearStepLength, ChordAB_Length);
 
      if( intersects )
      {
@@ -209,7 +209,7 @@ G4PropagatorInField::
 #ifdef G4VERBOSE
 	   if( Verbose() > 0 )
 	      G4cout << " Found intersection after Step of length " << 
-	           StepTaken << endl;
+	           StepTaken << G4endl;
 #endif
 	}
 	else
@@ -243,11 +243,11 @@ G4PropagatorInField::
   if( do_loop_count >= GetMaxLoopCount() ){
 
      G4cerr << "G4PropagateInField: Warning: Particle is looping - " 
-	    << " tracking in field will be stopped. " << endl;
+	    << " tracking in field will be stopped. " << G4endl;
      G4cerr << " It has performed " << do_loop_count << " steps in Field " 
 	    << " while a maximum of " << GetMaxLoopCount() << " are allowed. "
-	    << endl;
-     //G4cerr << " In future this will be treated better/quicker. " << endl;
+	    << G4endl;
+     //G4cerr << " In future this will be treated better/quicker. " << G4endl;
      fParticleIsLooping= true;
   }
 #endif
@@ -281,7 +281,7 @@ G4PropagatorInField::
            << " and is " <<  End_PointAndTangent.CurveS() 
            << " a difference of " 
 	   << OriginalState.CurveS() + TruePathLength 
-              - End_PointAndTangent.CurveS() << endl;
+              - End_PointAndTangent.CurveS() << G4endl;
   }
 #endif
 
@@ -423,7 +423,7 @@ G4PropagatorInField::LocateIntersectionPoint(
 				    ChordAF_Length, NewSafety);
 
        G4bool Intersects_AF = (stepLength <= ChordAF_Length);
-       stepLength = min(stepLength, ChordAF_Length);
+       stepLength = G4std::min(stepLength, ChordAF_Length);
        if( Intersects_AF ){
 	   //  There is an intersection of AF with a volume boundary
 	   
@@ -458,7 +458,7 @@ G4PropagatorInField::LocateIntersectionPoint(
 				       ChordFB_Length, NewSafety);
 
 	   G4bool Intersects_FB = stepLength <= ChordFB_Length;
-	   stepLength = min(stepLength, ChordFB_Length);
+	   stepLength = G4std::min(stepLength, ChordFB_Length);
 	   if( Intersects_FB ) { 
 	       //  There is an intersection of FB with a volume boundary
 	       // H <- First Intersection of Chord FB 
@@ -510,12 +510,12 @@ G4PropagatorInField::LocateIntersectionPoint(
 	  if(   (noInaccuracyWarnings < maxNoWarnings ) 
              || (Verbose() > 1) ){
 	     G4cerr << "G4PropagatorInField::LocateIntersectionPoint: " 
-		    << "  Warning: Integration inaccuracy requires " << endl
-		    << " an adjustment in the step's endpoint "      << endl
+		    << "  Warning: Integration inaccuracy requires " << G4endl
+		    << " an adjustment in the step's endpoint "      << G4endl
 		    << "   Two mid-points are further apart than their "
-		    <<         "curve length difference"             << endl 
+		    <<         "curve length difference"             << G4endl 
 		    << "   Dist = "       << sqrt(linDistSq)
-		    << " curve length = " << curveDist               << endl; 
+		    << " curve length = " << curveDist               << G4endl; 
 	  }
 #endif
        }
@@ -565,21 +565,21 @@ void G4PropagatorInField::printStatus(
        static G4int noPrecision= 4;
        G4cout.precision(noPrecision);
        // G4cout.setf(ios_base::fixed,ios_base::floatfield);
-       G4cout << setw( 6)  << " " 
-	      << setw( 25) << " Current Position  and  Direction" << " "
-	      << endl; 
-       G4cout << setw( 5) << "Step#" << " "
-            << setw( 9) << "X(mm)" << " "
-            << setw( 9) << "Y(mm)" << " "  
-            << setw( 9) << "Z(mm)" << " "
-            << setw( 7) << " N_x " << " "
-            << setw( 7) << " N_y " << " "
-            << setw( 7) << " N_z " << " "
-            << setw( 9) << "StepLen" << " "  
-            << setw( 9) << "PhsStep" << " "  
-            << setw(12) << "StartSafety" << " "  
-            << setw(18) << "NextVolume" << " "
-            << endl;
+       G4cout << G4std::setw( 6)  << " " 
+	      << G4std::setw( 25) << " Current Position  and  Direction" << " "
+	      << G4endl; 
+       G4cout << G4std::setw( 5) << "Step#" << " "
+            << G4std::setw( 9) << "X(mm)" << " "
+            << G4std::setw( 9) << "Y(mm)" << " "  
+            << G4std::setw( 9) << "Z(mm)" << " "
+            << G4std::setw( 7) << " N_x " << " "
+            << G4std::setw( 7) << " N_y " << " "
+            << G4std::setw( 7) << " N_z " << " "
+            << G4std::setw( 9) << "StepLen" << " "  
+            << G4std::setw( 9) << "PhsStep" << " "  
+            << G4std::setw(12) << "StartSafety" << " "  
+            << G4std::setw(18) << "NextVolume" << " "
+            << G4endl;
         // Recurse to print the start values 
         printStatus( StartFT,   StartFT,   // 
                  -1.0, safety,  -1, 0);     //  startVolume);
@@ -589,45 +589,45 @@ void G4PropagatorInField::printStatus(
     {
        G4cout.precision(3);
        if( stepNo >= 0)
- 	  G4cout << setw( 5) << stepNo << " ";
+ 	  G4cout << G4std::setw( 5) << stepNo << " ";
        else
-	  G4cout << setw( 5) << "Start" << " ";
-       G4cout << setw( 9) << CurrentPosition.x() << " "
-	      << setw( 9) << CurrentPosition.y() << " "
-	      << setw( 9) << CurrentPosition.z() << " "
-	      << setw( 7) << CurrentUnitVelocity.x() << " "
-	      << setw( 7) << CurrentUnitVelocity.y() << " "
-	      << setw( 7) << CurrentUnitVelocity.z() << " ";
-       G4cout << setw( 9) << step_len << " "; 
+	  G4cout << G4std::setw( 5) << "Start" << " ";
+       G4cout << G4std::setw( 9) << CurrentPosition.x() << " "
+	      << G4std::setw( 9) << CurrentPosition.y() << " "
+	      << G4std::setw( 9) << CurrentPosition.z() << " "
+	      << G4std::setw( 7) << CurrentUnitVelocity.x() << " "
+	      << G4std::setw( 7) << CurrentUnitVelocity.y() << " "
+	      << G4std::setw( 7) << CurrentUnitVelocity.z() << " ";
+       G4cout << G4std::setw( 9) << step_len << " "; 
        if( requestStep != -1.0 ) 
-	  G4cout << setw( 9) << requestStep << " ";
+	  G4cout << G4std::setw( 9) << requestStep << " ";
        else
-  	  G4cout << setw( 9) << " InitialStep " << " "; 
-       G4cout << setw(12) << safety << " ";
+  	  G4cout << G4std::setw( 9) << " InitialStep " << " "; 
+       G4cout << G4std::setw(12) << safety << " ";
 
        if( startVolume != 0) {
-	  G4cout << setw(12) << startVolume->GetName() << " ";
+	  G4cout << G4std::setw(12) << startVolume->GetName() << " ";
        } else {
 	  if( step_len != -1 )
-	     G4cout << setw(12) << "OutOfWorld" << " ";
+	     G4cout << G4std::setw(12) << "OutOfWorld" << " ";
 	  else
-	     G4cout << setw(12) << "NotGiven" << " ";
+	     G4cout << G4std::setw(12) << "NotGiven" << " ";
        }
 
-       G4cout << endl;
+       G4cout << G4endl;
     }
 
     else // if( verboseLevel > 3 )
     {
        //  Multi-line output
        
-      // G4cout << "Current  Position is " << CurrentPosition << endl 
-      //    << " and UnitVelocity is " << CurrentUnitVelocity << endl;
+      // G4cout << "Current  Position is " << CurrentPosition << G4endl 
+      //    << " and UnitVelocity is " << CurrentUnitVelocity << G4endl;
        G4cout << "Step taken was " << step_len  
-	    << " out of PhysicalStep= " <<  requestStep << endl;
-       G4cout << "Final safety is: " << safety << endl;
+	    << " out of PhysicalStep= " <<  requestStep << G4endl;
+       G4cout << "Final safety is: " << safety << G4endl;
 
-       G4cout << "Chord length = " << (CurrentPosition-StartPosition).mag() << endl;
-       G4cout << endl; 
+       G4cout << "Chord length = " << (CurrentPosition-StartPosition).mag() << G4endl;
+       G4cout << G4endl; 
     }
 }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIparameter.cc,v 1.3 1999-11-15 10:39:43 gunter Exp $
+// $Id: G4UIparameter.cc,v 1.4 1999-12-15 14:50:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -72,28 +72,28 @@ int G4UIparameter::operator!=(const G4UIparameter &right) const
 
 void G4UIparameter::List()
 {
-  G4cout << endl << "Parameter : " << parameterName << endl;
+  G4cout << G4endl << "Parameter : " << parameterName << G4endl;
   if( ! parameterGuidance.isNull() )
-  G4cout << parameterGuidance << endl ;
-  G4cout << " Parameter type  : " << parameterType << endl;
+  G4cout << parameterGuidance << G4endl ;
+  G4cout << " Parameter type  : " << parameterType << G4endl;
   if(omittable)
-  { G4cout << " Omittable       : True" << endl; }
+  { G4cout << " Omittable       : True" << G4endl; }
   else
-  { G4cout << " Omittable       : False" << endl; }
+  { G4cout << " Omittable       : False" << G4endl; }
   if( currentAsDefaultFlag )
-  { G4cout << " Default value   : taken from the current value" << endl; }
+  { G4cout << " Default value   : taken from the current value" << G4endl; }
   else if( ! defaultValue.isNull() )
-  { G4cout << " Default value   : " << defaultValue << endl; }
+  { G4cout << " Default value   : " << defaultValue << G4endl; }
   if( ! parameterRange.isNull() )
-  G4cout << " Parameter range : " << parameterRange << endl;
+  G4cout << " Parameter range : " << parameterRange << G4endl;
   if( ! parameterCandidate.isNull() )
-  G4cout << " Candidates      : " << parameterCandidate << endl;
+  G4cout << " Candidates      : " << parameterCandidate << G4endl;
 }
 
 void G4UIparameter::SetDefaultValue(G4int theDefaultValue)
 {
   char defVal[20];
-  ostrstream os(defVal,20);
+  G4std::ostrstream os(defVal,20);
   os << theDefaultValue << '\0';
   defaultValue = defVal;
 }
@@ -101,7 +101,7 @@ void G4UIparameter::SetDefaultValue(G4int theDefaultValue)
 void G4UIparameter::SetDefaultValue(G4double theDefaultValue)
 {
   char defVal[20];
-  ostrstream os(defVal,20);
+  G4std::ostrstream os(defVal,20);
   os << theDefaultValue << '\0';
   defaultValue = defVal;
 }
@@ -134,7 +134,7 @@ CandidateCheck(G4String newValue) {
       iToken++;
       if(aToken==newValue) return iToken;
     } 
-    G4cerr << "parameter value is not listed in the candidate List." << endl;
+    G4cerr << "parameter value is not listed in the candidate List." << G4endl;
     return 0;
 }
 
@@ -143,7 +143,7 @@ RangeCheck(G4String newValue) {
     yystype result;
     bp = 0;                   // reset buffer pointer for G4UIpGetc()
     const char* t = newValue;
-    istrstream is((char*)t); 
+    G4std::istrstream is((char*)t); 
     char type = toupper( parameterType );
     switch (type) {
         case 'D': { is >> newVal.D; } break;
@@ -155,11 +155,11 @@ RangeCheck(G4String newValue) {
    result = Expression();
    if( paramERR == 1 ) return 0;
    if( result.type != CONSTINT) {
-      G4cerr << "Illegal Expression in parameter range." << endl;
+      G4cerr << "Illegal Expression in parameter range." << G4endl;
       return 0;
    }
    if ( result.I ) return 1;
-   G4cerr << "parameter out of range: "<< parameterRange << endl;
+   G4cerr << "parameter out of range: "<< parameterRange << G4endl;
    return 0;
 }
 
@@ -172,13 +172,13 @@ TypeCheck(G4String newValue)
         case 'D':
             if( IsDouble(newValue.data())== 0) {
                 G4cerr<<newValue<<": double value expected."
-                    << endl;
+                    << G4endl;
                 return 0;
              } break;
         case 'I':
             if( IsInt(newValue.data(),20)== 0) {
                 G4cerr<<newValue<<": integer expected."
-                    << endl;
+                    << G4endl;
                 return 0;
              } break;
         case 'S': break;
@@ -191,7 +191,7 @@ TypeCheck(G4String newValue)
                   ||newValue == "TRUE" || newValue == "FALSE") 
                   return 1;
              else {
-                    G4cerr<<newValue<<": bool expected." << endl;
+                    G4cerr<<newValue<<": bool expected." << G4endl;
                     return 0; 
              } 
         default: ;
@@ -201,7 +201,7 @@ TypeCheck(G4String newValue)
 
 
 int G4UIparameter::
-IsInt(const char* buf, short maxDigits)  // do not allow any ws
+IsInt(const char* buf, short maxDigits)  // do not allow any G4std::ws
 {
     const char* p= buf;
     int length=0;
@@ -210,15 +210,15 @@ IsInt(const char* buf, short maxDigits)  // do not allow any ws
         while( isdigit( (int)(*p) )) { ++p;  ++length; }
         if( *p == '\0' ) {
             if( length > maxDigits) {
-                G4cerr <<"digit length exceeds"<<endl;
+                G4cerr <<"digit length exceeds"<<G4endl;
                 return 0;
             }
             return 1;
         } else {
-            // G4cerr <<"illegal character after int:"<<buf<<endl;
+            // G4cerr <<"illegal character after int:"<<buf<<G4endl;
         }
     } else {
-        // G4cerr <<"illegal int:"<<buf<<endl;
+        // G4cerr <<"illegal int:"<<buf<<G4endl;
     }
     return 0;
 }
@@ -296,7 +296,7 @@ Expression(void)
 {
     yystype result;
     #ifdef DEBUG
-        G4cerr << " Expression()" << endl;
+        G4cerr << " Expression()" << G4endl;
     #endif
     result = LogicalORExpression();
     return result;
@@ -310,7 +310,7 @@ LogicalORExpression(void)
     p = LogicalANDExpression();
     if( token != LOGICALOR)  return p;
     if( p.type == CONSTSTRING || p.type == IDENTIFIER ) {
-        G4cerr << "Parameter range: illegal type at '||'" << endl;
+        G4cerr << "Parameter range: illegal type at '||'" << G4endl;
         paramERR = 1;
     }
     result.I = p.I;
@@ -319,7 +319,7 @@ LogicalORExpression(void)
         token = Yylex();
         p = LogicalANDExpression();
         if( p.type == CONSTSTRING || p.type == IDENTIFIER ) {
-            G4cerr << "Parameter range: illegal type at '||'" <<endl;
+            G4cerr << "Parameter range: illegal type at '||'" <<G4endl;
             paramERR = 1;
         }
         switch (p.type) {
@@ -330,7 +330,7 @@ LogicalORExpression(void)
                 result.I += (p.D != 0.0); 
                 result.type = CONSTINT;      break;
             default: 
-                G4cerr << "Parameter range: unknown type"<<endl; 
+                G4cerr << "Parameter range: unknown type"<<G4endl; 
                 paramERR = 1;
         } 
     }
@@ -345,7 +345,7 @@ LogicalANDExpression(void)
     p = EqualityExpression();
     if( token != LOGICALAND)  return p;
     if( p.type == CONSTSTRING || p.type == IDENTIFIER ) {
-        G4cerr << "Parameter range: illegal type at '&&'" << endl;
+        G4cerr << "Parameter range: illegal type at '&&'" << G4endl;
         paramERR = 1;
     }
     result.I = p.I;
@@ -354,7 +354,7 @@ LogicalANDExpression(void)
         token = Yylex();
         p = EqualityExpression();
         if( p.type == CONSTSTRING || p.type == IDENTIFIER ) {
-            G4cerr << "Parameter range: illegal type at '&&'" << endl;
+            G4cerr << "Parameter range: illegal type at '&&'" << G4endl;
             paramERR = 1;
         }
         switch (p.type) {
@@ -365,7 +365,7 @@ LogicalANDExpression(void)
                 result.I *= (p.D != 0.0);
                 result.type = CONSTINT;      break;
             default:
-                G4cerr << "Parameter range: unknown type."<< endl;
+                G4cerr << "Parameter range: unknown type."<< G4endl;
                 paramERR = 1;
         } 
     }
@@ -380,7 +380,7 @@ EqualityExpression(void)
     int operat;
     yystype result;
     #ifdef DEBUG
-        G4cerr << " EqualityExpression()" <<endl;
+        G4cerr << " EqualityExpression()" <<G4endl;
     #endif
     result = RelationalExpression();
     if( token==EQ || token==NE ) {
@@ -391,12 +391,12 @@ EqualityExpression(void)
         result.I = Eval2( arg1, operat, arg2 );   // semantic action
         result.type = CONSTINT;
         #ifdef DEBUG
-            G4cerr << " return code of Eval2(): " << result.I <<endl;
+            G4cerr << " return code of Eval2(): " << result.I <<G4endl;
         #endif
     } else {
         if (result.type != CONSTINT && result.type != CONSTDOUBLE) {  
             G4cerr << "Parameter range: error at EqualityExpression"
-                 << endl;
+                 << G4endl;
             paramERR = 1;
         }
     }
@@ -411,7 +411,7 @@ RelationalExpression(void)
     int operat;
     yystype result;
     #ifdef DEBUG
-        G4cerr << " RelationalExpression()" <<endl;
+        G4cerr << " RelationalExpression()" <<G4endl;
     #endif
 
     arg1 = AdditiveExpression();
@@ -422,13 +422,13 @@ RelationalExpression(void)
         result.I = Eval2( arg1, operat, arg2 );    // semantic action
         result.type = CONSTINT;
         #ifdef DEBUG
-            G4cerr << " return  Eval2(): " << endl;
+            G4cerr << " return  Eval2(): " << G4endl;
         #endif
     } else {
         result = arg1;
     }
     #ifdef DEBUG
-       G4cerr <<" return RelationalExpression()" <<endl;
+       G4cerr <<" return RelationalExpression()" <<G4endl;
     #endif
     return  result;
 }
@@ -440,7 +440,7 @@ AdditiveExpression(void)
     if( token != '+' && token != '-' )  return result;
     G4cerr << "Parameter range: operator " 
          << (char)token 
-         << " is not supported." << endl;
+         << " is not supported." << G4endl;
     paramERR = 1;
     return  result;
 }
@@ -452,7 +452,7 @@ MultiplicativeExpression(void)
     if( token != '*' && token != '/' && token != '%' ) return result;
     G4cerr << "Parameter range: operator "
          << (char)token
-         << " is not supported." << endl;
+         << " is not supported." << G4endl;
     paramERR = 1;
     return  result;
 }
@@ -463,7 +463,7 @@ UnaryExpression(void)
     yystype result;
     yystype p;
     #ifdef DEBUG
-        G4cerr <<" UnaryExpression"<< endl;
+        G4cerr <<" UnaryExpression"<< G4endl;
     #endif
     switch(token) {
         case '-':
@@ -484,7 +484,7 @@ UnaryExpression(void)
             token = Yylex();
             G4cerr << "Parameter range error: "
                  << "operator '!' is not supported (sorry)."
-                 << endl;
+                 << G4endl;
             paramERR = 1;
             result = UnaryExpression();   break;
         default:
@@ -499,7 +499,7 @@ PrimaryExpression(void)
 {
      yystype result;
      #ifdef DEBUG
-         G4cerr <<" PrimaryExpression" << endl;
+         G4cerr <<" PrimaryExpression" << G4endl;
      #endif
      switch (token) {
          case IDENTIFIER:
@@ -518,7 +518,7 @@ PrimaryExpression(void)
               token= Yylex();
               result = Expression();
               if( token !=  ')'  ) {
-                  G4cerr << " ')' expected" << endl;
+                  G4cerr << " ')' expected" << G4endl;
                   paramERR = 1;
               }
               token = Yylex();
@@ -537,7 +537,7 @@ Eval2(yystype arg1, int op, yystype arg2)
     if( (arg1.type != IDENTIFIER) && (arg2.type != IDENTIFIER)) {
         G4cerr << parameterName
              << ": meaningless comparison "
-             << arg1.type << " " << arg2.type << endl;
+             << arg1.type << " " << arg2.type << G4endl;
         paramERR = 1;
     }
     char type = toupper( parameterType );
@@ -549,7 +549,7 @@ Eval2(yystype arg1, int op, yystype arg2)
                 } else {
                     G4cerr << "integer operand expected for "
                          << parameterRange << '.' 
-                         << endl; 
+                         << G4endl; 
                 }
                  break;
             case 'D': 
@@ -570,7 +570,7 @@ Eval2(yystype arg1, int op, yystype arg2)
                 } else {
                     G4cerr << "integer operand expected for "
                          << parameterRange << '.' 
-                         << endl; 
+                         << G4endl; 
                 }
                  break;
             case 'D': 
@@ -583,7 +583,7 @@ Eval2(yystype arg1, int op, yystype arg2)
             default: ;
         }
     }
-    G4cerr << "no param name is specified at the param range."<<endl;
+    G4cerr << "no param name is specified at the param range."<<G4endl;
     return 0;
 }
 
@@ -600,14 +600,14 @@ CompareInt(int arg1, int op, int arg2)
        case EQ:  result = ( arg1 == arg2); opr= "==";  break;
        case NE:  result = ( arg1 != arg2); opr= "!=";  break;
        default: 
-           G4cerr << "Parameter range: error at CompareInt" << endl;
+           G4cerr << "Parameter range: error at CompareInt" << G4endl;
            paramERR = 1;
     }
     #ifdef DEBUG
         G4cerr << "CompareInt "
              << arg1 << " " << opr << arg2 
              << " result: " << result
-             << endl;
+             << G4endl;
     #endif
     return result;
 }
@@ -625,14 +625,14 @@ CompareDouble(double arg1, int op, double arg2)
         case EQ:  result = ( arg1 == arg2); opr= "==";  break;
         case NE:  result = ( arg1 != arg2); opr= "!=";  break;
         default:
-           G4cerr << "Parameter range: error at CompareDouble" << endl;
+           G4cerr << "Parameter range: error at CompareDouble" << G4endl;
            paramERR = 1;
     }
     #ifdef DEBUG
         G4cerr << "CompareDouble " 
              << arg1 <<" " << opr << " "<< arg2
              << " result: " << result
-             << endl;
+             << G4endl;
     #endif
     return result;
 }
@@ -658,7 +658,7 @@ Yylex()         // reads input and returns token number KR486
                    c=='e' || c=='E' || c=='+' || c=='-');
          G4UIpUngetc(c);
 	 const char* t = buf;
-	 istrstream is((char*)t);
+	 G4std::istrstream is((char*)t);
          if ( IsInt(buf.data(),20) ) {
              is >> yylval.I;
              return  CONSTINT;
@@ -667,7 +667,7 @@ Yylex()         // reads input and returns token number KR486
              is >> yylval.D;
              return  CONSTDOUBLE;
          } else {
-             G4cerr << buf<<": numeric format error."<<endl;
+             G4cerr << buf<<": numeric format error."<<G4endl;
          }
     }
     buf="";
@@ -680,7 +680,7 @@ Yylex()         // reads input and returns token number KR486
             yylval.S =buf;
             return IDENTIFIER;
         } else {
-            G4cerr << buf << " is not a parameter name."<< endl;
+            G4cerr << buf << " is not a parameter name."<< G4endl;
             paramERR = 1;
        }
     }
@@ -722,10 +722,10 @@ G4UIpUngetc(int c) {                 // emulation of ungetc()
     if (bp >0 && c == parameterRange(bp-1)) {
          --bp;
     } else {
-         G4cerr << "G4UIpUngetc() failed." << endl;
+         G4cerr << "G4UIpUngetc() failed." << G4endl;
          G4cerr << "bp="<<bp <<" c="<<c
               << " pR(bp-1)=" << parameterRange(bp-1)
-              << endl;
+              << G4endl;
          paramERR = 1;
          return -1;
     }

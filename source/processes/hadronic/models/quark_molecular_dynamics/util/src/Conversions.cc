@@ -58,8 +58,8 @@ ConversionImpossible::~ConversionImpossible()
    delete [] String;
 }
 
-void ConversionImpossible::writeMessage(ostream& o) const
+void ConversionImpossible::writeMessage(G4std::ostream& o) const
 {
-   o << "Cannot convert '" << String << "' to type " << Type << endl;
+   o << "Cannot convert '" << String << "' to type " << Type << G4endl;
 }
 

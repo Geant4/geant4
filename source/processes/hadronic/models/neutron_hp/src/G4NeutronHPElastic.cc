@@ -13,7 +13,7 @@
     dirName = getenv("NeutronHPCrossSections");
     G4String tString = "/Elastic/";
     dirName = dirName + tString;
-//    G4cout <<"G4NeutronHPElastic::G4NeutronHPElastic testit "<<dirName<<endl;
+//    G4cout <<"G4NeutronHPElastic::G4NeutronHPElastic testit "<<dirName<<G4endl;
     numEle = G4Element::GetNumberOfElements();
     theElastic = new G4NeutronHPChannel[numEle];
     for (G4int i=0; i<numEle; i++)

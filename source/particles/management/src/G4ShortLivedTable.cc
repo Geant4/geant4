@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedTable.cc,v 1.7 1999-10-30 04:33:47 kurasige Exp $
+// $Id: G4ShortLivedTable.cc,v 1.8 1999-12-15 14:51:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,11 +25,7 @@
 
 #include "G4ios.hh"
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 
 G4ShortLivedTable::G4ShortLivedTable()
@@ -76,7 +72,7 @@ void G4ShortLivedTable::Insert(G4ParticleDefinition* particle)
     //#ifdef G4VERBOSE
     //if (GetVerboseLevel()>0) {
     //  G4cout << "G4ShortLivedTable::Insert :" << particle->GetParticleName() ;
-    //  G4cout << " is not short lived" << endl; 
+    //  G4cout << " is not short lived" << G4endl; 
     //}
     //#endif
   }
@@ -100,7 +96,7 @@ void G4ShortLivedTable::Remove(G4ParticleDefinition* particle)
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4ShortLivedTable::Remove :" << particle->GetParticleName() ;
-      G4cout << " is not short lived" << endl; 
+      G4cout << " is not short lived" << G4endl; 
     }
 #endif
   }

@@ -5,7 +5,7 @@
 
 
 //
-// $Id: mgrnodearray.h,v 1.2 1999-05-21 20:20:42 japost Exp $
+// $Id: mgrnodearray.h,v 1.3 1999-12-15 14:50:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -91,7 +91,7 @@ public:
 
     virtual int Insert(GenericNode* gn);
     virtual int Insert(GenericNode* gn, int index) 
-	{ cerr << 
+	{ G4cerr << 
 	  "Call MgrNodeArraySorted::Insert() without index argument instead.\n"
 		<< "index argument: " << index << " being ignored.\n";
 	  return Insert(gn); }

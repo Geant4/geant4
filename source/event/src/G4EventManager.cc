@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EventManager.cc,v 1.2 1999-04-15 08:41:52 asaim Exp $
+// $Id: G4EventManager.cc,v 1.3 1999-12-15 14:49:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,9 +63,9 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 #ifdef G4VERBOSE
   if ( verboseLevel > 0 )
   {
-    G4cout << "=====================================" << endl;
-    G4cout << "  G4EventManager::ProcessOneEvent()  " << endl;
-    G4cout << "=====================================" << endl;
+    G4cout << "=====================================" << G4endl;
+    G4cout << "  G4EventManager::ProcessOneEvent()  " << G4endl;
+    G4cout << "=====================================" << G4endl;
   }
 #endif
 
@@ -85,7 +85,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   if ( verboseLevel > 1 )
   {
     G4cout << currentEvent->GetNumberOfPrimaryVertex()
-         << " vertices passed from G4Event." << endl;
+         << " vertices passed from G4Event." << G4endl;
   }
 #endif
 
@@ -95,8 +95,8 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   if ( verboseLevel > 0 )
   {
     G4cout << trackContainer->GetNTotalTrack() << " primaries "
-         << "are passed from G4EventTransformer." << endl;
-    G4cout << "!!!!!!! Now start processing an event !!!!!!!" << endl;
+         << "are passed from G4EventTransformer." << G4endl;
+    G4cout << "!!!!!!! Now start processing an event !!!!!!!" << G4endl;
   }
 #endif
 
@@ -108,7 +108,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
     {
       G4cout << "Track " << track << " (trackID " << track->GetTrackID()
   	 << ", parentID " << track->GetParentID() 
-  	 << ") is passed to G4TrackingManager." << endl;
+  	 << ") is passed to G4TrackingManager." << G4endl;
     }
 #endif
 
@@ -122,7 +122,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
     {
       G4cout << "Track (trackID " << track->GetTrackID()
 	 << ", parentID " << track->GetParentID()
-         << ") is processed with stopping code " << istop << endl;
+         << ") is processed with stopping code " << istop << G4endl;
     }
 #endif
 
@@ -153,7 +153,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 
       case fAlive:
         G4cout << "Illeagal TrackStatus returned from G4TrackingManager!"
-             << endl;
+             << G4endl;
       case fKillTrackAndSecondaries:
         if( secondaries ) secondaries->clearAndDestroy();
         delete track;
@@ -164,8 +164,8 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 #ifdef G4VERBOSE
   if ( verboseLevel > 0 )
   {
-    G4cout << "NULL returned from G4StackManager." << endl;
-    G4cout << "Terminate current event processing." << endl;
+    G4cout << "NULL returned from G4StackManager." << G4endl;
+    G4cout << "Terminate current event processing." << G4endl;
   }
 #endif
 
@@ -202,7 +202,7 @@ void G4EventManager::StackTracks(G4TrackVector *trackVector)
         G4cout << "A new track " << newTrack 
              << " (trackID " << newTrack->GetTrackID()
 	     << ", parentID " << newTrack->GetParentID() 
-	     << ") is passed to G4StackManager." << endl;
+	     << ") is passed to G4StackManager." << G4endl;
       }
 #endif
     }

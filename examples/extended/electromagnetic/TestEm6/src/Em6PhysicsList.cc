@@ -1,6 +1,6 @@
 
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -27,7 +27,7 @@
 #include "G4EnergyLossTables.hh"
 ////#include "G4Timer.hh"
 #include "G4ios.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"                
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -217,7 +217,7 @@ void Em6PhysicsList::ConstructEM()
     {
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
 
-      cout << "Hadronic processes for " << particleName << endl; 
+      cout << "Hadronic processes for " << particleName << G4endl; 
 
       // Standard ionisation
       // G4hIonisation* hIon = new G4hIonisation() ;
@@ -248,7 +248,7 @@ void Em6PhysicsList::ConstructEM()
     {
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
 
-      cout << "Ionic processes for " << particleName << endl; 
+      cout << "Ionic processes for " << particleName << G4endl; 
 
       // Standard ionisation
       // G4hIonisation* hIon = new G4ionIonisation() ;
@@ -303,7 +303,7 @@ void Em6PhysicsList::SetCuts()
   ////theTimer.Start() ;
   if (verboseLevel >0){
     G4cout << "Em6PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << endl;
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
@@ -327,8 +327,8 @@ void Em6PhysicsList::SetCuts()
 
   ////theTimer.Stop();
   ////G4cout.precision(6);
-  ////G4cout << endl ;
-  ////G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<endl;
+  ////G4cout << G4endl ;
+  ////G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<G4endl;
 
 }
 
@@ -400,10 +400,10 @@ void Em6PhysicsList::GetRange(G4double val)
   G4double cut;
   part = theParticleTable->FindParticle("e-");
   cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  G4cout << "material : " << currMat->GetName() << endl;
-  G4cout << "particle : " << part->GetParticleName() << endl;
-  G4cout << "energy   : " << val / keV << " (keV)" << endl;
-  G4cout << "range    : " << cut / mm << " (mm)" << endl;
+  G4cout << "material : " << currMat->GetName() << G4endl;
+  G4cout << "particle : " << part->GetParticleName() << G4endl;
+  G4cout << "energy   : " << val / keV << " (keV)" << G4endl;
+  G4cout << "range    : " << cut / mm << " (mm)" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -411,8 +411,8 @@ void Em6PhysicsList::GetRange(G4double val)
 void Em6PhysicsList::SetMaxStep(G4double step)
 {
   MaxChargedStep = step ;
-  G4cout << " MaxChargedStep=" << MaxChargedStep << endl;
-  G4cout << endl;
+  G4cout << " MaxChargedStep=" << MaxChargedStep << G4endl;
+  G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst16DetectorConstruction.cc,v 1.1 1999-11-18 14:58:18 stesting Exp $
+// $Id: Tst16DetectorConstruction.cc,v 1.2 1999-12-15 14:54:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,7 +40,7 @@ void Tst16DetectorConstruction::SelectMaterial(G4String val)
 {
   materialChoice = val;
   SelectMaterialPointer();
-  G4cout << "SimpleBox is now made of " << materialChoice << endl;
+  G4cout << "SimpleBox is now made of " << materialChoice << G4endl;
 }
 
 void Tst16DetectorConstruction::SelectMaterialPointer()

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCandidate.cc,v 1.1 1999-11-17 11:04:16 hpw Exp $
+// $Id: G4QCandidate.cc,v 1.2 1999-12-15 14:52:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -27,7 +27,7 @@ G4QCandidate::G4QCandidate(G4int PDGcode)
   theDefinition=G4ParticleTable::GetParticleTable()->FindParticle(PDGencoding);
   if (theDefinition == NULL)
   {
-	cout << "Encoding = " << PDGencoding << endl;
+	cout << "Encoding = " << PDGencoding << G4endl;
 	G4Exception("G4QCandidate::GetDefinition(): Encoding not in particle table");
   }
   theMass = theDefinition->GetPDGMass();
@@ -46,7 +46,7 @@ G4QCandidate::G4QCandidate(G4int PDGcode)
   //{
 	 //G4double z=aNucleus->GetZ();
 	 //G4double n=aNucleus->GetN();
-	 //cout << "Nucleus M(Z=" << z << ", N=" << n << ")=" << aNucleus->AtomicMass(z+n,z) << endl;
+	 //cout << "Nucleus M(Z=" << z << ", N=" << n << ")=" << aNucleus->AtomicMass(z+n,z) << G4endl;
 	 //G4Exception("G4QCandidate: Initialization for nuclear environment is not implemented");
   //}
 }

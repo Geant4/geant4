@@ -5,7 +5,7 @@
 
 
 //
-// $Id: STEPfile.h,v 1.2 1999-05-21 20:20:32 japost Exp $
+// $Id: STEPfile.h,v 1.3 1999-12-15 14:50:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef _STEPFILE_H
@@ -35,7 +35,7 @@
 
 #include <instmgr.h>
 #include <Registry.h>
-#include <fstream.h>
+#include "g4std/fstream"
 #include <dirobj.h>
 #include <errordesc.h>
 #include <time.h>
@@ -143,12 +143,12 @@ class STEPfile
     Severity ReadWorkingFile (const char* filename =0);
     Severity AppendWorkingFile (const char* filename =0);
 
-    Severity AppendFile (istream* in) ;
+    Severity AppendFile (G4std::istream* in) ;
 
-    Severity WriteExchangeFile (ostream& out, int validate =1);
+    Severity WriteExchangeFile (G4std::ostream& out, int validate =1);
     Severity WriteExchangeFile (const char* filename =0, int validate =1);
 
-    Severity WriteWorkingFile (ostream& out);
+    Severity WriteWorkingFile (G4std::ostream& out);
     Severity WriteWorkingFile (const char* filename =0);
 
     stateEnum EntityWfState(char c);
@@ -163,10 +163,10 @@ class STEPfile
 //member functions
     
 //called by ReadExchangeFile
-    istream* OpenInputFile (const char* filename = "");
-    void CloseInputFile(istream* in);
+    G4std::istream* OpenInputFile (const char* filename = "");
+    void CloseInputFile(G4std::istream* in);
     
-    Severity ReadHeader(istream& in);
+    Severity ReadHeader(G4std::istream& in);
 
     InstMgr* HeaderConvertToNew(InstMgr& oldinst);
     Severity HeaderVerifyInstances(InstMgr* im);
@@ -180,53 +180,53 @@ class STEPfile
                                                 //   J.Apostolakis Oct 30, 98
     int HeaderIdOld (const char* nm ="\0");
 
-    int ReadData1 (istream& in); // first pass to create instances
-    int ReadData2 (istream& in); // second pass to read instances
+    int ReadData1 (G4std::istream& in); // first pass to create instances
+    int ReadData2 (G4std::istream& in); // second pass to read instances
 
 // obsolete
-    int ReadWorkingData1 (istream& in);
-    int ReadWorkingData2 (istream& in);
+    int ReadWorkingData1 (G4std::istream& in);
+    int ReadWorkingData2 (G4std::istream& in);
 
-    void ReadRestOfFile(istream& in);
+    void ReadRestOfFile(G4std::istream& in);
 
 	// create instance - used by ReadData1()
-    STEPentity *  CreateInstance(istream& in, ostream& out);
+    STEPentity *  CreateInstance(G4std::istream& in, G4std::ostream& out);
 	// create complex instance - used by CreateInstance()
-    STEPentity * CreateSubSuperInstance(istream& in, int fileid);
+    STEPentity * CreateSubSuperInstance(G4std::istream& in, int fileid);
 
 	// read the instance - used by ReadData2()
-    STEPentity * ReadInstance (istream& in, ostream& out, SCLstring &cmtStr);
+    STEPentity * ReadInstance (G4std::istream& in, G4std::ostream& out, SCLstring &cmtStr);
 
   //  reading scopes are still incomplete
   //  these functions are stubs
-    Severity CreateScopeInstances(istream& in, STEPentityH ** scopelist);
-    Severity ReadScopeInstances(istream& in);
-//    Severity ReadSubSuperInstance(istream& in);
+    Severity CreateScopeInstances(G4std::istream& in, STEPentityH ** scopelist);
+    Severity ReadScopeInstances(G4std::istream& in);
+//    Severity ReadSubSuperInstance(G4std::istream& in);
 
-    int FindDataSection (istream& in);
-    int FindHeaderSection (istream& in);
+    int FindDataSection (G4std::istream& in);
+    int FindHeaderSection (G4std::istream& in);
 
 // writing working session files
-    void WriteWorkingData(ostream& out);
+    void WriteWorkingData(G4std::ostream& out);
 
 //called by WriteExchangeFile
-    ofstream* OpenOutputFile(const char* filename =0);
-    void CloseOutputFile(ostream* out);
+    G4std::ofstream* OpenOutputFile(const char* filename =0);
+    void CloseOutputFile(G4std::ostream* out);
 
-    void WriteHeader (ostream& out);
-    void WriteHeaderInstance (STEPentity *obj, ostream& out);
-    void WriteHeaderInstanceFileName (ostream& out);
-    void WriteHeaderInstanceFileDescription (ostream& out);
-    void WriteHeaderInstanceFileSchema (ostream& out);
+    void WriteHeader (G4std::ostream& out);
+    void WriteHeaderInstance (STEPentity *obj, G4std::ostream& out);
+    void WriteHeaderInstanceFileName (G4std::ostream& out);
+    void WriteHeaderInstanceFileDescription (G4std::ostream& out);
+    void WriteHeaderInstanceFileSchema (G4std::ostream& out);
 
-    void WriteData (ostream& out);
+    void WriteData (G4std::ostream& out);
     
     int IncrementFileId (int fileid);
     int FileIdIncr() { return _fileIdIncr; }
     void SetFileIdIncrement ();
     void MakeBackupFile();
 
-//    void ReadWhiteSpace(istream& in);
+//    void ReadWhiteSpace(G4std::istream& in);
 };
 
 //inline functions

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.cc,v 1.8 1999-05-19 16:57:11 magni Exp $
+// $Id: G4FConicalSurface.cc,v 1.9 1999-12-15 14:50:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/G4FConicalSurface.cc,v 1.2 1993/02/05 00:38:39 alanb Exp  */
@@ -18,7 +18,7 @@
 //                                            const G4Vector3D& a,
 //		G4double l, G4double sr, G4double lr )
 //	G4FConicalSurface::G4FConicalSurface( const G4FConicalSurface& c )
-//	G4FConicalSurface::PrintOn( ostream& os ) const
+//	G4FConicalSurface::PrintOn( G4std::ostream& os ) const
 //	G4FConicalSurface::operator==( const G4FConicalSurface& c )
 //	G4FConicalSurface::WithinBoundary( const G4Vector3D& x ) const
 //	G4FConicalSurface::Scale() const
@@ -139,9 +139,9 @@ void G4FConicalSurface::CalcBBox()
 }
 
 
-void G4FConicalSurface::PrintOn( ostream& os ) const
+void G4FConicalSurface::PrintOn( G4std::ostream& os ) const
 { 
-  //  printing function using C++ ostream class
+  //  printing function using C++ G4std::ostream class
   os << "G4FConicalSurface with origin: " << origin << "\t"
      << "and axis: " << Position.GetAxis() << "\n"
      << "\t small radius: " << small_radius 
@@ -362,7 +362,7 @@ G4double G4FConicalSurface::HowNear( const G4Vector3D& x ) const
     hownear = fabs(m*xd.x()-xd.z()+q)/sqrt(1+m*m);
     return hownear;
   } else {
-    hownear = min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
+    hownear = G4std::min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
     return hownear;
   }
 

@@ -18,18 +18,18 @@ void G4ShapeDefinitionRepresentationCreator::CreateG4Geometry(STEPentity& Ent)
 /*
   // Output messages
   G4cout<<"Shape definition representation created with "
-	<<"the Advanced Brep shape :"<<endl;
+	<<"the Advanced Brep shape :"<<G4endl;
 
-  G4cout<<" - BBox of the solid :"<<endl;
+  G4cout<<" - BBox of the solid :"<<G4endl;
   G4cout<< "    box min: "
 	<< ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMin().x()<< " "
 	<< ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMin().y()<< " "
-	<< ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMin().z()<< endl;
+	<< ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMin().z()<< G4endl;
 
   G4cout<< "    box max: "
 	<< ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMax().x()<< " "
 	<< ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMax().y()<< " "
-	<< ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMax().z()<< endl;
+	<< ((G4BREPSolid*)ps->GetSolid())->GetBBox()->GetBoxMax().z()<< G4endl;
 
 */
 }

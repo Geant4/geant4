@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testshapes.cc,v 1.1 1999-01-08 16:33:59 gunter Exp $
+// $Id: testshapes.cc,v 1.2 1999-12-15 14:54:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,7 +90,7 @@ main (int argc,char** argv) {
   G4VisManager* pVMan = G4VisManager::GetInstance ();
 
   // Tie streams together so output is flushed before any input.
-  cin.tie (&G4cout);
+  G4cin.tie (&G4cout);
   // Main loop.
   G4int iGeom;
   do {
@@ -109,10 +109,10 @@ main (int argc,char** argv) {
 	   << "9)  PCon (Not implemented yet)\n"
 	   << "10) PGon (Not implemented yet)\n"
 	   << "11) Forced wireframe box\n"
-	   << endl;
+	   << G4endl;
       G4cout << "Enter choice (< 0 to exit): ";
-      cin >> iGeom;  // (Protect against invalid input!!!!!!!!!!!!!!!!!!!)
-      while (cin.get () != '\n');  // Get newline character after cin >> iGS;
+      G4cin >> iGeom;  // (Protect against invalid input!!!!!!!!!!!!!!!!!!!)
+      while (G4cin.get () != '\n');  // Get newline character after G4cin >> iGS;
       
     } while (iGeom > 11);
     
@@ -126,9 +126,9 @@ main (int argc,char** argv) {
 	pVMan -> AddToCurrentSceneData (pGeometries [iGeom]);
 
 	// These lines temporarily removed from G4RunManager, so they're here..
-	G4cout << "Start closing geometry." << endl;
+	G4cout << "Start closing geometry." << G4endl;
 	G4GeometryManager::GetInstance()->CloseGeometry();
-	G4cout << "Geometry closed. Start event processing." << endl;
+	G4cout << "Geometry closed. Start event processing." << G4endl;
 
 	// Enter UI command interpreter.
 	UI -> Interact ("G4Vis> ");
@@ -136,7 +136,7 @@ main (int argc,char** argv) {
       else {
 	G4cout << "Null geometry pointer."
 	  "\nMaybe you selected a not-implemented shape!"
-	     << endl;
+	     << G4endl;
       }
     }
   } while ( iGeom >= 0 );

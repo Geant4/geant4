@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CrossSectionDataTest.cc,v 1.1 1999-01-08 16:33:10 gunter Exp $
+// $Id: G4CrossSectionDataTest.cc,v 1.2 1999-12-15 14:52:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,10 +50,10 @@ int main()
 {
 // Element definition
 
-   G4cout << " 1 copper" << endl;
-   G4cout << " 2 uranium" << endl;
+   G4cout << " 1 copper" << G4endl;
+   G4cout << " 2 uranium" << G4endl;
    G4int choice;
-   cin >> choice;
+   G4cin >> choice;
 
    G4Element* theElement;
    G4Material* theMaterial;
@@ -69,20 +69,20 @@ int main()
                                    kStateSolid);
       break;
    }
-   //   G4cout << "Dumping element info:" << endl;
+   //   G4cout << "Dumping element info:" << G4endl;
    //   theElement->DumpInfo();
-   //   G4cout << "Dumping material info:" << endl;
+   //   G4cout << "Dumping material info:" << G4endl;
    //   theMaterial->DumpInfo();
 
 // Particle definition
 
-   G4cout << " 1 proton" << endl;
-   G4cout << " 2 pion+" << endl;
-   G4cout << " 3 neutron" << endl;
-   G4cout << " 4 kaon+" << endl;
-   G4cout << " 5 kaon0short" << endl;
-   G4cout << " 6 pion-" << endl;
-   cin >> choice;
+   G4cout << " 1 proton" << G4endl;
+   G4cout << " 2 pion+" << G4endl;
+   G4cout << " 3 neutron" << G4endl;
+   G4cout << " 4 kaon+" << G4endl;
+   G4cout << " 5 kaon0short" << G4endl;
+   G4cout << " 6 pion-" << G4endl;
+   G4cin >> choice;
 
    G4ParticleDefinition* theParticleDefinition;
    G4VProcess* theProcess;
@@ -112,12 +112,12 @@ int main()
       theParticleDefinition = G4PionMinus::PionMinusDefinition();
       break;
    }
-   //   G4cout << "Dumping particle info:" << endl;
+   //   G4cout << "Dumping particle info:" << G4endl;
    //   theParticleDefinition->DumpTable();
 
    G4double ekin;
    G4cout << "Kinetic energy in GeV: ";
-   cin >> ekin;
+   G4cin >> ekin;
 
 // Make a dynamic particle too
    G4DynamicParticle* theDynamicParticle;
@@ -126,11 +126,11 @@ int main()
                                               ekin*GeV);
 // Process definition
 
-   G4cout << " 1 elastic" << endl;
-   G4cout << " 2 fission" << endl;
-   G4cout << " 3 capture" << endl;
-   G4cout << " 4 inelastic" << endl;
-   cin >> choice;
+   G4cout << " 1 elastic" << G4endl;
+   G4cout << " 2 fission" << G4endl;
+   G4cout << " 3 capture" << G4endl;
+   G4cout << " 4 inelastic" << G4endl;
+   G4cin >> choice;
 
    G4CrossSectionDataStore theCrossSectionDataStore;
 
@@ -191,7 +191,7 @@ int main()
                                                   theElement);
    G4cout << theProcess->GetProcessName() << " cross section for " << 
            theParticleDefinition->GetParticleName() <<
-           " on " << theElement->GetName() << endl;
-   G4cout << sig/millibarn << " mb" << endl;
-   G4cout << "Mean free path = " << mfp << " mm" << endl;
+           " on " << theElement->GetName() << G4endl;
+   G4cout << sig/millibarn << " mb" << G4endl;
+   G4cout << "Mean free path = " << mfp << " mm" << G4endl;
 }

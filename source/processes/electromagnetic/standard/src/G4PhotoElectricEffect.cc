@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.8 1999-10-20 11:27:16 maire Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.9 1999-12-15 14:51:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,7 +27,7 @@
 // 08-01-97, crossection table + meanfreepath table, M.Maire
 // 13-03-97, adapted for the new physics scheme, M.Maire
 // 28-03-97, protection in BuildPhysicsTable, M.Maire
-// 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
+// 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
 // 13-08-98, new methods SetBining() PrintInfo()
 // 17-11-98, use table of Atomic shells in PostStepDoIt
 // 06-01-99, use Sandia crossSection below 50 keV, V.Grichine mma
@@ -307,7 +307,7 @@ void G4PhotoElectricEffect::PrintInfoDefinition()
            comments += "Good description from 10 KeV to 50 MeV for all Z";
            comments += "\n        Sandia crossSection below 50 KeV";
 	             
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n       PhysicsTables from " << G4BestUnit(LowestEnergyLimit,"Energy")
          << " to " << G4BestUnit(HighestEnergyLimit,"Energy") 
          << " in " << NumbBinTable << " bins. \n";

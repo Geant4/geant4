@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.cc,v 1.5 1999-07-28 11:48:20 maire Exp $
+// $Id: G4Material.cc,v 1.6 1999-12-15 14:50:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,7 +40,7 @@
 
 #include "G4Material.hh"
 #include "G4UnitsTable.hh"
-#include <iomanip.h>
+#include "g4std/iomanip"
 
 
 G4MaterialTable G4Material::theMaterialTable;
@@ -61,7 +61,7 @@ G4Material::G4Material(const G4String& name, G4double z,
               << " define a material with density=0 is not allowed. \n"
               << " The material " << name << " will be constructed with the"
               << " default minimal density: " << universe_mean_density/(g/cm3) 
-              << "g/cm3" << endl;
+              << "g/cm3" << G4endl;
          density = universe_mean_density;
        } 
 
@@ -109,7 +109,7 @@ G4Material::G4Material(const G4String& name, G4double density, G4int nComponents
             << " define a material with density=0 is not allowed. \n"
             << " The material " << name << " will be constructed with the"
             << " default minimal density: " << universe_mean_density/(g/cm3) 
-            << "g/cm3" << endl;
+            << "g/cm3" << G4endl;
        density = universe_mean_density;
       }
         
@@ -146,7 +146,7 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
               << " define a material with density=0 is not allowed. \n"
               << " The material " << name << " will be constructed with the"
               << " default minimal density: " << universe_mean_density/(g/cm3) 
-              << "g/cm3" << endl;
+              << "g/cm3" << G4endl;
          density = universe_mean_density;
        } 
 
@@ -195,7 +195,7 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
             << " define a material with density=0 is not allowed. \n"
             << " The material " << name << " will be constructed with the"
             << " default minimal density: " << universe_mean_density/(g/cm3) 
-            << "g/cm3" << endl;
+            << "g/cm3" << G4endl;
        density = universe_mean_density;
       }
         
@@ -267,7 +267,7 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
     // if fAtomsVector is non-NULL, complain. Apples and oranges.  $$$
     if (fAtomsVector) {
         G4cerr << "This material is already being defined via elements by"
-             << "atoms." << endl;
+             << "atoms." << G4endl;
         G4Exception ("You are mixing apples and oranges ...");
     }
          
@@ -302,7 +302,7 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
        if (abs(1.-wtSum) > perThousand) {
          G4cerr << "WARNING !! - Fractional masses do not sum to 1 :the Delta is > 0.001"
               << "( the weights are NOT renormalized; the results may be wrong)" 
-              << endl;
+              << G4endl;
        }
 
        ComputeDerivedQuantities();
@@ -322,7 +322,7 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
     // if fAtomsVector is non-NULL, complain. Apples and oranges.  $$$
     if (fAtomsVector) {
         G4cerr << "This material is already being defined via elements by"
-             << "atoms." << endl;
+             << "atoms." << G4endl;
         G4Exception ("You are mixing apples and oranges ...");
     }
     // initialization
@@ -360,7 +360,7 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
        if (abs(1.-wtSum) > perThousand) {
          G4cerr << "WARNING !! - Fractional masses do not sum to 1 :the Delta is > 0.001"
               << "( the weights are NOT renormalized; the results may be wrong)" 
-              << endl;
+              << G4endl;
        }
 
        ComputeDerivedQuantities();
@@ -503,40 +503,40 @@ G4int G4Material::operator!=(const G4Material& right) const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 
-ostream& operator<<(ostream& flux, G4Material* material)
+G4std::ostream& operator<<(G4std::ostream& flux, G4Material* material)
 {
-  long mode = flux.setf(ios::fixed,ios::floatfield);
+  long mode = flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
   
   flux
-    << " Material: "      << setw(8) <<  material->fName
+    << " Material: "      << G4std::setw(8) <<  material->fName
     << " " << material->fChemicalFormula << " "
-    << "  density: "     << setw(6) << setprecision(3)  
+    << "  density: "     << G4std::setw(6) << G4std::setprecision(3)  
                           << G4BestUnit(material->fDensity,"Volumic Mass") 
-    << "  temperature: " << setw(6) << setprecision(2)  
+    << "  temperature: " << G4std::setw(6) << G4std::setprecision(2)  
                           << (material->fTemp)/kelvin << " K"
-    << "  pressure: "    << setw(6) << setprecision(2)   
+    << "  pressure: "    << G4std::setw(6) << G4std::setprecision(2)   
                           << (material->fPressure)/atmosphere << " atm"
-    << "  RadLength: "   << setw(7)  << setprecision(3)  
+    << "  RadLength: "   << G4std::setw(7)  << G4std::setprecision(3)  
                           << G4BestUnit(material->fRadlen,"Length");
     
   for (G4int i=0; i<material->fNumberOfElements; i++)
   flux 
     << "\n   ---> " << (*(material->theElementVector))[i] 
-    << "  fractionMass: " << setw(6)<< setprecision(2) 
+    << "  fractionMass: " << G4std::setw(6)<< G4std::setprecision(2) 
                           << (material->fMassFractionVector[i])/perCent << " %" 
-    << "  Abundance "     << setw(6)<< setprecision(2) 
+    << "  Abundance "     << G4std::setw(6)<< G4std::setprecision(2) 
                           << 100*(material->VecNbOfAtomsPerVolume[i])/
                                  (material->TotNbOfAtomsPerVolume)
                           << " %";
     
-  flux.setf(mode,ios::floatfield);
+  flux.setf(mode,G4std::ios::floatfield);
             
   return flux;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
- ostream& operator<<(ostream& flux, G4Material& material)
+ G4std::ostream& operator<<(G4std::ostream& flux, G4Material& material)
 {
   flux << &material;        
   return flux;
@@ -544,14 +544,14 @@ ostream& operator<<(ostream& flux, G4Material* material)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
      
-ostream& operator<<(ostream& flux, G4MaterialTable MaterialTable)
+G4std::ostream& operator<<(G4std::ostream& flux, G4MaterialTable MaterialTable)
 {
  //Dump info for all known materials
    flux << "\n***** Table : Nb of materials = " << MaterialTable.length() 
-        << " *****\n" << endl;
+        << " *****\n" << G4endl;
         
    for (G4int i=0; i<MaterialTable.length(); i++) flux << MaterialTable[i] 
-                                                       << endl << endl;
+                                                       << G4endl << G4endl;
 
    return flux;
 }      

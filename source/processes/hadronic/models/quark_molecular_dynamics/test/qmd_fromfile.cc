@@ -1,4 +1,4 @@
-#include <fstream.h>
+#include "g4std/fstream"
 #include <algo.h>
 #include "newvector.hh"
 #include "Random.hh"
@@ -30,7 +30,7 @@
 #include "globals.hh"
 
 
-ostream* Output::fileout = 0;
+G4std::ostream* Output::fileout = 0;
 
 class q_Quark : public QuantumNumbers
 {
@@ -141,14 +141,14 @@ bool prof_tube::homogeneous(Vektor4& x)
   return true;
 }
 
-void skipline(istream& in,int n=1) {
+void skipline(G4std::istream& in,int n=1) {
   char c;
   for (int i=0; i<n; i++) {
      while ( in.get(c) && c != '\n' ) ;
   }
 }
 
-double readEvent(istream& in,bool final = true) 
+double readEvent(G4std::istream& in,bool final = true) 
 {
   int S,C,col;
   double B,m,i,i3,s,s3,lt,time,flag;
@@ -304,11 +304,11 @@ int main(int argc,char* argv[]) {
            >> deconf >> kapp >> len >> Thermalize >> M >> PtoN >> file
            >> ForceDecay >> transprof >> skip;
     inputStream >> ReadIn;
-    istream* in;
+    G4std::istream* in;
     if ( input == "-" ) 
       in = &cin;
     else
-      in = new ifstream((char*)String(input));
+      in = new G4std::ifstream((char*)String(input));
     *in >> ReadIn;
   }
 
@@ -351,12 +351,12 @@ int main(int argc,char* argv[]) {
   double tau = 1.0;   // fm, formation time of QGP
   double tau_c = 0.1; // fm, formation tiem of c-cbar
 
-  istream* readIn = 0;
+  G4std::istream* readIn = 0;
   if ( file.isValid() ) 
     if ( file == "-" ) 
       readIn = &cin;
     else	
-      readIn = new ifstream((char*)(String)file);
+      readIn = new G4std::ifstream((char*)(String)file);
 
 
 
@@ -375,7 +375,7 @@ int main(int argc,char* argv[]) {
   Blob->whatAmI(cerr);
 
 
-  Output::fileout = new ofstream(Dir+"/output.out");
+  Output::fileout = new G4std::ofstream(Dir+"/output.out");
   *Output::fileout << "! Start\n";
   Output::fileout->flush();
 
@@ -403,7 +403,7 @@ int main(int argc,char* argv[]) {
       QuarkVolume<RelBoltzmann> QGP(*Blob,Quarks,T,mu,mus,num);
       double u_frac = (2.0*double(PtoN)+1.0)/(PtoN+1.0)/3.0;
       QGP.createParticles(u_frac);
-      cerr << " - Energy : " << QGP.Etot()/Blob->getVolume() << "  " << R << "  " << box.List.size() << endl;
+      G4cerr << " - Energy : " << QGP.Etot()/Blob->getVolume() << "  " << R << "  " << box.List.size() << G4endl;
   
       box.setup();
       setPhaseSpace(box.List,*Blob,T);
@@ -413,9 +413,9 @@ int main(int argc,char* argv[]) {
         run.kstart = 20000;
         Colour::allowDecay = false;
         Colour::allowClustering = false; 
-        cerr << "Thermalizing...";
+        G4cerr << "Thermalizing...";
         run.evaluate(21000);
-        cerr << "finished\n";
+        G4cerr << "finished\n";
       }
   
       if ( Initial == "bjorken" ) {
@@ -428,9 +428,9 @@ int main(int argc,char* argv[]) {
       Colour::allowClustering = (clu == "yes");
       Colour::directHadrons = (dir == "yes");
   
-      cout << "# Temperature " << T << endl;
-      cout << "#        mu_q " << mu << endl;
-      cout << "#        mu_s " << mus << endl;
+      cout << "# Temperature " << T << G4endl;
+      cout << "#        mu_q " << mu << G4endl;
+      cout << "#        mu_s " << mus << G4endl;
         
     }
 
@@ -440,14 +440,14 @@ int main(int argc,char* argv[]) {
 
         double t1 = box.Time()+dt;
         if ( Time>0 ) 
-          t1 = min(t1,(double)Time);
+          t1 = G4std::min(t1,(double)Time);
 
         if ( box.Nquark ) {
           while ( box.Time() < t1 && ( box.Nquark>0 || Time>0 ) ) {
             box.one_step();
-            cerr << n << " :  " << box.Time() << " : " << "  " 
+            G4cerr << n << " :  " << box.Time() << " : " << "  " 
                  << box.Etot() << "  "
-                 << box.Npart << "  " << -box.Nquark+box.Npart << endl;
+                 << box.Npart << "  " << -box.Nquark+box.Npart << G4endl;
           }
         }
         else {
@@ -464,7 +464,7 @@ int main(int argc,char* argv[]) {
       Output::fileout->flush();
     }
     catch ( char *s ) {
-      cerr << "ERROR: " << s << endl;
+      G4cerr << "ERROR: " << s << G4endl;
     }
     int c = 1;
   }

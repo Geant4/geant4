@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NISTStepReader.cc,v 1.1 1999-11-08 09:48:35 gcosmo Exp $
+// $Id: G4NISTStepReader.cc,v 1.2 1999-12-15 14:50:21 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NISTStepReader.hh"
@@ -43,14 +43,14 @@ void G4NISTStepReader::ReadSTEPFile(G4String STEPfilename)
   // Reading the STEPfile instantiates all the objects in it.
   // The instances get pointers into the InstMgr, and each type
   // and entity gets a pointer into the registry.
-  G4cout << "\n### Reading exchange file from " << STEPfilename << endl;
+  G4cout << "\n### Reading exchange file from " << STEPfilename << G4endl;
   sfile->ReadExchangeFile(STEPfilename);    
 
   // Just checking... ;-)
   G4cout << "\n### The InstMgr says there are ";
-  G4cout << InstanceList.InstanceCount() << " instantiated objects" << endl;
+  G4cout << InstanceList.InstanceCount() << " instantiated objects" << G4endl;
     
-  // G4cout << "\n### Here is the exchange file:" << endl << endl;
+  // G4cout << "\n### Here is the exchange file:" << G4endl << G4endl;
   // sfile->WriteExchangeFile(G4cout);
 
   delete sfile;

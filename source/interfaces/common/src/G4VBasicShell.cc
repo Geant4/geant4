@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VBasicShell.cc,v 1.5 1999-11-02 20:06:46 barrand Exp $
+// $Id: G4VBasicShell.cc,v 1.6 1999-12-15 14:50:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -17,11 +17,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIcommandStatus.hh"
 #include "G4UImanager.hh"
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 G4VBasicShell::G4VBasicShell()
 :currentDirectory("/")
@@ -192,10 +188,10 @@ G4String G4VBasicShell::FindMatchingPath(
     if(n_commandEntry==1) {
       return (pathName + commands[0]->GetCommandName());
     } else if (n_commandEntry>=2) {
-      G4cout << "Matching commands :" << endl; 
+      G4cout << "Matching commands :" << G4endl; 
       for( int i_thCommand = 0; i_thCommand < n_commandEntry; i_thCommand++ ) {
 	G4UIcommand* cmd = commands[i_thCommand];
-	G4cout << cmd->GetCommandName() << endl; 
+	G4cout << cmd->GetCommandName() << G4endl; 
       }
       return empty;
     }
@@ -214,10 +210,10 @@ G4String G4VBasicShell::FindMatchingPath(
     if(n_treeEntry==1) {
       return trees[0]->GetPathName();
     } else if (n_treeEntry>=2) {
-      G4cout << "Matching directories :" << endl; 
+      G4cout << "Matching directories :" << G4endl; 
       for( int i_thTree = 0; i_thTree < n_treeEntry; i_thTree++ ) {
 	G4UIcommandTree* tree = trees[i_thTree];
-	G4cout << tree->GetPathName() << endl; 
+	G4cout << tree->GetPathName() << G4endl; 
       }
       return empty;
     } else {
@@ -256,16 +252,16 @@ void G4VBasicShell::ExecuteCommand (
   case fCommandSucceeded:
     break;
   case fCommandNotFound:
-    G4cerr << "command not found" << endl;
+    G4cerr << "command not found" << G4endl;
     break;
   case fIllegalApplicationState:
-    G4cerr << "illegal application state -- command refused" << endl;
+    G4cerr << "illegal application state -- command refused" << G4endl;
     break;
   case fParameterOutOfRange:
   case fParameterUnreadable:
   case fParameterOutOfCandidates:
   default:
-    G4cerr << "command refused (" << commandStatus << ")" << endl;
+    G4cerr << "command refused (" << commandStatus << ")" << G4endl;
   }
 }
 /***************************************************************************/
@@ -283,7 +279,7 @@ void G4VBasicShell::ApplyShellCommand (
   G4String command = a_string.strip(G4String::leading);
   if( command(0) == '#' ) { 
 
-    G4cout << command << endl; 
+    G4cout << command << G4endl; 
 
   } else if( command == "ls" || command(0,3) == "ls " ) {
 
@@ -292,7 +288,7 @@ void G4VBasicShell::ApplyShellCommand (
   } else if( command == "pwd" ) { 
 
     G4cout << "Current Working Directory : " 
-       << GetCurrentWorkingDirectory() << endl; 
+       << GetCurrentWorkingDirectory() << G4endl; 
 
   } else if( command(0,2) == "cd" ) { 
 
@@ -310,7 +306,7 @@ void G4VBasicShell::ApplyShellCommand (
 
     G4int nh = UI->GetNumberOfHistory();
     for(int i=0;i<nh;i++) { 
-      G4cout << i << ": " << UI->GetPreviousCommand(i) << endl; 
+      G4cout << i << ": " << UI->GetPreviousCommand(i) << G4endl; 
     }
 
   } else if( command(0) == '!' ) {
@@ -318,24 +314,24 @@ void G4VBasicShell::ApplyShellCommand (
     G4String ss = command(1,command.length()-1);
     G4int vl;
     const char* tt = ss;
-    istrstream is((char*)tt);
+    G4std::istrstream is((char*)tt);
     is >> vl;
     G4int nh = UI->GetNumberOfHistory();
     if(vl>=0 && vl<nh) { 
       G4String prev = UI->GetPreviousCommand(vl); 
-      G4cout << prev << endl;
+      G4cout << prev << G4endl;
       ExecuteCommand (ModifyToFullPathCommand(prev));
     } else { 
-      G4cerr << "history " << vl << " is not found." << endl; 
+      G4cerr << "history " << vl << " is not found." << G4endl; 
     }
 
   } else if( command(0,4) == "exit" ) { 
 
     if( exitPause == false) { //In a secondary loop.
-      G4cout << "You are now processing RUN." << endl;
-      G4cout << "Please abort it using \"/run/abort\" command first" << endl;
-      G4cout << " and use \"continue\" command until the application" << endl;
-      G4cout << " becomes to Idle." << endl;
+      G4cout << "You are now processing RUN." << G4endl;
+      G4cout << "Please abort it using \"/run/abort\" command first" << G4endl;
+      G4cout << " and use \"continue\" command until the application" << G4endl;
+      G4cout << " becomes to Idle." << G4endl;
     } else {
       exitSession = true;
     }
@@ -358,7 +354,7 @@ void G4VBasicShell::ShowCurrent(G4String newCommand)
   G4String theCommand = ModifyToFullPathCommand(comString);
   G4String curV = UI->GetCurrentValues(theCommand);
   if( ! curV.isNull() ) { 
-    G4cout << "Current value(s) of the parameter(s) : " << curV << endl; 
+    G4cout << "Current value(s) of the parameter(s) : " << curV << G4endl; 
   }
 }
 void G4VBasicShell::ChangeDirectoryCommand(G4String newCommand)
@@ -371,7 +367,7 @@ void G4VBasicShell::ChangeDirectoryCommand(G4String newCommand)
     prefix = aNewPrefix.strip(G4String::both);
   }
   if(!ChangeDirectory(prefix)) { 
-    G4cout << "directory <" << prefix << "> not found." << endl; 
+    G4cout << "directory <" << prefix << "> not found." << G4endl; 
   }
 }
 void G4VBasicShell::ListDirectory(G4String newCommand)
@@ -385,7 +381,7 @@ void G4VBasicShell::ListDirectory(G4String newCommand)
   }
   G4UIcommandTree* commandTree = FindDirectory( targetDir );
   if( commandTree == NULL ) { 
-    G4cout << "Directory <" << targetDir << "> is not found." << endl; 
+    G4cout << "Directory <" << targetDir << "> is not found." << G4endl; 
   } else { 
     commandTree->ListCurrent(); 
   }
@@ -409,7 +405,7 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
     }
     else
     {
-      G4cout << "Command <" << newValue << " is not found." << endl;
+      G4cout << "Command <" << newValue << " is not found." << G4endl;
       return;
     }
   }
@@ -430,11 +426,11 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
   floor[iFloor]->ListCurrentWithNum();
   // 1998 Oct 2 non-number input
   while(1){
-   //G4cout << endl << "Type the number ( 0:end, -n:n level back ) : "<<flush;
-    G4cout << endl << "Type the number ( 0:end, -n:n level back ) : "<<endl;
+   //G4cout << G4endl << "Type the number ( 0:end, -n:n level back ) : "<<G4std::flush;
+    G4cout << G4endl << "Type the number ( 0:end, -n:n level back ) : "<<G4endl;
     G4int i;
     if(!GetHelpChoice(i)){
-      G4cout << endl << "Not a number, once more" << endl; 
+      G4cout << G4endl << "Not a number, once more" << G4endl; 
       continue;
     } else if( i < 0 ){
       iFloor += i;
@@ -460,8 +456,8 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
       }
     }
   }
-  G4cout << "Exit from HELP." << endl << endl;
-  //G4cout << endl;
+  G4cout << "Exit from HELP." << G4endl << G4endl;
+  //G4cout << G4endl;
   ExitHelp();
 }
 

@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include "HbookType.hh"
-#include "vector.h"
+#include "g4std/vector"
 
 extern "C"
 {
@@ -45,7 +45,7 @@ public:
 	else
 	  handle=open(filen,O_RDONLY);
 	if(handle<0)
-	  cerr << "Error opening ntupel buffer:" << strerror(errno) << endl;
+	  G4cerr << "Error opening ntupel buffer:" << strerror(errno) << G4endl;
 	delete[] filen;
       }
     else
@@ -121,7 +121,7 @@ void HbookNtupel<T>::goHbook()
 	}
       handle=open(filen,O_RDONLY);
       if(handle<0)
-	cerr << "Error reading buffer file:" << strerror(errno) << endl;
+	G4cerr << "Error reading buffer file:" << strerror(errno) << G4endl;
       hropen_(lun,lunname,hbookfile,mode,lrec,ierr,strlen(lunname),
 	      strlen(hbookfile),strlen(mode));
       hbnt_(id,NtupelName,"D",strlen(NtupelName),1);
@@ -190,7 +190,7 @@ int HbookNtupel<T>::ReadFromTupel(T& buf)
     return 0;
   else 
     {
-      cerr << "Error reading Ntupel:" << strerror(errno) << endl;
+      G4cerr << "Error reading Ntupel:" << strerror(errno) << G4endl;
       return -1;
     }
 }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiProperties.hh,v 1.8 1999-10-28 23:24:11 kurasige Exp $
+// $Id: G4NucleiProperties.hh,v 1.9 1999-12-15 14:51:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,7 @@ inline
 {
   if (A < 1 || Z < 0 || Z > A) {
     G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
-	   << " and Z = " << Z << endl;
+	   << " and Z = " << Z << G4endl;
     return 0.0;
 
   } else {
@@ -96,7 +96,7 @@ inline
 {
   if (Z < 0 || Z > A) {
     G4cout << "G4NucleiProperties::GetAtomicMass: Wrong values for A = " << A 
-	   << " and Z = " << Z << endl;	return 0.0;
+	   << " and Z = " << Z << G4endl;	return 0.0;
 
   } else if (abs(A - G4int(A)) > 1.e-10) {
     return AtomicMass(A,Z);
@@ -117,7 +117,7 @@ inline
 {
   if (A < 1 || Z < 0 || Z > A) {
     G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
-	   << " and Z = " << Z << endl;
+	   << " and Z = " << Z << G4endl;
     return 0.0;
 
   } else {

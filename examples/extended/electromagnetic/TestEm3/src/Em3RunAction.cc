@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3RunAction.cc,v 1.2 1999-11-12 16:29:43 maire Exp $
+// $Id: Em3RunAction.cc,v 1.3 1999-12-15 14:49:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,7 +26,7 @@
 #include "Randomize.hh"
 #include "CLHEP/Hist/HBookFile.h"
 
-#include <iomanip.h>
+#include "g4std/iomanip"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -65,7 +65,7 @@ void Em3RunAction::bookHisto()
 
 void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
-  G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
   if (saveRndm > 0)
@@ -101,11 +101,11 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4double MeanEAbs,rmsEAbs,MeanLAbs,rmsLAbs;
   
-  G4long oldform = G4cout.setf(ios::fixed,ios::floatfield);
+  G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
   G4int  oldprec = G4cout.precision(2);
     
   G4cout << "\n-------------------------------------------------------------\n"
-         << setw(51) << "total energy dep" << setw(30) << "total tracklen \n \n";
+         << G4std::setw(51) << "total energy dep" << G4std::setw(30) << "total tracklen \n \n";
 	   
   for (G4int k=0; k<Detector->GetNbOfAbsor(); k++)
     {
@@ -119,17 +119,17 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
      //    
      G4cout
      << " Absorber" << k 
-     << " (" << setw(12) << Detector->GetAbsorMaterial(k)->GetName() << ") :" 
-     << setw( 7) << G4BestUnit(MeanEAbs,"Energy") << " +- "
-     << setw( 5) << G4BestUnit( rmsEAbs,"Energy")
-     << setw(12) << G4BestUnit(MeanLAbs,"Length") << " +- "
-     << setw( 5) << G4BestUnit( rmsLAbs,"Length")
-     << endl;
+     << " (" << G4std::setw(12) << Detector->GetAbsorMaterial(k)->GetName() << ") :" 
+     << G4std::setw( 7) << G4BestUnit(MeanEAbs,"Energy") << " +- "
+     << G4std::setw( 5) << G4BestUnit( rmsEAbs,"Energy")
+     << G4std::setw(12) << G4BestUnit(MeanLAbs,"Length") << " +- "
+     << G4std::setw( 5) << G4BestUnit( rmsLAbs,"Length")
+     << G4endl;
     }
     
   G4cout << "\n-------------------------------------------------------------";
-  G4cout << endl;  
-  G4cout.setf(oldform,ios::floatfield);
+  G4cout << G4endl;  
+  G4cout.setf(oldform,G4std::ios::floatfield);
   G4cout.precision(oldprec);
   
   // Write histogram file 

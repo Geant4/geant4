@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalSkinSurface.cc,v 1.1 1999-01-07 16:08:48 gunter Exp $
+// $Id: G4LogicalSkinSurface.cc,v 1.2 1999-12-15 14:50:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -95,35 +95,35 @@ void G4LogicalSkinSurface::DumpInfo()
 
     G4cout << "***** Surface Table : Nb of Surfaces = " << 
 // G4LogicalSkinSurface::
-      GetNumberOfSkinSurfaces() << " *****" << endl;
+      GetNumberOfSkinSurfaces() << " *****" << G4endl;
 
     for (int i=0; i<theSurfaceTable.length(); i++) {
       G4LogicalSkinSurface *pSkinSurface= theSurfaceTable[i];
-      G4cout << theSurfaceTable[i]->GetName() << " : " << endl <<
+      G4cout << theSurfaceTable[i]->GetName() << " : " << G4endl <<
 	" Skin of logical volume " << pSkinSurface->GetLogicalVolume()->GetName  ()
-	<< endl <<
+	<< G4endl <<
 	" Optical Surface Ptr  = " << (long) (pSkinSurface->GetOpticalSurface() )
-	<< endl;
+	<< G4endl;
 
 #ifdef PRINT_INFO
       //  DOES NOT COMPILE without including "G4OpticalSurface.hh"
     
-      //  G4cout << pSkinSurface->GetOpticalSurface() << endl ;
+      //  G4cout << pSkinSurface->GetOpticalSurface() << G4endl ;
       G4pticalSurface opticalSurface= pSkinSurface->GetOpticalSurface(); 
       G4cout << 
-          "  Surface type   = " << opticalSurface->GetType()   << endl <<
-          "  Surface finish = " << opticalSurface->GetFinish() << endl <<
-	  "  Surface model  = " << opticalSurface->GetModel()  << endl;
+          "  Surface type   = " << opticalSurface->GetType()   << G4endl <<
+          "  Surface finish = " << opticalSurface->GetFinish() << G4endl <<
+	  "  Surface model  = " << opticalSurface->GetModel()  << G4endl;
 
 /* 
         operator << ( G4OpticalSurface opticalSurface ) should exist 
 	   and do something like:
-          "  Surface type   = " << opticalSurface->GetType()   << endl <<
-          "  Surface finish = " << opticalSurface->GetFinish() << endl <<
-	  "  Surface model  = " << opticalSurface->GetModel()  << endl;
+          "  Surface type   = " << opticalSurface->GetType()   << G4endl <<
+          "  Surface finish = " << opticalSurface->GetFinish() << G4endl <<
+	  "  Surface model  = " << opticalSurface->GetModel()  << G4endl;
  */
 #endif 
 
     }
-    G4cout << endl;
+    G4cout << G4endl;
 }

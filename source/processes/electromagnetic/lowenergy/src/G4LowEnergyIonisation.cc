@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.25 1999-11-11 15:36:25 gunter Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.26 1999-12-15 14:51:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@
 #include "G4EnergyLossTables.hh"
 #include "G4Gamma.hh"
 #include "G4UnitsTable.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 
 typedef G4RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
 
@@ -210,7 +210,7 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticle
           if (&aParticleType==G4Electron::Electron())
             {
               Tmax = LowEdgeEnergy/2.;
-              d = min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
+              d = G4std::min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
               ionloss = log(2.*(tau+2.)/Eexcm2)-1.-beta2
                        + log((tau-d)*d)+tau/(tau-d)
                        + (0.5*d*d+(2.*tau+1.)*log(1.-d/tau))/gamma2;
@@ -218,7 +218,7 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticle
           else        //positron
             {
               Tmax = LowEdgeEnergy ;
-              d = min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
+              d = G4std::min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
               d2=d*d/2.; d3=d*d*d/3.; d4=d*d*d*d/4.;
               y=1./(1.+gamma);
               ionloss = log(2.*(tau+2.)/Eexcm2)+log(tau*d)
@@ -434,7 +434,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     aParticleChange.SetEnergyChange(0.);
     
  if(KineticEnergy < 0.)
-   G4cout << " 1. negative deposit:" << KineticEnergy/eV << endl; 
+   G4cout << " 1. negative deposit:" << KineticEnergy/eV << G4endl; 
     aParticleChange.SetLocalEnergyDeposit(KineticEnergy);
 
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
@@ -459,7 +459,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   if(KineticEnergy <= BindingEn)
   {
     G4cout << " Tkin=" << KineticEnergy/eV << "  Ebind=" << BindingEn/eV
-           << "   selection of subshell ???????" << endl;
+           << "   selection of subshell ???????" << G4endl;
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
   }
 
@@ -485,7 +485,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   if(finalKineticEnergy < 0.){
 
     G4cout << "Tkin=" << KineticEnergy/eV << "  Tdel=" << DeltaKineticEnergy/eV
-	   << "  BindingEn=" << BindingEn/eV << "  ***********" << endl;
+	   << "  BindingEn=" << BindingEn/eV << "  ***********" << G4endl;
   }
 
   // deposit energy if delta energy is below cut
@@ -497,7 +497,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 
       if((DeltaKineticEnergy+BindingEn) < 0.){
 
-	G4cout << " 2. negative deposit:" << (DeltaKineticEnergy+BindingEn)/eV << endl; 
+	G4cout << " 2. negative deposit:" << (DeltaKineticEnergy+BindingEn)/eV << G4endl; 
       }
 
       aParticleChange.SetLocalEnergyDeposit(DeltaKineticEnergy+BindingEn);
@@ -509,7 +509,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 
       if(KineticEnergy < 0.){
 
-	G4cout << " 3. negative deposit:" << KineticEnergy/eV << endl; 
+	G4cout << " 3. negative deposit:" << KineticEnergy/eV << G4endl; 
       }
 
       aParticleChange.SetLocalEnergyDeposit(KineticEnergy);
@@ -703,7 +703,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
       aParticleChange.SetMomentumChange(finalPx,finalPy,finalPz);
       aParticleChange.SetEnergyChange(finalKineticEnergy);
  if(theEnergyDeposit < 0.)
-   G4cout << " 4. negative deposit:" << theEnergyDeposit/eV << endl; 
+   G4cout << " 4. negative deposit:" << theEnergyDeposit/eV << G4endl; 
       aParticleChange.SetLocalEnergyDeposit (theEnergyDeposit);
     }
     else
@@ -711,8 +711,8 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
       theEnergyDeposit += finalKineticEnergy ;
  if(theEnergyDeposit < 0.)
  {
-   G4cout << " 5. negative deposit:" << theEnergyDeposit/eV << endl; 
-   G4cout << " finalKineticEnergy=" << finalKineticEnergy/eV << endl;
+   G4cout << " 5. negative deposit:" << theEnergyDeposit/eV << G4endl; 
+   G4cout << " finalKineticEnergy=" << finalKineticEnergy/eV << G4endl;
  }
 
       aParticleChange.SetLocalEnergyDeposit (theEnergyDeposit);
@@ -1153,7 +1153,7 @@ void G4LowEnergyIonisation::PrintInfoDefinition()
   G4String comments = "First version of low energy ionisation code,";
            comments += "\n At present it can be used for electrons only ";
            comments += " in the energy range [250 eV,100 GeV]";
-  G4cout << endl << GetProcessName() << ":  " << comments << endl;
+  G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
 
 }
 

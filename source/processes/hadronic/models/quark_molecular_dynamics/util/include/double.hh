@@ -5,7 +5,7 @@
 #pragma interface
 #endif
 
-#include <iostream.h>
+#include "g4std/iostream"
 #include <math.h>
 #include "BinIOStream.hh"
 #include "Error.hh"
@@ -21,8 +21,8 @@ class Xdouble;
 class Double
 {
   friend Xdouble;
-  friend ostream& operator<<(ostream& o,const Double& a);
-  friend istream& operator>>(istream& o,Double& a) { return o >> a.x; }
+  friend G4std::ostream& operator<<(G4std::ostream& o,const Double& a);
+  friend G4std::istream& operator>>(G4std::istream& o,Double& a) { return o >> a.x; }
   friend BinOStream& operator<<(BinOStream& o,const Double& y) { return o << y.x; };
   friend BinIStream& operator>>(BinIStream& in,Double& y) { return in >> y.x; }
 friend int operator==(const Double& a,const Double& b) { return a.IsEqual(b.x); }
@@ -147,7 +147,7 @@ protected:
 class Xdouble : public Double
 {
   friend int Valid(const Xdouble& y) { return  (y.status ==0); }
-  friend ostream& operator<<(ostream& o,const Xdouble& x);
+  friend G4std::ostream& operator<<(G4std::ostream& o,const Xdouble& x);
   friend BinOStream& operator<<(BinOStream&,const Xdouble&);
   friend BinIStream& operator>>(BinIStream&,Xdouble&);
 public:

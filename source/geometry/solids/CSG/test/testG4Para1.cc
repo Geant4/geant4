@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Para1.cc,v 1.1 1999-01-08 16:31:51 gunter Exp $
+// $Id: testG4Para1.cc,v 1.2 1999-12-15 14:50:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -206,7 +206,7 @@ G4bool testG4Para()
 //DistanceToIn(P)
     
     Dist=trap1.DistanceToIn(pbig);
-    G4cout<<"trap1.DistanceToIn(pbig) = "<<Dist<<endl;
+    G4cout<<"trap1.DistanceToIn(pbig) = "<<Dist<<G4endl;
     assert(ApproxEqual(Dist,80));
     Dist=trap1.DistanceToIn(pbigx);
     assert(ApproxEqual(Dist,80));

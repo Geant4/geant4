@@ -9,7 +9,7 @@ Vektor3 Vektor3::isotropy(double r)
   return Vektor3(r*sin_theta*cos(phi),r*sin_theta*sin(phi),r*cos_theta);
 }
 
-istream& operator>>(istream& in,Vektor& v)
+G4std::istream& operator>>(G4std::istream& in,Vektor& v)
 {
   String vs;
   in >> vs;
@@ -130,7 +130,7 @@ Matrize transpose(const Matrize& A)
   return C;
 }
 
-ostream& operator<<(ostream& o,const Matrize& A)
+G4std::ostream& operator<<(G4std::ostream& o,const Matrize& A)
 {
   o << "[";
   for (int i=0; i<A.M-1; i++)

@@ -5,7 +5,7 @@
 
 
 //
-// $Id: SdaiBinary.cc,v 1.2 1999-05-21 20:20:53 japost Exp $
+// $Id: SdaiBinary.cc,v 1.3 1999-12-15 14:50:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -24,12 +24,12 @@
 #include <SdaiBinary.h>
 
 extern Severity 
-CheckRemainingInput(istream &in, ErrorDescriptor *err, 
+CheckRemainingInput(G4std::istream &in, ErrorDescriptor *err, 
 		    const char *typeName, // used in error message
 		    const char *tokenList); // e.g. ",)"
 
 void 
-SdaiBinary::STEPwrite (ostream& out) const
+SdaiBinary::STEPwrite (G4std::ostream& out) const
 {
     const char *str = 0;
     if (is_null ())
@@ -71,7 +71,7 @@ SdaiBinary::STEPwrite (SCLstring &s) const
 }
 
 Severity 
-SdaiBinary::ReadBinary(istream& in, ErrorDescriptor *err, int AssignVal,
+SdaiBinary::ReadBinary(G4std::istream& in, ErrorDescriptor *err, int AssignVal,
 		       int needDelims)
 {
     if(AssignVal)
@@ -84,7 +84,7 @@ SdaiBinary::ReadBinary(istream& in, ErrorDescriptor *err, int AssignVal,
 
     int validDelimiters = 1;
 
-    in >> ws; // skip white space
+    in >> G4std::ws; // skip white space
 
     if( in.good() )
     {
@@ -165,7 +165,7 @@ SdaiBinary::ReadBinary(istream& in, ErrorDescriptor *err, int AssignVal,
 Severity
 SdaiBinary::StrToVal (const char * s, ErrorDescriptor *err)
 {
-    istrstream in ((char *)s); // sz defaults to length of s
+    G4std::istrstream in ((char *)s); // sz defaults to length of s
     return ReadBinary(in, err, 1, 0);
 }
 
@@ -256,19 +256,19 @@ SdaiBinary::StrToVal (const char * s, ErrorDescriptor *err)
 //  delimited by double quotes
 
 Severity 
-SdaiBinary::STEPread (istream& in, ErrorDescriptor *err)
+SdaiBinary::STEPread (G4std::istream& in, ErrorDescriptor *err)
 {
     return ReadBinary(in, err, 1, 1);
 /*
     int foundEndQuote = 0; // need so this string is not ok: 'hi''
     set_null ();  // clear the old string
     char c;
-    in >> ws; // skip white space
+    in >> G4std::ws; // skip white space
     in >> c;
 
 	// remember the current format state to restore the previous settings
     long int flags = in.flags();
-    in.unsetf(ios::skipws);
+    in.unsetf(G4std::ios::skipws);
 
     if (c == BINARY_DELIM)
     {
@@ -299,7 +299,7 @@ SdaiBinary::STEPread (istream& in, ErrorDescriptor *err)
 Severity 
 SdaiBinary::STEPread (const char *s, ErrorDescriptor *err)
 {
-    istrstream in((char *)s);
+    G4std::istrstream in((char *)s);
     return STEPread (in, err);
 }
 
@@ -324,14 +324,14 @@ SdaiBinary::STEPread (const char *s, ErrorDescriptor *err)
 ///////////////////////////////////////////////////////////////////////////////
 
 Severity 
-SdaiBinary::BinaryValidLevel (istream &in, ErrorDescriptor *err,
+SdaiBinary::BinaryValidLevel (G4std::istream &in, ErrorDescriptor *err,
 				int optional, char *tokenList, 
 				int needDelims, int clearError)
 {
     if(clearError)
 	err->ClearErrorMsg();
 
-    in >> ws; // skip white space
+    in >> G4std::ws; // skip white space
     char c = in.peek();
     if(c == '$' || in.eof())
     {
@@ -366,7 +366,7 @@ SdaiBinary::BinaryValidLevel (const char *value, ErrorDescriptor *err,
 				int optional, char *tokenList, 
 				int needDelims, int clearError)
 {
-    istrstream in((char *)value);
+    G4std::istrstream in((char *)value);
     return BinaryValidLevel (in, err, optional, tokenList, 
 			     needDelims, clearError);
 }

@@ -6,7 +6,7 @@
 void terminate();
 #endif
 
-#include <iostream.h>
+#include "g4std/iostream"
 #include <stdlib.h>
 #include <stdarg.h>
 #include "Subscript.hh"
@@ -25,8 +25,8 @@ public:
 template<class t>
 class arrayBase 
 {
-  friend ostream& operator<<(ostream& o,const arrayBase<t>& a);
-  friend istream& operator>>(istream& in,const arrayBase<t>& a);
+  friend G4std::ostream& operator<<(G4std::ostream& o,const arrayBase<t>& a);
+  friend G4std::istream& operator>>(G4std::istream& in,const arrayBase<t>& a);
   friend int operator==(const arrayBase<t>& a,const arrayBase<t>& b);
   friend int operator!=(const arrayBase<t>& a,const arrayBase<t>& b);
 public:
@@ -49,8 +49,8 @@ public:
   void set(Subscript n,const t& def);
   void set(Subscript n,const t* defArray);
   void set(const arrayBase<t>& a);
-  virtual void writeToStream(ostream& o) const;
-  virtual void readFromStream(istream& in);
+  virtual void writeToStream(G4std::ostream& o) const;
+  virtual void readFromStream(G4std::istream& in);
   operator t*() { return x; }
 protected:
   arrayBase() : size(0),x(0) {}
@@ -59,8 +59,8 @@ protected:
   arrayBase(Subscript n,const t* defArray);
   arrayBase(const arrayBase<t>& a);
 protected:
-  virtual void writeOut(ostream& o) const;
-  virtual void readIn(istream& i) const;
+  virtual void writeOut(G4std::ostream& o) const;
+  virtual void readIn(G4std::istream& i) const;
   Subscript size;
   t* x;
 };
@@ -167,7 +167,7 @@ public:
 protected:
   Matrix<t>& multiply(const Matrix<t>& B,Matrix<t>& C) const;
 private:
-  void writeOut(ostream& o ) const;
+  void writeOut(G4std::ostream& o ) const;
   void addLine(Subscript j,Subscript k,const t& y);
   void swapLines(Subscript j,Subscript k);
   Subscript N,M;

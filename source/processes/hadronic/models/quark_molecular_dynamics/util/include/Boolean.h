@@ -11,15 +11,15 @@ See README file for further details.
 #ifndef BOOLEANH
 #define BOOLEANH
 
-class ostream;
-class istream;
+class G4std::ostream;
+class G4std::istream;
 
 
 class Boolean {
   // I/O
 
-friend ostream& operator<<(ostream& s, Boolean  b);
-friend istream& operator>>(istream& s, Boolean& b);
+friend G4std::ostream& operator<<(G4std::ostream& s, Boolean  b);
+friend G4std::istream& operator>>(G4std::istream& s, Boolean& b);
 
 public:
     // Constants

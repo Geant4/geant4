@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.cc,v 1.4 1999-07-03 10:51:45 johna Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.5 1999-12-15 14:54:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,7 @@ void G4OpenGLXViewer::GetXConnection () {
   dpy = XOpenDisplay (0);
   if (!dpy) {
     fViewId = -1;  // This flags an error.
-    G4cerr << "G4OpenGLViewer::G4OpenGLViewer couldn't open display." << endl;
+    G4cerr << "G4OpenGLViewer::G4OpenGLViewer couldn't open display." << G4endl;
     return;
   }
 
@@ -81,7 +81,7 @@ void G4OpenGLXViewer::GetXConnection () {
   if (!glXQueryExtension (dpy, &errorBase, &eventBase)) {
     fViewId = -1;  // This flags an error.
     G4cerr << "G4OpenGLViewer::G4OpenGLViewer X Server has no GLX extension." 
-	 << endl;
+	 << G4endl;
     return;
   }
 }
@@ -93,7 +93,7 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
   if (!XGetWindowAttributes(dpy, XRootWindow (dpy, vi -> screen), &xwa)) {
     fViewId = -1;  // This flags an error.
     G4cerr << "G4OpenGLViewer::G4OpenGLViewer couldn't return window attributes"
-	 << endl;
+	 << G4endl;
     return;
   }
   
@@ -102,7 +102,7 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
   if (!cx) {
     fViewId = -1;  // This flags an error.
     G4cerr << "G4OpenGLViewer::G4OpenGLViewer couldn't create context."
-	 << endl;
+	 << G4endl;
     return;
   }
 
@@ -132,19 +132,19 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
 	  cmap = standardCmaps[i].colormap;
 	  XFree (standardCmaps);
 	}
-    G4cout << "Got standard cmap" << endl;
+    G4cout << "Got standard cmap" << G4endl;
   } else {
     cmap = XCreateColormap (dpy, 
 			    XRootWindow(dpy, vi -> screen), 
 			    vi -> visual, 
 			    AllocNone);
-    G4cout << "Created own cmap" << endl;
+    G4cout << "Created own cmap" << G4endl;
   }
 
   if (!cmap) {
     fViewId = -1;  // This flags an error.
     G4cerr << "G4OpenGLViewer::G4OpenGLViewer failed to allocate a Colormap."
-	 << endl;
+	 << G4endl;
     return;
   }
 
@@ -174,7 +174,7 @@ void G4OpenGLXViewer::CreateMainWindow () {
     WinSize_y = fVP.GetWindowSizeHintY ();
   x_origin = xwa.x;
   y_origin = xwa.y;
-  G4cout << "Window name: " << fName << endl;
+  G4cout << "Window name: " << fName << G4endl;
   strncpy (charViewName, fName, 100);
   char *window_name = charViewName;
   char *icon_name = charViewName;
@@ -273,7 +273,7 @@ G4OpenGLXViewer::~G4OpenGLXViewer () {
 
 void G4OpenGLXViewer::print() {
   
-  //cout << "print_col_callback requested with file name: " << print_string << endl;
+  //cout << "print_col_callback requested with file name: " << print_string << G4endl;
   
   if (vectored_ps) {
     G4int size = 5000000;

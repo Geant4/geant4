@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRenderer.cc,v 1.3 1999-01-11 00:47:23 allison Exp $
+// $Id: G4FukuiRenderer.cc,v 1.4 1999-12-15 14:54:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,7 +77,7 @@ G4VSceneHandler* G4FukuiRenderer::CreateSceneHandler (const G4String& name)
 	if(!flag_connected) { delete p ;  p = NULL ; }
 
 	G4cout	<< G4FukuiRendererSceneHandler::GetSceneCount ()
-		<< ' ' << fName << " scenes extanct." << endl;
+		<< ' ' << fName << " scenes extanct." << G4endl;
 
 	return p;
 }
@@ -97,7 +97,7 @@ void G4FukuiRenderer::UseInetDomainAuto()
 	int		pid ;
 
 #if defined DEBUG_FR_SYSTEM
-	G4cerr << "***** Unix Inet Domain (AUTO mode)" << endl;
+	G4cerr << "***** Unix Inet Domain (AUTO mode)" << G4endl;
 #endif
 	fIPMode = G4FukuiRenderer::IP_UNIX ;
 
@@ -127,11 +127,11 @@ void G4FukuiRenderer::UseInetDomainAuto()
 	}
 
 	if(!flag_connected) { 
-	  G4cerr << "***** ERROR: Connection failed" << endl; 
+	  G4cerr << "***** ERROR: Connection failed" << G4endl; 
 	}
 	else { 
 	  G4cerr << "***** GEANT4 is connected to FukuiRenderer DAWN ";
-	  G4cerr << "in the same host" << endl; 
+	  G4cerr << "in the same host" << G4endl; 
 	}
 
 } //  G4FukuiRenderer::UseInetDomainAuto()
@@ -142,18 +142,18 @@ void
 G4FukuiRenderer::UseInetDomain()
 {
 #if defined DEBUG_FR_SYSTEM
-	G4cerr << "***** INET Domain " << endl;
+	G4cerr << "***** INET Domain " << G4endl;
 #endif
 	fIPMode = G4FukuiRenderer::IP_INET ;
 
 	this->ConnectPort();
 
 	if(!flag_connected) {
-	  G4cerr << "***** ERROR: Connection failed" << endl; 
+	  G4cerr << "***** ERROR: Connection failed" << G4endl; 
 	}
 	else { 
 	  G4cerr << "GEANT4 is connected to FukuiRenderer DAWN via socket" ; 
-	  G4cerr << endl; 
+	  G4cerr << G4endl; 
 	}
 
 } // G4FukuiRenderer::UseInetDomain()
@@ -166,10 +166,10 @@ G4FukuiRenderer::ConnectPort( int max_port_incr )
   while(1) {
     if ( ++connect_trial > max_port_incr ) {
 	this->flag_connected = 0 ;
-	G4cerr << "***** INET Connection failed."                << endl;
-	G4cerr << "      Maybe, you have not invoked DAWN yet,"  << endl;
-	G4cerr << "      or too many DAWN's are already running" << endl;
-	G4cerr << "      in the server host."                    << endl;
+	G4cerr << "***** INET Connection failed."                << G4endl;
+	G4cerr << "      Maybe, you have not invoked DAWN yet,"  << G4endl;
+	G4cerr << "      or too many DAWN's are already running" << G4endl;
+	G4cerr << "      in the server host."                    << G4endl;
 	fPrimDest.IncrementPortNumber( (- FR_MAX_PORT_INCR) );
 	return ;
     } else if ( fPrimDest.ConnectINET() ) { 
@@ -177,14 +177,14 @@ G4FukuiRenderer::ConnectPort( int max_port_incr )
 	this->flag_connected = 1 ;
 	G4cerr << "***** GEANT4 is connected to port  " ;
 	G4cerr << fPrimDest.GetPortNumber() ; 
-	G4cerr << "  of server" << endl;
+	G4cerr << "  of server" << G4endl;
 	break ; 
     } else { 
 	    // Connection failed. Try the next port.
       this->flag_connected = 0 ;
       fPrimDest.IncrementPortNumber();
       G4cerr << "***** GEANT4 incremented targeting port to " ;
-      G4cerr << fPrimDest.GetPortNumber() << endl;
+      G4cerr << fPrimDest.GetPortNumber() << G4endl;
 
     } // if-elseif-else
 
@@ -198,7 +198,7 @@ void G4FukuiRenderer::UseBSDUnixDomainAuto()
 	int     pid ;
 
 #if defined DEBUG_FR_SYSTEM
-	G4cerr << "***** UseBSDUnixDomainAuto " << endl;
+	G4cerr << "***** UseBSDUnixDomainAuto " << G4endl;
 #endif
 	fIPMode = G4FukuiRenderer::IP_UNIX ; // Unix domain
 
@@ -224,10 +224,10 @@ void G4FukuiRenderer::UseBSDUnixDomainAuto()
 
 			//----- display status
 		if(!flag_connected) {
-		  G4cerr << "***** ERROR: Connection failed" << endl; 
+		  G4cerr << "***** ERROR: Connection failed" << G4endl; 
 		} else { 
 		  G4cerr << "*** GEANT4 is connected to FukuiRenderer DAWN ";
-		  G4cerr <<  "in the same host" << endl; 
+		  G4cerr <<  "in the same host" << G4endl; 
 		}
 
 	} // if--else

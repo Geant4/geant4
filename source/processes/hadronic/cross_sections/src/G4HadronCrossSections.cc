@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronCrossSections.cc,v 1.1 1999-01-07 16:11:33 gunter Exp $
+// $Id: G4HadronCrossSections.cc,v 1.2 1999-12-15 14:52:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1218,8 +1218,8 @@ G4HadronCrossSections::CalcScatteringCrossSections(
    G4double z = anElement->GetZ();
 
    if (verboseLevel > 1) {
-      G4cout << "G4HadronCrossSections: a=" << a << endl;
-      G4cout << "G4HadronCrossSections: z=" << z << endl;
+      G4cout << "G4HadronCrossSections: a=" << a << G4endl;
+      G4cout << "G4HadronCrossSections: z=" << z << G4endl;
    }
 
 // Ions...
@@ -1266,7 +1266,7 @@ G4HadronCrossSections::CalcScatteringCrossSections(
            je1 = midBin;
       } while (je2 - je1 > 1); 
 
-      G4double ekx = max(ek, 1.e-9);
+      G4double ekx = G4std::max(ek, 1.e-9);
       G4double delab = elab[je2] - elab[je1];
 
       //      G4int ja2 = NCNLW;
@@ -1355,8 +1355,8 @@ G4HadronCrossSections::CalcScatteringCrossSections(
    b = csin[ipart1][je1] - rc*plab[je1];
    sigin = rc*p + b;
    if (verboseLevel > 1) {
-      G4cout << "sigel " << sigel << endl;
-      G4cout << "sigin " << sigin << endl;
+      G4cout << "sigel " << sigel << G4endl;
+      G4cout << "sigin " << sigin << G4endl;
    }
    G4double alph = alpha[ipart1];
    if (ipart < 14) {
@@ -1440,8 +1440,8 @@ G4HadronCrossSections::CalcScatteringCrossSections(
             b = cspiin[i - 1][je1] - rc*plab[je1];
             xspiin = rc*p + b;
             if (verboseLevel > 1) {
-               G4cout << "xspiel " << xspiel << endl;
-               G4cout << "xspiin " << xspiin << endl;
+               G4cout << "xspiel " << xspiel << G4endl;
+               G4cout << "xspiin " << xspiin << G4endl;
             }               
             if (sigel >= 0.001) 
                crel = xspiel/(0.36*sigel*pow(G4double(csa[i]),1.17));
@@ -1482,7 +1482,7 @@ G4HadronCrossSections::GetCaptureCrossSection(
    G4double ek = aParticle->GetKineticEnergy()/GeV;
    if (ek > 0.0327) return 0.;
 
-   G4double ekx = max(ek, 1.e-9);
+   G4double ekx = G4std::max(ek, 1.e-9);
    G4double z = anElement->GetZ();
    G4int izno = z + 0.01;
    if (izno > 100) izno = 100;      // Not in GHESIG
@@ -1536,7 +1536,7 @@ G4HadronCrossSections::GetFissionCrossSection(
    G4double z43ba;
    if (j == 4) {
       z43ba = pow(z, 4./3.)/a;
-      z43ba = max(-67. + 38.7*z43ba, 0.);
+      z43ba = G4std::max(-67. + 38.7*z43ba, 0.);
    }
    else {
       z43ba = 1.;

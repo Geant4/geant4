@@ -1,17 +1,17 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4EnergyLossTables.cc,v 1.1 1999-01-08 16:33:08 gunter Exp $
+// $Id: testG4EnergyLossTables.cc,v 1.2 1999-12-15 14:52:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-------------------------------------------------------------------
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 #include "globals.hh"
 #include "G4Timer.hh"
 #include "G4MultipleScattering.hh"
@@ -75,10 +75,10 @@ G4VPhysicalVolume* BuildVolume(G4Material* matworld)
 int main()
 {
   //-------- set output format-------
-   G4cout.setf( ios::scientific, ios::floatfield );
+   G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
   //---write results to the file msc.out-----
-   ofstream outFile("msc.out", ios::out ) ;
-   outFile.setf( ios::scientific, ios::floatfield );
+   G4std::ofstream outFile("msc.out", G4std::ios::out ) ;
+   outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
   //--------- Material definition ---------
   G4Timer theTimer ;
@@ -239,117 +239,117 @@ int main()
   // loop until no particle is selected
   while (1) {
 
-  G4cout << "Do you want the electron as particle (yes/no)?" << flush;
-  cin >> confirm ;
+  G4cout << "Do you want the electron as particle (yes/no)?" << G4std::flush;
+  G4cin >> confirm ;
   if(confirm == "yes")
   {
     theParticle = theElectron ;
     theParticleMultipleScattering=&theElectronMultipleScattering;
     theParticleProcessManager=theElectronProcessManager;
-    outFile << " ----------particle = electron -------------" << endl;
+    outFile << " ----------particle = electron -------------" << G4endl;
   }
   else
   {    
-    G4cout << "Do you want the positron as particle (yes/no)?" << flush;
-    cin >> confirm ;
+    G4cout << "Do you want the positron as particle (yes/no)?" << G4std::flush;
+    G4cin >> confirm ;
     if(confirm == "yes")
     {
       theParticle = thePositron ;
       theParticleMultipleScattering=&thePositronMultipleScattering;
       theParticleProcessManager=thePositronProcessManager;
-      outFile << " ----------particle = positron -------------" << endl;
+      outFile << " ----------particle = positron -------------" << G4endl;
     }
     else
     {
-      G4cout << "Do you want the mu+ as particle (yes/no)?" << flush;
-      cin >> confirm ;
+      G4cout << "Do you want the mu+ as particle (yes/no)?" << G4std::flush;
+      G4cin >> confirm ;
       if(confirm == "yes")
       {
         theParticle = theMuonPlus ;
         theParticleMultipleScattering=&theMuonPlusMultipleScattering;
         theParticleProcessManager=theMuonPlusProcessManager;
-        outFile << " --------particle = mu+ -------------" << endl;
+        outFile << " --------particle = mu+ -------------" << G4endl;
       }
       else
       {
-        G4cout << "Do you want the mu- as particle (yes/no)?" << flush;
-        cin >> confirm ;
+        G4cout << "Do you want the mu- as particle (yes/no)?" << G4std::flush;
+        G4cin >> confirm ;
         if(confirm == "yes")
         {
           theParticle = theMuonMinus ;
           theParticleMultipleScattering=&theMuonMinusMultipleScattering;
           theParticleProcessManager=theMuonMinusProcessManager;
-          outFile << " --------particle = mu- -------------" << endl;
+          outFile << " --------particle = mu- -------------" << G4endl;
       }
       else
   {
-  G4cout << " Do you want the proton as particle (yes/no)? " << flush;
-  cin >> confirm ;
+  G4cout << " Do you want the proton as particle (yes/no)? " << G4std::flush;
+  G4cin >> confirm ;
   if(confirm == "yes")
   {
     theParticle = theProton;
     theParticleMultipleScattering=&theProtonMultipleScattering;
     theParticleProcessManager=theProtonProcessManager;
-    outFile << " ---------- particle = proton ----------------" << endl;
+    outFile << " ---------- particle = proton ----------------" << G4endl;
   }
   else
   {
-     G4cout << " Do you want the antiproton as particle (yes/no)? " << flush;
-     cin >> confirm ;
+     G4cout << " Do you want the antiproton as particle (yes/no)? " << G4std::flush;
+     G4cin >> confirm ;
      if(confirm == "yes")
      {
         theParticle = theAntiProton;
         theParticleMultipleScattering=&theAntiProtonMultipleScattering;
         theParticleProcessManager=theAntiProtonProcessManager;
-        outFile << " ---------- particle = antiproton ----------------" << endl;
+        outFile << " ---------- particle = antiproton ----------------" << G4endl;
      }
      else
      {
-      G4cout << " Do you want the pi+ as particle (yes/no)? " << flush;
-      cin >> confirm ;
+      G4cout << " Do you want the pi+ as particle (yes/no)? " << G4std::flush;
+      G4cin >> confirm ;
       if(confirm == "yes")
       {
       theParticle = thePionPlus;
       theParticleMultipleScattering=&thePionPlusMultipleScattering;
       theParticleProcessManager=thePionPlusProcessManager;
-      outFile << " ---------- particle = pi+ ----------------" << endl;
+      outFile << " ---------- particle = pi+ ----------------" << G4endl;
       }
       else
       {
-        G4cout << " Do you want the pi- as particle (yes/no)? " << flush;
-        cin >> confirm ;
+        G4cout << " Do you want the pi- as particle (yes/no)? " << G4std::flush;
+        G4cin >> confirm ;
         if(confirm == "yes")
         {
         theParticle = thePionMinus;
         theParticleMultipleScattering=&thePionMinusMultipleScattering;
         theParticleProcessManager=thePionMinusProcessManager;
-        outFile << " ---------- particle = pi- ----------------" << endl;
+        outFile << " ---------- particle = pi- ----------------" << G4endl;
         } 
         else
         {
-          G4cout << " Do you want the K+ as particle (yes/no)? " << flush;
-          cin >> confirm ;
+          G4cout << " Do you want the K+ as particle (yes/no)? " << G4std::flush;
+          G4cin >> confirm ;
           if(confirm == "yes")
           {
           theParticle = theKaonPlus;
           theParticleMultipleScattering=&theKaonPlusMultipleScattering;
           theParticleProcessManager=theKaonPlusProcessManager;
-          outFile << " ---------- particle = K+ ----------------" << endl;
+          outFile << " ---------- particle = K+ ----------------" << G4endl;
           }
           else
           {
-            G4cout << " Do you want the K- as particle (yes/no)? " << flush;
-            cin >> confirm ;
+            G4cout << " Do you want the K- as particle (yes/no)? " << G4std::flush;
+            G4cin >> confirm ;
             if(confirm == "yes")
             {
             theParticle = theKaonMinus;
             theParticleMultipleScattering=&theKaonMinusMultipleScattering;
             theParticleProcessManager=theKaonMinusProcessManager;
-            outFile << " ---------- particle = K- ----------------" << endl;
+            outFile << " ---------- particle = K- ----------------" << G4endl;
             }
             else
             {
-             G4cout << " There is no other particle in the test." << endl;
+             G4cout << " There is no other particle in the test." << G4endl;
              return EXIT_SUCCESS;
             }
           }
@@ -375,22 +375,22 @@ int main()
   G4double cutinrange ;
 
 
-  G4cout << "give cuts in range" << endl ;
+  G4cout << "give cuts in range" << G4endl ;
 
   G4cout << "cut for GAMMA in mm =" ;
-  cin >> cutinrange ; 
+  G4cin >> cutinrange ; 
   theGamma->SetCuts(cutinrange) ;
 
   GammaKineticEnergyCuts = theGamma->GetCutsInEnergy() ;
 
   G4cout << "cut for ELECTRON in mm =" ;
-  cin >> cutinrange ; 
+  G4cin >> cutinrange ; 
   theElectron->SetCuts(cutinrange) ;
 
   ElectronKineticEnergyCuts = theElectron->GetCutsInEnergy() ;
 
   G4cout << "cut for POSITRON in mm =" ;
-  cin >> cutinrange ; 
+  G4cin >> cutinrange ; 
   thePositron->SetCuts(cutinrange) ;
 
   PositronKineticEnergyCuts = thePositron->GetCutsInEnergy() ;
@@ -400,7 +400,7 @@ int main()
  if((theParticle != theElectron) && (theParticle != thePositron))
  {
   G4cout << "cut for the selected particle in mm =" ;
-  cin >> cutinrange ; 
+  G4cin >> cutinrange ; 
   theParticle->SetCuts(cutinrange) ;
 
   ParticleKineticEnergyCuts = theParticle->GetEnergyCuts() ;
@@ -420,9 +420,9 @@ int main()
     G4DynamicParticle aParticle(theParticle,energy,theMomentum);
     aParticle.SetKineticEnergy(energy-mass);
     
-    outFile << "  " << endl;
-    outFile << " M S C test **********************************************" << endl ;
-    outFile << "  " << endl;
+    outFile << "  " << G4endl;
+    outFile << " M S C test **********************************************" << G4endl ;
+    outFile << "  " << G4endl;
     palongget = aParticle.GetDefinition()->GetProcessManager()
                                  ->GetAlongStepProcessVector(0);
     ppostget = aParticle.GetDefinition()->GetProcessManager()
@@ -465,7 +465,7 @@ int main()
 
     apttoMaterial = (*theMaterialTable)[ J ] ;
     MaterialName = apttoMaterial->GetName() ; 
-    G4cout << endl << "material=" << MaterialName << endl << endl;
+    G4cout << G4endl << "material=" << MaterialName << G4endl << G4endl;
 
 //---------- Volume definition ---------------------
 
@@ -545,10 +545,10 @@ int main()
 
     G4double thetamean,thetamean2,dthetamean,errdistr ;
 
-    outFile << endl ;
-    outFile << "  " << MaterialName << "  PostStepDoIt (scattering) test " << endl ;
-    outFile << "  +++++++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    outFile << endl ;
+    outFile << G4endl ;
+    outFile << "  " << MaterialName << "  PostStepDoIt (scattering) test " << G4endl ;
+    outFile << "  +++++++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    outFile << G4endl ;
 
     G4double wg[100] ;
 
@@ -586,12 +586,12 @@ int main()
 	rangestart = theKaonPlusIonisation.OldGetRange(theKaonPlus,TMeV,apttoMaterial) ; 
       if( theParticle == theKaonMinus )
 	rangestart = theKaonMinusIonisation.OldGetRange(theKaonMinus,TMeV,apttoMaterial) ; 
-      G4cout << " energy (MeV) = " << TMeV << endl;
-      G4cout << " range (OldGetRange) = " << rangestart << endl ;   
+      G4cout << " energy (MeV) = " << TMeV << G4endl;
+      G4cout << " range (OldGetRange) = " << rangestart << G4endl ;   
 
       G4double range2= G4EnergyLossTables::GetRange(theParticle, TMeV, apttoMaterial);
 
-      G4cout << " range (G4EnergyLossTables::GetRange) = " << range2 << endl ;   
+      G4cout << " range (G4EnergyLossTables::GetRange) = " << range2 << G4endl ;   
     }
             
     } // of material loop

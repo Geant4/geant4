@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-class ostream;
+class G4std::ostream;
 
 //<etymology>
 // rand_gen is a contraction for <b>rand</b>om number <b>gen</b>erator.
@@ -17,7 +17,7 @@ class ostream;
 class rand_gen
 {
 // Print seeding of the random generator. This is important for event reproduction.
-  friend ostream& operator<<(ostream&,rand_gen&);
+  friend G4std::ostream& operator<<(G4std::ostream&,rand_gen&);
 public:
 // Initializes random generator with seed given by argument. 0 initializes the
 // random generator by using the actual system time.

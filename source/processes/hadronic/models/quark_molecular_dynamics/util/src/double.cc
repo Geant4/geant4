@@ -3,14 +3,14 @@
 #include "double.hh"
 //REAL double_a;
 //const REAL double_b=double_a,double_c=double_a;
-//REAL double_x=max(double_b,double_c);
+//REAL double_x=G4std::max(double_b,double_c);
 #else
 #include "double.hh"
 #endif
 
 #include "Error.hh"
 #include <math.h>
-#include <iostream.h>
+#include "g4std/iostream"
 #include <algo.h>
 
 const double Double::Epsilon = 1e-12;
@@ -26,7 +26,7 @@ const Double mathConstants::gamma = 0.5277; // [GeV*fm]
 
 //const Double NotDefined(IsNotDefined);
 
-ostream& operator<<(ostream& o,const Double& a)
+G4std::ostream& operator<<(G4std::ostream& o,const Double& a)
 {
   if (fabs(a) == Double::Infinity) 
     o << "Double::Infinity";
@@ -47,7 +47,7 @@ Double operator/(const Double& a,const Double& b)
     if (a != 0)
       y = sign(a)*Double::Infinity;
     else {
-      //      cerr << "WARNING: Division by Zero" << endl;
+      //      G4cerr << "WARNING: Division by Zero" << G4endl;
       //exit(1);
       throw DividedByZero(a.x); 
     }
@@ -63,7 +63,7 @@ Double operator/(const Double& a,double b)
     else
       y = 0;
   else {
-    //    cerr << "WARNING: Division by Zero" << endl;
+    //    G4cerr << "WARNING: Division by Zero" << G4endl;
     //exit(1);
     throw DividedByZero(a.x); 
   }
@@ -83,7 +83,7 @@ Double operator/(double a,const Double& b)
     if (a1 != 0)
       y = sign(a1)*Double::Infinity;
     else {
-      //  cerr << "WARNING: Division by Zero" << endl;
+      //  G4cerr << "WARNING: Division by Zero" << G4endl;
       // exit(1);
       throw DividedByZero(a); 
     }
@@ -102,7 +102,7 @@ Double operator/(const Double& a,int b)
     if (a != 0)
       y = sign(a)*Double::Infinity;
     else {
-      cerr << "WARNING: Division by Zero" << endl;
+      G4cerr << "WARNING: Division by Zero" << G4endl;
       throw DividedByZero(a.x); 
   }
   return y;
@@ -120,7 +120,7 @@ Double operator/(int a,const Double& b)
     if (a) 
       y = a*Double::Infinity;
     else {
-      //      cerr << "WARNING: Division by Zero" << endl;
+      //      G4cerr << "WARNING: Division by Zero" << G4endl;
       //exit(1);
       throw DividedByZero(a); 
     }
@@ -130,9 +130,9 @@ Double operator/(int a,const Double& b)
 Double sqrt(const Double& y)
 {
   if (y >= 0)
-    return sqrt(max(y.x,0.0));
+    return sqrt(G4std::max(y.x,0.0));
   else {
-    //    cerr << "WARNING: SQRT: x = " << y.x << endl;
+    //    G4cerr << "WARNING: SQRT: x = " << y.x << G4endl;
     //exit(1);
     //return 0;
     if (fabs(y.x)>Double::EpsWarning)
@@ -147,7 +147,7 @@ Double log(const Double& y)
   if (y > 0)
     return log(y.x);
   else {
-    //    cerr << "LOG: x = " << y.x << endl;
+    //    G4cerr << "LOG: x = " << y.x << G4endl;
     //exit(1);
     throw WrongArgument("log (x>0)",y.x);
   }
@@ -158,7 +158,7 @@ Double log(const Double& b,const Double& y)
   if (y > 0)
     return log(y.x)/log(b);
   else {
-    //    cerr << "LOG_B: x = " << y.x << endl;
+    //    G4cerr << "LOG_B: x = " << y.x << G4endl;
     //exit(1);
     throw WrongArgument("log_b (x>0)",y.x);
   }
@@ -169,7 +169,7 @@ Double tan(const Double& a)
   if (cos(a) != 0)
     return tan(a.x);
   else {
-    cerr << "TAN: x = " << a.x << endl;
+    G4cerr << "TAN: x = " << a.x << G4endl;
 //    exit(1);
 //    return 0;
     throw WrongArgument("tan",a.x);
@@ -181,7 +181,7 @@ Double cot(const Double& a)
   if (sin(a) != 0)
     return 1/tan(a.x);
   else {
-    //    cerr << "COTANGENS: x = " << a.x << endl;
+    //    G4cerr << "COTANGENS: x = " << a.x << G4endl;
     //exit(1);
     throw WrongArgument("cot",a.x);
   }
@@ -197,7 +197,7 @@ Double arcsin(const Double& y)
   }
   else {
     if (fabs(fabs(y.x)-1)>Double::EpsWarning) {
-      //      cerr << "WARNING: ARCSIN: x = " << y.x << ":" << fabs(y.x) - 1 << endl;
+      //      G4cerr << "WARNING: ARCSIN: x = " << y.x << ":" << fabs(y.x) - 1 << G4endl;
       //exit(1);
       throw WrongArgument("arcsin (-1<=x<=1)",y.x);
     }
@@ -216,7 +216,7 @@ Double arccos(const Double& y)
   }
   else {
     if (fabs(fabs(y.x)-1)>Double::EpsWarning) {
-      //      cerr << "WARNING: ARCCOS: x = " << y.x << endl;
+      //      G4cerr << "WARNING: ARCCOS: x = " << y.x << G4endl;
       //exit(1);
       throw WrongArgument("arccos (-1<=x<=1)",y.x);
     }
@@ -235,7 +235,7 @@ Double coth(const Double& a)
   if (tanh(a) != 0)
     return 1/tanh(a.x);
   else {
-    //    cerr << "COTH: x = " << a.x << endl;
+    //    G4cerr << "COTH: x = " << a.x << G4endl;
     //exit(1);
     throw WrongArgument("coth",a.x);
   }
@@ -244,10 +244,10 @@ Double coth(const Double& a)
 Double arcosh(const Double& y) 
 {
   if (y >= 1)
-    return acosh(max(y.x,1.0));
+    return acosh(G4std::max(y.x,1.0));
   else {
     if (fabs(y.x-1)>Double::EpsWarning) {
-      //    cerr << "ARCOSH: x = " << y.x << endl;
+      //    G4cerr << "ARCOSH: x = " << y.x << G4endl;
       //exit(1);
       throw WrongArgument("arcosh (x>=1)",y.x);
     }
@@ -261,7 +261,7 @@ Double artanh(const Double& y)
   if (fabs(y) < 1)
     return atanh(y.x);
   else {
-    //    cerr << "ARTANH: x = " << y.x << endl;
+    //    G4cerr << "ARTANH: x = " << y.x << G4endl;
     //exit(1);
     throw WrongArgument("artanh (|x|<1)",y.x);
   }
@@ -272,13 +272,13 @@ Double arcoth(const Double& y)
   if (fabs(y) > 1)
     return atanh(y.x);
   else {
-    //    cerr << "ARCOTH: x = " << y.x << endl;
+    //    G4cerr << "ARCOTH: x = " << y.x << G4endl;
     //exit(1);
     throw WrongArgument("arcoth (|x|>1)",y.x);
   }
 }
 
-ostream& operator<<(ostream& o,const Xdouble& x) 
+G4std::ostream& operator<<(G4std::ostream& o,const Xdouble& x) 
 {
   if (Valid(x))
     o << x.x;

@@ -61,7 +61,7 @@ Tst01PrimaryGeneratorAction::SetGunPosition(G4ThreeVector pGun)
                     fGunPosition.y()*fGunPosition.y() +
                     fGunPosition.z()*fGunPosition.z()     ) ;
 
-  G4cout<<"fPosition = "<<fPosition<<endl ;
+  G4cout<<"fPosition = "<<fPosition<<G4endl ;
 
   // world extent
 
@@ -86,7 +86,7 @@ Tst01PrimaryGeneratorAction::SetGunPosition(G4ThreeVector pGun)
   {
     fSize = 0.0 ;
   }
-  G4cout<<"fSize = "<<fSize<<endl ;
+  G4cout<<"fSize = "<<fSize<<G4endl ;
 }
 
 #endif

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleGun.cc,v 1.1 1999-01-07 16:06:37 gunter Exp $
+// $Id: G4ParticleGun.cc,v 1.2 1999-12-15 14:49:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,8 +57,8 @@ void G4ParticleGun::SetParticleMomentum(G4ParticleMomentum aMomentum)
 {
   if(particle_definition==NULL)
   {
-    G4cout <<"Particle Definition not defined yet for G4ParticleGun"<< endl;
-    G4cout <<"Zero Mass is assumed"<<endl;
+    G4cout <<"Particle Definition not defined yet for G4ParticleGun"<< G4endl;
+    G4cout <<"Zero Mass is assumed"<<G4endl;
     particle_momentum_direction =  aMomentum.unit();
     particle_energy = aMomentum.mag();
   } 
@@ -69,13 +69,13 @@ void G4ParticleGun::SetParticleMomentum(G4ParticleMomentum aMomentum)
     particle_momentum_direction =  aMomentum.unit();
     if ((particle_energy>0.0)&&(abs(particle_energy+mass-sqrt(p*p+mass*mass))>keV))
     {
-      G4cout << "G4ParticleGun::" << particle_definition->GetParticleName() << endl;
-      G4cout << "  KineticEnergy and Momentum could be inconsistent" << endl;
+      G4cout << "G4ParticleGun::" << particle_definition->GetParticleName() << G4endl;
+      G4cout << "  KineticEnergy and Momentum could be inconsistent" << G4endl;
       G4cout << " (Momentum:" << p/GeV << " GeV/c";
-      G4cout << "  Mass:" << mass/GeV << " GeV/c/c)" << endl;
+      G4cout << "  Mass:" << mass/GeV << " GeV/c/c)" << G4endl;
       G4cout << "  KineticEnergy is overwritten!! ";
       G4cout << particle_energy/GeV << "->";
-      G4cout << (sqrt(p*p+mass*mass)-mass)/GeV << "GeV" << endl;
+      G4cout << (sqrt(p*p+mass*mass)-mass)/GeV << "GeV" << G4endl;
     }
     particle_energy = sqrt(p*p+mass*mass)-mass;
   }

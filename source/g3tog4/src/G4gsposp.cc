@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsposp.cc,v 1.11 1999-12-05 17:50:14 gcosmo Exp $
+// $Id: G4gsposp.cc,v 1.12 1999-12-15 14:49:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 13.10.99
@@ -49,9 +49,9 @@ void G4ProcessDaughters(G3VolTableEntry* vte)
 // vte daughters
 {
   if (vte->HasNegPars()) {
-    G4cerr << " Warning:" << endl;
+    G4cerr << " Warning:" << G4endl;
     G4cerr << " G4ProcessDaughters: Ignored (vte has negative parameters)." 
-           << endl;
+           << G4endl;
   }  
   else {  
     for (G4int i=0; i<vte->GetNoDaughters(); i++) {

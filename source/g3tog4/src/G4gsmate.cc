@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsmate.cc,v 1.5 1999-12-09 00:05:02 lockman Exp $
+// $Id: G4gsmate.cc,v 1.6 1999-12-15 14:49:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
@@ -77,7 +77,7 @@ G4Element* CreateElement(G4double zeff, G4double aeff, G4String matName)
   // create new element if it was not found in element table
   G4Element* element = new G4Element(elName, elSymbol, zeff, aeff);	
   G4cout << "New element: " << element->GetName()
-         << " for " << matName << " material has been created." << endl;
+         << " for " << matName << " material has been created." << G4endl;
   return element;	
 }
 */

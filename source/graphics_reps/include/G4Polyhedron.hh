@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedron.hh,v 1.3 1999-11-17 07:39:24 stanaka Exp $
+// $Id: G4Polyhedron.hh,v 1.4 1999-12-15 14:50:33 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,7 +122,7 @@
 
 class G4Facet {
   friend class G4Polyhedron;
-  friend ostream& operator<<(ostream&, const G4Facet &facet);
+  friend G4std::ostream& operator<<(G4std::ostream&, const G4Facet &facet);
 
  private:
   struct G4Edge { G4int v,f; };
@@ -137,7 +137,7 @@ class G4Facet {
 };
 
 class G4Polyhedron: public G4VVisPrim {
-  friend ostream& operator<<(ostream&, const G4Polyhedron &ph);
+  friend G4std::ostream& operator<<(G4std::ostream&, const G4Polyhedron &ph);
 
  private:
   static G4int fNumberOfRotationSteps;

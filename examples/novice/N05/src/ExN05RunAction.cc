@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05RunAction.cc,v 1.3 1999-04-22 21:45:27 asaim Exp $
+// $Id: ExN05RunAction.cc,v 1.4 1999-12-15 14:49:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -27,14 +27,14 @@ ExN05RunAction::~ExN05RunAction()
 
 void ExN05RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   //  timer->Start();
 }
 
 void ExN05RunAction::EndOfRunAction(const G4Run* aRun)
 {
   timer->Stop();
-  G4cout << "number of event = " << aRun->GetNumberOfEvent() << endl;
-  //       << " " << *timer << endl;
+  G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
+  //       << " " << *timer << G4endl;
 }
 

@@ -5,7 +5,7 @@
 
 
 //
-// $Id: SdaiBinary.h,v 1.2 1999-05-21 20:20:33 japost Exp $
+// $Id: SdaiBinary.h,v 1.3 1999-12-15 14:50:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef SDAIBINARY_H
@@ -30,11 +30,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 class ErrorDescriptor;
 #include <scl_string.h>
@@ -64,22 +60,22 @@ class SdaiBinary : public SCLstring
 
     // format for STEP
     const char * asStr () const  {  return chars ();  }
-    void STEPwrite (ostream& out =G4cout)  const;
+    void STEPwrite (G4std::ostream& out =G4cout)  const;
     const char * STEPwrite (SCLstring &s) const;
 
     Severity StrToVal (const char *s, ErrorDescriptor *err);
-    Severity STEPread (istream& in, ErrorDescriptor *err);
+    Severity STEPread (G4std::istream& in, ErrorDescriptor *err);
     Severity STEPread (const char *s, ErrorDescriptor *err);
 
     Severity BinaryValidLevel (const char *value, ErrorDescriptor *err,
 			       int optional, char *tokenList,
 			       int needDelims = 0, int clearError = 1);
-    Severity BinaryValidLevel (istream &in, ErrorDescriptor *err, 
+    Severity BinaryValidLevel (G4std::istream &in, ErrorDescriptor *err, 
 			       int optional, char *tokenList,
 			       int needDelims = 0, int clearError = 1);
 
  protected:
-  Severity ReadBinary(istream& in, ErrorDescriptor *err, int AssignVal = 1,
+  Severity ReadBinary(G4std::istream& in, ErrorDescriptor *err, int AssignVal = 1,
 		      int needDelims = 1);
 };
 

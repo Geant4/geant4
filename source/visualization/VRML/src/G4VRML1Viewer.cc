@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1Viewer.cc,v 1.3 1999-11-04 02:38:48 stanaka Exp $
+// $Id: G4VRML1Viewer.cc,v 1.4 1999-12-15 14:54:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRMLView.cc
@@ -34,14 +34,14 @@ G4VRML1Viewer::~G4VRML1Viewer()
 void G4VRML1Viewer::SetView()
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML1Viewer::SetView(): No effects" << endl;
+  G4cerr << "***** G4VRML1Viewer::SetView(): No effects" << G4endl;
 #endif
 }
 
 void G4VRML1Viewer::DrawView()
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4VRML1Viewer::DrawView()" << endl;
+	G4cerr << "***** G4VRML1Viewer::DrawView()" << G4endl;
 #endif
 
 	fSceneHandler.VRMLBeginModeling();
@@ -55,14 +55,14 @@ void G4VRML1Viewer::DrawView()
 void G4VRML1Viewer::ClearView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML1Viewer::ClearView(): No effects" << endl;
+  G4cerr << "***** G4VRML1Viewer::ClearView(): No effects" << G4endl;
 #endif
 }
 
 void G4VRML1Viewer::ShowView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML1Viewer::ShowView()" << endl;
+  G4cerr << "***** G4VRML1Viewer::ShowView()" << G4endl;
 #endif
 	fSceneHandler.VRMLEndModeling();
 }
@@ -70,7 +70,7 @@ void G4VRML1Viewer::ShowView(void)
 void G4VRML1Viewer::FinishView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML1Viewer::FinishView(): No effects" << endl;
+  G4cerr << "***** G4VRML1Viewer::FinishView(): No effects" << G4endl;
 #endif
 }
 

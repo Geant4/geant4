@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StackManager.cc,v 1.1 1999-01-07 16:06:39 gunter Exp $
+// $Id: G4StackManager.cc,v 1.2 1999-12-15 14:49:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,7 +57,7 @@ G4int G4StackManager::PushOneTrack(G4Track *newTrack)
     {
       G4cout << "   ---> G4Track " << newTrack << " (trackID "
 	 << newTrack->GetTrackID() << ", parentID "
-	 << newTrack->GetParentID() << ") is not to be stored." << endl;
+	 << newTrack->GetParentID() << ") is not to be stored." << G4endl;
     }
 #endif
     delete newTrack;
@@ -91,7 +91,7 @@ G4Track * G4StackManager::PopNextTrack()
   if( verboseLevel > 0 )
   {
     G4cout << "### pop requested out of " 
-         << GetNUrgentTrack() << " stacked tracks." << endl;
+         << GetNUrgentTrack() << " stacked tracks." << G4endl;
   }
 #endif
 
@@ -99,14 +99,14 @@ G4Track * G4StackManager::PopNextTrack()
   {
 #ifdef G4VERBOSE
     if( verboseLevel > 0 ) G4cout << "### " << GetNWaitingTrack()
-                      << " waiting tracks are re-classified to" << endl;
+                      << " waiting tracks are re-classified to" << G4endl;
 #endif
     waitingStack->TransferTo(urgentStack);
     if(userStackingAction) userStackingAction->NewStage();
 #ifdef G4VERBOSE
     if( verboseLevel > 0 ) G4cout << "     " << GetNUrgentTrack()
                       << " urgent tracks and " << GetNWaitingTrack()
-                      << " waiting tracks." << endl;
+                      << " waiting tracks." << G4endl;
 #endif
     if( ( GetNUrgentTrack()==0 ) && ( GetNWaitingTrack()==0 ) ) return NULL;
   }
@@ -121,7 +121,7 @@ G4Track * G4StackManager::PopNextTrack()
          << " with G4Track " << selectedStackedTrack->GetTrack()
 	 << " (trackID " << selectedStackedTrack->GetTrack()->GetTrackID()
 	 << ", parentID " << selectedStackedTrack->GetTrack()->GetParentID()
-	 << ")" << endl;
+	 << ")" << G4endl;
   }
 #endif
 
@@ -173,7 +173,7 @@ G4int G4StackManager::PrepareNewEvent()
     if( verboseLevel > 0 )
     {
       G4cout << GetNPostponedTrack() 
-           << " postponed tracked are now shifted to the stack." << endl;
+           << " postponed tracked are now shifted to the stack." << G4endl;
     }
 #endif
 

@@ -1,4 +1,4 @@
-#include <strstream.h>
+#include "g4std/strstream"
 #include "genericRead.hh"
 #include <ctype.h>
 #include <stdlib.h>
@@ -6,10 +6,10 @@
 genericRead::genericRead(char* file) : Name(file)
 {
   try {
-    in = new ifstream(file);
+    in = new G4std::ifstream(file);
   }
   catch ( ... ) {
-    cerr << "Cannot open file " << file << endl;
+    G4cerr << "Cannot open file " << file << G4endl;
     throw;
   }
 }
@@ -23,7 +23,7 @@ void genericRead::read()
     while ( in->get(c) && isspace(c) )
       if ( c=='\n' ) ++noLines;
     if ( !(*in) ) {
-      cerr << "Read in complete...\n";
+      G4cerr << "Read in complete...\n";
       break;
     }
     if ( c == '#' ) {
@@ -39,8 +39,8 @@ void genericRead::read()
 	++N;
       }
       catch (const String& s) { 
-	cerr << Name << ": Read Error in Line " << noLines << ":\n";
-	cerr << s << endl;
+	G4cerr << Name << ": Read Error in Line " << noLines << ":\n";
+	G4cerr << s << G4endl;
 	exit(1);
       }
     }

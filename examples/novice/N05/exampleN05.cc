@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN05.cc,v 1.4 1999-11-29 15:40:46 stesting Exp $
+// $Id: exampleN05.cc,v 1.5 1999-12-15 14:49:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
   //-------------------------------
   // Initialization of Run manager
   //-------------------------------
-  G4cout << "RunManager construction starting...." << endl;
+  G4cout << "RunManager construction starting...." << G4endl;
   G4RunManager * runManager = new G4RunManager;
 
   // Detector geometry
@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
   // Visualization:
   //----------------
 #ifdef G4VIS_USE
-  G4cout << "Instantiating MyVisManager......." << endl;
+  G4cout << "Instantiating MyVisManager......." << G4endl;
   G4VisManager* visManager = new MyVisManager;
   visManager -> Initialize ();
 #endif

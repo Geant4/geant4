@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Element.cc,v 1.2 1999-04-14 12:49:01 maire Exp $
+// $Id: G4Element.cc,v 1.3 1999-12-15 14:50:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,7 +30,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 #include "G4Element.hh"
-#include <iomanip.h>
+#include "g4std/iomanip"
 
 G4ElementTable G4Element::theElementTable;
 
@@ -51,7 +51,7 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
     if ((zeff-G4int(zeff)) > perMillion)
       G4cerr << name <<
       " : WARNING ! Trying to define an element as a mixture directly via effective Z."
-           << endl;
+           << G4endl;
 
     InitializePointers();
 
@@ -266,30 +266,30 @@ G4double G4Element::GetAtomicShell(G4int i) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-ostream& operator<<(ostream& flux, G4Element* element)
+G4std::ostream& operator<<(G4std::ostream& flux, G4Element* element)
 { 
-  long mode = flux.setf(ios::fixed,ios::floatfield);
+  long mode = flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
   
   flux
-    << " Element: " << setw(8) << element->fName << setw(3) << element->fSymbol
-    << "   Z = " << setw(4) << setprecision(1) <<  element->fZeff 
-    << "   N = " << setw(5) << setprecision(1) <<  element->fNeff
-    << "   A = " << setw(6) << setprecision(2) << (element->fAeff)/(g/mole) 
+    << " Element: " << G4std::setw(8) << element->fName << G4std::setw(3) << element->fSymbol
+    << "   Z = " << G4std::setw(4) << G4std::setprecision(1) <<  element->fZeff 
+    << "   N = " << G4std::setw(5) << G4std::setprecision(1) <<  element->fNeff
+    << "   A = " << G4std::setw(6) << G4std::setprecision(2) << (element->fAeff)/(g/mole) 
     << " g/mole";
    
   for (G4int i=0; i<element->fNumberOfIsotopes; i++)
   flux 
     << "\n   ---> " << (*(element->theIsotopeVector))[i] 
-    << "   abundance: " << setw(6) << setprecision(2) 
+    << "   abundance: " << G4std::setw(6) << G4std::setprecision(2) 
     << (element->fRelativeAbundanceVector[i])/perCent << " %";
     
-  flux.setf(mode,ios::floatfield);         
+  flux.setf(mode,G4std::ios::floatfield);         
   return flux;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
- ostream& operator<<(ostream& flux, G4Element& element)
+ G4std::ostream& operator<<(G4std::ostream& flux, G4Element& element)
 {
   flux << &element;        
   return flux;
@@ -297,14 +297,14 @@ ostream& operator<<(ostream& flux, G4Element* element)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
      
-ostream& operator<<(ostream& flux, G4ElementTable ElementTable)
+G4std::ostream& operator<<(G4std::ostream& flux, G4ElementTable ElementTable)
 {
  //Dump info for all known elements
    flux << "\n***** Table : Nb of elements = " << ElementTable.length() 
-        << " *****\n" << endl;
+        << " *****\n" << G4endl;
         
    for (G4int i=0; i<ElementTable.length(); i++) flux << ElementTable[i] 
-                                                      << endl << endl;
+                                                      << G4endl << G4endl;
 
    return flux;
 }      

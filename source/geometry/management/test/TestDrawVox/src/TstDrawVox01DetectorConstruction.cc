@@ -76,14 +76,14 @@ void TstDrawVox01DetectorConstruction::SelectDetector(G4String val)
   { detectorChoice = 1; }
   else
   { detectorChoice = 0; }
-  G4cout << "Now Detector is " << val << endl;
+  G4cout << "Now Detector is " << val << G4endl;
 }
 
 void TstDrawVox01DetectorConstruction::SelectMaterial(G4String val)
 {
   materialChoice = val;
   SelectMaterialPointer();
-  G4cout << "SimpleBox is now made of " << materialChoice << endl;
+  G4cout << "SimpleBox is now made of " << materialChoice << G4endl;
 }
 
 void TstDrawVox01DetectorConstruction::SelectMaterialPointer()

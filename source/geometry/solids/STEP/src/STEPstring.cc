@@ -5,7 +5,7 @@
 
 
 //
-// $Id: STEPstring.cc,v 1.2 1999-05-21 20:20:52 japost Exp $
+// $Id: STEPstring.cc,v 1.3 1999-12-15 14:50:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -22,14 +22,10 @@
 /*  */
 
 #include <STEPstring.h>
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 void 
-SdaiString::STEPwrite (ostream& out) const
+SdaiString::STEPwrite (G4std::ostream& out) const
 {
     const char *str = 0;
 // strings that exist but do not contain any chars should be written as '',
@@ -89,17 +85,17 @@ SdaiString::StrToVal (const char * s)
 //  STEPread reads a string in exchange file format
 //  starting with a single quote
 Severity 
-SdaiString::STEPread (istream& in, ErrorDescriptor *err)
+SdaiString::STEPread (G4std::istream& in, ErrorDescriptor *err)
 {
     int foundEndQuote = 0; // need so this string is not ok: 'hi''
     set_null ();  // clear the old string
     char c;
-    in >> ws; // skip white space
+    in >> G4std::ws; // skip white space
     in >> c;
 
 	// remember the current format state to restore the previous settings
     long int flags = in.flags();
-    in.unsetf(ios::skipws);
+    in.unsetf(G4std::ios::skipws);
 
     if (c == STRING_DELIM)
     {
@@ -146,6 +142,6 @@ SdaiString::STEPread (istream& in, ErrorDescriptor *err)
 Severity 
 SdaiString::STEPread (const char *s, ErrorDescriptor *err)
 {
-    istrstream in((char *)s);
+    G4std::istrstream in((char *)s);
     return STEPread (in, err);
 }

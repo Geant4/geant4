@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4InterpolationManager.hh,v 1.4 1999-08-27 07:42:56 hpw Exp $
+// $Id: G4InterpolationManager.hh,v 1.5 1999-12-15 14:53:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4InterpolationManager_h
@@ -16,7 +16,7 @@
 #include "globals.hh"
 #include "G4InterpolationScheme.hh"
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 
 class G4InterpolationManager
 {
@@ -82,7 +82,7 @@ class G4InterpolationManager
      nEntries = aRange;
    }
    
-   inline void Init(ifstream & aDataFile)
+   inline void Init(G4std::ifstream & aDataFile)
    {
      delete [] start;
      delete [] range;

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateXm.cc,v 1.3 1999-01-11 00:47:44 allison Exp $
+// $Id: G4OpenGLImmediateXm.cc,v 1.4 1999-12-15 14:54:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,7 @@ G4OpenGLImmediateXm::G4OpenGLImmediateXm ():
 G4VSceneHandler* G4OpenGLImmediateXm::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4OpenGLImmediateSceneHandler (*this, name);
   G4cout << G4OpenGLImmediateSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scenes extanct." << endl;
+       << ' ' << fName << " scenes extanct." << G4endl;
   return    pScene;
 }
 
@@ -46,14 +46,14 @@ G4VViewer* G4OpenGLImmediateXm::CreateViewer (G4VSceneHandler& scene,
     if (pView -> GetViewId () < 0) {
       G4cerr << "G4OpenGLImmediateXm::CreateViewer: error flagged by"
 	" negative view id in G4OpenGLImmediateXmViewer creation."
-	"\n Destroying view and returning null pointer." << endl;
+	"\n Destroying view and returning null pointer." << G4endl;
       delete pView;
       pView = 0;
     }
   }
   else {
     G4cerr << "G4OpenGLImmediateXm::CreateViewer: null pointer on"
-      " new G4OpenGLImmediateXmViewer." << endl;
+      " new G4OpenGLImmediateXmViewer." << G4endl;
   }
   return pView;
 }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Element.hh,v 1.3 1999-11-11 15:36:08 gunter Exp $
+// $Id: G4Element.hh,v 1.4 1999-12-15 14:50:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -123,9 +123,9 @@ public:
 
     G4IonisParamElm* GetIonisation() const {return fIonisation;};
    
-    friend ostream& operator<<(ostream&, G4Element*);    
-    friend ostream& operator<<(ostream&, G4Element&);    
-    friend ostream& operator<<(ostream&, G4ElementTable);
+    friend G4std::ostream& operator<<(G4std::ostream&, G4Element*);    
+    friend G4std::ostream& operator<<(G4std::ostream&, G4Element&);    
+    friend G4std::ostream& operator<<(G4std::ostream&, G4ElementTable);
     
     G4int operator==(const G4Element&) const;
     G4int operator!=(const G4Element&) const;

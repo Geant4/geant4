@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ModelingParameters.hh,v 1.4 1999-11-25 14:18:48 johna Exp $
+// $Id: G4ModelingParameters.hh,v 1.5 1999-12-15 14:54:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@ class G4ModelingParameters {
 
 public: // With description
 
-  friend ostream& operator << (ostream& os, const G4ModelingParameters&);
+  friend G4std::ostream& operator << (G4std::ostream& os, const G4ModelingParameters&);
 
   enum RepStyle {
     wireframe,  // Use G4Wireframe.

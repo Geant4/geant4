@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: replicaCal.cc,v 1.1 1999-01-08 16:31:32 gunter Exp $
+// $Id: replicaCal.cc,v 1.2 1999-12-15 14:49:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -106,9 +106,9 @@ int main()
   G4VPhysicalVolume *myTopNode;
   G4Timer timer;
 
-  G4cout << "  Replication Performance Test - P.Kent 26.09.96" << endl;
+  G4cout << "  Replication Performance Test - P.Kent 26.09.96" << G4endl;
 #ifndef NDEBUG
-  G4cout << "WARNING: *** ASSERTs are compiled IN ***" << endl;
+  G4cout << "WARNING: *** ASSERTs are compiled IN ***" << G4endl;
 #endif
 
   myTopNode=BuildReplicaCal(NULL);	// Build the geometry
@@ -124,9 +124,9 @@ int main()
     {
       G4cout << "Optimisation OFF";
     }
-  G4cout << " Geometry close took " << timer << endl;
+  G4cout << " Geometry close took " << timer << G4endl;
   
-  G4cout << endl << "Shooting from " << pos << " along " << dir << endl;
+  G4cout << G4endl << "Shooting from " << pos << " along " << dir << G4endl;
   ShootVerbose(myTopNode,pos,dir);
   Shoot(numShoot,myTopNode,pos,dir);
 

@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -170,7 +170,7 @@ G4Material* Air = new G4Material(name="Air"  , density, ncomponents=2);
 Air->AddElement(elN, fractionmass=0.7);
 Air->AddElement(elO, fractionmass=0.3);
 
-G4cout << *(G4Material::GetMaterialTable()) << endl;
+G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //default materials of the calorimeter
   AbsorberMaterial = H2O;
@@ -259,13 +259,13 @@ void Em6DetectorConstruction::PrintCalorParameters()
   G4cout << "\n The  WORLD   is made of " 
          << G4BestUnit(WorldSizeX,"Length") << " of " << WorldMaterial->GetName();
   G4cout << ". The transverse size (YZ) of the world is " 
-         << G4BestUnit(WorldSizeYZ,"Length") << endl;
+         << G4BestUnit(WorldSizeYZ,"Length") << G4endl;
   G4cout << " The ABSORBER is made of " << NumberOfAbsorbers << " items of "
          <<G4BestUnit(AbsorberThickness,"Length")<< " of " << AbsorberMaterial->GetName();
   G4cout << ". The transverse size (YZ) is " 
-         << G4BestUnit(AbsorberSizeYZ,"Length") << endl;
+         << G4BestUnit(AbsorberSizeYZ,"Length") << G4endl;
   G4cout << " X position of the middle of the absorber " << G4BestUnit(XposAbs,"Length");
-  G4cout << endl;
+  G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

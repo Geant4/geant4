@@ -6,8 +6,8 @@
 #endif
 
 #include "globals.hh"
-#include <iostream.h>
-#include <vector.h>
+#include "g4std/iostream"
+#include "g4std/vector"
 
 //
 //  Reads members of a class t from file.
@@ -15,7 +15,7 @@
 //
 //  Requirements to template class t:
 //
-//  - constructor  t(istream& )   for reading in properties
+//  - constructor  t(G4std::istream& )   for reading in properties
 //  - operator<<   for being printed out
 //  - operator==   to identify entry in the vector
 //
@@ -23,10 +23,10 @@
 template<class t>
 class ReadList : public vector<t>
 {
-  friend ostream& operator<<(ostream&,ReadList<t>&);
+  friend G4std::ostream& operator<<(G4std::ostream&,ReadList<t>&);
 protected:
   int N;
-  istream* file;
+  G4std::istream* file;
 public:
   ReadList(char* fileName);
   void readIn();
@@ -42,10 +42,10 @@ public:
 template<class t>
 class ReadList_P : public vector<t*>
 {
-  friend ostream& operator<<(ostream&,ReadList_P<t>&);
+  friend G4std::ostream& operator<<(G4std::ostream&,ReadList_P<t>&);
 protected:
   int N;
-  istream* file;
+  G4std::istream* file;
 public:
   ReadList_P(char* fileName);
   void readIn();

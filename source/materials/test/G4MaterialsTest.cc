@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialsTest.cc,v 1.1 1999-01-08 16:32:09 gunter Exp $
+// $Id: G4MaterialsTest.cc,v 1.2 1999-12-15 14:50:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,9 +68,9 @@ elU->AddIsotope(U5, abundance= 90.*perCent);
 elU->AddIsotope(U8, abundance= 10.*perCent);
 
 
-G4cout << *(G4Isotope::GetIsotopeTable()) << endl;
+G4cout << *(G4Isotope::GetIsotopeTable()) << G4endl;
 
-G4cout << *(G4Element::GetElementTable()) << endl;
+G4cout << *(G4Element::GetElementTable()) << G4endl;
 
 //
 // define simple materials
@@ -170,7 +170,7 @@ beam->AddMaterial(Air, fractionmass=1.);
 // Print the table of materials
 //
 
-G4cout << *(G4Material::GetMaterialTable()) << endl;
+G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
 return EXIT_SUCCESS;
 }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImanager.cc,v 1.3 1999-11-15 10:39:43 gunter Exp $
+// $Id: G4UImanager.cc,v 1.4 1999-12-15 14:50:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,11 +22,7 @@
 #include "G4ios.hh"
 #include "G4strstreambuf.hh"
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 G4UImanager * G4UImanager::fUImanager = 0;
 G4bool G4UImanager::fUImanagerHasBeenKilled = false;
@@ -87,7 +83,7 @@ G4String G4UImanager::GetCurrentValues(const char * aCommand)
   savedCommand = treeTop->FindPath( theCommand );
   if( savedCommand == NULL ) 
   {
-    G4cerr << "command not found" << endl;
+    G4cerr << "command not found" << G4endl;
     return G4String();
   }
   return savedCommand->GetCurrentValue();
@@ -138,7 +134,7 @@ const char * aParameterName, G4bool reGet)
      GetCurrentStringValue( aCommand, aParameterName, reGet );
   G4int value;
   const char* t = targetParameter;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
   is >> value;
   return value;
 }
@@ -150,7 +146,7 @@ int parameterNumber, G4bool reGet)
      GetCurrentStringValue( aCommand, parameterNumber, reGet );
   G4int value;
   const char* t = targetParameter;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
   is >> value;
   return value;
 }
@@ -162,7 +158,7 @@ const char * aParameterName, G4bool reGet)
      GetCurrentStringValue( aCommand, aParameterName, reGet );
   G4double value;
   const char* t = targetParameter;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
   is >> value;
   return value;
 }
@@ -174,7 +170,7 @@ int parameterNumber, G4bool reGet)
      GetCurrentStringValue( aCommand, parameterNumber, reGet );
   G4double value;
   const char* t = targetParameter;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
   is >> value;
   return value;
 }
@@ -206,7 +202,7 @@ int G4UImanager::ApplyCommand(char * aCommand)
 
 int G4UImanager::ApplyCommand(G4String aCommand)
 {
-  if(verboseLevel) G4cout << aCommand << endl;
+  if(verboseLevel) G4cout << aCommand << G4endl;
 
   G4String commandString;
   G4String commandParameter;
@@ -224,14 +220,14 @@ int G4UImanager::ApplyCommand(G4String aCommand)
   G4UIcommand * targetCommand = treeTop->FindPath( commandString );
   if( targetCommand == NULL )
   {
-    // G4cout << commandString << " NOT FOUND." << endl;
+    // G4cout << commandString << " NOT FOUND." << G4endl;
     return fCommandNotFound;
   }
 
   if(!(targetCommand->IsAvailable())) 
   { return fIllegalApplicationState; }
  
-  if(saveHistory) historyFile << aCommand << endl; 
+  if(saveHistory) historyFile << aCommand << G4endl; 
   histVec.insert(aCommand);
   return targetCommand->DoIt( commandParameter );
 }
@@ -268,7 +264,7 @@ void G4UImanager::ListCommands(G4String direct)
   if(comTree)
   { comTree->List(); }
   else
-  { G4cout << direct << " is not found." << endl; }
+  { G4cout << direct << " is not found." << G4endl; }
 }
 
 G4UIcommandTree* G4UImanager::FindDirectory(const char* dirName)
@@ -305,13 +301,13 @@ void G4UImanager::Interact(char * pC)
 
 void G4UImanager::Interact(G4String pC)
 {
-  G4cerr << "G4UImanager::Interact() is out of date and is not used anymore." << endl;
-  G4cerr << "This method will be removed shortly!!!" << endl;
-  G4cerr << "In case of main() use" << endl;
-  G4cerr << "    G4UIsession * session = new G4UIterminal;" << endl;
-  G4cerr << "    session->SessionStart();" << endl;
-  G4cerr << "In other cases use" << endl;
-  G4cerr << "    G4StateManager::GetStateManager()->Pause();" << endl;
+  G4cerr << "G4UImanager::Interact() is out of date and is not used anymore." << G4endl;
+  G4cerr << "This method will be removed shortly!!!" << G4endl;
+  G4cerr << "In case of main() use" << G4endl;
+  G4cerr << "    G4UIsession * session = new G4UIterminal;" << G4endl;
+  G4cerr << "    session->SessionStart();" << G4endl;
+  G4cerr << "In other cases use" << G4endl;
+  G4cerr << "    G4StateManager::GetStateManager()->Pause();" << G4endl;
 }
 
 

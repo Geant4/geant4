@@ -2,8 +2,8 @@
 #define __PROPERTIES__
 
 #include "globals.hh"
-#include <iostream.h>
-#include <vector.h>
+#include "g4std/iostream"
+#include "g4std/vector"
 #include "String.hh"
 #include "ParticleBase.hh"
 #include "ParticleType.hh"
@@ -29,7 +29,7 @@ public:
 
 class QuantumState : public QuantumProjections,public QuantumNumbers
 {
-  friend ostream& operator<<(ostream& o,const QuantumState& p) { o << p.B() << ": " << p.Spin() << "  " << p.Isospin() << " : " << p.Spin3() << "  " << p.Iso3() << "  "; return o; }
+  friend G4std::ostream& operator<<(G4std::ostream& o,const QuantumState& p) { o << p.B() << ": " << p.Spin() << "  " << p.Isospin() << " : " << p.Spin3() << "  " << p.Iso3() << "  "; return o; }
   friend QuantumState operator+(const QuantumState& p1,const QuantumState& p2);
   friend QuantumState addToLowest(const QuantumState& p1,const QuantumState& p2);
   friend QuantumState anti(const QuantumState&);
@@ -45,7 +45,7 @@ public:
 class ParticleProperties : private QuantumProjections,
 			   public virtual ParticleBase
 {
-  friend ostream& operator<<(ostream& o,const ParticleProperties& p) { p.writeOut(o); return o; }
+  friend G4std::ostream& operator<<(G4std::ostream& o,const ParticleProperties& p) { p.writeOut(o); return o; }
 
   const ParticleType& Type;
   double mass,lifetime;
@@ -91,7 +91,7 @@ public:
   virtual QuantumState getProperties() const { return QuantumState(Type,*this); }
   virtual const ParticleType& getType() const { return Type; }
 private:
-  virtual void writeOut(ostream& o) const;
+  virtual void writeOut(G4std::ostream& o) const;
   String chargeName() const;
 };
 

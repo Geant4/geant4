@@ -46,7 +46,7 @@ void G4NeutronHPFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)
 {
   if(&aP!=G4Neutron::Neutron()) 
      G4Exception("Attempt to use NeutronHP data for particles other than neutrons!!!");  
-  G4cout << "G4NeutronHPFissionData::DumpPhysicsTable still to be implemented"<<endl;
+  G4cout << "G4NeutronHPFissionData::DumpPhysicsTable still to be implemented"<<G4endl;
 }
 
 G4double G4NeutronHPFissionData::GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE)

@@ -186,7 +186,7 @@ int main()
                pv[i].setSide(0);
                if(pv[i].getCharge() < -0.5) nneg++;
              }
-           G4double phmf1 = max(0., phmf*(1.+0.2*theInteraction.normal()));
+           G4double phmf1 = G4std::max(0., phmf*(1.+0.2*theInteraction.normal()));
            pv[i].SmulAndUpdate(pv[i], phmf1/phmf);
            pana[5].Lor(pv[i], pana[3]);
            G4double xup = pana[5].getEnergy() + pana[5].getMomentum().z();
@@ -273,7 +273,7 @@ int main()
 
      }  while (iteration < NumberEvents) ;
 
-    cout << " number of useful events " << nevhmf << endl; 
+    cout << " number of useful events " << nevhmf << G4endl; 
    
     G4double wgthmf = 1./nevhmf;
     for(i = 1; i<=19; i++) plot[i].Scale(wgthmf, plot[i]);

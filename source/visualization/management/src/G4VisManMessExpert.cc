@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessExpert.cc,v 1.3 1999-01-11 00:48:37 allison Exp $
+// $Id: G4VisManMessExpert.cc,v 1.4 1999-12-15 14:54:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -201,7 +201,7 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
     if (ViewValid ()) {
       G4double x, y, z, worldSize;
       const char* aString = newValues;
-      istrstream is((char*) aString); is >> x >> y >> z >> worldSize;
+      G4std::istrstream is((char*) aString); is >> x >> y >> z >> worldSize;
       G4Circle circle = G4Circle(G4Point3D(x,y,z));
       circle.SetWorldSize (worldSize);
       G4Colour c(0.0, 1.0, 1.0 );
@@ -217,7 +217,7 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
       G4double x0, y0, z0;
       G4double x1, y1, z1;
       const char* aString = newValues;
-      istrstream is((char*) aString); is >> x0 >> y0 >> z0 >> x1 >> y1 >> z1 ;
+      G4std::istrstream is((char*) aString); is >> x0 >> y0 >> z0 >> x1 >> y1 >> z1 ;
 
       G4Polyline line;
       G4Colour c(1.0, 0.0, 0.0);
@@ -242,7 +242,7 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
     if (ViewValid ()) {
       G4double x, y, z, worldSize;
       const char* aString = newValues;
-      istrstream is((char*) aString); is >> x >> y >> z >> worldSize;
+      G4std::istrstream is((char*) aString); is >> x >> y >> z >> worldSize;
 
        // Draw squares
       xx = x ; yy = y; zz = z ;
@@ -331,7 +331,7 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
     if (ViewValid ()) {
       int nPolyMarkers, type;
       const char* aString = newValues;
-      istrstream is((char*) aString) ;is >> nPolyMarkers >> type;
+      G4std::istrstream is((char*) aString) ;is >> nPolyMarkers >> type;
       G4Polymarker::MarkerType realType;
       switch (type) {
       default:
@@ -388,7 +388,7 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
     if (ViewValid ()) {
       int nSpirals;
       const char* aString = newValues;
-      istrstream is((char*) aString) ; is >> nSpirals;
+      G4std::istrstream is((char*) aString) ; is >> nSpirals;
       G4int i;
       G4double a, fa, z, dz, t, dt = M_PI / 50.;
       G4Polyline line;
@@ -419,7 +419,7 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
     if (ViewValid ()) {
       G4double x, y, z, worldSize;
       const char* aString = newValues;
-      istrstream is((char*) aString); is >> x >> y >> z >> worldSize;
+      G4std::istrstream is((char*) aString); is >> x >> y >> z >> worldSize;
       G4Square Square = G4Square (G4Point3D (x, y, z));
       // Set attributes - begin snippet.
       Square.SetWorldSize (worldSize);

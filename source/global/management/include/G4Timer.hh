@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.hh,v 1.8 1999-11-23 15:00:03 gcosmo Exp $
+// $Id: G4Timer.hh,v 1.9 1999-12-15 14:50:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@
 //
 // Operators:
 //
-// ostream& operator << (ostream& os, const G4Timer& t);
+// G4std::ostream& operator << (G4std::ostream& os, const G4Timer& t);
 //   Print the elapsed real,system and usertimes on os. Prints **s for times
 //   if !IsValid
 //

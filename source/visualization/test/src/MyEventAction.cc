@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyEventAction.cc,v 1.1 1999-04-16 10:32:36 johna Exp $
+// $Id: MyEventAction.cc,v 1.2 1999-12-15 14:54:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,21 +43,21 @@ void MyEventAction::EndOfEventAction()
   G4int trackerCollID = SDman->GetCollectionID(colNam="TrackerCollection");
   G4int calorimeterCollID = SDman->GetCollectionID(colNam="CalCollection");
 
-  G4cout << ">>> Event " << evt->GetEventID() << endl;
+  G4cout << ">>> Event " << evt->GetEventID() << G4endl;
 
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;
   if(trajectoryContainer)
   { n_trajectories = trajectoryContainer->entries(); }
   G4cout << "    " << n_trajectories 
-       << " trajectories stored in this event." << endl;
+       << " trajectories stored in this event." << G4endl;
 
   G4HCofThisEvent * HCE = evt->GetHCofThisEvent();
   G4int n_hitCollection = 0;
   if(HCE)
   { n_hitCollection = HCE->GetCapacity(); }
   G4cout << "    " << n_hitCollection
-       << " hitsCollections stored in this event." << endl;
+       << " hitsCollections stored in this event." << G4endl;
 
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 

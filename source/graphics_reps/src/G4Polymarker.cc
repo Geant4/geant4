@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polymarker.cc,v 1.4 1999-05-25 09:10:23 johna Exp $
+// $Id: G4Polymarker.cc,v 1.5 1999-12-15 14:50:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@ G4Polymarker & G4Polymarker::operator = (const G4Polymarker &right) {
   return *this;
 }
 
-ostream& operator << (ostream& os, const G4Polymarker& marker) {
+G4std::ostream& operator << (G4std::ostream& os, const G4Polymarker& marker) {
   os << "G4Polymarker: type: ";
   switch (marker.fMarkerType) {
   case G4Polymarker::line:

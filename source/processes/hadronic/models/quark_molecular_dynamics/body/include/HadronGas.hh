@@ -5,8 +5,8 @@
 #include "double.hh"
 #include "ParticleType.hh"
 #include "bessel.hh"
-#include <iomanip.h>
-#include <fstream.h>
+#include "g4std/iomanip"
+#include "g4std/fstream"
 #include "newvector.hh"
 #include "MathTools.hh"
 

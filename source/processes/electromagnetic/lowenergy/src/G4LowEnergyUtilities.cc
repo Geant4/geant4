@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyUtilities.cc,v 1.2 1999-09-28 13:15:45 aforti Exp $
+// $Id: G4LowEnergyUtilities.cc,v 1.3 1999-12-15 14:51:33 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,7 +27,7 @@
 // 08-01-97, crossection table + meanfreepath table, M.Maire
 // 13-03-97, adapted for the new physics scheme, M.Maire
 // 28-03-97, protection in BuildPhysicsTable, M.Maire
-// 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
+// 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
 // --------------------------------------------------------------
 // This Class Header
 #include "G4LowEnergyUtilities.hh"
@@ -37,7 +37,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4Material.hh"
 #include "CLHEP/String/Strings.h"
-#include <fstream.h>
+#include "g4std/fstream"
 
 G4LowEnergyUtilities::G4LowEnergyUtilities()
 {}
@@ -69,8 +69,8 @@ G4SecondLevel* G4LowEnergyUtilities::BuildSecondLevelTables(const G4int TableInd
   
   HepString path_string(path);
   HepString dir_file = path_string + "/" + name;
-  ifstream file(dir_file);
-  filebuf* lsdp = file.rdbuf();
+  G4std::ifstream file(dir_file);
+  G4std::filebuf* lsdp = file.rdbuf();
 
   if(!lsdp->is_open()){
     
@@ -164,8 +164,8 @@ G4FirstLevel* G4LowEnergyUtilities::BuildFirstLevelTables(const G4int TableInd,
   
   HepString path_string(path);
   HepString dir_file = path_string + "/" + name;
-  ifstream file(dir_file);
-  filebuf* lsdp = file.rdbuf();
+  G4std::ifstream file(dir_file);
+  G4std::filebuf* lsdp = file.rdbuf();
 
   if(!lsdp->is_open()){
     

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeSearchScene.cc,v 1.3 1999-02-07 17:23:22 johna Exp $
+// $Id: G4PhysicalVolumeSearchScene.cc,v 1.4 1999-12-15 14:54:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,16 +45,16 @@ void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid& solid) {
 
   /**************************************************
   G4cout << "Required volume: \"" << fRequiredPhysicalVolumeName
-	 << "\", copy no. " << fRequiredCopyNo << endl;
+	 << "\", copy no. " << fRequiredCopyNo << G4endl;
   G4cout << "PhysicalVolume:  \"" << fpCurrentPV -> GetName ()
-	 << "\", copy no. " << fpCurrentPV -> GetCopyNo () << endl;
+	 << "\", copy no. " << fpCurrentPV -> GetCopyNo () << G4endl;
   *******************************************/
 
   if (fRequiredPhysicalVolumeName == "list") {
     for (G4int i = 0; i < fCurrentDepth; i++ ) G4cout << "  ";
     G4cout << "\"" << fpCurrentPV -> GetName ()
 	   << "\", copy no. " << fpCurrentPV -> GetCopyNo ()
-	   << endl;
+	   << G4endl;
     return;
   }
 
@@ -78,7 +78,7 @@ void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid& solid) {
 	  "\n  physical volumes which have different parentage.  Besides,"
 	  "\n  it's tricky to specify in general; we plan a GUI to do this."
 	  "\n  This function gives you access to the first occurrence only."
-	       << endl;
+	       << G4endl;
       }
     }
   }      

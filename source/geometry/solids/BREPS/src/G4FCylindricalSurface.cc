@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.cc,v 1.8 1999-05-27 10:44:55 japost Exp $
+// $Id: G4FCylindricalSurface.cc,v 1.9 1999-12-15 14:50:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/FG4Cylinder.cc,v 1.1 1992/10/27 22:02:29 alanb Exp  */
@@ -17,7 +17,7 @@
 //      FG4Cylinder::FG4Cylinder( const G4Point3D& o, const G4ThreeVec& a,
 //	                          G4double r, G4double l )
 //	FG4Cylinder::FG4Cylinder( const FG4Cylinder& c )
-//	FG4Cylinder::PrintOn( ostream& os ) const
+//	FG4Cylinder::PrintOn( G4std::ostream& os ) const
 //	FG4Cylinder::operator==( const FG4Cylinder& c )
 //	FG4Cylinder::WithinBoundary( const G4ThreeVec& x ) const
 //	FG4Cylinder::Scale() const
@@ -76,8 +76,8 @@ G4FCylindricalSurface::G4FCylindricalSurface( const G4FCylindricalSurface& c )
   length = c.length;
 }
 
-//  printing function using C++ ostream class
-void G4FCylindricalSurface::PrintOn( ostream& os ) const
+//  printing function using C++ G4std::ostream class
+void G4FCylindricalSurface::PrintOn( G4std::ostream& os ) const
 { 
   os << "G4FCylindricalSurface with origin: " << origin << "\t"
      << "and axis: " << Position.GetAxis() << "\n"
@@ -239,7 +239,7 @@ G4double G4FCylindricalSurface::HowNear( const G4Vector3D& x ) const
   if ( ((Zinter >= downcorner.z()) && (Zinter <=upcorner.z())) ) {
     hownear = fabs( radius - xd.x() );
   } else {
-    hownear = min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
+    hownear = G4std::min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
   }
 
   return hownear;

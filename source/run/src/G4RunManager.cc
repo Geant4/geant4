@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.10 1999-12-02 16:26:07 asaim Exp $
+// $Id: G4RunManager.cc,v 1.11 1999-12-15 14:53:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,11 +37,7 @@
 #include "G4VVisManager.hh"
 
 #include "G4ios.hh"
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 
 G4RunManager* G4RunManager::fRunManager = NULL;
@@ -71,20 +67,20 @@ G4RunManager::G4RunManager()
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   G4cout 
-  << "**********************************************" << endl
-  << " Geant4 version $Name: not supported by cvs2svn $" << endl
-  << "                                  (07-Dec-99)" << endl
-  << "             Copyright : Geant4 Collaboration" << endl
-  << "**********************************************" << endl;
+  << "**********************************************" << G4endl
+  << " Geant4 version $Name: not supported by cvs2svn $" << G4endl
+  << "                                  (07-Dec-99)" << G4endl
+  << "             Copyright : Geant4 Collaboration" << G4endl
+  << "**********************************************" << G4endl;
 }
 
 G4RunManager::~G4RunManager()
 {
-  if(verboseLevel>0) G4cout << "G4 kernel has come to Quit state." << endl;
+  if(verboseLevel>0) G4cout << "G4 kernel has come to Quit state." << G4endl;
   G4StateManager* pStateManager = G4StateManager::GetStateManager();
   pStateManager->SetNewState(Quit);
 
-  if(verboseLevel>1) G4cout << "Deletion of G4 kernel class start." << endl;
+  if(verboseLevel>1) G4cout << "Deletion of G4 kernel class start." << G4endl;
   delete timer;
   delete runMessenger;
   physicsList->RemoveProcessManager();
@@ -94,42 +90,42 @@ G4RunManager::~G4RunManager()
   if(userDetector)
   {
     delete userDetector;
-    if(verboseLevel>1) G4cout << "UserDetectorConstruction deleted." << endl;
+    if(verboseLevel>1) G4cout << "UserDetectorConstruction deleted." << G4endl;
   }
   if(physicsList)
   {
     delete physicsList;
-    if(verboseLevel>1) G4cout << "UserPhysicsList deleted." << endl;
+    if(verboseLevel>1) G4cout << "UserPhysicsList deleted." << G4endl;
   }
   if(userRunAction)
   {
     delete userRunAction;
-    if(verboseLevel>1) G4cout << "UserRunAction deleted." << endl;
+    if(verboseLevel>1) G4cout << "UserRunAction deleted." << G4endl;
   }
   if(userPrimaryGeneratorAction)
   {
     delete userPrimaryGeneratorAction;
-    if(verboseLevel>1) G4cout << "UserPrimaryGenerator deleted." << endl;
+    if(verboseLevel>1) G4cout << "UserPrimaryGenerator deleted." << G4endl;
   }
   G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
   if(fSDM)
   {
     delete fSDM;
-    if(verboseLevel>1) G4cout << "G4SDManager deleted." << endl;
+    if(verboseLevel>1) G4cout << "G4SDManager deleted." << G4endl;
   }
   delete eventManager;
-  if(verboseLevel>1) G4cout << "EventManager deleted." << endl;
+  if(verboseLevel>1) G4cout << "EventManager deleted." << G4endl;
   G4UImanager* pUImanager = G4UImanager::GetUIpointer();
   {
     if(pUImanager) delete pUImanager;
-    if(verboseLevel>1) G4cout << "UImanager deleted." << endl;
+    if(verboseLevel>1) G4cout << "UImanager deleted." << G4endl;
   }
   if(pStateManager) 
   {
     delete pStateManager;
-    if(verboseLevel>1) G4cout << "StateManager deleted." << endl;
+    if(verboseLevel>1) G4cout << "StateManager deleted." << G4endl;
   }
-  if(verboseLevel>1) G4cout << "RunManager is deleting." << endl;
+  if(verboseLevel>1) G4cout << "RunManager is deleting." << G4endl;
 }
 
 void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
@@ -150,14 +146,14 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(currentState!=PreInit && currentState!=Idle)
   {
-    G4cerr << "Illegal application state - BeamOn() ignored." << endl;
+    G4cerr << "Illegal application state - BeamOn() ignored." << G4endl;
     return false;
   }
 
   if(!initializedAtLeastOnce)
   {
-    G4cerr << " Geant4 kernel should be initialized" << endl;
-    G4cerr << "before the first BeamOn(). - BeamOn ignored." << endl;
+    G4cerr << " Geant4 kernel should be initialized" << G4endl;
+    G4cerr << "before the first BeamOn(). - BeamOn ignored." << G4endl;
     return false;
   }
 
@@ -165,11 +161,11 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
   {
     if(verboseLevel>0)
     {
-      G4cout << "Start re-initialization because " << endl;
-      if(!geometryInitialized) G4cout << "  Geometry" << endl;
-      if(!physicsInitialized)  G4cout << "  Physics processes" << endl;
-      if(!cutoffInitialized)   G4cout << "  Cutoff" << endl;
-      G4cout << "has been modified since last Run." << endl;
+      G4cout << "Start re-initialization because " << G4endl;
+      if(!geometryInitialized) G4cout << "  Geometry" << G4endl;
+      if(!physicsInitialized)  G4cout << "  Physics processes" << G4endl;
+      if(!cutoffInitialized)   G4cout << "  Cutoff" << G4endl;
+      G4cout << "has been modified since last Run." << G4endl;
     }
     Initialize();
   }
@@ -189,7 +185,7 @@ void G4RunManager::RunInitialization()
   if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
   if(geometryNeedsToBeClosed)
   {
-    if(verboseLevel>1) G4cout << "Start closing geometry." << endl;
+    if(verboseLevel>1) G4cout << "Start closing geometry." << G4endl;
     G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
     geomManager->OpenGeometry();
     geomManager->CloseGeometry(geometryToBeOptimized);
@@ -206,7 +202,7 @@ void G4RunManager::RunInitialization()
 
   if(storeRandomNumberStatus==1 || storeRandomNumberStatus==-1) StoreRandomNumberStatus();
   
-  if(verboseLevel>0) G4cout << "Start Run processing." << endl;
+  if(verboseLevel>0) G4cout << "Start Run processing." << G4endl;
 }
 
 void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_select)
@@ -250,13 +246,13 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
   if(verboseLevel>0)
   {
     timer->Stop();
-    G4cout << "Run terminated." << endl;
-    G4cout << "Run Summary" << endl;
+    G4cout << "Run terminated." << G4endl;
+    G4cout << "Run Summary" << G4endl;
     if(runAborted)
-    { G4cout << "  Run Aborted after " << i_event << " events processed." << endl; }
+    { G4cout << "  Run Aborted after " << i_event << " events processed." << G4endl; }
     else
-    { G4cout << "  Number of events processed : " << n_event << endl; }
-    G4cout << "  "  << *timer << endl;
+    { G4cout << "  Number of events processed : " << n_event << G4endl; }
+    G4cout << "  "  << *timer << G4endl;
   }
 }
 
@@ -320,7 +316,7 @@ void G4RunManager::Initialize()
   if(currentState!=PreInit && currentState!=Idle)
   {
     G4cerr << "Illegal application state - "
-         << "G4RunManager::Initialize() ignored." << endl;
+         << "G4RunManager::Initialize() ignored." << G4endl;
     return;
   }
 
@@ -340,7 +336,7 @@ void G4RunManager::InitializeGeometry()
     ("G4RunManager::InitializeGeometry - G4VUserDetectorConstruction is not defined.");
   }
 
-  if(verboseLevel>1) G4cout << "userDetector->Construct() start." << endl;
+  if(verboseLevel>1) G4cout << "userDetector->Construct() start." << G4endl;
   DefineWorldVolume(userDetector->Construct());
   geometryInitialized = true;
 }
@@ -349,7 +345,7 @@ void G4RunManager::InitializePhysics()
 {
   if(physicsList)
   {
-    if(verboseLevel>1) G4cout << "physicsList->Construct() start." << endl;
+    if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
     physicsList->Construct();
   }
   else
@@ -363,7 +359,7 @@ void G4RunManager::InitializeCutOff()
 {
   if(physicsList)
   {
-    if(verboseLevel>1) G4cout << "physicsList->setCut() start." << endl;
+    if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
     physicsList->SetCuts();
   }
   cutoffInitialized = true;
@@ -381,7 +377,7 @@ void G4RunManager::AbortRun()
   }
   else
   {
-    G4cerr << "Run is not in progress. AbortRun() ignored." << endl;
+    G4cerr << "Run is not in progress. AbortRun() ignored." << G4endl;
   }
 }
 
@@ -405,7 +401,7 @@ void G4RunManager::StoreRandomNumberStatus(G4int eventID)
   if(storeRandomNumberStatus>0 && currentRun != NULL)
   {
     char st[20];
-    ostrstream os(st,20);
+    G4std::ostrstream os(st,20);
     os << currentRun->GetRunID() << '\0';
     fileN += "R";
     fileN += st;
@@ -413,7 +409,7 @@ void G4RunManager::StoreRandomNumberStatus(G4int eventID)
   if(storeRandomNumberStatus==2 && eventID>=0)
   {
     char st[20];
-    ostrstream os(st,20);
+    G4std::ostrstream os(st,20);
     os << eventID << '\0';
     fileN += "E";
     fileN += st;

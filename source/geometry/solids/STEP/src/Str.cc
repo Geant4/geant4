@@ -5,7 +5,7 @@
 
 
 //
-// $Id: Str.cc,v 1.2 1999-05-21 20:21:06 japost Exp $
+// $Id: Str.cc,v 1.3 1999-12-15 14:50:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -154,8 +154,8 @@ PrettyNewName (const char * oldname)
 // this function can push the file pointer up to but not past the delimiter
 // (i.e. not removing the delimiter from the input stream).  If you have a
 // string containing a single value and you expect the whole string to contain
-// a valid value, you can change the string to an istrstream, read the value 
-// then send the istrstream to this function with tokenList set to null 
+// a valid value, you can change the string to an G4std::istrstream, read the value 
+// then send the G4std::istrstream to this function with tokenList set to null 
 // and this function will set an error for you if any input remains following
 // the value.
 
@@ -178,7 +178,7 @@ PrettyNewName (const char * oldname)
 //	  no way to know when to stop.
 
 Severity 
-CheckRemainingInput(istream &in, ErrorDescriptor *err, 
+CheckRemainingInput(G4std::istream &in, ErrorDescriptor *err, 
 		    const char *typeName, // used in error message
 		    const char *tokenList) // e.g. ",)"
 {
@@ -195,7 +195,7 @@ CheckRemainingInput(istream &in, ErrorDescriptor *err,
 	// preceding a delimiter if you are expecting one.
 
 	in.clear(); // clear the istreams error
-	in >> ws; // skip whitespace
+	in >> G4std::ws; // skip whitespace
 	if(in.eof()) // no input following the desired input (or following the 
 	{	     // missing desired input)
 	    return err->severity();
@@ -278,7 +278,7 @@ CheckRemainingInput(istream &in, ErrorDescriptor *err,
 	return err->severity();
     }
     else
-    { // badbit set (in.bad()) means there was a problem when reading istream
+    { // badbit set (in.bad()) means there was a problem when reading G4std::istream
       // this is bad news... it means the input stream is hopelessly messed up
 	err->GreaterSeverity(SEVERITY_INPUT_ERROR);
 	sprintf(name, "Invalid %s value.\n", typeName);

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: BuildGeom_Example2.cc,v 1.1 1999-04-16 10:32:34 johna Exp $
+// $Id: BuildGeom_Example2.cc,v 1.2 1999-12-15 14:54:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -155,16 +155,16 @@ G4VPhysicalVolume* BuildGeom_Example2()
     G4double cellRotAngle = (5.5-iCalCell)*calCellOpeningAngle;
     calCellRot->rotateZ(cellRotAngle+90.0*deg);
 /*
-    G4cout << calCellRot << endl;
+    G4cout << calCellRot << G4endl;
     G4cout << calCellRot->xx() << " "
          << calCellRot->xy() << " "
-         << calCellRot->xz() << " " << endl;
+         << calCellRot->xz() << " " << G4endl;
     G4cout << calCellRot->yx() << " "
          << calCellRot->yy() << " "
-         << calCellRot->yz() << " " << endl;
+         << calCellRot->yz() << " " << G4endl;
     G4cout << calCellRot->zx() << " "
          << calCellRot->zy() << " "
-         << calCellRot->zz() << " " << endl;
+         << calCellRot->zz() << " " << G4endl;
 */
     G4double calCellX = calCellZpos * cos(cellRotAngle/rad);
     G4double calCellY = calCellZpos * sin(cellRotAngle/rad);
@@ -173,16 +173,16 @@ G4VPhysicalVolume* BuildGeom_Example2()
 	       "calRowPhys",calCellLog,calRowPhys,false,iCalCell);
     G4RotationMatrix* tmpRot = calCellPhys->GetRotation();
 /*
-    G4cout << "saved : " << tmpRot << endl;
+    G4cout << "saved : " << tmpRot << G4endl;
     G4cout << tmpRot->xx() << " "
          << tmpRot->xy() << " "
-         << tmpRot->xz() << " " << endl;
+         << tmpRot->xz() << " " << G4endl;
     G4cout << tmpRot->yx() << " "
          << tmpRot->yy() << " "
-         << tmpRot->yz() << " " << endl;
+         << tmpRot->yz() << " " << G4endl;
     G4cout << tmpRot->zx() << " "
          << tmpRot->zy() << " "
-         << tmpRot->zz() << " " << endl;
+         << tmpRot->zz() << " " << G4endl;
 */
   }
 

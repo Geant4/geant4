@@ -62,7 +62,7 @@ void QuarkBox::doSomething()
     f+=length(C.List[i]->Force());
   }
   Force.addEntry(f/C.Nquark);
-  cerr << ++cnt << "  " << f/C.Nquark << "  " << e/G.getVolume() << endl;
+  G4cerr << ++cnt << "  " << f/C.Nquark << "  " << e/G.getVolume() << G4endl;
 }
   //  C.print(cout);
 

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Sphere.cc,v 1.1 1999-01-08 16:31:52 gunter Exp $
+// $Id: testG4Sphere.cc,v 1.2 1999-12-15 14:50:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -98,7 +98,7 @@ int main(void)
     G4Sphere s33("Band (theta segment1)",45,50,0,2*M_PI,M_PI*3/4,M_PI/4);
     G4Sphere s34("Band (theta segment)",4,50,0,2*M_PI,M_PI/4,M_PI/2);
     G4Sphere s4("Band (phi segment)",45,50,-M_PI/4,M_PI/2,0,2*M_PI);
-    //    G4cout<<"s4.fSPhi = "<<s4.GetSPhi()<<endl;
+    //    G4cout<<"s4.fSPhi = "<<s4.GetSPhi()<<G4endl;
     G4Sphere s5("Patch (phi/theta seg)",45,50,-M_PI/4,M_PI/2,M_PI/4,M_PI/2);
     G4Sphere s6("John example",300,500,0,5.76,0,M_PI) ; 
 
@@ -108,13 +108,13 @@ int main(void)
 
     Dist = s4.DistanceToOut(ponrmin3,vmz,calcNorm,pgoodNorm,pNorm) ;
     G4cout<<"s4.DistanceToOut(ponrmin3,vmz,calcNorm,pgoodNorm,pNorm) = "<<Dist
-        <<endl ;
+        <<G4endl ;
     Dist = s6.DistanceToOut(ponrminJ,vmz,calcNorm,pgoodNorm,pNorm) ;
     G4cout<<"s6.DistanceToOut(ponrminJ,vmz,calcNorm,pgoodNorm,pNorm) = "<<Dist
-        <<endl ;
+        <<G4endl ;
     Dist = s6.DistanceToOut(ponrmaxJ,vmz,calcNorm,pgoodNorm,pNorm) ;
     G4cout<<"s6.DistanceToOut(ponrmaxJ,vmz,calcNorm,pgoodNorm,pNorm) = "<<Dist
-        <<endl ;
+        <<G4endl ;
 
     assert(s1.GetName()=="Solid G4Sphere");
     
@@ -185,21 +185,21 @@ int main(void)
     
     
         Dist=s2.DistanceToOut(ponrmin1,vxy,calcNorm,pgoodNorm,pNorm);
-	//        G4cout<<"Dist=s2.DistanceToOut(pormin1,vxy) = "<<Dist<<endl;
+	//        G4cout<<"Dist=s2.DistanceToOut(pormin1,vxy) = "<<Dist<<G4endl;
 
     Dist=s2.DistanceToOut(ponrmax1,vmx,calcNorm,pgoodNorm,pNorm);
-    //    G4cout<<"Dist=s2.DistanceToOut(ponxside,vmx) = "<<Dist<<endl;
+    //    G4cout<<"Dist=s2.DistanceToOut(ponxside,vmx) = "<<Dist<<G4endl;
     Dist=s2.DistanceToOut(ponrmax1,vmxmy,calcNorm,pgoodNorm,pNorm);
-    //    G4cout<<"Dist=s2.DistanceToOut(ponxside,vmxmy) = "<<Dist<<endl;
+    //    G4cout<<"Dist=s2.DistanceToOut(ponxside,vmxmy) = "<<Dist<<G4endl;
     Dist=s2.DistanceToOut(ponrmax1,vz,calcNorm,pgoodNorm,pNorm);
-    //    G4cout<<"Dist=s2.DistanceToOut(ponxside,vz) = "<<Dist<<endl;
+    //    G4cout<<"Dist=s2.DistanceToOut(ponxside,vz) = "<<Dist<<G4endl;
 
     //    Dist=s2.DistanceToOut(pbigx,vx,calcNorm,pgoodNorm,pNorm);
-    //    G4cout<<"Dist=s2.DistanceToOut(pbigx,vx) = "<<Dist<<endl;
+    //    G4cout<<"Dist=s2.DistanceToOut(pbigx,vx) = "<<Dist<<G4endl;
     //    Dist=s2.DistanceToOut(pbigx,vxy,calcNorm,pgoodNorm,pNorm);
-    //    G4cout<<"Dist=s2.DistanceToOut(pbigx,vxy) = "<<Dist<<endl;
+    //    G4cout<<"Dist=s2.DistanceToOut(pbigx,vxy) = "<<Dist<<G4endl;
     //    Dist=s2.DistanceToOut(pbigx,vz,calcNorm,pgoodNorm,pNorm);
-    //    G4cout<<"Dist=s2.DistanceToOut(pbigx,vz) = "<<Dist<<endl;
+    //    G4cout<<"Dist=s2.DistanceToOut(pbigx,vz) = "<<Dist<<G4endl;
 
 
      
@@ -220,7 +220,7 @@ int main(void)
     Dist=s2.DistanceToIn(pzero,vmy);
     assert(ApproxEqual(Dist,45));
     Dist=s2.DistanceToIn(ponrmin1,vx);
-    //    G4cout<<"s2.DistanceToIn(ponmin1,vx) = "<<Dist<<endl;
+    //    G4cout<<"s2.DistanceToIn(ponmin1,vx) = "<<Dist<<G4endl;
     assert(Dist==0);
     Dist=s2.DistanceToIn(ponrmin1,vmx);
     assert(ApproxEqual(Dist,90));
@@ -232,29 +232,29 @@ int main(void)
 
 
     Dist=s3.DistanceToIn(ptesttheta1,vmz);
-    //    G4cout<<"s3.DistanceToIn(ptesttheta1,vmz) = "<<Dist<<endl;
+    //    G4cout<<"s3.DistanceToIn(ptesttheta1,vmz) = "<<Dist<<G4endl;
     assert(ApproxEqual(Dist,100-48/sqrt(2.)));
     Dist=s3.DistanceToIn(pontheta1,vz);
-    //    G4cout<<"s3.DistanceToIn(pontheta1,vz) = "<<Dist<<endl;
+    //    G4cout<<"s3.DistanceToIn(pontheta1,vz) = "<<Dist<<G4endl;
     assert(Dist==kInfinity);
     Dist=s3.DistanceToIn(pontheta1,vmz);
     assert(Dist==0);
     Dist=s3.DistanceToIn(pontheta2,vz);
-    //    G4cout<<"s3.DistanceToIn(pontheta2,vz) = "<<Dist<<endl;
+    //    G4cout<<"s3.DistanceToIn(pontheta2,vz) = "<<Dist<<G4endl;
     assert(Dist==0);
     Dist=s3.DistanceToIn(pontheta2,vmz);
     assert(Dist==kInfinity);
     Dist=s32.DistanceToIn(pontheta1,vz);
-    //    G4cout<<"s32.DistanceToIn(pontheta1,vz) = "<<Dist<<endl;
+    //    G4cout<<"s32.DistanceToIn(pontheta1,vz) = "<<Dist<<G4endl;
     assert(Dist==0);
     Dist=s32.DistanceToIn(pontheta1,vmz);
-    //    G4cout<<"s32.DistanceToIn(pontheta1,vmz) = "<<Dist<<endl;
+    //    G4cout<<"s32.DistanceToIn(pontheta1,vmz) = "<<Dist<<G4endl;
     assert(Dist==kInfinity);
     Dist=s33.DistanceToIn(pontheta2,vz);
-    //    G4cout<<"s33.DistanceToIn(pontheta2,vz) = "<<Dist<<endl;
+    //    G4cout<<"s33.DistanceToIn(pontheta2,vz) = "<<Dist<<G4endl;
     assert(Dist==kInfinity);
     Dist=s33.DistanceToIn(pontheta2,vmz);
-    //    G4cout<<"s33.DistanceToIn(pontheta2,vmz) = "<<Dist<<endl;
+    //    G4cout<<"s33.DistanceToIn(pontheta2,vmz) = "<<Dist<<G4endl;
     assert(Dist==0);
 
      Dist=s4.DistanceToIn(pbigy,vmy);
@@ -271,7 +271,7 @@ int main(void)
      Dist=s4.DistanceToIn(ponphi1,vmxmy);
      assert(Dist==kInfinity);
      Dist=s4.DistanceToIn(ponphi1,vxy);
-     //     G4cout<<"s4.DistanceToIn(ponphi1,vxy) = "<<Dist<<endl;
+     //     G4cout<<"s4.DistanceToIn(ponphi1,vxy) = "<<Dist<<G4endl;
      assert(ApproxEqual(Dist,0));
 
      Dist=s4.DistanceToIn(ptestphi2,vx);
@@ -279,7 +279,7 @@ int main(void)
      Dist=s4.DistanceToIn(ponphi2,vmxy);
      assert(Dist==kInfinity);
      Dist=s4.DistanceToIn(ponphi2,vxmy);
-     //     G4cout<<"s4.DistanceToIn(ponphi2,vxmy) = "<<Dist<<endl;
+     //     G4cout<<"s4.DistanceToIn(ponphi2,vxmy) = "<<Dist<<G4endl;
      assert(ApproxEqual(Dist,0));
 
      Dist=s3.DistanceToIn(pzero,vx);
@@ -383,16 +383,16 @@ int main(void)
     assert(min<=-5&&max>=5);
     
     s34.CalculateExtent(kXAxis,allClip,tGen,min,max);
-    // G4cout<<"s34.CalculateExtent(kXAxis,allClip,tGen,min,max)"<<endl ;
-    // G4cout<<"min = "<<min<<"   max = "<<max<<endl ;
+    // G4cout<<"s34.CalculateExtent(kXAxis,allClip,tGen,min,max)"<<G4endl ;
+    // G4cout<<"min = "<<min<<"   max = "<<max<<G4endl ;
 
     s34.CalculateExtent(kYAxis,allClip,tGen,min,max);
-    // G4cout<<"s3.CalculateExtent(kYAxis,allClip,tGen,min,max)"<<endl ;
-    // G4cout<<"min = "<<min<<"   max = "<<max<<endl ;
+    // G4cout<<"s3.CalculateExtent(kYAxis,allClip,tGen,min,max)"<<G4endl ;
+    // G4cout<<"min = "<<min<<"   max = "<<max<<G4endl ;
 
     s34.CalculateExtent(kZAxis,allClip,tGen,min,max);
-    //  G4cout<<"s34.CalculateExtent(kZAxis,allClip,tGen,min,max)"<<endl ;
-    //  G4cout<<"min = "<<min<<"   max = "<<max<<endl ;
+    //  G4cout<<"s34.CalculateExtent(kZAxis,allClip,tGen,min,max)"<<G4endl ;
+    //  G4cout<<"min = "<<min<<"   max = "<<max<<G4endl ;
     assert(s34.CalculateExtent(kXAxis,allClip,tGen,min,max));
     assert(min<=-5&&max>=5);
     assert(s34.CalculateExtent(kYAxis,allClip,tGen,min,max));

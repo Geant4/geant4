@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.cc,v 1.7 1999-05-21 04:25:47 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.8 1999-12-15 14:53:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"                
 
 
 G4VUserPhysicsList::G4VUserPhysicsList()
@@ -74,7 +74,7 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
     if (verboseLevel >1){
       G4cout << "G4VUserPhysicsList::AddProcessManager: ";
       G4cout  << newParticle->GetParticleName();
-      G4cout << " already has ProcessManager " << endl;
+      G4cout << " already has ProcessManager " << G4endl;
     }
 #endif
     return;
@@ -117,7 +117,7 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
   if (verboseLevel >2){
     G4cout << "G4VUserPhysicsList::AddProcessManager: ";
     G4cout  << "adds ProcessManager to ";
-    G4cout  << newParticle->GetParticleName() << endl;
+    G4cout  << newParticle->GetParticleName() << G4endl;
     newManager->DumpInfo();
   } 
 #endif
@@ -153,7 +153,7 @@ void G4VUserPhysicsList::RemoveProcessManager()
     if (verboseLevel >2){
       G4cout << "G4VUserPhysicsList::RemoveProcessManager: ";
       G4cout  << "remove ProcessManager from ";
-      G4cout  << particle->GetParticleName() << endl;
+      G4cout  << particle->GetParticleName() << G4endl;
     }
 #endif
   } 
@@ -194,7 +194,7 @@ void G4VUserPhysicsList::SetDefaultCutValue(G4double value)
 #ifdef G4VERBOSE    
      if (verboseLevel >0){
        G4cout << "G4VUserPhysicsList::SetDefaultCutValue: negative cut values";
-       G4cout << "  :" << value/mm << "[mm]" << endl;
+       G4cout << "  :" << value/mm << "[mm]" << G4endl;
      }
 #endif
    } else { 
@@ -202,7 +202,7 @@ void G4VUserPhysicsList::SetDefaultCutValue(G4double value)
      if (verboseLevel >1){
        G4cout << "G4VUserPhysicsList::SetDefaultCutValue:";
        G4cout << "default cut value is changed to   :" ;
-       G4cout << value/mm << "[mm]" << endl;
+       G4cout << value/mm << "[mm]" << G4endl;
      }
 #endif
      defaultCutValue = value;
@@ -214,8 +214,8 @@ void G4VUserPhysicsList::ResetCuts()
 {
 #ifdef G4VERBOSE    
   if (verboseLevel >1) {
-    G4cout << "G4VUserPhysicsList::ResetCuts()" << endl;
-    G4cout << "  cut values in energy will be calculated later" << endl;
+    G4cout << "G4VUserPhysicsList::ResetCuts()" << G4endl;
+    G4cout << "  cut values in energy will be calculated later" << G4endl;
   }
 #endif
 
@@ -257,7 +257,7 @@ void G4VUserPhysicsList::SetCutValueForOtherThan(G4double cutValue,
 #ifdef G4VERBOSE    
     if (verboseLevel >0){
       G4cout << "G4VUserPhysicsList::SetCutValueForOtherThan: negative cut values";
-      G4cout << "  :" << cutValue/mm << "[mm]" << endl;
+      G4cout << "  :" << cutValue/mm << "[mm]" << G4endl;
     }
 #endif
     return;
@@ -265,7 +265,7 @@ void G4VUserPhysicsList::SetCutValueForOtherThan(G4double cutValue,
 #ifdef G4VERBOSE    
     if (verboseLevel >1) {
       G4cout << "G4VUserPhysicsList::SetCutValueForOtherThan ";
-      G4cout << "  :" << cutValue/mm << "[mm]" << endl;
+      G4cout << "  :" << cutValue/mm << "[mm]" << G4endl;
     }
 #endif
   }
@@ -330,7 +330,7 @@ void G4VUserPhysicsList::SetCutValueForOtherThan(G4double cutValue,
       BuildPhysicsTable(particle);
 
 #ifdef G4VERBOSE    
-      if (verboseLevel >1) G4cout << "Set cuts for " << particle->GetParticleName() << endl;
+      if (verboseLevel >1) G4cout << "Set cuts for " << particle->GetParticleName() << G4endl;
 #endif
     }
   }
@@ -350,10 +350,10 @@ void G4VUserPhysicsList::SetCutValue(G4double aCut, const G4String& name)
 
 #ifdef G4VERBOSE    
   if (particle != 0){
-    if (verboseLevel >1) G4cout << "Set cuts for " << name << endl;
+    if (verboseLevel >1) G4cout << "Set cuts for " << name << G4endl;
   } else {
     if (verboseLevel >0) 
-      G4cout << name << " is not found in ParticleTable" << endl;
+      G4cout << name << " is not found in ParticleTable" << G4endl;
   }
 #endif
 }
@@ -366,7 +366,7 @@ void G4VUserPhysicsList::SetCutsWithDefault()
 #ifdef G4VERBOSE    
   if (verboseLevel >1){
     G4cout << "G4VUserPhysicsList::SetCutsWithDefault:";
-    G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
+    G4cout << "CutLength : " << cut/mm << " (mm)" << G4endl;
   }  
 #endif
 
@@ -395,7 +395,7 @@ void G4VUserPhysicsList::SetCutValueForOthers(G4double cutValue)
 #ifdef G4VERBOSE    
     if (verboseLevel >0){
       G4cout << "G4VUserPhysicsList::SetCutValueForOthers: negative cut values";
-      G4cout << "  :" << cutValue/mm << "[mm]" << endl;
+      G4cout << "  :" << cutValue/mm << "[mm]" << G4endl;
     }
 #endif
     return;
@@ -404,7 +404,7 @@ void G4VUserPhysicsList::SetCutValueForOthers(G4double cutValue)
 #ifdef G4VERBOSE    
   if (verboseLevel >1) {
       G4cout << "G4VUserPhysicsList::SetCutValueForOthers ";
-      G4cout << "  :" << cutValue/mm << "[mm]" << endl;
+      G4cout << "  :" << cutValue/mm << "[mm]" << G4endl;
   }
 #endif
 
@@ -423,7 +423,7 @@ void G4VUserPhysicsList::SetCutValueForOthers(G4double cutValue)
 
 #ifdef G4VERBOSE    
 	if (verboseLevel >1) 
-	  G4cout << "Set cuts for " << particle->GetParticleName() << endl;
+	  G4cout << "Set cuts for " << particle->GetParticleName() << G4endl;
 #endif
       }
     }
@@ -440,14 +440,14 @@ void G4VUserPhysicsList::ReCalcCutValue(const G4String& name)
       BuildPhysicsTable(particle);
 
 #ifdef G4VERBOSE    
-      if (verboseLevel >1) G4cout << "Recalc cuts for " << name << endl;
+      if (verboseLevel >1) G4cout << "Recalc cuts for " << name << G4endl;
 #endif
     }
   } 
 
 #ifdef G4VERBOSE    
   if (( particle ==0 ) && (verboseLevel >0)) {
-    G4cout << name << " is not found in ParticleTable" << endl;
+    G4cout << name << " is not found in ParticleTable" << G4endl;
   }
 #endif
 
@@ -474,7 +474,7 @@ void G4VUserPhysicsList::ReCalcCutValueForOthers()
 
 #ifdef G4VERBOSE    
 	if (verboseLevel >1) 
-	  G4cout << "ReCalc cuts for " << particle->GetParticleName() << endl;
+	  G4cout << "ReCalc cuts for " << particle->GetParticleName() << G4endl;
 #endif
       }
     }
@@ -542,12 +542,12 @@ void G4VUserPhysicsList::DumpList() const
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4cout << particle->GetParticleName();
     if ((idx++ % 4) == 3) {
-      G4cout << endl;
+      G4cout << G4endl;
     } else {
       G4cout << ", ";
     }      
   }
-  G4cout << endl;
+  G4cout << G4endl;
 }
 
 void G4VUserPhysicsList::DumpCutValues(const G4String &particle_name) const
@@ -573,29 +573,29 @@ void G4VUserPhysicsList::DumpCutValues( G4ParticleDefinition* particle) const
 
   if (particle->IsShortLived()) {
     // name field
-    G4cout << " --- " << particle->GetParticleName() << " is a short lived particle ------ " << endl;
+    G4cout << " --- " << particle->GetParticleName() << " is a short lived particle ------ " << G4endl;
   } else {
     // name field
-    G4cout << " --- " << particle->GetParticleName() << " ------ " << endl;
+    G4cout << " --- " << particle->GetParticleName() << " ------ " << G4endl;
 
     // cut value in range field
-    G4cout << "   - Cut in range = " << G4BestUnit(particle->GetLengthCuts(),"Length") << endl;
+    G4cout << "   - Cut in range = " << G4BestUnit(particle->GetLengthCuts(),"Length") << G4endl;
 
     // material and energy cut value for the material 
     G4double*  theKineticEnergyCuts = particle->GetEnergyCuts();
     
     if (theKineticEnergyCuts != 0) {
       const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-      G4cout << "   - Material ---------------- Energy Cut ---" << endl;
+      G4cout << "   - Material ---------------- Energy Cut ---" << G4endl;
       for (G4int idx=0; idx<materialTable->entries(); idx++){
-	G4cout << "     " << setw(19) << (*materialTable)[idx]->GetName(); 
-	G4cout << " : "   << setw(10) << G4BestUnit(theKineticEnergyCuts[idx],"Energy");
-	G4cout << endl;
+	G4cout << "     " << G4std::setw(19) << (*materialTable)[idx]->GetName(); 
+	G4cout << " : "   << G4std::setw(10) << G4BestUnit(theKineticEnergyCuts[idx],"Energy");
+	G4cout << G4endl;
       }
 
     } else {
-      G4cout << "   - Cuts in energy are not calculated yet --" << endl;
-      G4cout << " Enter /run/initialize command to calculate cuts " << endl;
+      G4cout << "   - Cuts in energy are not calculated yet --" << G4endl;
+      G4cout << " Enter /run/initialize command to calculate cuts " << G4endl;
     }
 
   }
@@ -618,17 +618,17 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
 
   //line 1 //-- Commented out (M.Asai)
   //G4cout << "Default cut value in range :";
-  //G4cout << defaultCutValue/mm << "[mm]" << endl;
+  //G4cout << defaultCutValue/mm << "[mm]" << G4endl;
 
   //line 2
-  G4cout << "============= The cut Energy ==============================" <<endl;
+  G4cout << "============= The cut Energy ==============================" <<G4endl;
   
   // line 3
   G4cout << "                     ";
   for (idx=0; idx <size; idx++) {
-    G4cout << " " << setw(11) << name[idx] << "    ";
+    G4cout << " " << G4std::setw(11) << name[idx] << "    ";
   }
-  G4cout << endl;
+  G4cout << G4endl;
 
   // line 4
   G4cout << "Cut in range       ";
@@ -636,19 +636,19 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
     if (particle[idx] == 0) {
       G4cout << "            ";
     } else {
-      G4cout << " " << setw(11) << G4BestUnit(particle[idx]->GetLengthCuts(),"Length");
+      G4cout << " " << G4std::setw(11) << G4BestUnit(particle[idx]->GetLengthCuts(),"Length");
     }
   }
-  G4cout << endl;
+  G4cout << G4endl;
 
   // line 5
   G4cout << "Cut in energy";
-  G4cout << endl;
+  G4cout << G4endl;
 
  // line 6 ..
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   for (G4int J=0; J<materialTable->entries(); J++) {
-    G4cout << " " << setw(18) << ((*materialTable)[J])->GetName();
+    G4cout << " " << G4std::setw(18) << ((*materialTable)[J])->GetName();
     for (idx=0; idx <size; idx++) {
       if (particle[idx] == 0) {
 	G4cout << "            ";
@@ -657,20 +657,20 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
 	  G4cout << " ---------- ";
           IsOK = false;
 	} else {
-	  G4cout << " " << setw(11) << G4BestUnit((particle[idx]->GetEnergyCuts())[J],"Energy");
+	  G4cout << " " << G4std::setw(11) << G4BestUnit((particle[idx]->GetEnergyCuts())[J],"Energy");
 	}
       }
     }
-    G4cout << endl;
+    G4cout << G4endl;
   }
   
   if (!IsOK) {
-    G4cout << " Cuts in energy have not calculated yet !!" << endl;
-    G4cout << " Enter /run/initialize command to calculate cuts " << endl;
+    G4cout << " Cuts in energy have not calculated yet !!" << G4endl;
+    G4cout << " Enter /run/initialize command to calculate cuts " << G4endl;
   }
 
   // last line 
-  G4cout << "===================================================" << endl;
+  G4cout << "===================================================" << G4endl;
   G4cout.precision(prec);
 }
 

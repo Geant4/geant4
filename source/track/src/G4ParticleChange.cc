@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.cc,v 1.7 1999-10-05 06:48:35 kurasige Exp $
+// $Id: G4ParticleChange.cc,v 1.8 1999-12-15 14:53:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@ G4ParticleChange::G4ParticleChange():G4VParticleChange(false)
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cout << "G4ParticleChange::G4ParticleChange() " << endl;
+    G4cout << "G4ParticleChange::G4ParticleChange() " << G4endl;
   }
 #endif
 }
@@ -45,7 +45,7 @@ G4ParticleChange::G4ParticleChange(G4bool useEB):G4VParticleChange(useEB)
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cout << "G4ParticleChange::G4ParticleChange() " << endl;
+    G4cout << "G4ParticleChange::G4ParticleChange() " << G4endl;
   }
 #endif
 }
@@ -54,7 +54,7 @@ G4ParticleChange::~G4ParticleChange()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cout << "G4ParticleChange::~G4ParticleChange() " << endl;
+    G4cout << "G4ParticleChange::~G4ParticleChange() " << G4endl;
   }
 #endif
 }
@@ -63,7 +63,7 @@ G4ParticleChange::~G4ParticleChange()
 G4ParticleChange::G4ParticleChange(const G4ParticleChange &right): G4VParticleChange(right)
 {
    if (verboseLevel>1) {
-    G4cout << "G4ParticleChange::  copy constructor is called " << endl;
+    G4cout << "G4ParticleChange::  copy constructor is called " << G4endl;
    }
    theMomentumDirectionChange = right.theMomentumDirectionChange;
    thePolarizationChange = right.thePolarizationChange;
@@ -79,7 +79,7 @@ G4ParticleChange::G4ParticleChange(const G4ParticleChange &right): G4VParticleCh
 G4ParticleChange & G4ParticleChange::operator=(const G4ParticleChange &right)
 {
    if (verboseLevel>1) {
-    G4cout << "G4ParticleChange:: assignment operator is called " << endl;
+    G4cout << "G4ParticleChange:: assignment operator is called " << G4endl;
    }
    if (this != &right)
    {
@@ -366,51 +366,51 @@ void G4ParticleChange::DumpInfo() const
   G4cout.precision(3);
 
   G4cout << "        Mass (GeV)   : " 
-       << setw(20) << theMassChange/GeV
-       << endl; 
+       << G4std::setw(20) << theMassChange/GeV
+       << G4endl; 
   G4cout << "        Charge (eplus)   : " 
-       << setw(20) << theChargeChange/eplus
-       << endl; 
+       << G4std::setw(20) << theChargeChange/eplus
+       << G4endl; 
   G4cout << "        Position - x (mm)   : " 
-       << setw(20) << thePositionChange.x()/mm
-       << endl; 
+       << G4std::setw(20) << thePositionChange.x()/mm
+       << G4endl; 
   G4cout << "        Position - y (mm)   : " 
-       << setw(20) << thePositionChange.y()/mm
-       << endl; 
+       << G4std::setw(20) << thePositionChange.y()/mm
+       << G4endl; 
   G4cout << "        Position - z (mm)   : " 
-       << setw(20) << thePositionChange.z()/mm
-       << endl;
+       << G4std::setw(20) << thePositionChange.z()/mm
+       << G4endl;
   G4cout << "        Time (ns)           : " 
-       << setw(20) << theTimeChange/ns
-       << endl;
+       << G4std::setw(20) << theTimeChange/ns
+       << G4endl;
   G4cout << "        Proper Time (ns)    : " 
-       << setw(20) << theProperTimeChange/ns
-       << endl;
+       << G4std::setw(20) << theProperTimeChange/ns
+       << G4endl;
   G4cout << "        Momentum Direct - x : " 
-       << setw(20) << theMomentumDirectionChange.x()
-       << endl;
+       << G4std::setw(20) << theMomentumDirectionChange.x()
+       << G4endl;
   G4cout << "        Momentum Direct - y : " 
-       << setw(20) << theMomentumDirectionChange.y()
-       << endl;
+       << G4std::setw(20) << theMomentumDirectionChange.y()
+       << G4endl;
   G4cout << "        Momentum Direct - z : " 
-       << setw(20) << theMomentumDirectionChange.z()
-       << endl;
+       << G4std::setw(20) << theMomentumDirectionChange.z()
+       << G4endl;
   G4cout << "        Kinetic Energy (MeV): " 
-       << setw(20) << theEnergyChange/MeV
-       << endl;
+       << G4std::setw(20) << theEnergyChange/MeV
+       << G4endl;
   G4cout << "        Polarization - x    : " 
-       << setw(20) << thePolarizationChange.x()
-       << endl;
+       << G4std::setw(20) << thePolarizationChange.x()
+       << G4endl;
   G4cout << "        Polarization - y    : " 
-       << setw(20) << thePolarizationChange.y()
-       << endl;
+       << G4std::setw(20) << thePolarizationChange.y()
+       << G4endl;
   G4cout << "        Polarization - z    : " 
-       << setw(20) <<  thePolarizationChange.z()
-       << endl;
+       << G4std::setw(20) <<  thePolarizationChange.z()
+       << G4endl;
   if (fUseEB) {
     G4cout << "        Track Weight      : " 
-         << setw(20) <<  theWeightChange
-         << endl;	
+         << G4std::setw(20) <<  theWeightChange
+         << G4endl;	
   }
 }
 
@@ -430,8 +430,8 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
     accuracy = abs(theMomentumDirectionChange.mag2()-1.0);
     if (accuracy > accuracyForWarning) {
       G4cout << "  G4ParticleChange::CheckIt  : ";
-      G4cout << "the Momentum Change is not unit vector !!" << endl;
-      G4cout << "  Difference:  " << accuracy << endl;
+      G4cout << "the Momentum Change is not unit vector !!" << G4endl;
+      G4cout << "  Difference:  " << accuracy << G4endl;
       itsOKforMomentum = false;
       if (accuracy > accuracyForException) exitWithError = true;
     }
@@ -442,8 +442,8 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   accuracy = (aTrack.GetGlobalTime()- theTimeChange)/ns;
   if (accuracy > accuracyForWarning) {
     G4cout << "  G4ParticleChange::CheckIt    : ";
-    G4cout << "the global time goes back  !!" << endl;
-    G4cout << "  Difference:  " << accuracy  << "[ns] " <<endl;
+    G4cout << "the global time goes back  !!" << G4endl;
+    G4cout << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
     itsOKforGlobalTime = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
@@ -452,8 +452,8 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   accuracy = (aTrack.GetProperTime() - theProperTimeChange )/ns;
   if (accuracy > accuracyForWarning) {
     G4cout << "  G4ParticleChange::CheckIt    : ";
-    G4cout << "the proper time goes back  !!" << endl;
-    G4cout << "  Difference:  " << accuracy  << "[ns] " <<endl;
+    G4cout << "the proper time goes back  !!" << G4endl;
+    G4cout << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
     itsOKforProperTime = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
@@ -463,8 +463,8 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   accuracy = -1.0*theEnergyChange/MeV;
   if (accuracy > accuracyForWarning) {
     G4cout << "  G4ParticleChange::CheckIt    : ";
-    G4cout << "the kinetic energy is negative  !!" << endl;
-    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<endl;
+    G4cout << "the kinetic energy is negative  !!" << G4endl;
+    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
     itsOKforEnergy = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
@@ -472,8 +472,8 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   G4bool itsOK = itsOKforMomentum && itsOKforEnergy && itsOKforProperTime && itsOKforGlobalTime;
   // dump out information of this particle change
   if (!itsOK) { 
-    G4cout << " G4ParticleChange::CheckIt " <<endl;
-    G4cout << " pointer : " << this <<endl ;
+    G4cout << " G4ParticleChange::CheckIt " <<G4endl;
+    G4cout << " pointer : " << this <<G4endl ;
     DumpInfo();
   }
 

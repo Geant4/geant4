@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTableEntry.cc,v 1.2 1999-12-05 17:50:10 gcosmo Exp $
+// $Id: G3VolTableEntry.cc,v 1.3 1999-12-15 14:49:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 13.10.99
@@ -128,13 +128,13 @@ G3VolTableEntry::FindClone(const G4String& Cname){
 void G3VolTableEntry::PrintSolidInfo() {
 // only parameters related to solid definition
 // are printed
-  G4cout << "VTE: " << fVname << " " << this << endl;
-  G4cout << "Solid: " << fSolid << endl;
+  G4cout << "VTE: " << fVname << " " << this << G4endl;
+  G4cout << "Solid: " << fSolid << G4endl;
   G4cout << "Parameters (npar = " << fNpar << ") fRpar: ";
   for (G4int i=0; i<fNpar; i++) G4cout << fRpar[i] << " ";
-  G4cout << endl;
-  G4cout << "HasNegPars: " << fHasNegPars << endl;
-  G4cout << "================================= " << endl;
+  G4cout << G4endl;
+  G4cout << "HasNegPars: " << fHasNegPars << G4endl;
+  G4cout << "================================= " << G4endl;
 }
 
 void

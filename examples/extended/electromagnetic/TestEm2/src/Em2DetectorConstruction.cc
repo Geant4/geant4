@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2DetectorConstruction.cc,v 1.1 1999-10-11 15:08:48 maire Exp $
+// $Id: Em2DetectorConstruction.cc,v 1.2 1999-12-15 14:49:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -142,7 +142,7 @@ void Em2DetectorConstruction::DefineMaterials()
     G4Material* pb = new G4Material(name="Lead", density, ncomponents=1);
     pb->AddElement(Pb, fractionmass=1.0);
      
-    G4cout << *(G4Material::GetMaterialTable()) << endl;
+    G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //choose material
   myMaterial = PbWO;
@@ -187,7 +187,7 @@ G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
 
 
   cout << "Absorber is " << G4BestUnit(EcalLength,"Length") 
-       << " of " << myMaterial->GetName() << endl; 
+       << " of " << myMaterial->GetName() << G4endl; 
 
 
   G4VisAttributes* VisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));

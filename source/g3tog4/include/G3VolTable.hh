@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.hh,v 1.12 1999-12-09 01:27:46 lockman Exp $
+// $Id: G3VolTable.hh,v 1.13 1999-12-15 14:49:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 13.10.99
@@ -24,7 +24,7 @@ class G3VolTable{
 private:
   G3VolTableEntry* G3toG4TopVTE;
   G4String _FirstKey;
-  G4std::map<G4String, G3VolTableEntry*, less<G4String> > VTD;
+  G4std::map<G4String, G3VolTableEntry*, G4std::less<G4String> > VTD;
   G4int _NG3Pos;
 
 public:

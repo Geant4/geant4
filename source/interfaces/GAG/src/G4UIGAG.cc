@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIGAG.cc,v 1.7 1999-11-15 10:39:44 gunter Exp $
+// $Id: G4UIGAG.cc,v 1.8 1999-12-15 14:50:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UIGAG.cc
@@ -16,15 +16,11 @@
 #include "G4UIcommandTree.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcommandStatus.hh"
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 G4UIGAG::G4UIGAG(): TVersion("T1.0a"), JVersion("J1.0a")
 {
-  //G4cout << "G4UIGAG: Apr15,98." << endl;
+  //G4cout << "G4UIGAG: Apr15,98." << G4endl;
   prefix = "/";
   UI = G4UImanager::GetUIpointer();
   UI->SetSession(this);
@@ -50,7 +46,7 @@ G4UIGAG::~G4UIGAG()
   {
      UI->SetSession(NULL);
      UI->SetCoutDestination(NULL);
-     //     G4cout << "GAG session deleted" << endl;
+     //     G4cout << "GAG session deleted" << G4endl;
   }
 }                                                 
 
@@ -72,7 +68,7 @@ G4UIsession * G4UIGAG::SessionStart()
 void G4UIGAG::PauseSessionStart(G4String msg)
 {
   promptCharacter = msg;
-  G4cout << "@@PROMPT \"" << promptCharacter << "\"" << endl;
+  G4cout << "@@PROMPT \"" << promptCharacter << "\"" << G4endl;
   iCont = true;
   G4String newCommand = GetCommand();
   while( iCont )
@@ -93,16 +89,16 @@ void G4UIGAG::ExecuteCommand(G4String aCommand)
     case fCommandSucceeded:
       break;
     case fCommandNotFound:
-      G4cerr << "command not found" << endl;
+      G4cerr << "command not found" << G4endl;
       break;
     case fIllegalApplicationState:
-      G4cerr << "illegal application state -- command refused" << endl;
+      G4cerr << "illegal application state -- command refused" << G4endl;
       break;
     case fParameterOutOfRange:
     case fParameterUnreadable:
     case fParameterOutOfCandidates:
     default:
-      G4cerr << "command refused (" << commandStatus << ")" << endl;
+      G4cerr << "command refused (" << commandStatus << ")" << G4endl;
     }
   }else{
     switch(commandStatus) {
@@ -121,22 +117,22 @@ void G4UIGAG::ExecuteCommand(G4String aCommand)
       }
       break;
     case fCommandNotFound:
-      G4cout << "@@ErrResult \"command not found.\"" << endl;
+      G4cout << "@@ErrResult \"command not found.\"" << G4endl;
       break;
     case fIllegalApplicationState:
-      G4cout << "@@ErrResult \"Illegal application state -- command refused\"" << endl;
+      G4cout << "@@ErrResult \"Illegal application state -- command refused\"" << G4endl;
       break;
     case fParameterOutOfRange:
-      G4cout << "@@ErrResult \"Parameter Out of Range.\"" << endl;
+      G4cout << "@@ErrResult \"Parameter Out of Range.\"" << G4endl;
       break;
     case fParameterUnreadable:
-      G4cout << "@@ErrResult \"Parameter Unreadable.\"" << endl;
+      G4cout << "@@ErrResult \"Parameter Unreadable.\"" << G4endl;
       break;
     case fParameterOutOfCandidates:
-      G4cout << "@@ErrResult \"Parameter Out of Candidates.\"" << endl;
+      G4cout << "@@ErrResult \"Parameter Out of Candidates.\"" << G4endl;
       break;
     default:
-      G4cout << "@@ErrResult \"command refused (" << commandStatus << ")\"" << endl;
+      G4cout << "@@ErrResult \"command refused (" << commandStatus << ")\"" << G4endl;
     }
   }
 }
@@ -144,13 +140,13 @@ void G4UIGAG::ExecuteCommand(G4String aCommand)
 
 G4int G4UIGAG::ReceiveG4cout(G4String coutString)
 {
-  cout << coutString << flush;
+  cout << coutString << G4std::flush;
   return 0;
 }
 
 G4int G4UIGAG::ReceiveG4cerr(G4String cerrString)
 {
-  cerr << cerrString << flush;
+  G4cerr << cerrString << G4std::flush;
   return 0;
 }                                                    
 
@@ -167,15 +163,15 @@ G4String G4UIGAG::GetCommand()
   {
     G4UIcommandTree* tree = UI->GetTree();
     if ( uiMode != terminal_mode ){
-      G4cout << "@@PROMPT \"" << promptCharacter << "\"" << endl;
+      G4cout << "@@PROMPT \"" << promptCharacter << "\"" << G4endl;
     }
     if ( uiMode != java_mode ){
-      G4cout << promptCharacter << "> " << flush;
+      G4cout << promptCharacter << "> " << G4std::flush;
     }else{
-      G4cout << "@@Ready" << endl;
+      G4cout << "@@Ready" << G4endl;
     }
-    newCommand.readLine( cin, FALSE );
-    if (!cin.good()) { cin.clear(); newCommand = nullString; iExit=false;break;}
+    newCommand.readLine( G4cin, FALSE );
+    if (!G4cin.good()) { G4cin.clear(); newCommand = nullString; iExit=false;break;}
 
     newCommand = newCommand.strip(G4String::leading);
     if( newCommand.length() < 1) { break; }
@@ -184,8 +180,8 @@ G4String G4UIGAG::GetCommand()
     {
       G4String newLine;
       newCommand.remove(newCommand.length()-1);
-      newLine.readLine( cin );
-      if (!cin.good()) { cin.clear(); newCommand = nullString; iExit=false;break;}
+      newLine.readLine( G4cin );
+      if (!G4cin.good()) { G4cin.clear(); newCommand = nullString; iExit=false;break;}
       newCommand.append(newLine);
     }
 
@@ -195,23 +191,23 @@ G4String G4UIGAG::GetCommand()
     // -------------------- nC.toUpper();
     if( nC == "@@GAGmodeJAVA" ) {
       uiMode = java_mode;
-      G4cout << endl << "@@Version " << JVersion << endl;
+      G4cout << G4endl << "@@Version " << JVersion << G4endl;
       SendCommandProperties(tree);
       NotifyStateChange();
     }
     else if( nC == "@@GAGmodeTcl" ) {
       uiMode = tcl_mode;
-      G4cout << endl << "@@Version " << TVersion << endl;
+      G4cout << G4endl << "@@Version " << TVersion << G4endl;
       SendCommandProperties(tree);
       NotifyStateChange();
     }
     else if( nC(0) == '#' )
-      { G4cout << nC << endl; }
+      { G4cout << nC << G4endl; }
 
     else if( nC == "ls"  || nC(0,3) == "ls " )
     { ListDirectory( nC ); }
     else if( nC == "pwd" )
-    { G4cout << "Current Working Directory : " << prefix << endl; }
+    { G4cout << "Current Working Directory : " << prefix << G4endl; }
     else if( nC(0,2) == "cd"  || nC(0,3) == "cd " )
     { ChangeDirectory( nC ); }
     else if(  nC == "help" || nC(0,5) == "help ")
@@ -222,36 +218,36 @@ G4String G4UIGAG::GetCommand()
     {
       G4int nh = UI->GetNumberOfHistory();
       for(int i=0;i<nh;i++)
-      { G4cout << i << ": " << UI->GetPreviousCommand(i) << endl; }
+      { G4cout << i << ": " << UI->GetPreviousCommand(i) << G4endl; }
     }
     else if( nC(0) == '!' )
     {
       G4String ss = nC(1,nC.length()-1);
       G4int vl;
       const char* tt = ss;
-      istrstream is((char*)tt);
+      G4std::istrstream is((char*)tt);
       is >> vl;
       G4int nh = UI->GetNumberOfHistory();
       if(vl>=0 && vl<nh)
       { 
         newCommand = UI->GetPreviousCommand(vl); 
-        G4cout << newCommand << endl;
+        G4cout << newCommand << G4endl;
         break;
       }
       else
-      { G4cerr << "history " << vl << " is not found." << endl; }
+      { G4cerr << "history " << vl << " is not found." << G4endl; }
     }
     else if( nC(0,4) == "exit" )
     { 
       if( iCont )
       { 
 	if ( uiMode == terminal_mode){
-	  G4cerr << "You are now processing RUN." << endl;
-	  G4cerr << "Please abrot it using \"/run/abort\" command first" << endl;
-	  G4cerr << " and use \"continue\" command until the application" << endl;
-	  G4cerr << " becomes to Idle." << endl;
+	  G4cerr << "You are now processing RUN." << G4endl;
+	  G4cerr << "Please abrot it using \"/run/abort\" command first" << G4endl;
+	  G4cerr << " and use \"continue\" command until the application" << G4endl;
+	  G4cerr << " becomes to Idle." << G4endl;
 	}else{
-	  G4cout << "@@ErrResult \"You are now processing RUN.\"" << endl;
+	  G4cout << "@@ErrResult \"You are now processing RUN.\"" << G4endl;
 	}
       }
       else
@@ -307,7 +303,7 @@ G4String G4UIGAG::GetFullPath( G4String aNewCommand )
 
 void G4UIGAG::SessionTerminate()
 {
-  G4cout << "***** Terminal session end *****" << endl;
+  G4cout << "***** Terminal session end *****" << G4endl;
 }
 
 void G4UIGAG::ShowCurrent( G4String newCommand )
@@ -316,14 +312,14 @@ void G4UIGAG::ShowCurrent( G4String newCommand )
   G4String curV = UI->GetCurrentValues(theCommand);
   if( ! (curV.isNull()||curV(0)=='\0' ) ) {
     if (uiMode == terminal_mode){
-      G4cout << "Current value(s) of the parameter(s) : " << curV << endl;
+      G4cout << "Current value(s) of the parameter(s) : " << curV << G4endl;
     }else{
-      G4cout << "@@CurrentValue " << curV << endl;
+      G4cout << "@@CurrentValue " << curV << G4endl;
     }
   } else if (uiMode == terminal_mode){
-      G4cout << "Current value is not available." << endl;
+      G4cout << "Current value is not available." << G4endl;
     } else {
-      G4cout << "@@ErrResult \"Current value is not available.\"" << endl;
+      G4cout << "@@ErrResult \"Current value is not available.\"" << G4endl;
     }
 }
 
@@ -349,7 +345,7 @@ void G4UIGAG::ChangeDirectory( G4String newCommand )
   { prefix += "/"; }
   if( FindDirPath( prefix ) == NULL )
   {
-    G4cout << "Directory <" << prefix << "> is not found." << endl;
+    G4cout << "Directory <" << prefix << "> is not found." << G4endl;
     prefix = savedPrefix;
   }
 }
@@ -377,7 +373,7 @@ void G4UIGAG::ListDirectory( G4String newCommand )
   { targetDir += "/"; }
   G4UIcommandTree * commandTree = FindDirPath( targetDir );
   if( commandTree == NULL )
-  { G4cout << "Directory <" << targetDir << "> is not found." << endl; }
+  { G4cout << "Directory <" << targetDir << "> is not found." << G4endl; }
   else
   { commandTree->ListCurrent(); }
 }
@@ -400,7 +396,7 @@ void G4UIGAG::TerminalHelp(G4String newCommand)
     }
     else
     {
-      G4cout << "Command <" << newValue << " is not found." << endl;
+      G4cout << "Command <" << newValue << " is not found." << G4endl;
       return;
     }
   }
@@ -420,12 +416,12 @@ void G4UIGAG::TerminalHelp(G4String newCommand)
   floor[iFloor]->ListCurrentWithNum();
   // 1998 Oct 2 non-number input
   while(1){
-    G4cout << endl << "Type the number ( 0:end, -n:n level back ) : "<<flush;
-    cin >> i;
-    if(!cin.good()){
-      cin.clear();
-      cin.ignore(30,'\n');
-      G4cout << endl << "Not a number, once more" << endl; continue;}
+    G4cout << G4endl << "Type the number ( 0:end, -n:n level back ) : "<<G4std::flush;
+    G4cin >> i;
+    if(!G4cin.good()){
+      G4cin.clear();
+      G4cin.ignore(30,'\n');
+      G4cout << G4endl << "Not a number, once more" << G4endl; continue;}
     else if( i < 0 ){
       iFloor += i;
       if( iFloor < 0 ) iFloor = 0;
@@ -450,11 +446,11 @@ void G4UIGAG::TerminalHelp(G4String newCommand)
     }
 
   }
-  G4cout << "Exit from HELP." << endl << endl;
-  G4cout << endl;
-  // cin.flush();
+  G4cout << "Exit from HELP." << G4endl << G4endl;
+  G4cout << G4endl;
+  // G4cin.flush();
   char temp[100];
-  cin.getline( temp, 100 );
+  G4cin.getline( temp, 100 );
 }
 
 
@@ -508,25 +504,25 @@ G4UIcommandTree * G4UIGAG::FindDirPath(G4String newCommand)
 void G4UIGAG::SendCommandProperties(G4UIcommandTree * tree)
 {
   if( tree == NULL ) { 
-    G4cerr << "GetTree() returnes null." << endl;
+    G4cerr << "GetTree() returnes null." << G4endl;
     return;
   }
   if (uiMode == java_mode){
-    G4cout << "@@JTreeBegin" << endl;
+    G4cout << "@@JTreeBegin" << G4endl;
     CodeGenJavaTree(tree, 0);  
-    G4cout << "@@JTreeEnd" << endl;
+    G4cout << "@@JTreeEnd" << G4endl;
     CodeGenJavaParams(tree, 0);
   }else{
-    G4cout << endl << "@@maketree_start" << endl;
+    G4cout << G4endl << "@@maketree_start" << G4endl;
     CodeGenTclTree(tree,0);  
-    G4cout << "@@maketree_end" << endl;
+    G4cout << "@@maketree_end" << G4endl;
     CodeGenTclParams(tree, 0);
   }
 }
 void G4UIGAG::SendParameterProperties(G4UIcommandTree * tree)
 {
   if( tree == NULL ) { 
-    G4cerr << "GetTree() returnes null." << endl;
+    G4cerr << "GetTree() returnes null." << G4endl;
     return;
   }
   if (uiMode == java_mode){
@@ -544,7 +540,7 @@ void G4UIGAG::CodeGenJavaTree(G4UIcommandTree * tree, int level)
 
   if(level!=0) {
     for(int i=0; i<commandEntry; i++){
-      G4cout << tree->GetCommand(i+1)->GetCommandPath() << endl;
+      G4cout << tree->GetCommand(i+1)->GetCommandPath() << G4endl;
     }
   }
   if(treeEntry == 0) return; //end recursion
@@ -570,9 +566,9 @@ void G4UIGAG::CodeGenJavaParams(G4UIcommandTree * tree, int level) //recursive
 
   for(i=0; i< treeEntry; i++) {
     treeLink = tree->GetTree(i+1);
-    G4cout << "@@JDirGuideBegin" << endl;
-    G4cout << treeLink->GetPathName() << endl << treeLink->GetTitle() << endl;
-    G4cout << "@@JDirGuideEnd" << endl;
+    G4cout << "@@JDirGuideBegin" << G4endl;
+    G4cout << treeLink->GetPathName() << G4endl << treeLink->GetTitle() << G4endl;
+    G4cout << "@@JDirGuideEnd" << G4endl;
     CodeGenJavaParams(treeLink, level+1); 
   }
 }
@@ -585,9 +581,9 @@ void G4UIGAG::SendAParamProperty(G4UIcommand * Comp)
   char c[2];
   guidanceEntry = Comp->GetGuidanceEntries();
   parameterEntry = Comp->GetParameterEntries();
-  G4cout << "@@JParamBegin" << endl;
-  G4cout << Comp->GetCommandPath() << endl;
-  G4cout << guidanceEntry << endl;
+  G4cout << "@@JParamBegin" << G4endl;
+  G4cout << Comp->GetCommandPath() << G4endl;
+  G4cout << guidanceEntry << G4endl;
   for (int j=0; j<guidanceEntry; j++){
     title = Comp->GetGuidanceLine(j);
     title2 = "";
@@ -601,21 +597,21 @@ void G4UIGAG::SendAParamProperty(G4UIcommand * Comp)
 	title2.append(c);
       }
     }
-    G4cout << title2 << endl;
+    G4cout << title2 << G4endl;
   }
-  G4cout << Comp->GetRange() << endl;
-  G4cout << parameterEntry << endl;
+  G4cout << Comp->GetRange() << G4endl;
+  G4cout << parameterEntry << G4endl;
   for( int par=0; par<parameterEntry; par++) {
     prp = (G4UIparameter *)Comp->GetParameter(par);
-    G4cout << prp->GetParameterName() << endl;
-    G4cout << prp->GetParameterGuidance() << endl;
-    G4cout << prp->GetParameterType() << endl;
-    G4cout << prp->IsOmittable() << endl;
-    G4cout << prp->GetDefaultValue() << endl;
-    G4cout << prp->GetParameterRange() << endl;
-    G4cout << prp->GetParameterCandidates() << endl;
+    G4cout << prp->GetParameterName() << G4endl;
+    G4cout << prp->GetParameterGuidance() << G4endl;
+    G4cout << prp->GetParameterType() << G4endl;
+    G4cout << prp->IsOmittable() << G4endl;
+    G4cout << prp->GetDefaultValue() << G4endl;
+    G4cout << prp->GetParameterRange() << G4endl;
+    G4cout << prp->GetParameterCandidates() << G4endl;
   }
-  G4cout << "@@JParamEnd" << endl;
+  G4cout << "@@JParamEnd" << G4endl;
 }
 
 void G4UIGAG::SendDisableList(G4UIcommandTree * tree, int level)
@@ -628,7 +624,7 @@ void G4UIGAG::SendDisableList(G4UIcommandTree * tree, int level)
   for(int com=0; com<commandEntry; com++) {
     Comp = tree->GetCommand(com+1);
     if( Comp->IsAvailable()==false ) {
-       G4cout << Comp->GetCommandPath()<<endl;
+       G4cout << Comp->GetCommandPath()<<G4endl;
     }
   }
   if( treeEntry == 0 ) return;     // end recursion
@@ -654,7 +650,7 @@ void G4UIGAG::CodeGenTclTree(G4UIcommandTree * tree, int level)
   for(int com=0; com<commandEntry; com++){
     Comp = tree->GetCommand(com+1);
     commandPath = Comp->GetCommandPath();
-    G4cout << commandPath << " @@command" << endl;
+    G4cout << commandPath << " @@command" << G4endl;
     guidanceEntry = Comp->GetGuidanceEntries();
     if (guidanceEntry == 0){
       title2 = "...Title not available...";
@@ -678,7 +674,7 @@ void G4UIGAG::CodeGenTclTree(G4UIcommandTree * tree, int level)
 	title2.append("\\n");
       }
     }
-    G4cout << commandPath << " @@title \""<< title2 <<"\""<< endl;
+    G4cout << commandPath << " @@title \""<< title2 <<"\""<< G4endl;
   }
 
   if(treeEntry == 0) return; //end recursion
@@ -696,9 +692,9 @@ void G4UIGAG::CodeGenTclTree(G4UIcommandTree * tree, int level)
 	title2.append("\\\""); // a Backslash and a double quote
       else title2.append(c);
     }
-    if(level==0) G4cout << pathName<< endl;
-    else G4cout << pathName<< "  @@cascade"<<endl;
-    G4cout << pathName << "  @@title \"" << title1  << "\""<<endl;
+    if(level==0) G4cout << pathName<< G4endl;
+    else G4cout << pathName<< "  @@cascade"<<G4endl;
+    G4cout << pathName << "  @@title \"" << title1  << "\""<<G4endl;
     CodeGenTclTree(t, level+1);
   }
 }
@@ -728,13 +724,13 @@ void G4UIGAG::SendATclParamProperty(G4UIcommand * Comp)
     int parameterEntry = Comp->GetParameterEntries();
     G4String commandPath = Comp->GetCommandPath();
     G4String commandRange = Comp->GetRange();
-    G4cout << "@@parameter_start" << endl;
-    G4cout << commandPath << " @@param " << parameterEntry << endl;
-    G4cout << "@@command_range \"" << commandRange << "\"" << endl;
+    G4cout << "@@parameter_start" << G4endl;
+    G4cout << commandPath << " @@param " << parameterEntry << G4endl;
+    G4cout << "@@command_range \"" << commandRange << "\"" << G4endl;
     for( int par=0; par<parameterEntry; par++) {
       prp = (G4UIparameter *)Comp->GetParameter(par);
       G4cout << "{" ;
-      G4cout << "@@param_name : \"" << prp->GetParameterName() <<"\""<<endl;
+      G4cout << "@@param_name : \"" << prp->GetParameterName() <<"\""<<G4endl;
       G4String  guide1,guide2;
       guide1 = prp->GetParameterGuidance();
       guide2 = "";
@@ -746,15 +742,15 @@ void G4UIGAG::SendATclParamProperty(G4UIcommand * Comp)
         guide2.append("\\\""); // a Backslash and a double quote
         else guide2.append(c);
       }
-      G4cout << " @@param_guide : \"" << guide2 << "\""<<endl; 
-      G4cout << " @@param_type : \"" << prp->GetParameterType()<<"\""<<endl;
-      G4cout << " @@param_omit : \"" << prp->IsOmittable()<<"\""<<endl;
-      G4cout << " @@param_default : \""<< prp->GetDefaultValue()<<"\""<<endl;
-      G4cout << " @@param_range : \""<< prp->GetParameterRange()<<"\""<<endl;
-      G4cout << " @@param_candidate : \"" << prp->GetParameterCandidates()<< "\""<<endl;
-      G4cout << "}" << endl;
+      G4cout << " @@param_guide : \"" << guide2 << "\""<<G4endl; 
+      G4cout << " @@param_type : \"" << prp->GetParameterType()<<"\""<<G4endl;
+      G4cout << " @@param_omit : \"" << prp->IsOmittable()<<"\""<<G4endl;
+      G4cout << " @@param_default : \""<< prp->GetDefaultValue()<<"\""<<G4endl;
+      G4cout << " @@param_range : \""<< prp->GetParameterRange()<<"\""<<G4endl;
+      G4cout << " @@param_candidate : \"" << prp->GetParameterCandidates()<< "\""<<G4endl;
+      G4cout << "}" << G4endl;
     }
-    G4cout << "@@parameter_end" << endl;
+    G4cout << "@@parameter_end" << G4endl;
 }
 
 void G4UIGAG::NotifyStateChange(void)
@@ -764,10 +760,10 @@ void G4UIGAG::NotifyStateChange(void)
    G4UIcommandTree * tree = UI->GetTree();
    stateString = statM->GetStateString(statM->GetCurrentState());
    if ( uiMode != terminal_mode ){
-     G4cout << "@@State \"" << stateString << "\"" << endl;
-     G4cout << "@@DisableListBegin"<<endl;
+     G4cout << "@@State \"" << stateString << "\"" << G4endl;
+     G4cout << "@@DisableListBegin"<<G4endl;
      SendDisableList(tree, 0);
-     G4cout << "@@DisableListEnd" <<endl;
+     G4cout << "@@DisableListEnd" <<G4endl;
    }
 }
 
@@ -811,7 +807,7 @@ int G4UIGAG::CommandUpdated(void)
       }
       if( j==nEntry ) { 
          deleted = 1;
-         //G4cout <<"deleted: "<< previousTreeCommands(i) << endl;
+         //G4cout <<"deleted: "<< previousTreeCommands(i) << G4endl;
       }
   }
   for( i=0; i<nEntry; i++) {      // check added command(s)
@@ -820,12 +816,12 @@ int G4UIGAG::CommandUpdated(void)
       }
       if( j==pEntry ) { 
          added = 1;
-      //   G4cout <<"added: "<< newTreeCommands(i) << endl;
+      //   G4cout <<"added: "<< newTreeCommands(i) << G4endl;
       }
   }
-  if( added    && deleted==0 ) {G4cout<<"c added"<<endl;return added;}
-  if( added==0 && deleted ) {G4cout<<"c deleted"<<endl;return deleted;}
-  if( added    && deleted ) {G4cout<<"c add/deleted"<<endl;return addedAndDeleted;}
+  if( added    && deleted==0 ) {G4cout<<"c added"<<G4endl;return added;}
+  if( added==0 && deleted ) {G4cout<<"c deleted"<<G4endl;return deleted;}
+  if( added    && deleted ) {G4cout<<"c add/deleted"<<G4endl;return addedAndDeleted;}
   return notChanged;
 }
 
@@ -870,7 +866,7 @@ void G4UIGAG::UpdateParamVal(void)
     if( previousTreeParams[i] != newTreeParams[i]){
        Comp = newTreePCP[i];
        G4cout << Comp->GetCommandPath()
-            << " command is updated." <<endl; 
+            << " command is updated." <<G4endl; 
        NotifyParameterUpdate(Comp);
     }
   }
@@ -890,7 +886,7 @@ void G4UIGAG::UpdateParamVal(void)
 //    }
 //    if( j==nEntry ) { 
 //       deleted = 1;
-//       //G4cout <<"para deleted: "<< previousTreeParams(i) << endl;
+//       //G4cout <<"para deleted: "<< previousTreeParams(i) << G4endl;
 //    }
 //  }
 //  for( i=0; i<nEntry; i++) {      // check added param(s)
@@ -899,12 +895,12 @@ void G4UIGAG::UpdateParamVal(void)
 //    }
 //    if( j==pEntry ) { 
 //       added = 1;
-//       //G4cout <<"para added: "<< newTreeParams(i) << endl;
+//       //G4cout <<"para added: "<< newTreeParams(i) << G4endl;
 //    }
 //  }
-//  if( added    && deleted==0 ) {G4cout<<"p added"<<endl;return added;}
-// if( added==0 && deleted )  {G4cout<<"p deleted"<<endl;return deleted;}
-//  if( added    && deleted )  {G4cout<<"p add/deleted"<<endl; return addedAndDeleted;}
+//  if( added    && deleted==0 ) {G4cout<<"p added"<<G4endl;return added;}
+// if( added==0 && deleted )  {G4cout<<"p deleted"<<G4endl;return deleted;}
+//  if( added    && deleted )  {G4cout<<"p add/deleted"<<G4endl; return addedAndDeleted;}
 //  return notChanged;
 //}
 

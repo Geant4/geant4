@@ -64,7 +64,7 @@ public:
     NotPossible() : flavour(0) {}
     NotPossible(int f) : flavour(f) {}
     operator int() const { return flavour; }
-    void writeMessage(ostream& o) const { o << "Collision not possible..."; }
+    void writeMessage(G4std::ostream& o) const { o << "Collision not possible..."; }
   };
 
 private:

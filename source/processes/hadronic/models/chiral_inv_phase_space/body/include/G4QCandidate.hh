@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCandidate.hh,v 1.1 1999-11-17 11:04:14 hpw Exp $
+// $Id: G4QCandidate.hh,v 1.2 1999-12-15 14:52:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -22,7 +22,7 @@
 //  class header for Quasmon initiated Candidates used by the CHIPS Model
 // ----------------------------------------------------------------------
 
-#include <iostream.h>
+#include "g4std/iostream"
 //#include <CLHEP/config/CLHEP.h>
 #include "globals.hh"
 //#include "G4ThreeVector.hh"

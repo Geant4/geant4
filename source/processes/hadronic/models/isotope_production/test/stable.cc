@@ -1,6 +1,6 @@
 #include "G4StableIsotopes.hh"
 #include "globals.hh"
-#include <iostream.h>
+#include "g4std/iostream"
 
 int main()
 {
@@ -14,8 +14,8 @@ int main()
       cout <<theIso.GetName(Z)<<" ";
       cout <<Z<<" ";
       cout <<theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(Z)+i)<<" ";
-      cout << endl;
+      cout << G4endl;
     }
-    cout << endl;
+    cout << G4endl;
   }
 }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuPairProduction.cc,v 1.6 1999-06-14 13:26:35 urban Exp $
+// $Id: G4MuPairProduction.cc,v 1.7 1999-12-15 14:51:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -18,7 +18,7 @@
 //      -------- G4MuPairProduction physics process ---------
 //                by Laszlo Urban, May 1998 
 // **************************************************************
-// 04-06-98, in DoIt,secondary production condition:range>min(threshold,safety)
+// 04-06-98, in DoIt,secondary production condition:range>G4std::min(threshold,safety)
 // 26/10/98, new stuff from R. Kokoulin + cleanup , L.Urban
 // 06/05/99 , bug fixed , L.Urban
 // --------------------------------------------------------------
@@ -787,7 +787,7 @@ G4Element* G4MuPairProduction::SelectRandomAtom(G4Material* aMaterial) const
     if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
   }
   cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements, NULL pointer returned." << endl;
+       << "' has no elements, NULL pointer returned." << G4endl;
   return NULL;
 }
 void G4MuPairProduction::PrintInfoDefinition()
@@ -795,7 +795,7 @@ void G4MuPairProduction::PrintInfoDefinition()
   G4String comments = "theoretical cross sections \n ";
            comments += "         Good description up to 1000 TeV.";
 
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n    PhysicsTables from " << G4BestUnit(LowestKineticEnergy,
                                                      "Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy")

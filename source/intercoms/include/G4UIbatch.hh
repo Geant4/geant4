@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIbatch.hh,v 1.2 1999-10-29 06:06:43 asaim Exp $
+// $Id: G4UIbatch.hh,v 1.3 1999-12-15 14:50:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $id$
@@ -15,7 +15,7 @@
 
 #include "globals.hh"
 #include "G4UIsession.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 
 class G4UImanager;
 
@@ -45,7 +45,7 @@ class G4UIbatch : public G4UIsession
   private:
       G4UImanager * UImanager;
       G4UIsession * previousSession;
-      ifstream macroFile;
+      G4std::ifstream macroFile;
       G4String macroFileName;
       G4bool openFailed;
 };

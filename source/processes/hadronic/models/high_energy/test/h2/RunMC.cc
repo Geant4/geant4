@@ -149,7 +149,7 @@ int main()
   G4double xup = pana[1].getEnergy() + pana[1].getMomentum().z();
   G4double xlo = pana[1].getEnergy() - pana[1].getMomentum().z();
   G4double drap = log(xup/xlo)/2.;
-  cout << " Beam Rapidity " << drap << endl;
+  cout << " Beam Rapidity " << drap << G4endl;
    G4ParticleChange* aFinalState;
 
   G4int iteration = 0;   
@@ -291,7 +291,7 @@ int main()
                pv[i].setSide(0);
                if(pv[i].getCharge() < -0.5) nnehmf++;
              }
-           G4double phmf1 = max(0., phmf*(1.+0.2*theInteraction.normal()));
+           G4double phmf1 = G4std::max(0., phmf*(1.+0.2*theInteraction.normal()));
            pv[i].SmulAndUpdate(pv[i], phmf1/phmf);
            pana[5].Lor(pv[i], pana[3]);
            xup = pana[5].getEnergy() + pana[5].getMomentum().z();
@@ -463,8 +463,8 @@ int main()
        aver[6]+= sqr(nshow+ngrey);
        aver[7]+= sqr(nshowm);
        aver[8]+= sqr(ngrey);
-       ngrey = min(ngrey,19);
-       ngrey = max(ngrey,0);
+       ngrey = G4std::min(ngrey,19);
+       ngrey = G4std::max(ngrey,0);
        aver[10+ngrey] += (G4double)nshow;
        aver[30+ngrey] += 1.;       
 
@@ -477,7 +477,7 @@ int main()
 
      }  while (iteration < NumberEvents) ;
 
-    cout << " number of useful events " << nevhmf << endl; 
+    cout << " number of useful events " << nevhmf << G4endl; 
    
     for(i=1; i<10; i++)
       {
@@ -486,21 +486,21 @@ int main()
     aver[6] -= aver[1]*aver[1];
     aver[7] -= aver[2]*aver[2];
     aver[8] -= aver[3]*aver[3];
-    aver[6] = max(aver[6], 0.);
-    aver[7] = max(aver[7], 0.);
-    aver[8] = max(aver[8], 0.);
+    aver[6] = G4std::max(aver[6], 0.);
+    aver[7] = G4std::max(aver[7], 0.);
+    aver[8] = G4std::max(aver[8], 0.);
     aver[6] = sqrt(aver[6]);
     aver[7] = sqrt(aver[7]);
     aver[8] = sqrt(aver[8]);
     cout << " mean, dispersion " << aver[1] << " , " << aver[6] << " , " 
          << aver[2] << " , " << aver[7] << " , " << aver[3] << " , " 
-         << aver[8] << endl;
+         << aver[8] << G4endl;
     for(i=10; i<30; i++)
       {
          if(aver[20+i] > 0.) aver[i] /= aver[20+i];
          G4int ngrey = i-10;
          cout << " ngrey, <nshow> " << ngrey << " , " << aver[i] << " , " 
-              << aver[20+i] << endl;
+              << aver[20+i] << G4endl;
       }
     G4double wgthmf = 1./nevhmf;
     for(i = 1; i<8; i++) plot[i].Scale(wgthmf, plot[i]);
@@ -520,13 +520,13 @@ int main()
       {
         for(i=5; i<11; i++)      
           {
-            cout << " plot " << i << " to plot " << 30+i << endl;
+            cout << " plot " << i << " to plot " << 30+i << G4endl;
             plot[30+i].GetFromFile( i, aHFile);
           }
         plot[47].GetFromFile( 17, aHFile);
-        cout << " plot " << 17 << " to plot " << 47 << endl;
+        cout << " plot " << 17 << " to plot " << 47 << G4endl;
         plot[48].GetFromFile( 18, aHFile);
-        cout << " plot " << 18 << " to plot " << 48 << endl;
+        cout << " plot " << 18 << " to plot " << 48 << G4endl;
 
         plot[23].Divide(1.,1.,plot[5],plot[35]);
         plot[24].Divide(1.,1.,plot[6],plot[36]);

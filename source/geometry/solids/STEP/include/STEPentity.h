@@ -5,7 +5,7 @@
 
 
 //
-// $Id: STEPentity.h,v 1.2 1999-05-21 20:20:31 japost Exp $
+// $Id: STEPentity.h,v 1.3 1999-12-15 14:50:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef STEPENTITY_H
@@ -114,18 +114,18 @@ class STEPentity : public EntityInstance {
 // READ
     virtual Severity STEPread(int id, int addFileId, 
 			      class InstMgr * instance_set,
-			      istream& in =cin);
-    virtual void STEPread_error(char c, int index, istream& in);
+			      G4std::istream& in =G4cin);
+    virtual void STEPread_error(char c, int index, G4std::istream& in);
 
 // WRITE
-    virtual void STEPwrite(ostream& out =G4cout, int writeComment = 1);
+    virtual void STEPwrite(G4std::ostream& out =G4cout, int writeComment = 1);
     virtual const char * STEPwrite(SCLstring &buf);
 
-    void	 STEPwrite_reference (ostream& out =G4cout);
+    void	 STEPwrite_reference (G4std::ostream& out =G4cout);
     const char * STEPwrite_reference (SCLstring &buf);
 
-    void beginSTEPwrite(ostream& out =G4cout); // writes out the SCOPE section
-    void endSTEPwrite(ostream& out =G4cout);
+    void beginSTEPwrite(G4std::ostream& out =G4cout); // writes out the SCOPE section
+    void endSTEPwrite(G4std::ostream& out =G4cout);
 
 // MULTIPLE INHERITANCE
     int MultipleInheritance() { return !(headMiEntity == 0); }
@@ -156,7 +156,7 @@ typedef STEPentity* STEPentityPtr;
 typedef STEPentity* STEPentityH;
 
 extern STEPentity *
-ReadEntityRef(istream &in, ErrorDescriptor *err, char *tokenList, 
+ReadEntityRef(G4std::istream &in, ErrorDescriptor *err, char *tokenList, 
 	      InstMgr * instances, int addFileId);
 
 //typedef  STEPentity * (* Creator) () const;

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.cc,v 1.6 1999-11-11 15:38:03 gunter Exp $
+// $Id: G4Trajectory.cc,v 1.7 1999-12-15 14:53:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -91,17 +91,17 @@ G4Trajectory::~G4Trajectory()
 void G4Trajectory::ShowTrajectory() const
 ///////////////////////////////////
 {
-   G4cout << endl << "TrackID =" << fTrackID 
-        << ":ParentID=" << fParentID << endl;
+   G4cout << G4endl << "TrackID =" << fTrackID 
+        << ":ParentID=" << fParentID << G4endl;
    G4cout << "Particle name : " << ParticleName 
-        << "  Charge : " << PDGCharge << endl;
+        << "  Charge : " << PDGCharge << G4endl;
    G4cout << "  Current trajectory has " << positionRecord->entries() 
-        << " points." << endl;
+        << " points." << G4endl;
 
    for( size_t i=0 ; i < positionRecord->entries() ; i++){
        G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[i]);
        G4cout << "Point[" << i << "]" 
-            << " Position= " << aTrajectoryPoint->GetPosition() << endl;
+            << " Position= " << aTrajectoryPoint->GetPosition() << G4endl;
    }
 }
 

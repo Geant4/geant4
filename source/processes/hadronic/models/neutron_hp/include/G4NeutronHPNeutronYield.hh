@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPNeutronYield.hh,v 1.3 1999-07-02 09:59:44 johna Exp $
+// $Id: G4NeutronHPNeutronYield.hh,v 1.4 1999-12-15 14:53:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPNeutronYield_h
@@ -32,7 +32,7 @@ class G4NeutronHPNeutronYield
   
   G4double GetTargetMass() { return targetMass; }
   
-  void InitMean(ifstream & aDataFile)
+  void InitMean(G4std::ifstream & aDataFile)
   {
     G4int iflag;
     aDataFile >> targetMass >>iflag;
@@ -47,7 +47,7 @@ class G4NeutronHPNeutronYield
     }
   }
 
-  void InitPrompt(ifstream & aDataFile)
+  void InitPrompt(G4std::ifstream & aDataFile)
   { 
     hasPromptData = true;
     G4int iflag;
@@ -63,7 +63,7 @@ class G4NeutronHPNeutronYield
     }
   }
  
-  void InitDelayed(ifstream & aDataFile)
+  void InitDelayed(G4std::ifstream & aDataFile)
   {
     hasDelayedData = true;
     G4int iflag;

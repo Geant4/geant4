@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Box.cc,v 1.1 1999-01-08 16:31:50 gunter Exp $
+// $Id: testG4Box.cc,v 1.2 1999-12-15 14:50:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -56,18 +56,18 @@ G4bool testG4Box()
 
     G4ThreeVector pJohnXZ(9,0,12);
     Dist = b2.DistanceToIn(pJohnXZ,vxmz) ;
-    G4cout<<"b2.DistanceToIn(pJohnXZ,vxmz) = "<<Dist<<endl ;
+    G4cout<<"b2.DistanceToIn(pJohnXZ,vxmz) = "<<Dist<<G4endl ;
 
     G4ThreeVector pJohnXY(12,9,0);
     Dist = b2.DistanceToIn(pJohnXY,vmxy) ;
-    G4cout<<"b2.DistanceToIn(pJohnXY,vmxy) = "<<Dist<<endl ;
+    G4cout<<"b2.DistanceToIn(pJohnXY,vmxy) = "<<Dist<<G4endl ;
 
     Dist = b2.DistanceToIn(pJohnXY,vmx) ;
-    G4cout<<"b2.DistanceToIn(pJohnXY,vmx) = "<<Dist<<endl ;
+    G4cout<<"b2.DistanceToIn(pJohnXY,vmx) = "<<Dist<<G4endl ;
 
     G4ThreeVector pMyXY(32,-11,0);
     Dist = b2.DistanceToIn(pMyXY,vmxy) ;
-    G4cout<<"b2.DistanceToIn(pMyXY,vmxy) = "<<Dist<<endl ;
+    G4cout<<"b2.DistanceToIn(pMyXY,vmxy) = "<<Dist<<G4endl ;
 
 
 
@@ -133,7 +133,7 @@ G4bool testG4Box()
     Dist=b1.DistanceToOut(ponxside,vmx,calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(Dist,40)&&ApproxEqual(*pNorm,vmx)&&*pgoodNorm);
     Dist=b1.DistanceToOut(pbigx,vy,calcNorm,pgoodNorm,pNorm);
-G4cout<<"b1.DistanceToOut(ponxside,vy) = "<<Dist<<endl;
+G4cout<<"b1.DistanceToOut(ponxside,vy) = "<<Dist<<G4endl;
 //   assert(ApproxEqual(Dist,0)&&ApproxEqual(*pNorm,vy)&&*pgoodNorm);
     Dist=b1.DistanceToOut(ponmxside,vmx,calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(Dist,0)&&ApproxEqual(norm,vmx)&&*pgoodNorm);

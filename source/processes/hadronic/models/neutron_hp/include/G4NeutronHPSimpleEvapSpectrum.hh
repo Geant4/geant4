@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPSimpleEvapSpectrum.hh,v 1.3 1999-07-02 09:59:57 johna Exp $
+// $Id: G4NeutronHPSimpleEvapSpectrum.hh,v 1.4 1999-12-15 14:53:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPSimpleEvapSpectrum_h
@@ -17,7 +17,7 @@
 #include "G4NeutronHPVector.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 #include "G4VNeutronHPEDis.hh"
 
 // we will need a List of these .... one per term.
@@ -33,7 +33,7 @@ class G4NeutronHPSimpleEvapSpectrum : public G4VNeutronHPEDis
   {
   }
   
-  inline void Init(ifstream & aDataFile)
+  inline void Init(G4std::ifstream & aDataFile)
   {
     theFractionalProb.Init(aDataFile,eV);
     theThetaDist.Init(aDataFile, eV);

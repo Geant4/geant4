@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ThreeMat.cc,v 1.1 1999-01-07 16:07:47 gunter Exp $
+// $Id: G4ThreeMat.cc,v 1.2 1999-12-15 14:50:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  G4ThreeMat.cc,v 1.5 1993/08/02 22:21:27 atwood Exp  */
@@ -16,8 +16,8 @@
 //
 //	G4ThreeMat::G4ThreeMat()
 //	G4ThreeMat::G4ThreeMat( G4double a[3][3] )
-//	operator<<( ostream&, const G4ThreeMat& m );
-//	G4ThreeMat::PrintOn( ostream& os ) const
+//	operator<<( G4std::ostream&, const G4ThreeMat& m );
+//	G4ThreeMat::PrintOn( G4std::ostream& os ) const
 //	operator==( const G4ThreeMat& m )
 //	G4ThreeMat::operator=( const G4ThreeMat& m )
 //	G4ThreeMat::operator-()
@@ -76,7 +76,7 @@ G4ThreeMat::G4ThreeMat( const G4ThreeMat& m )
 }
 
 
-ostream& operator<<( ostream& os, const G4ThreeMat& m )
+G4std::ostream& operator<<( G4std::ostream& os, const G4ThreeMat& m )
 {
   // overwrite output operator << to Print out G4ThreeMat objects
   // using the PrintOn function defined below
@@ -85,9 +85,9 @@ ostream& operator<<( ostream& os, const G4ThreeMat& m )
 }
 
 
-void G4ThreeMat::PrintOn( ostream& os ) const
+void G4ThreeMat::PrintOn( G4std::ostream& os ) const
 {
-  // printing function using C++ ostream class
+  // printing function using C++ G4std::ostream class
   os << "[ " << element[0][0] << "\t" 
      << element[0][1] << "\t"
      << element[0][2] << "\n  "

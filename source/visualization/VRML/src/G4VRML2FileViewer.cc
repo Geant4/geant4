@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2FileViewer.cc,v 1.3 1999-11-04 02:38:49 stanaka Exp $
+// $Id: G4VRML2FileViewer.cc,v 1.4 1999-12-15 14:54:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2FileViewer.cc
@@ -42,7 +42,7 @@ G4VRML2FileViewer::~G4VRML2FileViewer()
 void G4VRML2FileViewer::SetView()
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2FileViewer::SetView(): No effects" << endl;
+  G4cerr << "***** G4VRML2FileViewer::SetView(): No effects" << G4endl;
 #endif
 
 // Do nothing, since VRML a browser is running as a different process.
@@ -53,7 +53,7 @@ void G4VRML2FileViewer::SetView()
 void G4VRML2FileViewer::DrawView()
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4VRML2FileViewer::DrawView()" << endl;
+	G4cerr << "***** G4VRML2FileViewer::DrawView()" << G4endl;
 #endif
 
 	fSceneHandler.VRMLBeginModeling() ; 
@@ -70,14 +70,14 @@ void G4VRML2FileViewer::DrawView()
 void G4VRML2FileViewer::ClearView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2File1View::ClearView(): No effects" << endl;
+  G4cerr << "***** G4VRML2File1View::ClearView(): No effects" << G4endl;
 #endif
 }
 
 void G4VRML2FileViewer::ShowView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2FileViewer::ShowView()" << endl;
+  G4cerr << "***** G4VRML2FileViewer::ShowView()" << G4endl;
 #endif
 	fSceneHandler.VRMLEndModeling();
 }
@@ -85,7 +85,7 @@ void G4VRML2FileViewer::ShowView(void)
 void G4VRML2FileViewer::FinishView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2FileViewer::FinishView(): No effects" << endl;
+  G4cerr << "***** G4VRML2FileViewer::FinishView(): No effects" << G4endl;
 #endif
 }
 
@@ -112,15 +112,15 @@ void G4VRML2FileViewer::SendViewParameters ()
 	G4Point3D		E(0.0, 0.0, E_z );
 
 	// VRML codes are generated below	
-	fDest << endl;
-	fDest << "#---------- CAMERA" << endl;
-	fDest << "Viewpoint {"         << endl;
+	fDest << G4endl;
+	fDest << "#---------- CAMERA" << G4endl;
+	fDest << "Viewpoint {"         << G4endl;
 	fDest << "\t" << "position "           ;
 	fDest                 << E.x() << " "  ;
 	fDest                 << E.y() << " "  ;
-	fDest                 << E.z() << endl ;
-	fDest << "}" << endl;
-	fDest << endl;
+	fDest                 << E.z() << G4endl ;
+	fDest << "}" << G4endl;
+	fDest << G4endl;
 
 } 
 

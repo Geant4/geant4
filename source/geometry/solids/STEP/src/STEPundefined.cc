@@ -5,7 +5,7 @@
 
 
 //
-// $Id: STEPundefined.cc,v 1.2 1999-05-21 20:20:53 japost Exp $
+// $Id: STEPundefined.cc,v 1.3 1999-12-15 14:50:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,7 +40,7 @@ SCLundefined::StrToVal(const char *s, ErrorDescriptor *err)
 }
 
 Severity 
-SCLundefined::StrToVal(istream &in, ErrorDescriptor *err)
+SCLundefined::StrToVal(G4std::istream &in, ErrorDescriptor *err)
 {
     return STEPread(in, err);
 }
@@ -48,20 +48,20 @@ SCLundefined::StrToVal(istream &in, ErrorDescriptor *err)
 Severity 
 SCLundefined::STEPread(const char *s, ErrorDescriptor *err)
 {
-    istrstream in((char *) s);
+    G4std::istrstream in((char *) s);
     return STEPread(in, err);
 }
 
 Severity 
-SCLundefined::STEPread(istream &in, ErrorDescriptor *err)
+SCLundefined::STEPread(G4std::istream &in, ErrorDescriptor *err)
 {
     char c = '\0';
-    strstream ss;
+    G4std::strstream ss;
     SCLstring str;
 
     int terminal = 0;
 
-    in >> ws; // skip white space
+    in >> G4std::ws; // skip white space
     in >> c;
     if(c == '$')
     {
@@ -118,7 +118,7 @@ SCLundefined::STEPread(istream &in, ErrorDescriptor *err)
 //	  if (!in.readable ()) terminal =1;
     }	  
 
-    ss << ends;
+    ss << G4std::ends;
     val = ss.str();
 
     err->GreaterSeverity(SEVERITY_NULL);
@@ -145,7 +145,7 @@ SCLundefined::STEPwrite(SCLstring &s)
 }
 
 void 
-SCLundefined::	STEPwrite (ostream& out)
+SCLundefined::	STEPwrite (G4std::ostream& out)
 {
     if(val.rep())
 	out << val.chars();
@@ -196,7 +196,7 @@ SCLundefined::is_null ()
 
 /*
 int
-SCLundefined::STEPread(istream& in )  
+SCLundefined::STEPread(G4std::istream& in )  
 {
     char c ='\0';
     char buf [BUFSIZ];

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsrotm.cc,v 1.7 1999-12-05 17:50:14 gcosmo Exp $
+// $Id: G4gsrotm.cc,v 1.8 1999-12-15 14:49:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G3toG4.hh"
@@ -59,19 +59,19 @@ void G4gsrotm(G4int irot, G4double theta1, G4double phi1,
     if (1-abs(check)>tol) {
         G4cerr << "Coordinate axes forming rotation matrix "
                << irot << " are not orthonormal.(" << 1-abs(check) << ")" 
-         << endl;
+         << G4endl;
         G4cerr << " theta1=" << theta1;
         G4cerr << " phi1=" << phi1;
         G4cerr << " theta2=" << theta2;
         G4cerr << " phi2=" << phi2;
         G4cerr << " theta3=" << theta3;
         G4cerr << " phi3=" << phi3;
-        G4cerr << endl;
+        G4cerr << G4endl;
         G4Exception("G4gsrotm error");
     }
     else if (1+check<=tol) {
         G4cerr << "G4gsrotm warning: coordinate axes forming rotation "
-               << "matrix " << irot << " are left-handed" << endl;
+               << "matrix " << irot << " are left-handed" << G4endl;
     }
     
     G3toG4RotationMatrix* rotp = new G3toG4RotationMatrix;

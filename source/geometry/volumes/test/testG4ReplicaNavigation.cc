@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4ReplicaNavigation.cc,v 1.2 1999-05-03 17:18:38 japost Exp $
+// $Id: testG4ReplicaNavigation.cc,v 1.3 1999-12-15 14:50:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -172,8 +172,8 @@ G4bool testG4ReplicaNavigation()
   assert(Dist==1);
   Dist=repNav.DistanceToOut(&radRep,1,G4ThreeVector(21,21,0));
   cout.precision(8);
-  // cout << " Dist is " << Dist << " and expected= " << sqrt(2.*441.)-20. << endl;
-  // cout << "   a difference of " << Dist-(sqrt(2.*441.)-20.) << endl;
+  // cout << " Dist is " << Dist << " and expected= " << sqrt(2.*441.)-20. << G4endl;
+  // cout << "   a difference of " << Dist-(sqrt(2.*441.)-20.) << G4endl;
   assert( Dist - (sqrt(2.*441.)-20.) < 1.e-14 );
   // assert(ApproxEqual(Dist, sqrt(2.*441.)-20.));
 

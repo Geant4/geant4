@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -13,7 +13,7 @@
 
 #include <stdio.h>
 #include <math.h>
-#include <fstream.h>
+#include "g4std/fstream"
 #include <stdlib.h>
 #include "G4ios.hh" 
 #include "G4BREPSolid.hh"
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 
   Dist = MyConBox->DistanceToIn(pt2);  
   G4cout << "\nPoint 100000,0,50";
-  G4cout << "\nDist to in: " << Dist << endl;
+  G4cout << "\nDist to in: " << Dist << G4endl;
 
 
   return EXIT_SUCCESS;

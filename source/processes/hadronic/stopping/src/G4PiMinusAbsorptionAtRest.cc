@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.3 1999-05-06 14:37:01 stesting Exp $
+// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.4 1999-12-15 14:53:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,7 +60,7 @@ G4PiMinusAbsorptionAtRest::G4PiMinusAbsorptionAtRest(const G4String& processName
   _indexDeexcitation = 0;
 
   if (verboseLevel>0) 
-    { G4cout << GetProcessName() << " is created "<< endl; }
+    { G4cout << GetProcessName() << " is created "<< G4endl; }
 }
 
 
@@ -79,7 +79,7 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
     {
       G4cerr  
       << "G4PiMinusAbsorptionAtRest: ERROR, particle must be a pion minus!" 
-      << endl;
+      << G4endl;
       return NULL;
     }
 
@@ -121,7 +121,7 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   G4double pionEnergy = stoppedHadron->GetTotalEnergy();
   G4double excitation = pionEnergy - stopAbsorption.Energy();
   if (excitation < 0.) G4Exception("G4PiMinusAbsorptionAtRest::AtRestDoIt -- excitation energy < 0");
-  if (verboseLevel>0) { G4cout << " excitation " << excitation << endl; }
+  if (verboseLevel>0) { G4cout << " excitation " << excitation << G4endl; }
 
   G4StopDeexcitationAlgorithm* nucleusAlgorithm = LoadNucleusAlgorithm();
   G4StopDeexcitation stopDeexcitation(nucleusAlgorithm);
@@ -144,7 +144,7 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
     {
       G4cout << "nAbsorptionProducts = " << nAbsorptionProducts
 	     << "  nFragmentationProducts = " << nFragmentationProducts
-	     << endl;
+	     << G4endl;
     }
 
   // Deal with ParticleChange final state
@@ -182,7 +182,7 @@ G4PiMinusStopMaterial* G4PiMinusAbsorptionAtRest::LoadAlgorithm(int Z)
 {  
   if (verboseLevel>0) 
     {
-      G4cout << "Load material algorithm " << Z << endl; 
+      G4cout << "Load material algorithm " << Z << G4endl; 
     }
 
   G4int index = 3;
@@ -199,39 +199,39 @@ G4PiMinusStopMaterial* G4PiMinusAbsorptionAtRest::LoadAlgorithm(int Z)
     {
     case 3:
       if (verboseLevel>0) 
-	{ G4cout << " =================== Load Li algorithm " << endl; }
+	{ G4cout << " =================== Load Li algorithm " << G4endl; }
       return new G4PiMinusStopLi();
     case 6:
       if (verboseLevel>0) 
-	{ G4cout << " =================== Load C algorithm " << endl; }
+	{ G4cout << " =================== Load C algorithm " << G4endl; }
       return new G4PiMinusStopC();
     case 7:
       if (verboseLevel>0) 
-	{ G4cout << " =================== Load N algorithm " << endl; }
+	{ G4cout << " =================== Load N algorithm " << G4endl; }
       return new G4PiMinusStopN();
     case 8:
       if (verboseLevel>0) 
-	{ G4cout << " =================== Load O algorithm " << endl; }
+	{ G4cout << " =================== Load O algorithm " << G4endl; }
       return new G4PiMinusStopO();
     case 13:
       if (verboseLevel>0) 
-	{ G4cout << " =================== Load Al algorithm " << endl; }
+	{ G4cout << " =================== Load Al algorithm " << G4endl; }
       return new G4PiMinusStopAl();
     case 27:
       if (verboseLevel>0) 
-	{ G4cout << " =================== Load Cu algorithm " << endl; }
+	{ G4cout << " =================== Load Cu algorithm " << G4endl; }
       return new G4PiMinusStopCu();
     case 29:
       if (verboseLevel>0) 
-	{ G4cout << " =================== Load Co algorithm " << endl; }
+	{ G4cout << " =================== Load Co algorithm " << G4endl; }
       return new G4PiMinusStopCo();
     case 73:
       if (verboseLevel>0) 
-	{ G4cout << " =================== Load Ta algorithm " << endl; }
+	{ G4cout << " =================== Load Ta algorithm " << G4endl; }
       return new G4PiMinusStopTa();
     default: 
       if (verboseLevel>0) 
-	{ G4cout << " =================== Load default material algorithm " << endl; }
+	{ G4cout << " =================== Load default material algorithm " << G4endl; }
       return new G4PiMinusStopC();
     }
 }
@@ -243,15 +243,15 @@ G4StopDeexcitationAlgorithm* G4PiMinusAbsorptionAtRest::LoadNucleusAlgorithm()
     {
     case 0:
       if (verboseLevel>0) 
-	{ G4cout << " =================== Load Theo deexcitation " << endl; }
+	{ G4cout << " =================== Load Theo deexcitation " << G4endl; }
       return new G4StopTheoDeexcitation();
     case 1:
       if (verboseLevel>0) 
-	{ G4cout << " =================== Load Dummy deexcitation " << endl; }
+	{ G4cout << " =================== Load Dummy deexcitation " << G4endl; }
       return new G4StopDummyDeexcitation();
     default:  
       if (verboseLevel>0) 
-	{ G4cout << " =================== Load default deexcitation " << endl; }
+	{ G4cout << " =================== Load default deexcitation " << G4endl; }
       return new G4StopTheoDeexcitation();
     }
 }

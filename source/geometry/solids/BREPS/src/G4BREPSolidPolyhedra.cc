@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.10 1999-09-17 13:35:29 sgiani Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.11 1999-12-15 14:50:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Corrections by S.Giani:
@@ -248,18 +248,18 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(G4String name,
   
   if(print_pgone_parameters)
   {
-    G4cout << "Parameters of the G4PGone " << name << endl;
-    G4cout << "  starting angle =" << original_parameters.Start_angle << endl;
-    G4cout << "  opening angle =" << original_parameters.Opening_angle << endl;
-    G4cout << "  sides =" << original_parameters.Sides << endl;
-    G4cout << "  nb of z planes=" << original_parameters.Num_z_planes << endl;
+    G4cout << "Parameters of the G4PGone " << name << G4endl;
+    G4cout << "  starting angle =" << original_parameters.Start_angle << G4endl;
+    G4cout << "  opening angle =" << original_parameters.Opening_angle << G4endl;
+    G4cout << "  sides =" << original_parameters.Sides << G4endl;
+    G4cout << "  nb of z planes=" << original_parameters.Num_z_planes << G4endl;
 
     for (G4int nb = 0; nb <= sections; nb++)
     {
       G4cout << "   Z[" << nb << "] = " << original_parameters.Z_values[nb];
       G4cout << "   Rmin[" << nb << "] = " << original_parameters.Rmin[nb];
       G4cout << "   Rmax[" << nb << "] = " << original_parameters.Rmax[nb] 
-	     << endl;
+	     << G4endl;
     }   
   }
 #endif

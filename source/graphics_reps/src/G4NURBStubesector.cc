@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBStubesector.cc,v 1.3 1999-05-19 08:33:49 stesting Exp $
+// $Id: G4NURBStubesector.cc,v 1.4 1999-12-15 14:50:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,12 +20,8 @@
 //#include <math.h>
 // cf cylinder
 
-// for ostrstream
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+// for G4std::ostrstream
+#include "g4std/strstream"
 
 
 	G4NURBStubesector::G4NURBStubesector(G4double r, G4double R, G4double DZ, G4double PHI1, G4double PHI2)
@@ -162,7 +158,7 @@
 			<< "\nERROR: G4NURBStubesector::G4NURBStubesector: wrong index,"
 			<< i << " instead of " << (mtotnbrCtrlPts - 10)
 			<< "\n\tIt sounds very strange. The tubesector won't be correct. Have a nice debuging!" 
-			<< endl;
+			<< G4endl;
 			};
 
 		CP(mpCtrlPts[i++] ,  cp2*mr, sp2*mr, 0, 1);
@@ -182,7 +178,7 @@
 
 		// creating the nurbs identity
 		mpwhoami = new char [200];
-		ostrstream	tmpstr(mpwhoami, 200);
+		G4std::ostrstream	tmpstr(mpwhoami, 200);
 		tmpstr << "Tubs" << " \tPHI1=" << PHI1 << " ; PHI2=" << PHI2 << '\0';
 		// could be more sophisticated, reallocating
 		// mpwhoami to the exact length
@@ -216,10 +212,10 @@ G4NURBStubesector::t_inddCtrlPt	G4NURBStubesector::DecideNbrCtrlPts(G4double PHI
 		while (deltaPHI <= 0) { PHI2 += 2*M_PI; deltaPHI += 2*M_PI; };
 		G4double k = deltaPHI / (M_PI_2);
 
-//		G4cerr << " k " << k << endl;
-//		G4cerr << " fk " << floor(k) << endl;
-//		G4cerr <<  " ifk " << ((int)(floor(k))) << endl;
-//		G4cerr << " n " << (2*((int)(floor(k))) + 7) << endl;
+//		G4cerr << " k " << k << G4endl;
+//		G4cerr << " fk " << floor(k) << G4endl;
+//		G4cerr <<  " ifk " << ((int)(floor(k))) << G4endl;
+//		G4cerr << " n " << (2*((int)(floor(k))) + 7) << G4endl;
 
 		return ( 2*((int)(floor(k))) + 7 ); 		
 		}

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GeometryManager.cc,v 1.1 1999-01-07 16:07:19 gunter Exp $
+// $Id: G4GeometryManager.cc,v 1.2 1999-12-15 14:49:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
@@ -87,8 +87,8 @@ void G4GeometryManager::BuildOptimisations(const G4bool allOpts)
                    volume->GetDaughter(0)->IsReplicated()==true))
 		 {
 #ifdef G4GEOMETRY_VOXELDEBUG
-		     G4cout << "**** G4GeometryManager::BuildOptimisations" << endl
-			  << "     Examining logical volume name = " << volume->GetName() << endl;
+		     G4cout << "**** G4GeometryManager::BuildOptimisations" << G4endl
+			  << "     Examining logical volume name = " << volume->GetName() << G4endl;
 #endif
 		     head = new G4SmartVoxelHeader(volume);
 		     if (head)
@@ -105,9 +105,9 @@ void G4GeometryManager::BuildOptimisations(const G4bool allOpts)
 // Don't create voxels for this node
 #ifdef G4GEOMETRY_VOXELDEBUG
 		     G4cout << "**** G4GeometryManager::BuildOptimisations"
-			  << endl
+			  << G4endl
 			  << "     Skipping logical volume name = "
-			  << volume->GetName() << endl;
+			  << volume->GetName() << G4endl;
 #endif
 		 }
 

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1RunAction.cc,v 1.2 1999-11-12 15:49:41 maire Exp $
+// $Id: Em1RunAction.cc,v 1.3 1999-12-15 14:48:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,7 +20,7 @@
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
-#include <iomanip.h>
+#include "g4std/iomanip"
 
 #include "Randomize.hh"
 #include "CLHEP/Hist/HBookFile.h"
@@ -64,7 +64,7 @@ void Em1RunAction::cleanHisto()
 
 void Em1RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
-  G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
   if (saveRndm > 0)
@@ -108,28 +108,28 @@ void Em1RunAction::EndOfRunAction(const G4Run* aRun)
     { //nb of tracks and steps per event
       G4double dNbOfEvents = double(NbOfEvents);
     
-      G4long oldform = G4cout.setf(ios::fixed,ios::floatfield);
+      G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
       G4int  oldprec = G4cout.precision(2);
       
       G4cout << "\n nb tracks/event"
-                      << "   neutral: " << setw(7) << NbOfTraks0/dNbOfEvents
-                      << "   charged: " << setw(7) << NbOfTraks1/dNbOfEvents
+                      << "   neutral: " << G4std::setw(7) << NbOfTraks0/dNbOfEvents
+                      << "   charged: " << G4std::setw(7) << NbOfTraks1/dNbOfEvents
              << "\n nb  steps/event"
-                      << "   neutral: " << setw(7) << NbOfSteps0/dNbOfEvents
-                      << "   charged: " << setw(7) << NbOfSteps1/dNbOfEvents
-             << endl;
+                      << "   neutral: " << G4std::setw(7) << NbOfSteps0/dNbOfEvents
+                      << "   charged: " << G4std::setw(7) << NbOfSteps1/dNbOfEvents
+             << G4endl;
       
       //frequency of processes call       
       G4cout << "\n nb of process calls per event: \n   ";       
       for (G4int i=0; i< ProcCounter->entries();i++)
-           G4cout << setw(9) << (*ProcCounter)[i]->GetName();
+           G4cout << G4std::setw(9) << (*ProcCounter)[i]->GetName();
            
       G4cout << "\n   ";       
       for (G4int j=0; j< ProcCounter->entries();j++)
-           G4cout << setw(9) << ((*ProcCounter)[j]->GetCounter())/dNbOfEvents;
-      G4cout << endl;    
+           G4cout << G4std::setw(9) << ((*ProcCounter)[j]->GetCounter())/dNbOfEvents;
+      G4cout << G4endl;    
                          
-      G4cout.setf(oldform,ios::floatfield);
+      G4cout.setf(oldform,G4std::ios::floatfield);
       G4cout.precision(oldprec);       
     }         
    

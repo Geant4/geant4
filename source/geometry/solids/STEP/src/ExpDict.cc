@@ -5,7 +5,7 @@
 
 
 //
-// $Id: ExpDict.cc,v 1.2 1999-05-21 20:20:47 japost Exp $
+// $Id: ExpDict.cc,v 1.3 1999-12-15 14:50:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -335,13 +335,13 @@ EntityDescriptor::FindLongestAttribute()
     while( attrPtr != 0)
     {
 	if(attrPtr->AttrDesc()->IsEntityType())
-	    maxAttrLen = max(maxAttrLen, 
+	    maxAttrLen = G4std::max(maxAttrLen, 
 		    (strlen(attrPtr->AttrDesc()->EntityType()->Name()) +
 		      strlen(attrPtr->AttrDesc()->Name()) + 3
 		     )
 		    );
 	else
-	    maxAttrLen = max(maxAttrLen, 
+	    maxAttrLen = G4std::max(maxAttrLen, 
 	      (strlen(attrPtr->AttrDesc()->DomainType()->NameOrDescription()) +
 	       strlen(attrPtr->AttrDesc()->Name()) + 3
 	      )

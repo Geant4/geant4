@@ -1,10 +1,10 @@
-#include <iostream.h>
+#include "g4std/iostream"
 #include "newBinning.hh"
 
 class outputList
 {
   int N;
-  ostream** files;
+  G4std::ostream** files;
   bool* erase;
 public:
   outputList(int n);
@@ -12,7 +12,7 @@ public:
   ~outputList();
   int Number() const { return N; }
   void add(int i,ostream*);
-  ostream& operator[](int i) { return *files[i]; }
+  G4std::ostream& operator[](int i) { return *files[i]; }
 };
 
 class PlotList : public outputList

@@ -107,7 +107,7 @@
       hasXsec = false;
       return;
     }
-    ifstream theData(filename, ios::in);
+    G4std::ifstream theData(filename, G4std::ios::in);
     
     hasFSData = theFinalStatePhotons.InitMean(theData); 
     if(hasFSData)

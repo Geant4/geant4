@@ -10,7 +10,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ios.hh"
-#include <iomanip.h>
+#include "g4std/iomanip"
 
 Tst15SteppingAction::Tst15SteppingAction()
 {;}
@@ -26,51 +26,51 @@ void Tst15SteppingAction::UserSteppingAction(const G4Step* theStep)
   // check if it is alive
   if(theTrack->GetTrackStatus()==fAlive) { return; }
 
-      G4cout << setw( 5) << "#Step#" << " "
-        << setw( 9) << "X(mm)" << " "
-          << setw( 9) << "Y(mm)" << " "
-            << setw( 9) << "Z(mm)" << " "
-              << setw( 9) << "KineE(MeV)" << " "
-                << setw( 9) << "dE(MeV)" << " "
-                  << setw( 9) << "StepLeng" << " "
-                    << setw( 9) << "TrackLeng" << " "
-                        << setw(10) << "ProcName" << endl;
+      G4cout << G4std::setw( 5) << "#Step#" << " "
+        << G4std::setw( 9) << "X(mm)" << " "
+          << G4std::setw( 9) << "Y(mm)" << " "
+            << G4std::setw( 9) << "Z(mm)" << " "
+              << G4std::setw( 9) << "KineE(MeV)" << " "
+                << G4std::setw( 9) << "dE(MeV)" << " "
+                  << G4std::setw( 9) << "StepLeng" << " "
+                    << G4std::setw( 9) << "TrackLeng" << " "
+                        << G4std::setw(10) << "ProcName" << G4endl;
     G4cout.precision(3);
-    G4cout << setw( 5) << theTrack->GetCurrentStepNumber() << " "
-      << setw( 9) << theTrack->GetPosition().x() / mm << " "
-        << setw( 9) << theTrack->GetPosition().y() / mm << " "
-          << setw( 9) << theTrack->GetPosition().z() / mm << " "
-             << setw( 9) << theTrack->GetKineticEnergy() / MeV << " "
-              << setw( 9) << theStep->GetTotalEnergyDeposit() /MeV << " "
-                << setw( 9) << theStep->GetStepLength() / mm << " "
-                  << setw( 9) << theTrack->GetTrackLength() / mm << " ";
+    G4cout << G4std::setw( 5) << theTrack->GetCurrentStepNumber() << " "
+      << G4std::setw( 9) << theTrack->GetPosition().x() / mm << " "
+        << G4std::setw( 9) << theTrack->GetPosition().y() / mm << " "
+          << G4std::setw( 9) << theTrack->GetPosition().z() / mm << " "
+             << G4std::setw( 9) << theTrack->GetKineticEnergy() / MeV << " "
+              << G4std::setw( 9) << theStep->GetTotalEnergyDeposit() /MeV << " "
+                << G4std::setw( 9) << theStep->GetStepLength() / mm << " "
+                  << G4std::setw( 9) << theTrack->GetTrackLength() / mm << " ";
     if(theStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
       G4cout << theStep->GetPostStepPoint()->GetProcessDefinedStep()
         ->GetProcessName();
     } else {
       G4cout << "User Limit";
     }
-    G4cout << endl;
+    G4cout << G4endl;
 
    G4TrackVector* fSecondary = SM->GetfSecondary();
        G4cout << "   -- List of secondaries generated : "
-         << "(x,y,z,kE,t,PID) --" << endl;
+         << "(x,y,z,kE,t,PID) --" << G4endl;
        for( G4int lp1=0;lp1<(*fSecondary).entries(); lp1++){
          G4cout << "      "
-           << setw( 9)
+           << G4std::setw( 9)
              << (*fSecondary)[lp1]->GetPosition().x() / mm << " "
-               << setw( 9)
+               << G4std::setw( 9)
                  << (*fSecondary)[lp1]->GetPosition().y() / mm << " "
-                   << setw( 9)
+                   << G4std::setw( 9)
                      << (*fSecondary)[lp1]->GetPosition().z() / mm << " "
-                       << setw( 9)
+                       << G4std::setw( 9)
                          << (*fSecondary)[lp1]->GetKineticEnergy() / MeV << " "
-                           << setw( 9)
+                           << G4std::setw( 9)
                              << (*fSecondary)[lp1]->GetGlobalTime() / ns << " "
-                               << setw(18)
+                               << G4std::setw(18)
                                  << (*fSecondary)[lp1]->GetDefinition()
                                    ->GetParticleName();
-         G4cout << endl;
+         G4cout << G4endl;
        }
 
 }

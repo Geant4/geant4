@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticleChange.cc,v 1.3 1999-05-06 11:42:58 kurasige Exp $
+// $Id: G4VParticleChange.cc,v 1.4 1999-12-15 14:53:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -153,31 +153,31 @@ void G4VParticleChange::DumpInfo() const
 // Show header
   G4cout.precision(3);
   G4cout << "      -----------------------------------------------" 
-       << endl;
-  G4cout << "        G4ParticleChange Information  " << setw(20) << endl;
+       << G4endl;
+  G4cout << "        G4ParticleChange Information  " << G4std::setw(20) << G4endl;
   G4cout << "      -----------------------------------------------" 
-       << endl;
+       << G4endl;
 
   G4cout << "        # of 2ndaries       : " 
-       << setw(20) << theNumberOfSecondaries
-       << endl;
+       << G4std::setw(20) << theNumberOfSecondaries
+       << G4endl;
 
   if (theNumberOfSecondaries >0) {
     G4cout << "        Pointer to 2ndaries : " 
-         << setw(20) << GetSecondary(0)
-         << endl;
+         << G4std::setw(20) << GetSecondary(0)
+         << G4endl;
     G4cout << "        (Showed only 1st one)"
-         << endl;
+         << G4endl;
   }
   G4cout << "      -----------------------------------------------" 
-       << endl;
+       << G4endl;
 
   G4cout << "        Energy Deposit (MeV): " 
-       << setw(20) << theLocalEnergyDeposit/MeV
-       << endl;
+       << G4std::setw(20) << theLocalEnergyDeposit/MeV
+       << G4endl;
 
   G4cout << "        Track Status        : " 
-       << setw(20);
+       << G4std::setw(20);
        if( theStatusChange == fAlive ){
          G4cout << " Alive";
        } else if( theStatusChange == fStopButAlive ){
@@ -191,20 +191,20 @@ void G4VParticleChange::DumpInfo() const
        } else if( theStatusChange == fPostponeToNextEvent ){
            G4cout << " PostponeToNextEvent";
        }
-       G4cout << endl;
+       G4cout << G4endl;
   G4cout << "        True Path Length (mm) : " 
-       << setw(20) << theTrueStepLength/mm
-       << endl;
+       << G4std::setw(20) << theTrueStepLength/mm
+       << G4endl;
   G4cout << "        Stepping Control     : " 
-       << setw(20) << theSteppingControlFlag
-       << endl;   
+       << G4std::setw(20) << theSteppingControlFlag
+       << G4endl;   
   G4cout << "        Event Biasing        : ";
   if (fUseEB) {
-    G4cout << setw(20) << theEBMechanism->GetName();
+    G4cout << G4std::setw(20) << theEBMechanism->GetName();
   } else {
     G4cout << " not used ";
   }
-  G4cout << endl;      
+  G4cout << G4endl;      
 }
 
 G4bool G4VParticleChange::CheckIt(const G4Track& aTrack)
@@ -219,8 +219,8 @@ G4bool G4VParticleChange::CheckIt(const G4Track& aTrack)
   accuracy = -1.0*theLocalEnergyDeposit/MeV;
   if (accuracy > accuracyForWarning) {
     G4cout << "  G4VParticleChange::CheckIt    : ";
-    G4cout << "the energy deposit  is negative  !!" << endl;
-    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<endl;
+    G4cout << "the energy deposit  is negative  !!" << G4endl;
+    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
     itsOKforEnergy = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
@@ -230,8 +230,8 @@ G4bool G4VParticleChange::CheckIt(const G4Track& aTrack)
   accuracy = -1.0*theTrueStepLength/mm;
   if (accuracy > accuracyForWarning) {
     G4cout << "  G4VParticleChange::CheckIt    : ";
-    G4cout << "the true step length is negative  !!" << endl;
-    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<endl;
+    G4cout << "the true step length is negative  !!" << G4endl;
+    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
     itsOKforStepLength = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
@@ -239,8 +239,8 @@ G4bool G4VParticleChange::CheckIt(const G4Track& aTrack)
   G4bool itsOK = itsOKforStepLength && itsOKforEnergy ;
   // dump out information of this particle change
   if (! itsOK ){
-    G4cout << " G4VParticleChange::CheckIt " <<endl;
-    G4cout << " pointer : " << this <<endl ;
+    G4cout << " G4VParticleChange::CheckIt " <<G4endl;
+    G4cout << " pointer : " << this <<G4endl ;
     DumpInfo();
   }
 

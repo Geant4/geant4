@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StackingMessenger.cc,v 1.1 1999-01-07 16:06:40 gunter Exp $
+// $Id: G4StackingMessenger.cc,v 1.2 1999-12-15 14:49:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -50,11 +50,11 @@ void G4StackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
 {
   if( command==statusCmd )
   {
-    G4cout << "========================== Current status of the stack =====" << endl;
-    G4cout << " Number of tracks in the stack" << endl;
-    G4cout << "    Urgent stack    : " << fContainer->GetNUrgentTrack() << endl;
-    G4cout << "    Waiting stack   : " << fContainer->GetNWaitingTrack() << endl;
-    G4cout << "    Postponed stack : " << fContainer->GetNPostponedTrack() << endl;
+    G4cout << "========================== Current status of the stack =====" << G4endl;
+    G4cout << " Number of tracks in the stack" << G4endl;
+    G4cout << "    Urgent stack    : " << fContainer->GetNUrgentTrack() << G4endl;
+    G4cout << "    Waiting stack   : " << fContainer->GetNWaitingTrack() << G4endl;
+    G4cout << "    Postponed stack : " << fContainer->GetNPostponedTrack() << G4endl;
   }
   if( command==clearCmd )
   {

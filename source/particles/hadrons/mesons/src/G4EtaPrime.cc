@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EtaPrime.cc,v 1.2 1999-06-09 16:07:50 kurasige Exp $
+// $Id: G4EtaPrime.cc,v 1.3 1999-12-15 14:51:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,8 +18,8 @@
 // ****************************************************************
 // ----------------------------------------------------------------
 
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4EtaPrime.hh"
 

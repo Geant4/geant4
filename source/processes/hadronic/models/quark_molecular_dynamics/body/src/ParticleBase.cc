@@ -3,7 +3,7 @@
 #include "ParticleType.hh"
 #include "math.hh"
 
-ostream& operator<<(ostream& o,const ParticleBase& p)
+G4std::ostream& operator<<(G4std::ostream& o,const ParticleBase& p)
 {
   o << p.Name() << ":  " << p.B() << "  " << p.S() << "  "
     << p.Charm() << "  " << p.Mass() << "  " 

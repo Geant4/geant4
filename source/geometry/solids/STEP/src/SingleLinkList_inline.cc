@@ -5,7 +5,7 @@
 
 
 //
-// $Id: SingleLinkList_inline.cc,v 1.2 1999-05-21 20:21:05 japost Exp $
+// $Id: SingleLinkList_inline.cc,v 1.3 1999-12-15 14:50:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,7 +61,7 @@ SingleLinkNode *
 SingleLinkList::NewNode () 
 {
     //  defined in subtypes
-    cerr << "\n\n******BUG****** a virtually defined function should \n"
+    G4cerr << "\n\n******BUG****** a virtually defined function should \n"
 	 << "be called for SingleLinkList::NewNode()\n\n";
     return new SingleLinkNode();
 }

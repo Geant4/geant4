@@ -28,21 +28,21 @@
   {
     G4NeutronHPDataUsed result;
     aFlag = true;
-//    G4cout << "Names::GetName entered"<<endl;
+//    G4cout << "Names::GetName entered"<<G4endl;
     G4int myA = A;
     G4int myZ = Z;
     G4String * theName = NULL;
     G4String theFileName("");
     G4int offA = 0, offZ = 0, inc = 1;
     
-    ifstream check;
+    G4std::ifstream check;
     G4bool first = true;
-//    G4cout << "entered GetName!!!"<<endl;
+//    G4cout << "entered GetName!!!"<<G4endl;
      do   
      {
       aFlag = true;
       char the1[100] = {""};
-      ostrstream ost1(the1, 100, ios::out);
+      G4std::ostrstream ost1(the1, 100, G4std::ios::out);
       ost1 <<base<<"/"<<"CrossSection/"<<myZ<<"_"<<myA<<"_"<<theString[myZ-1];
       G4String * biff = new G4String(the1); // delete here as theName
       if(theName!=NULL) delete theName;
@@ -53,7 +53,7 @@
 #ifndef WIN32
       check.open(*theName);
 #else
-      check.open(*theName,ios::in|ios::nocreate);
+      check.open(*theName,G4std::ios::in|G4std::ios::nocreate);
 #endif
       if(!(check)) 
       {
@@ -64,7 +64,7 @@
           aFlag = true;
           first = false;
           char the1[100] = {""};
-          ostrstream ost1(the1, 100, ios::out);
+          G4std::ostrstream ost1(the1, 100, G4std::ios::out);
           ost1 <<base<<"/"<<"CrossSection/"<<myZ<<"_"<<"nat"<<"_"<<theString[myZ-1];
           biff = new G4String(the1); // delete here as theName
           if(theName!=NULL) delete theName;
@@ -76,7 +76,7 @@
 #ifndef WIN32
           check.open(*theName);
 #else
-          check.open(*theName,ios::in|ios::nocreate);
+          check.open(*theName,G4std::ios::in|G4std::ios::nocreate);
 #endif
           if (!check) 
           {
@@ -86,7 +86,7 @@
           else
           {
             char the1[100] = {""};
-            ostrstream ost1(the1, 100, ios::out);
+            G4std::ostrstream ost1(the1, 100, G4std::ios::out);
             ost1 <<base<<"/"<<rest<<myZ<<"_"<<"nat"<<"_"<<theString[myZ-1];  
             biff = new G4String(the1); // delete here as theName
             if(theName!=NULL) delete theName;
@@ -101,7 +101,7 @@
       else
       {
         char the1[100] = {""};
-        ostrstream ost1(the1, 100, ios::out);
+        G4std::ostrstream ost1(the1, 100, G4std::ios::out);
         ost1 <<base<<"/"<<rest<<myZ<<"_"<<myA<<"_"<<theString[myZ-1];  
         biff = new G4String(the1); // delete here as theName
         if(theName!=NULL) delete theName;
@@ -117,10 +117,10 @@
           myZ = Z;
           myA = A;
         }else{
-          G4cout <<"G4NeutronHPNames: Sorry, this material does not come near to any data."<<endl;
-          G4cout <<"G4NeutronHPNames: Please make sure NeutronHPCrossSections points to the" << endl;
-          G4cout <<"                  directory, the neutron scattering data are located in." << endl;
-          G4cout << "G4NeutronHPNames: The material was: A="<<A<<", Z="<<Z<<endl;
+          G4cout <<"G4NeutronHPNames: Sorry, this material does not come near to any data."<<G4endl;
+          G4cout <<"G4NeutronHPNames: Please make sure NeutronHPCrossSections points to the" << G4endl;
+          G4cout <<"                  directory, the neutron scattering data are located in." << G4endl;
+          G4cout << "G4NeutronHPNames: The material was: A="<<A<<", Z="<<Z<<G4endl;
           G4Exception("In case the data sets are at present not available in the neutron data library, please contact Hans-Peter.Wellisch@cern.ch");
           delete theName;
           theFileName = "";
@@ -136,8 +136,8 @@
       }
     }
     while(!(check));
-//    G4cout << "Names::GetName: last theName proposal = "<< *theName <<" "<<A<<" "<<Z<<endl;
-//    G4cout << "File-name: "<<*theName<<endl;
+//    G4cout << "Names::GetName: last theName proposal = "<< *theName <<" "<<A<<" "<<Z<<G4endl;
+//    G4cout << "File-name: "<<*theName<<G4endl;
     delete theName;
     return result;
   }

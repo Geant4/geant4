@@ -5,13 +5,13 @@
 #pragma interface
 #endif
 
-#include <iostream.h>
+#include "g4std/iostream"
 
 #include "InputItem.hh"
 #include "Fallible.hh"
 #include "String.hh"
 
-class istream;
+class G4std::istream;
 
 template<class T>
 class InputVariable
@@ -24,14 +24,14 @@ class InputVariable
       : theKey(key),Fallible<T>(Default) {}
     
     virtual const String& getKey() const { return theKey; }
-    virtual void read(istream& is) {
+    virtual void read(G4std::istream& is) {
       T value;
       is >> value;
       if( is.good() ) {
 	validate(value);
       } 
     }
-    virtual void write(ostream& os) { 
+    virtual void write(G4std::ostream& os) { 
       if( isValid() ) {
 	os << T(*this);
       }

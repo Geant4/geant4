@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4strstreambuf.hh,v 1.4 1999-11-23 15:00:04 gcosmo Exp $
+// $Id: G4strstreambuf.hh,v 1.5 1999-12-15 14:50:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,7 +78,7 @@ public:
       G4std::cout << stringToSend << G4std::flush;
       result =0;
     } else if(this == & G4cerrbuf && destination == NULL) {
-      G4std::cerr << stringToSend << G4std::flush;
+      G4std::G4cerr << stringToSend << G4std::flush;
       result =0;
     }
     return result;

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.3 1999-11-15 11:10:26 maire Exp $
+// $Id: ExN03DetectorConstruction.cc,v 1.4 1999-12-15 14:49:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -211,7 +211,7 @@ G4Material* beam = new G4Material(name="Beam", density, ncomponents=1,
                                       kStateGas,temperature,pressure);
 beam->AddMaterial(Air, fractionmass=1.);
 
-G4cout << *(G4Material::GetMaterialTable()) << endl;
+G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //default materials of the calorimeter
   AbsorberMaterial = Pb;

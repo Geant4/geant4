@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRestDiscreteProcess.hh,v 1.3 1999-11-07 17:11:48 kurasige Exp $
+// $Id: G4VRestDiscreteProcess.hh,v 1.4 1999-12-15 14:53:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -143,10 +143,10 @@ inline
 #ifdef G4VERBOSE
    if ((currentInteractionLength <=0.0) || (verboseLevel>2)){
     G4cout << "G4VRestDiscreteProcess::PostStepGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<endl;
+    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() <<endl;
-    G4cout << "MeanFreePath = " << currentInteractionLength/cm << "[cm]" <<endl;
+    G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
+    G4cout << "MeanFreePath = " << currentInteractionLength/cm << "[cm]" <<G4endl;
   }
 #endif
 
@@ -154,10 +154,10 @@ inline
 #ifdef G4VERBOSE
    if (verboseLevel>1){
     G4cout << "G4VRestDiscreteProcess::PostStepGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<endl;
+    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " <<  track.GetMaterial()->GetName() <<endl;
-    G4cout << "InteractionLength= " << value/cm <<"[cm] " <<endl;
+    G4cout << " in Material  " <<  track.GetMaterial()->GetName() <<G4endl;
+    G4cout << "InteractionLength= " << value/cm <<"[cm] " <<G4endl;
   }
 #endif
   return value;
@@ -191,10 +191,10 @@ inline G4double G4VRestDiscreteProcess::AtRestGetPhysicalInteractionLength(
 #ifdef G4VERBOSE
    if ((currentInteractionLength <0.0) || (verboseLevel>2)){
     G4cout << "G4VRestDiscreteProcess::AtRestGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<endl;
+    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() <<endl;
-    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<endl;
+    G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
+    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<G4endl;
   }
 #endif
 

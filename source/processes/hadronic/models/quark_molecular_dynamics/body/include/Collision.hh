@@ -3,7 +3,7 @@
 
 #include "globals.hh"
 #include <list.h>
-#include <vector.h>
+#include "g4std/vector"
 #include "reactionChannels.hh"
 #include "ParticleBase.hh"
 #include "ParticleType.hh"
@@ -25,14 +25,14 @@ class CollisionType : public Knot<CollisionType>
   CollisionType(const ParticleType& P);
   CollisionType();
 public:
-  CollisionType(istream& in);
+  CollisionType(G4std::istream& in);
   double Crossection(double s) const;
   double checkProducts(const CollisionType& x,bool&) const;
   virtual double isEqualTo(const CollisionType& x) const;
   void perform(const vector<ParticleBase*>&,selection = ALL,bool force = false) const;
   static CollisionType* checkCollision(const vector<ParticleBase*>&);
   vector<decayMode*> channels;
-  void print(ostream& o) const;
+  void print(G4std::ostream& o) const;
 private:
   decayMode& chooseMode(double Emax,selection = ALL,bool = false) const;
   static double FindDecomposition(int,const CollisionType&,const vector<ParticleBase*>&);

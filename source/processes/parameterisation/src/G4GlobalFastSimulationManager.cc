@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.4 1999-04-28 10:06:43 mora Exp $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.5 1999-12-15 14:53:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -140,7 +140,7 @@ G4GlobalFastSimulationManager::ActivateFastSimulationModel(const G4String& aName
     G4cout << "Model " << aName << " activated.";
   else
     G4cout << "Model " << aName << " not found.";
-  G4cout << endl;
+  G4cout << G4endl;
 }
 
 void 
@@ -153,7 +153,7 @@ G4GlobalFastSimulationManager::InActivateFastSimulationModel(const G4String& aNa
     G4cout << "Model " << aName << " inactivated.";
   else
     G4cout << "Model " << aName << " not found.";
-  G4cout << endl;
+  G4cout << G4endl;
 }
 
 void 
@@ -174,7 +174,7 @@ G4GlobalFastSimulationManager::ListEnvelopes(const G4String& aName,
 	  G4cout << "Current Envelopes for Fast Simulation:\n";
 	G4cout << "   "; 
 	ManagedManagers(ifsm)->ListTitle();
-	G4cout << endl;
+	G4cout << G4endl;
       }
       else ManagedManagers(ifsm)->ListModels();
     }

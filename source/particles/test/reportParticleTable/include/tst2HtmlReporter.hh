@@ -1,10 +1,10 @@
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tst2HtmlReporter.hh,v 1.1 1999-06-17 04:41:46 kurasige Exp $
+// $Id: tst2HtmlReporter.hh,v 1.2 1999-12-15 14:51:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,7 +14,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 
 #include "tst2VParticleReporter.hh"
 
@@ -36,8 +36,8 @@ class tst2HtmlReporter: public tst2VParticleReporter
     void GenerateIndex();
     void GeneratePropertyTable(G4ParticleDefinition* );
 
-    void PrintHeader(ofstream& );
-    void PrintFooter(ofstream& );
+    void PrintHeader(G4std::ofstream& );
+    void PrintFooter(G4std::ofstream& );
 
 
  private:

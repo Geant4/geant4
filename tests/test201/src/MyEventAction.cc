@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyEventAction.cc,v 1.4 1999-05-11 13:19:12 barrand Exp $
+// $Id: MyEventAction.cc,v 1.5 1999-12-15 14:55:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,7 +41,7 @@ void MyEventAction::EndOfEventAction(const G4Event* aEvent)
   G4int trackerCollID = SDman->GetCollectionID(colNam="TrackerCollection");
   G4int calorimeterCollID = SDman->GetCollectionID(colNam="CalCollection");
 
-  G4cout << ">>> Event " << aEvent->GetEventID() << endl;
+  G4cout << ">>> Event " << aEvent->GetEventID() << G4endl;
 
   G4TrajectoryContainer * trajectoryContainer = 
     aEvent->GetTrajectoryContainer();
@@ -49,14 +49,14 @@ void MyEventAction::EndOfEventAction(const G4Event* aEvent)
   if(trajectoryContainer)
   { n_trajectories = trajectoryContainer->entries(); }
   G4cout << "    " << n_trajectories 
-       << " trajectories stored in this event." << endl;
+       << " trajectories stored in this event." << G4endl;
 
   G4HCofThisEvent * HCE = aEvent->GetHCofThisEvent();
   G4int n_hitCollection = 0;
   if(HCE)
   { n_hitCollection = HCE->GetCapacity(); }
   G4cout << "    " << n_hitCollection
-       << " hitsCollections stored in this event." << endl;
+       << " hitsCollections stored in this event." << G4endl;
 }
 
 

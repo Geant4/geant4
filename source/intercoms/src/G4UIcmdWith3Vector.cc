@@ -1,21 +1,17 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcmdWith3Vector.cc,v 1.1 1999-01-07 16:09:25 gunter Exp $
+// $Id: G4UIcmdWith3Vector.cc,v 1.2 1999-12-15 14:50:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
 #include "G4UIcmdWith3Vector.hh"
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 G4UIcmdWith3Vector::G4UIcmdWith3Vector
 (const char * theCommandPath,G4UImessenger * theMessenger)
@@ -35,7 +31,7 @@ G4ThreeVector G4UIcmdWith3Vector::GetNew3VectorValue(G4String paramString)
   G4double vy;
   G4double vz;
   const char* t = paramString;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
   is >> vx >> vy >> vz;
   return G4ThreeVector(vx,vy,vz);
 }
@@ -43,7 +39,7 @@ G4ThreeVector G4UIcmdWith3Vector::GetNew3VectorValue(G4String paramString)
 G4String G4UIcmdWith3Vector::ConvertToString(G4ThreeVector vec)
 {
   char st[100];
-  ostrstream os(st,100);
+  G4std::ostrstream os(st,100);
   os << vec.x() << " " << vec.y() << " " << vec.z() << '\0';
   G4String vl = st;
   return vl;

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.cc,v 1.5 1999-08-18 09:15:22 kurasige Exp $
+// $Id: G4DynamicParticle.cc,v 1.6 1999-12-15 14:51:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -329,21 +329,21 @@ void G4DynamicParticle::Set4Momentum(const G4LorentzVector &momentum )
 void G4DynamicParticle::DumpInfo(G4int mode) const
 {
   if (theParticleDefinition == 0) {
-    G4cout << " G4DynamicParticle::DumpInfo():: !!!Particle type not defined !!!! " << endl; 
+    G4cout << " G4DynamicParticle::DumpInfo():: !!!Particle type not defined !!!! " << G4endl; 
   } else {
-    G4cout << " Particle type - " << theParticleDefinition->GetParticleName() << endl
-         << "   mass:        " << GetMass()/GeV <<  "[GeV]" <<endl
-         << "   charge:      " << GetCharge()/eplus <<  "[e]" <<endl
+    G4cout << " Particle type - " << theParticleDefinition->GetParticleName() << G4endl
+         << "   mass:        " << GetMass()/GeV <<  "[GeV]" <<G4endl
+         << "   charge:      " << GetCharge()/eplus <<  "[e]" <<G4endl
          << "   Direction x: " << GetMomentumDirection().x() << ", y: "
 	 << GetMomentumDirection().y() << ", z: "
-                             << GetMomentumDirection().z() << endl
-         << "   Total Momentum = " << GetTotalMomentum() /GeV << "[GeV]" << endl
+                             << GetMomentumDirection().z() << G4endl
+         << "   Total Momentum = " << GetTotalMomentum() /GeV << "[GeV]" << G4endl
          << "   Momentum: "    << GetMomentum().x() /GeV << "[GeV]" << ", y: "
                                << GetMomentum().y() /GeV << "[GeV]" << ", z: "
-                               << GetMomentum().z() /GeV << "[GeV]" << endl
-         << "   Total Energy   = " << GetTotalEnergy()/GeV << "[GeV]"  << endl
-         << "   Kinetic Energy = " << GetKineticEnergy() /GeV << "[GeV]" << endl
-         << "   ProperTime     = " << GetProperTime() /ns <<  "[ns]" << endl;
+                               << GetMomentum().z() /GeV << "[GeV]" << G4endl
+         << "   Total Energy   = " << GetTotalEnergy()/GeV << "[GeV]"  << G4endl
+         << "   Kinetic Energy = " << GetKineticEnergy() /GeV << "[GeV]" << G4endl
+         << "   ProperTime     = " << GetProperTime() /ns <<  "[ns]" << G4endl;
     if (mode>0) {
       if( theElectronOccupancy != 0) {
 	theElectronOccupancy->DumpInfo();

@@ -1,18 +1,18 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEPEvtInterface.hh,v 1.3 1999-11-11 15:35:37 gunter Exp $
+// $Id: G4HEPEvtInterface.hh,v 1.4 1999-12-15 14:49:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4HEPEvtInterface_h
 #define G4HEPEvtInterface_h 1
 
-#include <fstream.h>
+#include "g4std/fstream"
 #include "g4rw/tpordvec.h"
 #include "globals.hh"
 #include "G4VPrimaryGenerator.hh"
@@ -69,7 +69,7 @@ class G4HEPEvtInterface:public G4VPrimaryGenerator
 
   private:
     G4String fileName;
-    ifstream inputFile;
+    G4std::ifstream inputFile;
     G4RWTPtrOrderedVector<G4HEPEvtParticle> HPlist;
 };
 

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingMessenger.cc,v 1.4 1999-10-14 05:39:52 tsasaki Exp $
+// $Id: G4TrackingMessenger.cc,v 1.5 1999-12-15 14:53:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,11 +36,7 @@
 #include "G4TrackStatus.hh"
 #include "G4ios.hh"
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 ///////////////////////////////////////////////////////////////////
 G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager * trMan)
@@ -106,7 +102,7 @@ void G4TrackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
   if( command == VerboseCmd ){
     G4int vl;
     const char* t = newValues;
-    istrstream is((char*)t);
+    G4std::istrstream is((char*)t);
     is >> vl;
     trackingManager->SetVerboseLevel(vl);
   }
@@ -123,7 +119,7 @@ void G4TrackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
   if( command == StoreTrajectoryCmd ){
     G4int vl;
     const char* t = newValues;
-    istrstream is((char*)t);
+    G4std::istrstream is((char*)t);
     is >> vl;
     trackingManager->SetStoreTrajectory(vl!=0);
   }
@@ -136,7 +132,7 @@ G4String G4TrackingMessenger::GetCurrentValue(G4UIcommand * command)
 {
   if( command == VerboseCmd ){
     char line[100];
-    ostrstream os(line,100);
+    G4std::ostrstream os(line,100);
     os << trackingManager->GetVerboseLevel() << '\0';
     return G4String(line);
   }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessCamera.cc,v 1.3 1999-01-11 00:48:35 allison Exp $
+// $Id: G4VisManMessCamera.cc,v 1.4 1999-12-15 14:54:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -190,12 +190,12 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
     if (ViewValid ()) {
       G4double in;
       const char* aString = newValues;
-      istrstream is((char*) aString) ; is >> in;
-      G4cout << "Dolly " << in << " in." << endl;
+      G4std::istrstream is((char*) aString) ; is >> in;
+      G4cout << "Dolly " << in << " in." << G4endl;
       fpVMan -> SetCurrentViewParameters ().IncrementDolly (in);
       if (fpVMan -> GetVerboseLevel () > 0) {
 	G4cout << "Dolly distance changed to "
-	     << fpVMan -> GetCurrentViewParameters ().GetDolly () << endl;
+	     << fpVMan -> GetCurrentViewParameters ().GetDolly () << G4endl;
 	if (fpVMan -> GetVerboseLevel () > 1) {
 	  fpVMan -> PrintCurrentView ();
 	}
@@ -210,7 +210,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 	// Recalculate projection matrices, etc.
 	pView -> SetView ();
       }
-      G4cout << "Issue Draw or refresh to see effect." << endl;
+      G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
   }
 
@@ -220,7 +220,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       G4int nFrames;
       G4double dbeta;
       const char* aString = newValues;
-      istrstream is((char*) aString) ; is >> nFrames >> dbeta;
+      G4std::istrstream is((char*) aString) ; is >> nFrames >> dbeta;
       dbeta = dbeta * deg;
       fpVMan -> SetCurrentViewParameters ().SetLightsMoveWithCamera (false);
       for (int i = 0; i < nFrames; i++) {
@@ -237,13 +237,13 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
     if (ViewValid ()) {
       G4double right, up;
       const char* aString = newValues;
-      istrstream is((char*) aString);is >> right >> up;
-      G4cout << "Pan " << right << " right, " << up << " up." << endl;
+      G4std::istrstream is((char*) aString);is >> right >> up;
+      G4cout << "Pan " << right << " right, " << up << " up." << G4endl;
       fpVMan -> SetCurrentViewParameters ().Pan (right, up);
       if (fpVMan -> GetVerboseLevel () > 0) {
 	G4cout << "Current target point changed to "
 	     << fpVMan -> GetCurrentViewParameters ().GetCurrentTargetPoint ()
-	     << endl;
+	     << G4endl;
 	if (fpVMan -> GetVerboseLevel () > 1) {
 	  fpVMan -> PrintCurrentView ();
 	}
@@ -258,7 +258,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 	// Recalculate projection matrices, etc.
 	pView -> SetView ();
       }
-      G4cout << "Issue Draw or refresh to see effect." << endl;
+      G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
   }
 
@@ -267,14 +267,14 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
     G4int iStyle;
     G4double fieldHalfAngleDegrees;
     const char* aString = newValues;
-    istrstream is((char*) aString) ; is >> iStyle >> fieldHalfAngleDegrees;
+    G4std::istrstream is((char*) aString) ; is >> iStyle >> fieldHalfAngleDegrees;
     if (iStyle < 0 || iStyle > 1) {
       G4cout << "Available representation styles:";
       G4cout << "\n  0) orthogonal";
       G4cout << "\n  1) perspective (also specify field half angle in degrees)";
       G4cout << "\nChoose by specifying integer parameter and field half angle"
 	" (if relevant).";
-      G4cout << endl;
+      G4cout << G4endl;
     }
     else {
       switch (iStyle) {
@@ -282,18 +282,18 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       case 0:
 	fpVMan -> SetCurrentViewParameters ().SetFieldHalfAngle (0.);
 	if (fpVMan -> GetVerboseLevel () > 0) {
-	  G4cout << "\nOrthogonal projection set." << endl;
+	  G4cout << "\nOrthogonal projection set." << G4endl;
 	}
 	break;
       case 1:
 	if (fieldHalfAngleDegrees == 0.0) {
 	  fieldHalfAngleDegrees = 30.;
 	  G4cout << "Field half angle defaulted to "
-	       << fieldHalfAngleDegrees << " degrees." << endl;
+	       << fieldHalfAngleDegrees << " degrees." << G4endl;
 	}
 	if (fieldHalfAngleDegrees > 89.5 || fieldHalfAngleDegrees <= 0.0) {
 	  G4cout << "Field half angle should be 0 < angle <= 89.5 degrees.";
-	  G4cout << endl;
+	  G4cout << G4endl;
 	}
 	else {
 	  fpVMan -> SetCurrentViewParameters ().
@@ -303,7 +303,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 	    G4cout << "\nField half angle set to " << fieldHalfAngleDegrees  
 		 << " degrees" << " ("
 		 << fpVMan -> GetCurrentViewParameters ().GetFieldHalfAngle ()
-		 << " radians)." << endl;
+		 << " radians)." << G4endl;
 	    if (fpVMan -> GetVerboseLevel () > 1) {
 	      fpVMan -> PrintCurrentView ();
 	    }
@@ -323,7 +323,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 	// Recalculate projection matrices, etc.
 	pView -> SetView ();
       }
-      G4cout << "Issue Draw or refresh to see effect." << endl;
+      G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
   }
 
@@ -333,7 +333,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       G4int nFrames;
       G4double dbeta;
       const char* aString = newValues;
-      istrstream is((char*) aString) ; is >> nFrames >> dbeta;
+      G4std::istrstream is((char*) aString) ; is >> nFrames >> dbeta;
       dbeta = dbeta * deg;
       fpVMan -> SetCurrentViewParameters ().SetLightsMoveWithCamera (true);
       for (int i = 0; i < nFrames; i++) {
@@ -349,7 +349,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
   if (commandPath == "/vis~/camera/viewpoint") {
     G4double theta, phi ;
     const char* aString = newValues;
-    istrstream is((char*) aString) ; is >> theta >> phi;
+    G4std::istrstream is((char*) aString) ; is >> theta >> phi;
     theta = theta * deg;
     phi   = phi   * deg;
     G4double x = sin (theta) * cos (phi);
@@ -359,10 +359,10 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
     fpVMan -> SetCurrentViewParameters().SetViewAndLights (vp);
     const G4ViewParameters& viewParams = fpVMan -> GetCurrentViewParameters ();
     if (fpVMan -> GetVerboseLevel () > 0) {
-      G4cout << "Viewpoint direction set to " << vp << endl;
+      G4cout << "Viewpoint direction set to " << vp << G4endl;
       if (viewParams.GetLightsMoveWithCamera ()) {
 	G4cout << "Lightpoint direction set to "
-	     << viewParams.GetLightpointDirection () << endl;
+	     << viewParams.GetLightpointDirection () << G4endl;
       }
       if (fpVMan -> GetVerboseLevel () > 1) {
 	fpVMan -> PrintCurrentView ();
@@ -380,17 +380,17 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       // Recalculate projection matrices, etc.
       pView -> SetView ();
     }
-    G4cout << "Issue Draw or refresh to see effect." << endl;
+    G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }
 
   ///////////////////////////////////////  /vis~/camera/window_size_hint  ////
   if (commandPath == "/vis~/camera/window_size_hint") {
     G4int size;
     const char* aString = newValues;
-    istrstream is((char*) aString) ; is >> size;
+    G4std::istrstream is((char*) aString) ; is >> size;
     fpVMan -> SetCurrentViewParameters ().SetWindowSizeHint (size, size);
     if (fpVMan -> GetVerboseLevel () > 0) {
-      G4cout << "Window size hint set to " << size << " x " << size << endl;
+      G4cout << "Window size hint set to " << size << " x " << size << G4endl;
       if (fpVMan -> GetVerboseLevel () > 1) {
 	fpVMan -> PrintCurrentView ();
       }
@@ -402,11 +402,11 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
     if (ViewValid ()) {
       G4double zoomBy;
       const char* aString = newValues;
-      istrstream is((char*) aString) ; is >> zoomBy;
+      G4std::istrstream is((char*) aString) ; is >> zoomBy;
       fpVMan -> SetCurrentViewParameters ().MultiplyZoomFactor (zoomBy);
       if (fpVMan -> GetVerboseLevel () > 0) {
 	G4cout << "Zoom factor changed to "
-	     << fpVMan -> GetCurrentViewParameters ().GetZoomFactor () << endl;
+	     << fpVMan -> GetCurrentViewParameters ().GetZoomFactor () << G4endl;
 	if (fpVMan -> GetVerboseLevel () > 1) {
 	  fpVMan -> PrintCurrentView ();
 	}
@@ -421,7 +421,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 	// Recalculate projection matrices, etc.
 	pView -> SetView ();
       }
-      G4cout << "Issue Draw or refresh to see effect." << endl;
+      G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
   }
 }

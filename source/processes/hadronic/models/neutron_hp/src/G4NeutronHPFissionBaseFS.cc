@@ -29,9 +29,9 @@
       return; // no data for exactly this isotope.
     }
 #ifndef WIN32
-    ifstream theData(filename, ios::in);
+    G4std::ifstream theData(filename, G4std::ios::in);
 #else
-    ifstream theData(filename, ios::in|ios::nocreate);
+    G4std::ifstream theData(filename, G4std::ios::in|G4std::ios::nocreate);
 #endif
     G4int dummy;
     G4double dumm;

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05PiModel.cc,v 1.1 1999-01-07 16:06:18 gunter Exp $
+// $Id: ExN05PiModel.cc,v 1.2 1999-12-15 14:49:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05PiModel.hh"
@@ -38,10 +38,10 @@ G4bool ExN05PiModel::ModelTrigger(const G4FastTrack& fastTrack) {
   // are available at this level via the fastTrack parameter (allowing 
   // to check distance from boundaries, see below  to allow the decision)
   //--------------------------------------------------------------
-  G4cout << "\nExN05PiModel::ModelTrigger() called:" << endl;
-  G4cout <<   "--------------------------------" << endl;
+  G4cout << "\nExN05PiModel::ModelTrigger() called:" << G4endl;
+  G4cout <<   "--------------------------------" << G4endl;
   G4cout << "(particle is a " << fastTrack.GetPrimaryTrack()->
-    GetDefinition()->GetParticleName() << " )\n" << endl;
+    GetDefinition()->GetParticleName() << " )\n" << G4endl;
 
   // -- Examples of available informations:
 
@@ -49,14 +49,14 @@ G4bool ExN05PiModel::ModelTrigger(const G4FastTrack& fastTrack) {
   G4cout << "         Track position: " <<
     fastTrack.GetPrimaryTrack()->GetPosition()  << "(global coord.)"   <<
     fastTrack.GetPrimaryTrackLocalPosition()  << "(in envelope coord.)" 
-       << endl;
+       << G4endl;
 
   // -- direction:
   G4cout << "         Track direction:"       <<
     fastTrack.GetPrimaryTrack()->GetMomentum().unit() << 
     "(global coord.)"      <<
     fastTrack.GetPrimaryTrackLocalDirection() << "(in envelope coord.)" << 
-    endl;
+    G4endl;
 
   return true;
 }
@@ -75,7 +75,7 @@ void ExN05PiModel::DoIt(const G4FastTrack& fastTrack,
   // The primary track continues along its direction.
   // One secondary (a photon) is added:
   //------------------------------------------------
-  G4cout << "      Pion `model' applied\n" << endl;
+  G4cout << "      Pion `model' applied\n" << G4endl;
 
   //------------------------------
   // Primary:

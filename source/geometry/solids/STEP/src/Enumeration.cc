@@ -5,7 +5,7 @@
 
 
 //
-// $Id: Enumeration.cc,v 1.2 1999-05-21 20:20:47 japost Exp $
+// $Id: Enumeration.cc,v 1.3 1999-12-15 14:50:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -26,11 +26,7 @@
 
 //static char rcsid[] ="";
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 // Josh L, 3/31/95
 // These constants have to be initialized outside the SDAI struct.  They
@@ -103,7 +99,7 @@ int Boolean::operator ==( LOGICAL log ) const
 
 /******************************************************************
  ** Procedure:  DebugDisplay
- ** Parameters:  ostream& out
+ ** Parameters:  G4std::ostream& out
  ** Returns:  
  ** Description:  prints out some information on the enumerated 
  **               item for debugging purposes
@@ -111,7 +107,7 @@ int Boolean::operator ==( LOGICAL log ) const
  ** Status:  ok 2/1/91
  ******************************************************************/
 void
-STEPenumeration::DebugDisplay (ostream& out) const  {
+STEPenumeration::DebugDisplay (G4std::ostream& out) const  {
     SCLstring tmp;
     out << "Value  :  " <<  v  << "  " 
 	<< asStr (tmp) 
@@ -142,7 +138,7 @@ STEPenumeration::DebugDisplay (ostream& out) const  {
 // true or false => non-matching delimiters are flagged as an error
 
 Severity 
-STEPenumeration::ReadEnum(istream& in, ErrorDescriptor *err, int AssignVal,
+STEPenumeration::ReadEnum(G4std::istream& in, ErrorDescriptor *err, int AssignVal,
 			  int needDelims)
 {
     if(AssignVal)
@@ -155,7 +151,7 @@ STEPenumeration::ReadEnum(istream& in, ErrorDescriptor *err, int AssignVal,
 
     int validDelimiters = 1;
 
-    in >> ws; // skip white space
+    in >> G4std::ws; // skip white space
 
     if( in.good() )
     {
@@ -272,7 +268,7 @@ STEPenumeration::ReadEnum(istream& in, ErrorDescriptor *err, int AssignVal,
 	    err->AppendToUserMsg(messageBuf);
 	}
     }
-    else // Hit eof (assuming there was no error state for istream passed in)
+    else // Hit eof (assuming there was no error state for G4std::istream passed in)
     {
 	err->GreaterSeverity(SEVERITY_INCOMPLETE);
     }
@@ -291,7 +287,7 @@ STEPenumeration::StrToVal (const char * s)
 Severity 
 STEPenumeration::StrToVal (const char * s, ErrorDescriptor *err, int optional)
 {
-    istrstream in ((char *)s); // sz defaults to length of s
+    G4std::istrstream in ((char *)s); // sz defaults to length of s
 
     Severity sev = ReadEnum(in, err, 1, 0);
     if( (err->severity() == SEVERITY_INCOMPLETE) && optional)
@@ -304,13 +300,13 @@ STEPenumeration::StrToVal (const char * s, ErrorDescriptor *err, int optional)
 Severity
 STEPenumeration::STEPread (const char *s, ErrorDescriptor *err, int optional)
 {
-    istrstream in((char *)s);
+    G4std::istrstream in((char *)s);
     return STEPread (in, err, optional);
 }
 
 // reads an enumerated value in STEP file format 
 Severity
-STEPenumeration::STEPread (istream& in, ErrorDescriptor *err, int optional)
+STEPenumeration::STEPread (G4std::istream& in, ErrorDescriptor *err, int optional)
 {
     Severity sev = ReadEnum(in, err, 1, 1);
     if( (err->severity() == SEVERITY_INCOMPLETE) && optional)
@@ -332,7 +328,7 @@ STEPenumeration::asStr (SCLstring &s) const  {
 }
 
 void 
-STEPenumeration::STEPwrite (ostream& out)  const  {
+STEPenumeration::STEPwrite (G4std::ostream& out)  const  {
     if( is_null() )
 	out << '$';
     else
@@ -379,14 +375,14 @@ STEPenumeration::set_elements (const char * const e [])  {
 }
 #endif
 Severity 
-STEPenumeration::EnumValidLevel(istream &in, ErrorDescriptor *err,
+STEPenumeration::EnumValidLevel(G4std::istream &in, ErrorDescriptor *err,
 				int optional, char *tokenList, 
 				int needDelims, int clearError)
 {
     if(clearError)
 	err->ClearErrorMsg();
 
-    in >> ws; // skip white space
+    in >> G4std::ws; // skip white space
     char c = ' '; 
     c = in.peek();
     if(c == '$' || in.eof())
@@ -423,7 +419,7 @@ STEPenumeration::EnumValidLevel(const char *value, ErrorDescriptor *err,
 				int optional, char *tokenList, 
 				int needDelims, int clearError)
 {
-    istrstream in((char *)value);
+    G4std::istrstream in((char *)value);
     return EnumValidLevel (in, err, optional, tokenList, needDelims,
 			   clearError);
 /*
@@ -551,7 +547,7 @@ STEPenumeration::operator= (const STEPenumeration& Senum)
     return *this;
 }
 
-ostream &operator<< ( ostream& out, const STEPenumeration& a )
+G4std::ostream &operator<< ( G4std::ostream& out, const STEPenumeration& a )
 {
     SCLstring tmp;
     out << a.asStr( tmp );
@@ -628,7 +624,7 @@ STEPenumeration::StrToVal (const char * s, ErrorDescriptor *err, int optional)
 
 
 Severity
-STEPenumeration::STEPread (istream& in, ErrorDescriptor *err, int optional)
+STEPenumeration::STEPread (G4std::istream& in, ErrorDescriptor *err, int optional)
 {
     char enumValue [BUFSIZ];
     char c;

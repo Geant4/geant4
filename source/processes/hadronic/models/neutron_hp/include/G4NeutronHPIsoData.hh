@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPIsoData.hh,v 1.5 1999-11-19 18:07:38 hpw Exp $
+// $Id: G4NeutronHPIsoData.hh,v 1.6 1999-12-15 14:53:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPIsoData_h
@@ -19,12 +19,8 @@
  
 #include "globals.hh"
 #include "G4ios.hh"
-#include <fstream.h>
-#ifdef WIN32
-  #include <strstrea.h>
-#else
-  #include <strstream.h>
-#endif
+#include "g4std/fstream"
+#include "g4std/strstream"
 #include <stdlib.h>
 #include "G4NeutronHPVector.hh"
 #include "G4NeutronHPNames.hh"

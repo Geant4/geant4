@@ -12,7 +12,7 @@
   G4DynamicParticleVector * G4NeutronHPTCFissionFS::ApplyYourself(G4int NNeutrons)
   {  
     G4DynamicParticleVector * aResult;
-//    G4cout <<"G4NeutronHPTCFissionFS::ApplyYourself +"<<endl;
+//    G4cout <<"G4NeutronHPTCFissionFS::ApplyYourself +"<<G4endl;
     aResult = G4NeutronHPFissionBaseFS::ApplyYourself(NNeutrons);    
     return aResult;
   }

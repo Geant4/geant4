@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.hh,v 1.8 1999-11-16 13:53:31 stesting Exp $
+// $Id: G4EnergyLossTables.hh,v 1.9 1999-12-15 14:52:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -152,7 +152,7 @@ public:
   typedef const G4ParticleDefinition* K;
 
 private:
-  typedef G4std::map<K,G4EnergyLossTablesHelper,less<K> > helper_map;
+  typedef G4std::map<K,G4EnergyLossTablesHelper,G4std::less<K> > helper_map;
   static helper_map dict;
   
   static G4EnergyLossTablesHelper GetTables(const G4ParticleDefinition* p);

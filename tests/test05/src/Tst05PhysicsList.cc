@@ -1,4 +1,4 @@
-// $Id: Tst05PhysicsList.cc,v 1.3 1999-10-03 09:55:09 kurasige Exp $
+// $Id: Tst05PhysicsList.cc,v 1.4 1999-12-15 14:54:37 gunter Exp $
 
 #include "globals.hh"
 #include "Tst05PhysicsList.hh"
@@ -16,7 +16,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"                
 
 
 Tst05PhysicsList::Tst05PhysicsList():  G4VUserPhysicsList()
@@ -176,7 +176,7 @@ void Tst05PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
     G4cout << "Tst05PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << endl;
+    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }  
   //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 

@@ -1,7 +1,7 @@
 #ifndef __REACTIONCHANNELS__
 #define __REACTIONCHANNELS__
 
-#include <vector.h>
+#include "g4std/vector"
 #include "newvector.hh"
 #include "genericRead.hh"
 #include "EventHandling.hh"
@@ -44,7 +44,7 @@ public:
 class decayMode
 {
   friend class CollisionType;
-  friend ostream& operator<<(ostream& o,decayMode&);
+  friend G4std::ostream& operator<<(G4std::ostream& o,decayMode&);
 
   FunctionType* sigmaPart;
   bool isoSet;
@@ -54,7 +54,7 @@ class decayMode
   vector<isotop*> products;
 public:
   decayMode(int C,const vector<ParticleBase*>& P);
-  decayMode(istream&,const vector<ParticleType*>&);
+  decayMode(G4std::istream&,const vector<ParticleType*>&);
   int N() const { return products.size(); }
   bool isDecomposition() const { return (partialCrossection(1)<0); }
   bool isElastic() const { return elastic; }

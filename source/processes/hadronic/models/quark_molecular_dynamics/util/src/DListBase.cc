@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include "g4std/iostream"
 
 #include "DListBase.hh"
 #include "Boolean.h"
@@ -201,14 +201,14 @@ DListBase::removeMarked() {
 }
 
 void
-DListBase::ErrEmpty::writeMessage(ostream& os) const {
-  os << "in DListBase::remove()" << endl;
+DListBase::ErrEmpty::writeMessage(G4std::ostream& os) const {
+  os << "in DListBase::remove()" << G4endl;
   os << "remove from empty list";
 }
 
 void
-DListBase::IteratorBase::ErrNoMore::writeMessage(ostream& os) const {
-  os << "in DListBase::IteratorBase::current()" << endl;
+DListBase::IteratorBase::ErrNoMore::writeMessage(G4std::ostream& os) const {
+  os << "in DListBase::IteratorBase::current()" << G4endl;
   os << "no more items in list";
 }
 

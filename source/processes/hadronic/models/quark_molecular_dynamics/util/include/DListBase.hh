@@ -29,7 +29,7 @@ class DListBase {
     class ErrEmpty
       : public Error
     {
-      virtual void writeMessage(ostream& os) const;
+      virtual void writeMessage(G4std::ostream& os) const;
     };
 
     class IteratorBase {
@@ -53,7 +53,7 @@ class DListBase {
         class ErrNoMore
           : public Error
         {
-          virtual void writeMessage(ostream& os) const;
+          virtual void writeMessage(G4std::ostream& os) const;
         };
 
       private:

@@ -5,7 +5,7 @@
 
 
 //
-// $Id: instmgr.cc,v 1.3 1999-05-21 20:21:09 japost Exp $
+// $Id: instmgr.cc,v 1.4 1999-12-15 14:50:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,7 +55,7 @@ InstMgr::PrintSortedFileIds()
     for(i = 0; i < count; i++)
       {
 	mn = (MgrNode *)((*sortedMaster)[i]);
-	G4cout << i << " " << mn->GetFileId() << endl;
+	G4cout << i << " " << mn->GetFileId() << G4endl;
       }
 }
 

@@ -6,7 +6,7 @@ class DumpFrames
 public:
 static void DumpFrame(G4FastVector<G4ReactionProduct,128> &vec, G4int vecLen)
 {
-//  cout << vecLen<<endl;
+//  cout << vecLen<<G4endl;
 //  for(G4int i=0; i<vecLen; i++)
 //  {
 //    cout << vec[i]->GetDefinition()->GetPDGEncoding()<<" ";
@@ -22,7 +22,7 @@ static void DumpFrame(G4FastVector<G4ReactionProduct,128> &vec, G4int vecLen)
 //    cout << x<<" "<<y<<" "<<z;
 //    cout << vec[i]->GetMomentum()<<" ";
 //    cout << vec[i]->GetTotalEnergy();
-//    cout << endl;
+//    cout << G4endl;
 //  }
 }
 };

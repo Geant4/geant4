@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StopTheoDeexcitation.cc,v 1.3 1999-11-11 15:37:48 gunter Exp $
+// $Id: G4StopTheoDeexcitation.cc,v 1.4 1999-12-15 14:53:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,10 +80,10 @@ G4ReactionProductVector* G4StopTheoDeexcitation::BreakUp(G4double A, G4double Z,
   //  theExcitedNucleus.SetMomentum(initialMomentum);
 
   //  G4cout << "Theo input " << A << " " << Z << " " 
-  //	 << pMag << " " << atomicMass << endl
-  //	 << "Theo -     " << excitation << " " << initialMomentum.mag() << endl
+  //	 << pMag << " " << atomicMass << G4endl
+  //	 << "Theo -     " << excitation << " " << initialMomentum.mag() << G4endl
   //	 << "Fragment - " << theExcitedNucleus.GetExcitationEnergy() << " "
-  //	 << theExcitedNucleus.GetMomentum().mag() << endl;
+  //	 << theExcitedNucleus.GetMomentum().mag() << G4endl;
 
   return theHandler.BreakItUp(theExcitedNucleus);
 }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3DetectorMessenger.cc,v 1.1 1999-10-11 16:55:52 maire Exp $
+// $Id: Em3DetectorMessenger.cc,v 1.2 1999-12-15 14:49:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -123,7 +123,7 @@ void Em3DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      G4int num; G4double tick;
      char mat[30],unts[30];
      const char* t = newValue;
-     istrstream is((char*)t);
+     G4std::istrstream is((char*)t);
      is >> num >> mat >> tick >> unts;
      G4String material=mat, unt=unts;
      tick *= G4UIcommand::ValueOf(unt);

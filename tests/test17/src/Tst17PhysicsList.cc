@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst17PhysicsList.cc,v 1.1 1999-11-30 18:01:55 stesting Exp $
+// $Id: Tst17PhysicsList.cc,v 1.2 1999-12-15 14:54:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -26,7 +26,7 @@
 #include "G4Material.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4ios.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"                
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -167,7 +167,7 @@ void Tst17PhysicsList::SetGELowLimit(G4double lowcut)
 {
   if (verboseLevel >0){
     G4cout << "Tst17PhysicsList::SetCuts:";
-    G4cout << "Gamma and Electron cut in energy: " << lowcut*MeV << " (MeV)" << endl;
+    G4cout << "Gamma and Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
   }  
 
   G4Gamma::SetEnergyRange(lowcut*MeV,1e5*MeV);
@@ -179,7 +179,7 @@ void Tst17PhysicsList::SetGammaLowLimit(G4double lowcut)
 {
   if (verboseLevel >0){
     G4cout << "Tst17PhysicsList::SetCuts:";
-    G4cout << "Gamma cut in energy: " << lowcut*MeV << " (MeV)" << endl;
+    G4cout << "Gamma cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
   }  
 
   G4Gamma::SetEnergyRange(lowcut*MeV,1e5*MeV);
@@ -191,7 +191,7 @@ void Tst17PhysicsList::SetElectronLowLimit(G4double lowcut)
   if (verboseLevel >0){
 
     G4cout << "Tst17PhysicsList::SetCuts:";
-    G4cout << "Electron cut in energy: " << lowcut*MeV << " (MeV)" << endl;
+    G4cout << "Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
 
   }  
 
@@ -201,8 +201,8 @@ void Tst17PhysicsList::SetElectronLowLimit(G4double lowcut)
 
 void Tst17PhysicsList::SetLowEnSecPhotCut(G4double cut){
   
-  G4cout<<"Low energy secondary photons cut is now set to: "<<cut*MeV<<" (MeV)"<<endl;
-  G4cout<<"for processes LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation"<<endl;
+  G4cout<<"Low energy secondary photons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
+  G4cout<<"for processes LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation"<<G4endl;
   theLEBremsstrahlung->SetCutForLowEnSecPhotons(cut);
   theLEPhotoElectric->SetCutForLowEnSecPhotons(cut);
   theLEIonisation->SetCutForLowEnSecPhotons(cut);
@@ -210,9 +210,9 @@ void Tst17PhysicsList::SetLowEnSecPhotCut(G4double cut){
 
 void Tst17PhysicsList::SetLowEnSecElecCut(G4double cut){
   
-  G4cout<<"Low energy secondary electrons cut is now set to: "<<cut*MeV<<" (MeV)"<<endl;
-  //  G4cout<<"for processes LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation"<<endl;
-  G4cout<<"for processes LowEnergyIonisation"<<endl;
+  G4cout<<"Low energy secondary electrons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
+  //  G4cout<<"for processes LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation"<<G4endl;
+  G4cout<<"for processes LowEnergyIonisation"<<G4endl;
   //  G4LowEnergyPhotoElectric::SetCutForLowEnSecElectrons(cut);
   theLEIonisation->SetCutForLowEnSecElectrons(cut);
 }
@@ -223,7 +223,7 @@ void Tst17PhysicsList::SetCuts()
   theTimer.Start() ;
   if (verboseLevel >0){
     G4cout << "Tst17PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << endl;
+    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }  
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
@@ -238,8 +238,8 @@ void Tst17PhysicsList::SetCuts()
   
   theTimer.Stop();
   G4cout.precision(6);
-  G4cout << endl ;
-  G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<endl;
+  G4cout << G4endl ;
+  G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<G4endl;
 
 }
 
@@ -300,10 +300,10 @@ void Tst17PhysicsList::GetRange(G4double val)
   G4double cut;
   part = theParticleTable->FindParticle("e-");
   cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  G4cout << "material : " << currMat->GetName() << endl;
-  G4cout << "particle : " << part->GetParticleName() << endl;
-  G4cout << "energy   : " << val / keV << " (keV)" << endl;
-  G4cout << "range    : " << cut / mm << " (mm)" << endl;
+  G4cout << "material : " << currMat->GetName() << G4endl;
+  G4cout << "particle : " << part->GetParticleName() << G4endl;
+  G4cout << "energy   : " << val / keV << " (keV)" << G4endl;
+  G4cout << "range    : " << cut / mm << " (mm)" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

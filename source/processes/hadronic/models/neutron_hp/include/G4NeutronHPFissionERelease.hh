@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPFissionERelease.hh,v 1.3 1999-07-02 09:59:05 johna Exp $
+// $Id: G4NeutronHPFissionERelease.hh,v 1.4 1999-12-15 14:53:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFissionERelease_h
@@ -15,7 +15,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 
 class G4NeutronHPFissionERelease
 {
@@ -23,7 +23,7 @@ class G4NeutronHPFissionERelease
   G4NeutronHPFissionERelease(){}
   ~G4NeutronHPFissionERelease(){}
   
-  inline void Init(ifstream & aDataFile)
+  inline void Init(G4std::ifstream & aDataFile)
   {
     G4double dummy;
     

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: shooter.cc,v 1.1 1999-01-08 16:31:33 gunter Exp $
+// $Id: shooter.cc,v 1.2 1999-12-15 14:49:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // shooter - perform test shots through simple box world.
@@ -29,23 +29,23 @@ int main()
     G4ThreeVector vy(0,1,0);
     G4VPhysicalVolume *myTopNode;
 
-    G4cout << "Simple BoxWorld Performance Test - P.Kent 21.08.95" << endl;
+    G4cout << "Simple BoxWorld Performance Test - P.Kent 21.08.95" << G4endl;
 #ifndef NDEBUG
-    G4cout << "WARNING: *** ASSERTs are compiled IN ***" << endl;
+    G4cout << "WARNING: *** ASSERTs are compiled IN ***" << G4endl;
 #endif
 
     myTopNode=BuildBoxWorld();	// Build the geometry
     G4GeometryManager::GetInstance()->CloseGeometry();
 
-    G4cout << endl << "Shooting from " << origin << " along " << vx << endl;
+    G4cout << G4endl << "Shooting from " << origin << " along " << vx << G4endl;
     ShootVerbose(myTopNode,origin,vx);
     Shoot(numShoot,myTopNode,origin,vx);
 
-    G4cout << endl << "Shooting from " << origin << " along " << vy << endl;
+    G4cout << G4endl << "Shooting from " << origin << " along " << vy << G4endl;
     ShootVerbose(myTopNode,origin,vy);
     Shoot(numShoot,myTopNode,origin,vy);
 
-    G4cout << endl << "Shooting from " << pMX << " along " << vx << endl;
+    G4cout << G4endl << "Shooting from " << pMX << " along " << vx << G4endl;
     ShootVerbose(myTopNode,pMX,vx);
     Shoot(numShoot,myTopNode,pMX,vx);
 

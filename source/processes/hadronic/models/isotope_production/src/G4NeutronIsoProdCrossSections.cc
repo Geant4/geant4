@@ -1,7 +1,7 @@
 #include "G4NeutronIsoProdCrossSections.hh"
 
 void G4NeutronIsoProdCrossSections::
-Init(ifstream & aDataSet)
+Init(G4std::ifstream & aDataSet)
 {
   G4int aNumberOfPoints;
   aDataSet>>aNumberOfPoints;

@@ -5,7 +5,7 @@
 
 
 //
-// $Id: errordesc.cc,v 1.2 1999-05-21 20:21:08 japost Exp $
+// $Id: errordesc.cc,v 1.3 1999-12-15 14:50:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -25,7 +25,7 @@
 #include <errordesc.h>
 
 DebugLevel ErrorDescriptor::_debug_level = DEBUG_OFF;
-ostream *  ErrorDescriptor::_out = 0;
+G4std::ostream *  ErrorDescriptor::_out = 0;
 
 ErrorDescriptor::ErrorDescriptor ( Severity s,  DebugLevel d)
 :     _severity (s), 

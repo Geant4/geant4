@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRendererViewer.cc,v 1.3 1999-11-01 02:40:48 stanaka Exp $
+// $Id: G4FukuiRendererViewer.cc,v 1.4 1999-12-15 14:54:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@ G4FukuiRendererViewer::~G4FukuiRendererViewer ()
 void G4FukuiRendererViewer::SetView () 
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4FukuiRendererViewer::SetView(): No effects" << endl;
+  G4cerr << "***** G4FukuiRendererViewer::SetView(): No effects" << G4endl;
 #endif 
 // Do nothing, since DAWN is running as a different process.
 // SendViewParameters () will do this job instead.
@@ -64,7 +64,7 @@ void
 G4FukuiRendererViewer::ClearView( void )
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4FukuiRendererViewer::ClearView (): No effects " << endl;
+  G4cerr << "***** G4FukuiRendererViewer::ClearView (): No effects " << G4endl;
 #endif
 
 }
@@ -74,7 +74,7 @@ G4FukuiRendererViewer::ClearView( void )
 void G4FukuiRendererViewer::DrawView () 
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererViewer::DrawView () " << endl;
+	G4cerr << "***** G4FukuiRendererViewer::DrawView () " << G4endl;
 #endif
 
 	//----- Begin modeling 3D 
@@ -93,7 +93,7 @@ void G4FukuiRendererViewer::DrawView ()
 void G4FukuiRendererViewer::ShowView( void )
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererViewer::ShowView () " << endl;
+	G4cerr << "***** G4FukuiRendererViewer::ShowView () " << G4endl;
 #endif
 
 	if( fSceneHandler.FRIsInModeling() ) 
@@ -114,12 +114,12 @@ void G4FukuiRendererViewer::ShowView( void )
 void  G4FukuiRendererViewer::Wait()
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererViewer::Wait () : Begin" << endl;
+	G4cerr << "***** G4FukuiRendererViewer::Wait () : Begin" << G4endl;
 #endif
   fSceneHandler.SendStr    ( FR_WAIT );
   fSceneHandler.GetPrimDest().WaitSendBack( FR_WAIT );
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererViewer::Wait () : end" << endl;
+	G4cerr << "***** G4FukuiRendererViewer::Wait () : end" << G4endl;
 #endif
 
 }
@@ -130,7 +130,7 @@ void
 G4FukuiRendererViewer::SendDevice( FRDEV dev )
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererViewer::SendDevice() " << endl;
+	G4cerr << "***** G4FukuiRendererViewer::SendDevice() " << G4endl;
 #endif
 
   //	enum {PS=1, XWIN=2, PS2=3, XWIN2=4, OPEN_GL=5, DEVICE_END=6};
@@ -145,7 +145,7 @@ G4FukuiRendererViewer::SendDevice( FRDEV dev )
 void  G4FukuiRendererViewer::SendDrawingStyle() 
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererViewer::SendDrawingStyle() " << endl;
+	G4cerr << "***** G4FukuiRendererViewer::SendDrawingStyle() " << G4endl;
 #endif
 
 	G4int  style = fVP.GetDrawingStyle();
@@ -178,7 +178,7 @@ void G4FukuiRendererViewer::SendViewParameters ()
   // later due to user interaction via visualization system's GUI.)
 
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4FukuiRendererViewer::SendViewParameters()" << endl;
+  G4cerr << "***** G4FukuiRendererViewer::SendViewParameters()" << G4endl;
 #endif 
 
 		//----- Magic number to decide camera distance automatically
@@ -206,8 +206,8 @@ void G4FukuiRendererViewer::SendViewParameters ()
 	}
 
 	if ( camera_distance < radius ) { 
-		G4cerr << "WARNING from FukuiRenderer (DAWN) driver:" << endl;
-		G4cerr << "  Camera cannot enter inside objects"      << endl;
+		G4cerr << "WARNING from FukuiRenderer (DAWN) driver:" << G4endl;
+		G4cerr << "  Camera cannot enter inside objects"      << G4endl;
 		camera_distance = radius ; 
 	}
 

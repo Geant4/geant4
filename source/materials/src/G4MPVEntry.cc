@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MPVEntry.cc,v 1.4 1999-11-11 15:36:10 gunter Exp $
+// $Id: G4MPVEntry.cc,v 1.5 1999-12-15 14:50:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,5 +104,5 @@ void G4MPVEntry::DumpEntry()
 	     << ", " 
 	     << theProperty
  	     << ")" 
-	     << endl;	
+	     << G4endl;	
 }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VBasicShell.hh,v 1.4 1999-11-02 21:31:59 barrand Exp $
+// $Id: G4VBasicShell.hh,v 1.5 1999-12-15 14:50:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

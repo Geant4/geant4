@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.hh,v 1.4 1999-05-19 16:55:46 magni Exp $
+// $Id: G4FCylindricalSurface.hh,v 1.5 1999-12-15 14:49:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __FCYLINDER_H
@@ -101,7 +101,7 @@ class G4FCylindricalSurface: public G4Surface
   }
   
   //  printing function
-  virtual void PrintOn( ostream& os = G4cout ) const;
+  virtual void PrintOn( G4std::ostream& os = G4cout ) const;
   
   //  equality operator
   int operator==( const G4FCylindricalSurface& c );

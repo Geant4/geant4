@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBS.cc,v 1.2 1999-05-19 08:33:46 stesting Exp $
+// $Id: G4NURBS.cc,v 1.3 1999-12-15 14:50:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@ G4VVisPrim & G4NURBS::operator = (const G4VVisPrim &right) {
   return G4VVisPrim::operator = (right);
 }
 
-ostream & operator << (ostream & inout_outStream, const G4NURBS & in_kNurb)
+G4std::ostream & operator << (G4std::ostream & inout_outStream, const G4NURBS & in_kNurb)
 		{
 		inout_outStream
 			// the magic could be changed for good reasons only
@@ -90,7 +90,7 @@ ostream & operator << (ostream & inout_outStream, const G4NURBS & in_kNurb)
 		    }
 		  while (otherCPs);
 		  } // end of control point iteration
-		inout_outStream << "\n# That's all!" << endl;	// endl do an \n and a flush
+		inout_outStream << "\n# That's all!" << G4endl;	// endl do an \n and a flush
 		return inout_outStream;
 		}
 
@@ -106,7 +106,7 @@ G4float	G4NURBS::GetfloatKnot(t_direction in_dir, t_indKnot in_index) const
 	 {
 	 G4cerr << "\nERROR: G4NURBS::GetfloatKnot: index out of range\n"
 	      << "\n\t in_dir : " << in_dir << ", in_index : " << in_index
-              << "m[in_dir].nbrKnots : " << m[in_dir].nbrKnots << endl;
+              << "m[in_dir].nbrKnots : " << m[in_dir].nbrKnots << G4endl;
 	 return ((G4float)m[in_dir].pKnots[m[in_dir].nbrKnots-1]); 
 	 };
 	}
@@ -120,7 +120,7 @@ G4double	G4NURBS::GetdoubleKnot(t_direction in_dir, t_indKnot in_index) const
 		 {
 		 G4cerr << "\nERROR: G4NURBS::GetdoubleKnot: index out of range"
 		      << "\n\t in_dir : " << in_dir << ", in_index : " << in_index
-	              << "m[in_dir].nbrKnots : " << m[in_dir].nbrKnots << endl;
+	              << "m[in_dir].nbrKnots : " << m[in_dir].nbrKnots << G4endl;
 		 return (G4double)(m[in_dir].pKnots[m[in_dir].nbrKnots-1]); 
 		 };
 		}
@@ -133,7 +133,7 @@ G4NURBS::t_floatCtrlPt*	G4NURBS::GetfloatCtrlPt(t_indCtrlPt in_onedimindex) cons
 		 {
 		 G4cerr 	<< "\nERROR: G4NURBS::GetfloatCtrlPt: index out of range"
 			<< "\n\t in_onedimindex : " << in_onedimindex
-			<< " , mtotnbrCtrlPts : " << mtotnbrCtrlPts << endl;
+			<< " , mtotnbrCtrlPts : " << mtotnbrCtrlPts << G4endl;
 		 return TofloatCtrlPt(mpCtrlPts[mtotnbrCtrlPts-1]);  
 		 };		
 		}
@@ -151,7 +151,7 @@ G4NURBS::t_floatCtrlPt*	G4NURBS::GetfloatCtrlPt(t_inddCtrlPt in_Uindex, t_inddCt
 			<< "\n\t in_Uindex : " << in_Uindex
 			<< " , in_Vindex : " << in_Vindex
 			<< " , UnbrCtrlPts : " << m[U].nbrCtrlPts
-			<< " , VnbrCtrlPts : " << m[V].nbrCtrlPts << endl;
+			<< " , VnbrCtrlPts : " << m[V].nbrCtrlPts << G4endl;
 		 return TofloatCtrlPt(mpCtrlPts[mtotnbrCtrlPts-1]);  
 		 };		
 		}
@@ -164,7 +164,7 @@ G4NURBS::t_doubleCtrlPt*	G4NURBS::GetdoubleCtrlPt(t_indCtrlPt in_onedimindex) co
 		 {
 		 G4cerr 	<< "\nERROR: G4NURBS::getdoubleCtrlPts: index out of range"
 			<< "\n\t in_onedimindex : " << in_onedimindex
-			<< " , mtotnbrCtrlPts : " << mtotnbrCtrlPts << endl;
+			<< " , mtotnbrCtrlPts : " << mtotnbrCtrlPts << G4endl;
 		 return TodoubleCtrlPt(mpCtrlPts[mtotnbrCtrlPts-1]);  
 		 };		
 		}
@@ -182,7 +182,7 @@ G4NURBS::t_doubleCtrlPt*	G4NURBS::GetdoubleCtrlPt(t_inddCtrlPt in_Uindex, t_indd
 			<< "\n\t in_Uindex : " << in_Uindex
 			<< " , in_Vindex : " << in_Vindex
 			<< " , UnbrCtrlPts : " << m[U].nbrCtrlPts
-			<< " , VnbrCtrlPts : " << m[V].nbrCtrlPts << endl;
+			<< " , VnbrCtrlPts : " << m[V].nbrCtrlPts << G4endl;
 		 return TodoubleCtrlPt(mpCtrlPts[mtotnbrCtrlPts-1]);  
 		 };		
 		}
@@ -241,7 +241,7 @@ G4double *	G4NURBS::GetdoubleAllCtrlPts() const
 			<< "\n\tin_startIndex : " << in_startIndex
 			<< ", nbr of knots : " << in_rNurb.m[kmdir].nbrKnots
 			<< "\n\t mp set to NULL, calls to picking functions will fail"
-			<< endl;
+			<< G4endl;
 		  mp = NULL;
 		  };
 		}
@@ -271,7 +271,7 @@ G4bool	G4NURBS::KnotsIterator::pick(G4float * inout_pFlt)
 			<< "\n\tin_startCtrlPtIndex : " << in_startCtrlPtIndex
 			<< ", nbr of CtrlPts : " << in_rNurb.mtotnbrCtrlPts 
 			<< "\n\t mp set to NULL, calls to picking functions will fail"
-			<< endl;
+			<< G4endl;
 		  mp = NULL;
 		  };
 		}
@@ -299,7 +299,7 @@ G4bool G4NURBS::CtrlPtsCoordsIterator::pick(G4float * inout_pFlt)
 			<< "\n\tin_startIndex : " << in_startIndex
 			<< ", nbr of CtrlPts : " << in_rNurb.mtotnbrCtrlPts 
 			<< "\n\t mp set to NULL, calls to picking functions will fail"
-			<< endl;
+			<< G4endl;
 		  mp = NULL;
 		  };
 		}
@@ -361,7 +361,7 @@ G4bool	G4NURBS::MakeKnotVector(t_Dir & io_d, t_KnotVectorGenFlag in_KVGFlag)
 	}
 
 
-ostream &	operator << (ostream & io_ostr, G4NURBS::t_KnotVectorGenFlag in_f)
+G4std::ostream &	operator << (G4std::ostream & io_ostr, G4NURBS::t_KnotVectorGenFlag in_f)
 		{
 		switch (in_f) 
 			{
@@ -388,14 +388,14 @@ void	G4NURBS::Conscheck() const
 				{ 
 				G4cerr 	<< "\nFATAL ERROR: G4NURBS::G4NURBS: The order in the "
 					<< G4NURBS::Tochar(dir) 
-					<< " direction must be >= 1" << endl;
+					<< " direction must be >= 1" << G4endl;
 				exit(-1);
 				};
 			if (m[dir].nbrCtrlPts<=0)
 				{
 				G4cerr 	<< "\nFATAL ERROR: G4NURBS::G4NURBS: The number of control points "
 					<< G4NURBS::Tochar(dir) 
-					<< " direction must be >= 1" << endl;
+					<< " direction must be >= 1" << G4endl;
 				exit(-1);
 				};
 			};	// end of dummy
@@ -425,7 +425,7 @@ void	G4NURBS::Conscheck() const
 		if (! (mpCtrlPts = in_pCtrlPts) )
 			{
 			G4cerr 	<< "\nFATAL ERROR: G4NURBS::G4NURBS: A NURBS MUST HAVE CONTROL POINTS!\n\teven if they are defined later, the array must be allocated."
-				<< "\n\tgood bye. Have a nice debuging." << endl;
+				<< "\n\tgood bye. Have a nice debuging." << G4endl;
 			exit(-1);
 			};
 		//mnbralias = 0;
@@ -443,7 +443,7 @@ void	G4NURBS::Conscheck() const
 					<< G4NURBS::Tochar(dir)
 					<< " direction."
 					<< "\n\tgood bye. Have a nice debuging."
-					<< endl;
+					<< G4endl;
 				exit(-1);
 
 				};
@@ -495,7 +495,7 @@ void	G4NURBS::Conscheck() const
 				<< flag 
 				<< " knots vector)"
 				<< "\n\tgood bye. Have a nice debuging."
-				<< endl;
+				<< G4endl;
 			exit(-1);
 			};
 		    //m[dir].nbralias = 0;
@@ -541,7 +541,7 @@ void	G4NURBS::Conscheck() const
 
 		// and as it's very strange to copy a nurbs in G4
 		// we issue a warning :
-		G4cerr << "\nWARNING: G4NURBS::G4NURBS(const G4NURBS &) used" << endl;
+		G4cerr << "\nWARNING: G4NURBS::G4NURBS(const G4NURBS &) used" << G4endl;
 		}	// end of G4NURBS::G4NURBS(const G4NURBS &)
 
 

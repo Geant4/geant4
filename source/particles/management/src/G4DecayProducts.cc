@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayProducts.cc,v 1.4 1999-04-14 10:28:24 kurasige Exp $
+// $Id: G4DecayProducts.cc,v 1.5 1999-12-15 14:51:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -113,7 +113,7 @@ G4int G4DecayProducts::PushProducts(G4DynamicParticle *aParticle)
 #ifdef G4VERBOSE
      G4cout << "G4DecayProducts::PushProducts ";
      G4cout << " exceeds MaxNumberOfProducts(=" <<MaxNumberOfProducts << ")";
-     G4cout << endl;
+     G4cout << G4endl;
 #endif
    }
    return numberOfProducts;
@@ -212,7 +212,7 @@ G4bool G4DecayProducts::IsChecked()
   if ( (parent_momentum.mag() >0.0) && (abs(direction.mag()-1.0) >1.0e-6 ) ) {
 #ifdef G4VERBOSE
     G4cout << " Momentum Direction Vector of Parent is not normalized ";
-    G4cout << "  (=" << direction.mag() << ")" << endl;
+    G4cout << "  (=" << direction.mag() << ")" << G4endl;
 #endif
     returnValue = false;
     parent_momentum = parent_momentum * (1./direction.mag());
@@ -233,7 +233,7 @@ G4bool G4DecayProducts::IsChecked()
     if ( (momentum.mag()>0.0) && (abs(direction.mag()-1.0) > 1.0e-6)) {
 #ifdef G4VERBOSE
       G4cout << " Momentum Direction Vector of Daughter [" << index;
-      G4cout << "]  is not normalized (=" << direction.mag() << ")" << endl;
+      G4cout << "]  is not normalized (=" << direction.mag() << ")" << G4endl;
 #endif
       returnValue = false;
       momentum = momentum * (1./direction.mag());
@@ -241,7 +241,7 @@ G4bool G4DecayProducts::IsChecked()
     // whether daughter stops or not
     if (energy - mass < DBL_MIN ) {
 #ifdef G4VERBOSE
-      G4cout << "Daughter [" << index << "] has no kinetic energy "<< endl;
+      G4cout << "Daughter [" << index << "] has no kinetic energy "<< G4endl;
 #endif
       returnValue = false;
     }
@@ -252,7 +252,7 @@ G4bool G4DecayProducts::IsChecked()
   if ( (abs(total_energy) >1.0e-6) || (total_momentum.mag() >1.0e-6 ) ){ 
 #ifdef G4VERBOSE
     G4cout << " Energy/Momentum is not conserved   ";
-    G4cout << total_energy << "  " << total_momentum << endl;
+    G4cout << total_energy << "  " << total_momentum << G4endl;
 #endif
     returnValue = false;
   }
@@ -261,15 +261,15 @@ G4bool G4DecayProducts::IsChecked()
 
 void G4DecayProducts::DumpInfo()
 {
-   G4cout << " ----- List of DecayProducts  -----" << endl;
-   G4cout << " ------ Parent Particle ----------" << endl;
+   G4cout << " ----- List of DecayProducts  -----" << G4endl;
+   G4cout << " ------ Parent Particle ----------" << G4endl;
    if (theParentParticle != 0) theParentParticle->DumpInfo();
-   G4cout << " ------ Daughter Particles  ------" << endl;  
+   G4cout << " ------ Daughter Particles  ------" << G4endl;  
    for (G4int index=0; index < numberOfProducts; index++) 
    {
-      G4cout << " ----------" << index+1 << " -------------" << endl;  
+      G4cout << " ----------" << index+1 << " -------------" << G4endl;  
       theProductVector[index]-> DumpInfo();
    }
-   G4cout << " ----- End List of DecayProducts  -----" << endl;
-   G4cout << endl;
+   G4cout << " ----- End List of DecayProducts  -----" << G4endl;
+   G4cout << G4endl;
 } 

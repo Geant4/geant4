@@ -5,7 +5,7 @@
 
 
 //
-// $Id: errordesc.h,v 1.2 1999-05-21 20:20:40 japost Exp $
+// $Id: errordesc.h,v 1.3 1999-12-15 14:50:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -69,7 +69,7 @@ enum  DebugLevel  {
  ** Description:  
  **	the error is a detailed error message + a severity level
  **	also keeps a user message separately
- **	detailed message gets sent to ostream
+ **	detailed message gets sent to G4std::ostream
  **	uses SCLstring class to keep the user messages
  **	keeps severity of error
  **	created with or without error
@@ -77,13 +77,13 @@ enum  DebugLevel  {
  ******************************************************************/
 
 class ErrorDescriptor {
-//  friend     istream &operator<< ( istream&, ErrorDescriptor& );
+//  friend     G4std::istream &operator<< ( G4std::istream&, ErrorDescriptor& );
   protected:
   
     Severity	_severity;
 
     static DebugLevel	_debug_level;
-    static ostream* _out;
+    static G4std::ostream* _out;
     
     SCLstring *_userMsg;
     SCLstring *_detailMsg;
@@ -134,7 +134,7 @@ class ErrorDescriptor {
 
     DebugLevel debug_level() const        { return _debug_level; }
     void debug_level(DebugLevel d)   { _debug_level = d; }
-    void SetOutput(ostream *o)      { _out = o; }
+    void SetOutput(G4std::ostream *o)      { _out = o; }
     
     // void operator =  (const char* y)  {  SCLstring::operator = (y);  }
     

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Colour.hh,v 1.3 1999-11-17 07:39:21 stanaka Exp $
+// $Id: G4Colour.hh,v 1.4 1999-12-15 14:50:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,10 +57,10 @@
 #define G4COLOUR_HH
 
 #include "globals.hh"
-class ostream;
+class G4std::ostream;
 
 class G4Colour {
-  friend ostream& operator << (ostream& os, const G4Colour& c);
+  friend G4std::ostream& operator << (G4std::ostream& os, const G4Colour& c);
 
 public: // With description
 

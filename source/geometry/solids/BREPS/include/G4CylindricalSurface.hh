@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CylindricalSurface.hh,v 1.1 1999-01-07 16:07:30 gunter Exp $
+// $Id: G4CylindricalSurface.hh,v 1.2 1999-12-15 14:49:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/G4CylindricalSurface.h,v 1.16 1993/12/30 02:14:08 rensing Exp  */
@@ -63,7 +63,7 @@ public:
   
   virtual char *NameOf() const { return "G4CylindricalSurface"; }
   
-  virtual void PrintOn( ostream& os = G4cout ) const;
+  virtual void PrintOn( G4std::ostream& os = G4cout ) const;
   
   int operator==( const G4CylindricalSurface& c )
   {
@@ -131,7 +131,7 @@ private:
 //----->virtual char *NameOf() const { return "G4CylindricalSurface"; }
 //
 //  printing function
-//----->virtual void PrintOn( ostream& os = G4cout ) const;
+//----->virtual void PrintOn( G4std::ostream& os = G4cout ) const;
 //
 //  equality operator
 //----->int operator==( const G4CylindricalSurface& c )

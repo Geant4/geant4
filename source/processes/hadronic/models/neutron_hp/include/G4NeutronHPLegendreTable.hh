@@ -7,14 +7,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPLegendreTable.hh,v 1.3 1999-07-02 09:59:22 johna Exp $
+// $Id: G4NeutronHPLegendreTable.hh,v 1.4 1999-12-15 14:53:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPLegendreTable_h
 #define G4NeutronHPLegendreTable_h 1
 
 #include "globals.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 #include "G4ios.hh"
 #include "G4InterpolationManager.hh"
 
@@ -46,7 +46,7 @@ class G4NeutronHPLegendreTable
     }
   }
   
-  inline void Init(ifstream & aDataFile) 
+  inline void Init(G4std::ifstream & aDataFile) 
   {
     G4double eNeu, coeff;
     G4int nPoly;
@@ -66,7 +66,7 @@ class G4NeutronHPLegendreTable
     theCoeff[0]=1.;
     theEnergy = e;
     nCoeff = n+1;
-//    G4cout << "G4NeutronHPLegendreTable::Init called "<<e<<" "<<n<<endl;
+//    G4cout << "G4NeutronHPLegendreTable::Init called "<<e<<" "<<n<<G4endl;
   }
   inline void SetEnergy(G4double energy){ theEnergy = energy; }
   inline void SetTemperature(G4double temp){ theTemp = temp; }

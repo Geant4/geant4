@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: benchmark.cc,v 1.1 1999-01-08 16:32:06 gunter Exp $
+// $Id: benchmark.cc,v 1.2 1999-12-15 14:50:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -132,7 +132,7 @@ G4VPhysicalVolume* BuildCalorimeter(G4Material* Air,
 int main()
 {
 //-------- set output format-------
-    G4cout.setf( ios:: scientific, ios :: floatfield );
+    G4cout.setf( G4std::ios:: scientific, G4std::ios :: floatfield );
 
 //--------- Material definition ---------
 
@@ -163,7 +163,7 @@ int main()
 
     G4VPhysicalVolume *myTopNode;
 
-    G4cout << "Calorimeter volume Performance Test" << endl;
+    G4cout << "Calorimeter volume Performance Test" << G4endl;
     myTopNode=BuildCalorimeter(Air,Pb,Al);	// Build the geometry
     G4GeometryManager::GetInstance()->CloseGeometry();
 

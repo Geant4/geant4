@@ -1,5 +1,5 @@
 #include <stdarg.h>
-#include <iostream.h>
+#include "g4std/iostream"
 
 
 template<class t> 

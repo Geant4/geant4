@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedron.cc,v 1.4 1999-07-23 08:16:00 johna Exp $
+// $Id: G4Polyhedron.cc,v 1.5 1999-12-15 14:50:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,24 +37,24 @@
  * Function: Print contents of G4 polyhedron                           *
  *                                                                     *
  ***********************************************************************/
-ostream& operator<<(ostream &ostr, const G4Facet &facet) {
+G4std::ostream& operator<<(G4std::ostream &ostr, const G4Facet &facet) {
   for (G4int k=0; k<4; k++) {
     ostr << " " << facet.edge[k].v << "/" << facet.edge[k].f;
   }
   return ostr;
 }
 
-ostream& operator<<(ostream &ostr, const G4Polyhedron &ph) {
+G4std::ostream& operator<<(G4std::ostream &ostr, const G4Polyhedron &ph) {
   G4int i;
 
-  ostr << endl;
-  ostr << "Nverteces=" << ph.nvert << ", Nfacets=" << ph.nface << endl;
+  ostr << G4endl;
+  ostr << "Nverteces=" << ph.nvert << ", Nfacets=" << ph.nface << G4endl;
   for (i=1; i<=ph.nvert; i++) {
      ostr << "xyz(" << i << ")=" <<
-       ph.pV[i].x() << ' ' << ph.pV[i].y() << ' ' << ph.pV[i].z() << endl;
+       ph.pV[i].x() << ' ' << ph.pV[i].y() << ' ' << ph.pV[i].z() << G4endl;
   }
   for (i=1; i<=ph.nface; i++) {
-    ostr << "face(" << i << ")=" << ph.pF[i] << endl;
+    ostr << "face(" << i << ")=" << ph.pF[i] << G4endl;
   }
   return ostr;
 }
@@ -235,7 +235,7 @@ void G4Polyhedron::SetNumberOfRotationSteps(G4int n)
   if (n < nMin) {
     n = nMin;
     G4cout << "G4Polyhedron::SetNumberOfRotationSteps: attempt to set the"
-      "\nnumber of steps per circle < " << nMin << "; forced to " << n << endl;
+      "\nnumber of steps per circle < " << nMin << "; forced to " << n << G4endl;
   }
   fNumberOfRotationSteps = n;
 }
@@ -649,7 +649,7 @@ void G4Polyhedron::RotateAroundZ(G4int nstep, G4double phi, G4double dphi,
   if (k-1 != nface) {
     G4cerr << "Polyhedron::RotateAroundZ: number of generated faces ("
          << k-1 << ") is not equal to the number of allocated faces ("
-         << nface << ")" << endl;
+         << nface << ")" << G4endl;
   }
 }
 
@@ -700,8 +700,8 @@ void G4Polyhedron::SetReferences()
       i2 = (iedge < nedge-1) ? iedge+1 : 0;
       i1 = abs(pF[iface].edge[i1].v);
       i2 = abs(pF[iface].edge[i2].v);
-      k1 = min(i1,i2);
-      k2 = max(i1,i2);
+      k1 = G4std::min(i1,i2);
+      k2 = G4std::max(i1,i2);
       
       // check head of the List corresponding to k1
       cur = headList[k1];
@@ -729,7 +729,7 @@ void G4Polyhedron::SetReferences()
 	       << iface << "/" << iedge << "/"
 	       << pF[iface].edge[iedge].v << " and "
 	       << cur->iface << "/" << cur->iedge << "/"
-	       << pF[cur->iface].edge[cur->iedge].v << endl;
+	       << pF[cur->iface].edge[cur->iedge].v << G4endl;
 	}
 	continue;
       }
@@ -762,7 +762,7 @@ void G4Polyhedron::SetReferences()
 		   << iface << "/" << iedge << "/"
 		   << pF[iface].edge[iedge].v << " and "
 		   << cur->iface << "/" << cur->iedge << "/"
-		   << pF[cur->iface].edge[cur->iedge].v << endl;
+		   << pF[cur->iface].edge[cur->iedge].v << G4endl;
 	    }
 	  break;
 	}
@@ -775,7 +775,7 @@ void G4Polyhedron::SetReferences()
   for (i=0; i<nvert; i++) {
     if (headList[i] != 0) {
       G4cerr << "Polyhedron::SetReferences: List " << i << " is not empty"
-	   << endl;
+	   << G4endl;
     }
   }
 
@@ -824,7 +824,7 @@ G4Point3D G4Polyhedron::GetVertex(G4int index) const
  ***********************************************************************/
 {
   if (index <= 0 || index > nvert){
-    G4cerr << "Error: irrelevant vertex label " << index << endl;
+    G4cerr << "Error: irrelevant vertex label " << index << G4endl;
       return G4Point3D();
   }
   return pV[index];
@@ -1088,10 +1088,10 @@ G4PolyhedronCons::G4PolyhedronCons(G4double Rmn1, G4double Rmx1,
     if ((k & 1) != 0) G4cerr << " (radiuses)";
     if ((k & 2) != 0) G4cerr << " (half-length)";
     if ((k & 4) != 0) G4cerr << " (angles)";
-    G4cerr << endl;
+    G4cerr << G4endl;
     G4cerr << " Rmn1=" << Rmn1 << " Rmx1=" << Rmx1;
     G4cerr << " Rmn2=" << Rmn2 << " Rmx2=" << Rmx2;
-    G4cerr << " Dz=" << Dz << " Phi1=" << Phi1 << " Dphi=" << Dphi << endl;
+    G4cerr << " Dz=" << Dz << " Phi1=" << Phi1 << " Dphi=" << Dphi << G4endl;
     return;
   }
   
@@ -1140,19 +1140,19 @@ G4PolyhedronPgon::G4PolyhedronPgon(G4double phi,
   //   C H E C K   I N P U T   P A R A M E T E R S
 
   if (dphi <= 0. || dphi > 2*M_PI) {
-    G4cerr << "G4PolyhedronPgon/Pcon: wrong delta phi = " << dphi << endl;
+    G4cerr << "G4PolyhedronPgon/Pcon: wrong delta phi = " << dphi << G4endl;
     return;
   }    
     
   if (nz < 2) {
     G4cerr << "G4PolyhedronPgon/Pcon: number of z-planes less than two = " << nz
-         << endl;
+         << G4endl;
     return;
   }
 
   if (npdv < 0) {
     G4cerr << "G4PolyhedronPgon/Pcon: error in number of phi-steps =" << npdv
-         << endl;
+         << G4endl;
     return;
   }
 
@@ -1160,7 +1160,7 @@ G4PolyhedronPgon::G4PolyhedronPgon(G4double phi,
   for (i=0; i<nz; i++) {
     if (rmin[i] < 0. || rmax[i] < 0. || rmin[i] > rmax[i]) {
       G4cerr << "G4PolyhedronPgon: error in radiuses rmin[" << i << "]="
-	   << rmin[i] << " rmax[" << i << "]=" << rmax[i] << endl;
+	   << rmin[i] << " rmax[" << i << "]=" << rmax[i] << G4endl;
       return;
     }
   }
@@ -1218,29 +1218,29 @@ G4PolyhedronSphere::G4PolyhedronSphere(G4double rmin, G4double rmax,
   //   C H E C K   I N P U T   P A R A M E T E R S
 
   if (dphi <= 0. || dphi > 2*M_PI) {
-    G4cerr << "G4PolyhedronSphere: wrong delta phi = " << dphi << endl;
+    G4cerr << "G4PolyhedronSphere: wrong delta phi = " << dphi << G4endl;
     return;
   }    
 
   if (the < 0. || the > M_PI) {
-    G4cerr << "G4PolyhedronSphere: wrong theta = " << the << endl;
+    G4cerr << "G4PolyhedronSphere: wrong theta = " << the << G4endl;
     return;
   }    
   
   if (dthe <= 0. || dthe > M_PI) {
-    G4cerr << "G4PolyhedronSphere: wrong delta theta = " << dthe << endl;
+    G4cerr << "G4PolyhedronSphere: wrong delta theta = " << dthe << G4endl;
     return;
   }    
 
   if (the+dthe > M_PI) {
     G4cerr << "G4PolyhedronSphere: wrong theta + delta theta = "
-         << the << " " << dthe << endl;
+         << the << " " << dthe << G4endl;
     return;
   }    
   
   if (rmin < 0. || rmin >= rmax) {
     G4cerr << "G4PolyhedronSphere: error in radiuses"
-         << " rmin=" << rmin << " rmax=" << rmax << endl;
+         << " rmin=" << rmin << " rmax=" << rmax << G4endl;
     return;
   }
 
@@ -1301,14 +1301,14 @@ G4PolyhedronTorus::G4PolyhedronTorus(G4double rmin, G4double rmax,
   //   C H E C K   I N P U T   P A R A M E T E R S
 
   if (dphi <= 0. || dphi > 2*M_PI) {
-    G4cerr << "G4PolyhedronTorus: wrong delta phi = " << dphi << endl;
+    G4cerr << "G4PolyhedronTorus: wrong delta phi = " << dphi << G4endl;
     return;
   }
 
   if (rmin < 0. || rmin >= rmax || rmax >= rtor) {
     G4cerr << "G4PolyhedronTorus: error in radiuses"
          << " rmin=" << rmin << " rmax=" << rmax
-         << " rtorus=" << rtor << endl;
+         << " rtorus=" << rtor << G4endl;
     return;
   }
 

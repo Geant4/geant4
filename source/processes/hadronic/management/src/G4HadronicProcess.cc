@@ -1,20 +1,16 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronicProcess.cc,v 1.7 1999-11-22 19:54:15 hpw Exp $
+// $Id: G4HadronicProcess.cc,v 1.8 1999-12-15 14:52:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // HPW to implement the choosing of an element for scattering.
-#include <fstream.h>
-#ifdef WIN32
-  #include <strstrea.h>
-#else
-  #include <strstream.h>
-#endif
+#include "g4std/fstream"
+#include "g4std/strstream"
 #include <stdlib.h>
 #include "G4HadronicProcess.hh"
 //@@ add model name info, once typeinfo available #include <typeinfo.h>
@@ -162,7 +158,7 @@
     
     // prepare the IsoResult.
     char the1[100] = {""};
-    ostrstream ost1(the1, 100, ios::out);
+    G4std::ostrstream ost1(the1, 100, G4std::ios::out);
     ost1 <<Z<<"_"<<A;
     G4String * biff = new G4String(the1);
     G4IsoResult * theResult = new G4IsoResult(*biff, aNucleus);

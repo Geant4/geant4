@@ -1,4 +1,4 @@
-// $Id: MyPhysicsList.cc,v 1.3 1999-10-03 09:54:23 kurasige Exp $
+// $Id: MyPhysicsList.cc,v 1.4 1999-12-15 14:54:37 gunter Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -24,7 +24,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"                
 
 
 MyPhysicsList::MyPhysicsList():  G4VUserPhysicsList()
@@ -184,7 +184,7 @@ void MyPhysicsList::SetCuts()
 {
   if (verboseLevel >0){
     G4cout << "MyPhysicsList::SetCuts:";
-    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << endl;
+    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }  
 
   //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hype.cc,v 1.3 1999-11-19 16:10:10 grichine Exp $
+// $Id: G4Hype.cc,v 1.4 1999-12-15 14:50:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Hype: this class implements in G4 the volume equivalent 
@@ -114,8 +114,8 @@ G4bool G4Hype::CalculateExtent(const EAxis pAxis,
 {
 
 
-  //G4cout << "Calculate extent !"<< endl;
-  //G4cout << "Surface data: " << outerRadius << endl;
+  //G4cout << "Calculate extent !"<< G4endl;
+  //G4cout << "Surface data: " << outerRadius << G4endl;
 
   if (!pTransform.IsRotated())
 	{
@@ -134,7 +134,7 @@ G4bool G4Hype::CalculateExtent(const EAxis pAxis,
 	  xoffset=pTransform.NetTranslation().x();
 	  xMin=xoffset-endOuterRadius;
 	  xMax=xoffset+endOuterRadius;
-	  //G4cout << "xMin, xMax : " << xMin << " " << xMax << endl;
+	  //G4cout << "xMin, xMax : " << xMin << " " << xMax << G4endl;
 	  if (pVoxelLimit.IsXLimited())
 	    {
 	      if (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance ||
@@ -147,12 +147,12 @@ G4bool G4Hype::CalculateExtent(const EAxis pAxis,
 		  if (xMin<pVoxelLimit.GetMinXExtent())
 		    {
 		      xMin=pVoxelLimit.GetMinXExtent();
-		      //G4cout << xMin << endl;
+		      //G4cout << xMin << G4endl;
 		    }
 		  if (xMax>pVoxelLimit.GetMaxXExtent())
 		    {
 		      xMax=pVoxelLimit.GetMaxXExtent();
-		      //G4cout << xMax << endl;
+		      //G4cout << xMax << G4endl;
 		    }
 		}
 	    }
@@ -208,7 +208,7 @@ G4bool G4Hype::CalculateExtent(const EAxis pAxis,
 	  switch (pAxis)
 		{
 		case kXAxis:
-		  //G4cout << "kXAxis" << endl;
+		  //G4cout << "kXAxis" << G4endl;
 		  yoff1=yoffset-yMin;
 		  yoff2=yMax-yoffset;
 		  if (yoff1>=0&&yoff2>=0)
@@ -231,13 +231,13 @@ G4bool G4Hype::CalculateExtent(const EAxis pAxis,
 		  
 		  break;
 		case kYAxis:
-		  //G4cout << "kYAxis" << endl;
+		  //G4cout << "kYAxis" << G4endl;
 		  xoff1=xoffset-xMin;
 		  xoff2=xMax-xoffset;
 		  if (xoff1>=0&&xoff2>=0)
 		   {
 		      // X limits cross max/min y => no change
-		     //G4cout << "assegnazione diretta, xoff1,2 > 0" << yMin << " " << yMax << endl;
+		     //G4cout << "assegnazione diretta, xoff1,2 > 0" << yMin << " " << yMax << G4endl;
 		     pMin=yMin;
 		     pMax=yMax;
 		   }
@@ -246,20 +246,20 @@ G4bool G4Hype::CalculateExtent(const EAxis pAxis,
 		      // X limits don't cross max/min y => compute max delta y, hence new mins/maxs
 		      diff1=sqrt(abs(endOuterRadius2-xoff1*xoff1));
 		      diff2=sqrt(abs(endOuterRadius2-xoff2*xoff2));
-		      //G4cout << diff1 << " " << diff2 << endl;
+		      //G4cout << diff1 << " " << diff2 << G4endl;
 		      maxDiff=(diff1>diff2) ? diff1:diff2;
-		      //G4cout << "maxDiff " << maxDiff << endl;
+		      //G4cout << "maxDiff " << maxDiff << G4endl;
 		      newMin=yoffset-maxDiff;
 		      newMax=yoffset+maxDiff;
-		      //G4cout << "assegnazione indiretta" << yMin << " " << yMax << endl;
-		      //G4cout << "newMin, newMax : " << newMin << " " << newMax << endl;
+		      //G4cout << "assegnazione indiretta" << yMin << " " << yMax << G4endl;
+		      //G4cout << "newMin, newMax : " << newMin << " " << newMax << G4endl;
 		      
 		      pMin=(newMin<yMin) ? yMin : newMin;
 		      pMax=(newMax>yMax) ? yMax : newMax;
 		    }
 		  break;
 		case kZAxis:
-		  //G4cout << "kZAxis" << endl;
+		  //G4cout << "kZAxis" << G4endl;
 		  pMin=zMin;
 		  pMax=zMax;
 		  break;
@@ -268,8 +268,8 @@ G4bool G4Hype::CalculateExtent(const EAxis pAxis,
 	  pMin-=kCarTolerance;
 	  pMax+=kCarTolerance;
 
-	  //G4cout << xoffset << " " << yoffset << " " << zoffset << endl;
-	  //G4cout << "pMin, pMax: " << pMin << "," << pMax << endl << endl;
+	  //G4cout << xoffset << " " << yoffset << " " << zoffset << G4endl;
+	  //G4cout << "pMin, pMax: " << pMin << "," << pMax << G4endl << G4endl;
 	  return true;
 	  
 	}
@@ -336,8 +336,8 @@ EInside G4Hype::Inside(const G4ThreeVector& p) const
 {
   // Get third component of point "in study"
   double xZ=abs(p.z());
-  //G4cout << "Inside::This point is : " << p << endl;
-  //G4cout << "Surface data : " << outerRadius << endl;
+  //G4cout << "Inside::This point is : " << p << G4endl;
+  //G4cout << "Surface data : " << outerRadius << G4endl;
 
   // if point's Z component is greater than halfLenZ it is SURELY outside.
   if (xZ<=(1+SURFACE_PRECISION)*halfLenZ)
@@ -354,7 +354,7 @@ EInside G4Hype::Inside(const G4ThreeVector& p) const
 	  // 1. w/o inner surface 
 	  // 2. w/  inner surface
 
-	  //G4cout << "iRad, xR, oRad : " << sqrt(iRad2) << "  " << sqrt(xR2) << " " << sqrt(oRad2) << endl;
+	  //G4cout << "iRad, xR, oRad : " << sqrt(iRad2) << "  " << sqrt(xR2) << " " << sqrt(oRad2) << G4endl;
 
 	  if ((innerRadius==0.) && (innerStereo==0.))
 	    {
@@ -363,12 +363,12 @@ EInside G4Hype::Inside(const G4ThreeVector& p) const
 		{ // on endcaps ?
 		  if (abs(xZ/halfLenZ-1)<SURFACE_PRECISION) 
 		    {
-		      //G4cout << "kSurf, no Inner, endcaps" << endl;
+		      //G4cout << "kSurf, no Inner, endcaps" << G4endl;
 		      return kSurface; // yes. On endcap!
 		    }
 		  else 
 		    {
-		      //G4cout << "kInside, no Inner, endcaps" << endl;		      
+		      //G4cout << "kInside, no Inner, endcaps" << G4endl;		      
 		      return kInside;  // no. It's inside!
 		    }
 		}
@@ -376,12 +376,12 @@ EInside G4Hype::Inside(const G4ThreeVector& p) const
 	      else
 		if (abs(sqrt(xR2/oRad2)-1) < SURFACE_PRECISION)
 		  {
-		    //G4cout << "kSurf, no Inner, hype surface" << endl;
+		    //G4cout << "kSurf, no Inner, hype surface" << G4endl;
 		    return kSurface;  // yes...it's on the surface!
 		  }
 		else 
 		  {
-		    //G4cout << "kOut, no Inner, hype surface" << endl;
+		    //G4cout << "kOut, no Inner, hype surface" << G4endl;
 		    return kOutside;  // no...outside the hype.
 		  }
 	    }
@@ -395,12 +395,12 @@ EInside G4Hype::Inside(const G4ThreeVector& p) const
 		  // on endcaps ??
 		  if (abs(xZ/halfLenZ-1)<SURFACE_PRECISION) 
 		    {
-		      //G4cout << "kSurf, Inner, endcaps" << endl;
+		      //G4cout << "kSurf, Inner, endcaps" << G4endl;
 		      return kSurface; // yes. On endcap!
 		    }
 		  else 
 		    {
-		      //G4cout << "kInside, inner, endcaps" << endl;
+		      //G4cout << "kInside, inner, endcaps" << G4endl;
 		      return kInside;  // no. It's inside!
 		    }
 		}
@@ -410,17 +410,17 @@ EInside G4Hype::Inside(const G4ThreeVector& p) const
 		    || 
 		    abs(sqrt(xR2/iRad2)-1) < SURFACE_PRECISION) 
 		  {
-		    //G4cout << "kSurf, inner, hype surface" << endl;
+		    //G4cout << "kSurf, inner, hype surface" << G4endl;
 		    return kSurface;  // yes...it's on the surface!
 		  }
 		else 
 		  {
-		    //G4cout << "kOutside, Inner, hype surface" << endl;
+		    //G4cout << "kOutside, Inner, hype surface" << G4endl;
 		    return kOutside;  // no...outside the hype.
 		  }
 	    }
 	}
-  //G4cout << "qui ci devo arrivare sse abs(z)>halfLenZ!!!! " << endl;
+  //G4cout << "qui ci devo arrivare sse abs(z)>halfLenZ!!!! " << G4endl;
   return kOutside;
 }
 
@@ -433,8 +433,8 @@ G4ThreeVector G4Hype::SurfaceNormal( const G4ThreeVector& p) const
   double zRadius2=p.x()*p.x()+p.y()*p.y();
   double param=0;
 
-  //G4cout << "Surface Normal " << p << endl;
-  //G4cout << "Surface data : " << outerRadius << endl;
+  //G4cout << "Surface Normal " << p << G4endl;
+  //G4cout << "Surface data : " << outerRadius << G4endl;
 
 
   // check if the point is on the endcaps
@@ -481,8 +481,8 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p,
     EInside Pp=Inside(p);
     double zero_tolerance=1e-6;
 
-    //G4cout << "DistToIn(pt,dir)" << p << " " << v << endl;
-    //G4cout << "Surface data : " << outerRadius << endl;
+    //G4cout << "DistToIn(pt,dir)" << p << " " << v << G4endl;
+    //G4cout << "Surface data : " << outerRadius << G4endl;
 
     if (Pp==kSurface || Pp==kInside)
       {
@@ -721,7 +721,7 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p,
 	  }
       }
     // Done!
-    //G4cout << "DistToIn(pt,dir) = " << snxt << endl;
+    //G4cout << "DistToIn(pt,dir) = " << snxt << G4endl;
     return snxt;
 }
  
@@ -741,13 +741,13 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
   double BpointR=0.;
   double BpointZ=pZ;
   
-  //G4cout << "DistToIn(pt)" << p << endl;
-  //G4cout << "Surface data : " << outerRadius << endl;
+  //G4cout << "DistToIn(pt)" << p << G4endl;
+  //G4cout << "Surface data : " << outerRadius << G4endl;
 
   EInside Pp=Inside(p);
   if (Pp==kSurface || Pp==kInside) 
     {
-      //G4cout << "Point on surface or inside, returning 0" << endl;
+      //G4cout << "Point on surface or inside, returning 0" << G4endl;
       return 0.;
     }
 
@@ -756,7 +756,7 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
       pR2<=(1+SURFACE_PRECISION)*(1+SURFACE_PRECISION)*endOuterRadius2 && 
       pR2>=(1-SURFACE_PRECISION)*(1-SURFACE_PRECISION)*endInnerRadius2)
     { 
-      //G4cout << "zone1 - returning : " <<  abs(pZ)-halfLenZ << endl;
+      //G4cout << "zone1 - returning : " <<  abs(pZ)-halfLenZ << G4endl;
       return abs(pZ)-halfLenZ; 
     }
 
@@ -765,12 +765,12 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
     { 
       if (pR<=(1+SURFACE_PRECISION)*innerRadius) 
 	{
-	  //G4cout << "z=0, inner nearer,  returning: " << (innerRadius-pR) << endl;
+	  //G4cout << "z=0, inner nearer,  returning: " << (innerRadius-pR) << G4endl;
 	  return abs(innerRadius-pR);
 	}
       else
 	{
-	  //G4cout << "z=0, outer nearer, returning: " << pR2-outerRadius << endl;
+	  //G4cout << "z=0, outer nearer, returning: " << pR2-outerRadius << G4endl;
 	  return abs(pR-outerRadius);
 	}
     }
@@ -782,7 +782,7 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
       if (pR>=(1-SURFACE_PRECISION)*outerRadius &&
 	  pZ<=(1+SURFACE_PRECISION)*halfLenZ)
 	{
-	  //G4cout << "zone2 - Cyl - returning : " <<  pR-outerRadius << endl;
+	  //G4cout << "zone2 - Cyl - returning : " <<  pR-outerRadius << G4endl;
 	  return abs(pR-outerRadius);
 	}
     }
@@ -838,7 +838,7 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
 	    // line normal to the Hype axis passing in A)
 	    BpointR=sqrt(HypeOuterRadius2(BpointZ));
 	    
-	    // //G4cout << "BpointZ : " << BpointZ << "  BpointR: " << BpointR << endl; 
+	    // //G4cout << "BpointZ : " << BpointZ << "  BpointR: " << BpointR << G4endl; 
 	    
 	    // the components of the normal vector in B are
 	    // / normR = 2*BpointR
@@ -855,7 +855,7 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
 	    //    i.e. stepping back for the  backupdist
 	    // 2. move of backupdist in the opposite direction
 	    // so mydist is the double of backupdist with opposite Sign
-	    // //G4cout << " mydist : " << mydist << endl;
+	    // //G4cout << " mydist : " << mydist << G4endl;
 	    
 	    if (abs(mydist)<abs(backupdist)) { backupdist=mydist; }
 	    else { mydist=-2*backupdist; }
@@ -865,7 +865,7 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
 	  // Now I have the correct point BpointZ, BpointR stored...
 	  //G4cout << "zone2 - hyp - returning : " << 
 	  //sqrt((ApointZ-BpointZ)*(ApointZ-BpointZ)+
-	  // (ApointR-BpointR)*(ApointR-BpointR)) << endl;
+	  // (ApointR-BpointR)*(ApointR-BpointR)) << G4endl;
 
 	  return sqrt((ApointZ-BpointZ)*(ApointZ-BpointZ)+
 		      (ApointR-BpointR)*(ApointR-BpointR));
@@ -878,7 +878,7 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
       if (pR<=(1+SURFACE_PRECISION)*innerRadius &&
 	  pZ<=(1+SURFACE_PRECISION)*halfLenZ)
 	{
-	  //G4cout << "zone3 - Cyl - returning : " << innerRadius-pR << endl;
+	  //G4cout << "zone3 - Cyl - returning : " << innerRadius-pR << G4endl;
 	  return abs(innerRadius-pR);
 	}
     }
@@ -926,7 +926,7 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
 		// line normal to the Hype axis passing in A)
 		BpointR=sqrt(HypeInnerRadius2(BpointZ));
 		
-		// //G4cout << "BpointZ : " << BpointZ << "  BpointR: " << BpointR << endl; 
+		// //G4cout << "BpointZ : " << BpointZ << "  BpointR: " << BpointR << G4endl; 
 		
 		// the components of the normal vector in B are
 		// / normR = 2*BpointR
@@ -943,7 +943,7 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
 		//    i.e. stepping back for the  backupdist
 		// 2. move of backupdist in the opposite direction
 		// so mydist is the double of backupdist with opposite Sign
-		// //G4cout << " mydist : " << mydist << endl;
+		// //G4cout << " mydist : " << mydist << G4endl;
 		
 		if (abs(mydist)<abs(backupdist)) { backupdist=mydist; }
 		else { mydist=-2*backupdist; }
@@ -953,7 +953,7 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
 	      // Now I have the correct point BpointZ, BpointR stored...
 	      //G4cout << " zone3 - hyp - returning: " <<
 	      //sqrt((ApointZ-BpointZ)*(ApointZ-BpointZ)+
-	      //     (ApointR-BpointR)*(ApointR-BpointR)) << endl;
+	      //     (ApointR-BpointR)*(ApointR-BpointR)) << G4endl;
 	      return sqrt((ApointZ-BpointZ)*(ApointZ-BpointZ)+
 			  (ApointR-BpointR)*(ApointR-BpointR));
 	    }
@@ -964,7 +964,7 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
     { // 4b
       //G4cout << " zone 4b - returning: " <<
       // sqrt((ApointR-endInnerRadius)*(ApointR-endInnerRadius)+
-      //      (ApointZ-halfLenZ)*(ApointZ-halfLenZ)) << endl;
+      //      (ApointZ-halfLenZ)*(ApointZ-halfLenZ)) << G4endl;
 
       return sqrt( 
 		  (ApointR-endInnerRadius)*(ApointR-endInnerRadius)+
@@ -974,7 +974,7 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
     { // 4a
       //G4cout << " zone 4a - returning: " <<
       //sqrt((ApointR-endOuterRadius)*(ApointR-endOuterRadius)+
-      //     (ApointZ-halfLenZ)*(ApointZ-halfLenZ)) << endl;
+      //     (ApointZ-halfLenZ)*(ApointZ-halfLenZ)) << G4endl;
 
       return sqrt( 
 		  (ApointR-endOuterRadius)*(ApointR-endOuterRadius)+
@@ -996,8 +996,8 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 
     if (calcNorm) *validNorm=true;  // All normals are valid
     *n=G4ThreeVector(0.,0.,0.);
-    //G4cout << "DistanceToOut(pt,dir): " << p << " " << v << endl;
-    //G4cout << "Surface Data " << outerRadius << endl;
+    //G4cout << "DistanceToOut(pt,dir): " << p << " " << v << G4endl;
+    //G4cout << "Surface Data " << outerRadius << G4endl;
 
     EInside Pp=Inside(p);
     if (Pp==kOutside)
@@ -1021,8 +1021,8 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 
         // make direction a versor
 	direction=direction.unit();
-	//G4cout << "direzione : " << direction << endl;
-	//G4cout << "workPoint : " << workPoint << endl;
+	//G4cout << "direzione : " << direction << G4endl;
+	//G4cout << "workPoint : " << workPoint << G4endl;
 
         // line parameters - u vector
         double ux=direction.x();
@@ -1042,7 +1042,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 	  {
 	    // *left* (see docs) intersection z=-halfLenZ
 	    double tLeft=(-halfLenZ-vz)/uz;
-	    //   //G4cout << tLeft << endl;
+	    //   //G4cout << tLeft << G4endl;
 	    if (tLeft>0 || abs(tLeft)<zero_tolerance) 
 	      {
 		double xIL=ux*tLeft+vx;
@@ -1059,7 +1059,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 	
 	    // *right* (see docs) intersection z=halfLenZ
 	    double tRight=(halfLenZ-vz)/uz;
-	    // //G4cout << tRight << endl;
+	    // //G4cout << tRight << G4endl;
 	    if (tRight>0 || abs(tRight)<zero_tolerance)
 	      {
 		double xIR=ux*tRight+vx;
@@ -1074,7 +1074,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 		  }
 	      }
 	    	    
-	    //G4cout << "tLeft, tRight : " << tLeft << "  " << tRight << endl;
+	    //G4cout << "tLeft, tRight : " << tLeft << "  " << tRight << G4endl;
 	  }
 	  
 	// ==============================================================================//
@@ -1104,7 +1104,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 		double solution2=(-paramB-sqrt(delta))/paramA;
 		double dist1=kInfinity;
 		double dist2=kInfinity;
-		//G4cout << "Sol 1,2 " << solution1 << "  " << solution2 << endl;
+		//G4cout << "Sol 1,2 " << solution1 << "  " << solution2 << G4endl;
 
 		if (solution1>0 || abs(solution1)<zero_tolerance)
 		  dist1=abs(solution1);
@@ -1149,8 +1149,8 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 
 	// intersection equation discriminant
         double delta=paramB*paramB-paramA*paramC;
-	//G4cout << "delta : " << delta << endl;
-	//G4cout << "A, B, C : " << paramA << "  " << paramB << "   " << paramC << endl;
+	//G4cout << "delta : " << delta << G4endl;
+	//G4cout << "A, B, C : " << paramA << "  " << paramB << "   " << paramC << G4endl;
 
         if (delta > 0 || abs(delta)<zero_tolerance) 
         { 
@@ -1159,7 +1159,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 	  double solution1=(-paramB+sqrt(delta))/paramA;
 	  double solution2=(-paramB-sqrt(delta))/paramA;
 
-	  //G4cout << "Solution 1, 2  : " << solution1*1E+14 << "   " << solution2*1E+14 << endl;
+	  //G4cout << "Solution 1, 2  : " << solution1*1E+14 << "   " << solution2*1E+14 << G4endl;
 	  
 	  if (solution1>0 || abs(solution1)<zero_tolerance) 
 	    {
@@ -1225,7 +1225,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 
 	// Done!
 	//G4cout << "distanze left, right, inner, outer :" << distanceLeft << "   " 
-	//     << distanceRight << "   " << distanceInner << "    " << distanceOuter << endl;
+	//     << distanceRight << "   " << distanceInner << "    " << distanceOuter << G4endl;
 	
 	// normal calculation, where required.
 	// normal to EXIT the volume...
@@ -1238,7 +1238,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 		yi=vy+snxt*uy;
 		zi=vz+snxt*uz;
 		*n=G4ThreeVector(xi,yi,-zi*tanOuterStereo2).unit();
-		//G4cout << "outerFace : " << *n << endl;
+		//G4cout << "outerFace : " << *n << G4endl;
 		break;
 	  
 	      case innerFace:
@@ -1246,17 +1246,17 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 		yi=vy+snxt*uy;
 		zi=vx+snxt*uz;
 		*n=-G4ThreeVector(xi,yi,-zi*tanInnerStereo2).unit();
-		//G4cout << "innerFace: " << *n << endl;
+		//G4cout << "innerFace: " << *n << G4endl;
 		break;
 		
 	      case leftCap:
 		*n=G4ThreeVector(0,0,-1);
-		//G4cout << "leftCap: " << *n << endl;
+		//G4cout << "leftCap: " << *n << G4endl;
 		break;
 		
 	      case rightCap:
 		*n=G4ThreeVector(0,0,1);
-		//G4cout << "rightCap: " << *n << endl;
+		//G4cout << "rightCap: " << *n << G4endl;
 		break;
 		
 	      default: *validNorm=false;
@@ -1264,8 +1264,8 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 	  }
       }
     snxt+=zero_tolerance*halfLenZ; 
-    //G4cout << "valore restituito: " << snxt << endl;
-    //G4cout << "*n = " << *n << endl;
+    //G4cout << "valore restituito: " << snxt << G4endl;
+    //G4cout << "*n = " << *n << G4endl;
     return snxt;
 }
 
@@ -1280,25 +1280,25 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
   double pR=sqrt(pR2);
 
   //G4cout << "pZ : " << pZ << " param: " << pZ/halfLenZ << " SP: "
-  //      << SURFACE_PRECISION <<endl;
+  //      << SURFACE_PRECISION <<G4endl;
 
   // distance parameters
   double distEndCap=kInfinity;
   double distSurfac=kInfinity;
 
-  //G4cout << "DistToOut(pt)" << p << endl;
-  //G4cout << "Surface data: " << outerRadius << endl;
+  //G4cout << "DistToOut(pt)" << p << G4endl;
+  //G4cout << "Surface data: " << outerRadius << G4endl;
 
   EInside Pp=Inside(p);
   if (Pp==kOutside)
     {
-      //G4cout << "Point outside, returning 0." << endl;
+      //G4cout << "Point outside, returning 0." << G4endl;
       return 0;
     }
       
   if (Pp==kSurface) 
     {
-      //G4cout << "Point on surface, returning Step" << endl;
+      //G4cout << "Point on surface, returning Step" << G4endl;
       return halfLenZ*SURFACE_PRECISION;
     }
 
@@ -1327,8 +1327,8 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
       double a2=abs(outerRadius-pR);
       distSurfac= (a1<a2?a1:a2);
       //G4cout << "a1: " << a1 << "  a2: " << a2 << "  distEndCap: " << 
-      //	distEndCap << endl; 
-      //G4cout << "Point with z=0, returning: " <<(distSurfac<distEndCap?distSurfac:distEndCap) << endl;
+      //	distEndCap << G4endl; 
+      //G4cout << "Point with z=0, returning: " <<(distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
       return (distSurfac<distEndCap?distSurfac:distEndCap); // Done
     }
   
@@ -1344,7 +1344,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 	    {
 	      distSurfac=abs(outerRadius-pR);
 	      //G4cout << "Cyl, no inner surf, returning: " << 
-	      //(distSurfac<distEndCap?distSurfac:distEndCap) << endl;
+	      //(distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
 	      return (distSurfac<distEndCap?distSurfac:distEndCap);
 	    }
 	}
@@ -1379,7 +1379,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 	    // line normal to the Hype axis passing in A)
 	    BpointR=sqrt(HypeOuterRadius2(BpointZ));
 	    
-	    // //G4cout << "BpointZ : " << BpointZ << "  BpointR: " << BpointR << endl; 
+	    // //G4cout << "BpointZ : " << BpointZ << "  BpointR: " << BpointR << G4endl; 
 	    
 	    // the components of the normal vector in B are
 	    // / normR = 2*BpointR
@@ -1396,7 +1396,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 	    //    i.e. stepping back for the  backupdist
 	    // 2. move of backupdist in the opposite direction
 	    // so mydist is the double of backupdist with opposite Sign
-	    // //G4cout << " mydist : " << mydist << endl;
+	    // //G4cout << " mydist : " << mydist << G4endl;
 	    
 	    if (abs(mydist)<abs(backupdist)) { backupdist=mydist; }
 	    else { mydist=-2*backupdist; }
@@ -1407,7 +1407,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 	  //distSurfac=sqrt((ApointZ-BpointZ)*(ApointZ-BpointZ)+
 	  //                (ApointR-BpointR)*(ApointR-BpointR));
 	  //G4cout << "Hyperb, no inner surface, returning : " << 
-	  //  (distSurfac<distEndCap?distSurfac:distEndCap) << endl;
+	  //  (distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
 	  return (distSurfac<distEndCap?distSurfac:distEndCap);
 	}
     }
@@ -1425,7 +1425,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 		{
 		  distSurfac=abs(outerRadius-pR);
 		  //G4cout << "Cyl, with inner surface, outer is nearer,  returning : " << 
-		  //  (distSurfac<distEndCap?distSurfac:distEndCap) << endl;
+		  //  (distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
 		  return (distSurfac<distEndCap?distSurfac:distEndCap);
 		}
 	    }
@@ -1459,7 +1459,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 		// line normal to the Hype axis passing in A)
 		BpointR=sqrt(HypeOuterRadius2(BpointZ));
 		
-		// //G4cout << "BpointZ : " << BpointZ << "  BpointR: " << BpointR << endl; 
+		// //G4cout << "BpointZ : " << BpointZ << "  BpointR: " << BpointR << G4endl; 
 		
 		// the components of the normal vector in B are
 		// / normR = 2*BpointR
@@ -1476,7 +1476,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 		//    i.e. stepping back for the  backupdist
 		// 2. move of backupdist in the opposite direction
 		// so mydist is the double of backupdist with opposite Sign
-		// //G4cout << " mydist : " << mydist << endl;
+		// //G4cout << " mydist : " << mydist << G4endl;
 		
 		if (abs(mydist)<abs(backupdist)) { backupdist=mydist; }
 		else { mydist=-2*backupdist; }
@@ -1487,7 +1487,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 	      distSurfac=sqrt((ApointZ-BpointZ)*(ApointZ-BpointZ)+
 			      (ApointR-BpointR)*(ApointR-BpointR));
 	      //G4cout << "Hyp, with inner surface, outer is nearer,  returning : " << 
-	      //(distSurfac<distEndCap?distSurfac:distEndCap) << endl;
+	      //(distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
 
 	      return (distSurfac<distEndCap?distSurfac:distEndCap);
 	    }
@@ -1503,7 +1503,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 		{
 		  distSurfac=abs(pR-innerRadius);
 		  //G4cout << "Cyl, with inner surface, inner is nearer,  returning : " << 
-		  //  (distSurfac<distEndCap?distSurfac:distEndCap) << endl;
+		  //  (distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
 
 		  return (distSurfac<distEndCap?distSurfac:distEndCap);
 		}
@@ -1522,7 +1522,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 	      double paramNorm=endInnerRadius/(-tanInnerStereo2*halfLenZ);
 	      if (ApointR<=(1+SURFACE_PRECISION)*(paramNorm*(ApointZ-halfLenZ)+endInnerRadius))
 		{
-		  // //G4cout << "HERE!" << endl;
+		  // //G4cout << "HERE!" << G4endl;
 		  // not in a blank zone!!!
 		  //Prepare the parameter for the iteration
 		  double mydist=0.;       // distance between C and A     
@@ -1544,7 +1544,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 		    // line normal to the Hype axis passing in A)
 		    BpointR=sqrt(HypeInnerRadius2(BpointZ));
 		    
-		    // //G4cout << "BpointZ : " << BpointZ << "  BpointR: " << BpointR << endl; 
+		    // //G4cout << "BpointZ : " << BpointZ << "  BpointR: " << BpointR << G4endl; 
 		    
 		    // the components of the normal vector in B are
 		    // / normR = 2*BpointR
@@ -1561,7 +1561,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 		    //    i.e. stepping back for the  backupdist
 		    // 2. move of backupdist in the opposite direction
 		    // so mydist is the double of backupdist with opposite Sign
-		    // //G4cout << " mydist : " << mydist << endl;
+		    // //G4cout << " mydist : " << mydist << G4endl;
 		    
 		    if (abs(mydist)<abs(backupdist)) { backupdist=mydist; }
 		    else { mydist=-2*backupdist; }
@@ -1572,7 +1572,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 		  distSurfac=sqrt((ApointZ-BpointZ)*(ApointZ-BpointZ)+
 				  (ApointR-BpointR)*(ApointR-BpointR));
 		  //G4cout << "Hyp, with inner surface, inner is nearer,  returning : " << 
-		  //  (distSurfac<distEndCap?distSurfac:distEndCap) << endl;
+		  //  (distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
 
 		  return (distSurfac<distEndCap?distSurfac:distEndCap);
 		}
@@ -1584,7 +1584,7 @@ G4double G4Hype::DistanceToOut(const G4ThreeVector& p) const
 				    (pR-endOuterRadius)*(pR-endOuterRadius));
 		  distSurfac=(dist1<dist2?dist1:dist2);
 		  //G4cout << "Blank zone,  returning : " << 
-		  //  (distSurfac<distEndCap?distSurfac:distEndCap) << endl;
+		  //  (distSurfac<distEndCap?distSurfac:distEndCap) << G4endl;
 
 		  return (distSurfac<distEndCap?distSurfac:distEndCap); // Done
 		}

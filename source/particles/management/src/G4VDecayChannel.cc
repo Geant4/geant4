@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.cc,v 1.5 1999-08-30 08:28:00 kurasige Exp $
+// $Id: G4VDecayChannel.cc,v 1.6 1999-12-15 14:51:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -155,7 +155,7 @@ void G4VDecayChannel::ClearDaughtersName()
 #ifdef G4VERBOSE
       if (verboseLevel>1) {
 	G4cout << "G4VDecayChannel::ClearDaughtersName ";
-	G4cout << "clear all daughters " << endl;
+	G4cout << "clear all daughters " << G4endl;
       }
 #endif
       for (G4int index=0; index < numberOfDaughters; index++) { 
@@ -194,7 +194,7 @@ void G4VDecayChannel::SetDaughter(G4int anIndex,
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cout << "G4VDecayChannel::SetDaughter: ";
-      G4cout << "Number of daughters is not defined" << endl;
+      G4cout << "Number of daughters is not defined" << G4endl;
     }
 #endif
     return;
@@ -214,7 +214,7 @@ void G4VDecayChannel::SetDaughter(G4int anIndex,
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cout << "G4VDecayChannel::SetDaughter";
-      G4cout << "index out of range " << anIndex << endl;
+      G4cout << "index out of range " << anIndex << G4endl;
     }
 #endif
   } else {
@@ -227,7 +227,7 @@ void G4VDecayChannel::SetDaughter(G4int anIndex,
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
       G4cout << "G4VDecayChannel::SetDaughter[" << anIndex <<"] :";
-      G4cout << daughters_name[anIndex] << ":" << *daughters_name[anIndex]<<endl;
+      G4cout << daughters_name[anIndex] << ":" << *daughters_name[anIndex]<<G4endl;
     }
 #endif
   }
@@ -243,7 +243,7 @@ void G4VDecayChannel::FillDaughters()
   G4int index;
   
 #ifdef G4VERBOSE
-  if (verboseLevel>1) G4cout << "G4VDecayChannel::FillDaughters()" <<endl;
+  if (verboseLevel>1) G4cout << "G4VDecayChannel::FillDaughters()" <<G4endl;
 #endif
   if (daughters != 0) delete [] daughters;
 
@@ -274,7 +274,7 @@ void G4VDecayChannel::FillDaughters()
 #ifdef G4VERBOSE
       if (verboseLevel>0) {
 	G4cout << "G4VDecayChannel::FillDaughters  ";
-	G4cout << index << "-th daughter is not defined yet" << endl;
+	G4cout << index << "-th daughter is not defined yet" << G4endl;
       }
 #endif
       daughters[index] = 0;
@@ -288,8 +288,8 @@ void G4VDecayChannel::FillDaughters()
       if (verboseLevel>0) {
 	G4cout << "G4VDecayChannel::FillDaughters  ";
 	G4cout << index << ":" << *daughters_name[index];
-	G4cout << " is not defined !!" << endl;
-        G4cout << " The BR of this decay mode is set to zero " << endl;
+	G4cout << " is not defined !!" << G4endl;
+        G4cout << " The BR of this decay mode is set to zero " << G4endl;
       }
 #endif
       SetBR(0.0);
@@ -298,7 +298,7 @@ void G4VDecayChannel::FillDaughters()
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
       G4cout << index << ":" << *daughters_name[index];
-      G4cout << ":" << daughters[index] << endl;
+      G4cout << ":" << daughters[index] << G4endl;
     }
 #endif
     daughters_mass[index] = daughters[index]->GetPDGMass();
@@ -311,12 +311,12 @@ void G4VDecayChannel::FillDaughters()
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4VDecayChannel::FillDaughters ";
-      G4cout << "    Energy/Momentum conserevation breaks " <<endl;
+      G4cout << "    Energy/Momentum conserevation breaks " <<G4endl;
       G4cout << "    parent:" << *parent_name;
-      G4cout << " mass:" << parentmass/GeV << "[GeV/c/c]" <<endl;
+      G4cout << " mass:" << parentmass/GeV << "[GeV/c/c]" <<G4endl;
       for (index=0; index < numberOfDaughters; index++){
         G4cout << "     daughter " << index << ":" << *daughters_name[index];
-        G4cout << " mass:" << daughters[index]->GetPDGMass()/GeV << "[GeV/c/c]" <<endl;
+        G4cout << " mass:" << daughters[index]->GetPDGMass()/GeV << "[GeV/c/c]" <<G4endl;
       }
     }
 #endif
@@ -334,7 +334,7 @@ void G4VDecayChannel::FillParent()
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cout << "G4VDecayChannel::FillParent   ";
-      G4cout << ": parent name is not defined !!" << endl;
+      G4cout << ": parent name is not defined !!" << G4endl;
     }
 #endif
     parent = 0;
@@ -347,7 +347,7 @@ void G4VDecayChannel::FillParent()
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cout << "G4VDecayChannel::FillParent   ";
-      G4cout << *parent_name << " does not exist !!" << endl;
+      G4cout << *parent_name << " does not exist !!" << G4endl;
     }
 #endif
     G4Exception("G4VDecayChannel::FillParent");
@@ -372,7 +372,7 @@ void G4VDecayChannel::DumpInfo()
       G4cout << " not defined ";
     }
   }
-  G4cout << endl;
+  G4cout << G4endl;
 }
 
 

@@ -5,7 +5,7 @@
 
 
 //
-// $Id: STEPselect.cc,v 1.3 1999-11-17 08:34:42 gcosmo Exp $
+// $Id: STEPselect.cc,v 1.4 1999-12-15 14:50:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -25,11 +25,7 @@
 #include <STEPselect.h>
 #include <stdio.h> // to get the BUFSIZ #define
 #include <ExpDict.h>
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 #include <STEPentity.h>
 
 /**********
@@ -155,7 +151,7 @@ SdaiSelect::SelectValidLevel(const char *attrValue, ErrorDescriptor *err,
 //    s = tmp -> StrToVal 
 //      (attrValue, CurrentUnderlyingType () -> Name (), err, im);
 //  else
-  istrstream paska((char *)attrValue);
+  G4std::istrstream paska((char *)attrValue);
   s = tmp -> STEPread (paska, err, im);
   delete tmp;
   return s;
@@ -212,7 +208,7 @@ SdaiSelect::StrToVal(const char *Val, const char *selectType,
 	  case INTEGER_TYPE:
 	  default:
 	  {
-	    istrstream paska((char *)Val);
+	    G4std::istrstream paska((char *)Val);
 	      err->GreaterSeverity( STEPread_content( paska ) );
 	      if(_error.severity() != SEVERITY_NULL)
 		  err->AppendFromErrorArg(&_error);
@@ -223,7 +219,7 @@ SdaiSelect::StrToVal(const char *Val, const char *selectType,
 }
 
 Severity
-SdaiSelect::STEPread  (istream& in, ErrorDescriptor *err, InstMgr * instances, 
+SdaiSelect::STEPread  (G4std::istream& in, ErrorDescriptor *err, InstMgr * instances, 
 		       int addFileId)
 {
     char c ='\0';
@@ -232,7 +228,7 @@ SdaiSelect::STEPread  (istream& in, ErrorDescriptor *err, InstMgr * instances,
     // find out what case we have
     //  NOTE case C falls out of recursive calls in cases A and B
 
-    in >> ws;
+    in >> G4std::ws;
     in >> c;
 //    c = in.peek();
     if( isalpha(c) ) //  case B 
@@ -251,12 +247,12 @@ SdaiSelect::STEPread  (istream& in, ErrorDescriptor *err, InstMgr * instances,
 
 	if( SetUnderlyingType( CanBe( tmp.chars() ) ) )
 	{  //  assign the value to the underlying type
-	    in >> ws; // skip white space
+	    in >> G4std::ws; // skip white space
 	    STEPread_content (in, instances, addFileId);
 //  STEPread_content uses the ErrorDesc data member from the STEPselect class
 	    err->AppendToDetailMsg (Error ());
 	    err->GreaterSeverity( severity () );
-	    in >> ws >> c;  
+	    in >> G4std::ws >> c;  
 	    if( c != ')' )
 	    {
 		err->AppendToDetailMsg( 
@@ -414,7 +410,7 @@ SdaiSelect::STEPread  (istream& in, ErrorDescriptor *err, InstMgr * instances,
 
 
 void
-SdaiSelect::STEPwrite(ostream& out)  const
+SdaiSelect::STEPwrite(G4std::ostream& out)  const
 {
     if (!exists ()) {  
 	out << "$";
@@ -434,9 +430,9 @@ SdaiSelect::STEPwrite(ostream& out)  const
 const char *
 SdaiSelect::STEPwrite(SCLstring& s)  const
 {
-  strstream buf;
+  G4std::strstream buf;
   STEPwrite (buf);
-  buf << ends;  // have to add the terminating \0 char
+  buf << G4std::ends;  // have to add the terminating \0 char
   char * tmp;
   tmp = buf.str ();
   s = tmp;
@@ -455,10 +451,10 @@ SdaiSelect::STEPwrite(SCLstring& s)  const
 char* 
 SdaiSelect::asStr()  const
 {
-  strstream buf;
+  G4std::strstream buf;
   STEPwrite (buf);
 /*  STEPwrite_content (buf);*/
-  buf << ends;  // have to add the terminating \0 char
+  buf << G4std::ends;  // have to add the terminating \0 char
   return buf.str ();  // need to delete this space
 }
 #endif

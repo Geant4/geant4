@@ -1,4 +1,4 @@
-#include <iomanip.h>
+#include "g4std/iomanip"
 #include <algo.h>
 #include "Kinematics.hh"
 
@@ -57,9 +57,9 @@ void Kinematics::calculate(double sigma)
 
 
   if ( l<0 || l>sigma_l ) {
-    cerr << "Fehler: " << z << "  " << l << "  " 
+    G4cerr << "Fehler: " << z << "  " << l << "  " 
 	 << pq*eps_min-p0[0] << "  " 
-	 << sigma_l << endl;
+	 << sigma_l << G4endl;
     throw "Not possible...";
   }
 
@@ -81,7 +81,7 @@ REAL Kinematics::inv_eps(REAL eps,signed int sign) {
 
 void Kinematics::kin1(REAL& z,REAL& l)
 {
-  //  cerr << "pq = " << pq << ", sigma*z = " << sigma_l << endl;
+  //  G4cerr << "pq = " << pq << ", sigma*z = " << sigma_l << G4endl;
   REAL zmin = 0;
   REAL zmax = 1;
   if ( eps < eps_max_0 ) {
@@ -90,7 +90,7 @@ void Kinematics::kin1(REAL& z,REAL& l)
       zmax = inv_eps(eps,+1);
     }
   }
-  //  cerr << zmin << "  " << zmax << endl;  
+  //  G4cerr << zmin << "  " << zmax << G4endl;  
   FragmentationFunction f(zmin,zmax,Mt2*pq2);
   z = f.getValue();
   l =  get_eps(z);
@@ -98,14 +98,14 @@ void Kinematics::kin1(REAL& z,REAL& l)
 
 void Kinematics::kin2(REAL& z,REAL& l)
 {
-  REAL e = rand_gen::Random(eps_min,min(eps_max_0,eps));
+  REAL e = rand_gen::Random(eps_min,G4std::min(eps_max_0,eps));
   //  if ( e > eps_max_1 )
     z = inv_eps(e,-1);
     //  else
     //    z = inv_eps(e,+1);
   l = e*pq-p0[0];
   if ( get_eps(z) != l ) {
-    cerr << "get_eps != eps :  " << get_eps(z) << "  " << l << endl;
+    G4cerr << "get_eps != eps :  " << get_eps(z) << "  " << l << G4endl;
     throw "Not possible...";
   }
 }
@@ -120,7 +120,7 @@ void Kinematics::kin3(REAL& z,REAL& l)
       zmax = inv_eps(eps,+1);
     }
   }
-  //  cerr << zmin << "  " << zmax << endl;  
+  //  G4cerr << zmin << "  " << zmax << G4endl;  
   Banerjee f(zmin,zmax);
   z = f.getValue();
   l =  get_eps(z);

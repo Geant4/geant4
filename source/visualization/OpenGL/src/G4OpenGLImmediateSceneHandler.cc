@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.2 1999-01-11 00:47:42 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.3 1999-12-15 14:54:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,7 +54,7 @@ G4OpenGLImmediateSceneHandler::~G4OpenGLImmediateSceneHandler ()
   fSceneCount--;
 }
 
-#include <iomanip.h>
+#include "g4std/iomanip"
 
 void G4OpenGLImmediateSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
@@ -67,9 +67,9 @@ void G4OpenGLImmediateSceneHandler::BeginPrimitives
   G4cout << "G4OpenGLTransform3D matrix:";
   for (int i = 0; i < 16; i++) {
     if ((i % 4) == 0) G4cout << '\n';
-    G4cout << setw (15) << m[i];
+    G4cout << G4std::setw (15) << m[i];
   }
-  G4cout << endl;
+  G4cout << G4endl;
   *****************************************/
 
   glMultMatrixd (oglt.GetGLMatrix ());

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisationPlus.cc,v 1.3 1999-04-13 09:05:41 urban Exp $
+// $Id: G4eIonisationPlus.cc,v 1.4 1999-12-15 14:51:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -158,7 +158,7 @@ void G4eIonisationPlus::BuildLossTable(const G4ParticleDefinition& aParticleType
           if (&aParticleType==G4Electron::Electron())
             {
               Tmax = LowEdgeEnergy/2.;  
-              d = min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
+              d = G4std::min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
               ionloss = log(2.*(tau+2.)/Eexcm2)-1.-beta2
                        + log((tau-d)*d)+tau/(tau-d)
                        + (0.5*d*d+(2.*tau+1.)*log(1.-d/tau))/gamma2;
@@ -166,7 +166,7 @@ void G4eIonisationPlus::BuildLossTable(const G4ParticleDefinition& aParticleType
           else        //positron
             {
               Tmax = LowEdgeEnergy ;  
-              d = min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
+              d = G4std::min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
               d2=d*d/2.; d3=d*d*d/3.; d4=d*d*d*d/4.;
               y=1./(1.+gamma);
               ionloss = log(2.*(tau+2.)/Eexcm2)+log(tau*d)
@@ -449,7 +449,7 @@ void G4eIonisationPlus::PrintInfoDefinition()
            comments += "Good description from 1 KeV to 100 GeV.\n";
            comments += "        delta ray energy sampled from  differential Xsection.";
                      
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,"Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy") 
          << " in " << TotBin << " bins. \n";

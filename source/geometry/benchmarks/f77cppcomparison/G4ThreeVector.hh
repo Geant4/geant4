@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ThreeVector.hh,v 1.1 1999-01-08 16:31:34 gunter Exp $
+// $Id: G4ThreeVector.hh,v 1.2 1999-12-15 14:49:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -21,7 +21,7 @@
 #include "globals.hh"
 #include "geomdefs.hh"
 
-class ostream;
+class G4std::ostream;
 
 class G4ThreeVector {
 
@@ -152,7 +152,7 @@ private:
 
 };
 
-ostream & operator << (ostream &, const G4ThreeVector &);
+G4std::ostream & operator << (G4std::ostream &, const G4ThreeVector &);
 // output to a stream
 
 

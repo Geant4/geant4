@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05EventAction.cc,v 1.3 1999-11-11 15:41:27 gunter Exp $
+// $Id: ExN05EventAction.cc,v 1.4 1999-12-15 14:49:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,7 +53,7 @@ void ExN05EventAction::EndOfEventAction(const G4Event* evt )
   calorimeterCollID    = SDman->GetCollectionID(colNam="CalCollection");
   hadCalorimeterCollID = SDman->GetCollectionID(colNam="HadCollection");
   
-   G4cout << ">>> Event " << evt->GetEventID() << endl;
+   G4cout << ">>> Event " << evt->GetEventID() << G4endl;
   
   G4HCofThisEvent * HCE = evt->GetHCofThisEvent();
   ExN05CalorimeterHitsCollection* CaloHC    = NULL;
@@ -68,24 +68,24 @@ void ExN05EventAction::EndOfEventAction(const G4Event* evt )
     {
       int n_hit = CaloHC->entries();
       G4cout << "     " << n_hit
-	   << " hits are stored in EM ExN05CalorimeterHitsCollection." << endl;
+	   << " hits are stored in EM ExN05CalorimeterHitsCollection." << G4endl;
       G4double totE = 0;
       for(int i=0;i<n_hit;i++)
 	{ totE += (*CaloHC)[i]->GetEdep(); }
       G4cout << "     Total energy deposition in EM calorimeter crytals : "
-	   << totE / GeV << " (GeV)" << endl;
+	   << totE / GeV << " (GeV)" << G4endl;
     }
 
   if(HadCaloHC)
     {
       int n_hit = HadCaloHC->entries();
       G4cout << "     " << n_hit
-	   << " hits are stored in HAD ExN05CalorimeterHitsCollection." << endl;
+	   << " hits are stored in HAD ExN05CalorimeterHitsCollection." << G4endl;
       G4double totE = 0;
       for(int i=0;i<n_hit;i++)
 	{ totE += (*HadCaloHC)[i]->GetEdep(); }
       G4cout << "     Total energy deposition in HAD calorimeter towers : "
-	   << totE / GeV << " (GeV)" << endl;
+	   << totE / GeV << " (GeV)" << G4endl;
     }
   
   if(drawFlag)

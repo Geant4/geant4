@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testMaterialPropertiesTable.cc,v 1.1 1999-01-08 16:32:10 gunter Exp $
+// $Id: testMaterialPropertiesTable.cc,v 1.2 1999-12-15 14:50:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,8 +71,8 @@ int main()
 	G4MaterialPropertyVector *mpv;
 	mpv = myMPT.GetProperty("EFFIC"); 
 
-	G4cout << "EFFIC" << endl;
-	G4cout << "-----" << endl;
+	G4cout << "EFFIC" << G4endl;
+	G4cout << "-----" << G4endl;
 
 	mpv->DumpVector();
 	LoopUntilPressEnter();	
@@ -80,8 +80,8 @@ int main()
 	myMPT.AddProperty("ABSCO", PPCKOV, ABSCO, NUMENTRIES);
 	mpv = myMPT.GetProperty("ABSCO");
 
-        G4cout << "ABSCO" << endl;
-        G4cout << "-----" << endl;
+        G4cout << "ABSCO" << G4endl;
+        G4cout << "-----" << G4endl;
         mpv->DumpVector();
 
 	LoopUntilPressEnter();	
@@ -96,8 +96,8 @@ int main()
 	myMPT.AddProperty("RINDEX", PPCKOV, RINDEX, NUMENTRIES);
 	mpv = myMPT.GetProperty("RINDEX"); 
 
-	G4cout << "RINDEX" << endl;
-	G4cout << "------" << endl;
+	G4cout << "RINDEX" << G4endl;
+	G4cout << "------" << G4endl;
 
         mpv->DumpVector();
 
@@ -127,17 +127,17 @@ int main()
 	mpv = myMPT.GetProperty("RINDEX");
 	myMPT.AddEntry("RINDEX", 3.166e-09, 1.34);
 
-        G4cout << "RINDEX" << endl;
-        G4cout << "------" << endl;
+        G4cout << "RINDEX" << G4endl;
+        G4cout << "------" << G4endl;
 	mpv->DumpVector();
 
-	G4cout << "TESTING GetPhotonMomentum()" << endl;
-	G4cout << "---------------------------" << endl;
+	G4cout << "TESTING GetPhotonMomentum()" << G4endl;
+	G4cout << "---------------------------" << G4endl;
 
 	for (int i=0; i < NUMENTRIES; i++) { 
 		G4cerr << "Photon Momentum for " << RINDEX[i] << " "
 		     << mpv->GetPhotonMomentum(RINDEX[i])	
-		     << endl;
+		     << G4endl;
 	}	
 
         LoopUntilPressEnter();
@@ -156,8 +156,8 @@ int main()
         mpv = myMPT.GetProperty("RINDEX");
         myMPT.RemoveEntry("RINDEX", 3.166e-09);
 
-        G4cout << "RINDEX" << endl;
-        G4cout << "------" << endl;
+        G4cout << "RINDEX" << G4endl;
+        G4cout << "------" << G4endl;
         mpv->DumpVector();
         LoopUntilPressEnter();
 
@@ -210,8 +210,8 @@ int main()
 
         testMPV2.DumpVector();
 
-        G4cout << "MinPM " << testMPV2.GetMinPhotonMomentum() << endl;
-	G4cout << "MaxPM " << testMPV2.GetMaxPhotonMomentum() << endl;
+        G4cout << "MinPM " << testMPV2.GetMinPhotonMomentum() << G4endl;
+	G4cout << "MaxPM " << testMPV2.GetMaxPhotonMomentum() << G4endl;
         G4cout << "\n\n";
         LoopUntilPressEnter();
 
@@ -259,10 +259,10 @@ void LoopUntilPressEnter()
 {
         char ch;
 	G4cout << "Press <Enter> to continue ... ";
-        while ( cin.get(ch) )
+        while ( G4cin.get(ch) )
         {
                 if (ch == '\n') break;
         }       
-	G4cout << endl;
+	G4cout << G4endl;
 }
 

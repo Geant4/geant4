@@ -1,7 +1,7 @@
 #ifndef __PERMUT__
 #define __PERMUT__
 
-#include <vector.h>
+#include "g4std/vector"
 
 template<class t>
 vector<t>& operator>>(vector<t>& v,int n); 

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst15PhysicsList.cc,v 1.2 1999-11-18 15:01:52 hpw Exp $
+// $Id: Tst15PhysicsList.cc,v 1.3 1999-12-15 14:54:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,7 +28,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include <iomanip.h>   
+#include "g4std/iomanip"   
 
 #include "G4FastSimulationManagerProcess.hh"
 #include "G4NeutronIsotopeProduction.hh"

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test15.hadronic.exerciser.cc,v 1.4 1999-12-02 16:34:41 stesting Exp $
+// $Id: test15.hadronic.exerciser.cc,v 1.5 1999-12-15 14:54:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -72,5 +72,5 @@ int main (int argc, char** argv) {
 
   OutputCases (particleNameList, energyList, materialNameList);
 
-  cout << endl;
+  cout << G4endl;
 }

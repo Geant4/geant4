@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.cc,v 1.4 1999-05-25 09:14:17 johna Exp $
+// $Id: G4ViewParameters.cc,v 1.5 1999-12-15 14:54:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,7 +115,7 @@ void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
     fCutawayPlanes.insert (cutawayPlane);
   }
   else {
-    G4cerr << "A maximum of 3 cutaway planes supported." << endl;
+    G4cerr << "A maximum of 3 cutaway planes supported." << G4endl;
   }
 }
 
@@ -128,14 +128,14 @@ void G4ViewParameters::SetVisibleDensity (G4double visibleDensity) {
   const G4double reasonableMaximum = 10.0 * g / cm3;
   if (visibleDensity < 0) {
     G4cout << "G4ViewParameters::SetVisibleDensity: attempt to set negative "
-      "density - ignored." << endl;
+      "density - ignored." << G4endl;
   }
   else {
     if (fVisibleDensity > reasonableMaximum) {
       G4cout << "G4ViewParameters::SetVisibleDensity: density > "
 	   << reasonableMaximum
 	   << " g / cm3 - did you mean this?"
-	   << endl;
+	   << G4endl;
     }
     fVisibleDensity = visibleDensity;
   }
@@ -147,7 +147,7 @@ void G4ViewParameters::SetNoOfSides (G4int nSides) {
     nSides = nSidesMin;
     G4cout << "G4ViewParameters::SetNoOfSides: attempt to set the"
       "\nnumber of sides per circle < " << nSidesMin
-	 << "; forced to" << nSides << endl;
+	 << "; forced to" << nSides << G4endl;
   }
   fNoOfSides = nSides;
 }
@@ -216,32 +216,32 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fGlobalMarkerScale    != v.fGlobalMarkerScale)    ||
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY))
-    G4cout << "Difference in 1st batch." << endl;
+    G4cout << "Difference in 1st batch." << G4endl;
 
   if (fSection) {
     if (!(fSectionPlane == v.fSectionPlane))
-      G4cout << "Difference in section planes batch." << endl;
+      G4cout << "Difference in section planes batch." << G4endl;
   }
 
   if (fCutaway) {
     if (fCutawayPlanes.entries () != v.fCutawayPlanes.entries ()) {
-      G4cout << "Difference in no of cutaway planes." << endl;
+      G4cout << "Difference in no of cutaway planes." << G4endl;
     }
     else {
       for (int i = 0; i < fCutawayPlanes.entries (); i++) {
 	if (!(fCutawayPlanes (i) == v.fCutawayPlanes (i)))
-	  G4cout << "Difference in cutaway plane no. " << i << endl;
+	  G4cout << "Difference in cutaway plane no. " << i << G4endl;
       }
     }
   }
 
   if (fExplode) {
     if (fExplodeFactor != v.fExplodeFactor)
-      G4cout << "Difference in explode factor." << endl;
+      G4cout << "Difference in explode factor." << G4endl;
   }
 }
 
-ostream& operator << (ostream& os, const G4ViewParameters& v) {
+G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v) {
   os << "View parameters and options:";
 
   os << "\n  Drawing style: ";

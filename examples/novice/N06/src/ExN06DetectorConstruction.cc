@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -206,8 +206,8 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
   OpWaterSurface->SetFinish(polished);
   OpWaterSurface->SetModel(glisur);
 
-  if( WaterSurface->GetVolume1() == waterTank_phys ) G4cout << " Equal " << endl;
-  if( WaterSurface->GetVolume2() == expHall_phys   ) G4cout << " Equal " << endl;
+  if( WaterSurface->GetVolume1() == waterTank_phys ) G4cout << " Equal " << G4endl;
+  if( WaterSurface->GetVolume2() == expHall_phys   ) G4cout << " Equal " << G4endl;
 
   G4OpticalSurface * OpAirSurface =
                               new G4OpticalSurface("AirSurface");
@@ -221,16 +221,16 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
   OpAirSurface->SetFinish(ground);
   OpAirSurface->SetModel(unified);
 
-  if( AirSurface->GetLogicalVolume() == bubbleAir_log ) G4cout << " Equal " << endl;
+  if( AirSurface->GetLogicalVolume() == bubbleAir_log ) G4cout << " Equal " << G4endl;
 
   G4LogicalBorderSurface * Tmp1Surface = WaterSurface->
 				 GetSurface(waterTank_phys,expHall_phys);
 
-//  if (Tmp1Surface == *WaterSurface) G4cout << " Equal "     << endl;
+//  if (Tmp1Surface == *WaterSurface) G4cout << " Equal "     << G4endl;
 
   G4LogicalSkinSurface * Tmp2Surface = AirSurface->GetSurface(bubbleAir_log);
 
-//  if (Tmp2Surface == *AirSurface  ) G4cout << " Equal "     << endl;
+//  if (Tmp2Surface == *AirSurface  ) G4cout << " Equal "     << G4endl;
 
   G4OpticalSurface * TmpOpSurface = Tmp2Surface->GetOpticalSurface();
   TmpOpSurface->DumpInfo();

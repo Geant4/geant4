@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst17PrimaryGeneratorAction.cc,v 1.1 1999-11-30 18:01:55 stesting Exp $
+// $Id: Tst17PrimaryGeneratorAction.cc,v 1.2 1999-12-15 14:54:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,14 +112,14 @@ void Tst17PrimaryGeneratorAction::Setzvertex(G4double z)
   vertexdefined = true ;
   zvertex = z ;
   G4cout << " Z coordinate of the primary vertex = " << zvertex/mm <<
-            " mm." << endl;
+            " mm." << G4endl;
 }
 void Tst17PrimaryGeneratorAction::Setxvertex(G4double x)
 {
   vertexdefined = true ;
   xvertex = x ;
   G4cout << " X coordinate of the primary vertex = " << xvertex/mm <<
-            " mm." << endl;
+            " mm." << G4endl;
 }
 
 void Tst17PrimaryGeneratorAction::Setyvertex(G4double y)
@@ -127,5 +127,5 @@ void Tst17PrimaryGeneratorAction::Setyvertex(G4double y)
   vertexdefined = true ;
   yvertex = y ;
   G4cout << " Y coordinate of the primary vertex = " << yvertex/mm <<
-            " mm." << endl;
+            " mm." << G4endl;
 }

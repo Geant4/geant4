@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test19DetectorMessenger.cc,v 1.1 1999-04-16 10:32:39 johna Exp $
+// $Id: test19DetectorMessenger.cc,v 1.2 1999-12-15 14:54:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ void test19DetectorMessenger::SetNewValue
   if (command == fpDetectorCommand) {
     G4int id;
     const char* aString = newValues;
-    istrstream is((char*) aString) ; is >> id;
+    G4std::istrstream is((char*) aString) ; is >> id;
 #ifdef ATLAS
     const G4int idMax = 5;
 #else
@@ -79,7 +79,7 @@ void test19DetectorMessenger::SetNewValue
 	   << "\n5) ATLAS (selected part)"
 #endif
 	   << "\nChoose by specifying integer parameter."
-	   << endl;
+	   << G4endl;
     }
     else {
       G4VPhysicalVolume* pGeom;
@@ -99,7 +99,7 @@ void test19DetectorMessenger::SetNewValue
 	//G4cout << 
 	//  "Now further commands before constructing MyDetector."
 	//  "\nType continue to Construct MyDetector..."
-	//     << endl;
+	//     << G4endl;
 	//G4StateManager::GetStateManager () -> Pause ();
 	pGeom = detector -> Construct ();
 	break;
@@ -112,10 +112,10 @@ void test19DetectorMessenger::SetNewValue
 	G4cout << 
 	  "Now further ATLAS commands before constructing."
 	  "\nType continue to Construct ATLAS..."
-	     << endl;
+	     << G4endl;
 	G4StateManager::GetStateManager () -> Pause ();
 	pGeom = atlas -> buildATLAS ();
-	G4cout << "ATLAS geometrical definition Done." << endl;
+	G4cout << "ATLAS geometrical definition Done." << G4endl;
 	break;
 #endif
       }

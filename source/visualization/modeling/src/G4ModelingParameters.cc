@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ModelingParameters.cc,v 1.3 1999-05-25 09:14:26 johna Exp $
+// $Id: G4ModelingParameters.cc,v 1.4 1999-12-15 14:54:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,14 +86,14 @@ void G4ModelingParameters::SetVisibleDensity (G4double visibleDensity) {
   const G4double reasonableMaximum = 10.0 * g / cm3;
   if (visibleDensity < 0) {
     G4cout << "G4ModelingParameters::SetVisibleDensity: attempt to set negative "
-      "density - ignored." << endl;
+      "density - ignored." << G4endl;
   }
   else {
     if (fVisibleDensity > reasonableMaximum) {
       G4cout << "G4ModelingParameters::SetVisibleDensity: density > "
 	   << reasonableMaximum
 	   << " g / cm3 - did you mean this?"
-	   << endl;
+	   << G4endl;
     }
     fVisibleDensity = visibleDensity;
   }
@@ -105,7 +105,7 @@ void G4ModelingParameters::SetNoOfSides (G4int nSides) {
     nSides = nSidesMin;
     G4cout << "G4ModelingParameters::SetNoOfSides: attempt to set the"
       "\nnumber of sides per circle < " << nSidesMin
-	 << "; forced to" << nSides << endl;
+	 << "; forced to" << nSides << G4endl;
   }
   fNoOfSides = nSides;
 }
@@ -125,10 +125,10 @@ void G4ModelingParameters::PrintDifferences
       (fViewGeom              != that.fViewGeom)              ||
       (fViewHits              != that.fViewHits)              ||
       (fViewDigis             != that.fViewDigis))
-    G4cout << "Difference in 1st batch." << endl;
+    G4cout << "Difference in 1st batch." << G4endl;
 }
 
-ostream& operator << (ostream& os, const G4ModelingParameters& mp) {
+G4std::ostream& operator << (G4std::ostream& os, const G4ModelingParameters& mp) {
   os << "Modeling parameters and options:";
 
   os << "\n  Default vis. attributes: " << *mp.fpDefaultVisAttributes;

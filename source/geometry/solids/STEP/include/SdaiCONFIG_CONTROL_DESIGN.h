@@ -5,7 +5,7 @@
 
 
 //
-// $Id: SdaiCONFIG_CONTROL_DESIGN.h,v 1.2 1999-05-21 20:20:35 japost Exp $
+// $Id: SdaiCONFIG_CONTROL_DESIGN.h,v 1.3 1999-12-15 14:50:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef  SDAICONFIG_CONTROL_DESIGN_H
@@ -1760,8 +1760,8 @@ class SdaiCharacterized_product_definition  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -1846,8 +1846,8 @@ class SdaiShape_definition  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -1936,8 +1936,8 @@ class SdaiCharacterized_definition  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -2006,8 +2006,8 @@ class SdaiChange_request_item  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -2083,8 +2083,8 @@ class SdaiReversible_topology_item  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -2186,8 +2186,8 @@ class SdaiAxis2_placement  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -2265,8 +2265,8 @@ class SdaiSpecified_item  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -2361,8 +2361,8 @@ class SdaiMeasure_value  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -2442,8 +2442,8 @@ class SdaiPerson_organization_select  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -2513,8 +2513,8 @@ class SdaiPcurve_or_surface  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -2590,8 +2590,8 @@ class SdaiClassified_item  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -2675,8 +2675,8 @@ class SdaiVector_or_direction  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -2754,8 +2754,8 @@ class SdaiWireframe_model  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -2832,8 +2832,8 @@ class SdaiGeometric_set_select  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -2908,8 +2908,8 @@ class SdaiStart_request_item  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -2989,8 +2989,8 @@ class SdaiPerson_organization_item  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -3125,8 +3125,8 @@ class SdaiDate_time_item  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -3254,8 +3254,8 @@ class SdaiShell  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -3341,8 +3341,8 @@ class SdaiTransformation  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -3419,8 +3419,8 @@ class SdaiBoolean_operand  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -3487,8 +3487,8 @@ class SdaiCertified_item  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -3563,8 +3563,8 @@ class SdaiDate_time_select  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -3635,8 +3635,8 @@ class SdaiCurve_on_surface  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -3727,8 +3727,8 @@ class SdaiTrimming_select  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -3801,8 +3801,8 @@ class SdaiContracted_item  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -3873,8 +3873,8 @@ class SdaiUnit  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -3944,8 +3944,8 @@ class SdaiReversible_topology  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -4016,8 +4016,8 @@ class SdaiWork_item  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -4090,8 +4090,8 @@ class SdaiSupported_item  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -4190,8 +4190,8 @@ class SdaiApproved_item  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 
@@ -4326,8 +4326,8 @@ class SdaiSurface_model  :  public SdaiSelect {
 
 
 // STEP Part 21
-	virtual void STEPwrite_content (ostream& out =G4cout) const;
-	virtual Severity STEPread_content (istream& in =cin, InstMgr * instances =0, int addFileId =0);
+	virtual void STEPwrite_content (G4std::ostream& out =G4cout) const;
+	virtual Severity STEPread_content (G4std::istream& in =G4cin, InstMgr * instances =0, int addFileId =0);
 
 	virtual Severity StrToVal_content (const char *, InstMgr * instances =0);
 

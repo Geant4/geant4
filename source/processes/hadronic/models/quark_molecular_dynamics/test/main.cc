@@ -1,4 +1,4 @@
-#include <fstream.h>
+#include "g4std/fstream"
 #include <algo.h>
 #include "newvector.H"
 #include "Random.H"
@@ -31,7 +31,7 @@
 
 Array<String> xx;
  
-ostream* Output::fileout = 0;
+G4std::ostream* Output::fileout = 0;
 
 class q_Quark : public QuantumNumbers
 {
@@ -122,7 +122,7 @@ void setPhaseSpace_stream(vector<Particle*>& L,Geometry& G,REAL T,double ymax)
   }
 }
 
-void waitfor(istream& in,const String &s) {
+void waitfor(G4std::istream& in,const String &s) {
   char c;
   while ( in ) {
     while ( in.get(c) && c != s[0] );
@@ -135,16 +135,16 @@ void waitfor(istream& in,const String &s) {
   }
 }
 
-void skipline(istream& in,int n=1) {
+void skipline(G4std::istream& in,int n=1) {
   char c;
   for (int i=0; i<n; i++) {
-    //        cerr << "skip: ";
-    while ( in.get(c) && c != '\n' ) /*cerr << c*/ ;
-    //        cerr << endl;
+    //        G4cerr << "skip: ";
+    while ( in.get(c) && c != '\n' ) /*G4cerr << c*/ ;
+    //        G4cerr << G4endl;
   }
 }
 
-double readEvent(istream& in,bool final = true) 
+double readEvent(G4std::istream& in,bool final = true) 
 {
   bool readit = false;
   int S,C,col;
@@ -165,7 +165,7 @@ double readEvent(istream& in,bool final = true)
 	readit = true;
       else if ( fs.subString(0,3) == "time" ) {
 	time = atof(fs.subString(5,length(fs)-2));
-	cerr << "t = " << time << endl;
+	G4cerr << "t = " << time << G4endl;
 	skipline(in);
       }
       else 
@@ -202,7 +202,7 @@ double readEvent(istream& in,bool final = true)
     return 0.0;
 }
 /*
-double readUQMD(istream& in) 
+double readUQMD(G4std::istream& in) 
 {
   ParticleType* quarks[3];
   const ParticleType& q = Knot<ParticleType>::FindKnot("q");
@@ -216,13 +216,13 @@ double readUQMD(istream& in)
   Vektor3 x,p;
   skipline(in,14);
   in >> N;
-  cerr << "N=" << N << endl;
+  G4cerr << "N=" << N << G4endl;
   skipline(in,2);
   for (int j=0; j<N; j++) {
     in >> t >> x[1] >> x[2] >> x[3] >> p0 >> p[1] >> p[2] >> p[3]
        >> mass >> dummy >> i3 >> Q >> dummy >> dummy >> dummy >> dummy 
        >> dummy >> dummy >> q1 >> q2;
-    //    cerr << j+1 << "  " << t << "  " << p0 << "  " << q1 << "  " << q2 << endl;
+    //    G4cerr << j+1 << "  " << t << "  " << p0 << "  " << q1 << "  " << q2 << G4endl;
     int sig = sign(q2);
     RGB col(rand_gen::Random(1,3));
     switch ( abs(q2) ) {
@@ -286,7 +286,7 @@ double readUQMD(istream& in)
   return t;
 }
 */
-double readUQMD(istream& in) 
+double readUQMD(G4std::istream& in) 
 {
   int N;
   double t,p0,mass,dummy,iso;
@@ -294,7 +294,7 @@ double readUQMD(istream& in)
   Vektor3 x,p;
   skipline(in,14);
   in >> N;
-  cerr << "N=" << N << endl;
+  G4cerr << "N=" << N << G4endl;
   skipline(in,2);
   for (int j=0; j<N; j++) {
     in >> t >> x[1] >> x[2] >> x[3] >> p0 >> p[1] >> p[2] >> p[3]
@@ -320,12 +320,12 @@ double readUQMD(istream& in)
     pp.setS(-s);
     pp.setIsospin(0.5*abs(i3));
     pp.setC(0);
-    cerr << q1 << "  " << q2 << "  ";
+    G4cerr << q1 << "  " << q2 << "  ";
     pp.writeOut(cerr);
     ParticleType& knot = Knot<ParticleType>::FindKnot((ParticleType&)pp);
     ParticleType& h = knot.selectType(mass);
     ParticleBase* H = makeParticle(h,QuantumProjections(c,0,0.5*i3,s3));
-    cerr << H->Name() << endl;
+    G4cerr << H->Name() << G4endl;
     H->SetMomentum(p);
     H->SetCoordinates(x);
     H->SetMass(mass);
@@ -411,11 +411,11 @@ int main(int argc,char* argv[]) {
 	   >> deconf >> kapp >> len >> Thermalize >> M >> PtoN >> file
 	   >> ForceDecay >> transprof >> skip;
     inputStream >> ReadIn;
-    istream* in;
+    G4std::istream* in;
     if ( input == "-" ) 
       in = &cin;
     else
-      in = new ifstream((char*)String(input));
+      in = new G4std::ifstream((char*)String(input));
     *in >> ReadIn;
   }
   String pot = String(Potential);
@@ -452,20 +452,20 @@ int main(int argc,char* argv[]) {
   FileRead<ParticleType> Groups("/afs/cern.ch/user/s/sscherer/qmd_geant/Input/Groups.dat");
   FileRead<ParticleType> Particles("/afs/cern.ch/user/s/sscherer/qmd_geant/Input/Particles_Radiation.dat");
   Knot<ParticleType>::Root->printTree(cerr);
-  //  cerr << "-----\n";
+  //  G4cerr << "-----\n";
   FileRead<CollisionType> Collisions("/afs/cern.ch/user/s/sscherer/qmd_geant/Input/Collisions.dat");
   //  Knot<CollisionType>::Root->printTree(cerr);
 
   double tau = 1.0;   // fm, formation time of QGP
   double tau_c = 0.1; // fm, formation tiem of c-cbar
 
-  istream* readIn = 0;
+  G4std::istream* readIn = 0;
   if ( file.isValid() ) 
      if ( file == "-" ) 
 	readIn = &cin;
      else	
-        readIn = new ifstream((char*)(String)file);
-  cerr << "point 2\n";
+        readIn = new G4std::ifstream((char*)(String)file);
+  G4cerr << "point 2\n";
   Geometry* Blob = 0;
   if ( Initial == "bjorken" )
     Blob = new Tube(R,2*tau);
@@ -477,16 +477,16 @@ int main(int argc,char* argv[]) {
     Blob = new Tube(R,L);
   else
     throw "Unknown initial condition...";
-  cerr << "point 1\n";
+  G4cerr << "point 1\n";
   Blob->whatAmI(cerr);
   //halfSpace Blob(R);
   //  Box Blob(R); // 3 fm Kantenlänge
-  Output::fileout = new ofstream(Dir+"/output.out");
+  Output::fileout = new G4std::ofstream(Dir+"/output.out");
   *Output::fileout << "! Start\n";
   Output::fileout->flush();
-  //  ostream& final = cerr;
+  //  G4std::ostream& final = cerr;
   int n=0;
-  cerr << "point 3\n";
+  G4cerr << "point 3\n";
   vector<ParticleType*> Quarks = Knot<ParticleType>::Find("SQ");
   Colour::setQuarks(Quarks);
   if ( readIn ) {
@@ -519,7 +519,7 @@ int main(int argc,char* argv[]) {
       QuarkVolume<RelBoltzmann> QGP(*Blob,Quarks,T,mu,mus,num);
       double u_frac = (2.0*double(PtoN)+1.0)/(PtoN+1.0)/3.0;
       QGP.createParticles(u_frac);
-      cerr << "Energy : " << QGP.Etot()/Blob->getVolume() << "  " << R << "  " << box.List.size() << endl;
+      G4cerr << "Energy : " << QGP.Etot()/Blob->getVolume() << "  " << R << "  " << box.List.size() << G4endl;
       N_c = 0;
       //    setPhaseSpace_stream(box.List,Blob,T,ymax);
       box.setup();
@@ -530,9 +530,9 @@ int main(int argc,char* argv[]) {
 	
 	Colour::allowDecay = false;
 	Colour::allowClustering = false; 
-	cerr << "Thermalizing...";
+	G4cerr << "Thermalizing...";
 	run.evaluate(21000);
-	cerr << "finished\n";
+	G4cerr << "finished\n";
 	//      v_profile(box.List);
       }
       if ( Initial == "bjorken" ) {
@@ -545,10 +545,10 @@ int main(int argc,char* argv[]) {
       //    Colour::allowClustering = false;
       Colour::directHadrons = (dir == "yes");
 
-      cout << "# Temperature " << T << endl;
-      cout << "# mu_q        " << mu << endl;
-      cout << "# mu_s        " << mus << endl;
-      cout << "# pt        " << pt << endl;
+      cout << "# Temperature " << T << G4endl;
+      cout << "# mu_q        " << mu << G4endl;
+      cout << "# mu_s        " << mus << G4endl;
+      cout << "# pt        " << pt << G4endl;
       
       const ParticleType& cq = Knot<ParticleType>::FindKnot("c");
       
@@ -575,16 +575,16 @@ int main(int argc,char* argv[]) {
       while ( ( box.Time() < Time || Time<0 ) && ( box.Nquark>0 || Time>0 ) ) {
 	double t1 = box.Time()+dt;
 	if ( Time>0 ) 
-	  t1 = min(t1,(double)Time);
+	  t1 = G4std::min(t1,(double)Time);
 	//      box.Correlation();
 	if ( box.Nquark ) {
 	  while ( box.Time() < t1 && ( box.Nquark>0 || Time>0 ) ) {
 	    //final.flush();
 	    box.one_step();
-	    cerr << n << " :  " << box.Time() << " : " << "  " 
+	    G4cerr << n << " :  " << box.Time() << " : " << "  " 
 		 << box.Etot() << "  "
 	      //	       << "  " << "  " << length(box.Ptot()) << "  " 
-		 << box.Npart << "  " << -box.Nquark+box.Npart << endl;
+		 << box.Npart << "  " << -box.Nquark+box.Npart << G4endl;
 	  }
 	}
 	else {
@@ -592,7 +592,7 @@ int main(int argc,char* argv[]) {
 	  CollisionTab::perform(t1);
 	}
 	box.print(cout);
-	//      Output[0] << "# time=" << box.Time() << endl;
+	//      Output[0] << "# time=" << box.Time() << G4endl;
 	//      box.writeField(Output[0],0,0,0,0,0,0);
       }
       if ( finalDecay ) {
@@ -603,7 +603,7 @@ int main(int argc,char* argv[]) {
       Output::fileout->flush();
     }
     catch ( char *s ) {
-      cerr << "ERROR: " << s << endl;
+      G4cerr << "ERROR: " << s << G4endl;
     }
     int c = 1;
     //    double E0 = box.Etot(),E1 = E0;

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3DetectorConstruction.cc,v 1.1 1999-10-11 16:55:51 maire Exp $
+// $Id: Em3DetectorConstruction.cc,v 1.2 1999-12-15 14:49:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -238,7 +238,7 @@ G4Material* beam = new G4Material(name="Beam", density, ncomponents=1,
                                       kStateGas,temperature,pressure);
 beam->AddMaterial(Air, fractionmass=1.);
 
-G4cout << *(G4Material::GetMaterialTable()) << endl;
+G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //default materials of the calorimeter
   AbsorMaterial[0] = Pb;
@@ -381,8 +381,8 @@ void Em3DetectorConstruction::PrintCalorParameters()
          << "\n ---> The calorimeter is " << NbOfLayers << " layers of:";
   for (G4int i=0; i<NbOfAbsor; i++)
      { 
-       G4cout << "\n \t" << setw(12) << AbsorMaterial[i]->GetName() <<": "
-              << setw(6) << G4BestUnit(AbsorThickness[i],"Length");
+       G4cout << "\n \t" << G4std::setw(12) << AbsorMaterial[i]->GetName() <<": "
+              << G4std::setw(6) << G4BestUnit(AbsorThickness[i],"Length");
      }
   G4cout << "\n-------------------------------------------------------------\n";
 }
@@ -396,7 +396,7 @@ void Em3DetectorConstruction::SetNbOfAbsor(G4int ival)
   if (ival < 1 || ival > MaxAbsor)
     { G4cout << "\n ---> warning from SetNbOfAbsor: " 
              << ival << " must be at least 1 and and most " << MaxAbsor 
-	     << ". Command refused" << endl;
+	     << ". Command refused" << G4endl;
       return;
     }  
   NbOfAbsor = ival;
@@ -409,7 +409,7 @@ void Em3DetectorConstruction::SetAbsorMaterial(G4int ival,G4String material)
   //
   if (ival >= NbOfAbsor)
     { G4cout << "\n --->warning from SetAbsorMaterial: absor number " 
-             << ival << " out of range. Command refused" << endl;
+             << ival << " out of range. Command refused" << G4endl;
       return;
     }
          
@@ -425,12 +425,12 @@ void Em3DetectorConstruction::SetAbsorThickness(G4int ival,G4double val)
   //
   if (ival >= NbOfAbsor)
     { G4cout << "\n --->warning from SetAbsorThickness: absor number " 
-             << ival << " out of range. Command refused" << endl;
+             << ival << " out of range. Command refused" << G4endl;
       return;
     }
   if (val <= DBL_MIN)
     { G4cout << "\n --->warning from SetAbsorThickness: thickness " 
-             << val  << " out of range. Command refused" << endl;
+             << val  << " out of range. Command refused" << G4endl;
       return;
     }     	      
   AbsorThickness[ival] = val;
@@ -444,7 +444,7 @@ void Em3DetectorConstruction::SetCalorSizeYZ(G4double val)
   //
   if (val <= DBL_MIN)
     { G4cout << "\n --->warning from SetCalorSizeYZ: thickness " 
-             << val  << " out of range. Command refused" << endl;
+             << val  << " out of range. Command refused" << G4endl;
       return;
     }       
   CalorSizeYZ = val;
@@ -458,7 +458,7 @@ void Em3DetectorConstruction::SetNbOfLayers(G4int ival)
   //
   if (ival < 1)
     { G4cout << "\n --->warning from SetNbOfLayers: " 
-             << ival << " must be at least 1. Command refused" << endl;
+             << ival << " must be at least 1. Command refused" << G4endl;
       return;
     }  
   NbOfLayers = ival;

@@ -1,15 +1,18 @@
 //
 // $RCSfile: BinIOStream.cc,v $
 //
-// $Revision: 1.1 $
-// $Date: 1999-12-09 11:50:39 $
-// $Author: sscherer $
+// $Revision: 1.2 $
+// $Date: 1999-12-15 14:53:32 $
+// $Author: gunter $
 // $Locker:  $
 // $State: Exp $
 // DOSfile: biostream.cpp
 // UNIXfile: BinIOStream.C
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1  1999/12/09 11:50:39  sscherer
+// adding quark_molecular_dynamics
+//
 // Revision 1.1.1.1  1998/09/22 16:31:05  mhofmann
 // U++ V0.9
 //
@@ -22,9 +25,9 @@
 //
 
 static char RCS_Id[] = 
-  "@(#) $Id: BinIOStream.cc,v 1.1 1999-12-09 11:50:39 sscherer Exp $";
+  "@(#) $Id: BinIOStream.cc,v 1.2 1999-12-15 14:53:32 gunter Exp $";
 
-#include <iostream.h>
+#include "g4std/iostream"
 #include <stdlib.h>
 
 #ifdef __MSDOS__
@@ -45,7 +48,7 @@ static char RCS_Id[] =
      
 static const char identification[] = "@(#)BinIOStream";
 
-BinOStream::BinOStream(ostream& o, int) 
+BinOStream::BinOStream(G4std::ostream& o, int) 
   : os(&o)
 {
   for( int i = 0; i < 16; i++ ) {
@@ -53,7 +56,7 @@ BinOStream::BinOStream(ostream& o, int)
   }
 }
 
-BinIStream::BinIStream(istream& i, int) 
+BinIStream::BinIStream(G4std::istream& i, int) 
   : is(&i)
 {
   char c; 

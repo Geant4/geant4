@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastStep.cc,v 1.5 1999-09-15 16:04:28 mora Exp $
+// $Id: G4FastStep.cc,v 1.6 1999-12-15 14:53:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //$Id:
@@ -239,14 +239,14 @@ void G4FastStep::Initialize(const G4Track&) {
 G4FastStep::G4FastStep():G4VParticleChange()
 {
   if (verboseLevel>2) {
-    G4cerr << "G4FastStep::G4FastStep() " << endl;
+    G4cerr << "G4FastStep::G4FastStep() " << G4endl;
   }
 }
 
 G4FastStep::~G4FastStep() 
 {
   if (verboseLevel>2) {
-    G4cerr << "G4FastStep::~G4FastStep() " << endl;
+    G4cerr << "G4FastStep::~G4FastStep() " << G4endl;
   }
 }
 
@@ -377,41 +377,41 @@ void G4FastStep::DumpInfo() const
 
   G4cout.precision(3);
   G4cout << "        Position - x (mm)   : " 
-       << setw(20) << thePositionChange.x()/mm
-       << endl; 
+       << G4std::setw(20) << thePositionChange.x()/mm
+       << G4endl; 
   G4cout << "        Position - y (mm)   : " 
-       << setw(20) << thePositionChange.y()/mm
-       << endl; 
+       << G4std::setw(20) << thePositionChange.y()/mm
+       << G4endl; 
   G4cout << "        Position - z (mm)   : " 
-       << setw(20) << thePositionChange.z()/mm
-       << endl;
+       << G4std::setw(20) << thePositionChange.z()/mm
+       << G4endl;
   G4cout << "        Time (ns)           : " 
-       << setw(20) << theTimeChange/ns
-       << endl;
+       << G4std::setw(20) << theTimeChange/ns
+       << G4endl;
   G4cout << "        Proper Time (ns)    : " 
-       << setw(20) << theProperTimeChange/ns
-       << endl;
+       << G4std::setw(20) << theProperTimeChange/ns
+       << G4endl;
   G4cout << "        Momentum Direct - x : " 
-       << setw(20) << theMomentumChange.x()
-       << endl;
+       << G4std::setw(20) << theMomentumChange.x()
+       << G4endl;
   G4cout << "        Momentum Direct - y : " 
-       << setw(20) << theMomentumChange.y()
-       << endl;
+       << G4std::setw(20) << theMomentumChange.y()
+       << G4endl;
   G4cout << "        Momentum Direct - z : " 
-       << setw(20) << theMomentumChange.z()
-       << endl;
+       << G4std::setw(20) << theMomentumChange.z()
+       << G4endl;
   G4cout << "        Kinetic Energy (MeV): " 
-       << setw(20) << theEnergyChange/MeV
-       << endl;
+       << G4std::setw(20) << theEnergyChange/MeV
+       << G4endl;
   G4cout << "        Polarization - x    : " 
-       << setw(20) << thePolarizationChange.x()
-       << endl;
+       << G4std::setw(20) << thePolarizationChange.x()
+       << G4endl;
   G4cout << "        Polarization - y    : " 
-       << setw(20) << thePolarizationChange.y()
-       << endl;
+       << G4std::setw(20) << thePolarizationChange.y()
+       << G4endl;
   G4cout << "        Polarization - z    : " 
-       << setw(20) <<  thePolarizationChange.z()
-       << endl;
+       << G4std::setw(20) <<  thePolarizationChange.z()
+       << G4endl;
 }
 
 G4bool G4FastStep::CheckIt(const G4Track& aTrack)
@@ -442,8 +442,8 @@ G4bool G4FastStep::CheckIt(const G4Track& aTrack)
   accuracy = ( theEnergyChange - aTrack.GetKineticEnergy())/MeV;
   if (accuracy > accuracyForWarning) {
     G4cout << "  G4FastStep::CheckIt    : ";
-    G4cout << "the energy becomes larger than the initial value !!" << endl;
-    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<endl;
+    G4cout << "the energy becomes larger than the initial value !!" << G4endl;
+    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
     itsOK = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
@@ -454,7 +454,7 @@ G4bool G4FastStep::CheckIt(const G4Track& aTrack)
     if (accuracy > accuracyForWarning) {
       G4cout << "  G4FastStep::CheckIt    : ";
       G4cout << "the Momentum Change is not unit vector !!"
-	     << "  Difference:  " << accuracy << endl;
+	     << "  Difference:  " << accuracy << G4endl;
       itsOK = itsOKforMomentum = false;
       if (accuracy > accuracyForException) exitWithError = true;
     }
@@ -464,7 +464,7 @@ G4bool G4FastStep::CheckIt(const G4Track& aTrack)
   if (accuracy > accuracyForWarning) {
     G4cout << "  G4FastStep::CheckIt    : ";
     G4cout << "the global time goes back  !!"
-	   << " Difference:  " << accuracy << "[ns] " <<endl;
+	   << " Difference:  " << accuracy << "[ns] " <<G4endl;
     itsOK = false;
   }
   
@@ -472,13 +472,13 @@ G4bool G4FastStep::CheckIt(const G4Track& aTrack)
   if (accuracy) {
     G4cout << "  G4FastStep::CheckIt    : ";
     G4cout << "the proper time goes back  !!"
-	   << " Difference:  " <<  accuracy  << "[ns] " <<endl;
+	   << " Difference:  " <<  accuracy  << "[ns] " <<G4endl;
     itsOK = false;
   }
   
   if (!itsOK) { 
-    G4cout << " G4FastStep::CheckIt " <<endl;
-    G4cout << " pointer : " << this <<endl ;
+    G4cout << " G4FastStep::CheckIt " <<G4endl;
+    G4cout << " pointer : " << this <<G4endl ;
     DumpInfo();
   }
   

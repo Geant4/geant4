@@ -21,6 +21,6 @@ main()
   for(G4int i=0; i<100000000000; i++)
   {
     G4double it = aVector.Sample();
-    G4cout << it<<endl;
+    G4cout << it<<G4endl;
   }
 }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Isotope.cc,v 1.1 1999-01-07 16:09:44 gunter Exp $
+// $Id: G4Isotope.cc,v 1.2 1999-12-15 14:50:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,7 +27,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 #include "G4Isotope.hh"
-#include <iomanip.h>
+#include "g4std/iomanip"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -90,24 +90,24 @@ G4int G4Isotope::operator!=(const G4Isotope &right) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-ostream& operator<<(ostream& flux, G4Isotope* isotope)
+G4std::ostream& operator<<(G4std::ostream& flux, G4Isotope* isotope)
 {
-  long mode = flux.setf(ios::fixed,ios::floatfield);
+  long mode = flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
   
   flux
-    << " Isotope: " << setw(5) << isotope->fName 
-    << "   Z = " << setw(2) <<  isotope->fZ 
-    << "   N = " << setw(3) <<  isotope->fN
-    << "   A = " << setw(6) << setprecision(2) 
+    << " Isotope: " << G4std::setw(5) << isotope->fName 
+    << "   Z = " << G4std::setw(2) <<  isotope->fZ 
+    << "   N = " << G4std::setw(3) <<  isotope->fN
+    << "   A = " << G4std::setw(6) << G4std::setprecision(2) 
     << (isotope->fA)/(g/mole) << " g/mole";
     
-  flux.setf(mode,ios::floatfield);       
+  flux.setf(mode,G4std::ios::floatfield);       
   return flux;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
- ostream& operator<<(ostream& flux, G4Isotope& isotope)
+ G4std::ostream& operator<<(G4std::ostream& flux, G4Isotope& isotope)
 {
   flux << &isotope;        
   return flux;
@@ -115,14 +115,14 @@ ostream& operator<<(ostream& flux, G4Isotope* isotope)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
      
-ostream& operator<<(ostream& flux, G4IsotopeTable IsotopeTable)
+G4std::ostream& operator<<(G4std::ostream& flux, G4IsotopeTable IsotopeTable)
 {
  //Dump info for all known isotopes
    flux 
      << "\n***** Table : Nb of isotopes = " << IsotopeTable.length() 
-     << " *****\n" << endl;
+     << " *****\n" << G4endl;
         
-   for (G4int i=0; i<IsotopeTable.length(); i++) flux << IsotopeTable[i] << endl;
+   for (G4int i=0; i<IsotopeTable.length(); i++) flux << IsotopeTable[i] << G4endl;
 
    return flux;
 }      

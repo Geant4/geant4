@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.cc,v 1.14 1999-10-30 04:33:46 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.15 1999-12-15 14:51:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -146,7 +146,7 @@ void G4ParticleTable::RemoveAllParticles()
 
 #ifdef G4VERBOSE
   if (verboseLevel>1){
-    G4cout << "G4ParticleTable::RemoveAllParticles() " << endl;
+    G4cout << "G4ParticleTable::RemoveAllParticles() " << G4endl;
   }
 #endif
 
@@ -189,7 +189,7 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
   if ((particle == 0) || (GetKey(particle).isNull())) {
 #ifdef G4VERBOSE
     if (verboseLevel>0){
-      G4cout << "The particle[Addr:" << particle << "] has no name "<< endl;
+      G4cout << "The particle[Addr:" << particle << "] has no name "<< G4endl;
     }
 #endif
     return 0;
@@ -199,7 +199,7 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
     if (contains(particle)) {
 #ifdef G4VERBOSE
       if (verboseLevel>0){
-	G4cout << "The particle has same name "<< endl;
+	G4cout << "The particle has same name "<< G4endl;
       }
       if (verboseLevel>1){
         FindParticle(particle) -> DumpTable();
@@ -333,7 +333,7 @@ G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index)
 #ifdef G4VERBOSE
   if (verboseLevel>0){
     G4cout << " G4ParticleTable::GetParticle";
-    G4cout << " invalid index (=" << index << ")" << endl;
+    G4cout << " invalid index (=" << index << ")" << G4endl;
   }
 #endif
   return 0;
@@ -353,7 +353,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
     if (aPDGEncoding == 0){ 
 #ifdef G4VERBOSE
       if (verboseLevel>0){
-        G4cout << "PDGEncoding  [" <<  aPDGEncoding << "] is not valid " << endl;
+        G4cout << "PDGEncoding  [" <<  aPDGEncoding << "] is not valid " << G4endl;
       }
 #endif
       return 0;
@@ -372,7 +372,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
 
 #ifdef G4VERBOSE
     if ((particle == 0) && (verboseLevel>0) ){
-      G4cout << "CODE:" << aPDGEncoding << " does not exist in ParticleTable " << endl;
+      G4cout << "CODE:" << aPDGEncoding << " does not exist in ParticleTable " << G4endl;
     }
 #endif
     return particle;
@@ -396,7 +396,7 @@ void G4ParticleTable::DumpTable(const G4String &particle_name)
     } else {
 #ifdef G4VERBOSE
       if (verboseLevel>0){
-        G4cout << particle_name << " does not exist in ParticleTable " <<endl;
+        G4cout << particle_name << " does not exist in ParticleTable " <<G4endl;
       }
 #endif
     }

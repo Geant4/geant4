@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.5 1999-11-05 15:50:37 johna Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.6 1999-12-15 14:54:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ void G4OpenGLStoredSceneHandler::BeginPrimitives
       G4cout << "********************* WARNING! ********************\n"
 	   <<"Unable to allocate any more display lists in OpenGL.\n "
 	   << "      Continuing drawing in IMMEDIATE MODE.\n"
-	   << "***************************************************" << endl;
+	   << "***************************************************" << G4endl;
       fMemoryForDisplayLists = false;
     }
   }
@@ -117,14 +117,14 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
     if (fPODLList (i)) {
       glDeleteLists (fPODLList (i), 1);
     } else {
-      G4cerr << "Warning : NULL display List in fPODLList." << endl;
+      G4cerr << "Warning : NULL display List in fPODLList." << G4endl;
     }
   }
   for (i = 0; i < fTODLList.entries (); i++) {
     if (fTODLList (i)) {
       glDeleteLists (fTODLList (i), 1);
     } else {
-      G4cerr << "Warning : NULL display List in fTODLList." << endl;
+      G4cerr << "Warning : NULL display List in fTODLList." << G4endl;
     }
   }
 

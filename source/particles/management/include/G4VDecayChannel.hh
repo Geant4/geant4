@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.hh,v 1.5 1999-11-07 15:46:46 kurasige Exp $
+// $Id: G4VDecayChannel.hh,v 1.6 1999-12-15 14:51:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -166,7 +166,7 @@ inline
     return daughters[anIndex];
   } else {
     if (verboseLevel>0)
-      G4cout << "G4VDecayChannel::GetDaughter  index out of range "<<anIndex<<endl;
+      G4cout << "G4VDecayChannel::GetDaughter  index out of range "<<anIndex<<G4endl;
     return 0;
   }
 }
@@ -179,7 +179,7 @@ inline
   } else {
     if (verboseLevel>0){
       G4cout << "G4VDecayChannel::GetDaughterName ";
-      G4cout << "index out of range " << anIndex << endl;
+      G4cout << "index out of range " << anIndex << G4endl;
     }
     return noName;
   }
@@ -193,7 +193,7 @@ inline
   } else {
     if (verboseLevel>0){
       G4cout << "G4VDecayChannel::GetDaughterMass ";
-      G4cout << "index out of range " << anIndex << endl;
+      G4cout << "index out of range " << anIndex << G4endl;
     }
     return 0.0;
   }

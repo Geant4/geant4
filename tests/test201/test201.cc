@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test201.cc,v 1.3 1999-11-11 15:41:16 gunter Exp $
+// $Id: test201.cc,v 1.4 1999-12-15 14:54:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,8 +19,8 @@
 #include <stdlib.h>
 
 #include "globals.hh"
-ostream& g4cout = G4cout;
-ostream& g4cerr = G4cerr;
+G4std::ostream& g4cout = G4cout;
+G4std::ostream& g4cerr = G4cerr;
 #include "test201DetectorConstruction.hh"
 #include "MyPhysicsList.hh"
 #include "MyRunAction.hh"
@@ -116,7 +116,7 @@ int main (int argc, char** argv) {
   G4UImanager::GetUIpointer()->SetSession(session);  //So that Pause works..
 
   // Run manager
-  g4cout << "RunManager is constructing...." << endl;
+  g4cout << "RunManager is constructing...." << G4endl;
   G4RunManager * runManager = new G4RunManager;
 
   // User initialization classes
@@ -137,13 +137,13 @@ int main (int argc, char** argv) {
 
   G4UImanager* UI = G4UImanager::GetUIpointer ();
 
-  g4cout << "Reading test201.g4m file...." << endl;
+  g4cout << "Reading test201.g4m file...." << G4endl;
   UI -> ApplyCommand ("/control/execute test201.g4m");
 
   g4cout << 
     "Choose a detector with /test201/detector (or let default be"
     " constructed)."
-       << endl;
+       << G4endl;
 
   // Start an interactive session.
   session -> SessionStart();

@@ -1,17 +1,17 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPCaptureTest.cc,v 1.1 1999-01-08 16:33:42 gunter Exp $
+// $Id: G4NeutronHPCaptureTest.cc,v 1.2 1999-12-15 14:53:21 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
  
 #include "../src/G4NeutronHPIsoData.cc"
 #include "G4Material.hh"
@@ -61,11 +61,11 @@
  
  int main()
   {
-    G4cout.setf( ios::scientific, ios::floatfield );
-    ofstream outFile( "InelasticAlpha.listing.GetMeanFreePath", ios::out);
-    outFile.setf( ios::scientific, ios::floatfield );
-    ofstream outFile1( "InelasticAlpha.listing.DoIt", ios::out);
-    outFile1.setf( ios::scientific, ios::floatfield );
+    G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
+    G4std::ofstream outFile( "InelasticAlpha.listing.GetMeanFreePath", G4std::ios::out);
+    outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
+    G4std::ofstream outFile1( "InelasticAlpha.listing.DoIt", G4std::ios::out);
+    outFile1.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
     G4String name, symbol;
     G4double a, iz, z, density;
@@ -202,12 +202,12 @@
       theU->AddElement( elU, 1 );
      theMaterials[22] = theU;
     
-    G4cout << "Please enter material number"<<endl;
+    G4cout << "Please enter material number"<<G4endl;
     G4int inputNumber;
-    cin >> inputNumber;
+    G4cin >> inputNumber;
     theMaterials[0]=theMaterials[inputNumber];
-    G4cout << "Active Material = " << theMaterials[0]->GetName()<<endl;
-    cin >> inputNumber;
+    G4cout << "Active Material = " << theMaterials[0]->GetName()<<G4endl;
+    G4cin >> inputNumber;
     
     // ----------- here all material have been defined -----------
     
@@ -233,8 +233,8 @@
    theParticles[0]=theNeutron;
    
    //------ here all the particles are Done ----------
-   G4cout << "Done with all the particles" << endl;
-   G4cout << "Starting process definitions" << endl;
+   G4cout << "Done with all the particles" << G4endl;
+   G4cout << "Starting process definitions" << G4endl;
    //--------- Processes definitions ---------
    G4HadronCaptureProcess* theProcesses[1];
       
@@ -243,7 +243,7 @@
    G4HadronCaptureProcess theCaptureProcess; 
    G4LCapture theCapture;
    G4NeutronHPCapture theNeutronHPCapture;
-   G4cout << "Capture instanciated!!!"<<endl;
+   G4cout << "Capture instanciated!!!"<<G4endl;
    theCaptureProcess.RegisterMe(&theCapture);
    theCapture.SetMinEnergy(21*MeV);
    theCaptureProcess.RegisterMe(&theNeutronHPCapture);
@@ -253,8 +253,8 @@
    G4ForceCondition* condition = new G4ForceCondition;
    *condition = NotForced;
 
-   G4cout << "Done with all the process definitions"<<endl;
-   //   G4cout << "Building the CrossSection Tables. This will take a while"<<endl;
+   G4cout << "Done with all the process definitions"<<G4endl;
+   //   G4cout << "Building the CrossSection Tables. This will take a while"<<G4endl;
    
    // ----------- define energies of interest ----------------
    
@@ -274,25 +274,25 @@
    G4double incomingEnergy;
    G4int k, i, l, hpw = 0;   
    // --------- Test the PostStepDoIt now, 10 events each --------------
-   G4cout << "Entering the DoIt loops!!!!!"<< endl;
+   G4cout << "Entering the DoIt loops!!!!!"<< G4endl;
    G4ParticleChange* aFinalState;
-   G4cout << "Test the DoIt: please enter the number of events"<<endl;
+   G4cout << "Test the DoIt: please enter the number of events"<<G4endl;
    G4int ll0;
-   cin >> ll0;
-   G4cout <<"Now debug the DoIt: enter the problem event number"<< endl;
+   G4cin >> ll0;
+   G4cout <<"Now debug the DoIt: enter the problem event number"<< G4endl;
    G4int debugThisOne=1;
-   cin >> debugThisOne;
-   G4cout << "Please enter the neutron energy"<<endl;
-   cin >> incomingEnergy;
+   G4cin >> debugThisOne;
+   G4cout << "Please enter the neutron energy"<<G4endl;
+   G4cin >> incomingEnergy;
    for (i=0; i<numberOfParticles; i++)
    {
-     outFile << endl
+     outFile << G4endl
              << "New particle type: " << theParticles[i]->GetParticleName()
-             << " " << i << endl;
+             << " " << i << G4endl;
      for ( G4int k=0; k<numberOfMaterials; k++)
      {
-       outFile << endl << "Entering Material " << theMaterials[k]->GetName()
-               << " for particle " << theParticles[i]->GetParticleName() << endl;
+       outFile << G4endl << "Entering Material " << theMaterials[k]->GetName()
+               << " for particle " << theParticles[i]->GetParticleName() << G4endl;
        LogicalFrame->SetMaterial(theMaterials[k]); 
 //       for( G4int j=0; j<numberOfEnergies; ++j )
 int j = 0;
@@ -310,21 +310,21 @@ int j = 0;
            G4cerr << "FINAL EVENTCOUNTER=" << hpw
                 << " current energy: " << incomingEnergy
                 << " of particle " << aParticle->GetDefinition()->GetParticleName() 
-                << " in material " << theMaterials[k]->GetName() << endl;
+                << " in material " << theMaterials[k]->GetName() << G4endl;
            if (hpw==debugThisOne)
            {
              debugThisOne+=0;
            }
            G4cout << "Last chance before DoIt call: "
 //                << theNeutronHPCapture.GetNiso()
-                <<endl;
+                <<G4endl;
            aFinalState =
 	   (G4ParticleChange*) (theProcesses[i]->PostStepDoIt( *aTrack, aStep ));
            G4cout << "NUMBER OF SECONDARIES="<<aFinalState->GetNumberOfSecondaries();
            G4double theFSEnergy = aFinalState->GetEnergyChange();
            G4ThreeVector * theFSMomentum= aFinalState->GetMomentumChange();
            G4cout << "FINAL STATE = "<<theFSEnergy<<" ";
-           G4cout <<*theFSMomentum<<endl;
+           G4cout <<*theFSMomentum<<G4endl;
            G4Track * second;
            G4DynamicParticle * aSec;
            G4int isec;
@@ -343,7 +343,7 @@ int j = 0;
              {
                G4cout << -1;
              }
-             G4cout <<endl;
+             G4cout <<G4endl;
              delete second;
            }
            delete aParticle;

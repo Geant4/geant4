@@ -11,8 +11,8 @@
 #include "undef.hh"
 #include "Pattern.hh"
 
-class ostream;
-class istream;
+class G4std::ostream;
+class G4std::istream;
 class decayMode;
 class ParticleDecayModes;
 class ParticleProperties;
@@ -70,7 +70,7 @@ public:
   bool isDiquark() const { return fabs(fabs(B())-0.5)<0.5 && fabs(B())>0.5; }
   bool isGluon() const { return (maxColor() == 8); }
 
-  void writeOut(ostream& o) const;
+  void writeOut(G4std::ostream& o) const;
 };
 
 class ParticleType : public QuantumNumbers,public Knot<ParticleType>
@@ -87,7 +87,7 @@ class ParticleType : public QuantumNumbers,public Knot<ParticleType>
   };
   friend class MassDist;
   friend class ParticleDecayModes;
-  friend ostream& operator<<(ostream& o,const ParticleType& x) { x.writeOut(o); return o; }
+  friend G4std::ostream& operator<<(G4std::ostream& o,const ParticleType& x) { x.writeOut(o); return o; }
   friend bool operator==(const ParticleType& x,const ParticleType& y);
   int id,g;
   double minmass,width,BWnorm;
@@ -95,19 +95,19 @@ class ParticleType : public QuantumNumbers,public Knot<ParticleType>
   void getProbab(double,vector<double>&,vector<ParticleType*>&,bool = false) const;
   ParticleType();
 public:
-  ParticleType(istream&);
+  ParticleType(G4std::istream&);
   ParticleType& selectType(double mass) const;
   ParticleType& selectType(int,const vector<ParticleBase*>& P,double m) const;
   ParticleType& selectType() const;
   double selectMass(double Mmax) const;
-  virtual void ClassInfo(ostream& o) const { o << " ("<<id << ") "; }
+  virtual void ClassInfo(G4std::ostream& o) const { o << " ("<<id << ") "; }
   virtual double getMass(double Emax = 0.0) const;
   double getLifetime() const;
   double getWidth() const { return width; }
   int degeneracy() const { return int(g*(2*Spin()+1)*(2*Isospin()+1)); }
   virtual double isEqualTo(const ParticleType& x) const;
 
-  void writeOut(ostream& o) const;
+  void writeOut(G4std::ostream& o) const;
   class undefinedParticle {};
 private:
 };

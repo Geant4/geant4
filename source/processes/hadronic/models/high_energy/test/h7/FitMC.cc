@@ -71,7 +71,7 @@ int main()
             {
               if(npl == iplot[l]) goto label;
             }
-          cout << " wrong plot " << npl << endl;
+          cout << " wrong plot " << npl << G4endl;
           continue;
 	label:
           if(i==1) plot[npl].GetFromFile(j, aPIM110File);      

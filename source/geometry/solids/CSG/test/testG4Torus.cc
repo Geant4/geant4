@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Torus.cc,v 1.1 1999-01-08 16:31:52 gunter Exp $
+// $Id: testG4Torus.cc,v 1.2 1999-12-15 14:50:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -145,13 +145,13 @@ G4bool testG4Torus()
 //    assert(ApproxEqual(Dist,50)&&ApproxEqual(pNorm->unit(),vxy)&&*pgoodNorm);
 
     Dist=t2.DistanceToOut(ponphi12,vxmy,calcNorm,pgoodNorm,pNorm);
-//    G4cout<<"Dist=t2.DistanceToOut(ponphi12,vxmy) = "<<Dist<<endl;
+//    G4cout<<"Dist=t2.DistanceToOut(ponphi12,vxmy) = "<<Dist<<G4endl;
     assert(ApproxEqual(Dist,0)&&ApproxEqual(pNorm->unit(),vxmy)&&*pgoodNorm);
     Dist=t2.DistanceToOut(ponphi22,vmxmy,calcNorm,pgoodNorm,pNorm);
-//    G4cout<<"Dist=t2.DistanceToOut(ponphi22,vmxmy) = "<<Dist<<endl;
+//    G4cout<<"Dist=t2.DistanceToOut(ponphi22,vmxmy) = "<<Dist<<G4endl;
     assert(ApproxEqual(Dist,0)&&ApproxEqual(pNorm->unit(),vmxmy)&&*pgoodNorm);
     Dist=t2.DistanceToOut(ponphi23,vmxmy,calcNorm,pgoodNorm,pNorm);
-//    G4cout<<"Dist=t2.DistanceToOut(ponphi23,vmxmy) = "<<Dist<<endl;
+//    G4cout<<"Dist=t2.DistanceToOut(ponphi23,vmxmy) = "<<Dist<<G4endl;
     assert(ApproxEqual(Dist,0.353553)&&ApproxEqual(pNorm->unit(),vmxmy)
 	   &&*pgoodNorm);
   
@@ -165,10 +165,10 @@ G4bool testG4Torus()
     Dist=t1.DistanceToIn(pbigmy);
     assert(ApproxEqual(Dist,50));
     Dist=t1.DistanceToIn(pbigz);
-//    G4cout<<"Dist=t1.DistanceToIn(pbigz) = "<<Dist<<endl;
+//    G4cout<<"Dist=t1.DistanceToIn(pbigz) = "<<Dist<<G4endl;
 //    assert(ApproxEqual(Dist,50));
     Dist=t1.DistanceToIn(pbigmz);
-//    G4cout<<"Dist=t1.DistanceToIn(pbigmz) = "<<Dist<<endl;
+//    G4cout<<"Dist=t1.DistanceToIn(pbigmz) = "<<Dist<<G4endl;
 //    assert(ApproxEqual(Dist,50));
 
 // DistanceToIn(P,V)
@@ -200,7 +200,7 @@ G4bool testG4Torus()
     Dist=t2.DistanceToIn(ponphi12,vmy);
     assert(ApproxEqual(Dist,kInfinity));
     Dist=t2.DistanceToIn(ponphi1,vy);
-//    G4cout<<"Dist=t2.DistanceToIn(ponphi1,vy) = "<<Dist<<endl;  // about 13
+//    G4cout<<"Dist=t2.DistanceToIn(ponphi1,vy) = "<<Dist<<G4endl;  // about 13
     Dist=t2.DistanceToIn(ponrmin,vy);
     assert(ApproxEqual(Dist,0));
     Dist=t2.DistanceToIn(ponrmin,vmy);
@@ -267,7 +267,7 @@ G4bool testG4Torus()
     genRot.rotateZ(M_PI/6);
     G4AffineTransform tGen(genRot,vx);
     assert(t4.CalculateExtent(kXAxis,allClip,tGen,min,max));
-//    G4cout<<"min = "<<min<<"    max = "<<max<<endl;
+//    G4cout<<"min = "<<min<<"    max = "<<max<<G4endl;
     assert(min<=-5&&max>=5);
     assert(t4.CalculateExtent(kYAxis,allClip,tGen,min,max));
     assert(min<=-5&&max>=5);
@@ -275,14 +275,14 @@ G4bool testG4Torus()
     assert(min<=-5&&max>=5);
 
     assert(t5.CalculateExtent(kXAxis,allClip,tGen,min,max));
-    G4cout<<"min = "<<min<<"    max = "<<max<<endl;
+    G4cout<<"min = "<<min<<"    max = "<<max<<G4endl;
     assert(t5.CalculateExtent(kYAxis,allClip,tGen,min,max));
-    G4cout<<"min = "<<min<<"    max = "<<max<<endl;
+    G4cout<<"min = "<<min<<"    max = "<<max<<G4endl;
     assert(t5.CalculateExtent(kZAxis,allClip,tGen,min,max));
-    G4cout<<"min = "<<min<<"    max = "<<max<<endl;
+    G4cout<<"min = "<<min<<"    max = "<<max<<G4endl;
 
     t1.CalculateExtent(kZAxis,allClip,tGen,min,max);
-    G4cout<<"min = "<<min<<"    max = "<<max<<endl;
+    G4cout<<"min = "<<min<<"    max = "<<max<<G4endl;
 
 // Test z clipping ok
     for (G4double zTest=-200;zTest<200;zTest+=9)

@@ -65,7 +65,7 @@
    {
      if(aPoint!=nEntries) 
      {
-       G4cout <<"G4InterpolationManager::AppendScheme - "<<aPoint<<" "<<nEntries<<endl;
+       G4cout <<"G4InterpolationManager::AppendScheme - "<<aPoint<<" "<<nEntries<<G4endl;
        G4Exception("Wrong usage of G4InterpolationManager::AppendScheme");
      }
      if(nEntries==0)

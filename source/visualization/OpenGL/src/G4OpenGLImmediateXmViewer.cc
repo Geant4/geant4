@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateXmViewer.cc,v 1.1 1999-01-09 16:23:15 allison Exp $
+// $Id: G4OpenGLImmediateXmViewer.cc,v 1.2 1999-12-15 14:54:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,7 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
 // ensure a suitable window was found
   if (!vi_immediate) {
     G4cerr << "G4OpenGLImmediateXmViewer::G4OpenGLImmediateXmViewer -"
-      " G4OpenGLXmViewer couldn't get a visual." << endl;  
+      " G4OpenGLXmViewer couldn't get a visual." << G4endl;  
     fViewId = -1;  // This flags an error.
     return;
   }

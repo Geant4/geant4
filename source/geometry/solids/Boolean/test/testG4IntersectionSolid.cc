@@ -160,7 +160,7 @@ int main()
     assert(ApproxEqual(dist,20)&&ApproxEqual(*pNorm,vmx)&&*pgoodNorm);
 
     dist=b1.DistanceToOut(ponxside,vy,calcNorm,pgoodNorm,pNorm);
-//  cout<<"b1.DistanceToOut(ponxside,vy) = "<<dist<<endl;
+//  cout<<"b1.DistanceToOut(ponxside,vy) = "<<dist<<G4endl;
 //  assert(ApproxEqual(dist,0)&&ApproxEqual(*pNorm,vy)&&*pgoodNorm);
 
     dist=b1Ib2.DistanceToOut(ponb2mx,vmx,calcNorm,pgoodNorm,pNorm);
@@ -218,40 +218,40 @@ int main()
 
     dist=b1Ib2.DistanceToIn(pzero,vmy);
     assert(ApproxEqual(dist,kInfinity));
-    // G4cout<<"(kInfinity) b1Ib2.DistanceToIn(pzero,vmy) = "<<dist<<endl ;
+    // G4cout<<"(kInfinity) b1Ib2.DistanceToIn(pzero,vmy) = "<<dist<<G4endl ;
 
     dist=b1Ib2.DistanceToIn(pzero,vy);
     assert(ApproxEqual(dist,0));
-    // G4cout<<"(0) b1Ib2.DistanceToIn(pzero,vy) = "<<dist<<endl ;
+    // G4cout<<"(0) b1Ib2.DistanceToIn(pzero,vy) = "<<dist<<G4endl ;
 
 
     // It returns 0, probably due to G4Displaced or G4Transform3D games !?
     //
     // dist=b1Ib2.DistanceToIn(pzero,vmx);
     // assert(ApproxEqual(dist,kInfinity));
-    //  G4cout<<"(kInfinity) b1Ib2.DistanceToIn(pzero,vmx) = "<<dist<<endl ;
+    //  G4cout<<"(kInfinity) b1Ib2.DistanceToIn(pzero,vmx) = "<<dist<<G4endl ;
 
     dist=likeb2.DistanceToIn(G4ThreeVector(10,0,0),vmx);
     assert(ApproxEqual(dist,0));
     // G4cout<<"(0) likeb2.DistanceToIn(G4ThreeVector(10,0,0),vmx) = "
-    //       <<dist<<endl ;
+    //       <<dist<<G4endl ;
 
     dist=b1Ib2.DistanceToIn(G4ThreeVector(10,0,0),vx);
     assert(ApproxEqual(dist,kInfinity));
     // G4cout<<"(kInfinity) likeb2.DistanceToIn(G4ThreeVector(10,0,0),vx) = "
-    //       <<dist<<endl ;
+    //       <<dist<<G4endl ;
 
     dist=b1Ib2.DistanceToIn(G4ThreeVector(10,0,0),vy);
     assert(ApproxEqual(dist,kInfinity));
     // G4cout<<"(kInfinity) likeb2.DistanceToIn(G4ThreeVector(10,0,0),vy) = "
-    //       <<dist<<endl ;
+    //       <<dist<<G4endl ;
 
     dist=b1Ib2.DistanceToIn(G4ThreeVector(10,0,0),vmy);
     assert(ApproxEqual(dist,kInfinity));
     // G4cout<<"(kInfinity) likeb2.DistanceToIn(G4ThreeVector(10,0,0),vmy) = "
-    //       <<dist<<endl ;
+    //       <<dist<<G4endl ;
 
-    G4cout<<"Tracking functions are OK"<<endl ;
+    G4cout<<"Tracking functions are OK"<<G4endl ;
 
 
 //  CalculateExtent
@@ -272,23 +272,23 @@ int main()
 
     assert(b1Ib2.CalculateExtent(kXAxis,limit,origin,min,max));
     //   G4cout<<"min of b1Ib2.CalculateExtent(kXAxis,limit,origin,min,max) = "
-    //    <<min<<endl ;
+    //    <<min<<G4endl ;
     //  G4cout<<"max of b1Ib2.CalculateExtent(kXAxis,limit,origin,min,max) = "
-    //      <<max<<endl ;
+    //      <<max<<G4endl ;
      assert(ApproxEqual(min,-10)&&ApproxEqual(max,10));
 
     assert(b1Ib2.CalculateExtent(kYAxis,limit,origin,min,max));
     // G4cout<<"min of b1Ib2.CalculateExtent(kYAxis,limit,origin,min,max) = "
-    //      <<min<<endl ;
+    //      <<min<<G4endl ;
     //  G4cout<<"max of b1Ib2.CalculateExtent(kYAxis,limit,origin,min,max) = "
-    //      <<max<<endl ;
+    //      <<max<<G4endl ;
     assert(ApproxEqual(min,0)&&ApproxEqual(max,20));
 
     assert(b1Ib2.CalculateExtent(kZAxis,limit,origin,min,max));
     //  G4cout<<"min of b1Ib2.CalculateExtent(kZAxis,limit,origin,min,max) = "
-    //      <<min<<endl ;
+    //      <<min<<G4endl ;
     //  G4cout<<"max of b1Ib2.CalculateExtent(kZAxis,limit,origin,min,max) = "
-    //      <<max<<endl ;
+    //      <<max<<G4endl ;
      assert(ApproxEqual(min,-10)&&ApproxEqual(max,10));
 
     G4ThreeVector pmxmymz(-100,-110,-120);
@@ -354,9 +354,9 @@ int main()
 
     assert(b1Ib2.CalculateExtent(kYAxis,allClip,tGen,min,max)) ;
     // G4cout<<"min of b1Ib2.CalculateExtent(kYAxis,allClip,tGen,min,max) = "
-    //      <<min<<endl ;
+    //      <<min<<G4endl ;
     // G4cout<<"max of b1Ib2.CalculateExtent(kYAxis,allClip,tGen,min,max) = "
-    //       <<max<<endl ;
+    //       <<max<<G4endl ;
     // Reasonable but not so obvious ?!
     assert(ApproxEqual(min,-3.21667)&&ApproxEqual(max,4.20641)) ;
 
@@ -419,7 +419,7 @@ int main()
     assert(b1.CalculateExtent(kZAxis,buggyClip1,origin,min,max));
     assert(ApproxEqual(min,-40)&&ApproxEqual(max,40));
 
-    G4cout<<"CalculateExtent is OK"<<endl ;
+    G4cout<<"CalculateExtent is OK"<<G4endl ;
 
   return 0 ;
 }

@@ -35,15 +35,15 @@ REAL DistributionFunction::getValue() const
     do {
       REAL r = rand_gen::Random(rmin,rmax);
       z = inverseIntegratedMajorante(r);
-      //      cerr << z << "  " << f(z) << "  " << Majorante(z) << endl;
+      //      G4cerr << z << "  " << f(z) << "  " << Majorante(z) << G4endl;
     }
     while ( z<RangeMin || z>RangeMax );
     ++n;
-    //    cerr << z << "  " << Majorante(z) << "  " << f(z) << endl; 
+    //    G4cerr << z << "  " << Majorante(z) << "  " << f(z) << G4endl; 
   }
   while (Majorante(z)*rand_gen::Random() > f(z) && --counter);
   if ( !counter ) {
-    cerr << "DistributionFunction::CounterOverflow...\n";
+    G4cerr << "DistributionFunction::CounterOverflow...\n";
     throw "Counter overflow";
   }
   return z;

@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -14,7 +14,7 @@
 
 #include <stdio.h>
 #include <math.h>
-#include <fstream.h>
+#include "g4std/fstream"
 #include <stdlib.h>
 #include "G4ios.hh" 
 // #include "G4BREPSolid.hh"
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 						    RMINVec  ,
 						    RMAXVec   );
   
-  G4cout << "\n\nPCone created ! "<<endl;
+  G4cout << "\n\nPCone created ! "<<G4endl;
   // -> Check methods :
   //  - Inside
   //  - DistanceToIn
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
       d = MyPCone->DistanceToOut(start, dir);
       G4cout<<"  distance to out="<<d;
       d = MyPCone->DistanceToOut(start);
-      G4cout<<"  closest distance to out="<<d<<endl;
+      G4cout<<"  closest distance to out="<<d<<G4endl;
     }
     else if( in == kOutside ) 
     {
@@ -126,10 +126,10 @@ int main(int argc, char **argv)
       d = MyPCone->DistanceToIn(start, dir);
       G4cout<<"  distance to in="<<d;
       d = MyPCone->DistanceToIn(start);
-      G4cout<<"  closest distance to in="<<d<<endl;
+      G4cout<<"  closest distance to in="<<d<<G4endl;
     }
     else
-      G4cout <<" is on the surface"<<endl;
+      G4cout <<" is on the surface"<<G4endl;
 
   }
 
@@ -148,7 +148,7 @@ int main(int argc, char **argv)
     d2 = MyPCone->DistanceToIn(start2, dir2);
     G4cout<<"  distance to in="<<d2;
     d2 = MyPCone->DistanceToIn(start2);
-    G4cout<<"  distance to in="<<d2<<endl;
+    G4cout<<"  distance to in="<<d2<<G4endl;
   }
 
   G4cout<<"\n\n==================================================";
@@ -164,7 +164,7 @@ int main(int argc, char **argv)
     G4cout<<"  y="<<y;
     start3.setY(y);
     d3 = MyPCone->DistanceToIn(start3, dir3);
-    G4cout<<"  distance to in="<<d3<<endl;
+    G4cout<<"  distance to in="<<d3<<G4endl;
   }
   
   

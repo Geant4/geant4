@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticleChange.icc,v 1.2 1999-04-13 09:43:31 kurasige Exp $
+// $Id: G4VParticleChange.icc,v 1.3 1999-12-15 14:53:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //----------------------------------------------------------------
@@ -184,8 +184,8 @@ inline void G4VParticleChange::InitializeSecondaries(const G4Track&)
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cerr << "G4VParticleChange::Initialize() Warning  ";
-      G4cerr << "theListOfSecondaries is not empty " << endl;
-      G4cerr << "All objects in theListOfSecondaries are destroyed!" << endl;
+      G4cerr << "theListOfSecondaries is not empty " << G4endl;
+      G4cerr << "All objects in theListOfSecondaries are destroyed!" << G4endl;
     }
 #endif
     for (G4int index= 0; index<theNumberOfSecondaries; index++){
@@ -214,8 +214,8 @@ inline void G4VParticleChange::AddSecondary(G4Track *aTrack)
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cerr << "G4VParticleChange::AddSecondary() Warning  ";
-      G4cerr << "theListOfSecondaries is full !! " << endl;
-      G4cerr << " The object will not be added in theListOfSecondaries" << endl;
+      G4cerr << "theListOfSecondaries is full !! " << G4endl;
+      G4cerr << " The object will not be added in theListOfSecondaries" << G4endl;
     }
 #endif
   }

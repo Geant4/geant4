@@ -117,7 +117,7 @@ void Tst05DetectorConstruction::SelectDetector(G4String val)
   { detectorChoice = 1; }
   else
   { detectorChoice = 0; }
-  G4cout << "Now Detector is " << val << endl;
+  G4cout << "Now Detector is " << val << G4endl;
 }
 
 

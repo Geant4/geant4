@@ -1,13 +1,13 @@
-#include <iostream.h>
-#include <strstream.h>
+#include "g4std/iostream"
+#include "g4std/strstream"
 #include "StreamBuffer.hh"
 #include "array.hh"
 
-ostream& operator<<(ostream& o,const StreamBuffer& x) { return o << x.buffer; }
+G4std::ostream& operator<<(G4std::ostream& o,const StreamBuffer& x) { return o << x.buffer; }
 
 StreamBuffer::StreamBuffer() : in(0) {}
 
-StreamBuffer::StreamBuffer(istream& i) : in(0) 
+StreamBuffer::StreamBuffer(G4std::istream& i) : in(0) 
 {
   String s;
   while ( i >> s ) 
@@ -20,16 +20,16 @@ StreamBuffer& StreamBuffer::operator<<(const String& s)
   return *this; 
 }
   
-StreamBuffer::operator istream&() 
+StreamBuffer::operator G4std::istream&() 
 { 
-  return ( in ) ? *in : *(in = new istrstream((char*)buffer,length(buffer))); 
+  return ( in ) ? *in : *(in = new G4std::istrstream((char*)buffer,length(buffer))); 
 }
 
 void StreamBuffer::reset() 
 { 
   if (in) 
     delete in; 
-  in = new istrstream((char*)buffer,length(buffer)); 
+  in = new G4std::istrstream((char*)buffer,length(buffer)); 
 }
 
 void StreamBuffer::createStream(int n,char** args) 

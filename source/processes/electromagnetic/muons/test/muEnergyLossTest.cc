@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: muEnergyLossTest.cc,v 1.1 1999-01-08 16:32:22 gunter Exp $
+// $Id: muEnergyLossTest.cc,v 1.2 1999-12-15 14:51:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-----------------------------------------------------------------
@@ -20,8 +20,8 @@
 //---------------------------------------------------------------
      
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 #include "globals.hh"
 #include "G4Timer.hh"     
 #include "G4MuEnergyLoss.hh"
@@ -70,13 +70,13 @@ G4VPhysicalVolume* BuildVolume(G4Material* matworld)
 int main()
 {
   //-------- set output format-------
-   G4cout.setf( ios::scientific, ios::floatfield );
+   G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
   G4int nrandom;
   G4double ran ;
 
-  G4cout << "Give the number of random numbers you want to Generate at start!" << endl;
-  cin >> nrandom ;
+  G4cout << "Give the number of random numbers you want to Generate at start!" << G4endl;
+  G4cin >> nrandom ;
   if( nrandom>0)
   { 
     for (G4int ir=0; ir<nrandom; ir++)
@@ -183,8 +183,8 @@ int main()
 
   G4String confirm ;
 
-  G4cout << " Do you want the mu+ as particle (yes/no)? " << flush;
-  cin >> confirm ;
+  G4cout << " Do you want the mu+ as particle (yes/no)? " << G4std::flush;
+  G4cin >> confirm ;
   if(confirm == "yes")
   {
     mass=theMuonPlus->GetPDGMass();
@@ -192,8 +192,8 @@ int main()
   }
   else
   {
-     G4cout << " Do you want the mu- as particle (yes/no)? " << flush;
-     cin >> confirm ;
+     G4cout << " Do you want the mu- as particle (yes/no)? " << G4std::flush;
+     G4cin >> confirm ;
      if(confirm == "yes")
      {
         mass=theMuonMinus->GetPDGMass();
@@ -232,70 +232,70 @@ int main()
 
   theTimer.Start() ;
   G4cout << "cut for GAMMA in mm =" ;
-  cin >> cutinrange ; cutinrange *= mm;
+  G4cin >> cutinrange ; cutinrange *= mm;
   theGamma->SetCuts(cutinrange) ;
-    G4cout << "gamma,cut in range(mm)=" << theGamma->GetCuts()/mm << endl ;
+    G4cout << "gamma,cut in range(mm)=" << theGamma->GetCuts()/mm << G4endl ;
 
   GammaKineticEnergyCuts = theGamma->GetCutsInEnergy() ;
   for (G4int icut=0; icut<theMaterialTable->length(); icut++)
   {
     G4cout << "material index=" << icut << "  kin.energy cut(MeV)=" << 
-         GammaKineticEnergyCuts[icut]/MeV << endl ;
+         GammaKineticEnergyCuts[icut]/MeV << G4endl ;
   }
   theTimer.Stop() ;
-  G4cout << " time = " << theTimer.GetUserElapsed() << endl;
+  G4cout << " time = " << theTimer.GetUserElapsed() << G4endl;
 
   theTimer.Start() ;
   G4cout << "cut for ELECTRON in mm =" ;
-  cin >> cutinrange ; cutinrange *= mm;
+  G4cin >> cutinrange ; cutinrange *= mm;
   CutInRangeele = cutinrange ;
   theElectron->SetCuts(cutinrange) ;
-    G4cout << "electron,cut in range(mm)=" << theElectron->GetCuts()/mm << endl ;
+    G4cout << "electron,cut in range(mm)=" << theElectron->GetCuts()/mm << G4endl ;
 
   ElectronKineticEnergyCuts = theElectron->GetCutsInEnergy() ;
   for ( icut=0; icut<theMaterialTable->length(); icut++)
   {
     G4cout << "material index=" << icut << "  kin.energy cut(MeV)=" << 
-         ElectronKineticEnergyCuts[icut]/MeV << endl ;
+         ElectronKineticEnergyCuts[icut]/MeV << G4endl ;
   }
   theTimer.Stop() ;
-  G4cout << " time = " << theTimer.GetUserElapsed() << endl;
+  G4cout << " time = " << theTimer.GetUserElapsed() << G4endl;
 
   theTimer.Start() ;
   G4cout << "cut for POSITRON in mm =" ;
-  cin >> cutinrange ; cutinrange *= mm; 
+  G4cin >> cutinrange ; cutinrange *= mm; 
   CutInRangepos = cutinrange ;
   thePositron->SetCuts(cutinrange) ;
-    G4cout << "positron,cut in range(mm)=" << thePositron->GetCuts()/mm << endl ;
+    G4cout << "positron,cut in range(mm)=" << thePositron->GetCuts()/mm << G4endl ;
 
   PositronKineticEnergyCuts = thePositron->GetCutsInEnergy() ;
   for ( icut=0; icut<theMaterialTable->length(); icut++)
   {
     G4cout << "material index=" << icut << "  kin.energy cut(MeV)=" << 
-         PositronKineticEnergyCuts[icut]/MeV << endl ;
+         PositronKineticEnergyCuts[icut]/MeV << G4endl ;
   }
   theTimer.Stop() ;
-  G4cout << " time = " << theTimer.GetUserElapsed() << endl;
+  G4cout << " time = " << theTimer.GetUserElapsed() << G4endl;
 
   theTimer.Start() ;
   G4cout << "cut for muons in mm =" ;
-  cin >> cutinrange ; cutinrange *= mm;
+  G4cin >> cutinrange ; cutinrange *= mm;
   theParticle->SetCuts(cutinrange) ;
 
-    G4cout << "cut in range(mm)=" << theParticle->GetLengthCuts()/mm << endl ;
+    G4cout << "cut in range(mm)=" << theParticle->GetLengthCuts()/mm << G4endl ;
 
   ParticleKineticEnergyCuts = theParticle->GetEnergyCuts() ;
 
   for ( icut=0; icut<theMaterialTable->length(); icut++)
   {
     G4cout << "material index=" << icut << "  kin.energy cut(MeV)=" << 
-         ParticleKineticEnergyCuts[icut]/MeV << endl ;
+         ParticleKineticEnergyCuts[icut]/MeV << G4endl ;
   }
   theTimer.Stop() ;
-  G4cout << " time = " << theTimer.GetUserElapsed() << endl;
+  G4cout << " time = " << theTimer.GetUserElapsed() << G4endl;
 
 
-    G4cout << "  ------         ----- " << endl ;
+    G4cout << "  ------         ----- " << G4endl ;
     
     palongget = aParticle.GetDefinition()->GetProcessManager()
                                  ->GetAlongStepProcessVector(typeGPIL);
@@ -345,17 +345,17 @@ int main()
     NEXTMATERIAL: ;
     J = J+1 ;
     if ( J >= theMaterialTable->length() )
-      { G4cout << "that was the last material in the table --> STOP" << endl;
+      { G4cout << "that was the last material in the table --> STOP" << G4endl;
         return EXIT_FAILURE ; }  
 
     apttoMaterial = (*theMaterialTable)[ J ] ;
     MaterialName = apttoMaterial->GetName() ; 
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the Energyloss test 1. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the Energyloss test 1. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
     G4int icont ;
-    cin >> icont ;
+    G4cin >> icont ;
     if ( icont < 0 )
         goto NEXTMATERIAL ;
 
@@ -394,13 +394,13 @@ int main()
    
 //**************************************************************************
 
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  Energyloss test 1." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  Energyloss test 1." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
     G4cout << "kin.en.(MeV)    dE/dx(MeV/mm)    range(mm)    Step(mm)" 
-            <<  "  dEdx(GeVcm2/g)" <<  endl ;
-    G4cout << endl ;
+            <<  "  dEdx(GeVcm2/g)" <<  G4endl ;
+    G4cout << G4endl ;
  
 
     for ( G4int i=0 ; i<Nbin ; i++)
@@ -422,19 +422,19 @@ int main()
 
        G4cout <<" " <<  T/MeV << "  " << dEdx/(MeV/mm) << "  " ;
        G4cout << range/mm << "  " << stepLimit/mm << "  "
-               << dEdx/(GeV/cm)/(apttoMaterial->GetDensity()/(g/cm3)) << endl ; 
+               << dEdx/(GeV/cm)/(apttoMaterial->GetDensity()/(g/cm3)) << G4endl ; 
 
     }
 
-    G4cout <<  endl;
+    G4cout <<  G4endl;
 
     ENERGYLOSS2: ;
 
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the Energyloss test 2. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
-    cin >> icont ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the Energyloss test 2. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
+    G4cin >> icont ;
     if ( icont < 0 )
         goto ENERGYLOSS3 ;
 
@@ -442,7 +442,7 @@ int main()
   
 
     G4cout << "give an energy value in MeV " ;
-    cin >> TMeV ; TMeV *= MeV;
+    G4cin >> TMeV ; TMeV *= MeV;
 
       trueStep = cutinrange ; 
       previousStepSize = cutinrange ;
@@ -455,9 +455,9 @@ int main()
                                               refsafety,
                                               &selection);
 
-    G4cout << " give a steplength in mm , the max. meaningful Step is " << stepmx/mm << " mm" <<endl;
+    G4cout << " give a steplength in mm , the max. meaningful Step is " << stepmx/mm << " mm" <<G4endl;
     G4cout << "Step:" ;
-    cin >> stepmm ; stepmm *= mm;
+    G4cin >> stepmm ; stepmm *= mm;
  
    (*Step).SetTrack(tracke) ;
    (*Step).SetStepLength(stepmm);
@@ -468,29 +468,29 @@ int main()
       meanloss = theParticleIonisation.GetMeanLoss() ;
       lossnow = TMeV-(*aParticleChange).GetEnergyChange();
 
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  Energyloss test 2." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
-    G4cout << "kin.en.(MeV)    Step(mm)   meanloss(MeV)  act.loss(MeV)" << endl ;
-    G4cout << TMeV/MeV << "   " << stepmm/mm << "  " << meanloss/MeV << "  " << lossnow/MeV << endl ;
-    G4cout << " status change:" << (*aParticleChange).GetStatusChange() << endl ;
-    G4cout << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  Energyloss test 2." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "kin.en.(MeV)    Step(mm)   meanloss(MeV)  act.loss(MeV)" << G4endl ;
+    G4cout << TMeV/MeV << "   " << stepmm/mm << "  " << meanloss/MeV << "  " << lossnow/MeV << G4endl ;
+    G4cout << " status change:" << (*aParticleChange).GetStatusChange() << G4endl ;
+    G4cout << G4endl ;
  
     goto ENERGYLOSS2 ;
 
     ENERGYLOSS3: ;
 
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the Energyloss test 3. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
-    cin >> icont ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the Energyloss test 3. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
+    G4cin >> icont ;
     if ( icont < 0 )
         goto DELTARAY1 ;
 
     G4cout << "give an energy value in MeV " ;
-    cin >> TMeV ; TMeV *= MeV;
+    G4cin >> TMeV ; TMeV *= MeV;
 
       trueStep = cutinrange ; 
       previousStepSize = cutinrange ;
@@ -503,9 +503,9 @@ int main()
                                               refsafety,
                                               &selection);
 
-    G4cout << " give a steplength in mm , the max. meaningful Step is " << stepmx << " mm" <<endl;
+    G4cout << " give a steplength in mm , the max. meaningful Step is " << stepmx << " mm" <<G4endl;
     G4cout << "Step:" ;
-    cin >> stepmm ; stepmm *= mm;
+    G4cin >> stepmm ; stepmm *= mm;
  
    (*Step).SetTrack(tracke) ;
    (*Step).SetStepLength(stepmm);
@@ -513,7 +513,7 @@ int main()
 
     G4cout << " give number of events you want " ;
     G4int nbev,ibev ;
-    cin >> nbev ;
+    G4cin >> nbev ;
 
     meanloss=0.;
     theTimer.Start();
@@ -529,33 +529,33 @@ int main()
 
     theTimer.Stop();
     meanloss /= nbev ;
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  Energyloss test 3." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
-    G4cout << "kin.en.(MeV)    Step(mm)   meanloss(MeV) time/event(sec) " << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  Energyloss test 3." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "kin.en.(MeV)    Step(mm)   meanloss(MeV) time/event(sec) " << G4endl ;
     G4cout << TMeV/MeV << "   " << stepmm/mm << "  " << meanloss/MeV << "  " << 
-    theTimer.GetUserElapsed()/nbev << endl ;
-    G4cout << endl ;
+    theTimer.GetUserElapsed()/nbev << G4endl ;
+    G4cout << G4endl ;
  
     goto ENERGYLOSS3 ;
 
     DELTARAY1: ;
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the delta ray test 1. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
-    cin >> icont ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the delta ray test 1. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
+    G4cin >> icont ;
     if ( icont < 0 )
         goto DELTARAY2 ;
 
 
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  delta ray test 1." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
-    G4cout << "kin.en.(MeV)      mean free path(mm)" << endl ;
-    G4cout << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  delta ray test 1." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "kin.en.(MeV)      mean free path(mm)" << G4endl ;
+    G4cout << G4endl ;
  
     for ( i=0 ; i<Nbin ; i++)
     {
@@ -569,20 +569,20 @@ int main()
 
       T = TkinMeV[i] ;
 
-      G4cout <<" " <<  T/MeV << "      " <<  stepLimit/mm << endl ;
+      G4cout <<" " <<  T/MeV << "      " <<  stepLimit/mm << G4endl ;
 
     }
 
-    G4cout <<  endl;
+    G4cout <<  G4endl;
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     DELTARAY2: ;
 
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the deltaray test 2. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
-    cin >> icont ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the deltaray test 2. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
+    G4cin >> icont ;
 
     G4double newenergy,dx,dy,dz,Tdelta,ddx,ddy,ddz ;
     G4int nd ;
@@ -593,7 +593,7 @@ int main()
         goto BREMS1 ;  
 
     G4cout << "give an energy value in MeV " ;
-    cin >> TMeV ; TMeV *= MeV;
+    G4cin >> TMeV ; TMeV *= MeV;
                            
      stepmm = 1.*mm ;
 
@@ -624,17 +624,17 @@ int main()
     (*aParticleChange).Clear();
 
 
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  delta ray test 2." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
-    G4cout << "T=" << TMeV/MeV << "   newT=" << newenergy/MeV << "  (MeV)" << endl ;
-    G4cout << " status change:" << (*aParticleChange).GetStatusChange() << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  delta ray test 2." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "T=" << TMeV/MeV << "   newT=" << newenergy/MeV << "  (MeV)" << G4endl ;
+    G4cout << " status change:" << (*aParticleChange).GetStatusChange() << G4endl ;
     if(nd>0)
-    G4cout << "Tdelta=" << Tdelta/MeV << endl ;
-    G4cout << "new direction:" << dx << "  " << dy << "  " << dz << endl;
+    G4cout << "Tdelta=" << Tdelta/MeV << G4endl ;
+    G4cout << "new direction:" << dx << "  " << dy << "  " << dz << G4endl;
     if(nd>0)
-    G4cout << "delta direction:" << ddx << "  " << ddy << "  " << ddz << endl ;
+    G4cout << "delta direction:" << ddx << "  " << ddy << "  " << ddz << G4endl ;
 //............................................
     nbev=50000 ;
     mloss = 0. ;
@@ -672,33 +672,33 @@ int main()
     dEdxdelta=mloss/stepLimit ;
 
     G4cout << " mean energy loss due to delta production (in MeV)=" <<
-              mloss/MeV << " +- " << sloss/MeV << endl ;
+              mloss/MeV << " +- " << sloss/MeV << G4endl ;
     G4cout << " dE/dx due to delta production (in MeV/mm,from " <<
-             nbev << " events )=" << dEdxdelta/(MeV/mm) << endl ;
+             nbev << " events )=" << dEdxdelta/(MeV/mm) << G4endl ;
     G4cout << "in GeVcm2/g =" 
-         << dEdxdelta/(GeV/cm)/(apttoMaterial->GetDensity()/(g/cm3)) << endl ; 
-    G4cout << " time/delta =" << theTimer.GetUserElapsed()/nbev << endl ;
-    G4cout << endl ;
+         << dEdxdelta/(GeV/cm)/(apttoMaterial->GetDensity()/(g/cm3)) << G4endl ; 
+    G4cout << " time/delta =" << theTimer.GetUserElapsed()/nbev << G4endl ;
+    G4cout << G4endl ;
             
 //..................................
 
     goto DELTARAY2 ;
 
     BREMS1: ;
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the brems test 1. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
-    cin >> icont ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the brems test 1. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
+    G4cin >> icont ;
     if ( icont < 0 )
         goto BREMS2 ;
 
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  brems test 1." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
-    G4cout << "kin.en.(MeV)      mean free path(mm)" << endl ;
-    G4cout << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  brems test 1." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "kin.en.(MeV)      mean free path(mm)" << G4endl ;
+    G4cout << G4endl ;
  
     for ( i=0 ; i<Nbin ; i++)
     {
@@ -712,25 +712,25 @@ int main()
 
       T = TkinMeV[i] ;
 
-      G4cout <<" " <<  T/MeV << "      " << stepLimit/mm << endl ;
+      G4cout <<" " <<  T/MeV << "      " << stepLimit/mm << G4endl ;
 
     }
 
-    G4cout <<  endl;
+    G4cout <<  G4endl;
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     BREMS2: ;
 
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the brems test 2. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
-    cin >> icont ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the brems test 2. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
+    G4cin >> icont ;
     if ( icont < 0 )
         goto PAIR1 ;  
 
     G4cout << "give an energy value in MeV " ;
-    cin >> TMeV ; TMeV *= MeV;
+    G4cin >> TMeV ; TMeV *= MeV;
                            
      stepmm = 1. ;
 
@@ -759,17 +759,17 @@ int main()
     (*aParticleChange).Clear();
 
 
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  brems test 2." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
-    G4cout << "T=" << TMeV/MeV << "   newT=" << newenergy/MeV << "  (MeV)" << endl ;
-    G4cout << " status change:" << (*aParticleChange).GetStatusChange() << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  brems test 2." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "T=" << TMeV/MeV << "   newT=" << newenergy/MeV << "  (MeV)" << G4endl ;
+    G4cout << " status change:" << (*aParticleChange).GetStatusChange() << G4endl ;
     if(nd>0)
-    G4cout << "Tgamma=" << Tdelta/MeV << endl ;
-    G4cout << "new direction:" << dx << "  " << dy << "  " << dz << endl;
+    G4cout << "Tgamma=" << Tdelta/MeV << G4endl ;
+    G4cout << "new direction:" << dx << "  " << dy << "  " << dz << G4endl;
     if(nd>0)
-    G4cout << "gamma direction:" << ddx << "  " << ddy << "  " << ddz << endl ;
+    G4cout << "gamma direction:" << ddx << "  " << ddy << "  " << ddz << G4endl ;
 
     nbev=50000 ;
     mloss = 0. ;
@@ -804,31 +804,31 @@ int main()
     dEdxbrems=mloss/stepLimit ;
 
     G4cout << " mean energy loss due to bremsstrahlung (in MeV)=" <<
-              mloss/MeV << " +- " << sloss/MeV << endl ;
+              mloss/MeV << " +- " << sloss/MeV << G4endl ;
     G4cout << " dE/dx due to bremsstrahlung (in MeV/mm,from " <<
-             nbev << " events )=" << dEdxbrems/(MeV/mm) << endl;
+             nbev << " events )=" << dEdxbrems/(MeV/mm) << G4endl;
     G4cout << "in GeVcm2/g =" 
-         << dEdxbrems/(GeV/cm)/(apttoMaterial->GetDensity()/(g/cm3)) << endl ; 
-    G4cout << " time/brems =" << theTimer.GetUserElapsed()/nbev << endl ;
-    G4cout << endl ;
+         << dEdxbrems/(GeV/cm)/(apttoMaterial->GetDensity()/(g/cm3)) << G4endl ; 
+    G4cout << " time/brems =" << theTimer.GetUserElapsed()/nbev << G4endl ;
+    G4cout << G4endl ;
  
     goto BREMS2 ;
 
     PAIR1: ;
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the pair test 1. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
-    cin >> icont ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the pair test 1. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
+    G4cin >> icont ;
     if ( icont < 0 )
         goto PAIR2 ;
 
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  pair test 1." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
-    G4cout << "kin.en.(MeV)      mean free path(mm)" << endl ;
-    G4cout << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  pair test 1." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "kin.en.(MeV)      mean free path(mm)" << G4endl ;
+    G4cout << G4endl ;
  
     for ( i=0 ; i<Nbin ; i++)
     {
@@ -842,11 +842,11 @@ int main()
 
       T = TkinMeV[i] ;
 
-      G4cout <<" " <<  T/MeV << "      " << stepLimit/mm << endl ;
+      G4cout <<" " <<  T/MeV << "      " << stepLimit/mm << G4endl ;
 
     }
 
-    G4cout <<  endl;
+    G4cout <<  G4endl;
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     PAIR2: ;
@@ -855,16 +855,16 @@ int main()
     G4ParticleMomentum ddir1,ddir2 ;
     G4double dEdxpair ;
 
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the pair test 2. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
-    cin >> icont ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the pair test 2. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
+    G4cin >> icont ;
     if ( icont < 0 )
         goto NUCL1 ;  
 
     G4cout << "give an energy value in MeV " ;
-    cin >> TMeV ; TMeV *= MeV;
+    G4cin >> TMeV ; TMeV *= MeV;
 
      stepmm = 1. ;
 
@@ -903,22 +903,22 @@ int main()
     (*aParticleChange).Clear();
 
 
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  pair test 2." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
-    G4cout << "T=" << TMeV/MeV << "   newT=" << newenergy/MeV << "  (MeV)" << endl ;
-    G4cout << " status change:" << (*aParticleChange).GetStatusChange() << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  pair test 2." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "T=" << TMeV/MeV << "   newT=" << newenergy/MeV << "  (MeV)" << G4endl ;
+    G4cout << " status change:" << (*aParticleChange).GetStatusChange() << G4endl ;
     if(nd>0)
-    G4cout << "T1=" << Tdelta1/MeV << endl ;
+    G4cout << "T1=" << Tdelta1/MeV << G4endl ;
     if(nd>1)
-    G4cout << "T2=" << Tdelta2/MeV << endl ;
+    G4cout << "T2=" << Tdelta2/MeV << G4endl ;
 
-    G4cout << "new direction:" << dx << "  " << dy << "  " << dz << endl;
+    G4cout << "new direction:" << dx << "  " << dy << "  " << dz << G4endl;
     if(nd>0)
-    G4cout << "direction1:" << ddx1 << "  " << ddy1 << "  " << ddz1 << endl ;
+    G4cout << "direction1:" << ddx1 << "  " << ddy1 << "  " << ddz1 << G4endl ;
     if(nd>1)
-    G4cout << "direction2:" << ddx2 << "  " << ddy2 << "  " << ddz2 << endl ;
+    G4cout << "direction2:" << ddx2 << "  " << ddy2 << "  " << ddz2 << G4endl ;
 
     nbev=50000 ;
     mloss = 0. ;
@@ -960,31 +960,31 @@ int main()
     dEdxpair=mloss/stepLimit ;
 
     G4cout << " mean energy loss due to pair production (in MeV)=" <<
-              mloss/MeV << " +- " << sloss/MeV << endl ;
+              mloss/MeV << " +- " << sloss/MeV << G4endl ;
     G4cout << " dE/dx due to pair production (in MeV/mm,from " <<
-             nbev << " events )=" << dEdxpair/(MeV/mm) << endl;
+             nbev << " events )=" << dEdxpair/(MeV/mm) << G4endl;
     G4cout << "in GeVcm2/g =" 
-         << dEdxpair/(GeV/cm)/(apttoMaterial->GetDensity()/(g/cm3)) << endl ; 
-    G4cout << " time/pair =" << theTimer.GetUserElapsed()/nbev << endl ;
-    G4cout << endl ;
+         << dEdxpair/(GeV/cm)/(apttoMaterial->GetDensity()/(g/cm3)) << G4endl ; 
+    G4cout << " time/pair =" << theTimer.GetUserElapsed()/nbev << G4endl ;
+    G4cout << G4endl ;
  
     goto PAIR2 ;
 
     NUCL1: ;
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the nucl.int. test 1. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
-    cin >> icont ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the nucl.int. test 1. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
+    G4cin >> icont ;
     if ( icont < 0 )
         goto NUCL2 ;
 
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  nucl.int. test 1." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
-    G4cout << "kin.en.(MeV)      mean free path(mm)" << endl ;
-    G4cout << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  nucl.int. test 1." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "kin.en.(MeV)      mean free path(mm)" << G4endl ;
+    G4cout << G4endl ;
  
     for ( i=0 ; i<Nbin ; i++)
     {
@@ -998,25 +998,25 @@ int main()
 
       T = TkinMeV[i] ;
 
-      G4cout <<" " <<  T/MeV << "      " << stepLimit/mm << endl ;
+      G4cout <<" " <<  T/MeV << "      " << stepLimit/mm << G4endl ;
 
     }
 
-    G4cout <<  endl;
+    G4cout <<  G4endl;
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     NUCL2: ;
 
-    G4cout << "material=" << MaterialName << endl ;
-    G4cout << "Do you want the nucl.int. test 2. for this material?" << endl ;
-    G4cout << "type a positive number if the answer is YES" << endl ;
-    G4cout << "type a negative number if the answer is NO " << endl ;
-    cin >> icont ;
+    G4cout << "material=" << MaterialName << G4endl ;
+    G4cout << "Do you want the nucl.int. test 2. for this material?" << G4endl ;
+    G4cout << "type a positive number if the answer is YES" << G4endl ;
+    G4cout << "type a negative number if the answer is NO " << G4endl ;
+    G4cin >> icont ;
     if ( icont < 0 )
         goto NEXTMATERIAL ;  
 
     G4cout << "give an energy value in MeV " ;
-    cin >> TMeV ; TMeV *= MeV;
+    G4cin >> TMeV ; TMeV *= MeV;
 
      stepmm = 1. ;
 
@@ -1046,22 +1046,22 @@ int main()
     (*aParticleChange).Clear();
 
 
-    G4cout <<  endl;
-    G4cout <<"  " << MaterialName  << "  nucl.int. test 2." << endl ;
-    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << endl ;
-    G4cout << endl ;
-    G4cout << "T=" << TMeV/MeV << "   newT=" << newenergy/MeV << "  (MeV)" << endl ;
-    G4cout << " status change:" << (*aParticleChange).GetStatusChange() << endl ;
+    G4cout <<  G4endl;
+    G4cout <<"  " << MaterialName  << "  nucl.int. test 2." << G4endl ;
+    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++" << G4endl ;
+    G4cout << G4endl ;
+    G4cout << "T=" << TMeV/MeV << "   newT=" << newenergy/MeV << "  (MeV)" << G4endl ;
+    G4cout << " status change:" << (*aParticleChange).GetStatusChange() << G4endl ;
     if(nd>0)
-    G4cout << "T1=" << Tdelta1/MeV << endl ;
+    G4cout << "T1=" << Tdelta1/MeV << G4endl ;
     if(nd>1)
-    G4cout << "T2=" << Tdelta2/MeV << endl ;
+    G4cout << "T2=" << Tdelta2/MeV << G4endl ;
 
-    G4cout << "new direction:" << dx << "  " << dy << "  " << dz << endl;
+    G4cout << "new direction:" << dx << "  " << dy << "  " << dz << G4endl;
     if(nd>0)
-    G4cout << "direction1:" << ddx1 << "  " << ddy1 << "  " << ddz1 << endl ;
+    G4cout << "direction1:" << ddx1 << "  " << ddy1 << "  " << ddz1 << G4endl ;
     if(nd>1)
-    G4cout << "direction2:" << ddx2 << "  " << ddy2 << "  " << ddz2 << endl ;
+    G4cout << "direction2:" << ddx2 << "  " << ddy2 << "  " << ddz2 << G4endl ;
 
     nbev=50000 ;
     mloss = 0. ;
@@ -1102,13 +1102,13 @@ int main()
     dEdxpair=mloss/stepLimit ;
 
     G4cout << " mean energy loss due to nucl.int. production (in MeV)=" <<
-              mloss/MeV << " +- " << sloss/MeV << endl ;
+              mloss/MeV << " +- " << sloss/MeV << G4endl ;
     G4cout << " dE/dx due to nucl.int. production (in MeV/mm,from " <<
-             nbev << " events )=" << dEdxpair/(MeV/mm) << endl;
+             nbev << " events )=" << dEdxpair/(MeV/mm) << G4endl;
     G4cout << "in GeVcm2/g =" 
-         << dEdxpair/(GeV/cm)/(apttoMaterial->GetDensity()/(g/cm3)) << endl ; 
-    G4cout << " time/nucl =" << theTimer.GetUserElapsed()/nbev << endl ;
-    G4cout << endl ;
+         << dEdxpair/(GeV/cm)/(apttoMaterial->GetDensity()/(g/cm3)) << G4endl ; 
+    G4cout << " time/nucl =" << theTimer.GetUserElapsed()/nbev << G4endl ;
+    G4cout << G4endl ;
  
     goto NUCL2 ;
     if( J < theMaterialTable->length()-1 )

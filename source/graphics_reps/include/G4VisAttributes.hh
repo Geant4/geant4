@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisAttributes.hh,v 1.4 1999-11-17 07:39:26 stanaka Exp $
+// $Id: G4VisAttributes.hh,v 1.5 1999-12-15 14:50:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 
 class G4VisAttributes {
 
-  friend ostream& operator << (ostream& os, const G4VisAttributes& a);
+  friend G4std::ostream& operator << (G4std::ostream& os, const G4VisAttributes& a);
 
 public: // With description
 

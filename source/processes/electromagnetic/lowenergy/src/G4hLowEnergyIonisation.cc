@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -2141,7 +2141,7 @@ G4double G4hLowEnergyIonisation::GetHeEffChargeSquare(const G4int iz,
   static G4double C[6] = {0.2865,  0.1266, -0.001429,
                           0.02402,-0.01135, 0.001475} ;
 
-  G4double E = log( max( 1.0, HeKinEnergy/(keV*HeMassAMU) ) ) ; 
+  G4double E = log( G4std::max( 1.0, HeKinEnergy/(keV*HeMassAMU) ) ) ; 
   G4double x = C[0] ;
   G4double y = 1.0 ;
     for (G4int i=1; i<6; i++) {
@@ -2241,7 +2241,7 @@ G4double G4hLowEnergyIonisation::GetIonEffChargeSquare(const G4Material* aMateri
   // Helium ion case
   if( IonCharge < 2.5 ) {
 
-    G4double E = log( max( 1.0, KinEnergy / (keV*HeMassAMU) ) ) ; 
+    G4double E = log( G4std::max( 1.0, KinEnergy / (keV*HeMassAMU) ) ) ; 
     G4double x = C[0] ;
     G4double y = 1.0 ;
       for (G4int i=1; i<6; i++) {
@@ -2273,7 +2273,7 @@ G4double G4hLowEnergyIonisation::GetIonEffChargeSquare(const G4Material* aMateri
     G4double q = 1.0 - exp( 0.803*y3 - 1.3167*y3*y3 - 0.38157*y - 0.008983*y*y ) ;     
     if( q < 0.0 ) q = 0.0 ;
 
-    Q = 7.6 -  log(max(1.0, ReducedEnergy/keV)) ; 
+    Q = 7.6 -  log(G4std::max(1.0, ReducedEnergy/keV)) ; 
     Q = 1.0 + ( 0.18 + 0.0015 * Z ) * exp( -Q*Q )/ (IonCharge*IonCharge) ;
 
     // Screen length according to
@@ -2298,25 +2298,25 @@ void G4hLowEnergyIonisation::PrintInfoDefinition()
   comments += "         delta ray energy sampled from  differential Xsection.";
   
   if(pbarStop){
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << LowestKineticEnergy / eV << " eV " 
          << " to " << HighestKineticEnergy / TeV << " TeV "
          << " in " << TotBin << " bins."
          << "\n        Low energy losses approximation is taken from  " << DEDXtable
          << "\n        from " << ParamLowEnergy / keV << " keV "
-         << " to " << ParamHighEnergy / MeV << " MeV " << "." << endl ;
+         << " to " << ParamHighEnergy / MeV << " MeV " << "." << G4endl ;
   } else {
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << LowestKineticEnergy / eV << " eV " 
          << " to " << HighestKineticEnergy / TeV << " TeV "
          << " in " << TotBin << " bins."
          << "\n        Low energy losses approximation is taken from  " << DEDXtable
          << "\n        from " << ParamLowEnergy / keV << " keV "
-         << " to " << ParamHighEnergy / MeV << " MeV " << "." << endl
+         << " to " << ParamHighEnergy / MeV << " MeV " << "." << G4endl
   	 << "\n Energy loss for antiproton now available only from 100 keV.";
   }
   if(nStopping) {
-    G4cout << "        Simulation of nuclear stopping is switched on.  \n" << endl ; 
+    G4cout << "        Simulation of nuclear stopping is switched on.  \n" << G4endl ; 
   }
 }
 

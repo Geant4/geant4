@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QContent.hh,v 1.1 1999-11-17 11:04:14 hpw Exp $
+// $Id: G4QContent.hh,v 1.2 1999-12-15 14:52:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -22,7 +22,7 @@
 //  class header for Quasmon initiated Contents used by the CHIPS Model
 // ----------------------------------------------------------------------
 
-#include <iostream.h>
+#include "g4std/iostream"
 #include "globals.hh"
 #include "Randomize.hh"
 
@@ -99,7 +99,7 @@ private:            //                       C    S
   G4int nAS;        // a#of anti-s-quarks (+1/3)(-1)
 };
 
-ostream& operator<<(ostream& lhs, G4QContent& rhs);
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QContent& rhs);
 
 inline int G4QContent::operator==(const G4QContent& rhs) const {return this==&rhs;}	
 inline int G4QContent::operator!=(const G4QContent& rhs) const {return this!=&rhs;}

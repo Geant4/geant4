@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleWithCuts.cc,v 1.5 1999-06-09 08:56:54 kurasige Exp $
+// $Id: G4ParticleWithCuts.cc,v 1.6 1999-12-15 14:51:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,11 +32,7 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4ios.hh"
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 
 G4double  G4ParticleWithCuts::LowestEnergy = 0.99e-3*MeV;
@@ -184,13 +180,13 @@ void G4ParticleWithCuts::BuildLossTable()
     if (GetVerboseLevel()>2) {
       G4cout << "G4ParticleWithCuts::BuildLossTable() ";
       G4cout << "Create theLossTable[" << theLossTable << "]";
-      G4cout << " NumberOfElements=" << NumberOfElements <<endl;
+      G4cout << " NumberOfElements=" << NumberOfElements <<G4endl;
     }
 #endif
   } else {
     if (NumberOfElements != G4Element::GetNumberOfElements()){
       char errMsg[1024];
-      ostrstream errOs(errMsg,1024);
+      G4std::ostrstream errOs(errMsg,1024);
       errOs << "Error in G4ParticlWithCuts::BuildLossTable()";
       errOs << "[" <<  this->GetParticleName() << "] ";
       errOs << "  :  inconsistent G4Element::GetNumberOfElements =" << G4Element::GetNumberOfElements();
@@ -253,10 +249,10 @@ G4double G4ParticleWithCuts::ConvertCutToKineticEnergy(G4RangeVector* rangeVecto
   {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "Error in G4ParticleWithCuts::ConvertCutToKineticEnergy" <<endl;
+      G4cout << "Error in G4ParticleWithCuts::ConvertCutToKineticEnergy" <<G4endl;
       G4cout << "******** ConvertCutToKineticEnergy for " << GetParticleName(); 
-      G4cout << " ********************" << endl;
-      G4cout << "The cut energy is set " << DBL_MAX/GeV << "GeV " <<endl; 
+      G4cout << " ********************" << G4endl;
+      G4cout << "The cut energy is set " << DBL_MAX/GeV << "GeV " <<G4endl; 
     }
 #endif
     return  DBL_MAX;
@@ -285,7 +281,7 @@ G4double G4ParticleWithCuts::ConvertCutToKineticEnergy(G4RangeVector* rangeVecto
 void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut) 
 {
   char errMsg[1024];
-  ostrstream errOs(errMsg,1024);
+  G4std::ostrstream errOs(errMsg,1024);
   // check LowestEnergy/ HighestEnergy/TotBin 
   if (TotBin<1) {
     errOs <<  "Error in G4ParticlWithCuts::G4ParticlWithCuts" ;
@@ -332,7 +328,7 @@ void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut)
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>0) {
 	    G4cout << " G4ParticleWithCuts::CalcEnergyCuts  ";
-	    G4cout << " proton is not defined !!" << endl;
+	    G4cout << " proton is not defined !!" << G4endl;
       }
 #endif
       useProtonCut = false;
@@ -355,7 +351,7 @@ void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut)
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>2) {
       G4cout << " G4ParticleWithCuts: [" << GetParticleName() <<"]";
-      G4cout << " uses Proton Cut " << endl;
+      G4cout << " uses Proton Cut " << G4endl;
     }
 #endif                                                      
     G4double ChargeSquare = Charge*Charge/(eplus*eplus) ;
@@ -373,7 +369,7 @@ void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut)
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>2) {
       G4cout << " G4ParticleWithCuts: [" << GetParticleName() <<"]";
-      G4cout << " calcurate by using its own loss table  " << endl;
+      G4cout << " calcurate by using its own loss table  " << G4endl;
     }
 #endif
     // Build the energy loss table
@@ -482,7 +478,7 @@ void G4ParticleWithCuts::BuildRangeVector(
   G4int NumEl = aMaterial->GetNumberOfElements();
   if (rangeVector == 0) {
     char errMsg[1024];
-    ostrstream errOs(errMsg,1024);
+    G4std::ostrstream errOs(errMsg,1024);
     errOs << "Error in G4ParticleWithCuts::BuildRangeVector()";
     errOs << "[" << this->GetParticleName() << "] ";
     errOs << " :  0 pointer is found in absorptionLengthVector" << '\0';
@@ -553,11 +549,11 @@ void G4ParticleWithCuts::BuildRangeVector(
   if ( theCutInMaxInteractionLength >= rmax) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "Error in G4ParticleWithCuts::BuildRangeVector()" << endl;
-      G4cout << " SetCuts for " << GetParticleName() << endl;
-      G4cout << "The maximal meaningful cut is " << rmax/mm << " mm." << endl;
-      G4cout << "All the " << GetParticleName() << "will be killed !" << endl;
-      G4cout << "in the material " << aMaterial->GetName() << "." << endl;
+      G4cout << "Error in G4ParticleWithCuts::BuildRangeVector()" << G4endl;
+      G4cout << " SetCuts for " << GetParticleName() << G4endl;
+      G4cout << "The maximal meaningful cut is " << rmax/mm << " mm." << G4endl;
+      G4cout << "All the " << GetParticleName() << "will be killed !" << G4endl;
+      G4cout << "in the material " << aMaterial->GetName() << "." << G4endl;
     }
 #endif
   }

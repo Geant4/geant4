@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst01SteppingAction.cc,v 1.3 1999-11-26 09:47:36 grichine Exp $
+// $Id: Tst01SteppingAction.cc,v 1.4 1999-12-15 14:54:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,7 +17,7 @@
 #include "Tst01SteppingAction.hh"
 #include "G4SteppingManager.hh"
 #include "math.h"
-#include <fstream.h>
+#include "g4std/fstream"
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -33,12 +33,12 @@ SteplengthProfile(100,0.,2*M_PI),fNumberOfTracks(10,0.,10.0)
 
 Tst01SteppingAction::~Tst01SteppingAction()
 {
-  ofstream o("NumberOfTracks.plt");
+  G4std::ofstream o("NumberOfTracks.plt");
   fNumberOfTracks.output(o);
   o.close();
 
 
-  //  ofstream o("test01.stepLength.plt");
+  //  G4std::ofstream o("test01.stepLength.plt");
   //  Steplength.output(o);
   //  o.close();
   //  o.open("test01.stepLengthProfile.plt");

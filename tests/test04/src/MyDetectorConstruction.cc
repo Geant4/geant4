@@ -22,7 +22,7 @@ MyDetectorConstruction::~MyDetectorConstruction()
 
 G4VPhysicalVolume* MyDetectorConstruction::Construct()
 {
-    G4cout << "  -- Tracker type sensitive detector" << endl;
+    G4cout << "  -- Tracker type sensitive detector" << G4endl;
 
 //--------- Material definition ---------
 

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyEventAction.cc,v 1.2 1999-11-11 16:01:41 gunter Exp $
+// $Id: MyEventAction.cc,v 1.3 1999-12-15 14:48:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -59,7 +59,7 @@ void MyEventAction::EndOfEventAction()
 {
   const G4Event* evt = fpEventManager->GetConstCurrentEvent();
 
-  G4cout << ">>> Event " << evt->GetEventID() << endl;
+  G4cout << ">>> Event " << evt->GetEventID() << G4endl;
 
   G4HCofThisEvent * HCE = evt->GetHCofThisEvent();
   MyCalorimeterHitsCollection* CHC = NULL;
@@ -72,12 +72,12 @@ void MyEventAction::EndOfEventAction()
       = CHC->GetVector();
     int n_hit = theCollection.entries();
     G4cout << "     " << n_hit
-         << " hits are stored in MyCalorimeterHitsCollection." << endl;
+         << " hits are stored in MyCalorimeterHitsCollection." << G4endl;
     G4double totE = 0;
     for(int i=0;i<n_hit;i++)
     { totE += theCollection[i].GetEdep(); }
     G4cout << "     Total energy deposition in calorimeter tubes : "
-         << totE / GeV << " (GeV)" << endl;
+         << totE / GeV << " (GeV)" << G4endl;
   }
 
   if(drawFlag)

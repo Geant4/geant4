@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3RunActionMessenger.cc,v 1.1 1999-10-11 16:55:55 maire Exp $
+// $Id: Em3RunActionMessenger.cc,v 1.2 1999-12-15 14:49:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,7 @@ void Em3RunActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
       Em3Run->SetRndmFreq(RndmSaveCmd->GetNewIntValue(newValue));
 		 
   if (command == RndmReadCmd)
-    { G4cout << "\n---> rndm status restored from file: " << newValue << endl;
+    { G4cout << "\n---> rndm status restored from file: " << newValue << G4endl;
       HepRandom::restoreEngineStatus(newValue);
       HepRandom::showEngineStatus();
     }     

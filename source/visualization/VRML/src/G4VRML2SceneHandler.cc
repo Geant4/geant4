@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2SceneHandler.cc,v 1.1 1999-01-09 16:27:53 allison Exp $
+// $Id: G4VRML2SceneHandler.cc,v 1.2 1999-12-15 14:54:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2SceneHandler.cc
@@ -19,7 +19,7 @@
 //#define DEBUG_FR_SCENE
 
 #include <unistd.h>
-#include <fstream.h>
+#include "g4std/fstream"
 #include <math.h>
 
 #include "globals.hh"
@@ -71,7 +71,7 @@ G4VRML2SceneHandler::G4VRML2SceneHandler(G4VRML2& system, const G4String& name) 
 G4VRML2SceneHandler::~G4VRML2SceneHandler()
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** ~G4VRML2SceneHandler" << endl;
+	G4cerr << "***** ~G4VRML2SceneHandler" << G4endl;
 #endif 
 	fSceneCount--;
 }
@@ -94,12 +94,12 @@ void G4VRML2SceneHandler::connectPort(G4int max_trial)
 		    // INET domain connection is established
 			G4cerr << "*** GEANT4 is connected to port  ";
 			G4cerr << fDest.getPort(); 
-			G4cerr << " of server  " << fSystem.getHostName() << endl;
+			G4cerr << " of server  " << fSystem.getHostName() << G4endl;
 			break; 
 		} else { 
 			// Connection failed. Try the next port.
 			G4cerr << "*** GEANT4 incremented targeting port to ";
-			G4cerr << port << endl;
+			G4cerr << port << G4endl;
 		}
 
 		sleep (1);
@@ -107,17 +107,17 @@ void G4VRML2SceneHandler::connectPort(G4int max_trial)
 	} // for
 
 	if (!fDest.isConnected()) {
-		G4cerr << "*** INET Connection failed. " << endl;
-		G4cerr << "    Maybe, you have not invoked viewer  g4vrmlview  yet, " << endl;
-		G4cerr << "    or too many viewers are already running in the " << endl;
-		G4cerr << "    server host(" << fSystem.getHostName() << "). " << endl;
+		G4cerr << "*** INET Connection failed. " << G4endl;
+		G4cerr << "    Maybe, you have not invoked viewer  g4vrmlview  yet, " << G4endl;
+		G4cerr << "    or too many viewers are already running in the " << G4endl;
+		G4cerr << "    server host(" << fSystem.getHostName() << "). " << G4endl;
 	}
 }
 
 void G4VRML2SceneHandler::closePort()
 {
 	fDest.close();
-	G4cerr << "*** INET Connection closed. " << endl;
+	G4cerr << "*** INET Connection closed. " << G4endl;
 }
 
 

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.6 1999-12-06 16:08:24 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.7 1999-12-15 14:54:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,11 +28,7 @@
 #include "G4PhysicalVolumeSearchScene.hh"
 #include "G4TransportationManager.hh"
 
-#ifdef WIN32
-#include <strstrea.h>
-#else
-#include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 G4PhysicalVolumeModel::G4PhysicalVolumeModel
 (G4VPhysicalVolume*          pVPV,
@@ -53,8 +49,8 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fppCurrentLV   (0)
 {
   const int len = 8; char a [len];
-  ostrstream o (a, len); o.seekp (ios::beg);
-  o << fpTopPV -> GetCopyNo () << ends;
+  G4std::ostrstream o (a, len); o.seekp (G4std::ios::beg);
+  o << fpTopPV -> GetCopyNo () << G4std::ends;
   fGlobalTag = fpTopPV -> GetName () + "." + a;
   fGlobalDescription = "G4PhysicalVolumeModel " + fGlobalTag;
 
@@ -123,9 +119,9 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
 
 G4String G4PhysicalVolumeModel::GetCurrentTag () const {
   const int len = 8; char a [len];
-  ostrstream o (a, len); o.seekp (ios::beg);
+  G4std::ostrstream o (a, len); o.seekp (G4std::ios::beg);
   if (fpCurrentPV) {
-    o << fpCurrentPV -> GetCopyNo () << ends;
+    o << fpCurrentPV -> GetCopyNo () << G4std::ends;
     return fpCurrentPV -> GetName () + "." + a;
   }
   else {
@@ -242,7 +238,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	    "G4PhysicalVolumeModel::VisitGeometryAndGetVisReps: WARNING:"
 	    "\n  built-in replicated volumes replicated in radius are not yet"
 	    "\n  properly visualizable."
-	       << endl;
+	       << G4endl;
 	  break;
 	case kPhi:
 	  rotation.rotateZ (-(offset+n*width));
@@ -302,7 +298,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 	 << rotation.thetaZ() << ", "
 	 << rotation.phiZ();
   G4cout << "\n    Translation: " << theNewAT.getTranslation();
-  G4cout << endl;
+  G4cout << G4endl;
   **********************************************************/
 
   // Make decision to Draw.
@@ -431,7 +427,7 @@ G4bool G4PhysicalVolumeModel::Validate () {
     -> GetNavigatorForTracking () -> GetWorldVolume ();
   // The idea now is to seek a PV with the same name and copy no
   // in the hope it's the same one!!
-  G4cout << "G4PhysicalVolumeModel::Validate() called." << endl;
+  G4cout << "G4PhysicalVolumeModel::Validate() called." << G4endl;
   G4PhysicalVolumeSearchScene searchScene (fTopPVName, fTopPVCopyNo);
   G4PhysicalVolumeModel searchModel (world);
   searchModel.DescribeYourselfTo (searchScene);
@@ -442,7 +438,7 @@ G4bool G4PhysicalVolumeModel::Validate () {
 	   << ") still exists and is being used."
       "\n  Be warned that this does not necessarily guarantee it's the same"
       "\n  volume you originally specified in /vis/scene/add/."
-	   << endl;
+	   << G4endl;
     fpTopPV = foundVolume;
     return true;
   }
@@ -450,7 +446,7 @@ G4bool G4PhysicalVolumeModel::Validate () {
     G4cout << "  A volume of the same name and copy number (\""
 	   << fTopPVName << "\", copy " << fTopPVCopyNo
 	   << ") no longer exists."
-	   << endl;
+	   << G4endl;
     return false;
   }
 }

@@ -4,11 +4,11 @@ inline double Colour::Etot()
   Vektor3 d;
   for (int i=0; i<Npart; i++) {
     s += List[i]->E();
-    //    cerr << i << "  " << List[i]->E() << endl;
+    //    G4cerr << i << "  " << List[i]->E() << G4endl;
     if ( List[i]->Color() )
       for (int j=i+1; j<Nquark; j++) {
 	 s += E_int(i,j);
-	 //	 cerr << i << "  " << j << "  " << E_int(i,j) << endl;
+	 //	 G4cerr << i << "  " << j << "  " << E_int(i,j) << G4endl;
       }
   }
   return s;

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronCrossSectionPlugin.hh,v 1.1 1999-01-08 16:33:10 gunter Exp $
+// $Id: G4HadronCrossSectionPlugin.hh,v 1.2 1999-12-15 14:52:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,11 +53,11 @@ public:
                 const G4Element* anElement)
    {
       if (verboseLevel > 1) {
-         G4cout << "G4HadronCrossSectionPlugin::IsApplicable:" << endl;
+         G4cout << "G4HadronCrossSectionPlugin::IsApplicable:" << G4endl;
          G4cout << "  Particle: " <<
-                 aParticle->GetDefinition()->GetParticleName() << endl;
-         G4cout << "  Energy:   " << aParticle->GetKineticEnergy()/GeV << endl;
-         G4cout << "  Element:  " << anElement->GetName() << endl;
+                 aParticle->GetDefinition()->GetParticleName() << G4endl;
+         G4cout << "  Energy:   " << aParticle->GetKineticEnergy()/GeV << G4endl;
+         G4cout << "  Element:  " << anElement->GetName() << G4endl;
       }
       if (aParticle->GetDefinition() != G4Proton::Proton()) return 0;
       G4double ekin = aParticle->GetKineticEnergy()/GeV;

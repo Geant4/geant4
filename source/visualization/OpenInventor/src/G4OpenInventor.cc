@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventor.cc,v 1.5 1999-05-12 14:00:58 barrand Exp $
+// $Id: G4OpenInventor.cc,v 1.6 1999-12-15 14:54:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
@@ -44,7 +44,7 @@ G4VInteractorManager* G4OpenInventor::GetInteractorManager () {
 G4VSceneHandler* G4OpenInventor::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* p = new G4OpenInventorSceneHandler (*this, name);
   G4cout << G4OpenInventorSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scenes extanct." << endl;
+       << ' ' << fName << " scenes extanct." << G4endl;
   return    p;
 }
 

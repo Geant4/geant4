@@ -107,7 +107,7 @@ void Tst01DetectorConstruction::SelectDetector(G4String val)
   { detectorChoice = 1; }
   else
   { detectorChoice = 0; }
-  G4cout << "Now Detector is " << val << endl;
+  G4cout << "Now Detector is " << val << G4endl;
 }
 /////////////////////////////////////////////////////////////////////
 //
@@ -120,7 +120,7 @@ void Tst01DetectorConstruction::SelectCSG(G4String name)
   else if( name == "Sphere" ) fChoiceCSG = 3 ;
   else                        fChoiceCSG = 0 ; // default or error in name
  
-  G4cout << "Now CGS is " << name << endl;
+  G4cout << "Now CGS is " << name << G4endl;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -183,7 +183,7 @@ void Tst01DetectorConstruction::SelectBoolean(G4String name)
   else if( name == "Subtraction" ) fChoiceBool = 2 ;
   else                             fChoiceBool = 0 ; // default or error in name
  
-  G4cout << "Now Boolean is " << name << endl;
+  G4cout << "Now Boolean is " << name << G4endl;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -235,7 +235,7 @@ void Tst01DetectorConstruction::SelectMaterial(G4String val)
 {
   materialChoice = val;
   SelectMaterialPointer();
-  G4cout << "Daughter CSG/Boolean will be made of " << materialChoice << endl;
+  G4cout << "Daughter CSG/Boolean will be made of " << materialChoice << G4endl;
 }
 
 ///////////////////////////////////////////////////////////////////////

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eplusAnnihilation.cc,v 1.1 1999-01-07 16:11:25 gunter Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.2 1999-12-15 14:51:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -318,7 +318,7 @@ void G4eplusAnnihilation::PrintInfoDefinition()
   G4String comments = "Total cross section from Heilter formula (annihilation into 2 photons).\n";
            comments += "        gamma energies sampled according Heitler";
                      
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestEnergyLimit,"Energy")
          << " to " << G4BestUnit(HighestEnergyLimit,"Energy") 
          << " in " << NumbBinTable << " bins. \n";

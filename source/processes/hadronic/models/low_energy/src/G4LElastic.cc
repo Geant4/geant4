@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LElastic.cc,v 1.2 1999-05-25 00:36:42 gcosmo Exp $
+// $Id: G4LElastic.cc,v 1.3 1999-12-15 14:53:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Physics model class G4LElastic
@@ -96,7 +96,7 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
 
    G4double p = aParticle->GetTotalMomentum()/GeV;
    if (verboseLevel > 1)
-      G4cout << "G4LElastic::DoIt: Incident particle p=" << p << " GeV" << endl;
+      G4cout << "G4LElastic::DoIt: Incident particle p=" << p << " GeV" << G4endl;
 
    if (p < 0.01) return &theParticleChange;
 
@@ -122,17 +122,17 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    cc = cc/dd;
    rr = (aa + cc)*ran;
    if (verboseLevel > 1) {
-      G4cout << "DoIt: aa,bb,cc,dd,rr" << endl;
-      G4cout << aa << " " << bb << " " << cc << " " << dd << " " << rr << endl;
+      G4cout << "DoIt: aa,bb,cc,dd,rr" << G4endl;
+      G4cout << aa << " " << bb << " " << cc << " " << dd << " " << rr << G4endl;
    }
    G4double t1 = -log(ran)/bb;
    G4double t2 = -log(ran)/dd;
    if (verboseLevel > 1) {
-      G4cout << "log(FLT_MAX)=" << log(FLT_MAX) << endl;
+      G4cout << "log(FLT_MAX)=" << log(FLT_MAX) << G4endl;
       G4cout << "t1,Fctcos " << t1 << " " << Fctcos(t1, aa, bb, cc, dd, rr) << 
-              endl;
+              G4endl;
       G4cout << "t2,Fctcos " << t2 << " " << Fctcos(t2, aa, bb, cc, dd, rr) << 
-              endl;
+              G4endl;
    }
    G4double eps = 0.001;
    G4int ind1 = 10;
@@ -141,25 +141,25 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    ier1 = Rtmi(&t, t1, t2, eps, ind1,
                aa, bb, cc, dd, rr);
    if (verboseLevel > 1) {
-      G4cout << "From Rtmi, ier1=" << ier1 << endl;
+      G4cout << "From Rtmi, ier1=" << ier1 << G4endl;
       G4cout << "t, Fctcos " << t << " " << Fctcos(t, aa, bb, cc, dd, rr) << 
-              endl;
+              G4endl;
    }
    if (ier1 != 0) t = 0.25*(3.*t1 + t2);
    if (verboseLevel > 1) {
       G4cout << "t, Fctcos " << t << " " << Fctcos(t, aa, bb, cc, dd, rr) << 
-              endl;
+              G4endl;
    }
    G4double phi = G4UniformRand()*twopi;
    rr = 0.5*t/(p*p);
    if (rr > 1.) rr = 0.;
    if (verboseLevel > 1)
-      G4cout << "rr=" << rr << endl;
+      G4cout << "rr=" << rr << G4endl;
    G4double cost = 1. - rr;
-   G4double sint = sqrt(max(rr*(2. - rr), 0.));
+   G4double sint = sqrt(G4std::max(rr*(2. - rr), 0.));
    if (sint == 0.) return &theParticleChange;
    if (verboseLevel > 1)
-      G4cout << "cos(t)=" << cost << "  sin(t)=" << sint << endl;
+      G4cout << "cos(t)=" << cost << "  sin(t)=" << sint << G4endl;
 // Scattered particle referred to axis of incident particle
    G4double px = p*sint*sin(phi);
    G4double py = p*sint*cos(phi);
@@ -169,8 +169,8 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    G4double pyinc = p*(aParticle->GetMomentumDirection().y());
    G4double pzinc = p*(aParticle->GetMomentumDirection().z());
    if (verboseLevel > 1) {
-      G4cout << "NOM SCAT " << px << " " << py << " " << pz << endl;
-      G4cout << "INCIDENT " << pxinc << " " << pyinc << " " << pzinc << endl;
+      G4cout << "NOM SCAT " << px << " " << py << " " << pz << G4endl;
+      G4cout << "INCIDENT " << pxinc << " " << pyinc << " " << pzinc << G4endl;
    }
 
 // Transform scattered particle to reflect direction of incident particle
@@ -181,8 +181,8 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    pynew = pynew/p;
    pznew = pznew/p;
    if (verboseLevel > 1) {
-      G4cout << "DoIt: returning new momentum vector" << endl;
-      G4cout << pxnew << " " << pynew << " " << pznew << endl;
+      G4cout << "DoIt: returning new momentum vector" << G4endl;
+      G4cout << pxnew << " " << pynew << " " << pznew << G4endl;
    }
 
    if (aSecondary)
@@ -348,8 +348,8 @@ G4LElastic::Defs1(G4double p, G4double px, G4double py, G4double pz,
       G4double cosp = cos(ph);
       G4double sinp = sin(ph);
       if (verboseLevel > 1) {
-         G4cout << "cost sint " << cost << " " << sint << endl;
-         G4cout << "cosp sinp " << cosp << " " << sinp << endl;
+         G4cout << "cost sint " << cost << " " << sint << G4endl;
+         G4cout << "cosp sinp " << cosp << " " << sinp << G4endl;
       }
       *pxnew = cost*cosp*px - sinp*py + sint*cosp*pz;
       *pynew = cost*sinp*px + cosp*py + sint*sinp*pz;

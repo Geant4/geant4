@@ -4,7 +4,7 @@ G4Axis2PlacementsCreator G4Axis2PlacementsCreator::csc;
 
 G4Axis2PlacementsCreator::G4Axis2PlacementsCreator(){
   // G4cerr << " G4Axis2PlacementsCreator default constructor " 
-  // << " calling G4GeometryTable::RegisterObject(this) " << endl;
+  // << " calling G4GeometryTable::RegisterObject(this) " << G4endl;
   G4GeometryTable::RegisterObject(this);
 }
 

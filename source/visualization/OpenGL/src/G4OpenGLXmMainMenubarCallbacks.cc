@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.3 1999-01-11 00:47:49 allison Exp $
+// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.4 1999-12-15 14:54:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,11 +34,7 @@
 #include "G4OpenGLXmTopLevelShell.hh"
 #include "G4OpenGLXmSeparator.hh"
 
-#ifdef WIN32
-#include <strstrea.h>
-#else
-#include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 void G4OpenGLXmViewer::actions_callback (Widget w, 
 				       XtPointer clientData,
@@ -62,9 +58,9 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
       if (!pView->fprotation_top) {
 	const int rot_len = 50;
 	char* frot_Name = new char [rot_len];
-	ostrstream rot_ost (frot_Name, rot_len);
-	rot_ost.seekp (ios::beg);
-	rot_ost << pView->GetScene()->GetSceneId() << '-' << pView->fViewId << ends;
+	G4std::ostrstream rot_ost (frot_Name, rot_len);
+	rot_ost.seekp (G4std::ios::beg);
+	rot_ost << pView->GetScene()->GetSceneId() << '-' << pView->fViewId << G4std::ends;
 	
 	pView->fprotation_top = new G4OpenGLXmTopLevelShell (pView, 
 							     frot_Name);
@@ -147,9 +143,9 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
       if (!pView->fppanning_top) {
 	const int pan_len = 50;
 	char* fpan_Name = new char [pan_len];
-	ostrstream pan_ost (fpan_Name, pan_len);
-	pan_ost.seekp (ios::beg);
-	pan_ost << pView->GetScene()->GetSceneId() << '-' << pView->fViewId << ends;
+	G4std::ostrstream pan_ost (fpan_Name, pan_len);
+	pan_ost.seekp (G4std::ios::beg);
+	pan_ost << pView->GetScene()->GetSceneId() << '-' << pView->fViewId << G4std::ends;
 	
 	pView->fppanning_top = new G4OpenGLXmTopLevelShell (pView, 
 							    fpan_Name);
@@ -247,9 +243,9 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
       if (!pView->fpsetting_top) {
 	const int set_len = 50;
 	char* fset_Name = new char [set_len];
-	ostrstream set_ost (fset_Name, set_len);
-	set_ost.seekp (ios::beg);
-	set_ost << pView->GetScene()->GetSceneId() << '-' << pView->fViewId << ends;
+	G4std::ostrstream set_ost (fset_Name, set_len);
+	set_ost.seekp (G4std::ios::beg);
+	set_ost << pView->GetScene()->GetSceneId() << '-' << pView->fViewId << G4std::ends;
 	
 	pView->fpsetting_top = new G4OpenGLXmTopLevelShell(pView,
 							   fset_Name);
@@ -328,9 +324,9 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 	
 	const int misc_len = 50;
 	char* fmisc_Name = new char [misc_len];
-	ostrstream misc_ost (fmisc_Name, misc_len);
-	misc_ost.seekp (ios::beg);
-	misc_ost << pView->GetScene()->GetSceneId() << '-' << pView->fViewId << ends;
+	G4std::ostrstream misc_ost (fmisc_Name, misc_len);
+	misc_ost.seekp (G4std::ios::beg);
+	misc_ost << pView->GetScene()->GetSceneId() << '-' << pView->fViewId << G4std::ends;
 	
 	pView->fpmiscellany_top = new G4OpenGLXmTopLevelShell (pView, 
 							       fmisc_Name);
@@ -423,9 +419,9 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 	
 	const int print_len = 50;
 	char* fprint_Name = new char [print_len];
-	ostrstream print_ost (fprint_Name, print_len);
-	print_ost.seekp (ios::beg);
-	print_ost << pView->GetScene()->GetSceneId() << '-' << pView->fViewId << ends;
+	G4std::ostrstream print_ost (fprint_Name, print_len);
+	print_ost.seekp (G4std::ios::beg);
+	print_ost << pView->GetScene()->GetSceneId() << '-' << pView->fViewId << G4std::ends;
 	
 	pView->fpprint_top = new G4OpenGLXmTopLevelShell (pView, 
 							  fprint_Name);

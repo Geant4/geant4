@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -13,7 +13,7 @@
 
 #include <stdio.h>
 #include <math.h>
-#include <fstream.h>
+#include "g4std/fstream"
 #include <stdlib.h>
 #include "G4ios.hh" 
 #include "G4BREPSolid.hh"
@@ -69,32 +69,32 @@ int main()
       
     if( in[a] == kInside )
     {
-      G4cout <<" is inside"<<endl;
+      G4cout <<" is inside"<<G4endl;
 
       dist[a][1] = myCyl->DistanceToOut(Pt[a]);
-      cout<<"\nDistance to out is :"<<dist[a][1]<<endl;
+      cout<<"\nDistance to out is :"<<dist[a][1]<<G4endl;
 
       cout << "\nDir   : x=" << Dir[a].x() 
 	   << " y=" << Dir[a].y() 
-	   << " z=" << Dir[a].z()<<endl;
+	   << " z=" << Dir[a].z()<<G4endl;
       dist[a][2] = myCyl->DistanceToOut(Pt[a], Dir[a]);
-      cout<<"Distance to out is :"<<dist[a][2]<<endl;
+      cout<<"Distance to out is :"<<dist[a][2]<<G4endl;
 
     }
     else
     {
-      G4cout <<" is outside"<<endl;
+      G4cout <<" is outside"<<G4endl;
 
       dist[a][1] = myCyl->DistanceToIn(Pt[a]);
-      cout<<"\nDistance to in is :"<<dist[a][1]<<endl;
+      cout<<"\nDistance to in is :"<<dist[a][1]<<G4endl;
 
       cout << "\nDir   : x=" << Dir[a].x() 
 	   << " y=" << Dir[a].y() 
-	   << " z=" << Dir[a].z()<<endl;
+	   << " z=" << Dir[a].z()<<G4endl;
       dist[a][2] = myCyl->DistanceToIn(Pt[a], Dir[a]);
       cout<<"Distance to in is :"<<dist[a][2];
     }
-    cout<<endl;
+    cout<<G4endl;
   }
 
 

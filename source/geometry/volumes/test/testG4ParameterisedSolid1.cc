@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4ParameterisedSolid1.cc,v 1.2 1999-11-24 21:13:56 japost Exp $
+// $Id: testG4ParameterisedSolid1.cc,v 1.3 1999-12-15 14:50:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,7 +91,7 @@ class BoxesAndSpheres : public G4VPVParameterisation
 				 const G4VPhysicalVolume* pRep) const
   {
     if( &pBox != &fBox ){
-      G4cerr << " Got another Box in ComputeDimensions(G4Box, , )" << endl;
+      G4cerr << " Got another Box in ComputeDimensions(G4Box, , )" << G4endl;
     }
     pBox.SetXHalfLength(10*mm);
     pBox.SetYHalfLength(10*mm);
@@ -103,9 +103,9 @@ class BoxesAndSpheres : public G4VPVParameterisation
 				 const G4VPhysicalVolume* pRep) const
   {
     if( &pSphere != &fSphere ){
-      G4cerr << " Got another sphere in ComputeDimensions(G4Sphere, , )" << endl;
+      G4cerr << " Got another sphere in ComputeDimensions(G4Sphere, , )" << G4endl;
     }
-    G4int nrad= min(5, n-fNumBoxes+1);
+    G4int nrad= G4std::min(5, n-fNumBoxes+1);
     pSphere.SetInsideRadius( nrad *  5. * mm);
     pSphere.SetOuterRadius ( nrad * 10. * mm);
     pSphere.SetStartPhiAngle  (0.);
@@ -182,7 +182,7 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
     assert(located->GetName()=="Rotating Block Or Sphere");
     assert(located->GetCopyNo()== 0);
     assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),G4ThreeVector(0,-5,-5)));
-    // G4cout << " Local coords = " << myNav.GetCurrentLocalCoordinate() << endl;
+    // G4cout << " Local coords = " << myNav.GetCurrentLocalCoordinate() << G4endl;
 
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(100,0,5));
     assert(located->GetName()=="Rotating Block Or Sphere");
@@ -196,13 +196,13 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
     assert(located->GetName()=="Rotating Block Or Sphere");
     assert(located->GetCopyNo()== 1);
 #if 0 
-    G4cout << " Local coords = " << myNav.GetCurrentLocalCoordinate() << endl;
+    G4cout << " Local coords = " << myNav.GetCurrentLocalCoordinate() << G4endl;
     G4ThreeVector ExpectedPosition(5*cos(angle1),-5.*sin(angle1),0.);
-    G4cout << " Expected     = " << ExpectedPosition << endl;
+    G4cout << " Expected     = " << ExpectedPosition << G4endl;
     // assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),ExpectedPosition ));
     if(!ApproxEqual(myNav.GetCurrentLocalCoordinate(),ExpectedPosition ))
        {
-	 G4cout << " Error: The coordinates do not match " << endl;
+	 G4cout << " Error: The coordinates do not match " << G4endl;
        }
 #endif 
     

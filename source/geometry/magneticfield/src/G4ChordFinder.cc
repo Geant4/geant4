@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.8 1999-07-27 20:26:28 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.9 1999-12-15 14:49:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -81,7 +81,7 @@ G4ChordFinder::AdvanceChordLimited(   G4FieldTrack& yCurrent,
 #ifdef G4VERBOSE
   if( dbg ) 
     G4cerr << "Entered FindNextChord Limited with:\n yCurrent: " << yCurrent
-	   << " and initial Step=stepMax=" <<  stepMax << " mm. " << endl;
+	   << " and initial Step=stepMax=" <<  stepMax << " mm. " << G4endl;
 #endif
 
   stepPossible= FindNextChord(yCurrent, stepMax, yEnd, dyErr, epsStep);
@@ -98,7 +98,7 @@ G4ChordFinder::AdvanceChordLimited(   G4FieldTrack& yCurrent,
      good_advance = fIntgrDriver->AccurateAdvance(yCurrent, stepPossible, epsStep);
      #ifdef G4VERBOSE
      if (dbg) G4cerr << "Accurate advance to end of chord attemped"
-		       << "with result " << good_advance << endl ;
+		       << "with result " << good_advance << G4endl ;
      #endif
      if ( ! good_advance ){ 
        // In this case the driver could not do the full distance
@@ -108,7 +108,7 @@ G4ChordFinder::AdvanceChordLimited(   G4FieldTrack& yCurrent,
 
 #ifdef G4VERBOSE
   if( dbg ) G4cerr << "Exiting FindNextChord Limited with:\n yCurrent: " 
-		 << yCurrent<< endl; 
+		 << yCurrent<< G4endl; 
 #endif
 
   return stepPossible;
@@ -147,8 +147,8 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
 
 #ifdef G4VERBOSE
      if( dbg ) {
-        G4cerr << "Returned from QuickAdvance with: yCur=" << yCurrent << endl;
-        G4cerr << " dChordStep= "<< dChordStep <<" dyErr=" << dyErr << endl; 
+        G4cerr << "Returned from QuickAdvance with: yCur=" << yCurrent << G4endl;
+        G4cerr << " dChordStep= "<< dChordStep <<" dyErr=" << dyErr << G4endl; 
      }
 #endif
 
@@ -164,7 +164,7 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
 	 // stepTrial= fIntgrDriver->ComputeNewStepSize( dyErr/epsStep, stepTrial);
 #ifdef G4VERBOSE
 	 if( dbg ) 
-	   G4cerr << "Dchord too big. Trying new hstep=" << stepTrial << endl;
+	   G4cerr << "Dchord too big. Trying new hstep=" << stepTrial << G4endl;
 #endif
      }
  
@@ -240,20 +240,20 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
        CurveB_PointVelocity.CurveS() - CurveA_PointVelocity.CurveS();  
 
   // const 
-  G4double  integrationInaccuracyLimit= max( perMillion, 0.5*eps_step ); 
+  G4double  integrationInaccuracyLimit= G4std::max( perMillion, 0.5*eps_step ); 
   if( curve_length < ABdist * (1. - integrationInaccuracyLimit) ){ 
 //  #ifdef G4DEBUG
-    G4cerr << " Warning in G4ChordFinder::ApproxCurvePoint: " << endl <<
-      " The two points are further apart than the curve length " << endl <<
+    G4cerr << " Warning in G4ChordFinder::ApproxCurvePoint: " << G4endl <<
+      " The two points are further apart than the curve length " << G4endl <<
       " Dist = "         << ABdist  << 
       " curve length = " << curve_length 
 	   << " relativeDiff = " << (curve_length-ABdist)/ABdist 
-	   << endl;
+	   << G4endl;
 //  #endif
     if( curve_length < ABdist * (1. - 10*eps_step) ) {
 //    #ifdef G4DEBUG
       G4cerr << " ERROR: the size of the above difference exceeds allowed limits.  Aborting." 
-	     << endl;
+	     << G4endl;
 //    #endif
       G4Exception("G4ChordFinder::ApproxCurvePoint> Unphysical curve length.");
     }
@@ -269,17 +269,17 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
      AE_fraction = ChordAE_Vector.mag() / ABdist;
   }else{
      G4cerr << " Error in G4ChordFinder::ApproxCurvePoint: A and B are the same point\n" <<
-      " Chord AB length = " << ChordAE_Vector.mag()  << endl << endl;
+      " Chord AB length = " << ChordAE_Vector.mag()  << G4endl << G4endl;
      AE_fraction = 0.5;                         // Guess .. ?; 
   }
   
   if( (AE_fraction> 1.0 + perMillion) || (AE_fraction< 0.) ){
-    G4cerr << " G4ChordFinder::ApproxCurvePointV: Warning: Anomalous condition:AE > AB or AE/AB <= 0 " << endl <<
-      "   AE_fraction = " <<  AE_fraction << endl <<
-      "   Chord AE length = " << ChordAE_Vector.mag()  << endl << 
-      "   Chord AB length = " << ABdist << endl << endl;
-    G4cerr << " OK if this condition occurs after a recalculation of 'B'" << endl
-	   << " Otherwise it is an error. " << endl ; 
+    G4cerr << " G4ChordFinder::ApproxCurvePointV: Warning: Anomalous condition:AE > AB or AE/AB <= 0 " << G4endl <<
+      "   AE_fraction = " <<  AE_fraction << G4endl <<
+      "   Chord AE length = " << ChordAE_Vector.mag()  << G4endl << 
+      "   Chord AB length = " << ABdist << G4endl << G4endl;
+    G4cerr << " OK if this condition occurs after a recalculation of 'B'" << G4endl
+	   << " Otherwise it is an error. " << G4endl ; 
      // This course can now result if B has been re-evaluated, 
      //   without E being recomputed   (1 July 99)
      //  In this case this is not a "real error" - but it undesired

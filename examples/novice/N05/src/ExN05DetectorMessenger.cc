@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05DetectorMessenger.cc,v 1.1 1999-01-07 16:06:16 gunter Exp $
+// $Id: ExN05DetectorMessenger.cc,v 1.2 1999-12-15 14:49:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,13 +16,9 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "globals.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"                
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 ExN05DetectorMessenger::ExN05DetectorMessenger(ExN05DetectorConstruction * myDet) : myDetector(myDet)
 { 
@@ -92,7 +88,7 @@ G4String ExN05DetectorMessenger::GetCurrentValue(G4UIcommand * command)
 {
   G4String returnValue('\0');
   char line[255];
-  ostrstream os(line,255);
+  G4std::ostrstream os(line,255);
   
   if( command == SwitchCmd ) { 
     if ( myDetector->IsUseUserLimits() )returnValue = "on";

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3EventAction.cc,v 1.2 1999-11-11 15:41:21 gunter Exp $
+// $Id: Em3EventAction.cc,v 1.3 1999-12-15 14:49:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,7 +59,7 @@ void Em3EventAction::BeginOfEventAction(const G4Event* evt)
 {   
  G4int evtNb = evt->GetEventID();
  if (evtNb%printModulo == 0) 
-    G4cout << "\n---> Begin Of Event: " << evtNb << endl;
+    G4cout << "\n---> Begin Of Event: " << evtNb << G4endl;
     
  if (calorimeterCollID==-1)
   {
@@ -125,7 +125,7 @@ void Em3EventAction::EndOfEventAction(const G4Event* evt)
      G4int evtNb = evt->GetEventID();
      if (evtNb%printModulo == 0)
        { 
-        G4cout << "\n---> End of Event: " << evtNb << endl;
+        G4cout << "\n---> End of Event: " << evtNb << G4endl;
         HepRandom::showEngineStatus();
        }
     }     

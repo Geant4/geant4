@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIxvt.cc,v 1.2 1999-04-13 01:25:02 yhajime Exp $
+// $Id: G4UIxvt.cc,v 1.3 1999-12-15 14:50:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef G4UI_BUILD_XVT_SESSION
@@ -195,7 +195,7 @@ G4UIsession*  G4UIxvt::SessionStart(void)
 
   fillArrayEntries(comTree, 0);
 
-  G4cout << " --------- List of Array Entries ---------- " << endl;
+  G4cout << " --------- List of Array Entries ---------- " << G4endl;
 
   listCommandArray();
   briefListCommands();
@@ -326,7 +326,7 @@ void G4UIxvt::writeGeantToXvt(const G4String& theString)
   int write_check = write(fd_GeantToXvt, theString, number);
     
   if(write_check == -1)
-    G4cout << "ERROR WITH WRITE!!" << endl;
+    G4cout << "ERROR WITH WRITE!!" << G4endl;
 }
 
 
@@ -341,7 +341,7 @@ void G4UIxvt::writeGeantToXvt(const G4String& theString)
 ///////////////////////////////////////////////////////////////////////////////
 void G4UIxvt::errorHandler(const G4String& theError)
 {
-  G4cout << "Error with " << theError << endl;  
+  G4cout << "Error with " << theError << G4endl;  
 }
 
 
@@ -410,7 +410,7 @@ G4String G4UIxvt::GetCommand()
   }
 
   if( newCommand(0) != '/' )
-    G4cerr << "IT GOT THERE!!!!" << endl;
+    G4cerr << "IT GOT THERE!!!!" << G4endl;
     // If you ever see the error message in the output something has gone
     // wrong.
 
@@ -690,7 +690,7 @@ void G4UIxvt::fillArrayEntries(G4UIcommandTree * tree, int level)
     if(level==0) 
     {
       // --- This code shouldn't ever get executed --- //
-      G4cout << "Printing command Path" << commandPath << endl;
+      G4cout << "Printing command Path" << commandPath << G4endl;
     }
     else     
     {
@@ -772,11 +772,11 @@ void G4UIxvt::listCommandArray(void)
 {
   for(int i = 0; i < currentPosition; i++)
   {
-    G4cout << "CommandArray, Entry-> " << i << endl
-         << "Flag-> " << commandArray[i].flag << endl
-         << "Name-> " << commandArray[i].name << endl
-         << "Guidance-> " << commandArray[i].guidance << endl
-         << "Number of Parameters-> " << commandArray[i].numOfParameters << endl;
+    G4cout << "CommandArray, Entry-> " << i << G4endl
+         << "Flag-> " << commandArray[i].flag << G4endl
+         << "Name-> " << commandArray[i].name << G4endl
+         << "Guidance-> " << commandArray[i].guidance << G4endl
+         << "Number of Parameters-> " << commandArray[i].numOfParameters << G4endl;
          
          int numParam = commandArray[i].numOfParameters;
          
@@ -784,19 +784,19 @@ void G4UIxvt::listCommandArray(void)
          {
            for(int x = 0; x < numParam; x++)
            {
-             G4cout << "Parameters for this command: " << endl << endl
-                  << "Parameter Name-> "          << commandArray[i].parameters[x].name         << endl
-                  << "Parameter Guidance-> "      << commandArray[i].parameters[x].guidance     << endl
-                  << "Parameter Default Value-> " << commandArray[i].parameters[x].defaultValue << endl
-                  << "Parameter Range-> "         << commandArray[i].parameters[x].range        << endl
-                  << "Parameter Candidate-> "     << commandArray[i].parameters[x].candidate    << endl
-                  << "Parameter Type-> "          << commandArray[i].parameters[x].type         << endl
-                  << "Parameter Omittable-> "     << commandArray[i].parameters[x].omittable    << endl 
-                  << endl << endl;
+             G4cout << "Parameters for this command: " << G4endl << G4endl
+                  << "Parameter Name-> "          << commandArray[i].parameters[x].name         << G4endl
+                  << "Parameter Guidance-> "      << commandArray[i].parameters[x].guidance     << G4endl
+                  << "Parameter Default Value-> " << commandArray[i].parameters[x].defaultValue << G4endl
+                  << "Parameter Range-> "         << commandArray[i].parameters[x].range        << G4endl
+                  << "Parameter Candidate-> "     << commandArray[i].parameters[x].candidate    << G4endl
+                  << "Parameter Type-> "          << commandArray[i].parameters[x].type         << G4endl
+                  << "Parameter Omittable-> "     << commandArray[i].parameters[x].omittable    << G4endl 
+                  << G4endl << G4endl;
            }
          }
          
-         G4cout << "Number-> " << commandArray[i].commandNumber << endl << endl;
+         G4cout << "Number-> " << commandArray[i].commandNumber << G4endl << G4endl;
   }
 }
 

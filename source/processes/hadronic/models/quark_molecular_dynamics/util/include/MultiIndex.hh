@@ -3,11 +3,11 @@
 
 #include "globals.hh"
 
-class ostream;
+class G4std::ostream;
 
 class MultiIndex
 {
-  friend ostream& operator<<(ostream& o,MultiIndex& i);
+  friend G4std::ostream& operator<<(G4std::ostream& o,MultiIndex& i);
   int N;
   int* array,*n_min,*n_max;
   bool valid;

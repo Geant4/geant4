@@ -1,6 +1,6 @@
-#include <fstream.h>
-#include <iostream.h>
-#include <strstream.h>
+#include "g4std/fstream"
+#include "g4std/iostream"
+#include "g4std/strstream"
 #include "globals.hh"
 
 main()
@@ -41,16 +41,16 @@ main()
       for(int i3=0;i3<11;i3++)
       {
         char the[100] = {""};
-        ostrstream ost(the, 100, ios::out);
+        G4std::ostrstream ost(the, 100, G4std::ios::out);
         ost << a[ii][i]<<"_"<<z[ii]<<"_";
         if(energy[i3]<2) ost<<0;
         ost<<energy[i3];
         G4String * biff = new G4String(the);
         theName = name + *biff;
-        cout << theName<<endl;
-        ofstream outFile( theName, ios::out);
-        outFile <<  a[ii][i]<<endl<<z[ii]<<endl<<1<<endl<<1000000<<endl
-                <<1<<endl<<energy[i3]<<endl;
+        cout << theName<<G4endl;
+        G4std::ofstream outFile( theName, G4std::ios::out);
+        outFile <<  a[ii][i]<<G4endl<<z[ii]<<G4endl<<1<<G4endl<<1000000<<G4endl
+                <<1<<G4endl<<energy[i3]<<G4endl;
       }
     }
   }

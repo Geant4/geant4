@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsSystem.cc,v 1.4 1999-05-10 14:04:11 johna Exp $
+// $Id: G4VGraphicsSystem.cc,v 1.5 1999-12-15 14:54:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@ G4VGraphicsSystem::G4VGraphicsSystem (const G4String& name,
   fDescription (description),
   fFunctionality (f) {}
 
-ostream& operator << (ostream& os, const G4VGraphicsSystem& gs) {
+G4std::ostream& operator << (G4std::ostream& os, const G4VGraphicsSystem& gs) {
   G4VisManager* pVMan = G4VisManager::GetInstance ();
   const G4SceneHandlerList& scenes = pVMan -> GetAvailableSceneHandlers ();
   os << "Graphics System: " << gs.GetName ();

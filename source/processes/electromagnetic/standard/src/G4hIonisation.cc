@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.cc,v 1.6 1999-07-29 07:01:28 urban Exp $
+// $Id: G4hIonisation.cc,v 1.7 1999-12-15 14:51:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -566,7 +566,7 @@ void G4hIonisation::PrintInfoDefinition()
            comments += "\n         Good description above the mean excitation energy.\n";
            comments += "         delta ray energy sampled from  differential Xsection.";
 
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,
                                                   "Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy")

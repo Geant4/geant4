@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -28,7 +28,7 @@ void ExN06RunAction::BeginOfRunAction(const G4Run* aRun)
   UI->ApplyCommand("/event/verbose 1");
   //UI->ApplyCommand("/tracking/verbose 1");
 
-  G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   timer->Start();
 }
 
@@ -36,5 +36,5 @@ void ExN06RunAction::EndOfRunAction(const G4Run* aRun)
 {
   timer->Stop();
   G4cout << "number of event = " << aRun->GetNumberOfEvent() 
-       << " " << *timer << endl;
+       << " " << *timer << G4endl;
 }

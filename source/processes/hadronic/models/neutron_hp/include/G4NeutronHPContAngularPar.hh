@@ -7,14 +7,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPContAngularPar.hh,v 1.3 1999-07-02 09:58:33 johna Exp $
+// $Id: G4NeutronHPContAngularPar.hh,v 1.4 1999-12-15 14:53:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPContAngularPar_h
 #define G4NeutronHPContAngularPar_h 1
 
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 #include "globals.hh"
 #include "G4NeutronHPList.hh"
 #include "G4ReactionProduct.hh"
@@ -35,7 +35,7 @@ class G4NeutronHPContAngularPar
     if(theAngular!=NULL) delete [] theAngular;
   }
   
-  void Init(ifstream & aDataFile);
+  void Init(G4std::ifstream & aDataFile);
   
   G4ReactionProduct * Sample(G4double anEnergy, G4double massCode, G4double mass, 
                              G4int angularRep, G4int interpol);
@@ -79,7 +79,7 @@ class G4NeutronHPContAngularPar
       {
 //        G4cout <<"test "<<i<<" "<<store1.theEnergy<<" "<<store2.theEnergy<<" "
 //             << store1.theAngular[i].GetValue(ii)<<" "<<
-//             store2.theAngular[i].GetValue(ii)<<endl;
+//             store2.theAngular[i].GetValue(ii)<<G4endl;
         value = theInt.Interpolate(aScheme, anEnergy, 
                                    store1.theEnergy, store2.theEnergy,
                                    store1.theAngular[i].GetValue(ii),

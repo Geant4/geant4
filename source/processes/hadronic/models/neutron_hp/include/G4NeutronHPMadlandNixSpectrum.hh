@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPMadlandNixSpectrum.hh,v 1.3 1999-07-02 09:59:26 johna Exp $
+// $Id: G4NeutronHPMadlandNixSpectrum.hh,v 1.4 1999-12-15 14:53:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPMadlandNixSpectrum_h
@@ -17,7 +17,7 @@
 #include "G4NeutronHPVector.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 #include <math.h>
 #include "G4VNeutronHPEDis.hh"
 
@@ -38,7 +38,7 @@ class G4NeutronHPMadlandNixSpectrum : public G4VNeutronHPEDis
   {
   }
   
-  inline void Init(ifstream & aDataFile)
+  inline void Init(G4std::ifstream & aDataFile)
   {
     theFractionalProb.Init(aDataFile);
     aDataFile>> theAvarageKineticPerNucleonForLightFragments;

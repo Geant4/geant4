@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelNavigation.cc,v 1.3 1999-02-17 17:29:24 japost Exp $
+// $Id: G4VoxelNavigation.cc,v 1.4 1999-12-15 14:50:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -245,7 +245,7 @@ G4double G4VoxelNavigation::ComputeVoxelSafety(const G4ThreeVector&localPoint) c
 	else // (maxCurNodeNoDelta == minCurNodeNoDelta)
 	    	{
 		voxelSafety=minCurNodeNoDelta*curNodeWidth;
-		voxelSafety+=min(minCurCommonDelta,maxCurCommonDelta);
+		voxelSafety+=G4std::min(minCurCommonDelta,maxCurCommonDelta);
 	    	}
 
 // Compute isotropic safety to boundaries of previous levels
@@ -327,7 +327,7 @@ G4bool G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
 			maxVal=minVal+workNodeWidth;
 			if (maxVal<=workCoord-kCarTolerance*0.5)
 				{
-			        // G4cout << "Must consider next voxel" << endl;
+			        // G4cout << "Must consider next voxel" << G4endl;
 				newNodeNo=workNodeNo+1;
 				newHeader=workHeader;
 				newDistance=(maxVal-localPoint(workHeaderAxis))/localDirection(workHeaderAxis);
@@ -522,6 +522,6 @@ G4double G4VoxelNavigation::ComputeSafety(const G4ThreeVector &localPoint,
 G4VoxelNavigation::~G4VoxelNavigation()
 {
 #ifdef G4DEBUG_NAVIGATION
-  cout << "G4VoxelNavigation::~G4VoxelNavigation() called." << endl;
+  cout << "G4VoxelNavigation::~G4VoxelNavigation() called." << G4endl;
 #endif
 }

@@ -21,9 +21,9 @@
 
 #include "G4Quasmon.hh"
 
-#include <iostream.h>
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/iostream"
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 //int main(int argc, char** argv) 
 int main()
@@ -43,14 +43,14 @@ int main()
   //}
 
   //-------- set output format-------
-   G4cout.setf( ios::scientific, ios::floatfield );
+   G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
   //-------- write results onto a file --------
-   ofstream outFile( "chipstest.out", ios::out);
-   outFile.setf( ios::scientific, ios::floatfield );
+   G4std::ofstream outFile( "chipstest.out", G4std::ios::out);
+   outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
   //--------- Example how to write in the outFile -----------
-  //outFile << " " << endl;
+  //outFile << " " << G4endl;
 
   //@@... Temporary: initialize the G4ParticleTable (particle definition procedure)
   G4ParticleTable::GetParticleTable()->SetVerboseLevel(2);
@@ -87,22 +87,22 @@ int main()
   {
     G4QHadron curRes(rPDG, maxM);
     G4LorentzVector tmp4Mom = curRes.Get4Momentum();
-    outFile << tmp4Mom.m() << endl;
+    outFile << tmp4Mom.m() << G4endl;
   }
   for (G4int ir=0; ir<0; ir++)
   {
     G4LorentzVector totSum = prot4mom + apro4mom;
 #ifdef debug
-    cout << "Main: p4mom =" << prot4mom << ", ap4mom =" << apro4mom << endl;
+    cout << "Main: p4mom =" << prot4mom << ", ap4mom =" << apro4mom << G4endl;
 #endif
     G4Quasmon* pan = new G4Quasmon(2212, -2212, prot4mom, apro4mom);
 #ifdef debug
-    cout << "===>>> Now call HadronizeQuasmon hadronization function" << endl;
+    cout << "===>>> Now call HadronizeQuasmon hadronization function" << G4endl;
 #endif
     G4QHadronVector output = pan->HadronizeQuasmon();
     G4int totNOfHadrons = output.entries();
 #ifdef pdebug
-    cout<<"DONE^^^^^^^^^^^^:ir="<<ir<<": A#of generated hadrons ="<<totNOfHadrons<<endl;
+    cout<<"DONE^^^^^^^^^^^^:ir="<<ir<<": A#of generated hadrons ="<<totNOfHadrons<<G4endl;
 #endif
     for (G4int index=0; index<totNOfHadrons; index++)
     {
@@ -110,11 +110,11 @@ int main()
       G4LorentzVector lorV = output[index]->Get4Momentum();
       totSum    -= lorV;
 #ifdef pdebug
-      cout<<"Hadron #"<<index<<", m="<<m <<", LV="<<lorV<<", M="<<totSum.m()<<endl;
+      cout<<"Hadron #"<<index<<", m="<<m <<", LV="<<lorV<<", M="<<totSum.m()<<G4endl;
 #endif
     }
 #ifdef pdebug
-    cout << "CHECK: Lorentz Vector sum:" << totSum << endl;
+    cout << "CHECK: Lorentz Vector sum:" << totSum << G4endl;
 #endif
     delete pan;
   }

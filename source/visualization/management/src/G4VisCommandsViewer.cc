@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.7 1999-11-05 16:31:39 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.8 1999-12-15 14:54:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -18,11 +18,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4ios.hh"
-#ifdef WIN32
-#include <strstrea.h>
-#else
-#include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 G4VVisCommandViewer::G4VVisCommandViewer () {}
 
@@ -105,7 +101,7 @@ G4VisCommandViewerCreate::~G4VisCommandViewerCreate () {
 G4String G4VisCommandViewerCreate::NextName () {
   const int charLength = 100;
   char nextName [charLength];
-  ostrstream ost (nextName, charLength);
+  G4std::ostrstream ost (nextName, charLength);
   G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler ();
   ost << "viewer-" << fId << " (";
   if (sceneHandler) {
@@ -114,7 +110,7 @@ G4String G4VisCommandViewerCreate::NextName () {
   else {
     ost << "no_scene_handlers";
   }
-  ost << ")" << ends;
+  ost << ")" << G4std::ends;
   return nextName;
 }
 
@@ -151,7 +147,7 @@ G4String G4VisCommandViewerCreate::GetCurrentValue (G4UIcommand* command) {
 void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
   G4String sceneHandlerName, newName;
-  istrstream is ((char*)newValue.data());
+  G4std::istrstream is ((char*)newValue.data());
   is >> sceneHandlerName;
   // Now need to handle the possibility that the second string
   // contains embedded blanks within quotation marks.
@@ -165,7 +161,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
   if (nHandlers <= 0) {
     G4cout << "G4VisCommandViewerCreate::SetNewValue: no scene handlers."
       "\n  Create a scene handler with \"/vis/sceneHandler/create\""
-	   << endl;
+	   << G4endl;
     return;
   }
 
@@ -179,7 +175,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
     // This shouldn't happen!!!!!!
     G4cerr << "G4VisCommandViewerCreate::SetNewValue:"
       " invalid scene handler specified."
-	   << endl;
+	   << G4endl;
     return;
   }
 
@@ -202,7 +198,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
     const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
     for (int iViewer = 0; iViewer < viewerList.entries (); iViewer++) {
       if (viewerList [iViewer] -> GetName () == newName ) {
-	G4cout << "Viewer \"" << newName << "\" already exists." << endl;
+	G4cout << "Viewer \"" << newName << "\" already exists." << G4endl;
 	return;
       }
     }
@@ -210,7 +206,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
 
   // Create viewer.
   fpVisManager -> CreateViewer (newName);
-  G4cout << "New viewer \"" << newName << "\" created." << endl;
+  G4cout << "New viewer \"" << newName << "\" created." << G4endl;
 
   UpdateCandidateLists ();
 }
@@ -251,7 +247,7 @@ void G4VisCommandViewerList::SetNewValue (G4UIcommand* command,
 					 G4String newValue) {
   G4String name;
   G4int verbosity;
-  istrstream is ((char*)newValue.data());
+  G4std::istrstream is ((char*)newValue.data());
   is >> name >> verbosity;
   G4String shortName = ShortName (name);
 
@@ -276,7 +272,7 @@ void G4VisCommandViewerList::SetNewValue (G4UIcommand* command,
 	   << "\", scene \"" << pScene -> GetName () << "\":";
     G4int nViewers = viewerList.entries ();
     if (nViewers == 0) {
-      G4cout << "\n            No viewers for this scene handler." << endl;
+      G4cout << "\n            No viewers for this scene handler." << G4endl;
     }
     else {
       for (int iViewer = 0; iViewer < nViewers; iViewer++) {
@@ -300,12 +296,12 @@ void G4VisCommandViewerList::SetNewValue (G4UIcommand* command,
 	  G4cout << "\n  " << *thisViewer << '\n';
 	}
       }
-      G4cout << endl;
+      G4cout << G4endl;
     }
   }
 
   if (!foundCurrent) {
-    G4cout << "No valid current viewer - please create or select one." << endl;
+    G4cout << "No valid current viewer - please create or select one." << G4endl;
   }
 
   if (!found) {
@@ -313,7 +309,7 @@ void G4VisCommandViewerList::SetNewValue (G4UIcommand* command,
     if (name != "all") {
       G4cout << " of name \"" << name << "\"";
     }
-    G4cout << " found." << endl;
+    G4cout << " found." << G4endl;
   }
 }
 
@@ -383,17 +379,17 @@ void G4VisCommandViewerRemove::SetNewValue (G4UIcommand* command,
   if (!found) {
     G4cout << "Viewer \"" << removeName
 	   << "\" not found - \"/vis/viewer/list\" to see possibilities."
-	   << endl;
+	   << G4endl;
       return;
   }
 
-  G4cout << "Viewer \"" << removeName << "\" removed." << endl;
+  G4cout << "Viewer \"" << removeName << "\" removed." << G4endl;
   if (removeShortName == currentShortName) {
     fpVisManager -> DeleteCurrentViewer ();
   }
   else {
     sceneHandler -> SetViewerList ().remove (viewer);
-    G4cout << "Current viewer unchanged." << endl;
+    G4cout << "Current viewer unchanged." << G4endl;
   }
 
   UpdateCandidateLists ();
@@ -460,17 +456,17 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand* command,
     G4VViewer* currentViewer = fpVisManager -> GetCurrentViewer ();
     if (currentViewer &&
 	ShortName (currentViewer -> GetName ())	== selectShortName) {
-      G4cout << " already selected." << endl;
+      G4cout << " already selected." << G4endl;
     }
     else {
-      G4cout << " being selected." << endl;
+      G4cout << " being selected." << G4endl;
       fpVisManager -> SetCurrentViewer (viewer);
     }
   }
   else {
     G4cout << " not found - \"/vis/viewer/list\""
       "\n  to see possibilities."
-	   << endl;
+	   << G4endl;
   }
 }
 
@@ -546,5 +542,5 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand* command,
     G4cout << " not found - \"/vis/viewer/list\""
       "\n  to see possibilities.";
   }
-  G4cout << endl;
+  G4cout << G4endl;
 }

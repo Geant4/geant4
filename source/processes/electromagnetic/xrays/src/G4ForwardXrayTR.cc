@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ForwardXrayTR.cc,v 1.2 1999-04-13 09:27:49 grichine Exp $
+// $Id: G4ForwardXrayTR.cc,v 1.3 1999-12-15 14:52:05 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ForwardXrayTR class -- implementation file
@@ -236,7 +236,7 @@ G4ForwardXrayTR( const G4String& matName1,   //  G4Material* pMat1,
   {
     G4Exception("Invalid second material name in G4ForwardXrayTR constructor") ;
   }
-  //  G4cout<<"G4ForwardXray constructor is called"<<endl ;
+  //  G4cout<<"G4ForwardXray constructor is called"<<G4endl ;
   BuildXrayTRtables() ;
 }
 
@@ -331,7 +331,7 @@ void G4ForwardXrayTR::BuildXrayTRtables()
               fMaxThetaTR = fTheMinAngle ;
 	    }
 	  }
-   // G4cout<<endl<<"fGamma = "<<fGamma<<"  fMaxThetaTR = "<<fMaxThetaTR<<endl ;
+   // G4cout<<G4endl<<"fGamma = "<<fGamma<<"  fMaxThetaTR = "<<fMaxThetaTR<<G4endl ;
           G4PhysicsLinearVector* 
                      angleVector = new G4PhysicsLinearVector(        0.0,
                                                              fMaxThetaTR,
@@ -353,7 +353,7 @@ void G4ForwardXrayTR::BuildXrayTRtables()
             energyVector->PutValue(iTR,energySum) ;
             angleVector ->PutValue(iTR,angleSum)   ;
 	  }
-	  // G4cout<<"sumE = "<<energySum<<" ; sumA = "<<angleSum<<endl ;
+	  // G4cout<<"sumE = "<<energySum<<" ; sumA = "<<angleSum<<G4endl ;
 
           if(jMat < iMat)
 	  {
@@ -369,7 +369,7 @@ void G4ForwardXrayTR::BuildXrayTRtables()
       }      //         jMat != iMat
     }        //     jMat
   }          // iMat
-  //  G4cout<<"G4ForwardXrayTR::BuildXrayTRtables have been called"<<endl ;
+  //  G4cout<<"G4ForwardXrayTR::BuildXrayTRtables have been called"<<G4endl ;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -536,7 +536,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 				                const G4Step&  aStep)
 {
   aParticleChange.Initialize(aTrack);
-  //  G4cout<<"call G4ForwardXrayTR::PostStepDoIt"<<endl ;
+  //  G4cout<<"call G4ForwardXrayTR::PostStepDoIt"<<G4endl ;
   G4int iMat, jMat, iTkin, iPlace, numOfMat, numOfTR, iTR, iTransfer ;
 
   G4double energyPos, anglePos, energyTR, theta, phi, dirX, dirY, dirZ ;
@@ -624,7 +624,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
   {
  // G4cout<<iTkin<<" mean TR number = "<<( (*(*fEnergyDistrTable)(iPlace))(0) +
  //                                   (*(*fAngleDistrTable)(iPlace))(0) )
- //      *chargeSq*0.5<<endl ;
+ //      *chargeSq*0.5<<G4endl ;
 
     numOfTR = RandPoisson::shoot( ( (*(*fEnergyDistrTable)(iPlace))(0) +
                                     (*(*fAngleDistrTable)(iPlace))(0) )
@@ -635,7 +635,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
     }
     else
     {
-      // G4cout<<"Number of X-ray TR photons = "<<numOfTR<<endl ;
+      // G4cout<<"Number of X-ray TR photons = "<<numOfTR<<G4endl ;
 
       aParticleChange.SetNumberOfSecondaries(numOfTR);
 
@@ -648,7 +648,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 	}
         energyTR = (*fEnergyDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
 
-	// G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<endl ;
+	// G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<G4endl ;
 
         kinEnergy -= energyTR ; 
         aParticleChange.SetEnergyChange(kinEnergy);
@@ -660,7 +660,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 	}
         theta = sqrt((*fAngleDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1)) ;
 
-	// G4cout<<iTransfer<<" :  theta = "<<theta<<endl ;
+	// G4cout<<iTransfer<<" :  theta = "<<theta<<G4endl ;
 
         phi = twopi*G4UniformRand() ;
         dirX = sin(theta)*cos(phi)  ;
@@ -693,7 +693,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
   // (*(*fAngleDistrTable)(iPlace))(0))*W1 + 
   //                                ((*(*fEnergyDistrTable)(iPlace + 1))(0)+
   // (*(*fAngleDistrTable)(iPlace + 1))(0))*W2)
-  //                                    *chargeSq*0.5<<endl ;
+  //                                    *chargeSq*0.5<<G4endl ;
 
       numOfTR = RandPoisson::shoot((((*(*fEnergyDistrTable)(iPlace))(0)+
 (*(*fAngleDistrTable)(iPlace))(0))*W1 + 
@@ -706,7 +706,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
       }
       else
       {
-        // G4cout<<"Number of X-ray TR photons = "<<numOfTR<<endl ;
+        // G4cout<<"Number of X-ray TR photons = "<<numOfTR<<G4endl ;
 
         aParticleChange.SetNumberOfSecondaries(numOfTR);
         for(iTR=0;iTR<numOfTR;iTR++)
@@ -721,7 +721,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
           energyTR = ((*fEnergyDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer))*W1+
                ((*fEnergyDistrTable)(iPlace + 1)->GetLowEdgeEnergy(iTransfer))*W2 ;
 
-	  // G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<endl ;
+	  // G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<G4endl ;
 
           kinEnergy -= energyTR ; 
           aParticleChange.SetEnergyChange(kinEnergy);
@@ -738,7 +738,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
                   ((*fAngleDistrTable)(iPlace + 1)->
                         GetLowEdgeEnergy(iTransfer-1))*W2) ;
 
-	  // G4cout<<iTransfer<<" : theta = "<<theta<<endl ;
+	  // G4cout<<iTransfer<<" : theta = "<<theta<<G4endl ;
 
           phi = twopi*G4UniformRand() ;
           dirX = sin(theta)*cos(phi)  ;
@@ -843,7 +843,7 @@ G4ForwardXrayTR::GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const
       }
       else
       {
-  G4cout<<"It is still OK in GetEnergyTR(int,int,int)"<<endl;
+  G4cout<<"It is still OK in GetEnergyTR(int,int,int)"<<G4endl;
         for(iTR=0;iTR<numOfTR;iTR++)
         {
           energyPos = ((*energyVector1)(0)*W1+

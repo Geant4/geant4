@@ -3,19 +3,19 @@
 
 #include "String.hh"
 
-class istream;
-class ostream;
+class G4std::istream;
+class G4std::ostream;
 
 class StreamBuffer
 {
-  friend ostream& operator<<(ostream&,const StreamBuffer&);
-  istream* in;
+  friend G4std::ostream& operator<<(G4std::ostream&,const StreamBuffer&);
+  G4std::istream* in;
   String buffer;
 public:
   StreamBuffer();
-  StreamBuffer(istream&);
+  StreamBuffer(G4std::istream&);
   StreamBuffer& operator<<(const String& s);
-  operator istream&();
+  operator G4std::istream&();
   void reset();
   void createStream(int n,char** args);
 };

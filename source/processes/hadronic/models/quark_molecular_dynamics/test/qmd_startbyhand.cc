@@ -1,4 +1,4 @@
-#include <fstream.h>
+#include "g4std/fstream"
 #include <algo.h>
 #include "newvector.H"
 #include "Random.H"
@@ -31,7 +31,7 @@
 
 Array<String> xx;
  
-ostream* Output::fileout = 0;
+G4std::ostream* Output::fileout = 0;
 
 class q_Quark : public QuantumNumbers
 {
@@ -241,7 +241,7 @@ int main(int argc,char* argv[]) {
 
   Blob->whatAmI(cerr);
 
-  Output::fileout = new ofstream(Dir+"/output.out");
+  Output::fileout = new G4std::ofstream(Dir+"/output.out");
   *Output::fileout << "! Start\n";
   Output::fileout->flush();
 
@@ -267,8 +267,8 @@ int main(int argc,char* argv[]) {
     Colour::allowClustering = (clu == "yes");
     Colour::directHadrons = (dir == "yes");
 
-    cout << "# Temperature " << T << endl;
-    cout << "#        mu_q " << mu << endl;
+    cout << "# Temperature " << T << G4endl;
+    cout << "#        mu_q " << mu << G4endl;
          
 
     ParticleBase* p1 = makeParticle(q,QuantumProjections(1,RGB::RED,0,-0.5));
@@ -300,14 +300,14 @@ int main(int argc,char* argv[]) {
       while ( ((Time < 0) && (box.Nquark > 0)) || (box.Time() < Time) ) {
         double t1 = box.Time()+dt;
         if ( Time>0 ) 
-          t1 = min(t1,(double)Time);
+          t1 = G4std::min(t1,(double)Time);
  
         if ( box.Nquark ) {
           while ( box.Time() < t1 && ( box.Nquark>0 || Time>0 ) ) {
             box.one_step();
-            cerr << n << " :  " << box.Time() << " : " << "  " 
+            G4cerr << n << " :  " << box.Time() << " : " << "  " 
                  << box.Etot() << "  "
-  	             << box.Npart << "  " << -box.Nquark+box.Npart << endl;
+  	             << box.Npart << "  " << -box.Nquark+box.Npart << G4endl;
           }
         }
         else {
@@ -324,7 +324,7 @@ int main(int argc,char* argv[]) {
       Output::fileout->flush();
     }
     catch ( char *s ) {
-      cerr << "ERROR: " << s << endl;
+      G4cerr << "ERROR: " << s << G4endl;
     }
     int c = 1;
   }

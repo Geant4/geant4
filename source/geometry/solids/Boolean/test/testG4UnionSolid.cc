@@ -214,13 +214,13 @@ int main()
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,100));
     //    G4cout<<"(100) b4Ub5.DistanceToOut(G4ThreeVector(50,0,0),vmx) = "
-    //          <<dist<<endl ;
+    //          <<dist<<G4endl ;
 
     dist=b4Ub5.DistanceToOut(G4ThreeVector(-10,0,-60),vxz,
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,84.8528));
     //  G4cout<<"(84.85) b4Ub5.DistanceToOut(G4ThreeVector(-10,0,-60),vxz) = "
-    //        <<dist<<endl ;
+    //        <<dist<<G4endl ;
 
 
     dist=b1Ub2.DistanceToOut(pzero,vx,calcNorm,pgoodNorm,pNorm);
@@ -251,7 +251,7 @@ int main()
     assert(ApproxEqual(dist,30)&&ApproxEqual(*pNorm,vmx)); // &&*pgoodNorm);
 
     dist=b1.DistanceToOut(ponxside,vy,calcNorm,pgoodNorm,pNorm);
-//  G4cout<<"b1.DistanceToOut(ponxside,vy) = "<<dist<<endl;
+//  G4cout<<"b1.DistanceToOut(ponxside,vy) = "<<dist<<G4endl;
 //  assert(ApproxEqual(dist,0)&&ApproxEqual(*pNorm,vy)); // &&*pgoodNorm);
 
     dist=b1Ub2.DistanceToOut(ponb2mx,vmx,calcNorm,pgoodNorm,pNorm);
@@ -295,93 +295,93 @@ int main()
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,5));
     // G4cout<<"(5) t2Ut1Ut1.DistanceToOut(G4ThreeVector(50,0,0),vmx) = "
-    //       <<dist<<endl ;
+    //       <<dist<<G4endl ;
 
     dist=t2Ut1Ut1.DistanceToOut(G4ThreeVector(50,0,0),vx,
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,0));
     //   G4cout<<"(0) t2Ut1Ut1.DistanceToOut(G4ThreeVector(50,0,0),vx) = "
-    //         <<dist<<endl ;
+    //         <<dist<<G4endl ;
 
     dist=t2Ut1Ut1.DistanceToOut(G4ThreeVector(50,0,70),vmx,
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,100));
     //   G4cout<<"(100) t2Ut1Ut1.DistanceToOut(G4ThreeVector(50,0,70),vmx) = "
-    //         <<dist<<endl ;
+    //         <<dist<<G4endl ;
 
     dist=t2Ut1Ut1.DistanceToOut(G4ThreeVector(50,0,70),vx,
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,0));
     //   G4cout<<"(0) t2Ut1Ut1.DistanceToOut(G4ThreeVector(50,0,70),vx) = "
-    //         <<dist<<endl ;
+    //         <<dist<<G4endl ;
 
     dist=t2Ut1Ut1.DistanceToOut(G4ThreeVector(0,0,60),vmz,
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,0));
     //   G4cout<<"(0) t2Ut1Ut1.DistanceToOut(G4ThreeVector(0,0,60),vmz) = "
-    //         <<dist<<endl ;
+    //         <<dist<<G4endl ;
 
     dist=t2Ut1Ut1.DistanceToOut(G4ThreeVector(0,0,60),vz,
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,100));
     //  G4cout<<"(100) t2Ut1Ut1.DistanceToOut(G4ThreeVector(0,0,60),vz) = "
-    //        <<dist<<endl ;
+    //        <<dist<<G4endl ;
 
     dist=t2Ut3Ut3.DistanceToOut(G4ThreeVector(-50,0,-48),vxmz,
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,9.89949));
     //  G4cout<<"(9.89) t2Ut3Ut3.DistanceToOut(G4ThreeVector(-50,0,-48),vxmz) = "
-    //        <<dist<<endl ;
+    //        <<dist<<G4endl ;
 
     dist=t2Ut3Ut3.DistanceToOut(G4ThreeVector(-50,0,-50),vxz,
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,7.07107));
     //  G4cout<<"(7.07) t2Ut3Ut3.DistanceToOut(G4ThreeVector(-50,0,-50),vxz) = "
-    //        <<dist<<endl ;
+    //        <<dist<<G4endl ;
 
     dist=t2Ut3Ut3.DistanceToOut(G4ThreeVector(-50,0,-50),vxmz,
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,7.07107));
     // G4cout<<"(7.07) t2Ut3Ut3.DistanceToOut(G4ThreeVector(-50,0,-50),vxmz) = "
-    //       <<dist<<endl ;
+    //       <<dist<<G4endl ;
 
     dist=t2Ut3Ut3.DistanceToOut(G4ThreeVector(-50,0,-52),vxmz,
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,4.24264));
     // G4cout<<"(4.24) t2Ut3Ut3.DistanceToOut(G4ThreeVector(-50,0,-52),vxmz) = "
-    //       <<dist<<endl ;
+    //       <<dist<<G4endl ;
 
     dist=t3Ut3Ut3.DistanceToOut(G4ThreeVector(0,0,-15),vz,
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,30));
     //  G4cout<<"(30) t3Ut3Ut3.DistanceToOut(G4ThreeVector(0,0,-15),vz) = "
-    //        <<dist<<endl ;
+    //        <<dist<<G4endl ;
 
     dist=t2Ut4.DistanceToOut(G4ThreeVector(-50,0,0),vx,
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,100));
     // G4cout<<"(100) t2Ut4.DistanceToOut(G4ThreeVector(-50,0,0),vx) = "
-    //       <<dist<<endl ;
+    //       <<dist<<G4endl ;
 
     dist=t2Ut4.DistanceToOut(G4ThreeVector(-15,-45,0),vx,
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,15));
     //  G4cout<<"(36.8) t2Ut4.DistanceToOut(G4ThreeVector(-15,-45,0),vx) = "
-    //      <<dist<<endl ;
+    //      <<dist<<G4endl ;
 
     dist=t2Ut4.DistanceToOut(G4ThreeVector(0,-45,0),vx,
                              calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,21.7945));
     // G4cout<<"(21.8) t2Ut4.DistanceToOut(G4ThreeVector(0,-45,0),vx) = "
-    //      <<dist<<endl ;
+    //      <<dist<<G4endl ;
 
 // DistanceToIn(P)
 
     dist=b1Ub2.DistanceToIn(pbigx);
     assert(ApproxEqual(dist,80));
-    //   G4cout<<"b1Ub2.DistanceToIn(pbigx) = "<<dist<<endl ;
-    //   G4cout<<"b1.DistanceToIn(pbigx) = "<<b1.DistanceToIn(pbigx)<<endl ;
-    //   G4cout<<"b2.DistanceToIn(pbigx) = "<<b2.DistanceToIn(pbigx)<<endl ;
+    //   G4cout<<"b1Ub2.DistanceToIn(pbigx) = "<<dist<<G4endl ;
+    //   G4cout<<"b1.DistanceToIn(pbigx) = "<<b1.DistanceToIn(pbigx)<<G4endl ;
+    //   G4cout<<"b2.DistanceToIn(pbigx) = "<<b2.DistanceToIn(pbigx)<<G4endl ;
 
     dist=b1Ub2.DistanceToIn(ponxside);
     assert(ApproxEqual(dist,0));
@@ -455,28 +455,28 @@ int main()
     assert(ApproxEqual(dist,50));
 
     dist=t2Ut1Trans.DistanceToIn(pzero,vx);
-    //  G4cout<<"t2Ut1Trans.DistanceToIn(pzero,vx) = "<<dist<<endl ;
+    //  G4cout<<"t2Ut1Trans.DistanceToIn(pzero,vx) = "<<dist<<G4endl ;
     assert(ApproxEqual(dist,45));
 
     dist=t2Ut1Trans.DistanceToIn(pzero,vz);
-    //   G4cout<<"t2Ut1Trans.DistanceToIn(pzero,vz) = "<<dist<<endl ;
+    //   G4cout<<"t2Ut1Trans.DistanceToIn(pzero,vz) = "<<dist<<G4endl ;
     assert(ApproxEqual(dist,60));
 
     dist=t2Ut1Trans.DistanceToIn(pzero,vmz);
-    //   G4cout<<"t2Ut1Trans.DistanceToIn(pzero,vmz) = "<<dist<<endl ;
+    //   G4cout<<"t2Ut1Trans.DistanceToIn(pzero,vmz) = "<<dist<<G4endl ;
     assert(ApproxEqual(dist,kInfinity));
 
     dist=t2Ut1Trans.DistanceToIn(G4ThreeVector(0,0,55),vx);
     //   G4cout<<"t2Ut1Trans.DistanceToIn(G4ThreeVector(0,0,55),vx) = "
-    //         <<dist<<endl ;
+    //         <<dist<<G4endl ;
     assert(ApproxEqual(dist,kInfinity));
 
     dist=t2Ut1Ut1.DistanceToIn(pzero,vmz);
-    //  G4cout<<"t2Ut1Ut1.DistanceToIn(pzero,vmz) = "<<dist<<endl ;
+    //  G4cout<<"t2Ut1Ut1.DistanceToIn(pzero,vmz) = "<<dist<<G4endl ;
     assert(ApproxEqual(dist,60));
 
 
-    G4cout<<"Tracking functions are OK"<<endl ;
+    G4cout<<"Tracking functions are OK"<<G4endl ;
 
 
 // CalculateExtent
@@ -604,7 +604,7 @@ int main()
     assert(b1.CalculateExtent(kZAxis,buggyClip1,origin,min,max));
     assert(ApproxEqual(min,-40)&&ApproxEqual(max,40));
 
-    G4cout<<"CalculateExtent is OK"<<endl ;
+    G4cout<<"CalculateExtent is OK"<<G4endl ;
 
 
   return 0 ;

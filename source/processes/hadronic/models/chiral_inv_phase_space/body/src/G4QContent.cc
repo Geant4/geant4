@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QContent.cc,v 1.1 1999-11-17 11:04:16 hpw Exp $
+// $Id: G4QContent.cc,v 1.2 1999-12-15 14:52:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -22,7 +22,7 @@
 
 #include "G4QContent.hh"
 
-ostream& operator<<(ostream& lhs, G4QContent& rhs)
+G4std::ostream& operator<<(G4std::ostream& lhs, G4QContent& rhs)
 {
   lhs << "{" << rhs.GetU() << "," << rhs.GetD() << "," << rhs.GetS() << ","
       << rhs.GetAU() << "," << rhs.GetAD() << "," << rhs.GetAS() << "}";
@@ -66,7 +66,7 @@ G4QContent::~G4QContent() {}
 G4int G4QContent::DecQAQ(const G4int& nQAQ)
 {
 #ifdef debug
-  cout<<"DecQC:in U="<<nU<<",D="<<nD<<",S="<<nS<<",AU="<<nAU<<",AD="<<nAD<<",AS="<<nAS<<endl;
+  cout<<"DecQC:in U="<<nU<<",D="<<nD<<",S="<<nS<<",AU="<<nAU<<",AD="<<nAD<<",AS="<<nAS<<G4endl;
 #endif
   G4int nUP=0;             // U/AU min factor
   if (nU>=nAU) nUP+=nAU;
@@ -88,7 +88,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
   if (!nReal) return nRet; // Now nothing to do
   // ---------- Decrimenting by nReal pairs
 #ifdef debug
-  cout << "DecQC: demanded "<<nQAQ<<" pairs, executed "<<nReal<<" pairs"<<endl;
+  cout << "DecQC: demanded "<<nQAQ<<" pairs, executed "<<nReal<<" pairs"<<G4endl;
 #endif
   for (int i=0; i<nReal; i++)
   {
@@ -96,7 +96,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
     if (nUP && j<nUP)      // U-antiU pair
 	{
 #ifdef debug
-      cout << "DecQC: decrementing UAU pair UP="<<nUP<<",nU="<<nU<<",nAU="<<nAU<<endl;
+      cout << "DecQC: decrementing UAU pair UP="<<nUP<<",nU="<<nU<<",nAU="<<nAU<<G4endl;
 #endif
       nU--;
       nAU--;
@@ -107,7 +107,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
     else if (nDP && j<nLP) // D-antiD pair
 	{
 #ifdef debug
-      cout << "DecQC: decrementing DAD pair DP="<<nDP<<",nD="<<nD<<",nAD="<<nAD<<endl;
+      cout << "DecQC: decrementing DAD pair DP="<<nDP<<",nD="<<nD<<",nAD="<<nAD<<G4endl;
 #endif
       nD--;
       nAD--;
@@ -118,17 +118,17 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
     else if (nSP)          // S-antiS pair
 	{
 #ifdef debug
-      cout << "DecQC: decrementing SAS pair SP="<<nSP<<",nS="<<nS<<",nAS="<<nAS<<endl;
+      cout << "DecQC: decrementing SAS pair SP="<<nSP<<",nS="<<nS<<",nAS="<<nAS<<G4endl;
 #endif
       nS--;
       nAS--;
       nSP--;
       nTotP--;
 	}
-    else cerr<<"***DecQC:i="<<i<<",j="<<j<<",UP="<<nUP<<",DP="<<nDP<<",T="<<nTotP<<endl;
+    else G4cerr<<"***DecQC:i="<<i<<",j="<<j<<",UP="<<nUP<<",DP="<<nDP<<",T="<<nTotP<<G4endl;
   }
 #ifdef debug
-  cout<<"DecQC:out U="<<nU<<",D="<<nD<<",S="<<nS<<",AU="<<nAU<<",AD="<<nAD<<",AS="<<nAS<<endl;
+  cout<<"DecQC:out U="<<nU<<",D="<<nD<<",S="<<nS<<",AU="<<nAU<<",AD="<<nAD<<",AS="<<nAS<<G4endl;
 #endif
   return nRet;
 }
@@ -173,7 +173,7 @@ const G4int G4QContent::GetCharge() const
   if(nAD)c+=nAD*cAD;
   if(nAS)c+=nAS*cAS;
 
-  if(c%3) cerr << "***G4Content: Charge="<<c<<"/3 is not an integer value" << endl;
+  if(c%3) G4cerr << "***G4Content: Charge="<<c<<"/3 is not an integer value" << G4endl;
 
   return c/3;
 }

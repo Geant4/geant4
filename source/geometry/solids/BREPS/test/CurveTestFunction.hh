@@ -29,7 +29,7 @@
 
 
 // Printing debug info
-ostream& operator<<(ostream& os, const G4Axis2Placement3D& p)
+G4std::ostream& operator<<(G4std::ostream& os, const G4Axis2Placement3D& p)
 {
   os << "(" << p.GetLocation()
      << ", " << p.GetAxis()
@@ -38,7 +38,7 @@ ostream& operator<<(ostream& os, const G4Axis2Placement3D& p)
 }
 
 
-ostream& operator<<(ostream& os, const G4BoundingBox3D& b)
+G4std::ostream& operator<<(G4std::ostream& os, const G4BoundingBox3D& b)
 {
   os << "(" << b.GetBoxMin()
      << ", " << b.GetBoxMax() << ")";
@@ -69,12 +69,12 @@ G4double GetRandomP(G4Curve* c)
 void TestCurve(G4Curve* c)
 {
   // bounds
-  G4cout << "  GetStartPoint  : " << c->GetStart()  << endl;
-  G4cout << "  GetEndPoint    : " << c->GetEnd()    << endl;
-  G4cout << "  GetPStartPoint : " << c->GetPStart() << endl;
-  G4cout << "  GetPEndPoint   : " << c->GetPEnd()   << endl;
-  G4cout << "  GetPMax        : " << c->GetPMax()   << endl;
-  G4cout << "  u -> GetPoint() -> p -> GetPPoint() -> u2" << endl;
+  G4cout << "  GetStartPoint  : " << c->GetStart()  << G4endl;
+  G4cout << "  GetEndPoint    : " << c->GetEnd()    << G4endl;
+  G4cout << "  GetPStartPoint : " << c->GetPStart() << G4endl;
+  G4cout << "  GetPEndPoint   : " << c->GetPEnd()   << G4endl;
+  G4cout << "  GetPMax        : " << c->GetPMax()   << G4endl;
+  G4cout << "  u -> GetPoint() -> p -> GetPPoint() -> u2" << G4endl;
 
   G4int i;
   for (i=0; i<1000; i++) 
@@ -92,38 +92,38 @@ void TestCurve(G4Curve* c)
     if (i<5 || error) 
     {
       G4cout << " u : " << u << " p: " << p
-	     << " u2: " << u2 << endl;
+	     << " u2: " << u2 << G4endl;
       
       if (error) 
       {
-	G4cout << "    Error: u != u2 !" << endl;
+	G4cout << "    Error: u != u2 !" << G4endl;
 	exit(EXIT_FAILURE);
       }
     }
 
     if (!c->IsPOn(u)) 
     {
-      G4cout << "    Error: u is not on the curve!" << endl;
+      G4cout << "    Error: u is not on the curve!" << G4endl;
       exit(EXIT_FAILURE);
     }
   }
 
   const G4BoundingBox3D& bBox= *(c->BBox());
-  G4cout << "  BBox: " << bBox << endl;
+  G4cout << "  BBox: " << bBox << G4endl;
   G4BoundingBox3D bBox2(c->GetStart(), c->GetEnd());
   
   for (i=0; i<1000; i++) 
     bBox2.Extend(c->GetPoint(GetRandomP(c)));
  
-  G4cout << "  BBox from random points: " << bBox2 << endl;
-  G4cout << "  empty space around it when put in BBox:" << endl;
+  G4cout << "  BBox from random points: " << bBox2 << G4endl;
+  G4cout << "  empty space around it when put in BBox:" << G4endl;
   
   G4Vector3D max= bBox.GetBoxMax()-bBox2.GetBoxMax();
   G4Vector3D min= bBox2.GetBoxMin()-bBox.GetBoxMin();
   
   G4cout << " min x: " << min.x() << " max x: " << max.x()
 	 << "\n min y: " << min.y() << " max y: " << max.y()
-	 << "\n min z: " << min.z() << " max z: " << max.z() << endl;
+	 << "\n min z: " << min.z() << " max z: " << max.z() << G4endl;
 }
 
 
@@ -131,30 +131,30 @@ void TestCurve(G4Curve* c)
 void TestPlacement(G4Axis2Placement3D* p)
 {
   G4cout << "G4Axis2Placement3D " << p->GetLocation() << " " << p->GetAxis()
-	 << " " << p->GetRefDirection() << endl;
+	 << " " << p->GetRefDirection() << G4endl;
 
-  G4cout << "  coordinate vectors:" << endl;
+  G4cout << "  coordinate vectors:" << G4endl;
 
   G4cout << " p[1]: " << p->GetPX() 
 	 << "\n p[2]: " << p->GetPY()
-	 << "\n p[3]: " << p->GetPZ() << endl;
+	 << "\n p[3]: " << p->GetPZ() << G4endl;
 
   G4cout << " p[1].p[2]: " << p->GetPX()*p->GetPY()
 	 << "\n p[3]-(p[1]xp[2]): "<< p->GetPZ()-(p->GetPX().cross(p->GetPY()))
-	 << endl;
+	 << G4endl;
 
-  G4cout << "  coordinate vectors computed from the transformation:" << endl;
+  G4cout << "  coordinate vectors computed from the transformation:" << G4endl;
 
   G4cout << " p[1]: " << p->GetFromPlacementCoordinates()*G4Point3D(1, 0, 0)
 	 << "\n p[2]: " << p->GetFromPlacementCoordinates()*G4Point3D(0, 1, 0)
 	 << "\n p[3]: " << p->GetFromPlacementCoordinates()*G4Point3D(0, 0, 1)
-	 << endl;
+	 << G4endl;
   
   G4cout << "  coordinate vectors in placement coordinate system:";
 
   G4cout << "\n   " << p->GetToPlacementCoordinates()*p->GetPX()
 	 << "\n   " << p->GetToPlacementCoordinates()*p->GetPY()
-	 << "\n   " << p->GetToPlacementCoordinates()*p->GetPZ() << endl;
+	 << "\n   " << p->GetToPlacementCoordinates()*p->GetPZ() << G4endl;
 }
 
 
@@ -177,47 +177,47 @@ void TestProject(G4Curve* c, const G4Transform3D& tr)
     if (abs(p2.z())>0.0001) 
     {
       error= true;
-      G4cout << "Error: the projection is not in the xy plane!" << endl;
+      G4cout << "Error: the projection is not in the xy plane!" << G4endl;
     }
 
     if ((p1-p2).mag()>0.001) 
     {
       error= true;
-      G4cout << "Error: the two projected points should be the same!" << endl;
+      G4cout << "Error: the two projected points should be the same!" << G4endl;
     }
 
     if (error) 
     {
-      G4cout << "u: " << u << endl;
+      G4cout << "u: " << u << G4endl;
      
       G4cout << "point on original curve:\n" << c->GetPoint(u)
-	     << "\n projected: " << tr*c->GetPoint(u) << endl;
+	     << "\n projected: " << tr*c->GetPoint(u) << G4endl;
       
-      G4cout << "point on projected curve: " << projC->GetPoint(u) << endl;
+      G4cout << "point on projected curve: " << projC->GetPoint(u) << G4endl;
       
       u= -u;
-      G4cout << "u: " << u << endl;
+      G4cout << "u: " << u << G4endl;
       
       G4cout << "point on original curve:\n" << c->GetPoint(u)
-	     << "\n projected: " << tr*c->GetPoint(u) << endl;
+	     << "\n projected: " << tr*c->GetPoint(u) << G4endl;
      
-      G4cout << "point on projected curve:\n" << projC->GetPoint(u) << endl;
+      G4cout << "point on projected curve:\n" << projC->GetPoint(u) << G4endl;
       
       u= -u; u+= pi;
-      G4cout << "u: " << u << endl;
+      G4cout << "u: " << u << G4endl;
       
       G4cout << "point on original curve:\n" << c->GetPoint(u)
-	     << "\n projected: " << tr*c->GetPoint(u) << endl;
+	     << "\n projected: " << tr*c->GetPoint(u) << G4endl;
       
-      G4cout << "\npoint on projected curve: " << projC->GetPoint(u) << endl;
+      G4cout << "\npoint on projected curve: " << projC->GetPoint(u) << G4endl;
       
       u= -u;
-      G4cout << "u: " << u << endl;
+      G4cout << "u: " << u << G4endl;
       
       G4cout << "point on original curve:\n" << c->GetPoint(u)
-	     << "\n projected: " << tr*c->GetPoint(u) << endl;
+	     << "\n projected: " << tr*c->GetPoint(u) << G4endl;
       
-      G4cout << "point on projected curve: " << projC->GetPoint(u) << endl;
+      G4cout << "point on projected curve: " << projC->GetPoint(u) << G4endl;
       
       exit(EXIT_FAILURE);
     }

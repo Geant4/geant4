@@ -21,7 +21,7 @@ void Tst05RunAction::BeginOfRunAction(const G4Run* aRun)
   UI->ApplyCommand("/event/Verbose 1");
   UI->ApplyCommand("/tracking/Verbose 1");
 
-  //G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
+  //G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   timer->Start();
 }
 
@@ -29,6 +29,6 @@ void Tst05RunAction::EndOfRunAction(const G4Run* aRun)
 {
   timer->Stop();
   //G4cout << "number of event = " << aRun->GetNumberOfEvent() 
-  //     << " " << *timer << endl;
+  //     << " " << *timer << G4endl;
 }
 

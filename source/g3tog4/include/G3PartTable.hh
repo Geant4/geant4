@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3PartTable.hh,v 1.5 1999-12-09 01:27:43 lockman Exp $
+// $Id: G3PartTable.hh,v 1.6 1999-12-15 14:49:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -20,7 +20,7 @@
 
 class G3PartTable {
 private:
-  G4std::map<G4String, G4ParticleDefinition*, less<G4String> > PTD;
+  G4std::map<G4String, G4ParticleDefinition*, G4std::less<G4String> > PTD;
   void HashID(G4int partid, G4String* _HID);
   void HashID(G4int partid, G4String& _HID);
 public:

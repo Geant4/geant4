@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Decay.cc,v 1.3 1999-04-13 09:56:08 kurasige Exp $
+// $Id: G4Decay.cc,v 1.4 1999-12-15 14:51:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@ G4Decay::G4Decay(const G4String& processName)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
-    G4cerr << "G4Decay  constructor " << "  Name:" << processName << endl;
+    G4cerr << "G4Decay  constructor " << "  Name:" << processName << G4endl;
   }
 #endif
   aPhysicsTable = NULL;
@@ -87,10 +87,10 @@ G4double G4Decay::GetMeanLifeTime(const G4Track&    aTrack,
 
 #ifdef G4VERBOSE
    if (GetVerboseLevel()>1) {
-     G4cerr << "G4Decay::GetMeanLifeTime() "<< endl;
+     G4cerr << "G4Decay::GetMeanLifeTime() "<< G4endl;
      G4cerr << "KineticEnergy:" << aParticle->GetKineticEnergy()/GeV <<"[GeV]";
      G4cerr << "Mass:" << aParticle->GetMass()/GeV <<"[GeV]"; 
-     G4cerr << "Life time: "<< aLife/ns << "[ns]" << endl;
+     G4cerr << "Life time: "<< aLife/ns << "[ns]" << G4endl;
    }
 #endif
 
@@ -107,7 +107,7 @@ G4double G4Decay::GetMeanLifeTime(const G4Track&    aTrack,
 
 #ifdef G4VERBOSE
    if (GetVerboseLevel()>1) {
-     G4cerr << "mean life time: "<< meanlife/ns << "[ns]" << endl;
+     G4cerr << "mean life time: "<< meanlife/ns << "[ns]" << G4endl;
    }
 #endif
 
@@ -130,10 +130,10 @@ G4double G4Decay::GetMeanFreePath(const G4Track& aTrack,G4double, G4ForceConditi
 
 #ifdef G4VERBOSE
    if (GetVerboseLevel()>1) {
-     G4cerr << "G4Decay::GetMeanFreePath() "<< endl;
+     G4cerr << "G4Decay::GetMeanFreePath() "<< G4endl;
      G4cerr << "KineticEnergy:" << aParticle->GetKineticEnergy()/GeV <<"[GeV]";
      G4cerr << "Mass:" << aMass/GeV <<"[GeV]"; 
-     G4cerr << "c*Tau:" << aCtau/m <<"[m]" <<endl; 
+     G4cerr << "c*Tau:" << aCtau/m <<"[m]" <<G4endl; 
    }
 #endif
 
@@ -153,7 +153,7 @@ G4double G4Decay::GetMeanFreePath(const G4Track& aTrack,G4double, G4ForceConditi
      pathlength =  DBL_MAX;
 #ifdef G4VERBOSE
      if (GetVerboseLevel()>1) {
-       G4cerr << " Zero Mass particle " << endl;
+       G4cerr << " Zero Mass particle " << G4endl;
      }
 #endif
    } else {
@@ -174,7 +174,7 @@ G4double G4Decay::GetMeanFreePath(const G4Track& aTrack,G4double, G4ForceConditi
 #ifdef G4VERBOSE
        if (GetVerboseLevel()>1) {
 	 G4cerr << "G4Decay::GetMeanFreePath()   !!particle stops!!";
-         G4cerr << aParticleDef->GetParticleName() << endl;
+         G4cerr << aParticleDef->GetParticleName() << G4endl;
 	 G4cerr << "KineticEnergy:" << aParticle->GetKineticEnergy()/GeV <<"[GeV]";
        }
 #endif
@@ -186,7 +186,7 @@ G4double G4Decay::GetMeanFreePath(const G4Track& aTrack,G4double, G4ForceConditi
    }
 #ifdef G4VERBOSE
    if (GetVerboseLevel()>1) {
-     G4cerr << "mean free path: "<< pathlength/m << "[m]" << endl;
+     G4cerr << "mean free path: "<< pathlength/m << "[m]" << G4endl;
    }
 #endif
    return  pathlength;
@@ -198,7 +198,7 @@ void G4Decay::BuildPhysicsTable(const G4ParticleDefinition&)
   if (aPhysicsTable != NULL) return;
 
   // create  aPhysicsTable
-  if (GetVerboseLevel()>1) G4cerr <<" G4Decay::BuildPhysicsTable() "<< endl;
+  if (GetVerboseLevel()>1) G4cerr <<" G4Decay::BuildPhysicsTable() "<< G4endl;
   aPhysicsTable = new G4PhysicsTable(1);
  
   //create physics vector 
@@ -243,7 +243,7 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>0) {
 	G4cerr <<  "G4Decay::DoIt  : decay table not defined  for";
-        G4cerr << aParticle->GetDefinition()->GetParticleName()<< endl;
+        G4cerr << aParticle->GetDefinition()->GetParticleName()<< G4endl;
       }
 #endif
       fParticleChangeForDecay.SetNumberOfSecondaries(0);
@@ -260,7 +260,7 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 	// decay channel not found
 #ifdef G4VERBOSE
 	if (GetVerboseLevel()>0) {
-	  G4cerr <<  "G4Decay::DoIt  : can not determine decay channel " <<endl;
+	  G4cerr <<  "G4Decay::DoIt  : can not determine decay channel " <<G4endl;
 	  decaytable ->DumpInfo();
 	}
 #endif
@@ -269,7 +269,7 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 	// execute DecayIt() 
 #ifdef G4VERBOSE
 	if (GetVerboseLevel()>1) {
-	  G4cerr << "G4Decay::DoIt  : selected decay channel  addr:" << decaychannel <<endl;
+	  G4cerr << "G4Decay::DoIt  : selected decay channel  addr:" << decaychannel <<G4endl;
 	  temp = decaychannel->GetVerboseLevel();
 	  decaychannel->SetVerboseLevel(GetVerboseLevel());
 	}
@@ -314,8 +314,8 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
     G4cerr << " X:" << (aTrack.GetPosition()).x() /cm << "[cm]";
     G4cerr << " Y:" << (aTrack.GetPosition()).y() /cm << "[cm]";
     G4cerr << " Z:" << (aTrack.GetPosition()).z() /cm << "[cm]";
-    G4cerr << endl;
-    G4cerr << "G4Decay::DoIt  : decay products in Lab. Frame" << endl;
+    G4cerr << G4endl;
+    G4cerr << "G4Decay::DoIt  : decay products in Lab. Frame" << G4endl;
     products->DumpInfo();
   }
 #endif

@@ -5,7 +5,7 @@
 
 
 //
-// $Id: STEPselect.h,v 1.2 1999-05-21 20:20:32 japost Exp $
+// $Id: STEPselect.h,v 1.3 1999-12-15 14:50:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef _STEPSELECT_H
@@ -84,8 +84,8 @@ class SdaiSelect {
 
   // reading and writing
         const char * STEPwrite(SCLstring& s)  const;
-	void STEPwrite (ostream& out =G4cout) const;
-        virtual void STEPwrite_content (ostream& out) const =0;
+	void STEPwrite (G4std::ostream& out =G4cout) const;
+        virtual void STEPwrite_content (G4std::ostream& out) const =0;
 //	char * asStr() const;
 
 
@@ -94,11 +94,11 @@ class SdaiSelect {
         virtual Severity StrToVal_content (const char *, 
 					   InstMgr * instances =0) =0;
 
-	Severity STEPread(istream& in, ErrorDescriptor *err, 
+	Severity STEPread(G4std::istream& in, ErrorDescriptor *err, 
 			  InstMgr * instances = 0, int addFileId =0);
 
 		// abstract function
-        virtual Severity STEPread_content (istream& in =cin, 
+        virtual Severity STEPread_content (G4std::istream& in =G4cin, 
 					   InstMgr * instances =0, 
 					   int addFileId =0) =0;
 

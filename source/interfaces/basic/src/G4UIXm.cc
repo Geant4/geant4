@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIXm.cc,v 1.5 1999-11-02 20:07:33 barrand Exp $
+// $Id: G4UIXm.cc,v 1.6 1999-12-15 14:50:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -14,11 +14,7 @@
 
 #ifdef G4UI_BUILD_XM_SESSION
 
-#ifdef WIN32
-#include <Strstrea.h>
-#else
-#include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 #include <string.h>
 

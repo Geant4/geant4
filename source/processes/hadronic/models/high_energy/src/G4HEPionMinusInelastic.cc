@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEPionMinusInelastic.cc,v 1.2 1999-06-16 04:39:55 kurasige Exp $
+// $Id: G4HEPionMinusInelastic.cc,v 1.3 1999-12-15 14:52:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,23 +47,23 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
 
     if(incidentKineticEnergy < 1.)
       { 
-        G4cout << "GHEPionMinusInelastic: incident energy < 1 GeV" << endl ;
+        G4cout << "GHEPionMinusInelastic: incident energy < 1 GeV" << G4endl ;
       }
     if(verboseLevel > 1)
       {
-        G4cout << "G4HEPionMinusInelastic::ApplyYourself" << endl;
+        G4cout << "G4HEPionMinusInelastic::ApplyYourself" << G4endl;
         G4cout << "incident particle " << incidentParticle.getName()
              << "mass "              << incidentMass
              << "kinetic energy "    << incidentKineticEnergy
-             << endl;
+             << G4endl;
         G4cout << "target material with (A,Z) = (" 
-             << atomicWeight << "," << atomicNumber << ")" << endl;
+             << atomicWeight << "," << atomicNumber << ")" << G4endl;
       }
 
     G4double inelasticity  = NuclearInelasticity(incidentKineticEnergy, 
                                                  atomicWeight, atomicNumber);
     if(verboseLevel > 1)
-        G4cout << "nuclear inelasticity = " << inelasticity << endl;
+        G4cout << "nuclear inelasticity = " << inelasticity << G4endl;
 
     incidentKineticEnergy -= inelasticity;
     
@@ -76,7 +76,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
                                                excitationEnergyDTA);
     if(verboseLevel > 1)
       G4cout << "nuclear excitation = " << excitation << excitationEnergyGNP 
-           << excitationEnergyDTA << endl;             
+           << excitationEnergyDTA << G4endl;             
 
 
     incidentKineticEnergy -= excitation;
@@ -113,7 +113,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
         
     if(verboseLevel > 1)
       G4cout << "ApplyYourself: CallFirstIntInCascade for particle "
-           << incidentCode << endl;
+           << incidentCode << G4endl;
 
     G4bool successful = false; 
     
@@ -123,7 +123,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
                                incidentParticle, targetParticle);
 
         if(verboseLevel > 1)
-	   G4cout << "ApplyYourself::StrangeParticlePairProduction" << endl;  
+	   G4cout << "ApplyYourself::StrangeParticlePairProduction" << G4endl;  
 
 
         if ((vecLength > 0) && (availableEnergy > 1.)) 
@@ -165,7 +165,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
 
     if (!successful)
       { 
-        G4cout << "GHEInelasticInteraction::ApplyYourself fails to produce final state particles" << endl;
+        G4cout << "GHEInelasticInteraction::ApplyYourself fails to produce final state particles" << G4endl;
       }
       FillParticleChange(pv,  vecLength);
       delete [] pv;
@@ -225,7 +225,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
        counter = -1;
        for( np=0; np<(numSec/3); np++ ) 
           {
-            for( nm=max(0,np-1); nm<=(np+1); nm++ ) 
+            for( nm=G4std::max(0,np-1); nm<=(np+1); nm++ ) 
                {
                  for( nz=0; nz<numSec/3; nz++ ) 
                     {
@@ -294,7 +294,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
 //                                            suppress high multiplicity events at low momentum
 //                                            only one additional pion will be produced
        G4double cech[] = {1., 0.95, 0.79, 0.32, 0.19, 0.16, 0.14, 0.12, 0.10, 0.08};
-       G4int iplab = max(9, G4int( incidentTotalMomentum*5.));
+       G4int iplab = G4std::max(9, G4int( incidentTotalMomentum*5.));
        if( G4UniformRand() < cech[iplab] )
          {
            if( targetCode == protonCode )
@@ -353,7 +353,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
 
        for( nt=1; nt<=numSec; nt++ ) 
          {
-           test = exp( min( expxu, max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
+           test = exp( G4std::min( expxu, G4std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
            dum = M_PI*nt/(2.0*n*n);
            if( fabs(dum) < 1.0 ) 
              if( test >= 1.0e-10 )anpn += dum*test;
@@ -368,7 +368,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
            counter = -1;
            for( np=0; np<numSec/3; np++ ) 
               {
-                for( nm=max(0,np-1); nm<=(np+1); nm++ ) 
+                for( nm=G4std::max(0,np-1); nm<=(np+1); nm++ ) 
                    {
                      for( nz=0; nz<numSec/3; nz++ ) 
                         {
@@ -377,7 +377,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
                               nt = np+nm+nz;
                               if( (nt>0) && (nt<=numSec) ) 
                                 {
-                                  test = exp( min( expxu, max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
+                                  test = exp( G4std::min( expxu, G4std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
                                   dum = (M_PI/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                                   if( fabs(dum) < 1.0 ) 
                                         if( test >= 1.0e-10 )excs += dum*test;
@@ -408,7 +408,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
                               nt = np+nm+nz;
                               if( (nt>=1) && (nt<=numSec) ) 
                                 {
-                                  test = exp( min( expxu, max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
+                                  test = exp( G4std::min( expxu, G4std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
                                   dum = (M_PI/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                                   if( fabs(dum) < 1.0 ) 
                                       if( test >= 1.0e-10 )excs += dum*test;
@@ -511,7 +511,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
             { 
               G4cout << pv[i].getName() << " " ;
             }
-         G4cout << endl;
+         G4cout << G4endl;
       }
    return;
  }

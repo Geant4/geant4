@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ElectronOccupancy.cc,v 1.4 1999-08-30 08:27:56 kurasige Exp $
+// $Id: G4ElectronOccupancy.cc,v 1.5 1999-12-15 14:51:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,10 +111,10 @@ G4int G4ElectronOccupancy::operator!=(const G4ElectronOccupancy& right) const
 
 void G4ElectronOccupancy::DumpInfo() const
 {
-  G4cout << "  -- Electron Occupancy -- " << endl;
+  G4cout << "  -- Electron Occupancy -- " << G4endl;
   G4int index;
   for (index = 0; index < theSizeOfOrbit; index++) {
     G4cout << "   " << index << "-th orbit       " 
-           <<  theOccupancies[index] << endl;
+           <<  theOccupancies[index] << G4endl;
   }
 }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GenericIon.cc,v 1.2 1999-04-13 08:24:11 kurasige Exp $
+// $Id: G4GenericIon.cc,v 1.3 1999-12-15 14:51:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,8 +18,8 @@
 //      4 Dec. 98 by H.Kurashige
 // ----------------------------------------------------------------------
 
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4GenericIon.hh"
 

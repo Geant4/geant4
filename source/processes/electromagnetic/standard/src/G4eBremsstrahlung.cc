@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.cc,v 1.6 1999-04-13 09:05:44 urban Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.7 1999-12-15 14:51:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -219,7 +219,7 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
 
            if(LPMGammaEnergyLimit > klim)
            {
-             G4double kmax = min(Cut,LPMGammaEnergyLimit) ;
+             G4double kmax = G4std::min(Cut,LPMGammaEnergyLimit) ;
 
              G4double floss = 0. ;
              G4int nmax = 1000 ;
@@ -793,8 +793,8 @@ G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
        G4double screenmin = screenfac*epsilmin/(1.-epsilmin);
 
        // Compute the maximum of the rejection function
-       G4double F1 = max(ScreenFunction1(screenmin) - FZ ,0.);
-       G4double F2 = max(ScreenFunction2(screenmin) - FZ ,0.);
+       G4double F1 = G4std::max(ScreenFunction1(screenmin) - FZ ,0.);
+       G4double F2 = G4std::max(ScreenFunction2(screenmin) - FZ ,0.);
        grejmax = (F1 - epsilmin* (F1*ah - bh*epsilmin*F2))/(42.392 - FZ);
 
        // sample the energy rate of the emitted Gamma 
@@ -805,8 +805,8 @@ G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
              x = pow(xmin, G4UniformRand());  
              epsil = x*KineticEnergy/TotalEnergy;
              screenvar = screenfac*epsil/(1-epsil);
-             F1 = max(ScreenFunction1(screenvar) - FZ ,0.);
-             F2 = max(ScreenFunction2(screenvar) - FZ ,0.);
+             F1 = G4std::max(ScreenFunction1(screenvar) - FZ ,0.);
+             F2 = G4std::max(ScreenFunction2(screenvar) - FZ ,0.);
              migdal = (1. + MigdalFactor)/(1. + MigdalFactor/(x*x));
              greject = migdal*(F1 - epsil* (ah*F1 - bh*epsil*F2))/(42.392 - FZ);      
         }  while( greject < G4UniformRand()*grejmax );
@@ -830,9 +830,9 @@ G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
        G4double bl = bl0 + bl1*U + bl2*U2;
 
        // Compute the maximum of the rejection function
-       grejmax = max(1. + xmin* (al + bl*xmin), 1.+al+bl);
+       grejmax = G4std::max(1. + xmin* (al + bl*xmin), 1.+al+bl);
        G4double xm = -al/(2.*bl);
-       if ((xmin < xm)&&(xm < 1.)) grejmax = max(grejmax, 1.+ xm* (al + bl*xm));
+       if ((xmin < xm)&&(xm < 1.)) grejmax = G4std::max(grejmax, 1.+ xm* (al + bl*xm));
 
        // sample the energy rate of the emitted Gamma 
 
@@ -924,7 +924,7 @@ G4Element* G4eBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
   for ( G4int i=0; i < NumberOfElements; i++ )
     if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements, NULL pointer returned." << endl;
+       << "' has no elements, NULL pointer returned." << G4endl;
   return NULL;
 }
 
@@ -937,7 +937,7 @@ void G4eBremsstrahlung::PrintInfoDefinition()
            comments += "        log scale extrapolation above 100 GeV \n";
            comments += "        Gamma energy sampled from a parametrised formula.";
                      
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,"Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy") 
          << " in " << TotBin << " bins. \n";

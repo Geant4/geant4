@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredX.cc,v 1.4 1999-05-10 14:03:57 johna Exp $
+// $Id: G4OpenGLStoredX.cc,v 1.5 1999-12-15 14:54:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@ G4OpenGLStoredX::~G4OpenGLStoredX () {}
 G4VSceneHandler* G4OpenGLStoredX::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4OpenGLStoredSceneHandler (*this, name);
   G4cout << G4OpenGLStoredSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scenes extanct." << endl;
+       << ' ' << fName << " scenes extanct." << G4endl;
   return    pScene;
 }
 
@@ -51,12 +51,12 @@ G4VViewer* G4OpenGLStoredX::CreateViewer (G4VSceneHandler& scene,
       pView = 0;
       G4cerr << "G4OpenGLStoredX::CreateViewer: error flagged by"
 	" negative view id in G4OpenGLStoredXViewer creation."
-	"\n Destroying view and returning null pointer." << endl;
+	"\n Destroying view and returning null pointer." << G4endl;
     }
   }
   else {
     G4cerr << "G4OpenGLStoredX::CreateViewer: null pointer on"
-      " new G4OpenGLStoredXViewer." << endl;
+      " new G4OpenGLStoredXViewer." << G4endl;
   }
   return pView;
 }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessCreateView.cc,v 1.4 1999-11-15 10:39:48 gunter Exp $
+// $Id: G4VisManMessCreateView.cc,v 1.5 1999-12-15 14:54:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,7 +65,7 @@ void G4VisManMessenger::DoCommandCreateView (const G4String& commandPath,
   if (commandPath == "/vis~/create_view/new_graphics_system") {
     G4String selector;
     const char* aString = newValues;
-    istrstream is ((char*) aString) ; is >> selector;
+    G4std::istrstream is ((char*) aString) ; is >> selector;
     const G4GraphicsSystemList& gsl = fpVMan -> GetAvailableGraphicsSystems ();
     int nSystems = gsl.entries ();
     if (nSystems > 0) {
@@ -135,14 +135,14 @@ void G4VisManMessenger::DoCommandCreateView (const G4String& commandPath,
 	  G4cout <<
 	    "\nChoose by specifying class name or nickname, if any, or help.";
 	}
-	G4cout << endl;
+	G4cout << G4endl;
       }
       if (iGS >=0 && iGS < nSystems) {
 	// Valid index.  Create view.
 	G4VGraphicsSystem* pSystem = gsl [iGS];;
 	fpVMan -> SetCurrentGraphicsSystemAndCreateViewer (pSystem);
 	if (fpVMan -> GetVerboseLevel () > 0) {
-	  G4cout << "Graphics system set to " << pSystem -> GetName () << endl;
+	  G4cout << "Graphics system set to " << pSystem -> GetName () << G4endl;
 	  if (fpVMan -> GetVerboseLevel () > 1) {
 	    fpVMan -> PrintCurrentSystem ();
 	  }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertyVector.cc,v 1.4 1999-11-11 15:36:10 gunter Exp $
+// $Id: G4MaterialPropertyVector.cc,v 1.5 1999-12-15 14:50:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -173,7 +173,7 @@ G4MaterialPropertyVector::GetProperty(G4double aPhotonMomentum) const
 	{
 		G4cout << "\nWarning: G4MaterialPropertyVector::GetProperty";
 		G4cout << "\n==> attempt to Retrieve Property below range" 
-		<< endl;
+		<< G4endl;
 		return minProp; 
 	} 
 
@@ -181,7 +181,7 @@ G4MaterialPropertyVector::GetProperty(G4double aPhotonMomentum) const
 	{
 		G4cout << "\nWarning: G4MaterialPropertyVector::GetProperty";
 		G4cout << "\n==> attempt to Retrieve Property above range" 
-		<< endl;
+		<< G4endl;
 		return maxProp;
 	} 
 	
@@ -278,14 +278,14 @@ G4MaterialPropertyVector::GetPhotonMomentum(G4double aProperty) const
 	{
 	  G4cout << "\nWarning: G4MaterialPropertyVector::GetPhotonMomentum";
 	  G4cout << "\n==> attempt to Retrieve Photon Momentum out of range" 
-	       << endl; 
+	       << G4endl; 
 	  return PMmin;
 	}
 
 	if (aProperty > PropMax) {
           G4cout << "\nWarning: G4MaterialPropertyVector::GetPhotonMomentum";
 	  G4cout << "\n==> attempt to Retrieve Photon Momentum out of range" 
-	       << endl;
+	       << G4endl;
 	  return PMmax;
 	}
 
@@ -340,7 +340,7 @@ void G4MaterialPropertyVector::ResetIterator()
 void G4MaterialPropertyVector::DumpVector()
 {
  	if (MPV.isEmpty())  {
- 		G4cerr << "nothing to dump" << endl;
+ 		G4cerr << "nothing to dump" << G4endl;
 		G4Exception("G4MaterialPropertyVector::DumpVector ==>"
 			    "Nothing to dump!  Vector is empty");
  	}
@@ -348,9 +348,9 @@ void G4MaterialPropertyVector::DumpVector()
 	for (G4int i = 0; i < NumEntries; i++) {
 		G4cout << "MPV["<< i << "]: ";
 		MPV[i]->DumpEntry();
-                G4cout << i << NumEntries << endl;
+                G4cout << i << NumEntries << G4endl;
 	}
-        G4cout << " Done DumpVector " << endl;
+        G4cout << " Done DumpVector " << G4endl;
 
 } 
 

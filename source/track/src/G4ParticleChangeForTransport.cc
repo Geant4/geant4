@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.4 1999-05-06 11:42:57 kurasige Exp $
+// $Id: G4ParticleChangeForTransport.cc,v 1.5 1999-12-15 14:53:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,14 +31,14 @@
 G4ParticleChangeForTransport::G4ParticleChangeForTransport():G4ParticleChange()
 {
   if (verboseLevel>2) {
-    G4cout << "G4ParticleChangeForTransport::G4ParticleChangeForTransport() " << endl;
+    G4cout << "G4ParticleChangeForTransport::G4ParticleChangeForTransport() " << G4endl;
   }
 }
 
 G4ParticleChangeForTransport::~G4ParticleChangeForTransport() 
 {
   if (verboseLevel>2) {
-    G4cout << "G4ParticleChangeForTransport::~G4ParticleChangeForTransport() " << endl;
+    G4cout << "G4ParticleChangeForTransport::~G4ParticleChangeForTransport() " << G4endl;
   }
 }
 
@@ -46,7 +46,7 @@ G4ParticleChangeForTransport::~G4ParticleChangeForTransport()
 G4ParticleChangeForTransport::G4ParticleChangeForTransport(const G4ParticleChangeForTransport &right):G4ParticleChange(right)
 {
   if (verboseLevel>0) {
-    G4cout << "G4ParticleChangeForTransport::  copy constructor is called " << endl;
+    G4cout << "G4ParticleChangeForTransport::  copy constructor is called " << G4endl;
   }
   theTouchableChange = right.theTouchableChange;
 }
@@ -55,7 +55,7 @@ G4ParticleChangeForTransport::G4ParticleChangeForTransport(const G4ParticleChang
 G4ParticleChangeForTransport & G4ParticleChangeForTransport::operator=(const G4ParticleChangeForTransport &right)
 {
    if (verboseLevel>1) {
-    G4cout << "G4ParticleChangeForTransport:: assignment operator is called " << endl;
+    G4cout << "G4ParticleChangeForTransport:: assignment operator is called " << G4endl;
    }
    if (this != &right)
    {
@@ -84,8 +84,8 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAtRest(G4Step* pStep)
 { 
   // Nothing happens for AtRestDoIt
   if (verboseLevel>0) {
-    G4cout << "G4ParticleChangeForTransport::UpdateStepForAtRest() is called" << endl; 
-    G4cout << " Nothing happens for this method " << endl; 
+    G4cout << "G4ParticleChangeForTransport::UpdateStepForAtRest() is called" << G4endl; 
+    G4cout << " Nothing happens for this method " << G4endl; 
   }
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
@@ -198,8 +198,8 @@ void G4ParticleChangeForTransport::DumpInfo() const
 
   G4cout.precision(3);
   G4cout << "        Touchable (pointer) : " 
-       << setw(20) << theTouchableChange
-       << endl; 
+       << G4std::setw(20) << theTouchableChange
+       << G4endl; 
 }
 
 

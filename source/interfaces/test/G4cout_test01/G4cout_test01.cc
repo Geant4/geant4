@@ -48,11 +48,11 @@ int main()
 
   // job termination
   delete runManager;
-  cout << "oooooooooooooooooooooooooooooooooooooooooooooooooo"<< endl;
+  cout << "oooooooooooooooooooooooooooooooooooooooooooooooooo"<< G4endl;
   cout << "The output of G4cout/G4cerr is logged to \""
-       << LoggingSession->logFileName << "\"." << endl;
-  cout << "Please have a look." << endl;
-  cout << "oooooooooooooooooooooooooooooooooooooooooooooooooo" << endl;
+       << LoggingSession->logFileName << "\"." << G4endl;
+  cout << "Please have a look." << G4endl;
+  cout << "oooooooooooooooooooooooooooooooooooooooooooooooooo" << G4endl;
 
   delete LoggingSession;
   return 0;

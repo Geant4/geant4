@@ -1,18 +1,18 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ComptonTest.cc,v 1.1 1999-01-08 16:32:24 gunter Exp $
+// $Id: ComptonTest.cc,v 1.2 1999-12-15 14:51:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ---------------------------------------------------------------
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "g4templates.hh"
 
@@ -44,10 +44,10 @@
 int main()
 {
   //-------- set output format-------
-   G4cout.setf( ios::scientific, ios::floatfield );
+   G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
   //-------- write results onto a file --------
-   ofstream outFile( "Compton.out", ios::out);
-   outFile.setf( ios::scientific, ios::floatfield );
+   G4std::ofstream outFile( "Compton.out", G4std::ios::out);
+   outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
   //
   //--------- Materials definition ---------
@@ -142,12 +142,12 @@ int main()
 
     LogicalFrame->SetMaterial(apttoMaterial); 
 
-    outFile << " " << endl;   // Print table of mean free path
-    outFile <<"  " << MaterialName  << "    Compton Scattering Mean Free Path in cm" << endl;
-    outFile << "----------------------------------------------------" << endl;
-    outFile << " " << endl;
-    outFile << "kinetic energy (MeV)     mean free path (cm)" << endl ;
-    outFile << " " << endl;
+    outFile << " " << G4endl;   // Print table of mean free path
+    outFile <<"  " << MaterialName  << "    Compton Scattering Mean Free Path in cm" << G4endl;
+    outFile << "----------------------------------------------------" << G4endl;
+    outFile << " " << G4endl;
+    outFile << "kinetic energy (MeV)     mean free path (cm)" << G4endl ;
+    outFile << " " << G4endl;
 
     for ( G4int i=0 ; i<nkin ; i++)
       {
@@ -155,9 +155,9 @@ int main()
 
        meanFreePath = theComptonScatteringProcess.GetMeanFreePath(aTrack, 1., condition);
 
-       outFile <<"  " <<  Tkin[i]/MeV << "            " << meanFreePath/cm << endl ;
+       outFile <<"  " <<  Tkin[i]/MeV << "            " << meanFreePath/cm << G4endl ;
       }
-    outFile << " " << endl;
+    outFile << " " << G4endl;
    }
 
   //
@@ -177,7 +177,7 @@ int main()
         adummy      = theComptonScatteringProcess.PostStepDoIt(aTrack, aStep);
         aFinalGamma = (G4ParticleChange*)adummy;
 
-         outFile << " -----------------------------------------------------------" << endl;   
+         outFile << " -----------------------------------------------------------" << G4endl;   
         // check the kinematic
         //
         G4double Tkin0 = aGamma.GetKineticEnergy();
@@ -185,7 +185,7 @@ int main()
                  Py0   = aGamma.GetMomentum().y() ,
                  Pz0   = aGamma.GetMomentum().z() ;
         outFile << " Initial Gamma :  Px= " << Px0/MeV << "   Py= " << Py0/MeV 
-                << "   Pz= " << Pz0/MeV << "   Tkin= " << Tkin0/MeV << endl ;
+                << "   Pz= " << Pz0/MeV << "   Tkin= " << Tkin0/MeV << G4endl ;
 
         G4double Tkin1 =  aFinalGamma->GetEnergyChange();
         G4double Px1   = (aFinalGamma->GetMomentumChange()->x())*Tkin1 ,
@@ -194,7 +194,7 @@ int main()
         G4double Edep  =  aFinalGamma->GetLocalEnergyDeposit();
         outFile << "   final Gamma :  Px= " << Px1/MeV << "   Py= " << Py1/MeV 
                 << "   Pz= " << Pz1/MeV << "   Tkin= " << Tkin1/MeV 
-                << "   Edep= " << Edep/MeV << endl ;
+                << "   Edep= " << Edep/MeV << G4endl ;
 
         G4double Tkin2 = 0., Px2 = 0., Py2 = 0., Pz2 = 0. ;
         if (aFinalGamma->GetNumberOfSecondaries()) {
@@ -204,16 +204,16 @@ int main()
             Py2   = (aFinalElectr->GetMomentum()).y() ;
             Pz2   = (aFinalElectr->GetMomentum()).z() ;
             outFile << "   final Electr :  Px= " << Px2/MeV << "   Py= " << Py2/MeV 
-                    << "   Pz= " << Pz2/MeV << "   Tkin= " << Tkin2/MeV << endl ;
+                    << "   Pz= " << Pz2/MeV << "   Tkin= " << Tkin2/MeV << G4endl ;
            // NOTE - Secondaries are normally deleted by the track destructor !
            delete aFinalGamma->GetSecondary(0);
            }
 
         G4double sTkin = Tkin0 - Tkin1 - Tkin2 - Edep,    
                  sPx = Px0 - Px1 - Px2, sPy = Py0 - Py1 - Py2, sPz = Pz0 - Pz1 - Pz2;
-        outFile << endl;
+        outFile << G4endl;
         outFile << " Balance        :  Px= " << sPx/MeV << "   Py= " << sPy/MeV << "   Pz= " << sPz/MeV 
-                           << "   Tkin= " << sTkin/MeV << endl ;
+                           << "   Tkin= " << sTkin/MeV << G4endl ;
 
         // update the initial gamma
         //

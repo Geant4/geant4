@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -28,8 +28,8 @@
 // Other Class Headers
 
 // C++ Headers
-#include <iostream.h>
-#include <fstream.h>
+#include "g4std/iostream"
+#include "g4std/fstream"
 #include <string.h>
 
 // Constructors
@@ -57,8 +57,8 @@ void G4VDataFile::OpenFile(){
 
   G4String path_string(path);
   G4String dir_file = path_string + "/" + _filename;
-  _istr.open(dir_file.data(), ios::in | ios::nocreate);
-  filebuf* lsdp = _istr.rdbuf();
+  _istr.open(dir_file.data(), G4std::ios::in | G4std::ios::nocreate);
+  G4std::filebuf* lsdp = _istr.rdbuf();
 
   if(!lsdp->is_open()){
 
@@ -81,7 +81,7 @@ void G4VDataFile::Eof(){
   }
 }
 
-streampos G4VDataFile::TellPos(){
+G4std::streampos G4VDataFile::TellPos(){
 
   return _istr.tellg();
 }
@@ -91,7 +91,7 @@ G4bool G4VDataFile::IsOpen(){
   return TRUE;//_istr.is_open();
 }
 
-void G4VDataFile::SeekPos(streampos pos){
+void G4VDataFile::SeekPos(G4std::streampos pos){
 
   _istr.seekg(pos);
 }

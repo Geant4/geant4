@@ -128,7 +128,7 @@ int main()
 
      }  while (iteration < NumberEvents) ;
 
-    cout << " number of useful events " << nevhmf << endl; 
+    cout << " number of useful events " << nevhmf << G4endl; 
    
     G4double wgthmf = 1./nevhmf;
     plot[1].Scale(wgthmf, plot[1]);

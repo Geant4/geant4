@@ -5,7 +5,7 @@
 
 
 //
-// $Id: STEPfile_inline.cc,v 1.2 1999-05-21 20:20:51 japost Exp $
+// $Id: STEPfile_inline.cc,v 1.3 1999-12-15 14:50:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -142,7 +142,7 @@ STEPfile::ReadExchangeFile(const char* filename)
 {
     _error.ClearErrorMsg();
     _errorCount = 0;
-    istream* in = OpenInputFile(filename);
+    G4std::istream* in = OpenInputFile(filename);
     if (_error.severity() < SEVERITY_WARNING) 
       {	  
 	CloseInputFile(in);
@@ -163,7 +163,7 @@ STEPfile::AppendExchangeFile (const char* filename)
 {
     _error.ClearErrorMsg();
     _errorCount = 0;
-    istream* in = OpenInputFile(filename);
+    G4std::istream* in = OpenInputFile(filename);
     if (_error.severity() < SEVERITY_WARNING) 
       {	      
 	CloseInputFile(in);
@@ -180,7 +180,7 @@ STEPfile::ReadWorkingFile(const char* filename)
 {
     _error.ClearErrorMsg();
     _errorCount = 0;
-    istream* in = OpenInputFile(filename);
+    G4std::istream* in = OpenInputFile(filename);
     if (_error.severity() < SEVERITY_WARNING) 
       {	  
 	CloseInputFile(in);
@@ -203,7 +203,7 @@ STEPfile::AppendWorkingFile(const char* filename)
 {
     _error.ClearErrorMsg();
     _errorCount = 0;
-    istream* in = OpenInputFile(filename);
+    G4std::istream* in = OpenInputFile(filename);
     if (_error.severity() < SEVERITY_WARNING) 
       {	      
 	CloseInputFile(in);
@@ -219,7 +219,7 @@ STEPfile::AppendWorkingFile(const char* filename)
 
 
 /******************************************************/
-istream*
+G4std::istream*
 STEPfile::OpenInputFile (const char* filename)
 {
     //  if there's no filename to use, fail
@@ -239,10 +239,10 @@ STEPfile::OpenInputFile (const char* filename)
 	      return (0);
 	  }
     }
-    //  istream* in = new istream(FileName(), io_readonly, a_useonly);
+    //  G4std::istream* in = new G4std::istream(FileName(), io_readonly, a_useonly);
     // port 29-Mar-1994 kcm
-    istream* in = new ifstream(FileName());
-    // default for ostream is readonly and protections are set to 644 
+    G4std::istream* in = new G4std::ifstream(FileName());
+    // default for G4std::ostream is readonly and protections are set to 644 
 //    if ( !in || !(in -> readable ()) )
     if ( !in || !(in -> good ()) )
       {
@@ -257,7 +257,7 @@ STEPfile::OpenInputFile (const char* filename)
 
 /******************************************************/
 void
-STEPfile::CloseInputFile(istream* in)
+STEPfile::CloseInputFile(G4std::istream* in)
 {
     delete in;
 }
@@ -267,7 +267,7 @@ STEPfile::CloseInputFile(istream* in)
 
 /*
 void
-STEPfile::ReadWhiteSpace (istream& in)
+STEPfile::ReadWhiteSpace (G4std::istream& in)
 {
 
   char c = ' ';
@@ -280,7 +280,7 @@ STEPfile::ReadWhiteSpace (istream& in)
 
 /***************************
 ***************************/
-ofstream*
+G4std::ofstream*
 STEPfile::OpenOutputFile(const char* filename)
 {
     if (!filename) 
@@ -304,10 +304,10 @@ STEPfile::OpenOutputFile(const char* filename)
 
     if (_currentDir->FileExists(TruncFileName(FileName())))
 	MakeBackupFile();
-//    ostream* out  = new ostream(FileName(), io_writeonly, a_create);  
+//    G4std::ostream* out  = new G4std::ostream(FileName(), io_writeonly, a_create);  
     // - port 29-Mar-1994 kcm
-    ofstream* out  = new ofstream(FileName());  
-    // default for ostream is writeonly and protections are set to 644 
+    G4std::ofstream* out  = new G4std::ofstream(FileName());  
+    // default for G4std::ostream is writeonly and protections are set to 644 
     if (!out) 
       {
 	  _error.AppendToUserMsg("unable to open file for output\n");
@@ -317,7 +317,7 @@ STEPfile::OpenOutputFile(const char* filename)
 }
 
 void
-STEPfile::CloseOutputFile(ostream* out) 
+STEPfile::CloseOutputFile(G4std::ostream* out) 
 {
     delete out;
 }

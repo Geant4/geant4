@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -29,7 +29,7 @@
 #include "G4Data.hh"
 
 // C++ Headers
-#include <fstream.h>
+#include "g4std/fstream"
 
 class G4VDataFile{
 
@@ -46,8 +46,8 @@ public:
   void CloseFile();
   void Eof();
   G4bool IsOpen();
-  void SeekPos(streampos);
-  streampos TellPos();
+  void SeekPos(G4std::streampos);
+  G4std::streampos TellPos();
 
   void GetLine();
   G4int LineLength();
@@ -66,7 +66,7 @@ protected:
 private:
 
   const G4String& _filename;             // data file name
-  ifstream _istr;
+  G4std::ifstream _istr;
   G4int _bufSize;
   char* buf;
 };

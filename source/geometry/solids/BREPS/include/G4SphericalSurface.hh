@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SphericalSurface.hh,v 1.1 1999-01-07 16:07:35 gunter Exp $
+// $Id: G4SphericalSurface.hh,v 1.2 1999-12-15 14:49:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __G4SpheShell_H
@@ -84,7 +84,7 @@ public:
   }
 
   virtual char *NameOf() const { return "G4SphericalSurface"; }
-  virtual void PrintOn( ostream& os = G4cout ) const;
+  virtual void PrintOn( G4std::ostream& os = G4cout ) const;
   
   int operator==( const G4SphericalSurface& s )
   { return origin  == s.origin  &&  
@@ -180,7 +180,7 @@ private:
 //----->virtual char *NameOf() const { return "G4SphericalSurface"; }
 //
 //  printing function
-//----->virtual void PrintOn( ostream& os = G4cout ) const;
+//----->virtual void PrintOn( G4std::ostream& os = G4cout ) const;
 //
 //  equality operator
 //----->int operator==( const G4SphericalSurface& s )

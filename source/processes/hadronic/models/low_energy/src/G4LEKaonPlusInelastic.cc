@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEKaonPlusInelastic.cc,v 1.1 1999-01-07 16:12:46 gunter Exp $
+// $Id: G4LEKaonPlusInelastic.cc,v 1.2 1999-12-15 14:53:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy KaonPlus Inelastic Process
@@ -34,11 +34,11 @@
     if( verboseLevel > 1 )
     {
       G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEKaonPlusInelastic::ApplyYourself called" << endl;
+      G4cout << "G4LEKaonPlusInelastic::ApplyYourself called" << G4endl;
       G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy() << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << ", ";
       G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
-           << endl;
+           << G4endl;
     }    
     G4ReactionProduct currentParticle( originalIncident->GetDefinition() );
     currentParticle.SetMomentum( originalIncident->GetMomentum() );
@@ -158,7 +158,7 @@
       G4int counter = -1;
       for( np=0; np<(numSec/3); ++np )
       {
-        for( nm=max(0,np-2); nm<=np; ++nm )
+        for( nm=G4std::max(0,np-2); nm<=np; ++nm )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
@@ -179,7 +179,7 @@
       counter = -1;
       for( np=0; np<numSec/3; ++np )
       {
-        for( nm=max(0,np-1); nm<=(np+1); ++nm )
+        for( nm=G4std::max(0,np-1); nm<=(np+1); ++nm )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
@@ -219,7 +219,7 @@
       nm = np = nz = 0;
       if( targetParticle.GetDefinition() == aProton )
       {
-        test = exp( min( expxu, max( expxl, -sqr(1.0+b[0])/(2.0*c*c) ) ) );
+        test = exp( G4std::min( expxu, G4std::max( expxl, -sqr(1.0+b[0])/(2.0*c*c) ) ) );
         w0 = test;
         wp = test*2.0;        
         if( G4UniformRand() < w0/(w0+wp) )
@@ -229,10 +229,10 @@
       }
       else  // target is a neutron
       {
-        test = exp( min( expxu, max( expxl, -sqr(1.0+b[1])/(2.0*c*c) ) ) );
+        test = exp( G4std::min( expxu, G4std::max( expxl, -sqr(1.0+b[1])/(2.0*c*c) ) ) );
         w0 = test;
         wp = test;
-        test = exp( min( expxu, max( expxl, -sqr(-1.0+b[1])/(2.0*c*c) ) ) );
+        test = exp( G4std::min( expxu, G4std::max( expxl, -sqr(-1.0+b[1])/(2.0*c*c) ) ) );
         wm = test;
         wt = w0+wp+wm;
         wp += w0;
@@ -256,7 +256,7 @@
         G4int counter = -1;
         for( np=0; (np<numSec/3) && (ran>=excs); ++np )
         {
-          for( nm=max(0,np-2); (nm<=np) && (ran>=excs); ++nm )
+          for( nm=G4std::max(0,np-2); (nm<=np) && (ran>=excs); ++nm )
           {
             for( nz=0; (nz<numSec/3) && (ran>=excs); ++nz )
             {
@@ -265,7 +265,7 @@
                 nt = np+nm+nz;
                 if( nt > 0 )
                 {
-                  test = exp( min( expxu, max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                   if( fabs(dum) < 1.0 )
                   {
@@ -286,7 +286,7 @@
         G4int counter = -1;
         for( np=0; (np<numSec/3) && (ran>=excs); ++np )
         {
-          for( nm=max(0,np-1); (nm<=(np+1)) && (ran>=excs); ++nm )
+          for( nm=G4std::max(0,np-1); (nm<=(np+1)) && (ran>=excs); ++nm )
           {
             for( nz=0; (nz<numSec/3) && (ran>=excs); ++nz )
             {
@@ -295,7 +295,7 @@
                 nt = np+nm+nz;
                 if( (nt>=1) && (nt<=numSec) )
                 {
-                  test = exp( min( expxu, max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                   if( fabs(dum) < 1.0 )
                   {

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEProtonInelastic.cc,v 1.1 1999-01-07 16:12:48 gunter Exp $
+// $Id: G4LEProtonInelastic.cc,v 1.2 1999-12-15 14:53:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Low Energy Proton Inelastic Process
@@ -29,11 +29,11 @@
     if( verboseLevel > 1 )
     {
       G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEProtonInelastic::ApplyYourself called" << endl;
+      G4cout << "G4LEProtonInelastic::ApplyYourself called" << G4endl;
       G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << ", ";
       G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
-           << endl;
+           << G4endl;
     }
     if( originalIncident->GetKineticEnergy()/GeV < 0.01+2.*G4UniformRand()/9. )
     {
@@ -209,7 +209,7 @@
       counter = -1;
       for( np=0; np<(numSec/3); ++np )
       {
-        for( nm=max(0,np-2); nm<=np; ++nm )
+        for( nm=G4std::max(0,np-2); nm<=np; ++nm )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
@@ -232,7 +232,7 @@
       counter = -1;
       for( np=0; np<numSec/3; ++np )
       {
-        for( nm=max(0,np-1); nm<=(np+1); ++nm )
+        for( nm=G4std::max(0,np-1); nm<=(np+1); ++nm )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
@@ -272,7 +272,7 @@
       np = nm = nz = 0;
       if( targetParticle.GetDefinition() == aProton )
       {
-        test = exp( min( expxu, max(
+        test = exp( G4std::min( expxu, G4std::max(
          expxl, -(1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
         w0 = test/2.0;
         wp = test;
@@ -283,11 +283,11 @@
       }
       else // target is a neutron
       {
-        test = exp( min( expxu, max(
+        test = exp( G4std::min( expxu, G4std::max(
          expxl, -(1.0+b[1])*(1.0+b[1])/(2.0*c*c) ) ) );
         w0 = test;
         wp = test/2.0;        
-        test = exp( min( expxu, max(
+        test = exp( G4std::min( expxu, G4std::max(
          expxl, -(-1.0+b[1])*(-1.0+b[1])/(2.0*c*c) ) ) );
         wm = test/2.0;
         wt = w0+wp+wm;
@@ -312,7 +312,7 @@
         counter = -1;
         for( np=0; np<numSec/3 && ran>=excs; ++np )
         {
-          for( nm=max(0,np-2); nm<=np && ran>=excs; ++nm )
+          for( nm=G4std::max(0,np-2); nm<=np && ran>=excs; ++nm )
           {
             for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
             {
@@ -321,7 +321,7 @@
                 nt = np+nm+nz;
                 if( nt>0 && nt<=numSec )
                 {
-                  test = exp( min( expxu, max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                   if( fabs(dum) < 1.0 )
                   {
@@ -345,7 +345,7 @@
         counter = -1;
         for( np=0; np<numSec/3 && ran>=excs; ++np )
         {
-          for( nm=max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
+          for( nm=G4std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
           {
             for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
             {
@@ -354,7 +354,7 @@
                 nt = np+nm+nz;
                 if( nt>0 && nt<=numSec )
                 {
-                  test = exp( min( expxu, max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                   if( fabs(dum) < 1.0 )
                   {

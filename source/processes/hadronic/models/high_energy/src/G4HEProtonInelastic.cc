@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEProtonInelastic.cc,v 1.2 1999-06-16 04:40:46 kurasige Exp $
+// $Id: G4HEProtonInelastic.cc,v 1.3 1999-12-15 14:52:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,7 +41,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
     SetParticles();
 
     if(verboseLevel > 1)
-      G4cout << "Z , A = " << atomicNumber << "  " << atomicWeight << endl;
+      G4cout << "Z , A = " << atomicNumber << "  " << atomicWeight << G4endl;
 
     G4int    incidentCode          = incidentParticle.getCode();
     G4double incidentMass          = incidentParticle.getMass();
@@ -51,23 +51,23 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
 
     if(incidentKineticEnergy < 1.)
       { 
-        G4cout << "GHEProtonInelastic: incident energy < 1 GeV" << endl;
+        G4cout << "GHEProtonInelastic: incident energy < 1 GeV" << G4endl;
       }
     if(verboseLevel > 1)
       {
-        G4cout << "G4HEProtonInelastic::ApplyYourself" << endl;
+        G4cout << "G4HEProtonInelastic::ApplyYourself" << G4endl;
         G4cout << "incident particle " << incidentParticle.getName() << " " 
              << "mass "              << incidentMass << " " 
              << "kinetic energy "    << incidentKineticEnergy
-             << endl;
+             << G4endl;
         G4cout << "target material with (A,Z) = (" 
-             << atomicWeight << "," << atomicNumber << ")" << endl;
+             << atomicWeight << "," << atomicNumber << ")" << G4endl;
       }
     
     G4double inelasticity  = NuclearInelasticity(incidentKineticEnergy, 
                                                  atomicWeight, atomicNumber);
     if(verboseLevel > 1)
-        G4cout << "nuclear inelasticity = " << inelasticity << endl;
+        G4cout << "nuclear inelasticity = " << inelasticity << G4endl;
 
     incidentKineticEnergy -= inelasticity;
     
@@ -81,7 +81,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
 
     if(verboseLevel > 1)
       G4cout << "nuclear excitation = " << excitation << " " << excitationEnergyGNP << " "
-           << excitationEnergyDTA << endl;             
+           << excitationEnergyDTA << G4endl;             
 
 
     incidentKineticEnergy -= excitation;
@@ -118,7 +118,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
         
     if(verboseLevel > 1)
       G4cout << "ApplyYourself: CallFirstIntInCascade for particle "
-           << incidentCode << endl;
+           << incidentCode << G4endl;
 
     G4bool successful = false; 
     
@@ -128,7 +128,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
                             incidentParticle, targetParticle, atomicWeight);
 
         if(verboseLevel > 1)
-	   G4cout << "ApplyYourself::StrangeParticlePairProduction" << endl;  
+	   G4cout << "ApplyYourself::StrangeParticlePairProduction" << G4endl;  
 
 
         if ((vecLength > 0) && (availableEnergy > 1.)) 
@@ -170,7 +170,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
 
     if (!successful)
       { 
-        G4cout << "GHEInelasticInteraction::ApplyYourself fails to produce final state particles" << endl;
+        G4cout << "GHEInelasticInteraction::ApplyYourself fails to produce final state particles" << G4endl;
       }
       FillParticleChange(pv,  vecLength);
       delete [] pv;
@@ -232,7 +232,7 @@ G4HEProtonInelastic::FirstIntInCasProton( G4bool &inElastic,
        counter = -1;
        for( np=0; np<(numSec/3); np++ ) 
           {
-            for( nm=max(0,np-2); nm<=np; nm++ ) 
+            for( nm=G4std::max(0,np-2); nm<=np; nm++ ) 
                {
                  for( nz=0; nz<numSec/3; nz++ ) 
                     {
@@ -254,7 +254,7 @@ G4HEProtonInelastic::FirstIntInCasProton( G4bool &inElastic,
        counter = -1;
        for( np=0; np<numSec/3; np++ ) 
           {
-            for( nm=max(0,np-1); nm<=(np+1); nm++ ) 
+            for( nm=G4std::max(0,np-1); nm<=(np+1); nm++ ) 
                {
                  for( nz=0; nz<numSec/3; nz++ ) 
                     {
@@ -290,7 +290,7 @@ G4HEProtonInelastic::FirstIntInCasProton( G4bool &inElastic,
        if( targetCode == neutronCode ) 
          {
            G4double cech[] = {0.50, 0.45, 0.40, 0.35, 0.30, 0.25, 0.06, 0.04, 0.005, 0.};
-           G4int iplab = G4int( min( 9.0, incidentTotalMomentum*2.5 ) );
+           G4int iplab = G4int( G4std::min( 9.0, incidentTotalMomentum*2.5 ) );
            if( G4UniformRand() < cech[iplab]/pow(atomicWeight,0.42) ) 
              {                                            // charge exchange  pi+ n -> pi0 p
                pv[0] = PionZero;
@@ -355,7 +355,7 @@ G4HEProtonInelastic::FirstIntInCasProton( G4bool &inElastic,
 
        for( nt=1; nt<=numSec; nt++ ) 
          {
-           test = exp( min( expxu, max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
+           test = exp( G4std::min( expxu, G4std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
            dum = M_PI*nt/(2.0*n*n);
            if( fabs(dum) < 1.0 ) 
              if( test >= 1.0e-10 )anpn += dum*test;
@@ -370,7 +370,7 @@ G4HEProtonInelastic::FirstIntInCasProton( G4bool &inElastic,
            counter = -1;
            for( np=0; np<numSec/3; np++ ) 
               {
-                for( nm=max(0,np-2); nm<=np; nm++ ) 
+                for( nm=G4std::max(0,np-2); nm<=np; nm++ ) 
                    {
                      for( nz=0; nz<numSec/3; nz++ ) 
                         {
@@ -379,7 +379,7 @@ G4HEProtonInelastic::FirstIntInCasProton( G4bool &inElastic,
                               nt = np+nm+nz;
                               if( (nt>0) && (nt<=numSec) ) 
                                 {
-                                  test = exp( min( expxu, max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
+                                  test = exp( G4std::min( expxu, G4std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
                                   dum = (M_PI/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                                   if( fabs(dum) < 1.0 ) 
                                         if( test >= 1.0e-10 )excs += dum*test;
@@ -401,7 +401,7 @@ G4HEProtonInelastic::FirstIntInCasProton( G4bool &inElastic,
            counter = -1;
            for( np=0; np<numSec/3; np++ ) 
               {
-                for( nm=max(0,np-1); nm<=(np+1); nm++ ) 
+                for( nm=G4std::max(0,np-1); nm<=(np+1); nm++ ) 
                    {
                      for( nz=0; nz<numSec/3; nz++ ) 
                         {
@@ -410,7 +410,7 @@ G4HEProtonInelastic::FirstIntInCasProton( G4bool &inElastic,
                               nt = np+nm+nz;
                               if( (nt>=1) && (nt<=numSec) ) 
                                 {
-                                  test = exp( min( expxu, max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
+                                  test = exp( G4std::min( expxu, G4std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
                                   dum = (M_PI/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                                   if( fabs(dum) < 1.0 ) 
                                       if( test >= 1.0e-10 )excs += dum*test;
@@ -513,7 +513,7 @@ G4HEProtonInelastic::FirstIntInCasProton( G4bool &inElastic,
             { 
               G4cout << pv[i].getName() << " " ;
             }
-         G4cout << endl;
+         G4cout << G4endl;
       }
    return;
  }

@@ -79,7 +79,7 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
 #ifdef G4_NHP_DEBUG
           cout <<"G4NeutronHPEnAngCorrelation: "<<
         	 it->at(ii)->GetTotalEnergy()<<" "<<
-        	 it->at(ii)->GetMomentum()<<endl;
+        	 it->at(ii)->GetMomentum()<<G4endl;
 #endif
           it->at(ii)->Lorentz(*(it->at(ii)), -1.*theCMS);
 	}

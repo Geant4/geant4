@@ -1,5 +1,5 @@
-#include <fstream.h>
-#include <iostream.h>
+#include "g4std/fstream"
+#include "g4std/iostream"
 // #include "G4NeutronHPNames.hh"
 // #include "G4SandiaTable.hh"
 #include <stdlib.h>
@@ -37,7 +37,7 @@ int main()
   int counter=0; // number of iso types produced
   for(i=0; i<11; i++)
   {
-    ifstream aDataSet(theNames[i], ios::in);
+    G4std::ifstream aDataSet(theNames[i], G4std::ios::in);
     for(j=0; j<1000000; j++) // 1000000 events each test-run 
     {
       G4String label;
@@ -56,7 +56,7 @@ int main()
   }
   cout << "ve/cr ee(11) r ";
   for(i=0; i<11; i++) cout << energies[i]<<" ";
-  cout << endl;
+  cout << G4endl;
   for(j=0; j<counter; j++)
   {
     cout << "ve/cr "<<theList[j]<<"(11) r ";
@@ -65,16 +65,16 @@ int main()
 //      cout << energies[i]<<" "<<theCounter[j][i]/1000000.<<" ";
       cout <<xsec[i]*theCounter[j][i]/1000000.<<" ";
     }
-    cout <<endl;
+    cout <<G4endl;
     cout << "ve/cr err"<<theList[j]<<"(11) r ";
     for(i=0; i<11; i++)
     {
 //      cout << energies[i]<<" "<<theCounter[j][i]/1000000.<<" ";
       cout <<xsec[i]*sqrt(theCounter[j][i])/1000000.+0.2*xsec[i]*theCounter[j][i]/1000000.<<" ";
     }
-    cout <<endl;
+    cout <<G4endl;
   }
-  ifstream aDataSet("/data1/data/NeutronProductionData/G4NDL0.2//IsotopeProduction/CrossSection/82_206_Lead", ios::in);
+  G4std::ifstream aDataSet("/data1/data/NeutronProductionData/G4NDL0.2//IsotopeProduction/CrossSection/82_206_Lead", G4std::ios::in);
   int niso;
   aDataSet >> niso;
   double ** theXsec = new double * [niso];
@@ -98,9 +98,9 @@ int main()
   }
   
   // now dump out
-  cout << "opt a4"<<endl;
-  cout << "zone 2 3"<<endl;
-  cout << "opt pto"<<endl;
+  cout << "opt a4"<<G4endl;
+  cout << "zone 2 3"<<G4endl;
+  cout << "opt pto"<<G4endl;
   for(i=0; i<counter; i++)
   {
     if(theList[i]=="UNCHANGED") i++;
@@ -116,22 +116,22 @@ int main()
     cout <<") r ";
     for(j=0; j<isoSize[it]; j++)
     {
-      if(j==30*(j/30)) cout << " _ "<<endl;
+      if(j==30*(j/30)) cout << " _ "<<G4endl;
       cout << theEs[it][j]<<" ";
     }
-    cout << endl;
+    cout << G4endl;
     cout << "ve/cr X_"<<isoLabels[it]<<"("<<isoSize[it]<<") r ";
     for(j=0; j<isoSize[it]; j++)
     {
-      if(j==30*(j/30)) cout << " _ "<<endl;
+      if(j==30*(j/30)) cout << " _ "<<G4endl;
       cout << theXsec[it][j]<<" ";
     }
-    cout << endl;
+    cout << G4endl;
   }
   
   // now make the plots
-  cout << "fo/file 66 isosproduced.test.ps"<<endl<<"meta 66 -111"<<endl;
-  cout << "ve/cr err(11) r 11*0.000000001"<<endl;
+  cout << "fo/file 66 isosproduced.test.ps"<<G4endl<<"meta 66 -111"<<G4endl;
+  cout << "ve/cr err(11) r 11*0.000000001"<<G4endl;
   for(i=0; i<counter; i++)
   {
     if(theList[i]=="UNCHANGED") i++;
@@ -144,17 +144,17 @@ int main()
     {
       if(max<theXsec[j][k]) max = theXsec[j][k];
     }
-    cout << "title_gl 'isotopes produced by neutrons on 206Pb'"<<endl;
-    cout << "null -10 110 0 "<<1.5*max<<endl;
-    cout << "atit 'E?n! \"m#MeV\"n#' '[s]?"<<isoLabels[j]<<"! \"m#mb\"n#'"<<endl;
-    cout << "text 0 "<<0.9*1.5*max<<" '"<<isoLabels[j]<<"' 0.3"<<endl;
-    cout << "ve/cr err_"<<isoLabels[j]<<"("<<isoSize[j]<<") r "<<isoSize[j]<<"*0.0000000001"<<endl;
+    cout << "title_gl 'isotopes produced by neutrons on 206Pb'"<<G4endl;
+    cout << "null -10 110 0 "<<1.5*max<<G4endl;
+    cout << "atit 'E?n! \"m#MeV\"n#' '[s]?"<<isoLabels[j]<<"! \"m#mb\"n#'"<<G4endl;
+    cout << "text 0 "<<0.9*1.5*max<<" '"<<isoLabels[j]<<"' 0.3"<<G4endl;
+    cout << "ve/cr err_"<<isoLabels[j]<<"("<<isoSize[j]<<") r "<<isoSize[j]<<"*0.0000000001"<<G4endl;
     cout << "hpl/err E_"<<isoLabels[j]<< " X_"<<isoLabels[j]
                  <<" err_"<<isoLabels[j]<<" err_"<<isoLabels[j]<<" "
-                 << isoSize[j] << " 19 0.1"<<endl;
-    cout << "hpl/err ee "<<theList[i]<<" err err"<<theList[i]<<" 11 20 0.3"<<endl;
+                 << isoSize[j] << " 19 0.1"<<G4endl;
+    cout << "hpl/err ee "<<theList[i]<<" err err"<<theList[i]<<" 11 20 0.3"<<G4endl;
   }
-  cout << "close 66"<<endl;
+  cout << "close 66"<<G4endl;
   
   // some debugging
   
@@ -178,5 +178,5 @@ int main()
     double avX = lowX+(testEnergy-lowE)*(highX-lowX)/(highE-lowE);
     sumX += avX;
   }
-  cerr << "the total cross-section at "<<testEnergy<<" MeV is "<<sumX<<endl;
+  G4cerr << "the total cross-section at "<<testEnergy<<" MeV is "<<sumX<<G4endl;
 }

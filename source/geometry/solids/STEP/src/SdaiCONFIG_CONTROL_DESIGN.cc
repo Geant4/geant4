@@ -5,7 +5,7 @@
 
 
 //
-// $Id: SdaiCONFIG_CONTROL_DESIGN.cc,v 1.2 1999-05-21 20:20:57 japost Exp $
+// $Id: SdaiCONFIG_CONTROL_DESIGN.cc,v 1.3 1999-12-15 14:50:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef  SDAICONFIG_CONTROL_DESIGN_CC
@@ -457,7 +457,7 @@ SdaiCharacterized_product_definition::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -471,7 +471,7 @@ SdaiCharacterized_product_definition::NewSelect ()
 // STEP Part 21
 
 void
-SdaiCharacterized_product_definition::STEPwrite_content (ostream& out) const
+SdaiCharacterized_product_definition::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_product_definition)
 	_stepentityh -> STEPwrite_reference (out);
@@ -485,7 +485,7 @@ SdaiCharacterized_product_definition::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiCharacterized_product_definition::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiCharacterized_product_definition::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_product_definition)   {
@@ -520,7 +520,7 @@ SdaiCharacterized_product_definition::STEPread_content (istream& in, InstMgr * i
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -536,7 +536,7 @@ SdaiCharacterized_product_definition::StrToVal_content (const char * str, InstMg
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -895,7 +895,7 @@ SdaiShape_definition::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -909,7 +909,7 @@ SdaiShape_definition::NewSelect ()
 // STEP Part 21
 
 void
-SdaiShape_definition::STEPwrite_content (ostream& out) const
+SdaiShape_definition::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_product_definition_shape)
 	_stepentityh -> STEPwrite_reference (out);
@@ -925,7 +925,7 @@ SdaiShape_definition::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiShape_definition::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiShape_definition::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_product_definition_shape)   {
@@ -974,7 +974,7 @@ SdaiShape_definition::STEPread_content (istream& in, InstMgr * instances, int ad
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -990,7 +990,7 @@ SdaiShape_definition::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -1397,7 +1397,7 @@ SdaiCharacterized_definition::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -1411,7 +1411,7 @@ SdaiCharacterized_definition::NewSelect ()
 // STEP Part 21
 
 void
-SdaiCharacterized_definition::STEPwrite_content (ostream& out) const
+SdaiCharacterized_definition::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designt_characterized_product_definition)
 	_sdaicharacterized_product_definition.STEPwrite (out);
@@ -1425,7 +1425,7 @@ SdaiCharacterized_definition::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiCharacterized_definition::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiCharacterized_definition::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designt_characterized_product_definition)   {
@@ -1440,7 +1440,7 @@ SdaiCharacterized_definition::STEPread_content (istream& in, InstMgr * instances
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -1456,7 +1456,7 @@ SdaiCharacterized_definition::StrToVal_content (const char * str, InstMgr * inst
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -1604,7 +1604,7 @@ SdaiChange_request_item::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -1618,7 +1618,7 @@ SdaiChange_request_item::NewSelect ()
 // STEP Part 21
 
 void
-SdaiChange_request_item::STEPwrite_content (ostream& out) const
+SdaiChange_request_item::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_product_definition_formation)
 	_stepentityh -> STEPwrite_reference (out);
@@ -1630,7 +1630,7 @@ SdaiChange_request_item::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiChange_request_item::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiChange_request_item::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_product_definition_formation)   {
@@ -1651,7 +1651,7 @@ SdaiChange_request_item::STEPread_content (istream& in, InstMgr * instances, int
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -1667,7 +1667,7 @@ SdaiChange_request_item::StrToVal_content (const char * str, InstMgr * instances
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -1882,7 +1882,7 @@ SdaiReversible_topology_item::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -1896,7 +1896,7 @@ SdaiReversible_topology_item::NewSelect ()
 // STEP Part 21
 
 void
-SdaiReversible_topology_item::STEPwrite_content (ostream& out) const
+SdaiReversible_topology_item::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_edge)
 	_stepentityh -> STEPwrite_reference (out);
@@ -1918,7 +1918,7 @@ SdaiReversible_topology_item::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiReversible_topology_item::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiReversible_topology_item::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_edge)   {
@@ -2009,7 +2009,7 @@ SdaiReversible_topology_item::STEPread_content (istream& in, InstMgr * instances
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -2025,7 +2025,7 @@ SdaiReversible_topology_item::StrToVal_content (const char * str, InstMgr * inst
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -2589,7 +2589,7 @@ SdaiAxis2_placement::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -2603,7 +2603,7 @@ SdaiAxis2_placement::NewSelect ()
 // STEP Part 21
 
 void
-SdaiAxis2_placement::STEPwrite_content (ostream& out) const
+SdaiAxis2_placement::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_axis2_placement_2d)
 	_stepentityh -> STEPwrite_reference (out);
@@ -2617,7 +2617,7 @@ SdaiAxis2_placement::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiAxis2_placement::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiAxis2_placement::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_axis2_placement_2d)   {
@@ -2652,7 +2652,7 @@ SdaiAxis2_placement::STEPread_content (istream& in, InstMgr * instances, int add
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -2668,7 +2668,7 @@ SdaiAxis2_placement::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -2948,7 +2948,7 @@ SdaiSpecified_item::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -2962,7 +2962,7 @@ SdaiSpecified_item::NewSelect ()
 // STEP Part 21
 
 void
-SdaiSpecified_item::STEPwrite_content (ostream& out) const
+SdaiSpecified_item::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_product_definition)
 	_stepentityh -> STEPwrite_reference (out);
@@ -2976,7 +2976,7 @@ SdaiSpecified_item::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiSpecified_item::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiSpecified_item::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_product_definition)   {
@@ -3011,7 +3011,7 @@ SdaiSpecified_item::STEPread_content (istream& in, InstMgr * instances, int addF
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -3027,7 +3027,7 @@ SdaiSpecified_item::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -3360,7 +3360,7 @@ SdaiMeasure_value::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -3374,7 +3374,7 @@ SdaiMeasure_value::NewSelect ()
 // STEP Part 21
 
 void
-SdaiMeasure_value::STEPwrite_content (ostream& out) const
+SdaiMeasure_value::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designt_area_measure)
 	out <<  _sdaireal;
@@ -3408,7 +3408,7 @@ SdaiMeasure_value::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiMeasure_value::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiMeasure_value::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designt_area_measure)   {
@@ -3474,7 +3474,7 @@ SdaiMeasure_value::STEPread_content (istream& in, InstMgr * instances, int addFi
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -3492,7 +3492,7 @@ SdaiMeasure_value::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -3798,7 +3798,7 @@ SdaiPerson_organization_select::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -3812,7 +3812,7 @@ SdaiPerson_organization_select::NewSelect ()
 // STEP Part 21
 
 void
-SdaiPerson_organization_select::STEPwrite_content (ostream& out) const
+SdaiPerson_organization_select::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_person_and_organization)
 	_stepentityh -> STEPwrite_reference (out);
@@ -3824,7 +3824,7 @@ SdaiPerson_organization_select::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiPerson_organization_select::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiPerson_organization_select::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_person_and_organization)   {
@@ -3845,7 +3845,7 @@ SdaiPerson_organization_select::STEPread_content (istream& in, InstMgr * instanc
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -3861,7 +3861,7 @@ SdaiPerson_organization_select::StrToVal_content (const char * str, InstMgr * in
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -4025,7 +4025,7 @@ SdaiPcurve_or_surface::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -4039,7 +4039,7 @@ SdaiPcurve_or_surface::NewSelect ()
 // STEP Part 21
 
 void
-SdaiPcurve_or_surface::STEPwrite_content (ostream& out) const
+SdaiPcurve_or_surface::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_pcurve)
 	_stepentityh -> STEPwrite_reference (out);
@@ -4053,7 +4053,7 @@ SdaiPcurve_or_surface::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiPcurve_or_surface::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiPcurve_or_surface::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_pcurve)   {
@@ -4088,7 +4088,7 @@ SdaiPcurve_or_surface::STEPread_content (istream& in, InstMgr * instances, int a
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -4104,7 +4104,7 @@ SdaiPcurve_or_surface::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -4341,7 +4341,7 @@ SdaiClassified_item::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -4355,7 +4355,7 @@ SdaiClassified_item::NewSelect ()
 // STEP Part 21
 
 void
-SdaiClassified_item::STEPwrite_content (ostream& out) const
+SdaiClassified_item::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_product_definition_formation)
 	_stepentityh -> STEPwrite_reference (out);
@@ -4369,7 +4369,7 @@ SdaiClassified_item::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiClassified_item::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiClassified_item::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_product_definition_formation)   {
@@ -4404,7 +4404,7 @@ SdaiClassified_item::STEPread_content (istream& in, InstMgr * instances, int add
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -4420,7 +4420,7 @@ SdaiClassified_item::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -4773,7 +4773,7 @@ SdaiVector_or_direction::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -4787,7 +4787,7 @@ SdaiVector_or_direction::NewSelect ()
 // STEP Part 21
 
 void
-SdaiVector_or_direction::STEPwrite_content (ostream& out) const
+SdaiVector_or_direction::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_vector)
 	_stepentityh -> STEPwrite_reference (out);
@@ -4801,7 +4801,7 @@ SdaiVector_or_direction::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiVector_or_direction::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiVector_or_direction::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_vector)   {
@@ -4836,7 +4836,7 @@ SdaiVector_or_direction::STEPread_content (istream& in, InstMgr * instances, int
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -4852,7 +4852,7 @@ SdaiVector_or_direction::StrToVal_content (const char * str, InstMgr * instances
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -5116,7 +5116,7 @@ SdaiWireframe_model::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -5130,7 +5130,7 @@ SdaiWireframe_model::NewSelect ()
 // STEP Part 21
 
 void
-SdaiWireframe_model::STEPwrite_content (ostream& out) const
+SdaiWireframe_model::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_shell_based_wireframe_model)
 	_stepentityh -> STEPwrite_reference (out);
@@ -5144,7 +5144,7 @@ SdaiWireframe_model::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiWireframe_model::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiWireframe_model::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_shell_based_wireframe_model)   {
@@ -5179,7 +5179,7 @@ SdaiWireframe_model::STEPread_content (istream& in, InstMgr * instances, int add
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -5195,7 +5195,7 @@ SdaiWireframe_model::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -5438,7 +5438,7 @@ SdaiGeometric_set_select::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -5452,7 +5452,7 @@ SdaiGeometric_set_select::NewSelect ()
 // STEP Part 21
 
 void
-SdaiGeometric_set_select::STEPwrite_content (ostream& out) const
+SdaiGeometric_set_select::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_point)
 	_stepentityh -> STEPwrite_reference (out);
@@ -5468,7 +5468,7 @@ SdaiGeometric_set_select::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiGeometric_set_select::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiGeometric_set_select::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_point)   {
@@ -5517,7 +5517,7 @@ SdaiGeometric_set_select::STEPread_content (istream& in, InstMgr * instances, in
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -5533,7 +5533,7 @@ SdaiGeometric_set_select::StrToVal_content (const char * str, InstMgr * instance
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -5756,7 +5756,7 @@ SdaiStart_request_item::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -5770,7 +5770,7 @@ SdaiStart_request_item::NewSelect ()
 // STEP Part 21
 
 void
-SdaiStart_request_item::STEPwrite_content (ostream& out) const
+SdaiStart_request_item::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_product_definition_formation)
 	_stepentityh -> STEPwrite_reference (out);
@@ -5782,7 +5782,7 @@ SdaiStart_request_item::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiStart_request_item::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiStart_request_item::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_product_definition_formation)   {
@@ -5803,7 +5803,7 @@ SdaiStart_request_item::STEPread_content (istream& in, InstMgr * instances, int 
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -5819,7 +5819,7 @@ SdaiStart_request_item::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -6058,7 +6058,7 @@ SdaiPerson_organization_item::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -6072,7 +6072,7 @@ SdaiPerson_organization_item::NewSelect ()
 // STEP Part 21
 
 void
-SdaiPerson_organization_item::STEPwrite_content (ostream& out) const
+SdaiPerson_organization_item::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_change)
 	_stepentityh -> STEPwrite_reference (out);
@@ -6102,7 +6102,7 @@ SdaiPerson_organization_item::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiPerson_organization_item::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiPerson_organization_item::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_change)   {
@@ -6249,7 +6249,7 @@ SdaiPerson_organization_item::STEPread_content (istream& in, InstMgr * instances
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -6265,7 +6265,7 @@ SdaiPerson_organization_item::StrToVal_content (const char * str, InstMgr * inst
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -7231,7 +7231,7 @@ SdaiDate_time_item::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -7245,7 +7245,7 @@ SdaiDate_time_item::NewSelect ()
 // STEP Part 21
 
 void
-SdaiDate_time_item::STEPwrite_content (ostream& out) const
+SdaiDate_time_item::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_product_definition)
 	_stepentityh -> STEPwrite_reference (out);
@@ -7273,7 +7273,7 @@ SdaiDate_time_item::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiDate_time_item::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiDate_time_item::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_product_definition)   {
@@ -7406,7 +7406,7 @@ SdaiDate_time_item::STEPread_content (istream& in, InstMgr * instances, int addF
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -7422,7 +7422,7 @@ SdaiDate_time_item::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -8286,7 +8286,7 @@ SdaiShell::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -8300,7 +8300,7 @@ SdaiShell::NewSelect ()
 // STEP Part 21
 
 void
-SdaiShell::STEPwrite_content (ostream& out) const
+SdaiShell::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_open_shell)
 	_stepentityh -> STEPwrite_reference (out);
@@ -8318,7 +8318,7 @@ SdaiShell::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiShell::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiShell::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_open_shell)   {
@@ -8381,7 +8381,7 @@ SdaiShell::STEPread_content (istream& in, InstMgr * instances, int addFileId)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -8397,7 +8397,7 @@ SdaiShell::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -8761,7 +8761,7 @@ SdaiTransformation::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -8775,7 +8775,7 @@ SdaiTransformation::NewSelect ()
 // STEP Part 21
 
 void
-SdaiTransformation::STEPwrite_content (ostream& out) const
+SdaiTransformation::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_item_defined_transformation)
 	_stepentityh -> STEPwrite_reference (out);
@@ -8789,7 +8789,7 @@ SdaiTransformation::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiTransformation::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiTransformation::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_item_defined_transformation)   {
@@ -8824,7 +8824,7 @@ SdaiTransformation::STEPread_content (istream& in, InstMgr * instances, int addF
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -8840,7 +8840,7 @@ SdaiTransformation::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -9106,7 +9106,7 @@ SdaiBoolean_operand::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -9120,7 +9120,7 @@ SdaiBoolean_operand::NewSelect ()
 // STEP Part 21
 
 void
-SdaiBoolean_operand::STEPwrite_content (ostream& out) const
+SdaiBoolean_operand::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_solid_model)
 	_stepentityh -> STEPwrite_reference (out);
@@ -9132,7 +9132,7 @@ SdaiBoolean_operand::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiBoolean_operand::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiBoolean_operand::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_solid_model)   {
@@ -9153,7 +9153,7 @@ SdaiBoolean_operand::STEPread_content (istream& in, InstMgr * instances, int add
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -9169,7 +9169,7 @@ SdaiBoolean_operand::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -9300,7 +9300,7 @@ SdaiCertified_item::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -9314,7 +9314,7 @@ SdaiCertified_item::NewSelect ()
 // STEP Part 21
 
 void
-SdaiCertified_item::STEPwrite_content (ostream& out) const
+SdaiCertified_item::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_supplied_part_relationship)
 	_stepentityh -> STEPwrite_reference (out);
@@ -9326,7 +9326,7 @@ SdaiCertified_item::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiCertified_item::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiCertified_item::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_supplied_part_relationship)   {
@@ -9347,7 +9347,7 @@ SdaiCertified_item::STEPread_content (istream& in, InstMgr * instances, int addF
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -9363,7 +9363,7 @@ SdaiCertified_item::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -9602,7 +9602,7 @@ SdaiDate_time_select::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -9616,7 +9616,7 @@ SdaiDate_time_select::NewSelect ()
 // STEP Part 21
 
 void
-SdaiDate_time_select::STEPwrite_content (ostream& out) const
+SdaiDate_time_select::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_date_and_time)
 	_stepentityh -> STEPwrite_reference (out);
@@ -9628,7 +9628,7 @@ SdaiDate_time_select::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiDate_time_select::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiDate_time_select::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_date_and_time)   {
@@ -9649,7 +9649,7 @@ SdaiDate_time_select::STEPread_content (istream& in, InstMgr * instances, int ad
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -9665,7 +9665,7 @@ SdaiDate_time_select::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -9835,7 +9835,7 @@ SdaiCurve_on_surface::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -9849,7 +9849,7 @@ SdaiCurve_on_surface::NewSelect ()
 // STEP Part 21
 
 void
-SdaiCurve_on_surface::STEPwrite_content (ostream& out) const
+SdaiCurve_on_surface::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_pcurve)
 	_stepentityh -> STEPwrite_reference (out);
@@ -9865,7 +9865,7 @@ SdaiCurve_on_surface::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiCurve_on_surface::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiCurve_on_surface::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_pcurve)   {
@@ -9914,7 +9914,7 @@ SdaiCurve_on_surface::STEPread_content (istream& in, InstMgr * instances, int ad
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -9930,7 +9930,7 @@ SdaiCurve_on_surface::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -10346,7 +10346,7 @@ SdaiTrimming_select::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -10360,7 +10360,7 @@ SdaiTrimming_select::NewSelect ()
 // STEP Part 21
 
 void
-SdaiTrimming_select::STEPwrite_content (ostream& out) const
+SdaiTrimming_select::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_cartesian_point)
 	_stepentityh -> STEPwrite_reference (out);
@@ -10374,7 +10374,7 @@ SdaiTrimming_select::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiTrimming_select::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiTrimming_select::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_cartesian_point)   {
@@ -10400,7 +10400,7 @@ SdaiTrimming_select::STEPread_content (istream& in, InstMgr * instances, int add
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -10416,7 +10416,7 @@ SdaiTrimming_select::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -10615,7 +10615,7 @@ SdaiContracted_item::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -10629,7 +10629,7 @@ SdaiContracted_item::NewSelect ()
 // STEP Part 21
 
 void
-SdaiContracted_item::STEPwrite_content (ostream& out) const
+SdaiContracted_item::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_product_definition_formation)
 	_stepentityh -> STEPwrite_reference (out);
@@ -10641,7 +10641,7 @@ SdaiContracted_item::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiContracted_item::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiContracted_item::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_product_definition_formation)   {
@@ -10662,7 +10662,7 @@ SdaiContracted_item::STEPread_content (istream& in, InstMgr * instances, int add
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -10678,7 +10678,7 @@ SdaiContracted_item::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -10863,7 +10863,7 @@ SdaiUnit::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -10877,7 +10877,7 @@ SdaiUnit::NewSelect ()
 // STEP Part 21
 
 void
-SdaiUnit::STEPwrite_content (ostream& out) const
+SdaiUnit::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_named_unit)
 	_stepentityh -> STEPwrite_reference (out);
@@ -10889,7 +10889,7 @@ SdaiUnit::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiUnit::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiUnit::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_named_unit)   {
@@ -10910,7 +10910,7 @@ SdaiUnit::STEPread_content (istream& in, InstMgr * instances, int addFileId)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -10926,7 +10926,7 @@ SdaiUnit::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -11057,7 +11057,7 @@ SdaiReversible_topology::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -11071,7 +11071,7 @@ SdaiReversible_topology::NewSelect ()
 // STEP Part 21
 
 void
-SdaiReversible_topology::STEPwrite_content (ostream& out) const
+SdaiReversible_topology::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designt_reversible_topology_item)
 	_sdaireversible_topology_item.STEPwrite (out);
@@ -11087,7 +11087,7 @@ SdaiReversible_topology::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiReversible_topology::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiReversible_topology::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designt_reversible_topology_item)   {
@@ -11106,7 +11106,7 @@ SdaiReversible_topology::STEPread_content (istream& in, InstMgr * instances, int
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -11124,7 +11124,7 @@ SdaiReversible_topology::StrToVal_content (const char * str, InstMgr * instances
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -11295,7 +11295,7 @@ SdaiWork_item::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -11309,7 +11309,7 @@ SdaiWork_item::NewSelect ()
 // STEP Part 21
 
 void
-SdaiWork_item::STEPwrite_content (ostream& out) const
+SdaiWork_item::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_product_definition_formation)
 	_stepentityh -> STEPwrite_reference (out);
@@ -11321,7 +11321,7 @@ SdaiWork_item::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiWork_item::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiWork_item::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_product_definition_formation)   {
@@ -11342,7 +11342,7 @@ SdaiWork_item::STEPread_content (istream& in, InstMgr * instances, int addFileId
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -11358,7 +11358,7 @@ SdaiWork_item::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -11555,7 +11555,7 @@ SdaiSupported_item::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -11569,7 +11569,7 @@ SdaiSupported_item::NewSelect ()
 // STEP Part 21
 
 void
-SdaiSupported_item::STEPwrite_content (ostream& out) const
+SdaiSupported_item::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_action_directive)
 	_stepentityh -> STEPwrite_reference (out);
@@ -11585,7 +11585,7 @@ SdaiSupported_item::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiSupported_item::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiSupported_item::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_action_directive)   {
@@ -11634,7 +11634,7 @@ SdaiSupported_item::STEPread_content (istream& in, InstMgr * instances, int addF
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -11650,7 +11650,7 @@ SdaiSupported_item::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -12138,7 +12138,7 @@ SdaiApproved_item::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -12152,7 +12152,7 @@ SdaiApproved_item::NewSelect ()
 // STEP Part 21
 
 void
-SdaiApproved_item::STEPwrite_content (ostream& out) const
+SdaiApproved_item::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_product_definition_formation)
 	_stepentityh -> STEPwrite_reference (out);
@@ -12184,7 +12184,7 @@ SdaiApproved_item::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiApproved_item::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiApproved_item::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_product_definition_formation)   {
@@ -12345,7 +12345,7 @@ SdaiApproved_item::STEPread_content (istream& in, InstMgr * instances, int addFi
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -12361,7 +12361,7 @@ SdaiApproved_item::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }
@@ -13366,7 +13366,7 @@ SdaiSurface_model::AssignEntity (STEPentity * se)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-  G4cerr << se -> EntityName () << endl;
+  G4cerr << se -> EntityName () << G4endl;
 #endif
   return 0;
 }
@@ -13380,7 +13380,7 @@ SdaiSurface_model::NewSelect ()
 // STEP Part 21
 
 void
-SdaiSurface_model::STEPwrite_content (ostream& out) const
+SdaiSurface_model::STEPwrite_content (G4std::ostream& out) const
 {
   if (CurrentUnderlyingType () == config_control_designe_shell_based_surface_model)
 	_stepentityh -> STEPwrite_reference (out);
@@ -13392,7 +13392,7 @@ SdaiSurface_model::STEPwrite_content (ostream& out) const
 }
 
 Severity
-SdaiSurface_model::STEPread_content (istream& in, InstMgr * instances, int addFileId)
+SdaiSurface_model::STEPread_content (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
   if (CurrentUnderlyingType () == config_control_designe_shell_based_surface_model)   {
@@ -13413,7 +13413,7 @@ SdaiSurface_model::STEPread_content (istream& in, InstMgr * instances, int addFi
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << instances << "  " << addFileId << endl;
+G4cerr << instances << "  " << addFileId << G4endl;
 #endif
 
   return severity ();
@@ -13429,7 +13429,7 @@ SdaiSurface_model::StrToVal_content (const char * str, InstMgr * instances)
    G4cerr << __FILE__ << ":" << __LINE__ <<  ":  WARNING:  possible misuse of SELECT TYPE from schema library.\n";
   Error( "Mismatch in underlying type." );
 #ifdef __SUNCPLUSPLUS__
-G4cerr << str << "  " << instances << endl;
+G4cerr << str << "  " << instances << G4endl;
 #endif
 	return SEVERITY_WARNING;
   }

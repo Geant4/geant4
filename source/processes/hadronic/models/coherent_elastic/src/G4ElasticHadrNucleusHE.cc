@@ -24,7 +24,7 @@
 
         G4double   aNuclZ     = aNucl->GetZ();    
                   aNucleon    = aNucl->GetN();
-//  G4cout<< " 1 "<<endl;
+//  G4cout<< " 1 "<<G4endl;
 
                nN   = aNucleon;
                nZ   = aNuclZ;
@@ -37,20 +37,20 @@
         secNuclDef     =  G4ParticleTable::GetParticleTable()->
            GetIonTable()->GetIon(  6,  12,  0,  6);
 
-//  G4cout<<" Name "<<  secNuclDef->GetParticleName()<<endl;
+//  G4cout<<" Name "<<  secNuclDef->GetParticleName()<<G4endl;
 
-//  G4cout<< " 2 "<<endl;
+//  G4cout<< " 2 "<<G4endl;
 
-//  G4cout<< " 3 "<<endl;
+//  G4cout<< " 3 "<<G4endl;
 
         G4DynamicParticle *   secNuclDyn = new G4DynamicParticle();
-//  G4cout<< " 4 "<<endl;
+//  G4cout<< " 4 "<<G4endl;
 
             secNuclDyn->SetDefinition(secNuclDef);
-//  G4cout<< " 5 "<<endl;
+//  G4cout<< " 5 "<<G4endl;
 
         G4ThreeVector          NuclPos;
-//  G4cout<< " 6 "<<endl;
+//  G4cout<< " 6 "<<G4endl;
 
         G4Track                secNuclTrack = G4Track(secNuclDyn,
                                                       0.0, NuclPos);
@@ -65,7 +65,7 @@
 
 //  G4cout<<" Nucleus Mass "<<MassNucl<<" inEnHadr "<<
 //         inEnHadr<<" inLabMom "<<inLabMom<<" MassH "<<
-//             MassHadr<<endl;
+//             MassHadr<<G4endl;
 
 // ---------------    For final state of hadron    ------------------
 
@@ -79,12 +79,12 @@
 
 //  G4cout << " The angle of output Hadron : "<<
 //                        acos(cosHadr)*180/3.1416<<
-//  " Energy "<<outEnHadr<< " Mom "<<outMomHdr<<" Q2 "<< ranQ2<< endl;
+//  " Energy "<<outEnHadr<< " Mom "<<outMomHdr<<" Q2 "<< ranQ2<< G4endl;
 
 //----------------     For final state of nucleus   -----------------
 
 //  G4cout<<" sqrMass "<<sqrMass<<" ranQ2 "<<ranQ2<<" MassNucl "<<
-//                MassNucl<<endl;
+//                MassNucl<<G4endl;
         G4double   outEnNucl = (2*MassNucl*MassNucl+ranQ2)/2/MassNucl;
         G4double   outMomNcl = sqrt(outEnNucl*outEnNucl-
                                     MassNucl*MassNucl);
@@ -93,7 +93,7 @@
 
 //   G4cout << " The angle of output Nucleus : "<<
 //                        acos(cosNucl)*180/3.1416<<
-//    " Energy " << outEnNucl << " Mom "<<outMomNcl<< endl;
+//    " Energy " << outEnNucl << " Mom "<<outMomNcl<< G4endl;
 
         G4double   ranFi     = 6.2832*G4UniformRand();
 
@@ -140,9 +140,9 @@
                          sinTet;
                      }
 
-//   G4cout<<" Apply InLabMom "<< inLabMom <<endl;
+//   G4cout<<" Apply InLabMom "<< inLabMom <<G4endl;
 //   G4cout<<" Apply Cos(Tet) initial part. "<< cosTet <<
-//          " sinTet "<<sinTet<< endl;
+//          " sinTet "<<sinTet<< G4endl;
 
                         RotMatrix[0][0]   =  cosFi*cosTet;
                         RotMatrix[0][1]   =  sinFi;
@@ -154,13 +154,13 @@
                         RotMatrix[2][1]   =  0;
                         RotMatrix[2][2]   =  cosTet;
 
-//   G4cout<<" Apply The rotation matrix : "<<endl;
+//   G4cout<<" Apply The rotation matrix : "<<G4endl;
 //   G4cout<<RotMatrix[0][0]<< 
-//                    " "<<RotMatrix[0][1]<<" "<< RotMatrix[0][2]<<endl;
+//                    " "<<RotMatrix[0][1]<<" "<< RotMatrix[0][2]<<G4endl;
 //   G4cout<<RotMatrix[1][0]<< 
-//                    " "<<RotMatrix[1][1]<<" "<< RotMatrix[1][2]<<endl;
+//                    " "<<RotMatrix[1][1]<<" "<< RotMatrix[1][2]<<G4endl;
 //   G4cout<<RotMatrix[2][0]<< 
-//                    " "<<RotMatrix[2][1]<<" "<< RotMatrix[2][2]<<endl;
+//                    " "<<RotMatrix[2][1]<<" "<< RotMatrix[2][2]<<G4endl;
 
                    for(G4int ii=0; ii<3; ii++)
                      {
@@ -178,14 +178,14 @@
                 G4ThreeVector  aNuclMom( NucMomOldSys[0],
                                          NucMomOldSys[1],
                                          NucMomOldSys[2]);
-//  G4cout<<" 8 "<<endl;
+//  G4cout<<" 8 "<<G4endl;
                 secNuclDyn->SetMomentum(aNuclMom);
                 secNuclTrack.SetKineticEnergy(outEnNucl-MassNucl);
-//  G4cout<<" 9 "<<endl;
+//  G4cout<<" 9 "<<G4endl;
 
                 secNuclTrack.SetMomentumDirection(aNuclMom);
 
-//  G4cout<<" 10 "<<endl;
+//  G4cout<<" 10 "<<G4endl;
 
                 G4double pxnew = NewMomOldSys[0];
                 G4double pynew = NewMomOldSys[1];
@@ -193,7 +193,7 @@
 
 //   G4cout<<" Apply Mom "<< NewMomOldSys[0]<<" "<< NewMomOldSys[1]<<
 //                " "<< NewMomOldSys[2]<<" Angle "<<
-//                        acos(cosHadr)*180/3.1416<<endl;
+//                        acos(cosHadr)*180/3.1416<<G4endl;
 
 //   G4cout<<" "<<outMomHdr<<" "<<
 //                acos(cosHadr)*180/3.1416<<" ";
@@ -201,12 +201,12 @@
 //   G4cout<<" "<<sqrt(pow(NucMomOldSys[0],2)+
 //            pow(NucMomOldSys[1],2)+
 //            pow(NucMomOldSys[2],2))*outMomNcl<<" "<<
-//            acos(cosNucl)*180/3.1416<<endl;
+//            acos(cosNucl)*180/3.1416<<G4endl;
      
-//     G4cout<<endl;
+//     G4cout<<G4endl;
 
           theParticleChange.AddSecondary( &secNuclTrack);
-//  G4cout<<" 11 "<<endl;
+//  G4cout<<" 11 "<<G4endl;
 
           theParticleChange.SetEnergyChange(outEnHadr*1000);
           theParticleChange.SetMomentumDirectionChange(pxnew, pynew, pznew);
@@ -236,13 +236,13 @@
 // ----------------  The preparing of probability function  ------------
 
 //  G4cout << " In Random 3: R0 " << R0<<" dQ2 "<<dQ2<<
-//                         " Nstep "<<Nstep<< endl;
+//                         " Nstep "<<Nstep<< G4endl;
 
         G4double Mom1 = aHadron->GetTotalMomentum();
         G4double Enr1 = aHadron->GetTotalEnergy();
 
-//  G4cout << "In Random : Mom1 "<<Mom1<<" Enr1 "<<Enr1<<endl;
-//  G4cout << endl;
+//  G4cout << "In Random : Mom1 "<<Mom1<<" Enr1 "<<Enr1<<G4endl;
+//  G4cout << G4endl;
 
              for(G4int ii=0; ii<Nstep-1; ii++) 
               {
@@ -254,7 +254,7 @@
                    G4double  curQ2  = iQ2[ii];                       //
                    G4double  curSum = 0;                             //
                    G4double  curSec;                                 //
-// G4cout << " befor Intgr "<<"ii "<<ii<<" "<<curSec<<endl;
+// G4cout << " befor Intgr "<<"ii "<<ii<<" "<<curSec<<G4endl;
 
                    for(G4int ll=0; ll<99; ll++)                      //
                      {                                               //
@@ -263,10 +263,10 @@
                        curQ2 = curQ2 + ddQ2;                         //
                       curSum = curSum + curSec*coefSimp[ll];         //
 //G4cout << " In Intgr "<<ll<<" "<<" "<<curQ2<<" "<<curSec
-//        <<" "<<coefSimp[ll]<<endl;
+//        <<" "<<coefSimp[ll]<<G4endl;
                      }      //  ll                                   //
 
-//G4cout << " In out Intgr "<<ii<<" "<<curSum<<curQ2<<endl;
+//G4cout << " In out Intgr "<<ii<<" "<<curSum<<curQ2<<G4endl;
                     intgStep = curSum*ddQ2/3/1000/1000;              //
 //  --------------------------------------------------------------------
 
@@ -282,7 +282,7 @@
              {
                iIntgr[ii] = iIntgr[ii]/intgrS;
 //   G4cout <<" Q2 "<< iQ2[ii]/1000/1000<< 
-//           " Probability function " << iIntgr[ii]<<endl;
+//           " Probability function " << iIntgr[ii]<<G4endl;
               }   //  ii
 
       
@@ -301,7 +301,7 @@
                for(ii=1; ii<Nstep; ii++)
                   {
 //  G4cout << " Prob. func. " << iIntgr[ii]<< 
-//                 " Uni "<<ranUni<<endl;
+//                 " Uni "<<ranUni<<G4endl;
                    if(iIntgr[ii] > ranUni) break;
                      curStep += 1;
                   }   //  ii
@@ -312,11 +312,11 @@
 // ---------------------------------------------------------------------
 
 //  G4cout<<" Random Uni "<<ranUni<<" Q2 "<<ranQ2<<" curStep "<<
-//            curStep<<   " Elastic "<<intgrS<<endl;
+//            curStep<<   " Elastic "<<intgrS<<G4endl;
 //  G4cout<<" Diff : "<<ranUni-iIntgr[curStep]<<
-//                 " "<< iIntgr[curStep+1]-iIntgr[curStep+1]<<endl;
+//                 " "<< iIntgr[curStep+1]-iIntgr[curStep+1]<<G4endl;
 
-//    G4cout<<ranQ2<<endl;
+//    G4cout<<ranQ2<<G4endl;
           }    //  kk
 
              return ranQ2;

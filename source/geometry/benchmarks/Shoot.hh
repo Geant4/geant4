@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Shoot.hh,v 1.1 1999-01-08 16:31:32 gunter Exp $
+// $Id: Shoot.hh,v 1.2 1999-12-15 14:49:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef SHOOT_HH
@@ -48,7 +48,7 @@ void Shoot(const G4int numShoot,
 		};
 	}
     timer.Stop();
-    G4cout << "Shots = " << numShoot << " " << timer << endl;
+    G4cout << "Shots = " << numShoot << " " << timer << G4endl;
 }
 
 void ShootVerbose(G4VPhysicalVolume *pTopNode,
@@ -70,9 +70,9 @@ void ShootVerbose(G4VPhysicalVolume *pTopNode,
 	{
 	    Step=myNav.ComputeStep(partLoc,pVec,physStep,safety);
 	    G4cout << "Physical Location=" << located->GetName()
-		 << " #" << located->GetCopyNo() << endl
+		 << " #" << located->GetCopyNo() << G4endl
 	         << "   Step=" << Step << "  Safety=" << safety
-		 << "  ---->" << endl;
+		 << "  ---->" << G4endl;
 
 	    partLoc+=Step*pVec;
 	    myNav.SetGeometricallyLimitedStep();

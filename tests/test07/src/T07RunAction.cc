@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T07RunAction.cc,v 1.3 1999-04-22 22:09:57 asaim Exp $
+// $Id: T07RunAction.cc,v 1.4 1999-12-15 14:54:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@ T07RunAction::~T07RunAction()
 
 void T07RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
    

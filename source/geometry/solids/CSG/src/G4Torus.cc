@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.3 1999-11-19 16:10:12 grichine Exp $
+// $Id: G4Torus.cc,v 1.4 1999-12-15 14:50:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -178,12 +178,12 @@ G4int  G4Torus::TorusRoots(       G4double Ri,
      {
         for(i=0;i<num;i++)
         {
-           G4cout<<i<<" Root = "<<s[i]<<endl ; 
+           G4cout<<i<<" Root = "<<s[i]<<G4endl ; 
         }
      }
-     else G4cout<<"All real roots are negative"<<endl ;
+     else G4cout<<"All real roots are negative"<<G4endl ;
    }
-   else G4cout<<"No real roots for intesection with torus"<<endl;
+   else G4cout<<"No real roots for intesection with torus"<<G4endl;
       
    return num ;      
 }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1SceneHandlerFunc.icc,v 1.3 1999-11-04 02:38:48 stanaka Exp $
+// $Id: G4VRML1SceneHandlerFunc.icc,v 1.4 1999-12-15 14:54:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1SceneHandlerFunc.icc
@@ -24,7 +24,7 @@
 void G4VRML1SCENE::AddThis(const G4Trd& trd)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis trd" << endl ;
+	G4cerr << "***** AddThis trd" << G4endl ;
 #endif
 	VRMLBeginModeling () ;
 	ADDTHIS_WITH_NAME(trd)
@@ -33,7 +33,7 @@ void G4VRML1SCENE::AddThis(const G4Trd& trd)
 void G4VRML1SCENE::AddThis(const G4Trap& trap)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis trap" << endl ;
+	G4cerr << "***** AddThis trap" << G4endl ;
 #endif
 	VRMLBeginModeling () ;
 	ADDTHIS_WITH_NAME(trap)
@@ -42,7 +42,7 @@ void G4VRML1SCENE::AddThis(const G4Trap& trap)
 void G4VRML1SCENE::AddThis(const G4Para& para)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis para" << endl ;
+	G4cerr << "***** AddThis para" << G4endl ;
 #endif
 	VRMLBeginModeling () ;
 	ADDTHIS_WITH_NAME(para)
@@ -51,7 +51,7 @@ void G4VRML1SCENE::AddThis(const G4Para& para)
 void G4VRML1SCENE::AddThis(const G4Torus& torus )
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis torus" << endl ;
+	G4cerr << "***** AddThis torus" << G4endl ;
 #endif
 	VRMLBeginModeling () ;
 	ADDTHIS_WITH_NAME(torus)
@@ -61,7 +61,7 @@ void G4VRML1SCENE::AddThis(const G4Torus& torus )
 void G4VRML1SCENE::AddThis(const G4VSolid& vsolid)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis vsolid" << endl ;
+	G4cerr << "***** AddThis vsolid" << G4endl ;
 #endif
 	VRMLBeginModeling () ;
 	ADDTHIS_WITH_NAME(vsolid)
@@ -70,7 +70,7 @@ void G4VRML1SCENE::AddThis(const G4VSolid& vsolid)
 void G4VRML1SCENE::AddThis(const G4Tubs& tubs)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis tubs" << endl ;
+	G4cerr << "***** AddThis tubs" << G4endl ;
 #endif
 	VRMLBeginModeling () ;
 
@@ -86,14 +86,14 @@ void G4VRML1SCENE::AddThis(const G4Tubs& tubs)
 	// Send data
 	if ( r == 0.0 && dp >= 360. * deg ) {
 		// Send a built-in VRML node (Cylinder)
-		fDest << "Separator {" << endl;
+		fDest << "Separator {" << G4endl;
 		SendMatrixTransformNode( fpObjectTransformation );
 
-		fDest << "\t" << "DEF " << fCurrentDEF << " Separator {" << endl;
+		fDest << "\t" << "DEF " << fCurrentDEF << " Separator {" << G4endl;
 		SendMaterialNode();
 		SendCylinderNode(R, dz * 2);
-		fDest << "\t" << "}" << endl; // DEF Separator
-		fDest << "}" << endl; // Separator
+		fDest << "\t" << "}" << G4endl; // DEF Separator
+		fDest << "}" << G4endl; // Separator
 	} else {
 		// call AddPrimitive(Polyhedron)
 		RequestPrimitives(tubs); 
@@ -107,7 +107,7 @@ void G4VRML1SCENE::AddThis(const G4Tubs& tubs)
 void G4VRML1SCENE::AddThis(const G4Cons& cons)
 {
 #if defined DEBUG_SCENE_FUNC
-    G4cerr << "***** AddThis cons" << endl ;
+    G4cerr << "***** AddThis cons" << G4endl ;
 #endif
 	VRMLBeginModeling () ;
 
@@ -126,14 +126,14 @@ void G4VRML1SCENE::AddThis(const G4Cons& cons)
 	// Send data
 	if ( r1 == 0.0 && r2 == 0.0 && R1 == R2 && dp >= 360. * deg) {
 		// Send a built-in VRML node (Cylinder)
-		fDest << "Separator {" << endl;
+		fDest << "Separator {" << G4endl;
 		SendMatrixTransformNode( fpObjectTransformation );
 
-		fDest << "\t" << "DEF " << fCurrentDEF << " Separator {" << endl;
+		fDest << "\t" << "DEF " << fCurrentDEF << " Separator {" << G4endl;
 		SendMaterialNode();
 		SendCylinderNode(R1, dz * 2);
-		fDest << "\t" << "}" << endl; // DEF Separator
-		fDest << "}" << endl; // Separator
+		fDest << "\t" << "}" << G4endl; // DEF Separator
+		fDest << "}" << G4endl; // Separator
 	} else {
 		// call AddPrimitive(Polyhedron)
 		RequestPrimitives(cons); 
@@ -146,7 +146,7 @@ void G4VRML1SCENE::AddThis(const G4Cons& cons)
 void G4VRML1SCENE::AddThis(const G4Box& box)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis box" << endl ;
+	G4cerr << "***** AddThis box" << G4endl ;
 #endif
 	VRMLBeginModeling () ;
 
@@ -154,17 +154,17 @@ void G4VRML1SCENE::AddThis(const G4Box& box)
 	fCurrentDEF = "box_" + box.GetName();
 
 	// Send a built-in VRML node (Cube)
-	fDest << "Separator {" << endl;
+	fDest << "Separator {" << G4endl;
 
-	//fDest << "\t" << "renderCulling ON" << endl;
+	//fDest << "\t" << "renderCulling ON" << G4endl;
 	SendMatrixTransformNode( fpObjectTransformation );
 
-	fDest << "\t" << "DEF " << fCurrentDEF << " Separator {" << endl;
+	fDest << "\t" << "DEF " << fCurrentDEF << " Separator {" << G4endl;
 	SendMaterialNode();
 	SendCubeNode(box.GetXHalfLength() * 2, box.GetYHalfLength() * 2, box.GetZHalfLength() * 2);
-	fDest << "\t" << "}" << endl; // DEF Separator
+	fDest << "\t" << "}" << G4endl; // DEF Separator
 
-	fDest << "}" << endl; // Separator
+	fDest << "}" << G4endl; // Separator
 
 	// reset current name to null
 	fCurrentDEF = "";
@@ -174,7 +174,7 @@ void G4VRML1SCENE::AddThis(const G4Box& box)
 void G4VRML1SCENE::AddThis(const G4Sphere& sphere)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddThis sphere" << endl ;
+	G4cerr << "***** AddThis sphere" << G4endl ;
 #endif
 	VRMLBeginModeling () ;
 
@@ -190,14 +190,14 @@ void G4VRML1SCENE::AddThis(const G4Sphere& sphere)
 	// Send data
 	if ( (dphi >= 360. * deg) && (dtheta >= 180. * deg) && (rmin == 0.0)  ) {
 		// Send a built-in VRML node (Sphere)
-		fDest << "Separator {" << endl;
+		fDest << "Separator {" << G4endl;
 		SendMatrixTransformNode( fpObjectTransformation );
 
-		fDest << "\t" << "DEF " << fCurrentDEF << " Separator {" << endl;
+		fDest << "\t" << "DEF " << fCurrentDEF << " Separator {" << G4endl;
 		SendMaterialNode();
 		SendSphereNode( rmax );
-		fDest << "\t" << "}" << endl; // DEF Separator
-		fDest << "}" << endl; // Separator
+		fDest << "\t" << "}" << G4endl; // DEF Separator
+		fDest << "}" << G4endl; // Separator
 	} else {
 			// call AddPrimitive(Polyhedron)
 			RequestPrimitives( sphere ); 
@@ -210,50 +210,50 @@ void G4VRML1SCENE::AddThis(const G4Sphere& sphere)
 void G4VRML1SCENE::AddPrimitive(const G4Polyline& polyline)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddPrimitive polyline" << endl ;
+	G4cerr << "***** AddPrimitive polyline" << G4endl ;
 #endif 
 	VRMLBeginModeling () ;	
 
-	fDest << "Separator {" << endl;
+	fDest << "Separator {" << G4endl;
 
 	SendMatrixTransformNode (fpObjectTransformation );
 
 	SendMaterialNode( polyline.GetVisAttributes() );
 
-	fDest << "\t" << "Coordinate3 {" << endl;
-	fDest << "\t\t" << "point [" << endl;
+	fDest << "\t" << "Coordinate3 {" << G4endl;
+	fDest << "\t\t" << "point [" << G4endl;
 	G4int e, i;
 	for (i = 0, e = polyline.entries(); e; i++, e--) {
 		fDest << "\t\t\t";
 		fDest << polyline(i).x() << " ";
 		fDest << polyline(i).y() << " ";
-		fDest << polyline(i).z() << "," << endl;
+		fDest << polyline(i).z() << "," << G4endl;
 	}
-	fDest << "\t\t" << "]" << endl;
-	fDest << "\t" << "}" << endl; // Coordinate3
+	fDest << "\t\t" << "]" << G4endl;
+	fDest << "\t" << "}" << G4endl; // Coordinate3
 
-	fDest << "\t" << "IndexedLineSet {" << endl;
+	fDest << "\t" << "IndexedLineSet {" << G4endl;
 	fDest << "\t\t" << "coordIndex [";
 	for (i = 0, e = polyline.entries(); e; i++, e--) {
 		if (i % 10 == 0)
-			fDest << endl << "\t\t\t";
+			fDest << G4endl << "\t\t\t";
 		fDest << i << ", ";
 	}
-	fDest << "-1" << endl;
-	fDest << "\t\t" << "]" << endl;
-	fDest << "\t" << "}" << endl; // IndexedLineSet
+	fDest << "-1" << G4endl;
+	fDest << "\t\t" << "]" << G4endl;
+	fDest << "\t" << "}" << G4endl; // IndexedLineSet
 
-	fDest << "}" << endl; // Separator
+	fDest << "}" << G4endl; // Separator
 }
 
 void G4VRML1SCENE::AddPrimitive(const G4Polyhedron& polyhedron)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddPrimitive(G4Polyhedron)" << endl;
+	G4cerr << "***** AddPrimitive(G4Polyhedron)" << G4endl;
 #endif
 	VRMLBeginModeling () ;
 
-	fDest << "Separator {" << endl;
+	fDest << "Separator {" << G4endl;
 
 	SendMatrixTransformNode( fpObjectTransformation );
 
@@ -261,33 +261,33 @@ void G4VRML1SCENE::AddPrimitive(const G4Polyhedron& polyhedron)
 	if (fCurrentDEF != "")
 		fDest << "DEF " << fCurrentDEF << " ";
 
-	fDest << "Separator {" << endl;
+	fDest << "Separator {" << G4endl;
 
-	//fDest << "\t\t" << "renderCulling ON" << endl;
+	//fDest << "\t\t" << "renderCulling ON" << G4endl;
 
-	fDest << "\t\t" << "ShapeHints {" << endl;
-	fDest << "\t\t\t" << "vertexOrdering COUNTERCLOCKWISE" << endl;
-	fDest << "\t\t\t" << "shapeType SOLID" << endl;
-	fDest << "\t\t\t" << "faceType CONVEX" << endl;
-	fDest << "\t\t" << "}" << endl;
+	fDest << "\t\t" << "ShapeHints {" << G4endl;
+	fDest << "\t\t\t" << "vertexOrdering COUNTERCLOCKWISE" << G4endl;
+	fDest << "\t\t\t" << "shapeType SOLID" << G4endl;
+	fDest << "\t\t\t" << "faceType CONVEX" << G4endl;
+	fDest << "\t\t" << "}" << G4endl;
 
 	SendMaterialNode();
 
-	fDest << "\t\t" << "Coordinate3 {" << endl;
-	fDest << "\t\t\t" << "point [" << endl;
+	fDest << "\t\t" << "Coordinate3 {" << G4endl;
+	fDest << "\t\t\t" << "point [" << G4endl;
 	G4int i, j;
 	for (i = 1, j = polyhedron.GetNoVertices(); j; j--, i++) {
 		G4Point3D point = polyhedron.GetVertex(i);
 		fDest << "\t\t\t\t";
 		fDest << point.x() << " ";
 		fDest << point.y() << " ";
-		fDest << point.z() << "," << endl;
+		fDest << point.z() << "," << G4endl;
 	}
-	fDest << "\t\t\t" << "]" << endl;
-	fDest << "\t\t" << "}" << endl; // Coordinate3
+	fDest << "\t\t\t" << "]" << G4endl;
+	fDest << "\t\t" << "}" << G4endl; // Coordinate3
 
-	fDest << "\t\t" << "IndexedFaceSet {" << endl;
-	fDest << "\t\t\t" << "coordIndex [" << endl;
+	fDest << "\t\t" << "IndexedFaceSet {" << G4endl;
+	fDest << "\t\t\t" << "coordIndex [" << G4endl;
 
 	// facet loop
 	G4int f;
@@ -301,13 +301,13 @@ void G4VRML1SCENE::AddPrimitive(const G4Polyhedron& polyhedron)
 			notLastEdge = polyhedron.GetNextVertexIndex(index, edgeFlag);
 			fDest << index - 1 << ", ";
 		} while (notLastEdge);
-		fDest << "-1," << endl;
+		fDest << "-1," << G4endl;
 	}
-	fDest << "\t\t\t" << "]" << endl;
-	fDest << "\t\t" << "}" << endl; // IndexFaceSet
+	fDest << "\t\t\t" << "]" << G4endl;
+	fDest << "\t\t" << "}" << G4endl; // IndexFaceSet
 
-	fDest << "\t" << "}" << endl; // (DEF) Separator
-	fDest << "}" << endl; // Separator
+	fDest << "\t" << "}" << G4endl; // (DEF) Separator
+	fDest << "}" << G4endl; // Separator
 
 }
 
@@ -315,9 +315,9 @@ void G4VRML1SCENE::AddPrimitive(const G4Polyhedron& polyhedron)
 void G4VRML1SCENE::AddPrimitive(const G4NURBS& nurb)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddPrimitive nurbs" << endl ;
+	G4cerr << "***** AddPrimitive nurbs" << G4endl ;
 #endif 
-	G4cerr << "G4VRML1File::AddPrimitive(G4NURBS&): not implemented. " << endl ;
+	G4cerr << "G4VRML1File::AddPrimitive(G4NURBS&): not implemented. " << G4endl ;
 	VRMLBeginModeling () ;
 
 }
@@ -325,12 +325,12 @@ void G4VRML1SCENE::AddPrimitive(const G4NURBS& nurb)
 void G4VRML1SCENE::AddPrimitive( const G4Text& text ) 
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddPrimitive text" << endl ;
+	G4cerr << "***** AddPrimitive text" << G4endl ;
 #endif
 	G4cerr <<
           "***** void G4VRML1SCENE::AddPrimitive( const G4Text& text )"
           " not implemented yet."
-             << endl;
+             << G4endl;
 
 	VRMLBeginModeling () ;
 }
@@ -338,13 +338,13 @@ void G4VRML1SCENE::AddPrimitive( const G4Text& text )
 void G4VRML1SCENE::AddPrimitive( const G4Circle& circle ) 
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddPrimitive circle" << endl ;
+	G4cerr << "***** AddPrimitive circle" << G4endl ;
 #endif
 
 	VRMLBeginModeling () ;
 
 	// begin sending a mark
-	fDest << "Separator {" << endl;
+	fDest << "Separator {" << G4endl;
 
 	// send color 
 	SendMarkerColor    ( circle ) ;
@@ -356,25 +356,25 @@ void G4VRML1SCENE::AddPrimitive( const G4Circle& circle )
 	G4double size = GetMarkerHalfSize ( circle );
 
 	// send shape with size 
-	fDest << "\t" << "Sphere {" << endl;
-	fDest << "\t\t" << "radius " << size << endl;
-	fDest << "\t" << "}" << endl;
+	fDest << "\t" << "Sphere {" << G4endl;
+	fDest << "\t\t" << "radius " << size << G4endl;
+	fDest << "\t" << "}" << G4endl;
 
 	// end sending a mark
-	fDest << "}" << endl; // Separator
+	fDest << "}" << G4endl; // Separator
 }
 
 
 void G4VRML1SCENE::AddPrimitive(const G4Square& square)
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** AddPrimitive square" << endl ;
+	G4cerr << "***** AddPrimitive square" << G4endl ;
 #endif
 
 	VRMLBeginModeling () ;
 
 	// begin sending a mark
-	fDest << "Separator {" << endl;
+	fDest << "Separator {" << G4endl;
 
 	// send color 
 	SendMarkerColor    ( square );
@@ -387,27 +387,27 @@ void G4VRML1SCENE::AddPrimitive(const G4Square& square)
 	size *= 2.;
 
 	// send shape with size 
-	fDest << "\t" << "Cube {" << endl;
-	fDest << "\t\t" << "width "  << size << endl;
-	fDest << "\t\t" << "height " << size << endl;
-	fDest << "\t\t" << "depth "  << size << endl;
-	fDest << "\t" << "}" << endl;
+	fDest << "\t" << "Cube {" << G4endl;
+	fDest << "\t\t" << "width "  << size << G4endl;
+	fDest << "\t\t" << "height " << size << G4endl;
+	fDest << "\t\t" << "depth "  << size << G4endl;
+	fDest << "\t" << "}" << G4endl;
 
 	// end sending a mark
-	fDest << "}" << endl; // Separator
+	fDest << "}" << G4endl; // Separator
 }
 
 void G4VRML1SCENE::ClearStore()
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** ClearStore(): No effects" << endl ;
+	G4cerr << "***** ClearStore(): No effects" << G4endl ;
 #endif 
 }
 
 void G4VRML1SCENE::BeginModeling()
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** BeginModeling " << endl ;
+	G4cerr << "***** BeginModeling " << G4endl ;
 #endif
 	G4VSceneHandler::BeginModeling();
 }
@@ -415,7 +415,7 @@ void G4VRML1SCENE::BeginModeling()
 void G4VRML1SCENE::EndModeling()
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** EndModeling " << endl ;
+	G4cerr << "***** EndModeling " << G4endl ;
 #endif
 	G4VSceneHandler::EndModeling();
 }
@@ -425,7 +425,7 @@ void G4VRML1SCENE::BeginPrimitives(const G4Transform3D& objectTransformation)
   G4VSceneHandler::BeginPrimitives (objectTransformation);
   fpObjectTransformation = &objectTransformation;
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** BeginPrimitives " << endl ;
+	G4cerr << "***** BeginPrimitives " << G4endl ;
 #endif
 	VRMLBeginModeling();
 }
@@ -433,7 +433,7 @@ void G4VRML1SCENE::BeginPrimitives(const G4Transform3D& objectTransformation)
 void G4VRML1SCENE::EndPrimitives()
 {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** EndPrimitives " << endl ;
+	G4cerr << "***** EndPrimitives " << G4endl ;
 #endif
   G4VSceneHandler::EndPrimitives();
 }
@@ -448,19 +448,19 @@ void G4VRML1SCENE::SendMaterialNode( const G4VisAttributes*  pVA )
 
 	const G4Color& color = pVA->GetColor();
 
-	fDest << "\t\t" << "Material {" << endl;
+	fDest << "\t\t" << "Material {" << G4endl;
 
 	if (pVA->IsForceDrawingStyle() &&
 	   (pVA->GetForcedDrawingStyle() == G4VisAttributes::wireframe)) {
-		fDest << "\t\t\t" << "transparency " << TRANSPARENCY << endl;
+		fDest << "\t\t\t" << "transparency " << TRANSPARENCY << G4endl;
 	}
 
 	fDest << "\t\t\t" << "diffuseColor";
 	fDest << " " << color.GetRed();
 	fDest << " " << color.GetGreen();
 	fDest << " " << color.GetBlue();
-	fDest << endl;
-	fDest << "\t\t" << "}" << endl;
+	fDest << G4endl;
+	fDest << "\t\t" << "}" << G4endl;
 }
 
 
@@ -498,52 +498,52 @@ void G4VRML1SCENE::SendMatrixTransformNode(const G4Transform3D *trans)
 	e2 = e2.unit(); //
 	e3 = e3.unit(); //
 
-	fDest << "\t" << "MatrixTransform {" << endl;
+	fDest << "\t" << "MatrixTransform {" << G4endl;
 	fDest << "\t\t" << "matrix ";
 	fDest << e1.x() << " " << e1.y() << " " << e1.z() << " 0 ";
 	fDest << e2.x() << " " << e2.y() << " " << e2.z() << " 0 ";
 	fDest << e3.x() << " " << e3.y() << " " << e3.z() << " 0 ";
-	fDest << B.x()  << " " << B.y()  << " " << B.z()  << " 1" << endl;
-	fDest << "\t" << "}" << endl;
+	fDest << B.x()  << " " << B.y()  << " " << B.z()  << " 1" << G4endl;
+	fDest << "\t" << "}" << G4endl;
 }
 
 void G4VRML1SCENE::SendCubeNode(G4double w, G4double h, G4double d)
 {
-	fDest << "\t\t" << "Cube {" << endl;
-	fDest << "\t\t\t" << "width "  << w << endl;
-	fDest << "\t\t\t" << "height " << h << endl;
-	fDest << "\t\t\t" << "depth "  << d << endl;
-	fDest << "\t\t" << "}" << endl;
+	fDest << "\t\t" << "Cube {" << G4endl;
+	fDest << "\t\t\t" << "width "  << w << G4endl;
+	fDest << "\t\t\t" << "height " << h << G4endl;
+	fDest << "\t\t\t" << "depth "  << d << G4endl;
+	fDest << "\t\t" << "}" << G4endl;
 }
 
 void G4VRML1SCENE::SendCylinderNode(G4double R, G4double h)
 {
-	fDest << "\t\t" << "Transform {" << endl;
-	fDest << "\t\t\t" << "rotation 1 0 0 " << (90. * deg) << endl;
-	fDest << "\t\t" << "}" << endl;
+	fDest << "\t\t" << "Transform {" << G4endl;
+	fDest << "\t\t\t" << "rotation 1 0 0 " << (90. * deg) << G4endl;
+	fDest << "\t\t" << "}" << G4endl;
 
-	fDest << "\t\t" << "Cylinder {" << endl;
-	fDest << "\t\t\t" << "radius " << R << endl;
-	fDest << "\t\t\t" << "height " << h << endl;
-	fDest << "\t\t" << "}" << endl;
+	fDest << "\t\t" << "Cylinder {" << G4endl;
+	fDest << "\t\t\t" << "radius " << R << G4endl;
+	fDest << "\t\t\t" << "height " << h << G4endl;
+	fDest << "\t\t" << "}" << G4endl;
 }
 
 void G4VRML1SCENE::SendSphereNode(G4double R)
 {
-	fDest << "\t\t" << "Sphere {" << endl;
-	fDest << "\t\t\t" << "radius " << R << endl;
-	fDest << "\t\t" << "}" << endl;
+	fDest << "\t\t" << "Sphere {" << G4endl;
+	fDest << "\t\t\t" << "radius " << R << G4endl;
+	fDest << "\t\t" << "}" << G4endl;
 }
 
 void G4VRML1SCENE::VRMLBeginModeling()
 {
 	if (!IS_CONNECTED ) {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** VRMLBeginModeling() (started)" << endl ;
+	G4cerr << "***** VRMLBeginModeling() (started)" << G4endl ;
 #endif
 		this->connectPort();
-		fDest << "#VRML V1.0 ascii" << endl;
-		fDest << "# Generated by VRML 1.0 driver of GEANT4\n" << endl;
+		fDest << "#VRML V1.0 ascii" << G4endl;
+		fDest << "# Generated by VRML 1.0 driver of GEANT4\n" << G4endl;
 	}
 }
 
@@ -551,10 +551,10 @@ void G4VRML1SCENE::VRMLEndModeling()
 {
 	if ( IS_CONNECTED ) {
 #if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** VRMLEndModeling() (started)" << endl ;
+	G4cerr << "***** VRMLEndModeling() (started)" << G4endl ;
 #endif
 
-		fDest << "#End of file." << endl;
+		fDest << "#End of file." << G4endl;
 		this->closePort();
 	}
 }
@@ -563,7 +563,7 @@ void      G4VRML1SCENE::SendMarkerColor ( const G4VMarker& mark )
 {
 	const G4Color& color = GetColor( mark );
 
-	fDest << "\t" << "Material {" << endl;
+	fDest << "\t" << "Material {" << G4endl;
 	fDest << "\t\t";
 	fDest << "ambientColor [] ";
 	fDest << "specularColor [] ";
@@ -571,13 +571,13 @@ void      G4VRML1SCENE::SendMarkerColor ( const G4VMarker& mark )
 	fDest << " " << color.GetRed();
 	fDest << " " << color.GetGreen();
 	fDest << " " << color.GetBlue();
-	fDest << endl;
+	fDest << G4endl;
 	fDest << "\t\t" << "emissiveColor";
 	fDest << " " << color.GetRed();
 	fDest << " " << color.GetGreen();
 	fDest << " " << color.GetBlue();
-	fDest << endl;
-	fDest << "\t" << "}" << endl;
+	fDest << G4endl;
+	fDest << "\t" << "}" << G4endl;
 }
 
 void      
@@ -587,10 +587,10 @@ G4VRML1SCENE::SendMarkerWorldPosition ( const G4VMarker& mark )
 
 	SendMatrixTransformNode( fpObjectTransformation );
 
-	fDest << "\t\t" << "Transform {" << endl;
+	fDest << "\t\t" << "Transform {" << G4endl;
 	fDest << "\t\t\t" << "translation ";
-	fDest << point.x() << " " << point.y() << " " << point.z() << endl;
-	fDest << "\t\t" << "}" << endl;
+	fDest << point.x() << " " << point.y() << " " << point.z() << G4endl;
+	fDest << "\t\t" << "}" << G4endl;
 }
 
 

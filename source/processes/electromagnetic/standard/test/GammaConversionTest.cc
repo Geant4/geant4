@@ -1,18 +1,18 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaConversionTest.cc,v 1.1 1999-01-08 16:32:25 gunter Exp $
+// $Id: GammaConversionTest.cc,v 1.2 1999-12-15 14:51:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ---------------------------------------------------------------
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "g4templates.hh"
 
@@ -41,10 +41,10 @@
 int main()
 {
   //-------- set output format-------
-   G4cout.setf( ios::scientific, ios::floatfield );
+   G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
   //-------- write results onto a file --------
-   ofstream outFile( "GammaConversion.out", ios::out);
-   outFile.setf( ios::scientific, ios::floatfield );
+   G4std::ofstream outFile( "GammaConversion.out", G4std::ios::out);
+   outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
   //
   //--------- Materials definition ---------
@@ -142,12 +142,12 @@ int main()
 
     LogicalFrame->SetMaterial(apttoMaterial); 
 
-    outFile << " " << endl;   // Print table of mean free path
-    outFile <<"  " << MaterialName  << "    Gamma Conversion Mean Free Path in cm" << endl;
-    outFile << "----------------------------------------------------" << endl;
-    outFile << " " << endl;
-    outFile << "kinetic energy (MeV)     mean free path (cm)" << endl ;
-    outFile << " " << endl;
+    outFile << " " << G4endl;   // Print table of mean free path
+    outFile <<"  " << MaterialName  << "    Gamma Conversion Mean Free Path in cm" << G4endl;
+    outFile << "----------------------------------------------------" << G4endl;
+    outFile << " " << G4endl;
+    outFile << "kinetic energy (MeV)     mean free path (cm)" << G4endl ;
+    outFile << " " << G4endl;
 
     for ( G4int i=0 ; i<nkin ; i++)
       {
@@ -155,11 +155,11 @@ int main()
 
        meanFreePath = theGammaConversion.GetMeanFreePath(aTrack, 1., condition);
 
-       outFile <<"  " <<  Tkin[i]/MeV << "            " << meanFreePath/cm << endl ;
+       outFile <<"  " <<  Tkin[i]/MeV << "            " << meanFreePath/cm << G4endl ;
       }
-    outFile << " " << endl;
+    outFile << " " << G4endl;
    }
-  outFile << " -----------------------------------------------------------" << endl;
+  outFile << " -----------------------------------------------------------" << G4endl;
   //
   // --------- Test the DoIt for the Gamma conversion process
   //
@@ -187,7 +187,7 @@ int main()
                  Py0   = aPhoton.GetMomentum().y() ,
                  Pz0   = aPhoton.GetMomentum().z() ;
         outFile << " Initial Photon : Tkin= " << Tkin0/MeV << "   Px= " << Px0/MeV 
-                << "   Py= " << Py0/MeV << "   Pz= " << Pz0/MeV << endl << endl ;
+                << "   Py= " << Py0/MeV << "   Pz= " << Pz0/MeV << G4endl << G4endl ;
 
         G4String  Name;
         G4double  Px2 , Py2 , Pz2 , Etot2 ;
@@ -204,7 +204,7 @@ int main()
            Pz2   = (aCreatedParticle->GetMomentum()).z() ;
            outFile << " No: " << i << " (" << Name << ")     : Etot= " << Etot2/MeV   
                    << "   Px= " << Px2/MeV << "   Py= " << Py2/MeV << "   Pz= " << Pz2/MeV 
-                   << endl;
+                   << G4endl;
 
           // NOTE - Secondaries are normally deleted by the track destructor !
           delete aFinalPhoton->GetSecondary(i);
@@ -214,13 +214,13 @@ int main()
         }
 
         G4double Edep  =  aFinalPhoton->GetLocalEnergyDeposit();
-        outFile << " Local Energ deposit= " << Edep/MeV << endl ;
+        outFile << " Local Energ deposit= " << Edep/MeV << G4endl ;
         sEtot -= Edep;
 
-        outFile << endl;
+        outFile << G4endl;
         outFile << " Balance        : Ener= " << sEtot/MeV
-             << "   Px= " << sPx/MeV << "   Py= " << sPy/MeV << "   Pz= " << sPz/MeV << endl; 
-        outFile << " -----------------------------------------------------------" << endl;
+             << "   Px= " << sPx/MeV << "   Py= " << sPy/MeV << "   Pz= " << sPz/MeV << G4endl; 
+        outFile << " -----------------------------------------------------------" << G4endl;
 
         // 'Build' a new initial photon
         //

@@ -26,7 +26,7 @@ main()
             << aNDataSet.GetCrossSection(theDynamicParticle, theElement)/millibarn
             << " " 
             << aPDataSet.GetCrossSection(theDynamicParticle, theElement)/millibarn
-            << endl;
+            << G4endl;
      }
      delete theDynamicParticle;
    }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.8 1999-11-05 16:29:02 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.9 1999-12-15 14:54:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -27,11 +27,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4ios.hh"
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 ////////////// /vis/scene/add/volume ///////////////////////////////////////
 
@@ -76,7 +72,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
   if (sceneList.isEmpty ()) {
     G4cout << "No scenes - please create one before adding anything."
-	   << endl;
+	   << G4endl;
     return;
   }
 
@@ -84,7 +80,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
   G4int copyNo;
   G4int requestedDepthOfDescent;
   const char* s = newValue;
-  istrstream is ((char*)s);
+  G4std::istrstream is ((char*)s);
   is >> name >> copyNo >> requestedDepthOfDescent;
   G4VPhysicalVolume* world =
     G4TransportationManager::GetTransportationManager ()
@@ -101,7 +97,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
     else {
       G4cerr << "G4VisCommandSceneAddVolume::SetNewValue: *** ERROR ***"
 	     << "\n  No world - shouldn't happen if G4ApplicationState is"
-	     << " being properly handled!!" << endl;
+	     << " being properly handled!!" << G4endl;
     }
   }
   else {
@@ -129,7 +125,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
     }
     else {
       G4cout << "Volume \"" << name << "\", copy no. " << copyNo
-	     << " not found." << endl;
+	     << " not found." << G4endl;
     }
   }
 
@@ -145,7 +141,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
 	     << ",\n  with further requested depth of descent "
 	     << requestedDepthOfDescent
 	     << ", has been added to scene \"" << currentSceneName << "\""
-	     << endl;
+	     << G4endl;
     }
   }
 }
@@ -186,14 +182,14 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
   if (sceneList.isEmpty ()) {
     G4cout << "No scenes - please create one before adding anything."
-	   << endl;
+	   << G4endl;
     return;
   }
 
   G4String name;
   G4int requestedDepthOfDescent;
   const char* s = newValue;
-  istrstream is ((char*)s);
+  G4std::istrstream is ((char*)s);
   is >> name >> requestedDepthOfDescent;
 
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
@@ -206,7 +202,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
   }
   if (iLV == nLV) {
     G4cout << "Logical volume " << name
-	   << " not found in logical volume Store." << endl;
+	   << " not found in logical volume Store." << G4endl;
     return;
   }
 
@@ -220,7 +216,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
 	   << " with requested depth of descent "
 	   << requestedDepthOfDescent
 	   << ",\n  has been added to scene \"" << currentSceneName << "\""
-	   << endl;
+	   << G4endl;
   }
 }
 
@@ -257,14 +253,14 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
   if (sceneList.isEmpty ()) {
     G4cout << "No scenes - please create one before adding anything."
-	   << endl;
+	   << G4endl;
     return;
   }
 
   G4VGlobalFastSimulationManager* theGlobalFastSimulationManager;
   if(!(theGlobalFastSimulationManager = 
        G4VGlobalFastSimulationManager::GetConcreteInstance ())){
-    G4cout<< "WARNING: no G4GlobalFastSimulationManager" << endl;
+    G4cout<< "WARNING: no G4GlobalFastSimulationManager" << G4endl;
     return;
   }
   
@@ -283,7 +279,7 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
     UpdateVisManagerScene ();
     if (successful) {
       G4cout << "Ghosts added to the Scene, refresh the view to see it."
-	     << endl;
+	     << G4endl;
     }
     return;
   }
@@ -291,7 +287,7 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
   G4ParticleDefinition* currentParticle = 
     theParticleTable->FindParticle(newValue);
   if (currentParticle == NULL) {
-    G4cout << "\"" << newValue << "\": not found this particle name!" << endl;
+    G4cout << "\"" << newValue << "\": not found this particle name!" << G4endl;
     return;
   }
 
@@ -303,8 +299,8 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
     UpdateVisManagerScene (currentSceneName);
     if (successful) {
       G4cout << "Ghosts added to the Scene, refresh the view to see it."
-	     << endl;
+	     << G4endl;
     }
   }
-  else G4cout << "There are no ghosts for \""<<newValue<<"\""<<endl;
+  else G4cout << "There are no ghosts for \""<<newValue<<"\""<<G4endl;
 }

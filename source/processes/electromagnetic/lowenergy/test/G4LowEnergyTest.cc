@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyTest.cc,v 1.1 1999-06-24 19:29:41 aforti Exp $
+// $Id: G4LowEnergyTest.cc,v 1.2 1999-12-15 14:51:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // KaonMinusAtRestTest.cc 
@@ -30,8 +30,8 @@
 // -------------------------------------------------------------------
 
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4Material.hh"
 
@@ -75,38 +75,38 @@ main()
   G4int verboseLevel=1;
   G4int processID=6;
 
-  G4cout << "How many interactions? [10], Which material? [3], which Verbose Level? [1]" << endl;
-  cin >> niter >> imat >> verboseLevel;
+  G4cout << "How many interactions? [10], Which material? [3], which Verbose Level? [1]" << G4endl;
+  G4cin >> niter >> imat >> verboseLevel;
 
-  G4cout<<"which process?"<<endl<<setw(60)<<"[1] = G4LowEnergyPhotoElectric, [2] = G4LowEnergyCompton"<<endl;
-  G4cout<<setw(60)<<"[3] = G4LowEnergyRayleigh, [4] = G4LowEnergyGammaconversion"<<endl;
-  G4cout<<setw(60)<<"[5] = G4LowEnergyBremstrahlung"<<"[6] = G4LowEnergyIonisation"<<endl;
+  G4cout<<"which process?"<<G4endl<<G4std::setw(60)<<"[1] = G4LowEnergyPhotoElectric, [2] = G4LowEnergyCompton"<<G4endl;
+  G4cout<<G4std::setw(60)<<"[3] = G4LowEnergyRayleigh, [4] = G4LowEnergyGammaconversion"<<G4endl;
+  G4cout<<G4std::setw(60)<<"[5] = G4LowEnergyBremstrahlung"<<"[6] = G4LowEnergyIonisation"<<G4endl;
 
-  cin >> processID;
+  G4cin >> processID;
 
   G4double InitEnergy = 1e-3, InitX = 0., InitY = 0., InitZ = 1.;
-  G4cout<<"Enter the initial particle energy E and its direction"<<endl; 
-  cin >> InitEnergy >> InitX >> InitY >> InitZ;
+  G4cout<<"Enter the initial particle energy E and its direction"<<G4endl; 
+  G4cin >> InitEnergy >> InitX >> InitY >> InitZ;
 
   G4double gammaCut = 1e-3, electronCut = 1e-3;
-  G4cout<<"Set photons 1e-3 mm and electrons cuts 1e-3 mm"<<endl; 
-  cin>>gammaCut>>electronCut;
+  G4cout<<"Set photons 1e-3 mm and electrons cuts 1e-3 mm"<<G4endl; 
+  G4cin>>gammaCut>>electronCut;
 
   //-------- write results onto a file --------
  
-  //  ofstream outFile1( "lowenergypri.out", ios::out);
-  //  ofstream outFile2( "lowenergysec.out", ios::out);
-  //  ofstream outFile3( "lowenergymfp.out", ios::out);
+  //  G4std::ofstream outFile1( "lowenergypri.out", G4std::ios::out);
+  //  G4std::ofstream outFile2( "lowenergysec.out", G4std::ios::out);
+  //  G4std::ofstream outFile3( "lowenergymfp.out", G4std::ios::out);
 
-  //  outFile1.setf( ios::scientific, ios::floatfield);
-  //  outFile2.setf( ios::scientific, ios::floatfield);
-  //  outFile3.setf( ios::scientific, ios::floatfield);
+  //  outFile1.setf( G4std::ios::scientific, G4std::ios::floatfield);
+  //  outFile2.setf( G4std::ios::scientific, G4std::ios::floatfield);
+  //  outFile3.setf( G4std::ios::scientific, G4std::ios::floatfield);
 
-  //  outFile1.setf(ios::left);
-  //  outFile2.setf(ios::left);
-  //  outFile3.setf(ios::left);
+  //  outFile1.setf(G4std::ios::left);
+  //  outFile2.setf(G4std::ios::left);
+  //  outFile3.setf(G4std::ios::left);
 
-  G4cout.setf( ios::scientific, ios::floatfield );
+  G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
   // -------------------------------------------------------------------
 
   // ALE ---- HBOOK initialization
@@ -141,7 +141,7 @@ main()
     assert (hbookManager != 0);
   }
   // ALE ---- Book a histogram and ntuples
-  G4cout<<"Hbook file name: "<<((HBookFile*) hbookManager)->filename()<<endl;
+  G4cout<<"Hbook file name: "<<((HBookFile*) hbookManager)->filename()<<G4endl;
   
   // ---- primary ntuple ------
   HepTuple* ntuple1 = hbookManager->ntuple("Primary Ntuple");
@@ -207,7 +207,7 @@ main()
 
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
-  G4cout<<"The material is: "<<(*theMaterialTable)(imat)->GetName()<<endl;
+  G4cout<<"The material is: "<<(*theMaterialTable)(imat)->GetName()<<G4endl;
 
   // Geometry definitions
   G4Box* theFrame = new G4Box ("Frame",92*mm, 92*mm, 92*mm);
@@ -285,9 +285,9 @@ main()
   positron->SetCuts(1e-6*mm);
 
   G4cout<<"the cut in energy for gamma in: "<<(*theMaterialTable)(imat)->GetName()
-      <<" is: "<<G4Gamma::GetCutsInEnergy()[imat]<<endl;
+      <<" is: "<<G4Gamma::GetCutsInEnergy()[imat]<<G4endl;
   G4cout<<"the cut in energy for e- in: "<<(*theMaterialTable)(imat)->GetName()
-      <<" is: "<<G4Electron::GetCutsInEnergy()[imat]<<endl;
+      <<" is: "<<G4Electron::GetCutsInEnergy()[imat]<<G4endl;
 
   // -------- create 1 Dynamic Particle  ----
 
@@ -338,7 +338,7 @@ main()
       << PhotonDefinition->GetParticleName()
       << " is not a Photon! or " 
       << ElectronDefinition->GetParticleName()
-      <<" is not an Electron"<<endl;
+      <<" is not an Electron"<<G4endl;
     G4Exception("FAIL: *** exit program ***\n");
   //     return ;
   }
@@ -376,11 +376,11 @@ main()
   } 
   else if(processID == 5) {
 
-    cout<<"****** BR BuildPhysicsTable:Table already Built *******"<<endl;
+    cout<<"****** BR BuildPhysicsTable:Table already Built *******"<<G4endl;
   } 
   else if(processID == 6) {
 
-    cout<<"****** IO BuildPhysicsTable:Table already Built *******"<<endl;
+    cout<<"****** IO BuildPhysicsTable:Table already Built *******"<<G4endl;
   } 
 
   else {
@@ -460,7 +460,7 @@ main()
        ntuple3->column("mfp",meanFreePath);
        ntuple3->dumpData();
 
-      //      outFile3<<setw(4)<<J<<setw(14)<<Tkin[i]<<setw(14)<<meanFreePath<<endl;    
+      //      outFile3<<G4std::setw(4)<<J<<G4std::setw(14)<<Tkin[i]<<G4std::setw(14)<<meanFreePath<<G4endl;    
     }
   }// for loop on materials
   //END OF COMMENT */
@@ -535,7 +535,7 @@ main()
 
     // ---- secondaries histos ----    
     G4cout<<"E and p of the primary particle: "<<pEnChange<<"  "<<pxChange<<"  "
-	  <<pyChange<<"  "<<pzChange<<endl;
+	  <<pyChange<<"  "<<pzChange<<G4endl;
 
     ntuple1->column("ench", pEnChange);
     ntuple1->column("pxch", pxChange);
@@ -543,8 +543,8 @@ main()
     ntuple1->column("pzch", pzChange);
     ntuple1->column("pch", PChange);
     
-    //    outFile1<<setw(13)<<pEnChange<<setw(13)<<pxChange<<setw(13)
-    //	    <<pyChange<<setw(13)<<pzChange<<endl;
+    //    outFile1<<G4std::setw(13)<<pEnChange<<G4std::setw(13)<<pxChange<<G4std::setw(13)
+    //	    <<pyChange<<G4std::setw(13)<<pzChange<<G4endl;
     
     ntuple1->dumpData(); 
     
@@ -583,7 +583,7 @@ main()
 
       aParticleName = aFinalParticle->GetDefinition()->GetParticleName();
       G4cout<<aParticleName<<": "
-	  <<" "<<e<<"  "<<eKin<<"  "<<Px<<"  "<<Py<<"  "<<Pz<<" ***"<<endl;      
+	  <<" "<<e<<"  "<<eKin<<"  "<<Px<<"  "<<Py<<"  "<<Pz<<" ***"<<G4endl;      
       hEKin->accumulate(eKin);
       hP->accumulate(sqrt(Px*Px+Py*Py+Pz*Pz));
 
@@ -605,20 +605,20 @@ main()
       ntuple2->dumpData(); 
 
       // Print secondaries on a file
-      //      outFile2<<setw(3)<<aParticleChange->GetNumberOfSecondaries()<<setw(14)
-      //	      <<aParticleChange->GetLocalEnergyDeposit()<<setw(14)<<e<<setw(14)
-      //	      <<eKin<<setw(14)<<sqrt(Px*Px+Py*Py+Pz*Pz)<<setw(14)<<Px<<setw(14)
-      //	      <<Py<<setw(14)<<Pz<<setw(3)<<ptype<<endl;
+      //      outFile2<<G4std::setw(3)<<aParticleChange->GetNumberOfSecondaries()<<G4std::setw(14)
+      //	      <<aParticleChange->GetLocalEnergyDeposit()<<G4std::setw(14)<<e<<G4std::setw(14)
+      //	      <<eKin<<G4std::setw(14)<<sqrt(Px*Px+Py*Py+Pz*Pz)<<G4std::setw(14)<<Px<<G4std::setw(14)
+      //	      <<Py<<G4std::setw(14)<<Pz<<G4std::setw(3)<<ptype<<G4endl;
 
       delete aParticleChange->GetSecondary(i);
     }
     
     aParticleChange->Clear();
     iteration++;
-    G4cout << "******* Iteration = " << iteration << endl;
+    G4cout << "******* Iteration = " << iteration << G4endl;
     
   }  while (iteration < niter) ;
-  cout<<"Iteration number: "<<endl;
+  cout<<"Iteration number: "<<G4endl;
   hbookManager->write();
   delete hbookManager;
 
@@ -647,7 +647,7 @@ main()
   //  outFile2.close();
   //  outFile3.close();
 
-  cout<<"END OF THE MAIN PROGRAM"<<endl;
+  cout<<"END OF THE MAIN PROGRAM"<<G4endl;
 }
 
 

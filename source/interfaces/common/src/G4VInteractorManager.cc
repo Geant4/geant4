@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VInteractorManager.cc,v 1.7 1999-11-10 15:23:23 barrand Exp $
+// $Id: G4VInteractorManager.cc,v 1.8 1999-12-15 14:50:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -221,9 +221,9 @@ void G4VInteractorManager::SecondaryLoop (
   if(secondaryLoopEnabled==FALSE) return;
   
   if (alreadyInSecondaryLoop==FALSE) {
-    G4cout << "------------------------------------------" << endl;
-    G4cout << "You have entered a viewer secondary X event loop." << endl;
-    G4cout << "Quit it with an 'Escape' viewer button" << endl;
+    G4cout << "------------------------------------------" << G4endl;
+    G4cout << "You have entered a viewer secondary X event loop." << G4endl;
+    G4cout << "Quit it with an 'Escape' viewer button" << G4endl;
     alreadyInSecondaryLoop   = TRUE;
     exitSecondaryLoop        = 0;
     SecondaryLoopPreActions  ();

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ComptonScattering.cc,v 1.2 1999-03-04 16:31:23 maire Exp $
+// $Id: G4ComptonScattering.cc,v 1.3 1999-12-15 14:51:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,7 +28,7 @@
 // 05-03-97, new Physics scheme, M.Maire
 // 28-03-97, protection in BuildPhysicsTable, M.Maire
 // 07-04-98, remove 'tracking cut' of the scattered gamma, MMa
-// 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
+// 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
 // 13-08-98, new methods SetBining()  PrintInfo()
 // 15-12-98, cross section=0 below 10 keV
 // --------------------------------------------------------------
@@ -286,7 +286,7 @@ void G4ComptonScattering::PrintInfoDefinition()
            comments += "Good description from 10 KeV to (100/Z) GeV. \n";
            comments += "        Scattered gamma energy according Klein-Nishina.";
                      
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestEnergyLimit,"Energy")
          << " to " << G4BestUnit(HighestEnergyLimit,"Energy") 
          << " in " << NumbBinTable << " bins. \n";

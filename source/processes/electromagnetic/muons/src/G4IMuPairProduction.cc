@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuPairProduction.cc,v 1.2 1999-05-04 14:24:23 urban Exp $
+// $Id: G4IMuPairProduction.cc,v 1.3 1999-12-15 14:51:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -19,7 +19,7 @@
 //      -------- G4IMuPairProduction physics process ---------
 //                by Laszlo Urban, May 1998 
 // **************************************************************
-// 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
+// 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
 // --------------------------------------------------------------
 
 #include "G4IMuPairProduction.hh"
@@ -55,20 +55,20 @@ G4IMuPairProduction::G4IMuPairProduction(const G4String& processName)
 
     theMeanFreePathTable = NULL ;
 
-  cout << endl ;
-  cout << "****************************************************************" << endl;
-  cout << "****************************************************************" << endl;
-  cout << "**                                                            **" << endl; 
-  cout << "**   G4IMuPairProduction :                                     **" << endl;
-  cout << "**      cross section/energy loss is calculated using         **" << endl;
-  cout << "**      the accurate cross section formula of R.Kokoulin,     **" << endl;
-  cout << "**      ( building the tables takes a lot of time,            **" << endl;
-  cout << "**                   PLEASE BE PATIENT  ! )                   **" << endl;
-  cout << "**      sampling of the energy of the pair is generated       **" << endl;
-  cout << "**      according to the sampling tables.                     **" << endl;
-  cout << "**                                                            **" << endl;
-  cout << "****************************************************************" << endl;
-  cout << "****************************************************************" << endl;
+  cout << G4endl ;
+  cout << "****************************************************************" << G4endl;
+  cout << "****************************************************************" << G4endl;
+  cout << "**                                                            **" << G4endl; 
+  cout << "**   G4IMuPairProduction :                                     **" << G4endl;
+  cout << "**      cross section/energy loss is calculated using         **" << G4endl;
+  cout << "**      the accurate cross section formula of R.Kokoulin,     **" << G4endl;
+  cout << "**      ( building the tables takes a lot of time,            **" << G4endl;
+  cout << "**                   PLEASE BE PATIENT  ! )                   **" << G4endl;
+  cout << "**      sampling of the energy of the pair is generated       **" << G4endl;
+  cout << "**      according to the sampling tables.                     **" << G4endl;
+  cout << "**                                                            **" << G4endl;
+  cout << "****************************************************************" << G4endl;
+  cout << "****************************************************************" << G4endl;
 }
  
 // destructor
@@ -148,21 +148,21 @@ void G4IMuPairProduction::TestOfInversion(
                           G4Material::GetMaterialTable();
   G4int numOfMaterials = theMaterialTable->length() ;
 
-  G4cout.setf(ios::scientific, ios::floatfield) ;
+  G4cout.setf(G4std::ios::scientific, G4std::ios::floatfield) ;
   if(printflag>1)
   {
-  G4cout << endl;
-  G4cout << "  particle=" << aParticleType.GetParticleName() << endl;
-  G4cout << "----------------------" << endl;
+  G4cout << G4endl;
+  G4cout << "  particle=" << aParticleType.GetParticleName() << G4endl;
+  G4cout << "----------------------" << G4endl;
   }
   for (G4int J=0; J<numOfMaterials; J++)
   {
    if(printflag>1)
    {
-    G4cout << endl;
-    G4cout << " material = " << (*theMaterialTable)[J]->GetName() << endl;
+    G4cout << G4endl;
+    G4cout << " material = " << (*theMaterialTable)[J]->GetName() << G4endl;
     G4cout << " mat.ind.=" << J << "  T           Nlambda         Tprime"
-         << "         (Tprime-T)/T(%)" << endl ;
+         << "         (Tprime-T)/T(%)" << G4endl ;
    }
 
     G4PhysicsLogVector* aVector ;
@@ -196,28 +196,28 @@ void G4IMuPairProduction::TestOfInversion(
       }
     if(printflag>1)
      {
-      G4cout << setw(18) << setprecision(6) << T << "  " <<
-              setw(14)<< setprecision(6) << Nlambda << "  " <<
-      setw(14) << setprecision(6) << Tprime << "      " <<
-              setw(12) << setprecision(3) << del << endl;
+      G4cout << G4std::setw(18) << G4std::setprecision(6) << T << "  " <<
+              G4std::setw(14)<< G4std::setprecision(6) << Nlambda << "  " <<
+      G4std::setw(14) << G4std::setprecision(6) << Tprime << "      " <<
+              G4std::setw(12) << G4std::setprecision(3) << del << G4endl;
     }
      }
     }
     if(printflag>0)
     {
-    G4cout << endl;
-    G4cout << "G4IMuPairProduction::TestOfInversion (T->Nlambda->Tprime) " << endl ;
+    G4cout << G4endl;
+    G4cout << "G4IMuPairProduction::TestOfInversion (T->Nlambda->Tprime) " << G4endl ;
     G4cout << "particle= " << aParticleType.GetParticleName() <<
-            "   material= " << (*theMaterialTable)[J]->GetName() << endl ;
-    G4cout << "max (Tprime-T)/T in % =" << setw(10) << setprecision(3) << delta
+            "   material= " << (*theMaterialTable)[J]->GetName() << G4endl ;
+    G4cout << "max (Tprime-T)/T in % =" << G4std::setw(10) << G4std::setprecision(3) << delta
 ;
-    G4cout << "  at a kinetic energy " << setw(10) << setprecision(3) <<
-            Tdelta/MeV << "  MeV" << endl;
+    G4cout << "  at a kinetic energy " << G4std::setw(10) << G4std::setprecision(3) <<
+            Tdelta/MeV << "  MeV" << G4endl;
     delmean /= sum ;
-    G4cout << "mean rel.diff. (Tprime-T)/T=" << setw(10) <<
-            setprecision(3) << delmean <<
-            " % (mean is calculated in abs. value)" << endl;
-    G4cout << endl;
+    G4cout << "mean rel.diff. (Tprime-T)/T=" << G4std::setw(10) <<
+            G4std::setprecision(3) << delmean <<
+            " % (mean is calculated in abs. value)" << G4endl;
+    G4cout << G4endl;
     }
   }
 
@@ -570,7 +570,7 @@ void G4IMuPairProduction::BuildInverseNlambdaTable(
      // inverse can be built for "meaningful" cut value only!
       if(Smallest >= Biggest)
       {
-         G4cout << endl ;
+         G4cout << G4endl ;
          G4Exception(
         "Cut value is too big , smaller value should be used !");
       }
@@ -1329,7 +1329,7 @@ G4VParticleChange* G4IMuPairProduction::PostStepDoIt(const G4Track& trackData,
    G4double ElectKineEnergy = ElectronEnergy - electron_mass_c2 ;
 
    if (G4EnergyLossTables::GetRange(G4Electron::Electron(),ElectKineEnergy,aMaterial)
-        >= min(G4Electron::GetCuts(),stepData.GetPostStepPoint()->GetSafety()) )         
+        >= G4std::min(G4Electron::GetCuts(),stepData.GetPostStepPoint()->GetSafety()) )         
       {
         numberofsecondaries += 1 ;
         flagelectron = 1 ;
@@ -1350,7 +1350,7 @@ G4VParticleChange* G4IMuPairProduction::PostStepDoIt(const G4Track& trackData,
    PositronMomentum = sqrt(PositKineEnergy*(PositronEnergy+electron_mass_c2));
 
    if (G4EnergyLossTables::GetRange(G4Positron::Positron(),PositKineEnergy,aMaterial)
-        < min(G4Positron::GetCuts(),stepData.GetPostStepPoint()->GetSafety()) )         
+        < G4std::min(G4Positron::GetCuts(),stepData.GetPostStepPoint()->GetSafety()) )         
       {
         LocalEnerDeposit += PositKineEnergy ;
         PositKineEnergy = 0. ;
@@ -1411,6 +1411,6 @@ G4Element* G4IMuPairProduction::SelectRandomAtom(G4Material* aMaterial) const
     if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
   }
   cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements, NULL pointer returned." << endl;
+       << "' has no elements, NULL pointer returned." << G4endl;
   return NULL;
 }

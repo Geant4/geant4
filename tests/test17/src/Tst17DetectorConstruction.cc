@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst17DetectorConstruction.cc,v 1.1 1999-11-30 18:01:54 stesting Exp $
+// $Id: Tst17DetectorConstruction.cc,v 1.2 1999-12-15 14:54:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -149,7 +149,7 @@ G4Material* Air = new G4Material(name="Air"  , density, ncomponents=2);
 Air->AddElement(elN, fractionmass=0.7);
 Air->AddElement(elO, fractionmass=0.3);
 
-G4cout << *(G4Material::GetMaterialTable()) << endl;
+G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //default materials of the calorimeter
   AbsorberMaterial = Pb;
@@ -245,12 +245,12 @@ void Tst17DetectorConstruction::PrintCalorParameters()
 {
   G4cout << "\n The  WORLD   is made of " 
        << WorldSizeZ/mm << "mm of " << WorldMaterial->GetName() ;
-  G4cout << ", the transverse size (R) of the world is " << WorldSizeR/mm << " mm. " << endl;
+  G4cout << ", the transverse size (R) of the world is " << WorldSizeR/mm << " mm. " << G4endl;
   G4cout << " The ABSORBER is made of " 
        << AbsorberThickness/mm << "mm of " << AbsorberMaterial->GetName() ;
-  G4cout << ", the transverse size (R) is " << AbsorberRadius/mm << " mm. " << endl;
-  G4cout << " Z position of the (middle of the) absorber " << zAbsorber/mm << "  mm." << endl;
-  G4cout << endl;
+  G4cout << ", the transverse size (R) is " << AbsorberRadius/mm << " mm. " << G4endl;
+  G4cout << " Z position of the (middle of the) absorber " << zAbsorber/mm << "  mm." << G4endl;
+  G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

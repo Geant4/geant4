@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VShortLivedParticle.cc,v 1.2 1999-04-13 08:18:31 kurasige Exp $
+// $Id: G4VShortLivedParticle.cc,v 1.3 1999-12-15 14:51:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,32 +46,32 @@ G4VShortLivedParticle::G4VShortLivedParticle(const G4String&  aName,
 
 void            G4VShortLivedParticle::ResetCuts()
 {
-  G4cout << "G4VShortLivedParticle::ResetCuts() causes no effect!!" << endl;
+  G4cout << "G4VShortLivedParticle::ResetCuts() causes no effect!!" << G4endl;
 }
 void            G4VShortLivedParticle::SetCuts(G4double )
 {
-  G4cout << "G4VShortLivedParticle::SetCuts() causes no effect!!" << endl;
+  G4cout << "G4VShortLivedParticle::SetCuts() causes no effect!!" << G4endl;
 }
 void            G4VShortLivedParticle::ReCalcCuts()
 {
-  G4cout << "G4VShortLivedParticle::ReCalcCuts() causes no effect!!" << endl;
+  G4cout << "G4VShortLivedParticle::ReCalcCuts() causes no effect!!" << G4endl;
 }
 
 G4double      	G4VShortLivedParticle::GetLengthCuts() const
 {
-  G4cout << "G4VShortLivedParticle::GetLengthCuts() causes no effect!!" << endl;
+  G4cout << "G4VShortLivedParticle::GetLengthCuts() causes no effect!!" << G4endl;
   return -1.0;
 }
 
 G4double*	G4VShortLivedParticle::GetEnergyCuts() const
 {
-  G4cout << "G4VShortLivedParticle::GetLengthCuts() causes no effect!!" << endl;
+  G4cout << "G4VShortLivedParticle::GetLengthCuts() causes no effect!!" << G4endl;
   return 0;
 }
 
 G4double      	G4VShortLivedParticle::GetEnergyThreshold(const G4Material* ) const
 {
-  G4cout << "G4VShortLivedParticle::GetEnergyThreshold() causes no effect!!" << endl;
+  G4cout << "G4VShortLivedParticle::GetEnergyThreshold() causes no effect!!" << G4endl;
   return -1.0;
 }
 

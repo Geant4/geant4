@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: templates.hh,v 1.3 1999-11-16 17:40:53 gcosmo Exp $
+// $Id: templates.hh,v 1.4 1999-12-15 14:50:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,7 +23,7 @@
 //                        DBL_MAX, FLT_DIG, FLT_MAX  : 12/04/1996
 // Gabriele Cosmo - Removed boolean enum definition : 29/11/1996
 // Gunter Folger  - Added G4SwapPtr() and G4SwapObj() : 31/07/1997
-// Gabriele Cosmo - Adapted signatures of min(), max() to
+// Gabriele Cosmo - Adapted signatures of min(), G4std::max() to
 //                  STL's ones, thanks to E.Tcherniaev : 31/07/1997
 // Gabriele Cosmo,
 // Evgueni Tcherniaev - Migrated to CLHEP: 04/12/1997 

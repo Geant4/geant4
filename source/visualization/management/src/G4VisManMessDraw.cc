@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessDraw.cc,v 1.4 1999-04-16 09:06:09 mora Exp $
+// $Id: G4VisManMessDraw.cc,v 1.5 1999-12-15 14:54:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -147,7 +147,7 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
       G4double length ;
       G4String unitString;
       const char* aString = newValues;
-      istrstream is((char*) aString);
+      G4std::istrstream is((char*) aString);
       is >> x0 >> y0 >> z0 >> length >> unitString;
 
       G4double unit = G4UnitDefinition::GetValueOf (unitString);
@@ -195,7 +195,7 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
       G4double font_size, x_offset, y_offset;
       G4String unitString, textString;
       const char* aString = newValues;
-      istrstream is((char*) aString);
+      G4std::istrstream is((char*) aString);
       is >> x >> y >> z >> unitString
 	 >> font_size >> x_offset >> y_offset >> textString;
       G4double unit = G4UnitDefinition::GetValueOf (unitString);
@@ -212,24 +212,24 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
     // Find physical_volume.
     G4String name;
     const char* aString = newValues;
-    istrstream is((char*) aString) ; is >> name;
+    G4std::istrstream is((char*) aString) ; is >> name;
 
     G4cout << "/vis~/draw/volume: requested name is " << name;
     G4cout << "\n...but this command is \"UNDER DEVELOPMENT\"!";
-    G4cout << endl;
+    G4cout << G4endl;
   }
   //////////////////////////  /vis~/draw/ghosts  /////
   if (commandPath == "/vis~/draw/ghosts") {
     // preliminaries
     G4VisManager* theVisManager;
     if(!(theVisManager= G4VisManager::GetInstance())) {
-      G4cout<< "grafic system not yet avaliable." << endl;
+      G4cout<< "grafic system not yet avaliable." << G4endl;
       return;
     }
     G4VGlobalFastSimulationManager* theGlobalFastSimulationManager;
     if(!(theGlobalFastSimulationManager = 
 	 G4VGlobalFastSimulationManager::GetConcreteInstance ())){
-      G4cout<< "WARNING: none G4GlobalFastSimulationManager" << endl;
+      G4cout<< "WARNING: none G4GlobalFastSimulationManager" << G4endl;
       return;
     }
     G4ParticleTable* theParticleTable=G4ParticleTable::GetParticleTable();
@@ -246,13 +246,13 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
 	  currentScene -> AddRunDurationModel
 	    (new G4FlavoredParallelWorldModel (CurrentFlavoredWorld));
       G4cout << "Ghosts added to the Scene, refresh the view to see it."
-	     << endl;
+	     << G4endl;
       return;
     }
     G4ParticleDefinition* currentParticle = 
       theParticleTable->FindParticle(newValues);
     if (currentParticle == NULL) {
-      G4cout << newValues << ": not found this particle name!" << endl;
+      G4cout << newValues << ": not found this particle name!" << G4endl;
       return;
     }
     G4VFlavoredParallelWorld* worldForThis;
@@ -261,8 +261,8 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
       currentScene -> AddRunDurationModel
 	(new G4FlavoredParallelWorldModel (worldForThis));
       G4cout << "Ghosts added to the Scene, refresh the view to see it."
-	     << endl;
+	     << G4endl;
     }
-    else G4cout << "There are no ghosts for "<<newValues<<endl;
+    else G4cout << "There are no ghosts for "<<newValues<<G4endl;
   }
 }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyPhysicsList.cc,v 1.2 1999-05-07 10:22:30 barrand Exp $
+// $Id: MyPhysicsList.cc,v 1.3 1999-12-15 14:55:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"                
 
 
 MyPhysicsList::MyPhysicsList():  G4VUserPhysicsList()
@@ -262,7 +262,7 @@ void MyPhysicsList::SetCuts()
   /*GB
   if (verboseLevel >0){
     G4cout << "MyPhysicsList::SetCuts:";
-    G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
+    G4cout << "CutLength : " << cut/mm << " (mm)" << G4endl;
   }  
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEAntiSigmaMinusInelastic.cc,v 1.1 1999-01-07 16:12:44 gunter Exp $
+// $Id: G4LEAntiSigmaMinusInelastic.cc,v 1.2 1999-12-15 14:53:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: AntiSigmaMinus Inelastic Process
@@ -33,11 +33,11 @@
     if( verboseLevel > 1 )
     {
       G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEAntiSigmaMinusInelastic::ApplyYourself called" << endl;
+      G4cout << "G4LEAntiSigmaMinusInelastic::ApplyYourself called" << G4endl;
       G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << ", ";
       G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
-           << endl;
+           << G4endl;
     }
     //
     // Fermi motion and evaporation
@@ -86,7 +86,7 @@
     vec.Initialize( 0 );
     
     const G4double cutOff = 0.1;
-    const G4double anni = min( 1.3*currentParticle.GetTotalMomentum()/GeV, 0.4 );
+    const G4double anni = G4std::min( 1.3*currentParticle.GetTotalMomentum()/GeV, 0.4 );
     if( (currentParticle.GetKineticEnergy()/MeV > cutOff) || (G4UniformRand() > anni) )
       Cascade( vec, vecLen,
                originalIncident, currentParticle, targetParticle,
@@ -157,7 +157,7 @@
       counter = -1;
       for( np=0; np<(numSec/3); ++np )
       {
-        for( nm=max(0,np-2); nm<=np; ++nm )
+        for( nm=G4std::max(0,np-2); nm<=np; ++nm )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
@@ -178,7 +178,7 @@
       counter = -1;
       for( np=0; np<numSec/3; ++np )
       {
-        for( nm=max(0,np-1); nm<=(np+1); ++nm )
+        for( nm=G4std::max(0,np-1); nm<=(np+1); ++nm )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
@@ -280,7 +280,7 @@
         counter = -1;
         for( np=0; np<numSec/3 && ran>=excs; ++np )
         {
-          for( nm=max(0,np-2); nm<=np && ran>=excs; ++nm )
+          for( nm=G4std::max(0,np-2); nm<=np && ran>=excs; ++nm )
           {
             for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
             {
@@ -289,7 +289,7 @@
                 nt = np+nm+nz;
                 if( nt>0 && nt<=numSec )
                 {
-                  test = exp( min( expxu, max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                   if( fabs(dum) < 1.0 )
                   {
@@ -308,7 +308,7 @@
           return;
         }
         np--; nm--; nz--;
-        G4int ncht = min( 3, max( 1, np-nm+1 ) );
+        G4int ncht = G4std::min( 3, G4std::max( 1, np-nm+1 ) );
         switch( ncht )
         {
          case 1:
@@ -344,7 +344,7 @@
         counter = -1;
         for( np=0; np<numSec/3 && ran>=excs; ++np )
         {
-          for( nm=max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
+          for( nm=G4std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
           {
             for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
             {
@@ -353,7 +353,7 @@
                 nt = np+nm+nz;
                 if( nt>0 && nt<=numSec )
                 {
-                  test = exp( min( expxu, max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                   if( fabs(dum) < 1.0 )
                   {
@@ -372,7 +372,7 @@
           return;
         }
         np--; nm--; nz--;
-        G4int ncht = min( 3, max( 1, np-nm+2 ) );
+        G4int ncht = G4std::min( 3, G4std::max( 1, np-nm+2 ) );
         switch( ncht )
         {
          case 1:
@@ -437,7 +437,7 @@
               nt = np+nm+nz;
               if( nt>1 && nt<=numSec )
               {
-                test = exp( min( expxu, max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                 dum = (pi/anpn)*nt*protmulA[counter]*protnormA[nt-1]/(2.0*n*n);
                 if( fabs(dum) < 1.0 )
                 {
@@ -469,7 +469,7 @@
               nt = np+nm+nz;
               if( nt>1 && nt<=numSec )
               {
-                test = exp( min( expxu, max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                 dum = (pi/anpn)*nt*neutmulA[counter]*neutnormA[nt-1]/(2.0*n*n);
                 if( fabs(dum) < 1.0 )
                 {

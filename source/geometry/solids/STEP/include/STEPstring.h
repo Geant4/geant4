@@ -5,7 +5,7 @@
 
 
 //
-// $Id: STEPstring.h,v 1.2 1999-05-21 20:20:32 japost Exp $
+// $Id: STEPstring.h,v 1.3 1999-12-15 14:50:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef STEPSTRING_H
@@ -49,11 +49,11 @@ public:
 
   // format for STEP
   const char * asStr (SCLstring & s) const  {  return s = chars ();  }
-  void STEPwrite (ostream& out =G4cout)  const;
+  void STEPwrite (G4std::ostream& out =G4cout)  const;
   void STEPwrite (SCLstring &s) const;
 
   Severity StrToVal (const char *s);
-  Severity STEPread (istream& in, ErrorDescriptor *err);
+  Severity STEPread (G4std::istream& in, ErrorDescriptor *err);
   Severity STEPread (const char *s, ErrorDescriptor *err);
 
  protected:

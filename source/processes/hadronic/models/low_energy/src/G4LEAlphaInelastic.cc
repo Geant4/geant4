@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEAlphaInelastic.cc,v 1.1 1999-01-07 16:12:43 gunter Exp $
+// $Id: G4LEAlphaInelastic.cc,v 1.2 1999-12-15 14:53:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Alpha Inelastic Process
@@ -29,9 +29,9 @@
     if( verboseLevel > 1 )
     {
       G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEAlphaInelastic::ApplyYourself called" << endl;
+      G4cout << "G4LEAlphaInelastic::ApplyYourself called" << G4endl;
       G4cout << "kinetc energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
-      G4cout << "target material = " << targetMaterial->GetName() << endl;
+      G4cout << "target material = " << targetMaterial->GetName() << G4endl;
     }
     
     // Work-around for lack of model above 100 MeV

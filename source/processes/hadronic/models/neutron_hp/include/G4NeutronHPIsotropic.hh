@@ -7,14 +7,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPIsotropic.hh,v 1.3 1999-07-02 09:59:17 johna Exp $
+// $Id: G4NeutronHPIsotropic.hh,v 1.4 1999-12-15 14:53:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPIsotropic_h
 #define G4NeutronHPIsotropic_h 1
 
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 #include "globals.hh"
 #include "G4ReactionProduct.hh"
 #include "G4VNeutronHPEnergyAngular.hh"
@@ -29,7 +29,7 @@ class G4NeutronHPIsotropic : public G4VNeutronHPEnergyAngular
   
   public:
   
-  void Init(ifstream & aDataFile);
+  void Init(G4std::ifstream & aDataFile);
   G4ReactionProduct * Sample(G4double anEnergy, G4double massCode, G4double mass);
   G4double MeanEnergyOfThisInteraction()
   {

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T07CalorimeterSD.cc,v 1.1 1999-01-08 16:35:11 gunter Exp $
+// $Id: T07CalorimeterSD.cc,v 1.2 1999-12-15 14:54:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,7 +78,7 @@ G4bool T07CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
       if (physVol == Detector->GetGap     ()) calHit->AddGap(edep,stepl);
       HitID[LayerNumber] = CalCollection->insert(calHit) - 1;
       if (verboseLevel>0)
-        G4cout << " New Calorimeter Hit on layer: " << LayerNumber << endl;
+        G4cout << " New Calorimeter Hit on layer: " << LayerNumber << G4endl;
     }
   else
     { 
@@ -87,7 +87,7 @@ G4bool T07CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
       if (physVol == Detector->GetGap())
          (*CalCollection)[HitID[LayerNumber]]->AddGap(edep,stepl);
       if (verboseLevel>0)
-        G4cout << " Energy added to Layer: " << LayerNumber << endl; 
+        G4cout << " Energy added to Layer: " << LayerNumber << G4endl; 
     }
     
   return true;

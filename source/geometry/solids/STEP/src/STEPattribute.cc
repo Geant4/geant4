@@ -5,7 +5,7 @@
 
 
 //
-// $Id: STEPattribute.cc,v 1.2 1999-05-21 20:20:49 japost Exp $
+// $Id: STEPattribute.cc,v 1.3 1999-12-15 14:50:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -113,7 +113,7 @@ STEPattribute::StrToVal (const char* s, InstMgr * instances, int addFileId)
 	return _error.severity (SEVERITY_INPUT_ERROR);
     }
 
-    istrstream in ((char *)s); // sz defaults to length of s
+    G4std::istrstream in ((char *)s); // sz defaults to length of s
     int valAssigned = 0;
 
     // read in value for attribute
@@ -202,7 +202,7 @@ STEPattribute::StrToVal (const char* s, InstMgr * instances, int addFileId)
  ** Returns:  Severity, which indicates success, or failure
  **         value >= SEVERITY_WARNING means program can continue parsing input,
  **         value <= SEVERITY_INPUT_ERROR  is fatal read error
- ** Description:  the value of the attribute is read from istream
+ ** Description:  the value of the attribute is read from G4std::istream
  **               the format expected is STEP exchange file
  **          modified to accept '$' as value for OPTIONAL ATTRIBUTE,
  **             (since this function is used for reading files in both
@@ -213,7 +213,7 @@ STEPattribute::StrToVal (const char* s, InstMgr * instances, int addFileId)
 // the delim separating the last attribute from the end of the entity (')').
 
 Severity
-STEPattribute::STEPread (istream& in, InstMgr * instances, int addFileId)
+STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId)
 {
 
     char errStr[BUFSIZ];
@@ -225,7 +225,7 @@ STEPattribute::STEPread (istream& in, InstMgr * instances, int addFileId)
     //  set the value to be null (reinitialize the attribute value)
     set_null();
 
-    in >> ws; // skip whitespace
+    in >> G4std::ws; // skip whitespace
     in >> c;
     in.putback (c);    //  leave input stream alone
 
@@ -253,7 +253,7 @@ STEPattribute::STEPread (istream& in, InstMgr * instances, int addFileId)
 	return _error.severity();
 
       case '*':
-	in.get(c);  // take * off the istream
+	in.get(c);  // take * off the G4std::istream
 	if (IsDerived ())  
 	    _error.severity(SEVERITY_NULL);
 	else {
@@ -470,7 +470,7 @@ STEPattribute::asStr (SCLstring& str) const
 // The output is in physical file format.
 
 void
-STEPattribute::STEPwrite (ostream& out) 
+STEPattribute::STEPwrite (G4std::ostream& out) 
 { 
     if (IsDerived ())  {
       out << "*";
@@ -938,13 +938,13 @@ STEPattribute::ValidLevel (const char *attrValue, ErrorDescriptor *error,
   
 /******************************************************************
  ** Procedure:  operator <<
- ** Parameters:  ostream & out -- output stream
+ ** Parameters:  G4std::ostream & out -- output stream
  **              STEPattribute & a -- attribute to output
- ** Returns:  ostream &
+ ** Returns:  G4std::ostream &
  ** Description:  overloads the output operator to Print an attribute 
  ******************************************************************/
 
-ostream &operator<< ( ostream& out, STEPattribute& a )
+G4std::ostream &operator<< ( G4std::ostream& out, STEPattribute& a )
 {
     a.STEPwrite (out);
     return out;
@@ -991,7 +991,7 @@ STEPattribute::AddErrorInfo()
 // if it hits one of StopChars it puts it back.
 // RETURNS: the last char it read.
 char
-STEPattribute::SkipBadAttr(istream& in, char *StopChars)
+STEPattribute::SkipBadAttr(G4std::istream& in, char *StopChars)
 {
 #ifndef WIN32
     int sk = in.skip(0);  //turn skipping whitespace off

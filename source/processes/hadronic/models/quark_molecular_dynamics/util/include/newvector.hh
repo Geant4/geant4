@@ -1,7 +1,7 @@
 #ifndef __NEWVECTOR__
 #define __NEWVECTOR__
 
-#include <iostream.h>
+#include "g4std/iostream"
 #include <math.h>
 #include "String.hh"
 
@@ -10,8 +10,8 @@ class Vektor
   friend int dim(const Vektor& v) { return v.N; }
   friend double length(const Vektor& v) { return sqrt(v*v); }
   friend double square(const Vektor& v) { return v*v; }
-  friend ostream& operator<<(ostream& o,const Vektor& v) { o << "("; for (int k=1; k<v.N; k++) o << v[k] << ","; o << v[v.N] << ")"; return o; }
-  friend istream& operator>>(istream& in,Vektor& v);
+  friend G4std::ostream& operator<<(G4std::ostream& o,const Vektor& v) { o << "("; for (int k=1; k<v.N; k++) o << v[k] << ","; o << v[v.N] << ")"; return o; }
+  friend G4std::istream& operator>>(G4std::istream& in,Vektor& v);
   friend Vektor operator-(const Vektor& v) { Vektor x(v.N); for (int k=0; k<v.N; k++) x.a[k] = -v.a[k]; return x; }
   friend Vektor operator+(const Vektor& v,const Vektor& w) { Vektor x(v.N); for (int k=0; k<v.N; k++) x.a[k] = v.a[k]+w.a[k]; return x; }
   friend Vektor operator-(const Vektor& v,const Vektor& w) { Vektor x(v.N); for (int k=0; k<v.N; k++) x.a[k] = v.a[k]-w.a[k]; return x; }
@@ -80,7 +80,7 @@ class Vektor4 : public Vektor
 
 class Matrize
 {
-  friend ostream& operator<<(ostream& o,const Matrize& A);
+  friend G4std::ostream& operator<<(G4std::ostream& o,const Matrize& A);
   friend int Rows(const Matrize& A) { return A.N; }
   friend int Cols(const Matrize& A) { return A.M; }
   friend Matrize operator*(const Matrize& A,const Matrize& B);

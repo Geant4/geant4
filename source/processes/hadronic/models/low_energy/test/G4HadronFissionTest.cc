@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronFissionTest.cc,v 1.1 1999-01-08 16:33:41 gunter Exp $
+// $Id: G4HadronFissionTest.cc,v 1.2 1999-12-15 14:53:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,7 +52,7 @@ int main()
    G4Material Uranium("uranium 235", 92, 235.*g/mole, 18.95*g/cm3,
                       kStateSolid);
 
-//   G4cout << "Dumping material table info:" << endl;
+//   G4cout << "Dumping material table info:" << G4endl;
 //   Uranium.DumpInfo();
 
 // Particle definition
@@ -83,24 +83,24 @@ int main()
 
    G4double T;
    G4cout << "Enter neutron kinetic energy in GeV: ";
-   cin >> T;
+   G4cin >> T;
    aNeutron.SetKineticEnergy(T*GeV);
    G4double p = aNeutron.GetTotalMomentum()/GeV;
-   G4cout << "neutron momentum=" << p << endl;
+   G4cout << "neutron momentum=" << p << G4endl;
    G4double px, py, pz;
    G4cout << "Enter momentum direction px/p, py/p, pz/p: ";
-   cin >> px >> py >> pz;
+   G4cin >> px >> py >> pz;
    aNeutron.SetMomentumDirection(G4ParticleMomentum(px, py, pz));
    aNeutron.DumpInfo();
 
    G4double meanFreePath;
    meanFreePath = theLFissionProcess.GetMeanFreePathBasic(&aNeutron, &Uranium);
-   G4cout << endl << "Neutron mean free path = " << meanFreePath <<
-           " mm" << endl;
+   G4cout << G4endl << "Neutron mean free path = " << meanFreePath <<
+           " mm" << G4endl;
 
    G4int nevent;
-   G4cout << endl << "Enter number of events: ";
-   cin >> nevent;
+   G4cout << G4endl << "Enter number of events: ";
+   G4cin >> nevent;
 
    G4Step aStep;
 
@@ -121,9 +121,9 @@ int main()
    pxn = pxn2 = pyn = pyn2 = pzn = pzn2 = 0.;
    nn = nn2 = ng = ng2 = 0;
 
-   if (nevent > 10) G4cout << "Printing first 10 events only" << endl;
-   G4cout << endl << "Event  sec#  type  Ek(MeV)  Px/P  Py/P  Pz/P"
-        << endl << endl;
+   if (nevent > 10) G4cout << "Printing first 10 events only" << G4endl;
+   G4cout << G4endl << "Event  sec#  type  Ek(MeV)  Px/P  Py/P  Pz/P"
+        << G4endl << G4endl;
 
    G4Box* theFrame = new G4Box ("Frame",10*m, 10*m, 10*m);
    G4LogicalVolume* LogicalFrame = new G4LogicalVolume(theFrame,
@@ -200,19 +200,19 @@ int main()
       ng2 += ngnew*ngnew;
    }
 
-   G4cout << endl << "NEUTRON:" << endl;
-   G4cout << "  #  " << (G4double)nn/nevent << endl;
-   G4cout << "  Ek " << ekn/nn << endl;
-   G4cout << "  Px " << pxn/nn << endl;
-   G4cout << "  Py " << pyn/nn << endl;
-   G4cout << "  Pz " << pzn/nn << endl;
+   G4cout << G4endl << "NEUTRON:" << G4endl;
+   G4cout << "  #  " << (G4double)nn/nevent << G4endl;
+   G4cout << "  Ek " << ekn/nn << G4endl;
+   G4cout << "  Px " << pxn/nn << G4endl;
+   G4cout << "  Py " << pyn/nn << G4endl;
+   G4cout << "  Pz " << pzn/nn << G4endl;
 
-   G4cout << endl << "GAMMA:" << endl;
-   G4cout << "  #  " << (G4double)ng/nevent << endl;
-   G4cout << "  Ek " << ekg/ng << endl;
-   G4cout << "  Px " << pxg/ng << endl;
-   G4cout << "  Py " << pyg/ng << endl;
-   G4cout << "  Pz " << pzg/ng << endl;
+   G4cout << G4endl << "GAMMA:" << G4endl;
+   G4cout << "  #  " << (G4double)ng/nevent << G4endl;
+   G4cout << "  Ek " << ekg/ng << G4endl;
+   G4cout << "  Px " << pxg/ng << G4endl;
+   G4cout << "  Py " << pyg/ng << G4endl;
+   G4cout << "  Pz " << pzg/ng << G4endl;
 
    //   return EXIT_SUCCESS;
 }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunMessenger.cc,v 1.4 1999-07-25 15:58:47 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.5 1999-12-15 14:53:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -19,11 +19,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4ios.hh"
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
 :runManager(runMgr)
@@ -161,7 +157,7 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     G4int nev;
     G4int ns;
     const char* nv = (const char*)newValue;
-    istrstream is((char*)nv);
+    G4std::istrstream is((char*)nv);
     is >> nev >> macroFileName >> ns;
     if(macroFileName=="***NULL***")
     { runManager->BeamOn(nev); }

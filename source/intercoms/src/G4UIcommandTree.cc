@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommandTree.cc,v 1.2 1999-11-15 10:39:43 gunter Exp $
+// $Id: G4UIcommandTree.cc,v 1.3 1999-12-15 14:50:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -174,45 +174,45 @@ G4UIcommand * G4UIcommandTree::FindPath(G4String commandPath)
 
 void G4UIcommandTree::ListCurrent()
 {
-  G4cout << "Command directory path : " << pathName << endl;
+  G4cout << "Command directory path : " << pathName << G4endl;
   if( guidance != NULL ) guidance->List();
   int i = 0;
-  G4cout << " Sub-directories : " << endl;
+  G4cout << " Sub-directories : " << G4endl;
   int n_treeEntry = tree.entries();
   for( int i_thTree = 0; i_thTree < n_treeEntry; i_thTree++ )
   {
     G4cout << "   " << tree[i_thTree]->GetPathName() 
-	 << "   " << tree[i_thTree]->GetTitle() << endl;
+	 << "   " << tree[i_thTree]->GetTitle() << G4endl;
   }
-  G4cout << " Commands : " << endl;
+  G4cout << " Commands : " << G4endl;
   int n_commandEntry = command.entries();
   for( int i_thCommand = 0; i_thCommand < n_commandEntry; i_thCommand++ )
   {
     G4cout << "   " << command[i_thCommand]->GetCommandName() 
-	 << " * " << command[i_thCommand]->GetTitle() << endl;
+	 << " * " << command[i_thCommand]->GetTitle() << G4endl;
   }
 }
 
 void G4UIcommandTree::ListCurrentWithNum()
 {
-  G4cout << "Command directory path : " << pathName << endl;
+  G4cout << "Command directory path : " << pathName << G4endl;
   if( guidance != NULL ) guidance->List();
   int i = 0;
-  G4cout << " Sub-directories : " << endl;
+  G4cout << " Sub-directories : " << G4endl;
   int n_treeEntry = tree.entries();
   for( int i_thTree = 0; i_thTree < n_treeEntry; i_thTree++ )
   {
     i++;
     G4cout << " " << i << ") " << tree[i_thTree]->GetPathName() 
-	 << "   " << tree[i_thTree]->GetTitle() << endl;
+	 << "   " << tree[i_thTree]->GetTitle() << G4endl;
   }
-  G4cout << " Commands : " << endl;
+  G4cout << " Commands : " << G4endl;
   int n_commandEntry = command.entries();
   for( int i_thCommand = 0; i_thCommand < n_commandEntry; i_thCommand++ )
   {
     i++;
     G4cout << " " << i << ") " << command[i_thCommand]->GetCommandName() 
-	 << " * " << command[i_thCommand]->GetTitle() << endl;
+	 << " * " << command[i_thCommand]->GetTitle() << G4endl;
   }
 }
 

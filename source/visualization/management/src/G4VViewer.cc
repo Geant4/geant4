@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.cc,v 1.4 1999-11-10 18:30:43 johna Exp $
+// $Id: G4VViewer.cc,v 1.5 1999-12-15 14:54:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,11 +15,7 @@
 #include "G4VViewer.hh"
 
 #include "G4ios.hh"
-#ifdef WIN32
-#include <strstrea.h>
-#else
-#include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 #include "G4VisManager.hh"
 #include "G4VGraphicsSystem.hh"
@@ -38,8 +34,8 @@ fNeedKernelVisit (true)
   fVP = pVMan -> GetCurrentViewParameters ();
   if (name == "") {
     char charname [50];
-    ostrstream ost (charname, 50);
-    ost << fSceneHandler.GetName () << '-' << fViewId << ends;
+    G4std::ostrstream ost (charname, 50);
+    ost << fSceneHandler.GetName () << '-' << fViewId << G4std::ends;
     fName = charname;
   }
   else {
@@ -91,7 +87,7 @@ void G4VViewer::SetViewParameters (const G4ViewParameters& vp) {
   fModified = true;
 }
 
-ostream& operator << (ostream& os, const G4VViewer& v) {
+G4std::ostream& operator << (G4std::ostream& os, const G4VViewer& v) {
   os << "View " << v.fName << ":\n";
   os << v.fVP;
   return os;

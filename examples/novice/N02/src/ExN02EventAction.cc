@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02EventAction.cc,v 1.2 1999-04-24 09:38:04 asaim Exp $
+// $Id: ExN02EventAction.cc,v 1.3 1999-12-15 14:49:21 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,14 +32,14 @@ void ExN02EventAction::BeginOfEventAction(const G4Event*)
 
 void ExN02EventAction::EndOfEventAction(const G4Event* evt)
 {
-  G4cout << ">>> Event " << evt->GetEventID() << endl;
+  G4cout << ">>> Event " << evt->GetEventID() << G4endl;
   
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;
   if(trajectoryContainer)
   { n_trajectories = trajectoryContainer->entries(); }
   G4cout << "    " << n_trajectories 
-       << " trajectories stored in this event." << endl;
+       << " trajectories stored in this event." << G4endl;
 
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 

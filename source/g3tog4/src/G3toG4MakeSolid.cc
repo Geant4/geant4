@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4MakeSolid.cc,v 1.3 1999-12-05 17:50:11 gcosmo Exp $
+// $Id: G3toG4MakeSolid.cc,v 1.4 1999-12-15 14:49:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, V.Berejnoi 27 Sep 99 
@@ -273,7 +273,7 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
 
   } else if ( shape == "ELTU" ) {
     // $$$ not implemented.
-    G4cerr << "ELTU not supported" << endl;
+    G4cerr << "ELTU not supported" << G4endl;
 
   } else if ( shape == "HYPE" ) {
     G4double pRmin = Rpar[0]*cm;
@@ -287,16 +287,16 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
       solid = new G4Hype(vname, pRmin, pRmax, pThet, pThet, pDz);
     } else {
       G4cerr << "Negative length parameters not supported for shape " 
-	     << shape << endl;
+	     << shape << G4endl;
     }
 
   } else if ( shape == "GTRA" ) {
     // $$$ not implemented.
-    G4cerr << "GTRA not supported" << endl;
+    G4cerr << "GTRA not supported" << G4endl;
 
   } else if ( shape == "CTUB" ) {
     // $$$ not implemented.
-    G4cerr << "CTUB not supported" << endl;
+    G4cerr << "CTUB not supported" << G4endl;
   }
   return solid;
 }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpRayleigh.cc,v 1.1 1999-01-07 16:14:02 gunter Exp $
+// $Id: G4OpRayleigh.cc,v 1.2 1999-12-15 14:53:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,7 +51,7 @@ G4OpRayleigh::G4OpRayleigh(const G4String& processName)
         thePhysicsTable = NULL;
 
         if (verboseLevel>0) {
-           G4cout << GetProcessName() << " is created " << endl;
+           G4cout << GetProcessName() << " is created " << G4endl;
         }
 
         BuildThePhysicsTable();
@@ -89,11 +89,11 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         const G4Material* aMaterial = aTrack.GetMaterial();
 
         if (verboseLevel>0) {
-		G4cout << "Scattering Photon!" << endl;
+		G4cout << "Scattering Photon!" << G4endl;
 		G4cout << "Old Momentum Direction: "
-	     	     << aParticle->GetMomentumDirection() << endl;
+	     	     << aParticle->GetMomentumDirection() << G4endl;
 		G4cout << "Old Polarization: "
-		     << aParticle->GetPolarization() << endl;
+		     << aParticle->GetPolarization() << G4endl;
 	}
 
 	// find polar angle w.r.t. old polarization vector
@@ -152,13 +152,13 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         if (verboseLevel>0) {
 		G4cout << "New Polarization: " 
-		     << NewPolarization << endl;
+		     << NewPolarization << G4endl;
 		G4cout << "Polarization Change: "
-		     << *(aParticleChange.GetPolarizationChange()) << endl;  
+		     << *(aParticleChange.GetPolarizationChange()) << G4endl;  
 		G4cout << "New Momentum Direction: " 
-		     << NewMomentumDirection << endl;
+		     << NewMomentumDirection << G4endl;
 		G4cout << "Momentum Change: "
-		     << *(aParticleChange.GetMomentumChange()) << endl; 
+		     << *(aParticleChange.GetMomentumChange()) << G4endl; 
 	}
 
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
@@ -285,7 +285,7 @@ G4OpRayleigh::RayleighAttenuationLengthGenerator(G4MaterialPropertiesTable *aMPT
                 Dist = 1.0 / (c1*c2*c3*c4);
 
 	        if (verboseLevel>0) {
-	                G4cout << Dist << " mm" << endl;
+	                G4cout << Dist << " mm" << G4endl;
 		}
                 RayleighScatteringLengths->
 			InsertValues(Rindex->GetPhotonMomentum(), Dist);

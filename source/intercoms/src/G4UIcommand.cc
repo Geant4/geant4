@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommand.cc,v 1.4 1999-11-15 10:39:43 gunter Exp $
+// $Id: G4UIcommand.cc,v 1.5 1999-12-15 14:50:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,9 +30,9 @@ G4UIcommand::G4UIcommand(const char * theCommandPath,
   { // this must be a directory
     if(comStr(comStr.length()-1)!='/')
     {
-      G4cerr << "G4UIcommand Warning : " << endl;
-      G4cerr << "  <" << theCommandPath << "> must be a directory." << endl;
-      G4cerr << "  '/' is appended." << endl;
+      G4cerr << "G4UIcommand Warning : " << G4endl;
+      G4cerr << "  <" << theCommandPath << "> must be a directory." << G4endl;
+      G4cerr << "  '/' is appended." << G4endl;
       comStr += "/";
     }
   }
@@ -247,7 +247,7 @@ G4String G4UIcommand::UnitsList(G4String unitCategory)
   { if(UTbl[i]->GetName()==unitCategory) break; }
   if(i==UTbl.entries())
   { 
-    G4cerr << "Unit category <" << unitCategory << "> is not defined." << endl;
+    G4cerr << "Unit category <" << unitCategory << "> is not defined." << G4endl;
     return retStr;
   }
   G4UnitsContainer& UCnt = UTbl[i]->GetUnitsList();
@@ -268,34 +268,30 @@ G4String G4UIcommand::UnitsList(G4String unitCategory)
   
 void G4UIcommand::List()
 {
-  G4cout << endl;
-  G4cout << endl;
+  G4cout << G4endl;
+  G4cout << G4endl;
   if(commandPath(commandPath.length()-1)!='/')
-  { G4cout << "Command " << commandPath << endl; }
-  G4cout << "Guidance :" << endl;
+  { G4cout << "Command " << commandPath << G4endl; }
+  G4cout << "Guidance :" << G4endl;
   int n_guidanceEntry = commandGuidance.entries();
   for( int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ )
-  { G4cout << commandGuidance[i_thGuidance] << endl; }
+  { G4cout << commandGuidance[i_thGuidance] << G4endl; }
   if( ! rangeString.isNull() )
-  { G4cout << " Range of parameters : " << rangeString << endl; }
+  { G4cout << " Range of parameters : " << rangeString << G4endl; }
   int n_parameterEntry = parameter.entries();
   if( n_parameterEntry > 0 )
   {
     for( int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ )
     { parameter[i_thParameter]->List(); }
   }
-  G4cout << endl;
+  G4cout << G4endl;
 }
 
 // ----- the following is used by CheckNewValue()  ------------
 
 
 #include <ctype.h>          // isalpha(), toupper()
-#ifdef WIN32
-#include <strstrea.h>
-#else
-#include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 //#include "checkNewValue_debug.icc"
 //#define DEBUG 1
@@ -318,7 +314,7 @@ TypeCheck(G4String newValues)
     G4String aNewValue;
     char type;
     const char* t = newValues;
-    istrstream is((char*)t);
+    G4std::istrstream is((char*)t);
     for (unsigned i=0; i< parameter.entries(); i++) {
         is >> aNewValue;
         type = toupper(parameter(i)->GetParameterType());
@@ -326,13 +322,13 @@ TypeCheck(G4String newValues)
             case 'D':
                 if( IsDouble(aNewValue)==0 ){
                     G4cerr << aNewValue << ": double value expected."
-                         << endl;
+                         << G4endl;
                     return 0;
                 } break;
             case 'I':
                 if( IsInt(aNewValue,20)==0 ){
                     G4cerr <<aNewValue<<": integer expected."
-                         <<endl;
+                         <<G4endl;
                      return 0;
                 } break;
             case 'S':
@@ -364,15 +360,15 @@ IsInt(const char* buf, short maxDigits)
         while( isdigit( (int)(*p) )) { ++p;  ++length; }
         if( *p == '\0' ) {
             if( length > maxDigits) {
-                G4cerr <<"digit length exceeds"<<endl;
+                G4cerr <<"digit length exceeds"<<G4endl;
                 return 0;
             }
             return 1;
         } else {
-            // G4cerr <<"illegal character after int:"<<buf<<endl;
+            // G4cerr <<"illegal character after int:"<<buf<<G4endl;
         }
     } else {
-        // G4cerr <<"illegal int:"<<buf<<endl;
+        // G4cerr <<"illegal int:"<<buf<<G4endl;
     }
     return 0;
 }
@@ -453,7 +449,7 @@ RangeCheck(G4String newValue) {
     char type;
     bp = 0;                 // reset buffer pointer for G4UIpGetc()
     const char* t = newValue;
-    istrstream is((char*)t);
+    G4std::istrstream is((char*)t);
     for (unsigned i=0; i< parameter.entries(); i++) {
         type= toupper(parameter(i)->GetParameterType());
         switch ( type ) {
@@ -470,11 +466,11 @@ RangeCheck(G4String newValue) {
 
    if( paramERR == 1 ) return 0;
    if( result.type != CONSTINT) {
-      G4cerr << "Illegal Expression in parameter range." << endl;
+      G4cerr << "Illegal Expression in parameter range." << G4endl;
       return 0;
    }
    if ( result.I ) return 1;
-   G4cerr << "parameter out of range: "<< rangeString << endl;
+   G4cerr << "parameter out of range: "<< rangeString << G4endl;
    return 0;
 }
 
@@ -484,7 +480,7 @@ Expression(void)
 {
     yystype result;
     #ifdef DEBUG
-        G4cerr << " Expression()" << endl;
+        G4cerr << " Expression()" << G4endl;
     #endif
     result = LogicalORExpression();
     return result;
@@ -498,7 +494,7 @@ LogicalORExpression(void)
     p = LogicalANDExpression();
     if( token != LOGICALOR)  return p;
     if( p.type == CONSTSTRING || p.type == IDENTIFIER ) {
-        G4cerr << "Parameter range: illegal type at '||'" << endl;
+        G4cerr << "Parameter range: illegal type at '||'" << G4endl;
         paramERR = 1;
     }
     result.I = p.I;
@@ -507,7 +503,7 @@ LogicalORExpression(void)
         token = Yylex();
         p = LogicalANDExpression();
         if( p.type == CONSTSTRING || p.type == IDENTIFIER ) {
-            G4cerr << "Parameter range: illegal type at '||'" <<endl;
+            G4cerr << "Parameter range: illegal type at '||'" <<G4endl;
             paramERR = 1;
         }
         switch (p.type) {
@@ -518,7 +514,7 @@ LogicalORExpression(void)
                 result.I += (p.D != 0.0); 
                 result.type = CONSTINT;      break;
             default: 
-                G4cerr << "Parameter range: unknown type"<<endl; 
+                G4cerr << "Parameter range: unknown type"<<G4endl; 
                 paramERR = 1;
         } 
     }
@@ -533,7 +529,7 @@ LogicalANDExpression(void)
     p = EqualityExpression();
     if( token != LOGICALAND)  return p;
     if( p.type == CONSTSTRING || p.type == IDENTIFIER ) {
-        G4cerr << "Parameter range: illegal type at '&&'" << endl;
+        G4cerr << "Parameter range: illegal type at '&&'" << G4endl;
         paramERR = 1;
     }
     result.I = p.I;
@@ -542,7 +538,7 @@ LogicalANDExpression(void)
         token = Yylex();
         p = EqualityExpression();
         if( p.type == CONSTSTRING || p.type == IDENTIFIER ) {
-            G4cerr << "Parameter range: illegal type at '&&'" << endl;
+            G4cerr << "Parameter range: illegal type at '&&'" << G4endl;
             paramERR = 1;
         }
         switch (p.type) {
@@ -553,7 +549,7 @@ LogicalANDExpression(void)
                 result.I *= (p.D != 0.0);
                 result.type = CONSTINT;      break;
             default:
-                G4cerr << "Parameter range: unknown type."<< endl;
+                G4cerr << "Parameter range: unknown type."<< G4endl;
                 paramERR = 1;
         } 
     }
@@ -568,7 +564,7 @@ EqualityExpression(void)
     int operat;
     yystype result;
     #ifdef DEBUG
-        G4cerr << " EqualityExpression()" <<endl;
+        G4cerr << " EqualityExpression()" <<G4endl;
     #endif
     result = RelationalExpression();
     if( token==EQ || token==NE ) {
@@ -579,12 +575,12 @@ EqualityExpression(void)
         result.I = Eval2( arg1, operat, arg2 );   // semantic action
         result.type = CONSTINT;
         #ifdef DEBUG
-            G4cerr << " return code of Eval2(): " << result.I <<endl;
+            G4cerr << " return code of Eval2(): " << result.I <<G4endl;
         #endif
     } else {
         if (result.type != CONSTINT && result.type != CONSTDOUBLE) {  
             G4cerr << "Parameter range: error at EqualityExpression"
-                 << endl;
+                 << G4endl;
             paramERR = 1;
         }
     }
@@ -599,7 +595,7 @@ RelationalExpression(void)
     int operat;
     yystype result;
     #ifdef DEBUG
-        G4cerr << " RelationalExpression()" <<endl;
+        G4cerr << " RelationalExpression()" <<G4endl;
     #endif
 
     arg1 = AdditiveExpression();
@@ -610,13 +606,13 @@ RelationalExpression(void)
         result.I = Eval2( arg1, operat, arg2 );    // semantic action
         result.type = CONSTINT;
         #ifdef DEBUG
-            G4cerr << " return code of Eval2(): " << result.I << endl;
+            G4cerr << " return code of Eval2(): " << result.I << G4endl;
         #endif
     } else {
               result = arg1;
     }
     #ifdef DEBUG
-       G4cerr <<" return RelationalExpression()"<< endl;
+       G4cerr <<" return RelationalExpression()"<< G4endl;
     #endif
     return  result;
 }
@@ -628,7 +624,7 @@ AdditiveExpression(void)
     if( token != '+' && token != '-' )  return result;
     G4cerr << "Parameter range: operator " 
          << (char)token 
-         << " is not supported." << endl;
+         << " is not supported." << G4endl;
     paramERR = 1;
     return  result;
 }
@@ -640,7 +636,7 @@ MultiplicativeExpression(void)
     if( token != '*' && token != '/' && token != '%' ) return result;
     G4cerr << "Parameter range: operator "
          << (char)token
-         << " is not supported." << endl;
+         << " is not supported." << G4endl;
     paramERR = 1;
     return  result;
 }
@@ -651,7 +647,7 @@ UnaryExpression(void)
     yystype result;
     yystype p;
     #ifdef DEBUG
-        G4cerr <<" UnaryExpression"<< endl;
+        G4cerr <<" UnaryExpression"<< G4endl;
     #endif
     switch(token) {
         case '-':
@@ -672,7 +668,7 @@ UnaryExpression(void)
             token = Yylex();
             G4cerr << "Parameter range error: "
                  << "operator '!' is not supported (sorry)."
-                 << endl;
+                 << G4endl;
             paramERR = 1;
             result = UnaryExpression();   break;
         default:
@@ -687,7 +683,7 @@ PrimaryExpression(void)
 {
      yystype result;
      #ifdef DEBUG
-         G4cerr <<" primary_exp"<<endl;
+         G4cerr <<" primary_exp"<<G4endl;
      #endif
      switch (token) {
          case IDENTIFIER:
@@ -706,7 +702,7 @@ PrimaryExpression(void)
               token= Yylex();
               result = Expression();
               if( token !=  ')'  ) {
-                  G4cerr << " ')' expected" << endl;
+                  G4cerr << " ')' expected" << G4endl;
                   paramERR = 1;
               }
               token = Yylex();
@@ -726,7 +722,7 @@ Eval2(yystype arg1, int op, yystype arg2)
     if( (arg1.type != IDENTIFIER) && (arg2.type != IDENTIFIER)) {
         G4cerr << commandName
              << ": meaningless comparison"
-             << endl;
+             << G4endl;
         paramERR = 1;
     }
 
@@ -740,7 +736,7 @@ Eval2(yystype arg1, int op, yystype arg2)
                 } else {
                     G4cerr << "integer operand expected for "
                          <<  rangeString 
-                         << '.' << endl;
+                         << '.' << G4endl;
                 } break;
             case 'D':
                 if( arg2.type == CONSTDOUBLE ) {
@@ -762,7 +758,7 @@ Eval2(yystype arg1, int op, yystype arg2)
                 } else {
                     G4cerr << "integer operand expected for "
                          <<  rangeString
-                         << '.' << endl;
+                         << '.' << G4endl;
                 } break;
             case 'D':
                 if( arg1.type == CONSTDOUBLE ) {
@@ -790,14 +786,14 @@ CompareInt(int arg1, int op, int arg2)
        case EQ:  result = ( arg1 == arg2); opr= "==";  break;
        case NE:  result = ( arg1 != arg2); opr= "!=";  break;
        default: 
-           G4cerr << "Parameter range: error at CompareInt" << endl;
+           G4cerr << "Parameter range: error at CompareInt" << G4endl;
            paramERR = 1;
     }
     #ifdef DEBUG
         G4cerr << "CompareInt "
              << arg1 << " " << opr << arg2 
              << " result: " << result
-             << endl;
+             << G4endl;
     #endif
     return result;
 }
@@ -816,14 +812,14 @@ CompareDouble(double arg1, int op, double arg2)
         case NE:  result = ( arg1 != arg2); opr= "!=";  break;
         default:
            G4cerr << "Parameter range: error at CompareDouble"
-                << endl;
+                << G4endl;
            paramERR = 1;
     }
     #ifdef DEBUG
         G4cerr << "CompareDouble " 
              << arg1 <<" " << opr << " "<< arg2
              << " result: " << result
-             << endl;
+             << G4endl;
     #endif
     return result;
 }
@@ -841,7 +837,7 @@ IndexOf( G4String nam)
         }
     }
     paramERR = 1;
-    G4cerr << "parameter name:"<<nam<<" not found."<< endl;
+    G4cerr << "parameter name:"<<nam<<" not found."<< G4endl;
     return 0;
 }
 
@@ -880,7 +876,7 @@ Yylex()         // reads input and returns token number, KR486
                    c=='e' || c=='E' || c=='+' || c=='-');
          G4UIpUngetc(c);
          const char* t = buf;
-	 istrstream is((char*)t);
+	 G4std::istrstream is((char*)t);
          if ( IsInt(buf.data(),20) ) {
              is >> yylval.I;
              return  CONSTINT;
@@ -889,7 +885,7 @@ Yylex()         // reads input and returns token number, KR486
              is >> yylval.D;
              return  CONSTDOUBLE;
          } else {
-             G4cerr << buf<<": numeric format error."<<endl;
+             G4cerr << buf<<": numeric format error."<<G4endl;
          }
     }
     buf="";
@@ -902,7 +898,7 @@ Yylex()         // reads input and returns token number, KR486
             yylval.S =buf;
             return IDENTIFIER;
         } else {
-            G4cerr << buf << " is not a parameter name."<< endl;
+            G4cerr << buf << " is not a parameter name."<< G4endl;
             paramERR = 1;
        }
     }
@@ -944,10 +940,10 @@ G4UIpUngetc(int c) {                 // emulation of ungetc()
     if (bp >0 && c == rangeString(bp-1)) {
          --bp;
     } else {
-         G4cerr << "G4UIpUngetc() failed." << endl;
+         G4cerr << "G4UIpUngetc() failed." << G4endl;
          G4cerr << "bp="<<bp <<" c="<<c
               << " pR(bp-1)=" << rangeString(bp-1)
-              << endl;
+              << G4endl;
          paramERR = 1;
          return -1;
     }

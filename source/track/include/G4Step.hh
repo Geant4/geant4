@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Step.hh,v 1.6 1999-11-07 16:32:01 kurasige Exp $
+// $Id: G4Step.hh,v 1.7 1999-12-15 14:53:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,7 +41,7 @@
 
 #include <stdlib.h>                 // Include from 'system'
 #include "G4ios.hh"               // Include from 'system'
-#include <iomanip.h>                // Include from 'system'
+#include "g4std/iomanip"                // Include from 'system'
 #include "globals.hh"               // Include from 'global'
 #include "G4ThreeVector.hh"         // Include from 'global'
 #include "G4VPhysicalVolume.hh"     // Include from 'geometry'

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalBorderSurface.cc,v 1.1 1999-01-07 16:08:47 gunter Exp $
+// $Id: G4LogicalBorderSurface.cc,v 1.2 1999-12-15 14:50:26 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -97,16 +97,16 @@ void G4LogicalBorderSurface::DumpInfo() // Class method (it is really const)
     // Dump info for known surfaces
 
     G4cout << "***** Surface Table : Nb of Surfaces = " << 
-            GetNumberOfBorderSurfaces() << " *****" << endl;
+            GetNumberOfBorderSurfaces() << " *****" << G4endl;
 
     for (int i=0; i<theBorderSurfaceTable.length(); i++) {
-      G4cout << theBorderSurfaceTable[i]->GetName() << " : " << endl <<
-          "  Surface type   = " << theBorderSurfaceTable[i]->GetName() << endl;
+      G4cout << theBorderSurfaceTable[i]->GetName() << " : " << G4endl <<
+          "  Surface type   = " << theBorderSurfaceTable[i]->GetName() << G4endl;
 #ifdef PRINT_INFO
-          "  Surface type   = " << theBorderSurfaceTable[i]->GetOpticalSurface()->GetType()   << endl;
-          "  Surface finish = " << theBorderSurfaceTable[i]->GetFinish() << endl <<
-	  "  Surface model  = " << theBorderSurfaceTable[i]->GetModel()  << endl;
+          "  Surface type   = " << theBorderSurfaceTable[i]->GetOpticalSurface()->GetType()   << G4endl;
+          "  Surface finish = " << theBorderSurfaceTable[i]->GetFinish() << G4endl <<
+	  "  Surface model  = " << theBorderSurfaceTable[i]->GetModel()  << G4endl;
 #endif 
     }
-    G4cout << endl;
+    G4cout << G4endl;
 }

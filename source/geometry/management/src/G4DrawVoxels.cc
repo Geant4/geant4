@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DrawVoxels.cc,v 1.8 1999-11-30 12:10:11 gcosmo Exp $
+// $Id: G4DrawVoxels.cc,v 1.9 1999-12-15 14:49:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,7 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
  
    #ifdef G4DrawVoxelsDebug
  	G4cout << "**** !!! G4DrawVoxels::Draw_Voxels : a query for drawing voxelisation";
- 	G4cout << "	Logical Volume:" << lv->GetName() <<endl;
+ 	G4cout << "	Logical Volume:" << lv->GetName() <<G4endl;
    #endif
  
 
@@ -60,8 +60,8 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
    
    if (lv->GetNoDaughters()<=0) {
      #ifdef G4DrawVoxelsDebug
-        G4cout << "**** !!! G4DrawVoxels::Draw_Voxels : a query for drawing voxelisation" << endl;
-        G4cout << "	of a logical volume that has no (or <=0) daughter has been detected !!! ****" <<endl;
+        G4cout << "**** !!! G4DrawVoxels::Draw_Voxels : a query for drawing voxelisation" << G4endl;
+        G4cout << "	of a logical volume that has no (or <=0) daughter has been detected !!! ****" <<G4endl;
      #endif
      return;
    }
@@ -112,8 +112,8 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
 		default:
 		//erreur interne
 		/************************/
-		G4cout << "PANIC: in Draw_Voxels:DrawVoxels(...) header is decayed." <<endl;
-		G4cout << "header->GetAxis returns an invalid axis." <<endl; 
+		G4cout << "PANIC: in Draw_Voxels:DrawVoxels(...) header is decayed." <<G4endl;
+		G4cout << "header->GetAxis returns an invalid axis." <<G4endl; 
 		/************************/
 		break;
 	};
@@ -128,14 +128,14 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
    #ifdef G4DrawVoxelsDebug
       G4cout << "	Axis of the voxelisation:" << header->GetAxis();
       G4cout << "	No slices of the voxelisation:" << header->GetNoSlices();
-      G4cout << "	step:" << step <<endl;	
+      G4cout << "	step:" << step <<G4endl;	
    #endif
 
    while (slice_no<no_slices){
 		  
 	#ifdef G4DrawVoxelsDebug
 	   G4cout << "		slice_no:" << slice_no;
-	   G4cout << "		header/node:" << slice->IsHeader() <<endl;					
+	   G4cout << "		header/node:" << slice->IsHeader() <<G4endl;					
   	#endif
   		  
 	if (slice->IsHeader()){
@@ -200,8 +200,8 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv) const{
 
    if (lv->GetNoDaughters()<=0) {
    #ifdef G4DrawVoxelsDebug
-        G4cout << "**** !!! G4DrawVoxels::Draw_Voxels : a query for drawing voxelisation" << endl;
-        G4cout << "	of a logical volume that has no (or <=0) daughter has been detected !!! ****" <<endl;
+        G4cout << "**** !!! G4DrawVoxels::Draw_Voxels : a query for drawing voxelisation" << G4endl;
+        G4cout << "	of a logical volume that has no (or <=0) daughter has been detected !!! ****" <<G4endl;
    #endif
    return;
    }
@@ -219,7 +219,7 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv) const{
 	for (G4int i=0;i<pplist->entries();i++)
 	   pVVisManager->Draw((*pplist)(i).GetPolyhedron(),(*pplist)(i).GetTransform()*transf3D);	
    }
-   else G4cout << "@@@@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume*) pVVisManager is null! @@@@" <<endl; 	
+   else G4cout << "@@@@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume*) pVVisManager is null! @@@@" <<G4endl; 	
    delete pplist;
 }
 

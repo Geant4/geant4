@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4AffineTransform.cc,v 1.2 1999-04-19 18:51:39 japost Exp $
+// $Id: testG4AffineTransform.cc,v 1.3 1999-12-15 14:50:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -97,7 +97,7 @@ G4bool testG4AffineTransform()
 	G4ThreeVector backV= invTf.TransformPoint(forwV);
         
         G4ThreeVector diffV= xyzVec - backV; 
-        G4cout << " Diff of xyzVec and backV is " << diffV << endl;
+        G4cout << " Diff of xyzVec and backV is " << diffV << G4endl;
 #endif
 	assert(ApproxEqual(invTf.TransformPoint(rtTf.TransformPoint(xyzVec)),
 			   xyzVec));
@@ -112,7 +112,7 @@ G4bool testG4AffineTransform()
         G4double MaxAbsDiff(const G4AffineTransform &tf1,
 	                    const G4AffineTransform &tf2); 
         G4double maxabsdiff= MaxAbsDiff( invTf, rtTf.Inverse() );
-        G4cout << "Max difference is " << maxabsdiff << endl;
+        G4cout << "Max difference is " << maxabsdiff << G4endl;
 	assert( maxabsdiff <= 1.e-12 );
 
         G4AffineTransform  rtTf_inv=rtTf.Inverse();
@@ -159,7 +159,7 @@ G4double MaxAbsDiff(const G4AffineTransform &tf1,
                   G4double absdiff; 
 
 		  absdiff= fabs(tf1[i]-tf2[i]);
-                  maxabs= max(absdiff, maxabs); 
+                  maxabs= G4std::max(absdiff, maxabs); 
 		}
 	return maxabs;
 }

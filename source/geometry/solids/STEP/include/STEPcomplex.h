@@ -5,7 +5,7 @@
 
 
 //
-// $Id: STEPcomplex.h,v 1.2 1999-05-21 20:20:31 japost Exp $
+// $Id: STEPcomplex.h,v 1.3 1999-12-15 14:50:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef STEPCOMPLEX_H
@@ -46,14 +46,14 @@ class STEPcomplex : public STEPentity {
 // READ
     virtual Severity STEPread(int id, int addFileId, 
 				   InstMgr * instance_set,
-				   istream& in =cin);
-    virtual void STEPread_error(char c, int index, istream& in);
+				   G4std::istream& in =G4cin);
+    virtual void STEPread_error(char c, int index, G4std::istream& in);
 
 // WRITE
-    virtual void STEPwrite(ostream& out =G4cout, int writeComment = 1);
+    virtual void STEPwrite(G4std::ostream& out =G4cout, int writeComment = 1);
     virtual const char * STEPwrite(SCLstring &buf);
 
-    virtual void WriteExtMapEntities(ostream& out =G4cout);
+    virtual void WriteExtMapEntities(G4std::ostream& out =G4cout);
     virtual const char * WriteExtMapEntities(SCLstring &buf);
     virtual void AppendEntity(STEPcomplex *stepc);
 

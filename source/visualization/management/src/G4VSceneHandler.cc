@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.cc,v 1.7 1999-11-11 15:38:11 gunter Exp $
+// $Id: G4VSceneHandler.cc,v 1.8 1999-12-15 14:54:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,11 +15,7 @@
 #include "G4VSceneHandler.hh"
 
 #include "G4ios.hh"
-#ifdef WIN32
-#include <strstrea.h>
-#else
-#include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 #include "G4VisManager.hh"
 #include "G4VGraphicsSystem.hh"
@@ -59,8 +55,8 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fpScene = pVMan -> GetCurrentScene ();
   if (name == "") {
     char charname [50];
-    ostrstream ost (charname, 50);
-    ost << fSystem.GetName () << '-' << fSceneId << ends;
+    G4std::ostrstream ost (charname, 50);
+    ost << fSystem.GetName () << '-' << fSceneId << G4std::ends;
     fName = charname;
   }
   else {
@@ -239,8 +235,8 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       break;
     }
     else {
-      G4cerr << "NURBS not available for " << solid.GetName () << endl;
-      G4cerr << "Trying polyhedron." << endl;
+      G4cerr << "NURBS not available for " << solid.GetName () << G4endl;
+      G4cerr << "Trying polyhedron." << G4endl;
     }
     // Dropping through to polyhedron...
   case G4ModelingParameters::polyhedron:
@@ -258,7 +254,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
     else {
       G4cerr << "Polyhedron not available for " << solid.GetName ()
 	   <<".\nThis means it cannot be visualized on most systems."
-	"\nContact the Visualization Coordinator." << endl;
+	"\nContact the Visualization Coordinator." << G4endl;
     }
     break;
   case G4ModelingParameters::hierarchy:
@@ -266,7 +262,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
 	 << GetModel () -> GetCurrentTag ()
 	 << ", depth "
 	 << fCurrentDepth
-	 << endl;
+	 << G4endl;
     break;
   }
   EndPrimitives ();
@@ -285,7 +281,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
     fpScene -> GetRunDurationModelList ();
 
   if (runDurationModelList.entries ()) {
-    G4cout << "Traversing scene data..." << endl;
+    G4cout << "Traversing scene data..." << G4endl;
     G4ModelingParameters* pMP = CreateModelingParameters ();
     for (int i = 0; i < runDurationModelList.entries (); i++) {
       G4VModel* pModel = runDurationModelList[i];
@@ -312,7 +308,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
     SetModel (0);  // Flags invalid model.
   }
   else {
-    G4cerr << "No run-duration models in scene data." << endl;
+    G4cerr << "No run-duration models in scene data." << G4endl;
   }
 
   fReadyForTransients = true;
@@ -461,7 +457,7 @@ G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker,
   return size;
 }
 
-ostream& operator << (ostream& os, const G4VSceneHandler& s) {
+G4std::ostream& operator << (G4std::ostream& os, const G4VSceneHandler& s) {
 
   G4VisManager* pVMan = G4VisManager::GetInstance ();
 

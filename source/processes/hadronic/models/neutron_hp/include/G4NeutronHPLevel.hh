@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPLevel.hh,v 1.3 1999-07-02 09:59:24 johna Exp $
+// $Id: G4NeutronHPLevel.hh,v 1.4 1999-12-15 14:53:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPLevel_h
@@ -15,7 +15,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 #include "G4DynamicParticleVector.hh"
 #include "Randomize.hh"
 #include "G4Gamma.hh"

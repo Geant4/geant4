@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessLights.cc,v 1.3 1999-01-11 00:48:38 allison Exp $
+// $Id: G4VisManMessLights.cc,v 1.4 1999-12-15 14:54:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,7 +54,7 @@ void G4VisManMessenger::DoCommandLights (const G4String& commandPath,
   if (commandPath == "/vis~/lights/direction") {
     G4double theta, phi ;
     const char* aString = newValues;
-    istrstream is((char*) aString) ; is >> theta >> phi;
+    G4std::istrstream is((char*) aString) ; is >> theta >> phi;
     theta = theta * deg;
     phi   = phi   * deg;
     G4double x = sin (theta) * cos (phi);
@@ -64,7 +64,7 @@ void G4VisManMessenger::DoCommandLights (const G4String& commandPath,
     G4ViewParameters& viewParams = fpVMan -> SetCurrentViewParameters();
     viewParams.SetLightpointDirection (lightpointDirection);
     if (fpVMan -> GetVerboseLevel () > 0) {
-      G4cout << "Lightpoint direction set to " << lightpointDirection << endl;
+      G4cout << "Lightpoint direction set to " << lightpointDirection << G4endl;
       if (fpVMan -> GetVerboseLevel () > 1) {
 	fpVMan -> PrintCurrentView ();
       }

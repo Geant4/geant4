@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.22 1999-12-06 09:28:04 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.23 1999-12-15 14:51:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,14 +37,10 @@
 #include "G4VIsotopeTable.hh"
 
 #include "G4ios.hh"
-#include <iostream.h>               
-#include <iomanip.h>               
+#include "g4std/iostream"               
+#include "g4std/iomanip"               
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 
 ////////////////////
@@ -81,7 +77,7 @@ G4IonTable::~G4IonTable()
       G4String name;
       if (GetVerboseLevel()>1) {
         G4cout << "G4IonTable:~IonTable() : delete ion of  " ;
-        G4cout << particle->GetParticleName() << endl;
+        G4cout << particle->GetParticleName() << G4endl;
       }
 #endif
       delete particle;
@@ -109,8 +105,8 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
   if ( name(0) == '?') {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "G4IonTable::GetIon() : can not create ions " << endl;
-      G4cout << " Z =" << Z << "  A = " << A <<  endl;
+      G4cout << "G4IonTable::GetIon() : can not create ions " << G4endl;
+      G4cout << " Z =" << Z << "  A = " << A <<  G4endl;
     }
 #endif
       return 0;
@@ -141,7 +137,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
 
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
-    G4cout << "G4IonTable::GetIon() : create ion of " << name << endl;
+    G4cout << "G4IonTable::GetIon() : create ion of " << name << G4endl;
   } 
 #endif
   
@@ -175,8 +171,8 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4double E, G4int J)
   if ( (A<1) || (Z>numberOfElements) || (Z<=0) || (J<0) || (E<0.0) ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "G4IonTable::GetIon() : illegal atomic number/mass" << endl;
-      G4cout << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << endl;
+      G4cout << "G4IonTable::GetIon() : illegal atomic number/mass" << G4endl;
+      G4cout << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << G4endl;
     }
 #endif
     G4Exception("G4IonTable::GetIon : illegal atomic number/mass ");
@@ -201,8 +197,8 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
   if ( (A<1) || (Z>numberOfElements) || (Z<=0) || (J<0) || (E<0.0)) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " << endl;
-      G4cout << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << endl;
+      G4cout << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " << G4endl;
+      G4cout << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << G4endl;
     }
 #endif
     return 0;
@@ -266,9 +262,9 @@ G4String G4IonTable::GetIonName(G4int Z, G4int A, G4double E) const
     return "?";
   }
   char val[50];
-  ostrstream os(val,50);
-  os.setf(ios::fixed);
-  os << A << '[' << setprecision(1) << E/keV << ']' << '\0';
+  G4std::ostrstream os(val,50);
+  os.setf(G4std::ios::fixed);
+  os << A << '[' << G4std::setprecision(1) << E/keV << ']' << '\0';
   name += val;
   return name;
 }
@@ -340,8 +336,8 @@ G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A) const
   if ( (A<1) || (Z>numberOfElements) || (Z<0)) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "G4IonTable::GetNucleusMass() : illegal atomic number/mass " << endl;
-      G4cout << " Z =" << Z << "  A = " << A  << endl;
+      G4cout << "G4IonTable::GetNucleusMass() : illegal atomic number/mass " << G4endl;
+      G4cout << " Z =" << Z << "  A = " << A  << G4endl;
     }
 #endif
     G4Exception("G4IonTable::GetNucleusMass() : illegal atomic number/mass ");
@@ -386,7 +382,7 @@ void G4IonTable::Insert(G4ParticleDefinition* particle)
     //#ifdef G4VERBOSE
     //if (GetVerboseLevel()>0) {
     //  G4cout << "G4IonTable::Insert :" << particle->GetParticleName() ;
-    //  G4cout << " is not ions" << endl; 
+    //  G4cout << " is not ions" << G4endl; 
     //}
     //#endif
   }
@@ -411,7 +407,7 @@ void G4IonTable::Remove(G4ParticleDefinition* particle)
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4IonTable::Remove :" << particle->GetParticleName() ;
-      G4cout << " is not ions" << endl; 
+      G4cout << " is not ions" << G4endl; 
     }
 #endif
   }
@@ -470,7 +466,7 @@ void  G4IonTable::AddProcessManager(const G4String& name)
 {
   // create command string for addProcManager
   char cmdAdd[60];
-  ostrstream osAdd(cmdAdd,60);
+  G4std::ostrstream osAdd(cmdAdd,60);
   osAdd << "/run/particle/addProcManager "<< name << '\0';
 
   // set /control/verbose 0
@@ -498,7 +494,7 @@ void  G4IonTable::SetCuts(G4ParticleDefinition* ion)
 #ifdef G4VERBOSE
     if (GetVerboseLevel()> 1) {
       G4cout << "G4IonTable::GetIon() : cut value =";
-      G4cout << genericIon->GetLengthCuts()/mm << "[mm]" <<endl;
+      G4cout << genericIon->GetLengthCuts()/mm << "[mm]" <<G4endl;
     } 
 #endif      
 
@@ -507,7 +503,7 @@ void  G4IonTable::SetCuts(G4ParticleDefinition* ion)
     // Build Physics Tables for the ion
     // create command string for buildPhysicsTable
     char cmdBld[60];
-    ostrstream osBld(cmdBld,60);
+    G4std::ostrstream osBld(cmdBld,60);
     osBld << "/run/particle/buildPhysicsTable "<< name << '\0';
  
     // set /control/verbose 0

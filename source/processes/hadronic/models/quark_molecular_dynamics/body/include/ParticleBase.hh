@@ -5,7 +5,7 @@
 #include "globals.hh"
 
 class String;
-class ostream;
+class G4std::ostream;
 class QuantumState;
 class QuantumProjections;
 class ParticleType;
@@ -13,7 +13,7 @@ class RGB;
 
 class ParticleBase
 {
-  friend ostream& operator<<(ostream&,const ParticleBase&);
+  friend G4std::ostream& operator<<(G4std::ostream&,const ParticleBase&);
 public:
   virtual ~ParticleBase() {}
   virtual int C() const = 0;

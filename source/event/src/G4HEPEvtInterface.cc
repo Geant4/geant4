@@ -1,21 +1,17 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEPEvtInterface.cc,v 1.2 1999-06-07 16:53:57 stesting Exp $
+// $Id: G4HEPEvtInterface.cc,v 1.3 1999-12-15 14:49:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 #include "G4ios.hh"
 #include "G4HEPEvtInterface.hh"

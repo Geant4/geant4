@@ -74,7 +74,7 @@ Matrize Box::rotateFrame(const Vektor3& r)
   Matrize U(3,3);
   signed int j=0;
   for (int i=1; i<=3 && j==0; i++) {
-    //    cerr << i << "  " << fabs(r[i]/(0.5*L))-1.0 << "  " << (signed int)(r[i]/(0.5*L)) << endl;
+    //    G4cerr << i << "  " << fabs(r[i]/(0.5*L))-1.0 << "  " << (signed int)(r[i]/(0.5*L)) << G4endl;
     j=round(r[i]/(0.5*L))*i;
   }
   switch ( j ) {
@@ -84,7 +84,7 @@ Matrize Box::rotateFrame(const Vektor3& r)
   case -1 : U(1,3) = 1; U(2,2) = 1; U(3,1) = -1; break;
   case 2 : U(1,1) = 1; U(2,3) = 1; U(3,2) = 1; break;
   case -2 : U(1,1) = 1; U(2,3) = -1; U(3,2) = -1; break;
-  default: cerr << "Fehler!!! " << j << endl; exit(0);
+  default: G4cerr << "Fehler!!! " << j << G4endl; exit(0);
   }
   return U;
 }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeBremsstrahlung.cc,v 1.3 1999-05-03 11:04:13 urban Exp $
+// $Id: G4IeBremsstrahlung.cc,v 1.4 1999-12-15 14:51:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -142,21 +142,21 @@ void G4IeBremsstrahlung::TestOfInversion(
   const G4MaterialTable* theMaterialTable=
                           G4Material::GetMaterialTable();
   G4int numOfMaterials = theMaterialTable->length() ;
-  G4cout.setf(ios::scientific, ios::floatfield) ;
+  G4cout.setf(G4std::ios::scientific, G4std::ios::floatfield) ;
   if(printflag>1)
   {
-    G4cout << endl;
-    G4cout << "  particle=" << aParticleType.GetParticleName() << endl;
-    G4cout << "----------------------" << endl;
+    G4cout << G4endl;
+    G4cout << "  particle=" << aParticleType.GetParticleName() << G4endl;
+    G4cout << "----------------------" << G4endl;
   }
   for (G4int J=0; J<numOfMaterials; J++)
   {
     if(printflag>1)
     {
-      G4cout << endl;
-      G4cout << " material = " << (*theMaterialTable)[J]->GetName() << endl;
+      G4cout << G4endl;
+      G4cout << " material = " << (*theMaterialTable)[J]->GetName() << G4endl;
       G4cout << " mat.ind.=" << J << "  T           Nlambda         Tprime"
-             << "         (Tprime-T)/T(%)" << endl ;
+             << "         (Tprime-T)/T(%)" << G4endl ;
     }
 
     G4PhysicsLogVector* aVector ;
@@ -190,29 +190,29 @@ void G4IeBremsstrahlung::TestOfInversion(
        }
        if(printflag>1)
        {
-         G4cout << setw(18) << setprecision(6) << T << "  " <<
-                setw(14)<< setprecision(6) << Nlambda << "  " <<
-                setw(14) << setprecision(6) << Tprime << "      " <<
-                setw(12) << setprecision(3) << del << endl;
+         G4cout << G4std::setw(18) << G4std::setprecision(6) << T << "  " <<
+                G4std::setw(14)<< G4std::setprecision(6) << Nlambda << "  " <<
+                G4std::setw(14) << G4std::setprecision(6) << Tprime << "      " <<
+                G4std::setw(12) << G4std::setprecision(3) << del << G4endl;
        }
      }
    }
    if(printflag>0)
    {
-     G4cout << endl;
+     G4cout << G4endl;
      G4cout << "G4IeBremsstrahlung::TestOfInversion (T->Nlambda->Tprime) " 
-            << endl ;
+            << G4endl ;
      G4cout << "particle= " << aParticleType.GetParticleName() <<
-            "   material= " << (*theMaterialTable)[J]->GetName() << endl ;
-     G4cout << "max (Tprime-T)/T in % =" << setw(10) << setprecision(3)
+            "   material= " << (*theMaterialTable)[J]->GetName() << G4endl ;
+     G4cout << "max (Tprime-T)/T in % =" << G4std::setw(10) << G4std::setprecision(3)
             << delta ;
-     G4cout << "  at a kinetic energy " << setw(10) << setprecision(3) <<
-            Tdelta/MeV << "  MeV" << endl;
+     G4cout << "  at a kinetic energy " << G4std::setw(10) << G4std::setprecision(3) <<
+            Tdelta/MeV << "  MeV" << G4endl;
      delmean /= sum ;
-     G4cout << "mean rel.diff. (Tprime-T)/T=" << setw(10) <<
-             setprecision(3) << delmean <<
-            " % (mean is calculated in abs. value)" << endl;
-     G4cout << endl;
+     G4cout << "mean rel.diff. (Tprime-T)/T=" << G4std::setw(10) <<
+             G4std::setprecision(3) << delmean <<
+            " % (mean is calculated in abs. value)" << G4endl;
+     G4cout << G4endl;
    }
  }
 }
@@ -720,7 +720,7 @@ void G4IeBremsstrahlung::BuildLossTable(
 
            if(LPMGammaEnergyLimit > klim)
            {
-             G4double kmax = min(Cut,LPMGammaEnergyLimit) ;
+             G4double kmax = G4std::min(Cut,LPMGammaEnergyLimit) ;
 
              G4double floss = 0. ;
              G4int nmax = 1000 ;
@@ -1278,8 +1278,8 @@ G4VParticleChange* G4IeBremsstrahlung::PostStepDoIt(const G4Track& trackData,
        G4double screenmin = screenfac*epsilmin/(1.-epsilmin);
 
        // Compute the maximum of the rejection function
-       G4double F1 = max(ScreenFunction1(screenmin) - FZ ,0.);
-       G4double F2 = max(ScreenFunction2(screenmin) - FZ ,0.);
+       G4double F1 = G4std::max(ScreenFunction1(screenmin) - FZ ,0.);
+       G4double F2 = G4std::max(ScreenFunction2(screenmin) - FZ ,0.);
        grejmax = (F1 - epsilmin* (F1*ah - bh*epsilmin*F2))/(42.392 - FZ);
 
        // sample the energy rate of the emitted Gamma
@@ -1290,8 +1290,8 @@ G4VParticleChange* G4IeBremsstrahlung::PostStepDoIt(const G4Track& trackData,
              x = pow(xmin, G4UniformRand()); 
              epsil = x*KineticEnergy/TotalEnergy;
              screenvar = screenfac*epsil/(1-epsil);
-             F1 = max(ScreenFunction1(screenvar) - FZ ,0.);
-             F2 = max(ScreenFunction2(screenvar) - FZ ,0.);
+             F1 = G4std::max(ScreenFunction1(screenvar) - FZ ,0.);
+             F2 = G4std::max(ScreenFunction2(screenvar) - FZ ,0.);
              migdal = (1. + MigdalFactor)/(1. + MigdalFactor/(x*x));
              greject = migdal*(F1 - epsil* (ah*F1 - bh*epsil*F2))/(42.392 - FZ);
         }  while( greject < G4UniformRand()*grejmax );
@@ -1314,9 +1314,9 @@ G4VParticleChange* G4IeBremsstrahlung::PostStepDoIt(const G4Track& trackData,
        G4double bl = bl0 + bl1*U + bl2*U2;
 
        // Compute the maximum of the rejection function
-       grejmax = max(1. + xmin* (al + bl*xmin), 1.+al+bl);
+       grejmax = G4std::max(1. + xmin* (al + bl*xmin), 1.+al+bl);
        G4double xm = -al/(2.*bl);
-       if ((xmin < xm)&&(xm < 1.)) grejmax = max(grejmax, 1.+ xm* (al + bl*xm));
+       if ((xmin < xm)&&(xm < 1.)) grejmax = G4std::max(grejmax, 1.+ xm* (al + bl*xm));
 
        // sample the energy rate of the emitted Gamma
 
@@ -1406,7 +1406,7 @@ G4Element* G4IeBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
   for ( G4int i=0; i < NumberOfElements; i++ )
     if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements, NULL pointer returned." << endl;
+       << "' has no elements, NULL pointer returned." << G4endl;
   return NULL;
 }
 
@@ -1417,7 +1417,7 @@ void G4IeBremsstrahlung::PrintInfoDefinition()
            comments += "        log scale extrapolation above 100 GeV \n";
            comments += "        Gamma energy sampled from a parametrised formula.";
 
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,"Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy")
          << " in " << TotBin << " bins. \n";

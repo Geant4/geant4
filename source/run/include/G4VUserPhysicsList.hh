@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.hh,v 1.5 1999-11-07 13:11:49 kurasige Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.6 1999-12-15 14:53:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -194,14 +194,14 @@ class G4VUserPhysicsList
 
 inline void G4VUserPhysicsList::Construct()
 {
-  if (verboseLevel >1) G4cout << "G4VUserPhysicsList::Construct()" << endl;  
+  if (verboseLevel >1) G4cout << "G4VUserPhysicsList::Construct()" << G4endl;  
 
-  if (verboseLevel >1) G4cout << "Construct particles " << endl;  
+  if (verboseLevel >1) G4cout << "Construct particles " << G4endl;  
   ConstructParticle();
 
   InitializeProcessManager();
 
-  if (verboseLevel >1) G4cout << "Construct processes " << endl;  
+  if (verboseLevel >1) G4cout << "Construct processes " << G4endl;  
   ConstructProcess();
 }
 
@@ -215,7 +215,7 @@ inline void G4VUserPhysicsList::SetVerboseLevel(G4int value)
   verboseLevel = value;
   if (verboseLevel >1){
     G4cout << "G4VUserPhysicsList::SetVerboseLevel  :";
-    G4cout << " Verbose level is set to " << verboseLevel << endl;
+    G4cout << " Verbose level is set to " << verboseLevel << G4endl;
   }
 }
 

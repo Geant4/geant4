@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonDecayChannel.cc,v 1.4 1999-04-14 10:28:27 kurasige Exp $
+// $Id: G4MuonDecayChannel.cc,v 1.5 1999-12-15 14:51:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@ G4MuonDecayChannel::G4MuonDecayChannel(const G4String& theParentName,
   //#ifdef G4VERBOSE
   //if (GetVerboseLevel()>1) {
   //  G4cout << "G4MuonDecayChannel:: constructor ";
-  //  G4cout << "addr[" << this << "]" << endl;
+  //  G4cout << "addr[" << this << "]" << G4endl;
   //}
   //#endif
 
@@ -59,7 +59,7 @@ G4MuonDecayChannel::G4MuonDecayChannel(const G4String& theParentName,
     //  if (GetVerboseLevel()>0) {
     //   G4cout << "G4MuonDecayChannel:: constructor :";
     //   G4cout << " parent particle is not muon but ";
-    //   G4cout << theParentName << endl;
+    //   G4cout << theParentName << G4endl;
     // }
     //#endif
   }
@@ -162,7 +162,7 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
     G4cout << "G4MuonDecayChannel::DecayIt ";
-    G4cout << "  create decay products in rest frame " <<endl;
+    G4cout << "  create decay products in rest frame " <<G4endl;
     products->DumpInfo();
   }
 #endif

@@ -1,5 +1,5 @@
-#include <iostream.h>
-#include <vector.h>
+#include "g4std/iostream"
+#include "g4std/vector"
 #include <string.h>
 #include "math.hh"
 #include "ParticleType.hh"
@@ -54,7 +54,7 @@ RGB RGB::operator<<(int d)
   return y;
 }
 
-void QuantumNumbers::writeOut(ostream& o) const
+void QuantumNumbers::writeOut(G4std::ostream& o) const
 {
   o << B() << "  " << S() << "  " << Isospin() << "  " << Spin() << "  ";
 }
@@ -66,7 +66,7 @@ bool operator==(const ParticleType& x,const ParticleType& y)
 
 ParticleType::ParticleType() : minmass(0),width(0) {}
 
-ParticleType::ParticleType(istream& in) 
+ParticleType::ParticleType(G4std::istream& in) 
   : minmass(0),width(0)
 {
   static int id_counter = 0;
@@ -192,7 +192,7 @@ ParticleType& ParticleType::selectType(int C_,const vector<ParticleBase*>& P,dou
   }
   if ( y.size() ) {
     if ( y0 == 0.0 ) {
-      cerr << "Too few energy: " << m << "!!\n";
+      G4cerr << "Too few energy: " << m << "!!\n";
       int i=0;
       while ( i<L.size() && L[i]->getWidth() == 0.0 ) { ++i; }
       if ( i==L.size() ) 
@@ -204,20 +204,20 @@ ParticleType& ParticleType::selectType(int C_,const vector<ParticleBase*>& P,dou
     int l;
     for (l=0; l<y.size() && r>y[l]; l++);
     if (l==y.size()) {
-      cerr << "Not found: 1\n";
+      G4cerr << "Not found: 1\n";
 //      printTree(cerr);
 //      for (int i=0; i<P.size(); i++)
-//	cerr << *P[i] << endl;
+//	G4cerr << *P[i] << G4endl;
       throw "Not found";
     }
     return *L[list[l]];
   }
   else {
-    cerr << "Undefined Particle!!\n";
+    G4cerr << "Undefined Particle!!\n";
     //    return Knot<ParticleType>::FindKnot("X");
 //    printTree(cerr);
 //    for (int i=0; i<P.size(); i++)
-//      cerr << *P[i] << endl;
+//      G4cerr << *P[i] << G4endl;
     throw undefinedParticle();  
   }
 }
@@ -271,7 +271,7 @@ RGB QuantumNumbers::getColor(RGB col) const
   return RGB(c);
 }
 
-void ParticleType::writeOut(ostream& o) const
+void ParticleType::writeOut(G4std::ostream& o) const
 {
   o << Name() << ": " << PeakMass() << "  ";
   QuantumNumbers::writeOut(o);

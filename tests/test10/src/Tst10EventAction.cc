@@ -1,4 +1,4 @@
-// $Id: Tst10EventAction.cc,v 1.2 1999-04-17 08:01:51 kurasige Exp $
+// $Id: Tst10EventAction.cc,v 1.3 1999-12-15 14:54:43 gunter Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -19,7 +19,7 @@
 #include "G4VVisManager.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
-#include <iostream.h>
+#include "g4std/iostream"
 
 Tst10EventAction::Tst10EventAction()
 {;}
@@ -29,12 +29,12 @@ Tst10EventAction::~Tst10EventAction()
 
 void Tst10EventAction::BeginOfEventAction(const G4Event* evt)
 {
-  cout << ">>> Start Event " << evt->GetEventID() << endl;
+  cout << ">>> Start Event " << evt->GetEventID() << G4endl;
 }
 
 void Tst10EventAction::EndOfEventAction(const G4Event* evt)
 {
-  cout << ">>> End Event " << evt->GetEventID() << endl;
+  cout << ">>> End Event " << evt->GetEventID() << G4endl;
 
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;

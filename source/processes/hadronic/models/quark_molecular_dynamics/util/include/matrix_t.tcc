@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include "g4std/iostream"
 #include <stdlib.h>
 #include <stdarg.h>
 #ifndef GCC
@@ -6,14 +6,14 @@
 #endif 
 
 template<class t>
-ostream& operator<<(ostream& o,const arrayBase<t>& a) 
+G4std::ostream& operator<<(G4std::ostream& o,const arrayBase<t>& a) 
 { 
   a.writeOut(o); 
   return o; 
 }
 
 template<class t>
-istream& operator>>(istream& in,const arrayBase<t>& a) 
+G4std::istream& operator>>(G4std::istream& in,const arrayBase<t>& a) 
 { 
   a.readIn(in); 
   return in; 
@@ -34,7 +34,7 @@ template<class t>
 inline t& arrayBase<t>::coeff(int i) 
 { 
   if (i>=size) {
-    cerr << i << endl;
+    G4cerr << i << G4endl;
     throw "arrayBase::coeff: Index out of range"; 
   }
   return x[i]; 
@@ -43,7 +43,7 @@ inline t& arrayBase<t>::coeff(int i)
 template<class t>
 inline t arrayBase<t>::coeff(int i) const { 
   if (i>=size) {
-    cerr << i << endl;
+    G4cerr << i << G4endl;
     throw "arrayBase::coeff: Index out of range"; 
   }
   return x[i]; 
@@ -113,7 +113,7 @@ void arrayBase<t>::set(const arrayBase<t>& a)
     }
 
 template<class t>
-void arrayBase<t>::writeToStream(ostream& o) const
+void arrayBase<t>::writeToStream(G4std::ostream& o) const
 {
   o << size << " ";
   for (int i=0; i<size; i++)
@@ -122,7 +122,7 @@ void arrayBase<t>::writeToStream(ostream& o) const
 }
 
 template<class t>
-void arrayBase<t>::readFromStream(istream& in)
+void arrayBase<t>::readFromStream(G4std::istream& in)
 {
   in >> size;
   set(size);
@@ -157,7 +157,7 @@ arrayBase<t>::arrayBase(const arrayBase<t>& a) : size(a.dim()),x(new t[size])
     x[i] = a.coeff(i);
 }
 template<class t>
-void arrayBase<t>::writeOut(ostream& o) const
+void arrayBase<t>::writeOut(G4std::ostream& o) const
 {
   o << "(";
   for (int i=0; i<dim()-1; i++)
@@ -166,7 +166,7 @@ void arrayBase<t>::writeOut(ostream& o) const
 }
 
 template<class t>
-void arrayBase<t>::readIn(istream& i) const
+void arrayBase<t>::readIn(G4std::istream& i) const
 {
   char c;
   t y;
@@ -697,14 +697,14 @@ Matrix<t>& Matrix<t>::multiply(const Matrix<t>& B,Matrix<t>& C) const
   return C;
 }
 template<class t>
-void Matrix<t>::writeOut(ostream& o ) const
+void Matrix<t>::writeOut(G4std::ostream& o ) const
 {
   for (int i=1; i<=rows(); i++) {
     for (int j=1; j<=cols(); j++) {
       o.width(12);
       o << (*this)(i,j) << "  ";
     }
-    o << endl;
+    o << G4endl;
   }
 }
 template<class t>

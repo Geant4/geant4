@@ -1,16 +1,16 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GHEProtonInteractionTest.cc,v 1.1 1999-01-08 16:33:23 gunter Exp $
+// $Id: G4GHEProtonInteractionTest.cc,v 1.2 1999-12-15 14:52:58 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4Material.hh"
 
@@ -28,9 +28,9 @@
 
 int main()
 {
-   G4cout.setf( ios::scientific, ios::floatfield );
-   ofstream outFile( "ProtonInelastic.listing", ios::out);
-   outFile.setf( ios::scientific, ios::floatfield );
+   G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
+   G4std::ofstream outFile( "ProtonInelastic.listing", G4std::ios::out);
+   outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
   G4Material* Al = new G4Material("Aluminium", 13., 26.98*g/mole, 2.7 *g/cm3 );
   G4Material* Fe = new G4Material("Iron",      26., 55.85*g/mole, 7.87*g/cm3 );
@@ -96,9 +96,9 @@ int main()
 
        meanFreePath = theProtonInelasticProcess.GetMeanFreePath(aTrack, 1., condition);
 
-       outFile <<"  " << "100 GeV"  << "            " << meanFreePath/cm << endl ;
+       outFile <<"  " << "100 GeV"  << "            " << meanFreePath/cm << G4endl ;
     }
-  outFile << " " << endl;
+  outFile << " " << G4endl;
    
   // --------- Test the PostStepDoIt
 
@@ -132,7 +132,7 @@ int main()
  
       //      theProtonInelasticProcess.ResetNumberOfInteractionLengthLeft();
 
-         outFile << " -----------------------------------------------------------" << endl;   
+         outFile << " -----------------------------------------------------------" << G4endl;   
         // check the kinematic
         //
         G4double Tkin0 = aProton.GetKineticEnergy();
@@ -140,7 +140,7 @@ int main()
                  Py0   = aProton.GetMomentum().y() ,
                  Pz0   = aProton.GetMomentum().z() ;
         outFile << " Initial Proton:  Px= " << Px0 << "   Py= " << Py0 << "   Pz= " << Pz0 
-                           << "   Tkin= " << Tkin0 << endl ;
+                           << "   Tkin= " << Tkin0 << G4endl ;
 
         G4double Tkin1 =  aFinalState->GetEnergyChange();
         G4double Px1   = (aFinalState->GetMomentumChange()->x())*Tkin1 ,
@@ -149,7 +149,7 @@ int main()
                  Pz1   = (aFinalState->GetMomentumChange()->z())*Tkin1 ;
         G4double Edep  =  aFinalState->GetLocalEnergyDeposited();
         outFile << "   final State:  Px= " << Px1 << "   Py= " << Py1 << "   Pz= " << Pz1 
-                           << "   Tkin= " << Tkin1 << "   Edep= " << Edep << endl ;
+                           << "   Tkin= " << Tkin1 << "   Edep= " << Edep << G4endl ;
 
         G4double Tkin2 = 0., Px2 = 0., Py2 = 0., Pz2 = 0. ;
         G4Track * aSecondary;
@@ -161,7 +161,7 @@ int main()
             Py2   = (aSecondary->GetMomentum()).y() ;
             Pz2   = (aSecondary->GetMomentum()).z() ;
             outFile << "  secondary: Px= " << Px2 << "   Py= " << Py2 << "   Pz= " << Pz2
-                           << "   Tkin= " << Tkin2 << endl ;
+                           << "   Tkin= " << Tkin2 << G4endl ;
            // NOTE - Secondaries are normally deleted by the track destructor !
 	    //            delete aFinalState->GetSecondary(i);
            }

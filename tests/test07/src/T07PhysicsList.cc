@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T07PhysicsList.cc,v 1.3 1999-10-03 10:01:26 kurasige Exp $
+// $Id: T07PhysicsList.cc,v 1.4 1999-12-15 14:54:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,7 +24,7 @@
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
 #include "G4ios.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"                
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -241,7 +241,7 @@ void T07PhysicsList::SetCuts()
   G4double cut = defaultCutValue;
   if (verboseLevel >0){
     G4cout << "T07PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
+    G4cout << "CutLength : " << cut/mm << " (mm)" << G4endl;
   }  
 
  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
@@ -276,17 +276,17 @@ void T07PhysicsList::SetStatusEmProcess()
 //
  do {
      // diplay the status of the processes
-        G4cout << " ****** Processes status ****** " << endl;
+        G4cout << " ****** Processes status ****** " << G4endl;
         G4cout << "   " << process1 << " " << process2 << " " << process3
              <<  " "  << process4 << " " << process5 << " " << process6 
-             <<  " "  << process7 << endl;
+             <<  " "  << process7 << G4endl;
         G4cout << "   "  << lstate1 << "   " << lstate2 << "   " << lstate3
              << "   " << lstate4 << "   " << lstate5 << "   " << lstate6 
-             << "   " << lstate7 << endl;
+             << "   " << lstate7 << G4endl;
 
      // update the status of the processes
-        G4cout << "  enter -> a process name, on/off or: ok on : " << flush;
-        cin >> process >> newstate ;
+        G4cout << "  enter -> a process name, on/off or: ok on : " << G4std::flush;
+        G4cin >> process >> newstate ;
         if (newstate=="on") active = true;
          else active = false;
 
@@ -323,7 +323,7 @@ void T07PhysicsList::SetStatusEmProcess()
            }
   } while (process!="ok") ;
   
- G4cout << "  ---> Done" << endl;  
+ G4cout << "  ---> Done" << G4endl;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -5,7 +5,7 @@
 
 
 //
-// $Id: STEPentity.cc,v 1.2 1999-05-21 20:20:50 japost Exp $
+// $Id: STEPentity.cc,v 1.3 1999-12-15 14:50:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -129,7 +129,7 @@ STEPentity::AddP21Comment(SCLstring &s, int replace)
 }
 
 void 
-STEPentity::STEPwrite_reference (ostream& out)
+STEPentity::STEPwrite_reference (G4std::ostream& out)
 {  
   out << "#" << STEPfile_id; 
 }
@@ -288,13 +288,13 @@ void STEPentity::EnforceOptionality(int on)
 */
 /******************************************************************
  ** Procedure:  beginSTEPwrite
- ** Parameters:  ostream& out -- stream to write to
+ ** Parameters:  G4std::ostream& out -- stream to write to
  ** Returns:  
  ** Side Effects:  writes out the SCOPE section for an entity
  ** Status:  stub 
  ******************************************************************/
 
-void STEPentity::beginSTEPwrite(ostream& out)
+void STEPentity::beginSTEPwrite(G4std::ostream& out)
 {
     out << "begin STEPwrite ... \n" ;
     out.flush();
@@ -309,7 +309,7 @@ void STEPentity::beginSTEPwrite(ostream& out)
 
 /******************************************************************
  ** Procedure:  STEPwrite
- ** Parameters:  ostream& out -- stream to write to
+ ** Parameters:  G4std::ostream& out -- stream to write to
  ** Returns:  
  ** Side Effects:  writes out the data associated with an instance 
                    in STEP format
@@ -317,7 +317,7 @@ void STEPentity::beginSTEPwrite(ostream& out)
  **
  ******************************************************************/
 
-void STEPentity::STEPwrite(ostream& out, int writeComment)
+void STEPentity::STEPwrite(G4std::ostream& out, int writeComment)
 {
     SCLstring tmp;
     if(writeComment && p21Comment && !p21Comment->is_null() )
@@ -332,7 +332,7 @@ void STEPentity::STEPwrite(ostream& out, int writeComment)
     out << ");\n";
 }
 
-void STEPentity::endSTEPwrite(ostream& out)
+void STEPentity::endSTEPwrite(G4std::ostream& out)
 {
     out << "end STEPwrite ... \n" ;
     out.flush();
@@ -388,14 +388,14 @@ STEPentity::PrependEntityErrMsg()
  ** Procedure:  STEPentity::STEPread_error
  ** Parameters:  char c --  character which caused error
  **     int i --  index of attribute which caused error
- **     istream& in  --  input stream for recovery
+ **     G4std::istream& in  --  input stream for recovery
  ** Returns:  
  ** Description:  reports the error found, reads until it finds the end of an
  **     instance. i.e. a close quote followed by a semicolon optionally having
  **     whitespace between them.
  ******************************************************************/
 void
-STEPentity::STEPread_error(char c, int i, istream& in)
+STEPentity::STEPread_error(char c, int i, G4std::istream& in)
 {
     char errStr[BUFSIZ];
     errStr[0] = '\0';
@@ -453,7 +453,7 @@ STEPentity::STEPread_error(char c, int i, istream& in)
 	}
 	if(in.good() && (c == ')') )
 	{
-	    in >> ws; // skip whitespace
+	    in >> G4std::ws; // skip whitespace
 	    in.get(c);
 	    tmp.Append(c);
 //	    G4cerr << c;
@@ -486,13 +486,13 @@ STEPentity::STEPread_error(char c, int i, istream& in)
  ** Parameters:  int id
  **              int idIncrement
  **              InstMgr instances
- **              istream& in
+ **              G4std::istream& in
  ** Side Effects:  gobbles up input stream
  ** Status:
  ******************************************************************/
 
 Severity
-STEPentity::STEPread(int id,  int idIncr, InstMgr * instance_set, istream& in)
+STEPentity::STEPread(int id,  int idIncr, InstMgr * instance_set, G4std::istream& in)
 {
     STEPfile_id = id;
     char c ='\0';
@@ -503,7 +503,7 @@ STEPentity::STEPread(int id,  int idIncr, InstMgr * instance_set, istream& in)
     // L. Broglia
     // ClearError(1);
 
-    in >> ws;
+    in >> G4std::ws;
     in >> c; 
 
     // read the open paren
@@ -514,7 +514,7 @@ STEPentity::STEPread(int id,  int idIncr, InstMgr * instance_set, istream& in)
 		       "  Missing initial open paren... Trying to recover.\n");
 	in.putback(c); // assume you can recover by reading 1st attr value
     }
-    in >> ws;
+    in >> G4std::ws;
 
     int n = attributes.list_length();
     if( n == 0)  // no attributes
@@ -588,14 +588,14 @@ STEPentity::STEPread(int id,  int idIncr, InstMgr * instance_set, istream& in)
 ///////////////////////////////////////////////////////////////////////////////
 
 STEPentity *
-ReadEntityRef(istream &in, ErrorDescriptor *err, char *tokenList, 
+ReadEntityRef(G4std::istream &in, ErrorDescriptor *err, char *tokenList, 
 	      InstMgr * instances, int addFileId)
 {
     char c;
     char errStr[BUFSIZ];
     errStr[0] = '\0';
     
-    in >> ws;
+    in >> G4std::ws;
     in >> c;
     switch (c)
     {
@@ -692,7 +692,7 @@ STEPentity *
 ReadEntityRef(const char * s, ErrorDescriptor *err, char *tokenList, 
 	      InstMgr * instances, int addFileId)
 {
-    istrstream in((char *)s);
+    G4std::istrstream in((char *)s);
     return ReadEntityRef(in, err, tokenList, instances, addFileId);
 }
 
@@ -924,7 +924,7 @@ STEPentity::AttributeCount ()  {
 #ifdef OBSOLETE
 Severity 
 STEPentity::ReadAttrs(int id, int addFileId, 
-		       class InstMgr * instance_set, istream& in)
+		       class InstMgr * instance_set, G4std::istream& in)
 {
     char c ='\0';
     char errStr[BUFSIZ];
@@ -987,7 +987,7 @@ STEPentity::ReadAttrs(int id, int addFileId,
 	}
 	else if(c == ')')
 	{
-	    in >> ws;
+	    in >> G4std::ws;
 	    char z = in.peek();
 	    if (z == ';')
 	    {

@@ -1,4 +1,4 @@
-// $Id: Tst10PhysicsList.cc,v 1.2 1999-04-17 08:01:52 kurasige Exp $
+// $Id: Tst10PhysicsList.cc,v 1.3 1999-12-15 14:54:43 gunter Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -20,7 +20,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"                
 
 
 Tst10PhysicsList::Tst10PhysicsList():  G4VUserPhysicsList()
@@ -97,7 +97,7 @@ void Tst10PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
     G4cout << "Tst10PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << endl;
+    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }
   // set verbose level 0 to surpress messages
   G4int temp = GetVerboseLevel();

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.16 1999-10-24 15:16:09 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.17 1999-12-15 14:51:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -570,7 +570,7 @@ void G4MultipleScattering::PrintInfoDefinition()
         comments += "\n          New model of MSC , computes the lateral \n";
         comments += "          displacement of the particle , too.";
 
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,
                                                   "Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy")

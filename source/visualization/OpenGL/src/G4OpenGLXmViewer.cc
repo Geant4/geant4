@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.2 1999-01-11 00:47:51 allison Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.3 1999-12-15 14:54:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,7 @@ void G4OpenGLXmViewer::GetXmConnection () {
   if (!toplevel) {
     fViewId = -1;  // This flags an error.
     G4cerr << "G4OpenGLXmViewer::GetXmConnection unable to Initialize"
-      " application context." << endl;
+      " application context." << G4endl;
     return;
   }
 
@@ -103,14 +103,14 @@ void G4OpenGLXmViewer::GetXmConnection () {
   if (!dpy) {
     fViewId = -1;  // This flags an error.
     G4cerr << "G4OpenGLXmViewer::GetXmConnection unable to connect to display."
-	 << endl;
+	 << G4endl;
     return;
   }
 
   if (!glXQueryExtension (dpy, &errorBase, &eventBase)) {
     fViewId = -1;  // This flags an error.
     G4cerr << "G4OpenGLXmViewer::GetXmConnection. X Server has no GLX extension."
-	 << endl;;
+	 << G4endl;;
     return;
   }
 }
@@ -163,7 +163,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   XmStringFree (misc_str);
   XmStringFree (spec_str);
 
-  G4cout << "Created menubar" << endl;
+  G4cout << "Created menubar" << G4endl;
 
 
   //*********Create style pulldown menu on menubar*********
@@ -190,7 +190,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   XmStringFree (draw_str);
   XmStringFree (bgnd_str);
 
-  //  G4cout << "Created Style pulldown menu" << endl;
+  //  G4cout << "Created Style pulldown menu" << G4endl;
 
   //Add Representation pullright menu to style cascade...
   polyhedron_str = XmStringCreateLocalized ("Polyhedron");
@@ -232,7 +232,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   XmStringFree (polyhedron_str);
   XmStringFree (nurbs_str);
   
-  //  G4cout << "Created Representation pulldown menu" << endl;
+  //  G4cout << "Created Representation pulldown menu" << G4endl;
 
   //Add Drawing pullright menu to style cascade...
   wireframe_str = XmStringCreateLocalized ("Wireframe");
@@ -287,7 +287,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   XmStringFree (hsr_str);
   XmStringFree (hlhsr_str);
 
-  //  G4cout << "Created Drawing pullright menu" << endl;
+  //  G4cout << "Created Drawing pullright menu" << G4endl;
 
   //Add Drawing pullright menu to style cascade...
   white_str = XmStringCreateLocalized ("White");
@@ -327,7 +327,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   XmStringFree (white_str);
   XmStringFree (black_str);
 
-  //  G4cout << "Created Background color pullright menu" << endl;
+  //  G4cout << "Created Background color pullright menu" << G4endl;
 
   //*********Create actions pulldown menu on menubar*********
   rot_str = XmStringCreateLocalized ("Rotation control panel");
@@ -353,7 +353,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   XmStringFree (rot_str);
   XmStringFree (pan_str);
   XmStringFree (set_str);
-  G4cout << "Created Actions pulldown menu" << endl;
+  G4cout << "Created Actions pulldown menu" << G4endl;
 
   misc_str = XmStringCreateLocalized ("Miscellany control panel");
   exit_str = XmStringCreateLocalized ("Exit to G4Vis>");
@@ -379,7 +379,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   XmStringFree (misc_str);
   XmStringFree (exit_str);
   XmStringFree (print_str);
-  G4cout << "Created Miscellany pulldown menu" << endl;
+  G4cout << "Created Miscellany pulldown menu" << G4endl;
 
   trans_str = XmStringCreateLocalized ("Transparency");
   anti_str = XmStringCreateLocalized ("Antialiasing");
@@ -405,7 +405,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   XmStringFree (anti_str);
   XmStringFree (halo_str);
 
-  //  G4cout << "Created Special pulldown menu" << endl;
+  //  G4cout << "Created Special pulldown menu" << G4endl;
 
   //Add Transparency pullright menu to special cascade...
   off_str = XmStringCreateLocalized ("Off");

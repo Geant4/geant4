@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.1 1999-01-07 16:13:44 gunter Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.2 1999-12-15 14:53:37 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -117,7 +117,7 @@ G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName)
   pdefFragm[5] = G4Alpha::Alpha();
 
   if (verboseLevel>0) {
-    G4cout << GetProcessName() << " is created "<< endl;
+    G4cout << GetProcessName() << " is created "<< G4endl;
   }
 
   Fragments   = new G4GHEKinematicsVector [MXFRAG];
@@ -189,10 +189,10 @@ G4double G4MuonMinusCaptureAtRest::AtRestGetPhysicalInteractionLength(
 
   if ((currentInteractionLength <0.0) || (verboseLevel>2)){
     G4cout << "G4MuonMinusCaptureAtRestProcess::AtRestGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<endl;
+    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() <<endl;
-    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<endl;
+    G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
+    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<G4endl;
   }
 
   return theNumberOfInteractionLengthLeft * currentInteractionLength;
@@ -221,7 +221,7 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(
   G4double globalTime = track.GetGlobalTime()/s;
 
   if (verboseLevel>1) {
-    G4cout << "G4MuonMinusCaptureAtRest::AtRestDoIt is invoked " <<endl;
+    G4cout << "G4MuonMinusCaptureAtRest::AtRestDoIt is invoked " <<G4endl;
   }
 
   G4ParticleMomentum momentum;
@@ -532,7 +532,7 @@ G4double G4MuonMinusCaptureAtRest::CalculateIsotopicMass(G4double a,
     a * 8.367 - z * .783 + ev + es + ec + eex + cam2[iz0 - 1] + cam3[n - 1];
   ret_val = (ret_val + a * O16OLD) * O16RAT - a * ( C12NEW - ADJUST );
   d__1 = ret_val, d__2 = z * exhydr + (a - z) * exneut;
-  ret_val = min(d__1,d__2);
+  ret_val = G4std::min(d__1,d__2);
   return ret_val;
 
 } // CalculateIsotopicMass
@@ -617,12 +617,12 @@ void G4MuonMinusCaptureAtRest::EvaporationDeexcitation()
       ipar = 2;
     }
   }
-  delpai = min(eexdum,delta);
+  delpai = G4std::min(eexdum,delta);
   rnucl = residualNuclearMasses[atMassResidNucl - 1] * R0NUCL;
   ainerm = massResidNucl * .24 * rnucl * rnucl;
   roten0 = 0.5 * PLABRC * PLABRC / ainerm;
   d__1 = delta, d__2 = roten0 * 2.;
-  enmin = max(d__1,d__2);
+  enmin = G4std::max(d__1,d__2);
   rnmass = massResidNucl + excitEnResidNucl;
   umo = rnmass;
   gamcm = totEnResidNucl / rnmass;
@@ -661,7 +661,7 @@ void G4MuonMinusCaptureAtRest::EvaporationDeexcitation()
       }
       lexpn = (lmult << 1) + 1;
       ddlexp = (G4double) lexpn;
-      xdismx = min(ddlexp,hhh);
+      xdismx = G4std::min(ddlexp,hhh);
       if (xdismx > EXPMAX) {
 	dismx = 0.;
       } else {
@@ -712,8 +712,8 @@ void G4MuonMinusCaptureAtRest::EvaporationDeexcitation()
       umo = rnmass;
     } while (excitEnResidNucl > enmin);
     if (nSecPart >= MXSECS) {
-      G4cout << " **** Finuc overflow in EvaporationDeexcitation, program stopped ****" << endl;
-      G4cout << "STOP" << endl;
+      G4cout << " **** Finuc overflow in EvaporationDeexcitation, program stopped ****" << G4endl;
+      G4cout << "STOP" << G4endl;
       exit(1);
     }
   }
@@ -811,12 +811,12 @@ void G4MuonMinusCaptureAtRest::EvaporationDeexcitation()
   echck -= kinEnResidNucl;
   if (abs(echck) > echck0 * 1e-7) {
     G4cout << " **** No energy conservation in EvaporationDeexcitation ****"
-	 << " " << echck << endl;
+	 << " " << echck << G4endl;
   }
   excitEnResidNucl = 0.;
   if (nSecPart > MXSECS) {
-    G4cout << " **** Finuc overflow in EvaporationDeexcitation, program stopped ****" << endl;
-    G4cout << "STOP" << endl;
+    G4cout << " **** Finuc overflow in EvaporationDeexcitation, program stopped ****" << G4endl;
+    G4cout << "STOP" << G4endl;
     exit(1);
   }
   recoilEnResidNucl = kinEnResidNucl;
@@ -849,8 +849,8 @@ void G4MuonMinusCaptureAtRest::FermiMotion(G4int pidx)
   frndm[0] = G4UniformRand();
   frndm[1] = G4UniformRand();
   frndm[2] = G4UniformRand();
-  r__1 = max(frndm[0],frndm[1]);
-  p2 = max(r__1,frndm[2]);
+  r__1 = G4std::max(frndm[0],frndm[1]);
+  p2 = G4std::max(r__1,frndm[2]);
   if (atMassTarget <= 1) {
     ferm = 0.;
   }
@@ -1390,7 +1390,7 @@ L1000:
   // Check for starting data inconsistencies
   if (ja - jz < 0) {
     G4cout << " Dres: cascade residual nucleus has mass no. less than Z!!"
-	 << endl;
+	 << G4endl;
     return;
   } else if (ja <= 6 || jz <= 2) {
     //
@@ -1418,7 +1418,7 @@ L1000:
       if (deltu <= 0.) {
 	if (deltu < umo * -2.0 * ANGLGB) {
 	  G4cout << " *** Dres: insufficient Umo for a nucleon couple"
-	       << " " << umo << " " << zmass[jemiss - 1] * 2. << endl;
+	       << " " << umo << " " << zmass[jemiss - 1] * 2. << G4endl;
 	}
 	umo = (umo + deltu) * ( 1.0 + ANGLGB );
       }
@@ -1445,15 +1445,15 @@ L1000:
 	  } else {
 	    // Energy too low to split the deuteron, return
 	    G4cout << " **Dres: energy too low to split a deuteron! M2,M3"
-		 << " " << m2 << " " << m3 << endl;
+		 << " " << m2 << " " << m3 << G4endl;
 	    return;
 	  }
 	case 4:
 	  //  Triton:
 	  d__1 = 0., d__2 = *u + bnmass[2] - bnmass[3];
-	  deuneu = max(d__1,d__2);
+	  deuneu = G4std::max(d__1,d__2);
 	  d__1 = 0., d__2 = *u - bnmass[3];
-	  prnene = max(d__1,d__2);
+	  prnene = G4std::max(d__1,d__2);
 	  qnorm = deuneu + prnene;
 	  //  If we cannot split then return
 	  if (qnorm <= 0.) {
@@ -1495,9 +1495,9 @@ L1000:
 	case 5:
 	  //  3-He:
 	  d__1 = 0., d__2 = *u + bnmass[2] - bnmass[4];
-	  deupro = max(d__1,d__2);
+	  deupro = G4std::max(d__1,d__2);
 	  d__1 = 0., d__2 = *u - bnmass[4];
-	  prprne = max(d__1,d__2);
+	  prprne = G4std::max(d__1,d__2);
 	  qnorm = deupro + prprne;
 	  //  If we cannot split then return
 	  if (qnorm <= 0.) {
@@ -1540,11 +1540,11 @@ L1000:
 	  //  Alpha:
 	  //
 	  d__1 = 0., d__2 = *u + bnmass[2] * 2. - bnmass[5];
-	  deudeu = max(d__1,d__2);
+	  deudeu = G4std::max(d__1,d__2);
 	  d__1 = 0., d__2 = *u + bnmass[3] - bnmass[5];
-	  protri = max(d__1,d__2);
+	  protri = G4std::max(d__1,d__2);
 	  d__1 = 0., d__2 = *u + bnmass[4] - bnmass[5];
-	  ueu3he = max(d__1,d__2);
+	  ueu3he = G4std::max(d__1,d__2);
 	  qnorm = deudeu + protri + ueu3he;
 	  //  If we cannot split then return
 	  if (qnorm <= 0.) {
@@ -1598,7 +1598,7 @@ L1000:
       ddjja = (G4double) jja;
       ddjjz = (G4double) jjz;
       d__1 = *u + energ0 - GetIsotopicMass(ddjja, ddjjz) - exmass[k - 1];
-      q[k] = max(d__1,0.) + q[k - 1];
+      q[k] = G4std::max(d__1,0.) + q[k - 1];
     }
     //  If no emission channel is open then return
     if (q[6] <= 0.) {
@@ -1629,7 +1629,7 @@ L1000:
 	goto L2300;
       }
     }
-    G4cout << " **** error in Dres, few nucleon treatment ****" << endl;
+    G4cout << " **** error in Dres, few nucleon treatment ****" << G4endl;
     return;
     // Loop to compute the residual excitation energy
 L2300:
@@ -1820,13 +1820,13 @@ L2600:
       ExcitationEnergyLevel(iaa, izz, &eex1st, &eex2nd, &corr);
       eex1st *= 1e3;
       eex2nd *= 1e3;
-      corr = max(corr,0.) * 1e3;
+      corr = G4std::max(corr,0.) * 1e3;
       if (nn == 4 && izz == 4) {
 	if (*u - thresh[j - 1] - 6.1 > 0.) {
 	  corr = 6.;
 	} else {
 	  tmpvar = *u - thresh[j - 1] - .1;
-	  corr = max(0.,tmpvar);
+	  corr = G4std::max(0.,tmpvar);
 	}
       }
       if (NINT(pairCorrFlag) == 1) {
@@ -1846,9 +1846,9 @@ L2600:
     }
     n1 = 1;
     d__1 =
-      max(s[0],s[1]), d__1 = max(d__1,s[2]), d__1 =
-      max(d__1,s[3]), d__1 = max(d__1,s[4]);
-    ses = max(d__1,s[5]);
+      G4std::max(s[0],s[1]), d__1 = G4std::max(d__1,s[2]), d__1 =
+      G4std::max(d__1,s[3]), d__1 = G4std::max(d__1,s[4]);
+    ses = G4std::max(d__1,s[5]);
     for (j = 1; j <= 6; ++j) {
       js = (G4int) (sos[j - 1] + 1.);
       fjs = (G4double) js;
@@ -1856,12 +1856,12 @@ L2600:
       if (s[j - 1] > 0.) {
 	mm = ja - ia[j - 1];
 	d__3 = EXPMIN, d__4 = s[j - 1] - ses;
-	d__1 = EXPMAX, d__2 = max(d__3,d__4);
-	expsas = min(d__1,d__2);
+	d__1 = EXPMAX, d__2 = G4std::max(d__3,d__4);
+	expsas = G4std::min(d__1,d__2);
 	sas = exp(expsas);
 	d__3 = EXPMIN, d__4 = -s[j - 1];
-	d__1 = EXPMAX, d__2 = max(d__3,d__4);
-	expsus = min(d__1,d__2);
+	d__1 = EXPMAX, d__2 = G4std::max(d__3,d__4);
+	expsus = G4std::min(d__1,d__2);
 	sus = exp(expsus);
 	d__1 = s[j - 1];
 	d__2 = s[j - 1];
@@ -1881,7 +1881,7 @@ L2600:
 	  r[j - 1] = ccoul[j - 1] * (d__1 * d__1) * eye1[j - 1] * sas;
 	}
 	d__1 = 0., d__2 = r[j - 1];
-	r[j - 1] = max(d__1,d__2);
+	r[j - 1] = G4std::max(d__1,d__2);
 	sigma += r[j - 1];
       }
     }
@@ -2196,7 +2196,7 @@ G4double G4MuonMinusCaptureAtRest::GetIsotopicMass(G4double a, G4double z)
     if (ka0 != 1) {
       if (n < 0) {
 	G4cout << " Stopped in energy: mass number =< atomic number !!"
-	     << " " << ka0 << " " << kz0 << endl;
+	     << " " << ka0 << " " << kz0 << G4endl;
       }
     } else {
       ret_val = isotopicData[2][0];
@@ -3474,7 +3474,7 @@ void G4MuonMinusCaptureAtRest::DoMuCapture()
       amntar2 = massProton;
       break;
     default:
-      G4cout << "? This cannot happen!" << endl;
+      G4cout << "? This cannot happen!" << G4endl;
       exit(1);
     }
   } else {
@@ -3524,10 +3524,10 @@ void G4MuonMinusCaptureAtRest::DoMuCapture()
     }
   }
   i__1 = nSecPart, i__2 = MXGKIN - nGkine;
-  nstak1 = min(i__1,i__2);
+  nstak1 = G4std::min(i__1,i__2);
   if (nSecPart > nstak1) {
     G4cout << " **** FLUFIN: Stack overflow, "
-	 << nSecPart - nstak1 << " particles lost" << endl;
+	 << nSecPart - nstak1 << " particles lost" << G4endl;
   }
   // ==     Put neutrino on the stack IF DESIRED.
   ++nGkine;
@@ -3544,10 +3544,10 @@ void G4MuonMinusCaptureAtRest::DoMuCapture()
     Gkin[nGkine - 1].SetTOF( tDelay );
   }
   i__1 = nallFragm, i__2 = MXGKIN - nGkine;
-  nstak2 = min(i__1,i__2);
+  nstak2 = G4std::min(i__1,i__2);
   if (nallFragm > nstak2) {
     G4cout << " **** FLUFIN: Stack overflow, "
-	 << nallFragm - nstak2 << " heavy particles lost" << endl;
+	 << nallFragm - nstak2 << " heavy particles lost" << G4endl;
   }
   i__1 = nstak2;
   for (k = 1; k <= i__1; ++k) {
@@ -3586,7 +3586,7 @@ void G4MuonMinusCaptureAtRest::MuEvaporation()
   //  The initial excitation energy, mass and charge of the nucleus are
   //  put into Ex, Apr, Zpr (common Hetc5)
   d__1 = excitEnResidNucl * 1000;
-  iniExcitEnEvapNucl = max(d__1,ANGLGB);
+  iniExcitEnEvapNucl = G4std::max(d__1,ANGLGB);
   atMassEvapNucl = atMassCurrent;
   chargeEvapNucl = chargeCurrent;
   //  Ammres is the atomic mass of the residual nucleus
@@ -3655,7 +3655,7 @@ void G4MuonMinusCaptureAtRest::MuEvaporation()
       GetIsotopicMass(atMassCurrent, chargeCurrent) * .001;
     excitEnResidNucl = finExcitEnEvapNucl * .001;
     d__1 = recoilEnEvapNucl * .001;
-    recoilEnResidNucl = max(d__1,0.);
+    recoilEnResidNucl = G4std::max(d__1,0.);
     totMomResidNucl =
       sqrt(recoilEnResidNucl *
 	   (recoilEnResidNucl + (massResidNucl + excitEnResidNucl) * 2.));
@@ -3669,7 +3669,7 @@ void G4MuonMinusCaptureAtRest::MuEvaporation()
   if ((d__1 = etevap - eotest, abs(d__1)) / eotest > .05) {
     G4cout << " Evevap: failure in energy conservation!!"
 	 << " " << etevap << " " << eotest << " " << etevap - eotest
-	 << " " << totEnResidNucl << endl;
+	 << " " << totEnResidNucl << G4endl;
   }
   //  Check if the deexcitation module have to be called
   EvaporationDeexcitation();
@@ -3713,11 +3713,11 @@ G4double G4MuonMinusCaptureAtRest::NuclearBindingEnergy(G4double a1,
   n1 = ka1 - kz1;
   n2 = ka2 - kz2;
   if (n1 <= 0) {
-    G4cout << "STOP - 105" << endl;
+    G4cout << "STOP - 105" << G4endl;
     exit(1);
   }
   if (n2 <= 0) {
-    G4cout << "STOP - 106" << endl;
+    G4cout << "STOP - 106" << G4endl;
     exit(1);
   }
   izz1 = NINT(isotopicData[0][ka1 - 1]);

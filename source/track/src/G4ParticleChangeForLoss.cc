@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForLoss.cc,v 1.3 1999-05-06 11:42:56 kurasige Exp $
+// $Id: G4ParticleChangeForLoss.cc,v 1.4 1999-12-15 14:53:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@ G4ParticleChangeForLoss::G4ParticleChangeForLoss():G4VParticleChange()
   debugFlag = false;
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cout << "G4ParticleChangeForLoss::G4ParticleChangeForLoss() " << endl;
+    G4cout << "G4ParticleChangeForLoss::G4ParticleChangeForLoss() " << G4endl;
   }
 #endif
 }
@@ -40,7 +40,7 @@ G4ParticleChangeForLoss::~G4ParticleChangeForLoss()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cout << "G4ParticleChangeForLoss::~G4ParticleChangeForLoss() " << endl;
+    G4cout << "G4ParticleChangeForLoss::~G4ParticleChangeForLoss() " << G4endl;
   }
 #endif
 }
@@ -49,7 +49,7 @@ G4ParticleChangeForLoss::~G4ParticleChangeForLoss()
 G4ParticleChangeForLoss::G4ParticleChangeForLoss(const G4ParticleChangeForLoss &right): G4VParticleChange(right)
 {
    if (verboseLevel>1) {
-    G4cout << "G4ParticleChangeForLoss::  copy constructor is called " << endl;
+    G4cout << "G4ParticleChangeForLoss::  copy constructor is called " << G4endl;
    }
    theEnergyChange = right.theEnergyChange;
 }
@@ -58,7 +58,7 @@ G4ParticleChangeForLoss::G4ParticleChangeForLoss(const G4ParticleChangeForLoss &
 G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(const G4ParticleChangeForLoss &right)
 {
    if (verboseLevel>1) {
-    G4cout << "G4ParticleChangeForLoss:: assignment operator is called " << endl;
+    G4cout << "G4ParticleChangeForLoss:: assignment operator is called " << G4endl;
    }
    if (this != &right)
    {
@@ -140,8 +140,8 @@ void G4ParticleChangeForLoss::DumpInfo() const
 
   G4cout.precision(3);
   G4cout << "        Kinetic Energy (MeV): " 
-       << setw(20) << theEnergyChange/MeV
-       << endl;
+       << G4std::setw(20) << theEnergyChange/MeV
+       << G4endl;
 }
 
 G4bool G4ParticleChangeForLoss::CheckIt(const G4Track& aTrack)
@@ -155,16 +155,16 @@ G4bool G4ParticleChangeForLoss::CheckIt(const G4Track& aTrack)
   accuracy = ( theEnergyChange - aTrack.GetKineticEnergy())/MeV;
   if (accuracy > accuracyForWarning) {
     G4cout << "  G4ParticleChangeForLoss::CheckIt    : ";
-    G4cout << "the energy becoes larger than the initial value !!" << endl;
-    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<endl;
+    G4cout << "the energy becoes larger than the initial value !!" << G4endl;
+    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
     itsOK = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
 
   // dump out information of this particle change
   if (!itsOK) { 
-    G4cout << " G4ParticleChangeForLoss::CheckIt " <<endl;
-    G4cout << " pointer : " << this <<endl ;
+    G4cout << " G4ParticleChangeForLoss::CheckIt " <<G4endl;
+    G4cout << " pointer : " << this <<G4endl ;
     DumpInfo();
   }
 

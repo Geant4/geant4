@@ -1,4 +1,4 @@
-#include <vector.h>
+#include "g4std/vector"
 #include "math.hh"
 #include "iso.hh"
 #include "clebsch.hh"
@@ -39,7 +39,7 @@ void Iso::Projections(int n,double J,double M,double* jk,double* mk,bool* isSet)
 	if ( !isSet[i] ) 
 	  mk[i] = -jk[i]+proj[i];
       double P = sqr(f(n-2,jk[n-1],mk[n-1],J,M,jk,mk));
-      //      cerr << proj << "  " << P << endl;
+      //      G4cerr << proj << "  " << P << G4endl;
       Ptot += P;
       probab.insert(probab.end(),P);
       ++num;

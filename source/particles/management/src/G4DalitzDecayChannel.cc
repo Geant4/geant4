@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DalitzDecayChannel.cc,v 1.3 1999-04-13 08:00:14 kurasige Exp $
+// $Id: G4DalitzDecayChannel.cc,v 1.4 1999-12-15 14:51:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@ G4DalitzDecayChannel::G4DalitzDecayChannel(
   //#ifdef G4VERBOSE
   //if (GetVerboseLevel()>1) {
   //  G4cout << "G4DalitzDecayChannel:: constructor ";
-  //  G4cout << "addr[" << this << "]" << endl;
+  //  G4cout << "addr[" << this << "]" << G4endl;
   //}
   //#endif
   // set names for daughter particles
@@ -144,7 +144,7 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
      G4cout << "G4DalitzDecayChannel::DecayIt ";
-     G4cout << "  create decay products in rest frame " <<endl;
+     G4cout << "  create decay products in rest frame " <<G4endl;
      products->DumpInfo();
   }
 #endif

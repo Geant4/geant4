@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em0RunAction.cc,v 1.3 1999-05-10 16:44:42 maire Exp $
+// $Id: Em0RunAction.cc,v 1.4 1999-12-15 14:51:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,7 @@
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
-#include <iomanip.h>
+#include "g4std/iomanip"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -35,7 +35,7 @@ Em0RunAction::~Em0RunAction()
 
 void Em0RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   NbOfTraks0 = 0; NbOfTraks1 = 0; NbOfSteps0 = 0; NbOfSteps1 = 0;   
 
@@ -58,18 +58,18 @@ void Em0RunAction::EndOfRunAction(const G4Run* aRun)
   if (NbOfEvents)
     { G4double dNbOfEvents = double(NbOfEvents);
     
-      G4long oldform = G4cout.setf(ios::fixed,ios::floatfield);
+      G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
       G4int  oldprec = G4cout.precision(2);
       
       G4cout << "\n nb tracks/event"
-                      << "   neutral: " << setw(7) << NbOfTraks0/dNbOfEvents
-                      << "   charged: " << setw(7) << NbOfTraks1/dNbOfEvents     
+                      << "   neutral: " << G4std::setw(7) << NbOfTraks0/dNbOfEvents
+                      << "   charged: " << G4std::setw(7) << NbOfTraks1/dNbOfEvents     
              << "\n nb  steps/event"
-                      << "   neutral: " << setw(7) << NbOfSteps0/dNbOfEvents
-                      << "   charged: " << setw(7) << NbOfSteps1/dNbOfEvents
-             << endl;
+                      << "   neutral: " << G4std::setw(7) << NbOfSteps0/dNbOfEvents
+                      << "   charged: " << G4std::setw(7) << NbOfSteps1/dNbOfEvents
+             << G4endl;
              
-      G4cout.setf(oldform,ios::floatfield);
+      G4cout.setf(oldform,G4std::ios::floatfield);
       G4cout.precision(oldprec);       
     }         
                              

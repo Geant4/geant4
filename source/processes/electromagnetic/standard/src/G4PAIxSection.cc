@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIxSection.cc,v 1.3 1999-10-27 09:26:36 grichine Exp $
+// $Id: G4PAIxSection.cc,v 1.4 1999-12-15 14:51:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,7 +70,7 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
                              GetElectronDensity() ;
       fIntervalNumber         = (*theMaterialTable)[materialIndex]->
                              GetSandiaTable()->GetMatNbOfIntervals() ;
-      G4cout<<fDensity<<"\t"<<fElectronDensity<<"\t"<<fIntervalNumber<<endl ;
+      G4cout<<fDensity<<"\t"<<fElectronDensity<<"\t"<<fIntervalNumber<<G4endl ;
       // G4double maxEnergyTransfer  = 100*keV ;
 
       fEnergyInterval = new G4double[fIntervalNumber+2] ;
@@ -91,7 +91,7 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
          fA4[i]             = (*theMaterialTable)[materialIndex]->
 	                      GetSandiaTable()->GetSandiaCofForMaterial(i-1,4);
 	 // G4cout<<fEnergyInterval[i]<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
-	 //                               <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<endl ;
+	 //                               <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl ;
          if(fEnergyInterval[i] >= maxEnergyTransfer)
          {
             fEnergyInterval[i] = maxEnergyTransfer ;
@@ -180,7 +180,7 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
 
 // (*theMaterialTable)[materialIndex]->GetSandiaTable()->GetMatNbOfIntervals() ;
 
-      // G4cout<<fDensity<<"\t"<<fElectronDensity<<"\t"<<fIntervalNumber<<endl ;
+      // G4cout<<fDensity<<"\t"<<fElectronDensity<<"\t"<<fIntervalNumber<<G4endl ;
       // G4double maxEnergyTransfer  = 100*keV ;
 
       fEnergyInterval = new G4double[fIntervalNumber+2] ;
@@ -208,7 +208,7 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
          if( i == 1 || i == fIntervalNumber)
 	 {
 	   // G4cout<<fEnergyInterval[i]<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
-	   //         <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<endl ;
+	   //         <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl ;
 	 }
          if(fEnergyInterval[i] >= maxEnergyTransfer)
          {
@@ -338,7 +338,7 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
          if( i == 1 || i == fIntervalNumber)
 	 {
 	   // G4cout<<fEnergyInterval[i]<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
-	   //         <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<endl ;
+	   //         <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl ;
 	 }
          if(fEnergyInterval[i] >= maxEnergyTransfer)
          {
@@ -528,12 +528,12 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 	                    RutherfordIntegral(j,fEnergyInterval[j],
                                                  fSplineEnergy[i]    ) ;
       }
-      // G4cout<<i<<"\t"<<fSplineEnergy[i]<<"\t"<<fIntegralTerm[i]<<"\n"<<endl;
+      // G4cout<<i<<"\t"<<fSplineEnergy[i]<<"\t"<<fIntegralTerm[i]<<"\n"<<G4endl;
    } 
    fNormalizationCof = 2*pi*pi*hbarc*hbarc*fine_structure_const/electron_mass_c2 ;
    fNormalizationCof *= fElectronDensity/fIntegralTerm[fSplineNumber] ;
 
-   // G4cout<<"fNormalizationCof = "<<fNormalizationCof<<endl ;
+   // G4cout<<"fNormalizationCof = "<<fNormalizationCof<<G4endl ;
 
 	  // Calculation of PAI differrential cross-section (1/(keV*cm))
 	  // in the energy points near borders of energy intervals
@@ -923,14 +923,14 @@ G4double G4PAIxSection::GetStepEnergyLoss( G4double step )
   G4double loss = 0.0 ;
   G4double meanNumber, position ;
 
-  // G4cout<<" G4PAIxSection::GetStepEnergyLoss "<<endl ;
+  // G4cout<<" G4PAIxSection::GetStepEnergyLoss "<<G4endl ;
 
 
 
   meanNumber = fIntegralPAIxSection[1]*step ;
   numOfCollisions = RandPoisson::shoot(meanNumber) ;
 
-  //   G4cout<<"numOfCollisions = "<<numOfCollisions<<endl ;
+  //   G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
   while(numOfCollisions)
   {
@@ -943,7 +943,7 @@ G4double G4PAIxSection::GetStepEnergyLoss( G4double step )
     loss += fSplineEnergy[iTransfer]  ;
     numOfCollisions-- ;
   }
-  // G4cout<<"PAI energy loss = "<<loss/keV<<" keV"<<endl ; 
+  // G4cout<<"PAI energy loss = "<<loss/keV<<" keV"<<G4endl ; 
 
   return loss ;
 }

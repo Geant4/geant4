@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopMaterial.cc,v 1.2 1999-11-11 15:37:47 gunter Exp $
+// $Id: G4PiMinusStopMaterial.cc,v 1.3 1999-12-15 14:53:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -143,9 +143,9 @@ G4RWTPtrOrderedVector<G4LorentzVector>* G4PiMinusStopMaterial::P4Vector(const G4
 
       // ---- Debug     
       //      G4cout << " ---- binding = " << binding << ", nucleus mass = " << massNucleus 
-      //	     << ", p nucleus = " << pNucleus << endl;
+      //	     << ", p nucleus = " << pNucleus << G4endl;
       //      G4cout << "eKin1,2 " << eKin1 << " " << eKin2 << " eRecoil " << eRecoil 
-      //	     << " availableE " << availableE << endl;
+      //	     << " availableE " << availableE << G4endl;
       // ----
 
     }  while ((eKin1 + eKin2 + eRecoil) > availableE);

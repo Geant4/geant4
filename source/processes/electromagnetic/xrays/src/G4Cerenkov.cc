@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cerenkov.cc,v 1.6 1999-11-16 01:48:16 gum Exp $
+// $Id: G4Cerenkov.cc,v 1.7 1999-12-15 14:52:05 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@ G4Cerenkov::G4Cerenkov(const G4String& processName)
         thePhysicsTable = NULL;
 
 	if (verboseLevel>0) {
-           G4cout << GetProcessName() << " is created " << endl;
+           G4cout << GetProcessName() << " is created " << G4endl;
 	}
 
 	BuildThePhysicsTable();
@@ -264,7 +264,7 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	if (verboseLevel>0) {
 	G4cout << "\n Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = " 
-	     << aParticleChange.GetNumberOfSecondaries() << endl;
+	     << aParticleChange.GetNumberOfSecondaries() << G4endl;
 	}
 
 	return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
@@ -485,8 +485,8 @@ G4Cerenkov::GetAverageNumberOfPhotons(const G4DynamicParticle* aParticle,
 		ge = CAImax - CAImin;
 
 		if (verboseLevel>0) {
-			G4cout << "CAImin = " << CAImin << endl;
-			G4cout << "ge = " << ge << endl;
+			G4cout << "CAImin = " << CAImin << G4endl;
+			G4cout << "ge = " << ge << G4endl;
 		}
 	}
 	

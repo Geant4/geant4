@@ -1,21 +1,17 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.1 1999-01-07 16:09:26 gunter Exp $
+// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.2 1999-12-15 14:50:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 G4UIcmdWithADoubleAndUnit::G4UIcmdWithADoubleAndUnit
 (const char * theCommandPath,G4UImessenger * theMessenger)
@@ -34,7 +30,7 @@ G4double G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(G4String paramString)
   char unts[30];
   
   const char* t = paramString;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
   is >> vl >> unts;
   G4String unt = unts;
   
@@ -47,7 +43,7 @@ G4double G4UIcmdWithADoubleAndUnit::GetNewDoubleRawValue(G4String paramString)
   char unts[30];
   
   const char* t = paramString;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
   is >> vl >> unts;
   
   return vl;
@@ -59,7 +55,7 @@ G4double G4UIcmdWithADoubleAndUnit::GetNewUnitValue(G4String paramString)
   char unts[30];
   
   const char* t = paramString;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
   is >> vl >> unts;
   G4String unt = unts;
   
@@ -73,7 +69,7 @@ G4String G4UIcmdWithADoubleAndUnit::ConvertToString
   G4double uv = ValueOf(unitName);
   
   char st[50];
-  ostrstream os(st,50);
+  G4std::ostrstream os(st,50);
   os << dblValue/uv << " " << unitName << '\0';
   G4String vl = st;
   return vl;

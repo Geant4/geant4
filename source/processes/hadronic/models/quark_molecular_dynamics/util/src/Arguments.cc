@@ -49,7 +49,7 @@ Arguments::~Arguments()
   delete [] argv;
 }
 
-void Arguments::WrongOptionDeclarator::writeMessage(ostream& o) const
+void Arguments::WrongOptionDeclarator::writeMessage(G4std::ostream& o) const
 {
   o << "Illegal Option declarator '" << ch << "'.\n"; 
 }
@@ -60,9 +60,9 @@ Arguments::IllegalOption::IllegalOption(char* c,char* o)
   option = strdup(o);
 }
 
-void Arguments::IllegalOption::writeMessage(ostream& o) const
+void Arguments::IllegalOption::writeMessage(G4std::ostream& o) const
 {
-  o << command << ": illegal option -- " << option << endl;
+  o << command << ": illegal option -- " << option << G4endl;
 }
 
 void Arguments::Apply()

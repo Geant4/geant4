@@ -95,9 +95,9 @@
   void G4NeutronHPChannelList::Init(G4Element * anElement, const G4String & dirName)
   {
     theDir = dirName;
-//    G4cout << theDir << endl;
+//    G4cout << theDir << G4endl;
     theElement = anElement;
-//    G4cout << theElement << endl;
+//    G4cout << theElement << G4endl;
     ;
   }
   

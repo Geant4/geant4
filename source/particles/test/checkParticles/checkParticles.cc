@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: checkParticles.cc,v 1.1 1999-06-09 16:12:14 kurasige Exp $
+// $Id: checkParticles.cc,v 1.2 1999-12-15 14:51:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,8 +13,8 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "tstParticleConstructor.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 void CheckMass(const char*);
 void CheckWidth(const char*);
@@ -22,14 +22,14 @@ void CheckWidth(const char*);
 int main(int argc,char** argv) {
   // PDG computer-readble file for particle properties
   //  see http://www-pdg.lbl.gov/computer_read.html
-  ifstream pdgFile;
+  G4std::ifstream pdgFile;
   G4String pdgFileName = "garren_98.mc";
   if (argc > 1) pdgFileName =  argv[1];
  
   // open the pdg file
   pdgFile.open((const char*)pdgFileName);
   if( pdgFile.fail() ) {
-    G4cerr << "pdg data file <" << pdgFileName << "> could not open." << endl;
+    G4cerr << "pdg data file <" << pdgFileName << "> could not open." << G4endl;
 	exit(1);
   }
 
@@ -47,7 +47,7 @@ int main(int argc,char** argv) {
     if (pdgFile.eof() ) {
 		break;
     } else if( pdgFile.bad() ) {
-        G4cout << "Cannot read " << pdgFileName << "." << endl;
+        G4cout << "Cannot read " << pdgFileName << "." << G4endl;
         break;
     } 
 
@@ -61,18 +61,14 @@ int main(int argc,char** argv) {
   return EXIT_SUCCESS;
 }
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 #include "G4ParticleTable.hh"
 
 void CheckMass(const char* inputString)
 {
   const char* t = inputString;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
  
   G4int     encoding;
   G4double  mass;
@@ -82,7 +78,7 @@ void CheckMass(const char* inputString)
   is >> encoding;
 
   t = &inputString[33];
-  istrstream is2((char*)t);
+  G4std::istrstream is2((char*)t);
   is2 >> mass >> massRange >> name;
 
   // get a pointer to G4ParticleDefinition with encoding
@@ -90,15 +86,15 @@ void CheckMass(const char* inputString)
     G4ParticleTable::GetParticleTable()->FindParticle(encoding);
   if (particle == 0) {
     G4cout << "Can not find the particle with " << encoding;
-    G4cout << " for " << name << endl;
+    G4cout << " for " << name << G4endl;
     return;
   } 
  
   if ( abs(particle->GetPDGMass()/GeV-mass)/mass > 1.0e-4 ) {
 	G4cout << "Mass is inconsistent for " << particle->GetParticleName();
-    G4cout << " mass = " << particle->GetPDGMass()/GeV << endl;
+    G4cout << " mass = " << particle->GetPDGMass()/GeV << G4endl;
     G4cout <<  encoding << " " << mass <<  " ";
-	G4cout << massRange <<  " " << name << endl;
+	G4cout << massRange <<  " " << name << G4endl;
   }
 
   // anti_particle
@@ -108,14 +104,14 @@ void CheckMass(const char* inputString)
       G4ParticleTable::GetParticleTable()->FindParticle(anti_encoding);
     if (particle == 0) {
       G4cout << "Can not find the anti_particle with " << anti_encoding;
-      G4cout << " for " << name << endl;
+      G4cout << " for " << name << G4endl;
       return;
     } 
     if ( abs(particle->GetPDGMass()/GeV-mass)/mass > 1.0e-3 ) {
 	  G4cout << "Mass is inconsistent for " << particle->GetParticleName();
-      G4cout << " mass = " << particle->GetPDGMass()/GeV << endl;
+      G4cout << " mass = " << particle->GetPDGMass()/GeV << G4endl;
       G4cout <<  encoding << " " << mass <<  " ";
-	  G4cout << massRange <<  " " << name << endl;
+	  G4cout << massRange <<  " " << name << G4endl;
     }
   }
 } 
@@ -123,7 +119,7 @@ void CheckMass(const char* inputString)
 void CheckWidth(const char* inputString)
 {
   const char* t = inputString;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
  
   G4int     encoding;
   G4double  width;
@@ -133,7 +129,7 @@ void CheckWidth(const char* inputString)
   is >> encoding;
 
    t = &inputString[33];
-   istrstream is2((char*)t);
+   G4std::istrstream is2((char*)t);
    is2 >> width >> widthRange >> name;
 
   // get a pointer to G4ParticleDefinition with encoding
@@ -141,15 +137,15 @@ void CheckWidth(const char* inputString)
     G4ParticleTable::GetParticleTable()->FindParticle(encoding);
   if (particle == 0) {
     G4cout << "Can not find the particle with " << encoding;
-    G4cout << " for " << name << endl;
+    G4cout << " for " << name << G4endl;
     return;
   } 
  
   if ( abs(particle->GetPDGWidth()/GeV-width)/width > 1.0e-3 ) {
 	G4cout << "Width is inconsistent for " << particle->GetParticleName();
-    G4cout << " width = " << particle->GetPDGWidth()/GeV << endl;
+    G4cout << " width = " << particle->GetPDGWidth()/GeV << G4endl;
     G4cout <<  encoding << " " << width <<  " ";
-	G4cout << widthRange <<  " " << name << endl;
+	G4cout << widthRange <<  " " << name << G4endl;
   }
 
   // anti_particle
@@ -159,14 +155,14 @@ void CheckWidth(const char* inputString)
       G4ParticleTable::GetParticleTable()->FindParticle(anti_encoding);
     if (particle == 0) {
       G4cout << "Can not find the anti_particle with " << anti_encoding;
-      G4cout << " for " << name << endl;
+      G4cout << " for " << name << G4endl;
       return;
     } 
    if ( abs(particle->GetPDGWidth()/GeV-width)/width > 1.0e-4 ) {
 	G4cout << "Width is inconsistent for " << particle->GetParticleName();
-    G4cout << " width = " << particle->GetPDGWidth()/GeV << endl;
+    G4cout << " width = " << particle->GetPDGWidth()/GeV << G4endl;
     G4cout <<  encoding << " " << width <<  " ";
-	G4cout << widthRange <<  " " << name << endl;
+	G4cout << widthRange <<  " " << name << G4endl;
   }
  }
 

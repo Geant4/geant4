@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuEnergyLoss.hh,v 1.3 1999-07-30 10:18:00 urban Exp $
+// $Id: G4MuEnergyLoss.hh,v 1.4 1999-12-15 14:51:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -37,8 +37,8 @@
 #define G4MuEnergyLoss_h 1
  
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4VContinuousDiscreteProcess.hh"

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KaonMinusAbsorptionAtRestTest.cc,v 1.1 1999-01-08 16:33:46 gunter Exp $
+// $Id: G4KaonMinusAbsorptionAtRestTest.cc,v 1.2 1999-12-15 14:53:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // KaonMinusAtRestTest.cc 
@@ -32,8 +32,8 @@
 // -------------------------------------------------------------------
 
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4Material.hh"
 
@@ -67,10 +67,10 @@
 int main()
 {
   //-------- set output format-------
-   G4cout.setf( ios::scientific, ios::floatfield );
+   G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
   //-------- write results onto a file --------
-   ofstream outFile( "KaonMinusAbsorptionAtRest.out", ios::out);
-   outFile.setf( ios::scientific, ios::floatfield );
+   G4std::ofstream outFile( "KaonMinusAbsorptionAtRest.out", G4std::ios::out);
+   outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
   // -------------------------------------------------------------------
   // MGP ---- HBOOK initialization
@@ -108,14 +108,14 @@ int main()
    G4int imat=3;
    G4int verboseLevel=1;
    G4int processID=1;
-   G4cout << " How many absorptions? [10], Which material? [3], which Verbose Level? [1]" << endl;
-   cin >> niter >> imat >> verboseLevel;
-   G4cout << " which process? (1)=G4KaonMinusAbsorptionAtRest, (2)=G4HadronAtRest  [1]" << endl;
-   cin >> processID;
+   G4cout << " How many absorptions? [10], Which material? [3], which Verbose Level? [1]" << G4endl;
+   G4cin >> niter >> imat >> verboseLevel;
+   G4cout << " which process? (1)=G4KaonMinusAbsorptionAtRest, (2)=G4HadronAtRest  [1]" << G4endl;
+   G4cin >> processID;
    
   G4int hnt;
-  G4cout << "Enter histo (0) or ntuple (1) " << endl;
-  cin >> hnt;
+  G4cout << "Enter histo (0) or ntuple (1) " << G4endl;
+  G4cin >> hnt;
   
 
   //
@@ -225,7 +225,7 @@ int main()
     if(!theKaonAbsorptionProcess.IsApplicable(*KaonMinusDefinition)) {
        G4cout 
             << KaonMinusDefinition->GetParticleName()
-            << " is not a KaonMinus!" << endl;
+            << " is not a KaonMinus!" << G4endl;
        G4Exception("FAIL: *** exit program ***\n");
   //     return ;
      }
@@ -256,13 +256,13 @@ int main()
         }
 
 
-	//        outFile << "! ---------------------------------------------------------------" << endl;   
-	//        outFile << "! Energy deposit = " << aParticleChange->GetLocalEnergyDeposit() << endl;
+	//        outFile << "! ---------------------------------------------------------------" << G4endl;   
+	//        outFile << "! Energy deposit = " << aParticleChange->GetLocalEnergyDeposit() << G4endl;
 	//
 	//        G4double E = 0., Px = 0., Py = 0., Pz = 0., Edep = 0. ;
 	//        
-	//        outFile << "! Name         Px             Py            Pz          Etot" << endl;
-	//        outFile << "! ---------------------------------------------------------------" << endl
+	//        outFile << "! Name         Px             Py            Pz          Etot" << G4endl;
+	//        outFile << "! ---------------------------------------------------------------" << G4endl
         // loop over final particle List.
 
     G4double e = 0;
@@ -313,12 +313,12 @@ int main()
 	//		<< "  " << Py 
 	//		<< "  " << Pz
 	//		<< "  " << E 
-	//		<< endl ;
+	//		<< G4endl ;
       }
 
     aParticleChange->Clear();
     iteration++;
-    G4cout << "******* Iteration = " << iteration << endl;
+    G4cout << "******* Iteration = " << iteration << G4endl;
         
     }  while (iteration < niter) ;
 

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst14CalorimeterSD.cc,v 1.3 1999-06-14 23:26:45 aforti Exp $
+// $Id: Tst14CalorimeterSD.cc,v 1.4 1999-12-15 14:54:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,14 +77,14 @@ G4bool Tst14CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
       if (physVol == Detector->GetAbsorber()) calHit->AddAbs(edep,stepl);
       HitID[Tst14Number] = CalCollection->insert(calHit) - 1;
       if (verboseLevel>0)
-        G4cout << " New Calorimeter Hit on Tst14: " << Tst14Number << endl;
+        G4cout << " New Calorimeter Hit on Tst14: " << Tst14Number << G4endl;
     }
   else
     { 
       if (physVol == Detector->GetAbsorber())
          (*CalCollection)[HitID[Tst14Number]]->AddAbs(edep,stepl);
       if (verboseLevel>0)
-        G4cout << " Energy added to Tst14: " << Tst14Number << endl; 
+        G4cout << " Energy added to Tst14: " << Tst14Number << G4endl; 
     }
     
   return true;

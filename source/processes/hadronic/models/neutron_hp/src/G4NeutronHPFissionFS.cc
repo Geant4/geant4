@@ -129,7 +129,7 @@
     }
     else
     {
-//    cout << " all = "<<all<<endl;
+//    cout << " all = "<<all<<G4endl;
       theFS.SampleNeutronMult(all, Prompt, delayed, eKinetic, 0);
       theDecayConstants = new G4double[delayed];
       if(Prompt==0&&delayed==0) Prompt=all;
@@ -150,7 +150,7 @@
       delete theNeutrons;   
     }
     delete [] theDecayConstants;
-//    cout << "all delayed "<<delayed<<endl; 
+//    cout << "all delayed "<<delayed<<G4endl; 
     G4int nPhotons = 0;
     if(thePhotons!=NULL)
     {
@@ -165,15 +165,15 @@
 // do some rotating, if that helps to conserve momentum @@@@
          
 // finally deal with local energy depositions.
-//    G4cout <<"Number of secondaries = "<<theResult.GetNumberOfSecondaries()<< endl;
-//    G4cout <<"Number of Prompt = "<<Prompt<<endl;
-//    G4cout <<"Number of delayed = "<<delayed<<endl;
-//    G4cout <<"Number of photons = "<<nPhotons<<endl;
+//    G4cout <<"Number of secondaries = "<<theResult.GetNumberOfSecondaries()<< G4endl;
+//    G4cout <<"Number of Prompt = "<<Prompt<<G4endl;
+//    G4cout <<"Number of delayed = "<<delayed<<G4endl;
+//    G4cout <<"Number of photons = "<<nPhotons<<G4endl;
     G4NeutronHPFissionERelease * theERelease;
     theERelease = theFS.GetEnergyRelease();
     G4double eDepByFragments = theERelease->GetFragmentKinetic();
     theResult.SetLocalEnergyDeposit(eDepByFragments);
-//    cout << "local energy deposit" << eDepByFragments<<endl;
+//    cout << "local energy deposit" << eDepByFragments<<G4endl;
 // clean up the primary neutron
     theResult.SetStatusChange(fStopAndKill);
     return &theResult;

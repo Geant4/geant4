@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Hype.cc,v 1.1 1999-01-08 16:31:51 gunter Exp $
+// $Id: testG4Hype.cc,v 1.2 1999-12-15 14:50:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -97,21 +97,21 @@ G4bool testG4Hype()
     assert(ApproxEqual(Dist,50.00005)&&ApproxEqual(pNorm->unit(),vxy)&&*pgoodNorm);
 
     Dist=t2.DistanceToOut(pzero,vxy,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(pzero,vxy) = "<<Dist<<endl;
+    G4cout<<"Dist=t2.DistanceToOut(pzero,vxy) = "<<Dist<<G4endl;
 
     Dist=t2.DistanceToOut(ponxside,vmx,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(ponxside,vmx) = "<<Dist<<endl;
+    G4cout<<"Dist=t2.DistanceToOut(ponxside,vmx) = "<<Dist<<G4endl;
     Dist=t2.DistanceToOut(ponxside,vmxmy,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(ponxside,vmxmy) = "<<Dist<<endl;
+    G4cout<<"Dist=t2.DistanceToOut(ponxside,vmxmy) = "<<Dist<<G4endl;
     Dist=t2.DistanceToOut(ponxside,vz,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(ponxside,vz) = "<<Dist<<endl;
+    G4cout<<"Dist=t2.DistanceToOut(ponxside,vz) = "<<Dist<<G4endl;
 
     Dist=t2.DistanceToOut(pbigx,vx,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(pbigx,vx) = "<<Dist<<endl;
+    G4cout<<"Dist=t2.DistanceToOut(pbigx,vx) = "<<Dist<<G4endl;
     Dist=t2.DistanceToOut(pbigx,vxy,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(pbigx,vxy) = "<<Dist<<endl;
+    G4cout<<"Dist=t2.DistanceToOut(pbigx,vxy) = "<<Dist<<G4endl;
     Dist=t2.DistanceToOut(pbigx,vz,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(pbigx,vz) = "<<Dist<<endl;
+    G4cout<<"Dist=t2.DistanceToOut(pbigx,vz) = "<<Dist<<G4endl;
 
 
 //DistanceToIn(P)

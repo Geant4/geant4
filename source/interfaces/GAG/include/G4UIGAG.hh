@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIGAG.hh,v 1.3 1999-11-08 04:14:10 masayasu Exp $
+// $Id: G4UIGAG.hh,v 1.4 1999-12-15 14:50:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UIGAG.hh
@@ -20,8 +20,8 @@
 
 #include "G4UIsession.hh"
 #include "G4UImanager.hh"
-#include <fstream.h>
-#include <g4std/vector>
+#include "g4std/fstream"
+#include "g4std/vector"
 
 enum UImode { terminal_mode , java_mode, tcl_mode };
 enum ChangeOfTree  { notChanged=0, added, deleted, addedAndDeleted };

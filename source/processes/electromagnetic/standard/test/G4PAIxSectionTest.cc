@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIxSectionTest.cc,v 1.3 1999-12-10 15:08:30 grichine Exp $
+// $Id: G4PAIxSectionTest.cc,v 1.4 1999-12-15 14:51:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,7 @@
 // 21.10.99, V. Grichine implementation based on G4PAIonisationTest
 
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 #include <math.h>
 #include "globals.hh"
 #include "Randomize.hh"
@@ -35,20 +35,20 @@
 
 int main()
 {
-   ofstream outFile("PAIdEdx.out", ios::out ) ;
-   outFile.setf( ios::scientific, ios::floatfield );
+   G4std::ofstream outFile("PAIdEdx.out", G4std::ios::out ) ;
+   outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
-   ofstream fileOut("PAIdistribution.out", ios::out ) ;
-   fileOut.setf( ios::scientific, ios::floatfield );
+   G4std::ofstream fileOut("PAIdistribution.out", G4std::ios::out ) ;
+   fileOut.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
-   //  ifstream fileRead("exp.dat", ios::out ) ;
-   //  fileRead.setf( ios::scientific, ios::floatfield );
+   //  G4std::ifstream fileRead("exp.dat", G4std::ios::out ) ;
+   //  fileRead.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
-   ofstream fileWrite("exp.dat", ios::out ) ;
-   fileWrite.setf( ios::scientific, ios::floatfield );
+   G4std::ofstream fileWrite("exp.dat", G4std::ios::out ) ;
+   fileWrite.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
-   ofstream fileWrite1("mprrpai.dat", ios::out ) ;
-   fileWrite1.setf( ios::scientific, ios::floatfield );
+   G4std::ofstream fileWrite1("mprrpai.dat", G4std::ios::out ) ;
+   fileWrite1.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
 // Create materials  
    
@@ -391,7 +391,7 @@ int main()
 
 
 
-  //  G4cout << *(G4Material::GetMaterialTable()) << endl;
+  //  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //
   //  Create Sandia/PAI tables for given material 
@@ -405,29 +405,29 @@ int main()
 
   numOfMaterials = theMaterialTable->length();
 
-  G4cout<<"Available materials under test : "<< endl<<endl ;
-  outFile<<"Available materials under test : "<< endl<<endl ;
+  G4cout<<"Available materials under test : "<< G4endl<<G4endl ;
+  outFile<<"Available materials under test : "<< G4endl<<G4endl ;
 
   for(k=0;k<numOfMaterials;k++)
   {
-  G4cout <<k<<"\t"<< "  Material : " <<(*theMaterialTable)[k]->GetName() << endl ;
- outFile <<k<<"\t"<< "  Material : " <<(*theMaterialTable)[k]->GetName() << endl ;
+  G4cout <<k<<"\t"<< "  Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
+ outFile <<k<<"\t"<< "  Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
   }
   G4String testName ;
-  G4cout<<"Enter material name for test : "<<flush ;
-  cin>>testName ;
+  G4cout<<"Enter material name for test : "<<G4std::flush ;
+  G4cin>>testName ;
 
   for(k=0;k<numOfMaterials;k++)
   {
     if((*theMaterialTable)[k]->GetName() != testName) continue ;
 
-     outFile << "Material : " <<(*theMaterialTable)[k]->GetName() << endl ;
-     G4cout << "Material : " <<(*theMaterialTable)[k]->GetName() << endl ;
+     outFile << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
+     G4cout << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
 
      nbOfElements = (*theMaterialTable)[k]->GetNumberOfElements() ;
 
-     G4cout<<"Sandia cof according old PAI stuff"<<endl<<endl ;
-     outFile<<"Sandia cof according old PAI stuff"<<endl<<endl ;
+     G4cout<<"Sandia cof according old PAI stuff"<<G4endl<<G4endl ;
+     outFile<<"Sandia cof according old PAI stuff"<<G4endl<<G4endl ;
 
      G4int* thisMaterialZ = new G4int[nbOfElements] ;
      for(iSan=0;iSan<nbOfElements;iSan++)
@@ -454,44 +454,44 @@ int main()
          outFile<<"  "<<sandia.GetPhotoAbsorpCof(row+1,iSan) ;
 	 // *(*theMaterialTable)[k]->GetDensity() ;
        }
-       G4cout<<endl ;
-       outFile<<endl ;
+       G4cout<<G4endl ;
+       outFile<<G4endl ;
      }
-     G4cout<<endl ;
-     outFile<<endl ;
+     G4cout<<G4endl ;
+     outFile<<G4endl ;
 
 
-     outFile<<endl ;
+     outFile<<G4endl ;
      maxEnergyTransfer = 100*keV ;
      gamma = 4.0 ;
      bg2 = gamma*gamma - 1 ;
 
      G4PAIxSection testPAI(k,maxEnergyTransfer,bg2) ;
 
-     G4cout<<"Interval no."<<"\t"<<"Energy interval"<<endl<<endl ;
-     outFile<<"Interval no."<<"\t"<<"Energy interval"<<endl<<endl ;
+     G4cout<<"Interval no."<<"\t"<<"Energy interval"<<G4endl<<G4endl ;
+     outFile<<"Interval no."<<"\t"<<"Energy interval"<<G4endl<<G4endl ;
 
      for(j=1;j<=testPAI.GetIntervalNumber();j++)
      {
-       G4cout<<j<<"\t\t"<<testPAI.GetEnergyInterval(j)/keV<<endl ;
-       outFile<<j<<"\t\t"<<testPAI.GetEnergyInterval(j)/keV<<endl ;
+       G4cout<<j<<"\t\t"<<testPAI.GetEnergyInterval(j)/keV<<G4endl ;
+       outFile<<j<<"\t\t"<<testPAI.GetEnergyInterval(j)/keV<<G4endl ;
      }
-     G4cout<<endl ;
-     outFile<<endl ;
+     G4cout<<G4endl ;
+     outFile<<G4endl ;
 
-     outFile<<"Actual spline size = "<<testPAI.GetSplineSize()<<endl ;
-     outFile<<"Normalization Cof = "<<testPAI.GetNormalizationCof()<<endl ;
-     outFile<<endl ;
+     outFile<<"Actual spline size = "<<testPAI.GetSplineSize()<<G4endl ;
+     outFile<<"Normalization Cof = "<<testPAI.GetNormalizationCof()<<G4endl ;
+     outFile<<G4endl ;
 
-     G4cout << "Actual spline size = "<<testPAI.GetSplineSize()<<endl ;
-     G4cout <<"Normalization Cof = "<<testPAI.GetNormalizationCof()<<endl ;
-     G4cout << endl ;
+     G4cout << "Actual spline size = "<<testPAI.GetSplineSize()<<G4endl ;
+     G4cout <<"Normalization Cof = "<<testPAI.GetNormalizationCof()<<G4endl ;
+     G4cout << G4endl ;
 
      outFile<<"Lorentz factor"<<"\t"<<"Max E transfer, kev"<<"\t"
-          <<"<dE/dx>, keV/cm"<<"\t\t"<<"<dN/dx>, 1/cm"<<endl<<endl ;
+          <<"<dE/dx>, keV/cm"<<"\t\t"<<"<dN/dx>, 1/cm"<<G4endl<<G4endl ;
    
      G4cout << "Lorentz factor"<<"\t"<<"Max E transfer, kev"<<"\t"
-            << "<dE/dx>, keV/cm"<<"\t\t"<<"<dN/dx>, 1/cm"<<endl<<endl ;
+            << "<dE/dx>, keV/cm"<<"\t\t"<<"<dN/dx>, 1/cm"<<G4endl<<G4endl ;
    
 
      //   G4PAIxSection testPAIproton(k,maxEnergyTransfer) ;
@@ -520,36 +520,36 @@ int main()
        outFile << gamma << "\t"
                << maxEnergyTransfer/keV<<"\t\t"
                << testPAIproton.GetMeanEnergyLoss()*cm/keV << "\t\t"
-               << testPAIproton.GetIntegralPAIxSection(1)*cm << "\t\t" << endl ;
+               << testPAIproton.GetIntegralPAIxSection(1)*cm << "\t\t" << G4endl ;
        G4cout  << gamma << "\t"
                << maxEnergyTransfer/keV<<"\t\t"
                << testPAIproton.GetMeanEnergyLoss()*cm/keV << "\t\t"
-               << testPAIproton.GetIntegralPAIxSection(1)*cm << "\t\t" << endl ;
+               << testPAIproton.GetIntegralPAIxSection(1)*cm << "\t\t" << G4endl ;
 
        //   outFile<<testPAIproton.GetLorentzFactor(j)<<"\t"
        //          <<maxEnergyTransfer/keV<<"\t\t"
        //          <<testPAIproton.GetPAItable(0,j)*cm/keV<<"\t\t"
-       //  	      <<testPAIproton.GetPAItable(1,j)*cm<<"\t\t"<<endl ;
+       //  	      <<testPAIproton.GetPAItable(1,j)*cm<<"\t\t"<<G4endl ;
 
        kineticEnergy *= 1.5 ;
      }
-     G4cout<<endl ;
-     outFile<<endl ;
+     G4cout<<G4endl ;
+     outFile<<G4endl ;
   }
 
   G4String confirm ;
-  G4cout<<"Enter 'y' , if you would like to get dE/dx-distribution : "<<flush ;
-  cin>>confirm ;
+  G4cout<<"Enter 'y' , if you would like to get dE/dx-distribution : "<<G4std::flush ;
+  G4cin>>confirm ;
   if(confirm != "y" ) return 1 ;
-  G4cout<<endl ;
+  G4cout<<G4endl ;
 
   for(k=0;k<numOfMaterials;k++)
   {
-    G4cout <<k<< "  Material : " <<(*theMaterialTable)[k]->GetName() << endl ;
+    G4cout <<k<< "  Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
   } 
-  G4cout<<"Enter material name for dE/dx-distribution : "<<flush ;
-  cin>>testName ;
-  G4cout<<endl ;
+  G4cout<<"Enter material name for dE/dx-distribution : "<<G4std::flush ;
+  G4cin>>testName ;
+  G4cout<<G4endl ;
 
   G4int    iLoss, iStat, iStatMax, nGamma ;
   G4double energyLoss[50], Ebin, delta, delta1, delta2, delta3, step, y, pos ;
@@ -558,35 +558,35 @@ int main()
   G4double alphaCrossTalk = -0.055, betaS = 0.2*0.4*keV ;
   G4int    spectrum[50] ;
 
-  G4cout << " Enter nGamma 1<nGamma<10 : "  <<flush ;
-  cin>>nGamma ;
-  G4cout<<endl ;
+  G4cout << " Enter nGamma 1<nGamma<10 : "  <<G4std::flush ;
+  G4cin>>nGamma ;
+  G4cout<<G4endl ;
 
   for(k=0;k<numOfMaterials;k++)
   {
      if((*theMaterialTable)[k]->GetName() != testName) continue ;
 
-     G4cout << "Material : " <<(*theMaterialTable)[k]->GetName() << endl<<endl ;
+     G4cout << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl<<G4endl ;
 
 
-     G4cout << " Enter Lorentz factor : "  <<flush ;
-     cin>>gamma ;
-     G4cout<<endl ;
+     G4cout << " Enter Lorentz factor : "  <<G4std::flush ;
+     G4cin>>gamma ;
+     G4cout<<G4endl ;
 
-     G4cout << " Enter step in mm : " <<flush ;
-     cin>>step ;
-     G4cout<<endl ;
+     G4cout << " Enter step in mm : " <<G4std::flush ;
+     G4cin>>step ;
+     G4cout<<G4endl ;
      step *= mm ;
 
-     G4cout << " Enter energy bin in keV : " <<flush ;
-     cin>>Ebin ;
-     G4cout<<endl ;
+     G4cout << " Enter energy bin in keV : " <<G4std::flush ;
+     G4cin>>Ebin ;
+     G4cout<<G4endl ;
      Ebin *= keV ;
 
-     G4cout << " Enter number of events : " <<flush ;
-     cin>>iStatMax ;
+     G4cout << " Enter number of events : " <<G4std::flush ;
+     G4cin>>iStatMax ;
 
-     G4cout<<endl<<"Start dE/dx distribution"<<endl<<endl ;
+     G4cout<<G4endl<<"Start dE/dx distribution"<<G4endl<<G4endl ;
 
      maxEnergyTransfer = 100*keV ;
      bg2               = gamma*gamma - 1 ;
@@ -634,49 +634,49 @@ int main()
      }
      G4double meanLoss = 0.0 ;
 
-     outFile<<"E, keV"<<"\t\t"<<"Distribution"<<endl<<endl ;
-     G4cout<<"E, keV"<<"\t\t"<<"Distribution"<<endl<<endl ;
-     G4cout<<endl ;
+     outFile<<"E, keV"<<"\t\t"<<"Distribution"<<G4endl<<G4endl ;
+     G4cout<<"E, keV"<<"\t\t"<<"Distribution"<<G4endl<<G4endl ;
+     G4cout<<G4endl ;
      for(iLoss=0;iLoss<50;iLoss++) // with last bin
      {
-       fileOut<<energyLoss[iLoss]/keV<<"\t\t"<<spectrum[iLoss]<<endl ;
-       G4cout<<energyLoss[iLoss]/keV<<"\t\t"<<spectrum[iLoss]<<endl ;
+       fileOut<<energyLoss[iLoss]/keV<<"\t\t"<<spectrum[iLoss]<<G4endl ;
+       G4cout<<energyLoss[iLoss]/keV<<"\t\t"<<spectrum[iLoss]<<G4endl ;
        meanLoss +=energyLoss[iLoss]*spectrum[iLoss] ;
      }
-     G4cout<<endl ;
-     G4cout<<"Mean loss over spectrum = "<<meanLoss/keV/iStatMax<<" keV"<<endl ;
+     G4cout<<G4endl ;
+     G4cout<<"Mean loss over spectrum = "<<meanLoss/keV/iStatMax<<" keV"<<G4endl ;
   }
 
   G4int exit = 1 ;
 
   while(exit)
   {
-     G4cout<<"Enter 'y' , if you would like to compare with exp. data : "<<flush ;
-     cin>>confirm ;
+     G4cout<<"Enter 'y' , if you would like to compare with exp. data : "<<G4std::flush ;
+     G4cin>>confirm ;
      if(confirm != "y" ) break ;
-     G4cout<<endl ;
+     G4cout<<G4endl ;
 
      // Read experimental data file
 
      G4double delExp[200], distr[200], deltaBin, sumPAI, sumExp ;
      G4int numberOfExpPoints ;
 
-     G4cout<<endl ;
-     G4cout << " Enter number of experimental points : " <<flush ;
-     cin>>numberOfExpPoints ;
-     G4cout<<endl ;
-     G4cout << " Enter energy bin in keV : " <<flush ;
-     cin>>deltaBin ;
-     G4cout<<endl ;
+     G4cout<<G4endl ;
+     G4cout << " Enter number of experimental points : " <<G4std::flush ;
+     G4cin>>numberOfExpPoints ;
+     G4cout<<G4endl ;
+     G4cout << " Enter energy bin in keV : " <<G4std::flush ;
+     G4cin>>deltaBin ;
+     G4cout<<G4endl ;
      deltaBin *= keV ;
 
-     ifstream fileRead ;
+     G4std::ifstream fileRead ;
      fileRead.open("input.dat") ;
      for(i=0;i<numberOfExpPoints;i++)
      {
        fileRead>>delExp[i]>>distr[i] ;
        delExp[i] *= keV ;
-       G4cout<<i<<"\t"<<delExp[i]<<"\t"<<distr[i]<<endl ;
+       G4cout<<i<<"\t"<<delExp[i]<<"\t"<<distr[i]<<G4endl ;
      }
      fileRead.close() ;
 
@@ -694,16 +694,16 @@ int main()
 
      for(i=0;i<numberOfExpPoints;i++)
      {
-       fileWrite<<delExp[i]/keV<<"\t"<<distr[i]<<endl ;
-       G4cout<<delExp[i]/keV<<"\t"<<distr[i]<<endl ;
+       fileWrite<<delExp[i]/keV<<"\t"<<distr[i]<<G4endl ;
+       G4cout<<delExp[i]/keV<<"\t"<<distr[i]<<G4endl ;
      }
      exit = 0 ;
   }
 
-  G4cout<<"Enter 'y' , if you would like to get most probable delta : "<<flush ;
-  cin>>confirm ;
+  G4cout<<"Enter 'y' , if you would like to get most probable delta : "<<G4std::flush ;
+  G4cin>>confirm ;
   if(confirm != "y" ) return 1 ;
-  G4cout<<endl ;
+  G4cout<<G4endl ;
 
   G4int kGamma, iMPLoss, maxSpectrum, iMax ;
   G4double mpDelta[50], meanDelta[50], rrMP[50], rrMean[50] ; 
@@ -719,54 +719,54 @@ int main()
 
   for(k=0;k<numOfMaterials;k++)
   {
-    G4cout <<k<< "  Material : " <<(*theMaterialTable)[k]->GetName() << endl ;
+    G4cout <<k<< "  Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
   } 
-  G4cout<<"Enter material name for dE/dx-distribution : "<<flush ;
-  cin>>testName ;
-  G4cout<<endl ;
+  G4cout<<"Enter material name for dE/dx-distribution : "<<G4std::flush ;
+  G4cin>>testName ;
+  G4cout<<G4endl ;
 
 
   for(k=0;k<numOfMaterials;k++)
   {
      if((*theMaterialTable)[k]->GetName() != testName) continue ;
 
-     G4cout << "Material : " <<(*theMaterialTable)[k]->GetName() << endl<<endl ;
+     G4cout << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl<<G4endl ;
 
-     G4cout << " Enter nGamma 1<nGamma<10 : "  <<flush ;
-     cin>>nGamma ;
-     G4cout<<endl ;
+     G4cout << " Enter nGamma 1<nGamma<10 : "  <<G4std::flush ;
+     G4cin>>nGamma ;
+     G4cout<<G4endl ;
 
 
-     G4cout << " Enter step in mm : " <<flush ;
-     cin>>step ;
-     G4cout<<endl ;
+     G4cout << " Enter step in mm : " <<G4std::flush ;
+     G4cin>>step ;
+     G4cout<<G4endl ;
      step *= mm ;
 
-     G4cout << " Enter energy bin in keV : " <<flush ;
-     cin>>Ebin ;
-     G4cout<<endl ;
+     G4cout << " Enter energy bin in keV : " <<G4std::flush ;
+     G4cin>>Ebin ;
+     G4cout<<G4endl ;
      Ebin *= keV ;
 
-     G4cout << " Enter trancated mean ration <1.0 : "  <<flush ;
-     cin>>tmRatio ;
-     G4cout<<endl ;
+     G4cout << " Enter trancated mean ration <1.0 : "  <<G4std::flush ;
+     G4cin>>tmRatio ;
+     G4cout<<G4endl ;
 
 
-     G4cout << " Enter number of events : " <<flush ;
-     cin>>iStatMax ;
-     G4cout<<endl ;
+     G4cout << " Enter number of events : " <<G4std::flush ;
+     G4cin>>iStatMax ;
+     G4cout<<G4endl ;
 
      G4cout<<"no."<<"\t"<<"Gamma"<<"\t"<<"Rel. rise"<<"\t"<<"M.P. loss, keV"
-           <<"\t"<<"Mean loss, keV"<<endl<<endl ;
+           <<"\t"<<"Mean loss, keV"<<G4endl<<G4endl ;
      //   outFile<<"no."<<"\t"<<"Gamma"<<"\t"<<"M.P. loss, keV"
-     //      <<"\t"<<"Mean loss, keV"<<endl<<endl ;
+     //      <<"\t"<<"Mean loss, keV"<<G4endl<<G4endl ;
      
 
      // gamma = 1.1852 ;
 
      for(kGamma=0;kGamma<33;kGamma++)
      {
-       //    G4cout<<endl<<"Start dE/dx distribution"<<endl<<endl ;
+       //    G4cout<<G4endl<<"Start dE/dx distribution"<<G4endl<<G4endl ;
 
        gamma = aGamma[kGamma] ;
        maxEnergyTransfer = 100*keV ;
@@ -822,8 +822,8 @@ int main()
 
        for(iLoss=0;iLoss<iMPLoss;iLoss++) // without last bin
        {
-	 // fileOut<<energyLoss[iLoss]/keV<<"\t\t"<<spectrum[iLoss]<<endl ;
-	 //  G4cout<<energyLoss[iLoss]/keV<<"\t\t"<<spectrum[iLoss]<<endl ;
+	 // fileOut<<energyLoss[iLoss]/keV<<"\t\t"<<spectrum[iLoss]<<G4endl ;
+	 //  G4cout<<energyLoss[iLoss]/keV<<"\t\t"<<spectrum[iLoss]<<G4endl ;
 
          meanLoss += energyLoss[iLoss]*spectrum[iLoss] ;
 
@@ -850,15 +850,15 @@ int main()
        if(kGamma > 0)
        {
          rrMP[kGamma] = mpLoss/mpDelta[0] ;
-         G4cout<<kGamma<<"\t"<<gamma<<"\t"<<rrMP[kGamma]<<"\t"<<mpLoss<<endl ;
-	 //  outFile<<gamma<<"\t"<<rrMP[kGamma]<<endl ;
-         fileWrite1<<gamma<<"\t"<<rrMP[kGamma]<<endl ;
+         G4cout<<kGamma<<"\t"<<gamma<<"\t"<<rrMP[kGamma]<<"\t"<<mpLoss<<G4endl ;
+	 //  outFile<<gamma<<"\t"<<rrMP[kGamma]<<G4endl ;
+         fileWrite1<<gamma<<"\t"<<rrMP[kGamma]<<G4endl ;
        }
 
        //  gamma *= 1.5 ;
     }
-    G4cout<<endl ;
-    outFile<<endl ;
+    G4cout<<G4endl ;
+    outFile<<G4endl ;
   }   
 
    return EXIT_SUCCESS;

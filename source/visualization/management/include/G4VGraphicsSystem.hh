@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsSystem.hh,v 1.5 1999-11-25 15:26:33 johna Exp $
+// $Id: G4VGraphicsSystem.hh,v 1.6 1999-12-15 14:54:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,7 +70,7 @@ protected:
   Functionality  fFunctionality;
 };
 
-ostream& operator << (ostream& os, const G4VGraphicsSystem& gs);
+G4std::ostream& operator << (G4std::ostream& os, const G4VGraphicsSystem& gs);
 
 #include "G4VGraphicsSystem.icc"
 

@@ -96,7 +96,7 @@ ParticleProperties::ParticleProperties(const ParticleProperties& p)
 {
 }
 
-void ParticleProperties::writeOut(ostream& o) const
+void ParticleProperties::writeOut(G4std::ostream& o) const
 {
   Type.writeOut(o);
   o << c << "  " << color << "  " << iso3 << "  " << spin3 << "  ";
@@ -133,7 +133,7 @@ String ParticleProperties::printCharge() const
   while (j<abs(ch));
   if ( j>2 ) {
     int ch1 = (int)Charge();
-    cerr << "ATTENTION: " << ch << "  " << c << endl;
+    G4cerr << "ATTENTION: " << ch << "  " << c << G4endl;
   }
   return s;
 }

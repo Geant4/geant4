@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testMaterialPropertyVector.cc,v 1.1 1999-01-08 16:32:10 gunter Exp $
+// $Id: testMaterialPropertyVector.cc,v 1.2 1999-12-15 14:50:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,8 +40,8 @@ int main ()
 
 	// Test Vector creation
 	// --------------------
-	G4cout << "Test Vector creation" << endl;
-	G4cout << "--------------------" << endl << endl;
+	G4cout << "Test Vector creation" << G4endl;
+	G4cout << "--------------------" << G4endl << G4endl;
 
 	G4MaterialPropertyVector absco(PPCKOV, ABSCO, NUMENTRIES);
 	absco.DumpVector();
@@ -49,26 +49,26 @@ int main ()
 		
 	// Test GetProperty
 	// ----------------	
-	G4cout << "Test GetProperty" << endl;
-	G4cout << "----------------" << endl << endl; 
-        G4cout << "Input a photon momentum value for which you wish" << endl;
+	G4cout << "Test GetProperty" << G4endl;
+	G4cout << "----------------" << G4endl << G4endl; 
+        G4cout << "Input a photon momentum value for which you wish" << G4endl;
         G4cout << "to find the absorption coefficient:  ";
 
-        cin >> aPhotonMomentum;
-	G4cout << endl;
+        G4cin >> aPhotonMomentum;
+	G4cout << G4endl;
 
 	anAbsorptionCoefficient = absco.GetProperty(aPhotonMomentum);
 
 	G4cout << "The absorption coefficient is:  " 
 	     << anAbsorptionCoefficient  
-	     << endl;
+	     << G4endl;
         LoopUntilPressEnter();
 
 	// Test AddElement
 	// ---------------
-	G4cout << "Test AddElement" << endl;
-	G4cout << "---------------" << endl << endl;
-	G4cout << "Add the entry just created" << endl;
+	G4cout << "Test AddElement" << G4endl;
+	G4cout << "---------------" << G4endl << G4endl;
+	G4cout << "Add the entry just created" << G4endl;
 	LoopUntilPressEnter();
 
 	absco.AddElement(aPhotonMomentum, anAbsorptionCoefficient); 
@@ -76,21 +76,21 @@ int main ()
 
 	// Test RemoveElement
 	// ------------------
-	G4cout << "Test RemoveElement" << endl;
-        G4cout << "------------------" << endl << endl;
-        G4cout << "Input a photon momentum value for which you wish" << endl;
+	G4cout << "Test RemoveElement" << G4endl;
+        G4cout << "------------------" << G4endl << G4endl;
+        G4cout << "Input a photon momentum value for which you wish" << G4endl;
         G4cout << "to remove the OPVEntry:  ";
 
-        cin >> aPhotonMomentum;
-	G4cout << endl;
+        G4cin >> aPhotonMomentum;
+	G4cout << G4endl;
 
 	absco.RemoveElement(aPhotonMomentum);
 	absco.DumpVector(); 
 
 	// Test the iterator
 	// -----------------
-	G4cout << "Test the iterator" << endl;
-	G4cout << "-----------------" << endl << endl;
+	G4cout << "Test the iterator" << G4endl;
+	G4cout << "-----------------" << G4endl << G4endl;
         LoopUntilPressEnter();
 
 	absco.ResetIterator();
@@ -98,9 +98,9 @@ int main ()
 	while (++absco)
 	{
 		G4cout << absco.GetPhotonMomentum() << "\t"
-		     << absco.GetProperty() << endl;
+		     << absco.GetProperty() << G4endl;
 	}
-	G4cout << "\n\n <END OF TEST>" << endl;
+	G4cout << "\n\n <END OF TEST>" << G4endl;
 
 	return EXIT_SUCCESS;
 }
@@ -112,9 +112,9 @@ void LoopUntilPressEnter()
 {
         char ch;
         G4cout << "Press <Enter> to continue ... ";
-        while ( cin.get(ch) )
+        while ( G4cin.get(ch) )
         {
                 if (ch == '\n') break;
         }
-        G4cout << endl;
+        G4cout << G4endl;
 }

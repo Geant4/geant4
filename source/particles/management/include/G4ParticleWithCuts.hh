@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleWithCuts.hh,v 1.4 1999-10-28 23:24:13 kurasige Exp $
+// $Id: G4ParticleWithCuts.hh,v 1.5 1999-12-15 14:51:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -191,7 +191,7 @@ inline void G4ParticleWithCuts::ReCalcCuts()
   } else {
     if (GetVerboseLevel()>0) {
       G4cout << "G4ParticleWithCuts::ReCalcCuts() :";
-      G4cout << "theCutInMaxInteractionLength is not defined " << endl; 
+      G4cout << "theCutInMaxInteractionLength is not defined " << G4endl; 
     }
   }
 }

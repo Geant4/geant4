@@ -3,15 +3,15 @@
 
 #include "globals.hh"
 #include "array.hh"
-#include <strstream.h>
+#include "g4std/strstream"
 
-class ostream;
-class istream;
+class G4std::ostream;
+class G4std::istream;
 
 class String 
 {
-  friend ostream& operator<<(ostream& o,const String& s);
-  friend istream& operator>>(istream& i,String& s);
+  friend G4std::ostream& operator<<(G4std::ostream& o,const String& s);
+  friend G4std::istream& operator>>(G4std::istream& i,String& s);
   friend bool operator==(const String& s1,const String& s2);
   friend bool operator==(const String& s1,const char* s2);
   friend bool operator==(const char* s1,const String& s2);
@@ -23,7 +23,7 @@ class String
   friend int length(const String& s) { return s.len; }
   friend String eatwhite(const String& s);
   char* data;
-  istream* str;
+  G4std::istream* str;
   int len;
   String(int l,int);
 public:
@@ -48,7 +48,7 @@ public:
   String subString(int start,int end) const;
   
   Array<String> divide(String = ",");
-  void putToStream(istream&) const;
+  void putToStream(G4std::istream&) const;
 };
 
 #endif

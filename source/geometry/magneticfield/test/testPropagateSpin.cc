@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testPropagateSpin.cc,v 1.1 1999-02-12 12:41:08 japost Exp $
+// $Id: testPropagateSpin.cc,v 1.2 1999-12-15 14:49:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -38,7 +38,7 @@
 #include "G4UniformMagField.hh"
 
 #include "G4ios.hh"
-#include <iomanip.h>
+#include "g4std/iomanip"
 
 // Sample Parameterisation
 class G4LinScale : public G4VPVParameterisation
@@ -306,10 +306,10 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
     if( fabs(UnitMomentum.mag() - 1.0) > 1.e-8 ) 
     {
       G4cout << "UnitMomentum.mag() - 1.0 = " << UnitMomentum.mag() - 1.0 <<
-	endl;
+	G4endl;
     }
 
-    G4cout << endl; 
+    G4cout << G4endl; 
 
     for( int iparticle=0; iparticle < 2; iparticle++ )
     { 
@@ -331,22 +331,22 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
        G4double  beta = momentum_val / sqrt( rest_mass*rest_mass + momentum_val*momentum_val );
        G4ThreeVector  Velocity = UnitMomentum * beta * c_light;
 
-       G4cout << endl;
-       G4cout << "Test PropagateMagField: ***********************" << endl
-            << " Starting New Particle with Position " << Position << endl 
-	    << " and UnitVelocity " << UnitMomentum << endl;
+       G4cout << G4endl;
+       G4cout << "Test PropagateMagField: ***********************" << G4endl
+            << " Starting New Particle with Position " << Position << G4endl 
+	    << " and UnitVelocity " << UnitMomentum << G4endl;
        G4cout << " Momentum in MeV/c is "<< (0.5+iparticle*1.0)*0.1*GeV;
-       G4cout << endl;
+       G4cout << G4endl;
 
        G4ThreeVector initialSpin = UnitMomentum; 
 
        for( int istep=0; istep < 14; istep++ ){ 
-   //        // G4cout << "UnitMomentum Magnitude is " << UnitMomentum.mag() << endl;
+   //        // G4cout << "UnitMomentum Magnitude is " << UnitMomentum.mag() << G4endl;
 	  located= pNavig->LocateGlobalPointAndSetup(Position);
 	  //  Is the following better ?? It would need "changes"
 	  // located= pMagFieldPropagator->LocateGlobalPointAndSetup(Position);
 	  // G4cout << "Starting Step " << istep << " in volume " 
-	       // << located->GetName() << endl;
+	       // << located->GetName() << G4endl;
 
           G4FieldTrack  stateVec( Position, Velocity, 0.0, 0.0,
                                   0.0, 0.0, &initialSpin ); 
@@ -366,25 +366,25 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 	  G4ThreeVector EndSpin=         EndFieldTrack.GetSpin();
           G4ThreeVector EndVelocity    = EndFieldTrack.GetVelocity();
 
-//          G4cout << " EndPosition " << EndPosition << endl;
-//          G4cout << " EndUnitMomentum " << EndUnitMomentum << endl;
-//          G4cout << " initialSpin " << initialSpin.mag() << endl;
-//          G4cout << " EndSpin     " << EndSpin.mag()     << endl;
+//          G4cout << " EndPosition " << EndPosition << G4endl;
+//          G4cout << " EndUnitMomentum " << EndUnitMomentum << G4endl;
+//          G4cout << " initialSpin " << initialSpin.mag() << G4endl;
+//          G4cout << " EndSpin     " << EndSpin.mag()     << G4endl;
 
 	  if( fabs(EndUnitMomentum.mag2() - 1.0) > 1.e-8 )
 	    G4cout << "EndUnitMomentum.mag2() - 1.0 = " <<
-	      EndUnitMomentum.mag2() - 1.0 << endl;
+	      EndUnitMomentum.mag2() - 1.0 << G4endl;
 
           // In this case spin should be parallel (equal) to momentum
 	  G4double magdiff= (EndUnitMomentum - EndSpin).mag();
 	  if( magdiff > 1.e-8 )
 	    G4cout << " Spin is not equal to Momentum " 
-		   << " Diff = " << magdiff << endl;
+		   << " Diff = " << magdiff << G4endl;
 
 	  G4ThreeVector MoveVec = EndPosition - Position;
 	  assert( MoveVec.mag() < physStep*(1.+1.e-9) );
 
-	  // G4cout << " testPropagatorInField: After stepI " << istep  << " : " << endl;
+	  // G4cout << " testPropagatorInField: After stepI " << istep  << " : " << G4endl;
 	  report_endPV(Position, Velocity, step_len, physStep, safety,
 		       EndPosition, EndVelocity, istep, located );
 
@@ -447,66 +447,66 @@ void report_endPV(G4ThreeVector    Position,
     {
        G4cout.precision(3);
        // G4cout.setf(ios_base::fixed,ios_base::floatfield);
-       G4cout << setw( 5) << "Step#" << " "
-            << setw( 9) << "X(mm)" << " "
-            << setw( 9) << "Y(mm)" << " "  
-            << setw( 9) << "Z(mm)" << " "
-            << setw( 7) << " N_x " << " "
-            << setw( 7) << " N_y " << " "
-            << setw( 7) << " N_z " << " "
-	   // << setw( 9) << "KinE(MeV)" << " "
-	   // << setw( 9) << "dE(MeV)" << " "  
-            << setw( 9) << "StepLen" << " "  
-            << setw( 9) << "PhsStep" << " "  
-            << setw( 9) << "Safety" << " "  
-            << setw(18) << "NextVolume" << " "
-            << endl;
+       G4cout << G4std::setw( 5) << "Step#" << " "
+            << G4std::setw( 9) << "X(mm)" << " "
+            << G4std::setw( 9) << "Y(mm)" << " "  
+            << G4std::setw( 9) << "Z(mm)" << " "
+            << G4std::setw( 7) << " N_x " << " "
+            << G4std::setw( 7) << " N_y " << " "
+            << G4std::setw( 7) << " N_z " << " "
+	   // << G4std::setw( 9) << "KinE(MeV)" << " "
+	   // << G4std::setw( 9) << "dE(MeV)" << " "  
+            << G4std::setw( 9) << "StepLen" << " "  
+            << G4std::setw( 9) << "PhsStep" << " "  
+            << G4std::setw( 9) << "Safety" << " "  
+            << G4std::setw(18) << "NextVolume" << " "
+            << G4endl;
     }
     //
     //
     if( verboseLevel > 3 )
     {
-       G4cout << "End  Position is " << EndPosition << endl 
-	    << " and UnitVelocity is " << EndUnitVelocity << endl;
+       G4cout << "End  Position is " << EndPosition << G4endl 
+	    << " and UnitVelocity is " << EndUnitVelocity << G4endl;
        G4cout << "Step taken was " << step_len  
-	    << " out of PhysicalStep= " <<  physStep << endl;
-       G4cout << "Final safety is: " << safety << endl;
+	    << " out of PhysicalStep= " <<  physStep << G4endl;
+       G4cout << "Final safety is: " << safety << G4endl;
 
-       G4cout << "Chord length = " << (EndPosition-Position).mag() << endl;
-       G4cout << endl; 
+       G4cout << "Chord length = " << (EndPosition-Position).mag() << G4endl;
+       G4cout << G4endl; 
     }
     else // if( verboseLevel > 0 )
     {
        G4cout.precision(3);
-       G4cout << setw( 5) << Step << " "
-	    << setw( 9) << Position.x() << " "
-	    << setw( 9) << Position.y() << " "
-	    << setw( 9) << Position.z() << " "
-	    << setw( 7) << EndUnitVelocity.x() << " "
-	    << setw( 7) << EndUnitVelocity.y() << " "
-	    << setw( 7) << EndUnitVelocity.z() << " "
-	 //    << setw( 9) << KineticEnergy << " "
-	 //    << setw( 9) << EnergyDifference << " "
-	    << setw( 9) << step_len << " "
-	    << setw( 9) << physStep << " "
-	    << setw( 9) << safety << " ";
+       G4cout << G4std::setw( 5) << Step << " "
+	    << G4std::setw( 9) << Position.x() << " "
+	    << G4std::setw( 9) << Position.y() << " "
+	    << G4std::setw( 9) << Position.z() << " "
+	    << G4std::setw( 7) << EndUnitVelocity.x() << " "
+	    << G4std::setw( 7) << EndUnitVelocity.y() << " "
+	    << G4std::setw( 7) << EndUnitVelocity.z() << " "
+	 //    << G4std::setw( 9) << KineticEnergy << " "
+	 //    << G4std::setw( 9) << EnergyDifference << " "
+	    << G4std::setw( 9) << step_len << " "
+	    << G4std::setw( 9) << physStep << " "
+	    << G4std::setw( 9) << safety << " ";
        if( startVolume != 0) {
-	 G4cout << setw(12) << startVolume->GetName() << " ";
+	 G4cout << G4std::setw(12) << startVolume->GetName() << " ";
        } else {
-	 G4cout << setw(12) << "OutOfWorld" << " ";
+	 G4cout << G4std::setw(12) << "OutOfWorld" << " ";
        }
 
 #if 0
        if( endVolume != 0) 
        {
-	 G4cout << setw(12) << endVolume()->GetName() << " ";
+	 G4cout << G4std::setw(12) << endVolume()->GetName() << " ";
        } 
        else 
        {
-	 G4cout << setw(12) << "OutOfWorld" << " ";
+	 G4cout << G4std::setw(12) << "OutOfWorld" << " ";
        }
 #endif
-       G4cout << endl;
+       G4cout << G4endl;
     }
 }
 
@@ -525,18 +525,18 @@ int readin_particle( )
  int pCharge, i ;
  double pMomentum, pTeta, pPhi, h ;
  G4cout<<"Enter particle type: 0 - electron, 1 - muon, 2 - pion, \n"
-     <<"3 - kaon, 4 - proton "<< endl ;
- cin>>i ;
+     <<"3 - kaon, 4 - proton "<< G4endl ;
+ G4cin>>i ;
  double pMass = pmass[i] ;
- G4cout<<"Enter particle charge in units of the positron charge "<< endl ;
- cin>>pCharge ;
- G4cout<<"Enter particle momentum in GeV/c"<<endl ;
- cin>>pMomentum ;
- G4cout<<"Enter particle teta & phi in degrees"<<endl ;
- cin>>pTeta ;
- cin>>pPhi ;
- G4cout<<"Enter particle Step in centimeters"<<endl ;
- cin>>h ;
+ G4cout<<"Enter particle charge in units of the positron charge "<< G4endl ;
+ G4cin>>pCharge ;
+ G4cout<<"Enter particle momentum in GeV/c"<<G4endl ;
+ G4cin>>pMomentum ;
+ G4cout<<"Enter particle teta & phi in degrees"<<G4endl ;
+ G4cin>>pTeta ;
+ G4cin>>pPhi ;
+ G4cout<<"Enter particle Step in centimeters"<<G4endl ;
+ G4cin>>h ;
 
  h *=  10.; // G4 units are in millimeters.
 

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyTest.cc,v 1.3 1999-11-09 21:08:02 pia Exp $
+// $Id: G4hLowEnergyTest.cc,v 1.4 1999-12-15 14:51:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // KaonMinusAtRestTest.cc 
@@ -28,8 +28,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4Material.hh"
 #include "G4ProcessManager.hh"
@@ -68,20 +68,20 @@ main()
   G4int verboseLevel=1;
   //G4int processID=9;
 
-  //G4cout << "How many interactions? [10], Which material? [3], which Verbose Level? [1]" << endl;
-  //cin >> niter >> imat >> verboseLevel;
+  //G4cout << "How many interactions? [10], Which material? [3], which Verbose Level? [1]" << G4endl;
+  //G4cin >> niter >> imat >> verboseLevel;
 
-  //G4cout<<"which process?"<<endl<<setw(60)<<"[1] = G4LowEnergyPhotoElectric, [2] = G4LowEnergyCompton"<<endl;
-  //G4cout<<setw(60)<<"[3] = G4LowEnergyRayleigh, [4] = G4LowEnergyGammaconversion"<<endl;
-  //G4cout<<setw(60)<<"[5] = G4LowEnergyBremstrahlung"<<"[6] = G4LowEnergyIonisation"<<endl;
+  //G4cout<<"which process?"<<G4endl<<G4std::setw(60)<<"[1] = G4LowEnergyPhotoElectric, [2] = G4LowEnergyCompton"<<G4endl;
+  //G4cout<<G4std::setw(60)<<"[3] = G4LowEnergyRayleigh, [4] = G4LowEnergyGammaconversion"<<G4endl;
+  //G4cout<<G4std::setw(60)<<"[5] = G4LowEnergyBremstrahlung"<<"[6] = G4LowEnergyIonisation"<<G4endl;
 
-  //cin >> processID;
+  //G4cin >> processID;
 
   G4double InitEnergy = 1e-3, InitX = 0., InitY = 0., InitZ = 1.;
-  //G4cout<<"Enter the initial particle energy E and its direction"<<endl; 
-  //cin >> InitEnergy >> InitX >> InitY >> InitZ;
+  //G4cout<<"Enter the initial particle energy E and its direction"<<G4endl; 
+  //G4cin >> InitEnergy >> InitX >> InitY >> InitZ;
 
-  G4cout.setf( ios::scientific, ios::floatfield );
+  G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
   // -------------------------------------------------------------------
 
   // ---- HBOOK initialization
@@ -91,7 +91,7 @@ main()
     assert (hbookManager != 0);
   
   // ---- Book a histogram and ntuples
-  G4cout<<"Hbook file name: "<<((HBookFile*) hbookManager)->filename()<<endl;
+  G4cout<<"Hbook file name: "<<((HBookFile*) hbookManager)->filename()<<G4endl;
   
   // ---- primary ntuple ------
   HepTuple* ntuple1 = hbookManager->ntuple("Primary Ntuple");
@@ -154,7 +154,7 @@ main()
 
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
-  G4cout<<"The material is: "<<(*theMaterialTable)(imat)->GetName()<<endl;
+  G4cout<<"The material is: "<<(*theMaterialTable)(imat)->GetName()<<G4endl;
 
   // Geometry definitions
   G4Box* theFrame = new G4Box ("Frame",92*mm, 92*mm, 92*mm);
@@ -291,7 +291,7 @@ main()
 
     // ---- secondaries histos ----    
     G4cout<<"E and p of the primary particle: "<<pEnChange<<"  "<<pxChange<<"  "
-	  <<pyChange<<"  "<<pzChange<<endl;
+	  <<pyChange<<"  "<<pzChange<<G4endl;
 
     ntuple1->column("ench", pEnChange);
     ntuple1->column("pxch", pxChange);
@@ -328,7 +328,7 @@ main()
 	     << eKin << "  " 
 	     << Px << "  " 
 	     << Py << "  "
-	     << Pz << " ***" << endl;   
+	     << Pz << " ***" << G4endl;   
    
       hEKin->accumulate(eKin);
       hP->accumulate(sqrt(Px*Px+Py*Py+Pz*Pz));
@@ -355,11 +355,11 @@ main()
     
     aParticleChange->Clear();
     iteration++;
-    G4cout << "******* Iteration = " << iteration << endl;
+    G4cout << "******* Iteration = " << iteration << G4endl;
     
   }  while (iteration < niter) ;
 
-  cout <<"Iteration number: " << endl;
+  cout <<"Iteration number: " << G4endl;
   hbookManager->write();
   delete hbookManager;
 
@@ -386,7 +386,7 @@ main()
   delete Step;
   delete touche;
 
-  cout<<"END OF THE MAIN PROGRAM"<<endl;
+  cout<<"END OF THE MAIN PROGRAM"<<G4endl;
 }
 
 

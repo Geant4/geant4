@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLViewer.cc,v 1.3 1999-05-10 14:04:00 johna Exp $
+// $Id: G4OpenGLViewer.cc,v 1.4 1999-12-15 14:54:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -198,7 +198,7 @@ void G4OpenGLViewer::HaloingSecondPass () {
 
 void G4OpenGLViewer::HLRFirstPass () {
 
-  G4cout << "First pass HLR" << endl;
+  G4cout << "First pass HLR" << G4endl;
 
   //Hidden line drawing requires three renderings to different buffers, so it
   //cannot be treated in G4OpenGLSceneHandler alone (as can wireframe or hidden 
@@ -243,7 +243,7 @@ void G4OpenGLViewer::HLRFirstPass () {
 
 void G4OpenGLViewer::HLRSecondPass () {
 
-  G4cout << "Second pass HLR" << endl;
+  G4cout << "Second pass HLR" << G4endl;
 
   //2) Use the stencil buffer to mask out pixels where stencil value = 1, and
   //   render to the stencil buffer as depth tested filled polygons.
@@ -266,7 +266,7 @@ void G4OpenGLViewer::HLRThirdPass () {
   //3) Turn off the stencil buffer, turn on the colour buffer
   //   and render polygons in wireframe mode.
 
-  G4cout << "Third pass HLR" << endl;
+  G4cout << "Third pass HLR" << G4endl;
 
   glDisable (GL_STENCIL_TEST);
   glColorMask (GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);

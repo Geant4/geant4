@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuPairProduction.icc,v 1.1 1999-01-07 16:11:03 gunter Exp $
+// $Id: G4IMuPairProduction.icc,v 1.2 1999-12-15 14:51:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -79,10 +79,10 @@ inline G4double G4IMuPairProduction::PostStepGetPhysicalInteractionLength(
      {
       G4cout << "G4IMuPairProduction PostStepGPIL : Nlambda has been" <<
               " increased at update.Nlambda old/new :" << nlold <<
-              "  " << nl << endl;
-      G4cout << "(theNumberOfInteractionLengthLeft has been increased!)" << endl
+              "  " << nl << G4endl;
+      G4cout << "(theNumberOfInteractionLengthLeft has been increased!)" << G4endl
 ;
-      G4cout << " correction : Nlambda old=new ........." << endl;
+      G4cout << " correction : Nlambda old=new ........." << G4endl;
      }
       //corr. of num errror
       nlold = nl ;
@@ -129,10 +129,10 @@ inline G4double G4IMuPairProduction::PostStepGetPhysicalInteractionLength(
     {
     if(verboseLevel>2)
     {
-     G4cout << "G4IMuPairProduction PostStepGPIL: Step < 0.!, Step=" << value << endl
+     G4cout << "G4IMuPairProduction PostStepGPIL: Step < 0.!, Step=" << value << G4endl
 ;
-     G4cout << "range,rangenext:" << range << "  " << rangenext << endl ;
-     G4cout << "correction : rangenext=range ....." << endl;
+     G4cout << "range,rangenext:" << range << "  " << rangenext << G4endl ;
+     G4cout << "correction : rangenext=range ....." << G4endl;
     }
      //corr. of num error
      rangenext = range ;

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.1 1999-11-17 11:04:17 hpw Exp $
+// $Id: G4Quasmon.cc,v 1.2 1999-12-15 14:52:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -128,10 +128,10 @@ G4Quasmon::G4Quasmon(G4int Z, G4int N, G4int S, G4LorentzVector FourMomentum) :
   //@@ Temporary debugging test ==========
   if (valQ.CheckNegative())
   {
-    cerr << "G4Quasmon:NegativeQContent(" << valQ.GetU() << "," << valQ.GetD() << ","
+    G4cerr << "G4Quasmon:NegativeQContent(" << valQ.GetU() << "," << valQ.GetD() << ","
          << valQ.GetS() << "," << valQ.GetAU() << "," << valQ.GetAD() << "," 
-         << valQ.GetAS() << ")" << " for Z=" << Z << ",N=" << N << ",S=" << S << endl;
-    //cerr<<"G4Quasmon:NegativeQContent(" << valQ <<"  for Z="<< Z <<",N="<< N <<",S="<< S << endl;
+         << valQ.GetAS() << ")" << " for Z=" << Z << ",N=" << N << ",S=" << S << G4endl;
+    //G4cerr<<"G4Quasmon:NegativeQContent(" << valQ <<"  for Z="<< Z <<",N="<< N <<",S="<< S << G4endl;
     abort();
   };
   InitCandidateVector();
@@ -153,7 +153,7 @@ G4Quasmon::G4Quasmon(G4int projPDG, G4int targPDG, G4LorentzVector proj4Mom,
   valQ.SetAS(projDefinition->GetAntiQuarkContent(3) + targDefinition->GetAntiQuarkContent(3));
 #ifdef debug
   cout << "QInit: u=" << valQ.GetU() << ", d=" << valQ.GetD() << ", s=" << valQ.GetS()
-       << ", au="<<valQ.GetAU() << ", ad="<<valQ.GetAD() << ", as="<<valQ.GetAS() << endl;
+       << ", au="<<valQ.GetAU() << ", ad="<<valQ.GetAD() << ", as="<<valQ.GetAS() << G4endl;
 #endif
   InitCandidateVector();
 }
@@ -177,7 +177,7 @@ void G4Quasmon::InitCandidateVector()
   //  G4String pName = G4ParticleTable::GetParticleTable()->GetParticleName(k);
   //  G4ParticleDefinition* pdf = G4ParticleTable::GetParticleTable()->GetParticle(k);
   //  G4int codePDG = pdf->GetPDGEncoding();
-  //  cout << k << ". Name=" << pName << ", code=" << codePDG << endl;
+  //  cout << k << ". Name=" << pName << ", code=" << codePDG << G4endl;
   //}
   // Originaly the only particles which were in the Table are:
   //0. Name=proton, code=2212
@@ -197,11 +197,11 @@ void G4Quasmon::InitCandidateVector()
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   for (int i=0; i<nOfSMesons; i++) 
   {
-    //cout << "Meson # " << i << "before initialization" << endl;
+    //cout << "Meson # " << i << "before initialization" << G4endl;
     theQCandidates.insert(new G4QCandidate(sMesonPDG[i]));
 #ifdef debug
     cout << "Meson # " << i << " with code = " << sMesonPDG[i]
-         << ", QC=" << theQCandidates[i]->GetQC() << " is initialized" << endl;
+         << ", QC=" << theQCandidates[i]->GetQC() << " is initialized" << G4endl;
 #endif
   }
 
@@ -216,11 +216,11 @@ void G4Quasmon::InitCandidateVector()
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   for (int j=0; j<nOfPResons; j++) 
   {
-    //cout << "Resonance # " << j << "before initialization" << endl;
+    //cout << "Resonance # " << j << "before initialization" << G4endl;
     theQResonances.insert(new G4QHadron(pMesonPDG[j]));
 #ifdef debug
     cout << "Resonance # " << j << " with code = " << pMesonPDG[j] << ", QC="
-         << theQResonances[j]->GetQC() << " is initialized" << endl;
+         << theQResonances[j]->GetQC() << " is initialized" << G4endl;
 #endif
   }
 }
@@ -237,166 +237,166 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon()
   {
     G4double quaM2= q4Mom.m2();
 #ifdef debug
-    cout<<"QFragm: Yes. RQ4mom2="<<q4Mom.m2()<<" > Threshold2="<<MaxSqThresh<< endl;
+    cout<<"QFragm: Yes. RQ4mom2="<<q4Mom.m2()<<" > Threshold2="<<MaxSqThresh<< G4endl;
 #endif
     G4double quasM= q4Mom.m();                // Current mass of Quasmon 
     G4double kMin = mPi0SqDiv2/quasM;
 #ifdef debug
-    cout << "QFragm: kMax=" << quasM/2. << ", kMin=" << kMin << endl;
+    cout << "QFragm: kMax=" << quasM/2. << ", kMin=" << kMin << G4endl;
 #endif
     CalculateContentOfQPartons(quasM);
 #ifdef debug
-    cout << "QFragm: Now call GetQPartonMomentum QC of Quasmon=" << valQ << endl;
+    cout << "QFragm: Now call GetQPartonMomentum QC of Quasmon=" << valQ << G4endl;
 #endif
     G4double kMom = GetQPartonMomentum(kMin); // Call it only after CalculateContentOfQPartons
 #ifdef debug
-    cout << "QFragm: =======>" << ++j << ": kMom=" << kMom << endl;
+    cout << "QFragm: =======>" << ++j << ": kMom=" << kMom << G4endl;
 #endif
     CalculateHadronizationProbabilities(kMom);
     G4int nCandid = theQCandidates.entries();
 #ifdef debug
-    cout << "QFragm: NofCandidates=" << nCandid << endl;
+    cout << "QFragm: NofCandidates=" << nCandid << G4endl;
 #endif
     G4double totP = theQCandidates[nCandid-1]->GetIntegProbability() * G4UniformRand();
     int i=0;
     while(theQCandidates[i]->GetIntegProbability() < totP) i++;
 #ifdef debug
-    cout << "QFragm: i=" << i << " for p=" << totP << endl;
+    cout << "QFragm: i=" << i << " for p=" << totP << G4endl;
 #endif
     //@@(?) now "i" points to the selected candidate
-    if (i>=nCandid) cerr << "Candidate # " << i << " >= Total # " << nCandid << endl;
+    if (i>=nCandid) G4cerr << "Candidate # " << i << " >= Total # " << nCandid << G4endl;
     G4double selM2 = theQCandidates[i]->GetMass2();
     sPDG  = theQCandidates[i]->GetPDGcode();
 	//@@ Temporary
     selMass = theQCandidates[i]->GetMass();
-    if (selMass+mPi0>quasM) cerr << "***QFrag:Too big candidate Mh=" << selMass
-                                 << ", PDG=" << sPDG << ", Mq=" << quasM << endl;
+    if (selMass+mPi0>quasM) G4cerr << "***QFrag:Too big candidate Mh=" << selMass
+                                 << ", PDG=" << sPDG << ", Mq=" << quasM << G4endl;
     //
     //---Now the residual Quasmon mass cann't be smaller than a mass of corresponding S-meson 
     G4QContent curQ = valQ;                //Temporary copy of valQ to estimate the MinM2
     curQ   -= theQCandidates[i]->GetQC();  //Subtract outHadron from Quarc Content of Quasmon
 #ifdef debug
-    cout << "QFragm: -Q=" << theQCandidates[i]->GetQC()<< " = curQ=" << curQ  << endl;
+    cout << "QFragm: -Q=" << theQCandidates[i]->GetQC()<< " = curQ=" << curQ  << G4endl;
 #endif
     G4double minSqT = GetMinSqThresh(curQ);//Calculates mS+nP+gammaP Squared Threshold
     G4double dk = kMom+kMom;
     G4double kt = (quasM-dk)*(quasM-selM2/dk);
     G4double np = nOfQ - 3;                //Power for an integrated residual quasmon mass
 #ifdef debug
-    cout << "QFragm: kt=" << kt << ", minSqT=" << minSqT << ", np=" << np << endl;
+    cout << "QFragm: kt=" << kt << ", minSqT=" << minSqT << ", np=" << np << G4endl;
 #endif
     G4double cM = pow(minSqT/kt,np);       //Bottom cut for a possible Quasmon residual mass
     G4double uR = G4UniformRand();
     G4double rn = pow(cM +(1.-cM)*uR, 1./np);
 #ifdef debug
-    cout << "QFragm: cM=" << cM << ", uR=" << uR << ", rn=" << rn << endl;
+    cout << "QFragm: cM=" << cM << ", uR=" << uR << ", rn=" << rn << G4endl;
 #endif
     G4double m2 = kt*rn;                   //Squared Mass of residual quasmon
     //---Now check that the residual quasmon can decay in something (M_Q > mSMes1+mSMes2)
     // Residual S limit (absolute low limit for P-resonance) for S+S Decay
     //G4double minM2=GetMinSqThresh(curQ);
-    //cout << "QFragm: If m2="<<m2<<"> minThresh2="<<minM2<<" to avoid S+S decay?"<< endl;
+    //cout << "QFragm: If m2="<<m2<<"> minThresh2="<<minM2<<" to avoid S+S decay?"<< G4endl;
     //if (m2<=minM2)                         //In this case decay in ThisHadron+minSqTHadron
     // Residual S+S limit (absolute low limit for P-resonance) for S+S Decay
     G4double midM2=GetMidSqThresh(curQ);
 #ifdef debug
-    cout << "QFragm: Is m2="<<m2<< "> midThresh2="<<midM2<<" to avoid S+S decay?"<< endl;
+    cout << "QFragm: Is m2="<<m2<< "> midThresh2="<<midM2<<" to avoid S+S decay?"<< G4endl;
 #endif
     if (m2<=midM2)      //======>>>>>      In this case decay in ThisHadron+minSqTHadron
 	{
       G4int flag=0;                              // Formal flag to get rPDG
       G4int rPDG=GetNofSqMassSum(valQ, flag);    // PDG of residual hadron (@@ temporary)
 #ifdef debug
-      cout << "QFragm:>>>NO final Q->hr+hs: rPDG=" << rPDG << ", sPDG=" << sPDG << endl;
+      cout << "QFragm:>>>NO final Q->hr+hs: rPDG=" << rPDG << ", sPDG=" << sPDG << G4endl;
 #endif
-      if(!Quasmon2HDecay(rPDG, sPDG)) cerr<<"***QFragm: Exception1"<<endl;
+      if(!Quasmon2HDecay(rPDG, sPDG)) G4cerr<<"***QFragm: Exception1"<<G4endl;
       return theQHadrons;                        // This is the last decay of the quasmon...
 	}
     MaxSqThresh = GetMaxHSqThresh(valQ);         // Calculates mS+nP+GamP Squared Threshold
 #ifdef debug
-    cout<<"QFragm: YES. Is m2="<<m2<<" > maxTh2="<<MaxSqThresh<<" to stay in LOOP?"<< endl;
+    cout<<"QFragm: YES. Is m2="<<m2<<" > maxTh2="<<MaxSqThresh<<" to stay in LOOP?"<< G4endl;
 #endif
     if (m2<=MaxSqThresh) break;                  // In this case decay in Hadron+Resonance
     G4LorentzVector resQ4Mom(0.,0.,0.,sqrt(m2)); // 4-mom of residual Quasmon in CMS
-    if(!Quasmon2HDecay(sPDG, resQ4Mom)) cerr << "***QFragm: Exception2" << endl;
+    if(!Quasmon2HDecay(sPDG, resQ4Mom)) G4cerr << "***QFragm: Exception2" << G4endl;
     q4Mom = resQ4Mom;                            // Update the residual quasmon Lor.Vect.
     valQ    = curQ;                              // Update the Quark Content of Quasmon
 #ifdef debug
-    cout<<"QFragm: residual Quasmon's Lorents Vector="<<q4Mom << ", QC="<<valQ<< endl;
+    cout<<"QFragm: residual Quasmon's Lorents Vector="<<q4Mom << ", QC="<<valQ<< G4endl;
 #endif
   }
   //---Now the {S-meson + P-meson} decay should take place (with Bright-Wigner probabilities)
 #ifdef debug
-  cout<<"QFragm:>>>NO S+P decay starts resM="<<q4Mom.m()<<",LorV="<<q4Mom<<",QC="<<valQ<< endl;
+  cout<<"QFragm:>>>NO S+P decay starts resM="<<q4Mom.m()<<",LorV="<<q4Mom<<",QC="<<valQ<< G4endl;
 #endif
   G4int rPDG=GetNofSqMassSum(valQ, sPDG);  // PDG of residual hadron
 #ifdef debug
-  cout << "QFragm: P-resonance rPDG=" << rPDG << ", the hadron sPDG=" << sPDG << endl;
+  cout << "QFragm: P-resonance rPDG=" << rPDG << ", the hadron sPDG=" << sPDG << G4endl;
 #endif
   G4double maxM = q4Mom.m()-selMass;
   //@@G4QResonance* curRes = new G4QResonance(rPDG, maxM); // The Resonance
   G4QHadron* curRes = new G4QHadron(rPDG, maxM); // The Resonance (as aHadron@@)
   G4LorentzVector tmp4Mom = curRes->Get4Momentum();
-  if(!Quasmon2HDecay(sPDG, tmp4Mom)) cerr << "***QFragm: Exception3" << endl;
+  if(!Quasmon2HDecay(sPDG, tmp4Mom)) G4cerr << "***QFragm: Exception3" << G4endl;
   //---Decay of residual P-resonance to the main channels listed in the PDG Decay Table
   q4Mom = tmp4Mom;                               // Update the residual quasmon = P-resonance
   //@@Later all the following part shold be in the G4QResonance class
   G4double rM = q4Mom.m();                       // Mass of decaying resonance
   G4int thePDG = curRes->GetPDGcode();           // Get PDG code of P-res. to switch
 #ifdef debug
-  cout<<"QFragm: decay Resonance with LV="<<q4Mom<<", m="<<rM<<", PDG="<<thePDG<< endl;
+  cout<<"QFragm: decay Resonance with LV="<<q4Mom<<", m="<<rM<<", PDG="<<thePDG<< G4endl;
 #endif
   G4double rnd = G4UniformRand();          // Random value to select brunching
   if     (thePDG== 223) // omega decays ===============================================
   {
     if(rnd<.891&&rM>414.12)
-      {if(!Quasmon3HDecay(211,-211,111))cerr<<"***QFragm:1 Rez. decay"<<endl; ;}//3pi
+      {if(!Quasmon3HDecay(211,-211,111))G4cerr<<"***QFragm:1 Rez. decay"<<G4endl; ;}//3pi
     else if (rnd<.914&&rM>279.12)
-      {if(!Quasmon2HDecay(211,-211))cerr<<"***QFragm:2 Rez. decay"<<endl; ;}//2pi
-	else if(!Quasmon2HDecay(111,  22))cerr<<"***QFragm:3 Rez. decay"<<endl; ;//pi0,gam
+      {if(!Quasmon2HDecay(211,-211))G4cerr<<"***QFragm:2 Rez. decay"<<G4endl; ;}//2pi
+	else if(!Quasmon2HDecay(111,  22))G4cerr<<"***QFragm:3 Rez. decay"<<G4endl; ;//pi0,gam
 
   } 
   else if(thePDG== 113) // rho0 decay ============================================
-         {if(!Quasmon2HDecay(211,-211))cerr<<"***QFragm:4 Rez. decay"<<endl; ;}//rho0=>pi+,pi-
+         {if(!Quasmon2HDecay(211,-211))G4cerr<<"***QFragm:4 Rez. decay"<<G4endl; ;}//rho0=>pi+,pi-
   else if(thePDG== 213) // rho+ decay ============================================
-         {if(!Quasmon2HDecay(211, 111))cerr<<"***QFragm:5 Rez. decay"<<endl; ;}//rho+=>pi+,pi0
+         {if(!Quasmon2HDecay(211, 111))G4cerr<<"***QFragm:5 Rez. decay"<<G4endl; ;}//rho+=>pi+,pi0
   else if(thePDG==-213) // rho- decay ============================================
-         {if(!Quasmon2HDecay(111,-211))cerr<<"***QFragm:6 Rez. decay"<<endl; ;}//rho-=>pi0,pi-
+         {if(!Quasmon2HDecay(111,-211))G4cerr<<"***QFragm:6 Rez. decay"<<G4endl; ;}//rho-=>pi0,pi-
   else if(thePDG== 313) // K0* decays  ===========================================
   {
     if(rnd<.5&&rM>633.25)
-      {if(!Quasmon2HDecay(321,-211))cerr<<"***QFragm:7 Rez. decay"<<endl; ;}//K+,pi-
-    else if(!Quasmon2HDecay(311, 111))cerr<<"***QFragm:8 Rez. decay"<<endl; ;//K0,pi0
+      {if(!Quasmon2HDecay(321,-211))G4cerr<<"***QFragm:7 Rez. decay"<<G4endl; ;}//K+,pi-
+    else if(!Quasmon2HDecay(311, 111))G4cerr<<"***QFragm:8 Rez. decay"<<G4endl; ;//K0,pi0
   } 
   else if (thePDG== 323) // K+* decays  ======================================
   {
     if(rnd<.5&&rM>637.25)
-      {if(!Quasmon2HDecay(311,211))cerr<<"***QFragm:9 Rez. decay"<<endl; ;}//K0,pi+
-    else if(!Quasmon2HDecay(321,111))cerr<<"***QFragm:A Rez. decay"<<endl; ;//K+,pi0
+      {if(!Quasmon2HDecay(311,211))G4cerr<<"***QFragm:9 Rez. decay"<<G4endl; ;}//K0,pi+
+    else if(!Quasmon2HDecay(321,111))G4cerr<<"***QFragm:A Rez. decay"<<G4endl; ;//K+,pi0
   }
   else if (thePDG==-313)// AK0* decays =========================================
   {
     if(rnd<.5&&rM>633.25)
-      {if(!Quasmon2HDecay(-321,211))cerr<<"***QFragm:B Rez. decay"<<endl; ;}// K-,pi+
-    else if(!Quasmon2HDecay(-311,111))cerr<<"***QFragm:C Rez. decay"<<endl; ;//AK0,pi0
+      {if(!Quasmon2HDecay(-321,211))G4cerr<<"***QFragm:B Rez. decay"<<G4endl; ;}// K-,pi+
+    else if(!Quasmon2HDecay(-311,111))G4cerr<<"***QFragm:C Rez. decay"<<G4endl; ;//AK0,pi0
   }
   else if (thePDG==-323)// K-* decays  ==========================================
   {
     if(rnd<.5&&rM>637.25)
-      {if(!Quasmon2HDecay(-311,-211))cerr<<"***QFragm:D Rez. decay"<<endl; ;}//AK0,pi-
-    else if(!Quasmon2HDecay(-321, 111))cerr<<"***QFragm:E Rez. decay"<<endl; ;// K-,pi0
+      {if(!Quasmon2HDecay(-311,-211))G4cerr<<"***QFragm:D Rez. decay"<<G4endl; ;}//AK0,pi-
+    else if(!Quasmon2HDecay(-321, 111))G4cerr<<"***QFragm:E Rez. decay"<<G4endl; ;// K-,pi0
   } 
   else if (thePDG==333) // phi decays  ===============================================
   {
 	if(rnd<.343&&rM>995.36)
-           {if(!Quasmon2HDecay(311,-311))cerr<<"***QFragm:F Rez. decay"<<endl; ;}//K0,AK0
+           {if(!Quasmon2HDecay(311,-311))G4cerr<<"***QFragm:F Rez. decay"<<G4endl; ;}//K0,AK0
 	else if(rnd<.846&&rM>987.36)
-           {if(!Quasmon2HDecay(321,-321))cerr<<"***QFragm:G Rez. decay"<<endl; ;}//K+,K-
+           {if(!Quasmon2HDecay(321,-321))G4cerr<<"***QFragm:G Rez. decay"<<G4endl; ;}//K+,K-
     else if(rnd<.012&&rM>547.5)
-           {if(!Quasmon2HDecay(221,  22))cerr<<"***QFragm:H Rez. decay"<<endl; ;}//eta,gam
-    else if(!Quasmon3HDecay(211,-211,111))cerr<<"***QFragm:I Rez. decay"<<endl; ;//pi+,pi-,pi0
+           {if(!Quasmon2HDecay(221,  22))G4cerr<<"***QFragm:H Rez. decay"<<G4endl; ;}//eta,gam
+    else if(!Quasmon3HDecay(211,-211,111))G4cerr<<"***QFragm:I Rez. decay"<<G4endl; ;//pi+,pi-,pi0
   }
-  else cerr << "***QFragm: Unknown P-resonance PDGcode=" << thePDG << endl;
+  else G4cerr << "***QFragm: Unknown P-resonance PDGcode=" << thePDG << G4endl;
   return theQHadrons;
 }
 
@@ -407,7 +407,7 @@ G4bool G4Quasmon::Quasmon2HDecay(const G4int& rPDG, const G4int& sPDG)
   G4LorentzVector tmp4Mom = curHadr->Get4Momentum();
   if(!Quasmon2HDecay(sPDG, tmp4Mom))
   {
-    cerr<<"***Q22H(r/s): Exception"<<endl;
+    G4cerr<<"***Q22H(r/s): Exception"<<G4endl;
     return false;
   }
   curHadr->Set4Momentum(tmp4Mom);
@@ -419,7 +419,7 @@ G4bool G4Quasmon::Quasmon2HDecay(const G4int& rPDG, const G4int& sPDG)
 G4bool G4Quasmon::Quasmon2HDecay(const G4int& sPDG, G4LorentzVector& r4Mom)
 {
 #ifdef debug
-  cout << "Q22H is called with sPDJ="<<sPDG<<", r4Mom="<<r4Mom<< endl;
+  cout << "Q22H is called with sPDJ="<<sPDG<<", r4Mom="<<r4Mom<< G4endl;
 #endif
   G4QHadron* curHadr = new G4QHadron(sPDG);    // Creation of the 2nd Hadron
   G4double sM    = curHadr->GetMass();
@@ -429,24 +429,24 @@ G4bool G4Quasmon::Quasmon2HDecay(const G4int& sPDG, G4LorentzVector& r4Mom)
   G4double quasM = q4Mom.m();                  // Mass of the current quasmon
   G4double quaM2 = q4Mom.m2();
 #ifdef debug
-  cout << "Q22H: sM="<<sM<<"(sPDG="<<sPDG<<"), rM="<<rM<<", qM="<<quasM<< endl;
+  cout << "Q22H: sM="<<sM<<"(sPDG="<<sPDG<<"), rM="<<rM<<", qM="<<quasM<< G4endl;
 #endif
   //@@ Later on make a quark content check for the decay
   if (quasM<rM+sM)
   {
 #ifdef debug
-    cout << "***Q22H*** sM="<<sM<<" + rM="<<rM<<" > M="<<quasM<< endl;
+    cout << "***Q22H*** sM="<<sM<<" + rM="<<rM<<" > M="<<quasM<< G4endl;
 #endif
     delete curHadr; // The secondary hadron should be cleaned up if failed
     return false;
   }
   G4double d2 = quaM2-rM2-sM2;
   G4double p2 = (d2*d2/4.-rM2*sM2)/quaM2;      // Decay momentum(^2) in CMS of Quasmon
-  if (p2<0.) cerr << "*?*p2="<<p2<< "d2*d2="<<d2*d2/4.<< "4m2selM2="<<rM2*sM2 << endl;
+  if (p2<0.) G4cerr << "*?*p2="<<p2<< "d2*d2="<<d2*d2/4.<< "4m2selM2="<<rM2*sM2 << G4endl;
   G4double p  = sqrt(p2);
   G4double ct = 1.-2*G4UniformRand();
 #ifdef debug
-  cout << "Q22H: ct=" << ct << endl;
+  cout << "Q22H: ct=" << ct << G4endl;
 #endif
   G4double phi= 360.*deg*G4UniformRand();      // @@ Change 360.*deg to M_TWOPI (?)
   G4double ps = p * sqrt(1.-ct*ct);
@@ -457,12 +457,12 @@ G4bool G4Quasmon::Quasmon2HDecay(const G4int& sPDG, G4LorentzVector& r4Mom)
   
   G4ThreeVector ltb = q4Mom.boostVector();// Boost vector for backward Lor.Trans.
 #ifdef debug
-  cout << "Q22H: Now making LorTrans with "<<ltb << ", 4Mom="<<q4Mom << endl;
+  cout << "Q22H: Now making LorTrans with "<<ltb << ", 4Mom="<<q4Mom << G4endl;
 #endif
   had4Mom.boost(ltb);                          // Lor.Trans. of hadron back to LS
   r4Mom.boost(ltb);                            // Lor.Trans. of residual Quazmon back to LS
 #ifdef debug
-  cout<<"Q22H: the hadron LorVector="<<had4Mom<<", the residual LorVector="<<r4Mom<<endl;
+  cout<<"Q22H: the hadron LorVector="<<had4Mom<<", the residual LorVector="<<r4Mom<<G4endl;
 #endif
   curHadr->Set4Momentum(had4Mom);              // Define the LS 4-mom of the outgoing hadron
   theQHadrons.insert(curHadr);                 // Fill 2nd Hadron to Output Hadrons Vector
@@ -473,7 +473,7 @@ G4bool G4Quasmon::Quasmon2HDecay(const G4int& sPDG, G4LorentzVector& r4Mom)
 G4bool G4Quasmon::Quasmon3HDecay(const G4int& rPDG, const G4int& sPDG, const G4int& tPDG)
 {
 #ifdef debug
-  cout << "Q23H is called: rPDG="<<rPDG << ", sPDG="<<sPDG << ", tPDG="<<tPDG << endl;
+  cout << "Q23H is called: rPDG="<<rPDG << ", sPDG="<<sPDG << ", tPDG="<<tPDG << G4endl;
 #endif
   G4QHadron* curHadr1 = new G4QHadron(rPDG);   // 1-st hadron
   G4double rM  = curHadr1->GetMass();
@@ -485,7 +485,7 @@ G4bool G4Quasmon::Quasmon3HDecay(const G4int& rPDG, const G4int& sPDG, const G4i
   //@@ Later on make a quark content check for the decay
   if (qM < rM + sM + tM)
   {
-    cerr << "***Q23H: rM="<<rM<<" + sM="<<sM<<" + tM="<<tM<<" > qM="<<qM<< endl;
+    G4cerr << "***Q23H: rM="<<rM<<" + sM="<<sM<<" + tM="<<tM<<" > qM="<<qM<< G4endl;
     delete curHadr1;                           // Should be cleaned up if failed
     delete curHadr2;                           // Should be cleaned up if failed
     delete curHadr3;                           // Should be cleaned up if failed
@@ -512,22 +512,22 @@ G4bool G4Quasmon::Quasmon3HDecay(const G4int& rPDG, const G4int& sPDG, const G4i
     rR = m13sRange/m13sBase;
     rnd= G4UniformRand();
 #ifdef debug
-    cout << "Q23H: try to decay #"<<++tr << ", rR="<<rR << ", rnd="<<rnd << endl;
+    cout << "Q23H: try to decay #"<<++tr << ", rR="<<rR << ", rnd="<<rnd << G4endl;
 #endif
   }
   delete curHadr3;                  // Hadron3(tPDG) is created later in Q22H
   G4ThreeVector v0(0.,0.,0.);       // Zero Vector...
   G4double m12 = sqrt(m12s);        // Mass of H1+H2 system
   G4LorentzVector hadQ4Mom(v0,m12); // 4-mom of H1+H2 system in CMS
-  if(!Quasmon2HDecay(tPDG, hadQ4Mom)) cerr << "***Q23H: Exception1" << endl;
+  if(!Quasmon2HDecay(tPDG, hadQ4Mom)) G4cerr << "***Q23H: Exception1" << G4endl;
   q4Mom = hadQ4Mom;                 // Update the residual quasmon = H1+H2 system
 #ifdef debug
-  cout << "Q23H: Now the last decay for mSS=" << q4Mom.m() << endl;
+  cout << "Q23H: Now the last decay for mSS=" << q4Mom.m() << G4endl;
 #endif
   delete curHadr2;                  // Hadron2(sPDG) is created later in Q22H
   hadQ4Mom.setVect(v0);             // Redefine hadQ4Mom for Hadron1(rPDG)
   hadQ4Mom.setE(rM);
-  if(!Quasmon2HDecay(sPDG, hadQ4Mom)) cerr << "***Q23H: Exception2" << endl;
+  if(!Quasmon2HDecay(sPDG, hadQ4Mom)) G4cerr << "***Q23H: Exception2" << G4endl;
   curHadr1->Set4Momentum(hadQ4Mom); // Define the LS 4-mom of the outgoing hadron
   theQHadrons.insert(curHadr1);     // Fill the Output Hadrons Vector
   return true;
@@ -539,7 +539,7 @@ G4double G4Quasmon::GetMinSqThresh(const G4QContent& qCon) //@@ Temporary not us
   static const G4double sqm[5] = {0., 19479.771, 243716.98, 247677.42, 18218.629};
 
   G4int ind = (qCon.GetCharge()+1)*3 + qCon.GetStrangeness() + 1;
-  if (ind<1 || ind>7) cerr << "G4Quasmon::GetMinSqThresh: ind=" << ind << endl;
+  if (ind<1 || ind>7) G4cerr << "G4Quasmon::GetMinSqThresh: ind=" << ind << G4endl;
   if (ind>5) ind = 8 - ind;
 
   return sqm[ind];
@@ -593,10 +593,10 @@ G4int G4Quasmon::GetNofSqMassSum(const G4QContent& qCon, G4int& sPDG)
     {
       G4int dec = (tot-4)/2;
 #ifdef debug
-      cout << "NofSMS: tot=" << tot << ", dec=" << dec << endl;
+      cout << "NofSMS: tot=" << tot << ", dec=" << dec << G4endl;
 #endif
       G4int r   = cQ.DecQAQ(dec);
-      if (r<0) cerr<<"***NofSMS:4 fail to decrement r="<<r<<", sPDG="<<sPDG<< endl;
+      if (r<0) G4cerr<<"***NofSMS:4 fail to decrement r="<<r<<", sPDG="<<sPDG<< G4endl;
     }
   }
   // Now we have 1 diquark and 1 anti-diquark
@@ -636,7 +636,7 @@ G4int G4Quasmon::GetNofSqMassSum(const G4QContent& qCon, G4int& sPDG)
     else if (dn==1 && an==2) return 12; // K0 +K0  // K0 +K0*-G // K0 +K0*+G
     else if (dn==2 && an==4) return 11; // K  +eta // eta+K* -G // K  +phi+G
     else if (dn==2 && an==5) return 13; // K0 +eta // eta+K0*-G // K0 +phi+G
-    else cerr << "Impossible combination dn=" << dn << ", an=" << endl;
+    else G4cerr << "Impossible combination dn=" << dn << ", an=" << G4endl;
   }
   else if (sPDG==0) // fake sPDG to get PDGs for S+S decay
   {
@@ -693,7 +693,7 @@ G4int G4Quasmon::GetNofSqMassSum(const G4QContent& qCon, G4int& sPDG)
 	  }
       else
 	  {
-        cerr << cQ << " in pi0+K decay" << endl;
+        G4cerr << cQ << " in pi0+K decay" << G4endl;
 	  }
     }
     else if ((dn==1 && an==5) || (dn==3 && an==4)) // pi0+K0
@@ -733,7 +733,7 @@ G4int G4Quasmon::GetNofSqMassSum(const G4QContent& qCon, G4int& sPDG)
 	  }
       else
 	  {
-        cerr << cQ << " in pi+K decay" << endl;
+        G4cerr << cQ << " in pi+K decay" << G4endl;
 	  }
     }
     else if (dn==1 && an==4) // pi +K0
@@ -760,7 +760,7 @@ G4int G4Quasmon::GetNofSqMassSum(const G4QContent& qCon, G4int& sPDG)
 	  }
       else
 	  {
-        cerr << cQ << " in pi+K decay" << endl;
+        G4cerr << cQ << " in pi+K decay" << G4endl;
 	  }
     }
     else if (dn==an)         // pi0+eta
@@ -800,7 +800,7 @@ G4int G4Quasmon::GetNofSqMassSum(const G4QContent& qCon, G4int& sPDG)
 	  //}
       else
 	  {
-        cerr << cQ << " in pi0+K decay" << endl;
+        G4cerr << cQ << " in pi0+K decay" << G4endl;
 	  }
     }
     else if (dn==2 && an==3) // K  +K0
@@ -835,7 +835,7 @@ G4int G4Quasmon::GetNofSqMassSum(const G4QContent& qCon, G4int& sPDG)
 	  }
       else
 	  {
-        cerr << cQ << " in eta+K decay" << endl;
+        G4cerr << cQ << " in eta+K decay" << G4endl;
 	  }
     }
     else if (dn==2 && an==5) // K0 +eta
@@ -851,7 +851,7 @@ G4int G4Quasmon::GetNofSqMassSum(const G4QContent& qCon, G4int& sPDG)
         return -311;
 	  }
     }
-    else cerr << "Impossible combination dn=" << dn << ", an=" << endl;
+    else G4cerr << "Impossible combination dn=" << dn << ", an=" << G4endl;
   }
   else  // For real PDG of outgoing hadron we should find the corresponding P-resonance
   {
@@ -874,10 +874,10 @@ G4int G4Quasmon::GetNofSqMassSum(const G4QContent& qCon, G4int& sPDG)
     {
       G4int dc = (tot-2)/2;
 #ifdef debug
-      cout << "NofSMS: SP case: tot=" << tot << ", dc=" << dc << endl;
+      cout << "NofSMS: SP case: tot=" << tot << ", dc=" << dc << G4endl;
 #endif
       G4int r  = cQ.DecQAQ(dc);
-      if (r<0) cerr<<"***NofSMS:2 fail to decrement r="<<r<<", sPDG="<<sPDG<<endl;
+      if (r<0) G4cerr<<"***NofSMS:2 fail to decrement r="<<r<<", sPDG="<<sPDG<<G4endl;
       nU = cQ.GetU();
       nD = cQ.GetD();
       nS = cQ.GetS();
@@ -897,7 +897,7 @@ G4int G4Quasmon::GetNofSqMassSum(const G4QContent& qCon, G4int& sPDG)
     else if(nS==1&&nAD==1)     return -313;// AK0*
     else if(nS==1&&nAU==1)     return -323;// K-*
     else if(nS==1&&nAS==1)     return 333; // phi
-	else cerr<<"***NofSMS:U"<<nU<<",D"<<nD<<",S"<<nS<<",AU"<<nAU<<",AD"<<nAD<<",AS"<<nAS<<endl;
+	else G4cerr<<"***NofSMS:U"<<nU<<",D"<<nD<<",S"<<nS<<",AU"<<nAU<<",AD"<<nAD<<",AS"<<nAS<<G4endl;
   }
   return 0;
 }
@@ -907,14 +907,14 @@ G4double G4Quasmon::GetQPartonMomentum(G4double kMin)
 {
   //gives k>kMin QParton Momentum for the current Quasmon
 #ifdef debug
-  cout << "G4Quasmon::GetQPartonMomentum is called with kMin = " << kMin << endl;
+  cout << "G4Quasmon::GetQPartonMomentum is called with kMin = " << kMin << G4endl;
 #endif
   G4double qMass = q4Mom.m();
   if (kMin+kMin>qMass || qMass<=0. || nOfQ<2) return 0.;
 
   G4double kMax=qMass/2.;
 #ifdef debug
-  cout << "GetQPartonMomentum: kMax = " << kMax << ", nQ=" << nOfQ << endl;
+  cout << "GetQPartonMomentum: kMax = " << kMax << ", nQ=" << nOfQ << G4endl;
 #endif
   if (nOfQ==2) return kMax;
   G4int n=nOfQ-2;
@@ -935,7 +935,7 @@ G4double G4Quasmon::GetQPartonMomentum(G4double kMin)
     G4double df= 1./static_cast<double>(nOfQ);
     G4double f = df*(static_cast<int>(nOfQ*nOfQ*n*x/5.)+(nOfQ/2));
 #ifdef debug
-    cout << "First x=" << x << ", f=" << f << endl;
+    cout << "First x=" << x << ", f=" << f << G4endl;
 #endif
     while ( abs(d/vRndm) > 0.001 )
 	{
@@ -947,7 +947,7 @@ G4double G4Quasmon::GetQPartonMomentum(G4double kMin)
       d = c - vRndm;
 #ifdef debug
 	  cout << "Iteration#" << it << ": (c=" << c << " - R=" << vRndm 
-           << ") =" << d/vRndm << ", x=" << x << ", f=" << f << endl;
+           << ") =" << d/vRndm << ", x=" << x << ", f=" << f << G4endl;
 #endif
       x = x + f*d/(r*nx*(fn+1.));
       if (f>1.0001)    f-=df;
@@ -965,7 +965,7 @@ void G4Quasmon::CalculateContentOfQPartons(G4double qMass)
   static const G4double Temperature = 200.; // "Vacuum Temperature" parameter of the CHIPS model
   // M^2=4*n*(n-1)*T^2 => n = M/2T + 1/2 + T/4M + O (T^3/16M^3)
 #ifdef debug
-  cout << "#ofQP is called: qMass = " << qMass << ", T=" << Temperature<< endl;
+  cout << "#ofQP is called: qMass = " << qMass << ", T=" << Temperature<< G4endl;
 #endif
   G4double qMOver2T = qMass/(Temperature+Temperature);
   G4double est = qMOver2T+1.+0.125/qMOver2T;
@@ -981,7 +981,7 @@ void G4Quasmon::CalculateContentOfQPartons(G4double qMass)
     }
     G4int nSeaPairs = (nOfQ-valc)/2;
 #ifdef debug
-    cout<<"#ofQP: #Initial="<<valc<<", #Final="<<nOfQ<<", #Sea="<<nSeaPairs<<endl;
+    cout<<"#ofQP: #Initial="<<valc<<", #Final="<<nOfQ<<", #Sea="<<nSeaPairs<<G4endl;
 #endif
 	if (nSeaPairs) valQ.IncQAQ(nSeaPairs);
   }
@@ -993,7 +993,7 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double kVal)
   G4double mQ = q4Mom.m();
   G4double accumulatedProbability = 0.;
 #ifdef debug
-  cout << "QHadProb: Quasmon mass="<<mQ << ", Quark Content (QC) ="<<valQ << endl;
+  cout << "QHadProb: Quasmon mass="<<mQ << ", Quark Content (QC) ="<<valQ << G4endl;
 #endif
   for (G4int index=0; index<theQCandidates.entries(); index++)
   {
@@ -1006,7 +1006,7 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double kVal)
       else        probability = 1.;
 	}
 #ifdef debug
-    cout << "QHadProb: #"<<index <<", m2="<<mH2 << ", n="<<nOfQ << ", p="<<probability << endl;
+    cout << "QHadProb: #"<<index <<", m2="<<mH2 << ", n="<<nOfQ << ", p="<<probability << G4endl;
 #endif
     G4QContent candQC = theQCandidates[index]->GetQC();
     probability *= valQ.NOfCombinations(candQC);
@@ -1014,7 +1014,7 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double kVal)
     accumulatedProbability += probability;
     theQCandidates[index]->SetIntegProbability(accumulatedProbability);
 #ifdef debug
-    cout << "QHadProb: Final p="<<probability << ", P_sum="<<accumulatedProbability << endl;
+    cout << "QHadProb: Final p="<<probability << ", P_sum="<<accumulatedProbability << G4endl;
 #endif
   }
 }

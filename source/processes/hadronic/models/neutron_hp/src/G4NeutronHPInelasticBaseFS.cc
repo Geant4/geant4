@@ -13,16 +13,16 @@
 void G4NeutronHPInelasticBaseFS::InitGammas(G4double AR, G4double ZR)
 {
    char the[100] = {""};
-   ostrstream ost(the, 100, ios::out);
+   G4std::ostrstream ost(the, 100, G4std::ios::out);
    ost <<gammaPath<<"z"<<ZR<<".a"<<AR;
    G4String * aName = new G4String(the);
 #ifndef WIN32
-   ifstream from(*aName, ios::in);
+   G4std::ifstream from(*aName, G4std::ios::in);
 #else
-   ifstream from(*aName, ios::in|ios::nocreate);
+   G4std::ifstream from(*aName, G4std::ios::in|G4std::ios::nocreate);
 #endif
    if(!from) return; // no data found for this isotope
-   ifstream theGammaData(*aName, ios::in);
+   G4std::ifstream theGammaData(*aName, G4std::ios::in);
     
    G4double eps = 0.001;
    theNuclearMassDifference = 
@@ -53,9 +53,9 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
     return;
   }
 #ifndef WIN32
-  ifstream theData(filename, ios::in);
+  G4std::ifstream theData(filename, G4std::ios::in);
 #else
-  ifstream theData(filename, ios::in|ios::nocreate);
+  G4std::ifstream theData(filename, G4std::ios::in|G4std::ios::nocreate);
 #endif
   if(!(theData))
   {

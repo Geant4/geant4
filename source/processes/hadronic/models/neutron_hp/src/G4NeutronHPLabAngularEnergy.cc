@@ -14,7 +14,7 @@
 #include "G4Alpha.hh"
 #include "Randomize.hh"
 
-void G4NeutronHPLabAngularEnergy::Init(ifstream & aDataFile)
+void G4NeutronHPLabAngularEnergy::Init(G4std::ifstream & aDataFile)
 {
   aDataFile >> nEnergies;
   theManager.Init(aDataFile);

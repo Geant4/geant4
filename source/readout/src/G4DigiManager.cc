@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DigiManager.cc,v 1.2 1999-11-15 10:39:48 gunter Exp $
+// $Id: G4DigiManager.cc,v 1.3 1999-12-15 14:53:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,13 +54,13 @@ void G4DigiManager::AddNewModule(G4VDigitizerModule* DM)
   G4String DMname = DM->GetName();
   if(DMtable.index(DM) != G4std::string::npos)
   { 
-    G4cout << "<" << DMname << "> has already been registored." << endl; 
+    G4cout << "<" << DMname << "> has already been registored." << G4endl; 
     return;
   }
   else if( verboseLevel > 0 )
   {
     G4cout << "New DigitizerModule <" << DMname
-         << "> is registored." << endl;
+         << "> is registored." << G4endl;
   }
   DMtable.insert(DM);
 
@@ -72,12 +72,12 @@ void G4DigiManager::AddNewModule(G4VDigitizerModule* DM)
     { 
       G4cout << "DigiCollection <" << DCname 
            << "> has already been registored with "
-           << DMname << " DigitizerModule." << endl;
+           << DMname << " DigitizerModule." << G4endl;
     }
     else if( verboseLevel > 0 )
     {
       G4cout << "DigiCollection " << DCname 
-           << " is registored. " << endl;
+           << " is registored. " << G4endl;
     }
   }
   
@@ -90,7 +90,7 @@ void G4DigiManager::Digitize(G4String mName)
   if(aDM)
   { aDM->Digitize(); }
   else
-  { G4cout << "Unknown digitizer module <" << mName << ">. Digitize() ignored." << endl; }
+  { G4cout << "Unknown digitizer module <" << mName << ">. Digitize() ignored." << G4endl; }
 }
 
 G4VDigitizerModule* G4DigiManager::FindDigitizerModule(G4String mName)
@@ -141,7 +141,7 @@ G4int G4DigiManager::GetDigiCollectionID(G4String DCname)
 {
   G4int i = DCtable->GetCollectionID(DCname);
   if(i==-2)
-  { G4cout << "< " << DCname << "> is ambegious." << endl; }
+  { G4cout << "< " << DCname << "> is ambegious." << G4endl; }
   return i;
 }
 
@@ -151,7 +151,7 @@ void G4DigiManager::SetDigiCollection(G4int DCID,G4VDigiCollection* aDC)
   if(consEvt==NULL) 
   {
     G4cout << "G4DigiManager::SetDigiCollection --- "
-         << "Event object is not available." << endl;
+         << "Event object is not available." << G4endl;
     return;
   }
   
@@ -162,7 +162,7 @@ void G4DigiManager::SetDigiCollection(G4int DCID,G4VDigiCollection* aDC)
     DCE = new G4DCofThisEvent(DCtable->entries());
     evt->SetDCofThisEvent(DCE);
     if(verboseLevel>0)
-    { G4cout << "DCofThisEvent object is added to current G4Event." << endl; }
+    { G4cout << "DCofThisEvent object is added to current G4Event." << G4endl; }
   }
 
   DCE->AddDigiCollection(DCID,aDC);
@@ -170,7 +170,7 @@ void G4DigiManager::SetDigiCollection(G4int DCID,G4VDigiCollection* aDC)
   if(verboseLevel>0)
   {
     G4cout << aDC->GetName() << " is stored at " << DCID 
-         << "-th slot of G4DCofThisEvent." << endl;
+         << "-th slot of G4DCofThisEvent." << G4endl;
   }
 }
   
@@ -184,7 +184,7 @@ void G4DigiManager::SetVerboseLevel(G4int val)
 void G4DigiManager::List() const
 {
   for(G4int i=0;i<DMtable.entries();i++)
-  { G4cout << "   " << i << " : " << DMtable[i]->GetName() << endl; }
+  { G4cout << "   " << i << " : " << DMtable[i]->GetName() << G4endl; }
 }
 
 

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManagerMessenger.cc,v 1.3 1999-06-17 09:02:14 kurasige Exp $
+// $Id: G4ProcessManagerMessenger.cc,v 1.4 1999-12-15 14:53:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,13 +36,9 @@
 
 #include "G4ProcessManagerMessenger.hh"
 #include "G4ios.hh"                 // Include from 'system'
-#include <iomanip.h>                  // Include from 'system'
+#include "g4std/iomanip"                  // Include from 'system'
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
                         :theParticleTable(pTable),
@@ -117,7 +113,7 @@ G4ParticleDefinition* G4ProcessManagerMessenger::SetCurrentParticle()
   if (currentParticle == 0) {
     theManager = 0;
     G4cout << "G4ProcessManagerMessenger::SetCurrentParticle() ";
-    G4cout << particleName << " not found " << endl;
+    G4cout << particleName << " not found " << G4endl;
   } else {
     theManager = currentParticle->GetProcessManager();
     theProcessList = theManager->GetProcessList();
@@ -128,7 +124,7 @@ G4ParticleDefinition* G4ProcessManagerMessenger::SetCurrentParticle()
 void G4ProcessManagerMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
   if (SetCurrentParticle()==0) {
-      G4cout << "Particle is not selected yet !! Command ignored." << endl;
+      G4cout << "Particle is not selected yet !! Command ignored." << G4endl;
       return;
   }
   if( command == dumpCmd ){
@@ -140,12 +136,12 @@ void G4ProcessManagerMessenger::SetNewValue(G4UIcommand * command,G4String newVa
       currentProcess =  (*theProcessList)(index);
       if (currentProcess == 0) {
 	G4cout << " no process at index of " << index;
-	G4cout << "in the Process Vector" << endl;
+	G4cout << "in the Process Vector" << G4endl;
       } else {
 	currentProcess->DumpInfo();
       }
     } else {
-      G4cout << " illegal index !!! " << endl;
+      G4cout << " illegal index !!! " << G4endl;
       currentProcess = 0;
     } 
  
@@ -160,7 +156,7 @@ void G4ProcessManagerMessenger::SetNewValue(G4UIcommand * command,G4String newVa
     //Commnad   /particle/process/Verbose
     //  inputstream for newValues 
     const char* temp = (const char*)(newValue);
-    istrstream is((char*)temp);
+    G4std::istrstream is((char*)temp);
     G4int Verbose, index;
     is  >>Verbose >>index;
     if (index <0) {
@@ -170,12 +166,12 @@ void G4ProcessManagerMessenger::SetNewValue(G4UIcommand * command,G4String newVa
       currentProcess =  (*theProcessList)(index);
       if (currentProcess == 0) {
 	G4cout << " no process at index of " << index;
-	G4cout << "in the Process Vector" << endl;
+	G4cout << "in the Process Vector" << G4endl;
       } else {
 	currentProcess->SetVerboseLevel(Verbose);
       }
     } else {
-      G4cout << " illegal index !!! " << endl;
+      G4cout << " illegal index !!! " << G4endl;
       currentProcess = 0;
     } 
   }
@@ -191,7 +187,7 @@ G4String G4ProcessManagerMessenger::GetCurrentValue(G4UIcommand * command)
   }
 
   char line[255];
-  ostrstream os(line,255);
+  G4std::ostrstream os(line,255);
   
   if( command==verboseCmd ){
     //Commnad   /particle/process/Verbose

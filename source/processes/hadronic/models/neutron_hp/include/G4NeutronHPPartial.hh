@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPPartial.hh,v 1.3 1999-07-02 09:59:50 johna Exp $
+// $Id: G4NeutronHPPartial.hh,v 1.4 1999-12-15 14:53:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPPartial_h
@@ -35,20 +35,20 @@ class G4NeutronHPPartial
     T = new G4double[n2];
     X = new G4double[n1];
     data = new G4NeutronHPVector[n1];
-    nData = max(n1,n2);
+    nData = G4std::max(n1,n2);
   }  
   
-  void InitInterpolation(G4int i, ifstream & aDataFile)
+  void InitInterpolation(G4int i, G4std::ifstream & aDataFile)
   {
     data[i].InitInterpolation(aDataFile);
   }
   
-  void InitInterpolation(ifstream & aDataFile)
+  void InitInterpolation(G4std::ifstream & aDataFile)
   {
     theManager.Init(aDataFile);
   }
   
-  void Init(ifstream & aDataFile)
+  void Init(G4std::ifstream & aDataFile)
   {
     G4int i;
     G4double e;
@@ -62,7 +62,7 @@ class G4NeutronHPPartial
     }  
   }
   
-  void InitData(G4int i, ifstream & aDataFile, G4double unit=1.)
+  void InitData(G4int i, G4std::ifstream & aDataFile, G4double unit=1.)
   {
     G4int ii;
     G4double eg, pg;

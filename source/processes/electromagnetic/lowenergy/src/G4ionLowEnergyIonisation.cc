@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -60,7 +60,7 @@ void G4ionLowEnergyIonisation::SetIonDefinition(G4ParticleDefinition* theIonType
   theIon    = theIonType ;
   MassRatio = proton_mass_c2/(theIonType->GetPDGMass()) ;
   Charge    = (theIonType->GetPDGCharge())/eplus ;
-  cout << "New ion with Q = " << Charge << "; MassR = " << MassRatio << endl;
+  cout << "New ion with Q = " << Charge << "; MassR = " << MassRatio << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -105,7 +105,7 @@ G4double G4ionLowEnergyIonisation::GetLowEnergyForParametrisation(const G4Materi
   }
   G4double E1 = 3.25 * keV ;
   G4double E2 = 25.0 * keV / pow(Z, 0.667) ;
-  E1 = max (E1, E2) ;
+  E1 = G4std::max (E1, E2) ;
   return max(ParamLowEnergy, E1) / MassRatio ; 
 }
 
@@ -543,16 +543,16 @@ void G4ionLowEnergyIonisation::PrintInfoDefinition()
   comments += "\n         Good description above the mean excitation energy.\n";
   comments += "         delta ray energy sampled from  differential Xsection.";
   
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,
 							  "Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy")
          << " in " << TotBin << " bins."
          << "\n        Low energy losses approximation is taken from  " << DEDXtable
          << "\n        from " << G4BestUnit(ParamLowEnergy,"Energy")
-         << " to " << G4BestUnit(ParamHighEnergy,"Energy") << "." << endl ;
+         << " to " << G4BestUnit(ParamHighEnergy,"Energy") << "." << G4endl ;
   if(nStopping) {
-    G4cout << "        Simulation of nuclear stopping is switched on.  \n" << endl ; 
+    G4cout << "        Simulation of nuclear stopping is switched on.  \n" << G4endl ; 
   }
 }
 

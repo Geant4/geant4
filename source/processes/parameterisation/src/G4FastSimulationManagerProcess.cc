@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationManagerProcess.cc,v 1.3 1999-04-28 10:06:43 mora Exp $
+// $Id: G4FastSimulationManagerProcess.cc,v 1.4 1999-12-15 14:53:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,7 +39,7 @@ G4FastSimulationManagerProcess(const G4String& processName,
 
   fGhostTouchable       = new G4TouchableHistory();
   if (verboseLevel>0) {
-    G4cout << GetProcessName() << " is created " << endl;
+    G4cout << GetProcessName() << " is created " << G4endl;
   }
   fGhostFieldPropagator = new G4PropagatorInField(&fGhostNavigator,
 						   G4TransportationManager::
@@ -252,7 +252,7 @@ G4VParticleChange* G4FastSimulationManagerProcess::PostStepDoIt(
     }
   else
     {
-      if (fOutOfGhostWorld)   G4cout << " ????????????? Problem of logic in GHOST param !!! " << endl;
+      if (fOutOfGhostWorld)   G4cout << " ????????????? Problem of logic in GHOST param !!! " << G4endl;
       // No FastSimulationManager has asked for trigger. That means here:
       //       - the PostStep is "Conditionally" forced because
       //       - the Step has been limited by the ALong of G4FSMP because
@@ -296,7 +296,7 @@ G4VParticleChange* G4FastSimulationManagerProcess::PostStepDoIt(
 	      fUpdateGhostTouchable = true; // What should we do here ?!?
 	                                    // false => lot a microscopic steps
 	                                    // is true rasonnably safe ?
-	      G4cout << GetProcessName() << " : WARNING: Can not correct for\ndifference between tracking and ghost mag-field computations." << endl;
+	      G4cout << GetProcessName() << " : WARNING: Can not correct for\ndifference between tracking and ghost mag-field computations." << G4endl;
 	    }
 	  else
 	    {
@@ -510,22 +510,22 @@ void G4FastSimulationManagerProcess::Verbose() const
   switch(fFastSimulationManager->GetTriggerStatus())
     {
     case NoModel:
-      G4cout << "NoModel" << endl;
+      G4cout << "NoModel" << G4endl;
       break;
     case OnBoundaryButLeaving:
-      G4cout << "OnBoundaryButLeaving" << endl;
+      G4cout << "OnBoundaryButLeaving" << G4endl;
       break;
     case OneModelTrigger:
-      G4cout << "OneModelTrigger" << endl;
+      G4cout << "OneModelTrigger" << G4endl;
       break;
     case NoModelTrigger:
-      G4cout << "NoModelTrigger" << endl;
+      G4cout << "NoModelTrigger" << G4endl;
       break;
     case Undefined:
-      G4cout << "Undefined" << endl;
+      G4cout << "Undefined" << G4endl;
       break;
     default:
-      G4cout << " Bizarre..." << endl;
+      G4cout << " Bizarre..." << G4endl;
       break;
     }*/
 }

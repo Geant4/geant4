@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IVContinuousDiscreteProcess.hh,v 1.5 1999-11-07 17:11:42 kurasige Exp $
+// $Id: G4IVContinuousDiscreteProcess.hh,v 1.6 1999-12-15 14:53:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -174,10 +174,10 @@ inline G4double G4IVContinuousDiscreteProcess::AlongStepGetPhysicalInteractionLe
 
   if (verboseLevel>1){
     G4cout << "G4IVContinuousDiscreteProcess::AlongStepGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<endl;
+    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " <<  track.GetMaterial()->GetName() <<endl;
-    G4cout << "IntractionLength= " << steplength/cm <<"[cm] " <<endl;
+    G4cout << " in Material  " <<  track.GetMaterial()->GetName() <<G4endl;
+    G4cout << "IntractionLength= " << steplength/cm <<"[cm] " <<G4endl;
   }
   return  steplength ;
 }

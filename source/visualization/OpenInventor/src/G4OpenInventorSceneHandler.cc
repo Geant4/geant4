@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.5 1999-11-05 15:50:39 johna Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.6 1999-12-15 14:54:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -636,10 +636,10 @@ void G4OpenInventorSceneHandler::PreAddThis
       }
       else {
         G4cerr << "OIScene non-leaf protocol error.  Mother volume " << 
-	          MotherVolume->GetName() << " missing." << endl;
+	          MotherVolume->GetName() << " missing." << G4endl;
         G4cerr << "                         Daughter volume was: "
 	     << fpCurrentPV->GetName()
-	     << endl;
+	     << G4endl;
       }
       MotherVolume=MotherVolume->GetMother();
     }
@@ -662,10 +662,10 @@ void G4OpenInventorSceneHandler::PreAddThis
       }
       else {
 	G4cerr << "OIScene leaf protocol error.  Mother volume " << 
-	          MotherVolume->GetName() <<  " missing." << endl;
+	          MotherVolume->GetName() <<  " missing." << G4endl;
 	G4cerr << "                         Daughter volume was: "
 	     << fpCurrentPV->GetName()
-	     << endl;
+	     << G4endl;
       }
       MotherVolume = MotherVolume->GetMother();
     }

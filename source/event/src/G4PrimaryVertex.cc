@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryVertex.cc,v 1.1 1999-01-07 16:06:39 gunter Exp $
+// $Id: G4PrimaryVertex.cc,v 1.2 1999-12-15 14:49:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,8 +53,8 @@ int G4PrimaryVertex::operator!=(const G4PrimaryVertex &right) const
 void G4PrimaryVertex::Print() const
 {
   G4cout << "Vertex  ( "
-       << X0 << ", " << Y0 << ", " << Z0 << ", " << T0 << " )" << endl;
-  G4cout << "#### Primary particles" << endl;
+       << X0 << ", " << Y0 << ", " << Z0 << ", " << T0 << " )" << G4endl;
+  G4cout << "#### Primary particles" << G4endl;
   G4PrimaryParticle* aPrim = theParticle;
   if(aPrim != NULL)
   {

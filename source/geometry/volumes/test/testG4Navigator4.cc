@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Navigator4.cc,v 1.2 1999-11-24 21:13:53 japost Exp $
+// $Id: testG4Navigator4.cc,v 1.3 1999-12-15 14:50:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -195,7 +195,7 @@ G4bool testG4NavigatorLocate(G4VPhysicalVolume *pTopNode)
 
     // Check found to be inside daughter volumes of replicas
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(36,36,36),0,false);
-    //    G4cout << "At " << G4ThreeVector(36,36,36) << endl << myNav;
+    //    G4cout << "At " << G4ThreeVector(36,36,36) << G4endl << myNav;
     assert(located->GetName()=="Target");
     assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
 		       G4ThreeVector(1.5,-1.5,1)));
@@ -240,7 +240,7 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
-    //    G4cout << "At " << pos << endl << myNav;
+    //    G4cout << "At " << pos << G4endl << myNav;
     assert(located->GetName()=="Slab");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
     assert(ApproxEqual(Step,50));
@@ -248,7 +248,7 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
-    //    G4cout << "At " << pos << endl << myNav;
+    //    G4cout << "At " << pos << G4endl << myNav;
     assert(located->GetName()=="Slab3");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
     assert(ApproxEqual(Step,20));
@@ -257,7 +257,7 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     Step=10;
     pos+=Step*dir;
     located=myNav.LocateGlobalPointAndSetup(pos);
-    //    G4cout << "At " << pos << endl << myNav;
+    //    G4cout << "At " << pos << G4endl << myNav;
     assert(located->GetName()=="Slab3");
 
     dir=myHat;
@@ -267,7 +267,7 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
-    //    G4cout << "At " << pos << endl << myNav;
+    //    G4cout << "At " << pos << G4endl << myNav;
     assert(located->GetName()=="Slab3");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
     assert(ApproxEqual(Step,5));
@@ -275,7 +275,7 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
-    //    G4cout << "At " << pos << endl << myNav;
+    //    G4cout << "At " << pos << G4endl << myNav;
     assert(located->GetName()=="Slab3");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
     assert(ApproxEqual(Step,5));
@@ -283,7 +283,7 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
-    //    G4cout << "At " << pos << endl << myNav;
+    //    G4cout << "At " << pos << G4endl << myNav;
     assert(located->GetName()=="World");
 
 
@@ -291,7 +291,7 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     dir=yHat;
     physStep=kInfinity;
     located=myNav.LocateGlobalPointAndSetup(pos);
-    //    G4cout << "At " << pos << endl << myNav;
+    //    G4cout << "At " << pos << G4endl << myNav;
     assert(located->GetName()=="Target");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
     assert(ApproxEqual(Step,3.5));
@@ -300,7 +300,7 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
-    //    G4cout << "At " << pos << endl << myNav;
+    //    G4cout << "At " << pos << G4endl << myNav;
     assert(located->GetName()=="Slab5");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
     assert(ApproxEqual(Step,0.5));
@@ -309,7 +309,7 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
-    //    G4cout << "At " << pos << endl << myNav;
+    //    G4cout << "At " << pos << G4endl << myNav;
     assert(located->GetName()=="Slab5");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
     assert(ApproxEqual(Step,0.5));
@@ -318,7 +318,7 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
-    //    G4cout << "At " << pos << endl << myNav;
+    //    G4cout << "At " << pos << G4endl << myNav;
     assert(located->GetName()=="Target");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
     assert(ApproxEqual(Step,4));
@@ -327,7 +327,7 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
-    //    G4cout << "At " << pos << endl << myNav;
+    //    G4cout << "At " << pos << G4endl << myNav;
     assert(located->GetName()=="Slab5");
     assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
 		       G4ThreeVector(-2,-1.5,1)));

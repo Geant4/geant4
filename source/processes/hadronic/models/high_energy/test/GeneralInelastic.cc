@@ -479,7 +479,7 @@ int main()
          }
        else
          {
-           cout << " no process number " << iprocess << endl;
+           cout << " no process number " << iprocess << G4endl;
            continue; 
          }  
        pana[1] = incidentParticle;

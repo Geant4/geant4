@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhaseSpaceDecayChannel.cc,v 1.3 1999-04-13 08:00:34 kurasige Exp $
+// $Id: G4PhaseSpaceDecayChannel.cc,v 1.4 1999-12-15 14:51:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::DecayIt(G4double parentMass)
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4PhaseSpaceDecayChannel::DecayIt ";
-      G4cout << " daughters not defined " <<endl;
+      G4cout << " daughters not defined " <<G4endl;
     }
 #endif
     break;
@@ -95,7 +95,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::DecayIt(G4double parentMass)
 #ifdef G4VERBOSE
   if ((products == 0) && (GetVerboseLevel()>0)) {
     G4cout << "G4PhaseSpaceDecayChannel::DecayIt ";
-    G4cout << *parent_name << " can not decay " << endl;
+    G4cout << *parent_name << " can not decay " << G4endl;
     DumpInfo();
   }
 #endif
@@ -105,7 +105,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::DecayIt(G4double parentMass)
 G4DecayProducts *G4PhaseSpaceDecayChannel::OneBodyDecayIt()
 {
 #ifdef G4VERBOSE
-  if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::OneBodyDecayIt()"<<endl;
+  if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::OneBodyDecayIt()"<<G4endl;
 #endif
   G4double parentmass = parent_mass;
   G4double daughtermass = daughters_mass[0];
@@ -124,7 +124,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::OneBodyDecayIt()
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
      G4cout << "G4PhaseSpaceDecayChannel::OneBodyDecayIt ";
-     G4cout << "  create decay products in rest frame " <<endl;
+     G4cout << "  create decay products in rest frame " <<G4endl;
      products->DumpInfo();
   }
 #endif
@@ -134,7 +134,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::OneBodyDecayIt()
 G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
 {
 #ifdef G4VERBOSE
-  if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::TwoBodyDecayIt()"<<endl;
+  if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::TwoBodyDecayIt()"<<G4endl;
 #endif
   // parent mass
   G4double parentmass = parent_mass;
@@ -169,7 +169,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
      G4cout << "G4PhaseSpaceDecayChannel::TwoBodyDecayIt ";
-     G4cout << "  create decay products in rest frame " <<endl;
+     G4cout << "  create decay products in rest frame " <<G4endl;
      products->DumpInfo();
   }
 #endif
@@ -180,7 +180,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
 // algorism of this code is originally written in GDECA3 of GEANT3
 {
 #ifdef G4VERBOSE
-  if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()"<<endl;
+  if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()"<<G4endl;
 #endif
   // parent mass
   G4double parentmass = parent_mass;
@@ -235,10 +235,10 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
   // output message
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
-    G4cout << "     daughter 0:" << daughtermomentum[0]/GeV << "[GeV/c]" <<endl;
-    G4cout << "     daughter 1:" << daughtermomentum[1]/GeV << "[GeV/c]" <<endl;
-    G4cout << "     daughter 2:" << daughtermomentum[2]/GeV << "[GeV/c]" <<endl;
-    G4cout << "   momentum sum:" << momentumsum/GeV << "[GeV/c]" <<endl;
+    G4cout << "     daughter 0:" << daughtermomentum[0]/GeV << "[GeV/c]" <<G4endl;
+    G4cout << "     daughter 1:" << daughtermomentum[1]/GeV << "[GeV/c]" <<G4endl;
+    G4cout << "     daughter 2:" << daughtermomentum[2]/GeV << "[GeV/c]" <<G4endl;
+    G4cout << "   momentum sum:" << momentumsum/GeV << "[GeV/c]" <<G4endl;
   }
 #endif
 
@@ -277,7 +277,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
      G4cout << "G4PhaseSpaceDecayChannel::ThreeBodyDecayIt ";
-     G4cout << "  create decay products in rest frame " <<endl;
+     G4cout << "  create decay products in rest frame " <<G4endl;
      products->DumpInfo();
   }
 #endif
@@ -301,7 +301,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
   G4DecayProducts *products;
 
 #ifdef G4VERBOSE
-  if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::ManyBodyDecayIt()"<<endl;
+  if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::ManyBodyDecayIt()"<<G4endl;
 #endif
   // parent mass
   G4double parentmass = parent_mass;
@@ -347,7 +347,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
       temp -= daughtermass[index];
       if (GetVerboseLevel()>1) {
         G4cout << index << "  rundom number:" << rd[index]; 
-        G4cout << "   virtual mass:" << sm[index]/GeV << "[GeV/c/c]" <<endl; 
+        G4cout << "   virtual mass:" << sm[index]/GeV << "[GeV/c/c]" <<G4endl; 
       }
     }
     delete [] rd;
@@ -359,7 +359,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
       G4cout << "     daughter " << index << ":" << *daughters_name[index];
-      G4cout << " momentum:" << daughtermomentum[index]/GeV << "[GeV/c]" <<endl;
+      G4cout << " momentum:" << daughtermomentum[index]/GeV << "[GeV/c]" <<G4endl;
     }
 #endif
     for(index =numberOfDaughters-2; index>=0; index--) {
@@ -370,12 +370,12 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
 #ifdef G4VERBOSE
         if (GetVerboseLevel()>0) {
           G4cout << "G4PhaseSpaceDecayChannel::ManyBodyDecayIt ";
-          G4cout << "     can not calculate daughter momentum " <<endl;
+          G4cout << "     can not calculate daughter momentum " <<G4endl;
           G4cout << "     parent:" << *parent_name;
-          G4cout << " mass:" << parentmass/GeV << "[GeV/c/c]" <<endl;
+          G4cout << " mass:" << parentmass/GeV << "[GeV/c/c]" <<G4endl;
           G4cout << "     daughter " << index << ":" << *daughters_name[index];
           G4cout << " mass:" << daughtermass[index]/GeV << "[GeV/c/c]" ;
-          G4cout << " mass:" << daughtermomentum[index]/GeV << "[GeV/c]" <<endl;
+          G4cout << " mass:" << daughtermomentum[index]/GeV << "[GeV/c]" <<G4endl;
         }
 #endif
 	delete [] sm;
@@ -388,19 +388,19 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
         weight *=  daughtermomentum[index]/sm[index];
         if (GetVerboseLevel()>1) {
           G4cout << "     daughter " << index << ":" << *daughters_name[index];
-          G4cout << " momentum:" << daughtermomentum[index]/GeV << "[GeV/c]" <<endl;
+          G4cout << " momentum:" << daughtermomentum[index]/GeV << "[GeV/c]" <<G4endl;
         }
       }
     }
     if (GetVerboseLevel()>1) {
-      G4cout << "    weight: " << weight <<endl;
+      G4cout << "    weight: " << weight <<G4endl;
     }
     
     // exit if number of Try exceeds 100
     if (numberOfTry++ >100) {
       if (GetVerboseLevel()>0) {
         G4cout << "G4PhaseSpaceDecayChannel::ManyBodyDecayIt: ";
-	G4cout << " can not determine Decay Kinematics " << endl;
+	G4cout << " can not determine Decay Kinematics " << G4endl;
       }
       delete [] sm;
       delete [] daughtermass;
@@ -411,7 +411,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
 
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
-      G4cout << "Start calulation of daughters momentum vector "<<endl;
+      G4cout << "Start calulation of daughters momentum vector "<<G4endl;
   }
 #endif  
   G4double costheta, sintheta, phi;
@@ -467,7 +467,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) { 
     G4cout << "G4PhaseSpaceDecayChannel::ManyBodyDecayIt ";
-    G4cout << "  create decay products in rest frame " << endl;
+    G4cout << "  create decay products in rest frame " << G4endl;
     products->DumpInfo();
   }
 #endif

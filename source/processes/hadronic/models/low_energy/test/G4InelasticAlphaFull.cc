@@ -1,17 +1,17 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4InelasticAlphaFull.cc,v 1.1 1999-01-08 16:33:41 gunter Exp $
+// $Id: G4InelasticAlphaFull.cc,v 1.2 1999-12-15 14:53:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
  
 #include "G4Material.hh"
  
@@ -106,11 +106,11 @@
  
  int main()
   {
-    G4cout.setf( ios::scientific, ios::floatfield );
-    ofstream outFile( "InelasticAlpha.listing.GetMeanFreePath", ios::out);
-    outFile.setf( ios::scientific, ios::floatfield );
-    ofstream outFile1( "InelasticAlpha.listing.DoIt", ios::out);
-    outFile1.setf( ios::scientific, ios::floatfield );
+    G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
+    G4std::ofstream outFile( "InelasticAlpha.listing.GetMeanFreePath", G4std::ios::out);
+    outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
+    G4std::ofstream outFile1( "InelasticAlpha.listing.DoIt", G4std::ios::out);
+    outFile1.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
     G4String name, symbol;
     G4double a, iz, z, density;
@@ -270,8 +270,8 @@
    theParticles[24]=theAntiOmegaMinus;
    
    //------ here all the particles are Done ----------
-   G4cout << "Done with all the particles" << endl;
-   G4cout << "Starting process definitions" << endl;
+   G4cout << "Done with all the particles" << G4endl;
+   G4cout << "Starting process definitions" << G4endl;
    //--------- Processes definitions ---------
    G4HadronInelasticProcess* theProcesses[25];
    
@@ -454,8 +454,8 @@
    G4ForceCondition* condition = new G4ForceCondition;
    *condition = NotForced;
 
-   G4cout << "Done with all the process definitions"<<endl;
-   //   G4cout << "Building the CrossSection Tables. This will take a while"<<endl;
+   G4cout << "Done with all the process definitions"<<G4endl;
+   //   G4cout << "Building the CrossSection Tables. This will take a while"<<G4endl;
    
    // ------- Build the CrossSection Tables ------- this design can be impoved ------
    
@@ -485,7 +485,7 @@
    //   theOmegaMinus->SetCuts(1.*mm);
    //   theAntiOmegaMinus->SetCuts(1.*mm);
    
-   //   G4cout << "Done with the CrossSectionTables" << endl;
+   //   G4cout << "Done with the CrossSectionTables" << G4endl;
    // ----------- define energies of interest ----------------
    
    int numberOfEnergies = 5;
@@ -504,25 +504,25 @@
    G4double incomingEnergy;
    G4int k, i, l, hpw = 0;
    
-   G4cout << "Test the GetMeanFreePath, and DoIt: please enter the material" << endl;
-   G4cout << "Candidates are:" << endl;
+   G4cout << "Test the GetMeanFreePath, and DoIt: please enter the material" << G4endl;
+   G4cout << "Candidates are:" << G4endl;
    for( G4int k1=0; k1<numberOfMaterials; ++k1 )
-     G4cout << k1 << ") " << theMaterials[k1]->GetName() << endl;
-   G4cout << "Test the GetMeanFreePath, and DoIt: please enter the particle type"<<endl;
-   G4cout << "Candidates are:"<<endl;
+     G4cout << k1 << ") " << theMaterials[k1]->GetName() << G4endl;
+   G4cout << "Test the GetMeanFreePath, and DoIt: please enter the particle type"<<G4endl;
+   G4cout << "Candidates are:"<<G4endl;
    for( G4int i1=0; i1<numberOfParticles; ++i1 )
-     G4cout << i1 << ") " << theParticles[i1]->GetParticleName() << endl;
-   G4cout << "running" << endl;
+     G4cout << i1 << ") " << theParticles[i1]->GetParticleName() << G4endl;
+   G4cout << "running" << G4endl;
    theParticles[i]->SetCuts( 1.0*mm );
    for ( i=0; i<numberOfParticles; i++)
    {
-     outFile << endl
-             << "New particle type: " << theParticles[i]->GetParticleName() << endl;
+     outFile << G4endl
+             << "New particle type: " << theParticles[i]->GetParticleName() << G4endl;
      for ( k=0; k<numberOfMaterials; k++)
      {
-       outFile << endl
+       outFile << G4endl
                << "Entering Material " << theMaterials[k]->GetName() << " for particle "
-               << theParticles[i]->GetParticleName() << endl;
+               << theParticles[i]->GetParticleName() << G4endl;
        LogicalFrame->SetMaterial( theMaterials[k] ); 
        for( G4int j=0; j<numberOfEnergies; ++j ) {
          incomingEnergy = theEnergies[j];
@@ -534,32 +534,32 @@
          aStep.SetTrack( aTrack );
          outFile << "  " << incomingEnergy/GeV << " GeV";
          meanFreePath = theProcesses[i]->GetMeanFreePath( *aTrack, -1., condition );
-         outFile<< "            " << meanFreePath*cm << endl ;
+         outFile<< "            " << meanFreePath*cm << G4endl ;
          delete aParticle;
          delete aTrack;
        }  // energy loop
      }  // material loop
    }  //particle loop
-   outFile << " " << endl;
+   outFile << " " << G4endl;
    
    // --------- Test the PostStepDoIt now, 10 events each --------------
-   G4cout << "Entering the DoIt loops!!!!!"<< endl;
+   G4cout << "Entering the DoIt loops!!!!!"<< G4endl;
    G4VParticleChange* aFinalState;
-   G4cout << "Now test the DoIt: please enter the number of events"<<endl;
+   G4cout << "Now test the DoIt: please enter the number of events"<<G4endl;
    G4int ll0=0;
-   cin >> ll0;
-   G4cout <<"Now debug the DoIt: enter the problem event number"<< endl;
+   G4cin >> ll0;
+   G4cout <<"Now debug the DoIt: enter the problem event number"<< G4endl;
    G4int debugThisOne;
-   cin >> debugThisOne;
+   G4cin >> debugThisOne;
    for (i=0; i<numberOfParticles; i++)
    {
-     outFile << endl
+     outFile << G4endl
              << "New particle type: " << theParticles[i]->GetParticleName()
-             << " " << i << endl;
+             << " " << i << G4endl;
      for ( G4int k=0; k<numberOfMaterials; k++)
      {
-       outFile << endl << "Entering Material " << theMaterials[k]->GetName()
-               << " for particle " << theParticles[i]->GetParticleName() << endl;
+       outFile << G4endl << "Entering Material " << theMaterials[k]->GetName()
+               << " for particle " << theParticles[i]->GetParticleName() << G4endl;
        LogicalFrame->SetMaterial(theMaterials[k]); 
        for( G4int j=0; j<numberOfEnergies; ++j )
        {
@@ -576,7 +576,7 @@
            G4cout << "EVENTCOUNTER=" << ++hpw
                 << " current energy: " << incomingEnergy
                 << " of particle " << aParticle->GetDefinition()->GetParticleName() 
-                << " in material " << theMaterials[k]->GetName() << endl;
+                << " in material " << theMaterials[k]->GetName() << G4endl;
            if (hpw==debugThisOne)
            {
             debugThisOne+=0;
@@ -1246,7 +1246,7 @@
              delete currentTrack;
            } // secondary loop
            aFinalState->Clear();
-           G4cout << "total multiplicity: "<<totalMulti<<endl;
+           G4cout << "total multiplicity: "<<totalMulti<<G4endl;
          }  // event loop
        }  // energy loop
      }  // material loop

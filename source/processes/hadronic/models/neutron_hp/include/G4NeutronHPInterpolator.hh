@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInterpolator.hh,v 1.4 1999-08-27 07:42:57 hpw Exp $
+// $Id: G4NeutronHPInterpolator.hh,v 1.5 1999-12-15 14:53:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPInterpolator_h
@@ -26,7 +26,7 @@ class G4NeutronHPInterpolator
   G4NeutronHPInterpolator(){}
   ~G4NeutronHPInterpolator()
    {
-    //  G4cout <<"deleted the interpolator"<<endl;
+    //  G4cout <<"deleted the interpolator"<<G4endl;
    }
   
   inline G4double Lin(G4double x,G4double x1,G4double x2,G4double y1,G4double y2)
@@ -89,7 +89,7 @@ Interpolate(G4InterpolationScheme aScheme,
       result = Random(x, x1, x2, y1, y2);
       break;
     default:
-      G4cout << "theScheme = "<<theScheme<<endl;
+      G4cout << "theScheme = "<<theScheme<<G4endl;
       G4Exception("G4NeutronHPInterpolator::Carthesian Invalid InterpolationScheme");
       break;
   }

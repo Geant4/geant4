@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEOmegaMinusInelastic.cc,v 1.1 1999-01-07 16:12:47 gunter Exp $
+// $Id: G4LEOmegaMinusInelastic.cc,v 1.2 1999-12-15 14:53:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: OmegaMinus Inelastic Process
@@ -34,11 +34,11 @@
     if( verboseLevel > 1 )
     {
       G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEOmegaMinusInelastic::ApplyYourself called" << endl;
+      G4cout << "G4LEOmegaMinusInelastic::ApplyYourself called" << G4endl;
       G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy() << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << ", ";
       G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
-           << endl;
+           << G4endl;
     }
     G4ReactionProduct currentParticle( originalIncident->GetDefinition() );
     currentParticle.SetMomentum( originalIncident->GetMomentum() );
@@ -159,7 +159,7 @@
       counter = -1;
       for( np=0; np<(numSec/3); ++np )
       {
-        for( nm=max(0,np-1); nm<=(np+1); ++nm )
+        for( nm=G4std::max(0,np-1); nm<=(np+1); ++nm )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
@@ -223,7 +223,7 @@
       counter = -1;
       for( np=0; np<numSec/3 && ran>=excs; ++np )
       {
-        for( nm=max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
+        for( nm=G4std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
         {
           for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
           {
@@ -232,7 +232,7 @@
               nt = np+nm+nz;
               if( nt > 0 )
               {
-                test = exp( min( expxu, max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                 dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                 if( fabs(dum) < 1.0 )
                 {
@@ -266,7 +266,7 @@
               nt = np+nm+nz;
               if( (nt>=1) && (nt<=numSec) )
               {
-                test = exp( min( expxu, max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                 dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                 if( fabs(dum) < 1.0 )
                 {

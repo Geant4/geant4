@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Mars5GeVMechanism.cc,v 1.3 1999-07-14 01:37:01 kurasige Exp $
+// $Id: G4Mars5GeVMechanism.cc,v 1.4 1999-12-15 14:53:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,7 @@ void G4Mars5GeVMechanism::GetTargetNuclei(const G4Material* material)
   const G4int numberOfElements = material->GetNumberOfElements() ;
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 2) {
-    G4cout << " G4Mars5GeVMechanism::GetTargetNuclei" << endl;
+    G4cout << " G4Mars5GeVMechanism::GetTargetNuclei" << G4endl;
  }
 #endif 
   
@@ -99,7 +99,7 @@ void G4Mars5GeVMechanism::GetTargetNuclei(const G4Material* material)
     if (GetVerboseLevel() > 2) {
       G4cout << iel << ": " << theAtomicNumDensityVector[iel];
       G4cout << "  Z=" << (*theElementVector)(iel)->GetZ() << "  A=" << (*theElementVector)(iel)->GetN();
-      G4cout << endl; 
+      G4cout << G4endl; 
    }
 #endif 
   }
@@ -109,7 +109,7 @@ void G4Mars5GeVMechanism::GetTargetNuclei(const G4Material* material)
   if (GetVerboseLevel() > 2) {
     G4cout << "<Z>=" << fZNucl;
     G4cout << "<A>=" << fANucl;
-    G4cout << endl; 
+    G4cout << G4endl; 
   }
 #endif 
 } 
@@ -126,7 +126,7 @@ void G4Mars5GeVMechanism::Treem5()
   if (GetVerboseLevel() > 2) {
     G4cout << " G4Mars5GeVMechanism::Treem5() ";
     G4cout << "       Incident Particle: " << incidentParticle->GetDefinition()->GetParticleName();
-    G4cout << "  : energy = " <<   pE/GeV << "[GeV]" << endl; 
+    G4cout << "  : energy = " <<   pE/GeV << "[GeV]" << G4endl; 
   }
 #endif
 
@@ -178,7 +178,7 @@ G4bool G4Mars5GeVMechanism::CoulombBarrier(G4int pType, G4double  pE){
       if ( rCoulomb < RCoulombTh ) {
 #ifdef G4VERBOSE
 	if (GetVerboseLevel() > 2) {
-	  G4cout << " Can not interact because of Coulomb Barrier " << endl; 
+	  G4cout << " Can not interact because of Coulomb Barrier " << G4endl; 
 	}
 #endif 
 	return true;
@@ -192,7 +192,7 @@ void G4Mars5GeVMechanism::CreateNucleon(G4int ib, G4int pType, G4double  pE)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 2) {
-    G4cout << " G4Mars5GeVMechanism::CreateNucleon()" << endl;
+    G4cout << " G4Mars5GeVMechanism::CreateNucleon()" << G4endl;
   }
 #endif
  if ( pType == MarsGAM) {
@@ -231,7 +231,7 @@ void G4Mars5GeVMechanism::CreatePion(G4int ib, G4int pType, G4double  pE)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 2) {
-    G4cout << " G4Mars5GeVMechanism::CreatePion()" << endl;
+    G4cout << " G4Mars5GeVMechanism::CreatePion()" << G4endl;
   }
 #endif
  static const G4double PionProductionEth = 0.28*GeV; 
@@ -283,7 +283,7 @@ void G4Mars5GeVMechanism::CreatePionZero(G4int ib, G4int pType, G4double  pE)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 2) {
-    G4cout << " G4Mars5GeVMechanism::CreatePionZero()" << endl;
+    G4cout << " G4Mars5GeVMechanism::CreatePionZero()" << G4endl;
   }
 #endif
   static const G4double PionProductionEth = 0.28*GeV; 
@@ -319,11 +319,11 @@ void G4Mars5GeVMechanism::AddSecondary()
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 2) {
-    G4cout << " G4Mars5GeVMechanism::AddSecondary()" << endl;
+    G4cout << " G4Mars5GeVMechanism::AddSecondary()" << G4endl;
     G4cout << " Particle :" << selec1.Tprod;
-    G4cout << ":" << GetParticleName(selec1.Tprod) <<endl;
-    G4cout << " Energy   :" << selec1.EN <<endl;
-    G4cout << "Weight    :" <<  selec1.V * incidentWeight << endl;
+    G4cout << ":" << GetParticleName(selec1.Tprod) <<G4endl;
+    G4cout << " Energy   :" << selec1.EN <<G4endl;
+    G4cout << "Weight    :" <<  selec1.V * incidentWeight << G4endl;
   }
 #endif
   // determine direction cosine
@@ -370,11 +370,11 @@ G4double G4Mars5GeVMechanism::SelBS(G4int pType, G4double aNucl, G4double zNucl)
 
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 2) {
-    G4cout << " G4Mars5GeVMechanism::SelBS" << endl;
-    G4cout << "   pType = " << pType <<  "   e0    = " << e0 << endl;
-    G4cout << "   aNucl = " << aNucl <<  "   zNucl = " << zNucl << endl;
+    G4cout << " G4Mars5GeVMechanism::SelBS" << G4endl;
+    G4cout << "   pType = " << pType <<  "   e0    = " << e0 << G4endl;
+    G4cout << "   aNucl = " << aNucl <<  "   zNucl = " << zNucl << G4endl;
     G4cout << "   Treac = " <<selec1.Treac;
-    G4cout << "   Tprod = " <<selec1.Tprod << endl;
+    G4cout << "   Tprod = " <<selec1.Tprod << G4endl;
  }
 #endif 
 
@@ -410,7 +410,7 @@ G4double G4Mars5GeVMechanism::SelBS(G4int pType, G4double aNucl, G4double zNucl)
 
 #ifdef G4VERBOSE
     if (GetVerboseLevel() > 2) {
-      G4cout << "selec1.EN = " << en << endl;
+      G4cout << "selec1.EN = " << en << G4endl;
     }
 #endif 
     
@@ -452,7 +452,7 @@ G4double G4Mars5GeVMechanism::SelBS(G4int pType, G4double aNucl, G4double zNucl)
 #ifdef G4VERBOSE
     if (GetVerboseLevel() > 2) {
       G4cout << " D2N2 = " <<  v2/(dw*da*(selec1.V10));
-      G4cout << " v2 = " << v2 << endl;
+      G4cout << " v2 = " << v2 << G4endl;
     }
 #endif 
 
@@ -462,7 +462,7 @@ G4double G4Mars5GeVMechanism::SelBS(G4int pType, G4double aNucl, G4double zNucl)
       selec1.V  = 0.0;
 #ifdef G4VERBOSE
       if (GetVerboseLevel() > 2) {
-	G4cout << "exceed retry limit !!" << endl;
+	G4cout << "exceed retry limit !!" << G4endl;
       }
 #endif 
       return selec1.V;
@@ -880,7 +880,7 @@ void G4Mars5GeVMechanism::Trans(G4ThreeVector* d1,G4ThreeVector* d2)
  
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 2) {
-    G4cout << " G4Mars5GeVMechanism::Trans() " << endl;
+    G4cout << " G4Mars5GeVMechanism::Trans() " << G4endl;
   }
 #endif
  // Direction cosine transformation
@@ -925,7 +925,7 @@ G4VParticleChange* G4Mars5GeVMechanism::ApplyMath(
   G4VParticleChange* pChange = (pVPChange);
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 2) {
-    G4cout << " G4Mars5GeVMechanism::ApplyMath" << endl;
+    G4cout << " G4Mars5GeVMechanism::ApplyMath" << G4endl;
   }
 #endif
   G4Track* incidentTrack = aStep.GetTrack();
@@ -940,7 +940,7 @@ G4VParticleChange* G4Mars5GeVMechanism::ApplyMath(
   if ( !IsApplicable(incidentMarsEncoding) ) return pChange; 
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 2) {
-    G4cout << " OK the particle is applicable" << endl;
+    G4cout << " OK the particle is applicable" << G4endl;
   }
 #endif
 

@@ -1,11 +1,11 @@
 #ifndef __NBODY__
 #define __NBODY__
 
-#include <vector.h>
+#include "g4std/vector"
 #include <string.h>
 #include "Random.hh"
 #include "newvector.hh"
-#include <iostream.h>
+#include "g4std/iostream"
 #include <math.h>
 #include "String.hh"
 #include "ParticleBase.hh"
@@ -42,7 +42,7 @@ public:
   inline virtual Vektor3 dr(const Vektor3& x1,const Vektor3& x2) const;
   inline virtual double distance(int i,int j) const;
   virtual void one_step();
-  virtual void print(ostream& o);
+  virtual void print(G4std::ostream& o);
 
   void setTime(double t) { time = t; }
   double Time() const { return time; }

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst14PhysicsList.cc,v 1.7 1999-07-06 13:24:31 aforti Exp $
+// $Id: Tst14PhysicsList.cc,v 1.8 1999-12-15 14:54:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -151,7 +151,7 @@ void Tst14PhysicsList::SetGELowLimit(G4double lowcut)
 {
   if (verboseLevel >0){
     G4cout << "Tst14PhysicsList::SetCuts:";
-    G4cout << "Gamma and Electron cut in energy: " << lowcut*MeV << " (MeV)" << endl;
+    G4cout << "Gamma and Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
   }  
 
   G4Gamma::SetEnergyRange(lowcut,1e5);
@@ -163,7 +163,7 @@ void Tst14PhysicsList::SetGammaLowLimit(G4double lowcut)
 {
   if (verboseLevel >0){
     G4cout << "Tst14PhysicsList::SetCuts:";
-    G4cout << "Gamma cut in energy: " << lowcut*MeV << " (MeV)" << endl;
+    G4cout << "Gamma cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
   }  
 
   G4Gamma::SetEnergyRange(lowcut,1e5);
@@ -175,7 +175,7 @@ void Tst14PhysicsList::SetElectronLowLimit(G4double lowcut)
   if (verboseLevel >0){
 
     G4cout << "Tst14PhysicsList::SetCuts:";
-    G4cout << "Electron cut in energy: " << lowcut*MeV << " (MeV)" << endl;
+    G4cout << "Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
 
   }  
 
@@ -207,8 +207,8 @@ void Tst14PhysicsList::SetCuts(){
 
 void Tst14PhysicsList::SetLowEnSecPhotCut(G4double cut){
   
-  G4cout<<"Low energy secondary photons cut is now set to: "<<cut*MeV<<" (MeV)"<<endl;
-  G4cout<<"for processes LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation"<<endl;
+  G4cout<<"Low energy secondary photons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
+  G4cout<<"for processes LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation"<<G4endl;
   LeBrprocess->SetCutForLowEnSecPhotons(cut);
   LePeprocess->SetCutForLowEnSecPhotons(cut);
   LeIoprocess->SetCutForLowEnSecPhotons(cut);
@@ -216,9 +216,9 @@ void Tst14PhysicsList::SetLowEnSecPhotCut(G4double cut){
 
 void Tst14PhysicsList::SetLowEnSecElecCut(G4double cut){
   
-  G4cout<<"Low energy secondary electrons cut is now set to: "<<cut*MeV<<" (MeV)"<<endl;
-  //  G4cout<<"for processes LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation"<<endl;
-  G4cout<<"for processes LowEnergyIonisation"<<endl;
+  G4cout<<"Low energy secondary electrons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
+  //  G4cout<<"for processes LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation"<<G4endl;
+  G4cout<<"for processes LowEnergyIonisation"<<G4endl;
   //  G4LowEnergyPhotoElectric::SetCutForLowEnSecElectrons(cut);
   LeIoprocess->SetCutForLowEnSecElectrons(cut);
 }

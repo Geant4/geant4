@@ -66,7 +66,7 @@ Tst01PrimaryGeneratorAction::Tst01PrimaryGeneratorAction():
   {
     fSize = 0.0 ;
   }
-  G4cout<<"fSize = "<<fSize<<endl ;
+  G4cout<<"fSize = "<<fSize<<G4endl ;
 }
 
 ///////////////////////////////////////////////////////////////////////////

@@ -66,9 +66,9 @@ void* G4GeometryTable::CreateObject(STEPentity& Ent)
 #ifdef G4_STEPINTERFACE_DEBUG
     if (obj == 0) 
       G4cout << "G4 object of type " << gctmp->Name() 
-	     << " not necessary" << endl;
+	     << " not necessary" << G4endl;
     else 
-      //G4cout << "Created G4 object of type " << gctmp->Name() << endl;
+      //G4cout << "Created G4 object of type " << gctmp->Name() << G4endl;
 #endif
 
     return obj;
@@ -76,7 +76,7 @@ void* G4GeometryTable::CreateObject(STEPentity& Ent)
   else
   {
     G4String err = "Geometry creator for entity " + name +  " not found.";
-    G4cout << err << endl;
+    G4cout << err << G4endl;
     //      G4Exception(err);
     return 0;
   } 
@@ -114,17 +114,17 @@ void G4GeometryTable::PrintObjectNames()
   G4int objectCount = RegisteredObjects.length();
   if(!objectCount)
     {
-      G4cout << "No registered objects in table." << endl;
+      G4cout << "No registered objects in table." << G4endl;
       return;
     }
 
-  G4cout << "Objects in table:" << endl;  
+  G4cout << "Objects in table:" << G4endl;  
   
   for(a=0;a<objectCount;a++)
     {
       gc = RegisteredObjects[a];
       name = gc->Name();
-      G4cout << name << endl;
+      G4cout << name << G4endl;
     }
 
 }

@@ -5,12 +5,12 @@
 #pragma interface
 #endif
 
-#include <iostream.h>
+#include "g4std/iostream"
 
 template<class t>
 class Array
 {
-  friend ostream& operator<<(ostream& o,const Array<t>& i){
+  friend G4std::ostream& operator<<(G4std::ostream& o,const Array<t>& i){
     o << "(";
     for (int k=0; k<i.N; k++) {
       o << i.array[k];

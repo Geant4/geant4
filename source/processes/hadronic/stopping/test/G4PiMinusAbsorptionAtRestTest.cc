@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusAbsorptionAtRestTest.cc,v 1.1 1999-01-08 16:33:46 gunter Exp $
+// $Id: G4PiMinusAbsorptionAtRestTest.cc,v 1.2 1999-12-15 14:53:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -30,8 +30,8 @@
 // -------------------------------------------------------------------
 
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4Material.hh"
 #include "G4Element.hh"
@@ -124,33 +124,33 @@ int main()
   G4int processId = 1;
   G4int deexcitationIndex =0;
 
-  cout << " 0) Copper      1) Lead         2) Iron         3) Carbon" << endl;
-  cout << " 4) LArgon      5) Polystyrene  6) Tungsten     7) Oxygen" << endl;
-  cout << " 8) Beryllium   9) Aluminium   10) Uranium     11) BGO" << endl;
-  cout << "12) NaI        13) CsI         14) Kapton" << endl;
+  cout << " 0) Copper      1) Lead         2) Iron         3) Carbon" << G4endl;
+  cout << " 4) LArgon      5) Polystyrene  6) Tungsten     7) Oxygen" << G4endl;
+  cout << " 8) Beryllium   9) Aluminium   10) Uranium     11) BGO" << G4endl;
+  cout << "12) NaI        13) CsI         14) Kapton" << G4endl;
 
   G4cout 
     << "Enter number of absorptions [10], material [3], Verbose level [1]"
-    << endl;
-  cin >> nIter >> imat >> verboseLevel;
+    << G4endl;
+  G4cin >> nIter >> imat >> verboseLevel;
 
   G4cout 
     << "Enter process: 1 G4PiMinusAbsorptionAtRest, 2 G4GheishaAbsAtRest" 
-    << endl;
-  cin >> processId;
+    << G4endl;
+  G4cin >> processId;
 
   if (processId < 1 || processId >2)
     {
-      G4cout << "Wrong process ID, set to default" << endl;
+      G4cout << "Wrong process ID, set to default" << G4endl;
       processId = 1;
     }
 
-  G4cout << "Enter deexcitation algorithm: 0 Theo, 1 Dummy" << endl;
-  cin >> deexcitationIndex;
+  G4cout << "Enter deexcitation algorithm: 0 Theo, 1 Dummy" << G4endl;
+  G4cin >> deexcitationIndex;
   
   G4int hnt;
-  G4cout << "Enter histo (0) or ntuple (1) " << endl;
-  cin >> hnt;
+  G4cout << "Enter histo (0) or ntuple (1) " << G4endl;
+  G4cin >> hnt;
 
   // Materials definition 
 
@@ -342,7 +342,7 @@ int main()
   if (! thePiAbsorptionProcess->IsApplicable(*PionMinusDefinition)) 
     {
       G4cout 
-	<< PionMinusDefinition->GetParticleName() << " is not a PionMinus!" << endl;
+	<< PionMinusDefinition->GetParticleName() << " is not a PionMinus!" << G4endl;
       G4Exception("FAIL: *** exit program ***\n");
       //     return ;
     }
@@ -425,7 +425,7 @@ int main()
 	  }
       }
 
-    G4cout << "******* Iteration = " << iteration << endl;
+    G4cout << "******* Iteration = " << iteration << G4endl;
     iteration++;
     aParticleChange->Clear();
     

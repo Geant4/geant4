@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.6 1999-11-05 15:49:33 johna Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.7 1999-12-15 14:54:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,7 +77,7 @@ private:
   // A proper implementation would use geometry hierarchy.
   //
   G4std::map <const G4VPhysicalVolume*, SoSeparator*,
-    less <const G4VPhysicalVolume*> > SeparatorMap;
+    G4std::less <const G4VPhysicalVolume*> > SeparatorMap;
   SoSeparator *root;
   SoSeparator *staticRoot;
   SoSeparator *transientRoot;

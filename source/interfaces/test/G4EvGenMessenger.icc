@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EvGenMessenger.icc,v 1.1 1999-01-08 16:32:06 gunter Exp $
+// $Id: G4EvGenMessenger.icc,v 1.2 1999-12-15 14:50:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -18,7 +18,7 @@
 #include "G4ThreeVector.hh"
 #include "globals.hh"
 #include "G4ios.hh"
-#include <strstream.h>
+#include "g4std/strstream"
 
 
 class G4EvGenMessenger: public G4UImessenger
@@ -147,7 +147,7 @@ void G4EvGenMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     else
     { 
       G4cout << "Unknown particle <" << newValues 
-	   << ">. Command ignored." << endl;
+	   << ">. Command ignored." << G4endl;
     }
   }
   if( command->GetCommandName() == "momentum" )
@@ -155,11 +155,11 @@ void G4EvGenMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     G4double px;
     G4double py;
     G4double pz;
-    istrstream is((char*)t);
+    G4std::istrstream is((char*)t);
     is >> px >> py >> pz;
     G4double pp = sqrt( sqr(px) + sqr(py) + sqr(pz) );
     if( pp == 0.0 )
-    { G4cout << "Zero vector! command ignored." << endl; }
+    { G4cout << "Zero vector! command ignored." << G4endl; }
     else
     { 
       fParticleGun->SetParticleMomentumDirection(
@@ -170,7 +170,7 @@ void G4EvGenMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
   {
     G4double ee;
     char ues[10];
-    istrstream is((char*)t);
+    G4std::istrstream is((char*)t);
     is >> ee >> ues;
     G4String ue(ues);
     if( ue == "TeV" )
@@ -180,7 +180,7 @@ void G4EvGenMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     else if( ue == "MeV" )
     { fParticleGun->SetParticleEnergy(ee*MeV); }
     else
-    { G4cout << "Unknown unit <" << ue << ">. Command ignored." << endl; }
+    { G4cout << "Unknown unit <" << ue << ">. Command ignored." << G4endl; }
   }
   if( command->GetCommandName() == "position" )
   {
@@ -188,7 +188,7 @@ void G4EvGenMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     G4double xy;
     G4double xz;
     char uxs[10];
-    istrstream is((char*)t);
+    G4std::istrstream is((char*)t);
     is >> xx >> xy >> xz >> uxs;
     G4String ux(uxs);
     if( ux == "m" )
@@ -198,13 +198,13 @@ void G4EvGenMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     else if( ux == "mm" )
     { fParticleGun->SetParticlePosition(G4ThreeVector(xx*mm,xy*mm,xz*mm)); }
     else
-    { G4cout << "Unknown unit <" << ux << ">. Command ignored." << endl; }
+    { G4cout << "Unknown unit <" << ux << ">. Command ignored." << G4endl; }
   }
   if( command->GetCommandName() == "time" )
   {
     G4double et;
     char uts[10];
-    istrstream is((char*)t);
+    G4std::istrstream is((char*)t);
     is >> et >> uts;
     G4String ut(uts);
     if( ut == "s" )
@@ -214,7 +214,7 @@ void G4EvGenMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     else if( ut == "ns" )
     { fParticleGun->SetParticleTime(et*ns); }
     else
-    { G4cout << "Unknown unit <" << ut << ">. Command ignored." << endl; }
+    { G4cout << "Unknown unit <" << ut << ">. Command ignored." << G4endl; }
   }
 }
 

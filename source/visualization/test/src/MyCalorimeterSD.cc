@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyCalorimeterSD.cc,v 1.1 1999-04-16 10:32:36 johna Exp $
+// $Id: MyCalorimeterSD.cc,v 1.2 1999-12-15 14:54:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,13 +55,13 @@ G4bool MyCalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
     int icell = CalCollection->insert( &calHit );
     CellID[copyID] = icell;
     if(verboseLevel>0)
-    { G4cout << " New Calorimeter Hit on CellID " << copyID << endl; }
+    { G4cout << " New Calorimeter Hit on CellID " << copyID << G4endl; }
   }
   else
   { 
     CalCollection->AddEdep( CellID[copyID], edep );
     if(verboseLevel>0)
-    { G4cout << " Energy added to CellID " << copyID << endl; }
+    { G4cout << " Energy added to CellID " << copyID << G4endl; }
   }
 
   return true;

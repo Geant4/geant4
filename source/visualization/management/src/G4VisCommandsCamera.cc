@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCamera.cc,v 1.3 1999-01-11 00:48:31 allison Exp $
+// $Id: G4VisCommandsCamera.cc,v 1.4 1999-12-15 14:54:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,7 +28,7 @@ void G4VisCommandCameraReset::SetValue () {
       G4cout << "\nDolly distance reset to 0.";
       G4cout << "\nViewpoint direction reset to +z.";
       G4cout << "\nUp vector set to +y.";
-      G4cout << endl;
+      G4cout << G4endl;
       if (pVMan -> GetVerboseLevel () > 1) {
 	pVMan -> PrintCurrentView ();
       }

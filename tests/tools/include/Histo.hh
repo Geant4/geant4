@@ -1,7 +1,7 @@
 #ifndef Histo_h
 #define Histo_h
 
-#include <iostream.h>
+#include "g4std/iostream"
 
 // Due to RW-STL transition problems this simpl histo class works only
 // with C++-arrays
@@ -72,23 +72,23 @@ public:
       return entries;
     }
 
-  void output(ostream& o) const
+  void output(G4std::ostream& o) const
     {
       //The statistical information
-      o << "# Bins " << nbins << endl;
-      o << "# Entries " << entries << endl;
-      o << "# Overflow " << overflow << endl;
-      o << "# Underflow " << underflow << endl;
-      o << "# Sum " << sumw << endl;
-      o << "# Average " << Average() << endl;
-      o << "# RMS " << RMS() << endl;
+      o << "# Bins " << nbins << G4endl;
+      o << "# Entries " << entries << G4endl;
+      o << "# Overflow " << overflow << G4endl;
+      o << "# Underflow " << underflow << G4endl;
+      o << "# Sum " << sumw << G4endl;
+      o << "# Average " << Average() << G4endl;
+      o << "# RMS " << RMS() << G4endl;
       int i;
       for(i=0;i<nbins;i++)
-	o << i*binwidth+lowerbound << ' ' << content[i] << endl;
-      o << i*binwidth+lowerbound << ' ' << content[i-1] << endl;
+	o << i*binwidth+lowerbound << ' ' << content[i] << G4endl;
+      o << i*binwidth+lowerbound << ' ' << content[i-1] << G4endl;
     }
       
-  void input(istream& in)
+  void input(G4std::istream& in)
     {
       char c,dummy[80];
       double average,rms,bla;

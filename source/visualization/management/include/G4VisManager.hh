@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.9 1999-11-29 15:20:33 johna Exp $
+// $Id: G4VisManager.hh,v 1.10 1999-12-15 14:54:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,11 +102,11 @@ class G4VisManager: public G4VVisManager {
   friend class G4VSceneHandler;
   friend class G4VViewer;
 
-  friend class ostream & operator <<
-  (class ostream &, const class G4VGraphicsSystem &);
+  friend class G4std::ostream & operator <<
+  (class G4std::ostream &, const class G4VGraphicsSystem &);
 
-  friend class ostream & operator <<
-  (class ostream &, const class G4VSceneHandler &);
+  friend class G4std::ostream & operator <<
+  (class G4std::ostream &, const class G4VSceneHandler &);
 
   friend class G4VisStateDependent;
 

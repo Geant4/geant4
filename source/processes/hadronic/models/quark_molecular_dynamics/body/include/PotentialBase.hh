@@ -9,7 +9,7 @@ public:
   virtual double V(double r,double s) const = 0;
   virtual double V_prime(double r,double s) const = 0;
   virtual double V_inv(double r,double s) const = 0;
-  void print(ostream& o,double min,double max,int n);
+  void print(G4std::ostream& o,double min,double max,int n);
 };
 
 class Potential : public PotentialBase,private InverseFunction

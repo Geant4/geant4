@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiProperties.cc,v 1.5 1999-09-22 14:47:09 larazb Exp $
+// $Id: G4NucleiProperties.cc,v 1.6 1999-12-15 14:51:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,7 @@ G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 {
 	if (A < 1 || Z < 0 || Z > A) {
 		G4cout << "G4NucleiProperties::GetNuclearMass: Wrong values for A = " << A 
-				 << " and Z = " << Z << endl;
+				 << " and Z = " << Z << G4endl;
 		return 0.0;
 	} else {
 	 	G4ParticleDefinition * nucleus = 0;

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst17EventAction.cc,v 1.1 1999-11-30 18:01:55 stesting Exp $
+// $Id: Tst17EventAction.cc,v 1.2 1999-12-15 14:54:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ void Tst17EventAction::BeginOfEventAction(const G4Event* evt)
   } 
 
   if(verboselevel>1)
-    G4cout << "<<< Event  " << evt->GetEventID() << " started." << endl;
+    G4cout << "<<< Event  " << evt->GetEventID() << " started." << G4endl;
   nstep = 0. ;
   nstepCharged = 0. ;
   nstepNeutral = 0. ;
@@ -88,7 +88,7 @@ void Tst17EventAction::EndOfEventAction(const G4Event* evt)
     int n_hit = CHC->entries();
    // if(verboselevel==2)
    // G4cout << "     " << n_hit
-   //      << " hits are stored in Tst17CalorHitsCollection." << endl;
+   //      << " hits are stored in Tst17CalorHitsCollection." << G4endl;
 
     G4double totEAbs=0, totLAbs=0;
     for (int i=0;i<n_hit;i++)
@@ -97,11 +97,11 @@ void Tst17EventAction::EndOfEventAction(const G4Event* evt)
       }
   if(verboselevel==2)
     G4cout
-       << "   Absorber: total energy: " << setw(7) << 
+       << "   Absorber: total energy: " << G4std::setw(7) << 
                              G4BestUnit(totEAbs,"Energy")
-       << "       total track length: " << setw(7) <<
+       << "       total track length: " << G4std::setw(7) <<
                              G4BestUnit(totLAbs,"Length")
-       << endl;           
+       << G4endl;           
 
    // count event, add deposits to the sum ...
     runaction->CountEvent() ;
@@ -109,7 +109,7 @@ void Tst17EventAction::EndOfEventAction(const G4Event* evt)
     runaction->AddnStepsCharged(nstepCharged) ;
     runaction->AddnStepsNeutral(nstepNeutral) ;
     if(verboselevel==2)
-      G4cout << " Ncharged=" << Nch << "  ,   Nneutral=" << Nne << endl;
+      G4cout << " Ncharged=" << Nch << "  ,   Nneutral=" << Nne << G4endl;
     runaction->CountParticles(Nch,Nne);
     runaction->AddEP(NE,NP);
     runaction->AddTrRef(Transmitted,Reflected) ;
@@ -118,7 +118,7 @@ void Tst17EventAction::EndOfEventAction(const G4Event* evt)
   }
 
   if(verboselevel>0)
-    G4cout << "<<< Event  " << evt->GetEventID() << " ended." << endl;
+    G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
 
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   

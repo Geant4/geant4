@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -277,14 +277,14 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
 
 #ifdef G4DEBUG_TRANSPORT      
       cout.precision(5);
-      cout << "***Transportation::AlongStepGPIL ** " << endl ;
-      cout << "  Called Navigator->ComputeSafety " << endl
-	   << "    with position = " << fTransportEndPosition << endl
-	   << "    and it returned safety= " << endSafety << endl; 
+      cout << "***Transportation::AlongStepGPIL ** " << G4endl ;
+      cout << "  Called Navigator->ComputeSafety " << G4endl
+	   << "    with position = " << fTransportEndPosition << G4endl
+	   << "    and it returned safety= " << endSafety << G4endl; 
       cout << "  I add the endpoint distance " << endpointDistance 
 	   << "   to it " 
 	   << "   to obtain a pseudo-safety= " << currentSafety 
-	   << "   which I return."  << endl; 
+	   << "   which I return."  << G4endl; 
 #endif
   }				    
 
@@ -355,9 +355,9 @@ G4VParticleChange* G4Transportation::AlongStepDoIt(
      }
 
      if (LabTime_mean!=0.0) {
-        cout << setw(12) << (deltaTime/LabTime_mean - 1.0);
+        cout << G4std::setw(12) << (deltaTime/LabTime_mean - 1.0);
      }
-     cout << endl;
+     cout << G4endl;
   }     
   // Now Correct by Lorentz factor to get "proper" deltaTime
   //
@@ -425,30 +425,30 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
   cout.precision(8);
 
   if ( fVerbose > 5 ) {
-    cout << "G4Transportation::PostStepDoIt ***  " << endl
-	 << " The track has gone a geometrical distance of " << endl
-	 << "   new estimate=" <<  DeltaPosition << "  (PostStepDoIt) " << endl
+    cout << "G4Transportation::PostStepDoIt ***  " << G4endl
+	 << " The track has gone a geometrical distance of " << G4endl
+	 << "   new estimate=" <<  DeltaPosition << "  (PostStepDoIt) " << G4endl
 	 << "   previously  =" <<  endpointDistance 
-	 <<    "  was the distance of endpoint (in AlongStepGPIL) "  << endl;
+	 <<    "  was the distance of endpoint (in AlongStepGPIL) "  << G4endl;
     cout.precision(4);
-    cout << "   difference    =" <<  DeltaPosition-endpointDistance << endl;
+    cout << "   difference    =" <<  DeltaPosition-endpointDistance << G4endl;
     if( endpointDistance != 0.0 )
       cout << "   relative diff =" <<  DeltaPosition/endpointDistance - 1.0 
-	   << endl;
+	   << G4endl;
   }else if ( fVerbose > 0 ) {
       cout.precision(3);
-      cout << setw(12) << "DeltaPosition" << " "     
-	   << setw(16) << "EndpointDistance"  << " "     
-	   << setw(12) << "Difference"    << " " 
-	   << setw(12) << "RelativeDiff"  << " ";
-      cout << endl;
+      cout << G4std::setw(12) << "DeltaPosition" << " "     
+	   << G4std::setw(16) << "EndpointDistance"  << " "     
+	   << G4std::setw(12) << "Difference"    << " " 
+	   << G4std::setw(12) << "RelativeDiff"  << " ";
+      cout << G4endl;
 
-      cout << setw(12) << DeltaPosition << " "     
-	   << setw(15) << endpointDistance << " "     
-	   << setw(12) << DeltaPosition-endpointDistance  << " " ;
+      cout << G4std::setw(12) << DeltaPosition << " "     
+	   << G4std::setw(15) << endpointDistance << " "     
+	   << G4std::setw(12) << DeltaPosition-endpointDistance  << " " ;
       if( endpointDistance != 0.0 )
-	cout << setw(12) << DeltaPosition/endpointDistance - 1.0;
-      cout << endl;
+	cout << G4std::setw(12) << DeltaPosition/endpointDistance - 1.0;
+      cout << G4endl;
 
   }
 
@@ -495,32 +495,32 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
 #ifdef G4VERBOSE
      if( fVerbose > 5 ){
        cout.precision(6);
-       cout << "Transportation::PostStepDoIt reports: " << endl;
+       cout << "Transportation::PostStepDoIt reports: " << G4endl;
        cout << "  Energies " 
 	    << "   start  = " << stepData.GetPreStepPoint()->GetKineticEnergy() 
-	    << endl
+	    << G4endl
 	    << "     end  = " << stepData.GetPostStepPoint()->GetKineticEnergy()
-	    << endl;
-       cout << "  LabTime: " << endl
-	    << "    start = " << LabTime_start << endl
-	    << "    - end = " << LabTime_end   << endl
-	    << "    diff  = " << LabTime_diff  << endl;
+	    << G4endl;
+       cout << "  LabTime: " << G4endl
+	    << "    start = " << LabTime_start << G4endl
+	    << "    - end = " << LabTime_end   << G4endl
+	    << "    diff  = " << LabTime_diff  << G4endl;
      }else if (fVerbose > 1 ){
        cout.precision(6);
-       cout << "Transportation::PostStepDoIt reports: " << endl;
-       cout << setw(l2wide) << "       Energies " 
-	    << setw(l2wide+lwide+1) << "               LabTime " 
-	    << endl ;
-       cout << setw(lwide) << "  Start "  << " " << setw(lwide) << "  End "    << " "  
-            << setw(lwide) << "  Start "  << " " << setw(lwide) << "  End "    << " "
-            << setw(lwide) << "  Diff "  
-            << endl;
-       cout << setw(lwide) << stepData.GetPreStepPoint()->GetKineticEnergy() 
-	    << setw(lwide) << stepData.GetPostStepPoint()->GetKineticEnergy()
-	    << setw(lwide) << LabTime_start 
-	    << setw(lwide) << LabTime_end   
-	    << setw(lwide) << LabTime_diff  
- 	    << endl;
+       cout << "Transportation::PostStepDoIt reports: " << G4endl;
+       cout << G4std::setw(l2wide) << "       Energies " 
+	    << G4std::setw(l2wide+lwide+1) << "               LabTime " 
+	    << G4endl ;
+       cout << G4std::setw(lwide) << "  Start "  << " " << G4std::setw(lwide) << "  End "    << " "  
+            << G4std::setw(lwide) << "  Start "  << " " << G4std::setw(lwide) << "  End "    << " "
+            << G4std::setw(lwide) << "  Diff "  
+            << G4endl;
+       cout << G4std::setw(lwide) << stepData.GetPreStepPoint()->GetKineticEnergy() 
+	    << G4std::setw(lwide) << stepData.GetPostStepPoint()->GetKineticEnergy()
+	    << G4std::setw(lwide) << LabTime_start 
+	    << G4std::setw(lwide) << LabTime_end   
+	    << G4std::setw(lwide) << LabTime_diff  
+ 	    << G4endl;
     }
 #endif
 
@@ -546,22 +546,22 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
 
 #ifdef G4VERBOSE
      if( fVerbose > 5 ){
-       cout.precision(6);     cout << "  ProperTime: " << endl
-	  << "    start = " << ProperTime_start << endl
-	  << "    - end = " << ProperTime_end   << endl
-	  << "    diff  = " << ProperTime_diff  << endl;
+       cout.precision(6);     cout << "  ProperTime: " << G4endl
+	  << "    start = " << ProperTime_start << G4endl
+	  << "    - end = " << ProperTime_end   << G4endl
+	  << "    diff  = " << ProperTime_diff  << G4endl;
      }else if (fVerbose > 1 ){
        cout.precision(6);
 
        cout.precision(6);
-       cout << setw(lwide) << "  ProperTime: ---------------- " << endl; 
-       cout << setw(lwide) << "    Start  " 
-	    << setw(lwide) << "     End  " 
-	    << setw(lwide) << "     Diff   " << endl;
-       cout << setw(lwide) << ProperTime_start << " "
-	    << setw(lwide) << ProperTime_end   << " "
-	    << setw(lwide) << ProperTime_diff  << " " 
-	    << endl;
+       cout << G4std::setw(lwide) << "  ProperTime: ---------------- " << G4endl; 
+       cout << G4std::setw(lwide) << "    Start  " 
+	    << G4std::setw(lwide) << "     End  " 
+	    << G4std::setw(lwide) << "     Diff   " << G4endl;
+       cout << G4std::setw(lwide) << ProperTime_start << " "
+	    << G4std::setw(lwide) << ProperTime_end   << " "
+	    << G4std::setw(lwide) << ProperTime_diff  << " " 
+	    << G4endl;
       }
 #endif
   // FOR TEST ONLY  - start
@@ -582,47 +582,47 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
      G4double  restMass = track.GetDynamicParticle()->GetMass();
      G4double deltaProperTime= deltaTime * (restMass / track.GetTotalEnergy());
      if( fVerbose > 5 ){
-       cout <<   "  DeltaLabTime = " << deltaTime << endl
-	    <<   "  New method   = " << LabTime_diff << endl
-	    <<   "   change      = " << deltaTime - LabTime_diff << endl;
+       cout <<   "  DeltaLabTime = " << deltaTime << G4endl
+	    <<   "  New method   = " << LabTime_diff << G4endl
+	    <<   "   change      = " << deltaTime - LabTime_diff << G4endl;
        if (deltaTime!=0.0) 
-	 cout << "  % change     = " << (LabTime_diff/deltaTime - 1.0) << endl;
+	 cout << "  % change     = " << (LabTime_diff/deltaTime - 1.0) << G4endl;
        
        // Now the time corrected by Lorentz factor to get "proper" deltaTime
        //
-       cout << "  DeltaProperTime" << endl;
+       cout << "  DeltaProperTime" << G4endl;
        
-       cout <<   "  Old method  = " << deltaProperTime << endl
-	    <<   "  New method  = " << ProperTime_diff << endl
-	    <<   "   change     = " << deltaProperTime - ProperTime_diff << endl;
+       cout <<   "  Old method  = " << deltaProperTime << G4endl
+	    <<   "  New method  = " << ProperTime_diff << G4endl
+	    <<   "   change     = " << deltaProperTime - ProperTime_diff << G4endl;
        if (deltaProperTime!=0.0) 
-	 cout << "  % change    = " << (ProperTime_diff/deltaProperTime - 1.0) << endl;
+	 cout << "  % change    = " << (ProperTime_diff/deltaProperTime - 1.0) << G4endl;
      }else if (fVerbose > 1 ){
 
-       cout << "    DeltaLabTime " << endl;
-       cout << setw(lwide) << " Old method " << " "
-	    << setw(lwide) << " New method " << " "
-	    << setw(lwide) << " Difference " << " " << endl;
+       cout << "    DeltaLabTime " << G4endl;
+       cout << G4std::setw(lwide) << " Old method " << " "
+	    << G4std::setw(lwide) << " New method " << " "
+	    << G4std::setw(lwide) << " Difference " << " " << G4endl;
 
-       cout << setw(lwide) <<  deltaTime 
-	    << setw(lwide) <<  LabTime_diff 
-	    << setw(lwide) <<  deltaTime - LabTime_diff;
+       cout << G4std::setw(lwide) <<  deltaTime 
+	    << G4std::setw(lwide) <<  LabTime_diff 
+	    << G4std::setw(lwide) <<  deltaTime - LabTime_diff;
        if (deltaTime!=0.0) 
 	 cout << "  % change     = " << (LabTime_diff/deltaTime - 1.0); 
-       cout << endl;
+       cout << G4endl;
        
-       cout << "  DeltaProperTime " << endl;
-       cout << setw(lwide) << " Old method " << " "
-	    << setw(lwide) << " New method " << " "
-	    << setw(lwide) << " Difference " << " " 
-	    << setw(lwide) << " Relative%  " << " " 
-	    << endl;
-       cout << setw(lwide) << deltaProperTime << " "
-	    << setw(lwide) << ProperTime_diff << " "
-	    << setw(lwide) << deltaProperTime - ProperTime_diff << " ";
+       cout << "  DeltaProperTime " << G4endl;
+       cout << G4std::setw(lwide) << " Old method " << " "
+	    << G4std::setw(lwide) << " New method " << " "
+	    << G4std::setw(lwide) << " Difference " << " " 
+	    << G4std::setw(lwide) << " Relative%  " << " " 
+	    << G4endl;
+       cout << G4std::setw(lwide) << deltaProperTime << " "
+	    << G4std::setw(lwide) << ProperTime_diff << " "
+	    << G4std::setw(lwide) << deltaProperTime - ProperTime_diff << " ";
        if (deltaProperTime!=0.0) 
 	 cout << "  % change    = " << (ProperTime_diff/deltaProperTime - 1.0);
-       cout << endl;
+       cout << G4endl;
      }
 #endif       
 
@@ -683,17 +683,17 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
 			                        true);
     if( fCurrentTouchable->GetVolume() != track.GetVolume() ){
        // 
-       G4cerr << " ERROR: A relocation within safety has caused a volume change! " << endl ; 
+       G4cerr << " ERROR: A relocation within safety has caused a volume change! " << G4endl ; 
        G4cerr << "   The old volume is called " 
-	      << track.GetVolume()->GetName() << endl; 
+	      << track.GetVolume()->GetName() << G4endl; 
        G4cerr << "   The new volume is called ";
        if ( fCurrentTouchable->GetVolume() != 0 )
-	  G4cerr << fCurrentTouchable->GetVolume()->GetName() << endl; 
+	  G4cerr << fCurrentTouchable->GetVolume()->GetName() << G4endl; 
        else
-	  G4cerr << "Out of World" << endl; 
+	  G4cerr << "Out of World" << G4endl; 
 
        G4cerr.precision(7);
-       G4cerr << "   The position is " << track.GetPosition() <<  endl;
+       G4cerr << "   The position is " << track.GetPosition() <<  G4endl;
 
        // Let us relocate again, for debuging
        fLinearNavigator-> LocateGlobalPointAndUpdateTouchable( 
@@ -703,9 +703,9 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
 			                        true);
        G4cerr << "   The newer volume is called " ;
        if ( fCurrentTouchable->GetVolume() != 0 )
-	  G4cerr << fCurrentTouchable->GetVolume()->GetName() << endl; 
+	  G4cerr << fCurrentTouchable->GetVolume()->GetName() << G4endl; 
        else
-	  G4cerr << "Out of World" << endl; 
+	  G4cerr << "Out of World" << G4endl; 
     }
 
     assert( fCurrentTouchable->GetVolume()->GetName() == 

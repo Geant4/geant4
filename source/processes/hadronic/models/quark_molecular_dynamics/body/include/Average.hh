@@ -14,7 +14,7 @@ public:
   operator double() { return avg/N; }
   double getError() const { if ( N>1 ) {double x = avg/N; return sqrt((avg2-N*x*x)/(N-1));} }
   void addEntry(double x) { avg += x; avg2 += x*x; ++N; }
-  void print(ostream& o) const { o << avg/N << "  " << getError() << endl; }
+  void print(G4std::ostream& o) const { o << avg/N << "  " << getError() << G4endl; }
 };
 
 class AverageVector
@@ -27,7 +27,7 @@ public:
   operator Vektor() { return avg/N; }
   Vektor getError() const;
   void addEntry(const Vektor& x);
-  void print(ostream& o) const { o << avg/N << "  " << getError() << endl; }
+  void print(G4std::ostream& o) const { o << avg/N << "  " << getError() << G4endl; }
 };
 
 #endif

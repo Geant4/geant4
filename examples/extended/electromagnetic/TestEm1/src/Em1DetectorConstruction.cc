@@ -1,12 +1,12 @@
 
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1DetectorConstruction.cc,v 1.1 1999-10-11 13:07:44 maire Exp $
+// $Id: Em1DetectorConstruction.cc,v 1.2 1999-12-15 14:48:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,7 +122,7 @@ a = 238.03*g/mole;
 G4Material*  U = new G4Material(name="Uranium"     , z=82., a, density);
 
 
-G4cout << *(G4Material::GetMaterialTable()) << endl;
+G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //default materials of the calorimeter
   aMaterial = Al;
@@ -169,7 +169,7 @@ G4VPhysicalVolume* Em1DetectorConstruction::ConstructVolumes()
 void Em1DetectorConstruction::PrintParameters()
 {
   G4cout << "\n The Box is " << G4BestUnit(BoxSize,"Length")
-         << " of " << aMaterial->GetName() << endl;
+         << " of " << aMaterial->GetName() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

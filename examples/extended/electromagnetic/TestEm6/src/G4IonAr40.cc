@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonAr40.cc,v 1.1 1999-10-22 00:46:34 vnivanch Exp $
+// $Id: G4IonAr40.cc,v 1.2 1999-12-15 14:49:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,8 +22,8 @@
 //  Fixed  parameters by H.Kurashige, 25 Apr 1998
 // ----------------------------------------------------------------------
 
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4IonAr40.hh"
 

@@ -7,14 +7,14 @@ Knot<t>::~Knot()
 }
 
 template<class t>
-void Knot<t>::printTree(ostream& o,int n) const
+void Knot<t>::printTree(G4std::ostream& o,int n) const
 {
   String s;
   for (int i=0; i<n; i++)
     s += "  ";
   o << Name();
   ClassInfo(o);
-  o << endl;
+  o << G4endl;
   for (int j=0; j<successors.size(); j++) {
     o << s << j+1 << ".";
     successors[j]->printTree(o,n+1);
@@ -186,7 +186,7 @@ t& Knot<t>::FindKnot(const String& x)
 }
 
 template<class t>
-void Knot<t>::printTree(ostream& o) 
+void Knot<t>::printTree(G4std::ostream& o) 
 {
   printTree(o,1);
 }

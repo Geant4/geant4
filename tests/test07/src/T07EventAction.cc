@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T07EventAction.cc,v 1.3 1999-11-11 15:41:14 gunter Exp $
+// $Id: T07EventAction.cc,v 1.4 1999-12-15 14:54:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,17 +59,17 @@ T07EventAction::~T07EventAction()
 {
   delete eventMessenger;
 #ifndef MAKEHBOOK
-  ofstream o("test07.plt");
-  o << "# Histos 4" << endl;
+  G4std::ofstream o("test07.plt");
+  o << "# Histos 4" << G4endl;
   EnergyAbsorber.output(o);
-  o << endl;
-  o << endl;
+  o << G4endl;
+  o << G4endl;
   EnergyGap.output(o);
-  o << endl;
-  o << endl;
+  o << G4endl;
+  o << G4endl;
   TrackLengthAbsorber.output(o);
-  o << endl;
-  o << endl;
+  o << G4endl;
+  o << G4endl;
   TrackLengthGap.output(o);
   o.close();
 #endif
@@ -93,9 +93,9 @@ void T07EventAction::EndOfEventAction( const G4Event* evt )
  
 #ifdef MAKEHBOOK
   if(evt->GetEventID()%100==0)
-    G4cout << ">>> Event " << evt->GetEventID() << endl;
+    G4cout << ">>> Event " << evt->GetEventID() << G4endl;
 #else  
-  // G4cout << ">>> Event " << evt->GetEventID() << endl;
+  // G4cout << ">>> Event " << evt->GetEventID() << G4endl;
 #endif
 
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
@@ -108,7 +108,7 @@ void T07EventAction::EndOfEventAction( const G4Event* evt )
     int n_hit = CHC->entries();
 #ifndef MAKEHBOOK
     //G4cout << "     " << n_hit
-    //     << " hits are stored in T07CalorHitsCollection." << endl;
+    //     << " hits are stored in T07CalorHitsCollection." << G4endl;
 #endif
     G4double totEAbs=0, totLAbs=0, totEGap=0, totLGap=0;
     for (int i=0;i<n_hit;i++)
@@ -130,12 +130,12 @@ void T07EventAction::EndOfEventAction( const G4Event* evt )
     TrackLengthGap.accumulate(totLGap*mm);
     /*
     G4cout
-       << "   Absorber: total energy: " << setw(7) << G4BestUnit(totEAbs,"Energy")
-       << "       total track length: " << setw(7) << G4BestUnit(totLAbs,"Length")
-       << endl
-       << "        Gap: total energy: " << setw(7) << G4BestUnit(totEGap,"Energy")
-       << "       total track length: " << setw(7) << G4BestUnit(totLGap,"Length")
-       << endl;
+       << "   Absorber: total energy: " << G4std::setw(7) << G4BestUnit(totEAbs,"Energy")
+       << "       total track length: " << G4std::setw(7) << G4BestUnit(totLAbs,"Length")
+       << G4endl
+       << "        Gap: total energy: " << G4std::setw(7) << G4BestUnit(totEGap,"Energy")
+       << "       total track length: " << G4std::setw(7) << G4BestUnit(totLGap,"Length")
+       << G4endl;
     */
 #endif           
     }
@@ -147,7 +147,7 @@ void T07EventAction::EndOfEventAction( const G4Event* evt )
   if(trajectoryContainer)
   { n_trajectories = trajectoryContainer->entries(); }
   G4cout << "    " << n_trajectories 
-       << " trajectories stored in this event." << endl;
+       << " trajectories stored in this event." << G4endl;
 
 
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();

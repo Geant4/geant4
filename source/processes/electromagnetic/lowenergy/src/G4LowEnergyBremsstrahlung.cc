@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.17 1999-12-05 18:26:27 gcosmo Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.18 1999-12-15 14:51:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -356,7 +356,7 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
 
            if(LPMGammaEnergyLimit > klim)
            {
-             G4double kmax = min(Cut,LPMGammaEnergyLimit) ;
+             G4double kmax = G4std::min(Cut,LPMGammaEnergyLimit) ;
 
              G4double floss = 0. ;
              G4int nmax = 1000 ;
@@ -849,7 +849,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
 #ifdef G4VERBOSE
   if(verboseLevel > 15){
 
-    G4cout<<"LE Bremsstrahlung PostStepDoIt"<<endl;
+    G4cout<<"LE Bremsstrahlung PostStepDoIt"<<G4endl;
   }
 #endif
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
@@ -880,7 +880,7 @@ void G4LowEnergyBremsstrahlung::PrintInfoDefinition()
            comments += "Good description from 1 eV to 100 GeV.\n";
            comments += "Gamma energy sampled from a parametrised formula.";
                      
-	   G4cout << endl << GetProcessName() << ":  " << comments<<endl;
+	   G4cout << G4endl << GetProcessName() << ":  " << comments<<G4endl;
 
 }         
 

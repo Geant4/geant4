@@ -4,11 +4,11 @@
 #include "newvector.hh"
 
 class Geometry;
-class ostream;
+class G4std::ostream;
 
 class Metropolis
 {
-  friend ostream& operator<<(ostream& o,const Metropolis& M);
+  friend G4std::ostream& operator<<(G4std::ostream& o,const Metropolis& M);
 protected:
   int N,N_init;
   double T,E_k,F;

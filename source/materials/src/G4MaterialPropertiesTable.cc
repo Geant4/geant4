@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.7 1999-11-15 10:39:45 gunter Exp $
+// $Id: G4MaterialPropertiesTable.cc,v 1.8 1999-12-15 14:50:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -171,7 +171,7 @@ void G4MaterialPropertiesTable::DumpTable()
 {
   MPTiterator i;
   for (i = MPT.begin(); i != MPT.end(); ++i) {
-		G4cout << *(*i).first << endl;
+		G4cout << *(*i).first << G4endl;
 		(*i).second->DumpVector();
   }
 }

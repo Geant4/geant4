@@ -100,7 +100,7 @@ int main()
   G4double xup = pana[1].getEnergy() + pana[1].getMomentum().z();
   G4double xlo = pana[1].getEnergy() - pana[1].getMomentum().z();
   G4double drap = log(xup/xlo)/2.;
-  cout << " Beam Rapidity " << drap << endl;
+  cout << " Beam Rapidity " << drap << G4endl;
 
   G4int iteration = 0;   
     do 
@@ -123,7 +123,7 @@ int main()
        G4int ifast = -1; 
        G4double xhmf = -10.;
 
-       if(iteration < 10) cout << " iteration " << iteration << endl;
+       if(iteration < 10) cout << " iteration " << iteration << G4endl;
        for(i=0; i<ngk; i++)
          {
            if(fabs(pv[i].getCharge()) > 0.5)
@@ -159,7 +159,7 @@ int main()
              {
                pv[i].Print(i);
                pana[5].Print(5);
-               cout << " help " << help7[i] << " " << help8[i] << " " << help9[i] << endl;
+               cout << " help " << help7[i] << " " << help8[i] << " " << help9[i] << G4endl;
              } 
          }
         
@@ -180,7 +180,7 @@ int main()
        plotE[1].Fill(etot,1.);
        plotE[2].Fill(ekin,1.);
       
-       G4int ichhmf =min(5,(nchhmf-2)/2+1);
+       G4int ichhmf =G4std::min(5,(nchhmf-2)/2+1);
        for(i=0; i<ngk; i++)
 	 {
            G4double rl, dl;
@@ -260,9 +260,9 @@ int main()
        if(iteration < 10)
          {
            cout << " Masses " << pana[6].getMass() << " " << pana[7].getMass() << " " 
-		<< pana[8].getMass() << " " << pana[9].getMass() << endl;
-           cout << echmf[1] << " " << echmf[2] << " " << echmf[3] << " " << echmf[4] << endl; 
-           cout << cchmf[1] << " " << cchmf[2] << " " << cchmf[3] << " " << cchmf[4] << endl; 
+		<< pana[8].getMass() << " " << pana[9].getMass() << G4endl;
+           cout << echmf[1] << " " << echmf[2] << " " << echmf[3] << " " << echmf[4] << G4endl; 
+           cout << cchmf[1] << " " << cchmf[2] << " " << cchmf[3] << " " << cchmf[4] << G4endl; 
          }
        for(i=1; i<5; i++)
          {
@@ -273,13 +273,13 @@ int main()
        delete [] echmf;
        delete [] cchmf; 
 
-       //       cout << " iteration " << iteration << " " << ngk << endl;       
+       //       cout << " iteration " << iteration << " " << ngk << G4endl;       
 
        iteration++; 
 
      }  while (iteration < NumberEvents) ;
 
-    cout << " number of useful events " << nevhmf << endl; 
+    cout << " number of useful events " << nevhmf << G4endl; 
    
     G4double wgthmf = 1./nevhmf;
 

@@ -9,7 +9,7 @@ class G4NeutronIsoProdCrossSections
 public:
   G4NeutronIsoProdCrossSections(G4String aString)
   { theProductName=aString; }
-  void Init(ifstream & aDataSet);
+  void Init(G4std::ifstream & aDataSet);
   G4double GetProductionCrossSection(G4double anEnergy);
   G4String GetProductIsotope();
 

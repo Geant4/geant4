@@ -23,7 +23,7 @@
       if(nDistFunc==0)
       {
         G4cerr << "No distribution functions to sample "
-             << "from in G4NeutronHPArbitaryTab::Sample"<<endl;
+             << "from in G4NeutronHPArbitaryTab::Sample"<<G4endl;
         G4Exception();
       } 
       else 

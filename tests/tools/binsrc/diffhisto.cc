@@ -1,11 +1,11 @@
-#include <fstream.h>
+#include "g4std/fstream"
 #include "Histo.hh"
 
 
 int main(int argc,char* argv[])
 {
   
-  ifstream in(argv[1]),comp(argv[2]);
+  G4std::ifstream in(argv[1]),comp(argv[2]);
 
   odHisto hin,hcomp;
   char c,bla[80];

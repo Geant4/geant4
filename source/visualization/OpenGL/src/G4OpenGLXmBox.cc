@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmBox.cc,v 1.2 1999-01-09 16:23:34 allison Exp $
+// $Id: G4OpenGLXmBox.cc,v 1.3 1999-12-15 14:54:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Box container class
@@ -36,7 +36,7 @@ void G4OpenGLXmBox::AddChild (G4OpenGLXmVWidgetComponent* component)
   XtVaGetValues (box_row_col,
 		 XmNnumChildren, &num_children,
 		 NULL);
-//  G4cout << name << " now parents " << num_children << " children." << endl;
+//  G4cout << name << " now parents " << num_children << " children." << G4endl;
 }
 
 void G4OpenGLXmBox::AddYourselfTo (G4OpenGLXmVWidgetShell* window)
