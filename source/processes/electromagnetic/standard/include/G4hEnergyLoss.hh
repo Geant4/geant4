@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.hh,v 1.8 2000-02-22 10:37:49 urban Exp $
+// $Id: G4hEnergyLoss.hh,v 1.9 2000-02-25 07:35:02 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -185,6 +185,13 @@ class G4hEnergyLoss : public G4VEnergyLoss
 
     static const G4Proton* theProton ;
     static const G4AntiProton* theAntiProton ;
+
+    // just to keep hLowEnergyIonisation working ......
+    // ***********************************************
+    static G4double LowestKineticEnergy;
+    static G4double HighestKineticEnergy;
+    static G4int TotBin; 
+    // ***********************************************
 
   private:
 

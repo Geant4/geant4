@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.cc,v 1.16 2000-02-10 09:06:29 urban Exp $
+// $Id: G4hEnergyLoss.cc,v 1.17 2000-02-25 07:35:16 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -81,6 +81,12 @@ G4double G4hEnergyLoss::LowerBoundEloss = 1.*keV ;
 G4double G4hEnergyLoss::UpperBoundEloss = 100.*TeV ;;	
 G4int    G4hEnergyLoss::NbinEloss = 100 ; 
 G4double G4hEnergyLoss::RTable,G4hEnergyLoss::LOGRTable;
+// just to keep hLowEnergyIonisation working
+// ****************************************
+G4double G4hEnergyLoss::LowestKineticEnergy ;
+G4double G4hEnergyLoss::HighestKineticEnergy ;
+G4int    G4hEnergyLoss::TotBin ; 
+// ****************************************
 
 // constructor and destructor
  
@@ -90,6 +96,12 @@ G4hEnergyLoss::G4hEnergyLoss(const G4String& processName)
      MinKineticEnergy(1.*eV), 
      linLossLimit(0.05)
 {
+  // just to keep hLowEnergyIonisation working
+  // ****************************************
+  LowestKineticEnergy  = LowerBoundEloss ;
+  HighestKineticEnergy = UpperBoundEloss ;
+  TotBin               = NbinEloss       ;
+  // ****************************************
 }
 
 G4hEnergyLoss::~G4hEnergyLoss() 
