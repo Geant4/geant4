@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.9 2004-10-25 13:10:46 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.10 2004-11-07 01:38:17 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -967,7 +967,7 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
   // check if the file has been opened successfully 
   if (!fIn) {
     if (verboseLevel >0) {
-      G4cerr << "G4ProductionCutTable::RetreiveCutsInfo  ";
+      G4cerr << "G4ProductionCutTable::RetrieveCutsInfo  ";
       G4cerr << " Can not open file " << fileName << G4endl;
     }
     return false;
@@ -985,7 +985,7 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
   }
   if (key!=keyword) {
     if (verboseLevel >0) {
-      G4cout << "G4ProductionCutTable::RetreiveCutsInfo ";
+      G4cout << "G4ProductionCutTable::RetrieveCutsInfo ";
       G4cout << " Key word in " << fileName << "= " << keyword ;
       G4cout <<"( should be   "<< key << ")" <<G4endl;
     }

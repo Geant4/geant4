@@ -20,7 +20,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTableHelper.cc,v 1.1 2004-10-25 13:10:46 kurasige Exp $
+// $Id: G4PhysicsTableHelper.cc,v 1.2 2004-11-07 01:38:17 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -117,7 +117,7 @@ G4PhysicsTable* G4PhysicsTableHelper::PreparePhysicsTable(G4PhysicsTable* physTa
 
 
 
-G4bool G4PhysicsTableHelper::RetreivePhysicsTable(G4PhysicsTable* physTable,
+G4bool G4PhysicsTableHelper::RetrievePhysicsTable(G4PhysicsTable* physTable,
 						  const G4String& fileName,
 						  G4bool ascii              )
 {

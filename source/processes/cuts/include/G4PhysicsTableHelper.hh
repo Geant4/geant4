@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTableHelper.hh,v 1.1 2004-10-25 13:10:46 kurasige Exp $
+// $Id: G4PhysicsTableHelper.hh,v 1.2 2004-11-07 01:38:17 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,7 @@ class G4PhysicsTableHelper
     // resize the given physics table to match with the current
     // production cut table.   
 
-    static G4bool RetreivePhysicsTable(G4PhysicsTable* physTable,
+    static G4bool RetrievePhysicsTable(G4PhysicsTable* physTable,
 				       const G4String& fileName,
 				       G4bool ascii              );
     // Retrieve physics table from the given file and 
