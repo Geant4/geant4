@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.5 2003-11-13 18:33:49 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.6 2003-11-26 14:45:48 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -144,9 +144,15 @@ G4int G4PropagatorInField::SetVerboseLevel( G4int Verbose )
 }
 
 inline
-G4int G4PropagatorInField::Verbose() const
+G4int G4PropagatorInField::GetVerboseLevel() const
 {
   return fVerboseLevel;
+}
+
+inline
+G4int G4PropagatorInField::Verbose() const     // Obsolete
+{
+  return GetVerboseLevel();
 }
 
 inline
