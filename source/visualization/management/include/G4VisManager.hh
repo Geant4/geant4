@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.4 1999-01-11 00:48:27 allison Exp $
+// $Id: G4VisManager.hh,v 1.5 1999-02-07 17:32:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -266,8 +266,8 @@ protected:
   G4VSceneHandler*      fpSceneHandler;     // Current scene handler.
   G4VViewer*            fpViewer;           // Current viewer.
   G4GraphicsSystemList  fAvailableGraphicsSystems;
-  G4SceneHandlerList    fAvailableSceneHandlers;
   G4SceneList           fSceneList;
+  G4SceneHandlerList    fAvailableSceneHandlers;
   G4ViewParameters      fVP;                // Current viewing parameters.
   G4int                 fVerbose;           // Verbosity level 0-10.
   G4VisManMessenger*    fpMessenger;        // Pointer to messenger.
