@@ -5,8 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3Division.hh,v 1.3 1999-12-09 01:27:42 lockman Exp $
+// $Id: G3Division.hh,v 1.4 2000-11-24 09:50:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------
+// Class description:
+//
+// This class tranforms G3 divided volumes to G4 replicated volumes. 
+// UpdateVTE() method checks parameters of mother volume
+// and in case they are complete the solid that will be replicated 
+// is created. In case of division with offset an additinal envelope 
+// VTE (G3VolTableEntry instance) is created.
+// CreatePVReplica() methods creates the G4PVReplica instance.
+
+// ----------------------
 //
 // by I.Hrivnacova, V.Berejnoi, 27 Sep 99
 
@@ -24,7 +36,8 @@ enum G3DivType { kDvn, kDvn2, kDvt, kDvt2 };
 
 class G3Division 
 {
-  public:
+  public: // with description
+
     G3Division(G3DivType type, G3VolTableEntry* vte, G3VolTableEntry* mvte, 
                G4int nofDivision, G4int iaxis, G4int nmed, G4double c0, 
 	       G4double step);
@@ -37,6 +50,7 @@ class G3Division
     G4VPhysicalVolume* CreatePVReplica();   
     
   private:
+
     // methods
     void SetRangeAndAxis();
     void CreateSolid(G4String shape, G4double par[], G4int npar);

@@ -5,8 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTableEntry.hh,v 1.3 1999-12-09 01:27:43 lockman Exp $
+// $Id: G3MatTableEntry.hh,v 1.4 2000-11-24 09:50:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------
+// Class description:
+//
+// The class associates the G3 material index with the
+// corresponding G4Material object.
+
+// ----------------------
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -19,7 +27,8 @@ class G4Material;
 
 class G3MatTableEntry 
 {
-  public:
+  public: // with description
+  
     G3MatTableEntry(G4int id, G4Material* material);
     G3MatTableEntry(const G3MatTableEntry& right);
     virtual ~G3MatTableEntry();
@@ -34,6 +43,7 @@ class G3MatTableEntry
     G4Material* GetMaterial() const;
     
   private:
+  
     // data members  
     G4int        fID;
     G4Material*  fMaterial;

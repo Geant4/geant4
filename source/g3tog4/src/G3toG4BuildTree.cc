@@ -5,11 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4BuildTree.cc,v 1.11 1999-12-15 14:49:43 gunter Exp $
+// $Id: G3toG4BuildTree.cc,v 1.12 2000-11-24 09:50:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I. Hrivnacova, 2.8.99 
 
+#include "globals.hh"
 #include "G3toG4BuildTree.hh"
 #include "G3RotTable.hh"
 #include "G3MedTable.hh"
@@ -18,8 +19,6 @@
 #include "G3Pos.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "globals.hh"
-#include "G3toG4Debug.hh"
 
 void G3toG4BuildTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
 {
@@ -66,7 +65,8 @@ void G3toG4BuildTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
     for (G4int i=0; i<curVTE->NPCopies(); i++){
 
       G3Pos* theG3Pos = curVTE->GetG3PosCopy(i);
-      if (theG3Pos->GetMotherName() == motherVTE->GetMasterClone()->GetName()) {
+      if (theG3Pos &&
+          theG3Pos->GetMotherName() == motherVTE->GetMasterClone()->GetName()) {
 
         // rotation matrix
         G4int irot = theG3Pos->GetIrot();
@@ -89,12 +89,16 @@ void G3toG4BuildTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
 	
         // verbose
 	  
-	  if (G3toG4Debug() != 0) 
+	  #ifdef G3G4DEBUG
 	    G4cout << "PV: " << i << "th copy of " << curVTE->GetName()
 		   << "  in " << motherVTE->GetName() << "  copyNo: " 
 		   << copyNo << "  irot: " << irot << "  pos: " 
 		   << *(theG3Pos->GetPos()) << G4endl;
+	  #endif
 	}
+	
+	// clear this position
+	curVTE->ClearG3PosCopy(i); 
       }
     }
 
@@ -102,10 +106,13 @@ void G3toG4BuildTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
     if (curVTE->GetDivision()) {
       curVTE->GetDivision()->CreatePVReplica();
       // verbose
-      if (G3toG4Debug() != 0) {
+      #ifdef G3G4DEBUG
 	G4cout << "CreatePVReplica: " << curVTE->GetName() 
 	       << " in "  << motherVTE->GetName() << G4endl;
-      }
+      #endif
+
+      // clear this divison
+      curVTE->ClearDivision(); 
     }
   }
   else {

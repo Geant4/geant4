@@ -5,8 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MedTableEntry.hh,v 1.3 1999-12-09 01:27:43 lockman Exp $
+// $Id: G3MedTableEntry.hh,v 1.4 2000-11-24 09:50:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------
+// Class description:
+//
+// The class associates the G3 tracking medium index
+// with the corresponding G4Material, G4MagneticField, G4UserLimits 
+// instances and sensitivity flag (isvol).
+
+// ----------------------
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -21,7 +30,8 @@ class G4UserLimits;
 
 class G3MedTableEntry 
 {
-  public:
+  public:  // with description
+
     G3MedTableEntry(G4int id, G4Material* material, G4MagneticField* field,
        G4UserLimits* limits, G4int isvol);
     G3MedTableEntry(const G3MedTableEntry& right);
@@ -46,6 +56,7 @@ class G3MedTableEntry
     G4int GetISVOL() const;
     
   private:
+
     // data members  
     G4int             fID;
     G4Material*       fMaterial;

@@ -5,8 +5,45 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTableEntry.hh,v 1.3 1999-12-09 01:27:46 lockman Exp $
+// $Id: G3VolTableEntry.hh,v 1.4 2000-11-24 09:50:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------
+// Class description:
+//
+// This class is a temporary representation of G3 volume.
+// Its methods enables successive updating of its instances
+// during the phase of filling the G3 tables (defining G3 geometry,
+// eg. by parsing the G3 input via clparse.cc).
+// See G3VolTable class description, too.
+// 
+// Data members:
+//  fVname       volume name; 
+//  fShape       G3 shape name;
+//  fRpar        array of G3 volumes parameters;
+//  fNpar        number of G3 volumes parameters;
+//  fNmed        G3 tracking medium number;
+//  fSolid       the G4VSolid of this volume;
+//  fLV          the G4LogicalVolume;
+//  fHasNegPars  true if G3 volume was defined with incomplete
+//               parameters; 
+//  fDaughters   vector of daughter VTEs (VTEs of volumes placed inside
+//               this volume); 
+//  fMothers     vector of mother VTEs (VTEs of volumes inside which this
+//               volume is placed);
+//  fClones      vector of clone VTEs (see explanation below);
+//  fG3Pos       vector of G3 positions (G3Pos objects)
+//  fDivision    G3Division object created in case the G4 volume
+//               was defined as division; 
+//
+// Clone volumes:
+// In case a G3 volume (e.g. XYZ) has changed its solid parameters
+// with its new position (placement with GSPOSP) a new G3VolTableEntry
+// (associated with this new solid) with a new name (XYZ_N)
+// is created and registered as a clone volume in the fClones vector
+// data member of its master G3VolTableEntry object. 
+
+// ----------------------
 //
 // by I.Hrivnacova, 13.10.99
 
@@ -22,8 +59,10 @@ class G4LogicalVolume;
 class G4Material;
 class G4VSolid;
 
-class G3VolTableEntry {
-  public:
+class G3VolTableEntry
+{
+  public:  // with description
+
     G3VolTableEntry(G4String& vname, G4String& shape, G4double* rpar, 
                      G4int npar, G4int nmed, G4VSolid* solid, 
 		     G4bool hasNegPars);
@@ -52,6 +91,8 @@ class G3VolTableEntry {
     void SetNRpar(G4int npar, G4double* Rpar);
     void SetDivision(G3Division* division);
     void SetHasNegPars(G4bool hasNegPars);
+    void ClearG3PosCopy(G4int copy);
+    void ClearDivision();
  
     // get methods
     G4String  GetName();
@@ -76,6 +117,7 @@ class G3VolTableEntry {
     G3VolTableEntry* GetMasterClone();
 
   private:
+
     G4String fVname;
     G4String fShape;
     G4double* fRpar;
@@ -100,14 +142,3 @@ inline G3Division* G3VolTableEntry::GetDivision()
 { return fDivision; }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

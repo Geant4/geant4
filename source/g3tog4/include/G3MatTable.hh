@@ -5,8 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTable.hh,v 1.8 1999-12-09 01:27:42 lockman Exp $
+// $Id: G3MatTable.hh,v 1.9 2000-11-24 09:50:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------
+// Class description:
+//
+// G3 materials table.
+// Maps G3 material indices to their G4Material object counterparts.
+
+// ----------------------
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -25,17 +33,18 @@ typedef G4RWTPtrOrderedVector<G3MatTableEntry>  G3MaterialVector;
 
 class G3MatTable
 {
-  public:
+  public: // with description
+
     G3MatTable();
     virtual ~G3MatTable();
     
     // methods
-    // keep the same names of methods as in G4 g3tog4
     G4Material* get(G4int id) const;
     void put(G4int id, G4Material* material);
     void Clear();
 
   private:
+
     G3MaterialVector*  fMatVector;
 };
 

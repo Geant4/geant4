@@ -5,8 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MedTable.hh,v 1.7 1999-12-09 01:27:43 lockman Exp $
+// $Id: G3MedTable.hh,v 1.8 2000-11-24 09:50:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------
+// Class description:
+//
+// G3 tracking medium table.
+// Maps G3 tracking medium indices to their corresponding
+// G4 objects (G4Material, G4MagneticField, G4UserLimits)
+// and the sensitivity flag (isvol).
+
+// ----------------------
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -27,17 +37,19 @@ typedef G4RWTPtrOrderedVector<G3MedTableEntry>  G3MediumVector;
 
 class G3MedTable
 {
-  public:
+  public: // with description
+
     G3MedTable();
     virtual ~G3MedTable();
     
     // methods
     G3MedTableEntry* get(G4int id) const;
     void put(G4int id, G4Material* material, G4MagneticField* field,
-       G4UserLimits* limits, G4int isvol);
+             G4UserLimits* limits, G4int isvol);
     void Clear();
 
   private:
+
     G3MediumVector*  fMedVector;
 };
 

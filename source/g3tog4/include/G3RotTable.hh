@@ -5,8 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.hh,v 1.10 1999-12-09 01:27:46 lockman Exp $
+// $Id: G3RotTable.hh,v 1.11 2000-11-24 09:50:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------
+// Class description:
+//
+// G3 rotations table.
+// Maps G3 rotations indices to their G4RotationMatrix object counterparts.
+
+// ----------------------
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -25,19 +33,19 @@ typedef G4RWTPtrOrderedVector<G3RotTableEntry>  G3RotMatrixVector;
 
 class G3RotTable
 {
-  public:
+  public:  // with description
+
     G3RotTable();
     virtual ~G3RotTable();
     
     // methods
-    // keep the same names of methods as in G4 g3tog4
-    // G3toG4RotationMatrix type changed to G4RotationMatrix)
-    //
+
     G4RotationMatrix* Get(G4int id) const;
     void Put(G4int id, G4RotationMatrix* matrix);
     void Clear();
 
   private:
+
     G3RotMatrixVector*  fRotVector;
 };
 

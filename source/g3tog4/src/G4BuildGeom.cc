@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BuildGeom.cc,v 1.12 1999-12-15 14:49:43 gunter Exp $
+// $Id: G4BuildGeom.cc,v 1.13 2000-11-24 09:50:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I. Hrivnacova, 13.10.99 
@@ -14,7 +14,6 @@
 #include "g4std/fstream"
 #include "globals.hh"
 #include "G3toG4.hh"
-#include "G3toG4Debug.hh"
 #include "G3MatTable.hh"
 #include "G3MedTable.hh"
 #include "G3RotTable.hh"
@@ -82,10 +81,11 @@ G4LogicalVolume* G4BuildGeom(G4String& inFile){
         
         // check the geometry here
 
-  if (G3toG4Debug() != 0){
+  #ifdef G3G4DEBUG
     G4cout << "scan through G4LogicalVolumeStore:" << G4endl;
     checkVol();
-  }
+  #endif
+
   return topLV;
 }
 

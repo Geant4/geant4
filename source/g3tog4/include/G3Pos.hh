@@ -5,8 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3Pos.hh,v 1.8 2000-03-02 17:54:03 gcosmo Exp $
+// $Id: G3Pos.hh,v 1.9 2000-11-24 09:50:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------
+// Class description:
+//
+// G3 volume position
+
+// ----------------------
 //
 // modified by I.Hrivnacova, 13.10.99
 
@@ -15,14 +22,11 @@
 
 #include "G4ThreeVector.hh"
 
-class G3Pos{
-private:
-  G4String _MotherName;   
-  G4int _Copy;
-  G4ThreeVector* _Position;
-  G4int _Irot;
-  G4String _Only;
-public:
+class G3Pos
+{
+
+public:  // with description
+
   G3Pos(){;}
 
   G3Pos(G4String M, G4int C, G4ThreeVector* T, G4int R, G4String O);
@@ -40,6 +44,14 @@ public:
   G4int GetCopy();
 
   G4String& GetOnly();
-};
-#endif
 
+private:
+
+  G4String _MotherName;   
+  G4int _Copy;
+  G4ThreeVector* _Position;
+  G4int _Irot;
+  G4String _Only;
+};
+
+#endif

@@ -1,7 +1,18 @@
-$Id: History,v 1.36 2000-08-01 09:09:03 gcosmo Exp $
+$Id: History,v 1.37 2000-11-24 09:50:07 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V02-00-04 24-Nov-2000 G.Cosmo
+- Added protection against multiple positiong of the same physical volume
+  and added methods ClearG3PosCopy(G4int) and ClearDivision()in
+  G3VolTableEntry (I.Hrivnacova).
+- Removed useless G3toG4Debug global method and file.
+  Replaced verbosity by G3G4DEBUG flag.
+- Moved global function G3CalcParamsFn(...) from G3CalcParams.cc to
+  G3NegVolPars.cc and removed obsolete class/files G3CalcParams[.hh.cc].
+- Added class description comments for the Software Reference
+  Manual (I.Hrivnacova).
 
 g3tog4-V02-00-03 01-Aug-2000 G.Cosmo
 - Fixed initialisation of pDPhi for CONS in G3toG4MakeSolid.cc (I.Hrivnacova).
