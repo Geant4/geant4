@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.4 1999-12-15 14:54:08 gunter Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.5 2000-02-21 16:03:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,8 +85,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
   G4double size = GetMarkerSize (text, sizeType);
   G4cerr
     << "G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) not implemented yet."
-    << "\n  Called with text " << text.GetText ()
-    << " at " << text.GetPosition ()
+    << "\n  Called with text \"" << text.GetText ()
+    << "\" at " << text.GetPosition ()
     << ", size " << size
     << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
     << ", type " << sizeType
