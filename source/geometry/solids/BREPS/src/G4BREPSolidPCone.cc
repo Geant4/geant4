@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.29 2003-03-28 13:11:50 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.30 2003-05-21 10:52:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -554,7 +554,7 @@ G4ThreeVector G4BREPSolidPCone::SurfaceNormal(const G4ThreeVector& Pt) const
     }
   }
   
-  // calcul of the normal at this point
+  // calculation of the normal at this point
   if ( normflag ) {
     norm = SurfaceVec[iplane]->SurfaceNormal(Pt);
 
@@ -563,7 +563,7 @@ G4ThreeVector G4BREPSolidPCone::SurfaceNormal(const G4ThreeVector& Pt) const
 
     return n;
   } else {
-    G4cout << "Warning ... PCone not able to return normal .. " << G4endl;
+    // G4cout << "Warning ... PCone not able to return normal .. " << G4endl;
     return ( G4ThreeVector(1,0,0));
   }
 }
