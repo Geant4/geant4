@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.23 2001-11-09 13:59:47 maire Exp $
+// $Id: G4hIonisation.cc,v 1.24 2002-02-26 18:15:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process -------------------------------
@@ -53,6 +53,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4hIonisation.hh"
+#include "G4ProcessManager.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -211,7 +212,7 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
  theMeanFreePathTable = new G4PhysicsTable(numOfMaterials);
 
  // get electron cut in kinetic energy
- G4double* DeltaCutInKinEnergy = (G4Electron::Electron())->GetEnergyCuts() ;
+ G4double* DeltaCutInKinEnergy = (G4Electron::Electron())->GetEnergyCuts();
  
  // loop for materials 
 
@@ -265,9 +266,7 @@ G4double G4hIonisation::ComputeRestrictedMeandEdx (
  // calculate the dE/dx due to the ionization process (Geant4 internal units)
  // Bethe-Bloch formula
  //
- G4double particleMass   = aParticleType.GetPDGMass();
- G4double particleZ      = aParticleType.GetPDGCharge()/eplus;
- G4double zsquare = particleZ*particleZ;    
+ G4double particleMass   = proton_mass_c2;
  
  G4double ElectronDensity = material->GetElectronDensity();
  G4double Eexc = material->GetIonisation()->GetMeanExcitationEnergy();
@@ -319,7 +318,7 @@ G4double G4hIonisation::ComputeRestrictedMeandEdx (
 
      // now you can compute the total ionization loss
      dEdx -= (delta + sh);
-     dEdx *= twopi_mc2_rcl2*ElectronDensity*zsquare/beta2;
+     dEdx *= twopi_mc2_rcl2*ElectronDensity/beta2;
      if (dEdx < 0.) dEdx = 0.;
    }
  //   
@@ -353,7 +352,7 @@ G4double G4hIonisation::ComputeRestrictedMeandEdx (
          if (aParticleType.GetPDGSpin() == 0.5)
             deltaloss += 0.25*(Tmax-DeltaThreshold)*(Tmax-DeltaThreshold)/
                  (KineticEnergy*KineticEnergy+proton_mass_c2*proton_mass_c2);
-         deltaloss *= twopi_mc2_rcl2*ElectronDensity*zsquare/beta2;
+         deltaloss *= twopi_mc2_rcl2*ElectronDensity/beta2;
        }
      dEdx -= deltaloss;
      if (dEdx < 0.) dEdx = 0.;
@@ -374,9 +373,8 @@ G4double G4hIonisation::ComputeCrossSectionPerAtom(
  //
  // nb: cross section formula is OK for spin=0 and 1/2 only ! 
      
- G4double particleMass = aParticleType.GetPDGMass();
- G4double particleZ    = aParticleType.GetPDGCharge()/eplus;
- G4double zparticle2 = particleZ*particleZ;
+ G4double initialMass = aParticleType.GetPDGMass();
+ G4double particleMass = initialMass;
            
  G4double TotalEnergy = KineticEnergy + particleMass;
 
@@ -405,7 +403,7 @@ G4double G4hIonisation::ComputeCrossSectionPerAtom(
 	               betasquare / 
                        (MaxKineticEnergyTransfer * DeltaThreshold)) / 3.0;
 		       
-     TotalCrossSection *= twopi_mc2_rcl2*AtomicNumber*zparticle2/betasquare;
+     TotalCrossSection *= twopi_mc2_rcl2*AtomicNumber/betasquare;
    }
   return TotalCrossSection;
 }
@@ -420,7 +418,7 @@ G4VParticleChange* G4hIonisation::PostStepDoIt(const G4Track& trackData,
  G4Material* aMaterial = trackData.GetMaterial();
  const G4DynamicParticle*  aParticle = trackData.GetDynamicParticle();
 
- G4double particleMass = aParticle->GetDefinition()->GetPDGMass();
+ G4double particleMass = aParticle->GetMass();
  G4double KineticEnergy = aParticle->GetKineticEnergy();
  G4double TotalEnergy = KineticEnergy + particleMass;
  G4double Psquare = KineticEnergy*(TotalEnergy+particleMass);
@@ -511,7 +509,7 @@ G4VParticleChange* G4hIonisation::PostStepDoIt(const G4Track& trackData,
    {
      Edep = finalKineticEnergy;
      finalKineticEnergy = 0.;
-     if (aParticle->GetDefinition()->GetParticleName() == "proton")
+     if (!aParticle->GetDefinition()->GetProcessManager()->GetAtRestProcessVector())
            aParticleChange.SetStatusChange(fStopAndKill);
      else  aParticleChange.SetStatusChange(fStopButAlive);
    }

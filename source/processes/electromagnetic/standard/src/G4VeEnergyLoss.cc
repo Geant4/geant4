@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.23 2002-02-06 05:50:35 urban Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.24 2002-02-26 18:15:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 
@@ -41,6 +41,7 @@
 // 29-10-01 all static functions no more inlined (mma) 
 // 08-11-01 Charge,lastCharge not data members, L.Urban
 // 06-02-02 bug fixed in MinDeltaCutInRange computation, L.Urban
+// 26-02-02 bug fixed in TouchebleHandle definition, V.Ivanchenko
 // -----------------------------------------------------------------------------
 
  
@@ -647,7 +648,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
 
                G4Track* deltaTrack =
                          new G4Track(theDelta,DeltaTime,DeltaPosition);
-               deltaTrack->SetTouchableHandle(stepData.GetPostStepPoint()
+               deltaTrack->SetTouchableHandle(stepData.GetPreStepPoint()
 	                                               ->GetTouchableHandle());    
                deltaTrack->SetParentID(trackData.GetTrackID()) ;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.30 2002-02-06 05:50:27 urban Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.31 2002-02-26 18:15:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -49,6 +49,7 @@
 // 08-11-01 BuildDEDXTable not static,Charge local variable, L.Urban
 // 09-11-01 cosmetics; 80 columns everywhere (mma)
 // 06-02-02 bug fixed in MinDeltaCutInRange computation, L.Urban
+// 26-02-02 bug fixed in TouchebleHandle definition, V.Ivanchenko
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,6 +59,7 @@
 #include "G4Poisson.hh"
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
+#include "G4ProcessManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -413,9 +415,9 @@ G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
  // it calculates dEdx and the range as well....
 
  G4double KineticEnergy = aParticle->GetKineticEnergy();
- G4double massratio=proton_mass_c2/(aParticle->GetDefinition()->GetPDGMass());
+ G4double massratio=proton_mass_c2/(aParticle->GetMass());
  G4double Tscaled = KineticEnergy*massratio;
- G4double Charge  = aParticle->GetDefinition()->GetPDGCharge()/eplus;  
+ G4double Charge  = aParticle->GetCharge()/eplus;  
  G4double ChargeSquare = Charge*Charge;
 
  if (Charge>0.)
@@ -462,8 +464,9 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
  G4int index = aMaterial->GetIndex();
   
  const G4DynamicParticle*   aParticle = trackData.GetDynamicParticle();
- G4double Charge = aParticle->GetDefinition()->GetPDGCharge()/eplus;
+ G4double Charge = aParticle->GetCharge()/eplus;
  G4double ChargeSquare = Charge*Charge;
+ G4double mass=aParticle->GetMass();
     
  // get the actual (true) Step length from stepData 
  G4double Step = stepData.GetStepLength();
@@ -480,8 +483,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
     {
      if (Step>linLossLimit*fRangeNow)
       {
-       G4double massratio = proton_mass_c2/
-                                       aParticle->GetDefinition()->GetPDGMass();
+       G4double massratio = proton_mass_c2/mass;
        G4double rscaled = fRangeNow*massratio*ChargeSquare;
        G4double sscaled =   Step   *massratio*ChargeSquare; 
 
@@ -521,7 +523,6 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
 
   G4double MinDeltaEnergyNow = MinDeltaEnergy[index] ;
   G4double Tc=(G4Electron::Electron()->GetEnergyCuts())[index];
-  G4double mass=aParticle->GetDefinition()->GetPDGMass();
   G4double w=mass+electron_mass_c2 ;
   G4double ww=2.*mass-MinDeltaEnergyNow ;
   G4double TmintoProduceDelta=0.5*(sqrt(ww*ww+2.*w*w*MinDeltaEnergyNow/
@@ -676,7 +677,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
 
                   G4Track* deltaTrack =
                                 new G4Track(theDelta,DeltaTime,DeltaPosition);
-                  deltaTrack->SetTouchableHandle(stepData.GetPostStepPoint()
+                  deltaTrack->SetTouchableHandle(stepData.GetPreStepPoint()
 		                                      ->GetTouchableHandle());
 
                   deltaTrack->SetParentID(trackData.GetTrackID());
@@ -712,7 +713,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
  if (finalT <= 0.)
   {
    finalT = 0.;
-   if(aParticle->GetDefinition()->GetParticleName() == "proton")
+   if(!aParticle->GetDefinition()->GetProcessManager()->GetAtRestProcessVector() )
           aParticleChange.SetStatusChange(fStopAndKill);
    else   aParticleChange.SetStatusChange(fStopButAlive); 
   } 

@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2002-02-11 15:07:09 maire Exp $
+$Id: History,v 1.46 2002-02-26 18:19:24 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 fev 02: mma (stand-V04-00-
+- V.Ivanchenko fix G4VhEnergyLoss, G4hIonisation for GenericIons;
+  G4VeEnergyLoss and G4VhEnergyLoss : error in TouchebleHandle - take from 
+  PreStepPoint  
      
 10 fev 02: mma (stand-V04-00-00)
 - G4VeEnergyLoss and G4VhEnergyLoss : error in SetMindeltaCutInRange,

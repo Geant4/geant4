@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.icc,v 1.4 2001-11-09 13:56:28 maire Exp $
+// $Id: G4VhEnergyLoss.icc,v 1.5 2002-02-26 18:11:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,7 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 inline G4bool G4VhEnergyLoss::IsApplicable(const G4ParticleDefinition&
-                                                     particle)
+                                                 particle)
 {
    return(particle.GetPDGCharge()!= 0.);
 }
