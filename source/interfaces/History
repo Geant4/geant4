@@ -1,4 +1,4 @@
-$Id: History,v 1.5 1999-05-11 13:26:06 barrand Exp $
+$Id: History,v 1.6 1999-05-18 12:50:51 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+interfaces-01-00-01  18th April 1999  John Allison
+- Tagged.
 
 head 11th Mai 1999  Guy Barrand
 1) G4UIXm : Linux, correct geometry management of the menubar.
