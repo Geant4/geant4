@@ -13,12 +13,12 @@ class MyStackingAction : public G4UserStackingAction
 {
   public:
     MyStackingAction();
-    ~MyStackingAction();
+    virtual ~MyStackingAction();
 
   public:
-    G4ClassificationOfNewTrack ClassifyNewTrack(G4Track *const aTrack);
-    void NewStage();
-    void PrepareNewEvent();
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track *);
+    virtual void NewStage();
+    virtual void PrepareNewEvent();
 
 };
 

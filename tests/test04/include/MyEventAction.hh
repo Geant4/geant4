@@ -9,11 +9,11 @@ class MyEventAction : public G4UserEventAction
 {
   public:
     MyEventAction();
-    ~MyEventAction();
+    virtual ~MyEventAction();
 
   public:
-    void BeginOfEventAction();
-    void EndOfEventAction();
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event* );
 
   private:
     G4int colID1;

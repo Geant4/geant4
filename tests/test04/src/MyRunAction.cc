@@ -15,9 +15,9 @@ MyRunAction::~MyRunAction()
 {
 }
 
-void MyRunAction::BeginOfRunAction(G4Run* aRun)
+void MyRunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  aRun->SetRunID(runIDcounter++);
+  ((G4Run*)(aRun))->SetRunID(runIDcounter++);
   if(runIDcounter==1)
   {
     G4VPersistencyManager* persM 
@@ -32,7 +32,7 @@ void MyRunAction::BeginOfRunAction(G4Run* aRun)
   }
 }
 
-void MyRunAction::EndOfRunAction(G4Run* aRun)
+void MyRunAction::EndOfRunAction(const G4Run*)
 {
 }
 
