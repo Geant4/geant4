@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.13 2003-04-10 02:51:19 asaim Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.14 2003-04-29 04:25:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -422,10 +422,10 @@ G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
  if (ascii) {
     /////////////// ASCII mode  /////////////////
     // key word
-    fOut << key << G4endl;
+    fOut  << key << G4endl;
     
     // number of materials in the table
-    fOut << numberOfMaterial << G4endl;
+    fOut  << numberOfMaterial << G4endl;
     
     fOut.setf(G4std::ios::scientific);
   
@@ -543,6 +543,8 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
     double density;
     if (ascii) {
       fIn >> name >> density;
+      density *= (g/cm3);
+      
     } else {
       fIn.read(name, FixedStringLengthForStore);
       fIn.read((char*)(&density), sizeof (G4double));
@@ -555,7 +557,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
       fIn.close();
       return false;
     }
-    G4double ratio = abs( (density*g/cm3)/((*matTable)[idx])->GetDensity() );
+    G4double ratio = abs(density/((*matTable)[idx])->GetDensity() );
     if ( (name != ((*matTable)[idx])->GetName()) || (0.999>ratio) || (ratio>1.001) ){
 #ifdef G4VERBOSE  
       G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
@@ -604,10 +606,10 @@ G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& direc
   if (ascii) {
     /////////////// ASCII mode  /////////////////
     // key word
-    fOut << key << G4endl;
+    fOut << G4std::setw(FixedStringLengthForStore) <<  key << G4endl;
     
     // number of couples in the table
-    fOut << numberOfCouples << G4endl;
+    fOut  << numberOfCouples << G4endl;
   } else {
     /////////////// Binary mode  /////////////////
     // key word
@@ -648,7 +650,7 @@ G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& direc
     if (ascii) {
       /////////////// ASCII mode  /////////////////
       // index number
-      fOut << index << G4endl; 
+      fOut  << index << G4endl; 
   
       // material name 
       fOut << G4std::setw(FixedStringLengthForStore) << materialName<< G4endl;
@@ -763,7 +765,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
     if (ascii) {
       fIn >> index;
     } else {
-      fIn.read( (char*)(&numberOfCouples), sizeof (G4int));
+      fIn.read( (char*)(&index), sizeof (G4int));
     }
     if ( index !=  aCouple->GetIndex() ) {
 #ifdef G4VERBOSE  
@@ -819,6 +821,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
     for (size_t idx=0; idx< NumberOfG4CutIndex; idx++) {
       if (ascii) {
 	fIn >>  cutValues[idx];
+        cutValues[idx] *= (mm);
       } else {
 	fIn.read( (char*)(&(cutValues[idx])), sizeof (G4double));
       }
@@ -868,10 +871,10 @@ G4bool   G4ProductionCutsTable::StoreCutsInfo(const G4String& directory,
   if (ascii) {
     /////////////// ASCII mode  /////////////////
     // key word
-    fOut << key << G4endl;
+    fOut  << key << G4endl;
     
     // number of couples in the table
-    fOut << numberOfCouples << G4endl;
+    fOut  << numberOfCouples << G4endl;
   } else {
     /////////////// Binary mode  /////////////////
     // key word
