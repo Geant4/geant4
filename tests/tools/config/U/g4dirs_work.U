@@ -20,12 +20,6 @@ case "$g4lib" in
 	;;
 esac
 
-case "$g4bin" in
-'')
-	g4bin=$g4workdir/bin
-	;;
-esac
-
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
