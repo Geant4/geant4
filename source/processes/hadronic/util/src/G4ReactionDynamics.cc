@@ -846,8 +846,8 @@
       }    // closes outer loop
       if( eliminateThisParticle )  // not enough energy, eliminate target
       {
-        G4cerr << "eliminating target particle" << G4endl;
-        exit( EXIT_FAILURE );
+        G4cerr << "Warning: eliminating target particle" << G4endl;
+//        exit( EXIT_FAILURE );
       }
     }
     //
