@@ -16,9 +16,9 @@
 #/control/saveHistory
 #
 #/vis/open OGLIX
-#/vis/open DAWNFILE
-#/vis/viewer/flush
-#/vis/viewer/update
+/vis/open DAWNFILE
+/vis/viewer/flush
+/vis/viewer/update
 
 #
 # draw scene/
@@ -27,14 +27,14 @@
 #
 # for drawing the tracks
 # (if too many tracks cause core dump => storeTrajectory 0)
-#/tracking/storeTrajectory 1
-#/vis/scene/endOfEventAction accumulate
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
 
 #/vis/viewer/update
 
 # create 30 30 view
 #/vis/viewer/set/viewpointThetaPhi 30 30
-/run/beamOn 100
+#/run/beamOn 100
 exit
 
 

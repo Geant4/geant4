@@ -21,56 +21,53 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimaryGeneratorAction.hh,v 1.3 2002-12-18 17:04:42 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: Tst50PrimaryGeneratorMessenger.hh
+// GEANT4 tag $Name:  xray_fluo-V04-01-03
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-#ifndef Tst50PrimaryGeneratorAction_h
-#define Tst50PrimaryGeneratorAction_h 1
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+//  28 Nov 2001  Elena Guardincerri   Created
+//
+// -------------------------------------------------------------------
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ios.hh"
+
+#ifndef Tst50PrimaryGeneratorMessenger_h
+#define Tst50PrimaryGeneratorMessenger_h 1
+
+#include "G4UImessenger.hh"
 #include "globals.hh"
 
-class Tst50PrimaryGeneratorMessenger;
-class G4ParticleGun;
-class G4Event;
+class Tst50PrimaryGeneratorAction;
+class G4UIcmdWithAString;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-class Tst50PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+class Tst50PrimaryGeneratorMessenger: public G4UImessenger
 {
   public:
-    Tst50PrimaryGeneratorAction();    
-   ~Tst50PrimaryGeneratorAction();
-    
-  G4double GetInitialEnergy();
+  Tst50PrimaryGeneratorMessenger(Tst50PrimaryGeneratorAction*);
+  ~Tst50PrimaryGeneratorMessenger();
+  
+  void SetNewValue(G4UIcommand*, G4String);
+  
+private:
 
-  public:
-    void GeneratePrimaries(G4Event*);
-    
-  private:
-    G4ParticleGun* particleGun;
-    Tst50PrimaryGeneratorMessenger* gunMessenger; 
-    G4double energy;
+  Tst50PrimaryGeneratorAction* Tst50Action; 
+
+  //command to set a random impact point
+  G4UIcmdWithAString*          RndmCmd;
+
+ //command to choose a plane circular source
+  G4UIcmdWithAString*          RndmVert;
+ 
+  //command to shot particles according to certain spectra
+  G4UIcmdWithAString*        spectrum;
+
+ //command to shot particles from an isotropic source
+  G4UIcmdWithAString*        isoVert;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-inline G4double Tst50PrimaryGeneratorAction::GetInitialEnergy()
-{
-  return energy;
-
-}
 #endif
-
-
-
-
-
-
-
-
-
 

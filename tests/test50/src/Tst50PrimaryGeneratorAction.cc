@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimaryGeneratorAction.cc,v 1.3 2002-12-16 13:50:08 guatelli Exp $
+// $Id: Tst50PrimaryGeneratorAction.cc,v 1.4 2002-12-18 17:04:42 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,7 +29,7 @@
 
 #include "Tst50PrimaryGeneratorAction.hh"
 //#include "Tst50DetectorConstruction.hh"
-
+#include "Tst50PrimaryGeneratorMessenger.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
@@ -42,8 +42,11 @@ Tst50PrimaryGeneratorAction::Tst50PrimaryGeneratorAction()
 
 {
   G4int n_particle = 1;
+
   particleGun = new G4ParticleGun(n_particle);
-  energy=3.*MeV;   
+  gunMessenger = new Tst50PrimaryGeneratorMessenger(this);
+  
+energy=3.*MeV;   
 // default particle
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
@@ -58,6 +61,7 @@ Tst50PrimaryGeneratorAction::Tst50PrimaryGeneratorAction()
 
 Tst50PrimaryGeneratorAction::~Tst50PrimaryGeneratorAction()
 {
+  delete gunMessenger;
   delete particleGun;
 }
 

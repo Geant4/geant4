@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.3 2002-12-16 13:50:08 guatelli Exp $
+// $Id: test50.cc,v 1.4 2002-12-18 17:04:41 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,7 +80,7 @@ HepRandom::setTheEngine(new RanecuEngine);
  
    runManager->SetUserAction(pEventAction );
      
- Tst50SteppingAction* steppingaction =new Tst50SteppingAction(pEventAction, p_Primary,p_run);
+ Tst50SteppingAction* steppingaction =new Tst50SteppingAction(pEventAction,p_Primary,p_run);
  runManager->SetUserAction(steppingaction);
 
   //Initialize G4 kernel
