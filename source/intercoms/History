@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2003-06-04 13:51:20 gcosmo Exp $
+$Id: History,v 1.54 2003-06-07 16:41:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 07, 2003, G.Cosmo (intercoms-V05-01-02)
+- G4UItokenNum.hh: corrected implementation of operator=().
 
 Jun 04, 2003, G.Cosmo (intercoms-V05-01-01)
 - G4UItokenNum.hh: fixed longstanding bug in the definition of the
