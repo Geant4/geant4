@@ -73,7 +73,8 @@ class ExtNode {
   int        s;
 
  public: 
-  ExtNode(HepPoint3D vertex=0, int status=0) : v(vertex), s(status) {}
+  ExtNode(HepPoint3D vertex=HepPoint3D(), int status=0)
+    : v(vertex), s(status) {}
   ~ExtNode() {}
 
   ExtNode(const ExtNode & node) : v(node.v), s(node.s) {}
