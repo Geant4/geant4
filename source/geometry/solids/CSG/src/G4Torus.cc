@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.12 2000-10-11 12:05:01 medernac Exp $
+// $Id: G4Torus.cc,v 1.13 2000-10-23 10:28:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1233,16 +1233,16 @@ G4double G4Torus::DistanceToIn(const G4ThreeVector& p,
     c[0] = pRad2*pRad2 - 2*pRad2*(Rtor2+Rmax2) 
               + 4*Rtor2*p.z()*p.z() + (Rtor2-Rmax2)*(Rtor2-Rmax2) ;
    
-    //num = SolveBiQuadratic(c,s) ;
+    // num = SolveBiQuadratic(c,s) ;
+
     /* Numerical root research */
-    s[0] = SolveNumeric( p, v, true);
+    s[0] = SolveNumeric(p, v, true);
     num = 1; // There is only one root: the correct one 
 	
 #if DEBUGTORUS
-		G4cout << "G4Torus::DistanceToIn (" << __LINE__ << ") SolveNumeric : " << s[0] << G4endl;
+    G4cout << "G4Torus::DistanceToIn (" << __LINE__ << ") SolveNumeric : "
+           << s[0] << G4endl;
 #endif
-
-   
 
     if(num)
     {
@@ -1319,11 +1319,12 @@ G4double G4Torus::DistanceToIn(const G4ThreeVector& p,
       c[0] = pRad2*pRad2 - 2*pRad2*(Rtor2+Rmin2) 
                     + 4*Rtor2*p.z()*p.z() + (Rtor2-Rmin2)*(Rtor2-Rmin2) ;
    
-      //num = SolveBiQuadratic(c,s) ;
-			/* Numerical root research */
-			s[0] = s[0]; // We already take care of Rmin in SolveNumeric !
-			num = 1;
-   
+      // num = SolveBiQuadratic(c,s) ;
+
+      /* Numerical root research */
+      // s[0] = s[0]; // We already take care of Rmin in SolveNumeric !
+      num = 1;
+
       if(num)
       {
         for(i=0;i<num;i++)   // leave only >=kRadTolerance/2 roots   P?!
@@ -1638,8 +1639,8 @@ G4double G4Torus::DistanceToOut(const G4ThreeVector& p,
 	      c[0] = pRad2*pRad2 - 2*pRad2*(Rtor2+Rmin2) 
 		+ 4*Rtor2*p.z()*p.z() + (Rtor2-Rmin2)*(Rtor2-Rmin2) ;
    
-	      //num = SolveBiQuadratic(c,s) ;
-	      s[0] = s[0]; // We already take care of Rmin in SolveNumeric 
+	      // num = SolveBiQuadratic(c,s) ;
+	      // s[0] = s[0]; // We already take care of Rmin in SolveNumeric 
 	      num = 1;
    
 	      if(num)
@@ -2196,10 +2197,10 @@ G4NURBS* G4Torus::CreateNURBS () const
 
 #define EPSILON 1e-12
 #define INFINITY 1e+12
-#define TORUSPRECISION 1.0  // or whatever you want for precision (it is TorusEquation related)
-
+#define TORUSPRECISION 1.0  // or whatever you want for precision
+                            // (it is TorusEquation related)
 #define NBPOINT 6
-#define ITERATION 8 //20 But 8 is really enough for Newton with a good guess
+#define ITERATION 8 // 20 But 8 is really enough for Newton with a good guess
 #define NOINTERSECTION kInfinity
 
 
@@ -2208,10 +2209,13 @@ G4NURBS* G4Torus::CreateNURBS () const
  */
 
 /*
-  For speed issue,  we lose time *only* when intersecting the BVM and SafeNewton when it is called.
+  For speed issue,  we lose time *only* when intersecting the BVM
+  and SafeNewton when it is called.
  */
 
-G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4bool IsDistanceToIn) 
+G4double G4Torus::SolveNumeric(const G4ThreeVector& p,
+                               const G4ThreeVector& v,
+			       G4bool IsDistanceToIn)
 {
   /* This methods is a front-end to the numerical computation of roots */
   /* In fact this computation take care only of a perfect Torus */
@@ -2253,27 +2257,33 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4b
   switch (inside) {
   case kInside:
 #if DEBUGTORUS
-    G4cout << "G4Torus::SolveNumeric    Point is Inside Rmax Torus " << " Rtor = " << GetRtor()
+    G4cout << "G4Torus::SolveNumeric    Point is Inside Rmax Torus "
+           << " Rtor = " << GetRtor()
 	   << " Rmax = " << GetRmax() << G4endl ;
 #endif
     if (fabs(GetRmin()) > EPSILON) {
 #if DEBUGTORUS
       G4cout << "G4Torus::SolveNumeric    Testing interior torus .." << G4endl ;
 #endif
-      lambda = DistanceToTorus(p.x(),p.y(),p.z(),v.x(),v.y(),v.z(),GetRtor(),GetRmin()); //Interior torus
+      lambda = DistanceToTorus(p.x(),p.y(),p.z(),v.x(),v.y(),v.z(),
+                               GetRtor(),GetRmin()); //Interior torus
 
 #if DEBUGTORUS
-      G4cout << "G4Torus::SolveNumeric    lambda to interior torus =" << lambda << G4endl ;
-      G4cout << "G4Torus::SolveNumeric    Tolerance is " << kCarTolerance << G4endl ;
+      G4cout << "G4Torus::SolveNumeric    lambda to interior torus ="
+             << lambda << G4endl ;
+      G4cout << "G4Torus::SolveNumeric    Tolerance is "
+             << kCarTolerance << G4endl ;
 #endif
       /** Now check if on surface from interior torus **/
 
-      /* PROBLEM: This may be a problem of precision if we are near kCarTolerance ... */
+      /* PROBLEM: This may be a problem of precision
+                  if we are near kCarTolerance ... */
       if (fabs(lambda) < kCarTolerance) {
 	G4double Lx,Ly,Lz;
 	G4double scal;
 #if DEBUGTORUS								
-	G4cout << "G4Torus::SolveNumeric    In fact on the Surface of Rmin torus" << G4endl ;
+	G4cout << "G4Torus::SolveNumeric    In fact on the Surface of Rmin torus"
+	       << G4endl ;
 #endif
 
 	/* Compute Surface point */
@@ -2289,18 +2299,23 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4b
 	/* beware that this could be DistanceToOut */
 	if ((IsDistanceToIn == true) && (scal > 0.0)) {
 #if DEBUGTORUS
-	  G4cout << "G4Torus::SolveNumeric    Entering Surface from Rmin Torus Gradient: " << scal << G4endl ;
+	  G4cout << "G4Torus::SolveNumeric    Entering Surface from Rmin Torus Gradient: "
+	         << scal << G4endl ;
 #endif
 	  /* DistanceToIn return 0.0 */
 	  lambda = 0.0;
 	} else {
 #if DEBUGTORUS
-	  G4cout << "G4Torus::SolveNumeric    Exiting Surface (Recalculating) or DistanceToOut from surface" << G4endl ;
-	  G4cout << "G4Torus::SolveNumeric    Recursive call lambda..." << lambda << G4endl << G4endl;
+	  G4cout << "G4Torus::SolveNumeric    Exiting Surface (Recalculating) or DistanceToOut from surface"
+	         << G4endl ;
+	  G4cout << "G4Torus::SolveNumeric    Recursive call lambda..."
+	         << lambda << G4endl << G4endl;
 #endif
-	  /* else it is not necessary infinity !! (we could reach the opposite side..) */
-	  /* To reach the opposite side we remark that from Surface the sphere of radius min((Rmax - Rmin)/2, Rmin)
-	     does not hit 2 surface of the torus so it is safe to do that way */
+	  /* else it is not necessary infinity !!
+	     (we could reach the opposite side..) */
+	  /* To reach the opposite side we remark that from Surface
+	     the sphere of radius min((Rmax - Rmin)/2, Rmin) does not
+	     hit 2 surface of the torus so it is safe to do that way */
 	  
 	  if ((GetRmax() - GetRmin())/2.0 < GetRmin()) {
 	    lambda = SolveNumeric(p+((GetRmax() - GetRmin())/2.0)*v,v,IsDistanceToIn) + (GetRmax() - GetRmin())/2.0;
@@ -2309,14 +2324,16 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4b
 	  }
 
 #if DEBUGTORUS
-	  G4cout << "G4Torus::SolveNumeric    --> Recursive call: lambda = " << lambda << G4endl;
+	  G4cout << "G4Torus::SolveNumeric    --> Recursive call: lambda = "
+	         << lambda << G4endl;
 #endif
 	}
       } else {
 	/* PROBLEM : could be better done ? */
 	
-	G4double lambdaToRmax = DistanceToTorus(p.x(),p.y(),p.z(),v.x(),v.y(),v.z(),GetRtor(),GetRmax());
-	
+	G4double lambdaToRmax = DistanceToTorus(p.x(),p.y(),p.z(),
+	                                        v.x(),v.y(),v.z(),
+						GetRtor(),GetRmax());
 	if (lambda >= lambdaToRmax) {
 #if DEBUGTORUS
 	  G4cout << "G4Torus::SolveNumeric    Point does not hit the Rmin torus from here" << G4endl;
@@ -2324,7 +2341,8 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4b
 	  lambda = lambdaToRmax; 
 	} else {
 #if DEBUGTORUS							
-	  G4cout << "G4Torus::SolveNumeric    We hit the Rmin torus with " << lambda << G4endl;
+	  G4cout << "G4Torus::SolveNumeric    We hit the Rmin torus with "
+	         << lambda << G4endl;
 	  G4cout << "G4Torus::SolveNumeric    Note that this could be small and not in Tolerance resulting in wrong result " 
 		 << G4endl ;
 #endif
@@ -2333,7 +2351,9 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4b
     } else {
       /* It is a whole torus */
       
-      lambda = DistanceToTorus(p.x(),p.y(),p.z(),v.x(),v.y(),v.z(),GetRtor(),GetRmax()); 
+      lambda = DistanceToTorus(p.x(),p.y(),p.z(),
+                               v.x(),v.y(),v.z(),
+			       GetRtor(),GetRmax()); 
     }
     break;
   case kSurface:
@@ -2342,10 +2362,13 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4b
       G4double scal;
 
 #if DEBUGTORUS
-      G4cout << "G4Torus::SolveNumeric    Point is on the Rmax Surface" << G4endl ;
+      G4cout << "G4Torus::SolveNumeric    Point is on the Rmax Surface"
+             << G4endl ;
 #endif
       /* It is possible with Phi that this is not the correct point */
-      lambda = DistanceToTorus(p.x(),p.y(),p.z(),v.x(),v.y(),v.z(),GetRtor(),GetRmax()); 
+      lambda = DistanceToTorus(p.x(),p.y(),p.z(),
+                               v.x(),v.y(),v.z(),
+			       GetRtor(),GetRmax()); 
       /* Compute Surface point */
       Lx = p.x() + lambda*v.x();
       Ly = p.y() + lambda*v.y();
@@ -2358,18 +2381,22 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4b
       /* if entering it is < 0.0 */
       if ((IsDistanceToIn) && (scal < 0.0)) {
 #if DEBUGTORUS
-	G4cout << "G4Torus::SolveNumeric    Point is Entering Surface " << scal << G4endl ;
+	G4cout << "G4Torus::SolveNumeric    Point is Entering Surface "
+	       << scal << G4endl ;
 #endif
 	lambda = 0.0;
       } else {
 #if DEBUGTORUS
-	G4cout << "G4Torus::SolveNumeric    Point is Exiting Surface or DistanceToOut " << scal << G4endl ;
+	G4cout << "G4Torus::SolveNumeric    Point is Exiting Surface or DistanceToOut "
+	       << scal << G4endl ;
 	G4cout << "Recursive call ..." << G4endl << G4endl ;
 #endif
 	/* To reach the opposite side we remark that from Surface the sphere of radius (Rmax - Rmin)/2 
 	   does not hit 2 surface of the torus so it is safe to do that way */
 	//lambda = SolveNumeric(p+(lambda + kCarTolerance)*v,v,IsDistanceToIn);
-	lambda = SolveNumeric(p+((GetRmax() - GetRmin())/2.0)*v,v,IsDistanceToIn) + (GetRmax() - GetRmin())/2.0;
+	lambda = SolveNumeric(p+((GetRmax() - GetRmin())/2.0)*v,
+	                      v, IsDistanceToIn)
+		 + (GetRmax() - GetRmin())/2.0;
 #if DEBUGTORUS
 	G4cout << "Recursive call ...END" << G4endl ;
 #endif
@@ -2378,17 +2405,21 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4b
     break;
   case kOutside:
 #if DEBUGTORUS
-    G4cout << "G4Torus::SolveNumeric    Point is Outside the Rmax torus" << G4endl ;
+    G4cout << "G4Torus::SolveNumeric    Point is Outside the Rmax torus"
+           << G4endl ;
 #endif
 	       
-    lambda = DistanceToTorus(p.x(),p.y(),p.z(),v.x(),v.y(),v.z(),GetRtor(),GetRmax()); 
+    lambda = DistanceToTorus(p.x(),p.y(),p.z(),
+                             v.x(),v.y(),v.z(),
+			     GetRtor(),GetRmax()); 
     break;
   }
 
   if (lambda == kInfinity) return lambda;
 
 #if DEBUGTORUS
-  G4cout << "G4Torus::SolveNumeric    Intersection found. Now checking Phi angles" << G4endl ;
+  G4cout << "G4Torus::SolveNumeric    Intersection found. Now checking Phi angles"
+         << G4endl ;
 #endif
   
   /** Ok we have a lambda that is correct without Phi **/
@@ -2409,47 +2440,56 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4b
     
     /*** We have to verify if this root is inside the region between fSPhi and fSPhi + fDPhi ***/
 #if DEBUGTORUS
-    G4cout << "G4Torus::SolveNumeric    theta = " << theta << " Phi = " << fSPhi 
+    G4cout << "G4Torus::SolveNumeric    theta = " << theta
+           << " Phi = " << fSPhi 
 	   << " Phi + dPhi = " << fSPhi + fDPhi << G4endl ;
 #endif 
     
-    if ((theta >= fSPhi - kAngTolerance*0.5) && (theta <= (fSPhi + fDPhi + kAngTolerance*0.5))) {
+    if ((theta >= fSPhi - kAngTolerance*0.5) &&
+        (theta <= (fSPhi + fDPhi + kAngTolerance*0.5))) {
       /*** If this is the case we return this solution ***/
 #if DEBUGTORUS
       G4cout << "G4Torus::SolveNumeric    Correct Phi section" << G4endl ;
 #endif
       return lambda;
     } else {
-      /*** Else we compute the intersection with the 2 half-plane [fSPhi] and [fSPhi + fDPhi] ***/
+      /*** Else we compute the intersection with the 2 half-plane [fSPhi]
+           and [fSPhi + fDPhi] ***/
 
       G4double IntersectPlanar ;
 
       
-      IntersectPlanar = - (p.y() - p.x()*tan(fSPhi))/(v.y() - v.x()*tan(fSPhi)) ;
+      IntersectPlanar = - (p.y() - p.x()*tan(fSPhi))/(v.y() - v.x()*tan(fSPhi));
 #if DEBUGTORUS
-      G4cout << "G4Torus::SolveNumeric    IntersectPlanar = " << IntersectPlanar << G4endl ;
+      G4cout << "G4Torus::SolveNumeric    IntersectPlanar = "
+             << IntersectPlanar << G4endl ;
 #endif
 
       /** If this is below lambda we check for the other plane **/
       if (IntersectPlanar < lambda) { 
-	IntersectPlanar = - (p.y() - p.x()*tan(fSPhi + fDPhi))/(v.y() - v.x()*tan(fSPhi + fDPhi)) ;
+	IntersectPlanar = - (p.y() - p.x()*tan(fSPhi + fDPhi))
+	                  / (v.y() - v.x()*tan(fSPhi + fDPhi)) ;
 #if DEBUGTORUS
-	G4cout << "G4Torus::SolveNumeric    IntersectPlanar (2) = " << IntersectPlanar << G4endl ;
+	G4cout << "G4Torus::SolveNumeric    IntersectPlanar (2) = "
+	       << IntersectPlanar << G4endl ;
 #endif
       }
       
       /* If we does not hit the two plan then we does not hit the torus .. */
       if (IntersectPlanar < lambda) {
 #if DEBUGTORUS
-	G4cout << "G4Torus::SolveNumeric    No intersection with planar Phi .." << G4endl ;
+	G4cout << "G4Torus::SolveNumeric    No intersection with planar Phi .."
+	       << G4endl ;
 #endif
 	  return kInfinity;
       }
       
 #if DEBUGTORUS
       G4cout << "G4Torus::SolveNumeric    Incorrect Phi section" << G4endl ;
-      G4cout << "G4Torus::SolveNumeric    point : " << p << " direction : " << v << G4endl ;
-      G4cout << "G4Torus::SolveNumeric    IntersectPlanar = " << IntersectPlanar << G4endl ;
+      G4cout << "G4Torus::SolveNumeric    point : " << p << " direction : "
+             << v << G4endl ;
+      G4cout << "G4Torus::SolveNumeric    IntersectPlanar = "
+             << IntersectPlanar << G4endl ;
 #endif
       
       if ((TorusEquation(p.x() + IntersectPlanar*v.x(),
@@ -2460,7 +2500,8 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4b
 			     p.y() + IntersectPlanar*v.y(),
 			     p.z() + IntersectPlanar*v.z(),
 			     GetRtor(),GetRmin()) > 0)) {
-	/*** if this point is inside torus Rmax and outside torus Rmin then it is on the cut planar faces ***/
+	/*** if this point is inside torus Rmax and outside torus Rmin
+	     then it is on the cut planar faces ***/
 #if DEBUGTORUS
 	G4cout << "G4Torus::SolveNumeric    Hit planar section" << G4endl ;
 #endif
@@ -2468,21 +2509,19 @@ G4double G4Torus::SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4b
       } else {
 	/*** else we continue from this new point (SolveNumeric) ***/
 #if DEBUGTORUS
-	G4cout << "G4Torus::SolveNumeric    Recursive Phi call with " << IntersectPlanar << " .." << G4endl << G4endl;
+	G4cout << "G4Torus::SolveNumeric    Recursive Phi call with "
+	       << IntersectPlanar << " .." << G4endl << G4endl;
 #endif
 
-	return IntersectPlanar + SolveNumeric(p+IntersectPlanar*v,v,IsDistanceToIn);
-
-#if DEBUGTORUS
-	G4cout << "G4Torus::SolveNumeric    Recursive Phi call .. END" << G4endl ;
-#endif
+	return IntersectPlanar + SolveNumeric(p+IntersectPlanar*v,
+	                                      v,IsDistanceToIn);
       }
     }
   }
 
   return lambda;
 }
-
+/*
 #include <stdio.h>
 #include <math.h>
 
@@ -2492,7 +2531,7 @@ double sin(double x);
 
 double sqrt(double x);
 double fabs(double x);
-
+*/
 
 void G4Torus::BVMIntersection(G4double x,G4double y,G4double z,
 			      G4double dx,G4double dy,G4double dz,
@@ -2631,7 +2670,8 @@ void G4Torus::BVMIntersection(G4double x,G4double y,G4double z,
   }
 }
 
-void G4Torus::SortIntervals (G4double *SortL,G4double *NewL,int *valid,int *NbIntersection)
+void G4Torus::SortIntervals (G4double *SortL, G4double *NewL,
+                             G4int *valid, G4int *NbIntersection)
 {
   int i,j;
   G4double swap;
@@ -2765,12 +2805,13 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
   /*** If the ray intersects the torus it necessary intersects the BVMax ***/
   /*** So it is necessary into *an* interval from the BVM ***/
 
-  /** Note : In general there are only 2 intersections so computing the second interval
-      could be done only if the first one does not contain any root */
+  /** Note : In general there are only 2 intersections so computing the second
+      interval could be done only if the first one does not contain any root */
 
   /* NOW there is 2 possibilities */
   /* If inside the BVM (or Torus instead), take "0, SortL[0] .." */
-  /* If outside the BVM, we have intervals where if there is an intersection the root must be */
+  /* If outside the BVM, we have intervals where if there is an intersection
+     the root must be */
   /* Now Lmin1 <= Lambda <= Lmax and there is a root */
   /* Newton Methods in this interval from the guess */
 
@@ -2802,14 +2843,17 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
       guess = Lmax - Rmin*0.125;
 #if DEBUGTORUS
       G4cout << "G4Torus::DistanceToTorus    Inside the torus" << G4endl ;
-      G4cout << "G4Torus::DistanceToTorus    Initial Guess is " << guess << G4endl ;
+      G4cout << "G4Torus::DistanceToTorus    Initial Guess is "
+             << guess << G4endl ;
 #endif
       
     } else {
 #if DEBUGTORUS
       G4cout.precision(16);
-      G4cout << "G4Torus::DistanceToTorus    point " << x << ", " << y << ", " << z << ", "  << " is outside the torus "
-	     << " Rmax = " << Rmax << " Rmin = " << Rmin << " Teq = " << TorusEquation(x,y,z,Rmax,Rmin) << G4endl ;
+      G4cout << "G4Torus::DistanceToTorus    point " << x << ", " << y
+             << ", " << z << ", "  << " is outside the torus "
+	     << " Rmax = " << Rmax << " Rmin = " << Rmin << " Teq = "
+	     << TorusEquation(x,y,z,Rmax,Rmin) << G4endl ;
 #endif
       InsideTorus = 0;
       /* PROBLEMS what to choose ? */
@@ -2821,8 +2865,10 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
     guess = Newton(guess,x,y,z,dx,dy,dz,Rmax,Rmin,Lmin,Lmax);
 
 #if DEBUGTORUS
-    G4cout << "G4Torus::DistanceToTorus    First Newton guess = " << guess << G4endl ;
-    G4cout << "G4Torus::DistanceToTorus    Lmin = " << Lmin << "  Lmax = " << Lmax << G4endl ;
+    G4cout << "G4Torus::DistanceToTorus    First Newton guess = "
+           << guess << G4endl ;
+    G4cout << "G4Torus::DistanceToTorus    Lmin = " << Lmin
+           << "  Lmax = " << Lmax << G4endl ;
 #endif
 
     /* In case the origin point is just in the surface 
@@ -2838,8 +2884,10 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
       return guess ;
     } else {
 #if DEBUGTORUS
-      G4cout << "G4Torus::DistanceToTorus    Point does not appear to be in the interval guess = " << guess
-	     << " Lmin = " << Lmin - EPSILON << " Lmax = " << Lmax + EPSILON << G4endl ;
+      G4cout << "G4Torus::DistanceToTorus    Point does not appear to be in the interval guess = "
+             << guess
+	     << " Lmin = " << Lmin - EPSILON << " Lmax = "
+	     << Lmax + EPSILON << G4endl ;
 #endif
       
       if (NbIntersection == 3) {
@@ -2851,8 +2899,10 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
 	
 	guess = Newton(guess,x,y,z,dx,dy,dz,Rmax,Rmin,Lmin,Lmax);
 #if DEBUGTORUS
-	G4cout << "G4Torus::DistanceToTorus    Second Newton guess = " << guess << G4endl ;
-	G4cout << "G4Torus::DistanceToTorus    Lmin = " << Lmin << "  Lmax = " << Lmax << G4endl ;
+	G4cout << "G4Torus::DistanceToTorus    Second Newton guess = "
+	       << guess << G4endl ;
+	G4cout << "G4Torus::DistanceToTorus    Lmin = " << Lmin
+	       << "  Lmax = " << Lmax << G4endl ;
 #endif
 	if ((guess >= (Lmin - EPSILON)) && (guess <= (Lmax + EPSILON))) {
 	  return guess;
@@ -2900,18 +2950,21 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
     guess = Newton(guess,x,y,z,dx,dy,dz,Rmax,Rmin,Lmin,Lmax);
 
 #if DEBUGTORUS
-    G4cout << "G4Torus::DistanceToTorus    Newton with 2 or 4 points : " << guess << G4endl ;
+    G4cout << "G4Torus::DistanceToTorus    Newton with 2 or 4 points : "
+           << guess << G4endl ;
 #endif    
 
     /* Check here is the root found is into interval */
     if ((guess >= (Lmin - EPSILON)) && (guess <= (Lmax + EPSILON))) {
 #if DEBUGTORUS
-    G4cout << "G4Torus::DistanceToTorus    Newton gives a point into interval (Ok)" << G4endl ;
+    G4cout << "G4Torus::DistanceToTorus    Newton gives a point into interval (Ok)"
+           << G4endl ;
 #endif    
       return guess;
     } else { 				
 #if DEBUGTORUS
-    G4cout << "G4Torus::DistanceToTorus    Newton does not give a point into interval (Ko)" << G4endl ;
+    G4cout << "G4Torus::DistanceToTorus    Newton does not give a point into interval (Ko)"
+           << G4endl ;
 #endif    
       if (NbIntersection == 4) {
 	/* Well if that does not converge with the first interval try with the other one */
@@ -2934,25 +2987,6 @@ G4double G4Torus::DistanceToTorus (G4double x,G4double y,G4double z,
   }
 }
 
-inline G4double G4Torus::TorusGradient(G4double dx,
-				       G4double dy,
-				       G4double dz,
-				       G4double x,
-				       G4double y,
-				       G4double z,
-				       G4double Rmax,
-				       G4double Rmin)
-{
-  /* This tell the normal at a surface point */
-  G4double result;
-  result = 0;
-  result += dx*TorusDerivativeX(x,y,z,Rmax,Rmin); 
-  result += dy*TorusDerivativeY(x,y,z,Rmax,Rmin); 
-  result += dz*TorusDerivativeZ(x,y,z,Rmax,Rmin); 
-
-  return result;
-}
-
 
 G4int G4Torus::SafeNewton(G4double x, G4double y, G4double z,
 			  G4double dx, G4double dy, G4double dz,
@@ -2973,11 +3007,11 @@ G4int G4Torus::SafeNewton(G4double x, G4double y, G4double z,
   /*** Calculating Control Points  ***/
   
   /*
-    0    	p0 = F((*Lmin))
-    1/4  	p1 = F((*Lmin)) + ((*Lmax) - (*Lmin))/4 * F'((*Lmin))
-    2/4  	p2 = 1/6 * (16*F(((*Lmax) + (*Lmin))/2) - (p0 + 4*p1 + 4*p3 + p4))  
-    3/4         p3 = F((*Lmax)) - ((*Lmax) - (*Lmin))/4 * F'((*Lmax))
-    1           p4 = F((*Lmax))
+    0     p0 = F((*Lmin))
+    1/4   p1 = F((*Lmin)) + ((*Lmax) - (*Lmin))/4 * F'((*Lmin))
+    2/4   p2 = 1/6 * (16*F(((*Lmax) + (*Lmin))/2) - (p0 + 4*p1 + 4*p3 + p4))  
+    3/4   p3 = F((*Lmax)) - ((*Lmax) - (*Lmin))/4 * F'((*Lmax))
+    1     p4 = F((*Lmax))
   */
 
   
@@ -3022,7 +3056,8 @@ G4int G4Torus::SafeNewton(G4double x, G4double y, G4double z,
   Lz = z + ((*Lmax)+(*Lmin))/2*dz;
 
   P[2][0] = ((*Lmax) + (*Lmin))/2;
-  P[2][1] = (16*TorusEquation(Lx,Ly,Lz,Rmax,Rmin) - (P[0][1] + 4*P[1][1] + 4*P[3][1] + P[4][1]))/6 ;
+  P[2][1] = (16*TorusEquation(Lx,Ly,Lz,Rmax,Rmin)
+            - (P[0][1] + 4*P[1][1] + 4*P[3][1] + P[4][1]))/6 ;
 
 #if DEBUGTORUS
   G4cout << "G4Torus::SafeNewton    Lmin = " << (*Lmin) << G4endl ;
@@ -3036,18 +3071,19 @@ G4int G4Torus::SafeNewton(G4double x, G4double y, G4double z,
 
   /** Ok now we have all control points, we could compute the convex area **/
   /** Problems:
-      - if there is one point with a ~ 0 coordinate and all the other the same sign we
-      miss the value
-      - if there are more than a root in the interval then the interval length does not
-      decrease to 0. A solution may be to split intervals in the middle but how to
-      know when we must split ?
+      - if there is one point with a ~ 0 coordinate and all the other the
+        same sign we miss the value
+      - if there are more than a root in the interval then the interval
+        length does not decrease to 0. A solution may be to split intervals
+        in the middle but how to know when we must split ?
   **/
 
-  /*** For each points make 2 sets. A set of positive points and a set of negative points ***/
+  /*** For each points make 2 sets. A set of positive points and a set
+       of negative points ***/
   /*** Note: could be better done with scalar product .. ***/
   /**
-     We have to compute convex area of the control point before applying intersection 
-     with y=0
+     We have to compute convex area of the control point before
+     applying intersection  with y=0
   **/
 
   /* there is an intersection only if each have different signs */
@@ -3068,7 +3104,8 @@ G4int G4Torus::SafeNewton(G4double x, G4double y, G4double z,
 	  if (((P[j][1] > -TORUSPRECISION) && (P[i][1] < TORUSPRECISION)) ||
 	      ((P[j][1] < TORUSPRECISION) && (P[i][1] > -TORUSPRECISION))) {
 	    IntervalIsVoid  = 0;
-	    Intersection = P[j][0] - P[j][1]*((P[i][0] - P[j][0])/(P[i][1] - P[j][1]));
+	    Intersection = P[j][0] - P[j][1]*((P[i][0] - P[j][0])
+	                                     /(P[i][1] - P[j][1]));
 	    if (Intersection < NewMin) {
 	      NewMin = Intersection;
 	    }
@@ -3098,7 +3135,8 @@ G4double G4Torus::Newton (G4double guess,
 			  G4double Rmax, G4double Rmin,
 			  G4double Lmin,G4double Lmax)
 {
-  /* So now we have a good guess and an interval where if there are an intersection the root must be */
+  /* So now we have a good guess and an interval where
+     if there are an intersection the root must be */
 
   G4double Lx = 0;
   G4double Ly = 0;
@@ -3111,15 +3149,18 @@ G4double G4Torus::Newton (G4double guess,
 
   /* Reduce interval before applying Newton Method */
 #if DEBUGTORUS
-  G4cout << "G4Torus::Newton    Lmin = " << Lmin << " Lmax = " << Lmax << G4endl ;
+  G4cout << "G4Torus::Newton    Lmin = " << Lmin
+         << " Lmax = " << Lmax << G4endl ;
 #endif
   
   {
     int NewtonIsSafe ;
     int k;
       
-    for (k=0;((k<ITERATION) && ((NewtonIsSafe = SafeNewton(x,y,z,dx,dy,dz,Rmax,Rmin,&Lmin,&Lmax)) == 0));k++) ;
-
+    for (k=0;
+        ((k<ITERATION) &&
+        ((NewtonIsSafe = SafeNewton(x,y,z,dx,dy,dz,Rmax,Rmin,&Lmin,&Lmax))==0));
+	k++);
     guess = Lmin;
   }
   
@@ -3148,7 +3189,8 @@ G4double G4Torus::Newton (G4double guess,
   }
 #endif
       
-  /* In fact The Torus Equation give big number so TORUS PRECISION is not EPSILON */	  
+  /* In fact The Torus Equation give big number
+     so TORUS PRECISION is not EPSILON */	  
   while (fabs(Value) > TORUSPRECISION) {
 	  
     Lx = x + Lambda*dx;
@@ -3161,16 +3203,19 @@ G4double G4Torus::Newton (G4double guess,
     Gradient += dz*TorusDerivativeZ(Lx,Ly,Lz,Rmax,Rmin);
 
     /**
-    if (Gradient > -EPSILON) { //then the current point is repulsive and may not converge
-    Seems to be solved by SafeNewton
+    if (Gradient > -EPSILON) { // then the current point is repulsive
+                                  and may not converge
+                                  Seems to be solved by SafeNewton
     **/
     Lambda = Lambda - Value/Gradient ;
     
     
 #if DEBUGTORUS
     G4cout << "G4Torus::Newton    Iteration " << i << G4endl ;
-    G4cout << "G4Torus::Newton     Lambda = " << Lambda << " Value = " << Value << " Grad = " << Gradient << G4endl;
-    G4cout << "G4Torus::Newton     Lmin = " << Lmin << " Lmax = " << Lmax << G4endl ;
+    G4cout << "G4Torus::Newton     Lambda = " << Lambda
+           << " Value = " << Value << " Grad = " << Gradient << G4endl;
+    G4cout << "G4Torus::Newton     Lmin = " << Lmin
+           << " Lmax = " << Lmax << G4endl ;
 #endif
 
     i ++;

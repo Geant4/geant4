@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.hh,v 1.6 2000-10-11 09:01:24 medernac Exp $
+// $Id: G4Torus.hh,v 1.7 2000-10-23 10:28:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@
 // 21.04.98 J.Apostolakis  Added SetAllParameters function
 // 26.05.00 V.Grichine, new SolveBiQuadratic/Cubic developed by O.Cremonesi were
 //          added     
-// 31.08.00 E.Medernach    Add SolveNumeric Functions 
+// 31.08.00 E.Medernach    Added SolveNumeric Functions 
 // --------------------------------------------------------------------
 
 #ifndef G4Torus_HH
@@ -79,8 +79,11 @@
 
 #include "G4CSGSolid.hh"
 
-class G4Torus : public G4CSGSolid {
+class G4Torus : public G4CSGSolid
+{
+
 public:
+
   G4Torus(const G4String &pName,
 		  G4double pRmin,
 		  G4double pRmax,
@@ -108,7 +111,7 @@ public:
 
   G4double    GetRmin() const { return fRmin ; }
   G4double    GetRmax() const { return fRmax ; } 
-  G4double    GetRtor  () const { return fRtor   ; }
+  G4double    GetRtor() const { return fRtor ; }
   G4double    GetSPhi() const { return fSPhi ; }
   G4double    GetDPhi() const { return fDPhi ; }
 
@@ -141,11 +144,13 @@ protected:
 
   G4int SolveQuadratic(G4double c[], G4double s[]  ) const ;
 
-  G4double SolveNumeric(const G4ThreeVector& p,const G4ThreeVector& v,G4bool IsDistanceToIn) ;
-    
+  G4double SolveNumeric(const G4ThreeVector& p,
+                        const G4ThreeVector& v,
+			G4bool IsDistanceToIn);
+
   G4ThreeVectorList*
   CreateRotatedVertices(const G4AffineTransform& pTransform,
-						G4int& noPolygonVertices) const;
+			G4int& noPolygonVertices) const;
 
   G4double fRmin,fRmax,fRtor,fSPhi,fDPhi;
 
@@ -155,6 +160,7 @@ protected:
   enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi};
 
 private:
+
   inline G4double TorusEquation (G4double x,G4double y,G4double z,G4double R0,G4double R1) {
 	/* R0 : Radius of all little circles
 	   R1 : Radius of little circles
@@ -190,25 +196,32 @@ private:
 	return 4*z*(x*x + y*y + z*z +  R0*R0 - R1*R1) ;
   }
 
-  inline G4double G4Torus::TorusGradient(G4double dx,
-							  G4double dy,
-							  G4double dz,
-							  G4double x,
-							  G4double y,
-							  G4double z,
-							  G4double Rmax,
-										 G4double Rmin) ;
+  inline G4double TorusGradient(G4double dx, G4double dy, G4double dz,
+				G4double x, G4double y, G4double z,
+				G4double Rmax, G4double Rmin)
+  {
+    /* This tell the normal at a surface point */
+    G4double result;
+    result = 0;
+    result += dx*TorusDerivativeX(x,y,z,Rmax,Rmin); 
+    result += dy*TorusDerivativeY(x,y,z,Rmax,Rmin); 
+    result += dz*TorusDerivativeZ(x,y,z,Rmax,Rmin); 
+
+    return result;
+  }
 
   void BVMIntersection (G4double x,G4double y,G4double z,
 			G4double dx,G4double dy,G4double dz,
 			G4double Rmax, G4double Rmin,
 			G4double *NewL,int *valid);
   
-  void SortIntervals (G4double *SortL,G4double *NewL,int *valid,int *NbIntersection);
+  void SortIntervals (G4double *SortL, G4double *NewL,
+                      G4int *valid, G4int *NbIntersection);
   
-  
-  G4double DistanceToTorus (G4double x,G4double y,G4double z,G4double dx,G4double dy,G4double dz
-							,G4double R0,G4double R1);
+  G4double DistanceToTorus (G4double x, G4double y, G4double z,
+                            G4double dx,G4double dy,G4double dz,
+                            G4double R0,G4double R1);
+
   G4int SafeNewton(G4double x, G4double y, G4double z,
 		   G4double dx, G4double dy, G4double dz,
 		   G4double Rmax, G4double Rmin,
@@ -219,7 +232,6 @@ private:
 		   G4double dx, G4double dy, G4double dz,
 		   G4double Rmax, G4double Rmin,
 		   G4double Lmin,G4double Lmax);
-  
 };
    	
 #endif
