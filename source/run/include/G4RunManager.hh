@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.21 2001-11-20 23:29:14 asaim Exp $
+// $Id: G4RunManager.hh,v 1.22 2001-11-23 16:20:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -210,12 +210,13 @@ class G4RunManager
     G4std::vector<G4Event*>* previousEvents;
     G4int n_perviousEventsToBeStored;
 
-    G4int storeRandomNumberStatus;
+    G4bool storeRandomNumberStatus;
     G4String randomNumberStatusDir;
     G4String versionString;
 
   public:
-    virtual void StoreRandomNumberStatus(G4int eventID=-1);
+    virtual void rndmSaveThisRun();
+    virtual void rndmSaveThisEvent();
     virtual void RestoreRandomNumberStatus(G4String fileN);
 
   public: // with description
@@ -277,9 +278,9 @@ class G4RunManager
     { return versionString; }
 
   public:
-    inline void SetRandomNumberStore(G4int i)
-    { storeRandomNumberStatus = i; }
-    inline G4int GetRandomNumberStore() const
+    inline void SetRandomNumberStore(G4bool flag)
+    { storeRandomNumberStatus = flag; }
+    inline G4bool GetRandomNumberStore() const
     { return storeRandomNumberStatus; }
     inline void SetRandomNumberStoreDir(G4String dir)
     { 

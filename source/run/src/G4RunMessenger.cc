@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.9 2001-10-05 23:31:55 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.10 2001-11-23 16:20:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -119,46 +119,68 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   cutCmd->SetGuidance(" if cutoff value(s) have been modified after the");
   cutCmd->SetGuidance(" first initialization (or BeamOn).");
   cutCmd->AvailableForStates(PreInit,Idle);
-
-  storeRandCmd = new G4UIcmdWithAnInteger("/run/storeRandomNumberStatus",this);
-  storeRandCmd->SetGuidance("Store the status of the random number engine to a file.");
-  storeRandCmd->SetGuidance("See CLHEP manual for detail.");
-  storeRandCmd->SetGuidance("Frequency : 0 - not stored");
-  storeRandCmd->SetGuidance("            1 - begining of each run");
-  storeRandCmd->SetGuidance("           -1 - begining of each run (file overwritten)");
-  storeRandCmd->SetGuidance("            2 - begining of each event before generating primaries");
-  storeRandCmd->SetGuidance("           -2 - begining of each event before generating primaries (file overwritten)");
-  storeRandCmd->SetGuidance("           -3 - begining of both each run and each event before generating primaries (file overwritten)");
-  storeRandCmd->SetGuidance("Stored status can be restored by ");
-  storeRandCmd->SetGuidance("  /run/restoreRandomNumberStatus command.");
-  storeRandCmd->SetGuidance("In case Frequency is negative, a output file (file name RandEngine.stat)");
-  storeRandCmd->SetGuidance("  is overwitten every time.");
-  storeRandCmd->SetGuidance("In case Frequency is -3, output files (file name RandEngineRun.stat and RanEngineEvent.stat)");
-  storeRandCmd->SetGuidance("  are overwitten every time.");
-  storeRandCmd->SetGuidance("In case Frequency is 1, file names are RandEngineRxxx.stat,");
-  storeRandCmd->SetGuidance("  where xxx is the run number.");
-  storeRandCmd->SetGuidance("In case Frequency is 2, file names are RandEngineRxxxEyyy.stat,");
-  storeRandCmd->SetGuidance("  where xxx is the run number and yyy is the event number.");
-  storeRandCmd->AvailableForStates(PreInit,Idle);
-  storeRandCmd->SetParameterName("frequency",true);
-  storeRandCmd->SetDefaultValue(1);
-  storeRandCmd->SetRange("frequency >=-3 && frequency <=2");
-
-  restoreRandCmd = new G4UIcmdWithAString("/run/restoreRandomNumberStatus",this);
-  restoreRandCmd->SetGuidance("Restore the status of the random number engine from a file.");
-  restoreRandCmd->SetGuidance("See CLHEP manual for detail.");
-  restoreRandCmd->SetGuidance("The engine status must be stored beforehand.");
-  restoreRandCmd->SetGuidance("Directory of the status file should be set by /run/randomNumberStatusDirectory command.");
-  restoreRandCmd->SetParameterName("fileName",true);
-  restoreRandCmd->SetDefaultValue("RandEngine.stat");
-  restoreRandCmd->AvailableForStates(PreInit,Idle,GeomClosed);
-
-  randDirCmd = new G4UIcmdWithAString("/run/randomNumberStatusDirectory",this);
-  randDirCmd->SetGuidance("Define the directory name of the random number status files.");
-  randDirCmd->SetGuidance("Directory must be creates before storing the file.");
+  
+  randomDirectory = new G4UIdirectory("/random/");
+  randomDirectory->SetGuidance("Random number status control commands.");
+  
+  randDirCmd = new G4UIcmdWithAString("/random/setDirectoryName",this);
+  randDirCmd->SetGuidance("Define the directory name of the rndm status files.");
+  randDirCmd->SetGuidance("Directory must be creates before storing the files.");
   randDirCmd->SetParameterName("fileName",true);
   randDirCmd->SetDefaultValue("./");
   randDirCmd->AvailableForStates(PreInit,Idle,GeomClosed);
+  
+  savingFlagCmd = new G4UIcmdWithABool("/random/setSavingFlag",this);
+  savingFlagCmd->SetGuidance("The randomNumberStatus will be saved at :");
+  savingFlagCmd->SetGuidance("begining of run (currentRun.rndm) and "
+                             "begining of event (currentEvent.rndm) ");  
+  savingFlagCmd->SetParameterName("flag",true);
+  savingFlagCmd->SetDefaultValue(true);
+  
+  saveThisRunCmd = new G4UIcmdWithoutParameter("/random/saveThisRun",this);
+  saveThisRunCmd->SetGuidance("copy currentRun.rndm to runXXX.rndm");
+  saveThisRunCmd->AvailableForStates(Idle,GeomClosed,EventProc);
+  
+  saveThisEventCmd = new G4UIcmdWithoutParameter("/random/saveThisEvent",this);
+  saveThisEventCmd->SetGuidance("copy currentEvent.rndm to runXXXevtYYY.rndm");
+  saveThisEventCmd->AvailableForStates(EventProc);
+          
+  restoreRandCmd = new G4UIcmdWithAString("/random/resetEngineFrom",this);
+  restoreRandCmd->SetGuidance("Reset the status of the rndm engine from a file.");
+  restoreRandCmd->SetGuidance("See CLHEP manual for detail.");
+  restoreRandCmd->SetGuidance("The engine status must be stored beforehand.");
+  restoreRandCmd->SetGuidance("Directory of the status file should be set by"
+                              " /random/setDirectoryName.");
+  restoreRandCmd->SetParameterName("fileName",true);
+  restoreRandCmd->SetDefaultValue("currentRun.rndm");
+  restoreRandCmd->AvailableForStates(PreInit,Idle,GeomClosed);
+  
+  //old commands for the rndm engine status handling
+  //
+  randDirOld = new G4UIcmdWithAString("/run/randomNumberStatusDirectory",this);
+  randDirOld->SetGuidance("Define the directory name of the rndm status files.");
+  randDirOld->SetGuidance("Directory must be creates before storing the files.");
+  randDirOld->SetParameterName("fileName",true);
+  randDirOld->SetDefaultValue("./");
+  randDirOld->AvailableForStates(PreInit,Idle,GeomClosed);
+  
+  storeRandOld = new G4UIcmdWithAnInteger("/run/storeRandomNumberStatus",this);
+  storeRandOld->SetGuidance("The randomNumberStatus will be saved at :");
+  storeRandOld->SetGuidance("begining of run (currentRun.rndm) and "
+                            "begining of event (currentEvent.rndm) ");  
+  storeRandOld->SetParameterName("flag",true);
+  storeRandOld->SetDefaultValue(1);
+          
+  restoreRandOld = new G4UIcmdWithAString("/run/restoreRandomNumberStatus",this);
+  restoreRandOld->SetGuidance("Reset the status of the rndm engine from a file.");
+  restoreRandOld->SetGuidance("See CLHEP manual for detail.");
+  restoreRandOld->SetGuidance("The engine status must be stored beforehand.");
+  restoreRandOld->SetGuidance("Directory of the status file should be set by"
+                              " /random/setDirectoryName.");
+  restoreRandOld->SetParameterName("fileName",true);
+  restoreRandOld->SetDefaultValue("currentRun.rndm");
+  restoreRandOld->AvailableForStates(PreInit,Idle,GeomClosed);  
+
 }
 
 G4RunMessenger::~G4RunMessenger()
@@ -172,10 +194,15 @@ G4RunMessenger::~G4RunMessenger()
   delete initCmd;
   delete geomCmd;
   delete cutCmd;
-  delete storeRandCmd;
-  delete restoreRandCmd;
-  delete randDirCmd;
+  delete randDirOld; delete storeRandOld; delete restoreRandOld; 
   delete runDirectory;
+  
+  delete randDirCmd;
+  delete savingFlagCmd;
+  delete saveThisRunCmd;
+  delete saveThisEventCmd;
+  delete restoreRandCmd;
+  delete randomDirectory;
 }
 
 void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
@@ -208,12 +235,33 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->GeometryHasBeenModified(); }
   else if( command==cutCmd )
   { runManager->CutOffHasBeenModified(); }
-  else if( command==storeRandCmd )
-  { runManager->SetRandomNumberStore(storeRandCmd->GetNewIntValue(newValue)); }
-  else if( command==restoreRandCmd )
-  { runManager->RestoreRandomNumberStatus(newValue); }
+  
   else if( command==randDirCmd )
   { runManager->SetRandomNumberStoreDir(newValue); }
+  else if( command==savingFlagCmd )
+  { runManager->SetRandomNumberStore(savingFlagCmd->GetNewBoolValue(newValue)); }    
+  else if( command==saveThisRunCmd )
+  { runManager->rndmSaveThisRun(); }
+  else if( command==saveThisEventCmd )
+  { runManager->rndmSaveThisEvent(); }  
+  else if( command==restoreRandCmd )
+  { runManager->RestoreRandomNumberStatus(newValue); }
+  
+  else if( command==randDirOld )
+  {G4cout << "warning: deprecated command. Use /random/setDirectoryName"
+          << G4endl; 
+   runManager->SetRandomNumberStoreDir(newValue); }
+  else if( command==storeRandOld )
+  {G4cout << "warning: deprecated command. Use /random/setSavingFlag"
+          << G4endl;
+   G4int frequency = storeRandOld->GetNewIntValue(newValue);
+   G4bool flag = false;
+   if(frequency != 0) flag = true;	     
+   runManager->SetRandomNumberStore(flag); }    
+  else if( command==restoreRandOld )
+  {G4cout << "warning: deprecated command. Use /random/resetEngineFrom"
+           << G4endl;  
+   runManager->RestoreRandomNumberStatus(newValue); }  
 }
 
 G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)
@@ -222,8 +270,6 @@ G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)
   
   if( command==verboseCmd )
   { cv = verboseCmd->ConvertToString(runManager->GetVerboseLevel()); }
-  else if( command==storeRandCmd )
-  { cv = storeRandCmd->ConvertToString(runManager->GetRandomNumberStore()); }
   else if( command==randDirCmd )
   { cv = runManager->GetRandomNumberStoreDir(); }
   

@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2001-11-20 23:29:14 asaim Exp $
+$Id: History,v 1.48 2001-11-23 16:20:29 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+Nov 23, 2001 M.Maire
+- Add rndmSaveThisRun() and rndmSaveThisEvent() methods to G4RunManager.
+- Add /random/ commands to G4RunMessenger
 
 Nov 20, 2001 M.Asai (run-V03-02-09)
 - Add GetVersionString() method to G4RunManager.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.37 2001-11-21 13:45:42 gcosmo Exp $
+// $Id: G4RunManager.cc,v 1.38 2001-11-23 16:20:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,7 +69,7 @@ G4RunManager::G4RunManager()
  geometryNeedsToBeClosed(true),runAborted(false),initializedAtLeastOnce(false),
  geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
- storeRandomNumberStatus(0)
+ storeRandomNumberStatus(false)
 {
   if(fRunManager)
   { G4Exception("G4RunManager constructed twice."); }
@@ -220,7 +220,10 @@ void G4RunManager::RunInitialization()
 
   runAborted = false;
 
-  if(storeRandomNumberStatus==1 || storeRandomNumberStatus==-1 || storeRandomNumberStatus==-3) StoreRandomNumberStatus();
+  if(storeRandomNumberStatus) {
+    G4String fileN = randomNumberStatusDir + "currentRun.rndm"; 
+    HepRandom::saveEngineStatus(fileN);
+  }
   
   if(verboseLevel>0) G4cout << "Start Run processing." << G4endl;
 }
@@ -283,8 +286,11 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 
   G4Event* anEvent = new G4Event(i_event);
 
-  if(storeRandomNumberStatus==2 || storeRandomNumberStatus==-2 || storeRandomNumberStatus==-3) StoreRandomNumberStatus(anEvent->GetEventID());
-
+  if(storeRandomNumberStatus) {
+    G4String fileN = randomNumberStatusDir + "currentEvent.rndm"; 
+    HepRandom::saveEngineStatus(fileN);
+  }  
+    
   userPrimaryGeneratorAction->GeneratePrimaries(anEvent);
   return anEvent;
 }
@@ -416,34 +422,63 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
   geometryNeedsToBeClosed = true;
 }
 
-void G4RunManager::StoreRandomNumberStatus(G4int eventID)
+void G4RunManager::rndmSaveThisRun()
 {
-  G4String fileN = randomNumberStatusDir+"RandEngine";
-  if(storeRandomNumberStatus>0 && currentRun != 0)
-  {
-    char st[20];
-    G4std::ostrstream os(st,20);
-    os << currentRun->GetRunID() << '\0';
-    fileN += "R";
-    fileN += st;
+  G4int runNumber = runIDCounter;
+  if(currentRun == 0) runNumber--;        //state Idle; decrease runNumber
+  if(!storeRandomNumberStatus || runNumber < 0) {
+     G4cout << "---> warning from G4RunManager::rndmSaveThisRun():"
+          "there is no currentRun or its RandomEngineStatus is not available." 
+	  << G4endl;
+     return;
   }
-  if(storeRandomNumberStatus==2 && eventID>=0)
-  {
-    char st[20];
-    G4std::ostrstream os(st,20);
-    os << eventID << '\0';
-    fileN += "E";
-    fileN += st;
+  
+  G4String fileIn  = randomNumberStatusDir + "currentRun.rndm";
+  G4std::ifstream In(fileIn);
+  if (!In) {
+     G4cout << "---> warning from G4RunManager::rndmSaveThisRun()"     	       
+               " there is no file: " << fileIn << G4endl;
+     return;
   }
-  if(storeRandomNumberStatus==-3)
-  {
-    if(eventID>=0)
-    { fileN += "Run"; }
-    else
-    { fileN += "Event"; }
+  
+  G4std::ostrstream os;
+  os << "run" << runNumber << ".rndm" << '\0';
+  G4String fileOut = randomNumberStatusDir + os.str();  
+  G4std::ofstream Out(fileOut);
+  
+  //ready to copy file
+  char c;
+  while(In.get(c)) Out.put(c);
+  G4cout << "---> currentRun.rndm copied on file: " << fileOut << G4endl;    
+}
+
+void G4RunManager::rndmSaveThisEvent()
+{
+  if(!storeRandomNumberStatus || currentEvent == 0) {
+     G4cout << "---> warning from G4RunManager::rndmSaveThisEvent():"
+       " there is no currentEvent or its RandomEngineStatus is not available."
+       << G4endl;
+     return;
   }
-  fileN += ".stat";
-  HepRandom::saveEngineStatus(fileN);
+  
+  G4String fileIn  = randomNumberStatusDir + "currentEvent.rndm";
+  G4std::ifstream In(fileIn);
+  if (!In) {
+     G4cout << "---> warning from G4RunManager::rndmSaveThisEvent()"     	       
+               " there is no file: " << fileIn << G4endl;
+     return;
+  }     	              	       
+
+  G4std::ostrstream os;
+  os << "run" << currentRun->GetRunID() << "evt" << currentEvent->GetEventID()
+     << ".rndm" << '\0';
+  G4String fileOut = randomNumberStatusDir + os.str();       
+  G4std::ofstream Out(fileOut);
+  
+  //ready to copy file
+  char c;
+  while(In.get(c)) Out.put(c);  
+  G4cout << "---> currentEvent.rndm copied on file: " << fileOut << G4endl;  
 }
   
 void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
@@ -453,5 +488,9 @@ void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
   { fileNameWithDirectory = randomNumberStatusDir+fileN; }
   else
   { fileNameWithDirectory = fileN; }
+  
   HepRandom::restoreEngineStatus(fileNameWithDirectory);
-}
+  G4cout << "---> RandomNumberEngineStatus restored from file: "
+         << fileNameWithDirectory << G4endl;
+  HepRandom::showEngineStatus();	 
+  }
