@@ -45,10 +45,10 @@
     
     if( numberOfElements == 1 ) 
     {
-      currentZ = G4double((*theElementVector)(0)->GetZ());
-      currentN = (*theElementVector)(0)->GetN();
+      currentZ = G4double( ((*theElementVector)[0])->GetZ());
+      currentN = (*theElementVector)[0]->GetN();
       targetNucleus.SetParameters(currentN, currentZ);
-      return (*theElementVector)(0);
+      return (*theElementVector)[0];
     }
     
     const G4double *theAtomicNumberDensity = aMaterial->GetAtomicNumDensityVector();
@@ -59,7 +59,7 @@
     for( i=0; i < numberOfElements; ++i )
     {
       runningSum.push_back(theAtomicNumberDensity[i] *
-        dispatch->GetMicroscopicCrossSection( aParticle, (*theElementVector)(i), aTemp));
+        dispatch->GetMicroscopicCrossSection( aParticle, (*theElementVector)[i], aTemp));
       crossSectionTotal+=runningSum[i];
     }
     
@@ -68,16 +68,16 @@
     { 
       if( random<=runningSum[i]/crossSectionTotal )
       {
-        currentZ = G4double((*theElementVector)(i)->GetZ());
-        currentN = (*theElementVector)(i)->GetN();
+        currentZ = G4double( ((*theElementVector)[i])->GetZ());
+        currentN = ((*theElementVector)[i])->GetN();
         targetNucleus.SetParameters(currentN, currentZ);
-        return (*theElementVector)(i);
+        return (*theElementVector)[i];
       }
     }
-    currentZ = G4double((*theElementVector)(numberOfElements-1)->GetZ());
-    currentN = (*theElementVector)(numberOfElements-1)->GetN();
+    currentZ = G4double((*theElementVector)[numberOfElements-1]->GetZ());
+    currentN = (*theElementVector)[numberOfElements-1]->GetN();
     targetNucleus.SetParameters(currentN, currentZ);
-    return (*theElementVector)(numberOfElements-1);
+    return (*theElementVector)[numberOfElements-1];
   }
  
  G4VParticleChange *G4HadronicProcess::GeneralPostStepDoIt(
