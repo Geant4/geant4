@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.cc,v 1.4 1999-03-30 13:09:41 maire Exp $
+// $Id: G4UnitsTable.cc,v 1.5 1999-04-13 15:23:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,11 +70,13 @@ G4UnitDefinition::G4UnitDefinition(G4UnitDefinition& right)
  
 G4UnitDefinition& G4UnitDefinition::operator=(const G4UnitDefinition& right)
 {
-  if (this == &right) return *this;
-  Name          = right.Name;
-  SymbolName    = right.SymbolName;
-  Value         = right.Value;
-  CategoryIndex = right.CategoryIndex;
+  if (this != &right)
+    {
+      Name          = right.Name;
+      SymbolName    = right.SymbolName;
+      Value         = right.Value;
+      CategoryIndex = right.CategoryIndex;
+    }
   return *this;
 }
 
@@ -291,11 +293,13 @@ G4UnitsCategory::G4UnitsCategory(G4UnitsCategory& right)
  
 G4UnitsCategory& G4UnitsCategory::operator=(const G4UnitsCategory& right)
 {
-  if (this == &right) return *this;
-  Name      = right.Name;
-  UnitsList = right.UnitsList;
-  NameMxLen = right.NameMxLen;
-  SymbMxLen = right.SymbMxLen;
+  if (this != &right)
+    {
+      Name      = right.Name;
+      UnitsList = right.UnitsList;
+      NameMxLen = right.NameMxLen;
+      SymbMxLen = right.SymbMxLen;
+    }
   return *this;
 }
 
