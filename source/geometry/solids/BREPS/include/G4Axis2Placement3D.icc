@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Axis2Placement3D.icc,v 1.5 2001-07-11 09:59:30 gunter Exp $
+// $Id: G4Axis2Placement3D.icc,v 1.6 2001-07-20 11:15:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -59,9 +59,9 @@ void G4Axis2Placement3D::Init( const G4Vector3D& refDirection0 ,
   pY = pZ.cross(pX); // normalized
   
   // basis transformation
-  fromPlacementCoordinates= HepTranslate3D(location)
-    * G4Transform3D(HepXHat, HepYHat, HepZHat,
-		     pX, pY, pZ);
+  fromPlacementCoordinates =
+       G4Transform3D( G4Translate3D(location) *
+                      G4Transform3D(HepXHat, HepYHat, HepZHat, pX, pY, pZ) );
 
   toPlacementCoordinates= fromPlacementCoordinates.inverse();
 }
