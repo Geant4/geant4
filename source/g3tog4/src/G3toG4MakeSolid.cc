@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4MakeSolid.cc,v 1.6 2000-08-01 09:08:41 gcosmo Exp $
+// $Id: G3toG4MakeSolid.cc,v 1.7 2001-03-12 09:49:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, V.Berejnoi 27 Sep 99 
@@ -200,7 +200,7 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     NegVolPars = pRmin<0 || pRmax<0;
 
     if (!(NegVolPars || Deferred)) {
-      solid = new G4Sphere(vname, pRmin, pRmax, pThe1, pDThe, pPhi1, pDPhi);
+      solid = new G4Sphere(vname, pRmin, pRmax, pPhi1, pDPhi, pThe1, pDThe);
     }
 
   } else if ( shape == "PARA" ) {
