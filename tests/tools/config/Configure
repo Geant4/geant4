@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.4 2002-06-26 11:38:56 sadilov Exp $
+# $Id: Configure,v 1.5 2002-07-01 10:25:47 sadilov Exp $
 #
-# Generated on Wed Jun 26 13:35:12 CEST 2002 [metaconfig 3.0 PL70]
+# Generated on Mon Jul  1 12:23:24 CEST 2002 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -206,6 +206,7 @@ g4vis_build_openglxm_driver=''
 g4vis_build_raytracer_driver=''
 g4vis_build_vrml_driver=''
 g4vis_build_vrmlfile_driver=''
+g4vis_oglhome=''
 g4vis_use_asciitree=''
 g4vis_use_dawn=''
 g4vis_use_dawnfile=''
@@ -1576,6 +1577,8 @@ case "$g4osname" in
 				;;
 		'sunos')	g4osname=SUN
 				;;
+		'solaris')	g4osname=SUN
+				;;
 		'win32')	g4osname=WIN32
 				;;
 	esac
@@ -1629,13 +1632,14 @@ while test 1 = 1  ; do
 
 g4message=`cat << EOM
 
-Definition of G4SYSTEM variable.
+Definition of G4SYSTEM variable is $g4osname-$g4compiler.
+That stands for:
 
 1) OS		: $g4osname
 
 2) Compiler	: $g4compiler
 
-Select from list above (e.g. 2) 
+To modify default settings, select number above (e.g. 2) 
 EOM`
 
 dflt="Press [Enter] for default settings"
@@ -2186,9 +2190,9 @@ esac
 case "$g4install" in
 '')
 	if [ X$HOME = X/ ] ; then
-	G4HOME=""
+	HOME=""
 	fi
-	g4install=$G4HOME/geant4
+	g4install=$HOME/geant4
 	;;
 esac
 
@@ -2206,7 +2210,8 @@ esac
 
 case "$g4include" in
 '')
-	g4include=$g4install/include
+#	g4include=$g4install/include
+	g4include=''
 	;;
 esac
 
@@ -2282,7 +2287,7 @@ g4message=`cat << EOM
 
 2) G4LIB:		$g4lib
 
-Select from list above (e.g. 2) 
+To modify default settings, select number above (e.g. 2) 
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
@@ -2349,7 +2354,7 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4install/../G4EMLOW0.5
+	g4ledata=$g4install/../G4EMLOW1.1
 	;;
 esac
 
@@ -2375,7 +2380,7 @@ Data which is not part of the default Geant4 distribution:
 
 4) NeutronHPCrossSections:	$g4neutronhpcrosssections
 
-Select from list above (e.g. 2) 
+To modify default settings, select number above (e.g. 2) 
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
@@ -2405,7 +2410,7 @@ gans=$ans
 	3) 
 		dflt=$g4ledata
 		fn='f~'
-		rp="Where is G4EMLOW0.5 data installed ?"
+		rp="Where is G4EMLOW1.1 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
@@ -2526,7 +2531,7 @@ You can customize paths of you CLHEP installation:
 2) CLHEP_LIB_DIR:		$g4clhep_lib_dir
 3) CLHEP_LIB:			$g4clhep_lib
 
-Select from list above (e.g. 2) 
+To modify default settings, select number above (e.g. 2) 
 EOM`
 
 
@@ -3111,8 +3116,10 @@ g4message=`cat << EOM
 
   G4UI_NONE
 
-If set, no UI sessions nor any UI libraries are built. This can be useful
-when running a pure batch job or in a user framework having its own UI system.
+If this variable is set, no UI sessions nor any UI libraries are built. 
+This can be useful when running a pure batch job or in a user framework 
+having its own UI system.
+Do you want to set this variable ?
 
 EOM`
 
@@ -3339,6 +3346,12 @@ case "$g4vis_none" in
 	;;
 esac
 
+case "$g4vis_oglhome" in
+'')
+	g4vis_oglhome="/usr"
+	;;
+esac
+
 case "$g4vis_build_openglwin32_driver" in
 '')
 	g4vis_build_openglwin32_driver=n
@@ -3497,7 +3510,8 @@ g4message=`cat << EOM
 
   G4VIS_NONE
 
-If specified, no visualization drivers will be built or used.
+If this variable is set, no visualization drivers will be built or used.
+Do you want to set this variable ?
 
 EOM`
 
@@ -3898,7 +3912,24 @@ gans=y
 ;;
 esac
 
+if [ X$g4vis_build_openglx_driver = Xy ] || [ X$g4vis_build_openglxm_driver = Xy ] || [ X$g4vis_build_openglwin32_driver = Xy ] ; then 
 
+g4message=`cat << EOM
+
+  OGLHOME/include
+  OGLHOME/lib
+
+You have selected to use OpenGL driver.
+Specify the correct path (OGLHOME) where OpenGL is installed in your system:
+EOM`
+
+dflt=$g4vis_oglhome
+fn='d~'
+rp=$g4message
+. ./getfile
+g4vis_oglhome=$ans
+
+fi
 echo " "
 case "$g4use_hepodbms" in
 '')
@@ -4100,6 +4131,7 @@ g4vis_build_openglxm_driver='$g4vis_build_openglxm_driver'
 g4vis_build_raytracer_driver='$g4vis_build_raytracer_driver'
 g4vis_build_vrml_driver='$g4vis_build_vrml_driver'
 g4vis_build_vrmlfile_driver='$g4vis_build_vrmlfile_driver'
+g4vis_oglhome='$g4vis_oglhome'
 g4vis_use_asciitree='$g4vis_use_asciitree'
 g4vis_use_dawn='$g4vis_use_dawn'
 g4vis_use_dawnfile='$g4vis_use_dawnfile'
