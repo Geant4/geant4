@@ -1,4 +1,4 @@
-$Id: History,v 1.12 2000-03-14 09:27:28 gcosmo Exp $
+$Id: History,v 1.13 2000-03-23 08:27:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Mar 23,   00   G. Cosmo                  geom-solids-csg-V01-01-00
+ - Tagged.
+
+Mar 22,   00   D. Williams
+ - G4PolyhedraSide.cc: fixed bug in G4PolyhedraSide::Normal(...).
+   The method Normal(...) (used by G4VCSGfaceted::SurfaceNormal) was not
+   filling in the argument bestDistance. This fixes a bug observed in
+   G4Polyhedra::SurfaceNormal.
+
 Mar 14,   00   V. Grichine
  - Added diagnostics in G4Cons, G4Sphere and G4Torus in function
    DistanceToOut(p,v,...).
@@ -28,7 +37,6 @@ Mar 03,   00   G. Cosmo                   geom-solids-csg-V01-00-05
    to avoid warnings on Linux.
 
 Jan 19,   00   G. Cosmo			  geom-solids-csg-01-00-04
-
  - Fixed bug in DistanceToIn(p,v). Modified files: G4Trap.cc and
    testG4Trap.cc. (V.Grichine)
  - Syncronized file versions with HEAD (essentially CVS headers changes).
@@ -36,39 +44,27 @@ Jan 19,   00   G. Cosmo			  geom-solids-csg-01-00-04
    and test/SBT.
  
 Nov 17,   99   J. Apostolakis             geom-solids-csg-01-00-03
- 
  - Tagged
 
 Nov 17,   99   V. Grichine
-
-   Added initialisation to Eside "side" variable in DistanceToOut(p,v)
-   in CSG solids.    
-                            --> Problem report from D.C. Williams, BaBaR
-
-   A check in G4Trap Makeplane added.
-
-
+ - Added initialisation to Eside "side" variable in DistanceToOut(p,v)
+   in CSG solids   -->   Problem report from D.C. Williams, BaBar
+ - A check in G4Trap Makeplane added.
 
 Nov 10,   99   J. Apostolakis             geom-solids-csg-01-00-02-cand
-
-  - Included  David Williams' modifications to 
-        G4IntersectingCone.cc, G4PolyconeSide.cc and G4VCSGfaceted.cc
-
-     and to  test/SBT/SBT.cc  and  test/SBT/polycone.geant4
-
+ - Included  David Williams' modifications to 
+   G4IntersectingCone.cc, G4PolyconeSide.cc and G4VCSGfaceted.cc
+   and to  test/SBT/SBT.cc  and  test/SBT/polycone.geant4
 
 Nov 10,   99   J. Apostolakis             geom-solids-csg-01-00-01
+ - Tagged
 
-  - Tagged
+May 18,   99   David Williams
+ - Replaced 1/DBL_MAX with DBL_MIN (valid correction, seen in tests for STL) 
+   in G4PolyPhiFace.cc, G4PolyconeSide.cc and G4PolyhedraSide.cc
 
-
-May 18,   99   David Wiliams
-  Replaced 1/DBL_MAX with DBL_MIN (valid correction, seen in tests for STL) 
-    in G4PolyPhiFace.cc, G4PolyconeSide.cc and G4PolyhedraSide.cc
-
-Apr 29,   99   David Wiliams
-
-  G4Polyhedra and G4Polycone (and G4VCSGfaceted) modified:
+Apr 29,   99   David Williams
+ - G4Polyhedra and G4Polycone (and G4VCSGfaceted) modified:
          1. Implemented correct copy constructors and assignment operators.
          2. Fix some leaks for tracks that pass exactly through an edge. 
             Some leaks still remain: particularly if a track passes through
@@ -76,41 +72,33 @@ Apr 29,   99   David Wiliams
          3. G4Polyhedra argument numSide changed to G4int (from G4double)
 
 Apr 13,   99   Vladimir Grichine and Simone Giani
-
- Minor consistency fix to 8 basic CSG solids: 
-   Tolerance used in calculation of extent but not in one place, and not another
-   - this tripped up the client code. 
+ - Minor consistency fix to 8 basic CSG solids: 
+   Tolerance used in calculation of extent but not in one place,
+   and not another - this tripped up the client code. 
 
 Feb 16,   99   David Williams
-
-  Repaired bugs in G4Polycone (G4PolyconeSide.cc) as found in
-  test/testG4Polycone and missed in below.
-  
-  Updated definition of DistanceToIn(p) and DistanceToOut(p) to
-  return zero when the point p is on the surface of the solid.
+ - Repaired bugs in G4Polycone (G4PolyconeSide.cc) as found in
+   test/testG4Polycone and missed in below.
+ - Updated definition of DistanceToIn(p) and DistanceToOut(p) to
+   return zero when the point p is on the surface of the solid.
 
 Feb 12,   99   David Williams
-
-  src/G4PolyconeSide.cc updated (revision 1.4) to fix a bug discovered by
-  test/testG4Polycone.
+ - src/G4PolyconeSide.cc updated (revision 1.4) to fix a bug discovered by
+   test/testG4Polycone.
 
 Feb   9,  99   David C. Williams      (davidw@scipp.ucsc.edu)
-
-   I've committed new versions of the CSG Polycone and Polyhedra in the
- geant4 repository, including a new utility class called
- G4ReduciblePolygon. The new versions fix several subtle bugs which my  
- "test3" batch geometry testing code uncovered. In addition, the new class
- G4ReduciblePolygon is used to run strict tests on the validity of input
- parameters.
+ - I've committed new versions of the CSG Polycone and Polyhedra in the
+   geant4 repository, including a new utility class called
+   G4ReduciblePolygon. The new versions fix several subtle bugs which my  
+   "test3" batch geometry testing code uncovered. In addition, the new class
+   G4ReduciblePolygon is used to run strict tests on the validity of input
+   parameters.
    To fix a bug in Polyhedra, I had to back out some fancy code that
- allowed it to calculate intersections at a speed that was independent of
- the number of sides. The new version now runs at a speed proportional to
- the number of sides, and is thus much slower for polyhedras with many
- sides. I can fix this, but I thought it would be best to get the bug fixes
- in as soon as possible.
+   allowed it to calculate intersections at a speed that was independent of
+   the number of sides. The new version now runs at a speed proportional to
+   the number of sides, and is thus much slower for polyhedras with many
+   sides. I can fix this, but I thought it would be best to get the bug fixes
+   in as soon as possible.
 
-
-Feb  10,  99   John Apostolakis   
-
-  History file created.
-  
+Feb  10,  99   John Apostolakis
+ - History file created.
