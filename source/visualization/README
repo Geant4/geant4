@@ -1,4 +1,4 @@
-$Id: README,v 1.10 2001-08-24 23:26:56 perl Exp $
+$Id: README,v 1.11 2001-11-13 07:06:01 stanaka Exp $
 
 Note: Specific graphics systems must be instantiated in a high level
 library to avoid circular dependencies.  Also, some specifically need
@@ -26,7 +26,7 @@ For example, in your main():
 See, for example, examples/novices/N02/exampleN02.cc.
 
 1) Decide which graphics systems drivers you want.  By default you get:
-     ASCIITree, DAWNFILE, GAGTree, RayTracer, VRMLFILE.
+     ASCIITree, DAWNFILE, GAGTree, HepRepFile, RayTracer, VRMLFILE.
 
    For others, the choice depends on what graphics libraries you have
    access to.  Set the appropriate environment variables.  Here are
@@ -54,8 +54,7 @@ See, for example, examples/novices/N02/exampleN02.cc.
 
    In some cases you will need additional variables, e.g.:
 
-     setenv DAWN_HOME /afs/cern.ch/rd44/dev/DAWN/AIX-xlC
-
+     setenv DAWN_HOME /user/local/bin
      set path=( $path $DAWN_HOME )
 
      setenv OPACS_HOME ~/private/GEANT4/OPACS
@@ -68,16 +67,6 @@ See, for example, examples/novices/N02/exampleN02.cc.
    environment variable:
 
      setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
-
-   If you decided to use the Fukui Renderer DAWN, you will also need
-   to set, on rsplus, 
-
-     setenv TCL_LIBRARY /usr/local/lib/tcl8.0
-     setenv TK_LIBRARY  /usr/local/lib/tk8.0
-
-   Such setting is not necessary on other machines, where only one version 
-   of Tcl/Tk is installed.
-
 
 2) Compile and build the Geant4 libraries:
 
@@ -107,7 +96,7 @@ See, for example, examples/novices/N02/exampleN02.cc.
 
 3) Decide which graphics systems you want to use in your particular
    excutable.  By default you get:
-     ASCIITree, DAWNFILE, GAGTree, RayTracer, VRMLFILE.
+     ASCIITree, DAWNFILE, GAGTree, HepRepFile, RayTracer, VRMLFILE.
 
    Of course, this has to be chosen from the set you
    installed in (1,2) above.  Here are the current possibilities:
