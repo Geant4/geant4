@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2005-03-03 16:08:41 allison Exp $
+$Id: History,v 1.18 2005-03-03 23:09:23 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,8 +20,8 @@ committal in the CVS repository !
 March 3rd, 2005   J. Allison
 - Changed AddThis to AddSolid in all concrete implementations of
   DescribeYourselfTo (G4VGraphicsScene&) in all solids.
-- Used the newly available CreatePolyhedron for components of Boolean
-  solids (instead of GetPolyhedron).
+- Used the newly available GetPolyhedron for components of Boolean
+  solids (instead of CreatePolyhedron).
 
 December, 2nd, 2004   G. Cosmo             -  geomsolids-V06-02-01
 - Implemented migration to <cmath> for standard mathematical functions.
