@@ -7,10 +7,10 @@
 /gun/position 0. 0. 0.
 /gun/randomDirection on 
 /target/setTargetMat Hydrogen
-/target/setTargetThick 1500. cm
-/target/setTargetX 1500. cm
-/target/setTargetY 1500. cm
-/target/setMaxStep 0.00001 cm
+/target/setTargetThick 150000. cm
+/target/setTargetX 150000. cm
+/target/setTargetY 150000. cm
+/target/setMaxStep 0.01 cm
 #cut alto sempre per il test in range
 /le/cutE 1. m
 /target/update
@@ -32,6 +32,7 @@
 /run/beamOn 1
 /gun/energy 0.09 MeV
 /run/beamOn 1
+/target/setMaxStep 0.1 cm
 /gun/energy 0.1 MeV
 /run/beamOn 1
 /gun/energy 0.2 MeV
@@ -48,9 +49,11 @@
 /run/beamOn 1
 /gun/energy 0.8 MeV
 /run/beamOn 1
+/target/setMaxStep 1. cm
 /gun/energy 0.9 MeV
 /run/beamOn 1
 /gun/energy 1. MeV
+/target/setMaxStep 10. cm
 /run/beamOn 1
 /gun/energy 2. MeV
 /run/beamOn 1
@@ -74,3 +77,7 @@
 /run/beamOn 10
 /gun/energy 12. MeV
 /run/beamOn 10
+
+
+
+
