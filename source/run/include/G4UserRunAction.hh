@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserRunAction.hh,v 1.6 2003-03-10 01:50:21 asaim Exp $
+// $Id: G4UserRunAction.hh,v 1.7 2003-04-04 16:45:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,6 +38,10 @@ class G4Run;
 // any of the contents of G4Run object.
 //    virtual void BeginOfRunAction(const G4Run* aRun);
 //    virtual void EndOfRunAction(const G4Run* aRun);
+// The user can override the following method to instanciate his/her own
+// concrete Run class. G4Run has a virtual method RecordEvent, so that
+// the user can store any information useful to him/her with event statistics.
+//    virtual G4Run* GenerateRun();
 //  The user's concrete class derived from this class must be set to
 // G4RunManager via G4RunManager::SetUserAction() method.
 //
