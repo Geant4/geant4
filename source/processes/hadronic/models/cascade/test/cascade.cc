@@ -52,7 +52,7 @@ int main(int argc, char **argv ) {
   // get argumets from command line
   nCollisions =           (argc > 1) ? atoi(argv[1]) : nCollisions;
   bulletType  =           (argc > 2) ? atoi(argv[2]) : proton;
-  momZ        = G4double(((argc > 3) ? atoi(argv[3]) : momZ));
+  momZ        = G4double(((argc > 3) ? atoi(argv[3]) : momZ)) / GeV;
   N           = G4double(((argc > 4) ? atoi(argv[4]) : N));
   Z           = G4double(((argc > 5) ? atoi(argv[5]) : Z));
 
@@ -64,8 +64,8 @@ int main(int argc, char **argv ) {
     G4cout << "           Z " << Z           << G4endl;
   }
 
-  //testINC();     // Only INC model  
-  testINCAll();  // INC, pre-eq, evap, fission
+  testINC();     // Only INC model  
+  //testINCAll();  // INC, pre-eq, evap, fission
  
   //testINCEvap(); // INC and evaporation 
   test();        // misc. testing
@@ -98,9 +98,7 @@ G4int testINC() {
   // Set target
   G4std::vector<G4double> targetMomentum(4, 0.0);
 
-  //  G4InuclNuclei * target = new G4InuclNuclei(0.,197.,79.); //Au197  momentum = 0
-
-  G4InuclNuclei * target = new G4InuclNuclei(0.,N,Z);
+  G4InuclNuclei * target = new G4InuclNuclei(0.0, N, Z);
   target->setEnergy();
 
   // Resigister collider
@@ -167,11 +165,9 @@ G4int testINCAll() {
     // Set target
     G4std::vector<G4double> targetMomentum(4, 0.0);
 
-    //    G4InuclParticle* bull = new G4InuclElementaryParticle(bulletEnergy, 1); 
-    G4InuclParticle* bull = new G4InuclElementaryParticle(0.1,1); // momentumBullet, bulletType 
+    G4InuclParticle* bull = new G4InuclElementaryParticle(momZ, bulletType);  
 
-    // G4InuclParticle* targ = new G4InuclNuclei(0.0, 208.0, 82.0); // Pb
-    G4InuclNuclei* targ = new G4InuclNuclei(0.,197.,79.); //Au197  momentum = 0
+    G4InuclNuclei* targ = new G4InuclNuclei(0.0, N, Z);
     targ->setEnergy(); 
 
     if (verboseLevel > 2) {

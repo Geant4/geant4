@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2002-11-10 20:20:34 miheikki Exp $
+# $Id: GNUmakefile,v 1.9 2002-11-11 14:35:40 miheikki Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -118,20 +118,47 @@ NEWCC = $(addprefix G4, $(OLDCC))
 diffCc:
 	diff $(GM)/cascade/cascade/src/$(NEWCC) $(GM)/cascade/doc/inucl/inuclC/$(OLDCC)
 
+ta: # ::: make t(est) and a(nalysis)
+	gmake t; gmake a
 
 t: # ::: integrated test 
-	rm -r cascade; rm -r cascade.out; gmake cascade; cascade > cascade.out; cat cascade.out
+	rm -r cascade; rm -r cascade.out; gmake cascade; cascade > cascade.out; #cat cascade.out
 
+#(events particle bullet E [MeV] N Z)
 
-t1: # :::(t for test)
-	rm -r hetcCascadeTest; rm -r hetcCascadeTest.out; gmake hetcCascadeTest; hetcCascadeTest > hetcCascadeTest.out;cat hetcCascadeTest.out
+t1:	# ::: problem 1  (Al)  evaporation missing
+	rm -r cascade.out; cascade 10000 1 256 27 13 > cascade.out; gmake a; #cat cascade.out
+
+t2:	# ::: problem 2 (Al) srong energy tail
+	rm -r cascade.out; cascade 10000 1 160 27 13 > cascade.out; gmake a; #cat cascade.out
+
+t3:	# ::: problem 3 (Zr) weak medium energy
+	rm -r cascade.out; cascade 10000 1 256 91 40 > cascade.out; gmake a; #cat cascade.out
+
+t4:	# ::: problem 4 (Be) too few pi+'s
+	rm -r cascade.out; cascade 10000 1 585 9 4 > cascade.out; gmake a; #cat cascade.out
+
+t5:	# ::: problem 5 (Al) too many n's in medium energy
+	rm -r cascade.out; cascade 10000 1 585 27 13 > cascade.out; gmake a; #cat cascade.out
+
+t6:	# ::: problem 6 (Pb) too few neutrons 
+	rm -r cascade.out; cascade 10000 1 800 207 82 > cascade.out; gmake a; #cat cascade.out
+
+t7:	# ::: problem 7 (H) missing pions
+	rm -r cascade.out; cascade 10000 1 585 1 1 > cascade.out; gmake a; #cat cascade.out
+
+t8:	# ::: problem 8 (Zr) delta missing
+	rm -r cascade.out cascade.ps; cascade 10000 2 800 91 40 > cascade.out; gmake a; #cat cascade.out
 
 
 tt2: # :: timing for t1
 	time -v gmake t2
 
 a: # ::: (a for analysis) Integrated analysis root, eps generation for latex 
-	root -b -q cascade.C;  convert cascade.ps cascade.eps; cp cascade.eps $(RELD)/pictures/cascade.eps; gv cascade.ps;
+	root -b -q cascade.C; gv cascade.ps; 
+
+arel: #::: release analysis
+	convert cascade.ps cascade.eps; cp cascade.eps $(RELD)/pictures/cascade.eps;
 
 
 
