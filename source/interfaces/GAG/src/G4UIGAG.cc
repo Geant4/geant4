@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGAG.cc,v 1.10 2001-07-11 10:01:18 gunter Exp $
+// $Id: G4UIGAG.cc,v 1.11 2001-10-22 07:11:44 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UIGAG.cc
@@ -34,8 +34,9 @@
 #include "G4UIcommandStatus.hh"
 #include "g4std/strstream"
 
-G4UIGAG::G4UIGAG(): TVersion("T1.0a"), JVersion("J1.0a")
+G4UIGAG::G4UIGAG()//: TVersion("T1.0a"), JVersion("J1.0a")
 {
+ TVersion="T1.0a"; JVersion="J1.0a";
   //G4cout << "G4UIGAG: Apr15,98." << G4endl;
   prefix = "/";
   UI = G4UImanager::GetUIpointer();
@@ -294,7 +295,7 @@ G4String G4UIGAG::GetFullPath( G4String aNewCommand )
   else if( newCommand(0,3) == "../" )
   {
     G4String tmpPrefix = prefix;
-    G4int i_direc = 0;
+    /*G4int*/ unsigned i_direc = 0;
     while( i_direc < newCommand.length() )
     {
       if( newCommand(i_direc,3) == "../" )
@@ -397,7 +398,7 @@ void G4UIGAG::ListDirectory( G4String newCommand )
 void G4UIGAG::TerminalHelp(G4String newCommand)
 {
   G4UIcommandTree * treeTop = UI->GetTree();
-  int i = newCommand.index(" ");
+  /*int*/unsigned i = newCommand.index(" ");
   if( i != G4std::string::npos )
   {
     G4String newValue = newCommand(i+1,newCommand.length()-(i+1));
@@ -420,7 +421,7 @@ void G4UIGAG::TerminalHelp(G4String newCommand)
   G4UIcommandTree * floor[10];
   floor[0] = treeTop;
   int iFloor = 0;
-  int prefixIndex = 1;
+  /*int*/ unsigned prefixIndex = 1;
   while( prefixIndex < prefix.length()-1 )
   {
     int ii = prefix.index("/",prefixIndex);
@@ -444,7 +445,7 @@ void G4UIGAG::TerminalHelp(G4String newCommand)
       floor[iFloor]->ListCurrentWithNum(); continue;}
     else if(i == 0) { break;}
     else if( i > 0 ) {
-      int n_tree = floor[iFloor]->GetTreeEntry();
+      /*int*/ unsigned n_tree = floor[iFloor]->GetTreeEntry();
       if( i > n_tree )
       {
         if( i <= n_tree + floor[iFloor]->GetCommandEntry() )
@@ -503,7 +504,7 @@ G4String G4UIGAG::ModifyPrefix(G4String newCommand)
 G4UIcommandTree * G4UIGAG::FindDirPath(G4String newCommand)
 {
   G4UIcommandTree * comTree = UI->GetTree();
-  int idx = 1;
+  /*int*/ unsigned idx = 1;
   while( idx < newCommand.length()-1 )
   {
     int i = newCommand.index("/",idx);
@@ -569,7 +570,7 @@ void G4UIGAG::CodeGenJavaTree(G4UIcommandTree * tree, int level)
 void G4UIGAG::CodeGenJavaParams(G4UIcommandTree * tree, int level) //recursive
 {
   int treeEntry, commandEntry, i;
-  G4UIcommand * Comp;
+  //G4UIcommand * Comp;
   G4UIcommandTree * treeLink;
 
   treeEntry = tree->GetTreeEntry();
@@ -604,7 +605,7 @@ void G4UIGAG::SendAParamProperty(G4UIcommand * Comp)
     title = Comp->GetGuidanceLine(j);
     title2 = "";
     if (title != ""){
-      for(int i=0; i< title.length(); i++){
+      for(int i=0; i< (int)title.length(); i++){
 	c[0]=title(i);
 	c[1]= '\0';
 	if ( c[0] == '\n' || c[0] == '\r') {
@@ -675,7 +676,7 @@ void G4UIGAG::CodeGenTclTree(G4UIcommandTree * tree, int level)
       j = 0;
       while(1){
 	title1 = Comp->GetGuidanceLine(j);
-	for(i=0; i< title1.length(); i++){
+	for(i=0; i< (int)title1.length(); i++){
 	  char c[2];
 	  c[0]=title1(i);
 	  c[1]= '\0';
@@ -700,7 +701,7 @@ void G4UIGAG::CodeGenTclTree(G4UIcommandTree * tree, int level)
     pathName =  t->GetPathName();   
     title1 = t->GetTitle();
     title2 = "";
-    for(int i=0; i<title1.length(); i++){
+    for(int i=0; i<(int)title1.length(); i++){
       char c[2];
       c[0]=title1(i);
       c[1]= '\0';
@@ -750,7 +751,7 @@ void G4UIGAG::SendATclParamProperty(G4UIcommand * Comp)
       G4String  guide1,guide2;
       guide1 = prp->GetParameterGuidance();
       guide2 = "";
-      for(int i=0; i<guide1.length(); i++){
+      for(int i=0; i<(int)guide1.length(); i++){
         char c[2];
         c[0]=guide1(i);
         c[1]= '\0';
