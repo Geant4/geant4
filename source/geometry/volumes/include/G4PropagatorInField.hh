@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.18 2001-11-28 16:44:41 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.19 2001-11-28 19:07:38 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -138,13 +138,15 @@ class G4PropagatorInField
    inline G4double  GetMinimumEpsilonStep() const;
    inline void      SetMinimumEpsilonStep(G4double newEpsMin);
 
-     // 
    inline void      SetLargestAcceptableStep(G4double newBigDist);
    inline G4double  GetLargestAcceptableStep();
+
  public:  // without description
 
    // void  SetGlobalFieldMgr( G4FieldManager *detectorFieldMgr );
         // The Field Manager of the Detector.
+
+   inline G4FieldManager*  GetCurrentFieldManager();
 
  private:
 
