@@ -6,13 +6,12 @@
 #  include/*.ddl --> $(G4SYSTEM)/*.hh
 #                    $(G4SYSTEM)/*_ref.hh
 #                    $(G4SYSTEM)/*_ddl.cc --> $(G4SYSTEM)/*_ddl.o
-#  (schema) -------> $(G4EXAMPLE_BOOT)
+#  (schema) -------> $(G4TMPSCHEMA_BOOT)
 #  src/*.cc --------------------------------> $(G4SYSTEM)/*.o
 #
-# You must have unique G4EXAMPLE_FDID assigned by your local 
+# You must have unique G4SCHEMA_FDID assigned by your local 
 # manager of Objectivity/DB lock server.
 #
-# G4EXAMPLE_BOOT is defined as $HOME/G4EXAMPLE by default.
 
 name := G4persistency
 G4ODBMS := true
@@ -30,7 +29,7 @@ include $(G4INSTALL)/config/globlib.gmk
 
 .PHONY : all global clean clean_libs cleandb
 
-# override the target all, and warn if G4ODBMS flag is not defined.
+# if G4ODBMS flag is not defined, override the target "all" then exit 
 ifndef G4ODBMS
 all:
 	@echo Error - Persistency requires G4ODBMS and related database setup.
@@ -38,15 +37,15 @@ all:
 endif
 
 cleandb:
-ifndef G4EXAMPLE_FDID
-	@echo G4EXAMPLE_FDID is not defined.  Stop.
+ifndef G4SCHEMA_FDID
+	@echo G4SCHEMA_FDID is not defined.  Stop.
 	exit 1
 endif
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done
-	@rm -f $(G4EXAMPLE_BOOT_DIR)/G4EXAMPLE
-	@rm -f $(G4EXAMPLE_BOOT_DIR)/G4EXAMPLE.FDDB
-	@rm -f $(G4EXAMPLE_BOOT_DIR)/*.G4EXAMPLE.DB
-	@echo Copying schema file to $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
+	@rm -f $(G4TMPSCHEMA_BOOT_DIR)/G4TMPSCHEMA
+	@rm -f $(G4TMPSCHEMA_BOOT_DIR)/G4TMPSCHEMA.FDDB
+	@rm -f $(G4TMPSCHEMA_BOOT_DIR)/*.G4TMPSCHEMA.DB
+	@echo Copying schema file to $(G4TMPSCHEMA_BOOT) for FDID $(G4SCHEMA_FDID)
 	@$(HEP_ODBMS_DIR)/etc/getdb $(HEP_ODBMS_DIR)/schema/HEP_BASE \
-	  $(G4EXAMPLE_BOOT) $(G4EXAMPLE_FDID)
+	  $(G4TMPSCHEMA_BOOT) $(G4SCHEMA_FDID)
 
