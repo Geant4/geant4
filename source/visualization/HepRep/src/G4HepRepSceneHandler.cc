@@ -186,7 +186,6 @@ void G4HepRepSceneHandler::OpenHepRep() {
 
     // Create the top level Geometry Instance.
     HepRepInstance* detectorInstance = factory->createHepRepInstance(geometryInstanceTree, detectorType);
-    geometryInstanceTree->addInstance(detectorInstance);
 //    geomParentInstanceS.push(detectorInstance);
 
 //    geomParentDepth = -1;
@@ -212,7 +211,6 @@ void G4HepRepSceneHandler::OpenHepRep() {
 
     // Create the top level Event Instance.
     HepRepInstance* eventInstance = factory->createHepRepInstance(eventInstanceTree, eventType);
-    eventInstanceTree->addInstance(eventInstance);
 //    eventParentInstanceS.push(eventInstance);
 
 //    eventParentDepth = -1;
@@ -485,6 +483,9 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& traj) {
         const map<G4String,G4AttDef>* pointAttDefs = aTrajectoryPoint->GetAttDefs();
 
         HepRepInstance* pointInstance = CreateEventInstance(G4String("Point"), 1, pointAttDefs, pointAttValues);
+
+        // created
+        delete pointAttValues;
 
         // Specify the position of the trajectory point.
         G4Point3D vertex = aTrajectoryPoint->GetPosition();

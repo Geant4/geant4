@@ -32,8 +32,7 @@ bool DefaultHepRepDefinition::addAttDef(HepRepAttDef* hepRepAttDef) {
 }
 
 bool DefaultHepRepDefinition::addAttDef(string name, string desc, string type, string extra) {
-    addAttDef(new DefaultHepRepAttDef(name, desc, type, extra));
-    return true;
+    return addAttDef(new DefaultHepRepAttDef(name, desc, type, extra));
 }
 
 HepRepAttDef* DefaultHepRepDefinition::getAttDefFromNode(string name) {

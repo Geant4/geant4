@@ -12,10 +12,11 @@ DefaultHepRepAttribute::DefaultHepRepAttribute() {
 }
 
 DefaultHepRepAttribute::~DefaultHepRepAttribute() {
-    vector<HepRepAttValue *>* list = getAttValuesFromNode();
-    for (vector<HepRepAttValue*>::iterator i1 = list->begin(); i1 != list->end(); i1++) {
-        delete (*i1);
+    for (map<string, HepRepAttValue*>::iterator i = attValues.begin(); i != attValues.end(); i++) {
+        delete (*i).second;
     }
+
+    attList.clear();
 }
 
 vector<HepRepAttValue*>* DefaultHepRepAttribute::getAttValuesFromNode() {

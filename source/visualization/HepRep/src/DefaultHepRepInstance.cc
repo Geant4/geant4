@@ -21,6 +21,8 @@ DefaultHepRepInstance::DefaultHepRepInstance(HepRepInstanceTree* instanceTree, H
 }
 
 DefaultHepRepInstance::~DefaultHepRepInstance() {
+    parent = NULL;
+    type = NULL;
     for (vector<HepRepInstance*>::iterator i1 = instances.begin(); i1 != instances.end(); i1++) {
         delete (*i1);
     }

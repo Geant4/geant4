@@ -108,14 +108,9 @@ string DefaultHepRepAttValue::getString() {
 
 string DefaultHepRepAttValue::getLowerCaseString() {
     if (type != HepRepConstants::TYPE_STRING) cerr << "Trying to access AttValue as 'string'" << endl;
-    char *tmp = new char[strlen(stringValue.c_str())];
-    strcpy(tmp, stringValue.c_str());
-    int i = -1;
-    do {
-        i++;
-        tmp[i] = tolower(tmp[i]);
-    } while (tmp[i] != 0);
-    return tmp;
+    string s = stringValue;
+    transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
+    return s;
 }
 
 long DefaultHepRepAttValue::getLong() {
