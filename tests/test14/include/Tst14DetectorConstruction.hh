@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14DetectorConstruction.hh,v 1.5 2001-07-11 10:09:56 gunter Exp $
+// $Id: Tst14DetectorConstruction.hh,v 1.6 2003-01-31 08:06:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,21 +125,7 @@ class Tst14DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* ConstructCalorimeter();     
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void Tst14DetectorConstruction::ComputeCalorParameters()
-{
-  // Compute derived parameters of the calorimeter
-     if(!worldchanged)
-     {
-       WorldSizeR=2.*AbsorberRadius ;
-       WorldSizeZ=2.*AbsorberThickness ;
-     }
-     
-     zstartAbs = zAbsorber-0.5*AbsorberThickness; 
-     zendAbs   = zAbsorber+0.5*AbsorberThickness; 
-
-}
 
 #endif
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14DetectorConstruction.cc,v 1.9 2001-09-23 22:59:52 pia Exp $
+// $Id: Tst14DetectorConstruction.cc,v 1.10 2003-01-31 08:06:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -185,8 +185,11 @@ G4VPhysicalVolume* Tst14DetectorConstruction::ConstructCalorimeter()
   //
   if (solidWorld) delete solidWorld ;
   if (logicWorld) delete logicWorld ;
-  if (physiWorld) delete physiWorld ;
-
+  if (physiWorld) {
+		delete physiWorld ;
+		worldchanged = true;
+	}	 
+		
   solidWorld = new G4Tubs("World",				//its name
 			  0.,WorldSizeR,WorldSizeZ/2.,0.,twopi)       ;//its size
                          
@@ -244,6 +247,12 @@ G4VPhysicalVolume* Tst14DetectorConstruction::ConstructCalorimeter()
   //
   //always return the physical World
   //
+  (G4RunManager::GetRunManager())->GeometryHasBeenModified();
+	if ( worldchanged )
+	  { 
+      (G4RunManager::GetRunManager())->ResetNavigator();
+			worldchanged = false;
+	  }
   return physiWorld;
 }
 
@@ -275,7 +284,8 @@ void Tst14DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
     if (pttoMaterial->GetName() == materialChoice)
       {AbsorberMaterial = pttoMaterial;
       logicAbsorber->SetMaterial(pttoMaterial); 
-      // PrintCalorParameters();
+      PrintCalorParameters();
+			(G4RunManager::GetRunManager())->CutOffHasBeenModified();
       return;
       }             
     }
@@ -372,10 +382,24 @@ void Tst14DetectorConstruction::SetMagField(G4double fieldValue)
   
 void Tst14DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
+	G4VPhysicalVolume* v = ConstructCalorimeter();
+  G4RunManager::GetRunManager()->DefineWorldVolume(v);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void Tst14DetectorConstruction::ComputeCalorParameters()
+{
+  // Compute derived parameters of the calorimeter
+     if( worldchanged )
+     {
+       WorldSizeR=2.*AbsorberRadius ;
+       WorldSizeZ=2.*AbsorberThickness ;
+     }
+     
+     zstartAbs = zAbsorber-0.5*AbsorberThickness; 
+     zendAbs   = zAbsorber+0.5*AbsorberThickness; 
 
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
