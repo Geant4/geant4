@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPVector.hh,v 1.4 1999-06-29 21:36:50 stesting Exp $
+// $Id: G4NeutronHPVector.hh,v 1.5 1999-06-29 22:40:15 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPVector_h
@@ -25,8 +25,6 @@
 
 class G4NeutronHPVector
 {
-  friend G4NeutronHPVector & operator + (G4NeutronHPVector & left, G4NeutronHPVector & right);
-
   public:
   
   G4NeutronHPVector();
