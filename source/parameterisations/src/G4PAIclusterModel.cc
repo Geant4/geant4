@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIclusterModel.cc,v 1.1 2000-11-14 16:08:23 gcosmo Exp $
+// $Id: G4PAIclusterModel.cc,v 1.2 2001-01-22 08:43:13 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -82,6 +82,9 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
   G4double distance, energyTransfer, energyLoss, lambda, step, stepSum = 0.0 ;
   G4ThreeVector clusterPosition ;
 
+  fClusterPositionVector.clear() ;
+  fClusterEnergyVector.clear() ;
+
   charge     = fastTrack.GetPrimaryTrack()->GetDefinition()->GetPDGCharge() ;
   charge2    = charge*charge ;
   kinEnergy  = fastTrack.GetPrimaryTrack()->GetKineticEnergy() ;
@@ -107,8 +110,9 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
   step   = RandExponential::shoot(lambda) ;
   //  if (step < 0.0) step = 0.0 ;
   stepSum += step ;
-  distance -= stepSum ;
-  if(distance < 0.0) // no change, return 
+  //  distance -= stepSum ;
+  //  if(distance < 0.0) // no change, return 
+  if(stepSum > distance ) // no change, return 
   {
     return ;  
   }
@@ -119,7 +123,8 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
     G4ParticleMomentum globalDirection = fastTrack.GetPrimaryTrack()->
                                          GetMomentumDirection() ; 
 
-    while(distance >= 0.0)  // global (or local ?) cluster coordinates
+    //  while(distance >= 0.0)  
+    while(stepSum <= distance )  // global (or local ?) cluster coordinates
     {
       //  clusterPosition = fastTrack.GetPrimaryTrackLocalPosition() + 
       //                  stepSum*direction ;  
@@ -129,10 +134,11 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
 
       fClusterPositionVector.insert(clusterPosition) ;      
       fClusterEnergyVector.insert(energyTransfer) ;
+
       step = RandExponential::shoot(lambda) ;
       // if (step < 0.0) step = 0.0 ;
       stepSum    += step ;
-      distance   -= step ;
+      //  distance   -= step ;
       energyLoss += energyTransfer ;     
     } 
     kinEnergy -= energyLoss ;
@@ -148,6 +154,14 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
 //
 //
 ///////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
 
 
 
