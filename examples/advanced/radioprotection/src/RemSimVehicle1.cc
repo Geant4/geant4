@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimVehicle1.cc,v 1.6 2004-05-22 12:57:07 guatelli Exp $
+// $Id: RemSimVehicle1.cc,v 1.7 2004-05-22 13:16:17 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
@@ -62,7 +62,7 @@ void RemSimVehicle1::ConstructComponent(G4VPhysicalVolume* motherVolume)
   //layer of betacloth
   G4double translation = - 5.*m;
 
-  G4double thick = 0.02 *cm;  
+  G4double thick = 0.03 *cm;  
 
   G4Box* layer1 = new G4Box("layer1",sizeX/2.,sizeY/2.,thick/2.);
 
@@ -81,7 +81,7 @@ void RemSimVehicle1::ConstructComponent(G4VPhysicalVolume* motherVolume)
 
   translation = translation + thick;
 
-  thick = 0.0127*cm;
+  thick = 0.01*cm;
 
   // Mylar layer
   G4Material* mylar = pMaterial -> GetMaterial("mylar"); 
@@ -102,7 +102,7 @@ void RemSimVehicle1::ConstructComponent(G4VPhysicalVolume* motherVolume)
   // Nextel layer
   G4Material* nextel = pMaterial -> GetMaterial("Nextel312AF62"); 
   translation = translation + thick;    
-  thick = 0.137*cm;
+  thick = 0.1*cm;
   
   G4Box* layer3 = new G4Box("layer3",sizeX/2.,sizeY/2.,thick/2.);
 
@@ -134,7 +134,7 @@ void RemSimVehicle1::ConstructComponent(G4VPhysicalVolume* motherVolume)
                                  motherVolume,
 				 false,0);
   // Nextel layer
-  thick = 0.137*cm;
+  thick = 0.1*cm;
   translation = translation + 10.06*cm;
   layer5Phys = new G4PVPlacement(0,
                                  G4ThreeVector(0.,0.,thick/2.+ translation),
@@ -154,7 +154,7 @@ void RemSimVehicle1::ConstructComponent(G4VPhysicalVolume* motherVolume)
 				 false,0);
  // Nextel layer 
   translation = translation + thick;
-  thick = 0.137*cm;
+  thick = 0.2*cm;
   
   layer7Phys = new G4PVPlacement(0,
                                  G4ThreeVector(0.,0.,thick/2.+ translation),
@@ -162,15 +162,14 @@ void RemSimVehicle1::ConstructComponent(G4VPhysicalVolume* motherVolume)
                                  layer3Log,
                                  motherVolume,
 				 false,0);
-  // kevlar layer
+  // mylar layer
   translation = translation + thick;
-  G4Material* kevlar = pMaterial -> GetMaterial("kevlarVacuum"); 
-  thick = 0.13 *cm;
+  thick = 0.20 *cm;
 
   G4Box* layer8 = new G4Box("layer8",sizeX/2.,sizeY/2.,thick/2.);
 
   G4LogicalVolume* layer8Log = new G4LogicalVolume(layer8,
-                                                   kevlar,
+                                                   mylar,
                                                    "layer8Log",
                                                     0,0,0);
   
@@ -191,14 +190,14 @@ void RemSimVehicle1::ConstructComponent(G4VPhysicalVolume* motherVolume)
                                  layer4Log,
                                  motherVolume,
 				 false,0);
-  // kevlar layer
+  // mylar layer
   translation = translation + thick;
-  thick = 0.26 *cm;
+  thick = 0.2 *cm;
 
   G4Box* layer10 = new G4Box("layer10",sizeX/2.,sizeY/2.,thick/2.);
 
   G4LogicalVolume* layer10Log = new G4LogicalVolume(layer10,
-                                                   kevlar,
+                                                   mylar,
                                                    "layer10Log",
                                                     0,0,0);
   

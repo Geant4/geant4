@@ -27,7 +27,7 @@
 //    **********************************
 //
 //
-// $Id: RemSimEventAction.cc,v 1.4 2004-05-22 12:57:06 guatelli Exp $
+// $Id: RemSimEventAction.cc,v 1.5 2004-05-22 13:16:17 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
@@ -53,8 +53,6 @@ void RemSimEventAction::BeginOfEventAction(const G4Event* evt)
 
 void RemSimEventAction::EndOfEventAction(const G4Event* evt)
 {
-  G4cout<< evtNo << G4endl;
-
   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories =0;
   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
