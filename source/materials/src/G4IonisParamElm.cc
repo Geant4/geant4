@@ -21,12 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.cc,v 1.9 2004-09-06 11:02:30 vnivanch Exp $
+// $Id: G4IonisParamElm.cc,v 1.10 2004-09-06 15:50:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
+// 06-09-04, Update calculated values after any change of ionisation 
+//           potential change. V.Ivanchenko
 // 17-10-02, Fix excitation energy interpolation. V.Ivanchenko
 // 08-03-01, correct handling of fShellCorrectionVector. M.Maire
 // 22-11-00, tabulation of ionisation potential from 

@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2004-07-19 11:27:20 maire Exp $
+$Id: History,v 1.51 2004-09-06 15:50:46 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06.09.04 V.Ivant - materials-V06-02-01 
+         recalculate ionisation parameters after set of new
+         mean ionisation potential; add factor 2 to shell correction
+         term
      
 19.07.04 mma - materials-V06-02-00
          Put a protection in G4AtomicShells::GetNumberOfShells(Z)
