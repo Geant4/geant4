@@ -150,7 +150,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	}
 	else {
 	        theStatus = NoRINDEX;
-		aParticleChange.SetStatusChange(fStopAndKill);
+		aParticleChange.ProposeTrackStatus(fStopAndKill);
 		return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
 
@@ -159,7 +159,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	}
 	else {
 	        theStatus = NoRINDEX;
-		aParticleChange.SetStatusChange(fStopAndKill);
+		aParticleChange.ProposeTrackStatus(fStopAndKill);
 		return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
 
@@ -222,7 +222,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                   }
                   else {
 		     theStatus = NoRINDEX;
-                     aParticleChange.SetStatusChange(fStopAndKill);
+                     aParticleChange.ProposeTrackStatus(fStopAndKill);
                      return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
                   }
               }
@@ -278,7 +278,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	   }
            else if (theFinish == polishedbackpainted ||
                     theFinish == groundbackpainted ) {
-                      aParticleChange.SetStatusChange(fStopAndKill);
+                      aParticleChange.ProposeTrackStatus(fStopAndKill);
                       return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
            }
         }
@@ -299,7 +299,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
               }
               else {
 		 theStatus = NoRINDEX;
-                 aParticleChange.SetStatusChange(fStopAndKill);
+                 aParticleChange.ProposeTrackStatus(fStopAndKill);
                  return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	      }
            }
@@ -337,6 +337,13 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	theGlobalNormal = theNavigator->GetLocalToGlobalTransform().
 	                                TransformAxis(theLocalNormal);
+
+        if (OldMomentum * theGlobalNormal > 0.0) {
+           G4cerr << " G4OpBoundaryProcess/PostStepDoIt(): "
+                  << " theGlobalNormal points the wrong direction "
+                  << G4endl;
+           theGlobalNormal = -theGlobalNormal;
+        }
 
 	if (type == dielectric_metal) {
 
@@ -403,8 +410,8 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                         G4cout << " *** NoRINDEX *** " << G4endl;
         }
 
-	aParticleChange.SetMomentumChange(NewMomentum);
-	aParticleChange.SetPolarizationChange(NewPolarization);
+	aParticleChange.ProposeMomentumDirection(NewMomentum);
+	aParticleChange.ProposePolarization(NewPolarization);
 
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
@@ -514,7 +521,8 @@ void G4OpBoundaryProcess::DielectricMetal()
                 }
                 else {
 
-                   theFacetNormal = GetFacetNormal(OldMomentum,theGlobalNormal);
+                   if(theStatus==LobeReflection)theFacetNormal = 
+                             GetFacetNormal(OldMomentum,theGlobalNormal);
 
                    G4double PdotN = OldMomentum * theFacetNormal;
                    NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
@@ -655,6 +663,7 @@ void G4OpBoundaryProcess::DielectricDielectric()
                  if (Swap) Swap = !Swap;
 
 		 theStatus = FresnelReflection;
+
 		 if ( theModel == unified && theFinish != polished )
 						     ChooseReflection();
 
