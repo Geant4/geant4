@@ -1,4 +1,4 @@
-$Id: History,v 1.62 2001-12-12 15:22:31 johna Exp $
+$Id: History,v 1.63 2001-12-13 17:49:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13th December 2001  Gabriele Cosmo (examples-V03-02-05)
+- Updated reference outputs.
 
 12th December 2001  John Allison (examples-V03-02-04)
 - Updated new VisManagers for new graphics systems and defaults.
