@@ -1,0 +1,45 @@
+#
+# Macro file for the initialization phase of "TestEm5.cc"
+#
+# It creates the default geometry (simple absorber cylinder )        
+#
+/control/verbose 2
+#control/saveHistory
+/run/verbose 2
+#
+#
+#
+/field/setStepperType 4
+/field/setMinStep 10 mm
+#
+/field/update
+#
+/run/initialize
+#
+#/calor/setAbsMat Silicon   
+#/calor/setAbsThick 92.600e-3 mm  
+#/calor/setAbsRad 100.0 mm
+#/calor/update
+#
+#  hist file name
+/plots/sethistName g4.pl04 
+#  PLOT: lateral displacement for transmitted particles at exit
+/plots/setnbinR 100
+/plots/setRlow 0.0 mm
+/plots/setRhigh 500.0 mm
+#
+#/calor/cutG 2130.0 micrometer
+#/calor/cutE 7.000 micrometer
+#
+/run/initialize
+/run/particle/dumpCutValues
+#
+/gun/particle e-
+/gun/energy 50.0 MeV
+#
+/event/printModulo 100
+/run/beamOn 1000
+#
+#
+
+
