@@ -21,9 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutronAnnihilationAtRest.cc,v 1.5 2001-10-19 11:55:42 hpw Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
 //      CERN Geneva Switzerland
@@ -179,7 +176,6 @@ G4VParticleChange* G4AntiNeutronAnnihilationAtRest::AtRestDoIt(
   {
     targetCharge = G4double( ((*theElementVector)[numberOfElements-1])->GetZ());
     targetAtomicMass = (*theElementVector)[numberOfElements-1]->GetN();
-
   }
 
   if (verboseLevel>1) {

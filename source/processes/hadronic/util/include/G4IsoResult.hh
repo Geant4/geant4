@@ -42,6 +42,8 @@ public:
     theMotherNucleus = aMother;
   }
   
+  ~G4IsoResult();
+  
   G4String GetIsotope() { return theIsoName; }
   G4Nucleus GetMotherNucleus() { return theMotherNucleus; }
   

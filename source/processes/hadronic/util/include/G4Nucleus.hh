@@ -90,10 +90,13 @@
          pnBlackTrackEnergy=right.pnBlackTrackEnergy; 
          dtaBlackTrackEnergy=right.dtaBlackTrackEnergy; 
          theTemp = right.theTemp;
+	 excitationEnergy = right.excitationEnergy;
+	 momentum = right.momentum;
+	 fermiMomentum = right.fermiMomentum;
        }
        return *this;
      }
-    
+   
     inline G4bool operator==( const G4Nucleus &right ) const
     { return ( this == (G4Nucleus *) &right ); }
     
