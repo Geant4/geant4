@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.25 2002-09-26 11:01:37 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.26 2002-10-15 13:23:35 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -48,6 +48,7 @@
 // 12-08-02 bug fixed in PostStepDoIt (lateral displacement), L.Urban
 // 15-08-02 new angle distribution, L.Urban
 // 26-09-02 angle distribution + boundary algorithm modified, L.Urban
+// 15-10-02 temporary fix for proton scattering
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -329,10 +330,8 @@ G4double G4MultipleScattering::ComputeTransportCrossSection(
       }
 
   // correct this value using the corrections computed for e+/e-
-  // scaling: mass*beta*gamma does not depend on the kind of particle !
-  G4double tau=KineticEnergy/electron_mass_c2 ;
-  KineticEnergy = sqrt(ParticleMass*ParticleMass+tau*(tau+2.)*
-                       electron_mass_c2*electron_mass_c2)-ParticleMass ;
+  KineticEnergy *= electron_mass_c2/ParticleMass;
+
   // interpolate in AtomicNumber and beta2
   // get bin number in Z
   G4int iZ = 14;
