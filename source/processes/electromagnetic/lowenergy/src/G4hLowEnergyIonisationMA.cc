@@ -137,7 +137,7 @@ G4hLowEnergyIonisationMA::G4hLowEnergyIonisationMA(const G4String& processName)
     theParticle(0),
     theBaseParticle(0),
     chargeLowLimit(0.1),
-    paramStepLimit(0.005),
+    paramStepLimit(0.05),
     fluobins(20),
     theBarkas(true),
     theFluo(false),
@@ -218,7 +218,7 @@ void G4hLowEnergyIonisationMA::InitialiseProcess()
 
   SetIntegral(true);
   SetLinearLossLimit(0.15);
-  SetStepLimits(0.2, 1.0*mm);
+  SetStepLimits(0.1, 1.0*mm);
 
   isInitialised = true;
 
