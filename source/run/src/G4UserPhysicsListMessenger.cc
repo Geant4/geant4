@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.21 2003-04-14 20:13:11 asaim Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.22 2003-04-28 22:54:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -204,11 +204,19 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
     thePhysicsList->SetCutsWithDefault();
 
   } else if( command==setCutRCmd ){
-    G4Tokenizer next( newValue );
-    G4String rName = G4String(next());
-    G4String cValue = G4String(next())+" "+G4String(next());
-    G4double newCut = setCutCmd->GetNewDoubleValue(cValue); 
-    thePhysicsList->SetCutsForRegion(newCut,rName);
+    //G4Tokenizer next( newValue );
+    //G4String rName = G4String(next());
+    //G4String cValue = G4String(next())+" "+G4String(next());
+    //G4double newCut = setCutCmd->GetNewDoubleValue(cValue); 
+    //thePhysicsList->SetCutsForRegion(newCut,rName);
+    G4std::istrstream is(newValue);
+    char regName[50];
+    G4double cVal;
+    char uniName[10];
+    is >> regName >> cVal >> uniName;
+    G4String regN = regName;
+    G4String uniN = uniName;
+    thePhysicsList->SetCutsForRegion(cVal*(setCutRCmd->ValueOf(uniN)),regN);
 
   } else if( command==verboseCmd ) {
     thePhysicsList->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); 
