@@ -58,8 +58,8 @@
 
           G4double    dPower=1000.0; 
 
-  G4cout<<G4endl<<" The preparing of elastic Data array "<<G4endl;
-  G4cout<<" for '"<<sNameHdr<<"' on nucleus "<<iNnucl<<G4endl<<G4endl;
+//  G4cout<<G4endl<<" The preparing of elastic Data array "<<G4endl;
+//  G4cout<<" for '"<<sNameHdr<<"' on nucleus "<<iNnucl<<G4endl<<G4endl;
            for( ik = 0; ik<AreaNumb; ik++) 
            {
              for( ii = 0; ii<iPoE; ii++)
@@ -77,14 +77,14 @@
                   {
                     pTableCrSec[ii*ONQ2+kk+ik*ONQ2XE] = iIntgr[kk];
                   }  //   kk   step Q2         
- G4cout<<" Energy of "<<sNameHdr<<" =  "<<curE<<G4endl;
+// G4cout<<" Energy of "<<sNameHdr<<" =  "<<curE<<G4endl;
              }         //   ii   step Ei
                dPower *= 10.0; 
           }             //   ik   step power
 
-  G4cout<<" The array for elastic scattering of the "<<sNameHdr<<G4endl;
-  G4cout<<" on the Nuclues "<<iNnucl<<" has been prepared !"
-        <<G4endl<<G4endl;
+//  G4cout<<" The array for elastic scattering of the "<<sNameHdr<<G4endl;
+//  G4cout<<" on the Nuclues "<<iNnucl<<" has been prepared !"
+//        <<G4endl<<G4endl;
 
 //  ---------   The writing of array into sName File  ---------
 
@@ -136,9 +136,9 @@
 
       TestFile.close();
 
-  G4cout<<" The array for elastic scattering of "<<sNameHdr<<G4endl;
-  G4cout<<" on the Nuclues "<<iNnucl<<" has been written !"<<G4endl;
-  G4cout<<" The Name of File is "<<sNameFile.str()<<G4endl<<G4endl;
+//  G4cout<<" The array for elastic scattering of "<<sNameHdr<<G4endl;
+//  G4cout<<" on the Nuclues "<<iNnucl<<" has been written !"<<G4endl;
+//  G4cout<<" The Name of File is "<<sNameFile.str()<<G4endl<<G4endl;
 
       iContr = 0;
  }   //  Constructor 
@@ -168,7 +168,7 @@
    {
         sPath =  getenv("G4ELASTICDATA");
         sPath =  sPath+"/Elastic/";
-	G4cout << "@@@@ Path found "<<std::endl;
+	// G4cout << "@@@@ Path found "<<std::endl;
    }
   else  sPath =       "./Elastic/";
 
@@ -177,9 +177,9 @@
        std::ostrstream sNameFile;
        sNameFile<<sPath<<sNameHdr<<"_"<<iNnucl<<".dat"<<std::ends;
 
-  G4cout <<" Reading file for: Hadron - "<<sNameHdr
-         <<".  Nucleus - "<<iNnucl<<G4endl;
-  G4cout <<" The Name of File is "<<sNameFile.str()<<G4endl;
+//  G4cout <<" Reading file for: Hadron - "<<sNameHdr
+//         <<".  Nucleus - "<<iNnucl<<G4endl;
+//  G4cout <<" The Name of File is "<<sNameFile.str()<<G4endl;
 
         GetNucleusParameters(aNucleus);
 
@@ -201,7 +201,7 @@
    {
      ElasticData  ElD;
 
-     G4cout<<" The file exists "<<G4endl;
+//     G4cout<<" The file exists "<<G4endl;
 
      ElD.hadrName         = sNameHdr;
      ElD.nuclAtomicNumber = iNnucl;
@@ -237,10 +237,10 @@
 
     SetOfElasticData.push_back(ElD);
 
-  G4cout<<" The array for elastic scattering of "<<sNameHdr;
-  G4cout<<" on the Nuclues "<<iNnucl<<G4endl;
-  G4cout<<" from the file "<<sNameFile.str()<<" has been readout !"
-        <<G4endl<<G4endl;
+//  G4cout<<" The array for elastic scattering of "<<sNameHdr;
+//  G4cout<<" on the Nuclues "<<iNnucl<<G4endl;
+//  G4cout<<" from the file "<<sNameFile.str()<<" has been readout !"
+//        <<G4endl<<G4endl;
 
     return 1;
    }  //  if check
@@ -271,7 +271,7 @@
 
        G4String sHadron;
 
- G4cout<<" Name "<<dHadron->GetParticleName()<<G4endl;
+// G4cout<<" Name "<<dHadron->GetParticleName()<<G4endl;
 
          sHadron = dHadron->GetParticleName();
 
