@@ -99,9 +99,9 @@ G4ThreeVector SBTrun::GetRandomPoint() const {
     dz = widths.z()*GaussianRandom(10*m/widths.z());
 
 
-  if (grids.x() > 0) dx = grids.x()*rint( dx/grids.x() );
-  if (grids.y() > 0) dy = grids.y()*rint( dy/grids.y() );
-  if (grids.z() > 0) dz = grids.z()*rint( dz/grids.z() );
+  if (grids.x() > 0) dx = grids.x()*G4int( dx/grids.x()+1 );
+  if (grids.y() > 0) dy = grids.y()*G4int( dy/grids.y()+1 );
+  if (grids.z() > 0) dz = grids.z()*G4int( dz/grids.z()+1 );
 
   G4ThreeVector randvec( dx, dy, dz );
 
@@ -165,7 +165,7 @@ void SBTrun::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
     */
 
     G4SolidStore* SolidStore = G4SolidStore::GetInstance();
-    G4cout << (SolidStore->at(0))->GetName() << G4endl ;
+    G4cout << ((*SolidStore)[0])->GetName() << G4endl ;
   }
 
 
@@ -297,7 +297,7 @@ G4int SBTrun::DrawError( const G4VSolid *testVolume, G4std::istream &logger,
   //
   // Draw away
   //
-  visManager->ClearView();
+  // visManager->ClearView();
 
   //
   // This draws the trajectory
@@ -305,8 +305,8 @@ G4int SBTrun::DrawError( const G4VSolid *testVolume, G4std::istream &logger,
   G4VisAttributes blueStuff( G4Color(0,0,1) );
 
   G4Polyline polyline;
-  polyline.append( p );
-  polyline.append( p + 4*v*m );
+  polyline.push_back( p );
+  polyline.push_back( p + 4*v*m );
   polyline.SetVisAttributes( blueStuff );
   visManager->Draw( polyline );
 
@@ -323,8 +323,6 @@ G4int SBTrun::DrawError( const G4VSolid *testVolume, G4std::istream &logger,
   //
   G4VisAttributes redStuff( G4Color(1,0,0) );
   visManager->Draw( *testVolume, redStuff );
-
-  visManager->Show();;
 
   return 0;
 }
@@ -348,7 +346,7 @@ G4int SBTrun::DebugInside( const G4VSolid *testVolume, G4std::istream &logger, c
   //
   // Call
   //
-  EInside answer = testVolume->Inside( p );
+  testVolume->Inside( p );
   return 0;
 }
 
@@ -371,7 +369,7 @@ G4int SBTrun::DebugToInP( const G4VSolid *testVolume, G4std::istream &logger, co
   //
   // Call
   //
-  G4double answer = testVolume->DistanceToIn( p );
+  testVolume->DistanceToIn( p );
   return 0;
 }
 
@@ -398,7 +396,7 @@ G4int SBTrun::DebugToInPV( const G4VSolid *testVolume, G4std::istream &logger, c
 
   p += answer*v;
 
-  EInside inside = testVolume->Inside(p);
+  testVolume->Inside(p);
   return 0;
 }
 
@@ -421,7 +419,7 @@ G4int SBTrun::DebugToOutP( const G4VSolid *testVolume, G4std::istream &logger, c
   //
   // Call
   //
-  G4double answer = testVolume->DistanceToOut( p );
+  testVolume->DistanceToOut( p );
   return 0;
 }
 
@@ -448,7 +446,7 @@ G4int SBTrun::DebugToOutPV( const G4VSolid *testVolume, G4std::istream &logger, 
 
   p += answer*v;
 
-  EInside inside = testVolume->Inside(p);
+  testVolume->Inside(p);
   return 0;
 }
 
@@ -747,7 +745,7 @@ void SBTrun::ReportError( G4int *nError, const G4ThreeVector p,
   //
   // Have we encountered this error message before?
   //
-  SBTrunErrorList *last, *errors = errorList;
+  SBTrunErrorList *last=0, *errors = errorList;
   while( errors ) {
     //
     // Note: below is an expensive comparison. This could be replaced with something

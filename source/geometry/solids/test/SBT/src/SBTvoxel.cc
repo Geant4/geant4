@@ -118,7 +118,7 @@ void SBTvoxel::Draw( const G4VSolid *testVolume,
 	//
 	// Prepare visualization
 	//
-        visManager->ClearView();
+        // visManager->ClearView();
 
 	//
 	// Draw voxel as a box.
@@ -178,8 +178,8 @@ void SBTvoxel::Draw( const G4VSolid *testVolume,
 			polyline.SetVisAttributes( blueStuff );
 			inverseTransform.ApplyPointTransform( a );
 			inverseTransform.ApplyPointTransform( b );
-			polyline.append( a );
-			polyline.append( b );
+			polyline.push_back( a );
+			polyline.push_back( b );
 			visManager->Draw( polyline );
 			
 			if (drawLimits && axes[i]!=axis) {
@@ -187,8 +187,8 @@ void SBTvoxel::Draw( const G4VSolid *testVolume,
 				polyline.SetVisAttributes( yuckStuff );
 				inverseTransform.ApplyPointTransform( c );
 				inverseTransform.ApplyPointTransform( d );
-				polyline.append( c );
-				polyline.append( d );
+				polyline.push_back( c );
+				polyline.push_back( d );
 				visManager->Draw( polyline );
 			}
 		}
@@ -215,7 +215,7 @@ void SBTvoxel::Draw( const G4VSolid *testVolume,
         G4VisAttributes redStuff( G4Color(1,0,0) );
 	visManager->Draw( *testVolume, redStuff );
 
-        visManager->Show();;
+        // visManager->Show();
 }
 
 

@@ -10,6 +10,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jan 08, 2002 - G.Cosmo
+----------------------
+- Migrated SBTrun.cc and SBTvoxel.cc to Geant4 4.0.
+
 Apr 20, 2001 - G.Cosmo
 ----------------------
 - Updates for migration to STL vector, modified SBTrun.cc.

@@ -64,16 +64,10 @@ int main(int argc,char *argv[])
 		
 	// Give control to interactive terminal
 	G4UIsession *session = new G4UIterminal;
-	/* 
-	   MEDERNACH Emmanuel
-	   Aug 2000
 	   
-	   when run with an argument, run each scripts and exit
-	 */
-	if (argc > 1)
+	if (argc > 1)  // when run with an argument, run each scripts and exit
 	  {
 	    G4UImanager * UI = G4UImanager::GetUIpointer();
-	    G4UIsession * session = new G4UIterminal;
 
 	    for (int i=1;i<argc;i++)
 	      {
