@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAI.cc,v 1.5 2004-05-05 16:09:42 grichine Exp $
+// $Id: G4InitXscPAI.cc,v 1.6 2004-05-10 15:54:32 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,7 +54,7 @@
 // Local class constants
 
 const G4double G4InitXscPAI::fDelta        = 0.005 ; // energy shift from interval border
-const G4int G4InitXscPAI::fPAIbin          = 400 ;     // size of energy transfer vectors
+const G4int G4InitXscPAI::fPAIbin          = 100 ;     // size of energy transfer vectors
 const G4double G4InitXscPAI::fSolidDensity = 0.05*g/cm3 ; // ~gas-solid border
 
 //////////////////////////////////////////////////////////////////
@@ -64,6 +64,7 @@ const G4double G4InitXscPAI::fSolidDensity = 0.05*g/cm3 ; // ~gas-solid border
 
 G4InitXscPAI::G4InitXscPAI( const G4MaterialCutsCouple* matCC)
   : fPAIxscVector(NULL),
+    fPAIdEdxVector(NULL),
     fPAIphotonVector(NULL),
     fPAIelectronVector(NULL),
     fChCosSqVector(NULL),
@@ -108,6 +109,7 @@ G4InitXscPAI::G4InitXscPAI( const G4MaterialCutsCouple* matCC)
 G4InitXscPAI::~G4InitXscPAI()
 {
   if(fPAIxscVector)      delete fPAIxscVector;  
+  if(fPAIdEdxVector)     delete fPAIdEdxVector;  
   if(fPAIphotonVector)   delete fPAIphotonVector;  
   if(fPAIelectronVector) delete fPAIelectronVector;  
   if(fChCosSqVector)     delete fChCosSqVector;  
@@ -669,17 +671,22 @@ void G4InitXscPAI::IntegralPAIxSection(G4double bg2, G4double Tmax)
 // = mean energy loss per unit length, keV/cm
 // 
 
-G4double G4InitXscPAI::IntegralPAIdEdx(G4double omega, G4double bg2, G4double Tmax)
+void G4InitXscPAI::IntegralPAIdEdx(G4double bg2, G4double Tmax)
 {
-  G4int i;
-  G4double energy1, energy2, result=0.;
-
+  G4int i,k,i1,i2;
+  G4double energy1, energy2, result = 0.;
+ 
   fBetaGammaSq = bg2;
-  fTmax = Tmax;
+  fTmax        = Tmax;
+
+  if(fPAIdEdxVector) delete fPAIdEdxVector;  
+  
+  fPAIdEdxVector = new G4PhysicsLogVector( (*(*fMatSandiaMatrix)[0])[0], fTmax, fPAIbin);
+  fPAIdEdxVector->PutValue(fPAIbin-1,result);
 	         	
-  for( i = fIntervalNumber-2; i >= 0; i-- )
+  for( i = fIntervalNumber - 1; i >= 0; i-- )
   {
-    if(Tmax >= (*(*fMatSandiaMatrix)[i])[0]) break;
+    if( Tmax >= (*(*fMatSandiaMatrix)[i])[0] ) break;
   }
   if (i < 0) i = 0; // Tmax should be more than 
                     // first ionisation potential
@@ -687,41 +694,55 @@ G4double G4InitXscPAI::IntegralPAIdEdx(G4double omega, G4double bg2, G4double Tm
 
   G4Integrator<G4InitXscPAI,G4double(G4InitXscPAI::*)(G4double)> integral;
 
-  for( i = fIntervalTmax; i >= 0; i-- )
+  for( k = fPAIbin - 2; k >= 0; k-- )
   {
-    fCurrentInterval = i;
+    energy1 = fPAIdEdxVector->GetLowEdgeEnergy(k);
+    energy2 = fPAIdEdxVector->GetLowEdgeEnergy(k+1);
 
-    if(omega >= (*(*fMatSandiaMatrix)[i])[0])
+    for( i = fIntervalTmax; i >= 0; i-- ) 
     {
-      if(i == fIntervalTmax) 
-      {
-        return integral.Legendre10(this,&G4InitXscPAI::DifPAIdEdx,omega,fTmax);
-      }
-      else 
-      {
-        result += integral.Legendre10(this,&G4InitXscPAI::DifPAIdEdx,omega,
-                     (*(*fMatSandiaMatrix)[i+1])[0]);
-        break;
-      }
+      if( energy2 > (*(*fMatSandiaMatrix)[i])[0] ) break;
+    }
+    if(i < 0) i = 0;
+    i2 = i;
+
+    for( i = fIntervalTmax; i >= 0; i-- ) 
+    {
+      if( energy1 > (*(*fMatSandiaMatrix)[i])[0] ) break;
+    }
+    if(i < 0) i = 0;
+    i1 = i;
+
+    if( i1 == i2 )
+    {
+      fCurrentInterval = i1;
+      result += integral.Legendre10(this,&G4InitXscPAI::DifPAIdEdx,
+                                    energy1,energy2);
+      fPAIdEdxVector->PutValue(k,result);
     }
     else
     {
-      if(i == fIntervalTmax) 
+      for( i = i2; i >= i1; i-- ) 
       {
-        result += integral.Legendre10(this,&G4InitXscPAI::DifPAIdEdx,
-                (*(*fMatSandiaMatrix)[i])[0],fTmax);
+        fCurrentInterval = i;
+
+        if( i==i2 )        result += integral.Legendre10(this,
+                           &G4InitXscPAI::DifPAIdEdx,
+                           (*(*fMatSandiaMatrix)[i])[0] ,energy2);
+
+	else if( i == i1 ) result += integral.Legendre10(this,
+                           &G4InitXscPAI::DifPAIdEdx,energy1,
+                           (*(*fMatSandiaMatrix)[i+1])[0]);
+
+        else               result += integral.Legendre10(this,
+                           &G4InitXscPAI::DifPAIdEdx,
+                       (*(*fMatSandiaMatrix)[i])[0] ,(*(*fMatSandiaMatrix)[i+1])[0]);
       }
-      else
-      {
-        energy1 = (*(*fMatSandiaMatrix)[i])[0];
-        energy2 = (*(*fMatSandiaMatrix)[i+1])[0];
-        result += integral.Legendre10(this,&G4InitXscPAI::DifPAIdEdx,
-                           energy1,energy2);
-      }
+      fPAIdEdxVector->PutValue(k,result);
     }
-    // G4cout<<"IntegralPAIdEdx<<"("<<omega<<")"<<" = "<<result<<G4endl;
+    // G4cout<<k<<"\t"<<result<<G4endl; 
   }
-  return result;
+  return ;
 }
 
 ////////////////////////////////////////////////////////////////////////

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAI.hh,v 1.5 2004-05-05 16:09:42 grichine Exp $
+// $Id: G4InitXscPAI.hh,v 1.6 2004-05-10 15:54:31 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,7 +90,7 @@ public:
   void     IntegralCherenkov(G4double bg2, G4double Tmax) ;
   void     IntegralPlasmon(G4double bg2, G4double Tmax) ;
 
-  G4double IntegralPAIdEdx(G4double omega, G4double bg2, G4double Tmax) ;
+  void      IntegralPAIdEdx(G4double bg2, G4double Tmax) ;
 
 
   G4double GetPhotonLambda( G4double omega ) ;
@@ -112,6 +112,7 @@ public:
           { return (*(*fMatSandiaMatrix)[i])[j]; }
 
   G4PhysicsLogVector* GetPAIxscVector() const { return fPAIxscVector;}
+  G4PhysicsLogVector* GetPAIdEdxVector() const { return fPAIdEdxVector;}
   G4PhysicsLogVector* GetPAIphotonVector() const { return fPAIphotonVector;}
   G4PhysicsLogVector* GetPAIelectronVector() const { return fPAIelectronVector;}
   G4PhysicsLogVector* GetChCosSqVector() const { return fChCosSqVector;}
@@ -144,6 +145,7 @@ private :
   // vectors of integral cross-sections
   
   G4PhysicsLogVector* fPAIxscVector;
+  G4PhysicsLogVector* fPAIdEdxVector;
   G4PhysicsLogVector* fPAIphotonVector;
   G4PhysicsLogVector* fPAIelectronVector;
   G4PhysicsLogVector* fChCosSqVector;

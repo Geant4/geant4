@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAItest.cc,v 1.1 2004-04-15 09:18:16 grichine Exp $
+// $Id: G4InitXscPAItest.cc,v 1.2 2004-05-10 15:54:32 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@
 //
 // History:
 //
-// 21.10.99, V. Grichine implementation based on G4PAIonisationTest
+// 02.04.04, V. Grichine implementation based on G4PAIonisationTest
 
 #include "G4ios.hh"
 #include <fstream>
@@ -58,6 +58,9 @@ int main()
    outFile.setf( std::ios::scientific, std::ios::floatfield );
 
    std::ofstream fileOut("InitPAIdNdx.out", std::ios::out ) ;
+   fileOut.setf( std::ios::scientific, std::ios::floatfield );
+
+   std::ofstream outXsc("InitXsc.out", std::ios::out ) ;
    fileOut.setf( std::ios::scientific, std::ios::floatfield );
 
    //  std::ifstream fileRead("exp.dat", std::ios::out ) ;
@@ -124,11 +127,13 @@ int main()
 // G4Element::DumpInfo();
 // G4Material::DumpInfo();
 
+/*
   // Helium as detector gas, STP
 
   density = 0.178*mg/cm3 ;
   a = 4.0026*g/mole ;
   G4Material* He  = new G4Material(name="He",z=2., a, density );
+
 
   // Neon as detector gas, STP
 
@@ -147,6 +152,7 @@ int main()
   density = 3.700*mg/cm3 ;
   a = 83.80*g/mole ;
   G4Material* Kr  = new G4Material(name="Kr",z=36., a, density );
+*/
 
   // Xenon as detector gas, STP
 
@@ -430,8 +436,9 @@ int main()
   //
 
   G4int i, j, k, numOfMaterials, iSan, nbOfElements, sanIndex, row ;
-  G4double maxEnergyTransfer, kineticEnergy ;
-  G4double tau, gamma, bg2, beta2, rateMass, Tmax, Tmin, Tkin ;
+  G4double maxEnergyTransfer, kineticEnergy, dNdx, dNdxC, dNdxP, dEdx ;
+  G4double tau, gamma, bg2, beta2, rateMass, Tmax, Tmin, Tkin; 
+  G4double eTransfer, lambda, cos2, width, rangeE ;
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
 
@@ -440,7 +447,7 @@ int main()
   G4cout<<"Available materials under test : "<< G4endl<<G4endl ;
   outFile<<"Available materials under test : "<< G4endl<<G4endl ;
 
-  for(k=0;k<numOfMaterials;k++)
+  for( k = 0; k < numOfMaterials; k++ )
   {
   G4cout <<k<<"\t"<< "  Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
  outFile <<k<<"\t"<< "  Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
@@ -460,7 +467,7 @@ int main()
 
    // regGasDet->SetProductionCuts(cuts);
    
-
+  G4cout.precision(4);
 
   for( k = 0; k < numOfMaterials; k++ )
   {
@@ -482,7 +489,7 @@ int main()
 
      G4int* thisMaterialZ = new G4int[nbOfElements] ;
 
-     for(iSan=0;iSan<nbOfElements;iSan++)
+     for(iSan = 0; iSan < nbOfElements; iSan++)
      {
         thisMaterialZ[iSan] = (G4int)(*theMaterialTable)[k]->
                                       GetElement(iSan)->GetZ() ;
@@ -500,7 +507,7 @@ int main()
        G4cout<<row+1<<"\t"<<sandia.GetPhotoAbsorpCof(row+1,0)/keV ;
        outFile<<row+1<<"  "<<sandia.GetPhotoAbsorpCof(row+1,0)/keV ;
 
-       for(iSan=1;iSan<5;iSan++)
+       for(iSan = 1; iSan < 5;iSan++)
        {
          G4cout<<"\t"<<sandia.GetPhotoAbsorpCof(row+1,iSan) ;
 	 // *(*theMaterialTable)[k]->GetDensity() ;
@@ -557,11 +564,12 @@ int main()
 
      //   G4PAIxSection xscPAIproton(k,maxEnergyTransfer) ;
 
-     kineticEnergy = 10.0*keV ;  // 110*MeV ;
+     //  kineticEnergy = 10.0*keV ;  // 110*MeV ;
+     kineticEnergy = 3.0*proton_mass_c2 ;  // 110*MeV ;
 
      //     for(j=1;j<xscPAIproton.GetNumberOfGammas();j++)
 
-     for(j = 1; j < 70 ; j++)
+     for(j = 1; j < 3 ; j++) // 70
      {
        tau      = kineticEnergy/proton_mass_c2 ;
        gamma    = tau +1.0 ;
@@ -583,27 +591,79 @@ int main()
        {
           Tkin = Tmin + 0.5*eV ;
        }
+       xscPAI.IntegralPAIxSection(bg2,Tkin);
+       xscPAI.IntegralCherenkov(bg2,Tkin);
+       xscPAI.IntegralPlasmon(bg2,Tkin);
       
+       dEdx = xscPAI.IntegralPAIdEdx(Tmin,bg2,Tkin)*cm/keV; // integral(Tmin,Tkin) of E*dN/dE
+
+       G4PhysicsLogVector* vectorXsc = xscPAI.GetPAIxscVector();
+       dNdx = (*vectorXsc)(0)*cm ;
+
+       G4PhysicsLogVector* vectorChe = xscPAI.GetPAIphotonVector();
+       dNdxC = (*vectorChe)(0)*cm ;
+
+       G4PhysicsLogVector* vectorPla = xscPAI.GetPAIelectronVector();
+       dNdxP = (*vectorPla)(0)*cm ;
+       G4PhysicsLogVector* vectorCos2  = xscPAI.GetChCosSqVector();
+       G4PhysicsLogVector* vectorWidth = xscPAI.GetChWidthVector();
+       
        outFile 
                << kineticEnergy/keV<<"\t"
                << gamma << "\t"
                << Tkin/keV<<"\t"
-               << xscPAI.IntegralPAIdEdx(Tmin,bg2,Tkin)*cm/keV << "\t"
-               << xscPAI.IntegralPAIxSection(Tmin,bg2,Tkin)*cm << "\t" << G4endl ;
+               << dEdx<< "\t\t"
+               << dNdx<< "\t" << dNdxC+dNdxP << "\t" <<dNdxC << "\t" <<dNdxP << G4endl ;
        G4cout  
                << kineticEnergy/keV<<"\t\t"
                << gamma << "\t\t"
                << Tkin/keV<<"\t\t"
-               << xscPAI.IntegralPAIdEdx(Tmin,bg2,Tkin)*cm/keV << "\t"
-               << xscPAI.IntegralPAIxSection(Tmin,bg2,Tkin)*cm << "\t" << G4endl ;
+               << dEdx << "\t\t"
+               << dNdx << "\t" <<dNdxC+dNdxP << "\t" <<dNdxC << "\t" <<dNdxP << G4endl ;
+     G4cout<<G4endl ;
+     outFile<<G4endl ;
 
+     if(j == 1)
+     {
+       for( i = 0; i < vectorXsc->GetVectorLength()-2; i ++ )
+       {
+         dNdx  = (*vectorXsc)(i);
+         dNdxC = (*vectorChe)(i);
+         dNdxP = (*vectorPla)(i);
+
+         cos2  = (*vectorCos2)(i);
+         width = (*vectorWidth)(i);
+
+         eTransfer = vectorXsc->GetLowEdgeEnergy(i);
+         lambda = xscPAI.GetPhotonLambda(eTransfer);
+         
+         bg2=2*eTransfer/electron_mass_c2;
+         Tmax     = 2.0*electron_mass_c2*bg2
+                   /(1.0+2.0*gamma*rateMass+rateMass*rateMass) ;
+         if ( Tmax <= Tmin + 0.5*eV )    Tmax = Tmin + 0.5*eV ;   
+         dEdx=xscPAI.IntegralPAIdEdx(Tmin,bg2,Tmax);
+         rangeE = 0.5*eTransfer/dEdx;
+
+	   G4cout<< i <<"\t"<< eTransfer/keV <<"\t"<< lambda/mm<<"\t"<< rangeE/mm
+               <<"\t"<< cos2 <<"\t"<< width <<"\t\t"<< dNdxC/dNdx <<"\t"
+               << dNdxP/dNdx <<"\t\t"<< dNdx*cm <<"\t"<< dNdx/((*vectorXsc)(0)) <<G4endl;
+	   outXsc 
+             // << i 
+	        <<"\t"<< eTransfer/keV <<"\t"<< lambda/mm<<"\t"<< rangeE/mm <<"\t"
+             // << cos2 <<"\t"<< width <<"\t\t"
+                << dNdxC/dNdx <<"\t"
+                << dNdxP/dNdx <<"\t\t"<< dNdx*cm <<"\t"<< dNdx/((*vectorXsc)(0)) <<G4endl;
+       }
+     }
        //   outFile<<xscPAIproton.GetLorentzFactor(j)<<"\t"
        //          <<maxEnergyTransfer/keV<<"\t\t"
        //          <<xscPAIproton.GetPAItable(0,j)*cm/keV<<"\t\t"
        //  	      <<xscPAIproton.GetPAItable(1,j)*cm<<"\t\t"<<G4endl ;
 
-       kineticEnergy *= 1.4 ;   // 1.5 ;
+       // kineticEnergy *= 1.4 ;   // 1.5 ;
+       kineticEnergy *= 1.e4 ;
      }
+
      G4cout<<G4endl ;
      outFile<<G4endl ;
   }

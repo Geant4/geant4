@@ -45,6 +45,7 @@
 #include "G4Poisson.hh"
 #include "G4Step.hh"
 #include "G4Material.hh"
+#include "G4Timer.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 
@@ -147,7 +148,7 @@ void G4PAIwithPhotons::Initialise(const G4ParticleDefinition* p,
 
   const G4ProductionCutsTable* theCoupleTable =
         G4ProductionCutsTable::GetProductionCutsTable();
-
+  G4Timer timer;
   for(size_t iReg = 0; iReg < fPAIRegionVector.size();++iReg) // region loop
   {
     const G4Region* curReg = fPAIRegionVector[iReg];
@@ -166,17 +167,22 @@ void G4PAIwithPhotons::Initialise(const G4ParticleDefinition* p,
       fMaterialCutsCoupleVector.push_back(matCouple);
 
       fInitXscPAI = new G4InitXscPAI(matCouple);
-     
+
+      timer.Start();
+
       BuildPAIonisationTable();
       fPAIxscBank.push_back(fPAItransferBank);
-      //   fPAIdEdxBank.push_back(fPAIdEdxTable);
+      fPAIdEdxBank.push_back(fPAIdEdxTable);
       fdEdxTable.push_back(fdEdxVector);
 
       BuildLambdaVector(matCouple);
       fdNdxCutTable.push_back(fdNdxCutVector);
       fLambdaTable.push_back(fLambdaVector);
 
+      timer.Stop();
 
+      G4cout<<"Initialisation for  "<<matCouple->GetMaterial()->GetName()<<" = "
+	    <<timer.GetUserElapsed()<<" s  "  <<"("<<fParticle->GetParticleName()<<")"<<G4endl;
       matIter++;
     }
   }
@@ -240,6 +246,7 @@ G4PAIwithPhotons::BuildPAIonisationTable()
       Tkin = Tmin + deltaLow ;
     }
     fInitXscPAI->IntegralPAIxSection(bg2,Tkin);
+    fInitXscPAI->IntegralPAIdEdx(bg2,Tkin);
     fInitXscPAI->IntegralCherenkov(bg2,Tkin);
 
 
@@ -249,14 +256,15 @@ G4PAIwithPhotons::BuildPAIonisationTable()
     //    protonPAI.GetSplineSize()<<G4endl<<G4endl ;
 
     G4PhysicsLogVector* transferVector = fInitXscPAI->GetPAIxscVector(); 
+    G4PhysicsLogVector* dEdxVector     = fInitXscPAI->GetPAIdEdxVector(); 
 
-    ionloss = fInitXscPAI->IntegralPAIdEdx(Tmin,bg2,Tkin);   //  total <dE/dx>
+    ionloss = (*dEdxVector)(0);   //  total <dE/dx>
     if ( ionloss <= 0.)  ionloss = DBL_MIN;
 
     fdEdxVector->PutValue(i,ionloss) ;
 
     fPAItransferBank->insertAt(i,transferVector) ;
-    // fPAIdEdxTable->insertAt(i,dEdxVector) ;
+    fPAIdEdxTable->insertAt(i,dEdxVector) ;
 
     // delete[] transferVector ;
     }                                        // end of Tkin loop
