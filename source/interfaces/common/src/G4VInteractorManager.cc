@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VInteractorManager.cc,v 1.10 2001-10-22 08:10:55 gcosmo Exp $
+// $Id: G4VInteractorManager.cc,v 1.11 2001-12-03 08:07:45 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -163,7 +163,13 @@ void G4VInteractorManager::RemoveDispatcher (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  G4std::remove(dispatchers.begin(),dispatchers.end(),a_dispatcher);
+  G4std::vector<G4DispatchFunction>::iterator it;
+  for (it = dispatchers.begin(); it != dispatchers.end(); it++) {
+    if (*it == a_dispatcher) {
+      dispatchers.erase(it);
+      break;
+    }
+  }
 }
 /***************************************************************************/
 void G4VInteractorManager::DispatchEvent (
@@ -250,6 +256,7 @@ void G4VInteractorManager::SecondaryLoop (
       DispatchEvent  (event);
       if(exitSecondaryLoop!=0) break;
     }
+    G4cout << "Secondary X event loop exited." << G4endl;
     SecondaryLoopPostActions ();
     }
 }
@@ -293,7 +300,13 @@ void G4VInteractorManager::RemoveShell (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {  
-  G4std::remove(shells.begin(),shells.end(),a_shell);
+  G4std::vector<G4Interactor>::iterator it;
+  for (it = shells.begin(); it != shells.end(); it++) {
+    if (*it == a_shell) {
+      shells.erase(it);
+      break;
+    }
+  }
 }
 /***************************************************************************/
 void G4VInteractorManager::SetParentInteractor (
