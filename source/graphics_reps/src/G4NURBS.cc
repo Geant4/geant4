@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBS.cc,v 1.4 2001-07-11 10:01:07 gunter Exp $
+// $Id: G4NURBS.cc,v 1.5 2001-08-14 18:24:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,8 +121,9 @@ G4float	G4NURBS::GetfloatKnot(t_direction in_dir, t_indKnot in_index) const
 	else
 	 {
 	 G4cerr << "\nERROR: G4NURBS::GetfloatKnot: index out of range\n"
-	      << "\n\t in_dir : " << in_dir << ", in_index : " << in_index
-              << "m[in_dir].nbrKnots : " << m[in_dir].nbrKnots << G4endl;
+		<< "\n\t in_dir : " << G4int(in_dir)
+		<< ", in_index : " << G4int(in_index)
+		<< "m[in_dir].nbrKnots : " << m[in_dir].nbrKnots << G4endl;
 	 return ((G4float)m[in_dir].pKnots[m[in_dir].nbrKnots-1]); 
 	 };
 	}
@@ -135,8 +136,10 @@ G4double	G4NURBS::GetdoubleKnot(t_direction in_dir, t_indKnot in_index) const
 		else
 		 {
 		 G4cerr << "\nERROR: G4NURBS::GetdoubleKnot: index out of range"
-		      << "\n\t in_dir : " << in_dir << ", in_index : " << in_index
-	              << "m[in_dir].nbrKnots : " << m[in_dir].nbrKnots << G4endl;
+			<< "\n\t in_dir : " << G4int(in_dir)
+			<< ", in_index : " << G4int(in_index)
+			<< "m[in_dir].nbrKnots : " << m[in_dir].nbrKnots
+			<< G4endl;
 		 return (G4double)(m[in_dir].pKnots[m[in_dir].nbrKnots-1]); 
 		 };
 		}
@@ -366,7 +369,8 @@ G4bool	G4NURBS::MakeKnotVector(t_Dir & io_d, t_KnotVectorGenFlag in_KVGFlag)
 		// central knots
 		for (t_indKnot j=0; j < nbrCentralDistinctKnots; valKnot += stepKnot, j++)
 		   {
-		   for (t_indKnot k=0; k < in_KVGFlag; indKnot++, k++)
+		   for (t_indKnot k=0; k < t_indKnot(in_KVGFlag);
+			indKnot++, k++)
 		      io_d.pKnots[indKnot] = valKnot;
 		   };
 		}
