@@ -1,6 +1,9 @@
+# setting the variables in cse of a local installation of Anaphe and AIDA
+# in the local directory of user dressel
+
 # set the variables related to ANAPHE
-setenv ANAPHE_SCRIPTS /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.4/scripts
-source $ANAPHE_SCRIPTS/setupAnaphe.csh  #setup-Anaphe.csh in later vers.
+setenv ANAPHE_SCRIPTS /users/dressel/Anaphe/release/share/LHCXX/5.0.5/scripts
+source $ANAPHE_SCRIPTS/setup-Anaphe.csh  #setup-Anaphe.csh in later vers.
 setenv PATH ${ANAPHE_SCRIPTS}:$PATH
 setenv ANAPHESPECDIR `(cd $ANAPHE_REL_DIR/../; pwd)`
 
