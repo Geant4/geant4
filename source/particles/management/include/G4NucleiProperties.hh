@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiProperties.hh,v 1.5 1999-08-20 14:26:45 larazb Exp $
+// $Id: G4NucleiProperties.hh,v 1.6 1999-09-22 14:47:05 larazb Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,7 +95,7 @@ private:
 	// Calculate Mass Excess according to Cameron's liquid drop formula
 //	static G4double CameronMassExcess(const G4int A, const G4int Z);
 
-	static G4double  AtomicMass(G4double Z, G4double A);
+	static G4double  AtomicMass(G4double A, G4double Z);
 	
 	static G4double BindingEnergy(G4double A, G4double Z);
 

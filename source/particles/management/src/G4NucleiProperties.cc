@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiProperties.cc,v 1.4 1999-08-20 14:26:54 larazb Exp $
+// $Id: G4NucleiProperties.cc,v 1.5 1999-09-22 14:47:09 larazb Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,7 +27,7 @@
 
 
 
-G4double  G4NucleiProperties::AtomicMass(G4double Z, G4double A)
+G4double  G4NucleiProperties::AtomicMass(G4double A, G4double Z)
 {
   const G4double hydrogen_mass_excess = G4NucleiPropertiesTable::GetMassExcess(1,1);
   const G4double neutron_mass_excess =  G4NucleiPropertiesTable::GetMassExcess(0,1);
@@ -82,7 +82,7 @@ G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 		if (nucleus!=0) {
 			return nucleus->GetPDGMass();
   		}else {
-			return AtomicMass(A,Z) - Z*electron_mass_c2 + 1.433e-5*MeV*pow(Z,2.39);
+			return GetAtomicMass(A,Z) - Z*electron_mass_c2 + 1.433e-5*MeV*pow(Z,2.39);
 		}
 	}
 }
