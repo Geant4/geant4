@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2000-11-24 10:05:12 stesting Exp $
+$Id: History,v 1.10 2000-11-24 10:11:42 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,8 @@ track of all tags.
 
 25th November 2000 Steve O'Neale (tagset210)
 - Update test outputs for min.delta energy cut
-- Update test outputs for moderate changes in deposited energy and number of hits
+- The changes in deposited energy in HAD cal towers upto 20 per cent
+- The changes in deposited energy in EM cry(s)tals about 1 part in 10**5
 
 August 03, 2000  Gabriele Cosmo (exampleN05-V02-00-01r)
 - Changed RandGauss to G4RandGauss in ExN05PionShowerModel.cc to fix problem
