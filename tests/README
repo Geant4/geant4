@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2003-06-06 14:58:58 gcosmo Exp $
+$Id: README,v 1.5 2003-10-01 16:03:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -26,7 +26,6 @@ test02 ## Standard em processes.  Low energy and high energy
        ## hadronic processes and stopping, including coherent
        ## elastic scattering.  (Derived originally from ExN04)
        ## (Action? Split into (a) em, (b) had with higher em cuts)
-test05 ## BREPS and STEP Interface.
 test06 ## Integral approach electromagnetic processes.  Simple box.
        ## (Action?  Add muon test script)
 test07 ## Statistical evaluation prototype.  (Derived originally from ExN03)
@@ -45,8 +44,6 @@ test18 ## Radioactive decay.
 test20 ## Polarised LowE processes.
 test21 ## CHIPS as intra-nuclear transport replacement.
 test22 ## Gamma and electro-nuclear physics.
-test23 ## Old test on 'Cuts per material' and persistency of physics table.
-       ## (Action?  Currently archived, to be migrated to other functionality)
 test24 ## Binary cascade hadronic model.
 test25 ## Classical cascade hadronic model.
 test26 ## Cuts by region modelling.
@@ -58,5 +55,5 @@ test50 ## Statistical test suite for EM processes:
        ## 3) gamma process' cross section;
        ## 4) e-  backscattering;
        ## 5) e-,e+ transmission.
-
+______________________________________________________________________________
 
