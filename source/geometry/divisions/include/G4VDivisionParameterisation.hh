@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.hh,v 1.8 2004-05-17 07:20:39 gcosmo Exp $
+// $Id: G4VDivisionParameterisation.hh,v 1.9 2004-07-15 14:25:01 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation
@@ -46,7 +46,6 @@
 enum DivisionType { DivNDIVandWIDTH, DivNDIV, DivWIDTH };
 
 class G4VPhysicalVolume;
-class HepTransform3D;
 class G4VSolid;
 
 class G4VDivisionParameterisation : public G4VPVParameterisation

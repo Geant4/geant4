@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationBox.hh,v 1.4 2004-05-13 14:57:12 gcosmo Exp $
+// $Id: G4ParameterisationBox.hh,v 1.5 2004-07-15 14:25:01 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // classes G4ParameterisationBoxX,
@@ -45,7 +45,6 @@
 
 class G4VSolid;
 class G4VPhysicalVolume;
-class HepTransform3D;
 
 // Dummy declarations to get rid of warnings ...
 class G4Cons;
