@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4AffineTransform.cc,v 1.4 2001-07-11 10:00:34 gunter Exp $
+// $Id: testG4AffineTransform.cc,v 1.5 2001-12-20 20:08:31 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -132,11 +132,11 @@ G4bool testG4AffineTransform()
 	assert( maxabsdiff <= 1.e-12 );
 
         G4AffineTransform  rtTf_inv=rtTf.Inverse();
-	assert(MaxAbsDiff( invTf, rtTf.Inverse()) <= 1.e-12 );
+	assert(MaxAbsDiff( invTf, rtTf_inv) <= 1.e-12 );
 #if 0
 	assert(invTf==rtTf_inv);
          
-	assert(invTf==rtTf.Inverse());
+	assert(invTf==rtTf_inv);
 #endif
 
 	G4AffineTransform txTf2(xyzVec);

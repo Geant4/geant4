@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NavigationHistory.cc,v 1.4 2001-07-11 10:00:34 gunter Exp $
+// $Id: testG4NavigationHistory.cc,v 1.5 2001-12-20 20:09:04 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -113,7 +113,7 @@ G4bool testG4NavigationHistory()
     return true;
 }
 
-G4int main()
+int main( unsigned int argc, char* argv[] )
 {
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");
