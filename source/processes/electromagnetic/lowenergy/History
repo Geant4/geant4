@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2000-03-31 15:00:35 vnivanch Exp $
+$Id: History,v 1.4 2000-04-03 10:02:55 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03.04.2000 - Vladimir Ivanchenko and Stephane Chauvie
+             1) Linearity into Barkas effect and nuclear stopping power
+                for antiprotons
 
 31.03.2000 - Vladimir Ivanchenko update 
              1) G4hLowEnergyIonisation.cc limitation DeltaCut > Eexc

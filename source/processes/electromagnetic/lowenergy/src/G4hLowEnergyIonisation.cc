@@ -27,6 +27,8 @@
 // 30 Sept.  1999 V.Ivanchenko minor upgrade 
 // 12 Dec.   1999 S. Chauvie added Barkas correction 
 // 19 Jan.   2000 V.Ivanchenko minor changing in Barkas corrections
+// 02 April  2000 S. Chauvie linearization of barkas effect
+// 03 April  2000 V.Ivanchenko Nuclear Stopping power for antiprotons
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1034,22 +1036,23 @@ G4double G4hLowEnergyIonisation::GetNuclearDEDX(G4Material* material,
   //  loop for the elements in the material
   for (G4int iel=0; iel<NumberOfElements; iel++) {
       const G4Element* element = (*theElementVector)(iel) ;
+      G4double Z1 = abs(Charge) ;
       G4double Z2 = element->GetZ() ;
       G4double A2 = element->GetA()*mole/g ;
-      G4int iz = int(Z2) ;
+      G4int iz = G4int(Z2) ;
       if( iz <= 0 ) iz = 1 ;
       if( iz > 92 ) iz = 92 ; 
   // Choose the parametrisation using the table name
       
   // The "Ziegler1977H" table
       if(DEDXtable == "Ziegler1977H") { 
-	ionloss = GetStoppingPower1977n(Charge, Z2, A1, A2, KinEnergy) 
+	ionloss = GetStoppingPower1977n(Z1, Z2, A1, A2, KinEnergy) 
 	        * theAtomicNumDensityVector[iel]*ZieglerFactor ;
     
   // The "ICRU_R49p" table
       //      } else if(DEDXtable == "ICRU_R49p") { 
       } else { 
-	ionloss = GetStoppingPowerMoliere(Charge, Z2, A1, A2, KinEnergy)  
+	ionloss = GetStoppingPowerMoliere(Z1, Z2, A1, A2, KinEnergy)  
 	        * theAtomicNumDensityVector[iel]*ZieglerFactor ;
       }
     }
