@@ -151,7 +151,6 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     //    G4InuclParticle* bull = new G4InuclElementaryParticle(bulletMomentum, bulletType);
     bull = new G4InuclElementaryParticle(bulletMomentum, bulletType);
 
-    G4double bullMass = bull->getParticleMass(bulletType);
  
     if (verboseLevel > 2) {
       G4cout << "Bullet:  " << G4endl;  
@@ -161,14 +160,16 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     G4InuclNuclei* targ = NULL;
     G4InuclParticle* targIsH = NULL;
 
-    G4NucleiModel* model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
 
     if ( !(G4int(A) == 1) ) {
       targ = new G4InuclNuclei(targetMomentum, A, Z);
       targ->setEnergy();      
 
+      G4std::vector<G4double>  bmom = bull->getMomentum();
+      eInit = sqrt(bmom[0] * bmom[0]);
       G4std::vector<G4double> tmom = targ->getMomentum();
-      eInit = sqrt(tmom[0] * tmom[0]);
+      eInit += sqrt(tmom[0] * tmom[0]);
+
       cout << "-----------------------------"<<eInit << endl;
 
       if (verboseLevel > -1) {
@@ -186,10 +187,6 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
     for (G4int i = 1; i <= nCollisions; i++) {
       
-      G4std::vector<G4double>  bmom = bull->getMomentum();
-      eInit += sqrt(bmom[0] * bmom[0]);
-
-      cout << "=====================eInit" << eInit << endl; 
       if (verboseLevel > 3) {
 	G4cout << "collision " << i << G4endl; 
       }
@@ -197,8 +194,12 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
       if ( G4int(A) == 1 ) {
 	G4int is = 0;
 	targIsH = new G4InuclElementaryParticle(targetMomentum, 1);
+
+      G4std::vector<G4double>  bmom = bull->getMomentum();
+      eInit = sqrt(bmom[0] * bmom[0]);
 	G4std::vector<G4double> tmom = targIsH->getMomentum();
 	eInit += sqrt(tmom[0] * tmom[0]);
+
 	cout << "*************" << eInit << endl;
 	do {
 	  if (verboseLevel > 1) {
@@ -273,14 +274,12 @@ G4int printData(G4int i) {
  
   if(!nucleiFragments.empty()) { 
     nucleiIterator ifrag;
-       
+    eTot = 0;
     for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) {
     
       G4std::vector<G4double> m = ifrag->getMomentum();
 
       eTot  += sqrt(m[0] * m[0]);
-
-      cout << ">>>>>>>>>>>>eTot" << eTot << endl;
 
       G4ThreeVector mom(m[1], m[2], m[3]);    
       ekin = ifrag->getKineticEnergy() * GeV;
@@ -324,7 +323,6 @@ G4int printData(G4int i) {
 	  setw(13) << sumBaryon    << 
 	  setw(13) << sumEnergy    << G4endl;
       }
-      G4double particleMass = ifrag->getMass();
 
       eKinTot += ekin;
     }
@@ -337,8 +335,6 @@ G4int printData(G4int i) {
     for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
       G4std::vector<G4double> mom = ipart->getMomentum();
       eTot   += sqrt(mom[0] * mom[0]);
-
-      cout << "++++++++ eTot" << eTot << endl;
 
       // G4std::vector<G4double>  mom(3, 0.0);
       ekin = ipart->getKineticEnergy() * GeV;
@@ -392,7 +388,7 @@ G4int printData(G4int i) {
     G4cout << "Total kinetice energy  : " << eKinTot / GeV << "GeV" << G4endl; 
     G4cout << "Baryon sum             : " << sumBaryon << G4endl;
   }
-  eTot = 0.0;
+  //  eTot = 0.0;
   return 0;
 };
 
