@@ -45,11 +45,6 @@ void LXeTrajectory::DrawTrajectory(G4int i_mode) const{
   //Taken from G4VTrajectory and modified to select colours based on particle
   //type and to selectively eliminate drawing of certain trajectories.
 
-  G4cout<<forceDraw<<G4endl;
-  G4cout<<forceNoDraw<<G4endl;
-  G4cout<<drawit<<G4endl;
-
-  
   if(!forceDraw && (!drawit || forceNoDraw))
     return;
  
