@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.2 1999-02-12 12:37:58 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.3 1999-06-29 19:01:39 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -236,22 +236,23 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
   
   curve_length= 
        CurveB_PointVelocity.CurveS() - CurveA_PointVelocity.CurveS();  
-#ifdef DEBUG
+// #ifdef G4DEBUG
   const G4double  per_million=1e-6; 
-  if( ABdist * > curve_length * (1. + per_million ) ){
-    G4cerr << " Error in ApproxCurvePoint \n" <<
+  if( curve_length < ABdist * (1. - per_million ) ){
+    G4cerr << " Error in G4ChordFinder::ApproxCurvePoint \n" <<
       " The two points are further apart than the curve length " << endl <<
       " Dist = "         << ABdist  << 
       " curve length = " << curve_length  << endl;
+    G4Exception("G4ChordFinder::ApproxCurvePoint> Unphysical curve length.");
   }
-#endif
+// #endif
   G4double  new_st_length; 
 
   if ( ABdist > 0.0 ){
      AE_fraction = ChordAE_Vector.mag() / ABdist;
      new_st_length= AE_fraction * curve_length; 
   }else{
-     G4cerr << " Error in ApproxCurvePoint: A and B are the same point\n" <<
+     G4cerr << " Error in G4ChordFinder::ApproxCurvePoint: A and B are the same point\n" <<
       " Chord AB length = " << ChordAE_Vector.mag()  << endl << endl;
      AE_fraction = 0.5;                         // Guess .. ?; 
      new_st_length= AE_fraction * curve_length; // Is this correct ??
