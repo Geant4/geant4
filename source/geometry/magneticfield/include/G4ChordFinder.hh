@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh,v 1.11 2003-10-31 14:35:50 gcosmo Exp $
+// $Id: G4ChordFinder.hh,v 1.12 2003-11-05 10:47:17 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -123,12 +123,11 @@ class G4ChordFinder
                                             // G4int    nOK, nBAD;
       G4MagInt_Driver* fIntgrDriver;
 
+      const G4double fDefaultDeltaChord;  // SET in G4ChordFinder.cc = 0.25 mm
+
       G4double fDeltaChord;                        //  Maximum miss distance 
 
       G4double    fLastStepEstimate_Unconstrained; //  State information for efficiency
-
-      static const G4double fDefaultDeltaChord;  // SET in G4ChordFinder.cc = 3 mm
-
       //  Variables used in construction/destruction
       G4bool fAllocatedStepper;
       G4EquationOfMotion* fEquation; 
