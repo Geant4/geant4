@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.hh,v 1.10 2000-04-25 14:27:51 asaim Exp $
+// $Id: G4RunManager.hh,v 1.11 2000-04-25 15:38:20 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -118,7 +118,7 @@ class G4RunManager
     // This method is available for Geant4 states of GeomClosed and EventProc. The state
     // will be changed to Idle, so that another event loop can be done.
 
-  public: // with description
+  protected: // with description
 
     virtual void InitializeGeometry();
     virtual void InitializePhysics();
@@ -129,9 +129,9 @@ class G4RunManager
     // G4VUserPhysicsList class will be accessed from other two methods.
 
     virtual G4bool ConfirmBeamOnCondition();
-    virtual void RunInitialization(G4Run* aRun=NULL);
+    virtual void RunInitialization();
     virtual void DoEventLoop(G4int n_event,const char* macroFile=NULL,G4int n_select=-1);
-    virtual void RunTermination(G4bool runToBeDeleted=true);
+    virtual void RunTermination();
     //  These four protected methods are invoked from BeamOn() method. These four methods
     // are invoked in this order.
     //  ConfirmBeamOnCondition() method checks if all the necessary initializations have

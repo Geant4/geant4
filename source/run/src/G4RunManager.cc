@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.13 2000-04-25 14:27:52 asaim Exp $
+// $Id: G4RunManager.cc,v 1.14 2000-04-25 15:38:20 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -173,17 +173,10 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
   return true;
 }
 
-void G4RunManager::RunInitialization(G4Run* aRun)
+void G4RunManager::RunInitialization()
 {
-  if(aRun)
-  {
-    currentRun = aRun;
-  }
-  else
-  {
-    currentRun = new G4Run();
-    currentRun->SetRunID(runIDCounter);
-  }
+  currentRun = new G4Run();
+  currentRun->SetRunID(runIDCounter);
 
   currentRun->SetDCtable(DCtable);
   G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
@@ -287,7 +280,7 @@ void G4RunManager::AnalyzeEvent(G4Event* anEvent)
   currentRun->RecordEvent(currentEvent);
 }
 
-void G4RunManager::RunTermination(G4bool runToBeDeleted)
+void G4RunManager::RunTermination()
 {
   G4StateManager* stateManager = G4StateManager::GetStateManager();
 
@@ -297,7 +290,7 @@ void G4RunManager::RunTermination(G4bool runToBeDeleted)
 
   G4VPersistencyManager* fPersM = G4VPersistencyManager::GetPersistencyManager();
   if(fPersM) fPersM->Store(currentRun);
-  if(runToBeDeleted) delete currentRun;
+  delete currentRun;
   currentRun = NULL;
   runIDCounter++;
 
