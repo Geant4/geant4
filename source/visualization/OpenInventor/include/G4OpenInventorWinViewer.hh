@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.hh,v 1.4 2004-11-08 21:43:49 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.hh,v 1.5 2004-11-09 09:30:57 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,6 +56,8 @@ private:
   void SetView();
   void KernelVisitDecision();
   G4bool CompareForKernelVisit(G4ViewParameters&);
+  void WritePostScript(const G4String& file = "g4out.ps");
+private:
   static LRESULT CALLBACK WindowProc(HWND,UINT,WPARAM,LPARAM);
 private:
   G4OpenInventorSceneHandler& fG4OpenInventorSceneHandler;
