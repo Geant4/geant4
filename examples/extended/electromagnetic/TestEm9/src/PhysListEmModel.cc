@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmModel.cc,v 1.2 2003-08-29 16:38:36 vnivanch Exp $
+// $Id: PhysListEmModel.cc,v 1.3 2003-09-18 08:07:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +46,6 @@
 #include "G4MuPairProduction52.hh"
 
 #include "G4hIonisation52.hh"
-#include "G4ionIonisation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

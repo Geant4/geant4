@@ -126,15 +126,15 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmModel(name);
+    emPhysicsList = new PhysListEmStandard(name);
 
-  } else if (name == "model") {
+  } else if (name == "g4v52") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard(name);
+    emPhysicsList = new PhysListEmModel(name);
 
-  } else if (name == "modelP") {
+  } else if (name == "model") {
 
     emName = name;
     delete emPhysicsList;
@@ -189,18 +189,18 @@ void PhysicsList::SetCuts()
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
-G4cout << "world cuts are set" << G4endl;
+  G4cout << "world cuts are set" << G4endl;
   if( vertexDetectorCuts ) {
     G4Region* region = (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
     region->SetProductionCuts(vertexDetectorCuts);
   }
-G4cout << "Vertex cuts are set" << G4endl;
+  G4cout << "Vertex cuts are set" << G4endl;
 
   if( muonDetectorCuts ) {
     G4Region* region = (G4RegionStore::GetInstance())->GetRegion("MuonDetector");
     region->SetProductionCuts(muonDetectorCuts);
   }
-G4cout << "Muon cuts are set" << G4endl;
+  G4cout << "Muon cuts are set" << G4endl;
 
   if (verboseLevel>0) DumpCutValuesTable();
 }

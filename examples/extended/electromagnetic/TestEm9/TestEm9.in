@@ -1,4 +1,4 @@
-# $Id: TestEm9.in,v 1.3 2003-08-29 17:12:58 vnivanch Exp $
+# $Id: TestEm9.in,v 1.4 2003-09-18 08:07:30 vnivanch Exp $
 #
 # Macro file for "test26.cc"
 # V.Ivanchenko
@@ -10,8 +10,8 @@
 #
 #  select EM PhysicsList
 
-/testem/phys/addPhysics  model
-#/testem/phys/addPhysics  standard
+#/testem/phys/addPhysics  g4v52
+/testem/phys/addPhysics  standard
 #
 /testem/phys/setCuts    1 mm
 /testem/phys/VertexCuts 0.01 mm
@@ -25,6 +25,6 @@
 #/testem/histoName  e_in_01mm.paw
 /gun/particle e-
 /gun/energy 1 GeV
-/run/beamOn 10000
+/run/beamOn 100
 #
 

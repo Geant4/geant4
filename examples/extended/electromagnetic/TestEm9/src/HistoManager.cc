@@ -34,6 +34,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "HistoManager.hh"
+#include "G4UnitsTable.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -122,10 +123,10 @@ void HistoManager::EndOfHisto()
   G4double xp = x*(G4double)n_posit;
   G4double xs = x*(G4double)n_step;
   G4cout                    << "Number of events                     " << n_evt <<G4endl;
-  G4cout << setprecision(4) << "Average number of e-                 " << xe << G4endl;
-  G4cout << setprecision(4) << "Average number of gamma              " << xg << G4endl;
-  G4cout << setprecision(4) << "Average number of e+                 " << xp << G4endl;
-  G4cout << setprecision(4) << "Average number of steps              " << xs << G4endl;
+  G4cout << std::setprecision(4) << "Average number of e-                 " << xe << G4endl;
+  G4cout << std::setprecision(4) << "Average number of gamma              " << xg << G4endl;
+  G4cout << std::setprecision(4) << "Average number of e+                 " << xp << G4endl;
+  G4cout << std::setprecision(4) << "Average number of steps              " << xs << G4endl;
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
 
