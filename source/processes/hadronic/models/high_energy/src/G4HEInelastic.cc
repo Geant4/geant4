@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEInelastic.cc,v 1.6 2001-05-03 08:59:19 hpw Exp $
+// $Id: G4HEInelastic.cc,v 1.7 2001-05-30 10:37:26 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1499,7 +1499,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
    G4double val0[] = {0.00, 0.40, 0.48, 0.51, 0.54, 0.60, 0.65,  0.70};
    
    if (verboseLevel > 1)
-     cout << " Rotation in Direction  of primary particle (Defs1)" << endl;
+     G4cout << " Rotation in Direction  of primary particle (Defs1)" << G4endl;
 
    for (i = 0; i < vecLen; i++)
       { 
