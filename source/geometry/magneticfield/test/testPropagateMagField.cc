@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.12 2002-06-24 09:51:54 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.13 2002-10-29 10:59:08 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -269,6 +269,8 @@ G4PropagatorInField*  SetupPropagator( G4int type)
 }
 
 //  This is Done only for this test program ... the transportation does it.
+//  The method is now obsolete -- as propagator in Field has this method,
+//    in order to message the correct field manager's chord finder.
 //
 void  SetChargeMomentumMass(G4double charge, G4double MomentumXc, G4double Mass)
 {
@@ -306,9 +308,9 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
     // G4PropagatorInField 
     pMagFieldPropagator= SetupPropagator(type);
 
-    SetChargeMomentumMass(  +1.,                    // charge in e+ units
-			   0.5 * proton_mass_c2,    // Momentum in Mev/c ?
-			    proton_mass_c2 );
+    pMagFieldPropagator->SetChargeMomentumMass( +1.,   // charge in e+ units
+			            0.5 * proton_mass_c2, // Momentum in Mev/c
+					 proton_mass_c2 );
     pNavig->SetWorldVolume(pTopNode);
 
 
@@ -351,7 +353,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
        G4double labTof= 10.0*ns, properTof= 0.1*ns;
        G4ThreeVector Spin(1.0, 0.0, 0.0);
                                                    // Momentum in Mev/c ?
-       SetChargeMomentumMass(
+       pMagFieldPropagator->SetChargeMomentumMass(
 		      +1,                    // charge in e+ units
 		      momentum, 
 		      proton_mass_c2); 
