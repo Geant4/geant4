@@ -63,17 +63,17 @@ public:
     compression=0;
     max=0;
   };
-  // Variables with the pertinent informations of a DICOM image
-
-
+  
 private:
   G4int tag_dictionnary;
   G4int rows;
   G4int columns;
-
+  G4int bits_stored;
+  G4int bits_allocated;
+  G4int high_bits;
+  G4int len;
 public:
  
- int bits_stored,bits_allocated,high_bits, len;
   char pixel_spacing[300],pixel_spacing_X[300],pixel_spacing_Y[300];
   char slice_tickness[300];
   int rescale_slope, rescale_intercept;
