@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.20 2002-04-16 13:12:17 maire Exp $
+// $Id: G4Material.cc,v 1.21 2002-05-06 15:37:55 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,6 +54,7 @@
 // 14-09-01, Suppression of the data member fIndexInTable
 // 26-02-02, fIndexInTable renewed
 // 16-04-02, G4Exception put in constructor with chemical formula
+// 06-05-02, remove the check of the ideal gas state equation
 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -371,22 +372,30 @@ void G4Material::ComputeDerivedQuantities()
      TotNbOfElectPerVolume += VecNbOfAtomsPerVolume[i]*Zi;
   }
 
-  //for gas, check coherence of the state conditions
-  if (fState == kStateGas) {
-     G4double ratio = TotNbOfAtomsPerVolume*k_Boltzmann*fTemp/fPressure;
-     if ((ratio<0.1)||(ratio>10.)) {
-       G4cerr << "--warning from G4Material-- The state conditions of the gas: "
-              << fName << " are not consistent."
-              << "\n density  = "    << fDensity/(mg/cm3)     << " mg/cm3"
-              << "\t pressure = "    << fPressure/atmosphere  << " atmosphere"
-              << "\t temperature = " << fTemp/kelvin          << " kelvin"
-              << "\n rho*(T/P) would be of the order of: " 
-              << (fDensity/(TotNbOfAtomsPerVolume*k_Boltzmann))
-	         /((mg/cm3)*(kelvin/atmosphere))
-              << " (mg/cm3)*(kelvin/atmosphere)."
-	         " The energy loss calculation maybe be affected \n";
-       }
-    }
+///  //for gas, check coherence of the state conditions
+///  if (fState == kStateGas) {
+///     G4int nbAtomsPerMolecule = 1;
+///     if (fAtomsVector) {
+///       nbAtomsPerMolecule = 0;
+///       for (size_t j=0;j<fNumberOfElements;j++) 
+///             nbAtomsPerMolecule += fAtomsVector[j];
+///     }
+///    G4double NbOfMoleculesPerVolume = TotNbOfAtomsPerVolume/nbAtomsPerMolecule;	
+///	     
+///     G4double ratio = NbOfMoleculesPerVolume*k_Boltzmann*fTemp/fPressure;
+///     if ((ratio<0.1)||(ratio>10.)) {
+///       G4cerr << "--warning from G4Material-- The state conditions of the gas: "
+///              << fName << " are not consistent."
+///              << "\n density  = "    << fDensity/(mg/cm3)     << " mg/cm3"
+///              << "\t pressure = "    << fPressure/atmosphere  << " atmosphere"
+///              << "\t temperature = " << fTemp/kelvin          << " kelvin"
+///              << "\n rho*(T/P) would be of the order of: "
+///              << (fDensity/(NbOfMoleculesPerVolume*k_Boltzmann))
+///	         /((mg/cm3)*(kelvin/atmosphere))
+///              << " (mg/cm3)*(kelvin/atmosphere)."
+///	         " The energy loss calculation maybe be affected \n";
+///       }
+///    }
         
   ComputeRadiationLength();
   ComputeNuclearInterLength();

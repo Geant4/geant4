@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialsTest.cc,v 1.6 2002-02-26 17:34:35 maire Exp $
+// $Id: G4MaterialsTest.cc,v 1.7 2002-05-06 15:37:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -157,6 +157,14 @@ G4Material* CO2 = new G4Material(name="Carbonic gas", density, ncomponents=2,
                                      kStateGas,temperature,pressure);
 CO2->AddElement(elC, natoms=1);
 CO2->AddElement(elO, natoms=2);
+
+density     = 2.67*mg/cm3;
+pressure    = 1.*atmosphere;
+temperature = 273.15*kelvin;
+G4Material* C4H10 = new G4Material(name="isobutane", density, ncomponents=2,
+                                     kStateGas,temperature,pressure);
+C4H10->AddElement(elC, natoms=4);
+C4H10->AddElement(elH, natoms=10);
  
 density     = 0.3*mg/cm3;
 pressure    = 2.*atmosphere;
