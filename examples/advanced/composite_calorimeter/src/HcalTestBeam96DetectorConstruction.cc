@@ -18,7 +18,6 @@
 #include "G4HcalTB96.hh"
 #include "utils.hh"
 
-#include "G4CaloSD.hh"
 #include "CCalEcalOrganization.hh"
 #include "CCalHcalOrganization.hh"
 #include "G4SDManager.hh"

@@ -4,7 +4,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalSteppingAction.hh"
 #include "HcalTB96Analysis.hh"
-#include "G4CaloSD.hh"
 
 #include "G4SDManager.hh"
 #include "G4StepPoint.hh"

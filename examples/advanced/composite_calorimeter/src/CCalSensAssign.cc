@@ -5,7 +5,7 @@
 #include "CCalSensAssign.hh"
 #include "CCalStackingAction.hh"
 #include "CCalSensitiveDetectors.hh"
-#include "G4CaloSD.hh"
+#include "CCaloSD.hh"
 
 #include "G4RunManager.hh"
 #include "G4SDManager.hh"
@@ -54,7 +54,7 @@ bool CCalSensAssign::stackingAction() {
     result = true;
   } else {
     cout << "***CCalSens: a StackingAction already exists. "
-	 << "Maybe not the one G4CaloSD needs?" << endl;
+	 << "Maybe not the one CCaloSD needs?" << endl;
   }  
   return result;
 }
@@ -62,7 +62,7 @@ bool CCalSensAssign::stackingAction() {
 
 bool CCalSensAssign::addCaloSD(G4String name, 
 			       CCalVOrganization* numberingScheme) {
-  sens_[name]         = new G4CaloSD(name, numberingScheme);
+  sens_[name]         = new CCaloSD(name, numberingScheme);
   return true;
 
 }

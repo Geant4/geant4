@@ -6,7 +6,7 @@
 #include "G4StackManager.hh"
 
 #include "G4SDManager.hh"
-#include "G4CaloSD.hh"
+#include "CCaloSD.hh"
 #include "SDList.hh"
 #include "G4RunManager.hh"
 #include "G4Navigator.hh"
@@ -62,7 +62,7 @@ void CCalStackingAction::initialize(){
 	     << " in this Setup " << endl;
 #endif
       } else {
-	theCaloSD[i] = dynamic_cast<G4CaloSD*>(aSD);
+	theCaloSD[i] = dynamic_cast<CCaloSD*>(aSD);
 	theCaloSD[i]->SetPrimaryID(0);
       }	   
     }

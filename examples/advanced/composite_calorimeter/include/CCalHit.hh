@@ -1,8 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CMSCaloHit.h
-// Date: 06.10.99 Veronique.Lefebure@cern.ch
-// 
-// Hit class for Calorimeters (Ecal, Hcal, ...)
+// File: CCalHit.h
+// Description: Hit class for Calorimeters (Ecal, Hcal, ...)
 //
 // One Hit object should be created
 // -for each new particle entering the calorimeter
@@ -16,27 +14,23 @@
 // - the TrackID (= Identification number of the incident particle)
 // - the IncidentEnergy (= energy of that particle)
 //
-// Modified: 19/02/00 I.G. & D.R. Added output operator (<<)
-//                                Added const to get methods
-//           20/02/00 I.G. & D.R. addEnergy takes a const CMSCaloHit&
-//                                instead of a pointer
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef CMSCaloHit_h
-#define CMSCaloHit_h 1
+#ifndef CCalHit_h
+#define CCalHit_h 1
 
 #include <CLHEP/Vector/ThreeVector.h>
 #include <iostream>
 
-class CMSCaloHit {
+class CCalHit {
   
 public:
   
-  CMSCaloHit();
-  ~CMSCaloHit();
-  CMSCaloHit(const CMSCaloHit &right);
-  const CMSCaloHit& operator=(const CMSCaloHit &right);
-  int operator==(const CMSCaloHit &right){return 0;}
+  CCalHit();
+  ~CCalHit();
+  CCalHit(const CCalHit &right);
+  const CCalHit& operator=(const CCalHit &right);
+  int operator==(const CCalHit &right){return 0;}
   
   void print();
   
@@ -65,8 +59,8 @@ public:
   int          getTimeSliceID() const;     
   
   void         addEnergyDeposit(double em, double hd);
-  //void       addEnergyDeposit(CMSCaloHit* aHit);
-  void         addEnergyDeposit(const CMSCaloHit& aHit);
+  //void       addEnergyDeposit(CCalHit* aHit);
+  void         addEnergyDeposit(const CCalHit& aHit);
   
   double       getEnergyDeposit() const;
   
@@ -82,6 +76,6 @@ private:
   double       theTimeSlice;      //Time Slice Identification
 };
 
-ostream& operator<<(ostream&, const CMSCaloHit&);
+ostream& operator<<(ostream&, const CCalHit&);
 
 #endif

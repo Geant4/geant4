@@ -5,11 +5,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "HcalTB96EndOfEventAction.hh"
 #include "HcalTB96Analysis.hh"
-#include "G4CaloHit.hh"
-#include "G4CaloSD.hh"
+#include "CCaloSD.hh"
 #include "CMSPrimaryGeneratorAction.hh"
-#include "G4CaloHitsCollection.hh"
-#include "G4CaloHit.hh"
+#include "CCalG4HitCollection.hh"
+#include "CCalG4Hit.hh"
 #include "CCaloOrganization.hh"
 #include "SDList.hh"
 #include "CCalSteppingAction.hh"
@@ -112,8 +111,8 @@ void HcalTB96EndOfEventAction::EndOfEventAction(const G4Event* evt){
     edep[i] = 0;
     int caloHCid = G4SDManager::GetSDMpointer()->GetCollectionID(SDnames[i]);
 
-    G4CaloHitsCollection* theHC = 
-      (G4CaloHitsCollection*) allHC->GetHC(caloHCid);
+    CCalG4HitCollection* theHC = 
+      (CCalG4HitCollection*) allHC->GetHC(caloHCid);
     if (theHC != 0) {
 
       G4int nentries = theHC->entries();
@@ -126,7 +125,7 @@ void HcalTB96EndOfEventAction::EndOfEventAction(const G4Event* evt){
   
 	int j;
 	for (j=0; j<nentries; j++){
-	  G4CaloHit* aHit =  (*theHC)[j];
+	  CCalG4Hit* aHit =  (*theHC)[j];
 	  float En = aHit->getEnergyDeposit();
 	  int unitID = aHit->getUnitID();
 	  int id=-1;

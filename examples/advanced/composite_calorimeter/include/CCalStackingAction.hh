@@ -10,7 +10,7 @@
 #include "globals.hh"
 #include "G4UserStackingAction.hh"
 
-class G4CaloSD;
+class CCaloSD;
 
 class CCalStackingAction : public G4UserStackingAction {
 
@@ -36,7 +36,7 @@ private:
   G4String SDName[maxNumberOfSD];
   int nurgent;
   int acceptSecondaries;
-  G4CaloSD* theCaloSD[maxNumberOfSD];
+  CCaloSD* theCaloSD[maxNumberOfSD];
   G4bool isInitialized;
 private:
   void initialize();    

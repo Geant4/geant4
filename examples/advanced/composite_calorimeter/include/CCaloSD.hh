@@ -1,22 +1,20 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: G4CaloSD.hh
-// Date: 11/98 
+// File: CCaloSD.hh
 // Description: Stores hits of calorimetric type in appropriate container
 //
 // Use in your geometry routine: 
-//    G4CaloSD* caloSD = new G4CaloSD(SDname, new CalorimeterOrganization);
+//    CCaloSD* caloSD = new CCaloSD(SDname, new CalorimeterOrganization);
 //    G4SDManager::GetSDMpointer()->AddNewDetector(caloSD);
 //  and then for every Logical Volume to be declared as sensitive
 //    logVolume->SetSensitiveDetector(caloSD);
 //
-// Modifications: 27/04/00 SB 
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef G4CaloSD_h
-#define G4CaloSD_h 1
+#ifndef CCaloSD_h
+#define CCaloSD_h 1
 
-#include "G4CaloHitsCollection.hh"
-#include "G4CaloHit.hh"
+#include "CCalG4HitCollection.hh"
+#include "CCalG4Hit.hh"
 
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -33,11 +31,11 @@ class CCalVOrganization;
 
 //#define debug
  
-class G4CaloSD : public G4VSensitiveDetector {
+class CCaloSD : public G4VSensitiveDetector {
 
 public:
-  G4CaloSD(G4String aSDname, CCalVOrganization* numberingScheme);
-  virtual ~G4CaloSD();
+  CCaloSD(G4String aSDname, CCalVOrganization* numberingScheme);
+  virtual ~CCaloSD();
 
   void Initialize(G4HCofThisEvent*HCE);
   G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
@@ -50,7 +48,7 @@ public:
   
   void SetPrimaryID(int i) {PrimaryID = i;
 #ifdef debug
-  cout<<"G4CaloSD SetPrimaryID primID ="<<i<<endl;
+  cout<<"CCaloSD SetPrimaryID primID ="<<i<<endl;
 #endif
   }
   int  GetPrimaryID( )     {return PrimaryID;}
@@ -69,12 +67,12 @@ private:
 
 
 private:
-  G4int                 HCID;
-  G4String              SDname;
-  G4CaloHitsCollection* theHC; 
+  G4int                HCID;
+  G4String             SDname;
+  CCalG4HitCollection* theHC; 
 
   G4int              TSID; 
-  G4CaloHit*         CurrentHit;
+  CCalG4Hit*         CurrentHit;
   G4Track*           theTrack;
   G4VPhysicalVolume* CurrentPV;
   G4VPhysicalVolume* PreviousPV;
@@ -94,7 +92,7 @@ private:
   G4bool hitExists();
   void createNewHit();
   void updateHit();
-  void StoreHit(G4CaloHit* ahit);
+  void StoreHit(CCalG4Hit* ahit);
   void ResetForNewPrimary();
   void summarize();
       

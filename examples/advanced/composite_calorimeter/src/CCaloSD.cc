@@ -1,10 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: G4CaloSD.cc
-// Author: Veronique Lefebure
-// Modifications: 27/04/00 S.B.
+// File: CCaloSD.cc
+// Description: Stores hits of calorimetric type in appropriate container
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "G4CaloSD.hh"
+#include "CCaloSD.hh"
 #include "G4VProcess.hh"
 #include "G4SDManager.hh"
 #include "G4VTouchable.hh"
@@ -16,7 +15,7 @@
 //#define debug
 //#define ddebug
  
-G4CaloSD::G4CaloSD(G4String name, CCalVOrganization* numberingScheme):
+CCaloSD::CCaloSD(G4String name, CCalVOrganization* numberingScheme):
   G4VSensitiveDetector(name), HCID(-1), SDname(name), theHC(0),
   CurrentHit(0), theTrack(0), CurrentPV(0), PreviousPV(0), UnitID(0), 
   PreviousUnitID(0), PreStepPoint(0), PostStepPoint(0), 
@@ -26,7 +25,7 @@ G4CaloSD::G4CaloSD(G4String name, CCalVOrganization* numberingScheme):
   
   cout << "*******************************************************" << endl;
   cout << "*                                                     *" << endl;
-  cout << "* Constructing a G4CaloSD  with name " << name           << endl;  
+  cout << "* Constructing a CCaloSD  with name " << name            << endl;  
   cout << "*                                                     *" << endl;
   cout << "*******************************************************" << endl;
 
@@ -34,21 +33,21 @@ G4CaloSD::G4CaloSD(G4String name, CCalVOrganization* numberingScheme):
 }
 
 
-G4CaloSD::~G4CaloSD() {
+CCaloSD::~CCaloSD() {
  if (theDescription) 
    delete[] theDescription;
 }
 
 
-void G4CaloSD::Initialize(G4HCofThisEvent*HCE) {
+void CCaloSD::Initialize(G4HCofThisEvent*HCE) {
 
 #ifdef debug
-  cout << "G4CaloSD : Initialize called for " << SDname << endl;
+  cout << "CCaloSD : Initialize called for " << SDname << endl;
 #endif
   //This initialization is performed at the beginning of an event
   //------------------------------------------------------------
 
-  theHC = new G4CaloHitsCollection(SDname, collectionName[0]);
+  theHC = new CCalG4HitCollection(SDname, collectionName[0]);
   if (HCID<0) 
     HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
   HCE->AddHitsCollection( HCID, theHC );
@@ -59,7 +58,7 @@ void G4CaloSD::Initialize(G4HCofThisEvent*HCE) {
 }
 
 
-G4bool G4CaloSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist) {
+G4bool CCaloSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist) {
 
   if (aStep == NULL) return true;
    
@@ -71,7 +70,7 @@ G4bool G4CaloSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist) {
 } 
 
 
-void G4CaloSD::getStepInfo(G4Step* aStep) {
+void CCaloSD::getStepInfo(G4Step* aStep) {
   
   PreStepPoint = aStep->GetPreStepPoint(); 
   PostStepPoint= aStep->GetPostStepPoint(); 
@@ -102,10 +101,10 @@ void G4CaloSD::getStepInfo(G4Step* aStep) {
 }
 
 
-G4bool G4CaloSD::hitExists() {
+G4bool CCaloSD::hitExists() {
    
   if (PrimaryID<1) {
-    G4cerr << "***** G4CaloSD error: PrimaryID = " << PrimaryID
+    G4cerr << "***** CCaloSD error: PrimaryID = " << PrimaryID
 	   << " Maybe detector name changed"
 	   << endl;
   }
@@ -127,7 +126,7 @@ G4bool G4CaloSD::hitExists() {
   G4bool found = false;
   for (int j=0; j<theHC->entries()&&!found; j++) {
 
-    G4CaloHit* aPreviousHit = (*theHC)[j];
+    CCalG4Hit* aPreviousHit = (*theHC)[j];
     if (aPreviousHit->getTrackID()  == PrimaryID &&
 	aPreviousHit->getTimeSliceID() == TSliceID  &&
 	aPreviousHit->getUnitID()== UnitID       ) {
@@ -145,7 +144,7 @@ G4bool G4CaloSD::hitExists() {
 }
 
 
-void G4CaloSD::ResetForNewPrimary() {
+void CCaloSD::ResetForNewPrimary() {
   
   EntrancePoint = SetToLocal(HitPoint);
   IncidentEnergy = PreStepPoint->GetKineticEnergy();
@@ -153,11 +152,11 @@ void G4CaloSD::ResetForNewPrimary() {
 }
 
 
-void G4CaloSD::StoreHit(G4CaloHit* hit){
+void CCaloSD::StoreHit(CCalG4Hit* hit){
 
   if (PrimID<0) return;
   if (hit == 0 ) {
-    cout << "G4CaloSD: hit to be stored is NULL !!" <<endl;
+    cout << "CCaloSD: hit to be stored is NULL !!" <<endl;
     return;
   }
 
@@ -165,10 +164,10 @@ void G4CaloSD::StoreHit(G4CaloHit* hit){
 }
 
 
-void G4CaloSD::createNewHit() {
+void CCaloSD::createNewHit() {
 
 #ifdef debug
-  cout << "G4CaloSD createNewHit for"
+  cout << "CCaloSD createNewHit for"
        << " PV "     << CurrentPV->GetName()
        << " PVid = " << CurrentPV->GetCopyNo()
        << " MVid = " << CurrentPV->GetMother()->GetCopyNo()
@@ -193,7 +192,7 @@ void G4CaloSD::createNewHit() {
 #endif          
     
 
-  CurrentHit = new G4CaloHit;
+  CurrentHit = new CCalG4Hit;
   CurrentHit->setTrackID(PrimaryID);
   CurrentHit->setTimeSlice(TSlice);
   CurrentHit->setUnitID(UnitID);
@@ -206,7 +205,7 @@ void G4CaloSD::createNewHit() {
 }	 
 
 
-void G4CaloSD::updateHit() {
+void CCaloSD::updateHit() {
   if (EdepositEM+EdepositEHAD != 0) {
     CurrentHit->addEnergyDeposit(EdepositEM,EdepositEHAD);
 #ifdef debug
@@ -223,7 +222,7 @@ void G4CaloSD::updateHit() {
 }
 
 
-G4ThreeVector G4CaloSD::SetToLocal(G4ThreeVector global){
+G4ThreeVector CCaloSD::SetToLocal(G4ThreeVector global){
 
   G4ThreeVector localPoint;
   const G4VTouchable*   touch= PreStepPoint->GetTouchable();
@@ -234,30 +233,30 @@ G4ThreeVector G4CaloSD::SetToLocal(G4ThreeVector global){
 }
      
 
-void G4CaloSD::EndOfEvent(G4HCofThisEvent*HCE) {
+void CCaloSD::EndOfEvent(G4HCofThisEvent*HCE) {
   summarize();
 }
      
 
-void G4CaloSD::summarize() {
+void CCaloSD::summarize() {
 }
 
 
-void G4CaloSD::clear() {
+void CCaloSD::clear() {
 } 
 
 
-void G4CaloSD::DrawAll() {
+void CCaloSD::DrawAll() {
 } 
 
 
-void G4CaloSD::PrintAll() {
-  cout << "G4CaloSD: Collection " << theHC->GetName() << endl;
+void CCaloSD::PrintAll() {
+  cout << "CCaloSD: Collection " << theHC->GetName() << endl;
   theHC->PrintAllHits();
 } 
 
 
-void G4CaloSD::SetOrganization(CCalVOrganization* org){
+void CCaloSD::SetOrganization(CCalVOrganization* org){
 
   if (theDescription!=0) 
     delete theDescription;
