@@ -1,4 +1,4 @@
-$Id: History,v 1.71 2000-05-04 08:52:01 johna Exp $
+$Id: History,v 1.72 2000-05-04 19:18:01 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,7 +25,10 @@ History file for visualization category
 ---------------------------------------
 
 4th May 2000  John Allison
-- Tidied comments in G4VisManagerRegisterMessengers.cc
+- Tidied comments in G4VisManagerRegisterMessengers.cc.
+- Initialize current target point in G4VViewer constructor.
+- Re-implemented /vis/viewer/reset to change view parameters of
+  viewer directly.
 
 2nd May 2000  John Allison  vis-V01-01-02
 - Added /vis/viewer/reset.
