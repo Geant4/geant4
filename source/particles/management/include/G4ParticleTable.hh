@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.hh,v 1.13 1999-12-15 14:51:11 gunter Exp $
+// $Id: G4ParticleTable.hh,v 1.14 2000-02-25 07:36:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,12 +35,9 @@
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 
-#ifdef G4USE_STL
+
 #include "g4std/map"
 #include "G4ParticleTableIterator.hh"
-#else
-#include "g4rw/tphdict.h"
-#endif 
 
 class G4UImessenger;
 class G4ParticleMessenger;
@@ -58,17 +55,11 @@ class G4ParticleTable
  //   
 
  public:
-#ifdef G4USE_STL
+
    typedef G4ParticleTableIterator<G4String, G4ParticleDefinition*>::Map G4PTblDictionary;
    typedef G4ParticleTableIterator<G4String, G4ParticleDefinition*> G4PTblDicIterator;
    typedef G4ParticleTableIterator<G4int, G4ParticleDefinition*>::Map G4PTblEncodingDictionary;
    typedef G4ParticleTableIterator<G4int, G4ParticleDefinition*> G4PTblEncodingDicIterator;
-#else
-   typedef G4RWTPtrHashDictionary<G4String,G4ParticleDefinition> G4PTblDictionary;
-   typedef G4RWTPtrHashDictionaryIterator<G4String,G4ParticleDefinition> G4PTblDicIterator;
-   typedef G4RWTPtrHashDictionary<G4int,G4ParticleDefinition> G4PTblEncodingDictionary;
-   typedef G4RWTPtrHashDictionaryIterator<G4int,G4ParticleDefinition> G4PTblEncodingDicIterator;
-#endif
 
  protected:
    G4ParticleTable();
@@ -173,13 +164,6 @@ class G4ParticleTable
    void RemoveAllParticles();
    // remove all particles from G4ParticleTable and 
    // delete them if they were created dynamically  (i.e. not static objects) 
-
-#ifndef G4USE_STL
- protected:
-   static unsigned HashFun(const G4String& particle_name);
-   static unsigned EncodingHashFun(const G4int& aEndcoding);
-  // hash functions  
-#endif
 
  private:
    G4int verboseLevel;

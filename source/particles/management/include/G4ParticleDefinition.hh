@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.hh,v 1.6 1999-12-15 14:51:11 gunter Exp $
+// $Id: G4ParticleDefinition.hh,v 1.7 2000-02-25 07:36:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,6 +28,7 @@
 // added  GetEnergyThreshold  H.Kurashige 08 June 1998
 // added  ShortLived flag and ApplyCuts flag  H.Kurashige 27  June 1998
 // fixed  some improper codings   H.Kurashige 08 Apr. 1999
+// added  sub-type  H.Kurashige 15 Feb. 2000
 // ------------------------------------------------------------
 
 #ifndef G4ParticleDefinition_h
@@ -116,7 +117,8 @@ class G4ParticleDefinition
       G4int    GetPDGiIsospin3() const { return thePDGiIsospin3; }
       G4int    GetPDGiGParity() const { return thePDGiGParity; }
 
-      G4String GetParticleType() const { return theParticleType; }
+      const G4String& GetParticleType() const { return theParticleType; }
+      const G4String& GetParticleSubType() const { return theParticleSubType; }
       G4int    GetLeptonNumber() const { return theLeptonNumber; }
       G4int    GetBaryonNumber() const { return theBaryonNumber; }
 
@@ -165,6 +167,8 @@ class G4ParticleDefinition
       //  return value is PDG encoding for this particle.
       //  It means error if the return value is deffernt from
       //  this->thePDGEncoding.
+
+      void   SetParticleSubType(const G4String& subtype);
 
  public:
       void  SetVerboseLevel(G4int value);
@@ -241,6 +245,10 @@ class G4ParticleDefinition
 
       G4String theParticleType;
       //  More general textual type description of the particle.
+
+      G4String theParticleSubType;
+      // Textual type description of the particle
+      // eg. pion, lamda etc.
 
       G4int thePDGEncoding;
       //  The Particle Data Group integer identifier of this particle
@@ -371,6 +379,11 @@ G4int G4ParticleDefinition::GetAntiQuarkContent(G4int flavor) const
     }
     return 0;
   }  
+}
+
+inline void G4ParticleDefinition::SetParticleSubType(const G4String& subtype)
+{
+  theParticleSubType = subtype;
 }
 
 inline void             G4ParticleDefinition::ResetCuts(){}

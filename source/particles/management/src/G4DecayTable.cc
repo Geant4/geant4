@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTable.cc,v 1.5 1999-12-15 14:51:12 gunter Exp $
+// $Id: G4DecayTable.cc,v 1.6 2000-02-25 07:36:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,8 +15,9 @@
 //      For information related to this code contact:
 //      CERN, CN Division, ASD group
 //      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      27 July 1996 H.Kurashige
+// ----------------------------------------
+//      implementation for STL          14 Feb. 2000 H.Kurashige
 // ------------------------------------------------------------
 
 #include "globals.hh"
@@ -30,8 +31,14 @@ G4DecayTable::G4DecayTable():parent(0)
 
 G4DecayTable::~G4DecayTable()
 {
-  channels->clearAndDestroy();
-  delete channels;
+  // remove and delete all contents  
+  G4VDecayChannelVector::iterator i;
+  for (i = channels->begin(); i!= channels->end(); ++i) {
+    delete (*i);
+  }
+  channels->clear();
+  delete  channels;
+  channels = 0;
 }    
 
 void G4DecayTable::Insert( G4VDecayChannel * aChannel){
@@ -43,43 +50,47 @@ void G4DecayTable::Insert( G4VDecayChannel * aChannel){
     G4cout << " input:" << aChannel->GetParent()->GetParticleName() << G4endl;
 #endif
   } else {
-    channels->insert(aChannel);
+    G4double r = aChannel->GetBR();
+    G4VDecayChannelVector::iterator i;
+    for (i = channels->begin(); i!= channels->end(); ++i) {
+      if (r > (*i)->GetBR()) {
+	channels->insert(i,aChannel);
+	return;
+      }
+    }
+    channels->push_back(aChannel);
   }
 }
 
 G4VDecayChannel *G4DecayTable::SelectADecayChannel()
 {
-  // make cumlative table for branching ratio
-  G4double sumBR = 0.0;
-  G4int index;
-  G4int    numberofchannels = channels->entries();
-  G4double *cumBR = new G4double[numberofchannels];
-  for (index=numberofchannels-1; index >=0 ; index--) {
-    sumBR += ((*channels)(index))->GetBR();
-    cumBR[index] = sumBR;
-  }
+  // check if contents exist
+  if (channels->size()<1) return 0;
 
-  // select decay channel
-  G4double r = sumBR* G4UniformRand();
-  G4VDecayChannel *channel;
-  for (index= numberofchannels-1; index >=0 ; index--) {
-    if (r < cumBR[index]) {
-      channel = (*channels)(index);
-      break;
+  while (1) {
+    G4double sumBR = 0.0;
+    G4double r= G4UniformRand();
+    // select decay channel
+    G4VDecayChannelVector::iterator i;
+    for (i = channels->begin(); i!= channels->end(); ++i) {
+      sumBR += (*i)->GetBR();
+      if (r < sumBR) {
+	return (*i);
+      }
     }
   }
-  delete [] cumBR;
-  return channel;
+  return 0;
 }
 
 void G4DecayTable::DumpInfo() const
 {
   G4cout << "G4DecayTable:  " << parent->GetParticleName() << G4endl;
-  G4int numberofchannels = channels->entries();
-  for (G4int index= numberofchannels -1; index >=0 ; index -=1)
-  {
+  G4int index =0;
+  G4VDecayChannelVector::iterator i;
+  for (i = channels->begin(); i!= channels->end(); ++i) {
     G4cout << index << ": ";
-    ((*channels)(index))->DumpInfo();
+    (*i)->DumpInfo();
+    index +=1;
   }
   G4cout << G4endl;
 }

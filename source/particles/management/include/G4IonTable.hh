@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.hh,v 1.14 1999-12-15 14:51:10 gunter Exp $
+// $Id: G4IonTable.hh,v 1.15 2000-02-25 07:36:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,11 +31,7 @@
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 
-#ifdef G4USE_STL
 #include "g4std/vector"
-#else
-#include "g4rw/tpordvec.h"
-#endif 
 
 class G4ParticleTable;
 class G4VIsotopeTable; 
@@ -49,13 +45,8 @@ class G4IonTable
  //
 
  public:
-#ifdef G4USE_STL
    // Use STL Vector as list of ions
    typedef G4std::vector<G4ParticleDefinition*> G4IonList;
-#else
-   // Use  G4RWTPtrOrderedVector as list of ions
-   typedef G4RWTPtrOrderedVector<G4ParticleDefinition> G4IonList;
-#endif
 
  public:
   // constructor
@@ -169,24 +160,16 @@ class G4IonTable
 
 inline G4bool  G4IonTable::Contains(const G4ParticleDefinition* particle) const
 {
-#ifdef G4USE_STL
   G4IonList::iterator i;
   for (i = fIonList->begin(); i!= fIonList->end(); ++i) {
     if (**i==*particle) return true;
   }
   return false;
-#else
-  return fIonList->contains(particle);
-#endif
 }
 
 inline G4int G4IonTable::Entries() const
 {
-#ifdef G4USE_STL
   return fIonList->size();
-#else
-  return fIonList->entries();
-#endif
 }
 
 inline G4ParticleDefinition*  G4IonTable::GetParticle(G4int index) const

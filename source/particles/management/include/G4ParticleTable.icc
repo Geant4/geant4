@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.icc,v 1.6 1999-12-15 14:51:11 gunter Exp $
+// $Id: G4ParticleTable.icc,v 1.7 2000-02-25 07:36:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,16 +64,12 @@ inline
 inline 
  G4ParticleDefinition* G4ParticleTable::FindParticle(const G4String &particle_name)
 {
-#ifdef G4USE_STL
   G4PTblDictionary::iterator it =  fDictionary->find(particle_name);
   if (it != fDictionary->end()) {
     return (*it).second;
   }else {
     return 0;
   }
-#else
-  return fDictionary -> findValue(&particle_name);
-#endif
 }
 
 
@@ -100,12 +96,8 @@ inline
 inline 
  G4bool  G4ParticleTable::contains(const G4String& particle_name)
 {
-#ifdef G4USE_STL
   G4PTblDictionary::iterator it =  fDictionary->find(particle_name);
   return (it != fDictionary->end());
-#else
-  return fDictionary -> contains(&particle_name);
-#endif
 }
 
 inline 
@@ -128,35 +120,12 @@ inline
 inline 
  G4int G4ParticleTable::entries() const
 {
-#ifdef G4USE_STL
   return fDictionary->size();
-#else
-  return fDictionary -> entries();
-#endif
 }
 
 inline 
  G4int G4ParticleTable::size() const
 {
-#ifdef G4USE_STL
   return fDictionary->size();
-#else
-  return fDictionary -> entries();
-#endif
 }
 
-#ifndef G4USE_STL
-inline unsigned G4ParticleTable::HashFun(const G4String& particle_name)
-{
-  return particle_name.hash(); 
-}
-
-inline 
- unsigned G4ParticleTable::EncodingHashFun(const G4int& aEncoding)
-{
-  G4int temp = aEncoding;
-  if (aEncoding <0) temp *= -1;
-  G4int value = ( temp & 0x0FFF)*( temp & 0x0FFF)/2;
-  return value; 
-}
-#endif

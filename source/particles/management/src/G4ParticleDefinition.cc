@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.cc,v 1.7 1999-12-15 14:51:14 gunter Exp $
+// $Id: G4ParticleDefinition.cc,v 1.8 2000-02-25 07:36:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,6 +72,7 @@ G4ParticleDefinition::G4ParticleDefinition(
 		   thePDGIsospin(iIsospin*0.5),
 		   thePDGIsospin3(iIsospin3*0.5),
 		   theParticleType(pType), 
+		   theParticleSubType(""), 
 		   theLeptonNumber(lepton),
 		   theBaryonNumber(baryon),
 		   thePDGEncoding(encoding),
