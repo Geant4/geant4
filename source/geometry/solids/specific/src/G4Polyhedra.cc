@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.12 2003-11-05 17:01:44 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.13 2003-11-05 17:41:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -637,7 +637,7 @@ G4PolyhedraHistorical::~G4PolyhedraHistorical()
 }
 
 G4PolyhedraHistorical::
-G4PolyhedraHistorical( const G4PolyhedraHistorical &source )
+G4PolyhedraHistorical( const G4PolyhedraHistorical& source )
 {
   Start_angle   = source.Start_angle;
   Opening_angle = source.Opening_angle;
@@ -648,11 +648,39 @@ G4PolyhedraHistorical( const G4PolyhedraHistorical &source )
   Rmin     = new G4double[Num_z_planes];
   Rmax     = new G4double[Num_z_planes];
   
-  G4int i;
-  for( i = 0; i < Num_z_planes; i++)
+  for( G4int i = 0; i < Num_z_planes; i++)
   {
-    Z_values[i]  = source.Z_values[i];
-    Rmin[i]      = source.Rmin[i];
-    Rmax[i]      = source.Rmax[i];
+    Z_values[i] = source.Z_values[i];
+    Rmin[i]     = source.Rmin[i];
+    Rmax[i]     = source.Rmax[i];
   }
+}
+
+G4PolyhedraHistorical&
+G4PolyhedraHistorical::operator=( const G4PolyhedraHistorical& right )
+{
+  if ( &right == this ) return *this;
+
+  if (&right)
+  {
+    Start_angle   = right.Start_angle;
+    Opening_angle = right.Opening_angle;
+    numSide       = right.numSide;
+    Num_z_planes  = right.Num_z_planes;
+  
+    delete [] Z_values;
+    delete [] Rmin;
+    delete [] Rmax;
+    Z_values = new G4double[Num_z_planes];
+    Rmin     = new G4double[Num_z_planes];
+    Rmax     = new G4double[Num_z_planes];
+  
+    for( G4int i = 0; i < Num_z_planes; i++)
+    {
+      Z_values[i] = right.Z_values[i];
+      Rmin[i]     = right.Rmin[i];
+      Rmax[i]     = right.Rmax[i];
+    }
+  }
+  return *this;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.hh,v 1.10 2003-11-04 17:10:27 gcosmo Exp $
+// $Id: G4Polyhedra.hh,v 1.11 2003-11-05 17:41:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,7 +72,8 @@ class G4PolyhedraHistorical
     G4PolyhedraHistorical();
     ~G4PolyhedraHistorical();
     G4PolyhedraHistorical( const G4PolyhedraHistorical &source );
-  
+    G4PolyhedraHistorical& operator=( const G4PolyhedraHistorical& right );
+
     G4double Start_angle;
     G4double Opening_angle;
     G4int   numSide;

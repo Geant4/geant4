@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.14 2003-11-05 17:01:44 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.15 2003-11-05 17:41:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -575,18 +575,45 @@ G4PolyconeHistorical::
 G4PolyconeHistorical( const G4PolyconeHistorical &source )
 {
   Start_angle   = source.Start_angle;
-  Opening_angle  = source.Opening_angle;
+  Opening_angle = source.Opening_angle;
   Num_z_planes  = source.Num_z_planes;
   
   Z_values  = new G4double[Num_z_planes];
-  Rmin    = new G4double[Num_z_planes];
-  Rmax    = new G4double[Num_z_planes];
+  Rmin      = new G4double[Num_z_planes];
+  Rmax      = new G4double[Num_z_planes];
   
-  G4int i;
-  for( i = 0; i < Num_z_planes; i++)
+  for( G4int i = 0; i < Num_z_planes; i++)
   {
     Z_values[i] = source.Z_values[i];
-    Rmin[i]      = source.Rmin[i];
-    Rmax[i]      = source.Rmax[i];
+    Rmin[i]     = source.Rmin[i];
+    Rmax[i]     = source.Rmax[i];
   }
+}
+
+G4PolyconeHistorical&
+G4PolyconeHistorical::operator=( const G4PolyconeHistorical& right )
+{
+  if ( &right == this ) return *this;
+
+  if (&right)
+  {
+    Start_angle   = right.Start_angle;
+    Opening_angle = right.Opening_angle;
+    Num_z_planes  = right.Num_z_planes;
+  
+    delete [] Z_values;
+    delete [] Rmin;
+    delete [] Rmax;
+    Z_values  = new G4double[Num_z_planes];
+    Rmin      = new G4double[Num_z_planes];
+    Rmax      = new G4double[Num_z_planes];
+  
+    for( G4int i = 0; i < Num_z_planes; i++)
+    {
+      Z_values[i] = right.Z_values[i];
+      Rmin[i]     = right.Rmin[i];
+      Rmax[i]     = right.Rmax[i];
+    }
+  }
+  return *this;
 }

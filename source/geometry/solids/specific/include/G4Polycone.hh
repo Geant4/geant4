@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.hh,v 1.11 2003-11-04 17:10:26 gcosmo Exp $
+// $Id: G4Polycone.hh,v 1.12 2003-11-05 17:41:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,6 @@
 #include "G4VCSGfaceted.hh"
 #include "G4PolyconeSide.hh"
 
-
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
 class G4VCSGface;
@@ -70,7 +69,9 @@ class G4PolyconeHistorical
   public:
     G4PolyconeHistorical();
     ~G4PolyconeHistorical();
-    G4PolyconeHistorical( const G4PolyconeHistorical &source );
+    G4PolyconeHistorical( const G4PolyconeHistorical& source );
+    G4PolyconeHistorical& operator=( const G4PolyconeHistorical& right );
+
     G4double Start_angle;
     G4double Opening_angle;
     G4int   Num_z_planes;
