@@ -205,8 +205,8 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
   {
     G4double phi, x, y, z;
     phi = 360.*deg/nomucounter*i;
-    x = muBox_radius*sin(phi);
-    y = muBox_radius*cos(phi);
+    x = muBox_radius*std::sin(phi);
+    y = muBox_radius*std::cos(phi);
     z = 0.*cm;
     G4RotationMatrix rm;
     rm.rotateZ(phi);
