@@ -1,0 +1,1688 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%BoundingBox:      16.0    40.0   577.0   757.0
+%%Creator: pmendez using rose_exe
+%%CreationDate: Thu Dec 12 18:00:07 2002
+%%Title: lAr_calorimeter.ps
+%%EndComments
+
+%%BeginProlog
+200 dict begin 
+%%BeginResource: Units and resolution
+/cm { 300 mul 2.54 div } def
+/PageHeight 26.9 cm def
+ /PageWidth 20.6 cm def
+/LineSpace 0.05 cm def
+%%EndResource
+
+%%BeginResource: PenBrush
+/TmpPenArray 5 array def
+/PenArray 5 array def
+ /lpStyle 0 def
+ /lpWidth 1 def
+ /lpRed 2 def
+ /lpGreen 3 def
+ /lpBlue 4 def
+/BrushArray 6 array def
+ /lbStyle 0 def
+ /lbRed 1 def
+ /lbGreen 2 def
+ /lbBlue 3 def
+ /lbHatchStyle 4 def
+ /lpPattern 5 def
+/BkColorArray 5 array def
+ /bkRed 0 def
+ /bkGreen 1 def
+ /bkBlue 2 def
+/TextColorArray 3 array def
+ /TextRed 0 def
+ /TextGreen 1 def
+ /TextBlue 2 def
+/PenDashArray [ [] [0.2 cm 0.1 cm] [0.1 cm 0.1 cm] [0.3 cm 0.1 cm 0.1 cm 0.1 cm] [0.3 cm 0.1 cm 0.1 cm 0.1 cm 0.1 cm 0.1 cm] [] [] ] def
+
+/HatchStyleArray [ {HS_HORIZ} {HS_VERT} {HS_BDIAG} {HS_FDIAG} {HS_CROSS} {HS_DIAGCROSS} ] def
+
+/UpdatePen
+ {/PenArray exch def /PenWidthMemo PenArray lpWidth get def } def
+/UpdateBrush
+ {/BrushArray exch def} def
+
+/UpdateBkColor
+ {/BkColorArray exch def} def
+
+/UpdateBkMode
+ {/BkMode exch def} def
+
+/UpdateTextColor
+ {/TextColorArray exch def} def
+
+/HS_HORIZ
+ {0 LineSpace PageHeight { /i exch def 0 i MyMatrix itransform moveto PageWidth i MyMatrix idtransform lineto } for stroke } def
+/HS_VERT
+ {0 LineSpace PageWidth { /i exch def i 0 MyMatrix itransform moveto i PageHeight MyMatrix idtransform lineto } for stroke } def
+/HS_CROSS
+ { HS_HORIZ HS_VERT } def
+
+/HS_FDIAG
+ {0 PageHeight sub LineSpace 3.5 mul PageWidth 
+     { /i exch def i 0 MyMatrix itransform moveto i PageHeight add PageHeight 
+ MyMatrix idtransform lineto } for stroke } def
+/HS_BDIAG
+ {0 LineSpace 3.5 mul PageWidth PageHeight add
+     { /i exch def i 0 MyMatrix itransform moveto  i PageHeight sub
+  PageHeight MyMatrix idtransform lineto } for stroke } def
+/HS_DIAGCROSS
+ { HS_FDIAG HS_BDIAG } def
+
+/StrokeWithPen
+{/join exch def /Penwidth PenArray lpWidth get def 
+ Penwidth setlinewidth
+ Penwidth 1 le
+     { 0 setlinecap }
+     { Penwidth 5 gt { 1 setlinecap } { 2 setlinecap } ifelse } ifelse
+ join { Penwidth 5 le {0 setlinejoin 3 setmiterlimit}
+ { Penwidth 8 gt { 1 setlinejoin } { 2 setlinejoin } ifelse } ifelse } if
+ join LineJoin -1 ne and {SetLineJoin setlinejoin} if
+ join MiterLimit -1 ne and {MiterLimit miterlimit} if
+ PenArray lpRed get 255 div PenArray lpGreen get 255 div PenArray lpBlue get 255 div setrgbcolor
+ /PenStyle PenArray lpStyle get def
+ PenStyle 5 lt  { PenDashArray PenStyle get 0 setdash stroke }
+ { PenStyle 6 eq  { [] 0 setdash stroke } {newpath} ifelse } ifelse
+ join {0 setlinejoin 10 setmiterlimit} if } def
+
+/FillWithBkColor
+ { gsave BkColorArray bkRed get 255 div
+BkColorArray bkGreen get 255 div BkColorArray bkBlue get 
+255 div setrgbcolor fill grestore } def
+
+/FillWithBrush
+ {/BrushStyle BrushArray lbStyle get def
+ BrushStyle 2 eq dup BrushStyle 0 eq or
+ { BrushArray lbRed get 255 div BrushArray lbGreen get 255 div BrushArray lbBlue get 255 div setrgbcolor
+ { gsave BkMode 2 eq {FillWithBkColor} if clip
+PenArray lpWidth get PenWidthMemo dup 0 ne {div} {pop} ifelse setlinewidth
+ HatchStyleArray BrushArray lbHatchStyle get get exec
+ grestore }
+ { fill } ifelse }
+ {BrushStyle 3 eq {BrushArray 5 get p SHR
+  gsave clip /Tmp save def pfill Tmp restore grestore} {pop}ifelse
+     } ifelse } def
+
+/Fill&Stroke
+ { gsave FillWithBrush grestore StrokeWithPen } def
+  /patfont 10 dict def patfont begin
+    /FontType 3 def
+    /FontMatrix [1 0 0 -1 0 0] def
+    /FontBBox [0 0 16 16]
+    def/Encoding StandardEncoding def
+    /BuildChar{pop pop 16 0 0 0 16 16
+      setcachedevice 16 16 false [1 0 0 1 .25 .25]{pat}imagemask}bind def
+  end
+/p{/pat 32 string def
+    {}forall 0 1 7{dup 2 mul pat exch 3 index put dup
+      2 mul 1 add pat exch 3 index put dup 2 mul 16 add pat exch 3 index
+      put 2 mul 17 add pat exch 2 index put pop}for}bind def
+
+/AU{1 add cvi 15 or}bind def
+/AD{1 sub cvi -16 and}bind def
+/SHR{pathbbox
+AU/Y1 exch def AU/X1 exch def AD/Y0 exch def AD/X0 exch def}bind def
+
+/M /moveto load def
+
+/pfill{/PatFont patfont
+definefont setfont/ch(AAAA)def X0 64 X1{Y1 -16 Y0{1 index exch M ch
+show}for pop}for}bind def
+%%EndResource
+
+%%BeginResource: LineTo
+/LineTo
+ { /y exch def /x exch def
+ moveto x y lineto currentpoint false StrokeWithPen } def
+%%EndResource
+
+%%BeginResource: RectanglePath
+/RectanglePath
+{
+3 index 3 index moveto 3 index 1 index lineto
+1 index 1 index lineto 1 index 3 index lineto
+3 index 3 index lineto pop pop pop pop closepath} def
+/RectanglePathBackwards
+{
+3 index 3 index moveto 1 index 3 index lineto
+1 index 1 index lineto 3 index 1 index lineto
+3 index 3 index lineto pop pop pop pop closepath} def
+%%EndResource
+
+%%BeginResource: EllipticPath
+/EllipticPath
+{matrix currentmatrix dup 3 index 6 index sub 2 div
+3 index 6 index sub 2 div
+7 index 2 index add
+7 index 2 index add
+matrix translate 3 1 roll matrix scale
+exch matrix concatmatrix exch matrix concatmatrix setmatrix
+1 0 moveto 0 0 1 360 0 arcn closepath
+setmatrix
+pop pop pop pop 
+}def
+/EllipticPathBackwards
+{matrix currentmatrix dup 3 index 6 index sub 2 div
+3 index 6 index sub 2 div
+7 index 2 index add
+7 index 2 index add
+matrix translate 3 1 roll matrix scale
+exch matrix concatmatrix exch matrix concatmatrix setmatrix
+1 0 moveto 0 0 1 0 360 arc closepath
+setmatrix
+pop pop pop pop 
+}def
+%%EndResource
+
+%%BeginResource: Rectangle
+/RectangleOutLine
+{/y2 exch def /x2 exch def /y1 exch def /x1 exch def
+ newpath
+ x1 y1 moveto x2 y1 lineto x2 y2 lineto x1 y2 lineto
+ closepath
+ false StrokeWithPen } def
+
+/FillRectangle
+{/y2 exch def /x2 exch def /y1 exch def /x1 exch def
+ /MyMatrix matrix def
+ newpath
+ x1 y1 moveto x2 y1 lineto x2 y2 lineto x1 y2 lineto
+ closepath
+ FillWithBrush} def
+/FrameRectangle
+{/y2 exch def /x2 exch def /y1 exch def /x1 exch def
+ /MyMatrix matrix def
+ /x1 x1 0.5 sub def /x2 x2 0.5 add def /y2 y2 0.5 sub def /y1 y1 0.5 add def newpath
+ x1 y1 moveto x2 y1 lineto x2 y2 lineto x1 y2 lineto x1 y1 lineto
+ /x1 x1 1 add def /x2 x2 1 sub def /y2 y2 1 add def /y1 y1 1 sub def
+ x1 y1 moveto x1 y2 lineto x2 y2 lineto x2 y1 lineto x1 y1 lineto
+ closepath
+ FillWithBrush} def
+%%EndResource
+
+%%BeginResource: Polygon
+/Polygon
+{/MyMatrix matrix def
+ newpath PolylineArray PolylineMode 1 sub get exec closepath
+ true Fill&Stroke } def
+
+/FillPolygon
+{/MyMatrix matrix def
+ newpath PolylineArray PolylineMode 1 sub get exec closepath
+ FillWithBrush } def
+%%EndResource
+
+%%BeginResource: Polyline
+/PolylineArray [ {DrawPolyline} {Bezier} ] def
+/Polyline 
+{PolylineArray PolylineMode 1 sub get exec pop pop currentpoint true StrokeWithPen } def
+/Bezier 
+{/nbPoint exch def /nbCurves nbPoint 1 sub 3 idiv def /nbLeft nbPoint 1 sub nbCurves 3 mul sub def
+ moveto 1 1 nbCurves { pop 4 2 roll 6 -2 roll curveto } for
+ nbLeft 1 eq { lineto } {nbLeft 2 eq { 4 2 roll 2 copy curveto } if } ifelse
+ } def
+/DrawPolyline 
+{/nbPoint exch def moveto
+ 1 1 nbPoint 1 sub { pop lineto } for
+ } def
+
+%%EndResource
+
+%%BeginResource: Ellipse
+/Ellipse
+{gsave
+ /Dy exch def /Dx exch def /Cy exch def /Cx exch def
+ Cx Cy translate Dx Dy scale
+ /MyMatrix Dx Dy matrix scale Cx Cy matrix translate matrix concatmatrix def
+ newpath 0 0 1 0 360 arc closepath
+ 1 Dx div 1 Dy div scale 0 Cx sub 0 Cy sub translate
+ false Fill&Stroke
+ grestore } def 
+
+/FillEllipse
+{gsave
+ /Dy exch def /Dx exch def /Cy exch def /Cx exch def
+ Cx Cy translate Dx Dy scale
+ /MyMatrix Dx Dy matrix scale Cx Cy matrix translate matrix concatmatrix def
+ newpath 0 0 1 0 360 arc closepath
+ FillWithBrush
+ grestore } def 
+%%EndResource
+
+%%BeginResource: Arc
+/Arc
+{ gsave
+ /ang1 exch def /ang2 exch def /Dy exch def /Dx exch def /Cy exch def /Cx exch def
+ Cx Cy translate Dx Dy 
+ scale 1 -1 scale
+ newpath
+ ClockWise {0 0 1 ang2 ang1 narc} {0 0 1 ang2 ang1 arc} ifelse 
+ 1 -1 scale 1 Dx div 1 Dy div scale 0 Cx sub 0 Cy sub translate
+ false StrokeWithPen
+ grestore } def 
+%%EndResource
+
+%%BeginResource: Pie
+/Pie
+{gsave
+ /ang1 exch def /ang2 exch def /Dy exch def /Dx exch def /Cy exch def /Cx exch def
+ Cx Cy translate Dx Dy scale
+ 1 -1 scale
+ /MyMatrix Dx Dy matrix scale Cx Cy matrix translate matrix concatmatrix def
+ newpath 0 0 moveto ClockWise {0 0 1 ang2 ang1 narc} {0 0 1 ang2 ang1 arc} ifelse closepath
+ 1 -1 scale 1 Dx div 1 Dy div scale 0 Cx sub 0 Cy sub translate
+ true Fill&Stroke
+ grestore } def 
+%%EndResource
+
+%%BeginResource: Chord
+/Chord
+{gsave
+ /ang1 exch def /ang2 exch def /Dy exch def /Dx exch def /Cy exch def /Cx exch def
+ Cx Cy translate Dx Dy scale
+ 1 -1 scale
+ /MyMatrix Dx Dy matrix scale Cx Cy matrix translate matrix concatmatrix def
+ newpath ClockWise {0 0 1 ang2 ang1 narc} {0 0 1 ang2 ang1 arc} ifelse closepath
+ 1 -1 scale 1 Dx div 1 Dy div scale 0 Cx sub 0 Cy sub translate
+ true Fill&Stroke
+ grestore } def 
+%%EndResource
+
+%%BeginResource: RoundRectangle
+ /min {1 index 1 index le { pop} {exch pop} ifelse } def
+/RoundRectangle
+{/r2 exch def /r1 exch def /y2 exch def /x2 exch def /y1 exch def /x1 exch def
+ y2  2 div r2 min cvi /r2 exch def
+ x2 2 div r1 min cvi /r1 exch def
+ /width x2 r1 idiv def /height y2 r2 idiv def
+ gsave
+ x1 y1 translate r1 r2 scale
+ 1 -1 scale
+ /MyMatrix r1 r2 matrix scale x1 y1 matrix translate matrix concatmatrix def
+ newpath
+ 1 1 1 180 270 arc
+ width 1 sub 0 lineto width 1 sub 1 1 270 0 arc
+ width height 1 sub lineto width 1 sub height 1 sub 1 0 90 arc
+ 1 height lineto 1 height 1 sub 1 90 180 arc
+ closepath
+ PenArray TmpPenArray copy pop
+ PenArray lpWidth PenArray lpWidth get r1 abs r2 abs add 2 div div put
+ false Fill&Stroke
+ TmpPenArray PenArray copy pop
+ grestore } def
+%%EndResource
+
+%%BeginResource: TextOut
+/TextOut
+{TextColorArray 0 get 255 div TextColorArray 1 get 255 div TextColorArray 2 get 255 div setrgbcolor
+gsave translate rotate
+0 0 moveto /expwidth exch def dup stringwidth pop expwidth exch div -1 scale show pop pop currentpoint grestore} def 
+%%EndResource
+
+%%BeginResource: MwSetFont
+/EncodingDict 256 dict def
+EncodingDict begin
+0  [/.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef
+  /space /exclam /quotedbl /numbersign
+  /dollar /percent /ampersand /quotesingle
+  /parenleft /parenright /asterisk /plus
+  /comma /hyphen /period /slash /zero /one
+  /two /three /four /five /six /seven
+  /eight /nine /colon /semicolon /less
+  /equal /greater /question /at /A /B /C
+  /D /E /F /G /H /I /J /K /L /M /N /O /P
+  /Q /R /S /T /U /V /W /X /Y /Z
+  /bracketleft /backslash /bracketright
+  /asciicircum /underscore /grave /a
+  /b /c /d /e /f /g /h /i /j /k /l /m /n
+  /o /p /q /r /s /t /u /v /w /x /y /z
+  /braceleft /bar /braceright /asciitilde
+  /.notdef /.notdef /.notdef /quotesinglbase
+  /florin /quotedblbase /ellipsis /dagger
+  /daggerdbl /circumflex /perthousand /Scaron
+  /guilsinglleft /OE /.notdef /.notdef
+  /.notdef /.notdef /quoteleft /quoteright
+  /quotedblleft /quotedblright /bullet /endash
+  /emdash /tilde /trademark /scaron
+  /guilsinglright /oe /.notdef /.notdef
+  /Ydieresis /.notdef /exclamdown /cent
+  /sterling /currency /yen /brokenbar
+  /section /dieresis /copyright
+  /ordfeminine /guillemotleft /logicalnot
+  /hyphen /registered /macron /degree
+  /plusminus /twosuperior /threesuperior
+  /acute /mu /paragraph /periodcentered
+  /cedilla /onesuperior /ordmasculine
+  /guillemotright /onequarter /onehalf
+  /threequarters /questiondown /Agrave
+  /Aacute /Acircumflex /Atilde /Adieresis
+  /Aring /AE /Ccedilla /Egrave /Eacute
+  /Ecircumflex /Edieresis /Igrave /Iacute
+  /Icircumflex /Idieresis /Eth /Ntilde
+  /Ograve /Oacute /Ocircumflex /Otilde
+  /Odieresis /multiply /Oslash /Ugrave
+  /Uacute /Ucircumflex /Udieresis /Yacute
+  /Thorn /germandbls /agrave /aacute
+  /acircumflex /atilde /adieresis /aring
+  /ae /ccedilla /egrave /eacute
+  /ecircumflex /edieresis /igrave /iacute
+  /icircumflex /idieresis /eth /ntilde
+  /ograve /oacute /ocircumflex /otilde
+  /odieresis /divide /oslash /ugrave
+  /uacute /ucircumflex /udieresis /yacute
+  /thorn /ydieresis] def
+end
+/fntdict 100 dict def
+
+/MwScaleAndSetFont 
+{
+    2 index findfont  dup length dict begin
+    {1 index /FID ne {def} {pop pop} ifelse} forall
+    dup EncodingDict exch known 
+    {EncodingDict exch get /Encoding exch def} {pop} ifelse
+    currentdict end /font0 exch definefont
+    exch scalefont setfont pop
+} def
+
+/MwSetFont
+{
+  % look in cache of scaled fonts
+  1 index /askedsize exch def
+  2 index /askedname exch def
+  fntdict askedname known 
+  { % font name found in cache - what about the size
+    /fntszdict fntdict askedname get def
+    fntszdict askedsize known
+    {
+      % font size found in cache
+      fntszdict askedsize get setfont pop pop pop
+    }
+    {
+      MwScaleAndSetFont 
+      fntszdict askedsize currentfont put
+    }
+    ifelse
+  }
+  { % not found in cache
+    MwScaleAndSetFont 
+    /fntszdict 200 dict def
+    fntszdict askedsize currentfont put
+    fntdict askedname fntszdict put
+  }
+  ifelse 
+} def
+%%EndResource
+
+%%BeginResource: DisplayBB
+/DisplayBB {gsave initgraphics 72 300 div 72 300 div scale 0 3300 translate 
+1 -1 scale 1 setlinewidth 1 0 0 setrgbcolor 
+/y2 exch def /x2 exch def /y1 exch def /x1 exch def 
+newpath x1 y1 moveto x2 y1 lineto x2 y2 lineto x1 y2 lineto closepath 
+stroke grestore } def
+%%EndResource
+
+%%EndProlog
+
+%%BeginSetup
+%%EndSetup
+
+%%Page:
+%%BeginPageSetup
+/ClockWise false def /LineJoin -1 def /MiterLimit -1 def /PolylineMode 1 def /LineCap 0 def
+[0 0 0 0 0] UpdatePen
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0] UpdateTextColor
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+0 0
+
+% All the numbers (for positions, length or font size) given
+% in this file are expressed in pixels, but interpreted by
+% Postscript as points (1/72 inch)!
+%   -->so scale accordingly!
+72 300 div 72 300 div scale
+
+% So that (0, 0) is at top-left corner of paper sheet (takes postscript scaling into account too)
+0 3300 translate
+1 -1 scale
+
+/Courier  38 0  MwSetFont
+gstate /Mwgstate exch def
+%%EndPageSetup:
+Mwgstate setgstate newpath
+16 16 2416 3054 RectanglePath
+clip newpath
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+657 1098 1134 1269 FillRectangle
+657 1098 1134 1269 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALMaterialConsultant) 443 -0.00 674 1194 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+657 1208 1134 1269 FillRectangle
+657 1208 1134 1269 RectangleOutLine
+657 1231 1134 1269 FillRectangle
+657 1231 1134 1269 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(<<singleton>>) 258 -0.00 767 1147 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+1503 1460 1856 1579 FillRectangle
+1503 1460 1856 1579 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALPhysicsList) 307 -0.00 1526 1509 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+1503 1523 1856 1579 FillRectangle
+1503 1523 1856 1579 RectangleOutLine
+1503 1546 1856 1579 FillRectangle
+1503 1546 1856 1579 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+576 148 1023 267 FillRectangle
+576 148 1023 267 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALSteppingVerbose) 416 -0.00 592 197 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+576 211 1023 267 FillRectangle
+576 211 1023 267 RectangleOutLine
+576 234 1023 267 FillRectangle
+576 234 1023 267 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+1270 436 1641 555 FillRectangle
+1270 436 1641 555 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALVisManager) 321 -0.00 1295 485 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+1270 499 1641 555 FillRectangle
+1270 499 1641 555 RectangleOutLine
+1270 522 1641 555 FillRectangle
+1270 522 1641 555 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+183 450 456 669 FillRectangle
+183 450 456 669 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALCalorHit) 251 -0.00 194 546 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(sCollection) 199 -0.00 220 593 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+183 607 456 669 FillRectangle
+183 607 456 669 RectangleOutLine
+183 630 456 669 FillRectangle
+183 630 456 669 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(<<typedef>>) 228 -0.00 206 499 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+169 148 470 267 FillRectangle
+169 148 470 267 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALCalorHit) 251 -0.00 194 197 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+169 211 470 267 FillRectangle
+169 211 470 267 RectangleOutLine
+169 234 470 267 FillRectangle
+169 234 470 267 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 320 358
+320 449 LineTo
+pop pop 320 449
+335 413 LineTo
+pop pop 320 449
+305 413 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 320 358
+320 268 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 320 358
+320 449 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 320 358
+320 268 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+320 268 305 295 320 322 335 295 320 268 5 Polygon
+[0 153 0 51 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+68 740 475 859 FillRectangle
+68 740 475 859 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALHadModuleSD) 368 -0.00 88 789 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+68 803 475 859 FillRectangle
+68 803 475 859 RectangleOutLine
+68 826 475 859 FillRectangle
+68 826 475 859 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+95 1124 448 1243 FillRectangle
+95 1124 448 1243 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALHadModule) 312 -0.00 116 1173 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+95 1187 448 1243 FillRectangle
+95 1187 448 1243 RectangleOutLine
+95 1210 448 1243 FillRectangle
+95 1210 448 1243 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[1 0 153 0 51] UpdatePen
+pop pop 449 1184
+656 1184 LineTo
+[0 1 153 0 51] UpdatePen
+pop pop 656 1184
+620 1199 LineTo
+pop pop 656 1184
+620 1169 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 272 991
+272 1123 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 272 991
+272 860 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+272 860 257 887 272 914 287 887 272 860 5 Polygon
+[0 153 0 51 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 272 991
+272 860 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 272 991
+272 1123 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+272 1123 257 1096 272 1069 287 1096 272 1123 5 Polygon
+[0 153 0 51 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+673 1540 1118 1659 FillRectangle
+673 1540 1118 1659 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALCryostatVolumes) 413 -0.00 689 1589 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+673 1603 1118 1659 FillRectangle
+673 1603 1118 1659 RectangleOutLine
+673 1626 1118 1659 FillRectangle
+673 1626 1118 1659 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[1 0 153 0 51] UpdatePen
+pop pop 896 1539
+896 1270 LineTo
+[0 1 153 0 51] UpdatePen
+pop pop 896 1270
+911 1306 LineTo
+pop pop 896 1270
+881 1306 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 583 1391
+362 1244 LineTo
+pop pop 362 1244
+400 1252 LineTo
+pop pop 362 1244
+384 1276 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 583 1391
+805 1539 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 583 1391
+362 1244 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 583 1391
+805 1539 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+805 1539 775 1536 760 1509 791 1512 805 1539 5 Polygon
+[0 153 0 51 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+1555 1108 1900 1227 FillRectangle
+1555 1108 1900 1227 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALEMModule) 298 -0.00 1579 1157 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+1555 1171 1900 1227 FillRectangle
+1555 1171 1900 1227 RectangleOutLine
+1555 1194 1900 1227 FillRectangle
+1555 1194 1900 1227 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1310 1383
+1611 1228 LineTo
+pop pop 1611 1228
+1586 1258 LineTo
+pop pop 1611 1228
+1572 1232 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1310 1383
+1010 1539 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1310 1383
+1611 1228 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1310 1383
+1010 1539 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+1010 1539 1027 1514 1058 1514 1041 1540 1010 1539 5 Polygon
+[0 153 0 51 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[1 0 153 0 51] UpdatePen
+pop pop 1554 1171
+1135 1179 LineTo
+[0 1 153 0 51] UpdatePen
+pop pop 1135 1179
+1171 1193 LineTo
+pop pop 1135 1179
+1171 1163 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+1529 724 1926 843 FillRectangle
+1529 724 1926 843 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALEMModuleSD) 355 -0.00 1550 773 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+1529 787 1926 843 FillRectangle
+1529 787 1926 843 RectangleOutLine
+1529 810 1926 843 FillRectangle
+1529 810 1926 843 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1728 975
+1728 844 LineTo
+pop pop 1728 844
+1743 880 LineTo
+pop pop 1728 844
+1713 880 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1728 975
+1728 1107 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1728 975
+1728 844 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1728 975
+1728 1107 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+1728 1107 1713 1080 1728 1053 1743 1080 1728 1107 5 Polygon
+[0 153 0 51 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1728 975
+1728 844 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1728 975
+1728 1107 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+1728 1107 1713 1080 1728 1053 1743 1080 1728 1107 5 Polygon
+[0 153 0 51 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1728 975
+1728 1107 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1728 975
+1728 844 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+1728 844 1713 871 1728 898 1743 871 1728 844 5 Polygon
+[0 153 0 51 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+1169 148 1742 267 FillRectangle
+1169 148 1742 267 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALPrimaryGeneratorAction) 540 -0.00 1186 197 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+1169 211 1742 267 FillRectangle
+1169 211 1742 267 RectangleOutLine
+1169 234 1742 267 FillRectangle
+1169 234 1742 267 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+689 852 1102 971 FillRectangle
+689 852 1102 971 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALTestbeamSetup) 391 -0.00 700 901 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+689 915 1102 971 FillRectangle
+689 915 1102 971 RectangleOutLine
+689 938 1102 971 FillRectangle
+689 938 1102 971 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[1 0 153 0 51] UpdatePen
+pop pop 896 972
+896 1097 LineTo
+[0 1 153 0 51] UpdatePen
+pop pop 896 1097
+911 1061 LineTo
+pop pop 896 1097
+881 1061 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+662 532 1129 651 FillRectangle
+662 532 1129 651 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALTestbeamSetupSD) 447 -0.00 672 581 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+662 595 1129 651 FillRectangle
+662 595 1129 651 RectangleOutLine
+662 618 1129 651 FillRectangle
+662 618 1129 651 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 896 751
+896 652 LineTo
+pop pop 896 652
+911 688 LineTo
+pop pop 896 652
+881 688 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 896 751
+896 851 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 896 751
+896 652 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 896 751
+896 851 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+896 851 881 824 896 797 911 824 896 851 5 Polygon
+[0 153 0 51 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 896 751
+896 851 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 896 751
+896 652 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+896 652 881 679 896 706 911 679 896 652 5 Polygon
+[0 153 0 51 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+637 2132 1250 2251 FillRectangle
+637 2132 1250 2251 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALTBEventActionMessenger) 574 -0.00 657 2181 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+637 2195 1250 2251 FillRectangle
+637 2195 1250 2251 RectangleOutLine
+637 2218 1250 2251 FillRectangle
+637 2218 1250 2251 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+1392 1780 1807 1899 FillRectangle
+1392 1780 1807 1899 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALSteppingAction) 377 -0.00 1411 1829 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+1392 1843 1807 1899 FillRectangle
+1392 1843 1807 1899 RectangleOutLine
+1392 1866 1807 1899 FillRectangle
+1392 1866 1807 1899 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+167 1780 504 1899 FillRectangle
+167 1780 504 1899 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALRunAction) 291 -0.00 190 1829 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+167 1843 504 1899 FillRectangle
+167 1843 504 1899 RectangleOutLine
+167 1866 504 1899 FillRectangle
+167 1866 504 1899 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+740 1780 1147 1899 FillRectangle
+740 1780 1147 1899 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(FCALTBEventAction) 373 -0.00 757 1829 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 255 255 204 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+740 1843 1147 1899 FillRectangle
+740 1843 1147 1899 RectangleOutLine
+740 1866 1147 1899 FillRectangle
+740 1866 1147 1899 RectangleOutLine
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  40 0  MwSetFont
+/Courier  38 0  MwSetFont
+[0 255 255 204 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 944 2015
+944 2131 LineTo
+pop pop 944 2131
+959 2095 LineTo
+pop pop 944 2131
+929 2095 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 944 2015
+944 1900 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 944 2015
+944 2131 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 944 2015
+944 1900 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+944 1900 929 1927 944 1954 959 1927 944 1900 5 Polygon
+[0 153 0 51 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1269 1840
+1391 1840 LineTo
+pop pop 1391 1840
+1355 1855 LineTo
+pop pop 1391 1840
+1355 1825 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1269 1840
+1148 1840 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1269 1840
+1391 1840 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 1269 1840
+1148 1840 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+1148 1840 1175 1825 1202 1840 1175 1855 1148 1840 5 Polygon
+[0 153 0 51 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+[0 1 153 0 51] UpdatePen
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 622 1840
+505 1840 LineTo
+pop pop 505 1840
+541 1855 LineTo
+pop pop 505 1840
+541 1825 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 153 0 51 0 <>] UpdateBrush
+pop pop 622 1840
+739 1840 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+739 1840 712 1825 685 1840 712 1855 739 1840 5 Polygon
+[0 153 0 51 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0] UpdatePen
+Mwgstate setgstate newpath
+0 0 2432 3182 RectanglePath
+clip newpath
+/Courier  38 0  MwSetFont
+pop pop 166 3054
+766 3054 LineTo
+/Helvetica  32 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Helvetica  32 0  MwSetFont
+(File: /afs/cern.ch/user/p/pmendez/geant4/examples/advanced/lAr_calorimeter/include/lAr_calo.mdl    Thu Dec 12 18:00:07 2002    Class Diagram: Logical ) 2240 -0.00 166 3092 TextOut
+(View / Main  Page 1) 292 -0.00 166 3130 TextOut
+Mwgstate setgstate newpath
+0 0 2432 3182 RectanglePath
+clip newpath
+/Courier  38 0  MwSetFont
+/Courier  38 0  MwSetFont
+ pop pop % pop out coordinates for current pen position
+ showpage 
+end
+% end of the MainWin EPS file
