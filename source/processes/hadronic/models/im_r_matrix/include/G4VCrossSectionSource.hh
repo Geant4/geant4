@@ -26,6 +26,7 @@
 #define G4VCrossSectionSource_h
 
 #include "globals.hh"
+#include "G4HadronicException.hh"
 #include "G4CrossSectionVector.hh"
 
 class G4ParticleDefinition;

@@ -38,14 +38,14 @@ G4int G4FermiSplitter::Initialize(const G4int a, const G4int z, const G4int n)
       std::ostrstream errOs;
       errOs << "G4FermiSplitter::Initialize() Error: Non valid arguments A = "
 	    << a << " Z = " << z << " #fragments = " << n;
-      G4Exception(errOs.str());
+      throw G4HadronicException(__FILE__, __LINE__, errOs.str());
     }
   if (z > a || n > a)
     {
       std::ostrstream errOs;
       errOs << "G4FermiSplitter::Initialize() Error: Non physical arguments = "
 	    << a << " Z = " << z << " #fragments = " << n;
-      G4Exception(errOs.str());
+      throw G4HadronicException(__FILE__, __LINE__, errOs.str());
     }
   A = a;
   Z = z;

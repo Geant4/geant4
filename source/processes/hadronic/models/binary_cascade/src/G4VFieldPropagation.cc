@@ -34,6 +34,7 @@
 // -------------------------------------------------------------------
 #include "G4VFieldPropagation.hh"
 #include "globals.hh"
+#include "G4HadronicException.hh"
 
 G4VFieldPropagation::G4VFieldPropagation()
 { }
@@ -46,19 +47,19 @@ G4VFieldPropagation::~G4VFieldPropagation()
 
 const G4VFieldPropagation & G4VFieldPropagation::operator=(const G4VFieldPropagation & right)
 {
-  G4Exception("G4VFieldPropagation::operator= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4VFieldPropagation::operator= meant not to be accessible");
   return *this;
 }
 
 G4int G4VFieldPropagation::operator==(const G4VFieldPropagation & right) const
 {
-  G4Exception("G4VFieldPropagation::operator== meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4VFieldPropagation::operator== meant not to be accessible");
   return 0;
 }
 
 G4int G4VFieldPropagation::operator!=(const G4VFieldPropagation & right) const
 {
-  G4Exception("G4VFieldPropagation::operator!= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4VFieldPropagation::operator!= meant not to be accessible");
   return 1;
 }
 

@@ -90,7 +90,7 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 		Ptleft      = old.Ptleft;
 	} else
 	{
-		G4Exception("G4FragmentingString::G4FragmentingString: no decay Direction defined");
+		throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::G4FragmentingString: no decay Direction defined");
 	}
 	Pplus  = old.Pplus  - (momentum->e() + momentum->pz());
 	Pminus = old.Pminus - (momentum->e() - momentum->pz());
@@ -130,7 +130,7 @@ G4int G4FragmentingString::GetDecayDirection() const
 {
 	if      (decaying == Left ) return +1;
 	else if (decaying == Right) return -1;
-	else G4Exception("G4FragmentingString::GetDecayDirection: decay side UNdefined!");
+	else throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::GetDecayDirection: decay side UNdefined!");
 	return 0;
 }
  
@@ -160,7 +160,7 @@ G4ThreeVector G4FragmentingString::StablePt()
 {
 	if (decaying == Left ) return Ptright;
 	else if (decaying == Right ) return Ptleft;
-	else G4Exception("G4FragmentingString::DecayPt: decay side UNdefined!");
+	else throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::DecayPt: decay side UNdefined!");
 	return G4ThreeVector();
 }
 
@@ -168,7 +168,7 @@ G4ThreeVector G4FragmentingString::DecayPt()
 {
 	if (decaying == Left ) return Ptleft;
 	else if (decaying == Right ) return Ptright;
-	else G4Exception("G4FragmentingString::DecayPt: decay side UNdefined!");
+	else throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::DecayPt: decay side UNdefined!");
 	return G4ThreeVector();
 }
 
@@ -188,7 +188,7 @@ G4double G4FragmentingString::LightConeDecay()
 {
 	if (decaying == Left ) return Pplus;
 	else if (decaying == Right ) return Pminus;
-	else G4Exception("G4FragmentingString::DecayPt: decay side UNdefined!");
+	else throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::DecayPt: decay side UNdefined!");
 	return 0;
 }
 

@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiBreakUp.cc,v 1.2 2003-11-03 09:43:20 lara Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -36,7 +34,7 @@ G4FermiBreakUp::G4FermiBreakUp()
 
 G4FermiBreakUp::G4FermiBreakUp(const G4FermiBreakUp &) : G4VFermiBreakUp()
 {
-  G4Exception("G4FermiBreakUp::copy_constructor meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4FermiBreakUp::copy_constructor meant to not be accessable");
 }
 
 
@@ -47,7 +45,7 @@ G4FermiBreakUp::~G4FermiBreakUp()
 
 const G4FermiBreakUp & G4FermiBreakUp::operator=(const G4FermiBreakUp &)
 {
-  G4Exception("G4FermiBreakUp::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4FermiBreakUp::operator= meant to not be accessable");
   return *this;
 }
 

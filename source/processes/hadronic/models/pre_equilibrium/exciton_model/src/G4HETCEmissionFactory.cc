@@ -33,21 +33,21 @@
 const G4HETCEmissionFactory & G4HETCEmissionFactory::
 operator=(const G4HETCEmissionFactory & )
 {
-  G4Exception("G4HETCEmissionFactory::operator= meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4HETCEmissionFactory::operator= meant to not be accessable.");
   return *this;
 }
 
 G4bool G4HETCEmissionFactory::
 operator==(const G4HETCEmissionFactory & ) const
 {
-  G4Exception("G4HETCEmissionFactory::operator== meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4HETCEmissionFactory::operator== meant to not be accessable.");
   return false;
 }
 
 G4bool G4HETCEmissionFactory::
 operator!=(const G4HETCEmissionFactory & ) const
 {
-  G4Exception("G4HETCEmissionFactory::operator!= meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4HETCEmissionFactory::operator!= meant to not be accessable.");
   return true;
 }
 

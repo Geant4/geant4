@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationFactory.cc,v 1.1 2003-08-26 18:30:56 lara Exp $
+// $Id: G4EvaporationFactory.cc,v 1.2 2003-11-03 17:53:02 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -44,21 +44,21 @@
 const G4EvaporationFactory & 
 G4EvaporationFactory::operator=(const G4EvaporationFactory & )
 {
-  G4Exception("G4EvaporationFactory::operator= meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationFactory::operator= meant to not be accessable.");
   return *this;
 }
 
 G4bool 
 G4EvaporationFactory::operator==(const G4EvaporationFactory & ) const
 {
-  G4Exception("G4EvaporationFactory::operator== meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationFactory::operator== meant to not be accessable.");
   return false;
 }
 
 G4bool 
 G4EvaporationFactory::operator!=(const G4EvaporationFactory & ) const
 {
-  G4Exception("G4EvaporationFactory::operator!= meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationFactory::operator!= meant to not be accessable.");
   return true;
 }
 

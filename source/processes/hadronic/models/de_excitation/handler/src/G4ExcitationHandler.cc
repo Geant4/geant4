@@ -55,7 +55,7 @@ G4ExcitationHandler::G4ExcitationHandler():
 
 G4ExcitationHandler::G4ExcitationHandler(const G4ExcitationHandler &)
 {
-  G4Exception("G4ExcitationHandler::copy_constructor: is meant to not be accessable! ");
+  throw G4HadronicException(__FILE__, __LINE__, "G4ExcitationHandler::copy_constructor: is meant to not be accessable! ");
 }
 
 
@@ -70,7 +70,7 @@ G4ExcitationHandler::~G4ExcitationHandler()
 
 const G4ExcitationHandler & G4ExcitationHandler::operator=(const G4ExcitationHandler &)
 {
-  G4Exception("G4ExcitationHandler::operator=: is meant to not be accessable! ");
+  throw G4HadronicException(__FILE__, __LINE__, "G4ExcitationHandler::operator=: is meant to not be accessable! ");
 
   return *this;
 }
@@ -78,13 +78,13 @@ const G4ExcitationHandler & G4ExcitationHandler::operator=(const G4ExcitationHan
 
 G4bool G4ExcitationHandler::operator==(const G4ExcitationHandler &) const
 {
-  G4Exception("G4ExcitationHandler::operator==: is meant to not be accessable! ");
+  throw G4HadronicException(__FILE__, __LINE__, "G4ExcitationHandler::operator==: is meant to not be accessable! ");
   return false;
 } 
 
 G4bool G4ExcitationHandler::operator!=(const G4ExcitationHandler &) const
 {
-  G4Exception("G4ExcitationHandler::operator!=: is meant to not be accessable! ");
+  throw G4HadronicException(__FILE__, __LINE__, "G4ExcitationHandler::operator!=: is meant to not be accessable! ");
   return true;
 }
 

@@ -21,6 +21,7 @@
 // ********************************************************************
 //
 #include "G4PartonPair.hh"
+#include "G4HadronicException.hh"
 
 G4PartonPair::G4PartonPair(G4Parton* P1, G4Parton* P2, G4int Type, G4int aDirection)
     {
@@ -32,7 +33,7 @@ G4PartonPair::G4PartonPair(G4Parton* P1, G4Parton* P2, G4int Type, G4int aDirect
 
 G4PartonPair::G4PartonPair(const G4PartonPair &)
     {
-    G4Exception("You can not make a copy of this object");
+    throw G4HadronicException(__FILE__, __LINE__, "You can not make a copy of this object");
     }
 
 G4PartonPair::~G4PartonPair()

@@ -446,8 +446,8 @@
             {
               for(G4int i=0; i<vecLen; i++) delete vec[i];
    	      vecLen = 0;
-              throw(G4HadReentrentException(__FILE__, __LINE__,
-	      "G4ReactionDynamics::GenerateXandPt : a pion has been counted as a backward nucleon") );
+              throw G4HadReentrentException(__FILE__, __LINE__,
+	      "G4ReactionDynamics::GenerateXandPt : a pion has been counted as a backward nucleon");
             }
             vec[i]->SetSide( -3 );
             ++backwardNucleonCount;
@@ -1483,8 +1483,8 @@
       {
         for(G4int i=0; i<vecLen; i++) delete vec[i];
 	vecLen = 0;
-        throw(G4HadReentrentException(__FILE__, __LINE__,
-	"G4ReactionDynamics::TwoCluster: Negative number of particles") );
+        throw G4HadReentrentException(__FILE__, __LINE__,
+	"G4ReactionDynamics::TwoCluster: Negative number of particles");
       }
       delete vec[vecLen-1];
       delete vec[vecLen-2];
@@ -2340,7 +2340,7 @@
       {
         for(G4int i=0; i<vecLen; i++) delete vec[i];
         vecLen = 0;
-	throw(G4HadronicException(__FILE__, __LINE__, "G4ReactionDynamics::TwoBody: pf is too small ") );
+	throw G4HadronicException(__FILE__, __LINE__, "G4ReactionDynamics::TwoBody: pf is too small ");
       }
       
       pf = sqrt( pf ) / ( 2.0*cmEnergy );
@@ -3795,8 +3795,8 @@
     }
     if( index == 9 )  // loop continued to the end
     {
-      throw(G4HadronicException(__FILE__, __LINE__,
-           "G4ReactionDynamics::NuclearReaction: inelastic reaction kinematically not possible") );
+      throw G4HadronicException(__FILE__, __LINE__,
+           "G4ReactionDynamics::NuclearReaction: inelastic reaction kinematically not possible");
     }
     G4double ke = currentParticle.GetKineticEnergy()/GeV;
     G4int nt = 2;

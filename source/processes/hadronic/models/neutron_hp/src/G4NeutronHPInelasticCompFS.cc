@@ -51,7 +51,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
 {
   gammaPath = "/Inelastic/Gammas/";
     if(!getenv("NeutronHPCrossSections")) 
-       G4Exception("Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
   G4String tBase = getenv("NeutronHPCrossSections");
   gammaPath = tBase+gammaPath;
   G4String tString = dirName;
@@ -133,7 +133,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
     }
     else
     {
-      G4Exception("Data-type unknown to G4NeutronHPInelasticCompFS");
+      throw G4HadronicException(__FILE__, __LINE__, "Data-type unknown to G4NeutronHPInelasticCompFS");
     }
   }
   theData.close();
@@ -265,7 +265,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 	
 	if(getenv("InelasticCompFSLogging") && eKinetic-eExcitation < 0) 
 	{
-	  G4Exception("SEVERE: InelasticCompFS: Consistency of data not good enough, please file report");
+	  throw G4HadronicException(__FILE__, __LINE__, "SEVERE: InelasticCompFS: Consistency of data not good enough, please file report");
 	}
 	if(eKinetic-eExcitation < 0) eExcitation = 0;
 	if(iLevel!= -1) aHadron.SetKineticEnergy(eKinetic - eExcitation);

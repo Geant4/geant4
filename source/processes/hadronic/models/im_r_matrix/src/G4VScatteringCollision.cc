@@ -64,12 +64,12 @@ G4KineticTrackVector* G4VScatteringCollision::FinalState(const G4KineticTrack& t
 
   std::vector<const G4ParticleDefinition*> OutputDefinitions = GetOutgoingParticles();
   if (OutputDefinitions.size() != 2)
-    G4Exception("G4VScatteringCollision: Too many output particles!");
+    throw G4HadronicException(__FILE__, __LINE__, "G4VScatteringCollision: Too many output particles!");
 
   if (OutputDefinitions[0]->IsShortLived() && OutputDefinitions[1]->IsShortLived())
   {
     if(getenv("G4KCDEBUG")) G4cerr << "two shortlived for Type = "<<typeid(*this).name()<<G4endl;
-//    G4Exception("G4VScatteringCollision: can't handle two shortlived particles!"); // @hpw@
+//    throw G4HadronicException(__FILE__, __LINE__, "G4VScatteringCollision: can't handle two shortlived particles!"); // @hpw@
   }
   
   G4double outm1 = OutputDefinitions[0]->GetPDGMass();

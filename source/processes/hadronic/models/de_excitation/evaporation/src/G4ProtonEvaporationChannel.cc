@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProtonEvaporationChannel.cc,v 1.1 2003-08-26 18:31:00 lara Exp $
+// $Id: G4ProtonEvaporationChannel.cc,v 1.2 2003-11-03 17:53:02 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -33,13 +33,13 @@
 
 const G4ProtonEvaporationChannel & G4ProtonEvaporationChannel::operator=(const G4ProtonEvaporationChannel & )
 {
-    G4Exception("G4ProtonEvaporationChannel::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4ProtonEvaporationChannel::operator= meant to not be accessable");
     return *this;
 }
 
 G4ProtonEvaporationChannel::G4ProtonEvaporationChannel(const G4ProtonEvaporationChannel & ) : G4EvaporationChannel()
 {
-    G4Exception("G4ProtonEvaporationChannel::CopyConstructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4ProtonEvaporationChannel::CopyConstructor meant to not be accessable");
 }
 
 G4bool G4ProtonEvaporationChannel::operator==(const G4ProtonEvaporationChannel & right) const 

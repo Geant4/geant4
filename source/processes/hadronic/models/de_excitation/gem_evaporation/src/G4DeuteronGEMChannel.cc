@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DeuteronGEMChannel.cc,v 1.1 2003-08-26 18:44:08 lara Exp $
+// $Id: G4DeuteronGEMChannel.cc,v 1.2 2003-11-03 17:53:03 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -33,13 +33,13 @@
 
 const G4DeuteronGEMChannel & G4DeuteronGEMChannel::operator=(const G4DeuteronGEMChannel & )
 {
-    G4Exception("G4DeuteronGEMChannel::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4DeuteronGEMChannel::operator= meant to not be accessable");
     return *this;
 }
 
 G4DeuteronGEMChannel::G4DeuteronGEMChannel(const G4DeuteronGEMChannel & ): G4GEMChannel()
 {
-    G4Exception("G4DeuteronGEMChannel::CopyConstructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4DeuteronGEMChannel::CopyConstructor meant to not be accessable");
 }
 
 G4bool G4DeuteronGEMChannel::operator==(const G4DeuteronGEMChannel & right) const 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConcreteMesonBaryonToResonance.hh,v 1.1 2003-10-07 12:37:28 hpw Exp $ //
+// $Id: G4ConcreteMesonBaryonToResonance.hh,v 1.2 2003-11-03 17:53:27 hpw Exp $ //
 
 #ifndef G4ConcreteMesonBaryonToResonance_h
 #define G4ConcreteMesonBaryonToResonance_h
@@ -56,7 +56,7 @@ public:
 
   virtual const std::vector<G4String>& GetListOfColliders(G4int ) const
   {
-    G4Exception("Tried to call G4ConcreteNNToNDelta::GetListOfColliders. Please find out why!");
+    throw G4HadronicException(__FILE__, __LINE__, "Tried to call G4ConcreteNNToNDelta::GetListOfColliders. Please find out why!");
     std::vector<G4String> * aList = new std::vector<G4String>;
     return *aList;
   } 

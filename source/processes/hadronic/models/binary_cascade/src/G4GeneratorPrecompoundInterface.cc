@@ -34,7 +34,7 @@
      std::cout << "G4GeneratorPrecompoundInterface: ApplyYourself interface called stand-allone."<< G4endl;
      std::cout << "This class is only a mediator between generator and precompound"<<G4endl;
      std::cout << "Please remove from your physics list."<<G4endl;
-     G4Exception("SEVERE: G4GeneratorPrecompoundInterface model interface called stand-allone.");
+     throw G4HadronicException(__FILE__, __LINE__, "SEVERE: G4GeneratorPrecompoundInterface model interface called stand-allone.");
      return new G4HadFinalState;
    }
    
@@ -142,7 +142,7 @@
      
      if(!theDeExcitation)
      {
-       // G4Exception("Please register an evaporation phase with G4GeneratorPrecompoundInterface.");
+       // throw G4HadronicException(__FILE__, __LINE__, "Please register an evaporation phase with G4GeneratorPrecompoundInterface.");
      }
      else if(0!=anA && 0!=aZ)
      {
@@ -173,7 +173,7 @@
      }
      else
      {
-       // G4Exception("Please register an evaporation phase with G4GeneratorPrecompoundInterface.");
+       // throw G4HadronicException(__FILE__, __LINE__, "Please register an evaporation phase with G4GeneratorPrecompoundInterface.");
      }
      // now return
      

@@ -21,6 +21,7 @@
 // ********************************************************************
 //
 #include "G4CollisionManager.hh"
+#include "G4HadronicException.hh"
 #include "G4CollisionInitialState.hh"
 
 G4CollisionManager::G4CollisionManager()
@@ -53,7 +54,7 @@ void G4CollisionManager::AddCollision(G4double time, G4KineticTrack * proj,
 				<<target->Get4Momentum()<<" "
                                 <<target->GetDefinition()->GetParticleName()<<G4endl;
          G4cerr <<"G4Scatterer error message end"<< G4endl;
-	 G4Exception("G4Scatterer::AddCollision()");
+	 throw G4HadronicException(__FILE__, __LINE__, "G4Scatterer::AddCollision()");
       }
 }
 

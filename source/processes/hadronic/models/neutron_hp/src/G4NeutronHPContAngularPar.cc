@@ -88,7 +88,7 @@
     else if(A==4)
     {
       result->SetDefinition(G4Alpha::Alpha());
-      if(Z!=2) G4Exception("G4NeutronHPContAngularPar: Unknown ion case 1");    
+      if(Z!=2) throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPContAngularPar: Unknown ion case 1");    
     }
     else
     {
@@ -361,7 +361,7 @@
     }
     else
     {
-      G4Exception("G4NeutronHPContAngularPar::Sample: Unknown angular representation");
+      throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPContAngularPar::Sample: Unknown angular representation");
     }
     result->SetKineticEnergy(fsEnergy);
     G4double phi = twopi*G4UniformRand();

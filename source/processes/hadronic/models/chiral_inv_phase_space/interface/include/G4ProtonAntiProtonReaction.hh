@@ -44,11 +44,11 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
 {
   if(aTrack.GetDynamicParticle()->GetDefinition() != G4AntiProton::AntiProton())
   {
-    G4Exception("Calling G4ProtonAntiProtonReaction with particle other than p-bar!!!");
+    throw G4HadronicException(__FILE__, __LINE__, "Calling G4ProtonAntiProtonReaction with particle other than p-bar!!!");
   }
   if(aTargetNucleus.GetZ() != 1)
   {
-    G4Exception("Calling G4ProtonAntiProtonReaction for target other than Hydrogen!!!");
+    throw G4HadronicException(__FILE__, __LINE__, "Calling G4ProtonAntiProtonReaction for target other than Hydrogen!!!");
   }
   return theModel.ApplyYourself(aTrack, aTargetNucleus);
 }

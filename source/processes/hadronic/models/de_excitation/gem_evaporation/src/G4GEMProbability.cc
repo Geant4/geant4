@@ -34,7 +34,7 @@
 
 G4GEMProbability::G4GEMProbability(const G4GEMProbability &) : G4VEmissionProbability()
 {
-    G4Exception("G4GEMProbability::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4GEMProbability::copy_constructor meant to not be accessable");
 }
 
 
@@ -43,7 +43,7 @@ G4GEMProbability::G4GEMProbability(const G4GEMProbability &) : G4VEmissionProbab
 const G4GEMProbability & G4GEMProbability::
 operator=(const G4GEMProbability &)
 {
-  G4Exception("G4GEMProbability::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4GEMProbability::operator= meant to not be accessable");
   return *this;
 }
 

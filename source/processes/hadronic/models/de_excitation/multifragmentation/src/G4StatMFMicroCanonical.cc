@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroCanonical.cc,v 1.1 2003-08-26 18:47:59 lara Exp $
+// $Id: G4StatMFMicroCanonical.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -36,7 +36,7 @@
 G4StatMFMicroCanonical::G4StatMFMicroCanonical(const G4StatMFMicroCanonical &
 					       ) : G4VStatMFEnsemble()
 {
-    G4Exception("G4StatMFMicroCanonical::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroCanonical::copy_constructor meant to not be accessable");
 }
 
 // Operators
@@ -44,21 +44,21 @@ G4StatMFMicroCanonical::G4StatMFMicroCanonical(const G4StatMFMicroCanonical &
 G4StatMFMicroCanonical & G4StatMFMicroCanonical::
 operator=(const G4StatMFMicroCanonical & )
 {
-    G4Exception("G4StatMFMicroCanonical::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroCanonical::operator= meant to not be accessable");
     return *this;
 }
 
 
 G4bool G4StatMFMicroCanonical::operator==(const G4StatMFMicroCanonical & ) const
 {
-    G4Exception("G4StatMFMicroCanonical::operator== meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroCanonical::operator== meant to not be accessable");
     return false;
 }
  
 
 G4bool G4StatMFMicroCanonical::operator!=(const G4StatMFMicroCanonical & ) const
 {
-    G4Exception("G4StatMFMicroCanonical::operator!= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroCanonical::operator!= meant to not be accessable");
     return true;
 }
 
@@ -298,7 +298,7 @@ G4StatMFChannel *  G4StatMFMicroCanonical::ChooseAandZ(const G4Fragment & theFra
 		return (*it)->ChooseChannel(theFragment.GetA(),theFragment.GetZ(),__MeanTemperature);
 	    }
 	}
-	G4Exception("G4StatMFMicroCanonical::ChooseAandZ: wrong normalization!");
+	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroCanonical::ChooseAandZ: wrong normalization!");
     }
 
     return 0;	

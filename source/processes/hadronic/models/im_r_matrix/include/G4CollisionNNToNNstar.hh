@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToNNstar.hh,v 1.1 2003-10-07 12:37:27 hpw Exp $ //
+// $Id: G4CollisionNNToNNstar.hh,v 1.2 2003-11-03 17:53:27 hpw Exp $ //
 // -------------------------------------------------------------------
 
 #ifndef G4CollisionNNToNNstar_h
@@ -53,7 +53,7 @@ protected:
   std::vector<G4String> result;
   virtual const std::vector<G4String>& GetListOfColliders(G4int ) const
   {
-    G4Exception("Tried to call G4CollisionNNToNNstar::GetListOfColliders. Please find out why!");
+    throw G4HadronicException(__FILE__, __LINE__, "Tried to call G4CollisionNNToNNstar::GetListOfColliders. Please find out why!");
     return result;
   } 
 

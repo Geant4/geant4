@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.1 2003-10-07 11:25:41 hpw Exp $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.2 2003-11-03 17:54:53 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -118,7 +118,7 @@ G4VLongitudinalStringDecay::~G4VLongitudinalStringDecay()
 
 int G4VLongitudinalStringDecay::operator==(const G4VLongitudinalStringDecay &) const
     {
-	G4Exception("G4VLongitudinalStringDecay::operator== forbidden");
+	throw G4HadronicException(__FILE__, __LINE__, "G4VLongitudinalStringDecay::operator== forbidden");
 	return false;
     }
 
@@ -126,7 +126,7 @@ int G4VLongitudinalStringDecay::operator==(const G4VLongitudinalStringDecay &) c
 
 int G4VLongitudinalStringDecay::operator!=(const G4VLongitudinalStringDecay &) const
     {
-	G4Exception("G4VLongitudinalStringDecay::operator!= forbidden");
+	throw G4HadronicException(__FILE__, __LINE__, "G4VLongitudinalStringDecay::operator!= forbidden");
 	return true;
     }
 
@@ -641,7 +641,7 @@ G4ParticleDefinition* G4VLongitudinalStringDecay::FindParticle(G4int Encoding)
       if (ptr == NULL)
        {
        G4cout << "Particle with encoding "<<Encoding<<" does not exist!!!"<<G4endl;
-       G4Exception("Check your particle table");
+       throw G4HadronicException(__FILE__, __LINE__, "Check your particle table");
        }
    return ptr;    
    }
@@ -673,7 +673,7 @@ void G4VLongitudinalStringDecay::Sample4Momentum(G4LorentzVector* Mom, G4double 
 void G4VLongitudinalStringDecay::SetSigmaTransverseMomentum(G4double aValue)
 {
 	if ( PastInitPhase ) {
-		G4Exception("4VLongitudinalStringDecay::SetSigmaTransverseMomentum after FragmentString() not allowed");
+		throw G4HadronicException(__FILE__, __LINE__, "4VLongitudinalStringDecay::SetSigmaTransverseMomentum after FragmentString() not allowed");
 	} else {
 		SigmaQT = aValue;
 	}
@@ -684,7 +684,7 @@ void G4VLongitudinalStringDecay::SetSigmaTransverseMomentum(G4double aValue)
 void G4VLongitudinalStringDecay::SetStrangenessSuppression(G4double aValue)
 {
 	if ( PastInitPhase ) {
-		G4Exception("4VLongitudinalStringDecay::SetStrangenessSuppression after FragmentString() not allowed");
+		throw G4HadronicException(__FILE__, __LINE__, "4VLongitudinalStringDecay::SetStrangenessSuppression after FragmentString() not allowed");
 	} else {
 		StrangeSuppress = aValue;
 	}
@@ -695,7 +695,7 @@ void G4VLongitudinalStringDecay::SetStrangenessSuppression(G4double aValue)
 void G4VLongitudinalStringDecay::SetDiquarkSuppression(G4double aValue)
 {
 	if ( PastInitPhase ) {
-		G4Exception("4VLongitudinalStringDecay::SetDiquarkSuppression after FragmentString() not allowed");
+		throw G4HadronicException(__FILE__, __LINE__, "4VLongitudinalStringDecay::SetDiquarkSuppression after FragmentString() not allowed");
 	} else {
 		DiquarkSuppress = aValue;
 	}
@@ -704,7 +704,7 @@ void G4VLongitudinalStringDecay::SetDiquarkSuppression(G4double aValue)
 void G4VLongitudinalStringDecay::SetDiquarkBreakProbability(G4double aValue)
 {
 	if ( PastInitPhase ) {
-		G4Exception("4VLongitudinalStringDecay::SetDiquarkBreakProbability after FragmentString() not allowed");
+		throw G4HadronicException(__FILE__, __LINE__, "4VLongitudinalStringDecay::SetDiquarkBreakProbability after FragmentString() not allowed");
 	} else {
 		DiquarkBreakProb = aValue;
 	}
@@ -715,7 +715,7 @@ void G4VLongitudinalStringDecay::SetDiquarkBreakProbability(G4double aValue)
 void G4VLongitudinalStringDecay::SetVectorMesonProbability(G4double aValue)
 {
 	if ( PastInitPhase ) {
-		G4Exception("4VLongitudinalStringDecay::SetVectorMesonProbability after FragmentString() not allowed");
+		throw G4HadronicException(__FILE__, __LINE__, "4VLongitudinalStringDecay::SetVectorMesonProbability after FragmentString() not allowed");
 	} else {
 		pspin_meson = aValue;
 		delete hadronizer;
@@ -729,7 +729,7 @@ void G4VLongitudinalStringDecay::SetVectorMesonProbability(G4double aValue)
 void G4VLongitudinalStringDecay::SetSpinThreeHalfBarionProbability(G4double aValue)
 {
 	if ( PastInitPhase ) {
-		G4Exception("4VLongitudinalStringDecay::SetSpinThreeHalfBarionProbability after FragmentString() not allowed");
+		throw G4HadronicException(__FILE__, __LINE__, "4VLongitudinalStringDecay::SetSpinThreeHalfBarionProbability after FragmentString() not allowed");
 	} else {
 		pspin_barion = aValue;
 		delete hadronizer;
@@ -743,10 +743,10 @@ void G4VLongitudinalStringDecay::SetSpinThreeHalfBarionProbability(G4double aVal
 void G4VLongitudinalStringDecay::SetScalarMesonMixings(std::vector<G4double> aVector)
 {
 	if ( PastInitPhase ) {
-		G4Exception("4VLongitudinalStringDecay::SetScalarMesonMixings after FragmentString() not allowed");
+		throw G4HadronicException(__FILE__, __LINE__, "4VLongitudinalStringDecay::SetScalarMesonMixings after FragmentString() not allowed");
 	} else {
 	  if ( aVector.size() < 6 ) 
-	      G4Exception("4VLongitudinalStringDecay::SetScalarMesonMixings( argument Vector too small");
+	      throw G4HadronicException(__FILE__, __LINE__, "4VLongitudinalStringDecay::SetScalarMesonMixings( argument Vector too small");
 	  scalarMesonMix[0] = aVector[0];
 	  scalarMesonMix[1] = aVector[1];
 	  scalarMesonMix[2] = aVector[2];
@@ -764,10 +764,10 @@ void G4VLongitudinalStringDecay::SetScalarMesonMixings(std::vector<G4double> aVe
 void G4VLongitudinalStringDecay::SetVectorMesonMixings(std::vector<G4double> aVector)
 {
 	if ( PastInitPhase ) {
-		G4Exception("4VLongitudinalStringDecay::SetVectorMesonMixings after FragmentString() not allowed");
+		throw G4HadronicException(__FILE__, __LINE__, "4VLongitudinalStringDecay::SetVectorMesonMixings after FragmentString() not allowed");
 	} else {
 	  if ( aVector.size() < 6 ) 
-	      G4Exception("4VLongitudinalStringDecay::SetVectorMesonMixings( argument Vector too small");
+	      throw G4HadronicException(__FILE__, __LINE__, "4VLongitudinalStringDecay::SetVectorMesonMixings( argument Vector too small");
 	  vectorMesonMix[0] = aVector[0];
 	  vectorMesonMix[1] = aVector[1];
 	  vectorMesonMix[2] = aVector[2];

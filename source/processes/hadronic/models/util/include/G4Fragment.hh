@@ -257,7 +257,7 @@ inline void G4Fragment::SetNumberOfCharged(const G4int value)
   else 
   {
   G4String text = "G4Fragment::SetNumberOfCharged: Number of charged particles can't be greater than number of particles";
-	  throw(G4HadronicException(__FILE__, __LINE__, text) );
+	  throw G4HadronicException(__FILE__, __LINE__, text);
   }
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.1 2003-08-26 18:30:55 lara Exp $
+// $Id: G4Evaporation.cc,v 1.2 2003-11-03 17:53:02 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -41,7 +41,7 @@ G4Evaporation::G4Evaporation()
 
 G4Evaporation::G4Evaporation(const G4Evaporation &) : G4VEvaporation()
 {
-    G4Exception("G4Evaporation::copy_constructor meant to not be accessable.");
+    throw G4HadronicException(__FILE__, __LINE__, "G4Evaporation::copy_constructor meant to not be accessable.");
 }
 
 
@@ -53,7 +53,7 @@ G4Evaporation::~G4Evaporation()
 
 const G4Evaporation & G4Evaporation::operator=(const G4Evaporation &)
 {
-    G4Exception("G4Evaporation::operator= meant to not be accessable.");
+    throw G4HadronicException(__FILE__, __LINE__, "G4Evaporation::operator= meant to not be accessable.");
     return *this;
 }
 
@@ -157,7 +157,7 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 			
 	    if( j >= TotNumberOfChannels ) 
 	      {
-		G4Exception( "G4Evaporation::BreakItUp: Can't define emission probability of the channels!" );
+		throw G4HadronicException(__FILE__, __LINE__,  "G4Evaporation::BreakItUp: Can't define emission probability of the channels!" );
 	      } 
 	    else 
 	      {

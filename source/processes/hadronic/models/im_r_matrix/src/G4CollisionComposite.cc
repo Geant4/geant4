@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionComposite.cc,v 1.1 2003-10-07 12:37:34 hpw Exp $ //
+// $Id: G4CollisionComposite.cc,v 1.2 2003-11-03 17:53:28 hpw Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionComposite.hh"
@@ -106,7 +106,7 @@ G4KineticTrackVector* G4CollisionComposite::FinalState(const G4KineticTrack& trk
 //  G4cerr <<"in charge = "<<IsInCharge(trk1, trk2)<<G4endl;
 //  G4cerr <<"Cross-section = "<<CrossSection(trk1, trk2)/millibarn<<" "<<running<<" "<<cxCache.size()<<G4endl;
 //  G4cerr <<"Names = "<<trk1.GetDefinition()->GetParticleName()<<", "<<trk2.GetDefinition()->GetParticleName()<<G4endl;
-//  G4Exception("G4CollisionComposite: no final state found!");
+//  throw G4HadronicException(__FILE__, __LINE__, "G4CollisionComposite: no final state found!");
   return NULL;
 }
 
@@ -191,7 +191,7 @@ BufferedCrossSection(const G4KineticTrack& trk1, const G4KineticTrack& trk2) con
        return theBuffer[i].CrossSection(trk1, trk2);
      }
    }
-   G4Exception("G4CollisionComposite::BufferedCrossSection - Blitz !!");
+   throw G4HadronicException(__FILE__, __LINE__, "G4CollisionComposite::BufferedCrossSection - Blitz !!");
    return 0;
 }
 

@@ -35,7 +35,7 @@ G4E1SingleProbability001::G4E1SingleProbability001(
 			  const G4E1SingleProbability001& ): G4VEmissionProbability()
 {
 
-  G4Exception("G4E1SingleProbability001::copy_constructor meant to not be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4E1SingleProbability001::copy_constructor meant to not be accessible");
 
 }
 
@@ -43,7 +43,7 @@ const G4E1SingleProbability001& G4E1SingleProbability001::
 operator=(const G4E1SingleProbability001& ) 
 {
 
- G4Exception("G4E1SingleProbability001::operator= meant to not be accessible");
+ throw G4HadronicException(__FILE__, __LINE__, "G4E1SingleProbability001::operator= meant to not be accessible");
  return *this;
 }
 

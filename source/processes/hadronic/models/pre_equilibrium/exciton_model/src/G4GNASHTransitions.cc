@@ -26,7 +26,7 @@
 const G4GNASHTransitions & G4GNASHTransitions::
 operator=(const G4GNASHTransitions & )
 {
-  G4Exception("G4GNASHTransitions::operator= meant to not be accesable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4GNASHTransitions::operator= meant to not be accesable");
   return *this;
 }
 

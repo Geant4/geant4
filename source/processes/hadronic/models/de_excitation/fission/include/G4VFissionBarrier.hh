@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFissionBarrier.hh,v 1.1 2003-08-26 18:37:04 lara Exp $
+// $Id: G4VFissionBarrier.hh,v 1.2 2003-11-03 17:53:02 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -31,6 +31,7 @@
 #define G4VFissionBarrier_h 1
 
 #include "globals.hh"
+#include "G4HadronicException.hh"
 
 
 class G4VFissionBarrier

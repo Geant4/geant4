@@ -51,7 +51,7 @@ public:
 
   virtual const std::vector<G4String>& GetListOfColliders(G4int ) const
   {
-    G4Exception("Tried to call G4ConcreteNNTwoBodyResonance::GetListOfColliders. Please find out why!");
+    throw G4HadronicException(__FILE__, __LINE__, "Tried to call G4ConcreteNNTwoBodyResonance::GetListOfColliders. Please find out why!");
     std::vector<G4String> * aList = new std::vector<G4String>;
     return *aList;
   } 

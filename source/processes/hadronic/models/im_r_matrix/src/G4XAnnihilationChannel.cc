@@ -99,7 +99,7 @@ G4double G4XAnnihilationChannel::CrossSection(const G4KineticTrack& trk1,
   G4double cleb = NormalizedClebsch(trk1,trk2);
 
   G4double s = eCM * eCM;
-  if (s == 0.) G4Exception("G4XAnnihilationChannel::CrossSection - eCM = 0");
+  if (s == 0.) throw G4HadronicException(__FILE__, __LINE__, "G4XAnnihilationChannel::CrossSection - eCM = 0");
 
   G4double pCM = sqrt((s-(m1+m2)*(m1+m2))*(s-(m1-m2)*(m1-m2))/(4.*s));
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoulombBarrier.cc,v 1.1 2003-08-26 18:50:41 lara Exp $
+// $Id: G4CoulombBarrier.cc,v 1.2 2003-11-03 17:53:06 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -29,17 +29,18 @@
 
 
 #include "G4CoulombBarrier.hh"
+#include "G4HadronicException.hh"
 #include <strstream>
 
 G4CoulombBarrier::G4CoulombBarrier(const G4CoulombBarrier & ) : G4VCoulombBarrier()
 {
-  G4Exception("G4CoulombBarrier::copy_constructor meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4CoulombBarrier::copy_constructor meant to not be accessable.");
 }
 
 
 const G4CoulombBarrier & G4CoulombBarrier::operator=(const G4CoulombBarrier & )
 {
-  G4Exception("G4CoulombBarrier::operator= meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4CoulombBarrier::operator= meant to not be accessable.");
   return *this;
 }
 
@@ -66,7 +67,7 @@ G4double G4CoulombBarrier::GetCoulombBarrier(const G4int ARes, const G4int ZRes,
     errOs << "Wrong values for ";
     errOs << "residual nucleus A = " << ARes << " ";
     errOs << "and residual nucleus Z = " << ZRes << G4endl;
-    G4Exception(errMessage);
+    throw G4HadronicException(__FILE__, __LINE__, errMessage);
   }
   if (GetA() == 1 && GetZ() == 0) {
     Barrier = 0.0;   // Neutron Coulomb Barrier is 0

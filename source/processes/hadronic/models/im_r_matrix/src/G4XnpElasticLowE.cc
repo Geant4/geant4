@@ -91,10 +91,10 @@ G4XnpElasticLowE::G4XnpElasticLowE()
   // Protections: validity limits must be compatible with available data
 
   if (_eMin < _lowLimit)
-    G4Exception("G4XnpElasticLowE::G4XnpElasticLowE - Low energy limit not valid");
+    throw G4HadronicException(__FILE__, __LINE__, "G4XnpElasticLowE::G4XnpElasticLowE - Low energy limit not valid");
     
   if (_highLimit > _eMax)
-    G4Exception("G4XnpElasticLowE::G4XnpElasticLowE - High energy limit not valid");
+    throw G4HadronicException(__FILE__, __LINE__, "G4XnpElasticLowE::G4XnpElasticLowE - High energy limit not valid");
     
   _sigma = new G4PhysicsLnVector(_eMin,_eMax,_tableSize);
   G4int i;

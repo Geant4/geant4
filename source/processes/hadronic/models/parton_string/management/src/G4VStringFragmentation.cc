@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VStringFragmentation.cc,v 1.1 2003-10-07 11:26:01 hpw Exp $
+// $Id: G4VStringFragmentation.cc,v 1.2 2003-11-03 17:54:53 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VStringFragmentation
@@ -41,7 +41,7 @@ G4VStringFragmentation::~G4VStringFragmentation()
 
 const G4VStringFragmentation & G4VStringFragmentation::operator=(const G4VStringFragmentation &)
 {
-  G4Exception("G4VStringFragmentation::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4VStringFragmentation::operator= meant to not be accessable");
   return *this;
 }
 

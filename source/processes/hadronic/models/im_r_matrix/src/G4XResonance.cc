@@ -42,7 +42,7 @@ G4XResonance::G4XResonance(const G4ParticleDefinition* in1,
   table = sigmaTable.CrossSectionTable();
   // Check if there is a valid cross section table for this channel
   if (table == 0)
-    G4Exception("G4XResonance::G4XResonance - no cross section table available");
+    throw G4HadronicException(__FILE__, __LINE__, "G4XResonance::G4XResonance - no cross section table available");
   
   name = in1->GetParticleName() + in2->GetParticleName() + " -> " + subType1 + subType2;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFissionBarrier.cc,v 1.1 2003-08-26 18:37:33 lara Exp $
+// $Id: G4VFissionBarrier.cc,v 1.2 2003-11-03 17:53:03 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -32,13 +32,13 @@
 
 G4VFissionBarrier::G4VFissionBarrier(const G4VFissionBarrier & )
 {
-  G4Exception("G4VFissionBarrier::copy_constructor meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4VFissionBarrier::copy_constructor meant to not be accessable.");
 }
 
 
 const G4VFissionBarrier & G4VFissionBarrier::operator=(const G4VFissionBarrier & )
 {
- G4Exception("G4VFissionBarrier::operator= meant to not be accessable.");
+ throw G4HadronicException(__FILE__, __LINE__, "G4VFissionBarrier::operator= meant to not be accessable.");
  return *this;
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMF.cc,v 1.1 2003-08-26 18:47:56 lara Exp $
+// $Id: G4StatMF.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -42,7 +42,7 @@ G4StatMF::~G4StatMF() {} //{if (_theEnsemble != 0) delete _theEnsemble;}
 // Copy constructor
 G4StatMF::G4StatMF(const G4StatMF & ) : G4VMultiFragmentation()
 {
-    G4Exception("G4StatMF::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMF::copy_constructor meant to not be accessable");
 }
 
 
@@ -50,21 +50,21 @@ G4StatMF::G4StatMF(const G4StatMF & ) : G4VMultiFragmentation()
 
 G4StatMF & G4StatMF::operator=(const G4StatMF & )
 {
-    G4Exception("G4StatMF::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMF::operator= meant to not be accessable");
     return *this;
 }
 
 
 G4bool G4StatMF::operator==(const G4StatMF & )
 {
-    G4Exception("G4StatMF::operator== meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMF::operator== meant to not be accessable");
     return false;
 }
  
 
 G4bool G4StatMF::operator!=(const G4StatMF & )
 {
-    G4Exception("G4StatMF::operator!= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMF::operator!= meant to not be accessable");
     return true;
 }
 
@@ -161,7 +161,7 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
   
   // If Iterations >= 10 means that we couldn't solve for temperature
   if (Iterations >= 10) 
-    G4Exception("G4StatMF::BreakItUp: Was not possible to solve for temperature of breaking channel");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMF::BreakItUp: Was not possible to solve for temperature of breaking channel");
   
   
   G4FragmentVector * theResult = theChannel->

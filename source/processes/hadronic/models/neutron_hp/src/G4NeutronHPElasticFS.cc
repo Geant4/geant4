@@ -109,7 +109,7 @@
     else
     {
       G4cout << "unusable number for repFlag: repFlag="<<repFlag<<G4endl;
-      G4Exception("G4NeutronHPElasticFS::Init -- unusable number for repFlag");
+      throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPElasticFS::Init -- unusable number for repFlag");
     }
     theData.close();
   }
@@ -172,7 +172,7 @@
     else
     {
       G4cout << "unusable number for repFlag: repFlag="<<repFlag<<G4endl;
-      G4Exception("G4NeutronHPElasticFS::Init -- unusable number for repFlag");
+      throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPElasticFS::Init -- unusable number for repFlag");
     }
     if(cosTh<-1.1) return NULL;
     G4double phi = twopi*G4UniformRand();
@@ -236,7 +236,7 @@
     else
     {
       G4cout <<"Value of frameFlag (1=LAB, 2=CMS): "<<frameFlag;
-      G4Exception("G4NeutronHPElasticFS::ApplyYourSelf frameflag incorrect");
+      throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPElasticFS::ApplyYourSelf frameflag incorrect");
     }
     // now all in Lab
 // nun den recoil generieren...und energy change, momentum change angeben.

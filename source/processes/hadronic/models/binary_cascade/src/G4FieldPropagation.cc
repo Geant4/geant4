@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 #include "G4FieldPropagation.hh"
+#include "G4HadronicException.hh"
 
 const G4FieldPropagation & G4FieldPropagation::operator=(const G4FieldPropagation &right)
 {
-   G4Exception("G4FieldPropagation::operator= meant to be private");
+   throw G4HadronicException(__FILE__, __LINE__, "G4FieldPropagation::operator= meant to be private");
    return *this;
 }
 

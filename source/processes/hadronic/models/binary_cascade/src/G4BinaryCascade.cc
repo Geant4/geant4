@@ -148,7 +148,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
       G4cerr << "You are using G4BinaryCascade for projectiles other than neutron and proton."<<G4endl;
       G4cerr << "If you want to continue, please switch on the developer environment: "<<G4endl;
       G4cerr << "setenv I_Am_G4BinaryCascade_Developer 1 "<<G4endl<<G4endl;
-      G4Exception("G4BinaryCascade - used for unvalid particle type - Fatal");
+      throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCascade - used for unvalid particle type - Fatal");
     }
   }
 
@@ -809,7 +809,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
      G4KineticTrackVector debug;
      debug.push_back(primary);
      PrintKTVector(&debug,std::string("primay- target"));
-     G4Exception("G4BinaryCasacde::ApplyCollision()");
+     throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCasacde::ApplyCollision()");
 #else
      return false;
 #endif
@@ -925,10 +925,10 @@ G4bool G4BinaryCascade::Absorb()
   {
     G4KineticTrack * kt = *iter;
     if(!absorber.FindAbsorbers(*kt, theTargetList))
-      G4Exception("G4BinaryCascade::Absorb(): Cannot absorb a particle.");
+      throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCascade::Absorb(): Cannot absorb a particle.");
 
     if(!absorber.FindProducts(*kt))
-      G4Exception("G4BinaryCascade::Absorb(): Cannot absorb a particle.");
+      throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCascade::Absorb(): Cannot absorb a particle.");
 
     G4KineticTrackVector * products = absorber.GetProducts();
 // ------ debug
@@ -941,7 +941,7 @@ G4bool G4BinaryCascade::Absorb()
 // ------ end debug
       ClearAndDestroy(products);
       if(!absorber.FindProducts(*kt))
-	G4Exception(
+	throw G4HadronicException(__FILE__, __LINE__, 
 	  "G4BinaryCascade::Absorb(): Cannot absorb a particle.");
     }
 // ------ debug
@@ -1147,7 +1147,7 @@ void G4BinaryCascade::StepParticlesOut()
         }
       } else if ( kt->GetState() != G4KineticTrack::outside ){
           PrintKTVector(&theSecondaryList, std::string(" state ERROR....."));
-          G4Exception("G4BinaryCascade::StepParticlesOut() particle not in nucleus");
+          throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCascade::StepParticlesOut() particle not in nucleus");
       }
     }
 //    G4cerr << "CaptureCount = "<<counter<<" "<<nsec<<" "<<minTimeStep<<" "<<1*ns<<G4endl;
@@ -1672,7 +1672,7 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
 	  G4cerr << "G4BinaryCascade - secondaryBarions_out,secondaryCharge_out " <<
 	         secondaryBarions_out << " " << secondaryCharge_out << G4endl;
         G4cerr << "G4BinaryCascade - currentA, currentZ " << currentA << " " << currentZ << G4endl; 
-        G4Exception("G4BinaryCascade::CorrectBarionsOnBoundary() - fatal error");
+        throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCascade::CorrectBarionsOnBoundary() - fatal error");
      }
      G4double mass_final(0);
      G4double correction(0);

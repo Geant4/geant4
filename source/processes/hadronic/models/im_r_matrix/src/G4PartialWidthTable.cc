@@ -37,6 +37,7 @@
 // -------------------------------------------------------------------
 
 #include "globals.hh"
+#include "G4HadronicException.hh"
 #include "G4ios.hh"
 #include "G4PartialWidthTable.hh"
 #include "G4KineticTrack.hh"
@@ -92,7 +93,7 @@ const G4PhysicsVector* G4PartialWidthTable::Width(const G4String& name1, const G
 	  n++;
 	}
     }
-  if (n > 1) G4Exception("G4PartialWidthTable::Width - ambiguity");
+  if (n > 1) throw G4HadronicException(__FILE__, __LINE__, "G4PartialWidthTable::Width - ambiguity");
 
   return width;
 }

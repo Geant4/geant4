@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporationChannel.cc,v 1.1 2003-08-29 08:44:42 lara Exp $
+// $Id: G4VEvaporationChannel.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -32,7 +32,7 @@
 
 G4VEvaporationChannel::G4VEvaporationChannel(const G4VEvaporationChannel &)
 {
- G4Exception("G4VEvaporationChannel::copy_constructor meant to not be accessable");
+ throw G4HadronicException(__FILE__, __LINE__, "G4VEvaporationChannel::copy_constructor meant to not be accessable");
 }
 
 
@@ -40,7 +40,7 @@ G4VEvaporationChannel::G4VEvaporationChannel(const G4VEvaporationChannel &)
 
 const G4VEvaporationChannel & G4VEvaporationChannel::operator=(const G4VEvaporationChannel &)
 {
-  G4Exception("G4VEvaporationChannel::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4VEvaporationChannel::operator= meant to not be accessable");
   return *this;
 }
 

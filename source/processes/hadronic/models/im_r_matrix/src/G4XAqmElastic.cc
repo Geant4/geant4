@@ -90,7 +90,7 @@ G4double G4XAqmElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
   // Verify that elastic cross section < total cross section
 
   if (sigma > sigmaTot) 
-    G4Exception("G4XAqmElastic::CrossSection - elastic cross section greater than total");
+    throw G4HadronicException(__FILE__, __LINE__, "G4XAqmElastic::CrossSection - elastic cross section greater than total");
 
   return sigma;
 }

@@ -21,6 +21,7 @@
 // ********************************************************************
 
 #include "G4BertiniRegionModel.hh"
+#include "G4HadronicException.hh"
 
 const G4double G4BertiniRegionModel::radius0 = 1.0E-15; 
 const G4double G4BertiniRegionModel::BE = 7;
@@ -111,7 +112,7 @@ G4double G4BertiniRegionModel::GetMaximumNucleonMomentum(G4double r,
      }
   }
 
-  G4Exception("G4BertiniRegionModel::GetMaximumNucleonMomentum - return value undefined");
+  throw G4HadronicException(__FILE__, __LINE__, "G4BertiniRegionModel::GetMaximumNucleonMomentum - return value undefined");
   return 0;
 
 }

@@ -183,7 +183,7 @@ G4double G4AngularDistribution::CosTheta(G4double s, G4double m1, G4double m2) c
 
 
    if (cosTheta > 1. || cosTheta < -1.)
-     G4Exception("G4AngularDistribution::CosTheta - cos(theta) outside allowed range");
+     throw G4HadronicException(__FILE__, __LINE__, "G4AngularDistribution::CosTheta - cos(theta) outside allowed range");
 
    return cosTheta;
 }

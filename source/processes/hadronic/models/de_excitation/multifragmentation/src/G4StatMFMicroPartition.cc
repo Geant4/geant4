@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroPartition.cc,v 1.2 2003-10-21 15:55:46 lara Exp $
+// $Id: G4StatMFMicroPartition.cc,v 1.3 2003-11-03 17:53:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -34,7 +34,7 @@
 // Copy constructor
 G4StatMFMicroPartition::G4StatMFMicroPartition(const G4StatMFMicroPartition & )
 {
-  G4Exception("G4StatMFMicroPartition::copy_constructor meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroPartition::copy_constructor meant to not be accessable");
 }
 
 // Operators
@@ -42,21 +42,21 @@ G4StatMFMicroPartition::G4StatMFMicroPartition(const G4StatMFMicroPartition & )
 G4StatMFMicroPartition & G4StatMFMicroPartition::
 operator=(const G4StatMFMicroPartition & )
 {
-  G4Exception("G4StatMFMicroPartition::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroPartition::operator= meant to not be accessable");
   return *this;
 }
 
 
 G4bool G4StatMFMicroPartition::operator==(const G4StatMFMicroPartition & ) const
 {
-  //G4Exception("G4StatMFMicroPartition::operator== meant to not be accessable");
+  //throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroPartition::operator== meant to not be accessable");
   return false;
 }
  
 
 G4bool G4StatMFMicroPartition::operator!=(const G4StatMFMicroPartition & ) const
 {
-  //G4Exception("G4StatMFMicroPartition::operator!= meant to not be accessable");
+  //throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroPartition::operator!= meant to not be accessable");
   return true;
 }
 

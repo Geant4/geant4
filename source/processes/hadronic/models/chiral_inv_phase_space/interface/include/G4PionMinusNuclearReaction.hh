@@ -44,7 +44,7 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
 {
 //  if(aTrack.GetDynamicParticle()->GetDefinition() != G4PionMinus::PionMinusDefinition())
 //  {
-//    G4Exception("Called G4PionMinusNuclearReaction for particle other than PionMinus");
+//    throw G4HadronicException(__FILE__, __LINE__, "Called G4PionMinusNuclearReaction for particle other than PionMinus");
 //  }
   return theModel.ApplyYourself(aTrack, aTargetNucleus);
 }

@@ -52,9 +52,9 @@
     }
 /* not true, for example for Fe56, etc..
     if( originalIncident->GetKineticEnergy()/MeV < 0.000001 )
-      G4Exception("G4LENeutronInelastic: should be capture process!");
+      throw G4HadronicException(__FILE__, __LINE__, "G4LENeutronInelastic: should be capture process!");
     if( originalIncident->Get4Momentum().vect().mag()/MeV < 0.000001 )
-      G4Exception("G4LENeutronInelastic: should be capture process!");
+      throw G4HadronicException(__FILE__, __LINE__, "G4LENeutronInelastic: should be capture process!");
 */
     
     G4ReactionProduct modifiedOriginal;

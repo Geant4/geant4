@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4He5FermiFragment.cc,v 1.1 2003-08-26 18:34:44 lara Exp $
+// $Id: G4He5FermiFragment.cc,v 1.2 2003-11-03 17:53:02 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -37,7 +37,7 @@ G4He5FermiFragment::G4He5FermiFragment()
 
 G4He5FermiFragment::G4He5FermiFragment(const G4He5FermiFragment &) : G4UnstableFermiFragment()
 {
-    G4Exception("G4He5FermiFragment::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4He5FermiFragment::copy_constructor meant to not be accessable");
 }
 
 
@@ -48,7 +48,7 @@ G4He5FermiFragment::~G4He5FermiFragment()
 
 const G4He5FermiFragment & G4He5FermiFragment::operator=(const G4He5FermiFragment &)
 {
-    G4Exception("G4He5FermiFragment::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4He5FermiFragment::operator= meant to not be accessable");
     return *this;
 }
 

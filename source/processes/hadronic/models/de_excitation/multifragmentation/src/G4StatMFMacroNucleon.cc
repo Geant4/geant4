@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroNucleon.cc,v 1.1 2003-08-26 18:48:02 lara Exp $
+// $Id: G4StatMFMacroNucleon.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -34,28 +34,28 @@
 G4StatMFMacroNucleon & G4StatMFMacroNucleon::
 operator=(const G4StatMFMacroNucleon & )
 {
-    G4Exception("G4StatMFMacroNucleon::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroNucleon::operator= meant to not be accessable");
     return *this;
 }
 
 
 G4bool G4StatMFMacroNucleon::operator==(const G4StatMFMacroNucleon & ) const
 {
-    G4Exception("G4StatMFMacroNucleon::operator== meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroNucleon::operator== meant to not be accessable");
     return false;
 }
  
 
 G4bool G4StatMFMacroNucleon::operator!=(const G4StatMFMacroNucleon & ) const
 {
-    G4Exception("G4StatMFMacroNucleon::operator!= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroNucleon::operator!= meant to not be accessable");
     return true;
 }
 
 G4double G4StatMFMacroNucleon::CalcMeanMultiplicity(const G4double FreeVol, const G4double mu, 
 						    const G4double nu, const G4double T)
 {
-    if (T <= 0.0) G4Exception("G4StatMFMacroNucleon::CalcMeanMultiplicity: Temperature less or equal 0");
+    if (T <= 0.0) throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroNucleon::CalcMeanMultiplicity: Temperature less or equal 0");
     const G4double ThermalWaveLenght = 16.15*fermi/sqrt(T);
 	
     const G4double lambda3 = ThermalWaveLenght*ThermalWaveLenght*ThermalWaveLenght;

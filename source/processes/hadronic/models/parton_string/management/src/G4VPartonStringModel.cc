@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.cc,v 1.1 2003-10-07 11:26:00 hpw Exp $
+// $Id: G4VPartonStringModel.cc,v 1.2 2003-11-03 17:54:53 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //// ------------------------------------------------------------
@@ -57,7 +57,7 @@ G4VPartonStringModel::~G4VPartonStringModel()
 
 const G4VPartonStringModel & G4VPartonStringModel::operator=(const G4VPartonStringModel &)
 {
-  G4Exception("G4VPartonStringModel::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4VPartonStringModel::operator= meant to not be accessable");
   return *this;
 }
 
@@ -91,7 +91,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   {
   	if (attempts++ > maxAttempts ) 
   	{
-		G4Exception("G4VPartonStringModel::Scatter(): fails to generate strings");
+		throw G4HadronicException(__FILE__, __LINE__, "G4VPartonStringModel::Scatter(): fails to generate strings");
   	}
 
 	theThis->Init(theNucleus,thePrimary);

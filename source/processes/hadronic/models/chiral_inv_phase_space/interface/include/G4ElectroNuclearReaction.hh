@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.18 2003-10-31 15:31:55 hpw Exp $
+// $Id: G4ElectroNuclearReaction.hh,v 1.19 2003-11-03 17:49:00 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -89,7 +89,7 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
   const G4DynamicParticle* theElectron=&theTempEl;
   const G4ParticleDefinition* aD = theElectron->GetDefinition();
   if((aD != G4Electron::ElectronDefinition()) && (aD != G4Positron::PositronDefinition()))
-    G4Exception("G4ElectroNuclearReaction::ApplyYourself called for neither electron or positron");
+    throw G4HadronicException(__FILE__, __LINE__, "G4ElectroNuclearReaction::ApplyYourself called for neither electron or positron");
   
   const G4ElementTable* aTab = G4Element::GetElementTable();
   G4Element * anElement = 0;
@@ -106,7 +106,7 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
   {
     G4cerr<<"***G4ElectroNuclearReaction::ApplyYourself: element with Z="<<aTargetNucleus.GetZ()<<
 	  " is not in the element table"<<G4endl; // @@ how to retrieve A or N for the isotop?
-    G4Exception("Anomalous element error.");
+    throw G4HadronicException(__FILE__, __LINE__, "Anomalous element error.");
   }
 
   // Note: high energy gamma nuclear now implemented.
@@ -142,7 +142,7 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
     theResult.SetEnergyChange(theElectron->GetKineticEnergy());
     theResult.SetMomentumChange(theElectron->GetMomentumDirection()); // new direction for the electron
     return &theResult;        // DO-NOTHING condition
-    G4Exception("G4ElectroNuclearReaction::ApplyYourself: negative equivalent energy");
+    throw G4HadronicException(__FILE__, __LINE__, "G4ElectroNuclearReaction::ApplyYourself: negative equivalent energy");
   }
   G4DynamicParticle* theDynamicPhoton = new 
                      G4DynamicParticle(G4Gamma::GammaDefinition(), 

@@ -92,9 +92,9 @@
     
    if (!G4HadronicProcess::GetCrossSectionDataStore()) 
    {
-      throw(G4HadronicException(__FILE__, __LINE__, 
+      throw G4HadronicException(__FILE__, __LINE__, 
       "G4HadronInelasticProcess::GetMicroscopicCrossSection: "
-                  "no CrossSectionDataStore") );
+                  "no CrossSectionDataStore");
       return DBL_MIN;
    }
    return G4HadronicProcess::GetCrossSectionDataStore()->GetCrossSection(aParticle, anElement, aTemp);

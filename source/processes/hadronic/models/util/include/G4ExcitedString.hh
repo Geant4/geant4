@@ -165,7 +165,7 @@ void G4ExcitedString::InsertParton(G4Parton *aParton, const G4Parton * addafter)
 	   if (insert_index == thePartons.end())		// No object addafter in thePartons
 	   {
 	      G4String text = "G4ExcitedString::InsertParton called with invalid second argument";
-  	      throw(G4HadronicException(__FILE__, __LINE__, text) );
+  	      throw G4HadronicException(__FILE__, __LINE__, text);
 	   }
 	}
 	

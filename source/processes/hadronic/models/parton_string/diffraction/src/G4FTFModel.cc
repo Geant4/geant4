@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.2 2003-10-08 13:48:47 hpw Exp $
+// $Id: G4FTFModel.cc,v 1.3 2003-11-03 17:54:53 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -64,7 +64,7 @@ G4FTFModel::~G4FTFModel()
 
 const G4FTFModel & G4FTFModel::operator=(const G4FTFModel &)
 {
-	G4Exception("G4FTFModel::operator= is not meant to be accessed ");
+	throw G4HadronicException(__FILE__, __LINE__, "G4FTFModel::operator= is not meant to be accessed ");
 	return *this;
 }
 

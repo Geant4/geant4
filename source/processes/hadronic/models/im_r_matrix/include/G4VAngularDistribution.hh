@@ -43,6 +43,7 @@
 #define G4VANGULARDISTRIBUTION_HH
 
 #include "globals.hh"
+#include "G4HadronicException.hh"
 
 class G4VAngularDistribution 
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroManager.cc,v 1.1 2003-08-26 18:48:02 lara Exp $
+// $Id: G4StatMFMicroManager.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -35,7 +35,7 @@
 // Copy constructor
 G4StatMFMicroManager::G4StatMFMicroManager(const G4StatMFMicroManager & )
 {
-    G4Exception("G4StatMFMicroManager::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroManager::copy_constructor meant to not be accessable");
 }
 
 // Operators
@@ -43,7 +43,7 @@ G4StatMFMicroManager::G4StatMFMicroManager(const G4StatMFMicroManager & )
 G4StatMFMicroManager & G4StatMFMicroManager::
 operator=(const G4StatMFMicroManager & )
 {
-    G4Exception("G4StatMFMicroManager::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroManager::operator= meant to not be accessable");
     return *this;
 }
 
@@ -194,7 +194,7 @@ G4StatMFChannel * G4StatMFMicroManager::ChooseChannel(const G4double A0, const G
 	    return (*i)->ChooseZ(A0,Z0,MeanT);
     }
 
-    G4Exception
-	("G4StatMFMicroCanonical::ChooseChannel: Couldn't find a channel.");
+    throw G4HadronicException(__FILE__, __LINE__, 
+	"G4StatMFMicroCanonical::ChooseChannel: Couldn't find a channel.");
     return 0;
 }

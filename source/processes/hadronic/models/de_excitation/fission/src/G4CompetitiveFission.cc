@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc,v 1.1 2003-08-26 18:37:31 lara Exp $
+// $Id: G4CompetitiveFission.cc,v 1.2 2003-11-03 17:53:02 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -62,7 +62,7 @@ G4CompetitiveFission::~G4CompetitiveFission()
 
 const G4CompetitiveFission & G4CompetitiveFission::operator=(const G4CompetitiveFission &)
 {
-    G4Exception("G4CompetitiveFission::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4CompetitiveFission::operator= meant to not be accessable");
     return *this;
 }
 
@@ -157,13 +157,13 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
 	A2 = A - A1;
 	Z2 = Z - Z1;
 	if (A2 < 1 || Z2 < 0) 
-	    G4Exception("G4CompetitiveFission::BreakUp: Can't define second fragment! ");
+	    throw G4HadronicException(__FILE__, __LINE__, "G4CompetitiveFission::BreakUp: Can't define second fragment! ");
 	M2 = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z2,A2)/MeV;
 
 	// Check that fragment masses are less or equal than total energy
 	//  if (M1 + M2 > theNucleusMomentum.mag()/MeV)
 	if (M1 + M2 > theNucleusMomentum.e()/MeV)
-	    G4Exception("G4CompetitiveFission::BreakUp: Fragments Mass > Total Energy");
+	    throw G4HadronicException(__FILE__, __LINE__, "G4CompetitiveFission::BreakUp: Fragments Mass > Total Energy");
 
 	// Maximal Kinetic Energy (available energy for fragments)
 	//  G4double Tmax = theNucleusMomentum.mag()/MeV - M1 - M2;
@@ -183,7 +183,7 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
   
 
     if (FragmentsExcitationEnergy <= 0.0) 
-	G4Exception("G4CompetitiveFission::BreakItUp: Excitation energy for fragments < 0.0!");
+	throw G4HadronicException(__FILE__, __LINE__, "G4CompetitiveFission::BreakItUp: Excitation energy for fragments < 0.0!");
   
 
   // while (FragmentsExcitationEnergy < 0 && Trials < 100);
@@ -215,9 +215,9 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
 
     // Create Fragments
     G4Fragment * Fragment1 = new G4Fragment( A1, Z1, FourMomentum1);
-    if (!Fragment1) G4Exception("G4CompetitiveFission::BreakItUp: Can't create Fragment1! ");
+    if (!Fragment1) throw G4HadronicException(__FILE__, __LINE__, "G4CompetitiveFission::BreakItUp: Can't create Fragment1! ");
     G4Fragment * Fragment2 = new G4Fragment( A2, Z2, FourMomentum2);
-    if (!Fragment2) G4Exception("G4CompetitiveFission::BreakItUp: Can't create Fragment2! ");
+    if (!Fragment2) throw G4HadronicException(__FILE__, __LINE__, "G4CompetitiveFission::BreakItUp: Can't create Fragment2! ");
 
 #ifdef PRECOMPOUND_TEST
     Fragment1->SetCreatorModel(G4String("G4CompetitiveFission"));
@@ -460,7 +460,7 @@ G4double G4CompetitiveFission::SymmetricRatio(const G4double A,const G4double A1
 G4double G4CompetitiveFission::Ratio(const G4double A,const G4double A11,
 				     const G4double B1,const G4double A00) 
 {
-    if (A == 0) G4Exception("G4CompetitiveFission::Ratio: A == 0!");
+    if (A == 0) throw G4HadronicException(__FILE__, __LINE__, "G4CompetitiveFission::Ratio: A == 0!");
     if (A11 >= A/2.0 && A11 <= (A00+10.0)) return 1.0-B1*((A11-A00)/A)*((A11-A00)/A);
     else return 1.0-B1*(10.0/A)*(10.0/A)-2.0*(10.0/A)*B1*((A11-A00-10.0)/A);
 }

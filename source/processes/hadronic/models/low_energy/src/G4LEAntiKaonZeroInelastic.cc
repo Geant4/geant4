@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiKaonZeroInelastic.cc,v 1.6 2003-11-01 16:22:33 hpw Exp $
+// $Id: G4LEAntiKaonZeroInelastic.cc,v 1.7 2003-11-03 17:54:03 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy KaonZeroLong Inelastic Process
@@ -114,7 +114,7 @@
     catch(G4HadReentrentException aR)
     {
       aR.Report(G4cout);
-      throw(G4HadReentrentException(__FILE__, __LINE__, "Bailing out"));
+      throw G4HadReentrentException(__FILE__, __LINE__, "Bailing out");
     }
     SetUpChange( vec, vecLen,
                  currentParticle, targetParticle,

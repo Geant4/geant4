@@ -50,7 +50,7 @@ G4NeutronHPCaptureData::~G4NeutronHPCaptureData()
 void G4NeutronHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 {
   if(&aP!=G4Neutron::Neutron()) 
-     G4Exception("Attempt to use NeutronHP data for particles other than neutrons!!!");  
+     throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
   size_t numberOfElements = G4Element::GetNumberOfElements();
   // G4cout << "CALLED G4NeutronHPCaptureData::BuildPhysicsTable "<<numberOfElements<<G4endl;
   theCrossSections = new G4PhysicsTable( numberOfElements );
@@ -74,7 +74,7 @@ void G4NeutronHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 void G4NeutronHPCaptureData::DumpPhysicsTable(const G4ParticleDefinition& aP)
 {
   if(&aP!=G4Neutron::Neutron()) 
-     G4Exception("Attempt to use NeutronHP data for particles other than neutrons!!!");  
+     throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
   G4cout << "G4NeutronHPCaptureData::DumpPhysicsTable still to be implemented"<<G4endl;
 }
 

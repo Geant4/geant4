@@ -89,7 +89,7 @@ const std::vector<G4String>& G4CollisionnpElastic::GetListOfColliders(G4int whic
 	{ return colliders2; }
       else 
 	{
-	  G4Exception("G4CollisionnpElastic::GetListOfColliders - Argument outside valid range"); 
+	  throw G4HadronicException(__FILE__, __LINE__, "G4CollisionnpElastic::GetListOfColliders - Argument outside valid range"); 
 	  return colliders1;
 	}
     }

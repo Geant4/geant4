@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMCoulombBarrierHE.cc,v 1.1 2003-08-26 18:44:14 lara Exp $
+// $Id: G4GEMCoulombBarrierHE.cc,v 1.2 2003-11-03 17:53:04 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -29,17 +29,18 @@
 
 
 #include "G4GEMCoulombBarrierHE.hh"
+#include "G4HadronicException.hh"
 #include <strstream>
 
 G4GEMCoulombBarrierHE::G4GEMCoulombBarrierHE(const G4GEMCoulombBarrierHE & ) : G4VCoulombBarrier()
 {
-  G4Exception("G4GEMCoulombBarrierHE::copy_constructor meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4GEMCoulombBarrierHE::copy_constructor meant to not be accessable.");
 }
 
 
 const G4GEMCoulombBarrierHE & G4GEMCoulombBarrierHE::operator=(const G4GEMCoulombBarrierHE & )
 {
-  G4Exception("G4GEMCoulombBarrierHE::operator= meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4GEMCoulombBarrierHE::operator= meant to not be accessable.");
   return *this;
 }
 
@@ -66,7 +67,7 @@ G4double G4GEMCoulombBarrierHE::GetCoulombBarrier(const G4int ARes, const G4int 
     errOs << "Wrong values for ";
     errOs << "residual nucleus A = " << ARes << " ";
     errOs << "and residual nucleus Z = " << ZRes << G4endl;
-    G4Exception(errMessage);
+    throw G4HadronicException(__FILE__, __LINE__, errMessage);
   }
   if (GetZ() == 0) {
     Barrier = 0.0;   // If there is no charge there is neither barrier

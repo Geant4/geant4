@@ -468,7 +468,7 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 		if ( best < 0 )  
 		{
 		  G4String text = "G4Fancy3DNucleus.cc: Logic error in ReduceSum()";
-  	          throw(G4HadronicException(__FILE__, __LINE__, text) );
+  	          throw G4HadronicException(__FILE__, __LINE__, text);
 		}
 		momentum[testSums[best].index()]-=testSums[best].vector();
 		momentum[myA-1]=testSums[best].vector()-sum;

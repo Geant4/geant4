@@ -93,7 +93,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     theFastSec->SetMomentum(current4Mom.vect());
     theFastResult->push_back(theFastSec);
     return theFastResult;
-//    G4Exception("G4StringChipsParticleLevelInterface: Only one particle from String models!");
+//    throw G4HadronicException(__FILE__, __LINE__, "G4StringChipsParticleLevelInterface: Only one particle from String models!");
   }
   
   // target properties needed in constructor of quasmon, and for boosting to

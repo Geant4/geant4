@@ -37,17 +37,17 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* aParticle,
 {
    if (NDataSetList == 0) 
    {
-      throw(G4HadronicException(__FILE__, __LINE__, 
-       "G4CrossSectionDataStore: no data sets registered") );
+      throw G4HadronicException(__FILE__, __LINE__, 
+       "G4CrossSectionDataStore: no data sets registered");
       return DBL_MIN;
    }
    for (G4int i = NDataSetList-1; i >= 0; i--) {
       if (DataSetList[i]->IsApplicable(aParticle, anElement))
              return DataSetList[i]->GetCrossSection(aParticle, anElement, aTemperature);
    }
-   throw(G4HadronicException(__FILE__, __LINE__, 
+   throw G4HadronicException(__FILE__, __LINE__, 
                             "G4CrossSectionDataStore: no applicable data set found "
-                            "for particle/element") );
+                            "for particle/element");
    return DBL_MIN;
 }
 

@@ -51,21 +51,21 @@ G4SigmaZeroField::~G4SigmaZeroField()
 
 const G4SigmaZeroField & G4SigmaZeroField::operator=(const G4SigmaZeroField & right)
 {
-  G4Exception("G4SigmaZeroField::operator= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4SigmaZeroField::operator= meant not to be accessible");
   return *this;
 }
 
 
 G4int G4SigmaZeroField::operator==(const G4SigmaZeroField & right) const
 {
-  G4Exception("G4SigmaZeroField::operator== meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4SigmaZeroField::operator== meant not to be accessible");
   return 0;
 }
 
 
 G4int G4SigmaZeroField::operator!=(const G4SigmaZeroField & right) const
 {
-  G4Exception("G4SigmaZeroField::operator!= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4SigmaZeroField::operator!= meant not to be accessible");
   return 1;
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.1 2003-10-07 11:26:00 hpw Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.2 2003-11-03 17:54:53 hpw Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -268,7 +268,7 @@ G4double G4DiffractiveExcitation::ChooseX(G4double Xmin, G4double Xmax) const
 	if ( Xmin <= 0. || range <=0. ) 
 	{
 		G4cout << " Xmin, range : " << Xmin << " , " << range << G4endl;
-		G4Exception("G4DiffractiveExcitation::ChooseX : Invalid arguments ");
+		throw G4HadronicException(__FILE__, __LINE__, "G4DiffractiveExcitation::ChooseX : Invalid arguments ");
 	}
 
 	G4double x;
@@ -301,7 +301,7 @@ G4DiffractiveExcitation::G4DiffractiveExcitation(const G4DiffractiveExcitation &
 widthOfPtSquare(0) , minExtraMass(0),
 minmass(0)
 {
-	G4Exception("G4DiffractiveExcitation copy contructor not meant to be called");
+	throw G4HadronicException(__FILE__, __LINE__, "G4DiffractiveExcitation copy contructor not meant to be called");
 }
 
 
@@ -312,20 +312,20 @@ G4DiffractiveExcitation::~G4DiffractiveExcitation()
 
 const G4DiffractiveExcitation & G4DiffractiveExcitation::operator=(const G4DiffractiveExcitation &)
 {
-	G4Exception("G4DiffractiveExcitation = operator meant to be called");
+	throw G4HadronicException(__FILE__, __LINE__, "G4DiffractiveExcitation = operator meant to be called");
 	return *this;
 }
 
 
 int G4DiffractiveExcitation::operator==(const G4DiffractiveExcitation &) const
 {
-	G4Exception("G4DiffractiveExcitation == operator meant to be called");
+	throw G4HadronicException(__FILE__, __LINE__, "G4DiffractiveExcitation == operator meant to be called");
 	return false;
 }
 
 int G4DiffractiveExcitation::operator!=(const G4DiffractiveExcitation &) const
 {
-	G4Exception("G4DiffractiveExcitation != operator meant to be called");
+	throw G4HadronicException(__FILE__, __LINE__, "G4DiffractiveExcitation != operator meant to be called");
 	return true;
 }
 

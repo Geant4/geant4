@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionComposite.hh,v 1.1 2003-10-07 12:37:26 hpw Exp $
+// $Id: G4CollisionComposite.hh,v 1.2 2003-11-03 17:53:27 hpw Exp $
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -40,6 +40,7 @@
 #define G4CollisionComposite_h
 
 #include "globals.hh"
+#include "G4HadronicException.hh"
 #include "G4VCollision.hh"
 #include "G4CollisionVector.hh"
 #include "G4KineticTrackVector.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiplicity.cc,v 1.1 2003-08-26 18:48:01 lara Exp $
+// $Id: G4StatMFMacroMultiplicity.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -34,20 +34,20 @@
 G4StatMFMacroMultiplicity & 
 G4StatMFMacroMultiplicity::operator=(const G4StatMFMacroMultiplicity & ) 
 {
-    G4Exception("G4StatMFMacroMultiplicity::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiplicity::operator= meant to not be accessable");
     return *this;
 }
 
 G4bool G4StatMFMacroMultiplicity::operator==(const G4StatMFMacroMultiplicity & ) const 
 {
-    G4Exception("G4StatMFMacroMultiplicity::operator== meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiplicity::operator== meant to not be accessable");
     return false;
 }
 
 
 G4bool G4StatMFMacroMultiplicity::operator!=(const G4StatMFMacroMultiplicity & ) const 
 {
-    G4Exception("G4StatMFMacroMultiplicity::operator!= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiplicity::operator!= meant to not be accessable");
     return true;
 }
 
@@ -100,7 +100,7 @@ G4double G4StatMFMacroMultiplicity::CalcChemicalPotentialMu(void)
     }
     if (fChemPa*fChemPb > 0.0) 
     {
-	G4Exception("G4StatMFMacroMultiplicity::CalcChemicalPotentialMu: I couldn't bracket the root.");
+	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiplicity::CalcChemicalPotentialMu: I couldn't bracket the root.");
     }
 	
 	
@@ -109,7 +109,7 @@ G4double G4StatMFMacroMultiplicity::CalcChemicalPotentialMu(void)
     //    if (!theSolver->Crenshaw(*this)) 
     if (!theSolver->Brent(*this)) 
     {
-	G4Exception("G4StatMFMacroMultiplicity::CalcChemicalPotentialMu: I couldn't find the root.");
+	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiplicity::CalcChemicalPotentialMu: I couldn't find the root.");
     }
     _ChemPotentialMu = theSolver->GetRoot();
     delete theSolver;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationChannel.cc,v 1.1 2003-08-26 18:30:56 lara Exp $
+// $Id: G4EvaporationChannel.cc,v 1.2 2003-11-03 17:53:02 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -87,12 +87,12 @@ G4EvaporationChannel::~G4EvaporationChannel()
 
 G4EvaporationChannel::G4EvaporationChannel(const G4EvaporationChannel & ) : G4VEvaporationChannel()
 {
-    G4Exception("G4EvaporationChannel::copy_costructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationChannel::copy_costructor meant to not be accessable");
 }
 
 const G4EvaporationChannel & G4EvaporationChannel::operator=(const G4EvaporationChannel & )
 {
-    G4Exception("G4EvaporationChannel::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationChannel::operator= meant to not be accessable");
     return *this;
 }
 
@@ -254,7 +254,7 @@ G4double G4EvaporationChannel::CalcKineticEnergy(void)
     // in the probability for fragment emisson
 {
     if (MaximalKineticEnergy < 0.0) 
-	G4Exception("G4EvaporationChannel::CalcKineticEnergy: maximal kinetic energy is less than 0");
+	throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationChannel::CalcKineticEnergy: maximal kinetic energy is less than 0");
 
     G4double Rb = 4.0*theLevelDensityPtr->LevelDensityParameter(AResidual+A,ZResidual+Z,MaximalKineticEnergy)*
 	MaximalKineticEnergy;

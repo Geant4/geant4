@@ -46,6 +46,7 @@
 #include "globals.hh"
 #include "G4NuclearLevel.hh"
 #include "G4ios.hh"
+#include "G4HadronicException.hh"
 #include <stdlib.h>
 #include <fstream>
 #include <strstream>
@@ -60,7 +61,7 @@ G4NuclearLevelManager::G4NuclearLevelManager(const G4int Z, const G4int A, const
     _nucleusA(A), _nucleusZ(Z), _fileName(filename)
 { 
     if (A <= 0 || Z <= 0 || Z > A )
-	G4Exception("==== G4NuclearLevelManager ==== (Z,A) <0, or Z>A");
+	throw G4HadronicException(__FILE__, __LINE__, "==== G4NuclearLevelManager ==== (Z,A) <0, or Z>A");
 
     _levels = 0;
 

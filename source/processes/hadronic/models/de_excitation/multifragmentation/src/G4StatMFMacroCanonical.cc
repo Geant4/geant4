@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroCanonical.cc,v 1.1 2003-08-26 18:47:58 lara Exp $
+// $Id: G4StatMFMacroCanonical.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -61,7 +61,7 @@ G4StatMFMacroCanonical::~G4StatMFMacroCanonical()
 G4StatMFMacroCanonical & 
 G4StatMFMacroCanonical::operator=(const G4StatMFMacroCanonical & ) 
 {
-    G4Exception("G4StatMFMacroCanonical::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroCanonical::operator= meant to not be accessable");
     return *this;
 }
 

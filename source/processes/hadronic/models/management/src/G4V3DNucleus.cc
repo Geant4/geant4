@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.cc,v 1.2 2003-11-01 16:21:02 hpw Exp $
+// $Id: G4V3DNucleus.cc,v 1.3 2003-11-03 17:54:18 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4V3DNucleus.hh"
@@ -44,7 +44,7 @@ G4V3DNucleus::~G4V3DNucleus()
 const G4V3DNucleus & G4V3DNucleus::operator=(const G4V3DNucleus &)
 {
   G4String text = "G4V3DNucleus::operator= meant to not be accessable";
-  throw( G4HadronicException(__FILE__, __LINE__, text) ); 
+  throw G4HadronicException(__FILE__, __LINE__, text); 
   return *this;
 }
 

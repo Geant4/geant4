@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFChannel.cc,v 1.1 2003-08-26 18:47:53 lara Exp $
+// $Id: G4StatMFChannel.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -52,7 +52,7 @@ public:
 // Copy constructor
 G4StatMFChannel::G4StatMFChannel(const G4StatMFChannel & )
 {
-    G4Exception("G4StatMFChannel::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFChannel::copy_constructor meant to not be accessable");
 }
 
 // Operators
@@ -60,21 +60,21 @@ G4StatMFChannel::G4StatMFChannel(const G4StatMFChannel & )
 G4StatMFChannel & G4StatMFChannel::
 operator=(const G4StatMFChannel & )
 {
-    G4Exception("G4StatMFChannel::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFChannel::operator= meant to not be accessable");
     return *this;
 }
 
 
 G4bool G4StatMFChannel::operator==(const G4StatMFChannel & ) const
 {
-    //	G4Exception("G4StatMFChannel::operator== meant to not be accessable");
+    //	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFChannel::operator== meant to not be accessable");
     return false;
 }
  
 
 G4bool G4StatMFChannel::operator!=(const G4StatMFChannel & ) const 
 {
-    //	G4Exception("G4StatMFChannel::operator!= meant to not be accessable");
+    //	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFChannel::operator!= meant to not be accessable");
     return true;
 }
 

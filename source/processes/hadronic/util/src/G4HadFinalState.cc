@@ -12,7 +12,7 @@
      theEnergy=anEnergy;
      if(theEnergy<0) 
      {
-       throw(G4HadronicException(__FILE__, __LINE__, "G4HadFinalState: fatal - negative energy"));
+       throw G4HadronicException(__FILE__, __LINE__, "G4HadFinalState: fatal - negative energy");
      }
    }
 
@@ -26,7 +26,7 @@
      if(fabs(theDirection.mag()-1)>0.001) 
      {
        G4cout <<"We have negative theDirection.mag() "<<theDirection.mag()<<G4endl;
-       throw(G4HadronicException(__FILE__, __LINE__, "G4HadFinalState: fatal - negative direction.mag()."));
+       throw G4HadronicException(__FILE__, __LINE__, "G4HadFinalState: fatal - negative direction.mag().");
      }
    }
 
@@ -73,8 +73,8 @@
    {
      if(i>theSecs.size())
      {
-       throw(G4HadronicException(__FILE__, __LINE__, 
-            "Trying direct access to secondary beyond end of list"));
+       throw G4HadronicException(__FILE__, __LINE__, 
+            "Trying direct access to secondary beyond end of list");
      }
      return theSecs[i];
    }

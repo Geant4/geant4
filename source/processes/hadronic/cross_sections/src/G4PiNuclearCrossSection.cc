@@ -171,8 +171,8 @@ GetCrossSection(const G4DynamicParticle* aParticle,
   if(aParticle->GetDefinition() == G4PionPlus::PionPlus())   ok=true;
   if(!ok) 
   {
-    throw(G4HadronicException(__FILE__, __LINE__,
-                           "Call to G4PiNuclearCrossSection failed.") );
+    throw G4HadronicException(__FILE__, __LINE__,
+                           "Call to G4PiNuclearCrossSection failed.");
   }
   G4double charge = aParticle->GetDefinition()->GetPDGCharge();
   G4double kineticEnergy = aParticle->GetKineticEnergy();
@@ -184,8 +184,8 @@ GetCrossSection(const G4DynamicParticle* aParticle,
   while(it<theZ.size() && Z>theZ[it]) it++;
   if(Z > theZ[it]) 
   {
-    throw(G4HadronicException(__FILE__, __LINE__,
-      "Called G4PiNuclearCrossSection outside parametrization") );
+    throw G4HadronicException(__FILE__, __LINE__,
+      "Called G4PiNuclearCrossSection outside parametrization");
   }
   G4int Z1, Z2;
   G4double x1, x2;

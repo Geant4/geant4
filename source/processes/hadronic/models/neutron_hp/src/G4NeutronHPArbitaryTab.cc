@@ -46,7 +46,7 @@
       {
         G4cerr << "No distribution functions to sample "
              << "from in G4NeutronHPArbitaryTab::Sample"<<G4endl;
-        G4Exception();
+        throw G4HadronicException(__FILE__, __LINE__, "nDistFunc==0");
       } 
       else 
       {

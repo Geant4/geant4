@@ -52,7 +52,7 @@ G4InelasticSplitableHadron::~G4InelasticSplitableHadron()
 
 const G4InelasticSplitableHadron & G4InelasticSplitableHadron::operator=(const G4InelasticSplitableHadron &)
 {
-  G4Exception("G4InelasticSplitableHadron::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4InelasticSplitableHadron::operator= meant to not be accessable");
   return *this;
 }
 

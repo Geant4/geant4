@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SingleDiffractiveExcitation.cc,v 1.1 2003-10-07 11:26:00 hpw Exp $
+// $Id: G4SingleDiffractiveExcitation.cc,v 1.2 2003-11-03 17:54:53 hpw Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -208,7 +208,7 @@ G4double G4SingleDiffractiveExcitation::ChooseX(G4double Xmin, G4double Xmax) co
 	if ( Xmin <= 0. || range <=0. ) 
 	{
 		G4cout << " Xmin, range : " << Xmin << " , " << range << G4endl;
-		G4Exception("G4SingleDiffractiveExcitation::ChooseX : Invalid arguments ");
+		throw G4HadronicException(__FILE__, __LINE__, "G4SingleDiffractiveExcitation::ChooseX : Invalid arguments ");
 	}
 
 	G4double x;
@@ -241,7 +241,7 @@ G4SingleDiffractiveExcitation::G4SingleDiffractiveExcitation(const G4SingleDiffr
 widthOfPtSquare(0) , minExtraMass(0),
 minmass(0)
 {
-	G4Exception("G4SingleDiffractiveExcitation copy contructor not meant to be called");
+	throw G4HadronicException(__FILE__, __LINE__, "G4SingleDiffractiveExcitation copy contructor not meant to be called");
 }
 
 
@@ -252,20 +252,20 @@ G4SingleDiffractiveExcitation::~G4SingleDiffractiveExcitation()
 
 const G4SingleDiffractiveExcitation & G4SingleDiffractiveExcitation::operator=(const G4SingleDiffractiveExcitation &)
 {
-	G4Exception("G4SingleDiffractiveExcitation = operator meant to be called");
+	throw G4HadronicException(__FILE__, __LINE__, "G4SingleDiffractiveExcitation = operator meant to be called");
 	return *this;
 }
 
 
 int G4SingleDiffractiveExcitation::operator==(const G4SingleDiffractiveExcitation &) const
 {
-	G4Exception("G4SingleDiffractiveExcitation == operator meant to be called");
+	throw G4HadronicException(__FILE__, __LINE__, "G4SingleDiffractiveExcitation == operator meant to be called");
 	return false;
 }
 
 int G4SingleDiffractiveExcitation::operator!=(const G4SingleDiffractiveExcitation &) const
 {
-	G4Exception("G4SingleDiffractiveExcitation != operator meant to be called");
+	throw G4HadronicException(__FILE__, __LINE__, "G4SingleDiffractiveExcitation != operator meant to be called");
 	return true;
 }
 

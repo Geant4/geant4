@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroChemicalPotential.cc,v 1.1 2003-08-26 18:48:00 lara Exp $
+// $Id: G4StatMFMacroChemicalPotential.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -34,20 +34,20 @@
 G4StatMFMacroChemicalPotential & 
 G4StatMFMacroChemicalPotential::operator=(const G4StatMFMacroChemicalPotential & ) 
 {
-    G4Exception("G4StatMFMacroChemicalPotential::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroChemicalPotential::operator= meant to not be accessable");
     return *this;
 }
 
 G4bool G4StatMFMacroChemicalPotential::operator==(const G4StatMFMacroChemicalPotential & ) const 
 {
-    G4Exception("G4StatMFMacroChemicalPotential::operator== meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroChemicalPotential::operator== meant to not be accessable");
     return false;
 }
 
 
 G4bool G4StatMFMacroChemicalPotential::operator!=(const G4StatMFMacroChemicalPotential & ) const 
 {
-    G4Exception("G4StatMFMacroChemicalPotential::operator!= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroChemicalPotential::operator!= meant to not be accessable");
     return true;
 }
 
@@ -91,7 +91,7 @@ G4double G4StatMFMacroChemicalPotential::CalcChemicalPotentialNu(void)
     theSolver->SetIntervalLimits(ChemPa,ChemPb);
     //    if (!theSolver->Crenshaw(*this)) 
     if (!theSolver->Brent(*this)) 
-      G4Exception("G4StatMFMacroChemicalPotential::CalcChemicalPotentialNu: I couldn't find the root.");
+      throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroChemicalPotential::CalcChemicalPotentialNu: I couldn't find the root.");
     _ChemPotentialNu = theSolver->GetRoot();
     delete theSolver;
     return _ChemPotentialNu;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.34 2003-10-27 09:15:27 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.35 2003-11-03 17:49:00 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -284,7 +284,7 @@ void G4QNucleus::InitByPDG(G4int nucPDG)
   else
   {
     G4cerr<<"***G4QNucleus::InitByPDG: Initialized by not nuclear PDGCode="<<nucPDG<<G4endl;
-    //G4Exception("G4QNucleus::InitByPDG: Hadronic PDGCode can't be converted to Nuclear PDG Code");
+    //throw G4HadronicException(__FILE__, __LINE__, "G4QNucleus::InitByPDG: Hadronic PDGCode can't be converted to Nuclear PDG Code");
   }
 }
 // End of "InitByPDG"
@@ -495,7 +495,7 @@ void G4QNucleus::Reduce(G4int cPDG)
       //if(abs(newPDG)<NUCPDG)
 	  //{
       //  G4cerr<<"***G4QNucleus::Reduce:iPDG="<<curPDG<<" = newPDG="<<newPDG<<"+cPDG="<<cPDG<<G4endl;
-      //  G4Exception("*E*:::G4QNucleus::Reduce: Abnormal Nuclear Reduction");
+      //  throw G4HadronicException(__FILE__, __LINE__, "*E*:::G4QNucleus::Reduce: Abnormal Nuclear Reduction");
 	  //}
       InitByPDG(newPDG);                         // Reinit the Nucleus
 	}
@@ -815,7 +815,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   G4LorentzVector h2mom;
   G4LorentzVector h3mom;
   G4double totMass= GetMass();                    // Total mass of the Nucleus
-  //if(totMass-GetGSMass()>100.)G4Exception("****Big Mass");
+  //if(totMass-GetGSMass()>100.)throw G4HadronicException(__FILE__, __LINE__, "****Big Mass");
   if(a==2)
   {
     if(Z<0||N<0)
@@ -842,7 +842,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
 		{
           G4cerr<<"***G4QNucl::EvapBary: tM="<<totMass<<"-> 2N="<<nucPDG<<"(M="
 		        <<nucM<<") + pi="<<piPDG<<"(M="<<mPi<<")"<<G4endl;
-		  //G4Exception("G4QNucl::EvapBary:ISO-dibaryon DecayIn3 did not succeed");
+		  //throw G4HadronicException(__FILE__, __LINE__, "G4QNucl::EvapBary:ISO-dibaryon DecayIn3 did not succeed");
 		  return false;
 		}
         n14M+=n24M;
@@ -856,7 +856,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
 	  {
         G4cerr<<"***G4QNucleus::EvaporateBaryon: M="<<totMass
               <<", M="<<totMass<<" < M_2N+Pi, d="<<totMass-2*nucM-mPi<<G4endl;
-        //G4Exception("***G4QNucl::EvaporateBaryon: ISO-dibaryon is under a Mass Shell");
+        //throw G4HadronicException(__FILE__, __LINE__, "***G4QNucl::EvaporateBaryon: ISO-dibaryon is under a Mass Shell");
         return false;
 	  }      
 	}
@@ -2776,7 +2776,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
   } // End of the LOOP over Candidates
 #ifdef pdebug
   G4cout<<"G4QNucl::PrepCand:coveredP="<<ae*sZ/ze<<",coveredN="<<ae*sN/ne<<",totPr="<<sZ+sN<<G4endl;
-  //G4Exception("Temporary stop");
+  //throw G4HadronicException(__FILE__, __LINE__, "Temporary stop");
 #endif
 }// End of PrepareCandidates
 

@@ -78,21 +78,21 @@ G4ProtonField::~G4ProtonField()
 
 const G4ProtonField & G4ProtonField::operator=(const G4ProtonField & right)
 {
-  G4Exception("G4ProtonField::operator= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4ProtonField::operator= meant not to be accessible");
   return *this;
 }
 
 
 G4int G4ProtonField::operator==(const G4ProtonField & right) const
 {
-  G4Exception("G4ProtonField::operator== meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4ProtonField::operator== meant not to be accessible");
   return 0;
 }
 
 
 G4int G4ProtonField::operator!=(const G4ProtonField & right) const
 {
-  G4Exception("G4ProtonField::operator!= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4ProtonField::operator!= meant not to be accessible");
   return 1;
 }
 

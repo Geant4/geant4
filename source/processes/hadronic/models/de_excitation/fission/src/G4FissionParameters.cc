@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionParameters.cc,v 1.1 2003-08-26 18:37:31 lara Exp $
+// $Id: G4FissionParameters.cc,v 1.2 2003-11-03 17:53:03 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -30,6 +30,7 @@
 
 
 #include "G4FissionParameters.hh"
+#include "G4HadronicException.hh"
 
 
 const G4double G4FissionParameters::A1 = 134.0;
@@ -86,13 +87,13 @@ G4FissionParameters::G4FissionParameters(const G4int A, const G4int Z, const G4d
 
 G4FissionParameters::G4FissionParameters(const G4FissionParameters &)
 {
-    G4Exception("G4FissionParameters::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4FissionParameters::copy_constructor meant to not be accessable");
 }
 
 
 const G4FissionParameters & G4FissionParameters::operator=(const G4FissionParameters &)
 {
-    G4Exception("G4FissionParameters::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4FissionParameters::operator= meant to not be accessable");
     return *this;
 }
 

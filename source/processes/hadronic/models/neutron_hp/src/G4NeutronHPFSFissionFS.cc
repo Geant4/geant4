@@ -82,7 +82,7 @@
           break;
         default:
           G4cout << "G4NeutronHPFSFissionFS::Init: unknown data type"<<dataType<<G4endl;
-          G4Exception("G4NeutronHPFSFissionFS::Init: unknown data type");
+          throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPFSFissionFS::Init: unknown data type");
           break;
       }
     }

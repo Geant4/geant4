@@ -76,16 +76,16 @@ G4bool G4NeutronHPPhotonDist::InitMean(std::ifstream & aDataFile)
 	 }
 	 else
 	 {
-           G4Exception("G4NeutronHPPhotonDist: Unknown conversion flag");
+           throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPPhotonDist: Unknown conversion flag");
 	 }
       }
        // Note, that this is equivalent to using the 'Gamma' classes.
-      // G4Exception("G4NeutronHPPhotonDist: Transition probability array not sampled for the moment.");
+      // throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPPhotonDist: Transition probability array not sampled for the moment.");
     }
     else
     {
       G4cout << "Data representation in G4NeutronHPPhotonDist: "<<repFlag<<G4endl;
-      G4Exception("G4NeutronHPPhotonDist: This data representation is not implemented.");
+      throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPPhotonDist: This data representation is not implemented.");
     }
   }
   else
@@ -142,7 +142,7 @@ void G4NeutronHPPhotonDist::InitAngular(std::ifstream & aDataFile)
       else
       {
         G4cout << "tabulation type: tabulationType"<<G4endl;
-        G4Exception("cannot deal with this tabulation type for angular distributions.");
+        throw G4HadronicException(__FILE__, __LINE__, "cannot deal with this tabulation type for angular distributions.");
       }
     }
   }
@@ -256,7 +256,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
           thePhotons->operator[](count)->SetKineticEnergy(energy[i]);
 	}
 	count++;
-	if(count > nSecondaries)  G4Exception("G4NeutronHPPhotonDist::GetPhotons inconsistancy");
+	if(count > nSecondaries)  throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPPhotonDist::GetPhotons inconsistancy");
       }
     }
     // now do the angular distributions...

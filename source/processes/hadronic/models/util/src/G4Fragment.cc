@@ -96,7 +96,7 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector aMome
       G4cout << "A, Z, momentum, theExcitationEnergy"<<
            A<<" "<<Z<<" "<<aMomentum<<" "<<theExcitationEnergy<<G4endl;
       G4String text = "G4Fragment::G4Fragment Excitation Energy < 0.0!";
-      throw(G4HadronicException(__FILE__, __LINE__, text) );
+      throw G4HadronicException(__FILE__, __LINE__, text);
     }
 }
 

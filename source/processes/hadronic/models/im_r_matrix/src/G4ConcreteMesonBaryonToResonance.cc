@@ -80,7 +80,7 @@ const G4ParticleDefinition* G4ConcreteMesonBaryonToResonance::GetOutgoingParticl
   if ( (state = myConv().FindIso3State(myConv().GetGenericType(theSecondary), secondaryIso3)) == NULL) 
   {
     G4cerr << "for "<<static_cast<G4int>(myConv().GetGenericType(theSecondary))<<" "<<secondaryIso3<<G4endl;
-    G4Exception("G4ConcreteMesonBaryonToResonance: Can't find iso3 state!");
+    throw G4HadronicException(__FILE__, __LINE__, "G4ConcreteMesonBaryonToResonance: Can't find iso3 state!");
   }
   return state;
 }

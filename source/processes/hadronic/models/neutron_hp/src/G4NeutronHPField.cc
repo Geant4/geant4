@@ -25,6 +25,7 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4NeutronHPField.hh"
+#include "G4HadronicException.hh"
 #include "G4ios.hh"
 
 
@@ -97,7 +98,7 @@
   
   void G4NeutronHPField::Check(G4int i)
   {
-    if(i>nEntries) G4Exception("Skipped some index numbers in G4NeutronHPField");
+    if(i>nEntries) throw G4HadronicException(__FILE__, __LINE__, "Skipped some index numbers in G4NeutronHPField");
     if(i==nPoints)
     {
       nPoints += 50;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTetraNucleon.cc,v 1.1 2003-08-26 18:47:54 lara Exp $
+// $Id: G4StatMFMacroTetraNucleon.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -34,7 +34,7 @@ G4StatMFMacroTetraNucleon::
 G4StatMFMacroTetraNucleon(const G4StatMFMacroTetraNucleon & ) :
     G4VStatMFMacroCluster(0)  // Beacuse the def. constr. of base class is private
 {
-    G4Exception("G4StatMFMacroTetraNucleon::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTetraNucleon::copy_constructor meant to not be accessable");
 }
 
 // Operators
@@ -42,21 +42,21 @@ G4StatMFMacroTetraNucleon(const G4StatMFMacroTetraNucleon & ) :
 G4StatMFMacroTetraNucleon & G4StatMFMacroTetraNucleon::
 operator=(const G4StatMFMacroTetraNucleon & )
 {
-    G4Exception("G4StatMFMacroTetraNucleon::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTetraNucleon::operator= meant to not be accessable");
     return *this;
 }
 
 
 G4bool G4StatMFMacroTetraNucleon::operator==(const G4StatMFMacroTetraNucleon & ) const
 {
-    G4Exception("G4StatMFMacroTetraNucleon::operator== meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTetraNucleon::operator== meant to not be accessable");
     return false;
 }
  
 
 G4bool G4StatMFMacroTetraNucleon::operator!=(const G4StatMFMacroTetraNucleon & ) const
 {
-    G4Exception("G4StatMFMacroTetraNucleon::operator!= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTetraNucleon::operator!= meant to not be accessable");
     return true;
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.cc,v 1.1 2003-10-07 11:25:41 hpw Exp $
+// $Id: G4QGSMFragmentation.cc,v 1.2 2003-11-03 17:54:53 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -54,7 +54,7 @@ G4QGSMFragmentation::~G4QGSMFragmentation()
 
 const G4QGSMFragmentation & G4QGSMFragmentation::operator=(const G4QGSMFragmentation &)
    {
-    G4Exception("G4QGSMFragmentation::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4QGSMFragmentation::operator= meant to not be accessable");
     return *this;
    }
 
@@ -79,7 +79,7 @@ G4double G4QGSMFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int 
   { 
     if(absCode == 1 || absCode == 2) theA = arho;
     else if(absCode == 3) theA = aphi;
-    else G4Exception("Unknown PDGencoding in G4QGSMFragmentation::G4LightConeZ");
+    else throw G4HadronicException(__FILE__, __LINE__, "Unknown PDGencoding in G4QGSMFragmentation::G4LightConeZ");
 
     do 	
     {

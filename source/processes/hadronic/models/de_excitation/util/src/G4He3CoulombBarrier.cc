@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3CoulombBarrier.cc,v 1.1 2003-08-26 18:50:48 lara Exp $
+// $Id: G4He3CoulombBarrier.cc,v 1.2 2003-11-03 17:53:06 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -32,13 +32,13 @@
 
 G4He3CoulombBarrier::G4He3CoulombBarrier(const G4He3CoulombBarrier & ) : G4CoulombBarrier()
 {
-    G4Exception("G4He3CoulombBarrier::copy_constructor meant to not be accessable.");
+    throw G4HadronicException(__FILE__, __LINE__, "G4He3CoulombBarrier::copy_constructor meant to not be accessable.");
 }
 
 
 const G4He3CoulombBarrier & G4He3CoulombBarrier::operator=(const G4He3CoulombBarrier & )
 {
-    G4Exception("G4He3CoulombBarrier::operator= meant to not be accessable.");
+    throw G4HadronicException(__FILE__, __LINE__, "G4He3CoulombBarrier::operator= meant to not be accessable.");
     return *this;
 }
 

@@ -54,7 +54,7 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
 {
   gammaPath = "/Inelastic/Gammas/";
     if(!getenv("NeutronHPCrossSections")) 
-       G4Exception("Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
   G4String tBase = getenv("NeutronHPCrossSections");
   gammaPath = tBase+gammaPath;
   G4String tString = dirName;
@@ -137,7 +137,7 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
     }
     else
     {
-      G4Exception("Data-type unknown to G4NeutronHPInelasticBaseFS");
+      throw G4HadronicException(__FILE__, __LINE__, "Data-type unknown to G4NeutronHPInelasticBaseFS");
     }
   }
   theData.close();
@@ -269,7 +269,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 	}
 	else
 	{
-	  G4Exception("No energy distribution to sample from in InelasticBaseFS::BaseApply");
+	  throw G4HadronicException(__FILE__, __LINE__, "No energy distribution to sample from in InelasticBaseFS::BaseApply");
 	}
 	theAngularDistribution->SampleAndUpdate(*aHadron);
 	if(theEnergyDistribution==NULL && nDef == 2)
@@ -318,7 +318,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
   }
   else
   {
-    G4Exception("No data to create the neutrons in NInelasticFS");
+    throw G4HadronicException(__FILE__, __LINE__, "No data to create the neutrons in NInelasticFS");
   }
 
   G4ReactionProductVector * thePhotons = NULL;

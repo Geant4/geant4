@@ -64,7 +64,7 @@
     {
       Z = Z-registerCount;
     }
-    if(Z==theElement->GetZ()-5) G4Exception("Channel: Do not know what to do with this material");
+    if(Z==theElement->GetZ()-5) throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do with this material");
     G4int count = 0;
     if(registerCount==0) count = theElement->GetNumberOfIsotopes();
     if(count == 0||registerCount!=0) count +=

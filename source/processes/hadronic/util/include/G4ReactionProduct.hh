@@ -35,6 +35,7 @@
 #include "globals.hh"
 #include "G4DynamicParticle.hh"
 #include "G4HadProjectile.hh"
+#include "G4HadronicException.hh"
  
  class G4ReactionProduct
  {

@@ -91,7 +91,7 @@ G4double G4XNNTotalLowE::CrossSection(const G4KineticTrack& trk1, const G4Kineti
   }
   else
   {
-    G4Exception("G4XNNTotalLowE: particle key out of range");
+    throw G4HadronicException(__FILE__, __LINE__, "G4XNNTotalLowE: particle key out of range");
   }
 
   return result;

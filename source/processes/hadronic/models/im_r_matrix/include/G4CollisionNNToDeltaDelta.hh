@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToDeltaDelta.hh,v 1.1 2003-10-07 12:37:26 hpw Exp $ //
+// $Id: G4CollisionNNToDeltaDelta.hh,v 1.2 2003-11-03 17:53:27 hpw Exp $ //
 
 #ifndef G4CollisionNNToDeltaDelta_h
 #define G4CollisionNNToDeltaDelta_h
@@ -49,7 +49,7 @@ protected:
   std::vector<G4String> result;
   virtual const std::vector<G4String>& GetListOfColliders(G4int ) const
   {
-    G4Exception("Tried to call G4CollisionNNToDeltaDelta::GetListOfColliders. Please find out why!");
+    throw G4HadronicException(__FILE__, __LINE__, "Tried to call G4CollisionNNToDeltaDelta::GetListOfColliders. Please find out why!");
     return result;
   } 
   

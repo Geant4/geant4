@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLevelDensityParameter.hh,v 1.1 2003-08-26 18:50:13 lara Exp $
+// $Id: G4VLevelDensityParameter.hh,v 1.2 2003-11-03 17:53:06 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -35,6 +35,7 @@
 
 
 #include "globals.hh"
+#include "G4HadronicException.hh"
 
 class G4VLevelDensityParameter 
 {

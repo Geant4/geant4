@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AlphaGEMChannel.cc,v 1.1 2003-08-26 18:43:58 lara Exp $
+// $Id: G4AlphaGEMChannel.cc,v 1.2 2003-11-03 17:53:03 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -33,13 +33,13 @@
 
 const G4AlphaGEMChannel & G4AlphaGEMChannel::operator=(const G4AlphaGEMChannel & )
 {
-    G4Exception("G4AlphaGEMChannel::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4AlphaGEMChannel::operator= meant to not be accessable");
     return *this;
 }
 
 G4AlphaGEMChannel::G4AlphaGEMChannel(const G4AlphaGEMChannel & ): G4GEMChannel()
 {
-    G4Exception("G4AlphaGEMChannel::CopyConstructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4AlphaGEMChannel::CopyConstructor meant to not be accessable");
 }
 
 G4bool G4AlphaGEMChannel::operator==(const G4AlphaGEMChannel & right) const 

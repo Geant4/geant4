@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMultiFragmentation.cc,v 1.1 2003-08-26 18:48:04 lara Exp $
+// $Id: G4VMultiFragmentation.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -36,7 +36,7 @@ G4VMultiFragmentation::G4VMultiFragmentation()
 
 G4VMultiFragmentation::G4VMultiFragmentation(const G4VMultiFragmentation &)
 {
-    G4Exception("G4VMultiFragmentation::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4VMultiFragmentation::copy_constructor meant to not be accessable");
 }
 
 
@@ -47,20 +47,20 @@ G4VMultiFragmentation::~G4VMultiFragmentation()
 
 const G4VMultiFragmentation & G4VMultiFragmentation::operator=(const G4VMultiFragmentation &)
 {
-    G4Exception("G4VMultiFragmentation::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4VMultiFragmentation::operator= meant to not be accessable");
     return *this;
 }
 
 
 G4bool G4VMultiFragmentation::operator==(const G4VMultiFragmentation &) const
 {
-    G4Exception("G4VMultiFragmentation::operator== meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4VMultiFragmentation::operator== meant to not be accessable");
     return false;
 }
 
 G4bool G4VMultiFragmentation::operator!=(const G4VMultiFragmentation &) const
 {
-    G4Exception("G4VMultiFragmentation::operator=! meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4VMultiFragmentation::operator=! meant to not be accessable");
     return true;
 }
 

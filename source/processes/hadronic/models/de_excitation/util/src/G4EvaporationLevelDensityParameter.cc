@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationLevelDensityParameter.cc,v 1.1 2003-08-29 08:49:49 lara Exp $
+// $Id: G4EvaporationLevelDensityParameter.cc,v 1.2 2003-11-03 17:53:06 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -30,6 +30,7 @@
 
 
 #include "G4EvaporationLevelDensityParameter.hh"
+#include "G4HadronicException.hh"
 
 // Those values are from table 3 in 
 // A.S. Iljinov et al. Nucl Phys A543 (1992) 517-557
@@ -46,14 +47,14 @@ const G4double G4EvaporationLevelDensityParameter::Bs = 1.0;
 G4EvaporationLevelDensityParameter::
 G4EvaporationLevelDensityParameter(const G4EvaporationLevelDensityParameter &) : G4VLevelDensityParameter()
 {
-    G4Exception("G4EvaporationLevelDensityParameter::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationLevelDensityParameter::copy_constructor meant to not be accessable");
 }
 
 
 const G4EvaporationLevelDensityParameter & G4EvaporationLevelDensityParameter::
 operator=(const G4EvaporationLevelDensityParameter &)
 {
-    G4Exception("G4EvaporationLevelDensityParameter::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationLevelDensityParameter::operator= meant to not be accessable");
     return *this;
 }
 

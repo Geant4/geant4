@@ -148,8 +148,8 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     G4int myA = G4int(A + 0.5);   
     if( myA<1 || myZ<0 || myZ>myA )
     {
-      throw(G4HadronicException(__FILE__, __LINE__,
-                               "G4Nucleus::SetParameters called with non-physical parameters") );
+      throw G4HadronicException(__FILE__, __LINE__,
+                               "G4Nucleus::SetParameters called with non-physical parameters");
     }
     aEff = A;  // atomic weight
     zEff = Z;  // atomic number

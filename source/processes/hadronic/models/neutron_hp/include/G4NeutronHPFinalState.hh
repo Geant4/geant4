@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFinalState.hh,v 1.9 2003-07-01 15:58:36 hpw Exp $
+// $Id: G4NeutronHPFinalState.hh,v 1.10 2003-11-03 17:54:36 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFinalState_h
@@ -52,7 +52,7 @@ public:
   virtual void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType) = 0;
   virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & ) 
   {
-    G4Exception("G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack) needs implementation");
+    throw G4HadronicException(__FILE__, __LINE__, "G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack) needs implementation");
     return NULL;
   }
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionLevelDensityParameter.cc,v 1.1 2003-08-26 18:37:32 lara Exp $
+// $Id: G4FissionLevelDensityParameter.cc,v 1.2 2003-11-03 17:53:03 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -30,19 +30,20 @@
 
 
 #include "G4FissionLevelDensityParameter.hh"
+#include "G4HadronicException.hh"
 
 
 G4FissionLevelDensityParameter::
 G4FissionLevelDensityParameter(const G4FissionLevelDensityParameter &) : G4VLevelDensityParameter()
 {
-    G4Exception("G4FissionLevelDensityParameter::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4FissionLevelDensityParameter::copy_constructor meant to not be accessable");
 }
 
 
 const G4FissionLevelDensityParameter & G4FissionLevelDensityParameter::
 operator=(const G4FissionLevelDensityParameter &)
 {
-    G4Exception("G4FissionLevelDensityParameter::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4FissionLevelDensityParameter::operator= meant to not be accessable");
     return *this;
 }
 

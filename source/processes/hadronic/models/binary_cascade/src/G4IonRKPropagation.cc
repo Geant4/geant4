@@ -97,19 +97,19 @@ G4IonRKPropagation::~G4IonRKPropagation()
 
 const G4IonRKPropagation & G4IonRKPropagation::operator=(const G4IonRKPropagation & right)
 {
-  G4Exception("G4IonRKPropagation::operator= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4IonRKPropagation::operator= meant not to be accessible");
   return *this;
 }
 
 G4int G4IonRKPropagation::operator==(const G4IonRKPropagation & right) const
 {
-  G4Exception("G4IonRKPropagation::operator== meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4IonRKPropagation::operator== meant not to be accessible");
   return 0;
 }
 
 G4int G4IonRKPropagation::operator!=(const G4IonRKPropagation & right) const
 {
-  G4Exception("G4IonRKPropagation::operator!= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4IonRKPropagation::operator!= meant not to be accessible");
   return 1;
 }
 
@@ -285,7 +285,7 @@ void G4IonRKPropagation::Transport(G4KineticTrackVector & active,
 // if the particle is already outside nucleus go to next  @@GF should never happen? check!
     if(t_leave < 0)
     {  
-       G4Exception("G4IonRKPropagation:: Attempt to track particle past a  nucleus");
+       throw G4HadronicException(__FILE__, __LINE__, "G4IonRKPropagation:: Attempt to track particle past a  nucleus");
        continue;
     }  
 

@@ -33,7 +33,7 @@ G4ReactionProduct * G4NeutronHPEnAngCorrelation::SampleOne(G4double anEnergy)
   G4ReactionProduct * result = new G4ReactionProduct;
   
   // do we have an appropriate distribution
-  if(nProducts!=1) G4Exception("More than one product in SampleOne");
+  if(nProducts!=1) throw G4HadronicException(__FILE__, __LINE__, "More than one product in SampleOne");
   
   // get the result
   G4ReactionProductVector * temp=NULL;
@@ -41,7 +41,7 @@ G4ReactionProduct * G4NeutronHPEnAngCorrelation::SampleOne(G4double anEnergy)
   while(temp == NULL) temp = theProducts[i++].Sample(anEnergy);
   
   // is the multiplicity correct
-  if(temp->size()!=1) G4Exception("SampleOne: Yield not correct");
+  if(temp->size()!=1) throw G4HadronicException(__FILE__, __LINE__, "SampleOne: Yield not correct");
   
   // fill result
   result = temp->operator[](0);
@@ -121,7 +121,7 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
 	}
 	else
 	{
-          G4Exception("G4NeutronHPEnAngCorrelation::Sample: The frame of the finalstate is not specified");
+          throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPEnAngCorrelation::Sample: The frame of the finalstate is not specified");
 	}
 	result->push_back(it->operator[](ii));
       }

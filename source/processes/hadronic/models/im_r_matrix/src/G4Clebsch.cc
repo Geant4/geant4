@@ -24,6 +24,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4HadronicException.hh"
 #include "G4Clebsch.hh"
 #include "Randomize.hh"
 #include "G4Proton.hh"
@@ -109,7 +110,7 @@ G4double G4Clebsch::ClebschGordan(G4int isoIn1, G4int iso3In1,
   G4int n = lrint(m3+j1+j2+.1);
   G4double argument = 2. * j3 + 1.;
   if (argument < 0.) 
-    G4Exception("G4Clebsch::ClebschGordan - sqrt of negative argument");
+    throw G4HadronicException(__FILE__, __LINE__, "G4Clebsch::ClebschGordan - sqrt of negative argument");
   G4double coeff = sqrt(argument) / (pow(-1.,n));
   G4double clebsch = coeff * Wigner3J(j1,j2,j3, m1,m2,m3);
   G4double value = clebsch * clebsch;
@@ -211,7 +212,7 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
     for (i=0; i<n.size(); i++)
     {
       if (n[i] < 0. || n[i] > logEntries)
-	 G4Exception("G4Clebsch::Wigner3J - Outside logVector boundaries, n");
+	 throw G4HadronicException(__FILE__, __LINE__, "G4Clebsch::Wigner3J - Outside logVector boundaries, n");
     }
 
     G4double r1 = n[0];
@@ -236,7 +237,7 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
 
     G4double sigma1 = sigma + 1.;
     if (sigma1 < 0. || sigma1 > logEntries)
-      G4Exception("G4Clebsch::Wigner3J - Outside logVector boundaries, sigma");
+      throw G4HadronicException(__FILE__, __LINE__, "G4Clebsch::Wigner3J - Outside logVector boundaries, sigma");
 
     G4double ls = logVector[static_cast<G4int>(sigma1+.00001)];
     G4double hlp1 = (l2 + l3 + l4 +l7 -ls -l1 -l5 -l9 -l6 -l8) / 2.;
@@ -246,10 +247,10 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
 
     G4int n61 = static_cast<G4int>(r6 - r1+.00001);
     if (n61 < 0. || n61 > logEntries)
-      G4Exception("G4Clebsch::Wigner3J - Outside logVector boundaries, n61");
+      throw G4HadronicException(__FILE__, __LINE__, "G4Clebsch::Wigner3J - Outside logVector boundaries, n61");
     G4int n81 = static_cast<G4int>(r8 - r1+.00001);
     if (n81 < 0. || n81 > logEntries)
-      G4Exception("G4Clebsch::Wigner3J - Outside logVector boundaries, n81");
+      throw G4HadronicException(__FILE__, __LINE__, "G4Clebsch::Wigner3J - Outside logVector boundaries, n81");
 
     G4double hlp2 = l6 - logVector[n61] + l8 - logVector[n81];
     G4double sum = exp(hlp2);
@@ -261,7 +262,7 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
       G4double last = s.back();
       G4double den = i * (r6 - r1 + i) * (r8 - r1 + i);
       if (den == 0) 
-	G4Exception("G4Clebsch::Wigner3J - divide by zero");
+	throw G4HadronicException(__FILE__, __LINE__, "G4Clebsch::Wigner3J - divide by zero");
       G4double data = -last * (r1 + 1.0 - i) * (r5 + 1.0 - i) * (r9 + 1. - i) / den;
       s.push_back(data);
       sum += data;
@@ -342,7 +343,7 @@ std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
    G4int jMax  =  std::min(jMaxIn, jMaxOut);
    if (jMin > jMax)
    {
-     G4Exception ("G4Clebsch::GenerateIso3 - jMin > JMax");
+     throw G4HadronicException(__FILE__, __LINE__,  "G4Clebsch::GenerateIso3 - jMin > JMax");
    }
    
    // Number of possible isospins
@@ -351,11 +352,11 @@ std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
    // A few consistency checks
    
    if ( (isoIn1 == 0 || isoIn2 == 0) && jMin != jMax )
-     G4Exception ("G4Clebsch::GenerateIso3 - J1 or J2 = 0, but jMin != JMax");
+     throw G4HadronicException(__FILE__, __LINE__,  "G4Clebsch::GenerateIso3 - J1 or J2 = 0, but jMin != JMax");
 
    // MGP ---- Shall it be a warning or an exception?
    if (nJ == 0)
-     G4Exception ("G4Clebsch::GenerateIso3 - nJ is zero, no overlap between in and out");
+     throw G4HadronicException(__FILE__, __LINE__,  "G4Clebsch::GenerateIso3 - nJ is zero, no overlap between in and out");
 
    // Loop over all possible combinations of isoIn1, isoIn2, iso3In11, iso3In2, jTot
    // to get the probability of each of the in-channel couplings
@@ -370,7 +371,7 @@ std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
 
    // Consistency check
    if (static_cast<G4int>(clebsch.size()) != nJ)
-     G4Exception ("G4Clebsch::GenerateIso3 - nJ inconsistency");
+     throw G4HadronicException(__FILE__, __LINE__,  "G4Clebsch::GenerateIso3 - nJ inconsistency");
 
    G4double sum = clebsch[0];
    
@@ -380,7 +381,7 @@ std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
    }
    // Consistency check
    if (sum <= 0.)
-     G4Exception ("G4Clebsch::GenerateIso3 - Sum of Clebsch-Gordan probabilities <=0");
+     throw G4HadronicException(__FILE__, __LINE__,  "G4Clebsch::GenerateIso3 - Sum of Clebsch-Gordan probabilities <=0");
 
    // Generate a normalized pdf 
 
@@ -438,7 +439,7 @@ std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
      {
        m1pos++;
        if (m1pos >= size)
-	 G4Exception ("G4Clebsch::GenerateIso3 - m1pos > size");
+	 throw G4HadronicException(__FILE__, __LINE__,  "G4Clebsch::GenerateIso3 - m1pos > size");
        m1Out.push_back(m1pr);
        m2pos = -1;
        for (m2pr = static_cast<G4int>(mMin[1]+.00001); m2pr <= mMax[1]; m2pr+=2)
@@ -446,7 +447,7 @@ std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
 	 m2pos++;
 	 if (m2pos >= size)
 	 {
-	   G4Exception ("G4Clebsch::GenerateIso3 - m2pos > size");
+	   throw G4HadronicException(__FILE__, __LINE__,  "G4Clebsch::GenerateIso3 - m2pos > size");
 	 }
 	 m2Out.push_back(m2pr);
 
@@ -469,7 +470,7 @@ std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
    }
    
    if (sum <= 0.)
-     G4Exception("G4Clebsch::GenerateIso3 - sum (out) <=0");
+     throw G4HadronicException(__FILE__, __LINE__, "G4Clebsch::GenerateIso3 - sum (out) <=0");
 
    for (i=0; i<size; i++)
    {
@@ -500,7 +501,7 @@ std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
      }     
    }   
 
-  G4Exception ("Should never get here ");
+  throw G4HadronicException(__FILE__, __LINE__,  "Should never get here ");
   return temp;
 }
 

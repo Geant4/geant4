@@ -82,7 +82,7 @@ G4double G4VXResonance::IsospinCorrection(const G4KineticTrack& trk1,
   G4int iso3Proton = G4Proton::ProtonDefinition()->GetPDGiIsospin3();
   
   G4double pWeight = clebsch.Weight(isoProton,iso3Proton, isoProton,iso3Proton, isoOut1,isoOut2);
-  if (pWeight == 0.) G4Exception ("G4VXResonance::IsospinCorrection, no resonances - pWeight is zero");
+  if (pWeight == 0.) throw G4HadronicException(__FILE__, __LINE__, "G4VXResonance::IsospinCorrection, no resonances - pWeight is zero");
 
   if (in1->IsShortLived() || in2->IsShortLived())
   {
@@ -132,7 +132,7 @@ G4double G4VXResonance::DetailedBalance(const G4KineticTrack& trk1,
   G4ParticleDefinition* in2 = trk2.GetDefinition();
   if(in1->IsShortLived() && in2->IsShortLived())
   {
-    G4Exception("Detailed balance for resonance scattering still on the schedule.");
+    throw G4HadronicException(__FILE__, __LINE__, "Detailed balance for resonance scattering still on the schedule.");
   }
 
   G4double result = 0.;

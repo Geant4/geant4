@@ -76,21 +76,21 @@ G4NeutronField::~G4NeutronField()
 
 const G4NeutronField & G4NeutronField::operator=(const G4NeutronField & right)
 {
-  G4Exception("G4NeutronField::operator= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4NeutronField::operator= meant not to be accessible");
   return *this;
 }
 
 
 G4int G4NeutronField::operator==(const G4NeutronField & right) const
 {
-  G4Exception("G4NeutronField::operator== meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4NeutronField::operator== meant not to be accessible");
   return 0;
 }
 
 
 G4int G4NeutronField::operator!=(const G4NeutronField & right) const
 {
-  G4Exception("G4NeutronField::operator!= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4NeutronField::operator!= meant not to be accessible");
   return 1;
 }
 

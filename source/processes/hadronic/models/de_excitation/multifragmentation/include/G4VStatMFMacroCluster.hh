@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VStatMFMacroCluster.hh,v 1.1 2003-08-26 18:47:31 lara Exp $
+// $Id: G4VStatMFMacroCluster.hh,v 1.2 2003-11-03 17:53:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -32,6 +32,7 @@
 #define G4VStatMFMacroCluster_h 1
 
 #include "G4StatMFParameters.hh"
+#include "G4HadronicException.hh"
 
 class G4VStatMFMacroCluster {
 
@@ -45,7 +46,7 @@ public:
 	_MeanMultiplicity(0.0),
 	_Energy(0.0)
 	{
-	    if (theA <= 0) G4Exception(
+	    if (theA <= 0) throw G4HadronicException(__FILE__, __LINE__, 
 		"G4VStatMFMacroCluster::Constructor: Cluster's size must be >= 1");
 	    _InvLevelDensity = CalcInvLevelDensity();
 	}
@@ -122,7 +123,7 @@ public:
 	
     void SetSize(const G4double value)
 	{ 
-	    if (value <= 0.0) G4Exception("G4VStatMFMacroCluster::SetSize: Cluster's size must be >= 1");
+	    if (value <= 0.0) throw G4HadronicException(__FILE__, __LINE__, "G4VStatMFMacroCluster::SetSize: Cluster's size must be >= 1");
 	    theA = G4int(value); 
 	    _InvLevelDensity = CalcInvLevelDensity();
 	}

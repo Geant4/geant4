@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.2 2003-09-14 11:50:23 lara Exp $
+// $Id: G4PreCompoundTransitions.cc,v 1.3 2003-11-03 17:55:10 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -31,7 +31,7 @@
 const G4PreCompoundTransitions & G4PreCompoundTransitions::
 operator=(const G4PreCompoundTransitions &)
 {
-  G4Exception("G4PreCompoundTransitions::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundTransitions::operator= meant to not be accessable");
   return *this;
 }
 

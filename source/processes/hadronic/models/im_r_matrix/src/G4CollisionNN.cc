@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNN.cc,v 1.1 2003-10-07 12:37:34 hpw Exp $ //
+// $Id: G4CollisionNN.cc,v 1.2 2003-11-03 17:53:28 hpw Exp $ //
 
 
 #include "globals.hh"
@@ -69,7 +69,7 @@ G4CollisionNN::~G4CollisionNN()
 
 const std::vector<G4String>& G4CollisionNN::GetListOfColliders(G4int ) const
 {
-	  G4Exception("G4CollisionNN::GetListOfColliders - Argument outside valid range"); 
+	  throw G4HadronicException(__FILE__, __LINE__, "G4CollisionNN::GetListOfColliders - Argument outside valid range"); 
 	  return colliders1;
 }
 

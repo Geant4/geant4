@@ -357,7 +357,7 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
 		}
 //	      else
 //		{
-//		  G4Exception ("can't handle more than one shortlived in 3 particle output channel");
+//		  throw G4HadronicException(__FILE__, __LINE__,  ("can't handle more than one shortlived in 3 particle output channel");
 //		}     
 	      
 	    }

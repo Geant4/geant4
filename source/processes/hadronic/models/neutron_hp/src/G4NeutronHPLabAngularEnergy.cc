@@ -93,11 +93,11 @@ G4ReactionProduct * G4NeutronHPLabAngularEnergy::Sample(G4double anEnergy, G4dou
    else if(A==4)
    {
      result->SetDefinition(G4Alpha::Alpha());
-     if(Z!=2) G4Exception("Unknown ion case 1");    
+     if(Z!=2) throw G4HadronicException(__FILE__, __LINE__, "Unknown ion case 1");    
    }
    else
    {
-     G4Exception("G4NeutronHPLabAngularEnergy: Unknown ion case 2");
+     throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPLabAngularEnergy: Unknown ion case 2");
    }
    
    // get theta, E

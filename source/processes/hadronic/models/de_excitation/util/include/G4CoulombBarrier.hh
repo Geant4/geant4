@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoulombBarrier.hh,v 1.1 2003-08-26 18:50:05 lara Exp $
+// $Id: G4CoulombBarrier.hh,v 1.2 2003-11-03 17:53:06 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -31,6 +31,7 @@
 #define G4CoulombBarrier_h 1
 
 #include "G4VCoulombBarrier.hh"
+#include "G4HadronicException.hh"
 #include "globals.hh"
 
 

@@ -74,6 +74,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 #include "G4RadioactiveDecay.hh"
+#include "G4HadronicException.hh"
 #include "G4RadioactiveDecaymessenger.hh"
 
 #include "G4DynamicParticle.hh"
@@ -1233,13 +1234,13 @@ void G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition &theParent
 void G4RadioactiveDecay::SetSourceTimeProfile(G4String filename)
 {
   std::ifstream infile ( filename, std::ios::in );
-  if ( !infile ) G4Exception ( "Unable to open source data file" );
+  if ( !infile ) throw G4HadronicException(__FILE__, __LINE__,  "Unable to open source data file" );
   
   float bin, flux;
   NSourceBin = -1;
   while (infile >> bin >> flux ) {
     NSourceBin++;
-    if (NSourceBin > 99)  G4Exception ( "input source data file too big (>100 rows)" );
+    if (NSourceBin > 99)  throw G4HadronicException(__FILE__, __LINE__,  "input source data file too big (>100 rows)" );
     SBin[NSourceBin] = bin * s;
     SProfile[NSourceBin] = flux;
   }
@@ -1260,13 +1261,13 @@ void G4RadioactiveDecay::SetSourceTimeProfile(G4String filename)
 void G4RadioactiveDecay::SetDecayBias(G4String filename)
 {
   std::ifstream infile ( filename, std::ios::in);
-  if ( !infile ) G4Exception ( "Unable to open bias data file" );
+  if ( !infile ) throw G4HadronicException(__FILE__, __LINE__,  "Unable to open bias data file" );
   
   float bin, flux;
   NDecayBin = -1;
   while (infile >> bin >> flux ) {
     NDecayBin++;
-    if (NDecayBin > 99)  G4Exception ( "input bias data file too big (>100 rows)" );
+    if (NDecayBin > 99)  throw G4HadronicException(__FILE__, __LINE__,  "input bias data file too big (>100 rows)" );
     DBin[NDecayBin] = bin * s;
     DProfile[NDecayBin] = flux;
   }

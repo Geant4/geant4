@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInterpolator.hh,v 1.14 2003-06-27 10:20:40 hpw Exp $
+// $Id: G4NeutronHPInterpolator.hh,v 1.15 2003-11-03 17:54:36 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPInterpolator_h
@@ -31,6 +31,7 @@
 #include "G4InterpolationScheme.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
+#include "G4HadronicException.hh"
 
 
 class G4NeutronHPInterpolator
@@ -105,7 +106,7 @@ Interpolate(G4InterpolationScheme aScheme,
       break;
     default:
       G4cout << "theScheme = "<<theScheme<<G4endl;
-      G4Exception("G4NeutronHPInterpolator::Carthesian Invalid InterpolationScheme");
+      throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPInterpolator::Carthesian Invalid InterpolationScheme");
       break;
   }
   return result;

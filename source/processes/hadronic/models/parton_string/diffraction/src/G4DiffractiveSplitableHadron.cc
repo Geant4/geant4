@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.cc,v 1.2 2003-10-08 13:48:47 hpw Exp $
+// $Id: G4DiffractiveSplitableHadron.cc,v 1.3 2003-11-03 17:54:53 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -69,7 +69,7 @@ G4DiffractiveSplitableHadron::~G4DiffractiveSplitableHadron()
 
 const G4DiffractiveSplitableHadron & G4DiffractiveSplitableHadron::operator=(const G4DiffractiveSplitableHadron &)
 {
-  G4Exception("G4DiffractiveSplitableHadron::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4DiffractiveSplitableHadron::operator= meant to not be accessable");
   return *this;
 }
 

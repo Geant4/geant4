@@ -22,6 +22,7 @@
 //
 
 #include "G4ParticleTypeConverter.hh"
+#include "G4HadronicException.hh"
 
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
@@ -217,7 +218,7 @@ G4ParticleTypeConverter::GenericType G4ParticleTypeConverter::GetGenericType(con
   
   G4cerr << "Unknown Particle : " << aParticleDef->GetParticleName() << G4endl;
   return UNKNOWN;
-  G4Exception("G4ParticleTypeConverter: unknown particle type!");
+  throw G4HadronicException(__FILE__, __LINE__, "G4ParticleTypeConverter: unknown particle type!");
 }
  
 
@@ -232,7 +233,7 @@ G4int G4ParticleTypeConverter::GetUrqmdItyp(G4ParticleTypeConverter::GenericType
   //if (uMap.find(gType)!=uMap.end())
   // hpw return uMap.operator[](gType); 
   //else
-  G4Exception("G4ParticleTypeConverter: unknown particle type!");
+  throw G4HadronicException(__FILE__, __LINE__, "G4ParticleTypeConverter: unknown particle type!");
   return 0;
 }
 

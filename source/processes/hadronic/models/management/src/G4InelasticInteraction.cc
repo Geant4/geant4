@@ -26,7 +26,7 @@
  // original by H.P. Wellisch
  // modified by J.L. Chuma, TRIUMF, 22-Nov-1996
  // Last modified: 27-Mar-1997
- // J.P. Wellisch: 23-Apr-97: G4Exception removed
+ // J.P. Wellisch: 23-Apr-97: throw G4HadronicException(__FILE__, __LINE__,  removed
  // J.P. Wellisch: 24-Apr-97: correction for SetUpPions
  // Modified by J.L. Chuma, 30-Apr-97: added originalTarget to CalculateMomenta
  //                                    since TwoBody needed to reset the target particle
@@ -291,7 +291,7 @@
        catch(G4HadReentrentException aC)
        {
          aC.Report(G4cout);
-	 throw(G4HadReentrentException(__FILE__, __LINE__, "Failing to calculate momenta"));
+	 throw G4HadReentrentException(__FILE__, __LINE__, "Failing to calculate momenta");
        }
     }
     if( finishedTwoClu )

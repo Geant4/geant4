@@ -292,7 +292,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
       if(aSecTrack->GetDefinition()->GetPDGCharge()>1.5)
       {
          G4EffectiveCharge aCalculator;
-	 G4double charge = aCalculator.GetCharge(aMaterial, kineticEnergy,
+	 G4double charge = aCalculator.GetCharge(aMaterial, aSecTrack->GetKineticEnergy(),
 	                                        aSecTrack->GetDefinition()->GetPDGMass(),
 						aSecTrack->GetDefinition()->GetPDGCharge());
          if(getenv("GHADChargeDebug")) 

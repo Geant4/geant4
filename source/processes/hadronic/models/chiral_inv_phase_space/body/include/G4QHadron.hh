@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.20 2003-10-24 08:26:31 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.21 2003-11-03 17:49:00 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -33,6 +33,7 @@
 #define G4QHadron_h 1
 
 #include "globals.hh"
+#include "G4HadronicException.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
 #include "Randomize.hh"
@@ -129,7 +130,7 @@ inline void            G4QHadron::SetQPDG(const G4QPDGCode& newQPDG)
   else
   {
     G4cerr<<"***G4QHadron::SetQPDG: QPDG="<<newQPDG<<G4endl;
-    G4Exception("***G4QHadron::SetQPDG: Impossible QPDG");
+    throw G4HadronicException(__FILE__, __LINE__, "***G4QHadron::SetQPDG: Impossible QPDG");
   }
 }
 inline void   G4QHadron::SetQC(const G4QContent& newQC)              {valQ=newQC;}

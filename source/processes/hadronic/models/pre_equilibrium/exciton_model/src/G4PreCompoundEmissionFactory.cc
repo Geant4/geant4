@@ -33,21 +33,21 @@
 const G4PreCompoundEmissionFactory & G4PreCompoundEmissionFactory::
 operator=(const G4PreCompoundEmissionFactory & )
 {
-  G4Exception("G4PreCompoundEmissionFactory::operator= meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundEmissionFactory::operator= meant to not be accessable.");
   return *this;
 }
 
 G4bool G4PreCompoundEmissionFactory::
 operator==(const G4PreCompoundEmissionFactory & ) const
 {
-  G4Exception("G4PreCompoundEmissionFactory::operator== meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundEmissionFactory::operator== meant to not be accessable.");
   return false;
 }
 
 G4bool G4PreCompoundEmissionFactory::
 operator!=(const G4PreCompoundEmissionFactory & ) const
 {
-  G4Exception("G4PreCompoundEmissionFactory::operator!= meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundEmissionFactory::operator!= meant to not be accessable.");
   return true;
 }
 

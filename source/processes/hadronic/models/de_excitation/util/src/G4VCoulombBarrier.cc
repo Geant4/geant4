@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCoulombBarrier.cc,v 1.1 2003-08-26 18:50:47 lara Exp $
+// $Id: G4VCoulombBarrier.cc,v 1.2 2003-11-03 17:53:06 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -29,6 +29,7 @@
 
 
 #include "G4VCoulombBarrier.hh"
+#include "G4HadronicException.hh"
 #include <strstream>
 
 G4VCoulombBarrier::G4VCoulombBarrier(const G4int anA, const G4int aZ)
@@ -43,20 +44,20 @@ G4VCoulombBarrier::G4VCoulombBarrier(const G4int anA, const G4int aZ)
 	errOs << "Wrong values for ";
 	errOs << "A = " << anA << " ";
 	errOs << "and Z = " << aZ << G4endl;
-	G4Exception(errMessage);
+	throw G4HadronicException(__FILE__, __LINE__, errMessage);
     }
 }
 
 
 G4VCoulombBarrier::G4VCoulombBarrier(const G4VCoulombBarrier & )
 {
-    G4Exception("G4VCoulombBarrier::copy_constructor meant to not be accessable.");
+    throw G4HadronicException(__FILE__, __LINE__, "G4VCoulombBarrier::copy_constructor meant to not be accessable.");
 }
 
 
 const G4VCoulombBarrier & G4VCoulombBarrier::operator=(const G4VCoulombBarrier & )
 {
-    G4Exception("G4VCoulombBarrier::operator= meant to not be accessable.");
+    throw G4HadronicException(__FILE__, __LINE__, "G4VCoulombBarrier::operator= meant to not be accessable.");
     return *this;
 }
 

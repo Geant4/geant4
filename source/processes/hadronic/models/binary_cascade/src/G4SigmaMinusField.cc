@@ -50,21 +50,21 @@ G4SigmaMinusField::~G4SigmaMinusField()
 
 const G4SigmaMinusField & G4SigmaMinusField::operator=(const G4SigmaMinusField & right)
 {
-  G4Exception("G4SigmaMinusField::operator= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4SigmaMinusField::operator= meant not to be accessible");
   return *this;
 }
 
 
 G4int G4SigmaMinusField::operator==(const G4SigmaMinusField & right) const
 {
-  G4Exception("G4SigmaMinusField::operator== meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4SigmaMinusField::operator== meant not to be accessible");
   return 0;
 }
 
 
 G4int G4SigmaMinusField::operator!=(const G4SigmaMinusField & right) const
 {
-  G4Exception("G4SigmaMinusField::operator!= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4SigmaMinusField::operator!= meant not to be accessible");
   return 1;
 }
 

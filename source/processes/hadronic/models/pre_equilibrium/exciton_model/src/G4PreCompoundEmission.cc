@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.5 2003-09-29 11:15:55 lara Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.6 2003-11-03 17:55:10 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear Preequilibrium
@@ -36,7 +36,7 @@
 
 const G4PreCompoundEmission & G4PreCompoundEmission::operator=(const G4PreCompoundEmission &)
 {
-  G4Exception("G4PreCompoundEmission::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundEmission::operator= meant to not be accessable");
   return *this;
 }
 
@@ -109,7 +109,7 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
       G4cerr <<  "G4PreCompoundEmission::PerformEmission : I couldn't choose a fragment\n"
 	     << "while trying to de-excite\n" 
 	     << aFragment << '\n';
-      G4Exception("");
+      throw G4HadronicException(__FILE__, __LINE__, "");
     }
   // Kinetic Energy of emitted fragment
   G4double KineticEnergyOfEmittedFragment = theFragment->GetKineticEnergy(aFragment);
@@ -156,7 +156,7 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
     
   // check that Excitation energy is >= 0
   G4double anU = RestMomentum.m()-theFragment->GetRestNuclearMass();
-  if (anU < 0.0) G4Exception("G4PreCompoundModel::DeExcite: Excitation energy less than 0!");
+  if (anU < 0.0) throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundModel::DeExcite: Excitation energy less than 0!");
     
     
     

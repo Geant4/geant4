@@ -27,6 +27,7 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4V3DNucleus.hh"
+#include "G4HadronicException.hh"
 
 class G4VNuclearField
 {

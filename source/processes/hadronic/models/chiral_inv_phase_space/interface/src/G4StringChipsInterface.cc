@@ -51,7 +51,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   // Protection for non physical conditions
   
   if(theSecondaries->size() == 1) 
-    G4Exception("G4StringChipsInterface: Only one particle from String models!");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StringChipsInterface: Only one particle from String models!");
   
   // Calculate the mean energy lost
   G4Pair<G4double, G4double> theImpact = theNucleus->RefetchImpactXandY();

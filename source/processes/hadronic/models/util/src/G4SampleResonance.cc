@@ -113,8 +113,8 @@ G4double G4SampleResonance::SampleMass(const G4double poleMass,
 
   if ( minMass > maxMass ) 
     {
-      throw(G4HadronicException(__FILE__, __LINE__,
-           "SampleResonanceMass: mass range negative (minMass>maxMass)") );
+      throw G4HadronicException(__FILE__, __LINE__,
+           "SampleResonanceMass: mass range negative (minMass>maxMass)");
     }
 
   G4double returnMass;

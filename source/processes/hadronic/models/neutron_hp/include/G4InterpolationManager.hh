@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InterpolationManager.hh,v 1.9 2003-06-16 17:10:29 gunter Exp $
+// $Id: G4InterpolationManager.hh,v 1.10 2003-11-03 17:54:36 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4InterpolationManager_h
@@ -31,6 +31,7 @@
 #include "G4InterpolationScheme.hh"
 #include "G4ios.hh"
 #include <fstream>
+#include "G4HadronicException.hh"
 
 class G4InterpolationManager
 {

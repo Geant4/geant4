@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaNuclearReaction.hh,v 1.10 2003-07-01 16:32:50 hpw Exp $
+// $Id: G4GammaNuclearReaction.hh,v 1.11 2003-11-03 17:49:01 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,7 +57,7 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
 {
   if(aTrack.GetDefinition() != G4Gamma::GammaDefinition())
   {
-    G4Exception("Called G4GammaNuclearReaction for particle other than gamma");
+    throw G4HadronicException(__FILE__, __LINE__, "Called G4GammaNuclearReaction for particle other than gamma");
   }
   return theModel.ApplyYourself(aTrack, aTargetNucleus);
 }

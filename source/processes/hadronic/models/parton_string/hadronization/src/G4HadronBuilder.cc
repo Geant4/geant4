@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.cc,v 1.1 2003-10-07 11:25:40 hpw Exp $
+// $Id: G4HadronBuilder.cc,v 1.2 2003-11-03 17:54:53 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -33,6 +33,7 @@
 // -----------------------------------------------------------------------------
 
 #include "G4HadronBuilder.hh"
+#include "G4HadronicException.hh"
 #include "Randomize.hh"
 #include "G4ParticleTable.hh"
 
@@ -120,7 +121,7 @@ G4ParticleDefinition * G4HadronBuilder::Meson(G4ParticleDefinition * black,
 	   }
 	
 	if (abs(id1) > 3 ) 
-	   G4Exception("G4HadronBuilder::Meson : Illegal Quark content as input");
+	   throw G4HadronicException(__FILE__, __LINE__, "G4HadronBuilder::Meson : Illegal Quark content as input");
 	
         G4int PDGEncoding=0;
 
@@ -197,7 +198,7 @@ G4ParticleDefinition * G4HadronBuilder::Barion(G4ParticleDefinition * black,
 	   }
 
 	if (abs(id1) < 1000 || abs(id2) > 3 ) 
-	   G4Exception("G4HadronBuilder::Barion: Illegal quark content as input");   
+	   throw G4HadronicException(__FILE__, __LINE__, "G4HadronBuilder::Barion: Illegal quark content as input");   
 
 	G4int ifl1= abs(id1)/1000;
 	G4int ifl2 = (abs(id1) - ifl1 * 1000)/100;

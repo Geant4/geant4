@@ -21,18 +21,6 @@
 // ********************************************************************
 //
 //
-// -------------------------------------------------------------------
-//      GEANT4 Class file
-//
-//
-//      File name:     G4AngularDistribution
-//
-//      Author:        Maria Grazia Pia (MariaGrazia.Pia@genova.infn.it)
-// 
-//      Creation date: 15 April 2000
-//
-//      Modifications: 
-//      
 // Angular distribution according to:
 // G. Mao et al., Phys. Rev. C57 (1998) 1938
 // G. Mao et al., Phys. Rev. C53 (1996) 2933 

@@ -42,7 +42,7 @@ G4ExcitedStringDecay::~G4ExcitedStringDecay()
 
 const G4ExcitedStringDecay & G4ExcitedStringDecay::operator=(const G4ExcitedStringDecay &)
 {
-  G4Exception("G4ExcitedStringDecay::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay::operator= meant to not be accessable");
   return *this;
 }
 

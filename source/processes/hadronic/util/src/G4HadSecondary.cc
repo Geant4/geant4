@@ -6,7 +6,7 @@ G4HadSecondary::G4HadSecondary(G4DynamicParticle * aT, G4double aWeight) :
 {
   if(aT->GetKineticEnergy()<0)
   {
-    throw(G4HadronicException(__FILE__, __LINE__, 
-    "ATTEMPTING TO CREATE A SECONDARY WITH NGATIVE KINETIC ENERGY.") );
+    throw G4HadronicException(__FILE__, __LINE__, 
+    "ATTEMPTING TO CREATE A SECONDARY WITH NEGATIVE KINETIC ENERGY.");
   }
 }

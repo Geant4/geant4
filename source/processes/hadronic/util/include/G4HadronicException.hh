@@ -18,7 +18,8 @@ class G4HadronicException : public std::exception
   
   void Report(std::ostream & aS)
   {
-    aS<< "In " <<theName<<", line "<<theLine<<": "<<theMessage<<std::endl;
+    aS<< "In " <<theName<<", line "<<theLine<<": "<<std::endl;
+    aS<< "===> "<<theMessage<<std::endl;
   }
   
   private:

@@ -63,6 +63,6 @@ G4String G4CollisionMesonBaryonElastic::
 const std::vector<G4String>& G4CollisionMesonBaryonElastic::
  GetListOfColliders(G4int ) const
  {
-   G4Exception("Called G4CollisionMesonBaryonElastic::GetListOfColliders");
+   throw G4HadronicException(__FILE__, __LINE__, "Called G4CollisionMesonBaryonElastic::GetListOfColliders");
    return dummy;
  }  

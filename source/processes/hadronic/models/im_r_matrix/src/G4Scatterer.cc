@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.6 2003-10-31 10:50:53 hpw Exp $ //
+// $Id: G4Scatterer.cc,v 1.7 2003-11-03 17:53:28 hpw Exp $ //
 //
 
 #include "globals.hh"
@@ -250,7 +250,7 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 	     << ", mass1 = " << trk1.GetDefinition()->GetPDGMass()
 	     << ", mass2 = " << trk2.GetDefinition()->GetPDGMass()
 	     << G4endl;
-	G4Exception("G4Scatterer TimeToInteraction is INF");
+	throw G4HadronicException(__FILE__, __LINE__, "G4Scatterer TimeToInteraction is INF");
       // End of debugging
 	      */
     }

@@ -99,7 +99,7 @@ G4QGSMSplitableHadron::~G4QGSMSplitableHadron(){}
 
 const G4QGSMSplitableHadron & G4QGSMSplitableHadron::operator=(const G4QGSMSplitableHadron &)
 {
-  G4Exception("G4QGSMSplitableHadron::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4QGSMSplitableHadron::operator= meant to not be accessable");
   return *this;
 }
 
@@ -422,7 +422,7 @@ SampleX(G4double anXmin, G4int nSea, G4int totalSea, G4double aBeta)
       if(debcount>10000) 
       {
         G4cout << "anXmin = "<<anXmin<<" nSea = "<<nSea<<" totalSea = "<< totalSea<<G4endl;
-        G4Exception("G4QGSMSplitableHadron - Fatal: Cannot sample parton densities under these constraints.");
+        throw G4HadronicException(__FILE__, __LINE__, "G4QGSMSplitableHadron - Fatal: Cannot sample parton densities under these constraints.");
       }
       x1 = G4UniformRand();
     }

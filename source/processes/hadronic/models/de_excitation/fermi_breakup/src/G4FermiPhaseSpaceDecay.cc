@@ -26,6 +26,7 @@
 
 
 #include "G4FermiPhaseSpaceDecay.hh"
+#include "G4HadronicException.hh"
 #include "Randomize.hh"
 
 #include <algorithm>
@@ -153,7 +154,7 @@ G4FermiPhaseSpaceDecay::NBodyDecay(const G4double M,  const std::vector<G4double
            
       if (ntries++ > 1000000)
 	{
-	  G4Exception("G4FermiPhaseSpaceDecay::Decay: Cannot determine decay kinematics");
+	  throw G4HadronicException(__FILE__, __LINE__, "G4FermiPhaseSpaceDecay::Decay: Cannot determine decay kinematics");
 	}
     }
   while ( weight < G4UniformRand()*Wmax );

@@ -355,7 +355,7 @@ G4double G4ResonanceNames::MinMass(const G4String& name)
   else
     { 
       G4cout << "G4ResonanceNames::MinMass - " << name << " not found" << G4endl;
-      G4Exception ("G4ResonanceNames::MinMass - resonance name not found");
+      throw G4HadronicException(__FILE__, __LINE__,  "G4ResonanceNames::MinMass - resonance name not found");
     }
   return lowMass;
 }

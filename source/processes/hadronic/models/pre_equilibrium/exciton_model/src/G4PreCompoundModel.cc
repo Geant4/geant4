@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.3 2003-09-26 10:07:56 lara Exp $
+// $Id: G4PreCompoundModel.cc,v 1.4 2003-11-03 17:55:10 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -39,7 +39,7 @@ std::vector<G4String*> G4PreCompoundModel::theCreatorModels;
 
 const G4PreCompoundModel & G4PreCompoundModel::operator=(const G4PreCompoundModel &)
 {
-  G4Exception("G4PreCompoundModel::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundModel::operator= meant to not be accessable");
   return *this;
 }
 

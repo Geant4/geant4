@@ -79,7 +79,7 @@ void G4NeutronHPAngular::Init(std::ifstream & aDataFile)
   {
     theIsoFlag = false;
     G4cout << "unknown distribution found for Angular"<<G4endl;
-    G4Exception("unknown distribution needs implementation!!!");
+    throw G4HadronicException(__FILE__, __LINE__, "unknown distribution needs implementation!!!");
   }    
 }
 
@@ -163,7 +163,7 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
     }
     else
     {
-      G4Exception("Tried to sample non isotropic neutron angular");
+      throw G4HadronicException(__FILE__, __LINE__, "Tried to sample non isotropic neutron angular");
     }
   }
   aHadron.Lorentz(aHadron, -1.*theTarget); 

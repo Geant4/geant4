@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.28 2003-10-24 08:26:36 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.29 2003-11-03 17:49:00 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -69,7 +69,7 @@ G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p) :
   {
     G4cerr<<"***G4QHaron:(QP) PDG="<<theQPDG.GetPDGCode()<<", use other constructor"<<G4endl;
 #ifdef sdebug
-	G4Exception("***G4QHadron: QPDG Constructor failed");
+	throw G4HadronicException(__FILE__, __LINE__, "***G4QHadron: QPDG Constructor failed");
 #endif
   }
 
@@ -294,7 +294,7 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
   {
 	G4cerr<<"*G4QH::DecIn2:*Boost* 4M="<<theMomentum<<",e-p="
           <<theMomentum.e()-theMomentum.rho()<<G4endl;
-	//G4Exception("***G4QHadron::DecayIn2: Decay of particle with zero mass");
+	//throw G4HadronicException(__FILE__, __LINE__, "***G4QHadron::DecayIn2: Decay of particle with zero mass");
   }
   G4ThreeVector ltb = theMomentum.boostVector(); // Boost vector for backward Lor.Trans.
 #ifdef pdebug
@@ -514,7 +514,7 @@ G4bool G4QHadron::DecayIn3(G4LorentzVector& f4Mom,G4LorentzVector& s4Mom,G4Loren
   if(!DecayIn2(t4Mom,dh4Mom))
   {
     G4cerr<<"***G4QHadron::DecayIn3: Exception1"<<G4endl;
-	//G4Exception("***G4QHadron::DecayIn3(): DecayIn2 did not succeed");
+	//throw G4HadronicException(__FILE__, __LINE__, "***G4QHadron::DecayIn3(): DecayIn2 did not succeed");
     return false;
   }
 #ifdef debug
@@ -523,7 +523,7 @@ G4bool G4QHadron::DecayIn3(G4LorentzVector& f4Mom,G4LorentzVector& s4Mom,G4Loren
   if(!G4QHadron(dh4Mom).DecayIn2(f4Mom,s4Mom))
   {
     G4cerr<<"***G4QHadron::DecayIn3: Error in DecayIn2 -> Exception2"<<G4endl;
-	//G4Exception("G4QHadron::DecayIn3(): DecayIn2 did not succeed");
+	//throw G4HadronicException(__FILE__, __LINE__, "G4QHadron::DecayIn3(): DecayIn2 did not succeed");
     return false;
   }
   return true;
@@ -557,7 +557,7 @@ G4double G4QHadron::RandomizeMass(G4QParticle* pPart, G4double maxM)
   else if(width<0.)
   {
 	G4cerr<<"***G4QHadron::RandomizeMass: width="<<width<<"<0, PDGC="<<theQPDG.GetPDGCode()<<G4endl;
-	G4Exception("G4QHadron::RandomizeMass: width of the Hadron < 0");
+	throw G4HadronicException(__FILE__, __LINE__, "G4QHadron::RandomizeMass: width of the Hadron < 0");
   }
   G4double minM = pPart->MinMassOfFragm();
   if(minM>maxM)

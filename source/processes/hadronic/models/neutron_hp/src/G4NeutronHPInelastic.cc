@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.15 2003-07-01 15:58:39 hpw Exp $
+// $Id: G4NeutronHPInelastic.cc,v 1.16 2003-11-03 17:54:37 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NeutronHPInelastic.hh"
@@ -41,7 +41,7 @@
     system("echo $NeutronHPCrossSections");
 //    G4cout << " entering G4NeutronHPInelastic constructor"<<G4endl;
     if(!getenv("NeutronHPCrossSections")) 
-       G4Exception("Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
     dirName = getenv("NeutronHPCrossSections");
     G4String tString = "/Inelastic/";
     dirName = dirName + tString;

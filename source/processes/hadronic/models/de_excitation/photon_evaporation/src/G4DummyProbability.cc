@@ -34,7 +34,7 @@
 G4DummyProbability::G4DummyProbability(const G4DummyProbability& ) : G4VEmissionProbability()
 {
 
-  G4Exception("G4DummyProbability::copy_constructor meant to not be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4DummyProbability::copy_constructor meant to not be accessible");
 
 }
 
@@ -42,7 +42,7 @@ const G4DummyProbability& G4DummyProbability::
 operator=(const G4DummyProbability& ) 
 {
 
-  G4Exception("G4DummyProbability::operator= meant to not be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4DummyProbability::operator= meant to not be accessible");
   return *this;
 }
 

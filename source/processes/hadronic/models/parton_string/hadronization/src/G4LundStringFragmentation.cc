@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.1 2003-10-07 11:25:41 hpw Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.2 2003-11-03 17:54:53 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -57,7 +57,7 @@ G4LundStringFragmentation::~G4LundStringFragmentation()
 
 const G4LundStringFragmentation & G4LundStringFragmentation::operator=(const G4LundStringFragmentation &)
    {
-     G4Exception("G4LundStringFragmentation::operator= meant to not be accessable");
+     throw G4HadronicException(__FILE__, __LINE__, "G4LundStringFragmentation::operator= meant to not be accessable");
      return *this;
    }
 

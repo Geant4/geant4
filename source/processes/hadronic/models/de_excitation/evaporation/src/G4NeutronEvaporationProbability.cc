@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronEvaporationProbability.cc,v 1.1 2003-08-26 18:31:00 lara Exp $
+// $Id: G4NeutronEvaporationProbability.cc,v 1.2 2003-11-03 17:53:02 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -90,7 +90,7 @@ G4NeutronEvaporationProbability::G4NeutronEvaporationProbability() :
 
 G4NeutronEvaporationProbability::G4NeutronEvaporationProbability(const G4NeutronEvaporationProbability &) : G4EvaporationProbability()
 {
-    G4Exception("G4NeutronEvaporationProbability::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4NeutronEvaporationProbability::copy_constructor meant to not be accessable");
 }
 
 
@@ -99,7 +99,7 @@ G4NeutronEvaporationProbability::G4NeutronEvaporationProbability(const G4Neutron
 const G4NeutronEvaporationProbability & G4NeutronEvaporationProbability::
 operator=(const G4NeutronEvaporationProbability &)
 {
-    G4Exception("G4NeutronEvaporationProbability::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4NeutronEvaporationProbability::operator= meant to not be accessable");
     return *this;
 }
 

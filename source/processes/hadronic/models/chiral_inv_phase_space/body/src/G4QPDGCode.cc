@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.34 2003-10-24 08:26:37 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.35 2003-11-03 17:49:00 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -850,7 +850,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   {
 #ifdef debug
     G4cerr<<"***G4QPDGCode::GetNuclMass: A="<<A<<"<1 || Z="<<Z<<"<0 || N="<<N<<"<0"<<G4endl;
-    //@@G4Exception("***G4QPDGCode::GetNuclMass: Impossible nucleus");
+    //@@throw G4HadronicException(__FILE__, __LINE__, "***G4QPDGCode::GetNuclMass: Impossible nucleus");
 #endif
     return 0.;                       // @@ Temporary
   }

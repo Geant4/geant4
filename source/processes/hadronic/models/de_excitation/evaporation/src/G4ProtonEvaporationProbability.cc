@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProtonEvaporationProbability.cc,v 1.1 2003-08-26 18:31:01 lara Exp $
+// $Id: G4ProtonEvaporationProbability.cc,v 1.2 2003-11-03 17:53:02 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -81,13 +81,13 @@ G4ProtonEvaporationProbability::G4ProtonEvaporationProbability() :
 
 G4ProtonEvaporationProbability::G4ProtonEvaporationProbability(const G4ProtonEvaporationProbability &) : G4EvaporationProbability()
 {
-    G4Exception("G4ProtonEvaporationProbability::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4ProtonEvaporationProbability::copy_constructor meant to not be accessable");
 }
 
 const G4ProtonEvaporationProbability & G4ProtonEvaporationProbability::
 operator=(const G4ProtonEvaporationProbability &)
 {
-    G4Exception("G4ProtonEvaporationProbability::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4ProtonEvaporationProbability::operator= meant to not be accessable");
     return *this;
 }
 

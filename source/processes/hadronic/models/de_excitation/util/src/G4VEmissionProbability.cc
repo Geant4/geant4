@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEmissionProbability.cc,v 1.1 2003-08-26 18:50:43 lara Exp $
+// $Id: G4VEmissionProbability.cc,v 1.2 2003-11-03 17:53:06 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -34,7 +34,7 @@
 
 G4VEmissionProbability::G4VEmissionProbability(const G4VEmissionProbability &)
 {
-    G4Exception("G4VEmissionProbability::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4VEmissionProbability::copy_constructor meant to not be accessable");
 }
 
 
@@ -42,7 +42,7 @@ G4VEmissionProbability::G4VEmissionProbability(const G4VEmissionProbability &)
 
 const G4VEmissionProbability & G4VEmissionProbability::operator=(const G4VEmissionProbability &)
 {
-    G4Exception("G4VEmissionProbability::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4VEmissionProbability::operator= meant to not be accessable");
     return *this;
 }
 

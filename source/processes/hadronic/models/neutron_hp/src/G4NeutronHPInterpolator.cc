@@ -74,7 +74,7 @@
     }
     else
     {
-      G4Exception("Unknown interpolation scheme in G4NeutronHPVector::Integrate");
+      throw G4HadronicException(__FILE__, __LINE__, "Unknown interpolation scheme in G4NeutronHPVector::Integrate");
     }
     return result;
   }
@@ -129,7 +129,7 @@
     }
     else
     {
-      G4Exception("Unknown interpolation scheme in G4NeutronHPVector::Integrate");
+      throw G4HadronicException(__FILE__, __LINE__, "Unknown interpolation scheme in G4NeutronHPVector::Integrate");
     }
     return result;
   }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiNucleon.cc,v 1.1 2003-08-26 18:47:57 lara Exp $
+// $Id: G4StatMFMacroMultiNucleon.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -34,7 +34,7 @@ G4StatMFMacroMultiNucleon::
 G4StatMFMacroMultiNucleon() :
     G4VStatMFMacroCluster(0)  // Beacuse the def. constr. of base class is private
 {
-    G4Exception("G4StatMFMacroMultiNucleon::default_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::default_constructor meant to not be accessable");
 }
 
 // Copy constructor
@@ -42,7 +42,7 @@ G4StatMFMacroMultiNucleon::
 G4StatMFMacroMultiNucleon(const G4StatMFMacroMultiNucleon & ) :
     G4VStatMFMacroCluster(0)  // Beacuse the def. constr. of base class is private
 {
-    G4Exception("G4StatMFMacroMultiNucleon::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::copy_constructor meant to not be accessable");
 }
 
 // Operators
@@ -50,21 +50,21 @@ G4StatMFMacroMultiNucleon(const G4StatMFMacroMultiNucleon & ) :
 G4StatMFMacroMultiNucleon & G4StatMFMacroMultiNucleon::
 operator=(const G4StatMFMacroMultiNucleon & ) 
 {
-    G4Exception("G4StatMFMacroMultiNucleon::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::operator= meant to not be accessable");
     return *this;
 }
 
 
 G4bool G4StatMFMacroMultiNucleon::operator==(const G4StatMFMacroMultiNucleon & ) const
 {
-    G4Exception("G4StatMFMacroMultiNucleon::operator== meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::operator== meant to not be accessable");
     return false;
 }
  
 
 G4bool G4StatMFMacroMultiNucleon::operator!=(const G4StatMFMacroMultiNucleon & ) const
 {
-    G4Exception("G4StatMFMacroMultiNucleon::operator!= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::operator!= meant to not be accessable");
     return true;
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventGenerator.cc,v 1.1 2003-10-07 11:26:00 hpw Exp $
+// $Id: G4EventGenerator.cc,v 1.2 2003-11-03 17:54:53 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4EventGenerator
@@ -45,7 +45,7 @@ G4EventGenerator::~G4EventGenerator()
 
 const G4EventGenerator & G4EventGenerator::operator=(const G4EventGenerator &)
 {
-  G4Exception("G4EventGenerator::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4EventGenerator::operator= meant to not be accessable");
   return *this;
 }
 

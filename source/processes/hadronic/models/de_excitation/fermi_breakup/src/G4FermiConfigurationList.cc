@@ -36,14 +36,14 @@ G4FermiConfigurationList::G4FermiConfigurationList()
 
 G4FermiConfigurationList::G4FermiConfigurationList(const G4FermiConfigurationList &)
 {
-  G4Exception("G4FermiConfigurationList::copy_constructor meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4FermiConfigurationList::copy_constructor meant to not be accessable");
 }
 
 
 const G4FermiConfigurationList & G4FermiConfigurationList::
 operator=(const G4FermiConfigurationList &)
 {
-  G4Exception("G4FermiConfigurationList::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4FermiConfigurationList::operator= meant to not be accessable");
   return *this;
 }
 
@@ -117,7 +117,7 @@ G4FermiConfiguration G4FermiConfigurationList::ChooseConfiguration(void)
     } 
   if (thisConfig == NormalizedWeights.end())
     {
-      G4Exception("G4FermiConfigurationList::ChooseConfigration: Cannot choose a configuration");
+      throw G4HadronicException(__FILE__, __LINE__, "G4FermiConfigurationList::ChooseConfigration: Cannot choose a configuration");
       G4FermiConfiguration dummy;
       return dummy;
     }

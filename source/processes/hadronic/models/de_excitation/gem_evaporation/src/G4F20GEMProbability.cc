@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4F20GEMProbability.cc,v 1.1 2003-08-26 18:44:12 lara Exp $
+// $Id: G4F20GEMProbability.cc,v 1.2 2003-11-03 17:53:03 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -196,7 +196,7 @@ G4F20GEMProbability::G4F20GEMProbability() :
 
 G4F20GEMProbability::G4F20GEMProbability(const G4F20GEMProbability &) : G4GEMProbability()
 {
-  G4Exception("G4F20GEMProbability::copy_constructor meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4F20GEMProbability::copy_constructor meant to not be accessable");
 }
 
 
@@ -205,7 +205,7 @@ G4F20GEMProbability::G4F20GEMProbability(const G4F20GEMProbability &) : G4GEMPro
 const G4F20GEMProbability & G4F20GEMProbability::
 operator=(const G4F20GEMProbability &)
 {
-  G4Exception("G4F20GEMProbability::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4F20GEMProbability::operator= meant to not be accessable");
   return *this;
 }
 

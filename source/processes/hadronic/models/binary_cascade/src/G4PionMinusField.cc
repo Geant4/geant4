@@ -51,21 +51,21 @@ G4PionMinusField::~G4PionMinusField()
 
 const G4PionMinusField & G4PionMinusField::operator=(const G4PionMinusField & right)
 {
-  G4Exception("G4PionMinusField::operator= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4PionMinusField::operator= meant not to be accessible");
   return *this;
 }
 
 
 G4int G4PionMinusField::operator==(const G4PionMinusField & right) const
 {
-  G4Exception("G4PionMinusField::operator== meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4PionMinusField::operator== meant not to be accessible");
   return 0;
 }
 
 
 G4int G4PionMinusField::operator!=(const G4PionMinusField & right) const
 {
-  G4Exception("G4PionMinusField::operator!= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4PionMinusField::operator!= meant not to be accessible");
   return 1;
 }
 

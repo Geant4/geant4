@@ -52,21 +52,21 @@ G4AntiProtonField::~G4AntiProtonField()
 
 const G4AntiProtonField & G4AntiProtonField::operator=(const G4AntiProtonField & right)
 {
-  G4Exception("G4AntiProtonField::operator= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4AntiProtonField::operator= meant not to be accessible");
   return *this;
 }
 
 
 G4int G4AntiProtonField::operator==(const G4AntiProtonField & right) const
 {
-  G4Exception("G4AntiProtonField::operator== meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4AntiProtonField::operator== meant not to be accessible");
   return 0;
 }
 
 
 G4int G4AntiProtonField::operator!=(const G4AntiProtonField & right) const
 {
-  G4Exception("G4AntiProtonField::operator!= meant not to be accessible");
+  throw G4HadronicException(__FILE__, __LINE__, "G4AntiProtonField::operator!= meant not to be accessible");
   return 1;
 }
 

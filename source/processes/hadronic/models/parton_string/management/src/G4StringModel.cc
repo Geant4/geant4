@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StringModel.cc,v 1.1 2003-10-07 11:26:00 hpw Exp $
+// $Id: G4StringModel.cc,v 1.2 2003-11-03 17:54:53 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4StringModel
@@ -46,7 +46,7 @@ G4StringModel::~G4StringModel()
 
 const G4StringModel & G4StringModel::operator=(const G4StringModel &)
 {
-  G4Exception("G4StringModel::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4StringModel::operator= meant to not be accessable");
   return *this;
 }
 

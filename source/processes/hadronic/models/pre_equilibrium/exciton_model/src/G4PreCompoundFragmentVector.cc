@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundFragmentVector.cc,v 1.1 2003-08-26 18:54:51 lara Exp $
+// $Id: G4PreCompoundFragmentVector.cc,v 1.2 2003-11-03 17:55:10 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear Preequilibrium
@@ -34,7 +34,7 @@ const G4PreCompoundFragmentVector &
 G4PreCompoundFragmentVector::
 operator=(const G4PreCompoundFragmentVector &)
 {
-    G4Exception("G4PreCompoundFragmentVector::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundFragmentVector::operator= meant to not be accessable");
     return *this;
 }
 

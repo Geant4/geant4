@@ -20,10 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionSource.cc,v 1.1 2003-10-07 12:37:40 hpw Exp $ //
+// $Id: G4VCrossSectionSource.cc,v 1.2 2003-11-03 17:53:28 hpw Exp $ //
 //
 
 #include "globals.hh"
+#include "G4HadronicException.hh"
 #include "G4ios.hh"
 #include "G4VCrossSectionSource.hh"
 #include "G4ParticleDefinition.hh"
@@ -61,7 +62,7 @@ FindKeyParticle(const G4KineticTrack& trk1,const G4KineticTrack& trk2) const
   }
   else
   {
-    G4Exception("G4VCrossSectionSource: unklnown particles in FindKeyParticle");
+    throw G4HadronicException(__FILE__, __LINE__, "G4VCrossSectionSource: unklnown particles in FindKeyParticle");
   }
   return result;
 }

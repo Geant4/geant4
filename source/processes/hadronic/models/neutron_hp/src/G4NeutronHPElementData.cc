@@ -183,7 +183,7 @@
                                       G4ParticleDefinition * theP,
                                       G4NeutronHPFissionData* theSet)
   {
-   if(theP != G4Neutron::Neutron()) G4Exception();
+   if(theP != G4Neutron::Neutron()) throw G4HadronicException(__FILE__, __LINE__, "not a neutron");
    Init ( theElement );
    return GetData(theSet);
   }
@@ -191,7 +191,7 @@
                                       G4ParticleDefinition * theP,
                                       G4NeutronHPCaptureData * theSet)
   {
-   if(theP != G4Neutron::Neutron()) G4Exception();
+   if(theP != G4Neutron::Neutron()) throw G4HadronicException(__FILE__, __LINE__, "not a neutron");
    Init ( theElement );
    return GetData(theSet);
   }
@@ -199,7 +199,7 @@
                                       G4ParticleDefinition * theP,
                                       G4NeutronHPElasticData * theSet)
   {
-   if(theP != G4Neutron::Neutron()) G4Exception();
+   if(theP != G4Neutron::Neutron()) throw G4HadronicException(__FILE__, __LINE__, "not a neutron");
    Init ( theElement );
    return GetData(theSet);
   }
@@ -207,7 +207,7 @@
                                       G4ParticleDefinition * theP,
                                       G4NeutronHPInelasticData * theSet)
   {
-   if(theP != G4Neutron::Neutron()) G4Exception();
+   if(theP != G4Neutron::Neutron()) throw G4HadronicException(__FILE__, __LINE__, "not a neutron");
    Init ( theElement );
    return GetData(theSet);
   }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionPN.cc,v 1.1 2003-10-07 12:37:36 hpw Exp $ //
+// $Id: G4CollisionPN.cc,v 1.2 2003-11-03 17:53:28 hpw Exp $ //
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -105,7 +105,7 @@ const std::vector<G4String>& G4CollisionPN::GetListOfColliders(G4int whichOne) c
 	{ return colliders2; }
       else 
 	{
-	  G4Exception("G4CollisionNN::GetListOfColliders - Argument outside valid range"); 
+	  throw G4HadronicException(__FILE__, __LINE__, "G4CollisionNN::GetListOfColliders - Argument outside valid range"); 
 	  return colliders1;
 	}
     }

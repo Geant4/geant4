@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTemperature.cc,v 1.1 2003-08-26 18:47:55 lara Exp $
+// $Id: G4StatMFMacroTemperature.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -34,20 +34,20 @@
 G4StatMFMacroTemperature & 
 G4StatMFMacroTemperature::operator=(const G4StatMFMacroTemperature & ) 
 {
-    G4Exception("G4StatMFMacroTemperature::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::operator= meant to not be accessable");
     return *this;
 }
 
 G4bool G4StatMFMacroTemperature::operator==(const G4StatMFMacroTemperature & ) const 
 {
-    G4Exception("G4StatMFMacroTemperature::operator== meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::operator== meant to not be accessable");
     return false;
 }
 
 
 G4bool G4StatMFMacroTemperature::operator!=(const G4StatMFMacroTemperature & ) const 
 {
-    G4Exception("G4StatMFMacroTemperature::operator!= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::operator!= meant to not be accessable");
     return true;
 }
 
@@ -86,14 +86,14 @@ G4double G4StatMFMacroTemperature::CalcTemperature(void)
     }
 	
     if (fTa*fTb > 0.0) {
-	G4Exception("G4StatMFMacroTemperature::CalcTemperature: I couldn't bracket	the solution.");
+	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::CalcTemperature: I couldn't bracket	the solution.");
     }
 
     G4Solver<G4StatMFMacroTemperature> * theSolver = new G4Solver<G4StatMFMacroTemperature>(100,1.e-4);
     theSolver->SetIntervalLimits(Ta,Tb);
     //    if (!theSolver->Crenshaw(*this)) 
     if (!theSolver->Brent(*this)) 
-	G4Exception("G4StatMFMacroTemperature::CalcTemperature: I couldn't find the root.");
+	throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::CalcTemperature: I couldn't find the root.");
     _MeanTemperature = theSolver->GetRoot();
     delete theSolver;
     return _MeanTemperature;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyRangeManager.cc,v 1.10 2003-11-01 16:19:07 hpw Exp $
+// $Id: G4EnergyRangeManager.cc,v 1.11 2003-11-03 17:47:30 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Energy Range Manager
@@ -67,8 +67,7 @@
   {
     if( theHadronicInteractionCounter+1 > MAX_NUMBER_OF_MODELS )
     {
-      throw(G4HadronicException(__FILE__, __LINE__,
-                               "RegisterMe: TOO MANY MODELS"));
+      throw G4HadronicException(__FILE__, __LINE__,"RegisterMe: TOO MANY MODELS");
     }
     theHadronicInteraction[ theHadronicInteractionCounter++ ] = a;
   }
@@ -81,8 +80,8 @@
   {
     G4int counter = GetHadronicInteractionCounter();
     if( counter == 0 )
-      throw(G4HadronicException(__FILE__, __LINE__,
-                               "GetHadronicInteraction: NO MODELS STORED"));
+      throw G4HadronicException(__FILE__, __LINE__,
+                               "GetHadronicInteraction: NO MODELS STORED");
 
     G4int cou = 0, memory = 0, memor2 = 0;
     G4double emi1 = 0.0, ema1 = 0.0, emi2 = 0.0, ema2 = 0.0;
@@ -108,16 +107,16 @@
     switch ( cou )
     {
      case 0:
-       throw(G4HadronicException(__FILE__, __LINE__,
-          "GetHadronicInteraction: No Model found"));
+       throw G4HadronicException(__FILE__, __LINE__,
+          "GetHadronicInteraction: No Model found");
        return 0;
      case 1:
        m = memory;
        break;
      case 2:
        if( (emi2<=emi1 && ema2>=ema1) || (emi2>=emi1 && ema2<=ema1) )
-      throw(G4HadronicException(__FILE__, __LINE__,
-          "GetHadronicInteraction: Energy ranges of two models fully overlapping"));
+      throw G4HadronicException(__FILE__, __LINE__,
+          "GetHadronicInteraction: Energy ranges of two models fully overlapping");
        rand = G4UniformRand();
        if( emi1 < emi2 )
        {
@@ -133,8 +132,8 @@
        }
        break;
      default:
-      throw(G4HadronicException(__FILE__, __LINE__,
-        "GetHadronicInteraction: More than two competing models in this energy range"));
+      throw G4HadronicException(__FILE__, __LINE__,
+        "GetHadronicInteraction: More than two competing models in this energy range");
     }
     return theHadronicInteraction[m];
   } 

@@ -69,11 +69,11 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
    else if(A==4)
    {
      result->SetDefinition(G4Alpha::Alpha());
-     if(Z!=2) G4Exception("Unknown ion case 1");    
+     if(Z!=2) throw G4HadronicException(__FILE__, __LINE__, "Unknown ion case 1");    
    }
    else
    {
-     G4Exception("G4NeutronHPDiscreteTwoBody: Unknown ion case 2");
+     throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPDiscreteTwoBody: Unknown ion case 2");
    }
    
 // get cosine(theta)
@@ -123,7 +123,7 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
      }
      else
      {
-       G4Exception("unknown representation type in Two-body scattering");
+       throw G4HadronicException(__FILE__, __LINE__, "unknown representation type in Two-body scattering");
      }
    }
    else
@@ -251,12 +251,12 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
        }
        else
        {
-         G4Exception("Two neighbouring distributions with different interpolation");
+         throw G4HadronicException(__FILE__, __LINE__, "Two neighbouring distributions with different interpolation");
        }
      }
      else
      {
-       G4Exception("unknown representation type in Two-body scattering, case 2");
+       throw G4HadronicException(__FILE__, __LINE__, "unknown representation type in Two-body scattering, case 2");
      }
    }
    
