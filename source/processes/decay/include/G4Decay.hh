@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Decay.hh,v 1.4 2000-10-20 11:28:23 kurasige Exp $
+// $Id: G4Decay.hh,v 1.5 2001-01-18 19:52:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -24,7 +24,8 @@
 //   remove BuildPhysicsTable()   27 Nov. 1997   H.Kurashige
 //   modified for new ParticleChange 12 Mar. 1998  H.Kurashige
 //   added aPhysicsTable          2  Aug. 1998 H.Kurashige
-
+//   PreAssignedDecayTime         18 Jan. 2001 H.Kurashige
+//
 #ifndef G4Decay_h
 #define G4Decay_h 1
 
@@ -93,6 +94,13 @@ class G4Decay : public G4VRestDiscreteProcess
                              G4ForceCondition* condition
                             );
 
+    virtual G4double PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            );
+
+
   protected: // With Description
     // GetMeanFreePath returns ctau*beta*gamma for decay in flight 
     // GetMeanLifeTime returns ctau for decay at rest
@@ -136,15 +144,46 @@ class G4Decay : public G4VRestDiscreteProcess
     G4ParticleChangeForDecay fParticleChangeForDecay;
 };
 
+inline G4double G4Decay::PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            )
+{
+  // pre-assigned Decay time
+  G4double pTime = track.GetDynamicParticle()->GetPreAssignedDecayProperTime();
+
+  if (pTime < 0.) {
+    // normal case 
+    return G4VRestDiscreteProcess::PostStepGetPhysicalInteractionLength(track, previousStepSize, condition);
+  }
+
+  // condition is set to "Not Forced"
+  *condition = NotForced;
+  
+  // reminder proper time
+  fRemainderLifeTime = pTime - track.GetProperTime();
+  if (fRemainderLifeTime <= 0.0) fRemainderLifeTime = DBL_MIN;
+  
+  // use pre-assigned Decay time to determine PIL
+  G4double tau = track.GetDefinition()->GetPDGLifeTime();
+  return (fRemainderLifeTime/tau)*GetMeanFreePath(track, previousStepSize, condition);
+
+}
 inline
   G4double G4Decay::AtRestGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4ForceCondition* condition
                             )
 {
-  fRemainderLifeTime = 
-    G4VRestDiscreteProcess::AtRestGetPhysicalInteractionLength(
-                             track, condition );
+  G4double pTime = track.GetDynamicParticle()->GetPreAssignedDecayProperTime();
+  if (pTime >= 0.) {
+    fRemainderLifeTime = pTime - track.GetProperTime();
+    if (fRemainderLifeTime <= 0.0) fRemainderLifeTime = DBL_MIN;
+  } else {
+    fRemainderLifeTime = 
+      G4VRestDiscreteProcess::AtRestGetPhysicalInteractionLength(track, condition );
+  }
   return fRemainderLifeTime;
 }
 
