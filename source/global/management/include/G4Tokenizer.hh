@@ -21,45 +21,79 @@
 // ********************************************************************
 //
 //
-// $Id: G4Exception.cc,v 1.12 2001-10-11 14:04:12 gcosmo Exp $
+// $Id: G4Tokenizer.hh,v 1.1 2001-10-11 14:04:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// ----------------------------------------------------------------------
-// G4Exception
+//---------------------------------------------------------------
+//  GEANT 4 class header file
 //
-// Global error function prints string to G4cerr, and aborts
-// program
+//  G4Tokenizer
 //
-// History:
-// 30.06.95 P.Kent
+//  Class description:
+//
+//  String tokenizer.
+//  It derives from the implementation of the Rogue Wave
+//  RWTokenizer. It intrinsically uses STL string.
 
-#include "G4ios.hh"
-#include <stdlib.h>
+//---------------------------------------------------------------
+
+#ifndef __G4Tokenizer
+#define __G4Tokenizer
+
 #include "G4String.hh"
-#include "G4StateManager.hh"
 
-void G4Exception(const char* s)
+class G4Tokenizer 
 {
-   if(s)
+public:
+  G4Tokenizer(const G4String& s):string2tokenize(s),actual(0){}
+
+  G4SubString operator()(const char* str=" \t\n",size_t l=0)
+    {
+      size_t i,j,tmp;
+      G4bool hasws=false;
+      if(l==0) l=strlen(str);
+      //Skip leading delimeters
+      while(actual<string2tokenize.size())
 	{
-	    G4cerr << s << G4endl;
+	  
+	  for(i=0;i<l;i++)
+	    if(string2tokenize[actual]==str[i]) hasws=true;
+	  if(hasws)
+	    {
+	      actual++;
+	      hasws=false;
+	    }
+	  else
+	    break;
 	}
-   if(G4StateManager::GetStateManager()->SetNewState(Abort)) {
-     G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
-     abort();
-   } else {
-     G4cerr << G4endl << "*** G4Exception: Abortion suppressed ***"
-            << G4endl << "*** No guarantee for further execution ***" << G4endl;
-   }
-}
+	  
+      for(j=actual;j<string2tokenize.size();j++)
+	{
+	  for(i=0;i<l;i++)
+	    if(string2tokenize[j]==str[i]) break;
+	  if(i<l) break;
+	}
+      if(j!=string2tokenize.size())
+	{
+	  tmp=actual;
+	  actual=j+1;
+	  return string2tokenize(tmp,j-tmp);
+	}
+      else
+	{
+	  tmp=actual;
+	  actual=j;
+	  return string2tokenize(tmp,j-tmp);
+	}
+    } 
 
-void G4Exception(G4std::string s)
-{
-  G4Exception(s.c_str());
-}
+private:
 
-void G4Exception(G4String s)
-{
-  G4Exception(s.c_str());
-}
+  G4String string2tokenize;
+  size_t actual;
+
+};
+
+#endif
+

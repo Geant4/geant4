@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: globals.hh,v 1.17 2001-07-11 10:00:55 gunter Exp $
+// $Id: globals.hh,v 1.18 2001-10-11 14:04:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -82,7 +82,7 @@
 #include "G4Types.hh"
 
 // Get definition of G4String
-#include "g4rw/cstring.h"
+#include "G4String.hh"
 
 // Includes some additional definitions
 #include "templates.hh"
