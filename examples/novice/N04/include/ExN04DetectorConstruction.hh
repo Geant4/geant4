@@ -28,6 +28,7 @@
 #include "globals.hh"
 
 class G4VPhysicalVolume;
+class G4Material;
 
 class ExN04DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -39,8 +40,15 @@ class ExN04DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* Construct();
 
   private:
+     void DefineMaterials();
 
 #include "ExN04DetectorParameterDef.hh"
+
+  G4Material* Air;
+  G4Material* Ar;
+  G4Material* Silicon;
+  G4Material* Scinti;
+  G4Material* Lead;
 
 };
 

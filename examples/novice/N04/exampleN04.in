@@ -3,6 +3,9 @@
 /mydet/reqmuon 1
 /mydet/isomuon 1
 #
+/control/verbose  1
+/run/verbose      1
+/tracking/verbose 0
 /run/beamOn 3
 #
 exit

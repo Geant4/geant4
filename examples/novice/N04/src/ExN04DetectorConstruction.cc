@@ -52,30 +52,15 @@ ExN04DetectorConstruction::ExN04DetectorConstruction()
 {
 
 #include "ExN04DetectorParameterDef.icc"
+  DefineMaterials();
 
 }
 
 ExN04DetectorConstruction::~ExN04DetectorConstruction()
 {;}
 
-G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
+void ExN04DetectorConstruction::DefineMaterials()
 {
-  //-------------------------------------------------------------------------
-  // Magnetic field
-  //-------------------------------------------------------------------------
-
-  static G4bool fieldIsInitialized = false;
-  if(!fieldIsInitialized)
-  {
-    ExN04Field* myField = new ExN04Field;
-    G4FieldManager* fieldMgr
-      = G4TransportationManager::GetTransportationManager()
-        ->GetFieldManager();
-    fieldMgr->SetDetectorField(myField);
-    fieldMgr->CreateChordFinder(myField);
-    fieldIsInitialized = true;
-  }
-
   //-------------------------------------------------------------------------
   // Materials
   //-------------------------------------------------------------------------
@@ -97,26 +82,46 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
   G4Element* elO = new G4Element(name="Oxygen", symbol="O", iz=8., a);
 
   density = 1.29e-03*g/cm3;
-  G4Material* Air = new G4Material(name="Air", density, nel=2);
+  Air = new G4Material(name="Air", density, nel=2);
   Air->AddElement(elN, .7);
   Air->AddElement(elO, .3);
 
   a = 207.19*g/mole;
   density = 11.35*g/cm3;
-  G4Material* Lead = new G4Material(name="Lead", z=82., a, density);
+  Lead = new G4Material(name="Lead", z=82., a, density);
 
   a = 39.95*g/mole;
   density = 1.782e-03*g/cm3;
-  G4Material* Ar = new G4Material(name="ArgonGas", z=18., a, density);
+  Ar = new G4Material(name="ArgonGas", z=18., a, density);
 
   a = 28.09*g/mole;
   density = 2.33*g/cm3;
-  G4Material * Silicon = new G4Material(name="Silicon", z=14., a, density);
+  Silicon = new G4Material(name="Silicon", z=14., a, density);
 
   density = 1.032*g/cm3;
-  G4Material* Scinti = new G4Material(name="Scintillator", density, nel=2);
+  Scinti = new G4Material(name="Scintillator", density, nel=2);
   Scinti->AddElement(elC, 9);
   Scinti->AddElement(elH, 10);
+}
+
+G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
+{
+  //-------------------------------------------------------------------------
+  // Magnetic field
+  //-------------------------------------------------------------------------
+
+  static G4bool fieldIsInitialized = false;
+  if(!fieldIsInitialized)
+  {
+    ExN04Field* myField = new ExN04Field;
+    G4FieldManager* fieldMgr
+      = G4TransportationManager::GetTransportationManager()
+        ->GetFieldManager();
+    fieldMgr->SetDetectorField(myField);
+    fieldMgr->CreateChordFinder(myField);
+    fieldIsInitialized = true;
+  }
+
 
   //-------------------------------------------------------------------------
   // Detector geometry

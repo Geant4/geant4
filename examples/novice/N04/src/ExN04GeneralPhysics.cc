@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04GeneralPhysics.cc,v 1.4 2003-06-16 16:49:53 gunter Exp $
+// $Id: ExN04GeneralPhysics.cc,v 1.5 2003-09-27 13:27:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,7 @@ void ExN04GeneralPhysics::ConstructProcess()
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (fDecayProcess.IsApplicable(*particle)) { 
+    if (fDecayProcess.IsApplicable(*particle) && !particle->IsShortLived()) { 
       pmanager ->AddProcess(&fDecayProcess);
       // set ordering for PostStepDoIt and AtRestDoIt
       pmanager ->SetProcessOrdering(&fDecayProcess, idxPostStep);
