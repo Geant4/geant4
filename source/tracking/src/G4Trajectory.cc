@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.cc,v 1.11 2001-02-09 01:38:14 tsasaki Exp $
+// $Id: G4Trajectory.cc,v 1.12 2001-05-03 11:45:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -75,7 +75,7 @@ G4Trajectory::G4Trajectory(G4Trajectory & right)
   //  G4std::vector<G4VTrajectoryPoint*> *positionRecord;
   positionRecord = new TrajectoryPointContainer();
 
-  for(int i=0;i<right.positionRecord->size();i++)
+  for(size_t i=0;i<right.positionRecord->size();i++)
   {
     G4TrajectoryPoint* rightPoint = (G4TrajectoryPoint*)((*(right.positionRecord))[i]);
     positionRecord->push_back(new G4TrajectoryPoint(*rightPoint));
@@ -88,7 +88,7 @@ G4Trajectory::~G4Trajectory()
 /////////////////////////////
 {
   //  positionRecord->clearAndDestroy();
-  G4int i;
+  size_t i;
   for(i=0;i<positionRecord->size();i++){
     delete  (*positionRecord)[i];
   }
@@ -126,10 +126,10 @@ void G4Trajectory::DrawTrajectory(G4int i_mode) const
    if(i_mode>=0)
    {
      G4Polyline pPolyline;
-     for (int i = 0; i < positionRecord->size() ; i++) {
+     for (size_t i = 0; i < positionRecord->size() ; i++) {
        G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[i]);
        pos = aTrajectoryPoint->GetPosition();
-       pPolyline.append( pos );
+       pPolyline.push_back( pos );
      }
 
      G4Colour colour;
@@ -147,7 +147,7 @@ void G4Trajectory::DrawTrajectory(G4int i_mode) const
 
    if(i_mode!=0)
    {
-     for(int j=0; j<positionRecord->size(); j++) {
+     for(size_t j=0; j<positionRecord->size(); j++) {
        G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[j]);
        pos = aTrajectoryPoint->GetPosition();
        G4Circle circle( pos );
