@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.2 2003-08-27 17:18:15 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.3 2003-09-15 16:54:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void PrintCalorParameters();
 
      const G4MaterialCutsCouple* GetAbsorberMaterial()  const
-                                        {return logicAbsorber->GetMaterialCutsCouple();};
+                             {return logicAbsorber->GetMaterialCutsCouple();};
      G4double    GetAbsorberThickness() {return AbsorberThickness;};
      G4double    GetAbsorberSizeYZ()    {return AbsorberSizeYZ;};
 
