@@ -208,7 +208,7 @@ void G4Analyser::printResultsSimple() {
     G4cout << " >>> G4Analyser::printResultsSimple" << G4endl;
   }
 
-  G4cout << " Number of events " << int(eventNumber + 0.1) << G4endl
+  G4cout << " Number of events " << G4int(eventNumber + 0.1) << G4endl
 	 << " average multiplicity " << averageMultiplicity / eventNumber << G4endl
 	 << " average proton number " << averageProtonNumber / eventNumber << G4endl
 	 << " average neutron number " << averageNeutronNumber / eventNumber << G4endl
@@ -237,7 +237,7 @@ void G4Analyser::printResults() {
     G4cout << " >>> G4Analyser::printResults" << G4endl;
   }
 
-  G4cout << " Number of events " << int(eventNumber + 0.1) << G4endl
+  G4cout << " Number of events " << G4int(eventNumber + 0.1) << G4endl
 	 << " average multiplicity " << averageMultiplicity / eventNumber << G4endl
 	 << " average proton number " << averageProtonNumber / eventNumber << G4endl
 	 << " average neutron number " << averageNeutronNumber / eventNumber << G4endl
@@ -255,7 +255,6 @@ void G4Analyser::printResults() {
 	 << " average pi0 " << averagePion0 / eventNumber << G4endl;
      		   
   if (withNuclei) {
-
     G4cout
       << " average A " << averageA / eventNumber << G4endl 		   
       << " average Z " << averageZ / eventNumber << G4endl 		   
