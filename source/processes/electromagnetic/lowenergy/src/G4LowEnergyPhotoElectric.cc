@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.26 2000-07-11 18:46:48 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.27 2001-02-05 17:45:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,7 +93,6 @@ G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()
 
    // ClearAndDestroy of this tables is called in their destructors
    if (theFluorTransitionTable) {
-
       delete theFluorTransitionTable;
    }
 
@@ -103,14 +102,12 @@ G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()
    }
 
    if(ZNumVec){
-     
      ZNumVec->clear();
      delete ZNumVec;
    }
    
    if(ZNumVecFluor){
-
-     ZNumVecFluor->clear();
+     ZNumVecFluor->erase(ZNumVecFluor->begin(),ZNumVecFluor->end());
      delete ZNumVecFluor;
    }
 
@@ -157,7 +154,7 @@ void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
   theCrossSectionTable = new G4SecondLevel();
   G4int dataNum = 2;
  
-  for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
 
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
 
@@ -181,7 +178,7 @@ void G4LowEnergyPhotoElectric::BuildShellCrossSectionTable(){
    allAtomShellCrossSec = new allAtomTable();
    G4int dataNum = 2;
  
-   for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+   for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
 
      G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
 
@@ -217,10 +214,10 @@ void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
   }
   
   theFluorTransitionTable = new allAtomTable();
-  ZNumVecFluor = new G4Data(*ZNumVec);
+  ZNumVecFluor = new G4DataVector(*ZNumVec);
   G4int dataNum = 3;
   
-  for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
     if(AtomInd > 5){
       
@@ -244,12 +241,11 @@ void G4LowEnergyPhotoElectric::BuildZVec(){
   G4int numOfMaterials = theMaterialTable->length();
 
   if(ZNumVec){
-
     ZNumVec->clear();
     delete ZNumVec;
   }
 
-  ZNumVec = new G4Data(); 
+  ZNumVec = new G4DataVector(); 
   for (G4int J=0 ; J < numOfMaterials; J++){ 
  
     const G4Material* material= (*theMaterialTable)[J];        
@@ -261,11 +257,8 @@ void G4LowEnergyPhotoElectric::BuildZVec(){
       G4double Zel = (*theElementVector)(iel)->GetZ();
 
       if(ZNumVec->contains(Zel) == FALSE){
-
-	ZNumVec->insert(Zel);
-      }
-      else{
-	
+	ZNumVec->push_back(Zel);
+      } else{
 	continue;
       }
     }
@@ -290,8 +283,8 @@ G4double G4LowEnergyPhotoElectric::ComputeCrossSection(const G4double AtomIndex,
   for(G4int ind = 0; ind < oneAtomCS->entries(); ind++){
 
     G4double crossSec = 0;
-    G4Data* EnergyVector = (*(*oneAtomCS)[ind])[0];
-    G4Data* CrossSecVector = (*(*oneAtomCS)[ind])[1];
+    G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
+    G4DataVector* CrossSecVector = (*(*oneAtomCS)[ind])[1];
 
     if(IncEnergy < (*EnergyVector)[1]){ // First element is the shell number
 
@@ -412,12 +405,12 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4int thePrimaryShell = (G4int) (*(*theBindEnVec)[0])[subShellIndex];
   G4double BindingEn = ((*(*theBindEnVec)[1])[subShellIndex])*MeV;
   
-  if(thePrimShVec.length() != 0){
+  if(thePrimShVec.size() != 0){
     
     thePrimShVec.clear();
   }
 
-  thePrimShVec.insert(thePrimaryShell);
+  thePrimShVec.push_back(thePrimaryShell);
 
   // Create lists of pointers to DynamicParticles (photons and electrons)
   G4ParticleVector photvec;
@@ -578,8 +571,8 @@ G4int G4LowEnergyPhotoElectric::SelectRandomShell(const G4int AtomIndex,
   for(G4int ind = 0; ind < oneAtomCS->entries(); ind++){
 
     G4double crossSec;
-    G4Data* EnergyVector = (*(*oneAtomCS)[ind])[0];
-    G4Data* CrossSecVector = (*(*oneAtomCS)[ind])[1];
+    G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
+    G4DataVector* CrossSecVector = (*(*oneAtomCS)[ind])[1];
     if(IncEnergy < (*EnergyVector)[0]){ //First element is the shell number
 
       crossSec = 0;
@@ -643,7 +636,6 @@ G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhot
   }
   return (*theElementVector)(0);
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 //
@@ -701,7 +693,7 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
       G4double PartSum = 0;
       
       TransProb = 1; 
-      while(TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->length()){
+      while(TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->size()){
 	
 	PartSum += (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
 	

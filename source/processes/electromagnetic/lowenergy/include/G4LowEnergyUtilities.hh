@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyUtilities.hh,v 1.6 2000-11-03 10:29:51 pia Exp $
+// $Id: G4LowEnergyUtilities.hh,v 1.7 2001-02-05 17:45:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,26 +50,26 @@ public:
   G4SecondLevel* BuildSecondLevelTables(const G4int, const G4int, const char*);
 
   //inline functions
-  G4int FindBinLocation(const G4double BinValue, const G4Data& arg);
+  G4int FindBinLocation(const G4double BinValue, const G4DataVector& arg);
   G4int FindBinLocation(const G4double, const G4PhysicsVector*);
 
   G4double DataLogInterpolation(const G4double, 
-				const G4Data&,
-				const G4Data&);
+				const G4DataVector&,
+				const G4DataVector&);
 
   G4double DataLogInterpolation(const G4double Argument, 
 				const G4double AtomicNumber, 
 				const G4PhysicsTable* Table);
 
   G4double DataSemiLogInterpolation(const G4double, 
-				    const G4Data&, 
-				    const G4Data&);
+				    const G4DataVector&, 
+				    const G4DataVector&);
 
 };
 
-inline G4int G4LowEnergyUtilities::FindBinLocation(const G4double arg, const G4Data& vec){
+inline G4int G4LowEnergyUtilities::FindBinLocation(const G4double arg, const G4DataVector& vec){
 
-  G4int numberOfBin = vec.length();
+  G4int numberOfBin = vec.size();
   G4int lowerBound = 0;
   G4int upperBound = numberOfBin-1;
 
@@ -91,12 +91,12 @@ inline G4int G4LowEnergyUtilities::FindBinLocation(const G4double arg, const G4D
 
 
 inline G4double G4LowEnergyUtilities::DataLogInterpolation(const G4double Argument, 
-                                                               const G4Data& argVec, 
-                                                               const G4Data& valVec){
+                                                               const G4DataVector& argVec, 
+                                                               const G4DataVector& valVec){
 
   G4int theLoc = FindBinLocation(Argument, argVec); 
 
-  if(theLoc == argVec.length()-1){
+  if(theLoc == argVec.size()-1){
     return valVec[theLoc];
   }
 
@@ -162,12 +162,12 @@ inline G4double G4LowEnergyUtilities::DataLogInterpolation(const G4double Argume
 }
 
 inline G4double G4LowEnergyUtilities::DataSemiLogInterpolation(const G4double Argument, 
-                                                                const G4Data& argVec, 
-                                                                const G4Data& valVec){
+                                                                const G4DataVector& argVec, 
+                                                                const G4DataVector& valVec){
 
   G4int theLoc = FindBinLocation(Argument, argVec); 
 
-  if(theLoc == argVec.length()-1){
+  if(theLoc == argVec.size()-1){
     return valVec[theLoc];
   }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.15 2000-09-04 18:18:08 pia Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.16 2001-02-05 17:45:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,7 +69,6 @@ G4LowEnergyGammaConversion::~G4LowEnergyGammaConversion()
    }
 
    if(ZNumVec){
-     
      ZNumVec->clear();
      delete ZNumVec;
    }
@@ -98,7 +97,7 @@ void G4LowEnergyGammaConversion::BuildCrossSectionTable(){
   theCrossSectionTable = new G4SecondLevel();
   G4int dataNum = 2;
  
-  for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
 
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
 
@@ -115,12 +114,11 @@ void G4LowEnergyGammaConversion::BuildZVec(){
   G4int numOfMaterials = theMaterialTable->length();
 
   if(ZNumVec){
-
     ZNumVec->clear();
     delete ZNumVec;
   }
   
-  ZNumVec = new G4Data(); 
+  ZNumVec = new G4DataVector(); 
   for (G4int J=0 ; J < numOfMaterials; J++){ 
     
     const G4Material* material= (*theMaterialTable)[J];        
@@ -132,11 +130,8 @@ void G4LowEnergyGammaConversion::BuildZVec(){
       G4double Zel = (*theElementVector)(iel)->GetZ();
       
       if(ZNumVec->contains(Zel) == FALSE){
-	
-	ZNumVec->insert(Zel);
-      }
-      else{
-	
+	ZNumVec->push_back(Zel);
+      }      else{
 	continue;
       }
     }

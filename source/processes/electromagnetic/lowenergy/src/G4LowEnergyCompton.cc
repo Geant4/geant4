@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.20 2000-07-11 18:46:47 pia Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.21 2001-02-05 17:45:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,6 @@ G4LowEnergyCompton::~G4LowEnergyCompton()
    }
 
    if(ZNumVec){
-     
      ZNumVec->clear();
      delete ZNumVec;
    }
@@ -105,7 +104,7 @@ void G4LowEnergyCompton::BuildCrossSectionTable(){
   theCrossSectionTable = new G4SecondLevel();
   G4int dataNum = 2;
   
-  for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
     
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
     
@@ -126,7 +125,7 @@ void G4LowEnergyCompton::BuildScatteringFunctionTable(){
   theScatteringFunctionTable = new G4SecondLevel();
   G4int dataNum = 2;
  
-  for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
 
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
 
@@ -143,12 +142,11 @@ void G4LowEnergyCompton::BuildZVec(){
   G4int numOfMaterials = theMaterialTable->length();
 
   if(ZNumVec){
-
     ZNumVec->clear();
     delete ZNumVec;
   }
 
-  ZNumVec = new G4Data(); 
+  ZNumVec = new G4DataVector(); 
   for (G4int J=0 ; J < numOfMaterials; J++){ 
  
     const G4Material* material= (*theMaterialTable)[J];        
@@ -160,11 +158,8 @@ void G4LowEnergyCompton::BuildZVec(){
       G4double Zel = (*theElementVector)(iel)->GetZ();
 
       if(ZNumVec->contains(Zel) == FALSE){
-
-	ZNumVec->insert(Zel);
-      }
-      else{
-	
+	ZNumVec->push_back(Zel);
+      }  else{
 	continue;
       }
     }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.40 2000-09-20 16:49:40 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.41 2001-02-05 17:45:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -258,7 +258,7 @@ void G4LowEnergyIonisation::BuildShellCrossSectionTable(){
    allAtomShellCrossSec = new allAtomTable();
    G4int dataNum = 2;
  
-   for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+   for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
 
      G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
 
@@ -291,10 +291,10 @@ void G4LowEnergyIonisation::BuildFluorTransitionTable(){
   }
   
   theFluorTransitionTable = new allAtomTable();
-  ZNumVecFluor = new G4Data(*ZNumVec);
+  ZNumVecFluor = new G4DataVector(*ZNumVec);
   G4int dataNum = 3;
   
-  for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
     if(AtomInd > 5){
       
@@ -321,7 +321,7 @@ void G4LowEnergyIonisation::BuildSamplingCoeffTable(){
   
   G4int dataNum = 17;
 
-  for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
     oneAtomTable* oneAtomShellSc = util.BuildSecondLevelTables(AtomInd, dataNum, "ioni/io-co-");
     
@@ -346,7 +346,7 @@ void G4LowEnergyIonisation::BuildZVec(){
     delete ZNumVec;
   }
 
-  ZNumVec = new G4Data(); 
+  ZNumVec = new G4DataVector(); 
   for (G4int J=0 ; J < numOfMaterials; J++){ 
  
     const G4Material* material= (*theMaterialTable)[J];        
@@ -358,11 +358,8 @@ void G4LowEnergyIonisation::BuildZVec(){
       G4double Zel = (*theElementVector)(iel)->GetZ();
 
       if(ZNumVec->contains(Zel) == FALSE){
-
-	ZNumVec->insert(Zel);
-      }
-      else{
-	
+	ZNumVec->push_back(Zel);
+      } else{
 	continue;
       }
     }
@@ -452,8 +449,8 @@ G4double G4LowEnergyIonisation::ComputeCrossSection(const G4double AtomIndex,
   for(G4int ind = 0; ind < oneAtomCS->entries(); ind++){
 
     G4double crossSec = 0;
-    G4Data* EnergyVector = (*(*oneAtomCS)[ind])[0];
-    G4Data* CrossSecVector = (*(*oneAtomCS)[ind])[1];
+    G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
+    G4DataVector* CrossSecVector = (*(*oneAtomCS)[ind])[1];
 
     if(IncEnergy < (*EnergyVector)[1]){ // First element is the shell number
 
@@ -484,8 +481,8 @@ G4double G4LowEnergyIonisation::ComputeCrossSectionWithCut(const G4double AtomIn
   for(G4int ind = 0; ind < oneAtomCS->entries(); ind++){
 
     G4double crossSec = 0;
-    G4Data* EnergyVector = (*(*oneAtomCS)[ind])[0];
-    G4Data* CrossSecVector = (*(*oneAtomCS)[ind])[1];
+    G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
+    G4DataVector* CrossSecVector = (*(*oneAtomCS)[ind])[1];
 
     TotalCrossSection += GetShellCrossSectionwithCut(AtomIndex,ind,IncEnergy,CutEnergy);
   }
@@ -507,8 +504,8 @@ G4double G4LowEnergyIonisation::GetShellCrossSection(const G4double AtomicNumber
 
   if( ind >= oneAtomCS->entries() ) return crossSec ;
 
-  G4Data* EnergyVector = (*(*oneAtomCS)[ind])[0];
-  G4Data* CrossSecVector = (*(*oneAtomCS)[ind])[1];
+  G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
+  G4DataVector* CrossSecVector = (*(*oneAtomCS)[ind])[1];
 
   if(KineticEnergy < (*EnergyVector)[1]){ // First element is the shell number
 
@@ -561,27 +558,27 @@ G4double G4LowEnergyIonisation::GetShellCrossSectionwithCut(
 
   const G4int CoeffNumber = oneShellCoeffTable->entries();
 
-  const G4Data* energyVec = (*oneShellCoeffTable)[0];
-  const G4int LastPar = energyVec->length()-1;
-  G4Data Parms;
+  const G4DataVector* energyVec = (*oneShellCoeffTable)[0];
+  const G4int LastPar = energyVec->size()-1;
+  G4DataVector Parms;
 
   for(G4int ind = 1; ind < CoeffNumber-2; ind++){
 
-    const G4Data* oneCoeffVec = (*oneShellCoeffTable)[ind];
+    const G4DataVector* oneCoeffVec = (*oneShellCoeffTable)[ind];
 
     if(KineticEnergy < (*energyVec)[0]){
-      Parms.insert((*oneCoeffVec)[0]);
+      Parms.push_back((*oneCoeffVec)[0]);
     }
 
     else if(KineticEnergy > (*energyVec)[LastPar]){
 
-      Parms.insert((*oneCoeffVec)[LastPar]);
+      Parms.push_back((*oneCoeffVec)[LastPar]);
     }
 
     else{
 
       G4double par = util.DataSemiLogInterpolation(KineticEnergy,(*energyVec),(*oneCoeffVec));
-      Parms.insert(par);
+      Parms.push_back(par);
     }
   }
 
@@ -763,27 +760,27 @@ G4double G4LowEnergyIonisation::GetShellEnergyLosswithCut(
 
   const G4int CoeffNumber = oneShellCoeffTable->entries();
 
-  const G4Data* energyVec = (*oneShellCoeffTable)[0];
-  const G4int LastPar = energyVec->length()-1;
-  G4Data Parms;
+  const G4DataVector* energyVec = (*oneShellCoeffTable)[0];
+  const G4int LastPar = energyVec->size()-1;
+  G4DataVector Parms;
 
   for(G4int ind = 1; ind < CoeffNumber-2; ind++){
 
-    const G4Data* oneCoeffVec = (*oneShellCoeffTable)[ind];
+    const G4DataVector* oneCoeffVec = (*oneShellCoeffTable)[ind];
 
     if(KineticEnergy < (*energyVec)[0]){
-      Parms.insert((*oneCoeffVec)[0]);
+      Parms.push_back((*oneCoeffVec)[0]);
     }
 
     else if(KineticEnergy > (*energyVec)[LastPar]){
 
-      Parms.insert((*oneCoeffVec)[LastPar]);
+      Parms.push_back((*oneCoeffVec)[LastPar]);
     }
 
     else{
 
       G4double par = util.DataSemiLogInterpolation(KineticEnergy,(*energyVec),(*oneCoeffVec));
-      Parms.insert(par);
+      Parms.push_back(par);
     }
   }
 
@@ -1125,8 +1122,8 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     
     // Fluorescence data start from element 6
 
-     if(thePrimShVec.length() != 0){thePrimShVec.clear();}
-     thePrimShVec.insert(thePrimaryShell);
+     if(thePrimShVec.size() != 0){thePrimShVec.clear();}
+     thePrimShVec.push_back(thePrimaryShell);
      if(AtomIndex > 5){
       
       G4bool ThereAreShells = TRUE;
@@ -1288,8 +1285,8 @@ G4int G4LowEnergyIonisation::SelectRandomShell(const G4int AtomIndex
   for(G4int ind = 0; ind < oneAtomCS->entries(); ind++){
 
     G4double crossSec;
-    G4Data* EnergyVector = (*(*oneAtomCS)[ind])[0];
-    G4Data* CrossSecVector = (*(*oneAtomCS)[ind])[1];
+    G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
+    G4DataVector* CrossSecVector = (*(*oneAtomCS)[ind])[1];
     if(IncEnergy < (*EnergyVector)[0]){ //First element is the shell number
 
       crossSec = 0;
@@ -1403,7 +1400,7 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
     G4double PartSum = 0;
     
     TransProb = 1; 
-    while(TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->length()){
+    while(TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->size()){
       
       PartSum += (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
       
@@ -1457,21 +1454,21 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   // 2) Interpolate coefficients (I need the incoming electron kinetic energy)
   const G4int CoeffNumber = oneShellCoeffTable->entries();
 
-  const G4Data* energyVec = (*oneShellCoeffTable)[0];
-  const G4int LastPar = energyVec->length()-1;
-  G4Data Parms;
+  const G4DataVector* energyVec = (*oneShellCoeffTable)[0];
+  const G4int LastPar = energyVec->size()-1;
+  G4DataVector Parms;
 
   for(G4int ind = 1; ind < CoeffNumber-2; ind++){
 
-    const G4Data* oneCoeffVec = (*oneShellCoeffTable)[ind]; 
+    const G4DataVector* oneCoeffVec = (*oneShellCoeffTable)[ind]; 
 
     if(KinEn < (*energyVec)[0]){
-      Parms.insert((*oneCoeffVec)[0]);
+      Parms.push_back((*oneCoeffVec)[0]);
     }
 
     else if(KinEn > (*energyVec)[LastPar]){
 
-      Parms.insert((*oneCoeffVec)[LastPar]);
+      Parms.push_back((*oneCoeffVec)[LastPar]);
     }
 
     else{
@@ -1480,7 +1477,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
       // can be negative. 
 
       G4double par = util.DataSemiLogInterpolation(KinEn,(*energyVec),(*oneCoeffVec));
-      Parms.insert(par);
+      Parms.push_back(par);
     }
   }
 

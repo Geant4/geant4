@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.12 2000-11-03 10:29:50 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.13 2001-02-05 17:45:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,7 +101,7 @@ private:
   
   G4SecondLevel* ATable; 
   G4FirstLevel* BTable;
-  G4Data* ZNumVec;
+  G4DataVector* ZNumVec;
 
   G4LowEnergyUtilities util;
   // partial sum of total crosssection

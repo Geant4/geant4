@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.hh,v 1.7 2000-11-03 10:29:50 pia Exp $
+// $Id: G4LowEnergyCompton.hh,v 1.8 2001-02-05 17:45:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,7 +72,7 @@ private:
   G4SecondLevel* theCrossSectionTable;
   G4SecondLevel* theScatteringFunctionTable;
   G4PhysicsTable* theMeanFreePathTable;
-  G4Data* ZNumVec;
+  G4DataVector* ZNumVec;
 
   G4LowEnergyUtilities util;
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyUtilities.cc,v 1.7 2000-12-14 09:43:57 gcosmo Exp $
+// $Id: G4LowEnergyUtilities.cc,v 1.8 2001-02-05 17:45:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,7 +82,7 @@ G4SecondLevel* G4LowEnergyUtilities::BuildSecondLevelTables(const G4int TableInd
   
   for(G4int j = 0; j < ParNum; j++){ 
     
-    oneShellPar->insertAt(j,new G4Data());
+    oneShellPar->insertAt(j,new G4DataVector());
   }
   
   G4double a = 0;
@@ -101,7 +101,7 @@ G4SecondLevel* G4LowEnergyUtilities::BuildSecondLevelTables(const G4int TableInd
 	
 	for(G4int j = 0; j < ParNum; j++){ 
 	  
-	  oneShellPar->insertAt(j,new G4Data());
+	  oneShellPar->insertAt(j,new G4DataVector());
 	}
       }
       
@@ -122,12 +122,12 @@ G4SecondLevel* G4LowEnergyUtilities::BuildSecondLevelTables(const G4int TableInd
       
       if(k%ParNum != 0){	
 	
-	(*oneShellPar)[k-1]->insert(a);
+	(*oneShellPar)[k-1]->push_back(a);
 	k++;
       }
       else if(k%ParNum == 0){
 	
-	(*oneShellPar)[k-1]->insert(a);
+	(*oneShellPar)[k-1]->push_back(a);
 	k = 1;
       }
     }
@@ -181,7 +181,7 @@ G4FirstLevel* G4LowEnergyUtilities::BuildFirstLevelTables(const G4int TableInd,
   
   for(G4int j = 0; j < ParNum; j++){ 
     
-    oneAtomPar->insertAt(j,new G4Data());
+    oneAtomPar->insertAt(j,new G4DataVector());
   }
   
   G4double a = 0;
@@ -198,12 +198,12 @@ G4FirstLevel* G4LowEnergyUtilities::BuildFirstLevelTables(const G4int TableInd,
       
       if(k%ParNum != 0){	
 	
-	(*oneAtomPar)[k-1]->insert(a);
+	(*oneAtomPar)[k-1]->push_back(a);
 	k++;
       }
       else if(k%ParNum == 0){
 	
-	(*oneAtomPar)[k-1]->insert(a);
+	(*oneAtomPar)[k-1]->push_back(a);
 	k = 1;
       }
     }

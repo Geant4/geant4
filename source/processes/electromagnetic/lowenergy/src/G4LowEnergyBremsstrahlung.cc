@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.27 2000-09-20 16:49:40 vnivanch Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.28 2001-02-05 17:45:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,6 @@ G4LowEnergyBremsstrahlung::~G4LowEnergyBremsstrahlung()
      }
 
      if(ZNumVec){
-       
        ZNumVec->clear();
        delete ZNumVec;
      }
@@ -151,7 +150,7 @@ void G4LowEnergyBremsstrahlung::BuildCrossSectionTable(){
   theCrossSectionTable = new G4SecondLevel();
   G4int dataNum = 2;
  
-  for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
     
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
     
@@ -200,7 +199,7 @@ void G4LowEnergyBremsstrahlung::BuildZVec(){
     delete ZNumVec;
   }
 
-  ZNumVec = new G4Data(); 
+  ZNumVec = new G4DataVector(); 
   for (G4int J=0 ; J < numOfMaterials; J++){ 
  
     const G4Material* material= (*theMaterialTable)[J];        
@@ -211,12 +210,9 @@ void G4LowEnergyBremsstrahlung::BuildZVec(){
 
       G4double Zel = (*theElementVector)(iel)->GetZ();
 
-      if(ZNumVec->contains(Zel) == FALSE){
-
-	ZNumVec->insert(Zel);
-      }
-      else{
-	
+      if( !(ZNumVec->contains(Zel)) ) {
+	ZNumVec->push_back(Zel);
+      } else{
 	continue;
       }
     }
@@ -301,6 +297,7 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
    G4Material* material;
    G4double* CutInKineticEnergy = G4Gamma::Gamma()->GetCutsInEnergy() ;
 
+   PartialSumSigma.clearAndDestroy();
    PartialSumSigma.resize(NumbOfMaterials);
 
    G4double LowEdgeEnergy , Value;
@@ -362,7 +359,7 @@ void G4LowEnergyBremsstrahlung::ComputePartialSumSigma(const G4double KineticEne
    const G4ElementVector* theElementVector = aMaterial->GetElementVector(); 
    const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
 
-   PartialSumSigma(Imate) = new G4ValVector(NbOfElements);
+   PartialSumSigma[Imate] = new G4DataVector();
 
    G4double SIGMA = 0. ;
 
@@ -374,7 +371,7 @@ void G4LowEnergyBremsstrahlung::ComputePartialSumSigma(const G4double KineticEne
      
      SIGMA += theAtomNumDensityVector[Ielem]*interCrsSec;
 	 
-     PartialSumSigma(Imate)->insert(SIGMA);
+     PartialSumSigma[Imate]->push_back(SIGMA);
    }
 }
 
@@ -661,9 +658,9 @@ G4Element* G4LowEnergyBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) co
   const G4int NumberOfElements = aMaterial->GetNumberOfElements();
   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
 
-  G4double rval = G4UniformRand()*((*PartialSumSigma(Index))(NumberOfElements-1));
+  G4double rval = G4UniformRand()*((*PartialSumSigma[Index])[NumberOfElements-1]);
   for ( G4int i=0; i < NumberOfElements; i++ )
-    if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
+    if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)(i));
   return (*theElementVector)(0);
 }
 
