@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIXm.cc,v 1.3 1999-04-16 10:06:02 barrand Exp $
+// $Id: G4UIXm.cc,v 1.4 1999-05-11 13:26:31 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -47,6 +47,7 @@ static void XmTextAppendString (Widget,char*);
 static void clearButtonCallback (Widget,XtPointer,XtPointer);
 static char* XmConvertCompoundStringToString (XmString,int);
 static G4bool ConvertStringToInt(const char*,int&);
+static void ExecuteChangeSizeFunction(Widget);
 
 static G4bool exitSession = true;
 static G4bool exitPause = true;
@@ -82,7 +83,7 @@ G4UIXm::G4UIXm (
   shell = XtAppCreateShell ("G4UIXm","G4UIXm",
 			    topLevelShellWidgetClass,XtDisplay(top),
 			    args,1); 
-  Widget form = XmCreateForm (shell,"form",NULL,0);
+  form = XmCreateForm (shell,"form",NULL,0);
   XtManageChild (form);
 
   XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
@@ -294,6 +295,7 @@ void G4UIXm::AddMenu (
   widget = XmCreateCascadeButton (menuBar,(char*)a_name,args,2);
   XmStringFree (cps);
   XtManageChild (widget);
+  ExecuteChangeSizeFunction(form);
 }
 /***************************************************************************/
 void G4UIXm::AddButton (
@@ -465,5 +467,18 @@ G4bool ConvertStringToInt(
   aInt = value;
   return true;
 }
+#include <X11/IntrinsicP.h>
+//////////////////////////////////////////////////////////////////////////////
+void ExecuteChangeSizeFunction (
+ Widget aWidget
+)
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  if(aWidget==NULL) return;
+  if(aWidget->core.widget_class->core_class.resize==NULL) return;
+  (aWidget->core.widget_class->core_class.resize)(aWidget);
+}
+
 
 #endif
