@@ -3,7 +3,7 @@
 # A simple script to run all the tests in this directory and check
 # their results against the expected (previous) results
 #
-# $Id: run.sh,v 1.4 2000-02-28 15:11:24 gcosmo Exp $
+# $Id: run.sh,v 1.5 2003-10-01 14:52:20 gcosmo Exp $
 # $Name: not supported by cvs2svn $
 #
 # Created:
@@ -29,13 +29,5 @@ do
   echo  " "
 done
 
-# exit
+exit
 
-# Now test STEPtest
-target=STEPTest
-gmake G4TARGET=STEPTest
-echo Test outputs for $target... 
-for j in 1 2 3 4 5 6 7 8 9 
-do
-  echo $j | $G4WORKDIR/bin/$G4SYSTEM/$target
-done

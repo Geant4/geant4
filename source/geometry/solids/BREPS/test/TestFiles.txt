@@ -16,8 +16,6 @@
 
  * Test the functionality of Axis2Placement3D and Project
 
- This test is runing on Linux, HP, DEC and Sun
-
  ////////////////////////////////////////////////////////
 
  G4FPlaneTest
@@ -28,8 +26,6 @@
    points in the plane
 
  * Test the function EvaluateIntersection
-
- This test is runing on Linux, HP, DEC and Sun
 
  ////////////////////////////////////////////////////////
 
@@ -47,16 +43,3 @@
     - distance to out
 
  ////////////////////////////////////////////////////////
-
- STEPTest
-
- * Read a STEP file and create the STEP entities 
-
- * Check that BREP solids & surfaces build 
-   the solid specified by the reader output
- 
- *  BREP checks 
-      -> Check methods :
-        - Inside
-        - DistanceToIn
-        - DistanceToOut
