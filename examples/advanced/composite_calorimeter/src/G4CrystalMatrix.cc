@@ -10,7 +10,7 @@
 
 #include "CCalMaterialFactory.hh"
 #include "CCalRotationMatrixFactory.hh"
-#include "CMSSensitiveDetectors.hh"
+#include "CCalSensitiveDetectors.hh"
 
 #include "utils.hh"
 #include <math.h>
@@ -254,7 +254,7 @@ void G4CrystalMatrix::constructSensitive() {
   cout << "Now registering CrystalMatrix LogicalVolume's to SD's:" << endl;
 #endif
   if (sensitiveLogs.size()>0) {
-    CMSSensitiveDetectors* sensDets = CMSSensitiveDetectors::getInstance();
+    CCalSensitiveDetectors* sensDets = CCalSensitiveDetectors::getInstance();
     G4String SDname = idName;
     for(vector<ptrG4Log>::iterator iter=sensitiveLogs.begin(); 
 	                           iter<sensitiveLogs.end(); iter++) {

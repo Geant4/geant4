@@ -7,7 +7,7 @@
 
 #include "CCalMaterialFactory.hh"
 #include "CCalRotationMatrixFactory.hh"
-#include "CMSSensitiveDetectors.hh"
+#include "CCalSensitiveDetectors.hh"
 
 #include "utils.hh"
 #include <math.h>
@@ -312,7 +312,7 @@ G4LogicalVolume* G4HcalTB96HCal::constructAbsorberLayer(G4int lay) {
 void G4HcalTB96HCal::constructSensitive(){
 
   if (allSensitiveLogs.size()>0) {
-    CMSSensitiveDetectors* sensDets = CMSSensitiveDetectors::getInstance();
+    CCalSensitiveDetectors* sensDets = CCalSensitiveDetectors::getInstance();
     G4String SDname = Name();
     for (vector<ptrG4Log>::iterator iter=allSensitiveLogs.begin(); 
          iter<allSensitiveLogs.end(); iter++) {

@@ -1,4 +1,8 @@
-#include "HcalTB96SteppingAction.hh"
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalSeppingAction.cc
+// Description: Study profiling during the steps
+///////////////////////////////////////////////////////////////////////////////
+#include "CCalSteppingAction.hh"
 #include "HcalTB96Analysis.hh"
 #include "G4CaloSD.hh"
 
@@ -7,7 +11,7 @@
 #include <iostream>
 #include "G4ThreeVector.hh"
 
-HcalTB96SteppingAction::HcalTB96SteppingAction(){
+CCalSteppingAction::CCalSteppingAction(){
 
   HcalTB96Analysis* analysis = HcalTB96Analysis::getInstance();
   timeHistoMaxBin=analysis->maxbin();
@@ -17,13 +21,13 @@ HcalTB96SteppingAction::HcalTB96SteppingAction(){
 
 }
 
-HcalTB96SteppingAction::~HcalTB96SteppingAction(){
+CCalSteppingAction::~CCalSteppingAction(){
 
-  cout <<"Deleting HcalTB96SteppingAction"<<endl;
+  cout <<"Deleting CCalSteppingAction"<<endl;
 }
   
 
-void HcalTB96SteppingAction::UserSteppingAction(const G4Step* aStep){
+void CCalSteppingAction::UserSteppingAction(const G4Step* aStep){
 
   G4StepPoint*  PostStepPoint= aStep->GetPostStepPoint(); 
   G4StepPoint*  PreStepPoint= aStep->GetPreStepPoint(); 
@@ -42,7 +46,7 @@ void HcalTB96SteppingAction::UserSteppingAction(const G4Step* aStep){
 }
 
 
-void HcalTB96SteppingAction::endOfEvent(){
+void CCalSteppingAction::endOfEvent(){
 
   HcalTB96Analysis* analysis = HcalTB96Analysis::getInstance();
   analysis->InsertLateralProfile(LateralProfile);  

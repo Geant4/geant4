@@ -1,12 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CMSSensitiveDetectors.h
-// Date: 15/05/02 S.B.
-// Modifications: 
+// File: CCalSensitiveDetectors.hh
 // Description: Container of logical volume pointers which can be sensitive
 //              detectors
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef CMSSensitiveDetectors_h
-#define CMSSensitiveDetectors_h 1
+#ifndef CCalSensitiveDetectors_h
+#define CCalSensitiveDetectors_h 1
 
 #include <vector>
 #include <map>
@@ -15,17 +13,17 @@
 
 typedef multimap< string, G4LogicalVolume*, less<string> > mmslv;
 
-class CMSSensitiveDetectors {
+class CCalSensitiveDetectors {
 
 public:    
-  ~CMSSensitiveDetectors(){};
+  ~CCalSensitiveDetectors(){};
   vector<G4LogicalVolume*> getVolumes (const string& name, bool exists = 0);
   void registerVolume (const string& name, G4LogicalVolume*);
   bool setSensitive(const string& string, G4VSensitiveDetector* sens);
-  static CMSSensitiveDetectors* getInstance();
+  static CCalSensitiveDetectors* getInstance();
 private:
-  CMSSensitiveDetectors(){};
-  static CMSSensitiveDetectors* theInstance;
+  CCalSensitiveDetectors(){};
+  static CCalSensitiveDetectors* theInstance;
   // logical volume container: name, G4LogicalVolume*
   mmslv theLVs;
 

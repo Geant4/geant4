@@ -1,33 +1,33 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CMSSensitiveDetectors.cc
-// Date: 15/05/02
-// Modifications: 
+// File: CCalSensitiveDetectors.cc
+// Description: Provides a map of logicalvolume pointers which can be sensitive
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "CMSSensitiveDetectors.hh"
+#include "CCalSensitiveDetectors.hh"
 
 //#define debug
 
-CMSSensitiveDetectors* CMSSensitiveDetectors::theInstance = 0;
+CCalSensitiveDetectors* CCalSensitiveDetectors::theInstance = 0;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-CMSSensitiveDetectors* CMSSensitiveDetectors::getInstance() {
 
- if (!theInstance) theInstance = new CMSSensitiveDetectors;
+CCalSensitiveDetectors* CCalSensitiveDetectors::getInstance() {
+ if (!theInstance) theInstance = new CCalSensitiveDetectors;
  return theInstance;
 }
 
 
-void CMSSensitiveDetectors::registerVolume (const string& string, G4LogicalVolume* logv) {
+void CCalSensitiveDetectors::registerVolume (const string& string, 
+					     G4LogicalVolume* logv) {
 
   theLVs.insert(mmslv::value_type(string, logv));
 #ifdef debug
-  cout << "CMSSensitiveDetectors : Register " << logv->GetName() 
+  cout << "CCalSensitiveDetectors : Register " << logv->GetName() 
        << " in category " << string << endl;
 #endif
 }
 
-vector<G4LogicalVolume*> CMSSensitiveDetectors::getVolumes (const string& string, bool exist) {
+vector<G4LogicalVolume*> CCalSensitiveDetectors::getVolumes (const string& string, 
+							     bool exist) {
 
   mmslv::const_iterator mmscite;
   pair<mmslv::iterator, mmslv::iterator> mmsdi;
@@ -37,14 +37,15 @@ vector<G4LogicalVolume*> CMSSensitiveDetectors::getVolumes (const string& string
     lvs.push_back(const_cast<G4LogicalVolume*>((*mmscite).second));
   }
 
-  if (exist) cout << "CMSSensitiveDetector : " << lvs.size() 
+  if (exist) cout << "CCalSensitiveDetector : " << lvs.size() 
 		  << " detectors for " << string << endl;
   
   return lvs;
 }
 
 
-bool CMSSensitiveDetectors::setSensitive(const string& string, G4VSensitiveDetector* sens) {
+bool CCalSensitiveDetectors::setSensitive(const string& string, 
+					  G4VSensitiveDetector* sens) {
 
   bool result=false;
   mmslv::const_iterator mmscite;

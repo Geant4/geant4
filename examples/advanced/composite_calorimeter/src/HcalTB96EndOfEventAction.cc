@@ -12,7 +12,7 @@
 #include "G4CaloHit.hh"
 #include "CMSCaloOrganization.hh"
 #include "SDList.hh"
-#include "HcalTB96SteppingAction.hh"
+#include "CCalSteppingAction.hh"
 
 #include "G4ios.hh"
 #include "G4Event.hh"
@@ -181,7 +181,7 @@ void HcalTB96EndOfEventAction::instanciateSteppingAction(){
     cout << " HcalTB96EndOfEventAction::instanciateSteppingAction creates"
 	 << " CMSSteppingAction" << endl;
 #endif
-    theSteppingAction = new HcalTB96SteppingAction;  
+    theSteppingAction = new CCalSteppingAction;  
     G4RunManager::GetRunManager()->SetUserAction(theSteppingAction);
   }   
 	

@@ -12,7 +12,7 @@
 
 class CMSCaloOrganization;
 class G4HCofThisEvent;
-class HcalTB96SteppingAction;
+class CCalSteppingAction;
 class CMSPrimaryGeneratorAction;
 
 typedef G4String nameType;
@@ -33,7 +33,7 @@ private:
   G4bool                     isInitialized;
 
   CMSPrimaryGeneratorAction* primaryGenerator;
-  HcalTB96SteppingAction*    theSteppingAction;
+  CCalSteppingAction*        theSteppingAction;
   nameType*                  SDnames;
   G4int                      numberOfSD;
   CMSCaloOrganization*       theOrg;

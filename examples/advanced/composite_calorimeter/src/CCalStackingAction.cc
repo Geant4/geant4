@@ -1,9 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CMSStackingAction.cc
-// Date: 7.10.99 V.Lefebure
-// Modifications:
+// File: CCalStackingAction.cc
+// Description: Stacking action needed for the application
 ///////////////////////////////////////////////////////////////////////////////
-#include "CMSStackingAction.hh"
+#include "CCalStackingAction.hh"
 #include "G4StackManager.hh"
 
 #include "G4SDManager.hh"
@@ -15,15 +14,15 @@
 //#define debug
 //#define ddebug
 
-CMSStackingAction::CMSStackingAction():
+CCalStackingAction::CCalStackingAction():
 isInitialized(false)
 {}
 
 
-CMSStackingAction::~CMSStackingAction(){}
+CCalStackingAction::~CCalStackingAction(){}
 
 
-void CMSStackingAction::PrepareNewEvent(){
+void CCalStackingAction::PrepareNewEvent(){
 
   if(!isInitialized)   initialize();
   stage = firstStage;
@@ -32,14 +31,14 @@ void CMSStackingAction::PrepareNewEvent(){
 
 }
 
-void CMSStackingAction::initialize(){
+void CCalStackingAction::initialize(){
 
   isInitialized = true;
  
   numberOfSD = SDList::getInstance()->getNumberOfCaloSD();
 #ifdef debug
-  cout << "CMSStackingAction look for " << numberOfSD << " calorimeter-like SD"
-       << endl;
+  cout << "CCalStackingAction look for " << numberOfSD 
+       << " calorimeter-like SD" << endl;
 #endif
   int i = 0;
   for (i=0; i<numberOfSD; i++) {
@@ -59,7 +58,7 @@ void CMSStackingAction::initialize(){
       G4VSensitiveDetector* aSD = sd->FindSensitiveDetector(SDName[i]);
       if (aSD==0) {
 #ifdef debug
-	cout << "CMSStackingAction::initialize: No SD with name " << SDName[i]
+	cout << "CCalStackingAction::initialize: No SD with name " << SDName[i]
 	     << " in this Setup " << endl;
 #endif
       } else {
@@ -68,13 +67,14 @@ void CMSStackingAction::initialize(){
       }	   
     }
 #ifdef debug
-    cout << "CMSStackingAction::initialize: Could not get SD Manager !" <<endl;
+    cout << "CCalStackingAction::initialize: Could not get SD Manager !" 
+	 << endl;
 #endif
   }
    
 }
 
-G4ClassificationOfNewTrack CMSStackingAction::ClassifyNewTrack(const G4Track* aTrack){
+G4ClassificationOfNewTrack CCalStackingAction::ClassifyNewTrack(const G4Track* aTrack){
 
   G4ClassificationOfNewTrack classification=fKill;
   int parentID = aTrack->GetParentID();
@@ -91,7 +91,6 @@ G4ClassificationOfNewTrack CMSStackingAction::ClassifyNewTrack(const G4Track* aT
     cout << "returning classification= " << classification << endl;
 #endif
     return classification= fKill;
-  
   }
    
   if (aTrack->GetDefinition()->GetParticleName() == "gamma" && 
@@ -139,6 +138,7 @@ G4ClassificationOfNewTrack CMSStackingAction::ClassifyNewTrack(const G4Track* aT
        
   } else 
     classification = G4UserStackingAction::ClassifyNewTrack(aTrack);
+
 #ifdef ddebug
   cout << " returning classification= " << classification
        << " for track "<< aTrack->GetTrackID() << endl;
@@ -148,7 +148,7 @@ G4ClassificationOfNewTrack CMSStackingAction::ClassifyNewTrack(const G4Track* aT
 }
 
 
-void CMSStackingAction::NewStage(){
+void CCalStackingAction::NewStage(){
 
 #ifdef ddebug
   cout << "In NewStage with stage = " << stage << endl;
@@ -166,7 +166,7 @@ void CMSStackingAction::NewStage(){
   }
 }
 
-G4bool CMSStackingAction::trackStartsInCalo(const G4Track* atrack){
+G4bool CCalStackingAction::trackStartsInCalo(const G4Track* atrack){
 
  /// This method should check that the secondary particle
  /// was produced inside the detector calorimeter and 
@@ -178,12 +178,10 @@ G4bool CMSStackingAction::trackStartsInCalo(const G4Track* atrack){
  return true;
 }
 
-void CMSStackingAction::setPrimaryID(G4int id){
+void CCalStackingAction::setPrimaryID(G4int id){
   
   for (int i=0; i<numberOfSD; i++){
     if(theCaloSD[i] != 0)theCaloSD[i]->SetPrimaryID(id);
   }
-
-
 
 }

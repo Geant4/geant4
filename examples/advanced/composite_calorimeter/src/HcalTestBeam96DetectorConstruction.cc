@@ -13,7 +13,7 @@
 
 #include "CCalMaterialFactory.hh"
 #include "CCalRotationMatrixFactory.hh"
-#include "CMSSensAssign.hh"
+#include "CCalSensAssign.hh"
 #include "TestBeamMagneticField.hh"
 #include "G4HcalTB96.hh"
 #include "utils.hh"
@@ -101,16 +101,16 @@ G4VPhysicalVolume* HcalTestBeam96DetectorConstruction::Construct() {
 
   //Addsenistive detector types 
   bool result;
-  result = CMSSensAssign::getInstance()->addCaloSD("HadronCalorimeter",
-						   new HcalTB96HCalOrganization);
-  result = CMSSensAssign::getInstance()->addCaloSD("CrystalMatrix",
-						   new CrystalMatrixOrganization);
+  result = CCalSensAssign::getInstance()->addCaloSD("HadronCalorimeter",
+						    new HcalTB96HCalOrganization);
+  result = CCalSensAssign::getInstance()->addCaloSD("CrystalMatrix",
+						    new CrystalMatrixOrganization);
 
   //Assign the sensitive detectors
-  result = CMSSensAssign::getInstance()->assign();
+  result = CCalSensAssign::getInstance()->assign();
 
   //Create the stacking manager required by Calorimeter
-  result = CMSSensAssign::getInstance()->stackingAction();
+  result = CCalSensAssign::getInstance()->stackingAction();
   
   return volume;
 
