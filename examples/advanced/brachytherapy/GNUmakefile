@@ -1,5 +1,5 @@
 # --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.6 2002-06-13 15:11:27 guatelli Exp $
+# $Id: GNUmakefile,v 1.7 2002-11-15 17:36:55 guatelli Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -14,10 +14,10 @@ G4ANALYSIS_USE = 1
 
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../
+  G4INSTALL =~/GEANT4/geant4/
 endif
 
-CPPFLAGS += -I${LHCXX_REL_DIR}/include -I/afs/cern.ch/sw/contrib/AIDA/2.2/cpp
+CPPFLAGS += -I${LHCXX_REL_DIR}/include -I/afs/cern.ch/sw/contrib/AIDA/3.0/cpp -g
 
 
 .PHONY: all
@@ -25,9 +25,5 @@ all: lib bin
 
 
 include $(G4INSTALL)/config/binmake.gmk
-# From lowenergy/test/GNUmakefile
-CPPFLAGS += `aida-config --useHBook --include`
-LDFLAGS  += `aida-config --useHBook --lib`
-LOADLIBS  += `aida-config --useHBook --lib`
 
 
