@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.7 1999-05-12 13:53:59 sgiani Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.8 1999-05-25 17:51:43 sgiani Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Corrections by S.Giani:
@@ -343,7 +343,7 @@ EInside G4BREPSolidPolyhedra::Inside(register const G4ThreeVector& Pt) const
       if( (SurfaceVec[a]->Intersect(r)) & 1 )
       {
 	// test if the point is on the surface
-	if(SurfaceVec[a]->Distance() < kCarTolerance)
+	if(SurfaceVec[a]->Distance() <= kCarTolerance*kCarTolerance)
 	  return kSurface;
 	
 	// test if this intersection was founded before
