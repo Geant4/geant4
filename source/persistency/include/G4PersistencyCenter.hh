@@ -1,4 +1,4 @@
-// $Id: G4PersistencyCenter.hh,v 1.3 2002-12-04 10:37:20 gcosmo Exp $
+// $Id: G4PersistencyCenter.hh,v 1.4 2002-12-04 13:57:29 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyCenter.hh
@@ -51,7 +51,7 @@ class G4PersistencyCenter
       // Destructor
 
     public: // With description
-      static G4PersistencyCenter* GetG4PersistencyCenter();
+      static G4PersistencyCenter* GetPersistencyCenter();
       // returns the pointer of singleton G4PersistencyCenter
 
       void SelectSystem(G4std::string systemName);
@@ -108,13 +108,13 @@ class G4PersistencyCenter
       void PrintAll();
       // prints the current G4PersistencyCenter settings.
 
-      G4PersistencyManager* CurrentG4PersistencyManager() { return f_currentManager; };
+      G4PersistencyManager* CurrentPersistencyManager() { return f_currentManager; };
       // returns the pointer of the currnet G4PersistencyManager.
 
       void SetG4PersistencyManager(G4PersistencyManager* pm, G4std::string name);
       // returns the pointer of the currnet G4PersistencyManager.
 
-      G4PersistencyManager* GetG4PersistencyManager(G4std::string nam);
+      G4PersistencyManager* GetPersistencyManager(G4std::string nam);
       // returns the pointer of the currnet G4PersistencyManager with name.
 
       void RegisterG4PersistencyManager(G4PersistencyManager* pm);

@@ -1,4 +1,4 @@
-// $Id: G4PersistencyManager.hh,v 1.4 2002-12-04 11:39:56 gcosmo Exp $
+// $Id: G4PersistencyManager.hh,v 1.5 2002-12-04 13:57:29 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyManager.hh
@@ -169,7 +169,7 @@ class G4PersistencyManager
       // not used
 
     protected:
-      static G4PersistencyManager* GetG4PersistencyManager();
+      static G4PersistencyManager* GetPersistencyManager();
       // Get the instance of persistency manager
 
     protected:

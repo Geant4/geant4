@@ -1,4 +1,4 @@
-// $Id: G4VHCIOentry.cc,v 1.2 2002-12-04 10:25:50 gcosmo Exp $
+// $Id: G4VHCIOentry.cc,v 1.3 2002-12-04 13:57:30 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VHCIOentry.cc
@@ -15,10 +15,10 @@
 G4VHCIOentry::G4VHCIOentry(G4std::string n)
  : m_name(n)
 {
-  G4HCIOcatalog* c = G4HCIOcatalog::GetG4HCIOcatalog();
+  G4HCIOcatalog* c = G4HCIOcatalog::GetHCIOcatalog();
   c->RegisterEntry(this);
 
-  m_verbose = G4PersistencyCenter::GetG4PersistencyCenter()->VerboseLevel();
+  m_verbose = G4PersistencyCenter::GetPersistencyCenter()->VerboseLevel();
 }
 
 // End of G4VHCIOentry.cc

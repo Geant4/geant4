@@ -18,6 +18,7 @@ committal in the CVS repository !
 04 December, 02   Y.Morita (persistency-V04-01-02)
 - G4PersistencyManager.cc: protect for default persistency manager
 - G4PersistencyCenter.cc: bug fixes, disable HepMC/MCTruth printout
+- GetG4->Get, CurrentG4->Current
 
 04 December, 02   G.Cosmo (persistency-V04-01-01)
 - Corrections to comply to G4 coding rules:

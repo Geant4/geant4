@@ -1,4 +1,4 @@
-// $Id: G4HCIOentryT.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
+// $Id: G4HCIOentryT.hh,v 1.3 2002-12-04 13:57:29 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4HCIOentryT.hh
@@ -45,9 +45,9 @@ template <class T> class G4HCIOentryT
             G4cout << "G4HCIOentryT: Constructing HitsCollection IO manager"
                    << " for \"" << detName << "\" " << f_manager <<  G4endl;
           }
-          G4HCIOcatalog::GetG4HCIOcatalog()->RegisterHCIOmanager(f_manager);
+          G4HCIOcatalog::GetHCIOcatalog()->RegisterHCIOmanager(f_manager);
           if ( m_verbose > 2 ) {
-            G4HCIOcatalog::GetG4HCIOcatalog()->PrintHCIOmanager();
+            G4HCIOcatalog::GetHCIOcatalog()->PrintHCIOmanager();
           }
         }
       }

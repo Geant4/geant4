@@ -1,4 +1,4 @@
-// $Id: G4HCIOcatalog.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
+// $Id: G4HCIOcatalog.hh,v 1.3 2002-12-04 13:57:29 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4HCIOcatalog.hh
@@ -32,7 +32,7 @@ class G4HCIOcatalog
       // Destructor
 
     public: // With description
-      static G4HCIOcatalog* GetG4HCIOcatalog();
+      static G4HCIOcatalog* GetHCIOcatalog();
       // Construct G4HCIOcatalog and returns the pointer
 
       void SetVerboseLevel(int v) { m_verbose = v; };

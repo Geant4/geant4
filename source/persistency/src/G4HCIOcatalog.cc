@@ -1,4 +1,4 @@
-// $Id: G4HCIOcatalog.cc,v 1.2 2002-12-04 10:25:50 gcosmo Exp $
+// $Id: G4HCIOcatalog.cc,v 1.3 2002-12-04 13:57:29 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4HCIOcatalog.cc
@@ -18,8 +18,8 @@ G4HCIOcatalog::G4HCIOcatalog()
  : m_verbose(0)
 {}
 
-// Implementation of GetG4HCIOcatalog
-G4HCIOcatalog* G4HCIOcatalog::GetG4HCIOcatalog()
+// Implementation of GetHCIOcatalog
+G4HCIOcatalog* G4HCIOcatalog::GetHCIOcatalog()
 {
   if ( f_thePointer == 0 ) f_thePointer = new G4HCIOcatalog;
   return f_thePointer;

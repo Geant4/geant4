@@ -1,4 +1,4 @@
-// $Id: G4DCIOentryT.hh,v 1.2 2002-12-04 10:25:48 gcosmo Exp $
+// $Id: G4DCIOentryT.hh,v 1.3 2002-12-04 13:57:29 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4DCIOentryT.hh
@@ -45,9 +45,9 @@ template <class T> class G4DCIOentryT
             G4cout << "G4DCIOentryT: Constructing DigitsCollection IO manager"
                    << " for \"" << detName << "\" " << f_manager <<  G4endl;
           }
-          G4DCIOcatalog::GetG4DCIOcatalog()->RegisterDCIOmanager(f_manager);
+          G4DCIOcatalog::GetDCIOcatalog()->RegisterDCIOmanager(f_manager);
           if ( m_verbose > 2 ) {
-            G4DCIOcatalog::GetG4DCIOcatalog()->PrintDCIOmanager();
+            G4DCIOcatalog::GetDCIOcatalog()->PrintDCIOmanager();
           }
         }
       }

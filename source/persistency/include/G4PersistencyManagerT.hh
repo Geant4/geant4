@@ -1,4 +1,4 @@
-// $Id: G4PersistencyManagerT.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
+// $Id: G4PersistencyManagerT.hh,v 1.3 2002-12-04 13:57:29 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyManagerT.hh
@@ -28,7 +28,7 @@ template <class T> class G4PersistencyManagerT
            G4cout << "G4PersistencyManagerT: Registering G4PersistencyManager \""
                   << n << "\"" << G4endl;
          }
-         G4PersistencyCenter::GetG4PersistencyCenter()->
+         G4PersistencyCenter::GetPersistencyCenter()->
                        RegisterG4PersistencyManager(this);
       }
       // Constructor

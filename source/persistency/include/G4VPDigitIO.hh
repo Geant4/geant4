@@ -1,4 +1,4 @@
-// $Id: G4VPDigitIO.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
+// $Id: G4VPDigitIO.hh,v 1.3 2002-12-04 13:57:29 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VPDigitIO.hh
@@ -26,7 +26,7 @@ class G4VPDigitIO
       // Destructor
 
     public: // With description
-      G4VPDigitIO* GetG4VPDigitIO() { return f_G4VPDigitIO; };
+      G4VPDigitIO* GetVPDigitIO() { return f_G4VPDigitIO; };
       // Returns the pointer of the digit collection I/O manager.
 
       virtual G4bool Store(const G4DCofThisEvent*) =0;

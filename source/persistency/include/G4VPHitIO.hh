@@ -1,4 +1,4 @@
-// $Id: G4VPHitIO.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
+// $Id: G4VPHitIO.hh,v 1.3 2002-12-04 13:57:29 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VPHitIO.hh
@@ -26,7 +26,7 @@ class G4VPHitIO
       // Destructor
 
     public: // With description
-      G4VPHitIO* GetG4VPHitIO() { return f_G4VPHitIO; };
+      G4VPHitIO* GetVPHitIO() { return f_G4VPHitIO; };
       // Returns the pointer of the hit collection I/O manager.
 
       virtual G4bool Store(const G4HCofThisEvent*) =0;

@@ -41,6 +41,8 @@ cat $file | sed \
   -e 's/MCTVUserFilter/G4MCTVUserFilter/g' \
 -e 's/G4G4/G4/g' \
 -e 's/G4VG4/G4V/g' \
+-e 's/GetG4/Get/g' \
+-e 's/CurrentG4/Current/g' \
 -e 's/FADS\/Goofy tag/GEANT4 tag/g' \
   > $tmpfile
 

@@ -1,4 +1,4 @@
-// $Id: G4PersistencyManager.cc,v 1.7 2002-12-04 12:07:26 morita Exp $
+// $Id: G4PersistencyManager.cc,v 1.8 2002-12-04 13:57:29 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyManager.cc
@@ -29,10 +29,10 @@ G4PersistencyManager::G4PersistencyManager(G4PersistencyCenter* pc, G4std::strin
 G4PersistencyManager::~G4PersistencyManager()
 {}
 
-// Implementation of GetG4PersistencyManager
-G4PersistencyManager* G4PersistencyManager::GetG4PersistencyManager()
+// Implementation of GetPersistencyManager
+G4PersistencyManager* G4PersistencyManager::GetPersistencyManager()
 {
-  return G4PersistencyCenter::GetG4PersistencyCenter()->CurrentG4PersistencyManager();
+  return G4PersistencyCenter::GetPersistencyCenter()->CurrentPersistencyManager();
 }
 
 // Implementation of SetVerboseLevel
@@ -55,14 +55,14 @@ void G4PersistencyManager::SetVerboseLevel(int v)
 
   size_t i;
 
-  G4HCIOcatalog* hcio = G4HCIOcatalog::GetG4HCIOcatalog();
+  G4HCIOcatalog* hcio = G4HCIOcatalog::GetHCIOcatalog();
   if ( hcio != 0 ) {
     hcio->SetVerboseLevel(m_verbose);
     for ( i = 0; i < hcio->NumberOfHCIOmanager(); i++ ) {
       hcio->GetHCIOmanager(i)->SetVerboseLevel(m_verbose);
     }
   }
-  G4DCIOcatalog* dcio = G4DCIOcatalog::GetG4DCIOcatalog();
+  G4DCIOcatalog* dcio = G4DCIOcatalog::GetDCIOcatalog();
   if ( dcio != 0 ) {
     dcio->SetVerboseLevel(m_verbose);
     for ( i = 0; i < dcio->NumberOfDCIOmanager(); i++ ) {

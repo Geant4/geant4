@@ -1,4 +1,4 @@
-// $Id: G4VPHitIO.cc,v 1.1 2002-11-24 13:45:25 morita Exp $
+// $Id: G4VPHitIO.cc,v 1.2 2002-12-04 13:57:30 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VPHitIO.cc
@@ -14,7 +14,7 @@ G4VPHitIO* G4VPHitIO::f_G4VPHitIO = 0;
 G4VPHitIO::G4VPHitIO()
  : m_verbose(0)
 {
-  f_catalog = G4HCIOcatalog::GetG4HCIOcatalog();
+  f_catalog = G4HCIOcatalog::GetHCIOcatalog();
 }
 
 // Implementation of SetVerboseLevel

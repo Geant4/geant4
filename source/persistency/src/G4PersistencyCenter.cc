@@ -1,4 +1,4 @@
-// $Id: G4PersistencyCenter.cc,v 1.4 2002-12-04 12:23:53 morita Exp $
+// $Id: G4PersistencyCenter.cc,v 1.5 2002-12-04 13:57:29 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyCenter.cc
@@ -15,7 +15,7 @@
 #include "G4UImanager.hh"
 #include "G4PersistencyManager.hh"
 
-G4PersistencyCenter* G4PersistencyCenter::f_thePointer=G4PersistencyCenter::GetG4PersistencyCenter();
+G4PersistencyCenter* G4PersistencyCenter::f_thePointer=G4PersistencyCenter::GetPersistencyCenter();
 
 // Implementation of Constructor #1
 G4PersistencyCenter::G4PersistencyCenter()
@@ -62,8 +62,8 @@ G4PersistencyCenter::~G4PersistencyCenter()
   delete f_currentManager;
 }
 
-// Implementation of GetG4PersistencyCenter
-G4PersistencyCenter* G4PersistencyCenter::GetG4PersistencyCenter()
+// Implementation of GetPersistencyCenter
+G4PersistencyCenter* G4PersistencyCenter::GetPersistencyCenter()
 {
   if ( f_thePointer == 0 ) f_thePointer = new G4PersistencyCenter;
   return f_thePointer;
@@ -92,7 +92,7 @@ void G4PersistencyCenter::SelectSystem(G4std::string systemName)
     // G4std::string libs="Cint:Core:Tree:Rint:Matrix:Physics:fadsROOT";
     // st = man->ApplyCommand("/load "+libs);
     if ( st == 0 ) {
-      pm = GetG4PersistencyManager("ROOT");
+      pm = GetPersistencyManager("ROOT");
     }
   }
   else if (systemName=="ODBMS")
@@ -102,7 +102,7 @@ void G4PersistencyCenter::SelectSystem(G4std::string systemName)
     // G4std::string libs="fadsODBMS";
     // st = man->ApplyCommand("/load "+libs);
     if ( st == 0 ) {
-      pm = GetG4PersistencyManager("ODBMS");
+      pm = GetPersistencyManager("ODBMS");
     }
   }
   if ( st == 0 ) {
@@ -241,7 +241,7 @@ G4std::string G4PersistencyCenter::CurrentObject(G4std::string file)
 // Implementation of AddHCIOmanager
 void G4PersistencyCenter::AddHCIOmanager(G4std::string detName, G4std::string colName)
 {
-  G4HCIOcatalog* ioc = G4HCIOcatalog::GetG4HCIOcatalog();
+  G4HCIOcatalog* ioc = G4HCIOcatalog::GetHCIOcatalog();
 
   G4VHCIOentry* ioe = ioc->GetEntry(detName);
   if ( ioe != 0 ) {
@@ -255,14 +255,14 @@ void G4PersistencyCenter::AddHCIOmanager(G4std::string detName, G4std::string co
 // Implementation of CurrentHCIOmanager
 G4std::string G4PersistencyCenter::CurrentHCIOmanager()
 {
-  G4HCIOcatalog* ioc = G4HCIOcatalog::GetG4HCIOcatalog();
+  G4HCIOcatalog* ioc = G4HCIOcatalog::GetHCIOcatalog();
   return ioc->CurrentHCIOmanager();
 }
 
 // Implementation of AddDCIOmanager
 void G4PersistencyCenter::AddDCIOmanager(G4std::string detName)
 {
-  G4DCIOcatalog* ioc = G4DCIOcatalog::GetG4DCIOcatalog();
+  G4DCIOcatalog* ioc = G4DCIOcatalog::GetDCIOcatalog();
 
   G4std::string colName = "";
   G4VDCIOentry* ioe = ioc->GetEntry(detName);
@@ -277,7 +277,7 @@ void G4PersistencyCenter::AddDCIOmanager(G4std::string detName)
 // Implementation of CurrentDCIOmanager
 G4std::string G4PersistencyCenter::CurrentDCIOmanager()
 {
-  G4DCIOcatalog* ioc = G4DCIOcatalog::GetG4DCIOcatalog();
+  G4DCIOcatalog* ioc = G4DCIOcatalog::GetDCIOcatalog();
   return ioc->CurrentDCIOmanager();
 }
 
@@ -331,7 +331,7 @@ void G4PersistencyCenter::PrintAll()
   }
   G4cout << G4endl;
 
-  G4HCIOcatalog* hioc = G4HCIOcatalog::GetG4HCIOcatalog();
+  G4HCIOcatalog* hioc = G4HCIOcatalog::GetHCIOcatalog();
   if ( hioc != 0 ) {
     G4cout << "Hit IO Managers:" << G4endl;
     hioc->PrintEntries();
@@ -341,7 +341,7 @@ void G4PersistencyCenter::PrintAll()
     G4cout << "Hit IO Manager catalog is not registered." << G4endl;
   }
 
-  G4DCIOcatalog* dioc = G4DCIOcatalog::GetG4DCIOcatalog();
+  G4DCIOcatalog* dioc = G4DCIOcatalog::GetDCIOcatalog();
   if ( dioc != 0 ) {
     G4cout << "Digit IO Managers:" << G4endl;
     dioc->PrintEntries();
@@ -360,8 +360,8 @@ void G4PersistencyCenter::SetG4PersistencyManager(G4PersistencyManager* pm,
   f_currentSystemName=name;
 }
 
-// Implementation of GetG4PersistencyManager
-G4PersistencyManager* G4PersistencyCenter::GetG4PersistencyManager(G4std::string nam)
+// Implementation of GetPersistencyManager
+G4PersistencyManager* G4PersistencyCenter::GetPersistencyManager(G4std::string nam)
 {
   if (f_theCatalog.find(nam)!=f_theCatalog.end())
     return f_theCatalog[nam];

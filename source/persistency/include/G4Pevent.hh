@@ -1,4 +1,4 @@
-// $Id: G4Pevent.hh,v 1.1 2002-11-24 13:45:23 morita Exp $
+// $Id: G4Pevent.hh,v 1.2 2002-12-04 13:57:29 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4Pevent.hh
@@ -40,13 +40,13 @@ class G4Pevent
       int GetEventID() { return m_id; };
       // returns the event ID.
 
-      G4Event* GetG4Event() { return f_g4evt; };
+      G4Event* GetEvent() { return f_g4evt; };
       // returns the G4Event.
 
       HepMC::GenEvent* GetHepMCGenEvent() { return f_hepevt; };
       // returns the HepMC GenEvent.
 
-      // G4MCTEvent* GetG4MCTEvent() { return f_mctevt; };
+      // G4MCTEvent* GetMCTEvent() { return f_mctevt; };
       // returns the MCTruth event.
 
       int GetGenEventID() const { return genEventID; };

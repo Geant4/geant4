@@ -1,4 +1,4 @@
-// $Id: G4DCIOcatalog.cc,v 1.2 2002-12-04 10:25:50 gcosmo Exp $
+// $Id: G4DCIOcatalog.cc,v 1.3 2002-12-04 13:57:29 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4DCIOcatalog.cc
@@ -18,8 +18,8 @@ G4DCIOcatalog::G4DCIOcatalog()
  : m_verbose(0)
 {}
 
-// Implementation of GetG4DCIOcatalog
-G4DCIOcatalog* G4DCIOcatalog::GetG4DCIOcatalog()
+// Implementation of GetDCIOcatalog
+G4DCIOcatalog* G4DCIOcatalog::GetDCIOcatalog()
 {
   if ( f_thePointer == 0 ) f_thePointer = new G4DCIOcatalog;
   return f_thePointer;
