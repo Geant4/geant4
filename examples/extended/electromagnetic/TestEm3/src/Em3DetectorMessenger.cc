@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorMessenger.cc,v 1.8 2002-12-12 11:19:38 maire Exp $
+// $Id: Em3DetectorMessenger.cc,v 1.9 2003-03-06 11:16:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,7 +92,7 @@ Em3DetectorMessenger::Em3DetectorMessenger(Em3DetectorConstruction * Em3Det)
   unitPrm->SetParameterCandidates(unitList);
   AbsorCmd->SetParameter(unitPrm);
   //
-  AbsorCmd->AvailableForStates(G4State_Idle);
+  AbsorCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
