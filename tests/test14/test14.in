@@ -6,6 +6,8 @@
 #/run/verbose 2
 #
 /run/initialize
+
+/tracking/verbose 0
 /calor/setAbsMat Aluminium
 /calor/setAbsThick 10 cm  
 /calor/setAbsRad 12.0 cm
@@ -15,51 +17,75 @@
 /lowenergy/lowlimE 2.5e-4
 /lowenergy/cutG .01 micrometer
 /lowenergy/cutE .01 micrometer
+/lowenergy/secphotcut 10 eV
 /run/initialize
 /run/particle/dumpCutValues
 
 #
 /gun/direction 1 0 0
 #
-/tracking/verbose 2
+# gamma 500 eV in Al
+#
+#/tracking/verbose 6
+#/process/inactivate LowEnCompton
+#/process/inactivate LowEnConversion
+#/process/inactivate LowEnBrem
+#/process/inactivate LowEnPhotoElec
+#/process/inactivate LowEnergyIoni
+#
+/tracking/verbose 0
 /gun/particle gamma
+#
+/tracking/verbose 0
+# 
 /gun/energy 10 keV
-/run/beamOn 1
-#
-/tracking/verbose 0
-/gun/particle gamma
+/run/beamOn 1000
+# 
 /gun/energy 2 keV
-/run/beamOn 10
+/run/beamOn 1000
 #
-/tracking/verbose 0
-/gun/particle gamma
 /gun/energy 800 eV
-/run/beamOn 10
+/run/beamOn 1000
 #
-/tracking/verbose 0
-/gun/particle gamma
 /gun/energy 250 eV
-/run/beamOn 10
+/run/beamOn 1000
 #
 # electron 500 eV in Al
 #
 /gun/particle e-
+#
 /gun/energy 10 keV
-/run/beamOn 10
+/run/beamOn 1000
 #
-/gun/particle e-
+#/gun/particle e-
 /gun/energy 2 keV
-/run/beamOn 10
+/run/beamOn 1000
 #
-/gun/particle e-
+#/gun/particle e-
 /gun/energy 800 eV
-/run/beamOn 10
+/run/beamOn 1000
 #
-/gun/particle e-
+#/gun/particle e-
 /gun/energy 500 eV
-/run/beamOn 10
+/run/beamOn 1000
 #
 exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
