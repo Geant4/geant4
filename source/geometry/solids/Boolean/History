@@ -1,5 +1,5 @@
 
-$Id: History,v 1.42 2003-10-28 14:41:46 gcosmo Exp $
+$Id: History,v 1.43 2003-11-03 17:49:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Nov 03, 2003   G.Cosmo                   geom-bool-V05-02-03
+  - Code cleanup and headers inclusion review
+    (replaced by forward declarations where necessary).
 
  Oct 28, 2003   G.Cosmo                   geom-bool-V05-02-02
   - Migration to new G4Exception scheme.
