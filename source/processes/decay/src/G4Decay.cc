@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.17 2004-03-31 00:56:21 kurasige Exp $
+// $Id: G4Decay.cc,v 1.18 2004-05-08 15:30:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -213,8 +213,8 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 #endif
     fParticleChangeForDecay.SetNumberOfSecondaries(0);
     // Kill the parent particle
-    fParticleChangeForDecay.SetStatusChange( fStopAndKill ) ;
-    fParticleChangeForDecay.SetLocalEnergyDeposit(0.0); 
+    fParticleChangeForDecay.ProposeTrackStatus( fStopAndKill ) ;
+    fParticleChangeForDecay.ProposeLocalEnergyDeposit(0.0); 
     
     ClearNumberOfInteractionLengthLeft();
     return &fParticleChangeForDecay ;
@@ -307,9 +307,9 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   delete products;
 
   // Kill the parent particle
-  fParticleChangeForDecay.SetStatusChange( fStopAndKill ) ;
-  fParticleChangeForDecay.SetLocalEnergyDeposit(energyDeposit); 
-  fParticleChangeForDecay.SetTimeChange( finalGlobalTime );
+  fParticleChangeForDecay.ProposeTrackStatus( fStopAndKill ) ;
+  fParticleChangeForDecay.ProposeLocalEnergyDeposit(energyDeposit); 
+  fParticleChangeForDecay.ProposeGlobalTime( finalGlobalTime );
   // reset NumberOfInteractionLengthLeft
   ClearNumberOfInteractionLengthLeft();
 
