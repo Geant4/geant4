@@ -70,15 +70,13 @@ Current available graphics systems are:
  The ABSORBER is made of 1mm of Air, the transverse size (R) is 20000 mm. 
  Z position of the (middle of the) absorber 21990  mm.
 
-F01PhysicsList::SetCuts:CutLength : 1 mm 
 
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
-        Sandia crossSection below 50 KeV
-       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+phot:  Total cross sections from Sandia parametrisation. 
+F01PhysicsList::SetCuts:CutLength : 1 mm 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -122,7 +120,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=16.03 s 
+total time(SetCuts)=15.98 s 
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 1 mm
 ============= The cut Energy ==============================
@@ -1159,7 +1157,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.37s Real=0.73s Sys=0.11s
+  User=0.3s Real=0.46s Sys=0.16s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

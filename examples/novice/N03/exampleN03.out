@@ -70,6 +70,8 @@ Current available graphics systems are:
 ------------------------------------------------------------
 ---> The calorimeter is 10 layers of: [ 10mm of Lead + 5mm of liquidArgon ] 
 ------------------------------------------------------------
+
+phot:  Total cross sections from Sandia parametrisation. 
 ExN03PhysicsList::SetCuts:CutLength : 1 mm 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
@@ -78,11 +80,7 @@ conv:  Total cross sections from a parametrisation. Good description from 1.5 Me
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
-
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
-        Sandia crossSection below 50 KeV
-       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -168,8 +166,8 @@ Cut in energy
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 283.131 MeV       total track length: 19.9534 cm 
-        Gap: total energy: 12.4027 MeV       total track length: 6.03802 cm 
+   Absorber: total energy: 277.513 MeV       total track length: 19.3452 cm 
+        Gap: total energy: 1.60499 MeV       total track length: 7.59219 mm 
 
      10 hits are stored in ExN03CalorHitsCollection.
      Transportation,              hIoni,                msc,              eIoni
@@ -182,13 +180,13 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1291960900, 759167195
+ Current couple of seeds = 1847436775, 718970848
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 281.881 MeV       total track length: 19.6742 cm 
-        Gap: total energy: 15.4463 MeV       total track length: 8.07961 cm 
+   Absorber: total energy:  281.01 MeV       total track length: 19.6486 cm 
+        Gap: total energy: 17.4265 MeV       total track length: 9.00745 cm 
 
-     10 hits are stored in ExN03CalorHitsCollection.
+     9 hits are stored in ExN03CalorHitsCollection.
 
 ------------------------------------------------------------
 ---> The calorimeter is 10 layers of: [ 10mm of Aluminium + 5mm of liquidArgon ] 
@@ -207,12 +205,12 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 796806890, 2027378855
+ Current couple of seeds = 36791840, 1931960063
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 374.373 MeV       total track length: 90.1156 cm 
-        Gap: total energy: 92.9847 MeV       total track length: 2.59813 m  
+   Absorber: total energy:  406.98 MeV       total track length: 98.2884 cm 
+        Gap: total energy: 86.2644 MeV       total track length: 2.39964 m  
 
-     18 hits are stored in ExN03CalorHitsCollection.
+     24 hits are stored in ExN03CalorHitsCollection.
 Graphics systems deleted.
 Visualization Manager deleting...

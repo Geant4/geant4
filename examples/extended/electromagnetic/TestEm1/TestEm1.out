@@ -59,15 +59,13 @@ Current available graphics systems are:
 
 
  The Box is 20 m   of Aluminium
-Em1PhysicsList::SetCuts:CutLength : 1 mm 
 
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
-        Sandia crossSection below 50 KeV
-       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+phot:  Total cross sections from Sandia parametrisation. 
+Em1PhysicsList::SetCuts:CutLength : 1 mm 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -169,18 +167,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=11s Real=17s Sys=2.3s
+  User=11s Real=38s Sys=2.4s
 
- nb tracks/event   neutral:    27.2900   charged:   692.9700
- nb  steps/event   neutral:   145.4900   charged:  1331.6300
+ nb tracks/event   neutral:    27.7500   charged:   694.1700
+ nb  steps/event   neutral:   146.0800   charged:  1332.9500
 
  nb of process calls per event: 
           eIoni       eBrem       compt        phot        conv     annihil
-      1305.5100     24.9200    118.2000     26.0900      1.2000      1.2000
+      1306.7500     24.6400    118.3300     26.1900      1.5600      1.5600
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 640041358, 1353064269
+ Current couple of seeds = 227745057, 30502287
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

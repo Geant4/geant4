@@ -19,15 +19,13 @@ Current available graphics systems are:
  Material: FluorCarbonate     density:  1.610 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  22.435 cm 
    --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  38.74 %  Abundance  50.00 %
    --->  Element: Fluorine  N   Z =  9.0   N =  19.0   A =  18.99 g/mole  fractionMass:  61.26 %  Abundance  50.00 %
-Em4PhysicsList::SetCuts:CutLength : 1 (mm)
 
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
-        Sandia crossSection below 50 KeV
-       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+phot:  Total cross sections from Sandia parametrisation. 
+Em4PhysicsList::SetCuts:CutLength : 1 (mm)
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -88,11 +86,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=21s Real=8.1e+02s Sys=49s
+  User=21s Real=1.1e+03s Sys=55s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1181737323, 167549734
+ Current couple of seeds = 2128984052, 1655296855
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

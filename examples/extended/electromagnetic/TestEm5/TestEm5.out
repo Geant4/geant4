@@ -96,16 +96,14 @@ userDetector->Construct() start.
  The ABSORBER is made of 1 cm  of Silicon. The transverse size (YZ) is 2 cm 
  X position of the middle of the absorber 0 fm 
 physicsList->Construct() start.
+
+phot:  Total cross sections from Sandia parametrisation. 
 physicsList->setCut() start.
 Em5PhysicsList::SetCuts:CutLength : 1 mm 
 
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
-        Sandia crossSection below 50 KeV
-       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
-
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -265,99 +263,99 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=70s Real=2e+03s Sys=1.5e+02s
+  User=67s Real=3.8e+03s Sys=2.7e+02s
  ================== run summary =====================
  end of Run TotNbofEvents = 100000
-    mean charged track length   in absorber=0.0209601 +- 1.47921e-05  mm  
+    mean charged track length   in absorber=0.0209223 +- 1.31199e-05  mm  
 
-            mean energy deposit in absorber=0.00668546 +- 2.09597e-05  MeV 
+            mean energy deposit in absorber=0.00663466 +- 1.97391e-05  MeV 
 
- mean number of steps in absorber (charged) =0.07878 +- 0.00203188      
- mean number of steps in absorber (neutral) =5e-05 +- 2.23601e-05      
+ mean number of steps in absorber (charged) =0.08254 +- 0.00215863      
+ mean number of steps in absorber (neutral) =3e-05 +- 1.73202e-05      
 
-   mean number of charged secondaries = 0.03678 +- 0.000625358
+   mean number of charged secondaries = 0.03681 +- 0.000627655
 
-   mean number of neutral secondaries = 5e-05 +- 2.23601e-05
+   mean number of neutral secondaries = 3e-05 +- 1.73202e-05
 
-   mean number of e-s =0.03678  and e+s =0
+   mean number of e-s =0.03681  and e+s =0
 
-(number) transmission coeff=1  reflection coeff=0
+(number) transmission coeff=0.99999  reflection coeff=0
 
  energy deposit distribution 
-#entries=100000    #underflows=0    #overflows=5727
+#entries=100000    #underflows=0    #overflows=5685
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1    0.0002           0           0
     2    0.0004           0           0
     3    0.0006           0           0
-    4    0.0008           0           0
-    5     0.001           2         0.1
+    4    0.0008           1        0.05
+    5     0.001           0           0
     6    0.0012           4         0.2
-    7    0.0014           9        0.45
-    8    0.0016          31        1.55
-    9    0.0018         103        5.15
-   10     0.002         204        10.2
-   11    0.0022         435       21.75
-   12    0.0024         776        38.8
-   13    0.0026        1254        62.7
-   14    0.0028        1866        93.3
-   15     0.003        2624       131.2
-   16    0.0032        3370       168.5
-   17    0.0034        4064       203.2
-   18    0.0036        4630       231.5
-   19    0.0038        4844       242.2
-   20     0.004        4768       238.4
-   21    0.0042        4921      246.05
-   22    0.0044        4709      235.45
-   23    0.0046        4428       221.4
-   24    0.0048        4166       208.3
-   25     0.005        3753      187.65
-   26    0.0052        3409      170.45
-   27    0.0054        3164       158.2
+    7    0.0014          10         0.5
+    8    0.0016          34         1.7
+    9    0.0018          77        3.85
+   10     0.002         227       11.35
+   11    0.0022         430        21.5
+   12    0.0024         777       38.85
+   13    0.0026        1231       61.55
+   14    0.0028        1850        92.5
+   15     0.003        2601      130.05
+   16    0.0032        3346       167.3
+   17    0.0034        4038       201.9
+   18    0.0036        4597      229.85
+   19    0.0038        4771      238.55
+   20     0.004        5059      252.95
+   21    0.0042        4902       245.1
+   22    0.0044        4740         237
+   23    0.0046        4398       219.9
+   24    0.0048        4164       208.2
+   25     0.005        3683      184.15
+   26    0.0052        3462       173.1
+   27    0.0054        3119      155.95
    28    0.0056        2845      142.25
-   29    0.0058        2742       137.1
-   30     0.006        2392       119.6
-   31    0.0062        2284       114.2
-   32    0.0064        2057      102.85
-   33    0.0066        1979       98.95
-   34    0.0068        1845       92.25
-   35     0.007        1671       83.55
-   36    0.0072        1566        78.3
-   37    0.0074        1521       76.05
-   38    0.0076        1333       66.65
-   39    0.0078        1262        63.1
-   40     0.008        1205       60.25
-   41    0.0082        1077       53.85
-   42    0.0084         972        48.6
-   43    0.0086         913       45.65
-   44    0.0088         833       41.65
-   45     0.009         775       38.75
-   46    0.0092         767       38.35
-   47    0.0094         644        32.2
-   48    0.0096         585       29.25
-   49    0.0098         547       27.35
-   50      0.01         509       25.45
-   51    0.0102         492        24.6
-   52    0.0104         457       22.85
-   53    0.0106         397       19.85
-   54    0.0108         385       19.25
-   55     0.011         374        18.7
-   56    0.0112         332        16.6
-   57    0.0114         279       13.95
-   58    0.0116         263       13.15
-   59    0.0118         252        12.6
-   60     0.012         266        13.3
-   61    0.0122         260          13
-   62    0.0124         237       11.85
-   63    0.0126         201       10.05
-   64    0.0128         220          11
+   29    0.0058        2635      131.75
+   30     0.006        2536       126.8
+   31    0.0062        2298       114.9
+   32    0.0064        2078       103.9
+   33    0.0066        1972        98.6
+   34    0.0068        1855       92.75
+   35     0.007        1664        83.2
+   36    0.0072        1630        81.5
+   37    0.0074        1449       72.45
+   38    0.0076        1363       68.15
+   39    0.0078        1305       65.25
+   40     0.008        1132        56.6
+   41    0.0082        1018        50.9
+   42    0.0084        1017       50.85
+   43    0.0086         963       48.15
+   44    0.0088         826        41.3
+   45     0.009         744        37.2
+   46    0.0092         696        34.8
+   47    0.0094         619       30.95
+   48    0.0096         611       30.55
+   49    0.0098         533       26.65
+   50      0.01         551       27.55
+   51    0.0102         463       23.15
+   52    0.0104         425       21.25
+   53    0.0106         451       22.55
+   54    0.0108         420          21
+   55     0.011         356        17.8
+   56    0.0112         333       16.65
+   57    0.0114         292        14.6
+   58    0.0116         316        15.8
+   59    0.0118         245       12.25
+   60     0.012         246        12.3
+   61    0.0122         256        12.8
+   62    0.0124         242        12.1
+   63    0.0126         223       11.15
+   64    0.0128         186         9.3
 
- Emp =          0.0042   width=         0.0028  MeV 
+ Emp =           0.004   width=          0.003  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1149597935, 171470217
+ Current couple of seeds = 1966794955, 135055478
 ----------------------------------------
 #
 Graphics systems deleted.

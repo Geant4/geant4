@@ -48,15 +48,13 @@ Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visib
 Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visible, colour: (1,1,1,1)
   linestyle: solid, line width: 1
   drawing style unforced
-G3toG4PhysicsList::SetCuts:CutLength : 2 mm 
 
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
-        Sandia crossSection below 50 KeV
-       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+phot:  Total cross sections from Sandia parametrisation. 
+G3toG4PhysicsList::SetCuts:CutLength : 2 mm 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -249,5 +247,5 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.02s Sys=0.01s
 G4 kernel has come to Quit state.
