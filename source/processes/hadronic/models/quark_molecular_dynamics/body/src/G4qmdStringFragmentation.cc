@@ -85,13 +85,15 @@ int G4qmdStringFragmentation::operator!=(const G4qmdStringFragmentation &right) 
 {
   return 1;
 }
+
 //
 // --------------------------------------------
 //
 
-G4KineticTrackVector * FragmentStrings(const G4ExcitedStringVector * theStrings)
+G4KineticTrackVector * G4qmdStringFragmentation::FragmentStrings(const G4ExcitedStringVector * theStrings)
 {
-	SetupFromExcitedStringVector(theStrings);
+	G4KineticTrackVector * theResult = new G4KineticTrackVector();
+	SetupFromG4ExcitedStringVector(theStrings);
 	theResult = TheHadrons();
 	return theResult;
 }
@@ -99,7 +101,7 @@ G4KineticTrackVector * FragmentStrings(const G4ExcitedStringVector * theStrings)
 //
 // ----------- Setup from Excited String ---------------------------------
 //
-void G4qmdStringFragmentation::SetupFromExcitedStringVector(const G4ExcitedStringVector * theStrings)
+void G4qmdStringFragmentation::SetupFromG4ExcitedStringVector(const G4ExcitedStringVector * theStrings)
 {
   
   Particle::Soup = &theQuarkSystem;
@@ -121,15 +123,15 @@ void G4qmdStringFragmentation::SetupFromExcitedStringVector(const G4ExcitedStrin
 
  		  G4Parton* ThisParton = ThePartons->at(QuarkCounter);
 
-      const G4ThreeVector quark_ThreeVector = ThisParton->GetPosition();
-      const G4LorentzVector quark_4Momentum = ThisParton->Get4Momentum(); 
+      const G4ThreeVector  quark_ThreeVector = ThisParton->GetPosition();
+      const G4LorentzVector  quark_4Momentum = ThisParton->Get4Momentum(); 
 			G4int quark_PDGCode = ThisParton->GetPDGcode();
       G4int quark_Colour = ThisParton->GetColour();
       G4double quark_SpinZ = ThisParton->GetSpinZ();
       G4double quark_IsoSpinZ = ThisParton->GetIsoSpinZ();
 
-      Vektor3 quark_momentum = Vektor3(quark_4MomentumVector->x(),quark_4MomentumVector->y(),quark_4MomentumVector->z());
-      Vektor3 quark_position = Vektor3(quark_ThreeVector->x(),quark_ThreeVector->y(),quark_ThreeVector->z());
+      Vektor3 quark_momentum = Vektor3(quark_4Momentum.x(),quark_4Momentum.y(),quark_4Momentum.z());
+      Vektor3 quark_position = Vektor3(quark_ThreeVector.x(),quark_ThreeVector.y(),quark_ThreeVector.z());
 
 			G4cerr << " Parton " << flag << " with properties " << G4endl;
       G4cerr << "    PDG-CODE:  " <<  quark_PDGCode << G4endl; 
@@ -333,7 +335,7 @@ double G4qmdStringFragmentation::readEvent(istream& in)
 }
 
 
-void G4qmdStringFragmentation::SetupFromFile(const G4String & anInputFile="")
+void G4qmdStringFragmentation::SetupFromFile(const G4String & anInputFile)
 {
   if (anInputFile == "") {
     theInputFile = "/afs/cern.ch/user/s/sscherer/public/qmd/data/line_120.dat";

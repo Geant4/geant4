@@ -43,7 +43,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
-#include "G4ExcitedStringDecay.hh"
+//#include "G4ExcitedStringDecay.hh"
 #include "G4VStringFragmentation.hh"
 
 class Knot<ParticleType>;
@@ -82,8 +82,8 @@ class G4qmdStringFragmentation : public G4VStringFragmentation
       void SetOutputTimestep(double aOutputTimestep);
 
       void SetupFromFile(const G4String & anInputFile="");
-      void SetupFromG4ExcitedStringVector();
- 
+      void SetupFromG4ExcitedStringVector(const G4ExcitedStringVector * theInitalStrings);
+
 			G4String GetInputFile();
       G4KineticTrackVector* TheHadrons() ;
 

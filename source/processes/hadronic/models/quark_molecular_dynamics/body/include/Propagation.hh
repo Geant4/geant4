@@ -221,7 +221,7 @@ class ColorString
   QuantumState pp;
   QuantumState array[2];
   int PDGCode;
-	double FormationTime;
+	G4double FormationTime;
 
 public:
 
