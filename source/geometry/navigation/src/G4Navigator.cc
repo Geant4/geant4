@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.8 2004-03-11 13:09:29 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.9 2004-05-17 13:30:26 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -230,6 +230,20 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       targetSolid = fHistory.GetTopVolume()->GetLogicalVolume()->GetSolid();
       localPoint = fHistory.GetTopTransform().TransformPoint(globalPoint);
       insideCode = targetSolid->Inside(localPoint);
+#ifdef G4VERBOSE
+      if(( fVerbose == 1 ) && ( fCheck ))
+      {
+         G4String solidResponse = "-kInside-";
+         if (insideCode == kOutside)
+           solidResponse = "-kOutside-";
+         else if (insideCode == kSurface)
+           solidResponse = "-kSurface-";
+         G4cout << "*** G4Navigator::LocateGlobalPointAndSetup(): ***" << G4endl
+                << "    Invoked Inside() for solid: " << targetSolid->GetName()
+                << ". Solid replied: " << solidResponse << G4endl
+                << "    For local point p: " << localPoint << G4endl;
+      }
+#endif
     }
     else
     {
