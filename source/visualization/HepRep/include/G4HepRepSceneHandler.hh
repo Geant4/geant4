@@ -156,7 +156,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         // DO NOT USE member vars directly, use get methods.
         HEPREP::HepRep*                         _heprep;
         HEPREP::HepRepInstanceTree*             _geometryInstanceTree;
-        std::stack<HEPREP::HepRepInstance*>     _geometryInstance;
+        std::vector<HEPREP::HepRepInstance*>    _geometryInstance;
         HEPREP::HepRepInstance*                 _geometryRootInstance;
         HEPREP::HepRepTypeTree*                 _geometryTypeTree;
         std::vector<G4String>                   _geometryTypeName;

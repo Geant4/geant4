@@ -73,6 +73,8 @@ using namespace std;
 
 G4int G4HepRepSceneHandler::sceneCount = 0;
 
+#define PDEBUG 1
+
 G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4String& name)
         : G4VSceneHandler (system, sceneCount++, name),
           geometryLayer         ("Geometry"),
@@ -86,20 +88,7 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4S
           currentDepth          (0),
           currentPV             (0),
           currentLV             (0),
-          _heprep               (NULL),
-          _geometryInstanceTree (NULL),
-          _geometryRootInstance (NULL),
-          _geometryTypeTree     (NULL),
-          _geometryRootType     (NULL),
-          _eventInstanceTree    (NULL),
-          _eventInstance        (NULL),
-          _eventTypeTree        (NULL),
-          _eventType            (NULL),
-          _trajectoryType       (NULL),
-          _trajectoryPointType  (NULL),
-          _hitType              (NULL),
-          _calHitType           (NULL),
-          _calHitFaceType       (NULL)        
+          _heprep               (NULL)
 {
 
 #ifdef DEBUG
@@ -153,9 +142,16 @@ void G4HepRepSceneHandler::Open(G4String name) {
         cout << "G4HepRepSceneHandler::Open() " << name << endl;
 #endif
         out = new ofstream(name.c_str(), std::ios::out | std::ios::binary );
+        bool heprep = name.substr(name.size()-7, 7) == G4String(".heprep");
+        bool heprepzip = name.substr(name.size()-11, 11) == G4String(".heprep.zip");
         bool zip = name.substr(name.size()-4, 4) == G4String(".zip");
         bool gz = name.substr(name.size()-3, 3) == G4String(".gz");
-        writer = factory->createHepRepWriter(out, zip, zip || gz);
+        writer = factory->createHepRepWriter(out, heprepzip || zip, heprepzip || zip || gz);
+        
+        // write warning
+        if (!heprepzip && !heprep) {
+            cout << "WARNING HepRep file: '" << name << "' cannot be read by JAS/WIRED, use extensions .heprep or .heprep.zip" << endl;
+        }
     }
 }
 
@@ -167,7 +163,23 @@ void G4HepRepSceneHandler::OpenHepRep() {
 
     if (_heprep != NULL) return;
 
-    // all done on demand
+    // all done on demand, once pointers are set to NULL
+    _geometryInstanceTree = NULL;
+    _geometryRootInstance = NULL;
+    _geometryInstance.clear();
+    _geometryTypeTree     = NULL;
+    _geometryRootType     = NULL;
+    _geometryTypeName.clear();
+    _geometryType.clear();
+    _eventInstanceTree    = NULL;
+    _eventInstance        = NULL;
+    _eventTypeTree        = NULL;
+    _eventType            = NULL;
+    _trajectoryType       = NULL;
+    _trajectoryPointType  = NULL;
+    _hitType              = NULL;
+    _calHitType           = NULL;
+    _calHitFaceType       = NULL;     
 }
 
 
@@ -175,12 +187,11 @@ void G4HepRepSceneHandler::OpenHepRep() {
  * Returns true if the HepRep was (already) closed, false if the HepRep is still open
  */
 bool G4HepRepSceneHandler::CloseHepRep() {
+    if (_heprep == NULL) return true;
 
 #ifdef DEBUG
-    cout << "G4HepRepSceneHandler::CloseHepRep() " << endl;
+    cout << "G4HepRepSceneHandler::CloseHepRep() start" << endl;
 #endif
-
-    if (_heprep == NULL) return true;
 
     // add geometry to the heprep
     G4HepRepViewer* viewer = dynamic_cast<G4HepRepViewer*>(GetCurrentViewer());
@@ -204,6 +215,9 @@ bool G4HepRepSceneHandler::CloseHepRep() {
     delete _heprep;
     _heprep = NULL;
 
+#ifdef DEBUG
+    cout << "G4HepRepSceneHandler::CloseHepRep() end" << endl;
+#endif
     return true;
 }
 
@@ -703,11 +717,11 @@ HepRepInstance* G4HepRepSceneHandler::getGeometryInstance(G4String volumeName, i
 
     // adjust depth, also pop the current instance
     while (_geometryInstance.size() > depth) {
-        _geometryInstance.pop();
+        _geometryInstance.pop_back();
     }
     
     // get parent
-    HepRepInstance* parent = (_geometryInstance.empty()) ? getGeometryRootInstance() : _geometryInstance.top();
+    HepRepInstance* parent = (_geometryInstance.empty()) ? getGeometryRootInstance() : _geometryInstance.back();
     
     // get type
     HepRepType* type = getGeometryType(volumeName, depth);
@@ -715,7 +729,7 @@ HepRepInstance* G4HepRepSceneHandler::getGeometryInstance(G4String volumeName, i
     
     // create instance
     HepRepInstance* instance = factory->createHepRepInstance(parent, type);
-    _geometryInstance.push(instance);
+    _geometryInstance.push_back(instance);
 
     return instance;
 }
