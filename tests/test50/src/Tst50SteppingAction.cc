@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.16 2003-01-29 14:29:51 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.17 2003-02-04 14:21:32 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -174,12 +174,12 @@ if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
     }}}}}
 
 
-  if(0 != Step->GetTrack()->GetParentID() )
-   {
+  
  if(particle_name=="e-")
    {   
     if(name=="gamma")
-  {
+  { if(Step->GetTrack()->GetParentID()== 1)
+    { 
 if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
    
     if(Step->GetTrack()->GetNextVolume()->GetName() == "World" )
@@ -192,6 +192,7 @@ if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
     
 #ifdef G4ANALYSIS_USE
      analysis->fill_dataBrem(kin,angle);
+     analysis->angle_energy_gamma(angle,kin);
 #endif
       }}}
    }

@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.7 2003-01-29 14:29:51 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.8 2003-02-04 14:21:32 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef  G4ANALYSIS_USE
@@ -121,6 +121,7 @@ void Tst50AnalysisManager::book()
 h4=histFact->createHistogram1D("40","angle of backscattered particles",80.*2, 80.,190.);
 
  h5=histFact->createHistogram1D("50","angle of transmitted  particles",100.*2,0.,100.);
+ h6=histFact->createHistogram2D("60","angle, energy of bremmstrahlung gamma",180.*4,0., 180.,100.,0.,100.);
 
  // in questo istogramma  metto il deposito di energia di ogni evento nel target
 
@@ -163,6 +164,11 @@ void Tst50AnalysisManager::angleT(G4double angle)
 {
 
   h5->fill(angle);
+}
+void Tst50AnalysisManager::angle_energy_gamma(G4double angle, G4double energy)
+{
+
+  h6->fill(angle, energy,1);
 }
 void Tst50AnalysisManager::fill_dataBrem(G4double energy,G4double angle)
 {
