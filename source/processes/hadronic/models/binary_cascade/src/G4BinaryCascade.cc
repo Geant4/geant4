@@ -156,6 +156,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 // reset status that could be changed in previous loop event
     theCollisionMgr->ClearAndDestroy();
     ClearAndDestroy(&theTargetList);  // clear and rebuild theTargetList
+    the3DNucleus->Init(aNucleus.GetN(), aNucleus.GetZ());
     BuildTargetList();
     G4KineticTrack * kt = new G4KineticTrack(definition, 0., initialPosition,
 					     initial4Momentum);
@@ -1703,7 +1704,7 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
      {
 	if((*iter)->GetDefinition()->GetBaryonNumber()==1) 
 	{
-           if ((*iter)->Get4Momentum().e()+correction > (*iter)->GetActualMass())
+           if ((*iter)->GetTrackingMomentum().e()+correction > (*iter)->GetActualMass())
 	   {
 	      (*iter)->Update4Momentum((*iter)->GetTrackingMomentum().e() + correction);
 	   } else
