@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationManager.hh,v 1.5 1999-12-15 14:53:45 gunter Exp $
+// $Id: G4FastSimulationManager.hh,v 1.6 2000-05-30 08:30:31 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,9 +25,8 @@
 #ifndef G4FastSimulationManager_h
 #define G4FastSimulationManager_h 1
 
-#include "g4rw/tpordvec.h"
-
 #include "globals.hh"
+
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4ParticleTable.hh"
@@ -39,6 +38,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
 #include "G4Transform3D.hh"
+#include "G4FastSimulationVector.hh"
 
 #include "G4ios.hh"
 
@@ -155,7 +155,7 @@ public:  // without description
 					       const G4Navigator* a = 0);
   G4VParticleChange*  InvokeAtRestDoIt();
 
-  // For RW management
+  // For management
   G4bool operator == ( const G4FastSimulationManager&) const;
 
 private:
@@ -163,18 +163,18 @@ private:
   G4FastTrack fFastTrack;
   G4FastStep  fFastStep;
   G4VFastSimulationModel* fTriggedFastSimulationModel;
-  G4RWTPtrOrderedVector<G4VFastSimulationModel> ModelList;
-  G4RWTPtrOrderedVector<G4VFastSimulationModel> fInactivatedModels;
-  G4RWTPtrOrderedVector<G4Transform3D> GhostPlacements;
+  G4FastSimulationVector <G4VFastSimulationModel> ModelList;
+  G4FastSimulationVector <G4VFastSimulationModel> fInactivatedModels;
+  G4FastSimulationVector <G4Transform3D> GhostPlacements;
 
   G4ParticleDefinition* fLastCrossedParticle;
-  G4RWTPtrOrderedVector<G4VFastSimulationModel> fApplicableModelList;
+  G4FastSimulationVector <G4VFastSimulationModel> fApplicableModelList;
 };
 
 inline void 
 G4FastSimulationManager::AddFastSimulationModel(G4VFastSimulationModel* fsm)
 {
-  ModelList.insert(fsm);
+  ModelList.push_back(fsm);
   // forces the fApplicableModelList to be rebuild
   fLastCrossedParticle = 0;
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.5 1999-12-15 14:53:46 gunter Exp $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.6 2000-05-30 08:30:38 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -74,7 +74,7 @@ void G4GlobalFastSimulationManager::FastSimulationNeedsToBeClosed()
 void G4GlobalFastSimulationManager::
 AddFastSimulationManager(G4FastSimulationManager* fsmanager)
 {
-  ManagedManagers.insert(fsmanager);
+  ManagedManagers.push_back(fsmanager);
 }
 
 void G4GlobalFastSimulationManager::
@@ -102,14 +102,14 @@ void G4GlobalFastSimulationManager::CloseFastSimulation()
   G4cout << "Closing FastSimulation\n";
   for (G4int iParticle=0; iParticle<theParticleTable->entries(); iParticle++) {
     G4bool Needed = false;
-    for (G4int ifsm=0; ifsm<ManagedManagers.length(); ifsm++)
-      Needed = Needed || ManagedManagers(ifsm)->
+    for (G4int ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
+      Needed = Needed || ManagedManagers[ifsm]->
 	InsertGhostHereIfNecessary(aClone,
 				   *(theParticleTable->
 				     GetParticle(iParticle)));
     // if some FSM inserted a ghost, keep this clone.
     if(Needed) {
-      NeededFlavoredWorlds.insert(new 
+      NeededFlavoredWorlds.push_back(new 
 				  G4FlavoredParallelWorld(theParticleTable->
 					  GetParticle(iParticle),
 							  aClone));
@@ -124,9 +124,9 @@ G4VFlavoredParallelWorld*
 G4GlobalFastSimulationManager::
 GetFlavoredWorldForThis(G4ParticleDefinition* particle)
 {
-  for (G4int ipw=0; ipw<NeededFlavoredWorlds.length(); ipw++)
-    if(NeededFlavoredWorlds(ipw)->GetTheParticleType()==particle)
-      return NeededFlavoredWorlds(ipw);
+  for (G4int ipw=0; ipw<NeededFlavoredWorlds.size(); ipw++)
+    if(NeededFlavoredWorlds[ipw]->GetTheParticleType()==particle)
+      return NeededFlavoredWorlds[ipw];
   return 0;
 }
 
@@ -134,8 +134,8 @@ void
 G4GlobalFastSimulationManager::ActivateFastSimulationModel(const G4String& aName)
 {
   G4bool result = false;
-  for (G4int ifsm=0; ifsm<ManagedManagers.length(); ifsm++)
-    result = result || ManagedManagers(ifsm)->ActivateFastSimulationModel(aName);
+  for (G4int ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
+    result = result || ManagedManagers[ifsm]->ActivateFastSimulationModel(aName);
   if(result) 
     G4cout << "Model " << aName << " activated.";
   else
@@ -147,8 +147,8 @@ void
 G4GlobalFastSimulationManager::InActivateFastSimulationModel(const G4String& aName)
 {
   G4bool result = false;
-  for (G4int ifsm=0; ifsm<ManagedManagers.length(); ifsm++)
-    result = result || ManagedManagers(ifsm)->InActivateFastSimulationModel(aName);
+  for (G4int ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
+    result = result || ManagedManagers[ifsm]->InActivateFastSimulationModel(aName);
   if(result) 
     G4cout << "Model " << aName << " inactivated.";
   else
@@ -161,29 +161,29 @@ G4GlobalFastSimulationManager::ListEnvelopes(const G4String& aName,
 					     listType theType)
 {
   if(theType == ISAPPLICABLE) {
-    for (G4int ifsm=0; ifsm<ManagedManagers.length(); ifsm++)
-      ManagedManagers(ifsm)->ListModels(aName);
+    for (G4int ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
+      ManagedManagers[ifsm]->ListModels(aName);
     return;
   }
   
   if(aName == "all") {
     G4int titled = 0;
-    for (G4int ifsm=0; ifsm<ManagedManagers.length(); ifsm++) {
+    for (G4int ifsm=0; ifsm<ManagedManagers.size(); ifsm++) {
       if(theType == NAMES_ONLY) {
 	if(!(titled++))
 	  G4cout << "Current Envelopes for Fast Simulation:\n";
 	G4cout << "   "; 
-	ManagedManagers(ifsm)->ListTitle();
+	ManagedManagers[ifsm]->ListTitle();
 	G4cout << G4endl;
       }
-      else ManagedManagers(ifsm)->ListModels();
+      else ManagedManagers[ifsm]->ListModels();
     }
   }
   else {
-    for (G4int ifsm=0; ifsm<ManagedManagers.length(); ifsm++)
-      if(aName == ManagedManagers(ifsm)->
+    for (G4int ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
+      if(aName == ManagedManagers[ifsm]->
 	 GetEnvelope()->GetName()){
-	ManagedManagers(ifsm)->ListModels();
+	ManagedManagers[ifsm]->ListModels();
 	break;
       }
   }
@@ -192,8 +192,8 @@ G4GlobalFastSimulationManager::ListEnvelopes(const G4String& aName,
 void 
 G4GlobalFastSimulationManager::ListEnvelopes(const G4ParticleDefinition* aPD)
 {
-  for (G4int ifsm=0; ifsm<ManagedManagers.length(); ifsm++)
-    ManagedManagers(ifsm)->ListModels(aPD);
+  for (G4int ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
+    ManagedManagers[ifsm]->ListModels(aPD);
 }
 
 G4VPhysicalVolume* 

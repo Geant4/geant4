@@ -1,0 +1,61 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: 
+// GEANT4 tag $Name: 
+//
+// 
+//---------------------------------------------------------------
+//
+//  G4FastSimulationVector.hh
+//
+//  Description:
+//    Extends the STL vector to replace RW.
+//
+//  History:
+//    May 00: Verderi && MoraDeFreitas - First Implementation.
+//
+//---------------------------------------------------------------
+
+template<class T> 
+T* G4FastSimulationVector<T>::remove (const T* a)
+{
+  for (iterator it = begin();it<end(); it++)
+    {
+      if (**it==*a) 
+	{
+	  T* tmp=*it;
+	  erase(it);
+	  return tmp;
+	} 
+    }
+  return 0;
+}
+
+template<class T>
+T* G4FastSimulationVector<T>::removeAt (G4int i)
+{
+  iterator it=begin();
+  int j;
+  for(j=0;j<i;j++) it++;
+  if(it!=end())
+    {
+      T* tmp = operator[](i);
+      erase(it);
+      return tmp;
+    }
+  else
+    return 0;
+}
+
+template<class T>
+void G4FastSimulationVector<T>::clearAndDestroy ()
+{
+  for (iterator it = begin();it<end(); it++)
+    if(*it) delete *it;
+  clear();
+}
