@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsList.cc,v 1.15 2002-06-01 03:17:09 vnivanch Exp $
+// $Id: Tst14PhysicsList.cc,v 1.16 2003-02-23 10:17:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 
@@ -38,6 +38,20 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include "G4LowEnergyPolarizedCompton.hh"
+#include "G4LowEnergyCompton.hh"
+#include "G4LowEnergyGammaConversion.hh"
+#include "G4LowEnergyPhotoElectric.hh"
+#include "G4LowEnergyRayleigh.hh"
+
+// e+
+#include "G4MultipleScattering.hh"
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4eplusAnnihilation.hh"
+
+#include "G4LowEnergyIonisation.hh"
+#include "G4LowEnergyBremsstrahlung.hh"
 
 //#include "G4EnergyLossTables.hh"
 //#include "G4Material.hh"
@@ -101,19 +115,6 @@ void Tst14PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4LowEnergyCompton.hh"
-#include "G4LowEnergyGammaConversion.hh"
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyRayleigh.hh"
-
-// e+
-#include "G4MultipleScattering.hh"
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
-
-#include "G4LowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -127,8 +128,17 @@ void Tst14PhysicsList::ConstructEM()
      
     if (particleName == "gamma") {
 
-      // gamma         
-      pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
+      // gamma    
+      if (comptonLowEPolarised)
+	{
+	  G4std::cout << "Loading Polarised Compton" << G4std::endl;
+	  pmanager->AddDiscreteProcess(new G4LowEnergyPolarizedCompton);
+	}
+      else
+	{
+	  G4std::cout << "Loading LowEnergy Compton" << G4std::endl;
+	  pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
+	}
       pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
 
       LePeprocess = new G4LowEnergyPhotoElectric();

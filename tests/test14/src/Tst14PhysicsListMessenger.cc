@@ -21,46 +21,47 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsListMessenger.cc,v 1.8 2002-12-05 02:19:05 asaim Exp $
+// $Id: Tst14PhysicsListMessenger.cc,v 1.9 2003-02-23 10:17:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Added command for building modular PhysicsList
+//                          + cleaned up
+//
+// -------------------------------------------------------------------
 
 #include "Tst14PhysicsListMessenger.hh"
 #include "Tst14PhysicsList.hh"
-
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithABool.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-Tst14PhysicsListMessenger::Tst14PhysicsListMessenger(Tst14PhysicsList * List)
-:Tst14List(List)
+Tst14PhysicsListMessenger::Tst14PhysicsListMessenger(Tst14PhysicsList * physList)
+:List(physicsList)
 {
-
+  // MGP ---- ToDo: who is responsible for deleting lowEnDir?
   lowEnDir = new G4UIdirectory("/lowenergy/");
   lowEnDir->SetGuidance("LowEnergy commands");
-
+  
   cutGLowLimCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/lowlimG",this);
   cutGLowLimCmd->SetGuidance("Set ENERGY low limit for Gamma.");
   cutGLowLimCmd->SetParameterName("energy",true);
   cutGLowLimCmd->SetDefaultValue(1e-3);
   cutGLowLimCmd->SetDefaultUnit("MeV");
   cutGLowLimCmd->AvailableForStates(G4State_Idle);
-
+  
   cutELowLimCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/lowlimE",this);
   cutELowLimCmd->SetGuidance("Set ENERGY low limit for e-.");
   cutELowLimCmd->SetParameterName("energy",true);
   cutELowLimCmd->SetDefaultValue(1e-3);
   cutELowLimCmd->SetDefaultUnit("MeV");
   cutELowLimCmd->AvailableForStates(G4State_Idle);
-
+  
   cutGELowLimCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/lowlimGE",this);
   cutGELowLimCmd->SetGuidance("Set ENERGY low limit for e- and Gamma.");
   cutGELowLimCmd->SetParameterName("energy",true);
@@ -68,14 +69,8 @@ Tst14PhysicsListMessenger::Tst14PhysicsListMessenger(Tst14PhysicsList * List)
   cutGELowLimCmd->SetDefaultUnit("MeV");
   cutGELowLimCmd->AvailableForStates(G4State_Idle);
 
-  augerCmd = new G4UIcmdWithABool("/lowenergy/auger",this);
-  augerCmd->SetGuidance("Set flag Auger electrons production.");
-  augerCmd->SetParameterName("Auger",true);
-  augerCmd->SetDefaultValue(false);
-  augerCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   cutSecPhotCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/secphotcut",this);
-  cutSecPhotCmd->SetGuidance("Set production threshold for secondary Gamma.");
+  cutSecPhotCmd->SetGuidance("Set production threshold for secondary Gamma");
   cutSecPhotCmd->SetParameterName("energy",true);
   cutSecPhotCmd->SetDefaultValue(5e-5);
   cutSecPhotCmd->SetDefaultUnit("MeV");
@@ -102,9 +97,21 @@ Tst14PhysicsListMessenger::Tst14PhysicsListMessenger(Tst14PhysicsList * List)
   cutECmd->SetDefaultUnit("mm");
   cutECmd->AvailableForStates(G4State_Idle);
 
-}
+  // Auger activation
+  augerCmd = new G4UIcmdWithABool("/lowenergy/auger",this);
+  augerCmd->SetGuidance("Set flag Auger electrons production.");
+  augerCmd->SetParameterName("Auger",true);
+  augerCmd->SetDefaultValue(false);
+  augerCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  // Building modular PhysicsList
+
+  physicsListCmd = new G4UIcmdWithAString("/lowenergy/addPhysics",this);  
+  physicsListCmd->SetGuidance("Add chunks of PhysicsList.");
+  physicsListCmd->SetParameterName("physList",false);
+  physicsListCmd->AvailableForStates(G4State_PreInit);  
+
+}
 
 Tst14PhysicsListMessenger::~Tst14PhysicsListMessenger()
 {
@@ -117,38 +124,40 @@ Tst14PhysicsListMessenger::~Tst14PhysicsListMessenger()
   delete cutGCmd;
   delete cutECmd;
   delete augerCmd;
+  delete physicsListCmd;
+  delete lowEnDir;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
 void Tst14PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
-  if(command == cutGLowLimCmd)
-    { Tst14List->SetGammaLowLimit(cutGLowLimCmd->GetNewDoubleValue(newValue));}
+  if (command == cutGLowLimCmd)
+    { physicsList->SetGammaLowLimit(cutGLowLimCmd->GetNewDoubleValue(newValue)); }
 
-  if(command == cutELowLimCmd)
-    { Tst14List->SetElectronLowLimit(cutELowLimCmd->GetNewDoubleValue(newValue));}
+  if (command == cutELowLimCmd)
+    { physicsList->SetElectronLowLimit(cutELowLimCmd->GetNewDoubleValue(newValue)); }
 
-  if(command == cutGELowLimCmd)
-    { Tst14List->SetGELowLimit(cutGELowLimCmd->GetNewDoubleValue(newValue));}
+  if (command == cutGELowLimCmd)
+    { physicsList->SetGELowLimit(cutGELowLimCmd->GetNewDoubleValue(newValue)); }
 
-  if(command == cutSecPhotCmd)
-    { Tst14List->SetLowEnSecPhotCut(cutSecPhotCmd->GetNewDoubleValue(newValue));}
-  if(command == augerCmd)
-    { Tst14List->ActivateAuger(augerCmd->GetNewBoolValue(newValue));}
+  if (command == cutSecPhotCmd)
+    { physicsList->SetLowEnSecPhotCut(cutSecPhotCmd->GetNewDoubleValue(newValue)); }
 
-  if(command == cutSecElecCmd)
-    { Tst14List->SetLowEnSecElecCut(cutSecElecCmd->GetNewDoubleValue(newValue));}
+  if (command == cutSecElecCmd)
+    { physicsList->SetLowEnSecElecCut(cutSecElecCmd->GetNewDoubleValue(newValue)); }
 
-  if(command == cutGCmd)
-    { Tst14List->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue));}
+  if (command == cutGCmd)
+    { physicsList->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue)); }
 
-  if(command == cutECmd)
-    { Tst14List->SetElectronCut(cutECmd->GetNewDoubleValue(newValue));}
+  if (command == cutECmd)
+    { physicsList->SetElectronCut(cutECmd->GetNewDoubleValue(newValue)); }
+
+  if (command == augerCmd)
+    { physicsList->ActivateAuger(augerCmd->GetNewBoolValue(newValue)); }
+
+  if (command == physicsListCmd)
+   { physicsList->AddPhysicsList(newValue); }
 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 

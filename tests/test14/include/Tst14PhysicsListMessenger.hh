@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsListMessenger.hh,v 1.8 2003-02-23 09:49:14 pia Exp $
+// $Id: Tst14PhysicsListMessenger.hh,v 1.9 2003-02-23 10:17:59 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,7 +55,7 @@ class G4UIcmdWithABool;
 class Tst14PhysicsListMessenger: public G4UImessenger {
 public:
   
-  Tst14PhysicsListMessenger(Tst14PhysicsList*);
+  Tst14PhysicsListMessenger(Tst14PhysicsList* physList);
   
   ~Tst14PhysicsListMessenger();
   
@@ -63,7 +63,7 @@ public:
   
 private:
   
-  Tst14PhysicsList*          Tst14List;
+  Tst14PhysicsList*          physicsList;    // not owned pointer
   
   G4UIdirectory* lowEnDir;
 
