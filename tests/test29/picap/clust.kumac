@@ -1,0 +1,53 @@
+OPT ZFL
+ntu/cr 7 '1 cluster' 3 ' ' 3500 np1 xp1 yp1
+ntu/re 7 dua0:[lab211.kossov]clust1.dat
+ntu/cr 8 '2 cluster' 3 ' ' 3500 np2 xp2 yp2
+ntu/re 8 dua0:[lab211.kossov]clust2.dat
+ntu/cr 9 '3 cluster' 3 ' ' 3500 np3 xp3 yp3
+ntu/re 9 dua0:[lab211.kossov]clust3.dat
+ntu/cr 10 'clusters' 3 ' ' 3500 np xp yp
+ntu/re 10 dua0:[lab211.kossov]clust4.dat
+ntu/cr 11 'dis-clusters-1' 3 ' ' 3500 n11 n21 distance
+ntu/re 11 dua0:[lab211.kossov]clustd.dat
+ntu/cr 12 'main factors' 3 ' ' 3500 npf sf 1-factor
+ntu/re 12 dua0:[lab211.kossov]testab.dat
+ntu/cr 14 'eigenvalues' 2 ' ' 3500 ne eigenval
+ntu/re 14 dua0:[lab211.kossov]eigen.dat
+hi/fil 1 clust.rzdat 1024 n
+hrout 7
+hrout 8
+hrout 9
+hrout 10
+hrout 11
+hrout 12
+hrout 14
+zone 2 2
+*ntu/pri 10
+*nt/pl 10.yp
+2d 21 'two main factors' 100 -2 2 100 -2 2 0
+2d 22 'first cluster' 100 -1 2 100 -1 2 0
+2d 23 'second cluster' 100 -1 2 100 -1 2 0
+2d 24 'third cluster' 100 -1 2 100 -1 2 0
+2d 25 'all 3 clusters' 100 -1 2 100 -1 2 0
+nt/pl 14.eigenval
+nt/pl 11.distance
+nt/pl 12.1-factor
+ntu/proj 21 12.1-factor%sf
+ntu/proj 22 7.xp1%yp1
+ntu/proj 23 8.xp2%yp2
+ntu/proj 24 9.xp3%yp3
+ntu/proj 25 10.xp%yp
+hi/pl 21
+hi/pl 22
+hi/pl 23
+hi/pl 24
+hi/pl 25
+close 1
+hi/del 7
+hi/del 8
+hi/del 9
+hi/del 10
+hi/del 11
+hi/del 12
+hi/del 14
+zone
