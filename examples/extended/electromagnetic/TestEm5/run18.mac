@@ -6,8 +6,8 @@
 /control/verbose 2
 /run/verbose 2
 #
-/calor/cutG 1. mm    
-/calor/cutE 1. mm
+/run/particle/setGCut 1. mm    
+/run/particle/setECut 1. mm
 /run/initialize
 #
 /calor/setAbsMat XenonMethanePropane   

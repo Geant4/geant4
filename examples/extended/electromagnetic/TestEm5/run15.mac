@@ -7,8 +7,8 @@
 #control/saveHistory
 /run/verbose 2
 #
-/calor/cutG 2.13 mm    
-/calor/cutE 7.00 micrometer
+/run/particle/setGCut 2.13 mm    
+/run/particle/setECut 7.00 micrometer
 /run/initialize
 #
 /calor/setAbsMat Silicon   

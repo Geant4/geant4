@@ -7,8 +7,8 @@
 #control/saveHistory
 /run/verbose 2
 #
-/calor/cutG 13.0 micrometer
-/calor/cutE 1.12 micrometer
+/run/particle/setGCut 13.0 mum    
+/run/particle/setEcut 1.12 mum
 /run/initialize
 #
 /calor/setAbsMat Gold      

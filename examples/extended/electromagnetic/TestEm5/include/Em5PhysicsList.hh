@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsList.hh,v 1.5 2001-10-16 11:56:27 maire Exp $
+// $Id: Em5PhysicsList.hh,v 1.6 2002-03-08 17:30:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -70,7 +70,6 @@ class Em5PhysicsList: public G4VUserPhysicsList
     void SetGammaCut(G4double);
     void SetElectronCut(G4double);
     void SetProtonCut(G4double);
-    void SetCutsByEnergy(G4double);
     void GetRange(G4double);
 
     void SetMaxStep(G4double);

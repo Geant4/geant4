@@ -7,8 +7,8 @@
 #control/saveHistory
 /run/verbose 2
 #
-/calor/cutG 1.00 mm
-/calor/cutE 5.0 mum
+/run/particle/setGCut 1.00 mm
+/run/particle/setECut 5.0 mum
 /run/initialize
 #
 /calor/setAbsMat Lead 

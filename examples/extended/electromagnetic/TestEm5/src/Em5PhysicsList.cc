@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsList.cc,v 1.9 2001-10-16 11:56:29 maire Exp $
+// $Id: Em5PhysicsList.cc,v 1.10 2002-03-08 17:30:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -252,6 +252,7 @@ void Em5PhysicsList::SetCuts()
     {
      if(cutForGamma    == currentDefaultCut) cutForGamma    = defaultCutValue;
      if(cutForElectron == currentDefaultCut) cutForElectron = defaultCutValue;
+     if(cutForProton   == currentDefaultCut) cutForProton   = defaultCutValue;
      currentDefaultCut = defaultCutValue;
     }
       
@@ -269,8 +270,8 @@ void Em5PhysicsList::SetCuts()
       
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
+  //
    SetCutValue(cutForGamma,"gamma");
-
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
 
@@ -321,39 +322,6 @@ void Em5PhysicsList::SetProtonCut(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em5PhysicsList::SetCutsByEnergy(G4double val)
-{
-  G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
-  G4Material* currMat = pDet->GetAbsorberMaterial();
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-  G4ParticleDefinition* part;
-  G4double cut;
-
-  part = theParticleTable->FindParticle("e-");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "e-");
-
-  part = theParticleTable->FindParticle("e+");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "e+");
-
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton
-  part = theParticleTable->FindParticle("proton");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "proton");
-
-  part = theParticleTable->FindParticle("anti_proton");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "anti_proton");
-
-  SetCutValueForOthers(cut);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void Em5PhysicsList::GetRange(G4double val)
 {
   G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
@@ -365,8 +333,8 @@ void Em5PhysicsList::GetRange(G4double val)
   cut = G4EnergyLossTables::GetRange(part,val,currMat);
   G4cout << "material : " << currMat->GetName() << G4endl;
   G4cout << "particle : " << part->GetParticleName() << G4endl;
-  G4cout << "energy   : " << val / keV << " (keV)" << G4endl;
-  G4cout << "range    : " << cut / mm << " (mm)" << G4endl;
+  G4cout << "energy   : " << G4BestUnit(val,"Energy") << G4endl;
+  G4cout << "range    : " << G4BestUnit(cut,"Length") << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -374,7 +342,7 @@ void Em5PhysicsList::GetRange(G4double val)
 void Em5PhysicsList::SetMaxStep(G4double step)
 {
   pStepCut->SetMaxStep(step);
-  G4cout << " MaxChargedStep=" << step/mm << " mm" << G4endl;
+  G4cout << " MaxChargedStep=" << G4BestUnit(step,"length") << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
