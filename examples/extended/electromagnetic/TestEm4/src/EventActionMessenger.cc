@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventActionMessenger.cc,v 1.1 2003-06-23 16:16:34 maire Exp $
+// $Id: EventActionMessenger.cc,v 1.2 2003-10-06 14:51:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,6 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

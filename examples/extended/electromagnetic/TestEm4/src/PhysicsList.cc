@@ -21,10 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.2 2003-09-29 01:57:16 kurasige Exp $
+// $Id: PhysicsList.cc,v 1.3 2003-10-06 14:51:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +35,6 @@
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
-#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,16 +67,13 @@ void PhysicsList::ConstructParticle()
 
 void PhysicsList::ConstructBosons()
 {
-  // gamma
   G4Gamma::GammaDefinition();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructLeptons()
 {
-  // leptons
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
 }
@@ -97,12 +92,11 @@ void PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScatteringSTD.hh"
+#include "G4MultipleScattering.hh"
 
-#include "G4eIonisationSTD.hh"
-#include "G4eBremsstrahlungSTD.hh"
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -124,16 +118,16 @@ void PhysicsList::ConstructEM()
     } else if (particleName == "e-") {
     //electron
 
-      pmanager->AddProcess(new G4MultipleScatteringSTD,-1, 1,1);
-      pmanager->AddProcess(new G4eIonisationSTD,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlungSTD,   -1,-1,3);      
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);      
 
     } else if (particleName == "e+") {
     //positron
 
-      pmanager->AddProcess(new G4MultipleScatteringSTD,-1, 1,1);
-      pmanager->AddProcess(new G4eIonisationSTD,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlungSTD,   -1,-1,3);
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);      
     }
   }
@@ -150,16 +144,14 @@ void PhysicsList::SetCuts()
   
   //special for low energy physics
   //
-  G4double lowlimit=250*eV;  
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowlimit,100*GeV);
+  G4ProductionCutsTable::GetProductionCutsTable()
+                                   ->SetEnergyRange(250*eV, 100*GeV);
    
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
   SetCutValue(defaultCutValue, "gamma");
   SetCutValue(defaultCutValue, "e-");
   SetCutValue(defaultCutValue, "e+");
- 
-  if (verboseLevel>0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

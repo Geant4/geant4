@@ -21,10 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.1 2003-06-23 16:16:30 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2003-10-06 14:51:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,11 +34,6 @@
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-
-#include "G4VisAttributes.hh"
-#include "G4Colour.hh"
-
-#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,30 +50,25 @@ DetectorConstruction::~DetectorConstruction()
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   //
-  // define a material from elements.   case 1: chemical molecule
-  //
- 
-  G4String name, symbol;             //a=mass of a mole;
-  G4double a, z;                     //z=mean number of protons;  
+  // define a material from its elements.   case 1: chemical molecule
+  // 
+  G4double a, z;
+  G4double density;  
   G4int ncomponents, natoms;
  
-  a = 12.01*g/mole;
-  G4Element* elC  = new G4Element(name="Carbon"  ,symbol="C" , z= 6., a);
-
-  a = 18.99*g/mole;
-  G4Element* elF  = new G4Element(name="Fluorine",symbol="N" , z= 9., a);
+  G4Element* C = new G4Element("Carbon"  ,"C" , z= 6., a= 12.01*g/mole);
+  G4Element* F = new G4Element("Fluorine","N" , z= 9., a= 18.99*g/mole);
  
-  G4double density = 1.61*g/cm3;
-  G4Material* matC6F6 = new G4Material("FluorCarbonate",density,ncomponents=2);
-  matC6F6->AddElement(elC, natoms=6);
-  matC6F6->AddElement(elF, natoms=6);
+  G4Material* C6F6 = 
+  new G4Material("FluorCarbonate", density= 1.61*g/cm3, ncomponents=2);
+  C6F6->AddElement(C, natoms=6);
+  C6F6->AddElement(F, natoms=6);
   
-  G4cout << matC6F6 << G4endl;
+  G4cout << C6F6 << G4endl;
   
   //     
   // Container
-  //
-  
+  //  
   G4double Rmin=0., Rmax=5*cm, deltaZ= 5*cm, Phimin=0., deltaPhi=360*degree;
 
   G4Tubs*  
@@ -88,7 +77,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4LogicalVolume*                         
   logicWorld = new G4LogicalVolume(solidWorld,		//its solid
-                                   matC6F6,		//its material
+                                   C6F6,		//its material
                                    "C6F6");		//its name
   G4VPhysicalVolume*                                   
   physiWorld = new G4PVPlacement(0,			//no rotation
@@ -98,19 +87,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                                  0,			//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
-     
-  //                                        
-  // Visualization attributes
-  //
-  
-  G4VisAttributes* visAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  visAtt->SetVisibility(true);
-  logicWorld->SetVisAttributes(visAtt);
-  
+
   //
   //always return the physical World
-  //
-  
+  //  
   return physiWorld;
 }
 

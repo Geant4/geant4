@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2003-09-29 09:38:46 vnivanch Exp $
+$Id: History,v 1.25 2003-10-06 14:51:14 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+06-10-03 mma (testem4-V05-02-01)
+- migration STD -> standard
+- G4ANALYSIS_USE
 
 29-09-03 V.Ivanchenko (testem4-V05-02-00)
 - substitute obsolete interface to cut energy range

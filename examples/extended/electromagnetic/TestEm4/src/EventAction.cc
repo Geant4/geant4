@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.1 2003-06-23 16:16:34 maire Exp $
+// $Id: EventAction.cc,v 1.2 2003-10-06 14:51:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,15 +35,12 @@
 #include "EventActionMessenger.hh"
 
 #include "G4Event.hh"
-#include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
-#include "G4ios.hh"
 #include "G4UnitsTable.hh"
-#include "Randomize.hh"
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   #include "AIDA/IHistogram1D.h"
 #endif
 
@@ -84,7 +81,7 @@ void EventAction::EndOfEventAction( const G4Event* evt)
     G4cout << " Energy deposit: " 
            << G4BestUnit(TotalEnergyDeposit,"Energy") << G4endl;
 	   
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   Run->GetHisto(0)->fill(TotalEnergyDeposit/MeV);
 #endif
 

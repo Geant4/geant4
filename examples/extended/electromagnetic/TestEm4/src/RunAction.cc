@@ -21,9 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.1 2003-06-23 16:16:34 maire Exp $
+// $Id: RunAction.cc,v 1.2 2003-10-06 14:51:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,11 +34,10 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
-#include "G4ios.hh"
 
 #include "Randomize.hh"
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
  #include "AIDA/AIDA.h"
 #endif
 
@@ -54,7 +52,7 @@ RunAction::RunAction()
 
 RunAction::~RunAction()
 {
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
   
@@ -67,7 +65,7 @@ RunAction::~RunAction()
 
 void RunAction::bookHisto()
 {
-#ifndef G4NOHIST 
+#ifdef G4ANALYSIS_USE 
  // Creating the analysis factory
  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
@@ -98,7 +96,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
   // save Rndm status
-  //  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   HepRandom::showEngineStatus();
 
   if (G4VVisManager::GetConcreteInstance())

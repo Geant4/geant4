@@ -21,9 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.1 2003-06-23 16:16:24 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.2 2003-10-06 14:51:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
