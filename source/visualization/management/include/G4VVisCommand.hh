@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh,v 1.13 2001-09-10 10:49:07 johna Exp $
+// $Id: G4VVisCommand.hh,v 1.14 2002-11-27 12:32:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
@@ -51,7 +51,6 @@ public:
   static G4String ConvertToString(const G4ThreeVector& vec);
   static G4bool        GetNewBoolValue(const G4String& paramString);
   static G4int         GetNewIntValue(const G4String& paramString);
-  static G4double      GetNewDoubleValue(const G4String& paramString);
   static G4ThreeVector GetNew3VectorValue(const G4String& paramString);
   static void          GetNewDoublePairValue(const G4String& paramString,
 					     G4double& xval,
