@@ -110,11 +110,11 @@ export CLHEP_BASE_DIR
 echo "On this machine the CLHEP_BASE_DIR=\$CLHEP_BASE_DIR"
 fi
 
-if [ X$g4clhep_base_dir != X/usr -o X$g4clhep_base_dir != X/usr/local ] ; then 
-CLHEP_BASE_DIR="$g4clhep_base_dir"
-export CLHEP_BASE_DIR
-echo "On this machine the CLHEP_BASE_DIR=\$CLHEP_BASE_DIR"
-fi
+#if [ X$g4clhep_base_dir != X/usr -o X$g4clhep_base_dir != X/usr/local ] ; then 
+#CLHEP_BASE_DIR="$g4clhep_base_dir"
+#export CLHEP_BASE_DIR
+#echo "On this machine the CLHEP_BASE_DIR=\$CLHEP_BASE_DIR"
+#fi
 
 #+
 if [ X$g4clhep_include_dir != X ] ; then 
