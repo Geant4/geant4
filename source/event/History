@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2003-06-04 16:04:43 gcosmo Exp $
+$Id: History,v 1.60 2003-08-01 19:40:58 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 01 2003, M.Asai (event-V05-02-00)
+- With introducing G4RunManagerKernel class in Run category, G4EventManager now
+  toggles the application states between G4State_GeomClosed and G4State_EventProc.
 
 Jun 04 2003, G.Cosmo (event-V05-01-02)
 - Fixes for inclusion of <strstream> in G4HEPEvtInterface.cc in view
