@@ -1,4 +1,4 @@
-$Id: History,v 1.82 2004-11-18 23:42:28 perl Exp $
+$Id: History,v 1.83 2004-12-01 17:08:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01 December 2004 Gabriele Cosmo (tracking-V06-02-08)
+- Fix in G4SteppingManager::InvokePSDIP() for completing migration
+  to new G4VParticleVhange interface.
 
 18 November 2004 Joseph Perl (tracking-V06-02-07)
 - G4Trajectory add HepRep attribute for magnitude of momentum
