@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedRunAction.cc,v 1.1 2002-10-29 15:43:08 dressel Exp $
+// $Id: Tst33TimedRunAction.cc,v 1.2 2003-09-16 13:01:11 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@ Tst33TimedRunAction::~Tst33TimedRunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Tst33TimedRunAction::BeginOfRunAction(const G4Run* aRun)
+void Tst33TimedRunAction::BeginOfRunAction(const G4Run* )
 {
 }
 

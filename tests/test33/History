@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2003-08-22 13:14:49 dressel Exp $
+$Id: History,v 1.23 2003-09-16 13:01:08 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep. 16th, 2003 M. Dressel - test33-V05-02-02
+  - using <strstream> instead of  <sstream> 
+    cure some wornings
 
 Aug. 22th, 2003 M. Dressel - test33-V05-02-01
   - test for weight window technique

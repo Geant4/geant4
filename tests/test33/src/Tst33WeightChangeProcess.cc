@@ -39,8 +39,8 @@ Tst33WeightChangeProcess::~Tst33WeightChangeProcess()
 }
 
 G4double Tst33WeightChangeProcess::
-PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-				     G4double   previousStepSize,
+PostStepGetPhysicalInteractionLength(const G4Track&,
+				     G4double  ,
 				     G4ForceCondition* condition)
 {
   *condition = Forced;
@@ -48,7 +48,7 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 }
   
 G4VParticleChange * 
-Tst33WeightChangeProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
+Tst33WeightChangeProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &)
 {
   aParticleChange->Initialize(aTrack);
   G4double w = aTrack.GetWeight();

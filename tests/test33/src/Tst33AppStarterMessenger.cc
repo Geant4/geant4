@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarterMessenger.cc,v 1.6 2003-08-19 15:16:21 dressel Exp $
+// $Id: Tst33AppStarterMessenger.cc,v 1.7 2003-09-16 13:01:11 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -31,7 +31,8 @@
 //
 // ----------------------------------------------------------------------
 
-#include <sstream>
+#include "G4Types.hh"
+#include <strstream>
 
 #include "Tst33AppStarterMessenger.hh"
 #include "G4UIcommand.hh"

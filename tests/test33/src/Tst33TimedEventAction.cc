@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedEventAction.cc,v 1.7 2003-06-16 17:16:03 gunter Exp $
+// $Id: Tst33TimedEventAction.cc,v 1.8 2003-09-16 13:01:11 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,18 +72,18 @@ void Tst33TimedEventAction::SpecialCellScorer(const G4CellScorer *scorer){
 }
 
 
-void Tst33TimedEventAction::BeginOfEventAction(const G4Event* evt)
+void Tst33TimedEventAction::BeginOfEventAction(const G4Event*)
 {
-  struct tms time = {0};
+  struct tms time;
   times(&time);
   fEvStartTime = time.tms_utime;
 }
 
 
-void Tst33TimedEventAction::EndOfEventAction(const G4Event* evt)
+void Tst33TimedEventAction::EndOfEventAction(const G4Event*)
 {
 
-  struct tms time = {0};
+  struct tms time;
   times(&time);
 
 
