@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 // 
-// $Id: G4eBremsstrahlungSpectrum.hh,v 1.3 2002-05-28 09:15:26 pia Exp $
+// $Id: G4eBremsstrahlungSpectrum.hh,v 1.4 2003-02-21 17:05:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // Modifications: 
 // 10.10.01  MGP  Revision to improve code quality and consistency with design
 // 29.11.01  V.Ivanchenko    Parametrisation is updated
+// 21.02.03  V.Ivanchenko    Energy bins are defined in the constructor
 //
 // -------------------------------------------------------------------
 
@@ -53,7 +54,7 @@
 
 #include "globals.hh"
 #include "G4DataVector.hh"
-#include "G4VEnergySpectrum.hh" 
+#include "G4VEnergySpectrum.hh"
 
 class G4BremsstrahlungParameters;
 
@@ -61,51 +62,51 @@ class G4eBremsstrahlungSpectrum : public G4VEnergySpectrum
 {
 public:
 
-  G4eBremsstrahlungSpectrum();
+  G4eBremsstrahlungSpectrum(const G4DataVector& bins);
 
   ~G4eBremsstrahlungSpectrum();
 
-  G4double Probability(G4int Z, 
-                       G4double tMin, 
-                       G4double tMax, 
-                       G4double kineticEnergy, 
-                       G4int shell=0, 
+  G4double Probability(G4int Z,
+                       G4double tMin,
+                       G4double tMax,
+                       G4double kineticEnergy,
+                       G4int shell=0,
 		       const G4ParticleDefinition* pd=0) const;
 
-  G4double AverageEnergy(G4int Z, 
-                         G4double tMin, 
+  G4double AverageEnergy(G4int Z,
+                         G4double tMin,
                          G4double tMax,
                          G4double kineticEnergy,
-                         G4int shell=0, 
+                         G4int shell=0,
 			 const G4ParticleDefinition* pd=0) const;
 
-  G4double SampleEnergy(G4int Z, 
-                        G4double tMin, 
+  G4double SampleEnergy(G4int Z,
+                        G4double tMin,
                         G4double tMax,
                         G4double kineticEnergy,
-                        G4int shell=0, 
+                        G4int shell=0,
 			const G4ParticleDefinition* pd=0) const;
 
   G4double MaxEnergyOfSecondaries(G4double kineticEnergy,
                                   G4int Z = 0,
 				  const G4ParticleDefinition* pd=0) const;
 
-  G4double Excitation(G4int Z, G4double kineticEnergy) const; 
+  G4double Excitation(G4int Z, G4double kineticEnergy) const;
 
   void PrintData() const;
 
 private:
 
   G4double IntSpectrum(G4double xMin, G4double xMax,
-                         const G4DataVector& p) const; 
-  
+                         const G4DataVector& p) const;
+
   G4double AverageValue(G4double xMin, G4double xMax,
-			const G4DataVector& p) const; 
-  
-  G4double Function(G4double x, const G4DataVector& p) const; 
+			const G4DataVector& p) const;
+
+  G4double Function(G4double x, const G4DataVector& p) const;
 
 
-  // Hide copy constructor and assignment operator 
+  // Hide copy constructor and assignment operator
   G4eBremsstrahlungSpectrum(const  G4eBremsstrahlungSpectrum&);
   G4eBremsstrahlungSpectrum & operator = (const G4eBremsstrahlungSpectrum &right);
 
@@ -113,7 +114,7 @@ private:
   G4double                    lowestE;
   size_t                      length;
   G4int                       verbose;
-  G4DataVector                xp;
+  const G4DataVector&         xp;
 };
 
 #endif

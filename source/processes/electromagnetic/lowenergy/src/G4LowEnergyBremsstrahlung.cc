@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.56 2003-01-22 18:47:26 vnivanch Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.57 2003-02-21 17:05:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -52,6 +52,7 @@
 // 29.11.2001 VI  New parametrisation
 // 30.07.2002 VI  Fix in restricted energy loss
 // 21.01.2003 VI  Cut per region
+// 21.02.2003 V.Ivanchenko    Energy bins for spectrum are defined here
 //
 // --------------------------------------------------------------
 
@@ -84,6 +85,7 @@ G4LowEnergyBremsstrahlung::~G4LowEnergyBremsstrahlung()
   if(crossSectionHandler) delete crossSectionHandler;
   if(energySpectrum) delete energySpectrum;
   if(theMeanFreePath) delete theMeanFreePath;
+  energyBins.clear();
 }
 
 
@@ -98,7 +100,18 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
 
   // Create and fill BremsstrahlungParameters once
   if( energySpectrum != 0 ) delete energySpectrum;
-  energySpectrum = new G4eBremsstrahlungSpectrum();
+  energyBins.clear();
+  for(size_t i=0; i<15; i++) {
+    G4double x = 0.1*((G4double)i);
+    if(i == 0)  x = 0.01;
+    if(i == 10) x = 0.95;
+    if(i == 11) x = 0.97;
+    if(i == 12) x = 0.99;
+    if(i == 13) x = 0.995;
+    if(i == 14) x = 1.0;
+    energyBins.push_back(x);
+  }
+  energySpectrum = new G4eBremsstrahlungSpectrum(energyBins);
 
   if(verboseLevel > 0) {
     G4cout << "G4LowEnergyBremsstrahlungSpectrum is initialized"
