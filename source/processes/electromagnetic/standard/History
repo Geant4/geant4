@@ -1,4 +1,4 @@
-$Id: History,v 1.112 2004-03-15 12:18:42 maire Exp $
+$Id: History,v 1.113 2004-05-04 10:55:52 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04 May 04: V.Ivant (stand-V06-01-00)
+- (V.Grichine) Updated PAI model - use precise integrator, 
+  add photon emission, add G4PAIwithPhotons and  G4PAIxSection classes
      
 15 Mar 04: mma (stand-V06-00-04)
      
