@@ -1,4 +1,4 @@
-$Id: History,v 1.4 1999-02-06 10:14:12 kurasige Exp $
+$Id: History,v 1.5 1999-04-02 09:20:36 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Apr. 2,99   H.Kurashige (particles-01-00-03, partman-01-00-03)
+- Fixed mass fomulae in G4IonTable 
+
 - Feb 6, 99   H.Kurashige (particles-01-00-02 ,partman-01-00-02)
 - Migrate G4ParticleTypes.hh into process/management
 - Remove using G4ParticleMomentum
