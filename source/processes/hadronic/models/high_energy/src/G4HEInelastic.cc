@@ -2056,7 +2056,6 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
        pvmx[8].Add3(pvmx[8], pv[i] );
      } 
 
-       for(i=0; i<vecLen; i++) pv[i].Print(i);
   if (ledpar >= 0)
      { 
        if(verboseLevel > 1)
