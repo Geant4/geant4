@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4PolynomialSolver.cc,v 1.3 2001-01-29 09:57:22 gcosmo Exp $
+// $Id: testG4PolynomialSolver.cc,v 1.4 2001-01-29 10:06:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4PolynomialSolver.hh"
@@ -51,7 +51,7 @@ private:
 } ;
 
 
-G4int main (void)
+int main (void)
 {
   MyFunctionClass MyFunction(1.0);
 
