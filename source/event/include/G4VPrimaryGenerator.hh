@@ -21,12 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimaryGenerator.hh,v 1.5 2001-11-20 23:21:41 asaim Exp $
+// $Id: G4VPrimaryGenerator.hh,v 1.6 2001-11-21 13:48:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4VPrimaryGenerator_h
 #define G4VPrimaryGenerator_h 1
+
+#include "G4ThreeVector.hh"
 
 class G4Event;
 
