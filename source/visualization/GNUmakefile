@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999-06-19 16:29:35 johna Exp $
+# $Id: GNUmakefile,v 1.3 1999-09-03 09:30:31 johna Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -66,5 +66,10 @@ ifdef      G4VIS_BUILD_VRMLFILE_DRIVER
 endif
 # End of VRML and VRMLFILE drivers
 
-include $(G4INSTALL)/config/globlib.gmk
+.PHONY: granular glob global 
 
+granular:
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done
+
+glob global:
+	@echo "ERROR: The global target not relevant for the visualization category."
