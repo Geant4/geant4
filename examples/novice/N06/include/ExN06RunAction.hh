@@ -9,8 +9,8 @@
 #ifndef ExN06RunAction_h
 #define ExN06RunAction_h 1
 
-#include "globals.hh"
 #include "G4Timer.hh"
+#include "globals.hh"
 #include "G4UserRunAction.hh"
 
 class G4Run;

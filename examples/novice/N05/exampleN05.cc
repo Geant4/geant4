@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN05.cc,v 1.1 1999-01-07 16:06:10 gunter Exp $
+// $Id: exampleN05.cc,v 1.2 1999-05-28 12:55:34 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,6 +21,14 @@
 //   ie "Fast Simulation".
 //-------------------------------------------------------------------
 
+//------------------------------
+// Run, Generator etc.. actions:
+//------------------------------
+#include "ExN05RunAction.hh"
+#include "ExN05PrimaryGeneratorAction.hh"
+#include "ExN05EventAction.hh"
+#include "ExN05SteppingAction.hh"
+
 //---------------------------
 // Parameterisation manager:
 //---------------------------
@@ -30,14 +38,6 @@
 // Detector:
 //--------------------
 #include "ExN05DetectorConstruction.hh"
-
-//------------------------------
-// Run, Generator etc.. actions:
-//------------------------------
-#include "ExN05RunAction.hh"
-#include "ExN05PrimaryGeneratorAction.hh"
-#include "ExN05EventAction.hh"
-#include "ExN05SteppingAction.hh"
 
 //----------------------------------
 // ExN05PhysicsList makes use of the

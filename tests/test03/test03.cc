@@ -26,18 +26,17 @@
 //
 // --------------------------------------------------------------
 
-#include "G4ios.hh"
-#include <stdlib.h>
+#include "Tst03RunAction.hh"
+#include "Tst03DetectorConstruction.hh"
+#include "Tst03PrimaryGeneratorAction.hh"
+#include "Tst03PhysicsList.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 
-#include "Tst03DetectorConstruction.hh"
-#include "Tst03PrimaryGeneratorAction.hh"
-
-#include "Tst03PhysicsList.hh"
-#include "Tst03RunAction.hh"
+#include "G4ios.hh"
+#include <stdlib.h>
 
 int main(int argc,char** argv) {
 

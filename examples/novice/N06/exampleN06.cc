@@ -25,18 +25,17 @@
 //
 // --------------------------------------------------------------
 
-#include "G4ios.hh"
-#include <stdlib.h>
+#include "ExN06RunAction.hh"
+#include "ExN06DetectorConstruction.hh"
+#include "ExN06PrimaryGeneratorAction.hh"
+#include "ExN06PhysicsList.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 
-#include "ExN06DetectorConstruction.hh"
-#include "ExN06PrimaryGeneratorAction.hh"
-
-#include "ExN06PhysicsList.hh"
-#include "ExN06RunAction.hh"
+#include "G4ios.hh"
+#include <stdlib.h>
 
 int main(int argc,char** argv) {
 
