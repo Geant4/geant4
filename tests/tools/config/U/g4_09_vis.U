@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE:g4vis_build_dawn_driver g4vis_use_dawn g4vis_build_dawnfile_driver g4vis_use_dawnfile g4vis_build_opacs_driver g4vis_use_opacs g4vis_build_openglx_driver g4vis_use_openglx g4vis_build_openglxm_driver g4vis_use_openglxm g4vis_build_oix_driver g4vis_use_oix g4vis_build_raytracer_driver g4vis_use_raytracer g4vis_build_vrml_driver g4vis_use_vrml g4vis_build_vrmlfile_driver g4vis_use_vrmlfile g4vis_build_asciitree_driver g4vis_use_asciitree g4vis_build_openglwin32_driver g4vis_use_openglwin32 g4vis_build_oiwin32_driver g4vis_use_oiwin32:\
+?MAKE:g4vis_build_dawn_driver g4vis_use_dawn g4vis_build_dawnfile_driver g4vis_use_dawnfile g4vis_build_opacs_driver g4vis_use_opacs g4vis_build_openglx_driver g4vis_use_openglx g4vis_build_openglxm_driver g4vis_use_openglxm g4vis_build_oix_driver g4vis_use_oix g4vis_build_raytracer_driver g4vis_use_raytracer g4vis_build_vrml_driver g4vis_use_vrml g4vis_build_vrmlfile_driver g4vis_use_vrmlfile g4vis_build_asciitree_driver g4vis_use_asciitree g4vis_build_openglwin32_driver g4vis_use_openglwin32 g4vis_build_oiwin32_driver g4vis_use_oiwin32 g4vis_oglhome:\
 	g4ui_build_terminal_session Myread Getfile cat rm test
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
@@ -11,6 +11,12 @@ echo " "
 case "$g4vis_none" in
 '')
 	g4vis_none=n
+	;;
+esac
+
+case "$g4vis_oglhome" in
+'')
+	g4vis_oglhome="/usr"
 	;;
 esac
 
@@ -172,7 +178,8 @@ g4message=`cat << EOM
 
   G4VIS_NONE
 
-If specified, no visualization drivers will be built or used.
+If this variable is set, no visualization drivers will be built or used.
+Do you want to set this variable ?
 
 EOM`
 
@@ -573,3 +580,21 @@ gans=y
 ;;
 esac
 
+if [ X$g4vis_build_openglx_driver = Xy ] || [ X$g4vis_build_openglxm_driver = Xy ] || [ X$g4vis_build_openglwin32_driver = Xy ] ; then 
+
+g4message=`cat << EOM
+
+  OGLHOME/include
+  OGLHOME/lib
+
+You have selected to use OpenGL driver.
+Specify the correct path (OGLHOME) where OpenGL is installed in your system:
+EOM`
+
+dflt=$g4vis_oglhome
+fn='d~'
+rp=$g4message
+. ./getfile
+g4vis_oglhome=$ans
+
+fi
