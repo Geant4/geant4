@@ -368,6 +368,62 @@ G4ThreeVector GetVectorOnTubs(G4Tubs& tubs)
   return G4ThreeVector(px,py,pz);
 }
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Random vector out of tubs surface
+
+G4ThreeVector GetVectorOutOfTubs(G4Tubs& tubs)
+{
+  G4double phi, radius, px, py, pz;
+  G4double part = 1./5.;
+  G4double rand = G4UniformRand();
+
+  G4double pRmin = tubs.GetInnerRadius   ();
+  G4double pRmax = tubs.GetOuterRadius   ();
+  G4double tubsZ = tubs.GetZHalfLength   ();
+  G4double phi1  = tubs.GetStartPhiAngle ();
+  G4double deltaPhi  = tubs.GetDeltaPhiAngle ();
+  G4double phi2  = phi1 + deltaPhi;
+
+
+  if      ( rand < part ) // Rmax
+  {
+    radius = pRmax +0.5*kCarTolerance + pRmax*G4UniformRand(); 
+    pz     = -2*tubsZ + (4*tubsZ)*G4UniformRand(); 
+    phi    = (2*pi)*G4UniformRand();
+  }
+  else if ( rand < 2*part )  // Rmin
+  {
+    radius = (pRmin -0.5*kCarTolerance)*G4UniformRand(); 
+    pz     = -2*tubsZ + (4*tubsZ)*G4UniformRand(); 
+    phi    = (2*pi)*G4UniformRand();
+  }
+  else if ( rand < 3*part )  // out of deltaPhi
+  {
+    radius = (2*pRmax)*G4UniformRand(); 
+    pz     = -2*tubsZ - 0.5*kCarTolerance + (4*tubsZ + kCarTolerance)*G4UniformRand();   
+    phi    = phi2 + 0.5*kCarTolerance + (2*pi - deltaPhi - kCarTolerance)*G4UniformRand();
+  }
+  else if ( rand < 4*part )  // -fZ
+  {
+    radius = (2*pRmax)*G4UniformRand(); 
+    pz     = -tubsZ - 0.5*kCarTolerance - (tubsZ)*G4UniformRand();   
+    phi    = (2*pi)*G4UniformRand();  
+  }
+  else // fZ
+  {
+    radius = (2*pRmax)*G4UniformRand(); 
+    pz     = tubsZ + 0.5*kCarTolerance + (tubsZ)*G4UniformRand();   
+    phi    = (2*pi)*G4UniformRand();  
+  }
+
+  px = radius*std::cos(phi);
+  py = radius*std::sin(phi);
+  
+  return G4ThreeVector(px,py,pz);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Random vector on cons surface
@@ -506,8 +562,8 @@ G4ThreeVector GetVectorOnTorus(G4Torus& torus)
 
 int main(void)
 {
-  G4int i, j, iMax=1000000, jMax=1000;
-  G4int iCheck=iMax/10;
+  G4int i, j, iMax=100000, jMax=1000;
+  G4int iCheck = iMax/10;
   G4double distIn, distIn1, distIn2, distOut;
   EInside surfaceP, surfaceP1, surfaceP2;
   G4ThreeVector norm, *pNorm;
@@ -593,6 +649,7 @@ int main(void)
 
 
     G4Tubs*  detTub1 = new G4Tubs("Tubs4", 0.*cm, 5.*cm, 5.*cm, 0., 359*deg);
+    G4Tubs*  detTub12 = new G4Tubs("Tubs12", 1.*cm, 5.*cm, 5.*cm, 0., 359*deg);
     G4Tubs*  detTub2 = new G4Tubs("Tubs5", 1.*cm, 5.1*cm, 5.1*cm, 0., 359*deg);
 
     G4IntersectionSolid*  detInt1 = new G4IntersectionSolid("inter1", 
@@ -629,20 +686,22 @@ int main(void)
 
   pCheck = G4ThreeVector( -17.140591059524617, -23.320101452294466, -49.999999999668375 ); 
   vCheck = G4ThreeVector ( -0.69080640316788089, -0.58982688856527554, 0.41819941997528076 ); 
+  distIn  = detTub12->DistanceToIn(pCheck,vCheck);
   distIn1  = detTub1->DistanceToIn(pCheck,vCheck);
   distIn2  = detTub2->DistanceToIn(pCheck,vCheck);
-  G4cout<<"dTub1 = "<<distIn1<<"        dTub2 = "<<distIn2<<G4endl;
+  G4cout<<"dTub12 = "<<distIn<<";    dTub1 = "<<distIn1<<";    dTub2 = "<<distIn2<<G4endl;
+  surfaceP   = detTub12->Inside(pCheck);
   surfaceP1  = detTub1->Inside(pCheck);
   surfaceP2  = detTub2->Inside(pCheck);
-  G4cout<<"insideTub1 = "<<OutputInside(surfaceP1)
-        <<"       insideTub2 = "<<OutputInside(surfaceP2)<<G4endl; 
+  G4cout<<"insideTub12 = "<<OutputInside(surfaceP)<<";     insideTub1 = "<<OutputInside(surfaceP1)
+        <<";     insideTub2 = "<<OutputInside(surfaceP2)<<G4endl; 
   distIn1  = detInt1->DistanceToIn(pCheck,vCheck);
   distIn2  = detInt2->DistanceToIn(pCheck,vCheck);
-  G4cout<<"Int1 = "<<distIn1<<"        Int22 = "<<distIn2<<G4endl;
+  G4cout<<"Int1 = "<<distIn1<<";        Int2 = "<<distIn2<<G4endl;
   surfaceP1  = detInt1->Inside(pCheck);
   surfaceP2  = detInt2->Inside(pCheck);
   G4cout<<"insideInt1 = "<<OutputInside(surfaceP1)
-        <<"       insideInt2 = "<<OutputInside(surfaceP2)<<G4endl; 
+        <<";       insideInt2 = "<<OutputInside(surfaceP2)<<G4endl; 
 
 
 #ifdef NDEBUG
@@ -656,19 +715,21 @@ int main(void)
   switch (useCase)
   {
     case kInter:
-
-      G4cout<<"Testing all cutted G4Tubs-intersection:"<<G4endl<<G4endl;
-
-    for(i=0;i<iMax;i++)
+    G4cout<<"Testing of all cutted G4Tubs intersection:"<<G4endl<<G4endl;
+    for( i = 0; i < iMax; i++ )
     {
       if(i%iCheck == 0) G4cout<<"i = "<<i<<G4endl;
           
-      G4ThreeVector p1 = GetVectorOnTubs(*detTub1);
+      // G4ThreeVector p1 = GetVectorOnTubs(*detTub1);
+      G4ThreeVector p1 = GetVectorOutOfTubs(*detTub12);
       G4ThreeVector p2 = GetVectorOnTubs(*detTub2);
 
       surfaceP = detInt1->Inside(p1);
 
-      if(surfaceP != kSurface)
+      if(
+         //  surfaceP != kSurface
+           surfaceP != kOutside
+                                  )
       {
         // G4cout<<"p is out of surface: "<<G4endl;
         // G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl<<G4endl;
@@ -682,14 +743,21 @@ int main(void)
 
           distIn1  = detInt1->DistanceToIn(p1,v);
           distIn2  = detInt2->DistanceToIn(p1,v);
-
+          // distOut  = detInt1->DistanceToOut(p1,v,calcNorm,pgoodNorm,pNorm);
           // distOut = t4.DistanceToOut(p,v,calcNorm,pgoodNorm,pNorm); 
 
 	  //  if( distIn < kCarTolerance && distOut < kCarTolerance )
-          if( distIn1 !=  distIn2)
+          if( 
+	     // distIn1 !=  distIn2
+	     abs( distIn1 -  distIn2 ) > 100*kCarTolerance
+              //   distIn1 ==  distOut 
+                                          )
 	  {
 	    G4cout<<" distIn1  != distIn2: "<<G4endl;
-            G4cout<<"distIn1 = "<<distIn1<<";  distIn2 = "<<distIn2<<G4endl;
+	    //   G4cout<<" distIn1  == distOut: "<<G4endl;
+            G4cout<<"distIn1 = "<<distIn1
+	          <<";  distIn2 = "<<distIn2<<G4endl;
+	      //  <<";  distOut = "<<distOut<<G4endl;
             G4cout<<"location p1: "<<G4endl;
             G4cout<<"( "<<p1.x()<<", "<<p1.y()<<", "<<p1.z()<<" ); "<<G4endl;
             G4cout<<" direction v: "<<G4endl;
