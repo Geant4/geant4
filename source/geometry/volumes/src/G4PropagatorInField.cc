@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.25 2001-12-05 08:23:31 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.26 2001-12-07 09:42:10 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -37,6 +37,8 @@
 // 14.10.96 John Apostolakis,   design and implementation
 // 17.03.97 John Apostolakis,   renaming new set functions being added
 //
+
+// #define  G4DEBUG_FIELD  1
 
 #include "G4PropagatorInField.hh"
 #include "G4ios.hh"
@@ -84,14 +86,6 @@ G4double G4PropagatorInField::
   
   G4FieldTrack  CurrentState(pFieldTrack);
 
-#if 0
-  CurrentState.SetVelocity( pFieldTrack.GetMomentumDir() ); 
-    // For now, must utilize unit "velocity"    J.A. Nov 17, 98
-
-    //  Problem in setting the energy in this case .... (and in E field)
-#endif
-
- 
   G4FieldTrack  OriginalState= CurrentState;
 
   // If the Step length is "infinite", then an approximate-maximum Step lenght
@@ -121,7 +115,7 @@ G4double G4PropagatorInField::
      stepTrial= 0.5 * fFull_CurveLen_of_LastAttempt; 
      if( (stepTrial <= 0.0) && (fLast_ProposedStepLength>0.0) ) 
         stepTrial=0.5 * fLast_ProposedStepLength; 
-#ifdef DEBUG_FIELD
+#ifdef G4DEBUG_FIELD
      G4cout << " PiF: NoZeroStep= " << fNoZeroStep
 	    << " CurrentProposedStepLength= " << CurrentProposedStepLength
             << " Full_curvelen_last=" << fFull_CurveLen_of_LastAttempt
@@ -134,7 +128,7 @@ G4double G4PropagatorInField::
      if( fNoZeroStep > 2*fThresholdNo_ZeroSteps ){
         stepTrial *= 0.5;     // Ensure quicker convergence.
 
-#ifdef DEBUG_FIELD
+#ifdef G4DEBUG_FIELD
         // We are already in serious trouble, probably at some boundary
 	//   Let us try to print out some information to guide in 
 	//   diagnosing the problem.
@@ -236,7 +230,7 @@ G4double G4PropagatorInField::
 	   StepTaken = 
 	   TruePathLength= IntersectPointVelct_G.GetCurveLength()
 	                         - OriginalState.GetCurveLength(); // which is Zero now.
-#ifdef DEBUG_FIELD
+#ifdef G4DEBUG_FIELD
 	   if( Verbose() > 0 )
 	      G4cout << " Found intersection after Step of length " << 
 	           StepTaken << G4endl;
@@ -254,7 +248,7 @@ G4double G4PropagatorInField::
      }
      first_substep= false;
 
-#ifdef DEBUG_FIELD
+#ifdef G4DEBUG_FIELD
      // if( fNoZeroStep )
      if( fNoZeroStep > fThresholdNo_ZeroSteps )
      {
@@ -322,7 +316,7 @@ G4double G4PropagatorInField::
   }
 #endif
 
-#ifdef DEBUG_FIELD
+#ifdef G4DEBUG_FIELD
   if( fNoZeroStep ){
      G4cout << " PiF: Step returning=" << StepTaken << endl;
      G4cout << " ------------------------------------------------------- "
@@ -548,7 +542,7 @@ G4PropagatorInField::LocateIntersectionPoint(
 	  GetChordFinder()->GetIntegrationDriver()
 	    ->AccurateAdvance(newEndpoint, curveDist, GetEpsilonStep() );
 	  CurrentB_PointVelocity= newEndpoint;
-#ifdef G4DEBUG_NAVIGATION
+#ifdef G4DEBUG_FIELD
           static int noInaccuracyWarnings = 0; 
           const  int maxNoWarnings = 10;
 	  if(   (noInaccuracyWarnings < maxNoWarnings ) 
