@@ -1,4 +1,4 @@
-$Id: History,v 1.81 1999-11-23 14:51:36 gcosmo Exp $
+$Id: History,v 1.82 1999-11-25 15:57:30 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th November 1999  Gabriele Cosmo (config-V00-01-14)
+- architecture.gmk: redefined OSPACEDIR as OSPACE_BASE_DIR to conform to
+  an omogeneous format. Added existence check for OSPACE and CLHEP paths.
 
 23rd November 1999  Gabriele Cosmo (config-V00-01-13)
 - architecture.gmk: added setup for ISO/ANSI installation on DEC-cxx.

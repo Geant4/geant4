@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.50 1999-11-23 14:51:06 gcosmo Exp $
+# $Id: architecture.gmk,v 1.51 1999-11-25 15:57:30 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -19,20 +19,18 @@
 #
 #          DEC-cxx     DEC-OSF/1 4.0, DEC C++ 6.1
 #
-#          Linux-g++   Linux (Red Hat 5.1), egcs 1.1
+#          Linux-g++   Linux (Red Hat 5.1/6.1), egcs 1.1.2
 #
-#          WIN32-VC    NT and Microsoft Visual C++ 5.0 or Microsoft Visual C++ 6.0
-#                      and using CYGWIN32 tools ( make, g++ as "makedepend", sh...)
-#                      Note: you will need to set your environment, see installation
-#                            guide.
-#
-#          WIN32-VC-NICE  alias for the above, although NICE is not used anymore.
-#
+#          WIN32-VC    Windows/NT and Microsoft Visual C++ 6.0
+#                      Adding CYGWIN32 tools (make, g++ as "makedepend", sh...)
+#                      Note: you will need to set your environment, see the
+#                            installation guide.
+# -------------------------------------------------------------------------
+
+# Definition of HEP_ODBMS_LIBS, OBJY_LIBS and OSPACE_LIBS by HepODBMS.
 # Note: If G4ODBMS is defined, it calls for HEP_ODBMS setup files in
 #       $(HEP_ODBMS_DIR)/etc/.
 #
-
-# Definition of HEP_ODBMS_LIBS, OBJY_LIBS and OSPACE_LIBS by HepODBMS
 ifdef G4ODBMS
   # variables LHCXXTOP and PLATF are used in HepODBMS setup
   include $(HEP_ODBMS_DIR)/etc/$(OS).mk
@@ -49,6 +47,9 @@ CPPFLAGS  += -DG4USE_STL
 #
 ifndef G4SYSTEM
   G4SYSTEM := SUN-CC
+endif
+ifeq ($(G4SYSTEM),WIN32-VC-NICE)
+  G4SYSTEM := WIN32-VC
 endif
 
 # If not specified, the default path for G4 installation G4INSTALL is
@@ -147,40 +148,40 @@ endif
 ifndef CLHEP_BASE_DIR
   CLHEP_BASE_DIR    := /afs/cern.ch/sw/geant4/dev/CLHEP/$(G4SYSTEM)/pro
 endif
-CLHEP_INCLUDE_DIR := $(CLHEP_BASE_DIR)/include
-CLHEP_LIB_DIR     := $(CLHEP_BASE_DIR)/lib
-ifndef CLHEP_LIB
-  CLHEP_LIB         := CLHEP
-endif
-
-ifeq ($(G4SYSTEM),WIN32-VC-NICE)
-G4SYSTEM:=WIN32-VC
-endif
-
-ifeq ($(G4SYSTEM),WIN32-VC)
-#  CLHEP_BASE_DIR    must be defined in the environment
+ifndef CLHEP_INCLUDE_DIR
   CLHEP_INCLUDE_DIR := $(CLHEP_BASE_DIR)/include
+endif
+ifndef CLHEP_LIB_DIR
   CLHEP_LIB_DIR     := $(CLHEP_BASE_DIR)/lib
-  CLHEP_LIB         := CLHEP.lib
+endif
+ifndef CLHEP_LIB
+  ifeq ($(G4SYSTEM),WIN32-VC)
+    CLHEP_LIB         := CLHEP.lib
+  else
+    CLHEP_LIB         := CLHEP
+  endif
 endif
 
+# Native STL is the default
 #
-# Rogue Wave Tools.h++ path & ObjectSpace STL
-#
+G4STLINC := $(G4BASE)/global/STLInterface
 
+# Path to ObjectSpace STL (or STLport <- only test for Win/NT)
+#
 ifdef G4USE_OSPACE
 
 # ObjectSpace STL implementation
 
-  G4STLINC   := $(G4BASE)/global/STLInterface
-  OSPACEDIR  := /afs/cern.ch/sw/geant4/dev/ObjectSpace/$(G4SYSTEM)/pro/ToolKit
-  OSPACEINC  := -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)/ospace/stl
-  OSPACELIBS := -L$(OSPACEDIR)/lib -lospace
+  ifndef OSPACE_BASE_DIR
+    OSPACE_BASE_DIR := /afs/cern.ch/sw/geant4/dev/ObjectSpace/$(G4SYSTEM)/pro/ToolKit
+  endif
+  OSPACEINC       := -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)/ospace/stl
+  OSPACELIBS      := -L$(OSPACE_BASE_DIR)/lib -lospace
 
   ifeq ($(G4SYSTEM),WIN32-VC)
-    OSPACEDIR  := $(OBJECT_SPACE_BASE)
-    OSPACEINC  := -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)/ospace/stl -I$(OSPACEDIR)
-    OSPACELIBS := '-libpath:$(OSPACEDIR)\lib std-2.1-vc5.0-mt.lib'
+    OSPACE_BASE_DIR := $(OBJECT_SPACE_BASE)
+    OSPACEINC  := -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)/ospace/stl -I$(OSPACE_BASE_DIR)
+    OSPACELIBS := '-libpath:$(OSPACE_BASE_DIR)\lib std-2.1-vc5.0-mt.lib'
     CPPFLAGS   += -DG4USE_OLDSTL 
     CPPFLAGS   += -DOS_WIN_NT_4_0 -DOS_MULTI_THREADED -D_WIN32_WINNT $(OSPACEINC)
   endif
@@ -188,22 +189,15 @@ ifdef G4USE_OSPACE
 else 
 ifdef G4USE_STLPORT
 
-# STLport STL implementation (free) ( derived from SGI implementation)
+# STLport STL implementation (derived from SGI implementation)
 
   ifeq ($(G4SYSTEM),WIN32-VC)
-    G4STLINC   := $(G4BASE)/global/STLInterface
-    STLPORTDIR := $(STLPORT_BASE)
-    OSPACEINC  := -I$(STLPORTDIR)/stl
+    STLPORT_BASE_DIR := $(STLPORT_BASE)
+    OSPACEINC  := -I$(STLPORT_BASE_DIR)/stl
     CPPFLAGS   += -DG4USE_OLDSTL
     CPPFLAGS   += -D_NOTHREADS -D__STL_NO_NEW_IOSTREAMS -D__STL_NO_NAMESPACES
     CPPFLAGS   += -D__STL_NO_NEW_STYLE_HEADERS
   endif
-
-else
-
-# Native STL implementation
-
-  G4STLINC   := $(G4BASE)/global/STLInterface
 
 endif   #STLport
 endif   #OPSPACE
@@ -381,7 +375,7 @@ ifeq ($(G4SYSTEM),AIX-xlC)
   endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_AIX_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
-    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
+    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACE_BASE_DIR)
   endif
 endif
 
@@ -422,8 +416,9 @@ ifeq ($(G4SYSTEM),SUN-CC)
     CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
   endif
   ifdef G4USE_OSPACE
-    CPPFLAGS += -DOS_SOLARIS_2_5 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
-    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
+    CPPFLAGS += -DOS_SOLARIS_2_5 -DOS_NEW_CHECK -DOS_STL_ASSERT
+    CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
+    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACE_BASE_DIR)
   endif
 endif
 
@@ -465,9 +460,9 @@ ifeq ($(G4SYSTEM),HP-aCC)
     CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
   endif
   ifdef G4USE_OSPACE
-    CPPFLAGS += -DOS_HPUX_10_20 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
-    CPPFLAGS += -D__HPACC_NOEH
-    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
+    CPPFLAGS += -DOS_HPUX_10_20 -DOS_NEW_CHECK -DOS_STL_ASSERT
+    CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS -D__HPACC_NOEH
+    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACE_BASE_DIR)
   endif
 endif
 
@@ -498,7 +493,7 @@ ifeq ($(G4SYSTEM),SGI-CC)
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_IRIX_6_2 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
-    CPPFLAGS += $(OSPACEINC) -I$(OSPACEDIR)
+    CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
   endif
 endif
 
@@ -530,7 +525,7 @@ ifeq ($(G4SYSTEM),DEC-cxx)
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_OSF1_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING
     CPPFLAGS += -DOS_NO_ALLOCATORS -D__NO_EDG_EXCEPTION_CLASSES
-    CPPFLAGS += $(OSPACEINC) -I$(OSPACEDIR)
+    CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
     CXXFLAGS += -nostdnew
   else
     G4USE_STD_NAMESPACE := yes
@@ -575,8 +570,9 @@ ifeq ($(G4SYSTEM),Linux-g++)
   endif
   OIVFLAGS  += -I$(OIHOME)/include 
   ifdef G4USE_OSPACE
-    CPPFLAGS += -DOS_LINUX_2 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
-    CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
+    CPPFLAGS += -DOS_LINUX_2 -DOS_NEW_CHECK -DOS_STL_ASSERT
+    CPPFLAGS += -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
+    CPPFLAGS += -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)
   endif
 endif
 
@@ -594,26 +590,26 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   CXXFLAGS += -MD -GX -Zm200  -nologo -DWIN32 -D_CONSOLE 
   CXXFLAGS += -D_WIN32 -DOS -DG4NOT_ISO_DELETES
   CPPFLAGS += -DWIN32
-#
-# Should set $INCLUDE environment, if not set as below
-#
-ifdef G4USE_OSPACE
- CXXFLAGS += $(OSPACEINC)
-else
-ifdef G4USE_STLPORT
- CXXFLAGS += $(OSPACEINC)
-endif   #stlport
-endif   #ospace
+  #
+  # Should set $INCLUDE environment, if not set as below
+  #
+  ifdef G4USE_OSPACE
+    CXXFLAGS += $(OSPACEINC)
+  else
+    ifdef G4USE_STLPORT
+      CXXFLAGS += $(OSPACEINC)
+    endif   #stlport
+  endif   #ospace
 
   LDFLAGS  += -FORCE /NODEFAULTLIB:MSVCRT.dll
 
-#
-# Should set $LIB environment to include VC++ Studio lib directories, e.g.
-#
-#	$(LIB_PATH)"c:\ProgramFiles\DevStudio\vc\lib" \
-#       $(LIB_PATH)'\\srv1_info\v2\vc50pro1\DEVSTUDIO\VC\LIB' \
-#       $(LIB_PATH)'\\srv1_info\v2\DecFtn5\x86\df\lib'
-	      
+  #
+  # Should set $LIB environment to include VC++ Studio lib directories, e.g.
+  #
+  #       $(LIB_PATH)"c:\ProgramFiles\DevStudio\vc\lib" \
+  #       $(LIB_PATH)'\\srv1_info\v2\vc50pro1\DEVSTUDIO\VC\LIB' \
+  #       $(LIB_PATH)'\\srv1_info\v2\DecFtn5\x86\df\lib'
+      
   AR := LIB
   ECHO := echo -e
   FC := f77
