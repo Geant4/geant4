@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GamDistrXrayTRmodel.cc,v 1.1 2000-11-14 16:07:53 gcosmo Exp $
+// $Id: G4GamDistrXrayTRmodel.cc,v 1.2 2001-02-27 07:39:31 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -23,7 +23,7 @@
 G4GamDistrXrayTRmodel::G4GamDistrXrayTRmodel(G4Envelope *anEnvelope, 
 					       G4double a, G4double alphaPlate,
                                                G4double b, G4double alphaGas) :
-  G4VXrayTRmodel(anEnvelope,a,b)
+  G4VXrayTRadModel(anEnvelope,a,b)
 {
   G4cout<<"Gammma distributed X-ray TR radiator model is called"<<G4endl ;
 

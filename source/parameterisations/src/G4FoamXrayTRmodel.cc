@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FoamXrayTRmodel.cc,v 1.1 2000-11-14 16:07:37 gcosmo Exp $
+// $Id: G4FoamXrayTRmodel.cc,v 1.2 2001-02-27 07:39:23 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -22,7 +22,7 @@
 
 G4FoamXrayTRmodel::G4FoamXrayTRmodel(G4Envelope *anEnvelope, 
                                                   G4double a, G4double b) :
-  G4VXrayTRmodel(anEnvelope,a,b)
+  G4VXrayTRadModel(anEnvelope,a,b)
 {
   G4cout<<"Foam X-ray TR radiator model is called"<<G4endl ;
 

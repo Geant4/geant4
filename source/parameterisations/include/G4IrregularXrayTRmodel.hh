@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IrregularXrayTRmodel.hh,v 1.1 2000-11-14 16:05:46 gcosmo Exp $
+// $Id: G4IrregularXrayTRmodel.hh,v 1.2 2001-02-27 07:37:18 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,9 +31,9 @@
 #include "G4VFastSimulationModel.hh"
 // #include "G4ForwardXrayTR.hh"
 
-#include "G4VXrayTRmodel.hh"
+#include "G4VXrayTRadModel.hh"
 
-class G4IrregularXrayTRmodel : public G4VXrayTRmodel
+class G4IrregularXrayTRmodel : public G4VXrayTRadModel
 {
 public:
 
