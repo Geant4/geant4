@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: AnaEx01AnalysisManager.hh,v 1.1.1.1 2000-09-14 11:37:21 barrand Exp $
+// $Id: AnaEx01AnalysisManager.hh,v 1.2 2000-09-14 12:43:11 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@ class IHistogram1D;
 
 class AnaEx01AnalysisManager: public G4AnalysisManager {
 public:
-  AnaEx01AnalysisManager();
+  AnaEx01AnalysisManager(const G4String&);
 public:
   virtual void BeginOfRun(const G4Run*); 
   virtual void EndOfRun(const G4Run*); 

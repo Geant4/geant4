@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: AnaEx01AnalysisManager.cc,v 1.1.1.1 2000-09-14 11:37:21 barrand Exp $
+// $Id: AnaEx01AnalysisManager.cc,v 1.2 2000-09-14 12:43:11 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,7 @@
 #include "AnaEx01AnalysisManager.hh"
 
 AnaEx01AnalysisManager::AnaEx01AnalysisManager(
+  const G4String& aSystem
 )
 :fCalorimeterCollID(-1)
 ,fEAbs(0)
@@ -47,7 +48,7 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager(
   RegisterAnalysisSystem(new G4JasSystem);
 #endif
   // The factory and histograms will be deleted by the analysis manager.
-  IHistogramFactory* hfactory = GetHistogramFactory("OpenScientist");
+  IHistogramFactory* hfactory = GetHistogramFactory(aSystem);
   if(!hfactory) return;
   fEAbs = hfactory->createHistogram1D("EAbs",100,0,1);
   fLAbs = hfactory->createHistogram1D("LAbs",100,0,1);
