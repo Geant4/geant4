@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.11 2003-07-21 12:52:23 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.cc,v 1.12 2003-11-19 10:16:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -264,7 +264,7 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
                                    G4double maxEnergy)
 {
   G4double tmax = std::min(maxEnergy, MaxSecondaryEnergy(dp));
-  if(tmin >= tmax) return 0;
+  if(tmin > tmax) tmin = tmax;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy = kineticEnergy + electron_mass_c2;
@@ -275,7 +275,7 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
   G4double gamma2 = gam*gam;
   G4double beta2  = 1.0 - 1.0/gamma2;
   G4double x, z, q, grej;
-
+  G4cout << "1. p= " << dp->GetMomentum() << G4endl;
   G4ThreeVector momentum = dp->GetMomentumDirection();
 
   //Moller (e-e-) scattering
@@ -353,15 +353,17 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
   G4double sint = sqrt(1.0 - cost*cost);
 
   G4double phi = twopi * G4UniformRand() ;
-
+  G4cout <<"x= "<<x<<" totalMomentum= "<<totalMomentum<<" deltaMomentum= "<<deltaMomentum<<G4endl;
   G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
   deltaDirection.rotateUz(momentum);
+  G4cout << "2. p= " << dp->GetMomentum() << G4endl;
 
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle();
-  delta->SetDefinition(theElectron);
-  delta->SetKineticEnergy(deltaKinEnergy);
-  delta->SetMomentumDirection(deltaDirection);
+  G4DynamicParticle* delta = new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
+  G4cout << "p_delta= " << delta->GetMomentum() << " pin= " << dp->GetMomentum() << G4endl;
+  //  delta->SetDefinition(theElectron);
+  //  delta->SetKineticEnergy(deltaKinEnergy);
+  //  delta->SetMomentumDirection(deltaDirection);
 
   return delta;
 }
