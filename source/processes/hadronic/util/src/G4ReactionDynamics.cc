@@ -1063,9 +1063,12 @@
     
 //    G4double ekin0 = pseudoParticle[3].GetKineticEnergy()/GeV;
     
+    G4ParticleDefinition * aOrgDef = modifiedOriginal.GetDefinition();
+    G4int diff = 0;
+    if(aOrgDef == G4Proton::Proton() || aOrgDef == G4Neutron::Neutron() )  diff = 1;
     pseudoParticle[4].SetMomentum( 0.0, 0.0, 0.0 );
-    pseudoParticle[4].SetMass( protonMass*numberofFinalStateNucleons*MeV );
-    pseudoParticle[4].SetTotalEnergy( protonMass*numberofFinalStateNucleons*MeV );
+    pseudoParticle[4].SetMass( protonMass*(numberofFinalStateNucleons-diff)*MeV );
+    pseudoParticle[4].SetTotalEnergy( protonMass*(numberofFinalStateNucleons-diff)*MeV );
     
     G4double theoreticalKinetic =
       pseudoParticle[3].GetTotalEnergy()/MeV +
