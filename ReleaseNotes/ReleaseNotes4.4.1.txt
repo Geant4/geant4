@@ -1,0 +1,204 @@
+
+                 Geant4 4.1 Release Notes
+                 ------------------------
+
+                                                      28th June 2002
+
+These are the main new features/fixes included in this release since the
+last public release (for the detailed list of fixes/additions, please refer
+to the related History files):
+
+  o Configuration:
+    -------------
+
+  o Event:
+    -----
+
+  o Electromagnetic Processes (Low-energy):
+    --------------------------------------
+
+  o Electromagnetic Processes (Standard):
+    ------------------------------------
+
+  o General Processes, Parameterisation, Decay, Optical:
+    ---------------------------------------------------
+
+  o Geometry:
+    --------
+
+  o Global:
+    ------
+
+  o Graphics Representations:
+    ------------------------
+
+  o Hadronic Processes:
+    ------------------
+
+  o Materials:
+    ---------
+
+  o Particles:
+    ---------
+
+  o Run, Intercoms and Interfaces
+    -----------------------------
+
+  o Tracking & Track:
+    ----------------
+
+  o Transportation:
+    --------------
+
+  o Visualization:
+    -------------
+
+  o Examples:
+    --------
+  - Novice:
+  - Extended:
+  - Advanced:
+  - Updated reference outputs.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+The code and some binary libraries are available through our "Source Code"
+Web page:
+- see our <A href="http://cern.ch/geant4">Geant4 Home Page</A>.
+
+Please refer to <A
+href="http://cern.ch/geant4/G4UsersDocuments/Overview/html/index.html">Geant4
+User Documentation</A> for further information about using Geant4.
+
+
+Contents
+--------
+
+  1. Supported and Tested Platforms
+  2. AIDA and CLHEP
+  3. The Standard Template Library (STL)
+  4. Persistency
+  5. Compiler Specific Problems
+  6. Known Run-Time Problems
+  7. Compilation Warnings
+  8. Known Run-Time Warnings
+
+
+1. Supported and Tested Platforms
+---------------------------------
+
+  o SUN Solaris 5.7, C++ 5.2 Patch 109508-03.
+  o Linux, gcc 2.95.2, egcs-2.91.66 (egcs 1.1.2).
+      This configuration was tested with the RedHat 6.1 and 7.2 distributions,
+      versions of Geant4 have also been compiled successfully on other Linux
+      distributions, like Debian or Suse.
+      The default RedHat compiler gcc-2.96 ditributed in RedHat 7.X is NOT
+      supported. It has been verified that it produces incorrect binaries,
+      therefore is not reliable. See also note below.
+  o Windows-2000 and CygWin Tools with: Visual C++ 6.0 Service Pack 5
+
+Platforms configured but not tested and not supported:
+  o DEC V4.0, cxx C++ V6.1-027 with/without ObjectSpace STL
+  o HP 10.20, aCC C++ B3910B A.01.23 with/without ObjectSpace STL
+  o SGI V6.5.5, CC 7.2.1 with ObjectSpace STL
+  o AIX 4.3.2, xlC compiler with ObjectSpace STL
+  o MacOS 10.1, gcc 2.92.2
+
+2. AIDA and CLHEP
+-----------------
+
+Geant4 4.1 requires the installation of CLHEP. 
+
+See <A href="http://wwwinfo.cern.ch/asd/lhc++/INSTALLATION/clhep.html">
+CLHEP</A>. Tests have been performed with CLHEP 1.7.5.0. However, first
+level porting has also been verified on CLHEP 1.8.0.0.
+
+By default, the CLHEP installation scripts will activate ISO/ANSI C++ features
+if the compiler is capable. You need to explicitly disable CLHEP settings in
+case you wish non-ISO/ANSI setup on specific compilers.
+
+Geant4 4.1 coworks with ANAPHE 4.0.4 and components included therein:
+  Objectivity 6.1.3
+  HepODBMS 0.3.3.1
+  CLHEP 1.7.5.0
+  AIDA 2.2
+
+For more information about ANAPHE, see:
+  <A href="http://cern.ch/anaphe">ANAPHE</A>
+
+AIDA headers can be downloaded from:
+  <A href="http://aida.freehep.org">AIDA</A>
+
+
+3. The Standard Template Library
+--------------------------------
+
+Native versions of STL have been tested on the following platforms:
+
+   Windows/2000, Linux, and SUN.
+
+NOTES:
+
+- Platform specific setup:
+  o DEC:   Native STL is required for ISO/ANSI setup.
+  o SUN:   Native STL is required for ISO/ANSI setup (CC 5.2 only).
+  o Linux: Native STL is required (non ISO/ANSI setup for egcs compiler only).
+  o W2000: Native STL and ISO/ANSI setup required (VC++ 6.0).
+  o MacOS: Native STL is required for ISO/ANSI setup.
+
+
+4. Persistency
+--------------
+
+  See release notes for Geant4 4.0.
+
+
+5. Compiler Specific Problems
+-----------------------------
+
+  o Linux Red Hat 7.X, gcc-2.96.
+
+    - The default compiler distributed by Red Hat since release 7.0 is
+      NOT supported and not considered reliable for running a Geant4-based
+      application. In more than one test case, binaries produced by gcc-2.96
+      have shown incorrect behavior, either due to wrong order of
+      initialisation of static data in memory or to bugs in the system
+      iostream classes, problems which apparently have all been solved in
+      more recent versions of the compiler (3.X series).
+      For seek of knowledge, gcc-2.96 is a compiler that has never been
+      officially released, nor supported by the GNU team itself and is not
+      considered reliable by the authors (for more information, see also
+      http://gcc.gnu.org/gcc-2.96.html).
+
+
+6. Known Run-Time Problems and Limitations
+------------------------------------------
+
+For a complete list of outstanding run-time problems and to submit any
+problem you may find running this version of Geant4, please refer to the
+Geant4 Problem Reporting System, available on the Web at this address:
+
+    http://wwwinfo.cern.ch/asd/cgi-bin/geant4/problemreport
+
+
+7. Compilation Warnings
+-----------------------
+
+There are compilation warnings on some platforms.  We do not believe
+that any will lead to incorrect run-time behaviour, but we are working
+on reducing them.
+
+
+8. Known Run-Time Warnings
+--------------------------
+
+The following messages can be written to error output while tracking.
+We believe none give rise to incorrect behaviour.
+
+  o G4PropagateInField: Warning: Particle is looping 
+    -  tracking in field will be stopped. 
+       It has performed 10000 steps in Field while a maximum of 10000
+       are allowed. 
