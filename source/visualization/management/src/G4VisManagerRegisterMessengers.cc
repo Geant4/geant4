@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.20 2000-06-07 08:43:29 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.21 2000-10-18 14:03:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -205,7 +205,7 @@ contain spaces but must be unique up to the first space.
   Affects current viewer.
 
 * /vis/viewer/clone
-  Clone becomes current viewer.
+  Creates a clone.  Clone becomes current viewer.
 
 /vis/viewer/create [<scene-handler>]           [<viewer-name>]     [<pixels>]
   default:     current scene handler name    auto-generated name      600
@@ -222,7 +222,9 @@ contain spaces but must be unique up to the first space.
 
 /vis/viewer/refresh [<viewer-name>]
   default:       current viewer name
-  This viewer becomes current.
+  Re-traverses graphical data, which is enough in some cases to refresh the
+  view.  In some cases post-processing is required to complete the view -
+  see /vis/viewer/update.  This viewer becomes current.
 
 /vis/viewer/remove <viewer-name>
   default:          no default
@@ -245,7 +247,7 @@ to know the type of the parameter, so we need separate commands.)
   Copies view parameters from from-viewer to current viewer.
   Affects current viewer.
 
-/vis/viewer/set/style wireframe|surface
+/vis/viewer/set/style w[ireframe]|s[urface]
   Affects current viewer.
 
 /vis/viewer/set/edge [true|false]
@@ -256,10 +258,10 @@ to know the type of the parameter, so we need separate commands.)
   default:                       true
   Affects current viewer.
 
-/vis/viewer/set/culling global|coveredDaughters|invisible|density [true|false]
-                        [density] [unit]
-  default:                                                           true
-                          0.01    g/cm3
+/vis/viewer/set/culling
+  g[lobal]|c[overedDaughters]|i[nvisible]|d[ensity] [true|false]
+  [density] [unit]
+  default: none true 0.01 g/cm3
   Affects current viewer.
 
 * /vis/viewer/set/hiddenMarker  [true|false]
@@ -295,7 +297,7 @@ to know the type of the parameter, so we need separate commands.)
   Moves the camera in this distance relative to standard target point.
   Affects current viewer.
 
-*special* /vis/viewer/set/orbit
+*special* /vis/viewer/set/orbit (parameters)
   Orbits the scene about the up-vector, lights fixed to the scene.  Draws N
     frames, the camera rotated Delta-beta about the up-vector each frame.
   Affects current viewer.
@@ -313,14 +315,16 @@ to know the type of the parameter, so we need separate commands.)
     point.
   Affects current viewer.
 
-* /vis/viewer/set/projection_style orthogonal|perspective [<field-angle>] [deg|rad]
-  default:                                                     30          deg
+* /vis/viewer/set/projection_style
+  o[rthogonal]|p[erspective] [<field-angle>] [deg|rad]
+  default: none                    30           deg
 *or* /vis/viewer/set/orthgonal
 *or* /vis/viewer/set/perspective [<field-angle>] [deg|rad]
   default:                           30          deg
   Affects current viewer.
 
-*special* /vis/viewer/set/spin
+*special* /vis/viewer/set/spin (parameters)
+*or*      /vis/viewer/advanced?
   Spins the scene about the up-vector, lights fixed to the camera.  Draws N
   frames, the scene rotated Delta-beta about the up-vector each frame.
   Affects current viewer.
@@ -360,7 +364,7 @@ to know the type of the parameter, so we need separate commands.)
 
 /vis/viewer/update [<viewer-name>]
   default:     current viewer name
-  This viewer becomes current.
+  Initiates post-processing if required.  This viewer becomes current.
 
 
 Attributes (nothing implemented yet)
