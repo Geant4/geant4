@@ -51,7 +51,7 @@ G4Allocator<DMXPmtHit> DMXPmtHitsAllocator;
 
 DMXPmtHit::DMXPmtHit() {
   
-  pos=(0., 0., 0.);
+  pos = G4ThreeVector(0., 0., 0.);
   time=0.;
 
 }
