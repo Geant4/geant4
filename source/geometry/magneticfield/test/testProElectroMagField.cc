@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProElectroMagField.cc,v 1.6 2001-11-09 20:39:39 japost Exp $
+// $Id: testProElectroMagField.cc,v 1.7 2002-06-07 18:22:50 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -121,8 +121,8 @@ G4VPhysicalVolume* BuildGeometry()
 				// Logical with no material,field,
                                 // sensitive detector or user limits
     
-    G4PVPlacement *worldPhys=new 
-         G4PVPlacement(0,G4ThreeVector(0,0,0), "World",worldLog,
+    G4PVPlacement *worldPhys=
+         new G4PVPlacement(0,G4ThreeVector(0,0,0), "World",worldLog,
 					       0,false,0);
 				// Note: no mother pointer set
 
@@ -142,16 +142,19 @@ G4VPhysicalVolume* BuildGeometry()
 //
 //  1) Two big boxes in the world volume
 //
-    G4PVPlacement *BigTg1Phys=new G4PVPlacement(0,G4ThreeVector(0,0,-15*m),
+    // G4PVPlacement *BigTg1Phys=
+        new G4PVPlacement(0,G4ThreeVector(0,0,-15*m),
 						"Big Target 1",BigBoxLog,
 						worldPhys,false,0);
-    G4PVPlacement *BigTg2Phys=new G4PVPlacement(0,G4ThreeVector(0,0, 15*m),
+    // G4PVPlacement *BigTg2Phys=
+                               new G4PVPlacement(0,G4ThreeVector(0,0, 15*m),
 						"Big Target 2",BigBoxLog,
 						worldPhys,false,0);
 
 //  2) Four (medium) boxes in X & Y near the origin of the world volume
 //
-    G4PVPlacement *MedTg3a_Phys=new G4PVPlacement(0,G4ThreeVector(0, 7.5*m,0),
+    // G4PVPlacement *MedTg3a_Phys=
+                                 new G4PVPlacement(0,G4ThreeVector(0, 7.5*m,0),
 					      "Target 3a",smallBoxLog,
 					      worldPhys,false,0);
     G4PVPlacement *MedTg3b_Phys=new G4PVPlacement(0,G4ThreeVector(0,-7.5*m,0),
@@ -261,7 +264,8 @@ G4FieldManager* SetupField(G4int type)
 
 G4PropagatorInField*  SetupPropagator( G4int type)
 {
-    G4FieldManager* fieldMgr= SetupField( type) ;
+    // G4FieldManager* fieldMgr= 
+    SetupField( type) ;
 
     // G4ChordFinder  theChordFinder( &MagField, 0.05*mm ); // Default stepper
  
@@ -360,7 +364,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 		      momentum, 
 		      proton_mass_c2); 
        G4cout << G4endl;
-       G4cout << "Test PropagateMagField: ***********************" << G4endl
+       G4cout << "***********************" << G4endl
             << " Starting New Particle with Position " << Position << G4endl 
 	    << " and UnitVelocity " << UnitMomentum << G4endl;
        G4cout << " Momentum in GeV/c is "<< (0.5+iparticle*10.0)*proton_mass_c2;
@@ -428,6 +432,8 @@ int main(int argc, char **argv)
 {
     G4VPhysicalVolume *myTopNode;
     G4int type;
+    G4cout << "------------------ Test PropagateElectroMagField: ------------------" << G4endl;
+
     myTopNode=BuildGeometry();	// Build the geometry
     G4GeometryManager::GetInstance()->CloseGeometry(false);
 
