@@ -76,11 +76,11 @@ examples/novice/N04         asai@slac.stanford.edu          Makoto Asai
 examples/novice/N05         Marc.Verderi@in2p3.fr           Marc Verderi
 examples/novice/N06         gum@triumf.ca                   Peter Gumplinger
 examples/advanced           asai@slac.stanford.edu	    Makoto Asai
-  brachytherapy             chauvie.to.infn.it              Stephane Chauvie
+  brachytherapy             chauvie@to.infn.it              Stephane Chauvie
   gammaray_telescope        longof@ts.infn.it               Francesco Longo
   underground_physics       a.s.howard@ic.ac.uk             Alex Howard
   xray_fluorescence         MariaGrazia.Pia@ge.infn.it	    Maria Grazia Pia
-  xray_telescope            rnartall@estec.esa.nl           Ramon Nartallo
+  xray_telescope            rnartallo@space.qinetiq.com     Ramon Nartallo
 examples/extended/analysis  barrand@lal.in2p3.fr	    Guy Barrand
 examples/extended/biasing   Michael.Dressel@cern.ch         Michael Dressel
 examples/extended/electromagnetic:
@@ -126,5 +126,6 @@ tests/test23                kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 tests/test30                Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
 tests/test31                Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
 tests/test32                Hans-Peter.Wellisch@cern.ch	    Hans-Peter Wellisch
+tests/test33                Michael.Dressel@cern.ch         Michael Dressel
 tests/test201               barrand@lal.in2p3.fr            Guy Barrand
 

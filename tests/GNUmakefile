@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.45 2002-06-28 14:12:57 gcosmo Exp $
+# $Id: GNUmakefile,v 1.46 2002-10-31 14:52:56 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -74,6 +74,7 @@ SUBDIRS += test21 ## added nov 2001 (info to come).
 SUBDIRS += test22 ## added nov 2001 (info to come).
 SUBDIRS += test23 ## Cut per material and persistency of physics table.
 SUBDIRS += test32 ## Leading_particle biasing model of G4Mars5Ge on MARS13.
+SUBDIRS += test33 ## Importance biasing and scoring
 
 # Tests with hadronic exercisers.
 HADEXERDIRS = test02 test11 test12 test13 test15 test16 test21 
