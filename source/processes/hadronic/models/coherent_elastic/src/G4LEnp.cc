@@ -21,53 +21,36 @@
 // ********************************************************************
 //
 
- // G4 Low energy model: n-n or p-p scattering
+ // G4 Low energy model: n-p scattering
  // F.W. Jones, L.G. Greeniaus, H.P. Wellisch
 
 
-#include "G4LEpp.hh"
+#include "G4LEnp.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
 
 // Initialization of static data arrays:
-#include "G4LEppData.hh"
+#include "G4LEnpData.hh"
 
 
-G4LEpp::G4LEpp() :
+G4LEnp::G4LEnp() :
   G4HadronicInteraction()
 {
   //    theParticleChange.SetNumberOfSecondaries(1);
+  
   //    SetMinEnergy(10.*MeV);
   //    SetMaxEnergy(1200.*MeV);
-
-  SetCoulombSuppression(1);
-
   SetMinEnergy(0.);
   SetMaxEnergy(1200.*GeV);
 }
 
-G4LEpp::~G4LEpp()
+G4LEnp::~G4LEnp()
 {
   //    theParticleChange.Clear();
 }
 
-
-void
-G4LEpp::SetCoulombSuppression(G4int State)
-{
-  if (State) {
-    sig = Sig;
-    elab = Elab;
-  }
-  else {
-    sig = SigCoul;
-    elab = ElabCoul;
-  }
-}
-
-
 G4VParticleChange*
-G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
+G4LEnp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
 {
     theParticleChange.Initialize(aTrack);
 
@@ -86,7 +69,7 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       G4double Q = aParticle->GetDefinition()->GetPDGCharge();
       G4double N = targetNucleus.GetN();
       G4double Z = targetNucleus.GetZ();
-      G4cout << "G4LEpp:ApplyYourself: incident particle: "
+      G4cout << "G4LEnp:ApplyYourself: incident particle: "
              << aParticle->GetDefinition()->GetParticleName() << endl;
       G4cout << "P = " << P/GeV << " GeV/c"
              << ", Px = " << Px/GeV << " GeV/c"
@@ -96,7 +79,7 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
              << ", kinetic energy = " << ek/GeV << " GeV"
              << ", mass = " << E0/GeV << " GeV"
              << ", charge = " << Q << endl;
-      G4cout << "G4LEpp:ApplyYourself: material:" << endl;
+      G4cout << "G4LEnp:ApplyYourself: material:" << endl;
       G4cout << "A = " << N
              << ", Z = " << Z
              << ", atomic mass " 
@@ -110,7 +93,7 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       E0 = sqrt(abs(E02));
       if (E02 < 0)E0 *= -1;
       Q += Z;
-      G4cout << "G4LEpp:ApplyYourself: total:" << endl;
+      G4cout << "G4LEnp:ApplyYourself: total:" << endl;
       G4cout << "E = " << E/GeV << " GeV"
              << ", mass = " << E0/GeV << " GeV"
              << ", charge = " << Q << endl;

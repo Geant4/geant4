@@ -24,7 +24,7 @@
  // G4 Low energy model: n-n or p-p scattering
  // F.W. Jones, L.G. Greeniaus, H.P. Wellisch
  //  
- // For further comments see G4LEpp.cc
+ // For further comments see G4LEppData.hh and G4LEpp.cc
  //
 
 #ifndef G4LEpp_h
@@ -58,14 +58,26 @@ class G4LEpp : public G4HadronicInteraction
  
    G4VParticleChange* ApplyYourself(const G4Track& aTrack,
                                     G4Nucleus& targetNucleus);
+
+   void SetCoulombSuppression(G4int State);
+  
  private:
- //
+
+  G4float sig[NENERGY][NANGLE];
+  G4float elab[NENERGY];
+
  // The following arrays are declared static to allow the use of initializers.
- // They are initialized in G4LEpp.cc
- //
-   static G4float sig[NENERGY][NANGLE];
-   static G4float pcm[NENERGY], elab[NENERGY], 
-     dsigmax[NENERGY], sigtot[NENERGY];
+ // They are initialized in G4LEppData.hh
+
+ // Coulomb effects suppressed:
+   static G4float Sig[NENERGY][NANGLE];
+   static G4float Pcm[NENERGY], Elab[NENERGY], 
+     dSigmax[NENERGY], Sigtot[NENERGY];
+
+ // Coulomb effects not suppressed:
+   static G4float SigCoul[NENERGY][NANGLE];
+   static G4float PcmCoul[NENERGY], ElabCoul[NENERGY], 
+     dSigmaxCoul[NENERGY], SigtotCoul[NENERGY];
 
 };
 
