@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.hh,v 1.15 2002-10-14 17:31:13 maire Exp $
+// $Id: G4PAIonisation.hh,v 1.16 2002-11-20 15:41:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -144,7 +144,10 @@ class G4PAIonisation : public G4VPAIenergyLoss
 
     // Compute Sandia photoabsorption coefficient matrix
     void ComputeSandiaPhotoAbsCof() ;
- 
+
+  private:
+  
+    G4PhysicsLogVector* GetProtonEnergyVector();
 
   private:
 
@@ -192,11 +195,3 @@ class G4PAIonisation : public G4VPAIenergyLoss
 #include "G4PAIonisation.icc"
  
 #endif
- 
-
-
-
-
-
-
-
