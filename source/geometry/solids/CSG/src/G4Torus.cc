@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.8 2000-05-26 13:20:49 grichine Exp $
+// $Id: G4Torus.cc,v 1.9 2000-06-22 09:24:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -309,9 +309,10 @@ G4int G4Torus::SolveBiQuadratic(double c[], double s[]  ) const
 	{
 	   sub = s[j] ;
 	   i=j-1 ;
-	   while(i>=0 && s[i]>sub)
+	   while( i >= 0 && s[i] > sub )
 	   {
-	      s[i+1] = s[i--] ;
+	      i-- ;    
+	      s[i+1] = s[i] ;           // s[i--] ;
 	   }
 	   s[i+1] = sub ;
 	}
