@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.hh,v 1.6 2000-02-16 16:10:06 kurasige Exp $
+// $Id: G4Track.hh,v 1.7 2000-06-02 05:36:49 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,6 +39,7 @@
 #include "G4DynamicParticle.hh"       // Include from 'particle+matter'
 #include "G4TrackStatus.hh"           // Include from 'tracking'
 #include "G4VTouchable.hh"            // Include from 'geometry'
+#include "G4VUserTrackInformation.hh"
 
 #include "G4Material.hh"
 
@@ -200,6 +201,10 @@ public: // With description
    G4double GetWeight() const;
    void     SetWeight(G4double aValue);
 
+  // User information
+  G4VUserTrackInformation* GetUserInformation() const;
+  void SetUserInformation(G4VUserTrackInformation* aValue);
+
 //---------
    private:
 //---------
@@ -245,6 +250,7 @@ public: // With description
    G4LogicalVolume* fpLVAtVertex;       //Logical Volume at the vertex
    G4VProcess* fpCreatorProcess;        // Process which created the track
    
+   G4VUserTrackInformation* fpUserInformation;
 };
 #include "G4Step.hh"
 #include "G4Track.icc"
