@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.cc,v 1.6 2001-07-11 10:08:40 gunter Exp $
+// $Id: G4VParticleChange.cc,v 1.7 2001-08-16 08:17:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,10 +48,10 @@ G4VParticleChange::G4VParticleChange():
    theStatusChange(fAlive),
    theSteppingControlFlag(NormalCondition),     
    theLocalEnergyDeposit(0.0),
-   theParentWeight(1.0),
+   verboseLevel(1),
    theEBMechanism(0),
    fUseEB(false),
-   verboseLevel(1)
+   theParentWeight(1.0)
 {
    debugFlag = false;
 #ifdef G4VERBOSE
@@ -67,8 +67,8 @@ G4VParticleChange::G4VParticleChange(G4bool useEB):
    theStatusChange(fAlive),
    theSteppingControlFlag(NormalCondition),     
    theLocalEnergyDeposit(0.0),
-   theParentWeight(1.0),
-   verboseLevel(1)
+   verboseLevel(1),
+   theParentWeight(1.0)
 {
    fUseEB = useEB;
    // debug flag (activate CheckIt() )
@@ -106,9 +106,9 @@ G4VParticleChange::G4VParticleChange(const G4VParticleChange &right):
    theStatusChange(fAlive),
    theSteppingControlFlag(NormalCondition),     
    theLocalEnergyDeposit(0.0),
-   theParentWeight(1.0),
+   verboseLevel(1),
    fUseEB(false),
-   verboseLevel(1)
+   theParentWeight(1.0)
 {
    debugFlag = false;
 #ifdef G4VERBOSE
@@ -226,7 +226,6 @@ G4bool G4VParticleChange::CheckIt(const G4Track& aTrack)
 
   G4bool    exitWithError = false;
   G4double  accuracy;
-  G4double  newEnergyDeposit;
 
   // Energy deposit should not be negative
   G4bool itsOKforEnergy = true;

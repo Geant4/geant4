@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForDecay.cc,v 1.6 2001-07-11 10:08:39 gunter Exp $
+// $Id: G4ParticleChangeForDecay.cc,v 1.7 2001-08-16 08:17:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,9 +110,6 @@ void G4ParticleChangeForDecay::Initialize(const G4Track& track)
 
 G4Step* G4ParticleChangeForDecay::UpdateStepForPostStep(G4Step* pStep)
 { 
-  // A physics process always calculates the final state of the particle
-  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
-
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
 }

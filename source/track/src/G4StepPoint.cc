@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.cc,v 1.6 2001-07-11 10:08:39 gunter Exp $
+// $Id: G4StepPoint.cc,v 1.7 2001-08-16 08:17:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,6 +60,7 @@ G4StepPoint::G4StepPoint(const G4StepPoint &right):
   fProperTime(right.fProperTime),
   fMomentumDirection(right.fMomentumDirection),
   fKineticEnergy(right.fKineticEnergy),
+  fVelocity(right.fVelocity),
   fpTouchable(right.fpTouchable),
   fpMaterial(right.fpMaterial),
   fSafety(right.fSafety),
@@ -68,8 +69,7 @@ G4StepPoint::G4StepPoint(const G4StepPoint &right):
   fpProcessDefinedStep(right.fpProcessDefinedStep),
   fMass(right.fMass),
   fCharge(right.fCharge),
-  fWeight(right.fWeight),
-  fVelocity(right.fVelocity)
+  fWeight(right.fWeight)
 {}
 
 

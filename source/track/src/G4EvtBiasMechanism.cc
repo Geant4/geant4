@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvtBiasMechanism.cc,v 1.4 2001-07-11 10:08:38 gunter Exp $
+// $Id: G4EvtBiasMechanism.cc,v 1.5 2001-08-16 08:17:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,8 +42,8 @@
 
 G4EvtBiasMechanism::G4EvtBiasMechanism(const G4String& name, G4int mulFactor):
    G4VEvtBiasMechanism(name),
-   MultiplicationForSecondaries(mulFactor),
-   particleToBeBiased(0)
+   particleToBeBiased(0),
+   MultiplicationForSecondaries(mulFactor)
 {
 }  
 

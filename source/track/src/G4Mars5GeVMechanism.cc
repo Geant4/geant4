@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mars5GeVMechanism.cc,v 1.5 2001-07-11 10:08:38 gunter Exp $
+// $Id: G4Mars5GeVMechanism.cc,v 1.6 2001-08-16 08:17:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -131,8 +131,6 @@ void G4Mars5GeVMechanism::GetTargetNuclei(const G4Material* material)
 
 void G4Mars5GeVMechanism::Treem5()
 {
- 
-  G4double pMass = incidentParticle->GetDefinition()->GetPDGMass();
   G4double pE    = incidentParticle->GetKineticEnergy();
   G4int    pType = incidentMarsEncoding;
 
@@ -248,8 +246,7 @@ void G4Mars5GeVMechanism::CreatePion(G4int ib, G4int pType, G4double  pE)
     G4cout << " G4Mars5GeVMechanism::CreatePion()" << G4endl;
   }
 #endif
- static const G4double PionProductionEth = 0.28*GeV; 
-  static const G4double KaonProductionEth = 2.0*GeV; 
+  static const G4double PionProductionEth = 0.28*GeV; 
 
   if ( pE<PionProductionEth ) {
     if ((ib==MarsP)||(ib==MarsN)) return;
@@ -715,17 +712,17 @@ G4double G4Mars5GeVMechanism::D2N2(G4int    pType,       G4double incidentE,
   if(i==4) i = 1;
   G4bool condA = a<2. && i==2;
   G4bool condB = a<2.;
-  G4double az;
-  G4double pn;
-  G4double pr;
+
+  G4double pr =0.;
   if(!condB)
   {
+    G4double az;
     if(i==2)
     { az = (z+1.)/(a-z); }
     else
     { az = (a+1.-z)/z; }
     x1 = 0.5*e1ge;
-    pn = az;
+    G4double pn = az;
     if(x1<60.) pn *= 1. + exp(-x1);
     if(i==j)
     { pr = bn*pn/(1.+pn); }
@@ -734,8 +731,9 @@ G4double G4Mars5GeVMechanism::D2N2(G4int    pType,       G4double incidentE,
   }
   if(condA || !condB)
   {
+    G4double az;
     if(i==1) az = z/(a-z);
-    if(i==2) az = (a-z)/z;
+    else az = (a-z)/z;
     G4double bp = 1.0;
     G4double e0g = e1ge*e2ge;
     if(e0g<60.) bp -= 0.5*exp(-e0g);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.13 2001-07-11 10:08:38 gunter Exp $
+// $Id: G4ParticleChange.cc,v 1.14 2001-08-16 08:17:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -295,10 +295,8 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   // pointer to G4ParticleMometum. Also it is a normalized 
   // momentum vector.
 
-  G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
   G4Track*     aTrack  = pStep->GetTrack();
-  G4double     mass = theMassChange;
 
   // Set Mass/Charge
   pPostStepPoint->SetMass(theMassChange);
@@ -334,10 +332,8 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
 { 
   // A physics process always calculates the final state of the particle
 
-  G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
   G4Track*     aTrack  = pStep->GetTrack();
-  G4double     mass = theMassChange;
 
   // Set Mass/Charge
   pPostStepPoint->SetMass(theMassChange);
