@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TwistedTrap.cc,v 1.6 2005-03-03 16:06:06 allison Exp $
+// $Id: G4TwistedTrap.cc,v 1.7 2005-03-10 17:18:00 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1063,8 +1063,8 @@ void G4TwistedTrap::CreateSurfaces()
    fSide90  = new G4TwistedBoxSide("90deg",  fPhiTwist, fDy, fDx2, fDz, 90.*deg) ;
    fSide270 = new G4TwistedBoxSide("270deg", fPhiTwist, fDy, fDx1, fDz, 270.*deg) ;
 
-   fUpperEndcap = new G4FlatTrapSide("UpperCap",fPhiTwist, fDx1, fDx2, fDy, fDz,  1 ) ;
-   fLowerEndcap = new G4FlatTrapSide("LowerCap",fPhiTwist, fDx1, fDx2, fDy, fDz, -1 ) ;
+   fUpperEndcap = new G4FlatTrapSide("UpperCap",fPhiTwist, fDx1, fDx2, fDy, fDz, 0,0,0, 1 ) ;
+   fLowerEndcap = new G4FlatTrapSide("LowerCap",fPhiTwist, fDx1, fDx2, fDy, fDz, 0,0,0,-1 ) ;
  
    // Set neighbour surfaces
 

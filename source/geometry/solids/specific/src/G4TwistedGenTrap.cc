@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TwistedGenTrap.cc,v 1.2 2005-03-03 16:06:06 allison Exp $
+// $Id: G4TwistedGenTrap.cc,v 1.3 2005-03-10 17:17:59 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,11 +66,10 @@ G4TwistedGenTrap::G4TwistedGenTrap(const G4String &pname,         // Name of ins
 				   G4double      pDy1,        // half y length at -pDz
 				   G4double      pDx1,        // half x length at -pDz,-pDy
 				   G4double      pDx2,        // half x length at -pDz,+pDy
-				   G4double      pAlph1,      // tilt angle at -pDz
 				   G4double      pDy2,        // half y length at +pDz
 				   G4double      pDx3,        // half x length at +pDz,-pDy
 				   G4double      pDx4,        // half x length at +pDz,+pDy
-				   G4double      pAlph2      // tilt angle at +pDzconst G4String &pname,
+				   G4double      pAlph        // tilt angle 
 				   )
   : G4VSolid(pname), 
      fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
@@ -78,13 +77,28 @@ G4TwistedGenTrap::G4TwistedGenTrap(const G4String &pname,         // Name of ins
 {
 
   G4double pDytmp ;
+  G4double fDxUp ;
+  G4double fDxDown ;
+
   fDx1 = pDx1 ;
   fDx2 = pDx2 ;
   fDx3 = pDx3 ;
   fDx4 = pDx4 ;
+
+  fDy1 = pDy1 ;
+  fDy2 = pDy2 ;
+
+
   fDz   = pDz ;
+
+  // maximum values
+  fDxDown = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
+  fDxUp   = ( fDx3 > fDx4 ? fDx3 : fDx4 ) ;
+  fDx     = ( fDxUp > fDxDown ? fDxUp : fDxDown ) ;
+
+  fDy     = ( fDy1 > fDy2 ? fDy1 : fDy2 ) ;
   
-  // planarity check ( or in the constructor of the solid ?? )
+  // planarity check 
   if ( fDx1 != fDx2 && fDx3 != fDx4 ) {
     pDytmp = fDy1 * ( fDx3 - fDx4 ) / ( fDx1 - fDx2 ) ;
     if ( std::fabs(pDytmp - fDy2) > kCarTolerance ) {
@@ -95,43 +109,40 @@ G4TwistedGenTrap::G4TwistedGenTrap(const G4String &pname,         // Name of ins
       G4Exception("G4TwistedGenTrap::G4TwistedGenTrap()", "InvalidSetup",
                   FatalException, "Not planar surface in untwisted Trapezoid.");
     }
-    else {
-      G4cerr << "ERROR - G4TwistedGenTrap::G4TwistedGenTrap(): " << GetName() << G4endl
-             << "        Not implemented ! - " << G4endl 
-             << "Use G4TwistedBox instead." << G4endl ;
-      
-      G4Exception("G4TwistedGenTrap::G4TwistedGenTrap()", "InvalidSetup",
-                  FatalException, "Not implemented ! - Use G4TwistedBox instead.");
-      
-    }
   }
-    
-  fPhiTwist = PhiTwist ;
+
+  if ( fDx1 == fDx2 && fDx3 == fDx4 ) { 
+      G4cout << "Trapezoid is a box" << G4endl ;
+  }
   
-  fAlph = pAlph1 ;
-  // add test pAlph1 == pAlph2 !!!!
+  if ( (  fDx1 == fDx2 && fDx3 != fDx4 ) || ( fDx1 != fDx2 && fDx3 == fDx4 ) ) {
+    
+    G4cerr << "ERROR - G4TwistedGenTrap::G4TwistedGenTrap(): " << GetName() << G4endl
+	   << "        Not planar ! - " << G4endl 
+	   << "One endcap is rectengular, the other is a trapezoid. " << G4endl 
+	   << "For planarity reasons they have to be rectangles or trapezoids " << G4endl
+	   << "on both sides." << G4endl ;
+    
+    G4Exception("G4TwistedGenTrap::G4TwistedGenTrap()", "InvalidSetup",
+		FatalException, "Not planar surface in untwisted Trapezoid.");
+  }
+
+
+  // twist angle
+  fPhiTwist = PhiTwist ;
+
+  // tilt angle  
+  fAlph = - pAlph ;  // important: definition of angle alpha is different in equations !!!
   fTAlph = std::tan(fAlph) ;
   
   fTheta = pTheta ;
   fPhi   = pPhi ;
 
+  fdeltaX = 2 * fDz * std::tan(fTheta) * std::cos(fPhi)  ;  // dx in surface equation
+  fdeltaY = 2 * fDz * std::tan(fTheta) * std::sin(fPhi)  ;  // dy in surface equation
 
   CreateSurfaces();
-  fCubicVolume = 1 ;
-
-#if 0  
-  // add test of dimensions 
-
-   {
-      G4cerr << "ERROR - G4TwistedGenTrap()::G4TwistedGenTrap(): " << GetName() << G4endl
-             << "        Dimensions too small ! - "
-             << pDx1 << ", " << pDx2 << ", " << pDy << ", " << pDz << G4endl 
-             << " twistangle " << twistedangle/deg << " deg" << G4endl ;
-      
-      G4Exception("G4TwistedGenTrap::G4TwistedGenTrap()", "InvalidSetup",
-                  FatalException, "Invalid dimensions. Too small, or twist angle too big.");
-  }
-#endif
+  fCubicVolume = 2 * fDz * ( ( fDx1 + fDx2 ) * fDy1 + ( fDx3 + fDx4 ) * fDy2  )   ;
 
 
 }
@@ -177,10 +188,7 @@ G4bool G4TwistedGenTrap::CalculateExtent( const EAxis        pAxis,
                                              G4double          &pMax ) const
 {
 
-  G4double fDy = fDy1 ;  // temp !!!!!!!!!!!!
-
-  G4double maxSide = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
-  G4double maxRad = std::sqrt( maxSide*maxSide + fDy*fDy);
+  G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
 
   if (!pTransform.IsRotated())
     {
@@ -361,17 +369,13 @@ G4ThreeVectorList*
 G4TwistedGenTrap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
 
-  G4double fDy = fDy1 ;  // temp !!!!!!!!!!
-
-
   G4ThreeVectorList* vertices = new G4ThreeVectorList();
   vertices->reserve(8);
 
   if (vertices)
   {
 
-    G4double maxSide = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
-    G4double maxRad = std::sqrt( maxSide*maxSide + fDy*fDy);
+    G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
 
     G4ThreeVector vertex0(-maxRad,-maxRad,-fDz) ;
     G4ThreeVector vertex1(maxRad,-maxRad,-fDz) ;
@@ -407,8 +411,6 @@ G4TwistedGenTrap::CreateRotatedVertices(const G4AffineTransform& pTransform) con
 EInside G4TwistedGenTrap::Inside(const G4ThreeVector& p) const
 {
 
-  G4double fDy = fDy1 ;  // temp !!!!!!!!!!!!!!!!!1
-
    G4ThreeVector *tmpp;
    EInside       *tmpin;
    if (fLastInside.p == p) {
@@ -428,8 +430,14 @@ EInside G4TwistedGenTrap::Inside(const G4ThreeVector& p) const
    G4double posy = p.x() * sphi + p.y() * cphi   ;
    G4double posz = p.z()  ;
 
-   G4double wpos = fDx2 + ( fDx1-fDx2)/2. - posy * (fDx1-fDx2)/(2*fDy) ;
+   posx += fdeltaX * phi/fPhiTwist ;  // shift
+   posy += fdeltaY * phi/fPhiTwist ;
 
+   G4double xMin = xAxisMin(phi) ;  // Min and Max values are not symmetric (tilt angle alpha!)
+   G4double xMax = xAxisMax(phi) ;  
+
+   G4double yMax = yAxisMax(phi) ;  // b(phi)/2 is limit
+   G4double yMin = -yMax ;
 
 #ifdef G4SPECSDEBUG
 
@@ -439,25 +447,24 @@ EInside G4TwistedGenTrap::Inside(const G4ThreeVector& p) const
    G4cout << "posx = " << posx << G4endl ;
    G4cout << "posy = " << posy << G4endl ;
 
-  G4cout << "wpos = " << wpos << G4endl ;
-
 #endif 
 
-  if ( std::fabs(posx) <= wpos - kCarTolerance*0.5 )
+
+  if ( posx <= xMax - kCarTolerance*0.5 && posx >= xMin + kCarTolerance*0.5  )
   {
-    if (std::fabs(posy) <= fDy - kCarTolerance*0.5 )
+    if ( posy  <= yMax - kCarTolerance*0.5 && posy >= yMin + kCarTolerance*0.5 )
     {
       if      (std::fabs(posz) <= fDz - kCarTolerance*0.5 ) *tmpin = kInside ;
       else if (std::fabs(posz) <= fDz + kCarTolerance*0.5 ) *tmpin = kSurface ;
     }
-    else if (std::fabs(posy) <= fDy + kCarTolerance*0.5 )
+    else if ( posy <= yMax + kCarTolerance*0.5 && posy >= yMin - kCarTolerance*0.5 )
     {
       if (std::fabs(posz) <= fDz + kCarTolerance*0.5 ) *tmpin = kSurface ;
     }
   }
-  else if (std::fabs(posx) <= wpos + kCarTolerance*0.5 )
+  else if ( posx <= xMax + kCarTolerance*0.5 && posx >= xMin - kCarTolerance*0.5 )
   {
-    if (std::fabs(posy) <= fDy + kCarTolerance*0.5 )
+    if ( posy <= yMax + kCarTolerance*0.5 && posy >= yMin - kCarTolerance*0.5 )
     {
       if (std::fabs(posz) <= fDz + kCarTolerance*0.5) *tmpin = kSurface ;
     }
@@ -616,83 +623,6 @@ G4double G4TwistedGenTrap::DistanceToIn (const G4ThreeVector& p,
    return fLastDistanceToInWithV.value;
 }
 
-#ifdef DISTANCETOIN
-//=====================================================================
-//* DistanceToIn (p) --------------------------------------------------
-
-G4double G4TwistedGenTrap::DistanceToIn (const G4ThreeVector& p) const
-{
-   // DistanceToIn(p):
-   // Calculate distance to surface of shape from `outside',
-   // allowing for tolerance
-   //
-
-   //
-   // checking last value
-   //
-   
-
-  G4double fDy = fDy1 ;  // temp !!!!!!!!!!!!!!!!!1
-
-   G4ThreeVector *tmpp;
-   G4double      *tmpdist;
-   if (fLastDistanceToIn.p == p) {
-     return fLastDistanceToIn.value;
-   } else {
-      tmpp    = const_cast<G4ThreeVector*>(&(fLastDistanceToIn.p));
-      tmpdist = const_cast<G4double*>(&(fLastDistanceToIn.value));
-      tmpp->set(p.x(), p.y(), p.z());
-   }
-
-
-   //
-   // Calculate DistanceToIn(p) 
-   //
-   
-   EInside currentside = Inside(p);
-
-   switch (currentside) {
-
-      case (kInside) : {
-      }
-
-      case (kSurface) : {
-         *tmpdist = 0.;
-         return fLastDistanceToIn.value;
-      }
-
-      case (kOutside) : {
-         // Initialize
-
-        G4double safex, safey, safez, safe = 0.0 ;
-
-        G4double maxSide = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
-        G4double maxRad = std::sqrt( maxSide*maxSide + fDy*fDy);
-
-        G4cout << "maxRad = " << maxRad << G4endl ;
-
-        safex = std::fabs(p.x()) - maxRad ;
-        safey = std::fabs(p.y()) - maxRad ;
-        safez = std::fabs(p.z()) - fDz ;
-        
-        if (safex > safe) safe = safex ;
-        if (safey > safe) safe = safey ;
-        if (safez > safe) safe = safez ;
-        
-        *tmpdist = safe;        
-        return fLastDistanceToIn.value;
-        
-      }
-
-
-      default : {
-         G4Exception("G4TwistedGenTrap::DistanceToIn(p)", "InvalidCondition",
-                     FatalException, "Unknown point location!");
-      }
-   } // switch end
-   return kInfinity;
-}
-#else
 
 G4double G4TwistedGenTrap::DistanceToIn (const G4ThreeVector& p) const
 {
@@ -772,7 +702,6 @@ G4double G4TwistedGenTrap::DistanceToIn (const G4ThreeVector& p) const
    return kInfinity;
 }
 
-#endif
 
 //=====================================================================
 //* DistanceToOut (p, v) ----------------------------------------------
@@ -871,91 +800,6 @@ G4double G4TwistedGenTrap::DistanceToOut( const G4ThreeVector& p,
    return fLastDistanceToOutWithV.value;
 }
 
-#ifdef DISTANCETOIN
-//=====================================================================
-//* DistanceToOut (p) ----------------------------------------------
-
-G4double G4TwistedGenTrap::DistanceToOut( const G4ThreeVector& p ) const
-{
-   // DistanceToOut(p):
-   // Calculate distance to surface of shape from `inside', 
-   // allowing for tolerance
-   //
-   
-   //
-   // checking last value
-   //
-
-  G4double fDy = fDy1 ;
-
-   G4ThreeVector *tmpp;
-   G4double      *tmpdist;
-   if (fLastDistanceToOut.p == p) {
-      return fLastDistanceToOut.value;
-   } else {
-      tmpp    = const_cast<G4ThreeVector*>(&(fLastDistanceToOut.p));
-      tmpdist = const_cast<G4double*>(&(fLastDistanceToOut.value));
-      tmpp->set(p.x(), p.y(), p.z());
-   }
-   
-   //
-   // Calculate DistanceToOut(p)
-   //
-   
-   EInside currentside = Inside(p);
-
-   switch (currentside) {
-      case (kOutside) : {
-
-      }
-      case (kSurface) : {
-        *tmpdist = 0.;
-         return fLastDistanceToOut.value;
-      }
-      
-      case (kInside) : {
-         // Initialize
-
-        G4double      rminX = ( fDx1 < fDx2  ? fDx1 : fDx2 )  ;
-        G4double      rmin = (  rminX < fDy  ? rminX : fDy )  ;
-
-        G4double safx1,safx2,safy1,safy2,safz1,safz2,safe=0.0;
-
-        safx1 = rmin - p.x() ;
-        safx2 = rmin + p.x() ;
-        safy1 = rmin - p.y() ;
-        safy2 = rmin + p.y() ;
-        safz1 = fDz - p.z() ;
-        safz2 = fDz + p.z() ;  
-        
-  // shortest Dist to any boundary now MIN(safx1,safx2,safy1..)
-
-        if (safx2 < safx1) safe = safx2 ;
-        else               safe = safx1 ;
-        if (safy1 < safe)  safe = safy1 ;
-        if (safy2 < safe)  safe = safy2 ;
-        if (safz1 < safe)  safe = safz1 ;
-        if (safz2 < safe)  safe = safz2 ;
-        
-        if (safe < 0) safe = 0 ;
-
-        *tmpdist = safe;
-
-        return fLastDistanceToOut.value;
-      }
-      
-      default : {
-        G4Exception("G4TwistedGenTrap::DistanceToOut(p)", "InvalidCondition",
-                 FatalException, "Unknown point location!");
-      }
-
-   } // switch end
-
-   return 0;
-
-}
-
-#else
 
 G4double G4TwistedGenTrap::DistanceToOut( const G4ThreeVector& p ) const
 {
@@ -1037,8 +881,6 @@ G4double G4TwistedGenTrap::DistanceToOut( const G4ThreeVector& p ) const
 }
 
 
-#endif
-
 //=====================================================================
 //* StreamInfo --------------------------------------------------------
 
@@ -1072,10 +914,8 @@ void G4TwistedGenTrap::DescribeYourselfTo (G4VGraphicsScene& scene) const
 
 G4VisExtent G4TwistedGenTrap::GetExtent() const 
 {
-  G4double fDy = fDy1 ;  // temp !!!!!!!!!!!!!!!!!!!!!1
 
-  G4double maxSide = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
-  G4double maxRad = std::sqrt( maxSide*maxSide + fDy*fDy);
+  G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
 
   return G4VisExtent(-maxRad, maxRad ,
                      -maxRad, maxRad ,
@@ -1097,10 +937,8 @@ G4Polyhedron* G4TwistedGenTrap::CreatePolyhedron () const
 G4NURBS* G4TwistedGenTrap::CreateNURBS () const 
 {
 
-  G4double fDy = fDy1 ;  // temp !!!!!!!!!!!!!!!!!!!!!1
 
-  G4double maxSide = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
-  G4double maxRad = std::sqrt( maxSide*maxSide + fDy*fDy);
+  G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
 
   return new G4NURBStube(maxRad, maxRad, fDz); 
    // Tube for now!!!
@@ -1114,17 +952,15 @@ void G4TwistedGenTrap::CreateSurfaces()
    
    // create 6 surfaces of TwistedTub.
 
-  G4double fDy = fDy1 ;  // temp !!!!!!!!!!!!!!!!!!!!!!1
-
    fSide0   = new G4TwistedTrapAlphaSide("0deg"   ,fPhiTwist, fDz, fTheta,  fPhi    , fDy1, fDx1, fDx2, fDy2, fDx3, fDx4, fAlph, 0.*deg ) ;
    fSide180 = new G4TwistedTrapAlphaSide("180deg", fPhiTwist, fDz, fTheta, fPhi + pi, fDy1, fDx2, fDx1, fDy2, fDx4, fDx3, fAlph, 180.*deg) ;
 
-   fSide180 = new G4TwistedTrapParallelSide("90deg",  fPhiTwist, fDz, fTheta, fPhi,      fDy1, fDx1, fDx2, fDy2, fDx3, fDx4, fAlph, 0.*deg) ;
-   fSide180 = new G4TwistedTrapParallelSide("270deg", fPhiTwist, fDz, fTheta, fPhi + pi, fDy1, fDx2, fDx1, fDy2, fDx4, fDx3, fAlph, 180.*deg) ;
+   fSide90 = new G4TwistedTrapParallelSide("90deg",  fPhiTwist, fDz, fTheta, fPhi,      fDy1, fDx1, fDx2, fDy2, fDx3, fDx4, fAlph, 0.*deg) ;
+   fSide270 = new G4TwistedTrapParallelSide("270deg", fPhiTwist, fDz, fTheta, fPhi + pi, fDy1, fDx2, fDx1, fDy2, fDx4, fDx3, fAlph, 180.*deg) ;
 
 
-   fUpperEndcap = new G4FlatTrapSide("UpperCap",fPhiTwist, fDx1, fDx2, fDy, fDz,  1 ) ;
-   fLowerEndcap = new G4FlatTrapSide("LowerCap",fPhiTwist, fDx1, fDx2, fDy, fDz, -1 ) ;
+   fUpperEndcap = new G4FlatTrapSide("UpperCap",fPhiTwist, fDx3, fDx4, fDy2, fDz, fAlph, fPhi, fTheta,  1 ) ;
+   fLowerEndcap = new G4FlatTrapSide("LowerCap",fPhiTwist, fDx1, fDx2, fDy1, fDz, fAlph, fPhi, fTheta, -1 ) ;
  
    // Set neighbour surfaces
 
