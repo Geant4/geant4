@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                  (07-Dec-99)
+                                (10-Mar-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
@@ -14,7 +14,7 @@ SimpleBox is now made of Pb
 ionIoni:    Knock-on electron cross sections . 
          MeanFreePath is computed at tracking time.
          delta ray energy sampled from  differential Xsection.
-/afs/cern.ch/sw/geant4/stt/dev1/src/geant4/../G4NDL0.2
+/afs/cern.ch/sw/geant4/stt/dev2/src/geant4/../G4NDL0.2
 Tst11PhysicsList::SetCuts:CutLength : 1000 (mm)
 ******** SetCuts for gamma ********************
 The maximal meaningful cut is 857.187 mm.
@@ -65,16 +65,25 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+ eIoni   Minimum Delta cut in range=100  mm.
+
+           material       min.delta energy(keV) 
+
+                 Air         86.596
+           Aluminium          75793
+                Lead     3.8204e+10
+                Lead     1.8362e+11
+
+eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
 ******** ConvertCutToKineticEnergy for e+ ********************
-The cut energy is set 1.79769e+305GeV 
+The cut energy is set 1.7977e+305GeV 
 Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
 ******** ConvertCutToKineticEnergy for e+ ********************
-The cut energy is set 1.79769e+305GeV 
+The cut energy is set 1.7977e+305GeV 
 
 annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
         gamma energies sampled according Heitler
@@ -84,6 +93,15 @@ msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
         PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+ hIoni    Minimum Delta cut in range=100  mm.
+
+           material        min.delta energy(keV) 
+
+                 Air         86.596
+           Aluminium          75793
+                Lead     3.8204e+10
+                Lead     1.8362e+11
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -98,15 +116,15 @@ msc:   Tables of transport mean free paths.
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuBrems:  theoretical cross section 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuPairProd:  theoretical cross sections 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 /gun/direction 1 0 0
 #
 # proton at 10 GeV in U
