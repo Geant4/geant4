@@ -1,4 +1,4 @@
-$Id: History,v 1.42 1999-06-19 15:20:41 johna Exp $
+$Id: History,v 1.43 1999-06-24 10:53:06 johna Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24th June 1999  John Allison
+- Use liblist and libname.map in $G4LIBDIR.
 
 19th June 1999  John Allison
 - Removed references to G4Ray in G4VIS_BUILD.gmk and G4VIS_USE.gmk.
