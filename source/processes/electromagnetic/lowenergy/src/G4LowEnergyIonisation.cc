@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.86 2002-07-19 17:32:48 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.87 2002-07-30 16:12:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -90,6 +90,7 @@
 //                          AtomicDeexcitation
 // 03.06.02 MGP             Restore fStopAndKill
 // 19.06.02 VI              Additional printout
+// 30.07.02 VI              Fix in restricted energy loss
 //
 // --------------------------------------------------------------
 
@@ -303,16 +304,17 @@ void G4LowEnergyIonisation::BuildLossTable(
 
           G4double e = energySpectrum->AverageEnergy(Z, 0.0, tCut, 
                                                              lowEdgeEnergy, n);
-          G4double pro = energySpectrum->Probability(Z, 0.0, tCut, 
-                                                             lowEdgeEnergy, n);
+	  //          G4double pro = energySpectrum->Probability(Z, 0.0, tCut, 
+          //                                                   lowEdgeEnergy, n);
           G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy, n);
-          ionloss   += e * cs * pro * theAtomicNumDensityVector[iel];
+	  //          ionloss   += e * cs * pro * theAtomicNumDensityVector[iel];
+          ionloss   += e * cs * theAtomicNumDensityVector[iel];
           if(verboseLevel > 1 || (Z == 14 && lowEdgeEnergy>1. && lowEdgeEnergy<0.)) {
             G4cout << "Z= " << Z
                    << " shell= " << n
                    << " E(keV)= " << lowEdgeEnergy/keV
                    << " Eav(keV)= " << e/keV
-                   << " pro= " << pro
+	      //  << " pro= " << pro
                    << " cs= " << cs
 	           << " loss= " << ionloss
 	           << " rho= " << theAtomicNumDensityVector[iel]
@@ -356,7 +358,8 @@ void G4LowEnergyIonisation::BuildLossTable(
           G4double pro = energySpectrum->Probability(Z, 0.0, tCut, 
                                                              lowEdgeEnergy, n);
           G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy, n);
-          eAverage   += e * cs * pro * theAtomicNumDensityVector[iel];
+	  //          eAverage   += e * cs * pro * theAtomicNumDensityVector[iel];
+          eAverage   += e * cs * theAtomicNumDensityVector[iel];
           cross      += cs * pro * theAtomicNumDensityVector[iel];
           if(verboseLevel > 1) {
             G4cout << "Z= " << Z
