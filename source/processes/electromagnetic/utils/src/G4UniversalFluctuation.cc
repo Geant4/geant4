@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.18 2004-04-26 16:11:46 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.19 2004-04-26 16:48:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,14 +62,13 @@ G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
   particle(0),
   minNumberInteractionsBohr(10.0),
   theBohrBeta2(50.0*keV/proton_mass_c2),
-  minLoss(0.000001*eV),
-  problim(0.01),
+  minLoss(0.001*eV),
+  sumalim(0.01),
   alim(10.),
   nmaxCont1(4.),
   nmaxCont2(16.)
 {
   lastMaterial = 0;
-  sumalim = -log(problim);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -171,10 +170,9 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   if(a2 < 0.) a2 = 0.;
   if(a3 < 0.) a3 = 0.;
 
-
-  loss = 0. ;
-  /*
   G4double suma = a1+a2+a3;
+  loss = 0. ;
+  
   if(suma < sumalim)             // very small Step
     {
       //G4cout << "A very small step" << G4endl; 
@@ -222,7 +220,6 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
       }
     // Not so small Step
     } else {        
-  */
       //G4cout << "Excitation alim= " << alim << " a1= " << a1 << " a2= " << a2 << G4endl; 
       // excitation type 1
       if(a1>alim) {
@@ -247,7 +244,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
         loss += (1.-2.*G4UniformRand())*e1Fluct;   
       if(loss < 0.) loss = 0.0;
       
-      // ionisation .......................................
+      // ionisation 
       if(a3 > 0.) {
         if(a3>alim) {
           siga=sqrt(a3) ;
@@ -284,7 +281,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
         }        
         loss += lossc;  
       }
-      //    } 
+    } 
   //G4cout << "### Final loss= " << loss << G4endl;
   return loss;
 }
