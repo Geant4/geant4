@@ -1,4 +1,4 @@
-$Id: History,v 1.91 2000-10-18 14:04:18 allison Exp $
+$Id: History,v 1.92 2000-10-18 14:14:28 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -26,7 +26,8 @@ History file for visualization category
 
 18th October 2000  John Allison  (vis-V02-00-01)
 - G4PhysicalVolumeModel: protected against volumes without material.
-- Removed /vis/viewer/update from compound command /vis/viewer/specify.
+- Removed /vis/viewer/update from compound commands /vis/drawVolume
+  and /vis/specify.
 - Updated comments in G4VisManagerRegisterMessengers.cc.
 
 19th August 2000  John Allison  (vis-V02-00-00)
