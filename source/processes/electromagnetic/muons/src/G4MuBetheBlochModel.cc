@@ -32,7 +32,7 @@
 // 
 // Creation date: 09.08.2002
 //
-// Modifications: 
+// Modifications: 04.12.2002 VI Fix problem of G4DynamicParticle constructor
 //
 // -------------------------------------------------------------------
 //
@@ -50,8 +50,6 @@
 G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p) 
   : G4VEmModel(),
   particle(0),
-  mass(proton_mass_c2),
-  chargeSquare(1.0),
   highKinEnergy(100.*TeV),
   lowKinEnergy(2.0*MeV),
   twoln10(2.0*log(10.0)),
@@ -84,6 +82,7 @@ void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 G4double G4MuBetheBlochModel::HighEnergyLimit(const G4ParticleDefinition* p,
                                             const G4Material*) 
 {
+  if(!particle) SetParticle(p);
   return highKinEnergy;
 }
 
@@ -92,6 +91,7 @@ G4double G4MuBetheBlochModel::HighEnergyLimit(const G4ParticleDefinition* p,
 G4double G4MuBetheBlochModel::LowEnergyLimit(const G4ParticleDefinition* p,
                                            const G4Material*) 
 {
+  if(!particle) SetParticle(p);
   return lowKinEnergy;
 }
 
@@ -297,7 +297,7 @@ G4std::vector<G4DynamicParticle*>* G4MuBetheBlochModel::SampleSecondary(
   G4double xmax = G4std::min(tmax, maxEnergy)/tmax;
   if(xmin >= xmax) return 0;
 
-  G4ThreeVector momentum = dp->GetMomentum();
+  G4ThreeVector momentum = dp->GetMomentumDirection();
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double totEnergy = kineticEnergy + mass;
@@ -335,8 +335,11 @@ G4std::vector<G4DynamicParticle*>* G4MuBetheBlochModel::SampleSecondary(
     
   G4double deltaMomentum = 
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
+  G4double totMomentum = sqrt(totEnergy*totEnergy - mass*mass);
   G4double cost = deltaKinEnergy * (totEnergy + electron_mass_c2) /
-                                   (deltaMomentum * momentum.mag());
+                                   (deltaMomentum * totMomentum);
+  
+
   G4double sint = sqrt(1.0 - cost*cost);
  
   G4double phi = twopi * G4UniformRand() ; 
@@ -345,9 +348,10 @@ G4std::vector<G4DynamicParticle*>* G4MuBetheBlochModel::SampleSecondary(
   deltaDirection.rotateUz(momentum);
 
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle(G4Electron::Electron(),
-                                                   deltaKinEnergy,
-                                                   deltaDirection);
+  G4DynamicParticle* delta = new G4DynamicParticle();
+  delta->SetDefinition(G4Electron::Electron());
+  delta->SetKineticEnergy(deltaKinEnergy);
+  delta->SetMomentumDirection(deltaDirection);
 
   G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
   vdp->push_back(delta);

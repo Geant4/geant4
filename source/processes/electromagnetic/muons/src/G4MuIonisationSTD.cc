@@ -47,6 +47,7 @@
 // 07-11-01 correction(Tmax+xsection computation) L.Urban
 // 08-11-01 particleMass becomes a local variable (mma)
 // 10-05-02 V.Ivanchenko update to new design
+// 04-12-02 V.Ivanchenko the low energy limit for Kokoulin model to 10 GeV 
 //
 // -------------------------------------------------------------------
 //
@@ -92,14 +93,14 @@ void G4MuIonisationSTD::InitialiseProcess()
 
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0, 0.1*keV);
-  em->SetHighEnergyLimit(0, 0.2*MeV);
+  em->SetHighEnergyLimit(0, 2.*MeV);
   AddEmModel(em, 0);
   G4VEmModel* em1 = new G4BetheBlochModel();
-  em1->SetLowEnergyLimit(0, 0.2*MeV);
-  em1->SetHighEnergyLimit(0, 1.0*GeV);
+  em1->SetLowEnergyLimit(0, 2.*MeV);
+  em1->SetHighEnergyLimit(0, 10.0*GeV);
   AddEmModel(em1, 1);
   G4VEmModel* em2 = new G4MuBetheBlochModel();
-  em2->SetLowEnergyLimit(0, 1.0*GeV);
+  em2->SetLowEnergyLimit(0, 10.0*GeV);
   em2->SetHighEnergyLimit(0, 100.0*TeV);
   AddEmModel(em2, 2);
   G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
@@ -107,6 +108,7 @@ void G4MuIonisationSTD::InitialiseProcess()
 
   mass = (G4MuonPlus::MuonPlus())->GetPDGMass();
   ratio = electron_mass_c2/mass;
+  SetVerboseLevel(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -124,7 +126,7 @@ void G4MuIonisationSTD::PrintInfoDefinition() const
 {
   G4VEnergyLossSTD::PrintInfoDefinition();
 
-  G4cout << "      Bether-Bloch model for Escaled > 2 MeV, "
+  G4cout << "      Bether-Bloch model for E > 0.2 MeV " 
          << "parametrisation of Bragg peak below."
          << G4endl;
 }

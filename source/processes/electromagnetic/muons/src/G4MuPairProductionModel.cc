@@ -32,7 +32,7 @@
 // 
 // Creation date: 24.06.2002
 //
-// Modifications: 
+// Modifications: 04.12.2002 Change G4DynamicParticle constructor in PostStep (VI)
 //
 // Class Description: 
 //
@@ -724,9 +724,10 @@ G4std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondary(
    ElectDirection.rotateUz(ParticleDirection);   
  
    // create G4DynamicParticle object for the particle1  
-   G4DynamicParticle* aParticle1= new G4DynamicParticle (G4Electron::Electron(),
-                                                         ElectDirection, 
-                                                         ElectKineEnergy);
+   G4DynamicParticle* aParticle1= new G4DynamicParticle();
+   aParticle1->SetDefinition(G4Electron::Electron());
+   aParticle1->SetMomentumDirection(ElectDirection); 
+   aParticle1->SetKineticEnergy(ElectKineEnergy);
 
 
    G4double PositKineEnergy = PositronEnergy - electron_mass_c2 ;
@@ -736,9 +737,10 @@ G4std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondary(
    PositDirection.rotateUz(ParticleDirection);   
  
    // create G4DynamicParticle object for the particle2 
-   G4DynamicParticle* aParticle2= new G4DynamicParticle (G4Positron::Positron(),
-                                                         PositDirection, 
-                                                         PositKineEnergy);
+   G4DynamicParticle* aParticle2= new G4DynamicParticle();
+   aParticle2->SetDefinition(G4Positron::Positron());
+   aParticle2->SetMomentumDirection(PositDirection); 
+   aParticle2->SetKineticEnergy(PositKineEnergy);
 
 
   G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;

@@ -32,7 +32,7 @@
 // 
 // Creation date: 24.06.2002
 //
-// Modifications: 
+// Modifications: 04.12.02 (VI) Change G4DynamicParticle constructor in PostStepDoIt 
 //
 // Class Description: 
 //
@@ -542,8 +542,10 @@ G4std::vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondary(
   G4ThreeVector GammaDirection ( dirx, diry, dirz);
   GammaDirection.rotateUz(ParticleDirection);   
  
-  G4DynamicParticle* aGamma= new G4DynamicParticle (G4Gamma::Gamma(), GammaEnergy,
-                                                    GammaDirection);
+  G4DynamicParticle* aGamma = new G4DynamicParticle();
+  aGamma->SetDefinition(G4Gamma::Gamma());
+  aGamma->SetKineticEnergy(GammaEnergy);
+  aGamma->SetMomentumDirection(GammaDirection);
 
   G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
   vdp->push_back(aGamma);
