@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HelixHeum.hh,v 1.2 1999-12-15 14:49:47 gunter Exp $
+// $Id: G4HelixHeum.hh,v 1.3 2000-04-12 18:28:51 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -23,9 +23,9 @@ public:
   ~G4HelixHeum(){};
   
   void  DumbStepper(  const G4double y[],
-		      const G4double dydx[],
-		      const G4double h,
-		      G4double yout[]);
+		      G4ThreeVector  Bfld,
+		      G4double       h,
+		      G4double       yout[]);
   
   G4int     IntegratorOrder() { return 2; };
 };

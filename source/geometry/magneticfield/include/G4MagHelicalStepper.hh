@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagHelicalStepper.hh,v 1.2 1999-12-15 14:49:47 gunter Exp $
+// $Id: G4MagHelicalStepper.hh,v 1.3 2000-04-12 18:28:51 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //                                         Started from G4MagErrorStepper.hh
 //
@@ -46,8 +46,8 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
   // performs a 'dump' Step without error calculation.
   
   virtual  void  DumbStepper(  const G4double y[],
-			       const G4double dydx[],
-			       const G4double h,
+			       G4ThreeVector   Bfld,
+			       G4double  h,
 			       G4double yout[] ) = 0;
 
   // Estimate maximum distance of curved solution and chord ... 
@@ -66,14 +66,20 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
   // a first order Step along a helix inside the field
 
   void AdvanceHelix( const G4double  yIn[],
-		     const G4double  B[],
-		     const G4double  h,
-		     G4double  yHelix[]);
+		     G4ThreeVector   Bfld,
+		     G4double  h,
+		     G4double  yHelix[]);    // output 
 
   // evaluate the field at a certain point
 
-  void MagFieldEvaluate( const G4double y[], G4double B[] )   
-    { GetEquationOfMotion()->  GetFieldValue(y, B); }
+  // void MagFieldEvaluate( const G4double y[], G4double B[] )   
+  //  { GetEquationOfMotion()->  GetFieldValue(y, B); }
+
+  void MagFieldEvaluate( const G4double y[], G4ThreeVector& Bfield )   
+    { G4double B[3];
+      GetEquationOfMotion()->  GetFieldValue(y, B);
+      Bfield= G4ThreeVector( B[0], B[1], B[2] );
+    }
 
  private:
   
