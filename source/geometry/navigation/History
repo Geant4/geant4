@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2003-11-05 12:00:10 gcosmo Exp $
+$Id: History,v 1.7 2003-11-08 04:11:03 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov 6th, 2003 - J.Apostolakis  (geomnav-V05-02-04)
+-----------------------
+- G4PropagatorInField
+  o Implements move of EpsilonMin / Max to G4FieldManager.
+
+Important Note:
+   Requires and coworks with field-V05-02-04 or later tag.
 
 Nov 6th, 2003 - G.Cosmo  (geomnav-V05-02-04)
 -----------------------
