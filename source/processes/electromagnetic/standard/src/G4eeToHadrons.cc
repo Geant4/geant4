@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.cc,v 1.1 2004-10-14 12:16:38 vnivanch Exp $
+// $Id: G4eeToHadrons.cc,v 1.2 2004-11-10 08:53:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 02.08.2004
 //
 // Modifications:
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 
 //
@@ -77,7 +78,7 @@ G4eeToHadrons::~G4eeToHadrons()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eeToHadrons::BuildPhysicsTable(const G4ParticleDefinition& part)
+void G4eeToHadrons::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
@@ -99,7 +100,7 @@ void G4eeToHadrons::BuildPhysicsTable(const G4ParticleDefinition& part)
 
     cross = new G4eeCrossSections();
 
-    G4eeToHadronsModel* model = 
+    G4eeToHadronsModel* model =
       new G4eeToHadronsModel(new G4eeToTwoPiModel(cross), ver);
     models.push_back(model);
     model->SetHighEnergyLimit(maxKineticEnergy);
@@ -109,11 +110,10 @@ void G4eeToHadrons::BuildPhysicsTable(const G4ParticleDefinition& part)
     ekinMin.push_back(emin);
     ekinMax.push_back(model->HighEnergyLimit());
     ekinPeak.push_back(model->PeakEnergy());
-    cumSum.push_back(0.0);  
+    cumSum.push_back(0.0);
     AddEmModel(1, model);
     nModels = 1;
   }
-  G4VEmProcess::BuildPhysicsTable(part);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

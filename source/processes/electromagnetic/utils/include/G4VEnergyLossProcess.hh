@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.31 2004-09-09 10:57:54 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.32 2004-11-10 08:54:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,7 @@
 // 06-08-04 Clear up names of member functions (V.Ivanchenko)
 // 27-08-04 Add NeedBuildTables method (V.Ivanchneko)
 // 09-09-04 Bug fix for the integral mode with 2 peaks (V.Ivanchneko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -101,8 +102,7 @@ public:
 
   virtual ~G4VEnergyLossProcess();
 
-  void Initialise();
-  // Initialise for build of tables
+  //  void Initialise();
 
   G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
@@ -124,6 +124,9 @@ public:
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
   // True for all charged particles
 
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+  // Initialise for build of tables
+
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
   // Build physics table during initialisation
 
@@ -136,9 +139,7 @@ public:
   G4PhysicsTable* BuildLambdaSubTable();
   // Build tables
 
-  void SetParticle(const G4ParticleDefinition* p);
   void SetBaseParticle(const G4ParticleDefinition* p);
-  void SetSecondaryParticle(const G4ParticleDefinition* p);
 
   const G4ParticleDefinition* Particle() const;
   const G4ParticleDefinition* BaseParticle() const;
@@ -165,15 +166,15 @@ public:
   void SetMaxKinEnergyForPreciseRange(G4double e);
   // Max kinetic energy for tables
 
-  G4bool StorePhysicsTable(G4ParticleDefinition*,
-                     const G4String& directory,
-                           G4bool ascii = false);
+  G4bool StorePhysicsTable(const G4ParticleDefinition*,
+                           const G4String& directory,
+                                 G4bool ascii = false);
     // Store PhysicsTable in a file.
     // Return false in case of failure at I/O
 
-  G4bool RetrievePhysicsTable(G4ParticleDefinition*,
-                        const G4String& directory,
-                              G4bool ascii);
+  G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
+                              const G4String& directory,
+                                    G4bool ascii);
     // Retrieve Physics from a file.
     // (return true if the Physics Table can be build by using file)
     // (return false if the process has no functionality or in case of failure)
@@ -195,9 +196,12 @@ public:
   // Activate deexcitation code
 
   virtual void SetSubCutoff(G4bool);
- 
+
   void SetDEDXTable(G4PhysicsTable* p);
   G4PhysicsTable* DEDXTable() const;
+
+  void SetDEDXunRestrictedTable(G4PhysicsTable* p);
+  G4PhysicsTable* DEDXunRestrictedTable() const;
 
   void SetPreciseRangeTable(G4PhysicsTable* pRange);
   G4PhysicsTable* PreciseRangeTable() const;
@@ -216,7 +220,7 @@ public:
   void SetSubLambdaTable(G4PhysicsTable* p);
   G4PhysicsTable* SubLambdaTable();
 
-  // Return values for particle 
+  // Return values for particle
   G4double GetDEDX(G4double& kineticEnergy, const G4MaterialCutsCouple* couple);
   G4double GetRange(G4double& kineticEnergy, const G4MaterialCutsCouple* couple);
   G4double GetRangeForLoss(G4double& kineticEnergy, const G4MaterialCutsCouple* couple);
@@ -235,7 +239,7 @@ public:
   void SetIntegral(G4bool val);
   G4bool IsIntegral() const;
 
-  // Redefine parameteters for stepping control 
+  // Redefine parameteters for stepping control
   //
   void SetLinearLossLimit(G4double val);
   void SetMinSubRange(G4double val);
@@ -262,7 +266,23 @@ public:
 
   G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idx) const;
 
+  void SetIonisation(G4bool val);
+
+  G4bool IsIonisationProcess() const;
+
 protected:
+
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+                                    const G4Material*, G4double cut) = 0;
+
+  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp) = 0;
+
+  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+                                           const G4ParticleDefinition*) = 0;
+
+  void SetParticle(const G4ParticleDefinition* p);
+
+  void SetSecondaryParticle(const G4ParticleDefinition* p);
 
   virtual G4double GetMeanFreePath(const G4Track& track,
                                          G4double previousStepSize,
@@ -272,9 +292,6 @@ protected:
                                                 G4double previousStepSize,
                                                 G4double currentMinimumStep,
                                                 G4double& currentSafety);
-
-  virtual
-  const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition*);
 
   virtual
   G4PhysicsVector* DEDXPhysicsVector(const G4MaterialCutsCouple*);
@@ -288,11 +305,6 @@ protected:
   virtual
   G4PhysicsVector* SubLambdaPhysicsVector(const G4MaterialCutsCouple*);
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-                                    const G4Material*, G4double cut) = 0;
-
-  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp) = 0;
-
   G4VEmModel* SelectModel(G4double kinEnergy);
 
   G4VSubCutoffProcessor* SubCutoffProcessor(size_t index);
@@ -305,13 +317,10 @@ protected:
   void SetReduceFactor(G4double val);
   void SetChargeSquare(G4double val);
   void SetChargeSquareRatio(G4double val);
-  
+
   G4double GetCurrentRange() const;
 
 private:
-
-  // Initialise for Build or Retrieve Physics Tables
-  G4bool NeedBuildTables(const G4ParticleDefinition*);
 
   // Clear tables
   void Clear();
@@ -349,6 +358,7 @@ private:
   // tables and vectors
   G4PhysicsTable*             theDEDXTable;
   G4PhysicsTable*             theRangeTableForLoss;
+  G4PhysicsTable*             theDEDXunRestrictedTable;
   G4PhysicsTable*             thePreciseRangeTable;
   G4PhysicsTable*             theSecondaryRangeTable;
   G4PhysicsTable*             theInverseRangeTable;
@@ -406,6 +416,7 @@ private:
   G4bool   integral;
   G4bool   meanFreePath;
   G4bool   aboveCSmax;
+  G4bool   isIonisation;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -449,9 +460,9 @@ inline G4double G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
 {
   DefineMaterial(couple);
   G4double x = DBL_MAX;
-  if(thePreciseRangeTable)       
+  if(thePreciseRangeTable)
     x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio);
-  else if(theRangeTableForLoss)  
+  else if(theRangeTableForLoss)
     x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio);
   return x*reduceFactor;
 }
@@ -680,43 +691,50 @@ inline G4VSubCutoffProcessor* G4VEnergyLossProcess::SubCutoffProcessor(size_t in
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-inline G4PhysicsTable* G4VEnergyLossProcess::DEDXTable() const 
+
+inline G4PhysicsTable* G4VEnergyLossProcess::DEDXTable() const
 {
   return theDEDXTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
+
+inline G4PhysicsTable* G4VEnergyLossProcess::DEDXunRestrictedTable() const
+{
+  return theDEDXunRestrictedTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4PhysicsTable* G4VEnergyLossProcess::PreciseRangeTable() const
 {
   return thePreciseRangeTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-inline G4PhysicsTable* G4VEnergyLossProcess::RangeTableForLoss() const 
+
+inline G4PhysicsTable* G4VEnergyLossProcess::RangeTableForLoss() const
 {
   return theRangeTableForLoss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4PhysicsTable* G4VEnergyLossProcess::InverseRangeTable() const 
+inline G4PhysicsTable* G4VEnergyLossProcess::InverseRangeTable() const
 {
   return theInverseRangeTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-inline G4PhysicsTable* G4VEnergyLossProcess::LambdaTable() 
+
+inline G4PhysicsTable* G4VEnergyLossProcess::LambdaTable()
 {
   return theLambdaTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-inline G4PhysicsTable* G4VEnergyLossProcess::SubLambdaTable() 
+
+inline G4PhysicsTable* G4VEnergyLossProcess::SubLambdaTable()
 {
   return theSubLambdaTable;
 }
@@ -737,7 +755,7 @@ inline size_t G4VEnergyLossProcess::CurrentMaterialCutsCoupleIndex() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
-inline void G4VEnergyLossProcess::SetMassRatio(G4double val) 
+inline void G4VEnergyLossProcess::SetMassRatio(G4double val)
 {
   massRatio = val;
 }
@@ -765,7 +783,7 @@ inline void G4VEnergyLossProcess::SetChargeSquareRatio(G4double val)
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
-inline G4double G4VEnergyLossProcess::GetCurrentRange() const 
+inline G4double G4VEnergyLossProcess::GetCurrentRange() const
 {
   return fRange;
 }

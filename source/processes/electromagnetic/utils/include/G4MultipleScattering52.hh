@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering52.hh,v 1.2 2003-09-25 04:29:07 kurasige Exp $
+// $Id: G4MultipleScattering52.hh,v 1.3 2004-11-10 08:54:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------- G4MultipleScattering52 physics process --------------------------
@@ -43,6 +43,8 @@
 // 05-02-03 changes in data members, L.Urban
 // 18-04-03 Change signature of  GetTransportMeanFreePath (V.Ivanchenko)
 // 08-08-03 This class is frozen at the release 5.2 (V.Ivanchenko)
+// 08-11-04 Remove Store/Retrieve tables (V.Ivantchenko)
+
 //------------------------------------------------------------------------------
 
 // class description
@@ -90,18 +92,6 @@ class G4MultipleScattering52 : public G4VContinuousDiscreteProcess
      // Print few lines of informations about the process: validity range,
      // origine ..etc..
      // Invoked by BuildPhysicsTable().
-
-   
-   G4bool StorePhysicsTable(G4ParticleDefinition* ,
- 			    const G4String& directory, G4bool);
-     // store TransportMeanFreePath tables into an external file
-     // specified by 'directory' (must exist before invokation)
-
-   G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
- 		               const G4String& directory, G4bool);
-     // retrieve TransportMeanFreePath tables from an external file
-     // specified by 'directory' 
-       
 
    G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
                                                   G4double  previousStepSize,

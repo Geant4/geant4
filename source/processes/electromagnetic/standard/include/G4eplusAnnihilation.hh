@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.hh,v 1.14 2004-08-13 14:47:51 maire Exp $
+// $Id: G4eplusAnnihilation.hh,v 1.15 2004-11-10 08:53:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,7 +36,8 @@
 // 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
 // 05-08-04, suppress .icc file
 // 13-08-04, public ComputeCrossSectionPerAtom() and ComputeMeanFreePath()   
-// 
+// 09-11-04, Remove Store/Retrieve tables (V.Ivantchenko)
+//
 
 // class description
 //
@@ -64,7 +65,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4eplusAnnihilation : public G4VRestDiscreteProcess
- 
+
 {    
   public:  // with description
  
@@ -84,15 +85,15 @@ class G4eplusAnnihilation : public G4VRestDiscreteProcess
        // It builds the total CrossSectionPerAtom table, for e+,
        // and for every element contained in the elementTable.
        // It builds the MeanFreePath table, for e+,
-       // and for every material contained in the materialTable.       
-        
-     G4bool StorePhysicsTable(G4ParticleDefinition* ,
+       // and for every material contained in the materialTable.
+
+     G4bool StorePhysicsTable(const G4ParticleDefinition* ,
 			      const G4String& directory, G4bool);
        // store CrossSection and MeanFreePath tables into an external file
        // specified by 'directory' (must exist before invokation)
 
-     G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
-				 const G4String& directory, G4bool);
+       //G4bool RetrievePhysicsTable(const G4ParticleDefinition* ,
+       //				 const G4String& directory, G4bool);
        // retrieve CrossSection and MeanFreePath tables from an external file
        // specified by 'directory' 
                    

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.33 2004-08-25 17:03:58 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.34 2004-11-10 08:49:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,6 +53,7 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 // 17-08-04 Utilise mu+ tables for mu- (V.Ivanchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -75,7 +76,10 @@ G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
     lowestKinEnergy(1.*GeV),
     isInitialised(false)
 {
-  InitialiseProcess();
+  SetDEDXBinning(120);
+  SetLambdaBinning(120);
+  SetMinKinEnergy(0.1*keV);
+  SetMaxKinEnergy(100.0*TeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -85,34 +89,25 @@ G4MuBremsstrahlung::~G4MuBremsstrahlung()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuBremsstrahlung::InitialiseProcess()
-{  
-  isInitialised = true;
-
-  SetSecondaryParticle(G4Gamma::Gamma());
-
-  SetDEDXBinning(120);
-  SetLambdaBinning(120);
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*TeV);
-
-  G4MuBremsstrahlungModel* em = new G4MuBremsstrahlungModel();
-  em->SetLowestKineticEnergy(lowestKinEnergy);
-
-  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-  em->SetLowEnergyLimit(0.1*keV);
-  em->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(1, em, fm);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-const G4ParticleDefinition* G4MuBremsstrahlung::DefineBaseParticle(
-                      const G4ParticleDefinition* p)
+void G4MuBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
+                                                     const G4ParticleDefinition*)
 {
-  if (!theParticle) theParticle = p;
-  if (!isInitialised) InitialiseProcess();
-  return theBaseParticle;
+  if(!isInitialised) {
+
+    isInitialised = true;
+
+    theParticle = part;
+    SetSecondaryParticle(G4Gamma::Gamma());
+    SetIonisation(false);
+
+    G4MuBremsstrahlungModel* em = new G4MuBremsstrahlungModel();
+    em->SetLowestKineticEnergy(lowestKinEnergy);
+
+    G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
+    em->SetLowEnergyLimit(0.1*keV);
+    em->SetHighEnergyLimit(100.0*TeV);
+    AddEmModel(1, em, fm);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.hh,v 1.23 2004-10-25 13:32:52 vnivanch Exp $
+// $Id: G4MuIonisation.hh,v 1.24 2004-11-10 08:49:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,6 +57,7 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 // 17-08-04 Rename the process "Mu" -> "mu" (V.Ivanchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -87,8 +88,7 @@ public:
 
   virtual ~G4MuIonisation();
 
-  G4bool IsApplicable(const G4ParticleDefinition& p)
-    {return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);};
+  G4bool IsApplicable(const G4ParticleDefinition& p);
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
@@ -113,13 +113,12 @@ public:
 
 protected:
 
-  const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition* p);
+  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+                                           const G4ParticleDefinition*);
 
   virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
 
 private:
-
-  void InitialiseProcess();
 
   // hide assignment operator
   G4MuIonisation & operator=(const G4MuIonisation &right);
@@ -137,6 +136,13 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4MuIonisation::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4MuIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,

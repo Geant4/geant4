@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.hh,v 1.12 2004-08-13 14:47:50 maire Exp $
+// $Id: G4ComptonScattering.hh,v 1.13 2004-11-10 08:53:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4ComptonScattering physics process -----------------------
 //                   by Michel Maire, April 1996
 //
-// 10-06-96, updated by M.Maire 
+// 10-06-96, updated by M.Maire
 // 21-06-96, SetCuts implementation, M.Maire
 // 06-01-97, crossection table + meanfreepath table, M.Maire
 // 17-02-97, New Physics scheme
@@ -40,6 +40,7 @@
 // 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
 // 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
 // 13-08-04, suppress icc file; make public ComputeCrossSectionPerAtom()   (mma)
+// 09-11-04, Remove Retrieve tables (V.Ivantchenko)
 // -----------------------------------------------------------------------------
 
 // class description
@@ -55,10 +56,10 @@
 
 #include "G4ios.hh" 
 #include "globals.hh"
-#include "Randomize.hh" 
+#include "Randomize.hh"
 #include "G4VDiscreteProcess.hh"
 #include "G4PhysicsTable.hh"
-#include "G4PhysicsLogVector.hh" 
+#include "G4PhysicsLogVector.hh"
 #include "G4Element.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -67,10 +68,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4ComptonScattering : public G4VDiscreteProcess
- 
-{ 
+
+{
   public:  // with description
- 
+
   G4ComptonScattering(const G4String& processName ="compt",
 		            G4ProcessType type = fElectromagnetic);
 
@@ -78,41 +79,41 @@ class G4ComptonScattering : public G4VDiscreteProcess
 
      G4bool IsApplicable(const G4ParticleDefinition&);
        // true for Gamma only.
-     
+
      void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
-       // Allows to define the binning of the PhysicsTables, 
+       // Allows to define the binning of the PhysicsTables,
        // before to build them.
-     
+
      void BuildPhysicsTable(const G4ParticleDefinition&);
        // It builds the total CrossSectionPerAtom table, for Gamma,
        // and for every element contained in the elementTable.
        // It builds the MeanFreePath table, for Gamma,
        // and for every material contained in the materialTable.
 
-     G4bool StorePhysicsTable(G4ParticleDefinition* ,
+     G4bool StorePhysicsTable(const G4ParticleDefinition* ,
 			      const G4String& directory, G4bool);
        // store CrossSection and MeanFreePath tables into an external file
        // specified by 'directory' (must exist before invokation)
 
-     G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
-				 const G4String& directory, G4bool);
+       //G4bool RetrievePhysicsTable(const G4ParticleDefinition* ,
+       //			 const G4String& directory, G4bool);
        // retrieve CrossSection and MeanFreePath tables from an external file
-       // specified by 'directory' 
-       				         			           
+       // specified by 'directory'
+
      void PrintInfoDefinition();
        // Print few lines of informations about the process: validity range,
        // origine ..etc..
-       // Invoked by BuildThePhysicsTable(). 
-     
+       // Invoked by BuildThePhysicsTable().
+
      G4double GetMeanFreePath(const G4Track& aTrack,
                               G4double previousStepSize,
                               G4ForceCondition* condition);
        // It returns the MeanFreePath of the process for the current track :
        // (energy, material)
        // The previousStepSize and G4ForceCondition* are not used.
-       // This function overloads a virtual function of the base class.		      
+       // This function overloads a virtual function of the base class.
        // It is invoked by the ProcessManager of the Particle.
-       
+
      G4double GetCrossSectionPerAtom(G4DynamicParticle* aDynamicGamma,
                                          G4Element*         anElement);
        // It returns the total CrossSectionPerAtom of the process, 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation52.cc,v 1.2 2004-10-25 08:32:55 vnivanch Exp $
+// $Id: G4MuIonisation52.cc,v 1.3 2004-11-10 08:49:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------- G4MuIonisation52 physics process ------------------------------
@@ -44,6 +44,7 @@
 // 16-01-03 Migrade to cut per region (V.Ivanchenko)
 // 26-04-03 fix problems of retrieve tables (V.Ivanchenko)
 // 08-08-03 This class is frozen at the release 5.2 (V.Ivanchenko)
+// 08-11-04 Remove interface of Store/Retrieve tables (V.Ivantchenko)
 // -----------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -555,105 +556,6 @@ G4VParticleChange* G4MuIonisation52::PostStepDoIt(const G4Track& trackData,
 
  //ResetNumberOfInteractionLengthLeft();
 return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool G4MuIonisation52::StorePhysicsTable(G4ParticleDefinition* particle,
-				              const G4String& directory,
-				              G4bool          ascii)
-{
-  G4String filename;
-
-  // store stopping power table
-  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
-  if ( !theLossTable->StorePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theLossTable->StorePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-  // store mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  G4cout << GetProcessName() << " for " << particle->GetParticleName()
-         << ": Success to store the PhysicsTables in "
-         << directory << G4endl;
-
-  return true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool G4MuIonisation52::RetrievePhysicsTable(G4ParticleDefinition* particle,
-					         const G4String& directory,
-				                 G4bool          ascii)
-{
-  // delete theLossTable and theMeanFreePathTable
-  if (theLossTable != 0) {
-    theLossTable->clearAndDestroy();
-    delete theLossTable;
-  }
-  if (theMeanFreePathTable != 0) {
-    theMeanFreePathTable->clearAndDestroy();
-    delete theMeanFreePathTable;
-  }
-
-  // get bining from EnergyLoss
-  LowestKineticEnergy  = GetLowerBoundEloss();
-  HighestKineticEnergy = GetUpperBoundEloss();
-  TotBin               = GetNbinEloss();
-
-  G4String filename;
-
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
-
-  secondaryEnergyCuts = theCoupleTable->GetEnergyCutsVector(1);
-  
-  // retreive stopping power table
-  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
-  theLossTable = new G4PhysicsTable(numOfCouples);
-  if ( !theLossTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theLossTable0->RetrievePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  // retreive mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  theMeanFreePathTable = new G4PhysicsTable(numOfCouples);
-  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  G4cout << GetProcessName() << " for " << particle->GetParticleName()
-         << ": Success to retrieve the PhysicsTables from "
-         << directory << G4endl;
-
-  if (particle->GetPDGCharge() > 0.)
-    {
-      RecorderOfmuplusProcess[CounterOfmuplusProcess]   = (*this).theLossTable;
-      CounterOfmuplusProcess++;
-    }
-  else
-    {
-      RecorderOfmuminusProcess[CounterOfmuminusProcess] = (*this).theLossTable;
-      CounterOfmuminusProcess++;
-    }
-
-
-  G4VMuEnergyLoss::BuildDEDXTable(*particle);
-  if(particle==G4MuonPlus::MuonPlus()) PrintInfoDefinition();
-
-  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

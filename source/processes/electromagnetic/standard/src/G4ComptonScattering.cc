@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering.cc,v 1.21 2004-10-25 09:22:55 vnivanch Exp $
+// $Id: G4ComptonScattering.cc,v 1.22 2004-11-10 08:53:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,20 +49,22 @@
 // 17-04-02, LowestEnergyLimit = 1*keV     
 // 26-05-04, cross section parametrization improved for low energy :
 //           Egamma <~ 15 keV (Laszlo) 
+// 08-11-04, Remove Store/Retrieve tables (V.Ivantchenko)
 // -----------------------------------------------------------------------------
 
 #include "G4ComptonScattering.hh"
 #include "G4UnitsTable.hh"
+#include "G4PhysicsTableHelper.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // constructor
- 
-G4ComptonScattering::G4ComptonScattering(const G4String& processName, 
+
+G4ComptonScattering::G4ComptonScattering(const G4String& processName,
     G4ProcessType type):G4VDiscreteProcess (processName, type),
     theCrossSectionTable(NULL),
-    theMeanFreePathTable(NULL),  
-    LowestEnergyLimit (  1*keV),              
+    theMeanFreePathTable(NULL),
+    LowestEnergyLimit (  1*keV),
     HighestEnergyLimit(100*GeV),
     NumbBinTable(80),
     fminimalEnergy(1*eV)
@@ -118,17 +120,17 @@ void G4ComptonScattering::BuildPhysicsTable(const G4ParticleDefinition&)
    G4double AtomicNumber;
    size_t J;
 
-   for ( J=0 ; J < G4Element::GetNumberOfElements(); J++ )  
-       { 
+   for ( J=0 ; J < G4Element::GetNumberOfElements(); J++ )
+       {
         //create physics vector then fill it ....
         ptrVector = new G4PhysicsLogVector(LowestEnergyLimit,HighestEnergyLimit,
                                            NumbBinTable );
         AtomicNumber = (*theElementTable)[J]->GetZ();
- 
-        for ( G4int i = 0 ; i < NumbBinTable ; i++ )      
+
+        for ( G4int i = 0 ; i < NumbBinTable ; i++ )
            {
              LowEdgeEnergy = ptrVector->GetLowEdgeEnergy(i);
-             Value = ComputeCrossSectionPerAtom(LowEdgeEnergy, AtomicNumber);  
+             Value = ComputeCrossSectionPerAtom(LowEdgeEnergy, AtomicNumber);
              ptrVector->PutValue(i,Value);
            }
 
@@ -151,7 +153,7 @@ void G4ComptonScattering::BuildPhysicsTable(const G4ParticleDefinition&)
         ptrVector = new G4PhysicsLogVector(LowestEnergyLimit,HighestEnergyLimit,
                                            NumbBinTable ) ;
         material = (*theMaterialTable)[J];
- 
+
         for ( G4int i = 0 ; i < NumbBinTable ; i++ )      
            {
              LowEdgeEnergy = ptrVector->GetLowEdgeEnergy( i ) ;
@@ -163,7 +165,7 @@ void G4ComptonScattering::BuildPhysicsTable(const G4ParticleDefinition&)
       }
 
     PrintInfoDefinition();  
-         
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -199,7 +201,7 @@ G4double G4ComptonScattering::ComputeCrossSectionPerAtom
  CrossSection = p1Z*log(1.+2*X)/X
                 + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
 		
- //  modification for low energy. (special case for Hydrogen) 
+ //  modification for low energy. (special case for Hydrogen)
  if (GammaEnergy < T0) {
    G4double dT0 = 1.*keV;
    X = (T0+dT0) / electron_mass_c2 ;
@@ -228,7 +230,7 @@ G4double G4ComptonScattering::ComputeMeanFreePath(G4double GammaEnergy,
   G4double SIGMA = 0.;
 
   for ( size_t elm=0 ; elm < aMaterial->GetNumberOfElements() ; elm++ )
-      {             
+      {
         SIGMA += NbOfAtomsPerVolume[elm] * 
                  ComputeCrossSectionPerAtom(GammaEnergy,
                                             (*theElementVector)[elm]->GetZ());
@@ -255,7 +257,7 @@ G4double G4ComptonScattering::GetCrossSectionPerAtom(
                                        GetValue(GammaEnergy, isOutRange);
 
    return crossSection;
-} 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -283,7 +285,7 @@ G4double G4ComptonScattering::GetMeanFreePath(const G4Track& aTrack,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 G4VParticleChange* G4ComptonScattering::PostStepDoIt(const G4Track& aTrack,
                                                      const G4Step&  aStep)
 //
@@ -306,7 +308,7 @@ G4VParticleChange* G4ComptonScattering::PostStepDoIt(const G4Track& aTrack,
    //
    // sample the energy rate of the scattered gamma 
    //
- 
+
    G4double epsilon, epsilonsq, onecost, sint2, greject ;
 
    G4double epsilon0 = 1./(1. + 2*E0_m) , epsilon0sq = epsilon0*epsilon0;
@@ -334,7 +336,7 @@ G4VParticleChange* G4ComptonScattering::PostStepDoIt(const G4Track& aTrack,
    G4double dirx = sinTeta*cos(Phi), diry = sinTeta*sin(Phi), dirz = cosTeta;
 
    //
-   // update G4VParticleChange for the scattered gamma 
+   // update G4VParticleChange for the scattered gamma
    //
    
    G4ThreeVector GammaDirection1 ( dirx,diry,dirz );
@@ -367,8 +369,8 @@ G4VParticleChange* G4ComptonScattering::PostStepDoIt(const G4Track& aTrack,
         G4ThreeVector ElecDirection (
         (GammaEnergy0*GammaDirection0 - GammaEnergy1*GammaDirection1)
 	*(1./ElecMomentum) );
- 
-        // create G4DynamicParticle object for the electron.  
+
+        // create G4DynamicParticle object for the electron.
         G4DynamicParticle* aElectron= new G4DynamicParticle(
 	                   G4Electron::Electron(),ElecDirection,ElecKineEnergy);
 
@@ -379,18 +381,18 @@ G4VParticleChange* G4ComptonScattering::PostStepDoIt(const G4Track& aTrack,
       {
         aParticleChange.SetNumberOfSecondaries(0);
 	localEnergyDeposit += ElecKineEnergy;
-      }      
+      }
     aParticleChange.ProposeLocalEnergyDeposit (localEnergyDeposit);
-       
+
    //  Reset NbOfInteractionLengthLeft and return aParticleChange
    return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4ComptonScattering::StorePhysicsTable(G4ParticleDefinition* particle,
-				              const G4String& directory, 
-				              G4bool          ascii)
+G4bool G4ComptonScattering::StorePhysicsTable(const G4ParticleDefinition* particle,
+				              const G4String& directory,
+				                    G4bool          ascii)
 {
   G4String filename;
 
@@ -409,17 +411,17 @@ G4bool G4ComptonScattering::StorePhysicsTable(G4ParticleDefinition* particle,
            << G4endl;
     return false;
   }
-  
+
   G4cout << GetProcessName() << " for " << particle->GetParticleName()
-         << ": Success to store the PhysicsTables in "  
+         << ": Success to store the PhysicsTables in "
          << directory << G4endl;
   return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool G4ComptonScattering::RetrievePhysicsTable(G4ParticleDefinition* particle,
-					         const G4String& directory, 
+/*
+G4bool G4ComptonScattering::RetrievePhysicsTable(const G4ParticleDefinition* particle,
+					         const G4String& directory,
 				                 G4bool          ascii)
 {
   // delete theCrossSectionTable and theMeanFreePathTable
@@ -437,27 +439,27 @@ G4bool G4ComptonScattering::RetrievePhysicsTable(G4ParticleDefinition* particle,
   // retreive cross section table
   filename = GetPhysicsTableFileName(particle,directory,"CrossSection",ascii);
   theCrossSectionTable = new G4PhysicsTable(G4Element::GetNumberOfElements());
-  if ( !theCrossSectionTable->RetrievePhysicsTable(filename, ascii) ){
+  if ( !G4PhysicsTableHelper::RetrievePhysicsTable(filename, ascii) ){
     G4cout << " FAIL theCrossSectionTable->RetrievePhysicsTable in " << filename
-           << G4endl;  
+           << G4endl;
     return false;
   }
 
   // retreive mean free path table
   filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
   theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
-  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
+  if ( !G4PhysicsTableHelper::RetrievePhysicsTable(filename, ascii) ){
     G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
-           << G4endl;  
+           << G4endl;
     return false;
   }
-  
+
   G4cout << GetProcessName() << " for " << particle->GetParticleName()
          << ": Success to retrieve the PhysicsTables from "
          << directory << G4endl;
   return true;
 }
- 
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4ComptonScattering::PrintInfoDefinition()

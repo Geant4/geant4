@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation70.hh,v 1.2 2004-10-25 13:20:22 vnivanch Exp $
+// $Id: G4eplusAnnihilation70.hh,v 1.3 2004-11-10 08:53:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 02.08.2004
 //
 // Modifications:
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -84,17 +85,17 @@ public:
 
 protected:
 
-  const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition*);
+  virtual void InitialiseProcess(const G4ParticleDefinition*);
 
   virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp);
 
 private:
 
-  void InitialiseProcess();
-
-  // hide assignment operator
+ // hide assignment operator
   G4eplusAnnihilation70 & operator=(const G4eplusAnnihilation70 &right);
   G4eplusAnnihilation70(const G4eplusAnnihilation70&);
+  
+  G4bool isInitialised;
 
 };
 

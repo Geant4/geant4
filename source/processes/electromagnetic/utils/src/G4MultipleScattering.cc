@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.48 2004-08-17 12:40:23 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.49 2004-11-10 08:55:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -62,6 +62,7 @@
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 23-04-04 value of data member dtrl changed from 0.15 to 0.05 (L.Urban)
 // 17-08-04 name of facxsi changed to factail (L.Urban)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // -----------------------------------------------------------------------------
 //
@@ -87,7 +88,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
 {
   lowKineticEnergy = 0.1*keV;
   highKineticEnergy= 100.*TeV;
-  
+
   tlimit           = 1.e10*mm;
   tlimitmin        = 1.e-7*mm;
 
@@ -103,9 +104,9 @@ G4MultipleScattering::~G4MultipleScattering()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition& particle)
+void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* particle)
 {
-  if (particle.GetParticleType() == "nucleus") {
+  if (particle->GetParticleType() == "nucleus") {
     SetBoundary(false);
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);

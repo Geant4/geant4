@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.26 2004-10-25 13:20:23 vnivanch Exp $
+// $Id: G4hIonisation.hh,v 1.27 2004-11-10 08:53:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,7 @@
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -111,7 +112,8 @@ public:
 
 protected:
 
-  virtual const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition* p);
+  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+                                           const G4ParticleDefinition*);
 
   virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
 

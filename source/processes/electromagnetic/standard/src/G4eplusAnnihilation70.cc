@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation70.cc,v 1.1 2004-08-11 14:20:55 vnivanch Exp $
+// $Id: G4eplusAnnihilation70.cc,v 1.2 2004-11-10 08:53:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 02.08.2004
 //
 // Modifications:
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 
 //
@@ -53,10 +54,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eplusAnnihilation70::G4eplusAnnihilation70(const G4String& name)
-  : G4VEmProcess(name)
-{
-  InitialiseProcess();
-}
+  : G4VEmProcess(name), isInitialised(false)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -65,27 +64,21 @@ G4eplusAnnihilation70::~G4eplusAnnihilation70()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eplusAnnihilation70::InitialiseProcess()
+void G4eplusAnnihilation70::InitialiseProcess(const G4ParticleDefinition*)
 {
-  SetSecondaryParticle(G4Gamma::Gamma());
-  SetParticle(G4Positron::Positron());
-  G4double emin = 0.1*keV;
-  G4double emax = 100.*TeV;
-  SetLambdaBinning(120);
-  SetMinKinEnergy(emin);
-  SetMaxKinEnergy(emax);
-  G4VEmModel* em = new G4eeToTwoGammaModel();
-  em->SetLowEnergyLimit(emin);
-  em->SetHighEnergyLimit(emax);
-  AddEmModel(1, em);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-const G4ParticleDefinition* G4eplusAnnihilation70::DefineBaseParticle(
-                      const G4ParticleDefinition*)
-{
-  return 0;
+  if(!isInitialised) {
+    isInitialised = true;
+    SetSecondaryParticle(G4Gamma::Gamma());
+    G4double emin = 0.1*keV;
+    G4double emax = 100.*TeV;
+    SetLambdaBinning(120);
+    SetMinKinEnergy(emin);
+    SetMaxKinEnergy(emax);
+    G4VEmModel* em = new G4eeToTwoGammaModel();
+    em->SetLowEnergyLimit(emin);
+    em->SetHighEnergyLimit(emax);
+    AddEmModel(1, em);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

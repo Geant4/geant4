@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc,v 1.43 2004-08-25 17:03:59 vnivanch Exp $
+// $Id: G4MuPairProduction.cc,v 1.44 2004-11-10 08:49:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,6 +59,7 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 // 17-08-04 Utilise mu+ tables for mu- (V.Ivanchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -83,7 +84,10 @@ G4MuPairProduction::G4MuPairProduction(const G4String& name)
     subCutoff(false),
     isInitialised(false)
 {
-  InitialiseProcess();
+  SetDEDXBinning(120);
+  SetLambdaBinning(120);
+  SetMinKinEnergy(0.1*keV);
+  SetMaxKinEnergy(100.0*TeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -93,33 +97,23 @@ G4MuPairProduction::~G4MuPairProduction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuPairProduction::InitialiseProcess()
+void G4MuPairProduction::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
+                                                     const G4ParticleDefinition*)
 {
-  isInitialised = true;
+  if (!isInitialised) {
+    isInitialised = true;
 
-  SetSecondaryParticle(G4Positron::Positron());
+    theParticle = part;
+    SetSecondaryParticle(G4Positron::Positron());
+    SetIonisation(false);
 
-  SetDEDXBinning(120);
-  SetLambdaBinning(120);
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*TeV);
-
-  G4MuPairProductionModel* em = new G4MuPairProductionModel();
-  em->SetLowestKineticEnergy(lowestKinEnergy);
-  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-  em->SetLowEnergyLimit(0.1*keV);
-  em->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(1, em, fm);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-const G4ParticleDefinition* G4MuPairProduction::DefineBaseParticle(
-                      const G4ParticleDefinition* p)
-{
-  if (!theParticle)   theParticle = p;
-  if (!isInitialised) InitialiseProcess();
-  return theBaseParticle;
+    G4MuPairProductionModel* em = new G4MuPairProductionModel();
+    em->SetLowestKineticEnergy(lowestKinEnergy);
+    G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
+    em->SetLowEnergyLimit(0.1*keV);
+    em->SetHighEnergyLimit(100.0*TeV);
+    AddEmModel(1, em, fm);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.24 2004-10-25 09:32:52 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.25 2004-11-10 08:54:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,6 +48,7 @@
 // 25-05-04 add protection against case when range is less than steplimit (V.Ivanchenko)
 // 30-06-04 make destructor virtual (V.Ivanchenko)
 // 27-08-04 Add InitialiseForRun method (V.Ivanchneko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 
 // -------------------------------------------------------------------
 //
@@ -86,6 +87,9 @@ public:
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
     // True for all charged particles
 
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+  // Initialise for build of tables
+  
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
     // Build physics table during initialisation
 
@@ -118,15 +122,15 @@ public:
   G4double MaxKinEnergy() const;
     // Print out of the class parameters
 
-  G4bool StorePhysicsTable(G4ParticleDefinition*,
-                     const G4String& directory,
-                           G4bool ascii = false);
+  G4bool StorePhysicsTable(const G4ParticleDefinition*,
+                           const G4String& directory,
+                                 G4bool ascii = false);
     // Store PhysicsTable in a file.
     // Return false in case of failure at I/O
 
-  G4bool RetrievePhysicsTable(G4ParticleDefinition*,
-                        const G4String& directory,
-                              G4bool ascii);
+  G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
+                              const G4String& directory,
+                                    G4bool ascii);
     // Retrieve Physics from a file.
     // (return true if the Physics Table can be build by using file)
     // (return false if the process has no functionality or in case of failure)
@@ -159,11 +163,13 @@ public:
 
   G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idxRegion) const;
 
+  // Define particle definition
   const G4ParticleDefinition* Particle() const;
+  void SetParticle(const G4ParticleDefinition*);
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition&) = 0;
+  virtual void InitialiseProcess(const G4ParticleDefinition*) = 0;
 
   G4double GetMeanFreePath(const G4Track& track,
                                  G4double,
@@ -194,8 +200,6 @@ private:
   void DefineMaterial(const G4MaterialCutsCouple* couple);
   // define current material
 
-  void InitialiseForRun(const G4ParticleDefinition*);
-
   // hide  assignment operator
 
   G4VMultipleScattering(G4VMultipleScattering &);
@@ -214,6 +218,7 @@ private:
   G4PhysicsTable*             theLambdaTable;
 
   // cash
+  const G4ParticleDefinition* firstParticle;
   const G4ParticleDefinition* currentParticle;
   const G4MaterialCutsCouple* currentCouple;
   size_t                      currentMaterialIndex;

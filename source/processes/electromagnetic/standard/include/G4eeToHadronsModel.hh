@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.hh,v 1.2 2004-10-25 13:20:22 vnivanch Exp $
+// $Id: G4eeToHadronsModel.hh,v 1.3 2004-11-10 08:53:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,7 +51,6 @@
 
 class G4PhysicsVector;
 class G4Vee2hadrons;
-//class G4DynamicParticle;
 
 class G4eeToHadronsModel : public G4VEmModel
 {

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.19 2004-10-25 13:34:48 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.20 2004-11-10 08:54:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,10 +47,11 @@
 // 16-06-03: ShortLived are not applicable any more (V.Ivanchenko)
 // 17-08-04 name of data member facxsi changed to factail together
 //          with the corresponding set function (L.Urban)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.19 2004-10-25 13:34:48 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.20 2004-11-10 08:54:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -83,9 +84,6 @@ public:    // with description
              {return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());};
      // returns true for charged particles, false otherwise
 
-  void InitialiseProcess(const G4ParticleDefinition&);
-     // This function initialise models
-
   G4double TruePathLengthLimit(const G4Track&  track,
                                       G4double& lambda,
                                       G4double  currentMinimalStep);
@@ -109,6 +107,11 @@ public:    // with description
   void SetNuclCorrPar(G4double val)            {NuclCorrPar = val;};
   void SetFactPar(G4double val)                {FactPar = val;};
      // corrs to transport cross section for high energy
+
+protected:
+
+  void InitialiseProcess(const G4ParticleDefinition*);
+     // This function initialise models
 
 private:
 

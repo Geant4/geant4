@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.51 2004-05-27 17:23:02 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.52 2004-11-10 08:53:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,6 +67,7 @@
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 27-05-04 Set integral to be a default regime (V.Ivanchenko) 
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -108,9 +109,17 @@ G4hIonisation::~G4hIonisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4hIonisation::InitialiseProcess()
+void G4hIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
+                                                const G4ParticleDefinition* bpart)
 {
   if(isInitialised) return;
+
+  theParticle = part;
+
+  if(part == bpart || part == G4Proton::Proton()) theBaseParticle = 0;
+  else if(bpart == 0) theBaseParticle = G4Proton::Proton();
+  else                theBaseParticle = bpart;
+
   SetSecondaryParticle(G4Electron::Electron());
   mass  = theParticle->GetPDGMass();
   ratio = electron_mass_c2/mass;
@@ -131,18 +140,6 @@ void G4hIonisation::InitialiseProcess()
   SetStepLimits(0.2, 1.0*mm);
 
   isInitialised = true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-const G4ParticleDefinition* G4hIonisation::DefineBaseParticle(
-                      const G4ParticleDefinition* p)
-{
-  if(!theParticle) theParticle = p;
-  if(p != BaseParticle() && p != G4Proton::Proton()) theBaseParticle = G4Proton::Proton();
-  if(!isInitialised) InitialiseProcess();
-
-  return theBaseParticle;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

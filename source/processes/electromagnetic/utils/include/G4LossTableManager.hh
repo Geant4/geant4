@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.25 2004-08-06 11:30:59 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.26 2004-11-10 08:54:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,6 +49,7 @@
 // 17-10-03 Add SetParameters method (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 14-01-04 Activate precise range calculation (V.Ivanchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -130,11 +131,13 @@ public:
 
   void DeRegister(G4VEmProcess* p);
 
+  void EnergyLossProcessIsInitialised(const G4ParticleDefinition* aParticle, G4VEnergyLossProcess* p);
+  
   void RegisterIon(const G4ParticleDefinition* aParticle, G4VEnergyLossProcess* p);
 
-  void BuildPhysicsTable(const G4ParticleDefinition* aParticle);
+  void RegisterExtraParticle(const G4ParticleDefinition* aParticle, G4VEnergyLossProcess* p);
 
-  void RetrievePhysicsTables(const G4ParticleDefinition* aParticle, G4VEnergyLossProcess* em);
+  void BuildPhysicsTable(const G4ParticleDefinition* aParticle, G4VEnergyLossProcess* p);
 
   void SetLossFluctuations(G4bool val);
 
@@ -168,7 +171,7 @@ public:
 
   G4EnergyLossMessenger* GetMessenger();
 
-  G4bool IsRecalcNeeded(const G4ParticleDefinition* aParticle);
+  G4bool BuildPreciseRange() const;
 
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
 
@@ -180,14 +183,14 @@ private:
 
   G4LossTableManager();
 
-  void Initialise();
-
   G4VEnergyLossProcess* BuildTables(const G4ParticleDefinition* aParticle);
+
+  void CopyTables(const G4ParticleDefinition* aParticle, G4VEnergyLossProcess*);
 
   void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle);
 
   void SetParameters(G4VEnergyLossProcess*);
-  
+
   void CopyDEDXTables();
 
 private:
@@ -216,7 +219,6 @@ private:
 
   G4bool all_tables_are_built;
   G4bool first_entry;
-  G4bool electron_table_are_built;
   G4bool lossFluctuationFlag;
   G4bool subCutoffFlag;
   G4bool rndmStepFlag;
@@ -236,7 +238,7 @@ private:
   G4double maxKinEnergy;
   G4double maxKinEnergyForMuons;
 
-  G4VEnergyLossProcess*       eIonisation;
+  //G4VEnergyLossProcess*       eIonisation;
   G4LossTableBuilder*         tableBuilder;
   G4EnergyLossMessenger*      theMessenger;
   const G4ParticleDefinition* firstParticle;

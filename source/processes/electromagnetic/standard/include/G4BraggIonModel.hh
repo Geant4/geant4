@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.hh,v 1.1 2004-10-14 12:13:44 vnivanch Exp $
+// $Id: G4BraggIonModel.hh,v 1.2 2004-11-10 08:53:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 13.10.2004
 //
 // Modifications:
+// 09-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -56,7 +57,7 @@ public:
 
   G4BraggIonModel(const G4ParticleDefinition* p = 0, const G4String& nam = "BraggIon");
 
-  ~G4BraggIonModel();
+  virtual ~G4BraggIonModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.hh,v 1.2 2004-10-25 13:20:22 vnivanch Exp $
+// $Id: G4eeToHadrons.hh,v 1.3 2004-11-10 08:53:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 12.08.2004
 //
 // Modifications:
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -66,8 +67,6 @@ public:
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  virtual void BuildPhysicsTable(const G4ParticleDefinition& part);
-
   virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
@@ -76,7 +75,7 @@ public:
   G4double CrossSection(G4double kineticEnergy, const G4MaterialCutsCouple* couple);
   // It returns the cross section of the process for energy/ material
 
-  virtual G4double RecalculateLambda(G4double kinEnergy, 
+  virtual G4double RecalculateLambda(G4double kinEnergy,
                                const G4MaterialCutsCouple* couple);
 
   virtual void PrintInfoDefinition();
@@ -89,6 +88,8 @@ public:
 
 protected:
 
+  virtual void InitialiseProcess(const G4ParticleDefinition*);
+
   G4double GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*);
 
   virtual void ResetNumberOfInteractionLengthLeft();
@@ -96,8 +97,6 @@ protected:
   virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp);
 
 private:
-
-  void InitialiseProcess();
 
   G4double ComputeMeanFreePath(G4double kineticEnergy,
                          const G4MaterialCutsCouple* couple);

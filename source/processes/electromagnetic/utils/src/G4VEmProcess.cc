@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.13 2004-10-25 09:32:52 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.14 2004-11-10 08:55:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // Modifications:
 // 30-06-04 make it to be pure discrete process (V.Ivanchenko)
 // 30-09-08 optimise integral option (V.Ivanchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -64,6 +65,7 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include "G4PhysicsTableHelper.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -80,7 +82,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   integral(false),
   meanFreePath(true),
   aboveCSmax(true),
-  buildTable(true)
+  buildLambdaTable(true)
 {
 
   minKinEnergy    = 0.1*keV;
@@ -103,42 +105,43 @@ G4VEmProcess::~G4VEmProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEmProcess::InitialiseEmProcess()
+void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
-  Clear();
-  theCutsGamma =
+  if(!particle) particle = &part;
+
+  if(particle == &part) {
+    Clear();
+    theCutsGamma =
         modelManager->Initialise(particle,secondaryParticle,2.,verboseLevel);
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
-  theCutsGamma    = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
-  theCutsElectron = theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut);
-  theCutsPositron = theCoupleTable->GetEnergyCutsVector(idxG4PositronCut);
+    const G4ProductionCutsTable* theCoupleTable=
+          G4ProductionCutsTable::GetProductionCutsTable();
+    theCutsGamma    = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
+    theCutsElectron = theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut);
+    theCutsPositron = theCoupleTable->GetEnergyCutsVector(idxG4PositronCut);
+    if(buildLambdaTable)
+      theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEmProcess::Clear()
 {
-  if(theLambdaTable) theLambdaTable->clearAndDestroy();
   if(theEnergyOfCrossSectionMax) delete [] theEnergyOfCrossSectionMax;
   if(theCrossSectionMax) delete [] theCrossSectionMax;
-  theLambdaTable = 0;
   theEnergyOfCrossSectionMax = 0;
   theCrossSectionMax = 0;
   modelManager->Clear();
+  currentCouple = 0;
+  preStepLambda = 0.0;
+  mfpKinEnergy  = DBL_MAX;
+  preStepMFP    = DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  currentCouple = 0;
-  preStepLambda = 0.0;
-  mfpKinEnergy  = DBL_MAX;
-  preStepMFP    = DBL_MAX;
-
-  if( !particle ) particle = &part;
-
   if(0 < verboseLevel) {
     G4cout << "G4VEmProcess::BuildPhysicsTable() for "
            << GetProcessName()
@@ -146,26 +149,13 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
            << G4endl;
   }
 
-  G4bool cutsWasModified = false;
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
-  for (size_t j=0; j<numOfCouples; j++){
-    if (theCoupleTable->GetMaterialCutsCouple(j)->IsRecalcNeeded()) {
-      cutsWasModified = true;
-      break;
-    }
-  }
-  if( !cutsWasModified ) return;
-
-  InitialiseEmProcess();
-  if(buildTable) {
-    theLambdaTable = BuildLambdaTable();
+  if(buildLambdaTable) {
+    BuildLambdaTable();
     FindLambdaMax();
   }
-  PrintInfoDefinition();
+  if(-1 < verboseLevel) PrintInfoDefinition();
 
-  if(-1 < verboseLevel) {
+  if(0 < verboseLevel) {
     G4cout << "G4VEmProcess::BuildPhysicsTable() done for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
@@ -175,9 +165,8 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsTable* G4VEmProcess::BuildLambdaTable()
+void G4VEmProcess::BuildLambdaTable()
 {
-
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::BuildLambdaTable() for process "
            << GetProcessName() << " and particle "
@@ -190,17 +179,16 @@ G4PhysicsTable* G4VEmProcess::BuildLambdaTable()
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
-  G4PhysicsTable* theTable = new G4PhysicsTable(numOfCouples);
-
   for(size_t i=0; i<numOfCouples; i++) {
 
-    // create physics vector and fill it
-    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-    G4PhysicsVector* aVector = LambdaPhysicsVector(couple);
-    modelManager->FillLambdaVector(aVector, couple);
+    if (theLambdaTable->GetFlag(i)) {
 
-    // Insert vector for this material into the table
-    theTable->insert(aVector) ;
+      // create physics vector and fill it
+      const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
+      G4PhysicsVector* aVector = LambdaPhysicsVector(couple);
+      modelManager->FillLambdaVector(aVector, couple);
+      G4PhysicsTableHelper::SetPhysicsVector(theLambdaTable, i, aVector);
+    }
   }
 
   if(0 < verboseLevel) {
@@ -208,11 +196,9 @@ G4PhysicsTable* G4VEmProcess::BuildLambdaTable()
            << particle->GetParticleName()
            << G4endl;
     if(2 < verboseLevel) {
-      G4cout << *theTable << G4endl;
+      G4cout << *theLambdaTable << G4endl;
     }
   }
-
-  return theTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -261,7 +247,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
     G4double lx = GetLambda(finalT, currentCouple);
     if(preStepLambda<lx && 0 < verboseLevel) {
       G4cout << "WARING: for " << particle->GetParticleName() 
-             << " and " << GetProcessName() 
+             << " and " << GetProcessName()
              << " E(MeV)= " << finalT/MeV
              << " preLambda= " << preStepLambda << " < " << lx << " (postLambda) "
 	     << G4endl;  
@@ -270,7 +256,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
     if(preStepLambda*G4UniformRand() > lx)
       return G4VDiscreteProcess::PostStepDoIt(track,step);
   }
- 
+
   G4VEmModel* currentModel = SelectModel(finalT);
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
 
@@ -379,42 +365,37 @@ G4double G4VEmProcess::MeanFreePath(const G4Track& track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4VEmProcess::StorePhysicsTable(G4ParticleDefinition* part,
-			 	     const G4String& directory,
-				           G4bool ascii)
+G4bool G4VEmProcess::StorePhysicsTable(const G4ParticleDefinition* part,
+			 	       const G4String& directory,
+				             G4bool ascii)
 {
   G4bool yes = true;
 
-  if ( theLambdaTable ) {
+  if ( theLambdaTable && part == particle) {
     const G4String name = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
     yes = theLambdaTable->StorePhysicsTable(name,ascii);
-  }
 
-  if ( yes ) {
-    G4cout << "Physics tables are stored for " << particle->GetParticleName()
-           << " and process " << GetProcessName()
-	   << " in the directory <" << directory
-	   << "> " << G4endl;
-  } else {
-    G4cout << "Fail to store Physics Tables for " << particle->GetParticleName()
-           << " and process " << GetProcessName()
-	   << " in the directory <" << directory
-	   << "> " << G4endl;
+    if ( yes ) {
+      G4cout << "Physics tables are stored for " << particle->GetParticleName()
+             << " and process " << GetProcessName()
+	     << " in the directory <" << directory
+	     << "> " << G4endl;
+    } else {
+      G4cout << "Fail to store Physics Tables for " << particle->GetParticleName()
+             << " and process " << GetProcessName()
+	     << " in the directory <" << directory
+	     << "> " << G4endl;
+    }
   }
   return yes;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4VEmProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
-			  	        const G4String& directory,
-			  	              G4bool ascii)
+G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
+			  	          const G4String& directory,
+			  	                G4bool ascii)
 {
-  currentCouple = 0;
-  preStepLambda = 0.0;
-  mfpKinEnergy  = DBL_MAX;
-  preStepMFP    = DBL_MAX;
-
   if(0 < verboseLevel) {
     G4cout << "G4VEmProcess::RetrievePhysicsTable() for "
            << part->GetParticleName() << " and process "
@@ -422,35 +403,26 @@ G4bool G4VEmProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
   }
   G4bool yes = true;
 
+  if(!buildLambdaTable || particle != part) return yes;
+
   const G4String particleName = part->GetParticleName();
-  if( !particle ) particle = part;
-
-  InitialiseEmProcess();
-
   G4String filename;
-  const G4ProductionCutsTable* theCoupleTable=
-           G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
 
   filename = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
-  theLambdaTable = new G4PhysicsTable(numOfCouples);
-  yes = theLambdaTable->RetrievePhysicsTable(filename,ascii);
+  yes = G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTable,filename,ascii);
   if ( yes ) {
-      if (-1 < verboseLevel) {
-        G4cout << "Lambda table for " << particleName << " is retrieved from <"
-               << filename << ">"
-               << G4endl;
-      }
-      FindLambdaMax();
-      PrintInfoDefinition();
+    FindLambdaMax();
+    if (-1 < verboseLevel) {
+      G4cout << "Lambda table for " << particleName << " is Retrieved from <"
+             << filename << ">"
+             << G4endl;
+    }
   } else {
-      theLambdaTable->clearAndDestroy();
-      theLambdaTable = 0;
-      if (-1 < verboseLevel) {
-        G4cout << "Lambda table for " << particleName << " in file <"
-               << filename << "> is not exist"
-               << G4endl;
-      }
+    if (-1 < verboseLevel) {
+      G4cout << "Lambda table for " << particleName << " in file <"
+             << filename << "> is not exist"
+             << G4endl;
+    }
   }
 
   return yes;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.14 2004-09-16 09:08:06 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.15 2004-11-10 08:54:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,6 +40,7 @@
 // 11-08-04 add protected methods to access cuts (V.Ivanchenko)
 // 09-09-04 Bug fix for the integral mode with 2 peaks (V.Ivanchneko)
 // 16-09-04 Add flag for LambdaTable and method RecalculateLambda (V.Ivanchneko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -89,13 +90,14 @@ public:
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
     // True for all charged particles
 
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+  // Initialise for build of tables
+
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
   // Build physics table during initialisation
 
   virtual void PrintInfoDefinition();
   // Print out of the class parameters
-
-  G4PhysicsTable* BuildLambdaTable();
 
   void SetLambdaBinning(G4int nbins);
   G4int LambdaBinning() const;
@@ -109,15 +111,15 @@ public:
   G4double MaxKinEnergy() const;
   // Max kinetic energy for tables
 
-  G4bool StorePhysicsTable(G4ParticleDefinition*,
-                     const G4String& directory,
-                           G4bool ascii = false);
+  G4bool StorePhysicsTable(const G4ParticleDefinition*,
+                           const G4String& directory,
+                                 G4bool ascii = false);
     // Store PhysicsTable in a file.
     // Return false in case of failure at I/O
 
-  G4bool RetrievePhysicsTable(G4ParticleDefinition*,
-                        const G4String& directory,
-                              G4bool ascii);
+  G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
+                              const G4String& directory,
+                                    G4bool ascii);
     // Retrieve Physics from a file.
     // (return true if the Physics Table can be build by using file)
     // (return false if the process has no functionality or in case of failure)
@@ -130,7 +132,7 @@ public:
   void UpdateEmModel(const G4String&, G4double, G4double);
   // Define new energy range for the model identified by the name
 
-  virtual G4double RecalculateLambda(G4double kinEnergy, 
+  virtual G4double RecalculateLambda(G4double kinEnergy,
                                const G4MaterialCutsCouple* couple);
   G4double GetLambda(G4double& kinEnergy, const G4MaterialCutsCouple* couple);
   // It returns the Lambda of the process
@@ -158,7 +160,10 @@ public:
 
 protected:
 
+  virtual void InitialiseProcess(const G4ParticleDefinition*) = 0;
+  
   void SetParticle(const G4ParticleDefinition* p);
+  
   void SetSecondaryParticle(const G4ParticleDefinition* p);
 
   virtual G4double GetMeanFreePath(const G4Track& track,
@@ -180,8 +185,6 @@ protected:
 
 private:
 
-  void InitialiseEmProcess();
-
   void Clear();
 
   void DefineMaterial(const G4MaterialCutsCouple* couple);
@@ -189,6 +192,8 @@ private:
   G4double GetLambda(G4double kinEnergy);
 
   void ComputeLambda(G4double kinEnergy);
+
+  void BuildLambdaTable();
 
   void FindLambdaMax();
 
@@ -238,7 +243,7 @@ private:
   G4bool                       integral;
   G4bool                       meanFreePath;
   G4bool                       aboveCSmax;
-  G4bool                       buildTable;
+  G4bool                       buildLambdaTable;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -383,7 +388,7 @@ inline G4double G4VEmProcess::GetElectronEnergyCut()
 
 inline void G4VEmProcess::SetBuildTableFlag(G4bool val)
 {
-  buildTable = val;
+  buildLambdaTable = val;
 }
 
 

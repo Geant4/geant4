@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.28 2004-10-25 16:56:54 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.29 2004-11-10 08:53:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,7 +42,8 @@
 // 18-04-03 Use IonFluctuations (V.Ivanchenko)
 // 03-08-03 Add effective charge (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
-// 27-05-04 Set integral to be a default regime (V.Ivanchenko) 
+// 27-05-04 Set integral to be a default regime (V.Ivanchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -53,7 +54,7 @@
 #include "G4ionIonisation.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
-#include "G4AntiProton.hh"
+#include "G4GenericIon.hh"
 #include "G4BraggModel.hh"
 #include "G4BraggIonModel.hh"
 #include "G4BetheBlochModel.hh"
@@ -84,14 +85,21 @@ G4ionIonisation::~G4ionIonisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ionIonisation::InitialiseProcess()
+void G4ionIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
+                                                  const G4ParticleDefinition* bpart)
 {
+  if(isInitialised) return;
+
+  theParticle = part;
+
+  if(part == bpart || part == G4GenericIon::GenericIon()) theBaseParticle = 0;
+  else if(bpart == 0) theBaseParticle = G4GenericIon::GenericIon();
+  else                theBaseParticle = bpart;
+
   SetSecondaryParticle(G4Electron::Electron());
 
   flucModel = new G4IonFluctuations();
-  //flucModel = new G4UniversalFluctuation();
 
-//  G4VEmModel* em = new G4BraggModel();
   G4VEmModel* em = new G4BraggIonModel();
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(2.0*MeV);
@@ -105,18 +113,6 @@ void G4ionIonisation::InitialiseProcess()
   SetStepLimits(0.1, 0.1*mm);
 
   isInitialised = true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-const G4ParticleDefinition* G4ionIonisation::DefineBaseParticle(
-                      const G4ParticleDefinition* p)
-{
-  if(!theParticle) theParticle = p;
-  if(theParticle != G4Proton::Proton()) theBaseParticle = G4Proton::Proton();
-  if(!isInitialised) InitialiseProcess();
-
-  return theBaseParticle;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

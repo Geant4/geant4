@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAI.hh,v 1.6 2004-05-10 15:54:31 grichine Exp $
+// $Id: G4InitXscPAI.hh,v 1.7 2004-11-10 08:53:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,18 +42,17 @@
 
 class G4MaterialCutsCouple;
 class G4SandiaTable;
-// class G4OrderedTable;
 
 class G4InitXscPAI
 {
 public:
 	  // Constructors
   G4InitXscPAI( const G4MaterialCutsCouple* matCC);
-	  
-	  
-	  
-  ~G4InitXscPAI() ;
-	  
+
+
+
+  virtual ~G4InitXscPAI() ;
+
   // Methods
   // General control functions
 
@@ -63,7 +62,7 @@ public:
 
 
   // Physical methods
-          
+
 
   G4double RutherfordIntegral( G4int intervalNumber,
 	                               G4double limitLow,
@@ -99,16 +98,16 @@ public:
   G4double GetStepEnergyLoss( G4double step ) ;
   G4double GetStepCerenkovLoss( G4double step ) ;
   G4double GetStepPlasmonLoss( G4double step ) ;
-	 
+
   // Inline access functions
 
-	  
+
   G4int GetIntervalNumber() const { return fIntervalNumber ; }
   G4int GetBinPAI() const { return fPAIbin ; }
 
   G4double GetNormalizationCof() const { return fNormalizationCof ; }
-          
-  G4double GetMatSandiaMatrix(G4int i, G4int j) const 
+
+  G4double GetMatSandiaMatrix(G4int i, G4int j) const
           { return (*(*fMatSandiaMatrix)[i])[j]; }
 
   G4PhysicsLogVector* GetPAIxscVector() const { return fPAIxscVector;}
@@ -123,7 +122,7 @@ protected :
 private :
 
   // Local class constants
- 
+
   static const G4double fDelta ; // energy shift from interval border = 0.001
   static const G4int fPAIbin;
   static const G4double fSolidDensity; // ~the border between gases and solids

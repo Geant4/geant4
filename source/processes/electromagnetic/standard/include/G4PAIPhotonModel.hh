@@ -64,7 +64,7 @@ public:
 
   G4PAIPhotonModel(const G4ParticleDefinition* p = 0, const G4String& nam = "PAI");
 
-  ~G4PAIPhotonModel();
+  virtual ~G4PAIPhotonModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 

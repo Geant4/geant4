@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh,v 1.13 2004-08-13 14:47:51 maire Exp $
+// $Id: G4GammaConversion.hh,v 1.14 2004-11-10 08:53:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4GammaConversion physics process -------------------------
@@ -42,7 +42,8 @@
 // 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
 // 13-08-04, suppress .icc file
 //           public ComputeCrossSectionPerAtom() and ComputeMeanFreePath() (mma)
-   
+// 09-11-04, Remove Retrieve tables (V.Ivantchenko)
+
 // -----------------------------------------------------------------------------
 
 // class description
@@ -83,31 +84,31 @@ class G4GammaConversion : public G4VDiscreteProcess
 
      G4bool IsApplicable(const G4ParticleDefinition&);
        // true for Gamma only.
-          
+
      void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
-       // Allows to define the binning of the PhysicsTables, 
+       // Allows to define the binning of the PhysicsTables,
        // before to build them.
-     
+
      void BuildPhysicsTable(const G4ParticleDefinition&);
        // It builds the total CrossSectionPerAtom table, for Gamma,
        // and for every element contained in the elementTable.
        // It builds the MeanFreePath table, for Gamma,
-       // and for every material contained in the materialTable.       
-       
-     G4bool StorePhysicsTable(G4ParticleDefinition* ,
+       // and for every material contained in the materialTable.
+
+     G4bool StorePhysicsTable(const G4ParticleDefinition* ,
 			      const G4String& directory, G4bool);
        // store CrossSection and MeanFreePath tables into an external file
        // specified by 'directory' (must exist before invokation)
 
-     G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
-				 const G4String& directory, G4bool);
+       //G4bool RetrievePhysicsTable(const G4ParticleDefinition* ,
+       //				 const G4String& directory, G4bool);
        // retrieve CrossSection and MeanFreePath tables from an external file
-       // specified by 'directory' 
-       				         	                          
+       // specified by 'directory'
+
      void PrintInfoDefinition();
        // Print few lines of informations about the process: validity range,
        // origine ..etc..
-       // Invoked by BuildThePhysicsTable(). 
+       // Invoked by BuildThePhysicsTable().
 
      G4double GetMeanFreePath(const G4Track& aTrack,
                               G4double previousStepSize,

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering52.cc,v 1.2 2004-10-25 09:32:52 vnivanch Exp $
+// $Id: G4MultipleScattering52.cc,v 1.3 2004-11-10 08:55:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -68,6 +68,7 @@
 // 24-05-03 bug in nuclear size corr.computation fixed thanks to Vladimir(L.Urban)
 // 30-05-03 misprint in PostStepDoIt corrected(L.Urban)
 // 08-08-03 This class is frozen at the release 5.2 (V.Ivanchenko)
+// 08-11-04 Remove Store/Retrieve tables (V.Ivantchenko)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -732,7 +733,7 @@ G4VParticleChange* G4MultipleScattering52::PostStepDoIt(
            a = 0.5/(1.-cos(theta0)) ;
          else
            a = 1./(theta0*theta0) ;
-       } 
+       }
        else
        {
          w = log(tau/tau0) ;
@@ -760,7 +761,7 @@ G4VParticleChange* G4MultipleScattering52::PostStepDoIt(
            ea = 0. ;
          eaa = 1.-ea ; 
          xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
-                          
+
          c = 2. ;
          b1 = b+1. ;
          bx = b1 ;
@@ -844,7 +845,7 @@ G4VParticleChange* G4MultipleScattering52::PostStepDoIt(
                     << truestep << " mm" << G4endl ;
              G4cout << "p=" << prob << "  q=" << qprob << " -----> " 
                     << "p=" << (xmeanth-xmean2)/(xmean1-xmean2)
-                    << "  q=" << 1. << G4endl ;  
+                    << "  q=" << 1. << G4endl ;
            }        
          } 
          qprob = 1. ;
@@ -927,87 +928,6 @@ G4VParticleChange* G4MultipleScattering52::PostStepDoIt(
   }
 
   return &fParticleChange;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
- G4bool G4MultipleScattering52::StorePhysicsTable(G4ParticleDefinition* particle,
-				              const G4String& directory, 
-				              G4bool          ascii)
-{
-  G4String filename;
-  // store mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  if (!theTransportMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
-      G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  G4cout << GetProcessName() << " for " << particle->GetParticleName()
-         << ": Success to store the PhysicsTables in "  
-         << directory << G4endl;
-  return true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool G4MultipleScattering52::RetrievePhysicsTable(
-                                                 G4ParticleDefinition* particle,
-					         const G4String& directory, 
-				                 G4bool          ascii)
-{
-  // set values of some data members
-  G4String name = particle->GetParticleName();
-  if(name == "e-" || name == "e+")
-    {
-       // parameters for e+/e-
-       alfa1 = 1.45 ;
-       alfa2 = 0.60 ;
-       alfa3 = 0.30 ;
-       b = 1. ;
-       xsi = facxsi*2.22 ;
-       c0 = 2.30 ;
-    }
-    else
-    {
-       // parameters for heavy particles
-       alfa1 = 1.10 ;
-       alfa2 = 0.14 ;
-       alfa3 = 0.07 ;
-       b = 1. ;
-       xsi = facxsi*2.70 ;
-       c0 = 1.40 ;
-    }
-
-  // ..............................
-  Tlow = particle->GetPDGMass();
-
-  // delete theTransportMeanFreePathTable
-  if (theTransportMeanFreePathTable != 0) {
-    theTransportMeanFreePathTable->clearAndDestroy();
-    delete theTransportMeanFreePathTable;
-  }
-
-  G4String filename;
-
-  // retreive mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  theTransportMeanFreePathTable =
-                       new G4PhysicsTable(G4Material::GetNumberOfMaterials());
-  if (!theTransportMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
-
-  G4cout << GetProcessName() << " for " << particle->GetParticleName()
-         << ": Success to retrieve the PhysicsTables from "
-         << directory << G4endl;
-
-  if (name == "e-" || name == "mu+" || name == "proton") PrintInfoDefinition();
-
-  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
