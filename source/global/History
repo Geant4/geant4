@@ -1,4 +1,4 @@
-$Id: History,v 1.110 2003-03-25 14:56:44 gcosmo Exp $
+$Id: History,v 1.111 2003-03-27 16:42:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 27, 2003  G.Cosmo (global-V05-00-03)
+- Fixed compilation problem on WIN32-VC platform for G4strstreambuf.
 
 March 25, 2003  G.Cosmo (global-V05-00-02)
 - Fixed trivial strict pedantic warnings in copy constructor for
