@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06DetectorConstruction.cc,v 1.12 2003-10-06 09:00:53 maire Exp $
+// $Id: ExN06DetectorConstruction.cc,v 1.13 2003-11-28 00:48:16 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -220,8 +220,9 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
   G4LogicalSkinSurface* AirSurface = 
 	  new G4LogicalSkinSurface("AirSurface", bubbleAir_log, OpAirSurface);
 
-if(AirSurface->GetLogicalVolume() == bubbleAir_log) G4cout << "Equal" << G4endl;
-   AirSurface->GetSurface(bubbleAir_log)->GetOpticalSurface()->DumpInfo();
+  if(AirSurface->GetLogicalVolume() == bubbleAir_log) G4cout << "Equal" << G4endl;
+  ((G4OpticalSurface*)
+  (AirSurface->GetSurface(bubbleAir_log)->GetSurfaceProperty()))->DumpInfo();
 
 //
 // Generate & Add Material Properties Table attached to the optical surfaces
