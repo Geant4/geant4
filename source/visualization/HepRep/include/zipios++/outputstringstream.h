@@ -14,6 +14,9 @@ typedef std::ostringstream OutputStringStream ;
 
 #else
 
+// MD added include
+#include <strstream>
+
 /** OutputStringStream is typedefed to ostringstream if sstream is
     part of the standard library (unless Zipios++ has been explicitly
     configured not to use it). If sstream is not present
