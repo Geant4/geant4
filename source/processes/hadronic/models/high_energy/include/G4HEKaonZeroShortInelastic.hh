@@ -1,3 +1,14 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4HEKaonZeroShortInelastic.hh,v 1.2 1999-06-16 04:15:46 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
 // G4 Gheisha High Energy model class -- header file
 // H. Fesefeldt, RWTH Aachen 23-October-1996
 // Last modified: 10-December-1996

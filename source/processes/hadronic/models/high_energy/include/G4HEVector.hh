@@ -1,3 +1,14 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4HEVector.hh,v 1.2 1999-06-16 04:23:31 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
 // G4 Gheisha friend class G4KinematicParticle  -- header file
 // J.L. Chuma, TRIUMF, 22-Feb-1996
 // last modified: H. Fesefeldt 18-November-1996
@@ -32,24 +43,7 @@ class G4HEVector
 
   public:
 
-  G4HEVector(const G4DynamicParticle * aParticle)
-  {
-     G4ThreeVector aMom = 1./GeV*aParticle->GetMomentum();
-     px               = aMom.x();
-     py               = aMom.y();
-     pz               = aMom.z();
-     energy           = aParticle->GetTotalEnergy()/GeV;
-     kineticEnergy    = aParticle->GetKineticEnergy()/GeV;
-     mass             = aParticle->GetMass()/GeV;
-     charge           = aParticle->GetDefinition()->GetPDGCharge()/eplus;
-     timeOfFlight     = 0.0;
-     side             = 0;
-     flag             = false;
-     code             = aParticle->GetDefinition()->GetPDGEncoding();
-     baryon           = aParticle->GetDefinition()->GetBaryonNumber();
-     particleName     = getParticleName(code, baryon);
-     particleType     = aParticle->GetDefinition()->GetParticleType();
-  }
+  G4HEVector(const G4DynamicParticle * aParticle);
   
   G4HEVector()
    {
@@ -85,29 +79,32 @@ class G4HEVector
      code          = p.code;
      particleName  = p.particleName;
      particleType  = p.particleType;
-     baryon        = 0;
+     baryon        = p.baryon;
    }
 
 
   G4HEVector & operator = ( const G4HEVector & p )
    {
-     px            = p.px;
-     py            = p.py;
-     pz            = p.pz;
-     energy        = p.energy;
-     kineticEnergy = p.kineticEnergy;
-     mass          = p.mass;
-     charge        = p.charge;
-     timeOfFlight  = p.timeOfFlight;
-     side          = p.side;
-     flag          = p.flag;
-     code          = p.code;
-     particleName  = p.particleName;
-     particleType  = p.particleType;
-     baryon        = p.baryon;
+     if ( this != &p ) {
+       px            = p.px;
+       py            = p.py;
+       pz            = p.pz;
+       energy        = p.energy;
+       kineticEnergy = p.kineticEnergy;
+       mass          = p.mass;
+       charge        = p.charge;
+       timeOfFlight  = p.timeOfFlight;
+       side          = p.side;
+       flag          = p.flag;
+       code          = p.code;
+       particleName  = p.particleName;
+       particleType  = p.particleType;
+       baryon        = p.baryon;
+     }
      return *this;
    }
-  ~G4HEVector(){ };
+
+   ~G4HEVector(){ };
 
    G4String getParticleName(G4int code, G4int baryon);
  
@@ -180,6 +177,7 @@ class G4HEVector
    void setZero();
 
    G4String getType();
+
    void Add( const G4HEVector & p1, const G4HEVector & p2 );
 
    void Sub( const G4HEVector & p1, const G4HEVector & p2 );
@@ -228,3 +226,5 @@ class G4HEVector
 };
 
 #endif
+
+
