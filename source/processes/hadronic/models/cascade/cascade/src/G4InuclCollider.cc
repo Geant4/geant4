@@ -8,7 +8,7 @@ typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
 	 
 G4InuclCollider::G4InuclCollider()
-  : verboseLevel(1) {
+  : verboseLevel(2) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4InuclCollider::G4InuclCollider" << G4endl;

@@ -17,6 +17,8 @@
 #include "G4Track.hh"
 #include "G4Nucleus.hh"
 #include "G4NucleiModel.hh"
+#include "G4LorentzRotation.hh"
+
 
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
@@ -34,7 +36,7 @@ G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* the
   return NULL;
 };
 
-#define debug_G4CascadeInterface
+// #define debug_G4CascadeInterface
 
 G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack, 
 						     G4Nucleus& theNucleus) {
@@ -71,11 +73,22 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   if (aTrack.GetDefinition() ==     G4Gamma::Gamma()     ) bulletType = photon;
 
   // Code momentum and energy.
+  G4double px,py,pz;
+  px=aTrack.GetDynamicParticle()->Get4Momentum().px() / GeV;
+  py=aTrack.GetDynamicParticle()->Get4Momentum().py() / GeV;
+  pz=aTrack.GetDynamicParticle()->Get4Momentum().pz() / GeV;
+  
+  G4LorentzVector projectileMomentum = aTrack.GetDynamicParticle()->Get4Momentum();
+  G4LorentzRotation toZ;
+  toZ.rotateZ(-projectileMomentum.phi());
+  toZ.rotateY(-projectileMomentum.theta());
+  G4LorentzRotation toLabFrame = toZ.inverse();
+
   G4std::vector<G4double> momentumBullet(4);
   momentumBullet[0] =0.;
-  momentumBullet[1] =aTrack.GetDynamicParticle()->Get4Momentum().px() / GeV;
-  momentumBullet[2] =aTrack.GetDynamicParticle()->Get4Momentum().py() / GeV;
-  momentumBullet[3] =aTrack.GetDynamicParticle()->Get4Momentum().pz() / GeV;
+  momentumBullet[1] =0;
+  momentumBullet[2] =0;
+  momentumBullet[3] =G4std::sqrt(px*px+py*py+pz*pz);
 
   G4InuclElementaryParticle *  bullet = new G4InuclElementaryParticle(momentumBullet, bulletType); 
 
@@ -252,6 +265,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
       default: cout << " ERROR: G4CascadeInterface::Propagate undefined particle type";
       }
 
+      cascadeParticle->Set4Momentum(cascadeParticle->Get4Momentum()*=toLabFrame);
       theResult.AddSecondary(cascadeParticle); 
     }
   }
@@ -289,6 +303,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 	sumBaryon -= A;
 	sumEnergy -= eKin / GeV;
 
+        aFragment->Set4Momentum(aFragment->Get4Momentum()*=toLabFrame);
 	theResult.AddSecondary(aFragment); 
       }
   }

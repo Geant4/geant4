@@ -5,7 +5,7 @@
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4CollisionOutput::G4CollisionOutput()
-  : verboseLevel(2) {
+  : verboseLevel(0) {
   
   if (verboseLevel > 3) {
     G4cout << " >>> G4CollisionOutput::G4CollisionOutput" << G4endl;
@@ -31,6 +31,11 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   
   G4std::vector<G4double> out_mom = getTotalOutputMomentum();
   G4std::vector<G4double> mon_non_cons(4);
+  if(verboseLevel > 2){
+    G4cout << " bullet momentum = " << ini_mom[0]<<", "<< ini_mom[1]<<", "<< ini_mom[2]<<", "<< ini_mom[3]<<G4endl;
+    G4cout << " target momentum = " << momt[0]<<", "<< momt[1]<<", "<< momt[2]<<", "<< momt[3]<<G4endl;
+    G4cout << " Fstate momentum = " << out_mom[0]<<", "<< out_mom[1]<<", "<< out_mom[2]<<", "<< out_mom[3]<<G4endl;
+  }
 
   for(i = 0; i < 4; i++) mon_non_cons[i] = ini_mom[i] - out_mom[i];
 
