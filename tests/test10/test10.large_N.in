@@ -7,4 +7,4 @@
 #/tracking/verbose 1
 
 /mydet/SelectDetector Cone
-/run/beamOn 20
+/run/beamOn 1000
