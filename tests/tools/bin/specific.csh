@@ -132,6 +132,8 @@ if ( `uname -n | grep sgmedia` != "" ) then
 endif
 
 if ( `uname -n | grep sun` != "" ) then
+  setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
+  setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   if ( $?G4STTNONISO ) then
     setenv G4SYSTEM SUN-CC
     setenv DEBOPT ${DEBOPT}_NONISO
@@ -152,8 +154,6 @@ if ( `uname -n | grep sun` != "" ) then
     # Persistency...
     unsetenv G4USE_HEPODBMS
   endif
-  setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
-  setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :

@@ -96,6 +96,8 @@ if [ `uname -n | grep suncmsb` ]; then
 fi
 
 if [ `uname -n | grep sungeant` ]; then
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   if [ $G4STTNONISO ]; then
     export G4SYSTEM=SUN-CC
     export DEBOPT=${DEBOPT}_NONISO
@@ -115,8 +117,6 @@ if [ `uname -n | grep sungeant` ]; then
     # No Persistency...
     unset G4USE_HEPODBMS
   fi
-  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
-  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
