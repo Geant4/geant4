@@ -55,7 +55,7 @@ help /vis/sceneHandler/create
 /vis/scene/notifyHandlers
 /vis/draw/axes     0 0 0 500
 /vis/draw/text     0 0 0 mm 50 -120 -200   exampleN03
-/vis/show/view
+/vis/viewer/update
 #
 # Test logical volume model...
 /vis/scene/create
@@ -64,7 +64,7 @@ help /vis/sceneHandler/create
 /vis/viewer/create
 /vis/camera/viewpoint 35 35
 /vis/scene/notifyHandlers
-/vis/show/view
+/vis/viewer/update
 #
 # for drawing the tracks
 # if too many tracks cause core dump =storeTrajectory 0
@@ -77,6 +77,6 @@ help /vis/sceneHandler/create
 /vis/scene/notifyHandlers
 /tracking/storeTrajectory 1
 /run/beamOn 1
-/vis/show/view
+/vis/viewer/update
 
 
