@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2001-02-01 15:23:43 urban Exp $
+$Id: History,v 1.10 2001-02-02 13:11:02 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-01 feb 01: L.Urban
+     
+01 feb 01: L.Urban (utils-V03-00-01)
 - bug fixed in the fluctuation code , in G4VEnergyLoss.cc
   This bug affected the width of the energy loss/energy deposit
   distribution in the case of small cut value, the distribution

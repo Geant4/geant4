@@ -5,11 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.17 2001-02-01 15:17:27 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.18 2001-02-02 13:14:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // --------------------------------------------------------------
+//
+//  bug fixed in fluct., L.Urban 01/02/01
 //  bug fixed in fluct., L.Urban 26/05/00
 //  bug fixed in fluct., L.Urban 22/11/00
 // 
