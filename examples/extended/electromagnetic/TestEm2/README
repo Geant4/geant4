@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2002-05-31 16:06:53 maire Exp $
+$Id: README,v 1.7 2002-10-28 17:59:38 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -128,3 +128,13 @@ $Id: README,v 1.6 2002-05-31 16:06:53 maire Exp $
 
  After this, you will have access to the 'aida-config' command which
  is used in the GNUmakefile.
+
+ 8- Modular Physics Lists
+ ------------------------
+
+ Physics Lists are subdivided on 5 following modules: 
+    1. "GeneralPhysics" - decays and transportation  
+    2. "Particles" - particle definitions
+    3. "HadronicElastic" (optional) - process of elestic scattering of hadrons
+    4. "StandardEM" (alternative) - standard EM physics
+    5. "ModelEM" (alternative) - standard EM physics using model approach 
