@@ -1,6 +1,14 @@
                  History file
                  ------------
 
+16-Nov-2004 - A.Ribon (statAccepTest-V06-02-05)
+- Introduce a beam energy threshold (currently at
+  10 GeV) below which no biasing are applied, and
+  even the default tracking cut (700 mu) is used.
+  Also added PbSci as another calorimeter type to be 
+  tested (LHCb ECAL is a PbSci calorimeter).
+
+
 10-Nov-2004 - A.Ribon (statAccepTest-V06-02-04)
 - Added biasing for the neutrons, and also two different
   level of biasing for gammas, electrons, and positrons.

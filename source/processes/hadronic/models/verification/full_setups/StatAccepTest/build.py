@@ -30,6 +30,12 @@ import string
 
 print '  ========== START build.py ========== '
 
+# Below a certain beam energy threshold (in GeV) biasing is not
+# applied and also the default range production cut (700 mu) is used. 
+energyThresholdInGeVNoBiasBelow = 10.0   #***LOOKHERE***
+
+print '  energy Threshold No Bias Below = ', energyThresholdInGeVNoBiasBelow, ' GeV'
+
 # -------------- Get input parameters and print them ------------
 REFERENCE    = sys.argv[1]
 PHYSICS      = sys.argv[2]
@@ -268,11 +274,25 @@ mainProgram.write( "#endif \n" )
 mainProgram.write( "  runManager->SetUserInitialization( new StatAccepTestDetectorConstruction ); \n" )
 mainProgram.write( "  runManager->SetUserAction( new StatAccepTestPrimaryGeneratorAction ); \n" )
 mainProgram.write( "  " + PHYSICS + "  *thePL = new " + PHYSICS + "; \n" )
-mainProgram.write( "  thePL->SetDefaultCutValue( 1.0*cm ); \n" ) #***LOOKHERE***
+
+# If the beam energy is below a given threshold (in GeV) then
+# the default production range cut (700 microns) is used.
+if ( float( EnergyValue.split()[0] ) < energyThresholdInGeVNoBiasBelow ) :
+    mainProgram.write( "  //thePL->SetDefaultCutValue( 1.0*cm ); \n" ) #***LOOKHERE***
+else :
+    mainProgram.write( "  thePL->SetDefaultCutValue( 1.0*cm ); \n" ) #***LOOKHERE***
+    
 mainProgram.write( "  runManager->SetUserInitialization( thePL ); \n" )
 mainProgram.write( "  runManager->SetUserAction( new StatAccepTestRunAction ); \n" )  
 mainProgram.write( "  runManager->SetUserAction( new StatAccepTestEventAction ); \n" )
-mainProgram.write( "  runManager->SetUserAction( new StatAccepTestStackingAction ); \n" )
+
+# If the beam energy is below a given threshold (in GeV) then
+# no biasing is used (i.e. the StackingAction is not used).
+if ( float( EnergyValue.split()[0] ) < energyThresholdInGeVNoBiasBelow ) :
+    mainProgram.write( "  //runManager->SetUserAction( new StatAccepTestStackingAction ); \n" )
+else :
+    mainProgram.write( "  runManager->SetUserAction( new StatAccepTestStackingAction ); \n" )
+
 mainProgram.write( "  runManager->Initialize(); \n" )
 mainProgram.write( "  G4UImanager* UI = G4UImanager::GetUIpointer(); \n" )   
 mainProgram.write( "  if ( argc==1 ) {   // Define UI session for interactive mode. \n" )

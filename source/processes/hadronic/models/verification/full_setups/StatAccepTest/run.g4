@@ -15,7 +15,7 @@
 #  3) Choice of the  * Calorimeter Type * :
 #       I) Absorber and Active materials (and whether it is
 #          an homogeneous calorimeter or a sampling one):
-#            Fe-Sci, Cu-Sci, Cu-LAr, Pb-LAr, W-LAr  (Sampling) 
+#            Fe-Sci, Cu-Sci, Pb-Sci, Cu-LAr, Pb-LAr, W-LAr  (Sampling) 
 #            PbWO4  (Homogeneous)
 #      II) Dimension and Segmentation:
 #          - Is the unit with which to express the dimension of
@@ -100,6 +100,11 @@
 #
 #--- Copper - Scintillator
 #/mydet/absorberMaterial Copper
+#/mydet/activeMaterial Scintillator
+#/mydet/isCalHomogeneous 0
+#
+#--- Lead - Scintillator
+#/mydet/absorberMaterial Lead
 #/mydet/activeMaterial Scintillator
 #/mydet/isCalHomogeneous 0
 #
