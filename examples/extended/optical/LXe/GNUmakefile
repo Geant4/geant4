@@ -1,11 +1,15 @@
-# $Id: GNUmakefile,v 1.1 2004-05-29 19:33:44 gum Exp $
+# $Id: GNUmakefile,v 1.2 2004-06-01 07:05:03 gcosmo Exp $
 # --------------------------------------------------------------
-# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
+# GNUmakefile for LXe example.
 # --------------------------------------------------------------
 
 name := LXe
 G4TARGET := $(name)
 G4EXLIB := true
+
+ifndef G4INSTALL
+  G4INSTALL = ../../../..
+endif
 
 .PHONY: all
 all: lib bin
