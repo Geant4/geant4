@@ -275,7 +275,7 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
   if (daughters == NULL) FillDaughters();
   //
   //
-  // THIS IS A CHEAT!  We want to ensure that the difference between the total
+  // We want to ensure that the difference between the total
   // parent and daughter masses equals the energy liberated by the transition.
   //
   theParentMass = 0.0;
@@ -284,12 +284,12 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
   theParentMass += Qtransition  ;
   // bug fix for beta+ decay (flei 25/09/01)
   if (decayMode == 2) theParentMass -= 2*0.511 * MeV;
-  
+  //
   if (GetVerboseLevel()>1) {
     G4cout << "G4NuclearDecayChannel::DecayIt ";
     G4cout << "the decay mass = " << theParentMass << G4endl;
   }
-  
+
   SetParentMass (theParentMass);
   
   //
@@ -331,7 +331,6 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
     DumpInfo();
   }
 
-  // It seems the ARM  in G4 is not working properly yet. So this feature will not be released yet!
   //
   // now we have to take care of the EC product which have go through the ARM
   if (decayMode == 3 || decayMode == 4 || decayMode == 5) {
@@ -362,21 +361,21 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
 	exit(0);		      
       }
     G4int aZ = daughterZ;
+    if (aZ > 5 && aZ < 101) {  // only applies to 5< Z <101 
+      G4AtomicDeexcitation* atomDeex = new G4AtomicDeexcitation();
+      //no Auger electron generation 
+      // atomDeex->ActivateAugerElectronProduction(0);
+      std::vector<G4DynamicParticle*>* armProducts = atomDeex->GenerateParticles(aZ,eShell);
 
-    G4AtomicDeexcitation* atomDeex = new G4AtomicDeexcitation();
-    //no Auger electron generation 
-    atomDeex->ActivateAugerElectronProduction(0);
-    std::vector<G4DynamicParticle*>* armProducts = atomDeex->GenerateParticles(aZ,eShell);
-
-    // pop up the daughter before insertion
-    dynamicDaughter = products->PopProducts();
-    for (size_t i = 0;  i < armProducts->size(); i++)
-      products->PushProducts ((*armProducts)[i]);
-    delete armProducts;
-    delete atomDeex;
-    products->PushProducts (dynamicDaughter); 
+      // pop up the daughter before insertion
+      dynamicDaughter = products->PopProducts();
+      for (size_t i = 0;  i < armProducts->size(); i++)
+	products->PushProducts ((*armProducts)[i]);
+      delete armProducts;
+      delete atomDeex;
+      products->PushProducts (dynamicDaughter); 
+    }
   }
-  
 
   //
   // If the decay is to an excited state of the daughter nuclide, we need
@@ -406,8 +405,7 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
       //	       +daughterExcitation);
       //G4Fragment nucleus(daughterA, daughterZ, p4);
       //    nucleus.SetExcitationEnergy(daughterExcitation);
-   
-
+ 
       // G4VGammaDeexcitation* deexcitation = new G4DiscreteGammaDeexcitation;
       G4PhotonEvaporation* deexcitation = new G4PhotonEvaporation;
       deexcitation->SetVerboseLevel(GetVerboseLevel());
@@ -420,7 +418,9 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
       }
       // ARM in G4 is applied but no auger electrons!
       deexcitation->SetARM(true);
-      //      deexcitation->SetARM(false);
+      // not applied 
+      //deexcitation->SetARM(false);
+      //
       deexcitation->SetMaxHalfLife(1e-6*second);
       //
       // Get the gammas by deexciting the nucleus.
@@ -477,7 +477,6 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
 ////////////////////////////////////////////////////////////////////////////////
 //
 
-
 G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
 
 {
@@ -503,6 +502,9 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
 
   G4double Q = pmass - sumofdaughtermass;  
 
+  // 09/11/2004 flei
+  // All Beta decays are now treated with the improved 3 body decay algorithm. No more slow/fast modes
+  /*
   if (BetaSimple == true) {
 
     // Use the histogramed distribution to generate the beta energy
@@ -542,6 +544,8 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
     // the neutrino is igored in this case
 
   } else {
+  */
+    /* original slow method  
     //calculate daughter momentum
     //  Generate two
     G4double rd1, rd2;
@@ -618,8 +622,35 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
       G4cout <<"     daughter 2:" <<daughtermomentum[2]/GeV <<"[GeV/c]" <<G4endl;
       G4cout <<"   momentum sum:" <<momentumsum/GeV <<"[GeV/c]" <<G4endl;
     }
-    
-
+    */
+    // faster method as suggested by Dirk Kruecker of FZ-Julich
+    G4double daughtermomentum[3];
+    G4double daughterenergy[3];
+    // Use the histogramed distribution to generate the beta energy
+    daughterenergy[0] = RandomEnergy->shoot() * Q;
+    daughtermomentum[0] = sqrt(daughterenergy[0]*daughterenergy[0] +
+			       2.0*daughterenergy[0] * daughtermass[0]);
+	 
+    //neutrino energy distribution is flat within the kinematical limits
+    G4double rd = 2*G4UniformRand()-1;
+    // limits
+    G4double Mme=pmass-daughtermass[0];
+    G4double K=0.5-daughtermass[1]*daughtermass[1]/(2*Mme*Mme-4*pmass*daughterenergy[0]);
+	  
+    daughterenergy[2]=K*(Mme-daughterenergy[0]+rd*daughtermomentum[0]);
+    daughtermomentum[2] = daughterenergy[2] ; 
+	  
+    // the recoil neuleus
+    daughterenergy[1] = Q-daughterenergy[0]-daughterenergy[2];
+    daughtermomentum[1] = sqrt(daughterenergy[1]*daughterenergy[1] +
+			       2.0*daughterenergy[1] * daughtermass[1]);
+  
+    // output message
+    if (GetVerboseLevel()>1) {
+      G4cout <<"     daughter 0:" <<daughtermomentum[0]/GeV <<"[GeV/c]" <<G4endl;
+      G4cout <<"     daughter 1:" <<daughtermomentum[1]/GeV <<"[GeV/c]" <<G4endl;
+      G4cout <<"     daughter 2:" <<daughtermomentum[2]/GeV <<"[GeV/c]" <<G4endl;
+    }
     //create daughter G4DynamicParticle
     G4double costheta, sintheta, phi, sinphi, cosphi;
     G4double costhetan, sinthetan, phin, sinphin, cosphin;
@@ -657,7 +688,7 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
 			     (direction0*daughtermomentum[0] +
 			      direction2*(daughtermomentum[2]/direction2.mag()))*(-1.0));
     products->PushProducts(daughterparticle);
-  }
+    // }
   //   delete daughterparticle;
   
   if (GetVerboseLevel()>1) {
@@ -667,12 +698,3 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
   }
   return products;
 }
-  
-
-
-
-
-
-
-
-
