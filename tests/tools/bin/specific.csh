@@ -395,12 +395,12 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" ) then
   setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
   setenv G4VIS_BUILD_VRML_DRIVER     1
   setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
-  setenv G4ANALYSIS_BUILD_OPEN_SCIENTIST 1
-  setenv G4ANALYSIS_BUILD_JAS            1
-  setenv G4ANALYSIS_BUILD_LIZARD         1
-  setenv G4ANALYSIS_TUPLE 1
-  setenv G4ANALYSIS_CLOUD 1
-  setenv G4ANALYSIS_OPEN_SCIENTIST_VISUALIZATION 1
+  setenv G4ANALYSIS_BUILD_LAB        1
+  setenv G4ANALYSIS_BUILD_JAS        1
+  setenv G4ANALYSIS_BUILD_LIZARD     1
+  #setenv G4ANALYSIS_TUPLE 1
+  #setenv G4ANALYSIS_CLOUD 1
+  setenv G4ANALYSIS_LAB_VISUALIZATION 1
   # G4 use flags :
   setenv G4UI_USE_XM                 1
   setenv G4VIS_USE_OPENGLXM          1
@@ -410,39 +410,43 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" ) then
   setenv G4VIS_USE_DAWNFILE          1
   setenv G4VIS_USE_VRML              1
   setenv G4VIS_USE_VRMLFILE          1
-  setenv G4ANALYSIS_USE_OPEN_SCIENTIST 1
-  setenv G4ANALYSIS_USE_JAS            1
-  setenv G4ANALYSIS_SYSTEM OpenScientist
-  setenv G4ANALYSIS_USE_LIZARD         1
+  setenv G4ANALYSIS_USE_LAB          1
+  setenv G4ANALYSIS_USE_JAS          1
+  setenv G4ANALYSIS_USE_LIZARD       1
+  setenv G4ANALYSIS_SYSTEM           Lab
+  # AIDA : 
+  setenv G4ANALYSIS_AIDA /afs/cern.ch/sw/contrib/AIDA/1.0/AIDA
   # Lab :
   source /projects/Lab/v4r0/cmt/setup.csh
+  # CLHEP :
   setenv CLHEP_BASE_DIR /lal/CLHEP/1.5/Linux-gxx
-  setenv OGLHOME        /usr/X11R6
-  #setenv OGLHOME        /lal/Mesa/3.2/Linux
-  #setenv OIVHOME        /lal/SoFree/v3r1
-  #setenv HEPVISHOME     /lal/HEPVis/v5r1p7
+  # Things needed by the Geant4/vis/drivers :
+  #setenv OGLHOME        /usr/X11R6
+  setenv OGLHOME        /lal/Mesa/3.2/Linux
   setenv TTFLIBS        "-L/lal/freetype/1.3.1/Linux/lib -lttf"
-  setenv OIVHOME        $SOFREEROOT
-  setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISROOT/include"
-  setenv OIVLIBS        "-L$HEPVISROOT/Linux-gxx -lHEPVisXm -lHEPVisXt -lHEPVis ${TTFLIBS} -L$OIVHOME/Linux-gxx -lSoFreeXt -lSoFree"
-  setenv SOFREEUSER     $OIVHOME/user/
+  setenv OIVFLAGS       "-I$HEPVISROOT/include -I$SOFREEROOT/include"
+  setenv OIVLIBS        "-L$HEPVISROOT/$HEPVISCONFIG -lHEPVisXm -lHEPVisXt -lHEPVis ${TTFLIBS} -L$SOFREEROOT/$SOFREECONFIG -lSoFreeXt -lSoFree"
+  #setenv SOFREEUSER     $OIVHOME/user/
   # OPACS :
   #setenv G4UI_BUILD_WO_SESSION       1
   #setenv G4VIS_BUILD_OPACS_DRIVER    1
   #setenv G4UI_USE_WO                 1
   #setenv G4VIS_USE_OPACS             1
   #source /lal/OPACS/v3/setup.csh
+  #
+  # java :
   setenv JDKHOME /lal/JDK/1.2.2/Linux
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$JDKHOME/jre/lib/i386:$JDKHOME/jre/lib/i386/classic:$JDKHOME/jre/lib/i386/native_threads
-set jars=/lal/jas/2.0alpha4/release/lib
+  # jas :
+  set jars=/lal/jas/2.0alpha4/release/lib
   setenv CLASSPATH ${CLASSPATH}:$jars/collections.jar:$jars/hep.jar:$jars/jas.jar
+  setenv PATH ${PATH}:/lal/jas/2.0alpha4/release
   # Else :
   #setenv XENVIRONMENT   g4Xt.xrm
   setenv PATH "${PATH}:/lal/DAWN/dawn_3_85a/Linux/bin"
   setenv CPPVERBOSE 1
   alias g4ANA01 "cd $G4INSTALL/examples/extended/analysis/AnaEx01"
   alias ana01   "$G4WORKDIR/bin/$G4SYSTEM/AnaEx01"
-  setenv PATH ${PATH}:/lal/jas/2.0alpha4/release
   set prompt='g4-pc-gbp> ' 
 endif
 #
@@ -458,15 +462,15 @@ if ( `whoami` == "gbarrand" ) then
   setenv CPPVERBOSE 1
   #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
   # G4 build flags :
-  #setenv G4ANALYSIS_BUILD_OPEN_SCIENTIST 1
-  #setenv G4ANALYSIS_BUILD_JAS            1
-  setenv G4ANALYSIS_BUILD_LIZARD         1
+  setenv G4ANALYSIS_BUILD_LAB    1
+  setenv G4ANALYSIS_BUILD_JAS    1
+  setenv G4ANALYSIS_BUILD_LIZARD 1
   # G4 use flags :
-  setenv G4UI_USE_XM                   1
-  setenv G4UI_USE_XAW                  1
-  #setenv G4ANALYSIS_USE_OPEN_SCIENTIST 1
-  #setenv G4ANALYSIS_USE_JAS            1
-  setenv G4ANALYSIS_USE_LIZARD         1
+  setenv G4UI_USE_XM             1
+  setenv G4UI_USE_XAW            1
+  setenv G4ANALYSIS_USE_LAB      1
+  setenv G4ANALYSIS_USE_JAS      1
+  setenv G4ANALYSIS_USE_LIZARD   1
   # AIDA : 
   setenv G4ANALYSIS_AIDA /afs/cern.ch/sw/contrib/AIDA/1.0/AIDA
   # Lab :
@@ -483,6 +487,7 @@ if ( `whoami` == "gbarrand" ) then
   #setenv JDKHOME /usr/local/libexec/jdk/1.2.2
   setenv JDKHOME /afs/cern.ch/sw/java/i386_redhat61/jdk/blackdown-1.2.2
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${JDKHOME}/jre/lib/i386:${JDKHOME}/jre/lib/i386/classic:${JDKHOME}/jre/lib/i386/native_threads
+  # jas :
   set jars=/afs/cern.ch/sw/contrib/jas/2.0alpha4/release/lib
   setenv CLASSPATH ${CLASSPATH}:$jars/collections.jar:$jars/hep.jar:$jars/jas.jar
   # Else :
