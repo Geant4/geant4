@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2000-03-09 17:41:20 asaim Exp $
+$Id: History,v 1.7 2000-05-02 10:07:08 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+2nd May 2000  John Allison
+- G4RayTracer: set out-of-world ray to black.
+- G4RayTracerViewer: corrected trapping of orthogonal projection.
 
 10th March 2000  Makoto Asai
 - Added some comments for copyright notice and for the software reference manual.
