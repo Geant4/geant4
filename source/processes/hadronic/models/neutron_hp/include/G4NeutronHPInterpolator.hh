@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInterpolator.hh,v 1.3 1999-07-02 09:59:15 johna Exp $
+// $Id: G4NeutronHPInterpolator.hh,v 1.4 1999-08-27 07:42:57 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPInterpolator_h
@@ -40,7 +40,7 @@ class G4NeutronHPInterpolator
   
   inline G4double Interpolate(G4InterpolationScheme aScheme,
                               G4double x, G4double x1, G4double x2,
-                                          G4double y1, G4double y2);       
+                                          G4double y1, G4double y2) const;       
   
   G4double 
   GetBinIntegral(const G4InterpolationScheme & aScheme, 
@@ -52,18 +52,18 @@ class G4NeutronHPInterpolator
 
   private:
   
-  inline G4double Histogram(G4double x, G4double x1, G4double x2, G4double y1, G4double y2);
-  inline G4double LinearLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2);
-  inline G4double LinearLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2);
-  inline G4double LogarithmicLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2);
-  inline G4double LogarithmicLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2);
-  inline G4double Random(G4double x, G4double x1, G4double x2, G4double y1, G4double y2);
+  inline G4double Histogram(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const;
+  inline G4double LinearLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const;
+  inline G4double LinearLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const;
+  inline G4double LogarithmicLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const;
+  inline G4double LogarithmicLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const;
+  inline G4double Random(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const;
 
 };
 
 inline G4double G4NeutronHPInterpolator::
 Interpolate(G4InterpolationScheme aScheme,
-            G4double x, G4double x1, G4double x2, G4double y1, G4double y2)
+            G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
   G4double result;
   G4int theScheme = aScheme;
@@ -97,7 +97,7 @@ Interpolate(G4InterpolationScheme aScheme,
 }
 
 inline G4double G4NeutronHPInterpolator::
-Histogram(G4double x, G4double x1, G4double x2, G4double y1, G4double y2)
+Histogram(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
   G4double result;
   result = y1;
@@ -105,7 +105,7 @@ Histogram(G4double x, G4double x1, G4double x2, G4double y1, G4double y2)
 }
 
 inline G4double G4NeutronHPInterpolator::
-LinearLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2)
+LinearLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
   G4double slope=0, off=0;
   slope = (y2-y1)/(x2-x1);
@@ -115,7 +115,7 @@ LinearLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2)
 }
 
 inline G4double G4NeutronHPInterpolator::
-LinearLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2)
+LinearLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
   G4double result;
   result = LinearLinear(log(x), log(x1), log(x2), y1, y2);
@@ -123,7 +123,7 @@ LinearLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2
 }
   
 inline G4double G4NeutronHPInterpolator::
-LogarithmicLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2)
+LogarithmicLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
   G4double result;
   result = LinearLinear(x, x1, x2, log(y1), log(y2));
@@ -132,7 +132,7 @@ LogarithmicLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2
 }
   
 inline G4double G4NeutronHPInterpolator::
-LogarithmicLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2)
+LogarithmicLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
   G4double result;
   result = LinearLinear(log(x), log(x1), log(x2), log(y1), log(y2));
@@ -141,7 +141,7 @@ LogarithmicLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4doub
 }
 
 inline G4double G4NeutronHPInterpolator::
-Random(G4double x, G4double x1, G4double x2, G4double y1, G4double y2)
+Random(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
   G4double result;
   result = y1+G4UniformRand()*(y2-y1);

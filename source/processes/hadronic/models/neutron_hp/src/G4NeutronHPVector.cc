@@ -164,20 +164,7 @@
     y = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, y1, y2);
     if(e>=theData[nEntries-1].GetX()) 
     {
-      if(theData[nEntries-1].GetY()>y) 
-      {
-        y=max(y, 0.8*theData[nEntries-1].GetY());
-      }
-      else
-      {
-        if(low!=0)
-        {
-          x1 = theData[low-1] .GetX();
-          y1 = theData[low-1] .GetY();
-          y = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, y1, y2);
-          if(y>theData[nEntries-1].GetY()) y = theData[nEntries-1].GetY();
-        }
-      }
+      y=theData[nEntries-1].GetY();
     }
     return y;
   }

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPVector.hh,v 1.5 1999-06-29 22:40:15 stesting Exp $
+// $Id: G4NeutronHPVector.hh,v 1.6 1999-08-27 07:42:57 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPVector_h
@@ -25,6 +25,9 @@
 
 class G4NeutronHPVector
 {
+  friend G4NeutronHPVector & operator + (const G4NeutronHPVector & left, 
+                                         const G4NeutronHPVector & right);
+  
   public:
   
   G4NeutronHPVector();
@@ -84,15 +87,15 @@ class G4NeutronHPVector
     Check(i);
     theData[i].SetY(x);
   }
-  inline G4double GetEnergy(G4int i) { return theData[i].GetX(); }
-  inline G4double GetXsec(G4int i)   { return theData[i].GetY(); }
-  inline G4double GetX(G4int i) 
+  inline G4double GetEnergy(G4int i) const { return theData[i].GetX(); }
+  inline G4double GetXsec(G4int i) const { return theData[i].GetY(); }
+  inline G4double GetX(G4int i) const 
   { 
     if (i<0) i=0;
     if(i>=GetVectorLength()) i=GetVectorLength()-1;
     return theData[i].GetX();
   }
-  inline G4double GetY(G4int i) 
+  inline G4double GetY(G4int i)  const
   { 
     if (i<0) i=0;
     if(i>=GetVectorLength()) i=GetVectorLength()-1;
@@ -100,10 +103,10 @@ class G4NeutronHPVector
   }
   inline const G4NeutronHPDataPoint & GetPoint(G4int i) const { return theData[i]; }
   
-  G4double GetXsec(G4double e);
+  G4double GetXsec(G4double e) const;
 
-  inline G4double GetY(G4double x) {return GetXsec(x);}
-  inline G4int GetVectorLength() {return nEntries;}
+  inline G4double GetY(G4double x)  const {return GetXsec(x);}
+  inline G4int GetVectorLength() const {return nEntries;}
 
   void Dump();
   
