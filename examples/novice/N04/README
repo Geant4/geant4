@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2004-12-02 14:28:03 santin Exp $
+$Id: README,v 1.5 2004-12-13 16:21:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -31,9 +31,7 @@ a readout geometry to find the phi-z cell.
 3. Physics processes
 
  The example uses the QGSP 'Educated guess physics list', which 
-includes electro-magnetic and hadronic interactions. For a more 
-detailed decription of the physics included, please refer to the URL: 
-http://cmsdoc.cern.ch/~hpw/GHAD/HomePage 
+includes electro-magnetic and hadronic interactions. 
 
 3.1 Pre-compilation of the Hadronic Physics lists
 
@@ -41,7 +39,7 @@ http://cmsdoc.cern.ch/~hpw/GHAD/HomePage
 the hadronic physics lists. You can check if they are already compiled 
 (they are NOT automatically compiled together with the standard Geant4 
 libraries) by looking at the location
-$(G4LIB)/.lists_build/$(G4SYSTEM)
+$(G4LIB)/plists/$(G4SYSTEM)
 If you try to compile the example without the lists, you might probably 
 get an error message during the linking phase, similar to the following:
 "Linking exampleN04 ...
@@ -51,8 +49,9 @@ If they are not compiled yet, then you (or your Geant4 administrator)
 can do it with the following steps a,b,c:
 a. Make sure the Geant4 environment variables are defined 
    (this can be obtained for example in a CSH shell by sourcing the 
-   Geant4 configuration file $G4INSTALL/.config/.../env.csh)
-b. cd $G4INSTALL/hadronic_lists/lists 
+   Geant4 configuration file "env.csh" generated with your installation
+   through the Configure script)
+b. cd $G4INSTALL/physics_lists/hadronic
 c. gmake
 
 4. Event filtering by the stacking mechanism.
@@ -83,8 +82,3 @@ ExN04StackingAction.
 	Idle> /run/beamOn 3
 	....
 	Idle> exit
- 	
- 	  
- 	
-
-
