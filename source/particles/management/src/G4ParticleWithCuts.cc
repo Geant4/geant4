@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleWithCuts.cc,v 1.14 2001-10-18 04:31:25 kurasige Exp $
+// $Id: G4ParticleWithCuts.cc,v 1.15 2001-10-20 01:29:49 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -303,8 +303,6 @@ G4double
 void  G4ParticleWithCuts::RestoreCuts(const G4double* cutInLength,
                                       const G4double* cutInEnergy )
 {
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-
   // Set cut in stopping range
   if(theCutInMaxInteractionLength) delete [] theCutInMaxInteractionLength;
 
@@ -334,20 +332,21 @@ G4bool G4ParticleWithCuts::UseProtonCut()
             (GetParticleName() != "proton" ) &&
             (GetParticleName() != "anti_proton" ) && 
             (Charge != 0.)                             );
+  if (!useProtonCut) return false; 
 
   // check if the proton exists or not 
-  if ((useProtonCut) && (theProton ==0)) {
+  if(theProton ==0) {
     theProton =   G4ParticleTable::GetParticleTable()->FindParticle("proton");
     if (theProton ==0) {
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>0) {
-        G4cout << " G4ParticleWithCuts::UseProtonCut  ";
-        G4cout << " proton is not defined !!" << G4endl;
+	G4cout << " G4ParticleWithCuts::UseProtonCut  ";
+	G4cout << " proton is not defined !!" << G4endl;
       }
 #endif
       return false;
     } 
-  } 
+  }
 
   // check if cuts for the proton are defined or not
   if (theProton->GetEnergyCuts()==0) {
@@ -364,8 +363,8 @@ G4bool G4ParticleWithCuts::UseProtonCut()
   size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
   for (size_t J=0; J<numberOfMaterials; J +=1) {
     useProtonCut =  useProtonCut &&
-             ( abs(theCutInMaxInteractionLength[J]-protonCuts[J])<1.*nanometer )
-;  
+      ( abs(theCutInMaxInteractionLength[J]-protonCuts[J])<1.*nanometer )
+      ;  
   }
 
 #ifdef G4VERBOSE
@@ -404,6 +403,7 @@ G4bool  G4ParticleWithCuts::CheckEnergyBinSetting() const
   }
   return true;
 }
+
 
 void  G4ParticleWithCuts::CalcEnergyCuts() 
 {
@@ -463,9 +463,9 @@ void  G4ParticleWithCuts::CalcEnergyCuts()
 	}
 	if(theKineticEnergyCuts[J] < LowestEnergy) {
         theKineticEnergyCuts[J] = LowestEnergy ;
+	}
       }
-      }
-    delete rangeVector;
+      delete rangeVector;
     }
      
     // Delete energy loss table
@@ -644,7 +644,6 @@ void G4ParticleWithCuts::SetRangeCut(G4double aCut, const G4Material* aMaterial)
 void G4ParticleWithCuts::SetRangeCutVector(G4std::vector<G4double>& cuts)
 {
   // set material table pointer 
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
 
   // check vector 
