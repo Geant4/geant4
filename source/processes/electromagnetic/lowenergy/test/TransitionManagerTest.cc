@@ -23,9 +23,6 @@
 // -------------------------------------------------------------------
 //      GEANT 4 class implementation file 
 //
-//      For information related to this code contact:
-//      Geant4 Collaboration
-//
 //      File name:     TransitionManagerTest.cc
 //
 //      Authors:        Alfonso Mantero (alfonso.mantero@ge.infn.it)
