@@ -90,7 +90,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
   G4double theNucleusA = theNucleus.GetN() + theNucleus.GetZ();
 
-  if ( !(theNucleusA < 1.5) ) {
+  if ( !(G4int(theNucleusA) == 1) ) {
     target  = new G4InuclNuclei(targetMomentum, 
 				theNucleusA, 
 				theNucleus.GetZ());
@@ -117,7 +117,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   G4BigBanger*                     bigb = new G4BigBanger;
   G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
 
-  if ( theNucleusA < 1.5 ) 
+  if (G4int(theNucleusA) == 1) 
     {
       // Get momentum from H model
       G4NucleiModel* model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
