@@ -62,6 +62,7 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus, G4ParticleChange
   {
     aResult = & theResult;
     aResult->Initialize(aTrack);
+    aResult->SetStatusChange(fStopAndKill);
   }
   //projectile properties needed in constructor of quasmon
   G4LorentzVector proj4Mom;
@@ -113,8 +114,6 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus, G4ParticleChange
   delete pan;
   
   // Fill the particle change.
-  aResult->Initialize(aTrack);
-  aResult->SetStatusChange(fStopAndKill);
   aResult->SetNumberOfSecondaries(output->size());
   G4DynamicParticle * theSec;
 #ifdef CHIPSdebug

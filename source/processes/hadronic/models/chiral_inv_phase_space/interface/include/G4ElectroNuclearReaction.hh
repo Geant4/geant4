@@ -70,8 +70,12 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
     G4cout << "that is not in the table of elements. Z="<<aTargetNucleus.GetZ()<<G4endl;
     G4Exception("Folding with error.");
   }
-  G4double xSec = theData.GetCrossSection(aTrack.GetDynamicParticle(), anElement);
-  G4double photonEnergy = theData.GetEffectivePhotonEnergy();
+  G4double photonEnergy = 10*GeV;  
+  while(photonEnergy>3.*GeV)
+  {
+    G4double xSec = theData.GetCrossSection(aTrack.GetDynamicParticle(), anElement);
+    photonEnergy = theData.GetEffectivePhotonEnergy();
+  }
   theResult.SetEnergyChange(aTrack.GetDynamicParticle()->GetKineticEnergy() - photonEnergy);
   
   G4ThreeVector photonDirection = aTrack.GetMomentumDirection();
