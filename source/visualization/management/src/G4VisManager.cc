@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.22 2001-04-10 14:56:10 johna Exp $
+// $Id: G4VisManager.cc,v 1.23 2001-05-18 14:14:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,7 +72,7 @@ G4VisManager::G4VisManager ():
 
 G4VisManager::~G4VisManager () {
   fpInstance = 0;
-  int i;
+  size_t i;
   for (i = 0; i < fSceneList.size (); ++i) {
     delete fSceneList[i];
   }
@@ -88,6 +88,9 @@ G4VisManager::~G4VisManager () {
     delete fMessengerList[i];
   }
   delete fpMessenger;
+  for (i = 0; i < fDirectoryList.size (); ++i) {
+    delete fDirectoryList[i];
+  }
 }
 
 G4VisManager* G4VisManager::GetInstance () {
@@ -468,7 +471,6 @@ void G4VisManager::CreateSceneHandler (G4String name) {
   if (fpGraphicsSystem) {
     G4VSceneHandler* pSceneHandler =
       fpGraphicsSystem -> CreateSceneHandler (name);
-    G4VViewer* pViewer;
     if (pSceneHandler) {
       fAvailableSceneHandlers.push_back (pSceneHandler);
       fpSceneHandler = pSceneHandler;                         // Make current.
@@ -932,7 +934,7 @@ void G4VisManager::EndOfEvent () {
     const G4std::vector<G4VModel*>& EOEModelList =
       fpScene -> GetEndOfEventModelList ();
     fpSceneHandler->ClearTransientStore(); //GB
-    for (int i = 0; i < EOEModelList.size (); i++) {
+    for (size_t i = 0; i < EOEModelList.size (); i++) {
       G4VModel* pModel = EOEModelList [i];
       pModel -> SetModelingParameters (pMP);
       pModel -> DescribeYourselfTo (*fpSceneHandler);
@@ -950,8 +952,8 @@ G4String G4VisManager::ViewerShortName (const G4String& viewerName) const {
 
 G4VViewer* G4VisManager::GetViewer (const G4String& viewerName) const {
   G4String viewerShortName = ViewerShortName (viewerName);
-  G4int nHandlers = fAvailableSceneHandlers.size ();
-  G4int iHandler, iViewer;
+  size_t nHandlers = fAvailableSceneHandlers.size ();
+  size_t iHandler, iViewer;
   G4VSceneHandler* sceneHandler;
   G4VViewer* viewer;
   G4bool found = false;

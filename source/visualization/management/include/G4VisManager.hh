@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.17 2001-02-23 15:43:20 johna Exp $
+// $Id: G4VisManager.hh,v 1.18 2001-05-18 14:14:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -329,6 +329,7 @@ protected:
   G4int                 fVerbose;           // Verbosity level 0-10.
   G4VisManMessenger*    fpMessenger;        // Pointer to messenger.
   G4std::vector<G4UImessenger*> fMessengerList;
+  G4std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
 
 };

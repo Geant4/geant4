@@ -1,4 +1,4 @@
-$Id: History,v 1.115 2001-05-18 10:10:41 johna Exp $
+$Id: History,v 1.116 2001-05-18 14:14:30 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -27,6 +27,7 @@ History file for visualization category
 18th May 2001 John Allison
 - Removed unnecessary virtual inheritance of G4VViewer in G4RayTracerViewer.
 - Introduced verbosity to ASCIITree.
+- Proper deletion of directories in G4VisManagerRegisterMessengers.
 
 15th May 2001 John Allison
 - Fixed bug in name of /vis/viewer/set/sectionPlane command.

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.29 2001-05-03 11:14:18 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.30 2001-05-18 14:14:33 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -447,22 +447,26 @@ default: 0 0 0 0 cm 1 0 cm
 
   G4VVisCommand::SetVisManager (this);
 
-  G4UIcommand* command;
-  command = new G4UIdirectory ("/vis/");
-  command -> SetGuidance ("Visualization commands.");
+  G4UIcommand* directory;
+
+  directory = new G4UIdirectory ("/vis/");
+  directory -> SetGuidance ("Visualization commands.");
+  fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandEnable);
   fMessengerList.push_back (new G4VisCommandVerbose);
 
-  command = new G4UIdirectory ("/vis/scene/");
-  command -> SetGuidance ("Operations on Geant4 scenes.");
+  directory = new G4UIdirectory ("/vis/scene/");
+  directory -> SetGuidance ("Operations on Geant4 scenes.");
+  fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandSceneCreate);
   fMessengerList.push_back (new G4VisCommandSceneList);
   fMessengerList.push_back (new G4VisCommandSceneNotifyHandlers);
   fMessengerList.push_back (new G4VisCommandSceneSelect);
   fMessengerList.push_back (new G4VisCommandSceneRemove);
 
-  command = new G4UIdirectory ("/vis/scene/add/");
-  command -> SetGuidance ("Add model to current scene.");
+  directory = new G4UIdirectory ("/vis/scene/add/");
+  directory -> SetGuidance ("Add model to current scene.");
+  fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandSceneAddAxes);
   fMessengerList.push_back (new G4VisCommandSceneAddGhosts);
   fMessengerList.push_back (new G4VisCommandSceneAddHits);
@@ -471,21 +475,24 @@ default: 0 0 0 0 cm 1 0 cm
   fMessengerList.push_back (new G4VisCommandSceneAddTrajectories);
   fMessengerList.push_back (new G4VisCommandSceneAddVolume);
 
-  command = new G4UIdirectory ("/vis/scene/include/");
-  command -> SetGuidance ("Deprecated commands; now in /vis/scene/add/.");
+  directory = new G4UIdirectory ("/vis/scene/include/");
+  directory -> SetGuidance ("Deprecated commands; now in /vis/scene/add/.");
+  fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandSceneIncludeHits);
   fMessengerList.push_back (new G4VisCommandSceneIncludeTrajectories);
 
-  command = new G4UIdirectory ("/vis/sceneHandler/");
-  command -> SetGuidance ("Operations on Geant4 scene handlers.");
+  directory = new G4UIdirectory ("/vis/sceneHandler/");
+  directory -> SetGuidance ("Operations on Geant4 scene handlers.");
+  fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandSceneHandlerAttach);
   fMessengerList.push_back (new G4VisCommandSceneHandlerCreate);
   fMessengerList.push_back (new G4VisCommandSceneHandlerList);
   fMessengerList.push_back (new G4VisCommandSceneHandlerSelect);
   fMessengerList.push_back (new G4VisCommandSceneHandlerRemove);
 
-  command = new G4UIdirectory ("/vis/viewer/");
-  command -> SetGuidance ("Operations on Geant4 viewers.");
+  directory = new G4UIdirectory ("/vis/viewer/");
+  directory -> SetGuidance ("Operations on Geant4 viewers.");
+  fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandViewerClear);
   fMessengerList.push_back (new G4VisCommandViewerCreate);
   fMessengerList.push_back (new G4VisCommandViewerDolly);
@@ -500,8 +507,9 @@ default: 0 0 0 0 cm 1 0 cm
   fMessengerList.push_back (new G4VisCommandViewerViewpoint);
   fMessengerList.push_back (new G4VisCommandViewerZoom);
 
-  command = new G4UIdirectory ("/vis/viewer/set/");
-  command -> SetGuidance ("Set view parameters of current viewer.");
+  directory = new G4UIdirectory ("/vis/viewer/set/");
+  directory -> SetGuidance ("Set view parameters of current viewer.");
+  fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandsViewerSet);
 
   // Compound commands...
