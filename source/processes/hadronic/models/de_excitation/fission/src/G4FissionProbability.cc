@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.cc,v 1.3 2003-11-12 14:20:11 lara Exp $
+// $Id: G4FissionProbability.cc,v 1.4 2003-11-14 16:54:18 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -91,11 +91,11 @@ G4double G4FissionProbability::EmissionProbability(const G4Fragment & fragment, 
     
     G4double Exp1 = 0.0;
     if (SystemEntropy <= 160.0) Exp1 = exp(-SystemEntropy);
-    G4double Exp2 = exp( std::max(700.0,Cf-SystemEntropy) ); 
+    // @@@@@@@@@@@@@@@@@ hpw changed max to min - cannot notify vicente now since cern mail gave up on me...
+    G4double Exp2 = exp( std::min(700.0,Cf-SystemEntropy) ); 
 
     G4double probability = (Exp1 + (1.0-Cf)*Exp2) / 4.0*pi*afission;
-
-
+    
     return probability;
 }
 
