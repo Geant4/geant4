@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst18RunAction.hh,v 1.2 2000-06-06 11:36:11 flei Exp $
+// $Id: Tst18RunAction.hh,v 1.3 2000-06-06 12:15:06 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

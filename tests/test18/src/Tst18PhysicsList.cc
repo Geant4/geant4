@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst18PhysicsList.cc,v 1.2 2000-06-06 11:36:18 flei Exp $
+// $Id: Tst18PhysicsList.cc,v 1.3 2000-06-06 12:15:08 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
