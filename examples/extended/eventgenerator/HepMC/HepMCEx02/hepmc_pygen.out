@@ -1,0 +1,421 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (28-Feb-2002)
+             Copyright : Geant4 Collaboration
+**********************************************
+MuonMinusCaptureAtRest is created 
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+*  Visualizaton Driver: DAWN
+*  Visualizaton Driver: VRML1/2
+*  Visualizaton Driver: VRML1/2 File
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  OpenGLImmediateXm (OGLIXm)
+  OpenGLStoredXm (OGLSXm)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+
+current generator type: pythia
+1                                                                              
+ ******************************************************************************
+ ******************************************************************************
+ **                                                                          **
+ **                                                                          **
+ **              *......*                  Welcome to the Lund Monte Carlo!  **
+ **         *:::!!:::::::::::*                                               **
+ **      *::::::!!::::::::::::::*          PPP  Y   Y TTTTT H   H III   A    **
+ **    *::::::::!!::::::::::::::::*        P  P  Y Y    T   H   H  I   A A   **
+ **   *:::::::::!!:::::::::::::::::*       PPP    Y     T   HHHHH  I  AAAAA  **
+ **   *:::::::::!!:::::::::::::::::*       P      Y     T   H   H  I  A   A  **
+ **    *::::::::!!::::::::::::::::*!       P      Y     T   H   H III A   A  **
+ **      *::::::!!::::::::::::::* !!                                         **
+ **      !! *:::!!:::::::::::*    !!       This is PYTHIA version 6.205      **
+ **      !!     !* -><- *         !!       Last date of change:  1 Mar 2002  **
+ **      !!     !!                !!                                         **
+ **      !!     !!                !!       Now is  0 Jan 2000 at  0:00:00    **
+ **      !!                       !!                                         **
+ **      !!        lh             !!       Disclaimer: this program comes    **
+ **      !!                       !!       without any guarantees. Beware    **
+ **      !!                 hh    !!       of errors and use common sense    **
+ **      !!    ll                 !!       when interpreting results.        **
+ **      !!                       !!                                         **
+ **      !!                                Copyright T. Sjostrand (2001)     **
+ **                                                                          **
+ ** An archive of program versions and documentation is found on the web:    **
+ ** http://www.thep.lu.se/~torbjorn/Pythia.html                              **
+ **                                                                          **
+ ** When you cite this program, currently the official reference is          **
+ ** T. Sjostrand, P. Eden, C. Friberg, L. Lonnblad, G. Miu, S. Mrenna and    **
+ ** E. Norrbin, Computer Physics Commun. 135 (2001) 238.                     **
+ ** The large manual is                                                      **
+ ** T. Sjostrand, L. Lonnblad and S. Mrenna, LU TP 01-21 [hep-ph/0108264].   **
+ ** Also remember that the program, to a large extent, represents original   **
+ ** physics research. Other publications of special relevance to your        **
+ ** studies may therefore deserve separate mention.                          **
+ **                                                                          **
+ ** Main author: Torbjorn Sjostrand; Department of Theoretical Physics 2,    **
+ **   Lund University, Solvegatan 14A, S-223 62 Lund, Sweden;                **
+ **   phone: + 46 - 46 - 222 48 16; e-mail: torbjorn@thep.lu.se              **
+ ** Author: Leif Lonnblad; Department of Theoretical Physics 2,              **
+ **   Lund University, Solvegatan 14A, S-223 62 Lund, Sweden;                **
+ **   phone: + 46 - 46 - 222 77 80; e-mail: leif@thep.lu.se                  **
+ ** Author: Stephen Mrenna; Computing Division, Simulations Group,           **
+ **   Fermi National Accelerator Laboratory, MS 234, Batavia, IL 60510, USA; **
+ **   phone: + 1 - 630 - 840 - 2556; e-mail: mrenna@fnal.gov                 **
+ ** Author: Peter Skands; Department of Theoretical Physics 2,               **
+ **   Lund University, Solvegatan 14A, S-223 62 Lund, Sweden;                **
+ **   phone: + 46 - 46 - 222 31 92; e-mail: zeiler@thep.lu.se                **
+ **                                                                          **
+ **                                                                          **
+ ******************************************************************************
+ ******************************************************************************
+     PMAS(6,1)      changed from      175.00000 to      174.30000
+     PMAS(25,1)     changed from      115.00000 to      200.00000
+     MSEL           changed from              1 to              0
+     MSUB(102)      changed from              0 to              1
+     MSUB(123)      changed from              0 to              1
+     MSUB(124)      changed from              0 to              1
+     MDME(210,1)    changed from              1 to              0
+     MDME(211,1)    changed from              1 to              0
+     MDME(212,1)    changed from              1 to              0
+     MDME(213,1)    changed from              1 to              0
+     MDME(214,1)    changed from              1 to              0
+     MDME(215,1)    changed from              1 to              0
+     MDME(218,1)    changed from              1 to              0
+     MDME(219,1)    changed from              1 to              0
+     MDME(220,1)    changed from              1 to              0
+     MDME(222,1)    changed from              1 to              0
+     MDME(223,1)    changed from              1 to              0
+     MDME(224,1)    changed from              1 to              0
+     MDME(225,1)    changed from              1 to              1
+     MDME(226,1)    changed from              1 to              0
+     MDME(216,1)    changed from             -1 to             -1
+     MDME(217,1)    changed from             -1 to             -1
+     MDME(218,1)    changed from              0 to             -1
+     MDME(174,1)    changed from              1 to              0
+     MDME(175,1)    changed from              1 to              0
+     MDME(176,1)    changed from              1 to              0
+     MDME(177,1)    changed from              1 to              0
+     MDME(178,1)    changed from              1 to              0
+     MDME(179,1)    changed from              1 to              0
+     MDME(182,1)    changed from              1 to              0
+     MDME(183,1)    changed from              1 to              0
+     MDME(184,1)    changed from              1 to              1
+     MDME(185,1)    changed from              1 to              0
+     MDME(186,1)    changed from              1 to              0
+     MDME(187,1)    changed from              1 to              0
+     MDME(180,1)    changed from             -1 to             -1
+     MDME(181,1)    changed from             -1 to             -1
+     MDME(188,1)    changed from             -1 to             -1
+     MDME(189,1)    changed from             -1 to             -1
+     MSTP(61)       changed from              2 to              1
+     MSTP(71)       changed from              1 to              1
+     MSTP(81)       changed from              1 to              1
+     MSTP(111)      changed from              1 to              1
+1****************** PYINIT: initialization of PYTHIA routines *****************
+
+ ==============================================================================
+ I                                                                            I
+ I              PYTHIA will be initialized for a p on p collider              I
+ I                  at  14000.000 GeV center-of-mass energy                   I
+ I                                                                            I
+ ==============================================================================
+
+ ******** PYMAXI: summary of differential cross-section maximum search ********
+
+           ==========================================================
+           I                                      I                 I
+           I  ISUB  Subprocess name               I  Maximum value  I
+           I                                      I                 I
+           ==========================================================
+           I                                      I                 I
+           I   96   Semihard QCD 2 -> 2           I    1.8679E+03   I
+           I  102   g + g -> h0                   I    5.1617E-12   I
+           I  123   f + f' -> f + f' + h0         I    4.0000E-12   I
+           I  124   f + f' -> f" + f"' + h0       I    8.9419E-12   I
+           I                                      I                 I
+           ==========================================================
+
+ ********************** PYINIT: initialization completed **********************
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=11)
+E0 :         pi+ : pT=0.119 : TOF=27 : x=(-0.325,1.07,7.9)
+E0 :         mu- : pT=0.271 : TOF=26.7 : x=(1.11,0.388,7.9)
+E1 :         pi- : pT=0.299 : TOF=26.7 : x=(1.05,0.409,-7.9)
+E1 :         pi+ : pT=0.535 : TOF=26.6 : x=(-0.53,0.88,-7.9)
+E1 :         pi+ : pT=1.14 : TOF=27 : x=(-0.652,0.758,-8.02)
+E0 :         pi- : pT=0.297 : TOF=26.6 : x=(0.351,-0.96,7.9)
+E1 :          e- : pT=0.000632 : TOF=37.3 : x=(-0.575,1.66,-8.1)
+B3 :         mu+ : pT=42.7 : TOF=15 : x=(-4.04,1.97,-0.032)
+B1 :         mu- : pT=58.3 : TOF=21.4 : x=(2.08,3.93,-4.61)
+B4 :         mu+ : pT=21.8 : TOF=24.2 : x=(-4.25,-1.08,5.77)
+E1 :         mu- : pT=25.9 : TOF=28.6 : x=(-1.86,2.72,-7.9)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=15)
+E1 :         pi- : pT=0.297 : TOF=26.7 : x=(0.011,-1.06,-7.9)
+E0 :          e- : pT=0.000664 : TOF=29.2 : x=(0.573,1.12,7.9)
+E0 :          e- : pT=0.000499 : TOF=31.4 : x=(0.778,0.87,7.9)
+E1 :         mu- : pT=0.626 : TOF=26.7 : x=(-1.21,-0.17,-7.9)
+E1 :         pi- : pT=0.113 : TOF=27 : x=(-0.607,-0.921,-7.9)
+E1 :          e- : pT=0.000587 : TOF=29.9 : x=(-0.545,-1.33,-7.9)
+E1 :          e- : pT=0.000537 : TOF=30.7 : x=(-0.493,-1.47,-7.9)
+E1 :          e- : pT=0.000303 : TOF=31.4 : x=(-0.358,-1.45,-7.9)
+E1 :         pi- : pT=0.358 : TOF=26.6 : x=(-0.144,1.02,-7.9)
+E1 :         pi+ : pT=0.124 : TOF=26.7 : x=(-0.631,-0.99,-7.9)
+E1 :         pi+ : pT=0.617 : TOF=27.1 : x=(-1.22,-1.25,-7.9)
+B6 :         mu+ : pT=26.8 : TOF=16.9 : x=(-0.234,-4.25,-2.74)
+E0 :         mu- : pT=18.6 : TOF=27.8 : x=(2.62,-0.617,7.9)
+E1 :         mu- : pT=8.64 : TOF=26.9 : x=(-1.44,0.692,-7.9)
+B4 :         mu+ : pT=51 : TOF=17.3 : x=(-4.25,0.677,2.92)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=30)
+E1 :          e+ : pT=0.00741 : TOF=26.6 : x=(0.82,-0.592,-7.9)
+E0 :         pi- : pT=0.536 : TOF=26.7 : x=(0.746,-0.967,7.9)
+E1 :         pi- : pT=1.23 : TOF=26.6 : x=(-1.05,0.00119,-7.9)
+E1 :         mu+ : pT=0.164 : TOF=27 : x=(0.496,0.868,-8)
+E0 :         pi- : pT=3.4 : TOF=26.6 : x=(0.697,-0.808,7.9)
+E0 :         pi- : pT=0.584 : TOF=27 : x=(-0.797,-0.604,8.03)
+E0 :       kaon+ : pT=0.531 : TOF=26.8 : x=(0.13,1.05,7.9)
+E0 :         pi- : pT=0.294 : TOF=26.6 : x=(0.147,1.05,7.9)
+E1 :         pi- : pT=0.42 : TOF=26.6 : x=(-0.0944,1.05,-7.9)
+E1 :         pi+ : pT=0.307 : TOF=26.7 : x=(0.0136,-1.23,-7.9)
+E1 :       kaon+ : pT=2.03 : TOF=26.6 : x=(0.373,0.992,-7.9)
+E0 :       kaon- : pT=0.218 : TOF=27.9 : x=(-1.09,-0.0267,7.9)
+E1 :       kaon+ : pT=1.37 : TOF=26.8 : x=(1.38,-0.309,-7.9)
+E0 :         pi+ : pT=1.7 : TOF=26.7 : x=(-0.926,0.783,7.9)
+E0 :         mu+ : pT=0.48 : TOF=27.9 : x=(-1.06,2.53,7.9)
+E1 :         pi+ : pT=1.08 : TOF=26.9 : x=(-1.09,-0.742,-7.9)
+E1 :         pi+ : pT=0.299 : TOF=28.6 : x=(-0.256,-1.52,-7.9)
+E1 :      proton : pT=0.241 : TOF=27.6 : x=(-0.957,-0.798,-7.9)
+E1 :         mu+ : pT=0.101 : TOF=31.8 : x=(-0.485,-1.9,-7.9)
+E1 :      proton : pT=0.419 : TOF=27.1 : x=(-0.951,-0.863,-7.9)
+E1 :         pi+ : pT=0.334 : TOF=30.6 : x=(0.684,-1.27,-7.9)
+E1 :         pi- : pT=0.483 : TOF=31 : x=(-2.53,-1.06,-7.9)
+E1 :      proton : pT=0.338 : TOF=27 : x=(-0.912,-0.684,-7.9)
+E1 :         mu- : pT=0.274 : TOF=28 : x=(1.29,2.27,-7.9)
+E1 :         pi+ : pT=0.3 : TOF=27.1 : x=(-0.882,-0.471,-8.05)
+B6 :         mu- : pT=42 : TOF=14.9 : x=(-1.27,-4.25,0.409)
+B6 :          e- : pT=0.0158 : TOF=15 : x=(-1.3,-4.25,0.547)
+E1 :         mu+ : pT=24 : TOF=27.9 : x=(-2.65,0.758,-7.9)
+B7 :         mu+ : pT=42.8 : TOF=17.2 : x=(2.11,-3.9,-2.61)
+B2 :         mu- : pT=52.5 : TOF=22 : x=(1.45,4.25,-4.83)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=23)
+E0 :          e- : pT=0.0121 : TOF=26.6 : x=(1.18,0.138,7.9)
+E1 :         pi- : pT=3.55 : TOF=26.7 : x=(0.739,-1.02,-7.9)
+E1 :      proton : pT=0.26 : TOF=41.2 : x=(-1.33,0.205,-7.9)
+E1 :         mu+ : pT=0.411 : TOF=26.6 : x=(-0.669,0.798,-7.9)
+E1 :          e- : pT=0.000313 : TOF=26.8 : x=(-0.732,0.801,-7.9)
+B2 :         pi+ : pT=0.376 : TOF=29.2 : x=(-0.469,4.25,-5.92)
+E0 :          e- : pT=0.000679 : TOF=29.9 : x=(0.544,0.839,7.96)
+E1 :         pi- : pT=0.293 : TOF=26.7 : x=(0.0569,-1.1,-7.9)
+E1 :          e- : pT=0.00276 : TOF=28 : x=(1.29,0.432,-7.9)
+E1 :         pi- : pT=0.83 : TOF=26.6 : x=(-0.0938,1.01,-7.9)
+E1 :         pi+ : pT=1.9 : TOF=26.6 : x=(0.495,0.974,-7.9)
+E1 :         pi- : pT=0.428 : TOF=26.7 : x=(0.687,1.04,-7.9)
+E1 :         pi- : pT=13 : TOF=26.7 : x=(0.375,1.15,-7.9)
+E1 :         pi- : pT=2.59 : TOF=26.6 : x=(0.23,1.1,-7.9)
+E1 :         pi- : pT=1.06 : TOF=26.6 : x=(0.00362,1.1,-7.9)
+E1 :         pi+ : pT=0.695 : TOF=26.6 : x=(0.699,0.891,-7.9)
+E1 :         pi- : pT=0.551 : TOF=26.6 : x=(0.681,-0.888,-7.9)
+E1 :         pi- : pT=0.309 : TOF=26.7 : x=(-0.981,0.195,-7.94)
+E1 :          e- : pT=0.000682 : TOF=28.9 : x=(0.702,-0.743,-7.9)
+E1 :          e- : pT=0.000116 : TOF=30 : x=(0.794,-0.923,-8.1)
+B6 :         mu- : pT=42.2 : TOF=25.1 : x=(1.51,-4.25,-6.04)
+E1 :         mu+ : pT=29.4 : TOF=26.9 : x=(1.59,0.0322,-7.9)
+E1 :         mu- : pT=69.8 : TOF=26.6 : x=(-1.14,-0.105,-7.9)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=11)
+E0 :         mu- : pT=0.173 : TOF=26.7 : x=(-0.798,0.707,7.9)
+E1 :         pi- : pT=0.065 : TOF=33.6 : x=(0.197,0.98,-7.96)
+E1 :         mu+ : pT=0.0974 : TOF=27 : x=(-0.666,-0.958,-7.9)
+E0 : anti_proton : pT=0.653 : TOF=27.1 : x=(0.922,-0.59,7.9)
+E1 :         mu+ : pT=0.0996 : TOF=27.6 : x=(1.18,-1.18,-7.9)
+E1 :         pi- : pT=0.797 : TOF=26.6 : x=(-0.265,-1.06,-7.9)
+E1 :       kaon+ : pT=0.467 : TOF=26.8 : x=(0.614,-0.801,-7.9)
+B5 :         mu- : pT=17 : TOF=22.1 : x=(-2.87,-3.14,-5.09)
+B4 :         mu+ : pT=74.1 : TOF=20.4 : x=(-4.25,1.13,4.25)
+E0 :         mu- : pT=23.6 : TOF=27.5 : x=(-1.05,2.14,7.9)
+B5 :         mu+ : pT=64.9 : TOF=16 : x=(-2.56,-3.45,2.1)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=10)
+E0 :         pi- : pT=0.1 : TOF=27.1 : x=(0.94,0.65,7.9)
+E0 :         pi- : pT=0.106 : TOF=27.2 : x=(1.09,0.622,7.9)
+E0 :         pi+ : pT=0.174 : TOF=27.2 : x=(1.16,0.556,7.9)
+E1 :         mu- : pT=0.108 : TOF=26.9 : x=(-0.236,1.11,-7.9)
+E1 :         pi- : pT=0.124 : TOF=26.7 : x=(-1.17,-0.277,-7.9)
+E0 :         pi+ : pT=0.377 : TOF=26.7 : x=(0.701,0.914,7.9)
+B5 :         mu+ : pT=16.3 : TOF=15 : x=(-4.07,-1.94,0.178)
+B1 :         mu- : pT=98.2 : TOF=14.3 : x=(3.37,2.64,0.179)
+B1 :         mu+ : pT=62.2 : TOF=17.9 : x=(3.08,2.93,3.26)
+B4 :         mu- : pT=29.7 : TOF=19.3 : x=(-4.25,-0.461,3.89)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=15)
+E1 :         mu- : pT=0.15 : TOF=26.8 : x=(-0.784,0.955,-7.9)
+E1 :         pi+ : pT=0.115 : TOF=27.2 : x=(1.06,-0.669,-7.9)
+E1 :          e+ : pT=0.145 : TOF=26.6 : x=(0.402,0.918,-7.9)
+E1 :          e- : pT=0.0496 : TOF=26.6 : x=(0.41,0.92,-7.9)
+E1 :         pi- : pT=0.644 : TOF=26.6 : x=(-0.561,0.839,-7.9)
+E0 :         pi+ : pT=0.633 : TOF=26.7 : x=(-0.722,-0.932,7.9)
+E0 :          e- : pT=0.00119 : TOF=27.8 : x=(0.335,-1.06,7.9)
+E0 :         pi+ : pT=0.692 : TOF=26.6 : x=(-0.168,-0.998,7.9)
+E1 :         pi- : pT=0.913 : TOF=26.6 : x=(1.02,0.463,-7.9)
+E1 :       kaon- : pT=0.814 : TOF=26.7 : x=(0.159,-1.16,-7.9)
+E1 :          e- : pT=0.000238 : TOF=27.1 : x=(-0.748,0.677,-7.9)
+E0 :         mu+ : pT=4.26 : TOF=27.6 : x=(-2.23,-0.935,7.9)
+E1 :         mu- : pT=24.6 : TOF=27 : x=(0.371,1.72,-7.9)
+E1 :         mu+ : pT=21.5 : TOF=28.7 : x=(3.33,-0.623,-7.9)
+B5 :         mu- : pT=22.7 : TOF=23.5 : x=(-3.65,-2.36,5.53)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=7)
+E1 :         pi- : pT=0.189 : TOF=26.8 : x=(1.06,0.813,-7.9)
+E0 :         pi+ : pT=0.0723 : TOF=28 : x=(-1.19,-0.228,7.9)
+E1 :          e- : pT=0.00102 : TOF=28.9 : x=(0.772,-0.651,-7.9)
+B1 :         mu- : pT=19.6 : TOF=21.6 : x=(1.89,4.12,4.62)
+E1 :         mu+ : pT=11.3 : TOF=26.7 : x=(-1.15,-0.41,-7.9)
+B6 :         mu+ : pT=15.1 : TOF=18.8 : x=(-0.0189,-4.25,3.69)
+E1 :         mu- : pT=39.4 : TOF=27.7 : x=(-0.917,-2.4,-7.9)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=9)
+E1 :         pi- : pT=0.881 : TOF=26.6 : x=(0.986,-0.539,-7.9)
+E0 :         mu+ : pT=0.0765 : TOF=27 : x=(0.376,-0.961,7.9)
+E1 :         pi+ : pT=0.353 : TOF=26.7 : x=(0.441,-1.1,-7.9)
+E1 :          e- : pT=0.00138 : TOF=28.5 : x=(1.43,0.967,-7.9)
+E0 :         mu- : pT=0.172 : TOF=34.3 : x=(1.47,-0.372,7.9)
+B1 :         mu+ : pT=29.4 : TOF=15.6 : x=(4.05,1.96,-1.33)
+B4 :         mu- : pT=67.6 : TOF=14.7 : x=(-4.25,0.69,-1)
+B1 :         mu- : pT=43.1 : TOF=14.3 : x=(3.15,2.86,0.524)
+B4 :         mu+ : pT=34.2 : TOF=20.1 : x=(-4.25,-0.722,4.21)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=16)
+E0 :         pi- : pT=0.152 : TOF=26.8 : x=(0.186,-1.01,7.9)
+E0 :         pi- : pT=0.482 : TOF=26.7 : x=(0.123,-1.15,7.9)
+E1 :         pi- : pT=0.316 : TOF=26.7 : x=(1.19,-0.193,-7.9)
+E0 :          e- : pT=0.000452 : TOF=30 : x=(0.825,-0.624,7.9)
+E0 :         pi+ : pT=0.272 : TOF=26.6 : x=(0.689,-0.774,7.9)
+E0 :         pi- : pT=1.08 : TOF=26.6 : x=(0.412,-0.944,7.9)
+E0 :         pi+ : pT=1.21 : TOF=26.6 : x=(0.749,-0.67,7.9)
+E0 :         mu+ : pT=0.466 : TOF=27.7 : x=(0.945,-2.1,7.9)
+E0 :      proton : pT=0.535 : TOF=27.5 : x=(0.93,-0.697,7.9)
+E0 :         pi- : pT=2 : TOF=26.7 : x=(0.667,0.992,7.9)
+E1 :         mu- : pT=3.3 : TOF=28 : x=(-0.0478,2.8,-7.9)
+E0 :         pi+ : pT=0.586 : TOF=26.7 : x=(-1.12,-0.471,7.9)
+E0 :         pi+ : pT=0.67 : TOF=26.6 : x=(0.106,1.03,7.9)
+E0 :         mu- : pT=29.9 : TOF=27.5 : x=(-2.25,-0.52,7.9)
+B7 :         mu- : pT=55.4 : TOF=15.6 : x=(1.92,-4.09,1.27)
+E0 :         mu+ : pT=18.1 : TOF=27.2 : x=(1.26,1.59,7.9)
+
+1********* PYSTAT:  Statistics on Number of Events and Cross-sections *********
+
+ ==============================================================================
+ I                                  I                            I            I
+ I            Subprocess            I      Number of points      I    Sigma   I
+ I                                  I                            I            I
+ I----------------------------------I----------------------------I    (mb)    I
+ I                                  I                            I            I
+ I N:o Type                         I    Generated         Tried I            I
+ I                                  I                            I            I
+ ==============================================================================
+ I                                  I                            I            I
+ I   0 All included subprocesses    I           10            43 I  3.988E-12 I
+ I 102 g + g -> h0                  I            7            13 I  2.929E-12 I
+ I 123 f + f' -> f + f' + h0        I            1             9 I  3.282E-13 I
+ I 124 f + f' -> f" + f"' + h0      I            2            21 I  7.305E-13 I
+ I                                  I                            I            I
+ ==============================================================================
+
+ ********* Fraction of events that fail fragmentation cuts =  0.00000 *********
+
+Graphics systems deleted.
+Visualization Manager deleting...
