@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2000-01-07 14:49:04 grichine Exp $
+$Id: README,v 1.2 2001-03-30 12:35:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -135,4 +135,9 @@ $Id: README,v 1.1 2000-01-07 14:49:04 grichine Exp $
         8.   kinetic energy of the charged secondary particles (MeV)
         9.   z distribution of the secondary charged vertices (mm)
        10.   kinetic energy of the photons escaping the absorber (MeV)
-        
+
+ Note that, histograms are disabled via the flag G4NOHIST in the GNUmakefile.
+ Currently, histograms in this example are implemented through the obsolete
+ CLHEP/Hist package, which is no longer supported. The implementation will
+ be replaced by direct call to the "analysis" module in a near future.
+
