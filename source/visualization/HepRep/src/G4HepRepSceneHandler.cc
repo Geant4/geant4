@@ -288,6 +288,7 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
             getTrajectoryType();
             getHitType();
             getCalHitType();
+            getCalHitFaceType();
         }
     
         // Give this HepRep all of the layer order info for both geometry and event,
@@ -494,16 +495,15 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     do {
         HepRepInstance* face;
         if (isEventData()) {
-            face = factory->createHepRepInstance(instance, getCalHitType());
+            face = factory->createHepRepInstance(instance, getCalHitFaceType());
         } else {
             face = getGeometryInstance("*Face", currentDepth+1);
+            setAttribute(face, "PickParent", true);
         }
         
         setLine(face, polyhedron);
         setColor(face, GetColor(polyhedron));
         if (isEventData()) setColor(face, GetColor(polyhedron), G4String("FillColor"));
-
-	setAttribute(face, "PickParent", true);
 
         notLastFace = polyhedron.GetNextNormal (surfaceNormal);
 
@@ -1192,5 +1192,13 @@ HepRepType* G4HepRepSceneHandler::getCalHitType() {
         _calHitType->addAttValue("DrawAs", G4String("Polygon"));
     }
     return _calHitType;
+}
+
+HepRepType* G4HepRepSceneHandler::getCalHitFaceType() {
+    if (_calHitFaceType == NULL) {
+        _calHitFaceType = factory->createHepRepType(getCalHitType(), "CalHitFace");
+        _calHitFaceType->addAttValue("PickParent", true);
+    }
+    return _calHitFaceType;
 }
 

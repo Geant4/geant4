@@ -145,6 +145,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         HEPREP::HepRepType*         getTrajectoryType       ();
         HEPREP::HepRepType*         getHitType              ();
         HEPREP::HepRepType*         getCalHitType           ();
+        HEPREP::HepRepType*         getCalHitFaceType       ();
 
         G4String getFullTypeName(G4String volumeName, int depth);
         G4String getParentTypeName(int currentDepth);
