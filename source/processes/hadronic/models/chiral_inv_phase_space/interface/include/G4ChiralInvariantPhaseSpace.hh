@@ -57,10 +57,10 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
   G4QNucleus::SetParameters(fractionOfSingleQuasiFreeNucleons,
                             fractionOfPairedQuasiFreeNucleons,
-			    clusteringCoefficient);
+			                clusteringCoefficient);
   G4Quasmon::SetParameters(temperature,
                            halfTheStrangenessOfSee,
-			   etaToEtaPrime, 1.);
+			               etaToEtaPrime);
 //  G4cout << "Input info "<< projectilePDGCode << " " 
 //         << targetPDGCode <<" "
 //	 << 1./MeV*proj4Mom<<" "

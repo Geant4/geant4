@@ -150,15 +150,13 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4double temperature = 180.;
   G4double halfTheStrangenessOfSee = 0.1; // = s/d = s/u
   G4double etaToEtaPrime = 0.3;
-  G4double medium = 1.;
 
   G4QNucleus::SetParameters(fractionOfSingleQuasiFreeNucleons,
                             fractionOfPairedQuasiFreeNucleons,
 			                clusteringCoefficient);
   G4Quasmon::SetParameters(temperature,
                            halfTheStrangenessOfSee,
-			               etaToEtaPrime,
-                           medium);
+			               etaToEtaPrime);
   G4cout << "G4QNucleus parameters "<< fractionOfSingleQuasiFreeNucleons << " "
          << fractionOfPairedQuasiFreeNucleons << " "<< clusteringCoefficient << G4endl;
   G4cout << "G4Quasmon parameters "<< temperature << " "<< halfTheStrangenessOfSee << " "
