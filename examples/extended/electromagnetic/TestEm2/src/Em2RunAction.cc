@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.cc,v 1.20 2003-06-16 16:47:40 gunter Exp $
+// $Id: Em2RunAction.cc,v 1.21 2003-06-18 09:34:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -355,12 +355,8 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
   //print
   // 
 
-#ifdef G4USE_STD_NAMESPACE
   std::ios::fmtflags mode = G4cout.flags();
   G4cout.setf(std::ios::fixed,std::ios::floatfield);
-#else 
-  G4long mode = G4cout.setf(std::ios::fixed,std::ios::floatfield);
-#endif
   G4int  prec = G4cout.precision(2);
   
   G4cout << "                 LATERAL PROFILE                   "

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.cc,v 1.24 2003-06-16 16:47:44 gunter Exp $
+// $Id: Em3RunAction.cc,v 1.25 2003-06-18 09:36:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -172,12 +172,8 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
 
   G4double MeanEAbs,rmsEAbs,MeanLAbs,rmsLAbs;
 
-#ifdef G4USE_STD_NAMESPACE
   std::ios::fmtflags mode = G4cout.flags();
   G4cout.setf(std::ios::fixed,std::ios::floatfield);
-#else
-  G4long mode = G4cout.setf(std::ios::fixed,std::ios::floatfield);
-#endif
   G4int  prec = G4cout.precision(2);
 
   G4cout << "\n-------------------------------------------------------------\n"
@@ -244,12 +240,8 @@ void Em3RunAction::PrintDedxTables()
 
   //print the kinetic energies
   //
-#ifdef G4USE_STD_NAMESPACE
   std::ios::fmtflags mode = G4cout.flags();
   G4cout.setf(std::ios::fixed,std::ios::floatfield);
-#else
-  long mode = G4cout.setf(std::ios::fixed,std::ios::floatfield);
-#endif
   G4int  prec = G4cout.precision(3);
 
   G4cout << "\n kinetic energies \n ";
