@@ -509,7 +509,7 @@ G4VEnergyLossSTD* G4LossTableManager::BuildTables(const G4ParticleDefinition* aP
     for(G4int j=0; j<n_dedx; j++) {
       newlist[j]->clearAndDestroy();
     }
-  }  
+  }
   em->SetRangeTable(range);
   range_vector[iem] = range;
 
@@ -556,7 +556,7 @@ void G4LossTableManager::SetSubCutoff(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4LossTableManager::SetIntegral(G4bool val) 
+void G4LossTableManager::SetIntegral(G4bool val)
 {
   integral = val;
   integralActive = true;
@@ -577,7 +577,7 @@ void G4LossTableManager::SetMinSubRange(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4LossTableManager::SetRandomStep(G4bool val) 
+void G4LossTableManager::SetRandomStep(G4bool val)
 {
   rndmStepFlag = val;
   for(G4int i=0; i<n_loss; i++) {

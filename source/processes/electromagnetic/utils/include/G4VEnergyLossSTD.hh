@@ -225,7 +225,7 @@ public:
   void SetLossFluctuations(G4bool val) {lossFluctuationFlag = val;};
 
   virtual void SetIntegral(G4bool val);
-  //  G4bool IsIntegral() const {return integral;};
+  void DefineIntegral(G4bool val) {integral = val;};
 
   void SetRandomStep(G4bool val) {rndmStepFlag = val;};
 

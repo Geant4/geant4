@@ -77,7 +77,6 @@ void G4ionIonisation::InitialiseProcess()
   SetVerboseLevel(0);
 
   SetSecondaryParticle(G4Electron::Electron());
-  SetIntegral(true);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);

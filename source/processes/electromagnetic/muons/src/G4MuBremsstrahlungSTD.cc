@@ -62,7 +62,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuBremsstrahlungSTD::G4MuBremsstrahlungSTD(const G4String& name) 
+G4MuBremsstrahlungSTD::G4MuBremsstrahlungSTD(const G4String& name)
   : G4VEnergyLossSTD(name),
     theParticle(0),
     theBaseParticle(0)
@@ -72,15 +72,14 @@ G4MuBremsstrahlungSTD::G4MuBremsstrahlungSTD(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuBremsstrahlungSTD::~G4MuBremsstrahlungSTD() 
+G4MuBremsstrahlungSTD::~G4MuBremsstrahlungSTD()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuBremsstrahlungSTD::InitialiseProcess() 
+void G4MuBremsstrahlungSTD::InitialiseProcess()
 {
   SetSecondaryParticle(G4Gamma::Gamma());
-  SetIntegral(true);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);

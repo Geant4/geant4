@@ -81,7 +81,7 @@ G4eBremsstrahlungSTD::G4eBremsstrahlungSTD(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eBremsstrahlungSTD::~G4eBremsstrahlungSTD() 
+G4eBremsstrahlungSTD::~G4eBremsstrahlungSTD()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -89,7 +89,6 @@ G4eBremsstrahlungSTD::~G4eBremsstrahlungSTD()
 void G4eBremsstrahlungSTD::InitialiseProcess()
 {
   SetSecondaryParticle(G4Gamma::Gamma());
-  SetIntegral(true);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);

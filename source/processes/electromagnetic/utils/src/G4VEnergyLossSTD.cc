@@ -139,6 +139,7 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   scoffRegions.clear();
 
   // default dRoverRange and finalRange
+  SetIntegral(integral);
   SetStepLimits(0.2, 1.0*mm);
 
   //  SetVerboseLevel(0);

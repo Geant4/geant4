@@ -73,8 +73,7 @@ G4eIonisationSTD::G4eIonisationSTD(const G4String& name)
     theElectron(G4Electron::Electron()),
     subCutoff(false),
     isElectron(true),
-    isInitialised(false),
-    integrl(true)
+    isInitialised(false)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -87,8 +86,7 @@ G4eIonisationSTD::~G4eIonisationSTD()
 void G4eIonisationSTD::InitialiseProcess()
 {
   SetSecondaryParticle(theElectron);
-  G4VEnergyLossSTD::SetIntegral(integrl);
-
+  DefineIntegral(integrl);
   SetDEDXBinning(120);
   SetLambdaBinning(120);
   SetMinKinEnergy(0.1*keV);
@@ -136,7 +134,7 @@ void G4eIonisationSTD::SetSubCutoff(G4bool val)
 void G4eIonisationSTD::SetIntegral(G4bool val)
 {
   integrl = val;
-  G4VEnergyLossSTD::SetIntegral(val);
+  DefineIntegral(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
