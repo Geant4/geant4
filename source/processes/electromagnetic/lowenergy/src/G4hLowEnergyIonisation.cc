@@ -77,6 +77,7 @@
 // 31 May   2002 V.Ivanchenko Add path of Fluo + Auger cuts to 
 //                            AtomicDeexcitation
 // 03 Jun   2002 MGP          Restore fStopAndKill
+// 10 Jun   2002 V.Ivanchenko Restore fStopButAlive
 
 // -----------------------------------------------------------------------
 
@@ -1015,7 +1016,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   if (finalT <= MinKineticEnergy ) {
      
      finalT = 0.0;
-     aParticleChange.SetStatusChange(fStopAndKill); 
+     aParticleChange.SetStatusChange(fStopButAlive); 
   } 
 
   aParticleChange.SetEnergyChange( finalT );
@@ -1382,7 +1383,7 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
       aParticleChange.SetMomentumChange(ParticleDirection.x(),
                       ParticleDirection.y(),ParticleDirection.z());
 
-      aParticleChange.SetStatusChange(fStopAndKill);
+      aParticleChange.SetStatusChange(fStopButAlive);
     }
   
   aParticleChange.SetEnergyChange( finalKineticEnergy );
