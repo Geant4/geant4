@@ -16,6 +16,7 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ParticleTable.hh"
+#include "G4LeptonConstructor.hh"
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
@@ -56,15 +57,9 @@ void Tst03PhysicsList::ConstructBosons()
 
 void Tst03PhysicsList::ConstructLeptons()
 {
-  // leptons
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
+  // Construct all leptons
+  G4LeptonConstructor pConstructor;
+  pConstructor.ConstructParticle();
 }
 
 void Tst03PhysicsList::ConstructMesons()
@@ -80,6 +75,8 @@ void Tst03PhysicsList::ConstructBarions()
 //  barions
   G4Proton::ProtonDefinition();
   G4Neutron::NeutronDefinition();
+  G4AntiProton::AntiProtonDefinition();
+  G4AntiNeutron::AntiNeutronDefinition();
 }
 
 void Tst03PhysicsList::ConstructProcess()
@@ -217,27 +214,12 @@ void Tst03PhysicsList::ConstructOp()
   }
 }
 
-void Tst03PhysicsList::SetCuts(G4double cut)
+void Tst03PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
     G4cout << "Tst03PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
   }
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-
-  SetCutValue(cut, "gamma");
-  SetCutValue(cut, "e-");
-  SetCutValue(cut, "e+");
-
-  // set cut values for proton
-
-  SetCutValue(cut, "proton");
-
-  SetCutValueForOthers(GetDefaultCutValue());
-
-  if (verboseLevel>1) {
-    DumpCutValuesTable();
-  }
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+  SetCutsWithDefault();   
 }
