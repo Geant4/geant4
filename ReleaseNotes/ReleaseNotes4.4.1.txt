@@ -10,54 +10,234 @@ to the related History files):
 
   o Configuration:
     -------------
+    - Added Darwin-g++.gmk configuration file for MacOS-X systems running
+      with GNU g++ compiler.
+    - Removed obsolete SUN-CC4.gmk configuration file.
 
   o Event:
     -----
+    - Introduced new G4TrajectoryContainer class aggregating STL vector.
+    - Added TransferOneStackedTrack() method to G4StackManager.
 
   o Electromagnetic Processes (Low-energy):
     --------------------------------------
-
+    - New more complete and detailed data files (G4LOWEN1.1 data set).
+    - Extended parameterisation of e- ionisation (24 parameters per each
+      atomic shell) in order to have better fit to EEDL data.
+    - Bug fixes in e- bremsstruhlung process.
+    - Fixes and updates to parameterisation of the cross section in
+      photo-electric effect.
+    - Updates to polarised Compton process.
+    - Provided simulation of ionisation for GenericIons.
+    - Fixes in simulation of fluctuations of energy loss.
+    - Fixes in simulation of hadron induced fluorescence.
+    - Provided simulation of Auger electrons production.
+    - Fixes to the angular distribution in Rayleigh scattering 
+      (G4LowEnergyRayleigh process).
+    - Added UI control on the threshold to produce fluorescence photons 
+      and Auger electrons as secondaries.
+  
   o Electromagnetic Processes (Standard):
     ------------------------------------
+    - New classes (G4VXTRenergyLoss, G4GammaXTRadiator and G4RegularXTRadiator)
+      for the description of X-ray transition radiation as continuous process.
+    - New electromagnetic process G4GammaConversionToMuons for gamma conversion
+      into muon pairs.
+    - G4MultipleScattering: new parametrisation for angle distribution. 
+      Modified boundary algorithm and some other minor fixes. Improvements
+      and performance optimisation.
+    - Fixes to hadron ionisation/energy-loss processes for delta-electron
+      spectra of GenericIons.
+    - G4eIonisation: fixed access to energy cuts in BuildLossTables.
+    - Modifications in G4PAIxSection allowing to get additional information on
+      transverse and longitudinal excitations at atomic frequences.
+    - Bug fix in G4GammaConversion::DoIt() for e+e- angular distribution.
+    - G4ComptonScattering: set LowestEnergyLimit to 1*keV.
+    - G4PhotoElectricEffect:
+      o keep only Sandia crossSections, removed call to BuildPhysicsTables.
+        Simplified public interface.     
+      o generate theta angle of the photoelectron from Sauter-Gravila
+        distribution.
+    - G4Scintillation, G4Cerenkov: tracks are suspended only in 'fAlive' state.
+    - G4VMuEnergyLoss: bug fix in number of subcutoff delta.
 
   o General Processes, Parameterisation, Decay, Optical:
     ---------------------------------------------------
+    - Added method G4VProcess::GetCurrentInteractionLength().
+    - Fixed bug in G4VProcess::PostStepDoIt() when MeanFreePath is DBL_MAX.
 
   o Geometry:
     --------
+    - Introduced optional 3D geometry optimisation for parameterised volumes.
+    - Introduced ability to optionally disable optimisation of hierarchies of
+      geometry volume placements, through G4LogicalVolume.
+    - Enhanced reflection of volumes to cover all CSG and CSG-like solids.
+    - First release of module for importance biasing.
+    - Enhanced behavior for destructors of volumes/solids stores.
+      o Added locking mechanism for preventing conflicts when destroying
+        stores and deregistering pointers.
+      o Added Clean() static method to volumes/solids stores to explicitely
+        delete pointed objects in the stores and clear all entries. 
+    - G4GeometryMessenger: added new commands to exploit more 
+      features of the G4GeomTestVolume class for detecting geometry overlaps. 
+    - G4Tubs: restored original "vertices" algorithm for
+      CalculateExtent() which was temporarly disabled.
+    - G4Sphere: bug fixed in Inside() for treatment of point p on z-axis.
+    - G4BREPSolidPCone: added sanity check of delta phi section value
+      and exception is thrown saying about this unsupported feature if
+      delta phi is less than 2*PI. 
+    - G4AssemblyVolume:
+      o Fixed inconsistent handling of input rotation matrices.
+      o Corrected handling of cases when pointer to rotation matrix is zero.
+      o Moved accessors to assembly counters to public.
+      o Added support for user definable count base for generated physical
+        volumes.
+    - Implemented G4EllipticalTube::CreatePolyhedron().
+    - Fix in G4Navigator for problem concerning ExitNormal with photons.
 
   o Global:
     ------
-
-  o Graphics Representations:
-    ------------------------
+    - G4String: use G4std::string instead of internal type 'std_string' 
+      in signatures of public methods. No functional or interface changes. 
+    - G4DataVector: initialise to zero values in collection for contructor
+      taking capacity.
+    - Added more verbosity to G4Exception.
+    - Introduced temporary patches for porting on gcc-3.1 compiler.
 
   o Hadronic Processes:
     ------------------
+    - General code cleanup for removal of warnings.
+    - cross_sections:
+      o Included the high Q2 part of the cross-section into electro and
+        photo nuclear reaction cross-sections, and into the equivalent
+        photon production.
+      o New class for calculating projectile fragment cross-sections in
+        ion ion reactions. Implements Physical Review C61, 034607 (2000).
+        based on EPAX Version 2, with the kind permission of the authors.
+    - management:
+      o Included recoil charge state treatement in HadronicProcess.
+      o Bug-fix affecting energy conservation for anti-protons in hydrogene.
+    - models/chiral_inv_phase_space: 
+      o Included Q2!=0 for gamma and electro nuclear reactions.
+      o Using quark-gluon string model now to simulate reactions with large
+        energy transfers.
+      o Added protection for reactions at threshold.
+    - models/coherent_elastic:
+      o Improvement for coulomb effects.
+      o Correction of array sizes; slightly extends the applicability.
+    - models/high_energy:
+      o Fix for a long standing problem in phi symmetry traced to the Cross
+        method of G4HEVector.
+    - models/leading_particle:
+      o New package, steming from a partial re-implementation of the MARS
+        code. Valid for energies below 5 Gev for proton/neutron/pi+-,
+        K+-/gamma/anti_proton
+        The code is intrinsically leading particle biased, hence applicable
+        for radiation background simulations.
+	Typical application of this would be in the ESA MOLASSIS application.
+    - models/low_energy:
+      o Correction for randomization of fermi motion (1 in 1000 effect).
+      o Better treatement for anti-nucleons through accounting of
+        annihilation energy.
+      o Various cross-sections in the accounting of nucleons.
+      o Improved pi-0 to charged pion rations used in low energy models.
+      o Improved treatement of Lorentz transformation, getting rid of the
+        1 in 100 phi=0 peak for nucleons.
+    - models/neutron_hp:
+      o Resolved a problem in the effective luminosity correction
+        in the doppler broadening on the fly. Removes a bias in capture time
+        on termal neutrons in hydrogen (was off by 10%).
+    - models/radiative_decay:
+      o Fixed problem with sort, leading to erroneous behavior.
+    - models/generator/de_excitation:
+      o Moving the catching of low energy gammas.
+      o Adding a complete set of fresh evaporation code, that is more or
+        less equivalent to the GEM evaporation models. It produces fragments
+        up to Na25. Currently at beta level. G4Evaporation::SetGEMChannel()
+        method should be used to activate this.
+    - models/generator/high_energy:
+      o Included direct strong resonance decay in case of scattering off
+        hydrogen, hence removing this boundary use-case from the cascade
+        interface specifications.
+    - models/generator/management:
+      o Added utility interface for nucleus and nuclear density functions,
+        for the use of cascade codes.  
+    - models/generator/pre_equilibrium:
+      o Fixed error in the low energy proton distributions
+      o Improvements in the level density.
+      o Bug fixed in angular distributions (theta).
+      o Small bug fixed in the equilibrium exciton number.
+      o Migration to new pairing corrections.
+    - models/generator/quark_gluon_string:
+      o Design iteration to enable specialization of participants
+        in string excitation.
+      o Added gamma nuclear reactions by adding specialised participants for
+        this; based on single nucleon participant model, and mesonic structure;
+        assuming vector meson dominance in the reactions and splitting.
+    - models/generator/util:
+      o Added utility for the decay of strong resonances.
+      o Added consts to enforce few design considerations.
+
+  o Magnetic Field:
+    --------------
+    - Fix in G4MagIntegratorDriver to update the field track for small steps.
+    - Fixed LinearStep in G4MagHelicalStepper (expected unit direction).
+    - Changed maximum number of steps in driver from 500/order to 250/order.
+    - Fix in G4MagHelicalStepper::LinearStep().
+    - G4ChordFinder: corrected behaviour for very small or large step changes.
 
   o Materials:
     ---------
+    - G4Material: removed check of the ideal gas state equation.
 
   o Particles:
     ---------
+    - Added G4TauLeptonicDecayChannel for tau leptonic decay.
+    - Fixed a bug in G4NeutronBetaDecayChannel.
 
   o Run, Intercoms and Interfaces
     -----------------------------
+    - Introduced new class G4UIGainServer, socket extension for G4UIGAG.
+    - Adopt limit to the number of stored command strings.
+    - Cleared naive usage of G4String type arguments from most UI classes.
+    - Modified G4RunManager to re-open geometry when G4 changes to QUIT state.
+    - Use "virtual" inheritance for G4VModularPhysicsList.
+    - Fixed pedantic warnings.
 
   o Tracking & Track:
     ----------------
+    - G4TrackingManager: implemented EventAborted() method.
 
   o Transportation:
     --------------
+    - Added new classes for management of biasing transportation and scoring.
 
   o Visualization:
     -------------
+    - Prevent copying of autoRefresh status with /vis/viewer/set/all command.
+    - Corrected out of date advice about /vis/set/culling, etc.
+    - Deprecated /vis/viewer/set/autoRefresh command.
+    - Workaround for pseudo-parallel/orthogonal projection in Ray Tracer.
+    - Updated OpenGL to compile on Windows (G4VIS_BUILD_OPENGLWIN32_DRIVER).
+    - Bug fixes in G4VRMLXFileSceneHandlerFunc class.
+    - Fixed pedantic warnings.
 
   o Examples:
     --------
   - Novice:
+    o Added G4Scintillation process to example N06.
   - Extended:
+    o Created 8 new examples for importance biasing and scoring.
+    o Created 2 new examples demonstrating event-level parallellism.
+    o Introduced first version of example for importing GDML geometries.
+    o Introduced first version of CMS tool for debugging geometries overlaps.
+    o Added example showing import of STEP CAD geometries.
+    o Created 2 new examples showing usage of HepMC event generator.
+    o Added new EM example TestEm6 for G4GammaConversionToMuons process.
+    o Migrated EM examples to use AIDA 2.2 for histogramming.
   - Advanced:
+    o Updated examples to recent development and usage of histogramming
+      features in AIDA 2.2.
   - Updated reference outputs.
 
  ----------------------------------------------------------------------------
@@ -143,11 +323,9 @@ Native versions of STL have been tested on the following platforms:
 NOTES:
 
 - Platform specific setup:
-  o DEC:   Native STL is required for ISO/ANSI setup.
-  o SUN:   Native STL is required for ISO/ANSI setup (CC 5.2 only).
+  o SUN:   Native STL is required for ISO/ANSI setup.
   o Linux: Native STL is required (non ISO/ANSI setup for egcs compiler only).
   o W2000: Native STL and ISO/ANSI setup required (VC++ 6.0).
-  o MacOS: Native STL is required for ISO/ANSI setup.
 
 
 4. Persistency
