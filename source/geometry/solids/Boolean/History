@@ -1,5 +1,5 @@
 
-$Id: History,v 1.30 2002-03-26 14:23:06 gcosmo Exp $
+$Id: History,v 1.31 2002-04-16 12:30:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Apr 16  2002  Vladimir Grichine    geom-bool-V04-00-04
+  - G4ReflectedSolid.cc: enhanced algorithm for CalculateExtent(), now
+    passing all basic unit tests.
+  - Updated unit test for G4ReflectedSolid, testG4ReflectedSolid.cc
 
  Mar 26  2002  Vladimir Grichine    geom-bool-V04-00-03
   - G4ReflectedSolid.cc: modified implementation of CalculateExtent() to
