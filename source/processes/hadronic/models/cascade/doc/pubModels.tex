@@ -118,14 +118,13 @@ For N-N cross-sections parametrizations based on the experimental energy and iso
 The parameterization described in \cite{barashenkov72} is used. 
 
 For pion the INC crossections are privded to treat elestic collisions and following inelstics channels
-pi- n -> pi0 n,
-pi0 p -> pi+ n and
- pi0 n -> pi- p.
-Alo multiple production is implemented.
+$\pi^{-}$n $\rightarrow$ $\pi^{0}$n, $\pi^{0}$p $\rightarrow$ $\pi^{+}$n and $\pi^{0}$n $\rightarrow$ $\pi^{-}$p.
+Multiple particle production is also implemented.
+
 Pion absorption cannels are 
-$\pi^{+}$ + nn $\rightarrow$ pn, $\pi^{+}$ + pn $\rightarrow$ pp, 
-$\pi^{0}$ + nn $\rightarrow$ X , $\pi^{0}$ + pn $\rightarrow$ pn,      $\pi^{0}$ + pp $\rightarrow$ pp, 
-$\pi^{-}$ + nn $\rightarrow$ X , $\pi^{-}$ + pn $\rightarrow$ nn , and $\pi^{-}$ + pp $\rightarrow$ pn.
+$\pi^{+}$nn $\rightarrow$ pn, $\pi^{+}$pn $\rightarrow$ pp, 
+$\pi^{0}$nn $\rightarrow$ X , $\pi^{0}$pn $\rightarrow$ pn,      $\pi^{0}$pp $\rightarrow$ pp, 
+$\pi^{-}$nn $\rightarrow$ X , $\pi^{-}$pn $\rightarrow$ nn , and $\pi^{-}$pp $\rightarrow$ pn.
 \subsection{Pre-equilibrium model}
 
 {\sc Geant4} cascade model implements exiton model proposed by Griffin \cite{griffin66, griffin67}.
@@ -140,13 +139,12 @@ where p is the number of particle, h is number of holes and n = p + h is the num
 
 Cascade pre-equilibrium model uses target exitation data, 
 exiton configuration for neutron and proton to produce non-equilibrium evaporation.
-
+The angular distribution is isotropic in the frame of rest of the exiton system.
 
 Parametrisations of the level density, is tabulated both with A and Z dependence and with high temperature 
 behaviour (the nuclei binding energy using smooth liquid high energy formula).
 
-N $\rightarrow$ N - 2, N $\rightarrow$ N - 1 N $\rightarrow$ N, N $\rightarrow$ N + 2,  channels are treated.
-The angular distribution is isotropic in the frame of rest of the exiton system.
+%N $\rightarrow$ N - 2, N $\rightarrow$ N - 1 N $\rightarrow$ N, N $\rightarrow$ N + 2,  channels are treated.
 
 \subsection{Break-up models}
 
@@ -160,8 +158,7 @@ some features of the fission statistical model are incorporated \cite{fong69}.
 
 \subsection{Evaporation model}
 
-Physics of particle emission of the exited nucleus (de-exitation) remaining after the INC is based on statistical theory
-originally developed by Weisskopf \cite{weisskopf37}. 
+Statistical theory for particle emission of the exited nucleus remaining after the INC was originally developed by Weisskopf \cite{weisskopf37}. 
 This model assumes complete energy equilibration before the particle emission, and re-equilibration of excitation energies between successive evaporations. 
 As a result the angular distribution of emitted particles is isotropic.
 
