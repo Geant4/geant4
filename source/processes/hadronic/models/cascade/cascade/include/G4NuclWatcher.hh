@@ -7,7 +7,7 @@
 #endif
 
 #include "pair.h"
-#include "vector"
+#include "g4std/vector"
 #include <math.h>
 
 class G4NuclWatcher {
@@ -15,9 +15,9 @@ class G4NuclWatcher {
 public:
 
   G4NuclWatcher(G4double z, 
-		vector<G4double> expa, 
-		vector<G4double> expcs, 
-		vector<G4double> experr, 
+		G4std::vector<G4double> expa, 
+		G4std::vector<G4double> expcs, 
+		G4std::vector<G4double> experr, 
 		G4bool check, 
 		G4bool nucl)
     : nuclz(z),
@@ -126,7 +126,7 @@ public:
     G4double exp_cs_err = 0.0;
     G4double inucl_cs = 0.0;
     G4double inucl_cs_err = 0.0;
-    vector<G4bool> not_used(simulated_cs.size(), true);
+    G4std::vector<G4bool> not_used(simulated_cs.size(), true);
     G4int nmatched = exper_as.size();
     G4int nused = simulated_cs.size();
     G4double lhood = 0.0;
@@ -233,19 +233,19 @@ private:
 
   G4double aver_matched;
 
-  vector<G4double> exper_as;
+  G4std::vector<G4double> exper_as;
 
-  vector<G4double> exper_cs;
+  G4std::vector<G4double> exper_cs;
 
-  vector<G4double> exper_err;
+  G4std::vector<G4double> exper_err;
 
-  vector<G4double> simulated_as;
+  G4std::vector<G4double> simulated_as;
 
-  vector<G4double> simulated_cs;
+  G4std::vector<G4double> simulated_cs;
 
-  vector<G4double> simulated_errors;
+  G4std::vector<G4double> simulated_errors;
 
-  vector<G4double> simulated_prob;
+  G4std::vector<G4double> simulated_prob;
 
   G4bool checkable;
 

@@ -31,14 +31,14 @@ G4int verboseLevel;
 		   G4double R12) const;
 		    
   void potentialMinimization(G4double& VP, 
-			     vector<G4double>& ED, 
+			     G4std::vector<G4double>& ED, 
 			     G4double& VC,
 			     G4double AF, 
 			     G4double AS, 
 			     G4double ZF, 
 			     G4double ZS,
-			     vector<G4double>& AL1, 
-			     vector<G4double>& BET1, 
+			     G4std::vector<G4double>& AL1, 
+			     G4std::vector<G4double>& BET1, 
 			     G4double& R12) const; 
 
 };        

@@ -3,7 +3,7 @@
 
 #include "G4FissionConfiguration.hh"
 
-#include "vector"
+#include "g4std/vector"
 
 class G4FissionStore {
 
@@ -31,7 +31,7 @@ public:
 private:
   G4int verboseLevel;
 
-  vector<G4FissionConfiguration> configurations;
+  G4std::vector<G4FissionConfiguration> configurations;
 
 };
 

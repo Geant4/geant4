@@ -1,7 +1,8 @@
 #include "globals.hh"
 #include <math.h>
 #include "pair.h"
-#include "vector"
+#include "g4std/vector"
+
 
 namespace G4InuclSpecialFunctions {
 
@@ -21,7 +22,7 @@ namespace G4InuclSpecialFunctions {
 		       G4double Z, 
 		       G4int ntype);
   
-  pair<vector<G4double>, vector<G4double> > paraMaker(G4double Z);
+  pair<G4std::vector<G4double>, G4std::vector<G4double> > paraMaker(G4double Z);
 
   pair<G4double, G4double> paraMakerTruncated(G4double Z); 
 
@@ -41,6 +42,6 @@ namespace G4InuclSpecialFunctions {
 
   G4double nucleiLevelDensity(G4double a);
 
-  vector<G4double> generateWithFixedTheta(G4double ct, 
+  G4std::vector<G4double> generateWithFixedTheta(G4double ct, 
 					  G4double p);
 }

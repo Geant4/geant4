@@ -20,13 +20,13 @@ public:
 private: 
 
 G4int verboseLevel;
-  vector<G4InuclElementaryParticle> generateBangInSCM(G4double etot, 
+  G4std::vector<G4InuclElementaryParticle> generateBangInSCM(G4double etot, 
 						      G4double a, 
 						      G4double z, 
 						      G4double mp,
 						      G4double mn) const;
 
-  vector<G4double> generateMomentumModules(G4double etot, 
+  G4std::vector<G4double> generateMomentumModules(G4double etot, 
 					   G4double a, 
 					   G4double z,
 					   G4double mp, 

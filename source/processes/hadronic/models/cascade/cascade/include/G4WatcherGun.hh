@@ -2,25 +2,23 @@
 #define G4WATCHER_GUN_HH
 
 #include "G4NuclWatcher.hh"
-#include "vector"
+#include "g4std/vector"
 
 class G4WatcherGun {
 
 public:
 
   G4WatcherGun();
-
   void setWatchers();
 
-  vector<G4NuclWatcher> getWatchers() const { 
-
+  G4std::vector<G4NuclWatcher> getWatchers() const { 
     return watchers; 
   };
 
 private: 
-  G4int verboseLevel;
 
-  vector<G4NuclWatcher> watchers;
+  G4int verboseLevel;
+  G4std::vector<G4NuclWatcher> watchers;
 
 };        
 

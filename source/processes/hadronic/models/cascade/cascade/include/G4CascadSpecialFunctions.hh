@@ -2,7 +2,7 @@
 
 #include <math.h>
 #include "pair.h"
-#include "vector"
+#include "g4std/vector"
 
 namespace G4CascadSpecialFunctions {
 

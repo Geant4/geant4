@@ -6,7 +6,7 @@
 #include "globals.hh"
 #endif
 
-#include "vector"
+#include "g4std/vector"
 
 class G4LorentzConvertor {
 
@@ -14,9 +14,9 @@ public:
 
   G4LorentzConvertor();
 
-  G4LorentzConvertor(const vector<G4double>& bmom, 
+  G4LorentzConvertor(const G4std::vector<G4double>& bmom, 
 		     G4double bmass, 
-		     const vector<G4double>& tmom, 
+		     const G4std::vector<G4double>& tmom, 
 		     G4double tmass) {
 
     setBullet(bmom, bmass);
@@ -24,7 +24,7 @@ public:
     degenerated = false;  
   }; 
 
-  void setBullet(const vector<G4double>& bmom, 
+  void setBullet(const G4std::vector<G4double>& bmom, 
 		 G4double bmass) {
 
     bullet_mom = bmom;
@@ -32,7 +32,7 @@ public:
     //  G4cout << " bullet: e " << bmom[0] << " mass " << bmass << G4endl;
   };
 
-  void setTarget(const vector<G4double>& tmom, 
+  void setTarget(const G4std::vector<G4double>& tmom, 
 		 G4double tmass) {
 
     target_mom = tmom;
@@ -44,7 +44,7 @@ public:
  
   void toTheTargetRestFrame(); 
 
-  vector<G4double> backToTheLab(const vector<G4double>& mom) const; 
+  G4std::vector<G4double> backToTheLab(const G4std::vector<G4double>& mom) const; 
 
   G4double getKinEnergyInTheTRS() const {
 
@@ -71,10 +71,10 @@ public:
     return plab; 
   };
  
-  vector<G4double> rotate(const vector<G4double> mom) const; 
+  G4std::vector<G4double> rotate(const G4std::vector<G4double> mom) const; 
 
-  vector<G4double> rotate(const vector<G4double> mom1,
-			    const vector<G4double> mom) const; 
+  G4std::vector<G4double> rotate(const G4std::vector<G4double> mom1,
+			    const G4std::vector<G4double> mom) const; 
 
   G4bool reflectionNeeded() const; 
 
@@ -84,15 +84,15 @@ public:
 
 private: 
 G4int verboseLevel;
-  vector<G4double> bullet_mom;
+  G4std::vector<G4double> bullet_mom;
   G4double bullet_mass;
 
-  vector<G4double> target_mom;
+  G4std::vector<G4double> target_mom;
   G4double target_mass;
 
-  vector<G4double> velocity;
+  G4std::vector<G4double> velocity;
 
-  vector<G4double> scm_momentum;
+  G4std::vector<G4double> scm_momentum;
 
   G4double ecm_tot;
 

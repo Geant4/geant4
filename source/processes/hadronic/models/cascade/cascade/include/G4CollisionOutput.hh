@@ -7,7 +7,7 @@
 #include "G4InuclNuclei.hh"
 
 #include "pair.h"
-#include "vector"
+#include "g4std/vector"
 
 class G4CollisionOutput {
 
@@ -25,7 +25,7 @@ public:
     outgoingParticles.push_back(particle);
   };
 
-  void addOutgoingParticles(const vector<G4InuclElementaryParticle>& particles) {
+  void addOutgoingParticles(const G4std::vector<G4InuclElementaryParticle>& particles) {
     for(G4int i = 0; i < G4int(particles.size()); i++)
       outgoingParticles.push_back(particles[i]);
   };
@@ -34,12 +34,12 @@ public:
     nucleiFragments.push_back(nuclei);
   };
 
-  void addTargetFragments(const vector<G4InuclNuclei>& nuclea) {
+  void addTargetFragments(const G4std::vector<G4InuclNuclei>& nuclea) {
     for(G4int i = 0; i < G4int(nuclea.size()); i++)
       nucleiFragments.push_back(nuclea[i]);
   };
 
-  vector<G4InuclElementaryParticle> getOutgoingParticles() const {
+ G4std::vector<G4InuclElementaryParticle> getOutgoingParticles() const {
     return outgoingParticles;
   };
 
@@ -47,19 +47,19 @@ public:
     return nucleiFragments.size(); 
   };
  
-  vector<G4InuclNuclei> getNucleiFragments() const {
+  G4std::vector<G4InuclNuclei> getNucleiFragments() const {
     return nucleiFragments;
   };
 
-  vector<G4double> getTotalOutputMomentum() const {
-    vector<G4double> tot_mom(4, 0.0);
+  G4std::vector<G4double> getTotalOutputMomentum() const {
+    G4std::vector<G4double> tot_mom(4, 0.0);
     double eex_r = 0.0;
     for(G4int i = 0; i < G4int(outgoingParticles.size()); i++) {
-      vector<G4double> mom = outgoingParticles[i].getMomentum();
+      G4std::vector<G4double> mom = outgoingParticles[i].getMomentum();
       for(G4int j = 0; j < 4; j++) tot_mom[j] += mom[j];
     };
     for(i = 0; i < G4int(nucleiFragments.size()); i++) {
-      vector<G4double> mom = nucleiFragments[i].getMomentum();
+      G4std::vector<G4double> mom = nucleiFragments[i].getMomentum();
       for(G4int j = 0; j < 4; j++) tot_mom[j] += mom[j];
       eex_r += 0.001 * nucleiFragments[i].getExitationEnergy();
     };
@@ -119,9 +119,9 @@ public:
 private: 
 
 G4int verboseLevel;
-  vector<G4InuclElementaryParticle> outgoingParticles;
+  G4std::vector<G4InuclElementaryParticle> outgoingParticles;
 
-  vector<G4InuclNuclei> nucleiFragments;
+  G4std::vector<G4InuclNuclei> nucleiFragments;
 
   G4double eex_rest;
 

@@ -25,7 +25,7 @@ public:
     exitationEnergy = 0.0; 
   };
 
-  G4InuclNuclei(const vector<G4double>& mom, 
+  G4InuclNuclei(const G4std::vector<G4double>& mom, 
 		G4double a, 
 		G4double z)
     : G4InuclParticle(mom),
@@ -43,7 +43,7 @@ public:
     Z(z) { 
 
     setNucleiMass();
-    vector<G4double> mom(4, 0.0);
+    G4std::vector<G4double> mom(4, 0.0);
     mom[0] = ekin + nucleiMass;
     mom[3] = sqrt(mom[0] * mom[0] - nucleiMass * nucleiMass);
     G4InuclParticle::setMomentum(mom);

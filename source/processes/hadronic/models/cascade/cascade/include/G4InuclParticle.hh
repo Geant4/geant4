@@ -6,7 +6,7 @@
 #endif
 
 #include <iostream.h>
-#include "vector"
+#include "g4std/vector"
 
 class G4InuclParticle {
 
@@ -16,17 +16,17 @@ public:
 
   virtual ~G4InuclParticle() { };
  
-  G4InuclParticle(const vector<G4double>& mom) {
+  G4InuclParticle(const G4std::vector<G4double>& mom) {
 
     setMomentum(mom);
   };
 
-  void setMomentum(const vector<G4double>& mom) {
+  void setMomentum(const G4std::vector<G4double>& mom) {
 
     momentum = mom;
   };
 
-  vector<G4double> getMomentum() const { 
+  G4std::vector<G4double> getMomentum() const { 
 
     return momentum; 
   };
@@ -50,7 +50,7 @@ public:
 
 protected: 
 
-  vector<G4double> momentum;
+  G4std::vector<G4double> momentum;
 
 };        
 
