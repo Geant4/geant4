@@ -85,11 +85,10 @@
       }
       debug.push_back(tmpV);
       debug.dump();
-      G4ReactionProductVector *result=theModel.Propagate(initalState, fancyNucleus);
-      debug.push_back("################# Result ? ");
+      result=theModel.Propagate(initalState, fancyNucleus);
+      debug.push_back("################# Result size");
       debug.push_back(result->size());
       debug.dump();
-      delete fancyNucleus;
       delete projectile;
       for_each(initalState->begin(), initalState->end(), Delete<G4KineticTrack>());
       delete initalState;
@@ -97,52 +96,68 @@
       if(result->size()==0) 
       {
         delete result; result=0;
-      }
-      
+        delete fancyNucleus;
+      } 
+      else
+      {
+        break;
+      }     
     }
+    debug.push_back("################# Through the loop ? "); debug.dump();
     //inverse transformation in case we swapped.
     fancyNucleus->StartLoop();  
     G4int resA(0), resZ(0); 
     G4Nucleon * aNuc;
+    debug.push_back("getting at the hits"); debug.dump();
     while( (aNuc=fancyNucleus->GetNextNucleon()) )
     {
+      debug.push_back("getting the hits"); debug.dump();
       if(!aNuc->AreYouHit())
       {
         resA++;
 	resZ+=aNuc->GetDefinition()->GetPDGCharge();
       }
-      
-      // Calculate excitation energy
-      G4LorentzVector iState = mom;
-      iState.setT(iState.getT()+m2);
-      
-      G4LorentzVector fState(0,0,0,0);
-      for(G4int i=0; i<result->size(); i++)
+      else
       {
-        fState += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
+        debug.push_back(" ##### a hit ##### "); debug.dump();
       }
-      G4LorentzVector momentum(iState-fState);
-      
-      //Make the fragment
-      G4Fragment aProRes;
-      aProRes.SetA(resA);
-      aProRes.SetZ(resZ);
-      aProRes.SetNumberOfParticles(0);
-      aProRes.SetNumberOfCharged(0);
-      aProRes.SetNumberOfHoles(a2-resA);
-      aProRes.SetMomentum(momentum);
-      
-      // call precompound model
-      G4ReactionProductVector * proFrag(0);
-      proFrag = theProjectileFragmentation.DeExcite(aProRes);
-      
-      // collect the evaporation part
-      G4ReactionProductVector::iterator ii;
-      for(ii=proFrag->begin(); ii!=proFrag->end(); ii++)
-      {
-        result->push_back(*ii);
-      }
+      debug.push_back("collected a hit"); debug.dump();
     }
+    delete fancyNucleus;
+    debug.push_back("have the hits"); debug.dump();
+    // Calculate excitation energy
+    G4LorentzVector iState = mom;
+    iState.setT(iState.getT()+m2);
+
+    G4LorentzVector fState(0,0,0,0);
+    G4int i(0);
+    for(i=0; i<result->size(); i++)
+    {
+      fState += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
+    }
+    G4LorentzVector momentum(iState-fState);
+
+    //Make the fragment
+    G4Fragment aProRes;
+    aProRes.SetA(resA);
+    aProRes.SetZ(resZ);
+    aProRes.SetNumberOfParticles(0);
+    aProRes.SetNumberOfCharged(0);
+    aProRes.SetNumberOfHoles(a2-resA);
+    aProRes.SetMomentum(momentum);
+
+    // call precompound model
+    G4ReactionProductVector * proFrag(0);
+    proFrag = theProjectileFragmentation.DeExcite(aProRes);
+
+    // collect the evaporation part
+    G4ReactionProductVector::iterator ii;
+    for(ii=proFrag->begin(); ii!=proFrag->end(); ii++)
+    {
+      result->push_back(*ii);
+    }
+
+    debug.push_back("################# done with evaporation"); debug.dump();
     // Rotate to lab
     G4LorentzRotation toZ;
     toZ.rotateZ(-1*mom.phi());
@@ -154,7 +169,7 @@
     theParticleChange.Initialize(aTrack);
     theParticleChange.SetStatusChange(fStopAndKill);
     theParticleChange.SetNumberOfSecondaries(result->size());
-    for(G4int i=0; i<result->size(); i++)
+    for(i=0; i<result->size(); i++)
     {
       G4DynamicParticle * aNew = 
       new G4DynamicParticle((*result)[i]->GetDefinition(),

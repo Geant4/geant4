@@ -1034,6 +1034,8 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   if(target != NULL)
     oldTarget.push_back(target);
      //G4cerr << "G4BinaryCascade::ApplyCollision pre-update"<<G4endl;
+  primary->Hit();
+  target->Hit();
   UpdateTracksAndCollisions(&oldSecondaries, &oldTarget, products);
      //G4cerr << "G4BinaryCascade::ApplyCollision post-update"<<G4endl;
   ClearAndDestroy(&oldSecondaries);  // free memory of desappeared tracks
