@@ -1,0 +1,21 @@
+2003 December 08
+ - present MOMO's XML functions (save and load) are limited.
+	-only available GDML tags are implemented. Not implemented are
+		- CSG Torus, Hype
+		- BREPs Polygon, Polycone
+		- no vis attributes
+		- no physical volumes
+
+	- when you want to save unimplemented elements, MOMO warns.
+		You can continue to save the file, but the output
+		may not be well-formed. You can chech it by
+		reading the file with the Web browser.
+
+ - Non-compatiblity of Java's serialization.
+	You can save or load in the Java serialized format, without
+	loosing any element created in MOMO. But The present
+	version MOMO doesn't guarantee the persistency between
+	different version of Java nor different version of MOMO.
+
+ - GGE and GPE have been integrated in MOMO and are no more improved.
+	Please use MOMO instead.
