@@ -1,4 +1,4 @@
-$Id: History,v 1.5 1999-08-19 11:42:34 maire Exp $
+$Id: History,v 1.6 1999-09-14 02:26:53 stanaka Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-08-99 Satoshi Tanaka
+  TAG: examples-V00-01-02
+  Visualization tutorial macros are committed.
+  (exN03Vis0.mac,..., exN03Vis3.mac)
      
 19-08-99 Michel Maire
 - modify ExN03PhysicsList to keep the command setCut compatible

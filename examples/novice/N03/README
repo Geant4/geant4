@@ -1,4 +1,4 @@
-$Id: README,v 1.2 1999-05-31 14:48:07 maire Exp $
+$Id: README,v 1.3 1999-09-14 02:25:34 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -85,11 +85,23 @@ $Id: README,v 1.2 1999-05-31 14:48:07 maire Exp $
  	Optionaly one can choose to draw all particles, only the charged one,
  	or none. This command is defined in EventActionMessenger class.
 	
-	NB: the visualization (with OpenGL) assumes two things:
+	NB 1: the visualization (with OpenGL driver) assumes two things:
 	    1- the visualisation & interfaces categories have been compiled
 	       with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
 	    2- exampleN03.cc has been compiled with G4VIS_USE_OPENGLX.   
+
+	NB 2: the visualization (with DAWNFILE driver) assumes two things:
+	    1- the visualisation & interfaces categories have been compiled
+	       with the environment variable G4VIS_BUILD_DAWNFILE_DRIVER.
+	    2- exampleN03.cc has been compiled with G4VIS_USE_DAWNFILE.   
  	
+	NN 3: The macros "exN03VisX.mac" are tutorial macros for 
+              visualization.  They can be tried as:
+               % $G4BINDIR/exampleN03 exN03VisX.mac
+              For details, see commentt lines  described in the macro files.
+              These macros are designed to help your understanding the 
+              User's Guide.    
+
  5- PHYSICS DEMO
  
  	The particle's type and the physic processes which will be available
