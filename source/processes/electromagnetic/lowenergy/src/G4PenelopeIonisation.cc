@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisation.cc,v 1.11 2004-03-17 13:25:27 pandola Exp $
+// $Id: G4PenelopeIonisation.cc,v 1.12 2004-03-18 13:44:44 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -45,6 +45,7 @@
 //                              to eliminate the same bug 
 // 10.03.04 L.Pandola           Bug fixed with reference system of delta rays
 // 17.03.04 L.Pandola           Removed unnecessary calls to pow(a,b)
+// 18.03.04 L.Pandola           Bug fixed in the destructor
 // --------------------------------------------------------------
 
 #include "G4PenelopeIonisation.hh"
@@ -95,7 +96,7 @@ G4PenelopeIonisation::~G4PenelopeIonisation()
     {
       if (ionizationEnergy->count(Z)) delete (ionizationEnergy->find(Z)->second);
       if (resonanceEnergy->count(Z)) delete (resonanceEnergy->find(Z)->second);
-      if (occupationNumber->count(Z)) delete (resonanceEnergy->find(Z)->second);
+      if (occupationNumber->count(Z)) delete (occupationNumber->find(Z)->second);
       if (shellFlag->count(Z)) delete (shellFlag->find(Z)->second);
     }
   delete ionizationEnergy;
