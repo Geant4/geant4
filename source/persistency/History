@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 April, 01   Y.Morita
+- Change NULL to 0
+
 25 April, 01   G.Cosmo
 - Removed redundant declarations of G4ThreeVectorList in CSG schemas:
   G4PPara.ddl, G4PSphere.ddl and G4PTrap.ddl.
