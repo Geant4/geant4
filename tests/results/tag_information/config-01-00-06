@@ -1,0 +1,36 @@
+ config-01-00-06 collects all changes listed below since the last
+ announced tag. Please, consider it for your tests.
+
+ Gabriele
+
+-----------------------------
+27th May 1999  Gabriele Cosmo (config-01-00-06)
+- architecture.gmk: set default $G4INSTALL path to $HOME/geant4
+  (was still referring to geant4beta...).
+- Restored default CLHEP_BASE_DIR to
+  /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro
+  now switched to CLHEP 1.4 by default.
+- architecture.gmk: added -DG4NOT_ISO_DELETES for NT setup
+  (G.Folger).
+
+25th May 1999  Gabriele Cosmo
+- architecture.gmk: fixed bug in SUN-CC setup. Replaced VISLIBS with
+  LOADLIBS to specify inclusion of socket libraries -lsocket -lnsl.
+- binmake.gmk: fixed path to libname.map in the definition of LDLIBS2
+  for the granular libs setup.
+
+19th May 1999  John Allison
+- Force linking of static library, libCLHEP.a.
+
+18th May 1999  John Allison
+- Specify -DG4NOT_ISO_DELETES in any case (not just G4USE_STL) and
+  only for HP, Sun and AIX.
+
+17th May 1999  Gabriele Cosmo
+- Added -DG4NOT_ISO_DELETES for DEC and AIX
+- Added path to wrappers for AIX.
+
+17th May 1999  John Allison
+- Added -DG4NOT_ISO_DELETES for Sun and HP.
+- Changed order of -I$(OSPACEDIR)/ospace/std and
+  -I$(OSPACEDIR)/ospace/stl.
