@@ -43,7 +43,7 @@ class G4NeutronIsotopeProduction : public G4VIsotopeProduction
   public:
   
   G4NeutronIsotopeProduction();
-  ~G4NeutronIsotopeProduction();
+  virtual ~G4NeutronIsotopeProduction();
 
   G4IsoResult * GetIsotope(const G4Track & aTrack, const G4Nucleus & aNucleus);
 

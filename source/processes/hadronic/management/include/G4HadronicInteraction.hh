@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.6 2001-08-01 17:03:23 hpw Exp $
+// $Id: G4HadronicInteraction.hh,v 1.7 2001-10-04 20:00:20 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Interaction  abstract base class
@@ -59,7 +59,7 @@
     
     G4HadronicInteraction() :
       verboseLevel(0), theMinEnergy(0.0*GeV), theMaxEnergy(25.0*GeV),
-      theBlockedCounter(0), theMinCounter(0), theMaxCounter(0),
+      theMinCounter(0), theMaxCounter(0), theBlockedCounter(0), 
       theMinCounterElements(0), theMaxCounterElements(0),
       theBlockedCounterElements(0)
     { 

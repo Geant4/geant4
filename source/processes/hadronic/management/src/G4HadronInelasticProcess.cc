@@ -61,7 +61,6 @@
     
     G4double aTemp = aMaterial->GetTemperature();
     G4Element *anElement = (*theElementVector)[0];
-    G4int j = anElement->GetIndex();
         
     G4double sigma = 0.0;
     for( G4int i=0; i<nElements; ++i )

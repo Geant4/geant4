@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopAbsorption.hh,v 1.6 2001-08-01 17:12:21 hpw Exp $
+// $Id: G4PiMinusStopAbsorption.hh,v 1.7 2001-10-04 20:00:40 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,8 +42,6 @@
 
 #ifndef G4PIMINUSSTOPABSORPTION_HH
 #define G4PIMINUSSTOPABSORPTION_HH
-
-#include "g4rw/tpordvec.h"
 
 #include "globals.hh"
 #include "G4DynamicParticle.hh"

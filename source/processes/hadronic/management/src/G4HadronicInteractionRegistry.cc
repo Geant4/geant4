@@ -46,7 +46,7 @@ AddModel(G4HadronicInteraction * aModel)
   G4bool alreadyThere = false;
   for(G4int i=0; i<nModels; i++)
   {
-    if(allModels(i)==aModel)
+    if(allModels[i]==aModel)
     {
       alreadyThere = true;
       break;
@@ -55,7 +55,6 @@ AddModel(G4HadronicInteraction * aModel)
   if(!alreadyThere)
   {
     nModels++;
-    allModels.resize(nModels);
-    allModels(nModels-1) = aModel;
+    allModels.push_back(aModel);
   }
 }

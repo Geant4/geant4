@@ -290,7 +290,7 @@
 
           G4double    dPower; 
 
-           for(G4int ik = 0; ik<AreaNumb; ik++) 
+           for( ik = 0; ik<AreaNumb; ik++) 
              {
                dPower = pow(10,ik);
                for( ii = 0; ii<iNpoE; ii++)
@@ -329,7 +329,7 @@
 
        TestFile << dEbeg<<" "<<dEend<<"  "<<iNpoE<<G4endl;
 
-  for(G4int ik=0; ik<AreaNumb; ik++)
+  for(ik=0; ik<AreaNumb; ik++)
   {
     for(ii=0; ii<ONQ2; ii++)
       {
@@ -891,7 +891,8 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
 
                iIntgr[0] = 0;
 
-             for(G4int ii=0; ii<Nstep-1; ii++) 
+             G4int ii;
+	     for( ii=0; ii<Nstep-1; ii++) 
               {
 
 // ----------------  The integration  -------------
@@ -925,7 +926,7 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
               }   //  ii
 
 //  -------------------  The normalization  ----------------
-            for(G4int ii=0; ii<Nstep; ii++)
+	    for(ii=0; ii<Nstep; ii++)
              {
                iIntgr[ii] = iIntgr[ii]/iIntgr[Nstep-1];
               }   //  ii
@@ -1063,7 +1064,7 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
 
               }                                            //   ii (Q2)
 
-          for(G4int ii = 0; ii<Nstep; ii++)
+          for(ii = 0; ii<Nstep; ii++)
                    {  
                   iIntgr[ii]=iIntgr[ii]/iIntgr[Nstep-1];
 

@@ -243,10 +243,10 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
     }
     else
     {
-      for(i=0; i<tmpHadrons->length(); i++)
+      for(i=0; i<tmpHadrons->size(); i++)
       {
 	for(ii=0; ii<nDef; ii++)
-          if(!Done[ii] && tmpHadrons->at(i)->GetDefinition() == theDefs[ii]) 
+          if(!Done[ii] && tmpHadrons->operator[](i)->GetDefinition() == theDefs[ii]) 
               Done[ii] = true;
       }
     }
@@ -266,7 +266,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
 	  G4Exception("No energy distribution to sample from in InelasticBaseFS::BaseApply");
 	}
 	theAngularDistribution->SampleAndUpdate(*aHadron);
-	tmpHadrons->insert(aHadron);
+	tmpHadrons->push_back(aHadron);
       }
     }
     delete [] Done;
@@ -286,10 +286,10 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
     thePhotons = theFinalStatePhotons->GetPhotons(anEnergy);
     if(thePhotons!=NULL)
     {
-      for(i=0; i<thePhotons->length(); i++)
+      for(i=0; i<thePhotons->size(); i++)
       {
         // back to lab
-        thePhotons->at(i)->Lorentz(*(thePhotons->at(i)), -1.*theTarget);
+        thePhotons->operator[](i)->Lorentz(*(thePhotons->operator[](i)), -1.*theTarget);
       }
     }
   }
@@ -306,29 +306,29 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
     G4double eBindT = G4NucleiPropertiesTable::GetBindingEnergy(1,3);
     G4double eBindHe3 = G4NucleiPropertiesTable::GetBindingEnergy(2,3);
     G4double eBindA = G4NucleiPropertiesTable::GetBindingEnergy(2,4);
-    for(i=0; i<tmpHadrons->length(); i++)
+    for(i=0; i<tmpHadrons->size(); i++)
     {
-      if(tmpHadrons->at(i)->GetDefinition() == G4Neutron::Neutron())
+      if(tmpHadrons->operator[](i)->GetDefinition() == G4Neutron::Neutron())
       {
         eBindProducts+=eBindN;
       }
-      else if(tmpHadrons->at(i)->GetDefinition() == G4Proton::Proton())
+      else if(tmpHadrons->operator[](i)->GetDefinition() == G4Proton::Proton())
       {
         eBindProducts+=eBindP;
       }
-      else if(tmpHadrons->at(i)->GetDefinition() == G4Deuteron::Deuteron())
+      else if(tmpHadrons->operator[](i)->GetDefinition() == G4Deuteron::Deuteron())
       {
         eBindProducts+=eBindD;
       }
-      else if(tmpHadrons->at(i)->GetDefinition() == G4Triton::Triton())
+      else if(tmpHadrons->operator[](i)->GetDefinition() == G4Triton::Triton())
       {
         eBindProducts+=eBindT;
       }
-      else if(tmpHadrons->at(i)->GetDefinition() == G4He3::He3())
+      else if(tmpHadrons->operator[](i)->GetDefinition() == G4He3::He3())
       {
         eBindProducts+=eBindHe3;
       }
-      else if(tmpHadrons->at(i)->GetDefinition() == G4Alpha::Alpha())
+      else if(tmpHadrons->operator[](i)->GetDefinition() == G4Alpha::Alpha())
       {
         eBindProducts+=eBindA;
       }
@@ -358,9 +358,9 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
       if(thePhotons==NULL) thePhotons = new G4ReactionProductVector;
       if(theOtherPhotons != NULL)
       {
-        for(G4int ii=0; ii<theOtherPhotons->length(); ii++)
+        for(G4int ii=0; ii<theOtherPhotons->size(); ii++)
         {
-          thePhotons->insert(theOtherPhotons->at(ii));
+          thePhotons->push_back(theOtherPhotons->operator[](ii));
         }
         delete theOtherPhotons; 
       }
@@ -370,9 +370,9 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
   }
   
 // fill the result
-  G4int nSecondaries = tmpHadrons->length();
+  G4int nSecondaries = tmpHadrons->size();
   G4int nPhotons = 0;
-  if(thePhotons!=NULL) nPhotons = thePhotons->length();
+  if(thePhotons!=NULL) nPhotons = thePhotons->size();
   nSecondaries += nPhotons;
   theResult.SetNumberOfSecondaries(nSecondaries);
   G4DynamicParticle * theSec;
@@ -380,20 +380,20 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
   for(i=0; i<nSecondaries-nPhotons; i++)
   {
     theSec = new G4DynamicParticle;    
-    theSec->SetDefinition(tmpHadrons->at(i)->GetDefinition());
-    theSec->SetMomentum(tmpHadrons->at(i)->GetMomentum());
+    theSec->SetDefinition(tmpHadrons->operator[](i)->GetDefinition());
+    theSec->SetMomentum(tmpHadrons->operator[](i)->GetMomentum());
     theResult.AddSecondary(theSec); 
-    delete tmpHadrons->at(i);
+    delete tmpHadrons->operator[](i);
   }
   if(thePhotons != NULL)
   {
     for(i=0; i<nPhotons; i++)
     {
       theSec = new G4DynamicParticle;    
-      theSec->SetDefinition(thePhotons->at(i)->GetDefinition());
-      theSec->SetMomentum(thePhotons->at(i)->GetMomentum());
+      theSec->SetDefinition(thePhotons->operator[](i)->GetDefinition());
+      theSec->SetMomentum(thePhotons->operator[](i)->GetMomentum());
       theResult.AddSecondary(theSec); 
-      delete thePhotons->at(i);
+      delete thePhotons->operator[](i);
     }
   }
   

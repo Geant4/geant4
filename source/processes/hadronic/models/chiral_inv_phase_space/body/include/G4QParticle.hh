@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QParticle.hh,v 1.6 2001-09-17 14:19:49 mkossov Exp $
+// $Id: G4QParticle.hh,v 1.7 2001-10-04 20:00:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -94,7 +94,7 @@ inline G4double           G4QParticle::GetWidth()         {return aQPDG.GetWidth
 
 inline G4double G4QParticle::MinMassOfFragm()
 {
-  G4int nCh=aDecay.entries();
+  G4int nCh=aDecay.size();
   G4double m=GetMass();
   G4double min=m;
   if(nCh)

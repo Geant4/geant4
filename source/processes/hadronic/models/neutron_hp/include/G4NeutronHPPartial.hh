@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPartial.hh,v 1.6 2001-07-26 09:28:17 hpw Exp $
+// $Id: G4NeutronHPPartial.hh,v 1.7 2001-10-04 20:00:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPPartial_h
@@ -66,7 +66,6 @@ class G4NeutronHPPartial
   {
     G4int i;
     G4double e;
-    G4int neg;
     for( i=0; i<nData; i++)
     {
       aDataFile >> e;

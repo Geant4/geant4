@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QParentClusterVector.hh,v 1.5 2001-09-17 14:19:49 mkossov Exp $
+// $Id: G4QParentClusterVector.hh,v 1.6 2001-10-04 20:00:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4QParentClusterVector_h
@@ -22,9 +22,10 @@
 // ---------------------------------------------------------------
 
 #include "G4QParentCluster.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
-typedef G4RWTPtrOrderedVector<G4QParentCluster> G4QParentClusterVector;
+typedef G4std::vector<G4QParentCluster *> G4QParentClusterVector;
+struct DeleteQParentCluster{ void operator()(G4QParentCluster *aN){delete aN;} };
 
 #endif
 

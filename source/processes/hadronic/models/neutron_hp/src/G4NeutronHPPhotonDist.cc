@@ -36,8 +36,6 @@ G4bool G4NeutronHPPhotonDist::InitMean(G4std::ifstream & aDataFile)
   if(aDataFile >> repFlag)
   {
     aDataFile >> targetMass;
-    G4int d1=0;
-    G4double e=0, y=0, z=0;
     if(repFlag==1)
     {
     // multiplicities
@@ -112,8 +110,6 @@ void G4NeutronHPPhotonDist::InitAngular(G4std::ifstream & aDataFile)
         theGammas[i]*=eV;
         theShells[i]*=eV;
     }
-    G4double eNeu, coeff;
-    G4int nPoly, nProb;
     nNeu = new G4int [nDiscrete2-nIso];
     if(tabulationType==1)theLegendre=new G4NeutronHPLegendreTable *[nDiscrete2-nIso];
     if(tabulationType==2)theAngular =new G4NeutronHPAngularP *[nDiscrete2-nIso];
@@ -227,7 +223,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
     {
       G4ReactionProduct * theOne = new G4ReactionProduct;
       theOne->SetDefinition(G4Gamma::Gamma());
-      thePhotons->insert(theOne);
+      thePhotons->push_back(theOne);
     }
     G4int count=0;
     for(i=0; i<nDiscrete; i++)
@@ -236,7 +232,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
       {   
 	if(disType[i]==1) // continuum
 	{
-          G4double econt=0, sum=0, run=0;
+          G4double  sum=0, run=0;
           for(iii=0; iii<nPartials; iii++) sum+=probs[iii].GetY(anEnergy);
           G4double random = G4UniformRand();
           G4int theP = 0;
@@ -251,19 +247,18 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
           G4NeutronHPVector * temp;
           temp = partials[theP]->GetY(anEnergy); //@@@ look at, seems fishy
           G4double eGamm = temp->Sample();
-          thePhotons->at(count)->SetKineticEnergy(eGamm);
+          thePhotons->operator[](count)->SetKineticEnergy(eGamm);
           delete temp;
 	}
 	else // discrete
 	{
-          thePhotons->at(count)->SetKineticEnergy(energy[i]);
+          thePhotons->operator[](count)->SetKineticEnergy(energy[i]);
 	}
 	count++;
 	if(count > nSecondaries)  G4Exception("G4NeutronHPPhotonDist::GetPhotons inconsistancy");
       }
     }
     // now do the angular distributions...
-    G4double count1=0;
     if( isoFlag == 1)
     {
       for (i=0; i< nSecondaries; i++)
@@ -272,9 +267,9 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
 	G4double theta = acos(costheta);
 	G4double phi = twopi*G4UniformRand();
 	G4double sinth = sin(theta);
-	G4double en = thePhotons->at(i)->GetTotalEnergy();
+	G4double en = thePhotons->operator[](i)->GetTotalEnergy();
 	G4ThreeVector temp(en*sinth*cos(phi), en*sinth*sin(phi), en*cos(theta) );
-	thePhotons->at(i)->SetMomentum( temp ) ;
+	thePhotons->operator[](i)->SetMomentum( temp ) ;
   //      G4cout << "Isotropic distribution in PhotonDist"<<temp<<G4endl;
       }
     }
@@ -282,7 +277,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
     {
       for(i=0; i<nSecondaries; i++)
       { 
-	G4double currentEnergy = thePhotons->at(i)->GetTotalEnergy();
+	G4double currentEnergy = thePhotons->operator[](i)->GetTotalEnergy();
 	for(ii=0; ii<nDiscrete2; ii++) 
 	{
           if (abs(currentEnergy-theGammas[ii])<0.1*keV) break;
@@ -294,14 +289,13 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
           G4double theta = pi*G4UniformRand();
           G4double phi = twopi*G4UniformRand();
           G4double sinth = sin(theta);
-          G4double en = thePhotons->at(i)->GetTotalEnergy();
+          G4double en = thePhotons->operator[](i)->GetTotalEnergy();
           G4ThreeVector tempVector(en*sinth*cos(phi), en*sinth*sin(phi), en*cos(theta) );
-          thePhotons->at(i)->SetMomentum( tempVector ) ;
+          thePhotons->operator[](i)->SetMomentum( tempVector ) ;
 	}
 	else if(tabulationType==1)
 	{
           // legendre polynomials
-          G4double rand = G4UniformRand();
           G4int it;
           for (iii=0; iii<nNeu[ii-nIso]; iii++) // find the neutron energy
           {
@@ -316,9 +310,9 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
           G4double theta = acos(cosTh);
           G4double phi = twopi*G4UniformRand();
           G4double sinth = sin(theta);
-          G4double en = thePhotons->at(i)->GetTotalEnergy();
+          G4double en = thePhotons->operator[](i)->GetTotalEnergy();
           G4ThreeVector tempVector(en*sinth*cos(phi), en*sinth*sin(phi), en*cos(theta) );
-          thePhotons->at(i)->SetMomentum( tempVector ) ;
+          thePhotons->operator[](i)->SetMomentum( tempVector ) ;
 	}
 	else
 	{
@@ -334,9 +328,9 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
           G4double theta = acos(costh);
           G4double phi = twopi*G4UniformRand();
           G4double sinth = sin(theta);
-          G4double en = thePhotons->at(i)->GetTotalEnergy();
+          G4double en = thePhotons->operator[](i)->GetTotalEnergy();
           G4ThreeVector tmpVector(en*sinth*cos(phi), en*sinth*sin(phi), en*costh );
-          thePhotons->at(i)->SetMomentum( tmpVector ) ;
+          thePhotons->operator[](i)->SetMomentum( tmpVector ) ;
 	}
       }  
     } 
@@ -367,7 +361,6 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
       theOne->SetDefinition(G4Electron::Electron());
     }
     theOne->SetTotalEnergy(totalEnergy);
-    G4double count1=0;
     if( isoFlag == 1)
     {
       G4double costheta = 2.*G4UniformRand()-1;
@@ -399,7 +392,6 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
       else if(tabulationType==1)
       {
         // legendre polynomials
-        G4double rand = G4UniformRand();
         G4int it;
         for (iii=0; iii<nNeu[ii-nIso]; iii++) // find the neutron energy
         {
@@ -437,7 +429,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
         theOne->SetMomentum( tmpVector ) ;
       }
     }
-    thePhotons->insert(theOne);
+    thePhotons->push_back(theOne);
   }
   else
   {

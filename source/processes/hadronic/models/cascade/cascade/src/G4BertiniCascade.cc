@@ -17,7 +17,6 @@
 //#include "Randomize.hh"
 
 #include "G4ios.hh"
-//#include "g4rw/tvvector.h"
 
 #include "G4BertiniCascade.hh"
 

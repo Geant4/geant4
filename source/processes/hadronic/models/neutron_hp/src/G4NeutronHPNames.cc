@@ -55,7 +55,7 @@
     G4int myZ = Z;
     G4String * theName = NULL;
     G4String theFileName("");
-    G4int offA = 0, offZ = 0, inc = 1;
+    G4int inc = 1;
     
     G4std::ifstream * check = new G4std::ifstream(".dummy");
     G4bool first = true;

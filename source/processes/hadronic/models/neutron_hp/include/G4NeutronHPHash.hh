@@ -110,7 +110,7 @@ public:
     {
       lower = theUpper->GetMinIndex(e);
     }
-    G4int i;
+    unsigned int i;
     for(i=lower; i<theData.size(); i++)
     {
       if(theData[i].GetX()>e)

@@ -35,7 +35,7 @@ G4double G4NeutronHPLegendreStore::SampleMax (G4double anEnergy)
 {
   G4double result;
   
-  G4int i0, i1, i2, i3, i4;
+  G4int i0;
   G4int low, high;
   G4NeutronHPFastLegendre theLeg;
   for (i0=0; i0<nEnergy; i0++)
@@ -45,8 +45,7 @@ G4double G4NeutronHPLegendreStore::SampleMax (G4double anEnergy)
   }
   low = G4std::max(0, high-1);
   G4NeutronHPInterpolator theInt;
-  G4double lim=0.005;
-  G4double x, x1, x2, y1, y2, y;
+  G4double x, x1, x2;
   x = anEnergy;
   x1 = theCoeff[low].GetEnergy();
   x2 = theCoeff[high].GetEnergy();
@@ -106,7 +105,7 @@ G4double G4NeutronHPLegendreStore::SampleElastic (G4double anEnergy)
 {
   G4double result;
   
-  G4int i0, i1, i2, i3, i4;
+  G4int i0;
   G4int low, high;
   G4NeutronHPFastLegendre theLeg;
   for (i0=0; i0<nEnergy; i0++)
@@ -116,8 +115,7 @@ G4double G4NeutronHPLegendreStore::SampleElastic (G4double anEnergy)
   }
   low = G4std::max(0, high-1);
   G4NeutronHPInterpolator theInt;
-  G4double lim=0.005;
-  G4double x, x1, x2, y1, y2, y;
+  G4double x, x1, x2;
   x = anEnergy;
   x1 = theCoeff[low].GetEnergy();
   x2 = theCoeff[high].GetEnergy();
@@ -166,7 +164,7 @@ G4double G4NeutronHPLegendreStore::SampleElastic (G4double anEnergy)
 
 G4double G4NeutronHPLegendreStore::Sample (G4double energy) // still in interpolation; do not use
 {
-  G4int i0, i1, i2, i3, i4;
+  G4int i0;
   G4int low, high;
 //  G4cout << "G4NeutronHPLegendreStore::Sample "<<energy<<" "<<energy<<" "<<nEnergy<<G4endl;
   for (i0=0; i0<nEnergy; i0++)
@@ -179,7 +177,6 @@ G4double G4NeutronHPLegendreStore::Sample (G4double energy) // still in interpol
 //  G4cout << "G4NeutronHPLegendreStore::Sample high, low: "<<high<<", "<<low<<G4endl;
   G4NeutronHPVector theBuffer;
   G4NeutronHPInterpolator theInt;
-  G4double lim=0.005;
   G4double x1, x2, y1, y2, y;
   x1 = theCoeff[low].GetEnergy();
   x2 = theCoeff[high].GetEnergy();

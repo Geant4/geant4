@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2000-12-12 17:01:22 hweber Exp $
+# $Id: GNUmakefile,v 1.2 2001-10-04 20:00:39 hpw Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -8,7 +8,7 @@ name := G4hadronic_urqmd
 G4DEBUG = 1
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../../../..
+  G4INSTALL = ../../../../..
 endif
 
 include $(G4INSTALL)/config/architecture.gmk

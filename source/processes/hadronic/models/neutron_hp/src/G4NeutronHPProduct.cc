@@ -38,14 +38,14 @@ G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
   theDist->SetTarget(theTarget);
   theDist->SetNeutron(theNeutron);
   G4int i;
-  G4double eMax = GetTarget()->GetMass()+GetNeutron()->GetMass()
-                  - theActualStateQValue;
+//  G4double eMax = GetTarget()->GetMass()+GetNeutron()->GetMass()
+//                  - theActualStateQValue;
   theCurrentMultiplicity = static_cast<G4int>(mean);
   G4ReactionProduct * tmp;
   for(i=0;i<multi;i++)
   {
     tmp = theDist->Sample(anEnergy, theMassCode, theMass);
-    if(tmp != NULL) result->insert(tmp);
+    if(tmp != NULL) result->push_back(tmp);
   }
   if(multi == 0) 
   {
@@ -56,7 +56,7 @@ G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
   {
     tmp = theDist->Sample(anEnergy, theMassCode, theMass);
     tmp->SetDefinition(G4Proton::Proton());
-    if(tmp != NULL) result->insert(tmp);
+    if(tmp != NULL) result->push_back(tmp);
   }
   return result;
 }

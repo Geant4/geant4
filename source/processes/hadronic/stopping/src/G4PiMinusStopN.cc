@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopN.cc,v 1.6 2001-08-01 17:12:35 hpw Exp $
+// $Id: G4PiMinusStopN.cc,v 1.7 2001-10-04 20:00:42 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,9 +42,7 @@
 
 #include "G4PiMinusStopN.hh"
 
-#include "g4rw/tpordvec.h"
-#include "g4rw/tvordvec.h"
-#include "g4rw/cstring.h"
+#include "g4std/vector"
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -107,28 +105,28 @@ G4PiMinusStopN::G4PiMinusStopN()
   // R ratio
   theR = 1. / (1. + npRatio);
 
-  _definitions = new G4RWTPtrOrderedVector<G4ParticleDefinition>();
-  _momenta = new G4RWTPtrOrderedVector<G4LorentzVector>();
+  _definitions = new G4std::vector<G4ParticleDefinition*>();
+  _momenta = new G4std::vector<G4LorentzVector*>();
 
-  G4RWTValOrderedVector<double> eKinVector;
-  G4RWTValOrderedVector<double> eKinDataVector;
+  G4std::vector<double> eKinVector;
+  G4std::vector<double> eKinDataVector;
   int i;
   for (i=0; i<eKinEntries; i++)
     {
-      eKinVector.insert(eKin[i]);
-      eKinDataVector.insert(eKinData[i]);
+      eKinVector.push_back(eKin[i]);
+      eKinDataVector.push_back(eKinData[i]);
     }
-  eKinVector.insert(eKin[eKinEntries]);
+  eKinVector.push_back(eKin[eKinEntries]);
   _distributionE = new G4DistributionGenerator(eKinVector,eKinDataVector);
 
-  G4RWTValOrderedVector<double> angleVector;
-  G4RWTValOrderedVector<double> angleDataVector;
+  G4std::vector<double> angleVector;
+  G4std::vector<double> angleDataVector;
   for (i=0; i<angleEntries; i++)
     {
-      angleVector.insert(angle[i]);
-      angleDataVector.insert(angleData[i]);
+      angleVector.push_back(angle[i]);
+      angleDataVector.push_back(angleData[i]);
     }
-  angleVector.insert(angle[angleEntries]);
+  angleVector.push_back(angle[angleEntries]);
   _distributionAngle = new G4DistributionGenerator(angleVector,angleDataVector);
 }
 

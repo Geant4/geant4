@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCHIPSWorld.hh,v 1.6 2001-09-17 14:19:47 mkossov Exp $
+// $Id: G4QCHIPSWorld.hh,v 1.7 2001-10-04 20:00:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -66,7 +66,7 @@ inline G4QParticle* G4QCHIPSWorld::GetQParticle(G4QPDGCode* pQP) const
 {
   return (*qWorld)[pQP->GetQCode()];
 }
-inline G4int        G4QCHIPSWorld::GetQPEntries() const {return (*qWorld).entries();}
+inline G4int        G4QCHIPSWorld::GetQPEntries() const {return (*qWorld).size();}
 
 #endif
 

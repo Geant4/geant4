@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCHIPSWorld.cc,v 1.11 2001-09-18 15:28:20 mkossov Exp $
+// $Id: G4QCHIPSWorld.cc,v 1.12 2001-10-04 20:00:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -71,7 +71,7 @@ G4QParticleVector* G4QCHIPSWorld::InitCHIPSWorld(G4int nOfParts)
 #ifdef debug
     G4cout<<"G4QCHIPSWorld::InitCHIPSWorld: Creating CHIPS World of nP="<<nOfParts<<G4endl;
 #endif
-    G4int curNP=theWorld.entries();
+    G4int curNP=theWorld.size();
     if(curNP<0) curNP=0;
     if(!init++||nOfParts>curNP)                 // Initialize for increasing CHIPS World
     {
@@ -88,7 +88,7 @@ G4QParticleVector* G4QCHIPSWorld::InitCHIPSWorld(G4int nOfParts)
       {
         G4QParticle* curPart = new G4QParticle; // Created
         curPart->InitQParticle(i);              //   ||
-        theWorld.insert(curPart);               // Filled (forever but once)
+        theWorld.push_back(curPart);               // Filled (forever but once)
 #ifdef debug
         G4cout<<"G4QCHIPSWorld::InitCHIPSWorld: Particle#"<<i<<"(of "<<nOfParts<<") done"<<endl;
 #endif
@@ -96,7 +96,7 @@ G4QParticleVector* G4QCHIPSWorld::InitCHIPSWorld(G4int nOfParts)
     }
     else if (nOfParts<0)
 	{
-      theWorld.clearAndDestroy();
+      G4std::for_each(theWorld.begin(), theWorld.end(), DeleteQParticle());
       init=0;
 	}
     else init--;

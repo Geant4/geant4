@@ -136,7 +136,7 @@
       G4DynamicParticle * it = new G4DynamicParticle;
       it->SetDefinition(theNeutrons[i].GetDefinition());
       it->SetMomentum(theNeutrons[i].GetMomentum());
-      aResult->insert(it);
+      aResult->push_back(it);
    }
    delete [] theNeutrons;
 // return the result
@@ -179,17 +179,17 @@ G4DynamicParticleVector * G4NeutronHPFSFissionFS::GetPhotons()
    if(temp == NULL) return NULL;
 
 // lorentz transform, and add photons to final state
-   G4int i;
+   unsigned int i;
    G4DynamicParticleVector * result = new G4DynamicParticleVector;
-   for(i=0; i<temp->length(); i++)
+   for(i=0; i<temp->size(); i++)
    {
      // back to lab
-     temp->at(i)->Lorentz(*temp->at(i), -1.*theTarget);
+     temp->operator[](i)->Lorentz(*(temp->operator[](i)), -1.*theTarget);
      G4DynamicParticle * theOne = new G4DynamicParticle;
-     theOne->SetDefinition(temp->at(i)->GetDefinition());
-     theOne->SetMomentum(temp->at(i)->GetMomentum());
-     result->insert(theOne);
-     delete temp->at(i);
+     theOne->SetDefinition(temp->operator[](i)->GetDefinition());
+     theOne->SetMomentum(temp->operator[](i)->GetMomentum());
+     result->push_back(theOne);
+     delete temp->operator[](i);
    }
    delete temp;
    return result;

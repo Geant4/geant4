@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPArbitaryTab.hh,v 1.6 2001-07-26 09:27:54 hpw Exp $
+// $Id: G4NeutronHPArbitaryTab.hh,v 1.7 2001-10-04 20:00:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPArbitaryTab_h
@@ -51,7 +51,7 @@ class G4NeutronHPArbitaryTab : public G4VNeutronHPEDis
   
   inline void Init(G4std::ifstream & theData)
   {
-    G4int i, total;
+    G4int i;
     theFractionalProb.Init(theData, eV);
     theData >> nDistFunc; // = number of incoming n energy points
     theDistFunc = new G4NeutronHPVector [nDistFunc];

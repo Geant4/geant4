@@ -39,10 +39,10 @@ G4ReactionProduct * G4NeutronHPEnAngCorrelation::SampleOne(G4double anEnergy)
   while(temp == NULL) temp = theProducts[i++].Sample(anEnergy);
   
   // is the multiplicity correct
-  if(temp->length()!=1) G4Exception("SampleOne: Yield not correct");
+  if(temp->size()!=1) G4Exception("SampleOne: Yield not correct");
   
   // fill result
-  result = temp->at(0);
+  result = temp->operator[](0);
   
   // some garbage collection
   delete temp;
@@ -90,11 +90,11 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
     }
     if(it!=NULL)
     {
-      for(G4int ii=0; ii<it->length(); ii++)
+      for(unsigned int ii=0; ii<it->size(); ii++)
       {
 	if(frameFlag==1) // target rest
 	{
-          it->at(ii)->Lorentz(*(it->at(ii)), -1.*theTarget);
+          it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*theTarget);
 	}
 	else if(frameFlag==2) // CMS
 	{
@@ -103,13 +103,13 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
         	 it->at(ii)->GetTotalEnergy()<<" "<<
         	 it->at(ii)->GetMomentum()<<G4endl;
 #endif
-          it->at(ii)->Lorentz(*(it->at(ii)), -1.*theCMS);
+          it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*theCMS);
 	}
 	else
 	{
           G4Exception("G4NeutronHPEnAngCorrelation::Sample: The frame of the finalstate is not specified");
 	}
-	result->insert(it->at(ii));
+	result->push_back(it->operator[](ii));
       }
     delete it;
     }

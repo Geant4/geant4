@@ -151,7 +151,7 @@ G4int G4NeutronHPInelasticCompFS::SelectExitChannel(G4double eKinetic)
 {
   G4double running[50];
   running[0] = 0;
-  G4int i;
+  unsigned int i;
   for(i=0; i<50; i++)
   {
     if(i!=0) running[i]=running[i-1];
@@ -215,7 +215,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
     G4ReactionProduct boosted;
     boosted.Lorentz(theNeutron, theTarget);
     eKinetic = boosted.GetKineticEnergy();
-    G4double momentumInCMS = boosted.GetTotalMomentum();
+//    G4double momentumInCMS = boosted.GetTotalMomentum();
   
 // select exit channel for composite FS class.
     G4int it = SelectExitChannel(eKinetic);
@@ -231,7 +231,6 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
                              (targetMass - residualMass)*G4Neutron::Neutron()->GetPDGMass();
     G4int nothingWasKnownOnHadron = 0;
     G4int dummy;
-    G4int nSecGamma = 0;
     G4double eGamm = 0;
     G4int iLevel=it-1;
     if(50==it) 
@@ -296,7 +295,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
                                      eGamm*sin(acos(costh))*sin(phi),
                                      eGamm*costh);
           if(thePhotons == NULL) thePhotons = new G4ReactionProductVector;
-          thePhotons->insert(theRestEnergy);
+          thePhotons->push_back(theRestEnergy);
 	}
       }
     }
@@ -318,7 +317,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
       thePhotons = theFinalStatePhotons[it]->GetPhotons(anEnergy);
       G4double aBaseEnergy = theFinalStatePhotons[it]->GetLevelEnergy();
       G4double testEnergy = 0;
-      if(thePhotons!=NULL && thePhotons->entries()!=0) aBaseEnergy-=thePhotons->at(0)->GetTotalEnergy();
+      if(thePhotons!=NULL && thePhotons->size()!=0) aBaseEnergy-=thePhotons->operator[](0)->GetTotalEnergy();
       if(theFinalStatePhotons[it]->NeedsCascade())
       {
 	while(aBaseEnergy>0.01*keV)
@@ -342,8 +341,8 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
             {
               G4ReactionProductVector * theNext = 
         	theFinalStatePhotons[i]->GetPhotons(anEnergy);
-              thePhotons->insert(theNext->at(0));
-              aBaseEnergy = testEnergy-theNext->at(0)->GetTotalEnergy();
+              thePhotons->push_back(theNext->operator[](0));
+              aBaseEnergy = testEnergy-theNext->operator[](0)->GetTotalEnergy();
               delete theNext;
 	      foundMatchingLevel = true;
               break; // ===>
@@ -358,8 +357,8 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
 	  {
             G4ReactionProductVector * theNext = 
                theFinalStatePhotons[closest]->GetPhotons(anEnergy);
-            thePhotons->insert(theNext->at(0));
-            aBaseEnergy = aBaseEnergy-theNext->at(0)->GetTotalEnergy();
+            thePhotons->push_back(theNext->operator[](0));
+            aBaseEnergy = aBaseEnergy-theNext->operator[](0)->GetTotalEnergy();
             delete theNext;
 	  }
         } 
@@ -367,10 +366,10 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
     }
     if(thePhotons!=NULL)
     {
-      for(i=0; i<thePhotons->length(); i++)
+      for(i=0; i<thePhotons->size(); i++)
       {
 	// back to lab
-	thePhotons->at(i)->Lorentz(*(thePhotons->at(i)), -1.*theTarget);
+	thePhotons->operator[](i)->Lorentz(*(thePhotons->operator[](i)), -1.*theTarget);
       }
     }
     if(nothingWasKnownOnHadron)
@@ -378,10 +377,10 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
       G4double totalPhotonEnergy = 0;
       if(thePhotons!=NULL)
       {
-        G4int nPhotons = thePhotons->length();
+        G4int nPhotons = thePhotons->size();
 	for(i=0; i<nPhotons; i++)
         {
-          totalPhotonEnergy += thePhotons->at(i)->GetTotalEnergy();
+          totalPhotonEnergy += thePhotons->operator[](i)->GetTotalEnergy();
         }
       }
       availableEnergy -= totalPhotonEnergy;
@@ -411,14 +410,14 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
     G4ThreeVector totalMomentum(0);
     if(theParticles != NULL) 
     {
-      nSecondaries = theParticles->length();
+      nSecondaries = theParticles->size();
       G4ParticleDefinition * aDef;
-      for(i=0; i<theParticles->length(); i++)
+      for(i=0; i<theParticles->size(); i++)
       {
-        aDef = theParticles->at(i)->GetDefinition();
+        aDef = theParticles->operator[](i)->GetDefinition();
 	totalBaryonNumber+=aDef->GetBaryonNumber();
 	totalCharge+=G4int(aDef->GetPDGCharge()+eps);
-        totalMomentum += theParticles->at(i)->GetMomentum();
+        totalMomentum += theParticles->operator[](i)->GetMomentum();
       } 
       if(totalBaryonNumber!=G4int(theBaseA+eps+incidentParticle->GetDefinition()->GetBaryonNumber())) 
       {
@@ -432,7 +431,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
     }
     
     G4int nPhotons = 0;
-    if(thePhotons!=NULL) nPhotons = thePhotons->length();
+    if(thePhotons!=NULL) nPhotons = thePhotons->size();
     nSecondaries += nPhotons;
     
     theResult.SetNumberOfSecondaries(nSecondaries);
@@ -457,7 +456,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
 	{
           for(i=0; i<nPhotons; i++)
           {
-            totalPhotonMomentum += thePhotons->at(i)->GetMomentum();
+            totalPhotonMomentum += thePhotons->operator[](i)->GetMomentum();
           }
 	}
         theSec = new G4DynamicParticle;   
@@ -467,13 +466,13 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
     }
     else
     {
-      for(i=0; i<theParticles->length(); i++)
+      for(i=0; i<theParticles->size(); i++)
       {
         theSec = new G4DynamicParticle; 
-        theSec->SetDefinition(theParticles->at(i)->GetDefinition());
-        theSec->SetMomentum(theParticles->at(i)->GetMomentum());
+        theSec->SetDefinition(theParticles->operator[](i)->GetDefinition());
+        theSec->SetMomentum(theParticles->operator[](i)->GetMomentum());
         theResult.AddSecondary(theSec); 
-        delete theParticles->at(i); 
+        delete theParticles->operator[](i); 
       } 
       delete theParticles;
       if(needsSeparateRecoil && residualZ!=0)
@@ -498,9 +497,9 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
       {
         theSec = new G4DynamicParticle;    
         theSec->SetDefinition(G4Gamma::Gamma());
-        theSec->SetMomentum(thePhotons->at(i)->GetMomentum());
+        theSec->SetMomentum(thePhotons->operator[](i)->GetMomentum());
         theResult.AddSecondary(theSec); 
-        delete thePhotons->at(i);
+        delete thePhotons->operator[](i);
       }
 // some garbage collection
       delete thePhotons;

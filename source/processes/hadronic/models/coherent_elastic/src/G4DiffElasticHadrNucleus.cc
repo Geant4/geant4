@@ -153,13 +153,13 @@
               2*R23Ap*R13Ap/2/R12ApdR22Ap*exp(-Q2/4/R12ApdR22Ap)*DDSec2p+
               R23Ap*R23Ap/2*R22Ap/2*exp(-Q2/8*R22Ap)*DDSec3p);   // at i=0
 
+      G4double Din2, BinCoeff = 1;
       if(Nucleus>95 && HadrEnergy>1000) {Din1=0; goto tam;}
 
                G4double exp1p;
                G4double exp2p;
                G4double exp3p;
                G4double N2p;
-               G4double Din2, BinCoeff = 1;
 
                for( i = 1; i<= Nucleus-2; i++)
                    {

@@ -66,11 +66,10 @@
 
   G4double G4NeutronHPMadlandNixSpectrum::Sample(G4double anEnergy) 
   {
-    G4bool Done = false;
     G4double tm = theMaxTemp.GetY(anEnergy);
     G4double last=0, buff, current = 100*MeV;
     G4double precision = 0.001;
-    G4double newValue = 0., oldValue=0., diff=0.;
+    G4double newValue = 0., oldValue=0.;
     G4double random = G4UniformRand();
     
     do

@@ -115,7 +115,6 @@
   }
   G4ParticleChange * G4NeutronHPElasticFS::ApplyYourself(const G4Track & theTrack)
   {  
-    G4int i, ii, iii;
 //    G4cout << "G4NeutronHPElasticFS::ApplyYourself+"<<G4endl;
     theResult.Initialize(theTrack);   
     G4double eKinetic = theTrack.GetKineticEnergy();
@@ -125,7 +124,6 @@
     theNeutron.SetKineticEnergy( eKinetic );
 //    G4cout << "G4NeutronHPElasticFS::ApplyYourself++"<<eKinetic<<" "<<G4endl;
 //    G4cout << "CMSVALUES 0 "<<theNeutron.GetTotalMomentum()<<G4endl;
-    G4double pold = theNeutron.GetTotalMomentum();
     
     G4ReactionProduct theTarget; 
     G4Nucleus aNucleus;
@@ -236,7 +234,6 @@
     G4DynamicParticle* theRecoil = new G4DynamicParticle;
     if(targetMass<4.5)
     {
-      G4bool He3flag = false;
       if(targetMass<1)
       {
         // proton

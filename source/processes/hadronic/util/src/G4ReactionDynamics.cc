@@ -1337,7 +1337,6 @@
     G4int i;
     G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
     G4ParticleDefinition *aProton = G4Proton::Proton();
-    G4ParticleDefinition *anAntiProton = G4AntiProton::AntiProton();
     G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
     G4ParticleDefinition *aPiZero = G4PionZero::PionZero();
@@ -2097,8 +2096,6 @@
     // Not available values are taken from those of similar reactions.
     //
     G4int i;
-    G4ParticleDefinition *aProton = G4Proton::Proton();
-    G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
     G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
     G4ParticleDefinition *aPiZero = G4PionZero::PionZero();
@@ -2107,9 +2104,7 @@
     G4ParticleDefinition *aKaonZeroS = G4KaonZeroShort::KaonZeroShort();
     G4ParticleDefinition *aKaonZeroL = G4KaonZeroLong::KaonZeroLong();
     
-      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
-    const G4double kaonMinusMass = aKaonMinus->GetPDGMass()/GeV;
-    
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);    
     static const G4double expxu =  82.;           // upper bound for arg. of exp
     static const G4double expxl = -expxu;         // lower bound for arg. of exp
     
@@ -3502,7 +3497,7 @@
 
  void
   G4ReactionDynamics::NuclearReaction(
-   G4FastVector<G4ReactionProduct,3> &vec,
+   G4FastVector<G4ReactionProduct,4> &vec,
    G4int &vecLen,
    const G4DynamicParticle *originalIncident,
    const G4Nucleus &targetNucleus,

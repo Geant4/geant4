@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.29 2001-09-18 15:28:23 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.30 2001-10-04 20:00:24 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,22 +61,22 @@ G4Quasmon::G4Quasmon(const G4Quasmon& right)
   //theEnvironment        = right.theEnvironment;
   status                = right.status;
   //theQHadrons (Vector)
-  G4int nQH             = right.theQHadrons.entries();
+  G4int nQH             = right.theQHadrons.size();
   if(nQH) for(G4int ih=0; ih<nQH; ih++)
   {
     G4QHadron* curQH    = new G4QHadron(right.theQHadrons[ih]);
-    theQHadrons.insert(curQH);
+    theQHadrons.push_back(curQH);
   }
   theWorld              = right.theWorld;
   phot4M                = right.phot4M;
   nBarClust             = right.nBarClust;
   nOfQ                  = right.nOfQ;
   //theQCandidates (Vector)
-  G4int nQC             = right.theQCandidates.entries();
+  G4int nQC             = right.theQCandidates.size();
   if(nQC) for(G4int iq=0; iq<nQC; iq++)
   {
     G4QCandidate* curQC = new G4QCandidate(right.theQCandidates[iq]);
-    theQCandidates.insert(curQC);
+    theQCandidates.push_back(curQC);
   }
   f2all                 = right.f2all;
   rEP                   = right.rEP;
@@ -93,7 +93,7 @@ G4Quasmon::G4Quasmon(G4Quasmon* right)
   //theEnvironment        = right->theEnvironment;
   status                = right->status;
   //theQHadrons (Vector)
-  G4int nQH             = right->theQHadrons.entries();
+  G4int nQH             = right->theQHadrons.size();
 #ifdef sdebug
   G4cout<<"G4Quasmon::Copy-Constructor:nQH="<<nQH<<G4endl;
 #endif
@@ -103,14 +103,14 @@ G4Quasmon::G4Quasmon(G4Quasmon* right)
     G4cout<<"G4Quasmon:Copy-Constructor:H#"<<ih<<",QH="<<right->theQHadrons[ih]<<G4endl;
 #endif
     G4QHadron* curQH    = new G4QHadron(right->theQHadrons[ih]);
-    theQHadrons.insert(curQH);
+    theQHadrons.push_back(curQH);
   }
   theWorld              = right->theWorld;
   phot4M                = right->phot4M;
   nBarClust             = right->nBarClust;
   nOfQ                  = right->nOfQ;
   //theQCandidates (Vector)
-  G4int nQC             = right->theQCandidates.entries();
+  G4int nQC             = right->theQCandidates.size();
 #ifdef sdebug
   G4cout<<"G4Quasmon:Copy-Constructor: nCand="<<nQC<<G4endl;
 #endif
@@ -120,7 +120,7 @@ G4Quasmon::G4Quasmon(G4Quasmon* right)
     G4cout<<"G4Quasmon:Copy-Constructor:C#"<<iq<<",QC="<<right->theQCandidates[iq]<<G4endl;
 #endif
     G4QCandidate* curQC = new G4QCandidate(right->theQCandidates[iq]);
-    theQCandidates.insert(curQC);
+    theQCandidates.push_back(curQC);
   }
   f2all                 = right->f2all;
   rEP                   = right->rEP;
@@ -132,7 +132,7 @@ G4Quasmon::G4Quasmon(G4Quasmon* right)
 
 G4Quasmon::~G4Quasmon()
 {
-  G4int nCan=theQCandidates.entries();
+  G4int nCan=theQCandidates.size();
 #ifdef sdebug
   G4cout<<"G4Quasmon::Destructor before theQCandidates nC="<<nCan<<G4endl;
 #endif
@@ -150,7 +150,7 @@ G4Quasmon::~G4Quasmon()
 #ifdef sdebug
   G4cout<<"G4Quasmon::Destructor before theQHadrons"<<G4endl;
 #endif
-  theQHadrons.clearAndDestroy();
+  G4std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());
 #ifdef sdebug
   G4cout<<"G4Quasmon::Destructor === DONE ==="<<G4endl;
 #endif
@@ -177,22 +177,22 @@ const G4Quasmon& G4Quasmon::operator=(const G4Quasmon& right)
   //theEnvironment        = right.theEnvironment;
   status                = right.status;
   //theQHadrons (Vector)
-  G4int nQH             = right.theQHadrons.entries();
+  G4int nQH             = right.theQHadrons.size();
   if(nQH) for(G4int ih=0; ih<nQH; ih++)
   {
     G4QHadron* curQH    = new G4QHadron(right.theQHadrons[ih]);
-    theQHadrons.insert(curQH);
+    theQHadrons.push_back(curQH);
   }
   theWorld              = right.theWorld;
   phot4M                = right.phot4M;
   nBarClust             = right.nBarClust;
   nOfQ                  = right.nOfQ;
   //theQCandidates (Vector)
-  G4int nQC             = right.theQCandidates.entries();
+  G4int nQC             = right.theQCandidates.size();
   if(nQC) for(G4int iq=0; iq<nQC; iq++)
   {
     G4QCandidate* curQC = new G4QCandidate(right.theQCandidates[iq]);
-    theQCandidates.insert(curQC);
+    theQCandidates.push_back(curQC);
   }
   f2all                 = right.f2all;
   rEP                   = right.rEP;
@@ -239,7 +239,7 @@ void G4Quasmon::InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust)
   if(maxMes>nOfMesons) maxMes=nOfMesons;
   if(maxMes>=0) for (i=0; i<maxMes; i++) 
   {
-    theQCandidates.insert(new G4QCandidate(mesonPDG[i]));
+    theQCandidates.push_back(new G4QCandidate(mesonPDG[i]));
 #ifdef sdebug
     G4cout<<"G4Quasmon::InitCandidateVector: "<<ind++<<", Meson # "<<i<<" with code = "
           <<mesonPDG[i]<<", QC="<<theQCandidates[i]->GetQC()<<" is initialized"<<G4endl;
@@ -248,7 +248,7 @@ void G4Quasmon::InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust)
   if(maxBar>nOfBaryons) maxBar=nOfBaryons;
   if(maxBar>=0) for (i=0; i<maxBar; i++) 
   {
-    theQCandidates.insert(new G4QCandidate(baryonPDG[i]));
+    theQCandidates.push_back(new G4QCandidate(baryonPDG[i]));
 #ifdef sdebug
     G4cout<<"G4Quasmon::InitCandidateVector: "<<ind++<<", Baryon # "<<i<<" with code = "
           <<baryonPDG[i]<< ", QC="<<theQCandidates[i]->GetQC()<<" is initialized"<<G4endl;
@@ -260,7 +260,7 @@ void G4Quasmon::InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust)
     G4QPDGCode clustQPDG;
     clustQPDG.InitByQCode(clustQCode);
     G4int clusterPDG=clustQPDG.GetPDGCode();
-    theQCandidates.insert(new G4QCandidate(clusterPDG));
+    theQCandidates.push_back(new G4QCandidate(clusterPDG));
 #ifdef sdebug
     G4cout<<"G4Quasmon::InitCandidateVector:"<<ind++<<", Cluster # "<<i<<" with code = "
           <<clusterPDG<<", QC="<<clustQPDG.GetQuarkContent()<<" is initialized"<<G4endl;
@@ -760,7 +760,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
         G4double rEn=cr4Mom.e();
         rMo=cr4Mom.rho();                            // p for the ResidualColouredQuasmon in LS
         rEP=rEn+rMo;                                 // E+p for the ResidualColouredQuasmon in LS
-        G4int totCand = theQCandidates.entries();    // Total number of candidates
+        G4int totCand = theQCandidates.size();    // Total number of candidates
 #ifdef sdebug
 	    G4cout<<"G4Q::HQ: ***>>>K-ITERATION #"<<kCount<<", k="<<kMom<<k4Mom<<G4endl;
 #endif
@@ -822,7 +822,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     G4cout<<"G4Q::HQ:=K's FOUND=>k="<<kMom<<",ki="<<minK<<",ka="<<maxK<<",kLS="<<k4Mom<<kLS<<G4endl;
 #endif
     CalculateHadronizationProbabilities(excE,kMom,kLS,piF,gaF); //ResonanceMass is randomized here
-    G4int nCandid = theQCandidates.entries();
+    G4int nCandid = theQCandidates.size();
     G4bool fprob = true;                             // Flag of existing decay probability
     ////G4bool fdul  = true;                            // Prototype of flag of resonance decay
     G4bool fdul  = false;                            // Prototype of flag of resonance decay
@@ -2372,7 +2372,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
         if(ffin)
 		{
           //@@CHECK CoulBar and may be evaporate instead
-          theQHadrons.insert(candHadr);              // Fill the emergency PHOTON (delete equiv.)
+          theQHadrons.push_back(candHadr);              // Fill the emergency PHOTON (delete equiv.)
           G4QHadron* candHRes = new G4QHadron(rPDG,resQ4Mom);// Creation Hadron for the QResid
           FillHadronVector(candHRes);                // Fill "new candHRes" (delete equivalent)
 		  //#ifdef debug
@@ -2573,7 +2573,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
     else
     {
       //qH->SetNFragments(2);
-      //theQHadrons.insert(qH);                  // (delete equivalent)
+      //theQHadrons.push_back(qH);                  // (delete equivalent)
       // Instead
       delete qH;
       //
@@ -2638,12 +2638,12 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
 	      G4Exception("G4Quasm::FillHadrV: Mes+ResA DecayIn2 did not succeed");
 	    }
         //qH->SetNFragments(2);                  // Put a#of Fragments=2
-        //theQHadrons.insert(qH);
+        //theQHadrons.push_back(qH);
         // Instead
         delete qH;
         //
         G4QHadron* H1 = new G4QHadron(PDG1,fq4M);
-        theQHadrons.insert(H1);                // (delete equivalent)
+        theQHadrons.push_back(H1);                // (delete equivalent)
         G4QHadron* H2 = new G4QHadron(PDG2,qe4M);
         FillHadronVector(H2);                  // (delete equivalent)
 	  }
@@ -2652,12 +2652,12 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
         G4double r1=m1/fragMas;
         G4double r2=1.-r1;
         //qH->SetNFragments(2);                  // Put a#of Fragments=2
-        //theQHadrons.insert(qH);
+        //theQHadrons.push_back(qH);
         // Instead
         delete qH;
         //
         G4QHadron* H1 = new G4QHadron(PDG1,r1*t);
-        theQHadrons.insert(H1);                // (delete equivalent)
+        theQHadrons.push_back(H1);                // (delete equivalent)
         G4QHadron* H2 = new G4QHadron(PDG2,r2*t);
         FillHadronVector(H2);                  // (delete equivalent)
 	  }
@@ -2758,13 +2758,13 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
         G4LorentzVector b4Mom(0.,0.,0.,resM);
         if(!qH->DecayIn2(a4Mom,b4Mom))
         {
-          theQHadrons.insert(qH);              // No decay (delete equivalent)
+          theQHadrons.push_back(qH);              // No decay (delete equivalent)
           G4cerr<<"***G4Q::FillHadronVector: Be8 decay did not succeed"<<G4endl;
 	    }
         else
         {
           //qH->SetNFragments(2);                // Fill a#of fragments to decaying Hadron
-          //theQHadrons.insert(qH);              // Fill hadron with nf=2 (delete equivalent)
+          //theQHadrons.push_back(qH);              // Fill hadron with nf=2 (delete equivalent)
           // Instead
           delete qH;
           //
@@ -2779,7 +2779,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
 #ifdef pdebug
 	    G4cout<<"G4Quasm::FillHadrVect: Leave as it is"<<G4endl;
 #endif
-        theQHadrons.insert(qH);             // No decay  (delete equivalent)
+        theQHadrons.push_back(qH);             // No decay  (delete equivalent)
 	  }
     }
     else if (fragMas<GSMass)
@@ -2800,7 +2800,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
       G4LorentzVector b4Mom(0.,0.,0.,GSMass);
       if(!qH->DecayIn2(a4Mom,b4Mom))
       {
-        theQHadrons.insert(qH);              // No decay (delete equivalent)
+        theQHadrons.push_back(qH);              // No decay (delete equivalent)
         G4cerr<<"***G4Q::FillHadronVector: N*->gamma/pi0+N decay did not succeed"<<G4endl;
 	  }
       else
@@ -2808,7 +2808,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
         G4QHadron* HadrB = new G4QHadron(gamPDG,a4Mom);
         FillHadronVector(HadrB);             // Fill gamma/Pi0 Hadron (delete equivalent)
         qH->Set4Momentum(b4Mom);
-        theQHadrons.insert(qH);                // Fill corrected baryon in the HadronVector
+        theQHadrons.push_back(qH);                // Fill corrected baryon in the HadronVector
       }
     }
     else                                       // ===> Evaporation of excited system
@@ -2824,13 +2824,13 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
         G4cerr<<"***G4Quasmon::FillHadronVector:Evaporation, PDG="<<thePDG<<",tM="<<fragMas<<G4endl;
         delete bHadron;
         delete rHadron;
-        theQHadrons.insert(qH);                // Fill hadron in the HadronVector as it is
+        theQHadrons.push_back(qH);                // Fill hadron in the HadronVector as it is
 	  }
 #ifdef pdebug
       G4cout<<"G4Quasm::FillHadrVec:Done b="<<bHadron->GetQPDG()<<",r="<<rHadron->GetQPDG()<<G4endl;
 #endif
       //qH->SetNFragments(2);                    // Fill a#of fragments to decaying Hadron
-      //theQHadrons.insert(qH);                  // Fill hadron with nf=2 (delete equivalent)
+      //theQHadrons.push_back(qH);                  // Fill hadron with nf=2 (delete equivalent)
       // Instead
       delete qH;
       //
@@ -3081,7 +3081,7 @@ void G4Quasmon::ModifyInMatterCandidates()
   G4int tN = totQC.GetN();                       // A#of neutrons in the Current Environment
   G4int tL = totQC.GetL();                       // A#of lambdas in the Current Environment
   G4double totM=G4QNucleus(totQC).GetMZNS();     // Mass of total system
-  for (G4int ind=0; ind<theQCandidates.entries(); ind++)
+  for (G4int ind=0; ind<theQCandidates.size(); ind++)
   {
     G4QCandidate* curCand=theQCandidates[ind];   // Pointer to the Candidate
     G4int  cPDG = curCand->GetPDGCode();         // PDGC of the Candidate
@@ -3167,7 +3167,7 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
   G4int qIso = qBar-qChg-qChg;                   // Charge of Quasmon
   G4int aQuI = abs(qIso);                        // Abs value for estimate
   G4int oeQB = qBar%2;                           // odd(1)/even(0) QBaryn flag
-  G4int maxC = theQCandidates.entries();         // A#of candidates
+  G4int maxC = theQCandidates.size();         // A#of candidates
   G4int maxB = theEnvironment.GetMaxClust();     // Maximum BaryNum for clusters
   G4double totZ = theEnvironment.GetZ() + valQ.GetCharge();       // Z of the Nucleus
   G4double totA = theEnvironment.GetA() + valQ.GetBaryonNumber(); // A of the Nucleus
@@ -3183,7 +3183,7 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
   G4cout<<"G4Q::CalculateHadronizationProbabilities:Q="<<mQ<<valQ<<",v="<<vaf<<",mC="<<maxB<<G4endl;
 #endif
   // ================= Calculate probabilities for candidates
-  for (G4int index=0; index<theQCandidates.entries(); index++)
+  for (G4int index=0; index<theQCandidates.size(); index++)
   {
     G4QCandidate* curCand=theQCandidates[index];
     curCand->ClearParClustVector();             // Clear Parent Cluster Vector for the Fragment
@@ -3938,7 +3938,7 @@ G4bool G4Quasmon::CheckGroundState(G4bool corFlag) // Correction is forbidden by
   }
   G4QContent envaQC = theEnvironment.GetQCZNS(); // Quark Content of the Environment
   G4double resTMa=reTLV.m();                     // CM Mass of the Residual Nucleus (Quasm+Environ)
-  G4int nOfOUT = theQHadrons.entries();          // Total #of QHadrons at this point
+  G4int nOfOUT = theQHadrons.size();          // Total #of QHadrons at this point
 #ifdef pdebug
   G4cout<<"G4Q::CheckGS: (totM="<<resTMa<<" < rQM+rEM="<<resSMa<<" || rEM="<<resEMa<<"=0 && bs="
         <<bsCond<<"=0) && n="<<nOfOUT<<" >0"<<G4endl;
@@ -4048,9 +4048,9 @@ G4bool G4Quasmon::CheckGroundState(G4bool corFlag) // Correction is forbidden by
 #endif
             if      (totNMa>resLastM+hadrMa)             // "Just exclude the Last" case
 		    {
-              theQHadrons.removeLast();                  // the LastH is excluded from OUTPUT HV
-              theQHadrons.removeLast();                  // the PrevH is excluded from OUTPUT HV
-              theQHadrons.insert(theLast);               // LastH substitute Prev H in OUTPUT HV
+              theQHadrons.pop_back();                  // the LastH is excluded from OUTPUT HV
+              theQHadrons.pop_back();                  // the PrevH is excluded from OUTPUT HV
+              theQHadrons.push_back(theLast);               // LastH substitute Prev H in OUTPUT HV
               G4QHadron* destrP=thePrev;                 // destruction Pointer for the QHadron
               delete     destrP;                         // the Last QHadron is destructed
               thePrev=theLast;
@@ -4060,7 +4060,7 @@ G4bool G4Quasmon::CheckGroundState(G4bool corFlag) // Correction is forbidden by
 		    }
             else if (totNMa>resPrevM+prevMa)              // "Just exclude the Last" case
 		    {
-              theQHadrons.removeLast();
+              theQHadrons.pop_back();
               delete theLast;
 		    }
             else return false;
@@ -4104,7 +4104,7 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
   G4double m = t.m();                                 // Get the mass value of decaying Hadron
   // --- Randomize a channel of decay
   G4QDecayChanVector decV = theWorld.GetQParticle(theQPDG)->GetDecayVector();
-  G4int nChan = decV.entries();
+  G4int nChan = decV.size();
 #ifdef debug
   G4cout<<"G4Quasmon::DecayOutHadron: PDG="<<thePDG<<", m="<<m<<",("<<nChan<<" channels)"<<G4endl;
 #endif
@@ -4125,7 +4125,7 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
 	  }
 	}
     G4QPDGCodeVector cV=decV[i]->GetVecOfSecHadrons();// PDGVector of the selected Decay Channel
-    G4int nPart=cV.entries();                         // A#of particles to decay in
+    G4int nPart=cV.size();                         // A#of particles to decay in
 #ifdef debug
 	G4cout<<"G4Quasmon::DecayOutHadron: resi="<<i<<",nP="<<nPart<<":"<<cV[0]->GetPDGCode()
           <<","<<cV[1]->GetPDGCode();
@@ -4193,13 +4193,13 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
           delete sHadr;                                  // Delete "new sHadr"
           G4cerr<<"***G4Q::DecayOutHadron:in2, PDGC="<<thePDG<<", ch#"<<i<<G4endl;
           G4Exception("***Ex***G4Q::Failed to decay in 2");
-          theQHadrons.insert(qHadron);                   // Fill as it is (delete equivalent)
+          theQHadrons.push_back(qHadron);                   // Fill as it is (delete equivalent)
           return false;
 	    }
         else
         {
           //qHadron->SetNFragments(2);
-          //theQHadrons.insert(qHadron);                   // Fill with NFr=2 (delete equivalent)
+          //theQHadrons.push_back(qHadron);                   // Fill with NFr=2 (delete equivalent)
           // Instead
           delete qHadron;
           //
@@ -4209,7 +4209,7 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
           FillHadronVector(sHadr);                       // Fill 2nd Hadron (delete equivalent)
         }
 	  }
-      else theQHadrons.insert(qHadron);                  // Fill hadron as it is (delete equivalent)
+      else theQHadrons.push_back(qHadron);                  // Fill hadron as it is (delete equivalent)
     }
     else if(nPart==3)
 	{
@@ -4285,13 +4285,13 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
         delete sHadr;                                  // Delete "new sHadr"
         delete tHadr;                                  // Delete "new tHadr"
         G4cerr<<"***G4Q::DecayOutHadron:in3, PDGC="<<thePDG<<", ch#"<<i<<G4endl;
-        theQHadrons.insert(qHadron);                   // Fill as it is (delete equivalent)
+        theQHadrons.push_back(qHadron);                   // Fill as it is (delete equivalent)
         return false;
 	  }
       else
       {
         //qHadron->SetNFragments(3);
-        //theQHadrons.insert(qHadron);                   // Fill with NFr=3 (delete equivalent)
+        //theQHadrons.push_back(qHadron);                   // Fill with NFr=3 (delete equivalent)
         // Instead
         delete qHadron;
         //
@@ -4309,7 +4309,7 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
 #ifdef pdebug
     G4cout<<"G4Quasmon::DecayOutHadron: Fill PDG= "<<thePDG<<t<<m<<"***0***>>>>>"<<G4endl;
 #endif
-    theQHadrons.insert(qHadron);                       // Fill as it is (delete equivalent)
+    theQHadrons.push_back(qHadron);                       // Fill as it is (delete equivalent)
   }
   return true;                                         // FAKE (impossible to reach)
 } // End of "DecayOutHadron"
@@ -4349,7 +4349,7 @@ G4QHadronVector* G4Quasmon::Fragment(G4QNucleus& nucEnviron, G4int nQ)
   G4cout<<"G4Quasmon::Fragment is called theEnviron="<<nucEnviron<<G4endl;
 #endif
   HadronizeQuasmon(nucEnviron,nQ);
-  G4int nHadrs=theQHadrons.entries();
+  G4int nHadrs=theQHadrons.size();
 #ifdef pdebug
   G4cout<<"G4Quasmon::Fragment after HadronizeQuasmon nH="<<nHadrs<<G4endl;
 #endif
@@ -4357,7 +4357,7 @@ G4QHadronVector* G4Quasmon::Fragment(G4QNucleus& nucEnviron, G4int nQ)
   for (int hadron=0; hadron<nHadrs; hadron++)
   {
     G4QHadron* curHadr = new G4QHadron(theQHadrons[hadron]);
-    theFragments->insert(curHadr);         // (delete equivalent - user)
+    theFragments->push_back(curHadr);         // (delete equivalent - user)
   }
   return theFragments;
 } // End of "Fragment"

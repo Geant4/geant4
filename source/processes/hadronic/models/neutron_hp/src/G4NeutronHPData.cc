@@ -55,9 +55,7 @@
     G4double emax = theVector->GetX(len-1);
 //    G4cout <<"zahl der energie-punkte "<< len<<" "<<emin<<" "<<emax<<G4endl;
     
-   //  G4int dummy; G4cin >> dummy; 
-    G4bool flag;
-    
+   //  G4int dummy; G4cin >> dummy;     
     G4LPhysicsFreeVector * theResult = new G4LPhysicsFreeVector(len, emin, emax);
     for (G4int i=0; i<len; i++)
     {

@@ -40,7 +40,6 @@
   
   G4double G4NeutronHPField::GetY(G4double e, G4int j)
   {
-    G4int found = 0;
     G4int low   = 0;
     G4int high  = 0;
     G4int i;

@@ -672,7 +672,6 @@ G4LEpp::G4LEpp() :
   //    SetMaxEnergy(1200.*MeV);
   SetMinEnergy(0.);
   SetMaxEnergy(1200.*GeV);
-  HAng = new HbookHistogram("CM angle (deg)", 182, -0.5, 180.5);
 }
 
 G4LEpp::~G4LEpp()
@@ -769,7 +768,6 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       G4cout << "   angle bin " << k << " angle=" << theta/degree << G4endl;
     }
 
-    HAng->accumulate(theta*180./pi);
 
     // Get the target particle
 

@@ -90,9 +90,9 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
 //	 << nop << G4endl;
   G4QHadronVector projHV;
   G4QHadron* iH = new G4QHadron(projectilePDGCode, 1./MeV*proj4Mom);
-  projHV.insert(iH);
+  projHV.push_back(iH);
   G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
-  projHV.clearAndDestroy();
+  G4std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
   //G4Quasmon* pan= new G4Quasmon(projectilePDGCode, targetPDGCode, 1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
   G4QHadronVector* output = pan->Fragment();
   delete pan;
@@ -100,19 +100,19 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   // Fill the particle change.
   theResult.Initialize(aTrack);
   theResult.SetStatusChange(fStopAndKill);
-  theResult.SetNumberOfSecondaries(output->length());
+  theResult.SetNumberOfSecondaries(output->size());
   G4DynamicParticle * theSec;
   G4cout << "NEW EVENT"<<endl;
-  G4int particle;
-  for( particle = 0; particle < output->length(); particle++)
+  unsigned int particle;
+  for( particle = 0; particle < output->size(); particle++)
   {
-    if(output->at(particle)->GetNFragments() != 0) 
+    if(output->operator[](particle)->GetNFragments() != 0) 
     {
-      delete output->at(particle);
+      delete output->operator[](particle);
       continue;
     }
     theSec = new G4DynamicParticle;  
-    G4int pdgCode = output->at(particle)->GetPDGCode();
+    G4int pdgCode = output->operator[](particle)->GetPDGCode();
     G4ParticleDefinition * theDefinition;
     // Note that I still have to take care of strange nuclei
     // For this I need the mass calculation, and a changed interface
@@ -128,13 +128,13 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
     }
     else
     {
-      theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(output->at(particle)->GetPDGCode());
+      theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(output->operator[](particle)->GetPDGCode());
     }
     G4cout << "Particle code produced = "<< pdgCode <<endl;
     theSec->SetDefinition(theDefinition);
-    theSec->SetMomentum(output->at(particle)->Get4Momentum().vect());
+    theSec->SetMomentum(output->operator[](particle)->Get4Momentum().vect());
     theResult.AddSecondary(theSec); 
-    delete output->at(particle);
+    delete output->operator[](particle);
   }
   delete output;
   return & theResult;

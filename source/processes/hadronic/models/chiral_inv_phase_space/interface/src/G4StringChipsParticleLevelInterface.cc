@@ -76,7 +76,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 {
   // Protection for non physical conditions
   
-  if(theSecondaries->length() == 1) 
+  if(theSecondaries->size() == 1) 
     G4Exception("G4StringChipsParticleLevelInterface: Only one particle from String models!");
   
   // target properties needed in constructor of quasmon, and for boosting to
@@ -88,8 +88,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4int resZ = 0;
   G4ThreeVector hitMomentum(0,0,0);
   G4double hitMass = 0;
-  G4int hitCount = 0;
-  while(aNucleon = theNucleus->GetNextNucleon())
+  unsigned int hitCount = 0;
+  while((aNucleon = theNucleus->GetNextNucleon()))
   {
     if(!aNucleon->AreYouHit())
     {
@@ -125,16 +125,16 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   // now select all particles in range
   G4std::list<G4Pair<G4double, G4KineticTrack *> > theSorted;
   G4std::list<G4Pair<G4double, G4KineticTrack *> >::iterator current;
-  for(G4int secondary = 0; secondary<theSecondaries->length(); secondary++)
+  for(unsigned int secondary = 0; secondary<theSecondaries->size(); secondary++)
   {
-    G4LorentzVector a4Mom = theSecondaries->at(secondary)->Get4Momentum();
-    G4cout <<"ALL STRING particles "<<theSecondaries->at(secondary)->GetDefinition()->GetPDGCharge()<<" "
-           << theSecondaries->at(secondary)->GetDefinition()->GetPDGEncoding()<<" "
+    G4LorentzVector a4Mom = theSecondaries->operator[](secondary)->Get4Momentum();
+    G4cout <<"ALL STRING particles "<<theSecondaries->operator[](secondary)->GetDefinition()->GetPDGCharge()<<" "
+           << theSecondaries->operator[](secondary)->GetDefinition()->GetPDGEncoding()<<" "
 	   << a4Mom <<G4endl; 
     G4double toSort = a4Mom.rapidity();
     G4Pair<G4double, G4KineticTrack *> it;
     it.first = toSort;
-    it.second = theSecondaries->at(secondary);
+    it.second = theSecondaries->operator[](secondary);
     G4bool inserted = false;
     for(current = theSorted.begin(); current!=theSorted.end(); current++)
     {
@@ -192,20 +192,20 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
         current4Mom.boost(targ4Mom.boostVector());
         theSec->SetTotalEnergy(current4Mom.t());
         theSec->SetMomentum(current4Mom.vect());
-        theResult->insert(theSec);
+        theResult->push_back(theSec);
       } 
       else
       {
-        for (G4int aSecondary=0; aSecondary<secondaries->entries(); aSecondary++)
+        for (unsigned int aSecondary=0; aSecondary<secondaries->size(); aSecondary++)
         {
-          theSec = new G4ReactionProduct(secondaries->at(aSecondary)->GetDefinition());
-          G4LorentzVector current4Mom = secondaries->at(aSecondary)->Get4Momentum();
+          theSec = new G4ReactionProduct(secondaries->operator[](aSecondary)->GetDefinition());
+          G4LorentzVector current4Mom = secondaries->operator[](aSecondary)->Get4Momentum();
           current4Mom.boost(targ4Mom.boostVector());
           theSec->SetTotalEnergy(current4Mom.t());
           theSec->SetMomentum(current4Mom.vect());
-          theResult->insert(theSec);
+          theResult->push_back(theSec);
         }
-        secondaries->clearAndDestroy();
+        G4std::for_each(secondaries->begin(), secondaries->end(), DeleteKineticTrack());
         delete secondaries;
       }
     }
@@ -243,15 +243,15 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4std::vector<G4LorentzVector> theFinalMomenta;
   if(theContents.size()<hitCount || 1)
   {
-    for(G4int hp = 0; hp<theContents.size(); hp++)
+    for(unsigned int hp = 0; hp<theContents.size(); hp++)
     {
       G4QHadron* aHadron = new G4QHadron(theContents[hp], theMomenta[hp]);
-      projHV.insert(aHadron);
+      projHV.push_back(aHadron);
     }
   }
   else
   {
-    G4int hp;
+    unsigned int hp;
     for(hp=0; hp<hitCount; hp++) 
     {
       G4QContent co(0, 0, 0, 0, 0, 0);
@@ -259,7 +259,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       G4LorentzVector mo(0,0,0,0);
       theFinalMomenta.push_back(mo);
     }
-    G4int running = 0;
+    unsigned int running = 0;
     while (running<theContents.size())
     {
       for(hp = 0; hp<hitCount; hp++)
@@ -273,7 +273,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     for(hp = 0; hp<hitCount; hp++)
     {
       G4QHadron* aHadron = new G4QHadron(theFinalContents[hp], theFinalMomenta[hp]);
-      projHV.insert(aHadron);
+      projHV.push_back(aHadron);
     }
   }
   // construct the quasmon
@@ -300,7 +300,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
     G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
     // clean up particles
-    projHV.clearAndDestroy();
+    G4std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
     output = pan->Fragment();
     delete pan;
   }
@@ -328,38 +328,38 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       current4Mom.boost(targ4Mom.boostVector());
       theSec->SetTotalEnergy(current4Mom.t());
       theSec->SetMomentum(current4Mom.vect());
-      theResult->insert(theSec);
+      theResult->push_back(theSec);
     } 
     else
     {
-      for (G4int aSecondary=0; aSecondary<secondaries->entries(); aSecondary++)
+      for (unsigned int aSecondary=0; aSecondary<secondaries->size(); aSecondary++)
       {
-        theSec = new G4ReactionProduct(secondaries->at(aSecondary)->GetDefinition());
-        G4LorentzVector current4Mom = secondaries->at(aSecondary)->Get4Momentum();
+        theSec = new G4ReactionProduct(secondaries->operator[](aSecondary)->GetDefinition());
+        G4LorentzVector current4Mom = secondaries->operator[](aSecondary)->Get4Momentum();
         current4Mom.boost(targ4Mom.boostVector());
         theSec->SetTotalEnergy(current4Mom.t());
         theSec->SetMomentum(current4Mom.vect());
-        theResult->insert(theSec);
+        theResult->push_back(theSec);
       }
-      secondaries->clearAndDestroy();
+      G4std::for_each(secondaries->begin(), secondaries->end(), DeleteKineticTrack());
       delete secondaries;
     }
   }
-  theSecondaries->clearAndDestroy();
+  G4std::for_each(theSecondaries->begin(), theSecondaries->end(), DeleteKineticTrack());
   delete theSecondaries;
     
   // now add the quasmon output
-  G4cout << "Number of particles from string"<<theResult->length()<<G4endl;
-  G4cout << "Number of particles from chips"<<output->length()<<G4endl;
-  for(G4int particle = 0; particle < output->length(); particle++)
+  G4cout << "Number of particles from string"<<theResult->size()<<G4endl;
+  G4cout << "Number of particles from chips"<<output->size()<<G4endl;
+  for(unsigned int particle = 0; particle < output->size(); particle++)
   {
-    if(output->at(particle)->GetNFragments() != 0) 
+    if(output->operator[](particle)->GetNFragments() != 0) 
     {
-      delete output->at(particle);
+      delete output->operator[](particle);
       continue;
     }
     theSec = new G4ReactionProduct;  
-    G4int pdgCode = output->at(particle)->GetPDGCode();
+    G4int pdgCode = output->operator[](particle)->GetPDGCode();
     G4ParticleDefinition * theDefinition;
     // Note that I still have to take care of strange nuclei
     // For this I need the mass calculation, and a changed interface
@@ -385,23 +385,23 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     }    
     else
     {
-      theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(output->at(particle)->GetPDGCode());
+      theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(output->operator[](particle)->GetPDGCode());
     }
     G4cout << "Particle code produced = "<< pdgCode <<G4endl;
     theSec = new G4ReactionProduct(theDefinition);
-    G4LorentzVector current4Mom = output->at(particle)->Get4Momentum();
+    G4LorentzVector current4Mom = output->operator[](particle)->Get4Momentum();
     current4Mom.boost(targ4Mom.boostVector());
     theSec->SetTotalEnergy(current4Mom.t());
     theSec->SetMomentum(current4Mom.vect());
-    theResult->insert(theSec);
+    theResult->push_back(theSec);
     
     G4cout <<"CHIPS particles "<<theDefinition->GetPDGCharge()<<" "
            << theDefinition->GetPDGEncoding()<<" "
 	   << current4Mom <<G4endl; 
-    delete output->at(particle);
+    delete output->operator[](particle);
   }
   delete output;
-  G4cout << "Number of particles"<<theResult->length()<<G4endl;
+  G4cout << "Number of particles"<<theResult->size()<<G4endl;
   G4cout << G4endl;
   G4cout << "QUASMON preparation info "
          << 1./MeV*proj4Mom<<" "

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QDecayChan.cc,v 1.10 2001-09-18 15:28:21 mkossov Exp $
+// $Id: G4QDecayChan.cc,v 1.11 2001-10-04 20:00:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -22,6 +22,7 @@
 //#define pdebug
 
 #include "G4QDecayChanVector.hh"
+#include "g4std/algorithm"
 
 G4QDecayChan::G4QDecayChan(){};
 
@@ -30,15 +31,15 @@ G4QDecayChan::G4QDecayChan(G4double pLev, G4int PDG1, G4int PDG2, G4int PDG3):
 {
   G4QPDGCode* firstPDG = new G4QPDGCode(PDG1);
   theMinMass =firstPDG->GetMass();
-  aVecOfSecHadrons.insert(firstPDG);
+  aVecOfSecHadrons.push_back(firstPDG);
   G4QPDGCode* secondPDG = new G4QPDGCode(PDG2);
   theMinMass+=secondPDG->GetMass();
-  aVecOfSecHadrons.insert(secondPDG);
+  aVecOfSecHadrons.push_back(secondPDG);
   if(PDG3) 
   {
     G4QPDGCode* thirdPDG = new G4QPDGCode(PDG3);
     theMinMass+=thirdPDG->GetMass();
-    aVecOfSecHadrons.insert(thirdPDG);
+    aVecOfSecHadrons.push_back(thirdPDG);
   }
 #ifdef debug
   cout<<"G4QDecayChan is defined with pL="<<pLev<<",1="<<PDG1<<",2="<<PDG2<<",3="<<PDG3
@@ -51,11 +52,11 @@ G4QDecayChan::G4QDecayChan(const G4QDecayChan& right)
   aDecayChanLimit     = right.aDecayChanLimit;
   theMinMass          = right.theMinMass;
   //aVecOfSecHadrons (Vector)
-  G4int nSH           = right.aVecOfSecHadrons.entries();
+  G4int nSH           = right.aVecOfSecHadrons.size();
   if(nSH) for(G4int ih=0; ih<nSH; ih++)
   {
     G4QPDGCode* curPC = new G4QPDGCode(right.aVecOfSecHadrons[ih]);
-    aVecOfSecHadrons.insert(curPC);
+    aVecOfSecHadrons.push_back(curPC);
   }
 }
 
@@ -64,15 +65,18 @@ G4QDecayChan::G4QDecayChan(G4QDecayChan* right)
   aDecayChanLimit     = right->aDecayChanLimit;
   theMinMass          = right->theMinMass;
   //aVecOfSecHadrons (Vector)
-  G4int nSH           = right->aVecOfSecHadrons.entries();
+  G4int nSH           = right->aVecOfSecHadrons.size();
   if(nSH) for(G4int ih=0; ih<nSH; ih++)
   {
     G4QPDGCode* curPC = new G4QPDGCode(right->aVecOfSecHadrons[ih]);
-    aVecOfSecHadrons.insert(curPC);
+    aVecOfSecHadrons.push_back(curPC);
   }
 }
 
-G4QDecayChan::~G4QDecayChan() {aVecOfSecHadrons.clearAndDestroy();}
+G4QDecayChan::~G4QDecayChan() 
+{
+  G4std::for_each(aVecOfSecHadrons.begin(), aVecOfSecHadrons.end(), DeleteQPDGCode());
+}
 
 // Assignment operator
 const G4QDecayChan& G4QDecayChan::operator=(const G4QDecayChan& right)
@@ -80,11 +84,11 @@ const G4QDecayChan& G4QDecayChan::operator=(const G4QDecayChan& right)
   aDecayChanLimit     = right.aDecayChanLimit;
   theMinMass          = right.theMinMass;
   //aVecOfSecHadrons (Vector)
-  G4int nSH           = right.aVecOfSecHadrons.entries();
+  G4int nSH           = right.aVecOfSecHadrons.size();
   if(nSH) for(G4int ih=0; ih<nSH; ih++)
   {
     G4QPDGCode* curPC = new G4QPDGCode(right.aVecOfSecHadrons[ih]);
-    aVecOfSecHadrons.insert(curPC);
+    aVecOfSecHadrons.push_back(curPC);
   }
 
   return *this;
@@ -96,7 +100,7 @@ ostream& operator<<(ostream& lhs, G4QDecayChan& rhs)
 {
   lhs << "[L=" << rhs.GetDecayChanLimit(); 
   G4QPDGCodeVector VSH = rhs.GetVecOfSecHadrons();
-  G4int n = VSH.entries();
+  G4int n = VSH.size();
   lhs << ", N=" << n << ": ";
   for (int i=0; i<n; i++)
   {

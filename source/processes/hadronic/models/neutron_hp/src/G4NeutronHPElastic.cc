@@ -63,7 +63,6 @@
     if(n!=1)
     {
       G4int i;
-      G4int it = n-1;
       xSec = new G4double[n];
       G4double sum=0;
       const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();

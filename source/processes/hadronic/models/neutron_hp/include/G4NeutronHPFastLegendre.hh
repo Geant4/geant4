@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFastLegendre.hh,v 1.7 2001-07-26 09:27:59 hpw Exp $
+// $Id: G4NeutronHPFastLegendre.hh,v 1.8 2001-10-04 20:00:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFastLegendre_h
@@ -150,7 +150,7 @@ class G4NeutronHPFastLegendre
   
   inline G4double Interpolate(G4int bin, G4int l, G4double y1, G4double y2, G4double x)
   {
-    G4double slope = 0, off = 0, x1=0, x2=0, x1mx2;
+    G4double slope = 0, off = 0, x2=0, x1mx2;
     G4int half = (theNbin[l]-1)/2;
 //    x1 = (bin-half)/G4double(half);
     x2 = (bin+1-half)/G4double(half);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.cc,v 1.19 2001-09-18 15:28:22 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.20 2001-10-04 20:00:23 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -2563,7 +2563,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
   G4int mac=6;                                   // Maximum cluster # for fixed baryon number
   G4int cca=0;                                   // Counter of clusters for the same baryon number
   G4int acm=0;                                   // Threshold ac value
-  G4int mCand=theQCandidates.entries();
+  G4int mCand=theQCandidates.size();
   G4double s=0.;                                 // Prototype of summ for constant A (=ac>2)
   G4double sZ=0.;                                // Percent of protons
   G4double sN=0.;                                // Percent of neutrons

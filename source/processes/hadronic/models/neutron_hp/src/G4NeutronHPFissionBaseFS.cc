@@ -56,7 +56,6 @@
     ifstream theData(filename, ios::in|ios::nocreate);
 #endif
     G4int dummy;
-    G4double dumm;
     if(!(theData))
     {
       theData.close();
@@ -124,7 +123,7 @@ G4DynamicParticleVector * G4NeutronHPFissionBaseFS::ApplyYourself(G4int nPrompt)
       G4DynamicParticle * it = new G4DynamicParticle;
       it->SetDefinition(theNeutrons[i].GetDefinition());
       it->SetMomentum(theNeutrons[i].GetMomentum());
-      aResult->insert(it);
+      aResult->push_back(it);
    }
    delete [] theNeutrons;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.5 2001-07-26 09:27:38 hpw Exp $
+// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.6 2001-10-04 20:00:38 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NeutronHPNBodyPhaseSpace.hh"
@@ -82,8 +82,6 @@ G4ReactionProduct * G4NeutronHPNBodyPhaseSpace::Sample(G4double anEnergy, G4doub
    G4double maxE = GetEmax(anEnergy, result->GetMass());
    G4double energy;
    G4double max;
-   G4double tMass = GetTarget()->GetMass();
-   G4double pMass = GetNeutron()->GetMass();
    if(theTotalCount<=3)
    {
      max = maxE/2.;

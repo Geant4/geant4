@@ -52,7 +52,6 @@
     // accommodating deficiencie of some compilers
     if(theChannel.eof()) {theChannel.close(); return false;} 
     if(!theChannel) {theChannel.close(); return false;}
-    G4int count;
     G4int dummy; 
     theChannel >> dummy >> dummy;
     theChannelData = new G4NeutronHPVector;

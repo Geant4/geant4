@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StopTheoDeexcitation.cc,v 1.6 2001-08-01 17:12:38 hpw Exp $
+// $Id: G4StopTheoDeexcitation.cc,v 1.7 2001-10-04 20:00:43 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,9 +43,6 @@
 #include "G4ios.hh"
 
 #include "G4StopTheoDeexcitation.hh"
-
-#include "g4rw/tpordvec.h"
-#include "g4rw/tvordvec.h"
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"

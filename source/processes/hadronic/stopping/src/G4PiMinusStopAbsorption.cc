@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopAbsorption.cc,v 1.8 2001-08-01 17:12:34 hpw Exp $
+// $Id: G4PiMinusStopAbsorption.cc,v 1.9 2001-10-04 20:00:41 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,9 +40,7 @@
 
 
 #include "G4PiMinusStopAbsorption.hh"
-#include "g4rw/tpordvec.h"
-#include "g4rw/tvordvec.h"
-#include "g4rw/cstring.h"
+#include "g4std/vector"
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -83,14 +81,14 @@ G4PiMinusStopAbsorption::~G4PiMinusStopAbsorption()
 
 G4DynamicParticleVector* G4PiMinusStopAbsorption::DoAbsorption()
 {
-  G4RWTPtrOrderedVector<G4ParticleDefinition>* defNucleons = _materialAlgo->DefinitionVector();
+  G4std::vector<G4ParticleDefinition*>* defNucleons = _materialAlgo->DefinitionVector();
 
   G4double newA = _nucleusA;
   G4double newZ = _nucleusZ;
 
   if (defNucleons != 0)
     {
-      for (G4int i=0; i<defNucleons->entries(); i++)
+      for (G4int i=0; i<defNucleons->size(); i++)
 	{
 	  if ( (*defNucleons)[i] == G4Proton::Proton())
 	    {
@@ -106,15 +104,15 @@ G4DynamicParticleVector* G4PiMinusStopAbsorption::DoAbsorption()
   G4double mass = G4NucleiProperties::GetNuclearMass(newA,newZ);
 
 
-  G4RWTPtrOrderedVector<G4LorentzVector>* p4Nucleons = _materialAlgo->P4Vector(binding,mass);
+  G4std::vector<G4LorentzVector*>* p4Nucleons = _materialAlgo->P4Vector(binding,mass);
 
   if (defNucleons != 0 && p4Nucleons != 0)
     {
-      int nNucleons = p4Nucleons->entries();
+      int nNucleons = p4Nucleons->size();
       
       G4double seen = _materialAlgo->FinalNucleons() / 2.;
       G4int maxN = nNucleons;
-      if (defNucleons->entries() < nNucleons) { maxN = defNucleons->entries(); }
+      if (defNucleons->size() < nNucleons) { maxN = defNucleons->size(); }
 
       for (G4int i=0; i<maxN; i++)
 	{
@@ -126,7 +124,7 @@ G4DynamicParticleVector* G4PiMinusStopAbsorption::DoAbsorption()
 	  G4double ranflat = G4UniformRand();
 	  
 	  if (ranflat < seen) 
-	    { _absorptionProducts->append(product); }
+	    { _absorptionProducts->push_back(product); }
           else
 	    { delete product; }
 	}
@@ -140,7 +138,7 @@ G4ThreeVector G4PiMinusStopAbsorption::RecoilMomentum()
 {
   G4ThreeVector pProducts(0.,0.,0.);
   
-  for (G4int i = 0; i< _absorptionProducts->entries(); i++)
+  for (G4int i = 0; i< _absorptionProducts->size(); i++)
     {
       pProducts = pProducts + (*_absorptionProducts)[i]->GetMomentum();
     }
@@ -151,7 +149,7 @@ G4ThreeVector G4PiMinusStopAbsorption::RecoilMomentum()
 G4int G4PiMinusStopAbsorption::NProtons()
 {
   G4int n = 0;
-  G4int entries = _absorptionProducts->entries();
+  G4int entries = _absorptionProducts->size();
   for (int i = 0; i<entries; i++)
     {
       if ((*_absorptionProducts)[i]->GetDefinition() == G4Proton::Proton())
@@ -164,7 +162,7 @@ G4int G4PiMinusStopAbsorption::NProtons()
 G4int G4PiMinusStopAbsorption::NNeutrons()
 {
   G4int n = 0;
-  G4int entries = _absorptionProducts->entries();
+  G4int entries = _absorptionProducts->size();
   for (int i = 0; i<entries; i++)
     {
       if ((*_absorptionProducts)[i]->GetDefinition() == G4Neutron::Neutron())
@@ -183,7 +181,7 @@ G4double G4PiMinusStopAbsorption::Energy()
   G4int nP = 0;
 
 
-  G4int nAbsorptionProducts = _absorptionProducts->entries();
+  G4int nAbsorptionProducts = _absorptionProducts->size();
 
   for (int i = 0; i<nAbsorptionProducts; i++)
     {

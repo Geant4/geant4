@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QParticleVector.hh,v 1.5 2001-09-17 14:19:49 mkossov Exp $
+// $Id: G4QParticleVector.hh,v 1.6 2001-10-04 20:00:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4QParticleVector_h
@@ -22,9 +22,10 @@
 // ---------------------------------------------------------------
 
 #include "G4QParticle.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
-typedef G4RWTPtrOrderedVector<G4QParticle> G4QParticleVector;
+typedef G4std::vector<G4QParticle *> G4QParticleVector;
+struct DeleteQParticle{ void operator()(G4QParticle *aN){delete aN;} };
 
 #endif
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReactionDynamics.hh,v 1.5 2001-08-01 17:12:42 hpw Exp $
+// $Id: G4ReactionDynamics.hh,v 1.6 2001-10-04 20:00:43 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Reaction Dynamics
@@ -47,7 +47,7 @@
     
     G4ReactionDynamics() {}
     
-    ~G4ReactionDynamics() {}
+    virtual ~G4ReactionDynamics() {}
     
     virtual G4double FindInelasticity()
     { return 0.0; }

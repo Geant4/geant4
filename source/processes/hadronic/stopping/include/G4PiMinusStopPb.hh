@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopPb.hh,v 1.5 2001-08-01 17:12:23 hpw Exp $
+// $Id: G4PiMinusStopPb.hh,v 1.6 2001-10-04 20:00:41 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,10 +40,6 @@
 
 #ifndef G4PIMINUSSTOPPB_HH
 #define G4PIMINUSSTOPPB_HH 
-
-#include "g4rw/tpordvec.h"
-#include "g4rw/tvordvec.h"
-#include "g4rw/cstring.h"
 
 #include "G4PiMinusStopMaterial.hh"
 #include "globals.hh"

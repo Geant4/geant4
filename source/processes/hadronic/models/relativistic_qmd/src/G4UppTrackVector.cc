@@ -28,30 +28,30 @@
 
 void G4UppTrackVector::add(const G4KineticTrackVector& v)
 {
-  for (G4int i=0; i<v.length(); i++) {
+  for (unsigned int i=0; i<v.size(); i++) {
     this->push_back(new G4UppTrack(*v[i]));
   }
 }
 
     
 
-void G4UppTrackVector::add(const G4RWTPtrOrderedVector<G4Nucleon>& v, const G4int g)
+void G4UppTrackVector::add(const G4std::vector<G4Nucleon *> & v, const G4int g)
 {
-  for (G4int i=0; i<v.length(); i++) {
+  for (unsigned int i=0; i<v.size(); i++) {
     G4UppTrack* newTrack = new G4UppTrack(*v[i],g);
     // cout << "got nuc: " << newTrack->GetDefinition()->GetParticleName() << ":";
     // cout << newTrack->Get4Momentum().e() << ":";
     // cout << newTrack->GetActualMass()<< endl;
     this->push_back(newTrack);
   }
-  if (uppdebug) cout << "(debug) " << v.length() << " Nucleons added." << endl;
+  if (uppdebug) cout << "(debug) " << v.size() << " Nucleons added." << endl;
   if (uppdebug) cout << "(debug) nonCollisionGroup: " << g << endl;
 }
 
 
 G4int G4UppTrackVector::getIndex(const G4UppTrack* tPtr) const
 {
-  for (G4int i=0; i<this->size(); i++) {
+  for (unsigned int i=0; i<this->size(); i++) {
     if ((*this)[i] == tPtr) return i;
   }
   return -1;
@@ -61,7 +61,7 @@ G4int G4UppTrackVector::getIndex(const G4UppTrack* tPtr) const
 void G4UppTrackVector::dump() const
 {
   cout << "dumping..." << this->size() << endl;
-  for (G4int i=0; i<this->size(); i++) {
+  for (unsigned int i=0; i<this->size(); i++) {
     G4cout << i << ": " << endl;
     (*this)[i]->dump();
   }
@@ -74,7 +74,7 @@ G4UppTrackChange G4UppTrackVector::update(const G4UppTrackChange& aChange)
   
   // aChange.dump();
 
-  for (G4int i=0; i<aChange.oldParticles.size(); i++) {
+  for (unsigned int i=0; i<aChange.oldParticles.size(); i++) {
     backup.newParticles.push_back(aChange.oldParticles[i]);
     G4int Index = getIndex(aChange.oldParticles[i]);
     // cout << "Erase " << Index << endl;
@@ -93,7 +93,7 @@ G4UppTrackChange G4UppTrackVector::update(const G4UppTrackChange& aChange)
 
 G4bool G4UppTrackVector::isPauliBlocked(const G4UppTrackVector& t) const
 {
-  for (G4int i=0; i<t.size(); i++) {
+  for (unsigned int i=0; i<t.size(); i++) {
     if (isPauliBlocked(t[i]))
       return true;
   }
@@ -103,7 +103,7 @@ G4bool G4UppTrackVector::isPauliBlocked(const G4UppTrackVector& t) const
 
 void G4UppTrackVector::resetChangedFlags()
 {
-  for (G4int i=0; i<this->size(); i++) {
+  for (unsigned int i=0; i<this->size(); i++) {
     (*this)[i]->setChanged(false);
   }
 }
@@ -120,14 +120,14 @@ G4bool G4UppTrackVector::isPauliBlocked(const G4UppTrack* aTrack) const
   G4double p2;
   G4double rho = 0.0;
   G4double rhob = 0.0;
-  G4double rhob0 = 0.0;
+//  G4double rhob0 = 0.0;
   G4double f = 0.0;
   G4double pgw = 1.0/hbarc/hbarc/gw;
 	 
 
   if (aTrack->GetDefinition()->GetBaryonNumber() == 1) {
-    G4int i = getIndex(aTrack);
-    for (G4int j=0; j<size(); j++) {
+//    G4int i = getIndex(aTrack);
+    for (unsigned int j=0; j<size(); j++) {
       //    r2 = (rx(i)-rx(j))**2+(ry(i)-ry(j))**2+(rz(i)-rz(j))**2;
       r2 = (aTrack->GetPosition() - (*this)[j]->GetPosition() ).mag2();
       if ((aTrack->GetDefinition()==(*this)[j]->GetDefinition())) {

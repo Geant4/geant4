@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleVector.hh,v 1.5 2001-08-01 17:12:42 hpw Exp $
+// $Id: G4ParticleVector.hh,v 1.6 2001-10-04 20:00:43 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -34,13 +34,13 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4DynamicParticle.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 // #ifdef STL
 // for future use STL vector as container 
 // typedef Vector<G4DynamicParticle> G4ParticleVector;
 // #elseifdef RWT
 
-typedef G4RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
+typedef G4std::vector<G4DynamicParticle *> G4ParticleVector;
 
 #endif

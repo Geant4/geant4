@@ -45,7 +45,7 @@ void G4UppModel::initialize (G4Fancy3DNucleus& aProjectile,
 void G4UppModel::initialize (const G4KineticTrackVector& tracks)
 {
   allTracks.clear();
-  for (G4int i=0; i<tracks.length(); i++) {
+  for (G4int i=0; i<tracks.size(); i++) {
     G4UppTrack* aTrackPtr = new G4UppTrack( *(tracks[i]) );
     allTracks.push_back(aTrackPtr);
   }

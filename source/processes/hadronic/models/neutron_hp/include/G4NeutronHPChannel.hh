@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPChannel.hh,v 1.7 2001-07-26 09:27:54 hpw Exp $
+// $Id: G4NeutronHPChannel.hh,v 1.8 2001-10-04 20:00:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
@@ -63,7 +63,6 @@ public:
   ~G4NeutronHPChannel()
   {
     delete theChannelData; 
-    G4int i;
     // Following statement disabled to avoid SEGV
     // theBuffer is also deleted as "theChannelData" in
     // ~G4NeutronHPIsoData.  FWJ 06-Jul-1999

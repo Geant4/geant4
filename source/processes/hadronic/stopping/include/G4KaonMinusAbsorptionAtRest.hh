@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinusAbsorptionAtRest.hh,v 1.6 2001-08-01 17:12:19 hpw Exp $
+// $Id: G4KaonMinusAbsorptionAtRest.hh,v 1.7 2001-10-04 20:00:40 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,9 +44,6 @@
 // Process for nuclear absorption of K- at rest; 
 // to be used in your physics list in case you need this physics.
 // Class Description - End
-
-
-#include "g4rw/tpordvec.h"
 
 #include "globals.hh"
 #include "Randomize.hh"

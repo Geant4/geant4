@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCodeVector.hh,v 1.5 2001-09-17 14:19:49 mkossov Exp $
+// $Id: G4QPDGCodeVector.hh,v 1.6 2001-10-04 20:00:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4QPDGCodeVector_h
@@ -22,9 +22,11 @@
 // ---------------------------------------------------------------
 
 #include "G4QPDGCode.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
-typedef G4RWTPtrOrderedVector<G4QPDGCode> G4QPDGCodeVector;
+typedef G4std::vector<G4QPDGCode *> G4QPDGCodeVector;
+struct DeleteQPDGCode{ void operator()(G4QPDGCode *aN){delete aN;} };
+
 
 #endif
 

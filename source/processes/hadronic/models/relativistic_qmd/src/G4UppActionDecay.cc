@@ -43,7 +43,7 @@ G4UppTrackChange* G4UppActionDecay::perform(const G4UppTrackVector& allTracks) c
 
   if (newPart==NULL) cout << "NULL!" << endl;
   // cout << "newpart: " << newPart->entries() << endl; // I hate rw
-  for (G4int k=0; k<newPart->entries(); k++) {
+  for (unsigned int k=0; k<newPart->size(); k++) {
     // cout << "DECPROD: " << (*newPart)[k]->GetDefinition()->GetParticleName() << endl;
     G4UppTrack* TrackPtr = new G4UppTrack(*(*newPart)[k]);
     TrackPtr->setLocalTime(allTracks.getGlobalTime());

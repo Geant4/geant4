@@ -29,7 +29,6 @@
 void G4NeutronHPAngular::Init(G4std::ifstream & aDataFile)
 {
 //  G4cout << "here we are entering the Angular Init"<<G4endl;
-  G4int dummy;
   aDataFile >> theAngularDistributionType >> targetMass;
   aDataFile >> frameFlag;
   if(theAngularDistributionType == 0)
@@ -66,7 +65,7 @@ void G4NeutronHPAngular::Init(G4std::ifstream & aDataFile)
     theProbArray = new G4NeutronHPPartial(nEnergy, nEnergy);
     theProbArray->InitInterpolation(aDataFile);
     G4double temp, energy;
-    G4int tempdep, nPoints;
+    G4int tempdep;
     for(G4int i=0; i<nEnergy; i++)
     {
       aDataFile >> temp >> energy >> tempdep;

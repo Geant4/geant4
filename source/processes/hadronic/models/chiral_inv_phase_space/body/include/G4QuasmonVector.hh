@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QuasmonVector.hh,v 1.5 2001-09-17 14:19:50 mkossov Exp $
+// $Id: G4QuasmonVector.hh,v 1.6 2001-10-04 20:00:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4QuasmonVector_h
@@ -22,8 +22,9 @@
 // ----------------------------------------------------------------
 
 #include "G4Quasmon.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
-typedef G4RWTPtrOrderedVector<G4Quasmon> G4QuasmonVector;
+typedef vector<G4Quasmon *> G4QuasmonVector;
+struct DeleteQuasmon{ void operator()(G4Quasmon *aN){delete aN;} };
 
 #endif

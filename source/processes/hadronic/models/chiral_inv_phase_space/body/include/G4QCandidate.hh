@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCandidate.hh,v 1.9 2001-09-17 14:19:47 mkossov Exp $
+// $Id: G4QCandidate.hh,v 1.10 2001-10-04 20:00:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -24,6 +24,7 @@
 
 #include "G4QHadron.hh"
 #include "G4QParentClusterVector.hh"
+#include "g4std/algorithm"
 
 class G4QCandidate : public G4QHadron
 {
@@ -86,7 +87,7 @@ inline G4int G4QCandidate::operator==(const G4QCandidate &right) const  {return 
 inline G4int G4QCandidate::operator!=(const G4QCandidate &right) const  {return this!=&right;}
 
 inline G4QParentCluster* G4QCandidate::TakeParClust(G4int nPC)  {return thePClusters[nPC];}
-inline G4int    G4QCandidate::GetPClustEntries()          const {return thePClusters.entries();}
+inline G4int    G4QCandidate::GetPClustEntries()          const {return thePClusters.size();}
 inline G4bool   G4QCandidate::GetPossibility()            const {return possible;}
 inline G4bool   G4QCandidate::GetParPossibility()         const {return parPossible;}
 inline G4double G4QCandidate::GetKMin()                   const {return kMin;}
@@ -99,11 +100,15 @@ inline G4double G4QCandidate::GetIntegProbability()       const {return integral
 inline G4double G4QCandidate::GetSecondRelProb()          const {return secondRelProbability;}
 inline G4double G4QCandidate::GetSecondIntProb()          const {return secondIntProbability;}
 
-inline void G4QCandidate::ClearParClustVector()                 {thePClusters.clearAndDestroy();}
+inline void G4QCandidate::ClearParClustVector()                 
+{
+  G4std::for_each(thePClusters.begin(), thePClusters.end(), DeleteQParentCluster());
+}
+
 inline void G4QCandidate::FillPClustVec(G4QParentCluster* pCl)
 {
   G4QParentCluster* npCl = new G4QParentCluster(pCl);
-  thePClusters.insert(npCl);                              // Fill new instance of PCl
+  thePClusters.push_back(npCl);                              // Fill new instance of PCl
 }
 inline void G4QCandidate::SetPossibility(G4bool choice)         {possible=choice;}
 inline void G4QCandidate::SetParPossibility(G4bool choice)      {parPossible=choice;}

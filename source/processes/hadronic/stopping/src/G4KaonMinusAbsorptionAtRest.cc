@@ -127,7 +127,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
   
   G4DynamicParticle* thePion;
   G4int i;
-  for(i = 0; i < absorptionProducts->length(); i++)
+  for(i = 0; i < absorptionProducts->size(); i++)
     {
       thePion = (*absorptionProducts)[i];
       if (thePion->GetDefinition() == G4PionMinus::PionMinus()
@@ -136,7 +136,8 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
 	{
 	  if (AbsorbPionByNucleus(thePion))
 	    {
-	      absorptionProducts->remove(thePion);
+	      absorptionProducts->erase(absorptionProducts->begin()+i);
+	      i--;
               delete thePion;
 	      if (verboseLevel > 1) 
 		G4cout << "G4KaonMinusAbsorption::AtRestDoIt: Pion absorbed in Nucleus" 
@@ -147,7 +148,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
   
   G4DynamicParticle* theSigma;
   G4DynamicParticle* theLambda;
-  for (i = 0; i < absorptionProducts->length(); i++)
+  for (i = 0; i < absorptionProducts->size(); i++)
     {
       theSigma = (*absorptionProducts)[i];
       if (theSigma->GetDefinition() == G4SigmaMinus::SigmaMinus()
@@ -156,9 +157,10 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
 	{
 	  theLambda = SigmaLambdaConversion(theSigma);
 	  if (theLambda  != 0){
-	    absorptionProducts->remove(theSigma);
+	    absorptionProducts->erase(absorptionProducts->begin()+i);
+	    i--;
             delete theSigma;
-	    absorptionProducts->append(theLambda);
+	    absorptionProducts->push_back(theLambda);
 
 	    if (verboseLevel > 1) 
 	      G4cout << "G4KaonMinusAbsorption::AtRestDoIt: SigmaLambdaConversion Done" 
@@ -175,7 +177,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
   G4int nP = 0;
 
   G4int nAbsorptionProducts = 0;
-  if (absorptionProducts != 0) nAbsorptionProducts = absorptionProducts->entries();
+  if (absorptionProducts != 0) nAbsorptionProducts = absorptionProducts->size();
   
   for ( i = 0; i<nAbsorptionProducts; i++)
     {
@@ -226,7 +228,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
   G4ReactionProductVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,energyDeposit,pNucleus);
   
   G4int nFragmentationProducts = 0;
-  if (fragmentationProducts != 0) nFragmentationProducts = fragmentationProducts->entries();
+  if (fragmentationProducts != 0) nFragmentationProducts = fragmentationProducts->size();
   
   //Initialize ParticleChange
    aParticleChange.Initialize(track);
@@ -242,12 +244,12 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
   for(i=0; i<nFragmentationProducts; i++)
   {
     G4DynamicParticle * aNew = 
-       new G4DynamicParticle(fragmentationProducts->at(i)->GetDefinition(),
-                             fragmentationProducts->at(i)->GetTotalEnergy(),
-                             fragmentationProducts->at(i)->GetMomentum());
-    G4double newTime = aParticleChange.GetGlobalTime(fragmentationProducts->at(i)->GetFormationTime());
+       new G4DynamicParticle((*fragmentationProducts)[i]->GetDefinition(),
+                             (*fragmentationProducts)[i]->GetTotalEnergy(),
+                             (*fragmentationProducts)[i]->GetMomentum());
+    G4double newTime = aParticleChange.GetGlobalTime((*fragmentationProducts)[i]->GetFormationTime());
     aParticleChange.AddSecondary(aNew, newTime);
-    delete fragmentationProducts->at(i);
+    delete (*fragmentationProducts)[i];
   }
   if (fragmentationProducts != 0) delete fragmentationProducts;
   
@@ -426,14 +428,14 @@ G4DynamicParticleVector* G4KaonMinusAbsorptionAtRest::KaonNucleonReaction()
   theReactionKinematics.TwoBodyScattering( &modifiedHadron, &aNucleon,
 					   producedBaryon, producedMeson);
   
-  products->append(producedBaryon);
-  products->append(producedMeson);
+  products->push_back(producedBaryon);
+  products->push_back(producedMeson);
   
   if (verboseLevel > 1) 
     {
       G4cout 
 	<< "G4KaonMinusAbsorption::KaonNucleonReaction: Number of primaries = " 
-	<< products->entries()
+	<< products->size()
 	<< ": " <<producedMesonDef->GetParticleName() 
 	<< ", " <<producedBaryonDef->GetParticleName() << G4endl;
     }

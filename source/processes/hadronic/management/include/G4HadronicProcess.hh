@@ -48,7 +48,7 @@
 #include "G4PhysicsVector.hh"
 #include "G4Nucleus.hh" 
 #include "G4ReactionProduct.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 #include "G4VIsotopeProduction.hh"
 #include "G4IsoParticleChange.hh"
  
@@ -61,7 +61,7 @@
     { isoIsOnAnyway = 0; }
     
     virtual ~G4HadronicProcess()
-    { theProductionModels.clearAndDestroy(); }
+    { unsigned int i; for(i=0; i<theProductionModels.size(); i++) delete theProductionModels[i]; }
     
     inline void RegisterMe( G4HadronicInteraction *a )
     { GetManagerPointer()->RegisterMe( a ); }
@@ -111,7 +111,7 @@
     void DisableIsotopeCounting() {isoIsOnAnyway = -1;}
     
     void RegisterIsotopeProductionModel(G4VIsotopeProduction * aModel)
-    { theProductionModels.insert(aModel); }
+    { theProductionModels.push_back(aModel); }
 
     static G4IsoParticleChange * GetIsotopeProductionInfo() 
     { 
@@ -154,7 +154,7 @@
     G4int isoIsOnAnyway; // true(1), false(-1) or default(0)
     
     G4IsoParticleChange theIsoPC;
-    G4RWTPtrOrderedVector<G4VIsotopeProduction> theProductionModels;
+    G4std::vector<G4VIsotopeProduction *> theProductionModels;
 
     static G4IsoParticleChange * theIsoResult;
     static G4IsoParticleChange * theOldIsoResult;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCandidate.cc,v 1.13 2001-09-18 15:28:20 mkossov Exp $
+// $Id: G4QCandidate.cc,v 1.14 2001-10-04 20:00:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -21,6 +21,7 @@
 //#define debug
 
 #include "G4QCandidate.hh"
+#include "g4std/algorithm"
 
 G4QCandidate::G4QCandidate() : relativeProbability(0.),integralProbability(0.) {};
 
@@ -52,11 +53,11 @@ G4QCandidate::G4QCandidate(const G4QCandidate& right)
   secondRelProbability= right.secondRelProbability;
   secondIntProbability= right.secondIntProbability;
   // thePClusters
-  G4int nParCl        = right.thePClusters.entries();
+  G4int nParCl        = right.thePClusters.size();
   if(nParCl) for(G4int ip=0; ip<nParCl; ip++)
   {
     G4QParentCluster* curPC = new G4QParentCluster(right.thePClusters[ip]);
-    thePClusters.insert(curPC);
+    thePClusters.push_back(curPC);
   }
 }
 
@@ -76,11 +77,11 @@ G4QCandidate::G4QCandidate(G4QCandidate* right)
   secondRelProbability= right->secondRelProbability;
   secondIntProbability= right->secondIntProbability;
   // thePClusters
-  G4int nParCl        = right->thePClusters.entries();
+  G4int nParCl        = right->thePClusters.size();
   if(nParCl) for(G4int ip=0; ip<nParCl; ip++)
   {
     G4QParentCluster* curPC = new G4QParentCluster(right->thePClusters[ip]);
-    thePClusters.insert(curPC);
+    thePClusters.push_back(curPC);
   }
 }
 
@@ -89,7 +90,7 @@ G4QCandidate::~G4QCandidate()
 #ifdef debug
   G4cout<<"~G4QCandidate: before thePClusters nC="<<thePClusters.entries()<<G4endl;
 #endif
-  thePClusters.clearAndDestroy();
+  G4std::for_each(thePClusters.begin(), thePClusters.end(), DeleteQParentCluster());
 #ifdef debug
   G4cout<<"~G4QCandidate: === DONE ==="<<G4endl;
 #endif
@@ -112,11 +113,11 @@ const G4QCandidate& G4QCandidate::operator=(const G4QCandidate &right)
   secondRelProbability= right.secondRelProbability;
   secondIntProbability= right.secondIntProbability;
   // thePClusters (Vector)
-  G4int nParCl        = right.thePClusters.entries();
+  G4int nParCl        = right.thePClusters.size();
   if(nParCl) for(G4int ip=0; ip<nParCl; ip++)
   {
     G4QParentCluster* curPC = new G4QParentCluster(right.thePClusters[ip]);
-    thePClusters.insert(curPC);
+    thePClusters.push_back(curPC);
   }
 
   return *this;

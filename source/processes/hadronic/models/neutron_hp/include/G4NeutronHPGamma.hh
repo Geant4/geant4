@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPGamma.hh,v 1.7 2001-07-26 09:28:03 hpw Exp $
+// $Id: G4NeutronHPGamma.hh,v 1.8 2001-10-04 20:00:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPGamma_h
@@ -67,7 +67,7 @@ class G4NeutronHPGamma
     G4DynamicParticle * theNew = new G4DynamicParticle;
     theNew->SetDefinition(G4Gamma::Gamma());
     theNew->SetKineticEnergy(gammaEnergy);
-    theResult->insert(theNew);
+    theResult->push_back(theNew);
     return theResult;
   }
   

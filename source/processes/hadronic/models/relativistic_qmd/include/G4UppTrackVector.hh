@@ -39,7 +39,7 @@ class G4UppTrackVector : public G4std::vector<G4UppTrack*>
 public:
 
   void add(const G4KineticTrackVector& aTrackVector);
-  void add(const G4RWTPtrOrderedVector<G4Nucleon>& aNucleonVector, 
+  void add(const G4std::vector<G4Nucleon *> & aNucleonVector, 
 	   const G4int nonInteractionGroup=0); 
 
   G4int getIndex(const G4UppTrack* trackPtr) const;

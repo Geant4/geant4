@@ -31,7 +31,7 @@
     G4NeutronHPVector * result = new G4NeutronHPVector;
     G4int j=0;
     G4double x;
-    G4double yl, yr, y;
+    G4double y;
     G4int running = 0;
     for(G4int i=0; i<left.GetVectorLength(); i++)
     {
@@ -213,8 +213,7 @@
     // continue in unknown areas by substraction of the last difference.
     
     CleanUp();
-    G4int s = 0, n=0, i=0, m=0;
-    G4bool flag;
+    G4int s = 0, n=0, m=0;
     G4NeutronHPVector * tmp;
     G4int a = s, p = n, t;
     while ( a<active->GetVectorLength() )
@@ -352,7 +351,6 @@
       if(theIntegral==NULL) IntegrateAndNormalise();
       do
       {
-        G4int i;
         G4double value, test, baseline;
         baseline = theData[GetVectorLength()-1].GetX()-theData[0].GetX();
         G4double rand;

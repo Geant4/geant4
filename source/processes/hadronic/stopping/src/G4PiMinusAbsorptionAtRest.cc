@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.6 2001-08-01 17:12:33 hpw Exp $
+// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.7 2001-10-04 20:00:41 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -148,11 +148,11 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
 
   G4int nAbsorptionProducts = 0;
   if (absorptionProducts != 0)     
-    { nAbsorptionProducts  =  absorptionProducts->entries(); }
+    { nAbsorptionProducts  =  absorptionProducts->size(); }
 
   G4int nFragmentationProducts = 0;
   if (fragmentationProducts != 0) 
-    { nFragmentationProducts = fragmentationProducts->entries(); }
+    { nFragmentationProducts = fragmentationProducts->size(); }
   
   if (verboseLevel>0) 
     {
@@ -167,18 +167,18 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   aParticleChange.SetNumberOfSecondaries(G4int(nAbsorptionProducts + nFragmentationProducts)); 
      
   for (i = 0; i<nAbsorptionProducts; i++)
-    { aParticleChange.AddSecondary(absorptionProducts->at(i)); }
+    { aParticleChange.AddSecondary((*absorptionProducts)[i]); }
 
 //  for (i = 0; i<nFragmentationProducts; i++)
 //    { aParticleChange.AddSecondary(fragmentationProducts->at(i)); }
   for(i=0; i<nFragmentationProducts; i++)
   {
     G4DynamicParticle * aNew = 
-       new G4DynamicParticle(fragmentationProducts->at(i)->GetDefinition(),
-                             fragmentationProducts->at(i)->GetMomentum());
-    G4double newTime = aParticleChange.GetGlobalTime(fragmentationProducts->at(i)->GetFormationTime());
+       new G4DynamicParticle((*fragmentationProducts)[i]->GetDefinition(),
+                             (*fragmentationProducts)[i]->GetMomentum());
+    G4double newTime = aParticleChange.GetGlobalTime((*fragmentationProducts)[i]->GetFormationTime());
     aParticleChange.AddSecondary(aNew, newTime);
-    delete fragmentationProducts->at(i);
+    delete (*fragmentationProducts)[i];
   }
 
   if (fragmentationProducts != 0)   delete fragmentationProducts;   

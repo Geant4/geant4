@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronCrossSections.hh,v 1.6 2001-08-01 17:03:09 hpw Exp $
+// $Id: G4HadronCrossSections.hh,v 1.7 2001-10-04 20:00:18 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -90,7 +90,7 @@ class G4HadronCrossSections
 {
 public:
 
-   G4HadronCrossSections() : verboseLevel(0), prevParticleDefinition(0)
+   G4HadronCrossSections() : prevParticleDefinition(0), verboseLevel(0)
    {
    }
 

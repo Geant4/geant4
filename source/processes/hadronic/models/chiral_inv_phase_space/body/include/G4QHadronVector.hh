@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadronVector.hh,v 1.7 2001-09-17 14:19:49 mkossov Exp $
+// $Id: G4QHadronVector.hh,v 1.8 2001-10-04 20:00:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4QHadronVector_h
@@ -22,8 +22,9 @@
 // ---------------------------------------------------------------
 
 #include "G4QHadron.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
-typedef G4RWTPtrOrderedVector<G4QHadron> G4QHadronVector;
+typedef G4std::vector<G4QHadron *> G4QHadronVector;
+struct DeleteQHadron { void operator()(G4QHadron * aQ){delete aQ;}};
 
 #endif

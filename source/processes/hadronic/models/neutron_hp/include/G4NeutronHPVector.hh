@@ -250,8 +250,7 @@ class G4NeutronHPVector
   inline void Merge(G4NeutronHPVector * active, G4NeutronHPVector * passive)
   {
     CleanUp();
-    G4int s = 0, n=0, i=0, m=0;
-    G4bool flag;
+    G4int s = 0, n=0, m=0;
     G4NeutronHPVector * tmp;
     G4int a = s, p = n, t;
     while (a<active->GetVectorLength()&&p<passive->GetVectorLength())

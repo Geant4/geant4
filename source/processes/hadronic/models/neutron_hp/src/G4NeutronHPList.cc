@@ -30,7 +30,6 @@
   {
     if(i<0) 
     {
-      G4int dummy; 
       G4Exception("G4NeutronHPList::Check(G4int) called with negative index");
     }
     if(i>nEntries) G4Exception("Skipped some index numbers in G4NeutronHPList");

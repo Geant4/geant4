@@ -47,7 +47,7 @@ G4NeutronHPVector * G4NeutronHPPartial::GetY(G4double e1)
     }
     if(i==nData) i--;
     if(0==i) i=1;
-    G4double x1,x2,y1,y2,y, off, slope;
+    G4double x1,x2,y1,y2,y;
     G4int i1=0, ib=0;
     G4double E1 = X[i-1];
     G4double E2 = X[i];
@@ -97,7 +97,6 @@ G4NeutronHPVector * G4NeutronHPPartial::GetY(G4double e1)
   
   G4double G4NeutronHPPartial::Sample(G4double x)
   {
-    G4double result=0;
     G4int i;
     for (i=0; i<nData; i++)
     {

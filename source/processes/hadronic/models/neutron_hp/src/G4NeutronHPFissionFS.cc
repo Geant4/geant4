@@ -82,7 +82,8 @@
     xSec[1] = xSec[0]+theSC.GetXsec(eKinetic);
     xSec[2] = xSec[1]+theTC.GetXsec(eKinetic);
     xSec[3] = xSec[2]+theLC.GetXsec(eKinetic);
-    G4int i, it;
+    G4int it;
+    unsigned int i;
     G4double random = G4UniformRand();
     for(i=0; i<4; i++)
     {
@@ -132,21 +133,21 @@
     {
       theDecayConstants = new G4double[delayed];
       G4int nPhotons = 0;
-      if(thePhotons!=NULL) nPhotons = thePhotons->length();
+      if(thePhotons!=NULL) nPhotons = thePhotons->size();
       theResult.SetNumberOfSecondaries(nPhotons+Prompt+delayed);
-      for(i=0; i<theNeutrons->length(); i++)
+      for(i=0; i<theNeutrons->size(); i++)
       {
-        theResult.AddSecondary(theNeutrons->at(i));
+        theResult.AddSecondary(theNeutrons->operator[](i));
       }
       delete theNeutrons;  
       
       G4DynamicParticleVector * theDelayed = NULL;
       theDelayed = theFS.ApplyYourself(0, delayed, theDecayConstants);
-      for(i=0; i<theDelayed->length(); i++)
+      for(i=0; i<theDelayed->size(); i++)
       {
         G4double time = -log(G4UniformRand())/theDecayConstants[i];
         time += theResult.GetTimeChange();
-        theResult.AddSecondary(theDelayed->at(i), time);
+        theResult.AddSecondary(theDelayed->operator[](i), time);
       }
       delete theDelayed;                  
     }
@@ -158,17 +159,17 @@
       if(Prompt==0&&delayed==0) Prompt=all;
       theNeutrons = theFS.ApplyYourself(Prompt, delayed, theDecayConstants);
       G4int nPhotons = 0;
-      if(thePhotons!=NULL) nPhotons = thePhotons->length();
+      if(thePhotons!=NULL) nPhotons = thePhotons->size();
       theResult.SetNumberOfSecondaries(nPhotons+Prompt+delayed);
       for(i=0; i<Prompt; i++)
       {
-        theResult.AddSecondary(theNeutrons->at(i));
+        theResult.AddSecondary(theNeutrons->operator[](i));
       }
       for(i=Prompt; i<Prompt+delayed; i++)
       {
         G4double time = -log(G4UniformRand())/theDecayConstants[i-Prompt];
         time += theResult.GetTimeChange();        
-        theResult.AddSecondary(theNeutrons->at(i), time);
+        theResult.AddSecondary(theNeutrons->operator[](i), time);
       }
       delete theNeutrons;   
     }
@@ -177,10 +178,10 @@
     G4int nPhotons = 0;
     if(thePhotons!=NULL)
     {
-      nPhotons = thePhotons->length();
-      for(i=0; i<thePhotons->length(); i++)
+      nPhotons = thePhotons->size();
+      for(i=0; i<thePhotons->size(); i++)
       {
-        theResult.AddSecondary(thePhotons->at(i));
+        theResult.AddSecondary(thePhotons->operator[](i));
       }
       delete thePhotons; 
     }
