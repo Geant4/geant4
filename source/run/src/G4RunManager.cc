@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.42 2002-02-26 18:50:35 gcosmo Exp $
+// $Id: G4RunManager.cc,v 1.43 2002-04-26 16:31:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,6 +99,7 @@ G4RunManager::~G4RunManager()
   if(verboseLevel>1) G4cout << "Deletion of G4 kernel class start." << G4endl;
   delete timer;
   delete runMessenger;
+  G4GeometryManager::GetInstance()->OpenGeometry();
   physicsList->RemoveProcessManager();
   G4ParticleTable::GetParticleTable()->DeleteMessenger();
   G4ProcessTable::GetProcessTable()->DeleteMessenger();

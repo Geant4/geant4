@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2002-02-26 18:50:11 gcosmo Exp $
+$Id: History,v 1.53 2002-04-26 16:31:35 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 26, 2002 M.Asai (run-V04-00-02)
+- G4RunManager re-opens geometry when G4 state becomes QUIT.
 
 Feb 26, 2002 G.Cosmo (run-V04-00-01)
 - G4RunManager.cc: fixed new date for the public patch "geant4-04-00-patch-02".
