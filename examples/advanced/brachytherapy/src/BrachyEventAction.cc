@@ -41,7 +41,7 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4VVisManager.hh"
-//#include"BrachyAnalysisManager.hh"
+#include"BrachyAnalysisManager.hh"
 //....
 
 BrachyEventAction::BrachyEventAction(G4String &SDName) :
@@ -54,11 +54,10 @@ BrachyEventAction::BrachyEventAction(G4String &SDName) :
  
    m_NumVoxelX=pDetector-> GetNumVoxelX();
   m_NumVoxelZ=pDetector->GetNumVoxelZ();
-  if (!m_pVoxel){
-                m_pVoxel=new G4float[ m_NumVoxelX * m_NumVoxelZ];
-                for (G4int i=0;i<m_NumVoxelX * m_NumVoxelZ;i++)
-		  { m_pVoxel[i]=0;}
-  }
+   VoxelWidth_Z= pDetector -> VoxelWidth_Z()   ;
+   VoxelWidth_X=pDetector->VoxelWidth_X();
+
+ 
 }
 
 //....
@@ -66,21 +65,8 @@ BrachyEventAction::BrachyEventAction(G4String &SDName) :
 BrachyEventAction::~BrachyEventAction()
 {
  delete pDetector;
- if(m_pVoxel)delete[]m_pVoxel;
+ 
 }
-
-
-G4int BrachyEventAction::GetEventno()
-{
-  G4int evno = fpEventManager->GetConstCurrentEvent()->GetEventID() ;
-  return evno ;
-}
-
-
-G4double BrachyEventAction::GetEnergy(G4int k) const
-{ return m_pVoxel[k];}
-
-
 
 //....
 
@@ -118,22 +104,34 @@ if(m_HitsCollectionID < 0)
 
  if(CHC)
 	{
-	if(m_pVoxel)
-		{
-		// Fill voxel matrix with energy deposit data
-		G4int HitCount = CHC->entries();
-		for (G4int h=0; h<HitCount; h++)
+	
+	       G4int HitCount = CHC->entries();
+		
+   for (G4int h=0; h<HitCount; h++)
                 {
-		j=((*CHC)[h])->GetZID() + ((*CHC)[h])->GetXID()*m_NumVoxelX;
-                m_pVoxel[j]+=(*CHC)[h]->GetEdep();
-		}
-		}
-      
-     }
- 
+	      
+			  
+                  BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();	
+             
+                     i=((*CHC)[h])->GetZID();
+                     k=((*CHC)[h])->GetXID();
+                        
+                      j=i+k*m_NumVoxelX;
+
+                      EnergyDep=(*CHC)[h]->GetEdep();
+                      
+                        z = (-m_NumVoxelZ+1+2*k)*VoxelWidth_Z/2; 
+                        x = (- m_NumVoxelX +1+2*i)*VoxelWidth_X/2;
+                       
+			if(EnergyDep!=0){if(fabs(x) > 3*mm || fabs(z) > 6*mm)	
+			 { G4cout<<i<<" "<<k <<" "<<j<<" "<<x<<" "<<z<<" "<<  EnergyDep<<"Energia dello step" << G4endl;
+			 analysis->hist(x,z,EnergyDep); analysis->analyse(x,z,EnergyDep);}}}
+
+	}
 
 
-  // extract the trajectories and draw them
+
+// extract the trajectories and draw them
 
   if (G4VVisManager::GetConcreteInstance())
     {

@@ -34,7 +34,7 @@ BrachyAnalysisManager::BrachyAnalysisManager() :
  //parameters for the TreeFactory
   bool fileExists = false;
   bool readOnly   = false;
-  std::string fileName="Brachy2.hbk";
+  std::string fileName="Brachy3.hbk";
   theTree = treeFact->create(fileName, readOnly, fileExists, "hbook");
 
   delete treeFact;
@@ -81,7 +81,7 @@ void BrachyAnalysisManager::book()
  
 // check for non-zero
 
- IHistogram1D *h3 = histFact->create1D("30","Initial Energy", 200,0.02,0.04);
+ IHistogram1D *h3 = histFact->create1D("30","Initial Energy", 500,0.00,5.);
  // check for non-zero
 
  //Ntuple management
