@@ -1,4 +1,4 @@
-$Id: History,v 1.212 2003-05-08 08:44:52 gcosmo Exp $
+$Id: History,v 1.213 2003-05-28 08:03:41 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28th May 2003  Gabriele Cosmo (config-V05-01-01)
+- architecture.gmk, binmake.gmk: added flags G4LIB_BUILD_STEP/G4USE_STEP
+  to make optional the compilation of the STEP library and interface module.
+  By default the libraries will not be built.
 
 31st March 2003  Gabriele Cosmo (config-V05-01-00)
 - Added more strict compiler options for Linux-g++ platform.
