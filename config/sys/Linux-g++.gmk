@@ -51,7 +51,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
   ifdef G4ODBMS
     GCCVERSION := $(shell g++ -v 2>&1 | grep version | grep egcs)
     ifeq ($(findstring 1.1,$(GCCVERSION)),1.1)
-      G4DDLX_FLAGS += -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd=""
+      G4DDLX_FLAGS += -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd="" -DG4std=""
     endif
   endif
   define build-granular-shared-lib
