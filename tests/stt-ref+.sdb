@@ -1,49 +1,44 @@
-# $Id: stt-ref+.sdb,v 1.14 1999-04-27 12:29:31 stesting Exp $
+# $Id: stt-ref+.sdb,v 1.15 1999-04-28 14:25:11 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
 # Super-categories
-geant4/config           config-01-00-03
+geant4/config           geant4-00-ref-04
 # geant4/documents - not currently part of reference versions
-geant4/environments     geant4-00-ref-03
-geant4/examples         examples-01-00-03
-geant4/examples/novice/N01/exampleN01.out HEAD
-geant4/examples/novice/N01/exampleN02.out HEAD
-geant4/examples/novice/N01/exampleN03.out HEAD
-geant4/examples/novice/N01/exampleN04.out HEAD
-geant4/examples/novice/N01/exampleN05.out HEAD
-geant4/examples/novice/N01/exampleN06.out HEAD
+geant4/environments     geant4-00-ref-04
+geant4/examples         geant4-00-ref-04
 # geant4/source - split into categories - see below.
 # geant4/tests - checkout HEAD by hand and use this script.
 # Source categories
-geant4/source/GNUmakefile      geant4-00-ref-03
-geant4/source/digits+hits      geant4-00-ref-03
-geant4/source/event            event-01-00-02
-geant4/source/g3tog4           geant4-00-ref-03
-geant4/source/geometry/GNUmakefile   geant4-00-ref-03
-geant4/source/geometry/History       geant4-00-ref-03
-geant4/source/geometry/magneticfield geant4-00-ref-03
-geant4/source/geometry/management    geant4-00-ref-03
-geant4/source/geometry/solids        geant4-00-ref-03
-geant4/source/geometry/volumes       geant4-00-ref-03
-geant4/source/global           geant4-00-ref-03
-geant4/source/graphics_reps    geant4-00-ref-03
-geant4/source/intercoms        geant4-00-ref-03
-geant4/source/interfaces       geant4-00-ref-03
-geant4/source/materials        geant4-00-ref-03
-geant4/source/particles        particles-01-00-06
-geant4/source/persistency      geant4-00-ref-03
-geant4/source/processes/GNUmakefile         geant4-00-ref-03
-geant4/source/processes/History             geant4-00-ref-03
-geant4/source/processes/decay	            geant4-00-ref-03
-geant4/source/processes/electromagnetic	    geant4-00-ref-03
-geant4/source/processes/hadronic            geant4-00-ref-03
-geant4/source/processes/management          geant4-00-ref-03
-geant4/source/processes/optical	            geant4-00-ref-03
-geant4/source/processes/parameterisation    geant4-00-ref-03
-geant4/source/processes/transportation      geant4-00-ref-03
-geant4/source/readout          geant4-00-ref-03
-geant4/source/run              run-01-00-04
-geant4/source/track            track-01-00-05
-geant4/source/tracking         tracking-01-00-03
-geant4/source/visualization    geant4-00-ref-03
+geant4/source/GNUmakefile      source-gmk-01-00-01
+geant4/source/digits+hits      geant4-00-ref-04
+geant4/source/event            geant4-00-ref-04
+geant4/source/g3tog4           geant4-00-ref-04
+geant4/source/geometry/GNUmakefile   geant4-00-ref-04
+geant4/source/geometry/History       geant4-00-ref-04
+geant4/source/geometry/magneticfield geant4-00-ref-04
+geant4/source/geometry/management    geant4-00-ref-04
+geant4/source/geometry/solids        geant4-00-ref-04
+geant4/source/geometry/volumes       geant4-00-ref-04
+geant4/source/global           geant4-00-ref-04
+geant4/source/graphics_reps    greps-01-00-04
+geant4/source/intercoms        intercoms-01-00-02
+geant4/source/interfaces       geant4-00-ref-04
+geant4/source/materials        geant4-00-ref-04
+geant4/source/particles        geant4-00-ref-04
+geant4/source/persistency      geant4-00-ref-04
+geant4/source/processes/GNUmakefile         geant4-00-ref-04
+geant4/source/processes/History             geant4-00-ref-04
+geant4/source/processes/decay	            geant4-00-ref-04
+geant4/source/processes/electromagnetic	    geant4-00-ref-04
+geant4/source/processes/hadronic            geant4-00-ref-04
+geant4/source/processes/management          geant4-00-ref-04
+geant4/source/processes/optical	            geant4-00-ref-04
+geant4/source/processes/parameterisation    param-01-00-03a
+geant4/source/processes/transportation      geant4-00-ref-04
+geant4/source/readout          geant4-00-ref-04
+geant4/source/run              geant4-00-ref-04
+geant4/source/track            geant4-00-ref-04
+geant4/source/tracking         geant4-00-ref-04
+geant4/source/visualization    vis-01-00-09
+
