@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InelasticAlphaMicro.cc,v 1.4 2003-06-19 14:42:06 gunter Exp $
+// $Id: G4InelasticAlphaMicro.cc,v 1.5 2004-07-14 09:06:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -58,6 +58,7 @@
 #include "G4XiMinusInelasticProcess.hh"
 #include "G4XiZeroInelasticProcess.hh"
  
+
 #include "G4LEAlphaInelastic.hh"
 #include "G4LEAntiLambdaInelastic.hh"
 #include "G4LEAntiNeutronInelastic.hh"
