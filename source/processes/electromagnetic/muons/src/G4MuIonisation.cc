@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.28 2003-01-17 18:54:40 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.29 2003-01-24 11:28:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------- G4MuIonisation physics process ------------------------------
@@ -88,7 +88,7 @@ void G4MuIonisation::SetNbinLambda(G4int n)
  {NbinLambda = n;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-	    
+
 G4double G4MuIonisation::GetLowerBoundLambda()
  { return LowerBoundLambda;}
 
@@ -108,7 +108,7 @@ void G4MuIonisation::BuildPhysicsTable(const G4ParticleDefinition& ParticleType)
 // just call BuildLossTable+BuildLambdaTable
 {
   if( !CutsWhereModified() && theLossTable) return;
-  
+
   // get bining from EnergyLoss
   LowestKineticEnergy  = GetLowerBoundEloss();
   HighestKineticEnergy = GetUpperBoundEloss();
@@ -126,7 +126,7 @@ void G4MuIonisation::BuildPhysicsTable(const G4ParticleDefinition& ParticleType)
       RecorderOfmuminusProcess[CounterOfmuminusProcess] = (*this).theLossTable;
       CounterOfmuminusProcess++;
     }
- 
+
   BuildLambdaTable(ParticleType);
 
   G4VMuEnergyLoss::BuildDEDXTable(ParticleType);
@@ -156,7 +156,7 @@ void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
    // create physics vector and fill it
      G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
                        LowestKineticEnergy, HighestKineticEnergy, TotBin);
-     
+
      const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(J);
      const G4Material* material= couple->GetMaterial();
 

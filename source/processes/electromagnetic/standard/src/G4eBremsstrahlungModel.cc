@@ -29,14 +29,15 @@
 // File name:     G4eBremsstrahlungModel
 //
 // Author:        Vladimir Ivanchenko on base of Laszlo Urban code
-// 
+//
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications:
 //
 // 11-11-02  Fix division by 0 (VI)
 // 04-12-02  Change G4DynamicParticle constructor in PostStep (VI)
 // 23-12-02  Change interface in order to move to cut per region (VI)
+// 24-01-03  Fix for compounds (V.Ivanchenko)
 //
 // Class Description: 
 //
@@ -71,12 +72,11 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p)
   oldMaterial(0)
 {
   if(p) SetParticle(p);
-  partialSumSigma.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eBremsstrahlungModel::~G4eBremsstrahlungModel() 
+G4eBremsstrahlungModel::~G4eBremsstrahlungModel()
 {
   size_t n = partialSumSigma.size();
   if(n > 0) {
@@ -88,7 +88,7 @@ G4eBremsstrahlungModel::~G4eBremsstrahlungModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlungModel::SetParticle(const G4ParticleDefinition* p) 
+void G4eBremsstrahlungModel::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
   if(p == G4Electron::Electron()) isElectron = true;
@@ -97,14 +97,14 @@ void G4eBremsstrahlungModel::SetParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eBremsstrahlungModel::HighEnergyLimit(const G4ParticleDefinition* p) 
+G4double G4eBremsstrahlungModel::HighEnergyLimit(const G4ParticleDefinition* p)
 {
   return highKinEnergy;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eBremsstrahlungModel::LowEnergyLimit(const G4ParticleDefinition* p) 
+G4double G4eBremsstrahlungModel::LowEnergyLimit(const G4ParticleDefinition* p)
 {
   return lowKinEnergy;
 }
@@ -112,14 +112,14 @@ G4double G4eBremsstrahlungModel::LowEnergyLimit(const G4ParticleDefinition* p)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition* p,
-                                              const G4Material*) 
+                                              const G4Material*)
 {
   return minThreshold;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4eBremsstrahlungModel::IsInCharge(const G4ParticleDefinition* p) 
+G4bool G4eBremsstrahlungModel::IsInCharge(const G4ParticleDefinition* p)
 {
   return (p == G4Electron::Electron() || p == G4Positron::Positron());
 }
@@ -129,7 +129,7 @@ G4bool G4eBremsstrahlungModel::IsInCharge(const G4ParticleDefinition* p)
 G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
                                              const G4ParticleDefinition* p,
                                                    G4double kineticEnergy,
-                                                   G4double cutEnergy) 
+                                                   G4double cutEnergy)
 {
   if(!particle) SetParticle(p);
   if(kineticEnergy < lowKinEnergy) return 0.0;
@@ -143,7 +143,7 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
   const G4double factorHigh = 36./(1450.*GeV);
   const G4double coef1 = -0.5;
   const G4double coef2 = 2./9.;
-                            
+
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector();
 
@@ -161,22 +161,22 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
 
       x = log(totalEnergy/electron_mass_c2);
       loss = ComputeBremLoss(Z, kineticEnergy, cut, x) ;
-      if (!isElectron) loss *= PositronCorrFactorLoss(Z, kineticEnergy, cut);   
-                  
+      if (!isElectron) loss *= PositronCorrFactorLoss(Z, kineticEnergy, cut);
+
     // extrapolation for KineticEnergy>100 GeV
     } else if(cut < thigh) {
-                                 
+
       loss = ComputeBremLoss(Z, thigh, cut, xhigh) ;
-      if (!isElectron) loss *= PositronCorrFactorLoss(Z, thigh, cut) ;   
+      if (!isElectron) loss *= PositronCorrFactorLoss(Z, thigh, cut) ;
       rate = cut/kineticEnergy;
       loss *= (1. + coef1*rate + coef2*rate*rate);
       rate = cut/thigh;
       loss /= (1.+coef1*rate+coef2*rate*rate);
 
     } else {
-                                 
+
       loss = ComputeBremLoss(Z, thigh, 0.5*thigh, xhigh) ;
-      if (!isElectron) loss *= PositronCorrFactorLoss(Z, thigh, 0.5*thigh) ;   
+      if (!isElectron) loss *= PositronCorrFactorLoss(Z, thigh, 0.5*thigh) ;
       rate = cut/kineticEnergy;
       loss *= (1. + coef1*rate + coef2*rate*rate);
       loss *= cut*factorHigh;
@@ -194,7 +194,7 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
 
       G4double floss = 0.;
       G4int nmax = 100;
-     
+
       G4double vmin=log(kmin);
       G4double vmax=log(kmax) ;
       G4int nn = (G4int)(nmax*(vmax-vmin)/(log(highKinEnergy)-vmin)) ;
@@ -206,8 +206,8 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
 
         for(G4int n=0; n<=nn; n++) {
 
-          v += dv;  
-          u = exp(v);               
+          v += dv;
+          u = exp(v);
           fac = u*SupressionFunction(material,kineticEnergy,u);
 	  fac *= probsup*(u*u/(u*u+kp2))+1.-probsup;
           if ((n==0)||(n==nn)) c=0.5;
@@ -215,7 +215,7 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
           fac   *= c ;
           floss += fac ;
         }
-        floss *=dv/(kmax-kmin); 
+        floss *=dv/(kmax-kmin);
 
       } else {
         floss = 1.;
@@ -235,7 +235,7 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
 G4double G4eBremsstrahlungModel::ComputeBremLoss(G4double Z, G4double T,
                                                  G4double Cut, G4double x)
 
-// compute loss due to soft brems 
+// compute loss due to soft brems
 {
   static const G4double beta=1.0, ksi=2.0;
   static const G4double clossh = 0.254 , closslow = 1./3. , alosslow = 1. ;
@@ -296,7 +296,7 @@ G4double G4eBremsstrahlungModel::ComputeBremLoss(G4double Z, G4double T,
   for (G4int ii=0; ii<NZ; ii++)
     {
       G4double dz = abs(Z-ZZ[ii]); 
-      if(dz < delz)  { 
+      if(dz < delz)  {
         iz = ii; 
         delz = dz;
       }
@@ -304,7 +304,7 @@ G4double G4eBremsstrahlungModel::ComputeBremLoss(G4double Z, G4double T,
 
   G4double xx = log10(T);
   G4double fl = 1.;
-  
+
   if (xx <= xlim)
     {
       fl = coefloss[iz][Nloss-1];
@@ -322,7 +322,7 @@ G4double G4eBremsstrahlungModel::ComputeBremLoss(G4double Z, G4double T,
   //  correction 
   loss *= (aaa+bbb*T/Tlim)/(1.+ccc*T/Tlim);
   loss *= fl;
-  loss /= Avogadro; 
+  loss /= Avogadro;
 
   return loss;
 }
@@ -333,7 +333,7 @@ G4double G4eBremsstrahlungModel::PositronCorrFactorLoss(G4double Z,
                                  G4double kineticEnergy, G4double cut)
 
 //calculates the correction factor for the energy loss due to bremsstrahlung for positrons
-//the same correction is in the (discrete) bremsstrahlung 
+//the same correction is in the (discrete) bremsstrahlung
 
 {
   static const G4double K = 132.9416*eV ;
@@ -342,24 +342,24 @@ G4double G4eBremsstrahlungModel::PositronCorrFactorLoss(G4double Z,
   G4double x   = log(kineticEnergy/(K*Z*Z)), x2 = x*x, x3 = x2*x;
   G4double eta = 0.5+atan(a1*x+a3*x3+a5*x3*x2)/pi;
   G4double e0  = cut/kineticEnergy;
-  
+
   G4double factor = 0.0;
-  if (e0 < 1.0) { 
-    factor=log(1.-e0)/eta; 
+  if (e0 < 1.0) {
+    factor=log(1.-e0)/eta;
     factor=exp(factor);
-  }  
+  }
   factor = eta*(1.-factor)/e0;
 
   return factor;
 }
-      
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eBremsstrahlungModel::CrossSection(const G4Material* material,
                                               const G4ParticleDefinition* p,
                                                     G4double kineticEnergy,
                                                     G4double cutEnergy,
-                                                    G4double maxEnergy) 
+                                                    G4double maxEnergy)
 {
   if(!particle) SetParticle(p);
   G4double cross = 0.0;
@@ -371,21 +371,30 @@ G4double G4eBremsstrahlungModel::CrossSection(const G4Material* material,
   const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
 
   if(material != oldMaterial) {
+    
+    if( !oldMaterial ) {
+      partialSumSigma.clear();
+      for (size_t i=0; i<G4Material::GetNumberOfMaterials(); i++) {
+        G4DataVector* dv = new G4DataVector();
+	partialSumSigma.push_back(dv);
+      }
+    }
+
     oldMaterial = material;
-    ComputePartialSumSigma(material, 0.5*highKinEnergy,  
+    ComputePartialSumSigma(material, 0.5*highKinEnergy,
                            G4std::min(cutEnergy, 0.25*highKinEnergy));
   }
 
   for (size_t i=0; i<material->GetNumberOfElements(); i++) {
-             
+
     cross += theAtomNumDensityVector[i] * CrossSectionPerAtom(kineticEnergy,
              (*theElementVector)[i]->GetZ(), cut);
     if(tmax < kineticEnergy) {
       cross -= theAtomNumDensityVector[i] * CrossSectionPerAtom(kineticEnergy,
              (*theElementVector)[i]->GetZ(), tmax);
     }
-  }       
-           
+  }
+
   // now compute the correction due to the supression(s)
 
   G4double kmax = tmax;
@@ -545,7 +554,7 @@ G4double G4eBremsstrahlungModel::PositronCorrFactorSigma( G4double Z,
 // Eta is the ratio of positron to electron energy loss by bremstrahlung. 
 // A parametrized formula from L. Urban is used to estimate eta. It is a fit to the results
 // of L. Kim & al: Phys Rev. A33,3002 (1986)
- 
+
 {
   static const G4double K = 132.9416*eV;
   static const G4double a1 = 4.15e-1, a3 = 2.10e-3, a5 = 54.0e-5;
@@ -569,26 +578,15 @@ void G4eBremsstrahlungModel::ComputePartialSumSigma(const G4Material* material,
 {
   size_t index = material->GetIndex();
   G4int nElements = material->GetNumberOfElements();
-  const G4ElementVector* theElementVector = material->GetElementVector(); 
+  const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
 
-  G4DataVector* dv;
-
-  if (index >= partialSumSigma.size()) {
-
-    dv = new G4DataVector();
-    partialSumSigma.push_back(dv);
-
-  } else {
-
-    dv = partialSumSigma[index];
-    dv->clear();
-  }
+  G4DataVector* dv = partialSumSigma[index];
 
   G4double cross = 0.0;
 
   for (G4int i=0; i<nElements; i++ ) {
-             
+
     cross += theAtomNumDensityVector[i] * CrossSectionPerAtom(kineticEnergy,
               (*theElementVector)[i]->GetZ(), cut);
     dv->push_back(cross);
@@ -703,7 +701,7 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
 
        do {
              q = G4UniformRand();
-             x = pow(xmin, q + kappa*(1.0 - q));  
+             x = pow(xmin, q + kappa*(1.0 - q));
              epsil = x*kineticEnergy/totalEnergy;
              screenvar = screenfac*epsil/(1-epsil);
              F1 = G4std::max(ScreenFunction1(screenvar) - FZ ,0.);
@@ -783,7 +781,7 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
   G4ThreeVector gammaDirection(sint*cos(phi),sint*sin(phi), cos(theta));
   gammaDirection.rotateUz(momentum);
 
-  // create G4DynamicParticle object for the Gamma 
+  // create G4DynamicParticle object for the Gamma
   G4DynamicParticle* g = new G4DynamicParticle();
   g->SetDefinition(G4Gamma::Gamma());
   g->SetKineticEnergy(gammaEnergy);

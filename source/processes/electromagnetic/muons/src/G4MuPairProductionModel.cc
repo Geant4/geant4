@@ -32,10 +32,11 @@
 // 
 // Creation date: 24.06.2002
 //
-// Modifications: 
+// Modifications:
 //
-// 04.12.2002 Change G4DynamicParticle constructor in PostStep (VI)
-// 23.12.2002 Change interface in order to move to cut per region (VI)
+// 04-12-02 Change G4DynamicParticle constructor in PostStep (V.Ivanchenko)
+// 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
+// 24-01-03 Fix for compounds (V.Ivanchenko)
 //
 // Class Description: 
 //
@@ -56,8 +57,8 @@
 #include "G4ElementVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-// static members 
+
+// static members
 //
 G4double G4MuPairProductionModel::zdat[]={1.,4.,13.,29.,92.};
 G4double G4MuPairProductionModel::adat[]={1.01,9.01,26.98,63.55,238.03};
@@ -65,7 +66,7 @@ G4double G4MuPairProductionModel::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p) 
+G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p)
   : G4VEmModel(),
   minPairEnergy(4.*electron_mass_c2),
   highKinEnergy(1000000.*TeV),
@@ -76,9 +77,7 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p)
   NBIN(1000),
   oldMaterial(0),
   samplingTablesAreFilled(false)
-{
-  partialSumSigma.clear();
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -458,11 +457,11 @@ G4double G4MuPairProductionModel::CrossSection(const G4Material* material,
                                                const G4ParticleDefinition* p,
                                                      G4double kineticEnergy,
                                                      G4double cutEnergy,
-                                                     G4double maxEnergy) 
+                                                     G4double maxEnergy)
 {
   G4double cross = 0.0;
   if(!samplingTablesAreFilled) {
-    minThreshold = MinEnergyCut(p, material); 
+    minThreshold = MinEnergyCut(p, material);
     MakeSamplingTables();
   }
   G4double tmax = G4std::min(maxEnergy, kineticEnergy);
@@ -473,8 +472,15 @@ G4double G4MuPairProductionModel::CrossSection(const G4Material* material,
   const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
 
   if(material != oldMaterial) {
+    if( !oldMaterial ) {
+      partialSumSigma.clear();
+      for (size_t i=0; i<G4Material::GetNumberOfMaterials(); i++) {
+        G4DataVector* dv = new G4DataVector();
+	partialSumSigma.push_back(dv);
+      }
+    }
     oldMaterial = material;
-    G4double fixedEnergy = sqrt(lowKinEnergy*highKinEnergy);   
+    G4double fixedEnergy = sqrt(lowKinEnergy*highKinEnergy);
     ComputePartialSumSigma(material, fixedEnergy, cutEnergy);
   }
 
@@ -508,19 +514,7 @@ void G4MuPairProductionModel::ComputePartialSumSigma(const G4Material* material,
   const G4ElementVector* theElementVector = material->GetElementVector(); 
   const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
 
-  G4DataVector* dv;
-
-  if (index >= partialSumSigma.size()) {
-
-    dv = new G4DataVector();
-    partialSumSigma.push_back(dv);
-
-  } else {
-
-    dv = partialSumSigma[index];
-    dv->clear();
-    if(0 == index) samplingTablesAreFilled = false;
-  }
+  G4DataVector* dv = partialSumSigma[index];
 
   G4double cross = 0.0;
 
@@ -623,7 +617,7 @@ G4std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
                              const G4Material* aMaterial,
                              const G4DynamicParticle* aDynamicParticle,
                                    G4double minEnergy,
-                                   G4double maxEnergy) 
+                                   G4double maxEnergy)
 {
    static const G4double esq = sqrt(exp(1.));
    G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
