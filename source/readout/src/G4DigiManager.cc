@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DigiManager.cc,v 1.5 2001-07-11 10:08:31 gunter Exp $
+// $Id: G4DigiManager.cc,v 1.6 2001-10-18 20:28:19 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,7 +61,7 @@ G4DigiManager::G4DigiManager():verboseLevel(0)
 G4DigiManager::~G4DigiManager()
 {
   //DMtable.clearAndDestroy();
-  for(G4int i=0;i<DMtable.size();i++)
+  for(G4int i=0;i<int(DMtable.size());i++)
   { delete DMtable[i]; }
   DMtable.clear();
   delete DCtable;
@@ -71,7 +71,7 @@ G4DigiManager::~G4DigiManager()
 void G4DigiManager::AddNewModule(G4VDigitizerModule* DM)
 {
   G4String DMname = DM->GetName();
-  for(int j=0;j<DMtable.size();j++)
+  for(int j=0;j<int(DMtable.size());j++)
   {
     if(DMtable[j]==DM)
     { 
@@ -117,7 +117,7 @@ void G4DigiManager::Digitize(G4String mName)
 
 G4VDigitizerModule* G4DigiManager::FindDigitizerModule(G4String mName)
 {
-  for(G4int i=0;i<DMtable.size();i++)
+  for(G4int i=0;i<int(DMtable.size());i++)
   {
     if(DMtable[i]->GetName() == mName) return DMtable[i];
   }
@@ -199,13 +199,13 @@ void G4DigiManager::SetDigiCollection(G4int DCID,G4VDigiCollection* aDC)
 void G4DigiManager::SetVerboseLevel(G4int val)
 {
   verboseLevel = val;
-  for(G4int i=0;i<DMtable.size();i++)
+  for(G4int i=0;i<int(DMtable.size());i++)
   { DMtable[i]->SetVerboseLevel(val); }
 }
 
 void G4DigiManager::List() const
 {
-  for(G4int i=0;i<DMtable.size();i++)
+  for(G4int i=0;i<int(DMtable.size());i++)
   { G4cout << "   " << i << " : " << DMtable[i]->GetName() << G4endl; }
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DCtable.cc,v 1.5 2001-07-11 10:08:31 gunter Exp $
+// $Id: G4DCtable.cc,v 1.6 2001-10-18 20:28:19 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,7 +33,7 @@ G4DCtable::~G4DCtable() {;}
 
 G4int G4DCtable::Registor(G4String DMname,G4String DCname)
 {
-  for(int i=0;i<DClist.size();i++)
+  for(int i=0;i<int(DClist.size());i++)
   { if(DClist[i]==DCname && DMlist[i]==DMname) return -1; }
   DClist.push_back(DCname);
   DMlist.push_back(DMname);
@@ -45,7 +45,7 @@ G4int G4DCtable::GetCollectionID(G4String DCname)
   G4int i = -1;
   if(DCname.index("/")==G4std::string::npos) // DCname only
   {
-    for(G4int j=0;j<DClist.size();j++)
+    for(int j=0;j<int(DClist.size());j++)
     {
       if(DClist[j]==DCname)
       { 
@@ -56,7 +56,7 @@ G4int G4DCtable::GetCollectionID(G4String DCname)
   }
   else
   {
-    for(G4int j=0;j<DClist.size();j++)
+    for(int j=0;j<int(DClist.size());j++)
     {
       G4String tgt = DMlist[j];
       tgt += "/";
