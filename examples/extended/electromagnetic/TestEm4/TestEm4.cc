@@ -5,24 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm4.cc,v 1.4 2000-03-09 11:27:37 gracia Exp $
+// $Id: TestEm4.cc,v 1.5 2000-12-06 17:22:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// --------------------------------------------------------------
-//      GEANT 4 - example Em4 
-//
-//      For information related to this code contact:
-//      CERN, IT Division, ASD Group
-// --------------------------------------------------------------
-// Comments
-//
-// 
-// --------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
@@ -36,6 +28,8 @@
 #include "Em4EventAction.hh"
 #include "Em4SteppingAction.hh"
 #include "Em4SteppingVerbose.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 int main(int argc,char** argv) {
  
@@ -74,7 +68,12 @@ int main(int argc,char** argv) {
 
   if (argc==1)   // Define UI terminal for interactive mode  
     { 
-     G4UIsession * session = new G4UIterminal;
+     G4UIsession * session = 0;
+#ifdef G4UI_USE_TCSH
+      session = new G4UIterminal(new G4UItcsh);      
+#else
+      session = new G4UIterminal();
+#endif         
      UI->ApplyCommand("/control/execute init.mac");    
      session->SessionStart();
      delete session;
@@ -94,4 +93,6 @@ int main(int argc,char** argv) {
 
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
 
