@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoClusterModel.hh,v 1.1 2004-11-09 09:20:32 hpw Exp $
+// $Id: G4PhotoClusterModel.hh,v 1.2 2004-11-30 10:27:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,6 @@
 
 #include "globals.hh"
 
-#include "G4PAIonisation.hh"
 #include "G4VClusterModel.hh"
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
