@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testReferenceCountedHandle.cc,v 1.6 2001-10-22 14:39:35 gcosmo Exp $
+// $Id: testReferenceCountedHandle.cc,v 1.7 2001-11-07 00:09:21 stesting Exp $
 // 
 //
 // The program testing features and behaviour of the reference
@@ -31,7 +31,9 @@
 #include "G4ios.hh"
 #include "G4ReferenceCountedHandle.hh"
 #include <string>
-#include "g4std/vector"
+#include <vector>
+
+#include <assert.h>
 
 class TesterBase
 {
@@ -55,7 +57,7 @@ public:
   }
   
   const G4std::string& Data() const { return fData; }
-  void  SetData( const std::string& data ) { fData = data; }
+  void  SetData( const G4std::string& data ) { fData = data; }
   void  SetData( const char*        data ) { fData = data; }
   virtual void Report() {
     G4cout << ">>" << Data() << "<< ";
@@ -91,16 +93,9 @@ typedef G4ReferenceCountedHandle<TesterBase>   Counted;
 typedef G4ReferenceCountedHandle<TesterString> CountedString;
 typedef G4ReferenceCountedHandle<TesterInt>    CountedInt;
 
-//G4Allocator<G4ReferenceCountedHandle<TesterBase>::CountedObject>   G4ReferenceCountedHandle<TesterBase>::aRCHCountedObjectAllocator;
-//G4Allocator<G4ReferenceCountedHandle<TesterString>::CountedObject> G4ReferenceCountedHandle<TesterString>::aRCHCountedObjectAllocator;
-//G4Allocator<G4ReferenceCountedHandle<TesterInt>::CountedObject>    G4ReferenceCountedHandle<TesterInt>::aRCHCountedObjectAllocator;
-//G4Allocator<G4ReferenceCountedHandle<TesterBase> >                 G4ReferenceCountedHandle<TesterBase>::aRCHAllocator;
-//G4Allocator<G4ReferenceCountedHandle<TesterString> >               G4ReferenceCountedHandle<TesterString>::aRCHAllocator;
-//G4Allocator<G4ReferenceCountedHandle<TesterInt> >                  G4ReferenceCountedHandle<TesterInt>::aRCHAllocator;
-
 class HandleWatcher {
 public:
-  typedef G4std::vector<G4ReferenceCountedHandle<TesterBase> >       Handles;
+  typedef G4std::vector<Counted>     Handles;
   typedef Handles::iterator          HandlesIt;
   typedef Handles::const_iterator    HandlesCIt;
 
