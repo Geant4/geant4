@@ -73,6 +73,7 @@
 // 25 Mar   2002 V.Ivanchenko Fix problem of fluorescence below threshold  
 // 28 Mar   2002 V.Ivanchenko Set fluorescence off by default
 // 09 Apr   2002 V.Ivanchenko Fix table problem of GenericIons
+// 28 May   2002 V.Ivanchenko Remove flag fStopAndKill
 // -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1009,10 +1010,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   if (finalT <= MinKineticEnergy ) {
      
      finalT = 0.0;
-     if( theProton == particle->GetDefinition() )
-	aParticleChange.SetStatusChange(fStopAndKill);
-     else  
-	aParticleChange.SetStatusChange(fStopButAlive); 
+     aParticleChange.SetStatusChange(fStopButAlive); 
   } 
 
   aParticleChange.SetEnergyChange( finalT );
@@ -1378,9 +1376,8 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
       finalKineticEnergy = 0.;
       aParticleChange.SetMomentumChange(ParticleDirection.x(),
                       ParticleDirection.y(),ParticleDirection.z());
-      if (!aParticle->GetDefinition()->GetProcessManager()->GetAtRestProcessVector())
-	aParticleChange.SetStatusChange(fStopAndKill);
-      else  aParticleChange.SetStatusChange(fStopButAlive);
+
+      aParticleChange.SetStatusChange(fStopButAlive);
     }
   
   aParticleChange.SetEnergyChange( finalKineticEnergy );

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.79 2002-05-28 09:20:19 pia Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.80 2002-05-28 15:33:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -85,6 +85,7 @@
 // 29.11.01 V.Ivanchenko    New parametrisation introduced
 // 25.03.02 V.Ivanchneko    Fix in fluorescence
 // 28.03.02 V.Ivanchenko    Add flag of fluorescence
+// 28.05.02 V.Ivanchenko    Remove flag fStopAndKill
 //
 // --------------------------------------------------------------
 
@@ -482,6 +483,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
   if(finalKinEnergy < 0.0) {
     theEnergyDeposit += finalKinEnergy;
     finalKinEnergy    = 0.0;
+    aParticleChange.SetStatusChange(fStopButAlive); 
 
   } else {
 

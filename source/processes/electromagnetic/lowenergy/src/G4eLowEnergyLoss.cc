@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.25 2002-04-19 17:21:20 pia Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.26 2002-05-28 15:33:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -54,6 +54,7 @@
 // 24/10/01  MGP - Protection against negative energy loss in AlongStepDoIt
 // 26/10/01  VI Clean up access to deexcitation 
 // 23/11/01  VI Move static member-functions from header to source
+// 28/05/02  VI Remove flag fStopAndKill
 //
 // --------------------------------------------------------------
  
@@ -439,8 +440,7 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   if (finalT <= 0. )
   {
     finalT = 0.;
-    if (Charge < 0.) aParticleChange.SetStatusChange(fStopAndKill);
-    else             aParticleChange.SetStatusChange(fStopButAlive); 
+    aParticleChange.SetStatusChange(fStopButAlive); 
   } 
 
   G4double edep = E - finalT;
