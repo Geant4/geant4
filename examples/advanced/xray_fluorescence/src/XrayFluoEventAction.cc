@@ -231,7 +231,7 @@ G4double XrayFluoEventAction::RandomCut(G4double energy)
 
     if ( Random<efficiency )
       {
-	G4double sigma = sqrt(F*epsilon*energy+pow(deltaE/2355,2));
+	G4double sigma = std::sqrt(F*epsilon*energy+std::pow(deltaE/2355,2));
 
 	EdepDetect = G4RandGauss::shoot(energy, sigma );
 

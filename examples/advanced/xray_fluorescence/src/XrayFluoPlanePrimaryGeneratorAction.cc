@@ -21,21 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoPrimaryGeneratorAction.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// $Id: XrayFluoPlanePrimaryGeneratorAction.cc
+// GEANT4 tag $Name: 
 //
-// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+// Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //
 // History:
 // -----------
-// 28 Nov 2001 Elena Guardincerri     Created
+// 02 Sep 2003 Alfonso Mantero created
 //
 // -------------------------------------------------------------------
 
-#include "XrayFluoPrimaryGeneratorAction.hh"
+#include "XrayFluoPlanePrimaryGeneratorAction.hh"
 #include "G4DataVector.hh"
-#include "XrayFluoDetectorConstruction.hh"
-#include "XrayFluoPrimaryGeneratorMessenger.hh"
+#include "XrayFluoPlaneDetectorConstruction.hh"
+#include "XrayFluoPlanePrimaryGeneratorMessenger.hh"
 #include "XrayFluoRunAction.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -47,8 +47,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(XrayFluoDetectorConstruction* XrayFluoDC)
-  :rndmFlag("off"),beam("off"),spectrum("off"),isoVert("off")
+XrayFluoPlanePrimaryGeneratorAction::XrayFluoPlanePrimaryGeneratorAction(XrayFluoPlaneDetectorConstruction* XrayFluoDC)
+  :rndmFlag("on"),beam("off"),spectrum("off"),isoVert("off")
 {
 
   XrayFluoDetector = XrayFluoDC;
@@ -57,7 +57,7 @@ XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(XrayFluoDetectorC
   particleGun  = new G4ParticleGun(n_particle);
   
   //create a messenger for this class
-  gunMessenger = new XrayFluoPrimaryGeneratorMessenger(this);
+  gunMessenger = new XrayFluoPlanePrimaryGeneratorMessenger(this);
   runManager = new XrayFluoRunAction();
   
   // default particle kinematic
@@ -74,35 +74,42 @@ XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(XrayFluoDetectorC
   G4double position = -0.5*(XrayFluoDetector->GetWorldSizeZ());
   particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
 
-  G4cout << "XrayFluoPrimaryGeneratorAction created" << G4endl;
+  G4cout << "XrayFluoPlanePrimaryGeneratorAction created  UUUUUUUUUUAAAAAAAAAAAAAAAAAAAAAAAaa" << G4endl;
   
 }
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoPrimaryGeneratorAction::~XrayFluoPrimaryGeneratorAction()
+XrayFluoPlanePrimaryGeneratorAction::~XrayFluoPlanePrimaryGeneratorAction()
 {
   delete particleGun;
   delete gunMessenger;
   delete runManager;
 
-  G4cout << "XrayFluoPrimaryGeneratorAction deleted" << G4endl;
+  G4cout << "XrayFluoPlanePrimaryGeneratorAction deleted" << G4endl;
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+void XrayFluoPlanePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
   // 
   G4double z0 = -0.5*(XrayFluoDetector->GetWorldSizeZ());
-  G4double y0 = 0.*cm, x0 = 0.*cm;
+  G4double y0 = 0.*m, x0 = 0.*m;
+  G4double dX = 0.5*(XrayFluoDetector->GetWorldSizeXY())-(XrayFluoDetector->GetPlaneSizeXY());
   if (rndmFlag == "on")
-    {y0 = (XrayFluoDetector->GetDia3SizeXY())/std::sqrt(2.)*(G4UniformRand()-0.5); // it was GetSampleSizeXY(), 
-    x0 = (XrayFluoDetector->GetDia3SizeXY())/std::sqrt(2.)*(G4UniformRand()-0.5); // not divided by std::sqrt(2.)
+
+    {y0 = (XrayFluoDetector->GetPlaneSizeXY())*(G4UniformRand()-0.5); 
+    x0 = (XrayFluoDetector->GetPlaneSizeXY())*(G4UniformRand()-0.5) + dX; 
     } 
+
+  z0 = -1 * dX;
+
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(-1.,0.,1.));
+
   particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   
   //randomize starting point
@@ -182,8 +189,8 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       G4double z = -(rho*std::cos(theta));
       particleGun->SetParticlePosition(G4ThreeVector(x,y,z));
       
-      G4double Xdim = XrayFluoDetector->GetSampleSizeXY();
-      G4double Ydim = XrayFluoDetector->GetSampleSizeXY();
+      G4double Xdim = XrayFluoDetector->GetPlaneSizeXY();
+      G4double Ydim = XrayFluoDetector->GetPlaneSizeXY();
       
       G4double Dx = Xdim*(G4UniformRand()-0.5);
       

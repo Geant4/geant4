@@ -21,21 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoPrimaryGeneratorAction.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// $Id: XrayFluoPlanePrimaryGeneratorAction.cc
+// GEANT4 tag $Name: 
 //
-// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+// Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //
 // History:
 // -----------
-// 28 Nov 2001 Elena Guardincerri     Created
+// 02 Sep 2003 Alfonso Mantero created
 //
 // -------------------------------------------------------------------
 
-#include "XrayFluoPrimaryGeneratorAction.hh"
+#include "XrayFluoMercuryPrimaryGeneratorAction.hh"
 #include "G4DataVector.hh"
-#include "XrayFluoDetectorConstruction.hh"
-#include "XrayFluoPrimaryGeneratorMessenger.hh"
+#include "XrayFluoMercuryDetectorConstruction.hh"
+#include "XrayFluoMercuryPrimaryGeneratorMessenger.hh"
 #include "XrayFluoRunAction.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -47,8 +47,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(XrayFluoDetectorConstruction* XrayFluoDC)
-  :rndmFlag("off"),beam("off"),spectrum("off"),isoVert("off")
+XrayFluoMercuryPrimaryGeneratorAction::XrayFluoMercuryPrimaryGeneratorAction(XrayFluoMercuryDetectorConstruction* XrayFluoDC)
+  :globalFlag(false),spectrum("off")
 {
 
   XrayFluoDetector = XrayFluoDC;
@@ -57,7 +57,7 @@ XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(XrayFluoDetectorC
   particleGun  = new G4ParticleGun(n_particle);
   
   //create a messenger for this class
-  gunMessenger = new XrayFluoPrimaryGeneratorMessenger(this);
+  gunMessenger = new XrayFluoMercuryPrimaryGeneratorMessenger(this);
   runManager = new XrayFluoRunAction();
   
   // default particle kinematic
@@ -67,57 +67,124 @@ XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(XrayFluoDetectorC
   G4ParticleDefinition* particle
     = particleTable->FindParticle(particleName="gamma");
   particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,-1.));
   
 
   particleGun->SetParticleEnergy(10.*keV);
   G4double position = -0.5*(XrayFluoDetector->GetWorldSizeZ());
   particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
 
-  G4cout << "XrayFluoPrimaryGeneratorAction created" << G4endl;
+  G4cout << "XrayFluoMercuryPrimaryGeneratorAction created" << G4endl;
   
 }
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoPrimaryGeneratorAction::~XrayFluoPrimaryGeneratorAction()
+XrayFluoMercuryPrimaryGeneratorAction::~XrayFluoMercuryPrimaryGeneratorAction()
 {
   delete particleGun;
   delete gunMessenger;
   delete runManager;
 
-  G4cout << "XrayFluoPrimaryGeneratorAction deleted" << G4endl;
+  G4cout << "XrayFluoMercuryPrimaryGeneratorAction deleted" << G4endl;
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+void XrayFluoMercuryPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
   // 
+
+  // Conidering the sunas a Poin-like source.
+
   G4double z0 = -0.5*(XrayFluoDetector->GetWorldSizeZ());
-  G4double y0 = 0.*cm, x0 = 0.*cm;
-  if (rndmFlag == "on")
-    {y0 = (XrayFluoDetector->GetDia3SizeXY())/std::sqrt(2.)*(G4UniformRand()-0.5); // it was GetSampleSizeXY(), 
-    x0 = (XrayFluoDetector->GetDia3SizeXY())/std::sqrt(2.)*(G4UniformRand()-0.5); // not divided by std::sqrt(2.)
-    } 
-  particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+  G4double y0 = 0.*m, x0 = 0.*m;
+
+
+  // Let's try to illuminate only the prtion of Mercury surface that can be seen by the detector.
+
+  G4double spacecraftLatitude = XrayFluoDetector->GetOrbitInclination();
+  G4double mercuryDia = XrayFluoDetector->GetMercuryDia();
+  G4double sunDia = XrayFluoDetector->GetSunDia();
+  G4double opticField = XrayFluoDetector->GetOpticAperture();
   
-  //randomize starting point
-  if (beam == "on")
-    {
-      G4double radius = 0.5 * mm;
-      G4double rho = radius*std::sqrt(G4UniformRand());
-      G4double theta = 2*pi*G4UniformRand()*rad;
-      G4double position = -0.5*(XrayFluoDetector->GetWorldSizeZ());
-      
-      G4double y = rho * std::sin(theta);
-      G4double x = rho * std::cos(theta);
-      
-      particleGun->SetParticlePosition(G4ThreeVector(x,y,position));
+ 
+  G4double a = 2*std::tan(opticField/2);
+  
+  //  if (!pointLikeFlag) {
+
+    // let's decide from wich point of the sun surface the particle is coming:
+
+    G4double theta = pi/2. * G4UniformRand();
+    G4double phi = 2. * pi * G4UniformRand();
+    G4double rho = sunDia/2;                         
+
+    G4double sunPosX = x0 + rho * std::sin(theta) * std::cos(phi);
+    G4double sunPosY = y0 + rho * std::sin(theta) * std::sin(phi);
+    G4double sunPosZ = z0 + rho * std::cos(theta);           
+
+    particleGun->SetParticlePosition(G4ThreeVector(sunPosX,sunPosY,sunPosZ));
+
+    // the angle at the center of Mercury subtending the area seen by the optics:
+    G4double alpha = 2 * a/mercuryDia; 
+    
+    if(!globalFlag){
+      theta = alpha * G4UniformRand() + (180.*deg - spacecraftLatitude)-alpha/2.;
+      phi = alpha * G4UniformRand() + 90. * deg - alpha/2.;     
+    }    
+    
+    else if(globalFlag){
+      theta = pi/2. * rad * G4UniformRand() + 90.*deg ; //was 900., probably an error
+      phi = 2*pi*rad * G4UniformRand() ;
     }
+    
+    rho = mercuryDia/2.;                        
+    
+    G4double mercuryPosX = rho * std::sin(theta) * std::cos(phi);
+    G4double mercuryPosY = rho * std::sin(theta) * std::sin(phi);
+    G4double mercuryPosZ = rho * std::cos(theta);           
+    
+    particleGun->SetParticleMomentumDirection(
+			    G4ThreeVector(mercuryPosX-sunPosX ,mercuryPosY-sunPosY,mercuryPosZ-sunPosZ));
+
+    //  }
+//   if (pointLikeFlag) {
+
+//   // theta is the angle that the mean direction of the incident light (on the desired 
+//   // point of the surface of Mercury) makes with  the Z-axis
+//   G4double theta = std::asin( mercuryDia/2. * std::sin(spacecraftLatitude) / 
+// 			 std::sqrt(std::pow(z0,2)+std::pow(mercuryDia/2.,2)-2*mercuryDia/2.*z0*std::cos(spacecraftLatitude)) );	 
+
+//   // on the y axis, the light emitted from the Sun must be in [theta-phi;theta+phi]
+//   G4double phi = std::asin( mercuryDia/2.*std::sin(spacecraftLatitude) + a*std::cos(spacecraftLatitude) /
+// 		       std::sqrt( std::pow(mercuryDia/2.*std::sin(spacecraftLatitude) + a*std::cos(spacecraftLatitude) , 2) +
+// 			     std::pow(z0 - mercuryDia/2.*std::cos(spacecraftLatitude) - a*std::sin(spacecraftLatitude) , 2)) ) 
+//     - theta;  
+  
+//   // on the x axis, the light emitted from the Sun must be in [-zeta;zeta]
+//   G4double zeta = std::atan( a/std::sqrt(std::pow(z0,2)+std::pow(mercuryDia,2)-2*mercuryDia*z0*std::cos(spacecraftLatitude)) );
+  
+  
+  
+//   //alpha in [-zeta;zeta]
+//   G4double alpha = (2*zeta)*G4UniformRand() - zeta;
+//   //beta in [theta-phi;theta+phi]
+//   G4double beta = (G4UniformRand()*2*phi) - phi + theta;
+  
+//   G4double dirY = std::sin(beta);
+//   G4double dirX = std::sin(alpha);
+  
+//   particleGun->SetParticleMomentumDirection(G4ThreeVector(dirX.,dirY,1.));
+  
+//   particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+
+//   }
+
+
+  
   //shoot particles according to a certain spectrum
   if (spectrum =="on")
     {
@@ -170,28 +237,7 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	}
     }
   
-  if (isoVert == "on")
-    {
-      G4double rho = 1. *m;
-      //theta in [0;pi/2]
-      G4double theta = (pi/2)*G4UniformRand();
-      //phi in [-pi;pi]
-      G4double phi = (G4UniformRand()*2*pi)- pi;
-      G4double x = rho*std::sin(theta)*std::sin(phi);
-      G4double y = rho*std::sin(theta)*std::cos(phi);
-      G4double z = -(rho*std::cos(theta));
-      particleGun->SetParticlePosition(G4ThreeVector(x,y,z));
-      
-      G4double Xdim = XrayFluoDetector->GetSampleSizeXY();
-      G4double Ydim = XrayFluoDetector->GetSampleSizeXY();
-      
-      G4double Dx = Xdim*(G4UniformRand()-0.5);
-      
-      G4double Dy = Ydim*(G4UniformRand()-0.5);
-      
-      particleGun->SetParticleMomentumDirection(G4ThreeVector(-x+Dx,-y+Dy,-z));
-      
-    }
+
 #ifdef G4ANALYSIS_USE 
 
   G4double partEnergy = particleGun->GetParticleEnergy();
@@ -199,7 +245,7 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   analysis->analysePrimaryGenerator(partEnergy/keV);
 
 #endif
- 
+
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 
