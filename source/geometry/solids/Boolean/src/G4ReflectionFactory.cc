@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.2 2001-11-08 15:47:07 gcosmo Exp $
+// $Id: G4ReflectionFactory.cc,v 1.3 2002-02-07 13:15:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Ivana Hrivnacova, 16.10.2001  (Ivana.Hrivnacova@cern.ch)
@@ -323,20 +323,23 @@ void G4ReflectionFactory::ReflectPVPlacement(G4VPhysicalVolume* dPV,
     if (fVerboseLevel>0) 
       G4cout << " will be reflected." << G4endl;
 
-    // create new daughter solid and logical volume
-    refDLV = CreateReflectedLV(dLV); 
+    // get reflected volume if already created
+    refDLV = GetReflectedLV(dLV); 
+
+    if (!refDLV) {    
+      // create new daughter solid and logical volume
+      refDLV = CreateReflectedLV(dLV); 
   
+      // recursive call
+      ReflectDaughters(dLV, refDLV);   
+    }  
+
     // create new daughter physical volume
     // with updated transformation
 
-    G4VPhysicalVolume* refDPV
-      = new G4PVPlacement(dt, refDLV, dPV->GetName(), refLV, 
-	                  dPV->IsMany(), dPV->GetCopyNo()); 
-			  
-    refLV->AddDaughter(refDPV); 
-    
-    // recursive call
-    ReflectDaughters(dLV, refDLV);   
+    new G4PVPlacement(dt, refDLV, dPV->GetName(), refLV, 
+                      dPV->IsMany(), dPV->GetCopyNo()); 
+
   } 
   else {
     if (fVerboseLevel>0) 
@@ -344,11 +347,8 @@ void G4ReflectionFactory::ReflectPVPlacement(G4VPhysicalVolume* dPV,
 
     refDLV = GetConstituentLV(dLV); 
 
-    G4VPhysicalVolume* refDPV
-      = new G4PVPlacement(dt, refDLV, dPV->GetName(), refLV, 
-                          dPV->IsMany(), dPV->GetCopyNo()); 
-			  
-    refLV->AddDaughter(refDPV); 
+    new G4PVPlacement(dt, refDLV, dPV->GetName(), refLV, 
+                      dPV->IsMany(), dPV->GetCopyNo()); 
   }       
 }    
 
@@ -381,20 +381,22 @@ void G4ReflectionFactory::ReflectPVReplica(G4VPhysicalVolume* dPV,
     if (fVerboseLevel>0) 
       G4cout << " will be reflected." << G4endl;
 
-    // create new daughter solid and logical volume
-    refDLV = CreateReflectedLV(dLV); 
+    // get reflected volume if already created
+    refDLV = GetReflectedLV(dLV); 
+
+    if (!refDLV) {    
+      // create new daughter solid and logical volume
+      refDLV = CreateReflectedLV(dLV); 
   
+      // recursive call
+      ReflectDaughters(dLV, refDLV); 
+   }     
+        
     // create new daughter replica
-
-    G4VPhysicalVolume* refDPV
-      = new G4PVReplica(dPV->GetName(), refDLV, refLV,
-                        axis, nofReplicas, width, offset); 
-
-			  
-    refLV->AddDaughter(refDPV); 
     
-    // recursive call
-    ReflectDaughters(dLV, refDLV);   
+    new G4PVReplica(dPV->GetName(), refDLV, refLV, 
+                    axis, nofReplicas, width, offset); 
+		        
   } 
   else {
     if (fVerboseLevel>0) 
@@ -402,11 +404,8 @@ void G4ReflectionFactory::ReflectPVReplica(G4VPhysicalVolume* dPV,
 
     refDLV = GetConstituentLV(dLV); 
 
-    G4VPhysicalVolume* refDPV
-      = new G4PVReplica(dPV->GetName(), refDLV, refLV,
-                        axis, nofReplicas, width, offset); 
-			  
-    refLV->AddDaughter(refDPV); 
+    new G4PVReplica(dPV->GetName(), refDLV, refLV, 
+                    axis, nofReplicas, width, offset); 
   }       
 }
 
