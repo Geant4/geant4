@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.17 2004-09-17 10:51:34 maire Exp $
+# $Id: run01.mac,v 1.18 2005-03-02 18:39:52 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -21,7 +21,7 @@
 /testem/run/acceptance 0.9488 0.0112 3.0
 #
 # histogram file
-/testem/histo/setFileName testem2.paw
+/testem/histo/setFileName testem2
 /testem/histo/setFileType hbook
 #
 /run/initialize

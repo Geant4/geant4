@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.6 2004-09-17 10:51:38 maire Exp $
+// $Id: RunAction.hh,v 1.7 2005-03-02 18:39:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,10 +79,10 @@ class RunAction : public G4UserRunAction
      G4double GetLimitEdep() const      {return limittrue;};
 
      // Histogram name and type
-     void SetHistoName(G4String& val)   {histoName = val;};
-     void SetHistoType(G4String& val)   {histoType = val;};
+     void SetHistoName(G4String& val)   {histoName[0] = val;};
+     void SetHistoType(G4String& val)   {histoType    = val;};
      
-     const G4String& GetHistoName() const  {return histoName;};
+     const G4String& GetHistoName() const  {return histoName[1];};
      const G4String& GetHistoType() const  {return histoType;};
      
   private:
@@ -126,7 +126,7 @@ class RunAction : public G4UserRunAction
     G4double rmstrue;
     G4double limittrue;
     
-    G4String histoName;
+    G4String histoName[2];
     G4String histoType;
     
     AIDA::IAnalysisFactory* af;
