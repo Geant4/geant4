@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.2 1999-04-23 00:50:10 kurasige Exp $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.3 1999-06-09 17:28:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,9 +95,16 @@ void G4ExcitedMesonConstructor::ConstructMesons(G4int iState, G4int iType)
   
   for ( G4int iIso3=(-1)*iIsoSpin[iType]; iIso3<=iIsoSpin[iType]; iIso3+=2) {
     aName= GetName(iIso3, iState, iType);
-
+    G4double fmass =  mass[iState][iType];
+    G4double fwidth = width[iState][iType];
+	if ( (iType== TK) || (iType==TAntiK ) ) {
+	  if ( GetCharge(iIso3,iType) == 0.0) {
+		fmass  += massKdiff[iState];
+	    fwidth += widthKdiff[iState];
+      }
+   }
     particle = new G4ExcitedMesons(            
-             aName,   mass[iState][iType],         width[iState][iType],    
+             aName,   fmass,         fwidth,    
 		 GetCharge(iIso3,iType),                 iSpin[iState],
 			iParity[iState],    iChargeConjugation[iState],
                         iIsoSpin[iType],                         iIso3,   
@@ -1359,16 +1366,26 @@ const G4String G4ExcitedMesonConstructor::name[G4ExcitedMesonConstructor::NMulti
 
 const G4double G4ExcitedMesonConstructor::mass[G4ExcitedMesonConstructor::NMultiplets ][ G4ExcitedMesonConstructor::NMesonTypes ] = 
 {
-  {   1.230*GeV, 1.170*GeV, 1.386*GeV, 1.273*GeV,  1.273*GeV },
+  {  1.2295*GeV, 1.170*GeV, 1.386*GeV, 1.272*GeV,  1.272*GeV },
   {   1.474*GeV, 1.370*GeV,       0.0, 1.429*GeV,  1.429*GeV },
-  {   1.230*GeV, 1.282*GeV, 1.426*GeV, 1.402*GeV,  1.402*GeV },
-  {   1.318*GeV, 1.275*GeV, 1.525*GeV, 1.426*GeV,  1.426*GeV },
+  {   1.230*GeV, 1.282*GeV,1.4262*GeV, 1.402*GeV,  1.402*GeV },
+  {   1.318*GeV, 1.275*GeV, 1.525*GeV,1.4256*GeV, 1.4256*GeV },
   {   1.670*GeV, 1.632*GeV, 1.854*GeV, 1.773*GeV,  1.773*GeV },
   {   1.700*GeV, 1.649*GeV,       0.0, 1.717*GeV,  1.717*GeV },
   {   1.691*GeV, 1.667*GeV, 1.854*GeV, 1.776*GeV,  1.776*GeV },
-  {   1.300*GeV, 1.297*GeV, 1.440*GeV, 1.460*GeV,  1.460*GeV },
+  {   1.300*GeV, 1.297*GeV, 1.440*GeV,1.4324*GeV, 1.4324*GeV },
   {   1.465*GeV, 1.419*GeV, 1.680*GeV, 1.414*GeV,  1.414*GeV },
-  {         0.0, 1.815*GeV, 2.011*GeV, 1.973*GeV,  1.973*GeV }
+  {         0.0, 1.815*GeV, 2.010*GeV, 1.973*GeV,  1.973*GeV }
+};
+
+const G4double  G4ExcitedMesonConstructor::massKdiff[ NMultiplets ] = {
+	0.0*MeV,  0.0*MeV, 0.0*MeV, 6.8*MeV, 0.0*MeV, 
+    0.0*MeV,  0.0*MeV, 0.0*MeV, 0.0*MeV, 0.0*MeV
+};
+
+const G4double  G4ExcitedMesonConstructor::widthKdiff[ NMultiplets ] = {
+	0.0*MeV,  0.0*MeV, 0.0*MeV, 10.5*MeV, 0.0*MeV, 
+    0.0*MeV,  0.0*MeV, 0.0*MeV, 0.0*MeV, 0.0*MeV
 };
 
 const G4double G4ExcitedMesonConstructor::width[G4ExcitedMesonConstructor::NMultiplets ][ G4ExcitedMesonConstructor::NMesonTypes ] = 
@@ -1376,13 +1393,13 @@ const G4double G4ExcitedMesonConstructor::width[G4ExcitedMesonConstructor::NMult
   {  142.0*MeV, 360.0*MeV,  91.0*MeV,  90.0*MeV,  90.0*MeV },
   {  265.0*MeV, 200.0*MeV,       0.0, 287.0*MeV, 287.0*MeV },
   {  400.0*MeV,  24.0*MeV,  55.0*MeV, 174.0*MeV, 174.0*MeV },
-  {  107.0*MeV, 186.0*MeV,  76.0*MeV,  98.5*MeV,  98.5*MeV },
+  {  107.0*MeV, 185.5*MeV,  76.0*MeV,  98.5*MeV,  98.5*MeV },
   {  258.0*MeV, 180.0*MeV, 202.0*MeV, 186.0*MeV, 186.0*MeV },
-  {  235.0*MeV, 220.0*MeV,       0.0, 322.0*MeV, 322.0*MeV },
-  {  160.0*MeV, 160.0*MeV,  87.0*MeV, 159.0*MeV, 159.0*MeV },
+  {  240.0*MeV, 220.0*MeV,       0.0, 320.0*MeV, 320.0*MeV },
+  {  160.0*MeV, 168.0*MeV,  87.0*MeV, 159.0*MeV, 159.0*MeV },
   {  220.0*MeV,  53.0*MeV,  56.0*MeV, 260.0*MeV, 260.0*MeV },
-  {  310.0*MeV, 174.0*MeV, 150.0*MeV, 232.0*MeV, 232.0*MeV },
-  {        0.0, 197.0*MeV, 202.0*MeV, 373.0*MeV, 373.0*MeV }
+  {  310.0*MeV, 170.0*MeV, 150.0*MeV, 232.0*MeV, 232.0*MeV },
+  {        0.0, 197.0*MeV, 200.0*MeV, 373.0*MeV, 373.0*MeV }
 };
 
 
@@ -1429,7 +1446,7 @@ const G4int    G4ExcitedMesonConstructor::iGParity[G4ExcitedMesonConstructor::NM
 
 
 const G4int    G4ExcitedMesonConstructor::encodingOffset[]=
-{ 10000, 20000, 10000,      0, 10000, 30000,     0, 100000,100000,100000};
+{ 10000, 20000, 20000,      0, 10000, 30000,     0, 100000,100000,100000};
 
 
 

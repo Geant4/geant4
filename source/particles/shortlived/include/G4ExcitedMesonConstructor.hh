@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedMesonConstructor.hh,v 1.1 1999-01-07 16:10:38 gunter Exp $
+// $Id: G4ExcitedMesonConstructor.hh,v 1.2 1999-06-09 17:28:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,9 @@ class G4ExcitedMesonConstructor
     G4double GetCharge(G4int iIsoSpin3, G4int idxType);
     static const G4String name[ NMultiplets ][ NMesonTypes ];
     static const G4double mass[ NMultiplets ][ NMesonTypes ];
+    static const G4double massKdiff[ NMultiplets ];
     static const G4double width[ NMultiplets ][ NMesonTypes ];
+    static const G4double widthKdiff[ NMultiplets ];
     static const G4int    iIsoSpin[ NMesonTypes ];    
     static const G4int    iSpin[ NMultiplets ];
     static const G4int    iParity[ NMultiplets ];

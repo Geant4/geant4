@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedConstructor.cc,v 1.1 1999-01-07 16:10:43 gunter Exp $
+// $Id: G4ShortLivedConstructor.cc,v 1.2 1999-06-09 17:28:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -531,11 +531,12 @@ void G4ShortLivedConstructor::ConstructMesons()
   // vector mesons
   // omega
   particle = new G4ExcitedMesons(            
-	      "omega",      781.94*MeV,      8.43*MeV,    +0.0*eplus, 
+	      "omega",      781.94*MeV,      8.41*MeV,    +0.0*eplus, 
                     2,              -1,            -1,          
                     0,              +0,            -1,             
               "meson",               0,             0,           223,
 		false,             0.0,          NULL);
+  particle->SetAntiPDGEncoding(223);
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of omega -> pi+ + pi- + pi0
@@ -553,6 +554,7 @@ void G4ShortLivedConstructor::ConstructMesons()
                     0,              +0,            -1,             
               "meson",               0,             0,           333,
 		false,             0.0,          NULL);
+  particle->SetAntiPDGEncoding(333);
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of phi -> kaon+ + kaon-
@@ -610,7 +612,7 @@ void G4ShortLivedConstructor::ConstructMesons()
   
   // k_star+
   particle = new G4ExcitedMesons(            
-	    "k_star+",       891.6*MeV,      49.8*MeV,    +1.0*eplus, 
+	    "k_star+",       891.6*MeV,      50.8*MeV,    +1.0*eplus, 
                     2,              -1,             0,          
                     1,              +1,             0,             
               "meson",               0,             0,           323,
@@ -656,7 +658,7 @@ void G4ShortLivedConstructor::ConstructMesons()
 
   // k_star-
   particle = new G4ExcitedMesons(            
-            "k_star-",       891.6*MeV,      49.8*MeV,    -1.0*eplus, 
+            "k_star-",       891.6*MeV,      50.8*MeV,    -1.0*eplus, 
                     2,              -1,             0,          
                     1,              +1,             0,             
               "meson",               0,             0,          -323,
