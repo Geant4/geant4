@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTableMessenger.cc,v 1.10 2001-10-11 13:53:10 gcosmo Exp $
+// $Id: G4ProcessTableMessenger.cc,v 1.11 2002-09-17 15:39:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -99,13 +99,28 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   verboseCmd->SetRange("verbose >=0");
   verboseCmd->AvailableForStates(PreInit,Init,Idle,GeomClosed,EventProc);
 
+  //Commnad   /particle/process/setVerbose
+  procVerboseCmd = new G4UIcommand("/process/setVerbose",this);
+  procVerboseCmd->SetGuidance("Set verbose level for processes");
+  procVerboseCmd->SetGuidance("  setVerbose level [type or name] ");
+  procVerboseCmd->SetGuidance("    level: verbose level ");
+  procVerboseCmd->SetGuidance("    name : process name ");
+  procVerboseCmd->SetGuidance("    type : process type ");
+  procVerboseCmd->SetGuidance("       [all] for all proceeses ");
+  G4UIparameter* param = new G4UIparameter("verbose",'i',false);
+  procVerboseCmd->SetParameter(param);
+  param = new G4UIparameter("type",'s',true);
+  param->SetDefaultValue("all");
+  procVerboseCmd->SetParameter(param);
+  procVerboseCmd->AvailableForStates(Idle,GeomClosed,EventProc);
+ 
   //Commnad   /particle/process/dump
   dumpCmd = new G4UIcommand("/process/dump",this);
   dumpCmd->SetGuidance("Dump process information");
   dumpCmd->SetGuidance(" dump name [particle]");
   dumpCmd->SetGuidance("   name:     process name or type name");
   dumpCmd->SetGuidance("   particle: particle name [all: for all particles]");
-  G4UIparameter* param = new G4UIparameter("procName",'s',false);
+  param = new G4UIparameter("procName",'s',false);
   dumpCmd->SetParameter(param);
   param = new G4UIparameter("particle",'s',true);
   param->SetDefaultValue("all");
@@ -148,6 +163,7 @@ G4ProcessTableMessenger::~G4ProcessTableMessenger()
   delete verboseCmd;
   delete dumpCmd;
   delete listCmd;
+  delete procVerboseCmd;
   delete thisDirectory;
 }
 
@@ -191,6 +207,50 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     G4cout << G4endl;
     delete tmpVector;
     //Commnad  /process/list
+
+  } else if( command==procVerboseCmd ) {
+    //Commnad  /process/setVerbose
+    G4Tokenizer next( newValue );
+
+    // check 1st argument
+    G4String tmpS = G4String(next());
+    //  inputstream for newValues
+    const char* temp = (const char*)(tmpS);
+    G4std::istrstream is((char*)temp);
+    G4int level;
+    is  >>level;
+
+    // check 2nd argument
+    currentProcessTypeName = G4String(next());
+    if (currentProcessTypeName.isNull()) currentProcessTypeName = "all";
+    G4bool isProcName = false;
+    G4bool isAll = false;
+    type = -1;
+
+    if (currentProcessTypeName == "all") {	
+      isAll = true; 
+    } else {
+      type  = GetProcessType(currentProcessTypeName);
+      if (type<0) {
+	isProcName = true;
+	currentProcessName = currentProcessTypeName;
+	currentProcessTypeName = "";
+      }
+    }  
+    idx =0;
+    G4ProcessTable::G4ProcNameVector::iterator itr; 
+    for (itr=procNameVector->begin(); itr!=procNameVector->end(); ++itr) {
+      idx +=1;
+      tmpVector = theProcessTable->FindProcesses(*itr);
+      G4VProcess* p = (*tmpVector)(0);
+      if ( isAll || 
+	   (!isProcName && ( p->GetProcessType() == type) ) ||
+	   ( isProcName && ( p->GetProcessName()== currentProcessName) ) ){
+	p->SetVerboseLevel(level);
+      }
+    }
+    delete tmpVector;
+    //Commnad  /process/setVerbose
 
   } else if( command==verboseCmd ) {
     //Commnad   /process/verbose

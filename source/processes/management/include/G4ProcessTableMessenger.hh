@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTableMessenger.hh,v 1.4 2001-07-11 10:08:17 gunter Exp $
+// $Id: G4ProcessTableMessenger.hh,v 1.5 2002-09-17 15:39:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -89,6 +89,7 @@ class G4ProcessTableMessenger: public G4UImessenger
     G4UIcommand *               dumpCmd;
     G4UIcommand *               activateCmd;
     G4UIcommand *               inactivateCmd;
+    G4UIcommand *               procVerboseCmd;
 
     G4String                    currentProcessTypeName;
     G4String                    currentProcessName;
