@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.7 2003-02-12 08:52:55 gcosmo Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.8 2003-03-21 08:01:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4Timer.hh"
-#include "G4Poisson.hh"
 
 #include "G4VXTRenergyLoss.hh"
+#include "G4Poisson.hh"
 #include "G4MaterialTable.hh"
 
 #include "G4PhysicsVector.hh"
