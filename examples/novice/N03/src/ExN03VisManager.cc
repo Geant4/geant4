@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03VisManager.cc,v 1.11 2003-09-15 15:38:18 maire Exp $
+// $Id: ExN03VisManager.cc,v 1.12 2003-11-06 14:37:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,11 +50,6 @@
 
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
-#endif
-
-#ifdef G4VIS_USE_OPACS
-#include "G4Wo.hh"
-#include "G4Xo.hh"
 #endif
 
 #ifdef G4VIS_USE_OPENGLX
@@ -107,11 +102,6 @@ void ExN03VisManager::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
-#endif
-
-#ifdef G4VIS_USE_OPACS
-  RegisterGraphicsSystem (new G4Wo);
-  RegisterGraphicsSystem (new G4Xo);
 #endif
 
 #ifdef G4VIS_USE_OPENGLX
