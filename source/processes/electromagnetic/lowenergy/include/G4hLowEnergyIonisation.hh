@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyIonisation.hh,v 1.2 1999-07-23 16:37:44 vnivanch Exp $
+// $Id: G4hLowEnergyIonisation.hh,v 1.3 1999-07-27 09:53:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,9 +19,8 @@
 //      ---------- G4hLowEnergyIonisation physics process -----
 //                by Vladimir Ivanchenko, 14 July 1999 
 // ************************************************************
-// It is the first implementation of the NEW IONISATION     
-// PROCESS. ( delta rays + continuous energy loss)
-// It calculates the ionisation for slow charged hadrons.      
+// It is the extention of the ionisation process for the slow 
+// charged hadrons.
 // ************************************************************
 // ------------------------------------------------------------
  
@@ -41,11 +40,17 @@ class G4hLowEnergyIonisation : public G4hIonisation
 
     void BuildLossTable(const G4ParticleDefinition& aParticleType);
 
-    void SetDEDXTableName(const G4String& dedxTable);
-    
-    G4double GetZieglerLoss(const G4Material* material, G4double KinEnergy);
+    void SetStoppingPowerTableName(const G4String& dedxTable);
 
-    G4double GetBetheBlochLoss(const G4Material* material, G4double KinEnergy);
+    void SetNuclearStoppingOn();
+
+    void SetNuclearStoppingOff();
+    
+    G4double GetZieglerLoss(const G4Material* material, const G4double KinEnergy, 
+                            const G4double DeltaRayCutNow);
+
+    G4double GetBetheBlochLoss(const G4Material* material, const G4double KinEnergy,
+                            const G4double DeltaRayCutNow);
 
     G4double GetFreeElectronGasLoss(G4double paramA, G4double KinEnergy);
 
@@ -58,9 +63,11 @@ class G4hLowEnergyIonisation : public G4hIonisation
 
     G4double GetUrbanModel(const G4Element* element, G4double KinEnergy);
 
-    G4double GetDeltaRaysEnergy(const G4Material* material, G4double KinEnergy);
+    G4double GetDeltaRaysEnergy(const G4Material* material, const G4double KinEnergy,
+                                const G4double DeltaRayCutNow);
 
-    G4double GetChemicalFactor(const G4Material* material, G4double KinEnergy);
+    G4double GetChemicalFactor(const G4Material* material, const G4double KinEnergy,
+                               const G4double DeltaRayCutNow);
 
     void PrintInfoDefinition();
 
@@ -75,16 +82,13 @@ class G4hLowEnergyIonisation : public G4hIonisation
 
     G4PhysicsTable* theMeanFreePathTable;
 
-    // LowestKineticEnergy = lower limit of particle kinetic energy
-    // HighestKineticEnergy = upper limit of particle kinetic energy 
-    // TotBin = number of bins 
-    //  ---------in the energy ionisation loss table-------------------
-    G4double LowestKineticEnergy;
-    G4double HighestKineticEnergy;
+    // interval of parametrisation of electron stopping power 
     G4double ZieglerLowEnergy;
     G4double ZieglerHighEnergy;
+    // name of parametrisation table of electron stopping power
     G4String DEDXtable;
-    G4int TotBin;
+    // flag of parametrisation of nucleus stopping power
+    G4bool nStopping;
 
     // constants needed for the energy loss calculation
 
@@ -99,14 +103,20 @@ class G4hLowEnergyIonisation : public G4hIonisation
     const G4Proton* theProton;
     const G4AntiProton* theAntiProton;
 
-    const G4double* DeltaCutInKineticEnergy ; 
- 
-    G4double DeltaCutInKineticEnergyNow ;
-
     G4double ProtonMassAMU;
     G4double ZieglerFactor; // Factor to convert the Stopping Power 
                             // unit [ev/(10^15 atoms/cm^2]
                             // into the Geant4 dE/dx unit
+
+protected:
+
+    // LowestKineticEnergy = lower limit of particle kinetic energy
+    // HighestKineticEnergy = upper limit of particle kinetic energy 
+    // TotBin = number of bins 
+    //  ---------in the energy ionisation loss table-------------------
+    G4double LowestKineticEnergy;
+    G4double HighestKineticEnergy;
+    G4int TotBin;
  
 };
  
