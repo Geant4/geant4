@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.21 2001-12-06 18:16:56 japost Exp $
+// $Id: G4Navigator.cc,v 1.22 2001-12-11 15:58:44 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -130,7 +130,9 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 		{
 		case kNormal:
 		  fBlockedPhysicalVolume->Setup(curPhysical);
-		  fHistory.NewLevel(fBlockedPhysicalVolume);
+		  fHistory.NewLevel(fBlockedPhysicalVolume,
+				    kNormal,
+				    fBlockedPhysicalVolume->GetCopyNo());
 		  break;
 		case kReplica:
 		  freplicaNav.ComputeTransformation(fBlockedReplicaNo,
