@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.hh,v 1.7 2001-07-11 10:08:35 gunter Exp $
+// $Id: G4ParticleChange.hh,v 1.8 2001-10-20 08:07:49 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,7 @@ class G4ParticleChange: public G4VParticleChange
   public:
     // default constructor
     G4ParticleChange();
-    G4ParticleChange(G4bool useEB);
+//    G4ParticleChange(G4bool useEB);
 
     // destructor
     virtual ~G4ParticleChange();
@@ -241,12 +241,12 @@ class G4ParticleChange: public G4VParticleChange
   
 
   public:
-    // these methods is used for switch on/off EB in all ParticleChange objects
-    static void SwOnAllEB();
-    static void SwOffAllEB();
+  // these methods is used for switch on/off EB in all ParticleChange objects
+  // static void SwOnAllEB();
+  //  static void SwOffAllEB();
 
   private:
-    static G4bool fUseEBForAll;
+  //  static G4bool fUseEBForAll;
 
   public:
     // for Debug 

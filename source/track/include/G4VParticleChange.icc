@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.icc,v 1.6 2001-07-11 10:08:38 gunter Exp $
+// $Id: G4VParticleChange.icc,v 1.7 2001-10-20 08:07:50 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //----------------------------------------------------------------
@@ -31,7 +31,7 @@
 inline G4Step* G4VParticleChange::UpdateStepInfo(G4Step* pStep)
 {
   // Apply math fomula if Event Biasing is active
-  if (fUseEB) theEBMechanism->ApplyMath( this, *pStep);
+  // if (fUseEB) theEBMechanism->ApplyMath( this, *pStep);
 
   // Update the G4Step specific attributes
   pStep->SetStepLength( theTrueStepLength );
@@ -272,36 +272,6 @@ inline void G4VParticleChange::Initialize(const G4Track& track)
 }
 
 inline 
- void G4VParticleChange::RegisterEBMechanism(G4VEvtBiasMechanism* pEB)
-{
-  theEBMechanism = pEB;
-}
-
-inline 
- void G4VParticleChange::SwOnEB()
-{
-  if (theEBMechanism!=0) fUseEB = true;
-}
-
-inline 
- void G4VParticleChange::SwOffEB()
-{
-  fUseEB = false;
-}
-
-inline 
- G4bool G4VParticleChange::IsEBActive() const
-{
-  return fUseEB;
-}
-
-inline 
- G4VEvtBiasMechanism* G4VParticleChange::GetEBMechanism() 
-{
-  return theEBMechanism;
-}
-
-inline 
  void G4VParticleChange::ClearDebugFlag()
 {
   debugFlag = false;
@@ -318,3 +288,33 @@ inline
 {
   return debugFlag;
 }
+
+//inline 
+// void G4VParticleChange::RegisterEBMechanism(G4VEvtBiasMechanism* pEB)
+//{
+//  theEBMechanism = pEB;
+//}
+
+//inline 
+// void G4VParticleChange::SwOnEB()
+//{
+//  if (theEBMechanism!=0) fUseEB = true;
+//}
+
+//inline 
+// void G4VParticleChange::SwOffEB()
+//{
+//  fUseEB = false;
+//}
+
+//inline 
+// G4bool G4VParticleChange::IsEBActive() const
+//{
+//  return fUseEB;
+//}
+
+//inline 
+// G4VEvtBiasMechanism* G4VParticleChange::GetEBMechanism() 
+//{
+//  return theEBMechanism;
+//}

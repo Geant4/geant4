@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.icc,v 1.8 2001-07-11 10:08:35 gunter Exp $
+// $Id: G4ParticleChange.icc,v 1.9 2001-10-20 08:07:49 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@ inline
  G4Step* G4ParticleChange::UpdateStepInfo(G4Step* pStep)
 {
   // use fUseEBForAll instead of fUseEB
-  fUseEB = fUseEBForAll;
+  // fUseEB = fUseEBForAll;
   return G4VParticleChange::UpdateStepInfo(pStep);
 }
 
@@ -220,16 +220,20 @@ inline
   return direction*tMomentum; 
 }
 
-inline
-  void G4ParticleChange::SwOnAllEB()
-{
-  fUseEBForAll = true;
-}
+//inline
+//  void G4ParticleChange::SwOnAllEB()
+//{
+//  fUseEBForAll = true;
+//}
 
-inline void G4ParticleChange::SwOffAllEB()
-{
-  fUseEBForAll = false;
-}
+//inline void G4ParticleChange::SwOffAllEB()
+//{
+//  fUseEBForAll = false;
+//}
+
+
+
+
 
 
 

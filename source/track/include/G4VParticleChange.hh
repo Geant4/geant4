@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.hh,v 1.5 2001-07-11 10:08:37 gunter Exp $
+// $Id: G4VParticleChange.hh,v 1.6 2001-10-20 08:07:49 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,7 @@ class G4VParticleChange
   public:
     // default constructor
     G4VParticleChange();
-    G4VParticleChange(G4bool useEvtBiasing);
+//  G4VParticleChange(G4bool useEvtBiasing);
 
     // destructor
     virtual ~G4VParticleChange();
@@ -236,15 +236,15 @@ class G4VParticleChange
 
   public: // with description
   //---- following methods and members are used for Event Biasing
-    virtual void   RegisterEBMechanism(G4VEvtBiasMechanism* );
-    virtual void   SwOnEB();
-    virtual void   SwOffEB();
-    virtual G4bool IsEBActive() const;
-    virtual G4VEvtBiasMechanism* GetEBMechanism();
+  //  virtual void   RegisterEBMechanism(G4VEvtBiasMechanism* );
+  //  virtual void   SwOnEB();
+  //  virtual void   SwOffEB();
+  //  virtual G4bool IsEBActive() const;
+  //  virtual G4VEvtBiasMechanism* GetEBMechanism();
 
   protected:
-    G4VEvtBiasMechanism* theEBMechanism;
-    G4bool fUseEB;
+  //    G4VEvtBiasMechanism* theEBMechanism;
+  //  G4bool fUseEB;
     G4double theParentWeight;
      
 };

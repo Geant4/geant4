@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.14 2001-08-16 08:17:58 kurasige Exp $
+// $Id: G4ParticleChange.cc,v 1.15 2001-10-20 08:07:50 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,20 +44,20 @@
 #include "G4TrackFastVector.hh"
 #include "G4DynamicParticle.hh"
 
-G4bool G4ParticleChange::fUseEBForAll = false;
+// G4bool G4ParticleChange::fUseEBForAll = false;
 
-G4ParticleChange::G4ParticleChange():G4VParticleChange(false)
+G4ParticleChange::G4ParticleChange():G4VParticleChange()
 {
 }
 
-G4ParticleChange::G4ParticleChange(G4bool useEB):G4VParticleChange(useEB)
-{
-#ifdef G4VERBOSE
-  if (verboseLevel>2) {
-    G4cout << "G4ParticleChange::G4ParticleChange() " << G4endl;
-  }
-#endif
-}
+//G4ParticleChange::G4ParticleChange(G4bool useEB):G4VParticleChange(useEB)
+//{
+//#ifdef G4VERBOSE
+//  if (verboseLevel>2) {
+//    G4cout << "G4ParticleChange::G4ParticleChange() " << G4endl;
+//  }
+//#endif
+//}
 
 G4ParticleChange::~G4ParticleChange() 
 {
