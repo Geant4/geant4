@@ -1562,7 +1562,7 @@ etc.</a></td>
 
 <td>20</td>
 
-<td>testing</td>
+<td>accepted</td>
 </tr>
 
 <tr>
@@ -1580,9 +1580,9 @@ classes: "accuracyForWarning" and "accuracyForException" are 1.0e-9 and
 
 <td>990506</td>
 
-<td></td>
+<td>21</td>
 
-<td></td>
+<td>testing</td>
 </tr>
 
 <tr>
@@ -1600,26 +1600,27 @@ classes: "accuracyForWarning" and "accuracyForException" are 1.0e-9 and
 
 <td>20</td>
 
-<td>testing</td>
+<td>accepted</td>
 </tr>
 
 <tr>
 <td>photolepton_hadron
 <br>-01-00-00</td>
 
-<td>had-01-00-02</td>
+<td></td>
 
 <td>em-01-00-05</td>
 
 <td>Memory overwriting fix.</td>
 
-<td>Hans-Peter</td>
+<td>Hans-Peter
+<br>Laszlo Urban</td>
 
 <td>990510</td>
 
-<td></td>
+<td>21</td>
 
-<td></td>
+<td>testing</td>
 </tr>
 
 <tr>
@@ -1640,9 +1641,9 @@ small improvement in the energy loss fluctuation code + bug fixed in "LossPlus.c
 
 <td>990510</td>
 
-<td></td>
+<td>21</td>
 
-<td></td>
+<td>testing</td>
 </tr>
 
 <tr>
@@ -1661,6 +1662,25 @@ small improvement in the energy loss fluctuation code + bug fixed in "LossPlus.c
 
 <td>20</td>
 
+<td>accepted</td>
+</tr>
+
+<tr>
+<td>param-01-00-04</td>
+
+<td></td>
+
+<td></td>
+
+<td>G4FastStep::CheckIt method to care with accuracyForWarning and
+<br>accuracyForException settings.</td>
+
+<td>Paulo Mora de Freitas</td>
+
+<td>990511</td>
+
+<td>21</td>
+
 <td>testing</td>
 </tr>
 
@@ -1677,9 +1697,9 @@ small improvement in the energy loss fluctuation code + bug fixed in "LossPlus.c
 
 <td>990512</td>
 
-<td></td>
+<td>21</td>
 
-<td></td>
+<td>testing</td>
 </tr>
 
 <tr>
@@ -1689,20 +1709,43 @@ small improvement in the energy loss fluctuation code + bug fixed in "LossPlus.c
 
 <td></td>
 
-<td>- G4VSceneHandler : ClearTransientStore.
-<br>- G4VisCommandsSceneHandler : protect against a null pointer.
-<br>- OpenInventor : use HEPVis/SoWindow to create windows (needed on NT).
-Implement the a "transient scene graph" for "event" things. Use fXxx convention
-for fields.
-<br>- G4TrajectoriesModeling : do not draw a "marker" at each step by default.&nbsp;</td>
+<td><a href="tag_information/vis-01-00-11">- G4VSceneHandler : ClearTransientStore.</a>
+<br><a href="tag_information/vis-01-00-11">- G4VisCommandsSceneHandler
+: protect against a null pointer.</a>
+<br><a href="tag_information/vis-01-00-11">- OpenInventor : use HEPVis/SoWindow
+to create windows (needed on NT). Implement the a "transient scene graph"
+for "event" things. Use fXxx convention for fields.</a>
+<br><a href="tag_information/vis-01-00-11">- G4TrajectoriesModeling : do
+not draw a "marker" at each step by default.&nbsp;</a></td>
 
 <td>Guy Barrand</td>
 
 <td>990512</td>
 
+<td>21</td>
+
+<td>testing</td>
+</tr>
+
+<tr>
+<td>geometry-01-00-04</td>
+
 <td></td>
 
 <td></td>
+
+<td>G4Navigator: only issue warning in the case of small inaccuracies.<br>
+VolumeStores: compatibility with RW/STL.
+<br>G4BREPSolidPolyhedra (constructor convention and improvement).
+<br>G4FPlane: consistent normals</td>
+
+<td>John Apostolakis</td>
+
+<td>990512</td>
+
+<td>21</td>
+
+<td>testing</td>
 </tr>
 </table>
 
