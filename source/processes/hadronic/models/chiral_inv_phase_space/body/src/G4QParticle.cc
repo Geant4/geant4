@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.cc,v 1.17 2001-11-26 14:11:47 hpw Exp $
+// $Id: G4QParticle.cc,v 1.18 2002-12-12 13:25:54 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParticle ----------------
@@ -123,8 +123,9 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
 //    ===================================================
 {
   //static G4int nP = 486;                  // Up to A=80
-  static G4int nP = 494;                  // Up to A=80 "Isonuclear revision"
-  static G4QDecayChanVector* DecayDB = new G4QDecayChanVector[nP];
+  static const G4int nP = 494;                  // Up to A=80 "Isonuclear revision"
+  //static G4QDecayChanVector* DecayDB = new G4QDecayChanVector[nP];
+  static G4QDecayChanVector DecayDB[nP];
   static int limit= 0;
   if(nQ>=limit && nQ<nP)
   {

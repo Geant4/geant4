@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.19 2001-11-26 14:11:45 hpw Exp $
+// $Id: G4Quasmon.hh,v 1.20 2002-12-12 13:25:52 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -80,6 +80,7 @@ public:
   void              ClearOutput();                    // Clear but not destroy the output
   void              InitQuasmon(const G4QContent& qQCont, const G4LorentzVector& q4M);
   void              IncreaseBy(const G4Quasmon* pQuasm); // as operator+= but by pointer
+  void              ClearQuasmon();                   // Clear Quasmon (status=0)
   void              KillQuasmon();                    // Kill Quasmon (status=0)
 
 private:  
@@ -161,7 +162,7 @@ inline void G4Quasmon::InitQuasmon(const G4QContent& qQCont, const G4LorentzVect
   status= 3;
 }
 
-inline void G4Quasmon::KillQuasmon()
+inline void G4Quasmon::ClearQuasmon()
 {
   static const G4QContent zeroQC(0,0,0,0,0,0);
   static const G4LorentzVector nothing(0.,0.,0.,0.);
@@ -169,6 +170,15 @@ inline void G4Quasmon::KillQuasmon()
   valQ  = zeroQC;
   q4Mom = nothing;
   status= 0;
+  G4std::for_each(theQCandidates.begin(), theQCandidates.end(), DeleteQCandidate());
+  theQCandidates.clear();
+
+}
+
+inline void G4Quasmon::KillQuasmon()
+{
+  ClearQuasmon();
+  ClearOutput();
 }
 
 #endif
