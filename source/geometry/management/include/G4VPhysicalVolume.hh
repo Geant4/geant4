@@ -5,14 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VPhysicalVolume.hh,v 1.1 1999-01-07 16:07:17 gunter Exp $
+// $Id: G4VPhysicalVolume.hh,v 1.2 1999-11-09 14:50:23 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
+// class description:
 // 
-// class G4VPhysicalVolume
+//    class G4VPhysicalVolume
 //
-// Base class for representation of one or many volumes positioned within
-// and relative to a mother volume
+// This is an Abstract Base class for representation of positioned volume.  
+// The volume is placed within a mother volume,  relative to its coordinate 
+// system.  Either a single positioned volume or many positioned volume can 
+// be represented by a particular G4VPhysicalVolume. 
 //
 // Member functions:
 // 
@@ -59,8 +63,9 @@
 // the rotation/translation is being made for the frame or the object/volume 
 // that is being placed. (They are the inverse of each other).
 //
-//       G4RotationMatrix* GetObjectRotation()    const
-//       G4ThreeVector     GetObjectTranslation() const
+//         G4RotationMatrix* GetObjectRotation()    const      //  Obsolete 
+//  inline G4RotationMatrix  GetObjectRotationValue() const;   //  Replacement
+//         G4ThreeVector     GetObjectTranslation() const
 //   Return the rotation/translation of the Object relative to the mother 
 //
 // const G4RotationMatrix* GetFrameRotation()    const
@@ -68,18 +73,6 @@
 //   Return the rotation/translation of the Frame used to position 
 //   this volume in its mother volume (opposite of object rot/trans).
 //
-// Older version:
-//
-// const G4ThreeVector&    GetTranslation() const
-// const G4RotationMatrix* GetRotation() const
-//   Return the translation/rotation of the volume
-//
-// void SetTranslation(const G4ThreeVector &v)
-// G4RotationMatrix* GetRotation()
-// void SetRotation(G4RotationMatrix*)
-//   NOT INTENDED FOR GENERAL USE.
-//   Non constant versions of above. Used to change transformation
-//   for replication/paramterisation mechanism.
 //
 // To be provided by subclasses:
 //
@@ -106,9 +99,22 @@
 //   Perform any initialisation/setup necessary for the given volume.
 //   [Set the current mother pointer to refer to the specified mother, by
 //   calling SetMother]
+
+// Older access methods:
 //
+// const G4ThreeVector&    GetTranslation() const
+// const G4RotationMatrix* GetRotation() const
+//   Return the translation/rotation of the volume
+//
+// void SetTranslation(const G4ThreeVector &v)
+// G4RotationMatrix* GetRotation()
+// void SetRotation(G4RotationMatrix*)
+//   NOT INTENDED FOR GENERAL USE.
+//   Non constant versions of above. Used to change transformation
+//   for replication/parameterisation mechanism.
 // 
 // History:
+// 09.11.99 J.Apostolakis  Added GetObjectRotationValue() method & redid comments.
 // 28.08.96 P.Kent Replaced transform by rotmat + vector
 // 25.07.96 P.Kent Modified interface for new `Replica' capable geometry 
 // 24.07.95 P.Kent First non-stub version
@@ -127,7 +133,7 @@ class G4VPVParameterisation;
 
 class G4VPhysicalVolume
 {
-public:
+public: // with description
     G4VPhysicalVolume(G4RotationMatrix *pRot,
 		      const G4ThreeVector &tlate,
 		      const G4String &pName,
@@ -141,7 +147,8 @@ public:
     G4bool operator == (const G4VPhysicalVolume& p) const;
 
 // Access functions
-          G4RotationMatrix* GetObjectRotation() const;
+          G4RotationMatrix* GetObjectRotation() const;       //  Obsolete 
+   inline G4RotationMatrix  GetObjectRotationValue() const;  //  Replacement
           G4ThreeVector  GetObjectTranslation() const;
     const G4RotationMatrix* GetFrameRotation() const;
           G4ThreeVector  GetFrameTranslation() const;
