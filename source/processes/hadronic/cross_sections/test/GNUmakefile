@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2001-10-26 09:54:20 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2002-02-07 17:03:09 hpw Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -52,6 +52,7 @@ INCFLAGS := \
             -I$(G4BASE)/processes/hadronic/management/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
+            -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
             -I$(G4BASE)/processes/electromagnetic/standard/include \
             -I$(G4BASE)/processes/electromagnetic/muons/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
