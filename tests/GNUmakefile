@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.28 2000-07-26 13:32:27 stesting Exp $
+# $Id: GNUmakefile,v 1.29 2000-07-26 15:36:16 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -101,8 +101,8 @@ clean_libs:
 	done;:
 	@for dir in $(SUBDIRS); do (cd $$dir && $(MAKE) clean_libs); done;:
 
-#	@$(MAKE) clean_examples_links_source
 examples_links_source:
+	@$(MAKE) clean_examples_links_source
 	@for nn in $(EXAMPLES); do \
 	  testdir=test1$$nn; \
 	  exdir=$(G4INSTALL)/examples/novice/N$$nn; \
@@ -142,20 +142,20 @@ examples_links_source:
 	    ln -s $$exout $$testdir/$$testout; \
 	  done; \
 	done;:
-	testdir=test601; \
+	@testdir=test601; \
          exdir=$(G4INSTALL)/examples/extended/g3tog4/clGeometry; \
          ln -s $$exdir $$testdir; \
          ln -s clGeometry.in  $$testdir/test601.in;  \
          ln -s clGeometry.out $$testdir/test601.out; \
          true
-	testdir=test602; \
+	@testdir=test602; \
 	exdir=$(G4INSTALL)/examples/extended/g3tog4/cltog4; \
          ln -s $$exdir $$testdir; \
          ln -s cltog4.in  $$testdir/test602.in;  \
          ln -s cltog4.out $$testdir/test602.out; :
 
-#	@$(MAKE) clean_examples_links_binaries
 examples_links_binaries:
+	@$(MAKE) clean_examples_links_binaries
 	@for nn in $(EXAMPLES); do \
 	  ln -s exampleN$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test1$$nn; \
 	done;:
@@ -167,7 +167,7 @@ examples_links_binaries:
 	  ln -s $$exdir/PersistentEx$${nn}run \
 	    $(G4WORKDIR)/bin/$(G4SYSTEM)/test4$$nn; \
 	done;:
-	ln -s clGeometry $(G4WORKDIR)/bin/$(G4SYSTEM)/test601; \
+	@ln -s clGeometry $(G4WORKDIR)/bin/$(G4SYSTEM)/test601; \
 	ln -s cltog4    $(G4WORKDIR)/bin/$(G4SYSTEM)/test602; \
         true
 
@@ -206,3 +206,4 @@ clean_examples_links_binaries:
 	@for nn in $(PERSISTENCY); do \
 	  rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test4$$nn; \
 	done;:
+        @rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test601 $(G4WORKDIR)/bin/$(G4SYSTEM)/test602;:
