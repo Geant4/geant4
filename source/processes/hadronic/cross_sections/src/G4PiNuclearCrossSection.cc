@@ -154,14 +154,14 @@ GetCrossSection(const G4DynamicParticle* aParticle,
   // body
   G4double result = 0;
   G4int Z=static_cast<G4int>(anElement->GetZ()+.001);
-  G4int it=0;
+  size_t it=0;
   while(it<theZ.size() && Z>theZ[it]) it++;
   if(Z > theZ[it]) 
   {
     G4Exception("Error: Calling G4PiNuclearCrossSection outside parametrization");
   }
   G4int Z1, Z2;
-  G4double x1, x2, x;
+  G4double x1, x2;
   if(charge<0)
   {
     if(theZ[it]==Z)
