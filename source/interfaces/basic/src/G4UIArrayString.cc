@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIArrayString.cc,v 1.2 2000-06-14 03:18:59 asaim Exp $
+// $Id: G4UIArrayString.cc,v 1.3 2000-07-31 08:00:01 gracia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,7 +31,7 @@ G4UIArrayString::G4UIArrayString(const G4String& stream)
     nElement++;
     if(jc == G4String::npos) break;
     for(G4int i=1; jc+i< astream.length(); i++ ) {  // skip continuing spaces
-      if(astream[jc+i]==' ') jc++;
+      if(astream[(size_t)(jc+i)]==' ') jc++;
       else break;
     }
     indx= jc+1;
@@ -105,7 +105,7 @@ G4int G4UIArrayString::GetNField(int icol) const
     // care for color code
     // if(GetElement(icol,iy)-> index(strESC,0) != G4String::npos) {
     // if(strESC == (*GetElement(icol,iy))[0] ) {
-    const char tgt = (*GetElement(icol,iy))[0];
+    const char tgt = (*GetElement(icol,iy))[(size_t)0];
     if(strESC == tgt) {
       ilen-= 5;
       if(ilen<0) G4cout << "length(c) cal. error." << G4endl;
@@ -157,7 +157,7 @@ void G4UIArrayString::Show(G4int ncol)
       G4String colorWord;
       //if(word.index(strESC,0) != G4String::npos) {
       //if(strESC == word[0]) {
-      const char tgt = word[0];
+      const char tgt = word[(size_t)0];
       if(strESC == tgt) {
         colorWord= word(0,5);
         word.erase(0,5);

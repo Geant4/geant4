@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2000-07-22 10:52:27 asaim Exp $
+$Id: History,v 1.34 2000-07-31 08:01:59 gracia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+31 July 2000 Gonzalo Gracia
+- Modifications required to compile on NT
+  Operator string::[] requires size_t argument. 
+  Cast from integer to size_t in several places in basic/src/G4UIArrayString.cc
+  and G4VUIshell.cc
 
 22 July 2000 Makoto Asai (interfaces-V02-00-00)
 - Modify G4UIterminal, G4VUIshell, G4UIcsh and G4UItcsh to display the
