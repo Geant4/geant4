@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.12 2003-04-03 10:26:53 gcosmo Exp $
+// $Id: G4LogicalVolume.hh,v 1.13 2003-05-13 18:35:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -170,6 +170,9 @@ class G4LogicalVolume
     inline void RemoveDaughter(const G4VPhysicalVolume* p);
       // Remove the volume p from the List of daughter of the current
       // logical volume.
+    inline void ClearDaughters();
+      // Clear the list of daughters. Used by the phys-volume store when
+      // the geometry tree is cleared, since modified at run-time.
 
     inline G4VSolid* GetSolid() const;
     inline void SetSolid(G4VSolid *pSolid);
