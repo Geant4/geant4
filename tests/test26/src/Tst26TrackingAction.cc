@@ -21,35 +21,45 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26TrackingAction.cc,v 1.1 2003-01-31 18:43:58 vnivanch Exp $
+// $Id: Tst26TrackingAction.cc,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em2TrackingAction.hh"
-#include "Em2RunAction.hh"
+#include "Tst26TrackingAction.hh"
+#include "Tst26RunAction.hh"
 
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2TrackingAction::Em2TrackingAction(Em2RunAction* run)
-:Em2Run(run)
+Tst26TrackingAction::Tst26TrackingAction(Tst26RunAction* run)
+:Tst26Run(run)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
+void Tst26TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
   //count total track length
   G4double charge = aTrack->GetDefinition()->GetPDGCharge();
   G4double TrLeng = aTrack->GetTrackLength();
   
-  Em2Run->fillPerTrack(charge,TrLeng);     
+  Tst26Run->fillPerTrack(charge,TrLeng);     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

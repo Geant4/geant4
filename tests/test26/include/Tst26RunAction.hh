@@ -21,18 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26RunAction.hh,v 1.1 2003-01-31 18:43:57 vnivanch Exp $
+// $Id: Tst26RunAction.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// 08.03.01 Hisaya: Adapted MyVector for STL   
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#ifndef Em2RunAction_h
-#define Em2RunAction_h 1
+#ifndef Tst26RunAction_h
+#define Tst26RunAction_h 1
 
 #include "G4UserRunAction.hh"
 
@@ -48,8 +55,8 @@ typedef  G4std::vector<G4double> MyVector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em2DetectorConstruction;
-class Em2PrimaryGeneratorAction;
+class Tst26DetectorConstruction;
+class Tst26PrimaryGeneratorAction;
 
 class G4Run;
 
@@ -60,12 +67,12 @@ namespace AIDA {
 } 
 #endif
 
-class Em2RunAction : public G4UserRunAction
+class Tst26RunAction : public G4UserRunAction
 {
   public:
   
-    Em2RunAction(Em2DetectorConstruction*, Em2PrimaryGeneratorAction*);
-   ~Em2RunAction();
+    Tst26RunAction(Tst26DetectorConstruction*, Tst26PrimaryGeneratorAction*);
+   ~Tst26RunAction();
 
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
@@ -83,8 +90,8 @@ class Em2RunAction : public G4UserRunAction
     
   private:
     
-    Em2DetectorConstruction*   Em2Det;
-    Em2PrimaryGeneratorAction* Em2Kin;
+    Tst26DetectorConstruction*   Tst26Det;
+    Tst26PrimaryGeneratorAction* Tst26Kin;
     
     G4int nLbin;    
     MyVector dEdL;
@@ -121,7 +128,7 @@ class Em2RunAction : public G4UserRunAction
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-void Em2RunAction::initializePerEvent()
+void Tst26RunAction::initializePerEvent()
 {
   //initialize arrays of energy deposit per bin     
   for (G4int i=0; i<nLbin; i++)
@@ -137,7 +144,7 @@ void Em2RunAction::initializePerEvent()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-void Em2RunAction::fillPerTrack(G4double charge, G4double trkLength)
+void Tst26RunAction::fillPerTrack(G4double charge, G4double trkLength)
 {
   if (charge != 0.) ChargTrLength += trkLength;
   else              NeutrTrLength += trkLength;   
@@ -146,7 +153,7 @@ void Em2RunAction::fillPerTrack(G4double charge, G4double trkLength)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-void Em2RunAction::fillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
+void Tst26RunAction::fillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
 {
   dEdL[Lbin] += dEstep; dEdR[Rbin] += dEstep;
 }
@@ -154,7 +161,7 @@ void Em2RunAction::fillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-void Em2RunAction::particleFlux(G4ParticleDefinition* particle, G4int Lplan)
+void Tst26RunAction::particleFlux(G4ParticleDefinition* particle, G4int Lplan)
 {
        if (particle == G4Gamma::Gamma())          gammaFlux[Lplan]++;
   else if (particle == G4Electron::Electron()) electronFlux[Lplan]++;

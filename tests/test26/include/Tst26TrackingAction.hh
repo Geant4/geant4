@@ -21,30 +21,41 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26TrackingAction.hh,v 1.1 2003-01-31 18:43:57 vnivanch Exp $
+// $Id: Tst26TrackingAction.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
 
-#ifndef Em2TrackingAction_h
-#define Em2TrackingAction_h 1
+
+#ifndef Tst26TrackingAction_h
+#define Tst26TrackingAction_h 1
 
 #include "G4UserTrackingAction.hh"
 
-class Em2RunAction;
+class Tst26RunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em2TrackingAction : public G4UserTrackingAction {
+class Tst26TrackingAction : public G4UserTrackingAction {
 
   public:  
-    Em2TrackingAction(Em2RunAction*);
-   ~Em2TrackingAction() {};
+    Tst26TrackingAction(Tst26RunAction*);
+   ~Tst26TrackingAction() {};
    
     void PostUserTrackingAction(const G4Track*);
     
   private:
-    Em2RunAction* Em2Run;  
+    Tst26RunAction* Tst26Run;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

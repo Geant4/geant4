@@ -21,21 +21,31 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26DetectorMessenger.hh,v 1.1 2003-01-31 18:43:56 vnivanch Exp $
+// $Id: Tst26DetectorMessenger.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em2DetectorMessenger_h
-#define Em2DetectorMessenger_h 1
+#ifndef Tst26DetectorMessenger_h
+#define Tst26DetectorMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class Em2DetectorConstruction;
+class Tst26DetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWith3Vector;
@@ -44,16 +54,16 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em2DetectorMessenger: public G4UImessenger
+class Tst26DetectorMessenger: public G4UImessenger
 {
   public:
-    Em2DetectorMessenger(Em2DetectorConstruction* );
-   ~Em2DetectorMessenger();
+    Tst26DetectorMessenger(Tst26DetectorConstruction* );
+   ~Tst26DetectorMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    Em2DetectorConstruction* Em2Detector;
+    Tst26DetectorConstruction* Tst26Detector;
     
     G4UIdirectory*             testemDir;
     G4UIcmdWithAString*        MaterCmd;

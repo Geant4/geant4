@@ -21,38 +21,48 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysicsListMessenger.hh,v 1.1 2003-01-31 18:43:57 vnivanch Exp $
+// $Id: Tst26PhysicsListMessenger.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em2PhysicsListMessenger_h
-#define Em2PhysicsListMessenger_h 1
+#ifndef Tst26PhysicsListMessenger_h
+#define Tst26PhysicsListMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class Em2PhysicsList;
+class Tst26PhysicsList;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em2PhysicsListMessenger: public G4UImessenger
+class Tst26PhysicsListMessenger: public G4UImessenger
 {
   public:
   
-    Em2PhysicsListMessenger(Em2PhysicsList* );
-   ~Em2PhysicsListMessenger();
+    Tst26PhysicsListMessenger(Tst26PhysicsList* );
+   ~Tst26PhysicsListMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
   
-    Em2PhysicsList* pPhysicsList;
+    Tst26PhysicsList* pPhysicsList;
     
     G4UIcmdWithADoubleAndUnit* gammaCutCmd;
     G4UIcmdWithADoubleAndUnit* electCutCmd;

@@ -21,35 +21,45 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26SteppingAction.cc,v 1.1 2003-01-31 18:43:58 vnivanch Exp $
+// $Id: Tst26SteppingAction.cc,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em2SteppingAction.hh"
-#include "Em2DetectorConstruction.hh"
-#include "Em2RunAction.hh"
+#include "Tst26SteppingAction.hh"
+#include "Tst26DetectorConstruction.hh"
+#include "Tst26RunAction.hh"
 #include "G4SteppingManager.hh"
 #include "G4VTouchable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2SteppingAction::Em2SteppingAction(Em2DetectorConstruction* det,
-                                     Em2RunAction* run)
-:Em2Det(det),Em2Run(run)
+Tst26SteppingAction::Tst26SteppingAction(Tst26DetectorConstruction* det,
+                                     Tst26RunAction* run)
+:Tst26Det(det),Tst26Run(run)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2SteppingAction::~Em2SteppingAction()
+Tst26SteppingAction::~Tst26SteppingAction()
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2SteppingAction::UserSteppingAction(const G4Step* aStep)
+void Tst26SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
  G4Track* aTrack = aStep->GetTrack();
  const G4VTouchable*  preStepTouchable= aStep->GetPreStepPoint()->GetTouchable();
@@ -60,24 +70,24 @@ void Em2SteppingAction::UserSteppingAction(const G4Step* aStep)
  G4int SlideNb(0), RingNb(0);
  if (preStepTouchable->GetHistoryDepth()>0)
  {
-   if (Em2Det->GetnRtot()>1)
+   if (Tst26Det->GetnRtot()>1)
      RingNb  = preStepTouchable->GetReplicaNumber(1);
-   if (Em2Det->GetnLtot()>1)
+   if (Tst26Det->GetnLtot()>1)
      SlideNb = preStepTouchable->GetReplicaNumber();
  }
          
  G4double dEStep = aStep->GetTotalEnergyDeposit();
  if (dEStep > 0.)
-   Em2Run->fillPerStep(dEStep,SlideNb,RingNb);
+   Tst26Run->fillPerStep(dEStep,SlideNb,RingNb);
 
  // particle flux
  //  
- if ((Em2Det->GetnLtot()>1)&&
+ if ((Tst26Det->GetnLtot()>1)&&
      (postStepTouchable->GetVolume()))
    {
      G4int next = postStepTouchable->GetReplicaNumber();
      if (next != SlideNb)
-        Em2Run->particleFlux(aTrack->GetDefinition(), (SlideNb+next)/2);
+        Tst26Run->particleFlux(aTrack->GetDefinition(), (SlideNb+next)/2);
    }  
 }
 

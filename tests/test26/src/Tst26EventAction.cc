@@ -21,18 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26EventAction.cc,v 1.1 2003-01-31 18:43:58 vnivanch Exp $
+// $Id: Tst26EventAction.cc,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em2EventAction.hh"
+#include "Tst26EventAction.hh"
 
-#include "Em2RunAction.hh"
-#include "Em2EventActionMessenger.hh"
+#include "Tst26RunAction.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"
@@ -43,22 +52,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2EventAction::Em2EventAction(Em2RunAction* run)
-:Em2Run(run),drawFlag("none"),printModulo(10000)
-{
-  eventMessenger = new Em2EventActionMessenger(this);
-}
+Tst26EventAction::Tst26EventAction(Tst26RunAction* run)
+:Tst26Run(run),drawFlag("none"),printModulo(10000)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2EventAction::~Em2EventAction()
-{
-  delete eventMessenger;
-}
+Tst26EventAction::~Tst26EventAction()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2EventAction::BeginOfEventAction(const G4Event* evt)
+void Tst26EventAction::BeginOfEventAction(const G4Event* evt)
 {
  G4int evtNb = evt->GetEventID();     
  
@@ -67,14 +72,14 @@ void Em2EventAction::BeginOfEventAction(const G4Event* evt)
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
 
  //additional initializations 
- Em2Run->initializePerEvent();
+ Tst26Run->initializePerEvent();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2EventAction::EndOfEventAction(const G4Event* evt)
+void Tst26EventAction::EndOfEventAction(const G4Event* evt)
 {  
-  Em2Run->fillPerEvent();  
+  Tst26Run->fillPerEvent();  
     
   if (G4VVisManager::GetConcreteInstance())
     {                         

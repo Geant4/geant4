@@ -21,33 +21,41 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26EventAction.hh,v 1.1 2003-01-31 18:43:57 vnivanch Exp $
+// $Id: Tst26EventAction.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em2EventAction_h
-#define Em2EventAction_h 1
+#ifndef Tst26EventAction_h
+#define Tst26EventAction_h 1
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class Em2RunAction;
-class Em2EventActionMessenger;
-
+class Tst26RunAction;
 class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em2EventAction : public G4UserEventAction
+class Tst26EventAction : public G4UserEventAction
 {
   public:
   
-    Em2EventAction(Em2RunAction*);
-   ~Em2EventAction();
+    Tst26EventAction(Tst26RunAction*);
+   ~Tst26EventAction();
 
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
@@ -57,10 +65,10 @@ class Em2EventAction : public G4UserEventAction
     
   private:
   
-    Em2RunAction*             Em2Run;
+    Tst26RunAction*             Tst26Run;
     G4String                  drawFlag;
     G4int                     printModulo;          
-    Em2EventActionMessenger*  eventMessenger;
+   
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

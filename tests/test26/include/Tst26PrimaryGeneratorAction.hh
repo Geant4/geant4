@@ -21,31 +21,41 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PrimaryGeneratorAction.hh,v 1.1 2003-01-31 18:43:57 vnivanch Exp $
+// $Id: Tst26PrimaryGeneratorAction.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em2PrimaryGeneratorAction_h
-#define Em2PrimaryGeneratorAction_h 1
+#ifndef Tst26PrimaryGeneratorAction_h
+#define Tst26PrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
 #include "globals.hh"
 
 class G4Event;
-class Em2DetectorConstruction;
+class Tst26DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class Tst26PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    Em2PrimaryGeneratorAction(Em2DetectorConstruction*);    
-   ~Em2PrimaryGeneratorAction();
+    Tst26PrimaryGeneratorAction(Tst26DetectorConstruction*);    
+   ~Tst26PrimaryGeneratorAction();
 
   public:
     void GeneratePrimaries(G4Event*);
@@ -53,7 +63,7 @@ class Em2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     
   private:
     G4ParticleGun*              particleGun;
-    Em2DetectorConstruction*    Em2Detector; 
+    Tst26DetectorConstruction*    Tst26Detector; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

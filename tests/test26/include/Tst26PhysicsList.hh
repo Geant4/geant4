@@ -21,31 +21,39 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysicsList.hh,v 1.1 2003-01-31 18:43:57 vnivanch Exp $
+// $Id: Tst26PhysicsList.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/////////////////////////////////////////////////////////////////////////
 //
-// 14.10.02 (V.Ivanchenko) provide modular list on base of old Em2PhysicsList
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
+
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em2PhysicsList_h
-#define Em2PhysicsList_h 1
+#ifndef Tst26PhysicsList_h
+#define Tst26PhysicsList_h 1
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
-class Em2PhysicsListMessenger;
+class Tst26PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em2PhysicsList: public G4VModularPhysicsList
+class Tst26PhysicsList: public G4VModularPhysicsList
 {
   public:
-    Em2PhysicsList();
-   ~Em2PhysicsList();
+    Tst26PhysicsList();
+   ~Tst26PhysicsList();
 
     void AddPhysicsList(const G4String& name);
     
@@ -62,7 +70,7 @@ class Em2PhysicsList: public G4VModularPhysicsList
 
     G4bool   emPhysicsListIsRegistered;
     
-    Em2PhysicsListMessenger* pMessenger;         
+    Tst26PhysicsListMessenger* pMessenger;         
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,17 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26DetectorMessenger.cc,v 1.1 2003-01-31 18:43:57 vnivanch Exp $
+// $Id: Tst26DetectorMessenger.cc,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em2DetectorMessenger.hh"
+#include "Tst26DetectorMessenger.hh"
 
-#include "Em2DetectorConstruction.hh"
+#include "Tst26DetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWith3Vector.hh"
@@ -40,11 +50,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2DetectorMessenger::Em2DetectorMessenger(Em2DetectorConstruction * Det)
-:Em2Detector(Det)
+Tst26DetectorMessenger::Tst26DetectorMessenger(Tst26DetectorConstruction * Det)
+:Tst26Detector(Det)
 { 
   testemDir = new G4UIdirectory("/testem/");
-  testemDir->SetGuidance("Em2 detector control.");
+  testemDir->SetGuidance("Tst26 detector control.");
       
   MaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
   MaterCmd->SetGuidance("Select Material.");
@@ -81,7 +91,7 @@ Em2DetectorMessenger::Em2DetectorMessenger(Em2DetectorConstruction * Det)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2DetectorMessenger::~Em2DetectorMessenger()
+Tst26DetectorMessenger::~Tst26DetectorMessenger()
 {
   delete MaterCmd;
   delete LBinCmd;
@@ -93,22 +103,22 @@ Em2DetectorMessenger::~Em2DetectorMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void Tst26DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == MaterCmd )
-   { Em2Detector->SetMaterial(newValue);}
+   { Tst26Detector->SetMaterial(newValue);}
    
   if( command == LBinCmd )
-   { Em2Detector->SetLBining(LBinCmd->GetNew3VectorValue(newValue));}
+   { Tst26Detector->SetLBining(LBinCmd->GetNew3VectorValue(newValue));}
    
   if( command == RBinCmd )
-   { Em2Detector->SetRBining(RBinCmd->GetNew3VectorValue(newValue));}
+   { Tst26Detector->SetRBining(RBinCmd->GetNew3VectorValue(newValue));}
       
   if( command == FieldCmd )
-   { Em2Detector->SetMagField(FieldCmd->GetNewDoubleValue(newValue));}
+   { Tst26Detector->SetMagField(FieldCmd->GetNewDoubleValue(newValue));}
      
   if( command == UpdateCmd )
-   { Em2Detector->UpdateGeometry();}
+   { Tst26Detector->UpdateGeometry();}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

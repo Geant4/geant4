@@ -21,13 +21,24 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysListParticles.cc,v 1.1 2003-01-31 18:43:58 vnivanch Exp $
+// $Id: Tst26PhysListParticles.cc,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 
+//
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em2PhysListParticles.hh"
+#include "Tst26PhysListParticles.hh"
 
 // Bosons
 #include "G4ChargedGeantino.hh"
@@ -75,18 +86,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2PhysListParticles::Em2PhysListParticles(const G4String& name)
+Tst26PhysListParticles::Tst26PhysListParticles(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2PhysListParticles::~Em2PhysListParticles()
+Tst26PhysListParticles::~Tst26PhysListParticles()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2PhysListParticles::ConstructParticle()
+void Tst26PhysListParticles::ConstructParticle()
 {
 
 // pseudo-particles

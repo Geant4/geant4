@@ -21,20 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26RunAction.cc,v 1.1 2003-01-31 18:43:58 vnivanch Exp $
+// $Id: Tst26RunAction.cc,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// 08.03.01 Hisaya: Adapted MyVector for STL   
+#include "Tst26RunAction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "Em2RunAction.hh"
-
-#include "Em2DetectorConstruction.hh"
-#include "Em2PrimaryGeneratorAction.hh"
+#include "Tst26DetectorConstruction.hh"
+#include "Tst26PrimaryGeneratorAction.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
@@ -49,16 +56,16 @@
 #include "Randomize.hh"
 
 #ifndef G4NOHIST
- #include "AIDA/AIDA.h"
+// #include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2RunAction::Em2RunAction(Em2DetectorConstruction*   det,
-                           Em2PrimaryGeneratorAction* kin)
-:Em2Det(det),Em2Kin(kin)			   
+Tst26RunAction::Tst26RunAction(Tst26DetectorConstruction*   det,
+                           Tst26PrimaryGeneratorAction* kin)
+:Tst26Det(det),Tst26Kin(kin)			   
 { 
-  nLbin = Em2Det->GetnLtot();
+  nLbin = Tst26Det->GetnLtot();
   dEdL.resize(nLbin, 0.0);
   sumELongit.resize(nLbin, 0.0);
   sumELongitCumul.resize(nLbin, 0.0); 
@@ -69,7 +76,7 @@ Em2RunAction::Em2RunAction(Em2DetectorConstruction*   det,
   electronFlux.resize(nLbin, 0.0);
   positronFlux.resize(nLbin, 0.0);
     
-  nRbin = Em2Det->GetnRtot();
+  nRbin = Tst26Det->GetnRtot();
   dEdR.resize(nRbin, 0.0);
   sumERadial.resize(nRbin, 0.0);
   sumERadialCumul.resize(nRbin, 0.0);
@@ -79,15 +86,16 @@ Em2RunAction::Em2RunAction(Em2DetectorConstruction*   det,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2RunAction::~Em2RunAction()
+Tst26RunAction::~Tst26RunAction()
 {
   cleanHisto();    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2RunAction::bookHisto()
+void Tst26RunAction::bookHisto()
 {
+  /*
 #ifndef G4NOHIST
  // Creating the analysis factory
  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
@@ -98,13 +106,13 @@ void Em2RunAction::bookHisto()
  // Creating a tree mapped to an hbook file.
  G4bool readOnly  = false;
  G4bool createNew = true;
- tree = tf->create("testem2.paw", "hbook", readOnly, createNew);
+ tree = tf->create("testTst26.paw", "hbook", readOnly, createNew);
 
  // Creating a histogram factory, whose histograms will be handled by the tree
  AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);  
-  G4double Ekin = Em2Kin->GetParticleGun()->GetParticleEnergy();
-  G4double dLradl = Em2Det->GetdLradl();
-  G4double dRradl = Em2Det->GetdRradl();
+  G4double Ekin = Tst26Kin->GetParticleGun()->GetParticleEnergy();
+  G4double dLradl = Tst26Det->GetdLradl();
+  G4double dRradl = Tst26Det->GetdRradl();
   
   histo[0] = hf->createHistogram1D( "1","total energy deposit(percent of Einc)",
                                     100,0.,100.);
@@ -148,22 +156,25 @@ void Em2RunAction::bookHisto()
   delete tf;
   delete af;				    
 #endif
+  */
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2RunAction::cleanHisto()
+void Tst26RunAction::cleanHisto()
 {
+  /*
 #ifndef G4NOHIST
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
 
   delete tree;
-#endif  
+#endif
+  */  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2RunAction::BeginOfRunAction(const G4Run* aRun)
+void Tst26RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
@@ -175,7 +186,7 @@ void Em2RunAction::BeginOfRunAction(const G4Run* aRun)
   //
   G4bool rebin(false);
   
-  G4int nLtot = Em2Det->GetnLtot();
+  G4int nLtot = Tst26Det->GetnLtot();
   if(nLbin != nLtot)
     {dEdL.resize(nLbin=nLtot, 0.0);
      sumELongit.resize(nLbin, 0.0);
@@ -188,7 +199,7 @@ void Em2RunAction::BeginOfRunAction(const G4Run* aRun)
      rebin=true;
     }
     
-  G4int nRtot = Em2Det->GetnRtot();
+  G4int nRtot = Tst26Det->GetnRtot();
   if(nRbin != nRtot)
     {dEdR.resize(nRbin=nRtot, 0.0);
      sumERadial.resize(nRbin, 0.0);
@@ -222,7 +233,7 @@ void Em2RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2RunAction::fillPerEvent()
+void Tst26RunAction::fillPerEvent()
 {
   //accumulate statistic
   //
@@ -250,39 +261,41 @@ void Em2RunAction::fillPerEvent()
   sum2ChargTrLength += ChargTrLength*ChargTrLength;
   sumNeutrTrLength  += NeutrTrLength;
   sum2NeutrTrLength += NeutrTrLength*NeutrTrLength;
-  
+  /* 
 #ifndef G4NOHIST  
   //fill histograms
   //
-  G4double Ekin=Em2Kin->GetParticleGun()->GetParticleEnergy();
-  G4double mass=Em2Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
-  G4double radl=Em2Det->GetMaterial()->GetRadlen();
-  
+  G4double Ekin=Tst26Kin->GetParticleGun()->GetParticleEnergy();
+  G4double mass=Tst26Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
+  G4double radl=Tst26Det->GetMaterial()->GetRadlen();
+ 
   histo[0]->fill(100.*dLCumul/(Ekin+mass));
   histo[1]->fill(ChargTrLength/radl);
   histo[2]->fill(NeutrTrLength/radl);
-#endif      
+#endif
+  */      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2RunAction::EndOfRunAction(const G4Run* aRun)
+void Tst26RunAction::EndOfRunAction(const G4Run* aRun)
 {
+  /*
   if (G4VVisManager::GetConcreteInstance())
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-     
+  */ 
   //compute and print statistic
   //     
   G4int NbOfEvents = aRun->GetNumberOfEvent();
-  G4double kinEnergy = Em2Kin->GetParticleGun()->GetParticleEnergy();   
+  G4double kinEnergy = Tst26Kin->GetParticleGun()->GetParticleEnergy();   
   assert(NbOfEvents*kinEnergy > 0);
   
-  G4double mass=Em2Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
+  G4double mass=Tst26Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
   G4double norme = 100./(NbOfEvents*(kinEnergy+mass));
   
   //longitudinal
   //
-  G4double dLradl = Em2Det->GetdLradl();    
+  G4double dLradl = Tst26Det->GetdLradl();    
   
   MyVector MeanELongit(nLbin),      rmsELongit(nLbin);
   MyVector MeanELongitCumul(nLbin), rmsELongitCumul(nLbin);
@@ -301,7 +314,7 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
     gammaFlux   [i] /= NbOfEvents;
     electronFlux[i] /= NbOfEvents;
     positronFlux[i] /= NbOfEvents;                                    
-
+    /*
 #ifndef G4NOHIST                                    
     G4double bin = i*dLradl;                                
     histo[3]->fill(bin,MeanELongit[i]/dLradl);
@@ -312,12 +325,13 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
     histo[6]->fill(bin, gammaFlux[i]);
     histo[7]->fill(bin, positronFlux[i]);
     histo[8]->fill(bin, electronFlux[i]);
-#endif                                            
+#endif
+    */                                            
    }
    
   //radial
   // 
-  G4double dRradl = Em2Det->GetdRradl();    
+  G4double dRradl = Tst26Det->GetdRradl();    
   
   MyVector MeanERadial(nRbin),      rmsERadial(nRbin);
   MyVector MeanERadialCumul(nRbin), rmsERadialCumul(nRbin);
@@ -331,19 +345,20 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
     MeanERadialCumul[i] = norme*sumERadialCumul[i];
      rmsERadialCumul[i] = norme*sqrt(abs(NbOfEvents*sumE2RadialCumul[i] 
                                     - sumERadialCumul[i]*sumERadialCumul[i]));
-                                 
+     /*                           
 #ifndef G4NOHIST                                     
     G4double bin = i*dRradl;                                
     histo[ 9]->fill(bin,MeanERadial[i]/dRradl);
     bin = (i+1)*dRradl;
     histo[10]->fill(bin,MeanERadialCumul[i]);
     histo[11]->fill(bin, rmsERadialCumul[i]);
-#endif                                           
+#endif 
+     */                                          
    }
 
   //track length
   //
-  norme = 1./(NbOfEvents*(Em2Det->GetMaterial()->GetRadlen()));
+  norme = 1./(NbOfEvents*(Tst26Det->GetMaterial()->GetRadlen()));
   G4double MeanChargTrLength = norme*sumChargTrLength;
   G4double  rmsChargTrLength = norme*sqrt(abs(NbOfEvents*sum2ChargTrLength
                                          - sumChargTrLength*sumChargTrLength));

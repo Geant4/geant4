@@ -21,17 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26DetectorConstruction.cc,v 1.1 2003-01-31 18:43:57 vnivanch Exp $
+// $Id: Tst26DetectorConstruction.cc,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em2DetectorConstruction.hh"
-#include "Em2DetectorMessenger.hh"
+#include "Tst26DetectorConstruction.hh"
+#include "Tst26DetectorMessenger.hh"
 
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
@@ -51,7 +61,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2DetectorConstruction::Em2DetectorConstruction()
+Tst26DetectorConstruction::Tst26DetectorConstruction()
 :nLtot(20),nRtot(20),dLradl(1.),dRradl(0.25),
  myMaterial(0),magField(0)  ,
  EcalLength(0.),EcalRadius(0.)    ,
@@ -59,17 +69,17 @@ Em2DetectorConstruction::Em2DetectorConstruction()
  solidSlice(0),logicSlice(0),physiSlice(0),
  solidRing(0) ,logicRing(0) ,physiRing(0) 
 {
-  detectorMessenger = new Em2DetectorMessenger(this);
+  detectorMessenger = new Tst26DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2DetectorConstruction::~Em2DetectorConstruction()
+Tst26DetectorConstruction::~Tst26DetectorConstruction()
 { delete detectorMessenger;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VPhysicalVolume* Em2DetectorConstruction::Construct()
+G4VPhysicalVolume* Tst26DetectorConstruction::Construct()
 {
   DefineMaterials();
   return ConstructVolumes();
@@ -77,7 +87,7 @@ G4VPhysicalVolume* Em2DetectorConstruction::Construct()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2DetectorConstruction::DefineMaterials()
+void Tst26DetectorConstruction::DefineMaterials()
 {
   G4String name, symbol; 
   G4double a, z, density;
@@ -176,7 +186,7 @@ void Em2DetectorConstruction::DefineMaterials()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
-G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
+G4VPhysicalVolume* Tst26DetectorConstruction::ConstructVolumes()
 {
   G4double Radl = myMaterial->GetRadlen();
 
@@ -229,7 +239,7 @@ G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2DetectorConstruction::SetMaterial(G4String materialChoice)
+void Tst26DetectorConstruction::SetMaterial(G4String materialChoice)
 {
   // search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
@@ -241,21 +251,21 @@ void Em2DetectorConstruction::SetMaterial(G4String materialChoice)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2DetectorConstruction::SetLBining(G4ThreeVector Value)
+void Tst26DetectorConstruction::SetLBining(G4ThreeVector Value)
 {
   nLtot = (G4int)Value(0); dLradl = Value(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2DetectorConstruction::SetRBining(G4ThreeVector Value)
+void Tst26DetectorConstruction::SetRBining(G4ThreeVector Value)
 {
   nRtot = (G4int)Value(0); dRradl = Value(1);
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2DetectorConstruction::SetMagField(G4double fieldValue)
+void Tst26DetectorConstruction::SetMagField(G4double fieldValue)
 {
   //apply a global uniform magnetic field along Z axis
   G4FieldManager* fieldMgr 
@@ -275,7 +285,7 @@ void Em2DetectorConstruction::SetMagField(G4double fieldValue)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
-void Em2DetectorConstruction::UpdateGeometry()
+void Tst26DetectorConstruction::UpdateGeometry()
 {
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }

@@ -21,14 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysListGeneral.hh,v 1.1 2003-01-31 18:43:57 vnivanch Exp $
+// $Id: Tst26PhysListGeneral.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em2PhysListGeneral_h
-#define Em2PhysListGeneral_h 1
+#ifndef Tst26PhysListGeneral_h
+#define Tst26PhysListGeneral_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "G4Decay.hh"
@@ -36,11 +47,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em2PhysListGeneral : public G4VPhysicsConstructor
+class Tst26PhysListGeneral : public G4VPhysicsConstructor
 {
   public: 
-    Em2PhysListGeneral(const G4String& name = "general");
-    virtual ~Em2PhysListGeneral();
+    Tst26PhysListGeneral(const G4String& name = "general");
+    virtual ~Tst26PhysListGeneral();
 
   public: 
     // This method is dummy for physics

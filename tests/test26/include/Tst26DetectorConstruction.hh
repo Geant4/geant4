@@ -21,16 +21,26 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26DetectorConstruction.hh,v 1.1 2003-01-31 18:43:56 vnivanch Exp $
+// $Id: Tst26DetectorConstruction.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em2DetectorConstruction_h
-#define Em2DetectorConstruction_h 1
+#ifndef Tst26DetectorConstruction_h
+#define Tst26DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
@@ -41,16 +51,16 @@
 class G4Tubs;
 class G4LogicalVolume;
 class G4UniformMagField;
-class Em2DetectorMessenger;
+class Tst26DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em2DetectorConstruction : public G4VUserDetectorConstruction
+class Tst26DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
   
-    Em2DetectorConstruction();
-   ~Em2DetectorConstruction();
+    Tst26DetectorConstruction();
+   ~Tst26DetectorConstruction();
 
   public:
      
@@ -99,7 +109,7 @@ class Em2DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume*   logicRing;    //pointer to the logical R-slide
      G4VPhysicalVolume* physiRing;    //pointer to the physical R-slide
      
-     Em2DetectorMessenger* detectorMessenger;  //pointer to the Messenger   
+     Tst26DetectorMessenger* detectorMessenger;  //pointer to the Messenger   
       
   private:
     

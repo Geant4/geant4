@@ -21,23 +21,33 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysicsListMessenger.cc,v 1.1 2003-01-31 18:43:58 vnivanch Exp $
+// $Id: Tst26PhysicsListMessenger.cc,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em2PhysicsListMessenger.hh"
+#include "Tst26PhysicsListMessenger.hh"
 
-#include "Em2PhysicsList.hh"
+#include "Tst26PhysicsList.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2PhysicsListMessenger::Em2PhysicsListMessenger(Em2PhysicsList* pPhys)
+Tst26PhysicsListMessenger::Tst26PhysicsListMessenger(Tst26PhysicsList* pPhys)
 :pPhysicsList(pPhys)
 {   
   gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setGCut",this);  
@@ -76,7 +86,7 @@ Em2PhysicsListMessenger::Em2PhysicsListMessenger(Em2PhysicsList* pPhys)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2PhysicsListMessenger::~Em2PhysicsListMessenger()
+Tst26PhysicsListMessenger::~Tst26PhysicsListMessenger()
 {
   delete gammaCutCmd;
   delete electCutCmd;
@@ -87,7 +97,7 @@ Em2PhysicsListMessenger::~Em2PhysicsListMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2PhysicsListMessenger::SetNewValue(G4UIcommand* command,
+void Tst26PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 {       
   if( command == gammaCutCmd )

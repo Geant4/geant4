@@ -21,13 +21,24 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysListEmStandard.cc,v 1.1 2003-01-31 18:43:58 vnivanch Exp $
+// $Id: Tst26PhysListEmStandard.cc,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#include "Em2PhysListEmStandard.hh"
+#include "Tst26PhysListEmStandard.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
@@ -49,18 +60,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2PhysListEmStandard::Em2PhysListEmStandard(const G4String& name)
+Tst26PhysListEmStandard::Tst26PhysListEmStandard(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2PhysListEmStandard::~Em2PhysListEmStandard()
+Tst26PhysListEmStandard::~Tst26PhysListEmStandard()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2PhysListEmStandard::ConstructProcess()
+void Tst26PhysListEmStandard::ConstructProcess()
 {
   // Add standard EM Processes
 

@@ -21,35 +21,45 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26SteppingAction.hh,v 1.1 2003-01-31 18:43:57 vnivanch Exp $
+// $Id: Tst26SteppingAction.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em2SteppingAction_h
-#define Em2SteppingAction_h 1
+#ifndef Tst26SteppingAction_h
+#define Tst26SteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
 
-class Em2DetectorConstruction;
-class Em2RunAction;
+class Tst26DetectorConstruction;
+class Tst26RunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em2SteppingAction : public G4UserSteppingAction
+class Tst26SteppingAction : public G4UserSteppingAction
 {
   public:
-    Em2SteppingAction(Em2DetectorConstruction*,Em2RunAction*);
-   ~Em2SteppingAction();
+    Tst26SteppingAction(Tst26DetectorConstruction*,Tst26RunAction*);
+   ~Tst26SteppingAction();
 
     void UserSteppingAction(const G4Step*);
   
   private:
-  Em2DetectorConstruction* Em2Det;
-  Em2RunAction*            Em2Run;  
+  Tst26DetectorConstruction* Tst26Det;
+  Tst26RunAction*            Tst26Run;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

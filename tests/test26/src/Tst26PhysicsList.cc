@@ -21,23 +21,33 @@
 // ********************************************************************
 //
 // 
+/////////////////////////////////////////////////////////////////////////
+//
+// test26: Cut per region physics
+//
+// Created: 31.01.03 V.Ivanchenko
+//
+// Modified:
+//
+////////////////////////////////////////////////////////////////////////
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em2PhysicsList.hh"
-#include "Em2PhysicsListMessenger.hh"
+#include "Tst26PhysicsList.hh"
+#include "Tst26PhysicsListMessenger.hh"
  
 #include "G4UnitsTable.hh"
-#include "Em2PhysListParticles.hh"
-#include "Em2PhysListGeneral.hh"
-#include "Em2PhysListEmStandard.hh"
-#include "Em2PhysListEmModel.hh"
+#include "Tst26PhysListParticles.hh"
+#include "Tst26PhysListGeneral.hh"
+#include "Tst26PhysListEmStandard.hh"
+#include "Tst26PhysListEmModel.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2PhysicsList::Em2PhysicsList() : G4VModularPhysicsList(),
+Tst26PhysicsList::Tst26PhysicsList() : G4VModularPhysicsList(),
   emPhysicsListIsRegistered(false)
 {   
   currentDefaultCut   = 1.0*mm;
@@ -45,43 +55,43 @@ Em2PhysicsList::Em2PhysicsList() : G4VModularPhysicsList(),
   cutForElectron      = currentDefaultCut;
   cutForPositron      = currentDefaultCut;
 
-  pMessenger = new Em2PhysicsListMessenger(this);
+  pMessenger = new Tst26PhysicsListMessenger(this);
 
   SetVerboseLevel(1);
 
   // Particles
-  RegisterPhysics( new Em2PhysListParticles("particles") );
+  RegisterPhysics( new Tst26PhysListParticles("particles") );
 
   // General Physics
-  RegisterPhysics( new Em2PhysListGeneral("general") );
+  RegisterPhysics( new Tst26PhysListGeneral("general") );
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2PhysicsList::~Em2PhysicsList()
+Tst26PhysicsList::~Tst26PhysicsList()
 {
   delete pMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2PhysicsList::AddPhysicsList(const G4String& name)
+void Tst26PhysicsList::AddPhysicsList(const G4String& name)
 {
   if (verboseLevel>1) {
-    G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+    G4cout << "Tst26PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
   if(name == "standard") {
 
     if (emPhysicsListIsRegistered) {
 
-      G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">" 
+      G4cout << "Tst26PhysicsList::AddPhysicsList: <" << name << ">" 
              << " cannot be register additionally to existing one"
              << G4endl;
     } else {
 
-      RegisterPhysics( new Em2PhysListEmStandard(name) );
+      RegisterPhysics( new Tst26PhysListEmStandard(name) );
       emPhysicsListIsRegistered = true;
     }
 
@@ -89,18 +99,18 @@ void Em2PhysicsList::AddPhysicsList(const G4String& name)
 
     if (emPhysicsListIsRegistered) {
 
-      G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">" 
+      G4cout << "Tst26PhysicsList::AddPhysicsList: <" << name << ">" 
              << " cannot be register additionally to existing one"
              << G4endl;
     } else {
 
-      RegisterPhysics( new Em2PhysListEmModel(name) );
+      RegisterPhysics( new Tst26PhysListEmModel(name) );
       emPhysicsListIsRegistered = true;
     }
 
   } else {
 
-    G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">" 
+    G4cout << "Tst26PhysicsList::AddPhysicsList: <" << name << ">" 
            << " is not defined"
            << G4endl;
   }
@@ -108,11 +118,11 @@ void Em2PhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2PhysicsList::SetCuts()
+void Tst26PhysicsList::SetCuts()
 {
      
   if (verboseLevel >0){
-    G4cout << "Em2PhysicsList::SetCuts:";
+    G4cout << "Tst26PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  
 
@@ -134,7 +144,7 @@ void Em2PhysicsList::SetCuts()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2PhysicsList::SetCutForGamma(G4double cut)
+void Tst26PhysicsList::SetCutForGamma(G4double cut)
 {
   ResetCuts();
   cutForGamma = cut;
@@ -142,7 +152,7 @@ void Em2PhysicsList::SetCutForGamma(G4double cut)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2PhysicsList::SetCutForElectron(G4double cut)
+void Tst26PhysicsList::SetCutForElectron(G4double cut)
 {
   ResetCuts();
   cutForElectron = cut;
@@ -150,7 +160,7 @@ void Em2PhysicsList::SetCutForElectron(G4double cut)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2PhysicsList::SetCutForPositron(G4double cut)
+void Tst26PhysicsList::SetCutForPositron(G4double cut)
 {
   ResetCuts();
   cutForPositron = cut;
