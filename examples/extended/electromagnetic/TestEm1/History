@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2004-09-20 15:13:09 maire Exp $
+$Id: History,v 1.51 2004-11-01 09:57:11 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,8 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01-11-04 V.Ivanchenko (testem1-V06-02-04)
+- migrade to new interface to ParticleChange in G4eBremsstrahlungCMS
      
-15-09-04 mma(testem1-V06-02-03)
+20-09-04 mma(testem1-V06-02-03)
 - do not delete Analysisfactory (for Jaida)
      
 15-09-04 mma(testem1-V06-02-02)

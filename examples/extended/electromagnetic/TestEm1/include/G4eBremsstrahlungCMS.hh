@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungCMS.hh,v 1.2 2003-10-24 12:06:36 maire Exp $
+// $Id: G4eBremsstrahlungCMS.hh,v 1.3 2004-11-01 09:57:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,7 +37,6 @@
 // Modifications:
 //
 // 17-10-03 model variant (V.Ivanchenko)
-//
 //
 // Class Description:
 //
