@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.10 2000-09-18 07:47:24 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.11 2000-09-18 09:01:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -555,7 +555,8 @@ void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC)
       //else      probab=dOfCl; // Isotopic focusing (use together with d>1 above)
       //else      probab=dOfCl*fact; // Isotopic focusing (use together with d>1 above)
       //else      probab=dOfCl*ac*fact; // Isotopic focusing (use together with d>1 above)
-      probab=nOfCl*ac*fact; //@@Always@@ Isotopic focusing (use together with d>1 above)
+      //==>>>>//probab=nOfCl*ac*fact; //@@Always@@ Isotopic focusing (use together with d>1 above)
+      probab=nOfCl*fact; //@@Always@@ Isotopic focusing (use together with d>1 above)
 #ifdef sdebug
 	  G4cout<<"G4QEnvironment::PrepareInteractionProbabilities:C="<<cPDG<<",P="<<probab<<",ac="
             <<ac<<",dq="<<dq<<",qC="<<qC<<",rPDG="<<rPDG<<",b="<<baryn<<",c="<<charge<<G4endl;
