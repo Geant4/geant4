@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2002-11-20 16:53:04 gcosmo Exp $
+$Id: History,v 1.49 2002-12-04 22:45:58 tsasaki Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+Dec. 04, 02  T.Sasaki(track-V04-01-03)
+- Initial value for fCharge is given in the constuctor 
+  of G4StepPoint.
 Nov. 20, 02   G.Cosmo (track-V04-01-02)
 - Patched access to public static data in G4VParticleChange.
   Added accessors to be used in the kernel to allow porting on
