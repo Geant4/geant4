@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLViewer.cc,v 1.9 2001-02-03 18:39:35 johna Exp $
+// $Id: G4OpenGLViewer.cc,v 1.10 2001-02-04 20:24:38 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,6 +49,10 @@ transparency_enabled (False),
 antialiasing_enabled (False),
 haloing_enabled (False)
 {
+  // Make changes to view parameters for OpenGL...
+  fVP.SetAutoRefresh(true);
+  fDefaultVP.SetAutoRefresh(true);
+
   //  glClearColor (0.0, 0.0, 0.0, 0.0);
   //  glClearDepth (1.0);
   //  glDisable (GL_BLEND);
