@@ -67,17 +67,24 @@ Sh01SecondaryGenerator::~Sh01SecondaryGenerator()
 {}
 
 /////////////////////////////////////////////////////////////////////////
-
-G4VParticleChange* Sh01SecondaryGenerator::Secondaries(const G4Track& track)
+//
+// G4VParticleChange*
+ 
+G4HadFinalState* Sh01SecondaryGenerator::Secondaries(const G4Track& track)
 {
+  G4HadProjectile thePro(track);
   if (hInteraction) 
   {  
-    return hInteraction->ApplyYourself(track, targetNucleus);
+    G4HadFinalState *result = hInteraction->ApplyYourself(thePro, targetNucleus);
+    result->SetTrafoToLab(thePro.GetTrafoToLab());
+    return result;
+    //    return hInteraction->ApplyYourself(track, targetNucleus);
   } 
   else 
   {
-    theParticleChange.Initialize(track);
-    return &theParticleChange;
+    //   theParticleChange.Initialize(track);
+    //  return &theParticleChange;
+    return 0;
   }
 }
 

@@ -93,9 +93,41 @@ G4VParticleChange* Sh01HadronProduction::PostStepDoIt(
                     const G4Track& track, 
                     const G4Step& step)
 {
-  pParticleChange = theGenerator->Secondaries(track);
+  // pParticleChange = theGenerator->Secondaries(track);
+
+
+  G4HadFinalState* result = theGenerator->Secondaries(track);
   ClearNumberOfInteractionLengthLeft();
 
+
+  theChange.Initialize(track);
+
+  G4int ns = result->GetNumberOfSecondaries();
+  G4int nb = ns;
+  if(result->GetStatusChange() == isAlive) nb++;
+
+  theChange.SetStatusChange(fStopAndKill);
+  theChange.SetNumberOfSecondaries(nb);
+
+  for(G4int i=0; i<ns; i++) {
+    G4Track* tr = new G4Track(result->GetSecondary(i)->GetParticle(),
+                              track.GetGlobalTime(),
+                              track.GetPosition());
+    theChange.AddSecondary(tr);
+  }
+
+  if(result->GetStatusChange() == isAlive) {
+    G4DynamicParticle* dp = new G4DynamicParticle(*(track.GetDynamicParticle()));
+    G4Track* tr = new G4Track(dp,track.GetGlobalTime(),track.GetPosition());
+    tr->SetKineticEnergy(result->GetEnergyChange());
+    tr->SetMomentumDirection(result->GetMomentumChange());
+    theChange.AddSecondary(tr);
+  }
+  result->Clear();
+
+  return &theChange;
+ 
+  /*
   if(pParticleChange->GetStatusChange() != fStopAndKill) 
   {
 
@@ -118,6 +150,7 @@ G4VParticleChange* Sh01HadronProduction::PostStepDoIt(
     pParticleChange = &theChange;     
   }
   return pParticleChange;
+  */
 }
 
 

@@ -42,7 +42,7 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
-
+#include "G4HadFinalState.hh"
 
 
 class G4Step;

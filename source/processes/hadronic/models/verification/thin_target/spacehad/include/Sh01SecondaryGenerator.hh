@@ -42,6 +42,9 @@
 #include "G4LorentzVector.hh"
 #include "G4VParticleChange.hh"
 #include "G4Nucleus.hh"
+#include "G4HadProjectile.hh"
+#include "G4HadFinalState.hh"
+
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -49,6 +52,8 @@ class G4Track;
 class G4ParticleDefinition;
 class G4HadronicInteraction;
 class G4Material;
+class G4VParticleChange;
+class G4ParticleChange;
 
 /////////////////////////////////////////////////////////////////////
 
@@ -60,7 +65,8 @@ public:
 
   virtual ~Sh01SecondaryGenerator();
 
-  virtual G4VParticleChange* Secondaries(const G4Track& track);
+  // virtual G4VParticleChange* Secondaries(const G4Track& track);
+  virtual G4HadFinalState* Secondaries(const G4Track& track);
 
   const G4String GeneratorName() const {return generatorName;};
 			   
@@ -69,7 +75,7 @@ public:
 protected:
 
 
-  G4VParticleChange theParticleChange;
+  //  G4VParticleChange theParticleChange;
   // the G4VParticleChange object which is modified and returned
 
   G4String generatorName;
@@ -84,6 +90,7 @@ private:
   G4Material* material;
   G4Nucleus targetNucleus;
   G4double mass;
+  G4HadFinalState* result;
 
 };
 

@@ -77,11 +77,13 @@
 #include "G4LEPionPlusInelastic.hh"
 #include "G4LEPionMinusInelastic.hh"
 #include "G4LEProtonInelastic.hh"
-#include "G4PionMinusNuclearReaction.hh"
-#include "G4StringChipsInterface.hh"
+// #include "G4PionMinusNuclearReaction.hh"
+// #include "G4StringChipsInterface.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4BinaryCascade.hh"
+#include "G4BinaryLightIonReaction.hh"
+#include "G4CascadeInterface.hh"
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -150,12 +152,15 @@ void Sh01Physics::Initialise()
   G4Alpha::AlphaDefinition();
   G4Triton::TritonDefinition();	
   theProcess = 0;
+  theDeExcitation = 0;
+  thePreCompound = 0;
+  hkmod = 0;
 }
 
 //////////////////////////////////////////////////////////////////////
 
-G4VProcess* Sh01Physics::GetProcess(const G4String& gen_name, 
-		                      const G4String& part_name,
+G4VProcess* Sh01Physics::GetProcess( const G4String& gen_name, 
+		                     const G4String& part_name,
 		                            G4Material* mat)
 { 
   G4cout <<  "Sh01Physics entry" << G4endl;
@@ -213,7 +218,8 @@ G4VProcess* Sh01Physics::GetProcess(const G4String& gen_name,
     }
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
-  } 
+  }
+  /* 
   else if(gen_name == "CHIPS") 
   {
     sg = new Sh01SecondaryGenerator(new G4PionMinusNuclearReaction(),mat);
@@ -229,7 +235,8 @@ G4VProcess* Sh01Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     //G4cout <<  "Generator is set" << G4endl;
     man->AddDiscreteProcess(theProcess);
-  } 
+  }
+  */ 
   else if( gen_name == "preCompound" ) 
   {
     sg = new Sh01SecondaryGenerator(
@@ -250,6 +257,36 @@ G4VProcess* Sh01Physics::GetProcess(const G4String& gen_name,
 
     man->AddDiscreteProcess(theProcess);
   } 
+  else if(gen_name == "binary") 
+  {
+    theDeExcitation = new G4ExcitationHandler();
+    G4PreCompoundModel* pcm = new G4PreCompoundModel(theDeExcitation);
+    thePreCompound = pcm;
+    G4BinaryCascade* hkm = new G4BinaryCascade();
+    sg = new Sh01SecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+    hkm->SetDeExcitation(pcm);
+    hkmod = hkm;
+  } 
+  else if(gen_name == "binary_no_pc") 
+  {
+    G4BinaryCascade* hkm = new G4BinaryCascade();
+    sg = new Sh01SecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+    hkm->SetDeExcitation(0);
+
+  } 
+  else if(gen_name == "binary_ion") 
+  {
+    G4BinaryLightIonReaction* hkm = new G4BinaryLightIonReaction();
+    sg = new Sh01SecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+//    hkm->SetDeExcitation(0);
+
+  }  
   else if( gen_name == "bertini" ) 
   {
     // G4CascadeInterface*             hkm = new G4CascadeInterface();

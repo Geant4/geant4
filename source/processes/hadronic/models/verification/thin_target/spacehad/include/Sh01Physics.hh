@@ -37,6 +37,9 @@
 
 #include "globals.hh"
 #include "Sh01HadronProduction.hh"
+#include "G4ExcitationHandler.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4BinaryCascade.hh"
 
 class G4VProcess;
 class G4Material;
@@ -52,12 +55,18 @@ class Sh01Physics
      
     G4VProcess* GetProcess(const G4String&, const G4String&, G4Material*);     
     G4double GetNucleusMass() {return theProcess->GetMass();};
+
+    G4ExcitationHandler* GetDeExcitation() {return theDeExcitation;};
+    G4PreCompoundModel* GetPreCompound() {return thePreCompound;};
 		                      
   private:
 
     void Initialise();
 	     
     Sh01HadronProduction* theProcess; 
+    G4ExcitationHandler*  theDeExcitation;
+    G4PreCompoundModel*   thePreCompound;
+    G4BinaryCascade*      hkmod;
 	
 };
 
