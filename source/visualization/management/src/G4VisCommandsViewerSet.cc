@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.15 2001-09-10 10:58:18 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.16 2001-11-06 12:59:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -35,7 +35,11 @@
 #include "G4UnitsTable.hh"
 #include "G4VisManager.hh"
 
-G4VisCommandsViewerSet::G4VisCommandsViewerSet () {
+G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
+  fLightsVector    (G4ThreeVector(1.,1.,1.)),
+  fUpVector        (G4ThreeVector(0.,1.,0.)),
+  fViewpointVector (G4ThreeVector(0.,0.,1.))
+{
   G4bool omitable;
   G4UIparameter* parameter;
 
@@ -104,6 +108,38 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet () {
   fpCommandLightsMove->SetParameterName("lightsMove",omitable = false);
   // fpCommandLightsMove->SetCandidates("move-with-camera move-with-object");
   // Own parsing.
+
+  fpCommandLightsThetaPhi = new G4UIcommand
+    ("/vis/viewer/set/lightsThetaPhi", this);
+  fpCommandLightsThetaPhi -> SetGuidance
+    ("/vis/viewer/set/lightsThetaPhi  [<theta>] [<phi>] [deg|rad]");
+  fpCommandLightsThetaPhi -> SetGuidance
+    ("Set direction from target to lights.");
+  parameter = new G4UIparameter("theta", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandLightsThetaPhi -> SetParameter (parameter);
+  parameter = new G4UIparameter("phi", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandLightsThetaPhi -> SetParameter (parameter);
+  parameter = new G4UIparameter ("unit", 's', omitable = true);
+  parameter -> SetDefaultValue ("deg");
+  fpCommandLightsThetaPhi -> SetParameter (parameter);
+
+  fpCommandLightsVector = new G4UIcommand
+    ("/vis/viewer/set/lightsVector", this);
+  fpCommandLightsVector -> SetGuidance
+    ("/vis/viewer/set/lightsVector  [<x>] [<y>] [<z>]");
+  fpCommandLightsVector -> SetGuidance
+    ("Set direction from target to lights.");
+  parameter = new G4UIparameter("x", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandLightsVector -> SetParameter (parameter);
+  parameter = new G4UIparameter("y", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandLightsVector -> SetParameter (parameter);
+  parameter = new G4UIparameter ("z", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandLightsVector -> SetParameter (parameter);
 
   fpCommandLineSegments = new G4UIcmdWithAnInteger
     ("/vis/viewer/set/lineSegmentsPerCircle",this);
@@ -178,6 +214,74 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet () {
     ("Note: parameter will be parsed for first character \"w\" or \"s\".");
   fpCommandStyle->SetParameterName ("style",omitable = false);
   // fpCommandStyle->SetCandidates("wireframe surface");  // Own parsing.
+
+  fpCommandUpThetaPhi = new G4UIcommand
+    ("/vis/viewer/set/upThetaPhi", this);
+  fpCommandUpThetaPhi -> SetGuidance
+    ("/vis/viewer/set/upThetaPhi  [<theta>] [<phi>] [deg|rad]");
+  fpCommandUpThetaPhi -> SetGuidance
+    ("Set up vector.  Viewer will attempt always to show"
+     " this direction upwards.");
+  parameter = new G4UIparameter("theta", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandUpThetaPhi -> SetParameter (parameter);
+  parameter = new G4UIparameter("phi", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandUpThetaPhi -> SetParameter (parameter);
+  parameter = new G4UIparameter ("unit", 's', omitable = true);
+  parameter -> SetDefaultValue ("deg");
+  fpCommandUpThetaPhi -> SetParameter (parameter);
+
+  fpCommandUpVector = new G4UIcommand
+    ("/vis/viewer/set/upVector", this);
+  fpCommandUpVector -> SetGuidance
+    ("/vis/viewer/set/upVector  [<x>] [<y>] [<z>]");
+  fpCommandUpVector -> SetGuidance
+    ("Set up vector.  Viewer will attempt always to show"
+     " this direction upwards.");
+  parameter = new G4UIparameter("x", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandUpVector -> SetParameter (parameter);
+  parameter = new G4UIparameter("y", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandUpVector -> SetParameter (parameter);
+  parameter = new G4UIparameter ("z", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandUpVector -> SetParameter (parameter);
+
+  fpCommandViewpointThetaPhi = new G4UIcommand
+    ("/vis/viewer/set/viewpointThetaPhi", this);
+  fpCommandViewpointThetaPhi -> SetGuidance
+    ("/vis/viewer/set/viewpointThetaPhi  [<theta>] [<phi>] [deg|rad]");
+  fpCommandViewpointThetaPhi -> SetGuidance
+    ("Set direction from target to camera.  Also changes lightpoint direction"
+     "\nif lights are set to move with camera.");
+  parameter = new G4UIparameter("theta", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandViewpointThetaPhi -> SetParameter (parameter);
+  parameter = new G4UIparameter("phi", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandViewpointThetaPhi -> SetParameter (parameter);
+  parameter = new G4UIparameter ("unit", 's', omitable = true);
+  parameter -> SetDefaultValue ("deg");
+  fpCommandViewpointThetaPhi -> SetParameter (parameter);
+
+  fpCommandViewpointVector = new G4UIcommand
+    ("/vis/viewer/set/viewpointVector", this);
+  fpCommandViewpointVector -> SetGuidance
+    ("/vis/viewer/set/viewpointVector  [<x>] [<y>] [<z>]");
+  fpCommandViewpointVector -> SetGuidance
+    ("Set direction from target to camera.  Also changes lightpoint direction"
+     "\nif lights are set to move with camera.");
+  parameter = new G4UIparameter("x", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandViewpointVector -> SetParameter (parameter);
+  parameter = new G4UIparameter("y", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandViewpointVector -> SetParameter (parameter);
+  parameter = new G4UIparameter ("z", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandViewpointVector -> SetParameter (parameter);
 }
 
 G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
@@ -189,13 +293,37 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandHiddenMarker;
   delete fpCommandLineSegments;
   delete fpCommandLightsMove;
+  delete fpCommandLightsThetaPhi;
+  delete fpCommandLightsVector;
   delete fpCommandProjection;
   delete fpCommandSectionPlane;
   delete fpCommandStyle;
+  delete fpCommandUpThetaPhi;
+  delete fpCommandUpVector;
+  delete fpCommandViewpointThetaPhi;
+  delete fpCommandViewpointVector;
 }
 
 G4String G4VisCommandsViewerSet::GetCurrentValue(G4UIcommand* command) {
-  return "invalid";
+  G4String currentValue;
+  if (command == fpCommandLightsThetaPhi) {
+    currentValue = ConvertToString(fLightsVector.theta(),
+			   fLightsVector.phi(), "deg");
+  }
+  else if (command == fpCommandLightsVector) {
+    currentValue = ConvertToString(fLightsVector);
+  }
+  else if (command == fpCommandViewpointThetaPhi) {
+    currentValue = ConvertToString(fViewpointVector.theta(),
+			   fViewpointVector.phi(), "deg");
+  }
+  else if (command == fpCommandViewpointVector) {
+    currentValue = ConvertToString(fViewpointVector);
+  }
+  else {
+    currentValue = "invalid";
+  }
+  return currentValue;
 }
 
 void G4VisCommandsViewerSet::SetNewValue
@@ -430,6 +558,29 @@ void G4VisCommandsViewerSet::SetNewValue
     }
   }
 
+  else if (command == fpCommandLightsThetaPhi) {
+    G4double theta, phi;
+    GetNewDoublePairValue(newValue, theta, phi);
+    G4double x = sin (theta) * cos (phi);
+    G4double y = sin (theta) * sin (phi);
+    G4double z = cos (theta);
+    fLightsVector = G4Vector3D (x, y, z);
+    vp.SetLightpointDirection(fLightsVector);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Lights direction set to "
+	     << vp.GetLightpointDirection() << G4endl;
+    }
+  }
+
+  else if (command == fpCommandLightsVector) {
+    fLightsVector = GetNew3VectorValue(newValue);
+    vp.SetLightpointDirection(fLightsVector);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Lights direction set to "
+	     << vp.GetLightpointDirection() << G4endl;
+    }
+  }
+
   else if (command == fpCommandLineSegments) {
     G4int nSides = GetNewIntValue(newValue);
     vp.SetNoOfSides(nSides);
@@ -578,6 +729,58 @@ void G4VisCommandsViewerSet::SetNewValue
       G4cout << "Drawing style of viewer \"" << currentViewer->GetName()
 	     << "\" set to " << vp.GetDrawingStyle()
 	     << G4endl;
+    }
+  }
+
+  else if (command == fpCommandUpThetaPhi) {
+    G4double theta, phi;
+    GetNewDoublePairValue(newValue, theta, phi);
+    G4double x = sin (theta) * cos (phi);
+    G4double y = sin (theta) * sin (phi);
+    G4double z = cos (theta);
+    fUpVector = G4Vector3D (x, y, z);
+    vp.SetUpVector(fUpVector);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Up direction set to " << vp.GetUpVector() << G4endl;
+    }
+  }
+
+  else if (command == fpCommandUpVector) {
+    fUpVector = GetNew3VectorValue(newValue);
+    vp.SetUpVector(fUpVector);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Up direction set to " << vp.GetUpVector() << G4endl;
+    }
+  }
+
+  else if (command == fpCommandViewpointThetaPhi) {
+    G4double theta, phi;
+    GetNewDoublePairValue(newValue, theta, phi);
+    G4double x = sin (theta) * cos (phi);
+    G4double y = sin (theta) * sin (phi);
+    G4double z = cos (theta);
+    fViewpointVector = G4Vector3D (x, y, z);
+    vp.SetViewAndLights(fViewpointVector);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Viewpoint direction set to "
+	     << vp.GetViewpointDirection() << G4endl;
+      if (vp.GetLightsMoveWithCamera ()) {
+	G4cout << "Lightpoint direction set to "
+	       << vp.GetActualLightpointDirection () << G4endl;
+      }
+    }
+  }
+
+  else if (command == fpCommandViewpointVector) {
+    fViewpointVector = GetNew3VectorValue(newValue);
+    vp.SetViewAndLights(fViewpointVector);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Viewpoint direction set to "
+	     << vp.GetViewpointDirection() << G4endl;
+      if (vp.GetLightsMoveWithCamera ()) {
+	G4cout << "Lightpoint direction set to "
+	       << vp.GetActualLightpointDirection () << G4endl;
+      }
     }
   }
 

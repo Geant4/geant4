@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.hh,v 1.9 2001-07-11 10:09:16 gunter Exp $
+// $Id: G4VisCommandsViewerSet.hh,v 1.10 2001-11-06 13:01:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -55,9 +55,18 @@ private:
   G4UIcmdWithABool*     fpCommandHiddenMarker;
   G4UIcmdWithAnInteger* fpCommandLineSegments;
   G4UIcmdWithAString*   fpCommandLightsMove;
+  G4UIcommand*          fpCommandLightsThetaPhi;
+  G4UIcommand*          fpCommandLightsVector;
+  G4ThreeVector         fLightsVector;
   G4UIcommand*          fpCommandProjection;
   G4UIcommand*          fpCommandSectionPlane;
   G4UIcmdWithAString*   fpCommandStyle;
+  G4UIcommand*          fpCommandUpThetaPhi;
+  G4UIcommand*          fpCommandUpVector;
+  G4ThreeVector         fUpVector;
+  G4UIcommand*          fpCommandViewpointThetaPhi;
+  G4UIcommand*          fpCommandViewpointVector;
+  G4ThreeVector         fViewpointVector;
 };
 
 #endif
