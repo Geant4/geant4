@@ -58,7 +58,7 @@
 #include "G4hZiegler1977He.hh"
 #include "G4hZiegler1985p.hh"
 #include "G4hSRIM2000p.hh"
-#include "G4hQAOModel.hh"
+//#include "G4hQAOModel.hh"
 #include "G4hICRU49p.hh"
 #include "G4hICRU49He.hh"
 #include "G4DynamicParticle.hh"
@@ -118,12 +118,12 @@ void G4hParametrisedLossModel::InitializeMe()
       eStopingPowerTable = new G4hICRU49He();
       highEnergyLimit = 10.0*MeV/4.0;
       lowEnergyLimit  = 1.0*keV/4.0;
-
+      /*
   } else if(qao == modelName) {
       eStopingPowerTable = new G4hQAOModel();
       highEnergyLimit = 2.0*MeV;
       lowEnergyLimit  = 5.0*keV;
-
+      */
   } else {
       modelName = ir49p;
       eStopingPowerTable = new G4hICRU49p();
