@@ -6,9 +6,9 @@
 #
 /run/initialize
 #
-# Run 10000 events
+# Run 1000 events
 #
-/run/beamOn 10000
+/run/beamOn 1000
 #
 # Termination
 #
