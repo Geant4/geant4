@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.17 2003-12-11 01:30:47 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.18 2003-12-12 10:29:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -624,8 +624,12 @@ G4PropagatorInField::LocateIntersectionPoint(
        {
          G4cerr << "G4PropagatorInField::LocateIntersectionPoint():" << G4endl
                 << "Error in advancing propagation." << G4endl;
+	 fVerboseLevel= 5; // Print out a maximum of information
          printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
                       -1.0, NewSafety,  substep_no, 0);
+	 G4cerr << " Point A (start) is " << CurrentA_PointVelocity << G4endl;
+	 G4cerr << " Point B (end)   is " << CurrentB_PointVelocity << G4endl;
+	 G4cerr << " curveDist is " << curveDist << G4endl;
          G4cerr << G4endl
                 << "The final curve point is not further along"
                 << " than the original!" << G4endl;
