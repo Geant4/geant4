@@ -1,4 +1,4 @@
-?RCS: $Id: Options.U,v 1.6 2004-12-02 22:09:49 sadilov Exp $
+?RCS: $Id: Options.U,v 1.7 2004-12-06 02:43:21 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.6  2004/12/02 22:09:49  sadilov
+?RCS: Add g4build
+?RCS:
 ?RCS: Revision 1.5  2003/02/20 17:01:09  sadilov
 ?RCS: Last version.
 ?RCS:
@@ -166,13 +169,20 @@ while test $# -gt 0; do
 	case "$1" in
 	-d) shift; fastread=yes;;
 	-e) shift; alldone=cont;;
-	-install) shift; install=yes;;
 	-build) shift; g4build=yes;;
-	-ldlibs) shift; g4ldlibs=yes;;
-	-ldflags) shift; g4ldflags=yes;;
+	-incflags) shift; g4incflags=yes;;
+	-install) shift; install=yes;;
 	-cppflags) shift; g4cppflags=yes;;
 	-cxxflags) shift; g4cxxflags=yes;;
-	-incflags) shift; g4incflags=yes;;
+	-ldlibs) shift; g4ldlibs=yes;;
+	-ldflags) shift; g4ldflags=yes;;
+	-prefix) 
+		shift 
+		case "$1" in
+		*) 
+		echo "g4final_install='$1'" >> optdef.sh;;
+		esac
+		shift;;
 	-f)
 		shift
 		cd ../..
@@ -231,13 +241,14 @@ Usage: $me [-dehrsEKOSV] [-install] [-build] [-libs] [-f config.sh] [-D symbol] 
                  [-U symbol] [-U symbol=]
   -d : use defaults for all answers.
   -e : go on without questioning past the production of config.sh.
-  -install : start installation of Geant4 libraries. 
   -build : start configuration AND build of Geant4 libraries. 
-  -ldlibs : retrieve the list of libraries to link
-  -ldflags : retrieve the list of directories where libraries are placed
-  -cxxflags : retrieve the list of cxxflags
   -cppflags : retrieve the list of cppflags
+  -cxxflags : retrieve the list of cxxflags
   -incflags : retrieve the list of incflags
+  -install : start installation of Geant4 libraries. 
+  -ldflags : retrieve the list of directories where libraries are placed
+  -ldlibs : retrieve the list of libraries to link
+  -prefix : define the final installation directory
   -f : specify an alternate default configuration file.
   -h : print this help message and exit (with an error status).
   -r : reuse C symbols value if possible (skips costly nm extraction).
