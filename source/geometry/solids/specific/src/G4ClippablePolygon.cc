@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ClippablePolygon.cc,v 1.3 2000-11-02 16:54:50 gcosmo Exp $
+// $Id: G4ClippablePolygon.cc,v 1.4 2000-11-13 08:11:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,6 +26,9 @@
 //
 // Constructor
 //
+G4ClippablePolygon::G4ClippablePolygon()
+{
+}
 
 //
 // Destructor
