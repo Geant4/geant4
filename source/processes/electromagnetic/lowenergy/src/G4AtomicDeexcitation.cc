@@ -273,13 +273,13 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       if (shellId  != pippo ) {
 	do { 
 	  shellNum++;
-	  if(shellNum == maxNumOfShells)
-	    {
-	      G4cout << "G4AtomicDeexcitation warning: No Auger transition found" <<  G4endl;
-	      G4cout << "Absorbed enrgy deposited locally" << G4endl;
-	      return 0;
-	      //  G4Exception("G4AtomicDeexcitation: No Auger transition found");
-	    }
+// 	  if(shellNum == maxNumOfShells)
+// 	    {
+//  	      G4cout << "G4AtomicDeexcitation warning: No Auger transition found" <<  G4endl;
+// 	      G4cout << "Absorbed enrgy deposited locally" << G4endl;
+// 	      return 0;
+// 	      //  G4Exception("G4AtomicDeexcitation: No Auger transition found");
+// 	    }
 	}
 	while (shellId != (transitionManager->ReachableAugerShell(Z,shellNum)->FinalShellId()) ) ;
       }

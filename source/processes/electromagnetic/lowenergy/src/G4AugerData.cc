@@ -388,7 +388,7 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 	    
 	    if(initIds->size() == 0) {
 	      
-	      // if this is the first data of the shell, alla the colums are equal 
+	      // if this is the first data of the shell, all the colums are equal 
 	      // to the shell Id; so we skip the next colums ang go to the next row
 	      
 	      initIds->push_back((G4int)a);
@@ -409,7 +409,8 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 		else {
 
 		  initIds->push_back((G4int)a);
-		  G4int augerShellId = *vectorIndex;
+		  G4int augerShellId = 0;
+		  augerShellId = *vectorIndex;
 		  
 		  
 		  (*newIdMap)[augerShellId] = *newIds;
