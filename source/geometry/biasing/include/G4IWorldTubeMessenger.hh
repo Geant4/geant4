@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IWorldTubeMessenger.hh,v 1.2 2002-07-12 10:40:43 dressel Exp $
+// $Id: G4IWorldTubeMessenger.hh,v 1.3 2002-08-28 15:16:21 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -53,7 +53,7 @@ class G4VSolid;
 class G4ITubeFactory;
 class G4ImportanceGeometryConstructor;
 class G4LogicalVolume;
-class G4VIStore;
+class G4IStore;
 
 class G4IWorldTubeMessenger : public  G4UImessenger
 {
@@ -68,7 +68,7 @@ public:
     // construct the specified G4Tube
 
   void ConstructICellFactory(G4LogicalVolume *,
-			     G4VIStore *);
+			     G4IStore *);
     // construct the cell factory for tubes.
 
 private:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ITubeFactory.cc,v 1.2 2002-07-12 10:40:44 dressel Exp $
+// $Id: G4ITubeFactory.cc,v 1.3 2002-08-28 15:16:22 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,10 +36,10 @@
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4VIStore.hh"
+#include "G4IStore.hh"
 #include "G4Material.hh"
 
-G4ITubeFactory::G4ITubeFactory(G4LogicalVolume *wl, G4VIStore *is,
+G4ITubeFactory::G4ITubeFactory(G4LogicalVolume *wl, G4IStore *is,
 				 G4double Radius, G4double HalfHight) :
   fWorldLogic(wl),
   fIStore(is),

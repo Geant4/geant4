@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.hh,v 1.4 2002-07-18 14:55:50 dressel Exp $
+// $Id: G4IStore.hh,v 1.5 2002-08-28 15:16:21 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -59,10 +59,14 @@ public:  // with description
     // destruct
 
   void AddImportanceRegion(G4double importance,
+			   const G4PTouchableKey &ptk);
+  void AddImportanceRegion(G4double importance,
 			   const G4VPhysicalVolume &,
 			   G4int aRepNum = 0);
     // Add a "cell" together with a importance value to the store.
 
+  void ChangeImportance(G4double importance,
+			const G4PTouchableKey &ptk);
   void ChangeImportance(G4double importance,
 			const G4VPhysicalVolume &,
 			G4int aRepNum = 0);
@@ -70,8 +74,6 @@ public:  // with description
 
   G4double GetImportance(const G4VPhysicalVolume &,
 			 G4int aRepNum = 0) const ;
-    // derive the importance value of a "cell" from the store.
-
   G4double GetImportance(const G4PTouchableKey &ptk) const;
     // derive a importance value of a "cell" addresed by a G4PTouchableKey
     // from the store.
@@ -87,10 +89,9 @@ public:  // with description
 private:
 
   G4bool IsInWorld(const G4VPhysicalVolume &) const;
-  void SetInternalIterator(const G4VPhysicalVolume &,
-			   G4int aRepNum) const;
+  void SetInternalIterator(const G4PTouchableKey &ptk) const;
   void Error(const G4String &m) const;
-
+  
 private:
  
   G4VPhysicalVolume &fWorldVolume;

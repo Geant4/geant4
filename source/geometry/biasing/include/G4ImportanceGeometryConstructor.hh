@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceGeometryConstructor.hh,v 1.2 2002-07-12 10:40:43 dressel Exp $
+// $Id: G4ImportanceGeometryConstructor.hh,v 1.3 2002-08-28 15:16:21 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -58,7 +58,7 @@ class G4LogicalVolume;
 class G4VSolid;
 class G4UImessenger;
 class G4Material;
-class G4VIStore;
+class G4IStore;
 class G4ImportanceGeometryMessenger;
 class G4WorldImpMess;
 
@@ -80,7 +80,7 @@ public:
   void SetWorldImportance(G4double b, G4double e);
     // set the importance as i = pow(b,e)
 
-  G4VIStore *GetIStore();
+  G4IStore *GetIStore();
     // get the importance store for the volumes in that geometry
 
   G4VPhysicalVolume *GetWorldVolume();
@@ -100,7 +100,7 @@ private:
   G4VSolid *fWorldSolid;
   G4VPhysicalVolume *fWorldVolume;
   G4LogicalVolume *fLogicalWorld;
-  G4VIStore *fIStore;
+  G4IStore *fIStore;
   G4ImportanceSolidTypes fSolidTypes;  
   G4WorldImpMess *fWorldImpMess;
 };

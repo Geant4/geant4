@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ITubeFactory.hh,v 1.2 2002-07-12 10:40:43 dressel Exp $
+// $Id: G4ITubeFactory.hh,v 1.3 2002-08-28 15:16:21 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -48,7 +48,7 @@ class G4ITubeMessenger;
 class G4Tubs;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
-class G4VIStore;
+class G4IStore;
 class G4Material;
 typedef G4std::map<G4String, G4Tubs *>  G4MapNameTube;
 typedef G4std::map<G4String, G4LogicalVolume *>  G4MapNameLogic;
@@ -57,7 +57,7 @@ typedef G4std::map<G4String, G4VPhysicalVolume *>  G4MapNamePhysical;
 
 class G4ITubeFactory {
 public:
-  G4ITubeFactory(G4LogicalVolume *wl, G4VIStore *is,
+  G4ITubeFactory(G4LogicalVolume *wl, G4IStore *is,
 		 G4double Radius, G4double HalfHight);
     // a factory for cells consisting of slabs with tube shape
     // of radius "Radius" and variable dimension along the z-axis.
@@ -77,7 +77,7 @@ private:
   }
 
   G4LogicalVolume *fWorldLogic;
-  G4VIStore *fIStore;
+  G4IStore *fIStore;
   G4double fRadius;
   G4double fHalfHight;
   G4ITubeMessenger *fITubeMessenger;

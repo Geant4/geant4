@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceGeometryConstructor.cc,v 1.2 2002-07-12 10:40:44 dressel Exp $
+// $Id: G4ImportanceGeometryConstructor.cc,v 1.3 2002-08-28 15:16:22 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -105,7 +105,7 @@ SetWorldImportance(G4double b, G4double e){
 }
 
 
-G4VIStore *G4ImportanceGeometryConstructor::GetIStore()
+G4IStore *G4ImportanceGeometryConstructor::GetIStore()
 {
   return fIStore;
 }

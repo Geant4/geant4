@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIStore.hh,v 1.4 2002-07-18 14:55:50 dressel Exp $
+// $Id: G4VIStore.hh,v 1.5 2002-08-28 15:16:21 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -53,20 +53,6 @@ public:  // with description
 
   G4VIStore(G4VPhysicalVolume &worldVolume){}
   virtual  ~G4VIStore(){}
-
-  virtual void AddImportanceRegion(G4double importance,
-				   const G4VPhysicalVolume &,
-				   G4int aRepNum = 0) = 0;
-    // Add a "cell" together with a importance value to the store.
-
-  virtual void ChangeImportance(G4double importance,
-				const G4VPhysicalVolume &,
-				G4int aRepNum = 0) = 0;
-    // Change a importance value of a "cell".
-
-  virtual G4double GetImportance(const G4VPhysicalVolume &,
-				 G4int aRepNum = 0) const = 0;
-    // derive the importance value of a "cell" from the store.
 
   virtual G4double GetImportance(const G4PTouchableKey &ptk) const = 0;
     // derive a importance value of a "cell" addresed by a G4PTouchableKey
