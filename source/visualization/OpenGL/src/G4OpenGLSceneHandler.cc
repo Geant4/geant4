@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.22 2004-07-14 10:35:32 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.23 2004-07-16 14:26:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -359,7 +359,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   materialColour [1] = c.GetGreen ();
   materialColour [2] = c.GetBlue ();
   materialColour [3] = 1.0;
-  
+  GLdouble clear_colour[4];
+  glGetDoublev (GL_COLOR_CLEAR_VALUE, clear_colour);
+
   switch (drawing_style) {
   case (G4ViewParameters::hlhsr):
     // Set up as for hidden line removal but paint polygons...
@@ -388,7 +390,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     break;
   case (G4ViewParameters::wireframe):
   default:
-    glDisable (GL_DEPTH_TEST);
+    //glDisable (GL_DEPTH_TEST);
+    glEnable (GL_DEPTH_TEST);
+    glDepthFunc (GL_ALWAYS);    
     glDisable (GL_CULL_FACE);
     glDisable (GL_LIGHTING);
     glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
@@ -403,8 +407,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     //First, find surface normal and note "not last facet"...
     G4Normal3D SurfaceUnitNormal;
     notLastFace = polyhedron.GetNextUnitNormal (SurfaceUnitNormal);
-    glNormal3d(SurfaceUnitNormal.x(), SurfaceUnitNormal.y(),
-	       SurfaceUnitNormal.z());
 
     //Loop through the four edges of each G4Facet...
     //G4int lastEdgeFlag (true);
@@ -413,6 +415,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     G4int edgeFlag[4];
     G4int edgeCount = 0;
     glBegin (GL_QUADS);
+    glNormal3d(SurfaceUnitNormal.x(), SurfaceUnitNormal.y(),
+	       SurfaceUnitNormal.z());
     do {
       notLastEdge = polyhedron.GetNextVertex (vertex[edgeCount], 
 					      edgeFlag[edgeCount]);
@@ -437,25 +441,28 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 		  vertex[edgeCount].z());
       edgeCount++;
     }
-    glEnd ();
 
     // Do it all over again (twice) for hlr...
     if  (drawing_style == G4ViewParameters::hlr ||
 	 drawing_style == G4ViewParameters::hlhsr) {
 
+      glEnd ();  // Placed here to allow GL state changes below but
+		 // allow wireframe and hsr (surface) to proceed
+		 // through all facets unimpeded.
+
       // Draw through stencil...
       glStencilFunc (GL_EQUAL, 0, 1);
       glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
       glPolygonMode (GL_FRONT, GL_FILL);
+      if (drawing_style == G4ViewParameters::hlhsr) glEnable (GL_LIGHTING);
+      glBegin (GL_QUADS);
       if  (drawing_style == G4ViewParameters::hlr) {
-	GLdouble clear_colour[4];
-	glGetDoublev (GL_COLOR_CLEAR_VALUE, clear_colour);
 	glColor4dv (clear_colour);
-      } else {
-	glEnable (GL_LIGHTING);
+      } else {  // drawing_style == G4ViewParameters::hlhsr
 	glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
       }
-      glBegin (GL_QUADS);
+      glNormal3d(SurfaceUnitNormal.x(), SurfaceUnitNormal.y(),
+		 SurfaceUnitNormal.z());
       for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
 	if (edgeFlag[edgeCount]) {
 	  glEdgeFlag (GL_TRUE);
@@ -488,9 +495,14 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       }
       glEnd ();
       glDepthFunc (GL_LESS);   // Revert for next quadrilateral.
+      glBegin (GL_QUADS);      // Ready for next quadrilateral.  GL
+			       // says it ignores incomplete
+			       // quadrilaterals, so final empty
+			       // glBegin/End sequence should be OK.
     }
   } while (notLastFace);  
   
+  glEnd ();
   glDisable (GL_STENCIL_TEST);
 }
 
