@@ -1,4 +1,4 @@
-# $Id: run1.mac,v 1.1 1999-01-08 16:32:56 gunter Exp $
+# $Id: run1.mac,v 1.2 1999-02-15 12:50:33 maire Exp $
 #
 # Macro file for "TestEm4.cc"
 # 
@@ -6,9 +6,8 @@
 #
 /control/verbose  2
 #
-/run/particle/setCut 0.1 mm
-/run/initialize
-/run/particle/dumpCutValues
+#/run/particle/setCut 0.1 mm
+#/run/initialize
 #
 /run/verbose 2
 /event/drawTracks none
