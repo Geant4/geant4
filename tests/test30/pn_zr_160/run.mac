@@ -16,6 +16,8 @@ proton
 Zr
 #energy(MeV)
 160.3
+#elim(MeV)
+20.
 #nangle
 13
 #angles

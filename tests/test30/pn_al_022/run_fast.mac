@@ -16,8 +16,10 @@ proton
 Al
 #energy(MeV)
 22.2
+#elim(MeV)
+1.
 #nangle
-13
+5
 #angles
 30. 60. 90. 120. 150.  
 #dangle

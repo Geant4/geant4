@@ -16,6 +16,8 @@ proton
 Al
 #energy(MeV)
 22.2
+#elim(MeV)
+1.
 #nangle
 5
 #angles
@@ -27,12 +29,12 @@ Al
 LEparametrisation
 #paw
 par.paw
-run
+#run
 #generator
 preCompound
 #paw
 prec.paw
-run
+#run
 #generator
 CHIPS
 #paw
@@ -42,6 +44,6 @@ generator
 kinetic
 #paw
 kin.paw
-#run
+//#run
 //--------Exit
 #exit

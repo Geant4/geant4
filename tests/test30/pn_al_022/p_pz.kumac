@@ -12,23 +12,22 @@ set NDVY 010205
  
  hi/file 1 par.paw
  hi/pl 4 hist
-* itx 100 4000 'protons 160.3 MeV on Al'
- itx 200 2000 'LEPAR'
+ itx 20 2000 'LEPAR'
  close 1
  
  hi/file 1 prec.paw
  hi/pl 4 hist
- itx 200 4000 'PREC'
+ itx 20 4000 'PREC'
  close 1
  
  hi/file 1 chips.paw
  hi/pl 4 hist
- itx 200 4000 'CHIPS'
+ itx 20 4000 'CHIPS'
  close 1
  
  hi/file 1 kin.paw
  hi/pl 4 hist
- itx 200 4000 'KIN'
+ itx 20 4000 'KIN'
  close 1
  
 exe ../prf p_pz eps
