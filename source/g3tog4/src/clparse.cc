@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: clparse.cc,v 1.13 2001-07-16 15:38:23 gcosmo Exp $
+// $Id: clparse.cc,v 1.14 2001-10-11 12:36:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova
@@ -29,7 +29,7 @@
 
 #include "globals.hh"
 #include "g4std/fstream"
-#include "g4rw/ctoken.h"
+#include "G4Tokenizer.hh"
 #include "G3toG4.hh"
 #include "G3EleTable.hh"
 #include "G3VolTable.hh"

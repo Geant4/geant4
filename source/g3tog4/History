@@ -1,7 +1,11 @@
-$Id: History,v 1.45 2001-07-16 15:38:17 gcosmo Exp $
+$Id: History,v 1.46 2001-10-11 12:36:01 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V03-02-01 11-Oct-2001 G.Cosmo
+- clparse.cc: removed inclusion of RW wrapper, moved now to G4Tokenizer.hh.
+  This tag co-works with "global-V03-02-03", where STLInterface has been removed.
 
 g3tog4-V03-02-00 16-Jul-2001 G.Cosmo
 - Migration to STL vector, removed references to Rogue-Wave Tools.h++
