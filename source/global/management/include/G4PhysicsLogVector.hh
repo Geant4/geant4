@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLogVector.hh,v 1.3 2001-01-09 01:18:49 kurasige Exp $
+// $Id: G4PhysicsLogVector.hh,v 1.4 2001-01-09 11:26:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,8 +26,8 @@
 //    03 Mar. 1996, K.Amako : Implemented the 1st version
 //    27 Apr. 1996, K.Amako : Cache mechanism added
 //    01 Jul. 1996, K.Amako : Hidden bin from the user introduced
-//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added.
-//    11 Nov. 2000, H.Kurashige : use g4std/vector for dataVector and binVector
+//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
+//    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
 //
 //--------------------------------------------------------------------
 

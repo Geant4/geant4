@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLnVector.hh,v 1.4 2001-01-09 01:18:49 kurasige Exp $
+// $Id: G4PhysicsLnVector.hh,v 1.5 2001-01-09 11:26:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,18 +23,15 @@
 //
 //  History:
 //    27 Apr. 1999, M.G. Pia: Created, copying from G4PhysicsLogVector 
-//    11 Nov. 2000, H.Kurashige : use g4std/vector for dataVector and binVector
+//    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
 //
 //--------------------------------------------------------------------
 
 #ifndef G4PhysicsLnVector_h
 #define G4PhysicsLnVector_h 1
 
-
 #include "globals.hh"
 #include "G4PhysicsVector.hh"
-#include "G4DataVector.hh"
-
 
 class G4PhysicsLnVector : public G4PhysicsVector  
 {

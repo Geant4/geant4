@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsFreeVector.cc,v 1.4 2001-01-09 01:19:01 kurasige Exp $
+// $Id: G4PhysicsFreeVector.cc,v 1.5 2001-01-09 11:27:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,7 +20,7 @@
 //    01 Jul. 1996, K.Amako : Cache mechanism and hidden bin from the 
 //                            user introduced.
 //    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added.
-//    11 Nov. 2000, H.Kurashige : use g4std/vector for dataVector and binVector
+//    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
 //
 //--------------------------------------------------------------------
 
@@ -40,12 +40,12 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(size_t theNbin)
 {
   numberOfBin = theNbin;
 
-   // Add extra one bin (hidden to user) to handle correctly when 
+  // Add extra one bin (hidden to user) to handle correctly when 
   // Energy=theEmax in getValue.
   dataVector.reserve(numberOfBin+1);
   binVector.reserve(numberOfBin+1);
 
-  for (int i=0; i<=numberOfBin; i++) {
+  for (size_t i=0; i<=numberOfBin; i++) {
      binVector.push_back(0.0);
      dataVector.push_back(0.0);
   }
@@ -73,7 +73,7 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(const G4DataVector& theBinVector,
 
   ptrNextTable = 0;
 
-  for (int i=0; i<numberOfBin; i++) {
+  for (size_t i=0; i<numberOfBin; i++) {
      binVector.push_back(theBinVector[i]);
      dataVector.push_back(theDataVector[i]);
   }

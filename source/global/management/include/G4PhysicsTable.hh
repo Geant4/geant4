@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsTable.hh,v 1.4 2001-01-09 01:18:50 kurasige Exp $
+// $Id: G4PhysicsTable.hh,v 1.5 2001-01-09 11:26:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,5 +29,3 @@ typedef G4RWTPtrOrderedVector<G4PhysicsVector> G4PhysicsTable;
 
 #include "G4PhysicsVector.hh"
 #endif
-
-

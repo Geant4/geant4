@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsOrderedFreeVector.icc,v 1.4 2001-01-09 01:18:50 kurasige Exp $
+// $Id: G4PhysicsOrderedFreeVector.icc,v 1.5 2001-01-09 11:26:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -19,7 +19,7 @@
 //
 // Updated:
 //              2000-11-11 by H.Kurashige
-//              > use g4std/vector for dataVector and binVector
+//              > use STL vector for dataVector and binVector
 ////////////////////////////////////////////////////////////////////////
 
 ////////////////////
@@ -53,7 +53,7 @@ G4double G4PhysicsOrderedFreeVector::GetMinLowEdgeEnergy()
 inline
 void G4PhysicsOrderedFreeVector::DumpValues()
 {
-   for (G4int i = 0; i < numberOfBin; i++) {
+   for (size_t i = 0; i < numberOfBin; i++) {
       G4cout << binVector[i] << "\t" << dataVector[i] << G4endl;
    }
 }

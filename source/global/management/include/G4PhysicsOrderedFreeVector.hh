@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsOrderedFreeVector.hh,v 1.4 2001-01-09 01:18:50 kurasige Exp $
+// $Id: G4PhysicsOrderedFreeVector.hh,v 1.5 2001-01-09 11:26:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -13,13 +13,12 @@
 ////////////////////////////////////////////////////////////////////////
 //
 // File:	G4PhysicsOrderedFreeVector.hh
-// Version:	1.0
 // Created:     1996-08-13
 // Author:      Juliet Armstrong
 // Updated:     1997-03-25 by Peter Gumplinger
 //		> cosmetics (only)
 //              2000-11-11 by H.Kurashige
-//              > use g4std/vector for dataVector and binVector
+//              > use STL vector for dataVector and binVector
 // mail:        gum@triumf.ca
 //
 // Class description:
@@ -94,7 +93,3 @@ private:
 #include "G4PhysicsOrderedFreeVector.icc"
 
 #endif /* G4PhysicsOrderedFreeVector_h */
-
-
-
-

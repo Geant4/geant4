@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsVector.hh,v 1.5 2001-01-09 01:18:51 kurasige Exp $
+// $Id: G4PhysicsVector.hh,v 1.6 2001-01-09 11:27:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,18 +28,16 @@
 //    27 Apr. 1996, K.Amako : Cache mechanism added
 //    01 Jul. 1996, K.Amako : Now GetValue not virtual. 
 //    21 Sep. 1996, K.Amako : Added [] and () operators. 
-//    11 Nov. 2000, H.Kurashige : use g4std/vector for dataVector and binVector
+//    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
 //
 //---------------------------------------------------------------
 
 #ifndef G4PhysicsVector_h
 #define G4PhysicsVector_h 1
 
-
-
-#include "globals.hh"
 #include "g4std/vector"
-#include  "G4PhysicsTable.hh"
+#include "globals.hh"
+#include "G4PhysicsTable.hh"
 
 class G4PhysicsVector 
 {
@@ -50,8 +48,8 @@ class G4PhysicsVector
     virtual ~G4PhysicsVector();
 
     // Public functions
-    G4double GetValue(G4double theEnergy, G4bool& isOutRange);
-         // Get the crosssection/energy-loss value corresponding to the
+    inline G4double GetValue(G4double theEnergy, G4bool& isOutRange);
+         // Get the cross-section/energy-loss value corresponding to the
          // given energy. An appropriate interpolation is used to calculate
          // the value. 
          // [Note] isOutRange is not used anymore. This argument is kept
@@ -59,17 +57,17 @@ class G4PhysicsVector
     // Public operators
     G4int operator==(const G4PhysicsVector &right) const ;
     G4int operator!=(const G4PhysicsVector &right) const ;
-    G4double operator[](const size_t binNumber) const ;
+    inline G4double operator[](const size_t binNumber) const ;
          // Returns simply the value in the bin specified by 'binNumber'
          // of the dataVector. The boundary check will be Done. If you
          // don't want this check, use the operator ().
-    G4double operator()(const size_t binNumber) const ;
+    inline G4double operator()(const size_t binNumber) const ;
          // Returns simply the value in the bin specified by 'binNumber'
          // of the dataVector. The boundary check will not be Done. If 
          // you want this check, use the operator [].
 
     // Public functions
-    void PutValue(size_t binNumber, G4double theValue);
+    inline void PutValue(size_t binNumber, G4double theValue);
          // Put 'theValue' into the bin specified by 'binNumber'.
          // Take note that the 'binNumber' starts from '0'.
          // To fill the vector, you have beforehand to Construct a vector
@@ -83,28 +81,28 @@ class G4PhysicsVector
          // This value is defined when a physics vector is constructed
          // by a constructor of a derived class. Use this function
          // when you fill physis vector by PutValue().
-    size_t GetVectorLength() const;
+    inline size_t GetVectorLength() const;
          // Get the toal length (bin number) of the vector. 
-    G4bool IsFilledVectorExist() const;
+    inline G4bool IsFilledVectorExist() const;
          // Is non-empty physics vector already exist?
 
-    void LinkPhysicsTable(G4PhysicsTable& theTable);
-         // Link the given G4PhysicsTable to the current G4PhyiscsVector.
-    G4bool IsLinkedTableExist() const;
+    inline void LinkPhysicsTable(G4PhysicsTable& theTable);
+         // Link the given G4PhysicsTable to the current G4PhysicsVector.
+    inline G4bool IsLinkedTableExist() const;
          // Has this physics vector an extended physics table?
-    const G4PhysicsTable* GetNextTable() const;
+    inline const G4PhysicsTable* GetNextTable() const;
          // Returns the pointer to a physics table created for elements 
          // or isotopes (when the cross-sesctions or energy-losses 
          // depend explicitly on them).
 
-    void PutComment(const G4String& theComment);
+    inline void PutComment(const G4String& theComment);
          // Put a comment to the G4PhysicsVector. This may help to check
          // whether your are accessing to the one you want. 
-    G4String GetComment() const;
+    inline G4String GetComment() const;
          // Retrieve the comment of the G4PhysicsVector.
 
   protected:
-    // Use STL Vector 
+
     typedef G4std::vector<G4double> G4PVDataVector;
 
     G4double edgeMin;           // Lower edge value of the lowest bin
@@ -121,10 +119,16 @@ class G4PhysicsVector
     G4PhysicsTable* ptrNextTable;  
                                 // Link to the connected physics table
 
-    G4double LinearInterpolation(G4double theEnergy, size_t theLocBin);
+    inline G4double LinearInterpolation(G4double theEnergy, size_t theLocBin);
          // Linear interpolation function
     virtual size_t FindBinLocation(G4double theEnergy) const=0;
          // Find the bin# in which theEnergy belongs - pure virtual function
+
+  private:
+
+    G4PhysicsVector(const G4PhysicsVector&);
+    G4PhysicsVector& operator=(const G4PhysicsVector&);
+         // Private copy constructor and assignment operator.
 
   private:
 

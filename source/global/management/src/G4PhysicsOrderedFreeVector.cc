@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsOrderedFreeVector.cc,v 1.4 2001-01-09 01:19:04 kurasige Exp $
+// $Id: G4PhysicsOrderedFreeVector.cc,v 1.5 2001-01-09 11:27:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@
 //              > initialize all data members of the base class in 
 //                derived class constructors
 //              2000-11-11 by H.Kurashige
-//              > use g4std/vector for dataVector and binVector
+//              > use STL vector for dataVector and binVector
 // mail:        gum@triumf.ca
 //
 //
@@ -52,7 +52,7 @@ G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(G4double *Energies,
 
 	numberOfBin = VectorLength;
 
-	for (G4int i = 0 ; i < VectorLength ; i++)
+	for (size_t i = 0 ; i < VectorLength ; i++)
 	{
 		binVector.push_back(Energies[i]);	
 		dataVector.push_back(Values[i]); 

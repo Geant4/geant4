@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LPhysicsFreeVector.hh,v 1.3 2001-01-09 01:18:46 kurasige Exp $
+// $Id: G4LPhysicsFreeVector.hh,v 1.4 2001-01-09 11:26:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,7 +27,7 @@
 //
 // 27-MAR-97 FWJ: first version for Alpha release
 // 20-JUN-97 FWJ: added comment re GetValue(): no longer virtual
-// 11 Nov. 2000, H.Kurashige : use g4std/vector for dataVector and binVector
+// 11-NOV-00 H.Kurashige: use STL vector for dataVector and binVector
 //
 
 #ifndef G4LPhysicsFreeVector_h
