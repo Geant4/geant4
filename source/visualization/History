@@ -1,4 +1,4 @@
-$Id: History,v 1.4 1999-01-10 13:27:06 allison Exp $
+$Id: History,v 1.5 1999-01-11 00:38:49 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,7 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-10th January 1999  John Allison
+vis-01-00-03 10th January 1999  John Allison
 - Added flags for viewing geom, hits, digis to G4ModelingParameters.
 
 vis-01-00-02  9th January 1999  John Allison
