@@ -38,5 +38,10 @@ binary_ion
 #paw
 bin.paw
 #run
+#generator
+abrasion
+#paw
+abr.paw
+#run
 //--------Exit
 #exit

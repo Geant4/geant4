@@ -85,6 +85,7 @@
 #include "G4BinaryCascade.hh"
 #include "G4BinaryLightIonReaction.hh"
 #include "G4CascadeInterface.hh"
+#include "G4WilsonAbrasionModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -245,6 +246,18 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
   } else if(gen_name == "bertini") {
     G4CascadeInterface* hkm = new G4CascadeInterface();
     sg = new Test30VSecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
+  } else if(gen_name == "abrasion") {
+    G4WilsonAbrasionModel* wam = new G4WilsonAbrasionModel();
+    size_t ne = mat->GetNumberOfElements();
+    const G4ElementVector* ev = mat->GetElementVector();
+    for(size_t i=0; i<ne; i++) {
+      G4Element* elm = (*ev)[i];
+      wam->ActivateFor(elm);
+    }    
+    sg = new Test30VSecondaryGenerator(wam, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
