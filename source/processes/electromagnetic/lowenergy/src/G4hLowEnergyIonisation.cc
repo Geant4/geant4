@@ -33,7 +33,6 @@
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #include "G4hLowEnergyIonisation.hh"
 #include "G4UnitsTable.hh"
 #include "G4EnergyLossTables.hh"
@@ -68,7 +67,6 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     TotBin = 200 ;
     MassRatio = 1.0 ;
     DeltaCutInKineticEnergy = 0; 
-
     qaoLoss = new G4QAOLowEnergyLoss;
 }
 
@@ -868,20 +866,30 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(G4Material* material,
    
   // start with antiproton management with quantum harmonic
   // oscillator loss model
+  if ( pbarStop && -0.5 > Charge){
   G4ParticleDefinition* pbarDef = G4AntiProton::AntiProtonDefinition();
   if ( pbarStop && (qaoLoss->IsInCharge(KinEnergy,pbarDef,material) ))
     {
+      G4double paramLowEnergyForAntiProtons = qaoLoss->LowEnergyLimit();
+      
       G4DynamicParticle dynamicPart;
       dynamicPart.SetDefinition(pbarDef);
-      dynamicPart.SetKineticEnergy(KinEnergy);
       dynamicPart.SetCharge(-1);
-
-      ionloss = qaoLoss->EnergyLoss(&dynamicPart,material);
-      ionloss -= GetDeltaRaysEnergy(material,KinEnergy,DeltaRayCutNow);
-    
-      return ionloss;
+      
+      if(KinEnergy<paramLowEnergyForAntiProtons){
+        dynamicPart.SetKineticEnergy(paramLowEnergyForAntiProtons);
+        G4double paramA = qaoLoss->EnergyLoss(&dynamicPart,material)/sqrt(paramLowEnergyForAntiProtons);
+        ionloss = GetFreeElectronGasLoss(paramA,KinEnergy);
+      } else {   
+        dynamicPart.SetKineticEnergy(KinEnergy);
+        ionloss = qaoLoss->EnergyLoss(&dynamicPart,material);
+        ionloss -= GetDeltaRaysEnergy(material,KinEnergy,DeltaRayCutNow);
+     }
+      
+      
+     return ionloss;
     }
-    
+   } 
   // First of all check tables for specific materials for ICRU_49 parametrisation
  
   // Ziegler parametrisation in ICRU49

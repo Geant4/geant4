@@ -60,14 +60,14 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(G4double energy,
   for (int m = 0; m < numberOfMaterials; m++)
     {
       G4String matName = material->GetName();
-      if (matName == materialAvailable[m]) hasMaterial = true;
-      break;
+      if (matName == materialAvailable[m]){ hasMaterial = true;
+      break;}
     }
   
   if (particleDefinition == G4AntiProton::AntiProtonDefinition()
       &&
-      hasMaterial
-      && energy >= LowEnergyLimit() && energy <= HighEnergyLimit() )
+      hasMaterial)
+      //&& energy >= LowEnergyLimit() && energy <= HighEnergyLimit() )
     isInCharge = true;
   
   return isInCharge;
@@ -122,12 +122,12 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4DynamicParticle* particle,
 
 G4int G4QAOLowEnergyLoss::GetNumberOfShell(const G4Material* material) const
 {
-  if(material->GetName() == "Aluminium")  return nbofShellForMaterial[1];
-  else if  (material->GetName() == "Silicon"  )return nbofShellForMaterial[2] ;
-  else if  (material->GetName()== "Copper") return nbofShellForMaterial[3];  
-  else if  (material->GetName() == "Tantalum")return nbofShellForMaterial[4];
-  else if  (material->GetName() == "Gold" )  return nbofShellForMaterial[5];  
-  else if  (material->GetName() == "Platinum")return nbofShellForMaterial[6];
+  if(material->GetName() == "Aluminium")  return nbofShellForMaterial[0];
+  else if  (material->GetName() == "Silicon"  )return nbofShellForMaterial[1] ;
+  else if  (material->GetName()== "Copper") return nbofShellForMaterial[2];  
+  else if  (material->GetName() == "Tantalum")return nbofShellForMaterial[3];
+  else if  (material->GetName() == "Gold" )  return nbofShellForMaterial[4];  
+  else if  (material->GetName() == "Platinum")return nbofShellForMaterial[5];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
