@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.58 2003-11-04 15:12:36 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.59 2003-11-05 09:41:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -856,13 +856,12 @@ void G4VEnergyLossSTD::SetRangeTable(G4PhysicsTable* p)
 
   for (size_t i=0; i<n; i++) {
     pv = (*p)[i];
-    G4double e1 = pv->GetLowEdgeEnergy(nbins-1);
-    G4double r1 = pv->GetValue(e1, b);
     G4double e2 = pv->GetLowEdgeEnergy(nbins);
     G4double r2 = pv->GetValue(e2, b);
-    G4double dedx = (e2-e1)/(r2-r1);
+    G4double dedx = ((*theDEDXTable)[i])->GetValue(e2,b);
     theDEDXAtMaxEnergy[i] = dedx;
     theRangeAtMaxEnergy[i] = r2;
+    G4cout << "i= " << i << " e2= " << e2 << " r2= " << r2 << " dedx= " << dedx << G4endl;
   }
 }
 
