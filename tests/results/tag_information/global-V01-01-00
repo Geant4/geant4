@@ -1,0 +1,13 @@
+global-V01-01-00
+----------------
+- STLInterface: implemented correct behavior for vectors' default
+  constructors, as expected by the RW interface.
+  o for pointer/value ordered/sorted collections, an EMPTY STL vector
+    is created and the vector capacity is set to G4RWDEFAULT_CAPACITY
+    using vector::reserve(capacity). No element initialisation is done.
+  o for pointer/value simple collections, a default constructor
+    creating an EMPTY STL vector is implemented; the constructor
+    taking the capacity as argument, creates an STL vector of the
+    given capacity and explicitly initialises its elements.
+    NB: pointers are initialised to zero.
+- Added "g4std/complex" wrapper file (V.Grichine)
