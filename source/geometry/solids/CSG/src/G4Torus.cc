@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.19 2000-11-30 15:42:06 medernac Exp $
+// $Id: G4Torus.cc,v 1.20 2000-12-01 11:49:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,8 +38,6 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
-#include "g4std/iomanip"
-#include "g4std/strstream"
 
 // #define DEBUGTORUS 1
 
