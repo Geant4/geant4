@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.4 2003-02-07 11:46:14 gcosmo Exp $
+// $Id: G4Region.cc,v 1.5 2003-03-05 19:01:24 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,7 +101,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     size_t repNo = daughterPVol->GetMultiplicity();
     for (register size_t rep=0; rep<repNo; rep++)
     {
-      volMat = pParam->ComputeMaterial(repNo, daughterPVol);
+      volMat = pParam->ComputeMaterial(rep, daughterPVol);
       pos = G4std::find(fMaterials.begin(),fMaterials.end(),volMat);
       if (pos == fMaterials.end())
       {
