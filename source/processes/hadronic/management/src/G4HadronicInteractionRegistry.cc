@@ -21,7 +21,19 @@ G4HadronicInteractionRegistry::~G4HadronicInteractionRegistry()
 void G4HadronicInteractionRegistry::
 AddModel(G4HadronicInteraction * aModel)
 {
-  nModels++;
-  allModels.resize(nModels);
-  allModels(nModels-1) = aModel;
+  G4bool alreadyThere = false;
+  for(G4int i=0; i<nModels; i++)
+  {
+    if(allModels(i)==aModel)
+    {
+      alreadyThere = true;
+      break;
+    }
+  }
+  if(!alreadyThere)
+  {
+    nModels++;
+    allModels.resize(nModels);
+    allModels(nModels-1) = aModel;
+  }
 }
