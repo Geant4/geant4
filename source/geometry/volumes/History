@@ -1,4 +1,4 @@
-$Id: History,v 1.107 2003-10-01 15:08:07 gcosmo Exp $
+$Id: History,v 1.108 2003-10-23 14:47:05 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 23rd, 2003  G. Cosmo - geomvol-V05-02-02
+- Migrated calls to G4Exception to new scheme.
 
 September 30th, 2003  G. Cosmo - geomvol-V05-02-01
 - Logical reorganisation and restructure of modules.
