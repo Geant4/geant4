@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.cc,v 1.26 2003-11-28 10:22:14 mkossov Exp $
+// $Id: G4QCHIPSWorld.cc,v 1.27 2003-12-02 18:44:08 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCHIPSWorld ----------------
@@ -45,8 +45,11 @@ G4QCHIPSWorld::G4QCHIPSWorld()
 
 G4QCHIPSWorld::~G4QCHIPSWorld()      // The CHIPS World is destructed only in the EndOfJob
 {
-  std::for_each(GetQWorld().begin(), GetQWorld().end(), DeleteQParticle());
-  GetQWorld().clear();
+  //G4int nP=GetQWorld().size();
+  //G4cout<<"G4QCHIPSWorld::Destructor: Before nP="<<nP<<","<<GetQWorld()[0]<<G4endl; //TMP
+  //if(nP) std::for_each(GetQWorld().begin(),GetQWorld().end(),DeleteQParticle());
+  //G4cout<<"G4QCHIPSWorld::Destructor: After"<<G4endl; // TMP
+  //GetQWorld().clear();
 }
 
 // Standard output for CHIPS World
@@ -79,41 +82,45 @@ G4QParticleVector & G4QCHIPSWorld::GetQWorld()
 G4QParticleVector* G4QCHIPSWorld::GetParticles(G4int nOfParts)
 //                 ===========================================
 {
-  static const G4int mnofParts = 486;           // max number of particles (up to A=80)
+  //static const G4int mnofParts = 486;           // max number of particles (up to A=80)
+  static const G4int mnofParts = 494;           // max number of particles (up to A=80) IN
 #ifdef debug
-  G4cout<<"G4QCHIPSWorld::Get: n="<<nOfParts<<" particles"<<G4endl;
+  G4cout<<"G4QCHIPSWorld::GetParticles: n="<<nOfParts<<" particles"<<G4endl;
 #endif
+  //if(GetQWorld().size())G4cout<<"G4QCHIPSWorld::GetPts:***Pt#0="<<GetQWorld()[0]<<G4endl;
   if(nOfParts>0)
   {
 #ifdef debug
-    G4cout<<"G4QCHIPSWorld::Get: Creating CHIPS World of nP="<<nOfParts<<G4endl;
+    G4cout<<"G4QCHIPSWorld::GetParticles: Creating CHIPS World of nP="<<nOfParts<<G4endl;
 #endif
     G4int curNP=GetQWorld().size();
+    //G4cout<<"G4QCHIPSWorld::GetParticles: Creating CHIPS World of curNP="<<curNP<<G4endl;
     if(nOfParts>curNP)                         // Initialization for increasing CHIPS World
     {
       if (nOfParts>mnofParts)
       {
-        G4cerr<<"***G4QCHIPSWorld::Get:nOfParts="<<nOfParts<<">"<<mnofParts<<G4endl;
+        G4cerr<<"***G4QCHIPSWorld::GetPartics:nOfParts="<<nOfParts<<">"<<mnofParts<<G4endl;
         nOfParts=mnofParts;
       }
       if (nOfParts<10) nOfParts=10;            // Minimal number of particles for Vacuum(?)
 #ifdef debug
-      G4cerr<<"G4QCHIPSWorld::Get: n="<<nOfParts<<",c="<<curNP<<G4endl;
+      G4cerr<<"G4QCHIPSWorld::GetParticles: n="<<nOfParts<<",c="<<curNP<<G4endl;
 #endif
       for (G4int i=curNP; i<nOfParts; i++) 
       {
         G4QParticle* curPart = new G4QParticle;// Created
         curPart->InitQParticle(i);             //   ||
+        //if(!i) G4cout<<"G4QCHIPSWorld::GetParticles:Pt#0="<<curPart<<G4endl;
         GetQWorld().push_back(curPart);           // Filled (forever but only once)
 #ifdef debug
-        G4cout<<"G4QCHIPSWorld::Get: Pt#"<<i<<"("<<nOfParts<<") is done"<<G4endl;
+        G4cout<<"G4QCHIPSWorld::GetParticles: Pt#"<<i<<"("<<nOfParts<<") is done"<<G4endl;
 #endif
       }
     }
     //else init--;//Recover theReInitializationCounter, if nothingWasAdded to theCHIPSWorld
   }
 #ifdef debug
-  G4cout<<"G4QCHIPSWorld::Get: TotalPt#"<<GetQWorld().size()<<G4endl;
+  G4cout<<"G4QCHIPSWorld::GetParticles: TotalPt#"<<GetQWorld().size()<<G4endl;
 #endif
   return &GetQWorld();
 }

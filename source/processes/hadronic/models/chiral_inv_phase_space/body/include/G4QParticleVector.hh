@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticleVector.hh,v 1.13 2003-10-08 14:48:22 hpw Exp $
+// $Id: G4QParticleVector.hh,v 1.14 2003-12-02 18:44:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidateVector ----------------
@@ -35,8 +35,31 @@
 #include "G4QParticle.hh"
 #include <vector>
 
-typedef std::vector<G4QParticle *> G4QParticleVector;
-struct DeleteQParticle{ void operator()(G4QParticle *aN){delete aN;} };
+//typedef std::vector<G4QParticle *> G4QParticleVector;
+
+struct DeleteQParticle
+{
+  void operator()(G4QParticle *aN)
+  {
+    if(aN)
+    {
+      //G4cout<<"G4QParticleVector::DeleteQParticle: aN="<<aN<<",PDG="<<aN->GetPDGCode()
+      //      <<",Q="<<aN->GetQCode()<<G4endl; // TMP
+      delete aN;
+    }
+    //else G4cout<<"***G4QParticleVector::DeleteQParticle: aN="<<aN<<G4endl; // TMP
+  }
+};
+
+class G4QParticleVector : public  std::vector<G4QParticle *>
+{
+public:
+  ~G4QParticleVector() 
+  {
+    std::for_each(begin(),end(),DeleteQParticle());
+	clear();
+  }
+};
 
 #endif
 

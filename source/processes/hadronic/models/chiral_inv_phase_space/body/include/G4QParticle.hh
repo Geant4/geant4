@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.hh,v 1.18 2003-11-24 10:15:11 mkossov Exp $
+// $Id: G4QParticle.hh,v 1.19 2003-12-02 18:44:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParticle ----------------
@@ -66,7 +66,7 @@ public:
   G4double            GetWidth();               // Get a width value for the Particle
 
   // Modifiers
-  G4QDecayChanVector InitDecayVector(G4int Q);  // Init Decay Vector in the CHIPS World by Q code
+  G4QDecayChanVector InitDecayVector(G4int Q);// Init DecayVector in theCHIPSWorld by QCode
   void InitPDGParticle(G4int thePDGCode);
   void InitQParticle(G4int theQCode);
 
@@ -80,7 +80,7 @@ private:
   // the Body
   G4QPDGCode          aQPDG;
   G4QDecayChanVector  aDecay;
-  G4QContent          aQuarkCont;               // @@ Secondary (added for acceleration - check)
+  G4QContent          aQuarkCont;       // @@ Secondary (added for acceleration - check)
 };
 
 // Not member operators
@@ -91,16 +91,17 @@ std::ostream&   operator<<(std::ostream& lhs, G4QParticle& rhs);
 inline G4bool G4QParticle::operator==(const G4QParticle& rhs) const {return this==&rhs;}
 inline G4bool G4QParticle::operator!=(const G4QParticle& rhs) const {return this!=&rhs;}
  
-inline G4QPDGCode         G4QParticle::GetQPDG()    const {return aQPDG;}
-inline G4int              G4QParticle::GetPDGCode() const {return aQPDG.GetPDGCode();}
-inline G4int              G4QParticle::GetSpin()    const {return aQPDG.GetSpin();}
-inline G4int              G4QParticle::GetCharge()  const {return aQuarkCont.GetCharge();}
-inline G4int              G4QParticle::GetStrange() const {return aQuarkCont.GetStrangeness();}
-inline G4int              G4QParticle::GetBaryNum() const {return aQuarkCont.GetBaryonNumber();}
-inline G4QContent         G4QParticle::GetQContent()      {return aQuarkCont;}
-inline G4QDecayChanVector G4QParticle::GetDecayVector()   {return aDecay;}
-inline G4double           G4QParticle::GetMass()          {return aQPDG.GetMass();}
-inline G4double           G4QParticle::GetWidth()         {return aQPDG.GetWidth();}
+inline G4QPDGCode    G4QParticle::GetQPDG()    const {return aQPDG;}
+inline G4int         G4QParticle::GetQCode()   const {return aQPDG.GetQCode();}
+inline G4int         G4QParticle::GetPDGCode() const {return aQPDG.GetPDGCode();}
+inline G4int         G4QParticle::GetSpin()    const {return aQPDG.GetSpin();}
+inline G4int         G4QParticle::GetCharge()  const {return aQuarkCont.GetCharge();}
+inline G4int         G4QParticle::GetStrange() const {return aQuarkCont.GetStrangeness();}
+inline G4int         G4QParticle::GetBaryNum() const {return aQuarkCont.GetBaryonNumber();}
+inline G4QContent    G4QParticle::GetQContent()      {return aQuarkCont;}
+inline G4QDecayChanVector G4QParticle::GetDecayVector() {return aDecay;}
+inline G4double      G4QParticle::GetMass()          {return aQPDG.GetMass();}
+inline G4double      G4QParticle::GetWidth()         {return aQPDG.GetWidth();}
 
 inline G4double G4QParticle::MinMassOfFragm()
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCodeVector.hh,v 1.13 2003-10-08 14:48:22 hpw Exp $
+// $Id: G4QPDGCodeVector.hh,v 1.14 2003-12-02 18:44:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidateVector ----------------
@@ -36,7 +36,15 @@
 #include <vector>
 
 typedef std::vector<G4QPDGCode *> G4QPDGCodeVector;
-struct DeleteQPDGCode{ void operator()(G4QPDGCode *aN){delete aN;} };
+struct DeleteQPDGCode
+{
+  void operator()(G4QPDGCode *aN)
+  {
+    //G4cout<<"G4QPDGCodeVector::DeleteQPDGCode: Before aN="<<aN<<G4endl; // TMP
+    if(aN) delete aN; // void Destructor
+    else G4cerr<<"***G4QPDGCodeVector::DeleteQPDGCode: aN="<<aN<<G4endl; // TMP
+  }
+};
 
 
 #endif

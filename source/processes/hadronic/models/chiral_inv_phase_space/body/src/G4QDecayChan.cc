@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChan.cc,v 1.20 2003-10-24 08:26:34 mkossov Exp $
+// $Id: G4QDecayChan.cc,v 1.21 2003-12-02 18:44:08 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDecayChan ----------------
@@ -35,7 +35,8 @@
 #include "G4QDecayChanVector.hh"
 #include <algorithm>
 
-G4QDecayChan::G4QDecayChan(){}
+G4QDecayChan::G4QDecayChan():aDecayChanLimit(0.),theMinMass(0.)
+{}
 
 G4QDecayChan::G4QDecayChan(G4double pLev, G4int PDG1, G4int PDG2, G4int PDG3):
   aDecayChanLimit(pLev)
@@ -86,7 +87,11 @@ G4QDecayChan::G4QDecayChan(G4QDecayChan* right)
 
 G4QDecayChan::~G4QDecayChan() 
 {
-  std::for_each(aVecOfSecHadrons.begin(), aVecOfSecHadrons.end(), DeleteQPDGCode());
+  G4int nSH=aVecOfSecHadrons.size();
+  //G4cout<<"G4QDecayChan::Destructor: Before nSH="<<nSH<<G4endl; // TMP
+  if(nSH)std::for_each(aVecOfSecHadrons.begin(), aVecOfSecHadrons.end(), DeleteQPDGCode());
+  //G4cout<<"G4QDecayChan::Destructor: After"<<G4endl; // TMP
+  aVecOfSecHadrons.clear();
 }
 
 // Assignment operator
