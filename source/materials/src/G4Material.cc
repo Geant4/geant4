@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.16 2001-10-17 07:59:54 gcosmo Exp $
+// $Id: G4Material.cc,v 1.17 2001-10-31 12:56:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -160,6 +160,11 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
                        G4State state, G4double temp, G4double pressure)
 :fName(name),fChemicalFormula(chFormula)
 {
+  G4cout 
+   << "---> warning from G4Material constructor with chemical formula."
+      " This constructor is going to be depreciated.\n" 
+      " Use material->SetChemicalFormula(const G4String&)" << G4endl;
+      
   InitializePointers();
     
   if (density < universe_mean_density)
@@ -210,7 +215,11 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
                        G4State state, G4double temp, G4double pressure)
 :fName(name),fChemicalFormula(chFormula)
 {
- 
+  G4cout 
+   << "---> warning from G4Material constructor with chemical formula."
+      " This constructor is going to be depreciated.\n" 
+      " Use material->SetChemicalFormula(const G4String&)" << G4endl;
+       
   InitializePointers();
     
   if (density < universe_mean_density)

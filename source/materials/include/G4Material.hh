@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.18 2001-10-17 14:02:15 gcosmo Exp $
+// $Id: G4Material.hh,v 1.19 2001-10-31 12:56:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -73,6 +73,7 @@
 // 30-03-01, suppression of the warning message in GetMaterial
 // 17-07-01, migration to STL. M. Verderi.
 // 14-09-01, Suppression of the data member fIndexInTable
+// 31-10-01, new function SetChemicalFormula() (mma)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -161,7 +162,9 @@ public:  // with description
                      
                      
   virtual ~G4Material();
-                        
+  
+  void SetChemicalFormula(const G4String& chF) {fChemicalFormula=chF;};
+                          
   //
   // retrieval methods
   // 
