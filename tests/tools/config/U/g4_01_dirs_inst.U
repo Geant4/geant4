@@ -30,10 +30,15 @@ esac
 
 case "$g4install" in
 '')
-	if [ X$HOME = X/ ] ; then
+if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
+	g4install="c:/geant4"
+else
+	if [ X"$HOME" = X/ ] ; then
 	HOME=""
 	fi
-	g4install=$HOME/geant4
+	g4install="$HOME"/geant4
+
+fi
 
 # Check for Windows!
 if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then

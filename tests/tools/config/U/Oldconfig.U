@@ -1,4 +1,4 @@
-?RCS: $Id: Oldconfig.U,v 1.16 2003-02-21 16:04:15 sadilov Exp $
+?RCS: $Id: Oldconfig.U,v 1.17 2004-12-02 20:39:05 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.16  2003/02/21 16:04:15  sadilov
+?RCS: Add Darwin.
+?RCS:
 ?RCS: Revision 1.15  2003/02/21 15:15:35  sadilov
 ?RCS: awk -> sed
 ?RCS:
@@ -628,7 +631,16 @@ case  "$g4compiler" in
 				g4compiler=CC
 				;;
 		'WIN32')
-				g4compiler=VC
+				g4compiler=VC7
+	clcompiler=`( cl 1>/dev/null || echo "ERROR: There is no 'cl' compiler.") 2>&1`
+				case $clcompiler in
+				*"Version 12"*) g4compiler=VC
+				;;
+				*"Version 13"*) g4compiler=VC7
+				;;
+				*) g4compiler=VC7
+				;;
+				esac				
 				;;
 		'Darwin')
 				g4compiler=g++

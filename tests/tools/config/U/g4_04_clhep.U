@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE:g4clhep_base_dir g4clhep_include_dir g4clhep_lib_dir g4clhep_lib: \
+?MAKE:g4clhep_base_dir g4clhep_include_dir g4clhep_lib_dir g4clhep_lib clhep_dirs: \
 	g4data Myread Getfile cat rm
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:

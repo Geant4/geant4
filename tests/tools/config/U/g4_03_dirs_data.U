@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE:g4data g4levelgammadata g4radioactivedata g4ledata g4neutronhpcrosssections: \
+?MAKE:g4data g4levelgammadata g4radioactivedata g4ledata g4neutronhpcrosssections g4elasticdata: \
 	g4tmp Myread Getfile cat rm g4system
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
@@ -38,6 +38,12 @@ case "$g4neutronhpcrosssections" in
 	;;
 esac
 
+case "$g4elasticdata" in
+'')
+	g4elasticdata=$g4data/Elastic
+	;;
+esac
+
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
@@ -51,6 +57,8 @@ Please, specify directories where the Geant4 data is installed:
 3) G4LEDATA:			$g4ledata
 
 4) NeutronHPCrossSections:	$g4neutronhpcrosssections
+
+5) G4ELASTICDATA:		$g4elasticdata
 
 To modify default settings, select number above (e.g. 2) 
 EOM`
@@ -93,6 +101,15 @@ gans=$ans
 		. ./getfile
 		g4neutronhpcrosssections=$ans
 		;;
+
+	5) 
+		dflt=$g4elasticdata
+		fn='f~'
+		rp="Where is G4ELASTICDATA installed?"
+		. ./getfile
+		g4elasticdata=$ans
+		;;
+
 #	[eE]) 
 #		break
 #		;;

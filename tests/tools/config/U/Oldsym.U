@@ -1,4 +1,4 @@
-?RCS: $Id: Oldsym.U,v 1.2 2001-12-12 21:24:14 sadilov Exp $
+?RCS: $Id: Oldsym.U,v 1.3 2004-12-02 20:39:18 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.2  2001/12/12 21:24:14  sadilov
+?RCS: Move UU in .config
+?RCS:
 ?RCS: Revision 1.1  2001/05/17 10:12:22  sadilov
 ?RCS: Import 'config'.
 ?RCS:
@@ -59,7 +62,7 @@ if $test -f .config/UU/config.sh; then
 ?X: the uniq -u command. The oldsyms file thus contains all the symbols
 ?X: that did not appear in the produced config.sh (Larry Wall).
 ?X:
-	sed -n 's/^\([a-zA-Z_0-9]*\)=.*/\1/p' config.sh config.sh .config/UU/oldconfig.sh |\
+	sed -n 's/^\([a-zA-Z_0-9]*\)=.*/\1/p' $g4conf/config.sh $g4conf/config.sh .config/UU/oldconfig.sh |\
 	sort | uniq -u >.config/UU/oldsyms
 	set X `cat .config/UU/oldsyms`
 	shift
