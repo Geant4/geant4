@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeplusAnnihilation.cc,v 1.2 1999-04-09 10:42:54 urban Exp $
+// $Id: G4IeplusAnnihilation.cc,v 1.3 1999-04-30 08:05:57 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -325,9 +325,6 @@ void G4IeplusAnnihilation::BuildNlambdaVector(
   G4bool isOut ;
   const G4double small = 1.e-100;
   const G4double plowloss = 0.5 ;  //this should be a data member of en.loss!
-  const G4double BIGSTEP=1.e10 ;
-
-  
 
   const G4MaterialTable* theMaterialTable=
                           G4Material::GetMaterialTable();
