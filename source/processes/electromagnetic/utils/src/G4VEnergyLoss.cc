@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.19 2001-03-23 07:18:29 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.20 2001-03-27 12:16:35 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -1086,6 +1086,9 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       loss += lossc;  
      }
     } 
+
+  if( loss < 0.)
+    loss = 0.;
 
   return loss ;
 }
