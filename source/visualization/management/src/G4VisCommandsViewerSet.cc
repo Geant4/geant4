@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.7 2001-02-06 23:36:58 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.8 2001-03-28 15:31:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -389,10 +389,11 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandProjection) {
     G4double fieldHalfAngle;
-    if (newValue[0] == 'o') {  // "orthogonal"
+    size_t iPos = 0;
+    if (newValue[iPos] == 'o') {  // "orthogonal"
       fieldHalfAngle = 0.;
     }
-    else if (newValue[0] == 'p') {  // "perspective"
+    else if (newValue[iPos] == 'p') {  // "perspective"
       G4String dummy;
       G4String unit;
       G4std::istrstream is ((char*)newValue.data());
@@ -468,7 +469,8 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandStyle) {
     G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
-    if (newValue[0] == 'w') {  // "wireframe"
+    size_t iPos = 0;
+    if (newValue[iPos] == 'w') {  // "wireframe"
       switch (existingStyle) {
       case G4ViewParameters::wireframe:
 	break;
@@ -482,7 +484,7 @@ void G4VisCommandsViewerSet::SetNewValue
         break;
       }
     }
-    else if (newValue[0] == 's') {  // "surface"
+    else if (newValue[iPos] == 's') {  // "surface"
       switch (existingStyle) {
       case G4ViewParameters::wireframe:
 	vp.SetDrawingStyle(G4ViewParameters::hsr);
