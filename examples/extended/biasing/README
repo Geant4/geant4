@@ -23,13 +23,13 @@ General remark to scoring
 A interface G4VPScorer is provided for the user. The user may create his 
 own class to perform the desired scoring. The user defined class 
 therefore should inherit from the interface G4VPScorer. 
-There are two example scorers G4PScorer and G4PIScorer provided. 
+An example of an implementation of a scorer is G4StandardScorer
+which may be found in source/run. 
+The scoring in these examples is done with a G4StandardScorer.
 When scoring is done in a "scoring" or in a "importance" geometry
 special action has to be taken to prevent counting of
 "collisions" with boundaries of the tracking geometry as interactions.
 This is differently handled when scoring is done in the tracking geometry.
-The scorers B01Scorer and B02Scorer show the difference in that case.
-The Scorer B06Scorer checks for consistency of importance and weight.
 
 Known problems
 --------------
@@ -44,6 +44,16 @@ former volume the biasing won't be invoked.
 This will produce particles with weights that do not correspondent to the
 importance of the current volumes.
 
+Further information:
+--------------------
+Short description of biasing and scoring:
+http://dressel.home.cern.ch/dressel/Biasing.html
+
+Descrtiption of the standard scoring:
+http://dressel.home.cern.ch/dressel/StandardScoring.html
+
+Instructions for the usage of a messenger for simple problems:
+http://dressel.home.cern.ch/dressel/Mess.html
 
 I. Examples for scoring without biasing
 =======================================
@@ -54,18 +64,15 @@ This example shows how to  use scoring in the "tracking" geometry.
 It scores several values for neutrons for every physical volume
 in the tracking geometry. 
 All scored values are printed after the running. In addition a more
-exclusive output of selected values is printed. The way the
-last output is produced shows how to extract certain values from all
-scored values.
+exclusive output of selected values is printed. 
+
 
 
 I. 2. Example B02
 -----------------
 This example shows how to use scoring in a "parallel" or "scoring" 
 geometry. In this example a tracking and a scoring geometry is 
-constructed. Gammas are scored in the scoring geometry. The scored values
-are dumped to the screen after the run. How to access the score values 
-more exclusively is shown in example B01.
+constructed. Gammas are scored in the scoring geometry. 
 
 
 II. Examples for biasing without scoring
@@ -96,10 +103,6 @@ III. 1. Example B05
 Biasing and Scoring in the "tracking" geometry.
 The importances are setup during the mass detector construction
 in the file: B05/src/B05DetectorConstruction.cc.
-Scoring is done with G4PIScorer from transportation. G4PIScorer
-scores several values for all the physical volumes of a geometry.
-It also checks that the importance value times track weight = 1, 
-which should hold in "simple" cases.
 
 
 III. 2. Example B06
@@ -107,8 +110,6 @@ III. 2. Example B06
 Biasing and scoring in a "parallel" geometry.
 The importances are setup during the construction of the parallel geometry
 in the file B06/src/B06ImportanceDetectorConstruction.cc.
-Customised scorer B06Scorer and printer B06ScorePrinter are  used.
-
 
 
 III. 3. Example B07
