@@ -403,6 +403,7 @@ int main(int argc,char** argv)
       gammaManager->AddProcess(rayle);
 
       eionle->BuildPhysicsTable(*electron);
+      G4cout << "Electron ionisation are built" << G4endl;
       ebrle->BuildPhysicsTable(*electron);
       comple->BuildPhysicsTable(*gamma);
       convle->BuildPhysicsTable(*gamma);
@@ -477,11 +478,12 @@ int main(int argc,char** argv)
 
           if(nProcess == 0) x = eionle->GetMeanFreePath(*gTrack,theStep,&a);
           if(nProcess == 1) x = ebrle->GetMeanFreePath(*gTrack,theStep,&a);
-          if(nProcess == 2) x = comple->GetMeanFreePath(*gTrack,theStep,&a);
-          if(nProcess == 3) x = convle->GetMeanFreePath(*gTrack,theStep,&a);
-          if(nProcess == 4) x = pele->GetMeanFreePath(*gTrack,theStep,&a);
-          if(nProcess == 5) x = rayle->GetMeanFreePath(*gTrack,theStep,&a);
-
+	  /*
+	  if(nProcess == 2) x = comple->GetMeanFreePath(*gTrack,theStep,&a);
+	  if(nProcess == 3) x = convle->GetMeanFreePath(*gTrack,theStep,&a);
+	  if(nProcess == 4) x = pele->GetMeanFreePath(*gTrack,theStep,&a);
+	  if(nProcess == 5) x = rayle->GetMeanFreePath(*gTrack,theStep,&a);
+	  */
       } else {
 
           if(nProcess == 0) x = eionst->GetMeanFreePath(*gTrack,theStep,&a);

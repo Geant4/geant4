@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComplexTest.cc,v 1.4 2001-09-10 18:07:55 pia Exp $
+// $Id: G4ComplexTest.cc,v 1.5 2001-09-16 17:07:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -559,8 +559,6 @@ int main(int argc,char** argv)
         if(cdProcess) dummy = cdProcess->PostStepDoIt(*gTrack, *step);
       } else {
         G4GPILSelection* sel = 0;
-	//  if(nProcess < 2) rmax = cdProcess->AlongStepGetPhysicalInteractionLength(*gTrack,
-        //                                   theStep,theStep,theStep*100.,sel);
         dummy = cdProcess->AlongStepDoIt(*gTrack, *step);
       }
       G4ParticleChange* particleChange = (G4ParticleChange*) dummy;
@@ -633,8 +631,8 @@ int main(int argc,char** argv)
         G4double px   = (finalParticle->GetMomentum()).x();
         G4double py   = (finalParticle->GetMomentum()).y();
         G4double pz   = (finalParticle->GetMomentum()).z();
-        G4double theta   = (finalParticle->GetMomentum()).theta();
-        G4double p   = sqrt(px*px+py*py+pz*pz);
+        G4double theta= (finalParticle->GetMomentum()).theta();
+        G4double p    = sqrt(px*px+py*py+pz*pz);
 
         if (eKin > gEnergy) {
 	    G4cout << "WARNING: eFinal > eInit in event #" << iter << G4endl;
