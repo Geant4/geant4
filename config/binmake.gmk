@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.99 2004-06-01 07:54:09 gcosmo Exp $
+# $Id: binmake.gmk,v 1.100 2004-06-02 09:28:55 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -283,7 +283,7 @@ ifndef USER_DEFINED_LDLIBS
 	  echo "         gmake libmap"; \
 	  exit 1; fi
   else
-	@echo "Using global libraries."
+	@echo "Using global libraries ..."
   endif
 endif
 	@if [ ! -d $(G4BINDIR) ] ; then mkdir $(G4BINDIR) ;fi
@@ -343,7 +343,7 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
-	@echo Making dependency for file $<...
+	@echo Making dependency for file $< ...
 	@set -e;\
 	g++ $(GPPFLAGS) $(CPPFLAGS) -w $< |\
 	sed 's!$(G4TARGET)\.o!$(G4TMPDIR)/exe/& $@!' >$@;\
