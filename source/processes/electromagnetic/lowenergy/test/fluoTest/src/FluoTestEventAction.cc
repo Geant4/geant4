@@ -1,11 +1,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "FluoTestEventAction.hh"
-
 #include "FluoTestSensorHit.hh"
 #include "FluoTestEventActionMessenger.hh"
-
-#include "g4rw/tvordvec.h"
 
 #ifdef G4ANALYSIS_USE
 #include "FluoTestAnalysisManager.hh"
@@ -147,7 +144,7 @@ void FluoTestEventAction::EndOfEventAction(const G4Event* evt)
       
       G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
       G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+      if (trajectoryContainer) n_trajectories = trajectoryContainer->size();
       
       for (G4int i=0; i<n_trajectories; i++) 
 	{ G4Trajectory* trj = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
