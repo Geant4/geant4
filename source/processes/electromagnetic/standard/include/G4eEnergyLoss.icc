@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLoss.icc,v 1.2 1999-02-16 13:34:46 urban Exp $
+// $Id: G4eEnergyLoss.icc,v 1.3 1999-02-24 13:43:26 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -52,15 +52,15 @@ inline G4double G4eEnergyLoss::GetContinuousStepLimit(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4double G4eEnergyLoss::GetConstraints(
                                       const G4DynamicParticle* aParticle,
                                             G4Material* aMaterial)
 {
+  G4double StepLimit;
   // returns the Step limit
   // dRoverRange is the max. allowed relative range loss in one Step
   // it calculates dEdx and the range as well....
-
-  G4double StepLimit;
 
   const G4ParticleDefinition* ParticleType=aParticle->GetDefinition();
 
@@ -68,15 +68,14 @@ inline G4double G4eEnergyLoss::GetConstraints(
   if(Charge != lastCharge)
   {
     lastCharge = Charge ;
-   
+
   }
 
   G4double KineticEnergy = aParticle->GetKineticEnergy();
- 
+
   fdEdx = G4EnergyLossTables::GetDEDX(ParticleType,KineticEnergy,aMaterial);
   fRangeNow =
            G4EnergyLossTables::GetRange(ParticleType,KineticEnergy,aMaterial);
-
 
   // compute the (random) Step limit
   if (fRangeNow>finalRange)

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.cc,v 1.2 1999-02-16 13:40:18 urban Exp $
+// $Id: G4hEnergyLoss.cc,v 1.3 1999-02-24 13:45:15 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -121,7 +121,7 @@ G4hEnergyLoss::G4hEnergyLoss(const G4String& processName)
    : G4VContinuousDiscreteProcess (processName),
      theLossTable (NULL),
      MinKineticEnergy(1.*eV), 
-     linLossLimit(0.02),
+     linLossLimit(0.05),
      lastMaterial (NULL),
      MaxExcitationNumber (1.e6),
      probLimFluct (0.01),
@@ -142,17 +142,13 @@ void G4hEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
 {
   //  calculate data members TotBin,LOGRTable,RTable first
-  G4double lrate ;
-  G4int nbin ;
-  G4double binning = 2.*dRoverRange;
-  lrate = log(HighestKineticEnergy/LowestKineticEnergy) ;
-  nbin = G4int((lrate/log(1.+binning) + lrate/log(1.+2.*binning))/2.);
-  nbin = (nbin+50)/100 ;
-  TotBin = 100*nbin ;
-  if(TotBin<100)
-    TotBin = 100 ;
-  if(TotBin>500)
-    TotBin = 500 ;
+  G4double binning = dRoverRange;
+  G4double lrate = log(HighestKineticEnergy/LowestKineticEnergy);
+  G4int    nbin =  G4int(lrate/log(1.+binning) + 0.5 );
+  nbin = (nbin+25)/50;
+  TotBin =50*nbin ;
+  if (TotBin<50) TotBin = 50;
+  if (TotBin>500) TotBin = 500;
   LOGRTable=lrate/TotBin;
   RTable   =exp(LOGRTable);
 

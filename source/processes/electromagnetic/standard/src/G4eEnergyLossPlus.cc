@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLossPlus.cc,v 1.2 1999-02-16 13:40:15 urban Exp $
+// $Id: G4eEnergyLossPlus.cc,v 1.3 1999-02-24 13:45:14 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // $Id: 
@@ -60,7 +60,7 @@ G4double     G4eEnergyLossPlus::c1lim = dRoverRange ;
 G4double     G4eEnergyLossPlus::c2lim = 2.*(1.-dRoverRange)*finalRange ;
 G4double     G4eEnergyLossPlus::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
-G4double         G4eEnergyLossPlus::MinDeltaCutInRange = 0.1*mm ;
+G4double         G4eEnergyLossPlus::MinDeltaCutInRange = 0.010*mm ;
 G4double*        G4eEnergyLossPlus::MinDeltaEnergy     = NULL   ;
 
 G4PhysicsTable*  G4eEnergyLossPlus::theDEDXElectronTable         = NULL;
@@ -99,7 +99,7 @@ G4eEnergyLossPlus::G4eEnergyLossPlus(const G4String& processName)
      LowestKineticEnergy(1.00*keV),
      HighestKineticEnergy(100.*TeV),
      MinKineticEnergy(1.*eV),
-     linLossLimit(0.01),
+     linLossLimit(0.02),
      MaxExcitationNumber (1.e6),
      probLimFluct (0.01),
      nmaxDirectFluct (100),
@@ -130,13 +130,12 @@ void G4eEnergyLossPlus::BuildDEDXTable(
   ParticleMass = aParticleType.GetPDGMass(); 
 
   //  calculate data members TotBin,LOGRTable,RTable first
-
-  G4double binning = 2.*dRoverRange;              //binning is 2.*dRoverRange
+  G4double binning = dRoverRange;
   G4double lrate = log(HighestKineticEnergy/LowestKineticEnergy);
-  G4double nbin =  G4int((lrate/log(1.+binning) + lrate/log(1.+2.*binning))/2.);
-  nbin = (nbin+50)/100; 
-  TotBin =int(100*nbin) ;
-  if (TotBin<100) TotBin = 100;
+  G4int    nbin =  G4int(lrate/log(1.+binning) + 0.5 );
+  nbin = (nbin+25)/50;
+  TotBin =50*nbin ;
+  if (TotBin<50) TotBin = 50;
   if (TotBin>500) TotBin = 500;
   LOGRTable=lrate/TotBin;
   RTable   =exp(LOGRTable);
@@ -256,6 +255,7 @@ void G4eEnergyLossPlus::BuildDEDXTable(
      if(&aParticleType==G4Electron::Electron())
      {
        // create array for the min. delta cuts in kinetic energy 
+       G4double absLowerLimit = 1.*keV ;
        G4cout << endl;
        G4cout.precision(5) ;
        G4cout << " eIoni+ Minimum Delta cut in range=" << MinDeltaCutInRange/mm
@@ -272,6 +272,10 @@ void G4eEnergyLossPlus::BuildDEDXTable(
          MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
                                G4Electron::Electron(),MinDeltaCutInRange,
                                           (*theMaterialTable)(mat)) ;
+
+         if(MinDeltaEnergy[mat]<absLowerLimit)
+           MinDeltaEnergy[mat] = absLowerLimit ; 
+
          if(MinDeltaEnergy[mat]<Tlowerlimit) MinDeltaEnergy[mat]=Tlowerlimit ;
          G4cout << setw(20) << (*theMaterialTable)(mat)->GetName() 
                 << setw(15) << MinDeltaEnergy[mat]/keV << endl;
@@ -1057,29 +1061,6 @@ G4VParticleChange* G4eEnergyLossPlus::AlongStepDoIt( const G4Track& trackData,
 
         if(N > 0)
         {
-   G4bool pf=false ;
- // G4bool pf= true ;
-  if(pf)
-  {
-  G4cout << endl;
-  G4cout << "material=" << aMaterial->GetName() << "  Tkin=" << E <<
-            " T0=" << T0 << endl;      
-  G4cout <<   "  MeanLoss=" << MeanLoss << "  finalT=" << finalT << endl;
-  G4cout << " position(pre  x,y,z): " <<
-          stepData.GetPreStepPoint()->GetPosition().x() << "  " <<
-          stepData.GetPreStepPoint()->GetPosition().y() << "  " <<
-          stepData.GetPreStepPoint()->GetPosition().z() << endl ;  
-  G4cout << " position(post x,y,z): " <<
-          stepData.GetPostStepPoint()->GetPosition().x() << "  " <<
-          stepData.GetPostStepPoint()->GetPosition().y() << "  " <<
-          stepData.GetPostStepPoint()->GetPosition().z() << endl ;  
-  G4cout << "safety(pre,post):" << presafety << "  " << postsafety << endl;
-  G4double dNdx = (c1N*(1.-T0/Tc)+c2N/E)*
-                 (aMaterial->GetTotNbOfElectPerVolume())/T0 ;
-  G4cout << " dN/dx=" << dNdx << "  delta/mm" << endl;
-  G4cout << " Step=" << Step ;
-  G4cout << "  fragment=" << fragment << "  Ndelta=" << N << endl;
-  }
           G4double Tkin,Etot,P,T,p,costheta,sintheta,phi,dirx,diry,dirz,
                    Pnew,Px,Py,Pz,delToverTc,
                    sumT,delTkin,delLoss,rate,

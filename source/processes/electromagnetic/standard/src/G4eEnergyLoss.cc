@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLoss.cc,v 1.2 1999-02-16 13:40:14 urban Exp $
+// $Id: G4eEnergyLoss.cc,v 1.3 1999-02-24 13:45:14 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // $Id: 
@@ -99,12 +99,10 @@ G4eEnergyLoss::G4eEnergyLoss(const G4String& processName)
      theRangeCoeffBTable(NULL),
      theRangeCoeffCTable(NULL),
      lastMaterial(NULL),                      
-     LowestKineticEnergy(1.00*eV),
-   //  LowestKineticEnergy(1.00*keV),
-     HighestKineticEnergy(100.*MeV),
-    // HighestKineticEnergy(100.*TeV),
+     LowestKineticEnergy(1.00*keV),
+     HighestKineticEnergy(100.*TeV),
      MinKineticEnergy(1.*eV),
-     linLossLimit(0.01),
+     linLossLimit(0.02),
      MaxExcitationNumber (1.e6),
      probLimFluct (0.01),
      nmaxDirectFluct (100),
@@ -135,16 +133,15 @@ void G4eEnergyLoss::BuildDEDXTable(
 
   //  calculate data members TotBin,LOGRTable,RTable first
 
-  G4double binning = 2.*dRoverRange;              //binning is 2.*dRoverRange
+  G4double binning = dRoverRange;    
   G4double lrate = log(HighestKineticEnergy/LowestKineticEnergy);
-  G4double nbin =  G4int((lrate/log(1.+binning) + lrate/log(1.+2.*binning))/2.);
-  nbin = (nbin+50)/100; 
-  TotBin =int(100*nbin) ;
-  if (TotBin<100) TotBin = 100;
+  G4int    nbin =  G4int(lrate/log(1.+binning) + 0.5 );
+  nbin = (nbin+25)/50; 
+  TotBin =50*nbin ;
+  if (TotBin<50) TotBin = 50;
   if (TotBin>500) TotBin = 500;
   LOGRTable=lrate/TotBin;
   RTable   =exp(LOGRTable);
-
   // Build energy loss table as a sum of the energy loss due to the
   // different processes.                                           
   //
@@ -897,9 +894,6 @@ void G4eEnergyLoss::InvertRangeVector(G4int materialIndex,
     }
 }
   
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-         
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* G4eEnergyLoss::AlongStepDoIt( const G4Track& trackData,

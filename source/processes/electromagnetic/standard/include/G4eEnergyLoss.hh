@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLoss.hh,v 1.2 1999-02-16 13:34:46 urban Exp $
+// $Id: G4eEnergyLoss.hh,v 1.3 1999-02-24 13:43:25 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -251,7 +251,6 @@ class G4eEnergyLoss : public G4VContinuousDiscreteProcess
                                 c2lim=2.*(1-dRoverRange)*finalRange;
                                 c3lim=-(1.-dRoverRange)*finalRange*finalRange;
                                }
-  
                                        
 };
  
