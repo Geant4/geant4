@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.icc,v 1.7 2001-10-22 04:19:40 kurasige Exp $
+// $Id: G4ParticleChangeForTransport.icc,v 1.8 2002-12-16 11:59:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,6 +49,18 @@ inline
  G4Material* G4ParticleChangeForTransport::GetMaterialChange() const
 {
   return theMaterialChange;
+}
+
+inline 
+ void G4ParticleChangeForTransport::SetMaterialCutsCoupleChange(const G4MaterialCutsCouple* fMaterialCutsCouple)
+{
+  theMaterialCutsCoupleChange =   fMaterialCutsCouple;
+}
+
+inline 
+ const G4MaterialCutsCouple* G4ParticleChangeForTransport::GetMaterialCutsCoupleChange() const
+{
+  return theMaterialCutsCoupleChange;
 }
 
 inline
@@ -99,4 +111,18 @@ inline void G4ParticleChangeForTransport::Initialize(const G4Track& track)
 // (P. Urban)
 }
 
+// Prototype implementation of smooth representation of curved trajectories.
 
+inline void
+G4ParticleChangeForTransport::
+SetPointerToVectorOfAuxiliaryPoints( G4std::vector<G4ThreeVector>*
+                                     theNewVectorPointer )
+{
+  fpVectorOfAuxiliaryPointsPointer = theNewVectorPointer;
+}
+
+inline G4std::vector<G4ThreeVector>*
+G4ParticleChangeForTransport::GetPointerToVectorOfAuxiliaryPoints() const
+{
+  return fpVectorOfAuxiliaryPointsPointer;
+}

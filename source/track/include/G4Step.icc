@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc,v 1.8 2002-10-31 23:41:52 tsasaki Exp $
+// $Id: G4Step.icc,v 1.9 2002-12-16 11:59:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -182,6 +182,7 @@ inline
    fpPreStepPoint->SetVelocity(fpTrack->GetVelocity());
    fpPreStepPoint->SetTouchableHandle(fpTrack->GetTouchableHandle());
    fpPreStepPoint->SetMaterial( fpTrack->GetTouchable()->GetVolume()->GetLogicalVolume()->GetMaterial());
+   fpPreStepPoint->SetMaterialCutsCouple( fpTrack->GetTouchable()->GetVolume()->GetLogicalVolume()->GetMaterialCutsCouple());
    fpPreStepPoint->SetPolarization(fpTrack->GetPolarization());
    fpPreStepPoint->SetSafety(0.);
    fpPreStepPoint->SetStepStatus(fUndefined);
@@ -221,6 +222,8 @@ inline
    // set velocity 
    fpPostStepPoint->SetVelocity(fpTrack->GetVelocity());
 }
+
+
 
 
 

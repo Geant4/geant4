@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.hh,v 1.9 2002-11-01 15:55:30 jacek Exp $
+// $Id: G4ParticleChangeForTransport.hh,v 1.10 2002-12-16 11:59:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,7 @@
 //   Added theMaterialChange                        16 FEb. 2000  H.Kurahige
 //   Remove thePolarizationChange		    12 Feb. 2001  H.Kurashige
 //   Modification for G4TouchableHandle             22 Oct. 2001  R.Chytracek
+//   Add MaterialCutsCouple                          8 Oct. 2002  H.Kurashige
 //
 // Class Description
 //  This class is a concrete class for ParticleChange for transportation
@@ -45,6 +46,7 @@
 #include "G4ios.hh"
 #include "G4TouchableHandle.hh"
 #include "G4ParticleChange.hh"
+#include "G4MaterialCutsCouple.hh"
 
 
 class G4ParticleChangeForTransport: public G4ParticleChange
@@ -57,7 +59,7 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     virtual ~G4ParticleChangeForTransport();
 
   protected:
-    // hide copy constructor and assignment operaor as protected
+    // hide copy constructor and assignment operator as protected
     G4ParticleChangeForTransport(const G4ParticleChangeForTransport &right);
     G4ParticleChangeForTransport & operator=(const G4ParticleChangeForTransport &right);
 
@@ -91,6 +93,10 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     void SetMaterialChange(G4Material* fMaterial);
     //  Get/Set the material in the touchable of the current particle.
 
+    const G4MaterialCutsCouple* GetMaterialCutsCoupleChange() const;
+    void SetMaterialCutsCoupleChange(const G4MaterialCutsCouple* fMaterialCutsCouple);
+    //  Get/Set the materialCutsCouple in the touchable of the current particle.
+
     G4bool GetMomentumChanged() const;
     void SetMomentumChanged(G4bool b);
 
@@ -101,28 +107,24 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     G4TouchableHandle theTouchableHandle;
     //  The changed touchable of a given particle.
 
+  public:
+
+    // Prototype implementation of smooth representation of curved trajectories.
+    // Auxiliary points are ThreeVectors for now; change to G4AuxiliaryPoints.
+
+    inline void SetPointerToVectorOfAuxiliaryPoints( G4std::vector<G4ThreeVector>* theNewVectorPointer );
+    inline G4std::vector<G4ThreeVector>* GetPointerToVectorOfAuxiliaryPoints() const;
+
   private:
     G4bool     isMomentumChanged;
     //  The flag which is set if mometum is changed in this stepi
     G4Material* theMaterialChange;
-     //  The material where given track currently locates
+    const G4MaterialCutsCouple* theMaterialCutsCoupleChange;
+     // The material (and MaterialCutsCouple) where given track
+     // currently locates
 
-  // Prototyping implementation of smooth representation of curved
-  // trajectories. (jacek 30/10/2002)
-public:
-  // Auxiliary points are ThreeVectors for now; change to
-  // G4AuxiliaryPoints or some such (jacek 30/10/2002)
-  void SetPointerToVectorOfAuxiliaryPoints( G4std::vector<G4ThreeVector>* theNewVectorPointer ) {
-    fpVectorOfAuxiliaryPointsPointer = theNewVectorPointer;
-  }
-  G4std::vector<G4ThreeVector>* GetPointerToVectorOfAuxiliaryPoints() const {
-    return fpVectorOfAuxiliaryPointsPointer;
-  }
-private:
-  // Explicity including the word "Pointer" in the name as I keep
-  // forgetting the * (jacek 30/10/2002)
-  G4std::vector<G4ThreeVector>* fpVectorOfAuxiliaryPointsPointer;
-
+  private:
+    G4std::vector<G4ThreeVector>* fpVectorOfAuxiliaryPointsPointer;
 };
 
 #include "G4ParticleChangeForTransport.icc"

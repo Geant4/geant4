@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.15 2001-12-14 09:59:35 kurasige Exp $
+// $Id: G4Track.hh,v 1.16 2002-12-16 11:59:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,6 +39,7 @@
 //
 //---------------------------------------------------------------
 //   Modification for G4TouchableHandle             22 Oct. 2001  R.Chytracek
+//   Add MaterialCutCouple                          08 Oct. 2002  H.Kurashige
 
 #ifndef G4Track_h
 #define G4Track_h 1
@@ -56,6 +57,7 @@
 #include "G4Material.hh"
 
 class G4Step;                         // Forward declaration
+class G4MaterialCutsCouple;
 
 //////////////
 class G4Track
@@ -133,6 +135,9 @@ public: // With description
 
    G4Material* GetMaterial() const;
    G4Material* GetNextMaterial() const;
+
+   const G4MaterialCutsCouple* GetMaterialCutsCouple() const;
+   const G4MaterialCutsCouple* GetNextMaterialCutsCouple() const;
 
    const G4VTouchable*      GetTouchable() const;
    const G4TouchableHandle& GetTouchableHandle() const;

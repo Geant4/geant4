@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.hh,v 1.9 2001-10-22 04:19:40 kurasige Exp $
+// $Id: G4StepPoint.hh,v 1.10 2002-12-16 11:59:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,6 +41,7 @@
 //
 // ---------------------------------------------------------------
 //   Added fpMaterial                       16 FEb. 2000  H.Kurahige
+//   Added fpMaterialCutsCouple              8 Oct. 2002  H.Kurahige
 
 #ifndef G4StepPoint_h
 #define G4StepPoint_h 1
@@ -54,6 +55,7 @@ class G4VProcess;
 #include "G4StepStatus.hh"           // Include from 'track'
 #include "G4TouchableHandle.hh"      // Include from 'geometry'
 #include "G4Material.hh"
+#include "G4MaterialCutsCouple.hh"
 #include "G4LogicalVolume.hh"
 
 /////////////////
@@ -130,6 +132,9 @@ class G4StepPoint
   G4Material* GetMaterial() const;
   void SetMaterial(G4Material*);
 
+  const G4MaterialCutsCouple* GetMaterialCutsCouple() const;
+  void SetMaterialCutsCouple(const G4MaterialCutsCouple*);
+
   G4double GetSafety() const;
   void SetSafety(const G4double aValue);
 
@@ -182,6 +187,8 @@ class G4StepPoint
       //  Touchable Handle  
    G4Material* fpMaterial;
       // Material of the volmue
+   const G4MaterialCutsCouple* fpMaterialCutsCouple;
+      // MaterialCutsCouple of the volmue
    G4double fSafety;
    G4ThreeVector fPolarization;
    G4StepStatus fStepStatus;

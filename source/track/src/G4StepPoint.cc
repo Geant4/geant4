@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.cc,v 1.8 2002-12-04 22:46:00 tsasaki Exp $
+// $Id: G4StepPoint.cc,v 1.9 2002-12-16 11:59:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,9 +46,9 @@
 //////////////////////////
 G4StepPoint::G4StepPoint():
 //////////////////////////
-  fpTouchable(0),fpMaterial(0),fpProcessDefinedStep(0),fCharge(0.)
+  fpTouchable(0), fpMaterial(0), fpMaterialCutsCouple(0),
+  fpProcessDefinedStep(0), fCharge(0.)
 {
-
 }
 
 //////////////////////////
@@ -63,6 +63,7 @@ G4StepPoint::G4StepPoint(const G4StepPoint &right):
   fVelocity(right.fVelocity),
   fpTouchable(right.fpTouchable),
   fpMaterial(right.fpMaterial),
+  fpMaterialCutsCouple(right.fpMaterialCutsCouple),
   fSafety(right.fSafety),
   fPolarization(right.fPolarization),
   fStepStatus(right.fStepStatus),
@@ -86,6 +87,7 @@ G4StepPoint & G4StepPoint::operator=(const G4StepPoint &right)
     fKineticEnergy = right.fKineticEnergy;
     fpTouchable = right.fpTouchable;
     fpMaterial = right.fpMaterial;
+    fpMaterialCutsCouple = right.fpMaterialCutsCouple;
     fSafety = right.fSafety;
     fPolarization = right.fPolarization;
     fStepStatus = right.fStepStatus;

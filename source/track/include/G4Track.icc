@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.icc,v 1.9 2001-12-13 15:31:24 kurasige Exp $
+// $Id: G4Track.icc,v 1.10 2002-12-16 11:59:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-----------------------------------------------------------------
@@ -107,6 +107,15 @@
 
    inline G4VPhysicalVolume* G4Track::GetNextVolume() const
    { return fpNextTouchable->GetVolume(); }
+
+// material
+   inline 
+    const G4MaterialCutsCouple* G4Track::GetMaterialCutsCouple() const
+   { return fpStep->GetPreStepPoint()->GetMaterialCutsCouple(); }
+
+   inline 
+    const G4MaterialCutsCouple* G4Track::GetNextMaterialCutsCouple() const
+   { return fpStep->GetPostStepPoint()->GetMaterialCutsCouple(); }
 
 // material
    inline G4Material* G4Track::GetMaterial() const
@@ -282,16 +291,6 @@
 
    inline void G4Track::SetStep(const G4Step* aValue)
    { fpStep = (aValue); }
-
-
-
-
-
-
-
-
-
-
 
 
 

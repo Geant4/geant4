@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.icc,v 1.5 2001-10-22 04:19:40 kurasige Exp $
+// $Id: G4StepPoint.icc,v 1.6 2002-12-16 11:59:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -160,6 +160,13 @@
    { return fpMaterial; }
    inline void G4StepPoint::SetMaterial(G4Material* material)
    {fpMaterial = material; }
+
+   inline 
+    const G4MaterialCutsCouple* G4StepPoint::GetMaterialCutsCouple() const
+   { return fpMaterialCutsCouple; }
+   inline 
+     void G4StepPoint::SetMaterialCutsCouple(const G4MaterialCutsCouple* materialCutsCouple)
+   {fpMaterialCutsCouple = materialCutsCouple; }
 
    inline void G4StepPoint::SetWeight(G4double aValue)
    { fWeight = aValue; }

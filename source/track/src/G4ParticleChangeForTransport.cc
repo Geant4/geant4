@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.12 2002-11-01 15:55:45 jacek Exp $
+// $Id: G4ParticleChangeForTransport.cc,v 1.13 2002-12-16 11:59:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,6 +79,7 @@ G4ParticleChangeForTransport & G4ParticleChangeForTransport::operator=(const G4P
       theStatusChange = right.theStatusChange;
       theTouchableHandle = right.theTouchableHandle;
       theMaterialChange = right.theMaterialChange;
+      theMaterialCutsCoupleChange = right.theMaterialCutsCoupleChange;
       theMomentumDirectionChange = right.theMomentumDirectionChange;
       thePolarizationChange = right.thePolarizationChange;
       thePositionChange = right.thePositionChange;
