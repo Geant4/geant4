@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.19 2003-05-19 17:10:26 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.20 2004-06-12 12:35:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -98,6 +98,8 @@ G4ParticleTable::~G4ParticleTable()
 
   if (fParticleMessenger!=0) delete fParticleMessenger;  
   fParticleMessenger =0;
+
+  fgParticleTable =0;
 }
 
 ////////////////////
