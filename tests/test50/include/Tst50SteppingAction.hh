@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.hh,v 1.13 2003-05-17 18:11:53 guatelli Exp $
+// $Id: Tst50SteppingAction.hh,v 1.14 2003-05-18 10:42:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -50,21 +50,23 @@ class Tst50DetectorConstruction;
 class Tst50SteppingAction : public G4UserSteppingAction
 {
 public:
-  Tst50SteppingAction(Tst50EventAction*,Tst50PrimaryGeneratorAction*,Tst50RunAction*, Tst50DetectorConstruction*);
+
+  Tst50SteppingAction(Tst50EventAction*,
+		      Tst50PrimaryGeneratorAction*,
+		      Tst50RunAction*, 
+		      Tst50DetectorConstruction*);
+
   ~Tst50SteppingAction();
 
   void UserSteppingAction(const G4Step* Step);
 
 private:
 
-  G4int IDold;
-  Tst50EventAction*          eventAction;
+  G4int idOld;
+  Tst50EventAction* eventAction;
   Tst50PrimaryGeneratorAction* primaryAction;
   Tst50RunAction* runAction; 
   Tst50DetectorConstruction* detector;     
- 
-  G4double range;
-  G4double  KinE_stepBeginning;
  
 };
 
