@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3.cc,v 1.6 2001-10-16 08:16:08 kurasige Exp $
+// $Id: G4He3.cc,v 1.7 2003-02-18 01:49:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,6 +55,7 @@ G4He3::G4He3(
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable )
 {
+  SetParticleSubType("static");
 } 
 
 G4He3::~G4He3()

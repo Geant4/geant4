@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Alpha.cc,v 1.6 2001-10-16 08:16:07 kurasige Exp $
+// $Id: G4Alpha.cc,v 1.7 2003-02-18 01:49:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,7 @@ G4Alpha::G4Alpha(
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable )
 {
+  SetParticleSubType("static");
 }
 
 G4Alpha::~G4Alpha()
