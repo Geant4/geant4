@@ -62,11 +62,11 @@ G4VParticleChange* G4DecayWithSpin::DecayIt(const G4Track& aTrack, const G4Step&
     // Generate random polarization direction
 
     G4double cost = 1. - 2.*G4UniformRand();
-    G4double sint = sqrt((1.-cost)*(1.+cost));
+    G4double sint = std::sqrt((1.-cost)*(1.+cost));
 
     G4double phi = 2*M_PI*G4UniformRand();
-    G4double sinp = sin(phi);
-    G4double cosp = cos(phi);
+    G4double sinp = std::sin(phi);
+    G4double cosp = std::cos(phi);
 
     G4double px = sint*cosp;
     G4double py = sint*sinp;
@@ -133,7 +133,7 @@ G4VParticleChange* G4DecayWithSpin::DecayIt(const G4Track& aTrack, const G4Step&
 G4ThreeVector G4DecayWithSpin::Spin_Precession( const G4Step& aStep,
                                         G4ThreeVector B, G4double deltatime )
 {
-  G4double Bnorm = sqrt(sqr(B[0])  + sqr(B[1]) +sqr(B[2]) );
+  G4double Bnorm = std::sqrt(sqr(B[0])  + sqr(B[1]) +sqr(B[2]) );
 
   G4double q = aStep.GetTrack()->GetDefinition()->GetPDGCharge();
   G4double a = 1.165922e-3;
@@ -151,10 +151,10 @@ G4ThreeVector G4DecayWithSpin::Spin_Precession( const G4Step& aStep,
 
 #ifdef G4VERBOSE
 
-//  G4double normspin = sqrt(Spin*Spin);
-//  G4double normnewspin = sqrt(newSpin*newSpin);
+//  G4double normspin = std::sqrt(Spin*Spin);
+//  G4double normnewspin = std::sqrt(newSpin*newSpin);
 //  G4double cosalpha = Spin*newSpin/normspin/normnewspin;
-//  G4double alpha = acos(cosalpha);
+//  G4double alpha = std::acos(cosalpha);
 
 //  G4cout<< "AT REST::: PARAMETERS\n"
 //        << "Initial spin  : " << Spin <<"\n"

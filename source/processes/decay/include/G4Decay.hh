@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.hh,v 1.12 2004-09-22 04:03:14 kurasige Exp $
+// $Id: G4Decay.hh,v 1.13 2004-12-02 07:06:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -91,7 +91,7 @@ class G4Decay : public G4VRestDiscreteProcess
 
      virtual void BuildPhysicsTable(const G4ParticleDefinition&); 
      // In G4Decay, thePhysicsTable stores values of
-    //    beta * sqrt( 1 - beta*beta) 
+    //    beta * std::sqrt( 1 - beta*beta) 
     //  as a function of normalized kinetic enregy (=Ekin/mass),
     //  becasuse this table is universal for all particle types,
 
