@@ -3,6 +3,10 @@
 ## Geant4 DAWNFILE visualization driver  ##  
 ###########################################
 
+                 Sept. 1, 2002
+                 Satoshi Tanaka
+                 stanaka@cs.ritsumei.ac.jp           
+
 #----- << G4DAWNFILE_DEST_DIR >> -----
 #      Set a directory where g4_XX.prim and g4_XX.eps files 
 #      are generated.  
