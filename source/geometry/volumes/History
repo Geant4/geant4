@@ -1,4 +1,4 @@
-$Id: History,v 1.9 1999-04-19 17:18:57 japost Exp $
+$Id: History,v 1.10 1999-05-03 17:26:10 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May       3, 99      J. Apostolakis 
+   testG4ReplicaNavigation.cc
+      Changed comparison of doubles, to give it a tolerance.  
+
+April     8, 99      (committed & recorded J. Apostolakis  May 3rd)
+   G4NavigationLevel.{hh,icc}: Minor Changes 
+      added const to copy constructor and
+      new 'new' operator with size_t - for STL use with preallocated containers" 
+
 
 March    19, 99      J. Apostolakis        geomvol-01-00-03
 
