@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 
 sub usage {
   print STDERR "This script takes a STEP file (from STDIN)\n";
