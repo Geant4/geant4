@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test14.cc,v 1.6 2000-01-20 10:24:01 lefebure Exp $
+// $Id: test14.cc,v 1.7 2000-01-20 17:31:56 lefebure Exp $
 //
 
 #include "Tst14DetectorConstruction.hh"
@@ -41,7 +41,7 @@ int main(int argc,char** argv) {
   Tst14RunAction* runaction = new Tst14RunAction;
   runManager->SetUserAction(runaction);
 
-  //runManager->SetUserAction(new Tst14SteppingAction);
+  runManager->SetUserAction(new Tst14SteppingAction);
   //runManager->SetUserAction(new Tst14TrackingAction);
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();

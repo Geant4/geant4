@@ -1,3 +1,10 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 
 #include "Tst14SteppingAction.hh"
 #include "G4SteppingManager.hh"
@@ -20,6 +27,11 @@ Tst14SteppingAction::~Tst14SteppingAction()
 
 void Tst14SteppingAction::UserSteppingAction(const G4Step * theStep)
 {
+
+     theProcCallSA.execute(theStep);
+
+/*
+
   G4SteppingManager * SM = fpSteppingManager;
   G4Track * theTrack = theStep->GetTrack();
 
@@ -72,6 +84,7 @@ void Tst14SteppingAction::UserSteppingAction(const G4Step * theStep)
                                    ->GetParticleName();
          G4cout << G4endl;
        }
+*/
 
 }
 
