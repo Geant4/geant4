@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.19 2002-05-17 17:56:01 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.20 2002-05-17 17:59:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
