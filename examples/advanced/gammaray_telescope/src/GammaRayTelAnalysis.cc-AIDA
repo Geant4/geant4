@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysis.cc-AIDA,v 1.1 2001-12-06 20:37:19 pfeiffer Exp $
+// $Id: GammaRayTelAnalysis.cc-AIDA,v 1.2 2001-12-07 11:04:00 pfeiffer Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -31,6 +31,9 @@
 //      ------------ GammaRayAnalysisManager  ------
 //           by R.Giannitrapani, F.Longo & G.Santin (03 dic 2000)
 //
+// 07.12.2001 A.Pfeiffer
+// - integrated Guy's addition of the ntuple
+//
 // 06.12.2001 A.Pfeiffer
 // - updating to new design (singleton)
 //
@@ -38,8 +41,9 @@
 // - Adaptation to AIDA
 //
 // ************************************************************
-#include <stdlib.h>
-#include "g4std/fstream"
+
+#include "G4RunManager.hh"
+
 #include "GammaRayTelAnalysis.hh"
 #include "GammaRayTelDetectorConstruction.hh"
 #include "GammaRayTelAnalysisMessenger.hh"
@@ -53,33 +57,38 @@
 #include <AIDA/IHistogram2D.h>
 #include <AIDA/IPlotterFactory.h>
 #include <AIDA/IPlotter.h>
+#include <AIDA/ITupleFactory.h>
+#include <AIDA/ITuple.h>
 #endif
 
 GammaRayTelAnalysis* GammaRayTelAnalysis::instance = 0;
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelAnalysis::GammaRayTelAnalysis()
+GammaRayTelAnalysis::GammaRayTelAnalysis(int argc,char** argv)
 :GammaRayTelDetector(0)
-,analysisFactory(0), tree(0), plotter(0)
+,analysisFactory(0), tree(0), plotter(0), tuple(0)
 ,energy(0), hits(0), posXZ(0), posYZ(0)
 ,histo1DDraw("enable"),histo1DSave("enable"),histo2DDraw("enable")
 ,histo2DSave("enable"),histo2DMode("strip")
 {
-  // Define the messenger and the analysis system
-  analysisMessenger = new GammaRayTelAnalysisMessenger(this);
-
   G4RunManager* runManager = G4RunManager::GetRunManager();
   GammaRayTelDetector =
 (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
 
 #ifdef  G4ANALYSIS_USE
+  // Define the messenger and the analysis system
+  analysisMessenger = new GammaRayTelAnalysisMessenger(this);
+
   analysisFactory = AIDA_createAnalysisFactory();
   if(analysisFactory) {
 
     ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
     if(treeFactory) {
-      tree = treeFactory->create();
+      // Tree in memory :
+      //tree = treeFactory->create();
+      // Create a "tree" associated to a ROOT "store" (in RECREATE mode).
+      tree = treeFactory->create("GammaRayTel.root",false,false,"ROOT");
       if(tree) {
 	IHistogramFactory* histoFactory	= 
 	  analysisFactory->createHistogramFactory(*tree);  
@@ -121,6 +130,16 @@ GammaRayTelAnalysis::GammaRayTelAnalysis()
 	  
 	  delete histoFactory;
 	}
+    
+
+	// Get a tuple factory :
+	ITupleFactory* tupleFactory = analysisFactory->createTupleFactory(*tree);
+	if(tupleFactory) {
+	  // Create a tuple :
+	  tuple = tupleFactory->create("tuple","tuple",
+				       "energy plane x y z");
+	  delete tupleFactory;
+	}
       }
       delete treeFactory; // Will not delete the ITree.
     }
@@ -135,23 +154,9 @@ GammaRayTelAnalysis::GammaRayTelAnalysis()
       }
       delete plotterFactory;
     }
+
   }
 
-
-  /*
-  sprintf(name,"gammaraytel%d.hbook::1", n);
-  // Book ntuples
-  ntuple = ntFactory->createC(name);
-  //  Add and bind the attributes to the ntuple
-  if ( !( ntuple->addAndBind( "energy", ntEnergy) &&
-	  ntuple->addAndBind( "plane" , ntPlane) &&
-  	  ntuple->addAndBind( "x"     , ntX   ) &&
-  	  ntuple->addAndBind( "y"     , ntY   ) &&
-  	  ntuple->addAndBind( "z"     , ntZ   ) ) ) {
-    delete ntuple;
-    G4Exception(" GammaRayTelAnalysis::BeginOfRun - Could not addAndBind ntuple");
-  }  
-  */
 
 #endif
 }
@@ -173,14 +178,14 @@ void GammaRayTelAnalysis::Finish()
 #ifdef  G4ANALYSIS_USE
   delete plotter;
   delete analysisFactory; // Will delete tree and histos.
-#endif
   delete analysisMessenger;
   analysisMessenger = 0;
+#endif
 }             
 
-GammaRayTelAnalysis* GammaRayTelAnalysis::getInstance()
+GammaRayTelAnalysis* GammaRayTelAnalysis::getInstance(int argc,char** argv)
 {
-  if (instance == 0) instance = new GammaRayTelAnalysis;
+  if (instance == 0) instance = new GammaRayTelAnalysis(argc,argv);
   return instance;
 }
 
@@ -223,15 +228,16 @@ void GammaRayTelAnalysis::InsertHits(int nplane)
 
 void GammaRayTelAnalysis::setNtuple(float E, float p, float x, float y, float z)
 {
-  /*
-  ntEnergy = E;
-  ntPlane = p;
-  ntX = x;
-  ntY = y;
-  ntZ = z;
-
-  ntuple->addRow();
-  */
+#ifdef  G4ANALYSIS_USE
+  if(tuple) {
+    tuple->fill(0,E);
+    tuple->fill(1,p);
+    tuple->fill(2,x);
+    tuple->fill(3,y);
+    tuple->fill(4,z);
+    tuple->addRow();
+  }
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -289,14 +295,14 @@ void GammaRayTelAnalysis::BeginOfRun(G4int n)
 void GammaRayTelAnalysis::EndOfRun(G4int n) 
 {
 #ifdef  G4ANALYSIS_USE
-  if(!plotter) return;
+  if(tree) tree->commit();
 
-  // We set one single region for the plotter
-  plotter->createRegions(1,1);
+  if(plotter) {
+    // We set one single region for the plotter
+    plotter->createRegions(1,1);
   
-  // We now print the histograms, each one in a separate file
-  if(histo2DSave == "enable")
-    {
+    // We now print the histograms, each one in a separate file
+    if(histo2DSave == "enable") {
       char name[15];
       sprintf(name,"posxz_%d.ps", n);
       plotter->plot(*posXZ);
@@ -308,19 +314,18 @@ void GammaRayTelAnalysis::EndOfRun(G4int n)
       plotter->write(name,"PS");
     }
 
-  if(histo1DSave == "enable")
-    {
+    if(histo1DSave == "enable") {
       char name[15];
       sprintf(name,"energy_%d.ps", n);
       plotter->plot(*energy);
       plotter->write(name,"PS");
-  
+      
       sprintf(name,"hits_%d.ps", n);
       plotter->clearRegion();
       plotter->plot(*hits);
       plotter->write(name,"PS");
-
     }
+  }
 #endif
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

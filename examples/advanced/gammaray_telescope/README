@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2001-12-04 11:40:27 flongo Exp $
+$Id: README,v 1.8 2001-12-07 11:04:00 pfeiffer Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,9 +22,10 @@ subdivided in ladders and strips, a CsI calorimeter and an
 anticoincidence system. In this version, the three detectors are made
 sensitive but only the hits on the tracker strips are registered and relevant 
 information (energy deposition, position etc) are dumped to an external
-ASCII file for subsequent analysis. If Lizard is available on the user
-platform, then some histograms with relevant hits information are 
-displayed and saved as PostScript files, and histograms and ntuples with
+ASCII file for subsequent analysis. If the user has set up the 
+AIDA (version 2.2 or compatible) environment or Anaphe/Lizard is available, 
+then some histograms with relevant hits information are displayed 
+and saved as PostScript files, and histograms and ntuples with
 relevant information are stored on a HBOOK file.
 
 The main features of this example are
