@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2002-04-18 10:21:38 maire Exp $
+$Id: History,v 1.45 2002-04-22 09:03:01 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+22 apr 02: Laszlo (utils-V04-00-??)
+- G4MultipleScattering.hh,.cc have been committed:
+  boundary algorithm has been modified resulting big improvement
+  in the performance (with the same physics) !!!!!!!!!
+  
 17 apr 02: Laszlo (utils-V04-00-03)
 - G4MultipleScattering.hh,.cc have been committed:
   new parametrisation for angle distribution. 
