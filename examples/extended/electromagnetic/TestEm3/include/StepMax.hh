@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.hh,v 1.3 2005-01-11 17:29:34 vnivanch Exp $
+// $Id: StepMax.hh,v 1.4 2005-01-11 18:20:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +45,7 @@ class StepMax : public G4VDiscreteProcess
 public:
 
   StepMax(const G4String& processName = "UserStepMax");
-  ~StepMax();
+ ~StepMax();
 
   G4bool   IsApplicable(const G4ParticleDefinition&);
 
