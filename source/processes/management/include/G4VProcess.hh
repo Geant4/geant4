@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.14 2003-04-01 16:43:50 gcosmo Exp $
+// $Id: G4VProcess.hh,v 1.15 2004-10-25 13:02:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@
 //   Add PILfactor and GPIL       3 Nov. 2000   H.Kurashige
 //   Add Store/RetrievePhysicsTable 8  Nov. 2000   H.Kurashige
 //   Modify Store/RetrievePhysicsTable methods 9 Mar. 2001   H.Kurashige
+//   Added PreparePhysicsTable  20 Aug. 2004 H.Kurashige
 
 #ifndef G4VProcess_h 
 #define G4VProcess_h 1
@@ -208,11 +209,18 @@ class G4VProcess
       // It is overloaded by individual processes when they need physics
       // tables. 
 
-      // Processes which Build (for example in their
-      // constructors) physics tables independent of cuts
-      // should preferably use a
-      // private void BuildThePhysicsTable()
-      // function. Not another BuildPhysicsTable, please.
+     virtual void PreparePhysicsTable(const G4ParticleDefinition&){};
+      // Messaged by the Particle definition (via the Process manager)
+      // whenever cross section tables have to be prepare for rebuilt 
+      // (i.e. if new materials have been defined). 
+      // It is overloaded by individual processes when they need physics
+      // tables. 
+
+      // Processes which Build physics tables independent of cuts
+      // (for example in their constructors)
+      // should preferably use private 
+      // void BuildThePhysicsTable() and void PreparePhysicsTable().
+      // Not another BuildPhysicsTable, please.
 
 
       virtual G4bool StorePhysicsTable(G4ParticleDefinition* ,
