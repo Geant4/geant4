@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.19 2001-11-07 13:12:26 radoone Exp $
+// $Id: G4SteppingManager.cc,v 1.20 2001-11-07 16:48:24 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -128,9 +128,6 @@ G4StepStatus G4SteppingManager::Stepping()
 
 // Switch next touchable in track to current one
    fTrack->SetTouchableHandle(fTrack->GetNextTouchableHandle());
-
-// Free the touchable which is not used
-   SetAnotherTouchableFree(fPostStepPoint->GetTouchable());
 
 // Reset the secondary particles
    fN2ndariesAtRestDoIt = 0;
