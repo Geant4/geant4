@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.36 2001-09-23 18:27:59 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.37 2001-10-04 17:49:59 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -237,10 +237,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
       aParticleChange.AddSecondary((*photonVector)[l]); 
     }
   
-  // Is clear necessary?
   delete photonVector;
-    //photonVector->clear();
-  //electronVector.clear();
   
   if (energyDeposit < 0)
     {

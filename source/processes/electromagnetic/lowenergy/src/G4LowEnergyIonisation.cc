@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.58 2001-10-01 12:45:49 guardi Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.59 2001-10-04 17:49:58 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,6 +67,11 @@
 //                       clean up the code 
 // 02.08.01 V.Ivanchenko fix energy conservation for small steps 
 // 18.08.01 V.Ivanchenko fix energy conservation for pathalogical delta-energy
+// 01.10.01 E. Guardincerri Replaced fluorescence generation in PostStepDoIt
+//                          according to design iteration
+// 04.10.01 MGP             Minor clean-up in the fluo section, removal of
+//                          compilation warnings and extra protection to
+//                          access a null pointer
 //                                                                 
 // --------------------------------------------------------------
  
@@ -1155,46 +1160,49 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
   if(thePrimShVec.size() != 0) thePrimShVec.clear();
   thePrimShVec.push_back(thePrimaryShell);
 
- G4int nElectrons = electronVector.size();
+ size_t nElectrons = electronVector.size();
  size_t nTotPhotons = 0;
- G4int nPhotons=0;
+ size_t nPhotons = 0;
   
  // Generation of fluorescence
   if (AtomIndex > 5)
     {
-      photonVector = deexcitationManager.GenerateParticles(AtomIndex,shellId); 
-      nTotPhotons = photonVector->size();
-      for (size_t k=0; k<nTotPhotons; k++)
+      photonVector = deexcitationManager.GenerateParticles(AtomIndex,shellId);
+      if (photonVector != 0)
 	{
-	  G4DynamicParticle* aPhoton = (*photonVector)[k];
-	  if(aPhoton==0)
+	  nTotPhotons = photonVector->size();
+	  for (size_t k=0; k<nTotPhotons; k++)
 	    {
-	      delete aPhoton;
-	    }
-	  else
-	    {
-	      G4double itsKineticEnergy = aPhoton->GetKineticEnergy();
-	      G4double eDepositTmp = theEnergyDeposit - itsKineticEnergy;
-	      if (itsKineticEnergy>=CutForLowEnergySecondaryPhotons &&
-		 eDepositTmp > 0.)
+	      G4DynamicParticle* aPhoton = (*photonVector)[k];
+	      if (aPhoton != 0)
 		{
-		  nPhotons++;
-		  // Local energy deposit is given as the sum of the 
-		  // energies of incident photons minus the energies
-		  // of the outcoming fluorescence photons
-		  theEnergyDeposit -= itsKineticEnergy;
-		  
+		  G4double itsKineticEnergy = aPhoton->GetKineticEnergy();
+		  G4double eDepositTmp = theEnergyDeposit - itsKineticEnergy;
+		  if (itsKineticEnergy >= CutForLowEnergySecondaryPhotons &&
+		      eDepositTmp > 0.)
+		    {
+		      nPhotons++;
+		      // Local energy deposit is given as the sum of the 
+		      // energies of incident photons minus the energies
+		      // of the outcoming fluorescence photons
+		      theEnergyDeposit -= itsKineticEnergy;
+		    }
+		  else
+		    {
+		      // The current photon would be below threshold,
+		      // or it would cause a negative energy deposit
+		      delete aPhoton;
+		    }
 		}
-	      else
-		{delete aPhoton;}
 	    }
 	}
     }
-  G4int nSecondaries  = nElectrons + nPhotons;
+      
+  size_t nSecondaries  = nElectrons + nPhotons;
   
   aParticleChange.SetNumberOfSecondaries(nSecondaries);
-  
-  G4int l = 0;
+      
+  size_t l;
   for ( l = 0; l<nElectrons; l++ )
     {
       aParticleChange.AddSecondary(electronVector[l]);
@@ -1204,9 +1212,10 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
       aParticleChange.AddSecondary((*photonVector)[l]); 
     }
   
-  // Is clear necessary?
-  delete photonVector;
-    photonVector->clear();
+  if (photonVector != 0)
+    {
+      delete photonVector;
+    }
   electronVector.clear();
   
   // fill ParticleChange 
