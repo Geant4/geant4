@@ -150,7 +150,8 @@ int main(int argc,char** argv)
  
   G4Material* ma[14];
   ma[0] = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
-  ma[1] = new G4Material("Graphite","Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
+  ma[1] = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
+  ma[1]->SetChemicalFormula("Graphite");
   ma[2] = new G4Material("Al", 13., 26.98*g/mole, 2.7 *g/cm3);
   ma[3] = new G4Material("Si",   14., 28.055*g/mole, 2.33*g/cm3);
   
@@ -168,17 +169,21 @@ int main(int argc,char** argv)
   G4Element*   I  = new G4Element ("Iodide"  , "I", 53. , 126.9044*g/mole);
 
   ma[10] = new G4Material("O2", 8., 16.00*g/mole, 1.1*g/cm3);
-  ma[11] = new G4Material ("Water" , "H_2O", 1.*g/cm3, 2);
+  ma[10]->SetChemicalFormula("O_2");
+  ma[11] = new G4Material ("Water" , 1.*g/cm3, 2);
   ma[11]->AddElement(H,2);
   ma[11]->AddElement(O,1);
+  ma[11]->SetChemicalFormula("H_2O");
 
-  ma[12] = new G4Material ("Ethane" , "C_2H_6", 0.4241*g/cm3, 2);
+  ma[12] = new G4Material ("Ethane" , 0.4241*g/cm3, 2);
   ma[12]->AddElement(H,6);
   ma[12]->AddElement(C,2);
+  ma[12]->SetChemicalFormula("C_2H_6");
   
   ma[13] = new G4Material ("CsI" , 4.53*g/cm3, 2);
   ma[13]->AddElement(Cs,1);
   ma[13]->AddElement(I,1);
+  ma[13]->SetChemicalFormula("CsI");
   
   static const G4MaterialTable* theMaterialTable = 
                G4Material::GetMaterialTable();
