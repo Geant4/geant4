@@ -105,9 +105,47 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4LorentzVector theHigh;
   G4cout << "CHIPS ENERGY LOST "<<theEnergyLostInFragmentation<<G4endl;
   G4cout << "sorted rapidities event start"<<G4endl;
+  G4ReactionProductVector * theResult = new G4ReactionProductVector;
+  G4ReactionProduct * theSec;
+  G4KineticTrackVector * secondaries;
+  
+  // first decay and add all escaping particles.
   for(current = theSorted.begin(); current!=theSorted.end(); current++)
   {
     firstEscaping = current;
+    if(current->second->GetDefinition()->GetQuarkContent(3)!=0 ||
+       current->second->GetDefinition()->GetAntiQuarkContent(3) !=0)
+    {
+      G4KineticTrack * aResult = current->second;
+      G4ParticleDefinition * pdef=aResult->GetDefinition();
+      secondaries = NULL;
+      if ( pdef->GetPDGWidth() > 0 && pdef->GetPDGLifeTime() < 5E-17*s )
+      {
+        secondaries = aResult->Decay();
+      }
+      if ( secondaries == NULL )
+      {
+        theSec = new G4ReactionProduct(aResult->GetDefinition());
+        G4LorentzVector current4Mom = aResult->Get4Momentum();
+        theSec->SetTotalEnergy(current4Mom.t());
+        theSec->SetMomentum(current4Mom.vect());
+        theResult->insert(theSec);
+      } 
+      else
+      {
+        for (G4int aSecondary=0; aSecondary<secondaries->entries(); aSecondary++)
+        {
+          theSec = new G4ReactionProduct(secondaries->at(aSecondary)->GetDefinition());
+          G4LorentzVector current4Mom = secondaries->at(aSecondary)->Get4Momentum();
+          theSec->SetTotalEnergy(current4Mom.t());
+          theSec->SetMomentum(current4Mom.vect());
+          theResult->insert(theSec);
+        }
+        secondaries->clearAndDestroy();
+        delete secondaries;
+      }
+      continue;
+    }
     runningEnergy += current->second->Get4Momentum().t();
     if(runningEnergy > theEnergyLostInFragmentation) break;
     
@@ -219,12 +257,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   }
    
   // Fill the result.
-  G4ReactionProductVector * theResult = new G4ReactionProductVector;
-  G4ReactionProduct * theSec;
   G4cout << "NEXT EVENT"<<endl;
   
   // first decay and add all escaping particles.
-  G4KineticTrackVector * secondaries;
   for(current = firstEscaping; current!=theSorted.end(); current++)
   {
     G4KineticTrack * aResult = current->second;
