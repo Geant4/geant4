@@ -1,10 +1,9 @@
                 Visualization Built In Commands
                 ===============================
 
-From Geant4 3.0 the old /vis~/ commands have been deprecated.  After
-Geant4 3.2 they are no longer available.  Here is some guidance on the
-new commands available with from Geant4 4.0.  Note particularly the
-new compound commands:
+The old /vis~/ commands are no longer available.  Here is some
+guidance on the new commands available from Geant4 4.0.  Note
+particularly the new compound commands:
 
 /vis/drawTree
 /vis/drawVolume
