@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsList.cc,v 1.10 2002-03-08 17:30:19 maire Exp $
+// $Id: Em5PhysicsList.cc,v 1.11 2002-06-05 15:43:43 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 

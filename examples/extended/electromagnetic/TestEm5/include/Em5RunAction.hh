@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5RunAction.hh,v 1.8 2001-11-28 16:08:18 maire Exp $
+// $Id: Em5RunAction.hh,v 1.9 2002-06-05 15:43:42 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,17 +68,6 @@ class Em5RunAction : public G4UserRunAction
 
     void AddTrRef(G4double tr,G4double ref);
 
-    void FillEn(G4double En);
-    void FillTh(G4double Th);
-    void FillThBack(G4double Th);
-    void FillR(G4double R);
-    void FillTt(G4double Tt);
-    void FillTb(G4double Tt);
-    void FillTsec(G4double T);
-    void FillGammaSpectrum(G4double E);
-    void FillNbOfSteps(G4double nstep);
-    void Fillvertexz(G4double z);
-
     void SethistName(G4String name) ;
 
     void SetnbinStep(G4int nbin);
@@ -121,6 +110,12 @@ class Em5RunAction : public G4UserRunAction
     void Setzlow(G4double z);
     void Setzhigh(G4double z);
 
+    G4double GetdTh() { return dTh;};
+    G4double GetdThback() { return dThback;};
+#ifndef G4NOHIST
+    HepHistogram* GetHisto(G4int id) {return histo[id];}
+#endif
+
   private:
 
     void bookHisto();
@@ -131,9 +126,7 @@ class Em5RunAction : public G4UserRunAction
     
 #ifndef G4NOHIST    
     HepTupleManager* hbookManager;
-    HepHistogram *histo1, *histo2, *histo3, *histo4, *histo5 ;
-    HepHistogram *histo6, *histo7, *histo8, *histo9, *histo10;
-    HepHistogram          *hi2bis;
+    HepHistogram* histo[10] ;    
 #endif
     
     G4double EnergySumAbs,EnergySquareSumAbs;
@@ -146,38 +139,25 @@ class Em5RunAction : public G4UserRunAction
 
     G4double Transmitted,Reflected ;
 
-    G4double entryStep,underStep,overStep,distStep[200];
-    G4double Steplow,Stephigh,dStep;
+    G4double Steplow,Stephigh;
     G4int    nbinStep;
-    G4double entryEn,underEn,overEn,distEn[200];
-    G4double Enlow,Enhigh,dEn;
+    G4double Enlow,Enhigh;
     G4int    nbinEn;
-    G4double entryTt,underTt,overTt,distTt[200];
-    G4double Ttlow,Tthigh,dTt;
+    G4double Ttlow,Tthigh;
     G4int    nbinTt;
-    G4double Ttmean,Tt2mean;
-    G4double entryTb,underTb,overTb,distTb[200];
-    G4double Tblow,Tbhigh,dTb;
+    G4double Tblow,Tbhigh;
     G4int    nbinTb;
-    G4double Tbmean,Tb2mean;
-    G4double entryTsec,underTsec,overTsec,distTsec[200];
-    G4double Tseclow,Tsechigh,dTsec;
+    G4double Tseclow,Tsechigh;
     G4int    nbinTsec;
-    G4double entryTh,underTh,overTh,distTh[200];
     G4double Thlow,Thhigh,dTh;
     G4int    nbinTh;
-    G4double entryThback,underThback,overThback,distThback[200];
     G4double Thlowback,Thhighback,dThback;
     G4int    nbinThback;
-    G4double entryR ,underR ,overR ,distR[200];
-    G4double Rlow,Rhigh,dR;
+    G4double Rlow,Rhigh;
     G4int    nbinR;
-    G4double Rmean,R2mean;
-    G4double entryGamma,underGamma,overGamma,distGamma[200];
-    G4double ElowGamma,EhighGamma,dEGamma;
+    G4double ElowGamma,EhighGamma;
     G4int nbinGamma ;
-    G4double entryvertexz,undervertexz,oververtexz,distvertexz[200];
-    G4double zlow,zhigh,dz;
+    G4double zlow,zhigh;
     G4int nbinvertexz;
  
     Em5RunMessenger* runMessenger;

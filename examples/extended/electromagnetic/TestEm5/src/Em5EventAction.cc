@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5EventAction.cc,v 1.7 2001-11-28 16:08:18 maire Exp $
+// $Id: Em5EventAction.cc,v 1.8 2002-06-05 15:43:43 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,10 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
+
+#ifndef G4NOHIST
+ #include "CLHEP/Hist/HBookFile.h"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -130,10 +134,16 @@ void Em5EventAction::EndOfEventAction(const G4Event* evt)
     runaction->AddEP(NE,NP);
     runaction->AddTrRef(Transmitted,Reflected) ;
     runaction->AddEdeps(totEAbs) ;
-    runaction->FillEn(totEAbs) ;
+#ifndef G4NOHIST
+    if(runaction->GetHisto(1) != 0)
+       runaction->GetHisto(1)->accumulate(totEAbs) ;
+#endif
 
     nstep=nstepCharged+nstepNeutral ;
-    runaction->FillNbOfSteps(nstep);
+#ifndef G4NOHIST
+    if(runaction->GetHisto(0) != 0)
+       runaction->GetHisto(0)->accumulate(nstep) ;
+#endif
   }
   
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
