@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2003-10-03 15:30:55 gcosmo Exp $
+$Id: History,v 1.60 2003-10-21 13:30:03 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+21 Oct 03: mma (muons-V05-02-07)
+- fixes in MuPairProductionodel.cc (R.Kokoulin):
+  - 2*xi in ComputeDDMicroscopicCrossSection
+  - 8 integration points in ComputeDMicroscopicCrossSection 
 
 3 Oct 03: G.Cosmo (muons-V05-02-06)
 - Modified GNUmakefiles:
