@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm4.cc,v 1.1 1999-01-08 16:32:56 gunter Exp $
+// $Id: TestEm4.cc,v 1.2 1999-01-20 14:29:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,8 +35,6 @@
 #include "Em4EventAction.hh"
 #include "Em4SteppingAction.hh"
 
-// Solve templates.
-#include "g4templates.hh"
 
 int main(int argc,char** argv) {
 
