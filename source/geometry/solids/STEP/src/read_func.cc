@@ -39,20 +39,20 @@ PrintErrorState(ErrorDescriptor &err)
     G4cout << err.DetailMsg() << "\n";
 }
 
-// print G4std::istream error information for debugging purposes
-void IStreamState(G4std::istream &in)
+// print std::istream error information for debugging purposes
+void IStreamState(std::istream &in)
 {
     if( in.good())
     {
-	G4cerr << "istream GOOD\n" << G4std::flush;
+	G4cerr << "istream GOOD\n" << std::flush;
     }
     if( in.fail() )
     {
-	G4cerr << "istream FAIL\n" << G4std::flush;
+	G4cerr << "istream FAIL\n" << std::flush;
     }
     if( in.eof() )
     {
-	G4cerr << "istream EOF\n" << G4std::flush;
+	G4cerr << "istream EOF\n" << std::flush;
     }
 }
 
@@ -66,7 +66,7 @@ void IStreamState(G4std::istream &in)
 //   a severity level and error message (no error MESSAGE is set for severity
 //   incomplete).
 // * tokenList contains characters that terminate reading the value.
-// * If tokenList is not zero then the G4std::istream will be read until a character 
+// * If tokenList is not zero then the std::istream will be read until a character 
 //   is found matching a character in tokenlist.  All values read up to the 
 //   terminating character (delimiter) must be valid or err will be set with an
 //   appropriate error message.  A valid value may still have been assigned 
@@ -78,11 +78,11 @@ void IStreamState(G4std::istream &in)
 ///////////////////////////////////////////////////////////////////////////////
 
 int
-ReadInteger(SCLP23(Integer) &val, G4std::istream &in, ErrorDescriptor *err, 
+ReadInteger(SCLP23(Integer) &val, std::istream &in, ErrorDescriptor *err, 
 	    char *tokenList)
 {
     SCLP23(Integer) i = 0;
-    in >> G4std::ws;
+    in >> std::ws;
     in >> i;
 
     int valAssigned = 0;
@@ -106,7 +106,7 @@ int
 ReadInteger(SCLP23(Integer) &val, const char *s, ErrorDescriptor *err, 
 	    char *tokenList)
 {
-    G4std::istrstream in((char *)s);
+    std::istrstream in((char *)s);
     return ReadInteger(val, in, err, tokenList);
 }
 
@@ -137,8 +137,8 @@ IntValidLevel (const char *attrValue, ErrorDescriptor *err,
     if(clearError)
 	err->ClearErrorMsg();
 
-    G4std::istrstream in((char *)attrValue);
-    in >> G4std::ws; // skip white space
+    std::istrstream in((char *)attrValue);
+    in >> std::ws; // skip white space
     char c = in.peek();
     if(in.eof())
     {
@@ -210,7 +210,7 @@ WriteReal(SCLP23(Real) val, SCLstring &s)
 }
 
 void
-WriteReal(SCLP23(Real) val, G4std::ostream &out)
+WriteReal(SCLP23(Real) val, std::ostream &out)
 {
     SCLstring s;
 
@@ -270,7 +270,7 @@ WriteReal(SCLP23(Real) val, G4std::ostream &out)
 //   a severity level and error message (no error MESSAGE is set for severity
 //   incomplete).
 // * tokenList contains characters that terminate reading the value.
-// * If tokenList is not zero then the G4std::istream will be read until a character 
+// * If tokenList is not zero then the std::istream will be read until a character 
 //   is found matching a character in tokenlist.  All values read up to the 
 //   terminating character (delimiter) must be valid or err will be set with an
 //   appropriate error message.  A valid value may still have been assigned 
@@ -287,7 +287,7 @@ WriteReal(SCLP23(Real) val, G4std::ostream &out)
 ///////////////////////////////////////////////////////////////////////////////
 
 int
-ReadReal(SCLP23(Real) &val, G4std::istream &in, ErrorDescriptor *err, 
+ReadReal(SCLP23(Real) &val, std::istream &in, ErrorDescriptor *err, 
 	 char *tokenList)
 {
     SCLP23(Real) d = 0;
@@ -300,7 +300,7 @@ ReadReal(SCLP23(Real) &val, G4std::istream &in, ErrorDescriptor *err,
     char c;
     ErrorDescriptor e;
 
-    in >> G4std::ws; // skip white space
+    in >> std::ws; // skip white space
 
     // read optional sign
     c = in.peek();
@@ -378,7 +378,7 @@ ReadReal(SCLP23(Real) &val, G4std::istream &in, ErrorDescriptor *err,
     int success = 0;
     success = sscanf(buf," %G", &d);
 */
-    G4std::istrstream in2((char *)buf);
+    std::istrstream in2((char *)buf);
 
     // now that we have the real the stream will be able to salvage reading 
     // whatever kind of format was used to represent the real.
@@ -429,7 +429,7 @@ int
 ReadReal(SCLP23(Real) &val, const char *s, ErrorDescriptor *err, 
 	 char *tokenList)
 {
-    G4std::istrstream in((char *)s);
+    std::istrstream in((char *)s);
     return ReadReal(val, in, err, tokenList);
 }
 
@@ -460,8 +460,8 @@ RealValidLevel (const char *attrValue, ErrorDescriptor *err,
     if(clearError)
 	err->ClearErrorMsg();
 
-    G4std::istrstream in((char *)attrValue);
-    in >> G4std::ws; // skip white space
+    std::istrstream in((char *)attrValue);
+    in >> std::ws; // skip white space
     char c = in.peek();
     if(in.eof())
     {
@@ -496,7 +496,7 @@ RealValidLevel (const char *attrValue, ErrorDescriptor *err,
 //   a severity level and error message (no error MESSAGE is set for severity
 //   incomplete).
 // * tokenList contains characters that terminate reading the value.
-// * If tokenList is not zero then the G4std::istream will be read until a character 
+// * If tokenList is not zero then the std::istream will be read until a character 
 //   is found matching a character in tokenlist.  All values read up to the 
 //   terminating character (delimiter) must be valid or err will be set with an
 //   appropriate error message.  A valid value may still have been assigned 
@@ -507,11 +507,11 @@ RealValidLevel (const char *attrValue, ErrorDescriptor *err,
 ///////////////////////////////////////////////////////////////////////////////
 
 int
-ReadNumber(SCLP23(Real) &val, G4std::istream &in, ErrorDescriptor *err, 
+ReadNumber(SCLP23(Real) &val, std::istream &in, ErrorDescriptor *err, 
 	   char *tokenList)
 {
     SCLP23(Real) d = 0;
-    in >> G4std::ws;
+    in >> std::ws;
     in >> d;
 
 //    IStreamState(in);
@@ -534,7 +534,7 @@ int
 ReadNumber(SCLP23(Real) &val, const char *s, ErrorDescriptor *err, 
 	   char *tokenList)
 {
-    G4std::istrstream in((char *)s);
+    std::istrstream in((char *)s);
     return ReadNumber(val, in, err, tokenList);
 }
 
@@ -566,8 +566,8 @@ NumberValidLevel (const char *attrValue, ErrorDescriptor *err,
     if(clearError)
 	err->ClearErrorMsg();
 
-    G4std::istrstream in((char *)attrValue);
-    in >> G4std::ws; // skip white space
+    std::istrstream in((char *)attrValue);
+    in >> std::ws; // skip white space
     char c = in.peek();
     if(in.eof())
     {
@@ -596,7 +596,7 @@ NumberValidLevel (const char *attrValue, ErrorDescriptor *err,
 // return 1 if 'in' points at a quoted quote otherwise return 0
 
 int
-QuoteInString(G4std::istream& in)
+QuoteInString(std::istream& in)
 {
     char c1, c2;
     if( in.good() )
@@ -618,13 +618,13 @@ QuoteInString(G4std::istream& in)
 // 'in'.  
 
 void
-PushPastString (G4std::istream& in, SCLstring &s, ErrorDescriptor *err)
+PushPastString (std::istream& in, SCLstring &s, ErrorDescriptor *err)
 {
     char messageBuf[BUFSIZ];
     messageBuf[0] = '\0';
 
     char c;
-    in >> G4std::ws; // skip whitespace
+    in >> std::ws; // skip whitespace
     in >> c;
     if(c == STRING_DELIM)
     {
@@ -668,13 +668,13 @@ PushPastString (G4std::istream& in, SCLstring &s, ErrorDescriptor *err)
 // aggregates.
 
 void
-PushPastImbedAggr (G4std::istream& in, SCLstring &s, ErrorDescriptor *err)
+PushPastImbedAggr (std::istream& in, SCLstring &s, ErrorDescriptor *err)
 {
     char messageBuf[BUFSIZ];
     messageBuf[0] = '\0';
 
     char c;
-    in >> G4std::ws;
+    in >> std::ws;
     in.get(c);
 
     if(c == '(')
@@ -716,13 +716,13 @@ PushPastImbedAggr (G4std::istream& in, SCLstring &s, ErrorDescriptor *err)
 // to contain an aggregate as an element.
 
 void
-PushPastAggr1Dim(G4std::istream& in, SCLstring &s, ErrorDescriptor *err)
+PushPastAggr1Dim(std::istream& in, SCLstring &s, ErrorDescriptor *err)
 {
     char messageBuf[BUFSIZ];
     messageBuf[0] = '\0';
 
     char c;
-    in >> G4std::ws;
+    in >> std::ws;
     in.get(c);
 
     if(c == '(')
@@ -762,11 +762,11 @@ PushPastAggr1Dim(G4std::istream& in, SCLstring &s, ErrorDescriptor *err)
 /*************************** 
 * FindStartOfInstance reads to the beginning of an instance marked by #  
 * it copies what is read to the SCLstring inst.  It leaves the # on the 
-* G4std::istream.
+* std::istream.
 ***************************/
 
 Severity 
-FindStartOfInstance(G4std::istream& in, SCLstring&  inst)
+FindStartOfInstance(std::istream& in, SCLstring&  inst)
 {
     char c =0;
     ErrorDescriptor errs;
@@ -806,7 +806,7 @@ FindStartOfInstance(G4std::istream& in, SCLstring&  inst)
 ***************************/
 
 Severity
-SkipInstance (G4std::istream& in, SCLstring&  inst)
+SkipInstance (std::istream& in, SCLstring&  inst)
 {
     char c =0;
     ErrorDescriptor errs;
@@ -849,12 +849,12 @@ SkipInstance (G4std::istream& in, SCLstring&  inst)
 ***************************/
 
 const char *
-SkipSimpleRecord(G4std::istream &in, SCLstring &buf, ErrorDescriptor *err)
+SkipSimpleRecord(std::istream &in, SCLstring &buf, ErrorDescriptor *err)
 {
     char c;
     SCLstring s;
 
-    in >> G4std::ws;
+    in >> std::ws;
     in.get(c);
     if(c == '(') // beginning of record
     {
@@ -897,11 +897,11 @@ SkipSimpleRecord(G4std::istream &in, SCLstring &buf, ErrorDescriptor *err)
 ***************************/
 
 const char *
-ReadStdKeyword(G4std::istream& in, SCLstring &buf, int skipInitWS)
+ReadStdKeyword(std::istream& in, SCLstring &buf, int skipInitWS)
 {
     char c;
     if(skipInitWS)
-	in >> G4std::ws;
+	in >> std::ws;
 
     while( in.get(c) && !isspace(c) && ( isalnum(c) || (c == '_') ) )
     {
@@ -916,9 +916,9 @@ ReadStdKeyword(G4std::istream& in, SCLstring &buf, int skipInitWS)
 
 /***************************
 This function returns a null terminated const char* for the
-characters read from the G4std::istream up to, but not including
+characters read from the std::istream up to, but not including
 the first character found in the set of delimiters, or the 
-whitespace character. It leaves the delimiter on the G4std::istream.
+whitespace character. It leaves the delimiter on the std::istream.
 
 The string is returned in a static buffer, so it will change 
 the next time the function is called.
@@ -929,7 +929,7 @@ digits, underscore characters, and possibly an exclamation mark.
 The "!" shall appear only once, and only as the first character.
 ***************************/
 const char* 
-GetKeyword(G4std::istream& in, const char* delims, ErrorDescriptor &err)
+GetKeyword(std::istream& in, const char* delims, ErrorDescriptor &err)
 {
     char c;
     int sz = 1;
@@ -965,17 +965,17 @@ GetKeyword(G4std::istream& in, const char* delims, ErrorDescriptor &err)
 // otherwise return 0. This gobbles up the input stream until it knows 
 // that it does or does not have the ENDSEC keyword (and semicolon). i.e.
 // the first character that stops matching the keyword ENDSEC; (including the 
-// semicolon) will be put back onto the G4std::istream, everything else will remain 
+// semicolon) will be put back onto the std::istream, everything else will remain 
 // read.  It is this way so that checking for the keywd the next time will
 // start with the correct char or if it doesn't find it the non-matching char
 // may be what you are looking for next (e.g. someone typed in END; and the 
 // next chars are DATA; for the beginning of the data section).
 
 int  
-FoundEndSecKywd(G4std::istream& in, ErrorDescriptor &err)
+FoundEndSecKywd(std::istream& in, ErrorDescriptor &err)
 {
     char c;
-    in >> G4std::ws;
+    in >> std::ws;
     in.get(c);
 
     if(c == 'E')
@@ -995,7 +995,7 @@ FoundEndSecKywd(G4std::istream& in, ErrorDescriptor &err)
 			in.get(c);
 			if(c == 'C')
 			{
-			    in >> G4std::ws;
+			    in >> std::ws;
 			    in.get(c);
 			    if(c == ';')
 			    {
@@ -1087,11 +1087,11 @@ const char * ReadComment(SCLstring &ss, const char *s)
 ***************************/
 
 const char * 
-ReadComment(G4std::istream& in, SCLstring &s)
+ReadComment(std::istream& in, SCLstring &s)
 {
     char c = '\0';
     int commentLength = 0;
-    in >> G4std::ws;
+    in >> std::ws;
     in >> c;
 
     // it looks like a comment so far
@@ -1100,7 +1100,7 @@ ReadComment(G4std::istream& in, SCLstring &s)
 	in.get(c);	// won't skip space
 	if (c == '*')   // it is a comment
 	{
-	    in >> G4std::ws; // skip leading comment space
+	    in >> std::ws; // skip leading comment space
 
 	    // only to keep it from completely gobbling up input
 	    while( commentLength <= MAX_COMMENT_LENGTH ) 
@@ -1144,12 +1144,12 @@ ReadComment(G4std::istream& in, SCLstring &s)
 }
 
 /***************************
- ** Read a Print Control Directive from the G4std::istream
+ ** Read a Print Control Directive from the std::istream
  ** "\F\" == formfeed
  ** "\N\" == newline
  ***************************/
 Severity
-ReadPcd(G4std::istream& in) 
+ReadPcd(std::istream& in) 
 {
     char c;
     in.get(c);
@@ -1168,15 +1168,15 @@ ReadPcd(G4std::istream& in)
 
 /******************************
 This function reads through token separators
-from an G4std::istream. It returns when a token
-separator is not the next thing on the G4std::istream.
+from an std::istream. It returns when a token
+separator is not the next thing on the std::istream.
 The token separators are blanks, explicit print control directives,
 and comments.
 Part 21 considers the blank to be the space character, 
 but this function considers blanks to be the return value of isspace(c)
 ******************************/
 void 
-ReadTokenSeparator(G4std::istream& in, SCLstring *comments)
+ReadTokenSeparator(std::istream& in, SCLstring *comments)
 {
     char c;
     SCLstring s; // used if need to read a comment
@@ -1190,7 +1190,7 @@ ReadTokenSeparator(G4std::istream& in, SCLstring *comments)
 
     while (in)
     {
-	in >> G4std::ws; // skip white space.
+	in >> std::ws; // skip white space.
 	c = in.peek(); // look at next char on input stream
 
 	switch (c) 

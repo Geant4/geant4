@@ -11,11 +11,11 @@
 
 /* $Id: sdaiBinary.cc,v */
 
-#include "g4std/strstream"
 #include <sdai.h>
+#include <strstream>
 
 extern Severity 
-CheckRemainingInput(G4std::istream &in, ErrorDescriptor *err, 
+CheckRemainingInput(std::istream &in, ErrorDescriptor *err, 
 		    const char *typeName, // used in error message
 		    const char *tokenList); // e.g. ",)"
 
@@ -28,7 +28,7 @@ SCLP23(Binary)::operator= (const char* s)
 }
 
 void 
-SCLP23(Binary)::STEPwrite (G4std::ostream& out) const
+SCLP23(Binary)::STEPwrite (std::ostream& out) const
 {
     const char *str = 0;
     if (is_null ())
@@ -70,7 +70,7 @@ SCLP23(Binary)::STEPwrite (SCLstring &s) const
 }
 
 Severity 
-SCLP23(Binary)::ReadBinary(G4std::istream& in, ErrorDescriptor *err, int AssignVal,
+SCLP23(Binary)::ReadBinary(std::istream& in, ErrorDescriptor *err, int AssignVal,
 			   int needDelims)
 {
     if(AssignVal)
@@ -83,7 +83,7 @@ SCLP23(Binary)::ReadBinary(G4std::istream& in, ErrorDescriptor *err, int AssignV
 
     int validDelimiters = 1;
 
-    in >> G4std::ws; // skip white space
+    in >> std::ws; // skip white space
 
     if( in.good() )
     {
@@ -164,7 +164,7 @@ SCLP23(Binary)::ReadBinary(G4std::istream& in, ErrorDescriptor *err, int AssignV
 Severity
 SCLP23(Binary)::StrToVal (const char * s, ErrorDescriptor *err)
 {
-    G4std::istrstream in ((char *)s); // sz defaults to length of s
+    std::istrstream in ((char *)s); // sz defaults to length of s
     return ReadBinary(in, err, 1, 0);
 }
 
@@ -255,19 +255,19 @@ SCLP23(Binary)::StrToVal (const char * s, ErrorDescriptor *err)
 //  delimited by double quotes
 
 Severity 
-SCLP23(Binary)::STEPread (G4std::istream& in, ErrorDescriptor *err)
+SCLP23(Binary)::STEPread (std::istream& in, ErrorDescriptor *err)
 {
     return ReadBinary(in, err, 1, 1);
 /*
     int foundEndQuote = 0; // need so this string is not ok: 'hi''
     set_null ();  // clear the old string
     char c;
-    in >> G4std::ws; // skip white space
+    in >> std::ws; // skip white space
     in >> c;
 
 	// remember the current format state to restore the previous settings
     long int flags = in.flags();
-    in.unsetf(G4std::ios::skipws);
+    in.unsetf(std::ios::skipws);
 
     if (c == BINARY_DELIM)
     {
@@ -298,7 +298,7 @@ SCLP23(Binary)::STEPread (G4std::istream& in, ErrorDescriptor *err)
 Severity 
 SCLP23(Binary)::STEPread (const char *s, ErrorDescriptor *err)
 {
-    G4std::istrstream in((char *)s);
+    std::istrstream in((char *)s);
     return STEPread (in, err);
 }
 
@@ -323,14 +323,14 @@ SCLP23(Binary)::STEPread (const char *s, ErrorDescriptor *err)
 ///////////////////////////////////////////////////////////////////////////////
 
 Severity 
-SCLP23(Binary)::BinaryValidLevel (G4std::istream &in, ErrorDescriptor *err,
+SCLP23(Binary)::BinaryValidLevel (std::istream &in, ErrorDescriptor *err,
 				  int optional, char *tokenList, 
 				  int needDelims, int clearError)
 {
     if(clearError)
 	err->ClearErrorMsg();
 
-    in >> G4std::ws; // skip white space
+    in >> std::ws; // skip white space
     char c = in.peek();
     if(c == '$' || in.eof())
     {
@@ -365,7 +365,7 @@ SCLP23(Binary)::BinaryValidLevel (const char *value, ErrorDescriptor *err,
 				  int optional, char *tokenList, 
 				  int needDelims, int clearError)
 {
-    G4std::istrstream in((char *)value);
+    std::istrstream in((char *)value);
     return BinaryValidLevel (in, err, optional, tokenList, 
 			     needDelims, clearError);
 }

@@ -25,7 +25,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
-#include "g4std/strstream"
+#include <strstream>
 
 class ErrorDescriptor;
 #include <scl_string.h>
@@ -57,17 +57,17 @@ class SCLP23_NAME(Binary) : public SCLstring
 
     // format for STEP
     const char * asStr () const  {  return chars ();  }
-    void STEPwrite (G4std::ostream& out =G4cout)  const;
+    void STEPwrite (std::ostream& out =G4cout)  const;
     const char * STEPwrite (SCLstring &s) const;
 
     Severity StrToVal (const char *s, ErrorDescriptor *err);
-    Severity STEPread (G4std::istream& in, ErrorDescriptor *err);
+    Severity STEPread (std::istream& in, ErrorDescriptor *err);
     Severity STEPread (const char *s, ErrorDescriptor *err);
 
     Severity BinaryValidLevel (const char *value, ErrorDescriptor *err,
 			       int optional, char *tokenList,
 			       int needDelims = 0, int clearError = 1);
-    Severity BinaryValidLevel (G4std::istream &in, ErrorDescriptor *err, 
+    Severity BinaryValidLevel (std::istream &in, ErrorDescriptor *err, 
 			       int optional, char *tokenList,
 			       int needDelims = 0, int clearError = 1);
 
@@ -76,7 +76,7 @@ class SCLP23_NAME(Binary) : public SCLstring
 #endif
 
  protected:
-  Severity ReadBinary(G4std::istream& in, ErrorDescriptor *err, int AssignVal = 1,
+  Severity ReadBinary(std::istream& in, ErrorDescriptor *err, int AssignVal = 1,
 		      int needDelims = 1);
 };
 

@@ -97,7 +97,7 @@ int scl_char_str__list::Index (scl_char_str_ptr v) {
 
 scl_char_str_ptr& scl_char_str__list::operator[] (int index) {
     Check(index);
-//    _count = G4std::max(_count, index+1);
+//    _count = std::max(_count, index+1);
     _count = ( (_count > index+1) ? _count : (index+1) );
     return _buf[index];
 }

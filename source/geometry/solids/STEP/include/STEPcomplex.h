@@ -40,19 +40,19 @@ class STEPcomplex : public SCLP23(Application_instance) {
 // READ
     virtual Severity STEPread(int id, int addFileId, 
 			      class InstMgr * instance_set,
-			      G4std::istream& in =G4cin, const char *currSch =NULL,
+			      std::istream& in =G4cin, const char *currSch =NULL,
 			      int useTechCor =1);
 
-    virtual void STEPread_error(char c, int index, G4std::istream& in);
+    virtual void STEPread_error(char c, int index, std::istream& in);
 
 // WRITE
-    virtual void STEPwrite(G4std::ostream& out =G4cout, const char *currSch =NULL,
+    virtual void STEPwrite(std::ostream& out =G4cout, const char *currSch =NULL,
 			   int writeComment = 1);
     virtual const char * STEPwrite(SCLstring &buf, const char *currSch =NULL);
 
     SCLP23(Application_instance) *Replicate();
 
-    virtual void WriteExtMapEntities(G4std::ostream& out =G4cout,
+    virtual void WriteExtMapEntities(std::ostream& out =G4cout,
 				     const char *currSch =NULL);
     virtual const char * WriteExtMapEntities(SCLstring &buf,
 					     const char *currSch =NULL);

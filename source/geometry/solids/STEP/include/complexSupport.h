@@ -14,8 +14,8 @@
  * Date:        5/9/97                                                       *
  *****************************************************************************/
 
-#include "g4std/iostream"
-#include "g4std/fstream"
+#include <iostream>
+#include <fstream>
 /*
 extern "C"
 {
@@ -125,8 +125,8 @@ class EntList {
     friend class OrList;
     friend class ComplexList;
     friend class ComplexCollect;
-    friend G4std::ostream & operator<< ( G4std::ostream &, EntList & );
-    friend G4std::ostream & operator<< ( G4std::ostream &, MultList & );
+    friend std::ostream & operator<< ( std::ostream &, EntList & );
+    friend std::ostream & operator<< ( std::ostream &, MultList & );
 
   public:
     // Changed order of member initialisations to match correct order - GC
@@ -171,7 +171,7 @@ class EntList {
 
 class SimpleList : public EntList {
     friend class ComplexList;
-    friend G4std::ostream & operator<< ( G4std::ostream &, SimpleList & );
+    friend std::ostream & operator<< ( std::ostream &, SimpleList & );
 
   public:
     // Changed order of member initialisations to match correct order - GC
@@ -201,7 +201,7 @@ class MultList : public EntList {
 
     friend class ComplexList;
     friend class ComplexCollect;
-    friend G4std::ostream & operator<< ( G4std::ostream &, MultList & );
+    friend std::ostream & operator<< ( std::ostream &, MultList & );
 
   public:
     MultList( JoinType j ) : EntList(j), supertype(0), numchildren(0),
@@ -255,7 +255,7 @@ class AndOrList : public JoinList {
 
 class AndList : public JoinList {
     friend class ComplexList;
-    friend G4std::ostream & operator<< ( G4std::ostream &, ComplexList & );
+    friend std::ostream & operator<< ( std::ostream &, ComplexList & );
 
   public:
     AndList() : JoinList( AND ) {}
@@ -289,7 +289,7 @@ class ComplexList {
 
     friend class MultList;
     friend class ComplexCollect;
-    friend G4std::ostream & operator<< ( G4std::ostream &, ComplexList & );
+    friend std::ostream & operator<< ( std::ostream &, ComplexList & );
 
   public:
   

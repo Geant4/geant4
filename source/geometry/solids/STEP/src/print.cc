@@ -12,7 +12,7 @@
 // Local function prototypes:
 static char *joinText( JoinType, char * );
 
-G4std::ostream & operator << ( G4std::ostream &os, ComplexList &clist )
+std::ostream & operator << ( std::ostream &os, ComplexList &clist )
     /*
      * Prints out a ComplexList, by iterating through its children.
      */
@@ -25,7 +25,7 @@ G4std::ostream & operator << ( G4std::ostream &os, ComplexList &clist )
     return os;
 }
 
-G4std::ostream & operator << ( G4std::ostream &os, EntList &list )
+std::ostream & operator << ( std::ostream &os, EntList &list )
     /*
      * Prints out an EntList.  Calls appropriate function based on JoinType.
      */
@@ -38,7 +38,7 @@ G4std::ostream & operator << ( G4std::ostream &os, EntList &list )
     return os;
 }
 
-G4std::ostream & operator << ( G4std::ostream &os, SimpleList &slist )
+std::ostream & operator << ( std::ostream &os, SimpleList &slist )
     /*
      * Prints out a SimpleList.
      */
@@ -47,7 +47,7 @@ G4std::ostream & operator << ( G4std::ostream &os, SimpleList &slist )
     return os;
 }
 
-G4std::ostream & operator << ( G4std::ostream &os, MultList &mlist )
+std::ostream & operator << ( std::ostream &os, MultList &mlist )
     /*
      * Prints out a MultList.
      */
