@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.43 2004-08-17 18:19:13 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.44 2004-08-25 17:03:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -132,14 +132,8 @@ void G4MuIonisation::InitialiseProcess()
 const G4ParticleDefinition* G4MuIonisation::DefineBaseParticle(
                       const G4ParticleDefinition* p)
 {
-  if (p != theParticle) {
-    theParticle = p;
-
-    if(p == G4MuonPlus::MuonPlus()) theBaseParticle = BaseParticle();
-    else       theBaseParticle = G4MuonPlus::MuonPlus();
-
-    if(!isInitialised) InitialiseProcess();
-  }
+  if (!theParticle) theParticle = p;
+  if (!isInitialised) InitialiseProcess();
   return theBaseParticle;
 }
 

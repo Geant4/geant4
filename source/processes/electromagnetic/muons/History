@@ -1,4 +1,4 @@
-$Id: History,v 1.69 2004-08-17 18:19:13 vnivanch Exp $
+$Id: History,v 1.70 2004-08-25 17:03:53 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 Aug 04: V.Ivant (muons-V06-02-01)
+- Fix problem of use of common tables
 
 17 Aug 04: V.Ivant (muons-V06-02-00)
 - Provide the common use of tables for mu+ and mu- to save 
