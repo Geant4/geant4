@@ -1,4 +1,4 @@
-$Id: History,v 1.169 2003-02-24 02:17:50 pia Exp $
+$Id: History,v 1.170 2003-02-26 15:35:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26.02-2003   G.Cosmo, tag emlowen-V05-00-09
+             Fixed usage of 'abs' in G4PenelopeCompton.cc to allow porting
+             on WIN32-VC platform. 'abs' should not be included in the std
+             namespace.
 
 24.02-2003   MGP, tag emlowen-V05-00-08
              Small fixes related to Penelope processes for photons
