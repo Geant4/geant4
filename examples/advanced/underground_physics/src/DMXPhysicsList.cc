@@ -376,6 +376,7 @@ void DMXPhysicsList::ConstructOp()
   // theScintProcessDef->DumpPhysicsTable();
   theScintProcessDef->SetTrackSecondariesFirst(true);
   theScintProcessDef->SetScintillationYieldFactor(1.0); //
+  theScintProcessDef->SetScintillationExcitationRatio(0.0); //
   theScintProcessDef->SetVerboseLevel(OpVerbLevel);
 
   // scintillation process for alpha:
@@ -383,6 +384,7 @@ void DMXPhysicsList::ConstructOp()
   // theScintProcessNuc->DumpPhysicsTable();
   theScintProcessAlpha->SetTrackSecondariesFirst(true);
   theScintProcessAlpha->SetScintillationYieldFactor(1.1);
+  theScintProcessAlpha->SetScintillationExcitationRatio(1.0);
   theScintProcessAlpha->SetVerboseLevel(OpVerbLevel);
 
   // scintillation process for heavy nuclei
@@ -390,6 +392,7 @@ void DMXPhysicsList::ConstructOp()
   // theScintProcessNuc->DumpPhysicsTable();
   theScintProcessNuc->SetTrackSecondariesFirst(true);
   theScintProcessNuc->SetScintillationYieldFactor(0.2);
+  theScintProcessNuc->SetScintillationExcitationRatio(1.0);
   theScintProcessNuc->SetVerboseLevel(OpVerbLevel);
 
   // optical processes
