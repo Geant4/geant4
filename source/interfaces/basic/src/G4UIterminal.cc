@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIterminal.cc,v 1.1 1999-01-07 16:09:35 gunter Exp $
+// $Id: G4UIterminal.cc,v 1.2 1999-04-13 01:26:28 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -108,7 +108,6 @@ void G4UIterminal::ExecuteCommand(G4String aCommand)
       G4cerr << "command refused (" << commandStatus << ")" << endl;
   }
 }
-
 G4String G4UIterminal::GetCommand()
 {
   G4String newCommand;
@@ -195,122 +194,21 @@ G4String G4UIterminal::GetCommand()
   }
   return ModifyToFullPathCommand(newCommand);
 }
-
-void G4UIterminal::ShowCurrent( G4String newCommand )
-{
-  G4String comString = newCommand(1,newCommand.length()-1);
-  G4String theCommand = ModifyToFullPathCommand(comString);
-  G4String curV = UI->GetCurrentValues(theCommand);
-  if( ! curV.isNull() )
-  { G4cout << "Current value(s) of the parameter(s) : " << curV << endl; }
+G4bool G4UIterminal::GetHelpChoice(G4int& aInt){
+  cin >> aInt;
+  if(!cin.good()){
+    cin.clear();
+    cin.ignore(30,'\n');
+    return false;
+  } 
+  return true;
 }
-
-void G4UIterminal::ChangeDirectoryCommand( G4String newCommand )
-{
-  G4String prefix;
-  if( newCommand.length() <= 3 )
-  { prefix = "/"; }
-  else
-  {
-    G4String aNewPrefix = newCommand(3,newCommand.length()-3);
-    prefix = aNewPrefix.strip(G4String::both);
-  }
-  if(!ChangeDirectory(prefix))
-  { G4cout << "directory <" << prefix << "> not found." << endl; }
-}
-
-void G4UIterminal::ListDirectory( G4String newCommand )
-{
-  G4String targetDir;
-  if( newCommand.length() <= 3 )
-  { targetDir = GetCurrentWorkingDirectory(); }
-  else
-  {
-    G4String newPrefix = newCommand(3,newCommand.length()-3);
-    targetDir = newPrefix.strip(G4String::both);
-  }
-  G4UIcommandTree* commandTree 
-    = FindDirectory(ModifyToFullPathCommand(targetDir));
-  if( commandTree == NULL )
-  { G4cout << "Directory <" << targetDir << "> is not found." << endl; }
-  else
-  { commandTree->ListCurrent(); }
-}
-
-void G4UIterminal::TerminalHelp(G4String newCommand)
-{
-  G4UIcommandTree * treeTop = UI->GetTree();
-  int i = newCommand.index(" ");
-  if( i != RW_NPOS )
-  {
-    G4String newValue = newCommand(i+1,newCommand.length()-(i+1));
-    newValue.strip(G4String::both);
-    G4String targetCom = ModifyToFullPathCommand( newValue );
-    G4UIcommand* theCommand = treeTop->FindPath( targetCom );
-    if( theCommand != NULL ) 
-    { 
-      theCommand->List();
-      return;
-    }
-    else
-    {
-      G4cout << "Command <" << newValue << " is not found." << endl;
-      return;
-    }
-  }
-
-  G4UIcommandTree * floor[10];
-  floor[0] = treeTop;
-  int iFloor = 0;
-  int prefixIndex = 1;
-  G4String prefix = GetCurrentWorkingDirectory();
-  while( prefixIndex < prefix.length()-1 )
-  {
-    int ii = prefix.index("/",prefixIndex);
-    floor[iFloor+1] = 
-      floor[iFloor]->GetTree(prefix(0,ii+1));
-    prefixIndex = ii+1;
-    iFloor++;
-  }
-  floor[iFloor]->ListCurrentWithNum();
-  // 1998 Oct 2 non-number input
-  while(1){
-    G4cout << endl << "Type the number ( 0:end, -n:n level back ) : "<<flush;
-    cin >> i;
-    if(!cin.good()){
-      cin.clear();
-      cin.ignore(30,'\n');
-      G4cout << endl << "Not a number, once more" << endl; continue;}
-    else if( i < 0 ){
-      iFloor += i;
-      if( iFloor < 0 ) iFloor = 0;
-      floor[iFloor]->ListCurrentWithNum(); continue;}
-    else if(i == 0) { break;}
-    else if( i > 0 ) {
-      int n_tree = floor[iFloor]->GetTreeEntry();
-      if( i > n_tree )
-      { 
-        if( i <= n_tree + floor[iFloor]->GetCommandEntry() )
-        { 
-          floor[iFloor]->GetCommand(i-n_tree)->List(); 
-          //iFloor++;
-        }
-      }
-      else
-      {
-        floor[iFloor+1] = floor[iFloor]->GetTree(i);
-        iFloor++;
-        floor[iFloor]->ListCurrentWithNum();
-      }
-    }
-    //G4cout << endl << "Type the number ( 0:end, -n:n level back ) : ";
-
-  }
-  G4cout << "Exit from HELP." << endl << endl;
-  G4cout << endl;
+void G4UIterminal::ExitHelp(){
   // cin.flush();
   char temp[100];
   cin.getline( temp, 100 );
 }
+
+
 
 

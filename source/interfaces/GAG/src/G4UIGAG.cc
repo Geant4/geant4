@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIGAG.cc,v 1.1 1999-01-07 16:09:30 gunter Exp $
+// $Id: G4UIGAG.cc,v 1.2 1999-04-13 01:26:19 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UIGAG.cc
@@ -21,12 +21,12 @@
 #else
 #  include <strstream.h>
 #endif
-
+/*
 #ifdef GNU_GCC
   template class RWTValVector<G4UIcommand *>;
   template class RWTValVector<RWCString>;
 #endif
-
+*/
 G4UIGAG::G4UIGAG(): TVersion("T1.0a"), JVersion("J1.0a")
 {
   //G4cout << "G4UIGAG: Apr15,98." << endl;

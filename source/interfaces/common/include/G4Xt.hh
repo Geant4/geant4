@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Xt.hh,v 1.1 1999-01-07 16:09:37 gunter Exp $
+// $Id: G4Xt.hh,v 1.2 1999-04-13 01:26:31 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  To unify X11 event treatment between 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VBasicShell.cc,v 1.1 1999-01-07 16:09:37 gunter Exp $
+// $Id: G4VBasicShell.cc,v 1.2 1999-04-13 01:26:32 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -138,6 +138,233 @@ G4String G4VBasicShell::ModifyPath(G4String tempPath)
     }
   }
   return newPath;
+}
+////////////////////////////////////////////
+// Method involving an interactive G4cout //
+////////////////////////////////////////////
+/***************************************************************************/
+void G4VBasicShell::ExecuteCommand (
+ G4String aCommand
+)
+/***************************************************************************/
+// Should be put in G4VBasicShell.
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+  if(aCommand.length()<2) return;
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if(UI==NULL) return;
+  int commandStatus = UI->ApplyCommand(aCommand);
+  switch(commandStatus) {
+  case fCommandSucceeded:
+    break;
+  case fCommandNotFound:
+    G4cerr << "command not found" << endl;
+    break;
+  case fIllegalApplicationState:
+    G4cerr << "illegal application state -- command refused" << endl;
+    break;
+  case fParameterOutOfRange:
+  case fParameterUnreadable:
+  case fParameterOutOfCandidates:
+  default:
+    G4cerr << "command refused (" << commandStatus << ")" << endl;
+  }
+}
+/***************************************************************************/
+void G4VBasicShell::ApplyShellCommand (
+ G4String a_string
+,G4bool& exitSession
+,G4bool& exitPause
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if(UI==NULL) return;
+
+  G4String command = a_string.strip(G4String::leading);
+  if( command(0) == '#' ) { 
+
+    G4cout << command << endl; 
+
+  } else if( command == "ls" || command(0,3) == "ls " ) {
+
+    ListDirectory( command );
+
+  } else if( command == "pwd" ) { 
+
+    G4cout << "Current Working Directory : " 
+       << GetCurrentWorkingDirectory() << endl; 
+
+  } else if( command(0,2) == "cd" ) { 
+
+    ChangeDirectoryCommand ( command );
+
+  } else if( command(0,4) == "help" ) { 
+
+    TerminalHelp( command ); 
+
+  } else if( command(0) == '?' ) { 
+
+    ShowCurrent( command );
+
+  } else if( command(0,4) == "hist" ) {
+
+    G4int nh = UI->GetNumberOfHistory();
+    for(int i=0;i<nh;i++) { 
+      G4cout << i << ": " << UI->GetPreviousCommand(i) << endl; 
+    }
+
+  } else if( command(0) == '!' ) {
+
+    G4String ss = command(1,command.length()-1);
+    G4int vl;
+    const char* tt = ss;
+    istrstream is((char*)tt);
+    is >> vl;
+    G4int nh = UI->GetNumberOfHistory();
+    if(vl>=0 && vl<nh) { 
+      G4String prev = UI->GetPreviousCommand(vl); 
+      G4cout << prev << endl;
+      ExecuteCommand (ModifyToFullPathCommand(prev));
+    } else { 
+      G4cerr << "history " << vl << " is not found." << endl; 
+    }
+
+  } else if( command(0,4) == "exit" ) { 
+
+    if( exitPause == false) { //In a secondary loop.
+      G4cout << "You are now processing RUN." << endl;
+      G4cout << "Please abort it using \"/run/abort\" command first" << endl;
+      G4cout << " and use \"continue\" command until the application" << endl;
+      G4cout << " becomes to Idle." << endl;
+    } else {
+      exitSession = true;
+    }
+
+  } else if( command(0,4) == "cont" ) { 
+
+    exitPause = true;
+
+  } else {
+
+    ExecuteCommand (ModifyToFullPathCommand(a_string));
+
+  }
+}
+void G4VBasicShell::ShowCurrent(G4String newCommand)
+{
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if(UI==NULL) return;
+  G4String comString = newCommand(1,newCommand.length()-1);
+  G4String theCommand = ModifyToFullPathCommand(comString);
+  G4String curV = UI->GetCurrentValues(theCommand);
+  if( ! curV.isNull() ) { 
+    G4cout << "Current value(s) of the parameter(s) : " << curV << endl; 
+  }
+}
+void G4VBasicShell::ChangeDirectoryCommand(G4String newCommand)
+{
+  G4String prefix;
+  if( newCommand.length() <= 3 ) { 
+    prefix = "/"; 
+  } else {
+    G4String aNewPrefix = newCommand(3,newCommand.length()-3);
+    prefix = aNewPrefix.strip(G4String::both);
+  }
+  if(!ChangeDirectory(prefix)) { 
+    G4cout << "directory <" << prefix << "> not found." << endl; 
+  }
+}
+void G4VBasicShell::ListDirectory(G4String newCommand)
+{
+  G4String targetDir;
+  if( newCommand.length() <= 3 ) { 
+    targetDir = GetCurrentWorkingDirectory();
+  } else {
+    G4String newPrefix = newCommand(3,newCommand.length()-3);
+    targetDir = newPrefix.strip(G4String::both);
+  }
+  G4UIcommandTree* commandTree = FindDirectory( targetDir );
+  if( commandTree == NULL ) { 
+    G4cout << "Directory <" << targetDir << "> is not found." << endl; 
+  } else { 
+    commandTree->ListCurrent(); 
+  }
+}
+void G4VBasicShell::TerminalHelp(G4String newCommand)
+{
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if(UI==NULL) return;
+  G4UIcommandTree * treeTop = UI->GetTree();
+  int i = newCommand.index(" ");
+  if( i != RW_NPOS )
+  {
+    G4String newValue = newCommand(i+1,newCommand.length()-(i+1));
+    newValue.strip(G4String::both);
+    G4String targetCom = ModifyToFullPathCommand( newValue );
+    G4UIcommand* theCommand = treeTop->FindPath( targetCom );
+    if( theCommand != NULL ) 
+    { 
+      theCommand->List();
+      return;
+    }
+    else
+    {
+      G4cout << "Command <" << newValue << " is not found." << endl;
+      return;
+    }
+  }
+
+  G4UIcommandTree * floor[10];
+  floor[0] = treeTop;
+  int iFloor = 0;
+  int prefixIndex = 1;
+  G4String prefix = GetCurrentWorkingDirectory();
+  while( prefixIndex < prefix.length()-1 )
+  {
+    int ii = prefix.index("/",prefixIndex);
+    floor[iFloor+1] = 
+      floor[iFloor]->GetTree(prefix(0,ii+1));
+    prefixIndex = ii+1;
+    iFloor++;
+  }
+  floor[iFloor]->ListCurrentWithNum();
+  // 1998 Oct 2 non-number input
+  while(1){
+   //G4cout << endl << "Type the number ( 0:end, -n:n level back ) : "<<flush;
+    G4cout << endl << "Type the number ( 0:end, -n:n level back ) : "<<endl;
+    G4int i;
+    if(!GetHelpChoice(i)){
+      G4cout << endl << "Not a number, once more" << endl; 
+      continue;
+    } else if( i < 0 ){
+      iFloor += i;
+      if( iFloor < 0 ) iFloor = 0;
+      floor[iFloor]->ListCurrentWithNum(); 
+      continue;
+    } else if(i == 0) { 
+      break;
+    } else if( i > 0 ) {
+      int n_tree = floor[iFloor]->GetTreeEntry();
+      if( i > n_tree )
+      { 
+        if( i <= n_tree + floor[iFloor]->GetCommandEntry() )
+        { 
+          floor[iFloor]->GetCommand(i-n_tree)->List(); 
+        }
+      }
+      else
+      {
+        floor[iFloor+1] = floor[iFloor]->GetTree(i);
+        iFloor++;
+        floor[iFloor]->ListCurrentWithNum();
+      }
+    }
+  }
+  G4cout << "Exit from HELP." << endl << endl;
+  //G4cout << endl;
+  ExitHelp();
 }
 
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIterminal.hh,v 1.1 1999-01-07 16:09:34 gunter Exp $
+// $Id: G4UIterminal.hh,v 1.2 1999-04-13 01:26:25 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,10 +36,8 @@ class G4UIterminal : public G4VBasicShell
   private:
       void ExecuteCommand(G4String);
       G4String GetCommand();
-      void ChangeDirectoryCommand(G4String);
-      void ListDirectory(G4String);
-      void TerminalHelp(G4String);
-      void ShowCurrent(G4String);
+      G4bool GetHelpChoice(G4int&);
+      void ExitHelp();
 };
 
 

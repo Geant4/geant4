@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIWin32.hh,v 1.1 1999-01-07 16:09:34 gunter Exp $
+// $Id: G4UIWin32.hh,v 1.2 1999-04-13 01:26:24 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIWin32_h
@@ -33,17 +33,15 @@ public:
   void PauseSessionStart (G4String);
   G4int ReceiveG4cout(G4String);
   G4int ReceiveG4cerr(G4String);
-  void ApplyShellCommand (G4String);
   void AddMenu (const char*,const char*);
   void AddButton (const char*,const char*,const char*);
   G4String GetCommand (int);
   void TextAppendString(char*);
 private:
   void SecondaryLoop (G4String);
-  void ExecuteCommand (G4String);
-  void ShowCurrent (G4String);
-  void ChangeDirectoryCommand (G4String);
-  void ListDirectory (G4String);
+  G4bool GetHelpChoice(G4int&);
+  void ExitHelp();
+private:
   G4VInteractorManager* interactorManager;
   HWND mainWindow;
   HWND textWindow,editWindow;
@@ -53,6 +51,9 @@ private:
   int textRows,textCols;
   static LRESULT CALLBACK MainWindowProc(HWND,UINT,WPARAM,LPARAM);
   static LRESULT CALLBACK TextWindowProc(HWND,UINT,WPARAM,LPARAM);
+  static LRESULT CALLBACK EditWindowProc(HWND,UINT,WPARAM,LPARAM);
+  G4bool fHelp;
+  G4int fHelpChoice;
 };
 
 #endif
