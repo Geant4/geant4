@@ -26,8 +26,8 @@
  // J.P. Wellisch, CERN, Apr. 14 2000
  // Last modified: 03-Apr-1997
 
-#ifndef G4PhotoNuclearProcess_h
-#define G4PhotoNuclearProcess_h 1
+#ifndef G4PositronNuclearProcess_h
+#define G4PositronNuclearProcess_h 1
  
 // Class Description
 // Process for Ion Inelastic scattering; 
@@ -35,28 +35,29 @@
 // Class Description - End
 
 #include "G4HadronInelasticProcess.hh"
-#include "G4Gamma.hh"
-#include "G4PhotoNuclearCrossSection.hh"
+#include "G4Positron.hh"
+#include "G4ElectroNuclearCrossSection.hh"
  
 
- class G4PhotoNuclearProcess : public G4HadronInelasticProcess
+ class G4PositronNuclearProcess : public G4HadronInelasticProcess
  {
  public:
     
-    G4PhotoNuclearProcess(
-     const G4String& processName = "PhotonInelastic" ) :
+    G4PositronNuclearProcess(
+     const G4String& processName = "PositronNuclear" ) :
 
-    G4HadronInelasticProcess( processName, G4Gamma::Gamma() )
+    G4HadronInelasticProcess( processName, G4Positron::Positron() )
     { 
       G4CrossSectionDataStore * theStore = GetCrossSectionDataStore();
       theStore->AddDataSet(&theData);
     } 
     
-    ~G4PhotoNuclearProcess()
+    ~G4PositronNuclearProcess()
     { }
+    
  private:
  
-   G4PhotoNuclearCrossSection theData;
+   G4ElectroNuclearCrossSection theData;
  };
 
 #endif
