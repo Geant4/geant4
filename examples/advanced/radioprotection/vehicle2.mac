@@ -4,12 +4,12 @@
 /physics/addPhysics photon-epdl
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
-/physics/addPhysics ion-standard
-#/physics/addPhysics ion-ICRU
+#/physics/addPhysics ion-standard
+/physics/addPhysics ion-ICRU
 #### Add Hadronic Physics, muon physics and decay
-/physics/addPhysics hadronic
-/physics/addPhysics muon-standard
-/physics/addPhysics decay
+#/physics/addPhysics hadronic
+#/physics/addPhysics muon-standard
+#/physics/addPhysics decay
 ##############################
 #### Sets some default verbose
 /control/verbose 1
