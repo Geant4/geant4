@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeComptonTest.cc,v 1.2 2003-03-13 17:31:21 pandola Exp $
+// $Id: G4PenelopeComptonTest.cc,v 1.3 2003-04-16 16:26:48 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -128,7 +128,9 @@ G4int main()
 
   // ---- table ntuple ------
   AIDA::ITuple* ntuple3 = tpf->create("3","Mean Free Path Ntuple","double kinen,mfp");
- 
+
+  // ---- fluorescence ntuple -------
+  AIDA::ITuple* ntuple4 = tpf->create("4","Fluorescence Ntuple","double eprimary,px,py,pz,e,partType");
   //--------- Materials definition ---------
 
   G4Material* Si  = new G4Material("Silicon",   14., 28.055*g/mole, 2.33*g/cm3);
@@ -242,12 +244,12 @@ G4int main()
   G4Positron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
   
   cutsTable->UpdateCoupleTable(); 
-  (G4ProductionCutsTable::GetProductionCutsTable())->DumpCouples();
+  //(G4ProductionCutsTable::GetProductionCutsTable())->DumpCouples();
 
   //cutsTable->DumpCouples();
   const G4MaterialCutsCouple* theCouple = cutsTable->GetMaterialCutsCouple(material,cuts);
-  G4int indx=theCouple->GetIndex();
-  G4cout << "Indice: " << indx << G4endl;
+  //G4int indx=theCouple->GetIndex();
+  //G4cout << "Indice: " << indx << G4endl;
 
 
   // Processes    
@@ -584,6 +586,7 @@ G4int main()
       // Secondaries 
       G4cout << " secondaries " << 
 	particleChange->GetNumberOfSecondaries() << G4endl;
+     
       G4double px_el,py_el,pz_el,p_el,e_el,theta_el,eKin_el;
       
       for (G4int i = 0; i < (particleChange->GetNumberOfSecondaries()); i++) 
@@ -605,9 +608,6 @@ G4int main()
 	  if (e > initEnergy)
 	    {
 	      G4cout << "WARNING: eFinal > eInit " << G4endl;
-	      //	     << e
-	      //		     << " > " initEnergy 
-	      
 	    }
 	  
 	  G4String particleName = 
@@ -620,7 +620,7 @@ G4int main()
 		  <<  px/MeV  <<  "," 
 		  <<  py/MeV  <<  ","
 		  <<  pz/MeV  << ") MeV "
-		  <<  G4endl;   
+		  <<  G4endl; 
 	  
 	  G4int partType;
 	  if (particleName == "e-") {
@@ -637,21 +637,35 @@ G4int main()
 	  
 
 	  delete particleChange->GetSecondary(i);
-	}
+	
       
       	  // Fill the secondaries ntuple
-
-      // Normalize all to the energy of primary
-      // for gammas initEnergy=initP
-      ntuple2->fill(ntuple2->findColumn("eprimary"),initEnergy);
-      ntuple2->fill(ntuple2->findColumn("px_el"),px_el/initEnergy);
-      ntuple2->fill(ntuple2->findColumn("py_el"),py_el/initEnergy);
-      ntuple2->fill(ntuple2->findColumn("pz_el"),pz_el/initEnergy);
-      ntuple2->fill(ntuple2->findColumn("p_el"),p_el/initEnergy);
-      ntuple2->fill(ntuple2->findColumn("e_el"),e_el/(initEnergy+electron_mass_c2));
-      ntuple2->fill(ntuple2->findColumn("theta_el"),theta_el);
-      ntuple2->fill(ntuple2->findColumn("ekin_el"),eKin_el/initEnergy);
-      ntuple2->addRow();
+	  
+	  // Normalize all to the energy of primary
+	  // for gammas initEnergy=initP
+	  if (i==0) {
+	    ntuple2->fill(ntuple2->findColumn("eprimary"),initEnergy);
+	    ntuple2->fill(ntuple2->findColumn("px_el"),px_el/initEnergy);
+	    ntuple2->fill(ntuple2->findColumn("py_el"),py_el/initEnergy);
+	    ntuple2->fill(ntuple2->findColumn("pz_el"),pz_el/initEnergy);
+	    ntuple2->fill(ntuple2->findColumn("p_el"),p_el/initEnergy);
+	    ntuple2->fill(ntuple2->findColumn("e_el"),e_el/(initEnergy+electron_mass_c2));
+	    ntuple2->fill(ntuple2->findColumn("theta_el"),theta_el);
+	    ntuple2->fill(ntuple2->findColumn("ekin_el"),eKin_el/initEnergy);
+	    ntuple2->addRow();
+	  }
+	  else //fluorescence
+	    {
+	      ntuple4->fill(ntuple4->findColumn("eprimary"),initEnergy);
+	      ntuple4->fill(ntuple4->findColumn("px"),px/keV);
+	      ntuple4->fill(ntuple4->findColumn("py"),py/keV);
+	      ntuple4->fill(ntuple4->findColumn("pz"),pz/keV);
+	      ntuple4->fill(ntuple4->findColumn("e"),eKin/keV);
+	      ntuple4->fill(ntuple4->findColumn("partType"),(G4double) partType);
+	      ntuple4->addRow();
+	    }
+       
+	}
       particleChange->Clear();
       
     } 
