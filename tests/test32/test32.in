@@ -1,0 +1,26 @@
+# $Id: test32.in,v 1.1 2002-06-13 12:16:35 jwellisc Exp $
+#
+/control/verbose 2
+#
+/mydet/SelectMaterial Pb
+/run/particle/setCut 10 cm
+#
+/run/initialize
+/gun/direction 0. 0. 1.
+/gun/position 0. 0. -400. cm 
+/gun/energy 1 GeV
+#
+#/event/verbose 1
+#/tracking/verbose 1
+/gun/particle neutron
+/run/beamOn 1000
+#
+/gun/particle proton
+/run/beamOn 1000
+
+/gun/particle pi-
+/run/beamOn 1000
+
+/gun/particle pi+
+/run/beamOn 1000
+
