@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cerenkov.cc,v 1.3 1999-10-28 01:24:55 gum Exp $
+// $Id: G4Cerenkov.cc,v 1.4 1999-10-30 00:42:20 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -17,7 +17,9 @@
 // Version:     2.1
 // Created:     1996-02-21  
 // Author:      Juliet Armstrong
-// Updated:     1997-08-08 by Peter Gumplinger
+// Updated:     1999-10-29 by Peter Gumplinger
+//              > change: == into <= in GetContinuousStepLimit
+//              1997-08-08 by Peter Gumplinger
 //              > add protection against /0
 //              > G4MaterialPropertiesTable; new physics/tracking scheme
 // mail:        gum@triumf.ca
