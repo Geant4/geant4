@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2003-01-28 17:14:19 maire Exp $
+$Id: README,v 1.10 2003-01-30 14:14:17 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -122,8 +122,27 @@ $Id: README,v 1.9 2003-01-28 17:14:19 maire Exp $
  	CLHEP provides several random number engines. In this example the Ranecu
 	engine is choosen at beginning of the main (exampleN03.cc).
 	
+	By default, G4RunManager does not save the rndm seed.
+	To do so the user must set in BeginOfRunAction:
+	G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+	
+	Then the rndm seed is systematically saved at beginning of run
+	(currentRun.rndm) and beginning of event (currentEvent.rndm)
+	Therefore, in case of abnormal end, the seed of the last event processed
+	is available in currentEvent.rndm
+	
+	Even in case of normal run processing, the user may wish to preserve the
+	rndm seed of selected events. At any time in the event, put the
+	following statement:
+	if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();
+	currentEvent.rndm will be copied to runXXevntYY.rndm
+	(see ExN03SteppingAction::UserSteppingAction() )
+	
+	To restart a run from a given rndm seed, use the UI command :
+	/random/resetEngineFrom  fileName 
+	
 	The macro rndmSeed.mac shows how to save and reset the random number
-	seed between runs.	
+	seed between runs, with UI commands.	
 	
  7- USER INTERFACES
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingAction.cc,v 1.6 2002-01-09 17:24:13 ranjard Exp $
+// $Id: ExN03SteppingAction.cc,v 1.7 2003-01-30 14:14:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN03SteppingAction.hh"
+
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -44,7 +46,10 @@ ExN03SteppingAction::~ExN03SteppingAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03SteppingAction::UserSteppingAction(const G4Step*)
-{ }
+{
+ // save the random number seed of this event, under condition
+ //// if(condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
