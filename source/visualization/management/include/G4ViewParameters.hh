@@ -5,12 +5,58 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.hh,v 1.4 1999-11-11 15:38:08 gunter Exp $
+// $Id: G4ViewParameters.hh,v 1.5 1999-11-25 15:26:38 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  19th July 1996
+//
+// Class description
+//
 // View parameters and options.
+//
+// THE STANDARD VIEW AND ALL THAT.
+//
+// In GEANT4 visualization, we have the concept of a ``Standard
+// View''.  This is the view when the complete set of objects being
+// viewed is comfortably in view from any viewpoint.  It is defined by
+// the ``Bounding Sphere'' of ``visible'' objects when initially
+// registered in the scene, and by the View Parameters.
+//
+// There is also the ``Standard Target Point'', which is the centre of
+// the Bounding Sphere (note that this belongs to the scene and is
+// stored in the G4Scene object).  The ``Current Target Point'', initially
+// set to the Standard Target Point, is incremented by the ``dolly''
+// and ``zoom'' commands, and can be reset to the Standard Target
+// Point with the {\tt /vis~/camera/reset} command.
+//
+// Also, the ``Standard Camera Position'' is the ``Standard Camera
+// Distance'' along the Viewpoint Direction vector from the Standard
+// Target Point.  The Standard Camera Distance is the radius of the
+// Bounding Sphere divided by {\tt fFieldHalfAngle}.  It is not stored
+// explicitly because of the singularity at {\tt fFieldHalfAngle} = 0,
+// which implies parallel projection.
+//
+// Similarly, the ``Current Camera Position'' is the ``Current Camera
+// Distance'' along the Viewpoint Direction vector from the Current
+// Target Point.  The Current Camera Distance is given by the formulae
+// below, but note that it can be negative, meaning that the camera
+// has moved {\em beyond} the Current Target Point, which is
+// conceptually possible, but which might give some problems when
+// setting up the view matrix --- see, for example, {\tt
+// G4OpenGLView::SetView ()}.
+//
+// All viewers are expected to keep the ``Up Vector'' vertical.
+//
+// Finally, the view is magnified by the ``Zoom Factor'' which is
+// reset to 1 by the \linebreak {\tt /vis~/camera/reset} command.
+//
+// Note: the camera movements pan, dolly and zoom, are currently coded
+// in \linebreak {\tt G4VisManMessenger.cc}.
+//
+// The algorithms for calculating various useful quantities from the
+// View Parameters are encapsulated in the functions described in
+// Appendix \ref{ap:useful}.
 
 #ifndef G4VIEWPARAMETERS_HH
 #define G4VIEWPARAMETERS_HH
@@ -24,56 +70,11 @@
 
 typedef G4RWTValOrderedVector<G4Plane3D> G4Planes;
 
-//. % THE STANDARD VIEW AND ALL THAT.
-//.
-//. In GEANT4 visualization, we have the concept of a ``Standard View''.
-//. This is the view when the complete set of objects being viewed is
-//. comfortably in view from any viewpoint.  It is defined by the
-//. ``Bounding Sphere'' of ``visible'' objects when initially registered
-//. in the scene, and the View Parameters.
-//.
-//. There is also the ``Standard Target Point'', which is the centre
-//. of the Bounding Sphere (note that these belong to the scene, and are
-//. stored in the Scene Data).  The ``Current Target Point'', initially
-//. set to the Standard Target Point, is incremented by the
-//. ``dolly'' and ``zoom'' commands, and can be reset to the
-//. Standard Target Point with the {\tt /vis~/camera/reset} command.
-//.
-//. Also, the ``Standard Camera Position'' is the ``Standard Camera
-//. Distance'' along
-//. the Viewpoint Direction vector from the Standard Target Point.
-//. The Standard Camera Distance is the radius of the
-//. Bounding Sphere divided by {\tt fFieldHalfAngle}.  It is not stored
-//. explicitly because of the singularity at {\tt fFieldHalfAngle} = 0,
-//. which implies parallel projection.
-//.
-//. Similarly, the ``Current Camera Position'' is the ``Current
-//. Camera Distance''
-//. along the Viewpoint Direction vector from the Current Target Point.
-//. The Current Camera Distance is given by the formulae below, but
-//. note that it can be negative, meaning that the camera has
-//. moved {\em beyond} the Current Target Point, which is conceptually
-//. possible, but which might give some problems when setting up
-//. the view matrix --- see, for example, {\tt G4OpenGLView::SetView ()}.
-//.
-//. All views are expected to keep the ``Up Vector'' vertical.
-//.
-//. Finally, the view is magnified by the ``Zoom Factor'' which is
-//. reset to 1 by the \linebreak
-//. {\tt /vis~/camera/reset} command.
-//.
-//. Note: the camera movements pan, dolly and zoom, are currently coded in
-//. \linebreak {\tt G4VisManMessenger.cc}.
-//.
-//. The algorithms for calculating various useful quantities from the
-//. View Parameters are encapsulated in the functions described in
-//. Appendix \ref{ap:useful}.
-
 class G4ViewParameters {
 
-  friend ostream& operator << (ostream& os, const G4ViewParameters& v);
+public: // With description
 
-public:
+  friend ostream& operator << (ostream& os, const G4ViewParameters& v);
 
   enum DrawingStyle {
     wireframe,  // Draw edges    - no hidden line removal.

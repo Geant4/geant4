@@ -5,11 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scene.hh,v 1.5 1999-11-11 15:38:07 gunter Exp $
+// $Id: G4Scene.hh,v 1.6 1999-11-25 15:26:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Scene  John Allison  19th July 1996.
+//
+// Class Description:
 //
 // Defines the viewable scene.
 
@@ -28,7 +30,7 @@ class G4VPhysicalVolume;
 
 class G4Scene {
 
-public:
+public: // With description
 
   friend ostream& operator << (ostream& os, const G4Scene& d);
 

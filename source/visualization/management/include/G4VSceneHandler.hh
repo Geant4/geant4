@@ -5,13 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.hh,v 1.7 1999-11-11 15:38:08 gunter Exp $
+// $Id: G4VSceneHandler.hh,v 1.8 1999-11-25 15:26:34 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  19th July 1996.
+//
+// Class description
+//
 // Abstract interface class for graphics scene handlers.
-// Inherits from G4VGraphicsScene, in the graphics_reps component, which is
+// Inherits from G4VGraphicsScene, in the intercoms category, which is
 // a minimal abstract interface for the GEANT4 kernel.
 
 #ifndef G4VSCENEHANDLER_HH
@@ -48,13 +51,15 @@ class G4LogicalVolume;
 
 class G4VSceneHandler: public G4VGraphicsScene {
 
-  friend ostream& operator << (ostream& os, const G4VSceneHandler& s);
+public: // With description
 
-public:
+  friend ostream& operator << (ostream& os, const G4VSceneHandler& s);
 
   enum MarkerSizeType {world, screen};
 
-  G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name = "");
+  G4VSceneHandler (G4VGraphicsSystem& system,
+		   G4int id,
+		   const G4String& name = "");
 
   virtual ~G4VSceneHandler ();
 

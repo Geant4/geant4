@@ -5,25 +5,37 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.7 1999-11-11 15:38:09 gunter Exp $
+// $Id: G4VisManager.hh,v 1.8 1999-11-25 15:26:39 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
+// Class Description:
+//
 // The GEANT4 Visualization Manager - John Allison 02/Jan/1996.
-
-// This is a "Singleton", i.e., only one instance may exist.  A
-// G4Exception is thrown if an attempt is made to instantiate more
-// than one.
-
+//
+// G4VisManage is a "Singleton", i.e., only one instance of it or any
+// derived class may exist.  A G4Exception is thrown if an attempt is
+// made to instantiate more than one.
+//
+// It is also an abstract class, so the user must derive his/her own
+// class from G4VisManager, implement the pure virtual function
+// RegisterGraphicsSystems, and instantiate an object of the derived
+// class - for an example see
+// visualization/include/MyVisManager.hh/cc.
+//
+// The recommended way for users to obtain a pointer to the vis
+// manager is with G4VVisManager::GetConcreteInstance (), being always
+// careful to test for non-zero.  This pointer is non-zero only when
+// (a) an object of the derived class exists and (b) when there is a
+// valid viewer available.
+//
 // Graphics system registration is normally done through the protected
 // pure virtual function RegisterGraphicsSystems called from
-// Initialise ().  You must define your own subclass and implement
-// RegisterGraphicsSystems - for an example see
-// visualization/include/MyVisManager.hh/cc.  You can also use the
-// public function RegisterGraphicsSystem (new MyGraphicsSystem) if
-// you have your own graphics system.
-
+// Initialise ().  You can also use the public function
+// RegisterGraphicsSystem (new MyGraphicsSystem) if you have your own
+// graphics system.
+//
 // The VisManager creates graphics systems, scenes, scene handlers and
 // viewers and manages them.  You can have any number.  It has the
 // concept of a "current viewer", and the "current scene handler", the
@@ -31,13 +43,15 @@
 // You can select the current viewer.  Most of the the operations of
 // the VisManager take place with the current viewer, in particular,
 // the Draw operations.
-
+//
 // Each scene comprises drawable objects such as detector components
 // and hits when appropriate.  A scene handler translates a scene into
 // graphics-system-specific function calls and, possibly, a
 // graphics-system-dependent database - display lists, scene graphs,
-// etc.  Each viewer has its "view parameters".
-
+// etc.  Each viewer has its "view parameters" (see class description
+// of G4ViewParameters for available parameters and also for a
+// description of the concept of a "standard view" and all that).
+//
 // G4VisManager is "state dependent", i.e., it is notified on change
 // of state (G4ApplicationState).  This is used to draw hits and
 // trajectories in the current scene at the end of event, as required.
@@ -76,7 +90,7 @@ class G4NURBS;
 
 class G4VisManager: public G4VVisManager, public G4VStateDependent {
 
-  // List of classes and functions which need access to private
+  // Friends - classes and functions which need access to private
   // members of G4VisManager.  This is mainly to obtain access to
   // GetInstance (), which is private.  The correct way for normal
   // users to obtain a pointer to the vis manager is with
@@ -115,11 +129,13 @@ class G4VisManager: public G4VVisManager, public G4VStateDependent {
   friend class G4VisCommandSetCullInvisible;
   friend class G4VisCommandShowView;
 
-protected:  // Only the subclass can instantiate.
+protected: // With description
 
   G4VisManager ();
+  // The constructor is protected so that an object of the derived
+  // class may be constructed.
 
-public:
+public: // With description
 
   virtual ~G4VisManager ();
 
@@ -132,7 +148,7 @@ private:
   // get a "higher level" pointer for general use - but always test
   // for non-zero.
 
-public:
+public: // With description
 
   void Initialise ();
   void Initialize ();  // Alias Initialise ().
@@ -220,11 +236,15 @@ public:
   void RefreshCurrentView  ();
   // Soft clear, then redraw.
 
+public:
+
   // These can go when OLD STYLE commands go...
   void PrintCurrentSystem  () const;
   void PrintCurrentSystems () const;
   void PrintCurrentScene   () const;
   void PrintCurrentView    () const;
+
+public: // With description
 
   /////////////////////////////////////////////////////////////////////
   // Access functions.

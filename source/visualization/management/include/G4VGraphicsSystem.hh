@@ -5,11 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsSystem.hh,v 1.4 1999-11-11 15:38:08 gunter Exp $
+// $Id: G4VGraphicsSystem.hh,v 1.5 1999-11-25 15:26:33 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  27th March 1996
+//
+// Class description
+//
 // Abstract interface class for graphics systems.
 
 #ifndef G4VGRAPHICSSYSTEM_HH
@@ -22,7 +25,7 @@ class G4VViewer;
 
 class G4VGraphicsSystem {
 
-public:
+public: // With description
 
   enum Functionality {
     noFunctionality,
