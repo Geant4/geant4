@@ -1,0 +1,34 @@
+  Major changes in this tag are:
+
+    ------ partman-V01-00-02
+    - Remove all RW vectors and use STL 
+    - Added ParticleSubType in ParticleDefinition
+    ------ partman-V01-00-01
+    - Bug fix in G4NucleiProperties 
+
+   ------ shortlived-V01-00-00
+   - Added "rho0" in G4ShortLivedConstructor
+
+   ------ hadrons-V01-00-00
+   - Removed G4RhoPlus, G4RhoZero, and G4RhoMinus class
+   - Removed G4RhoZero from G4MesonConstructor.cc
+   - Added GetAtomicNumber() and GetAtomicMass() to G4VIon, G4Proton, and
+G4Neutron.
+
+  Removal of classes for Rho mesons affects both G4ParticleTypes.hh and
+PhysicsList in some examples and tests.
+  Please use following version for testing this tag
+
+  processes/management                          procman-V01-00-00
+  tests/test06/src/Tst06PhysicsList.cc          HEAD (revision 1.6)
+  tests/test07/src/T07PhysicsList.cc            HEAD (revision 1.5)
+  tests/test09/src/Tst09PhysicsList.cc          HEAD (revision 1.6)
+  examples/novice/N02/src/ExN02PhysicsList.cc   HEAD (revision 1.5)
+  examples/novice/N03/src/ExN03PhysicsList.cc   HEAD (revision 1.7)
+
+  These modification in PhysicsList and G4ParticleTypes.hh will, I think,
+cause no effects on outputs even if these are used with older tags of
+particles.
+
+  Best Regards,
+                                                Hisaya

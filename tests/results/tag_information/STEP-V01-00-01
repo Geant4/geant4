@@ -1,0 +1,14 @@
+February 14, 2000       Gabriele Cosmo (STEP-V01-00-01)
+- Fixes for porting on supported platforms/compilers:
+  o STEPfile.h: removed declaration of function HeaderId(int)
+    since not used and NOT implemented;
+  o sdai[.h.cc]: replaced use of MAXLONG and MINFLOAT with LONG_MAX
+    and FLT_MIN respectively.
+  o STEPfile_inline.cc: added explicit cast to float in argument for
+    'ceil' function.
+
+January 31, 2000        Gabriele Cosmo (STEP-V01-00-00)
+- Upgraded NIST STEP Reader to SCL (STEP Class Library) 3.2.
+- Implemented porting on supported platforms/compilers.
+- Implemented changes for ISO-ANSI C++ compliance.
+- Added README and History files.

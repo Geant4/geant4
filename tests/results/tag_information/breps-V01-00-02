@@ -1,0 +1,60 @@
+25/02/2000 : G. Cosmo             breps-V01-00-02
+ G4BSplineSurface[.hh.cc]
+   - fixed dynamic memory allocation problem with creation of temporary
+     hits and manipulation of knots.
+   - rationalized dependencies over G4UVHit, G4ControlPoints and
+     G4BoundingBox3D classes.
+   - added initialization of pointers in constructor where missing.
+ G4BSplineSurfaceWithKnots[.hh.cc]
+   - created dummy classes.
+ G4ConicalSurface.cc
+   - Modified diagnostic message.
+ G4PointRat.hh
+   - Removed useless inclusion of G4UVHit.hh.
+ G4UVHit.hh
+   - Added missing initialization of data-members where needed.
+   - Initialized 'next' pointer to zero in costructor.
+ test/stepfiles
+   - G4msgc_barrel_solid.stp was corrupted. Fixed.
+   - Enhanced PERL script correct.pl to parse more complex STEP files.
+
+14/02/2000 : G. Cosmo             breps-V01-00-01
+ G4BSplineSurface.cc - fixed warnings on HP-aCC
+   - removed cast of G4Surface* to G4SurfaceList* (!) in function
+     FinalIntersection().
+   - replaced wherever needed explicit cast to G4PointRat from
+     G4Point3D and viceversa, by using appropriate access functions
+     instead.
+ G4SurfaceList.cc
+   - initialised 'next' and 'temp' pointers in default constructor.
+ Changed 'char*' to 'const char*' as return-type for methods returning
+ the concrete type name; removed temporary cast to char*. Updated
+ files:
+   - G4ThreeMat.hh, G4Surface.hh, G4SphericalSurface.hh, 
+     G4RectangularTrimmedSurface.hh, G4FPlane.hh,
+     G4FCylindricalSurface.hh, G4FConicalSurface.hh,
+     G4CylindricalSurface.hh, G4ConicalSurface.hh,
+     G4Curve.hh, G4BSplineSurface[.hh.cc].
+
+21/01/2000 : G. Cosmo             breps-V01-00-00
+ Decoupling from NIST STEP reader completed:
+   - G4RectangularTrimmedSurface.cc: removed inclusion of
+     SdaiCONFIG_CONTROL_DESIGN.h
+   - G4PointRat[.hh.cc]: removed unused function
+     CopyRationalValue(const RealNode&).
+   - G4Conic[.hh.cc]: removed constructor G4Conic(STEPentity&).
+   - G4BREPSolid[.hh.cc]: removed unused function CreateSTEPData() and
+     any references to STEP/instmgr.h.
+   - G4Parabola.hh: removed declared and NOT defined constructors
+     G4Parabola(STEPentity&) and G4Parabola(STEPentity&, InstMgr&).
+   - G4Hyperbola.hh: removed declared and NOT defined constructors
+     G4Hyperbola(STEPentity&) and G4Hyperbola(STEPentity&, InstMgr&).
+   - G4Ellipse.hh: removed declared and NOT defined constructors
+     G4Ellipse(STEPentity&) and G4Ellipse(STEPentity&, InstMgr&).
+   - G4ControlPoints.hh: removed declared and NOT defined constructor
+     G4ControlPoints(STEaggregate&, const int).
+ Temporary fixes for porting on SUN-CC 5.0 compiler. Casts to char*:
+   - G4ThreeMat.hh, G4Surface.hh, G4SphericalSurface.hh, 
+     G4RectangularTrimmedSurface.hh, G4FPlane.hh,
+     G4FCylindricalSurface.hh, G4FConicalSurface.hh,
+     G4CylindricalSurface.hh, G4ConicalSurface.hh.
