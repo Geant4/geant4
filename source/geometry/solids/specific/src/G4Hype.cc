@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.13 2004-10-10 10:39:56 johna Exp $
+// $Id: G4Hype.cc,v 1.14 2004-10-13 13:34:44 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -75,7 +75,7 @@ G4Hype::G4Hype(const G4String& pName,
                      G4double newInnerStereo,
                      G4double newOuterStereo,
                      G4double newHalfLenZ)
-  : G4VSolid(pName), fCubicVolume(0.), fpPolyhedron (0)
+  : G4VSolid(pName), fCubicVolume(0.), fpPolyhedron(0)
 {
   // Check z-len
   //
@@ -1375,8 +1375,8 @@ G4double G4Hype::GetCubicVolume()
 G4Polyhedron* G4Hype::GetPolyhedron () const
 {
   if (!fpPolyhedron)
-    {
-      fpPolyhedron = CreatePolyhedron ();
-    }
+  {
+    fpPolyhedron = CreatePolyhedron();
+  }
   return fpPolyhedron;
 }

@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.13 2004-10-10 10:40:06 johna Exp $
+// $Id: G4VCSGfaceted.cc,v 1.14 2004-10-13 13:34:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,7 +59,7 @@
 //
 G4VCSGfaceted::G4VCSGfaceted( G4String name )
   : G4VSolid(name),
-    numFace(0), faces(0), fCubicVolume(0.), fpPolyhedron (0),
+    numFace(0), faces(0), fCubicVolume(0.), fpPolyhedron(0),
     fCubVolStatistics(1000000), fCubVolEpsilon(0.001)
 {
 }
@@ -476,8 +476,8 @@ G4double G4VCSGfaceted::GetCubicVolume()
 G4Polyhedron* G4VCSGfaceted::GetPolyhedron () const
 {
   if (!fpPolyhedron)
-    {
-      fpPolyhedron = CreatePolyhedron ();
-    }
+  {
+    fpPolyhedron = CreatePolyhedron();
+  }
   return fpPolyhedron;
 }
