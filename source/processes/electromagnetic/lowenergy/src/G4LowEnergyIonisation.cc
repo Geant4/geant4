@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.35 2000-04-10 10:26:56 lefebure Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.36 2000-04-11 10:07:09 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,9 @@
 //      ---------- G4LowEnergyIonisation low energy modifications -----------
 //                by Alessandra Forti May 1999  
 // **************************************************************
+// - 11.04.2000 VL
+//   Changing use of float and G4float casts to G4double casts 
+//   because of problems with optimisation (bug ?)
 //   10.04.2000 VL
 // - Correcting Fluorescence transition probabilities in order to take into account 
 //   non-radiative transitions. No Auger electron simulated yet: energy is locally deposited.
@@ -607,7 +610,7 @@ G4double G4LowEnergyIonisation::GetShellCrossSectionwithCut(
   saa = aa, sbb = bb;
  
   for (G4int ii = 1; ii < 7; ii++){
-    norm += Parms[ii-1]*(saa-sbb)/float(ii) ;
+    norm += Parms[ii-1]*(saa-sbb)/G4double(ii) ;
     saa *= aa ;
     sbb *= bb ;
   }
@@ -632,7 +635,7 @@ G4double G4LowEnergyIonisation::GetShellCrossSectionwithCut(
 
     for(G4int kk = 1; kk < 5; kk++){
 
-      norm += Parms[kk+6]*(saa-sbb)/float(kk);
+      norm += Parms[kk+6]*(saa-sbb)/G4double(kk);
       saa *= aa;
       sbb *= bb;
     }
@@ -650,7 +653,7 @@ G4double G4LowEnergyIonisation::GetShellCrossSectionwithCut(
 
     for(G4int kk = 1; kk < 5; kk++){
 
-      norm += Parms[kk+6]*(saa-sbb)/float(kk);
+      norm += Parms[kk+6]*(saa-sbb)/G4double(kk);
       saa *= aa;
       sbb *= bb;
     }
@@ -671,7 +674,7 @@ G4double G4LowEnergyIonisation::GetShellCrossSectionwithCut(
       sbb = bb ;
       for(G4int i=1; i<7; i++)
       {
-        xsec += Parms[i-1]*(saa-sbb)/G4float(i) ;
+        xsec += Parms[i-1]*(saa-sbb)/G4double(i) ;
         saa *= aa ;
         sbb *= bb ;
       }
@@ -700,7 +703,7 @@ G4double G4LowEnergyIonisation::GetShellCrossSectionwithCut(
     sbb = bb ;
     for(G4int i=1; i<5; i++)
     {
-      xsec += Parms[i+6]*(saa-sbb)/G4float(i) ;
+      xsec += Parms[i+6]*(saa-sbb)/G4double(i) ;
       saa *= aa ;
       sbb *= bb ;
     }
@@ -717,7 +720,7 @@ G4double G4LowEnergyIonisation::GetShellCrossSectionwithCut(
     sbb = bb ;
     for(G4int i=1; i<5; i++)
     {
-      xsec += Parms[i+6]*(saa-sbb)/G4float(i) ;
+      xsec += Parms[i+6]*(saa-sbb)/G4double(i) ;
       saa *= aa ;
       sbb *= bb ;
     }
@@ -809,7 +812,7 @@ G4double G4LowEnergyIonisation::GetShellEnergyLosswithCut(
   saa = aa, sbb = bb;
  
   for (G4int ii = 1; ii < 7; ii++){
-    norm += Parms[ii-1]*(saa-sbb)/float(ii) ;
+    norm += Parms[ii-1]*(saa-sbb)/G4double(ii) ;
     saa *= aa ;
     sbb *= bb ;
   }
@@ -834,7 +837,7 @@ G4double G4LowEnergyIonisation::GetShellEnergyLosswithCut(
 
     for(G4int kk = 1; kk < 5; kk++){
 
-      norm += Parms[kk+6]*(saa-sbb)/float(kk);
+      norm += Parms[kk+6]*(saa-sbb)/G4double(kk);
       saa *= aa;
       sbb *= bb;
     }
@@ -852,7 +855,7 @@ G4double G4LowEnergyIonisation::GetShellEnergyLosswithCut(
 
     for(G4int kk = 1; kk < 5; kk++){
 
-      norm += Parms[kk+6]*(saa-sbb)/float(kk);
+      norm += Parms[kk+6]*(saa-sbb)/G4double(kk);
       saa *= aa;
       sbb *= bb;
     }
@@ -874,10 +877,10 @@ G4double G4LowEnergyIonisation::GetShellEnergyLosswithCut(
 
       for(G4int i=2; i<7; i++)
       {
-        w = (saa-sbb)/G4float(i-1) ;
+        w = (saa-sbb)/G4double(i-1) ;
         saa *= aa ;
         sbb *= bb ;
-        w += BindingEn*(sbb-saa)/G4float(i) ;
+        w += BindingEn*(sbb-saa)/G4double(i) ;
         loss += Parms[i-1]*w ;
       }
   
@@ -910,10 +913,10 @@ G4double G4LowEnergyIonisation::GetShellEnergyLosswithCut(
 
         for(G4int i=2; i<5; i++)
         {
-          w = (saa-sbb)/G4float(i-1) ;
+          w = (saa-sbb)/G4double(i-1) ;
           saa *= aa ;
           sbb *= bb ;
-          w += BindingEn*(sbb-saa)/G4float(i) ;
+          w += BindingEn*(sbb-saa)/G4double(i) ;
           loss += Parms[i+6]*w ;
         }
     
@@ -934,10 +937,10 @@ G4double G4LowEnergyIonisation::GetShellEnergyLosswithCut(
 
         for(G4int i=2; i<5; i++)
         {
-          w = (saa-sbb)/G4float(i-1) ;
+          w = (saa-sbb)/G4double(i-1) ;
           saa *= aa ;
           sbb *= bb ;
-          w += BindingEn*(sbb-saa)/G4float(i) ;
+          w += BindingEn*(sbb-saa)/G4double(i) ;
           loss += Parms[i+6]*w ;
         }
 
@@ -1050,7 +1053,12 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   // deposit energy if delta energy is below cut
   G4ThreeVector DeltaDirection(0.,0.,0.);
   if(DeltaKineticEnergy <= DeltaThreshold){
-    G4cout<<"This should not happen DeltaKineticEnergy= "<<DeltaKineticEnergy<<G4endl;
+    G4cout<<"This should not happen DeltaKineticEnergy= "<<DeltaKineticEnergy
+          <<" kinetic E = "<<KineticEnergy
+	  <<" DeltaThreshold = "<<DeltaThreshold
+	  << "  BindingEn= " << BindingEn
+	  <<" shell id = "<<subShellIndex
+	  <<G4endl;
     theEnergyDeposit += DeltaKineticEnergy;
     DeltaKineticEnergy = 0.;
   } 
@@ -1443,7 +1451,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   oneAtomTable* oneAtomCoeffTable = (*theSamplingCoeffTable)[ZNumVec->index(AtomicNumber)];
 
   oneShellTable* oneShellCoeffTable = (*oneAtomCoeffTable)[ShellIndex];
-  G4double BindingEn = (*(*(*theBindingEnergyTable)[AtomicNumber-1])[1])[ShellIndex];
+  const G4double BindingEn = (*(*(*theBindingEnergyTable)[AtomicNumber-1])[1])[ShellIndex];
 
   // 2) Interpolate coefficients (I need the incoming electron kinetic energy)
   const G4int CoeffNumber = oneShellCoeffTable->entries();
@@ -1475,14 +1483,20 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
     }
   }
 
-  // cuts in energy are always the same
 
+  const G4double minEn = deltaRayMinE;
+  
+  // cuts in energy are always the same
   // First cut
-  G4double fstCut = (*(*oneShellCoeffTable)[CoeffNumber-2])[0] == 0. ? DBL_MAX : (*(*oneShellCoeffTable)[CoeffNumber-2])[0]*MeV;
+  G4double fstCutbuf = (*(*oneShellCoeffTable)[CoeffNumber-2])[0]*MeV;
+  if(fstCutbuf<0.01*eV) fstCutbuf = DBL_MAX;
+  const G4double fstCut = fstCutbuf;
 
   // Second cut
-  G4double sndCut = (*(*oneShellCoeffTable)[CoeffNumber-1])[0] == 0. ? DBL_MAX : (*(*oneShellCoeffTable)[CoeffNumber-1])[0]*MeV;
-
+  G4double sndCutbuf = (*(*oneShellCoeffTable)[CoeffNumber-1])[0]*MeV;
+  if(sndCutbuf<fstCutbuf) sndCutbuf = DBL_MAX;
+  const G4double sndCut = sndCutbuf;
+  
   // 2') order of parameters:
   //     * Parms[0] = par1 LET
   //     * Parms[1] = par2 LET
@@ -1502,7 +1516,6 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   // 3) Compute partial areas (with functions here the cut is used)
   // **************************************************************
   // Sampling energy limits and areas variable declaration
-  G4double minEn = deltaRayMinE;
   G4double maxEn = (KinEn-BindingEn)/2;
   if(minEn>=maxEn) {
      G4cout<<"G4LowEnergyIonisation::EnergySampling not enought energy left !"<<G4endl;
@@ -1543,7 +1556,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   
     for (G4int ii = 1; ii < 7; ii++){
 
-         area1 += Parms[ii-1]*(saa-sbb)/float(ii) ;
+         area1 += Parms[ii-1]*(saa-sbb)/G4double(ii) ;
          saa *= aa ;
          sbb *= bb ;
          //
@@ -1552,6 +1565,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
          rejectionMax += Parms[ii-1]/llow;
          llow *= low ;
      }
+     if(area1<0) G4cerr<<"Problem: area1 = "<<area1<<G4endl;
   }
   //
   // Area of the second and third functions
@@ -1574,6 +1588,8 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
        G4double expon = Parms[13]+1;
        area2 = (Parms[12]/expon)*(pow(sndCut,expon)-pow(low,expon));
     }  
+    if(area2<0) G4cerr<<"Problem: area2 = "<<area2<<G4endl;
+
     // Third Function: sum_2(Ci/(energy+Binding)^i)  i = 2,3,4,5 
     // it is the same as the first function but with two degree less
     //
@@ -1587,11 +1603,12 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
     for(G4int kk = 1; kk < 5; kk++){ 
       
       // area3: integral of the normalized third function
-      area3 += Parms[kk+6]*(saa-sbb)/float(kk);
+      area3 += Parms[kk+6]*(saa-sbb)/G4double(kk);
       saa *= aa;
       sbb *= bb;     
     }
-    
+    if(area3<0) G4cerr<<"Problem: area3 = "<<area3<<G4endl;
+
     whatCut = low;
   }
   
@@ -1610,14 +1627,23 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
     G4double aa = 1./(low+BindingEn); // equivalent to 1./low in the first function 
     G4double bb = 1./(maxEn+BindingEn);  // equivalent to 1./high in the first function
     G4double saa = aa, sbb = bb;
-    
-    for(G4int kk = 1; kk < 5; kk++){
+    G4int kk;
+    for( kk = 1; kk < 5; kk++){
 
       // area3: integral of the normalized third function
-      area3 += Parms[kk+6]*(saa-sbb)/float(kk);
+      G4double buf = Parms[kk+6]*(saa-sbb)/G4double(kk);
+      area3+= buf;
       saa *= aa;
       sbb *= bb;     
     }
+    if(area3<0) {
+       G4cerr<<"Problem: area3 bis= "<<area3<<G4endl;
+       G4cout<<" low "<< low<<G4endl;
+       G4cout<<" maxEn "<<maxEn<<G4endl;
+       for(G4int  kk = 1; kk < 5; kk++){
+        G4cout<<" kk par"<<kk<<"  " <<Parms[kk+6]<<G4endl;
+       }
+    }   
      
     whatCut = low;
   }
@@ -1641,10 +1667,12 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
     // Low energy transfer 
     G4double rejection = 0;
     which = 1;
+    G4double rand2;
+    G4double Ka;
     do{
       
-      G4double rand2 = G4UniformRand();
-      G4double Ka = 0;
+      rand2 = G4UniformRand();
+      Ka = 0;
       
       if(fstCut < maxEn){
 	
@@ -1666,7 +1694,22 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
       //rejection /= Parms[6];
       rejection /= rejectionMax;
       
-    }while(rejection < G4UniformRand()); 
+    }while(rejection < G4UniformRand());
+    /*
+    if( sample<minEn ) {
+        G4cout<<" sample = "<< sample
+	      <<" minEn = "<<minEn
+	      <<" BindingEn = "<<BindingEn
+	      <<" Ka = "<<Ka
+	      <<" rand2 = "<<rand2
+	      <<" fstCut = "<<fstCut
+	      <<" sndCut = "<<sndCut
+	      <<" maxEn = "<<maxEn
+	      <<" area1 = "<<area1
+	      <<" rand1 = "<<rand1
+	      <<G4endl;
+    }
+    */
   }
   
   else if(rand1 > area1 && rand1 <= areaDue){
@@ -1681,6 +1724,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
     sample = pow(sum,exponInv);
     which = 2;
   }
+  
   
   else if (rand1 > areaDue && rand1 <= areaTot){ 
     
@@ -1707,7 +1751,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
       
     }while(rejection < G4UniformRand()); 
   }
-  
+  if(sample<minEn) G4cout<<" Error in energy sampling: sampleE<minEn: "<<sample<<" < "<<minEn<<"  "<<which<<G4endl;
   return sample;
 }
 
