@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.1 2000-04-04 13:51:43 lefebure Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.2 2000-06-22 02:38:12 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@ G4double     G4VeLowEnergyLoss::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
 G4VeLowEnergyLoss::G4VeLowEnergyLoss()
                    :G4VContinuousDiscreteProcess("No Name Loss Process"),
-     lastMaterial(NULL),
+     lastMaterial(0),
      nmaxCont1(4),
      nmaxCont2(16)
 {
@@ -886,10 +886,14 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   // get particle data
   G4double Tkin   = aParticle->GetKineticEnergy();
 
+  //  G4cout << "MGP -- Fluc Tkin " << Tkin/keV << " keV "  << " MeanLoss = " << MeanLoss/keV << G4endl;
+
   threshold =((*G4Electron::Electron()).GetCutsInEnergy())[imat];
   G4double rmass = electron_mass_c2/ParticleMass;
   G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
   G4double Tm    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);
+
+  // G4cout << "MGP Particle mass " << ParticleMass/MeV << " Tm " << Tm << G4endl;
 
   if (Tm <= ipotFluct) Tm = ipotFluct ;
   
@@ -902,80 +906,98 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
     siga = sqrt(MeanLoss*Tm*(1.-0.5*beta2)) ;
     loss = RandGauss::shoot(MeanLoss,siga) ;
     if(loss < 0.) loss = 0. ;
+    // G4cout << "MGP Gaussian: Tm = " << Tm << ", siga = " << siga << ", loss = " << loss << G4endl;
     return loss ;
   }
 
   w1 = Tm/ipotFluct;
   w2 = log(2.*electron_mass_c2*tau2);
-
+  
   C = MeanLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
-
+  
   a1 = C*f1Fluct*(w2-e1LogFluct-beta2)/e1Fluct;
   a2 = C*f2Fluct*(w2-e2LogFluct-beta2)/e2Fluct;
   if(Tm > ipotFluct)
     a3 = rateFluct*MeanLoss*(Tm-ipotFluct)/(ipotFluct*Tm*log(w1));
   else
-  {
-     a1 /= 1.-rateFluct ;
-     a2 /= 1.-rateFluct ;
-     a3  = 0. ;
-  } 
-
+    {
+      a1 /= 1.-rateFluct ;
+      a2 /= 1.-rateFluct ;
+      a3  = 0. ;
+    } 
+  
   suma = a1+a2+a3;
-
+  
   loss = 0. ;
-
+  
   if(suma < sumaLim)             // very small Step
     {
       e0 = aMaterial->GetIonisation()->GetEnergy0fluct();
-
+      // G4cout << "MGP e0 = " << e0/keV << G4endl;
+      
       if(Tm == ipotFluct)
-      {
-        a3 = MeanLoss/e0;
-
-        if(a3>alim)
-        {
-          siga=sqrt(a3) ;
-          p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
-        }
-        else
-          p3 = G4Poisson(a3);
-
-        loss = p3*e0 ;
-
-        if(p3 > 0)
-          loss += (1.-2.*G4UniformRand())*e0 ;
-
-      }
+	{
+	  a3 = MeanLoss/e0;
+	  
+	  if(a3>alim)
+	    {
+	      siga=sqrt(a3) ;
+	      p3 = G4std::max(0,G4int(RandGauss::shoot(a3,siga)+0.5));
+	    }
+	  else p3 = G4Poisson(a3);
+	  
+	  loss = p3*e0 ;
+	  
+	  if(p3 > 0) loss += (1.-2.*G4UniformRand())*e0 ;
+	  // G4cout << "MGP very small step " << loss/keV << G4endl;
+	}
       else
-      {
-        Tm = Tm-ipotFluct+e0 ;
-        a3 = MeanLoss*(Tm-e0)/(Tm*e0*log(Tm/e0));
+	{
+	  //	  G4cout << "MGP old Tm = " << Tm << " " << ipotFluct << " " << e0 << G4endl;
+	  Tm = Tm-ipotFluct+e0 ;
 
-        if(a3>alim)
-        {
-          siga=sqrt(a3) ;
-          p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
-        }
-        else
-          p3 = G4Poisson(a3);
+	  // MGP ---- workaround to avoid log argument<0, TO BE CHECKED
+	  if (Tm <= 0.) 
+	    { 
+	      loss = MeanLoss;
+	      p3 = 0.;
+	      // G4cout << "MGP correction loss = MeanLoss " << loss/keV << G4endl;
+	    }
+	  else
+	    {
+	      a3 = MeanLoss*(Tm-e0)/(Tm*e0*log(Tm/e0));
 
-        if(p3 > 0)
-        {
-          w = (Tm-e0)/Tm ;
-          if(p3 > nmaxCont2)
-          {
-            dp3 = G4float(p3) ;
-            Corrfac = dp3/G4float(nmaxCont2) ;
-            p3 = nmaxCont2 ;
-          }
-          else
-            Corrfac = 1. ;
+	      // G4cout << "MGP new Tm = " << Tm << " " << ipotFluct << " " << e0 << " a3= " << a3 << G4endl;
+	      
+	      if(a3>alim)
+		{
+		  siga=sqrt(a3) ;
+		  p3 = G4std::max(0,G4int(RandGauss::shoot(a3,siga)+0.5));
+		}
+	      else
+		p3 = G4Poisson(a3);
+	      //G4cout << "MGP p3 " << p3 << G4endl;
 
-          for(G4int i=0; i<p3; i++) loss += 1./(1.-w*G4UniformRand()) ;
-          loss *= e0*Corrfac ;  
-        }        
-      }
+	    }
+	      
+	  if(p3 > 0)
+	    {
+	      w = (Tm-e0)/Tm ;
+	      if(p3 > nmaxCont2)
+		{
+		  // G4cout << "MGP dp3 " << dp3 << " p3 " << p3 << " " << nmaxCont2 << G4endl;
+		  dp3 = G4double(p3) ;
+		  Corrfac = dp3/G4double(nmaxCont2) ;
+		  p3 = nmaxCont2 ;
+		}
+	      else
+		Corrfac = 1. ;
+	      
+	      for(G4int i=0; i<p3; i++) loss += 1./(1.-w*G4UniformRand()) ;
+	      loss *= e0*Corrfac ; 
+	      // G4cout << "MGP Corrfac = " << Corrfac << " e0 = " << e0/keV << " loss = " << loss/keV << G4endl;
+	    }        
+	}
     }
     
   else                              // not so small Step
@@ -1005,52 +1027,53 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
         loss += (1.-2.*G4UniformRand())*e2Fluct;
       else if (loss>0.)
         loss += (1.-2.*G4UniformRand())*e1Fluct;   
-
+      
       // ionisation .......................................
-     if(a3 > 0.)
-     {
-      if(a3>alim)
-      {
-        siga=sqrt(a3) ;
-        p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
-      }
-      else
-        p3 = G4Poisson(a3);
-
-      lossc = 0.;
-      if(p3 > 0)
-      {
-        na = 0.; 
-        alfa = 1.;
-        if (p3 > nmaxCont2)
-        {
-          dp3        = G4float(p3);
-          rfac       = dp3/(G4float(nmaxCont2)+dp3);
-          namean     = G4float(p3)*rfac;
-          sa         = G4float(nmaxCont1)*rfac;
-          na         = RandGauss::shoot(namean,sa);
-          if (na > 0.)
-          {
-            alfa   = w1*G4float(nmaxCont2+p3)/(w1*G4float(nmaxCont2)+G4float(p3));
-            alfa1  = alfa*log(alfa)/(alfa-1.);
-            ea     = na*ipotFluct*alfa1;
-            sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
-            lossc += RandGauss::shoot(ea,sea);
-          }
-        }
-
-        nb = G4int(G4float(p3)-na);
-        if (nb > 0)
-        {
-          w2 = alfa*ipotFluct;
-          w  = (Tm-w2)/Tm;      
-          for (G4int k=0; k<nb; k++) lossc += w2/(1.-w*G4UniformRand());
-        }
-      }        
-      loss += lossc;  
-     }
+      if(a3 > 0.)
+	{
+	  if(a3>alim)
+	    {
+	      siga=sqrt(a3) ;
+	      p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
+	    }
+	  else
+	    p3 = G4Poisson(a3);
+	  
+	  lossc = 0.;
+	  if(p3 > 0)
+	    {
+	      na = 0.; 
+	      alfa = 1.;
+	      if (p3 > nmaxCont2)
+		{
+		  dp3        = G4double(p3);
+		  rfac       = dp3/(G4double(nmaxCont2)+dp3);
+		  namean     = G4double(p3)*rfac;
+		  sa         = G4double(nmaxCont1)*rfac;
+		  na         = RandGauss::shoot(namean,sa);
+		  if (na > 0.)
+		    {
+		      alfa   = w1*G4double(nmaxCont2+p3)/(w1*G4double(nmaxCont2)+G4double(p3));
+		      alfa1  = alfa*log(alfa)/(alfa-1.);
+		      ea     = na*ipotFluct*alfa1;
+		      sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
+		      lossc += RandGauss::shoot(ea,sea);
+		    }
+		}
+	      
+	      nb = G4int(G4double(p3)-na);
+	      if (nb > 0)
+		{
+		  w2 = alfa*ipotFluct;
+		  w  = (Tm-w2)/Tm;      
+		  for (G4int k=0; k<nb; k++) lossc += w2/(1.-w*G4UniformRand());
+		}
+	    }        
+	  
+	  loss += lossc;  
+	}
     } 
-
+  
   return loss ;
 }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.4 2000-04-19 13:26:48 lefebure Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.5 2000-06-22 02:38:13 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -61,23 +61,23 @@ G4PhysicsTable** G4eLowEnergyLoss::RecorderOfPositronProcess =
                                            new G4PhysicsTable*[10];
                                            
 
-G4PhysicsTable*  G4eLowEnergyLoss::theDEDXElectronTable         = NULL;
-G4PhysicsTable*  G4eLowEnergyLoss::theDEDXPositronTable         = NULL;
-G4PhysicsTable*  G4eLowEnergyLoss::theRangeElectronTable        = NULL;
-G4PhysicsTable*  G4eLowEnergyLoss::theRangePositronTable        = NULL;
-G4PhysicsTable*  G4eLowEnergyLoss::theInverseRangeElectronTable = NULL;
-G4PhysicsTable*  G4eLowEnergyLoss::theInverseRangePositronTable = NULL;
-G4PhysicsTable*  G4eLowEnergyLoss::theLabTimeElectronTable      = NULL;
-G4PhysicsTable*  G4eLowEnergyLoss::theLabTimePositronTable      = NULL;
-G4PhysicsTable*  G4eLowEnergyLoss::theProperTimeElectronTable   = NULL;
-G4PhysicsTable*  G4eLowEnergyLoss::theProperTimePositronTable   = NULL;
+G4PhysicsTable*  G4eLowEnergyLoss::theDEDXElectronTable         = 0;
+G4PhysicsTable*  G4eLowEnergyLoss::theDEDXPositronTable         = 0;
+G4PhysicsTable*  G4eLowEnergyLoss::theRangeElectronTable        = 0;
+G4PhysicsTable*  G4eLowEnergyLoss::theRangePositronTable        = 0;
+G4PhysicsTable*  G4eLowEnergyLoss::theInverseRangeElectronTable = 0;
+G4PhysicsTable*  G4eLowEnergyLoss::theInverseRangePositronTable = 0;
+G4PhysicsTable*  G4eLowEnergyLoss::theLabTimeElectronTable      = 0;
+G4PhysicsTable*  G4eLowEnergyLoss::theLabTimePositronTable      = 0;
+G4PhysicsTable*  G4eLowEnergyLoss::theProperTimeElectronTable   = 0;
+G4PhysicsTable*  G4eLowEnergyLoss::theProperTimePositronTable   = 0;
 
-G4PhysicsTable*  G4eLowEnergyLoss::theeRangeCoeffATable         = NULL;
-G4PhysicsTable*  G4eLowEnergyLoss::theeRangeCoeffBTable         = NULL;
-G4PhysicsTable*  G4eLowEnergyLoss::theeRangeCoeffCTable         = NULL;
-G4PhysicsTable*  G4eLowEnergyLoss::thepRangeCoeffATable         = NULL;
-G4PhysicsTable*  G4eLowEnergyLoss::thepRangeCoeffBTable         = NULL;
-G4PhysicsTable*  G4eLowEnergyLoss::thepRangeCoeffCTable         = NULL;
+G4PhysicsTable*  G4eLowEnergyLoss::theeRangeCoeffATable         = 0;
+G4PhysicsTable*  G4eLowEnergyLoss::theeRangeCoeffBTable         = 0;
+G4PhysicsTable*  G4eLowEnergyLoss::theeRangeCoeffCTable         = 0;
+G4PhysicsTable*  G4eLowEnergyLoss::thepRangeCoeffATable         = 0;
+G4PhysicsTable*  G4eLowEnergyLoss::thepRangeCoeffBTable         = 0;
+G4PhysicsTable*  G4eLowEnergyLoss::thepRangeCoeffCTable         = 0;
 
 G4double         G4eLowEnergyLoss::LowerBoundEloss = 250.*eV ;
 G4double         G4eLowEnergyLoss::UpperBoundEloss = 100.*GeV ;
@@ -86,7 +86,7 @@ G4double         G4eLowEnergyLoss::RTable ;
 G4double         G4eLowEnergyLoss::LOGRTable ;
 
 
-G4EnergyLossMessenger* G4eLowEnergyLoss::eLossMessenger         = NULL;
+G4EnergyLossMessenger* G4eLowEnergyLoss::eLossMessenger         = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -94,13 +94,18 @@ G4EnergyLossMessenger* G4eLowEnergyLoss::eLossMessenger         = NULL;
  
 G4eLowEnergyLoss::G4eLowEnergyLoss(const G4String& processName)
    : G4VeLowEnergyLoss (processName),
-     theLossTable(NULL),
-     theDEDXTable(NULL),
+     theLossTable(0),
+     theDEDXTable(0),
      Charge(-1.),lastCharge(0.),
      MinKineticEnergy(1.*eV),
      //linLossLimit(0.02)
-     linLossLimit(0.05)
+     linLossLimit(0.05),
+     RecorderOfProcess(0),
+     fdEdx(0),
+     fRangeNow(0),
+     CounterOfProcess(0)
 {
+ 
  //create (only once) EnergyLoss messenger 
  if(!eLossMessenger) eLossMessenger = new G4EnergyLossMessenger();
 }
@@ -313,6 +318,8 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   // get particle and material pointers from trackData 
   const G4DynamicParticle* aParticle = trackData.GetDynamicParticle();
   G4double E      = aParticle->GetKineticEnergy() ;
+
+  //  G4cout << "MGP -- Along eInit " << E/keV << " keV " << G4endl;
   
   G4Material* aMaterial = trackData.GetMaterial();
   G4int index = aMaterial->GetIndex();
@@ -352,13 +359,18 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
 
   MeanLoss = E-finalT ;  
   
+  // G4cout << "MGP AlongStepDoIt finalT before fluct = " << finalT/keV  << " keV" << G4endl;
+
+   G4double fluc = GetLossWithFluct(aParticle,aMaterial,MeanLoss);
+
+   // G4cout << "LowerBoundEloss = " << LowerBoundEloss/keV = << "   Fluc = " << fluc/keV << G4endl;
+
   //now the loss with fluctuation
   if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowerBoundEloss))
   {
     finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
     if (finalT < 0.) finalT = 0.;
   }
-
 
   // kill the particle if the kinetic energy <= 0  
   if (finalT <= 0. )
@@ -367,6 +379,10 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
     if (Charge < 0.) fParticleChange.SetStatusChange(fStopAndKill);
     else             fParticleChange.SetStatusChange(fStopButAlive); 
   } 
+
+  // MGP debug 
+  // G4cout << "MGP AlongStepDoIt finalT = " << finalT/keV  << " keV" << G4endl;
+
 
   fParticleChange.SetEnergyChange(finalT);
   fParticleChange.SetLocalEnergyDeposit(E-finalT);

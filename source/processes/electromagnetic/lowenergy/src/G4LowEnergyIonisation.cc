@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.37 2000-04-19 13:28:18 lefebure Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.38 2000-06-22 02:38:12 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -203,7 +203,7 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticle
       const G4Material* material= (*theMaterialTable)[J];
 
       G4double Tcut = G4Electron::Electron()->GetCutsInEnergy()[material->GetIndex()] ;
-      G4cout<<"*** vl *** LEion using Tcut ="<<Tcut<<G4endl;
+      G4cout<<"*** LEion using Tcut ="<<Tcut<<G4endl;
       const G4ElementVector* theElementVector = material->GetElementVector();
       const G4int NumberOfElements = material->GetNumberOfElements() ;
       const G4double* theAtomicNumDensityVector = material->
@@ -1758,8 +1758,8 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
 void G4LowEnergyIonisation::PrintInfoDefinition()
 {
   G4String comments = "Low energy ionisation code ";
-           comments += "with first implementation of the continuous dE/dx part.";  
-           comments += "\n At present it can be used for electrons only ";
+           comments += "with implementation of the continuous dE/dx part.";  
+           comments += "\n At present it can be used for electrons ";
            comments += " in the energy range [250eV,100GeV]";
   G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.24 2000-04-19 13:30:27 lefebure Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.25 2000-06-22 02:38:12 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -398,6 +398,11 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   
   G4double ElectKinEn = aDynamicParticle->GetKineticEnergy();
 
+  // MGP debug
+  //  G4cout << "G4LowEnergyBremsstrahlung::PostStepDoIt - ElectKinEn "
+  //	 << ElectKinEn/keV << " keV " << G4endl;
+  // MGP end
+
   if(ElectKinEn <= LowestKineticEnergy){
     
     aParticleChange.SetStatusChange(fStopAndKill);
@@ -465,6 +470,10 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
     G4double R2 = G4UniformRand();
     GammaEnergy = ElectKinEn - R2*(ElectKinEn - minEn);
   }
+
+  // MGP debug 
+  //  if (GammaEnergy > 10*keV)
+  //    G4cout << "MGP BremPostStepDoIt eGamma = " << GammaEnergy/keV  << " keV" << G4endl;
 
 /*
  G4double R1 = minEn + G4UniformRand()*(ElectKinEn- minEn); 
@@ -663,8 +672,8 @@ void G4LowEnergyBremsstrahlung::PrintInfoDefinition()
 {
   G4String comments = "Total cross sections from EEDL database,";
            comments += "Gamma energy sampled from a parametrised formula.";
-           comments += "First implementation of the continuous dE/dx part.";  
-           comments += "\n At present it can be used for electrons only ";
+           comments += "Implementation of the continuous dE/dx part.";  
+           comments += "\n At present it can be used for electrons ";
            comments += " in the energy range [250eV,100GeV]";
                      
 	   G4cout << G4endl << GetProcessName() << ":  " << comments<<G4endl;
