@@ -1,4 +1,4 @@
-# $Id: hadron.mac,v 1.1 2004-09-24 09:57:57 maire Exp $
+# $Id: hadron.mac,v 1.2 2004-11-22 15:43:39 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -20,7 +20,7 @@
 /run/initialize
 #
 /testem/gun/setDefault
-/gun/particle pi+ 
+/gun/particle proton 
 /gun/energy 500 MeV
 #
 /tracking/verbose 1

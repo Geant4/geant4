@@ -1,4 +1,4 @@
-# $Id: neutron.mac,v 1.1 2004-08-13 10:37:49 maire Exp $
+# $Id: neutron.mac,v 1.2 2004-11-22 15:43:39 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -29,6 +29,6 @@
 #
 /testem/event/printModulo 10000
 #
-/run/beamOn 100000
+##/run/beamOn 100000
 
 

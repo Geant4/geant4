@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.5 2004-08-13 10:37:49 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.6 2004-11-22 15:43:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -130,6 +130,10 @@ G4Material* H2O = new G4Material("Water", density= 1.000*g/cm3, ncomponents=2);
 H2O->AddElement(H, natoms=2);
 H2O->AddElement(O, natoms=1);
 H2O->GetIonisation()->SetMeanExcitationEnergy(75*eV);
+
+G4Material* CH = new G4Material("Plastic", density= 1.04*g/cm3, ncomponents=2);
+CH->AddElement(C, natoms=1);
+CH->AddElement(H, natoms=1);
 
 //
 // define a material from elements.   case 2: mixture by fractional mass
