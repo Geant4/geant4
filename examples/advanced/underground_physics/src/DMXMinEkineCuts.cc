@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DMXMinEkineCuts.cc,v 1.1 2002-06-16 21:00:05 ahoward Exp $
+// $Id: DMXMinEkineCuts.cc,v 1.2 2002-06-18 10:17:30 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

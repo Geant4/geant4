@@ -1,6 +1,22 @@
 ------------------------------Advanced Example---------------------------------					README FILE
 
 
+NB: The documentation for this example is in the process of being updated.
+Please go to http://www.ge.infn.it/geant4/examples/ for the most up-to-date
+description, manual, design documentation and users requirement/traceability.
+
+JUNE 2002:
+The underground physics example has been updated since the December Geant4.0
+release to include:  1) Analysis, using AIDA 2.2 and tested against Anaphe 4.0
+		     2) Full lab geometry - important for neutron scattering
+		     3) Updated macros/messengers
+		     4) Correction of a few minor features
+
+The messengers can be seen from typing help within the UI.
+Additional file handling and time/energy cut messengers have been implemented.
+
+(1) and (2) are discussed more fully below
+
 UNDERGROUND PHYSICS
 
 An example of a underground dark matter experiment.
@@ -17,11 +33,19 @@ future off-line analysis.
 Geometry:
 Experimental set-up:
 
-A "cavern" of dimensions 5m x 6m x 3m with concrete walls is defined
-as the World Volume.  In the centre of the cavern a steel vacuum
-vessel containing liquid and gaseous xenon is placed.  The internal
-construction of the vessel accurately reproduces an existing prototype
-Dark Matter detector which allows experimental comparison. The active
+  G4double worldWidth  = 470.0*cm + 2.*wallThick; // "x"
+  G4double worldLength = 690.0*cm + 2.*wallThick; // "y"
+  G4double worldHeight = 280.0*cm + 2.*wallThick; // "z"
+
+
+
+A "cavern" of dimensions 5.18m x 7.38m x 3.28m with concrete walls is defined
+as the World Volume.  A laboratory geometry is incorporated included desks,
+cupboards, door and windows.  For ease this is included in a separate ".icc"
+file which can be removed should the code seem cumbersome.  In the centre of 
+the cavern a steel vacuum vessel containing liquid and gaseous xenon is placed.
+The internal construction of the vessel accurately reproduces an existing 
+prototype Dark Matter detector which allows experimental comparison. The active
 detector volume is defined by a series of metal rings, complemented by
 a cover mirror and a PMT immersed in the liquid.  Two grids and a
 thermalising copper shield are also incorporated. The liquid/gas
@@ -52,6 +76,7 @@ An ASCII file containing the following information:
      PmtTime, ns   : average PMT hit time relative to LXeTime
      First hit     : first particle to hit liquid xenon
      Flags         : particles contributing to energy deposition
+     Seeds	   : the initial seed values for given hit events
 
      Note:
 
@@ -123,7 +148,86 @@ G4LEDATA               : points to low energy data base - G4EMLOW0.5
 G4LEVELGAMMADATA       : points to PhotoEvaporation data
 NeutronHPCrossSections : points to neutron data files G4NDL3.5
 
+In addition if you require to use the full General Particle Source then the
+variable DMXENV_GPS_USE can be set.  The DMX gun is still included in order to
+allow forward compatibility should the GPS change.
 
+
+ANALYSIS:
+
+In order to use the AIDA 2.2 compliant analysis set the environment variable
+G4ANALYSIS_USE before building.  If a previous build exists a gmake clean has
+to be executed.  
+
+export G4ANALYSIS_USE=1
+
+To link with anaphe, first execute the anaphe installation script:
+
+source anaphe
+
+then gmake
+
+The program should then produce hbook histogram files as well as interactively
+two summary pages from QPLOTTER - outputing with postscript summary1.ps and
+summary2.ps
+
+In addition a lizard python script is included for reference:
+start lizard:
+lizard
+exe("DMX.py")
+
+Subsequent runs will require source of anaphe_start.sh
+
+source anaphe_start.sh
+
+before executing DMX
+
+
+NB: When running the program the output histogram file has to be "new"
+therefore if it has the same name as an existing file the program will crash.
+
+
+See http://cern.ch/anaphe for more information about ANAPHE/Lizard
+
+AIDA 2.2 information is available at http://www.aida.org
+
+Using AIDA 2.2 interfaces three different analysis packages can be utilised:
+Java Analysis Studio (JAS)
+OpenScientist
+Anaphe/Lizard
+
+At cern instead of executing the anaphe script see below:
+
+[
+	AT CERN the following has to be executed in order to pick-up anaphe:
+
+execute the following lines _before_ gmake, 
+select the Anaphe version you want to use (4.0.1-sec for RH61 "old" compiler,
+4.0.1 for RH61, new compiler (gcc-2.95.2)):
+export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/4.0.1-sec/bin
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.1-sec/install/sharedstart.sh
+(for the new compiler, use (sh derivates):
+export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/4.0.1/bin
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.1/install/sharedstart.sh)
+or, for [t]csh fans (still "old" compiler):
+
+setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/4.0.1-sec/bin
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.1-sec/install/sharedstart.csh
+]
+
+
+SEEDS:
+
+The seeds of event hits are stored in the hit record file.  These can be used
+to repeat events for visualisation, test crashes/idiosyncracies:
+
+/random/setDirectoryName ./seeds
+/random/resetEngineFrom currentEvent.rndm
+/random/saveThisEvent
+/random/setSavingFlag
+
+The file currentEvent.rndm should contain the two seeds which were outputed in
+the scintHit file.
 
 ERRORS:
 
@@ -170,5 +274,5 @@ config/sys/Linux-egcs.gmk to be altered so that CXX is set to kgcc
 
 
 Alex Howard, 29/11/01
-
+updated 18/06/02
 

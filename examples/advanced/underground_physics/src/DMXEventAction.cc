@@ -250,11 +250,11 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
     if (event_id%printModulo == 0) {
       G4cout << "     Average light collection time: "
 	     << G4BestUnit(aveTimePmtHits,"Time") << G4endl;
-      G4cout << " Numer of PMT hits (photons): " << P_hits << G4endl;
+      G4cout << " Number of PMT hits (photons): " << P_hits << G4endl;
 //  #ifdef G4ANALYSIS_USE
 //        // plot histograms, interactively:
 //        DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
-//        analysis->PlotHistos();
+//        analysis->PlotHistosInter();
 //  #endif
     }
     // write out (x,y,z) of PMT hits
@@ -350,15 +350,15 @@ void DMXEventAction::writePmtHitsToFile(const DMXPmtHitsCollection* hits) {
 
   //  G4String filename="pmt.out";
   G4String filename=runAct->GetsavepmtFile();
-  G4std::ofstream pmtfile(filename);
+  G4std::ofstream pmtfile(filename, G4std::ios::app);
   G4double x; G4double y; G4double z;
 
   if(pmtfile.is_open()) {
     pmtfile << "Hit#    X, mm   Y, mm   Z, mm" << G4endl;       
     pmtfile << G4std::setiosflags(G4std::ios::fixed)
-            << G4std::setprecision(3)
-            << G4std::setiosflags(G4std::ios::left)
-            << G4std::setw(6);
+	    << G4std::setprecision(3)
+	    << G4std::setiosflags(G4std::ios::left)
+	    << G4std::setw(6);
     for (G4int i=0; i<P_hits; i++)
       {
 	x = ((*hits)[i]->GetPos()).x()/mm;
@@ -370,16 +370,15 @@ void DMXEventAction::writePmtHitsToFile(const DMXPmtHitsCollection* hits) {
 		<< z << G4endl;
 #ifdef G4ANALYSIS_USE
   	// pass pmt hit summary to analysis manager for booking in ntples
-  	DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
-  	analysis->analysePMTHits(event_id,i,x,y,z);
+	DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
+	analysis->analysePMTHits(event_id,i,x,y,z);
 #endif
       }
     if (event_id%printModulo == 0) 
       G4cout << P_hits << "     PMT hits in " << filename << G4endl;  
     pmtfile.close();
   }
-
-
+  
 }
 
 

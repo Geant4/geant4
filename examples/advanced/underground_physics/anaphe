@@ -1,0 +1,3 @@
+gtar xvfz anaphe.tar.gz
+export AIDA_DIR = `pwd`
+source anaphe_run.sh

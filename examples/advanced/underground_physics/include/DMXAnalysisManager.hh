@@ -96,7 +96,12 @@ public:
   void HistFirstTime(G4double);
   
   //Method to interactively display histograms
-  void PlotHistos();
+  void PlotHistos(G4bool);
+  
+  //Method to interactively display histograms
+  void PlotHistosInit();
+  //Method to interactively display histograms
+  void PlotHistosInter();
   
   //method to call to create an instance of this class
   static DMXAnalysisManager* getInstance();
@@ -121,6 +126,7 @@ private:
 
   G4double time;
 
+  G4bool interactive;
 
   IAnalysisFactory  *af;
   ITree             *tree;

@@ -29,6 +29,7 @@
 // History:
 // -----------
 // 16 Jan 2002 Alex Howard     Created
+// 17 June 2002 Alex Howard    Successfully Modified to AIDA 2.2
 //
 // -------------------------------------------------------------------
 #ifdef  G4ANALYSIS_USE
@@ -42,7 +43,7 @@ DMXAnalysisManager* DMXAnalysisManager::instance = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DMXAnalysisManager::DMXAnalysisManager() :
-  af(0), tree(0), hf(0), tpf(0), pf(0), plotter(0)
+  af(0), tree(0), hf(0), tpf(0), pf(0)
 {
   // tree is created and booked inside book()
   ;
@@ -52,9 +53,6 @@ DMXAnalysisManager::DMXAnalysisManager() :
 
 DMXAnalysisManager::~DMXAnalysisManager() 
 {
-
-  delete plotter;
-  plotter=0;
 
   delete pf;
   pf=0;
@@ -176,7 +174,6 @@ void DMXAnalysisManager::book(G4String histogramfile)
   IHistogram1D* hOtherEdep    = hf->create1D("95","Other Ener Deposit/keV", 
 					    1000,0.,1000.);
   
-
   delete tf;
 
 }
@@ -198,7 +195,6 @@ void DMXAnalysisManager::finish()
 
   // extra delete as objects are created in book() method rather than during
   // initialisation of class
-  delete plotter;
   delete pf;
   delete tpf;
   delete hf;
@@ -210,11 +206,6 @@ void DMXAnalysisManager::finish()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
 void DMXAnalysisManager::analyseScintHits(G4int event_id, G4double energy_pri, G4double totEnergy, G4int S_hits, G4double firstLXeHitTime, G4int P_hits, G4double aveTimePmtHits, G4String firstparticleName, G4double firstParticleE, G4bool gamma_ev, G4bool neutron_ev, G4bool positron_ev,G4bool electron_ev,G4bool other_ev, long seed1, long seed2)
 
 {
@@ -236,11 +227,11 @@ void DMXAnalysisManager::analyseScintHits(G4int event_id, G4double energy_pri, G
   h3->fill(P_hits);  // fill(x,y,weight) 
 
 
-  //  IHistogram1D* h1 = dynamic_cast<IHistogram1D *> ( tree->find("10") );
-  //h1->fill(energy_pri/keV);  // fill(x,weight)     
+  IHistogram1D* h1 = dynamic_cast<IHistogram1D *> ( tree->find("10") );
+  h1->fill( energy_pri/keV );  // fill(x,weight)     
 
   IHistogram1D* h5 = dynamic_cast<IHistogram1D *> ( tree->find("20") );
-  h5->fill( totEnergy );
+  h5->fill( totEnergy/keV );
   
   IHistogram1D* h6 = dynamic_cast<IHistogram1D *> ( tree->find("60") );
   h6->fill(aveTimePmtHits/ns);  // fill(x,y,weight)     
@@ -307,8 +298,8 @@ void DMXAnalysisManager::analysePMTHits(G4int event, G4int i, G4double x, G4doub
 void DMXAnalysisManager::analysePrimaryGenerator(G4double energy)
 {
 
-  IHistogram1D* h1 = dynamic_cast<IHistogram1D *> ( tree->find("10") );
-  h1->fill(energy/keV);  // fill(x,weight) 
+  //  IHistogram1D* h1 = dynamic_cast<IHistogram1D *> ( tree->find("10") );
+  //  h1->fill(static_cast<double>(energy/keV));  // fill(x,weight) 
 
   ITuple * ntuple = dynamic_cast<ITuple *> ( tree->find("1 Energy") );
   // Fill energy ntple:
@@ -353,7 +344,6 @@ void DMXAnalysisManager::analyseParticleSource(G4double energy, G4String name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-//void BrachyAnalysisManager::hist(G4double x,G4double z, G4float enn)
 void DMXAnalysisManager::HistFirstTime(G4double time)
 {   
   IHistogram1D* h8 = dynamic_cast<IHistogram1D *> ( tree->find("61") );
@@ -361,7 +351,7 @@ void DMXAnalysisManager::HistFirstTime(G4double time)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-void DMXAnalysisManager::PlotHistos()
+void DMXAnalysisManager::PlotHistos(G4bool interactive)
 {   
 
   IHistogram1D* h1p = dynamic_cast<IHistogram1D *> ( tree->find("10") );
@@ -382,10 +372,10 @@ void DMXAnalysisManager::PlotHistos()
   IHistogram1D& h8  = *h8p;  
 
   // Creating the plotter factory
-  IPlotterFactory* pf = af->createPlotterFactory();
-
-//    // Creating a plotter
+  pf = af->createPlotterFactory();
+  // Creating a plotter
   IPlotter* plotter = pf->create();
+  //  plotter = pf->create();
 
   // Creating two regions
   plotter->clearPage();
@@ -411,9 +401,11 @@ void DMXAnalysisManager::PlotHistos()
   plotter->write("summary1.ps", "ps");
 
 
-  // Wait for the keyboard return to avoid destroying the plotter window too quickly.
-  G4cout << "Press <ENTER> to exit" << G4endl;
-  G4cin.get();
+  if (interactive) {
+    // Wait for the keyboard return to avoid destroying the plotter window too quickly.
+    G4cout << "Press <ENTER> to exit" << G4endl;
+    G4cin.get();
+  }
 
   plotter = pf->create();
   plotter->clearPage();
@@ -438,9 +430,11 @@ void DMXAnalysisManager::PlotHistos()
 
   plotter->write("summary2.ps", "ps");
 
-  // Wait for the keyboard return to avoid destroying the plotter window too quickly.
-  G4cout << "Press <ENTER> to exit" << G4endl;
-  G4cin.get();
+  if (interactive) {
+    // Wait for the keyboard return to avoid destroying the plotter window too quickly.
+    G4cout << "Press <ENTER> to exit" << G4endl;
+    G4cin.get();
+  }
 
 }
 
