@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.2 1999-04-14 12:49:03 maire Exp $
+// $Id: G4MaterialPropertiesTable.cc,v 1.3 1999-05-25 00:40:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,7 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
+#include "globals.hh"
 #include "G4MaterialPropertiesTable.hh"
 
 unsigned hashString(const G4String &str) { return str.hash(); }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LElastic.cc,v 1.1 1999-01-07 16:12:49 gunter Exp $
+// $Id: G4LElastic.cc,v 1.2 1999-05-25 00:36:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Physics model class G4LElastic
@@ -20,7 +20,7 @@
 // 25-JUN-98 FWJ: replaced missing Initialize for ParticleChange.
 //
 
-
+#include "globals.hh"
 #include "G4LElastic.hh"
 #include "Randomize.hh"
 
