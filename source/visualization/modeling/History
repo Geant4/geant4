@@ -1,4 +1,4 @@
-$Id: History,v 1.3 1999-11-25 14:18:40 johna Exp $
+$Id: History,v 1.4 2000-04-12 13:03:11 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,17 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+vis-V01-01-01  12th April 2000  John Allison
+- Made G4PhysicalVolumeModel::DescribeSolid virtual.
+- G4PhysicalVolumeModel::DescribeSolid no longer deals with composite
+  solids - now programmed into CompositeSolid::CreatePolyhedron, where
+  CompositeSolid means G4IntersectionSolid, G4SubtractionSolid and
+  G4UnionSolid.
+- G4PhysicalVolumeModel::DescribeSolid no longer deals with displaced
+  solids - now programmed into G4DisplacedSolid::CreatePolyhedron.
+- Added G4LogicalVolumeModel::DescribeSolid, which explicitly adds
+  components of composite solids as white forced-wireframe objects.
 
 vis-V00-01-10  25th November 1999  John Allison
 - Adapted header files of modeling for Software Reference Manual.
