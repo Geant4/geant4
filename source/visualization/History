@@ -1,4 +1,4 @@
-$Id: History,v 1.260 2004-09-13 21:20:56 johna Exp $
+$Id: History,v 1.261 2004-09-22 20:21:16 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,14 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+22nd September 2004  John Allison  (vis-V06-02-04)
+- Moved Doxyfile to management.  doxygen output to tmp area.
+- modeling-V06-02-01 - small fixes.
+- vistree-V06-02-01 - small fixes.
+- opengl-V06-02-06 - Trap non-regular polyhedra and other small changes.
+- DAWN-V06-02-00 - Improve diagnostic on trapping non-regular polyhedra.
+- vistest-V06-02-02: refined rotated tube test.
 
 13th September 2004  John Allison  (vis-V06-02-03)
 - vistree-V06-02-00: Improved ASCIITree:
