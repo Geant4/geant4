@@ -129,13 +129,13 @@ G4HepRepSceneHandler::~G4HepRepSceneHandler () {
 void G4HepRepSceneHandler::open(G4String name) {
     if (writer != NULL) return;
 
-    if (strcmp(name, "stdout") == 0) {
+    if (name == "stdout") {
 #ifdef SDEBUG
         cout << "G4HepRepSceneHandler::Open() stdout" << endl;
 #endif
         writer = factory->createHepRepWriter(&cout, false, false);
         out  = NULL;
-    } else if (strcmp(name, "stderr") == 0) {
+    } else if (name == "stderr") {
 #ifdef SDEBUG
         cout << "G4HepRepSceneHandler::Open() stderr" << endl;
 #endif
@@ -145,14 +145,24 @@ void G4HepRepSceneHandler::open(G4String name) {
 #ifdef SDEBUG
         cout << "G4HepRepSceneHandler::Open() " << name << endl;
 #endif
-        string ext[] = {".heprep", ".heprep.xml", ".heprep.zip", ".heprep.gz"};
-        unsigned int i=0; 
-        while (i < ext->length()) {
-            if (name.substr(name.size()-ext[i].size(), ext[i].size()) == ext[i]) break;
+        const int numberOfExtensions = 4;
+        string ext[numberOfExtensions] = {".heprep", ".heprep.xml", ".heprep.zip", ".heprep.gz"};
+        unsigned int i=0;
+        while (i < numberOfExtensions) {
+            int dot = name.size() - ext[i].size();
+            if ((dot >= 0) && 
+                (name.substr(dot, ext[i].size()) == ext[i])) break;
             i++;
         }
-        extension = (i != ext->length()) ? ext[i] : "";
-        baseName = name.substr(0, name.length() - extension.length());
+        
+        if (i != numberOfExtensions) {
+            extension = ext[i];
+            int dot = name.length() - extension.length();
+            baseName = (dot >= 0) ? name.substr(0, dot) : "";
+        } else {  
+            extension = ".heprep.zip";
+            baseName = name;
+        }
         
         // look for 0000 pattern in G4Output-0000.heprep
         unsigned int digit = baseName.length()-1;
@@ -235,9 +245,11 @@ bool G4HepRepSceneHandler::closeHepRep() {
 
     // open heprep file
     if (writer == NULL) {
-//        cout << "'" << ((GetScene() == NULL) ? "NULL" : "non-null") << "'" << endl;
-//        cout << "'" << ((GetScene()->GetName() == NULL) ? "NULL" : GetScene()->GetName()) << "'" << endl;
-        open(GetScene() == NULL ? G4String("G4HepRepOutput.heprep.zip") : GetScene()->GetName());
+        if (GetScene() == NULL) {
+            open(G4String("G4HepRepOutput.heprep.zip"));
+        } else { 
+            open(GetScene()->GetName());
+        }
     }
     
     if (writeMultipleFiles) {
