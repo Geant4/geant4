@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.34 2003-06-19 14:36:19 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.35 2003-06-19 15:21:42 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,11 +81,11 @@ G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum,
       fVerboseLevel=2;
 #endif
 
-      G4cout << "MagIntDriver version: 'invE_nS' New InvEps, Stats-Optional "
+      G4cout << "MagIntDriver version: invE_nS, with Statistics "
 #ifdef G4FLD_STATS
-      << " Stats-disabled "
+      << " enabled "
 #else
-      << " Stats-disabled "
+      << " disabled "
 #endif
 	<< G4endl;
 }
@@ -797,10 +797,11 @@ void G4MagInt_Driver::PrintStat_Aux(
 
 void G4MagInt_Driver::PrintStatisticsReport()
 {
-  G4int noPrecBig= 6, noPrecSmall=4; 
+  G4int noPrecBig= 6;
   G4int oldPrec= G4cout.precision(noPrecBig);
 
-  G4cout << "G4MagInt_Driver Number of Steps: "
+  G4cout << "G4MagInt_Driver Statistics of steps undertaken. " << G4endl;
+  G4cout << "G4MagInt_Driver: Number of Steps: "
 	 << " Total= " <<  fNoTotalSteps
          << " Bad= "   <<  fNoBadSteps 
          << " Small= " <<  fNoSmallSteps 
@@ -810,14 +811,17 @@ void G4MagInt_Driver::PrintStatisticsReport()
  #ifdef G4FLD_STATS
  G4cout << "MID dyerr: " 
 	 << " maximum= " << fDyerr_max 
-	 << " 2nd max= " << fDyerr_mx2
-	 << " Total small= " << fDyerrPos_smTot 
+	 // << " 2nd max= " << fDyerr_mx2
+	 << " Sum small= " << fDyerrPos_smTot 
 	 << " sqrt(Sum large^2): pos= " << sqrt(fDyerrPos_lgTot)
 	 << " vel= " << sqrt( fDyerrVel_lgTot )
 	 << " Total h-distance: small= " << fSumH_sm 
 	 << " large= " << fSumH_lg
 	 << G4endl;
 
+#if 0
+  G4int noPrecSmall=4; 
+  // Single line precis of statistics ... optional
   G4cout.precision(noPrecSmall);
   G4cout << "MIDnums: " << fMinimumStep
 	 << "   " << fNoTotalSteps 
@@ -832,6 +836,7 @@ void G4MagInt_Driver::PrintStatisticsReport()
 	 << "   " << fDyerrVel_lgTot
 	 << "   " << fSumH_lg
 	 << G4endl;
+ #endif 
  #endif 
 
  G4cout.precision(oldPrec);
