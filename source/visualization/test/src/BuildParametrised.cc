@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildParametrised.cc,v 1.4 2001-07-11 10:09:27 gunter Exp $
+// $Id: BuildParametrised.cc,v 1.5 2001-11-12 18:22:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,26 +50,26 @@ G4VPhysicalVolume* BuildParametrised ()
   G4Box* aBox = new G4Box("aBox",10*m, 10*m, 10*m);
   G4LogicalVolume*  theLogicalPit =
     new G4LogicalVolume(aBox, theAir,
-			"thePit", NULL, NULL, NULL);
+			"thePit", 0, 0, 0);
   theLogicalPit->SetVisAttributes (G4VisAttributes::Invisible);
   G4PVPlacement* thePit =
     new G4PVPlacement(    theNull,
 			  *theCenter,
 			  "thePit",
 			  theLogicalPit,    
-			  0, NULL, 0);
+			  0, 0, 0);
 
   // The Mother of Parametrised.
   G4VSolid * anotherBox = new G4Box("aBox",5*m, 5*m, 5*m);
   G4LogicalVolume*  theLogicalMother =
     new G4LogicalVolume(anotherBox, theAir,
-			"aTest", NULL, NULL,
-			NULL);
+			"aTest", 0, 0,
+			0);
   G4PVPlacement* theMother =
     new G4PVPlacement(    0, G4ThreeVector (-4 * m, 0 , 0),
 			  "theMother",
 			  theLogicalMother,    
-			  thePit, NULL, 0);
+			  thePit, 0, 0);
 
   // Parametrized volume.
   G4Material * theCopper =
@@ -78,8 +78,8 @@ G4VPhysicalVolume* BuildParametrised ()
   G4Box * theBox = new G4Box("aBox",1,1,1);
   G4LogicalVolume*  theLogicalBox =
     new G4LogicalVolume(theBox, theCopper,
-			"aTest", NULL, NULL,
-			NULL);
+			"aTest", 0, 0,
+			0);
   G4VisAttributes * logicalPAttributes;
   logicalPAttributes = new G4VisAttributes(G4Colour(1.,0.,0.));
   theLogicalBox->SetVisAttributes(logicalPAttributes);
@@ -95,20 +95,20 @@ G4VPhysicalVolume* BuildParametrised ()
   G4VSolid * box3 = new G4Box("aBox", 1 * m, 2 * m, 3 * m);
   G4LogicalVolume*  theLogicalRMother =
     new G4LogicalVolume(box3, theAir,
-			"aTest", NULL, NULL,
-			NULL);
+			"aTest", 0, 0,
+			0);
   G4PVPlacement* theRMother =
     new G4PVPlacement(    0, G4ThreeVector (4 * m, 0, 0),
 			  "theRMother",
 			  theLogicalRMother,    
-			  thePit, NULL, 0);
+			  thePit, 0, 0);
 
   // Replicated volume.
   G4VSolid * RBox = new G4Box("aBox", 0.2 * m, 2 * m, 3 * m);
   G4LogicalVolume*  theLogicalRBox =
     new G4LogicalVolume(RBox, theCopper,
-			"aTest", NULL, NULL,
-			NULL);
+			"aTest", 0, 0,
+			0);
   G4VisAttributes * logicalRAttributes;
   logicalRAttributes = new G4VisAttributes(G4Colour(0.,1.,0.));
   theLogicalRBox->SetVisAttributes(logicalRAttributes);
@@ -123,21 +123,21 @@ G4VPhysicalVolume* BuildParametrised ()
 				90. * deg, 180. * deg);
   G4LogicalVolume*  theLogicalTMother =
     new G4LogicalVolume(tubs, theAir,
-			"aTest", NULL, NULL,
-			NULL);
+			"aTest", 0, 0,
+			0);
   G4PVPlacement* theTMother =
     new G4PVPlacement(    0, G4ThreeVector (4 * m, 4 * m, 0),
 			  "theTMother",
 			  theLogicalTMother,    
-			  thePit, NULL, 0);
+			  thePit, 0, 0);
 
   // Replicated volume.
   G4VSolid * tubsPart = new G4Tubs ("aTubsPart", 0.5 * m, 1 * m, 2 * m,
 				    0., 36. * deg);
   G4LogicalVolume*  theLogicalTubsPart =
     new G4LogicalVolume(tubsPart, theCopper,
-			"aTest", NULL, NULL,
-			NULL);
+			"aTest", 0, 0,
+			0);
   G4VisAttributes * logicalTAttributes;
   logicalTAttributes = new G4VisAttributes(G4Colour(0.,0.,1.));
   theLogicalTubsPart->SetVisAttributes(logicalTAttributes);
@@ -152,8 +152,8 @@ G4VPhysicalVolume* BuildParametrised ()
   G4Box * thebloggsBox = new G4Box("aBox",5*m, 4*m, 2*m);
   G4LogicalVolume*  theLogicalbloggs =
     new G4LogicalVolume(thebloggsBox, theCopper,
-			"aTest", NULL, NULL,
-			NULL);
+			"aTest", 0, 0,
+			0);
   G4VisAttributes * bloggsAttributes = 
     new G4VisAttributes(G4Colour(0.,1.,0.));
   theLogicalbloggs->SetVisAttributes(bloggsAttributes);
@@ -163,7 +163,7 @@ G4VPhysicalVolume* BuildParametrised ()
 			  "bloggs",
 			  theLogicalbloggs,
 			  thePitPosition,    
-			  NULL, 0);
+			  0, 0);
 			  ***************/
 
   return thePit;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.16 2001-11-06 12:59:06 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.17 2001-11-12 18:22:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -564,7 +564,7 @@ void G4VisCommandsViewerSet::SetNewValue
     G4double x = sin (theta) * cos (phi);
     G4double y = sin (theta) * sin (phi);
     G4double z = cos (theta);
-    fLightsVector = G4Vector3D (x, y, z);
+    fLightsVector = G4ThreeVector (x, y, z);
     vp.SetLightpointDirection(fLightsVector);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Lights direction set to "
@@ -738,7 +738,7 @@ void G4VisCommandsViewerSet::SetNewValue
     G4double x = sin (theta) * cos (phi);
     G4double y = sin (theta) * sin (phi);
     G4double z = cos (theta);
-    fUpVector = G4Vector3D (x, y, z);
+    fUpVector = G4ThreeVector (x, y, z);
     vp.SetUpVector(fUpVector);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Up direction set to " << vp.GetUpVector() << G4endl;
@@ -759,7 +759,7 @@ void G4VisCommandsViewerSet::SetNewValue
     G4double x = sin (theta) * cos (phi);
     G4double y = sin (theta) * sin (phi);
     G4double z = cos (theta);
-    fViewpointVector = G4Vector3D (x, y, z);
+    fViewpointVector = G4ThreeVector (x, y, z);
     vp.SetViewAndLights(fViewpointVector);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Viewpoint direction set to "

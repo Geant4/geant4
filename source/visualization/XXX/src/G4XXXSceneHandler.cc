@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.4 2001-08-25 00:22:22 johna Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.5 2001-11-12 18:22:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -221,7 +221,7 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   //Draw each G4Facet individually
   
   //Get colour, etc..
-  const G4Colour& c = GetColour (polyhedron);
+  // const G4Colour& c = GetColour (polyhedron);
   
   G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (polyhedron);
   switch (drawing_style) {

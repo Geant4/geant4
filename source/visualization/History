@@ -1,4 +1,4 @@
-$Id: History,v 1.161 2001-11-12 17:42:39 stanaka Exp $
+$Id: History,v 1.162 2001-11-12 18:24:14 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,7 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
-13th Nov 2001   Hajime Yoshida and Minamimoto (vis-V03-02-17)
+
+12th November 2001  John Allison  (vis-V03-02-18 needs config-V03-02-09)
+- Fixed some warnings and one error from gcc-2.95.2.
+
+13th Nov 2001 (JST)  Hajime Yoshida and Minamimoto (vis-V03-02-17)
 - Updation of G4RTJpegMaker.cc for Windows platform (raytracer-V03-02-01). 
 
 7th November 2001  John Allison  (vis-V03-02-16 needs config-V03-02-09)

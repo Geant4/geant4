@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.29 2001-11-08 21:48:24 perl Exp $
+// $Id: G4VisCommandsScene.cc,v 1.30 2001-11-12 18:22:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -390,7 +390,6 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
 						   G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-  G4bool warn(verbosity >= G4VisManager::warnings);
 
   G4String sceneName, refresh_flush;
   G4std::istrstream is ((char*)newValue.data());
