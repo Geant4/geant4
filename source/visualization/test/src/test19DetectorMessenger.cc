@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test19DetectorMessenger.cc,v 1.5 2003-06-16 17:14:35 gunter Exp $
+// $Id: test19DetectorMessenger.cc,v 1.6 2004-07-01 15:52:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,7 @@
 #include "BuildGeom_Example1.hh"
 #include "BuildGeom_Example2.hh"
 #include "BuildParametrised.hh"
+#include "BuildHouse.hh"
 
 #ifdef ATLAS
 #include "ATLASdetector.hh"
@@ -60,7 +61,19 @@ test19DetectorMessenger::test19DetectorMessenger
   fpTest19DetCommandDirectory = command;
 
   command = new G4UIcommand ("/test19det/detector",this);
-  command -> SetGuidance ("test19 detector choice.");
+  command -> SetGuidance ("test19 detector choice.  Give integer.");
+  command -> SetGuidance
+    (
+     "0) Part of original test calorimeter"
+     "\n1) Example1 (LBNO, no rotation)"
+     "\n2) Example2 (embryo LBNO, rotated volumes)"
+     "\n3) A parametrised volume"
+     "\n4) MyDetector"
+     "\n5) House"
+#ifdef ATLAS
+     "\n6) ATLAS (selected part)"
+#endif
+     );
   param = new G4UIparameter ("detector id", 'i', true);
   param -> SetDefaultValue (-1);
   command -> SetParameter (param);
@@ -80,9 +93,9 @@ void test19DetectorMessenger::SetNewValue
     const char* aString = newValues;
     std::istrstream is((char*) aString) ; is >> id;
 #ifdef ATLAS
-    const G4int idMax = 5;
+    const G4int idMax = 6;
 #else
-    const G4int idMax = 4;
+    const G4int idMax = 5;
 #endif
     if (id < 0 || id > idMax) {
       G4cout << "Available detectors:"
@@ -118,8 +131,9 @@ void test19DetectorMessenger::SetNewValue
 	//G4StateManager::GetStateManager () -> Pause ();
 	pGeom = detector -> Construct ();
 	break;
+      case 5: pGeom = BuildHouse(); break;
 #ifdef ATLAS
-      case 5:
+      case 6:
 	atlas = new ATLASdetector();
 	//    G4UImanager* UI = G4UImanager::GetUIpointer ();
 	//    UI -> ApplyCommand ("/atlas/innerDetector/barrelSilicon 1");

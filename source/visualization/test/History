@@ -1,9 +1,12 @@
-$Id: History,v 1.26 2004-07-01 15:51:38 johna Exp $
+$Id: History,v 1.27 2004-07-01 15:52:24 johna Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.26  2004/07/01 15:51:38  johna
+Removed runManager->Initialize() - do with /run/initialize.
+
 Revision 1.25  2004/07/01 15:50:01  johna
 Corrected add/trajectories in test19.g4m.
 
