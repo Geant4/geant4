@@ -47,7 +47,7 @@ XrayFluoPrimaryGeneratorMessenger::XrayFluoPrimaryGeneratorMessenger(XrayFluoPri
   RndmCmd->SetParameterName("choice",true);
   RndmCmd->SetDefaultValue("on");
   RndmCmd->SetCandidates("on off");
-  RndmCmd->AvailableForStates(PreInit,Idle);
+  RndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   RndmVert = new G4UIcmdWithAString("/gun/randomVert",this);
   RndmVert->SetGuidance("Shoot randomly the incident particle.");
@@ -55,7 +55,7 @@ XrayFluoPrimaryGeneratorMessenger::XrayFluoPrimaryGeneratorMessenger(XrayFluoPri
   RndmVert->SetParameterName("choice",true);
   RndmVert->SetDefaultValue("on");
   RndmVert->SetCandidates("on off");
-  RndmVert->AvailableForStates(PreInit,Idle);
+  RndmVert->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   spectrum = new G4UIcmdWithAString("/gun/spectrum",this);
   spectrum->SetGuidance("Shoot the incident particle with a certain energy spectrum.");
@@ -63,7 +63,7 @@ XrayFluoPrimaryGeneratorMessenger::XrayFluoPrimaryGeneratorMessenger(XrayFluoPri
   spectrum->SetParameterName("choice",true);
   spectrum->SetDefaultValue("on");
   spectrum->SetCandidates("on off");
-  spectrum->AvailableForStates(PreInit,Idle);
+  spectrum->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   isoVert = new G4UIcmdWithAString("/gun/isoVert",this);
   isoVert->SetGuidance("Shoot the incident particle from an isotrofic direction.");
@@ -71,7 +71,7 @@ XrayFluoPrimaryGeneratorMessenger::XrayFluoPrimaryGeneratorMessenger(XrayFluoPri
   isoVert->SetParameterName("choice",true);
   isoVert->SetDefaultValue("on");
   isoVert->SetCandidates("on off");
-  isoVert->AvailableForStates(PreInit,Idle);
+  isoVert->AvailableForStates(G4State_PreInit,G4State_Idle);
 
 }
 
