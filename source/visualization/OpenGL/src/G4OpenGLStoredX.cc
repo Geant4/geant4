@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredX.cc,v 1.8 2002-02-24 01:48:17 johna Exp $
+// $Id: G4OpenGLStoredX.cc,v 1.9 2004-04-07 15:18:22 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,8 +30,6 @@
 
 
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
-
-#include <GL/gl.h>
 
 #include "G4VisFeaturesOfOpenGL.hh"
 #include "G4VSceneHandler.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXm.cc,v 1.8 2002-02-24 01:48:05 johna Exp $
+// $Id: G4OpenGLImmediateXm.cc,v 1.9 2004-04-07 15:18:22 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,8 +29,6 @@
 // OpenGL graphics system factory.
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
-#include <GL/gl.h>
 
 #include "G4VisFeaturesOfOpenGL.hh"
 #include "G4VSceneHandler.hh"

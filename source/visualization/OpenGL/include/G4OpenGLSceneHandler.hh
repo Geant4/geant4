@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.14 2003-06-10 17:58:55 gcosmo Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.15 2004-04-07 15:17:12 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,11 +37,7 @@
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
 
-#ifdef WIN32
-  #include <windows.h>
-#endif
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "G4OpenGL.hh"
 
 #include "G4VSceneHandler.hh"
 #include "G4OpenGLViewer.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.cc,v 1.9 2003-06-10 17:13:34 gcosmo Exp $
+// $Id: G4OpenGLStoredXViewer.cc,v 1.10 2004-04-07 15:18:22 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,8 +32,6 @@
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
 
 #include "G4OpenGLStoredXViewer.hh"
-
-#include <GL/gl.h>
 
 #include "G4ios.hh"
 

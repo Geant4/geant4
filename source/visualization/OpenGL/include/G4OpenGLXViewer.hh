@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.18 2003-09-22 10:37:50 johna Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.19 2004-04-07 15:17:12 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,9 +42,7 @@
 #include <X11/Intrinsic.h>
 #include <X11/Xmu/StdCmap.h>
 
-#include <GL/gl.h>
 #include <GL/glx.h>
-#include <GL/glu.h>
 
 class G4OpenGLSceneHandler;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.11 2002-02-24 01:48:29 johna Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.12 2004-04-07 15:18:23 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,10 +34,6 @@
 #include "globals.hh"
 
 #include "G4OpenGLXmViewer.hh"
-
-#include <GL/gl.h>
-#include <GL/glx.h>
-#include <GL/glu.h>
 
 #include "G4ios.hh"
 

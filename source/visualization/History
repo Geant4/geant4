@@ -1,4 +1,4 @@
-$Id: History,v 1.241 2004-03-16 08:46:58 gcosmo Exp $
+$Id: History,v 1.242 2004-04-07 15:19:48 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,13 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+07th April 2004  Guy Barrand
+- visualization/OpenGL/* : use the G4OpenGL.hh file.
+- Added : visualization/OpenGL/include/G4OpenGL.hh to encapsulate
+  the include of gl/gl.h and gl/glu.h that may be platform dependant.
+  It permits to rm some #ifdef WIN32 spread in the code. It opens also
+  the way to the usage of the Apple OpenGL on a Mac.
 
 14 March 2004 Joseph Perl (vis-V06-00-01)
 - HepRepFile handle duplicate ShowView.
