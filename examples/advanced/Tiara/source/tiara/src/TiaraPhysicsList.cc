@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraPhysicsList.cc,v 1.2 2003-06-18 16:40:30 gunter Exp $
+// $Id: TiaraPhysicsList.cc,v 1.3 2003-11-07 12:02:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -133,6 +133,7 @@ void TiaraPhysicsList::ConstructProcess()
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
+#include "G4ionIonisation.hh"
 
 void TiaraPhysicsList::ConstructEM()
 {
@@ -176,7 +177,7 @@ void TiaraPhysicsList::ConstructEM()
      
     } else if( particleName == "GenericIon" ) {
       pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-      pmanager->AddProcess(new G4hIonisation(),-1,2,2); 
+      pmanager->AddProcess(new G4ionIonisation(),-1,2,2); 
     } else { 
       if ((particle->GetPDGCharge() != 0.0) && 
           (particle->GetParticleName() != "chargedgeantino")&&
@@ -610,7 +611,8 @@ void TiaraPhysicsList::ConstructGeneral()
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (theDecayProcess->IsApplicable(*particle)) { 
+    if (theDecayProcess->IsApplicable(*particle) &&
+        !particle->IsShortLived()) { 
       pmanager ->AddProcess(theDecayProcess);
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
