@@ -32,7 +32,7 @@
 
        G4ParticleDefinition * dHadron = aHadron->GetDefinition();
 
-       G4int iHadron;
+       G4int iHadron=-1;   // dummy value to shut off compiler warning 
 
          if(dHadron == G4Proton::Proton()        ||
             dHadron == G4Neutron::Neutron()      ||
