@@ -116,6 +116,7 @@
   G4HadFinalState * G4NeutronHPElasticFS::ApplyYourself(const G4HadProjectile & theTrack)
   {  
 //    G4cout << "G4NeutronHPElasticFS::ApplyYourself+"<<G4endl;
+    theResult.Clear();
     G4double eKinetic = theTrack.GetKineticEnergy();
     const G4HadProjectile *incidentParticle = &theTrack;
     G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>(incidentParticle->GetDefinition()) );

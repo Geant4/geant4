@@ -36,6 +36,7 @@
   G4HadFinalState * G4NeutronHPCaptureFS::ApplyYourself(const G4HadProjectile & theTrack)
   {
     G4int i;
+    theResult.Clear();
 // prepare neutron
     G4double eKinetic = theTrack.GetKineticEnergy();
     const G4HadProjectile *incidentParticle = &theTrack;
