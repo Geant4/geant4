@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronicProcess.cc,v 1.6 1999-11-22 19:14:27 hpw Exp $
+// $Id: G4HadronicProcess.cc,v 1.7 1999-11-22 19:54:15 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // HPW to implement the choosing of an element for scattering.
@@ -120,7 +120,8 @@
     theIsoResult->SetParentParticle(*aTrack.GetDynamicParticle());
     theIsoResult->SetMotherNucleus(anIsoResult->GetMotherNucleus());
 //    theIsoResult->SetProducer(typeid(*theInteraction).name()); @@@@@@@
-    theIsoResult->SetProducer("WaitingForTypeidToBeAvailableInCompilers");
+    G4String aWorkaround("WaitingForTypeidToBeAvailableInCompilers"); // @@@@@  workaround for DEC.
+    theIsoResult->SetProducer(aWorkaround);
     
     delete anIsoResult;
 
