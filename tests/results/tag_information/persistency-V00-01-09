@@ -1,0 +1,22 @@
+Persistency
+===========
+December 1, 99   Y.Morita (persistency-V00-01-09)
+- fix for HP-aCC, Geant4 NamedSchema
+- added G4TMPDIR to GNUmakefile include path
+
+
+PersistentEx01
+==============
+1st December 1999   Y.Morita (PersistentEx01-V00-01-03)
+- Fix GNUmakefile to pick up right dependency files.
+- new PersistentEx01run script file for new config.
+
+PersistentEx02
+==============
+1st December 1999   Y.Morita (PersistentEx02-V00-01-01)
+- Fix GNUmakefile to pick up right dependency files.
+- new PersistentEx01run script file for new config.
+
+29th November 1999  Y.Morita
+- Bug fix for persistent hits collection based on PersistentEx01.
+  (Requires persistency-V00-01-08)
