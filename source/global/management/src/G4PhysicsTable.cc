@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.cc,v 1.8 2003-06-06 16:17:17 gcosmo Exp $
+// $Id: G4PhysicsTable.cc,v 1.9 2003-11-04 10:38:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -119,7 +119,21 @@ G4bool G4PhysicsTable::StorePhysicsTable(const G4String& fileName,
 }
 
 
+G4bool G4PhysicsTable::ExistPhysicsTable(const G4String& fileName) const
+{
+  std::ifstream fIn;  
+  G4bool value=true;
+  // open input file //
+  fIn.open(fileName,std::ios::in);
 
+  // check if the file has been opened successfully 
+  if (!fIn) {
+    value = false;
+  }
+  fIn.close();
+  return value;
+}
+    
 G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
 					    G4bool          ascii)
 {
