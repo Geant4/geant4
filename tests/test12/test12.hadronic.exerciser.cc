@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test12.hadronic.exerciser.cc,v 1.3 1999-11-11 15:41:15 gunter Exp $
+// $Id: test12.hadronic.exerciser.cc,v 1.4 1999-11-23 15:44:40 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -28,7 +28,7 @@ static void OutputCases
 	   iParticle < particleNameList.entries ();
 	   iParticle++) {
 
-	cout << "\n# " << particleNameList [iParticle]
+	cout << "\n#\n# " << particleNameList [iParticle]
 	     << " at " << G4BestUnit (energyList [iEnergy], "Energy")
 	     << " in " << materialNameList [iMaterial]
 	     << "\n#";
@@ -36,7 +36,7 @@ static void OutputCases
 	cout
 	  << "\n/gun/particle " << particleNameList [iParticle]
 	  << "\n/gun/energy " <<  G4BestUnit (energyList [iEnergy], "Energy")
-	  <<"\n/mydet/SelectMaterial " << materialNameList [iMaterial]
+	  << "\n/mydet/SelectMaterial " << materialNameList [iMaterial]
 	  << "\n/run/beamOn 1";
 
       }
@@ -56,8 +56,7 @@ int main (int argc, char** argv) {
     "\n/control/verbose 2"
     "\n# /run/verbose 2"
     "\n/run/initialize"
-    "\n/gun/direction 1 0 0"
-    "\n#";
+    "\n/gun/direction 1 0 0";
 
   G4RWTValOrderedVector <G4String> particleNameList;
   particleNameList.append ("proton");
