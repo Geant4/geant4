@@ -5,13 +5,17 @@ void G4Analyser::setInelCsec(G4double csec, G4bool withn) {
 
 inel_csec = csec; // mb
 withNuclei = withn;
+ if (verboseLevel > 1) {
 G4cout << " total inelastic " << inel_csec << G4endl;
+ }
 }
 
 void G4Analyser::handleWatcherStatistics() {
 const G4double small = 1.e-10;
+ if (verboseLevel > 1) {
 G4cout << " ===================================================== " << G4endl;
 G4cout << " ********** Izotop analysis ****************** " << G4endl;
+ }
 G4double fgr = 0.0;
 G4double averat = 0.0;
 G4double ave_err = 0.0;
@@ -50,12 +54,13 @@ if(checked > 0.0) {
   ave_err /= checked;
   fgr = pow(10.0, sqrt(fgr / checked)); 
 };
+ if (verboseLevel > 1) {
 G4cout << " ===================================================== " << G4endl;
 G4cout << " total exper c.s. " << tot_exper << " err " << tot_exper_err <<
  " tot inucl c.s. " << tot_inucl << " err " << tot_inucl_err << G4endl;
 G4cout << " checked total " << checked << " lhood " << fgr << G4endl
      << " average ratio " << averat << " err " << ave_err << G4endl
      << " global chsq " << gl_chsq << G4endl;
-
+ }
 }
 

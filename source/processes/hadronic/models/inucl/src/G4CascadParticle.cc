@@ -8,7 +8,7 @@ G4double G4CascadParticle::getPathToTheNextZone(G4double rz_in, G4double rz_out)
   G4double pp = 0.0;
   vector<G4double> mom = theParticle.getMomentum();
   for(G4int i = 1; i < 4; i++) {
-    rp += mom[i]*position[i - 1];
+    rp += mom[i] * position[i - 1];
     rr += position[i - 1] * position[i - 1];
     pp += mom[i] * mom[i];
   };
@@ -43,4 +43,7 @@ void G4CascadParticle::propagateAlongThePath(G4double path) {
   G4double pmod = theParticle.getMomModule();
   for(G4int i = 0; i < 3; i++) position[i] += mom[i + 1] * path / pmod;
 }
+
+
+
 

@@ -1,5 +1,3 @@
-//#define DEBUG
-
 #include "G4BigBanger.hh"
 #include "G4InuclNuclei.hh"
 #include "G4ParticleLargerEkin.hh"
@@ -31,42 +29,42 @@ if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
   toTheNucleiSystemRestFrame.toTheTargetRestFrame();
 
   G4double etot = 0.001 * (EEXS - bindingEnergy(A, Z));
-#ifdef DEBUG
+  if (verboseLevel > 1) {
   G4cout << " BigBanger: target " << G4endl;
   nuclei_target->printParticle(); 
   G4cout << " BigBanger: a " << A << " z " << Z << " eexs " << EEXS << " etot " <<
     etot << " nm " << nuclei_target->getMass() << G4endl;
-#endif
+  }
   
   vector<G4InuclElementaryParticle> particles = 	    
            generateBangInSCM(etot, A, Z, dummy.getParticleMass(1),
 	                                    dummy.getParticleMass(2));
-#ifdef DEBUG
+if (verboseLevel > 2) {
         G4cout << " particles " << particles.size() << G4endl;
 	for(G4int i = 0; i < particles.size(); i++) 
 	  particles[i].printParticle();
-#endif
+}
   if(!particles.empty()) { // convert back to Lab
-#ifdef DEBUG
+if (verboseLevel > 2) {
 	  vector<G4double> totscm(4, 0.0);
 	  vector<G4double> totlab(4, 0.0);
-#endif
+}
      particleIterator ipart;
      for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-#ifdef DEBUG
+if (verboseLevel > 2) {
 	    vector<G4double> mom_scm = ipart->getMomentum();
 	    for(G4int i = 0; i < 4; i++) totscm[i] += mom_scm[i];
-#endif
+}
        vector<G4double> mom = 
 	      toTheNucleiSystemRestFrame.backToTheLab(ipart->getMomentum());
        ipart->setMomentum(mom); 
-#ifdef DEBUG
+if (verboseLevel > 2) {
        mom = ipart->getMomentum();
        for(G4int i = 0; i < 4; i++) totlab[i] += mom[i];
-#endif
+}
      };
      sort(particles.begin(), particles.end(), ParticleLargerEkin());
-#ifdef DEBUG
+if (verboseLevel > 2) {
 	  G4cout << " In SCM: total outgoing momentum " << G4endl 
 	   << " E " << totscm[0] << " px " << totscm[1]
 	    << " py " << totscm[2] << " pz " << totscm[3] << G4endl; 
@@ -75,7 +73,7 @@ if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
 	   << " px " << PEX[1] - totlab[1]
 	   << " py " << PEX[2] - totlab[2] 
 	   << " pz " << PEX[3] - totlab[3] << G4endl; 
-#endif
+}
   };
 	
   output.addOutgoingParticles(particles);
@@ -97,9 +95,9 @@ vector<G4InuclElementaryParticle>
   
   G4int ia = dynamic_cast<G4int>(a + 0.1);
   G4int iz = dynamic_cast<G4int>(z + 0.1);
-#ifdef DEBUG
+if (verboseLevel > 2) {
   G4cout << " ia " << ia << " iz " << iz << G4endl;
-#endif
+}
   vector<G4InuclElementaryParticle> particles;
   
   if(ia == 1) {
@@ -161,9 +159,9 @@ vector<G4InuclElementaryParticle>
        G4double ct = -0.5 * (tot_mod * tot_mod + pmod[ia - 2] * pmod[ia - 2] -
                  pmod[ia - 1] * pmod[ia - 1]) / tot_mod / pmod[ia - 2];
 
-#ifdef DEBUG
+if (verboseLevel > 2) {
 	     G4cout << " ct last " << ct << G4endl;
-#endif
+}
   
        if(fabs(ct) < ang_cut) {
          vector<G4double> mom2 = 
@@ -192,9 +190,9 @@ vector<G4InuclElementaryParticle>
       };
     };
   };  
-#ifdef DEBUG
+if (verboseLevel > 2) {
   if(itry == itry_max) G4cout << " BigBanger -> can not generate bang " << G4endl;
-#endif
+}
   return particles;
   
 }
@@ -210,9 +208,9 @@ vector<G4double> G4BigBanger::generateMomentumModules(G4double etot,
   
   for(G4int i = 0; i < ia; i++) { 
     G4double x = generateX(ia, a, promax);
-#ifdef DEBUG
+if (verboseLevel > 2) {
     G4cout << " i " << i << " x " << x << G4endl;
-#endif
+}
     pmod.push_back(x);
     xtot += x;
   };
@@ -220,9 +218,9 @@ vector<G4double> G4BigBanger::generateMomentumModules(G4double etot,
     G4double m = i < iz ? mp : mn;
     pmod[i] = pmod[i] * etot / xtot;
     pmod[i] = sqrt(pmod[i] * (pmod[i] + 2.0 * m));
-#ifdef DEBUG
+if (verboseLevel > 2) {
     G4cout << " i " << i << " pmod " << pmod[i] << G4endl;
-#endif
+}
   };
   return pmod;
   
@@ -259,9 +257,9 @@ G4double G4BigBanger::generateX(G4int ia, G4double a, G4double promax) const {
     x = inuclRndm();
     if(xProbability(x, ia) >= promax * inuclRndm()) return x;
   };
-#ifdef DEBUG
+if (verboseLevel > 2) {
   G4cout << " BigBanger -> can not generate x " << G4endl;
-#endif
+}
   return maxProbability(a);
 
 }

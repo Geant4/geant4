@@ -1,5 +1,3 @@
-//#define DEBUG
-
 #include "G4CascadSpecialFunctions.hh"
 
 pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale2(G4double e) {
@@ -49,9 +47,9 @@ if(e < EMT1[0]) {
    ik = 19;
    sk = 1.0;
 };
-#ifdef DEBUG
+ if (verboseLevel > 2) {
 G4cout << " e " << e << " ik " << ik << " sk " << sk << G4endl;
-#endif
+ }
 
 return pair<G4int, G4double>(ik, sk);
 
@@ -68,9 +66,9 @@ G4double G4CascadSpecialFunctions::absorptionCrosSection(G4double e, G4int type)
     csec = 3.6735 * (1.0 - e) * (1.0 - e);     
   };
   if(csec < 0.0) csec = 0.0;
-#ifdef DEBUG
+  if (verboseLevel > 2) {
 G4cout << " ekin " << e << " abs. csec " << corr_fac * csec << G4endl;   
-#endif
+  }
 return corr_fac * csec;
 
 }
