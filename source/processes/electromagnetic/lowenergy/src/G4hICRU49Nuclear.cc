@@ -58,7 +58,7 @@ G4double G4hICRU49Nuclear::NuclearStoppingPower(G4double kineticEnergy,
                                 G4double m1, G4double m2) const
 {  
   G4double energy = kineticEnergy/keV ;  // energy in keV
-  G4double ionloss ;
+  G4double ionloss = 0.0;
   
   G4double rm = (m1 + m2) * sqrt( pow(z1, .23) + pow(z2, .23) ) ;
   

@@ -69,9 +69,6 @@
 
 G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
   : G4hLowEnergyLoss(processName),
-    theProtonTable("ICRU_R49p"),
-    theAntiProtonTable("ICRU_R49p"),
-    theNuclearTable("ICRU_R49"),
     theBetheBlochModel(0),
     theProtonModel(0),
     theAntiProtonModel(0),
@@ -79,6 +76,9 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     theNuclearStoppingModel(0),
     theIonChuFluctuationModel(0),
     theIonYangFluctuationModel(0),
+    theProtonTable("ICRU_R49p"),
+    theAntiProtonTable("ICRU_R49p"),
+    theNuclearTable("ICRU_R49"),
     nStopping(true),
     theBarkas(true),
     theMeanFreePathTable(0),
@@ -226,7 +226,6 @@ void G4hLowEnergyIonisation::BuildLossTable(
   G4double lowEdgeEnergy , ionloss, ionlossBB, paramB ;
   G4double lowEnergy, highEnergy;
   G4Proton* theProton = G4Proton::Proton();
-  G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
 
   if(aParticleType == *theProton) {
     lowEnergy = protonLowEnergy ;

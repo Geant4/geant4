@@ -120,6 +120,7 @@ void hTestStanPhysicsList::ConstructProcess()
                || particleName == "IonC12"  
                || particleName == "IonAr40"  
                || particleName == "IonFe56"  
+               || particleName == "GenericIon"  
               )
     {
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
@@ -128,8 +129,7 @@ void hTestStanPhysicsList::ConstructProcess()
         G4cout << "Ionic processes for " << particleName << G4endl; 
       }
 
-      G4hIonisation* iIon = new G4hIonisation() ;
-
+      G4hIonisation* iIon = new G4hIonisation();
       pmanager->AddProcess(iIon,-1,2,2);
       pmanager->AddProcess(theStepCut,  -1,-1,3);
     }
