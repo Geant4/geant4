@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: G4BREPSolidConeTest.cc,v 1.6 2001-07-11 09:59:49 gunter Exp $
+// $Id: G4BREPSolidConeTest.cc,v 1.7 2001-07-20 16:07:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -42,9 +42,8 @@
 #include "G4BREPSolidCone.hh"
 
 
-G4int main(G4int argc, char **argv)
+int main(G4int argc, char **argv)
 {
-  G4Timer timer; 
 
   G4ThreeVector tStart(19000,0,10.1);
   G4ThreeVector tDir(-1,0,0);

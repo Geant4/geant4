@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: G4BREPSolidCylinderTest.cc,v 1.7 2001-07-11 09:59:49 gunter Exp $
+// $Id: G4BREPSolidCylinderTest.cc,v 1.8 2001-07-20 16:07:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -42,9 +42,8 @@
 #include "G4BREPSolidCylinder.hh"
 
 
-G4int main()
+int main()
 {
-  G4Timer timer;
   
   G4cout << "\n ============   Cylinder test   ================"; 
   
@@ -62,17 +61,17 @@ G4int main()
   //  - DistanceToIn
   //  - DistanceToOut
 
-  G4Point3D Pt[4];
-  Pt[0] = G4Point3D(    1,    1,  100);
-  Pt[1] = G4Point3D( 1000,    0, 5000);
-  Pt[2] = G4Point3D(  -50,  -50,-5000);
-  Pt[3] = G4Point3D(    0,    0,  200);
+  G4ThreeVector Pt[4];
+  Pt[0] = G4ThreeVector(    1,    1,  100);
+  Pt[1] = G4ThreeVector( 1000,    0, 5000);
+  Pt[2] = G4ThreeVector(  -50,  -50,-5000);
+  Pt[3] = G4ThreeVector(    0,    0,  200);
 
-  G4Vector3D Dir[4];
-  Dir[0] = G4Vector3D(    1,    0,    0);
-  Dir[1] = G4Vector3D(    0,    1,    0);
-  Dir[2] = G4Vector3D(    0,    0,    1);
-  Dir[3] = G4Vector3D(    1,    1,   -1);
+  G4ThreeVector Dir[4];
+  Dir[0] = G4ThreeVector(    1,    0,    0);
+  Dir[1] = G4ThreeVector(    0,    1,    0);
+  Dir[2] = G4ThreeVector(    0,    0,    1);
+  Dir[3] = G4ThreeVector(    1,    1,   -1);
 
   EInside in[4];
   G4double dist[4][3];

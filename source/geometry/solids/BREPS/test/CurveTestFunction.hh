@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: CurveTestFunction.hh,v 1.4 2001-07-11 09:59:49 gunter Exp $
+// $Id: CurveTestFunction.hh,v 1.5 2001-07-20 16:07:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -189,7 +189,6 @@ void TestProject(G4Curve* c, const G4Transform3D& tr)
 {
   G4int i;
   G4Curve*   projC = c->Project(tr);
-  G4Ellipse* lof   = (G4Ellipse*)projC;
 
   for (i=0; i<1000; i++) 
   {

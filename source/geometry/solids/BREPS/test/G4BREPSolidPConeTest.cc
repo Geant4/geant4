@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: G4BREPSolidPConeTest.cc,v 1.8 2001-07-11 09:59:49 gunter Exp $
+// $Id: G4BREPSolidPConeTest.cc,v 1.9 2001-07-20 16:07:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -42,12 +42,11 @@
 #include "g4std/fstream"
 #include "g4std/iomanip"
 
-G4int main(G4int argc, char **argv)
+int main(G4int argc, char **argv)
 {
-  G4Timer timer;
   const G4int noZplanes= 8; 
   
-  double RMINVec[noZplanes];
+  G4double RMINVec[noZplanes];
   RMINVec[0] = 30;
   RMINVec[1] = 30;
   RMINVec[2] =  0;
@@ -57,7 +56,7 @@ G4int main(G4int argc, char **argv)
   RMINVec[6] = 40;
   RMINVec[7] = 40;  
 
-  double RMAXVec[noZplanes];
+  G4double RMAXVec[noZplanes];
   RMAXVec[0] = 70;
   RMAXVec[1] = 70;
   RMAXVec[2] = 70;
@@ -67,7 +66,7 @@ G4int main(G4int argc, char **argv)
   RMAXVec[6] = 80;
   RMAXVec[7] = 60; 
 
-  double Z_Values[noZplanes];
+  G4double Z_Values[noZplanes];
   Z_Values[0] =-20;
   Z_Values[1] =-10;
   Z_Values[2] =-10;
@@ -121,7 +120,7 @@ G4int main(G4int argc, char **argv)
   EInside in;
   
   G4cout<<"\n\n==================================================";
-  G4Point3D  pt(0, -100, 24);
+  G4ThreeVector  pt(0, -100, 24);
   G4double y; 
   for (y = -100; y<=100; y+=10)
   {
@@ -140,8 +139,8 @@ G4int main(G4int argc, char **argv)
   }
 
   G4cout<<"\n\n==================================================";
-  G4Point3D  start( 0, 0, -30);
-  G4Vector3D dir(1, 1, 0);
+  G4ThreeVector  start( 0, 0, -30);
+  G4ThreeVector dir(1, 1, 0);
   G4double   d;
   
   G4cout<<"\nPdep is (0, 0, z)";
@@ -179,8 +178,8 @@ G4int main(G4int argc, char **argv)
   }
 
   G4cout<<"\n\n==================================================";
-  G4Point3D  start2( 0, -100, -30);
-  G4Vector3D dir2(0, 1, 0);
+  G4ThreeVector  start2( 0, -100, -30);
+  G4ThreeVector dir2(0, 1, 0);
   G4double   d2;
 
   G4cout<<"\nPdep is (0, -100, z)";
@@ -197,8 +196,8 @@ G4int main(G4int argc, char **argv)
   }
 
   G4cout<<"\n\n==================================================";
-  G4Point3D  start3( 0, 0, -50);
-  G4Vector3D dir3(0, 0, 1);
+  G4ThreeVector  start3( 0, 0, -50);
+  G4ThreeVector dir3(0, 0, 1);
   G4double   d3;
 
   G4cout<<"\nPdep is (0, y, -50)";

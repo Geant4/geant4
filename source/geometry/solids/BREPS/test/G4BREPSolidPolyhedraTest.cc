@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: G4BREPSolidPolyhedraTest.cc,v 1.7 2001-07-11 09:59:50 gunter Exp $
+// $Id: G4BREPSolidPolyhedraTest.cc,v 1.8 2001-07-20 16:07:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -43,25 +43,24 @@
 #include "G4BREPSolidPolyhedra.hh"
 
 
-G4int main(G4int argc, char **argv)
+int main(G4int argc, char **argv)
 {
-  G4Timer timer;
   
-  double RMINVec[5];
+  G4double RMINVec[5];
   RMINVec[0] = 10;
   RMINVec[1] = 10;
   RMINVec[2] = 60;
   RMINVec[3] = 30;
   RMINVec[4] = 30;
 
-  double RMAXVec[5];
+  G4double RMAXVec[5];
   RMAXVec[0] = 50;
   RMAXVec[1] = 50;
   RMAXVec[2] = 100;
   RMAXVec[3] = 100; 
   RMAXVec[4] = 80;
    
-  double Z_Values[5];
+  G4double Z_Values[5];
   Z_Values[0] = 0;
   Z_Values[1] = 10;  
   Z_Values[2] = 20;
@@ -90,7 +89,7 @@ G4int main(G4int argc, char **argv)
   EInside in;
   
   G4cout<<"\n\n==================================================";
-  G4Point3D  pt(0, -110, 20);
+  G4ThreeVector  pt(0, -110, 20);
   for (G4int y = -110; y<=110; y+=10)
   {
     pt.setY(y);
@@ -108,11 +107,11 @@ G4int main(G4int argc, char **argv)
   }
 
   G4cout<<"\n\n==================================================";
-  G4Point3D  start( 0, 0, -5);
-  G4Vector3D dir1(1, 0, 0);
-  G4Vector3D dir2(1, 1, 0);
+  G4ThreeVector  start( 0, 0, -5);
+  G4ThreeVector dir1(1, 0, 0);
+  G4ThreeVector dir2(1, 1, 0);
   G4double   d1, d2;
-  G4double x, z;
+  G4double   z;
   
   G4cout<<"\nPdep is (0, 0, z)";
   G4cout<<"\nDir1 is (1, 0, 0)\n";
@@ -148,8 +147,8 @@ G4int main(G4int argc, char **argv)
   }
  
   G4cout<<"\n\n==================================================";
-  G4Point3D  start3( -110, -110, -5);
-  G4Vector3D dir3( 1, 1, 0);
+  G4ThreeVector start3( -110, -110, -5);
+  G4ThreeVector dir3( 1, 1, 0);
   G4double   d3;
   
   G4cout<<"\nPdep is (-110, -110, z)";
