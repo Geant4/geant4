@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.10 2004-06-07 13:49:51 gcosmo Exp $
+// $Id: G4SynchrotronRadiation.hh,v 1.11 2004-08-30 15:48:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -115,9 +115,9 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
 
      G4double CutInRange;
 
-     const G4Gamma*    theGamma; 
-     const G4Electron* theElectron;
-     const G4Positron* thePositron;
+     const G4ParticleDefinition* theGamma; 
+     const G4ParticleDefinition* theElectron;
+     const G4ParticleDefinition* thePositron;
 
      const G4double* GammaCutInKineticEnergy;
      const G4double* ElectronCutInKineticEnergy;

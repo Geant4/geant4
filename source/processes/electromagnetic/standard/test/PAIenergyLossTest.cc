@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PAIenergyLossTest.cc,v 1.4 2003-06-16 17:02:23 gunter Exp $
+// $Id: PAIenergyLossTest.cc,v 1.5 2004-08-30 15:48:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -171,15 +171,15 @@ int main()
 
 //--------- Particle definition ---------
 
-  G4Gamma* theGamma = G4Gamma::GammaDefinition();
-  G4Electron* theElectron = G4Electron::ElectronDefinition();
-  G4Positron* thePositron = G4Positron::PositronDefinition();
-  G4Proton* theProton = G4Proton::ProtonDefinition();
-  G4AntiProton* theAntiProton = G4AntiProton::AntiProtonDefinition();
-  G4PionPlus* thePionPlus = G4PionPlus::PionPlusDefinition();
-  G4PionMinus* thePionMinus = G4PionMinus::PionMinusDefinition();
-  G4KaonPlus* theKaonPlus = G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus* theKaonMinus = G4KaonMinus::KaonMinusDefinition();
+  G4ParticleDefinition* theGamma = G4Gamma::GammaDefinition();
+  G4ParticleDefinition* theElectron = G4Electron::ElectronDefinition();
+  G4ParticleDefinition* thePositron = G4Positron::PositronDefinition();
+  G4ParticleDefinition* theProton = G4Proton::ProtonDefinition();
+  G4ParticleDefinition* theAntiProton = G4AntiProton::AntiProtonDefinition();
+  G4ParticleDefinition* thePionPlus = G4PionPlus::PionPlusDefinition();
+  G4ParticleDefinition* thePionMinus = G4PionMinus::PionMinusDefinition();
+  G4ParticleDefinition* theKaonPlus = G4KaonPlus::KaonPlusDefinition();
+  G4ParticleDefinition* theKaonMinus = G4KaonMinus::KaonMinusDefinition();
 
   G4double* GammaKineticEnergyCuts ;
   G4double* ElectronKineticEnergyCuts ;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.16 2004-05-20 19:46:14 urban Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.17 2004-08-30 15:48:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,6 +80,7 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
   theLPMflag(true)
 {
   if(p) SetParticle(p);
+  theGamma = G4Gamma::Gamma();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -823,7 +824,7 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
   gammaDirection.rotateUz(direction);
 
   // create G4DynamicParticle object for the Gamma
-  G4DynamicParticle* g = new G4DynamicParticle(G4Gamma::Gamma(),gammaDirection,gammaEnergy);
+  G4DynamicParticle* g = new G4DynamicParticle(theGamma,gammaDirection,gammaEnergy);
 
   return g;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: eEnergyLossTest.cc,v 1.4 2003-06-16 17:02:25 gunter Exp $
+// $Id: eEnergyLossTest.cc,v 1.5 2004-08-30 15:48:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -154,9 +154,9 @@ int main()
   G4Timer theTimer ;
 //--------- Particle definition ---------
 
-  G4Gamma* theGamma = G4Gamma::GammaDefinition();
-  G4Electron* theElectron = G4Electron::ElectronDefinition();
-  G4Positron* thePositron = G4Positron::PositronDefinition();
+  G4ParticleDefinition* theGamma = G4Gamma::GammaDefinition();
+  G4ParticleDefinition* theElectron = G4Electron::ElectronDefinition();
+  G4ParticleDefinition* thePositron = G4Positron::PositronDefinition();
 
   G4double* ElectronKineticEnergyCuts ;
   G4double* PositronKineticEnergyCuts ;

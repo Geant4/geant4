@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.8 2003-07-21 12:52:23 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.hh,v 1.9 2004-08-30 15:48:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -142,6 +142,7 @@ private:
   G4eBremsstrahlungModel(const  G4eBremsstrahlungModel&);
 
   const G4ParticleDefinition* particle;
+  G4ParticleDefinition* theGamma;
   G4double highKinEnergy;
   G4double lowKinEnergy;
   G4double minThreshold;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotoElectricTest.cc,v 1.4 2003-06-16 17:02:24 gunter Exp $
+// $Id: PhotoElectricTest.cc,v 1.5 2004-08-30 15:48:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,8 +98,8 @@ int main()
 
   //--------- Particle definition ---------
   //
-  G4ParticleDefinition* Gamma = G4Gamma::GammaDefinition();
-  G4ParticleDefinition* Electron = G4Electron::ElectronDefinition();
+  G4ParticleDefinition* Gamma = G4Gamma::Gamma();
+  G4ParticleDefinition* Electron = G4Electron::Electron();
 
   //--------- Process definition ---------
   //
