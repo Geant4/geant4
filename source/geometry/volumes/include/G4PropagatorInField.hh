@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.35 2003-06-19 14:38:44 gunter Exp $
+// $Id: G4PropagatorInField.hh,v 1.36 2003-06-21 00:37:55 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -230,7 +230,7 @@ class G4PropagatorInField
    G4double  fEpsilonMax;
      // Limits for the Relative accuracy of any Step 
 
-   G4int  fmax_loop_count;
+   G4int  fMax_loop_count;
 
    //  Variables to keep track of "abnormal" case - which causes loop
    //
