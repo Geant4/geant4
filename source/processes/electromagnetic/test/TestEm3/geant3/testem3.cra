@@ -489,9 +489,9 @@
 +DECK,ffread,T=data.      
 LIST
 MATE   8  (Imat1) 5 (Imat2)
-CALOR  10 (nbLay) 1.(thck1) 0.5 (thck2) 10. (calorYZ) 0. (field)
-TRIG   100
-KINE   3 (Itype) 0.500 (Ekine) -9. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
+CALOR  50 (nbLay) 0.23(thck1) 0.57 (thck2) 40. (calorYZ) 0. (field)
+TRIG   1000
+KINE   3 (Itype) 1.0 (Ekine) -23.9 (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
 DEBUG  10  5 1000
 SWIT   0 (draw) 1 (save)
 CUTS   10.e-6 (cutgam)    100.e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
