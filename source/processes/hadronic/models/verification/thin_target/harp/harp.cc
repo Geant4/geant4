@@ -468,8 +468,8 @@ int main(int argc, char** argv)
 
       h[0]=hf->createHistogram1D("10","Number of protons",10,-0.5,9.5);
       h[1]=hf->createHistogram1D("11","Number of pions",10,-0.5,9.5);
-      h[2]=hf->createHistogram1D("12","Proton momentum",m_binp,m_pmin,m_pmax);
-      h[3]=hf->createHistogram1D("13","Pion momentum",m_binp,m_pmin,m_pmax);
+      h[2]=hf->createHistogram1D("12","Proton momentum",nbins,m_pmin,m_pmax);
+      h[3]=hf->createHistogram1D("13","Pion momentum",nbins,m_pmin,m_pmax);
       h[4]=hf->createHistogram1D("14","Proton Pt",m_binp,0.0,m_ptmax);
       h[5]=hf->createHistogram1D("15","Pion Pt",m_binp,0.0,m_ptmax);
       h[6]=hf->createHistogram1D("16","Proton theta",m_bint,0.0,m_thetamax);
