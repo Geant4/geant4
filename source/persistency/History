@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23 Feburuary, 00   Y.Morita (persistency-V00-02-1)
+- fixed a minor typo in G4PersistentGeomMan.cc
+
 December 6, 99   Y.Morita (persistency-V00-01-12)
 - Bug fix in G4PGeometryObjectMap.cc
 
