@@ -12,7 +12,7 @@ set NDVY 010205
  opt logy
  
  null 0 250 0.0001 1
- atitle 'E?kin!(MeV) secondary pi+' 'ds/dEdo (mb/MeV/sr)'
+ atitle 'E?kin!(MeV) secondary pi+' 'ds/dEdo (mb/MeV/sr) theta = 90 deg'
  
  
 * hi/file 1 prec.paw
@@ -31,16 +31,18 @@ set NDVY 010205
  close 1
  
 ve/create X(5) R 24 35 46 88 151 
-ve/create Y(5) R 0.0187 0.025 0.024 0.021 0.0072 
-gr/h/symb X Y 5 21 0.2
+ve/create Y(5) R 0.009 0.0117 0.0115 0.01153 0.00332 
+ve/create Z1(5) R 0 0 0 0 0 
+ve/create Z(5) R 0.0013 0.0011 0.0011 0.00022 0.00015 
+gr/h/error X Y Z1 Z 5 21 0.2 
  
 
  exe ../prf pip_a3 eps
 
   null 0 250 0.0001 1
- atitle 'E?kin!(MeV) secondary pi+' 'ds/dEdo (mb/MeV/sr)'
+ atitle 'E?kin!(MeV) secondary pi+' 'ds/dEdo (mb/MeV/sr) theta = 90 deg'
  
-gr/h/symb X  Y  5 21 0.2
+gr/h/error X Y Z1 Z 5 21 0.2 
 
   hi/file 1 par.paw
  set dmod 3
