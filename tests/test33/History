@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2002-11-29 13:13:18 mdressel Exp $
+$Id: History,v 1.15 2002-12-06 19:57:42 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,9 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec 06th G. Cosmo test33-V04-01-05
+  - Merged changes in messenger for migration to new G4ApplicationState.
+  - Corrected GNUmakefile.
+
 Nov 29th M. Dressel test33-V04-01-04
   - remove src/G4Trajectory.cc and added a DrawTrajectory function
-  in Tst33VisEventAction
+    in Tst33VisEventAction
   - some changes dut to gcc-3.2 complains.
 
 Nov 25th M. Dressel test33-V04-01-03
