@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCode.hh,v 1.3 2000-09-10 13:58:55 mkossov Exp $
+// $Id: G4QPDGCode.hh,v 1.4 2000-09-21 06:51:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -160,13 +160,44 @@ inline G4QPDGCode G4QPDGCode::operator/=(const G4int& rhs)
 inline G4double G4QPDGCode::GetMass2() {G4double m=GetMass(); return m*m;}
 inline G4double G4QPDGCode::GetNuclMass(G4int PDG)
 {
-  if(PDG>90000000)
+  if(PDG>80000000)
   {
-    G4int zns=PDG-90000000;
-    G4int zs=zns/1000;
-    G4int n =zns%1000;
-    G4int s = zs/1000;
-    G4int z = zs%1000;
+    G4int szn=PDG-90000000;
+    G4int ds=0;
+    G4int dz=0;
+    G4int dn=0;
+    if(szn<-100000)
+    {
+      G4int ns=(-szn)/1000000+1;
+      szn+=ns*1000000;
+      ds+=ns;
+    }
+    else if(szn<-100)
+    {
+      G4int nz=(-szn)/1000+1;
+      szn+=nz*1000;
+      dz+=nz;
+    }
+    else if(szn<0)
+    {
+      G4int nn=-szn;
+      szn=0;
+      dn+=nn;
+    }
+    G4int sz =szn/1000;
+    G4int n  =szn%1000;
+    if(n>700)
+    {
+      n-=1000;
+      dz--;
+    }
+    G4int z  =sz%1000-dz;
+    if(z>700)
+    {
+      z-=1000;
+      ds--;
+    }
+    G4int s  =sz/1000-ds;
     return GetNuclMass(z,n,s);
   }
   return 0.;
@@ -177,7 +208,7 @@ inline G4int    G4QPDGCode::GetCharge()  const {return GetQuarkContent().GetChar
 inline G4int    G4QPDGCode::GetBaryNum() const {return GetQuarkContent().GetBaryonNumber();}
 inline G4int    G4QPDGCode::GetSpin()    const 
 {
-  if(thePDGCode<90000000)               return thePDGCode%10;
+  if(thePDGCode<80000000)               return thePDGCode%10;
   else if(GetQuarkContent().GetTot()%2) return 3;
   else                                  return 1;
 }

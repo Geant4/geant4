@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QContent.cc,v 1.5 2000-09-14 14:54:09 mkossov Exp $
+// $Id: G4QContent.cc,v 1.6 2000-09-21 06:51:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -664,8 +664,7 @@ G4int G4QContent::GetP() const
   G4int rS=nS-nAS;                                   // Constituent s-quarks
   G4int dQ=rD-rU;                                    // Isotopic assimetry
   G4int b3=rD+rU+rS;                                 // (Baryon number) * 3
-  if(b3>0) return (b3-3*(rS+dQ))/6;                  // Matter case
-  else     return 0;                                 // Meson  case or anti-matter case
+  return (b3-3*(rS+dQ))/6;
 }
 
 // Calculate a#of neutrons in the QC (for nuclei)
@@ -676,8 +675,7 @@ G4int G4QContent::GetN() const
   G4int rS=nS-nAS;                                   // Constituent s-quarks
   G4int dQ=rD-rU;                                    // Isotopic assimetry
   G4int b3=rD+rU+rS;                                 // (Baryon number) * 3
-  if(b3>0) return (b3-3*(rS-dQ))/6;                  // Matter case
-  else     return 0;                                 // Meson  case or anti-matter case
+  return (b3-3*(rS-dQ))/6;
 }
 
 // Calculate a#of lambdas in the QC (for nuclei)
@@ -685,8 +683,7 @@ G4int G4QContent::GetL() const
 {//   ========================
   G4int rS=nS-nAS;                                   // Constituent s-quarks
   G4int b3=nD-nAD+nU-nAU+rS;                         // (Baryon number) * 3
-  if(b3>0) return rS;                                // Matter case
-  else     return 0;                                 // Meson  case or anti-matter case
+  return rS;
 }
 
 // Calculate a#of anti-protons in the QC (for anti-nuclei)
@@ -697,8 +694,7 @@ G4int G4QContent::GetAP() const
   G4int rS=nAS-nS;                                   // Constituent anti-s-quarks
   G4int dQ=rD-rU;                                    // Isotopic assimetry
   G4int b3=rD+rU+rS;                                 // - (Baryon number) * 3
-  if(b3>0) return (b3-3*(rS+dQ))/6;                  // Anti-matter case
-  else     return 0;                                 // Meson  case or matter case
+  return (b3-3*(rS+dQ))/6;
 }
 
 // Calculate a#of anti-neutrons in the QC (for anti-nuclei)
@@ -709,8 +705,7 @@ G4int G4QContent::GetAN() const
   G4int rS=nAS-nS;                                   // Constituent anti-s-quarks
   G4int dQ=rD-rU;                                    // Isotopic assimetry
   G4int b3=rD+rU+rS;                                 // - (Baryon number) * 3
-  if(b3>0) return (b3-3*(rS-dQ))/6;                  // Anti-matter case
-  else     return 0;                                 // Meson  case or matter case
+  return (b3-3*(rS-dQ))/6;
 }
 
 // Calculate a#of anti-lambdas in the QC (for anti-nuclei)
@@ -718,8 +713,7 @@ G4int G4QContent::GetAL() const
 {//   =========================
   G4int rS=nAS-nS;                                   // Constituent anti-s-quarks
   G4int b3=nAD-nD+nAU-nU+rS;                         // - (Baryon number) * 3
-  if(b3>0) return rS;                                // Anti-matter case
-  else     return 0;                                 // Meson  case or matter case
+  return rS;
 }
 
 // Calculate charge for the QC
@@ -758,7 +752,6 @@ G4int G4QContent::GetBaryonNumber() const
 // Gives the PDG of the lowest (in mass) S-wave hadron or Chipolino (=10) for double hadron
 G4int G4QContent::GetSPDGCode() const
 {//   ===============================
-  static const G4int NUCPDG  = 90000000;
   G4int p = 0;           // Prototype of output SPDG
   G4int n = GetTot();    // Total number of quarks
   if(!n) return 22;      // Photon does not have any Quark Content
@@ -884,7 +877,10 @@ G4int G4QContent::GetSPDGCode() const
       else return 10;
 	}
     // Normal One Baryon States: Heavy quark should come first
-    if(n>5)  return  0;                          //B+M+M Tripolino etc
+    if(n>5)
+    {
+      return GetZNSPDGCode();                    //B+M+M Tripolino etc
+    }
     if(n==5) return 10;                          //B+M Chipolino
     if(mS>0)                                     // Strange Baryons
 	{

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.15 2000-09-16 14:16:40 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.16 2000-09-21 06:51:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -247,7 +247,6 @@ void G4Quasmon::InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust)
 G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
 //              =============================================
 {
-  static const G4int QUASPDG = 900000000;
   static const G4int NUCPDG  = 90000000;
   static const G4double np   = 1877.9; //@@ temporary = a mass of np pair > m_n + m_p
   static const G4int maxRet  = 7;
@@ -391,7 +390,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
     cout<<"G4Quasm::HadrQuasm:j="<<j<<",mQ="<<quasM<<valQ<<bndQM2<<",nQ="<<nOfQ<<", Env="<<envM
         <<theEnvironment<<envQC<<",Q+E="<<quen<<",tM="<<totM<<totQC<<totPDG<<"<"<<totMass<<endl;
 #endif
-    if(envPDG>NUCPDG&&totM>totMass&&quen<totMass)// Decay in Quasm and Environment    
+    if(envPDG>80000000&&envPDG!=90000000&&totM>totMass&&quen<totMass)// Decay in Quasm and Environment    
 	{ // @@ Can not evaporate as it is under the ground state of the nucleus (?)
 #ifdef ppdebug
       G4cout<<"G4Quasm::HadrQuasm:UNDER-MASS-SHELL: Q4M="<<q4Mom<<", QEnv="<<theEnvironment<<G4endl;
@@ -409,7 +408,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
       qEnv=theEnvironment;
       return theQHadrons;
 	}
-    else if(totBN>1&&iniQM>quasM&&totMass>totM&&iniPDG!=1114&&iniPDG!=2224&&totS>=0&&envPDG>NUCPDG)
+    else if(totBN>1&&iniQM>quasM&&totMass>totM&&iniPDG!=1114&&iniPDG!=2224&&totS>=0&&envPDG>80000000&&envPDG!=90000000)
 	{
 #ifdef ppdebug
       G4cout<<"G4Quasm::HadrQuasm:NEEDS-EVAPORATION-1: Q4M="<<q4Mom<<", QEnv="<<theEnvironment<<G4endl;
@@ -524,7 +523,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
         {
           G4QCandidate* curCand=theQCandidates[index];
           G4int cPDG = curCand->GetPDGCode();
-          if(cPDG==90000001||cPDG==90001000||cPDG==91000000||cPDG<NUCPDG)//@@ k-PreAttempts(Acc)
+          if(cPDG==90000001||cPDG==90001000||cPDG==91000000||cPDG<80000000)//@@ k-PreAttempts(Acc)
           {
             G4bool poss= curCand->GetPossibility();
 #ifdef pdebug
@@ -547,7 +546,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
 #endif
               G4double bnM2=bnM*bnM;
               G4double k = kMom;
-              if(cPDG>NUCPDG) k=kLS;              // ===> Nuclear case (Lab System)
+              if(cPDG>80000000&&cPDG!=90000000) k=kLS; // ===> Nuclear case (Lab System)
               G4double kMin=(cfM*cfM-cMs*cMs)/(cMs+cMs);
               if(kMin<0.) kMin=0.;
               //G4double dR=(bnM*bnM-cQM2)/(rEP+rEP);
@@ -560,9 +559,9 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
                     <<",bM="<<bnM<<",rEP="<<rEP<<",d="<<kMin<<",dR="<<dR<<",c="<<cond<<endl;
 #endif
               ///***Cap***???
-			  //if(cPDG<NUCPDG&&k>kMin&&quasM>cMs+iniQM||cPDG>NUCPDG&&dR<kLS-kMin)cond=false;
-			  if(cPDG<NUCPDG&&k>kMin&&quasMt>cMs+iniQM||cPDG>NUCPDG&&dR<kLS-kMin &&
-			     kLS-freeE/(iniQM+cMs)<cMs/2.)cond=false;
+			  //if(cPDG<80000000&&k>kMin&&quasM>cMs+iniQM||cPDG>80000000&&dR<kLS-kMin)cond=false;
+			  if(cPDG<80000000&&k>kMin&&quasMt>cMs+iniQM||cPDG>80000000&&cPDG!=90000000&&dR<kLS-kMin
+                 && kLS-freeE/(iniQM+cMs)<cMs/2.)cond=false;
 		    }
 		  }
 	    }
@@ -588,7 +587,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
       momPhoton=0.;
       phot4M=G4LorentzVector(0.,0.,0.,0.);
     }
-    if(envPDG>NUCPDG&&counter>=maxCount&&j&&totS>=0)
+    if(envPDG>80000000&&envPDG!=90000000&&counter>=maxCount&&j&&totS>=0)
 	{
 #ifdef ppdebug
       G4cout<<"G4Quasm::HadrQuasm:NEEDS-EVAPORATION-2: Q4M="<<q4Mom<<", QEnv="<<theEnvironment<<G4endl;
@@ -664,7 +663,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
 	{
       if(j)                                      // normally j>0 except for "nothing is found"
       {
-        if(totBN>1&&totMass>totM&&totS>=0&&envPDG>NUCPDG)
+        if(totBN>1&&totMass>totM&&totS>=0&&envPDG>80000000&&envPDG!=90000000)
 	    {
 #ifdef ppdebug
           G4cout<<"G4Quasm::HadrQuasm:NEEDS-EVAPORATION-3: Q4M="<<q4Mom<<", QEnv="<<theEnvironment<<G4endl;
@@ -703,13 +702,13 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
           {
             sMass=G4QPDGCode(sPDG).GetMass();
             rPDG=envPDG;
-            if (rPDG>NUCPDG)
+            if (rPDG>80000000&&rPDG!=90000000)
 		    {
               rMass=theEnvironment.GetMZNS();
               q4Mom+=G4LorentzVector(0.,0.,0.,rMass);
               valQ +=theEnvironment.GetQC();
               quasM=q4Mom.m();
-              if(envPDG>NUCPDG)
+              if(envPDG>80000000&&envPDG!=90000000)
               {
                 theEnvironment.Reduce(rPDG);     //Update NuclEnvironment
                 fred=true;                       // Flag of reduction
@@ -737,7 +736,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
       sPDG  = curCand->GetPDGCode();             // PDG of the selected candidate 
       G4double prpr=curCand->GetPreProbability();
       //@@ For clusters should be another randomization & a loop over possible parent clusters
-      if(sPDG>NUCPDG)                            // ===> Fragment
+      if(sPDG>80000000&&sPDG!=90000000)          // ===> Fragment
 	  {
         int ip=0;
         G4int nParCandid = curCand->GetPClustEntries();
@@ -813,13 +812,13 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
       {
         G4int baryn=curQ.GetBaryonNumber();
         G4double minT=G4QPDGCode(rqPDG).GetMass();
-        //if(envPDG>pPDG&&rqPDG>NUCPDG&&sPDG>NUCPDG)
-        //if(((sPDG<NUCPDG&&envPDG>NUCPDG)||(sPDG>NUCPDG&&envPDG>pPDG))&&rqPDG>NUCPDG)
-        if((sPDG<NUCPDG&&envPDG>NUCPDG||sPDG>NUCPDG&&envPDG>pPDG) &&
-           (rqPDG>NUCPDG||rqPDG==2112||rqPDG==2212||rqPDG==3122) )
+        //if(envPDG>pPDG&&rqPDG>80000000&&sPDG>80000000)
+        //if(((sPDG<80000000&&envPDG>80000000)||(sPDG>80000000&&envPDG>pPDG))&&rqPDG>80000000)
+        if((sPDG<80000000&&envPDG>80000000&&envPDG!=90000000||sPDG>80000000&&sPDG!=90000000&&envPDG>pPDG)
+            && (rqPDG>80000000&&rqPDG!=90000000||rqPDG==2112||rqPDG==2212||rqPDG==3122) )
         {
           G4double newT=0.;
-          if(sPDG<NUCPDG)
+          if(sPDG<80000000)
 		  {
             G4QContent rtQC=curQ+envQC;           // Total Residual Quark Content
             G4QNucleus rtN(rtQC);                 // Create a pseudo-nucleus for residual
@@ -858,7 +857,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
       }
       G4double m2 = BIG2; //@@ just a BIG number // Prototype/Squared Mass of Residual Quasmon
       G4double kt=0.;                            // Prototype of (Max Residual Quasmon Mass)^2
-      if(sPDG>NUCPDG)                            // ===> Nuclear fragment candidate hadronization
+      if(sPDG>80000000&&sPDG!=90000000)          // ===> Nuclear fragment candidate hadronization
 	  {
 #ifdef pdebug
 	    cout<<"G4Quasmon::HadrQuasm: BoundM="<<pMass<<",FragM="<<sMass<<",QM="<<quasM<<endl;
@@ -956,9 +955,9 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
           <<" > rtM="<<rtM<<" to avoid H+S(sPDG="<<sPDG<<"),QM="<<quasM<<",dk="<<dk<<endl;
 #endif
       
-      if(kt>minSqT+.01&&(sPDG<NUCPDG||tM>rtM)&&!hsflag)// Mass(RQ)>M_min && Mass(RN)>M_min
+      if(kt>minSqT+.01&&(sPDG<80000000||tM>rtM)&&!hsflag)// Mass(RQ)>M_min && Mass(RN)>M_min
 	  {
-        if(sPDG<NUCPDG)                                // Hadronic candidate:finish calculations
+        if(sPDG<80000000)                              // Hadronic candidate:finish calculations
 	    {
           G4double np = nOfQ - 3;                      // Power for an residual quasmon mass
           G4double cM = pow(minSqT/kt,np);             // Cut for PossibleQuasmon residual mass
@@ -995,7 +994,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
       if(rPDG==221 || rPDG==331) rcMass=mPi0;
       G4double bs = rcMass+mPi0;
       G4bool rFl=false;                                // true: ResidualResonance,false: Quasmon
-      if(sPDG<NUCPDG&&envPDG==NUCPDG)rFl=G4UniformRand()<bs*bs/m2;// ProbabFunct: m_min^2/m^2
+      if(sPDG<80000000&&envPDG==NUCPDG)rFl=G4UniformRand()<bs*bs/m2;// ProbabFunct: m_min^2/m^2
 #ifdef pdebug
 	  cout<<"G4Quasmon::HadronizeQuasmon: sPDG="<<sPDG<<", hsflag="<<hsflag<<", rPDG="<<rPDG
           <<curQ<<",rM="<<rMass<<",rb="<<rb<<",rFl="<<rFl<<endl;
@@ -1106,8 +1105,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
       }
       if(rPDG==221)reMass=mPi0;
       G4double aMass=mPi0;
-      //if(envPDG>NUCPDG&&(sPDG<NUCPDG||envPDG!=pPDG))aMass=0.;
-      if((sPDG<NUCPDG&&envPDG>NUCPDG||sPDG>NUCPDG&&envPDG>pPDG)&&iniBarN>0
+      //if(envPDG>80000000&&(sPDG<80000000||envPDG!=pPDG))aMass=0.;
+      if((sPDG<80000000&&envPDG>80000000&&envPDG!=90000000||sPDG>80000000&&sPDG!=90000000&&envPDG>pPDG)&&iniBarN>0
         ||iniBarN>1||rPDG==10) aMass=0.;               // No Pi0 condition if NucEnviron exists
 #ifdef pdebug
       G4cout<<"G4Quasmon::HadrQuasmon: Is [hsf="<<hsflag<<"] or [rdf="<<fdul<<"] or [rM="<<rMass
@@ -1138,7 +1137,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
         G4double   tmpQM=totM-tmpNM;                 // Bound Mass of newQuasmon
         G4double   tmpM =tmpQPDG.GetMass();          // Minimum free mass for newQ
         if(tmpQM<tmpM) tmpM=tmpQM;
-        if(totBN>1&&totMass>totM&&totS>=0&&envPDG>NUCPDG)
+        if(totBN>1&&totMass>totM&&totS>=0&&envPDG>80000000&&envPDG!=90000000)
 		{
 #ifdef ppdebug
           G4cout<<"G4Quasm::HadrQuasm:NEEDS-EVAPORATION-4: Q4M="<<q4Mom<<", QEnv="<<theEnvironment<<G4endl;
@@ -1165,7 +1164,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
         // Final state eta/eta' suppression
         if(rPDG==331&&dm<958.)rPDG=221;
         if(rPDG==221&&dm<548.)rPDG=111;
-        if(rPDG<NUCPDG)                              // => ResidualQuasmon is not NuclearCluster
+        if(rPDG<80000000)                            // => ResidualQuasmon is not NuclearCluster
         {
           reMass=GetRandomMass(rPDG,dm);             // Randomize mass of the Hadron
           if(reMass==0.)
@@ -1186,10 +1185,11 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
 		    }
           }
 		}
-        else reMass=G4QPDGCode(rPDG).GetMass();    // Get Nuclear Cluster mass
+        //else if(rPDG!=90000000) reMass=G4QPDGCode(rPDG).GetMass(); // Get Nuclear Cluster mass
+        else reMass=G4QPDGCode(rPDG).GetMass(); // Get Nuclear Cluster mass
         //if(reMass+sMass>quasM)                   // Cann't decay Quasmon (mass is too small)
 		//if(totBN>1&&totMass>totM&&totS>=0)
-		if((totBN>1&&totMass>totM&&totS>=0||reMass+sMass>quasM)&&envPDG>NUCPDG)
+		if((totBN>1&&totMass>totM&&totS>=0||reMass+sMass>quasM)&&envPDG>80000000&&envPDG!=90000000)
         {
 #ifdef ppdebug
           G4cout<<"G4Quasm::HadrQuasm:NEEDS-EVAPORATION-5: Q4M="<<q4Mom<<", QEnv="<<theEnvironment<<G4endl;
@@ -1216,6 +1216,11 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
 	    G4cout<<"G4Quasmon::HadrQuasmonon:=== 2.3 ===>HdVect s4M="<<s4Mom<<",sPDG="<<sPDG
               <<", r4M="<<r4Mom<<",rPDG="<<rPDG<<G4endl;
 #endif
+        if(rPDG==90000000)
+        {
+          G4cerr<<"***G4Quasmon::HadrQuasmon: MV="<<reMass<<G4endl;
+          G4Exception("***G4Quasmon::HadrQuasm: Particle-Vacuum");
+        }
         G4QHadron* curHadr1 = new G4QHadron(rPDG,r4Mom);// Create RealHadron for ResidEnv
         FillHadronVector(curHadr1);                // Fill "new curHadr1"
         G4QHadron* curHadr2 = new G4QHadron(sPDG,s4Mom);// Creation Hadron for theCandidate
@@ -1247,8 +1252,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
 #ifdef pdebug
 	  G4cout<<"G4Quasmon::HadrQ: sPDG="<<sPDG<<", fr4m="<<fr4Mom<<", ePDG="<<ePDG<<G4endl;
 #endif
-      //if(sPDG<NUCPDG&&ePDG==NUCPDG)// ====>>>> Vacuum case @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-      if(sPDG<NUCPDG)                                // ====>>>> "Hadron candidate" case
+      //if(sPDG<80000000&&ePDG==NUCPDG)// ====>>>> Vacuum case @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+      if(sPDG<80000000)                                // ====>>>> "Hadron candidate" case
       {
         G4int SQ=totQC.GetStrangeness();
 #ifdef pdebug
@@ -1447,7 +1452,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
 #ifdef pdebug
         cout<<"G4Quasmon::HadronizeQuasm:QuarkExchange QQC="<<valQ<<",tranQC="<<transQC<<endl;
 #endif
-        if(envPDG>NUCPDG)theEnvironment.Reduce(pPDG);// Update NuclearEnviron after Q->RQ+F
+        theEnvironment.Reduce(pPDG);                 // Update NuclearEnviron after Q->RQ+F
         sumL-=theEnvironment.Get4Momentum()+q4Mom+fr4Mom;
 #ifdef pdebug
         cout<<"G4Quasmon::HadronizeQuasmon: >>>>>>>>>NM SUBCHECK>>>>>>>>>>>>>"<<sumL<<endl;
@@ -1497,19 +1502,31 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
   static const G4QContent neutQC(2,1,0,0,0,0);
   static const G4QContent protQC(1,2,0,0,0,0);
   static const G4QContent lambQC(1,1,1,0,0,0);
+  static const G4QContent PiQC(0,1,0,1,0,0);
+  static const G4QContent K0QC(1,0,0,0,0,1);
+  static const G4QContent KpQC(0,1,0,0,0,1);
   static const G4double mNeut= G4QPDGCode(2112).GetMass();
   static const G4double mProt= G4QPDGCode(2212).GetMass();
   static const G4double mLamb= G4QPDGCode(3122).GetMass();
-  static const G4int NUCPDG=90000000;
+  static const G4double mPi  = G4QPDGCode(211).GetMass();
+  static const G4double mK   = G4QPDGCode(321).GetMass();
+  static const G4double mK0  = G4QPDGCode(311).GetMass();
+
   status=1;                                    // Something is going to be filled by Quasmon
-  G4int thePDG = qH->GetPDGCode();             // Get PDG code of the Hadron to switch
-#ifdef pdebug
-  cout<<"G4Quasmon::FillHadronVector:Hadron's PDG="<<thePDG<<",4Mom="<<qH->Get4Momentum()<<endl;
+  G4int thePDG      = qH->GetPDGCode();        // Get PDG code of the Hadron to switch
+  G4LorentzVector t = qH->Get4Momentum();      // 4-Mom of Chipolino
+#ifdef ppdebug
+  G4cout<<"G4Quasmon::FillHadronVector:Hadron's PDG="<<thePDG<<",4Mom="<<qH->Get4Momentum()<<G4endl;
 #endif
   // In the decay scheme only one resonance can be present & it should be the last
-  if (thePDG==10)     // Chipolino decays (@@always - Chipolino is not kept in HadV (*Example*))
+  if (thePDG==90000000||thePDG==90999999||thePDG==90999000||thePDG==90000999||thePDG==89999001)
   {
-    G4LorentzVector t = qH->Get4Momentum();    // 4-Mom of Chipolino
+    G4cerr<<"***G4Quasmon::FillHadronVector:PDG="<<thePDG<<",M="<<qH->Get4Momentum().m()<<G4endl;
+    //qH->SetQPDG(G4QPDGCode(111));
+    //thePDG=111;
+  }
+  if (thePDG==10) // Chipolino decays (@@always - Chipolino is not kept in HadV (*Example*))
+  {
     G4double rM = t.m();                       // Mass of Chipolino
     G4QContent chipQC = qH->GetQC();           // QC of Chipolino
     G4QContent h1QC = chipQC.SplitChipo(rM);   // Extract QC of one of the Hadrons of Chipolino
@@ -1539,21 +1556,76 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
       FillHadronVector(sHadr);                 // Fill 2nd Hadron to Output Hadr. Vector
     }
   }
-  else if(thePDG>NUCPDG)                       // === Decay-Evaporation ===
+  else if(thePDG>80000000&&thePDG!=90000000)   // === Decay-Evaporation ===
   {
     G4double totMass=qH->GetMass();            // Real Mass of the nuclear fragment
-    G4QNucleus qNuc(qH->Get4Momentum(),thePDG);// Make a Nucleus out of the Hadron
+    G4QNucleus qNuc(t,thePDG);                 // Make a Nucleus out of the Hadron
     G4double GSMass =qNuc.GetGSMass();         // GrState Mass of the nuclear fragment
+    G4QContent totQC=qNuc.GetQCZNS();          // Total Quark Content of Residual Nucleus
+    G4int    nN     =qNuc.GetN();              // A#of neutrons in the Nucleus
+    G4int    nZ     =qNuc.GetZ();              // A#of protons in the Nucleus
+    G4int    nS     =qNuc.GetS();              // A#of protons in the Nucleus
+    G4int    bA     =qNuc.GetA();              // A#of baryons in the Nucleus
 #ifdef pdebug
-	cout<<"G4Quasm::FillHadrVect: !!!! nucl="<<qNuc<<",nPDG="<<thePDG<<",GSM="<<GSMass<<endl;
+	G4cout<<"G4Quasm::FillHadrVect: Nucl="<<qNuc<<",nPDG="<<thePDG<<",GSM="<<GSMass<<G4endl;
 #endif
-    if(abs(totMass-GSMass)<.1)                 // the Nucleus is too close the Ground State
+    if((nN<0||nZ<0||nS<0)&&bA>0)               // => "Anti-strangeness or ISOBAR" case
+	{
+      G4double m1=mPi;         
+      G4int  PDG1=-211;
+      G4QNucleus  newNpm(totQC+PiQC);
+      G4int  PDG2=newNpm.GetPDG();
+      G4double m2=newNpm.GetMZNS();
+      if(nZ<0)
+	  {
+        PDG1       =211;
+        G4QNucleus  newNpp(totQC-PiQC);
+        PDG2       =newNpp.GetPDG();
+        m2         =newNpp.GetMZNS();
+	  }
+      if(nS<0)
+      {
+        m1         =mK;         
+        PDG1       =321;
+        G4QNucleus  newNp(totQC-KpQC);
+        PDG2       =newNp.GetPDG();
+        m2         =newNp.GetMZNS();
+        G4QNucleus  newN0(totQC-KpQC);
+        G4double m3=newN0.GetMZNS();
+        if (m3+mK0<m2+mK)                      // => "aK0+ResA is better" case
+        {
+          m1  =mK0;
+          PDG1=311;
+          m2  =m3;
+          PDG2=newN0.GetPDG();
+        }
+	  }
+      if(totMass>m1+m2)                        // => "can decay" case
+      {
+        G4LorentzVector fq4M(0.,0.,0.,m1);
+        G4LorentzVector qe4M(0.,0.,0.,m2);
+        if(!qH->DecayIn2(fq4M,qe4M))
+	    {
+          G4cerr<<"***G4Quasm::FillHardV: QM="<<t.m()<<"-> Mes="<<PDG1<<"(M="
+	  	        <<m1<<") + ResA="<<PDG2<<"(M="<<m2<<")"<<G4endl;
+	      G4Exception("G4Quasm::FillHadrV: Mes+ResA DecayIn2 did not succeed");
+	    }
+        qH->SetNFragments(2);                  // Put a#of Fragments=2
+        theQHadrons.insert(qH);
+        G4QHadron* H1 = new G4QHadron(PDG1,fq4M);
+        theQHadrons.insert(H1);
+        G4QHadron* H2 = new G4QHadron(PDG2,qe4M);
+        theQHadrons.insert(H2);
+	  }
+      else
+	  {
+        G4cerr<<"***G4Quasm::FillHadrVec: QPDG="<<thePDG<<", QM="<<t.m()<<" < Mes="
+              <<PDG1<<"(M="<<m1<<") + ResA="<<PDG2<<"(M="<<m2<<")"<<G4endl;
+	    G4Exception("G4Quasm::FillHadrVec: mass of decayin hadron is too small");
+	  }
+	}
+    else if(abs(totMass-GSMass)<.1)            // the Nucleus is too close the Ground State
     {
-      G4QContent totQC=qNuc.GetQCZNS();        // Total Quark Content of Residual Nucleus
-      G4int    nN     =qNuc.GetN();            // A#of neutrons in the Nucleus
-      G4int    nZ     =qNuc.GetZ();            // A#of protons in the Nucleus
-      G4int    nS     =qNuc.GetS();            // A#of protons in the Nucleus
-      G4int    bA     =qNuc.GetA();            // A#of baryons in the Nucleus
       G4double nResM  =1000000.;               // Prototype of mass of residual for a neutron
       G4int    nResPDG=0;                      // Prototype of PDGCode of residual for a neutron
       if(nN>0&&bA>1)                           // It's nucleus and there is a neutron
@@ -1899,7 +1971,6 @@ void G4Quasmon::CalculateNumberOfQPartons(G4double qMass)
 void G4Quasmon::PrepareClusters()
 //   ============================
 {
-  static const G4int NUCPDG=90000000;
   G4double ze             = theEnvironment.GetZ();        // For bn<3 (in all nucleus)
   G4double ne             = theEnvironment.GetN();
   G4double se             = theEnvironment.GetS();
@@ -1912,14 +1983,13 @@ void G4Quasmon::PrepareClusters()
   {
     G4QCandidate* curCand=theQCandidates[index];
     G4int cPDG  = curCand->GetPDGCode();
-    if(cPDG>NUCPDG)                                // ===> Cluster case
+    if(cPDG>80000000&&cPDG!=90000000)              // ===> Cluster case
 	{
-      G4int zns= cPDG-NUCPDG;
-      G4int nc = zns%1000;                         // N of the cluster
-      G4int sz = zns/1000;
-      G4int zc = sz %1000;                         // Z of the cluster
-      G4int sc = sz /1000;                         // S of the cluster
-      G4int ac = zc+nc+sc;                         // A of the cluster
+      G4QNucleus cN(cPDG);
+      G4int zc = cN.GetZ();                        // "Z" of the cluster
+      G4int nc = cN.GetN();                        // "N" of the cluster
+      G4int sc = cN.GetS();                        // "S" of the cluster
+      G4int ac = cN.GetA();                        // "A" of the cluster
       pos      = theEnvironment.GetProbability(ac);// Get a cluster prob. normalization factor
       G4double dense=1.;
       if(ac==1)dense=theEnvironment.GetProbability(254)/pos;
@@ -1978,7 +2048,6 @@ void G4Quasmon::PrepareClusters()
 void G4Quasmon::PrepareCandidates(G4int j)
 //   =====================================
 {
-  static const G4int NUCPDG=90000000;
   G4double hadronicProbab = theEnvironment.GetProbability();
   G4double ze             = theEnvironment.GetZ();       // For bn<3
   G4double ne             = theEnvironment.GetN();
@@ -2013,14 +2082,13 @@ void G4Quasmon::PrepareCandidates(G4int j)
     G4int cPDG = curCand->GetPDGCode();
     G4double PDGM=G4QPDGCode(cPDG).GetMass();             // Vacuum (PDG) mass for the cluster
     if (realM>PDGM) realM=PDGM;
-    if(cPDG>NUCPDG)                                       // Nuclear case
+    if(cPDG>80000000&&cPDG!=90000000)                     // Nuclear case
 	{
-      G4int zns= cPDG-NUCPDG;
-      G4int nc = zns%1000;                                // N of the cluster
-      G4int sz = zns/1000;
-      G4int zc = sz %1000;                                // Z of the cluster
-      G4int sc = sz /1000;                                // S of the cluster
-      G4int ac = zc+nc+sc;                                // A of the cluster
+      G4QNucleus cN(cPDG);
+      G4int zc = cN.GetZ();                               // "Z" of the cluster
+      G4int nc = cN.GetN();                               // "N" of the cluster
+      G4int sc = cN.GetS();                               // "S" of the cluster
+      G4int ac = cN.GetA();                               // "A" of the cluster
       //if(ac>maxB||ze<zc||ne<nc||se<sc) curCand->SetPossibility(false);
       if(ac>maxB) curCand->SetPossibility(false);
       else
@@ -2085,7 +2153,6 @@ void G4Quasmon::PrepareCandidates(G4int j)
 void G4Quasmon::ModifyInMatterCandidates()
 //   ======================================
 {
-  static const G4int NUCPDG=90000000;
   G4double envM = theEnvironment.GetMass();      // Mass of the Current Environment
   G4int envPDGC = theEnvironment.GetPDGCode();   // PDG Code of Current Environment
   G4QContent envQC=theEnvironment.GetQCZNS();    // QuarkContent of the current Nuclear Environ.
@@ -2096,7 +2163,7 @@ void G4Quasmon::ModifyInMatterCandidates()
   {
     G4QCandidate* curCand=theQCandidates[ind];   // Pointer to the Candidate
     G4int  cPDG = curCand->GetPDGCode();         // PDGC of the Candidate
-    if(cPDG>NUCPDG)//Fragments are modified to take into account the Current Nuclear Environment
+    if(cPDG>80000000&&cPDG!=90000000)            //Fragments are modified to take into account CurNuclEnv
 	{
       G4QNucleus cNuc(cPDG);                     // Fake nucleus for the Candidate
       G4int cP = cNuc.GetZ();                    // A#of protons in the Current Environment
@@ -2128,7 +2195,6 @@ void G4Quasmon::ModifyInMatterCandidates()
 void G4Quasmon::CalculateHadronizationProbabilities(G4double kVal, G4double kLS, G4int j)
 //   ====================================================================================
 {
-  static const G4int NUCPDG=90000000;
   G4int    vap = nOfQ-3;                         // Vacuum power
   G4double mQ2 = q4Mom.m2();                     // Squared Mass of the Quasmon
   G4double eQ  = q4Mom.e();                      // LS Energy of the Quasmon
@@ -2184,12 +2250,12 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double kVal, G4double kLS,
     //G4double cA=static_cast<double>(cU+cD+cS)/3.; //@@Short cut for the BaryNum of cluster??
     G4bool pos=curCand->GetPossibility();
     //if(pos &&  !cS//@@ Temporary not strange fragments (aceler.)
-    //if(pos&&(cPDG<NUCPDG||(cPDG>NUCPDG&&dUD<2&&(cU<=cD||nofU>nofD||!envN)))) //@@=>  2 || 3
-    //if(pos&&(cPDG<NUCPDG||(cPDG>NUCPDG&&dUD<2&&(cU<dD||nofU>nofD||!envN)))) //@@=>  2 || 3
-    //if(pos&&(cPDG<NUCPDG||(cPDG>NUCPDG&&dUD<2&&(cU<=cD||nofU>=nofD||!envN)))) //@@=>  2 || 3
-	//if(pos&&(cPDG<NUCPDG||(cPDG>NUCPDG&&dUD<2&&(cU<dD||nofU>=nofD||!envN)))) //@@=>  2 || 3
-	if(pos&&(cPDG<NUCPDG||(cPDG>NUCPDG&&dUD<2))) //@@=>  2 || 3
-	//if(cPDG<NUCPDG||(cPDG>NUCPDG&&dUD<3)) //@@=>  2 || 3
+    //if(pos&&(cPDG<80000000||(cPDG>80000000&&dUD<2&&(cU<=cD||nofU>nofD||!envN)))) //@@=>  2 || 3
+    //if(pos&&(cPDG<80000000||(cPDG>80000000&&dUD<2&&(cU<dD||nofU>nofD||!envN)))) //@@=>  2 || 3
+    //if(pos&&(cPDG<80000000||(cPDG>80000000&&dUD<2&&(cU<=cD||nofU>=nofD||!envN)))) //@@=>  2 || 3
+	//if(pos&&(cPDG<80000000||(cPDG>80000000&&dUD<2&&(cU<dD||nofU>=nofD||!envN)))) //@@=>  2 || 3
+	if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000&&dUD<2))) //@@=>  2 || 3
+	//if(cPDG<80000000||(cPDG>80000000&&dUD<3)) //@@=>  2 || 3
 	{
       //Randomization of mass of each candidate
       G4QContent curQ = valQ;                   // Make a current copy of the Quasmon QuarkCont
@@ -2203,7 +2269,7 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double kVal, G4double kLS,
       //G4int cNQ  = 1;                       // A#of quark-partons & diquark-partons
       //G4int cNQ  = 2*candQC.GetTot()-4;         // A#of q-p in Candidate -2 (StringJunction)
       G4double resM=0.;                         // Prototype for minMass of residual hadron
-      if(cPDG>NUCPDG&&baryn<=maxB)              // ===>Nuclear Case (QUark EXchange mechanism)
+      if(cPDG>80000000&&cPDG!=90000000&&baryn<=maxB)// ===>Nuclear Case (QUark EXchange mechanism)
       {
         G4int      pc=0;                        // Parents counter
         G4double   pcomb=0.;                    // Summed probability of parent clusters
@@ -2449,7 +2515,7 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double kVal, G4double kLS,
 		  }                                    // ...> End of Quark Exchange "oq" Test LOOP
 		}                                      // ...> End of Quark Exchange "iq" Test LOOP
 	  }                                        // ---> End of Nuclear Case of fragmentation
-      else if(cPDG<NUCPDG)                     // ===> Hadronic case (QUark FUsion mechanism)
+      else if(cPDG<80000000)                     // ===> Hadronic case (QUark FUsion mechanism)
       {
         comb = valQ.NOfCombinations(candQC);
         if(cPDG==111||aPDG==211||cPDG==221||cPDG==331||cPDG==113||aPDG==213||cPDG==223||
@@ -2483,7 +2549,7 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double kVal, G4double kLS,
         //if(cPDG==2112||cPDG==2212||cPDG==3122)
         cout<<"G4Quasmon::CalcHadrProbability:comb="<<comb<<",rPDG="<<resPDG<<curQ<<endl;
 #endif
-        if(comb && resPDG && (resPDG>NUCPDG||resPDG<10000))
+        if(comb && resPDG && (resPDG>80000000&&resPDG!=90000000||resPDG<10000))
 	    {
 #ifdef sdebug
           //if(cPDG==2112||cPDG==2212||cPDG==3122)
@@ -2496,7 +2562,7 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double kVal, G4double kLS,
           //if(cPDG==2112||cPDG==2212||cPDG==3122)
           cout<<"G4Q:HPr:ResidQMass="<<resM<<curQ<<",envPDG="<<envPDGC<<",rQC="<<resQCode<<endl;
 #endif
-          if(envPDGC>NUCPDG&&resM>0.&&cPDG>1000&&resPDG!=10)  // ===> Environment is not empty
+          if(envPDGC>80000000&&envPDGC!=90000000&&resM>0.&&cPDG>1000&&resPDG!=10) // => Environment
           { 
             G4QContent rtQC=curQ+envQC;            // Total Residual Quark Content
             G4QNucleus rtN(rtQC);                  // Create a pseudo-nucleus for residual

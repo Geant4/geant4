@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadron.cc,v 1.7 2000-09-18 10:00:28 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.8 2000-09-21 06:51:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -41,8 +41,7 @@ G4QHadron::G4QHadron(G4int PDGCode, G4LorentzVector p) :
     if(theMomentum.e()==0.) theMomentum.setE(theQPDG.GetMass());
     valQ=theQPDG.GetQuarkContent();
   }
-  //else if(PDGCode>90000000) DefineQC(PDGCode);
-  else if(PDGCode>89000000) DefineQC(PDGCode);
+  else if(PDGCode>80000000) DefineQC(PDGCode);
   else cerr<<"***G4QHaron:(P) PDG="<<PDGCode<<", use other constructor"<<endl;
 };
 

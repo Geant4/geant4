@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadron.hh,v 1.6 2000-09-18 10:00:28 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.7 2000-09-21 06:51:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -113,8 +113,7 @@ inline void            G4QHadron::SetQPDG(const G4QPDGCode& newQPDG)
   G4int Q  =newQPDG.GetQCode();
   //cout<<"G4QHadron::SetQPDG is called with PDGCode="<<PDG<<", QCode="<<Q<<endl;
   if     (Q>-1) valQ=theQPDG.GetQuarkContent();
-  //else if(PDG>90000000)DefineQC(PDG);
-  else if(PDG>89000000)DefineQC(PDG);
+  else if(PDG>80000000)DefineQC(PDG);
 }
 inline void   G4QHadron::SetQC(const G4QContent& newQC)              {valQ=newQC;}
 inline void   G4QHadron::Set4Momentum(const G4LorentzVector& aMom)   {theMomentum=aMom;}
@@ -128,27 +127,35 @@ inline void   G4QHadron::DefineQC(G4int PDGCode)
   G4int ds=0;
   G4int dz=0;
   G4int dn=0;
-  if(szn<-1000)
+  if(szn<-100000)
   {
-    szn+=1000000;
-    ds++;
+    G4int ns=(-szn)/1000000+1;
+    szn+=ns*1000000;
+    ds+=ns;
+  }
+  else if(szn<-100)
+  {
+    G4int nz=(-szn)/1000+1;
+    szn+=nz*1000;
+    dz+=nz;
   }
   else if(szn<0)
   {
-    szn+=1000;
-    dz++;
+    G4int nn=-szn;
+    szn=0;
+    dn+=nn;
   }
   G4int sz =szn/1000;
   G4int n  =szn%1000;
   if(n>700)
   {
-    n=1000-n;
+    n-=1000;
     dz--;
   }
   G4int z  =sz%1000-dz;
   if(z>700)
   {
-    z=1000-z;
+    z-=1000;
     ds--;
   }
   G4int s  =sz/1000-ds;

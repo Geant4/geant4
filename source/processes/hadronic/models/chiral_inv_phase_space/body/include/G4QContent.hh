@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QContent.hh,v 1.5 2000-09-14 14:54:08 mkossov Exp $
+// $Id: G4QContent.hh,v 1.6 2000-09-21 06:51:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -174,24 +174,31 @@ inline G4int G4QContent::GetADAS() const{return nAD*nAS;}
 // Convert particle to anti-particle
 inline G4int G4QContent::GetZNSPDGCode() const
 {
-  G4int kD=nD-nAD;
-  G4int kU=nU-nAU;
-  G4int kS=nS-nAS;
-  if(kD>=0&&kU>=0&&kS>=0&&kD+kU+kS>0)
-  {
-    G4int b=(kU+kD-kS-kS)/3;
-    G4int d=kU-kD;
-    G4int n=(b-d)/2;
+  G4int kD=nD-nAD;                           // A net # of d quarks
+  G4int kU=nU-nAU;                           // A net # of u quarks
+  G4int kS=nS-nAS;                           // A net # of s quarks
+  // if(kD>=0&&kU>=0&&kS>=0&&kD+kU+kS>0)        // => "Normal nucleus" case
+  //{
+  //  G4int b=(kU+kD-kS-kS)/3;
+  //  G4int d=kU-kD;
+  //  G4int n=(b-d)/2;
+  //  return 90000000+1000*(1000*kS+n+d)+n;
+  //}
+  //else if(kD<=0&&kU<=0&&kS<=0&&kD+kU+kS<0)   // => "Normal anti-nucleus" case
+  //{
+  //  G4int b=(kS+kS-kD-kU)/3;
+  //  G4int d=kD-kU;
+  //  G4int n=(b-d)/2;
+  //  return -90000000-1000*(1000*kS+n+d)-n;   // @@ double notation for anti-nuclei
+  //}
+  //else
+  //{
+    G4int b=(kU+kD-kS-kS)/3;                 // Baryon number-n*{LAMBDA=kS)
+    G4int d=kU-kD;                           // Isotopic shift
+    G4int n=(b-d)/2;                         // A#of neutrons
     return 90000000+1000*(1000*kS+n+d)+n;
-  }
-  else if(kD<=0&&kU<=0&&kS<=0&&kD+kU+kS<0)
-  {
-    G4int b=(kS+kS-kD-kU)/3;
-    G4int d=kD-kU;
-    G4int n=(b-d)/2;
-    return -90000000-1000*(1000*kS+n+d)-n;
-  }
-  return 0;
+  //}
+  //return 0;
 }
 
 // Convert particle to anti-particle

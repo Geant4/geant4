@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCode.cc,v 1.5 2000-09-19 07:00:09 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.6 2000-09-21 06:51:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -207,9 +207,8 @@ G4int G4QPDGCode::MakePDGCode(const G4int& QCode)
 // Make a Q Code out of the PDG Code
 G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
 {//   ===========================================
-  static const G4int NUCPDG=90000000;
   G4int PDGC=abs(PDGCode);        // Qcode is always not negative
-  if (PDGC<NUCPDG)                // Baryons & Mesons
+  if (PDGC<80000000)                // Baryons & Mesons
   {
     if(PDGC>10000000)  return -2; // Impossible code
     if     (PDGC==10)  return -1; // Chipolino
@@ -222,7 +221,9 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
     G4int         Q= 0;
     if     (!r)
     {
-      cerr<<"***G4QPDGCode::MakeQCode: (0) Unknown in Q-System code: "<<PDGCode<<endl;
+#ifdef pdebug
+      G4cout<<"***G4QPDGCode::MakeQCode: (0) Unknown in Q-System code: "<<PDGCode<<G4endl;
+#endif
       return -2;
     }
     else if(r==1) Q= 3;
@@ -244,7 +245,9 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
       else if(p==33) return Q+=6;
       else
       {
-        cerr<<"***G4QPDGCode::MakeQCode: (1) Unknown in Q-System code: "<<PDGCode<<endl;
+#ifdef pdebug
+        G4cout<<"***G4QPDGCode::MakeQCode: (1) Unknown in Q-System code: "<<PDGCode<<G4endl;
+#endif
         return -2;
       }
 	}
@@ -263,7 +266,9 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
         else if(p==332) return Q+=8;
         else
         {
-          cerr<<"***G4QPDGCode::MakeQCode: (2) Unknown in Q-System code: "<<PDGCode<<endl;
+#ifdef pdebug
+          G4cout<<"***G4QPDGCode::MakeQCode: (2) Unknown in Q-System code: "<<PDGCode<<G4endl;
+#endif
           return -2;
         }
 	  }
@@ -282,7 +287,9 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
         else if(p==333) return Q+=11;
         else
         {
-          cerr<<"***G4QPDGCode::MakeQCode: (3) Unknown in Q-System code: "<<PDGCode<<endl;
+#ifdef pdebug
+          G4cout<<"***G4QPDGCode::MakeQCode: (3) Unknown in Q-System code: "<<PDGCode<<G4endl;
+#endif
           return -2;
         }
 	  }
@@ -290,18 +297,51 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
   }
   else                        // Nuclear Fragments
   {
-    G4int r=PDGC-NUCPDG;      // cut the fake 90000000
+    G4int r=PDGC-90000000;      // cut the fake 90000000
     if(!r) return -2;
-    G4int n=r%1000;           // a#of neutrons
-    G4int a=r/1000;           // a#of protons + 1000*Lambdas
-    G4int z=a%1000;           // a#of protons
-    G4int s=a/1000;           // a#of s quarks
+    G4int ds=0;
+    G4int dz=0;
+    G4int dn=0;
+    if(r<-100000)
+    {
+      G4int ns=(-r)/1000000+1;
+      r+=ns*1000000;
+      ds+=ns;
+    }
+    else if(r<-100)
+    {
+      G4int nz=(-r)/1000+1;
+      r+=nz*1000;
+      dz+=nz;
+    }
+    else if(r<0)
+    {
+      G4int nn=-r;
+      r=0;
+      dn+=nn;
+    }
+    G4int sz =r/1000;
+    G4int n=r%1000;
+    if(n>700)
+    {
+      n-=1000;
+      dz--;
+    }
+    G4int z=sz%1000-dz;
+    if(z>700)
+    {
+      z-=1000;
+      ds--;
+    }
+    G4int s=sz/1000-ds;
     G4int d=n+n+z+s;          // a#of d quarks
     G4int u=n+z+z+s;          // a#of u quarks
     G4int t=d+u+s;            // tot#of quarks
-    if(t%3 || t<3)            // b=0 are in mesons
+    if(t%3 || abs(t)<3)       // b=0 are in mesons
     {
-      cerr<<"***G4QPDGCode::MakeQCode: Unknown PDGCode="<<PDGCode<<", t="<<t<<endl;
+#ifdef pdebug
+      G4cout<<"***G4QPDGCode::MakeQCode: Unknown PDGCode="<<PDGCode<<", t="<<t<<G4endl;
+#endif
       return -2;
 	}
     else
@@ -314,7 +354,9 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
         else if(s==1&&u==1&&d==1) return 74;
         else
         {
-          cerr<<"***MakeQCode: (5) Unknown in Q-System code: "<<PDGCode<<endl;
+#ifdef pdebug
+          G4cout<<"***G4QPDGCode::MakeQCode: (5) Unknown in Q-System code: "<<PDGCode<<G4endl;
+#endif
           return -2;
         }
       }
@@ -328,7 +370,9 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
         else if(s==2&&u==2&&d==2) return 80;
         else
         {
-          cerr<<"***G4QPDGCode::MakeQCode: (6) Unknown in Q-System code: "<<PDGCode<<endl;
+#ifdef pdebug
+          G4cout<<"***G4QPDGCode::MakeQCode: (6) Unknown in Q-System code: "<<PDGCode<<G4endl;
+#endif
           return -2;
         }
       }
@@ -350,7 +394,7 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
         else
         {
 #ifdef debug
-          cerr<<"***G4QPDGCode::MakeQCode: (7) Unknown in Q-System code: "<<PDGCode<<endl;
+          G4cout<<"***G4QPDGCode::MakeQCode: (7) Unknown in Q-System code: "<<PDGCode<<G4endl;
 #endif
           return -2;
         }
@@ -368,14 +412,16 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
         else
         {
 #ifdef debug
-          cerr<<"***G4QPDGCode::MakeQCode: (8) Unknown in Q-System code: "<<PDGCode<<endl;
+          G4cout<<"***G4QPDGCode::MakeQCode: (8) Unknown in Q-System code: "<<PDGCode<<G4endl;
 #endif
           return -2;
         }
 	  }
 	}
   }
-  cerr<<"***G4QPDGCode::MakeQCode: () Unknown in Q-System code: "<<PDGCode<<endl;
+#ifdef pdebug
+  G4cout<<"***G4QPDGCode::MakeQCode: () Unknown in Q-System code: "<<PDGCode<<G4endl;
+#endif
   return -2;
 }
 
@@ -403,32 +449,40 @@ G4double G4QPDGCode::GetMass()
   G4int ab=theQCode;
   G4int szn=thePDGCode-90000000;
   if(szn==0) return 0.;
-  if( szn>-1000000)
+  if( szn>-10000000)
   {
     G4int ds=0;
     G4int dz=0;
     G4int dn=0;
-    if(szn<-1000)
+    if(szn<-100000)
     {
-      szn+=1000000;
-      ds++;
+      G4int ns=(-szn)/1000000+1;
+      szn+=ns*1000000;
+      ds+=ns;
+    }
+    else if(szn<-100)
+    {
+      G4int nz=(-szn)/1000+1;
+      szn+=nz*1000;
+      dz+=nz;
     }
     else if(szn<0)
     {
-      szn+=1000;
-      dz++;
+      G4int nn=-szn;
+      szn=0;
+      dn+=nn;
     }
     G4int sz =szn/1000;
     G4int n  =szn%1000;
     if(n>700)
     {
-      n=1000-n;
+      n-=1000;
       dz--;
     }
     G4int z  =sz%1000-dz;
     if(z>700)
     {
-      z=1000-z;
+      z-=1000;
       ds--;
     }
     G4int s  =sz/1000-ds;
@@ -489,6 +543,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   static const G4double mK  = G4QPDGCode( 321).GetMass();
   static const G4double mK0 = G4QPDGCode( 311).GetMass();
   static const G4double mPi = G4QPDGCode( 211).GetMass();
+  static const G4double mPi0= G4QPDGCode( 111).GetMass();
   static const G4int    nSh = 164;
   static G4double sh[nSh] = {0.,                        // Fake element for C++ N=Z=0
                                -4.315548,   2.435504,  -1.170501,   3.950887,   5.425238,
@@ -524,22 +579,22 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
                               1018.302560,1025.781870,1033.263560,1040.747880,1048.234460,
                               1055.723430,1063.214780,1070.708750,1078.204870,1085.703370,
                               1093.204260,1100.707530,1108.213070};
-  static G4double b1=8.09748564; // MeV
-  static G4double b2=-0.76277387;
-  static G4double b3=83.487332;  // MeV
-  static G4double b4=0.090578206;// 2*b4
-  static G4double b5=0.676377211;// MeV
-  static G4double b6=5.55231981; // MeV
-  static G4double b7=25.;        // MeV (Lambda binding energy predexponent)
+  static const G4double b1=8.09748564; // MeV
+  static const G4double b2=-0.76277387;
+  static const G4double b3=83.487332;  // MeV
+  static const G4double b4=0.090578206;// 2*b4
+  static const G4double b5=0.676377211;// MeV
+  static const G4double b6=5.55231981; // MeV
+  static const G4double b7=25.;        // MeV (Lambda binding energy predexponent)
   // even-odd difference is 3.7(MeV)/X
   // S(X>151)=-57.56-5.542*X**1.05
-  static G4double b8=10.5;       // (Lambda binding energy exponent)
-  static G4double b9=-1./3.;
-  static G4double a2=0.13;       // Lambda binding energy for the deutron+Lambda system (MeV)
-  static G4double a3=2.2;        // Lambda binding energy for the (t or He3)+Lambda system (MeV)
-  static G4double ml=1115.684;   // Lambda mass (MeV)
-  static G4double um=931.49432;  // Umified atomic mass unit (MeV)
-  static G4double me =0.511;     // electron mass (MeV)
+  static const G4double b8=10.5;       // (Lambda binding energy exponent)
+  static const G4double b9=-1./3.;
+  static const G4double a2=0.13;       // Lambda binding energy for the deutron+Lambda system (MeV)
+  static const G4double a3=2.2;        // Lambda binding energy for the (t or He3)+Lambda system (MeV)
+  static const G4double ml= G4QPDGCode(3122).GetMass();
+  static const G4double um=931.49432;  // Umified atomic mass unit (MeV)
+  static const G4double me =0.511;     // electron mass (MeV)
   static G4double c[9][9]={
                    {13.136,14.931,25.320,38.000,45.000,55.000,65.000,75.000,85.000},
 				   {14.950, 2.425,11.680,18.374,27.870,35.094,48.000,60.000,72.000},
@@ -550,10 +605,25 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
 				   {50.000,40.820,33.050,20.174,13.369, 3.125, 2.863, 2.855,10.680},
 				   {55.000,48.810,40.796,25.076,16.562, 3.020, 0.101,-4.737,1.9520},
 				   {60.000,55.000,50.100,33.660,23.664, 9.873, 5.683,-0.809,0.8730}};
+  if(!N&&!Z&&!S) 
+  {
+#ifdef debug
+    G4cout<<"G4QPDGCode::GetNuclMass(0,0,0)="<<mPi0<<"#0"<<G4endl;
+#endif
+    return mPi0;
+  }
+  G4int ZN=Z+N;
+  G4int Bn=ZN+S;
+  if(ZN<0&&Bn>0)                      // Bn*LAMBDA's + (-(N+Z))*Kaons
+  {
+    if     (N<0&&Z<0) return Bn*ml-Z*mK - N*mK0+0.001*   S ;
+    else if(N<0)      return Bn*ml+Z*mPi-ZN*mK0+0.001*(Z+S);
+    else              return Bn*ml+N*mPi-ZN*mK +0.001*(N+S);
+  } 
   G4double k=0.;                      // Mass Sum of K+ mesons
   if(S<0)                             // @@ Can be improved by K0/K+ search of minimum
   {
-    if(Z+N+S<1) return 0.;
+    if(Bn<1) return 0.;               // @@ Make it for antinuclei @@ (Bn<0)
     if(Z>0)
 	{
       if(Z>=-S)                         // => "Enough protons in nucleus" case
@@ -643,7 +713,7 @@ G4QContent G4QPDGCode::GetQuarkContent() const
   G4int as=0;
   G4int ab=abs(thePDGCode);
   if     (ab==22) return G4QContent(0,0,0,0,0,0); // Photon
-  else if(ab<90000000) // Baryons & Mesons
+  else if(ab<80000000) // Baryons & Mesons
   {
     G4int c=ab/10;     // temporary (quarks)
     G4int f=c%10;      // (1) low quark
@@ -738,16 +808,53 @@ G4QContent G4QPDGCode::GetQuarkContent() const
   }
   else
   {
-    G4int b=ab-90000000;
-    G4int n=b%1000;
-    G4int c=b/1000;
-    G4int p=c%1000;
-    s      =c/1000;
-    b=s+p+n;
-    d=b+n;
-    u=b+p;
-    if(a)return G4QContent(0,0,0,d,u,s);
-    else return G4QContent(d,u,s,0,0,0);
+    G4int szn=ab-90000000;
+    G4int ds=0;
+    G4int dz=0;
+    G4int dn=0;
+    if(szn<-100000)
+    {
+      G4int ns=(-szn)/1000000+1;
+      szn+=ns*1000000;
+      ds+=ns;
+    }
+    else if(szn<-100)
+    {
+      G4int nz=(-szn)/1000+1;
+      szn+=nz*1000;
+      dz+=nz;
+    }
+    else if(szn<0)
+    {
+      G4int nn=-szn;
+      szn=0;
+      dn+=nn;
+    }
+    G4int sz =szn/1000;
+    G4int n  =szn%1000;
+    if(n>700)
+    {
+      n-=1000;
+      dz--;
+    }
+    G4int z  =sz%1000-dz;
+    if(z>700)
+    {
+      z-=1000;
+      ds--;
+    }
+    s  =sz/1000-ds;
+    G4int b=z+n+s;
+    d=n+b;
+    u=z+b;
+    if      (d<0&&u<0&&s<0) return G4QContent(0,0,0,-d,-u,-s);
+    else if (u<0&&s<0)      return G4QContent(d,0,0,0,-u,-s);
+    else if (d<0&&s<0)      return G4QContent(0,u,0,-d,0,-s);
+    else if (d<0&&u<0)      return G4QContent(0,0,s,-d,-u,0);
+    else if (u<0)           return G4QContent(d,0,s,0,-u,0);
+    else if (s<0)           return G4QContent(d,u,0,0,0,-s);
+    else if (d<0)           return G4QContent(0,u,s,-d,0,0);
+    else                    return G4QContent(d,u,s,0,0,0);
   }
   return G4QContent(0,0,0,0,0,0);
 }

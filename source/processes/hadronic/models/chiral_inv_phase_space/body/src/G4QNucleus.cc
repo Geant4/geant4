@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.cc,v 1.6 2000-09-19 07:00:09 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.7 2000-09-21 06:51:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -179,25 +179,57 @@ ostream& operator<<(ostream& lhs, const G4QNucleus& rhs)
 void G4QNucleus::InitByPDG(G4int nucPDG)
 {//  ===================================
   static const G4int NUCPDG  = 90000000;
-  if(nucPDG>=NUCPDG)
+  if(nucPDG>=80000000)
   {
-    G4int zns=nucPDG-NUCPDG;
-    if(zns)
+    G4int szn=nucPDG-NUCPDG;
+    G4int ds=0;
+    G4int dz=0;
+    G4int dn=0;
+    if(szn<-100000)
     {
-      G4int zs =zns/1000;
-      N  = zns%1000;
-      Z  = zs%1000;
-      S  = zs/1000;
+      G4int ns=(-szn)/1000000+1;
+      szn+=ns*1000000;
+      ds+=ns;
     }
-    else
-	{
-      Z  = 0;
-      N  = 0;
-      S  = 0;
-	}
+    else if(szn<-100)
+    {
+      G4int nz=(-szn)/1000+1;
+      szn+=nz*1000;
+      dz+=nz;
+    }
+    else if(szn<0)
+    {
+      G4int nn=-szn;
+      szn=0;
+      dn+=nn;
+    }
+    G4int sz =szn/1000;
+    G4int n  =szn%1000;
+    if(n>700)
+    {
+      n-=1000;
+      dz--;
+    }
+    G4int z  =sz%1000-dz;
+    if(z>700)
+    {
+      z-=1000;
+      ds--;
+    }
+    Z  =z;
+    N  =n;
+    S  =sz/1000-ds;
     G4int ZNS=Z+N+S;
-    G4QContent nQC(N+ZNS,Z+ZNS,S,0,0,0);
-    SetQC(nQC);
+    G4int Dq=N+ZNS;
+    G4int Uq=Z+ZNS;
+    if      (Dq<0&&Uq<0&&S<0)SetQC(G4QContent(0,0,0,-Dq,-Uq,-S));
+    else if (Uq<0&& S<0)     SetQC(G4QContent(Dq,0,0,0,-Uq,-S));
+    else if (Dq<0&& S<0)     SetQC(G4QContent(0,Uq,0,-Dq,0,-S));
+    else if (Dq<0&&Uq<0)     SetQC(G4QContent(0,0,S,-Dq,-Uq,0));
+    else if (Uq<0)           SetQC(G4QContent(Dq,0,S,0,-Uq,0));
+    else if ( S<0)           SetQC(G4QContent(Dq,Uq,0,0,0,-S));
+    else if (Dq<0)           SetQC(G4QContent(0,Uq,S,-Dq,0,0));
+    else                     SetQC(G4QContent(Dq,Uq,S,0,0,0));
     G4QPDGCode nPDG(nucPDG);
     SetQPDG(nPDG);
     G4LorentzVector p(0.,0.,0.,nPDG.GetMass());
@@ -314,7 +346,7 @@ void G4QNucleus::UpdateClusters(G4int maxCls)
 void G4QNucleus::Reduce(G4int cPDG)
 {//  ==============================
   static const G4int NUCPDG=90000000;
-  if(cPDG>NUCPDG)
+  if(cPDG>80000000)
   {
     G4int curPDG=GetPDG();
     G4int newPDG=curPDG-cPDG+NUCPDG;             // PDG Code of Residual Nucleus
@@ -336,7 +368,7 @@ void G4QNucleus::Reduce(G4int cPDG)
 void G4QNucleus::Increase(G4int cPDG, G4LorentzVector c4M)
 {//  =====================================================
   static const G4int NUCPDG=90000000;
-  if(cPDG>NUCPDG)
+  if(cPDG>80000000)
   {
     G4int newPDG=GetPDG()+cPDG-NUCPDG;        // PDG Code of the New Nucleus
     InitByPDG(newPDG);                        // Reinit the Nucleus
@@ -477,8 +509,8 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   }
   else if(a>2)
   {
-    //G4double gunFact= true; // No Gun Flag
-    G4bool gunFact  = G4UniformRand()>exp(-a/gunA); // No Gun Flag
+    G4double gunFact= true; // No Gun Flag !!!!!
+    //G4bool gunFact  = G4UniformRand()>exp(-a/gunA); // Almost No Gun Flag
     //gunFact=true;                              //@@
     G4bool nFlag    = false;                   // Flag of possibility to radiate neutron
     G4bool pFlag    = false;                   // Flag of possibility to radiate proton
