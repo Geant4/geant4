@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.cc,v 1.11 2001-11-28 15:42:12 gcosmo Exp $
+// $Id: G4MaterialPropertyVector.cc,v 1.12 2002-01-22 13:58:58 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -144,6 +144,7 @@ void G4MaterialPropertyVector::AddElement(G4double aPhotonMomentum,
 	
 	newElement = new G4MPVEntry(aPhotonMomentum, aPropertyValue);
 	MPV.push_back(newElement);
+	G4std::sort(MPV.begin(), MPV.end(), less_for_G4MPVEntry_pointer());
 	NumEntries++; 
 }
 

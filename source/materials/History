@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2001-11-29 16:33:55 gcosmo Exp $
+$Id: History,v 1.33 2002-01-22 13:58:58 mverderi Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22.01.02 M.Verderi - materials-V04-00-00
+	 Fixed G4MaterialPropertyVector::AddElement() which wasn't make use
+	 of G4MPVEntry ordering in the G4std::vector<G4MPVEntry*> MPV vector.
+	 This happens since the STL migration (while method "insert" of Rogue-Wave
+	 was taking care about.)
+	 Changes in G4MaterialPropertyVector.hh, G4MaterialPropertyVector.cc
+	 and test/testMaterialPropertyVector.cc
 
 29.11.01 G.Cosmo - materials-V03-02-07
          Fixed declaration of ostream attributes to use standard 'fmtflags'
