@@ -134,7 +134,7 @@ public:
   G4double GetPostStepTransfer(G4PhysicsTable*, G4PhysicsLogVector*,
                                G4int iPlace, G4double scaledTkin );
   G4double GetAlongStepTransfer(G4PhysicsTable*, G4PhysicsLogVector*,
-                               G4int iPlace, G4double scaledTkin, G4double cof );
+                               G4int iPlace, G4double scaledTkin,G4double step, G4double cof );
   G4double GetEnergyTransfer(G4PhysicsTable*, G4int iPlace,
                              G4double position, G4int iTransfer );
 

@@ -1054,11 +1054,13 @@ G4double G4PAIPhotonModel::SampleFluctuations( const G4Material* material,
   iPlace = iTkin - 1 ; 
   if( iPlace < 0 ) iPlace = 0;
 
-  photonLoss = GetAlongStepTransfer(fPAIphotonTable,fdNdxCutPhotonVector,iPlace,scaledTkin,cof);
+  photonLoss = GetAlongStepTransfer(fPAIphotonTable,fdNdxCutPhotonVector,
+iPlace,scaledTkin,step,cof);
 
   //  G4cout<<"PAIPhotonModel AlongStepPhotonLoss = "<<photonLoss/keV<<" keV"<<G4endl ; 
 
-  plasmonLoss = GetAlongStepTransfer(fPAIplasmonTable,fdNdxCutPlasmonVector,iPlace,scaledTkin,cof);
+  plasmonLoss = GetAlongStepTransfer(fPAIplasmonTable,fdNdxCutPlasmonVector,
+iPlace,scaledTkin,step,cof);
 
   //  G4cout<<"PAIPhotonModel AlongStepPlasmonLoss = "<<plasmonLoss/keV<<" keV"<<G4endl ; 
 
@@ -1077,12 +1079,14 @@ G4double G4PAIPhotonModel::SampleFluctuations( const G4Material* material,
 G4double  
 G4PAIPhotonModel::GetAlongStepTransfer( G4PhysicsTable* pTable,
 				        G4PhysicsLogVector* pVector,
-                                        G4int iPlace, G4double scaledTkin,
+                                        G4int iPlace, G4double scaledTkin,G4double step,
                                         G4double cof )
 {  
   G4int iTkin = iPlace + 1, iTransfer;
   G4double loss = 0., position, E1, E2, W1, W2, W, dNdxCut1, dNdxCut2, meanNumber;
-  G4long numOfCollisions;
+  G4double lambda, stepDelta, stepSum=0. ;
+  G4long numOfCollisions=0;
+  G4bool numb = true;
 
   dNdxCut1 = (*pVector)(iPlace) ;  
 
@@ -1092,7 +1096,16 @@ G4PAIPhotonModel::GetAlongStepTransfer( G4PhysicsTable* pTable,
   {
     meanNumber = ((*(*pTable)(iPlace))(0) - dNdxCut1)*cof;
     if(meanNumber < 0.) meanNumber = 0. ;
-    numOfCollisions = RandPoisson::shoot(meanNumber) ;
+    //  numOfCollisions = RandPoisson::shoot(meanNumber) ;
+    if( meanNumber > 0.) lambda = step/meanNumber;
+    else                 lambda = DBL_MAX;
+    while(numb)
+    {
+      stepDelta = RandExponential::shoot(lambda);
+      stepSum += stepDelta;
+      if(stepSum >= step) break;
+      numOfCollisions++;
+    }   
     
     //     G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
@@ -1118,7 +1131,16 @@ G4PAIPhotonModel::GetAlongStepTransfer( G4PhysicsTable* pTable,
     {
       meanNumber = ((*(*pTable)(iPlace+1))(0) - dNdxCut2)*cof;
       if( meanNumber < 0. ) meanNumber = 0. ;
-      numOfCollisions = RandPoisson::shoot(meanNumber) ;
+      //  numOfCollisions = RandPoisson::shoot(meanNumber) ;
+      if( meanNumber > 0.) lambda = step/meanNumber;
+      else                 lambda = DBL_MAX;
+      while(numb)
+      {
+        stepDelta = RandExponential::shoot(lambda);
+        stepSum += stepDelta;
+        if(stepSum >= step) break;
+        numOfCollisions++;
+      }   
 
       //  G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
@@ -1152,7 +1174,16 @@ G4PAIPhotonModel::GetAlongStepTransfer( G4PhysicsTable* pTable,
       meanNumber=( ((*(*pTable)(iPlace))(0)-dNdxCut1)*W1 + 
 		   ((*(*pTable)(iPlace+1))(0)-dNdxCut2)*W2 )*cof;
       if(meanNumber<0.0) meanNumber = 0.0;
-      numOfCollisions = RandPoisson::shoot(meanNumber) ;
+      //  numOfCollisions = RandPoisson::shoot(meanNumber) ;
+      if( meanNumber > 0.) lambda = step/meanNumber;
+      else                 lambda = DBL_MAX;
+      while(numb)
+      {
+        stepDelta = RandExponential::shoot(lambda);
+        stepSum += stepDelta;
+        if(stepSum >= step) break;
+        numOfCollisions++;
+      }   
 
       //  G4cout<<"numOfCollisions = "<<numOfCollisions<<endl ;
 
