@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2001-08-28 12:27:56 gcosmo Exp $
+$Id: History,v 1.15 2001-09-25 12:55:32 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+tests-V03-02-01  25th Sep 2001  Steve O'Neale
+- update reference outputs in tests directory
 
 tests-V03-02-00  28th Aug 2001  Gabriele Cosmo
 - removed obsolete files in directories "results" and "tools"
