@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisation.cc,v 1.10 2004-03-10 17:22:33 pandola Exp $
+// $Id: G4PenelopeIonisation.cc,v 1.11 2004-03-17 13:25:27 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -44,6 +44,7 @@
 // 20.01.04 L.Pandola           Changed returns in CalculateDiscreteForPositrons()
 //                              to eliminate the same bug 
 // 10.03.04 L.Pandola           Bug fixed with reference system of delta rays
+// 17.03.04 L.Pandola           Removed unnecessary calls to pow(a,b)
 // --------------------------------------------------------------
 
 #include "G4PenelopeIonisation.hh"
@@ -484,7 +485,7 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
   G4double gamma = 1.0+ene/electron_mass_c2;
   G4double gamma2 = gamma*gamma;
   G4double beta2 = (gamma2-1.0)/gamma2;
-  G4double amol = pow((gamma-1.0)/gamma,2);
+  G4double amol = (gamma-1.0)*(gamma-1.0)/gamma2;
   G4double cps = ene*rb;
   G4double cp = sqrt(cps);
   
@@ -546,11 +547,11 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
       {
 	if (wi>(1e-6*ene)){
 	  G4double cpp=sqrt((ene-wi)*(ene-wi+2.0*electron_mass_c2));
-	  qm->push_back(sqrt(pow(cp-cpp,2)+electron_mass_c2*electron_mass_c2)-electron_mass_c2);
+	  qm->push_back(sqrt((cp-cpp)*(cp-cpp)+electron_mass_c2*electron_mass_c2)-electron_mass_c2);
 	}
 	else
 	  {
-	    qm->push_back(pow(wi,2)/(beta2*2.0*electron_mass_c2));
+	    qm->push_back((wi*wi)/(beta2*2.0*electron_mass_c2));
 	  }
 	//verificare che quando arriva qui il vettore ha SEMPRE l'i-esimo elemento
 	if ((*qm)[i] < wi)
@@ -710,7 +711,7 @@ void G4PenelopeIonisation::CalculateDiscreteForElectrons(G4double ene,G4double c
       }
       rk2 = rk*rk;
       rkf = rk/(1.0-rk);
-      phi = 1.0+pow(rkf,2)-rkf+amol*(rk2+rkf);
+      phi = 1.0+(rkf*rkf)-rkf+amol*(rk2+rkf);
     }while ((G4UniformRand()*(1.0+A*rk2)) > phi);
     //Energy and scattering angle (primary electron);
     kineticEnergy1 = ene*(1.0-rk);
@@ -805,6 +806,7 @@ G4double G4PenelopeIonisation::CalculateDeltaFermi(G4double ene,G4int Z,
   G4double wl2 = 0.0;
   G4double fdel=0.0;
   G4double wr=0;
+  G4double help1=0.0;
   size_t nbOsc = resonanceEnergy->find(Z)->second->size();
   for(size_t i=0;i<nbOsc;i++)
     {
@@ -813,7 +815,8 @@ G4double G4PenelopeIonisation::CalculateDeltaFermi(G4double ene,G4int Z,
       fdel += occupNb/(wr*wr+wl2);
     }
   if (fdel < TST) return delta;
-  wl2 = pow((*(resonanceEnergy->find(Z)->second))[nbOsc-1],2);
+  help1 = (*(resonanceEnergy->find(Z)->second))[nbOsc-1];
+  wl2 = help1*help1;
   do{
     wl2=wl2*2.0;
     fdel = 0.0;
@@ -863,7 +866,8 @@ G4double G4PenelopeIonisation::CalculateContinuous(G4double ene,G4double cutoff,
   G4double gamma = 1.0+ene/electron_mass_c2;
   G4double gamma2 = gamma*gamma;
   G4double beta2 = (gamma2-1.0)/gamma2;
-  G4double constant = pi*pow(classic_electr_radius,2)*2.0*electron_mass_c2/beta2;
+  G4double constant = pi*classic_electr_radius*classic_electr_radius
+    *2.0*electron_mass_c2/beta2;
  
   
   G4double delta = CalculateDeltaFermi(ene,Z,electronVolumeDensity);
@@ -895,7 +899,7 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForElectrons(G4double ene,G
   G4double gamma2 = gamma*gamma;
   G4double beta2 = (gamma2-1.0)/gamma2;
   G4double cps = ene*(ene+2.0*electron_mass_c2);
-  G4double amol = pow((gamma-1.0)/gamma,2);
+  G4double amol = (gamma-1.0)*(gamma-1.0)/gamma2;
   G4double sPower = 0.0;
   if (ene < resEne) return sPower;
 
@@ -910,7 +914,7 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForElectrons(G4double ene,G
 
   if (resEne > ene*(1e-6))
     {
-      qm = sqrt(pow(cp-cp1,2)+pow(electron_mass_c2,2))-electron_mass_c2;
+      qm = sqrt((cp-cp1)*(cp-cp1)+(electron_mass_c2*electron_mass_c2))-electron_mass_c2;
     }
   else
     {
@@ -943,7 +947,7 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForElectrons(G4double ene,G
   if (wl > (wu-1*eV)) return sPower;
   sPower += log(wu/wl)+(ene/(ene-wu))-(ene/(ene-wl))
     + (2.0 - amol)*log((ene-wu)/(ene-wl))
-    + amol*(pow(wu,2)-pow(wl,2))/(2.0*pow(ene,2));
+    + amol*((wu*wu)-(wl*wl))/(2.0*ene*ene);
 
   return sPower;
 }
@@ -956,11 +960,12 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForPositrons(G4double ene,G
   G4double gamma2 = gamma*gamma;
   G4double beta2 = (gamma2-1.0)/gamma2;
   G4double cps = ene*(ene+2.0*electron_mass_c2);
-  G4double amol = pow(ene/(ene+electron_mass_c2),2);
-  G4double bha1 = amol*(2.0*pow(gamma+1.0,2)-1.0)/(gamma2-1.0);
-  G4double bha2 = amol*(3.0+1.0/pow(gamma+1.0,2));
-  G4double bha3 = amol*2.0*gamma*(gamma-1.0)/pow(gamma+1.0,2);
-  G4double bha4 = amol*pow(gamma-1.0,2)/pow(gamma+1.0,2);
+  G4double amol = (ene/(ene+electron_mass_c2)) * (ene/(ene+electron_mass_c2));
+  G4double help = (gamma+1.0)*(gamma+1.0);
+  G4double bha1 = amol*(2.0*help-1.0)/(gamma2-1.0);
+  G4double bha2 = amol*(3.0+1.0/help);
+  G4double bha3 = amol*2.0*gamma*(gamma-1.0)/help;
+  G4double bha4 = amol*(gamma-1.0)*(gamma-1.0)/help;
 
   G4double sPower = 0.0;
   if (ene < resEne) return sPower;
@@ -976,7 +981,7 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForPositrons(G4double ene,G
 
   if (resEne > ene*(1e-6))
     {
-      qm = sqrt(pow(cp-cp1,2)+pow(electron_mass_c2,2))-electron_mass_c2;
+      qm = sqrt((cp-cp1)*(cp-cp1)+(electron_mass_c2*electron_mass_c2))-electron_mass_c2;
     }
   else
     {
@@ -1008,9 +1013,9 @@ G4double G4PenelopeIonisation::CalculateStoppingPowerForPositrons(G4double ene,G
   wl = resEne;
   if (wl > (wu-1*eV)) return sPower;
   sPower += log(wu/wl)-bha1*(wu-wl)/ene
-    + bha2*(pow(wu,2)-pow(wl,2))/(2.0*pow(ene,2))
-    - bha3*(pow(wu,3)-pow(wl,3))/(3.0*pow(ene,3))
-    + bha4*(pow(wu,4)-pow(wl,4))/(4.0*pow(ene,4));
+    + bha2*((wu*wu)-(wl*wl))/(2.0*ene*ene)
+    - bha3*((wu*wu*wu)-(wl*wl*wl))/(3.0*ene*ene*ene)
+    + bha4*((wu*wu*wu*wu)-(wl*wl*wl*wl))/(4.0*ene*ene*ene*ene);
 
   return sPower;
 }
@@ -1029,13 +1034,14 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
   G4double gamma = 1.0+ene/electron_mass_c2;
   G4double gamma2 = gamma*gamma;
   G4double beta2 = (gamma2-1.0)/gamma2;
-  G4double amol = pow((gamma-1.0)/gamma,2);
+  G4double amol = (gamma-1.0)*(gamma-1.0)/gamma2;
   G4double cps = ene*rb;
   G4double cp = sqrt(cps);
-  G4double bha1 = amol*(2.0*pow(gamma+1.0,2)-1.0)/(gamma2-1.0);
-  G4double bha2 = amol*(3.0+1.0/pow(gamma+1.0,2));
-  G4double bha3 = amol*2.0*gamma*(gamma-1.0)/pow(gamma+1.0,2);
-  G4double bha4 = amol*pow(gamma-1.0,2)/pow(gamma+1.0,2);
+  G4double help = (gamma+1.0)*(gamma+1.0);
+  G4double bha1 = amol*(2.0*help-1.0)/(gamma2-1.0);
+  G4double bha2 = amol*(3.0+1.0/help);
+  G4double bha3 = amol*2.0*gamma*(gamma-1.0)/help;
+  G4double bha4 = amol*(gamma-1.0)*(gamma-1.0)/help;
   
   G4double delta = CalculateDeltaFermi(ene,Z,electronVolumeDensity);
   G4double distantTransvCS0 = std::max(log(gamma2)-beta2-delta,0.0);
@@ -1060,8 +1066,8 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
       rl1=1.0-rl;
       if (rl < 1.0)
 	closeCS0 = (((1.0/rl)-1.0) + bha1*log(rl) + bha2*rl1
-		    + (bha3/2.0)*(pow(rl,2)-1.0)
-		    + (bha4/3.0)*(1.0-pow(rl,3)))/ene;
+		    + (bha3/2.0)*((rl*rl)-1.0)
+		    + (bha4/3.0)*(1.0-(rl*rl*rl)))/ene;
     }
 
   // Cross sections for the different oscillators
@@ -1098,11 +1104,11 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
       {
 	if (wi>(1e-6*ene)){
 	  G4double cpp=sqrt((ene-wi)*(ene-wi+2.0*electron_mass_c2));
-	  qm->push_back(sqrt(pow(cp-cpp,2)+electron_mass_c2*electron_mass_c2)-electron_mass_c2);
+	  qm->push_back(sqrt((cp-cpp)*(cp-cpp)+ electron_mass_c2 * electron_mass_c2)-electron_mass_c2);
 	}
 	else
 	  {
-	    qm->push_back(pow(wi,2)/(beta2+2.0*electron_mass_c2));
+	    qm->push_back(wi*wi/(beta2+2.0*electron_mass_c2));
 	  }
 	//verificare che quando arriva qui il vettore ha SEMPRE l'i-esimo elemento
 	if ((*qm)[i] < wi)
@@ -1137,8 +1143,8 @@ void G4PenelopeIonisation::CalculateDiscreteForPositrons(G4double ene,G4double c
 	  rl=wi/ene;
 	  rl1=1.0-rl;
 	  closeCS = occupNb*(((1.0/rl)-1.0)+bha1*log(rl)+bha2*rl1
-			     + (bha3/2.0)*(pow(rl,2)-1.0)
-			     + (bha4/3.0)*(1.0-pow(rl,3)))/ene;
+			     + (bha3/2.0)*((rl*rl)-1.0)
+			     + (bha4/3.0)*(1.0-(rl*rl*rl)))/ene;
 	  cumulHardCS->push_back(totalHardCS);
 	  typeOfInteraction->push_back(3.0); //close
 	  nbOfLevel->push_back((G4double) i);
@@ -1286,7 +1292,7 @@ G4double G4PenelopeIonisation::CalculateCrossSectionsRatio(G4double ene,G4double
   G4double gamma = 1.0+ene/electron_mass_c2;
   G4double gamma2 = gamma*gamma;
   G4double beta2 = (gamma2-1.0)/gamma2;
-  G4double constant = pi*pow(classic_electr_radius,2)*2.0*electron_mass_c2/beta2;
+  G4double constant = pi*classic_electr_radius*classic_electr_radius*2.0*electron_mass_c2/beta2;
   G4double delta = CalculateDeltaFermi(ene,Z,electronVolumeDensity);
   G4int nbOsc = (G4int) resonanceEnergy->find(Z)->second->size();
   G4double S0 = 0.0, H0=0.0;
@@ -1323,7 +1329,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForElectrons(G4double ene,G4dou
   G4double gamma2 = gamma*gamma;
   G4double beta2 = (gamma2-1.0)/gamma2;
   G4double cps = ene*(ene+2.0*electron_mass_c2);
-  G4double amol = pow(ene/(ene+electron_mass_c2),2);
+  G4double amol = (ene/(ene+electron_mass_c2)) * (ene/(ene+electron_mass_c2)) ;
   G4double hardCont = 0.0;
   G4double softCont = 0.0;
   if (ene < resEne) return 0.0;
@@ -1339,7 +1345,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForElectrons(G4double ene,G4dou
 
   if (resEne > ene*(1e-6))
     {
-      qm = sqrt(pow(cp-cp1,2)+pow(electron_mass_c2,2))-electron_mass_c2;
+      qm = sqrt((cp-cp1)*(cp-cp1)+(electron_mass_c2*electron_mass_c2))-electron_mass_c2;
     }
   else
     {
@@ -1379,7 +1385,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForElectrons(G4double ene,G4dou
       hardCont += (1.0/(ene-wu))-(1.0/(ene-wl))
 	- (1.0/wu)+(1.0/wl)
 	+ (1.0-amol)*log(((ene-wu)*wl)/((ene-wl)*wu))/ene
-	+ amol*(wu-wl)/pow(ene,2);
+	+ amol*(wu-wl)/(ene*ene);
       wu=wl;
     }
 
@@ -1391,7 +1397,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForElectrons(G4double ene,G4dou
   softCont += (1.0/(ene-wu))-(1.0/(ene-wl))
 	- (1.0/wu)+(1.0/wl)
 	+ (1.0-amol)*log(((ene-wu)*wl)/((ene-wl)*wu))/ene
-	+ amol*(wu-wl)/pow(ene,2);
+	+ amol*(wu-wl)/(ene*ene);
   if (index == 1) return softCont;
   return hardCont;
 }
@@ -1404,11 +1410,12 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForPositrons(G4double ene,G4dou
   G4double gamma2 = gamma*gamma;
   G4double beta2 = (gamma2-1.0)/gamma2;
   G4double cps = ene*(ene+2.0*electron_mass_c2);
-  G4double amol = pow(ene/(ene+electron_mass_c2),2);
-  G4double bha1 = amol*(2.0*pow(gamma+1.0,2)-1.0)/(gamma2-1.0);
-  G4double bha2 = amol*(3.0+1.0/pow(gamma+1.0,2));
-  G4double bha3 = amol*2.0*gamma*(gamma-1.0)/pow(gamma+1.0,2);
-  G4double bha4 = amol*pow(gamma-1.0,2)/pow(gamma+1.0,2);
+  G4double amol = (ene/(ene+electron_mass_c2)) * (ene/(ene+electron_mass_c2)) ;
+  G4double help = (gamma+1.0)*(gamma+1.0);
+  G4double bha1 = amol*(2.0*help-1.0)/(gamma2-1.0);
+  G4double bha2 = amol*(3.0+1.0/help);
+  G4double bha3 = amol*2.0*gamma*(gamma-1.0)/help;
+  G4double bha4 = amol*(gamma-1.0)*(gamma-1.0)/help;
   G4double hardCont = 0.0;
   G4double softCont = 0.0;
   if (ene < resEne) return 0.0;
@@ -1425,7 +1432,7 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForPositrons(G4double ene,G4dou
 
   if (resEne > ene*(1e-6))
     {
-      qm = sqrt(pow(cp-cp1,2)+pow(electron_mass_c2,2))-electron_mass_c2;
+      qm = sqrt((cp-cp1)*(cp-cp1)+(electron_mass_c2*electron_mass_c2))-electron_mass_c2;
     }
   else
     {
@@ -1462,8 +1469,8 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForPositrons(G4double ene,G4dou
  
   if (wl < (wu-1*eV)) {
     hardCont += (1.0/wl)-(1.0/wu)-bha1*log(wu/wl)/ene
-      + bha2*(wu-wl)/pow(ene,2) -bha3*(pow(wu,2)-pow(wl,2))/(2.0*pow(ene,3))
-      + bha4*(pow(wu,3)-pow(wl,3))/(3.0*pow(ene,4));
+      + bha2*(wu-wl)/(ene*ene) -bha3*((wu*wu)-(wl*wl))/(2.0*ene*ene*ene)
+      + bha4*((wu*wu*wu)-(wl*wl*wl))/(3.0*ene*ene*ene*ene);
     wu=wl;
   }
   wl = resEne;
@@ -1473,8 +1480,8 @@ G4double G4PenelopeIonisation::CrossSectionsRatioForPositrons(G4double ene,G4dou
       if (index == 2) return hardCont;
     }
   softCont += (1.0/wl)-(1.0/wu)-bha1*log(wu/wl)/ene
-    + bha2*(wu-wl)/pow(ene,2) -bha3*(pow(wu,2)-pow(wl,2))/(2.0*pow(ene,3))
-    + bha4*(pow(wu,3)-pow(wl,3))/(3.0*pow(ene,4));
+    + bha2*(wu-wl)/(ene*ene) -bha3*((wu*wu)-(wl*wl))/(2.0*ene*ene*ene)
+    + bha4*((wu*wu*wu)-(wl*wl*wl))/(3.0*ene*ene*ene*ene);
   
   if (index == 1) return softCont;
   return hardCont;
