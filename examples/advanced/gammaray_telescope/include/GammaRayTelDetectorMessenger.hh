@@ -5,11 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelDetectorMessenger.hh,v 1.1 2000-10-05 09:47:58 flongo Exp $
+// $Id: GammaRayTelDetectorMessenger.hh,v 1.2 2000-11-15 20:27:38 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
+// ------------------------------------------------------------
+//      GEANT 4 class header file
+//      CERN Geneva Switzerland
+//
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//
+//      ------------ GammaRayTelDetectorMessenger  ------
+//           by F.Longo, R.Giannitrapani & G.Santin (13 nov 2000)
+//
+// ************************************************************
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -5,10 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelPhysicsList.cc,v 1.1 2000-10-05 09:48:08 flongo Exp $
+// $Id: GammaRayTelPhysicsList.cc,v 1.2 2000-11-15 20:27:41 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+// ------------------------------------------------------------
+//      GEANT 4 class implementation file
+//      CERN Geneva Switzerland
 //
-// 
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//
+//      ------------ GammaRayTelPhysicsList  ------
+//           by R.Giannitrapani, F.Longo & G.Santin (13 nov 2000)
+//
+// ************************************************************
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -28,7 +37,7 @@
 
 GammaRayTelPhysicsList::GammaRayTelPhysicsList():  G4VUserPhysicsList()
 {
-  currentDefaultCut = defaultCutValue = 1.0*mm;
+  currentDefaultCut = defaultCutValue = 0.1*mm;
   cutForGamma       = defaultCutValue;
   cutForElectron    = defaultCutValue;
   cutForProton      = defaultCutValue;
@@ -49,7 +58,7 @@ void GammaRayTelPhysicsList::ConstructParticle()
   // for all particles which you want to use.
   // This ensures that objects of these particle types will be
   // created in the program. 
-
+  
   ConstructBosons();
   ConstructLeptons();
   ConstructMesons();
@@ -277,7 +286,7 @@ G4double  GammaRayTelPhysicsList::GetCutForElectron() const
 
 G4double  GammaRayTelPhysicsList::GetCutForProton() const
 {
-  return cutForGamma;
+  return cutForProton;
 }
 
 

@@ -5,11 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelDetectorConstruction.cc,v 1.1 2000-10-05 09:48:07 flongo Exp $
+// $Id: GammaRayTelDetectorConstruction.cc,v 1.2 2000-11-15 20:27:41 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+// ------------------------------------------------------------
+//      GEANT 4 class implementation file
+//      CERN Geneva Switzerland
 //
-// 
-
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//
+//      ------------ GammaRayTelDetectorConstruction  ------
+//           by F.Longo, R.Giannitrapani & G.Santin (13 nov 2000)
+//
+// ************************************************************
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -17,6 +25,7 @@
 #include "GammaRayTelDetectorMessenger.hh"
 
 #include "GammaRayTelPayloadSD.hh"
+#include "GammaRayTelPayloadROGeometry.hh"
 
 #include "G4Material.hh"
 #include "G4Box.hh"
@@ -37,23 +46,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 GammaRayTelDetectorConstruction::GammaRayTelDetectorConstruction()
-  :solidWorld(NULL),logicWorld(NULL),physiWorld(NULL),
-   solidPayload(NULL),logicPayload(NULL),physiPayload(NULL),
-   solidTKR(NULL),logicTKR(NULL),physiTKR(NULL),
-   solidCAL(NULL),logicCAL(NULL),physiCAL(NULL),
-   solidACT(NULL),logicACT(NULL),physiACT(NULL),
-   solidACL1(NULL),logicACL1(NULL),physiACL1(NULL),
-   solidACL2(NULL),logicACL2(NULL),physiACL2(NULL),
-   solidConverter(NULL),logicConverter(NULL),physiConverter(NULL),
-   solidTKRDetector(NULL),logicTKRDetector(NULL),
-   physiTKRDetectorX(NULL),physiTKRDetectorY(NULL),
-   solidTKRActiveTile(NULL),logicTKRActiveTile(NULL),
-   physiTKRActiveTileX(NULL), physiTKRActiveTileY(NULL),
-   solidTKRStripX(NULL),logicTKRStripX(NULL),physiTKRStripX(NULL),
-   solidTKRStripY(NULL),logicTKRStripY(NULL),physiTKRStripY(NULL),
-   solidCALDetector(NULL),logicCALDetector(NULL),
-   physiCALDetectorX(NULL),physiCALDetectorY(NULL),
-   solidPlane(NULL),logicPlane(NULL),physiPlane(NULL)
+  :solidWorld(0),logicWorld(0),physiWorld(0),
+   solidPayload(0),logicPayload(0),physiPayload(0),
+   solidTKR(0),logicTKR(0),physiTKR(0),
+   solidCAL(0),logicCAL(0),physiCAL(0),
+   solidACT(0),logicACT(0),physiACT(0),
+   solidACL1(0),logicACL1(0),physiACL1(0),
+   solidACL2(0),logicACL2(0),physiACL2(0),
+   solidConverter(0),logicConverter(0),physiConverter(0),
+   solidTKRDetector(0),logicTKRDetector(0),
+   physiTKRDetectorX(0),physiTKRDetectorY(0),
+   solidCALDetector(0),logicCALDetector(0),
+   physiCALDetectorX(0),physiCALDetectorY(0),
+   solidPlane(0),logicPlane(0),physiPlane(0)
 
 {
   // default parameter values of the payload
@@ -61,8 +66,9 @@ GammaRayTelDetectorConstruction::GammaRayTelDetectorConstruction()
   ConverterThickness = 300.*micrometer;
   TKRSiliconThickness = 400.*micrometer;
   TKRSiliconTileXY = 9.*cm;
-  TKRSiliconPitch = 200.*micrometer; // come fare per le strip?
+  TKRSiliconPitch = 200.*micrometer; 
   TKRLayerDistance = 3.*cm;
+  SiliconGuardRing = 1.5*mm;
   TKRViewsDistance = 1.*mm;
   NbOfTKRLayers = 15;
   NbOfTKRTiles = 4;
@@ -77,8 +83,9 @@ GammaRayTelDetectorConstruction::GammaRayTelDetectorConstruction()
 
   ComputePayloadParameters();
 
-  // create commands for interactive definition of the calorimeter  
+  // create commands for interactive definition of the payload
   detectorMessenger = new GammaRayTelDetectorMessenger(this);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -118,7 +125,7 @@ void GammaRayTelDetectorConstruction::DefineMaterials()
 
   a = 14.006*g/mole;
   G4Element* N  = new G4Element(name="Nitrogen"  ,symbol="N" , z= 7., a);
-
+  
   a = 15.99*g/mole;
   G4Element* O  = new G4Element(name="Oxygen"  ,symbol="O" , z= 8., a);
 
@@ -139,7 +146,7 @@ void GammaRayTelDetectorConstruction::DefineMaterials()
   density = 2.333*g/cm3;
   a = 28.09*g/mole;
   G4Material* Si = new G4Material(name="Silicon",z=14., a,density);
-
+  
   density = 19.3*g/cm3;
   a = 183.84*g/mole;
   G4Material* W = new G4Material(name="Tungsten", z=74., a, density);
@@ -194,11 +201,13 @@ void GammaRayTelDetectorConstruction::DefineMaterials()
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
   
   //default materials of the payload
+
   ConverterMaterial = Pb;
   defaultMaterial  = vacuum;
   ACDMaterial = Sci;
   CALMaterial = CsI;
   TKRMaterial = Si;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -211,47 +220,36 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
   //     
   // World
   //
-  solidWorld = new G4Box("World",				     //its name
-			 WorldSizeXY/2,WorldSizeXY/2,WorldSizeZ/2);  //its size
+
+  solidWorld = new G4Box("World",				     
+			 WorldSizeXY/2,WorldSizeXY/2,WorldSizeZ/2);  
   
-  logicWorld = new G4LogicalVolume(solidWorld,		//its solid
-                                   defaultMaterial,	//its material
-                                   "World");		//its name
-                                   
-  physiWorld = new G4PVPlacement(0,			//no rotation
-  				 G4ThreeVector(),	//at (0,0,0)
-                                 "World",		//its name
-                                 logicWorld,		//its logical volume
-                                 NULL,			//its mother  volume
-                                 false,			//no boolean operation
-                                 0);			//copy number
+  logicWorld = new G4LogicalVolume(solidWorld,		
+                                   defaultMaterial,	
+                                   "World");		
+  
+  physiWorld = new G4PVPlacement(0,G4ThreeVector(),"World",logicWorld,
+                                 0,false,0);			
   
   //                               
   // Payload
   //  
-
-  solidPayload=NULL; logicPayload=NULL; physiPayload=NULL;
-  solidTKR=NULL;logicTKR=NULL;physiTKR=NULL;
-  solidCAL=NULL;logicCAL=NULL;physiCAL=NULL;
-  solidACT=NULL;logicACT=NULL;physiACT=NULL;
-  solidACL1=NULL;logicACL1=NULL;physiACL1=NULL; 
-  solidACL2=NULL;logicACL2=NULL;physiACL2=NULL; 
-  solidConverter=NULL;logicConverter=NULL;physiConverter=NULL; 
-  solidTKRDetector=NULL;logicTKRDetector=NULL;
-  physiTKRDetectorX=NULL;physiTKRDetectorY=NULL;
-  solidTKRActiveTile=NULL;logicTKRActiveTile=NULL;
-  physiTKRActiveTileX=NULL;physiTKRActiveTileY=NULL;
-  solidTKRStripX=NULL;logicTKRStripX=NULL;physiTKRStripX=NULL;
-  solidTKRStripY=NULL;logicTKRStripY=NULL;physiTKRStripY=NULL;
-
-  solidCALDetector=NULL;logicCALDetector=NULL;
-  physiCALDetectorX=NULL;physiCALDetectorY=NULL;
-  solidPlane=NULL;logicPlane=NULL;physiPlane=NULL;
+  
+  solidPayload=0; logicPayload=0; physiPayload=0;
+  solidTKR=0;logicTKR=0;physiTKR=0;
+  solidCAL=0;logicCAL=0;physiCAL=0;
+  solidACT=0;logicACT=0;physiACT=0;
+  solidACL1=0;logicACL1=0;physiACL1=0; 
+  solidACL2=0;logicACL2=0;physiACL2=0; 
+  solidConverter=0;logicConverter=0;physiConverter=0; 
+  solidTKRDetector=0;logicTKRDetector=0;
+  physiTKRDetectorX=0;physiTKRDetectorY=0;
+  solidCALDetector=0;logicCALDetector=0;
+  physiCALDetectorX=0;physiCALDetectorY=0;
+  solidPlane=0;logicPlane=0;physiPlane=0;
   
   if (PayloadSizeZ > 0.) 
     { 
-      
-
       //
       // Payload
       //
@@ -277,8 +275,8 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
       //
 
       solidCAL = new G4Box("CAL",			
-                       CALSizeXY/2,CALSizeXY/2,CALSizeZ/2); 
-                       
+			   CALSizeXY/2,CALSizeXY/2,CALSizeZ/2); 
+      
       logicCAL = new G4LogicalVolume(solidCAL,
 				     defaultMaterial,
 				     "CAL");	
@@ -295,8 +293,8 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
       //
 
       solidTKR = new G4Box("TKR",			
-                       TKRSizeXY/2,TKRSizeXY/2,TKRSizeZ/2); 
-                       
+			   TKRSizeXY/2,TKRSizeXY/2,TKRSizeZ/2); 
+      
       logicTKR = new G4LogicalVolume(solidTKR,
 				     defaultMaterial,
 				     "TKR");	
@@ -310,6 +308,7 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 				   false,	
 				   0);	
 
+
       //                               
       // Anticoincidence Top (ACT)
       //
@@ -318,12 +317,12 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 			   ACTSizeXY/2,ACTSizeXY/2,ACTSizeZ/2); 
       
       logicACT = new G4LogicalVolume(solidACT,ACDMaterial,"ACT");
-	
+      
       physiACT = new G4PVPlacement(0,		
 				   G4ThreeVector(0,0,
 						 -PayloadSizeZ/2+CALSizeZ+
                                                  CALTKRDistance+TKRSizeZ+
-                                                 ACDTKRDistance+ACTSizeZ),
+                                                 ACDTKRDistance+ACTSizeZ/2),
 				   "ACT",		
 				   logicACT,
 				   physiPayload,
@@ -335,11 +334,11 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
       //
       
       solidACL1 = new G4Box("ACL1",			
-			   ACL1SizeX/2,ACL1SizeY/2,ACL1SizeZ/2); 
+			    ACL1SizeX/2,ACL1SizeY/2,ACL1SizeZ/2); 
       
       logicACL1 = new G4LogicalVolume(solidACL1,ACDMaterial,"ACL");	
 
-      physiACL1 = new G4PVPlacement(0, // <-- da definire rotation matrix
+      physiACL1 = new G4PVPlacement(0, 
 				    G4ThreeVector(-PayloadSizeXY/2+ACL1SizeX/2,
 						  -PayloadSizeXY/2+ACL1SizeY/2,
 						  -PayloadSizeZ/2+ACL1SizeZ/2),
@@ -349,10 +348,10 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 				    false,	
 				    0);	
 
-      physiACL1 = new G4PVPlacement(0, // <-- da definire rotation matrix
+      physiACL1 = new G4PVPlacement(0,
 				    G4ThreeVector(PayloadSizeXY/2-ACL1SizeX/2,
 						  PayloadSizeXY/2-ACL1SizeY/2,
-						 -PayloadSizeZ/2+ACL1SizeZ/2),
+						  -PayloadSizeZ/2+ACL1SizeZ/2),
 				    "ACL1",		
 				    logicACL1,
 				    physiPayload,
@@ -367,7 +366,7 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 				      "ACL2");	
  
 
-      physiACL2 = new G4PVPlacement(0, // <-- da definire rotation matrix
+      physiACL2 = new G4PVPlacement(0, 
 				    G4ThreeVector(-PayloadSizeXY/2+ACL2SizeX/2,
 						  PayloadSizeXY/2-ACL2SizeY/2,
 						  -PayloadSizeZ/2+ACL2SizeZ/2),
@@ -377,7 +376,7 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 				    false,	
 				    0);	
       
-      physiACL2 = new G4PVPlacement(0, // <-- da definire rotation matrix
+      physiACL2 = new G4PVPlacement(0, 
 				    G4ThreeVector(PayloadSizeXY/2-ACL2SizeX/2,
 						  -PayloadSizeXY/2+ACL2SizeY/2,
 						  -PayloadSizeZ/2+ACL2SizeZ/2),
@@ -386,7 +385,7 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 				    physiPayload,
 				    false,	
 				    1);	
-
+      
       
       // Tracker Structure (Plane + Converter + TKRDetectorX + TKRDetectorY)
       
@@ -396,7 +395,7 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 			     TKRSizeXY/2,TKRSizeXY/2,TKRSupportThickness/2); 
       
       logicPlane = new G4LogicalVolume(solidPlane,
-				       defaultMaterial, // (devo fare le fibre)
+				       defaultMaterial, 
 				       "Plane");	
 
       solidTKRDetector = new G4Box
@@ -413,41 +412,23 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
       logicConverter = new G4LogicalVolume(solidConverter,
 					     ConverterMaterial, 
 					     "Converter");	
-      
+
       G4int i=0;
-      G4double dist = 0;
+      
       for (i = 0; i < NbOfTKRLayers; i++)
 	{
-          G4cout << i << " plane" << G4endl;
-	  dist = -TKRSizeZ/2+TKRSiliconThickness/2 +(i)*TKRLayerDistance;
-	  G4cout << dist/cm << " distance" << G4endl;
-          G4cout << TKRSizeZ/cm << " tracker" << G4endl;
-          G4cout << TKRLayerDistance/cm << " layer" << G4endl;
-
-
+	  
           physiTKRDetectorY = 
-	    new G4PVPlacement(0,G4ThreeVector(0,0,-TKRSizeZ/2
+	    new G4PVPlacement(0,G4ThreeVector(0.,0.,-TKRSizeZ/2
 					      +TKRSiliconThickness/2 
 					      +(i)*TKRLayerDistance),
 			      "TKRDetectorY",		
 			      logicTKRDetector,
 			      physiTKR,
 			      false,	
-			      i);	
-	  
-          physiTKRDetectorX = 
-	    new G4PVPlacement(0,G4ThreeVector(0.,0.,
-					      -TKRSizeZ/2+
-					      TKRSiliconThickness/2 +
-					      TKRViewsDistance+
-					      (i)*TKRLayerDistance),
-			      "TKRDetectorX",		
-			      logicTKRDetector,
-			      physiTKR,
-			      false,	
-			      i);	
-
-          physiTKRDetectorX = 
+			      i);
+	
+	  physiTKRDetectorX = 
 	    new G4PVPlacement(0,G4ThreeVector(0.,0.,
 					      -TKRSizeZ/2+
 					      TKRSiliconThickness/2 +
@@ -459,6 +440,8 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 			      physiTKR,
 			      false,	
 			      i);
+
+
           physiConverter = 
 	    new G4PVPlacement(0,G4ThreeVector(0.,0.,
 					      -TKRSizeZ/2+
@@ -471,7 +454,7 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 			      physiTKR,
 			      false,	
 			      i);
-
+	  
 
 	  physiPlane =
 	    new G4PVPlacement(0,G4ThreeVector(0.,0.,
@@ -486,126 +469,22 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 			      false,	
 			      i);	
 	  
-
+	  
 	}
-      
-      solidTKRActiveTile = new G4Box("Active Tile",			
-				     TKRActiveTileXY/2,TKRActiveTileXY/2,
-				     TKRActiveTileZ/2); 
-      
-      logicTKRActiveTile = new G4LogicalVolume(solidTKRActiveTile,
-					       TKRMaterial, 
-					       "Active Tile");	
-
-      G4int j=0;
-      G4int k=0;
-
-      for (i=0;i< NbOfTKRTiles; i++)
-	{ 
-	  for (j=0;j< NbOfTKRTiles; j++)
-            {
-              k = i*NbOfTKRTiles + j;
-	      physiTKRActiveTileX =
-		new G4PVPlacement(0,
-				  G4ThreeVector(-TKRSizeXY/2+TilesSeparation+
-						SiliconGuardRing+
-						TKRActiveTileXY/2+
-						(j)*((2*SiliconGuardRing)+
-						     TilesSeparation+
-						     TKRActiveTileXY),
-						-TKRSizeXY/2+TilesSeparation+
-						SiliconGuardRing+
-						TKRActiveTileXY/2+
-						(i)*((2*SiliconGuardRing)+
-						     TilesSeparation+
-						     TKRActiveTileXY),
-						0.),
-			      "Active Tile X",		
-			      logicTKRActiveTile,
-			      physiTKRDetectorX,
-			      false,	
-			      k);	
-    
-	      physiTKRActiveTileY =
-		new G4PVPlacement(0,
-				  G4ThreeVector(-TKRSizeXY/2+TilesSeparation+
-						SiliconGuardRing+
-						TKRActiveTileXY/2+
-						(j)*((2*SiliconGuardRing)+
-						     TilesSeparation+
-						     TKRActiveTileXY),
-						-TKRSizeXY/2+TilesSeparation+
-						SiliconGuardRing+
-						TKRActiveTileXY/2+
-						(i)*((2*SiliconGuardRing)+
-						     TilesSeparation+
-						     TKRActiveTileXY),
-						0.),
-			      "Active Tile Y",		
-			      logicTKRActiveTile,
-			      physiTKRDetectorY,
-			      false,	
-			      k);	
-	    }
-	}
-
-
-
-      solidTKRStripX = new G4Box("Strip X",			
-				     TKRXStripX/2,TKRYStripX/2,
-				     TKRZStrip/2); 
-      
-      logicTKRStripX = new G4LogicalVolume(solidTKRStripX,
-					       TKRMaterial, 
-					       "Strip X");	
-
-      physiTKRStripX = new G4PVReplica("Strip X",       
-                                     logicTKRStripX,       
-                                     physiTKRActiveTileX,  
-                                     kXAxis,            
-                                     NbOfTKRStrips,
-                                     TKRXStripX); 
-
-      solidTKRStripY = new G4Box("Strip Y",			
-				     TKRXStripY/2,TKRYStripY/2,
-				     TKRZStrip/2); 
-      
-      logicTKRStripY = new G4LogicalVolume(solidTKRStripY,
-					       TKRMaterial, 
-					       "Strip Y");	
-
-      physiTKRStripY = new G4PVReplica("Strip Y",       
-                                     logicTKRStripY,       
-                                     physiTKRActiveTileY,  
-                                     kYAxis,            
-                                     NbOfTKRStrips,
-                                     TKRYStripY); 
-
+  
       // Calorimeter Structure (CALDetectorX + CALDetectorY)
       
-   
+      
       solidCALDetector = new G4Box("CALDetector",			
 			     CALSizeXY/2,CALSizeXY/2,CALBarThickness/2); 
       
-      logicCALDetector = new G4LogicalVolume(solidPlane,
+      logicCALDetector = new G4LogicalVolume(solidCALDetector,
 					     CALMaterial, 
 					     "CALDetector");	
       
-      
-      G4double dist1 = 0;
-      G4double dist2 = 0;
-
       for (i = 0; i < NbOfCALLayers; i++)
 	{
 	  
-	  
-          dist1 = -CALSizeZ/2+CALBarThickness/2+(i)*2*CALBarThickness;
-          dist2 = -CALSizeZ/2+CALBarThickness/2+(i)*2*CALBarThickness+                           CALBarThickness;
- 
-          G4cout << dist1/mm << "Distanza 1" << G4endl;
-          G4cout << dist2/mm << "Distanza 2" << G4endl;
-          G4cout << CALSizeZ/mm << "Distanza CAL" << G4endl;
-
 	  physiCALDetectorY = 
 	    new G4PVPlacement(0,G4ThreeVector(0,0,
 					      -CALSizeZ/2+
@@ -634,10 +513,11 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 
     }
 
+
   //                               
-  // Sensitive Detectors: TKRDetector CALDetector ACT ACL1 ACL2
+  // Sensitive Detectors: TKRDetector
   //
-  
+
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   
   if(!payloadSD)
@@ -646,33 +526,47 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
       SDman->AddNewDetector( payloadSD );
     }
 
-  //  if (logicTKRDetector)
-  //  logicTKRDetector->SetSensitiveDetector(payloadSD);
 
-  if (logicTKRStripX)
-    logicTKRStripX->SetSensitiveDetector(payloadSD);
-  if (logicTKRStripY)
-    logicTKRStripY->SetSensitiveDetector(payloadSD);
+  G4String ROgeometryName = "PayloadROGeom";
+  G4VReadOutGeometry* payloadRO = 
+    new GammaRayTelPayloadROGeometry(ROgeometryName, this);
+  payloadRO->BuildROGeometry();
+  payloadSD->SetROgeometry(payloadRO);
+  SDman->AddNewDetector( payloadSD );
+  
+  if (logicTKRDetector)
+    logicTKRDetector->SetSensitiveDetector(payloadSD); // sensitive planes  
 
-  /*
-  if (logicCALDetector)
-    logicCALDetector->SetSensitiveDetector(payloadSD);
-  
-  if (logicACT)
-    logicACT->SetSensitiveDetector(payloadSD);
-  if (logicACL1)
-    logicACL1->SetSensitiveDetector(payloadSD);
-  if (logicACL2)
-    logicACL2->SetSensitiveDetector(payloadSD);
-  */
-  
+
   //                                        
   // Visualization attributes
   //
   logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
-  G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  simpleBoxVisAtt->SetVisibility(true);
-  logicPayload->SetVisAttributes(simpleBoxVisAtt);
+  logicPayload->SetVisAttributes(G4VisAttributes::Invisible);  
+  logicTKR->SetVisAttributes(G4VisAttributes::Invisible);  
+  logicCALDetector->SetVisAttributes(G4VisAttributes::Invisible);  
+  logicTKRDetector->SetVisAttributes(G4VisAttributes::Invisible);  
+  logicPlane->SetVisAttributes(G4VisAttributes::Invisible);  
+  logicConverter->SetVisAttributes(G4VisAttributes::Invisible);
+  
+  G4VisAttributes* VisAtt1= new G4VisAttributes(G4Colour(0.3,0.8,0.1));
+  VisAtt1->SetVisibility(true);
+  VisAtt1->SetForceSolid(TRUE);
+
+  G4VisAttributes* VisAtt2= new G4VisAttributes(G4Colour(0.2,0.3,0.8));
+  VisAtt2->SetVisibility(true);
+  VisAtt2->SetForceSolid(FALSE);
+
+  G4VisAttributes* VisAtt3= new G4VisAttributes(G4Colour(0.8,0.2,0.3));
+  VisAtt3->SetVisibility(true);
+  VisAtt3->SetForceWireframe(TRUE);
+
+  logicCAL->SetVisAttributes(VisAtt1);
+  logicTKRDetector->SetVisAttributes(VisAtt2);
+  logicACT->SetVisAttributes(VisAtt3);  
+  logicACL1->SetVisAttributes(VisAtt3);  
+  logicACL2->SetVisAttributes(VisAtt3);  
+
   
   //
   //always return the physical World
@@ -791,7 +685,7 @@ void GammaRayTelDetectorConstruction::SetMagField(G4double fieldValue)
     fieldMgr->SetDetectorField(magField);
     fieldMgr->CreateChordFinder(magField);
     } else {
-      magField = NULL;
+      magField = 0;
       fieldMgr->SetDetectorField(magField);
     }
 }
@@ -800,10 +694,16 @@ void GammaRayTelDetectorConstruction::SetMagField(G4double fieldValue)
   
 void GammaRayTelDetectorConstruction::UpdateGeometry()
 {
+  //  delete payloadSD;
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructPayload());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+
+
 
 
 

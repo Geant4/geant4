@@ -5,13 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelDetectorMessenger.cc,v 1.1 2000-10-05 09:48:07 flongo Exp $
+// $Id: GammaRayTelDetectorMessenger.cc,v 1.2 2000-11-15 20:27:41 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// ------------------------------------------------------------
+//      GEANT 4 class implementation file
+//      CERN Geneva Switzerland
+//
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//
+//      ------------ GammaRayTelDetectorMessenger ------
+//           by F.Longo, R.Giannitrapani & G.Santin (13 nov 2000)
+//
+// ************************************************************
 
 #include "GammaRayTelDetectorMessenger.hh"
 
@@ -67,7 +74,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   SiliconPitchCmd->SetRange("Size>=0."); 
   SiliconPitchCmd->SetUnitCategory("Length");
   SiliconPitchCmd->AvailableForStates(Idle);
-
+  
   // tracker silicon tile size command
   
   SiliconTileXYCmd = new G4UIcmdWithADoubleAndUnit
@@ -149,7 +156,7 @@ GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorCo
   ACDThickCmd->SetRange("Size>=0.");
   ACDThickCmd->SetUnitCategory("Length");  
   ACDThickCmd->AvailableForStates(Idle);
-
+  
   // update Payload
 
   UpdateCmd = new G4UIcmdWithoutParameter("/payload/update",this);
@@ -242,3 +249,9 @@ void GammaRayTelDetectorMessenger::SetNewValue(G4UIcommand* command,G4String new
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+
+
+

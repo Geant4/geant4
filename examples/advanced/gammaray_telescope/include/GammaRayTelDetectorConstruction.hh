@@ -5,13 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelDetectorConstruction.hh,v 1.1 2000-10-05 09:47:58 flongo Exp $
+// $Id: GammaRayTelDetectorConstruction.hh,v 1.2 2000-11-15 20:27:38 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+// ------------------------------------------------------------
+//      GEANT 4 class header file
+//      CERN Geneva Switzerland
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//
+//      ------------ GammaRayTelDetectorConstruction  ------
+//           by F.Longo, R.Giannitrapani & G.Santin (13 nov 2000)
+//
+// ************************************************************
 
 #ifndef GammaRayTelDetectorConstruction_h
 #define GammaRayTelDetectorConstruction_h 1
@@ -31,20 +37,19 @@ class GammaRayTelPayloadSD;
 
 class GammaRayTelDetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
+public:
   
-    GammaRayTelDetectorConstruction();
-   ~GammaRayTelDetectorConstruction();
-
-  public:
-
-
+  GammaRayTelDetectorConstruction();
+  ~GammaRayTelDetectorConstruction();
+  
+public:
+  
   void SetNbOfTKRLayers (G4int); // TKR number of layers, material, detector
   void SetTKRTileSizeXY (G4double);
   void SetNbOfTKRTiles (G4int);
   void SetTKRSiliconThickness(G4double);
   void SetTKRSiliconPitch(G4double);
-
+  
   void SetTKRLayerDistance (G4double);
   void SetTKRViewsDistance (G4double);
 
@@ -62,53 +67,49 @@ class GammaRayTelDetectorConstruction : public G4VUserDetectorConstruction
      
   G4VPhysicalVolume* Construct();
   void UpdateGeometry();
-     
-  public:
+  
+public:
   
   void PrintPayloadParameters();
                     
 
-  G4double GetWorldSizeZ()           {return WorldSizeZ;}; 
-  G4double GetWorldSizeXY()          {return WorldSizeXY;};
-
+  G4double GetWorldSizeZ()             {return WorldSizeZ;}; 
+  G4double GetWorldSizeXY()            {return WorldSizeXY;};
+  
   G4double GetPayloadSizeZ()           {return PayloadSizeZ;}; 
   G4double GetPayloadSizeXY()          {return PayloadSizeXY;};
 
+  G4double GetTKRSizeZ()               {return TKRSizeZ;}; 
+  G4double GetTKRSizeXY()              {return TKRSizeXY;};
+
+  G4double GetCALSizeZ()               {return CALSizeZ;}; 
+  G4double GetCALTKRDistance()         {return CALTKRDistance;}; 
      
   G4double GetTKRSiliconThickness()    {return TKRSiliconThickness;}; 
   G4double GetTKRSiliconTileXY()       {return TKRSiliconTileXY;}; 
   G4double GetTKRSiliconPitch()        {return TKRSiliconPitch;}; 
   G4int    GetNbOfTKRLayers()          {return NbOfTKRLayers;}; 
   G4int    GetNbOfTKRTiles()           {return NbOfTKRTiles;}; 
-  G4int    GetNbOfStrips()           {return NbOfTKRStrips;}; 
-  G4double GetTKRLayerDistance()         {return TKRLayerDistance;};
-  G4double GetTKRViewsDistance()         {return TKRViewsDistance;};
+  G4int    GetNbOfTKRStrips()          {return NbOfTKRStrips;}; 
+  G4double GetTKRLayerDistance()       {return TKRLayerDistance;};
+  G4double GetTKRViewsDistance()       {return TKRViewsDistance;};
 
+  G4double GetTKRActiveTileXY()        {return TKRActiveTileXY;};
+  G4double GetTKRActiveTileZ()         {return TKRActiveTileZ;};
+  G4double GetSiliconGuardRing()       {return SiliconGuardRing;}
+  G4double GetTilesSeparation()        {return TilesSeparation;};
+  
   G4Material* GetConverterMaterial()   {return ConverterMaterial;};
   G4double    GetConverterThickness()  {return ConverterThickness;};      
-
-  G4double GetCALBarThickness()     {return CALBarThickness;};
-  G4int GetNbOfCALLayers()          {return NbOfCALLayers;}; 
-  G4int GetNbOfCALBars()            {return NbOfCALBars;}; 
   
-  G4double GetACDThickness()     {return ACDThickness;};
+  G4double GetCALBarThickness()        {return CALBarThickness;};
+  G4int GetNbOfCALLayers()             {return NbOfCALLayers;}; 
+  G4int GetNbOfCALBars()               {return NbOfCALBars;}; 
   
-  const G4VPhysicalVolume* GetphysiWorld()  {return physiWorld;};           
-
-  const G4VPhysicalVolume* GetTKRDetectorX() {return physiTKRDetectorX;};
-  const G4VPhysicalVolume* GetTKRDetectorY() {return physiTKRDetectorY;};
-
-  const G4VPhysicalVolume* GetTKRStripX() {return physiTKRStripX;};
-  const G4VPhysicalVolume* GetTKRStripY() {return physiTKRStripY;};
-
-  const G4VPhysicalVolume* GetCALDetectorX() {return physiCALDetectorX;};
-  const G4VPhysicalVolume* GetCALDetectorY() {return physiCALDetectorY;};
-
-  const G4VPhysicalVolume* GetACT() {return physiACT;};
-  const G4VPhysicalVolume* GetACL1() {return physiACL1;};
-  const G4VPhysicalVolume* GetACL2() {return physiACL2;};
+  G4double GetACDThickness()           {return ACDThickness;};
+  
               
-  private:
+private:
   
   G4Material*        ConverterMaterial;
   G4double           ConverterThickness;
@@ -204,19 +205,6 @@ class GammaRayTelDetectorConstruction : public G4VUserDetectorConstruction
   G4VPhysicalVolume* physiTKRDetectorX;    
   G4VPhysicalVolume* physiTKRDetectorY;    
 
-  G4Box*             solidTKRActiveTile;      // Tracker Tile
-  G4LogicalVolume*   logicTKRActiveTile;
-  G4VPhysicalVolume* physiTKRActiveTileX;
-  G4VPhysicalVolume* physiTKRActiveTileY;
-
-  G4Box*             solidTKRStripX;      // Tracker Strip X
-  G4LogicalVolume*   logicTKRStripX;
-  G4VPhysicalVolume* physiTKRStripX;
-
-  G4Box*             solidTKRStripY;      // Tracker Strip Y
-  G4LogicalVolume*   logicTKRStripY;
-  G4VPhysicalVolume* physiTKRStripY;
-
   G4Box*             solidCALDetector;  // Calorimeter PLANE 
   G4LogicalVolume*   logicCALDetector;
 
@@ -236,11 +224,11 @@ class GammaRayTelDetectorConstruction : public G4VUserDetectorConstruction
   GammaRayTelDetectorMessenger* detectorMessenger;  //pointer to the Messenger
   GammaRayTelPayloadSD* payloadSD;  //pointer to the sensitive detector
   
-  private:
+private:
     
-     void DefineMaterials();
-     void ComputePayloadParameters();
-     G4VPhysicalVolume* ConstructPayload();     
+  void DefineMaterials();
+  void ComputePayloadParameters();
+  G4VPhysicalVolume* ConstructPayload();     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -254,14 +242,12 @@ inline void GammaRayTelDetectorConstruction::ComputePayloadParameters()
   TKRSizeXY = NbOfTKRTiles*TKRSiliconTileXY + (NbOfTKRTiles+1)*TilesSeparation;
   TKRSizeZ = NbOfTKRLayers*TKRLayerDistance; 
   
-  SiliconGuardRing = 1.5*mm;
   TKRActiveTileXY = TKRSiliconTileXY - 2*SiliconGuardRing;
   TKRActiveTileZ = TKRSiliconThickness;
   NbOfTKRStrips = G4int(TKRActiveTileXY/TKRSiliconPitch);
 
   SiliconGuardRing = TKRActiveTileXY - NbOfTKRStrips*TKRSiliconPitch;
   TKRActiveTileXY = TKRSiliconTileXY - 2*SiliconGuardRing;
-  G4cout << "TKR Guard Ring" << SiliconGuardRing/mm << G4endl;
 
   TKRXStripX = TKRYStripY = TKRSiliconPitch;
   TKRYStripX = TKRXStripY = TKRActiveTileXY;

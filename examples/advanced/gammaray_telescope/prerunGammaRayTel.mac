@@ -1,5 +1,5 @@
-#
-# Macro file for the initialization phase of "exampleN03.cc"
+# Macro file for the initialization phase of the
+# GammaRayTel
 #
 # Sets some default verbose
 # and initializes the graphic.
@@ -7,30 +7,11 @@
 /control/verbose 2
 /control/saveHistory
 /run/verbose 2
-#
-# Create empty scene ("world" is default)
-/vis/scene/create
-#
-# Add volume to scene
-/vis/scene/add/volume
-#
-# Create a scene handler for a specific graphics system
-# Edit the next line(s) to choose another graphic system
-#
-#/vis/sceneHandler/create DAWNFILE
-/vis/sceneHandler/create OGLIX
-#
-# Create a viewer
-/vis/viewer/create
-#
-# Draw scene
-/vis/scene/notifyHandlers
-#
-# for drawing the tracks
-# if too many tracks cause core dump => storeTrajectory 0
-/tracking/storeTrajectory 1
-#/vis/scene/include/trajectories
-#
-# Flush visualization
-/vis/viewer/update
+/gun/particle gamma
+/gun/energy 1 GeV
+/gun/vertexRadius 25. cm
+/gun/sourceType 2
+
+
+
 

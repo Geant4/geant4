@@ -1,9 +1,31 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: GammaRayTelPayloadSD.cc,v 1.2 2000-11-15 20:27:41 flongo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+// ------------------------------------------------------------
+//      GEANT 4 class implementation file
+//      CERN Geneva Switzerland
+//
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//
+//      ------------ GammaRayTelPayloadSD  ------
+//           by  R.Giannitrapani, F.Longo & G.Santin (13 nov 2000)
+//
+// ************************************************************
+
 #include "GammaRayTelPayloadSD.hh"
 
 #include "GammaRayTelPayloadHit.hh"
 #include "GammaRayTelDetectorConstruction.hh"
 
 #include "G4VPhysicalVolume.hh"
+
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
@@ -37,75 +59,87 @@ void GammaRayTelPayloadSD::Initialize(G4HCofThisEvent*HCE)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
-{
-  G4double edep = aStep->GetTotalEnergyDeposit();
+{ 
   
-  if ((edep==0.)) return false;      
+  G4double edep = aStep->GetTotalEnergyDeposit();
+  if ((edep/keV == 0.)) return false;      
+  
+  G4int StripTotal = Detector->GetNbOfTKRStrips();
+  G4int TileTotal  = Detector->GetNbOfTKRTiles();  
 
   // This TouchableHistory is used to obtain the physical volume
   // of the hit
+
   G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
-
-  // G4VPhysicalVolume* strip = ROhist->GetVolume(); 
-  G4VPhysicalVolume* strip = theTouchable->GetVolume(); 
   
-  G4int StripTotal = Detector->GetNbOfStrips();
-  G4int TileTotal  = Detector->GetNbOfTKRTiles();
-
-  G4int StripNumber = 0;
   G4int PlaneNumber = 0;
-  StripNumber = theTouchable->GetReplicaNumber(1); // numero della strip
-  G4String nome;
-  nome = strip->GetName();
-  G4cout << " Numero Strip = " << StripNumber <<G4endl;
-
-  theTouchable->MoveUpHistory();
-  // G4VPhysicalVolume* tile = ROhist->GetVolume(); // mattonella
-  G4VPhysicalVolume* tile = theTouchable->GetVolume(); 
-  G4int numero = tile->GetCopyNo(); // (da 0 a (NbOfTKRTiles*NbOfTKRTiles)-1)
-  nome = tile->GetName();  
-  G4int NumeroTile = (numero%TileTotal); // ritorna modulo  
-
-  G4cout << " Numero Tile = " << NumeroTile <<G4endl;
-
-  G4int j=0;
-  for (j=0;j<TileTotal;j++)
-    { 
-      if(NumeroTile==j)StripNumber += StripTotal*NumeroTile;
-    }  
-  G4cout << " Numero Strip (2) = " << StripNumber <<G4endl;
-  
-  theTouchable->MoveUpHistory();
-  // ROhist->MoveUpHistory();
-  // G4VPhysicalVolume* plane = ROhist->GetVolume(); // piano
   G4VPhysicalVolume* plane = theTouchable->GetVolume(); 
   PlaneNumber=plane->GetCopyNo();
-  nome = plane->GetName();
-  G4cout << " Numero Piano = " << PlaneNumber <<G4endl;
-     
+  G4String PlaneName = plane->GetName();
+
+  //  G4cout << " Plane Number = " << PlaneNumber << PlaneName << G4endl;
   
+
+  // The RO History is used to obtain the real strip
+  // of the hit
+  // some problems with the RO tree
+
+  /*  G4int StripNumber = 0;
+      G4VPhysicalVolume* strip = 0;
+      strip = ROhist->GetVolume();
+      
+      G4String StripName = strip->GetName();
+      StripNumber= strip->GetCopyNo();  
+  
+      //G4cout << StripName << " " << StripNumber << G4endl;
+      
+      
+      ROhist->MoveUpHistory();
+      G4VPhysicalVolume* tile = ROhist->GetVolume(); 
+      G4int TileNumber = tile->GetCopyNo();  
+      G4String TileName = tile->GetName();   
+      //G4cout << " Tile Number = " << TileNumber << TileName << G4endl;
+  
+      G4int NTile = (TileNumber%TileTotal);  
+      G4int j=0;
+      
+      for (j=0;j<TileTotal;j++)
+      { 
+      if(NTile==j) StripNumber += StripTotal*NTile;
+      }  
+      
+      ROhist->MoveUpHistory();
+
+  */
+
+  G4VPhysicalVolume* ROPlane = ROhist->GetVolume(); 
+  G4int ROPlaneNumber = ROPlane->GetCopyNo();
+  G4String ROPlaneName = ROPlane->GetName();   
+  //G4cout << " Number ROPlane = " << ROPlaneNumber << ROPlaneName << G4endl;
+  
+
   // The hit is on an X silicon plane
-  if (nome == "TKRDetectorX" )
+  if (PlaneName == "TKRDetectorX" )
     { 
       GammaRayTelPayloadHit* PayloadHit = new GammaRayTelPayloadHit();
       PayloadHit->SetPlaneType(1);
       PayloadHit->AddSil(edep);
       PayloadHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
-      PayloadHit->SetNStrip(StripNumber);
       PayloadHit->SetNSilPlane(PlaneNumber);
+      // PayloadHit->SetNStrip(StripNumber);
       PayloadCollection->insert(PayloadHit);
     }
   
   // The hit is on an Y silicon plane
-  if (nome == "TKRDetectorY")
+  if (PlaneName == "TKRDetectorY")
     { 
       GammaRayTelPayloadHit* PayloadHit = new GammaRayTelPayloadHit();
       PayloadHit->SetPlaneType(0);
       PayloadHit->AddSil(edep);
       PayloadHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
-      PayloadHit->SetNStrip(StripNumber);
       PayloadHit->SetNSilPlane(PlaneNumber);
+      //PayloadHit->SetNStrip(StripNumber);
       PayloadCollection->insert(PayloadHit);
     }
   
@@ -119,7 +153,9 @@ void GammaRayTelPayloadSD::EndOfEvent(G4HCofThisEvent* HCE)
 {
   static G4int HCID = -1;
   if(HCID<0)
-  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
+    { 
+      HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
+    }
   HCE->AddHitsCollection(HCID,PayloadCollection);
 }
 
@@ -139,6 +175,7 @@ void GammaRayTelPayloadSD::PrintAll()
 {} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 
 

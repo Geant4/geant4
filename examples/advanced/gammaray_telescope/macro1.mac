@@ -1,0 +1,54 @@
+# ----------------------------------------------
+# Example macro file for the GammaRayTel
+# Visualization with OpenGL 
+# ----------------------------------------------
+# Authors: R.Giannitrapani, F.Longo and G.Santin 
+# ----------------------------------------------
+
+#
+# Sets some default verbose
+# and initializes the graphic.
+#
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+
+# You can modify the geometry of the telescope via a messenger
+#/payload/setNbOfTKRLayers 15
+#/payload/update
+
+#
+# Create empty scene ("world" is default)
+/vis/scene/create
+
+#
+# Add volume to scene
+/vis/scene/add/volume
+
+#
+# Create a scene handler for a specific graphics system
+/vis/sceneHandler/create OGLSX
+
+# Create a viewer
+/vis/viewer/create
+
+# Positioning of the camera
+/vis/camera/viewpoint 30 30 
+
+# for drawing the tracks
+# if too many tracks cause core dump => storeTrajectory 0
+/tracking/storeTrajectory 1
+#/vis/scene/include/trajectories
+#
+# Flush visualization
+/vis/viewer/update
+
+#
+# Draw scene
+/vis/scene/notifyHandlers
+
+
+
+
+
+
