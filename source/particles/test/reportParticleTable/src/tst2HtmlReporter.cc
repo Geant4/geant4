@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tst2HtmlReporter.cc,v 1.5 2001-07-11 10:02:11 gunter Exp $
+// $Id: tst2HtmlReporter.cc,v 1.6 2001-10-25 05:30:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,9 +35,9 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4DecayTable.hh"  
-#include "g4std/fstream"
-#include "g4std/iomanip"
-#include "g4rw/ctoken.h"
+#include "G4Tokenizer.hh"
+#include "g4std/iomanip"               
+#include "g4std/strstream"
 
  tst2HtmlReporter::tst2HtmlReporter():tst2VParticleReporter()
 {

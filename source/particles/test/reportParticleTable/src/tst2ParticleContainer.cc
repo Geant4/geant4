@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tst2ParticleContainer.cc,v 1.3 2001-07-11 10:02:12 gunter Exp $
+// $Id: tst2ParticleContainer.cc,v 1.4 2001-10-25 05:30:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,29 +41,39 @@
 
  tst2ParticleContainer::~tst2ParticleContainer()
 {
-  pVector->clearAndDestroy();
+  tst2ContainerElement* a;
+  while (pVector->size()>0) {
+    a = pVector->back();
+    pVector->pop_back();
+    if ( a )  delete a;    
+  } 
   delete pVector;
 }    
 
   tst2ParticleContainer::tst2ParticleContainer(const tst2ParticleContainer & right)
 {
-	pVector = new tst2ParticleVector;
-	for (G4int i=0; i< right.entries(); i++) {
-	  tst2ContainerElement* element =  new tst2ContainerElement( right.GetParticle(i), right.GetEncoding(i) );
-      pVector->insert(element);
-
-    }
+  pVector = new tst2ParticleVector;
+  for (G4int i=0; i< right.entries(); i++) {
+    tst2ContainerElement* element =  new tst2ContainerElement( right.GetParticle(i), right.GetEncoding(i) );
+    pVector->push_back(element);
+    
+  }
 }
 
  tst2ParticleContainer & tst2ParticleContainer::operator=(const tst2ParticleContainer & right)
 {
   if (this != &right) { 
-    pVector->clearAndDestroy();
+    tst2ContainerElement* a;
+    while (pVector->size()>0) {
+      a = pVector->back();
+      pVector->pop_back();
+      if ( a )  delete a;    
+    } 
     delete pVector;
-	pVector = new tst2ParticleVector;
-	for (G4int i=0; i< right.entries(); i++) {
-	  tst2ContainerElement* element =  new tst2ContainerElement( right.GetParticle(i), right.GetEncoding(i) );
-      pVector->insert(element);
+    pVector = new tst2ParticleVector;
+    for (G4int i=0; i< right.entries(); i++) {
+      tst2ContainerElement* element =  new tst2ContainerElement( right.GetParticle(i), right.GetEncoding(i) );
+      pVector->push_back(element);
     }
   }
   return *this;
@@ -78,7 +88,7 @@ G4int  tst2ParticleContainer::Insert( G4ParticleDefinition * particle){
   if (encoding <0) return 0;
 
   tst2ContainerElement* element =  new tst2ContainerElement(particle, encoding);
-  pVector->insert(element);
+  pVector->push_back(element);
  
   return 1;
 }
@@ -94,4 +104,5 @@ G4int  tst2ParticleContainer::Insert( G4ParticleDefinition * particle){
 
   return pTable->FindParticle(p->GetAntiPDGEncoding());
 }
+
 

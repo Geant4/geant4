@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tst2ParticleContainer.hh,v 1.4 2001-07-11 10:02:11 gunter Exp $
+// $Id: tst2ParticleContainer.hh,v 1.5 2001-10-25 05:30:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4rw/tpsrtvec.h"
+#include "g4std/vector"
 
 #include "tst2ContainerElement.hh"
 
@@ -46,7 +46,7 @@
 class tst2ParticleContainer
 {
  public:
-   typedef G4RWTPtrSortedVector<tst2ContainerElement> tst2ParticleVector;
+   typedef G4std::vector<tst2ContainerElement*> tst2ParticleVector;
 
  public:
   //constructors
@@ -85,7 +85,7 @@ class tst2ParticleContainer
 inline     
  G4int tst2ParticleContainer::entries() const
 {
-  return pVector->entries();
+  return pVector->size();
 }
 
 inline     
@@ -94,7 +94,7 @@ inline
   G4ParticleDefinition* p;
   p= 0;
   if ( (index>=0) && (index<entries()) ){
-    p = ((*pVector)(index))->particle;
+    p = ((*pVector)[index])->particle;
   }
   return p;
 }
@@ -104,7 +104,7 @@ inline
 {
   G4int code = -1;
   if ( (index>=0) && (index<entries()) ){
-    code = ((*pVector)(index))->encoding;
+    code = ((*pVector)[index])->encoding;
   }
   return code;
 }
@@ -112,3 +112,6 @@ inline
 
 
 #endif
+
+
+

@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tst2ParticleConstructor.cc,v 1.4 2001-07-11 10:02:12 gunter Exp $
+// $Id: tst2ParticleConstructor.cc,v 1.5 2001-10-25 05:30:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@
 void tst2ParticleConstructor::ConstructAllBosons()
 {
   // Construct all bosons
+  G4cout << "Bosons" << G4endl;
   G4BosonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
@@ -51,6 +52,7 @@ void tst2ParticleConstructor::ConstructAllBosons()
 void tst2ParticleConstructor::ConstructAllLeptons()
 {
   // Construct all leptons
+  G4cout << "Leptons" << G4endl;
   G4LeptonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
@@ -58,6 +60,7 @@ void tst2ParticleConstructor::ConstructAllLeptons()
 void tst2ParticleConstructor::ConstructAllMesons()
 {
   //  Construct all mesons
+  G4cout << "Leptons" << G4endl;
   G4MesonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
@@ -65,6 +68,7 @@ void tst2ParticleConstructor::ConstructAllMesons()
 void tst2ParticleConstructor::ConstructAllBaryons()
 {
   //  Construct all barions
+  G4cout << "Baryons" << G4endl;
   G4BaryonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
@@ -72,6 +76,7 @@ void tst2ParticleConstructor::ConstructAllBaryons()
 void tst2ParticleConstructor::ConstructAllIons()
 {
   //  Construct light ions
+  G4cout << "Ions" << G4endl;
   G4IonConstructor pConstructor;
   pConstructor.ConstructParticle();  
 }
@@ -79,6 +84,7 @@ void tst2ParticleConstructor::ConstructAllIons()
 void tst2ParticleConstructor::ConstructAllShortLiveds()
 {
   //  Construct  resonaces and quarks
+  G4cout << "Shortlived particles" << G4endl;
   G4ShortLivedConstructor pConstructor;
   pConstructor.ConstructParticle();  
 }
