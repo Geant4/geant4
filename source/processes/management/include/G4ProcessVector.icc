@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessVector.icc,v 1.3 2001-07-11 10:08:18 gunter Exp $
+// $Id: G4ProcessVector.icc,v 1.4 2001-09-19 10:54:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 inline G4bool G4ProcessVector::operator==(const G4ProcessVector &right) const
@@ -30,6 +30,11 @@ inline G4bool G4ProcessVector::operator==(const G4ProcessVector &right) const
 }
 
 inline G4int G4ProcessVector::entries() const
+{
+  return pProcVector->size();
+}
+
+inline G4int G4ProcessVector::size() const
 {
   return pProcVector->size();
 }

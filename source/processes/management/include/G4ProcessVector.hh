@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessVector.hh,v 1.7 2001-07-11 10:08:17 gunter Exp $
+// $Id: G4ProcessVector.hh,v 1.8 2001-09-19 10:54:47 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,6 +61,7 @@ class G4ProcessVector
     // Returns the number of items
     G4int entries() const;
     G4int length() const;
+    G4int size() const;
     
     // Returns the position of the element
     G4int index(G4VProcess* aProcess) const;

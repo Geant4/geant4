@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2001-09-19 08:42:39 kurasige Exp $
+$Id: History,v 1.22 2001-09-19 10:54:47 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-- Sep. 20, 2001  H.Kurashige (procman-V03-02-02)
+- Sep. 20, 2001  H.Kurashige (procman-V03-02-03)
+- Modify for STL migration for materials
+
+- Sep. 19, 2001  H.Kurashige (procman-V03-02-02)
 - Add Set/GetProcessManager to G4VProcess and modify 
   G4ProcessManager::AddProcess to invoke SetProcessManager 
 
