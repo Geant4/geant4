@@ -36,16 +36,16 @@ class Tst14ProcCallSA{
      void print();
           
   private:
-     typedef G4std::map<G4String, G4int, less<G4String> > intMap;
-     typedef G4std::map<G4String, G4int, less<G4String> >::iterator intMapIter;
+     typedef G4std::map<G4String, G4int, G4std::less<G4String> > intMap;
+     typedef G4std::map<G4String, G4int, G4std::less<G4String> >::iterator intMapIter;
      intMap calls;  
     
      
 #ifdef histo
 private:
 
-  typedef G4std::map<G4String, HepHistogram*, less<G4String> > histoMap;
-  typedef G4std::map<G4String, HepHistogram*, less<G4String> >::iterator histoMapIter;
+  typedef G4std::map<G4String, HepHistogram*, G4std::less<G4String> > histoMap;
+  typedef G4std::map<G4String, HepHistogram*, G4std::less<G4String> >::iterator histoMapIter;
   HepTupleManager* hbookManager;
   histoMap       hist,start;
 #endif
