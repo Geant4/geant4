@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevelRep.icc,v 1.8 2003-11-02 16:06:05 gcosmo Exp $
+// $Id: G4NavigationLevelRep.icc,v 1.9 2003-12-04 15:58:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  1 October 1997 J.Apostolakis Initial version. 
@@ -106,9 +106,7 @@ inline
 G4NavigationLevelRep& 
 G4NavigationLevelRep::operator=( const G4NavigationLevelRep &right )
 { 
-  if ( &right == this ) return *this;
-
-  if (&right)
+  if ( &right != this )
   {
     sTransform =  right.sTransform;  
     sPhysicalVolumePtr = right.sPhysicalVolumePtr;
@@ -116,7 +114,6 @@ G4NavigationLevelRep::operator=( const G4NavigationLevelRep &right )
     sReplicaNo =  right.sReplicaNo;
     fCountRef = right.fCountRef;
   }
-
   return *this;
 } 
 
