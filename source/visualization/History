@@ -1,4 +1,4 @@
-$Id: History,v 1.23 1999-07-03 10:52:25 johna Exp $
+$Id: History,v 1.24 1999-08-26 05:49:23 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,14 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+vis-V00-01-01 26th August Satoshi TANAKA
+- Protection for invalid calling of BeginModeling
+- .DAWN.history ==> .DAWN_1.history 
+   **** It means DAWN version 3.80a or  after is  required ***
+
+vis-V00-01-00  24th August Satoshi TANAKA
+- Improved README.
 
 vis-01-00-15a  3rd July 1999  John Allison
 - Improved README (Guy).
