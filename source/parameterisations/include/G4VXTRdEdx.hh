@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRdEdx.hh,v 1.4 2001-07-11 10:01:30 gunter Exp $
+// $Id: G4VXTRdEdx.hh,v 1.5 2001-09-18 09:02:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,7 @@ protected:
 
   G4double AngleSpectralXTRdEdx(G4double energy) ;
 
-  G4double G4VXTRdEdx::AngleXTRdEdx(G4double varAngle) ;
+  G4double AngleXTRdEdx(G4double varAngle) ;
 };
 
 #endif

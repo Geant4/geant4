@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularXTRdEdx.cc,v 1.2 2001-07-11 10:01:31 gunter Exp $
+// $Id: G4RegularXTRdEdx.cc,v 1.3 2001-09-18 09:02:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -69,7 +69,7 @@ G4double
 G4RegularXTRdEdx::GetStackFactor( G4double energy, 
                                          G4double gamma, G4double varAngle )
 {
-  G4double result, Qa, Qb, Q, aZa, bZb, aMa, bMb, D, I2 ;
+  G4double result, Qa, Qb, Q, aZa, bZb, aMa, bMb, D ;
   
   aZa = fPlateThick/GetPlateFormationZone(energy,gamma,varAngle) ;
   bZb = fGasThick/GetGasFormationZone(energy,gamma,varAngle) ;
@@ -94,15 +94,11 @@ G4RegularXTRdEdx::GetStackFactor( G4double energy,
   D            = 1.0 /( (1 - sqrt(Q))*(1 - sqrt(Q)) + 
                   4*sqrt(Q)*sin(0.5*(aZa+bZb))*sin(0.5*(aZa+bZb)) ) ;
 
-  G4complex F1 = (1.0 - Ha)*(1.0 - Hb)*(1 - Hs) ;
+  G4complex F1 = (1.0 - Ha)*(1.0 - Hb)*(1.0 - Hs)
+                 * G4double(fPlateNumber)*D ;
 
-  F1          *= G4double(fPlateNumber)*D ;
-
-  G4complex F2 = (1.0-Ha)*(1.0-Ha)*Hb*(1.0-Hs)*(1.0-Hs) ;
-
-  F2          *= 1.0 - G4std::pow(H,fPlateNumber) ;
-
-  F2          *= D*D ;
+  G4complex F2 = (1.0-Ha)*(1.0-Ha)*Hb*(1.0-Hs)*(1.0-Hs)
+                 * (1.0 - G4std::pow(H,fPlateNumber)) * D*D ;
 
   G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle) ;
 

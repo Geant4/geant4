@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXrayTRmodel.cc,v 1.4 2001-07-11 10:01:32 gunter Exp $
+// $Id: G4VXrayTRmodel.cc,v 1.5 2001-09-18 09:02:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -489,7 +489,7 @@ void G4VXrayTRmodel::GetPlateZmuProduct()
   outPlate.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
   G4int i ;
-  G4double omega, varAngle, gamma, result ;
+  G4double omega, varAngle, gamma ;
   gamma = 10000. ;
   varAngle = 1/gamma/gamma ;
   G4cout<<"energy, keV"<<"\t"<<"Zmu for plate"<<G4endl ;
@@ -523,7 +523,7 @@ void G4VXrayTRmodel::GetGasZmuProduct()
   G4std::ofstream outGas("gasZmu.dat", G4std::ios::out ) ;
   outGas.setf( G4std::ios::scientific, G4std::ios::floatfield );
   G4int i ;
-  G4double omega, varAngle, gamma, result ;
+  G4double omega, varAngle, gamma ;
   gamma = 10000. ;
   varAngle = 1/gamma/gamma ;
   G4cout<<"energy, keV"<<"\t"<<"Zmu for gas"<<G4endl ;
@@ -621,7 +621,7 @@ G4double G4VXrayTRmodel::XTRNAngleDensity(G4double varAngle)
 void G4VXrayTRmodel::GetNumberOfPhotons()
 {
   G4int iTkin ;
-  G4double gamma, numberE, numberA ;
+  G4double gamma, numberE ;
 
   G4std::ofstream outEn("numberE.dat", G4std::ios::out ) ;
   outEn.setf( G4std::ios::scientific, G4std::ios::floatfield );

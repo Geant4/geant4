@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GamDistrXTRdEdx.cc,v 1.2 2001-07-11 10:01:31 gunter Exp $
+// $Id: G4GamDistrXTRdEdx.cc,v 1.3 2001-09-18 09:02:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -90,13 +90,11 @@ G4GamDistrXTRdEdx::GetStackFactor( G4double energy,
   G4complex Hb = G4std::pow(Cb,-fAlphaGas) ;
   G4complex H  = Ha*Hb ;
 
-  G4complex F1 = (1.0 - Ha)*(1.0 - Hb )/(1.0 - H) ;
+  G4complex F1 =   (1.0 - Ha)*(1.0 - Hb )/(1.0 - H)
+                 * G4double(fPlateNumber) ;
 
-  F1          *=  G4double(fPlateNumber) ;
-
-  G4complex F2 = (1.0-Ha)*(1.0-Ha)*Hb/(1.0-H)/(1.0-H) ;
-
-  F2          *= 1.0 - G4std::pow(H,fPlateNumber) ;
+  G4complex F2 =   (1.0-Ha)*(1.0-Ha)*Hb/(1.0-H)/(1.0-H)
+                 * (1.0 - G4std::pow(H,fPlateNumber)) ;
 
   G4complex R  = (F1 + F2)*OneInterfaceXTRdEdx(energy,gamma,varAngle) ;
 

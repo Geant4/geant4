@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IrregularXTRdEdx.cc,v 1.2 2001-07-11 10:01:31 gunter Exp $
+// $Id: G4IrregularXTRdEdx.cc,v 1.3 2001-09-18 09:02:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -72,8 +72,8 @@ G4IrregularXTRdEdx::GetStackFactor( G4double energy,
 {
   G4double result ;
 
-  G4complex R  = OneInterfaceXTRdEdx(energy,gamma,varAngle) ;
-  R           *= G4double(fPlateNumber) ;
+  G4complex R  = OneInterfaceXTRdEdx(energy,gamma,varAngle)
+                 * G4double(fPlateNumber) ;
   result       = 2.0*G4std::real(R) ;
 
   return      result ;

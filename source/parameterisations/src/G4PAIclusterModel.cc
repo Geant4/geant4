@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIclusterModel.cc,v 1.4 2001-07-11 10:01:31 gunter Exp $
+// $Id: G4PAIclusterModel.cc,v 1.5 2001-09-18 09:02:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -97,7 +97,8 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
 		                    G4FastStep&  fastStep         )
 {
   G4double charge, charge2, kinEnergy, mass, massRatio, scaledTkin ;
-  G4double distance, energyTransfer, energyLoss, lambda, step, stepSum = 0.0 ;
+  G4double distance, energyTransfer, lambda, step, stepSum = 0.0 ;
+  G4double energyLoss = 0.0 ;
   G4ThreeVector clusterPosition ;
 
   fClusterPositionVector.clear() ;

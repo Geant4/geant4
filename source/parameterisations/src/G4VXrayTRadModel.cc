@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXrayTRadModel.cc,v 1.2 2001-07-11 10:01:32 gunter Exp $
+// $Id: G4VXrayTRadModel.cc,v 1.3 2001-09-18 09:02:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -69,8 +69,8 @@ G4VXrayTRadModel::~G4VXrayTRadModel()
 void G4VXrayTRadModel::DoIt( const G4FastTrack& fastTrack , 
 		                          G4FastStep&  fastStep         )
 {
-  G4int iTkin, iPlace,  numOfTR, iTR, iTransfer ;
-  G4double energyPos, energyTR, theta, phi, dirX, dirY, dirZ ;
+  G4int iTkin, iPlace,  numOfTR, iTR ;
+  G4double energyTR, theta, phi, dirX, dirY, dirZ ;
   G4double W, W1, W2, E1, E2 ;
 
   G4double charge = fastTrack.GetPrimaryTrack()->GetDefinition()->GetPDGCharge() ;
@@ -213,7 +213,7 @@ void G4VXrayTRadModel::DoIt( const G4FastTrack& fastTrack ,
 
 void G4VXrayTRadModel::BuildTable() 
 {
-  G4int iMat, jMat, iTkin, iTR, iPlace ;
+  G4int iTkin, iTR, iPlace ;
   G4double radiatorCof = 1.0 ;           // for tuning of XTR yield
 
   // fAngleDistrTable  = new G4PhysicsTable(fTotBin) ;

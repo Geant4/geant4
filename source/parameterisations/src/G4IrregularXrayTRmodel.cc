@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IrregularXrayTRmodel.cc,v 1.3 2001-07-11 10:01:31 gunter Exp $
+// $Id: G4IrregularXrayTRmodel.cc,v 1.4 2001-09-18 09:02:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -224,7 +224,7 @@ G4IrregularXrayTRmodel::GetStackFactor( G4double energy,
 
   factor      = plateFactor*gasFactor ;
 
-  result      = ( 1 - pow(factor,fPlateNumber) )/( 1 - factor ) ;
+  result      = ( 1 - pow(factor,G4double(fPlateNumber)) )/( 1 - factor ) ;
 
   result     *= 1 + plateFactor ;
 

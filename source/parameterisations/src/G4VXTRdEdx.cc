@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRdEdx.cc,v 1.6 2001-07-11 10:01:32 gunter Exp $
+// $Id: G4VXTRdEdx.cc,v 1.7 2001-09-18 09:02:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -69,8 +69,8 @@ G4VXTRdEdx::~G4VXTRdEdx()
 void G4VXTRdEdx::DoIt( const G4FastTrack& fastTrack , 
 		                          G4FastStep&  fastStep         )
 {
-  G4int iTkin, iPlace,  numOfTR, iTR, iTransfer ;
-  G4double energyPos, energyTR, theta, phi, dirX, dirY, dirZ ;
+  G4int iTkin, iPlace,  numOfTR, iTR ;
+  G4double energyTR, theta, phi, dirX, dirY, dirZ ;
   G4double W, W1, W2, E1, E2 ;
 
   G4double charge = fastTrack.GetPrimaryTrack()->GetDefinition()->GetPDGCharge() ;
@@ -211,7 +211,7 @@ void G4VXTRdEdx::DoIt( const G4FastTrack& fastTrack ,
 
 void G4VXTRdEdx::BuildTable() 
 {
-  G4int iMat, jMat, iTkin, iTR, iPlace ;
+  G4int iTkin, iTR, iPlace ;
   G4double radiatorCof = 1.0 ;           // for tuning of XTR yield
 
   
@@ -326,8 +326,8 @@ G4complex G4VXTRdEdx::OneInterfaceXTRdEdx( G4double energy,
   G4complex Z1    = GetPlateComplexFZ(energy,gamma,varAngle) ;
   G4complex Z2    = GetGasComplexFZ(energy,gamma,varAngle) ;
 
-  G4complex zOut  = (Z1 - Z2)*(Z1 - Z2) ;
-            zOut *= varAngle*energy/hbarc/hbarc ;  
+  G4complex zOut  = (Z1 - Z2)*(Z1 - Z2)
+                    * (varAngle*energy/hbarc/hbarc) ;  
   return    zOut  ;
 
 }
