@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MySteppingAction.hh,v 1.1 1999-04-16 10:32:30 johna Exp $
+// $Id: MySteppingAction.hh,v 1.2 1999-04-28 14:09:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,7 @@
 #include "Randomize.hh"
 
 class MySteppingAction: public G4UserSteppingAction {
-  void UserSteppingAction();
+  void UserSteppingAction(const G4Step*);
   private:
     HepJamesRandom theJamesEngine;
     DRand48Engine theDRand48Engine;

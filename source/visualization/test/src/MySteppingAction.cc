@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MySteppingAction.cc,v 1.1 1999-04-16 10:32:37 johna Exp $
+// $Id: MySteppingAction.cc,v 1.2 1999-04-28 14:09:19 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,7 +24,7 @@
 #include "G4Colour.hh"
 #include "G4Polyline.hh"
 
-void MySteppingAction::UserSteppingAction() {
+void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
 #ifdef G4VIS_USE_OPACS
   OHistogram h1 = MyRunAction::get_1d();
   OHistogram h2 = MyRunAction::Get2d();
@@ -48,7 +48,6 @@ void MySteppingAction::UserSteppingAction() {
   if(pVVisManager) {
     G4Polyline pl;
     G4Colour c;
-    G4Step* pStep = GetSteppingManager () -> GetStep ();
     G4double chg =
       pStep -> GetTrack () -> GetDefinition () -> GetPDGCharge ();
     if (chg != 0.) c = G4Colour (1., 0., 0.);
