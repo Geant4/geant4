@@ -14,6 +14,9 @@
 #include "G4LorentzRotation.hh"
 #include "G4HadFinalState.hh"
 
+#include "G4BCDecay.hh"
+#include "G4BCAction.hh"
+
 class G4CollisionManager;
 
 class G4HadProjectile;
@@ -99,7 +102,8 @@ private:
 
   G4ExcitationHandler * theExcitationHandler;
   G4CollisionManager * theCollisionMgr;
-  G4VScatterer * theScatterer;
+
+  std::vector<G4BCAction *> theImR;
   G4VFieldPropagation * thePropagator;
   G4double theCurrentTime;
   G4double theCutOnP;
@@ -110,7 +114,7 @@ private:
   G4LorentzRotation precompoundLorentzboost;
   G4double theOuterRadius;
   G4bool thePrimaryEscape;
-  const G4ParticleDefinition * thePrimaryType;
+  G4ParticleDefinition * thePrimaryType;
   G4ThreeVector theMomentumTransfer;
 
 

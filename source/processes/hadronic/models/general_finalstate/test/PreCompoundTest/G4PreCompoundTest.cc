@@ -39,27 +39,7 @@ struct DeleteFragment
 
 
 int main()
-{
-
-//     G4ParticleDefinition *theGamma = G4Gamma::GammaDefinition();
-//     G4ParticleDefinition *theElectron = G4Electron::ElectronDefinition();
-//     G4ParticleDefinition *theNeutron = G4Neutron::NeutronDefinition();
-//     G4ParticleDefinition *theProton = G4Proton::ProtonDefinition();   
-//     G4ParticleDefinition *theDeuteron = G4Deuteron::DeuteronDefinition();
-//     G4ParticleDefinition *theTriton = G4Triton::TritonDefinition();
-//     G4ParticleDefinition *theHelium3 = G4He3::He3Definition();
-//     G4ParticleDefinition *theAlpha = G4Alpha::AlphaDefinition();
-//     G4ParticleDefinition *theIon = G4GenericIon::GenericIonDefinition();
-//     theProton->SetCuts(1.0);
-//     theGamma->SetCuts(1.0);
-//     theElectron->SetCuts(1.0);
-//     theNeutron->SetCuts(1.0);
-//     theDeuteron->SetCuts(1.0);
-//     theTriton->SetCuts(1.0);
-//     theHelium3->SetCuts(1.0);
-//     theAlpha->SetCuts(1.0);
-//     theIon->SetCuts(1.0);
-    
+{    
     // --------
     // Greeting
     // --------

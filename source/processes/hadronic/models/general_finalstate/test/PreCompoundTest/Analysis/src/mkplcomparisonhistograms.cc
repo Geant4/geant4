@@ -96,7 +96,7 @@ void mkplcomparisonhistograms::PrepareDAhistograms(mkplexpdatamanager * expdata,
   mkpl_cm_da->SetCM();
   mkpl_cm_da->PrepareHistograms(expdata);
 
-  if (mkpl_cm_da)
+  if (!mkpl_cm_da->ThereIsData())
     {
       delete mkpl_cm_da;
       mkpl_cm_da = 0;
