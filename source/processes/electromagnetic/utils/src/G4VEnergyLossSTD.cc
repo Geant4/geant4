@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.54 2003-10-27 17:24:42 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.55 2003-10-28 10:19:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -645,8 +645,8 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   G4double tmax = MaxSecondaryEnergy(dynParticle);
   tmax = std::min(tmax,(*theCuts)[currentMaterialIndex]);
 
-/*
-  //G4double eloss0 = eloss;
+  /*
+  G4double eloss0 = eloss;
   if(-1 < verboseLevel) {
     //G4cout << *theDEDXTable << G4endl;
     G4cout << "eloss(MeV)= " << eloss/MeV
@@ -655,14 +655,15 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
            << " r0(mm)= " << (((*theRangeTable)[currentMaterialIndex])->
                GetValue(preStepScaledEnergy, b))
            << " tmax= " << tmax
-	   << " mat= " << currentMaterial
-           << " matIdx= " << currentMaterialIndex
-	   << " preCouple= " << (step.GetPreStepPoint())->GetMaterialCutsCouple()
-	   << " postCouple= " << (step.GetPostStepPoint())->GetMaterialCutsCouple()
-        //   << " rangeTable= " << theRangeTable
+           << " e-eloss= " << preStepKinEnergy-eloss
+      //   << " mat= " << currentMaterial
+      //   << " matIdx= " << currentMaterialIndex
+      //   << " preCouple= " << (step.GetPreStepPoint())->GetMaterialCutsCouple()
+      //   << " postCouple= " << (step.GetPostStepPoint())->GetMaterialCutsCouple()
+      //   << " rangeTable= " << theRangeTable
            << G4endl;
   }
-*/
+  */
 
   // Sample fluctuations
   if (lossFluctuationFlag && eloss < preStepKinEnergy && eloss > 0.0) {
@@ -706,6 +707,8 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
     delete newp;
   }
 
+  preStepKinEnergy -= eloss;
+
   /*
   if(-1 < verboseLevel) {
     G4cout << "eloss(MeV)= " << eloss/MeV
@@ -714,9 +717,6 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
            << G4endl;
   }
   */
-
-
-  preStepKinEnergy -= eloss;
 
   if (preStepKinEnergy <= 0.0) {
 
