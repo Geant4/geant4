@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.14 2004-12-07 17:39:12 vnivanch Exp $
+// $Id: G4LossTableBuilder.cc,v 1.15 2004-12-07 18:03:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,6 +39,7 @@
 // 23-01-03 V.Ivanchenko Cut per region
 // 21-07-04 V.Ivanchenko Fix problem of range for dedx=0
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 07-12-04 Fix of BuildDEDX table (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -59,36 +60,31 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
 {
   size_t n_processes = list.size();
 
+  G4cout << "np= " << n_processes << G4endl;
   if(1 >= n_processes) return;
 
   size_t n_vectors = dedxTable->length();
+  G4cout << "nv= " << n_vectors << G4endl;
 
-  if(!n_vectors) return;
+  if(0 >= n_vectors) return;
 
   G4bool b;
 
   for (size_t i=0; i<n_vectors; i++) {
 
-    if (dedxTable->GetFlag(i)) {
-      G4PhysicsVector* pv = (*dedxTable)[i];
-      size_t nbins = pv->GetVectorLength();
+    G4PhysicsVector* pv = (*dedxTable)[i];
+    size_t nbins = pv->GetVectorLength();
 
-      //G4double elow = pv->GetLowEdgeEnergy(0);
-      //G4double ehigh = pv->GetLowEdgeEnergy(nbins);
-      //      G4PhysicsLogVector* v = new G4PhysicsLogVector(elow, ehigh, nbins);
+    for (size_t j=0; j<nbins; j++) {
+      G4double dedx = 0.0;
+      G4double energy = pv->GetLowEdgeEnergy(j);
 
-      for (size_t j=0; j<nbins; j++) {
-        G4double dedx = 0.0;
-        G4double energy = pv->GetLowEdgeEnergy(j);
+      for (size_t k=0; k<n_processes; k++) {
 
-        for (size_t k=0; k<n_processes; k++) {
-
-          dedx += ((*(list[k]))[i])->GetValue(energy, b);
-
-        }
-        pv->PutValue(j, dedx);
+	dedx += ((*(list[k]))[i])->GetValue(energy, b);
+	G4cout << "!!!! e= " << energy << "  dedx= " << dedx << G4endl;
       }
-      G4PhysicsTableHelper::SetPhysicsVector(dedxTable, i, v);
+      pv->PutValue(j, dedx);
     }
   }
 }
