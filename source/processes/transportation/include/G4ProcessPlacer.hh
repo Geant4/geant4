@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.hh,v 1.3 2002-04-10 13:14:17 dressel Exp $
+// $Id: G4ProcessPlacer.hh,v 1.4 2002-05-24 08:17:19 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -61,6 +61,9 @@ public:  // with description
     // PostStepDoIt function is called second
     // THE ORDER CHANGES BY SUBSEQUENT CALLS         
 
+  void RemoveProcess(G4VProcess *process);
+    // removes a given process 
+
 private:
 
   G4ProcessManager &GetProcessManager();
@@ -72,7 +75,10 @@ private:
   };
 
   void AddProcessAs(G4VProcess *process, SecondOrLast);
-  void PrintProcVec(G4ProcessVector* processVec);  
+
+  void PrintProcVec(G4ProcessVector* processVec);
+  void PrintPostStepGPILVec();  
+  void PrintPostStepDoItVec();  
 
 private:
 

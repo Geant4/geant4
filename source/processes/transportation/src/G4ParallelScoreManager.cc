@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelScoreManager.cc,v 1.3 2002-04-09 17:40:16 gcosmo Exp $
+// $Id: G4ParallelScoreManager.cc,v 1.4 2002-05-24 08:17:20 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -48,8 +48,12 @@ G4ParallelScoreManager(G4VPhysicalVolume &worldvolume,
 
 G4ParallelScoreManager::~G4ParallelScoreManager()
 {
+  if (fPScorerProcess) {
+    G4ProcessPlacer placer(fParallelManager.GetParticleName());
+    placer.RemoveProcess(fPScorerProcess);
+    delete  fPScorerProcess;
+  }
   delete &fParallelManager;
-  if (fPScorerProcess) delete  fPScorerProcess;
 }
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassScoreManager.cc,v 1.2 2002-04-09 17:40:15 gcosmo Exp $
+// $Id: G4MassScoreManager.cc,v 1.3 2002-05-24 08:17:19 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,7 +45,11 @@ G4MassScoreManager::G4MassScoreManager(G4VPScorer &ascorer,
 
 G4MassScoreManager::~G4MassScoreManager()
 {
-  if (fMScoreProcess) delete fMScoreProcess;
+  if (fMScoreProcess) {
+    G4ProcessPlacer placer(fParticleName);
+    placer.RemoveProcess(fMScoreProcess);
+    delete fMScoreProcess;
+  }
 }
 
 G4MScoreProcess *G4MassScoreManager::CreateMassScoreProcess()

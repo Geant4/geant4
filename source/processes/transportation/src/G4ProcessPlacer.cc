@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.cc,v 1.4 2002-05-23 12:31:17 dressel Exp $
+// $Id: G4ProcessPlacer.cc,v 1.5 2002-05-24 08:17:20 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -44,20 +44,31 @@ G4ProcessPlacer::G4ProcessPlacer(const G4String &particlename)
 	  << G4endl;
 }
 
+void G4ProcessPlacer::RemoveProcess(G4VProcess *process){
+  G4cout << "  ProcessName: " << process->GetProcessName() 
+	 << ", will be removed!" << G4endl;
+
+  G4cout << "The initial Vectors: " << G4endl;
+  PrintPostStepGPILVec();
+  PrintPostStepDoItVec();
+
+  GetProcessManager().RemoveProcess(process);
+
+  G4cout << "The final Vectors: " << G4endl;
+  PrintPostStepGPILVec();
+  PrintPostStepDoItVec();
+  
+
+}
+
 void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
 {
   G4cout << "  ProcessName: " << process->GetProcessName() << G4endl;
 
-  G4ProcessVector* processGPILVec = 
-    GetProcessManager().GetPostStepProcessVector(typeGPIL);
-  G4cout << "The initial GPILVec: " << G4endl;
-  PrintProcVec(processGPILVec);
-  G4int  lenGPIL = processGPILVec->length();
-  
-  G4ProcessVector* processDoItVec = 
-    GetProcessManager().GetPostStepProcessVector(typeDoIt); 
-  G4cout << "The initial DoItVec: " << G4endl;
-  PrintProcVec(processDoItVec);
+  G4cout << "The initial Vectors: " << G4endl;
+  PrintPostStepGPILVec();
+  PrintPostStepDoItVec();
+
 
   if (sol == eLast) {  
     GetProcessManager().AddProcess(process,
@@ -88,10 +99,10 @@ void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
   }
   
   // for verification inly
-  G4cout << "The final GPIL Vec: " << G4endl;
-  PrintProcVec(processGPILVec);
-  G4cout << "The final DoIt Vec: " << G4endl;
-  PrintProcVec(processDoItVec);
+  G4cout << "The final Vectors: " << G4endl;
+  PrintPostStepGPILVec();
+  PrintPostStepDoItVec();
+  
   G4cout << "================================================" << G4endl;
   
 }
@@ -130,6 +141,22 @@ G4ProcessManager &G4ProcessPlacer::GetProcessManager()
   if (!processmanager) G4Exception(" G4ProcessPlacer::GetProcessManager: no ProcessManager");
   return *processmanager;
 }
+
+
+void G4ProcessPlacer::PrintPostStepGPILVec(){
+  G4cout << "GPIL Vector: " << G4endl;
+  G4ProcessVector* processGPILVec = 
+    GetProcessManager().GetPostStepProcessVector(typeGPIL);
+  PrintProcVec(processGPILVec);
+} 
+
+void G4ProcessPlacer::PrintPostStepDoItVec(){
+  G4cout << "DoIt Vector: " << G4endl;
+  G4ProcessVector* processDoItVec = 
+    GetProcessManager().GetPostStepProcessVector(typeDoIt); 
+  PrintProcVec(processDoItVec);
+}
+
 
 void G4ProcessPlacer::PrintProcVec(G4ProcessVector* processVec)
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceManager.cc,v 1.3 2002-04-09 17:40:15 gcosmo Exp $
+// $Id: G4ParallelImportanceManager.cc,v 1.4 2002-05-24 08:17:19 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -125,8 +125,12 @@ void G4ParallelImportanceManager::Initialize()
 
 G4ParallelImportanceManager::~G4ParallelImportanceManager()
 {
+  if (fParallelImportanceProcess) {
+    G4ProcessPlacer placer(fParallelManager.GetParticleName());
+    placer.RemoveProcess(fParallelImportanceProcess);
+    delete fParallelImportanceProcess;
+  }
   if (fCreatedPM) delete &fParallelManager;
   if (fDeleteAlg) delete &fIalgorithm;
-  if (fParallelImportanceProcess) delete fParallelImportanceProcess;
   delete fSampler;
 }

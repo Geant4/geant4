@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceScoreManager.cc,v 1.3 2002-04-09 17:40:16 gcosmo Exp $
+// $Id: G4ParallelImportanceScoreManager.cc,v 1.4 2002-05-24 08:17:19 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -66,9 +66,13 @@ G4ParallelImportanceScoreManager(G4VIStore &is,
 
 G4ParallelImportanceScoreManager::~G4ParallelImportanceScoreManager()
 {
+  if (fPScoreProcess) {
+    G4ProcessPlacer placer(fParallelManager.GetParticleName());
+    placer.RemoveProcess(fPScoreProcess);
+    delete  fPScoreProcess;
+  }
   delete &fParallelImportanceManager;
   delete &fParallelManager;
-  if (fPScoreProcess) delete  fPScoreProcess;
 }
 
 G4PScoreProcess *

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceManager.cc,v 1.3 2002-04-09 17:40:15 gcosmo Exp $
+// $Id: G4MassImportanceManager.cc,v 1.4 2002-05-24 08:17:19 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -61,7 +61,11 @@ G4MassImportanceManager(G4VIStore &aIstore,
 
 G4MassImportanceManager::~G4MassImportanceManager()
 {
-  if (fMassImportanceProcess) delete fMassImportanceProcess;
+  if (fMassImportanceProcess) {
+    G4ProcessPlacer placer(fParticleName);
+    placer.RemoveProcess(fMassImportanceProcess);
+    delete fMassImportanceProcess;
+  }
   if (fCreatedAlgorithm) delete &fAlgorithm;
 }
 
