@@ -1,4 +1,4 @@
-$Id: History,v 1.125 2001-11-09 17:16:26 pia Exp $
+$Id: History,v 1.126 2001-11-11 12:12:27 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09.11.2001 - MGP, tag emlowen-V03-02-44
+             Example for using analysis in test/LowEnTest, based on 
+             Ramon's XrayTel
 
 09.11.2001 - MGP, tag emlowen-V03-02-43
              Fixed name in test/processTest/GNUmakefile causing
