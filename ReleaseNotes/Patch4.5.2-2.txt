@@ -4,7 +4,14 @@
 
                                                             3 October 2003
 
-List of fixes included in this public patch to release 5.2-patch01:
+List of fixes included in this public patch since release 5.2.p01:
+
+  o Configuration script
+    --------------------
+    + Configure:
+      o Fixed correct default name for data sets.
+      o Implemented automatic detection of OpenGL and CLHEP installations.
+      o Fixed behavior of script on Windows system.
 
   o Geometry:
     --------
