@@ -34,7 +34,7 @@ event                                            events-V06-00-01
 geometry/navigation                              geomnav-V06-00-02
 -------------------
 - G4Navigator: fixed old outstanding bug in ComputeStep() for the location
-  of the the local point in the calculation of a valid exit normal.
+  of the local point in the calculation of a valid exit normal.
 - Added "check_mode" state for navigators. The state can be activated by
   a new UI command (geometry/navigator/check_mode [true/false]) and will
   force more strict and less tolerant checks in step/safety computation to
