@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.cc,v 1.12 1999-09-30 11:36:33 urban Exp $
+// $Id: G4hEnergyLossPlus.cc,v 1.13 1999-10-05 14:24:37 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -108,7 +108,7 @@ G4double     G4hEnergyLossPlus::c1lim = dRoverRange ;
 G4double     G4hEnergyLossPlus::c2lim = 2.*(1.-dRoverRange)*finalRange ;
 G4double     G4hEnergyLossPlus::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
-G4double         G4hEnergyLossPlus::MinDeltaCutInRange = 0.1*mm ;
+G4double         G4hEnergyLossPlus::MinDeltaCutInRange = 0.01*mm ;
 G4double*        G4hEnergyLossPlus::MinDeltaEnergy     = NULL   ;
 
 G4double         G4hEnergyLossPlus::Charge ;   
@@ -1185,6 +1185,23 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
   TmintoProduceDelta=0.5*(sqrt(ww*ww+2.*w*w*MinDeltaEnergyNow/
                        electron_mass_c2)-ww) ;
 
+ // G4cout << endl;
+ // G4cout << "  hEnergyLossPlus AlongStepDoIt print ........." << endl;
+ //       x1=stepData.GetPreStepPoint()->GetPosition().x();
+ //       y1=stepData.GetPreStepPoint()->GetPosition().y();
+ //       z1=stepData.GetPreStepPoint()->GetPosition().z();
+ //       dx=stepData.GetPostStepPoint()->GetPosition().x() ;
+ //       dy=stepData.GetPostStepPoint()->GetPosition().y() ;
+ //       dz=stepData.GetPostStepPoint()->GetPosition().z() ;
+ // G4cout << "  PreStepPoint x,y,z:" 
+ //       << setw(15) << x1 << setw(15) << y1 << setw(15) << z1 << endl; 
+ // G4cout << " PostStepPoint x,y,z:" 
+ //       << setw(15) << dx << setw(15) << dy << setw(15) << dz << endl; 
+ //     presafety  = stepData.GetPreStepPoint()->GetSafety() ;
+ //     postsafety = stepData.GetPostStepPoint()->GetSafety() ;
+ // G4cout << "  presafety=" << setw(12) << presafety/mm 
+ //       << "  postsafety=" << setw(12) << postsafety/mm << "  (mm)." << endl;  
+
   if((E > TmintoProduceDelta) && (MeanLoss > MinDeltaEnergyNow)
                                    && (finalT > MinKineticEnergy))
   {
@@ -1259,6 +1276,7 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
         // compute nb of delta rays to be generated
         G4int N=int(fragment*(c0N/(E*T0)+c1N/T0-(c2N+c3N*T0)/Tc)* 
                 (aMaterial->GetTotNbOfElectPerVolume())+0.5) ;
+ // G4cout << " # of delta rays to be generated=" << setw(8) << N << endl;
 
         if(N > 0)
         {
