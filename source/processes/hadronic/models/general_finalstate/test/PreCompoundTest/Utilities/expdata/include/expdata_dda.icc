@@ -1,0 +1,62 @@
+inline expdata_dda::~expdata_dda()
+{
+  dat->Delete();
+}
+
+inline void expdata_dda::Reset()
+{
+  dat->Delete();
+  nranges = 0;
+  theDataHeader.UnsetCM();
+  theDataHeader.SetCutoff(-1.0);
+}
+
+inline Int_t expdata_dda::GetNranges() const
+{
+  return dat->GetLast() + 1;
+}
+
+inline TObjArray * expdata_dda::GetData() const
+{
+  return dat;
+}
+
+inline expdata_ddaunit * expdata_dda::GetData(const Int_t i) const
+{
+  return (expdata_ddaunit*)(dat->At(i));
+}
+
+inline void expdata_dda::AddRange(const Int_t n, const Double_t Emin, const Double_t Emax,
+				  const Double_t * a, const Double_t * ea,
+				  const Double_t * d, const Double_t * ed)
+{
+  expdata_ddaunit * unit = new expdata_ddaunit(n,Emin,Emax,a,ea,d,ed);
+  ((expdata*)(unit))->operator=(theDataHeader);
+  dat->Add(unit);
+  nranges++;
+  return;
+}
+
+inline void expdata_dda::AddRange(const Int_t n, const Double_t Emin, const Double_t Emax,
+				  const Double_t * a, const Double_t * eal, const Double_t * eah,
+				  const Double_t * d, const Double_t * edl, const Double_t * edh)
+{
+  expdata_ddaunit * unit = new expdata_ddaunit(n,Emin,Emax,a,eal,eah,d,edl,edh);
+  ((expdata*)(unit))->operator=(theDataHeader);
+  dat->Add(unit);
+  nranges++;
+  return;
+}
+
+inline expdata * expdata_dda::GetHeader()
+{
+  return &theDataHeader;
+}
+
+inline void expdata_dda::ShowYourSelf(const Int_t v) const
+{
+  std::ostringstream os;
+  this->ShowYourSelf(v,os);
+  std::cout << os.rdbuf();
+  return;
+}

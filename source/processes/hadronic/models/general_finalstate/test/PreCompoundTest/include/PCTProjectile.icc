@@ -1,0 +1,80 @@
+inline PCTProjectile::~PCTProjectile()
+{
+}
+
+inline PCTProjectile::PCTProjectile(const PCTProjectile & p)
+{
+}
+
+inline const PCTProjectile& PCTProjectile::operator=(const PCTProjectile &right)
+{
+    return *this;
+}
+
+
+inline G4bool PCTProjectile::SetDirAndKineticE(const G4double KineticEnergy, 
+					       const PCTProjectileDirection& aDirection)
+{ 
+    this->SetDirection(aDirection); 
+    return this->SetKineticEnergy(KineticEnergy);
+}
+
+inline G4bool PCTProjectile::SetDirAndKineticE(const PCTProjectileDirection& aDirection, 
+					       const G4double KineticEnergy)
+{ 
+    this->SetDirection(aDirection); 
+    return this->SetKineticEnergy(KineticEnergy);
+}
+
+inline const G4LorentzVector& PCTProjectile::GetMomentum() const 
+{ 
+    return momentum; 
+}
+
+inline PCTProjectileDirection PCTProjectile::GetDirection() const 
+{
+    return dir;
+}
+
+inline G4ParticleDefinition * PCTProjectile::GetParticle() const 
+{ 
+    return theParticle; 
+}
+
+inline G4double PCTProjectile::GetMass() const
+{ 
+    if (theParticle) return theParticle->GetPDGMass();
+    else return -1.0;
+}
+
+inline G4int PCTProjectile::GetZ() const 
+{
+    if (theParticle)
+	return G4int(theParticle->GetPDGCharge()+0.5);
+    else 
+	return -1;
+}
+
+inline G4int PCTProjectile::GetA() const
+{
+    if (theParticle)
+	return theParticle->GetBaryonNumber();
+    else 
+	return -1;
+}
+
+inline void PCTProjectile::ResetMomentum() 
+{ 
+    momentum.setX(0.0); 
+    momentum.setY(0.0); 
+    momentum.setZ(0.0); 
+    momentum.setE(0.0);
+    return;
+}
+
+
+inline G4ParticleDefinition * PCTProjectile::GetDefinition() const 
+{
+    return theParticle;
+}
+

@@ -1,0 +1,10 @@
+#!/bin/tcsh 
+if ( ${?LD_LIBRARY_PATH} ) then
+   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4TMP}/${G4SYSTEM}/G4PreCompoundTest
+else
+   setenv LD_LIBRARY_PATH ${G4TMP}/${G4SYSTEM}/G4PreCompoundTest
+endif
+set path = ( `echo $path | sed 's/ \.//'`)
+set path = ( `echo $path | sed 's/\. //'`)
+set path = ( $path ${G4BIN}/${G4SYSTEM} ${G4INSTALL}/source/processes/hadronic/models/generator/test/PreCompoundTest/Analysis/bin . )
+rehash

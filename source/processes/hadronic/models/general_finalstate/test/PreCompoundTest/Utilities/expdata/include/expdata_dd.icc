@@ -1,0 +1,62 @@
+inline expdata_dd::~expdata_dd() 
+{ 
+  dat->Delete();
+}
+ 
+inline void expdata_dd::Reset()
+{
+  dat->Delete(); 
+  nangles = 0;
+  theDataHeader.UnsetCM();
+  theDataHeader.SetCutoff(-1.0);
+}
+
+inline Int_t expdata_dd::GetNangles() const 
+{ 
+  return dat->GetLast()+1; 
+}
+
+inline TObjArray * expdata_dd::GetData() const
+{
+  return dat; 
+}
+
+inline expdata_ddunit * expdata_dd::GetData(const Int_t i) const 
+{ 
+  return (expdata_ddunit*)dat->At(i); 
+} 
+
+inline void expdata_dd::AddAngle(const Int_t n, const Double_t angle, 
+				 const Double_t * e, const Double_t * ee,
+				 const Double_t * d, const Double_t * ed)
+{
+  expdata_ddunit * unit = new expdata_ddunit(n,angle,e,ee,d,ed);
+  ((expdata*)(unit))->operator=(theDataHeader);
+  dat->Add(unit);
+  nangles++;
+  return;
+}
+
+inline void expdata_dd::AddAngle(const Int_t n, const Double_t angle, 
+				 const Double_t * e, const Double_t * eel, const Double_t * eeh,
+				 const Double_t * d, const Double_t * edl, const Double_t * edh)
+{
+  expdata_ddunit * unit = new expdata_ddunit(n,angle,e,eel,eeh,d,edl,edh);
+  ((expdata*)(unit))->operator=(theDataHeader);
+  dat->Add(unit);
+  nangles++;
+  return;
+}
+
+inline expdata * expdata_dd::GetHeader() 
+{ 
+  return &theDataHeader; 
+}
+
+inline void expdata_dd::ShowYourSelf(const Int_t v) const
+{
+  std::ostringstream os;
+  this->ShowYourSelf(v,os);
+  std::cout << os.rdbuf();
+  return;
+}

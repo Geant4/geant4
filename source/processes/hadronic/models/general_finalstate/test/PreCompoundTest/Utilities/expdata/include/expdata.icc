@@ -1,0 +1,216 @@
+ 
+inline expdata::expdata() : 
+  targetA(0), targetZ(0), targetSymbol(""), 
+  projectileA(0), projectileZ(0), projectileEnergy(0.0), projectileSymbol(""),
+  entry(""), reaction(""),
+  particleA(0), particleZ(0), particleSymbol(""), 
+  CM(false), cutoff(-1.0)
+{
+}
+
+inline expdata::~expdata()
+{
+}
+
+inline void expdata::SetTargetA(const Int_t anA)
+{ 
+  targetA = anA; 
+  return;
+}
+
+inline Int_t expdata::GetTargetA() const
+{
+  return targetA;
+}
+
+inline void expdata::SetTargetZ(const Int_t aZ) 
+{ 
+  targetZ = aZ;
+  return;
+}
+
+inline Int_t expdata::GetTargetZ() const 
+{ 
+  return targetZ;
+}
+
+inline void expdata::SetTargetSymbol(const TString& s) 
+{ 
+  targetSymbol = s;
+  return;
+}
+
+inline void expdata::SetTargetSymbol(const Char_t * s) 
+{ 
+  targetSymbol = s;
+  return;
+}
+  
+inline TString expdata::GetTargetSymbol() const 
+{ 
+  return  targetSymbol;
+}
+
+inline void expdata::SetProjectileA(const Int_t anA) 
+{ 
+  projectileA = anA;
+  return;
+}
+
+inline Int_t expdata::GetProjectileA() const 
+{ 
+  return projectileA;
+}
+    
+inline void expdata::SetProjectileZ(const Int_t aZ) 
+{
+  projectileZ = aZ;
+  return;
+}
+
+inline Int_t expdata::GetProjectileZ() const 
+{ 
+  return projectileZ;
+}
+  inline void expdata::SetProjectileSymbol(const TString& s)
+{ 
+  projectileSymbol = s;
+  return;
+}
+
+inline void expdata::SetProjectileSymbol(const Char_t * s) 
+{ 
+  projectileSymbol = s;
+  return;
+}
+
+inline TString expdata::GetProjectileSymbol() const 
+{ 
+  return  projectileSymbol;
+}
+
+inline void expdata::SetProjectileEnergy(const Double_t e)
+{ 
+  projectileEnergy = e;
+  return;
+}
+
+inline Double_t expdata::GetProjectileEnergy() const
+{
+  return projectileEnergy;
+}
+
+void expdata::SetExforEntryCode(const TString& code)
+{ 
+  entry = code;
+ return;
+}
+
+void expdata::SetExforEntryCode(const Char_t * code)
+{ 
+  entry = code;
+  return;
+}
+
+TString expdata::GetExforEntryCode() const
+{ 
+  return entry;
+}
+ 
+inline void expdata::SetExforReaction(const TString& r )
+{ 
+  reaction = r; 
+  return;
+}
+
+inline void expdata::SetExforReaction(const Char_t * r ) 
+{ 
+  reaction = r;
+  return;
+}
+
+inline TString expdata::GetExforReaction() const 
+{
+  return reaction;
+}
+
+inline void expdata::SetParticleA(const Int_t anA) 
+{ 
+  particleA = anA; 
+  return;
+}
+
+inline Int_t expdata::GetParticleA() const
+{ 
+  return particleA; 
+}
+    
+inline void expdata::SetParticleZ(const Int_t aZ)
+{ 
+  particleZ = aZ; 
+  return;
+}
+
+inline Int_t expdata::GetParticleZ() const 
+{ 
+  return particleZ; 
+}
+
+inline void expdata::SetParticleSymbol(const TString& s) 
+{ 
+  particleSymbol = s; 
+  return;
+}
+
+inline void expdata::SetParticleSymbol(const Char_t * s) 
+{ 
+  particleSymbol = s;
+  return;
+}
+
+inline TString expdata::GetParticleSymbol() const 
+{ 
+  return particleSymbol;
+}
+
+inline void expdata::SetCM() 
+{ 
+  CM = true; 
+  return;
+}
+
+inline void expdata::UnsetCM()
+{
+  CM = false;
+  return;
+}
+
+inline bool expdata::IsCM() const 
+{ 
+  return CM;
+}
+
+
+inline void expdata::SetCutoff(const double cut)
+{
+  cutoff = cut;
+  return;
+}
+
+inline double expdata::GetCutoff() const
+{
+  return cutoff;
+}
+
+inline bool expdata::ThereIsCutoff() const
+{
+  return (cutoff > 0.0);
+}
+
+inline void expdata::ShowYourSelf() const 
+{
+  std::ostringstream os;
+  this->ShowYourSelf(os);
+  std::cout << os.rdbuf();
+  return;
+}

@@ -1,0 +1,46 @@
+inline mkplsimfilemanager::mkplsimfilemanager() 
+{
+}
+
+inline mkplsimfilemanager::mkplsimfilemanager(const mkplsimfilemanager& right)
+{
+}
+
+inline const mkplsimfilemanager& mkplsimfilemanager::
+operator=(const mkplsimfilemanager& right)
+{ 
+  return *this;
+}
+
+inline TTree * mkplsimfilemanager::GetTree()   
+{ 
+  return mkpl_simtree; 
+}
+
+
+inline string mkplsimfilemanager::GetFileName() 
+{ 
+  return mkpl_simfile->GetName();
+}
+
+inline string mkplsimfilemanager::GetBaseName()
+{
+  return mkpl_basename;
+}
+
+
+inline mkplsimfilemanager::~mkplsimfilemanager()
+{
+  if (mkpl_simfile) delete mkpl_simfile;
+}
+
+inline void mkplsimfilemanager::SetVerbosity(const int level)
+{
+  mkpl_verbose = level;
+  return;
+}
+
+inline int mkplsimfilemanager::GetVerbosity() const
+{
+  return mkpl_verbose;
+}

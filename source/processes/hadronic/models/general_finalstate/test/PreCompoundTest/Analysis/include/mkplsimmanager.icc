@@ -1,0 +1,76 @@
+inline mkplsimmanager::mkplsimmanager() : 
+  mkpl_fm(0), mkpl_reaction(0), mkpl_projectile_A(-1), mkpl_projectile_Z(-1),
+  mkpl_target_A(-1), mkpl_target_Z(0), mkpl_E(0.0), mkpl_tests(0)
+  { }
+
+inline mkplsimmanager::mkplsimmanager(mkplfilemanager& fm) :
+  mkpl_fm(0), mkpl_reaction(0), mkpl_projectile_A(-1), mkpl_projectile_Z(-1),
+  mkpl_target_A(-1), mkpl_target_Z(0), mkpl_E(0.0),
+  mkpl_tests(0)
+{
+  this->Initialize(&fm);
+}
+
+inline mkplsimmanager::mkplsimmanager(mkplfilemanager * fm) :
+  mkpl_fm(0), mkpl_reaction(0), mkpl_projectile_A(-1), mkpl_projectile_Z(-1),
+  mkpl_target_A(-1), mkpl_target_Z(0), mkpl_E(0.0),
+  mkpl_tests(0)
+{
+  this->Initialize(fm);
+}
+    
+inline mkplsimmanager::mkplsimmanager(const mkplsimmanager& right)
+{
+}
+
+inline const mkplsimmanager& mkplsimmanager::operator=(const mkplsimmanager& right)
+{ 
+  return *this; 
+}
+
+inline mkplsimmanager::~mkplsimmanager()
+{
+  this->DeleteHistograms();
+}
+
+
+inline void mkplsimmanager::PrintInfo() const
+{
+  if (mkpl_fm)
+    {
+      cout << '\t' << mkpl_fm->GetSimtree()->GetEntries() << " simulated events\n"
+	   << '\t' << "projectile: A = " << mkpl_projectile_A << " Z = " << mkpl_projectile_Z << '\n'
+ 	   << '\t' << "kinetic energy: " << mkpl_E << " MeV\n"
+	   << '\t' << "target: A = " << mkpl_target_A << " Z = " << mkpl_target_Z << '\n';
+    }
+  return;
+}
+
+inline void mkplsimmanager::GetSummary(std::ostringstream & os) const
+{
+  if (mkpl_fm)
+    {
+      os << "Number of events: " << mkpl_fm->GetSimtree()->GetEntries() << '\n'
+	 << "Projectile: A =" << mkpl_projectile_A << " Z = " << mkpl_projectile_Z << '\n'
+	 << "Kinetic energy: " << mkpl_E << " MeV\n"
+	 << "Target: A = " << mkpl_target_A << " Z = " << mkpl_target_Z << '\n';
+    }
+  return;
+}
+
+
+inline int mkplsimmanager::GetTargetZ() const
+{
+  return mkpl_target_Z;
+}
+
+inline mkpltesthistograms * mkplsimmanager::GetTestHistograms()
+{
+  return mkpl_tests;
+}
+
+inline vector<mkplcomparisonhistograms*> *  mkplsimmanager::GetComparisonHistograms()
+{
+  return &mkpl_comparisons;
+}
+

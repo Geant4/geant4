@@ -1,0 +1,139 @@
+inline PCTOptions::PCTOptions(const PCTOptions& right)
+{
+}
+
+inline PCTOptions& PCTOptions::operator=(const PCTOptions& right)
+{
+  return *this;
+}
+
+inline PCTOptions::PCTOptions()
+  : theEvapMode(no_mode), thePreeqEmissionMode(no_emission_mode), 
+    thePreeqTransitionMode(no_transition_mode),
+    pdirection(NoDirection), pA(-1), pZ(-1), pKineticEnergy(0.0),
+    natural(false), tA(-1), tZ(-1), iterations(0), particles(0), holes(0), charged(0),
+    inc(false), fermi(false)
+{
+}
+
+inline PCTOptions::~PCTOptions()
+{
+}
+
+inline void PCTOptions::PutEmptyLine(const G4int n)
+{
+    for (G4int i = 0; i < n; ++i) std::cout << '\n';
+    return;
+}
+
+inline G4String PCTOptions::GetFilename() const
+{
+    return filename;
+}
+
+inline PCTEVAPModes PCTOptions::GetEvapMode() const
+{
+    return theEvapMode;
+}
+
+inline PCTPREEQEmissionModes PCTOptions::GetPreeqEmissionMode() const 
+{
+  return thePreeqEmissionMode;
+}
+
+inline PCTPREEQTransitionModes PCTOptions::GetPreeqTransitionMode() const
+{
+  return thePreeqTransitionMode;
+}
+
+inline PCTProjectileDirection PCTOptions::GetProjectileDirection() const
+{
+    return pdirection;
+}
+
+inline G4int PCTOptions::GetProjectileZ() const
+{
+    return pZ;
+}
+
+inline G4int PCTOptions::GetProjectileA() const
+{
+    return pA;
+}
+
+inline G4double PCTOptions::GetProjectileKineticEnergy() const
+{
+    return pKineticEnergy;
+}
+
+inline G4int PCTOptions::GetTargetZ() const
+{
+    return tZ;
+}
+
+inline G4int PCTOptions::GetTargetA() const
+{
+    return tA;
+}
+
+inline G4bool PCTOptions::IsNaturalTarget() const
+{
+    return natural;
+}
+
+inline G4int PCTOptions::GetNumberOfIterations() const
+{
+    return iterations;
+}
+
+inline G4int PCTOptions::GetNumberOfParticles() const
+{
+    return particles;
+}
+
+inline G4int PCTOptions::GetNumberOfHoles() const
+{
+    return holes;
+}
+
+inline G4int PCTOptions::GetNumberOfCharged() const
+{
+    return charged;
+}
+
+inline G4int PCTOptions::GetNumberOfIsotopes() const
+{
+    if (natural) return material.size();
+    else return 1;
+}
+    
+inline std::pair<G4int,G4double>
+PCTOptions::GetIsotope(const unsigned int i) const
+{
+    if (i < material.size())
+    {
+	return material[i];
+    }
+    else
+    {
+	return std::make_pair(G4int(0),G4double(0.0));
+    }
+}
+
+
+inline const  std::vector< std::pair<G4int,G4double> >&
+PCTOptions::GetTargetMaterial() const
+{
+  return material;
+}
+
+inline const G4bool PCTOptions::UsingINC() const
+{
+  return inc;
+}
+
+inline const G4bool PCTOptions::UsingFermi() const
+{
+  return fermi;
+}
+

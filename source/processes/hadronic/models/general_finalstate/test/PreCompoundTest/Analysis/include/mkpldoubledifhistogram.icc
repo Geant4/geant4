@@ -1,0 +1,54 @@
+inline mkpldoubledifhistogram::mkpldoubledifhistogram()
+{
+}
+
+inline mkpldoubledifhistogram::mkpldoubledifhistogram(const int A, const int Z,
+						      const int pA, const int pZ, 
+						      const int tA, const int tZ, \
+						      const double E, const char * name) :
+  mkplvhistogram(A,Z,pA,pZ,tA,tZ,E,name)
+{
+}
+
+
+inline mkpldoubledifhistogram::~mkpldoubledifhistogram()
+{
+  this->DeleteHistograms();
+}
+
+
+inline void mkpldoubledifhistogram::DeleteHistograms()
+{
+  // delete all existing histograms
+  if (!mkpl_h.empty())  
+    for_each(mkpl_h.begin(), mkpl_h.end(), DeleteHistogramVector());
+  if (!mkpl_preeq_h.empty()) 
+    for_each(mkpl_preeq_h.begin(), mkpl_preeq_h.end(), DeleteHistogramVector());
+  if (!mkpl_evap_h.empty()) 
+    for_each(mkpl_evap_h.begin(), mkpl_evap_h.end(), DeleteHistogramVector());
+  if (!mkpl_fis_h.empty())  
+    for_each(mkpl_fis_h.begin(), mkpl_fis_h.end(), DeleteHistogramVector());
+  if (!mkpl_fermi_h.empty())  
+    for_each(mkpl_fermi_h.begin(), mkpl_fermi_h.end(), DeleteHistogramVector());
+  if (!mkpl_inc_h.empty())  
+    for_each(mkpl_inc_h.begin(), mkpl_inc_h.end(), DeleteHistogramVector());
+  return;
+}
+
+inline void mkpldoubledifhistogram::InitializeHistograms()
+{
+  this->DeleteHistograms();
+  mkpl_h.clear();
+  mkpl_preeq_h.clear();
+  mkpl_evap_h.clear();
+  mkpl_fis_h.clear();
+  mkpl_fermi_h.clear();
+  mkpl_inc_h.clear();
+  mkpl_weight.clear();
+  return;
+}
+
+inline int mkpldoubledifhistogram::Size() const
+{
+  return mkpl_h.size();
+}

@@ -1,0 +1,71 @@
+//------------------------------------------------------
+template<class charT, class traits>
+basic_gzstreambase<charT, traits>::basic_gzstreambase()
+//------------------------------------------------------
+{
+  init(&buffer);
+}
+
+//------------------------------------------------------
+template<class charT, class traits>
+basic_gzstreambase<charT, traits>::basic_gzstreambase(const char* name,
+                                                      const std::ios_base::openmode open_mode,
+                                                      const int level)
+//------------------------------------------------------
+{
+  init(&buffer);
+  this->open(name, open_mode, level);
+}
+
+//------------------------------------------------------
+template<class charT, class traits>
+basic_gzstreambase<charT, traits>::~basic_gzstreambase()
+//------------------------------------------------------
+{
+  if (buffer.is_open() ) buffer.close();
+}
+
+//------------------------------------------------------
+template<class charT, class traits>
+void basic_gzstreambase<charT, traits>::open(const char* name,
+                                             const std::ios_base::openmode open_mode,
+                                             const int level)
+//------------------------------------------------------
+{
+  if ( ! buffer.open(name, open_mode, level) )
+    {
+      clear( rdstate() | std::basic_ios<charT,traits>::badbit );
+    }
+}
+
+//------------------------------------------------------
+template<class charT, class traits>
+void basic_gzstreambase<charT, traits>::close()
+//------------------------------------------------------
+{
+  if ( buffer.is_open() )
+    {
+      if ( ! buffer.close() )
+        {
+          clear( rdstate() | std::ios_base::badbit );
+        }
+    }
+}
+
+//------------------------------------------------------
+template<class charT, class traits>
+basic_gzstreambuf<charT, traits>*
+basic_gzstreambase<charT, traits>::rdbuf()
+//------------------------------------------------------
+{
+  return &buffer;
+}
+
+
+//------------------------------------------------------
+template<class charT, class traits>
+bool basic_gzstreambase<charT, traits>::is_open() const
+//------------------------------------------------------
+{
+  return buffer.is_open();
+}

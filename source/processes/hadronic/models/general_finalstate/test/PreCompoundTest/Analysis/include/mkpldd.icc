@@ -1,0 +1,70 @@
+inline mkpldd::mkpldd()
+{
+}
+
+inline mkpldd::mkpldd(const int A, const int Z, const int pA, const int pZ,
+		      const int tA, const int tZ, const double E, const char * name)
+  : mkpldoubledifhistogram(A,Z,pA,pZ,tA,tZ,E,name), mkpl_exp(0)
+{
+}
+
+inline mkpldd::~mkpldd()
+{
+  this->DeleteHistograms();
+  this->ClearTemp();
+}
+
+
+inline void mkpldd::DeleteHistograms()
+{
+  mkpldoubledifhistogram::DeleteHistograms();
+  if (mkpl_exp) 
+    {
+      for (vector<pair<double, TMultiGraph*> >::iterator it = mkpl_exp->begin();
+	   it != mkpl_exp->end(); it++)
+	{
+	  delete it->second;
+	}
+      delete mkpl_exp;
+    }
+  return;
+}
+
+
+inline void mkpldd::InitializeHistograms()
+{
+  mkpldoubledifhistogram::InitializeHistograms();
+  mkpl_exp = 0;
+  return;
+}
+
+inline bool mkpldd::ThereIsData() const
+{
+  if (mkpl_exp) return true;
+  else return false;
+}
+
+inline double mkpldd::GetAngle(const int n) const
+{
+  if (n >= 0 && n < int(mkpl_exp->size()) ) return mkpl_exp->operator[](n).first;
+  else return -1;
+}
+
+
+inline void mkpldd::ClearTemp()
+{
+  if (!sim.empty())  
+    {
+      for_each(sim.begin(), sim.end(), DeleteHistogramVector());
+      sim.clear();
+    }
+
+  if (!exp.empty())
+    {
+      for (vector<pair<double,TMultiGraph*> >::iterator i = exp.begin();
+	   i != exp.end(); ++i)
+	delete (*i).second;
+      exp.clear();
+    }
+  return;
+}

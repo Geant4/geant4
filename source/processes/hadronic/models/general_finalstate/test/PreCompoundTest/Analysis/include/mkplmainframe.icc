@@ -1,0 +1,22 @@
+inline void mkplmainframe::CloseWindow()
+{
+  gApplication->Terminate(0);
+  return;
+}
+
+inline void mkplmainframe::OpenExpFile(const TString& fname)
+{
+  string filename(fname.Data());
+  mkpl_file_manager->OpenExpFile(filename);
+  mkpl_exp_data_manager = new mkplexpdatamanager(mkpl_file_manager);
+  return;
+}
+
+inline void mkplmainframe::CloseExpFile()
+{
+  delete mkpl_exp_data_manager;
+  mkpl_exp_data_manager = 0;
+  mkpl_file_manager->CloseExpFile();
+  return;
+}
+

@@ -1,0 +1,49 @@
+inline void mkplmakeplots::CloseWindow()
+{
+  gApplication->Terminate(0);
+  return;
+}
+
+inline void mkplmakeplots::OpenExpFile(const TString& fname)
+{
+  this->CloseExpFile();
+  string filename(fname.Data());
+  mkpl_file_manager->OpenExpFile(filename);
+  mkpl_exp_data_manager = new mkplexpdatamanager(mkpl_file_manager);
+  return;
+}
+
+inline void mkplmakeplots::CloseExpFile()
+{
+  if (mkpl_comparison_selector) 
+    {
+      delete mkpl_comparison_selector;
+      mkpl_comparison_selector = 0;
+    }
+  mkpl_exp_data_manager = 0;
+  mkpl_file_manager->CloseExpFile();
+  mkpl_tab->Selected(0);
+  return;
+}
+
+inline void mkplmakeplots::OpenSimFile(const TString& fname)
+{
+  this->CloseSimFile();
+  string filename(fname.Data());
+  mkpl_file_manager->OpenSimFile(filename);
+  mkpl_sim_data_manager = new mkplsimmanager(mkpl_file_manager);
+  return;
+}
+
+inline void mkplmakeplots::CloseSimFile()
+{
+  if (mkpl_comparison_selector) 
+    {
+      delete mkpl_comparison_selector;
+      mkpl_comparison_selector = 0;
+    }
+  mkpl_sim_data_manager = 0;
+  mkpl_file_manager->CloseSimFile();
+  mkpl_tab->Selected(0);
+  return;
+}

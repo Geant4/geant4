@@ -1,0 +1,27 @@
+inline PCTCrossSection::PCTCrossSection(PCTProjectile * projectile, PCTTarget * target)
+{
+    this->CalculateCrossSection(projectile,target);
+}
+
+inline PCTCrossSection::PCTCrossSection()
+    : CrossSection(-1.0)
+{
+}
+
+inline PCTCrossSection::PCTCrossSection(const PCTCrossSection& right)
+{
+}
+
+inline PCTCrossSection& PCTCrossSection::operator=(const PCTCrossSection& right)
+{
+    return *this;
+}
+
+inline PCTCrossSection::~PCTCrossSection()
+{
+}
+
+inline G4double PCTCrossSection::GetCrossSection() const
+{
+    return CrossSection;
+}

@@ -1,0 +1,47 @@
+inline expdata_unit::expdata_unit()
+{
+}
+
+inline expdata_unit::~expdata_unit()
+{
+}
+
+inline Bool_t expdata_unit::IsEmpty() const
+{
+  return (this->GetN() <= 0);
+}
+
+inline Bool_t expdata_unit::IsAsymmetric() const 
+{ 
+  return (XerrorL.GetSize() > 0);
+}
+
+inline Bool_t expdata_unit::IsSymmetric() const 
+{
+  return !this->IsAsymmetric();
+}
+
+inline Int_t expdata_unit::GetN() const
+{ 
+  return Xdata.GetSize();
+}
+
+
+inline void expdata_unit::ShowYourSelf() const
+{
+  std::ostringstream os;
+  this->ShowYourSelf(os);
+  std::cout << os.rdbuf();
+  return;
+}
+
+inline void expdata_unit::ShowYourSelf(std::ostringstream & os) const
+{
+  expdata::ShowYourSelf(os);
+  if (this->IsSymmetric()) os << "Symmetrical Errors\n";
+  else if (this->IsAsymmetric()) os << "Asymmetrical Errors\n";
+  else os << "ERROR: No data\n";
+  return;
+}
+
+  

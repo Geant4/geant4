@@ -1,0 +1,63 @@
+inline PCTCompositeNucleus::PCTCompositeNucleus()
+  : theProjectile(0), theTarget(0), lastCNucleus(0)
+{
+}
+
+inline PCTCompositeNucleus::PCTCompositeNucleus(const PCTCompositeNucleus& right) 
+{
+}
+
+inline PCTCompositeNucleus& PCTCompositeNucleus::operator=(const PCTCompositeNucleus& right) 
+{
+    return *this;
+}
+
+
+inline PCTCompositeNucleus::PCTCompositeNucleus(PCTProjectile* projectile, PCTTarget* target)
+  : theProjectile(projectile), theTarget(target), randExcitons(false),
+    holes(1), particles(2), charged(1), lastCNucleus(0)
+{   
+}
+
+inline PCTCompositeNucleus::PCTCompositeNucleus(PCTProjectile* projectile, PCTTarget* target, 
+						const G4int h, const G4int p, const G4int c)
+  : theProjectile(projectile), theTarget(target), randExcitons(false), 
+    holes(h), particles(p), charged(c), lastCNucleus(0)
+{
+}
+
+
+inline void PCTCompositeNucleus::RandomizeExcitons(const G4bool op)
+{
+  randExcitons = op;
+  return;
+}
+
+inline G4bool PCTCompositeNucleus::AreExcitonsRandomized() const
+{
+  return randExcitons;
+}
+
+inline void PCTCompositeNucleus::SetExcitons(const G4int h, const G4int p, const G4int c)
+{
+    particles = p;
+    holes = h;
+    charged = c;
+    randExcitons = false;
+    return;
+}
+
+inline const G4Fragment * PCTCompositeNucleus::GetLastCNucleus() const
+{
+  return lastCNucleus;
+}
+
+inline const PCTProjectile * PCTCompositeNucleus::GetProjectile() const
+{
+  return theProjectile;
+}
+
+inline const PCTTarget * PCTCompositeNucleus::GetTarget() const
+{
+  return theTarget;
+}

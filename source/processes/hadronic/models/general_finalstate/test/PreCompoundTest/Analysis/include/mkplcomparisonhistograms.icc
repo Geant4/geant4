@@ -1,0 +1,209 @@
+inline mkplcomparisonhistograms::mkplcomparisonhistograms(const int A, const int Z, const char * name) :
+  mkpl_A(A), mkpl_Z(Z), mkpl_name(name),
+  mkpl_projectile_A(-1), mkpl_projectile_Z(-1),
+  mkpl_target_A(-1), mkpl_target_Z(-1), mkpl_reaction_E(-1.0),
+  mkpl_de(0), mkpl_cm_de(0), 
+  mkpl_da(0), mkpl_cm_da(0), 
+  mkpl_dd(0), mkpl_cm_dd(0), 
+  mkpl_dda(0), mkpl_cm_dda(0)
+{
+}
+
+// Default constructor
+inline mkplcomparisonhistograms::mkplcomparisonhistograms()
+{
+}
+
+// Copy constructor
+inline mkplcomparisonhistograms::mkplcomparisonhistograms
+(const mkplcomparisonhistograms& right)
+{
+}
+
+// Destructor
+inline mkplcomparisonhistograms::~mkplcomparisonhistograms()
+{
+  // delete all histograms 
+  this->DeleteHistograms();
+}
+
+// Asignment operator
+inline const mkplcomparisonhistograms& mkplcomparisonhistograms::
+operator=(const mkplcomparisonhistograms& right)
+{
+  return *this;
+}
+
+inline void mkplcomparisonhistograms::SetProjectileA(const int A)
+{
+  mkpl_projectile_A = A;
+  return;
+}
+
+inline void mkplcomparisonhistograms::SetProjectileZ(const int Z)
+{
+  mkpl_projectile_Z = Z;
+  return;
+}
+
+
+inline void mkplcomparisonhistograms::SetTargetA(const int A)
+{
+  mkpl_target_A = A;
+  return;
+}
+
+inline void mkplcomparisonhistograms::SetTargetZ(const int Z)
+{
+  mkpl_target_Z = Z;
+  return;
+}
+
+inline void mkplcomparisonhistograms::SetReactionE(const double E)
+{
+  mkpl_reaction_E = E;
+  return;
+}
+
+inline void mkplcomparisonhistograms::
+PrepareHistograms(mkplexpdatamanager * expdata, const bool components,
+		  const double xs, const double entries)
+{
+  this->InitializeHistograms();
+  this->PrepareDEhistograms(expdata,components);
+  this->PrepareDAhistograms(expdata,components);
+  this->PrepareDDhistograms(expdata,components);
+  this->PrepareDDAhistograms(expdata,components);
+  this->DENormalization(xs,entries);
+  this->DANormalization(xs,entries);
+  this->DDNormalization(xs,entries);
+  this->DDANormalization(xs,entries);
+  return;
+}
+
+inline void mkplcomparisonhistograms::
+Fill(const int A, const int Z, const double E, const double ang, 
+     const double E_cm, const double ang_cm, const string& pname)
+{
+  if (mkpl_A == A && mkpl_Z == Z)
+    {
+      this->FillDE(E,ang,pname);
+      this->FillDEcm(E_cm,ang_cm,pname);
+      this->FillDA(E,ang,pname);
+      this->FillDAcm(E_cm,ang_cm,pname);
+      this->FillDD(E,ang,pname);
+      this->FillDDcm(E_cm,ang_cm,pname);
+      this->FillDDA(E,ang,pname);
+      this->FillDDAcm(E_cm,ang_cm,pname);
+    }
+  return;
+}
+
+
+inline TCanvas * mkplcomparisonhistograms::
+RenewCanvas(TCanvas * canvas)
+{
+  if (canvas) delete canvas;
+  TCanvas * aCanvas = new TCanvas("hCanvas","G4PreCompoundTest Analysis");//,596,842);
+  // Set the Grid in both axes
+  aCanvas->SetGrid(1,1);
+  return aCanvas;
+}
+
+
+inline TString mkplcomparisonhistograms::GetName() const
+{
+  return mkpl_name;
+}
+
+inline bool mkplcomparisonhistograms::ThereIsDE() const 
+{
+  if (mkpl_de) return true;
+  else return false;
+}
+
+inline bool mkplcomparisonhistograms::ThereIsDEcm() const 
+{
+  if (mkpl_cm_de) return true;
+  else return false;
+}
+
+inline bool mkplcomparisonhistograms::ThereIsDA() const 
+{
+  if (mkpl_da) return true;
+  else return false;
+}
+
+inline bool mkplcomparisonhistograms::ThereIsDAcm() const 
+{
+  if (mkpl_cm_da) return true;
+  else return false;
+}
+
+inline bool mkplcomparisonhistograms::ThereIsDD() const 
+{
+  if (mkpl_dd) return true;
+  else return false;
+}
+
+inline bool mkplcomparisonhistograms::ThereIsDDcm() const 
+{
+  if (mkpl_cm_dd) return true;
+  else return false;
+}
+
+inline bool mkplcomparisonhistograms::ThereIsDDA() const 
+{
+  if (mkpl_dda) return true;
+  else return false;
+}
+
+inline bool mkplcomparisonhistograms::ThereIsDDAcm() const 
+{
+  if (mkpl_cm_dda) return true;
+  else return false;
+}
+
+inline int mkplcomparisonhistograms::GetNumOfAngles() const
+{
+  return mkpl_dd->Size();
+}
+
+inline int mkplcomparisonhistograms::GetNumOfAnglesCM() const
+{
+  return mkpl_cm_dd->Size();
+}
+
+inline int mkplcomparisonhistograms::GetNumOfRanges() const
+{
+  return mkpl_dda->Size();
+}
+
+inline int mkplcomparisonhistograms::GetNumOfRangesCM() const
+{
+  return mkpl_cm_dda->Size();
+}
+
+inline double mkplcomparisonhistograms::GetAngle(const int n) const
+{
+  if (mkpl_dd) return mkpl_dd->GetAngle(n);
+  else return -1.0;
+}
+
+inline double mkplcomparisonhistograms::GetAngleCM(const int n) const
+{
+  if (mkpl_cm_dd) return mkpl_cm_dd->GetAngle(n);
+  else return -1.0;
+}
+
+inline pair<double,double> mkplcomparisonhistograms::GetRange(const int n) const
+{
+  if (mkpl_dda) return mkpl_dda->GetRange(n);
+  else return make_pair(-1.0,-1.0);
+}
+
+inline pair<double,double> mkplcomparisonhistograms::GetRangeCM(const int n) const
+{
+  if (mkpl_cm_dda) return mkpl_cm_dda->GetRange(n);
+  else  return make_pair(-1.0,-1.0);
+}

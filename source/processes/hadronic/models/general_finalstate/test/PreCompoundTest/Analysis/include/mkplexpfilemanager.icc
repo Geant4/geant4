@@ -1,0 +1,61 @@
+
+inline mkplexpfilemanager::mkplexpfilemanager()
+{
+}
+
+inline mkplexpfilemanager::mkplexpfilemanager(const mkplexpfilemanager& right)
+{
+}
+
+inline const mkplexpfilemanager& mkplexpfilemanager::
+operator=(const mkplexpfilemanager& right)
+{ 
+  return *this;
+}
+
+
+inline TTree * mkplexpfilemanager::GetDEtree() 
+{ 
+  return mkpl_exptree_de; 
+}
+
+inline TTree * mkplexpfilemanager::GetDAtree() 
+{
+  return mkpl_exptree_da; 
+}
+
+inline TTree * mkplexpfilemanager::GetDDtree() 
+{ 
+  return mkpl_exptree_dd; 
+}
+
+inline TTree * mkplexpfilemanager::GetDDAtree() 
+{ 
+  return mkpl_exptree_dda; 
+}
+
+inline string mkplexpfilemanager::GetFileName()
+{
+  return mkpl_expfile->GetName();
+}
+
+inline string mkplexpfilemanager::GetBaseName()
+{
+  return mkpl_basename;
+}
+
+inline mkplexpfilemanager::~mkplexpfilemanager()
+{
+  if (mkpl_expfile) delete mkpl_expfile;
+}
+
+inline void mkplexpfilemanager::SetVerbosity(const int level)
+{
+  mkpl_verbose = level;
+  return;
+}
+
+inline int mkplexpfilemanager::GetVerbosity() const
+{
+  return mkpl_verbose;
+}

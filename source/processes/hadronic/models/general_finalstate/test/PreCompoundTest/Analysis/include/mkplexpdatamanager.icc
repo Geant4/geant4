@@ -1,0 +1,45 @@
+inline mkplexpdatamanager::mkplexpdatamanager() :
+  mkpl_fm(0), mkpl_DEdata(0), mkpl_DAdata(0), mkpl_DDdata(0), mkpl_DDAdata(0)
+{
+}
+
+inline mkplexpdatamanager::mkplexpdatamanager(mkplfilemanager & fm) :
+  mkpl_fm(0), mkpl_DEdata(0), mkpl_DAdata(0), mkpl_DDdata(0), mkpl_DDAdata(0)
+{
+  this->Initialize(&fm);
+}
+inline mkplexpdatamanager::mkplexpdatamanager(mkplfilemanager * fm) :
+  mkpl_fm(0), mkpl_DEdata(0), mkpl_DAdata(0), mkpl_DDdata(0), mkpl_DDAdata(0)
+{
+  this->Initialize(fm);
+}
+
+inline mkplexpdatamanager::~mkplexpdatamanager()
+{
+
+  if (mkpl_DEdata) delete mkpl_DEdata;
+  if (mkpl_DAdata) delete mkpl_DEdata;
+  if (mkpl_DDdata) delete mkpl_DEdata;
+  if (mkpl_DDAdata) delete mkpl_DEdata;
+  for (summary::iterator i = mkpl_summary.begin(); i != mkpl_summary.end(); ++i)
+    {
+      i->second->clear();
+      delete i->second;
+    }
+  mkpl_summary.clear();
+}
+
+inline mkplexpdatamanager::mkplexpdatamanager(const mkplexpdatamanager& right)
+{
+}
+
+inline const mkplexpdatamanager& mkplexpdatamanager::
+operator=(const mkplexpdatamanager& right)
+{ 
+  return *this; 
+}
+
+inline mkplfilemanager * mkplexpdatamanager::GetFileManager() const
+{
+  return mkpl_fm;
+}

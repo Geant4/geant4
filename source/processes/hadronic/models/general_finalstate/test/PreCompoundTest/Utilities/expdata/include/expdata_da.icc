@@ -1,0 +1,70 @@
+inline expdata_da::expdata_da() : 
+  dat(0) 
+{
+} 
+
+inline expdata_da::~expdata_da()
+{
+  if (dat) delete dat;
+}
+
+
+inline void expdata_da::Reset()
+{
+  if (dat) 
+    {
+      delete dat;
+      dat = 0;
+    }
+  theDataHeader.UnsetCM();
+  theDataHeader.SetCutoff(-1.0);
+  return;
+}
+
+inline expdata_daunit * expdata_da::GetData() const 
+{ 
+  return dat; 
+}
+
+inline void expdata_da::SetData(const Int_t n,
+				const Double_t * e, 
+				const Double_t * ee,
+				const Double_t * d, 
+				const Double_t * ed)
+{
+  if (dat) this->Reset();
+  dat = new expdata_daunit(n,e,ee,d,ed);
+  ((expdata*)(dat))->operator=(theDataHeader);
+  return;
+}
+
+
+inline void expdata_da::SetData(const Int_t n,
+				const Double_t * e, 
+				const Double_t * eel, 
+				const Double_t * eeh,
+				const Double_t * d, 
+				const Double_t * edl,
+				const Double_t * edh)
+{
+  if (dat) this->Reset();
+  dat = new expdata_daunit(n,e,eel,eeh,d,edl,edh);
+  ((expdata*)(dat))->operator=(theDataHeader);
+  return;
+}
+
+inline expdata * expdata_da::GetHeader()
+{ 
+  //  return (expdata*)(dat); 
+  return &theDataHeader;
+}
+
+
+
+inline void expdata_da::ShowYourSelf() const
+{
+  std::ostringstream os;
+  this->ShowYourSelf(os);
+  std::cout << os.rdbuf();
+  return;
+}

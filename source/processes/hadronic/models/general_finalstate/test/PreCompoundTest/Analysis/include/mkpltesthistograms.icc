@@ -1,0 +1,154 @@
+inline  mkpltesthistograms::mkpltesthistograms() :
+  mkpl_testPhi(false), mkpl_direction('R'),
+  mkpl_baryonconservation(0), mkpl_chargeconservation(0), 
+  mkpl_energyconservation(0), mkpl_momentumconservation(0),
+  mkpl_pxconservation(0), mkpl_pyconservation(0), mkpl_pzconservation(0),
+  mkpl_theta(0), mkpl_thetaprecom(0), mkpl_thetaevap(0), 
+  mkpl_phi(0), mkpl_phiprecom(0), mkpl_phievap(0),
+  mkpl_phinucleon(0), mkpl_typefragments(0)
+{}
+
+inline  mkpltesthistograms::mkpltesthistograms(const mkpltesthistograms& right)
+{}
+
+inline mkpltesthistograms::~mkpltesthistograms()
+{
+  this->DeleteHistograms();
+}
+
+inline const mkpltesthistograms& mkpltesthistograms::
+operator=(const mkpltesthistograms& right)
+{
+  return *this;
+}
+
+
+inline TCanvas * mkpltesthistograms::
+RenewCanvas(TCanvas * canvas)
+{
+  if (canvas) delete canvas;
+  TCanvas * aCanvas = new TCanvas("hCanvas","G4PreCompoundTest Analysis");//,596,842);
+  // Set the Grid in both axes
+  aCanvas->SetGrid(1,1);
+  return aCanvas;
+}
+
+
+inline void mkpltesthistograms::PlotBaryonNumber()
+{
+  mkpl_baryonconservation->GetXaxis()->SetTitle("#DeltaA");
+  mkpl_baryonconservation->Draw();
+  return;
+}
+
+inline void mkpltesthistograms::PlotCharge()
+{
+  mkpl_chargeconservation->GetXaxis()->SetTitle("#DeltaZ");
+  mkpl_chargeconservation->Draw();
+  return;
+}
+
+inline void mkpltesthistograms::PlotEnergy()
+{
+  mkpl_energyconservation->GetXaxis()->SetTitle("#Delta E (MeV)");
+  mkpl_energyconservation->Draw();
+  return;
+}
+
+inline void mkpltesthistograms::PlotMomentum()
+{
+  mkpl_momentumconservation->GetXaxis()->SetTitle("#Delta P (MeV)");
+  mkpl_momentumconservation->Draw();
+  return;
+}
+
+inline void mkpltesthistograms::PlotPx()
+{
+  mkpl_pxconservation->GetXaxis()->SetTitle("#Delta P_{x} (MeV)");
+  mkpl_pxconservation->Draw();
+  return;
+}
+
+inline void mkpltesthistograms::PlotPy()
+{
+  mkpl_pyconservation->GetXaxis()->SetTitle("#Delta P_{y} (MeV)");
+  mkpl_pyconservation->Draw();
+  return;
+}
+
+inline void mkpltesthistograms::PlotPz()
+{
+  mkpl_pzconservation->GetXaxis()->SetTitle("#Delta P_{z} (MeV)");
+  mkpl_pzconservation->Draw();
+  return;
+}
+
+inline void mkpltesthistograms::PlotTheta()
+{
+  mkpl_theta->GetXaxis()->SetTitle("#theta (rad)");
+  mkpl_theta->Draw();
+  return;
+}
+
+inline void mkpltesthistograms::PlotThetaPreeq()
+{
+  mkpl_thetaprecom->GetXaxis()->SetTitle("#theta (rad)");
+  mkpl_thetaprecom->Draw();
+  return;
+}
+
+inline void mkpltesthistograms::PlotThetaEvap()
+{
+  mkpl_thetaevap->GetXaxis()->SetTitle("#theta (rad)");
+  mkpl_thetaevap->Draw();
+  return;
+}
+
+inline void mkpltesthistograms::PlotPhi()
+{
+  if (mkpl_testPhi)	
+    {
+      mkpl_phi->GetXaxis()->SetTitle("#phi (rad)");
+      mkpl_phi->Draw();
+    }
+  return;
+}
+
+inline void mkpltesthistograms::PlotPhiPreeq()
+{
+  if (mkpl_phiprecom)
+    {
+      mkpl_phiprecom->GetXaxis()->SetTitle("#phi (rad)");
+      mkpl_phiprecom->Draw();
+    }
+  return;
+}
+
+inline void mkpltesthistograms::PlotPhiEvap()
+{
+  if (mkpl_phievap)
+    {
+      mkpl_phievap->GetXaxis()->SetTitle("#phi (rad)");
+      mkpl_phievap->Draw();
+    }
+  return;
+}
+
+inline void mkpltesthistograms::PlotPhiNucleons()
+{
+  if (mkpl_phinucleon)
+    {
+      mkpl_phinucleon->GetXaxis()->SetTitle("#phi (rad)");
+      mkpl_phinucleon->Draw();
+    }
+  return;
+}
+
+inline void mkpltesthistograms::PlotTypeOfFragments()
+{
+  mkpl_typefragments->GetYaxis()->SetTitle("N. of Fragments");
+  mkpl_typefragments->LabelsDeflate("X");
+  mkpl_typefragments->LabelsOption(">v","X"); 
+  mkpl_typefragments->Draw();
+  return;
+}

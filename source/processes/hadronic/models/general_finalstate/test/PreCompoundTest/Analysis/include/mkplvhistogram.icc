@@ -1,0 +1,31 @@
+inline mkplvhistogram::mkplvhistogram()
+{}
+
+
+inline mkplvhistogram::mkplvhistogram(const int A, const int Z, const int pA, const int pZ,
+				      const int tA, const int tZ, const double E, 
+				      const char* name) :
+  mkpl_CM(false), mkpl_A(A), mkpl_Z(Z),
+  mkpl_projectile_A(pA), mkpl_projectile_Z(pZ),
+  mkpl_target_A(tA), mkpl_target_Z(tZ),
+  mkpl_reaction_E(E), mkpl_name(name)
+  
+{
+}
+
+inline mkplvhistogram::~mkplvhistogram() 
+{
+}
+
+inline bool mkplvhistogram::IsCM() const
+{
+  return mkpl_CM;
+}
+
+inline void mkplvhistogram::SetCM(const bool op)
+{
+  mkpl_CM = op;
+  return;
+}
+
+

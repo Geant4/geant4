@@ -1,0 +1,13 @@
+inline mkplda::mkplda()
+{
+}
+
+inline mkplda::mkplda(const int A, const int Z, const int pA, const int pZ,
+		      const int tA, const int tZ, const double E, const char * name)
+  : mkplsingledifhistogram(A,Z,pA,pZ,tA,tZ,E,name)
+{
+}
+
+inline mkplda::~mkplda()
+{
+}

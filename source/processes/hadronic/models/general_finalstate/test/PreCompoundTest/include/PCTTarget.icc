@@ -1,0 +1,67 @@
+inline PCTTarget::PCTTarget() 
+{
+}
+
+inline PCTTarget::PCTTarget(const PCTTarget& target) 
+{
+}
+
+inline const PCTTarget& PCTTarget::operator=(const PCTTarget & right) 
+{
+    return *this;
+}
+
+
+inline void PCTTarget::SetMomentum(const G4ThreeVector& p)
+{
+    if (theParticle) this->SetParticleMomentum(p);
+    else if (theMaterial) this->SetMaterialMomentum(p);
+}
+
+inline G4LorentzVector PCTTarget::GetMomentum() const
+{
+    if (theParticle) return this->GetParticleMomentum();
+    else if (theMaterial) return this->GetMaterialMomentum();
+    return G4LorentzVector(0.0,0.0,0.0,0.0);
+}
+
+inline G4bool PCTTarget::IsValid() const 
+{
+    return (this->IsNucleus() || this->IsNatural()); 
+}
+
+inline G4bool PCTTarget::IsNucleus() const 
+{
+    return (theParticle != 0); 
+}
+
+inline G4bool PCTTarget::IsNatural() const 
+{
+    return (theMaterial != 0); 
+}
+
+inline G4LorentzVector PCTTarget::GetParticleMomentum() const 
+{
+    return ParticleMomentum; 
+}    
+
+
+inline G4LorentzVector PCTTarget::GetMaterialMomentum() const
+{
+  if (lastIsotope >= 0)
+    {
+      return MaterialMomentum[lastIsotope];
+      
+    }
+  G4cerr << "PCTTarget::GetMaterialMomentum(): I couldn't find the momentum\n";
+  return G4LorentzVector(0.0,0.0,0.0,0.0);
+}
+
+
+inline G4double PCTTarget::GetMass() const
+{
+  if ( this->IsNucleus() ) return theParticle->GetPDGMass();
+  else return 0.0;
+}
+			     
+											    

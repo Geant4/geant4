@@ -1,0 +1,38 @@
+PCTWriter::PCTWriter() 
+{
+}
+
+PCTWriter::~PCTWriter()
+{
+  if (this->IsOpen()) this->CloseFile();
+}
+
+inline void PCTWriter::OpenFile(const G4String name)
+{
+  theFile.open(name);
+  return;
+}
+
+inline G4bool PCTWriter::IsOpen() const
+{
+  return theFile.is_open();
+}
+
+
+inline void PCTWriter::CloseFile()
+{
+  theFile.flush();
+  theFile.close();      
+  return;
+}
+
+
+
+inline void PCTWriter::WriteString(const G4String& str)
+{
+  if ( this->IsOpen() )
+    {
+      theFile << str << 'n';
+    }
+  return;
+}

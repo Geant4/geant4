@@ -1,0 +1,42 @@
+inline mkpldda::mkpldda()
+{
+}
+
+inline mkpldda::mkpldda(const int A, const int Z, const int pA, const int pZ,
+			const int tA, const int tZ, const double E, const char * name)
+  : mkpldoubledifhistogram(A,Z,pA,pZ,tA,tZ,E,name), mkpl_exp(0)
+{
+}
+
+inline mkpldda::~mkpldda()
+{
+  this->DeleteHistograms();
+}
+
+inline void mkpldda::DeleteHistograms()
+{
+  mkpldoubledifhistogram::DeleteHistograms();
+  if (mkpl_exp) delete mkpl_exp;
+  return;  
+}
+
+inline void mkpldda::InitializeHistograms()
+{
+  mkpldoubledifhistogram::InitializeHistograms();
+  mkpl_exp = 0;
+  return;
+}
+
+inline bool mkpldda::ThereIsData() const
+{
+  if (mkpl_exp) return true;
+  else return false;
+}
+
+inline pair<double,double> mkpldda::GetRange(const int n) const
+{
+  if (n >= 0 && n < int(mkpl_exp->size()) )  
+    return make_pair(mkpl_exp->operator[](n).GetInfCut(),mkpl_exp->operator[](n).GetSupCut());
+  else return make_pair(-1.0,-1.0);
+}
+		     

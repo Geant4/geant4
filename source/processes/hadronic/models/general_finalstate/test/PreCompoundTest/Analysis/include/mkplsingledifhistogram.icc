@@ -1,0 +1,67 @@
+inline mkplsingledifhistogram::mkplsingledifhistogram()
+{
+}
+
+inline mkplsingledifhistogram::mkplsingledifhistogram(const int A, const int Z,
+						      const int pA, const int pZ, 
+						      const int tA, const int tZ, 
+						      const double E, const char * name) :
+  mkplvhistogram(A,Z,pA,pZ,tA,tZ,E,name), mkpl_h(0), mkpl_preeq_h(0), mkpl_evap_h(0),
+  mkpl_fis_h(0), mkpl_fermi_h(0), mkpl_inc_h(0), mkpl_exp(0), mkpl_weight(1.0)
+
+{
+}
+
+
+inline mkplsingledifhistogram::~mkplsingledifhistogram()
+{
+  this->DeleteHistograms();
+}
+
+
+inline bool mkplsingledifhistogram::ThereIsData() const
+{
+  if (mkpl_exp) return true;
+  else return false;
+}
+
+
+inline void mkplsingledifhistogram::DeleteHistograms()
+{
+  // delete all existing histograms
+  if (mkpl_h) delete mkpl_h;
+  if (mkpl_preeq_h) delete mkpl_preeq_h;
+  if (mkpl_evap_h) delete mkpl_evap_h;
+  if (mkpl_fis_h) delete mkpl_fis_h;
+  if (mkpl_fermi_h) delete mkpl_fis_h;
+  if (mkpl_inc_h) delete mkpl_inc_h;
+  if (mkpl_exp) delete mkpl_exp;
+  mkpl_weight = 1.0;
+  return;
+}
+
+inline void mkplsingledifhistogram::InitializeHistograms()
+{
+  this->DeleteHistograms();
+  mkpl_h = 0;
+  mkpl_preeq_h = 0;
+  mkpl_evap_h = 0;
+  mkpl_fis_h = 0;
+  mkpl_fermi_h = 0;
+  mkpl_inc_h = 0;
+  mkpl_exp = 0;
+  mkpl_weight = 1.0;
+  return;
+}
+
+inline void mkplsingledifhistogram::SaveHistograms()
+{
+  if (mkpl_h) mkpl_h->Write("simulation");
+  if (mkpl_preeq_h) mkpl_preeq_h->Write("sim_preeq");
+  if (mkpl_evap_h) mkpl_evap_h->Write("sim_evap");
+  if (mkpl_fis_h) mkpl_inc_h->Write("sim_fis");
+  if (mkpl_fermi_h) mkpl_inc_h->Write("sim_fermi");
+  if (mkpl_inc_h) mkpl_inc_h->Write("sim_inc");
+  if (mkpl_exp) mkpl_exp->Write("experimental");
+  return;
+}

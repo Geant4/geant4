@@ -1,0 +1,87 @@
+inline mkplexpdda::mkplexpdda() : 
+  mkpl_liminf(0.0), mkpl_limsup(0.0), mkpl_mg(0) 
+{
+}
+
+inline mkplexpdda::~mkplexpdda() 
+{
+  // This is only a container that keeps some related information together,
+  // so it doesn't frees allocated memory. It is resposability of the owner of 
+  // this object to clean up memory.
+  if (mkpl_mg) delete mkpl_mg;
+}
+
+inline mkplexpdda::mkplexpdda(const mkplexpdda& right)
+{
+  mkpl_liminf = right.mkpl_liminf;
+  mkpl_limsup = right.mkpl_limsup;
+  mkpl_mg = (TMultiGraph*)(right.mkpl_mg->Clone());
+}
+
+inline mkplexpdda::mkplexpdda(const double li, const double ls, TMultiGraph * ptr) 
+{
+  if (ls > li)
+    {
+      mkpl_liminf = li;
+      mkpl_limsup = ls;
+    }
+  else 
+    {
+      mkpl_liminf = ls;
+      mkpl_limsup = li;
+      }
+  mkpl_mg = ptr;
+}
+
+
+inline const mkplexpdda& mkplexpdda::operator=(const mkplexpdda & right)
+{
+  mkpl_liminf = right.mkpl_liminf;
+  mkpl_limsup = right.mkpl_limsup;
+  mkpl_mg = (TMultiGraph*)(right.mkpl_mg->Clone());
+  return *this;
+}
+
+inline double mkplexpdda::GetInfCut() const
+{ 
+  return mkpl_liminf;
+}
+
+inline double mkplexpdda::GetSupCut() const
+{
+  return mkpl_limsup;
+}
+
+inline void mkplexpdda::SetRange(const double li, const double ls)
+{
+  this->SetLimits(li,ls);
+  return;
+}
+
+inline void mkplexpdda::SetLimits(const double li, const double ls)
+{
+  if (li < ls)
+    {
+      mkpl_liminf = li; 
+      mkpl_limsup = ls;
+    }
+  else 
+    {
+      mkpl_liminf = ls;
+      mkpl_limsup = li;
+    }
+  return;
+}
+
+inline TMultiGraph * mkplexpdda::GetData() 
+{
+  return mkpl_mg;
+}
+
+inline void mkplexpdda::SetData(TMultiGraph * ptr)
+{
+  if (mkpl_mg) delete mkpl_mg;
+  mkpl_mg = ptr;
+  return;
+}
+

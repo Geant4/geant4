@@ -1,0 +1,74 @@
+inline expdata_daunit::expdata_daunit() : 
+  Id(0)
+{
+}
+
+inline expdata_daunit::expdata_daunit(const expdata_daunit & val) : 
+  expdata_unit(val), Id(val.Id)
+{
+}
+
+inline expdata_daunit::~expdata_daunit() 
+{
+}
+
+inline const expdata_daunit & expdata_daunit::operator=(const expdata_daunit & val) 
+{
+  expdata_unit::operator=(val);
+  Id = val.Id;
+  return *this;
+}
+  
+inline expdata_daunit::expdata_daunit(const Int_t n, 
+				      const Double_t * e, 
+				      const Double_t * ee,
+				      const Double_t * d, 
+				      const Double_t * ed) :
+  expdata_unit(n,e,ee,d,ed), Id(0)
+{
+}
+
+inline expdata_daunit::expdata_daunit(const Int_t n, 
+				      const Double_t * e, 
+				      const Double_t * eel, 
+				      const Double_t * eeh,
+				      const Double_t * d, 
+				      const Double_t * edl, 
+				      const Double_t * edh) :
+  expdata_unit(n,e,eel,eeh,d,edl,edh),  Id(0)
+{
+}
+  
+inline Int_t expdata_daunit::GetId() const
+{ 
+  return Id;
+}
+
+inline Double_t expdata_daunit::GetAngle(const Int_t i) const
+{ 
+  return this->GetDataX(i); 
+}
+
+inline Double_t expdata_daunit::GetEngleError(const Int_t i) const 
+{ 
+  return this->GetErrorX(i); 
+}
+
+inline Double_t expdata_daunit::GetCrossSection(const Int_t i) const 
+{ 
+  return this->GetDataY(i); 
+}
+
+inline Double_t expdata_daunit::GetCrossSectionError(const Int_t i) const 
+{ 
+  return this->GetErrorY(i); 
+}
+
+inline void expdata_daunit::ShowYourSelf() const
+{
+  std::ostringstream os;
+  this->ShowYourSelf(os);
+  std::cout << os.rdbuf();
+  return;
+}
+

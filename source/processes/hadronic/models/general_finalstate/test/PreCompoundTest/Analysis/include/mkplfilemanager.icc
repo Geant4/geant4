@@ -1,0 +1,110 @@
+
+inline mkplfilemanager::mkplfilemanager() 
+  : mkpl_expfile(0), mkpl_simfile(0)
+{
+}
+
+inline mkplfilemanager::~mkplfilemanager()
+{
+  this->CloseSimFile();
+  this->CloseExpFile();
+}
+
+
+inline mkplfilemanager::mkplfilemanager(const mkplfilemanager& right)
+{
+}
+
+inline const mkplfilemanager& mkplfilemanager::
+operator=(const mkplfilemanager& right)
+{ 
+  return *this;
+}
+
+
+inline TTree * mkplfilemanager::GetExpDEtree() 
+{ 
+  if (mkpl_expfile) return mkpl_expfile->GetDEtree();
+  else return 0; 
+}
+
+inline TTree * mkplfilemanager::GetExpDAtree() 
+{
+  if (mkpl_expfile) return mkpl_expfile->GetDAtree();
+  else return 0;
+}
+
+inline TTree * mkplfilemanager::GetExpDDtree() 
+{ 
+  if (mkpl_expfile) return mkpl_expfile->GetDDtree();
+  else return 0;
+}
+
+inline TTree * mkplfilemanager::GetExpDDAtree() 
+{ 
+  if (mkpl_expfile) return mkpl_expfile->GetDDAtree();
+  else return 0;
+}
+
+inline TTree * mkplfilemanager::GetSimtree()   
+{ 
+  if (mkpl_simfile) return mkpl_simfile->GetTree();
+  else return 0;
+}
+
+inline string mkplfilemanager::GetSimFileName() 
+{ 
+  if (mkpl_simfile) return mkpl_simfile->GetFileName();
+  else return 0;
+}
+
+inline string  mkplfilemanager::GetExpFileName() 
+{ 
+  return mkpl_expfile->GetFileName();
+}
+
+inline void mkplfilemanager::OpenExpFile(const string & filename)
+{
+  if (mkpl_expfile) delete mkpl_expfile;
+  mkpl_expfile = new mkplexpfilemanager(filename);
+  return;
+}
+
+inline void mkplfilemanager::OpenSimFile(const string & filename)
+{
+  if (mkpl_simfile) delete mkpl_simfile;
+  mkpl_simfile = new mkplsimfilemanager(filename);
+  return;
+}
+
+
+inline void mkplfilemanager::CloseSimFile()
+{
+  if (mkpl_simfile) delete mkpl_simfile;
+  mkpl_simfile = 0;
+  return;
+}
+
+inline void mkplfilemanager::CloseExpFile()
+{
+  if (mkpl_expfile) delete mkpl_expfile;
+  mkpl_expfile = 0;
+  return;
+}
+
+inline mkplexpfilemanager * mkplfilemanager::GetExpFile()
+{
+  return mkpl_expfile;
+}
+
+inline mkplsimfilemanager * mkplfilemanager::GetSimFile()
+{
+  return mkpl_simfile;
+}
+
+inline void mkplfilemanager::SetVerbosity(const int level)
+{
+  if (mkpl_expfile) mkpl_expfile->SetVerbosity(level);
+  if (mkpl_simfile) mkpl_simfile->SetVerbosity(level);
+  return;
+}

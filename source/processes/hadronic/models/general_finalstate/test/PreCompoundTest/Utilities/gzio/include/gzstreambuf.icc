@@ -1,0 +1,295 @@
+template<class charT, class traits>
+const int basic_gzstreambuf<charT,traits>::pbSize;
+
+
+//---------------------------------------------------
+template <class charT, class traits>
+basic_gzstreambuf<charT, traits>::basic_gzstreambuf()
+  : opened(false)
+//---------------------------------------------------
+{
+  // set up buffer in such way that overflow() is already called
+  // when there is still room for one character. That way if overflow()
+  // is not called with EOF as the argument, the corresponding character
+  // can be written to the write position and the whole buffer can be emptied.
+  setp(buffer, buffer + (bufSize-1) );
+  
+  setg(buffer+pbSize, buffer+pbSize, buffer+pbSize);
+}
+
+//---------------------------------------------------
+template <class charT, class traits>
+basic_gzstreambuf<charT, traits>::~basic_gzstreambuf()
+//---------------------------------------------------
+{
+  this->close();
+}
+
+
+//---------------------------------------------------
+template <class charT, class traits>
+int basic_gzstreambuf<charT, traits>::flush_buffer()
+//---------------------------------------------------
+{
+  int cnt = pptr() - pbase();
+  if ( gzwrite( file, pbase(), cnt) != cnt)
+    {
+      return traits_type::eof();
+    }
+  pbump(-cnt);
+  return cnt;
+}
+
+//---------------------------------------------------
+template <class charT, class traits>
+int basic_gzstreambuf<charT, traits>::fill_buffer()
+//---------------------------------------------------
+{
+  // determine number of putback characters
+  std::streamsize numPutbacks = std::min(gptr() - eback(), pbSize);
+  memcpy(buffer + (pbSize-numPutbacks) * sizeof(char_type),
+         gptr() - numPutbacks * sizeof(char_type),
+         numPutbacks * sizeof(char_type));
+  int num = gzread(file, buffer + pbSize * sizeof(char_type), bufSize-pbSize);
+  
+  if (num <= 0)
+    {
+      setg(0,0,0);
+      return -1;
+    }
+  else 
+    {
+      setg(buffer + pbSize - numPutbacks,
+           buffer + pbSize, buffer + pbSize + num);
+      return num;
+    }
+}
+
+//---------------------------------------------------
+template <class charT, class traits>
+int basic_gzstreambuf<charT, traits>::sync()
+//---------------------------------------------------
+{
+  if (traits_type::eq_int_type(flush_buffer(), traits_type::eof()))
+    {
+      // ERROR
+      return -1;
+    }
+  
+  return 0;
+}
+
+//---------------------------------------------------
+template <class charT, class traits>
+typename basic_gzstreambuf<charT,traits>::int_type 
+basic_gzstreambuf<charT, traits>::overflow(int_type c)
+//---------------------------------------------------
+{
+  if (!traits_type::eq_int_type(c, traits_type::eof()))
+    {
+      // insert character into the buffer
+      *pptr() = c;
+      pbump(1);
+    }
+  // flush the buffer
+  if (traits_type::eq_int_type(flush_buffer(), traits_type::eof()))
+    {
+      return traits_type::eof();
+    }
+  
+  return  traits_type::not_eof(c);
+}
+
+
+// //---------------------------------------------------
+// template <class charT, class traits>
+// std::streamsize basic_gzstreambuf<charT, traits>::xsputn(const char_type * s, 
+//                                                          std::streamsize n)
+// //---------------------------------------------------
+// {
+//   if (n < epptr() - pptr())
+//     {
+//       memcpy(pptr(), s, n * sizeof(char_type));
+//       pbump(n);
+//     }
+//   else 
+//     {
+//       for (std::streamsize i = 0; i < n; i++)
+// 	{
+//           if (traits_type::eq_int_type(sputc(s[i]), traits_type::eof())) return i;
+// 	}
+//     }
+//   return n;
+// }
+
+
+//---------------------------------------------------
+template <class charT, class traits>
+std::streamsize basic_gzstreambuf<charT, traits>::xsputn(const char_type * s, 
+                                                         std::streamsize n)
+//---------------------------------------------------
+{
+  std::streamsize remain = n;
+  std::streamsize copied = 0;
+  while ( remain > 0 )
+    {
+      std::streamsize buf_capacity = epptr()-pptr();
+      if (remain < buf_capacity)
+        {
+          memcpy(pptr(), s+copied, remain * sizeof(char_type));
+          pbump(remain);
+          copied += remain;
+          remain = 0;
+        }
+      else 
+        {
+          memcpy(pptr(), s+copied, buf_capacity * sizeof(char_type));
+          pbump(buf_capacity);
+          copied += buf_capacity;
+          remain -= buf_capacity;
+          overflow(traits_type::eof());
+        }
+    }
+      
+  return n;
+}
+
+//---------------------------------------------------
+template <class charT, class traits>
+typename traits::int_type basic_gzstreambuf<charT, traits>::underflow()
+//---------------------------------------------------
+{
+  if (gptr() < egptr())
+    {
+      return traits_type::to_int_type(*gptr());
+    }
+  if (fill_buffer() < 0)
+    {
+      return traits_type::eof();
+    }
+  else
+    {
+      return traits_type::to_int_type(*gptr());
+    }
+}
+
+
+//---------------------------------------------------
+template <class charT, typename traits>
+typename traits::int_type basic_gzstreambuf<charT, traits>::pbackfail(int_type c)
+//---------------------------------------------------
+{
+  if (gptr() != eback())
+    {
+      gbump(-1);
+      if (!traits_type::eq_int_type(c, traits_type::eof()))
+	{
+          *(gptr()) = traits_type::to_char_type(c);
+	}
+      return traits_type::not_eof(c);
+    }
+  else
+    {
+      return traits_type::eof();
+    }
+}
+
+
+//---------------------------------------------------
+template <class charT, class traits>
+bool basic_gzstreambuf<charT, traits>::is_open() const
+//---------------------------------------------------
+{
+  return opened;
+}
+
+
+//---------------------------------------------------
+template <class charT, class traits>
+basic_gzstreambuf<charT, traits>* 
+basic_gzstreambuf<charT, traits>::close()
+//---------------------------------------------------
+{
+  if (opened)
+    {
+      this->sync();
+      opened = false;
+      if ( gzclose(file) == Z_OK) return this;
+    }
+  return static_cast<basic_gzstreambuf<charT,traits>*>(0);
+}
+
+//---------------------------------------------------
+template <class charT, class traits>
+basic_gzstreambuf<charT, traits>* 
+basic_gzstreambuf<charT, traits>::open(const char* name, 
+                                       const std::ios_base::openmode open_mode, 
+                                       const int level)
+//---------------------------------------------------
+{
+  basic_gzstreambuf<char_type, traits_type>* nullretval = 0;
+  
+  if (this->is_open()) 
+    {
+      return nullretval;
+    }
+  
+  mode = open_mode;
+  
+  if ( (mode & std::ios::ate) || (mode & std::ios::app) || 
+       ((mode & std::ios::in) && (mode & std::ios::out))) 
+    {
+      return nullretval;
+    }
+  
+  char  fmode[4];
+  char* fmodeptr = fmode;
+  if ( mode & std::ios::in)       *fmodeptr++ = 'r';
+  else if ( mode & std::ios::out) *fmodeptr++ = 'w';
+  *fmodeptr++ = 'b';
+  switch (level) 
+    {
+    case 0:
+      *fmodeptr++ = '0';
+      break;
+    case 1:
+      *fmodeptr++ = '1';
+      break;
+    case 2:
+      *fmodeptr++ = '2';
+      break;
+    case 3:
+      *fmodeptr++ = '3';
+      break;
+    case 4:
+      *fmodeptr++ = '4';
+      break;
+    case 5:
+      *fmodeptr++ = '5';
+      break;
+    case 6:
+      *fmodeptr++ = '6';
+      break;
+    case 7:
+      *fmodeptr++ = '7';
+      break;
+    case 8:
+      *fmodeptr++ = '8';
+      break;
+    case 9:
+      *fmodeptr++ = '9';
+      break;
+    case Z_DEFAULT_COMPRESSION:
+    default:
+      break;
+    }
+  
+  *fmodeptr = '\0';
+  
+  file = gzopen( name, fmode);
+  if (file == 0) return nullretval;
+
+  opened = true;
+
+  return this;
+}
