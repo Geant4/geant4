@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonAr40.cc,v 1.1 2000-05-21 18:36:12 chauvie Exp $
+// $Id: G4IonAr40.cc,v 1.2 2000-06-22 12:50:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ G4IonAr40 G4IonAr40::theIonAr40(
               "IonAr40",    37.291*GeV,       0.0*MeV,  +18.0*eplus, 
 		    0,              +1,             0,          
 		    0,               0,             0,             
-	    "nucleus",               0,            +40,           0,
+	    "static_nucleus",        0,            +40,           0,
 		 true,            -1.0,          NULL
 );
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonFe56.cc,v 1.1 2000-05-21 18:36:12 chauvie Exp $
+// $Id: G4IonFe56.cc,v 1.2 2000-06-22 12:50:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ G4IonFe56 G4IonFe56::theIonFe56(
               "IonFe56",    52.0308*GeV,       0.0*MeV,  +26.0*eplus, 
 		    0,              +1,             0,          
 		    0,               0,             0,             
-	    "nucleus",               0,            +56,           0,
+	    "static_nucleus",        0,            +56,           0,
 		 true,            -1.0,          NULL
 );
 
