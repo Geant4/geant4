@@ -79,31 +79,26 @@
       % gmake
  		
  - execute the program  in 'batch' mode from macro files
-      % lArcal    prerunlAr.mac
+      % lArCal prerunlArcal.mac
  		
  - execute Test  in 'interactive mode' with visualization
-      %  lArcal 
-         ....
-  
- Idle> type your commands
-         ....
- 	
-  Idle> exit
+      %  lArCal 
+         ...
+      Idle> type your commands
+         ...
+      Idle> exit
 
 
  6. HISTOGRAMS
  --------------
  
- lArcal produces 4 histograms (saved as fcal.paw) which illustrate
+ lArCal produces 4 histograms (saved as fcal.his) which illustrate
  the final state of the most important variables of the example:
 
  Histo1 --> Number of tracks out of World
  Histo2 --> Number of secondary particles
- Histo3 --> Electromagnetic Energy deposit in the EMModule
- Histo4 --> Hadronic Energy deposit in the HadModule
-
- The example generates 3 ntuples too which contains the same information 
- than the histograms. 
+ Histo3 --> Total energy deposited (in MeV) in the electromagnetic module
+ Histo4 --> Total energy deposited (in MeV) in the hadronic module
 
  See their definitions in FCALAnalysisManager.cc
 

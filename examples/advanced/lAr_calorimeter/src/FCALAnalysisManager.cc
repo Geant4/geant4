@@ -115,11 +115,11 @@ void FCALAnalysisManager::book()
 
   //  tuple = tupleFactory->create("FCAL","FCAL","energy counts");
 
-  ntuple_1 = tupleFactory->create("100","Number Out of World","float OutOfWorld, i, j");
+  // ntuple_1 = tupleFactory->create("100","Number Out of World","float OutOfWorld, i, j");
    
-  ntuple_2 = tupleFactory->create("200","Secondary Info","float Secondary, i, j");
+  // ntuple_2 = tupleFactory->create("200","Secondary Info","float Secondary, i, j");
   
-  ntuple_3 = tupleFactory->create("300","Energy Deposits","float EmEdep, HadEdep");
+  // ntuple_3 = tupleFactory->create("300","Energy Deposits","float EmEdep, HadEdep");
 } 
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

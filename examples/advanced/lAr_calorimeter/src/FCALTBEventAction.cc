@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALTBEventAction.cc,v 1.9 2004-01-27 09:08:05 ribon Exp $
+// $Id: FCALTBEventAction.cc,v 1.10 2004-01-27 15:31:08 ribon Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,6 +102,10 @@ void FCALTBEventAction::BeginOfEventAction(const G4Event* evt)
 
 void FCALTBEventAction::EndOfEventAction(const G4Event*)
 {
+#ifdef G4ANALYSIS_USE
+    FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
+#endif
+
   G4int i,j;
   NTracksOutOfWorld = StepAction->GetOutOfWorldTracks(0, 0); 
   G4cout << "N Tracks out of world " << NTracksOutOfWorld << G4endl;
@@ -118,9 +122,9 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
   };
   ofstream OutTracks(FileName1, iostemp1);
 
-  G4double OutOfWorld;
-
   OutTracks << NTracksOutOfWorld << G4endl;
+
+  G4double OutOfWorld;
   for(i=1; i<= NTracksOutOfWorld ; i++){
     for(j=1; j<11 ; j++) {
       //      G4double OutOfWorld = StepAction->GetOutOfWorldTracks(i,j);
@@ -128,27 +132,19 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
       OutTracks << OutOfWorld << " " ; 
     }
     OutTracks << std::endl;
-
     // G4double OutOfWorld2 = StepAction->GetOutOfWorldTracks(i,j);
-
-
+  } 
+  OutTracks.close();
 
 #ifdef G4ANALYSIS_USE
-
-    FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
-    analysis->getfhisto_1()->fill(OutOfWorld);
-
+    analysis->getfhisto_1()->fill(NTracksOutOfWorld);
 #endif
-
-  } 
-
-  OutTracks.close();
 
   NSecondaries = StepAction->GetSecondaries(0,0);
   G4cout << "N Scondaries " << NSecondaries << G4endl;   
   
   // Write Secondary Particles in File
-  //--------------------------------
+  //----------------------------------
   G4String FileName2 = "SecndTracks_802_1mm.dat";
   std::ios::openmode iostemp2;
   if(Init2 == 0) {
@@ -160,24 +156,22 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
   
   ofstream SecndTracks(FileName2, iostemp2);
   
-  G4double Secondary;
-  
   SecndTracks << NSecondaries << std::endl;
+
+  G4double Secondary;  
   for(i=1; i<= NSecondaries ; i++){
     for(j=1; j<11 ; j++) {
       Secondary = StepAction->GetSecondaries(i,j);
-      SecndTracks << Secondary  << " " ; }
+      SecndTracks << Secondary  << " " ; 
+    }
     SecndTracks << std::endl;
     // G4double Secondary2 = StepAction->GetSecondaries(i,j);
-
-#ifdef G4ANALYSIS_USE
-    FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
-    analysis->getfhisto_2()->fill(Secondary);
-#endif
-
   }
   SecndTracks.close();
   
+#ifdef G4ANALYSIS_USE
+    analysis->getfhisto_2()->fill(NSecondaries);
+#endif
 
   // Write Edep in FCAL1 and FCAL2 
   G4String FileName3 = "EdepFCAL_802_1mm.dat";
@@ -194,15 +188,12 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
   G4double EmEdep  = StepAction->GetEdepFCAL("FCALEm");
   G4double HadEdep = StepAction->GetEdepFCAL("FCALHad");
 
-  
   EdepFCAL << EmEdep << " ";
   EdepFCAL << HadEdep; 
   EdepFCAL << std::endl;
   EdepFCAL.close();
 
-
 #ifdef G4ANALYSIS_USE
-  FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
   analysis->getfhisto_3()->fill(EmEdep);
   analysis->getfhisto_4()->fill(HadEdep);
 #endif
