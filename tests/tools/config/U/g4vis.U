@@ -14,18 +14,6 @@ case "$g4vis_none" in
 	;;
 esac
 
-case "$g4vis_build_heprep_driver" in
-'')
-	g4vis_build_heprep_driver=n
-	;;
-esac
-
-case "$g4vis_use_heprep" in
-'')
-	g4vis_use_heprep=n
-	;;
-esac
-
 case "$g4vis_build_openglwin32_driver" in
 '')
 	g4vis_build_openglwin32_driver=n
@@ -138,18 +126,6 @@ case "$g4vis_use_raytracer" in
 	;;
 esac
 
-case "$g4vis_build_vrml_driver" in
-'')
-	g4vis_build_vrml_driver=n
-	;;
-esac
-
-case "$g4vis_use_vrml" in
-'')
-	g4vis_use_vrml=n
-	;;
-esac
-
 # Set by default!
 case "$g4vis_build_vrmlfile_driver" in
 '')
@@ -223,32 +199,6 @@ n)
 
 g4message=`cat << EOM
 
-  G4VIS_BUILD_HEPREP_DRIVER
-  G4VIS_USE_HEPREP
-
-DESCRIPTION
-
-EOM`
-
-dflt=$g4vis_use_heprep
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4vis_build_heprep_driver=n
-		g4vis_use_heprep=n
-		;;
-	y*|Y*) 
-		g4vis_build_heprep_driver=y
-		g4vis_use_heprep=y
-		;;
-	esac
-
-g4message=`cat << EOM
-
   G4VIS_BUILD_OPENGLWIN32_DRIVER
   G4VIS_USE_OPENGLWIN32
 
@@ -308,9 +258,6 @@ DAWN drivers are interfaces to the Fukui Renderer DAWN. DAWN is
 a vectorized 3D PostScript processor suited to prepare technical
 high quality outputs for presentation and/or documentation.
 
-The DAWNFILE driver sends 3D data to DAWN via an intermediate file, 
-named g4.prim in the current directory. The file g4.prim is able to 
-be re-visualized later without the help of Geant4. 
 EOM`
 
 dflt=$g4vis_use_dawn
@@ -422,8 +369,9 @@ g4message=`cat << EOM
 
 It is an interface to the de facto standard 3D graphics library,
 OpenGL. It is well suited for real-time fast visualization
-and prototyping. The X11 version of the OpenGL libraries is
-required.
+and prototyping. The X11 version of the OpenGL libraries and 
+the Motif Xm extension is required.
+
 EOM`
 
 dflt=$g4vis_use_openglxm
@@ -451,6 +399,8 @@ g4message=`cat << EOM
 This driver is based on the "Hepvis" class library.
 The OpenInventor driver and the Hepvis class library are based
 on OpenInventor technology for scientific visualization.
+The X11 version of OpenInventor is required.
+
 EOM`
 
 dflt=$g4vis_use_oix
@@ -504,8 +454,8 @@ g4message=`cat << EOM
   G4VIS_BUILD_VRML_DRIVER
   G4VIS_USE_VRML
 
-This driver generates VRML files, which describe 3D scenes to be 
-visualized with a proper VRML viewer, at either a local or a remote host. 
+DESCRIPTION
+
 EOM`
 
 dflt=$g4vis_use_vrml
