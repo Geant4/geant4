@@ -1,0 +1,34 @@
+# $Id: rndmSeed.mac,v 1.1 2003-01-27 17:55:47 maire Exp $
+#
+# This macro illustrates how to save and reset the random number seed
+#
+# inform the RunManager to systematically save the seed
+#
+/random/setSavingFlag 1
+#
+# run 0
+#
+/run/beamOn 7
+#look at what is saved
+/control/shell ls
+#
+# run 1 
+#
+/run/beamOn
+#save the seed of this current run
+/random/saveThisRun
+/control/shell ls
+#
+# run 2
+#
+/run/beamOn 4
+#
+# restart run 2
+#
+/random/resetEngineFrom currentRun.rndm
+/run/beamOn 4
+#
+# restart run 1 
+#
+/random/resetEngineFrom run1.rndm
+/run/beamOn
