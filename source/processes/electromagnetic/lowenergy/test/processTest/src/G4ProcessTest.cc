@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTest.cc,v 1.3 2001-10-29 09:30:00 pia Exp $
+// $Id: G4ProcessTest.cc,v 1.4 2001-10-29 12:04:36 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -68,7 +68,7 @@ G4ProcessTest:: ~G4ProcessTest()
   gProcessManager = 0;
  }
 
-void G4ProcessTest::buildTables(const G4String& type, G4bool isPolarised)
+void G4ProcessTest::buildTables(const G4String& type, G4bool isPolarised) 
 { 
   process = createProcess();
   G4cout << process->GetProcessName() << " created" << G4endl;

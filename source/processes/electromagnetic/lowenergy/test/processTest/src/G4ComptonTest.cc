@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonTest.cc,v 1.1 2001-10-29 09:30:00 pia Exp $
+// $Id: G4ComptonTest.cc,v 1.2 2001-10-29 12:04:36 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -62,53 +62,53 @@ G4ComptonTest:: ~G4ComptonTest()
 
 G4VProcess* G4ComptonTest::createElectronIonisation()
 {
-  G4VProcess* process = 0;
+  G4VProcess* testProcess = 0;
   if (type == "lowE")
     {
-      process = new G4LowEnergyIonisation;
+      testProcess = new G4LowEnergyIonisation;
     }
   else if (type == "standard")
     {
-      process = new G4eIonisation;
+      testProcess = new G4eIonisation;
     }
 
-  return process;
+  return testProcess;
 }
 
 G4VProcess* G4ComptonTest::createBremsstrahlung()
 {
-  G4VProcess* process = 0;
+  G4VProcess* testProcess = 0;
   if (type == "lowE")
     {
-      process = new G4LowEnergyBremsstrahlung;
+      testProcess = new G4LowEnergyBremsstrahlung;
     }
   else if (type == "standard")
     {
-      process = new G4eBremsstrahlung;
+      testProcess = new G4eBremsstrahlung;
     }
-  return process;  
+  return testProcess;  
 }
 
 G4VProcess* G4ComptonTest::createProcess()
 {
-  G4VProcess* process = 0;
+  G4VProcess* testProcess = 0;
   if (type == "lowE" && (!polarised))
     {
-      process = new G4LowEnergyCompton;
+      testProcess = new G4LowEnergyCompton;
     }
   else if (type == "lowE" && polarised)
     {
-      process = new G4LowEnergyPolarizedCompton;
+      testProcess = new G4LowEnergyPolarizedCompton;
     }  
   else if (type == "standard" && (!polarised))
     {
-      process = new G4ComptonScattering;
+      testProcess = new G4ComptonScattering;
     }
   else if (type == "standard" && polarised)
     {
-      process = new G4PolarizedComptonScattering;
+      testProcess = new G4PolarizedComptonScattering;
     }
-  return process;  
+  return testProcess;  
 }
 
 

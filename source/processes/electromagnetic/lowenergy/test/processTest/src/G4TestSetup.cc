@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestSetup.cc,v 1.4 2001-10-29 09:30:01 pia Exp $
+// $Id: G4TestSetup.cc,v 1.5 2001-10-29 12:04:36 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -58,11 +58,15 @@
 #include "Randomize.hh"
 
 
-G4TestSetup::G4TestSetup(G4Material* aMaterial,
-			 G4ParticleDefinition* def,
+G4TestSetup::G4TestSetup(const G4Material* aMaterial,
+			 const G4ParticleDefinition* def,
 			 G4double minEnergy, G4double  maxEnergy)
-  :part(def), material(aMaterial), eMin(minEnergy), eMax(maxEnergy)
+  : eMin(minEnergy), eMax(maxEnergy)
 {
+  // const_cast needed because geometry and tracking objects require
+  // non-const materials and particle definitions in their constructors (why?)
+  part = const_cast<G4ParticleDefinition*>(def);
+  material = const_cast<G4Material*>(aMaterial);
   track = 0;
   step = new G4Step;
   physicalFrame = 0;

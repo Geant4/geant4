@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestFactory.cc,v 1.1 2001-10-29 09:30:01 pia Exp $
+// $Id: G4TestFactory.cc,v 1.2 2001-10-29 12:04:37 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -42,9 +42,9 @@
 #include "G4BremsstrahlungTest.hh"
 #include "G4eIonisationTest.hh"
 
-const G4ProcessTest* G4TestFactory::createTestProcess(const G4String& type, 
-						      const G4String& category, 
-						      G4bool isPolarised)
+G4ProcessTest* G4TestFactory::createTestProcess(const G4String& type, 
+						const G4String& category, 
+						G4bool isPolarised)
 {
   G4ProcessTest* test = 0;
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestUI.cc,v 1.2 2001-10-29 09:30:01 pia Exp $
+// $Id: G4TestUI.cc,v 1.3 2001-10-29 12:04:37 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -81,11 +81,9 @@ void G4TestUI::selectMaterial()
 	     << (*theMaterialTable)[mat]->GetName()
 	     << G4endl;
     }
-  G4int materialId;
   G4cin >> materialId;
 
   G4Material* material = (*theMaterialTable)[materialId] ;
-
   G4cout << "The selected material is: " << material->GetName() << G4endl;
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: processTest.cc,v 1.5 2001-10-29 10:44:11 pia Exp $
+// $Id: processTest.cc,v 1.6 2001-10-29 12:03:15 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,8 +64,8 @@ int main()
   G4TestUI ui;
   ui.configure();
 
-  G4Material* material = ui.getSelectedMaterial();
-  G4ParticleDefinition* definition = ui.getParticleDefinition();
+  const G4Material* material = ui.getSelectedMaterial();
+  const G4ParticleDefinition* definition = ui.getParticleDefinition();
   G4double eMin = ui.getMinEnergy();
   G4double eMax = ui.getMaxEnergy();
   G4TestSetup setup(material,definition,eMin,eMax);
@@ -83,11 +83,11 @@ int main()
   for (G4int iter=0; iter<nIterations; iter++)
     {
       G4cout << "---- Iteration " << iter << G4endl;
-      G4Track* track = setup.makeTrack();
-      G4Step* step = setup.makeStep();
+      const G4Track* track = setup.makeTrack();
+      const G4Step* step = setup.makeStep();
       test->postStepTest(*track,*step);
     }
 
-  cout << "End of the test" << G4endl;
+  G4cout << "End of the test" << G4endl;
 }
 

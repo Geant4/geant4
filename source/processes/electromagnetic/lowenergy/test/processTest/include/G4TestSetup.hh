@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestSetup.hh,v 1.3 2001-10-29 09:28:54 pia Exp $
+// $Id: G4TestSetup.hh,v 1.4 2001-10-29 12:03:44 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -55,8 +55,8 @@ class G4TestSetup {
  
 public:
 
-  G4TestSetup(G4Material* aMaterial,
-	      G4ParticleDefinition* def,
+  G4TestSetup(const G4Material* aMaterial,
+	      const G4ParticleDefinition* def,
 	      G4double minEnergy, G4double  maxEnergy);
 
   virtual ~G4TestSetup();

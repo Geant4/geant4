@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestFactory.hh,v 1.1 2001-10-29 09:28:54 pia Exp $
+// $Id: G4TestFactory.hh,v 1.2 2001-10-29 12:03:44 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,9 +50,9 @@ class G4TestFactory
   G4TestFactory() { }
   virtual ~G4TestFactory() { }
   
-  const G4ProcessTest* createTestProcess(const G4String& type, 
-					 const G4String& category, 
-					 G4bool isPolarised);
+  G4ProcessTest* createTestProcess(const G4String& type, 
+				   const G4String& category, 
+				   G4bool isPolarised);
   
  private:
 

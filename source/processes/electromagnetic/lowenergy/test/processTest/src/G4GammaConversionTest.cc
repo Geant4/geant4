@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionTest.cc,v 1.1 2001-10-29 09:30:00 pia Exp $
+// $Id: G4GammaConversionTest.cc,v 1.2 2001-10-29 12:04:36 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -61,53 +61,53 @@ G4GammaConversionTest:: ~G4GammaConversionTest()
 
 G4VProcess* G4GammaConversionTest::createElectronIonisation()
 {
-  G4VProcess* process = 0;
+  G4VProcess* testProcess = 0;
   if (type == "lowE")
     {
-      process = new G4LowEnergyIonisation;
+      testProcess = new G4LowEnergyIonisation;
     }
   else if (type == "standard")
     {
-      process = new G4eIonisation;
+      testProcess = new G4eIonisation;
     }
-  return process;
+  return testProcess;
 }
 
 G4VProcess* G4GammaConversionTest::createBremsstrahlung()
 {
-  G4VProcess* process = 0;
+  G4VProcess* testProcess = 0;
   if (type == "lowE")
     {
-      process = new G4LowEnergyBremsstrahlung;
+      testProcess = new G4LowEnergyBremsstrahlung;
     }
   else if (type == "standard")
     {
-      process = new G4eBremsstrahlung;
+      testProcess = new G4eBremsstrahlung;
     }
-  return process;  
+  return testProcess;  
 }
 
 G4VProcess* G4GammaConversionTest::createProcess()
 {
-  G4VProcess* process = 0;
+  G4VProcess* testProcess = 0;
   if (type == "lowE" && (!polarised))
     {
-      process = new G4LowEnergyGammaConversion;
+      testProcess = new G4LowEnergyGammaConversion;
     }
   else if (type == "lowE" && polarised)
     {
       G4Exception("Polarised LowE process not available yet");
-      //      process = new G4LowEnergyPolarizedGammaConversion;
+      //      testProcess = new G4LowEnergyPolarizedGammaConversion;
     }  
   else if (type == "standard" && (!polarised))
     {
-      process = new G4GammaConversion;
+      testProcess = new G4GammaConversion;
     }
   else if (type == "standard" && polarised)
     {
       G4Exception("Standard process not available");
     }
-  return process;  
+  return testProcess;  
 }
 
 

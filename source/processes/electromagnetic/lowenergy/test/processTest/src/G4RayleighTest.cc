@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayleighTest.cc,v 1.1 2001-10-29 09:30:01 pia Exp $
+// $Id: G4RayleighTest.cc,v 1.2 2001-10-29 12:04:36 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -59,49 +59,49 @@ G4RayleighTest:: ~G4RayleighTest()
 
 G4VProcess* G4RayleighTest::createElectronIonisation()
 {
-  G4VProcess* process = 0;
+  G4VProcess* testProcess = 0;
   if (type == "lowE")
     {
-      process = new G4LowEnergyIonisation;
+      testProcess = new G4LowEnergyIonisation;
     }
   else if (type == "standard")
     {
-      process = new G4eIonisation;
+      testProcess = new G4eIonisation;
     }
-  return process;
+  return testProcess;
 }
 
 G4VProcess* G4RayleighTest::createBremsstrahlung()
 {
-  G4VProcess* process = 0;
+  G4VProcess* testProcess = 0;
   if (type == "lowE")
     {
-      process = new G4LowEnergyBremsstrahlung;
+      testProcess = new G4LowEnergyBremsstrahlung;
     }
   else if (type == "standard")
     {
-      process = new G4eBremsstrahlung;
+      testProcess = new G4eBremsstrahlung;
     }
-  return process;  
+  return testProcess;  
 }
 
 G4VProcess* G4RayleighTest::createProcess()
 {
-  G4VProcess* process = 0;
+  G4VProcess* testProcess = 0;
   if (type == "lowE" && (!polarised))
     {
-      process = new G4LowEnergyRayleigh;
+      testProcess = new G4LowEnergyRayleigh;
     }
   else if (type == "lowE" && polarised)
     {
       G4Exception("Polarised LowE process not available yet");
-      // process = new G4LowEnergyPolarizedRayleigh;
+      // testProcess = new G4LowEnergyPolarizedRayleigh;
     }  
   else if (type == "standard")
     {
       G4Exception("Standard process not available");
     }
-  return process;  
+  return testProcess;  
 }
 
 
