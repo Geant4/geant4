@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.cc,v 1.4 2001-11-01 19:00:11 gcosmo Exp $
+// $Id: G4GeometryMessenger.cc,v 1.5 2002-02-20 22:16:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -194,8 +194,8 @@ G4GeometryMessenger::ResetNavigator()
 
   // Reset navigator's state
   //
-  G4ThreeVector p(0,0,0);
-  tmanager->GetNavigatorForTracking()->LocateGlobalPointAndSetup(p,0,false);
+  G4ThreeVector pt(0,0,0);
+  tmanager->GetNavigatorForTracking()->LocateGlobalPointAndSetup(pt,0,false);
 }
 
 //
