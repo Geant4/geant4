@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.12 2001-07-11 09:59:21 gunter Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.13 2001-11-23 16:22:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -841,7 +841,9 @@ G4int    noNodes = ((noNodesSmart-noNodesExactI)>=0.5) ?
                      noNodesExactI + 1 : noNodesExactI ; 
 //
 //
-
+    if( noNodes == 0 ){
+       noNodes = 1;
+    }
 #ifdef G4GEOMETRY_VOXELDEBUG
     G4cout << "     Min width = " << minWidth
 	 << " => # Nodes = " << noNodes << G4endl;
