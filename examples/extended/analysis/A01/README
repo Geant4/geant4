@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2003-10-13 22:34:16 perl Exp $
+$Id: README,v 1.6 2003-10-13 22:36:01 perl Exp $
 
     =========================================================
     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -141,7 +141,8 @@ $Id: README,v 1.5 2003-10-13 22:34:16 perl Exp $
      simulation run a file A01.aida is produced which contains these
      data structures.  This file can be used as an input to the Java
      Analysis Studio (JAS) which allows the histograms and ntuples to 
-     examined, manipulated, saved and printed.
+     examined, manipulated, saved and printed.  For further details,
+     see README.JAIDA.
 
 
   7. GETTING STARTED:
