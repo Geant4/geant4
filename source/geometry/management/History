@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2002-04-16 10:39:06 gcosmo Exp $
+$Id: History,v 1.32 2002-04-19 08:18:12 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 19, 2002  G. Cosmo                   geommng-V04-00-03
+- Moved inline constructors/destructors to no inline.
+  Affected files: G4DrawVoxels[.hh.cc], G4SmartVoxelNode[.hh.cc],
+                  G4SmartVoxelProxy[.hh.cc], G4VoxelLimits[.hh.cc].
+- Enhanced behavior for destructors of volumes/solids stores.
+  o Added locking mechanism for preventing conflicts when destroying stores
+    and deregistering pointers. Now destructors of stores will also
+    explicitely delete pointers (and therefore allocated volumes/solids)
+    dynamically allocated in the user application.
+  o Added Clean() static method to volumes/solids stores to explicitely
+    delete pointed objects in the stores and clear all entries.
+  o Modified files: G4LogicalVolumeStore[.hh.cc], G4SolidStore[.hh.cc],
+                    G4PhysicalVolumeStore[.hh.cc].
 
 April 16, 2002  V. Grichine                geommng-V04-00-02
 - G4VSolid[.hh.cc]: fixed bug in G4VSolid::ClipPoligon() to consider
