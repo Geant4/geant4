@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.cc,v 1.8 2003-02-12 08:52:55 gcosmo Exp $
+// $Id: G4ForwardXrayTR.cc,v 1.9 2003-03-10 11:34:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ForwardXrayTR class -- implementation file
@@ -34,7 +34,8 @@
 // History:
 // 1st version 11.09.97 V. Grichine (Vladimir.Grichine@cern.ch )
 // 2nd version 17.12.97 V. Grichine
-// 17-09-01, migration of Materials to pure STL (mma) 
+// 17-09-01, migration of Materials to pure STL (mma)
+// 10-03-03, migration to "cut per region" (V.Ivanchenko)
 
 #include "G4ForwardXrayTR.hh"
 
@@ -45,6 +46,8 @@
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLinearVector.hh"
 #include "G4PhysicsLogVector.hh"
+#include "G4ProductionCutsTable.hh"
+
 
 // Table initialization
 
@@ -87,14 +90,14 @@ G4double G4ForwardXrayTR::fCofTR     = fine_structure_const/pi ;
 // in all materials involved in test program. Lorentz factors correspond to
 // kinetic energies of protons between 100*GeV and 100*TeV, ~ 10^2-10^5
 //
-// Recommended only for use in applications with 
+// Recommended only for use in applications with
 // few light materials involved                     !!!!!!!!!!!!!!
 
 G4ForwardXrayTR::G4ForwardXrayTR()
   : G4TransitionRadiation("XrayTR")
 {
   G4int iMat, jMat, iTkin, iTR, iPlace ;
-  static 
+  static
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   G4int numOfMat = G4Material::GetNumberOfMaterials();
   fGammaCutInKineticEnergy = new G4double[numOfMat] ;
@@ -124,7 +127,7 @@ G4ForwardXrayTR::G4ForwardXrayTR()
 //        fGammaTkinCut = fGammaCutInKineticEnergy[jMat] ; // TR photon in jMat !
           fGammaTkinCut = 0.0 ;
 
-        if(fGammaTkinCut > fTheMinEnergyTR) // setting of min/max TR energies 
+        if(fGammaTkinCut > fTheMinEnergyTR) // setting of min/max TR energies
 	{
           fMinEnergyTR = fGammaTkinCut ;
 	}
@@ -155,7 +158,7 @@ G4ForwardXrayTR::G4ForwardXrayTR()
           fGamma = 1.0 +   (aVector->GetLowEdgeEnergy(iTkin)/proton_mass_c2) ;
           fMaxThetaTR = 10000.0/(fGamma*fGamma) ;
           if(fMaxThetaTR > fTheMaxAngle)
-          { 
+          {
             fMaxThetaTR = fTheMaxAngle ;
 	  }
           else
@@ -171,7 +174,7 @@ G4ForwardXrayTR::G4ForwardXrayTR()
           for(iTR=fBinTR-2;iTR>=0;iTR--)
 	  {
             energySum += fCofTR*EnergySum(energyVector->GetLowEdgeEnergy(iTR),
-                                        energyVector->GetLowEdgeEnergy(iTR+1)) ; 
+                                        energyVector->GetLowEdgeEnergy(iTR+1)) ;
 
             angleSum  += fCofTR*AngleSum(angleVector->GetLowEdgeEnergy(iTR),
                                          angleVector->GetLowEdgeEnergy(iTR+1)) ;
@@ -182,13 +185,13 @@ G4ForwardXrayTR::G4ForwardXrayTR()
 	  {
             iPlace = (iMat*(numOfMat-1)+jMat)*fTotBin+iTkin ;
 	  }
-          else   // jMat > iMat right part of matrices (jMat-1) ! 
+          else   // jMat > iMat right part of matrices (jMat-1) !
 	  {
             iPlace = (iMat*(numOfMat-1)+jMat-1)*fTotBin+iTkin ;
-	  } 
+	  }
           fEnergyDistrTable->insertAt(iPlace,energyVector) ;
           fAngleDistrTable->insertAt(iPlace,angleVector) ;
-	}    //                      iTkin    
+	}    //                      iTkin
       }      //         jMat != iMat
     }        //     jMat
   }          // iMat
@@ -200,7 +203,7 @@ G4ForwardXrayTR::G4ForwardXrayTR()
 
 //////////////////////////////////////////////////////////////////////
 //
-// Constructor for creation of physics tables (angle and energy TR 
+// Constructor for creation of physics tables (angle and energy TR
 // distributions) for a couple of selected materials.
 //
 // Recommended for use in applications with many materials involved,
@@ -212,38 +215,39 @@ G4ForwardXrayTR::
 G4ForwardXrayTR( const G4String& matName1,   //  G4Material* pMat1,
 		 const G4String& matName2,    //  G4Material* pMat2,
                  const G4String& processName                          )
-  :        G4TransitionRadiation(processName) 
+  :        G4TransitionRadiation(processName)
 {
   //  fMatIndex1 = pMat1->GetIndex() ;
   //  fMatIndex2 = pMat2->GetIndex() ;
   G4int iMat;
-  static 
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  G4int numOfCouples = theCoupleTable->GetTableSize();
 
-  G4int numOfMat = G4Material::GetNumberOfMaterials();
-
-  for(iMat=0;iMat<numOfMat;iMat++)    // check first material name
+  for(iMat=0;iMat<numOfCouples;iMat++)    // check first material name
   {
-    if( matName1 == (*theMaterialTable)[iMat]->GetName() )
+    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(iMat);
+    if( matName1 == couple->GetMaterial()->GetName() )
     {
-      fMatIndex1 = (*theMaterialTable)[iMat]->GetIndex() ;
+      fMatIndex1 = couple->GetIndex() ;
       break ;
     }
   }
-  if(iMat == numOfMat)
+  if(iMat == numOfCouples)
   {
     G4Exception("Invalid first material name in G4ForwardXrayTR constructor") ;
   }
 
-  for(iMat=0;iMat<numOfMat;iMat++)    // check second material name
+  for(iMat=0;iMat<numOfCouples;iMat++)    // check second material name
   {
-    if( matName2 == (*theMaterialTable)[iMat]->GetName() )
+    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(iMat);
+    if( matName2 == couple->GetMaterial()->GetName() )
     {
-      fMatIndex2 = (*theMaterialTable)[iMat]->GetIndex() ;
+      fMatIndex2 = couple->GetIndex() ;
       break ;
     }
   }
-  if(iMat == numOfMat)
+  if(iMat == numOfCouples)
   {
     G4Exception("Invalid second material name in G4ForwardXrayTR constructor") ;
   }
@@ -257,7 +261,7 @@ G4ForwardXrayTR( const G4String& matName1,   //  G4Material* pMat1,
 
 G4ForwardXrayTR::
 G4ForwardXrayTR( const G4String& processName  )
-  :        G4TransitionRadiation(processName) 
+  :        G4TransitionRadiation(processName)
 {
   ;
 }
@@ -280,32 +284,32 @@ G4ForwardXrayTR::~G4ForwardXrayTR()
 void G4ForwardXrayTR::BuildXrayTRtables()
 {
   G4int iMat, jMat, iTkin, iTR, iPlace ;
-  static 
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  G4int numOfCouples = theCoupleTable->GetTableSize();
 
-  G4int numOfMat = G4Material::GetNumberOfMaterials() ;
-
-  fGammaCutInKineticEnergy = new G4double[numOfMat] ;
-  fGammaCutInKineticEnergy = fPtrGamma->GetEnergyCuts() ;
+  fGammaCutInKineticEnergy = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
 
   fAngleDistrTable  = new G4PhysicsTable(2*fTotBin) ;
   fEnergyDistrTable = new G4PhysicsTable(2*fTotBin) ;
 
 
-  for(iMat=0;iMat<numOfMat;iMat++)     // loop over pairs of different materials
+  for(iMat=0;iMat<numOfCouples;iMat++)     // loop over pairs of different materials
   {
     if( iMat != fMatIndex1 && iMat != fMatIndex2 ) continue ;
 
-    for(jMat=0;jMat<numOfMat;jMat++)  // transition iMat -> jMat !!!
+    for(jMat=0;jMat<numOfCouples;jMat++)  // transition iMat -> jMat !!!
     {
-      if( iMat == jMat || ( jMat != fMatIndex1 && jMat != fMatIndex2 ) )   
-      { 
-        continue ; 
-      } 
+      if( iMat == jMat || ( jMat != fMatIndex1 && jMat != fMatIndex2 ) )
+      {
+        continue ;
+      }
       else
       {
-        const G4Material* mat1 = (*theMaterialTable)[iMat] ;
-        const G4Material* mat2 = (*theMaterialTable)[jMat] ;
+        const G4MaterialCutsCouple* iCouple = theCoupleTable->GetMaterialCutsCouple(iMat);
+        const G4MaterialCutsCouple* jCouple = theCoupleTable->GetMaterialCutsCouple(jMat);
+        const G4Material* mat1 = iCouple->GetMaterial() ;
+        const G4Material* mat2 = jCouple->GetMaterial() ;
 
         fSigma1 = fPlasmaCof*(mat1->GetElectronDensity()) ;
         fSigma2 = fPlasmaCof*(mat2->GetElectronDensity()) ;
@@ -314,7 +318,7 @@ void G4ForwardXrayTR::BuildXrayTRtables()
 
         fGammaTkinCut = 0.0 ;
 
-        if(fGammaTkinCut > fTheMinEnergyTR)    // setting of min/max TR energies 
+        if(fGammaTkinCut > fTheMinEnergyTR)    // setting of min/max TR energies
 	{
           fMinEnergyTR = fGammaTkinCut ;
 	}
@@ -324,7 +328,7 @@ void G4ForwardXrayTR::BuildXrayTRtables()
 	}
         if(fGammaTkinCut > fTheMaxEnergyTR)
 	{
-          fMaxEnergyTR = 2.0*fGammaTkinCut ;    // usually very low TR rate 
+          fMaxEnergyTR = 2.0*fGammaTkinCut ;    // usually very low TR rate
 	}
         else
 	{
@@ -332,7 +336,7 @@ void G4ForwardXrayTR::BuildXrayTRtables()
 	}
         for(iTkin=0;iTkin<fTotBin;iTkin++)      // Lorentz factor loop
 	{
-          G4PhysicsLogVector* 
+          G4PhysicsLogVector*
                     energyVector = new G4PhysicsLogVector( fMinEnergyTR,
                                                            fMaxEnergyTR,
                                                            fBinTR         ) ;
@@ -341,9 +345,9 @@ void G4ForwardXrayTR::BuildXrayTRtables()
                             GetLowEdgeEnergy(iTkin)/proton_mass_c2) ;
 
           fMaxThetaTR = 10000.0/(fGamma*fGamma) ;
- 
+
           if(fMaxThetaTR > fTheMaxAngle)
-          { 
+          {
             fMaxThetaTR = fTheMaxAngle ;
 	  }
           else
@@ -354,7 +358,7 @@ void G4ForwardXrayTR::BuildXrayTRtables()
 	    }
 	  }
    // G4cout<<G4endl<<"fGamma = "<<fGamma<<"  fMaxThetaTR = "<<fMaxThetaTR<<G4endl ;
-          G4PhysicsLinearVector* 
+          G4PhysicsLinearVector*
                      angleVector = new G4PhysicsLinearVector(        0.0,
                                                              fMaxThetaTR,
                                                                   fBinTR  ) ;
@@ -367,7 +371,7 @@ void G4ForwardXrayTR::BuildXrayTRtables()
           for(iTR=fBinTR-2;iTR>=0;iTR--)
 	  {
             energySum += fCofTR*EnergySum(energyVector->GetLowEdgeEnergy(iTR),
-                                        energyVector->GetLowEdgeEnergy(iTR+1)) ; 
+                                        energyVector->GetLowEdgeEnergy(iTR+1)) ;
 
             angleSum  += fCofTR*AngleSum(angleVector->GetLowEdgeEnergy(iTR),
                                          angleVector->GetLowEdgeEnergy(iTR+1)) ;
@@ -381,13 +385,13 @@ void G4ForwardXrayTR::BuildXrayTRtables()
 	  {
             iPlace = fTotBin+iTkin ;   // (iMat*(numOfMat-1)+jMat)*
 	  }
-          else   // jMat > iMat right part of matrices (jMat-1) ! 
+          else   // jMat > iMat right part of matrices (jMat-1) !
 	  {
             iPlace = iTkin ;  // (iMat*(numOfMat-1)+jMat-1)*fTotBin+
-	  } 
+	  }
           fEnergyDistrTable->insertAt(iPlace,energyVector) ;
           fAngleDistrTable->insertAt(iPlace,angleVector) ;
-	}    //                      iTkin    
+	}    //                      iTkin
       }      //         jMat != iMat
     }        //     jMat
   }          // iMat
@@ -426,7 +430,7 @@ G4ForwardXrayTR::SpectralAngleTRdensity( G4double energy,
 //////////////////////////////////////////////////////////////////
 //
 // Analytical formula for angular density of X-ray TR photons
-// 
+//
 
 G4double G4ForwardXrayTR::AngleDensity( G4double energy,
                                         G4double varAngle ) const
@@ -559,13 +563,10 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 {
   aParticleChange.Initialize(aTrack);
   //  G4cout<<"call G4ForwardXrayTR::PostStepDoIt"<<G4endl ;
-  G4int iMat, jMat, iTkin, iPlace, numOfMat, numOfTR, iTR, iTransfer ;
+  G4int iMat, jMat, iTkin, iPlace, numOfTR, iTR, iTransfer ;
 
   G4double energyPos, anglePos, energyTR, theta, phi, dirX, dirY, dirZ ;
   G4double W, W1, W2, E1, E2 ;
-  static 
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
-  numOfMat = G4Material::GetNumberOfMaterials() ;
 
   G4StepPoint* pPreStepPoint  = aStep.GetPreStepPoint();
   G4StepPoint* pPostStepPoint = aStep.GetPostStepPoint();
@@ -581,35 +582,36 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
   }
   // Come on boundary, so begin to try TR
 
-  iMat = pPreStepPoint ->GetPhysicalVolume()->
-			 GetLogicalVolume()->GetMaterial()->GetIndex() ;
-  jMat = pPostStepPoint->GetPhysicalVolume()->
-			 GetLogicalVolume()->GetMaterial()->GetIndex() ;
+  const G4MaterialCutsCouple* iCouple = pPreStepPoint ->GetPhysicalVolume()->
+			 GetLogicalVolume()->GetMaterialCutsCouple();
+  const G4MaterialCutsCouple* jCouple = pPostStepPoint ->GetPhysicalVolume()->
+			 GetLogicalVolume()->GetMaterialCutsCouple();
+  const G4Material* iMaterial = iCouple->GetMaterial();
+  const G4Material* jMaterial = jCouple->GetMaterial();
+  iMat = iCouple->GetIndex();
+  jMat = jCouple->GetIndex();
 
   // The case of equal or approximate (in terms of plasma energy) materials
   // No TR photons ?!
 
   if (     iMat == jMat
-      || (    (fMatIndex1 >= 0 && fMatIndex1 >= 0) 
+      || (    (fMatIndex1 >= 0 && fMatIndex1 >= 0)
            && ( iMat != fMatIndex1 && iMat != fMatIndex2 )
            && ( jMat != fMatIndex1 && jMat != fMatIndex2 )  )
 
-      || (*theMaterialTable)[iMat]->GetState() ==
-         (*theMaterialTable)[jMat]->GetState()
-  
-      ||(    (*theMaterialTable)[iMat]->GetState() == kStateSolid
-          && (*theMaterialTable)[jMat]->GetState() == kStateLiquid )
- 
-      ||(    (*theMaterialTable)[iMat]->GetState() == kStateLiquid
-          && (*theMaterialTable)[jMat]->GetState() == kStateSolid  )   )
+      || iMaterial->GetState() == jMaterial->GetState()
+
+      ||(iMaterial->GetState() == kStateSolid && jMaterial->GetState() == kStateLiquid )
+
+      ||(iMaterial->GetState() == kStateLiquid && jMaterial->GetState() == kStateSolid  )   )
   {
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep) ;
   }
 
   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
   G4double charge = aParticle->GetDefinition()->GetPDGCharge();
- 
-  if(charge == 0.0) // Uncharged particle doesn't Generate TR photons 
+
+  if(charge == 0.0) // Uncharged particle doesn't Generate TR photons
   {
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }
@@ -624,7 +626,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
     if(TkinScaled < fProtonEnergyVector->GetLowEdgeEnergy(iTkin)) // <= ?
     {
       break ;
-    }     
+    }
   }
   if(jMat < iMat)
   {
@@ -632,7 +634,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
   }
   else
   {
-    iPlace = iTkin - 1 ;  // (iMat*(numOfMat - 1) + jMat - 1)*fTotBin + 
+    iPlace = iTkin - 1 ;  // (iMat*(numOfMat - 1) + jMat - 1)*fTotBin +
   }
   //  G4PhysicsVector*  energyVector1 = (*fEnergyDistrTable)(iPlace)     ;
   //  G4PhysicsVector*  energyVector2 = (*fEnergyDistrTable)(iPlace + 1) ;
@@ -672,7 +674,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 
 	// G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<G4endl ;
 
-        kinEnergy -= energyTR ; 
+        kinEnergy -= energyTR ;
         aParticleChange.SetEnergyChange(kinEnergy);
 
         anglePos = (*(*fAngleDistrTable)(iPlace))(0)*G4UniformRand() ;
@@ -702,23 +704,23 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
     if(iTkin == 0) // Tkin is too small, neglect of TR photon generation
     {
       return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
-    } 
+    }
     else          // general case: Tkin between two vectors of the material
     {
-      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
+      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ;
       E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
        W = 1.0/(E2 - E1) ;
       W1 = (E2 - TkinScaled)*W ;
       W2 = (TkinScaled - E1)*W ;
 
   // G4cout<<iTkin<<" mean TR number = "<<(((*(*fEnergyDistrTable)(iPlace))(0)+
-  // (*(*fAngleDistrTable)(iPlace))(0))*W1 + 
+  // (*(*fAngleDistrTable)(iPlace))(0))*W1 +
   //                                ((*(*fEnergyDistrTable)(iPlace + 1))(0)+
   // (*(*fAngleDistrTable)(iPlace + 1))(0))*W2)
   //                                    *chargeSq*0.5<<G4endl ;
 
       numOfTR = G4Poisson((((*(*fEnergyDistrTable)(iPlace))(0)+
-                            (*(*fAngleDistrTable)(iPlace))(0))*W1 + 
+                            (*(*fAngleDistrTable)(iPlace))(0))*W1 +
                            ((*(*fEnergyDistrTable)(iPlace + 1))(0)+
                             (*(*fAngleDistrTable)(iPlace + 1))(0))*W2)
                           *chargeSq*0.5 ) ;
@@ -745,7 +747,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 
 	  // G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<G4endl ;
 
-          kinEnergy -= energyTR ; 
+          kinEnergy -= energyTR ;
           aParticleChange.SetEnergyChange(kinEnergy);
 
           anglePos = ((*(*fAngleDistrTable)(iPlace))(0)*W1+
@@ -785,44 +787,45 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 // energy
 //
 
-G4double 
+G4double
 G4ForwardXrayTR::GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const
 {
-  G4int  iPlace, numOfMat, numOfTR, iTR, iTransfer ;
+  G4int  iPlace, numOfTR, iTR, iTransfer ;
   G4double energyTR = 0.0 ; // return this value for no TR photons
   G4double energyPos  ;
   G4double  W1, W2;
 
-  static 
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
-  numOfMat = G4Material::GetNumberOfMaterials() ;
-
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  G4int numOfCouples = theCoupleTable->GetTableSize();
 
   // The case of equal or approximate (in terms of plasma energy) materials
   // No TR photons ?!
 
+  const G4MaterialCutsCouple* iCouple = theCoupleTable->GetMaterialCutsCouple(iMat);
+  const G4MaterialCutsCouple* jCouple = theCoupleTable->GetMaterialCutsCouple(jMat);
+  const G4Material* iMaterial = iCouple->GetMaterial();
+  const G4Material* jMaterial = jCouple->GetMaterial();
 
   if (     iMat == jMat
 
-      || (*theMaterialTable)[iMat]->GetState() ==
-         (*theMaterialTable)[jMat]->GetState()
-  
-      ||(    (*theMaterialTable)[iMat]->GetState() == kStateSolid
-          && (*theMaterialTable)[jMat]->GetState() == kStateLiquid )
- 
-      ||(    (*theMaterialTable)[iMat]->GetState() == kStateLiquid
-          && (*theMaterialTable)[jMat]->GetState() == kStateSolid  )   )
+      || iMaterial->GetState() == jMaterial->GetState()
+
+      ||(iMaterial->GetState() == kStateSolid && jMaterial->GetState() == kStateLiquid )
+
+      ||(iMaterial->GetState() == kStateLiquid && jMaterial->GetState() == kStateSolid  )   )
+
   {
     return energyTR ;
   }
 
   if(jMat < iMat)
   {
-    iPlace = (iMat*(numOfMat - 1) + jMat)*fTotBin + iTkin - 1 ;
+    iPlace = (iMat*(numOfCouples - 1) + jMat)*fTotBin + iTkin - 1 ;
   }
   else
   {
-    iPlace = (iMat*(numOfMat - 1) + jMat - 1)*fTotBin + iTkin - 1 ;
+    iPlace = (iMat*(numOfCouples - 1) + jMat - 1)*fTotBin + iTkin - 1 ;
   }
   G4PhysicsVector*  energyVector1 = (*fEnergyDistrTable)(iPlace)     ;
   G4PhysicsVector*  energyVector2 = (*fEnergyDistrTable)(iPlace + 1) ;
@@ -852,10 +855,10 @@ G4ForwardXrayTR::GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const
     if(iTkin == 0) // Tkin is too small, neglect of TR photon generation
     {
       return energyTR ;
-    } 
+    }
     else          // general case: Tkin between two vectors of the material
     {             // use trivial mean half/half
-      W1 = 0.5 ; 
+      W1 = 0.5 ;
       W2 = 0.5 ;
      numOfTR = G4Poisson( (*energyVector1)(0)*W1 +
                           (*energyVector2)(0)*W2  ) ;
@@ -891,10 +894,10 @@ G4ForwardXrayTR::GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const
 // Test function for checking of PostStepDoIt random preparation of TR photon
 // theta angle relative to particle direction
 //
- 
-       
-G4double 
-G4ForwardXrayTR::GetThetaTR(G4int iMat, G4int jMat, G4int iTkin) const     
+
+
+G4double
+G4ForwardXrayTR::GetThetaTR(G4int iMat, G4int jMat, G4int iTkin) const
 {
   G4double theta = 0.0 ;
 
@@ -903,6 +906,6 @@ G4ForwardXrayTR::GetThetaTR(G4int iMat, G4int jMat, G4int iTkin) const
 
 
 
-// end of G4ForwardXrayTR implementation file 
+// end of G4ForwardXrayTR implementation file
 //
 ///////////////////////////////////////////////////////////////////////////
