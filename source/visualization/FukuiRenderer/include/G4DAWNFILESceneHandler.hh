@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.hh,v 1.8 2001-07-27 22:32:56 johna Exp $
+// $Id: G4DAWNFILESceneHandler.hh,v 1.9 2001-08-24 21:13:51 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -57,8 +57,13 @@ public:
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
+
+	//----- explicitly invoke base class methods to avoid warnings about
+        //----- hiding of base class methods.
   void AddPrimitive (const G4Polymarker& polymarker) 
        { G4VSceneHandler::AddPrimitive (polymarker); }
+  void AddPrimitive (const G4Scale& scale) 
+       { G4VSceneHandler::AddPrimitive (scale); }
 
   virtual void BeginModeling () { G4VSceneHandler::BeginModeling ();} 
   virtual void EndModeling   () { G4VSceneHandler::EndModeling   ();}

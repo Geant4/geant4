@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.hh,v 1.7 2001-07-11 10:08:44 gunter Exp $
+// $Id: G4FukuiRendererSceneHandler.hh,v 1.8 2001-08-24 21:16:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,8 +62,13 @@ public:
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
+
+	//----- explicitly invoke base class methods to avoid warnings about
+        //----- hiding of base class methods.
   void AddPrimitive (const G4Polymarker& polymarker) 
        { G4VSceneHandler::AddPrimitive (polymarker); }
+  void AddPrimitive (const G4Scale& scale) 
+       { G4VSceneHandler::AddPrimitive (scale); }
 
   virtual void BeginModeling () { G4VSceneHandler::BeginModeling ();} 
   virtual void EndModeling   () { G4VSceneHandler::EndModeling   ();}
