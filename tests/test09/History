@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2000-11-24 07:45:20 stesting Exp $
+$Id: History,v 1.5 2001-02-15 11:00:37 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15th Feb 2001 Steve O'Neale Update reference output
 
 25th November 2000 Steve O'Neale (tagset210)
 - Update test outputs for min.delta energy cut
