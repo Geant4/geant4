@@ -1,3 +1,8 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                  (07-Dec-99)
+             Copyright : Geant4 Collaboration
+**********************************************
 Now Detector is rod_place_asm
 PreInit> Now Detector is rod_place_asm
 PreInit> PreInit> #/tracking/verbose 1

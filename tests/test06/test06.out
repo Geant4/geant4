@@ -1,3 +1,8 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                  (07-Dec-99)
+             Copyright : Geant4 Collaboration
+**********************************************
 SimpleBox is now made of Pb
 PreInit> #
 PreInit> # Macro file test06.in
@@ -82,7 +87,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=38.24s Real=39.52s Sys=1.02s
+  User=37.11s Real=38.49s Sys=1.26s
 Idle> #
 Idle> # electron 500 MeV in Air
 Idle> #
@@ -95,7 +100,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.28s Real=3.36s Sys=0.04s
+  User=3.14s Real=3.17s Sys=0.03s
 Idle> #
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
