@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.8 2003-08-28 08:20:39 vnivanch Exp $
+// $Id: G4MscModel.cc,v 1.9 2003-09-12 18:59:17 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -397,7 +397,7 @@ G4double G4MscModel::GeomPathLength(
                           G4double truePathLength)
 {
   //  do the true -> geom transformation
-  const G4double ztmin = 1./3., ztmax = 0.98 ;
+  const G4double  ztmax = 101./103. ;
   if (theParticle != particle ) {
     particle = theParticle;
     mass = particle->GetPDGMass();
@@ -455,16 +455,16 @@ G4double G4MscModel::GeomPathLength(
     //  sample z
   G4double zPathLength = zmean ;
   G4double zt = zmean/tPathLength ;
-  if (tPathLength >= stepmin && samplez && zt > ztmin && zt < ztmax) {
+  if (tPathLength >= stepmin && samplez && zt > 0.5 && zt < ztmax)
+  {
     G4double cz = 0.5*(3.*zt-1.)/(1.-zt) ;
     G4double cz1 = 1.+cz ;
     G4double u0 = cz/cz1 ;
     G4double u,grej ;
-    G4double grej0 = exp(cz*log(u0))*(1.-u0) ;
     do {
         u = exp(log(G4UniformRand())/cz1) ;
-        grej  = exp(cz*log(u))*(1.-u) ;
-      } while (grej < grej0*G4UniformRand()) ;
+        grej = exp(cz*log(u/u0))*(1.-u)/(1.-u0) ;
+      } while (grej < G4UniformRand()) ;
    zPathLength = tPathLength*u ;
   }
 
