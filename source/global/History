@@ -1,4 +1,4 @@
-$Id: History,v 1.121 2004-03-15 11:23:48 gcosmo Exp $
+$Id: History,v 1.122 2004-04-23 15:09:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 23, 2004  G.Cosmo (global-V06-01-00)
+- Fixed bug in HEPNumerics/G4DataInterpolation::PolynomInterpolation()
+  for indexing in a for-loop.  (V.Grichine)
 
 March 15, 2004  G.Cosmo (global-V06-00-01)
 - Removed obsolete "includes" target in management/GNUmakefile.
