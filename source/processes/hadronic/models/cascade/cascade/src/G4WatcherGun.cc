@@ -1517,6 +1517,7 @@ void G4WatcherGun::setWatchers() {
   as.push_back(144.0);
   cs.push_back(0.28);
   errs.push_back(0.1);
+
   watchers.push_back(G4NuclWatcher(65.0, as, cs, errs, true, true));
 #endif  
 

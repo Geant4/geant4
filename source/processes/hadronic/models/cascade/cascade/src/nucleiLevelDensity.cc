@@ -1,9 +1,9 @@
 #include "G4InuclSpecialFunctions.hh"
 
 G4double G4InuclSpecialFunctions::nucleiLevelDensity(G4double a) {
-
   G4int verboseLevel = 2;
-if (verboseLevel > 3) {
+
+  if (verboseLevel > 3) {
     G4cout << " >>> G4InuclSpecialFunctions::nucleiLevelDensity" << G4endl;
   }
 
@@ -55,29 +55,12 @@ if (verboseLevel > 3) {
     // 240 - 245
     29.87, 30.25, 30.5, 29.8, 29.17, 28.67};
 
-  G4int ia = int(a + 0.1) - 20; 
+  G4int ia = G4int(a + 0.1) - 20; 
 
-  if(ia > 0) {
-
+  if (ia > 0) {
     return NLD[ia];
-  } else {
 
+  } else {
     return 0.1 * a;
   };
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
