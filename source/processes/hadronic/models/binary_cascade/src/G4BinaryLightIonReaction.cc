@@ -3,22 +3,29 @@
 #include "G4LorentzRotation.hh"
 #include <algorithm>
 #include "G4ReactionProductVector.hh"
-
-
+#include <vector>
+#include "G4ping.hh"
+  
   G4BinaryLightIonReaction::G4BinaryLightIonReaction()
   : theModel(), theHandler(), theProjectileFragmentation(&theHandler) {}
   
   G4VParticleChange *G4BinaryLightIonReaction::
   ApplyYourself(const G4Track &aTrack, G4Nucleus & targetNucleus )
   {    
+    G4ping debug("debug_G4BinaryLightIonReaction");
     G4double a1=aTrack.GetDefinition()->GetBaryonNumber();
     G4double z1=aTrack.GetDefinition()->GetPDGCharge();
     G4double m1=aTrack.GetDefinition()->GetPDGMass();
     G4double a2=targetNucleus.GetN();
     G4double z2=targetNucleus.GetZ();
     G4double m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(z2, a2);
-    
+    debug.push_back(a1);
+    debug.push_back(z1);
+    debug.push_back(a2);
+    debug.push_back(z2);
     G4LorentzVector mom(aTrack.GetDynamicParticle()->Get4Momentum());
+    debug.push_back(mom);
+    debug.dump();
     G4LorentzRotation toBreit(mom.boostVector());
         
     G4bool swapped = false;
@@ -32,6 +39,13 @@
       G4LorentzVector it(m1, G4ThreeVector(0,0,0));
       mom = toBreit*it;
     }
+    debug.push_back("After swap");
+    debug.push_back(a1);
+    debug.push_back(z1);
+    debug.push_back(a2);
+    debug.push_back(z2);
+    debug.push_back(mom);
+    debug.dump();
 
     G4ReactionProductVector * result = 0;
     G4V3DNucleus * fancyNucleus(0);
@@ -46,18 +60,34 @@
       G4double aX=(2.*G4UniformRand()-1.)*impactMax;
       G4double aY=(2.*G4UniformRand()-1.)*impactMax;
       G4ThreeVector pos(aX, aY, -2.*impactMax);
+      debug.push_back("Impact parameter");
+      debug.push_back(aX);
+      debug.push_back(aY);
+      debug.push_back(-2.*impactMax);
+      debug.dump();
 
       G4KineticTrackVector * initalState = new G4KineticTrackVector;
-      projectile->DoLorentzBoost(-1.*mom);
+      G4LorentzVector cache = mom;
+      cache.setZ(-cache.getZ());
+      projectile->DoLorentzBoost(cache);
       projectile->StartLoop();
       G4Nucleon * aNuc;
+      debug.push_back("Constituent energies after push");
+      debug.push_back(mom);
+      G4LorentzVector tmpV(0,0,0,0);
       while( (aNuc=projectile->GetNextNucleon()) )
       {
 	G4LorentzVector p4 = aNuc->GetMomentum();	
-	G4KineticTrack * it = new G4KineticTrack(aNuc->GetDefinition(), 0, aNuc->GetPosition()+pos, p4 );
+	tmpV+=p4;
+	G4KineticTrack * it = new G4KineticTrack(aNuc, aNuc->GetPosition()+pos, p4 );
 	initalState->push_back(it);
       }
+      debug.push_back(tmpV);
+      debug.dump();
       G4ReactionProductVector *result=theModel.Propagate(initalState, fancyNucleus);
+      debug.push_back("################# Result ? ");
+      debug.push_back(result->size());
+      debug.dump();
       delete fancyNucleus;
       delete projectile;
       for_each(initalState->begin(), initalState->end(), DeleteKineticTrack());
