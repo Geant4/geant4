@@ -27,7 +27,7 @@ public:
 
   // Analogical to SAX startElement callback
   virtual void StartElement( const std::string& name, const ASCIIAttributeList& attrs ) {
-    std::cout << "PROCESS::START OF TAG  : " << name << std::endl;
+    //std::cout << "PROCESS::START OF TAG  : " << name << std::endl;
 
     SAXObject** obj = Context()->GetTopObject();
     
@@ -58,18 +58,18 @@ public:
 
   // Analogical to SAX endElement callback
   virtual void EndElement( const std::string& name ) {
-    std::cout << "PROCESS::END OF TAG  : " << name << std::endl;
+    //std::cout << "PROCESS::END OF TAG  : " << name << std::endl;
     try {
       SAXObject** obj = Context()->GetTopObject();
       setup* saxobj = dynamic_cast<setup*>( *obj );
 
       if( saxobj != 0 ) {
-        std::cout << "PROCESS END OF TAG:: " << name;
-        std::cout << " name: "               << m_setup->get_name()
-                  << " version: "            << m_setup->get_version()
-                  << " found: "              << (int)m_setup->get_match() << std::endl;
+//         std::cout << "PROCESS END OF TAG:: " << name;
+//         std::cout << " name: "               << m_setup->get_name()
+//                   << " version: "            << m_setup->get_version()
+//                   << " found: "              << (int)m_setup->get_match() << std::endl;
       } else {
-        std::cout << "PROCESS END OF TAG:: " << name << " GOT ZERO DATA POINTER! " << std::endl;
+        std::cerr << "PROCESS END OF TAG:: " << name << " GOT ZERO DATA POINTER! " << std::endl;
       }
     } catch( ... ) {
       std::cerr << "PROCESS END OF TAG:: " << name << " BAD CAST exception caught...\a" << std::endl;

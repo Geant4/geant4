@@ -16,24 +16,19 @@ class atomProcess : virtual public SAXStateProcess, virtual public SAXComponentO
 {
 public:
   atomProcess( const ProcessingContext* context = 0 )
-  : SAXStateProcess( context )
-  {
-    tag = "atom";
+  : SAXStateProcess( context ) {
   }
   
-  virtual ~atomProcess()
-  {
+  virtual ~atomProcess() {
   }
   
-  virtual const SAXComponentObject* Build() const
-  {
+  virtual const SAXComponentObject* Build() const {
     return this;
   }
 
   // Analogical to SAX startElement callback
-  virtual void StartElement( const std::string& name, const ASCIIAttributeList& attrs )
-  {    
-    std::cout << "PROCESS::START OF TAG  : " << name << std::endl;
+  virtual void StartElement( const std::string& name, const ASCIIAttributeList& attrs ) {    
+    //std::cout << "PROCESS::START OF TAG  : " << name << std::endl;
     
     std::string aunit  = attrs.getValue( "unit" );
     std::string atype  = attrs.getValue( "type" );
@@ -48,9 +43,8 @@ public:
   }
   
   // Analogical to SAX endElement callback
-  virtual void EndElement( const std::string& name )
-  {
-    std::cout << "PROCESS::END OF TAG  : " << name << std::endl;
+  virtual void EndElement( const std::string& name ) {
+    //std::cout << "PROCESS::END OF TAG  : " << name << std::endl;
     try
     {
       SAXObject** obj = Context()->GetTopObject();
@@ -58,15 +52,15 @@ public:
       
       if( saxobj != 0 )
       {
-        std::cout << "PROCESS END OF TAG:: atom "
-                  << saxobj->get_type() << ": "
-                  << saxobj->get_value() << "["
-                  << saxobj->get_unit() << "]"                  
-                  << " looks OK" << std::endl;
+//         std::cout << "PROCESS END OF TAG:: atom "
+//                   << saxobj->get_type() << ": "
+//                   << saxobj->get_value() << "["
+//                   << saxobj->get_unit() << "]"                  
+//                   << " looks OK" << std::endl;
       }
       else
       {
-        std::cout << "PROCESS END OF TAG:: GOT ZERO DATA POINTER! " << std::endl;
+        std::cerr << "PROCESS END OF TAG:: GOT ZERO DATA POINTER! " << std::endl;
       }
     } catch( ... ) {
       std::cerr << "PROCESS END OF TAG " << name << " ERROR: "
@@ -86,13 +80,10 @@ public:
   }
   
   // The name of the state this object will process
-  virtual const std::string& State() const
-  {
+  virtual const std::string& State() const {
+    static std::string tag = "atom";
     return tag;
   }
-  
-private:
-  std::string tag;
 };
 
 DECLARE_PROCESS_FACTORY(atomProcess)

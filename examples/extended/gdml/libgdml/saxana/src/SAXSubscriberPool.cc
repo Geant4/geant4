@@ -68,7 +68,8 @@ SAXSubscriberPool::GetSubscribers( const SAXSubscriber::Subscription& subscripti
 void SAXSubscriberPool::Initialize()
 {
   const SAXComponentFactoryTable::Components*
-  factories = SAXComponentFactoryTable::GetInstance()->GetComponents( SAXComponentObject::eSubscriber );
+  factories = SAXComponentFactoryTable::GetInstance()->
+                                        GetComponents( SAXComponentObject::eSubscriber );
   
   SAXComponentFactoryTable::Components::const_iterator pit;  
   SAXSubscriberPool::Subscriber subscriber;
@@ -84,8 +85,8 @@ void SAXSubscriberPool::Initialize()
       std::cout << "Adding subscriber for tag: " << (*sit) << std::endl;
       AddSubscriber( *sit, subscriber );    
     }
-    std::cout << "---------------------------------------------" << std::endl;
   }
+  std::cout << "========================================================" << std::endl;
 }
 
 void SAXSubscriberPool::Reset() {

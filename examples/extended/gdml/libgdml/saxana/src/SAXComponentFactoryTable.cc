@@ -71,7 +71,7 @@ SAXComponentFactoryTable::SAXComponentFactoryTable()
   fProcesses   = new SAXComponentFactoryTable::Components();
   fActions     = new SAXComponentFactoryTable::Components();
   fSubscribers = new SAXComponentFactoryTable::Components();
-  std::cout << "SAXComponentFactoryTable created" << std::endl;
+  std::cout << "Component Factory Table created" << std::endl;
 }
 
 

@@ -38,7 +38,7 @@ public:
   }
   virtual ~ContentChoice() {
     if( m_choice.object != 0 ) {
-      std::cout << "ContentChoice destructor deleting " << m_choice.tag << std::endl;
+      //std::cout << "ContentChoice destructor deleting " << m_choice.tag << std::endl;
       delete m_choice.object;
     }
   }
@@ -69,7 +69,7 @@ public:
   virtual ~ContentSequence() {
     for( unsigned int idx= 0; idx < m_sequence.size(); idx++ ) {
       if( m_sequence[idx].object != 0 ) {
-        std::cout << "ContentSequence destructor deleting " << m_sequence[idx].tag << std::endl;
+        //std::cout << "ContentSequence destructor deleting " << m_sequence[idx].tag << std::endl;
         delete m_sequence[idx].object;
       }
     }
@@ -92,7 +92,7 @@ public:
   void clear() {
     for( unsigned int idx= 0; idx < m_sequence.size(); idx++ ) {
       if( m_sequence[idx].object != 0 ) {
-        std::cout << "ContentSequence destructor clearing " << m_sequence[idx].tag << std::endl;
+        //std::cout << "ContentSequence destructor clearing " << m_sequence[idx].tag << std::endl;
         delete m_sequence[idx].object;
       }
     }
@@ -110,7 +110,7 @@ public:
   virtual ~ContentAll() {
     for( unsigned int idx= 0; idx < m_all.size(); idx++ ) {
       if( m_all[idx].object != 0 ) {
-        std::cout << "ContentAll destructor deleting " << m_all[idx].tag << std::endl;
+        //std::cout << "ContentAll destructor deleting " << m_all[idx].tag << std::endl;
         delete m_all[idx].object;
       }
     }
@@ -133,7 +133,7 @@ public:
   void clear() {
     for( unsigned int idx= 0; idx < m_all.size(); idx++ ) {
       if( m_all[idx].object != 0 ) {
-        std::cout << "ContentAll clearing " << m_all[idx].tag << std::endl;
+        //std::cout << "ContentAll clearing " << m_all[idx].tag << std::endl;
         delete m_all[idx].object;
       }
     }

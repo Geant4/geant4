@@ -16,24 +16,19 @@ class constantProcess : virtual public SAXStateProcess, virtual public SAXCompon
 {
 public:
   constantProcess( const ProcessingContext* context = 0 )
-  : SAXStateProcess( context )
-  {
-    tag = "constant";
+  : SAXStateProcess( context ) {
   }
   
-  virtual ~constantProcess()
-  {
+  virtual ~constantProcess() {
   }
   
-  virtual const SAXComponentObject* Build() const
-  {
+  virtual const SAXComponentObject* Build() const {
     return this;
   }
 
   // Analogical to SAX startElement callback
-  virtual void StartElement( const std::string& name, const ASCIIAttributeList& attrs )
-  {    
-    std::cout << "PROCESS::START OF TAG  : " << name << std::endl;
+  virtual void StartElement( const std::string& name, const ASCIIAttributeList& attrs ) {    
+    //std::cout << "PROCESS::START OF TAG  : " << name << std::endl;
     
     std::string cname  = attrs.getValue( "name" );
     std::string cvalue = attrs.getValue( "value" );
@@ -46,9 +41,8 @@ public:
   }
   
   // Analogical to SAX endElement callback
-  virtual void EndElement( const std::string& name )
-  {
-    std::cout << "PROCESS::END OF TAG  : " << name << std::endl;
+  virtual void EndElement( const std::string& name ) {
+    //std::cout << "PROCESS::END OF TAG  : " << name << std::endl;
     try
     {
       SAXObject** obj = Context()->GetTopObject();
@@ -56,11 +50,12 @@ public:
       
       if( saxobj != 0 )
       {
-        std::cout << "PROCESS END OF TAG:: Constant " << saxobj->get_name() << " looks OK" << std::endl;
+        //std::cout << "PROCESS END OF TAG:: Constant " << saxobj->get_name() << " looks OK" << std::endl;
+        ;
       }
       else
       {
-        std::cout << "PROCESS END OF TAG:: GOT ZERO DATA POINTER! " << std::endl;
+        std::cerr << "PROCESS END OF TAG:: GOT ZERO DATA POINTER! " << std::endl;
       }
     } catch( ... ) {
       std::cerr << "PROCESS END OF TAG " << name << " ERROR: "
@@ -80,13 +75,10 @@ public:
   }
   
   // The name of the state this object will process
-  virtual const std::string& State() const
-  {
+  virtual const std::string& State() const {
+    static std::string tag = "constant";
     return tag;
   }
-  
-private:
-  std::string tag;
 };
 
 DECLARE_PROCESS_FACTORY(constantProcess)

@@ -61,7 +61,7 @@ public:
       return;
     }
     
-    std::cout << "MaterialType PROCESS::  : " << name << std::endl;
+    //std::cout << "MaterialType PROCESS::  : " << name << std::endl;
     
     SAXObject** obj = Context()->GetTopObject();
     

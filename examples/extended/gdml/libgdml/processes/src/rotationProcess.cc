@@ -16,24 +16,19 @@ class rotationProcess : virtual public SAXStateProcess, virtual public SAXCompon
 {
 public:
   rotationProcess( const ProcessingContext* context = 0 )
-  : SAXStateProcess( context )
-  {
-    m_tag = "rotation";
+  : SAXStateProcess( context ) {
   }
 
-  virtual ~rotationProcess()
-  {
+  virtual ~rotationProcess() {
   }
 
-  virtual const SAXComponentObject* Build() const
-  {
+  virtual const SAXComponentObject* Build() const {
     return this;
   }
 
   // Analogical to SAX startElement callback
-  virtual void StartElement( const std::string& name, const ASCIIAttributeList& attrs )
-  {
-    std::cout << "PROCESS::START OF TAG  : " << name << std::endl;
+  virtual void StartElement( const std::string& name, const ASCIIAttributeList& attrs ) {
+    //std::cout << "PROCESS::START OF TAG  : " << name << std::endl;
 
     std::string rname  = attrs.getValue( "name" );
     std::string rtype  = attrs.getValue( "type" );
@@ -54,9 +49,8 @@ public:
   }
 
   // Analogical to SAX endElement callback
-  virtual void EndElement( const std::string& name )
-  {
-    std::cout << "PROCESS::END OF TAG  : " << name << std::endl;
+  virtual void EndElement( const std::string& name ) {
+    //std::cout << "PROCESS::END OF TAG  : " << name << std::endl;
     try
     {
       SAXObject** obj = Context()->GetTopObject();
@@ -64,11 +58,12 @@ public:
 
       if( saxobj != 0 )
       {
-        std::cout << "PROCESS END OF TAG:: rotation " << saxobj->get_name() << " looks OK" << std::endl;
+        //std::cout << "PROCESS END OF TAG:: rotation " << saxobj->get_name() << " looks OK" << std::endl;
+        ;
       }
       else
       {
-        std::cout << "PROCESS END OF TAG:: GOT ZERO DATA POINTER! " << std::endl;
+        std::cerr << "PROCESS END OF TAG:: GOT ZERO DATA POINTER! " << std::endl;
       }
     } catch( ... ) {
       std::cerr << "PROCESS END OF TAG " << name << " ERROR: "
@@ -90,11 +85,9 @@ public:
   // The name of the state this object will process
   virtual const std::string& State() const
   {
+    static std::string m_tag = "rotation";
     return m_tag;
   }
-  
-private:
-  std::string m_tag;
 };
 
 DECLARE_PROCESS_FACTORY(rotationProcess)

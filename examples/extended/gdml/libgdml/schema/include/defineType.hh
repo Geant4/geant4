@@ -14,7 +14,7 @@ public:
   
   ~defineType() {
     
-    std::cout << "defineType desctructor called..." << std::endl;
+    //std::cout << "defineType desctructor called..." << std::endl;
     
     if( m_choices != 0 ) {
       if( m_choices->size() > 0 ) {

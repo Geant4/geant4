@@ -18,7 +18,6 @@ class isotopeProcess : public MaterialTypeProcess
 public:
   isotopeProcess( const ProcessingContext* context = 0 )
   : MaterialTypeProcess( context ) {
-    tag = "isotope";
   }
   
   virtual ~isotopeProcess() {
@@ -27,7 +26,7 @@ public:
   // Analogical to SAX startElement callback
   virtual void StartElement( const std::string& name, const ASCIIAttributeList& attrs )
   {    
-    std::cout << "PROCESS::START OF TAG  : " << name << std::endl;
+    //std::cout << "PROCESS::START OF TAG  : " << name << std::endl;
     
     std::string iname = attrs.getValue( "name" );
     std::string ifo   = attrs.getValue( "formula" );
@@ -50,17 +49,18 @@ public:
   // Analogical to SAX endElement callback
   virtual void EndElement( const std::string& name )
   {
-    std::cout << "PROCESS::END OF TAG  : " << name << std::endl;
+    //std::cout << "PROCESS::END OF TAG  : " << name << std::endl;
     try
     {
       SAXObject** obj = Context()->GetTopObject();
       isotope* saxobj = dynamic_cast<isotope*>( *obj );
       
       if( saxobj != 0 ) {
-        std::cout << "PROCESS END OF TAG:: isotope " << saxobj->get_name()
-                  << " looks OK" << std::endl;
+        //std::cout << "PROCESS END OF TAG:: isotope " << saxobj->get_name()
+        //          << " looks OK" << std::endl;
+        ;
       } else {
-        std::cout << "PROCESS END OF TAG:: GOT ZERO DATA POINTER! " << std::endl;
+        std::cerr << "PROCESS END OF TAG:: GOT ZERO DATA POINTER! " << std::endl;
       }
     }
     catch( ... )
@@ -78,7 +78,7 @@ public:
   // The name passed-in as the argument is the name of the XML element for which that's been done
   virtual void StackPopNotify( const std::string& name )
   {
-    std::cout << "PROCESS::isotope NOTIFIED AFTER THE TAG: " << name << std::endl;
+    //std::cout << "PROCESS::isotope NOTIFIED AFTER THE TAG: " << name << std::endl;
        
     SAXObject** obj = Context()->GetTopObject();
     
@@ -97,11 +97,9 @@ public:
   // The name of the state this object will process
   virtual const std::string& State() const
   {
+    static std::string tag = "isotope";
     return tag;
   }
-  
-private:
-  std::string tag;
 };
 
 DECLARE_PROCESS_FACTORY(isotopeProcess)

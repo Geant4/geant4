@@ -16,24 +16,20 @@ class positionProcess : virtual public SAXStateProcess, virtual public SAXCompon
 {
 public:
   positionProcess( const ProcessingContext* context = 0 )
-  : SAXStateProcess( context )
-  {
-    m_tag = "position";
+  : SAXStateProcess( context ) {
   }
   
-  virtual ~positionProcess()
-  {
+  virtual ~positionProcess() {
   }
   
-  virtual const SAXComponentObject* Build() const
-  {
+  virtual const SAXComponentObject* Build() const {
     return this;
   }
 
   // Analogical to SAX startElement callback
   virtual void StartElement( const std::string& name, const ASCIIAttributeList& attrs )
   {    
-    std::cout << "PROCESS::START OF TAG  : " << name << std::endl;
+    //std::cout << "PROCESS::START OF TAG  : " << name << std::endl;
     
     std::string pname = attrs.getValue( "name" );
     std::string ptype = attrs.getValue( "type" );
@@ -56,7 +52,7 @@ public:
   // Analogical to SAX endElement callback
   virtual void EndElement( const std::string& name )
   {
-    std::cout << "PROCESS::END OF TAG  : " << name << std::endl;
+    //std::cout << "PROCESS::END OF TAG  : " << name << std::endl;
     try
     {
       SAXObject** obj = Context()->GetTopObject();
@@ -64,11 +60,12 @@ public:
       
       if( saxobj != 0 )
       {
-        std::cout << "PROCESS END OF TAG:: position " << saxobj->get_name() << " looks OK" << std::endl;
+        //std::cout << "PROCESS END OF TAG:: position " << saxobj->get_name() << " looks OK" << std::endl;
+        ;
       }
       else
       {
-        std::cout << "PROCESS END OF TAG:: GOT ZERO DATA POINTER! " << std::endl;
+        std::cerr << "PROCESS END OF TAG:: GOT ZERO DATA POINTER! " << std::endl;
       }
     } catch( ... ) {
       std::cerr << "PROCESS END OF TAG " << name << " ERROR: "
@@ -90,11 +87,9 @@ public:
   // The name of the state this object will process
   virtual const std::string& State() const
   {
+    static std::string m_tag = "position";
     return m_tag;
   }
-  
-private:
-  std::string m_tag;
 };
 
 DECLARE_PROCESS_FACTORY(positionProcess)

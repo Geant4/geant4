@@ -30,7 +30,7 @@ public:
       ContentChoice* choice        = new ContentChoice;
       ContentGroup::ContentItem ci = { name, *so };
       choice->set_content( ci );
-      std::cout << "BOOLEAN SOLID PROCESS adding choice " << name << std::endl;
+      //std::cout << "BOOLEAN SOLID PROCESS adding choice " << name << std::endl;
       bsobj->add_content( "choice", choice );
     }
     

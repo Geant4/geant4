@@ -15,24 +15,19 @@ class defineProcess : virtual public SAXStateProcess, virtual public SAXComponen
 {
 public:
   defineProcess( const ProcessingContext* context = 0 )
-  : SAXStateProcess( context )
-  {
-    m_tag = "define";
+  : SAXStateProcess( context ) {
   }
 
-  virtual ~defineProcess()
-  {
+  virtual ~defineProcess() {
   }
 
-  virtual const SAXComponentObject* Build() const
-  {
+  virtual const SAXComponentObject* Build() const {
     return this;
   }
 
   // Analogical to SAX startElement callback
-  virtual void StartElement( const std::string& name, const ASCIIAttributeList& attrs )
-  {
-    std::cout << "PROCESS::START OF TAG  : " << name << std::endl;
+  virtual void StartElement( const std::string& name, const ASCIIAttributeList& attrs ) {
+    //std::cout << "PROCESS::START OF TAG  : " << name << std::endl;
 
     SAXObject** obj = Context()->GetTopObject();
     m_define = new define;
@@ -40,9 +35,8 @@ public:
   }
 
   // Analogical to SAX endElement callback
-  virtual void EndElement( const std::string& name )
-  {
-    std::cout << "PROCESS::END OF TAG  : " << name << std::endl;
+  virtual void EndElement( const std::string& name ) {
+    //std::cout << "PROCESS::END OF TAG  : " << name << std::endl;
     try
     {
       SAXObject** obj = Context()->GetTopObject();
@@ -50,11 +44,12 @@ public:
 
       if( saxobj != 0 )
       {
-        std::cout << "PROCESS END OF TAG:: define" << std::endl;
+        //std::cout << "PROCESS END OF TAG:: define" << std::endl;
+        ;
       }
       else
       {
-        std::cout << "PROCESS END OF TAG:: define:: GOT ZERO DATA POINTER! " << std::endl;
+        std::cerr << "PROCESS END OF TAG:: define:: GOT ZERO DATA POINTER! " << std::endl;
       }
     } catch( ... ) {
       std::cerr << "PROCESS END OF TAG:: define:: BAD CAST exception caught...\a" << std::endl;
@@ -87,13 +82,12 @@ public:
   }
 
   // The name of the state this object will process
-  virtual const std::string& State() const
-  {
+  virtual const std::string& State() const {
+    static std::string m_tag = "define";
     return m_tag;
   }
 
 private:
-  std::string m_tag;
   define*     m_define;
 };
 
