@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: robustness.cc,v 1.3 2001-07-11 10:07:31 gunter Exp $
+// $Id: robustness.cc,v 1.4 2001-07-23 07:23:09 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "DetectorConstruction.hh"
 #include "RunAction.hh"
+#include "EventAction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "PhysicsList.hh"
 #include "SteppingAction.hh"
@@ -52,8 +53,8 @@ int main(int argc,char** argv) {
 
   // UserAction classes
   runManager->SetUserAction(new RunAction);
+  runManager->SetUserAction(new EventAction);
   runManager->SetUserAction(new PrimaryGeneratorAction);
-  //runManager->SetUserAction(new SteppingAction);
 
   if(argc==1)
   {
