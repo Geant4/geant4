@@ -199,7 +199,9 @@ examples                                examples-V04-01-05
       using ROOT-I/O.
     o removed old ODBMS-based examples.
 
-tests                                   tests-V04-01-04
+tests                                   tests-V04-01-05
 -----
 - Corrections to messengers for migration to new G4ApplicationState.
 - test33: ported to gcc-3.2 compiler (test33-V04-01-05).
+- Updated reference outputs.
+
