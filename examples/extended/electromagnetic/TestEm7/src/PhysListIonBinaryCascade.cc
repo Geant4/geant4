@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListIonBinaryCascade.cc,v 1.2 2003-12-05 11:17:16 vnivanch Exp $
+// $Id: PhysListIonBinaryCascade.cc,v 1.3 2004-07-08 17:14:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "PhysListIonBinaryCascade.hh"
@@ -32,7 +32,6 @@
 #include "G4Triton.hh"
 #include "G4He3.hh"
 #include "G4Alpha.hh"
-#include "IonC12.hh"
 #include "G4GenericIon.hh"
 
 #include "G4ExcitationHandler.hh"
@@ -141,16 +140,6 @@ void PhysListIonBinaryCascade::ConstructProcess()
   theGenIonBC->SetMaxEnergy(10*GeV);
   theIPGenericIon->RegisterMe(theGenIonBC);
   pmanager->AddDiscreteProcess(theIPGenericIon);
-
-  // C12
-  particle = IonC12::Ion();
-  pmanager = particle->GetProcessManager();
-  G4HadronInelasticProcess* theIPIonC12 =
-      new G4HadronInelasticProcess("IonC12Inelastic",particle);
-  theIPIonC12->AddDataSet(TripathiCrossSection);
-  theIPIonC12->AddDataSet(aShen);
-  theIPIonC12->RegisterMe(theGenIonBC);
-  pmanager->AddDiscreteProcess(theIPIonC12);
 
   // He3
   particle = G4He3::He3();
