@@ -22,8 +22,7 @@
 // ************************************************************
 // 28 July   1999 V.Ivanchenko cleen up
 // 17 August 1999 G.Mancinelli added ICRU parametrisations for protons  
-// 20 August 1999 G.Mancinelli added ICRU tables for alpha (not functional
-// yet)  
+// 20 August 1999 G.Mancinelli added ICRU tables for alpha 
 // 31 August 1999 V.Ivanchenko update and cleen up 
 // 30 Sept.  1999 V.Ivanchenko minor upgrade 
 // 19 Jan.   2000 V.Ivanchenko minor changing in Barkas corrections
@@ -60,7 +59,7 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     HighestKineticEnergy = 100.*TeV ;
     TotBin = 200 ;
     MassRatio = 1.0 ;
-    DeltaCutInKineticEnergy = 0; 
+    DeltaCutInKineticEnergy = 0.0; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -79,15 +78,15 @@ void G4hLowEnergyIonisation::SetStoppingPowerTableName(const G4String& dedxTable
 {
   if(dedxTable == "Ziegler1977H") { 
     DEDXtable = "Ziegler1977H";
-    ParamHighEnergy = 2.*MeV;
+    ParamHighEnergy = 2.0*MeV;
     
   } else if(dedxTable == "Ziegler1977He") {
     DEDXtable = "Ziegler1977He";
-    ParamHighEnergy = 2.*MeV;
+    ParamHighEnergy = 2.0*MeV;
     
   } else if(dedxTable == "ICRU_R49p") {
     DEDXtable = "ICRU_R49p";
-    ParamHighEnergy = 2.*MeV;
+    ParamHighEnergy = 2.0*MeV;
     
     // set at 2 MeV. The ICRU report affirm their parametrisations are
     // valid up to 1 MeV for protons. They have used Ziegler-like
@@ -99,19 +98,19 @@ void G4hLowEnergyIonisation::SetStoppingPowerTableName(const G4String& dedxTable
     // up to 2 MeV (better boundary conditions there wrt 1 MeV) and
     // Bethe-Bloch for higher values (applying continuity constraint) 
     
-    ParamHighEnergy = 2.*MeV;
+    ParamHighEnergy = 2.0*MeV;
     
   } else if(dedxTable == "ICRU_R49He") {
     DEDXtable = "ICRU_R49He";
-    ParamHighEnergy = 2.*MeV;
+    ParamHighEnergy = 2.0*MeV;
 
   } else if(dedxTable == "ICRU_R49PowersHe") {
     DEDXtable = "ICRU_R49PowersHe";
-    ParamHighEnergy = 2.*MeV;
+    ParamHighEnergy = 2.0*MeV;
     
   } else if(dedxTable == "UrbanModel") {
     DEDXtable = "UrbanModel";
-    ParamHighEnergy = 2.*MeV;
+    ParamHighEnergy = 2.0*MeV;
     
   } else {
   G4cout << "G4hLowEnergyIonisation Warning: There is no table with the name ="
@@ -194,11 +193,11 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
       
       // get particle mass
       
-      const G4double PartMass = aParticleType.GetPDGMass()/MeV;
+      const G4double PartMass = aParticleType.GetPDGMass()/MeV ;
       
       // get particle charge
       
-      const G4double PartCharge = aParticleType.GetPDGCharge();
+      const G4double PartCharge = aParticleType.GetPDGCharge()/eplus ;
       
       // define constants A and B for this material  
       
@@ -365,7 +364,7 @@ void G4hLowEnergyIonisation::BuildLambdaTable(const G4ParticleDefinition& aParti
         {
 	  LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
 	  
-	  sigma = 0. ;
+	  sigma = 0.0 ;
 	  
 	  for (G4int iel=0; iel<NumberOfElements; iel++ )
 	    {
@@ -439,7 +438,7 @@ G4double G4hLowEnergyIonisation::ComputeMicroscopicCrossSection(
 	*TotalCrossSection/betasquare;
     }
   else
-    TotalCrossSection= 0. ;
+    TotalCrossSection= 0.0 ;
   
   return TotalCrossSection ;
 }
