@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.56 1999-12-05 18:10:27 gcosmo Exp $
+# $Id: architecture.gmk,v 1.57 1999-12-05 22:41:56 morita Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -451,6 +451,9 @@ ifeq ($(G4SYSTEM),SUN-CC5)
       CXXFLAGS += -compat
     endif
   endif
+  ifdef G4ODBMS
+    G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
+  endif
 endif
 
 # -------- HP ---------
@@ -499,6 +502,9 @@ ifeq ($(G4SYSTEM),HP-aCC)
       CPPFLAGS += -DG4USE_STD_NAMESPACE
     endif
   endif
+  ifdef G4ODBMS
+    G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
+  endif
 endif
 
 # -------- SGI ---------   !!! not supported !!!
@@ -532,6 +538,9 @@ ifeq ($(G4SYSTEM),SGI-CC)
     CPPFLAGS += -DOS_IRIX_6_5 -DOS_NEW_CHECK -DOS_STL_ASSERT
     CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
     CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
+  endif
+  ifdef G4ODBMS
+    G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
   endif
 endif
 
@@ -567,6 +576,9 @@ ifeq ($(G4SYSTEM),AIX-xlC)
     CPPFLAGS += -DOS_AIX_4 -DOS_NEW_CHECK -DOS_STL_ASSERT
     CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
     CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
+  endif
+  ifdef G4ODBMS
+    G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
   endif
 endif
 
@@ -606,6 +618,9 @@ ifeq ($(G4SYSTEM),DEC-cxx)
       CXXFLAGS += -std strict_ansi
       CPPFLAGS += -DG4USE_STD_NAMESPACE
     endif
+  endif
+  ifdef G4ODBMS
+    G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
   endif
 endif
 
@@ -648,6 +663,10 @@ ifeq ($(G4SYSTEM),Linux-g++)
     CPPFLAGS += -DOS_LINUX_2 -DOS_NEW_CHECK -DOS_STL_ASSERT
     CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
     CPPFLAGS += -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)
+  endif
+  ifdef G4ODBMS
+    G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD \
+                      -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd=""
   endif
 endif
 
@@ -694,6 +713,9 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   endif
   ifndef OGLLIBS
     OGLLIBS   := -lGLU  -lGL
+  endif
+  ifdef G4ODBMS
+    G4OODDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
   endif
 endif
 
