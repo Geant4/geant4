@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysis.cc,v 1.14 2002-06-18 21:15:13 griccard Exp $
+// $Id: GammaRayTelAnalysis.cc,v 1.15 2002-11-08 14:18:53 pfeiffer Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -53,21 +53,12 @@
 #include "GammaRayTelAnalysisMessenger.hh"
 
 #ifdef  G4ANALYSIS_USE
-#include <AIDA/IAnalysisFactory.h>
-#include <AIDA/ITreeFactory.h>
-#include <AIDA/ITree.h>
-#include <AIDA/IHistogramFactory.h>
-#include <AIDA/IHistogram1D.h>
-#include <AIDA/IHistogram2D.h>
-#include <AIDA/IPlotterFactory.h>
-#include <AIDA/IPlotter.h>
-#include <AIDA/ITupleFactory.h>
-#include <AIDA/ITuple.h>
-#include <AIDA/IManagedObject.h>
+# include <AIDA/AIDA.h>
 #endif
 
 GammaRayTelAnalysis* GammaRayTelAnalysis::instance = 0;
- 
+
+//-------------------------------------------------------------------------------- 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 GammaRayTelAnalysis::GammaRayTelAnalysis(int argc,char** argv)
@@ -88,27 +79,24 @@ GammaRayTelAnalysis::GammaRayTelAnalysis(int argc,char** argv)
   analysisFactory = AIDA_createAnalysisFactory();
   if(analysisFactory) {
 
-    ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
+    AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
     if(treeFactory) {
       // Tree in memory :
       // Create a "tree" associated to an hbook
-      tree = treeFactory->create("gammaraytel.hbook", false, false,"hbook");
+      tree = treeFactory->create("gammaraytel.hbook", "hbook", false, false);
       if(tree) {
 	// Get a tuple factory :
-	ITupleFactory* tupleFactory = analysisFactory->createTupleFactory(*tree);
+	AIDA::ITupleFactory* tupleFactory = analysisFactory->createTupleFactory(*tree);
 	if(tupleFactory) {
 	  // Create a tuple :
-	    tuple = tupleFactory->create("tuple","Event info",
-					 "float energy, plane, x, y, z");
+	    tuple = tupleFactory->create("1","1", "float energy, plane, x, y, z");
 	  
 	  assert(tuple);
 	  
 	  delete tupleFactory;
 	}
 
-
-	IHistogramFactory* histoFactory	= 
-	  analysisFactory->createHistogramFactory(*tree);  
+	AIDA::IHistogramFactory* histoFactory	= analysisFactory->createHistogramFactory(*tree);
 	if(histoFactory) {
 	  // Create histos :
 	  int Nplane = GammaRayTelDetector->GetNbOfTKRLayers();
@@ -120,28 +108,28 @@ GammaRayTelAnalysis::GammaRayTelAnalysis(int argc,char** argv)
 
 	  // 1D histogram that store the energy deposition of the
 	  // particle in the last (number 0) TKR X-plane
-	  energy = histoFactory->create1D("10","Energy deposition in the last X plane (keV)", 100, 50, 200);
+	  energy = histoFactory->createHistogram1D("10","Energy deposition in the last X plane (keV)", 100, 50, 200);
 	  
 	  // 1D histogram that store the hits distribution along the TKR X-planes
-	  hits = histoFactory->create1D("20","Hits distribution in the TKR X planes",Nplane, 0, Nplane-1);
+	  hits = histoFactory->createHistogram1D("20","Hits distribution in the TKR X planes",Nplane, 0, Nplane-1);
 	  
 	  // 2D histogram that store the position (mm) of the hits (XZ projection)
 	  if (histo2DMode == "strip")
-	    posXZ = histoFactory->create2D("30","Tracker Hits XZ (strip,plane)", 
+	    posXZ = histoFactory->createHistogram2D("30","Tracker Hits XZ (strip,plane)", 
 					   N, 0, N-1, 
 					   2*Nplane, 0, Nplane-1);
 	  else
-	    posXZ = histoFactory->create2D("30","Tracker Hits XZ (x,z) in mm", 
+	    posXZ = histoFactory->createHistogram2D("30","Tracker Hits XZ (x,z) in mm", 
 					   sizexy/5, -sizexy/2, sizexy/2, 
 					   sizez/5, -sizez/2, sizez/2);
 	  
 	  // 2D histogram that store the position (mm) of the hits (YZ projection)
 	  if(histo2DMode=="strip")
-	    posYZ = histoFactory->create2D("40","Tracker Hits YZ (strip,plane)", 
+	    posYZ = histoFactory->createHistogram2D("40","Tracker Hits YZ (strip,plane)", 
 					   N, 0, N-1, 
 					   2*Nplane, 0, Nplane-1);
 	  else
-	    posYZ = histoFactory->create2D("40","Tracker Hits YZ (y,z) in mm", 
+	    posYZ = histoFactory->createHistogram2D("40","Tracker Hits YZ (y,z) in mm", 
 					   sizexy/5, -sizexy/2, sizexy/2, 
 					   sizez/5, -sizez/2, sizez/2);
 	  
@@ -152,11 +140,11 @@ GammaRayTelAnalysis::GammaRayTelAnalysis(int argc,char** argv)
       delete treeFactory; // Will not delete the ITree.
     }
 
-    IPlotterFactory* plotterFactory = 
+    AIDA::IPlotterFactory* plotterFactory = 
       analysisFactory->createPlotterFactory(argc,argv);
     if(plotterFactory) {
-      plotter = plotterFactory->create();
-      if(plotter) {
+      plotter  = plotterFactory->create();
+     if(plotter) {
 	plotter->show();
 	plotter->setParameter("pageTitle","Gamma Ray Tel");
       }
@@ -240,7 +228,7 @@ void GammaRayTelAnalysis::InsertHits(int nplane)
 void GammaRayTelAnalysis::setNtuple(float E, float p, float x, float y, float z)
 {
 #ifdef  G4ANALYSIS_USE
-  ITuple * ntuple = dynamic_cast<ITuple *> ( tree->find("tuple") );
+  AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("1") );
   if(ntuple) {
     ntuple->fill(tuple->findColumn("energy"),E);
     ntuple->fill(tuple->findColumn("plane"),p);
@@ -261,13 +249,13 @@ void GammaRayTelAnalysis::setNtuple(float E, float p, float x, float y, float z)
 void GammaRayTelAnalysis::BeginOfRun(G4int n) 
 { 
 #ifdef  G4ANALYSIS_USE
-  
   /*
   if(energy) energy->reset();
   if(hits) hits->reset();
   if(posXZ) posXZ->reset();
   if(posYZ) posYZ->reset();
   */
+
 #endif
 }
 
@@ -279,41 +267,44 @@ void GammaRayTelAnalysis::BeginOfRun(G4int n)
 void GammaRayTelAnalysis::EndOfRun(G4int n) 
 {
 #ifdef  G4ANALYSIS_USE
-  if(tree) tree->commit();
-
+  if(tree) {
+    tree->commit();
+    tree->close();
+  }
 
   if(plotter) {
+
     // We set one single region for the plotter
     // We now print the histograms, each one in a separate file
     if(histo2DSave == "enable") {
       char name[15];
       plotter->createRegions(1,1);
       sprintf(name,"posxz_%d.ps", n);
-      plotter->plot(*posXZ);
+      plotter->currentRegion().plot(*posXZ);
       plotter->refresh();
-      plotter->write(name,"ps");
+      //plotter->write(name,"ps");
 
       plotter->createRegions(1,1);
       sprintf(name,"posyz_%d.ps", n);
-      plotter->plot(*posYZ);
+      plotter->currentRegion().plot(*posYZ);
       plotter->refresh();
-      plotter->write(name,"ps");
+      //plotter->write(name,"ps");
     }
 
     if(histo1DSave == "enable") {
       plotter->createRegions(1,1);
       char name[15];
       sprintf(name,"energy_%d.ps", n);
-      plotter->plot(*energy);
+      plotter->currentRegion().plot(*energy);
       plotter->refresh();
-      plotter->write(name,"ps");
+      //plotter->write(name,"ps");
 
       plotter->createRegions(1,1);      
       sprintf(name,"hits_%d.ps", n);
-      plotter->clearRegion();
-      plotter->plot(*hits);
+      //plotter->clearRegion();
+      plotter->currentRegion().plot(*hits);
       plotter->refresh();
-      plotter->write(name,"ps");
+      //plotter->write(name,"ps");
     }
 
   }
@@ -335,39 +326,21 @@ void GammaRayTelAnalysis::EndOfEvent(G4int flag)
   // for paper output.
   if(plotter) {
     if((histo2DDraw == "enable") && (histo1DDraw == "enable")) {
-      plotter->createRegions(2,2);
-      plotter->plot(*posXZ);
-      plotter->show();
-      plotter->next();
-
-      plotter->plot(*posYZ);
-      plotter->show();
-      plotter->next();
-
-      plotter->plot(*energy);
-      plotter->show();
-      plotter->next();
-      plotter->plot(*hits);
-      plotter->show();
-
+      plotter->currentRegion().plot(*posXZ);
+      plotter->currentRegion().plot(*posYZ);
+      plotter->currentRegion().plot(*energy);
+      plotter->currentRegion().plot(*hits);
     } else if((histo1DDraw == "enable") && (histo2DDraw != "enable")) {
-      plotter->createRegions(1,2);
-      plotter->plot(*energy);
-      plotter->show();
-      plotter->next();
-      plotter->plot(*hits);
+      plotter->currentRegion().plot(*energy);
+      plotter->currentRegion().plot(*hits);
     } else if((histo1DDraw != "enable") && (histo2DDraw == "enable")) {
-      plotter->createRegions(1,2);
-      plotter->plot(*posXZ);
-      plotter->show();
-      plotter->next();
-      plotter->plot(*posYZ);
+      plotter->currentRegion().plot(*posXZ);
+      plotter->currentRegion().plot(*posYZ);
     } else { // Nothing to plot.
       plotter->createRegions(1,1);
     }
     plotter->refresh();
   }
-
 
 #endif
 }

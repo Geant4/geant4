@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysis.hh,v 1.11 2002-06-18 18:47:14 griccard Exp $
+// $Id: GammaRayTelAnalysis.hh,v 1.12 2002-11-08 14:18:52 pfeiffer Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -52,13 +52,15 @@
 class GammaRayTelAnalysisMessenger;
 class GammaRayTelDetectorConstruction;
 
-class IAnalysisFactory;
-class IHistogramFactory;
-class ITree;
-class IHistogram1D;
-class IHistogram2D;
-class ITuple;
-class IPlotter;
+namespace AIDA {
+  class IAnalysisFactory;
+  class IHistogramFactory;
+  class ITree;
+  class IHistogram1D;
+  class IHistogram2D;
+  class ITuple;
+  class IPlotter;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -93,23 +95,23 @@ public:
 
 private:
   GammaRayTelAnalysis(int = 0, char** = 0);
-  void plot1D(IHistogram1D* histo);
-  void plot2D(IHistogram2D* histo);
+  void plot1D(AIDA::IHistogram1D* histo);
+  void plot2D(AIDA::IHistogram2D* histo);
   void Plot();
 private:
   static GammaRayTelAnalysis* instance;
 
   GammaRayTelDetectorConstruction*    GammaRayTelDetector;
 
-  IAnalysisFactory* analysisFactory;
-  ITree* tree;
-  IPlotter* plotter;
-  ITuple* tuple;
+  AIDA::IAnalysisFactory* analysisFactory;
+  AIDA::ITree* tree;
+  AIDA::IPlotter* plotter;
+  AIDA::ITuple* tuple;
 
-  IHistogram1D* energy;
-  IHistogram1D* hits;
-  IHistogram2D* posXZ;
-  IHistogram2D* posYZ;
+  AIDA::IHistogram1D* energy;
+  AIDA::IHistogram1D* hits;
+  AIDA::IHistogram2D* posXZ;
+  AIDA::IHistogram2D* posYZ;
 
   G4String histo1DDraw;
   G4String histo1DSave;
