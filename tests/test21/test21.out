@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Apr-2003)
+                                (19-May-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
@@ -20,13 +20,13 @@ Tst21PhysicsList::SetCuts:CutLength : 1000 (mm)
 SimpleBox is now made of Pb
 /run/beamOn 100
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1000 (mm)]   is too big  
+The cut in range [1000 (mm)]   is too big   for material  idx=2
 The cut in energy is set1.79769e+305GeV 
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e-
-The cut in range [1000 (mm)]   is too big  
+The cut in range [1000 (mm)]   is too big   for material  idx=2
 The cut in energy is set1.79769e+305GeV 
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
-The cut in range [1000 (mm)]   is too big  
+The cut in range [1000 (mm)]   is too big   for material  idx=2
 The cut in energy is set1.79769e+305GeV 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
@@ -410,7 +410,7 @@ Event number 299
 SimpleBox is now made of Al
 /run/beamOn 100
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1000 (mm)]   is too big  
+The cut in range [1000 (mm)]   is too big   for material  idx=1
 The cut in energy is set1.79769e+305GeV 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Apr-2003)
+                                (19-May-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -32,10 +32,10 @@ Current available graphics systems are:
 /gun/energy 1 MeV
 /run/beamOn 1
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1000 (mm)]   is too big  
+The cut in range [1000 (mm)]   is too big   for material  idx=1
 The cut in energy is set1.79769e+305GeV 
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1000 (mm)]   is too big  
+The cut in range [1000 (mm)]   is too big   for material  idx=2
 The cut in energy is set1.79769e+305GeV 
 
 msc:   Tables of transport mean free paths.
@@ -92,7 +92,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.33s Real=0.36s Sys=0.03s
+  User=0.35s Real=0.37s Sys=0.02s
     1000.000           1           0     Na24[0.0]
         46.4           1   1.551e+05     e-
     1.34e+03           1   1.551e+05     anti_nu_e
@@ -112,7 +112,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.33s Real=0.47s Sys=0.03s
+  User=0.32s Real=0.33s Sys=0.01s
        1e+03           1           0     Ne24[0.0]
          375           1       255.1     e-
     1.62e+03           1       255.1     anti_nu_e
@@ -137,7 +137,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.48s Real=0.52s Sys=0s
+  User=0.46s Real=0.47s Sys=0s
        1e+03           1           0     F24[0.0]
     1.09e+04           1     0.02878     e-
     1.86e+03           1     0.02878     anti_nu_e
@@ -166,7 +166,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.27s Real=0.27s Sys=0s
+  User=0.27s Real=0.28s Sys=0.01s
        1e+03           1           0     Al24[0.0]
     3.69e+03           1       4.458     e+
          511           1       4.458     gamma
@@ -210,7 +210,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.19s Real=0.23s Sys=0s
+  User=0.19s Real=0.19s Sys=0s
        1e+03           1           0     Cr46[0.0]
      2.6e+03           1      0.1036     e+
          511           1      0.1036     gamma
@@ -235,7 +235,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.06s Real=0.18s Sys=0s
+  User=0.07s Real=0.09s Sys=0s
        1e+03           1           0     Po215[0.0]
     7.39e+03           1   1.956e-05     alpha
          140           1   1.956e-05     Pb211[0.0]

@@ -1,12 +1,13 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Apr-2003)
+                                (19-May-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
 /run/verbose 2
 /run/initialize
 userDetector->Construct() start.
+SLog is registered to the default region.
 physicsList->Construct() start.
 
 phot:  Total cross sections from Sandia parametrisation. 
@@ -87,7 +88,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=11s Real=13s Sys=1.3s
+  User=11s Real=13s Sys=1.6s
 #
 # electron 500 MeV in Air
 #
@@ -157,7 +158,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.48s Real=0.48s Sys=0s
+  User=0.46s Real=0.49s Sys=0.03s
 #
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.

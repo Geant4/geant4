@@ -1,58 +1,27 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (13-Dec-2002)
+                                (19-May-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of U
 userDetector->Construct() start.
+SLog is registered to the default region.
 physicsList->Construct() start.
 
 phot:  Total cross sections from Sandia parametrisation. 
 Thank you for using G4KineticCascade. 
 physicsList->setCut() start.
 Tst24PhysicsList::SetCuts:CutLength : 1000 (mm)
+SimpleBox is now made of U
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1000 (mm)]   is too big  
-The cut in energy is set1.79769e+305GeV 
-G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1000 (mm)]   is too big  
-The cut in energy is set1.79769e+305GeV 
-G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1000 (mm)]   is too big  
+The cut in range [1000 (mm)]   is too big   for material  idx=3
 The cut in energy is set1.79769e+305GeV 
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e-
-The cut in range [1000 (mm)]   is too big  
+The cut in range [1000 (mm)]   is too big   for material  idx=3
 The cut in energy is set1.79769e+305GeV 
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
-The cut in range [1000 (mm)]   is too big  
+The cut in range [1000 (mm)]   is too big   for material  idx=3
 The cut in energy is set1.79769e+305GeV 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : Yes
- Material : H
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  is not ready to print
-
-Index : 1     used in the geometry : No      recalculation needed : Yes
- Material : Silicon
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  is not ready to print
-
-Index : 2     used in the geometry : No      recalculation needed : Yes
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  is not ready to print
-
-Index : 3     used in the geometry : Yes     recalculation needed : Yes
- Material : Uranium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -69,7 +38,8 @@ msc:   Tables of transport mean free paths.
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins.
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -90,6 +60,7 @@ hIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        Step function: finalRange(mm)= 1,  dRoverRange= 0.2
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -108,34 +79,6 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-SimpleBox is now made of U
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : H
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 990 eV     e- 708.91 keV    e+ 683.206 keV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.01145 GeV    e+ 962.847 MeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 949.551 GeV    e+ 779.788 GeV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
@@ -177,6 +120,3 @@ G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation bre
 G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
 G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
 G4VDecayChannel::FillDaughters [ N(1710)0 ]    Energy/Momentum conserevation breaks 
-WARNING - Attempt to delete the physical volume store while geometry closed !
-WARNING - Attempt to delete the logical volume store while geometry closed !
-WARNING - Attempt to delete the solid store while geometry closed !
