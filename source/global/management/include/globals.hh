@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: globals.hh,v 1.8 1999-05-25 03:44:39 gcosmo Exp $
+// $Id: globals.hh,v 1.9 1999-11-11 10:47:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,9 +56,8 @@
 // Include base types
 #include "G4Types.hh"
 
-// Other typedefs
-#include <rw/cstring.h>
-typedef RWCString G4String;
+// Get definition of G4String
+#include "g4rw/cstring.h"
 
 // Includes some additional definitions
 #include "templates.hh"

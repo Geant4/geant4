@@ -1,4 +1,4 @@
-$Id: History,v 1.25 1999-11-10 14:49:46 gcosmo Exp $
+$Id: History,v 1.26 1999-11-11 10:47:21 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -123,7 +123,7 @@ March 30, 99 M.Maire
 
 March 18, 99 J.Allison
 - globals.hh: Added #ifdef G4USE_STL, changed position of
-  #include <rw/cstring.h>.
+  #include "g4rw/cstring.h".
 
 December 17, 98  J.Allison  (global-00-04-03)
 - Added first version of STL interface.
@@ -216,8 +216,8 @@ July 14, 98 G.Cosmo (global-00-01-05)
   (H.Kurasige)
 
 July 8, 98 G.Cosmo (global-00-01-04)
-- Removed forward declarations of RWTPtrOrderedVector<G4KineticTrack>
-  and RWTPtrSortedVector<G4CollisionInitialState> from g4templates.hh.
+- Removed forward declarations of G4RWTPtrOrderedVector<G4KineticTrack>
+  and G4RWTPtrSortedVector<G4CollisionInitialState> from g4templates.hh.
 
 July 7, 98 G.Cosmo (global-00-01-03)
 - Removed old unit symbols in globals.hh (M.Maire)

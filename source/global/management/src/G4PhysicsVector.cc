@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsVector.cc,v 1.1 1999-01-07 16:09:06 gunter Exp $
+// $Id: G4PhysicsVector.cc,v 1.2 1999-11-11 10:47:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,7 +64,7 @@ G4bool G4PhysicsVector::IsFilledVectorExist() const
   return status;
 }
 
-void G4PhysicsVector::LinkPhysicsTable(RWTPtrOrderedVector<G4PhysicsVector>& theTable)
+void G4PhysicsVector::LinkPhysicsTable(G4RWTPtrOrderedVector<G4PhysicsVector>& theTable)
 {
   ptrNextTable = &theTable;
 } 

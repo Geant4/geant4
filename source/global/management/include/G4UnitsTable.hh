@@ -6,7 +6,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.hh,v 1.2 1999-03-30 13:09:25 maire Exp $
+// $Id: G4UnitsTable.hh,v 1.3 1999-11-11 10:47:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,10 +28,10 @@
 #define G4UnitsTable_HH
 
 #include "globals.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 class G4UnitsCategory;
-typedef RWTPtrOrderedVector<G4UnitsCategory> G4UnitsTable;
+typedef G4RWTPtrOrderedVector<G4UnitsCategory> G4UnitsTable;
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -79,7 +79,7 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-typedef RWTPtrOrderedVector<G4UnitDefinition> G4UnitsContainer;
+typedef G4RWTPtrOrderedVector<G4UnitDefinition> G4UnitsContainer;
 
 class G4UnitsCategory
 {

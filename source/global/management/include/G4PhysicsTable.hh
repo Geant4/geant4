@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsTable.hh,v 1.1 1999-01-07 16:09:02 gunter Exp $
+// $Id: G4PhysicsTable.hh,v 1.2 1999-11-11 10:47:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,11 +21,11 @@
 #ifndef G4PhysicsTable_h
 #define G4PhysicsTable_h 1
 
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 #include "globals.hh"
 #include "G4PhysicsVector.hh"
 
-typedef RWTPtrOrderedVector<G4PhysicsVector> G4PhysicsTable;
+typedef G4RWTPtrOrderedVector<G4PhysicsVector> G4PhysicsTable;
 
 #endif
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OrderedTable.hh,v 1.1 1999-01-07 16:09:01 gunter Exp $
+// $Id: G4OrderedTable.hh,v 1.2 1999-11-11 10:47:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,16 +21,16 @@
 #define G4OrderedTable_h 1
 
 #include "globals.hh"
-#include <rw/tvordvec.h>
-#include <rw/tpordvec.h>
+#include "g4rw/tvordvec.h"
+#include "g4rw/tpordvec.h"
 
-class G4ValVector : public RWTValOrderedVector<G4double>
+class G4ValVector : public G4RWTValOrderedVector<G4double>
 {
 
   public:
 
       G4ValVector(size_t capac=RWDEFAULT_CAPACITY)
-        : RWTValOrderedVector<G4double>(capac) {;}
+        : G4RWTValOrderedVector<G4double>(capac) {;}
 
       virtual ~G4ValVector() {;}
 
@@ -42,6 +42,6 @@ class G4ValVector : public RWTValOrderedVector<G4double>
 
 };
 
-typedef RWTPtrOrderedVector<G4ValVector> G4OrderedTable;
+typedef G4RWTPtrOrderedVector<G4ValVector> G4OrderedTable;
 
 #endif

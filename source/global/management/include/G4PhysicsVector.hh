@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsVector.hh,v 1.1 1999-01-07 16:09:02 gunter Exp $
+// $Id: G4PhysicsVector.hh,v 1.2 1999-11-11 10:47:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@
 
 #include "globals.hh"
 #include "G4DataVector.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 class G4PhysicsVector 
 {
@@ -84,11 +84,11 @@ class G4PhysicsVector
     G4bool IsFilledVectorExist() const;
          // Is non-empty physics vector already exist?
 
-    void LinkPhysicsTable(RWTPtrOrderedVector<G4PhysicsVector>& theTable);
+    void LinkPhysicsTable(G4RWTPtrOrderedVector<G4PhysicsVector>& theTable);
          // Link the given G4PhysicsTable to the current G4PhyiscsVector.
     G4bool IsLinkedTableExist() const;
          // Has this physics vector an extended physics table?
-    const RWTPtrOrderedVector<G4PhysicsVector>* GetNextTable() const;
+    const G4RWTPtrOrderedVector<G4PhysicsVector>* GetNextTable() const;
          // Returns the pointer to a physics table created for elements 
          // or isotopes (when the cross-sesctions or energy-losses 
          // depend explicitly on them).
@@ -112,7 +112,7 @@ class G4PhysicsVector
     G4DataVector dataVector;    // Vector to keep the crossection/energyloss
     G4DataVector binVector;     // Vector to keep the low edge value of bin
 
-    RWTPtrOrderedVector<G4PhysicsVector>* ptrNextTable;  
+    G4RWTPtrOrderedVector<G4PhysicsVector>* ptrNextTable;  
                                 // Link to the connected physics table
 
     G4double LinearInterpolation(G4double theEnergy, size_t theLocBin);
@@ -138,7 +138,7 @@ inline G4double G4PhysicsVector::operator()(const size_t binNumber) const
 }
 
 
-inline const RWTPtrOrderedVector<G4PhysicsVector>*
+inline const G4RWTPtrOrderedVector<G4PhysicsVector>*
 G4PhysicsVector::GetNextTable() const
 {
   return ptrNextTable;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DataVector.hh,v 1.1 1999-01-07 16:09:00 gunter Exp $
+// $Id: G4DataVector.hh,v 1.2 1999-11-11 10:47:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,8 +22,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 
-typedef RWTValOrderedVector<G4double> G4DataVector;
+typedef G4RWTValOrderedVector<G4double> G4DataVector;
 
 #endif
