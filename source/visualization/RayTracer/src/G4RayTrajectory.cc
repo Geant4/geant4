@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.cc,v 1.10 2003-05-30 13:01:21 johna Exp $
+// $Id: G4RayTrajectory.cc,v 1.11 2003-05-30 15:42:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,6 +50,7 @@ G4RayTrajectory :: G4RayTrajectory()
 }
 
 G4RayTrajectory :: G4RayTrajectory(G4RayTrajectory & right)
+: G4VTrajectory()
 {
   positionRecord = new G4std::vector<G4RayTrajectoryPoint*>;
   for(size_t i=0;i<right.positionRecord->size();i++)
