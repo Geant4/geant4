@@ -74,7 +74,6 @@ DicomGeometry::~DicomGeometry()
   delete patientConstructor;
 }
 
-
 void DicomGeometry::InitialisationOfMaterials()
 {
   // Creating elements :
@@ -254,14 +253,18 @@ void DicomGeometry::PatientConstruction()
 {
   DicomConfiguration* ReadConfiguration = new DicomConfiguration;
   ReadConfiguration->ReadDataFile();
-					
-  // images must have the same dimension ... 
-  ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[0] );
-  // open a .g4 file to read some values ...
 		
-  PatientX = (ReadConfiguration->IsCompressionUsed()*(ReadConfiguration->GetXPixelSpacing())/2.0) *mm;
-  PatientY = (ReadConfiguration->IsCompressionUsed()*(ReadConfiguration->GetYPixelSpacing())/2.0) *mm;
-  PatientZ = ((ReadConfiguration->GetSliceThickness()/2.0) *mm);
+  G4String listOfFile = ReadConfiguration->GetListOfFile()[0];	
+  // images must have the same dimension ... 
+  ReadConfiguration->ReadG4File( listOfFile );
+  // open a .g4 file to read some values ...
+  
+  G4int compressionUsed = ReadConfiguration->IsCompressionUsed();	
+  G4double sliceThickness = ReadConfiguration->GetSliceThickness();
+	
+  PatientX = (compressionUsed*(ReadConfiguration->GetXPixelSpacing())/2.0) *mm;
+  PatientY = (compressionUsed*(ReadConfiguration->GetYPixelSpacing())/2.0) *mm;
+  PatientZ = ((sliceThickness/2.0) *mm);
 
   // Logical Box to place Parameteristion inside it
   Attributes_param = new G4VisAttributes();
@@ -302,6 +305,8 @@ void DicomGeometry::PatientConstruction()
 						      denseBone,
 						      trabecularBone);
   Physical_LungINhale = new G4PVParameterised( "Physical_LungINhale" , Logical_LungINhale, logical_param, kZAxis, numberOfVoxels, Param_LungINhale );
+
+  
 }
 
 G4VPhysicalVolume* DicomGeometry::Construct()
