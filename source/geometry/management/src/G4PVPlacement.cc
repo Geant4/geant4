@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.7 2003-03-31 14:18:51 gcosmo Exp $
+// $Id: G4PVPlacement.cc,v 1.8 2003-05-13 18:37:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,12 @@ G4PVPlacement::G4PVPlacement( G4RotationMatrix *pRot,
   : G4VPhysicalVolume(pRot,tlate,pName,pLogical,pMother),
     fmany(pMany), fallocatedRotM(false), fcopyNo(pCopyNo)
 {
+  if (pMother)
+  {
+    G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
+    SetMotherLogical(motherLogical);
+    motherLogical->AddDaughter(this);
+  }
 }
 
 G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
@@ -52,7 +58,13 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
                       Transform3D.getTranslation(),pName,pLogical,pMother),
     fmany(pMany), fcopyNo(pCopyNo)
 {
-  fallocatedRotM= (this->GetRotation() != 0);
+  fallocatedRotM = (this->GetRotation() != 0);
+  if (pMother)
+  {
+    G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
+    SetMotherLogical(motherLogical);
+    motherLogical->AddDaughter(this);
+  }
 }
 
 //
@@ -71,6 +83,7 @@ G4PVPlacement::G4PVPlacement( G4RotationMatrix *pRot,
     fmany(pMany), fallocatedRotM(false), fcopyNo(pCopyNo)
 {
   if (pMotherLogical) pMotherLogical->AddDaughter(this);
+  SetMotherLogical(pMotherLogical);
 }
 
 
@@ -87,6 +100,7 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
   fallocatedRotM= (this->GetRotation() != 0);
   
   if (pMotherLogical) pMotherLogical->AddDaughter(this);
+  SetMotherLogical(pMotherLogical);
 }
 
 G4PVPlacement::~G4PVPlacement()
