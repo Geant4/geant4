@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.18 2000-12-14 10:38:14 gcosmo Exp $
+// $Id: G4RunManager.cc,v 1.19 2001-02-07 09:22:45 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,7 +63,7 @@ G4RunManager::G4RunManager()
   eventManager = new G4EventManager();
   timer = new G4Timer();
   runMessenger = new G4RunMessenger(this);
-  previousEvents = new G4RWTPtrOrderedVector<G4Event>;
+  previousEvents = new G4std::vector<G4Event*>;
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
@@ -196,9 +196,11 @@ void G4RunManager::RunInitialization()
   G4StateManager* stateManager = G4StateManager::GetStateManager();
   stateManager->SetNewState(GeomClosed);
 
-  previousEvents->clearAndDestroy();
+  //previousEvents->clearAndDestroy();
+  for(G4int itr=0;itr<previousEvents->size();itr++)
+  { delete (*previousEvents)[itr]; }
   for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
-  { previousEvents->insert((G4Event*)NULL); }
+  { previousEvents->push_back((G4Event*)NULL); }
 
   runAborted = false;
 
@@ -282,7 +284,9 @@ void G4RunManager::RunTermination()
 {
   G4StateManager* stateManager = G4StateManager::GetStateManager();
 
-  previousEvents->clearAndDestroy();
+  //previousEvents->clearAndDestroy();
+  for(G4int itr=0;itr<previousEvents->size();itr++)
+  { delete (*previousEvents)[itr]; }
 
   if(userRunAction) userRunAction->EndOfRunAction(currentRun);
 
@@ -302,8 +306,9 @@ void G4RunManager::StackPreviousEvent(G4Event* anEvent)
   { evt = anEvent; }
   else
   {
-    previousEvents->prepend(anEvent);
-    evt = previousEvents->removeLast();
+    previousEvents->insert(previousEvents->begin(),anEvent);
+    evt = previousEvents->back();
+    previousEvents->pop_back();
   }
   delete evt;
 }

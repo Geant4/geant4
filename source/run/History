@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2000-12-14 10:39:44 gcosmo Exp $
+$Id: History,v 1.28 2001-02-07 09:22:44 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Feb 7 2001, M.Asai (run-V03-00-00)
+- STL migration of G4RunManager
 
 Dec 14 2000, G.Cosmo (run-V02-00-06)
 - Updated date to G4RunManager.cc for public release 3.0.
