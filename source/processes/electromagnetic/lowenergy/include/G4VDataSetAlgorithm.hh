@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDataSetAlgorithm.hh,v 1.4 2001-10-09 11:23:26 vnivanch Exp $
+// $Id: G4VDataSetAlgorithm.hh,v 1.5 2001-10-09 12:13:48 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -51,6 +51,7 @@ public:
 
   virtual ~G4VDataSetAlgorithm() { }
  
+
   virtual G4double Calculate(G4double point, G4int bin, 
 			     const G4DataVector& energies, 
 			     const G4DataVector& data) const = 0;
