@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.12 2002-12-16 09:24:04 gcosmo Exp $
+// $Id: G4LogicalVolume.cc,v 1.13 2003-01-29 21:42:28 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,6 +74,8 @@ G4LogicalVolume::G4LogicalVolume( G4VSolid* pSolid,
 //
 G4LogicalVolume::~G4LogicalVolume()
 {
+  if(IsRootRegion())
+  { fRegion->RemoveRootLogicalVolume(this); }
   G4LogicalVolumeStore::DeRegister(this);
 }
 
