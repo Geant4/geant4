@@ -43,7 +43,7 @@ ExN04CalorimeterSD::ExN04CalorimeterSD(G4String name)
 ExN04CalorimeterSD::~ExN04CalorimeterSD()
 {;}
 
-void ExN04CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
+void ExN04CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
   CalCollection = new ExN04CalorimeterHitsCollection
                       (SensitiveDetectorName,collectionName[0]); 

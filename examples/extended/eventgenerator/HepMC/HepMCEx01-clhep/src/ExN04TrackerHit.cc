@@ -37,6 +37,7 @@ ExN04TrackerHit::~ExN04TrackerHit()
 {;}
 
 ExN04TrackerHit::ExN04TrackerHit(const ExN04TrackerHit &right)
+  : G4VHit()
 {
   edep = right.edep;
   pos = right.pos;
@@ -49,9 +50,9 @@ const ExN04TrackerHit& ExN04TrackerHit::operator=(const ExN04TrackerHit &right)
   return *this;
 }
 
-int ExN04TrackerHit::operator==(const ExN04TrackerHit &right) const
+G4int ExN04TrackerHit::operator==(const ExN04TrackerHit &right) const
 {
-  return 0;
+  return (this==&right) ? 1 : 0;
 }
 
 void ExN04TrackerHit::Draw()
@@ -71,5 +72,3 @@ void ExN04TrackerHit::Draw()
 
 void ExN04TrackerHit::Print()
 {;}
-
-
