@@ -21,13 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisRunAction.hh,v 1.2 2002-10-31 08:32:44 dressel Exp $
+// $Id: Tst33VisRunAction.hh,v 1.3 2002-11-20 13:09:17 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+// ----------------------------------------------------------------------
+// Class Tst33VisRunAction
+//
+// Class description:
+//
+// Run action for visualization.
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// 
 
 #ifndef Tst33VisRunAction_h
 #define Tst33VisRunAction_h 1

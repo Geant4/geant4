@@ -21,21 +21,26 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedRunAction.hh,v 1.2 2002-10-31 08:32:44 dressel Exp $
+// $Id: Tst33TimedRunAction.hh,v 1.3 2002-11-20 13:09:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+// ----------------------------------------------------------------------
+// Class Tst33TimedRunAction
+//
+// Class description:
+//
+// Run action for running a certain amount of time.
+// It does nothing!
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// ----------------------------------------------------------------------
+// 
 
 #ifndef Tst33TimedRunAction_h
 #define Tst33TimedRunAction_h 1
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
 
@@ -50,8 +55,6 @@ public:
   virtual void EndOfRunAction(const G4Run*);
   
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

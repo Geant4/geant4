@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VGeometry.hh,v 1.3 2002-11-20 09:38:26 dressel Exp $
+// $Id: Tst33VGeometry.hh,v 1.4 2002-11-20 13:09:17 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -29,7 +29,7 @@
 //
 // Class description:
 //
-// ...
+// Base class for a geometry which may be used for sampling.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------

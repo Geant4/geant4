@@ -21,9 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33PhysicsList.hh,v 1.1 2002-10-29 15:43:04 dressel Exp $
+// $Id: Tst33PhysicsList.hh,v 1.2 2002-11-20 13:09:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// Class Tst33PhysicsList
+//
+// Class description:
+//
+// taken from Tst12PhysicsList
+
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// ----------------------------------------------------------------------
 
 #ifndef Tst33PhysicsList_hh
 #define Tst33PhysicsList_hh Tst33PhysicsList_hh
@@ -32,7 +41,7 @@
 #include "globals.hh"
 
 
-// taken from Tst12PhysicsList
+
 
 class Tst33PhysicsList: public G4VUserPhysicsList
 {

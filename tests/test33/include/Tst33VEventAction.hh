@@ -21,10 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VEventAction.hh,v 1.2 2002-10-31 08:32:44 dressel Exp $
+// $Id: Tst33VEventAction.hh,v 1.3 2002-11-20 13:09:17 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// Classs Tst33VEventAction
+//
+// Class description:
+//
+// Base class for the event actions used in this test.
 // 
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// ----------------------------------------------------------------------
+// 
+
 
 #ifndef Tst33VEventAction_h
 #define Tst33VEventAction_h 1
@@ -40,7 +50,7 @@ class Tst33VEventAction : public G4UserEventAction
 public:
   Tst33VEventAction();
   virtual ~Tst33VEventAction();
-  virtual void SetCell_19_Scorer(const G4CellScorer *scorer) = 0;
+  virtual void SpecialCellScorer(const G4CellScorer *scorer) = 0;
   virtual void Clear() = 0;
 };
 

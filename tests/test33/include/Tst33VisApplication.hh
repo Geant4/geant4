@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisApplication.hh,v 1.2 2002-10-29 16:37:10 dressel Exp $
+// $Id: Tst33VisApplication.hh,v 1.3 2002-11-20 13:09:17 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -29,7 +29,7 @@
 //
 // Class description:
 //
-// ...
+// Provide event and run action if visualization is wished.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------

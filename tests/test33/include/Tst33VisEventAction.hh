@@ -21,13 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisEventAction.hh,v 1.2 2002-10-31 08:32:44 dressel Exp $
+// $Id: Tst33VisEventAction.hh,v 1.3 2002-11-20 13:09:17 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+// ----------------------------------------------------------------------
+// Class Tst33VisEventAction
+//
+// Class description:
+//
+// Event action used for visualization.
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// ----------------------------------------------------------------------
+
 
 #ifndef Tst33VisEventAction_h
 #define Tst33VisEventAction_h 1
@@ -37,7 +43,6 @@
 
 class Tst33VisEventActionMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Tst33VisEventAction : public Tst33VEventAction
 {
@@ -47,7 +52,7 @@ public:
 
   virtual void   BeginOfEventAction(const G4Event*);
   virtual void   EndOfEventAction(const G4Event*);
-  virtual void SetCell_19_Scorer(const G4CellScorer *scorer);
+  virtual void SpecialCellScorer(const G4CellScorer *scorer);
   virtual void Clear();
   
   inline void SetDrawFlag   (const G4String &val);

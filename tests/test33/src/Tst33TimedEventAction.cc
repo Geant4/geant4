@@ -21,13 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedEventAction.cc,v 1.4 2002-11-04 13:27:18 dressel Exp $
+// $Id: Tst33TimedEventAction.cc,v 1.5 2002-11-20 13:09:18 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Tst33TimedEventAction.hh"
 
@@ -48,20 +45,17 @@
 #include <sys/times.h>
 #include <time.h>
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Tst33TimedEventAction::Tst33TimedEventAction(G4int time)
   :
   fCScorer(0),
   fEvStartTime(0),
   fProcessTime(0),
-  //  fOut("FluxWeightedEnergy.txt",G4std::ios::out|G4std::ios::app),
   fMaxRunTime(time),
   fOld_lwe(0)
 {
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Tst33TimedEventAction::~Tst33TimedEventAction()
 {
@@ -71,14 +65,12 @@ Tst33TimedEventAction::~Tst33TimedEventAction()
 void Tst33TimedEventAction::Clear() {
   fCScorer = 0;
 }
-void Tst33TimedEventAction::SetCell_19_Scorer(const G4CellScorer *scorer){
+void Tst33TimedEventAction::SpecialCellScorer(const G4CellScorer *scorer){
   fCScorer = scorer;
   fSig.Init();
   fOld_lwe = 0;
 }
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Tst33TimedEventAction::BeginOfEventAction(const G4Event* evt)
 {
@@ -87,7 +79,6 @@ void Tst33TimedEventAction::BeginOfEventAction(const G4Event* evt)
   fEvStartTime = time.tms_utime;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Tst33TimedEventAction::EndOfEventAction(const G4Event* evt)
 {

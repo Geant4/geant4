@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ConcreteShield.hh,v 1.3 2002-11-20 09:38:25 dressel Exp $
+// $Id: Tst33ConcreteShield.hh,v 1.4 2002-11-20 13:09:15 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -29,7 +29,8 @@
 //
 // Class description:
 //
-// ...
+// A block of concrete without cells to be used as mass geometry
+// if the cells are given in the parallel geometry.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------

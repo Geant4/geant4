@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33MaterialFactory.hh,v 1.2 2002-10-29 16:37:09 dressel Exp $
+// $Id: Tst33MaterialFactory.hh,v 1.3 2002-11-20 13:09:16 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -29,7 +29,7 @@
 //
 // Class description:
 //
-// ...
+// Creates the material used in this test.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------

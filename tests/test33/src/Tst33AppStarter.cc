@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.cc,v 1.5 2002-11-04 10:57:48 dressel Exp $
+// $Id: Tst33AppStarter.cc,v 1.6 2002-11-20 13:09:17 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -171,7 +171,7 @@ void Tst33AppStarter::CreateScorer() {
       NewFailed("CreateScorer","G4CellStoreScorer");
     }
     fSampler->PrepareScoring(fScorer);
-    fEventAction->SetCell_19_Scorer(fCell_19_Scorer);
+    fEventAction->SpecialCellScorer(fCell_19_Scorer);
   }
 }
 

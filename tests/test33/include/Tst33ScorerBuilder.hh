@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ScorerBuilder.hh,v 1.2 2002-10-29 16:37:09 dressel Exp $
+// $Id: Tst33ScorerBuilder.hh,v 1.3 2002-11-20 13:09:16 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -29,7 +29,8 @@
 //
 // Class description:
 //
-// ...
+// Creating a scoreer for evry cell and a special scorer for 
+// cell 18.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------

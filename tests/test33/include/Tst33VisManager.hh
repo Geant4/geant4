@@ -21,28 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisManager.hh,v 1.2 2002-10-31 08:32:44 dressel Exp $
+// $Id: Tst33VisManager.hh,v 1.3 2002-11-20 13:09:17 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// Class Tst33VisManager
+//
+// Class description:
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 // Example Visualization Manager implementing virtual function
 //   RegisterGraphicsSystems.  Exploits C-pre-processor variables
 //   G4VIS_USE_DAWN, etc., which are set by the GNUmakefiles if
 //   environment variables of the same name are set.
-
+//
 // So all you have to do is set environment variables and compile and
 //   instantiate this in your main().
-
+//
 // Alternatively, you can implement an empty function here and just
 //   register the systems you want in your main(), e.g.:
 //   G4VisManager* myVisManager = new MyVisManager;
 //   myVisManager -> RegisterGraphicsSystem (new MyGraphicsSystem);
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Tst33VisManager_h
 #define Tst33VisManager_h 1
@@ -51,7 +50,6 @@
 
 #include "G4VisManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Tst33VisManager: public G4VisManager {
 
@@ -66,7 +64,6 @@ private:
 
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

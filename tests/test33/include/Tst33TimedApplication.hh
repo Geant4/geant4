@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedApplication.hh,v 1.2 2002-10-29 16:37:10 dressel Exp $
+// $Id: Tst33TimedApplication.hh,v 1.3 2002-11-20 13:09:16 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -29,7 +29,8 @@
 //
 // Class description:
 //
-// ...
+// Provides run and event actions used for running for a certain 
+// amount of time.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisEventAction.cc,v 1.3 2002-11-04 10:57:48 dressel Exp $
+// $Id: Tst33VisEventAction.cc,v 1.4 2002-11-20 13:09:18 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,8 +65,8 @@ void Tst33VisEventAction::Clear() {
 }
 
 
-void Tst33VisEventAction::SetCell_19_Scorer(const G4CellScorer *scorer){
-  G4cout << "Tst33VisEventAction::SetCell_19_Scorer: no action taken!" << G4endl;
+void Tst33VisEventAction::SpecialCellScorer(const G4CellScorer *scorer){
+  G4cout << "Tst33VisEventAction::SpecialCellScorer: no action taken!" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

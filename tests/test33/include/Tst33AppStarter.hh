@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.hh,v 1.3 2002-10-31 08:32:44 dressel Exp $
+// $Id: Tst33AppStarter.hh,v 1.4 2002-11-20 13:09:15 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -29,7 +29,9 @@
 //
 // Class description:
 //
-// ...
+// Different options for the application are supported:
+// mass, or parallel geometry, using visualization or timing
+// and configureable sampling.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------

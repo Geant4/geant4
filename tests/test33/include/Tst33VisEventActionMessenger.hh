@@ -21,9 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisEventActionMessenger.hh,v 1.2 2002-10-31 08:32:44 dressel Exp $
+// $Id: Tst33VisEventActionMessenger.hh,v 1.3 2002-11-20 13:09:17 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// Class Tst33VisEventActionMessenger
+//
+// Class description:
+//
+// Provides comands for messaging in visualization mode.
+
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

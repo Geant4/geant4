@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ParallelGeometry.hh,v 1.3 2002-11-20 09:38:25 dressel Exp $
+// $Id: Tst33ParallelGeometry.hh,v 1.4 2002-11-20 13:09:16 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -29,7 +29,7 @@
 //
 // Class description:
 //
-// ...
+// Provides the cells for scoring and importance sampling.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
