@@ -54,15 +54,7 @@ public:
      G4KineticTrackVector *result1, *secondaries, *result;
      result1=theSecondaries;
      result=new G4KineticTrackVector();
-     
-     G4ThreeVector theCurrentVelocity;
-     theCurrentVelocity.setX(0);    
-     theCurrentVelocity.setY(0); 
-     G4double vz = theEnergy/(sqrt(theEnergy*theEnergy + 
-                     G4Proton::Proton()->GetPDGMass()*G4Proton::Proton()->GetPDGMass()) 
-                   + G4Proton::Proton()->GetPDGMass());
-     theCurrentVelocity.setZ(vz);
-     
+          
      size_t aResult=0;
      for (aResult=0; aResult < result1->size(); aResult++)
      {
