@@ -202,7 +202,7 @@ DESCRIPTION
 
 EOM`
 
-dflt=$g4vis_use_none
+dflt=$g4vis_none
 rp=$g4message
 . ./myread
 gans=$ans
