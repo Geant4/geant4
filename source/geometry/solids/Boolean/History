@@ -1,5 +1,5 @@
 
-$Id: History,v 1.34 2002-10-29 14:16:22 gcosmo Exp $
+$Id: History,v 1.35 2003-01-27 10:44:00 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Jan 27, 2003   G.Cosmo                   geom-bool-V05-00-00
+  - G4ReflectionFactory[.hh.cc] (courtesy of I.Hrivnacova):
+    o Added set/get functions Set/GetVolumesNameExtension() for volume-name
+      extension. By default now the factory assigns "_refl" postfix to name
+      of reflected volumes.
+    o Assumed less strict condition in the CheckScale() method, to avoid
+      precision problems with imported rotation matrices.
 
  Oct 29  2002  Gabriele Cosmo       geom-bool-V04-01-01
   - Added method CleanTransformations() to G4DisplacedSolid and corrected
