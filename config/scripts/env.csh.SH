@@ -278,6 +278,12 @@ echo "On this machine the G4VIS_USE_VRML=\$G4VIS_USE_VRML"
 endif
 
 #+
+if ( X$g4vis_oglhome != X )  then
+setenv OGLHOME "$g4vis_oglhome"
+echo "On this machine the OGLHOME=\$OGLHOME"
+fi 
+
+#+
 #
 # g4shared
 #

@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.23 2002-06-26 11:38:19 stesting Exp $
+# $Id: Configure,v 1.24 2002-06-26 16:47:09 stesting Exp $
 #
-# Generated on Wed Jun 26 13:35:12 CEST 2002 [metaconfig 3.0 PL70]
+# Generated on Wed Jun 26 18:45:09 CEST 2002 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -206,6 +206,7 @@ g4vis_build_openglxm_driver=''
 g4vis_build_raytracer_driver=''
 g4vis_build_vrml_driver=''
 g4vis_build_vrmlfile_driver=''
+g4vis_oglhome=''
 g4vis_use_asciitree=''
 g4vis_use_dawn=''
 g4vis_use_dawnfile=''
@@ -1629,13 +1630,14 @@ while test 1 = 1  ; do
 
 g4message=`cat << EOM
 
-Definition of G4SYSTEM variable.
+Definition of G4SYSTEM variable is $g4osname-$g4compiler.
+That stands for:
 
 1) OS		: $g4osname
 
 2) Compiler	: $g4compiler
 
-Select from list above (e.g. 2) 
+To modify default settings, select number above (e.g. 2) 
 EOM`
 
 dflt="Press [Enter] for default settings"
@@ -2282,7 +2284,7 @@ g4message=`cat << EOM
 
 2) G4LIB:		$g4lib
 
-Select from list above (e.g. 2) 
+To modify default settings, select number above (e.g. 2) 
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
@@ -2375,7 +2377,7 @@ Data which is not part of the default Geant4 distribution:
 
 4) NeutronHPCrossSections:	$g4neutronhpcrosssections
 
-Select from list above (e.g. 2) 
+To modify default settings, select number above (e.g. 2) 
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
@@ -2526,7 +2528,7 @@ You can customize paths of you CLHEP installation:
 2) CLHEP_LIB_DIR:		$g4clhep_lib_dir
 3) CLHEP_LIB:			$g4clhep_lib
 
-Select from list above (e.g. 2) 
+To modify default settings, select number above (e.g. 2) 
 EOM`
 
 
@@ -3339,6 +3341,12 @@ case "$g4vis_none" in
 	;;
 esac
 
+case "$g4vis_oglhome" in
+'')
+	g4vis_oglhome="/usr"
+	;;
+esac
+
 case "$g4vis_build_openglwin32_driver" in
 '')
 	g4vis_build_openglwin32_driver=n
@@ -3497,7 +3505,8 @@ g4message=`cat << EOM
 
   G4VIS_NONE
 
-If specified, no visualization drivers will be built or used.
+If this variable is set, no visualization drivers will be built or used.
+Do you want to set this variable ?
 
 EOM`
 
@@ -3898,7 +3907,24 @@ gans=y
 ;;
 esac
 
+if [ X$g4vis_build_openglx_driver = Xy ] || [ X$g4vis_build_openglxm_driver = Xy ] || [ X$g4vis_build_openglwin32_driver = Xy ] ; then 
 
+g4message=`cat << EOM
+
+  $OGLHOME/include
+  $OGLHOME/lib
+
+You are selecting to use OpenGL driver.
+Where is it installed?
+EOM`
+
+dflt=$g4vis_oglhome
+fn='d~'
+rp=$g4message
+. ./getfile
+g4vis_oglhome=$ans
+
+fi
 echo " "
 case "$g4use_hepodbms" in
 '')
@@ -4100,6 +4126,7 @@ g4vis_build_openglxm_driver='$g4vis_build_openglxm_driver'
 g4vis_build_raytracer_driver='$g4vis_build_raytracer_driver'
 g4vis_build_vrml_driver='$g4vis_build_vrml_driver'
 g4vis_build_vrmlfile_driver='$g4vis_build_vrmlfile_driver'
+g4vis_oglhome='$g4vis_oglhome'
 g4vis_use_asciitree='$g4vis_use_asciitree'
 g4vis_use_dawn='$g4vis_use_dawn'
 g4vis_use_dawnfile='$g4vis_use_dawnfile'
