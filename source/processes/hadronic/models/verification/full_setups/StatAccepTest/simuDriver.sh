@@ -51,7 +51,7 @@ echo ' EVENTS      =' $EVENTS
     ###echo " I AM HERE 1 "
     export REF=$REF1 ;
     export LABEL=$REF-$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
-    python2 build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS ;
+    python2.2 build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS ;
     mv run.g4 run.g4-$LABEL
     mv setup.sh setup.sh-$LABEL
     . setup.sh-$LABEL ;
@@ -69,7 +69,7 @@ echo ' EVENTS      =' $EVENTS
     ###echo " I AM HERE 2 "
     export REF=$REF2 ; 
     export LABEL=$REF-$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS ;
-    python2 build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS ;
+    python2.2 build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS ;
     mv run.g4 run.g4-$LABEL
     mv setup.sh setup.sh-$LABEL
     . setup.sh-$LABEL ;

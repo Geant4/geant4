@@ -3,7 +3,7 @@
 #----------------------------------------------------------------
 # This Python script has the following input parameters:
 #
-#   1) the Geant4 reference tag ; example:  4.6.2.ref03
+#   1) the Geant4 reference tag ; example:  6.2.p02
 #   2) the Geant4 Physics List ;  example:  QGSP
 #   3) the Calorimeter type ;     example:  PbLAr
 #   4) the Particle type ;        example:  p
@@ -52,12 +52,7 @@ print '  ENERGY      = ', ENERGY
 print '  EVENTS      = ', EVENTS
 
 # ---------------- Release ---------------------
-if ( REFERENCE.count( "/" ) > 0 ) :
-    Release = "local"
-    g4Location = REFERENCE
-    print '  g4Location = ', REFERENCE
-else :
-    Release = "geant" + REFERENCE
+Release = "geant4." + REFERENCE
 print '  Release = ', Release                 
                  
 # ---------------- Physics ---------------------
@@ -183,31 +178,26 @@ g4file.close()
 
 setupFile = open( "setup.sh", "w" )
 
-setupFile.write( ". /afs/cern.ch/sw/geant4/dev/scripts/gcc-alt.sh 3.2.3 \n" )
+setupFile.write( "export PATH=$VO_DTEAM_SW_DIR/dirInstallations/dirGCC/bin:$PATH \n" )
+setupFile.write( "export LD_LIBRARY_PATH=$VO_DTEAM_SW_DIR/dirInstallations/dirGCC/lib:$LIBRARY_PATH \n" )
 
 setupFile.write( "export G4SYSTEM=Linux-g++ \n" )
 
-if ( Release == "local" ) :
-    setupFile.write( "export G4INSTALL=" + g4Location + "\n" )
-    setupFile.write( "export G4LIB=$G4INSTALL/lib \n" )
-else :
-    setupFile.write( "RELEASE=" + Release + " \n" )
-    setupFile.write( "PLATFORM=rh73_gcc323/ \n" )
-    setupFile.write( "DIR_SPECIFIC=/afs/cern.ch/sw/geant4/releases/specific/$PLATFORM \n" )
-    setupFile.write( "export G4INSTALL=/afs/cern.ch/sw/geant4/releases/share/$RELEASE \n" )
-    setupFile.write( "export G4LIB=$DIR_SPECIFIC/$RELEASE/lib \n" )
+setupFile.write( "export G4_RELEASE=" + Release + " \n" )
+setupFile.write( "export DIR_INSTALLATIONS=$VO_DTEAM_SW_DIR/dirInstallations \n" )
+setupFile.write( "export G4INSTALL=$DIR_INSTALLATIONS/$G4_RELEASE \n" )
+setupFile.write( "export G4LIB=$DIR_INSTALLATIONS/$G4_RELEASE/lib \n" )
 
-setupFile.write( "export G4LEVELGAMMADATA=/afs/cern.ch/sw/geant4/dev/data/PhotonEvaporation \n" )
-setupFile.write( "export G4RADIOACTIVEDATA=/afs/cern.ch/sw/geant4/dev/data/RadiativeDecay \n" )
-setupFile.write( "export G4LEDATA=/afs/cern.ch/sw/geant4/dev/data/G4EMLOW \n" )
-setupFile.write( "export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL \n")
+setupFile.write( "export G4LEVELGAMMADATA=$DIR_INSTALLATIONS/dirG4DATA/PhotonEvaporation \n" )
+setupFile.write( "export G4RADIOACTIVEDATA=$DIR_INSTALLATIONS/dirG4DATA/RadiativeDecay \n" )
+setupFile.write( "export G4LEDATA=$DIR_INSTALLATIONS/dirG4DATA/G4EMLOW \n" )
+setupFile.write( "export NeutronHPCrossSections=$DIR_INSTALLATIONS/dirG4DATA/G4NDL \n")
 
-setupFile.write( "export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/1.8.1.0/redhat73_gcc323 \n" )
+setupFile.write( "export CLHEP_BASE_DIR=$DIR_INSTALLATIONS/dirCLHEP \n" )
 setupFile.write( "export CLHEP_INCLUDE_DIR=$CLHEP_BASE_DIR/include \n" )
 setupFile.write( "export CLHEP_LIB_DIR=$CLHEP_BASE_DIR/lib \n" )
 setupFile.write( "export CLHEP_LIB=CLHEP \n" )
 
-setupFile.write( "export G4ANALYSIS_USE=1 \n" )
 setupFile.write( "export G4UI_USE_TCSH=1 \n" )
 
 setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$G4LIB/$G4SYSTEM \n" )
@@ -218,13 +208,12 @@ setupFile.write( "export G4WORKDIR=$PWD \n" )
 setupFile.write( "export PATH=$PATH:$G4WORKDIR/bin/$G4SYSTEM \n" )
 setupFile.write( "export G4ANALYSIS_USE=1 \n" )
 
-setupFile.write( "export PI_DIR=/afs/cern.ch/sw/lcg/app/releases/PI/PI_1_2_4/rh73_gcc323 \n" )
-setupFile.write( "export PATH=$PI_DIR/bin:$PATH \n" )
-setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PI_DIR/lib \n" )
-setupFile.write( "eval `aida-config --runtime sh` \n" )
+setupFile.write( "export PI_DIR=$DIR_INSTALLATIONS/dirPI \n" )
+setupFile.write( "export LD_LIBRARY_PATH=$PI_DIR/lib:${LD_LIBRARY_PATH} \n" )
+setupFile.write( "export SEAL_PLUGINS=$PI_DIR/lib/modules \n" )
 
-setupFile.write( "export GSL_DIR=/afs/cern.ch/sw/lcg/external/GSL/1.4/rh73_gcc323 \n" )
-setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GSL_DIR/lib \n" )
+###setupFile.write( "export GSL_DIR=$DIR_INSTALLATIONS/dirGSL \n" )
+###setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GSL_DIR/lib \n" )
 
 setupFile.close()
 

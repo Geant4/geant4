@@ -1,6 +1,10 @@
                  History file
                  ------------
 
+6-Dec-2004 - A.Ribon (statAccepTest-V06-02-06)
+- Setup for running on the Grid.
+
+
 16-Nov-2004 - A.Ribon (statAccepTest-V06-02-05)
 - Introduce a beam energy threshold (currently at
   10 GeV) below which no biasing are applied, and

@@ -144,10 +144,10 @@
 #
 #=======================  NUMBER OF EVENTS  ====================
 #
-#/run/beamOn    10
+/run/beamOn    10
 #/run/beamOn   100
 #/run/beamOn  1000
-/run/beamOn  5000
+#/run/beamOn  5000
 #/run/beamOn 10000
 #
 

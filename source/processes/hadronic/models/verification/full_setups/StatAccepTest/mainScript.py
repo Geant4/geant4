@@ -15,10 +15,7 @@ print '========== START mainScript.py =========='
 
 #***LOOKHERE*** You have to specify:
 #               -  the two references to be compared:
-#                  eg:   "4.6.2.ref03"  if the AFS installation should be used;
-#                  or    "/my/dir/"     if a local installation should be used
-#                                       (in this case the absolute path where
-#                                       geant4 is located should be specified.
+#                  eg:   "6.2.p02"  and  "7.0.cand01"
 #               -  whether the Geant4 simulation should be run for
 #                  the two reference:
 #                  "Yes" when you want that the simulation is run;
@@ -31,36 +28,21 @@ print '========== START mainScript.py =========='
 #               -  the Number of Events:
 #                  e.g. : "5000", "5k", etc.
 #
-REF1        = "4.6.2.ref03"
+REF1        = "6.2.p02"
 SIM_REF1    = "Yes"
-REF2        = "4.6.2.ref04"
-SIM_REF2    = "Yes"
-RUN_STAT    = "Yes"
-PHYSICS     = "LHEP"
+REF2        = "7.0.cand01"
+SIM_REF2    = "No"
+RUN_STAT    = "No"
+PHYSICS     = "QGSP"
 EVENTS      = "100"
 #***endLOOKHERE***
 
 # ---------------------------------------------
 
 #***LOOKHERE***
-CALORIMETER = "FeSci"
-PARTICLE    = "p"
-ENERGY      = "10GeV"
-#***endLOOKHERE***
-
-os.system( "simuDriver.sh " +
-           REF1 + " " + SIM_REF1 + " " +
-           REF2 + " " + SIM_REF2 + " " +
-           RUN_STAT + " " +
-           PHYSICS + " " +
-           CALORIMETER + " " +
-           PARTICLE + " " + ENERGY + " " +
-           EVENTS )
-
-#***LOOKHERE***
 CALORIMETER = "CuLAr"
-PARTICLE    = "pi+"
-ENERGY      = "20GeV"
+PARTICLE    = "n"
+ENERGY      = "5GeV"
 #***endLOOKHERE***
 
 os.system( "simuDriver.sh " +

@@ -125,9 +125,20 @@ all: lib bin
 include $(G4INSTALL)/config/binmake.gmk
 
 ifdef G4ANALYSIS_USE  
-  CPPFLAGS += `aida-config --include`
-  LDFLAGS  += `aida-config --lib`
-  LOADLIBS += `aida-config --lib`
+###  CPPFLAGS += `aida-config --include`
+###  LDFLAGS  += `aida-config --lib`
+###  LOADLIBS += `aida-config --lib`
+  CPPFLAGS += -I${PI_DIR}/include
+  LDFLAGS  += -L${PI_DIR}/lib \
+               -llcg_AIDA_AnalysisFactory \
+               -llcg_PluginManager \
+               -llcg_SealBase \
+               -llcg_AIDA_Plugin
+  LOADLIBS += -L${PI_DIR}/lib \
+               -llcg_AIDA_AnalysisFactory \
+               -llcg_PluginManager \
+               -llcg_SealBase \
+               -llcg_AIDA_Plugin
 endif
 
 CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
