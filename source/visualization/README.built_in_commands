@@ -200,46 +200,6 @@ NI /vis/sceneHandler/processScene
   This scene handler becomes current.
 
 
-Scene Handlers
-==============
-
-A scene handler is an object which knows how to interpret a scene for a
-specific graphics system.
-
-Each scene handler handles one scene and has, in general, any number of
-viewers.
-
-The G4VisManager has a list of scene handlers.
-
-/vis/sceneHandler/attach [<scene-name>]
-  default:             current scene name
-  Attaches scene to current scene handler.
-
-/vis/sceneHandler/create [<graphics-system-name>] [<scene-handler-name>]
-  default:                     error               auto-generated name
-  (The first default simply triggers a list of possibilities.)
-  This scene handler becomes current.
-  The current scene, if any, is attached.
-
-/vis/sceneHandler/list [<scene-handler-name>] [<verbosity>]
-  default:                     all                  0
-  Current scene handler remains current.
-
-NI /vis/sceneHandler/notifyEndOfProcessing
-  Issues "update" for each viewer of current scene handler.
-
-NI /vis/sceneHandler/processScene
-  Refreshes all viewers of current scene handler.
-  Does not issue "update" (see /vis/viewer/update).
-
-/vis/sceneHandler/remove <scene-handler-name>
-  Current scene handler can change or become invalid.
-
-/vis/sceneHandler/select [<scene-handler-name>]
-  default:            current scene handler name
-  This scene handler becomes current.
-
-
 Viewers
 =======
 
