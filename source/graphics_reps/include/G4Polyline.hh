@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyline.hh,v 1.1 1999-01-07 16:09:12 gunter Exp $
+// $Id: G4Polyline.hh,v 1.2 1999-05-19 08:33:42 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,6 +22,8 @@ class G4Polyline: public G4VVisPrim, public G4Point3DList {
 public:
   G4Polyline ();
   G4Polyline (const G4VVisPrim& prim);
+  virtual G4Visible&  operator = (const G4Visible& right);
+  virtual G4VVisPrim& operator = (const G4VVisPrim& right);
 };
 
 inline G4Polyline::G4Polyline () {}

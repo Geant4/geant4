@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Text.cc,v 1.1 1999-01-07 16:09:18 gunter Exp $
+// $Id: G4Text.cc,v 1.2 1999-05-19 08:33:51 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,3 +32,15 @@ fText     ("")    ,
 fLayout   (left)  ,
 fXOffset(0.) , fYOffset(0.)
 {}
+
+G4Visible & G4Text::operator = (const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4Text::operator = (const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
+}
+
+G4VMarker & G4Text::operator = (const G4VMarker &from) {
+  return G4VMarker::operator = (from);
+}

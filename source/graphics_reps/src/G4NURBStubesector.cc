@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBStubesector.cc,v 1.2 1999-05-12 16:11:02 johna Exp $
+// $Id: G4NURBStubesector.cc,v 1.3 1999-05-19 08:33:49 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -189,6 +189,14 @@
 		
 		}
 
+
+G4Visible & G4NURBStubesector::operator = (const G4Visible &right) {
+  return G4Visible::operator = (right);
+}
+
+G4VVisPrim & G4NURBStubesector::operator = (const G4VVisPrim &right) {
+  return G4VVisPrim::operator = (right);
+}
 
 const char*	G4NURBStubesector::Whoami() const
 		{

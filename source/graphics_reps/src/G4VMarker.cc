@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMarker.cc,v 1.2 1999-05-12 16:11:05 johna Exp $
+// $Id: G4VMarker.cc,v 1.3 1999-05-19 08:33:52 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,6 +15,14 @@
 #include "G4VisAttributes.hh"
 
 G4VMarker::~G4VMarker () {}
+
+G4Visible & G4VMarker::operator = (const G4Visible &right) {
+  return G4Visible::operator = (right);
+}
+
+G4VVisPrim & G4VMarker::operator = (const G4VVisPrim &right) {
+  return G4VVisPrim::operator = (right);
+}
 
 G4VMarker& G4VMarker::operator = (const G4VMarker& right) {
   if (&right == this) return *this;

@@ -1,4 +1,4 @@
-$Id: History,v 1.5 1999-05-12 16:10:42 johna Exp $
+$Id: History,v 1.6 1999-05-19 08:33:36 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+greps-01-00-06  19th May 1999  John Allison
+- Fixed compilation warnings, mainly overriding virtual functions.
 
 greps-01-00-05  12th May 1999  John Allison
 - Made destructors virtual where applicable.

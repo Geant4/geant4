@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedron.cc,v 1.2 1999-05-12 16:11:04 johna Exp $
+// $Id: G4Polyhedron.cc,v 1.3 1999-05-19 08:33:49 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,6 +78,118 @@ G4Polyhedron::G4Polyhedron(const G4Polyhedron &from)
   }else{
     nvert = 0; nface = 0; pV = 0; pF = 0;
   }
+}
+
+G4Visible & G4Polyhedron::operator=(const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4Polyhedron::operator=(const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
+}
+
+G4Visible & G4PolyhedronTrd2::operator=(const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4PolyhedronTrd2::operator=(const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
+}
+
+G4Visible & G4PolyhedronTrd1::operator=(const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4PolyhedronTrd1::operator=(const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
+}
+
+G4Visible & G4PolyhedronBox::operator=(const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4PolyhedronBox::operator=(const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
+}
+
+G4Visible & G4PolyhedronTrap::operator=(const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4PolyhedronTrap::operator=(const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
+}
+
+G4Visible & G4PolyhedronPara::operator=(const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4PolyhedronPara::operator=(const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
+}
+
+G4Visible & G4PolyhedronCons::operator=(const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4PolyhedronCons::operator=(const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
+}
+
+G4Visible & G4PolyhedronCone::operator=(const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4PolyhedronCone::operator=(const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
+}
+
+G4Visible & G4PolyhedronTubs::operator=(const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4PolyhedronTubs::operator=(const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
+}
+
+G4Visible & G4PolyhedronTube::operator=(const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4PolyhedronTube::operator=(const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
+}
+
+G4Visible & G4PolyhedronPgon::operator=(const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4PolyhedronPgon::operator=(const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
+}
+
+G4Visible & G4PolyhedronPcon::operator=(const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4PolyhedronPcon::operator=(const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
+}
+
+G4Visible & G4PolyhedronSphere::operator=(const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4PolyhedronSphere::operator=(const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
+}
+
+G4Visible & G4PolyhedronTorus::operator=(const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4PolyhedronTorus::operator=(const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
 }
 
 G4Polyhedron & G4Polyhedron::operator=(const G4Polyhedron &from)

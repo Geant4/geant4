@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBScylinder.hh,v 1.2 1999-05-12 16:10:48 johna Exp $
+// $Id: G4NURBScylinder.hh,v 1.3 1999-05-19 08:33:39 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,7 +22,10 @@
 
 class	G4NURBScylinder : public G4NURBS
 	{
-	public:	G4NURBScylinder(G4double R, G4double DZ);
+	public:
+	  G4NURBScylinder(G4double R, G4double DZ);
+	  virtual G4Visible&  operator = (const G4Visible& right);
+	  virtual G4VVisPrim& operator = (const G4VVisPrim& right);
 	  const char*	Whoami() const;
 	};
 

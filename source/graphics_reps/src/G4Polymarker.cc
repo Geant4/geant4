@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polymarker.cc,v 1.2 1999-02-07 17:00:24 johna Exp $
+// $Id: G4Polymarker.cc,v 1.3 1999-05-19 08:33:51 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,6 +16,18 @@
 G4Polymarker::G4Polymarker ():
 fMarkerType (line)
 {}
+
+G4Visible & G4Polymarker::operator = (const G4Visible &right) {
+  return G4Visible::operator = (right);
+}
+
+G4VVisPrim & G4Polymarker::operator = (const G4VVisPrim &right) {
+  return G4VVisPrim::operator = (right);
+}
+
+G4VMarker & G4Polymarker::operator = (const G4VMarker &right) {
+  return G4VMarker::operator = (right);
+}
 
 ostream& operator << (ostream& os, const G4Polymarker& marker) {
   os << "G4Polymarker: type: ";

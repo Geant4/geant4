@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisAttributes.cc,v 1.2 1999-01-08 16:32:04 gunter Exp $
+// $Id: G4VisAttributes.cc,v 1.3 1999-05-19 08:33:54 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,4 +108,9 @@ G4bool operator != (const G4VisAttributes& a1,
   }
 
   return false;
+}
+
+G4bool operator == (const G4VisAttributes& a1,
+		    const G4VisAttributes& a2) {
+  return !(a1 != a2);
 }

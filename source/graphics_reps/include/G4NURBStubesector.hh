@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBStubesector.hh,v 1.1 1999-01-07 16:09:11 gunter Exp $
+// $Id: G4NURBStubesector.hh,v 1.2 1999-05-19 08:33:40 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,9 +31,12 @@ class	G4NURBStubesector : public G4NURBS
 		// Except that, you can use any value for the arguments,
 		// it's the renderer or you that will have troubles. 
 
-		G4NURBStubesector(G4double RMIN, G4double RMAX, G4double DZ, G4double PHI1, G4double PHI2);
-virtual	const char*	Whoami() const;
-virtual 	~G4NURBStubesector();
+		G4NURBStubesector(G4double RMIN, G4double RMAX,
+				  G4double DZ, G4double PHI1, G4double PHI2);
+	  virtual 	~G4NURBStubesector();
+	  virtual G4Visible&  operator = (const G4Visible& right);
+	  virtual G4VVisPrim& operator = (const G4VVisPrim& right);
+	  virtual	const char*	Whoami() const;
 
 	protected:
 	char *	mpwhoami;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBS.hh,v 1.2 1999-05-12 16:10:45 johna Exp $
+// $Id: G4NURBS.hh,v 1.3 1999-05-19 08:33:37 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -51,6 +51,9 @@ public:
 
   // destructor. 
   virtual ~G4NURBS();
+
+  virtual G4Visible&  operator = (const G4Visible& right);
+  virtual G4VVisPrim& operator = (const G4VVisPrim& right);
 
   // direction selector defined as a type because the user will use it
   // and we want the user to be well-manered.
@@ -151,11 +154,15 @@ protected:
   // under the control of HIGH_PRECISION )
   typedef Float G4Float;
 
+public:
+
   // internal type for order, derivate from t_index
   typedef t_index t_order;
 
   // internal type for knot
   typedef G4Float t_Knot;
+
+protected:
 
   // internal types for the control points
   typedef G4Float t_Coord;

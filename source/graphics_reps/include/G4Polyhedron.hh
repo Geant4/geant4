@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedron.hh,v 1.1 1999-01-07 16:09:12 gunter Exp $
+// $Id: G4Polyhedron.hh,v 1.2 1999-05-19 08:33:41 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -184,6 +184,8 @@ class G4Polyhedron: public G4VVisPrim {
   ~G4Polyhedron() { delete [] pV; delete [] pF; }
 
   // Assignment
+  virtual G4Visible& operator=(const G4Visible &from);
+  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
   G4Polyhedron& operator=(const G4Polyhedron &from);
 
   // Get number of vertices
@@ -228,18 +230,24 @@ class G4PolyhedronTrd2 : public G4Polyhedron {
  public:
   G4PolyhedronTrd2(G4double Dx1, G4double Dx2,
 		   G4double Dy1, G4double Dy2, G4double Dz);
+  virtual G4Visible& operator=(const G4Visible &from);
+  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
 };
 
 class G4PolyhedronTrd1 : public G4PolyhedronTrd2 {
  public:
   G4PolyhedronTrd1(G4double Dx1, G4double Dx2, G4double Dy, G4double Dz) :
     G4PolyhedronTrd2(Dx1, Dx2, Dy, Dy, Dz) {}
+  virtual G4Visible& operator=(const G4Visible &from);
+  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
 };
 
 class G4PolyhedronBox : public G4PolyhedronTrd2 {
  public:
   G4PolyhedronBox(G4double Dx, G4double Dy, G4double Dz) :
     G4PolyhedronTrd2(Dx, Dx, Dy, Dy, Dz) {}
+  virtual G4Visible& operator=(const G4Visible &from);
+  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
 };
 
 class G4PolyhedronTrap : public G4Polyhedron {
@@ -247,6 +255,8 @@ class G4PolyhedronTrap : public G4Polyhedron {
   G4PolyhedronTrap(G4double Dz, G4double Theta, G4double Phi,
                    G4double Dy1, G4double Dx1, G4double Dx2, G4double Alp1,
                    G4double Dy2, G4double Dx3, G4double Dx4, G4double Alp2);
+  virtual G4Visible& operator=(const G4Visible &from);
+  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
 };
 
 class G4PolyhedronPara : public G4PolyhedronTrap {
@@ -254,6 +264,8 @@ class G4PolyhedronPara : public G4PolyhedronTrap {
   G4PolyhedronPara(G4double Dx, G4double Dy, G4double Dz,
                    G4double Alpha, G4double Theta, G4double Phi) :
     G4PolyhedronTrap(Dz, Theta, Phi, Dy, Dx, Dx, Alpha, Dy, Dx, Dx, Alpha) {}
+  virtual G4Visible& operator=(const G4Visible &from);
+  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
 };
 
 class G4PolyhedronCons : public G4Polyhedron {
@@ -261,6 +273,8 @@ class G4PolyhedronCons : public G4Polyhedron {
   G4PolyhedronCons(G4double Rmn1, G4double Rmx1, 
 		   G4double Rmn2, G4double Rmx2, G4double Dz,
 		   G4double Phi1, G4double Dphi); 
+  virtual G4Visible& operator=(const G4Visible &from);
+  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
 };
 
 class G4PolyhedronCone : public G4PolyhedronCons {
@@ -268,6 +282,8 @@ class G4PolyhedronCone : public G4PolyhedronCons {
   G4PolyhedronCone(G4double Rmn1, G4double Rmx1, 
 		   G4double Rmn2, G4double Rmx2, G4double Dz)
     : G4PolyhedronCons(Rmn1, Rmx1, Rmn2, Rmx2, Dz, 0*deg, 360*deg) {}
+  virtual G4Visible& operator=(const G4Visible &from);
+  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
 };
 
 class G4PolyhedronTubs : public G4PolyhedronCons {
@@ -275,12 +291,16 @@ class G4PolyhedronTubs : public G4PolyhedronCons {
   G4PolyhedronTubs(G4double Rmin, G4double Rmax, G4double Dz, 
 		   G4double Phi1, G4double Dphi)
     : G4PolyhedronCons(Rmin, Rmax, Rmin, Rmax, Dz, Phi1, Dphi) {}
+  virtual G4Visible& operator=(const G4Visible &from);
+  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
 };
 
 class G4PolyhedronTube : public G4PolyhedronCons {
  public:
   G4PolyhedronTube (G4double Rmin, G4double Rmax, G4double Dz)
     : G4PolyhedronCons(Rmin, Rmax, Rmin, Rmax, Dz, 0*deg, 360*deg) {}
+  virtual G4Visible& operator=(const G4Visible &from);
+  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
 };
 
 class G4PolyhedronPgon : public G4Polyhedron {
@@ -289,6 +309,8 @@ class G4PolyhedronPgon : public G4Polyhedron {
                    const G4double *z,
                    const G4double *rmin,
                    const G4double *rmax);
+  virtual G4Visible& operator=(const G4Visible &from);
+  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
 };
 
 class G4PolyhedronPcon : public G4PolyhedronPgon {
@@ -298,6 +320,8 @@ class G4PolyhedronPcon : public G4PolyhedronPgon {
                    const G4double *rmin,
                    const G4double *rmax)
     : G4PolyhedronPgon(phi, dphi, 0, nz, z, rmin, rmax) {}	
+  virtual G4Visible& operator=(const G4Visible &from);
+  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
 };
 
 class G4PolyhedronSphere : public G4Polyhedron {
@@ -305,12 +329,16 @@ class G4PolyhedronSphere : public G4Polyhedron {
   G4PolyhedronSphere(G4double rmin, G4double rmax,
                      G4double phi, G4double dphi,
                      G4double the, G4double dthe);
+  virtual G4Visible& operator=(const G4Visible &from);
+  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
 };
 
 class G4PolyhedronTorus : public G4Polyhedron {
  public:
   G4PolyhedronTorus(G4double rmin, G4double rmax, G4double rtor,
                     G4double phi, G4double dphi);
+  virtual G4Visible& operator=(const G4Visible &from);
+  virtual G4VVisPrim& operator=(const G4VVisPrim &from);
 };
 
 inline G4int G4Polyhedron::GetNumberOfRotationSteps()
