@@ -1,4 +1,4 @@
-$Id: History,v 1.138 2005-03-01 17:21:25 gcosmo Exp $
+$Id: History,v 1.139 2005-03-15 19:11:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 15, 2005  G.Cosmo (global-V07-00-02)
+- Migrated calls to G4Exception in HEPNumerics to canonical signature.
+- Q/A cleanup to clear CodeWizard warnings and minor fixes.
+- Moved inline methods to .icc files.
+- Minor cosmetics.
 
 Mar 01, 2005  G.Cosmo (global-V07-00-01)
 - Fixed compilation warnings on WIN32-VC for G4JTPolynomialSolver;
