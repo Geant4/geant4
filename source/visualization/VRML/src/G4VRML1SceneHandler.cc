@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1SceneHandler.cc,v 1.5 2001-07-11 10:09:13 gunter Exp $
+// $Id: G4VRML1SceneHandler.cc,v 1.6 2001-09-18 07:53:15 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1SceneHandler.cc
@@ -83,11 +83,11 @@ G4VRML1SceneHandler::~G4VRML1SceneHandler()
 
 
 
-#define  G4VRML1SCENE  G4VRML1SceneHandler
+#define  G4VRML1SCENEHANDLER  G4VRML1SceneHandler
 #define  IS_CONNECTED  fDest.isConnected() 
 #include "G4VRML1SceneHandlerFunc.icc"
 #undef   IS_CONNECTED
-#undef   G4VRML1SCENE 
+#undef   G4VRML1SCENEHANDLER
 
 
 void G4VRML1SceneHandler::connectPort(G4int max_trial)

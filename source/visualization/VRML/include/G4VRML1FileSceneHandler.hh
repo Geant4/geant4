@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileSceneHandler.hh,v 1.9 2001-08-24 21:30:15 johna Exp $
+// $Id: G4VRML1FileSceneHandler.hh,v 1.10 2001-09-18 07:53:08 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1FileSceneHandler.hh
@@ -77,7 +77,7 @@ public:
         void AddPrimitive (const G4Scale& scale) 
                 { G4VSceneHandler::AddPrimitive (scale); }
 
-	void ClearStore();
+	void ClearTransientStore();  // Used for triggering detector re-drawing.
 
 	void BeginModeling();
 	void EndModeling();

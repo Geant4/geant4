@@ -1,3 +1,7 @@
+VRML-V03-02-01 18th September 2001  
+- Updation for automatic visualization at Hebden Bridge mini-workshop.
+- Filename incrementation is made the same as the DAWNFILE driver
+
 27th April 2000  Gabriele Cosmo
 - Removed unnecessary #include "G4Transform.hh".
 

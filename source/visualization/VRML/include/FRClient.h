@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: FRClient.h,v 1.3 2001-07-11 10:09:09 gunter Exp $
+// $Id: FRClient.h,v 1.4 2001-09-18 07:53:07 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // FRClient.h

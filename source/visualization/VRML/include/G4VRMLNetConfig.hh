@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRMLNetConfig.hh,v 1.4 2001-07-11 10:09:12 gunter Exp $
+// $Id: G4VRMLNetConfig.hh,v 1.5 2001-09-18 07:53:08 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRMLNetConfig.hh

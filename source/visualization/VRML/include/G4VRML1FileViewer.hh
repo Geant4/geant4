@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileViewer.hh,v 1.6 2001-07-27 22:33:09 johna Exp $
+// $Id: G4VRML1FileViewer.hh,v 1.7 2001-09-18 07:53:08 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1FileViewer.hh

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandlerFunc.icc,v 1.8 2001-07-11 10:09:13 gunter Exp $
+// $Id: G4VRML2SceneHandlerFunc.icc,v 1.9 2001-09-18 07:53:16 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2SceneHandlerFunc.icc
@@ -29,7 +29,7 @@
 
 //#define DEBUG_SCENE_FUNC
 
-void G4VRML2SCENE::AddThis(const G4Trd& trd)
+void G4VRML2SCENEHANDLER::AddThis(const G4Trd& trd)
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddThis trd" << "\n" ;
@@ -38,7 +38,7 @@ void G4VRML2SCENE::AddThis(const G4Trd& trd)
 	G4VSceneHandler::AddThis(trd);
 }
 
-void G4VRML2SCENE::AddThis(const G4Trap& trap)
+void G4VRML2SCENEHANDLER::AddThis(const G4Trap& trap)
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddThis trap" << "\n" ;
@@ -47,7 +47,7 @@ void G4VRML2SCENE::AddThis(const G4Trap& trap)
 	G4VSceneHandler::AddThis(trap);
 }
 
-void G4VRML2SCENE::AddThis(const G4Para& para)
+void G4VRML2SCENEHANDLER::AddThis(const G4Para& para)
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddThis para" << "\n" ;
@@ -56,7 +56,7 @@ void G4VRML2SCENE::AddThis(const G4Para& para)
 	G4VSceneHandler::AddThis(para);
 }
 
-void G4VRML2SCENE::AddThis(const G4Torus& torus )
+void G4VRML2SCENEHANDLER::AddThis(const G4Torus& torus )
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddThis torus" << "\n" ;
@@ -66,7 +66,7 @@ void G4VRML2SCENE::AddThis(const G4Torus& torus )
 }
 
 
-void G4VRML2SCENE::AddThis(const G4VSolid& vsolid)
+void G4VRML2SCENEHANDLER::AddThis(const G4VSolid& vsolid)
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddThis vsolid" << "\n" ;
@@ -75,7 +75,7 @@ void G4VRML2SCENE::AddThis(const G4VSolid& vsolid)
 	G4VSceneHandler::AddThis(vsolid);
 }
 
-void G4VRML2SCENE::AddThis(const G4Tubs& tubs)
+void G4VRML2SCENEHANDLER::AddThis(const G4Tubs& tubs)
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddThis tubs" << "\n" ;
@@ -86,7 +86,7 @@ void G4VRML2SCENE::AddThis(const G4Tubs& tubs)
 }
 
 
-void G4VRML2SCENE::AddThis(const G4Cons& cons)
+void G4VRML2SCENEHANDLER::AddThis(const G4Cons& cons)
 {
 #if defined DEBUG_SCENE_FUNC
     G4cerr << "***** AddThis cons" << "\n" ;
@@ -95,7 +95,7 @@ void G4VRML2SCENE::AddThis(const G4Cons& cons)
 	G4VSceneHandler::AddThis(cons) ;
 }
 
-void G4VRML2SCENE::AddThis(const G4Box& box)
+void G4VRML2SCENEHANDLER::AddThis(const G4Box& box)
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddThis box" << "\n" ;
@@ -105,7 +105,7 @@ void G4VRML2SCENE::AddThis(const G4Box& box)
 }
 
 
-void G4VRML2SCENE::AddThis(const G4Sphere& sphere)
+void G4VRML2SCENEHANDLER::AddThis(const G4Sphere& sphere)
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddThis sphere" << "\n" ;
@@ -114,7 +114,7 @@ void G4VRML2SCENE::AddThis(const G4Sphere& sphere)
 	G4VSceneHandler::AddThis(sphere) ;
 }
 
-void G4VRML2SCENE::AddPrimitive(const G4Polyline& polyline)
+void G4VRML2SCENEHANDLER::AddPrimitive(const G4Polyline& polyline)
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddPrimitive polyline" << "\n" ;
@@ -163,7 +163,7 @@ void G4VRML2SCENE::AddPrimitive(const G4Polyline& polyline)
 }
 
 
-void G4VRML2SCENE::AddPrimitive(const G4Polyhedron& polyhedron)
+void G4VRML2SCENEHANDLER::AddPrimitive(const G4Polyhedron& polyhedron)
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddPrimitive(G4Polyhedron)" << "\n";
@@ -245,7 +245,7 @@ void G4VRML2SCENE::AddPrimitive(const G4Polyhedron& polyhedron)
 } 
 
 
-void G4VRML2SCENE::AddPrimitive(const G4NURBS& nurb)
+void G4VRML2SCENEHANDLER::AddPrimitive(const G4NURBS& nurb)
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddPrimitive nurbs" << "\n" ;
@@ -255,13 +255,13 @@ void G4VRML2SCENE::AddPrimitive(const G4NURBS& nurb)
 	VRMLBeginModeling () ;
 }
 
-void G4VRML2SCENE::AddPrimitive( const G4Text& text ) 
+void G4VRML2SCENEHANDLER::AddPrimitive( const G4Text& text ) 
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddPrimitive text" << "\n" ;
 #endif
 	G4cerr <<
-          "***** void G4VRML2SCENE::AddPrimitive( const G4Text& text )"
+          "***** void G4VRML2SCENEHANDLER::AddPrimitive( const G4Text& text )"
           " not implemented yet."
              << "\n";
 
@@ -269,7 +269,7 @@ void G4VRML2SCENE::AddPrimitive( const G4Text& text )
 
 }
 
-void G4VRML2SCENE::AddPrimitive( const G4Circle& circle ) 
+void G4VRML2SCENEHANDLER::AddPrimitive( const G4Circle& circle ) 
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddPrimitive circle" << "\n" ;
@@ -327,7 +327,7 @@ void G4VRML2SCENE::AddPrimitive( const G4Circle& circle )
 
 }
 
-void G4VRML2SCENE::AddPrimitive(const G4Square& square)
+void G4VRML2SCENEHANDLER::AddPrimitive(const G4Square& square)
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddPrimitive square" << "\n" ;
@@ -388,14 +388,7 @@ void G4VRML2SCENE::AddPrimitive(const G4Square& square)
 
 }
 
-void G4VRML2SCENE::ClearStore()
-{
-#if defined DEBUG_SCENE_FUNC
-	G4cerr << "***** ClearStore(): No effetcs" << "\n" ;
-#endif 
-}
-
-void G4VRML2SCENE::BeginModeling()
+void G4VRML2SCENEHANDLER::BeginModeling()
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** BeginModeling" << "\n" ;
@@ -404,7 +397,7 @@ void G4VRML2SCENE::BeginModeling()
 
 }
 
-void G4VRML2SCENE::EndModeling()
+void G4VRML2SCENEHANDLER::EndModeling()
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** EndModeling " << "\n" ;
@@ -412,7 +405,7 @@ void G4VRML2SCENE::EndModeling()
 	G4VSceneHandler::EndModeling();
 }
 
-void G4VRML2SCENE::BeginPrimitives(const G4Transform3D& objectTransformation)
+void G4VRML2SCENEHANDLER::BeginPrimitives(const G4Transform3D& objectTransformation)
 {
   G4VSceneHandler::BeginPrimitives (objectTransformation);
   fpObjectTransformation = &objectTransformation;
@@ -422,7 +415,7 @@ void G4VRML2SCENE::BeginPrimitives(const G4Transform3D& objectTransformation)
 	VRMLBeginModeling(); 
 }
 
-void G4VRML2SCENE::EndPrimitives()
+void G4VRML2SCENEHANDLER::EndPrimitives()
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** EndPrimitives " << "\n" ;
@@ -430,7 +423,7 @@ void G4VRML2SCENE::EndPrimitives()
   G4VSceneHandler::EndPrimitives();
 }
 
-void G4VRML2SCENE::SendMaterialNode( const G4VisAttributes*  pVA )
+void G4VRML2SCENEHANDLER::SendMaterialNode( const G4VisAttributes*  pVA )
 {
 	// Initialization of drawing parameters 	
 	G4bool		flagWF       = false ; 
@@ -491,14 +484,14 @@ void G4VRML2SCENE::SendMaterialNode( const G4VisAttributes*  pVA )
 }
 
 
-void G4VRML2SCENE::SendMaterialNode()
+void G4VRML2SCENEHANDLER::SendMaterialNode()
 {
 	SendMaterialNode
 	( fpViewer->GetApplicableVisAttributes (fpVisAttribs) );
 }
 
 
-void G4VRML2SCENE::VRMLBeginModeling()
+void G4VRML2SCENEHANDLER::VRMLBeginModeling()
 {
 	if (!IS_CONNECTED ) {
 #if defined DEBUG_SCENE_FUNC
@@ -510,7 +503,7 @@ void G4VRML2SCENE::VRMLBeginModeling()
 	}
 }
 
-void G4VRML2SCENE::VRMLEndModeling()
+void G4VRML2SCENEHANDLER::VRMLEndModeling()
 {
 	if ( IS_CONNECTED ) {
 #if defined DEBUG_SCENE_FUNC
@@ -521,7 +514,7 @@ void G4VRML2SCENE::VRMLEndModeling()
 	}
 }
 
-void      G4VRML2SCENE::SendMarkerColor ( const G4VMarker& mark ) 
+void      G4VRML2SCENEHANDLER::SendMarkerColor ( const G4VMarker& mark ) 
 {
 	const G4Color& color = GetColor( mark );
 
@@ -541,7 +534,7 @@ void      G4VRML2SCENE::SendMarkerColor ( const G4VMarker& mark )
 }
 
 void      
-G4VRML2SCENE::SendMarkerWorldPosition ( const G4VMarker& mark )
+G4VRML2SCENEHANDLER::SendMarkerWorldPosition ( const G4VMarker& mark )
 {
 	G4Point3D point = mark.GetPosition();
 
@@ -552,7 +545,7 @@ G4VRML2SCENE::SendMarkerWorldPosition ( const G4VMarker& mark )
 
 }
 
-void  G4VRML2SCENE::GetMarkerWorldPosition    (	const G4VMarker&  mark , 
+void  G4VRML2SCENEHANDLER::GetMarkerWorldPosition    (	const G4VMarker&  mark , 
 						double* pX             ,
 						double* pY             ,
 						double* pZ              ) 
@@ -566,7 +559,7 @@ void  G4VRML2SCENE::GetMarkerWorldPosition    (	const G4VMarker&  mark ,
 	*pZ = point.z() ;
 }
 
-G4double  G4VRML2SCENE::GetMarkerHalfSize ( const G4VMarker& mark ) 
+G4double  G4VRML2SCENEHANDLER::GetMarkerHalfSize ( const G4VMarker& mark ) 
 {
 	//----- return value ( marker radius in 3d units) 
 	G4double size       = 1.0 ; // initialization
@@ -613,7 +606,7 @@ G4double  G4VRML2SCENE::GetMarkerHalfSize ( const G4VMarker& mark )
 
 } 
 
-void G4VRML2SCENE::SendLineColor ( const G4VisAttributes*  pVA )
+void G4VRML2SCENEHANDLER::SendLineColor ( const G4VisAttributes*  pVA )
 {
 	const G4Color& color = pVA->GetColor();
 
@@ -632,7 +625,7 @@ void G4VRML2SCENE::SendLineColor ( const G4VisAttributes*  pVA )
 	fDest << "\t"   << "}"                       << "\n"; // appearance
 }
 
-G4double      G4VRML2SCENE::SetPVTransparency ()
+G4double      G4VRML2SCENEHANDLER::SetPVTransparency ()
 {
 
 	G4double	TRANSPARENCY = 0.7   ;	// initialization
@@ -651,5 +644,20 @@ G4double      G4VRML2SCENE::SetPVTransparency ()
 
 	return fPVTransparency ;
 }
+
+
+void G4VRML2SCENEHANDLER::ClearTransientStore() 
+{
+  G4VSceneHandler::ClearTransientStore ();
+  // This is typically called after an update and before drawing hits
+  // of the next event.  To simulate the clearing of "transients"
+  // (hits, etc.) the detector is redrawn...
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
+  }
+}
+
 
 // End of file.

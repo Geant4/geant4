@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2File.hh,v 1.8 2001-07-27 22:33:10 johna Exp $
+// $Id: G4VRML2File.hh,v 1.9 2001-09-18 07:53:08 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2File.hh

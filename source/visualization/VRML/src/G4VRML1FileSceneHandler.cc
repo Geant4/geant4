@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileSceneHandler.cc,v 1.6 2001-07-27 22:33:15 johna Exp $
+// $Id: G4VRML1FileSceneHandler.cc,v 1.7 2001-09-18 07:53:15 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1FileSceneHandler.cc
@@ -66,7 +66,7 @@ const char  DEFAULT_WRL_FILE_NAME[] = "g4.wrl";
 const char  ENV_VRML_VIEWER      [] = "G4VRMLFILE_VIEWER";
 const char  NO_VRML_VIEWER       [] = "NONE";
 const char  VRMLFILE_DEST_DIR    [] = "G4VRMLFILE_DEST_DIR";
-
+const int   DEFAULT_MAX_WRL_FILE_NUM = 100 ;
 
 G4VRML1FileSceneHandler::G4VRML1FileSceneHandler(G4VRML1File& system, const G4String& name) :
 	G4VSceneHandler(system, fSceneIdCount++, name),
@@ -84,17 +84,16 @@ G4VRML1FileSceneHandler::G4VRML1FileSceneHandler(G4VRML1File& system, const G4St
 		strcpy( fVRMLFileDestDir, getenv( VRMLFILE_DEST_DIR ) );
 	}
 
-	// maximum number of g4.prim files in the dest directory
-	fMaxFileNum = 1 ; // initialization
+	// maximum number of g4.wrl files in the dest directory
+	fMaxFileNum = DEFAULT_MAX_WRL_FILE_NUM ; // initialization
 	if ( getenv( "G4VRMLFILE_MAX_FILE_NUM" ) != NULL ) {	
 		
 		sscanf( getenv("G4VRMLFILE_MAX_FILE_NUM"), "%d", &fMaxFileNum ) ;
 
 	} else {
-		fMaxFileNum = 1 ;
+		fMaxFileNum = DEFAULT_MAX_WRL_FILE_NUM ;
 	}
-	if( fMaxFileNum < 1 ) { fMaxFileNum = 1 ; }
-
+	if( fMaxFileNum < 1 ) { fMaxFileNum = 1; }
 
 }
 
@@ -108,41 +107,44 @@ G4VRML1FileSceneHandler::~G4VRML1FileSceneHandler()
 }
 
 
-#define  G4VRML1SCENE   G4VRML1FileSceneHandler
+#define  G4VRML1SCENEHANDLER   G4VRML1FileSceneHandler
 #define  IS_CONNECTED   this->isConnected() 
 #include "G4VRML1SceneHandlerFunc.icc"
 #undef   IS_CONNECTED
-#undef   G4VRML1SCENE 
+#undef   G4VRML1SCENEHANDLER
 
 
 void G4VRML1FileSceneHandler::connectPort()
 {
-	// g4.wrl, g4_1.wrl, ..., g4_MAX_FILE_INDEX.wrl
+	// g4_00.wrl, g4_01.wrl, ..., g4_MAX_FILE_INDEX.wrl
 	const int MAX_FILE_INDEX = fMaxFileNum - 1 ;
 
 	// dest directory (null if no environmental variables is set)
 	strcpy ( fVRMLFileName, fVRMLFileDestDir) ; 
 
-	// create full path name (default)
+	// create (full) path name (default)
 	strcat ( fVRMLFileName, DEFAULT_WRL_FILE_NAME );
 
 	// Determine VRML file name
 	for( int i = 0 ; i < fMaxFileNum ; i++) { 
 
-		// Message
-		if( fMaxFileNum > 1 && i == MAX_FILE_INDEX ) {
+		// Message in the final execution
+		if( i == MAX_FILE_INDEX ) 
+		{
 		  G4cerr << "==========================================="   << G4endl; 
-		  G4cerr << "WARNING MESSAGE from VRML1FILE driver:      "  << G4endl;
+		  G4cerr << "WARNING MESSAGE from VRML1FILE driver:     "   << G4endl;
 		  G4cerr << "  This file name is the final one in the   "   << G4endl;
 		  G4cerr << "  automatic updation of the output file name." << G4endl; 
-		  G4cerr << "  You may overwrite an existing file of   "    << G4endl; 
-                  G4cerr << "  the same name.                          "    << G4endl;
+		  G4cerr << "  You may overwrite existing files, i.e.   "   << G4endl; 
+                  G4cerr << "  g4_XX.wrl.                               "   << G4endl;
 		  G4cerr << "==========================================="   << G4endl; 
 		}
 
-		// re-determine file to G4VRMLFILE_DEST_DIR/g4_i.wrl for i>0
-		if( i >  0 ) { 
-			sprintf( fVRMLFileName, "%s%s%d.wrl" , fVRMLFileDestDir,  WRL_FILE_HEADER, i );
+		// re-determine file name as G4VRMLFILE_DEST_DIR/g4_XX.wrl 
+		if( i >=  0 && i <= 9 ) { 
+			sprintf( fVRMLFileName, "%s%s%s%d.wrl" , fVRMLFileDestDir,  WRL_FILE_HEADER, "0", i );
+		} else {
+			sprintf( fVRMLFileName, "%s%s%d.wrl"   , fVRMLFileDestDir,  WRL_FILE_HEADER, i );
 		}
 
 		// check validity of the file name
@@ -150,12 +152,13 @@ void G4VRML1FileSceneHandler::connectPort()
 		fin.open(fVRMLFileName) ;
 		if(!fin) { 
 			// new file	
-			fin.close();  // error recovery
+			fin.close();  
 			break; 
 		} else { 
 			// already exists (try next) 
 			fin.close(); 
 		} 
+
 
 	} // for 
 
