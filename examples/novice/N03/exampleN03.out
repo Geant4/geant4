@@ -119,26 +119,6 @@ MuPairProd:  theoretical cross sections
 /control/saveHistory
 /run/verbose 2
 #
-/run/particle/dumpCutValues
-============= The cut Energy ==============================
-                            gamma              e-             mu-          proton         neutron    
-Cut in range                  2 mm            2 mm            2 mm            2 mm            2 mm 
-Cut in energy
-          Aluminium        9.56 keV        1.03 MeV        7.44 MeV        19.4 MeV         990 eV 
-        liquidArgon        8.59 keV         561 keV        4.78 MeV        12.3 MeV         990 eV 
-             Copper        35.7 keV        2.68 MeV        13.3 MeV        34.3 MeV         990 eV 
-               Lead         121 keV        2.61 MeV        12.6 MeV        31.8 MeV         990 eV 
-              Water        3.89 keV         568 keV        4.96 MeV        13.1 MeV         990 eV 
-       Scintillator        3.07 keV         575 keV        5.02 MeV        13.4 MeV         990 eV 
-             quartz        7.59 keV         907 keV        6.91 MeV        18.1 MeV         990 eV 
-                Air         990 eV          990 eV         82.2 keV         174 keV         990 eV 
-            Aerogel        2.32 keV         181 keV         1.9 MeV        4.84 MeV         990 eV 
-        CarbonicGas         990 eV         54.1 keV         597 keV        1.34 MeV         990 eV 
-         WaterSteam         990 eV          990 eV         29.6 keV          45 keV         990 eV 
-           Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
-               Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
-===================================================
-#
 # Create empty scene ("world" is default)
 /vis/scene/create
 #
@@ -149,7 +129,7 @@ Cut in energy
 # Edit the next line(s) to choose another graphic system
 #
 #/vis/sceneHandler/create DAWNFILE
-/vis/sceneHandler/create OGLIXm
+/vis/sceneHandler/create OGLIX
 #
 # Create a viewer
 /vis/viewer/create
@@ -202,7 +182,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.44s Real=0.49s Sys=0.03s
+  User=0.46s Real=0.52s Sys=0.03s
 Idle> #
 Idle> # list the existing physics processes
 Idle> /process/list
@@ -231,7 +211,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.39s Real=0.42s Sys=0.03s
+  User=0.42s Real=0.46s Sys=0.04s
 Idle> #
 Idle> # switch on MultipleScattering
 Idle> /process/activate msc
@@ -271,7 +251,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.96s Real=1s Sys=0.07s
+  User=1s Real=1.1s Sys=0.08s
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
