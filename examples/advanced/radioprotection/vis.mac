@@ -33,4 +33,4 @@
 /vis/viewer/zoom 2
 /tracking/storeTrajectory 1
 /gun/particle alpha
-/gun/energy 10. MeV
+/gun/energy 100. MeV
