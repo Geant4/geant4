@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: FluoTestPrimaryGeneratorAction.cc,v 1.2 2001-09-18 17:05:16 elena Exp $
+// $Id: FluoTestPrimaryGeneratorAction.cc,v 1.3 2001-09-19 18:39:54 elena Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,6 +62,7 @@ FluoTestPrimaryGeneratorAction::FluoTestPrimaryGeneratorAction(
   particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
   particleGun->SetParticleEnergy(50.*MeV);
   G4double position = -0.5*(FluoTestDetector->GetWorldSizeX());
+
   particleGun->SetParticlePosition(G4ThreeVector(position,0.*cm,0.*cm));
 
 }

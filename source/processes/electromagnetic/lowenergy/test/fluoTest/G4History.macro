@@ -9,4 +9,4 @@
 /tracking/storeTrajectory 1
 /gun/particle gamma
 /gun/energy 5 keV
-/run/beamOn 500000
+/run/beamOn 1

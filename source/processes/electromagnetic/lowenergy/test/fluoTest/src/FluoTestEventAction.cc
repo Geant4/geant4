@@ -61,6 +61,7 @@ void FluoTestEventAction::BeginOfEventAction(const G4Event* evt)
 {
   
   G4int evtNb = evt->GetEventID(); 
+
   //Returns the event ID
     if (evtNb%printModulo == 0)
    { 

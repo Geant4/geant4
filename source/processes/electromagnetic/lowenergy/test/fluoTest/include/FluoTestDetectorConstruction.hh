@@ -295,6 +295,7 @@ inline void FluoTestDetectorConstruction::ComputeApparateParameters()
 {     
   // Compute derived parameters of the apparate
      WorldSizeX = (2 * (DistDe  +1.4142 * G4std::max(SiSizeYZ,SiThickness)))+1*m; 
+
      WorldSizeYZ = 2 * (DistDe +1.4142 *G4std::max(Dia1SizeYZ,G4std::max(SiSizeYZ,SiThickness)));
      
      DeviceThickness = PixelThickness+OhmicNegThickness+OhmicPosThickness;

@@ -34,6 +34,8 @@ FluoTestSteppingAction::~FluoTestSteppingAction()
 
 void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
+
+
   //G4double gammaAtTheDetPre=0;
   //G4double gammaAtTheDetPost=0;
   G4double gammaLeavingSample=0;
@@ -47,10 +49,10 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
   //counters for data files  
   
   
-  if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Sample"){
+  /*if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Sample"){
     
-    if(aStep->GetTrack()->GetNextVolume()->GetName() == "World" ) 
-      { 
+ if(aStep->GetTrack()->GetNextVolume()->GetName() == "World" ) 
+  { 
 	if ((aStep->GetTrack()->GetDynamicParticle()
 	     ->GetDefinition()-> GetParticleName()) == "gamma" ) 
 	  {
@@ -60,10 +62,10 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	    analysisManager->InsGamLeavSam(gammaLeavingSample/keV);  
 #endif
 	  }
-      }
-  }
-  
-  
+	  }
+     }
+  */
+  /*
    if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Sample"){
     
     if(aStep->GetTrack()->GetNextVolume()->GetName() == "World" ) 
@@ -79,8 +81,8 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	  }
       }
   }
-  
-  
+  */
+  /*
    if((aStep->GetTrack()->GetDynamicParticle()
        ->GetDefinition()-> GetParticleName()) == "gamma" )
     
@@ -104,12 +106,12 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	     analysisManager->InsGamBornSample(gammaBornInSample/keV);  
 #endif
 	     
-	   }
+	     }
 	 }
        }
      }
-   
-    if((aStep->GetTrack()->GetDynamicParticle()
+  */
+   /* if((aStep->GetTrack()->GetDynamicParticle()
        ->GetDefinition()-> GetParticleName()) == "e-" )
     
      {if(1== (aStep->GetTrack()->GetCurrentStepNumber()))
@@ -128,7 +130,7 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	 }
        }
      }
-  
+   */
   if((aStep->GetTrack()->GetDynamicParticle()
        ->GetDefinition()-> GetParticleName()) == "e+" )
     {

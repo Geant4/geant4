@@ -154,7 +154,7 @@ void FluoTestPhysicsList::ConstructEM()
     //pmanager->AddDiscreteProcess(new G4GammaConversion());
      pmanager->AddDiscreteProcess(new G4LowEnergyCompton());      
      //pmanager->AddDiscreteProcess(new G4ComptonScattering());    
-    pmanager->AddDiscreteProcess(new G4LowEnergyPhotoElectric());
+     pmanager->AddDiscreteProcess(new G4LowEnergyPhotoElectric());
     // pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
   }else if (particleName == "e-") {
 
