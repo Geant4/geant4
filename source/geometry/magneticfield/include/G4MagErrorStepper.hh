@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagErrorStepper.hh,v 1.3 1999-03-04 14:04:31 japost Exp $
+// $Id: G4MagErrorStepper.hh,v 1.4 1999-04-19 17:20:28 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Abstract base class (ie Interface)
@@ -57,10 +57,14 @@ class G4MagErrorStepper : public G4MagIntegratorStepper
 private:
   
   // Data stored in order to find the chord
-  G4ThreeVector yInitial, yMidPoint, yFinal;
+  G4ThreeVector fInitialPoint, fMidPoint, fFinalPoint;
   
   // G4int theNumberOfVariables ; 
-  G4double *yTemp, *dydxTemp, *yIn; 
+
+  // The following arrays are used only for temporary storage
+  //   they are allocated at the class level only for efficiency -
+  //   so that calls to new and delete are not made in Stepper()
+  G4double *yInitial, *yMiddle, *dydxMid, *yOneStep;
 };
 #include  "G4MagErrorStepper.icc"
 
