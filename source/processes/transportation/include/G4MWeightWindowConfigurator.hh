@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MWeightWindowConfigurator.hh,v 1.3 2003-08-19 16:01:07 dressel Exp $
+// $Id: G4MWeightWindowConfigurator.hh,v 1.4 2003-08-27 07:32:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,10 +40,10 @@
 #include "G4ProcessPlacer.hh"
 #include "G4VSamplerConfigurator.hh"
 #include "G4PlaceOfAction.hh"
-#include "G4MassWeightWindowProcess.hh"
 
 class G4VWeightWindowStore;
 class G4VWeightWindowAlgorithm;
+class G4MassWeightWindowProcess;
 
 class G4MWeightWindowConfigurator : public G4VSamplerConfigurator{
 public:

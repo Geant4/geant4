@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceConfigurator.cc,v 1.4 2003-04-02 16:59:16 dressel Exp $
+// $Id: G4PImportanceConfigurator.cc,v 1.5 2003-08-27 07:32:51 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,6 +35,7 @@
 
 #include "G4ParallelWorld.hh"
 #include "G4ImportanceAlgorithm.hh"
+#include "G4ParallelImportanceProcess.hh"
 
 G4PImportanceConfigurator::
 G4PImportanceConfigurator(const G4String &particlename,

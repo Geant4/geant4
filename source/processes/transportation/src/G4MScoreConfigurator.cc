@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreConfigurator.cc,v 1.5 2003-04-02 16:59:12 dressel Exp $
+// $Id: G4MScoreConfigurator.cc,v 1.6 2003-08-27 07:32:51 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -34,6 +34,7 @@
 #include "G4MScoreConfigurator.hh"
 #include "G4VScorer.hh"
 #include "G4VTrackTerminator.hh"
+#include "G4MScoreProcess.hh"
 
 G4MScoreConfigurator::
 G4MScoreConfigurator(const G4String &particlename,

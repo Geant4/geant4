@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceConfigurator.hh,v 1.3 2002-10-22 13:25:56 dressel Exp $
+// $Id: G4PImportanceConfigurator.hh,v 1.4 2003-08-27 07:32:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,12 +42,11 @@
 
 #include "globals.hh"
 #include "G4ImportanceSplitExaminer.hh"
-#include "G4ParallelImportanceProcess.hh"
 #include "G4ProcessPlacer.hh"
 
 class G4ParallelWorld;
 class G4VImportanceAlgorithm;
-
+class G4ParallelImportanceProcess;
 
 class G4PImportanceConfigurator : public G4VSamplerConfigurator {
 public:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScoreConfigurator.hh,v 1.3 2002-10-22 13:25:56 dressel Exp $
+// $Id: G4PScoreConfigurator.hh,v 1.4 2003-08-27 07:32:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,12 +41,12 @@
 #include "G4VSamplerConfigurator.hh"
 
 #include "globals.hh"
-#include "G4PScoreProcess.hh"
 #include "G4ProcessPlacer.hh"
 
 class G4VParallelStepper;
 class G4VScorer;
 class G4VTrackTerminator;
+class G4PScoreProcess;
 
 class G4PScoreConfigurator : public G4VSamplerConfigurator{
 public:

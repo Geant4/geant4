@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PWeightWindowConfigurator.cc,v 1.2 2003-08-19 16:01:07 dressel Exp $
+// $Id: G4PWeightWindowConfigurator.cc,v 1.3 2003-08-27 07:32:51 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,6 +36,7 @@
 #include "G4ParallelWeightWindowProcess.hh" 
 #include "G4WeightWindowAlgorithm.hh"
 #include "G4ParallelWorld.hh"
+#include "G4ParallelWeightWindowProcess.hh"
 
 G4PWeightWindowConfigurator::
 G4PWeightWindowConfigurator(const G4String &particlename,
