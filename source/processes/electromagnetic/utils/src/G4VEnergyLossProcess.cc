@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.13 2004-03-19 16:37:57 maire Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.14 2004-03-31 11:18:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -71,6 +71,7 @@
 //          calculation, use functions ForLoss in AlongStepDoIt (V.Ivanchenko)
 // 10-03-04 Fix a problem of Precise Range table (V.Ivanchenko)
 // 19-03-04 Fix a problem energy below lowestKinEnergy (V.Ivanchenko)
+// 31-03-04 Fix a problem of retrieve tables (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -97,6 +98,7 @@
 #include "G4VParticleChange.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
+#include "G4Positron.hh"
 #include "G4Proton.hh"
 #include "G4VSubCutoffProcessor.hh"
 #include "G4ProcessManager.hh"
@@ -595,7 +597,6 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   // Get the actual (true) Step length
   G4double length = step.GetStepLength();
   G4double eloss  = 0.0;
-//  G4bool b;
 
 /*
   if(-1 < verboseLevel) {
@@ -688,6 +689,21 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
   */
 
+
+  G4double finalT = preStepKinEnergy - eloss;
+
+  if (finalT <= lowestKinEnergy) {
+
+    finalT = 0.0;
+
+    if (hasRestProcess) fParticleChange.SetStatusChange(fStopButAlive);
+    else                fParticleChange.SetStatusChange(fStopAndKill);
+  }
+
+  eloss = preStepKinEnergy-finalT;
+
+  fParticleChange.SetProposedKineticEnergy(finalT);
+
   // Subcutoff and/or deexcitation
   std::vector<G4Track*>* newp =
            SecondariesAlongStep(step, tmax, eloss, preStepScaledEnergy);
@@ -703,36 +719,27 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
         t = (*newp)[i];
         e = t->GetKineticEnergy();
         const G4ParticleDefinition* pd = t->GetDefinition();
-        if (pd != G4Gamma::Gamma() && pd != G4Electron::Electron() ) e += pd->GetPDGMass();
+        if (pd != G4Positron::Positron() ) e += electron_mass_c2;
+        if (e > eloss) e = eloss;
 
-        eloss += e;
+        eloss -= e;
         pParticleChange->AddSecondary(t);
       }
     }
     delete newp;
   }
 
-  G4double finalT = preStepKinEnergy - eloss;
-
 /*
   if(-1 < verboseLevel) {
-    G4cout << "eloss(MeV)= " << eloss/MeV
+    G4cout << "Final value eloss(MeV)= " << eloss/MeV
            << " preStepKinEnergy= " << preStepKinEnergy
+           << " postStepKinEnergy= " << finalT
            << " lossFlag= " << lossFluctuationFlag
            << G4endl;
   }
 */
 
-  if (finalT <= lowestKinEnergy) {
-
-    finalT = 0.0;
-
-    if (hasRestProcess) fParticleChange.SetStatusChange(fStopButAlive);
-    else                fParticleChange.SetStatusChange(fStopAndKill);
-  }
-
-  fParticleChange.SetProposedKineticEnergy(finalT);
-  fParticleChange.SetLocalEnergyDeposit(preStepKinEnergy-finalT);
+  fParticleChange.SetLocalEnergyDeposit(eloss);
 
   return &fParticleChange;
 }
@@ -1204,11 +1211,8 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
         }
       } else {
         table->clearAndDestroy();
-        if(fpi) {
-          res = false;
-	  G4cout << "Precise Range table for loss for " << particleName << " does not exist"
-		 << G4endl;
-        }
+	G4cout << "Precise Range table for loss for " << particleName << " does not exist"
+	       << G4endl;
       }
 
       filename = GetPhysicsTableFileName(part,directory,"InverseRange",ascii);
