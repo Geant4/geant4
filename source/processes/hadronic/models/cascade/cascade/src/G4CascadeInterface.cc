@@ -86,7 +86,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
   G4double theNucleusA = theNucleus.GetN() + theNucleus.GetZ();
 
-  if ( !(theNucleusA == 1) ) {
+  if ( !(theNucleusA < 1.5) ) {
     target  = new G4InuclNuclei(targetMomentum, 
 				theNucleusA, 
 				theNucleus.GetZ());
@@ -124,19 +124,27 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
 
 
-    if ( theNucleusA == 1 ) {
+    if ( theNucleusA < 1.5 ) 
+    {
      G4NucleiModel* model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
       targetH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); // get momentum from H model
-      output = collider->collide(bullet, targetH); 
-    } else {
+      do
+      {
+	 output = collider->collide(bullet, targetH); 
+      } 
+      while(output.getOutgoingParticles().size()<2.5);
+    } 
+    else 
+    {
       output = collider->collide(bullet, target ); 
-    };
+    }
 
-    if (verboseLevel > 1) {
+    if (verboseLevel > 1) 
+    {
       G4cout << " Cascade output: " << G4endl;
       output.printCollisionOutput();
-    };
-  };
+    }
+  }
 
   // Convert cascade data to use hadronics interface
 
@@ -162,11 +170,13 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
       switch(outgoingParticle) {
 
       case proton: 
+	G4cerr << "proton "<< counter<<G4endl;
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Proton::ProtonDefinition(), aMom, ekin);
 	break; 
 
       case neutron: 
+	G4cerr << "neutron "<< counter<<G4endl;
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Neutron::NeutronDefinition(), aMom, ekin);
 	break;
@@ -174,21 +184,25 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
       case pionPlus: 
 	cascadeParticle = 
 	  new G4DynamicParticle(G4PionPlus::PionPlusDefinition(), aMom, ekin);
+	G4cerr << "pionPlus "<< counter<<G4endl;
 	break;
 
       case pionMinus:
 	cascadeParticle = 
 	  new G4DynamicParticle(G4PionMinus::PionMinusDefinition(), aMom, ekin);
+	G4cerr << "pionMinus "<< counter<<G4endl;
 	break;
 
       case pionZero: 
 	cascadeParticle = 
 	  new G4DynamicParticle(G4PionZero::PionZeroDefinition(), aMom, ekin);
+	G4cerr << "pionZero "<< counter<<G4endl;
 	break;
 
       case foton: 
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Gamma::Gamma(), aMom, ekin);
+	G4cerr << "foton "<< counter<<G4endl;
 	break;
 
       default: cout << " ERROR: G4CascadeInterface::Propagate undefined particle type";
