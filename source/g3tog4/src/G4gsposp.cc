@@ -5,16 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsposp.cc,v 1.6 1999-05-18 18:44:33 lockman Exp $
+// $Id: G4gsposp.cc,v 1.7 1999-05-22 06:31:55 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4PVPlacement.hh"
-#include "G4ThreeVector.hh"
+
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
-#include "G3RotTable.hh"
 #include "G4makevol.hh"
 
 G4bool G3IsMany(G4String);
@@ -38,51 +34,37 @@ void PG4gsposp(RWCString tokens[]){
   G4gsposp(name, num, moth, x, y, z, irot, only, pars, npar);
 }
 
-void G4gsposp(G4String vname, G4int num, G4String vmoth, G4double x,
-              G4double y, G4double z, G4int irot, G4String vonly,
-              G4double pars[], G4int npar){
+void G4gsposp(const G4String& vname, const G4int num, const G4String& vmoth, 
+	      G4double x, G4double y, G4double z, const G4int irot, 
+	      const G4String& vonly, G4double* pars, G4int npar){
   
-  G4bool _debug=false;
-  
-  // get the rotation matrix pointer from the G3 IROT index
-  G3toG4RotationMatrix* rotm = G3Rot.get(irot);
-  
-  // translation offset
-  G4ThreeVector* offset = new G4ThreeVector(x, y, z);
-  
-  // determine ONLY/MANY status
-  G4bool isMany = G3IsMany(vonly);
-  
-  // check for negative parameters in volume definition.
-  G4bool nvp = G3Vol.GetVTE(vname)->HasNegVolPars();
+  // VTable entry
+  VolTableEntry* VTE = G3Vol.GetVTE(vname);
 
-  // get the logical volume pointer of the mother from the name
-  G4LogicalVolume *mothLV = G3Vol.GetLV(vmoth);
-  
-  // create a logical volume and add it to the constituent List of the
-  // G3 logical volume
-  G4String shape;
-  
-  G4int nmed;
-  G4cerr << "G4gsposp: not implemented" << endl;
-  /*
-    //    G3Vol.GetLVInfo(&vname, &shape, &nmed);
-    if (_debug) {
-    G4cout << "gsposp: creating lvol " << vname << " shape " << shape 
-    << " nmed " <<
-    nmed << " moth " << vmoth << " mothLV " << mothLV << " pars ";
-    for (int i=0; i<npar; i++) G4cout << pars[i] << " ";
-    G4cout << endl;
-    }      
-    G4LogicalVolume* lvol = G4makevol(vname, shape, nmed, pars, npar);
-    // add the logical volume to the constituent List
-    G3Vol.AddConstituentLVol(&vname, lvol);
-    
-    G4VPhysicalVolume* pvol = new G4PVPlacement((G4RotationMatrix*)rotm, 
-    *offset, lvol, vname,
-    mothLV, isMany, num);
-    // add it to the List
-    //    G3Vol.PutPV(&vname, pvol);
-  */
-  delete offset;
+  if (VTE != 0) {
+    // get some parameters from the current entry
+    G4String Shape = VTE->GetShape();
+    G4int Nmed = VTE->GetNmed();
+
+    // get pointer to key for current entry
+    const G4String* Key = G3Vol.GetVTD()->find(&vname);
+
+    // remove the current entry from the dictionary
+    G3Vol.GetVTD()->remove(Key);
+
+    // insert a new entry
+    G4makevol(vname, Shape, Nmed, pars, npar);
+
+    G4gspos(vname, num, vmoth, x, y, z, irot, vonly);
+
+  } else {
+    G4cerr << "G4gsposp: no G3VolTable entry for logical volume '"
+	   << vname << "'" << endl;
+  }
 }
+
+
+
+
+
+

@@ -5,12 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4makevol.cc,v 1.11 1999-05-18 19:06:59 lockman Exp $
+// $Id: G4makevol.cc,v 1.12 1999-05-22 06:32:01 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"
-#include "G4LogicalVolume.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4Trd.hh"
@@ -18,17 +17,17 @@
 #include "G4Cons.hh"
 #include "G4Sphere.hh"
 #include "G3toG4.hh"
-#include "G3VolTable.hh"
-#include "G3MedTable.hh"
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
 #include "G4Para.hh"
 #include "G4Hype.hh"
 #include "G4Material.hh"
 #include "G4makevol.hh"
+#include "G3VolTable.hh"
+#include "G3MedTable.hh"
         
-G4LogicalVolume* G4makevol(G4String& vname, G4String& shape, G4int nmed,
-                           G4double* Rpar, G4int npar){
+void G4makevol(const G4String& vname, const G4String& shape, const G4int nmed,
+	       const G4double* Rpar, const G4int npar){
     
   // EAxis axis = kXAxis;
   
@@ -39,15 +38,10 @@ G4LogicalVolume* G4makevol(G4String& vname, G4String& shape, G4int nmed,
   // if npar = 0 assume LV deferral
   G4bool Deferred = (npar == 0);
   
-  if (Deferred) {
-    G4cout << "Defer creation of logical volume '" << vname 
-	   << "' until placement" << endl;
-  }
-
   if ( shape == "BOX" ) {
-    G4double pX = Rpar[0] = Rpar[0]*cm;
-    G4double pY = Rpar[1] = Rpar[1]*cm;
-    G4double pZ = Rpar[2] = Rpar[2]*cm;
+    G4double pX = Rpar[0]*cm;
+    G4double pY = Rpar[1]*cm;
+    G4double pZ = Rpar[2]*cm;
     
     NegVolPars = pX<0 || pY<0 || pZ<0;
     
@@ -56,11 +50,11 @@ G4LogicalVolume* G4makevol(G4String& vname, G4String& shape, G4int nmed,
     }
 
   } else if ( shape == "TRD1" ) {
-    G4double pdx1 = Rpar[0] = Rpar[0]*cm;
-    G4double pdx2 = Rpar[1] = Rpar[1]*cm;
-    G4double pdy1 = Rpar[2] = Rpar[2]*cm;
+    G4double pdx1 = Rpar[0]*cm;
+    G4double pdx2 = Rpar[1]*cm;
+    G4double pdy1 = Rpar[2]*cm;
     G4double pdy2 = pdy1;
-    G4double pdz  = Rpar[3] = Rpar[3]*cm;
+    G4double pdz  = Rpar[3]*cm;
     
     NegVolPars = pdx1<0 || pdx2<0 || pdy1<0 || pdz<0;
 
@@ -69,11 +63,11 @@ G4LogicalVolume* G4makevol(G4String& vname, G4String& shape, G4int nmed,
     }
 
   } else if ( shape == "TRD2" ) {
-    G4double pdx1 = Rpar[0] = Rpar[0]*cm;
-    G4double pdx2 = Rpar[1] = Rpar[1]*cm;
-    G4double pdy1 = Rpar[2] = Rpar[2]*cm;
-    G4double pdy2 = Rpar[3] = Rpar[3]*cm;
-    G4double pdz  = Rpar[4] = Rpar[4]*cm;
+    G4double pdx1 = Rpar[0]*cm;
+    G4double pdx2 = Rpar[1]*cm;
+    G4double pdy1 = Rpar[2]*cm;
+    G4double pdy2 = Rpar[3]*cm;
+    G4double pdz  = Rpar[4]*cm;
 
     NegVolPars = pdx1<0 || pdx2<0 || pdy1<0 || pdy2<0 || pdz<0;
  
@@ -82,17 +76,17 @@ G4LogicalVolume* G4makevol(G4String& vname, G4String& shape, G4int nmed,
     }
 
   } else if ( shape == "TRAP" ) {
-    G4double pDz    = Rpar[0] = Rpar[0]*cm;
-    G4double pTheta = Rpar[1] = Rpar[1]*deg;
-    G4double pPhi   = Rpar[2] = Rpar[2]*deg;
-    G4double pDy1   = Rpar[3] = Rpar[3]*cm;
-    G4double pDx1   = Rpar[4] = Rpar[4]*cm;
-    G4double pDx2   = Rpar[5] = Rpar[5]*cm;
-    G4double pAlp1  = Rpar[6] = Rpar[6]*deg;
-    G4double pDy2   = Rpar[7] = Rpar[7]*cm;
-    G4double pDx3   = Rpar[8] = Rpar[8]*cm;
-    G4double pDx4   = Rpar[9] = Rpar[9]*cm;
-    G4double pAlp2  = Rpar[10]= Rpar[10]*deg;
+    G4double pDz    = Rpar[0]*cm;
+    G4double pTheta = Rpar[1]*deg;
+    G4double pPhi   = Rpar[2]*deg;
+    G4double pDy1   = Rpar[3]*cm;
+    G4double pDx1   = Rpar[4]*cm;
+    G4double pDx2   = Rpar[5]*cm;
+    G4double pAlp1  = Rpar[6]*deg;
+    G4double pDy2   = Rpar[7]*cm;
+    G4double pDx3   = Rpar[8]*cm;
+    G4double pDx4   = Rpar[9]*cm;
+    G4double pAlp2  = Rpar[10]*deg;
 
     NegVolPars= pDz<0 || pDy1<0 || pDx1<0 || pDx2<0 || pDy2<0 || pDx3<0 || pDx4<0;
 
@@ -103,9 +97,9 @@ G4LogicalVolume* G4makevol(G4String& vname, G4String& shape, G4int nmed,
     }
 
   } else if ( shape == "TUBE" ) {
-    G4double pRMin = Rpar[0] = Rpar[0]*cm;
-    G4double pRMax = Rpar[1] = Rpar[1]*cm;
-    G4double pDz   = Rpar[2] = Rpar[2]*cm;
+    G4double pRMin = Rpar[0]*cm;
+    G4double pRMax = Rpar[1]*cm;
+    G4double pDz   = Rpar[2]*cm;
     G4double pSPhi = 0.*deg;
     G4double pDPhi = 360.*deg;
     
@@ -116,13 +110,12 @@ G4LogicalVolume* G4makevol(G4String& vname, G4String& shape, G4int nmed,
     }
 
   } else if ( shape == "TUBS" ) {
-    G4double pRMin = Rpar[0] = Rpar[0]*cm;
-    G4double pRMax = Rpar[1] = Rpar[1]*cm;
-    G4double pDz   = Rpar[2] = Rpar[2]*cm;
-    G4double pSPhi = Rpar[3] = Rpar[3]*deg;
-    Rpar[4] = Rpar[4]*deg;
-    G4double pDPhi = Rpar[4] - pSPhi;
-    if ( Rpar[4] <= pSPhi ) pDPhi = pDPhi + 360.*deg;
+    G4double pRMin = Rpar[0]*cm;
+    G4double pRMax = Rpar[1]*cm;
+    G4double pDz   = Rpar[2]*cm;
+    G4double pSPhi = Rpar[3]*deg;
+    G4double pDPhi = Rpar[4]*deg - pSPhi;
+    if ( Rpar[4]*deg <= pSPhi ) pDPhi = pDPhi + 360.*deg;
 
     NegVolPars = pRMin<0 || pRMax<0 || pDz<0;
 
@@ -131,11 +124,11 @@ G4LogicalVolume* G4makevol(G4String& vname, G4String& shape, G4int nmed,
     }
 
   } else if ( shape == "CONE" ) {
-    G4double pDz    = Rpar[0] = Rpar[0]*cm;
-    G4double pRmin1 = Rpar[1] = Rpar[1]*cm;
-    G4double pRmax1 = Rpar[2] = Rpar[2]*cm;
-    G4double pRmin2 = Rpar[3] = Rpar[3]*cm;
-    G4double pRmax2 = Rpar[4] = Rpar[4]*cm;
+    G4double pDz    = Rpar[0]*cm;
+    G4double pRmin1 = Rpar[1]*cm;
+    G4double pRmax1 = Rpar[2]*cm;
+    G4double pRmin2 = Rpar[3]*cm;
+    G4double pRmax2 = Rpar[4]*cm;
     G4double pSPhi = 0.*deg;
     G4double pDPhi = 360.*deg;
 
@@ -147,15 +140,14 @@ G4LogicalVolume* G4makevol(G4String& vname, G4String& shape, G4int nmed,
     }
 
   } else if ( shape == "CONS" ) {
-    G4double pDz    = Rpar[0] = Rpar[0]*cm;
-    G4double pRmin1 = Rpar[1] = Rpar[1]*cm;
-    G4double pRmax1 = Rpar[2] = Rpar[2]*cm;
-    G4double pRmin2 = Rpar[3] = Rpar[3]*cm;
-    G4double pRmax2 = Rpar[4] = Rpar[4]*cm;
-    G4double pSPhi  = Rpar[5] = Rpar[5]*deg;
-    Rpar[6] = Rpar[6]*deg;
-    G4double pDPhi  = Rpar[6]-pSPhi;
-    if ( Rpar[6] <= pSPhi ) pDPhi = pDPhi + 360.*deg;
+    G4double pDz    = Rpar[0]*cm;
+    G4double pRmin1 = Rpar[1]*cm;
+    G4double pRmax1 = Rpar[2]*cm;
+    G4double pRmin2 = Rpar[3]*cm;
+    G4double pRmax2 = Rpar[4]*cm;
+    G4double pSPhi  = Rpar[5]*deg;
+    G4double pDPhi  = Rpar[6]- pSPhi;
+    if ( Rpar[6]*deg <= pSPhi ) pDPhi = pDPhi + 360.*deg;
 
     NegVolPars = pDz<0 || pRmin1<0 || pRmax1<0 || pRmin2<0 || pRmax2<0;
 
@@ -165,13 +157,13 @@ G4LogicalVolume* G4makevol(G4String& vname, G4String& shape, G4int nmed,
     }
 
   } else if ( shape == "SPHE" ) {
-    G4double pRmin  = Rpar[0] = Rpar[0]*cm;
-    G4double pRmax  = Rpar[1] = Rpar[1]*cm;
-    G4double pThe1  = Rpar[2] = Rpar[2]*deg;
-    G4double pThe2  = Rpar[3] = Rpar[3]*deg;
+    G4double pRmin  = Rpar[0]*cm;
+    G4double pRmax  = Rpar[1]*cm;
+    G4double pThe1  = Rpar[2]*deg;
+    G4double pThe2  = Rpar[3]*deg;
     G4double pDThe  = pThe2 - pThe1;
-    G4double pPhi1  = Rpar[4] = Rpar[4]*deg;
-    G4double pPhi2  = Rpar[5] = Rpar[5]*deg;
+    G4double pPhi1  = Rpar[4]*deg;
+    G4double pPhi2  = Rpar[5]*deg;
     G4double pDPhi  = pPhi2 - pPhi1;
 
     NegVolPars = pRmin<0 || pRmax<0;
@@ -222,8 +214,8 @@ G4LogicalVolume* G4makevol(G4String& vname, G4String& shape, G4int nmed,
 
   } else if ( shape == "PCON" ) {
     G4int i;
-    G4double pPhi1 = Rpar[0] = Rpar[0]*deg;
-    G4double dPhi  = Rpar[1] = Rpar[1]*deg;    
+    G4double pPhi1 =  Rpar[0]*deg;
+    G4double dPhi  = Rpar[1]*deg;    
     G4int nz = int(Rpar[2]);
     G4double *DzArray = new G4double[nz];
     G4double *Rmax    = new G4double[nz];
@@ -249,10 +241,10 @@ G4LogicalVolume* G4makevol(G4String& vname, G4String& shape, G4int nmed,
     G4cerr << "ELTU not supported" << endl;
 
   } else if ( shape == "HYPE" ) {
-    G4double pRmin = Rpar[0] = Rpar[0]*cm;
-    G4double pRmax = Rpar[1] = Rpar[1]*cm;
-    G4double pDz   = Rpar[2] = Rpar[2]*cm;
-    G4double pThet = Rpar[3] = Rpar[3]*deg;
+    G4double pRmin = Rpar[0]*cm;
+    G4double pRmax = Rpar[1]*cm;
+    G4double pDz   = Rpar[2]*cm;
+    G4double pThet = Rpar[3]*deg;
 
     NegVolPars = pRmin<0 || pRmax<0 || pDz<0;
 
@@ -282,9 +274,8 @@ G4LogicalVolume* G4makevol(G4String& vname, G4String& shape, G4int nmed,
   }
 
   // external store is needed to handle deferred LV creation 
-  G3Vol.PutLV(vname, shape, Rpar, npar, material, solid, Deferred, NegVolPars);
-
-  return G3Vol.GetLV(vname);
+  G3Vol.PutVTE(vname, shape, Rpar, npar, nmed, material, solid, Deferred, 
+	      NegVolPars);
 }
 
 

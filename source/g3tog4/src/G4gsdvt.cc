@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdvt.cc,v 1.2 1999-05-06 04:25:25 lockman Exp $
+// $Id: G4gsdvt.cc,v 1.3 1999-05-22 06:31:46 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -77,7 +77,8 @@ void G4gsdvt(G4String vname, G4String vmoth, G4double Step, G4int iaxis,
     
     // check for negative parameters in volume definition
     G4double *pars = NULL;
-    G4bool negpars = G3NegVolPars(pars,&npar,vname,vmoth,"GSDVN");
+    //   G4bool negpars = G3NegVolPars(pars,&npar,vname,vmoth,"GSDVN");
+    G4bool negpars = 0;
     G4double width = rangehi - c0;
     G4double offset = (rangehi + c0)/2.;
     

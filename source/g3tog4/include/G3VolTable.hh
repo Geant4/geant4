@@ -2,60 +2,31 @@
 #define _G3VOLTABLE_ 1
 
 #include <rw/tphdict.h>
+#include "VolTableEntry.hh"
 
 class G4LogicalVolume;
-class G4VPhysicalVolume;
 class G4Material;
 class G4VSolid;
 
-class VolTableEntry {
-private:
-  G4String _Vname;
-  G4String _Shape;
-  G4double* _Rpar;
-  G4int _Npar;
-  G4Material* _Mat;
-  G4VSolid* _Solid;
-  G4LogicalVolume* _LV;
-  G4bool _Deferred;
-  G4bool _NegVolPars;
-
-public:
-  VolTableEntry(G4String& v, G4String& sh, G4double* R, 
-		G4int n, 
-		G4Material* m, G4VSolid* so, 
-		G4LogicalVolume* LV, G4bool Deferred, 
-		G4bool NegVolPars);
-  virtual ~VolTableEntry();
-  G4bool HasNegVolPars(){return _NegVolPars;}
-  G4bool HasDeferred(){return _Deferred;};
-  G4String GetShape(){return _Shape;}
-  G4double* GetRpar(){return _Rpar;}
-  G4int GetNpar(){return _Npar;}
-  G4Material* GetMaterial(){return _Mat;}
-  G4LogicalVolume* GetLV(){return _LV;}
-};
-  
 class G3VolTable{
 private:
   G4LogicalVolume* G3toG4LogicalMother;
-  G4VPhysicalVolume* _pv;
-  G4int _copy;
-  G4VPhysicalVolume* G3toG4PhysicalMother;
-  RWTPtrHashDictionary <G4String, VolTableEntry>* _VTD;
+  G4String* _FirstKey;
   VolTableEntry* _VTE;
-
-private:
-  void SetMother(G4LogicalVolume* theMother);
+  RWTPtrHashDictionary <G4String, VolTableEntry>* _VTD;
 
 public:
-  void PutLV(G4String& vname, G4String& shape, G4double* Rpar, G4int Npar,
-	     G4Material* mat, G4VSolid* solid, G4bool Deferred, G4bool ng);
+  void PutVTE(const G4String& vname, const G4String& shape, 
+	      const G4double* Rpar,  const G4int Npar, const G4int nmed,
+	      const G4Material* mat, const G4VSolid* solid, 
+	      const G4bool Deferred, const G4bool ng);
+  
+  RWTPtrHashDictionary <G4String, VolTableEntry>* GetVTD();
   VolTableEntry* GetVTE(const G4String& Vname);
-  G4LogicalVolume* GetLV(const G4String& vname="-");
-  G4VPhysicalVolume* GetPV(const G4String& pname="-", G4int pcopy=0);
   G3VolTable();
   virtual ~G3VolTable();
+  G4LogicalVolume* GetG3toG4Mother();
+  VolTableEntry* GetFirstVTE();
 };
 extern G3VolTable G3Vol;
 #endif

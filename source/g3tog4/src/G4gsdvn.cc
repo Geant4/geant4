@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdvn.cc,v 1.2 1999-05-06 04:24:42 lockman Exp $
+// $Id: G4gsdvn.cc,v 1.3 1999-05-22 06:31:40 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
@@ -68,7 +68,8 @@ void G4gsdvn(G4String vname, G4String vmoth, G4int ndiv, G4int iaxis)
     G4double *pars = NULL;
     G4double width = rangehi - rangelo;
     G4double offset = (rangehi + rangelo)/2.;
-    G4bool negpars = G3NegVolPars(pars,&npar,vname,vmoth,"GSDVN");
+    //    G4bool negpars = G3NegVolPars(pars,&npar,vname,vmoth,"GSDVN");
+    G4bool negpars = false;
     
     if ( ! negpars ) {
       // Generate replicas

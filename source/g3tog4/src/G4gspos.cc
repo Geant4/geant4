@@ -5,19 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gspos.cc,v 1.6 1999-05-18 02:40:53 lockman Exp $
+// $Id: G4gspos.cc,v 1.7 1999-05-22 06:31:52 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4PVPlacement.hh"
-#include "G4ThreeVector.hh"
+
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
-#include "G3RotTable.hh"
-#include "G4VSolid.hh"
-
-G4bool G3IsMany(G4String);
+#include "VolTableEntry.hh"
+#include "G3Pos.hh"
 
 void PG4gspos(RWCString tokens[])
 {
@@ -37,48 +32,31 @@ void PG4gspos(RWCString tokens[])
     G4gspos(name, num, moth, x, y, z, irot, only);
 }
 
-void G4gspos(const G4String& vname, G4int num, const G4String& vmoth, 
-	     G4double x, G4double y, G4double z, G4int irot, 
+void G4gspos(const G4String& vname, const G4int num, const G4String& vmoth, 
+	     G4double x, G4double y, G4double z, const G4int irot, 
 	     const G4String& vonly){
 
-  // retrieve info about the LV from the store
-  G4String _Shape;
-
   VolTableEntry* _VTE = G3Vol.GetVTE(vname);
-  assert(_VTE != 0);
+  VolTableEntry* MVTE = G3Vol.GetVTE(vmoth);
 
-  G4LogicalVolume* _lvol = _VTE->GetLV();
-
-        // get the rotation matrix pointer from the G3 IROT index
-  G3toG4RotationMatrix *rotm;
-  if (irot>0) {
-    rotm = G3Rot.get(irot);
+  if (_VTE == 0) {
+    G4cerr << "G4gspos: '" << vname << "' has no VolTableEntry" << endl;
+  } else if (MVTE == 0) {
+    G4cerr << "G4gspos: '" << vname << "' mother volume '" << vmoth 
+	   << "' has no VolTableEntry" << endl;
   } else {
-    rotm = 0;
-  }
-  
-  // translation offset
-  G4ThreeVector* offset = new G4ThreeVector(x, y, z);
-  
-  // determine ONLY/MANY status
-  G4bool isMany = G3IsMany(vonly);
-  
-  // check for negative parameters in volume definition
-  
-  if (_VTE->HasNegVolPars()) {
-    G4cerr << "G4gspos: logical volume '" << vname 
-	   << "' has -ve length parameters" << endl;
-  } else if (_VTE->HasDeferred()) {
-    G4cerr << "G4gspos: logical volume '" << vname << "' is deferred" << endl;
-  } else {
+    
+    // translation offset
+    G4ThreeVector* offset = new G4ThreeVector(x, y, z);
+    
+    // create a G3Pos object and add it to the G3VolTable
 
-    // get the logical volume pointer of the mother from the name
-    G4LogicalVolume *mothLV = G3Vol.GetLV(vmoth);
-    G4PVPlacement* pvol = new G4PVPlacement((G4RotationMatrix*) rotm,
-					    *offset, _lvol, vname,
-					    mothLV, isMany, num);
+    G3Pos* aG3Pos = new G3Pos(vname, num, vmoth, offset, irot, vonly);
+    _VTE->AddG3Pos(aG3Pos);
+
+    // add the G3Pos object as a daughter to its mother
+    MVTE->AddDaughter(aG3Pos);
   }
-  delete offset;
 }
 
 

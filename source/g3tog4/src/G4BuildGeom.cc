@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BuildGeom.cc,v 1.4 1999-05-06 04:24:09 lockman Exp $
+// $Id: G4BuildGeom.cc,v 1.5 1999-05-22 06:31:34 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,6 +35,8 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4VisAttributes.hh"
 #include "globals.hh"
+#include "VolTableEntry.hh"
+
 extern ofstream ofile;
 
 void G3CLRead(G4String &, char *);
@@ -50,11 +52,17 @@ G4LogicalVolume* G4BuildGeom(G4String& inFile){
 
   G3CLRead(inFile, NULL);
 
-  G4cout << "Call List file read completed." << endl;
+  G4cout << "Call List file read completed. Build geometry" << endl;
 
+  // Build the geometry
+
+  G4cout << "G3toG4 top level volume is " << G3Vol.GetFirstVTE()->GetName()
+	 << endl;
+
+  /*
         // Retrieve the top-level G3toG4 logical mother volume pointer
 
-  G4LogicalVolume* lG3toG4 = G3Vol.GetLV();
+  G4LogicalVolume* lG3toG4 = G3Vol.GetG3toG4Mother();
 
   // mark as invisible
 
@@ -71,7 +79,8 @@ G4LogicalVolume* G4BuildGeom(G4String& inFile){
     G4cout << "scan through G4LogicalVolumeStore:" << endl;
     checkVol();
   }
-  return lG3toG4;
+  return lG3toG4; */
+  return 0;
 }
 
 void checkVol()
