@@ -1904,16 +1904,14 @@ L2600:
       corrrr[j - 1] = corr;
       // Standard calculation:
       arg = *u - thresh[j - 1] - corr;
-      if (arg < 0.) {
+      if (!(arg >= 0)) {
 	r[j - 1] = 0.;
 	s[j - 1] = 0.;
 	sos[j - 1] = 0.;
+        continue;
       }
-      else
-      {
-        s[j - 1] = sqrt(smalla[j - 1] * arg) * 2.;
-        sos[j - 1] = s[j - 1] * 10.;
-      }
+      s[j - 1] = sqrt(smalla[j - 1] * arg) * 2.;
+      sos[j - 1] = s[j - 1] * 10.;
     }
     n1 = 1;
     d__1 =
