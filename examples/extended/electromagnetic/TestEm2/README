@@ -1,4 +1,4 @@
-$Id: README,v 1.13 2004-03-24 18:13:39 maire Exp $
+$Id: README,v 1.14 2004-03-31 15:28:11 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -97,7 +97,7 @@ $Id: README,v 1.13 2004-03-24 18:13:39 maire Exp $
  	
  7- HISTOGRAMS
  
-   TestEm2 produces several histo which are saved as testem2.paw or testem2.root
+   TestEm2 produces several histo which are saved as testem2.paw 
      
      Content of these histo:
   
@@ -118,7 +118,7 @@ $Id: README,v 1.13 2004-03-24 18:13:39 maire Exp $
      12 : rms of cumulated radial energy profile
 
  Note that, by default, histograms are disabled. To activate them, uncomment
- the flag USE_AIDA or USE_ROOT (exclusive or) in GNUmakefile. 
+ the flag G4ANALYSIS_USE in GNUmakefile. 
  
  8- Using the Anaphe implementation of the AIDA 3.0 histograms:
  --------------------------------------------------------------
@@ -136,12 +136,3 @@ $Id: README,v 1.13 2004-03-24 18:13:39 maire Exp $
  /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe.csh
  (or /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe)
  
- 9- ROOT
- 
- To install root, see http://root.cern.ch
- Make sure that the environment variable ROOTSYS, used in GNUmakefile, is
- defined:
- 
- setenv ROOTSYS /???/ROOT/root_v3_10_02
- setenv PATH ${PATH}:${ROOTSYS}/bin
- setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${ROOTSYS}/lib:/usr/lib/gcc-lib/i386-redhat-linux/2.95.3:.

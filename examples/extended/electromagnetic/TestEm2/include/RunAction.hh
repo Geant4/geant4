@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.2 2004-03-15 14:26:00 maire Exp $
+// $Id: RunAction.hh,v 1.3 2004-03-31 15:28:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,11 +55,6 @@ namespace AIDA {
  class ITree;
  class IHistogram1D;
 } 
-#endif
-
-#ifdef USE_ROOT
-  class TFile;
-  class TH1F;  
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -119,12 +114,7 @@ class RunAction : public G4UserRunAction
 #ifdef USE_AIDA
     AIDA::ITree* tree;             // the tree should only be deleted at the end
     AIDA::IHistogram1D* histo[12];   // (after writing the histos to file)
-#endif
-
-#ifdef USE_ROOT         
-    TFile* tree;
-    TH1F*  histo[12];
-#endif      
+#endif    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
