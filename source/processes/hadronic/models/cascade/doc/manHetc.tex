@@ -1,0 +1,2393 @@
+%manual.tex
+\documentclass[a4paper,12pt,twoside]{article} 
+%:::packages
+\usepackage[dvips]{epsfig}
+%eps-printing when clipping is needed -> use graphics-package 
+\usepackage{graphics}
+\usepackage{html}
+%:::definitions
+%\def \AATOS {/afs/cern.ch/user/m/miheikki/public/html/}
+%\def \DATE {12.6.2001}
+\def \L{\item  \htmladdnormallink}
+\def \AATOS {/home/miheikki/public/html/}
+\def \WORKTITLE {High Energy Transport Code (HETC) for Geant4}
+%\def \WORKTITLE {Intranuclear cascades in Geant4}
+\def \GEV {\mbox{GeV}}
+\def \HET{$^3$He}
+\def \HEF{$^4$He}
+\def \BEE{$^8$Be}
+
+%:::margins and page settings
+\oddsidemargin=5mm
+\evensidemargin=-5mm
+\topmargin=0mm
+\headheight=0mm
+\headsep=0mm
+\textheight=252mm
+\textwidth=160mm
+
+\begin{document}
+\begin{titlepage}
+\input{epsf.sty}
+
+%:::HIP logo
+\begin{figure}[h]
+\leavevmode
+\begin{flushleft}
+\mbox{\epsfxsize=10cm\epsfysize=3.286cm\epsffile{\AATOS pictures/hip.eps}}
+\end{flushleft}
+\end{figure}
+
+%:::titlepage texts
+\vspace{-1.5truecm}
+\begin{center}
+\large
+%PREPRINT SERIES
+
+\vspace{0.2 cm}
+\large
+%:::choose TH, EXP, TECH
+%:::change the report number
+%HIP - 2001 - XX 
+
+\vspace{4.0 cm}
+\Large
+%:::title
+{\bf \WORKTITLE }
+\vspace{1.0 cm}
+
+
+\vspace{1.0 cm}
+
+%\large \DATE
+\large \today
+
+%\Huge
+\vspace{1.5 cm}
+\large
+
+%:::authors
+Joe Chuma$^a$, Aatos Heikkinen, Tapio Lampen and Laura Tillikainen
+
+\vspace{0.4 cm}
+\normalsize
+
+%:::address
+$^a$TRIUMF, Vancouver, Canada\\
+Helsinki Institute of Physics,
+P.O.Box 9,
+FIN-00014 University of Helsinki, Finland \\
+
+
+\vfill
+%------------------------------------------
+%(Submitted to Phys. Rev. Lett.)
+
+{HELSINKI INSTITUTE OF PHYSICS}\\
+\vspace{0.2 cm}
+P.O.Box 9 $\bullet$ FIN-00014 UNIVERSITY OF HELSINKI $\bullet$ FINLAND
+\end{center}
+\end{titlepage}
+
+%:::one empty page
+\thispagestyle{empty}
+\cleardoublepage
+
+\pagebreak[4]
+
+%:::contents page
+\newpage
+\pagebreak[4]
+
+\pagenumbering{roman}
+\tableofcontents
+
+%::: special first page of article with abstract
+\newpage
+\pagebreak[4] 
+
+\pagestyle{headings}
+\pagestyle{plain}
+\pagenumbering{arabic}
+%\pagestyle{headings}
+\begin{center}
+{\Large{\bf \WORKTITLE}}
+\end{center}
+
+\vspace*{0.5cm}
+
+\begin{abstract} %:::
+%We present Geant4 implementation of Bertini intranuclear cascade model based on High Energy Transport Code (HETC)
+We describe here project to implement High Energy Transport Code
+(HETC) software into Geant4. 
+We give on overview of the hadronic Monte Carlo models used and present
+first results from evaporation part of HETC. 
+We also outline project goals and future development.
+
+\end{abstract}
+
+
+\section{Outline} %:::
+
+HIP has requested (Spring 2001) to join Geant4 (G4) collaboration. 
+HIP Software and Physics Group will contibute Geant4 development with
+annual work of two man years. 
+This year 2001, our commitment is fulfilled with efforts made by Aatos
+Heikkinen, Nikita Stepanov, Laura Tillikainen and Tapio Lampen.
+
+One part of our agreement is that HIP provides C++ translation of Fortran
+based High Energy Transport Code (HETC) into G4 before 2002.
+
+Our work consists of re-engineering, implementing, validating and
+documenting the HETC into new module (called HETC++) in G4 hadronic
+models framework.
+
+\section{HETC++ Project}
+\subsection{Status  June 2001} %:::
+\begin{itemize}
+\item {\bf general status:} we are slightly behind scedule, but we
+still hope to provide HETC++ into Geant4 before 2002
+\item {\bf evaporation:} ready, documentation will be brovided next
+\item {\bf pre-quilibrium:} raw translation done, OOD tuning and testing next
+\item {\bf inc:} raw ranslation coming up, next we will build OOA\&D
+using this raw translation
+\item {\bf documentation:} very preliminary, in july we will have
+first HETC++ documentation
+\item {\bf testing:} evaporation tested, othervise just infividual
+routines tested, next we will set up sandard test suite
+\item {\bf results:} results from evaporation tests are compared agains
+Fortran version. Module works well. 
+Othevise no results, 
+Next results coming in august form pre-equilibrium module. 
+In september first results from inc.
+In december integrations tests will give overview of of HETC++ performance. 
+%\item {\br}
+\end{itemize}
+
+%This effort will continue during spring 2001 and our aim is
+%to have full HETC code for beta testing before summer 2001.
+%Testing and development of implementation is expected to end before
+%year 2002.
+
+
+\subsection{Schedule} %:::
+
+The future of HETC++ is planned as follows:
+\begin{itemize}
+\item {\bf June 2001}: major development in inc, and indocumentation 
+\item {\bf July} intesive development in  pre-quilibrium and inc
+\item {\bf August} first results and documentation from pre-equilibrium
+\item {\bf September} first results from inc, first relese of pre-equilibrium
+\item {\bf October} inc development
+\item {\bf November} integration of HETC++ modules into G4
+\item {\bf December} testing HETC++ in G4. First release.
+\end{itemize}
+
+
+\section{Background}
+
+\subsection{Basics}
+Often when a high energy hadron interacts with matter,
+many secondary particles are created.
+These particles will also interact and create more secondaries,
+until the energy of the incoming primary is all used.
+The process is called a hadron cascade. 
+
+
+How these cascades develop is of great interest 
+for the design and analysis of high energy physics experiments
+as well as for shielding and dosimetry.
+
+
+Calculation of hadronic cascades involves,
+in principle, a solution of the Bolzmann transport equation.
+Because different types of secondaries can be created in inelastic interactions
+and bacause of many processes,
+the equation is impossible to bormulate explitly.
+This together with the statistical nature of the transport process involved
+make the Monte Carlo methods a natural choice for solving the cascade equations.
+
+At enegies above $\approx 200 MeV$ the wavelenght assosiated to projectile hadron 
+is of same order as nulceon in the atom.
+From the projectile particle perspective the nucleon seems relatively transparent,
+and reminds a gas of independent nucleon particles.  
+\subsection{Simulation of Hadronic Cascades}
+
+Hadron nucleus (h-A) interaction can be scematically described as a
+sequence of the following steps \cite{ferrari00}:
+
+\begin{itemize}
+\item (Glauber-Gribov) cascade and high energy collisions
+\item (Generalized) intra nuclear cascade
+\item pre-equilibrium emission
+\item evaporation/fragmentation/fission and final de-exitation
+\end{itemize}
+
+\index{hadronic cascades} \label{sec:cascades}
+
+Although the basic physical processes occurring in 
+
+
+\begin{table}[!hbt]
+\caption{Characteristic stages of hadronic showers.}
+
+\hspace{0.5cm}
+
+\label{taul:hetcCharacteristics} %\cite???
+\centering
+\begin{tabular}{lcll}
+\hline
+\em Reaction     & \em Characteristic  & \em Characteristic             & \em Effects on energy      \\
+\em product      & \em time (s)        & \em properties                 & \em resolution             \\[2.5ex] 
+\hline
+    Secondary INC& $\sim 10^{-22}$     & Multiplicity 	                & Fluctuations in $\pi^\pm$  \\
+    hadrons      &    	               & $\sim A^{0.1} \ln E$[GeV]      & versus  $\pi^0$ production \\
+		 &                     &                                &                            \\
+    Nuclear      & $10^{-18}-10^{-13}$ & Emission if p's and n's        & $\sim 15 \%$ of hadronic   \\
+    excitation   &                     & ($\sim 100 MeV$);              & cascade energy             \\
+                 &                     & evaporation of n's, $\gamma$'s & converted into             \\
+                 &                     & ($\sim 10~MeV$)                & nuclear binding            \\
+                 &                     &                                & energy losses; large       \\
+                 &                     &                                & fluctuations and           \\
+                 &                     &                                & vastly different           \\
+                 &                     &                                & detection efficiencies     \\
+                 &                     &                                &                            \\
+Pion and         & $10^{-8}-10^{-6}$   & Fractional invisible           & Negligble contribution     \\
+muon decay       &                     & energy $\sim 0.04/\ln E$[GeVe]  & due to small loss of       \\
+                 &                     &                                & $\mu$'s and $\nu$'s        \\
+\hline
+\end{tabular} 
+\end{table}
+
+Fast tracks,coming from the projectile primary interactions, show the typical $\sim log$ increase observed for $(h, N)$ interactions. 
+Gray tracks, mostly due to INC reinteractions tend to saturate just above $10~GeV$.
+Black tracks, mostly due to evaporation charged particles saturate as well.
+
+\subsection{Search of an interaction point}
+
+For a particle moving in a uniform medium with a dencity $\rho_N$, the probability of undergoing a collision in the segment $[l, l + dl]$ of its way is given by the expression
+
+\begin{equation}
+W(l) dl = e^{l/L} dl/L,
+\end{equation}
+
+where $L= 1/\rho_N \sigma^{tot}$ is the measn free path of the particle.
+The distance run by the particle 
+until it undergoes the act of interaction 
+is determined by one random number $\beta$
+
+
+\begin{equation}
+l = - L \ln \beta
+\end{equation}
+
+The cross-section $\sigma^{tot}$ of the interaction 
+between a particle and an intranuclear nucleon 
+depends on a relative velocity of colliding particles, 
+i.e., on the Fermi motion of the partner.
+To take into account this effect the kinetic energy of the partner 
+and the direction of its motion are sampled. 
+
+
+%<a href="http://www.cern.ch/RD11/rkb/PH14pp/node58.html">
+%electromagnetic showers</a> 
+%
+%are well known, this is not quite so for 
+%<a
+%href="http://www.cern.ch/RD11/rkb/PH14pp/node80.html#SECTION000800000000000000000">
+%hadronic showers</a>. 
+%The simulation of showers in
+%<a href="http://www.cern.ch/RD11/rkb/PH14pp/node19.html">
+%calorimeters</a> 
+
+needs to follow all particles to rather small energies; for hadrons,
+phenomenological approximations for {\it intra-nuclear cascades}
+    and intermediate-energy processes have to be made, and also
+    electromagnetic simulation results can be sensitive to multiple
+    low-energy cutoff parameters. 
+
+A particle with $E \le E_{cutoff}$ is absorbed by the nucleus. 
+The calculation is carried out until all secondary particles are absorbed or leave the nucleus.
+
+The number of particles in a shower
+    is very large, particularly at high energies, so that even the computing
+    resources of large laboratories can be challenged by full simulation programs.
+
+\subsection{Quantum effects in INC}
+
+\begin{itemize}
+\item Pauli blocking
+\item formation time (inelastic)
+\item coherence length ((quasi)-elastic and charge exchange)
+\item nucleon antisymmetrization
+\item hard core nucleon correlations
+\end{itemize}
+
+\subsection{Geant4}
+
+% {\it The exploitation of hadronic final states has played a key role in the
+% success of all recent HEP collider experiments. It will also be one of
+% the key issues during the LHC era. }
+
+\subsubsection{Introduction}
+
+Geant4 is a Monte Carlo particle detector simulation toolkit for
+various computing platforms and en\-vi\-ron\-ments\cite{G4UserRequirements}.
+In order to match the needs of the LHC in high energy physics
+community. Other requirements are also set by medical and space
+science applications. Geant4 has been developed by a world-wide collaboration of over 40
+institutions~\cite{wellisch99,MoURD44}.  
+The objectives of the Geant4 development project are to redesign and
+re-engineer the major CERN software tool Geant3.21 for an Object Oriented (OO) environment. 
+
+% {\it
+% \begin{itemize}
+% %\item general overview of Geant4 and its OO development (G3.21)
+% \item uses of hadronic models and their status (quite inaccurate)
+% \item requirements from the LHC
+% \item abstract interfaces??
+% \item check: HPW article, G4 web page
+% \end{itemize}
+% }
+
+\subsubsection{Hadronic Models Framework in Geant4}
+
+Geant4 exploits advanced Software Engineering techniques and Object
+Oriented technology to achieve the transparency of the physics
+implementation and to this way provide the possibility of validating the
+physics results. The stringent requirements~\cite{wellisch99} of the
+LHC and other future experiments require from the hadronic simulation framework a high
+level of flexibility, customizability, extendibility and transparency,
+which can be attained only by a systematic OO software engineering
+approach. Easy maintenance and distributed development are also
+important issues for the framework design.
+
+The hadronic models framework is based on concepts of physics
+processes and models. While the process is a general concept, models
+are allowed to have restrictions in process type, material, element
+and energy range.  Several models can be utilized by one model class; for instance, a
+process class for inelastic collisions can use distinct models for different energies.
+% Geant4 provides a flexible framework for the modular implementation of
+% various kinds of hadronic interactions.  There are distinct process
+% classes for different type of interactions (i.e. elastic and
+% inelastic).  Process classes utilize model classes to determine the
+% secondaries produced in the interaction and to calculate the momenta
+% of the particles.  Several model classes for different particles and
+% energy regimes can be used by the process classes. 
+A simplified UML
+diagram of the hadronic models framework is presented in
+
+%Fig.~\ref{fig:HadronicModelsFramework}.
+%\begin{figure} [h!tb] 
+%\centering
+%    \leavevmode
+%     \epsfig{file=kuvat/kuva_HadronicModelsFramework.ps,bbllx=55pt,bblly=400pt,bburx=565pt,bbury=755pt,width=0.8\textwidth}
+%     \epsfig{file=kuvat/arti_GENeps.ps,bbllx=55pt,bblly=400pt,bburx=565pt,bbury=755pt,width=\textwidth}
+%        \caption{Simplified UML diagram describing the hadronic
+%  processes and models framework.  Methods and variables have been
+%  left out as well as the cross-section classes.
+%Specific processes and models can be derived from G4Hadron...Process 
+%and G4...Interaction classes, respectively. \label{fig:HadronicModelsFramework}}
+%\end{figure}
+
+Geant4 process classes contain two kinds of important methods used in
+tracking: {\it GetPhysicalInteractionLength} (GPIL) and {\it
+  DoIt}.  The {\it GPIL} method gives the step length from the current
+space-time position to the next space-time point where the {\it DoIt}
+method is invoked to describe what happens in the interaction.  It
+describes the change of energy and momentum direction, change of
+position and secondary tracks by returning an instance of the class {\it G4VParticleChange}.
+
+All physics process classes are derived from the class {\it G4VProcess}. It
+has three pure virtual {\it DoIt} methods: {\it PostStepDoIt},
+{\it AlongStepDoIt} and {\it AtRestDoIt}.
+
+%\scriptsize
+%{\it
+%\begin{itemize}
+%\item G4VParticleChange* PostStepDoIt(const G4Track\& track, const
+%  G4Step\& stepData)
+%\item G4VParticleChange* AlongStepDoIt(const G4Track\& track, const
+%  G4Step\& stepData){, \rm and }
+%\item   G4VParticleChange* AtRestDoIt(const G4Track\& track, const
+%  G4Step\& stepData).
+%\end{itemize}
+%}
+%\normalsize
+%\noindent
+
+%and also three similarly named and 
+These methods return {\it G4VParticleChange} classes. 
+{\it G4VProcess} also has corresponding pure virtual GPIL
+methods, which return a {\it G4double} for the interaction length. There are
+also some other pure virtual methods common for all physics processes.
+%like the {\it IsApplicable} method, which tells whether the process
+%object is applicable to the particle type or not.
+
+For simple processes, there are base classes such as {\it
+  G4VRestProcess}, {\it G4VContinuous\-Process} and {\it G4VDiscrete\-Process}
+available. In these classes only one of the above mentioned {\it DoIt}
+methods is active. The {\it DoIt} method returns an instance of
+``Particle Change'' class (derived from {\it G4VParticleChange}),
+which is responsible for updating the step class {\it G4Step} used in
+tracking.
+
+All hadronic process objects are derived from the abstract class {\it
+  G4Hadronic\.Process} (which itself is derived from {\it
+  G4VDis\-crete\-Process} and {\it G4VProcess}), and have one or more
+cross-section data sets associated with them. These objects
+encapsulate methods and data for calculating total cross-sections for
+a given process. The default cross-sections can be overridden in whole
+or in part (for certain materials and energy regimes) by the user.
+Thus the cross-sections and physical models are implemented independently.
+
+The Geant4 hadronic model framework allows flexible use of several models
+without the need for the implementation of a special interface. 
+This way, highly specialised models can be easily used in the same
+application together with more general code. Forexample, models wich
+are valid only for one material and particle and applicable only in a restricted energy range.
+
+%At the end of 1999, there were no properly tested hadronic cascade simulation models in Geant4. 
+%Several models were implemented, but not  yet thoroughly tested. 
+Geant4 models can be divided into parametrisation driven, data driven and
+theory driven models~\cite{privAmelin, wellisch99}.
+In parametrisation driven models, the existing data for hadronic
+reactions and energies is parametrized for generating the final
+state. In Geant4, inelastic scattering models based on this paradigm are
+available for low and high particle energies.
+
+Data driven models are typically used in Geant4 for the simulation of
+nuclear low energy neutron scattering.  It is also used in the
+simulation of the absorption of some particle coming to rest. When the data
+coverage is not sufficient other types of models are used.
+
+Theory driven models are available in Geant4 for inelastic scattering
+in a first implementation, covering the full energy range of LHC
+experiments (up to $\rm14~TeV$). Theory driven models are used to
+extract the missing cross-sections from the measured ones, or at high
+energies to predict the cross-sections by using the Regge theory.
+
+
+% The hadronic cascade simulation models can be
+% divided~\cite{wellisch99} into the following three categories:
+% \begin{itemize}
+% \item parametrization driven models \ldots
+% \item data driven model \ldots
+% \item theory driven models \ldots
+% \end{itemize}
+
+\section{HETC model overview} % jaottelu oli Intro, HETC model, Algorithms
+
+\subsection{Background}
+
+
+%HETC simulates the hadronic cascade by using Monte
+%Carlo techniques to to solve the Boltzman
+%transport equation and to compute the trajectories of the primary particle
+%( p, n, Pi<sup><u>+</u></sup>, and Mu<sup><u>+</u></sup> )   and the secondary particles produced in nuclear collisions. 
+%Each particle is followed until it eventually escapes from the
+%    geometric boundaries of the system, undergoes nuclear collision or
+%    absorption, comes to rest due to energy losses from ionization and
+%    excitation of atomic electrons, or decays. 
+%
+%<p>Although originally developed in 1972, HETC has continued to undergo
+%    improvement and has been recently extended to treat the very high
+%    energies of the Large Hadron Collider (LHC) project. 
+%Presently, HETC performs the particle transport and generation in a
+ %   three-fold manner: 
+%<ol>
+%<li>for energies less than 3 GeV, particles are
+%    generated by means of an intermediate-energy Intranuclear Cascade
+%    and Evaporation Model,
+%<li>from 3 GeV to approximately 10 GeV,
+%    particle generation is done by means of a scaling model, and
+%<li>
+%    above 10 GeV, particle generation is done by means of a multi-chain fragmentation model.
+%</ol>%
+%
+%<p>HETC has been benchmarked against numerous accelerator-based and spaced-based experiments with excellent
+%success. It has also been adopted by a number of other organizations and tailored to their requirements. 
+%</p>
+%<h3>Latest development</h3>
+%<p>Latest development in HETC is it's implementation as HETC++ into
+%    Geant4. 
+%HETC++ is completely rewritten using object oriented methods and c++ language. 
+%Code is capsulated into classes according to Geant4 hadronic physics
+%processes interface.
+
+
+HETC \footnote{Full name in the original 70's manual read as 'Monte Carlo High-Energy Nucleon-Meson Transport Code System'} is a Monte Carlo transport code for computing the properties of high-energy nucleon-meson cascades in matter.
+%HETC simulates the hadronic cascade by using Monte Carlo techniques
+%to solve the Boltzman transport equation and to compute the
+It computes the trajectories of the primary particle ($p$, $n$,
+$\pi^{\pm}$, or $\mu^{\pm}$) and the secondary particles produced in
+nuclear collisions. Each particle is followed until it eventually
+escapes from the geometric boundaries of the system, undergoes nuclear
+collision or absorption, comes to rest due to energy losses from
+ionization and excitation of atomic electrons or decays. HETC cannot
+handle the low-energy neutron transport or electromagnetic
+interactions, which must be handled with other models.
+
+% HETC simulates the hadronic cascade
+% by using Monte Carlo techniques to compute the trajectories of the
+% primary particle and the secondary particles produced in nuclear
+% collisions. It was developed on the basis of the existing
+% Nucleon-Meson Transport Code (NMTC) and the incorporated code for the
+% neutron transport. The evolution of HETC code is presented in
+% Table~\ref{taul:hetcHistory}.~\cite{bertini63,ornlhetc}
+
+HETC was originally developed 
+%by researchers in the Nuclear Analysis
+%and Shielding Section of 
+in Oak Ridge National Laboratory (ORNL), Oak Ridge, Tennessee.
+%Computational Physics and Engineering Division 
+in 1972 using FORTRAN IV nad IBM 360/370.  
+Basically HETC was written as extension to NMTC code.
+
+
+Major parts of the original Bertini INC code are still present, 
+making the code extremely difficult to read. 
+Until nowadays, HETC has undergone several improvements and
+has been recently extended to treat the very high energies of the LHC.
+Usually the improvements have been related to the update of
+experimental cross-sections or to revision of specific collision
+models such as the multi-chain fragmentation model~\cite{alsmiller90}.
+HETC has been developed by many different groups, but unfortunately
+with no coordination.  As a result, many different versions of the
+code exists.  The basic ideas of HETC have, however, not changed. \cite{bertini68}
+
+HETC has been included in many multi-purpose codes like HERMES, CALOR
+and also in the Geant3.21 code, where it was implemented via an
+interface called GCALOR. HETC has been benchmarked against numerous
+accelerator-based and space-based experiments with excellent success.
+It describes energy resolutions in calorimeters with quite good
+precision, and in Geant3.21, it was the prime candidate for radiation
+studies when combined to the MICAP (the Monte Carlo Ionization Chamber
+Analysis Program) transport code~\cite{wellisch}.
+%which is used to simulate neutrons of low energy ($<20$~MeV)
+HETC has also been adopted by a number of other organizations than
+CERN, although it has often been tailored to their specific
+requirements.
+
+
+\subsection{Characteristics of HETC98}
+%\subsection{Summary of  model features}
+The version of HETC used in our Geant4
+implementation work is HETC98 from year 1998 as used in BaBar
+experiment. 
+It's characteristics are enumerated in Table~\ref{taul:hetcCharacteristics}.
+
+% \begin{table}[hbt]
+% \caption{Evolution of the HETC code. Different versions and the
+% related restrictions. ~\cite{hetc,alsmiller90}} \label{taul:hetcHistory} 
+% \centering
+% \begin{tabular}{|l|l|}
+% %\hline
+% %\multicolumn{2}{|c|}{HETC (High Energy Transport Code} \\
+% \hline
+% Version                 &       Restrictions or improvements\\
+% \hline
+% NTC (early 1960's)      &       $E_0 <\  \sim400$~MeV \\
+% NMTC (1971)     &       $E_0 <\  \sim3$~GeV \\
+% HETC/RSIC version (1972)        & $E_0$ above 3~GeV, incorporates \\
+%                         &       MECC-7 and EVAP IV \cite{armstrong72}\\
+% HETC/ORNL version       &       Nuclear data updated, \\
+%                         &       multiple scattering updated \\
+% HETC/Science Applications Inc.  &       Time dependence added,\\        
+% version                 &       transport extended to ion beams \\
+%                         &       of deuterons to alpha particles \\
+% HETC88 (1988)           &       Multi-chain fragmentation model added\\
+%                         &       for $E<5~{\rm GeV}$ \\
+% \hline
+% \end{tabular} 
+% \end{table}
+
+\begin{table}[!hbt]
+\caption{Overview of Characteristics of HETC Code.}
+
+\label{taul:hetcCharacteristics} %\cite???
+\centering
+\begin{tabular}{|l|l|}
+%\hline
+%\multicolumn{2}{|c|}{Characteristics of HETC} \\
+\hline
+Particles transported   &       Neutrons ($\geq15~\rm MeV$), protons, $\pi^\pm$, $\mu^\pm$ \\
+%Particle energies allowed& At least $200~\rm TeV$ for protons~\cite{alsmiller90}        \\
+Particle energies allowed& Up to $20~\rm TeV$ for incident nucleons and pions~\cite{alsmiller90}        \\
+Mechanisms included     &       - Ionization and excitation \\
+                        &       - Multiple coulomb scattering \\
+                        &       - Range straggling, \\
+                        &       - $\pi^\pm$ and $\mu^\pm$ decay \\
+                        &       - Nuclear interactions \\
+Calculational method    &       Monte Carlo\\
+Nuclear collision model &       - Intranuclear-cascade-evaporation ($E<3$~GeV)\\
+                        &       - Sternheimer-Lingenfelter isobar model for $\pi$ production ($E < 3~GeV$) \\
+                        &       - Scaling model ($E > 3~GeV$) \\
+                        &         (Phenomenological fits \\
+                        &          to experimental data) \\
+%Geometry                &       Three dimensional \\
+Materials allowed       &       Arbitrary\\
+Restrictions            &       $\pi^0$, $\gamma$ and heavy particles (d, t,\HET, \HEF \\
+                        &        and residual nuclei products) \\
+                        &       computed but not transported\\
+Examples of applications&       - Accelerator and spacecraft shielding,\\
+                        &       - Neutron cosmic ray background in Earth's \\
+                        &       atmosphere \\
+			&       - Doses for biological cell survival,\\
+                        &       - Transmutation of\\
+                        &       nuclear waste materials~\cite{hetc}\\
+Principal shortages     &       Low-energy neutron transport ($E<15$~MeV) \\
+                        &       electrons and $\gamma$'s\\
+\hline
+\end{tabular} 
+\end{table}
+%                        &       - Scaling model ($3~{\rm GeV} < E < 5~{\rm GeV}$)\\
+%                        &       Multi-chain fragmentation ($E>5$~GeV)\\
+
+%\begin{itemize}
+%\item history, different versions
+%\end{itemize}
+
+
+%\begin{minipage}{\textwidth}
+Particle transport and generation is handled in HETC98 with three different approaches:
+ The code takes into account the dacay of charged pions and muons, 
+nonelastic nucleon- and charged-pion-nucleus collisions.
+Negative-pion capture at rest is treated via the INC evaporation model.
+
+\begin{enumerate}
+\item For energies less than $3~{\rm GeV}$, particles are generated by means
+    of an intermediate-energy intranuclear cascade and evaporation models. 
+The maximum allowable source-particle energies is not well defined.
+The lower limit for the model is 20~MeV.
+\item From $3~{\rm GeV}$ to approximately $10~{\rm GeV}$, 
+particle generation is done by means of a scaling model, 
+which combines the two different models.
+%\nopagebreak[4]
+\item Above $10~{\rm GeV}$, particle generation is done by means of a
+    multi-chain fragmentation model.% (see chapter~\ref{chap:simuHadrCascs}).
+\end{enumerate}
+%\end{minipage}
+
+% Before the implementation of the multi-fragmentation model in HETC88,
+% the first approach of an INC and evaporation models was used with an
+% extrapolation model for energies greater than 3~GeV. The extrapolation
+% model, however, only extrapolated the results from the INC-evaporation
+% model at 3~GeV enegies, and gave poor results.
+
+In our implementation, only the approach 1 is implemented.
+%the approaches 2 and 3 are not implemented.
+%The multi-fragmentation model has its origin in the transport code
+%FLUKA87, and, for copyright reasons, it cannot be used in Geant4.
+%is not available for Geant4 hadronic models.
+
+
+The functionality of HETC code in the lowest energy region can easily be
+divided into three different parts, which are: the intranuclear
+cascade (INC), which treats the interaction of high energy particles
+with a nucleon; the de-excitation of the resulting nucleus by
+evaporation of nucleons (in contrast to fission); and the transport of
+primary and secondary particles in a thick target. In our work, also a
+pre-equilibrium model, which usually is not part of the HETC, is
+included in the model, whereas the transport part is left out, 
+since it is handled by Geant4.
+
+%\begin{itemize}
+%\item three different models for different regimes
+%\end{itemize}
+
+% In the Geant4 implementation of HETC, there are three different parts
+% that are use sequantially. First, the intranuclear cascade model is
+% used. Then, a pre-equilibrium model is used to simulatee the
+% transition to a thermodynamic equilibrium. It is followed by the
+% evaporation and de-excitation algorithms, which handle the
+% de-excitation of the nucleus by via emission f light nuclei and gamma
+% particles.
+
+\section{Intranuclear cascade (INC) model}
+
+In HETC, different nuclear variables are calculated from models.  Only
+%$N$-$N$ 
+nucleon-nucleon cross-sections are taken as external variables. 
+In the following we review the characteristics of the nuclera model in HETC.
+The main variables are listed int Table :::
+
+
+Short sketch of the model:
+
+\begin{itemize}
+\item If an interaction is supposed to happen, the impact point onto thenucleus is calculated
+\item the nucleus is split into three different regions with different potentials, nucleon densities and Fermi energies.
+
+\item nucleon-projectile interction is chosen according to partial cross-sections
+\item the products of the interaction are tracked trough the regions  until the energy drops below a cut-off energy.
+\end{itemize}
+
+\section{Cross-sections}
+Probabllility for interactions during INC is obtained using free (N, N) cross-sections. 
+Cross-sections for production of one or two $\pi$ are included. 
+
+Interaction ($\pi$, $N$) is equally
+\section{Nuclear model}
+We present here the nuclear model used in HETC.
+
+\subsection{Nucleon dencity in the atom}
+
+Continuous charge dencity
+\begin{equation}
+\rho(r) = \frac{\rho_1}{e^{\frac{r-c}{a}}+1}
+\end{equation}
+
+where $a= 0.545~fm$ and $cA^{1/3} = 1.07~fm$. $A$ is mass number and $\rho_1$ mormalization parameter.
+
+In the code the nucleus is composed of three consentric spheres, 
+corresponding $0.9$, $0.2$, and $0.01$ of the maximal dencity.
+In every reqion the dencity is uniform, 
+and defined as mean value of continuos charge distribution.
+Normalization is set so that when integrating over the reqions, correct number of nucleons is achieved.
+ 
+\subsection{Impulse distribution}
+Impulse distribution in each region follows Fermi fermi distribution with zero temperature.
+
+\begin{equation}
+f(p) = c p ^2
+\end{equation}
+
+where
+
+\begin{equation}
+\int_0^{P_f} f(p) dp = n_p or n_n
+\end{equation}
+
+where $n_p$ and $n_n$ are the number of protons or neutrons in region.
+$P_f$ is impulse corresponding the Fermi energy
+
+
+\begin{equation}
+E_f = \frac{P_f^2}{2m} = \frac{\hbar^2}{2m}(\frac{3\pi^2n}{v})^\frac{2}{3}
+\end{equation}
+ 
+which depend on the dencity $n/v$ of particles, 
+and which is different for each particle and each region. 
+The total distribution as on composite does not follow Fermi distribution with zero temperature.
+
+\subsection{Distribution of potential energy}
+The binding energy is systematically set to be $7~MeV$. 
+In each region protons and neutrons have different potential energy.  
+\subsection{Pauli exclusion principle}
+
+Constrains imposed by the Pauli exclusion principle 
+are taken into account 
+by comparing energies of secondary particles.
+If among socondary particles 
+there is a nucleon with the energy lower than the Fermi energy 
+$E < E_F$, then this interaction is consideres prohibited,
+and the trajectori of the particle is traced further from the forbideden point.
+
+
+Energies of particles are compared with the so-called cut-off energy $E_{cutoff}$.
+Particles with the energy $E > E_{cutoff}$ participate in the development of the INC.
+Typical values are listed in Table~\ref{table:cutoff}.
+
+
+\begin{table}[!hbt]
+\caption{Typical cut-off values for HETC particles.}
+
+\hspace{0.5cm}
+
+\label{table:cutoff} 
+\centering
+\begin{tabular}{lcll}
+\hline
+\em Particel   	& \em cut-off      	\\
+\em Particel  	& \em enrgy [MeV]   	\\[2.5ex] 
+\hline
+$p$    		& $15$   		\\
+$n$         	& $15$   		\\
+$\mu$         	& $0.2$   		\\
+$\pi^\pm$     	& $2$   		\\
+\hline
+\end{tabular} 
+\end{table}
+
+
+\subsection{Description of INC}
+
+A key feature of this model is that, at sufficiently high energies,
+the initial phase of reaction can be treated int terms of collisions
+of the incident particle with individual nucleons inside the nucleus. 
+The struck nucleons can cause further collisions, giving rise to a
+particle ``cascede'' inside the nucleos; hence the term intranuclear
+cascade describing this process.
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+    \rotatebox{0}{\mbox{\epsfxsize=8cm \epsfysize=6cm \epsffile{\AATOS pictures/mc.eps}}}
+	\caption{Schematic diagram describing Monte Carlo simulation of INC. 400 MeV proton in colliding withnucleus, 
+Here. for simplicity only one region is used. Crosses incicate Pauli-plocking}
+  \label{sibtoo}
+  \end{center}
+
+\end{figure}
+
+
+The implementation of the INC model is briefly described in the following steps:
+\newcounter{list}
+\begin{list}{\upshape \arabic{list}. }
+        {\usecounter{list}
+        \setlength{\labelwidth}{2cm}\setlength{\leftmargin}{2.6cm}
+        \setlength{\labelsep}{0.5cm}\setlength{\rightmargin}{1cm}
+        \setlength{\parsep}{0.5ex plus0.2ex minus0.1ex}
+        \setlength{\itemsep}{0ex plus0.2ex}} %slshape
+\item The spatial point where the incident particle enters the nucleus is determined by selecting it uniformly from the circle presenting the area of the nucleus projected on a plane.
+\item A path length for the distance the particle travels before
+        collision is selected by using the total particle-particle
+        cross-sections and region-dependent nucleon densities.% (three
+%        different regions).
+\item If the particle escapes the nucleus without a collision, it will
+        no longer be tracked in the INC model. Otherwise, the momentum
+        of the struck nucleon, the type of reaction and the energy and
+        direction of the reaction products are determined.
+\item If the collision is not forbidden by the Pauli exclusion principle and
+        if the kinetic energy of the product is above a predefined
+        cutoff energy, the algorithm goes to step 2 to transport all
+        the products further in the nucleus.
+\item When the cascade is completed, the mass $A'$ and charge $Z'$ of
+        the residual nucleus are determined from their conservation
+        laws. Also the residual excitation energy $E^*$ is determined
+        from the energy conservation law.
+\end{list}             
+%\end{minipage}
+
+
+After the INC has been accomplished, $A'$, $Z'$ and $E^*$ are
+used as input for the pre-equilibrium and the subsequent evaporation
+algorithms to determine the number, type and energy of nucleons and
+heavier particles ($d$, $t$, \HET\ and $\alpha$ particles)
+emitted. The remaining excitation energy is assumed to dissipate by
+photon emission. 
+%The $A$ and $Z$ of the final nucleus are then determined.
+\subsection{Scaling model}
+The information (particle types, energies, direction cosines, etc.)
+obtained from the INC can be given as input to scaling routines, 
+that use an extrapolation model to obtain the description of the collision products 
+corresponding to the actual energy or the particle.
+\section{Pre-equilibrium model}
+\subsection{Separtion between INC and evaporation}
+
+
+The outline of the pre-equilibrium model is as follows~\cite{ferrari96}:
+\begin{list}{\upshape \arabic{list}. }
+        {\usecounter{list}
+        \setlength{\labelwidth}{2cm}\setlength{\leftmargin}{2.6cm}
+        \setlength{\labelsep}{0.5cm}\setlength{\rightmargin}{1cm}
+        \setlength{\parsep}{0.5ex plus0.2ex minus0.1ex}
+        \setlength{\itemsep}{0ex plus0.2ex}} %slshape
+    \item For a given excitation energy $E$, atomic number $A$ and
+      number of excitons $n$ the equilibrium number of excitons
+      $n_{eq}=\sqrt{0.5 + 2 g E}$ is calculated ($g$ is the single
+      particle level density). Now if the current exciton number
+      $n\geq n_{eq}$ or the excitation energy is below a predefined
+      level (i.e. 50~MeV), then the pre-equilibrium algorithm is
+      finished and further emission of fragments is done with an
+      equilibrium model (here the evaporation model). If $n<n_{eq}$,
+      the next step is performed.
+\item   The transition probabilities and emission probabilities for $n$, $p$, 
+        $d$, $t$, \HET\ and \HEF\ are calculated for
+        the current nucleus. The probabilities are normalized, and one
+        subprocess (emission or transition) is selected.
+\item   In case of a transition the number of excitons is updated, if
+        necessary, and the algorithm returns to step~1. Otherwise 
+        the next step is performed.
+\item   The kinetic energy of the fragment is selected.
+\item   Momentum direction angles of the fragment are sampled from an
+        isotropic distribution in the exciton system rest frame. The
+        momentum is then boosted to the nucleus rest frame.
+\item   Characteristics of the residual nucleus ($A$, $Z$, $E$ and 
+        momentum $P$) are updated. The algorithm returns to step~1.
+\end{list}             
+%\end{minipage}
+
+In HETC pre-equilibrium code have been used to replace the INC in in energy range $E < 200~MeV$.
+\subsection{Model for Hydrogen nonelastic collision}
+
+Nonelastic collisions with hydrogen nuclei are treated using experimental data 
+and calculational nethod of Gabriel, Santoro and Barish.
+
+\subsection{Implementation of CEM95 into Geant4.}
+CEM95 is
+
+The code CEM95 is intended for  the Monte Carlo calculation of nuclear
+reactions in the framework of the Cascade-Exciton Model (CEM) of
+nuclear reactions. The CEM assumes that reactions occur in three
+stages. The first stage is the intranuclear cascade. The excited
+residual nucleus formed after the  emission of cascade particles
+determines the particle-hole configuration that is a starting point
+for the second preequilibrium stage of the reaction. The subsequent
+relaxation of the nuclear excitation is treated in terms of the
+exciton model of preequilibrium decay which includes the description
+of the equilibrium evaporative stage of the reaction.
+
+
+ The CEM95 code is intended for calculation of reaction, elastic,
+ fission and total cross sections;  excitation functions; nuclide
+ yields, energy and angular spectra; double differential cross
+ sections; mean multiplicities, i.e., number of ejectiles per incident
+ bombarding particle; ejectile yields; mean energies and production
+ cross sections for neutrons, protons, deuterons, tritons, He3, He4,
+ pions-, pions0, and pions+ emitted in nucleon- and pion-induced
+ reactions using the Cascade-Exciton Model (CEM) of Nuclear
+ Reactions. A detailed description of the CEM may be found in
+ Ref.1. Part of primary version of the code concerning the
+ preequilibrium and equilibrium stages of reactions is published in
+ Ref.2. The Dubna version of the  intranuclear cascade model used in
+ the CEM95 is described in detail  in the monograph 3. A detailed
+ description of the subroutines used at the cascade stage of reaction
+ may be found in Ref.4. All the models incorporated in the CEM95 for
+ description of the level density parameter are given in Ref.5. All
+ the models incorporated in the CEM95 to take into account competition
+ between particle emission and fission at the compound stage of the
+ reactions are described in  Ref.6. Exemplary results obtained with
+ the code CEM95 may be found in Refs.7,8.
+
+9.
+STATUS
+IAEA1247/01: 21-APR-1995 tested at NEADB
+1015.
+
+NAME AND ESTABLISHMENT OF AUTHORS -.
+
+  Dr. Mashnik Stepan
+  Laboratory of Theoretical Physics
+  Joint Institute for Nuclear Research
+  141980 DUBNA
+  Moscow Region
+  RUSSIAN FEDERATION
+
+A.  Cross Section and Resonance Integral Calculations                              
+Computation of reaction  cross sections  from nuclear theory such  as        the  optical  or  Hauser Feshbach models,  resonance cross  sections  by        Breit Wigner or  multilevel theory, determination of differential  cross sections, cross section evaluation, and compilation programs.
+Keywords: evaporation model, high-energy reactions, nuclear cascades,
+nuclear models. \cite{gudima83}, \cite{mashnik94} 
+
+\begin{itemize}
+
+\L{CEM95 \\  http://www.nea.fr/abs/html/iaea1247.html}
+{http://www.nea.fr/abs/html/iaea1247.html}
+
+\end{itemize}
+
+
+\section{Evaporation model}
+
+After the pre-equilibrium model, the nucleus is assumed to be in an
+excited state, but in an internal thermal equilibrium.  The excitation
+leads to emission of nucleons, light nuclei and $\gamma$ particles,
+which are handled with the evaporation and de-excitation algorithms
+\cite{iljinov92}.
+
+%described in {\bf Chapter}. 
+
+The evaporation algorithm %described in Fig.~\ref{fig:hetcVuokaavio} 
+%is quite straight-forward. It 
+consists of subsequent evaporation cycles, which are repeated until no
+further evaporation is energetically possible.
+%as long as the nucleus remains excited. 
+On
+each evaporation cycle, one particle ($n$, $p$, $d$, $t$, \HET\ or
+\HEF) is sampled and emitted. The emission probabilities are obtained
+according to the statistical evaporation theory of
+Weisskopf~\cite{weisskopf37},where the probability to emit a
+particle $i$ with kinetic energy between $\epsilon$ and $d\epsilon$
+from a compound nucleus excited to an energy $E^*$ (measured from the
+ground state) is
+\begin{equation}\label{eq:weisskopf}
+        P_i(\epsilon)d\epsilon = \frac{(2S_i+1)m_i}{\pi^2 \hbar^3} \sigma_{inv,i}(\epsilon)
+        \frac{\rho_f(E^*- Q_i - \epsilon)}{\rho_i(E^*)}\epsilon d\epsilon,
+\end{equation}
+where $\rho$'s are the nuclear level densities for final and the
+initial nuclei, $\sigma_{inv,i}$ is the cross-section for the inverse
+reaction (total cross-section for capture of particle $i$ of energy
+$\epsilon$ by the residual nucleus), $S_i$ and $m_i$ are spin and mass
+of the emitted particle and $Q$ is its separation energy. This formula
+also describes the kinetic energy distribution of the emitted particle.  The
+state of the residual nucleus is updated when another cycle begins.
+When no further particle emission is possible, the (still excited)
+residual nucleus is given to the de-excitation algorithm. It is also
+possible that there is no residual nucleus, as in the splitting of
+\BEE.
+
+In the de-excitation algorithm, the remaining excitation energy of the
+residual nucleus is used to emit photons, which are uniformly
+distributed in the CMS frame. Their kinetic energy is sampled from a
+uniform distribution between zero and the residual excitation energy.
+Photons from this energy distribution are emitted as long as the
+remaining excitation energy is positive; otherwise the kinetic energy
+of the emitted photon is greater than the remaining excitation energy,
+and in this case it is set to be equal to the remaining excitation
+energy, which then goes to zero. This also ends the de-excitation
+algorithm.
+
+
+
+\section{De-exitation model}
+
+%\begin{itemize}
+%\item short description of INC, pre-equilibrium and evaporation \& de-excitation models
+%\end{itemize}
+
+\section{Implementing the HETC models into Geant4 } %:::make
+
+
+\subsection{General architecture}
+
+%\begin{figure} [h!tb] 
+%\centering
+%    \leavevmode
+%     \epsfig{file=kuvat/kuva_HETCpackages.eps,width=0.8\textwidth}
+%        \caption{UML diagram describing the architecture used in the implementation of HETC to Geant4.  \label{fig:hetcInGeant}}
+%\end{figure}
+
+Figure \ref{fig:hetcInGeant} describes general architecture used in
+our HETC implementation. We divide project into three separate
+architectural elements according to physics models: INC, pre-equilibrium and evaporation part.
+
+The HETC implementation is treated as a discrete process and it is
+inherited under {\it G4HadronInelasticProcess}.   
+
+\subsection{Implementation of INC model}
+
+
+\subsection{Implemetaion of pre-equilibrium model}
+
+
+\subsection{Implementation of Evaporation and De-exitation Models}
+
+%::: lleeter info follows 
+%Tein koodista sellaista kuin HPW halusi.  Laitoin evaporation-hakemiston
+%sisallon webbiin (BertiniEvapDx.tar.gz).  Sen doc-hakemisto on tosin viela
+%kesken, sinne pitaisi laittaa ajan tasalla oleva UML-kuva ja varmaan se
+%meidan raportti.  Se mun dippani on myos siella, koska vaikka sen UML-kuva
+%onkin vanhentunut, niin siina on kuitenkin kuvaus teoriasta.
+ 
+%Laitanpa tahan yhteenvedon koodiin tekemistani muutoksista, kun ne kerran
+%viela tuoreessa muistissa ovat.
+ 
+%Entinen paaluokka G4BertiniEvaporation.hh on nyt jaettu
+%G4BertiniEvaporation- ja G4BertiniDeexcitation-luokkiin.  Ne on periytetty
+%G4VEvaporation:sta ja G4VPhotonEvaporation:sta.  Niista on
+%tarkoitus ulkopuolelta kayttaa seuraavia public-metodeja:
+%---
+%G4FragmentVector * BreakItUp( const
+%G4Fragment & nucleus);  void setVerboseLevel( const G4int verbose );
+%--- (eli siis samanlaiset metodit molemmissa)
+ 
+%G4LayeredNucleusta en siis kayta enaa ollenkaan.
+% 
+%Evaporaatiokanavat ovat ennallaan (6 kpl), sen sijaan
+%gamma-de-eksitaatio-kanavan nimi on muutettu (G4BEGammaDeexcitation ->
+%G4BertiniDeexcitationChannel).
+% 
+%Muutin nuo muutamat testini yhteensopiviksi tuon uuden interfacen kanssa.
+%Pikaisten kokeilujen jalkeen testit nayttavat antavan samoja tuloksia kuin
+%siina raportissa ja dipassani on (en piirtanyt kuvaajia, mutta
+%numeerisessa muodossa se oli ihan samankaltaista).
+% 
+%Muuten, jos meilla on utils-luokkia kaytossa, niin mun luokissa olevat
+%isotropicCosines-metodit (arpovat isotrooppisesti jakautuneet kosinit)
+%voisi laittaa utils-luokkiin.  Mutta toimiihan tuo nakojaan nytkin.
+                                              
+The implementation of the evaporation and de-excitation models in
+Geant4 are described in Fig.~\ref{fig:bertiniUML}.  The interface to
+the {\it G4Cascade} is done with the class {\it G4BertiniEvaporation}.
+It has two methods, one for breaking up the nucleus and one for
+setting the verbose level, with which Geant4 controls the amount of
+details printed on the screen.  The method {\it BreakItUp} takes the
+excited nucleus {\it G4LayeredNucleus} as its parameter.
+
+As for the internal structure of the evaporation package, {\it
+  G4BertiniEvaporation} is an aggregate of six evaporation channels
+corresponding to each type of emission particle, and of one
+de-excitation channel for photon emission.  Chargeless
+neutrons have a distinct class for their evaporation
+channel, whereas charged particles have a class for their common
+properties ({\it G4BEChargedChannel}), from which the distinct
+channels are inherited. On the whole, the size of the implementation
+of evaporation and de-excitation models was about 1800 lines of code.
+%from which 330 were in the header files.
+
+The implementation was done in two phases.  In the first
+implementation, the purpose was to reproduce the results of the HETC98
+code by using the same algorithms and constants (i.e.\ particle
+masses and algorithms to calculate the Q values) and thus ensure the
+same functionality as in the HETC98 code. In the second phase, the
+model was modified to use Geant4 constants and utility classes as well
+as the kinetic energy sampling algorithm described
+in~\cite{dostrovsky59}.  When compared to the simulation results of
+the original (Fortran-based) HETC98 code, similar results were
+expected with the first implementation, whereas some differences were
+expected with the second implementation.
+
+
+%\begin{figure} [h!tb] 
+%\centering
+%    \epsfig{file=kuvat/kuva_bertiniUML.eps,width=11cm}%12.6cm}
+%   \caption{ UML Class diagram of the evaporation and de-excitation
+%   models.  For the sake of clarity, the parameters and return
+%   values have been left out.}
+%    \label{fig:bertiniUML} 
+%\end{figure}
+
+% \begin{itemize}
+% \item implementation \& class diagram
+% \item differences due to use of G4 utility classes and different
+%   energy sampling algorithm
+% \end{itemize}
+
+\section{Testing}
+
+To validate the functionality of the HETC code, several simulations
+were carried out. As the other parts of the implementation of HETC
+were not yet ready, the evaporation and de-excitation model was run
+separately in order to check its functionality. Some elementary tests
+were carried out to validate the implementation. 
+%Also, the results
+%were compared with experimental results when available.
+
+There were no remarkable differences between the results of the first
+implementation and the results of the HETC98 code. The differences, which
+were of the order of a couple of percent, were thought to arise from
+statistical fluctuations. In the comparisons, excitation functions for
+all emitted particles as well as for neutrons and protons separately
+were considered. Three different elements ($^{16}{\rm O}$, $^{63}{\rm
+  Cu}$ and $^{208}{\rm Pb}$) were considered. The graphs of these
+tests are, however, omitted here.
+
+When the results of the second implementation were compared to the
+results of HETC98, larger differences were found. On the excitation
+functions of all emitted particles, seen in
+Fig.~\ref{fig:kaikki}, there are differences of the order of 20~\%
+with $^{16}{\rm O}$. When the excitation functions of neutrons and
+protons are considered (Figs.~\ref{fig:neu} and \ref{fig:pro}), there
+are again such differences with $^{16}{\rm O}$. In other excitation
+functions, except perhaps that of protons with $^{63}{\rm Cu}$, the
+differences are less than 10~\%. There are also large differences in
+the proton excitation function of $^{208}{\rm Pb}$, but this can be
+explained by the fact that the proton emission is a very rare event
+and the related statistical fluctuations are again very large. As to
+the comparison of the kinetic energies of the emitted neutrons and
+protons (Figs.~\ref{fig:kinEneuts} and \ref{fig:kinEprots}),
+differences of less than 20\% were found whenever statistical
+fluctuations were small.
+
+%\begin{figure}[p]
+%\centering
+%\begin{tabular}{c}
+%    \epsfig{file=kuvat/kuva_kaikki.ps,bbllx=50pt,bblly=411pt,bburx=554pt,bbury=605pt,width=0.7\textwidth,clip=}\\
+%    \epsfig{file=kuvat/kuva_kaikkierror.ps,bbllx=50pt,bblly=323pt,bburx=555pt,bbury=463pt,width=0.7\textwidth,clip=} \\
+%\end{tabular}\\
+%    \caption{ Average multiplicity of all evaporated particles
+%      of $^{16}{\rm O}$, $^{63}{\rm Cu}$ and $^{208}{\rm Pb}$
+%      simulated and compared with the HETC98 code. The obtained
+%      average multiplicities and the relative difference (\%) are
+%      shown.}
+%      \label{fig:kaikki}
+%\end{figure}
+
+%\begin{figure}[p]
+%\centering
+%\begin{tabular}{c}
+%    \epsfig{file=kuvat/kuva_neu.ps,bbllx=50pt,bblly=411pt,bburx=554pt,bbury=605pt,width=0.7\textwidth,clip=}\\
+%    \epsfig{file=kuvat/kuva_neuerror.ps,bbllx=50pt,bblly=323pt,bburx=555pt,bbury=463pt,width=0.7\textwidth,clip=} \\
+%\end{tabular}\\
+%    \caption{ Average multiplicity of evaporated neutrons
+%      of $^{16}{\rm O}$, $^{63}{\rm Cu}$ and $^{208}{\rm Pb}$
+%     simulated and compared with the HETC98 code. }
+%      \label{fig:neu}
+%\end{figure}
+
+
+%\begin{figure}[p]
+%\centering
+%\begin{tabular}{c}
+%    \epsfig{file=kuvat/kuva_pro.ps,bbllx=50pt,bblly=411pt,bburx=554pt,bbury=605pt,width=0.7\textwidth,clip=}\\
+%    \epsfig{file=kuvat/kuva_proerror.ps,bbllx=50pt,bblly=323pt,bburx=555pt,bbury=463pt,width=0.7\textwidth,clip=} \\
+%\end{tabular}\\
+%    \caption{ Average multiplicity of evaporated protons
+%      of $^{16}{\rm O}$, $^{63}{\rm Cu}$ and $^{208}{\rm Pb}$
+%      simulated and compared with the HETC98 code. }
+%     \label{fig:pro}
+%\end{figure}
+
+%\begin{figure}[p]
+%\centering
+%\begin{tabular}{c}
+%    \epsfig{file=kuvat/kuva_kinEneut.ps,bbllx=50pt,bblly=411pt,bburx=554pt,bbury=605pt,width=0.7\textwidth,clip=}\\
+%    \epsfig{file=kuvat/kuva_kinEneuterror.ps,bbllx=50pt,bblly=511pt,bburx=555pt,bbury=592pt,width=0.7\textwidth,clip=} \\
+%\end{tabular}\\
+%    \caption{ Kinetic energies of evaporated neutrons of
+%      $^{16}{\rm O}$, $^{63}{\rm Cu}$ and $^{208}{\rm Pb}$
+%     simulated and compared with the HETC98 code. }
+%      \label{fig:kinEneuts}
+%\end{figure}
+
+%\begin{figure}[p]
+%\centering
+%\begin{tabular}{c}
+%    \epsfig{file=kuvat/kuva_kinEprot.ps,bbllx=50pt,bblly=411pt,bburx=554pt,bbury=605pt,width=0.7\textwidth,clip=}\\
+%    \epsfig{file=kuvat/kuva_kinEproterror.ps,bbllx=50pt,bblly=511pt,bburx=555pt,bbury=592pt,width=0.7\textwidth,clip=} \\
+%\end{tabular}\\
+%    \caption{ Kinetic energies of evaporated protons of
+%      $^{16}{\rm O}$, $^{63}{\rm Cu}$ and $^{208}{\rm Pb}$
+%      simulated and compared with the HETC98 code. }
+%      \label{fig:kinEprots}
+%\end{figure}
+\section{Results}%:::
+
+%\section{HETC++ documentation}%:::
+
+
+\section{Conclusion}%:::
+
+Implementation of evaporation and de-excitation has been done according to the
+OO principles is now ready and can be integrate to Geant4 hadronic
+model framework
+
+In evaporation model different MC results compared to old Fortan
+version come from statistical fluctuations, 
+but also from changement of constants and energy algorithm, 
+quite large differences with light $^{16}$O, fission not considered
+
+INC and pre-equilibrium models are now largely translated to
+C++. OOA\&D need to be finished before results are available from
+these modules.
+ 
+
+\section{Acknowledgements}
+
+We thank Hans-Peter Wellisch, Veikko Karim\"aki, Antti Honkanen, Pertti Aarnio and Mika Huhtinen for useful advice concerning Geant4 and hadronic simulations.
+
+
+\bibliographystyle{unsrt}  % Options plain, unsrt, alpha, abbrv
+
+
+%\bibstyle{plain}
+
+\bibliography{\AATOS texts/references/references.bib} 
+
+
+\clearpage
+\begin{appendix} %:::
+\section{APPENDIX / HETC UML-diagrams} %:::
+\begin{figure}[h]
+\leavevmode
+\begin{flushleft}
+%\mbox{\epsfxsize=10cm\epsfysize=3.286cm\epsffile{\AATOS
+%pictures/hip.eps}}
+\mbox{\epsffile{hetc.eps}}
+\end{flushleft}
+\end{figure}
+
+\section{APPENDIX / Working document} %:::
+
+\subsection{laura}
+\subsubsection{testing}
+\scriptsize 
+\begin{verbatim}
+25.6 
+
+20.6
+Most of the methods in class G4Cascade are suitable for testing.
+So, prepare test for shorter routines (max 3 windows of code). 
+18.6 
+G4Cascade::exprnf
+G4Cascade::gaurn
+G4Cascade::gtiso
+G4Cascade::getrig
+G4Cascade::zfoi 
+G4Cascade::modify
+G4Cascade::energy 
+G4Cascade::enrg
+G4Cascade::xlamb  (note: xlamb.cc should work now!)
+15.6
+G4Cascade::shxd 
+G4BertiniCascade::big7 
+11.6
+G4BertiniCascade::mud
+
+\end{verbatim}
+\normalsize
+
+\subsubsection{OO design and implementation of Bertini
+data set ({\tt chetc.dat}) into HETC++}
+
+20.6.\\
+I did some cleaning of your functions and documented few parameters
+used there.
+
+{\bf tools} \\
+Use command {\tt please info {\it keyword}} 
+to get help on the ugly variable names (example: {\tt please info pion}.
+In file {\tt hetc/inc/utils/globals.hh} we keep a list of all strange
+names of old and new version of HETC. 
+
+Please, make your own list where all strange names are listend and explained.
+
+Suggested steps in this coding exercise:
+\begin{itemize}
+\item pahse 0: study carefully the code and make notes
+\item phase 1: use {\tt read.cc} as an help to implement commented read
+lines in c++ code
+\item phase 2: create new class G4HETCData and implement Bertini data
+in good OO manner  
+\item phase 3: visualize cross section data, also the data in
+global.hh, using ROOT (see FittingDemo.C as an example of visualizing
+data vectors)
+is useful example)
+\item phase 4: use G4HETCData with other hetc++ classes
+\item phase 5: plan g4 integration
+\end{itemize}
+
+files/methods involved:
+\scriptsize 
+\begin{verbatim}
+chetc.dat
+read.cc
+G4Cascade methods:
+gthsig 
+sgm
+xsec
+shxd
+readh,
+original code comes from dres.f 
+(reads data into vectors 
+waps, cam2 and cam3, which are 
+needed in G4Cascade::energy and enrg)
+\end{verbatim}
+\normalsize
+
+\subsection{aatos}
+Protos for cascade classes:
+
+\begin{verbatim}
+
+mother classes
+...............
+
+G4VCrossSectionDataSet 
+
+G4VIntranuclearTransportModel
+
+G4VPreCompoundModel
+
+G4VElasticScatterer
+
+key classes
+...........
+
+
+Idea:  common block caterogies: COM3, COM and rest
+
+
+G4Cascade(Model) (manager, everything starts from here and is coordinated)
+
+----------------
+ -inherits form VIntranuclearTransportModel
+ - has Nucleus
+ -has ParticleVecors (G4KineticTrackVector, G4DynamicParticleVector,G4ParticleChange )?
+does: 
+-manage initialization
+-component suncronizations
+-
+cascad.f:
+COMON.F COMON2.F COMON3.F HIE.F PART2.F (all together)
+input.f:
+COMON.F HIE.F
+sprd.f:
+COMON.F
+main_broom.f:
+GMSTOR.F HIE.F (COMON.F COMON3.F COMON2.F PART2.F
+datalo_broom.f:
+(ECOMON.F PART2.F  HIE.F COMON2.F COMON3.F)
+analz1_broom.f:
+(HIE.F COMON.F)
+sors_broom.f:
+(COMON.F COMON2.F COMON3.F HIE.F)
+datahi.f:
+PART2.F COMON.F COMON2.F COMON3.F  HIE.F
+
+G4VBertini(Collision) (inc cascade) 
+---------
+- like in kinetic model
+ -subclasseses for different particles
+-has G4BeritiniData
+
+ -G4Bertini1.f: 
+ber1.f
+COM3.F COM.F (only once COM.F move to G4Nucleus)
+
+
+B4BertiniCollision (interaction, isobar) SUBCLASSES?
+-------------------
+hcol.f:
+COM1.F COM3.F COM.F COMON2.F COMON3.F (only once com1 and com2 together -> separata tha routine away)
+
+
+G4Nucleus (NucleusWithRegions)
+----------
+- material to G4collision or Scatterer
+ - has nucleons
+ - layers?
+ber2.f:
+COM.F
+
+G4Region (layer, lots of common variables together) 
+--------
+ber3.f 
+COM3.F
+
+
+G4BertiniUtils (tools, all)
+----------------
+-basic.f: (in order of importance)
+-COMON.F COMON2.F COMON3.F COM.F HIE.F PART.F PART2.F COM3.F
+
+PRE-EQUILIBRIUM MODEL:
+-follow closely the G4PreCompoundModel inherited from G4VPreCompoundModel
+-add G4Exiton
+particles
+..........
+
++G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
++aPiMinus->GetPDGCharge/GetBaryonNumber, Get4Momentum
++G4DynamicParticle *aParticle;
++aParticle->GetKineticEnergy()/GeV;   
++G4double protonMass = aProton->GetPDGMass()/MeV;
+
+G4ParticleDefinition* aParticleType = aParticle->GetDefinition();
+if (aParticleType == G4PionPlus::PionPlus()) ipart = 7;
+
++G4DynamicParticle *dp = new G4DynamicParticle();
++dp->SetDefinition( aNeutron );
++dp->SetKineticEnergy( energy-neutronMass );
++dp->SetMomentum( m );
++dp->SetMomentumDirection(u, v, w);  
+
+G4Element, GetN/Z
+
+G4double a = anElement->GetA()*mole/g;
+if (a < 230.) return 0;
+
+G4DynamicParticle* resultant = new G4DynamicParticle;
+resultant->SetDefinition( aPiZero );
+delete resultant;
+
+
+Vectors
+.......
+
+-G4LorenzVector pTarget(0,0,0,m)
+G4LorenzVector pProjectile(aPart->Get4Momentum()), p.m()
+E_cm = eCm =(pTarget.mag() -targetMass - pProjectile.m())/MeV
+
++G4ThreeVector m;
++m.setX( alc ); m.setY( bec ); m.setZ( gac );
+
++#define G4Vector G4std::vector
++typedef G4Vector< G4DynamicParticle* > DPvector;
++typedef G4Vector< G4double > Dvector;
++Dvector v;
++v.reserve(6);  
++v.erase( v.begin(), v.end() );
++v.push_back( 1.0 );
++v.push_back( v[0] );
+
+
+nucleus
+........
+
+G4V3DNucleus
+
+Shell
+G4Fancy3DNucleus
+
+G4Nucleus, GetFermiMomentum, AddExitationEnergy, AtomicMass 
+G4Nucleus *theNucleus;
+theNucleus->GetN()
+G4double P = theNucleus->GetMomentum().mag()/MeV;
+theNucleus->GetEnergyDeposit() 
+theNucleus->SetParameters( afj[lm], zfj[lm] );
+theNucleus->AddExcitationEnergy();
+
+G4FermiMomentum
+
+Dvector *vtmp = new Dvector( 5 );
+vtmp->insert( vtmp->begin()+3, ep2 );
+
+theNucleus->GetMomentum().setX(theNucleus->GetMomentum().x()-pl.x()*GeV);
+
+pEmittedParticle = pSelectedChannel->emit();
+nucleusTotalMomentum = pEmittedParticle->GetTotalMomentum(); // CMS frame
+pEmittedParticle->GetKineticEnergy();
+
+G4Nucleon, Boost
+
+kinematics
+...........
+
+G4NuclearFermiDensity
+
+G4ReactionDynanics/Kinematics
+
+G4ReactionProduct , lorenz
+G4ReactionDynamics 
+
+G4ReactionKinematics (lorenz boost, lab system)
+
+G4LorentzVector lorentz1(px, py, pz, energy1);
+
+
+cross-sections
+..............
+
+// Initialize static pointer for singleton instance
+G4HadronCrossSections* 
+G4HadronCrossSections::theInstance = 0;
+static G4HadronCrossSections* Instance() {
+if (!theInstance) theInstance = new G4HadronCrossSections();
+  return theInstance;
+}
+
+G4float G4HadronCrossSections::plab[TSIZE] = {0.00000E+00, 0.10000, 0.15000}
+
+enum { TSIZE=41, PSIZE=35, NELAB=17, NCNLW=15, NFISS=21 };
+class G4HadronCrossSections {
+public:
+   G4HadronCrossSections() : verboseLevel(0)
+
+
+G4VCrossSectionDataSet 
+
+// This is the class to which to register data-sets. You can get the instance
+// from energy hadronic process, and use its 'AddDataSet(...)' method to tailor
+// the cross-sectinos for your application.
+G4CrossSectionDataStore, AddDataSet(G4VCrossSectionDataSet*);
+
+
+
+utilities
+.........
+G4double ekx = G4std::max(ek, 1.e-9);
+
+
+const G4double cech[] ={0.33,0.13,0.10,0.09,0.07};
+
+
+
+pre compund
+.............
+
+G4PreCompoundNeutron/Proton/Ion/Fragment
+
+G4LEPionPlusInelastic (cascade)
+
+G4Exiton
+
+
+void G4BertiniEvaporation::fillParticleChange( 
+                   vector<G4DynamicParticle *> secondaryParticleVector,
+                   G4ParticleChange * pParticleChange )
+{
+  // Fill the vector pParticleChange with secondary particles stored in vector.
+  pParticleChange->SetNumberOfSecondaries( secondaryParticleVector.size() );
+  for ( G4int i = 0 ; i < secondaryParticleVector.size() ; i++ )
+    pParticleChange->AddSecondary( secondaryParticleVector[i] ); 
+  return;
+}
+
+void G4ReactionKinematics::TwoBodyScattering(
+           const G4DynamicParticle* pIn1, const G4DynamicParticle* pIn2,
+           G4DynamicParticle* pOut1, G4DynamicParticle* pOut2)
+{           
+// initial particles:
+
+// total invariant mass
+   G4LorentzVector sumIn(pIn1->Get4Momentum()+pIn2->Get4Momentum());
+   G4double invariantMass=sumIn.mag();
+
+// beta of center-of-mass system
+   G4ThreeVector betaCMS=sumIn.boostVector();
+
+// final particles:
+
+// get final particle masses
+   G4double massOut1=pOut1->GetMass();
+   G4double massOut2=pOut2->GetMass();
+
+// calculate breakup momentum:
+   G4double breakupMomentum=BreakupMomentum(invariantMass, massOut1, massOut2);
+
+// random decay angle
+   G4double theta=RandFlat::shoot(HepDouble(0.),HepDouble(pi));  // isotropic decay angle theta
+   G4double phi  =RandFlat::shoot(HepDouble(0.),HepDouble(twopi));  // isotropic decay angle phi
+
+// setup LorentzVectors
+   G4double pz=cos(theta)*breakupMomentum;
+   G4double px=sin(theta)*cos(phi)*breakupMomentum;
+   G4double py=sin(theta)*sin(phi)*breakupMomentum;
+   
+   G4double breakupMomentumSquared=breakupMomentum*breakupMomentum;
+   G4double energy1=sqrt(breakupMomentumSquared+massOut1*massOut1);
+   G4double energy2=sqrt(breakupMomentumSquared+massOut2*massOut2);
+
+   G4LorentzVector lorentz1(px, py, pz, energy1);
+   G4LorentzVector lorentz2(px, py, pz, energy2);
+
+// back into lab system
+   lorentz1.boost(betaCMS);
+   lorentz2.boost(betaCMS);
+
+// fill in new particles:
+   pOut1->Set4Momentum(lorentz1);
+   pOut2->Set4Momentum(lorentz2);
+
+   return;
+}
+        
+\end{verbatim}
+
+\begin{itemize}
+\item x
+\begin{itemize}
+\item 
+\item 
+\item 
+\end{itemize}
+
+\item {\bf pre-quilibrium}
+Joe Chumas work.
+ 
+\begin{itemize}
+\item study pre-equilibrium theory
+\item study G4 pre-equilibrium module
+\item study G4
+\item browse pre-equilibrium code
+\item integrate it with G4 
+\item try to compile it 
+\item document it
+\item clean it
+\item develop OOA\&D
+\item make tests for individual functions (dump data to ASCII files)
+\item use ROOT to visualize test results
+\item run code and study results using ROOT
+\item document your work in special assignment paper
+\end{itemize}
+
+\item {\bf documentation} 
+
+\begin{itemize}
+\item collect all material to this working document
+\item modularize manual?
+\item do major GNUmakefile to build HETC documentation
+\item generate HETC web pages using tex2html
+
+\end{itemize}
+
+\item {\bf testing} 
+
+\begin{itemize}
+\item make test for key functions, classe,and modules
+\item use ROOT
+\item 
+\end{itemize}
+
+\item {\bf results} 
+
+\begin{itemize}
+\item collect Tapios results to common results area (?)
+\item make use of ROOT scripts to visualize some INC function outputs
+\item 
+\end{itemize}
+
+\end{itemize}
+
+\section{APPENDIX / G4 coding style} %:::
+\scriptsize
+%\begin{verbatim}
+include g4Style.hh
+%\end{verbatim}
+\normalsize
+
+\section{APPENDIX / stuff} %:::
+% random note to be cleaned
+\begin{verbatim}
+
+/* hetc variable (lots of temporary stuff)
+
+
+rewrites to be done: 
+.............................
+basic.f (ppnp reading)
+basic.f (input2, ecol)
+input.f (input)
+mfpd2.f (mdpf2)
+datahi.f (datahi)
+
+do
+.............................................
+G4out to coherent form (remove format,write)
+go trough if   (i = 1 > i = 0 , and [i-1] > [i])
+clean translation results for read
+
+
+In original f77 (see make_bert) bertini simulation (no cem or other configurations, just bertini)
+is made with following configuration:
+
+basic.f        (basic utility stuff)
+ber1.f         (core bertini)
+ber2.f         (core bertini)
+ber3.f         (core bertini)
+cascad.f       ()
+hcol.f         ()
+dum_bert.f     (dummy functions listed)
+input.f        ()
+analz1_broom.f ()
+datalo_broom.f ()
+main_broom.f   ()
+sors_broom.f   ()  
+datahi.f       ()
+dres.f         ()
+geom.f         ()
+mfpd2.f        ()
+sprd.f         ()
+
+STATUS CODING: 
+// 0 nothing done    1 raw compilation   2 compiles   3 cleaned
+// 4 first draft oo  5 cleaned oo        OK done     
+
+  lines file            status 
+---------------------------------------
+   2193 basic.f           2         
+   1958 hcol.f            3
+   1840 ber1.f            3
+   1037 ber2.f            3
+   1664 ber3.f            3
+   1324 mfpd2.f           0 nor needed
+    883 cascad.f          3
+    511 dres.f            3 evaporation
+    293 input.f           0
+    164 datahi.f          0
+    822 main_broom.f      0
+    204 analz1_broom.f    0
+    118 datalo_broom.f    0
+    107 sors_broom.f      0
+    171 sprd.f            0  
+     65 dum_bert.f        OK              
+--------------------------------------
+
+These files include following common definitions:
+COMON.F COMON2.F COMON3.F COM.F COM1.F COM3.F PART.F PART2.F GMSTOR.F FINUC.F PAPROP.F HIE.F  
+  lines file             status
+------------------------------------------
+     28 COM3.F
+     22 COM.F
+     11 COM1.F
+
+     14 COMON.F
+      1 COMON2.F
+      1 COMON3.F
+
+      3 PAPROP.F
+      6 PART.F
+      6 PART2.F
+
+      2 FINUC.F
+      1 GMSTOR.F
+      1 HIE.F
+----------------
+
+Detailed usage of common blocks is as follows:
+
+basic.f: (in order of importance)
+COMON.F COMON2.F COMON3.F COM.F HIE.F PART.F PART2.F COM3.F
+
+ber1.f:
+COM3.F COM.F (only once COM.F)
+
+ber2.f:
+COM.F
+
+ber3.f
+COM3.F
+
+cascad.f: 
+COMON.F COMON2.F COMON3.F HIE.F PART2.F (all togeteher
+
+hcol.f:
+COM1.F COM3.F COM.F COMON2.F COMON3.F (once com1 and com2 together
+
+datahi.f:
+PART2.F COMON.F COMON2.F COMON3.F  HIE.F
+
+dres.f  
+COMON.F COMON2.F COMON3.F
+
+input.f:
+COMON.F HIE.F
+
+mfpd2.f:
+PART2.F FINUC.F COMON.F PAPROP.F PART2.F COMON3.F COMON2.F
+
+sprd.f:
+COMON.F
+
+main_broom.f:
+GMSTOR.F COMON.F HIE.F COMON3.F COMON2.F PART2.F
+
+datalo_broom.f:
+COMON.F PART2.F  HIE.F COMON2.F COMON3.F
+
+analz1_broom.f:
+HIE.F COMON.F
+
+sors_broom.f:
+COMON.F COMON2.F COMON3.F HIE.F 
+
+------------------------------------------------------
+ dummy functions not implemented in bertini version
+ (see makefile make_bert and dum_bert.f)
+-------------------------------------------------------
+mashnk         not implemented in HETC bertini cascade
+qhsigg         not implemented in HETC bertini cascade
+datar3         not implemented in HETC bertini cascade
+hadden         not implemented in HETC bertini cascade
+rchanw         not implemented in HETC bertini cascade
+chanwt         not implemented in HETC bertini cascade
+qheh           not implemented in HETC bertini cascade
+qevent         not implemented in HETC bertini cascade
+mcmosc         not implemented in HETC bertini cascade
+mesage         not implemented in HETC bertini cascade
+skale          not implemented in HETC bertini cascade
+inpcm          not implemented in HETC bertini cascade
+cemgeo         not implemented in HETC bertini cascade
+user           not implemented in HETC bertini cascade
+bertcem        not implemented in HETC bertini cascade
+crsec          not implemented in HETC bertini cascade
+heh            not implemented in HETC bertini cascade
+qmain          not implemented in HETC bertini cascade
+erupcem        not implemented in HETC bertini cascade
+pcol           not implemented in HETC bertini cascade
+-------------------------------------------------------
+
+...................
+id decription:
+...................
+1 single production  
+2 double production        
+3 elastic 
+4 exchange
+...................
+
+
+
+.........................
+  ncol
+.........................
+ -4 end of run
+ -3 end of batch    
+ -2 not used       
+ -1 start run    
+  0 not used        
+  1 source particle  
+  2 nuc interact      
+  3 particle slowed   
+  4 particle escape
+  5 pseudo collision
+  6 nuc absorption
+  7 medium bound crossing
+.........................
+
+
+
+ inc type of incident particle
+...............................
+ 0  proton
+ 1  neutron
+ 2  pi+
+ 3  pi0
+ 4  pi-
+ 5  mu+
+ 6  mu-
+
+                Naming conventions
+ 	meaning			example
+ -----------------------------------------------
+ T	templates		
+ V	virtual			G4VClass
+ i 	iterators		iList
+ l	length			lVector
+ r	reference		rData
+ p	pointer			pLayers
+ n	number of		nParticles
+ f	file			fCrosssection
+ e    enumerates 		eQuarkFamilies
+ g	globals			gDetector
+ k	constants		kPlancksConstant
+ -------------------------------------------------
+
+
+               naming conventions
+------------------------------------------------------------
+hetc      hetc++                   decription
+------------------------------------------------------------
+eswh()   > scatteringWithHydrogen
+sigels() > interpolateElasticNeutronData
+med      > medium
+e        > theEnergy
+kdd      > :::
+locf1[]  > :::
+datalo()                           transfers a particle from the cascade prod. bank or the evap. n/p bank to the below cut reac. report bank
+datahi()                           transfers a particle from the cascade prod. bank or the evap. n/p bank to the above cut reac. report bank >>>
+                                   reaction direction cosines are (relative to incoming particle) are transformed to coordinate system >>>
+                                   direction cosines using the values set by getrig. particle weights (also in datalo) are assigned to >>>
+                                   equal to the incoming particle weight unless scaling has occured, in which case this is muultiplied >>>
+                                   byt the scaling weight wtfas. this routine also assigns particle names.
+getrig()                           evaporation directions are chosen isotropically in the laboratory system.
+maxcas                             number of source particles to be started in each batch
+maxbch                             the number of batches to be run with the present se of input data
+n1col                              >0 each cascade history willb e computed only trough the history second generation 
+                                   that is, only trough the immediate descendants of source particles
+                                   <0 all generations will be computed (ittelevant for muon transport)
+                                   
+emax                               the maximum energy of particles being transported [MeV]
+elop                               cut-off energy for transporting protons [MeV], cutoff for pions (pi/proton mass) 0.1488 *elop
+
+cfepn(i+3)                         cutoff energies in each region for neutrons( = space(i+3)+ctofen)
+cfepn(i)                           cutoff energies in each region for protons (= space(i+9)+ctofe)
+nhstp     nhstp                    neutron history tape
+neutp     neutp                    flag to report neutrons below cut off
+sors()    sors                     source-particle data, sors(NCOL=-1): read input required by sors, problem dependent
+user()    user()                   may be problem dependent
+dres()    dres                     evaporation model
+itp       itp                      1 G4Proton, 2 G4Neutron, 3 G4PionPlus, 4 G4PionMinus
+ityp      ityp                     particle numbering ityp = tip + 1
+inc,tip   inc, tip                 type of incident particle, 0 proton, 1 neutron, 2 pi+, 3 pi0, 4 pi-, 5 mu+, 6 mu-
+e(1)      e[0]                     source-particle kinetic energy [MeV]
+x(1)      x[0]                     source-particle x position coordinates in cm
+y(1)      y[0]                     source-particle y position coordinates in cm
+z(1)      z[0]                     source-particle z position coordinates in cm
+u(1)      u[0]                     source-particle x direction cosine
+v(1)      v[0]                     source-particle y direction cosine
+w(1)      w[0]                     source-particle z direction cosine
+wt(1)     wt[0]                    source-particle statistical weight
+
+ctofe     ctoef                    INC cutoff energy
+xi(1..3) >coordinate[0..2]         x, y and z -coordinates of incoming particle 
+ec       >eCurrent                 energy usef for cross section interpolation
+amumev   >amu_c2                   AMU in MeV (CLHEP constant)
+dncms    >massNucleon              nucleon mass in center of mass (cm) frame
+1.0e-24  >millibarn                millibarn
+e(0)     >energy[0]                total p1 energy                   
+e[1]     >energy[1]                total energy sqrt(sqr(momentum struck particle) + sqr(nucleon mass))      
+1000.0   >MeV                      conversion of GeV to MeV units
+mp        protonMass               mass of proton
+charge    particleCharge           vector of particle charges
+rmass(7)  particleMass             vector of particle masses
+7.0      >bindingEnergy            binding energy
+pm()     >massParticle             particle mass
+hcs      >hadronCrossSection       hadron cross-section, hadronCrossSection[29850] corresponding file i gcalor 'chetc.dat'
+pnms     >massPionCharged          charged pion mass / cm
+poms     >massPionZero             neutral pion mass / cm
+bcs      >crossSection             total (p, p) and (n, p) cross-sections (single and double production + elastic)
+eco(1)    eco[0]                   proton  energy cut-off (= cfepn[med - 1]) 
+eco(2)    eco[1]                   neutron energy cut-off (= cfepn[med + 2])
+pppda     pppda                    probability (pi+, d) abs.
+ppmda     ppmda                    probability (pi-, d) abs.
+it        itxxx                    temporary rename
+es()      es1[]                    temporary rename
+pt(3)     pt[2]                    momentum of 3 in laboratory (e[3] - pm[3]) / rcpmv
+pt(15)    pt[14]                   momentum of 4 in laboratory (e[4] - pm[4]) / rcpmv
+adel      adel                     asymptotic density effect corrections
+ang1[][1][1] ang1[][0][0]          direction angle alpha
+ang1[][2][1] ang1[][1][0]          direction angle beta
+ang1[][3][1] ang1[][2][0]          direction angle gam
+ex        ex                       distance in sampling routine 
+sign      sign                     sigma ci region i  :::  
+plvc(1)   plvc[0]                  number of times entered for storage of velocity less than criterion 
+pgvc(1)   pgvc[0]                  number of times velocity greater than criterion entered 
+s.p.      s.p.                     single production ?
+rlke      rlke                     relative kinetic energy
+pol1      pol1                     calculate polar angles cos(theta) and sin(theta) ? 
+azio      azio                     calculate azimuthal angles  cos(phi) and sin(phi) ?
+pxyz      pxyz                     momentum vector
+pxyz      pxyz                     xyz coordinates of collision point
+p2        p2                       momentum of particle selected from proper fermi distribution                
+p1oe1     p1oe1                    p1 energy 
+pxyz(0)   pxyz[0]                  p1 momentum x coordinate
+pxyz(1)   pxyz[1]                  p2 sin(theta) cos(phi)
+pxyz(4)   pxyz[4]                  p1 momentum y coordinate
+pxyz(5)   pxyz[5]                  p2 sin(phi)
+pxyz(8)   pxyz[8]                  p1 momentum z coordinate sqrt(sqr(total energy)-sqr(mass))  
+pxyz(9)   pxyz[9]                  p2 cos(theta) 
+col       col                      part of isobar common :::
+col(1)    col[1]                   total energy of particles 1 and 2 (e[0] + e[1]) 
+col       col[21]                  qx :::
+col       col[22]                  qy :::  
+space     space                    well depth (MeV)
+space     space[13-16]             cross section (mb
+s         s[0-1]                   cross section
+pnidk(1)  pnidk[1]                 p x
+pnidk(2)  pnidk[2]                 p y
+pnidk(3)  pnidk[3]                 p z
+pnidk(4)  pnidk[4]                 :::
+pnidk(5)  pnidk[5]                 m(p1) decay pion mass squared
+pnidk(6)  pnidk[6]                 e(pi) prime decay pion energy prime 
+pnidk(7)  pnidk[7]                 decay pion   momentum           prime 
+pnidk(8)  pnidk[8]                 decay pion x momentum component prime 
+pnidk(9)  pnidk[9]                 decay pion y momentum component prime 
+pnidk(10) pnidk[10]                decay pion z momentum component prime 
+pnidk(11) pnidk[11]                decay pion energy e(pi) 
+pnidk(12) pnidk[12]                :::
+pnidk(13) pnidk[13]                :::
+pnidk(13) pnidk[14]                :::
+pnidk(14) pnidk[15]                :::
+pnidk(15) pnidk[16]                :::
+pnidk(16) pnidk[17]                :::
+pnidk(17) pnidk[18]                :::
+pnidk(18) pnidk[19]                :::
+pnidk(19) pnidk[20]                :::
+pnidk(20) pnidk[21]                :::
+pnidk(21) pnidk[22]                :::
+pnidk(22) pnidk[23]                :::
+dcintp()  dcintp()                 calculate (n - p) differential cross-section high energy?
+ifix      static_cast<G4int>       change data to integer
+sngl      static_cast<G4double>    change data to double (original real*4)    
+curr(1)   dcos[0]                  current incident particle
+curr(4)   curr[3]                  x coordinate of current incident particle
+curr(5)   dcos[4]                  y coordinate of current incident particle
+curr(6)   dcos[5]                  z coordinate of current incident particle
+xi(i)     xi[0]                    x coordinate
+xi(2)     xi[1]                    y coordinate
+xi(3)     xi[2]                    z coordinate
+dcos(7)   dcos[6]                  alpha direction cosine ?
+dcos(8)   dcos[7]                  beta direction cosine ?
+dcos(9)   dcos[8]                  gamma direction cosine ?
+curr(10)  curr[9]                  number of geometry ?
+icurr     icurr                    incident partice
+inc       inc                      inciden particle    
+pp0       pp0                      highest p0 of bin 
+cm        cm                       center of mass frame
+is        is                       (::sgm) used in cross-section vector to point correct partice data
+em        em                       (::sgm) energy used for cross-section calculation
+de        de                       (::sgm) difference of discrete energy points i cross-section tables 
+e         e                        (::sgm) fixed energy position used in cross-section tabulation
+s         s                        (::sgm) cross-section at energy position em
+it        it                       interaction type (single production, elastic, :::) or Al, Cu, Pb tabulated atom size? 
+npsg      npsg                     cross-section (n, p)
+pipsg     pipsg                    cross-section (pi+, :::) 
+ginum     ginum                    vector of particle masses
+fli       fli                      ::: data vector (globals.hh)
+dndpip    dndpip                   cross-section (pi-, N) ? or dn/dpi+
+dndpim    dndpim                   cross-section (pi-, N) ? or dn/dpi-
+pm        pmxxx (temporary)        momentum table ?           
+pm        pm                       particle mass
+ethr      ethr                     threshold kinetic energy in gev for particle prod.  
+cpnu      cpnu                     cross-section (p, N) ?
+cpimnu    cpimnu                   cross-section (pi-, N) ?
+cpipnu    cpipnu                   cross-section (pi+, N) ?
+cpimk     cpimk                    cross-section (pi-, :::) ?
+cpipk     cpipk                    cross-section (pi+, :::) ?
+cpk       cpk                      cross-section (p, :::) ?
+angle     angle                    vector of angle data (radians)
+ppdc      ppdc                     bertini data  ::: cross-section
+pmdd      pmdd                     bertini data  ::: cross-section
+pmdx      pmdx                     bertini data  ::: cross-section
+pndd      pndd                     bertini data: (pi-, p) direct cross-section :::
+ppnp      ppnp                     cross-section data defined (globals.hh)
+enrgy     enrgy                    energy vector defined (globals.hh)
+nwds      nwds                     total number of words (escaping particles) 
+nopart    nopart                   number or particles
+pnddi     pnddi                    (pi-, p) direct cross-section intermediate energy
+pnddl     pnddl                    (pi-, p) direct differential cross-section low energy  
+ppnda     ppnda                     probability (pi-, D) abs 
+dpcln(130) dpcln                   (n, p)   double production cross-section low energy (index 3841)
+pdpcl(130) pdpcl                   (p, p)   double production cross-section low energy (index 3553) 
+spcln(158) spcln                   (n, p)   single production cross-section low energy (index 3683)
+pspcl(158) pspcl                   (p, p)   single production cross-section low energy (index 3395)
+ppscl(117) ppscl                   (pi+, p) single production cross-section low energy (index 4409)
+pmscl(117) pmscl                   (pi-, p) single production cross-section low energy (index 4643) 
+pnscl(117) pnscl                   (pi0, p) single production cross-section low energy (index 4526)
+pnnsl(117) pnnsl                   (pi-, n) single production cross-section low energy (index 4760)
+pec(176)   pec                     (p, p)   elastic scattering cross-section           (index 6494)
+ecn(176)   ecn                     (n, p)   elastic scattering cross-section           (index 6370)
+pmec(126)  pmec                    (pi-, p) elastic scattering cross-section           (index 5942) 
+ppec(126)  ppec                    (pi+, p) elastic scattering cross-section           (index 6068)
+pnec(126)  pnec                    (pi0, p) elastic scattering cross-section           (index 5564)
+pnnec(126) pnnec                   (pin, n) elastic scattering cross-section           (index 5690)
+fripn(117) fripn                    ::: (index 5112)
+fmxsp(117)                          ::: (index 2925)
+pmxc(126) pmxc                      ::: (index 5816)
+ipec(10)  ipec[10]                 number of escaped particles on region 1 
+ipec(6)   ipec[6]                  number of escaped particles on region 2 
+ipec(1)   ipec[1]                  number of particles incident on region 3 escaping 
+wkrpn(4)  wkrpn[4]                 kinetic energy for protons and neutrons in region 2 
+wkrpn(1)  wkrpn[1]                 kinetic energy with respect to neutrons (protons) region 2 
+wkrpn(0)  wkrpn[0]                 kinetic energy with respect to neutrons (protons) region 1 
+wkrpn(2)  wkrpn[2]                 kinetic energy with respect to protons region 3 
+wkrpn(5)  wkrpn[5]                 kinetic energy with respect to neutrons region 3 
+xinc      xinc                     x-coordinate of incoming particle 
+esps      esps                     escaping particle storage :::  
+plvc      plvc                     particle with velocity less than criterion
+fcp       fcp                      number of forbidden collisions for protons
+fcn       fcn                      number of forbidden collisions for neutrons
+sf        sf                       scale factor (subject to change)
+rcpmv     rcpmv                    reciprocal cm / MeV
+sqnm      sqnm                     nucleon mass squared 
+nor       nor                      record number 
+nrt       nrt                      number of files 
+gam       gamma                    foton
+pm        pm                       pion or nucleon mass :::
+efrp      efrp                     ferm energy for protons (MeV)
+efrn      efrn                     ferm energy for neutrons (MeV)
+clsm      clsm                     collision medium
+crs       crs                      cross-section
+n         n                        neutron
+p         p                        proton
+d         d                        deuteron
+pi        pi                       pion
+pi+       pi+                      positive pion
+pip 	  pi+                      positive pion
+pi-       pi-                      negtive  pion
+pi0       pi0                      neutral  pion
+pizero    pi0                      neutral  pion
+pi+-      p+-                      charge   pion
+pin       pi-                      negtive  pion
+nu        N                        nucleon (neutron or proton)  
+N         N                        nucleon (neutron or proton)
+h         h                        hadron
+ce        ce                       coulomb energy
+r         r                        uniform random number
+alpfas    alpfas                   x-direction cosine
+betfas    betfas                   y-direction cosine 
+gamfas    gamfas                   z-direction cosine
+k.e.      kinetic energy           kinetic energy
+tke       tke                      laboratory kinetic energy of the particle (GeV)    
+ncas      ncas                     cumulative number of cascades completed
+eke1      ek1                      kinetic energy of incident particle (MeV)
+efas      efas                     kinetic energy of particles (MeV)
+p         p                        momentum
+pz        pz                       momentum ?
+p0        p0                       momentum of incident particle (GeV/c)
+ncasca    ncasca                   number of real collisions (non-hydrogen)
+nevaph    nevaph                   number of pre-equilibrium and evaporation neutrons in datahi
+ncoutp(1) ncoutp[1]                number of pre-equilibrium and evaporation (erupcem) neutrons
+nevapl    nevapl                   number of pre-equilibrium and evaporation o5r neutrons
+nerupl    nerupl                   number of evaporation (non-cem) o5r neutrons
+cnhist    cnhist                   total no. of histories
+no5rca    no5rca                   number of o5r neutrons from sub cascade
+cneuav    cneuav                   average number of o5r neutrons per history
+wttot     wttot                    total weight of o5r neutrons
+wtav      wtav                     average weight of o5r neutrons
+edtotn    edtotn                   average energy of o5r neutrons per history [MeV]
+edo5r     edo5r                    average energy per o5r neutron
+-------------------------------------------------------
+
+nofas ::: number of as
+itype intercation /initial ? type
+e benergy or secondary nucleon [GeV/c]
+etot total ? energy
+et total ? energy 
+erem remainded ? energy
+einc included ? energy
+av. average
+ang angle angle
+wmass mass mass
+es > es1 (because name clash)
+tpmass tp ? mass
+numnuc numberOfNucleus
+x x-direction cosine
+y y-direction cosine
+direction cosine
+pinc inc ? momentum
+pt
+itfas type of particle (same as above)
+rands location of random number sequence
+ratt[12]
+dum[18]
+v[161/126/19]
+w[101/26/19]
+x[161/126]
+y[130/126]
+z[176/127]
+neutp fNeutronp? neutron p? datafile
+revth real event
+rands integer location of random number sequence
+nobch End batch
+neutno Neutrons produced in this batch
+xtime cpu time [seconds]
+num number of qevent or qheh collision number
+nhist nhist
+dimension itfas(2), efas(2), alpfas(2), betfas(2), gamfas(2)
+dimension geosig(240)
+
+-----------------------------------------------------
+// fortran to C++ stuff
+//-----------------------
+
+removing LXX: 
+
+hae return;
+lisaa explisiittisesti hakevaan kohtaan,
+poista parittaisete linkit
+
+//  for (i = 2; i <= 4; ++i) {
+//    pnidk[i + 11] = pnidk[i - 1] * (univ + unive) + pnidk[i + 6]; 
+//    pnidk[i + 14] = pnidk[i - 1] - pnidk[i + 11];
+//  }
+   
+    for (i = 1; i <= 3; ++i) {
+    pnidk[i + 12] = pnidk[i] * (univ + unive) + pnidk[i + 7]; 
+    pnidk[i + 15] = pnidk[i] - pnidk[i + 12];
+  }
+[1: add one to each index in loop. 2: reduce index by one in for definition]
+
+-------------------
+
+k = 19;
+for (i = 3; i <= 11; i += 4) {
+  pxyz[i - 1] = col[k - 1] * univer + col[k + 2] * unive + col[k - 4] /	* univ;
+   ++k;
+  }
+  
+k=19
+do10i=3,11,4
+pxyz(i)=col(k)*univer+col(k+3)*unive+col(k-3)*univ
+10 k=k+1
+
+----------------------
+This:
+ 135  write(ioo,7125)ne
+ 7125 format(1h ,5hne = ,i5)
+
+generates:
+ io64.ciunit = ioo;
+  swsfe(&io64);
+  dofio(c1, (char *)&ne, (ftnlen)sizeof(G4int));
+  ewsfe();
+
+
+This is left from BertiniUtils.hh 29.7:
+
+\begin{verbatim}
+static const G4double rcpmv           (0.50613e11);
+
+G4double crdt[24];
+
+//G4double pow(G4double x, G4double y) {return x ;}
+//template <class T> T max(T x, T y){ if (x > y) return x; else return y;}
+
+void gomsor(G4int x[], G4double y[], G4double z[], 
+	    G4int nmed, G4double blz) {}	   	   
+
+void cole4() {};
+void pinst() {};
+void cangid() {};
+void alpha() {};
+void ecpl() {};
+void idk() {};
+void pstor() {};
+void angid() {};
+void alp19() {};
+void alp28() {};
+void dfmax() {};
+void store() {};
+void pfmax() {};
+void nn() {};
+void ccpes() {};
+void spcn() {};
+void erupcem(
+	     G4double epart, 	G4int npart, 	G4double up, 
+	     G4double apro, 		G4double zpro, 	G4double apr, 
+	     G4double zpr, 		G4double erec, 	G4double uu, 
+	     G4int nopart) {};
+void ersue(){};
+// bertini data
+G4double ppdc[6426]; //
+G4double pndd[6426]; //
+// rou20 data
+G4double dcin[115];  
+G4double dcln[80]; 
+G4double dchn[143]; 
+G4double pdci[60]; 
+G4double pdch[55];
+G4double locx[4][4];
+\end{verbatim}
+
+
+\end{verbatim}
+\section{Terms}
+
+\begin{description}
+\item [N] nucleon (proton or neutron)
+\item [h] hadron
+\item [quasi-elastic cross section] The physical interpretation of the
+quasi-elastic cross section is the following: besides the true
+elastics scattering (often called {\em coherent-elastic} there are
+contributions coming from interactions where the nucleus is no longer
+left in the ground state, but still no elementary inelastic h-N
+interactions accured.
+\end{description}
+
+\section{APPENDIX / testing} %:::
+
+\def\DIRMANHETC{/home/miheikki/public/html/hetc/doc}
+\def\HETCBACKGROUND{\AATOS/manHetcBackground.tex}
+\typeout{input stuff}
+%\input{\\HETCBACKGROUND}
+
+\emph{emphasized}
+
+\texttt{texttt}
+
+Phys. \ Journal
+
+space\quad quad
+
+space\qquad qquad
+
+A.~Heikkinen Section~1.2 
+
+
+{\scshape hetc}
+
+
+\textbar  bar  %|
+
+
+\textbackslash backslash 
+
+spelling made possible'Heik\-ki\-nen'
+
+1-2 1--2 1---2
+
+\end{appendix}
+\end{document}
+
+% End of file
+
+%::: extra material
+
+%\begin{figure}
+%  \begin{center}
+%    \leavevmode
+%    \mbox{\epsfxsize=12cm \epsfysize=15cm \epsffile{framework.eps} }
+%       \caption{Scematic diagram describing Helsinki trackfinder.}
+%  \label{hetc}
+%  \end{center}
+%\end{figure}
+
+%From Fig. \label{hetc} we can see ...
+
+%\cite{heikkinenweb99}
+
+
