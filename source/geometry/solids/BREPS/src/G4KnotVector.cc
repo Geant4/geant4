@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KnotVector.cc,v 1.4 2000-08-28 15:00:38 gcosmo Exp $
+// $Id: G4KnotVector.cc,v 1.5 2000-11-08 14:22:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,26 +36,41 @@ G4KnotVector::~G4KnotVector()
   delete [] knots;
 }  
 
-//Copy constructor
-G4KnotVector::G4KnotVector(const G4KnotVector& old_kv)
+G4KnotVector::G4KnotVector(const G4KnotVector& orig)
 {
-  k_size = old_kv.GetSize();
+  delete [] knots;
+  k_size = orig.k_size;
   knots = new G4double[k_size];
-  for(register G4int a=0; a < old_kv.k_size; a++)knots[a]=old_kv.knots[a];
+  for(register G4int a=0; a < orig.k_size; a++)
+    knots[a] = orig.knots[a];
+}
+
+G4KnotVector& G4KnotVector::operator=(const G4KnotVector& right)
+{
+  if (&right == this) return *this;
+  delete [] knots;
+  k_size = right.k_size;
+  knots = new G4double[k_size];
+  for(register G4int a=0; a < right.k_size; a++)
+    knots[a] = right.knots[a];
+
+  return *this;
 }
 
 G4int G4KnotVector::GetKnotIndex(G4double k_value, G4int order) const
 {
   G4int	   i, knot_index;
   G4double knt;
- 
-  if ( k_value < ( knt = knots[order - 1])) 
+
+  knt = knots[order - 1];
+  if ( k_value < knt ) 
     if (ApxEq( k_value, knt)) 
       k_value = knt;
     else
       return -1;
   
-  if ( k_value > ( knt = knots[k_size - order + 1]))  
+  knt = knots[k_size - order + 1];
+  if ( k_value > knt )  
     if (ApxEq( k_value, knt)) 
       k_value = knt;
     else

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Curve.cc,v 1.3 2000-08-28 08:57:57 gcosmo Exp $
+// $Id: G4Curve.cc,v 1.4 2000-11-08 14:22:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -24,6 +24,26 @@ G4Curve::G4Curve()
 
 G4Curve::~G4Curve()
 {
+}
+
+G4Curve::G4Curve(const G4Curve& c)
+ : start(c.start), end(c.end), pStart(c.pStart), pEnd(c.pEnd),
+   pRange(c.pRange), bounded(c.bounded), sameSense(c.sameSense)
+{
+}
+
+G4Curve& G4Curve::operator=(const G4Curve& c)
+{
+  if (&c == this) return *this;
+  start     = c.start;
+  end       = c.end;
+  pStart    = c.pStart;
+  pEnd      = c.pEnd;
+  pRange    = c.pRange;
+  bounded   = c.bounded;
+  sameSense = c.sameSense;
+
+  return *this;
 }
 
 G4String G4Curve::GetEntityType() const

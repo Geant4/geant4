@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Axis2Placement3D.cc,v 1.2 2000-08-28 08:57:54 gcosmo Exp $
+// $Id: G4Axis2Placement3D.cc,v 1.3 2000-11-08 14:22:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -21,17 +21,34 @@
 G4Axis2Placement3D::G4Axis2Placement3D(){}
 G4Axis2Placement3D::~G4Axis2Placement3D(){}
 
-// this constructor is used in STEPinterface module
+// copy constructor (used in STEPinterface module)
+//
 G4Axis2Placement3D::G4Axis2Placement3D(const G4Axis2Placement3D& place)
+  : refDirection(place.refDirection), 
+    axis(place.axis), location(place.location),
+    pX(place.pX), pY(place.pY), pZ(place.pZ),
+    toPlacementCoordinates(place.toPlacementCoordinates),
+    fromPlacementCoordinates(place.fromPlacementCoordinates)
 {
-  refDirection             = place.GetRefDirection(); 
-  axis                     = place.GetAxis();
-  location                 = place.GetLocation();
-  pX                       = place.GetPX();
-  pY                       = place.GetPY();
-  pZ                       = place.GetPZ();
-  toPlacementCoordinates   = GetToPlacementCoordinates();
-  fromPlacementCoordinates = GetFromPlacementCoordinates(); 
+}
+
+// assignment operator
+//
+G4Axis2Placement3D&
+G4Axis2Placement3D::operator=(const G4Axis2Placement3D& place)
+{
+  if (place==*this) return *this;
+  
+  refDirection             = place.refDirection; 
+  axis                     = place.axis;
+  location                 = place.location;
+  pX                       = place.pX;
+  pY                       = place.pY;
+  pZ                       = place.pZ;
+  toPlacementCoordinates   = place.toPlacementCoordinates;
+  fromPlacementCoordinates = place.fromPlacementCoordinates; 
+
+  return *this;
 }
 
 /* everything below here is commented-out ...

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CircularCurve.hh,v 1.5 2000-08-28 15:00:31 gcosmo Exp $
+// $Id: G4CircularCurve.hh,v 1.6 2000-11-08 14:22:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -31,6 +31,10 @@ public: // with description
   G4CircularCurve();
   virtual ~G4CircularCurve();
     // Constructor & destructor.
+
+  G4CircularCurve(const G4CircularCurve& right);
+  G4CircularCurve& operator=(const G4CircularCurve& right);
+    // Copy-constructor and assignment operator.
 
   virtual G4Curve* Project(const G4Transform3D& tr=
                            G4Transform3D::Identity);

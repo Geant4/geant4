@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidOpenPCone.cc,v 1.4 2000-08-28 08:57:55 gcosmo Exp $
+// $Id: G4BREPSolidOpenPCone.cc,v 1.5 2000-11-08 14:22:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,8 +37,8 @@ G4BREPSolidOpenPCone::G4BREPSolidOpenPCone
                                                 num_z_planes,
                                                 z_start, z_values,
                                                 RMIN, RMAX ),
-                         new G4Tubs( "IntersectionTubs",
-                                     0, 1*cm, 1*cm, 0*deg, 360*deg ) )
+                         new G4Tubs( "IntersectionTubs", 0., 1., 1.,
+                                     start_angle, opening_angle ) )
 {
 
 // compute max radius
@@ -49,14 +49,13 @@ G4BREPSolidOpenPCone::G4BREPSolidOpenPCone
   		
   G4double length = z_values[num_z_planes-1] - z_values[0];
   
-  G4Tubs *ptrTubs = (G4Tubs*) fPtrSolidB;  // To be modified: TODO
+  ((G4Tubs*)fPtrSolidB)->SetOuterRadius ( MaxRMAX );
+  ((G4Tubs*)fPtrSolidB)->SetZHalfLength ( length );
 
-  ptrTubs->SetInnerRadius ( 0 );
-  ptrTubs->SetOuterRadius ( MaxRMAX );
-  ptrTubs->SetZHalfLength ( length );
-  ptrTubs->SetStartPhiAngle ( start_angle );
-  ptrTubs->SetDeltaPhiAngle ( opening_angle );
+}
 
+G4BREPSolidOpenPCone::~G4BREPSolidOpenPCone()
+{
 }
 
 void G4BREPSolidOpenPCone::DescribeYourselfTo (G4VGraphicsScene& scene) const

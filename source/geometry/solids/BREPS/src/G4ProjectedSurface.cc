@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProjectedSurface.cc,v 1.4 2000-08-28 08:57:58 gcosmo Exp $
+// $Id: G4ProjectedSurface.cc,v 1.5 2000-11-08 14:22:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -26,25 +26,6 @@ G4ProjectedSurface::G4ProjectedSurface()
 }
 
 
-G4ProjectedSurface::G4ProjectedSurface(const G4ProjectedSurface &tmp) 
-{
-  distance = tmp.distance;
-  oslo_m   =(G4OsloMatrix*)0;  
-   
-  //    next=this;
-  
-  order[0] = tmp.order[0];
-  order[1] = tmp.order[1];
-  dir = tmp.dir;
-  
-  u_knots = new G4KnotVector(*tmp.u_knots);
-  v_knots = new G4KnotVector(*tmp.v_knots);
-  
-  ctl_points = new G4ControlPoints(*tmp.ctl_points); 
-  bbox = new G4BoundingBox3D();
-}
-
-
 G4ProjectedSurface::~G4ProjectedSurface()
 {
   delete u_knots;
@@ -54,10 +35,10 @@ G4ProjectedSurface::~G4ProjectedSurface()
   G4OsloMatrix* temp_oslo;
   if(oslo_m!=(G4OsloMatrix*)0)
   {
-    while(oslo_m->next != oslo_m)
+    while(oslo_m->GetNextNode() != oslo_m)
     {
       temp_oslo = oslo_m;
-      oslo_m    = oslo_m->next;
+      oslo_m    = oslo_m->GetNextNode();
       
       delete temp_oslo;
     }
@@ -68,6 +49,9 @@ G4ProjectedSurface::~G4ProjectedSurface()
   delete bbox;
 }
 
+G4ProjectedSurface::G4ProjectedSurface(const G4ProjectedSurface&)
+{
+}
 
 void  G4ProjectedSurface::CopySurface()
   // Copies the projected surface into a bezier surface
@@ -485,9 +469,9 @@ void G4ProjectedSurface::CalcOsloMatrix()
   if(oslo_m!=(G4OsloMatrix*)0)
   {
     G4OsloMatrix* tmp;
-    while(oslo_m!=oslo_m->next)
+    while(oslo_m!=oslo_m->GetNextNode())
     {
-      tmp=oslo_m->next;
+      tmp=oslo_m->GetNextNode();
       delete oslo_m; 
       oslo_m=tmp;
     }
@@ -509,8 +493,8 @@ void G4ProjectedSurface::CalcOsloMatrix()
   {
     if ( j != 0 )
     {
-      oslo_m->next = new G4OsloMatrix();
-      oslo_m = oslo_m->next;
+      oslo_m->SetNextNode(new G4OsloMatrix());
+      oslo_m = oslo_m->GetNextNode();
     }
 
     //while (old_knots->GetKnot(mu + 1) <= new_knots->GetKnot(j))
@@ -590,19 +574,20 @@ void G4ProjectedSurface::CalcOsloMatrix()
       }
     }
     
-    delete oslo_m->o_vec;
-    oslo_m->o_vec = new G4KnotVector(v+1);
-    oslo_m->offset = Amax(muprim - v, 0);
-    oslo_m->osize = v;
+    delete oslo_m->GetKnotVector();
+    oslo_m->SetKnotVector(new G4KnotVector(v+1));
+    oslo_m->SetOffset(Amax(muprim - v, 0));
+    oslo_m->SetSize(v);
     
     for ( i = v, p = 0; i >= 0; i--)
-      oslo_m->o_vec->PutKnot ( p++, ah->GetKnot(AhIndex (v, (ord-1) - i,ord)));
+      oslo_m->GetKnotVector()
+            ->PutKnot( p++, ah->GetKnot(AhIndex (v, (ord-1) - i,ord)) );
     
   }
   
   delete ah;
   delete newknots;
-  oslo_m->next = oslo_m;
+  oslo_m->SetNextNode(oslo_m);
   oslo_m = o_ptr;
 }
 
@@ -639,41 +624,41 @@ void  G4ProjectedSurface::MapSurface(G4ProjectedSurface* srf)
   for( register G4int a=0; a<size;a++)
   {
     if ( lower != 0)
-      for ( i = 0,  o_ptr = oslo_m; i < lower; i++,  o_ptr = o_ptr->next);
+      for ( i = 0,  o_ptr = oslo_m; i < lower; i++, o_ptr = o_ptr->GetNextNode());
     else
       o_ptr = oslo_m;
     
     if(!dir)// Direction ROW
     {
-      for ( j = lower; j < upper; j++, o_ptr = o_ptr->next) 
+      for ( j = lower; j < upper; j++, o_ptr = o_ptr->GetNextNode()) 
       {
 	register G4double o_scale;
 	register G4int x;
 	x=a;
 
 /* L. Broglia	
-	register G4Point2d o_pts = (G4Point2d&)old_pts->get(x,o_ptr->offset);
+	register G4Point2d o_pts = (G4Point2d&)old_pts->get(x,o_ptr->GetOffset());
 	register G4Point2d tempc = (G4Point2d&)c_ptr->get(j/upper,
 							  (j)%upper-lower);
 */
-	register G4Point3D o_pts = old_pts->Get3D(x, o_ptr->offset);
+	register G4Point3D o_pts = old_pts->Get3D(x, o_ptr->GetOffset());
 	register G4Point3D tempc = c_ptr->Get3D(j/upper, (j)%upper-lower);
-	o_scale = o_ptr->o_vec->GetKnot(0);
+	o_scale = o_ptr->GetKnotVector()->GetKnot(0);
 
 	tempc.setX(o_pts.x() * o_scale);
 	tempc.setY(o_pts.y() * o_scale);
 
-	for ( i = 1; i <= o_ptr->osize; i++) 
+	for ( i = 1; i <= o_ptr->GetSize(); i++) 
 	{
-	  o_scale = o_ptr->o_vec->GetKnot(i);
+	  o_scale = o_ptr->GetKnotVector()->GetKnot(i);
 
 /* L. Broglia	  
-	  o_pts = (G4Point2d&)old_pts->get(x,i+o_ptr->offset);
+	  o_pts = (G4Point2d&)old_pts->get(x,i+o_ptr->GetOffset());
 	  tempc.X(tempc.X() + o_scale * o_pts.X());
 	  tempc.Y(tempc.Y() + o_scale * o_pts.Y());
 */
 
-	  o_pts = old_pts->Get3D(x,i+o_ptr->offset);
+	  o_pts = old_pts->Get3D(x,i+o_ptr->GetOffset());
 	  tempc.setX(tempc.x() + o_scale * o_pts.x());
 	  tempc.setY(tempc.y() + o_scale * o_pts.y());
 	}
@@ -683,29 +668,29 @@ void  G4ProjectedSurface::MapSurface(G4ProjectedSurface* srf)
     }
     else  // dir = COL
     {
-      for ( j = lower; j < upper; j++, o_ptr = o_ptr->next) 
+      for ( j = lower; j < upper; j++, o_ptr = o_ptr->GetNextNode()) 
       {
 	register G4double o_scale;
 	register G4int x;
 	x=a;
 
 /* L.Broglia
-	register G4Point2d o_pts = (G4Point2d&)old_pts->get(o_ptr->offset,x);
+	register G4Point2d o_pts = (G4Point2d&)old_pts->get(o_ptr->GetOffset(),x);
 	register G4Point2d tempc = (G4Point2d&)c_ptr->get((j)%upper-lower,
 							  j/upper);
 */
-	register G4Point3D o_pts = old_pts->Get3D(o_ptr->offset,x);
+	register G4Point3D o_pts = old_pts->Get3D(o_ptr->GetOffset(),x);
 	register G4Point3D tempc = c_ptr->Get3D((j)%upper-lower, j/upper);
 		
-	o_scale = o_ptr->o_vec->GetKnot(0);
+	o_scale = o_ptr->GetKnotVector()->GetKnot(0);
 
 	tempc.setX(o_pts.x() * o_scale);
 	tempc.setY(o_pts.y() * o_scale);
 
-	for ( i = 1; i <= o_ptr->osize; i++) 
+	for ( i = 1; i <= o_ptr->GetSize(); i++) 
 	{
-	  o_scale = o_ptr->o_vec->GetKnot(i);
-	  o_pts= old_pts->Get3D(i+o_ptr->offset,a);
+	  o_scale = o_ptr->GetKnotVector()->GetKnot(i);
+	  o_pts= old_pts->Get3D(i+o_ptr->GetOffset(),a);
 	  
 	  tempc.setX(tempc.x() + o_scale * o_pts.x());
 	  tempc.setY(tempc.y() + o_scale * o_pts.y());

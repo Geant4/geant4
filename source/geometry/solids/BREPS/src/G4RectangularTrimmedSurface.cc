@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RectangularTrimmedSurface.cc,v 1.4 2000-08-28 08:57:59 gcosmo Exp $
+// $Id: G4RectangularTrimmedSurface.cc,v 1.5 2000-11-08 14:22:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,7 +40,7 @@ const char* G4RectangularTrimmedSurface::Name() const
 void G4RectangularTrimmedSurface::CalcBBox()
 {
   BasisSurface->CalcBBox();
-  bbox = BasisSurface->bbox;
+  bbox = BasisSurface->GetBBox();
 }
 
 
@@ -53,7 +53,7 @@ G4int G4RectangularTrimmedSurface::Intersect(const G4Ray& Rayref)
     
     if((TrimU1<=UHit)&&(TrimU2>=UHit)&&(TrimV1<=VHit)&&(TrimV2>=VHit))
     {
-      closest_hit = BasisSurface->closest_hit;
+      closest_hit = BasisSurface->GetClosestHit();
       return 1;
     }
   }

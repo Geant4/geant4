@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BoundingBox3D.cc,v 1.4 2000-08-28 08:57:56 gcosmo Exp $
+// $Id: G4BoundingBox3D.cc,v 1.5 2000-11-08 14:22:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,6 +38,25 @@ G4BoundingBox3D::G4BoundingBox3D(const G4Point3D& p)
 
 G4BoundingBox3D::~G4BoundingBox3D() {}
 
+G4BoundingBox3D::G4BoundingBox3D(const G4BoundingBox3D& right)
+  : box_min(right.box_min), box_max(right.box_max),
+    distance(right.distance), test_result(right.test_result),
+    MiddlePoint(right.MiddlePoint), GeantBox(right.GeantBox)
+{
+}
+
+G4BoundingBox3D& G4BoundingBox3D::operator=(const G4BoundingBox3D& right)
+{
+  if (&right == this) return *this;
+  box_min  = right.box_min;
+  box_max  = right.box_max;
+  distance = right.distance;
+  test_result = right.test_result;
+  MiddlePoint = right.MiddlePoint;
+  GeantBox = right.GeantBox;
+  
+  return *this;
+}
 
 void G4BoundingBox3D::Init(const G4Point3D& p1, const G4Point3D& p2) 
 {
@@ -123,7 +142,7 @@ G4int G4BoundingBox3D::Test(const G4Ray& rayref)
     
     // Adapt ray_starting point to box
 
-    const G4Point3D ray_start2 = ray_start - MiddlePoint;
+    const G4Point3D ray_start2 = G4Point3D( ray_start - MiddlePoint );
     distance = DistanceToIn(ray_start2, ray_dir);
 
     if(!distance)
@@ -330,7 +349,7 @@ G4double G4BoundingBox3D::DistanceToIn(const G4Point3D& p,
 
 ///////////////////////////////////////////////////////////////////////////////
 
-G4int G4BoundingBox3D::Inside(const G4Point3D& Pt)
+G4int G4BoundingBox3D::Inside(const G4Point3D& Pt) const
 {
   if( ( Pt.x() >= box_min.x() && Pt.x() <= box_max.x() ) &&
       ( Pt.y() >= box_min.y() && Pt.y() <= box_max.y() ) &&

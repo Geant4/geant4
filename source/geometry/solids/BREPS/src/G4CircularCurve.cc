@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CircularCurve.cc,v 1.4 2000-08-28 15:00:38 gcosmo Exp $
+// $Id: G4CircularCurve.cc,v 1.5 2000-11-08 14:22:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -21,6 +21,41 @@
 // G4CircularCurve
 G4CircularCurve::G4CircularCurve() {}
 G4CircularCurve::~G4CircularCurve() {}
+
+G4CircularCurve::G4CircularCurve(const G4CircularCurve& right)
+  : radius(right.radius)
+{
+  pShift    = right.pShift;
+  position  = right.position;
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+}
+
+G4CircularCurve&
+G4CircularCurve::operator=(const G4CircularCurve& right)
+{
+  if (&right == this) return *this;
+
+  radius    = right.radius;
+  pShift    = right.pShift;
+  position  = right.position;
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+
+  return *this;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -78,8 +113,8 @@ G4double G4CircularCurve::GetPMax() const
 
 G4Point3D G4CircularCurve::GetPoint(G4double param) const
 {
-  return position.GetLocation()+radius*
-    ( cos(param)*position.GetPX() + sin(param)*position.GetPY() );
+  return G4Point3D( position.GetLocation()+radius*
+    ( cos(param)*position.GetPX() + sin(param)*position.GetPY() ) );
 }
 
 G4double G4CircularCurve::GetPPoint(const G4Point3D& pt) const

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Parabola.icc,v 1.4 2000-08-28 15:00:34 gcosmo Exp $
+// $Id: G4Parabola.icc,v 1.5 2000-11-08 14:22:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -47,8 +47,9 @@ G4double G4Parabola::GetPMax() const
 inline
 G4Point3D G4Parabola::GetPoint(G4double param) const
 {
-  return position.GetLocation()
-    + focalDist* (param*param*position.GetPX() + 2*param*position.GetPY());
+  return G4Point3D( position.GetLocation()
+                    + focalDist* (param*param*position.GetPX()
+		    + 2*param*position.GetPY()) );
 }
 
 inline
@@ -110,7 +111,7 @@ G4int G4Parabola::IntersectRay2D(const G4Ray& ray)
   const G4Vector3D& l= position.GetPY();
 
   // a == 1
-  G4Vector3D SMinusF= S-F;
+  G4Vector3D SMinusF= G4Vector3D( S-F );
   G4double bHalf= SMinusF*d - (d.x()*l.y()-d.y()*l.x());
   G4double c= SMinusF.mag2() + ( (S.x()-L0.x())*l.y() - (S.y()-L0.y())*l.x() );
 

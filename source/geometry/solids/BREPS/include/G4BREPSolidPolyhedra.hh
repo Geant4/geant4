@@ -5,20 +5,30 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPolyhedra.hh,v 1.5 2000-08-28 15:00:29 gcosmo Exp $
+// $Id: G4BREPSolidPolyhedra.hh,v 1.6 2000-11-08 14:21:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidPolyhedra
 //
-// Class description:
+//  Class description:
 // 
-// The polygonal solid G4BREPSolidPolyhedra is a shape defined by an inner 
-// and outer polygonal surface and two planes perpendicular to the Z axis. 
-// Each polygonal surface is created by linking a series of polygons created 
-// at different planes perpendicular to the Z-axis. All these polygons all 
-// have the same number of sides (sides) and are defined at the same Z planes 
-// for both inner and outer polygonal surfaces. 
+//  The polygonal solid G4BREPSolidPolyhedra is a shape defined by an inner 
+//  and outer polygonal surface and two planes perpendicular to the Z axis. 
+//  Each polygonal surface is created by linking a series of polygons created 
+//  at different planes perpendicular to the Z-axis. All these polygons all 
+//  have the same number of sides (sides) and are defined at the same Z planes 
+//  for both inner and outer polygonal surfaces. 
+//
+//  G4BREPSolidPolyhedra( const G4String& name,
+//                              G4double  phi1,
+//                              G4double  dphi,
+//                              G4int     sides,
+//                              G4int     num_z_planes,      
+//                              G4double  z_start,
+//                              G4double  z_values[],
+//                              G4double  RMIN[],
+//                              G4double  RMAX[] )
 
 // Authors: J.Sulkimo, P.Urban.
 // Revisions by: L.Broglia, S.Giani, G.Cosmo.
@@ -96,6 +106,10 @@ public:
     // Resets all distance attributes.
 
 private:
+
+  G4BREPSolidPolyhedra(const G4BREPSolidPolyhedra&);
+  G4BREPSolidPolyhedra& operator=(const G4BREPSolidPolyhedra&);
+    // Private copy constructor and assignment operator.
 
   //   The following is only utilised in storing the shape parameters for
   //  use in visualising this shape.  J.A. Feb  24, 1997

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Assembly.cc,v 1.2 2000-08-28 08:57:54 gcosmo Exp $
+// $Id: G4Assembly.cc,v 1.3 2000-11-08 14:22:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -25,8 +25,7 @@ G4Assembly::G4Assembly()
 
 G4Assembly::~G4Assembly()
 {
-  for(G4int a=0;a<numberOfSolids;a++)
-    delete placedVec[a];
+  placedVec.clearAndDestroy();
 }
 
 void G4Assembly::SetPlacedVector(G4PlacedVector& pVec)

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.hh,v 1.4 2000-08-28 08:57:42 gcosmo Exp $
+// $Id: G4BREPSolidPCone.hh,v 1.5 2000-11-08 14:21:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -13,11 +13,20 @@
 //
 // Class description:
 //
-// The polyconical solid G4BREPSolidPCone is a shape defined by a set of 
-// inner and outer conical or cylindrical surface sections and two planes 
-// perpendicular to the Z axis. Each conical surface is defined by its 
-// radius at two different planes perpendicular to the Z-axis. Inner and 
-// outer conical surfaces are defined using common Z planes. 
+//  The polyconical solid G4BREPSolidPCone is a shape defined by a set of 
+//  inner and outer conical or cylindrical surface sections and two planes 
+//  perpendicular to the Z axis. Each conical surface is defined by its 
+//  radius at two different planes perpendicular to the Z-axis. Inner and 
+//  outer conical surfaces are defined using common Z planes:
+//
+//  G4BREPSolidPCone( const G4String& name,
+//                          G4double start_angle,
+//                          G4double opening_angle,		   
+//                          G4int    num_z_planes,
+//                          G4double z_start,		   
+//                          G4double z_values[],
+//                          G4double RMIN[],
+//                          G4double RMAX[] )
 
 // Authors: J.Sulkimo, P.Urban.
 // Revisions by: L.Broglia, S.Giani, G.Cosmo.
@@ -35,7 +44,7 @@ class G4BREPSolidPCone : public G4BREPSolid
   G4BREPSolidPCone( const G4String& name,
 		    G4double start_angle,
 		    G4double opening_angle,		   
-		    G4int    num_z_planes, // sections,
+		    G4int    num_z_planes, // sections
 		    G4double z_start,		   
 		    G4double z_values[],
 		    G4double RMIN[],
@@ -87,13 +96,17 @@ class G4BREPSolidPCone : public G4BREPSolid
 
 public:
 
+  void Reset() const;
+    // Resets all distance attributes.
+
   G4Polyhedron* CreatePolyhedron () const;
     // Creates a G4Polyhedron
 
-  inline void Reset() const;
-    // Resets all distance attributes.
-
 private:
+
+  G4BREPSolidPCone(const G4BREPSolidPCone&);
+  G4BREPSolidPCone& operator=(const G4BREPSolidPCone&);
+    // Private copy constructor and assignment operator.
 
   // The following is only utilised in storing the shape parameters for
   // use in visualising this shape.  J.A. Feb  24, 1997
@@ -101,22 +114,12 @@ private:
   struct PConeParameters {
      G4double Start_angle;
      G4double Opening_angle;		   
-     int      Num_z_planes; 
+     G4int    Num_z_planes; 
      // G4double z_start;		   
      G4double *Z_values;
      G4double *Rmin;
      G4double *Rmax;
   }  original_parameters;
 };
-
-inline void G4BREPSolidPCone::Reset() const
-{
-  Active(1);
-  ((G4BREPSolidPCone*)this)->intersectionDistance=kInfinity;
-  StartInside(0);
-  for(register int a=0;a<nb_of_surfaces;a++)
-    SurfaceVec[a]->Reset();
-  ShortestDistance = kInfinity;
-}
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SphericalSurface.hh,v 1.6 2000-08-28 15:00:34 gcosmo Exp $
+// $Id: G4SphericalSurface.hh,v 1.7 2000-11-08 14:22:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -139,9 +139,6 @@ public:  // without description
     // Returns the Normal unit vector as for SurfaceNormal().
 
 /*
-  G4SphericalSurface( const G4SphericalSurface& s );
-    // Copy constructor.
-
   virtual G4double distanceAlongRay( G4int which_way, const G4Ray* ry,
                                      G4ThreeVec& p ) const;
     // Returns the distance along a Ray to enter or leave a G4SphericalSurface.  
@@ -212,6 +209,10 @@ protected:  // with description
     // (in radians).  Allowed range: theta_1 < theta_2 <= theta_1 + PI.
 
 private:
+
+  G4SphericalSurface(const G4SphericalSurface&);
+  G4SphericalSurface& operator=(const G4SphericalSurface&);
+    // Private copy constructor and assignment operator.
 
   // virtual G4double gropeAlongHelix( const Helix* hx ) const;
     // Private function to use a crude technique to find the intersection

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.cc,v 1.9 2000-08-28 15:00:38 gcosmo Exp $
+// $Id: G4FPlane.cc,v 1.10 2000-11-08 14:22:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,11 +32,11 @@ G4FPlane::G4FPlane( const G4Vector3D& direction,
 		    const G4Point3D&  Pt0        )
   : pplace(direction, axis, Pt0)
 {
-  G4Point3D Pt1 = Pt0 + direction;
+  G4Point3D Pt1 = G4Point3D( Pt0 + direction );
 
   // The plane include direction and axis is the normal,
   // so axis^direction is included in the plane
-  G4Point3D Pt2 = Pt0 + axis.cross(direction);
+  G4Point3D Pt2 = G4Point3D( Pt0 + axis.cross(direction) );
 
   G4Ray::CalcPlane3Pts( Pl, Pt0, Pt1, Pt2 );
 

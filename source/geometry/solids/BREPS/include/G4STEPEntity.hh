@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4STEPEntity.hh,v 1.3 2000-08-28 15:00:34 gcosmo Exp $
+// $Id: G4STEPEntity.hh,v 1.4 2000-11-08 14:22:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -27,6 +27,9 @@ class G4STEPEntity
 {
 
 public:
+
+  G4STEPEntity(){}
+  virtual ~G4STEPEntity(){}
 
   virtual G4String GetEntityType() const = 0;
 

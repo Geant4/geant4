@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OsloMatrix.cc,v 1.3 2000-08-28 08:57:58 gcosmo Exp $
+// $Id: G4OsloMatrix.cc,v 1.4 2000-11-08 14:22:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,14 +36,14 @@ G4OsloMatrix::~G4OsloMatrix()
   delete o_vec;
 }
 
-Matrix::Matrix()
+G4PointMatrix::G4PointMatrix()
 {
   nr=nc=0;
   data=0;
 }
 
 
-Matrix::Matrix(int rows, int columns)
+G4PointMatrix::G4PointMatrix(int rows, int columns)
 {
   nr=rows; 
   nc=columns; 
@@ -54,7 +54,7 @@ Matrix::Matrix(int rows, int columns)
 }
 
 
-Matrix::Matrix(G4double vec[])
+G4PointMatrix::G4PointMatrix(G4double vec[])
 {
   nr = 4;
   nc = 4; 
@@ -64,5 +64,5 @@ Matrix::Matrix(G4double vec[])
     data[a]=vec[a];
 }
 
-Matrix::~Matrix(){;}
+G4PointMatrix::~G4PointMatrix(){;}
 

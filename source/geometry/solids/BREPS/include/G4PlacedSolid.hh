@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PlacedSolid.hh,v 1.4 2000-08-28 15:00:34 gcosmo Exp $
+// $Id: G4PlacedSolid.hh,v 1.5 2000-11-08 14:22:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,10 +39,16 @@ public:  // with description
   inline G4bool operator==(const G4PlacedSolid& ps) const;
     // Equality operator.
 
-  inline G4VSolid*         GetSolid() const;
-  inline G4RotationMatrix* GetRotation() const;
-  inline G4ThreeVector*    GetTranslation() const;
+  inline const G4VSolid*         GetSolid() const;
+  inline const G4RotationMatrix* GetRotation() const;
+  inline const G4ThreeVector*    GetTranslation() const;
     // Accessors.
+
+private:
+
+  G4PlacedSolid(const G4PlacedSolid&);
+  G4PlacedSolid& operator=(const G4PlacedSolid&);
+    // Private copy constructor and assignment operator.
 
 private:
 

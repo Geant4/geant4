@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.15 2000-08-28 08:57:55 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.16 2000-11-08 14:22:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -100,15 +100,15 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
       }
       else
       {
-        G4cerr << "Error in construction of G4BREPSolidPCone "
-               << "Exactly the same z, rmin and rmax given for "
+        G4cerr << "Error in construction of G4BREPSolidPCone. \n"
+               << "Exactly the same z, rmin and rmax given for \n"
                << "consecutive indices, " << a << " and " << a+1 << G4endl;
         continue; 
       }
 
       // Create plane surface
-      G4Point3D ArcStart1 = LocalOrigin + (R1*PlaneDir);
-      G4Point3D ArcStart2 = LocalOrigin + (R2*PlaneDir);
+      G4Point3D ArcStart1 = G4Point3D( LocalOrigin + (R1*PlaneDir) );
+      G4Point3D ArcStart2 = G4Point3D( LocalOrigin + (R2*PlaneDir) );
       
       G4CurveVector cv1;
       G4CircularCurve *tmp1, *tmp2;
@@ -158,7 +158,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 	// Create cone
 	if(RMIN[a] > RMIN[a+1])
 	{
-	  G4Vector3D ConeOrigin = LocalOrigin ; 
+	  G4Vector3D ConeOrigin = G4Vector3D(LocalOrigin) ; 
 	  
 	  SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis, Length, 
 						RMIN[a+1], RMIN[a]);
@@ -167,9 +167,9 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 	}
 	else
 	{      
-	  G4Vector3D Axis2 = (-1*Axis);
-	  G4Vector3D LocalOrigin2 = LocalOrigin + (Length*Axis);
-	  G4Vector3D ConeOrigin = LocalOrigin2 ; 
+	  G4Vector3D Axis2 = G4Vector3D( -1*Axis );
+	  G4Vector3D LocalOrigin2 = G4Vector3D( LocalOrigin + (Length*Axis) );
+	  G4Vector3D ConeOrigin = LocalOrigin2; 
 	  
 	  SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis2, 
 						Length, RMIN[a], RMIN[a+1]); 
@@ -191,7 +191,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 	else
 	{
 	  // Create cylinder
-	  G4Vector3D CylOrigin = LocalOrigin ; 
+	  G4Vector3D CylOrigin = G4Vector3D( LocalOrigin ); 
 	  
 	  SurfaceVec[b] = new G4FCylindricalSurface(CylOrigin, Axis, 
 						    RMIN[a], Length );
@@ -209,7 +209,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 	// Create cone
 	if(RMAX[a] > RMAX[a+1])
 	{
-	  G4Vector3D ConeOrigin = LocalOrigin ;
+	  G4Vector3D ConeOrigin = G4Vector3D( LocalOrigin );
 	  
 	  SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis, 
 						Length, RMAX[a+1], RMAX[a]);
@@ -219,8 +219,8 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 	}
 	else
 	{
-	  G4Vector3D Axis2 = (-1*Axis);
-	  G4Vector3D LocalOrigin2 = LocalOrigin + (Length*Axis);
+	  G4Vector3D Axis2 = G4Vector3D( -1*Axis );
+	  G4Vector3D LocalOrigin2 = G4Vector3D( LocalOrigin + (Length*Axis) );
 	  G4Vector3D ConeOrigin = LocalOrigin2 ;
 
 	  SurfaceVec[b] = new G4FConicalSurface(ConeOrigin, Axis2, 
@@ -235,7 +235,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
       else
       {
 	// Create cylinder
-	G4Vector3D CylOrigin = LocalOrigin ;
+	G4Vector3D CylOrigin = G4Vector3D( LocalOrigin );
 	
 	if (RMAX[a] == 0)
 	{
@@ -246,7 +246,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 	else
 	{
 	  // Create cylinder
-	  G4Vector3D CylOrigin = LocalOrigin ; 
+	  G4Vector3D CylOrigin = G4Vector3D( LocalOrigin ); 
 	  
 	  SurfaceVec[b] = new G4FCylindricalSurface(CylOrigin, Axis, 
 						    RMAX[a], Length );
@@ -272,8 +272,8 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
   if(RMIN[0] < RMAX[0]) {
 
     // Create start G4Plane & boundaries    
-    G4Point3D ArcStart1a = Origin + (RMIN[0]*PlaneDir);
-    G4Point3D ArcStart1b = Origin + (RMAX[0]*PlaneDir);
+    G4Point3D ArcStart1a = G4Point3D( Origin + (RMIN[0]*PlaneDir) );
+    G4Point3D ArcStart1b = G4Point3D( Origin + (RMAX[0]*PlaneDir) );
  
     tmp = new G4CircularCurve;
     tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, Origin), RMIN[0]);
@@ -287,7 +287,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
     tmp->SetSameSense(1);
     cv.append(tmp);
 
-    SurfaceVec[nb_of_surfaces-2]   = new G4FPlane(PlaneDir, -PlaneAxis, Origin);
+    SurfaceVec[nb_of_surfaces-2] = new G4FPlane(PlaneDir, -PlaneAxis, Origin);
     SurfaceVec[nb_of_surfaces-2]->SetBoundaries(&cv);
 
     // set sense of the surface
@@ -301,8 +301,8 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
   if(RMIN[sections] < RMAX[sections]) {
 
     // Create end G4Plane & boundaries    
-    G4Point3D ArcStart2a = LocalOrigin + (RMIN[sections]*PlaneDir);  
-    G4Point3D ArcStart2b = LocalOrigin + (RMAX[sections]*PlaneDir);    
+    G4Point3D ArcStart2a = G4Point3D( LocalOrigin+(RMIN[sections]*PlaneDir) );  
+    G4Point3D ArcStart2b = G4Point3D( LocalOrigin+(RMAX[sections]*PlaneDir) );    
   
     cv.clear();
 
@@ -374,9 +374,9 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 
 G4BREPSolidPCone::~G4BREPSolidPCone()
 {
-  delete[] original_parameters.Z_values;
-  delete[] original_parameters.Rmin;
-  delete[] original_parameters.Rmax;
+  delete [] original_parameters.Z_values;
+  delete [] original_parameters.Rmin;
+  delete [] original_parameters.Rmax;
 }
 
 void G4BREPSolidPCone::Initialize()
@@ -607,7 +607,7 @@ G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt,
   Reset();
 
   const G4double halfTolerance = kCarTolerance*0.5;    
-  G4Vector3D Ptv = Pt;
+  G4Vector3D Ptv = G4Vector3D( Pt );
   G4int a;
 
   // I don`t understand this line
@@ -697,6 +697,16 @@ G4double G4BREPSolidPCone::DistanceToOut(const G4ThreeVector& Pt) const
   else
     // return Dist;
     return fabs(Dist);
+}
+
+void G4BREPSolidPCone::Reset() const
+{
+  Active(1);
+  ((G4BREPSolidPCone*)this)->intersectionDistance=kInfinity;
+  StartInside(0);
+  for(register int a=0;a<nb_of_surfaces;a++)
+    SurfaceVec[a]->Reset();
+  ShortestDistance = kInfinity;
 }
 
 //  In graphics_reps:   

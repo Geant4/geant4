@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CompositeCurve.cc,v 1.5 2000-08-28 15:00:38 gcosmo Exp $
+// $Id: G4CompositeCurve.cc,v 1.6 2000-11-08 14:22:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,7 +39,10 @@ G4CompositeCurve::G4CompositeCurve(const G4Point3DVector& vertices)
   Init(cv);
 }
 
-G4CompositeCurve::~G4CompositeCurve(){}
+G4CompositeCurve::~G4CompositeCurve()
+{
+  segments.clearAndDestroy();
+}
 
 G4String G4CompositeCurve::GetEntityType() const 
 {
@@ -119,10 +122,7 @@ G4int G4CompositeCurve::IntersectRay2D(const G4Ray& ray)
     temp = c.IntersectRay2D(ray);
 
     // test if the point is on the composite curve
-    if( temp==999 )
-      return 999;
-    else
-      nbinter+= temp; 
+    if( temp ) nbinter+= temp; 
   }
  
   return nbinter;

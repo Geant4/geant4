@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidSphere.cc,v 1.3 2000-08-28 08:57:55 gcosmo Exp $
+// $Id: G4BREPSolidSphere.cc,v 1.4 2000-11-08 14:22:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,6 +36,9 @@ G4BREPSolidSphere::G4BREPSolidSphere(const G4String& name,
   Initialize();
 }
 
+G4BREPSolidSphere::~G4BREPSolidSphere()
+{
+}
 
 EInside G4BREPSolidSphere::Inside(register const G4ThreeVector& Pt) const
 {
@@ -63,11 +66,11 @@ G4double G4BREPSolidSphere::DistanceToIn(const G4ThreeVector& Pt) const
 G4double G4BREPSolidSphere::DistanceToIn(register const G4ThreeVector& Pt, 
 					 register const G4ThreeVector& V) const
 {
-  SphReset();  
+  // SphReset();  
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(V);   
   G4Ray      r(Pttmp, Vtmp);
-  int        Result = SurfaceVec[0]->Intersect( r );
+  G4int      Result = SurfaceVec[0]->Intersect( r );
 
   if(Result>0)
   {
@@ -84,9 +87,8 @@ G4double G4BREPSolidSphere::DistanceToOut(register const G4ThreeVector& Pt,
 					  G4bool *validNorm, 
 					  G4ThreeVector *n) const
 {
-  if(validNorm)
-    *validNorm = false;
-  SphReset();  
+  if(validNorm) *validNorm = false;
+  // SphReset();  
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(V);   
   G4Ray      r(Pttmp, Vtmp);

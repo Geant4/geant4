@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SphericalSurface.cc,v 1.3 2000-08-28 08:57:59 gcosmo Exp $
+// $Id: G4SphericalSurface.cc,v 1.4 2000-11-08 14:22:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -177,7 +177,7 @@ G4double G4SphericalSurface::HowNear( const G4Vector3D& x ) const
   //  Distance from the point x to the G4SphericalSurface.
   //  The distance will be positive if the point is Inside the 
   //  G4SphericalSurface, negative if the point is outside.
-  G4Vector3D d = x - origin;
+  G4Vector3D d = G4Vector3D( x - origin );
   G4double rad = d.mag();
   return (radius - rad);
 }
@@ -305,7 +305,7 @@ G4int G4SphericalSurface::Intersect( const G4Ray& ry )
 
   //  Origin and G4Vector3D unit vector of Ray.
   //	G4Vector3D x = ry->position( 0.0 );	
-  G4Vector3D x=ry.GetStart();
+  G4Vector3D x= G4Vector3D( ry.GetStart() );
 
   //	G4Vector3D dhat = ry->direction( 0.0 );
   G4Vector3D dhat = ry.GetDir();
@@ -317,7 +317,7 @@ G4int G4SphericalSurface::Intersect( const G4Ray& ry )
   s[1] = -1.0 ;
 
   //  calculate the two solutions (quadratic equation)
-  G4Vector3D d = x - GetOrigin();
+  G4Vector3D d = G4Vector3D( x - GetOrigin() );
   G4double r = GetRadius();
 
 //  quit with no intersection if the radius of the G4SphericalSurface is zero
@@ -599,7 +599,7 @@ G4Vector3D G4SphericalSurface::Normal( const G4Vector3D& p ) const
 { 
   //  Return the Normal unit vector to the G4SphericalSurface at a point p on
   //  (or nearly on) the G4SphericalSurface.
-  G4Vector3D n = p - origin;
+  G4Vector3D n = G4Vector3D( p - origin );
   G4double nmag = n.mag();
   
   if ( nmag != 0.0 )
@@ -618,7 +618,7 @@ G4Vector3D G4SphericalSurface::SurfaceNormal( const G4Point3D& p ) const
 { 
   //  Return the Normal unit vector to the G4SphericalSurface at a point p on
   //  (or nearly on) the G4SphericalSurface.
-  G4Vector3D n = p - origin;
+  G4Vector3D n = G4Vector3D( p - origin );
   G4double nmag = n.mag();
   
   if ( nmag != 0.0 )
@@ -651,7 +651,7 @@ G4int G4SphericalSurface::WithinBoundary( const G4Vector3D& x ) const
   //  return 1 if point x is on the G4SphericalSurface, otherwise return zero
   //  (x is assumed to lie on the surface of the G4SphericalSurface, so one 
   //  only checks the angular limits)
-  G4Vector3D y_axis = z_axis.cross( x_axis );
+  G4Vector3D y_axis = G4Vector3D( z_axis.cross( x_axis ) );
 
   //  components of x in the local coordinate system of the G4SphericalSurface
   G4double px = x * x_axis;

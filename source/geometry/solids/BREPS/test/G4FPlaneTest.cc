@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////
-// $Id: G4FPlaneTest.cc,v 1.4 2000-08-28 08:58:04 gcosmo Exp $
+// $Id: G4FPlaneTest.cc,v 1.5 2000-11-08 14:22:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -233,17 +233,17 @@ int main()
   if(intersec)
   {
     G4cout<<"\n\nIntersection founded at point :"
-	  <<"\n   x="<<SurfaceVec1.hitpoint.x()
-	  <<"\n   y="<<SurfaceVec1.hitpoint.y()
-	  <<"\n   z="<<SurfaceVec1.hitpoint.z();
+	  <<"\n   x="<<SurfaceVec1.GetHitPoint().x()
+	  <<"\n   y="<<SurfaceVec1.GetHitPoint().y()
+	  <<"\n   z="<<SurfaceVec1.GetHitPoint().z();
 
-    if (  ( SurfaceVec1.hitpoint.x()*SurfaceVec1.GetPplane().a +
-	    SurfaceVec1.hitpoint.y()*SurfaceVec1.GetPplane().b +
-	    SurfaceVec1.hitpoint.z()*SurfaceVec1.GetPplane().c   < 
+    if (  ( SurfaceVec1.GetHitPoint().x()*SurfaceVec1.GetPplane().a +
+	    SurfaceVec1.GetHitPoint().y()*SurfaceVec1.GetPplane().b +
+	    SurfaceVec1.GetHitPoint().z()*SurfaceVec1.GetPplane().c   < 
 	    SurfaceVec1.GetPplane().d + kCarTolerance              ) &&
-	  ( SurfaceVec1.hitpoint.x()*SurfaceVec1.GetPplane().a +
-	    SurfaceVec1.hitpoint.y()*SurfaceVec1.GetPplane().b +
-	    SurfaceVec1.hitpoint.z()*SurfaceVec1.GetPplane().c   > 
+	  ( SurfaceVec1.GetHitPoint().x()*SurfaceVec1.GetPplane().a +
+	    SurfaceVec1.GetHitPoint().y()*SurfaceVec1.GetPplane().b +
+	    SurfaceVec1.GetHitPoint().z()*SurfaceVec1.GetPplane().c   > 
 	    SurfaceVec1.GetPplane().d - kCarTolerance              )    )
        G4cout<<"\n\nPlain contain the hit point";
     else

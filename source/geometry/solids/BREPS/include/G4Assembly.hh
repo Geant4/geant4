@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Assembly.hh,v 1.4 2000-08-28 15:00:28 gcosmo Exp $
+// $Id: G4Assembly.hh,v 1.5 2000-11-08 14:21:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -13,9 +13,9 @@
 //
 // Class description:
 //   
-// Object providing access to the final assembled geometry as read for
-// example from a STEP file description. It own a vector of placed
-// solids which must be initialised through its SetPlacedVector()
+// Object providing access to the final assembled geometry as read, for
+// instance, from a STEP file description. It owns a vector of placed
+// solids which must be initialised through the SetPlacedVector()
 // method. Currently, it simply provides a way to retrieve the pointer
 // to each placed solid, and to determine the number of solids currently
 // placed.
@@ -45,6 +45,12 @@ public: // with description
   void SetPlacedVector(G4PlacedVector&);
   inline G4PlacedSolid* GetPlacedSolid(G4int solidNumber) const;
   inline G4int GetNumberOfSolids() const;
+
+private:
+
+  G4Assembly(const G4Assembly&);
+  G4Assembly& operator=(const G4Assembly&);
+    // Private copy constructor and assignment operator.
 
 private:  
 

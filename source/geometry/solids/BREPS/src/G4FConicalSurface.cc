@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.cc,v 1.11 2000-08-28 15:00:38 gcosmo Exp $
+// $Id: G4FConicalSurface.cc,v 1.12 2000-11-08 14:22:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -88,17 +88,6 @@ G4FConicalSurface::G4FConicalSurface(const G4Point3D&  o,
 
   //  Calculate the angle of the G4ConicalSurface from the length and radii
   tan_angle =  ( large_radius - small_radius ) / length ;
-}
-
-
-G4FConicalSurface::G4FConicalSurface( const G4FConicalSurface& c )
-  //: G4ConicalSurface( c.origin, c.GetAxis(), c.GetAngle() )
-{ 
-  //  copy constructor
-  small_radius = c.small_radius;
-  large_radius = c.large_radius;
-  length       = c.length;
-  tan_angle    = c.tan_angle;
 }
 
 

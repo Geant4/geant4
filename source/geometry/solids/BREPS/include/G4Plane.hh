@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Plane.hh,v 1.3 2000-08-28 08:57:47 gcosmo Exp $
+// $Id: G4Plane.hh,v 1.4 2000-11-08 14:22:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Axis2Placement3D.icc,v 1.3 2000-08-28 15:00:29 gcosmo Exp $
+// $Id: G4Axis2Placement3D.icc,v 1.4 2000-11-08 14:21:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -15,6 +15,17 @@
 //
 // Implementation of inline methods of G4AxisPlacement3D
 // --------------------------------------------------------------------
+
+inline
+G4bool G4Axis2Placement3D::operator==(const G4Axis2Placement3D& other) const
+{
+  return ((location == other.location) && (axis == other.axis) &&
+	  (refDirection == other.refDirection) &&
+	  (pX == other.pX) && (pY == other.pY) && (pZ == other.pZ) &&
+	  (toPlacementCoordinates == other.toPlacementCoordinates) &&
+	  (fromPlacementCoordinates == other.fromPlacementCoordinates))
+	 ? true : false; 
+}
 
 inline
 void G4Axis2Placement3D::Init( const G4Vector3D& refDirection0 ,

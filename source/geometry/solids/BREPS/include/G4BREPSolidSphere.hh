@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidSphere.hh,v 1.4 2000-08-28 15:00:29 gcosmo Exp $
+// $Id: G4BREPSolidSphere.hh,v 1.5 2000-11-08 14:21:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -13,7 +13,13 @@
 //
 // Class description:
 // 
-// Definition of a generic BREP sphere.
+//  Definition of a generic BREP sphere:
+//
+//  G4BREPSolidSphere(const G4String& name,
+//                    const G4Vector3D& origin,
+//                    const G4Vector3D& xhat, 
+//                    const G4Vector3D& zhat,
+//                          G4double radius)
 
 // Authors: J.Sulkimo, P.Urban.
 // Revisions by: L.Broglia, G.Cosmo.
@@ -28,12 +34,15 @@ class G4BREPSolidSphere : public G4BREPSolid
 
  public:  // with description
 
-  G4BREPSolidSphere(const G4String&,
+  G4BREPSolidSphere(const G4String& name,
 		    const G4Vector3D& origin,
 		    const G4Vector3D& xhat, 
 		    const G4Vector3D& zhat,
 		    G4double radius);
     // Constructor defining the sphere through its spherical surfaces.
+
+  ~G4BREPSolidSphere();
+    // Empty destructor.
 
   EInside Inside(register const G4ThreeVector& Pt) const;
     // Determines if the point Pt is inside, outside or on the surface
@@ -73,7 +82,13 @@ class G4BREPSolidSphere : public G4BREPSolid
 
  public:  // without description
 
-  inline void SphReset() const { ((G4BREPSolidSphere*)this)->active=1; }
+  inline void SphReset() { active=1; }
+
+ private:
+
+  G4BREPSolidSphere(const G4BREPSolidSphere&);
+  G4BREPSolidSphere& operator=(const G4BREPSolidSphere&);
+    // Private copy constructor and assignment operator.
 
 };
 

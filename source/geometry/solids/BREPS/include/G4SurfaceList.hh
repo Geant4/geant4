@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SurfaceList.hh,v 1.3 2000-08-28 08:57:49 gcosmo Exp $
+// $Id: G4SurfaceList.hh,v 1.4 2000-11-08 14:22:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -34,8 +34,8 @@ class G4SurfaceList
   void AddSurface(G4Surface *srf);
   
   G4Surface* GetSurface();
-  G4Surface* GetSurface(G4int number);
-  G4Surface* GetLastSurface();
+  const G4Surface* GetSurface(G4int number);
+  const G4Surface* GetLastSurface() const;
   
   void RemoveSurface(G4Surface* srf);
   void RemovePointer();
@@ -48,7 +48,17 @@ class G4SurfaceList
   
   void QuickG4Sort(G4Surface**, G4int, G4int);
 
- public:  // without description
+  const G4Surface* GetFirst() const { return first; }
+  const G4Surface* GetNext()  const { return next;  }
+  G4int GetSize() const { return number_of_elements; }
+
+ private:
+ 
+  G4SurfaceList(const G4SurfaceList&);
+  G4SurfaceList& operator=(const G4SurfaceList&);
+    // Private copy constructor and assignment operator.
+
+ private:  // without description
 
   G4int number_of_elements;
   

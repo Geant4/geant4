@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SurfaceOfLinearExtrusion.hh,v 1.2 2000-08-28 08:57:49 gcosmo Exp $
+// $Id: G4SurfaceOfLinearExtrusion.hh,v 1.3 2000-11-08 14:22:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,6 +35,7 @@ private:
 
   G4SurfaceOfLinearExtrusion(const G4SurfaceOfLinearExtrusion &);
   G4SurfaceOfLinearExtrusion& operator=(const G4SurfaceOfLinearExtrusion &);
+    // Private copy constructor and assignement operator.
 
 };
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProjectedSurface.hh,v 1.4 2000-08-28 15:00:34 gcosmo Exp $
+// $Id: G4ProjectedSurface.hh,v 1.5 2000-11-08 14:22:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,11 +32,8 @@ class G4ProjectedSurface : public G4Surface
 public:  // with description
 
   G4ProjectedSurface();
-  ~G4ProjectedSurface();
+  virtual ~G4ProjectedSurface();
     // Default constructor and destructor.
-
-  G4ProjectedSurface(const G4ProjectedSurface &tmp);
-    // Copy constructor.
 
   void CalcBBox();
     // Finds the bounds of the 2D-projected nurb, it
@@ -49,12 +46,17 @@ public:  // without description
   inline G4Vector3D SurfaceNormal(const G4Point3D& Pt) const;
     // Returns normal to surface (G4Vector3D(0,0,0)).
 
-  // Test variables
+protected:
 
   static G4int Splits;
   G4ControlPoints *ctl_points;
+    // Test variables
 
 private:
+
+  G4ProjectedSurface(const G4ProjectedSurface&);
+  G4ProjectedSurface& operator=(const G4ProjectedSurface&);
+    // Private copy constructor and assignment operator.
 
   void CopySurface();
     // Copies the projected surface into a bezier surface

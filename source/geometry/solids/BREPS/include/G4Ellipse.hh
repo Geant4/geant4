@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ellipse.hh,v 1.6 2000-08-28 15:00:32 gcosmo Exp $
+// $Id: G4Ellipse.hh,v 1.7 2000-11-08 14:22:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,8 +29,12 @@ class G4Ellipse : public G4Conic
 public:  // with description
 
   G4Ellipse();
-  ~G4Ellipse();
+  virtual ~G4Ellipse();
     // Constructor & destructor.
+
+  G4Ellipse(const G4Ellipse& right);
+  G4Ellipse& operator=(const G4Ellipse& right);
+    // Copy constructor and assignment operator.
 
   G4Curve* Project(const G4Transform3D& tr=
                    G4Transform3D::Identity);

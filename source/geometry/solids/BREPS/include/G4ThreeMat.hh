@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ThreeMat.hh,v 1.6 2000-08-28 15:00:35 gcosmo Exp $
+// $Id: G4ThreeMat.hh,v 1.7 2000-11-08 14:22:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,33 +35,23 @@ public:  // with description
   G4ThreeMat( G4double a[3][3] );
     // Normal constructors with a 3 x 3 array argument.
 
-  virtual ~G4ThreeMat() {};
+  virtual ~G4ThreeMat();
     // Destructor.
 
   G4ThreeMat( const G4ThreeMat& m );
-    // Copy constructor.
-
-  virtual const char* NameOf() const;
-    // Returns the class name.
-
-  friend G4std::ostream& operator<<( G4std::ostream& os, const G4ThreeMat& m );
-  virtual void PrintOn( G4std::ostream& os = G4cout ) const;
-    // Printing functions (derived classes do not need to overwrite operator <<).
+  G4ThreeMat& operator=( const G4ThreeMat& m );
+    // Copy constructor and assignment operator.
 
   G4int operator==( const G4ThreeMat& m ) const;
     // Equality operator.
 
-  void operator=( const G4ThreeMat& m );
-  G4ThreeMat operator+() const { return *this; };
-  G4ThreeMat operator-();
-  G4ThreeMat operator+=( const G4ThreeMat& m2 );
-  G4ThreeMat operator-=( const G4ThreeMat& m2 );
-  friend G4ThreeMat operator+( const G4ThreeMat& m1, const G4ThreeMat& m2 );
-  friend G4ThreeMat operator-( const G4ThreeMat& m1, const G4ThreeMat& m2 );
-  friend G4ThreeMat operator*( G4double x, const G4ThreeMat& m );
-  friend G4Vector3D operator*( const G4ThreeMat& m, const G4Vector3D& v );
-  friend G4ThreeMat operator*( const G4ThreeMat& m1, const G4ThreeMat& m2 );
-    // Overload operators =, +, -, +=, -=, *
+  friend G4std::ostream& operator<<( G4std::ostream& os, const G4ThreeMat& m );
+
+  virtual const char* NameOf() const;
+    // Returns the class name.
+
+  virtual void PrintOn( G4std::ostream& os = G4cout ) const;
+    // Printing functions (derived classes do not need to overwrite operator <<).
 
   G4double Determinant() const;
     // Determinant of matrix.

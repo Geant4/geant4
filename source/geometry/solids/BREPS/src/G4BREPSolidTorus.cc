@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidTorus.cc,v 1.3 2000-08-28 08:57:55 gcosmo Exp $
+// $Id: G4BREPSolidTorus.cc,v 1.4 2000-11-08 14:22:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,4 +32,8 @@ G4BREPSolidTorus::G4BREPSolidTorus(const    G4String& name,
   nb_of_surfaces = 1;
   active = 1;
   Initialize();
+}
+
+G4BREPSolidTorus::~G4BREPSolidTorus()
+{
 }

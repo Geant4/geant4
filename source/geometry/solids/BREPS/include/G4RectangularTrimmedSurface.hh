@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RectangularTrimmedSurface.hh,v 1.5 2000-08-28 08:57:48 gcosmo Exp $
+// $Id: G4RectangularTrimmedSurface.hh,v 1.6 2000-11-08 14:22:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,6 +41,11 @@ public:  // with description
 
   virtual const char* Name() const;
     // Returns the class type name.
+
+private:
+
+  G4RectangularTrimmedSurface(const G4RectangularTrimmedSurface&);
+  G4RectangularTrimmedSurface& operator=(const G4RectangularTrimmedSurface&);
 
 private:
 

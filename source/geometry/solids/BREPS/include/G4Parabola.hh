@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Parabola.hh,v 1.6 2000-08-28 15:00:34 gcosmo Exp $
+// $Id: G4Parabola.hh,v 1.7 2000-11-08 14:22:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,8 +29,12 @@ class G4Parabola : public G4Conic
 public:  // with description
 
   G4Parabola();
-  ~G4Parabola();
+  virtual ~G4Parabola();
     // Constructor & destructor.
+
+  G4Parabola(const G4Parabola& right);
+  G4Parabola& operator=(const G4Parabola& right);
+    // Copy constructor and assignment operator.
 
   G4Curve* Project(const G4Transform3D& tr=
                    G4Transform3D::Identity);

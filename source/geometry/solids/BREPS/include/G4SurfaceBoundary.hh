@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SurfaceBoundary.hh,v 1.4 2000-08-28 15:00:34 gcosmo Exp $
+// $Id: G4SurfaceBoundary.hh,v 1.5 2000-11-08 14:22:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -96,18 +96,15 @@ public:  // without description
 
   // void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is);
 
-public:
-
-  G4Point3DVector points;
-
 private:
 
-  // copy disabled
   G4SurfaceBoundary(const G4SurfaceBoundary&);
   G4SurfaceBoundary& operator=(const G4SurfaceBoundary&);
+    // Private copy constructor and assignment operator.
 
 private:
 
+  G4Point3DVector points;
   G4CurveVector bounds;
   G4BoundingBox3D bBox;
 

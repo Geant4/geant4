@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.hh,v 1.9 2000-08-28 15:00:33 gcosmo Exp $
+// $Id: G4FPlane.hh,v 1.10 2000-11-08 14:22:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -52,7 +52,7 @@ class G4FPlane : public G4Surface
 public:  // with description
 
   G4FPlane();
-  ~G4FPlane();
+  virtual ~G4FPlane();
     // Default constructor & destructor.
 
   G4FPlane( const G4Vector3D& direction, 
@@ -117,17 +117,26 @@ public:  // without description
   inline void Deactivate();
     // Deactive, used in G4Surface.
 
-  inline G4Ray* Norm() const;
+  inline G4Ray* Norm();
     // Returns the normal (used in BREPSolid).
 
-  G4Point3D hitpoint;
-    // Hit point of the ray on the surface.
+  inline const G4Point3D& GetHitPoint() const;
+    // Returns the hit point of the ray on the surface.
 
 protected:
 
   void InitBounded();
+
+protected:
   
+  G4Point3D hitpoint;
+    // Hit point of the ray on the surface.
+
 private:
+
+  G4FPlane(const G4FPlane&);
+  G4FPlane& operator=(const G4FPlane&);
+    // Private copy constructor and assignment operator.
 
   inline G4int Sign(G4double a) const;
 
@@ -135,7 +144,7 @@ private:
 
   G4Axis2Placement3D pplace;
   G4Plane            Pl;
-  G4Ray              *NormalX;
+  G4Ray*             NormalX;
   G4int              Convex;
   G4SurfaceBoundary* projectedBoundary;
 

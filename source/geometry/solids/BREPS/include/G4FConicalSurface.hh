@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.hh,v 1.8 2000-08-28 15:00:33 gcosmo Exp $
+// $Id: G4FConicalSurface.hh,v 1.9 2000-11-08 14:22:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -57,9 +57,6 @@ class G4FConicalSurface : public G4Surface
     // l : length of the G4FConicalSurface.
     // sl: small radius of the G4FConicalSurface.
     // lr: large radius of the G4FConicalSurface.
-
-  G4FConicalSurface( const G4FConicalSurface& c );
-    // Copy constructor.
 
   virtual G4Vector3D SurfaceNormal( const G4Point3D& p ) const;	
     // Returns the normal to the surface on point p.
@@ -137,6 +134,12 @@ protected:
 	
   G4Axis2Placement3D Position;
   G4double tan_angle;
+
+private:
+
+  G4FConicalSurface(const G4FConicalSurface&);
+  G4FConicalSurface& operator=(const G4FConicalSurface&);
+    // Private copy constructor and assignment operator.
 
 };
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Line.hh,v 1.5 2000-08-28 15:00:33 gcosmo Exp $
+// $Id: G4Line.hh,v 1.6 2000-11-08 14:22:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,11 +29,14 @@ class G4Line : public G4Curve
 public:  // with description
 
   G4Line();
-  ~G4Line();
+  virtual ~G4Line();
     // Constructor & destructor.
 
-  G4Curve* Project(const G4Transform3D& tr=
-                   G4Transform3D::Identity);
+  G4Line(const G4Line& orig);
+  G4Line& operator=(const G4Line& right);
+    // Copy constructor and assignment operator.
+
+  G4Curve* Project(const G4Transform3D& tr=G4Transform3D::Identity);
     // Transforms and projects the line.
 
   G4bool Tangent(G4CurvePoint& cp, G4Vector3D& vec);
@@ -58,7 +61,7 @@ public:  // without description
 protected:
 
   inline void InitBounded();
- 
+
 private:
   
   // geometric data

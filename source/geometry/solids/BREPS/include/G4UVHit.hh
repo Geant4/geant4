@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UVHit.hh,v 1.4 2000-08-28 08:57:50 gcosmo Exp $
+// $Id: G4UVHit.hh,v 1.5 2000-11-08 14:22:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -30,8 +30,14 @@ public:
     G4UVHit(G4double u_hit, G4double v_hit) {u = u_hit; v = v_hit; next=0;}
     ~G4UVHit() {}
 
-public:
-    G4UVHit * next;
+    void SetNext(G4UVHit* n) { next = n; }
+    G4UVHit* GetNext() { return next; }
+    G4double GetU() const { return u; }
+    G4double GetV() const { return v; }
+    
+private:
+
+    G4UVHit* next;
     G4double u, v;
 };
 

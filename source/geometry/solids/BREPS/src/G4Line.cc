@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Line.cc,v 1.5 2000-08-28 08:57:58 gcosmo Exp $
+// $Id: G4Line.cc,v 1.6 2000-11-08 14:22:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -19,6 +19,39 @@
 
 G4Line::G4Line (){}
 G4Line::~G4Line (){}
+
+G4Line::G4Line(const G4Line& right)
+  : pnt(right.pnt), dir(right.dir), invDir(right.invDir), v(right.v)
+{
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+}
+
+G4Line& G4Line::operator=(const G4Line& right)
+{
+  if (&right == this) return *this;
+  
+  pnt       = right.pnt;
+  dir       = right.dir;
+  invDir    = right.invDir;
+  v         = right.v;
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+  
+  return *this;
+}
 
 G4Curve* G4Line::Project(const G4Transform3D& tr)
 {

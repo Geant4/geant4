@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Surface.cc,v 1.5 2000-08-28 15:00:38 gcosmo Exp $
+// $Id: G4Surface.cc,v 1.6 2000-11-08 14:22:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -232,7 +232,7 @@ G4double G4Surface::HowNear( const G4Vector3D& x ) const
 {
   //  Distance from the point x to a Surface.
   //  The default for a Surface is the distance from the point to the origin.
-  G4Vector3D p = x - origin;
+  G4Vector3D p = G4Vector3D( x - origin );
   return p.mag();
 }
 
@@ -259,13 +259,13 @@ G4int G4Surface::GetNumberOfPoints() const
   return 0;
 }
 
-const G4Point3D& G4Surface::GetPoint(G4int Count) const
+const G4Point3D& G4Surface::GetPoint(G4int) const
 {
   const G4Point3D* tmp= new G4Point3D(0,0,0);
   return *tmp;
 }
 
-G4Ray* G4Surface::Norm() const
+G4Ray* G4Surface::Norm()
 {
   return (G4Ray*)0;
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ToroidalSurface.hh,v 1.4 2000-08-28 15:00:35 gcosmo Exp $
+// $Id: G4ToroidalSurface.hh,v 1.5 2000-11-08 14:22:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -69,6 +69,10 @@ class G4ToroidalSurface : public G4Surface
 
 private:
 
+  G4ToroidalSurface(const G4ToroidalSurface&);
+  G4ToroidalSurface& operator=(const G4ToroidalSurface&);
+    // Private copy constructor and assignment operator.
+
   inline G4int IsZero(G4double x) const;
   G4int SolveQuartic(G4double c[], G4double s[]);	
   G4int SolveCubic  (G4double c[], G4double s[]);
@@ -80,7 +84,7 @@ private:
   G4Axis2Placement3D Placement;
   G4double           MinRadius;
   G4double	     MaxRadius;
-  Matrix*            TransMatrix;   // transformation matrix  
+  G4PointMatrix*     TransMatrix;   // transformation matrix  
   G4Point3D          hitpoint;
   const G4double     EQN_EPS;
 

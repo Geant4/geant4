@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolid.cc,v 1.14 2000-08-28 15:00:37 gcosmo Exp $
+// $Id: G4BREPSolid.cc,v 1.15 2000-11-08 14:22:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -1074,8 +1074,8 @@ void G4BREPSolid::CalcBBoxes()
       //	    if(convex && Concavepoint==-1)
       {
 	srf->CalcBBox();
-	G4Point3D box_min = srf->bbox->GetBoxMin();
-	G4Point3D box_max = srf->bbox->GetBoxMax();
+	G4Point3D box_min = srf->GetBBox()->GetBoxMin();
+	G4Point3D box_max = srf->GetBBox()->GetBoxMax();
 	// Find max and min of face bboxes to make 
 	// solids bbox.
 	
@@ -1174,7 +1174,7 @@ void G4BREPSolid::TestSurfaceBBoxes(register const G4Ray& rayref) const
       // Get type
       if(srf->MyType() != 1) // 1 == planar face
       {
-	if(srf->bbox->Test(rayref))
+	if(srf->GetBBox()->Test(rayref))
 	  srf->SetDistance(bbox->GetDistance());	
 	else
 	{
@@ -1232,7 +1232,7 @@ G4int G4BREPSolid::Intersect(register const G4Ray& rayref) const
 	
 
 	// Get the evaluated point on the surface
-	G4Point3D& closest_point = srf->closest_hit;
+	const G4Point3D& closest_point = srf->GetClosestHit();
 
 	// Test for DistanceToIn(pt, vec)
 	// if d = 0 and vec.norm > 0, do not see the surface
@@ -1313,7 +1313,7 @@ G4int G4BREPSolid::Intersect(register const G4Ray& rayref) const
   if(!(SurfaceVec[0]->IsActive()))
     return 0;     
   
-  ((G4BREPSolid*)this)->intersection_point = SurfaceVec[0]->closest_hit;
+  ((G4BREPSolid*)this)->intersection_point = SurfaceVec[0]->GetClosestHit();
 
   
   bbox->SetDistance(HitDistance);
@@ -1359,7 +1359,7 @@ G4int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref,
 	if(ToIn) 
 	{
 	  const G4Vector3D& Dir = rayref.GetDir();
-	  const G4Point3D& Hit = srf->closest_hit;
+	  const G4Point3D& Hit = srf->GetClosestHit();
 	  const G4Vector3D& Norm = srf->SurfaceNormal(Hit);
 	   
 	  if(( Dir * Norm ) >= 0)
@@ -1409,7 +1409,7 @@ G4int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref,
 	  if(a+1<nb_of_surfaces)
 	  {
 	    const G4Vector3D& Dir = rayref.GetDir();
-	    const G4Point3D& Hit = srf->closest_hit;
+	    const G4Point3D& Hit = srf->GetClosestHit();
 	    const G4Vector3D& Norm = srf->SurfaceNormal(Hit);
 	      
 	    // L. Broglia

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineCurve.cc,v 1.4 2000-08-28 15:00:38 gcosmo Exp $
+// $Id: G4BSplineCurve.cc,v 1.5 2000-11-08 14:22:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -20,6 +20,7 @@
 #include "G4KnotVector.hh"
 
 G4BSplineCurve::G4BSplineCurve()
+  : degree(0), controlPointsList(0), knots(0), weightsData(0)
 {
 }
 
@@ -59,11 +60,48 @@ void G4BSplineCurve::Init(G4int degree0, G4Point3DVector* controlPointsList0,
 
 G4BSplineCurve::~G4BSplineCurve()
 {
-  delete controlPointsList;
-  delete knots;
-  if (weightsData) delete weightsData;
+  delete [] controlPointsList;
+  delete [] knots;
+  delete [] weightsData;
 }
 
+
+G4BSplineCurve::G4BSplineCurve(const G4BSplineCurve& right)
+{
+  delete [] controlPointsList;
+  delete [] knots;
+  delete [] weightsData;
+  Init(right.degree, right.controlPointsList,
+       right.knots, right.weightsData);
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+}
+
+G4BSplineCurve& G4BSplineCurve::operator=(const G4BSplineCurve& right)
+{
+  if (&right == this) return *this;
+  delete [] controlPointsList;
+  delete [] knots;
+  delete [] weightsData;
+  Init(right.degree, right.controlPointsList,
+       right.knots, right.weightsData);
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+
+  return *this;
+}
 
 // add by L. Broglia to pass linkage
 

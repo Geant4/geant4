@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ControlPoints.cc,v 1.4 2000-08-28 08:57:56 gcosmo Exp $
+// $Id: G4ControlPoints.cc,v 1.5 2000-11-08 14:22:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -55,7 +55,12 @@ G4ControlPoints::G4ControlPoints(const G4ControlPoints& old_points)
 { 
    // copy constructor
   
-  nr   = old_points.GetRows(); nc=old_points.GetCols();
+  for( G4int i = 0; i < nr*nc; i++)
+    delete data[i];
+  delete[] data;
+
+  nr   = old_points.nr;
+  nc   = old_points.nc;
   data = (G4PointRat**)new G4PointRat *[nr*nc];
   
   G4int a, b;
@@ -75,6 +80,33 @@ G4ControlPoints::~G4ControlPoints()
     delete data[a];
   
   delete[] data;
+}
+
+
+G4ControlPoints& G4ControlPoints::operator=(const G4ControlPoints& c)
+{ 
+   // assignment operator
+
+  if (&c == this) return *this;
+
+  for( G4int i = 0; i < nr*nc; i++)
+    delete data[i];
+  delete[] data;
+
+  nr   = c.nr;
+  nc   = c.nc;
+  data = (G4PointRat**)new G4PointRat *[nr*nc];
+  
+  G4int a, b;
+  
+  for (a = 0; a < nr*nc ; a++ )
+    data[a] = new G4PointRat;
+      
+  for ( a = 0; a < nr ; a++ )
+    for ( b = 0; b < nc ; b++ )
+      put( a, b, c.GetRat(a,b));
+
+  return *this;
 }
 
 

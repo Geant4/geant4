@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hyperbola.hh,v 1.6 2000-08-28 15:00:33 gcosmo Exp $
+// $Id: G4Hyperbola.hh,v 1.7 2000-11-08 14:22:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,8 +29,12 @@ class G4Hyperbola : public G4Conic
 public:  // with description
 
   G4Hyperbola();
-  ~G4Hyperbola();
+  virtual ~G4Hyperbola();
     // Constructor & destructor.
+
+  G4Hyperbola(const G4Hyperbola& right);
+  G4Hyperbola& operator=(const G4Hyperbola& right);
+    // Copy constructor and assignment operator.
 
   G4Curve* Project(const G4Transform3D& tr=
                    G4Transform3D::Identity);
@@ -69,6 +73,8 @@ protected:
 private:
 
   G4int Inside(const G4Point3D&, const G4Ray&);
+
+private:
 
   G4Point3D Focus1;
   G4Point3D Focus2;    

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.hh,v 1.9 2000-08-28 15:00:33 gcosmo Exp $
+// $Id: G4FCylindricalSurface.hh,v 1.10 2000-11-08 14:22:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -63,12 +63,8 @@ class G4FCylindricalSurface : public G4Surface
   virtual ~G4FCylindricalSurface();
     // Destructor.
 
-  G4FCylindricalSurface(const G4FCylindricalSurface& c);
-    // Copy constructor.
-
   inline G4int operator==( const G4FCylindricalSurface& c ) const;
     // Equality operator.
-
 
   virtual G4Vector3D SurfaceNormal( const G4Point3D& p ) const;
     // Returns the Normal unit vector to the G4FCylindricalSurface at a point 
@@ -138,6 +134,12 @@ class G4FCylindricalSurface : public G4Surface
   G4Axis2Placement3D Position;
   G4double  radius; 
   G4double  length;
+
+ private:
+
+  G4FCylindricalSurface(const G4FCylindricalSurface&);
+  G4FCylindricalSurface& operator=(const G4FCylindricalSurface&);
+    // Private copy constructor and assignment operator.
 
 };
 

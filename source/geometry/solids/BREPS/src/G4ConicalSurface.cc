@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ConicalSurface.cc,v 1.4 2000-08-28 08:57:56 gcosmo Exp $
+// $Id: G4ConicalSurface.cc,v 1.5 2000-11-08 14:22:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -19,12 +19,10 @@
 #include "G4Sort.hh"
 #include "G4Globals.hh"
 
-G4ConicalSurface::G4ConicalSurface() : G4Surface()
+
+G4ConicalSurface::G4ConicalSurface()
+  : G4Surface(), axis(G4Vector3D(1.,0.,0.)), angle(1.)
 {  
-  // default constructor
-  // default axis is ( 1.0, 0.0, 0.0 ), default angle is 1.0 radians
-  axis = G4Vector3D( 1.0, 0.0, 0.0 );
-  angle = 1.0;
 }
 
 G4ConicalSurface::G4ConicalSurface( const G4Point3D& o, 
@@ -111,10 +109,10 @@ G4double G4ConicalSurface::HowNear( const G4Vector3D& x ) const
   // Note that this may not be correct for a bounded conical object
   // subclassed to G4ConicalSurface.
 
-  G4Vector3D d    = x - origin;
+  G4Vector3D d    = G4Vector3D( x - origin );
   G4double   l    = d * axis;
-  G4Vector3D q    = origin  +  l * axis;
-  G4Vector3D v    = x - q;
+  G4Vector3D q    = G4Vector3D( origin  +  l * axis );
+  G4Vector3D v    = G4Vector3D( x - q );
 
 /* L. Broglia
   G4double   Dist = ( l * tan( angle )  -  v.Magnitude() ) * cos ( angle );
@@ -158,7 +156,7 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
 
   //  Origin and G4Vector3D unit vector of Ray.
   //	G4Vector3D x = ry->position();
-  G4Vector3D x = ry.GetStart();
+  G4Vector3D x = G4Vector3D( ry.GetStart() );
   
   //	G4Vector3D dhat = ry->direction( 0.0 );
   G4Vector3D dhat = ry.GetDir();
@@ -177,7 +175,7 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
   s[1] = -1.0 ;
 
   //  calculate the two solutions (quadratic equation)
-  G4Vector3D gamma = x - GetOrigin();
+  G4Vector3D gamma = G4Vector3D( x - GetOrigin() );
   G4double   T  = 1.0  +  ta * ta;
   G4double   ga = gamma * ahat;
   G4double   da = dhat * ahat;
@@ -464,7 +462,7 @@ G4Vector3D G4ConicalSurface::SurfaceNormal( const G4Point3D& p ) const
 {  
   //  return the Normal unit vector to the G4ConicalSurface at a point p 
   //  on (or nearly on) the G4ConicalSurface
-  G4Vector3D s    = p - origin;
+  G4Vector3D s    = G4Vector3D( p - origin );
 /* L. Broglia
    G4double   smag = s.Magnitude();
 */
@@ -492,13 +490,13 @@ G4Vector3D G4ConicalSurface::SurfaceNormal( const G4Point3D& p ) const
     s = s / smag;
 */
     s = s*(1/smag);
-    G4Vector3D q    = origin  +  l * axis;
-    G4Vector3D v    = p - q;
+    G4Vector3D q    = G4Vector3D( origin  +  l * axis );
+    G4Vector3D v    = G4Vector3D( p - q );
 /* L. Broglia
     G4double   sl   = v.Magnitude() * sin( angle );
 */
     G4double   sl   = v.mag2() * sin( angle );
-    G4Vector3D n    = v - sl * s;
+    G4Vector3D n    = G4Vector3D( v - sl * s );
 /* L. Broglia
     G4double   nmag = n.Magnitude();
 */

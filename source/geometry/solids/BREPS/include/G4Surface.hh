@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Surface.hh,v 1.5 2000-08-28 15:00:34 gcosmo Exp $
+// $Id: G4Surface.hh,v 1.6 2000-11-08 14:22:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -69,7 +69,10 @@ public:  // with description
   inline void Deactivate();
   inline void SetSameSense(G4int sameSense0);
   inline G4int GetSameSense() const;
-  inline G4BoundingBox3D* GetBBox() const;
+  inline G4BoundingBox3D* GetBBox();
+  inline const G4Point3D& GetClosestHit() const;
+  inline void SetNextNode(G4Surface*);
+  inline G4Surface* GetNextNode();
     // Get/Set methods for surface's attributes.
 
   virtual void Reset();
@@ -127,7 +130,7 @@ public:  // without description
   virtual const G4Point3D& GetPoint(G4int Count) const;
     // ???
 
-  virtual G4Ray* Norm() const;
+  virtual G4Ray* Norm();
   virtual G4Vector3D SurfaceNormal(const G4Point3D& Pt) const = 0;  
     // There is Normal as well -- so what do these do?
 
@@ -156,17 +159,15 @@ public:  // without description
     // further checks are Done. It must be overwritten by derived classes.
 */
 
-public:
-
-  G4BoundingBox3D* bbox;
-  G4Point3D closest_hit;
-  G4Surface* next;
-
 protected:
 
   virtual void InitBounded();
 
 protected:
+
+  G4BoundingBox3D* bbox;
+  G4Point3D closest_hit;
+  G4Surface* next;
 
   G4SurfaceBoundary surfaceBoundary;
     // The boundaries of the surface.
@@ -194,6 +195,12 @@ protected:
 
   const G4double FLT_EPSILO;
     // Maybe kCarTolerance instead?
+
+private:
+
+  G4Surface(const G4Surface&);
+  G4Surface& operator=(const G4Surface&);
+    // Private copy constructor and assignment operator.
 
 };
 

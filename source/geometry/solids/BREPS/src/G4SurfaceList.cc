@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SurfaceList.cc,v 1.4 2000-08-28 08:57:59 gcosmo Exp $
+// $Id: G4SurfaceList.cc,v 1.5 2000-11-08 14:22:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -34,7 +34,7 @@ void G4SurfaceList::MoveToFirst(G4Surface* srf)
   if(number_of_elements)
   {
     RemovePointer();
-    srf->next = first;  
+    srf->SetNextNode(first);  
     first = srf;
     index=first;
     number_of_elements++;  
@@ -49,13 +49,13 @@ void G4SurfaceList::AddSurface(G4Surface* srf)
     index = srf;
     first = srf;
     last = srf;
-    first->next = (G4Surface*)0;
+    first->SetNextNode(0);
   }
   else
   {
-    srf->next = last->next;  
-    last->next = srf;
-    last = last->next;
+    srf->SetNextNode(last->GetNextNode());  
+    last->SetNextNode(srf);
+    last = last->GetNextNode();
   }
   
   number_of_elements++;  
@@ -69,7 +69,7 @@ G4Surface* G4SurfaceList::GetSurface()
 }
 
 
-G4Surface* G4SurfaceList::GetSurface(G4int number)
+const G4Surface* G4SurfaceList::GetSurface(G4int number)
 {
   index = first;
   for(G4int a=0;a<number;a++)
@@ -79,7 +79,7 @@ G4Surface* G4SurfaceList::GetSurface(G4int number)
 }
 
 
-G4Surface* G4SurfaceList::GetLastSurface()
+const G4Surface* G4SurfaceList::GetLastSurface() const 
 {
   return last;
 }
@@ -94,7 +94,7 @@ void G4SurfaceList::RemoveSurface(G4Surface* srf)
     
     if(srf == first)
     {
-      first=first->next;
+      first=first->GetNextNode();
       index = first;
       if(number_of_elements == 0)last = first;
       delete srf;
@@ -102,9 +102,9 @@ void G4SurfaceList::RemoveSurface(G4Surface* srf)
     }
     else	
     {
-      while(temp->next != srf) temp = temp->next;
-      index = srf->next;
-      temp->next = index;
+      while(temp->GetNextNode() != srf) temp = temp->GetNextNode();
+      index = srf->GetNextNode();
+      temp->SetNextNode(index);
       if(srf == last) last = temp;
       index = first;
       delete srf;
@@ -123,18 +123,18 @@ void G4SurfaceList::RemovePointer()
       temp = first;
       
       // Find previous
-      while(temp->next != index) temp = temp->next;
+      while(temp->GetNextNode() != index) temp = temp->GetNextNode();
       
       // Hop over the one to be removed
-      temp->next = index->next;
+      temp->SetNextNode(index->GetNextNode());
 	
       // Correct the index pointer
-      index = temp->next;
+      index = temp->GetNextNode();
     }
     else
     {
       // Hop over the first
-      first = first->next;
+      first = first->GetNextNode();
       index = first;
     }
   
@@ -148,7 +148,7 @@ void G4SurfaceList::EmptyList()
   while (first != (G4Surface*)0)
   {
     temp  = first;
-    first = first->next;
+    first = first->GetNextNode();
     delete temp;
     number_of_elements--;
   }
@@ -166,7 +166,7 @@ void G4SurfaceList::MoveToFirst()
 void G4SurfaceList::Step()
 {
   if(index!=(G4Surface*)0)
-    index = index->next;
+    index = index->GetNextNode();
 }
 
 
@@ -186,7 +186,7 @@ void G4SurfaceList::G4SortList()
     while(x < number_of_elements)
     {
       distances[x] = index;
-      index = index->next;
+      index = index->GetNextNode();
       x++;
     }
     
@@ -204,12 +204,12 @@ void G4SurfaceList::G4SortList()
 
     while (x < number_of_elements)
     {
-      last->next = distances[x];
-      last = last ->next;
+      last->SetNextNode(distances[x]);
+      last = last->GetNextNode();
       x++;
     }
 	
-    last->next = (G4Surface*)0;
+    last->SetNextNode(0);
     MoveToFirst();
   }
   
@@ -241,7 +241,7 @@ void G4SurfaceList::QuickG4Sort(G4Surface** Dist, G4int left, G4int right)
       i++;
       j--;
     }
-  } while (i<=j);
+  } while (i<=j); 
   
   if( left < j  ) 
     QuickG4Sort(Dist, left, j );

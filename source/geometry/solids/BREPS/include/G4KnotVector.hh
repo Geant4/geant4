@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KnotVector.hh,v 1.5 2000-08-28 15:00:33 gcosmo Exp $
+// $Id: G4KnotVector.hh,v 1.6 2000-11-08 14:22:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -23,8 +23,6 @@
 
 #include <math.h>
 #include "geomdefs.hh"
-//#include "STEPaggregate.h"
-
 
 class G4KnotVector
 {
@@ -36,8 +34,11 @@ class G4KnotVector
   ~G4KnotVector();
     // Constructors & destructor.
 
-  G4KnotVector(const G4KnotVector& old_kv);
+  G4KnotVector(const G4KnotVector& orig);
     // Copy constructor.
+
+  G4KnotVector& operator=(const G4KnotVector& right);
+    // Assignment operator.
 
   inline G4int GetSize() const;
     // Gets number of knots.
@@ -68,11 +69,6 @@ class G4KnotVector
     // This is used in the evaluation of the intersection to find
     // out between which knots the intersection point is on the b-spline
     // surface.
-
- public:  // without description
-
-//  G4KnotVector(G4int Size, const G4int* MultiList, STEPaggregate& Aggr);
-//  G4KnotVector(G4int Size, STEPaggregate& Aggr);
 
  private:
 

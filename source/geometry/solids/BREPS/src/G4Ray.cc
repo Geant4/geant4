@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ray.cc,v 1.3 2000-08-28 08:57:59 gcosmo Exp $
+// $Id: G4Ray.cc,v 1.4 2000-11-08 14:22:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -52,7 +52,7 @@ void G4Ray::CreatePlanes()
 
   G4Point3D  p1, p2, p3, p4;
   G4Vector3D dir1, dir2;
-  G4Vector3D invdir = PINFINITY ;
+  G4Vector3D invdir = G4Vector3D( PINFINITY );
   
   if(!NearZero(RayDir.x(), SQRT_SMALL_FASTF)) 
     invdir.setX(1.0 / RayDir.x());
@@ -199,7 +199,8 @@ G4int G4Ray::CalcPlane3Pts(G4Plane &plane1,
   Vcross( plane1, B_A, C_A );
 
   //	Ensure unit length Normal 
-  if( (mag = Magnitude(plane1)) <= SQRT_SMALL_FASTF )
+  mag = Magnitude(plane1);
+  if( mag  <= SQRT_SMALL_FASTF )
     return(-1);//	 FAIL 
   
   mag = 1/mag;

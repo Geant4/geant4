@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OsloMatrix.icc,v 1.1 2000-08-28 08:57:47 gcosmo Exp $
+// $Id: G4OsloMatrix.icc,v 1.2 2000-11-08 14:22:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -17,25 +17,73 @@
 // --------------------------------------------------------------------
 
 inline
-G4int Matrix::GetRows() const
+G4int G4OsloMatrix::GetOffset() const
+{
+  return offset;
+}
+
+inline
+G4int G4OsloMatrix::GetSize() const
+{
+  return osize;
+}
+
+inline
+G4OsloMatrix* G4OsloMatrix::GetNextNode()
+{
+  return next;
+}
+
+inline
+G4KnotVector* G4OsloMatrix::GetKnotVector()
+{
+  return o_vec;
+}
+  
+inline
+void G4OsloMatrix::SetOffset(G4int o)
+{
+  offset = o;
+}
+
+inline
+void G4OsloMatrix::SetSize(G4int s)
+{
+  osize = s;
+}
+
+inline
+void G4OsloMatrix::SetNextNode(G4OsloMatrix* n)
+{
+  next = n;
+}
+
+inline
+void G4OsloMatrix::SetKnotVector(G4KnotVector* v)
+{
+  o_vec = v;
+}
+
+inline
+G4int G4PointMatrix::GetRows() const
 {
   return nr;
 }
 
 inline
-G4int Matrix::GetCols() const
+G4int G4PointMatrix::GetCols() const
 {
   return nc;
 }
 
 inline
-void Matrix::put(G4int i, G4int j, G4double x)
+void G4PointMatrix::put(G4int i, G4int j, G4double x)
 {
   data[i*nc+j]=x;
 }
   
 inline
-G4double Matrix::get(G4int i, G4int j) const
+G4double G4PointMatrix::get(G4int i, G4int j) const
 {
   return data[i*nc+j];
 }

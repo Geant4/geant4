@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Curve.hh,v 1.6 2000-08-28 15:00:32 gcosmo Exp $
+// $Id: G4Curve.hh,v 1.7 2000-11-08 14:22:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,6 +45,10 @@ class G4Curve
   G4Curve();
   virtual ~G4Curve();
     // Constructor & destructor.
+
+  G4Curve(const G4Curve& c);
+  G4Curve& operator=(const G4Curve& c);
+    // Copy contructor and assignment operator.
 
   inline G4bool operator==(const G4Curve& right) const;
     // Equality operator.
@@ -132,21 +136,9 @@ class G4Curve
   virtual void InitBounded()= 0;
     // This function will be called after the bounds are set.
 
+ protected:
+
   G4BoundingBox3D bBox;
-    // The bounding-box.
-
-private:
-  
-  G4Curve(const G4Curve&);
-  G4Curve& operator=(const G4Curve&);
-    // Private copy contructor and operator =.
-
-  void SetStart(const G4Point3D& pt);
-  void SetStart(G4double p);
-  void SetEnd(const G4Point3D& p);
-  void SetEnd(G4double p);
-  void SetBoundsRest();
-
   G4Point3D start;
   G4Point3D end;
   G4double  pStart;
@@ -154,6 +146,15 @@ private:
   G4double  pRange;
   G4bool    bounded;
   G4int     sameSense;
+
+ private:
+  
+  inline void SetStart(const G4Point3D& pt);
+  inline void SetStart(G4double p);
+  inline void SetEnd(const G4Point3D& p);
+  inline void SetEnd(G4double p);
+  inline void SetBoundsRest();
+
 };
 
 #include "G4Curve.icc"

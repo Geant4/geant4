@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CompositeCurve.hh,v 1.4 2000-08-28 15:00:31 gcosmo Exp $
+// $Id: G4CompositeCurve.hh,v 1.5 2000-11-08 14:22:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -70,6 +70,12 @@ protected:  // with description
   
   virtual void InitBounded();
     // Compute bounding box.
+
+private:
+
+  G4CompositeCurve(const G4CompositeCurve&);
+  G4CompositeCurve& operator=(const G4CompositeCurve&);
+     // Private copy-constructor and assignment operator.
 
 private:
   

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Axis2Placement3D.hh,v 1.2 2000-08-28 08:57:41 gcosmo Exp $
+// $Id: G4Axis2Placement3D.hh,v 1.3 2000-11-08 14:21:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,11 +38,15 @@ public: // with description
   G4Axis2Placement3D( const G4Vector3D& refDirection0 ,
 		      const G4Vector3D& axis0         , 
 		      const G4Point3D&  location0      );
-  virtual ~G4Axis2Placement3D();
+  ~G4Axis2Placement3D();
     // Constructors & destructor
   
-  G4Axis2Placement3D(const G4Axis2Placement3D& place);
-    // Copy constructor
+  G4Axis2Placement3D(const G4Axis2Placement3D&);
+  G4Axis2Placement3D& operator=(const G4Axis2Placement3D&);
+    // Copy constructor and assignment operator.
+
+  inline G4bool operator==(const G4Axis2Placement3D& other) const;
+    // Equality operator.
 
   inline void Init( const G4Vector3D& refDirection0 , 
 	            const G4Vector3D& axis0         ,
@@ -63,11 +67,6 @@ public: // with description
     // Transformation from/to the placement coordinate system
 
 public:
-
-  virtual G4bool operator==(const G4Axis2Placement3D& other) const 
-  {
-    return (this==&other) ? true : false; 
-  }
 
   //inline void Project (G4ThreeVec& Coord, const G4ThreeVec& Pt2, 
   //                     const G4Plane& Pl1, const G4Plane& Pl2)

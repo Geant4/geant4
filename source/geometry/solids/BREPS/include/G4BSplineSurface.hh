@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.hh,v 1.8 2000-08-28 15:00:29 gcosmo Exp $
+// $Id: G4BSplineSurface.hh,v 1.9 2000-11-08 14:22:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,7 +36,6 @@ class G4BSplineSurface : public G4Surface
   G4BSplineSurface(const char* nurbfilename, G4Ray& rayref);
   G4BSplineSurface(G4int u, G4int v, G4KnotVector& u_kv, G4KnotVector& v_kv, 
 		   G4ControlPoints& cp);    
-  G4BSplineSurface(const G4BSplineSurface& orig);
   virtual ~G4BSplineSurface();
     // Constructors & destructor.
 
@@ -62,6 +61,10 @@ public:
   inline G4int MyType() const;
 
 private:
+
+  G4BSplineSurface(const G4BSplineSurface&);
+  G4BSplineSurface& operator=(const G4BSplineSurface&);
+    // Private copy constructor and assignment operator.
 
   void FindIntersections(const G4Ray&);
 
@@ -93,17 +96,17 @@ private:
   G4SurfaceList bezier_list;
   G4SurfaceList projected_list;
   short dir;
-  int order[2];
+  G4int order[2];
   G4KnotVector *u_knots;
   G4KnotVector *v_knots;
   G4KnotVector *tmp_knots;
   G4ControlPoints *ctl_points;
   G4UVHit* Hit;
   G4UVHit* first_hit;
-  int ord;
-  int k_index;
+  G4int ord;
+  G4int k_index;
   G4double param;
-  int Rational;
+  G4int Rational;
 }; 
 
 #include "G4BSplineSurface.icc"

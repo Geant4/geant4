@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ellipse.cc,v 1.4 2000-08-28 08:57:57 gcosmo Exp $
+// $Id: G4Ellipse.cc,v 1.5 2000-11-08 14:22:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -23,6 +23,46 @@ G4Ellipse::G4Ellipse()
 
 G4Ellipse::~G4Ellipse()
 {
+}
+
+G4Ellipse::G4Ellipse(const G4Ellipse& right)
+  : semiAxis1(right.semiAxis1), semiAxis2(right.semiAxis2),
+    ratioAxis2Axis1(right.ratioAxis2Axis1), toUnitCircle(right.toUnitCircle),
+    forTangent(right.forTangent)
+{
+  pShift    = right.pShift;
+  position  = right.position;
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+}
+
+G4Ellipse& G4Ellipse::operator=(const G4Ellipse& right)
+{
+  if (&right == this) return *this;
+
+  semiAxis1 = right.semiAxis1;
+  semiAxis2 = right.semiAxis2;
+  ratioAxis2Axis1 = right.ratioAxis2Axis1;
+  toUnitCircle    = right.toUnitCircle;
+  forTangent = right.forTangent;
+  pShift   = right.pShift;
+  position = right.position;
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+
+  return *this;
 }
 
 G4Curve* G4Ellipse::Project(const G4Transform3D& tr)
@@ -43,23 +83,25 @@ G4Curve* G4Ellipse::Project(const G4Transform3D& tr)
   G4Vector3D yPrime= tr*position.GetPY();
   yPrime.setZ(0);
 
-  G4Vector3D a = semiAxis1*xPrime;
-  G4Vector3D b = semiAxis2*yPrime;
+  G4Vector3D a = G4Vector3D( semiAxis1*xPrime );
+  G4Vector3D b = G4Vector3D( semiAxis2*yPrime );
   
   G4double u;
   G4double abmag = a.mag2()-b.mag2();
   G4double prod = 2*a*b;
+/*
   if (abmag < FLT_MAX)
     if (prod > 0)
       u = pi/4;
     else
       u = -pi/4;
   else
+*/
     u = atan2(prod,abmag) / 2;
 
   // get the coordinate axis directions and the semiaxis lengths
-  G4Vector3D sAxis1          = a*cos(u)+b*sin(u);
-  G4Vector3D sAxis2          = a*cos(u+pi/2)+b*sin(u+pi/2);
+  G4Vector3D sAxis1          = G4Vector3D( a*cos(u)+b*sin(u) );
+  G4Vector3D sAxis2          = G4Vector3D( a*cos(u+pi/2)+b*sin(u+pi/2) );
   G4double newSemiAxis1      = sAxis1.mag();
   G4double newSemiAxis2      = sAxis2.mag();
   G4Vector3D newRefDirection = sAxis1;

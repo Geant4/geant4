@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SurfaceBoundary.cc,v 1.5 2000-08-28 08:57:59 gcosmo Exp $
+// $Id: G4SurfaceBoundary.cc,v 1.6 2000-11-08 14:22:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -147,11 +147,7 @@ G4int G4SurfaceBoundary::IntersectRay2D(const G4Ray& ray)
     G4Curve& c = *bounds.at(i);
     temp = c.IntersectRay2D(ray);
 
-    // test if the point is on the surface boundary
-    if( temp==999 )
-      return 1;
-    else
-      nbinter +=temp; 
+    if ( temp ) nbinter++; 
   }
 
   return nbinter;

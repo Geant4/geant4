@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolid.hh,v 1.7 2000-08-28 15:00:29 gcosmo Exp $
+// $Id: G4BREPSolid.hh,v 1.8 2000-11-08 14:21:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -109,7 +109,7 @@ public: // with description
     // Gets the roughly calculated closest intersection point for
     // a b_spline and the accurate point for others.
 
-  inline G4Surface* GetSurface(G4int nr) const;
+  inline G4Surface* GetSurface(G4int) const;
   inline void Active(G4int) const;  
   inline G4int Active() const;
   inline G4double GetShortestDistance() const;
@@ -117,9 +117,10 @@ public: // with description
   inline void SetId(G4int);
   inline const G4String& GetName() const;
   inline void SetName(const G4String& name);
-  inline G4int NumberOfFaces() const;
-  inline G4Axis2Placement3D* GetPlace() const;
-  inline G4BoundingBox3D*    GetBBox()  const;
+  inline G4int GetNumberOfFaces() const;
+  inline G4int GetNumberOfSolids() const;
+  inline const G4Axis2Placement3D* GetPlace() const;
+  inline const G4BoundingBox3D*    GetBBox()  const;
     // Accessors methods.
 
 public:
@@ -131,12 +132,8 @@ public:
   virtual void Reset() const;
     // Resets all distance attributes.
 
-public:
- 
-  static G4int NumberOfSolids;
-
 protected:
-
+ 
   G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform&) const;
   G4bool  IsConvex();
 
@@ -158,12 +155,17 @@ protected:
   inline G4int StartInside() const;  
   inline void StartInside(G4int si) const;
 
+  inline void QuickSort( register G4Surface** SrfVec, 
+		         register G4int left, register G4int right) const;
+
 protected:
 
-  G4Axis2Placement3D* place;
+  static G4int        NumberOfSolids;
   static G4Ray        Track;
   static G4double     ShortestDistance;
+
   G4int               Box, Convex, AxisBox, PlaneSolid;
+  G4Axis2Placement3D* place;
   G4BoundingBox3D*    bbox;   
   G4double            intersectionDistance;
   G4int               active;
@@ -176,10 +178,11 @@ protected:
   G4int               Id;
    
 
-  inline void QuickSort( register G4Surface** SrfVec, 
-		         register G4int left, register G4int right) const;
-
 private:
+
+  G4BREPSolid(const G4BREPSolid&);
+  G4BREPSolid& operator=(const G4BREPSolid&);
+    // Private copy constructor and assignment operator.
 
   G4int IsBox();
   G4int FinalEvaluation(register const G4Ray&, G4int =0) const;

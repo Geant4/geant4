@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ConicalSurface.hh,v 1.6 2000-08-28 15:00:31 gcosmo Exp $
+// $Id: G4ConicalSurface.hh,v 1.7 2000-11-08 14:22:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -119,9 +119,6 @@ public:  // with description
 public:  // without description
 
 /*
-  G4ConicalSurface( const G4ConicalSurface& c );
-    // Copy constructor.
-
   virtual G4double distanceAlongRay( G4int which_way, const G4Ray* ry,
                                      G4Vector3D& p ) const;
     // Returns the distance along a Ray to enter or leave a G4ConicalSurface.  
@@ -170,6 +167,12 @@ private:
     // intersection point is found.
     // The argument to the call is the pointer to the Helix.
 */
+
+private:
+
+  G4ConicalSurface(const G4ConicalSurface&);
+  G4ConicalSurface& operator=(const G4ConicalSurface&);
+    // Private copy constructor and assignment operator.
 
 private:
 

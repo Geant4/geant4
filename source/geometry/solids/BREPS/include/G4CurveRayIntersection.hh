@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CurveRayIntersection.hh,v 1.2 2000-08-28 08:57:45 gcosmo Exp $
+// $Id: G4CurveRayIntersection.hh,v 1.3 2000-11-08 14:22:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,6 +40,10 @@ public:  // with description
  
   ~G4CurveRayIntersection();
     // Empty destructor.
+
+  G4CurveRayIntersection(const G4CurveRayIntersection& cr);
+  G4CurveRayIntersection& operator=(const G4CurveRayIntersection& cr);
+    // Copy constructor and assignment operator.
 
   inline void Init(G4Curve& c0, const G4Ray& r0);
     // Initialises a G4CurveRayIntersection. Called by the constructor above.

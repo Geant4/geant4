@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.cc,v 1.10 2000-08-28 08:57:57 gcosmo Exp $
+// $Id: G4FCylindricalSurface.cc,v 1.11 2000-11-08 14:22:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -70,12 +70,6 @@ G4FCylindricalSurface::G4FCylindricalSurface( const G4Point3D& o,
 }
 
 
-G4FCylindricalSurface::G4FCylindricalSurface( const G4FCylindricalSurface& c )
-{ 
-  length = c.length;
-}
-
-
 const char* G4FCylindricalSurface::NameOf() const 
 {
   return "G4FCylindricalSurface"; 
@@ -105,12 +99,12 @@ void G4FCylindricalSurface::CalcBBox()
   // calculates the bounds for a bounding box
   // to the surface. The bounding box is used
   // for a preliminary check of intersection.
-  G4Point3D Max = -PINFINITY;
-  G4Point3D Min =  PINFINITY;
+  G4Point3D Max = G4Point3D(-PINFINITY);
+  G4Point3D Min = G4Point3D( PINFINITY);
 
   G4Point3D Tmp; 
   G4Point3D Origin    = Position.GetLocation();
-  G4Point3D EndOrigin = Origin + (length*Position.GetAxis());
+  G4Point3D EndOrigin = G4Point3D( Origin + (length*Position.GetAxis()) );
   G4Point3D Radius(radius, radius, 0);
  
   // Default BBox
@@ -166,7 +160,7 @@ G4int G4FCylindricalSurface::Intersect( const G4Ray& ry )
   s[1]=-1.0;
 
   // calculate the two intersections (quadratic equation)   
-  G4Vector3D gamma =  x - Position.GetLocation();
+  G4Vector3D gamma =  G4Vector3D( x - Position.GetLocation() );
   
   G4double ga = gamma * ahat;
   G4double da = dhat * ahat;
@@ -189,8 +183,8 @@ G4int G4FCylindricalSurface::Intersect( const G4Ray& ry )
   
   // validity of the solutions
   // the hit point must be into the bounding box of the cylindrical surface
-  G4Point3D p0 = x + s[0]*dhat;
-  G4Point3D p1 = x + s[1]*dhat;
+  G4Point3D p0 = G4Point3D( x + s[0]*dhat );
+  G4Point3D p1 = G4Point3D( x + s[1]*dhat );
 
   if( !GetBBox()->Inside(p0) )
     s[0] = kInfinity;
@@ -275,8 +269,9 @@ G4Vector3D G4FCylindricalSurface::SurfaceNormal( const G4Point3D& p ) const
   //  return the Normal unit vector to the G4CylindricalSurface at a point 
   //  p on (or nearly on) the G4CylindricalSurface
   
-  G4Vector3D n = ( p - Position.GetLocation() ) - 
-    ( ( p - Position.GetLocation()) * Position.GetAxis() ) *Position.GetAxis();
+  G4Vector3D n = G4Vector3D( ( p - Position.GetLocation() ) - 
+                           ( ( p - Position.GetLocation()) *
+			       Position.GetAxis() ) * Position.GetAxis() );
   G4double nmag = n.mag();
   
   if ( nmag != 0.0 )

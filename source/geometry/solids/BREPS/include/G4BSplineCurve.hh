@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineCurve.hh,v 1.7 2000-08-28 15:00:29 gcosmo Exp $
+// $Id: G4BSplineCurve.hh,v 1.8 2000-11-08 14:22:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,8 +37,14 @@ public:
 public:  // with description
 
   G4BSplineCurve();
-  ~G4BSplineCurve();
-    // Constructor & destructor.
+    // Default constructor, must be followed by call to Init(...) method.
+
+  virtual ~G4BSplineCurve();
+    // Virtual destructor.
+
+  G4BSplineCurve(const G4BSplineCurve& right);
+  G4BSplineCurve& operator=(const G4BSplineCurve& right);
+    // Copy constructor and assignment operator.
 
   virtual G4Curve* Project(const G4Transform3D& tr=
 			   G4Transform3D::Identity);
@@ -67,6 +73,7 @@ public:  // without description
 
   virtual G4int IntersectRay2D(const G4Ray& ray);
     // Returns 0. Empty implementation.
+
   //virtual void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is);
 
 protected:

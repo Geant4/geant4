@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Conic.hh,v 1.4 2000-08-28 15:00:31 gcosmo Exp $
+// $Id: G4Conic.hh,v 1.5 2000-11-08 14:22:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -33,6 +33,10 @@ public:  // with description
   virtual ~G4Conic();
     // Constructor & destructor.
 
+  G4Conic(const G4Conic& right);
+  G4Conic& operator=(const G4Conic& right);
+    // Copy contructor and assignment operator.
+
   inline const G4Axis2Placement3D* GetPosition() const;
   inline G4double GetPShift() const;
   inline void SetPShift(G4double pShift0); 
@@ -51,8 +55,6 @@ protected:
 
   G4Axis2Placement3D position;
     // Geometric data.
-
-private:
 
   G4double pShift;
     // pShift must be added/subtracted from the parameter.

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OsloMatrix.hh,v 1.3 2000-08-28 08:57:47 gcosmo Exp $
+// $Id: G4OsloMatrix.hh,v 1.4 2000-11-08 14:22:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -34,25 +34,41 @@ public:  // with description
   ~G4OsloMatrix();
     // Constructors & destructor
 
-public:  // without description
+  inline G4int GetOffset() const;
+  inline G4int GetSize() const;
+  inline G4OsloMatrix* GetNextNode();
+  inline G4KnotVector* GetKnotVector();
+  inline void SetOffset(G4int);
+  inline void SetSize(G4int);
+  inline void SetNextNode(G4OsloMatrix*);
+  inline void SetKnotVector(G4KnotVector*);
+    // Accessors
 
-  G4OsloMatrix * next;
+private:
+
+  G4OsloMatrix(const G4OsloMatrix&);
+  G4OsloMatrix& operator=(const G4OsloMatrix&);
+    // Private copy constructor and assignment operator.
+
+private:
+
+  G4OsloMatrix* next;
   G4int offset;
   G4int osize;
-  G4KnotVector *o_vec;
+  G4KnotVector* o_vec;
 };
 
 
-class Matrix
+class G4PointMatrix
 {
 public:
 
-  Matrix();
-  Matrix(G4int, G4int);
-  Matrix(G4double[]);
+  G4PointMatrix();
+  G4PointMatrix(G4int, G4int);
+  G4PointMatrix(G4double[]);
     // Constructors
 
-  ~Matrix();
+  ~G4PointMatrix();
     // Destructor
 
   inline G4int GetRows() const;
@@ -64,6 +80,11 @@ public:
   inline G4double get(G4int i, G4int j) const;
     // Retrieves control point from matrix location (i,j)
 
+private:
+
+  G4PointMatrix(const G4PointMatrix&);
+  G4PointMatrix& operator=(const G4PointMatrix&);
+    // Private copy constructor and assignment operator.
 
 private:				      
 

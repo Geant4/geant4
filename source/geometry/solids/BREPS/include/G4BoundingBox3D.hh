@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BoundingBox3D.hh,v 1.3 2000-08-28 08:57:43 gcosmo Exp $
+// $Id: G4BoundingBox3D.hh,v 1.4 2000-11-08 14:22:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,6 +36,10 @@ public:  // with description
   ~G4BoundingBox3D();
     // Constructors & destructor.
 
+  G4BoundingBox3D(const G4BoundingBox3D& right);
+  G4BoundingBox3D& operator=(const G4BoundingBox3D& right);
+    // Copy constructor and assignment operator.
+
   void Init(const G4Point3D&);
   void Init(const G4Point3D&, const G4Point3D&);
   void Extend(const G4Point3D&);
@@ -47,7 +51,7 @@ public:  // with description
   void SetDistance(G4double distance0);
     // Accessors.
 
-  G4int Inside(const G4Point3D&);
+  G4int Inside(const G4Point3D&) const;
     // Returns 1 if the point is inside and on the bbox.
     // Returns 0 if the point is outside the bbox.
 

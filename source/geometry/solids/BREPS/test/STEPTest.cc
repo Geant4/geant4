@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////
-// $Id: STEPTest.cc,v 1.5 2000-08-28 08:58:04 gcosmo Exp $
+// $Id: STEPTest.cc,v 1.6 2000-11-08 14:22:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -146,11 +146,11 @@ G4int main()
 	  <<" z="<<sol->GetBBox()->GetBoxMax().z()<<G4endl;
 
     G4cout<<"\n Get Translation"<<G4endl;
-    G4ThreeVector* tr = ps->GetTranslation();
+    const G4ThreeVector* tr = ps->GetTranslation();
     G4cout<<"   x="<<tr->x()<<" y="<<tr->y()<<" z="<<tr->z();
   
     G4cout<<"\n\n Get Rotation"<<G4endl;
-    HepRotation* hr = ps->GetRotation();
+    const HepRotation* hr = ps->GetRotation();
     G4cout<<"   xx="<<hr->xx()<<" xy="<<hr->xy()<<" xz="<<hr->xz()<<G4endl;
     G4cout<<"   yx="<<hr->yx()<<" yy="<<hr->yy()<<" yz="<<hr->yz()<<G4endl;
     G4cout<<"   zx="<<hr->zx()<<" zy="<<hr->zy()<<" zz="<<hr->zz()<<G4endl;

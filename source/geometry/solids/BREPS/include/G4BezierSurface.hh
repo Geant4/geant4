@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BezierSurface.hh,v 1.4 2000-08-28 15:00:30 gcosmo Exp $
+// $Id: G4BezierSurface.hh,v 1.5 2000-11-08 14:22:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,9 +38,8 @@ class G4BezierSurface : public G4Surface
 public:  // with description
   
   G4BezierSurface();
-  G4BezierSurface(const G4BezierSurface &tmp);
-  ~G4BezierSurface();
-    // Constructors & destructor
+  virtual ~G4BezierSurface();
+    // Constructor & destructor
 
   inline G4Point3D AveragePoint() const;
   inline void SetAveragePoint(G4Point3D p);
@@ -71,7 +70,7 @@ public:  // with description
 
   friend void CopySurface(G4BezierSurface& bez);
 
-public:  // without description
+protected:  // without description
 
   G4SurfaceList* bezier_list;
 
@@ -102,6 +101,12 @@ private:
   inline G4int Amin(G4int i, G4int j) const;
   inline G4int AhIndex(G4int j, G4int t, G4int iorder) const;
     // For calc_G4OsloMatrix...
+
+private:
+
+  G4BezierSurface(const G4BezierSurface&);
+  G4BezierSurface& operator=(const G4BezierSurface &);
+    // Private copy constructor and assignment operator.
 
 private:
 

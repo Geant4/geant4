@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ToroidalSurface.cc,v 1.3 2000-08-28 08:58:00 gcosmo Exp $
+// $Id: G4ToroidalSurface.cc,v 1.4 2000-11-08 14:22:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -34,7 +34,7 @@ G4ToroidalSurface::G4ToroidalSurface(const G4Vector3D& Location,
 
   MinRadius = MinRad;
   MaxRadius = MaxRad;
-  TransMatrix= new Matrix(4,4);
+  TransMatrix= new G4PointMatrix(4,4);
 }
 
 
