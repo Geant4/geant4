@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: FluoTestPhysicsList.cc,v 1.11 2001-10-15 08:27:08 guardi Exp $
+// $Id: FluoTestPhysicsList.cc,v 1.12 2001-10-15 08:33:40 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
