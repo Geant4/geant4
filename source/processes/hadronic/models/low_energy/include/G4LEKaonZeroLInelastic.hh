@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonZeroLInelastic.hh,v 1.7 2002-12-12 19:18:05 gunter Exp $
+// $Id: G4LEKaonZeroLInelastic.hh,v 1.8 2003-02-10 09:19:56 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,7 +47,7 @@ class G4LEKaonZeroLInelastic : public G4InelasticInteraction
       SetMaxEnergy( 25.*GeV );
     }
 
-    ~G4LEKaonZeroLInelastic(){ }
+    virtual ~G4LEKaonZeroLInelastic(){ }
 
     G4VParticleChange * ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
     {
