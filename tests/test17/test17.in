@@ -25,10 +25,10 @@
 /run/beamOn 1000
 #
 /test17/cutGammaEnergy 250 eV
-/test17/cutAugerEnergy 250 eV
 /gun/particle proton
 /gun/energy 500 keV
-/tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 100
 #
+/test17/cutAugerEnergy 250 eV
+/run/beamOn 100
 

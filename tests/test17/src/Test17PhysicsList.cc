@@ -253,6 +253,8 @@ void Test17PhysicsList::ConstructEM()
       // hIon->SetAntiProtonStoppingOff() ;
       //      hIon->SetBarkasOff() ;
       //      hIon->SetNuclearStoppingOn() ;
+            hIon->SetFluorescence(false) ;
+            hIon->SetCutForSecondaryPhotons(100.*eV) ;
 
       //hIon->SetStoppingPowerTableName("Ziegler1977He") ;
      //   hIon->SetElectronicStoppingPowerModel(particle,"Ziegler1977p") ;
@@ -290,9 +292,10 @@ void Test17PhysicsList::ConstructEM()
 	// iIon->SetStoppingPowerTableName("ICRU_R49p") ;
       //iIon->SetStoppingPowerTableName("ICRU_R49He") ;
       //iIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
+            iIon->SetCutForSecondaryPhotons(100.*eV) ;
 
       pmanager->AddProcess(iIon,-1,2,2);
-      //      hionVector.push_back(iIon);
+      hionVector.push_back(iIon);
       
       pmanager->AddProcess( theStepCut,       -1,-1,3);
     }
@@ -463,6 +466,7 @@ void Test17PhysicsList::SetCutForSecondaryPhotons(G4double cut)
 
   for (size_t i=0; i<n; i++) {    
     hionVector[i]->SetCutForSecondaryPhotons(cut);
+    hionVector[i]->SetFluorescence(true);
   }
 }
 
@@ -475,6 +479,8 @@ void Test17PhysicsList::SetCutForAugerElectrons(G4double cut)
 
   for (size_t i=0; i<n; i++) {    
     hionVector[i]->SetCutForAugerElectrons(cut);
+    hionVector[i]->SetFluorescence(true);
+    hionVector[i]->ActivateAugerElectronProduction(true);
   }
 }
 

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jan-2002)
+                                (31-Jul-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
@@ -78,6 +78,8 @@ Ionic processes for IonC12
 Ionic processes for alpha
 Hadronic processes for anti_proton
 Ionic processes for deuteron
+
+phot:  Total cross sections from Sandia parametrisation. 
 Hadronic processes for kaon+
 Hadronic processes for kaon-
 MuonMinusCaptureAtRest is created 
@@ -89,13 +91,9 @@ Test17PhysicsList::SetCuts:CutLength : 100 mum
 Set cuts for all particles! 
 G4VUserPhysicsList::SetCutValue       :Set cuts for gamma
 
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
-        Sandia crossSection below 50 KeV
-       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
-
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -147,6 +145,18 @@ msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
         PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+G4AugerData for Element no. 6 are loaded
+G4AugerData for Element no. 7 are loaded
+G4AugerData for Element no. 8 are loaded
+G4AugerData for Element no. 13 are loaded
+G4AugerData for Element no. 14 are loaded
+G4AugerData for Element no. 18 are loaded
+G4AugerData for Element no. 26 are loaded
+G4AugerData for Element no. 29 are loaded
+G4AugerData for Element no. 54 are loaded
+G4AugerData for Element no. 79 are loaded
+G4AugerData for Element no. 82 are loaded
+AugerTransitionTable complete
 
 hLowEIoni:    Knock-on electron cross sections . 
         Good description above the mean excitation energy.
@@ -161,20 +171,20 @@ hLowEIoni:    Knock-on electron cross sections .
         Nuclear stopping power model is ICRU_R49
 G4VUserPhysicsList::SetCutValue       :Set cuts for anti_proton
 G4VUserPhysicsList::SetCutValueForOthers   :0.1[mm]
-G4hLowEnergyIonisation::BuildPhysicsTable for GenericIon
+G4hLowEnergyIonisation::BuildPhysicsTable for GenericIon mass(MeV)= 938.272 charge= 1 type= nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
 G4hLowEnergyIonisation::BuildPhysicsTable: end for GenericIon
 Set cuts for GenericIon
 Set cuts for He3
-G4hLowEnergyIonisation::BuildPhysicsTable for IonC12
+G4hLowEnergyIonisation::BuildPhysicsTable for IonC12 mass(MeV)= 11149.5 charge= 6 type= static_nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
 G4hLowEnergyIonisation::BuildPhysicsTable: end for IonC12
 Set cuts for IonC12
-G4hLowEnergyIonisation::BuildPhysicsTable for alpha
+G4hLowEnergyIonisation::BuildPhysicsTable for alpha mass(MeV)= 3727.42 charge= 2 type= nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
@@ -183,7 +193,7 @@ Set cuts for alpha
 Set cuts for anti_nu_e
 Set cuts for anti_nu_mu
 Set cuts for chargedgeantino
-G4hLowEnergyIonisation::BuildPhysicsTable for deuteron
+G4hLowEnergyIonisation::BuildPhysicsTable for deuteron mass(MeV)= 1875.61 charge= 1 type= nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
@@ -242,22 +252,23 @@ Cut in energy
 /run/beamOn 10000
 ### Run 0 start.
 Start Run processing.
-EvtNo= 7067  length= 0.0186306  xend= -0.0118018
+EvtNo= 485  length= 0.00934112  xend= 0.00301327
+EvtNo= 3954  length= 0.00948489  xend= 0.00183036
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=11.72s Real=11.82s Sys=0s
+  User=8.88s Real=8.88s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 9999 for proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.2175 +- 0.00209839  microns 
-    CSDA  Range  in absorber = 9.00615 +- 0.00217717  microns 
+ end of Run TotNbofEvents = 9998 for proton with Ekin = 0.5 MeV
+    Track Length in absorber = 9.17578 +- 0.00166573  microns 
+    CSDA  Range  in absorber = 9.01407 +- 0.00195348  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.158495 +- 0.00209839 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.13715 +- 0.00217717 microns 
+    Track Length (G4 - ICRU49) = 0.11678 +- 0.00166573 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.145074 +- 0.00195348 microns 
 
 Average Number electrons per event = 0
 Average Number photons per event   = 0
@@ -267,23 +278,21 @@ Average Number photons per event   = 0
 /run/beamOn 10000
 ### Run 1 start.
 Start Run processing.
-EvtNo= 167  length= 0.00962092  xend= 0.002147
-EvtNo= 348  length= 0.00953036  xend= 0.00412481
-EvtNo= 1814  length= 0.00950745  xend= 0.00339484
-EvtNo= 3429  length= 0.0114425  xend= -0.00249947
-EvtNo= 6639  length= 0.00979083  xend= 0.00392
-EvtNo= 7105  length= 0.00751302  xend= -2.20868e-15
-EvtNo= 8726  length= 0.00935398  xend= 0.0041086
-EvtNo= 8730  length= 0.00936751  xend= 0.00415207
+EvtNo= 11  length= 0.0253785  xend= -0.0101018
+EvtNo= 1221  length= 0.00971188  xend= 0.00459769
+EvtNo= 1376  length= 0.00247651  xend= -3.07713e-15
+EvtNo= 2693  length= 0.00932615  xend= 0.00433814
+EvtNo= 4209  length= 0.00631962  xend= -4.19844e-16
+EvtNo= 5675  length= 0.0097278  xend= 0.00405861
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=13.65s Real=13.99s Sys=0.01s
+  User=9.25s Real=9.25s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 9992 for anti_proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.58138 +- 0.00213284  microns 
-    CSDA  Range  in absorber = 9.26868 +- 0.0027739  microns 
+ end of Run TotNbofEvents = 9994 for anti_proton with Ekin = 0.5 MeV
+    Track Length in absorber = 9.47233 +- 0.00185043  microns 
+    CSDA  Range  in absorber = 9.3296 +- 0.00238132  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
@@ -298,17 +307,16 @@ Test17PhysicsList:MaxChargedStep=0.001
 /run/beamOn 10000
 ### Run 2 start.
 Start Run processing.
-EvtNo= 4677  length= 0.00853905  xend= 0.0039115
-EvtNo= 6017  length= 0.00878597  xend= 0.00430644
+EvtNo= 3890  length= 0.00874838  xend= 0.000429879
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=13.1s Real=13.21s Sys=0.01s
+  User=11.63s Real=11.64s Sys=0.01s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 9998 for IonC12 with Ekin = 6 MeV
-    Track Length in absorber = 8.57222 +- 0.00149505  microns 
-    CSDA  Range  in absorber = 7.75088 +- 0.00617403  microns 
+ end of Run TotNbofEvents = 9999 for IonC12 with Ekin = 6 MeV
+    Track Length in absorber = 8.65589 +- 0.000849867  microns 
+    CSDA  Range  in absorber = 8.38578 +- 0.00387407  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -319,24 +327,68 @@ Average Number photons per event   = 0
 #scaled energy
 /gun/particle ion
 /gun/ion 6 12 6
-G4hLowEnergyIonisation::BuildPhysicsTable for C12[0.0]
-Cuts are defined 
-G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
-G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
-G4hLowEnergyIonisation::BuildPhysicsTable: end for C12[0.0]
+G4hLowEnergyIonisation::BuildPhysicsTable for C12[0.0] mass(MeV)= 11174.9 charge= 6 type= nucleus
 /run/beamOn 10000
 ### Run 3 start.
 Start Run processing.
-EvtNo= 9085  length= 0.00879742  xend= 0.00426653
+EvtNo= 3868  length= 0.00868933  xend= 0.00278865
+EvtNo= 5701  length= 0.0087012  xend= 0.0032452
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=13.07s Real=13.19s Sys=0s
+  User=11.66s Real=11.66s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 9999 for C12[0.0] with Ekin = 6 MeV
-    Track Length in absorber = 8.64188 +- 0.00137706  microns 
-    CSDA  Range  in absorber = 7.99542 +- 0.00564962  microns 
+ end of Run TotNbofEvents = 9998 for C12[0.0] with Ekin = 6 MeV
+    Track Length in absorber = 8.72471 +- 0.000815822  microns 
+    CSDA  Range  in absorber = 8.36766 +- 0.00471496  microns 
+
+    Energy deposit in absorber = 6  MeV 
+
+Average Number electrons per event = 0
+Average Number photons per event   = 0
+
+#scaled energy
+/gun/particle ion
+/gun/ion 26 56 26
+G4hLowEnergyIonisation::BuildPhysicsTable for Fe56[0.0] mass(MeV)= 52089.8 charge= 26 type= nucleus
+/run/beamOn 1000
+### Run 4 start.
+Start Run processing.
+EvtNo= 24  length= 0.00419263  xend= 0.00121564
+EvtNo= 948  length= 0.00422049  xend= 0.00199816
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.25s Real=0.25s Sys=0s
+ ================== run summary =====================
+
+ end of Run TotNbofEvents = 998 for Fe56[0.0] with Ekin = 6 MeV
+    Track Length in absorber = 4.23241 +- 0.000924985  microns 
+    CSDA  Range  in absorber = 3.6093 +- 0.00984899  microns 
+
+    Energy deposit in absorber = 6  MeV 
+
+Average Number electrons per event = 0
+Average Number photons per event   = 0
+
+#scaled energy
+/gun/particle ion
+/gun/ion 6 12 6
+/run/beamOn 1000
+### Run 5 start.
+Start Run processing.
+EvtNo= 302  length= 0.00863999  xend= 0.0035871
+EvtNo= 768  length= 0.00301991  xend= -0.00073181
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=4.57s Real=4.62s Sys=0.05s
+ ================== run summary =====================
+
+ end of Run TotNbofEvents = 998 for C12[0.0] with Ekin = 6 MeV
+    Track Length in absorber = 8.7261 +- 0.00256927  microns 
+    CSDA  Range  in absorber = 6.96426 +- 0.0206167  microns 
 
     Energy deposit in absorber = 6  MeV 
 
