@@ -181,18 +181,22 @@
 	}     
       }
       debug.push_back("################# Through the loop ? "); debug.dump();
-
       //inverse transformation in case we swapped.
-      projectile->StartLoop();  
       G4int resA(0), resZ(0); 
       G4Nucleon * aNuc;
+//       fancyNucleus->StartLoop();
+//       while( (aNuc=fancyNucleus->GetNextNucleon()) )
+//       {
+//         G4cout << " tgt Nucleon : " << aNuc->GetDefinition()->GetParticleName() <<" "<< aNuc->AreYouHit() <<" "<<aNuc->GetMomentum()<<G4endl;
+//       }
       G4ReactionProductVector * spectators= new G4ReactionProductVector;
      debug.push_back("getting at the hits"); debug.dump();
       // the projectile excitation energy estimate...
       G4double theStatisticalExEnergy = 0;
+      projectile->StartLoop();  
       while( (aNuc=projectile->GetNextNucleon()) )
       {
-  //      G4cout << " Nucleon : " << aNuc->AreYouHit() <<" "<<aNuc->GetMomentum()<<G4endl;
+//        G4cout << " Nucleon : " << aNuc->GetDefinition()->GetParticleName() <<" "<< aNuc->AreYouHit() <<" "<<aNuc->GetMomentum()<<G4endl;
 	debug.push_back("getting the hits"); debug.dump();
 	if(!aNuc->AreYouHit())
 	{
@@ -214,6 +218,7 @@
       }
       delete fancyNucleus;
       delete projectile;
+      G4ping debug("debug_G4BinaryLightIonReaction_1");
       debug.push_back("have the hits. A,Z, excitE"); 
       debug.push_back(resA);
       debug.push_back(resZ);
@@ -232,27 +237,63 @@
 	{
           fState += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
 	  cascaders->push_back((*result)[i]);
-  //        G4cout <<" secondary ... ";
+//          G4cout <<" secondary ... ";
 	}
 	else {
-  //        G4cout <<" spectator ... ";
+//          G4cout <<" spectator ... ";
           pspectators += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
 	  spectators->push_back((*result)[i]);
 	}
 
-  // 	G4cout << (*result)[i]<< " "
-  // 	      << (*result)[i]->GetDefinition()->GetParticleName() << " " 
-  // 	      << (*result)[i]->GetMomentum()<< " " 
-  // 	      << (*result)[i]->GetTotalEnergy() << G4endl;
+//       G4cout << (*result)[i]<< " "
+//   	    << (*result)[i]->GetDefinition()->GetParticleName() << " " 
+//   	    << (*result)[i]->GetMomentum()<< " " 
+//   	    << (*result)[i]->GetTotalEnergy() << G4endl;
       }
       delete result;
-      G4LorentzVector momentum(iState-fState);
-      debug.push_back("the momentum balance");
-      debug.push_back(iState);
-      debug.push_back(fState);
-      debug.push_back(momentum-pspectators);
-      debug.push_back(momentum);
+      debug.push_back(" iState - (fState+pspectators) ");
+      debug.push_back(iState-fState-pspectators);
       debug.dump();
+      G4LorentzVector momentum(iState-fState);
+      G4int loopcount(0);
+      while (abs(momentum-pspectators.e()) > 10*MeV)
+      {
+	 debug.push_back("the momentum balance");
+	 debug.push_back(iState);
+	 debug.push_back(fState);
+	 debug.push_back(momentum-pspectators);
+	 debug.push_back(momentum);
+	 debug.dump();
+	 G4LorentzVector pCorrect(iState-pspectators);
+	 G4bool EnergyIsCorrect=EnergyAndMomentumCorrector(cascaders, pCorrect);
+         if ( ! EnergyIsCorrect && getenv("debug_G4BinaryLightIonReactionResults"))
+         {
+            G4cout << "Warning - G4BinaryLightIonReaction E/P correction for cascaders failed" << G4endl;
+         }
+	 fState=G4LorentzVector();
+	 for(i=0; i<cascaders->size(); i++)
+         {
+	     fState += G4LorentzVector( (*cascaders)[i]->GetMomentum(), (*cascaders)[i]->GetTotalEnergy() );
+	 }
+	 momentum=iState-fState;
+	 debug.push_back("the momentum balance after correction");
+	 debug.push_back(iState);
+	 debug.push_back(fState);
+	 debug.push_back(momentum-pspectators);
+	 debug.push_back(momentum);
+	 debug.dump();
+	 if (++loopcount > 10 ) 
+	 {   
+	     if ( momentum.vect().mag() > momentum.e() )
+	     {
+	        G4cerr << "G4BinaryLightIonReaction.cc: Cannot correct 4-momentum of cascade particles" << G4endl;
+	        throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCasacde::ApplyCollision()");
+	     } else {
+	        break;
+	     }
+	     
+ 	 }
+      }
 
 
 
@@ -281,6 +322,15 @@
 	resDef = G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ);  
 	aProRes.SetParticleDefinition(resDef);
 	proFrag = theHandler.BreakItUp(aProRes);
+      if ( momentum.vect().mag() > momentum.e() )
+      {
+           G4cout << "mom check: " <<  momentum 
+	          << " 3.mag "<< momentum.vect().mag() << G4endl
+		  << " .. iState/fState/spectators " << iState <<" " 
+		  << fState << " " << pspectators << G4endl
+		  << " .. A,Z " << resA <<" "<< resZ << G4endl;          	                
+      }
+      
         G4LorentzRotation boost_fragments_here(momentum.boostVector());
 	boost_fragments = boost_fragments_here;
 
@@ -334,7 +384,7 @@
       if ( ! EnergyIsCorrect )
       {
 	 if(getenv("debug_G4BinaryLightIonReactionResults"))      
-           G4cout << "G4BinaryLightIonReaction E/P correction for nucleus failed" << G4endl;
+           G4cout << "G4BinaryLightIonReaction E/P correction for nucleus failed, will try to correct overall" << G4endl;
       }
 
   //  Add deexcitation secondaries 
@@ -447,7 +497,8 @@ G4bool G4BinaryLightIonReaction::EnergyAndMomentumCorrector(
 
     // Scale total c.m.s. hadron energy (hadron system mass).
     // It should be equal interaction mass
-    G4double Scale = 1;
+    G4double Scale = 0,OldScale=0;
+    G4double factor = 1.;
     G4int cAttempt = 0;
     G4double Sum = 0;
     G4bool success = false;
@@ -457,17 +508,25 @@ G4bool G4BinaryLightIonReaction::EnergyAndMomentumCorrector(
       for(i = 0; i < Output->size(); i++)
       {
         G4LorentzVector HadronMom = G4LorentzVector((*Output)[i]->GetMomentum(),(*Output)[i]->GetTotalEnergy());
-        HadronMom.setVect(HadronMom.vect()+ 10*(Scale-1)*HadronMom.vect());
+        HadronMom.setVect(HadronMom.vect()+ factor*Scale*HadronMom.vect());
         G4double E = sqrt(HadronMom.vect().mag2() + sqr((*Output)[i]->GetDefinition()->GetPDGMass()));
         HadronMom.setE(E);
         (*Output)[i]->SetMomentum(HadronMom.vect());
         (*Output)[i]->SetTotalEnergy(HadronMom.e());
         Sum += E;
-      }   
-      Scale = TotalCollisionMass/Sum;    
-//  G4cout << "E/P corr - " << cAttempt << " " << Scale - 1 << G4endl;
-      if (abs(Scale - 1) <= ErrLimit) 
+      }
+      OldScale=Scale;   
+      Scale = TotalCollisionMass/Sum - 1;
+      if ( cAttempt > 10 ) 
       {
+//         G4cout << " speed it up? " << abs(OldScale/(OldScale-Scale)) << G4endl;
+	 factor=std::max(1.,log(abs(OldScale/(OldScale-Scale))));
+//	 G4cout << " ? factor ? " << factor << G4endl;
+      }   
+//  G4cout << "E/P corr - " << cAttempt << " " << Scale << G4endl;
+      if (abs(Scale) <= ErrLimit) 
+      {
+        if (getenv("debug_G4BinaryLightIonReactionResults")) G4cout << "E/p corrector: " << cAttempt << G4endl;
         success = true;
 	break;
       }

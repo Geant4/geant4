@@ -51,6 +51,8 @@
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 
+#include "G4FermiPhaseSpaceDecay.hh"
+
 #include <algorithm>
 #include "G4ShortLivedConstructor.hh"
 #include <typeinfo>
@@ -499,15 +501,46 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 	     precompoundProducts = new G4ReactionProductVector();
 	     std::vector<G4KineticTrack *>::iterator i=theTargetList.begin();
 	     G4ReactionProduct * aNew = new G4ReactionProduct((*i)->GetDefinition());
-//	     G4LorentzVector final= GetFinalNucleusMomentum();
-	     aNew->SetTotalEnergy((*i)->GetDefinition()->GetPDGMass());       //final.e());
-//	     G4double mom(0);
-//	     if ( final.e() > (*i)->GetDefinition()->GetPDGMass() )
-//	     {
-//	        mom=sqrt ( sqr(final.e()) - sqr((*i)->GetDefinition()->GetPDGMass()));
-//	     }
-	     aNew->SetMomentum(G4ThreeVector(0));		//mom*final.vect().unit());
+	     aNew->SetTotalEnergy((*i)->GetDefinition()->GetPDGMass());       
+	     aNew->SetMomentum(G4ThreeVector(0));		// see boost fro preCompoundProducts below..
 	     precompoundProducts->push_back(aNew);
+	  } else if ( theTargetList.size() > 1)
+	  {
+	     precompoundProducts = new G4ReactionProductVector();
+	     std::vector<G4KineticTrack *>::iterator aNuc;
+	     G4LorentzVector aVec;
+	     std::vector<G4double> masses;
+	     G4double sumMass(0);
+	     for ( aNuc=theTargetList.begin(); aNuc != theTargetList.end(); aNuc++)
+	     {
+	        G4double mass=(*aNuc)->GetDefinition()->GetPDGMass();
+		masses.push_back(mass);
+		sumMass += mass;
+	     }
+	     G4LorentzVector finalP=GetFinal4Momentum();
+	     G4FermiPhaseSpaceDecay decay;
+//	     G4cout << " some neutrons? " << masses.size() <<" " << theTargetList.size()<<" "<<finalP <<" " << finalP.mag()<<G4endl;
+             G4double eCMS=finalP.mag();
+	     if ( eCMS < sumMass )                    // @@GF --- Cheat!!
+	     {
+	        eCMS=sumMass + (2*MeV*masses.size());     
+		finalP.setE(sqrt(finalP.vect().mag2() + sqr(eCMS)));
+	     }
+	     precompoundLorentzboost.set(finalP.boostVector());
+	     std::vector<G4LorentzVector*> * momenta=decay.Decay(eCMS,masses);
+	     std::vector<G4LorentzVector*>::iterator aMom=momenta->begin();
+	     for ( aNuc=theTargetList.begin(); 
+	          (aNuc != theTargetList.end()) && (aMom!=momenta->end()); 
+		  aNuc++, aMom++ )
+	     {
+	        G4ReactionProduct * aNew = new G4ReactionProduct((*aNuc)->GetDefinition());
+		aNew->SetTotalEnergy((*aMom)->e());
+		aNew->SetMomentum((*aMom)->vect());
+		precompoundProducts->push_back(aNew);
+//		G4cout << " only neutrons? " <<  (*aNuc)->GetDefinition()->GetParticleName() << G4endl;
+                delete *aMom;
+	     }
+	     delete momenta;
 	  }
        }
 
