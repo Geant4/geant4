@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.12 2001-10-22 04:19:40 kurasige Exp $
+// $Id: G4Track.hh,v 1.13 2001-11-13 05:13:37 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -210,10 +210,7 @@ public: // With description
    void SetCreatorProcess(G4VProcess* aValue);
 
   // track weight
-     // These are methods for manipulating a weight for this track.
-     // The track weight is used by G4VEvtBiasMechanism 
-     // to execute inclusive simulation for hadronic/electomagnetic shower
-     // and neutron transportation etc. 
+  // These are methods for manipulating a weight for this track.
    G4double GetWeight() const;
    void     SetWeight(G4double aValue);
 

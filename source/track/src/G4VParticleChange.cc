@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.cc,v 1.8 2001-10-20 08:07:50 kurasige Exp $
+// $Id: G4VParticleChange.cc,v 1.9 2001-11-13 05:13:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,9 +49,9 @@ G4VParticleChange::G4VParticleChange():
    theSteppingControlFlag(NormalCondition),     
    theLocalEnergyDeposit(0.0),
    verboseLevel(1),
-// theEBMechanism(0),
-// fUseEB(false),
-   theParentWeight(1.0)
+   theParentWeight(1.0),
+   fSetSecondaryWeightByProcess(false),  
+   fSetParentWeightByProcess(true)  
 {
    debugFlag = false;
 #ifdef G4VERBOSE
@@ -60,27 +60,6 @@ G4VParticleChange::G4VParticleChange():
 #endif
    theListOfSecondaries = new G4TrackFastVector();
 }
-
-//G4VParticleChange::G4VParticleChange(G4bool useEB):
-//   theNumberOfSecondaries(0),
-//   theSizeOftheListOfSecondaries(G4TrackFastVectorSize),
-//   theStatusChange(fAlive),
-//   theSteppingControlFlag(NormalCondition),     
-//   theLocalEnergyDeposit(0.0),
-//   verboseLevel(1),
-//   theParentWeight(1.0)
-//{
-//   fUseEB = useEB;
-//   // debug flag (activate CheckIt() )
-//   debugFlag = false;
-//#ifdef G4VERBOSE
-//  // activate CHeckIt if in VERBOSE mode
-//  debugFlag = true;
-//#endif
-//  theListOfSecondaries = new G4TrackFastVector();
-//   // register  G4EvtBiasMechanism as a default
-//   theEBMechanism = new G4Mars5GeVMechanism();
-//}
 
 G4VParticleChange::~G4VParticleChange() {
   // check if tracks still exist in theListOfSecondaries
@@ -95,7 +74,6 @@ G4VParticleChange::~G4VParticleChange() {
       if ( (*theListOfSecondaries)[index] ) delete (*theListOfSecondaries)[index] ;
     }
   }
-//  if (theEBMechanism !=0) delete theEBMechanism;
   delete theListOfSecondaries; 
 }
 
@@ -107,8 +85,8 @@ G4VParticleChange::G4VParticleChange(const G4VParticleChange &right):
    theSteppingControlFlag(NormalCondition),     
    theLocalEnergyDeposit(0.0),
    verboseLevel(1),
-// fUseEB(false),
-   theParentWeight(1.0)
+   theParentWeight(1.0),
+   fSetSecondaryWeightByProcess(false)
 {
    debugFlag = false;
 #ifdef G4VERBOSE
@@ -123,6 +101,7 @@ G4VParticleChange::G4VParticleChange(const G4VParticleChange &right):
   theTrueStepLength = right.theTrueStepLength;
   theLocalEnergyDeposit = right.theLocalEnergyDeposit;
   theSteppingControlFlag = right.theSteppingControlFlag;
+  fSetParentWeightByProcess = right.fSetParentWeightByProcess;    
 }
 
 
@@ -142,6 +121,7 @@ G4VParticleChange & G4VParticleChange::operator=(const G4VParticleChange &right)
       theTrueStepLength = right.theTrueStepLength;
       theLocalEnergyDeposit = right.theLocalEnergyDeposit;
       theSteppingControlFlag = right.theSteppingControlFlag;
+      fSetParentWeightByProcess = right.fSetParentWeightByProcess;    
    }
    return *this;
 }
@@ -212,12 +192,6 @@ void G4VParticleChange::DumpInfo() const
   G4cout << "        Stepping Control     : " 
        << G4std::setw(20) << theSteppingControlFlag
        << G4endl;   
-  //G4cout << "        Event Biasing        : ";
-  //  if (fUseEB) {
-  //  G4cout << G4std::setw(20) << theEBMechanism->GetName();
-  //} else {
-  //  G4cout << " not used ";
-  //}
   G4cout << G4endl;      
 }
 

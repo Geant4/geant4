@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.16 2001-10-22 04:19:41 kurasige Exp $
+// $Id: G4ParticleChange.cc,v 1.17 2001-11-13 05:13:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,20 +44,10 @@
 #include "G4TrackFastVector.hh"
 #include "G4DynamicParticle.hh"
 
-// G4bool G4ParticleChange::fUseEBForAll = false;
 
 G4ParticleChange::G4ParticleChange():G4VParticleChange()
 {
 }
-
-//G4ParticleChange::G4ParticleChange(G4bool useEB):G4VParticleChange(useEB)
-//{
-//#ifdef G4VERBOSE
-//  if (verboseLevel>2) {
-//    G4cout << "G4ParticleChange::G4ParticleChange() " << G4endl;
-//  }
-//#endif
-//}
 
 G4ParticleChange::~G4ParticleChange() 
 {
@@ -276,7 +266,7 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   pPostStepPoint->AddProperTime( theProperTimeChange 
 				 - pPreStepPoint->GetProperTime());
 
-  // update weight if use EB
+  // update weight
   pPostStepPoint->SetWeight( theWeightChange );
 
 #ifdef G4VERBOSE
@@ -316,7 +306,7 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
 				 - aTrack->GetGlobalTime());
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
-  // update weight if use EB
+  // update weight
   pPostStepPoint->SetWeight( theWeightChange );
 
 #ifdef G4VERBOSE
@@ -353,7 +343,7 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
 				 - aTrack->GetGlobalTime());
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
-  // update weight if use EB
+  // update weight 
   pPostStepPoint->SetWeight( theWeightChange );
 
 #ifdef G4VERBOSE

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.hh,v 1.6 2001-10-20 08:07:49 kurasige Exp $
+// $Id: G4VParticleChange.hh,v 1.7 2001-11-13 05:13:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,6 @@
 
 class G4Track;
 class G4Step;
-class G4VEvtBiasMechanism;
 
 #include "G4TrackFastVector.hh"
 #include "G4TrackStatus.hh"
@@ -85,7 +84,6 @@ class G4VParticleChange
   public:
     // default constructor
     G4VParticleChange();
-//  G4VParticleChange(G4bool useEvtBiasing);
 
     // destructor
     virtual ~G4VParticleChange();
@@ -178,6 +176,21 @@ class G4VParticleChange
     // ------------------------------------------------------   
 
     G4double GetParentWeight() const ;
+    //  Get weight of the parent (i.e. current) track
+
+    void     SetParentWeight(G4double);
+    void     SetParentWeightByProcess(G4bool);
+    G4bool   IsParentWeightSetByProcess() const;  
+    // If fParentWeightByProcess flag is false (true in default),
+    // G4VParticleChange can change the weight of the parent track,
+    // in any DoIt by using  SetParentWeight(G4double)
+ 
+
+    void     SetSecondaryWeightByProcess(G4bool);
+    G4bool   IsSecondaryWeightSetByProcess() const;  
+    // If fSecondaryWeightByProcess flag is false (false in default),
+    // G4VParticleChange set the weight of the secondary tracks
+    // equal to the parent weight when the secondary tracks are added.
 
     virtual void DumpInfo() const;
     //  Print out information
@@ -234,24 +247,15 @@ class G4VParticleChange
     static const G4double accuracyForWarning;
     static const G4double accuracyForException; 
 
-  public: // with description
-  //---- following methods and members are used for Event Biasing
-  //  virtual void   RegisterEBMechanism(G4VEvtBiasMechanism* );
-  //  virtual void   SwOnEB();
-  //  virtual void   SwOffEB();
-  //  virtual G4bool IsEBActive() const;
-  //  virtual G4VEvtBiasMechanism* GetEBMechanism();
 
   protected:
-  //    G4VEvtBiasMechanism* theEBMechanism;
-  //  G4bool fUseEB;
     G4double theParentWeight;
-     
+    G4bool   fSetSecondaryWeightByProcess;  
+    G4bool   fSetParentWeightByProcess;  
 };
 
 #include "G4Step.hh"
 #include "G4Track.hh"
-#include "G4VEvtBiasMechanism.hh"
 #include "G4VParticleChange.icc"
 
 #endif
