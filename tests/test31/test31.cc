@@ -29,7 +29,7 @@
 //      ---------- test31 ----------------------------
 //              
 //  Modified: 05.04.01 Vladimir Ivanchenko new design of test31 
-// 
+//
 // -------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -94,23 +94,25 @@ int main(int argc,char** argv) {
 
   runManager->SetUserAction(new test31TrackingAction());
   if(verbose >0) G4cout << "TrackingAction is defined" << G4endl;
-  
-  // get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
-  if(1 < verbose) UI->ListCommands("/test31/");
 
-  if (argc==1)   // Define UI terminal for interactive mode  
-    { 
-     // Initialize G4 kernel
-     runManager->Initialize();
+  // get the pointer to the User Interface manager
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if(1 < verbose) UI->ListCommands("/test31/");
+     
+  // Initialize G4 kernel
+  G4cout << "Start initialisation for test31" << G4endl;
+//  runManager->Initialize();
+
+  if (argc==1)   // Define UI terminal for interactive mode
+    {
 
      G4UIsession * session = new G4UIterminal;
-     UI->ApplyCommand("/control/execute init.mac");    
+     UI->ApplyCommand("/control/execute init.mac");
      session->SessionStart();
      delete session;
     }
-  else if (argc>1) // Batch mode with 1 or more files 
-    { 
+  else if (argc>1) // Batch mode with 1 or more files
+    {
      if(verbose >0) G4cout << "UI interface is started" << G4endl;
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
@@ -119,11 +121,9 @@ int main(int argc,char** argv) {
      // Initialize G4 kernel
      G4int nev = det->GetNumberOfEvents();
      if(nev > 0) {
-       G4cout << "Start initialisation for test31" << G4endl;
-       runManager->Initialize();
 
        if(verbose >0) {
-         G4cout << "Start event loop for " << nev  
+         G4cout << "Start event loop for " << nev
                 << " events" << G4endl;
        }
 

@@ -114,8 +114,8 @@ void test31ModelEM::ConstructProcess()
       G4VEnergyLossSTD* hIon = new G4hIonisationSTD();
       pmanager->AddProcess(hIon,   -1,2,2);
       //  hIon->SetLossFluctuations(false);
-      hIon->SetDEDXBinning(240);
-      hIon->SetVerboseLevel(0);
+      //  hIon->SetDEDXBinning(240);
+      //  hIon->SetVerboseLevel(0);
     }
   }
 }
