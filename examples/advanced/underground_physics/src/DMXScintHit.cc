@@ -51,10 +51,9 @@ G4Allocator<DMXScintHit> DMXScintHitAllocator;
 DMXScintHit::DMXScintHit()
 {
   edep=0.;
-  pos=(0., 0., 0.);
+  pos = G4ThreeVector(0., 0., 0.);
   time = 0.;
   particleEnergy = 0.;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
