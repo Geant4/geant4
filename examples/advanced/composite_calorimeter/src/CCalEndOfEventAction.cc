@@ -21,8 +21,13 @@
 #include "G4RunManager.hh"
 #include "G4UserSteppingAction.hh"
 
+#include "G4TrajectoryContainer.hh"
+#include "G4Trajectory.hh"
+#include "G4VVisManager.hh"
+
 //#define debug
 //#define ddebug
+
 
 CCalEndOfEventAction::CCalEndOfEventAction (CCalPrimaryGeneratorAction* pg): 
   isInitialized(false),SDnames(0),numberOfSD(0) {
@@ -40,6 +45,7 @@ CCalEndOfEventAction::CCalEndOfEventAction (CCalPrimaryGeneratorAction* pg):
   cout << "end of instantiation of EndofEventAction" << endl;
 }
 
+
 CCalEndOfEventAction::~CCalEndOfEventAction() {
 
   if (theOrg)
@@ -48,6 +54,7 @@ CCalEndOfEventAction::~CCalEndOfEventAction() {
     delete SDnames;
   cout << "Deleting CCalEndOfEventAction" << endl;
 }
+
 
 void CCalEndOfEventAction::initialize() {
 
@@ -68,10 +75,17 @@ void CCalEndOfEventAction::initialize() {
   }       
 }
 
-void CCalEndOfEventAction::StartOfEventAction(const G4Event* evt)
-{ }
+
+void CCalEndOfEventAction::StartOfEventAction(const G4Event* evt) { 
+  G4cout << "\n---> Begin of event: " << evt->GetEventID() << G4endl;
+}
+
 
 void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
+
+#ifdef debug
+  cout << endl << "=== Begin of EndOfEventAction === " << endl;
+#endif
 
   if (!isInitialized) initialize();
 
@@ -79,8 +93,7 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
   
   //
   // Look for the Hit Collection 
-  //
-  
+  //  
   G4HCofThisEvent* allHC = evt->GetHCofThisEvent();
   if (allHC == 0) {
 #ifdef debug
@@ -124,6 +137,9 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
   
 	int j;
 	for (j=0; j<nentries; j++){
+#ifdef ddebug
+	  cout << "Considering hit " << j << endl;
+#endif
 	  CCalG4Hit* aHit =  (*theHC)[j];
 	  float En = aHit->getEnergyDeposit();
 	  int unitID = aHit->getUnitID();
@@ -148,6 +164,10 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
 	  edep[i] += En/GeV;
 	  nhit++;
 	}
+#ifdef ddebug
+	cout << " ===> Total Energy Deposit in this Calorimeter = " 
+	     << edep[i]*1000.0 << "  MeV " << endl; 
+#endif
       }
     }
   }
@@ -167,10 +187,25 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
   analysis->InsertEnergyEcal(ecalE);
   analysis->setNtuple(hcalE, ecalE, ener, x, y, z, fullE, edec, edhc);
   analysis->EndOfEvent(nhit);
+
+  //A.R. Add to visualize tracks
+  // extract the trajectories and draw them
+  if (G4VVisManager::GetConcreteInstance()) {
+    G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
+    G4int n_trajectories = 0;
+    if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+    for (G4int i=0; i<n_trajectories; i++) { 
+      G4Trajectory* trj = (G4Trajectory*) ((*(evt->GetTrajectoryContainer()))[i]);
+      trj->DrawTrajectory(50); // Draw all tracks
+      // if ( trj->GetCharge() != 0. ) trj->DrawTrajectory(50); // Draw only charged tracks
+      // if ( trj->GetCharge() == 0. ) trj->DrawTrajectory(50); // Draw only neutral tracks
+    }
+  }
+
 }
 
-void CCalEndOfEventAction::instanciateSteppingAction(){
 
+void CCalEndOfEventAction::instanciateSteppingAction(){
 	
   G4UserSteppingAction* theUA = const_cast<G4UserSteppingAction*>(G4RunManager::GetRunManager()->GetUserSteppingAction());
         

@@ -14,14 +14,19 @@
 
 #include "G4RunManager.hh"
 #include "G4UIterminal.hh"
-#ifdef VIS_USE
+
+#ifdef G4UI_USE_XM
+#include "G4UIXm.hh"
+#endif
+
+#ifdef G4VIS_USE
   #include "CCalVisManager.hh"
 #endif
 
 
 int main(int argc,char** argv) {
 
-#ifdef VIS_USE
+#ifdef G4VIS_USE
   CCalVisManager *visManager = new CCalVisManager;
   visManager->Initialize();
 #endif        
@@ -58,51 +63,66 @@ int main(int argc,char** argv) {
   UI->ApplyCommand("/CCal/generator/verbose 2");
   UI->ApplyCommand("/gun/position -1380. 0. 0. mm");
   UI->ApplyCommand("/gun/direction 1. 0. 0.");
-  UI->ApplyCommand("/gun/energy 10 GeV");
+  UI->ApplyCommand("/gun/energy 100 GeV");
 
+  G4UIsession * session = 0;
   // Define (G)UI terminal for interactive mode
   if (argc==1) {
-    G4UIsession * session = new G4UIterminal;
+
+#ifdef G4UI_USE_XM
+      session = new G4UIXm(argc,argv);
+#else // G4UIterminal is a (dumb) terminal.
+      session = new G4UIterminal;
+#endif
+
     cout <<" Run initializing ..."<<endl;
     UI->ApplyCommand("/process/verbose 0");
     UI->ApplyCommand("/run/verbose 2");
     UI->ApplyCommand("/run/initialize");
-#ifdef VIS_USE
-    //Ask for visualization, and some personal code.
-    G4cout << "Which system do you want (0 for no visualization)? " << flush;
-    G4String answer;
-    cin >> answer;
-    if (answer!="0") {
-      G4String visSystem = "/vis/open ";
-      visSystem+=answer;
-      G4cout << endl << "Command: " << visSystem << endl;
-      UI->ApplyCommand(visSystem);
-    }
+   
+#ifdef G4VIS_USE
+    // Create empty scene
+    G4String visCommand = "/vis/scene/create";
+    UI->ApplyCommand(visCommand);
+
+    // Choose one default viewer 
+    // (the user can always change it later on) 
+    // visCommand = "/vis/open DAWNFILE";
+    // visCommand = "/vis/open VRML2FILE";
+    visCommand = "/vis/open OGLIX";
+    UI->ApplyCommand(visCommand);
+
+    visCommand = "/vis/viewer/flush";
+    UI->ApplyCommand(visCommand);
+    visCommand = "/tracking/storeTrajectory 1";
+    UI->ApplyCommand(visCommand);
 #endif
-    UI->ApplyCommand("/tracking/storeTrajectory 0");
+
+#ifdef G4UI_USE_XM
+    // Customize the G4UIXm menubar with a macro file :
+    UI->ApplyCommand("/control/execute gui.mac");
+#else
     cout <<"Now, please, apply beamOn command..."<<endl;
+#endif
+
     session->SessionStart();    
     delete session;
-  }
-  else {
-  // Batch mode
+
+  } else {
+
+    // Batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UI->ApplyCommand(command+fileName);
+
   }
 
   delete runManager;
 
-#ifdef VIS_USE
+#ifdef G4VIS_USE
   delete visManager;
 #endif
 
   return 0;
 }
-
-
-
-
-
-
 

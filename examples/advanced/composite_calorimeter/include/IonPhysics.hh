@@ -1,5 +1,8 @@
-#ifndef CCalProdIonPhysics_h
-#define CCalProdIonPhysics_h 1
+//========================
+// taken from example N04 of G4 distribution
+//========================
+#ifndef IonPhysics_h
+#define IonPhysics_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -21,11 +24,11 @@
 #include "G4hIonisation.hh"
 #include "G4MultipleScattering.hh"
 
-class CCalProdIonPhysics : public G4VPhysicsConstructor
+class IonPhysics : public G4VPhysicsConstructor
 {
   public: 
-    CCalProdIonPhysics(const G4String& name="ion");
-    virtual ~CCalProdIonPhysics();
+    IonPhysics(const G4String& name="ion");
+    virtual ~IonPhysics();
 
   public: 
     // This method will be invoked in the Construct() method. 
@@ -39,37 +42,42 @@ class CCalProdIonPhysics : public G4VPhysicsConstructor
 
   protected:
    // Elastic Process
-   G4HadronElasticProcess theElasticProcess;
    G4LElastic*            theElasticModel;
 
    // Generic Ion physics
+   G4HadronElasticProcess theIonElasticProcess;
    G4MultipleScattering   fIonMultipleScattering;
    G4hIonisation          fIonIonisation;
 
    // Deuteron physics
+   G4HadronElasticProcess      theDElasticProcess;
    G4MultipleScattering        fDeuteronMultipleScattering;
    G4hIonisation               fDeuteronIonisation;
    G4DeuteronInelasticProcess  fDeuteronProcess;
    G4LEDeuteronInelastic*      fDeuteronModel;
 
    // Triton physics
+   G4HadronElasticProcess      theTElasticProcess;
    G4MultipleScattering        fTritonMultipleScattering;
    G4hIonisation               fTritonIonisation;
    G4TritonInelasticProcess    fTritonProcess;
    G4LETritonInelastic*        fTritonModel;
   
    // Alpha physics
+   G4HadronElasticProcess      theAElasticProcess;
    G4MultipleScattering        fAlphaMultipleScattering;
    G4hIonisation               fAlphaIonisation;
    G4AlphaInelasticProcess     fAlphaProcess;
    G4LEAlphaInelastic*         fAlphaModel;
 
    // He3 physics
+   G4HadronElasticProcess      theHe3ElasticProcess;
    G4MultipleScattering        fHe3MultipleScattering;
    G4hIonisation               fHe3Ionisation;
 
 };
 
+// 2002 by J.P. Wellisch
 
 #endif
 

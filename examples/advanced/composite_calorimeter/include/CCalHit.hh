@@ -23,6 +23,8 @@
 #include <iostream>
 
 class CCalHit {
+
+  friend ostream& operator<< (ostream&, const CCalHit&);
   
 public:
   
@@ -39,12 +41,6 @@ public:
   Hep3Vector   getEntry() const;
   void         setEntry(Hep3Vector xyz);
   
-  double       getEM() const;
-  void         setEM (double e);
-  
-  double       getHadr() const;
-  void         setHadr (double e);
-  
   double       getIncidentEnergy() const;
   void         setIncidentEnergy (double e);
   
@@ -58,24 +54,20 @@ public:
   void         setTimeSlice(double d);
   int          getTimeSliceID() const;     
   
-  void         addEnergyDeposit(double em, double hd);
-  //void       addEnergyDeposit(CCalHit* aHit);
-  void         addEnergyDeposit(const CCalHit& aHit);
-  
   double       getEnergyDeposit() const;
+  void         setEnergyDeposit(const double e);
+  void         addEnergyDeposit(const CCalHit& aHit);
+  void         addEnergyDeposit(const double e);
   
 private:
   
-  Hep3Vector   entry;             //Entry point
-  double       elem;              //EnergyDeposit of EM particles
-  double       hadr;              //EnergyDeposit of HD particles
-  double       theIncidentEnergy; //Energy of the primary particle
-  int          theTrackID;        //Identification number of the primary
-                                 //particle
-  unsigned int theUnitID;         //Calorimeter Unit Number
-  double       theTimeSlice;      //Time Slice Identification
-};
+  Hep3Vector   entry;             // Entry point
+  double       theIncidentEnergy; // Energy of the primary particle
+  int          theTrackID;        // Identification number of the primary particle
+  unsigned int theUnitID;         // Calorimeter Unit Number
+  double       theTimeSlice;      // Time Slice Identification
+  double       theEnergyDeposit;  // Cumulated Energy deposit
 
-ostream& operator<<(ostream&, const CCalHit&);
+};
 
 #endif

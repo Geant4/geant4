@@ -1,5 +1,5 @@
-#ifndef CCalProdMuonPhysics_h
-#define CCalProdMuonPhysics_h 1
+#ifndef MuonPhysics_h
+#define MuonPhysics_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -13,11 +13,11 @@
 
 #include "G4MuonMinusCaptureAtRest.hh"
 
-class CCalProdMuonPhysics : public G4VPhysicsConstructor
+class MuonPhysics : public G4VPhysicsConstructor
 {
   public: 
-    CCalProdMuonPhysics(const G4String& name="muon");
-    virtual ~CCalProdMuonPhysics();
+    MuonPhysics(const G4String& name="muon");
+    virtual ~MuonPhysics();
 
   public: 
     // This method will be invoked in the Construct() method. 
@@ -52,6 +52,7 @@ class CCalProdMuonPhysics : public G4VPhysicsConstructor
 
 };
 
+// 2002 by J.P. Wellisch
 
 #endif
 

@@ -1,0 +1,34 @@
+#
+# This file permits to customize, with commands,
+# the menu bar of the G4UIXm sessions.
+# It has no effect with G4UIterminal.
+#
+# --- File --- 
+/gui/addMenu file File
+/gui/addButton file Continue continue
+/gui/addButton file Exit "exit"
+#
+# --- Particle ---
+/gui/addMenu particle Particle
+/gui/addButton particle muon-      "/gun/particle mu-"
+/gui/addButton particle electron-  "/gun/particle e-"
+/gui/addButton particle pion-      "/gun/particle pi-"
+#
+# --- Energy ---
+/gui/addMenu energy Energy
+/gui/addButton energy   50-GeV  "/gun/energy  50 GeV"
+/gui/addButton energy  100-GeV  "/gun/energy 100 GeV"
+/gui/addButton energy  150-GeV  "/gun/energy 150 GeV"
+/gui/addButton energy  200-GeV  "/gun/energy 200 GeV"
+/gui/addButton energy  250-GeV  "/gun/energy 250 GeV"
+/gui/addButton energy  300-GeV  "/gun/energy 300 GeV"
+#
+# --- NumEvents ---
+/gui/addMenu numEvents NumEvents
+/gui/addButton numEvents    1   "/run/beamOn   1"
+/gui/addButton numEvents    2   "/run/beamOn   2"
+/gui/addButton numEvents    5   "/run/beamOn   5"
+/gui/addButton numEvents   10   "/run/beamOn  10"
+/gui/addButton numEvents   50   "/run/beamOn  50"
+/gui/addButton numEvents  100   "/run/beamOn 100"
+#

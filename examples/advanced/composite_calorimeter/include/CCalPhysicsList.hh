@@ -1,24 +1,27 @@
-///////////////////////////////////////////////////////////////////////////////
-// File: CCalPhysicsList.hh
-// Description: CCalPhysicsList provides Physics list for the simulation
-///////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------
+// Renamed of the LHEP ufficial Physics List.
+//-----------------------------------------------------------
 #ifndef CCalPhysicsList_h
 #define CCalPhysicsList_h 1
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
-class CCalPhysicsList: public G4VModularPhysicsList {
+#define kNuCut  5*m
 
+class CCalPhysicsList: public G4VModularPhysicsList
+{
 public:
   CCalPhysicsList();
   virtual ~CCalPhysicsList();
   
-protected:
-  //  SetCuts()
+public:
+  // SetCuts() 
   virtual void SetCuts();
-  
+
 };
+
+// 2002 by J.P. Wellisch
 
 #endif
 

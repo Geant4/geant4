@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.1 2002-09-30 13:05:15 pia Exp $
+$Id: History,v 1.2 2002-10-24 12:01:52 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,12 @@ $Id: History,v 1.1 2002-09-30 13:05:15 pia Exp $
 
                       Example History file
                       ---------------------
+
+24.10.2002 - AR, Replaced physics list with ufficial LHEP one;
+                 added visualization and GUI; written README file.
+
+01.10.2002 : 9.10.2002 - SB,  Put the various classes in place,
+                              and rename them.
 
 30.09.2002 - MGP, Created directory
              

@@ -1,16 +1,16 @@
-#include "CCalProdIonPhysics.hh"
+#include "IonPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"   
 
 
-CCalProdIonPhysics::CCalProdIonPhysics(const G4String& name)
+IonPhysics::IonPhysics(const G4String& name)
                  :  G4VPhysicsConstructor(name)
 {
 }
 
-CCalProdIonPhysics::~CCalProdIonPhysics()
+IonPhysics::~IonPhysics()
 {
 }
 
@@ -20,7 +20,7 @@ CCalProdIonPhysics::~CCalProdIonPhysics()
 // Nuclei
 #include "G4IonConstructor.hh"
 
-void CCalProdIonPhysics::ConstructParticle()
+void IonPhysics::ConstructParticle()
 {
   //  Construct light ions
   G4IonConstructor pConstructor;
@@ -31,18 +31,22 @@ void CCalProdIonPhysics::ConstructParticle()
 #include "G4ProcessManager.hh"
 
 
-void CCalProdIonPhysics::ConstructProcess()
+void IonPhysics::ConstructProcess()
 {
   G4ProcessManager * pManager = 0;
   
   // Elastic Process
   theElasticModel = new G4LElastic();
-  theElasticProcess.RegisterMe(theElasticModel);
+  theIonElasticProcess.RegisterMe(theElasticModel);
+  theDElasticProcess.RegisterMe(theElasticModel);
+  theTElasticProcess.RegisterMe(theElasticModel);
+  theAElasticProcess.RegisterMe(theElasticModel);
+  theHe3ElasticProcess.RegisterMe(theElasticModel);
 
   // Generic Ion
   pManager = G4GenericIon::GenericIon()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+  pManager->AddDiscreteProcess(&theIonElasticProcess);
 
   pManager->AddProcess(&fIonIonisation, ordInActive, 2, 2);
 
@@ -53,7 +57,7 @@ void CCalProdIonPhysics::ConstructProcess()
   // Deuteron 
   pManager = G4Deuteron::Deuteron()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+  pManager->AddDiscreteProcess(&theDElasticProcess);
 
   fDeuteronModel = new G4LEDeuteronInelastic();
   fDeuteronProcess.RegisterMe(fDeuteronModel);
@@ -68,7 +72,7 @@ void CCalProdIonPhysics::ConstructProcess()
   // Triton 
   pManager = G4Triton::Triton()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+  pManager->AddDiscreteProcess(&theTElasticProcess);
 
   fTritonModel = new G4LETritonInelastic();
   fTritonProcess.RegisterMe(fTritonModel);
@@ -83,7 +87,7 @@ void CCalProdIonPhysics::ConstructProcess()
   // Alpha 
   pManager = G4Alpha::Alpha()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+  pManager->AddDiscreteProcess(&theAElasticProcess);
 
   fAlphaModel = new G4LEAlphaInelastic();
   fAlphaProcess.RegisterMe(fAlphaModel);
@@ -98,7 +102,7 @@ void CCalProdIonPhysics::ConstructProcess()
   // He3
   pManager = G4He3::He3()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+  pManager->AddDiscreteProcess(&theHe3ElasticProcess);
 
   pManager->AddProcess(&fHe3Ionisation, ordInActive, 2, 2);
 
@@ -110,3 +114,4 @@ void CCalProdIonPhysics::ConstructProcess()
 
 
 
+// 2002 by J.P. Wellisch

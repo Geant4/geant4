@@ -23,8 +23,8 @@ public:
 
 private:
 
-  float          LateralProfile[28];	
-  float          timeDeposit[50];
+  float          LateralProfile[70];	
+  float          timeDeposit[40];
   int            timeHistoMaxBin;	    
       
 private:

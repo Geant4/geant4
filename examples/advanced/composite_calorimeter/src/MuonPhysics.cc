@@ -1,16 +1,16 @@
-#include "CCalProdMuonPhysics.hh"
+#include "MuonPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"   
 
 
-CCalProdMuonPhysics::CCalProdMuonPhysics(const G4String& name)
+MuonPhysics::MuonPhysics(const G4String& name)
                    :  G4VPhysicsConstructor(name)
 {
 }
 
-CCalProdMuonPhysics::~CCalProdMuonPhysics()
+MuonPhysics::~MuonPhysics()
 {
 }
 
@@ -26,7 +26,7 @@ CCalProdMuonPhysics::~CCalProdMuonPhysics()
 #include "G4NeutrinoMu.hh"
 #include "G4AntiNeutrinoMu.hh"
 
-void CCalProdMuonPhysics::ConstructParticle()
+void MuonPhysics::ConstructParticle()
 {
   // Mu
   G4MuonPlus::MuonPlusDefinition();
@@ -45,7 +45,7 @@ void CCalProdMuonPhysics::ConstructParticle()
 
 #include "G4ProcessManager.hh"
 
-void CCalProdMuonPhysics::ConstructProcess()
+void MuonPhysics::ConstructProcess()
 {
   G4ProcessManager * pManager = 0;
 
@@ -98,3 +98,4 @@ void CCalProdMuonPhysics::ConstructProcess()
 
 
 
+// 2002 by J.P. Wellisch

@@ -52,15 +52,14 @@ private:
   ITree* tree;
   ITuple* tuple;
 
-  enum {numberOfTimeSlices = 40};
+  enum {numberOfTimeSlices = 40}; 
 
   IHistogram1D* energy;
-  IHistogram1D* profile;
-  IHistogram1D* hcalE[28];
-  IHistogram1D* ecalE[49];
-  IHistogram1D* timeHist[40];
-  IHistogram1D* lateralProfile[28];
-
+  IHistogram1D* hcalE[28];           // 28 hadronic modules
+  IHistogram1D* ecalE[49];           // 49 crystal towers
+  IHistogram1D* timeHist[40];        // 40 nanoseconds time window
+  IHistogram1D* lateralProfile[70];  // 70 centimeters lateral window
+                                     // (indeed 64 should be enough)
 };
 
 
