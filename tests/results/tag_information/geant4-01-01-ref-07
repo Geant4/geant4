@@ -1,0 +1,41 @@
+                      geant4-01-01-ref-07
+                      ===================
+
+geant4-01-01-ref-07 is geant4-01-01-cand-07 plus:
+
+./examples/extended/electromagnetic/TestEm2             testem2-V01-01-01
+./examples/extended/electromagnetic/TestEm8             TestEm8-V01-01-00
+./examples/novice/N04           exampleN04-V01-01-02
+./source/GNUmakefile            source-gmk-V01-01-01
+./source/global         global-V01-01-04
+./source/interfaces             interfaces-V01-01-06-old-G4UIterminal
+./source/materials              materials-V01-01-00
+./source/processes/electromagnetic/lowenergy            emlowen-V01-01-21
+./source/processes/hadronic/models/generator/de_excitation              de_excitation-V01-01-00
+./source/processes/parameterisation             param-V01-01-04
+./source/processes/transportation               transport-V01-01-02
+./tests/GNUmakefile             tests-gmk-V01-01-04
+./tests/tools           testtools-V01-01-01
+./examples              examples-V01-01-08 
+./tests/test14          test14-V01-01-04 
+
+geant4-01-01-cand-07 is geant4-01-01-ref-06 plus:
+
+./examples/novice/N02           exampleN02-V01-01-02
+./tests/test18          test18-V01-01-05
+./examples examples-V01-01-07 
+./examples/novice/N02           exampleN02-V01-01-02
+./tests/test16 test16-V01-01-00 
+./tests/test15 test15-V01-01-00 
+./tests/test14 test14-V01-01-03 
+./tests/test13 test13-V01-01-00 
+./tests/test12 test12-V01-01-00 
+./tests/test11 test11-V01-01-00 
+./tests/test10 test10-V01-01-00 
+./tests/test09 test09-V01-01-00 
+./tests/test07 test07-V01-01-00 
+./tests/test06 test06-V01-01-00 
+./tests/test05 test05-V01-01-01 
+./tests/test02 test02-V01-01-00 
+./tests/test01 test01-V01-01-01
+./tests/results test_results-V01-01-00

@@ -1,0 +1,13 @@
+                      geant4-02-00-cand-00
+                      ====================
+
+geant4-02-00-cand-00 is geant4-01-01-ref-08 plus:
+
+./source/geometry/solids/Boolean                geom-solid-bool-V01-01-03
+./source/geometry/solids/specific               geom-solids-specific-V01-01-02
+./source/global                                 global-V01-01-05
+./source/processes/hadronic/models/radiative_decay radiative_decay-V01-01-04 
+./examples/extended/electromagnetic/TestEm2     testem2-V01-01-02
+./examples/extended/electromagnetic/TestEm8     TestEm8-V01-01-03 
+./tests/test18                                  test18-V01-01-09 
+./source/processes/hadronic/models/GNUmakefile  had-mod-gmk-V01-01-00 

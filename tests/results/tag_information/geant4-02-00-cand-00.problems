@@ -1,0 +1,59 @@
+            Problems and Fixes with geant4-02-00-cand-00
+            ============================================
+
+This is the candidate tag for the release.  It is geant4-01-01-ref-08
+plus:
+
+./source/geometry/solids/Boolean                geom-solid-bool-V01-01-03
+./source/geometry/solids/specific               geom-solids-specific-V01-01-02
+./source/global                                 global-V01-01-05
+./source/processes/hadronic/models/radiative_decay radiative_decay-V01-01-04 
+./examples/extended/electromagnetic/TestEm2     testem2-V01-01-02
+./examples/extended/electromagnetic/TestEm8     TestEm8-V01-01-03 
+./tests/test18                                  test18-V01-01-09 
+./source/processes/hadronic/models/GNUmakefile  had-mod-gmk-V01-01-00 
+
+
+Problems Fixed
+--------------
+
+  DEC: debug: NON-ISO: T18: Curious crash in string comparison with positron.
+
+  TestEm8: compilations problems.
+
+
+Problems remaining
+------------------
+
+  DEC: NONISO: G4UIterminal shows prompt *after* command.
+               G4UIterminal with G4UItcsh: typing blind.
+
+  All ISO modes: T11, T15: problem reading neutron data.
+
+  DEC: optim:     ISO: T02.hadron: crash with K+ in Pb.
+
+  DEC: debug: NON-ISO: T18: Appears to stop early - G4cout lost?
+
+
+Large N Problems
+----------------
+
+  DEC: debug:    ISO: T13: *** Error in G4HEInelastic::GenerateNBodyEvent
+                           total mass (1.87784) >= total energy (1.81268)
+                           but it runs to completion.
+
+  DEC: optim:    ISO: T02.hadron: crash with proton in Pb.
+                      T13: command terminated abnormally.
+
+  HP: debug: T09: G4VParticleChange::SetNumberOfSecondaries() Warning
+                  theListOfSecondaries is not empty -
+                  but it runs to completion.
+  HP: optim: T09: As debug.
+             T13: Crash with 400 GeV proton in Al.
+
+  Linux: debug: T02.hadron: crash with kaon0S at 100 GeV in Al.
+
+  SUN: debug: NONISO: T09: G4VParticleChange::SetNumberOfSecondaries() Warning
+                           theListOfSecondaries is not empty -
+                           but it runs to completion.
+  SUN: optim: NONISO: T09: As debug.
