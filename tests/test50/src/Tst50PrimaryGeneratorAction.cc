@@ -21,15 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimaryGeneratorAction.cc,v 1.9 2003-05-15 16:00:59 guatelli Exp $
+// $Id: Tst50PrimaryGeneratorAction.cc,v 1.10 2003-05-17 18:11:53 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
+//
+// History:
+// -----------
+// 17 May  2003   S. Guatelli   1st implementation
+//
+// -------------------------------------------------------------------
+
 #include "G4IonTable.hh"
-#include "Tst50PrimaryGeneratorAction.hh"
-//#include "Tst50DetectorConstruction.hh"
-#include "Tst50PrimaryGeneratorMessenger.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
@@ -38,29 +41,25 @@
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4ThreeVector.hh"
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "Tst50PrimaryGeneratorAction.hh"
+#include "Tst50PrimaryGeneratorMessenger.hh"
 
 Tst50PrimaryGeneratorAction::Tst50PrimaryGeneratorAction():
-  rndmDirection("off")
+  randomDirection("off")
 {
-  G4int n_particle = 1;
+  G4int particleNumber = 1;
 
-  particleGun = new G4ParticleGun(n_particle);
+  particleGun = new G4ParticleGun(particleNumber);
   gunMessenger = new Tst50PrimaryGeneratorMessenger(this);
   
-  
   // default particle
- 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
- 
-  G4ParticleDefinition* particle = particleTable->FindParticle("gamma");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(1.*MeV);
-  particleGun->SetParticlePosition(G4ThreeVector(0.*m,0.*m,-1.*m));
+  G4ParticleDefinition* particle = particleTable -> FindParticle("gamma");
+  particleGun -> SetParticleDefinition(particle);
+  particleGun -> SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  particleGun -> SetParticleEnergy(1.*MeV);
+  particleGun -> SetParticlePosition(G4ThreeVector(0.*m,0.*m,-1.*m));
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Tst50PrimaryGeneratorAction::~Tst50PrimaryGeneratorAction()
 {
@@ -68,46 +67,44 @@ Tst50PrimaryGeneratorAction::~Tst50PrimaryGeneratorAction()
   delete particleGun;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void Tst50PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
-   if(rndmDirection=="on")
-   {
-    G4double a,b,c;
-    G4double n;
-    do{
+  if(randomDirection == "on")
+    {
+      G4double a,b,c;
+      G4double n;
+      do{
 	a = (G4UniformRand()-0.5)/0.5;
 	b = (G4UniformRand()-0.5)/0.5; 
 	c = (G4UniformRand()-0.5)/0.5;
 	n = a*a+b*b+c*c;
       }while(n > 1 || n == 0.0);
-    n = sqrt(n);
-    a /= n;
-    b /= n;
-    c /= n;
-    G4ThreeVector direction(a,b,c);
-    particleGun->SetParticleMomentumDirection(direction);
-   }
+      n = sqrt(n);
+      a /= n;
+      b /= n;
+      c /= n;
+      G4ThreeVector direction(a,b,c);
+      particleGun -> SetParticleMomentumDirection(direction);
+    }
   
-  if(rndmDirection=="off")
-  {
-   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  }
+  if(randomDirection == "off")
+    {
+      particleGun -> SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+    }
 
-  particleGun->GeneratePrimaryVertex(anEvent);
+  particleGun -> GeneratePrimaryVertex(anEvent);
 }
 
 G4double Tst50PrimaryGeneratorAction::GetInitialEnergy()
 {
-  G4double energy= particleGun->GetParticleEnergy(); 
-  return energy;
+  G4double primaryParticleEnergy = particleGun->GetParticleEnergy(); 
+  return primaryParticleEnergy;
 }
 
 G4String Tst50PrimaryGeneratorAction::GetParticle()
 {
-  G4String name= particleGun->GetParticleDefinition()->GetParticleName();
-  return name;
+  G4String primaryParticleName = particleGun->GetParticleDefinition()->GetParticleName();
+  return primaryParticleName;
 }
 
 

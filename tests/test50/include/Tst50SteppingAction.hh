@@ -21,11 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.hh,v 1.12 2003-05-15 16:00:59 guatelli Exp $
+// $Id: Tst50SteppingAction.hh,v 1.13 2003-05-17 18:11:53 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
+//
+// History:
+// -----------
+// 17 May  2003   S. Guatelli   1st implementation
+//
+// -------------------------------------------------------------------
 
 #ifndef Tst50SteppingAction_h
 #define Tst50SteppingAction_h 1
@@ -36,7 +41,6 @@
 #include "G4ios.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 class G4Step;
 class Tst50AnalysisManager;
 class Tst50EventAction;
@@ -45,25 +49,23 @@ class Tst50PrimaryGeneratorAction;
 class Tst50DetectorConstruction;
 class Tst50SteppingAction : public G4UserSteppingAction
 {
-  public:
-    Tst50SteppingAction(Tst50EventAction*,Tst50PrimaryGeneratorAction*,Tst50RunAction*, Tst50DetectorConstruction*);
-   ~Tst50SteppingAction();
+public:
+  Tst50SteppingAction(Tst50EventAction*,Tst50PrimaryGeneratorAction*,Tst50RunAction*, Tst50DetectorConstruction*);
+  ~Tst50SteppingAction();
 
-    void UserSteppingAction(const G4Step* Step);
+  void UserSteppingAction(const G4Step* Step);
 
 private:
 
- G4int IDold;
- Tst50EventAction*          eventaction;
-  Tst50PrimaryGeneratorAction* p_Primary;
-  Tst50RunAction* runaction; 
+  G4int IDold;
+  Tst50EventAction*          eventAction;
+  Tst50PrimaryGeneratorAction* primaryAction;
+  Tst50RunAction* runAction; 
   Tst50DetectorConstruction* detector;     
  
   G4double range;
   G4double  KinE_stepBeginning;
  
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

@@ -21,19 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.hh,v 1.15 2003-05-17 14:18:48 pia Exp $
+// $Id: Tst50RunAction.hh,v 1.16 2003-05-17 18:11:53 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //
 //
-// $Id: Tst50RunAction.hh,v 1.15 2003-05-17 14:18:48 pia Exp $
+// $Id: Tst50RunAction.hh,v 1.16 2003-05-17 18:11:53 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
 // History:
 // -----------
-// 02 Mar  1999   S. Guatelli   1st implementation
+// 17 May  2003   S. Guatelli   1st implementation
 //
 // -------------------------------------------------------------------
 
@@ -55,26 +55,28 @@ class Tst50RunAction : public G4UserRunAction
    ~Tst50RunAction();
 
   public:
-  void Set_Trans(G4String);
-  G4bool Get_flag();
   void BeginOfRunAction(const G4Run*);
+  G4int GetRunID ();
+  G4bool GetFlag();//returns the choice of test: transmission or 
+                   //SP and CSDA range test 
   void EndOfRunAction(const G4Run*);
-  void Trans_number();
-  void Back_number();
-  void gamma_transmitted();
-  G4int GetRun_ID ();
+  void SetTransmissionTest(G4String);
+  void TransmittedGammaNumber();
+  void TransmittedParticleNumber();
+  void BackscatteredParticleNumber();
 
-private:
-  G4double particle_trans;// number of transmitted massive particles
-  G4double particle_back;// number of backscattered massive particles
-  G4int numberEvents;// number of events in the BeamOn 
-  G4int runID;
-  G4double gamma_trans;// number of transmitted gamma 
-  Tst50PrimaryGeneratorAction* p_Primary;
-  Tst50DetectorConstruction* p_Detector;
+private: 
+  Tst50RunMessenger* messenger;
   G4bool flag; // if true transmission test, if false SP and CSDA range
                // valid for massive particles
-  Tst50RunMessenger* p_messenger;
+  G4int runID;
+  G4double gammaTransmitted; //number of transmitted gamma 
+  G4int numberEvents;// number of events in the BeamOn
+  G4double particleTransmitted;// number of transmitted massive particles  
+  G4double particleBackscattered;// number of backscattered massive particles 
+  Tst50PrimaryGeneratorAction* primary;
+  Tst50DetectorConstruction* detector;
+  
 };
 #endif
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

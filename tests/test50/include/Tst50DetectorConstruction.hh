@@ -21,13 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.hh,v 1.9 2003-05-15 16:00:58 guatelli Exp $
+// $Id: Tst50DetectorConstruction.hh,v 1.10 2003-05-17 18:11:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// author: Susanna Guatelli (guatelli@ge.infn.it) 
+//
+// History:
+// -----------
+// 17 May  2003   S. Guatelli   1st implementation
+//
+// -------------------------------------------------------------------
 
 #ifndef Tst50DetectorConstruction_h
 #define Tst50DetectorConstruction_h 1
@@ -42,9 +46,6 @@ class G4Material;
 class G4UserLimits;
 class Tst50TrackerSD;
 class Tst50DetectorMessenger;
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Tst50DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -67,34 +68,31 @@ public:
   void SetTargetX(G4double); 
   void SetTargetY(G4double);  
   void UpdateGeometry(); 
-  void  SetMaxStepInTarget(G4double value); 
+  void SetMaxStepInTarget(G4double value); 
   void UseUserLimits(G4bool value); 
   void SetUserLimits(G4bool);
-  G4Material* GetTargetMaterial()  {return TargetMaterial;}; 
- //returns the absorber material
+  G4Material* GetTargetMaterial()  {return targetMaterial;}; 
+  //returns the absorber material
 
 private:
-  G4Material*        TargetMaterial;
-  G4Material*        defaultMaterial;
+  G4Material*        targetMaterial;
+  G4Material*        defaultMaterial;//World absorber material: vacuum
   G4Box*             solidWorld; 
   G4LogicalVolume*   logicWorld; 
   G4VPhysicalVolume* physiWorld; 
   G4Box*             solidTarget;
   G4LogicalVolume*   logicTarget;
   G4VPhysicalVolume* physiTarget;
-  Tst50TrackerSD* pTargetSD; 
-  G4bool  IsRegistered_UseLimits;
-  G4double           TargetThickness;
+  Tst50TrackerSD* targetSD; 
+  G4bool  isRegisteredUserLimits;
+  G4double           targetThickness;
   G4double targetX;
   G4double targetY;
   G4UserLimits*    theUserLimitsForTarget;    
   G4bool           fUseUserLimits;
   G4double         theMaxStepInTarget;
-  Tst50DetectorMessenger* detectorMessenger;   
+  Tst50DetectorMessenger* messenger;   
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
 
 

@@ -20,23 +20,23 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// Code developed by:
-// S.Guatelli
-//
-//
-// $Id: Tst50AnalysisManager.hh,v 1.14 2003-05-17 11:59:35 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 //    **********************************
 //    *                                *
-//    *      BrachyAnalysisManager.hh  *
+//    *      Tst50AnalysisManager.hh  *
 //    *                                *
 //    **********************************
 // 
 
 // the class Analysis creates and managed histograms and ntuples
+///
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
+// History:
+// -----------
+// 17 May  2003   S. Guatelli   1st implementation
+//
+// -------------------------------------------------------------------
+ 
 #ifdef G4ANALYSIS_USE
 #ifndef G4PROCESSTESTANALYSIS_HH
 #define G4PROCESSTESTANALYSIS_HH
@@ -65,10 +65,10 @@ public:
   ~Tst50AnalysisManager();
   static Tst50AnalysisManager* getInstance();
   void book();
-  void attenuation_coeffiecient(G4int,G4double,G4double,G4double);
+  void AttenuationGammaCoeffiecient(G4int,G4double,G4double,G4double);
   void StoppingPower(G4int,G4double,G4double);
   void CSDARange(G4int,G4double,G4double);
-  void trasmission(G4int,G4double,G4double,G4double,G4double,G4double); 
+  void ParticleTransmission(G4int,G4double,G4double,G4double,G4double,G4double); 
   void finish();
 
 private:
@@ -79,11 +79,11 @@ private:
   AIDA::IAnalysisFactory*  aFact; 
   AIDA::ITreeFactory*      treeFact;
   AIDA::ITree*             theTree;
-  AIDA::IDataPointSetFactory * dpsf;
-  AIDA::IDataPointSet * dpsa;  
-  AIDA::IDataPointSet * dpsa1;
-  AIDA::IDataPointSet * dpsa2;
-  AIDA::IDataPointSet * dpsa3;
+  AIDA::IDataPointSetFactory *  dataPointFactory;
+  AIDA::IDataPointSet *  stoppingPowerDataPoint;  
+  AIDA::IDataPointSet *  CSDARangeDataPoint;
+  AIDA::IDataPointSet *  particleTransmissionDataPoint;
+  AIDA::IDataPointSet *  gammaAttenuationCoefficientDataPoint;
 };
 #endif
 #endif

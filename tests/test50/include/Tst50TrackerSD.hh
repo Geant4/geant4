@@ -21,11 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50TrackerSD.hh,v 1.2 2003-01-16 14:11:50 guatelli Exp $
+// $Id: Tst50TrackerSD.hh,v 1.3 2003-05-17 18:11:53 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
+//
+// History:
+// -----------
+// 17 May     2003 SG      first implemntation
+// -------------------------------------------------------------------
 
 #ifndef Tst50TrackerSD_h
 #define Tst50TrackerSD_h 1
@@ -37,24 +41,20 @@
 class G4Step;
 class G4HCofThisEvent;
 class Tst50AnalysisManager;
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Tst50TrackerSD : public G4VSensitiveDetector
 {
-  public:
-      Tst50TrackerSD(G4String);
-     ~Tst50TrackerSD();
+public:
+  Tst50TrackerSD(G4String);
+  ~Tst50TrackerSD();
 
-      void Initialize(G4HCofThisEvent*);
-      G4bool ProcessHits(G4Step*, G4TouchableHistory*);
-      void EndOfEvent(G4HCofThisEvent*);
+  void Initialize(G4HCofThisEvent*);
+  G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+  void EndOfEvent(G4HCofThisEvent*);
 
-  private:
-      Tst50TrackerHitsCollection* trackerCollection;
-    G4int*                   hit_ID;
+private:
+  Tst50TrackerHitsCollection* trackerCollection;
+  G4int*                   hitID;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
 

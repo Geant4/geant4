@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50TrackerHit.hh,v 1.2 2003-01-16 14:11:50 guatelli Exp $
+// $Id: Tst50TrackerHit.hh,v 1.3 2003-05-17 18:11:53 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// History:
+// -----------
+// 17 May     2003 SG   first implementation    
 
 #ifndef Tst50TrackerHit_h
 #define Tst50TrackerHit_h 1
@@ -35,50 +37,34 @@
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 class Tst50TrackerHit : public G4VHit
 {
-  public:
+public:
 
-      Tst50TrackerHit();
-     ~Tst50TrackerHit();
-      Tst50TrackerHit(const Tst50TrackerHit&);
-      const Tst50TrackerHit& operator=(const Tst50TrackerHit&);
-      int operator==(const Tst50TrackerHit&) const;
+  Tst50TrackerHit();
+  ~Tst50TrackerHit();
+  Tst50TrackerHit(const Tst50TrackerHit&);
+  const Tst50TrackerHit& operator=(const Tst50TrackerHit&);
+  int operator==(const Tst50TrackerHit&) const;
 
-      inline void* operator new(size_t);
-      inline void  operator delete(void*);
+  inline void* operator new(size_t);
+  inline void  operator delete(void*);
 
-      void Draw();
-      void Print();
+  void Draw();
+  void Print();
 
-  public:
-  
+public:
+  void SetEdep     (G4double de)      { edep = de; };
+  void AddEnergy    (G4double de)      { edep += de; };    
+  G4double GetEdep()    { return edep; };      
 
-
-      void SetEdep     (G4double de)      { edep = de; };
-      void AddEnergy    (G4double de)      { edep += de; };
-      
-    
-      G4double GetEdep()    { return edep; };      
-
- 
-  
-  private:
-  
-
-      G4double      edep;
-
+private:
+  G4double      edep;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 typedef G4THitsCollection<Tst50TrackerHit> Tst50TrackerHitsCollection;
 
 extern G4Allocator<Tst50TrackerHit> Tst50TrackerHitAllocator;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void* Tst50TrackerHit::operator new(size_t)
 {
@@ -87,14 +73,10 @@ inline void* Tst50TrackerHit::operator new(size_t)
   return aHit;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 inline void Tst50TrackerHit::operator delete(void *aHit)
 {
   Tst50TrackerHitAllocator.FreeSingle((Tst50TrackerHit*) aHit);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -20,6 +20,13 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
+//
+// History:
+// -----------
+// 17 May  2003   S. Guatelli   1st implementation
+//
+// -------------------------------------------------------------------
 
 #ifndef Tst50PrimaryGeneratorMessenger_h
 #define Tst50PrimaryGeneratorMessenger_h 1
@@ -32,16 +39,15 @@ class Tst50PrimaryGeneratorAction;
 
 class Tst50PrimaryGeneratorMessenger: public G4UImessenger
 {
-public:
+ public:
   Tst50PrimaryGeneratorMessenger(Tst50PrimaryGeneratorAction*);
   ~Tst50PrimaryGeneratorMessenger();
   
   void SetNewValue(G4UIcommand*, G4String);
   
-private:
-
-  Tst50PrimaryGeneratorAction* Tst50Action; 
-  G4UIcmdWithAString*          RndmDir;
+ private:
+  Tst50PrimaryGeneratorAction* tst50Gun; 
+  G4UIcmdWithAString*          randomDirectionCmd;
   //command to choose a primary particle random direction
 };
 

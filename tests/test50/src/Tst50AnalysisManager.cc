@@ -20,19 +20,24 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// Code developed by:
-//  S.Guatelli
 //
 //    *******************************
 //    *                             *
-//    *    BrachyAnalysisManager.cc *
+//    *    Tst50AnalysisManager.cc *
 //    *                             *
 //    *******************************
 //
 
-// $Id: Tst50AnalysisManager.cc,v 1.18 2003-05-17 13:07:48 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.19 2003-05-17 18:11:53 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
+//
+// History:
+// -----------
+// 17 May  2003   S. Guatelli   1st implementation
+//
+// -------------------------------------------------------------------
+ 
 #include <stdlib.h>
 #include "g4std/fstream"
 #include "Tst50AnalysisManager.hh"
@@ -45,31 +50,31 @@
 Tst50AnalysisManager* Tst50AnalysisManager::instance = 0;
 
 Tst50AnalysisManager::Tst50AnalysisManager() : 
-  aFact(0), treeFact(0),theTree(0),dpsf(0),dpsa(0),dpsa1(0),dpsa2(0),dpsa3(0)
+  aFact(0), treeFact(0),theTree(0),dataPointFactory(0),stoppingPowerDataPoint(0),CSDARangeDataPoint(0),particleTransmissionDataPoint(0),gammaAttenuationCoefficientDataPoint(0)
 { 
   aFact = AIDA_createAnalysisFactory();
-  treeFact = aFact->createTreeFactory();
+  treeFact = aFact -> createTreeFactory();
 }
 
 Tst50AnalysisManager::~Tst50AnalysisManager() 
 { 
-  delete dpsa3;
-  dpsa3=0;
+  delete gammaAttenuationCoefficientDataPoint;
+  gammaAttenuationCoefficientDataPoint = 0;
 
-  delete dpsa2;
-  dpsa2=0; 
+  delete particleTransmissionDataPoint;
+  particleTransmissionDataPoint = 0; 
 
-  delete dpsa1;
-  dpsa1=0; 
+  delete CSDARangeDataPoint;
+  CSDARangeDataPoint = 0; 
 
-  delete dpsa;
-  dpsa=0; 
+  delete stoppingPowerDataPoint;
+  stoppingPowerDataPoint = 0; 
 
   delete treeFact;
-  treeFact=0;
+  treeFact = 0;
 
   delete theTree;
-  theTree=0;
+  theTree = 0;
 
   delete aFact;
   aFact = 0;
@@ -85,67 +90,65 @@ Tst50AnalysisManager* Tst50AnalysisManager::getInstance()
 
 void Tst50AnalysisManager::book() 
 { 
-  theTree = treeFact->create("test50.xml","xml",false, true,"uncompress");
-  dpsf = aFact->createDataPointSetFactory(*theTree); 
-  dpsa = dpsf->create("Stopping Power test",2); 
-  dpsa1 = dpsf->create ("CSDA Range test",2);
-  dpsa2 = dpsf->create ("Transmission test",3);
-  dpsa3 = dpsf->create ("Gamma attenuation coefficient test",2); 
+  theTree = treeFact -> create("test50.xml","xml",false, true,"uncompress");
+  dataPointFactory = aFact -> createDataPointSetFactory(*theTree); 
+  stoppingPowerDataPoint = dataPointFactory -> create("Stopping Power test",2); 
+  CSDARangeDataPoint = dataPointFactory -> create ("CSDA Range test",2);
+  particleTransmissionDataPoint = dataPointFactory -> create ("Transmission test",3);
+  gammaAttenuationCoefficientDataPoint = dataPointFactory -> create ("Gamma attenuation coefficient test",2); 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Tst50AnalysisManager::attenuation_coeffiecient(G4int PointNumber,G4double energy, G4double coeff, G4double coeff_error )
+void Tst50AnalysisManager::AttenuationGammaCoeffiecient(G4int PointNumber,G4double primaryParticleEnergy, G4double gammaAttenuationCoefficient, G4double gammaAttenuationCoefficientError )
 {
-  dpsa3->addPoint();
-  AIDA::IDataPoint* point = dpsa3->point(PointNumber);
-  AIDA::IMeasurement* mX= point->coordinate( 0 );
-  mX->setValue(energy );
-  AIDA::IMeasurement* mY= point->coordinate( 1 );
-  mY->setValue( coeff );
-  mY->setErrorPlus(coeff_error );
-  mY->setErrorMinus(coeff_error);
+  gammaAttenuationCoefficientDataPoint -> addPoint();
+  AIDA::IDataPoint* point = gammaAttenuationCoefficientDataPoint -> point(PointNumber);
+  AIDA::IMeasurement* coordinateX = point->coordinate( 0 );
+  coordinateX->setValue(primaryParticleEnergy );
+  AIDA::IMeasurement* coordinateY = point -> coordinate( 1 );
+  coordinateY -> setValue( gammaAttenuationCoefficient );
+  coordinateY -> setErrorPlus(gammaAttenuationCoefficientError );
+  coordinateY -> setErrorMinus(gammaAttenuationCoefficientError);
  }
-void Tst50AnalysisManager::StoppingPower(G4int PointNumber,G4double energy, G4double SP)
+void Tst50AnalysisManager::StoppingPower(G4int PointNumber,G4double primaryParticleEnergy, G4double SP)
 {
-  dpsa->addPoint();
-  AIDA::IDataPoint* point = dpsa->point(PointNumber);
-  AIDA::IMeasurement* mX= point->coordinate( 0 );
-  mX->setValue(energy );
-  mX->setErrorPlus( 0. );
-  mX->setErrorMinus( 0. );
-  AIDA::IMeasurement* mY= point->coordinate( 1 );
-  mY->setValue( SP);
+  stoppingPowerDataPoint->addPoint();
+  AIDA::IDataPoint* point = stoppingPowerDataPoint->point(PointNumber);
+  AIDA::IMeasurement* coordinateX = point->coordinate( 0 );
+  coordinateX -> setValue(primaryParticleEnergy );
+  coordinateX -> setErrorPlus( 0. );
+  coordinateX -> setErrorMinus( 0. );
+  AIDA::IMeasurement* coordinateY = point->coordinate( 1 );
+  coordinateY -> setValue( SP);
 }
-void Tst50AnalysisManager::CSDARange(G4int PointNumber,G4double energy, G4double range)
+void Tst50AnalysisManager::CSDARange(G4int PointNumber,G4double primaryParticleEnergy, G4double range)
 {
-  dpsa1->addPoint();
-  AIDA::IDataPoint* point = dpsa1->point(PointNumber);
-  AIDA::IMeasurement* mX= point->coordinate( 0 );
-  mX->setValue(energy );
-  AIDA::IMeasurement* mY= point->coordinate( 1 );
-  mY->setValue(range);
+  CSDARangeDataPoint -> addPoint();
+  AIDA::IDataPoint* point = CSDARangeDataPoint -> point(PointNumber);
+  AIDA::IMeasurement* coordinateX = point -> coordinate( 0 );
+  coordinateX -> setValue(primaryParticleEnergy );
+  AIDA::IMeasurement* coordinateY = point -> coordinate( 1 );
+  coordinateY -> setValue(range);
 }
-void Tst50AnalysisManager::trasmission(G4int PointNumber,G4double energy, G4double TransFraction, G4double BackFraction, G4double TransError, G4double BackError)
+void Tst50AnalysisManager::ParticleTransmission(G4int PointNumber,G4double primaryParticleEnergy, G4double TransFraction, G4double BackFraction, G4double TransError, G4double BackError)
 {
-  dpsa2->addPoint();
-  AIDA::IDataPoint* point = dpsa2->point(PointNumber);
-  AIDA::IMeasurement* mX= point->coordinate( 0 );
-  mX->setValue(energy );
-  AIDA::IMeasurement* mY= point->coordinate( 1 );
-  mY->setValue(TransFraction);
-  mY->setErrorPlus(TransError);
-  mY->setErrorMinus(TransError);
-  AIDA::IMeasurement* mZ= point->coordinate( 2 );
-  mZ->setValue(BackFraction);
-  mZ->setErrorPlus(BackError);
-  mZ->setErrorMinus(BackError);
+  particleTransmissionDataPoint -> addPoint();
+  AIDA::IDataPoint* point = particleTransmissionDataPoint -> point(PointNumber);
+  AIDA::IMeasurement* coordinateX = point -> coordinate( 0 );
+  coordinateX -> setValue(primaryParticleEnergy );
+  AIDA::IMeasurement* coordinateY = point -> coordinate( 1 );
+  coordinateY -> setValue(TransFraction);
+  coordinateY -> setErrorPlus(TransError);
+  coordinateY -> setErrorMinus(TransError);
+  AIDA::IMeasurement* coordinateZ = point->coordinate( 2 );
+  coordinateZ -> setValue(BackFraction);
+  coordinateZ -> setErrorPlus(BackError);
+  coordinateZ -> setErrorMinus(BackError);
 }
 
 void Tst50AnalysisManager::finish() 
 {  
-  theTree->commit();
-  theTree->close();
+  theTree -> commit();
+  theTree -> close();
 }
 
 

@@ -21,10 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.16 2003-05-15 16:00:59 guatelli Exp $
+// $Id: Tst50EventAction.cc,v 1.17 2003-05-17 18:11:53 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
+//
+// History:
+// -----------
+// 17 May  2003   S. Guatelli   1st implementation
+//
+// -------------------------------------------------------------------
+ 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"
@@ -62,14 +69,14 @@ void Tst50EventAction::EndOfEventAction(const G4Event* evt)
         { 
          G4Trajectory* trj = (G4Trajectory*)
 	 ((*(evt->GetTrajectoryContainer()))[i]);
-	 trj->DrawTrajectory(50);
+	 trj -> DrawTrajectory(50);
         }
     }
 }
 
-G4int Tst50EventAction::GetEventno()
+G4int Tst50EventAction::GetEventNo()
 {
-  G4int evno = fpEventManager->GetConstCurrentEvent()->GetEventID() ;
+  G4int evno = fpEventManager -> GetConstCurrentEvent() -> GetEventID() ;
   return evno ;
 }
 

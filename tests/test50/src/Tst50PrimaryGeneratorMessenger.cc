@@ -27,31 +27,31 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Tst50PrimaryGeneratorMessenger::Tst50PrimaryGeneratorMessenger(Tst50PrimaryGeneratorAction* Tst50Gun)
-:Tst50Action(Tst50Gun)
+Tst50PrimaryGeneratorMessenger::Tst50PrimaryGeneratorMessenger(Tst50PrimaryGeneratorAction* primary)
+:tst50Gun(primary)
 { 
-  RndmDir = new G4UIcmdWithAString("/gun/randomDirection",this);
-  RndmDir->SetGuidance("Shoot  incident particle with random direction.");
-  RndmDir->SetGuidance("  Choice : on, off (default)");
-  RndmDir->SetParameterName("choice",true);
-  RndmDir->SetDefaultValue("off");
-  RndmDir->SetCandidates("on off");
-  RndmDir->AvailableForStates(G4State_PreInit,G4State_Idle);
+  randomDirectionCmd = new G4UIcmdWithAString("/gun/randomDirection",this);
+  randomDirectionCmd -> SetGuidance("Shoot  incident particle with random direction.");
+  randomDirectionCmd -> SetGuidance("  Choice : on, off (default)");
+  randomDirectionCmd -> SetParameterName("choice",true);
+  randomDirectionCmd -> SetDefaultValue("off");
+  randomDirectionCmd -> SetCandidates("on off");
+  randomDirectionCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst50PrimaryGeneratorMessenger::~Tst50PrimaryGeneratorMessenger()
 {
-  delete  RndmDir;
+  delete  randomDirectionCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst50PrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 { 
-  if( command == RndmDir )
-   { Tst50Action->SetRndmDirection(newValue);} 
+  if( command == randomDirectionCmd )
+   { tst50Gun->SetRandomDirection(newValue);} 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

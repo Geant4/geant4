@@ -22,13 +22,10 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.24 2003-05-17 13:07:48 guatelli Exp $
+// $Id: test50.cc,v 1.25 2003-05-17 18:11:38 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -48,23 +45,16 @@
 #include "Tst50VisManager.hh"
 #endif
 
-
 int main(int argc,char** argv) {
  	
   HepRandom::setTheEngine(new RanecuEngine);   
   G4int seed=time(0);
   HepRandom ::setTheSeed(seed);
  
-
-  //G4VSteppingVerbose::SetInstance(new Tst50SteppingVerbose);
-  
-
   G4RunManager * runManager = new G4RunManager;
 
-
   Tst50DetectorConstruction* Tst50detector = new Tst50DetectorConstruction();
-  runManager->SetUserInitialization(Tst50detector);
-  
+  runManager->SetUserInitialization(Tst50detector);  
 
   Tst50PhysicsList* fisica = new Tst50PhysicsList();
   runManager->SetUserInitialization(fisica);
@@ -87,10 +77,8 @@ int main(int argc,char** argv) {
   Tst50SteppingAction* steppingaction = new Tst50SteppingAction(pEventAction, p_Primary, p_run,Tst50detector);
   runManager->SetUserAction(steppingaction);
 
-
   Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
   analysis->book();
-
 
   //get the pointer to the User Interface manager 
   G4UImanager * UI = G4UImanager::GetUIpointer();  

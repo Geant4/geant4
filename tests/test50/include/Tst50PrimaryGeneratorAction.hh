@@ -21,11 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimaryGeneratorAction.hh,v 1.7 2003-05-15 16:00:59 guatelli Exp $
+// $Id: Tst50PrimaryGeneratorAction.hh,v 1.8 2003-05-17 18:11:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
+//
+// History:
+// -----------
+// 17 May  2003   S. Guatelli   1st implementation
+//
+// -------------------------------------------------------------------
  
 #ifndef Tst50PrimaryGeneratorAction_h
 #define Tst50PrimaryGeneratorAction_h 1
@@ -35,10 +40,10 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 
-class Tst50PrimaryGeneratorMessenger;
 class G4ParticleGun;
 class G4Event;
- 
+class Tst50PrimaryGeneratorMessenger; 
+
 class Tst50PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
@@ -49,10 +54,10 @@ public:
 public:
   G4double GetInitialEnergy();
   G4String GetParticle();
-  void SetRndmDirection (G4String val) {rndmDirection = val;}
+  void SetRandomDirection (G4String val) {randomDirection = val;}
   
 private:
-  G4String rndmDirection;
+  G4String randomDirection;
   G4ParticleGun* particleGun;
   Tst50PrimaryGeneratorMessenger* gunMessenger; 
 };

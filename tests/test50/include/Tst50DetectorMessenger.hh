@@ -21,13 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorMessenger.hh,v 1.6 2003-05-15 16:00:58 guatelli Exp $
+// $Id: Tst50DetectorMessenger.hh,v 1.7 2003-05-17 18:11:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// author: Susanna Guatelli (guatelli@ge.infn.it)
+// 
+// History:
+// -----------
+// 17 May  2003   S. Guatelli   1st implementation
+//
+// -------------------------------------------------------------------
 
 #ifndef Tst50DetectorMessenger_h
 #define Tst50DetectorMessenger_h 1
@@ -42,30 +46,26 @@ class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithABool;
 class Tst50DetectorConstruction;
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Tst50DetectorMessenger: public G4UImessenger
 {
- public:
-    Tst50DetectorMessenger(Tst50DetectorConstruction* );
-   ~Tst50DetectorMessenger();
+public:
+  Tst50DetectorMessenger(Tst50DetectorConstruction* );
+  ~Tst50DetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
- private:
-    Tst50DetectorConstruction* Tst50Detector;
+private:
+  Tst50DetectorConstruction* detector;
     
-    G4UIdirectory*             Tst50detDir;
-    G4UIcmdWithAString*        AbsMaterCmd;
-    G4UIcmdWithADoubleAndUnit* AbsThickCmd; 
-    G4UIcmdWithADoubleAndUnit*   XThickCmd;
-    G4UIcmdWithADoubleAndUnit*   YThickCmd; 
-    G4UIcmdWithABool* UseUserLimitCmd; 
-    G4UIcmdWithADoubleAndUnit*   SetStepCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
+  G4UIdirectory*             tst50Dir;
+  G4UIcmdWithAString*        targetMaterialCmd;
+  G4UIcmdWithADoubleAndUnit* targetThicknessCmd;
+  G4UIcmdWithADoubleAndUnit* targetXDimensionCmd;
+  G4UIcmdWithADoubleAndUnit* targetYDimensionCmd;             
+  G4UIcmdWithABool* UseUserLimitCmd; 
+  G4UIcmdWithADoubleAndUnit* setStepMaxCmd;
+  G4UIcmdWithoutParameter*   updateCmd;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
 

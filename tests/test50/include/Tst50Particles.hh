@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50Particles.hh,v 1.1 2003-04-25 08:43:33 guatelli Exp $
+// $Id: Tst50Particles.hh,v 1.2 2003-05-17 18:11:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -40,11 +40,12 @@
 #ifndef TST50PARTICLES_HH
 #define TST50PARTICLES_HH 1
 
-#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
+#include "G4VPhysicsConstructor.hh"
 
 class Tst50Particles : public G4VPhysicsConstructor {
 public: 
+
   Tst50Particles(const G4String& name = "particles");
   
   virtual ~Tst50Particles();

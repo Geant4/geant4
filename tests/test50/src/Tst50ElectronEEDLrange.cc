@@ -20,14 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50ElectronEEDLrange.cc,v 1.1 2003-04-25 08:43:34 guatelli Exp $
+// $Id: Tst50ElectronEEDLrange.cc,v 1.2 2003-05-17 18:11:53 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria.Grazia.Pia@cern.ch
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
 // History:
 // -----------
-// 22 Feb 2003 MGP          Designed for modular Physics List
+// 17 May     2003 SG          Designed for modular Physics List with
+// CSDA and StoppingPower test conditions
 //
 // -------------------------------------------------------------------
 
@@ -65,6 +66,6 @@ void Tst50ElectronEEDLrange::ConstructProcess()
 	  manager->AddProcess(new G4LowEnergyBremsstrahlung,-1,-1,3);
           G4VeLowEnergyLoss::SetEnlossFluc(false); 
 	  G4cout<<" range conditions set: no msc, no energy fluct"<<G4endl;	
-}   
+	}   
     }
 }

@@ -21,9 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.hh,v 1.11 2003-05-15 16:00:59 guatelli Exp $
+// $Id: Tst50EventAction.hh,v 1.12 2003-05-17 18:11:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
+//
+// History:
+// -----------
+// 17 May  2003   S. Guatelli   1st implementation
+//
+// -------------------------------------------------------------------
  
 #ifndef Tst50EventAction_h
 #define Tst50EventAction_h 1
@@ -31,8 +38,8 @@
 #include "globals.hh"
 #include "G4UserEventAction.hh"
 
-class Tst50TrackerHit;
 class G4Event;
+class Tst50TrackerHit;
 
 class Tst50EventAction : public G4UserEventAction
 {
@@ -42,7 +49,7 @@ public:
 
   void BeginOfEventAction(const G4Event*);
   void EndOfEventAction(const G4Event*);
-  G4int    GetEventno();
+  G4int    GetEventNo();
 };
 #endif
 

@@ -20,16 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50ElectronEEDLback.cc,v 1.1 2003-04-28 15:03:42 guatelli Exp $
+// $Id: Tst50ElectronEEDLback.cc,v 1.2 2003-05-17 18:11:53 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria.Grazia.Pia@cern.ch
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
 // History:
 // -----------
-// 22 Feb 2003 MGP          Designed for modular Physics List
-//
-// -------------------------------------------------------------------
+// 17 May     2003 SG         Designed for modular Physics List with
+// backscattering test conditions
 
 #include "Tst50ElectronEEDLback.hh"
 #include "G4ProcessManager.hh"

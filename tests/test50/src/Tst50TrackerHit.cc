@@ -21,11 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50TrackerHit.cc,v 1.3 2003-01-16 14:11:51 guatelli Exp $
+// $Id: Tst50TrackerHit.cc,v 1.4 2003-05-17 18:11:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Tst50TrackerHit.hh"
 #include "G4UnitsTable.hh"
@@ -36,69 +33,38 @@
 
 G4Allocator<Tst50TrackerHit> Tst50TrackerHitAllocator;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 Tst50TrackerHit::Tst50TrackerHit()
- {edep = 0.;}
+{
+  edep = 0.;
+}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Tst50TrackerHit::~Tst50TrackerHit() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+Tst50TrackerHit::~Tst50TrackerHit() 
+{}
 
 Tst50TrackerHit::Tst50TrackerHit(const Tst50TrackerHit& right)
 {
-  // trackID   = right.trackID;
-  
-  edep      = right.edep;
-  
+  edep      = right.edep;  
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const Tst50TrackerHit& Tst50TrackerHit::operator=(const Tst50TrackerHit& right)
 {
-  
-  // trackID   = right.trackID;
   edep      = right.edep;
- 
   return *this;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int Tst50TrackerHit::operator==(const Tst50TrackerHit& right) const
 {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void Tst50TrackerHit::Draw()
 {
-  /*
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
-    G4Circle circle(pos);
-    circle.SetScreenSize(0.04);
-    circle.SetFillStyle(G4Circle::filled);
-    G4Colour colour(1.,0.,0.);
-    G4VisAttributes attribs(colour);
-    circle.SetVisAttributes(attribs);
-    pVVisManager->Draw(circle);
-  }
-  */
-}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+}
 
 void Tst50TrackerHit::Print()
 {
  
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 

@@ -21,22 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50ElectronEEDLback.hh,v 1.1 2003-04-28 15:03:41 guatelli Exp $
+// $Id: Tst50ElectronEEDLback.hh,v 1.2 2003-05-17 18:11:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
 // History:
 // -----------
-// 22 Feb 2003 MGP          Created
-//
-// -------------------------------------------------------------------
+// 17 May     2003 SG         Designed for modular Physics List with
+// backscattering test conditions
 
-// Class description:
-// System test for e/gamma, electron processes based on EEDL for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
-// -------------------------------------------------------------------
 
 #ifndef TST50ELECTRONEEDLback_HH
 #define TST50ELECTRONEEDLback_HH 1
