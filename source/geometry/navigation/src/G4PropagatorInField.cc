@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.14 2003-12-10 20:36:02 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.15 2003-12-10 23:05:33 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -637,11 +637,13 @@ G4PropagatorInField::LocateIntersectionPoint(
 	  G4FieldTrack oldPointVelB = CurrentB_PointVelocity; 
 	  CurrentB_PointVelocity = newEndPointFT;
 
-	  recalculatedEndPoint= true;
-	  IntersectedOrRecalculatedFT= newEndPointFT;  // So that we can return it, 
+	  if( final_section ){
+	     recalculatedEndPoint= true;
+	     IntersectedOrRecalculatedFT= newEndPointFT;  // So that we can return it, 
 	                                           //  if it is the endpoint!
-	  if( fVerboseLevel > 2 ){
-  	     G4cout <<"G4PiF::LIP> Setting return G4FT to new endpoint " << newEndPointFT  << G4endl;
+	     if( fVerboseLevel > 2 ){
+	       G4cout <<"G4PiF::LIP> Setting return G4FT to new endpoint " << newEndPointFT  << G4endl;
+	     }
 	  }
        }
        if( curveDist < 0.0 )
