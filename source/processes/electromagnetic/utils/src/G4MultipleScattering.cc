@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.15 2001-09-28 15:20:01 maire Exp $
+// $Id: G4MultipleScattering.cc,v 1.16 2001-10-31 07:27:25 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -40,6 +40,7 @@
 // 14-09-01 protection in GetContinuousStepLimit, L.Urban
 // 17-09-01 migration of Materials to pure STL (mma)
 // 27-09-01 value of data member factlim changed, L.Urban
+// 31-10-01 big fixed in PostStepDoIt,L.Urban
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -547,33 +548,37 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
   //  change direction first ( scattering ) 
   G4double tau = truestep/fTransportMeanFreePath;
   G4double cth;
-  
+
   if     (tau < tausmall) cth =  1.;
   else if(tau > taubig)   cth = -1.+2.*G4UniformRand();
   else
       {
        if(lambda1 > 0.) tau = 0.5*tLast/lambda1
                               +(truestep-0.5*tLast)/fTransportMeanFreePath;
-       G4double e=exp(-tau);   
-       if (palfa < 0.) cth = e;
+       if(tau > taubig)   cth = -1.+2.*G4UniformRand();
        else
-        {
-          G4double a = exp( palfa*tau), ap1=a+1., am1=a-1., aw1 = 1./a;
-          G4double w = exp(-pbeta*tau), b = 2.*w/(1.-w),    bw1=w;
-          G4double c = 1.+pc0*tau, cp1=c+1., cm1=c-1.;	   
-          G4double gamma1 = pgamma-1.;
-          G4double w1  = exp(log(cp1)*gamma1), w2=exp(log(cm1)*gamma1);
-          G4double cw1 = c-gamma1*(w1*cm1-w2*cp1)/((gamma1-1.)*(w1-w2));
-          G4double q   = 1.-exp(-pq0-pq1*tau);
-          G4double prob = (e-cw1)/(q*aw1+(1.-q)*bw1-cw1);
-          if (G4UniformRand() <= prob)
+       {
+         G4double e=exp(-tau);   
+         if (palfa < 0.) cth = e;
+         else
+         {
+           G4double a = exp( palfa*tau), ap1=a+1., am1=a-1., aw1 = 1./a;
+           G4double w = exp(-pbeta*tau), b = 2.*w/(1.-w),    bw1=w;
+           G4double c = 1.+pc0*tau, cp1=c+1., cm1=c-1.;	   
+           G4double gamma1 = pgamma-1.;
+           G4double w1  = exp(log(cp1)*gamma1), w2=exp(log(cm1)*gamma1);
+           G4double cw1 = c-gamma1*(w1*cm1-w2*cp1)/((gamma1-1.)*(w1-w2));
+           G4double q   = 1.-exp(-pq0-pq1*tau);
+           G4double prob = (e-cw1)/(q*aw1+(1.-q)*bw1-cw1);
+           if (G4UniformRand() <= prob)
             {
              if (G4UniformRand() <= q)
                    cth = a-am1*ap1/sqrt(am1*am1+4.*a*G4UniformRand());
              else  cth = -1.+2.*exp(log(G4UniformRand())/(b+1.));
             }
-          else     cth = c-cp1*cm1/exp(log(w2+(w1-w2)*G4UniformRand())/gamma1);
-        }
+           else     cth = c-cp1*cm1/exp(log(w2+(w1-w2)*G4UniformRand())/gamma1);
+         }
+       }
       } 
 
   G4double sth  = sqrt(1.-cth*cth);
