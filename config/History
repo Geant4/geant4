@@ -1,4 +1,4 @@
-$Id: History,v 1.96 2000-01-31 11:30:30 gcosmo Exp $
+$Id: History,v 1.97 2000-02-14 11:27:42 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14th February 2000  Gabriele Cosmo (config-V01-00-02)
+- architecture.gmk: added option '+W823' to HP-aCC compilation setup to
+  discard warnings for macros parameter definition as used in the new
+  NIST STEP reader.
+- binmake.gmk: moved $EXTRALIBS to be included on top of the linking list,
+  just after the user application library.
 
 31st January 2000  Gabriele Cosmo (config-V01-00-01)
 - Added control for the Ray-tracer driver. Introduced G4VIS_USE_RAYTRACER
