@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingVerbose.cc,v 1.11 2003-06-16 16:49:50 gunter Exp $
+// $Id: ExN03SteppingVerbose.cc,v 1.12 2003-09-15 15:38:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

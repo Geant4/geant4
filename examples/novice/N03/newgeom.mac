@@ -17,8 +17,8 @@
 #
 /N03/det/setSizeYZ   40 cm
 #
-/N03/det/update
-#
 /N03/det/setField 3 tesla
+#
+/N03/det/update
 #
 /vis/viewer/zoom 1.3

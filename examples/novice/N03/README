@@ -1,4 +1,4 @@
-$Id: README,v 1.10 2003-01-30 14:14:17 maire Exp $
+$Id: README,v 1.11 2003-09-15 15:38:08 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -46,32 +46,12 @@ $Id: README,v 1.10 2003-01-30 14:14:17 maire Exp $
  	
  	In addition one can choose randomly the impact point of the incident
  	particle. The corresponding interactive command is built in
- 	PrimaryGeneratorMessenger class.
+ 	PrimaryGeneratorMessenger class (see run2.mac).
  	
  	A RUN is a set of events.
  	
- 3- DETECTOR RESPONSE
- 
- 	A HIT is a record, event per event and volume per volume, of all the 
- 	informations needed to simulate and analyse the detector response.
- 	
- 	In this example a CalorHit is defined as a set of 4 informations per
-	layer :
- 	- the total energy deposit in the absorber plate,
- 	- the total tracklength of all charged particles in the absorber plate,
- 	- the total energy deposit in the detection gap,
- 	- the total tracklength of all charged particles in the detection gap.
- 	
- 	Therefore both the absorber and the detection gap are declared
- 	'sensitive detector' (SD), which means they can contribute to the hit.
- 	
- 	At the end of a run, from the CalorHitsCollection, one can study the
-	calorimeter performances such as :
-				- shower profile,
- 				- calorimeter resolution,
- 				- pi/e ratio ...
  				
- 4- VISUALIZATION
+ 3- VISUALIZATION
  
  	The Visualization Manager is set in the main().
  	The initialisation of the drawing is done via a set of /vis/ commands
@@ -103,7 +83,7 @@ $Id: README,v 1.10 2003-01-30 14:14:17 maire Exp $
               These macros are designed to help your understanding the 
               User's Guide.    
 
- 5- PHYSICS DEMO
+ 4- PHYSICS DEMO
  
  	The particle's type and the physic processes which will be available
  	in this example are set in PhysicsList class.
@@ -113,11 +93,12 @@ $Id: README,v 1.10 2003-01-30 14:14:17 maire Exp $
  	allows to activate/inactivate the processes one by one.
  	Then one can well visualize the processes one by one, especially 
  	in the bubble chamber setup with a transverse magnetic field.
+	(see run2.mac and newgeom.mac)
  
  	As a homework try to visualize a gamma conversion alone, 
  	or the effect of the multiple scattering.
 	
- 6- RANDOM NUMBERS HANDLING
+ 5- RANDOM NUMBERS HANDLING
  
  	CLHEP provides several random number engines. In this example the Ranecu
 	engine is choosen at beginning of the main (exampleN03.cc).
@@ -142,9 +123,9 @@ $Id: README,v 1.10 2003-01-30 14:14:17 maire Exp $
 	/random/resetEngineFrom  fileName 
 	
 	The macro rndmSeed.mac shows how to save and reset the random number
-	seed between runs, with UI commands.	
+	seed between runs, from UI commands.	
 	
- 7- USER INTERFACES
+ 6- USER INTERFACES
   
         The default command interface, called G4UIterminal, is done via
 	standart cin/G4cout.
@@ -156,7 +137,7 @@ $Id: README,v 1.10 2003-01-30 14:14:17 maire Exp $
 	  2- exampleN03.cc has been compiled with G4UI_USE_XM. 
  
       	
- 8- HOW TO START ?
+ 7- HOW TO START ?
  
  	- compile and link to generate an executable
  		% cd N03

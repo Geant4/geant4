@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03VisManager.cc,v 1.10 2002-11-13 19:14:38 duns Exp $
+// $Id: ExN03VisManager.cc,v 1.11 2003-09-15 15:38:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
