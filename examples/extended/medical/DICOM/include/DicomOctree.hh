@@ -5,12 +5,12 @@
 #include "DicomOctreeNode.hh"
 
 //---------------------------------------------------------------------------
-/// \brief Octree encapsulates a volumetric compressed representation of the
+///  Octree encapsulates a volumetric compressed representation of the
 /// vector field used for the reconstruction of a 3D model from multiple
 /// range images or curves.
 /// 
 /// It is assumed that the space occupied by octree is a cube whose
-/// bottom-left-front corner is at origin (0,0,0) while the oposite corner
+/// bottom-left-front corner is at origin (0,0,0) while the opposite corner
 /// (top,right,back) is at ( mSize,mSize,mSize). Resolution of an octree
 /// denotes the number of voxels along each axis such
 /// that the resolution = 2^mNoLevels.
@@ -22,7 +22,7 @@ class Octree
 public:
   
   // MGP: why float? To be converted to G4double?
-  Octree( G4int noLevels, float size );
+  Octree( G4int noLevels, G4double size );
   ~Octree();
   void DeleteTree();
 

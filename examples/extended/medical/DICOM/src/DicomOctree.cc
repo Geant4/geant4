@@ -2,18 +2,19 @@
 #include <stddef.h>
 #include "DicomOctree.hh"
 
-Octree::Octree( G4int noLevels, float size )
+Octree::Octree( G4int noLevels, G4double size )
 {
-    mNoLevels = noLevels;
-    mSize = size;
-    mRoot = new MiddleNode( NULL );
+  mNoLevels = noLevels;
+  mSize = size;
+  mRoot = new MiddleNode(0);
 }
-//---------------------------------------------------------------------------
+
 Octree::~Octree()
 {
-    if ( mRoot != NULL ) delete mRoot; 
+  delete mRoot;
+  mRoot = 0; 
 }
-//---------------------------------------------------------------------------
+
 OctreeNode* Octree::CreateNode( float nodeX, float nodeY, float nodeZ, G4int level )
 {
     OctreeNode* current = mRoot;
@@ -76,33 +77,33 @@ OctreeNode* Octree::operator()( float nodeX, float nodeY, float nodeZ, G4int lev
     }
     return current;
 }
-//---------------------------------------------------------------------------
+
 float Octree::Size()
 {
     return mSize;
 }
-//---------------------------------------------------------------------------
+
 OctreeNode* Octree::Root()
 {
     return mRoot;
 }
-//---------------------------------------------------------------------------
+
 G4int Octree::NoLevels()
 {
     return mNoLevels;
 }
-//---------------------------------------------------------------------------
+
 G4int Octree::Resolution()
 {
     return ( 1 << mNoLevels );
 }
-//---------------------------------------------------------------------------
+
 void Octree::DeleteTree()
 {
     delete mRoot;
     mRoot = NULL;
 }
-//---------------------------------------------------------------------------
+
 void Octree::CountRecursive( OctreeNode* pNode, G4int rMiddle, G4int rTerminal )
 {
     if ( pNode->Type() == MIDDLE_NODE )
