@@ -145,7 +145,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     G4bool inserted = false;
     for(current = theSorted.begin(); current!=theSorted.end(); current++)
     {
-      if(current->first > toSort)
+      if((*current).first > toSort)
       {
 	theSorted.insert(current, it);
 	inserted = true;
@@ -168,7 +168,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4std::list<G4Pair<G4double, G4KineticTrack *> >::iterator firstEscaping = theSorted.begin();
   G4double runningEnergy = 0;
   G4int particleCount = 0;
-  G4LorentzVector theLow = theSorted.begin()->second->Get4Momentum();
+  G4LorentzVector theLow = (*(theSorted.begin())).second->Get4Momentum();
   G4LorentzVector theHigh;
 
 #ifdef CHIPSdebug
@@ -186,10 +186,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   for(current = theSorted.begin(); current!=theSorted.end(); current++)
   {
     firstEscaping = current;
-    if(current->second->GetDefinition()->GetQuarkContent(3)!=0 ||
-       current->second->GetDefinition()->GetAntiQuarkContent(3) !=0)
+    if((*current).second->GetDefinition()->GetQuarkContent(3)!=0 ||
+       (*current).second->GetDefinition()->GetAntiQuarkContent(3) !=0)
     {
-      G4KineticTrack * aResult = current->second;
+      G4KineticTrack * aResult = (*current).second;
       G4ParticleDefinition * pdef=aResult->GetDefinition();
       secondaries = NULL;
       if ( pdef->GetPDGWidth() > 0 && pdef->GetPDGLifeTime() < 5E-17*s )
@@ -221,35 +221,35 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       }
     }
 
-    runningEnergy += current->second->Get4Momentum().t();
-    if(current->second->GetDefinition() == G4Proton::Proton())
+    runningEnergy += (*current).second->Get4Momentum().t();
+    if((*current).second->GetDefinition() == G4Proton::Proton())
       runningEnergy-=G4Proton::Proton()->GetPDGMass();
-    if(current->second->GetDefinition() == G4Neutron::Neutron())
+    if((*current).second->GetDefinition() == G4Neutron::Neutron())
       runningEnergy-=G4Neutron::Neutron()->GetPDGMass();
 
 #ifdef CHIPSdebug
-      G4cout << "sorted rapidities "<<current->second->Get4Momentum().rapidity()<<G4endl;  
+      G4cout << "sorted rapidities "<<(*current).second->Get4Momentum().rapidity()<<G4endl;  
 #endif
 
     if(runningEnergy > theEnergyLostInFragmentation) break;
     
 #ifdef CHIPSdebug
-     G4cout <<"ABSORBED STRING particles "<<current->second->GetDefinition()->GetPDGCharge()<<" "
-           << current->second->GetDefinition()->GetPDGEncoding()<<" "
-	   << current->second->Get4Momentum() <<G4endl; 
+     G4cout <<"ABSORBED STRING particles "<<(*current).second->GetDefinition()->GetPDGCharge()<<" "
+           << (*current).second->GetDefinition()->GetPDGEncoding()<<" "
+	   << (*current).second->Get4Momentum() <<G4endl; 
 #endif
 
    // projectile 4-momentum in target rest frame needed in constructor of QHadron
     particleCount++;
-    theHigh = current->second->Get4Momentum(); 
-    proj4Mom = current->second->Get4Momentum(); 
+    theHigh = (*current).second->Get4Momentum(); 
+    proj4Mom = (*current).second->Get4Momentum(); 
     proj4Mom.boost(-1.*targ4Mom.boostVector());  
-    nD = current->second->GetDefinition()->GetQuarkContent(1);
-    nU = current->second->GetDefinition()->GetQuarkContent(2);
-    nS = current->second->GetDefinition()->GetQuarkContent(3);
-    nAD = current->second->GetDefinition()->GetAntiQuarkContent(1);
-    nAU = current->second->GetDefinition()->GetAntiQuarkContent(2);
-    nAS = current->second->GetDefinition()->GetAntiQuarkContent(3);
+    nD = (*current).second->GetDefinition()->GetQuarkContent(1);
+    nU = (*current).second->GetDefinition()->GetQuarkContent(2);
+    nS = (*current).second->GetDefinition()->GetQuarkContent(3);
+    nAD = (*current).second->GetDefinition()->GetAntiQuarkContent(1);
+    nAU = (*current).second->GetDefinition()->GetAntiQuarkContent(2);
+    nAS = (*current).second->GetDefinition()->GetAntiQuarkContent(3);
     G4QContent aProjectile(nD, nU, nS, nAD, nAU, nAS);
 //    G4cout << "Quark content: d="<<nD<<", u="<<nU<< ", s="<< nS << G4endl;
 //    G4cout << "Anti-quark content: anit-d="<<nAD<<", anti-u="<<nAU<< ", anti-s="<< nAS << G4endl;
@@ -345,7 +345,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   // first decay and add all escaping particles.
   for(current = firstEscaping; current!=theSorted.end(); current++)
   {
-    G4KineticTrack * aResult = current->second;
+    G4KineticTrack * aResult = (*current).second;
     G4ParticleDefinition * pdef=aResult->GetDefinition();
     secondaries = NULL;
     if ( pdef->GetPDGWidth() > 0 && pdef->GetPDGLifeTime() < 5E-17*s )

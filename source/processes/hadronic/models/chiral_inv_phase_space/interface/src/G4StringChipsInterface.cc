@@ -85,7 +85,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     G4bool inserted = false;
     for(current = theSorted.begin(); current!=theSorted.end(); current++)
     {
-      if(current->first > toSort)
+      if((*current).first > toSort)
       {
 	theSorted.insert(current, it);
 	inserted = true;
@@ -114,7 +114,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4std::list<G4Pair<G4double, G4KineticTrack *> >::iterator firstEscaping = theSorted.begin();
   G4double runningEnergy = 0;
   G4int particleCount = 0;
-  G4LorentzVector theLow = theSorted.begin()->second->Get4Momentum();
+  G4LorentzVector theLow = (*(theSorted.begin())).second->Get4Momentum();
   G4LorentzVector theHigh;
 
 #ifdef CHIPSdebug
@@ -130,10 +130,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   for(current = theSorted.begin(); current!=theSorted.end(); current++)
   {
     firstEscaping = current;
-    if(current->second->GetDefinition()->GetQuarkContent(3)!=0 ||
-       current->second->GetDefinition()->GetAntiQuarkContent(3) !=0)
+    if((*current).second->GetDefinition()->GetQuarkContent(3)!=0 ||
+       (*current).second->GetDefinition()->GetAntiQuarkContent(3) !=0)
     {
-      G4KineticTrack * aResult = current->second;
+      G4KineticTrack * aResult = (*current).second;
       G4ParticleDefinition * pdef=aResult->GetDefinition();
       secondaries = NULL;
       if ( pdef->GetPDGWidth() > 0 && pdef->GetPDGLifeTime() < 5E-17*s )
@@ -163,7 +163,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       }
       continue;
     }
-    runningEnergy += current->second->Get4Momentum().t();
+    runningEnergy += (*current).second->Get4Momentum().t();
     if(runningEnergy > theEnergyLostInFragmentation) break;
     
 #ifdef CHIPSdebug
@@ -174,20 +174,20 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 
     // projectile 4-momentum needed in constructor of quasmon
     particleCount++;
-    theHigh = current->second->Get4Momentum(); 
-    proj4Mom += current->second->Get4Momentum(); 
+    theHigh = (*current).second->Get4Momentum(); 
+    proj4Mom += (*current).second->Get4Momentum(); 
 
 #ifdef CHIPSdebug
     G4cout << "sorted rapidities "<<current->second->Get4Momentum().rapidity()<<G4endl;
 #endif
     
      // projectile quark contents needed for G4QContent construction (@@ ? -> G4QContent class)
-    nD += current->second->GetDefinition()->GetQuarkContent(1);
-    nU += current->second->GetDefinition()->GetQuarkContent(2);
-    nS += current->second->GetDefinition()->GetQuarkContent(3);
-    nAD += current->second->GetDefinition()->GetAntiQuarkContent(1);
-    nAU += current->second->GetDefinition()->GetAntiQuarkContent(2);
-    nAS += current->second->GetDefinition()->GetAntiQuarkContent(3);
+    nD  += (*current).second->GetDefinition()->GetQuarkContent(1);
+    nU  += (*current).second->GetDefinition()->GetQuarkContent(2);
+    nS  += (*current).second->GetDefinition()->GetQuarkContent(3);
+    nAD += (*current).second->GetDefinition()->GetAntiQuarkContent(1);
+    nAU += (*current).second->GetDefinition()->GetAntiQuarkContent(2);
+    nAS += (*current).second->GetDefinition()->GetAntiQuarkContent(3);
   }
   // construct G4QContent
 
@@ -301,7 +301,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   // first decay and add all escaping particles.
   for(current = firstEscaping; current!=theSorted.end(); current++)
   {
-    G4KineticTrack * aResult = current->second;
+    G4KineticTrack * aResult = (*current).second;
     G4ParticleDefinition * pdef=aResult->GetDefinition();
     secondaries = NULL;
     if ( pdef->GetPDGWidth() > 0 && pdef->GetPDGLifeTime() < 5E-17*s )
