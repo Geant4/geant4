@@ -22,7 +22,7 @@
 //
 //
 // Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
+// S.Guatelli
 //
 //    ************************************
 //    *                                  *
@@ -30,7 +30,7 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: RemSimROGeometry.cc,v 1.2 2004-02-03 09:16:47 guatelli Exp $
+// $Id: RemSimROGeometry.cc,v 1.3 2004-03-12 10:55:55 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "RemSimROGeometry.hh"
@@ -49,15 +49,12 @@
 RemSimROGeometry::RemSimROGeometry(G4double astronautDimX,
                                    G4double astronautDimY,
                                    G4double astronautDimZ,
-                                   G4int numberOfVoxelsX,
-                                   G4int numberOfVoxelsY,
                                    G4int numberOfVoxelsZ):
   astronautDimensionX(astronautDimX),
   astronautDimensionY(astronautDimY),
   astronautDimensionZ(astronautDimZ),
-  numberOfVoxelsAlongX(numberOfVoxelsX),
-  numberOfVoxelsAlongY(numberOfVoxelsY),
-  numberOfVoxelsAlongZ(numberOfVoxelsZ)
+  numberOfVoxelsAlongZ(numberOfVoxelsZ),
+  ROAstronautZDivisionPhys(0)
 {
 }
 
@@ -73,9 +70,9 @@ G4VPhysicalVolume* RemSimROGeometry::Build()
 
   G4Material* dummyMat = new G4Material(name="dummyMat", 1., 1.*g/mole, 1.*g/cm3);
 
-  G4double worldDimensionX = 10.0*m;
-  G4double worldDimensionY = 10.0*m;
-  G4double worldDimensionZ = 10.0*m;
+  G4double worldDimensionX = 20.0*m;
+  G4double worldDimensionY = 20.0*m;
+  G4double worldDimensionZ = 20.0*m;
 
   // world volume of ROGeometry ...
   G4Box *ROWorld = new G4Box("ROWorld",
@@ -106,74 +103,33 @@ G4VPhysicalVolume* RemSimROGeometry::Build()
 						      0,0,0);
 
   G4VPhysicalVolume *ROAstronautPhys = new G4PVPlacement(0,
-						       G4ThreeVector(0.,0.,40.*cm),
+						       G4ThreeVector(0.,0.,156.*cm),
 						       "AstronautPhys",
                                                        ROAstronautLog,
                                                        ROWorldPhys,
                                                        false,0);
-  // ROGeomtry: Voxel division
   
-  // variables for x division ...
-  G4double voxelSizeX = astronautDimensionX/numberOfVoxelsAlongX;
-  
-  // X division first... 
-  G4Box *ROAstronautXDivision = new G4Box("ROAstronautXDivision",
-					  voxelSizeX/2.,
-					  astronautDimensionY/2.,
-					  astronautDimensionZ/2.);
-
-  G4LogicalVolume *ROAstronautXDivisionLog = new G4LogicalVolume(ROAstronautXDivision,
-							       dummyMat,
-							       "ROAstronautXDivisionLog",
-							       0,0,0);
-
-  G4VPhysicalVolume *ROAstronautXDivisionPhys = new G4PVReplica("ROAstronautXDivisionPhys",
-                                                              ROAstronautXDivisionLog,
-                                                              ROAstronautPhys,
-                                                              kXAxis,
-                                                              numberOfVoxelsAlongX,
-                                                              voxelSizeX);
-  // ...then z division
+  // Z division ...
   G4double voxelSizeZ = astronautDimensionZ/numberOfVoxelsAlongZ;
   
   G4Box *ROAstronautZDivision = new G4Box("ROAstronautZDivision",
-					 voxelSizeX/2.,
-					 astronautDimensionY/2., 
-					 voxelSizeZ/2.);
+					  astronautDimensionX/2,
+					  astronautDimensionY/2.,
+					  voxelSizeZ/2.);
 
   G4LogicalVolume *ROAstronautZDivisionLog = new G4LogicalVolume(ROAstronautZDivision,
 							       dummyMat,
 							       "ROAstronautZDivisionLog",
 							       0,0,0);
 
-  G4VPhysicalVolume *ROAstronautZDivisionPhys = new G4PVReplica("ROAstronautZDivisionPhys",
-							      ROAstronautZDivisionLog,
-							      ROAstronautXDivisionPhys,
-							      kZAxis,
-							      numberOfVoxelsAlongZ,
-							      voxelSizeZ);
-  // ...then Y  division
-
-  G4double voxelSizeY = astronautDimensionY/numberOfVoxelsAlongY;
-
-  G4Box *ROAstronautYDivision = new G4Box("ROAstronautYDivision",
-					  voxelSizeX/2.,
-					  voxelSizeY/2.,
-                                          voxelSizeZ/2.);
-
-  G4LogicalVolume *ROAstronautYDivisionLog = new G4LogicalVolume(ROAstronautYDivision,
-							       dummyMat,
-							       "ROAstronautYDivisionLog",
-							       0,0,0);
- 
-  G4VPhysicalVolume *ROAstronautYDivisionPhys = new G4PVReplica("ROAstronautYDivisionPhys",
-							      ROAstronautYDivisionLog,
-							      ROAstronautZDivisionPhys,
-							      kYAxis,
-							      numberOfVoxelsAlongY,
-							      voxelSizeY);
+  ROAstronautZDivisionPhys = new G4PVReplica("ROAstronautXDivisionPhys",
+                                               ROAstronautZDivisionLog,
+                                               ROAstronautPhys,
+                                               kZAxis,
+                                               numberOfVoxelsAlongZ,
+                                               voxelSizeZ);
   RemSimDummySD *dummySD = new RemSimDummySD;
-  ROAstronautYDivisionLog->SetSensitiveDetector(dummySD);
+  ROAstronautZDivisionLog->SetSensitiveDetector(dummySD);
 
   return ROWorldPhys;
 }

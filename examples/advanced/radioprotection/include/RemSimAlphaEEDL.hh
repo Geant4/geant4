@@ -20,49 +20,32 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimElectronStandard.cc,v 1.2 2004-03-12 10:55:55 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author: Maria.Grazia.Pia@cern.ch
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
 // History:
 // -----------
-// 22 Feb 2003 MGP          Designed for modular Physics List
-//
+// 17 May     2003 SG          Designed for modular Physics List 
 // -------------------------------------------------------------------
 
-#include "RemSimElectronStandard.hh"
+#ifndef REMSIMALPHAEEDL_HH
+#define REMSIMALPHAEEDL_HH 1
 
-#include "G4ProcessManager.hh"
-#include "G4Gamma.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4MultipleScattering.hh"
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
+#include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
 
-RemSimElectronStandard::RemSimElectronStandard(const G4String& name): G4VPhysicsConstructor(name)
-{ }
+class RemSimAlphaEEDL : public G4VPhysicsConstructor {
 
-RemSimElectronStandard::~RemSimElectronStandard()
-{ }
+public: 
 
-void RemSimElectronStandard::ConstructProcess()
-{
-  // Add standard processes for electrons
+  RemSimAlphaEEDL(const G4String& name = "alpha-eedl");
   
-  theParticleIterator->reset();
+  virtual ~RemSimAlphaEEDL();
+  
+  // This method is dummy for physics
+  virtual void ConstructParticle() {};
+  
+  virtual void ConstructProcess();
+};
 
-  while( (*theParticleIterator)() )
-    {
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* manager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
-     
-      if (particleName == "e-") 
-	{
-	  manager->AddProcess(new G4MultipleScattering, -1, 1,1);
-	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
-	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-	}   
-    }
-}
+#endif
+

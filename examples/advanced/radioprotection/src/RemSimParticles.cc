@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimParticles.cc,v 1.1 2004-02-03 09:16:46 guatelli Exp $
+// $Id: RemSimParticles.cc,v 1.2 2004-03-12 10:55:55 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -36,7 +36,10 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Proton.hh"
-
+#include "G4Alpha.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4ShortLivedConstructor.hh"
 RemSimParticles::RemSimParticles(const G4String& name)
   :  G4VPhysicsConstructor(name)
 { }
@@ -50,4 +53,16 @@ void RemSimParticles::ConstructParticle()
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
   G4Proton :: ProtonDefinition();
+  G4Alpha :: AlphaDefinition();
+
+  // For hadronic physics - taken from HadronPhysicsQGSP by. Wellish 
+  G4MesonConstructor pMesonConstructor;
+  pMesonConstructor.ConstructParticle();
+
+  G4BaryonConstructor pBaryonConstructor;
+  pBaryonConstructor.ConstructParticle();
+
+  G4ShortLivedConstructor pShortLivedConstructor;
+  pShortLivedConstructor.ConstructParticle();  
+
 }

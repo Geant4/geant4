@@ -40,8 +40,6 @@ RemSimHit::RemSimHit(const RemSimHit &right)
   : G4VHit()
 {
   edep = right.edep;
-  xID = right.xID; 
-  yID = right.yID;
   zID = right.zID;
   position = right.position;
 }
@@ -49,8 +47,6 @@ RemSimHit::RemSimHit(const RemSimHit &right)
 const RemSimHit& RemSimHit::operator=(const RemSimHit &right)
 {
   edep = right.edep;
-  xID = right.xID; 
-  yID = right.yID;
   zID = right.zID; 
   position = right.position;
   return *this;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimSteppingAction.cc,v 1.1 2004-02-03 09:16:47 guatelli Exp $
+// $Id: RemSimSteppingAction.cc,v 1.2 2004-03-12 10:55:55 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,20 +38,21 @@
 #include "G4SteppingManager.hh"
 #include "G4Step.hh"
 #include "G4Track.hh"
+#include "G4StepPoint.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VPhysicalVolume.hh"
 #include "RemSimSteppingAction.hh"
-#include "RemSimRunAction.hh"
+#include "RemSimEventAction.hh"
 #include "RemSimPrimaryGeneratorAction.hh"
 #include "RemSimDetectorConstruction.hh"
-
+#include "G4TrackStatus.hh"
 #ifdef G4ANALYSIS_USE
 #include "RemSimAnalysisManager.hh"
 #endif
 
-RemSimSteppingAction::RemSimSteppingAction(RemSimPrimaryGeneratorAction* primary,RemSimRunAction* run, RemSimDetectorConstruction* det):
+RemSimSteppingAction::RemSimSteppingAction(RemSimPrimaryGeneratorAction* primary,RemSimEventAction* event, RemSimDetectorConstruction* det):
   primaryAction(primary),
-  runAction(run),
+  eventAction(event),IDnow(-2),IDold(-1),
   detector(det)
 { }
 
@@ -59,68 +60,138 @@ RemSimSteppingAction::~RemSimSteppingAction()
 { }
 
 void RemSimSteppingAction::UserSteppingAction(const G4Step* aStep)
-{  
+{ 
+  G4int evno = eventAction->GetEventNo(); 
+  G4int trno = aStep->GetTrack()->GetTrackID(); 
+  IDnow = trno + evno*10000; 
   
-  G4double charge =  aStep->GetTrack()->GetDynamicParticle()->
-                                            GetDefinition()->GetPDGCharge(); 
- if ((aStep->GetTrack()->GetParentID()== 0)&&(charge != 0))
-    {
-      G4int stepNumber = aStep->GetTrack()->GetCurrentStepNumber();
-      G4int runID = runAction->GetRunID();
-      G4double primaryParticleEnergy = primaryAction->GetInitialEnergy();
-	   
-     if (stepNumber == 1)
-	// Stopping Power test ...
-	{ 
-	  G4double initialStepXPosition = aStep->GetPreStepPoint()->GetPosition().x();
-	  G4double initialStepYPosition = aStep->GetPreStepPoint()->GetPosition().y();
-	  G4double initialStepZPosition = aStep->GetPreStepPoint()->GetPosition().z();
-	  if (0 == initialStepXPosition && 
-	      0 == initialStepYPosition &&
-	      0 == initialStepZPosition)
-	    { 
-	      G4double energyLost = abs(aStep->GetDeltaEnergy());
-	      G4double stepLength = aStep->GetTrack()-> GetStepLength();
-               if (stepLength != 0) 
-		{
-		  // calculation of Stopping Power 
-		  // reference http://physics.nist.gov/PhysRefData/Star/Text/contents.html
-		  G4double totalStoppingPower = energyLost / stepLength;
-                  
-		  G4double targetDensity = detector->GetDensity();
-           
-		  G4double nistStoppingPower = totalStoppingPower/targetDensity;
-#ifdef G4ANALYSIS_USE                
-  RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();	  analysis -> StoppingPower
-           (runID,primaryParticleEnergy/MeV,nistStoppingPower/(MeV*(cm2/g)));
-#endif
-		}
-	    }
-	}
-    
-      // CSDA range ...
-      G4double  ParticleKineticEnergy = aStep->GetTrack()->GetKineticEnergy();	     
-      if (0.0 == ParticleKineticEnergy) 
-	{  
-	  G4double xend = aStep->GetTrack()->GetPosition().x()/mm ;
-	  G4double yend = aStep->GetTrack()->GetPosition().y()/mm ;
-	  G4double zend = aStep->GetTrack()->GetPosition().z()/mm ;
-                 
-	  // calculation of CSDA range 
-	  // reference http://physics.nist.gov/PhysRefData/Star/Text/contents.html
-	  G4double range = (sqrt(xend*xend + yend*yend + zend*zend)); 
-	  G4double nistRange = range*(detector->GetDensity());
-          G4int stepNumber = aStep->GetTrack()->GetCurrentStepNumber();
-          G4cout<< stepNumber <<G4endl;
+#ifdef G4ANALYSIS_USE    
+ RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
 
-#ifdef G4ANALYSIS_USE                
-  RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();		 analysis -> CSDARange(runID,
-	  			primaryParticleEnergy/MeV,
-	  			nistRange/(g/cm2));
-#endif
+ G4String oldVolumeName = aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName();  
+ G4VPhysicalVolume* volume = aStep->GetPostStepPoint()->GetPhysicalVolume();
+ 
+ G4String particleName = (aStep->GetTrack()->GetDynamicParticle()
+      ->GetDefinition()-> GetParticleName());
+
+ if(aStep->GetTrack()->GetTrackID()!=1)
+   { 
+     G4int stepNumber = aStep->GetTrack()->GetCurrentStepNumber();
+     //Initial Kinetic Energy
+      if (stepNumber == 1)
+       {
+	 G4double particleEnergy = aStep->GetTrack()->GetKineticEnergy();
+	 if (particleName =="neutron")
+	   analysis->neutronEnergyDistribution(particleEnergy/MeV); 
+
+	 if (particleName =="gamma" )
+	   analysis->photonEnergyDistribution(particleEnergy/MeV); 
+ 
+	 if (particleName =="e-" )
+	   analysis->electronEnergyDistribution(particleEnergy/MeV); 
+    
+	 G4double charge = aStep->GetTrack()->GetDynamicParticle()->
+	   GetDefinition()->GetPDGCharge();
+
+	 if (charge!=0)
+	   {if ((particleName !="alpha") && (particleName !="proton")
+		&& (particleName !="e+") && (particleName !="e-") )
+	   analysis->hadronEnergyDistribution(particleEnergy/MeV); 
+	   }
+       }
+   }
+
+ //Analysis of other particles of interest
+   if(oldVolumeName == "world") 
+   { 
+    if (volume) 
+      {
+        G4String volumeName = volume->GetName();
+       if (volumeName == "phantom") 
+     {   
+      G4double particleEnergy = aStep->GetTrack()->GetKineticEnergy();
+     
+     if (particleName == "proton" || particleName == "alpha" )
+	{
+	  analysis -> hadronEnergySpectrum1(particleEnergy/MeV);         
 	}
-    }
+      if (particleName == "e-" || particleName == "e+" )
+	{
+	  analysis -> leptonsEnergySpectrum1(particleEnergy/MeV);         
+	}
+     if (particleName == "gamma" )
+	{
+	  analysis -> gammaEnergySpectrum1(particleEnergy/MeV);         
+	}
+     }
+      }
+   }
+
+   if(oldVolumeName == "phantom") 
+     { 
+       if (volume) 
+	 {
+	   G4String volumeName = volume->GetName();
+             
+	   if (volumeName == "detector") 
+	     {  
+	       G4double particleEnergy = aStep->GetTrack()->GetKineticEnergy();
+	       if (particleName == "proton" || particleName == "alpha" )
+		 {
+		   analysis -> hadronEnergySpectrum3(particleEnergy/MeV);
+		 }
+	       if (particleName == "e-" ||particleName == "e+" )
+		 {
+		   analysis -> leptonsEnergySpectrum3(particleEnergy/MeV);         
+		 }
+	       if (particleName == "gamma" )
+		 {
+		   analysis -> gammaEnergySpectrum3(particleEnergy/MeV);         		 }
+	     }
+	 }
+     }     
+
+
+   if(oldVolumeName == "phantom") 
+     { 
+       if (volume) 
+	 {
+	   G4String volumeName = volume->GetName();
+             
+	   if (volumeName == "phantom") 
+	     {  
+	       G4double zIn=aStep->GetPreStepPoint()->GetPosition().z();
+	       G4double zOut=aStep->GetPostStepPoint()->GetPosition().z();
+    
+	       G4double particleEnergy = aStep->GetTrack()->GetKineticEnergy();
+  
+	       if ((zIn>132.*cm && zIn < 133.*cm) && 
+		   (zOut>133.*cm && zOut < 134.*cm))
+		 {
+                  if(IDnow != IDold) 
+                  {
+                    IDold=IDnow ;
+		   if (particleName == "proton" ||particleName == "alpha" )
+		     {
+		       analysis -> hadronEnergySpectrum2(particleEnergy/MeV);         
+		     }
+		   if (particleName == "e-" ||particleName == "e+" )
+		     {
+		       analysis -> leptonsEnergySpectrum2(particleEnergy/MeV);         
+		     }
+		   if (particleName == "gamma" )
+		     {
+		       analysis -> gammaEnergySpectrum2(particleEnergy/MeV);         
+		     }
+		  }
+		 }
+	     }
+	 }
+     }
+#endif
 }
+    
+
 
 
 

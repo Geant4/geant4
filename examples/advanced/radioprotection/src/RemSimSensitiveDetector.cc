@@ -27,6 +27,9 @@
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
 #include "G4ios.hh"
+#ifdef G4ANALYSIS_USE
+#include "RemSimAnalysisManager.hh"
+#endif
 
 RemSimSensitiveDetector::RemSimSensitiveDetector(G4String name)
 :G4VSensitiveDetector(name)
@@ -53,39 +56,37 @@ G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep,
   G4double edep = aStep->GetTotalEnergyDeposit();
   if(edep==0.) return false;
  
-  G4int j = ROhist->GetReplicaNumber();
-  G4int k = ROhist->GetReplicaNumber(1);
-  G4int i = ROhist->GetReplicaNumber(2);
+  G4int i = ROhist->GetReplicaNumber();
   
-  G4double x = aStep->GetPreStepPoint()->GetPosition().x();
-  G4double y = aStep->GetPreStepPoint()->GetPosition().y();
-  G4double z = aStep->GetPreStepPoint()->GetPosition().z();
+  //G4double z = aStep->GetPreStepPoint()->GetPosition().z();
 
   RemSimHit* newHit = new RemSimHit();
   newHit->SetEdep(edep);
-  newHit->SetIndexes(i,j,k);
+  newHit->SetIndexes(i);
   newHit->SetPosition( aStep->GetPreStepPoint()->GetPosition());
   trackerCollection->insert( newHit );
-  newHit->Draw();
- 
-  G4int numberOfVoxelX = 100;
-  G4int numberOfVoxelY = 100;
-  G4int numberOfVoxelZ = 100;
-  G4double voxelWidthX = 0.1 *cm;
-  G4double voxelWidthY = 0.1 *cm;
-  G4double voxelWidthZ = 0.1 *cm;
+        
+  //newHit->Draw(); 
 
-  G4double xId = (-numberOfVoxelX+1+2*i)*voxelWidthX/2; 
-  G4double yId = (- numberOfVoxelY+1+2*j)*voxelWidthY/2;
-  G4double zId = (- numberOfVoxelZ+1+2*k)*voxelWidthZ/2;
- 
-  
+  /*
   G4cout <<edep/keV <<":in astronaut in position"
-    //       <<x/cm<<" "<<y/cm<<" "<<z/cm<<" "
-    //   <<"indexes"<<i<<":i "<<j<<":j "<<k<<":k "
-         <<"voxels: "<<xId/cm<<" "<<yId/cm<<" "<<zId/cm<<" "
+         <<x/cm<<" "<<y/cm<<" "<<z/cm<<" "
+         <<"index"<<i<<":i" 
          <<G4endl;
- return true;
+  */
+#ifdef G4ANALYSIS_USE
+  RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
+  analysis -> energyDepositStore(i,edep/MeV);
+  G4double x = aStep->GetPreStepPoint()->GetPosition().x();
+  G4double y = aStep->GetPreStepPoint()->GetPosition().y();
+  
+  if(i==0)analysis-> energyDeposit1(x/m,y/m);
+  if(i==3)analysis-> energyDeposit2(x/m,y/m);
+  if(i==6)analysis-> energyDeposit3(x/m,y/m);
+
+#endif
+
+  return true;
 }
 
 void RemSimSensitiveDetector::EndOfEvent(G4HCofThisEvent*)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimDetectorConstruction.hh,v 1.2 2004-02-03 09:16:44 guatelli Exp $
+// $Id: RemSimDetectorConstruction.hh,v 1.3 2004-03-12 10:55:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,10 +33,12 @@
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
-class RemSimVGeometryComponent;
 class RemSimMaterial;
-class RemSimDecorator;
 class RemSimDetectorMessenger;
+class G4Box;
+class G4VisAttributes;
+class RemSimVGeometryComponent;
+
 class RemSimDetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
@@ -45,24 +47,16 @@ public:
   ~RemSimDetectorConstruction();
 
   G4VPhysicalVolume* Construct();
-  void SwitchVehicle(G4String);
-  void ConstructVolume();
-  G4double GetDensity();
   void ChangeMaterial(G4String);
+  void ConstructVolume();
 
-private:    
-  // Logical volumes
-  //
+private:
   G4LogicalVolume* experimentalHall_log;
-   
-  // Physical volumes
-  //
   G4VPhysicalVolume* experimentalHall_phys;
-  G4int detectorChoice ;
-
-  RemSimMaterial*  pMaterial;
+  G4VPhysicalVolume* phantomPhys;
+  G4VPhysicalVolume* detectorPhys;
   RemSimVGeometryComponent* pVehicle;
-  RemSimDecorator* decorator;
+  RemSimMaterial*  pMaterial;
   RemSimDetectorMessenger* messenger; 
 };
 #endif

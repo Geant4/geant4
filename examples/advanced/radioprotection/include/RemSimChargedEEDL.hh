@@ -20,31 +20,25 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: RemSimInterplanetarySpaceConfiguration.hh,v 1.2 2004-02-03 09:16:45 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+#ifndef REMSIMCHARGEDEEDL_HH
+#define REMSIMCHARGEDEEDL_HH 1
 
-#ifndef RemSimInterplanetarySpaceConfiguration_h
-#define RemSimInterplanetarySpaceConfiguration_h 1
+#include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
 
-#include "RemSimVPrimaryGeneratorFactory.hh"
+class RemSimChargedEEDL : public G4VPhysicsConstructor {
 
-class G4ParticleGun;
-class G4Event;
+public: 
 
-class RemSimInterplanetarySpaceConfiguration : public RemSimVPrimaryGeneratorFactory
-{
-  public:
-    RemSimInterplanetarySpaceConfiguration();
-    ~RemSimInterplanetarySpaceConfiguration();
-
-  public:
-    void GeneratePrimaries(G4Event* anEvent);
-
-  private:
-    G4ParticleGun* particleGun;
+  RemSimChargedEEDL(const G4String& name = "charged-eedl");
+  
+  virtual ~RemSimChargedEEDL();
+  
+  // This method is dummy for physics
+  virtual void ConstructParticle() {};
+  
+  virtual void ConstructProcess();
 };
-#endif
 
+#endif
 

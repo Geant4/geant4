@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimEventAction.hh,v 1.2 2004-02-03 09:16:45 guatelli Exp $
+// $Id: RemSimEventAction.hh,v 1.3 2004-03-12 10:55:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -40,7 +40,11 @@ public:
 
 public:
   void BeginOfEventAction(const G4Event*);
+  G4int GetEventNo() const {return evtNo;};
   void EndOfEventAction(const G4Event*);
+
+private:
+  G4int evtNo;
 };
 #endif
 

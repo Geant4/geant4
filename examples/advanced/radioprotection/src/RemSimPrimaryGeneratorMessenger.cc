@@ -31,7 +31,7 @@
 //    *********************************
 //
 //
-// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.1 2004-02-03 09:16:47 guatelli Exp $
+// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.2 2004-03-12 10:55:55 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

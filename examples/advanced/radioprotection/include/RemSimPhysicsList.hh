@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPhysicsList.hh,v 1.2 2004-02-03 09:16:45 guatelli Exp $
+// $Id: RemSimPhysicsList.hh,v 1.3 2004-03-12 10:55:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Original author unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -68,9 +68,11 @@ private:
   G4bool positronIsRegistered;
   G4bool photonIsRegistered;
   G4bool protonIsRegistered;
+  G4bool alphaIsRegistered;
   G4double cutForGamma;
   G4double cutForElectron;
-
+  G4bool hadronicIsRegistered; 
+  G4bool chargedIsRegistered;
   RemSimPhysicsListMessenger* messenger;
 };
 #endif

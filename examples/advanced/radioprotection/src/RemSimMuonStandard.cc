@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimElectronStandard.cc,v 1.2 2004-03-12 10:55:55 guatelli Exp $
+// $Id: RemSimMuonStandard.cc,v 1.1 2004-03-12 10:57:33 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -31,38 +31,43 @@
 //
 // -------------------------------------------------------------------
 
-#include "RemSimElectronStandard.hh"
-
+#include "RemSimMuonStandard.hh"
 #include "G4ProcessManager.hh"
-#include "G4Gamma.hh"
-#include "G4ParticleDefinition.hh"
+
+//muon:
 #include "G4MultipleScattering.hh"
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-
-RemSimElectronStandard::RemSimElectronStandard(const G4String& name): G4VPhysicsConstructor(name)
+#include "G4MuIonisation.hh"
+#include "G4MuBremsstrahlung.hh"
+#include "G4MuPairProduction.hh"
+#include "G4MuonMinusCaptureAtRest.hh"
+RemSimMuonStandard::RemSimMuonStandard(const G4String& name): G4VPhysicsConstructor(name)
 { }
 
-RemSimElectronStandard::~RemSimElectronStandard()
+RemSimMuonStandard::~RemSimMuonStandard()
 { }
 
-void RemSimElectronStandard::ConstructProcess()
+void RemSimMuonStandard::ConstructProcess()
 {
-  // Add standard processes for electrons
+  // Add standard processes for muons
   
   theParticleIterator->reset();
 
   while( (*theParticleIterator)() )
     {
       G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* manager = particle->GetProcessManager();
+      G4ProcessManager* pmanager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
      
-      if (particleName == "e-") 
-	{
-	  manager->AddProcess(new G4MultipleScattering, -1, 1,1);
-	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
-	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-	}   
+      if( particleName == "mu+" ||particleName == "mu-"    ) 
+      {
+	//muon  
+        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+	pmanager->AddProcess(aMultipleScattering,           -1, 1, 1);
+	pmanager->AddProcess(new G4MuIonisation(),          -1, 2, 2);
+	pmanager->AddProcess(new G4MuBremsstrahlung(),      -1,-1, 3);
+	pmanager->AddProcess(new G4MuPairProduction(),      -1,-1, 4);
+	if( particleName == "mu-" )
+	  pmanager->AddProcess(new G4MuonMinusCaptureAtRest(), 0,-1,-1);
+      } 
     }
 }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimElectronStandard.cc,v 1.2 2004-03-12 10:55:55 guatelli Exp $
+// $Id: RemSimChargedEEDL.cc,v 1.1 2004-03-12 10:56:53 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -31,38 +31,41 @@
 //
 // -------------------------------------------------------------------
 
-#include "RemSimElectronStandard.hh"
-
+#include "RemSimChargedEEDL.hh"
 #include "G4ProcessManager.hh"
-#include "G4Gamma.hh"
-#include "G4ParticleDefinition.hh"
+#include "G4hLowEnergyIonisation.hh"
+#include "G4EnergyLossTables.hh"
 #include "G4MultipleScattering.hh"
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
 
-RemSimElectronStandard::RemSimElectronStandard(const G4String& name): G4VPhysicsConstructor(name)
+RemSimChargedEEDL::RemSimChargedEEDL(const G4String& name): G4VPhysicsConstructor(name)
 { }
 
-RemSimElectronStandard::~RemSimElectronStandard()
+RemSimChargedEEDL::~RemSimChargedEEDL()
 { }
 
-void RemSimElectronStandard::ConstructProcess()
+void RemSimChargedEEDL::ConstructProcess()
 {
-  // Add standard processes for electrons
+  // Add standard processes for muons
   
   theParticleIterator->reset();
 
   while( (*theParticleIterator)() )
     {
       G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* manager = particle->GetProcessManager();
+      G4ProcessManager* pmanager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
-     
-      if (particleName == "e-") 
-	{
-	  manager->AddProcess(new G4MultipleScattering, -1, 1,1);
-	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
-	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-	}   
+      G4double charge = particle->GetPDGCharge();
+
+      if(particleName != "proton" && particleName != "alpha" &&
+         particleName != "e+" &&  particleName != "e-")
+	{ 
+      if(charge!= 0.0) 
+      {
+        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+        G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
+	pmanager->AddProcess(aMultipleScattering,-1,1,1);
+	pmanager->AddProcess(ahadronLowEIon,     -1,2,2);   
+      } 
+	}
     }
 }

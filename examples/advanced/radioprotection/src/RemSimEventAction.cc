@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimEventAction.cc,v 1.2 2004-02-03 09:16:46 guatelli Exp $
+// $Id: RemSimEventAction.cc,v 1.3 2004-03-12 10:55:55 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -34,7 +34,7 @@
 #include "G4ios.hh"
 
 
-RemSimEventAction::RemSimEventAction()
+RemSimEventAction::RemSimEventAction():evtNo(-1)
 {  
  
 }
@@ -42,19 +42,17 @@ RemSimEventAction::RemSimEventAction()
 RemSimEventAction::~RemSimEventAction()
 {}
  
-void RemSimEventAction::BeginOfEventAction(const G4Event*)
+void RemSimEventAction::BeginOfEventAction(const G4Event* evt)
 { 
- 
+  evtNo = evt->GetEventID();
 }
 
 void RemSimEventAction::EndOfEventAction(const G4Event* evt)
 {
-  //G4int event_id = evt->GetEventID();
+  //get number of stored trajectories
   
-  // get number of stored trajectories
-  //
   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-  G4int n_trajectories = 0;
+  G4int n_trajectories =0;
   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
   
   if (G4VVisManager::GetConcreteInstance())

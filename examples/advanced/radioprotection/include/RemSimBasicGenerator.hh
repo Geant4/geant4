@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimBasicGenerator.hh,v 1.2 2004-02-03 09:16:44 guatelli Exp $
+// $Id: RemSimBasicGenerator.hh,v 1.3 2004-03-12 10:55:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,6 +47,7 @@ public:
 private:
   G4ParticleGun* particleGun;
   G4String randomDirection;
+  G4double energy;
 };
 #endif
 

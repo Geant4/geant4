@@ -17,16 +17,8 @@ public:
   void DestroyComponent(); 
   G4double GetDensity();
   void ChangeMaterial(G4String);
-
 private:
   RemSimMaterial* pMaterial;
-  G4Box* layer;
-  G4LogicalVolume* layer1Log;
   G4VPhysicalVolume* layer1Phys;
-  G4LogicalVolume* layer2Log;
-  G4VPhysicalVolume* layer2Phys;
-  G4VisAttributes* layer1VisAtt;
-  G4VisAttributes* layer2VisAtt;
-  G4Material* targetMaterial;
 };
 #endif

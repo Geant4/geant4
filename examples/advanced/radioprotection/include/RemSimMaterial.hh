@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimMaterial.hh,v 1.2 2004-02-03 09:16:45 guatelli Exp $
+// $Id: RemSimMaterial.hh,v 1.3 2004-03-12 10:55:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -51,26 +51,9 @@ public:
   G4Material* GetMaterial(G4String); //returns the material
 
 private:
-  G4Material* matW; 
-  G4Material* matplexiglass;
   G4Material* matPb;
-  G4Material* matir192;
-  G4Material* Titanium;
   G4Material* matAir;
-  G4Material* matH2O;
-  G4Material* soft;
-  G4Material* matsteel;
-  G4Material* gold;
-  G4Material* matI; 
-  G4Material* ceramic;
-  G4Material*Vacuum; 
-  G4Material* bone;
-  G4Material* muscle;
-  G4Material* Ar;
-  G4Material* Al;
-  G4Material* nylon;
-  G4Material* mylar;
-  G4Material* beta;
-  G4Material* kevlar;
-};
+  G4Material* matH2O; 
+  G4Material* vacuum; 
+ };
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimBasicGenerator.cc,v 1.2 2004-02-03 09:16:46 guatelli Exp $
+// $Id: RemSimBasicGenerator.cc,v 1.3 2004-03-12 10:55:55 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,7 +33,9 @@
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 #include "Randomize.hh"
-
+#ifdef G4ANALYSIS_USE  
+#include "RemSimAnalysisManager.hh"
+#endif
 RemSimBasicGenerator::RemSimBasicGenerator():randomDirection("off")
 {
   G4int n_particle = 1;
@@ -42,10 +44,9 @@ RemSimBasicGenerator::RemSimBasicGenerator():randomDirection("off")
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName = "proton";
   particleGun->SetParticleDefinition(particleTable->FindParticle(particleName));
-  particleGun->SetParticleEnergy(10. *MeV);
-
-  particleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));  
+  particleGun->SetParticlePosition(G4ThreeVector(0., 0., -5.*m));  
   G4ThreeVector v(0.0,0.0,1.0);
+  particleGun->SetParticleEnergy(1.*MeV);
   particleGun->SetParticleMomentumDirection(v);
 }
 
@@ -73,7 +74,16 @@ if(randomDirection == "on")
       G4ThreeVector direction(a,b,c);
       particleGun -> SetParticleMomentumDirection(direction);
     }
+ 
+
+#ifdef G4ANALYSIS_USE   
+ G4double energy = particleGun->GetParticleEnergy(); 
+ RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
+ analysis -> primaryParticleEnergyDistribution(energy/MeV);
+#endif
   particleGun->GeneratePrimaryVertex(anEvent);
+
+
 }
 
 void RemSimBasicGenerator:: GenerateIsotropicFlux()

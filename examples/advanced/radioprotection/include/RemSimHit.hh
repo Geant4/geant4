@@ -57,10 +57,9 @@ public:
   { edep = de; }
   inline G4double GetEdep()
   { return edep; }
-  inline  void SetIndexes(G4int i,G4int j,G4int k)
-  {xID = i; yID = j; zID = k;}
-  inline  G4int GetIndexX(){return xID;}
-  inline  G4int GetIndexY(){return yID;}
+  inline  void SetIndexes(G4int i)
+  {zID = i;}
+ 
   inline  G4int GetIndexZ(){return zID;} 
   
   inline void SetPosition(G4ThreeVector xyz)

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPhysicsList.cc,v 1.2 2004-02-03 09:16:47 guatelli Exp $
+// $Id: RemSimPhysicsList.cc,v 1.3 2004-03-12 10:55:55 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -41,7 +41,9 @@
 #include "RemSimPositronStandard.hh"
 #include "RemSimProtonStandard.hh"
 #include "RemSimProtonEEDL.hh"
+#include "RemSimAlphaEEDL.hh"
 #include "RemSimProtonEEDLziegler.hh"
+#include "RemSimChargedEEDL.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -54,9 +56,12 @@ RemSimPhysicsList::RemSimPhysicsList(): G4VModularPhysicsList(),
 				      electronIsRegistered(false), 
 				      positronIsRegistered(false),
 				      photonIsRegistered(false), 
-                                      protonIsRegistered(false)
+					protonIsRegistered(false),
+                                        alphaIsRegistered(false),
+                                        hadronicIsRegistered(false),
+                                        chargedIsRegistered(false)
 {
-  defaultCutValue = 0.1 * mm;
+  defaultCutValue = 1. * mm;
   SetVerboseLevel(1);
 
   messenger = new RemSimPhysicsListMessenger(this);
@@ -199,10 +204,45 @@ if (name == "proton-standard")
 	}
     }
 
-  if (electronIsRegistered && positronIsRegistered && photonIsRegistered)
+ if (name == "alpha-eedl") 
     {
-      G4cout << "PhysicsList for electron, positron and photon registered" << G4endl;
+      if (alphaIsRegistered) 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- alpha List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new RemSimAlphaEEDL(name) );
+	  alphaIsRegistered = true;
+	}
     }
+
+ if (name == "charged-eedl") 
+    {
+      if (chargedIsRegistered) 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- generic charged particle physics List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics(new RemSimChargedEEDL(name));
+	  chargedIsRegistered = true;
+	}
+    }
+
+
+  if (electronIsRegistered && positronIsRegistered && photonIsRegistered && 
+  alphaIsRegistered && chargedIsRegistered)
+    {
+      G4cout << "PhysicsList for electron, positron, photon,alpha and generic ion is registered" << G4endl;
+    }
+
 }
 
 void RemSimPhysicsList::SetGammaCut(G4double value)

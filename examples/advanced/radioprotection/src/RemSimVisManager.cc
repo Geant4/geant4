@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimVisManager.cc,v 1.2 2004-02-03 09:16:47 guatelli Exp $
+// $Id: RemSimVisManager.cc,v 1.3 2004-03-12 10:55:56 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -75,10 +75,10 @@
 #include "G4OpenInventorWin32.hh"
 #endif
 
-#ifdef G4VIS_USE_VRML
-#include "G4VRML1.hh"
-#include "G4VRML2.hh"
-#endif
+// #ifdef G4VIS_USE_VRML
+// #include "G4VRML1.hh"
+// #include "G4VRML2.hh"
+// #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -95,8 +95,8 @@ void RemSimVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4HepRepFile);
   RegisterGraphicsSystem (new G4HepRep);
   RegisterGraphicsSystem (new G4RayTracer);
-  RegisterGraphicsSystem (new G4VRML1File);
-  RegisterGraphicsSystem (new G4VRML2File);
+ //  RegisterGraphicsSystem (new G4VRML1File);
+//   RegisterGraphicsSystem (new G4VRML2File);
 
   // Graphics systems needing external packages or libraries...
 
@@ -126,12 +126,12 @@ void RemSimVisManager::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_OIWIN32
   RegisterGraphicsSystem (new G4OpenInventorWin32);
 #endif
-
-#ifdef G4VIS_USE_VRML
-  RegisterGraphicsSystem (new G4VRML1);
-  RegisterGraphicsSystem (new G4VRML2);
-#endif
-
+  
+// #ifdef G4VIS_USE_VRML
+//   RegisterGraphicsSystem (new G4VRML1);
+//   RegisterGraphicsSystem (new G4VRML2);
+// #endif
+  
   if (fVerbose > 0) {
     G4cout <<
       "\nYou have successfully chosen to use the following graphics systems."
@@ -141,5 +141,3 @@ void RemSimVisManager::RegisterGraphicsSystems () {
 }
 
 #endif
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

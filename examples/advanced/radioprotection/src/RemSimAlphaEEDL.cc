@@ -20,31 +20,43 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
-// $Id: RemSimInterplanetarySpaceConfiguration.cc,v 1.2 2004-02-03 09:16:46 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
-#include "RemSimInterplanetarySpaceConfiguration.hh"
-#include "RemSimVPrimaryGeneratorFactory.hh"
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4ParticleTable.hh"
+// History:
+// -----------
+// 17 May     2003 SG          Designed for modular Physics List 
+// -------------------------------------------------------------------
+#include "RemSimAlphaEEDL.hh"
+#include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
-#include "globals.hh"
+#include "G4MultipleScattering.hh"
+#include "G4Alpha.hh"
+#include "G4hLowEnergyIonisation.hh"
 
-RemSimInterplanetarySpaceConfiguration::RemSimInterplanetarySpaceConfiguration()
+RemSimAlphaEEDL::RemSimAlphaEEDL(const G4String& name): G4VPhysicsConstructor(name)
+{ }
+
+RemSimAlphaEEDL::~RemSimAlphaEEDL()
+{ }
+
+void RemSimAlphaEEDL::ConstructProcess()
 {
+  theParticleIterator->reset();
+
+  while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* manager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
+     
+      if (particleName == "alpha") 
+	{
+	   G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
+          G4VProcess*  multipleScattering= new G4MultipleScattering(); 
+          manager->AddProcess(ionisation,-1,2,2);
+           manager->AddProcess(multipleScattering,-1,1,1);  	
+	   //ionisation -> SetEnlossFluc(false);
+
+	}
+    }
 }
-
-RemSimInterplanetarySpaceConfiguration::~RemSimInterplanetarySpaceConfiguration()
-{
- 
-}
-
-void RemSimInterplanetarySpaceConfiguration::GeneratePrimaries(G4Event* anEvent)
-{
- 
-}
-
-
