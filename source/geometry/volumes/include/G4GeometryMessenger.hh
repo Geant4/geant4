@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.hh,v 1.1 2001-10-24 15:31:15 gcosmo Exp $
+// $Id: G4GeometryMessenger.hh,v 1.2 2001-10-24 18:10:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -68,7 +68,7 @@ class G4GeometryMessenger : public G4UImessenger
     void ResetNavigator();
     void RunTest();
 
-    G4UIdirectory             *navdir, *testdir;
+    G4UIdirectory             *geodir, *navdir, *testdir;
     G4UIcmdWith3VectorAndUnit *posCmd, *dirCmd;
     G4UIcmdWithoutParameter   *runCmd, *resCmd;
     G4UIcmdWithABool          *addCmd;

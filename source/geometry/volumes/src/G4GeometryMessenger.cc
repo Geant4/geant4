@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.cc,v 1.1 2001-10-24 15:31:39 gcosmo Exp $
+// $Id: G4GeometryMessenger.cc,v 1.2 2001-10-24 18:10:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -58,6 +58,9 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
     extra(false), newtol(false), tol(1E-4*mm),
     tmanager(tman)
 {
+  geodir = new G4UIdirectory( "/geometry/" );
+  geodir->SetGuidance( "Geometry control commands." );
+
   //
   // Geometry navigator commands
   //
@@ -114,6 +117,7 @@ G4GeometryMessenger::~G4GeometryMessenger()
   delete runCmd;
   delete resCmd;
   delete tolCmd;
+  delete geodir;
   delete navdir;
   delete testdir;
 }
@@ -179,6 +183,15 @@ G4GeometryMessenger::GetCurrentValue(G4UIcommand* command )
 void
 G4GeometryMessenger::ResetNavigator()
 {
+  // Close geometry if necessary
+  //
+  if (geometryOpened) {
+    G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
+    geomManager->OpenGeometry();
+    geomManager->CloseGeometry(true);
+    geometryOpened = false;
+  }	
+
   // Reset navigator's state
   //
   G4ThreeVector p(0,0,0);
