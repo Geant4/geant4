@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.17 2004-07-19 16:10:47 maire Exp $
+# $Id: GNUmakefile,v 1.18 2004-10-22 15:53:41 maire Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -14,7 +14,7 @@ endif
 .PHONY: all
 all: lib bin
 
-#### G4ANALYSIS_USE := true
+G4ANALYSIS_USE := true
 
 ifdef G4ANALYSIS_USE
   CPPFLAGS += -DG4ANALYSIS_USE

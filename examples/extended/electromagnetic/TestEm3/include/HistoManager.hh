@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.4 2004-10-20 14:32:32 maire Exp $
+// $Id: HistoManager.hh,v 1.5 2004-10-22 15:53:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,7 +43,7 @@ namespace AIDA {
 class HistoMessenger;
 
 #include "DetectorConstruction.hh"
-  const G4int MaxHisto = MaxAbsor;
+  const G4int MaxHisto = 2*MaxAbsor + 3;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,8 +59,9 @@ class HistoManager
     void book();
     void save();
     void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
-    void FillHisto(G4int id, G4double e, G4double weight = 1.0);
-    void RemoveHisto (G4int);   
+    void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
+    void Normalize(G4int id, G4double fac);    
+    void RemoveHisto(G4int);   
     
     G4bool    HistoExist  (G4int id) {return exist[id];}    
     G4double  GetHistoUnit(G4int id) {return Unit[id];}

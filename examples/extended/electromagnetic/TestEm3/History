@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2004-10-20 14:32:26 maire Exp $
+$Id: History,v 1.60 2004-10-22 15:53:41 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+     
+22-10-04 mma
+- more histograms : longitudinal energy profile and forward energy flow.
 
 20-10-04 mma (testem3-V06-02-01)
 - change the numering of absorbers:  start from 1 instead of 0

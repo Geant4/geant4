@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.4 2004-10-20 14:32:32 maire Exp $
+// $Id: SteppingAction.hh,v 1.5 2004-10-22 15:53:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,13 +34,14 @@
 
 class DetectorConstruction;
 class EventAction;
+class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(DetectorConstruction*, EventAction*);
+    SteppingAction(DetectorConstruction*, EventAction*, HistoManager*);
    ~SteppingAction();
 
     void UserSteppingAction(const G4Step*);
@@ -49,7 +50,8 @@ class SteppingAction : public G4UserSteppingAction
     
   private:
     DetectorConstruction* detector;
-    EventAction*          eventAct;      
+    EventAction*          eventAct;
+    HistoManager*         histoManager;      
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

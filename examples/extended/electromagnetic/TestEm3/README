@@ -1,4 +1,4 @@
-$Id: README,v 1.19 2004-10-20 14:32:27 maire Exp $
+$Id: README,v 1.20 2004-10-22 15:53:41 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,7 +13,7 @@ $Id: README,v 1.19 2004-10-20 14:32:27 maire Exp $
  1- GEOMETRY DEFINITION
  
  	The calorimeter is a box made of a given number of layers.
-	A layer consists of a sequence of various absorbers (maximum 9).
+	A layer consists of a sequence of various absorbers (maximum MaxAbsor=9).
 	The layer is replicated.
  	
  	Parameters defining the calorimeter :
@@ -109,7 +109,7 @@ $Id: README,v 1.19 2004-10-20 14:32:27 maire Exp $
  	
  7- HISTOGRAMS
  
- Testem3 produces histograms : 
+ Testem3 can produce histograms : 
   histo 1 : energy deposit in absorber 1
   histo 2 : energy deposit in absorber 2
   ...etc...........
@@ -118,6 +118,13 @@ $Id: README,v 1.19 2004-10-20 14:32:27 maire Exp $
   /testem/histo/setHisto   idAbsor  nbin  Emin  Emax  unit 
   ...etc...........  
   where unit is the desired energy unit for that histo (see TestEm3.in).
+  
+  histo 11 : longitudinal profile of energy deposit in absorber 1 (MeV)
+  histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV)  
+  ...etc...........  
+  
+  histo 21 : forward energy flow of primary particle (MeV)
+  histo 22 : forward energy flow of all secondary particles (MeV)  
 
  One can control the name of the histograms file with the command:
  /testem/histo/setFileName  name  (default testem3.aida)

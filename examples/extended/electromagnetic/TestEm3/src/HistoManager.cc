@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.4 2004-10-20 14:32:36 maire Exp $
+// $Id: HistoManager.cc,v 1.5 2004-10-22 15:53:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -117,33 +117,61 @@ void HistoManager::save()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::FillHisto(G4int ih, G4double e, G4double weight)
+void HistoManager::FillHisto(G4int ih, G4double xbin, G4double weight)
 {
   if (ih >= MaxHisto) {
     G4cout << "---> warning from HistoManager::FillHisto() : histo " << ih
-           << "does not exist; e= " << e << " w= " << weight << G4endl;
+           << G4endl;
     return;
   }
 #ifdef G4ANALYSIS_USE
-  if(exist[ih]) histo[ih]->fill(e/Unit[ih], weight);
+  if(exist[ih]) histo[ih]->fill(xbin/Unit[ih], weight);
 #endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::SetHisto(G4int ih, 
-                 G4int nbins, G4double valmin, G4double valmax, const G4String& unit)
+            G4int nbins, G4double valmin, G4double valmax, const G4String& unit)
 {   
   if (ih < 1 || ih >= MaxHisto) {
     G4cout << "---> warning from HistoManager::SetHisto() : histo " << ih
            << "does not exist" << G4endl;
     return;
-  }	 
-  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9"};
-  G4String title = "Edep in absorber " + id[ih] + " (" + unit + ")";
-  Unit[ih] = G4UnitDefinition::GetValueOf(unit);
-  G4double   vmin = valmin/Unit[ih], vmax = valmax/Unit[ih];  
-  
+  }
+
+ // histo 1 : energy deposit in absorber 1
+ // histo 2 : energy deposit in absorber 2
+ // ...etc...........
+ // MaxAbsor = 10 (-1)
+ // 
+ // histo 11 : longitudinal profile of energy deposit in absorber 1 (MeV)
+ // histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV)  
+ // ...etc...........  
+ // 
+ // histo 21 : forward energy flow of primary particle (MeV)
+ // histo 22 : forward energy flow of all secondary particles (MeV)  
+  	 
+  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+                         "10","11","12","13","14","15","16","17","18","19",
+			 "20","21","22"};
+			 
+  G4String title;
+  G4double vmin = valmin, vmax = valmax;
+    			 
+  if (ih < MaxAbsor) {			 
+    title = "Edep in absorber " + id[ih] + " (" + unit + ")";
+    Unit[ih] = G4UnitDefinition::GetValueOf(unit);   
+    vmin = valmin/Unit[ih]; vmax = valmax/Unit[ih];  
+  } else if (ih > MaxAbsor && ih < 2*MaxAbsor) {
+    title = "longit. profile of Edep (per event) in absorber " 
+           + id[ih-MaxAbsor] + " (MeV)";
+  } else if (ih == 2*MaxAbsor+1) {
+    title = "Forward energy flow (per event) of primary particle (MeV)";
+  } else if (ih == 2*MaxAbsor+2) {
+    title = "Forward energy flow (per event) of secondary particles (MeV)";
+  } else return;
+        
   exist[ih] = true;
   Label[ih] = id[ih];
   Title[ih] = title;
@@ -156,6 +184,20 @@ void HistoManager::SetHisto(G4int ih,
          << nbins << " bins from " 
          << vmin << " " << unit << " to " << vmax << " " << unit << G4endl;
    		 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::Normalize(G4int ih, G4double fac)
+{
+  if (ih >= MaxHisto) {
+    G4cout << "---> warning from HistoManager::Normalize() : histo " << ih
+           << G4endl;
+    return;
+  }
+#ifdef G4ANALYSIS_USE
+  if(exist[ih]) histo[ih]->scale(fac);
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

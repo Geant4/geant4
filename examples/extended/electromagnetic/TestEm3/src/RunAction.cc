@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.21 2004-10-20 14:32:37 maire Exp $
+// $Id: RunAction.cc,v 1.22 2004-10-22 15:53:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,8 +74,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //
 
   for (G4int k=0; k<MaxAbsor; k++) {
-      sumEAbs[k] = sum2EAbs[k]  = sumLAbs[k] = sum2LAbs[k] =
-      sumEleav[k]= sum2Eleav[k] = 0.;
+      sumEAbs[k] = sum2EAbs[k]  = sumLAbs[k] = sum2LAbs[k] = 0.;
   }
   
   //histograms
@@ -89,14 +88,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::fillPerEvent(G4int kAbs, G4double EAbs, G4double LAbs,
-                                         G4double Eleav)
+void RunAction::fillPerEvent(G4int kAbs, G4double EAbs, G4double LAbs)
 {
   //accumulate statistic
   //
   sumEAbs[kAbs]  += EAbs;  sum2EAbs[kAbs]  += EAbs*EAbs;
   sumLAbs[kAbs]  += LAbs;  sum2LAbs[kAbs]  += LAbs*LAbs;
-  sumEleav[kAbs] += Eleav; sum2Eleav[kAbs] += Eleav*Eleav;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -176,8 +173,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   }
   if(isStarted) acc.EndOfAcceptance();
 
-  //save histograms and delete factory
+  //normalize histograms
   //
+  G4double fac = 1./NbOfEvents;
+  for (G4int ih = MaxAbsor+1; ih < MaxHisto; ih++) {
+     histoManager->Normalize(ih,fac/MeV);
+  }
+  
+  //save histograms   
   histoManager->save();
 
   // show Rndm status
