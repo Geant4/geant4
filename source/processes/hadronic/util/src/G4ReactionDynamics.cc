@@ -96,6 +96,7 @@
     G4ParticleDefinition *aKaonZeroL = G4KaonZeroLong::KaonZeroLong();
 
     G4int i, l;
+    G4double forVeryForward = 0.;
     
     const G4double ekOriginal = modifiedOriginal.GetKineticEnergy()/GeV;
     const G4double etOriginal = modifiedOriginal.GetTotalEnergy()/GeV;
@@ -109,6 +110,7 @@
     targetMass = targetParticle.GetMass()/GeV;
     if( currentMass == 0.0 && targetMass == 0.0 )       // annihilation
     {
+      // no kinetic energy in target .....
       G4double ek = currentParticle.GetKineticEnergy();
       G4ThreeVector m = currentParticle.GetMomentum();
       currentParticle = *vec[0];
@@ -120,10 +122,12 @@
       delete temp;
       vecLen -= 2;
       currentMass = currentParticle.GetMass()/GeV;
+      targetMass = targetParticle.GetMass()/GeV;
       incidentHasChanged = true;
       targetHasChanged = true;
       currentParticle.SetKineticEnergy( ek );
       currentParticle.SetMomentum( m );
+      forVeryForward = targetParticle.GetDefinition()->GetPDGMass();
     }
     const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
@@ -213,7 +217,7 @@
             pVec->SetDefinition( aNeutron );
           pVec->SetSide( -2 );                // -2 means backside nucleon
           ++extraNucleonCount;
-          backwardEnergy += centerofmassEnergy/2.0;
+          backwardEnergy += pVec->GetMass()/GeV;
           extraNucleonMass += pVec->GetMass()/GeV;
         }
         else
@@ -230,7 +234,7 @@
         pVec->SetNewlyAdded( true );                // true is the same as IPA(i)<0
         vec.SetElement( vecLen++, pVec );    
         // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
-        backwardEnergy -= pVec->GetMass()/GeV;;
+        backwardEnergy -= pVec->GetMass()/GeV;
         ++backwardCount;
       }
     }
@@ -293,8 +297,9 @@
             {
               --extraNucleonCount;
               extraNucleonMass -= vec[i]->GetMass()/GeV;
+              backwardEnergy -= vec[i]->GetTotalEnergy()/GeV;
             }
-            backwardEnergy += vec[i]->GetMass()/GeV;
+            backwardEnergy += vec[i]->GetTotalEnergy()/GeV;
             for( G4int j=i; j<(vecLen-1); ++j )*vec[j] = *vec[j+1];   // shift up
             --backwardCount;
             backwardParticlesLeft = 1;
@@ -308,7 +313,7 @@
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       if( backwardParticlesLeft == 0 )
       {
-        backwardEnergy += targetParticle.GetMass()/GeV;
+	backwardEnergy += targetParticle.GetMass()/GeV;
         targetParticle = *vec[0];
         --backwardCount;
         for( G4int j=0; j<(vecLen-1); ++j )*vec[j] = *vec[j+1];
@@ -598,6 +603,7 @@
           {
             --extraNucleonCount;
             extraNucleonMass -= vecMass;
+            backwardEnergy -= vecMass;
           }
           --backwardCount;
           backwardEnergy += vecMass;
@@ -1110,8 +1116,8 @@
       for( i=0; i<vecLen+2; ++i )tempV.SetElement( tempLen++, &tempR[i] );
       constantCrossSection = true;
 
-      wgt = GenerateNBodyEvent(
-       pseudoParticle[3].GetTotalEnergy()/MeV+pseudoParticle[4].GetTotalEnergy()/MeV,
+      wgt = GenerateNBodyEvent(-forVeryForward + pseudoParticle[3].GetTotalEnergy()/MeV+
+                                pseudoParticle[4].GetTotalEnergy()/MeV,
        constantCrossSection, tempV, tempLen );
       theoreticalKinetic = 0.0;
       for( i=0; i<tempLen; ++i )
