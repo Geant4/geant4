@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2001-10-24 16:40:54 maire Exp $
+$Id: History,v 1.8 2001-11-08 08:52:07 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,9 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
 24 oct 01: mma (xrays-V03-02-01)
-- cut per material : G4ForwardXrayTR
+- modified G4ForwardXrayTR.cc for cuts per material.
+  Does NOT include mods in "xrays-V03-02-00a".
+
+08 nov 01: R.Chytracek (xrays-V03-02-00a)
+- modified G4Cerenkov.cc and G4Scintillator.cc for reference-counted
+  touchables. Requires coworking tags in geometry category.
 
 17 sep 01: mma (xrays-V03-02-00)
 - modifs in almost all classes for the migration of Materials to pure STL,
