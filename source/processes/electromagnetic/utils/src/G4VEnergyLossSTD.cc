@@ -52,6 +52,7 @@
 // 06-03-03 Control on GenericIons using SubType + update verbose (V.Ivanchenko)
 // 10-03-03 Add Ion registration (V.Ivanchenko)
 // 22-03-03 Add Initialisation of cash (V.Ivanchenko)
+// 26-03-03 Remove finalRange modification (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -82,7 +83,6 @@
 #include "G4VSubCutoffProcessor.hh"
 #include "G4ProcessManager.hh"
 #include "G4UnitsTable.hh"
-#include "G4Proton.hh"
 #include "G4GenericIon.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Region.hh"
@@ -229,15 +229,6 @@ void G4VEnergyLossSTD::Initialise()
       do {reg--;} while (reg && pcuts != (scoffRegions[reg]->GetProductionCuts()));
       idxSCoffRegions.push_back(reg);
     }
-  }
-
-
-  //!!!! To be checked because finalRange is changed here !!!!
-  for (size_t i=0; i<numOfCouples; i++) {
-    G4double lengthCut = theCoupleTable->GetMaterialCutsCouple(i)
-                       ->GetProductionCuts()->GetProductionCut(1);
-
-    if (finalRange > lengthCut) finalRange = lengthCut;
   }
 
   if (0 < verboseLevel) {
@@ -458,7 +449,7 @@ G4PhysicsTable* G4VEnergyLossSTD::BuildLambdaTable()
   }
 
   if(0 < verboseLevel) {
-    G4cout << "Lambda table is built for " 
+    G4cout << "Lambda table is built for "
            << particle->GetParticleName()
            << G4endl;
     if(2 < verboseLevel) {
@@ -743,7 +734,7 @@ void G4VEnergyLossSTD::PrintInfoDefinition() const
       G4cout << "InverseRangeTable address= " << theInverseRangeTable << G4endl;
       if(theInverseRangeTable) G4cout << (*theInverseRangeTable) << G4endl;
       G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
-      if(theSubLambdaTable) G4cout << (*theSubLambdaTable) << G4endl;
+      if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
       G4cout << "SubLambdaTable address= " << theSubLambdaTable << G4endl;
       if(theSubLambdaTable) G4cout << (*theSubLambdaTable) << G4endl;
     }

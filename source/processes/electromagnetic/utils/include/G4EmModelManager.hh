@@ -38,6 +38,7 @@
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 The set of models is defined for region (V.Ivanchenko)
+// 26-03-03 Add GetDEDXDispersion (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -142,6 +143,12 @@ public:
 				    G4double& preStepKinEnergy,
 				    size_t&   index);
 
+  G4double GetDEDXDispersion( const G4Material* material,
+                              const G4DynamicParticle* dp,
+                                    G4double& tmax,
+		                    G4double& length,
+				    size_t&   index);
+
   void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel*, const G4Region*);
 
 private:
@@ -209,6 +216,23 @@ inline G4double G4EmModelManager::SampleFluctuations(
   G4VEmFluctuationModel* fm = flucModels[currentIdx];
   G4double x = eloss;
   if(fm) x = fm->SampleFluctuations(material,dp,tmax,length,eloss);
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4EmModelManager::GetDEDXDispersion(
+                              const G4Material* material,
+                              const G4DynamicParticle* dp,
+                                    G4double& tmax,
+		                    G4double& length,
+				    size_t&   index)
+{
+  currentIdx = (setOfRegionModels[idxOfRegionModels[index]])
+             ->SelectIndex(dp->GetKineticEnergy());
+  G4VEmFluctuationModel* fm = flucModels[currentIdx];
+  G4double x = 0.0;
+  if(fm) x = fm->Dispersion(material,dp,tmax,length);
   return x;
 }
 

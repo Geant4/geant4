@@ -39,6 +39,8 @@
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
 // 17-02-03 Fix problem of store/restore tables for ions (V.Ivanchenko)
 // 10-03-03 Add Ion registration (V.Ivanchenko)
+// 25-03-03 Add deregistration (V.Ivanchenko)
+// 26-03-03 Add GetDEDXDispersion (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -66,6 +68,7 @@ class G4PhysicsTable;
 class G4MaterialCutsCouple;
 class G4EnergyLossMessengerSTD;
 class G4ParticleDefinition;
+class G4VMultipleScattering;
 
 class G4LossTableManager
 {
@@ -94,8 +97,19 @@ public:
     G4double range,
     const G4MaterialCutsCouple *couple);
 
+  G4double GetDEDXDispersion(
+    const G4MaterialCutsCouple *couple,
+    const G4DynamicParticle* dp,
+          G4double& length);
+
   // to be called only by energy loss processes
   void Register(G4VEnergyLossSTD* p);
+
+  void DeRegister(G4VEnergyLossSTD* p);
+
+  void Register(G4VMultipleScattering* p);
+
+  void DeRegister(G4VMultipleScattering* p);
 
   void RegisterIon(const G4ParticleDefinition* aParticle, G4VEnergyLossSTD* p);
 
@@ -225,6 +239,24 @@ inline G4double G4LossTableManager::GetEnergy(
     }
   }
   return currentLoss->GetKineticEnergy(range, couple);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline  G4double G4LossTableManager::GetDEDXDispersion(
+    const G4MaterialCutsCouple *couple,
+    const G4DynamicParticle* dp,
+          G4double& length)
+{
+  const G4ParticleDefinition* aParticle = dp->GetDefinition();
+  if(aParticle != currentParticle) {
+    G4std::map<PD,G4VEnergyLossSTD*,G4std::less<PD> >::const_iterator pos;
+    if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
+      currentParticle = aParticle;
+      currentLoss = (*pos).second;
+    }
+  }
+  return currentLoss->GetDEDXDispersion(couple, dp, length);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -40,6 +40,8 @@
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
 // 13-02-03 SubCutoffProcessors defined for regions (V.Ivanchenko)
 // 17-02-03 Fix problem of store/restore tables (V.Ivanchenko)
+// 26-02-03 Region dependent step limit (V.Ivanchenko)
+// 26-03-03 Add GetDEDXDispersion (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -194,6 +196,10 @@ public:
 
   G4double GetLambda(G4double kineticEnergy, const G4MaterialCutsCouple* couple);
   // It returns the MeanFreePath of the process for a (energy, material)
+
+  G4double GetDEDXDispersion(const G4MaterialCutsCouple *couple,
+                             const G4DynamicParticle* dp,
+                                   G4double& length);
 
   G4double MicroscopicCrossSection(G4double kineticEnergy,
                              const G4MaterialCutsCouple* couple);
@@ -385,6 +391,20 @@ inline G4double G4VEnergyLossSTD::GetKineticEnergy(G4double& range,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline G4double G4VEnergyLossSTD::GetDEDXDispersion(
+                                  const G4MaterialCutsCouple *couple,
+                                  const G4DynamicParticle* dp,
+                                        G4double& length)
+{
+  DefineMaterial(couple);
+  G4double tmax = MaxSecondaryEnergy(dp);
+  tmax = G4std::min(tmax,(*theCuts)[currentMaterialIndex]);
+  return modelManager->GetDEDXDispersion(currentMaterial, dp, tmax, length,
+                       currentMaterialIndex);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4double G4VEnergyLossSTD::GetMeanFreePath(const G4Track& track,
                                                         G4double,
                                                         G4ForceCondition* cond)
@@ -414,15 +434,16 @@ inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
     fRange = ((*theRangeTable)[currentMaterialIndex])->
                 GetValue(preStepScaledEnergy, b)*reduceFactor;
 
-    if(integral || fRange <= finalRange) {
+    if(integral) {
       x = fRange;
 
     } else {
-      x = c1lim*fRange+c2lim+c3lim/fRange;
-      if(rndmStepFlag) x = finalRange + (x-finalRange)*G4UniformRand();
+      G4double r = G4std::min(finalRange, currentCouple->GetProductionCuts()
+                 ->GetProductionCut(idxG4ElectronCut));
+      x = dRoverRange*fRange + r*(1.0 - dRoverRange)*(2.0 - r/fRange);
+      if(rndmStepFlag) x = r + (x-r)*G4UniformRand();
       if(x > fRange) x = fRange;
     }
-
   }
 
   return x;

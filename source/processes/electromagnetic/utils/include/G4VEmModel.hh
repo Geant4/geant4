@@ -37,6 +37,7 @@
 // 23-12-02 V.Ivanchenko change interface before move to cut per region
 // 24-01-03 Cut per region (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
+// 25-02-03 Add sample theta and displacement (V.Ivanchenko)
 //
 
 //
@@ -104,6 +105,16 @@ public:
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double tmax) = 0;
+  
+  virtual G4double SampleCosineTheta(G4double& kineticEnergy,
+                                     G4double& energyDeposition,
+				     G4double& stepLength,
+				     G4double& lambda) {return 1.0;};
+
+  virtual G4double SampleDisplacement(G4double& kineticEnergy,
+                                     G4double& truePathLength,
+				     G4double& stepLength,
+				     G4double& lambda) {return 0.0;};
 
   virtual G4double MaxSecondaryEnergy(
 				const G4DynamicParticle* dynParticle) = 0;

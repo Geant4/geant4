@@ -38,6 +38,7 @@
 // 15-02-03 Lambda table can be scaled (V.Ivanchenko)
 // 17-02-03 Fix problem of store/restore tables (V.Ivanchenko)
 // 10-03-03 Add Ion registration (V.Ivanchenko)
+// 25-03-03 Add deregistration (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -145,6 +146,21 @@ void G4LossTableManager::Register(G4VEnergyLossSTD* p)
   tables_are_built.push_back(false);
   all_tables_are_built = false;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::DeRegister(G4VEnergyLossSTD*)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::Register(G4VMultipleScattering*)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::DeRegister(G4VMultipleScattering*)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
