@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2001-09-05 16:27:35 maire Exp $
+$Id: History,v 1.31 2001-09-11 15:44:49 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+11 sep 01: L.Urban (stand-V03-02-02)
+- G4VhEnergyLoss+G4VeEnergyLoss: bugfix in subcutoff delta generation
      
 29 aug 01: mma (stand-V03-02-01)
 - G4hIonisation::PostStepDoIt grecj term for spin 1/2 (not 1)
