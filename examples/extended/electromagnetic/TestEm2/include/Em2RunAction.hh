@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2RunAction.hh,v 1.5 2000-12-07 12:14:06 maire Exp $
+// $Id: Em2RunAction.hh,v 1.6 2001-02-21 12:15:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,11 @@ class Em2PrimaryGeneratorAction;
 class Em2RunActionMessenger;
 
 class G4Run;
+
+#ifndef G4NOHIST
+ class HepTupleManager;
+ class HepHistogram;
+#endif
 
 class Em2RunAction : public G4UserRunAction
 {
@@ -91,7 +96,16 @@ class Em2RunAction : public G4UserRunAction
     G4double sum2NeutrTrLength;
     
     Em2RunActionMessenger* runMessenger;        
-    G4int saveRndm;    
+    G4int saveRndm;
+                  
+#ifndef G4NOHIST        
+    HepTupleManager* hbookManager;
+    HepHistogram *histo1, *histo2, *histo3;    
+    HepHistogram *histo4, *histo5, *histo6;
+    HepHistogram *histo7, *histo8, *histo9;
+    HepHistogram *hist10, *hist11, *hist12;
+#endif
+    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
