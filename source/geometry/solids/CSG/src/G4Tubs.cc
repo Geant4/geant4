@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.45 2005-03-03 16:06:06 allison Exp $
+// $Id: G4Tubs.cc,v 1.46 2005-03-18 15:39:11 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,26 +29,29 @@
 //
 // History:
 //
-// 1994-95  P.Kent:     implementation
 //
-// 18.06.98 V.Grichine: n-normalisation in DistanceToOut(p,v) 
-// 09.10.98 V.Grichine: modifications in DistanceToOut(p,v,...)
-// 23.03.99 V.Grichine: bug fixed in DistanceToIn(p,v) 
-// 25.05.99 V.Grichine: bugs fixed in DistanceToIn(p,v) 
-// 28.05.99 V.Grichine: bugs fixed in DistanceToOut(p,v,...)
-// 13.10.99 V.Grichine: bugs fixed in DistanceToIn(p,v) 
-// 19.11.99 V.Grichine: side = kNull in DistanceToOut(p,v,...)
-// 31.03.00 V.Grichine: bug fixed in Inside(p)
-// 17.05.00 V.Grichine: bugs (#76,#91) fixed in Distance ToOut(p,v,...)
-// 02.08.00 V.Grichine: point is outside check in Distance ToOut(p)
-// 08.08.00 V.Grichine: more stable roots of 2-equation in DistanceToOut(p,v,..)
-// 31.10.00 V.Grichine: assign sr, sphi in Distance ToOut(p,v,...)
-// 28.11.00 V.Grichine: bug fixed in Inside(p)
-// 07.12.00 V.Grichine: phi-section algorithm was changed in Inside(p)
+// 16.03.05 V.Grichine: SurfaceNormal(p) with edges/corners for boolean
+// 20.07.01 V.Grichine: bug fixed in Inside(p)
 // 20.02.01 V.Grichine: bug fixed in Inside(p) and CalculateExtent was 
 //                      simplified base on G4Box::CalculateExtent
-// 20.07.01 V.Grichine: bug fixed in Inside(p)
-// --------------------------------------------------------------------
+// 07.12.00 V.Grichine: phi-section algorithm was changed in Inside(p)
+// 28.11.00 V.Grichine: bug fixed in Inside(p)
+// 31.10.00 V.Grichine: assign sr, sphi in Distance ToOut(p,v,...)
+// 08.08.00 V.Grichine: more stable roots of 2-equation in DistanceToOut(p,v,..)
+// 02.08.00 V.Grichine: point is outside check in Distance ToOut(p)
+// 17.05.00 V.Grichine: bugs (#76,#91) fixed in Distance ToOut(p,v,...)
+// 31.03.00 V.Grichine: bug fixed in Inside(p)
+// 19.11.99 V.Grichine: side = kNull in DistanceToOut(p,v,...)
+// 13.10.99 V.Grichine: bugs fixed in DistanceToIn(p,v) 
+// 28.05.99 V.Grichine: bugs fixed in DistanceToOut(p,v,...)
+// 25.05.99 V.Grichine: bugs fixed in DistanceToIn(p,v) 
+// 23.03.99 V.Grichine: bug fixed in DistanceToIn(p,v) 
+// 09.10.98 V.Grichine: modifications in DistanceToOut(p,v,...)
+// 18.06.98 V.Grichine: n-normalisation in DistanceToOut(p,v)
+// 
+// 1994-95  P.Kent:     implementation
+// 
+
 
 #include "G4Tubs.hh"
 
@@ -550,100 +553,94 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
 {
-  ENorm side ;
-  G4ThreeVector norm ;
-  G4double rho, phi ;
-  G4double distZ, distRMin, distRMax, distSPhi, distEPhi, distMin ;
+  ENorm side;
+  G4ThreeVector norm;
+  G4double rho, phi;
+  G4double distZ, distRMin, distRMax, distSPhi, distEPhi, distMin;
 
-  rho = std::sqrt(p.x()*p.x() + p.y()*p.y()) ;
+  rho = std::sqrt(p.x()*p.x() + p.y()*p.y());
 
-  distRMin = std::fabs(rho - fRMin) ;
-  distRMax = std::fabs(rho - fRMax) ;
-  distZ    = std::fabs(std::fabs(p.z()) - fDz) ;
+  distRMin = std::fabs(rho - fRMin);
+  distRMax = std::fabs(rho - fRMax);
+  distZ    = std::fabs(std::fabs(p.z()) - fDz);
+
+  if (fDPhi < twopi)   //  &&  rho ) // Protected against (0,0,z) 
+  {
+    phi = std::atan2(p.y(),p.x());
+
+    if ( phi < 0 )    phi += twopi;
+
+    if ( fSPhi < 0 )  distSPhi = std::fabs(phi - (fSPhi + twopi))*rho;    
+    else              distSPhi = std::fabs(phi - fSPhi)*rho;
+    
+                      distEPhi = std::fabs(phi - fSPhi - fDPhi)*rho;
+  }
+
+#ifndef G4NEW_SURF_NORMAL
 
   if (distRMin < distRMax) // First minimum
   {
     if ( distZ < distRMin )
     {
-       distMin = distZ ;
-       side    = kNZ ;
+       distMin = distZ;
+       side    = kNZ;
     }
     else
     {
-      distMin = distRMin ;
-      side    = kNRMin   ;
+      distMin = distRMin;
+      side    = kNRMin;
     }
   }
   else
   {
     if ( distZ < distRMax )
     {
-      distMin = distZ ;
-      side    = kNZ   ;
+      distMin = distZ;
+      side    = kNZ;
     }
     else
     {
-      distMin = distRMax ;
-      side    = kNRMax   ;
+      distMin = distRMax;
+      side    = kNRMax;
     }
   }   
   if (fDPhi < twopi  &&  rho ) // Protected against (0,0,z) 
-  {
-    phi = std::atan2(p.y(),p.x()) ;
-
-    if ( phi < 0 ) phi += twopi ;
-
-    if ( fSPhi < 0 )
-    {
-      distSPhi = std::fabs(phi - (fSPhi + twopi))*rho ;
-    }
-    else
-    {
-      distSPhi = std::fabs(phi - fSPhi)*rho ;
-    }
-    distEPhi = std::fabs(phi - fSPhi - fDPhi)*rho ;
-                                      
+  {                                      
     if (distSPhi < distEPhi) // Find new minimum
     {
-      if ( distSPhi < distMin )
-      {
-        side = kNSPhi ;
-      }
+      if ( distSPhi < distMin )  side = kNSPhi;      
     }
     else
     {
-      if ( distEPhi < distMin )
-      {
-        side = kNEPhi ;
-      }
+      if ( distEPhi < distMin )  side = kNEPhi ;      
     }
   }    
   switch ( side )
   {
     case kNRMin : // Inner radius
     {                      
-      norm = G4ThreeVector(-p.x()/rho,-p.y()/rho,0) ;
-      break ;
+      norm = G4ThreeVector(-p.x()/rho,-p.y()/rho,0);
+      break;
     }
     case kNRMax : // Outer radius
     {                  
-      norm = G4ThreeVector(p.x()/rho,p.y()/rho,0) ;
+      norm = G4ThreeVector(p.x()/rho,p.y()/rho,0);
       break ;
     }
     case kNZ : //    + or - dz
     {                              
-      if ( p.z() > 0 ) norm = G4ThreeVector(0,0,1)  ; 
-      else             norm = G4ThreeVector(0,0,-1) ; 
+      if ( p.z() > 0 ) norm = G4ThreeVector(0,0,1); 
+      else             norm = G4ThreeVector(0,0,-1); 
       break ;
     }
     case kNSPhi:
     {
-      norm = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0) ;
+      norm = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
       break ;
     }
     case kNEPhi:
     {
-      norm = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0) ;
+      norm = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
       break;
     }
     default:
@@ -653,7 +650,245 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
                   "Undefined side for valid surface normal to solid.");
       break ;
     }    
-  }                
+  } 
+               
+#else  // algorithm supporting edges/corners
+
+  G4double delta    = 0.5*kCarTolerance;
+  G4ThreeVector nZ  = G4ThreeVector(0,0, 1.0);
+  G4ThreeVector nmZ = G4ThreeVector(0,0,-1.0);
+  G4ThreeVector nR, nr, nPs, nPe;
+
+  if ( rho > delta ) 
+  { 
+                 nR  = G4ThreeVector(p.x()/rho,p.y()/rho,0);
+    if ( fRMin ) nr  = G4ThreeVector(-p.x()/rho,-p.y()/rho,0);
+  }
+  if( fDPhi < twopi )   
+  {
+    nPs = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
+    nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
+  }
+
+  // Z -> (R -> Phi)-> (r -> Phi)
+
+  if( distZ <= delta ) // on Z/mZ surfaces
+  {
+    if( p.z() >= 0.)  // on Z surface
+    {
+      if( distRMax <= delta )
+      {
+        if( fDPhi < twopi )
+	{
+          if (distSPhi <= delta)    norm = ( nZ + nR + nPs ).unit();	  
+          else
+	  {
+            if (distEPhi <= delta)  norm = ( nZ + nR + nPe ).unit();
+	    else                    norm = ( nZ + nR ).unit(); 
+	  }
+	}
+        else                        norm = ( nZ + nR ).unit(); 
+      }
+      else  // out of RMax
+      {
+        if( fRMin )
+	{
+          if( distRMin <= delta )
+          {
+            if( fDPhi < twopi )
+	    {
+              if (distSPhi <= delta)    norm = ( nZ + nr + nPs ).unit();	  
+              else
+	      {
+                if (distEPhi <= delta)  norm = ( nZ + nr + nPe ).unit();
+	        else                    norm = ( nZ + nr ).unit(); 
+	      }
+	    }
+            else                        norm = ( nZ + nr ).unit(); 
+          }
+          else
+          {
+            if( fDPhi < twopi )
+	    {
+              if (distSPhi <= delta)    norm = ( nZ + nPs ).unit();	  
+              else
+	      {
+                if (distEPhi <= delta)  norm = ( nZ + nPe ).unit();
+	        else                    norm = nZ; 
+	      }
+	    }
+            else                        norm = nZ ;
+	  }
+	}
+        else
+	{
+          if( fDPhi < twopi )
+	  {
+            if (distSPhi <= delta)    
+	    {
+              if( distEPhi <= delta ) norm = ( nZ + nPs + nPe).unit();
+              else                    norm = ( nZ + nPs ).unit();
+	    }	  
+            else
+	    {
+              if (distEPhi <= delta)  norm = ( nZ + nPe ).unit();
+	      else                    norm = nZ; 
+	    }
+	  }
+          else                        norm = nZ;
+	} 
+      }
+    }
+    else  // on mZ surface
+    {
+      if( distRMax <= delta )
+      {
+        if( fDPhi < twopi )
+	{
+          if (distSPhi <= delta)    norm = ( nmZ + nR + nPs ).unit();	  
+          else
+	  {
+            if (distEPhi <= delta)  norm = ( nmZ + nR + nPe ).unit();
+	    else                    norm = ( nmZ + nR ).unit(); 
+	  }
+	}
+        else                        norm = ( nmZ + nR ).unit(); 
+      }
+      else  // out of RMax
+      {
+        if( fRMin )
+	{
+          if( distRMin <= delta )
+          {
+            if( fDPhi < twopi )
+	    {
+              if (distSPhi <= delta)    norm = ( nmZ + nr + nPs ).unit();	  
+              else
+	      {
+                if (distEPhi <= delta)  norm = ( nmZ + nr + nPe ).unit();
+	        else                    norm = ( nmZ + nr ).unit(); 
+	      }
+	    }
+            else                        norm = ( nmZ + nr ).unit(); 
+          }
+          else
+          {
+            if( fDPhi < twopi )
+	    {
+              if (distSPhi <= delta)    norm = ( nmZ + nPs ).unit();	  
+              else
+	      {
+                if (distEPhi <= delta)  norm = ( nmZ + nPe ).unit();
+	        else                    norm = nmZ; 
+	      }
+	    }
+            else                        norm = nmZ ;
+	  }
+	}
+        else
+	{
+          if( fDPhi < twopi )
+	  {
+            if (distSPhi <= delta)    
+	      {
+                if (distEPhi <= delta)  norm = ( nmZ + nPs + nPe ).unit();
+		else                    norm = ( nmZ + nPs ).unit();
+	      }	  
+            else
+	    {
+              if (distEPhi <= delta)  norm = ( nmZ + nPe ).unit();
+	      else                    norm = nmZ; 
+	    }
+	  }
+          else                        norm = nmZ;
+	} 
+      }
+    }
+  }
+  else  // out of Z/mZ surfaces, try R/r and SPhi/EPhi only
+  {
+    if( distRMax <= delta )
+    {
+      if( fDPhi < twopi )
+      {
+        if (distSPhi <= delta)    norm = ( nR + nPs ).unit();	  
+        else
+	{
+          if (distEPhi <= delta)  norm = ( nR + nPe ).unit();
+	  else                    norm = nR; 
+	}
+      }
+      else                        norm = nR; 
+    }
+    else  // out of RMax
+    {
+      if( fRMin )
+      {
+        if( distRMin <= delta )
+        {
+          if( fDPhi < twopi )
+	  {
+            if (distSPhi <= delta)    norm = ( nr + nPs ).unit();	  
+            else
+	    {
+              if (distEPhi <= delta)  norm = ( nr + nPe ).unit();
+	      else                    norm = nr; 
+	    }
+	  }
+          else                        norm = nr; 
+        }
+        else  // only Phi, if any
+        {
+          if( fDPhi < twopi )
+	  {
+            if (distSPhi <= delta)    norm = nPs;	  
+            else
+	    {
+              if (distEPhi <= delta)  norm = nPe; 
+              else
+	      {
+                G4Exception("G4Tubs::SurfaceNormal(p)", "Notification", JustWarning, 
+                            "Point p is not on surface !?" ); 
+	      }
+	    }
+	  }
+          else
+	  {
+          G4Exception("G4Tubs::SurfaceNormal(p)", "Notification", JustWarning, 
+                      "Point p is not on surface !?" ); 
+	  }
+	}
+      }
+      else
+      {
+        if( fDPhi < twopi )
+	{
+          if (distSPhi <= delta)    
+	  {
+            if (distEPhi <= delta)  norm = ( nPs + nPe ).unit(); 
+            else                    norm = nPs;
+	  }	  
+          else
+	  {
+            if (distEPhi <= delta)  norm = nPe; 
+            else                    // is not on surface !?
+            {
+              G4Exception("G4Tubs::SurfaceNormal(p)", "Notification", JustWarning, 
+                          "Point p is not on surface !?" ); 
+            }
+	  }
+	}
+        else
+	{
+          G4Exception("G4Tubs::SurfaceNormal(p)", "Notification", JustWarning, 
+                      "Point p is not on surface !?" ); 
+	}
+      } 
+    }
+  }
+
+#endif
+
   return norm;
 }
 
