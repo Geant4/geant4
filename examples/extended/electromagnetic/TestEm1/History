@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2000-06-17 12:44:26 stesting Exp $
+$Id: History,v 1.5 2000-11-13 09:15:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 17, 2000  John Allison  (testem1-V01-00-00)
-- Updated TestEm1.out for geant4-01-01-ref-06.
+13-11-00  G.Cosmo  (testem1-V02-00-00)
+          Fixed memory leak in Em1RunAction: added call to clearAndDestroy()
+	  in EndOfRunAction() to clean ProcCounter vector.
+
+17-06-00  J.Allison  (testem1-V01-00-00)
+          Updated TestEm1.out for geant4-01-01-ref-06.
 
 21-01-00  cppflag G4NOHIST to protect hbook histograms.
           
