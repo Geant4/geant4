@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.17 2001-07-24 22:01:59 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.18 2001-07-25 21:21:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -201,19 +201,8 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
   // Fractional margin - ensures scale is comfortably inside viewing
   // volume.
   const G4double oneMinusMargin (1. - margin);
-  const G4double freeLengthFraction (1. - 2. * margin);
 
   const G4VisExtent& sceneExtent = fpScene->GetExtent();
-
-  // Test scene for real content...
-  if (sceneExtent.GetExtentRadius() == 0) {
-    G4cout <<
-      "G4ScaleModel::DescribeYourselfTo: Scene does not yet have any extent."
-      "\n  Unable to draw scale."
-      "\n  Maybe you have not yet added any geometrical object."
-	   << G4endl;
-    return;
-  }
 
   // Useful constants...
   const G4double length(scale.GetLength());
@@ -228,24 +217,6 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
   const G4double ymax = sceneExtent.GetYmax();
   const G4double zmin = sceneExtent.GetZmin();
   const G4double zmax = sceneExtent.GetZmax();
-
-  // Test scene for room...
-  G4bool room (true);
-  switch (scale.GetDirection()) {
-  case G4Scale::x:
-    if (freeLengthFraction * (xmax - xmin) < length) room = false; break;
-  case G4Scale::y:
-    if (freeLengthFraction * (ymax - ymin) < length) room = false; break;
-  case G4Scale::z:
-    if (freeLengthFraction * (zmax - zmin) < length) room = false; break;
-  }
-  if (!room) {
-    G4cout <<
-      "G4ScaleModel::DescribeYourselfTo: Not enough room in existing scene."
-      "\n  Unable to draw scale.  Maybe scale is too long."
-	   << G4endl;
-    return;
-  }
 
   // Create (empty) polylines having the same vis attributes...
   G4Polyline scaleLine, tick11, tick12, tick21, tick22;
