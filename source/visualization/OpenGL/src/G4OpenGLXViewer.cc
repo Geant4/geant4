@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.12 2001-07-14 21:47:57 johna Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.13 2001-11-29 12:14:01 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -863,13 +863,13 @@ GLXContext G4OpenGLXViewer::create_GL_print_context(XVisualInfo*& pvi, G4bool& d
 			 XDefaultScreen (dpy),
 			 snglBuf_RGBA);
 
-  if (pvi != NULL) {
+  if (pvi) {
     db=false;
   } else {
     pvi = glXChooseVisual (dpy,
 			   XDefaultScreen (dpy),
 			   dblBuf_RGBA);
-    if (NULL) {
+    if (!pvi) {
       db=true;
     }
   }
