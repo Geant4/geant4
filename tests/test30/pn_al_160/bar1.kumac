@@ -30,11 +30,11 @@ set NDVY 010205
  itx 11.5 150 'KIN'
  close 1
  
- ve/create X(12) R 3 4 7 18 19 20 21 22 23 24 25 26 
- ve/create Y(12) R 33. 295. 6.44 3.75 0.43  15.57 1.89 14.36 1.86 39.55 2.7 38.04
- ve/create DX(12) R 0 0 0 0 0 0 0 0 0 0 0 0
- ve/create DY(12) R 0. 0. 0.46 0.38 0.12 0.87 0.15 0.47 0.41 2.4 0.3 3.0
- gr/h/err X Y DX DY 12 21 0.2 1
+ ve/create X(8) R 3  7 10 14 18 22 24 26 
+ ve/create Y(8) R 18 1.6 0.19 0.52 5.3 16 9.5 33.6
+ ve/create DX(8) R 0 0 0 0 0 0 0 0 0 0 0 0
+ ve/create DY(8) R 6 0.1 0.02 0.03 0.5 1 0.5 2
+ gr/h/err X Y DX DY 8 21 0.2 1
 
  
  opt liny
