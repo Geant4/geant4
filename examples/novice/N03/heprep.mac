@@ -1,4 +1,4 @@
-# $Id: heprep.mac,v 1.1 2003-05-28 23:31:34 duns Exp $
+# $Id: heprep.mac,v 1.2 2003-05-29 22:18:42 duns Exp $
 #
 # Macro file for "exampleN03.cc"
 #
@@ -7,22 +7,24 @@
 #
 # Produces heprep2 file(s)
 #
-/control/verbose 2
+/control/verbose 0
 /control/saveHistory
 #
-/run/verbose 2
+/run/verbose 0
 /event/verbose 0
-/tracking/verbose 1
+/tracking/verbose 0
 #
 # muon 300 MeV to the direction (1.,0.,0.)
 # 3 events
 #
 /vis/scene/create
 /vis/open HepRepXML
-/vis/viewer/flush
+#/vis/viewer/flush
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
+/vis/scene/add/volume world
 /vis/scene/add/trajectories
-#/vis/scene/add/hits
 /run/beamOn 1
-
+#/vis/viewer/flush
+/run/beamOn 10
+#/vis/viewer/flush
