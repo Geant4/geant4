@@ -1,4 +1,4 @@
-$Id: History,v 1.143 2004-03-31 11:18:56 vnivanch Exp $
+$Id: History,v 1.144 2004-04-05 14:18:17 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05 April 04: V.Ivant  (utils-V06-01-01)
+- G4VEnergyLossProcess: Update calulation of energy loss from tables
+  (important for proton energies about 1 MeV);
+- Fluctuations: smooth out sampling of Gaussian fluctuations,
+  when sigma is much bigger than energy loss.
 
 31 March 04: V.Ivant  (utils-V06-01-00)
 - G4VEnergyLossProcess: Fix a problem of retrieve tables if PreciseRange
