@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.46 1999-10-29 08:51:25 barrand Exp $
+# $Id: architecture.gmk,v 1.47 1999-11-11 16:12:35 gunter Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -15,9 +15,7 @@
 #
 #          SUN-CC      SunOS 5.6, CC 4.2 compiler (default)
 #
-#          HP-aCC      HP-UX 10.20, aCC A.01.09 compiler
-#
-#          SGI-CC      SGI-IRIX 6.2, C++ 7.2 compiler
+#          HP-aCC      HP-UX 10.20, aCC A.01.21 compiler
 #
 #          DEC-cxx     DEC-OSF/1 4.0, DEC C++ 6.1
 #
@@ -30,13 +28,8 @@
 #
 #          WIN32-VC-NICE  alias for the above, although NICE is not used anymore.
 #
-#	   WIN32-G++-NICE	NiceNT and CYGWIN32 with g++ as base compiler
-#				ex. NiceNT at CERN (but CYGWIN32 and RogueWave
-#				for g++ installed locally, because not full 
-#				installation on NICE)
-#
-#    Note: If G4ODBMS is defined, it calls for HEP_ODBMS setup files in
-#          $(HEP_ODBMS_DIR)/etc/.
+# Note: If G4ODBMS is defined, it calls for HEP_ODBMS setup files in
+#       $(HEP_ODBMS_DIR)/etc/.
 #
 
 # Definition of HEP_ODBMS_LIBS, OBJY_LIBS and OSPACE_LIBS by HepODBMS
@@ -48,12 +41,9 @@ endif
 
 MAKEFLAGS= --no-print-directory
 
-# Specify G4USE_STL when using STL, even for using our "temporary"
-# STLinterface to RogueWave.
+# Geant4 uses STL
 #
-ifdef G4USE_STL
-  CPPFLAGS  += -DG4USE_STL
-endif
+CPPFLAGS  += -DG4USE_STL
 
 # If not specified, the default platform for G4SYSTEM is SUN-CC ...
 #
@@ -176,86 +166,43 @@ endif
 
 ifdef G4USE_OSPACE
 
-#Object Space STL implementation
+# ObjectSpace STL implementation
 
-  RWINC      := $(G4BASE)/global/STLInterface
+  G4STLINC   := $(G4BASE)/global/STLInterface
   OSPACEDIR  := /afs/cern.ch/sw/geant4/dev/ObjectSpace/$(G4SYSTEM)/pro/ToolKit
   OSPACEINC  := -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)/ospace/stl
   OSPACELIBS := -L$(OSPACEDIR)/lib -lospace
-  CPPFLAGS   += -DG4USE_STL
 
   ifeq ($(G4SYSTEM),WIN32-VC)
     OSPACEDIR  := $(OBJECT_SPACE_BASE)
     OSPACEINC  := -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)/ospace/stl -I$(OSPACEDIR)
     OSPACELIBS := '-libpath:$(OSPACEDIR)\lib std-2.1-vc5.0-mt.lib'
-    CPPFLAGS   += -DG4USE_STL -DG4USE_OLDSTL 
+    CPPFLAGS   += -DG4USE_OLDSTL 
     CPPFLAGS   += -DOS_WIN_NT_4_0 -DOS_MULTI_THREADED -D_WIN32_WINNT $(OSPACEINC)
   endif
-else
-ifdef G4USE_STL
-
-# Native STL implemetation
-
-    RWINC      := $(G4BASE)/global/STLInterface
 
 else 
 ifdef G4USE_STLPORT
 
-# STLport STL implementation (free) ( derived from SGI implementaion)
-    ifeq ($(G4SYSTEM),WIN32-VC)
+# STLport STL implementation (free) ( derived from SGI implementation)
 
-    RWINC      := $(G4BASE)/global/STLInterface
+  ifeq ($(G4SYSTEM),WIN32-VC)
+    G4STLINC   := $(G4BASE)/global/STLInterface
     STLPORTDIR := $(STLPORT_BASE)
     OSPACEINC  := -I$(STLPORTDIR)/stl
-    CPPFLAGS   += -DG4USE_STL -DG4USE_OLDSTL
-    CPPFLAGS   += -D_NOTHREADS -D__STL_NO_NEW_IOSTREAMS -D__STL_NO_NAMESPACES -D__STL_NO_NEW_STYLE_HEADERS
+    CPPFLAGS   += -DG4USE_OLDSTL
+    CPPFLAGS   += -D_NOTHREADS -D__STL_NO_NEW_IOSTREAMS -D__STL_NO_NAMESPACES
+    CPPFLAGS   += -D__STL_NO_NEW_STYLE_HEADERS
+  endif
 
-    endif
+else
+
+# Native STL implementation
+
+  G4STLINC   := $(G4BASE)/global/STLInterface
 
 endif   #STLport
-endif   #STL
 endif   #OPSPACE
-
-#  default to RW if RWINC is not set...
-ifndef RWINC 
-    ifndef RWBASE
-      RWBASE    := /afs/cern.ch/sw/geant4/dev/rogue/$(G4SYSTEM)
-    endif
-    RWINC     := $(RWBASE)
-    RWLIBDIR  := $(RWBASE)/lib
-    RWLIB     := rwtool
-
-    ifeq ($(G4SYSTEM),HP-aCC)
-      RWBASE    := /opt/aCC
-      RWINC     := $(RWBASE)/include
-      RWLIBDIR  := /usr/lib
-    endif
-
-    ifeq ($(G4SYSTEM),WIN32-VC)
-#        RWBASE   must be defined in the environment
-
-      RWINC        := $(RWBASE)
-      RWLIBDIR     := $(RWBASE)"\lib"
-      RWLIB        := mtlmt.lib
-    endif
-
-    ifeq ($(G4SYSTEM),WIN32-G++-NICE)
-      #
-      # locally installed RogueWave for g++ (mount mapping)
-      #
-      RWBASE       := /rogue
-      RWINC        := $(RWBASE)
-      RWLIBDIR     := $(RWBASE)/lib
-      RWLIB        := rwtool
-    endif
-
-    #
-    # Make dependencies files by g++ then need right RW include
-    #
-    ifdef RWINCGPP
-      RWINCGPP := -I$(RWINCGPP)
-    endif
-endif # ifndef RWINC
 
 #
 # Paths for G4 data
@@ -305,7 +252,7 @@ endif
 # Variables for implicit rules, etc., as suggested in GNU Make manual...
 #
 
-CPPFLAGS  += -Iinclude -I$(RWINC)
+CPPFLAGS  += -Iinclude -I$(G4STLINC)
 CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR)
 
 #
@@ -313,24 +260,12 @@ CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR)
 #
 ifeq ($(G4SYSTEM),WIN32-VC)
   LDFLAGS   := -link $(LIB_PATH)$(CLHEP_LIB_DIR)
-  ifdef RWLIBDIR
-    LDFLAGS   += $(LIB_PATH)$(RWLIBDIR)
-  endif
   LOADLIBS  := $(CLHEP_LIB)
-  ifdef RWLIB
-    LOADLIBS  += $(RWLIB)
-  endif
 else
 ##  LDFLAGS   := -L$(CLHEP_LIB_DIR)
   LDFLAGS   := 
-  ifdef RWLIBDIR
-    LDFLAGS   += -L$(RWLIBDIR)
-  endif
 ##  LOADLIBS  := -l$(CLHEP_LIB)
   LOADLIBS  := $(CLHEP_LIB_DIR)/lib$(CLHEP_LIB).a
-  ifdef RWLIB
-    LOADLIBS  += -l$(RWLIB)
-  endif
   LOADLIBS  += -lm
 endif
 
@@ -374,17 +309,15 @@ ifndef OIVLIBS
   OIVLIBS   := -L${HEPVISLIB} -lHEPVis -lInventorXt -lInventor -lGLU -lGL
 endif
 # ----------------- OPACS --------------------
-ifeq ($(G4SYSTEM),Linux-g++)
-#  lesstiff is bugged for popups ; then OPACS/Xo uses 
+# lesstiff is bugged for popups ; then OPACS/Xo uses 
 # the Xaw widgets for handling popups. The OPACS distrib
 # for Linux assumes that lesstif is used by default. To be
 # coherent we set in Geant4 the default toolkit to lesstif 
 # on Linux in order to link with -lXaw, etc...
-  ifndef G4_OPACS_WIDGET_SET
+ifndef G4_OPACS_WIDGET_SET
+  ifeq ($(G4SYSTEM),Linux-g++)
     G4_OPACS_WIDGET_SET := lesstif
-  endif
-else
-  ifndef G4_OPACS_WIDGET_SET
+  else
     G4_OPACS_WIDGET_SET := Xm
   endif
 endif
@@ -440,11 +373,11 @@ ifeq ($(G4SYSTEM),AIX-xlC)
   endif
   CPPFLAGS += -DG4NOT_ISO_DELETES
   ifdef G4USE_STL
-    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM)
+    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
   endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_AIX_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
-    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
+    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
   endif
 endif
 
@@ -482,11 +415,11 @@ ifeq ($(G4SYSTEM),SUN-CC)
   LOADLIBS += -L/usr/lib -lsocket -lnsl
   CPPFLAGS += -DG4NOT_ISO_DELETES
   ifdef G4USE_STL
-    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM)
+    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
   endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_SOLARIS_2_5 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
-    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
+    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
   endif
 endif
 
@@ -525,12 +458,12 @@ ifeq ($(G4SYSTEM),HP-aCC)
   endif
   CPPFLAGS += -DG4NOT_ISO_DELETES
   ifdef G4USE_STL
-    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM)
+    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
   endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_HPUX_10_20 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
     CPPFLAGS += -D__HPACC_NOEH
-    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
+    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
   endif
 endif
 
@@ -592,12 +525,12 @@ ifeq ($(G4SYSTEM),DEC-cxx)
 #   OGLLIBS   := -lMesaGLU -lMesaGL
   endif
   ifdef G4USE_STL
-    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM)
+    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
     CXXFLAGS += -nostdnew
   endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_OSF1_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS -D__NO_EDG_EXCEPTION_CLASSES
-    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
+    CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
     CXXFLAGS += -nostdnew
   endif
 endif
@@ -656,7 +589,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   endif
   CXXFLAGS += -MD -GX -Zm200  -nologo -DWIN32 -D_CONSOLE 
   CXXFLAGS += -D_WIN32 -DOS -DG4NOT_ISO_DELETES
-  CPPFLAGS += -DWIN32 -DRW_NO_XMSG 
+  CPPFLAGS += -DWIN32
 #
 # Should set $INCLUDE environment, if not set as below
 #
@@ -689,29 +622,6 @@ endif   #ospace
   endif
 endif
 
-# ------ WIN32/G++/NICE ------
-#
-ifeq ($(G4SYSTEM),WIN32-G++-NICE)
-  CXX       := g++
-  CXXFLAGS  := -fno-for-scope
-  G4_HAVE_BOOL := yes
-  ifdef G4OPTIMISE
-    CXXFLAGS  += -O
-  else
-    CXXFLAGS  += -g
-  endif
-  CXXFLAGS += -DCYGWIN32 
-  ECHO := echo -e
-  FC := g77
-  FCLIBS := -lf2c
-  ifndef OGLFLAGS
-    OGLFLAGS  := 
-  endif
-  ifndef OGLLIBS
-    OGLLIBS   := -lGLU  -lGL
-  endif
-endif
-
 # If compiler recognises implicit C++ type bool...
 ifdef G4_HAVE_BOOL
   CPPFLAGS += -DG4_HAVE_BOOL
@@ -720,13 +630,6 @@ endif
 # If there is no cbrt() function...
 ifdef G4_NO_CBRT
   CPPFLAGS += -DG4_NO_CBRT
-endif
-
-# Standard Template Library (STL) not installed
-ifndef G4USE_STL
-  ifndef G4USE_OSPACE
-    CPPFLAGS += -DRW_NO_STL
-  endif
 endif
 
 # Verbosity code can be left out (for better performance)

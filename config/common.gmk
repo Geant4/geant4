@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.5 1999-11-10 15:11:01 morita Exp $
+# $Id: common.gmk,v 1.6 1999-11-11 16:12:36 gunter Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -90,12 +90,12 @@ endif
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 ifdef CPPVERBOSE
 	ooddlx -notitle -header_suffix .hh -ref_suffix _ref.hh -c++_suffix _ddl.cc \
-	-DRW_NO_CONST_OVERLOAD  -DRW_NO_STL -DTEMPLATEP_HIDES_FNCD \
+	-DTEMPLATEP_HIDES_FNCD \
 	$(CPPFLAGS) $< $(G4OODDLX_BOOT)
 else
 	@echo Preprocessing $< ...
 	@ooddlx -notitle -header_suffix .hh -ref_suffix _ref.hh -c++_suffix _ddl.cc \
-	-DRW_NO_CONST_OVERLOAD  -DRW_NO_STL -DTEMPLATEP_HIDES_FNCD \
+	-DTEMPLATEP_HIDES_FNCD \
 	$(CPPFLAGS) $< $(G4OODDLX_BOOT)
 endif
 	@mv -f $*.hh $(G4TMPDIR)/
@@ -121,7 +121,7 @@ endif
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@echo Making dependency for file $< ...
 	@($(ECHO) $(G4TMPDIR)/\\c ; \
-	g++ -MM $(RWINCGPP) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
+	g++ -MM $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
 ifdef G4ODBMS
 ifndef G4ODBMS_NODDL
 -include $(dependencies)

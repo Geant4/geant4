@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.35 1999-11-10 15:09:48 morita Exp $
+# $Id: binmake.gmk,v 1.36 1999-11-11 16:12:36 gunter Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -180,7 +180,7 @@ ifdef G4ODBMS
               -L$(HEP_ODBMS_DIR)/lib
 
 #  Note: $(G4ODBMS_LIBS) should be placed
-#        _before_ -l$(CLHEP_LIB) -l$(RWLIB)
+#        _before_ -l$(CLHEP_LIB)
 
   LDLIBS4 += $(G4ODBMS_LIBS)
 endif
@@ -277,7 +277,7 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
 	@echo Making dependency for file $<...
 	@($(ECHO) $(G4TMPDIR)/exe/\\c ; \
-	g++ -MM $(RWINCGPP) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
+	g++ -MM $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
 -include $(dependencies)
 
 clean:
