@@ -1,4 +1,4 @@
-$Id: History,v 1.55 2000-11-23 10:04:27 vnivanch Exp $
+$Id: History,v 1.56 2000-11-23 10:17:41 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22.11.2000 - MGP, tag emlowen-V02-00-22
+             Yang and Chu fluctuation models applied for positive
+             charged ions only
 
 23.11.2000 - Ion energy fluctuations only for charge>0
              V.Ivanchenko
