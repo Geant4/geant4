@@ -1,4 +1,4 @@
-$Id: History,v 1.141 2002-04-19 17:24:00 pia Exp $
+$Id: History,v 1.142 2002-05-28 08:55:48 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28.04-2002   MGP, tag emlowen-V04-00-08
+             Code and minor design improvements deriving from reviews,
+             inspections and Code Wizard
+
+28.04-2002   MGP, tag emlowen-V04-00-07
+             Added protection in G4eIonisationSpectrum
+
+28.04-2002   MGP, tag emlowen-V04-00-06
+             G4ComptonTest and test/GNUmakefile updated to AIDA 2.2 and
+             Anaphe 4.0.n
 
 19.04.2002 - MGP, tag emlowen-V04-00-05
              Fixed compilation warnings; added pointer protection in
