@@ -58,8 +58,8 @@ fi
 ####################################################################
 # Setup environment in $REFTREE
 ####################################################################
-cd /afs/cern.ch/sw/geant4/stt/$(REFTREE)/src/geant4/tests/tools/bin
-. /afs/cern.ch/sw/geant4/stt/$(REFTREE)/src/geant4/tests/tools/bin/setup.sh
+cd /afs/cern.ch/sw/geant4/stt/$REFTREE/src/geant4/tests/tools/bin
+. /afs/cern.ch/sw/geant4/stt/$REFTREE/src/geant4/tests/tools/bin/setup.sh
 
 env | grep G4
 ulimit -a
@@ -69,7 +69,7 @@ ulimit -a
 ##########################
 if [ -e $G4WORKDIR/inprogress.stat ]; then
 echo "In progress already!"
-# exit 
+exit 
 fi
 
 ###########################################
@@ -128,10 +128,16 @@ then
 chmod +x ${G4WORKDIR}/bin/${G4SYSTEM}/*
 fi
 
-if [ X$ACTION = Xrun -o X$ACTION = Xall  ]
+if [ X$ACTION = Xrun -o X$ACTION = Xall ]
 then
 ${G4INSTALL}/tests/tools/bin/run.sh $ACTARG3
 fi
+
+if [ X$ACTION = Xdiff ]
+then
+${G4INSTALL}/tests/tools/bin/diff.sh $ACTARG3
+fi
+
 ####################################################################
 
 ########################
