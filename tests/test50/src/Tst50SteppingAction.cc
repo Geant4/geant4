@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.25 2003-03-04 18:09:06 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.26 2003-03-09 13:50:05 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -226,10 +226,10 @@ if(0 == Step->GetTrack()->GetParentID() )
 #endif 
     if( (initial_energy == KinE) &&( ZMoD==1.))
       {
-#ifdef G4ANALYSIS_USE
+	G4cout<<"arrivo al fotone trasmeso"<<G4endl;
 	runaction->gamma_transmitted();
 	
-#endif 
+
       }}}}}}}
 
     if (Foil)
@@ -301,8 +301,6 @@ if (process=="LowEnConversion"||process=="conv")
     if(StoppingPower)
       {
 G4std::ofstream pmtfile(filename, G4std::ios::app);
-if(particle_name=="e-"){
-
     //new particle    
 if(IDnow != IDold){ 
 
@@ -332,11 +330,11 @@ G4double TotalStoppingPower=(energyLost/stepLength);
 if(pmtfile.is_open()){
   pmtfile<<'\t'<<(TotalStoppingPower/(detector->GetDensity()))/(MeV* (cm2)/g)<<'\t'<<'\t'<<initial_energy/MeV<<G4endl;
  
+}}}}}}
 
-}
-}}
-}}}
-}
+
+
+
 
 if(Range)
 {
