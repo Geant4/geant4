@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeLowEnergyLoss.hh,v 1.2 2000-09-20 16:46:52 vnivanch Exp $
+// $Id: G4VeLowEnergyLoss.hh,v 1.3 2000-11-03 10:29:51 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 3.4.2000 Veronique Lefebure:
@@ -37,6 +37,10 @@
 //  Modifications:
 // 20/09/00 update fluctuations V.Ivanchenko
 //
+// Class description:
+// Abstract class for Low Energy Electromagnetic electron energy loss
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 //  -----------------------------------------------------------
 
 #ifndef G4VeLowEnergyLoss_h

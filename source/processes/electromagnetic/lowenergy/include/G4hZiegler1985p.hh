@@ -26,9 +26,8 @@
 // Electronic stopping power parametrised according to
 // J.F.Ziegler, J.P.Biersack, U.Littmark The Stoping and
 // Range of Ions in Solids, Vol.1, Pergamon Press, 1985
-//
-// Class Description: End 
-//
+// Further documentation available from http://www.ge.infn.it/geant4/lowE//
+
 // -------------------------------------------------------------------
 //
 

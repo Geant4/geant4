@@ -25,9 +25,8 @@
 //
 // The aproximation of additional ion energy loss fluctuations 
 // Q.Yang et al., NIM B61(1991)149-155.
-//
-// Class Description: End 
-//
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // -------------------------------------------------------------------
 //
 

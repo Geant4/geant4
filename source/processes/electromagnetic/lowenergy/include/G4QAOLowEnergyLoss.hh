@@ -19,10 +19,10 @@
 // 16/09/2000 S. Chauvie  Oscillator for all materials
 // 23/05/2000 MGP  Made compliant to design
 //  
-// Class Description:
-// Quantal Harmonic Oscillator Model for energy loss of slow antiprotons 
-// Class Description - End
-//
+// Class description:
+// Quantal Harmonic Oscillator Model for energy loss of low energy antiprotons 
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // ------------------------------------------------------------
 
  

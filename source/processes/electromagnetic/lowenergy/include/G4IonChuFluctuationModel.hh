@@ -21,17 +21,17 @@
 // Modifications: 
 // 18/08/2000  V.Ivanchenko First implementation
 //
-// Class Description: 
+// Class description: 
 //
 // The aproximation of additional ion energy loss fluctuations 
 // W.K.Chu, In: Ion Beam Handbook for Material Analysis.
 // eds. J.W. Mayer and E. Rimini (Academic Press, New York, 1977).
 // Q.Yang et al., NIM B61(1991)149-155.
-//
-// Class Description: End 
-//
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
+
 // -------------------------------------------------------------------
-//
+
 
 #ifndef G4IonChuFluctuationModel_h
 #define G4IonChuFluctuationModel_h 1

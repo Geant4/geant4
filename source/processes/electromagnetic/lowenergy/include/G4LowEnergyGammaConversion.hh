@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.hh,v 1.5 2000-06-22 02:25:25 pia Exp $
+// $Id: G4LowEnergyGammaConversion.hh,v 1.6 2000-11-03 10:29:50 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,11 @@
 //      CERN, CN Division, ASD group
 //      ------------ G4LowEnergyGammaConversion physics process ------
 //                   by A.Forti 1999/03/02
+//
+// Class description:
+// Low Energy process, Photon conversion
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // ************************************************************
 
 #ifndef G4LowEnergyGammaConversion_h

@@ -26,9 +26,8 @@
 // Ion effective charge model
 // J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
 // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
-//
-// Class Description: End 
-//
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // -------------------------------------------------------------------
 //
 

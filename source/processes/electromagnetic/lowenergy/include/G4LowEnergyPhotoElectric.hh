@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.13 2000-06-22 02:25:26 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.14 2000-11-03 10:29:51 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,11 @@
 //      CERN, CN Division, ASD group
 //      ------------ G4LowEnergyPhotoElectric physics process ------
 //                   by A.Forti  1999/03/02
+//
+// Class description:
+// Low Energy Electromagnetic process, Photoelectric effect
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // ************************************************************
 
 #ifndef G4LowEnergyPhotoElectric_h

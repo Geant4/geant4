@@ -17,20 +17,7 @@
 //                was made on the base of G4hIonisation class
 //                developed by Laszlo Urban
 // ************************************************************
-// Class Description:
-// G4hLowEnergyIonisation class is the extention of the ionisation 
-// process for the slow charged hadrons and ions. The physics model is
-// described in CERN-OPEN-99-121 and CERN-OPEN-99-300. User have a 
-// possibility to define a parametrisation tables for electronic
-// stopping powers and nuclear stopping powers via its name.
-// The list of available tables:
-// Electronic stopping powers: "ICRU_49p" (default), "ICRU_49He",
-//                             "Ziegler1977p", "Ziegler1985p",
-//                             "Ziegler1977He" 
-// Nuclear stopping powers:    "ICRU_49" (default), "Ziegler1977",
-//                             "Ziegler1985"
-// Class Description - End
-//
+
 // ************************************************************
 // 28 July   1999 V.Ivanchenko cleen up
 // 17 August 1999 G.Mancinelli implemented ICRU parametrization (protons)  
@@ -43,6 +30,22 @@
 // 23 Oct    2000 V.Ivanchenko Renew comments
 // ------------------------------------------------------------
  
+// Class Description:
+// Ionisation process of charged hadrons and ions, including low energy
+// extensions
+// The physics model is described in CERN-OPEN-99-121 and CERN-OPEN-99-300. 
+// The user may select parametrisation tables for electronic
+// stopping powers and nuclear stopping powers
+// The list of available tables:
+// Electronic stopping powers: "ICRU_49p" (default), "ICRU_49He",
+//                             "Ziegler1977p", "Ziegler1985p",
+//                             "Ziegler1977He" 
+// Nuclear stopping powers:    "ICRU_49" (default), "Ziegler1977",
+//                             "Ziegler1985"
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
+// ------------------------------------------------------------
+
 #ifndef G4hLowEnergyIonisation_h
 #define G4hLowEnergyIonisation_h 1
  

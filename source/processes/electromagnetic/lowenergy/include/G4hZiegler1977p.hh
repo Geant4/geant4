@@ -26,9 +26,8 @@
 // Electronic stopping power parametrised according to
 // H.H.Andersen & J.F.Ziegler, Hydrogen Stopping Powers and
 // Ranges in All Elements, Vol.3, Pergamon Press, 1977
-//
-// Class Description: End 
-//
+// Further documentation available from http://www.ge.infn.it/geant4/lowE//
+
 // -------------------------------------------------------------------
 //
 

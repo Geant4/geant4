@@ -23,10 +23,9 @@
 //
 // Class Description: 
 //
-// Low energy hadrons/ions ionisation parametrisation
-//
-// Class Description: End 
-//
+// Low energy hadrons/ions ionisation parameterisation
+// Further documentation available from http://www.ge.infn.it/geant4/lowE//
+
 // -------------------------------------------------------------------
 //
 

@@ -23,11 +23,10 @@
 //
 // Class Description: 
 //
-// Electronic stopping power parametrised according to
+// Electronic stopping power parameterised according to
 // ICRU Report N49, 1993. J.F. Ziegler model for He ion.
-//
-// Class Description: End 
-//
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // -------------------------------------------------------------------
 //
 

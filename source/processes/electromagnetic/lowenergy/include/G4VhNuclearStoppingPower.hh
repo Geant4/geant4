@@ -23,10 +23,9 @@
 //
 // Class Description: 
 //
-// Hadrons/ions nuclear stopping power parametrisation
-//
-// Class Description: End 
-//
+// Hadrons/ions nuclear stopping power parameterisation
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // -------------------------------------------------------------------
 //
 

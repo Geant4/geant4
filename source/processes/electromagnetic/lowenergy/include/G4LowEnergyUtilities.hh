@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyUtilities.hh,v 1.5 2000-06-22 02:25:27 pia Exp $
+// $Id: G4LowEnergyUtilities.hh,v 1.6 2000-11-03 10:29:51 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,11 @@
 //      CERN, CN Division, ASD group
 //      ------------ G4LowEnergyPhotoElectric physics process ------
 //                   by A.Forti 1999/06/28
+//
+// Class description:
+// Class for the handling of the data libraries
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // ************************************************************
 
 #ifndef G4LowEnergyUtilities_h

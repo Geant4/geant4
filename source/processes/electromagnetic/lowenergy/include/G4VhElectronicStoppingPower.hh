@@ -24,9 +24,8 @@
 // Class Description: 
 //
 // Low energy hadrons/ions electronic stopping power parametrisation
-//
-// Class Description: End 
-//
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // -------------------------------------------------------------------
 //
 

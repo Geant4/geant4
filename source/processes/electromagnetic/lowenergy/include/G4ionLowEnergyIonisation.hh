@@ -16,12 +16,14 @@
 //                by Vladimir Ivanchenko, 6 September 1999 
 //                was made on the base of G4hLowEnergyIonisation class
 // ************************************************************
-// Class Description:
-// It is the extention of the ionisation process for the slow 
-// charged ions. Physics model is described in CERN-OPEN-99-XXX.
-// Class Description - End
-// ************************************************************
 //  6 September 1999 V.Ivanchenko create
+// ************************************************************
+//
+// Class Description:
+// This class is OBSOLETE; the same functionality is now provided by 
+// G4hLowEnergyIonisation 
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // ------------------------------------------------------------
  
 #ifndef G4ionLowEnergyIonisation_h

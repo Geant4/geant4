@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.hh,v 1.8 2000-10-15 02:41:16 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.hh,v 1.9 2000-11-03 10:29:51 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -40,6 +40,10 @@
 // 31/03/00 V.Ivanchenko rename to lowenergy as G4hLowEnergyLoss.hh 
 // 09/08/00 V.Ivanchenko remove GetContinuousStepLimit and IsApplicable
 //
+// Class description:
+// Class for Low Energy electromagnetic energy loss of hadrons 
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // ****************************************************************************
 
 #ifndef G4hLowEnergyLoss_h

@@ -24,10 +24,9 @@
 //
 // Class Description: 
 //
-// Abstract base class for hadron electronic energy loss model
-//
-// Class Description: End 
-//
+// Abstract class for Low Energy Electromagnetic models
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // -------------------------------------------------------------------
 //
 

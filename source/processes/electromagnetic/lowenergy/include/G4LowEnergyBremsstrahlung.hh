@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.11 2000-04-19 13:20:53 lefebure Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.12 2000-11-03 10:29:50 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,6 +22,10 @@
 // - First implementation of continuous energy loss.
 //
 //
+// Class description:
+// Low Energy electromagnetic process, Bremsstrahlung
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // ************************************************************
 
 #ifndef G4LowEnergyBremsstrahlung_h

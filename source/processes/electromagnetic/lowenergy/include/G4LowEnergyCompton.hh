@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.hh,v 1.6 2000-06-22 02:25:24 pia Exp $
+// $Id: G4LowEnergyCompton.hh,v 1.7 2000-11-03 10:29:50 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,11 @@
 //      CERN, CN Division, ASD group
 //      ------------ G4LowEnergyCompton physics process ------
 //                   by A.Forti 1999/03/02
+//
+// Class description:
+// Low Energy electromagnetic process, Compton
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // ************************************************************
 
 #ifndef G4LowEnergyCompton_h
