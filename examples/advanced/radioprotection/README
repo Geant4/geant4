@@ -154,12 +154,12 @@ alpha: speZ=2.txt
 
 3.1 UI
 The user can define primary particles with the following command:
-/gun/particle proton
-/gun/particle alpha
-/gun/particle IonC12
-/gun/particle IonO16
-/gun/particle IonSi28
-/gun/particle IonFe52
+/gun/particleType proton
+/gun/particleType alpha
+/gun/particleType IonC12
+/gun/particleType IonO16
+/gun/particleType IonSi28
+/gun/particleType IonFe52
 
 The user can select interactively the configuration with the following
 UI commands:

@@ -27,7 +27,7 @@
 //    *                                              *
 //    ************************************************
 //
-// $Id: RemSimPrimaryGeneratorMessenger.hh,v 1.4 2004-05-22 12:57:05 guatelli Exp $
+// $Id: RemSimPrimaryGeneratorMessenger.hh,v 1.5 2004-11-22 16:51:38 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Code developed by:  S.Guatelli, guatelli@ge.infn.it
@@ -58,7 +58,8 @@ public:
 private:
   RemSimPrimaryGeneratorAction* primary;//pointer to detector
   G4UIdirectory*                gunDir; 
-  G4UIcmdWithAString*           fluxCmd; //change vehicle 
+  G4UIcmdWithAString*           fluxCmd; //change vehicle
+  G4UIcmdWithAString*           particleCmd; //change vehicle  
 };
 #endif
 
