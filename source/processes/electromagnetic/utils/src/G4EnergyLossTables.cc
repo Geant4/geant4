@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.cc,v 1.30 2003-11-14 12:31:11 vnivanch Exp $
+// $Id: G4EnergyLossTables.cc,v 1.31 2003-11-24 12:12:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -819,7 +819,8 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
   
   if (!inverseRangeTable) {
     if(check) return G4LossTableManager::Instance()->GetEnergy(aParticle,range,couple);
-    else      ParticleHaveNoLoss(aParticle,"InverseRange");
+    else      return DBL_MAX;      
+    //    else      ParticleHaveNoLoss(aParticle,"InverseRange");
   }
 
   G4double scaledrange,scaledKineticEnergy ;

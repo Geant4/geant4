@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.34 2003-11-12 16:18:10 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.35 2003-11-24 12:12:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -335,7 +335,7 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
       for(G4int i=0; i<n_loss; i++) {
         G4VEnergyLossProcess* em = loss_vector[i];
         if(aParticle == part_vector[i]) SetParameters(loss_vector[i]);
-        if (tables_are_built[i] && em->SecondaryParticle() == theElectron) {
+        if (tables_are_built[i] && em->SecondaryParticle() == theElectron && eIonisation ) {
                 em->SetSecondaryRangeTable(eIonisation->RangeTable());
         }
       }
