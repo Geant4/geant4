@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTDNEW.cc,v 1.4 2003-04-18 12:44:05 vnivanch Exp $
+// $Id: G4MultipleScatteringSTDNEW.cc,v 1.5 2003-04-24 07:26:26 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -85,7 +85,7 @@ G4MultipleScatteringSTDNEW::G4MultipleScatteringSTDNEW(const G4String& processNa
        tLast (0.0),
        zLast (0.0),
        boundary(true),
-       facrange(0.199),tlimit(1.e10*mm),tlimitmin(1.e-7*mm),
+       facrange(0.199),tlimit(1.e10*mm),tlimitmin(1.e-6*mm),
        cf(1.001),
        stepno(0),stepnolastmsc(-1000000),nsmallstep(5),
        laststep(0.),

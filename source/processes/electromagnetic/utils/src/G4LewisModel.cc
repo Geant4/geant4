@@ -70,7 +70,8 @@ G4LewisModel::G4LewisModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
   NuclCorrPar (m_NuclCorrPar),
   FactPar(m_FactPar),
   facxsi(m_facxsi),
-  samplez(m_samplez)
+  samplez(m_samplez),
+  stepmin(1.e-6*mm)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -400,8 +401,7 @@ G4double G4LewisModel::GeomPathLength(
 			  G4double truePathLength)
 {
   //  do the true -> geom transformation
-  const G4double ztmax = 201./203.;
-  const G4double tmax  = 1.e20*mm ;
+  const G4double ztmin = 1./3., ztmax = 0.98 ;
 
   lambda0 = lambda;
   lambda1 = -1.;
@@ -444,28 +444,25 @@ G4double G4LewisModel::GeomPathLength(
     }
   }
     //  sample z
+  G4double zPathLength = zmean ;
   G4double zt = zmean/tPathLength ;
-  if (samplez && zt < ztmax && zt > 0.5) {
+  if (tPathLength >= stepmin && samplez && zt > ztmin && zt < ztmax) {
     G4double cz = 0.5*(3.*zt-1.)/(1.-zt) ;
-
-    if (tPathLength < exp(log(tmax)/(2.*cz))) {
-      G4double cz1 = 1.+cz ;
-      G4double grej0 = exp(cz1*log(cz*tPathLength/cz1))/cz ;
-      if (grej0 > 0.0) {
-        G4double grej;
-        do {
-          zmean = tPathLength*exp(log(G4UniformRand())/cz1) ;
-          grej  = exp(cz*log(zmean))*(tPathLength-zmean) ;
-          if (grej > grej0) {
-	     G4cout << "G4LewisModel: Warning! majoranta " << grej0 << " < " << grej 
-	            << " grej/grej0= " << grej/grej0 << G4endl;
-          }
-        } while (grej < grej0*G4UniformRand()) ;
-      }
-    }
+    G4double cz1 = 1.+cz ;
+    G4double u0 = cz/cz1 ;
+    G4double u,grej ;
+    G4double grej0 = exp(cz*log(u0))*(1.-u0) ;
+    do {
+        u = exp(log(G4UniformRand())/cz1) ;
+        grej  = exp(cz*log(u))*(1.-u) ;
+        if (grej > grej0)
+            G4cout << "G4LewisModel: Warning! majorant "
+                   << grej0 << " < " << grej << G4endl;
+      } while (grej < grej0*G4UniformRand()) ;
+   zPathLength = tPathLength*u ;
   }
 
-  return zmean;
+  return zPathLength ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -520,88 +517,94 @@ G4double G4LewisModel::SampleCosineTheta(G4double trueStepLength)
 {
   G4double cth = 1.;
   currentTau = trueStepLength/lambda0;
+  if(trueStepLength < stepmin)
+    cth = exp(-currentTau) ;
+  else
+  {       
 //  G4cout << "tau= " << currentTau << " lambda1= " << lambda1 << " lambdam= " << lambdam << G4endl;
-  if (currentTau > taubig) cth = -1.+2.*G4UniformRand();
-  else if (currentTau >= tausmall)
-  {
-    if(lambda1 > 0.)
+    if (currentTau > taubig) cth = -1.+2.*G4UniformRand();
+    else if (currentTau >= tausmall)
     {
-      if (lambdam < 0.)
-        currentTau = -alam*log(1.-trueStepLength/alam)/lambda0 ;
-      else
-        currentTau = -log(cthm)-alam*log(1.-(trueStepLength-0.5*tPathLength)/alam)/lambdam ;
-    }
-    if(currentTau > taubig) cth = -1.+2.*G4UniformRand();
-    else
-    {
-      const G4double amax = 25. ;
-      const G4double tau0 = 0.02  ;
-
-      G4double a;
-
-      G4double w = log(currentTau/tau0) ;
-      if (currentTau < tau0) a = (alfa1-alfa2*w)/currentTau ;
-      else            a = (alfa1+alfa3*w)/currentTau ;
-
-      G4double x0 = 1.-xsi/a ;
-      if(x0 < 0.) x0 = 0. ;
-
-      // from continuity of the 1st derivatives
-      G4double c = a*(b-x0) ;
-      if(a*currentTau < c0) c = c0*(b-x0)/currentTau ;
-
-      if(c == 1.) c=1.000001 ;
-      if(c == 2.) c=2.000001 ;
-      if(c == 3.) c=3.000001 ;
-
-      G4double ea = 0.0;
-      if (a*(1.-x0) < amax) ea = exp(-a*(1.-x0)) ;
-
-      G4double eaa = 1.-ea ;
-      G4double xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
-
-      G4double b1 = b+1. ;
-      G4double bx = b-x0 ;
-      G4double eb1= exp((c-1.)*log(b1)) ;
-      G4double ebx= exp((c-1.)*log(bx)) ;
-
-      G4double xmean2  = (x0*eb1+ebx+(eb1*bx-b1*ebx)/(2.-c))/(eb1-ebx) ;
-      G4double xmeanth = exp(-currentTau) ;
-
-      G4double cnorm1 = a/eaa ;
-      G4double cnorm2 = (c-1.)*eb1*ebx/(eb1-ebx) ;
-      G4double f1x0 = cnorm1*exp(-a*(1.-x0)) ;
-      G4double f2x0 = cnorm2/exp(c*log(b-x0)) ;
-
-      // from continuity at x=x0
-      G4double prob = f2x0/(f1x0+f2x0) ;
-      // from xmean = xmeanth
-      G4double qprob = (f1x0+f2x0)*xmeanth/(f2x0*xmean1+f1x0*xmean2) ;
-
-      // protection against qprob > 1
-      if(qprob > 1.)
+      if(lambda1 > 0.)
       {
-        qprob = 1. ;
-        prob = (xmeanth-xmean2)/(xmean1-xmean2) ;
-      }
-/*
-      G4cout << "tau= " << currentTau << " prob= " << prob << " qprob= " << qprob << G4endl;
-      G4cout << "ea= " << ea << " eaa= " << eaa << " a= " << a
-              << " b= " << b << " b1= " << b1 << " bx= " << bx
-	      << " ebx= " << ebx << " eb1= " << eb1 << " c= " << c
-	      << G4endl;
-*/
-      // sampling of costheta
-      if (G4UniformRand() < qprob)
-      {
-       if (G4UniformRand() < prob)
-           cth = 1.+log(ea+G4UniformRand()*eaa)/a ;
+        if (lambdam < 0.)
+          currentTau = -alam*log(1.-trueStepLength/alam)/lambda0 ;
         else
-           cth = b-b1*bx/exp(log(ebx-G4UniformRand()*(ebx-eb1))/(c-1.)) ;
+          currentTau = -log(cthm)-alam*
+                       log(1.-(trueStepLength-0.5*tPathLength)/alam)/lambdam ;
       }
+      if(currentTau > taubig) cth = -1.+2.*G4UniformRand();
       else
       {
-        cth = -1.+2.*G4UniformRand();
+        const G4double amax = 25. ;
+        const G4double tau0 = 0.02  ;
+
+        G4double a;
+
+        G4double w = log(currentTau/tau0) ;
+        if (currentTau < tau0) a = (alfa1-alfa2*w)/currentTau ;
+        else            a = (alfa1+alfa3*w)/currentTau ;
+
+        G4double x0 = 1.-xsi/a ;
+        if(x0 < 0.) x0 = 0. ;
+
+        // from continuity of the 1st derivatives
+        G4double c = a*(b-x0) ;
+        if(a*currentTau < c0) c = c0*(b-x0)/currentTau ;
+
+        if(c == 1.) c=1.000001 ;
+        if(c == 2.) c=2.000001 ;
+        if(c == 3.) c=3.000001 ;
+
+        G4double ea = 0.0;
+        if (a*(1.-x0) < amax) ea = exp(-a*(1.-x0)) ;
+
+        G4double eaa = 1.-ea ;
+        G4double xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
+
+        G4double b1 = b+1. ;
+        G4double bx = b-x0 ;
+        G4double eb1= exp((c-1.)*log(b1)) ;
+        G4double ebx= exp((c-1.)*log(bx)) ;
+
+        G4double xmean2  = (x0*eb1+ebx+(eb1*bx-b1*ebx)/(2.-c))/(eb1-ebx) ;
+        G4double xmeanth = exp(-currentTau) ;
+
+        G4double cnorm1 = a/eaa ;
+        G4double cnorm2 = (c-1.)*eb1*ebx/(eb1-ebx) ;
+        G4double f1x0 = cnorm1*exp(-a*(1.-x0)) ;
+        G4double f2x0 = cnorm2/exp(c*log(b-x0)) ;
+
+        // from continuity at x=x0
+        G4double prob = f2x0/(f1x0+f2x0) ;
+        // from xmean = xmeanth
+        G4double qprob = (f1x0+f2x0)*xmeanth/(f2x0*xmean1+f1x0*xmean2) ;
+
+        // protection against qprob > 1
+        if(qprob > 1.)
+        {
+          qprob = 1. ;
+          prob = (xmeanth-xmean2)/(xmean1-xmean2) ;
+        }
+/*
+        G4cout << "tau= " << currentTau << " prob= " << prob << " qprob= " << qprob << G4endl;
+        G4cout << "ea= " << ea << " eaa= " << eaa << " a= " << a
+               << " b= " << b << " b1= " << b1 << " bx= " << bx
+	       << " ebx= " << ebx << " eb1= " << eb1 << " c= " << c
+	       << G4endl;
+*/
+        // sampling of costheta
+        if (G4UniformRand() < qprob)
+        {
+          if (G4UniformRand() < prob)
+             cth = 1.+log(ea+G4UniformRand()*eaa)/a ;
+          else
+             cth = b-b1*bx/exp(log(ebx-G4UniformRand()*(ebx-eb1))/(c-1.)) ;
+        }
+        else
+        {
+          cth = -1.+2.*G4UniformRand();
+        }
       }
     }
   }

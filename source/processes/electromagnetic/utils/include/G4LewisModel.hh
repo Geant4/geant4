@@ -165,6 +165,8 @@ private:
 
   G4bool   samplez;
 
+  G4double stepmin ;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
