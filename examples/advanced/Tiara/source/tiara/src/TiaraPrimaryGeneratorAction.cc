@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraPrimaryGeneratorAction.cc,v 1.2 2003-11-07 12:39:11 vnivanch Exp $
+// $Id: TiaraPrimaryGeneratorAction.cc,v 1.3 2003-12-09 08:48:05 daquinog Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,17 +61,17 @@ TiaraPrimaryGeneratorAction::~TiaraPrimaryGeneratorAction()
   delete fEnergyGenerator;
 }
 
-/*
 TiaraPrimaryGeneratorAction::
-TiaraPrimaryGeneratorAction(const TiaraPrimaryGeneratorAction &rhs) {
-  
+TiaraPrimaryGeneratorAction(const TiaraPrimaryGeneratorAction &rhs)
+  : G4VUserPrimaryGeneratorAction()
+{  
   *this = rhs;
 }
 
 TiaraPrimaryGeneratorAction &
 TiaraPrimaryGeneratorAction::
-operator=(const TiaraPrimaryGeneratorAction &rhs) {
-  
+operator=(const TiaraPrimaryGeneratorAction &rhs)
+{  
   if (this != &rhs) {
     fEnergyGenerator = rhs.fEnergyGenerator->Clone();
     fDirectionGenerator = rhs.fDirectionGenerator->Clone(); 
@@ -80,7 +80,6 @@ operator=(const TiaraPrimaryGeneratorAction &rhs) {
   }
   return *this;
 }
-*/
 
 void TiaraPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
