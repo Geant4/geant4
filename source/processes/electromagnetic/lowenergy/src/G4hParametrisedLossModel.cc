@@ -103,6 +103,8 @@ void G4hParametrisedLossModel::InitializeMe()
     highEnergyLimit = 2.0*MeV;
     lowEnergyLimit  = 1.0*keV;
   }  
+  //G4cout << "G4hParametrisedLossModel: the model <" << modelName 
+  //       << "> is accepted" << G4endl;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -136,6 +138,9 @@ G4double G4hParametrisedLossModel::TheValue(
                         * proton_mass_c2/(aParticle->GetPDGMass());
 
   G4double eloss = StoppingPower(material,scaledEnergy) * theZieglerFactor; 
+
+  // G4cout << "G4hParametrisedLossModel: the model <" << modelName 
+  //       << "> return " << eloss*mm/MeV << G4endl;
 
   return eloss;
 }

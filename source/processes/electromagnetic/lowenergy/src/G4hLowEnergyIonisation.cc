@@ -50,6 +50,7 @@
 // 23 Nov.  2000 V.Ivanchenko Ion type fluctuations only for charge>0
 // 10 May   2001 V.Ivanchenko Clean up againist Linux compilation with -Wall
 // 23 May   2001 V.Ivanchenko Minor fix in PostStepDoIt
+// 07 June  2001 V.Ivanchenko Clean up AntiProtonDEDX + add print out
 // -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -178,6 +179,10 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
   
   //  just call BuildLossTable+BuildLambdaTable
 {
+  if(verboseLevel > 0) {
+    G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable for "
+           << aParticleType.GetParticleName() << G4endl;
+  }
   InitializeParametrisation() ;
   G4Proton* theProton = G4Proton::Proton();
   G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
@@ -209,12 +214,27 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
 	  CounterOfpbarProcess++;
 	}
     }
+
+  if(verboseLevel > 0) {
+    G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable: "
+           << "Loss table is built" << G4endl;
+  }
   
   BuildLambdaTable(aParticleType) ;
+
+  if(verboseLevel > 0) {
+    G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable: "
+           << "DEDX table will be built" << G4endl;
+  }
 
   BuildDEDXTable(aParticleType) ;
 
   if((&aParticleType == theProton) ) PrintInfoDefinition() ;
+
+  if(verboseLevel > 0) {
+    G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable: end for "
+           << aParticleType.GetParticleName() << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -721,6 +741,13 @@ G4double G4hLowEnergyIonisation::ProtonParametrisedDEDX(
   // Delta rays energy
   eloss -= DeltaRaysEnergy(material,kineticEnergy,proton_mass_c2) ;
 
+  if(verboseLevel > 1) {
+    G4cout << "p E(MeV)= " << kineticEnergy/MeV
+           << " dE/dx(MeV/mm)= " << eloss*mm/MeV 
+           << " for " << material->GetName() 
+           << " model: " << theProtonModel << G4endl;
+  }
+
   if(eloss < 0.0) eloss = 0.0 ;  
   
   return eloss ;
@@ -734,36 +761,42 @@ G4double G4hLowEnergyIonisation::AntiProtonParametrisedDEDX(
 {
   G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
   G4double eloss = 0.0 ;
-  //  G4double goldenRule = 1.0 ;
 
-  // Choose the model
-  G4VLowEnergyModel * theModel ;
+  // Antiproton model is used
   if(theAntiProtonModel->IsInCharge(theAntiProton,material)) {
-    theModel = theAntiProtonModel ;
+    if(kineticEnergy < antiProtonLowEnergy) {
+      eloss = theAntiProtonModel->TheValue(theAntiProton,material,
+                                           antiProtonLowEnergy);
+    
+    // Parametrisation 
+    } else {
+      eloss = theAntiProtonModel->TheValue(theAntiProton,material,
+                                           kineticEnergy);
+    }
+
+  // The proton model is used + Barkas correction
   } else { 
-    theModel = theProtonModel ;
-    // goldenRule = AntiProtonGoldenRule(kineticEnergy) ;
-  }
-
-    // Free Electron Gas Model is not used for antiprotons  
-  if(kineticEnergy < antiProtonLowEnergy) {
-    eloss = theModel->TheValue(theAntiProton, material, antiProtonLowEnergy);
-    //          * sqrt(kineticEnergy/protonLowEnergy) ;
+    if(kineticEnergy < antiProtonLowEnergy) {
+      eloss = theProtonModel->TheValue(G4Proton::Proton(),material,
+                                       antiProtonLowEnergy);
     
-    // Parametrisation using golden rule for antiprotons
-  } else {
-    eloss = theModel->TheValue(theAntiProton, material, kineticEnergy) ;
+    // Parametrisation 
+    } else {
+      eloss = theProtonModel->TheValue(G4Proton::Proton(),material,
+                                       kineticEnergy);
+    }
+    if(theBarkas) eloss -= 2.0*BarkasTerm(material, kineticEnergy);
   }
-    
-  // Taken into account golden rule for antiprotons
-  //eloss *= goldenRule ;
-
-    // Proton model is used
-  if(theBarkas && (theModel == theProtonModel)) 
-                  eloss -= 2.0*BarkasTerm(material, kineticEnergy);
   
   // Delta rays energy
   eloss -= DeltaRaysEnergy(material,kineticEnergy,proton_mass_c2) ;
+
+  if(verboseLevel > 0) {
+    G4cout << "pbar E(MeV)= " << kineticEnergy/MeV
+           << " dE/dx(MeV/mm)= " << eloss*mm/MeV 
+           << " for " << material->GetName() 
+           << " model: " << theProtonModel << G4endl;
+  }
 
   if(eloss < 0.0) eloss = 0.0 ;  
   

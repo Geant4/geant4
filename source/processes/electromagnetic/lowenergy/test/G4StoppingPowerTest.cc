@@ -60,9 +60,7 @@
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
-
 #include "G4MultipleScattering.hh"
-
 #include "G4EnergyLossTables.hh"
 #include "G4ParticleChange.hh"
 #include "G4ParticleChange.hh"

@@ -20,16 +20,17 @@
 //                 Introduced sizes of L0, L1, L2 arrays
 // 23/05/2000 MGP  Made compliant to design
 // 02/08/2000 V.Ivanchenko Clean up according new design
-// 16/09/2000 S. Chauvie  Oscillator for all materials
+// 16/09/2000 S. Chauvie   Oscillator for all materials
 // 03/10/2000 V.Ivanchenko CodeWizard clean up
 // 05/11/2000 V.Ivanchenko "Aluminum" - correct name, end of cycle
 //            over shells, and two bugs from previous edition
 // 10/05/2001 V.Ivanchenko Clean up againist Linux compilation with -Wall
-// 13/05/2001 S. Chauvie corrected bugs
+// 13/05/2001 S. Chauvie   corrected bugs
 // 01/06/2001 V.Ivanchenko replace names by Z, change the validity range
 //                         from 50 keV to 5 KeV and change sign of the
 //                         Barkas term
-// 4/06/2001 S. Chauvie  Corrected small bugs
+// 04/06/2001 S. Chauvie   Corrected small bugs
+// 07/06/2001 V.Ivanchenko In IsInCharge only 6 pure materials return true now
 //
 // ************************************************************
 // It is the Quantal Harmonic Oscillator Model for energy loss
@@ -109,7 +110,12 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(
 
   G4bool hasMaterial = false;
 
-  if (material->GetNumberOfElements() == 1) hasMaterial = true;
+  if(material->GetNumberOfElements() == 1) {
+    G4int Z = (G4int)(material->GetZ());
+    for(G4int i=0; i<numberOfMaterials; i++) {
+      if(materialAvailable[i] == Z) hasMaterial = true;
+    }
+  }
   
   if ((particle->GetDefinition()) == (G4AntiProton::AntiProtonDefinition())
                && hasMaterial) isInCharge = true;
@@ -128,8 +134,12 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(
   
   G4bool hasMaterial = false;
   
-  if (material->GetNumberOfElements() == 1) hasMaterial = true;
-  
+  if(material->GetNumberOfElements() == 1) {
+    G4int Z = (G4int)(material->GetZ());
+    for(G4int i=0; i<numberOfMaterials; i++) {
+      if(materialAvailable[i] == Z) hasMaterial = true;
+    }
+  }
 
   if (aParticle == (G4AntiProton::AntiProtonDefinition())
                 && hasMaterial) isInCharge = true;
