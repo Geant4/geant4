@@ -119,9 +119,9 @@ G4int G4FermiSplitter::Initialize(const G4int a, const G4int z, const G4int n)
                 }
               // Remove wrong splits
               for (std::vector<std::vector<const G4VFermiFragment*> >::iterator 
-                     itsplits = tsplits.begin(); itsplits != tsplits.end(); itsplits++)
+                     itsplits1 = tsplits.begin(); itsplits1 != tsplits.end(); itsplits1++)
                 {
-                  std::sort((itsplits)->begin(), (itsplits)->end(),
+                  std::sort((itsplits1)->begin(), (itsplits1)->end(),
                             std::greater<const G4VFermiFragment*>());
                 }
               // add splits  (eliminating a few of them that are repeated)
@@ -129,9 +129,9 @@ G4int G4FermiSplitter::Initialize(const G4int a, const G4int z, const G4int n)
                 itlastsplit =  tsplits.begin();
               splits.push_back((*itlastsplit));
               for (std::vector<std::vector<const G4VFermiFragment*> >::iterator 
-                     itsplits = itlastsplit+1; itsplits != tsplits.end(); itsplits++)
+                     itsplits2 = itlastsplit+1; itsplits2 != tsplits.end(); itsplits2++)
                 {
-                  if ( (*itsplits) != (*itlastsplit)) splits.push_back((*itsplits));
+                  if ( (*itsplits2) != (*itlastsplit)) splits.push_back((*itsplits2));
                   itlastsplit++;
                 }
 	    }

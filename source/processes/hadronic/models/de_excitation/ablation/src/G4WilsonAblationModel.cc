@@ -438,10 +438,10 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
 //
       G4double totalProb1      = 0.0;
       G4double probEvapType[6] = {0.0};
-      for (G4int i=0; i<nChannels; i++)
+      for (G4int ich=0; ich<nChannels; ich++)
       {
-        totalProb1      += theChannels[i]->GetEmissionProbability();
-        probEvapType[i]  = totalProb1 / totalProb;
+        totalProb1      += theChannels[ich]->GetEmissionProbability();
+        probEvapType[ich]  = totalProb1 / totalProb;
       }
       G4double xi = G4UniformRand();
       G4int i     = 0;
