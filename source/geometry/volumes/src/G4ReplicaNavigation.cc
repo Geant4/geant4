@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReplicaNavigation.cc,v 1.2 1999-12-15 14:50:27 gunter Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.3 2000-05-17 16:32:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -172,8 +172,7 @@ G4double G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
       G4Exception("Unknown axis in G4ReplicaNavigation::DistanceToOut");
       break;
     }
-  if (safety<0) safety=0;
-  return safety;
+  return (safety >= kCarTolerance) ? safety : 0;
 }
 
 G4double G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
@@ -528,6 +527,7 @@ void G4ReplicaNavigation::ComputeTransformation(const G4int replicaNo,
       break;
     }
 }
+
 G4double G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
 					  const G4ThreeVector &globalDirection,
 					  const G4ThreeVector &localPoint,
@@ -563,7 +563,6 @@ G4double G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
 	  ourSafety=0;
 	}
     }
-  
   exiting=false;
   entering=false;
   
@@ -577,6 +576,7 @@ G4double G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
   sampleSafety=DistanceToOut(history.GetTopVolume(),
 			     history.GetTopReplicaNo(),
 			     localPoint);
+
   if (sampleSafety<ourSafety)
     {
       ourSafety=sampleSafety;
@@ -589,7 +589,8 @@ G4double G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
 			localDirection);
       if (sampleStep<ourStep)
 	{
-	  ourStep=sampleStep;
+	  if (sampleStep != 0)
+	    ourStep=sampleStep;
 	  exiting=true;
 	  validExitNormal=false;
 	}
