@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Visible.hh,v 1.5 1999-12-15 14:50:35 gunter Exp $
+// $Id: G4Visible.hh,v 1.6 1999-12-15 16:46:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,9 +23,9 @@
 #define G4VISIBLE_HH
 
 #include "globals.hh"
+#include "g4std/iostream"
 
 class G4VisAttributes;
-class G4std::ostream;
 
 class G4Visible {
 

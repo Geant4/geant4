@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Colour.hh,v 1.4 1999-12-15 14:50:32 gunter Exp $
+// $Id: G4Colour.hh,v 1.5 1999-12-15 16:46:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@
 #define G4COLOUR_HH
 
 #include "globals.hh"
-class G4std::ostream;
+#include "g4std/iostream"
 
 class G4Colour {
   friend G4std::ostream& operator << (G4std::ostream& os, const G4Colour& c);
