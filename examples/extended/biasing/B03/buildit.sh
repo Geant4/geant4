@@ -12,7 +12,7 @@
 source env.csh
 cd include/
 echo Calling swig
-set SWIG=${ANAPHE_BASE}/PublicDomainPackages/2.0.0/bin/swig-1.3.15
+set SWIG=$ANAPHETOP/specific/rh73_gcc32/PublicDomainPackages/2.0.0/bin/swig-1.3.15
 $SWIG -python -c++ -shadow -no_default B03App.i
 echo moving files
 mv B03App_wrap.cxx ../src/B03App_wrap.cc

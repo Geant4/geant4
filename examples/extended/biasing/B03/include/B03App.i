@@ -143,7 +143,7 @@ public:
     const char *Write(const G4MapGeometryCellCellScorer &cs){
       std::ostrstream tmpout;
       self->Print(cs, &tmpout);
-      string *value = new string(tmpout.str());
+      std::string *value = new std::string(tmpout.str());
       return value->c_str();
     };
   }
