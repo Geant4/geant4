@@ -44,6 +44,7 @@
 
 #include "globals.hh"
 #include "G4HadronicException.hh"
+#include "Randomize.hh"
 
 class G4VAngularDistribution 
 {
