@@ -1,3 +1,10 @@
+DAWN-V01-01-03  Satoshi TANAKA  May 11, 2000
+- In G4DAWNFILEViewer.cc, 
+  <       strcpy( fPSViewer, "ghostview" );
+  ---
+  > //    strcpy( fPSViewer, "ghostview" );
+  >       strcpy( fPSViewer, "gv" );
+
 DAWN-V00-01-08
 - Removed implicit casting from the previous updation
 
