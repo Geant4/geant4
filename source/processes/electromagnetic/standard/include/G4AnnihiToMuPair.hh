@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.hh,v 1.4 2004-05-07 16:06:38 vnivanch Exp $
+// $Id: G4AnnihiToMuPair.hh,v 1.5 2004-05-07 16:52:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
@@ -56,7 +56,7 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
 {
   public:  // with description
 
-     G4AnnihiToMuPair(const G4String& processName ="annihiToMuPair",
+     G4AnnihiToMuPair(const G4String& processName ="AnnihiToMuPair",
 		            G4ProcessType type = fElectromagnetic);
 
     ~G4AnnihiToMuPair();
