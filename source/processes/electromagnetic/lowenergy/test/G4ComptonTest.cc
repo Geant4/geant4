@@ -1,9 +1,30 @@
-// execute the following two lines _before_ gmake:
-// export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/3.6.3-sec/bin/
-// source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.3(-sec|-pre1|)/install/sharedinstall.[c]sh
+//
+// from: geant4/source/processes/electromagnetic/lowenergy/test/
+//
+// execute the following lines _before_ gmake, 
+// select the Anaphe version you want to use (3.6.3-sec for RH61 "old" compiler,
+// 3.6.3 for RH61, new compiler (gcc-2.95.2)):
+//
+// export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/3.6.3-sec/bin
+// source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.3-sec/install/sharedstart.sh
+//
+// (for the new compiler, use (sh derivates):
+// export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/3.6.3/bin
+// source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.3/install/sharedstart.sh
+// )
+//
+// or, for [t]csh fans (still "old" compiler):
+//
+// setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/3.6.3-sec/bin
+// source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.3-sec/install/sharedstart.csh
+//
+// [gmake and run your simulation]
 //
 // to start Lizard:
-// startLizard.sh --useHBook 
+// startLizard.sh --noLicense  
+//
+// see also: http://cern.ch/Anaphe 
+//
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -26,7 +47,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonTest.cc,v 1.12 2001-09-18 12:34:49 pfeiffer Exp $
+// $Id: G4ComptonTest.cc,v 1.13 2001-09-18 16:09:14 pfeiffer Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -85,7 +106,6 @@
 
 // New Histogramming (from AIDA and Anaphe):
 #include "Interfaces/IHistoManager.h"
-#include "Interfaces/IHistogram.h"
 #include "Interfaces/IHistogram1D.h"
 #include "Interfaces/IHistogram2D.h"
 
@@ -170,6 +190,8 @@ int main()
   // Declare the quantities which reflect the attributes of the nTuple(s).
   // These quantities are used as variables of their base-types (float),
   // the binding to their nTuple makes sure the updated values are stored.
+  // Don't forget to remove the declarations of these variables in the
+  // code below.
 
   // First tuple ("Primary"):
   Quantity<float> initialEnergy;

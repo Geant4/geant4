@@ -1,6 +1,7 @@
 
 # tell HistoManger where to find the histograms:
 hm.selectStore("comptonhisto.hbook")
+
 # ... and load them into memory:
 hEKin    = hm.load1D(10)
 hP       = hm.load1D(20)
@@ -43,10 +44,15 @@ nt1.listAttributes()
 nplot(nt1,"energyf","",0,20)
 nplot(nt1,"dedx","",0.,100)
 
+# prompt user for <return>
+wait()
+
 # get the secondaries ntuple and plot a few attributes from it
 nt2 = ntm.findNtuple("comptonhisto2.hbook::2" )
 nplot(nt2, "type", "", 0., 42)
 nplot(nt2, "e", "", 0., 100.)
+
+pl.psPrint("secondaries.ps")
 
 
 
