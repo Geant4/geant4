@@ -21,7 +21,7 @@
 // ********************************************************************
 //
  //
- // G4 Low energy model: nn or pp scattering
+ // G4 Low energy model: n-n or p-p scattering
  // F.W. Jones, L.G. Greeniaus, H.P. Wellisch
  //  
  // For further comments see G4LEpp.cc

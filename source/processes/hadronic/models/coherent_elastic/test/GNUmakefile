@@ -54,6 +54,7 @@ INCFLAGS := \
 
 ifeq ($(G4TARGET), G4LEppTest)
    CPPFLAGS+=-I$(G4INSTALL)/tests/tools/include -DMAKEHBOOK -DMAKEBOOK
+   EXTRALIBS+=-lG4hadronic_coherent_elastic
    EXTRALIBS+=-L$(G4INSTALL)/tests/tools/lib/$(G4SYSTEM) -lG4TestTool
    EXTRALIBS+=-L/cern/pro/lib -lpacklib
 endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
  //
- // G4 Low energy model: nn or pp scattering
+ // G4 Low energy model: n-n or p-p scattering
  // F.W. Jones, L.G. Greeniaus, H.P. Wellisch
  // 
 
@@ -741,31 +741,68 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       else
         je1 = midBin;
     } while (je2 - je1 > 1); 
-    G4int j;
-    abs(ek-elab[je1]) < abs(ek-elab[je2]) ? j = je1 : j = je2;
+    //    G4int j;
+    //abs(ek-elab[je1]) < abs(ek-elab[je2]) ? j = je1 : j = je2;
+    G4double delab = elab[je2] - elab[je1];
 
     // Sample the angle
 
     G4float sample = G4UniformRand();
     G4int ke1 = 0;
     G4int ke2 = NANGLE - 1;
+    G4double dsig = sig[je2][0] - sig[je1][0];
+    G4double rc = dsig/delab;
+    G4double b = sig[je1][0] - rc*elab[je1];
+    G4double sigint1 = rc*ek + b;
+    G4double sigint2 = 0.;
+
+    if (verboseLevel > 1) G4cout << "sample=" << sample << G4endl
+                                 << ke1 << " " << ke2 << " " 
+                                 << sigint1 << " " << sigint2 << G4endl;
+
     do {
       G4int midBin = (ke1 + ke2)/2;
-      if (sample < sig[j][midBin])
+      dsig = sig[je2][midBin] - sig[je1][midBin];
+      rc = dsig/delab;
+      b = sig[je1][midBin] - rc*elab[je1];
+      G4double sigint = rc*ek + b;
+      if (sample < sigint) {
         ke2 = midBin;
-      else
+        sigint2 = sigint;
+      }
+      else {
         ke1 = midBin;
+        sigint1 = sigint;
+      }
+      if (verboseLevel > 1)G4cout << ke1 << " " << ke2 << " " 
+                                  << sigint1 << " " << sigint2 << G4endl;
     } while (ke2 - ke1 > 1); 
 
-    // sometime in the future we might linearly interpolate the angle
+    // sigint1 and sigint2 should be recoverable from above loop
 
-    G4int k;
-    abs(sample-sig[j][ke1]) < abs(sample-sig[j][ke2]) ? k = ke1 : k = ke2;
-    G4double theta = (0.5 + k)*pi/180.;
+    //    G4double dsig = sig[je2][ke1] - sig[je1][ke1];
+    //    G4double rc = dsig/delab;
+    //    G4double b = sig[je1][ke1] - rc*elab[je1];
+    //    G4double sigint1 = rc*ek + b;
+
+    //    G4double dsig = sig[je2][ke2] - sig[je1][ke2];
+    //    G4double rc = dsig/delab;
+    //    G4double b = sig[je1][ke2] - rc*elab[je1];
+    //    G4double sigint2 = rc*ek + b;
+
+    dsig = sigint2 - sigint1;
+    rc = 1./dsig;
+    b = ke1 - rc*sigint1;
+    G4double kint = rc*sample + b;
+    G4double theta = (0.5 + kint)*pi/180.;
+
+    //    G4int k;
+    //abs(sample-sig[j][ke1]) < abs(sample-sig[j][ke2]) ? k = ke1 : k = ke2;
+    //    G4double theta = (0.5 + k)*pi/180.;
 
     if (verboseLevel > 1) {
-      G4cout << "   energy bin " << j << " energy=" << elab[j] << G4endl;
-      G4cout << "   angle bin " << k << " angle=" << theta/degree << G4endl;
+      G4cout << "   energy bin " << je1 << " energy=" << elab[je1] << G4endl;
+      G4cout << "   angle bin " << kint << " angle=" << theta/degree << G4endl;
     }
 
 

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-11-24 17:59:56 starkov Exp $
+# $Id: GNUmakefile,v 1.2 2001-10-11 08:53:58 fjones Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -31,4 +31,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/myexample/include
            
+   CPPFLAGS+=-I$(G4INSTALL)/tests/tools/include -DMAKEHBOOK -DMAKEBOOK
+
 include $(G4INSTALL)/config/common.gmk
