@@ -12,7 +12,7 @@
 //      CERN, IT Division, ASD group
 //      CERN, Geneva, Switzerland
 //
-//      File name:     G4Epdl97File
+//      File name:     G4Epdl97File.hh
 //
 //      Author:        Alessandra Forti (Alessandra.Forti@cern.ch)
 // 

@@ -30,7 +30,7 @@
 // C++ Headers
 #include <iostream.h>
 #include <fstream.h>
-
+#include <string.h>
 
 // Constructors
 G4VDataFile::G4VDataFile(const G4String& dataFile):
@@ -42,7 +42,6 @@ G4VDataFile::G4VDataFile(const G4String& dataFile):
 G4VDataFile::~G4VDataFile()
 {
   if(buf){
-    cout<<"VDataFile destructor"<<endl;
     delete [] buf;
   }
 }
@@ -54,12 +53,12 @@ void G4VDataFile::OpenFile(){
   G4String dir_file = dir + _filename;
   _istr.open(dir_file.data(), ios::in | ios::nocreate);
   
-  if(!_istr.is_open()){
+  //  if(!_istr.is_open()){
     
-    cout<<"G4VDataFile::OpenFile() Error: file "
-	<<_filename<<" not found."<<endl;
-    exit(0);
-  }
+  //  cout<<"G4VDataFile::OpenFile() Error: file "
+  // 	<<_filename<<" not found."<<endl;
+  //  exit(0);
+  // }
 }
 
 void G4VDataFile::CloseFile(){
@@ -83,7 +82,7 @@ streampos G4VDataFile::TellPos(){
 
 G4bool G4VDataFile::IsOpen(){
 
-  return _istr.is_open();
+  return TRUE;//_istr.is_open();
 }
 
 void G4VDataFile::SeekPos(streampos pos){
@@ -111,6 +110,7 @@ void G4VDataFile::GetLine(){
 G4int G4VDataFile::LineLength(){
 
   return strlen(buf);
+
 }
 
 char* G4VDataFile::GetBuf(){

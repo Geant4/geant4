@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.1 1999-03-02 17:16:28 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.2 1999-03-27 19:16:33 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,6 +55,7 @@ class G4PhysicsVector;
 
 //RW Headers
 #include <rw/tpslist.h>
+#include "CLHEP/Hist/HBookFile.h"
 
 class G4LowEnergyPhotoElectric : public G4VDiscreteProcess{
 
@@ -91,7 +92,7 @@ private:
 
   G4Element* SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton, G4Material* aMaterial);
 
-  void SelectRandomTransition(G4int, G4int*, RWTPtrSlist< RWTPtrSlist<G4DataVector> >*);
+  G4bool SelectRandomTransition(G4int, G4double*, RWTPtrSlist< RWTPtrSlist<G4DataVector> >*);
 
   G4double DataLogInterpolation(G4double Argument, 
 				G4double AtomicNumber, 
@@ -106,13 +107,19 @@ private:
   RWTPtrSlist< RWTPtrSlist<G4DataVector> >* theFluorTransitionTable;
   RWTPtrSlist< RWTPtrSlist<G4DataVector> >* theAugerTransitionTable;
 
-  G4double LowestEnergyLimit;      // low  energy limit of the crossection formula
-  G4double HighestEnergyLimit;     // high energy limit of the crossection formula 
-  G4int NumbBinTable;              // number of bins in the crossection table
+  G4double LowestEnergyLimit;      
+  G4double HighestEnergyLimit;     
+  G4int NumbBinTable;              
   
-  G4double MeanFreePath;            // actual Mean Free Path (current medium)
+  G4double MeanFreePath;           
+  //  HepTupleManager* PEPsdiManager;
+  HepTupleManager* PEManager;
+
 };
 
 
 #include "G4LowEnergyPhotoElectric.icc"
 #endif
+
+
+

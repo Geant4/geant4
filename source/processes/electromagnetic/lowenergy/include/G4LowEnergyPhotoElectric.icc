@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.icc,v 1.1 1999-03-02 17:16:28 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.icc,v 1.2 1999-03-27 19:16:46 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,6 @@ inline G4int G4LowEnergyPhotoElectric::FindBinLocation(G4double arg, G4PhysicsVe
   G4int numberOfBin = vec->GetVectorLength();
   G4int lowerBound = 0;
   G4int upperBound = numberOfBin-1;
-
   do {
 
     G4int midBin = (lowerBound + upperBound)/2;
@@ -87,4 +86,6 @@ inline G4int G4LowEnergyPhotoElectric::FindBinLocation(G4double arg, G4PhysicsVe
 
   return upperBound;
 }
+
+
 

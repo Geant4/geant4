@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.1 1999-03-02 17:17:55 aforti Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.2 1999-03-27 19:22:03 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,9 +33,9 @@
 
 #include "G4LowEnergyRayleigh.hh"
 #include "G4EnergyLossTables.hh"
-#include "G4EpdlData.hh"
+#include "G4Epdl97File.hh"
+#include "G4EpdlTables.hh"
 #include "CLHEP/String/Strings.h"
-//#include "globals.hh"
 #include <rw/tvordvec.h>
 
 // constructor
@@ -104,7 +104,7 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
 // (Nuc Phys 20(1960),15). GEANT4 internal units
 //
 
-  aParticleChange.Initialize(aTrack);
+  //  aParticleChange.Initialize(aTrack);
   
   // Dynamic particle quantities  
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();

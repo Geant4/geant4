@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.1 1999-03-02 17:17:53 aforti Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.2 1999-03-27 19:21:26 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,7 +102,7 @@ void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& GammaType
 
   // build the scattering function table
   BuildScatteringFunctionTable();
-   
+
   // Build mean free path table for the Compton Scattering process
   BuildMeanFreePathTable();
 }
@@ -116,7 +116,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
 // GEANT4 internal units
 //
 
-  aParticleChange.Initialize(aTrack);
+  //  aParticleChange.Initialize(aTrack);
 
   // Dynamic particle quantities  
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
@@ -124,12 +124,14 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
   G4double E0_m = GammaEnergy0 / electron_mass_c2 ;
   G4ParticleMomentum GammaDirection0 = aDynamicGamma->GetMomentumDirection();
 
+  //  cout<<"GammaEnergy "<<GammaEnergy0<<endl;
   // Select randomly one element 
   G4Material* aMaterial = aTrack.GetMaterial();
   const G4int numOfElem = aMaterial->GetNumberOfElements();
   
   G4Element* theElement = SelectRandomAtom(aDynamicGamma, aMaterial);
-  
+  //  cout<<"TheElement Name "<<theElement->GetName()<<endl;
+
   // sample the energy rate of the scattered gamma 
   G4double Val, sfPar;
   G4double ERate, ERate2, onecost, sint2; 
@@ -164,7 +166,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
    G4double cosTeta = 1. - onecost , sinTeta = sqrt (sint2);
    G4double Phi     = twopi * G4UniformRand() ;
    G4double dirx = sinTeta*cos(Phi) , diry = sinTeta*sin(Phi) , dirz = cosTeta ;
-
+   //   cout<<"CosTh: "<<cosTeta<<" phy: "<<Phi<<endl;
    //
    // update G4VParticleChange for the scattered gamma 
    //
@@ -211,7 +213,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
    }
 
    //  Reset NbOfInteractionLengthLeft and return aParticleChange
-
+   //   cout<<"End of Compton PostStepDoIt"<<endl;
    return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
 
@@ -321,7 +323,7 @@ G4Element* G4LowEnergyCompton::SelectRandomAtom(const G4DynamicParticle* aDynami
     }
 
     PartialSumSigma += theAtomNumDensityVector[i] * crossSection;
-    cout<<"rval: "<<rval<<"   PSS: "<<PartialSumSigma<<endl;
+    //    cout<<"rval: "<<rval<<"   PSS: "<<PartialSumSigma<<endl;
     if(rval <= PartialSumSigma) return ((*theElementVector)(i));
   }
 

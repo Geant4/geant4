@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.1 1999-03-02 17:17:54 aforti Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.2 1999-03-27 19:21:48 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,8 @@
 
 #include "G4LowEnergyGammaConversion.hh"
 #include "G4EnergyLossTables.hh"
-#include "G4EpdlData.hh"
+#include "G4Epdl97File.hh"
+#include "G4EpdlTables.hh"
 #include "CLHEP/String/Strings.h"
 //#include "globals.hh"
 #include <rw/tvordvec.h>
@@ -103,7 +104,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
 // pair creation in both nuclear and atomic electron fields. However triplet 
 // prodution is not generated.
  
-  aParticleChange.Initialize(aTrack);
+  // aParticleChange.Initialize(aTrack);
   G4Material* aMaterial = aTrack.GetMaterial();
   
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();

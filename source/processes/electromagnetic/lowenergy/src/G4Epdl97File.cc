@@ -39,7 +39,6 @@ G4Epdl97File::G4Epdl97File(const G4String& filename, G4int* paramVec):
 // Destructor  
 G4Epdl97File::~G4Epdl97File()
 {
-  cout<<"Epdl97File destructor"<<endl;
 }
 
 G4bool G4Epdl97File::FindTheElement(G4int numZ){
@@ -53,6 +52,7 @@ G4bool G4Epdl97File::FindTheElement(G4int numZ){
       
     }
   }
+  return elementFound;
 }
 
 G4bool G4Epdl97File::FindTheProcess(){
@@ -67,31 +67,23 @@ G4bool G4Epdl97File::FindTheProcess(){
 
       if(_flags[1] == flag(2,3).toInt()){
 
-	if(_flags[2] == 0){
+	if(_flags[2] == flag(5,3).toInt()){
 	  
-	  tableFound = TRUE;
-	}
+	  G4int subsh;
+	  G4int Xi3 = flag(31,1).toInt();
 	  
-	else{
-
-	  if(_flags[2] == flag(5,3).toInt()){
+	  if(Xi3 == 0){
 	    
-	    G4int subsh;
-	    G4int Xi3 = flag(31,1).toInt();
+	    subsh = flag(22,1).toInt();
+	  }
+	  else if(Xi3 == 1){
 	    
-	    if(Xi3 == 0){
-	      
-	      subsh = flag(22,1).toInt();
-	    }
-	    else if(Xi3 == 1){
-	      
-	      subsh = (flag(22,1) + flag(24,1)).toInt();
-	    }
-
-	    if(_flags[3] == subsh){
-	      
-	      tableFound = TRUE;
-	    }
+	    subsh = (flag(22,1) + flag(24,1)).toInt();
+	  }
+	  
+	  if(_flags[3] == subsh){
+	    
+	    tableFound = TRUE;
 	  }
 	}
       }
@@ -114,28 +106,20 @@ G4bool G4Epdl97File::FindOneElemProc(G4int& subsh){
       
       if(_flags[1] == flag(2,3).toInt()){
 	
-	if(_flags[2] == 0){
+	if(_flags[2] == flag(5,3).toInt()){
 	  
-          tableFound = TRUE;
-        }
-	
-        else{
+	  G4int Xi3 = flag(31,1).toInt(); 
 	  
-          if(_flags[2] == flag(5,3).toInt()){
+	  if(Xi3 == 0){
 	    
-	    G4int Xi3 = flag(31,1).toInt(); 
-
-	    if(Xi3 == 0){
-	      
-	      subsh = flag(22,1).toInt();
-	    }
-	    else if(Xi3 == 1){
-	      
-	      subsh = (flag(22,1) + flag(24,1)).toInt();
-	    }
-	    
-	    tableFound = TRUE;
+	    subsh = flag(22,1).toInt();
 	  }
+	  else if(Xi3 == 1){
+	    
+	    subsh = (flag(22,1) + flag(24,1)).toInt();
+	  }
+	  
+	  tableFound = TRUE;
 	}
       }
     }
