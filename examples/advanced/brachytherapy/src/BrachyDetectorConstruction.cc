@@ -36,7 +36,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.18 2003-05-09 17:15:00 gcosmo Exp $
+// $Id: BrachyDetectorConstruction.cc,v 1.19 2003-05-09 17:15:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"
@@ -167,7 +167,10 @@ void BrachyDetectorConstruction::SelectDetector(G4String val)
     }
     else
     {
-      if(val=="Iridium")detectorChoice = 3;
+      if(val=="Iridium")
+      {
+        detectorChoice = 3;
+      }
     }
   }
   G4cout << "Now Detector is " << val << G4endl;
