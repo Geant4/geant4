@@ -32,7 +32,7 @@
 // 
 // Creation date: 10.05.2002
 //
-// Modifications: 
+// Modifications: 09.12.2002 VI remove warning
 //
 //
 // -------------------------------------------------------------------
@@ -89,8 +89,8 @@ void G4SCProcessorStand::Initialise(const G4ParticleDefinition* p,
 
   for(size_t i=0; i<nMaterials; i++) {
 
-    const G4Material* material = (*theMaterialTable)[i];
-    rangeCuts.push_back(secondaryParticle->GetRangeThreshold(material));
+    const G4Material* aMaterial = (*theMaterialTable)[i];
+    rangeCuts.push_back(secondaryParticle->GetRangeThreshold(aMaterial));
   }
 }
 

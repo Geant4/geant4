@@ -32,7 +32,7 @@
 // 
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications: 09.12.2002 VI remove warnings
 //
 // Class Description: 
 //
@@ -57,7 +57,7 @@ public:
   ~G4UniversalFluctuation();
 
   virtual void SampleFluctuations(const G4Material*, const G4DynamicParticle*,
-				    G4double&, G4double&, G4double); 
+ 				        G4double&, G4double&, G4double); 
 
   virtual void Initialise(const G4ParticleDefinition*);
 
@@ -73,10 +73,8 @@ private:
   G4double particleMass;
   G4double chargeSquare;
 
-  const G4Material* material;
   const G4Material* lastMaterial;
   G4int materialIndex;
-  G4double tmax;
 
   // data members to speed up the fluctuation calculation
   G4double ipotFluct;

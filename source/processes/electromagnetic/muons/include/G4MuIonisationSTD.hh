@@ -43,6 +43,7 @@
 // 19-09-01 come back to previous process name "hIoni"
 // 29-10-01 all static functions no more inlined  
 // 10-05-02 V.Ivanchenko update to new design
+// 09-12-02 V.Ivanchenko remove warning
 //
 // Class Description: 
 //
@@ -108,7 +109,6 @@ inline G4double G4MuIonisationSTD::MinPrimaryEnergy(const G4ParticleDefinition* 
                                                     const G4Material*, 
                                                           G4double cut)
 {
-  G4double mass = p->GetPDGMass();
   G4double x = 0.5*cut/electron_mass_c2;
   G4double y = electron_mass_c2/mass;
   G4double g = x*y + sqrt((1. + x)*(1. + x*y*y));
