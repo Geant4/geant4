@@ -129,7 +129,7 @@ track                                   track-V04-01-03
 -----
 - Fixed initialisation of 'fCharge' in G4StepPoint constructor.
 
-tracking                                tracking-V04-01-13
+tracking                                tracking-V04-01-14
 --------
 - Fix to G4VTrajectory::DrawTrajectory for default colors.
 - Fixed unprotected pointer in G4SmoothTrajectoryPoint::CreateAttValues.
