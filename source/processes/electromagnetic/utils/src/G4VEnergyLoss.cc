@@ -5,12 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.15 2000-10-30 06:50:49 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.16 2000-11-22 20:44:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // --------------------------------------------------------------
 //  bug fixed in fluct., L.Urban 26/05/00
+//  bug fixed in fluct., L.Urban 22/11/00
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -930,7 +931,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   if(MeanLoss >= kappa*Tm)
   {
     electronDensity = aMaterial->GetElectronDensity() ;
-    siga = sqrt(Tm*(0.5-0.25*beta2)*step*
+    siga = sqrt(Tm*(1.0-0.5*beta2)*step*
                 factor*electronDensity*ChargeSquare/beta2) ;
     loss = G4RandGauss::shoot(MeanLoss,siga) ;
     if(loss < 0.) loss = 0. ;
