@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.hh,v 1.10 2001-07-22 01:00:22 johna Exp $
+// $Id: G4BoundingSphereScene.hh,v 1.11 2001-07-25 21:08:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,10 +44,12 @@
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
 
+class G4VModel;
+
 class G4BoundingSphereScene: public G4VGraphicsScene {
 
 public:
-  G4BoundingSphereScene ();
+  G4BoundingSphereScene (G4VModel* pModel = 0);
   virtual ~G4BoundingSphereScene ();
   void AddThis (const G4Box& s) {Accrue (s);}
   void AddThis (const G4Cons& s) {Accrue (s);}
@@ -90,6 +92,7 @@ public:
 
 private:
   void Accrue (const G4VSolid& solid);
+  G4VModel* fpModel;  // Instantiating code may optionally set this.
   G4Point3D fCentre;
   G4double fRadius;
   const G4Transform3D* fpObjectTransformation;
