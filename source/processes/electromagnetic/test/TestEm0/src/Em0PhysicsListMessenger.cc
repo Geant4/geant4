@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em0PhysicsListMessenger.cc,v 1.1 1999-01-08 16:32:36 gunter Exp $
+// $Id: Em0PhysicsListMessenger.cc,v 1.2 1999-07-12 18:00:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,26 +27,25 @@ Em0PhysicsListMessenger::Em0PhysicsListMessenger(Em0PhysicsList* EvAct)
   cutGCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutG",this);
   cutGCmd->SetGuidance("Set cut values by RANGE for Gamma.");
   cutGCmd->SetParameterName("range",true);
-  cutGCmd->SetDefaultValue(1.);
-  cutGCmd->SetDefaultUnit("mm");
+  cutGCmd->SetRange("range>0.");  
   cutGCmd->AvailableForStates(Idle);
+  
   cutECmd = new G4UIcmdWithADoubleAndUnit("/calor/cutC",this);
   cutECmd->SetGuidance("Set cut values by ENERGY for charged particles.");
   cutECmd->SetParameterName("energy",true);
-  cutECmd->SetDefaultValue(10.);
-  cutECmd->SetDefaultUnit("keV");
+  cutECmd->SetRange("energy>0.");
   cutECmd->AvailableForStates(Idle);
+  
   rCmd = new G4UIcmdWithADoubleAndUnit("/calor/range",this);
   rCmd->SetGuidance("Display the RANGE of Electron for the current material.");
   rCmd->SetParameterName("energy",true);
-  rCmd->SetDefaultValue(10.);
-  rCmd->SetDefaultUnit("keV");
+  rCmd->SetRange("energy>0.");
   rCmd->AvailableForStates(Idle);
+  
   eCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutE",this);
   eCmd->SetGuidance("Set cut values by RANGE for electron.");
   eCmd->SetParameterName("range",true);
-  eCmd->SetDefaultValue(1.);
-  eCmd->SetDefaultUnit("mm");
+  eCmd->SetRange("range>0.");
   eCmd->AvailableForStates(Idle);
 }
 

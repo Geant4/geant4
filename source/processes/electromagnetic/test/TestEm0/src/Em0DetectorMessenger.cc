@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em0DetectorMessenger.cc,v 1.1 1999-01-08 16:32:35 gunter Exp $
+// $Id: Em0DetectorMessenger.cc,v 1.2 1999-07-12 18:00:33 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,6 @@ Em0DetectorMessenger::Em0DetectorMessenger(Em0DetectorConstruction * Em0Det)
   MaterCmd = new G4UIcmdWithAString("/calor/setMat",this);
   MaterCmd->SetGuidance("Select material of the box.");
   MaterCmd->SetParameterName("choice",true);
-  MaterCmd->SetCandidates("Air H2liquid Water liquidArgon Aluminium Iron Lead Uranium");
   MaterCmd->AvailableForStates(Idle);
   
   SizeCmd = new G4UIcmdWithADoubleAndUnit("/calor/setSize",this);
