@@ -342,7 +342,7 @@ void G4hLowEnergyIonisationVI::BuildLossTable(
     // get material parameters needed for the energy loss calculation  
     const G4Material* material= (*theMaterialTable)[j];
 
-    G4double tCut = cutForDelta[j];
+    //    G4double tCut = cutForDelta[j];
 
     // low energy of Bethe-Bloch formula for this material
     G4double highE = G4std::max(highEnergy,theBetheBlochModel->
@@ -1397,7 +1397,7 @@ G4int G4hLowEnergyIonisationVI::SelectRandomAtom(const G4Material* material,
   }
 
   const G4ElementVector* theElementVector = material->GetElementVector();
-  G4std::vector<G4double> p(nElements);
+  G4std::vector<G4double> p;
   G4int index = material->GetIndex();
 
   G4double norm = 0.0;
@@ -1405,7 +1405,7 @@ G4int G4hLowEnergyIonisationVI::SelectRandomAtom(const G4Material* material,
 
     const G4VEMDataSet* set = zFluoDataVector[index]->GetComponent(j);
     G4double cross    = set->FindValue(kineticEnergy);
-    p[j] = cross;
+    p.push_back(cross);
     norm += cross;
   }
   G4double q = norm*G4UniformRand();
