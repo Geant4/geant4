@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5RunAction.hh,v 1.7 2001-10-16 11:56:28 maire Exp $
+// $Id: Em5RunAction.hh,v 1.8 2001-11-28 16:08:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,10 +120,7 @@ class Em5RunAction : public G4UserRunAction
     void Setnbinzvertex(G4int nbin);
     void Setzlow(G4double z);
     void Setzhigh(G4double z);
-    
-    void  SetRndmFreq(G4int val) {saveRndm = val;}
-    G4int GetRndmFreq()          {return saveRndm;}
-    
+
   private:
 
     void bookHisto();
@@ -184,7 +181,6 @@ class Em5RunAction : public G4UserRunAction
     G4int nbinvertexz;
  
     Em5RunMessenger* runMessenger;
-    G4int saveRndm;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5RunMessenger.cc,v 1.5 2001-10-16 11:56:29 maire Exp $
+// $Id: Em5RunMessenger.cc,v 1.6 2001-11-28 16:08:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,6 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -175,25 +174,6 @@ Em5RunMessenger::Em5RunMessenger(Em5RunAction* RA)
   setThhighbackCmd = new G4UIcmdWithADoubleAndUnit("/plots/setThhighback",this);
   setThhighbackCmd->SetGuidance("set upper limit for backscattering Teta plot");
   setThhighbackCmd->SetParameterName("Thhighback",false);
-    
-  RndmDir = new G4UIdirectory("/rndm/");
-  RndmDir->SetGuidance("Rndm status control.");
-  
-  RndmSaveCmd = new G4UIcmdWithAnInteger("/rndm/save",this);
-  RndmSaveCmd->SetGuidance("set frequency to save rndm status on files.");
-  RndmSaveCmd->SetGuidance("freq = 0 not saved");
-  RndmSaveCmd->SetGuidance("freq > 0 saved on: beginOfRun.rndm");
-  RndmSaveCmd->SetGuidance("freq > 0 saved on:   endOfRun.rndm");
-  RndmSaveCmd->SetGuidance("freq = 2 saved on: beginOfEvent.rndm");    
-  RndmSaveCmd->SetParameterName("frequency",false);
-  RndmSaveCmd->SetRange("frequency>=0 && frequency<=2");
-  RndmSaveCmd->AvailableForStates(PreInit,Idle); 
-         
-  RndmReadCmd = new G4UIcmdWithAString("/rndm/read",this);
-  RndmReadCmd->SetGuidance("get rndm status from an external file.");
-  RndmReadCmd->SetParameterName("fileName",true);
-  RndmReadCmd->SetDefaultValue ("beginOfRun.rndm");
-  RndmReadCmd->AvailableForStates(PreInit,Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -242,9 +222,7 @@ Em5RunMessenger::~Em5RunMessenger()
   delete setThlowbackCmd;
   delete setThhighbackCmd;
 
-  delete plotDir;
-  
-  delete RndmSaveCmd; delete RndmReadCmd; delete RndmDir;  
+  delete plotDir;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -374,15 +352,6 @@ void Em5RunMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
   if( command == setThhighbackCmd)
     runAction
     ->SetThhighBack( setThhighbackCmd->GetNewDoubleValue(newValues));
- 
-  if (command == RndmSaveCmd)
-      runAction->SetRndmFreq(RndmSaveCmd->GetNewIntValue(newValues));
-		 
-  if (command == RndmReadCmd)
-    {G4cout << "\n---> rndm status restored from file: " << newValues << G4endl;
-     HepRandom::restoreEngineStatus(newValues);
-     HepRandom::showEngineStatus();
-    }   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

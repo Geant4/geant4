@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5EventAction.cc,v 1.6 2001-10-16 11:56:28 maire Exp $
+// $Id: Em5EventAction.cc,v 1.7 2001-11-28 16:08:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,13 +46,12 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
-#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5EventAction::Em5EventAction(Em5RunAction* Em5RA)
 :calorimeterCollID(-1),eventMessenger(NULL),runaction(Em5RA),
- verboselevel(0),drawFlag("all"),printModulo(10000)
+ verboselevel(0),drawFlag("none"),printModulo(10000)
 {
   eventMessenger = new Em5EventActionMessenger(this);
 }
@@ -73,13 +72,6 @@ void Em5EventAction::BeginOfEventAction(const G4Event* evt)
  //printing survey
  if (evtNb%printModulo == 0) 
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-  
- //save rndm status
- if (runaction->GetRndmFreq() == 2)
-   { 
-    HepRandom::saveEngineStatus("beginOfEvent.rndm");   
-    if (evtNb%printModulo == 0) HepRandom::showEngineStatus();
-   }
     
   if (calorimeterCollID==-1)
     {

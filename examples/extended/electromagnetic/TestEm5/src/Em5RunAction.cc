@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5RunAction.cc,v 1.10 2001-10-16 11:56:29 maire Exp $
+// $Id: Em5RunAction.cc,v 1.11 2001-11-28 16:08:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,7 @@
 #include "Em5RunMessenger.hh"
 
 #include "G4Run.hh"
+#include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
@@ -51,7 +52,6 @@ Em5RunAction::Em5RunAction()
    nbinTsec(0),nbinTh(0),nbinThback(0),nbinR(0),nbinGamma(0),nbinvertexz(0)
 {
   runMessenger = new Em5RunMessenger(this);
-  saveRndm = 1;
   
 #ifndef G4NOHIST
   histo1=0; histo2=0; histo3=0; histo4=0; histo5=0; histo6=0; histo7=0;
@@ -173,19 +173,11 @@ void Em5RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("beginOfRun.rndm");
-    }  
+  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  HepRandom::showEngineStatus();
 
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-   
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-  {
-    UI->ApplyCommand("/vis/scene/notifyHandlers");
-  }
+  if (G4VVisManager::GetConcreteInstance())
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
       
   EnergySumAbs = 0. ;
   EnergySquareSumAbs = 0.;
@@ -755,11 +747,8 @@ void Em5RunAction::EndOfRunAction(const G4Run* aRun)
   if (G4VVisManager::GetConcreteInstance())
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
    
-  // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("endOfRun.rndm");
-    }     
+  // show Rndm status
+  HepRandom::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: Em5RunMessenger.hh,v 1.4 2001-10-16 11:56:28 maire Exp $
+// $Id: Em5RunMessenger.hh,v 1.5 2001-11-28 16:08:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -104,11 +104,6 @@ class Em5RunMessenger: public G4UImessenger
    G4UIcmdWithAnInteger*      setnbinzvertexCmd; 
    G4UIcmdWithADoubleAndUnit* setzlowCmd; 
    G4UIcmdWithADoubleAndUnit* setzhighCmd;
-   
-   G4UIdirectory*             RndmDir;
-   G4UIcmdWithAnInteger*      RndmSaveCmd;    
-   G4UIcmdWithAString*        RndmReadCmd;    
- 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
