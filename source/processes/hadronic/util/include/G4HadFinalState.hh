@@ -33,6 +33,7 @@ class G4HadFinalState
    void SetLocalEnergyDeposit(G4double aE);
    G4double GetLocalEnergyDeposit();
    void SecondariesAreStale();
+   void ClearSecondaries();
  
   private:
    G4ThreeVector theDirection;
