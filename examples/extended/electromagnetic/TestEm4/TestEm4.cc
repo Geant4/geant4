@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm4.cc,v 1.3 1999-12-15 14:49:05 gunter Exp $
+// $Id: TestEm4.cc,v 1.4 2000-03-09 11:27:37 gracia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,9 +60,9 @@ int main(int argc,char** argv) {
     
   // set user action classes
   runManager->SetUserAction(new Em4PrimaryGeneratorAction);
-  Em4RunAction* RunAct     (new Em4RunAction);
+  Em4RunAction* RunAct     = new Em4RunAction;
   runManager->SetUserAction(RunAct);
-  Em4EventAction* EvAct    (new Em4EventAction(RunAct));  
+  Em4EventAction* EvAct    = new Em4EventAction(RunAct);  
   runManager->SetUserAction(EvAct);
   runManager->SetUserAction(new Em4SteppingAction(EvAct));
   
