@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01HodoscopeHit.cc,v 1.4 2003-07-11 21:32:02 duns Exp $
+// $Id: A01HodoscopeHit.cc,v 1.5 2003-10-14 18:58:22 perl Exp $
 // --------------------------------------------------------------
 //
 #include "A01HodoscopeHit.hh"
@@ -77,7 +77,6 @@ void A01HodoscopeHit::Draw()
     if(pVA) attribs = *pVA;
     G4Colour colour(0.,1.,1.);
     attribs.SetColour(colour);
-    attribs.SetForceWireframe(false);
     attribs.SetForceSolid(true);
     pVVisManager->Draw(*pLogV,attribs,trans);
   }
