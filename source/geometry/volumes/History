@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2000-05-31 14:52:48 gcosmo Exp $
+$Id: History,v 1.27 2000-05-31 15:51:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May     17th, 2000   G. Cosmo
+May     17th, 2000   G. Cosmo - geomvol-V01-01-01
 
 G4ReplicaNavigation.cc:
 - Added check to returned safety value in DistanceToOut(). Zero is
@@ -28,6 +28,11 @@ G4ReplicaNavigation.cc:
   This fix helps to get rid of infinite loops when a point is on a
   shared surface of a replica or on a shared vertex; a more definitive
   solution to the problem is needed for the correct replica location.
+
+May     16th, 2000   J. Apostolakis
+
+G4PropagatorInField[.hh.icc]:
+- Added implementations for SetDeltaOneStep and SetDeltaIntersection.
 
 May      9th, 2000   J. Apostolakis - geomvol-V01-01-00
 
