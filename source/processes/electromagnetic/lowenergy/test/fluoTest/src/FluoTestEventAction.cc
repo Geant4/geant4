@@ -5,6 +5,8 @@
 #include "FluoTestSensorHit.hh"
 #include "FluoTestEventActionMessenger.hh"
 
+#include "g4rw/tvordvec.h"
+
 #ifdef G4ANALYSIS_USE
 #include "FluoTestAnalysisManager.hh"
 #endif
