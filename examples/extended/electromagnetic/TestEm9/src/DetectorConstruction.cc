@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.3 2003-10-31 12:08:51 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.4 2003-11-25 15:19:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,6 +50,7 @@
 
 #include "G4TransportationManager.hh"
 
+#include "G4GeometryManager.hh"
 #include "G4RunManager.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
@@ -216,6 +217,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
   // Cleanup old geometry
 
+  G4GeometryManager::GetInstance()->OpenGeometry();
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();

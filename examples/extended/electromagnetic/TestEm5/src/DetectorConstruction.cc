@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.1 2003-08-11 10:17:12 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2003-11-25 15:19:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,6 +38,7 @@
 #include "G4PVPlacement.hh"
 #include "G4UniformMagField.hh"
 
+#include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
@@ -207,6 +208,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 { 
   // Cleanup old geometry
   //
+  G4GeometryManager::GetInstance()->OpenGeometry();
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();

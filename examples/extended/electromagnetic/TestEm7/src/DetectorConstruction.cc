@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.3 2003-10-10 16:21:30 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.4 2003-11-25 15:19:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 #include "G4PVPlacement.hh"
 #include "G4UniformMagField.hh"
 
+#include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
@@ -128,6 +129,7 @@ new G4Material("Galactic",z= 1,a= 1.008*g/mole,density,
   
 G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
+  G4GeometryManager::GetInstance()->OpenGeometry();
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
