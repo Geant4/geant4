@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.icc,v 1.13 2003-06-16 14:38:01 vnivanch Exp $
+// $Id: G4hIonisation.icc,v 1.14 2003-06-18 13:48:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,7 +76,7 @@ inline G4double G4hIonisation::GetMeanFreePath(const G4Track& track, G4double,
 
 inline G4double G4hIonisation::SecondaryEnergyThreshold(size_t index)
 {
-  return G4std::max((*secondaryEnergyCuts)[index],Tmincut);
+  return std::max((*secondaryEnergyCuts)[index],Tmincut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
