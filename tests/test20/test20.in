@@ -49,7 +49,7 @@
 /run/beamOn 1000
 #
 /gun/energy 300 eV
-/gun/polarization 1. 0. 0.
+/gun/polarization 0. 0. 1.
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
@@ -83,7 +83,7 @@
 /run/beamOn 1000
 #
 /gun/energy 300 eV
-/gun/polarization 1. 0. 0.
+/gun/polarization 0. 0. 1.
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
@@ -117,7 +117,7 @@
 /run/beamOn 1000
 #
 /gun/energy 300 eV
-/gun/polarization 1. 0. 0.
+/gun/polarization 0. 0. 1.
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
