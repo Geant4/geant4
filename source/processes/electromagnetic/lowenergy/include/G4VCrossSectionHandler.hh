@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.hh,v 1.1 2001-09-16 22:41:52 pia Exp $
+// $Id: G4VCrossSectionHandler.hh,v 1.2 2001-09-19 10:13:27 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -57,10 +57,10 @@ class G4VCrossSectionHandler {
 public:
 
   G4VCrossSectionHandler(const G4VDataSetAlgorithm* interpolation,
-			G4double minE = 250*eV, G4double maxE = 100*GeV, 
-			G4int nBins = 200,
-			G4double unitE = MeV, G4double unitData = barn,
-			G4int minZ = 1, G4int maxZ = 99);
+			 G4double minE = 250*eV, G4double maxE = 100*GeV, 
+			 G4int nBins = 200,
+			 G4double unitE = MeV, G4double unitData = barn,
+			 G4int minZ = 1, G4int maxZ = 99);
 
   virtual ~G4VCrossSectionHandler();
 	
