@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.21 2004-12-02 08:31:07 vnivanch Exp $
+// $Id: G4Scintillation.cc,v 1.22 2004-12-10 18:49:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -281,7 +281,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                 G4double cost = 1. - 2.*G4UniformRand();
                 G4double sint = sqrt((1.-cost)*(1.+cost));
 
-		G4double phi = 2*M_PI*G4UniformRand();
+		G4double phi = twopi*G4UniformRand();
 		G4double sinp = sin(phi);
 		G4double cosp = cos(phi);
 
@@ -303,7 +303,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
                 G4ThreeVector perp = photonMomentum.cross(photonPolarization);
 
-		phi = 2*M_PI*G4UniformRand();
+		phi = twopi*G4UniformRand();
 		sinp = sin(phi);
 		cosp = cos(phi);
 

@@ -238,7 +238,7 @@ G4double G4Generator2BN::Calculatedsdkdt(G4double kout, G4double theta, G4double
      G4double epsilonQ = std::log((Q+p)/(Q-p));
 
 
-     dsdkdt_value = Z2 * (r02/(8*M_PI*137)) * (1/k) * (p/p0) *
+     dsdkdt_value = Z2 * (r02/(8*pi*137)) * (1/k) * (p/p0) *
        ( (8 * (sintheta2*(2*E02+1))/(p02*delta04)) -
          ((2*(5*E02+2*E*E0+3))/(p02 * delta02)) -
          ((2*(p02-k2))/((Q2*delta02))) +
@@ -289,7 +289,7 @@ void G4Generator2BN::ConstructMajorantSurface()
   dsmax = 0.;
   thetamax = 0.;
 
-  for(theta = 0.; theta < M_PI; theta = theta + dtheta){
+  for(theta = 0.; theta < pi; theta = theta + dtheta){
 
     ds = Calculatedsdkdt(kmin, theta, Eel);
 
@@ -323,7 +323,7 @@ void G4Generator2BN::ConstructMajorantSurface()
     G4double fraction = (v/100.);
     k = std::pow(10.,fraction)*kmin;
 
-    for(theta = 0.; theta < M_PI; theta = theta + dtheta){
+    for(theta = 0.; theta < pi; theta = theta + dtheta){
       dk = k - k0;
       dt = theta - theta0;
       ds = Calculatedsdkdt(k,theta, Eel);
@@ -393,7 +393,7 @@ G4double G4Generator2BN::Generate2BN(G4double Ek, G4double k) const
 
   // generate theta accordimg to theta/(1+c*std::pow(theta,2)
   // Normalization constant
-  cte2 = 2*c/std::log(1+c*M_PI*M_PI);
+  cte2 = 2*c/std::log(1+c*pi2);
 
   y = G4UniformRand();
   t = std::sqrt((std::exp(2*c*y/cte2)-1)/c);

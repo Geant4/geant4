@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.16 2004-12-02 08:31:07 vnivanch Exp $
+// $Id: G4Cerenkov.cc,v 1.17 2004-12-10 18:49:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -226,7 +226,7 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 		rand = G4UniformRand();
 
-		G4double phi = 2*M_PI*rand;
+		G4double phi = twopi*rand;
 		G4double sinPhi = sin(phi);
 		G4double cosPhi = cos(phi);
 

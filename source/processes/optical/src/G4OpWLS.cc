@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc,v 1.4 2004-12-02 23:11:05 gum Exp $
+// $Id: G4OpWLS.cc,v 1.5 2004-12-10 18:53:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -147,7 +147,7 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     G4double cost = 1. - 2.*G4UniformRand();
     G4double sint = std::sqrt((1.-cost)*(1.+cost));
 
-    G4double phi = 2*M_PI*G4UniformRand();
+    G4double phi = twopi*G4UniformRand();
     G4double sinp = std::sin(phi);
     G4double cosp = std::cos(phi);
     
@@ -169,7 +169,7 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     
     G4ThreeVector perp = photonMomentum.cross(photonPolarization);
     
-    phi = 2*M_PI*G4UniformRand();
+    phi = twopi*G4UniformRand();
     sinp = std::sin(phi);
     cosp = std::cos(phi);
     

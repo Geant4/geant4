@@ -81,7 +81,7 @@ G4double G4Generator2BS::PolarAngle(const G4double initial_energy,
   G4double initialTotalEnergy = (initial_energy+electron_mass_c2)/electron_mass_c2;
   G4double finalTotalEnergy = (final_energy+electron_mass_c2)/electron_mass_c2;
   EnergyRatio = finalTotalEnergy/initialTotalEnergy;
-  G4double gMaxEnergy = (M_PI*initialTotalEnergy)*(M_PI*initialTotalEnergy);
+  G4double gMaxEnergy = (pi*initialTotalEnergy)*(pi*initialTotalEnergy);
 
   G4double Zeff = std::sqrt(static_cast<G4double>(Z) * (static_cast<G4double>(Z) + 1.0));
   z = (0.00008116224*(std::pow(Zeff,0.3333333)));
