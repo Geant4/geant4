@@ -115,7 +115,7 @@ G4AtomicTransitionManager::G4AtomicTransitionManager( )
   vectorOfShells.push_back(shell);
       
     }
-  shellTable.insert(std::make_pair(Z, vectorOfShells));
+  shellTable.insert(G4std::make_pair<const G4int,G4std::vector<G4AtomicShell*> >(Z, vectorOfShells));
     
   }
   
@@ -126,7 +126,7 @@ G4AtomicTransitionManager::G4AtomicTransitionManager( )
 
 G4AtomicTransitionManager::~G4AtomicTransitionManager()
 
-{ G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
+{ G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
 
  for (pos = shellTable.begin(); pos != shellTable.end(); pos++){
    
@@ -255,7 +255,7 @@ void G4AtomicTransitionManager::BuildZVec(){
 
 const G4AtomicShell* G4AtomicTransitionManager::Shell(G4int z, G4int shellIdentifier)
 { 
-  G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
+  G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
 
   pos = shellTable.find(z);
 
@@ -294,7 +294,7 @@ G4int G4AtomicTransitionManager::NumberOfShells (G4int z)
 
 {
 
-G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
+G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
 
   pos = shellTable.find(z);
 
@@ -314,7 +314,7 @@ G4double G4AtomicTransitionManager::TotalRadiativeTransitionProbability(G4int z,
 
 {
 
-G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
+G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
 
   pos = shellTable.find(z);
 
@@ -366,7 +366,7 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int
 
 {
 
-  G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
+  G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
   
   pos = shellTable.find(z);
   

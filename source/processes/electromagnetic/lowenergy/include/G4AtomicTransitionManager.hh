@@ -61,7 +61,7 @@ private:
   G4LowEnergyUtilities util;
   static G4AtomicTransitionManager* instance;
   
-  G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> > shellTable;
+  G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> > shellTable;
   // the first element of the map is the atomic number z.
   //the second element is a vector of shells.
   
