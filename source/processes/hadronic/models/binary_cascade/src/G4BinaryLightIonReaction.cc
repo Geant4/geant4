@@ -60,13 +60,16 @@
     G4double m_nucl(0);      // to check energy balance 
 
 
-    G4cout << "Entering the decision point "
-           << (mom.t()-mom.mag())/a1 << " "
-	   << a1<<" "<< z1<<" "
-	   << a2<<" "<< z2<<" "<<mom.t()-mom.mag()<<G4endl;
+//    G4double m1=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(G4lrint(z1),G4lrint(a1));
+//    G4cout << "Entering the decision point "
+//           << (mom.t()-mom.mag())/a1 << " "
+//	   << a1<<" "<< z1<<" "
+//	   << a2<<" "<< z2<<G4endl
+//	   << " "<<mom.t()-mom.mag()<<" "
+//	   << mom.t()- m1<<G4endl;
     if( (mom.t()-mom.mag())/a1 < 50*MeV )
     {
-      G4cout << "Using pre-compound only, E= "<<mom.t()-mom.mag()<<G4endl;
+//      G4cout << "Using pre-compound only, E= "<<mom.t()-mom.mag()<<G4endl;
       m_nucl = mom.mag();
       G4Fragment aPreFrag;
       aPreFrag.SetA(a1+a2);
@@ -83,8 +86,8 @@
                       ->FindIon(G4lrint(z1+z2),G4lrint(a1+a2),0,G4lrint(z1+z2));  
       aPreFrag.SetParticleDefinition(preFragDef);
 
-      G4cout << "Fragment INFO "<< a1+a2 <<" "<<z1+z2<<" "
-             << aL <<" "<<preFragDef->GetParticleName()<<G4endl;
+//      G4cout << "Fragment INFO "<< a1+a2 <<" "<<z1+z2<<" "
+//             << aL <<" "<<preFragDef->GetParticleName()<<G4endl;
       cascaders = theProjectileFragmentation.DeExcite(aPreFrag);
       G4double tSum = 0;
       for(size_t count = 0; count<cascaders->size(); count++)
@@ -92,7 +95,7 @@
 	cascaders->operator[](count)->SetNewlyAdded(true);
 	tSum += cascaders->operator[](count)->GetKineticEnergy();
       }
-       G4cout << "Exiting pre-compound only, E= "<<tSum<<G4endl;
+//       G4cout << "Exiting pre-compound only, E= "<<tSum<<G4endl;
    }
     else
     {
@@ -255,9 +258,9 @@
       // call precompound model
       G4ReactionProductVector * proFrag = NULL;
       G4LorentzVector pFragment;
-      G4cout << " == pre boost 1 "<< momentum.e()<< " "<< momentum.mag()<<G4endl;
+//      G4cout << " == pre boost 1 "<< momentum.e()<< " "<< momentum.mag()<<G4endl;
       G4LorentzRotation boost_fragments;
-      G4cout << " == post boost 1 "<< momentum.e()<< " "<< momentum.mag()<<G4endl;
+//      G4cout << " == post boost 1 "<< momentum.e()<< " "<< momentum.mag()<<G4endl;
   //    G4LorentzRotation boost_spectator_mom(-momentum.boostVector());
   //     G4cout << "- momentum " << boost_spectator_mom * momentum << G4endl; 
       if(resZ>0 && resA>1) 
@@ -437,9 +440,9 @@ G4bool G4BinaryLightIonReaction::EnergyAndMomentumCorrector(
     SumMass = sqrt(SumMass);
 
      // Compute c.m.s. hadron velocity and boost KTV to hadron c.m.s.
-      G4cout << " == pre boost 2 "<< SumMom.e()<< " "<< SumMom.mag()<<G4endl;
+//      G4cout << " == pre boost 2 "<< SumMom.e()<< " "<< SumMom.mag()<<G4endl;
     G4ThreeVector Beta = -SumMom.boostVector();
-      G4cout << " == pre boost 2 "<< SumMom.e()<< " "<< SumMom.mag()<<G4endl;
+//      G4cout << " == pre boost 2 "<< SumMom.e()<< " "<< SumMom.mag()<<G4endl;
 //    Output->Boost(Beta);
       for(i = 0; i < Output->size(); i++)
       {
