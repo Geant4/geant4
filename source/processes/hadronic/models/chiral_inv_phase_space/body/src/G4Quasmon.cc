@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.39 2002-06-13 09:12:22 jwellisc Exp $
+// $Id: G4Quasmon.cc,v 1.40 2002-12-06 13:35:29 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -31,6 +31,7 @@
 
 //#define debug
 //#define pdebug
+//#define psdebug
 //#define ppdebug
 //#define tdebug
 //#define sdebug
@@ -1133,8 +1134,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       else                                           // ===> "Hadron" case
       {
         pBaryn=1;
-        sMass = theQCandidates[i]->GetMass();        // Mass is randomized on probability level
-        sM2=theQCandidates[i]->GetMass2();           // Sq. Mass is randomized on probability level
+        sMass = theQCandidates[i]->GetNBMass();      // Mass is randomized on probability level
+        sM2=sMass*sMass;                 ;           // Sq. Mass is randomized on probability level
         curQ-= theQCandidates[i]->GetQC();           // Subtract outHadron QC from QC of Quasmon
 #ifdef debug
         G4cout<<"G4Q::HQ:valQ="<<valQ<<" - sQ="<<theQCandidates[i]->GetQC()<<",sM="<<sMass<<"(PDG="
@@ -2592,8 +2593,12 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
   phot4M=zeroLV;
   G4int thePDG      = qH->GetPDGCode();        // Get PDG code of the Hadron to switch
   G4LorentzVector t = qH->Get4Momentum();      // 4-Mom of Chipolino
+#ifdef psdebug
+  if(thePDG==113) G4cerr<<"G4Q::FillHadronVector: PDG="<<thePDG<<",M="<<t.m()<<G4endl;
+  if(thePDG==113&&fabs(t.m()-770.)<.001) G4Exception("G4Quasmon::FillHadronVector: Zero rho");
+#endif
 #ifdef ppdebug
-  G4cout<<"G4Quasmon::FillHadronVector:Hadron's PDG="<<thePDG<<",4Mom="<<qH->Get4Momentum()<<G4endl;
+  G4cout<<"G4Quasmon::FillHadronVector:Hadron's PDG="<<thePDG<<",4Mom="<<t<<G4endl;
 #endif
   if(thePDG>80000000 && (thePDG<90000000 || thePDG%1000>500 || thePDG%1000000>500000)
 	 && thePDG!=90002999 && thePDG!=89999003 && thePDG!=90003998 && thePDG!=89998004
@@ -3287,7 +3292,7 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
     G4bool pos=curCand->GetPossibility()&&totMass>tmpTM+frM;
     //G4bool pos=curCand->GetPossibility();
 #ifdef pdebug
-    if(cPDG==111||cPDG==90001000||cPDG==90000001||cPDG==90000002||cPDG==90001001||cPDG==90002002)
+    //if(cPDG==111||cPDG==90001000||cPDG==90000001||cPDG==90000002||cPDG==90001001||cPDG==90002002)
 	  G4cout<<"G4Q::CHP:==*****==>>>c="<<cPDG<<",dUD="<<dUD<<",pos="<<pos<<",eA="<<envA<<G4endl;
 #endif
 	if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000&&dUD<2))) // 2 (OK) or 3
@@ -3849,27 +3854,31 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
         G4double resTM=G4QPDGCode(resTQC.GetSPDGCode()).GetMass();
 #ifdef pdebug
         G4int aPDG = abs(cPDG);
-        if(aPDG<10000&&aPDG%10<3)
+        //if(aPDG<10000&&aPDG%10<3)
+        if(aPDG<10000&&aPDG%10<5)
 		G4cout<<"G4Q::CHP:***>>>PDG="<<cPDG<<",cQC="<<candQC<<",comb="<<comb<<",rQC="<<curQ<<G4endl;
 #endif
         if (resPDG==221 && (mQ<683.|| absb)) resPDG=111;// pi0 minimum residual instead of eta
         if (resPDG==111 && (mQ>683.&&!absb)) resPDG=221;// eta minimum residual instead of pi0
 #ifdef pdebug
-        if(aPDG<10000&&aPDG%10<3)
+        //if(aPDG<10000&&aPDG%10<3)
+        if(aPDG<10000&&aPDG%10<5)
 		G4cout<<"G4Q::CHP:cPDG="<<cPDG<<",comb="<<comb<<",rPDG="<<resPDG<<curQ<<", tM="
                 <<totMass<<">"<<frM-CB+resTM<<"=fM="<<frM<<"+RM="<<resTM<<"-CB="<<CB<<G4endl;
 #endif
         if(comb&&resPDG && totMass>frM-CB+resTM &&(resPDG>80000000&&resPDG!=90000000||resPDG<10000))
 	    {
 #ifdef pdebug
-          if(aPDG<10000&&aPDG%10<3)
+          //if(aPDG<10000&&aPDG%10<3)
+          if(aPDG<10000&&aPDG%10<5)
 		  G4cout<<"G4Q::CHP:ind="<<index<<",Q="<<valQ<<mQ<<",c="<<cPDG<<",r="<<resPDG<<curQ<<G4endl;
 #endif
           if(resPDG!=10)resM=G4QPDGCode(resPDG).GetMass();// PDG mean mass for the resid. hadron
           else resM=G4QChipolino(curQ).GetMass();  // Chipolino mass for the residual hadron
           G4int resQCode=G4QPDGCode(curQ).GetQCode();
 #ifdef pdebug
-          if(aPDG<10000&&aPDG%10<3)
+          //if(aPDG<10000&&aPDG%10<3)
+          if(aPDG<10000&&aPDG%10<5)
           G4cout<<"G4Q::CHP: RQMass/QC="<<resM<<curQ<<",ePDG="<<envPDGC<<",rQC="<<resQCode<<G4endl;
 #endif
           //if(envPDGC>80000000 && envPDGC!=90000000 && resM>0. && aPDG>1000 && // @@??
@@ -3881,7 +3890,8 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
             G4double rtM =rtN.GetMZNS();           // Min Mass of total residual Nucleus
             G4double bnRQ=rtM-envM;                // Bound mass of residual Quasmon
 #ifdef pdebug
-            if(aPDG<10000&&aPDG%10<3)
+            //if(aPDG<10000&&aPDG%10<3)
+            if(aPDG<10000&&aPDG%10<5)
             G4cout<<"G4Q::CHP: **Recalculate** RQMass="<<bnRQ<<",envM="<<envM<<",rtM="<<rtM<<G4endl;
 #endif
             // ***VRQ***
@@ -3893,15 +3903,16 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
             G4double rndM=GetRandomMass(cPDG,limM);// Candidate's Mass randomization
 #ifdef pdebug
             G4double cMass=G4QPDGCode(cPDG).GetMass();
-            if(aPDG<10000&&aPDG%10<3)
+            //if(aPDG<10000&&aPDG%10<3)
+            if(aPDG<10000&&aPDG%10<5)
 			G4cout<<"G4Q::CHP:rndM="<<rndM<<",limM="<<limM<<" > cM="<<cMass<<" ,rM+fM="<<resM+rndM
                     <<" < mQ="<<mQ<<G4endl;
 #endif
             // --- Kinematical Factors ---
             if(rndM>0. && resM+rndM<mQ)
 	        {
-              curCand->SetEBMass(rndM);            // Set a Randomized Mass value of the Candidate
-              curCand->SetNBMass(rndM);            // Set a Randomized Mass value of the Candidate
+              curCand->SetEBMass(rndM);            // Set a Randomized EnvBoundedMass of the Candidate
+              curCand->SetNBMass(rndM);            // Set a Randomized NotBoundedMass of the Candidate
               G4double mH2 = rndM*rndM;            // Squared mass of the candidate (Mu2)
               G4double rHk = mH2/dk;
               G4double zMax = 1.-rHk/mQ;           // z_max
@@ -3910,7 +3921,8 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
               if(qBar) zMin= mR2/mQ/(mQ-dk);       // z_min for Quasmon-Baryon
 			  G4double possibility=zMax-zMin;
 #ifdef pdebug
-              if(aPDG<10000&&aPDG%10<3)
+              //if(aPDG<10000&&aPDG%10<3)
+              if(aPDG<10000&&aPDG%10<5)
 				G4cout<<"G4Q::CHP:M="<<rndM<<",pos="<<possibility<<",za="<<zMax<<",rH="<<rHk<<",mQ="
                       <<mQ<<","<<dk<<",zi="<<zMin<<",mR2="<<mR2<<","<<resM<<";"<<mQ*(mQ-dk)<<G4endl;
 #endif
@@ -3923,7 +3935,8 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
 	          {
                 probability = vaf*(pow(zMax, vap)-pow(zMin, vap));
 #ifdef pdebug
-                if(aPDG<10000&&aPDG%10<3)
+                //if(aPDG<10000&&aPDG%10<3)
+                if(aPDG<10000&&aPDG%10<5)
                 G4cout<<"G4Q::CHP:#"<<index<<",m2="<<mH2<<",n="<<nOfQ<<",p="<<probability
                       <<",vaf="<<vaf<<",vap="<<vap<<",zMax="<<zMax<<",zMin="<<zMin<<G4endl;
 #endif
@@ -3946,7 +3959,8 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
             else
 		    {
 #ifdef pdebug
-              if(aPDG<10000&&aPDG%10<3)
+              //if(aPDG<10000&&aPDG%10<3)
+              if(aPDG<10000&&aPDG%10<5)
               G4cout<<"G4Q::CHP:cM=0["<<cPDG<<"],mQ="<<mQ<<valQ<<",rM="<<resM<<curQ<<G4endl;
 #endif
             }
@@ -3954,6 +3968,7 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
           else
 	      {
 #ifdef pdebug
+            //if(aPDG<10000&&aPDG%10<3)
             if(aPDG<10000&&aPDG%10<3)
             G4cout<<"***G4Q::CHP:M=0,#"<<index<<valQ<<",cP="<<cPDG<<"+rP="<<resPDG<<curQ<<G4endl;
 #endif
@@ -3963,6 +3978,7 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
 	    {
           probability=0.;
 #ifdef pdebug
+          //if(aPDG<10000&&aPDG%10<3)
           if(aPDG<10000&&aPDG%10<3)
           G4cout<<"G4Q::CHP:"<<index<<valQ<<",c="<<cPDG<<"+r="<<resPDG<<curQ<<":comb=0 || tM="
                 <<totMass<<"<"<<frM-CB+resTM<<" = fM="<<frM<<"+RM="<<resTM<<"-CB="<<CB<< G4endl;
@@ -3973,7 +3989,8 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double E, G4double kVal, G
       else probability=0.;
 #ifdef pdebug
       G4int aPDG = abs(cPDG);
-      if(cPDG>90000000&&baryn<5||aPDG<10000&&aPDG%10<3)
+      //if(cPDG>90000000&&baryn<5||aPDG<10000&&aPDG%10<3)
+      if(cPDG>90000000&&baryn<5||aPDG<10000&&aPDG%10<5)
       G4cout<<"G4Q::CHP:^^^cPDG="<<cPDG<<",pos="<<pos<<",rPDG="<<resPDG<<curQ<<resM<<", p="
             <<probability<<", s="<<accumulatedProbability<<",sp="<<secondProbab<<G4endl;
 #endif
@@ -4448,7 +4465,7 @@ G4QHadronVector* G4Quasmon::Fragment(G4QNucleus& nucEnviron, G4int nQ)
     G4QHadron* curHadr = new G4QHadron(theQHadrons[hadron]);
     theFragments->push_back(curHadr);         // (delete equivalent - user)
   }
-#ifdef pdebug
+#ifdef ppdebug
   else G4cerr<<"*******G4Quasmon::Fragment *** Nothing is in the output ***"<<G4endl;
 #endif
   return theFragments;
