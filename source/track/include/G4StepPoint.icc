@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StepPoint.icc,v 1.2 2000-06-01 02:28:57 kurasige Exp $
+// $Id: G4StepPoint.icc,v 1.3 2001-02-17 11:25:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,28 +77,19 @@
 
    inline G4double G4StepPoint::GetVelocity() const
    { 
-     if(fMass==0.){
-        return c_light;
-     } 
-     else{ 
-        G4double tMomentum = sqrt(fKineticEnergy*fKineticEnergy +
-                                  2.0*fKineticEnergy*fMass);
-        G4double tTotalEnergy = fKineticEnergy + fMass; 
-        return tMomentum/tTotalEnergy*c_light;
-     }   
+     return fVelocity;
    }
-   // This velocity is the velocity as if in vacuum.
-   // (So it is not corrected for the refraction index
-   //   in the case of photons - optical or X-rays.)
-   // In order to get the velocity in the material, use
-   //   GetVelocity of G4Track.
-   //
+   inline void G4StepPoint::SetVelocity(G4double v)
+   { 
+     fVelocity = v;
+   }
+  
 
   inline G4double G4StepPoint::GetBeta() const
-   { return (fMass==0.) ? 
-      1.0 : 
-      sqrt(fKineticEnergy*fKineticEnergy + 2.0*fKineticEnergy*fMass)
-      /(fKineticEnergy+fMass); }
+   { 
+      return fVelocity/c_light;
+   }
+
     // Velocity of the track in unit of c(light velocity)
 
    inline G4double G4StepPoint::GetGamma() const

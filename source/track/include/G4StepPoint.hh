@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StepPoint.hh,v 1.6 2000-06-01 02:28:57 kurasige Exp $
+// $Id: G4StepPoint.hh,v 1.7 2001-02-17 11:25:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -96,11 +96,7 @@ class G4StepPoint
      // Kinetic Energy of the track
 
   G4double GetVelocity() const;
-   // This velocity is the velocity as if in vacuum.
-   // (So it is not corrected for the refraction index
-   //   in the case of photons - optical or X-rays.)
-   // In order to get the velocity in the material, use
-   //   GetVelocity of G4Track.
+  void SetVelocity(G4double v);
    //
 
   G4double GetBeta() const;
@@ -163,6 +159,7 @@ class G4StepPoint
       // Time since track is created (in rest frame of particle)
    G4ThreeVector fMomentumDirection;
    G4double fKineticEnergy;
+   G4double fVelocity; 
    const G4VTouchable* fpTouchable;
    G4Material* fpMaterial;
       // Material of the volmue

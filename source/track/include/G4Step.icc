@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Step.icc,v 1.3 2000-10-18 15:00:09 kurasige Exp $
+// $Id: G4Step.icc,v 1.4 2001-02-17 11:25:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -162,6 +162,7 @@ inline
    fpPreStepPoint->SetProperTime(fpTrack->GetProperTime());
    fpPreStepPoint->SetMomentumDirection(fpTrack->GetMomentumDirection());
    fpPreStepPoint->SetKineticEnergy(fpTrack->GetKineticEnergy());
+   fpPreStepPoint->SetVelocity(fpTrack->GetVelocity());
    fpPreStepPoint->SetTouchable(fpTrack->GetTouchable());
    fpPreStepPoint->SetMaterial( fpTrack->GetTouchable()->GetVolume()->GetLogicalVolume()->GetMaterial());
    fpPreStepPoint->SetPolarization(fpTrack->GetPolarization());
