@@ -2054,7 +2054,7 @@ sub fads_create_io_source_file{
   print(OUT "  f_branchName = colName + \".\";\n");
   print(OUT "\n");
   print(OUT "  G4RootIOManager* pm = (G4RootIOManager*)\n");
-  print(OUT "     G4PersistencyCenter::GetG4PersistencyCenter()->CurrentG4PersistencyManager();\n");
+  print(OUT "     G4PersistencyCenter::GetPersistencyCenter()->CurrentPersistencyManager();\n");
   print(OUT "  assert(pm!=0);\n");
   print(OUT "  f_transMan = (G4RootTransManager*) pm->TransactionManager();\n");
   print(OUT "  assert(f_transMan!=0);\n");
