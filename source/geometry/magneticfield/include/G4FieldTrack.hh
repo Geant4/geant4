@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.hh,v 1.10 2003-10-31 14:35:51 gcosmo Exp $
+// $Id: G4FieldTrack.hh,v 1.11 2003-12-09 14:39:45 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,6 +72,7 @@ class  G4FieldTrack
      inline G4ThreeVector  GetMomentum() const;   
      inline G4ThreeVector  GetPosition() const; 
      inline const G4ThreeVector& GetMomentumDir() const;
+     inline G4ThreeVector  GetMomentumDirection() const;
      inline G4double       GetCurveLength() const;
        // Distance along curve of point.
      // inline G4double       GetMomentumModulus() const;  // Obsolete
@@ -114,7 +115,7 @@ class  G4FieldTrack
        // Needed and should be used only for RK integration driver
      enum { ncompSVEC = 12 };
      inline void DumpToArray(G4double valArr[ncompSVEC]) const; 
-     inline void LoadFromArray(const G4double valArr[ncompSVEC]); 
+     inline void LoadFromArray(const G4double valArr[ncompSVEC], G4int noVarsIntegrated); 
      
      friend  std::ostream&
              operator<<( std::ostream& os, G4FieldTrack& SixVec);
