@@ -5,7 +5,7 @@
 
 
 //
-// $Id: STEPfile_inline.cc,v 1.3 1999-12-15 14:50:17 gunter Exp $
+// $Id: STEPfile_inline.cc,v 1.4 1999-12-15 18:20:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -129,7 +129,7 @@ STEPfile::SetFileType(FileTypeCode ft)
 const char*
 STEPfile::TruncFileName(const char* filename) const
 {
-    char* tmp = strrchr(filename,'/');
+    const char* tmp = strrchr(filename,'/');
     if (tmp) return tmp++;
     else return filename;
     
