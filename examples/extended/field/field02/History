@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2003-11-12 17:35:58 gcosmo Exp $
+$Id: History,v 1.15 2003-11-12 18:46:06 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,8 @@ track of all tags.
 
 Nov 12th, 2003 - J.Apostolakis (fieldex-V05-02-01)
 ------------------------------
-- Revised to work with new field tags
+- Revised to work with new field tags (field-V05-02-04 and later)
+   * creation of chord finder for electric field must be explicit
 - Created helper class F02ElectricFieldSetup, using nearly all of 
   F02ElectroMagneticField, but not being a field.
 - Changed other parts to use this class.
