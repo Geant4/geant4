@@ -201,6 +201,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
     aHadron.SetDefinition(aDefinition); // what if only cross-sections exist ==> Na 23 11 @@@@    
     G4double availableEnergy = theNeutron.GetKineticEnergy() + theNeutron.GetMass() - aHadron.GetMass() +
                              (targetMass - residualMass)*G4Neutron::Neutron()->GetPDGMass();
+    G4int nothingWasKnownOnHadron = 0;
     G4int dummy;
     G4int nSecGamma = 0;
     G4double eGamm = 0;
@@ -262,13 +263,14 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
 	}
       }
     }
-    else if(theEnergyAngData[it]!= NULL)  
+    else if(theEnergyAngData[it] != NULL)  
     {
       theParticles = theEnergyAngData[it]->Sample(eKinetic);
     }
     else
     {
-      // @@@ what to do, if we have photon data, but no info on the proton itself
+      // @@@ what to do, if we have photon data, but no info on the hadron itself
+      nothingWasKnownOnHadron = 1;
     }
     if(theFinalStatePhotons[it]!=NULL) 
     {
@@ -316,14 +318,35 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
 	thePhotons->at(i)->Lorentz(*(thePhotons->at(i)), -1.*theTarget);
       }
     }
+    if(nothingWasKnownOnHadron)
+    {
+      G4double totalPhotonEnergy;
+      if(thePhotons!=NULL)
+      {
+        G4int nPhotons = thePhotons->length();
+	for(i=0; i<nPhotons; i++)
+        {
+          totalPhotonEnergy += thePhotons->at(i)->GetTotalEnergy();
+        }
+      }
+      availableEnergy -= totalPhotonEnergy;
+      residualMass += totalPhotonEnergy/G4Neutron::Neutron()->GetPDGMass();
+      aHadron.SetKineticEnergy(availableEnergy*residualMass*G4Neutron::Neutron()->GetPDGMass()/
+                               (aHadron.GetMass()+residualMass*G4Neutron::Neutron()->GetPDGMass()));
+      G4double CosTheta = 1.0 - 2.0*G4UniformRand();
+      G4double SinTheta = sqrt(1.0 - CosTheta*CosTheta);
+      G4double Phi = twopi*G4UniformRand();
+      G4ThreeVector Vector(cos(Phi)*SinTheta, sin(Phi)*SinTheta, CosTheta);
+      aHadron.SetMomentum(Vector* sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
+                                       aHadron.GetMass()*aHadron.GetMass()));
+    }
 
 // fill the result
-    G4int nSecondaries = 1; // the hadron
+    G4int nSecondaries = 2; // the hadron and the recoil
     if(theParticles != NULL) nSecondaries = theParticles->length();
     G4int nPhotons = 0;
     if(thePhotons!=NULL) nPhotons = thePhotons->length();
     nSecondaries += nPhotons;
-    if(1==nSecondaries) nSecondaries++; // the recoil
     theResult.SetNumberOfSecondaries(nSecondaries);
     
     G4DynamicParticle * theSec;
@@ -334,20 +357,25 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
       theSec->SetDefinition(aHadron.GetDefinition());
       theSec->SetMomentum(aHadron.GetMomentum());
       theResult.AddSecondary(theSec);    
-      if(thePhotons==NULL)
-      {
-	aHadron.Lorentz(aHadron, theTarget);
+ 
+ 	aHadron.Lorentz(aHadron, theTarget);
         G4ReactionProduct theResidual;   
         theResidual.SetDefinition(G4ParticleTable::GetParticleTable()->GetIon(residualZ, residualA, 0));  
         theResidual.SetKineticEnergy(aHadron.GetKineticEnergy()*aHadron.GetMass()/theResidual.GetMass());
         theResidual.SetMomentum(-1.*aHadron.GetMomentum());
 	theResidual.Lorentz(theResidual, -1.*theTarget);
-	
+	G4ThreeVector totalPhotonMomentum(0,0,0);
+	if(thePhotons!=NULL)
+	{
+          for(i=0; i<nPhotons; i++)
+          {
+            totalPhotonMomentum += thePhotons->at(i)->GetMomentum();
+          }
+	}
         theSec = new G4DynamicParticle;   
         theSec->SetDefinition(theResidual.GetDefinition());
-        theSec->SetMomentum(theResidual.GetMomentum());
+        theSec->SetMomentum(theResidual.GetMomentum()-totalPhotonMomentum);
         theResult.AddSecondary(theSec);    
-      }
     }
     else
     {
