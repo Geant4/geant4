@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.hh,v 1.1 2003-07-14 17:10:15 vnivanch Exp $
+// $Id: SteppingAction.hh,v 1.2 2003-10-31 12:08:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,13 +50,16 @@ class HistoManager;
 
 class SteppingAction : public G4UserSteppingAction
 {
-  public:
-    SteppingAction();
-   ~SteppingAction();
+public:
+  SteppingAction();
+  ~SteppingAction();
 
-    void UserSteppingAction(const G4Step*);
+  void UserSteppingAction(const G4Step*);
 
-  private:
+private:
+
+  SteppingAction & operator=(const SteppingAction &right);
+  SteppingAction(const SteppingAction&);
 
   HistoManager* theHisto;
 };

@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2003-08-29 17:12:58 vnivanch Exp $
+$Id: README,v 1.5 2003-10-31 12:08:50 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,7 +7,8 @@ $Id: README,v 1.4 2003-08-29 17:12:58 vnivanch Exp $
 
                             TestEm9
                             -------
-     This test is intended to test cut-per-region approach.
+     This test is intended to test cut-per-region approach and to demonstrate
+     electromagnetic physics in crystal calorimeter
 
  1- GEOMETRY DEFINITION
 
@@ -15,7 +16,7 @@ $Id: README,v 1.4 2003-08-29 17:12:58 vnivanch Exp $
      calorimeter (EM), and the muon identifier (MU). Detector layout along
      the axis Z.
 
-     VD consisted of 3 layers of Si with pads structure along the axis X.
+     VD consisted of 3 layers of Si with pads structured along the axis X.
      Between VD and EM there are 2 active absorbers (scintillators).
      EM is the matrix 5x5 of heavy crystals. MU consist of 2 active absorbers
      (scintillators) and the iron plate between.
@@ -41,7 +42,10 @@ $Id: README,v 1.4 2003-08-29 17:12:58 vnivanch Exp $
     1. "particles" - particle definitions
     2. "general" - decays and transportation
     3. "standard" (alternative) - standard EM physics
-    4. "model"    (alternative) - standard EM physics using model approach
+    4. "g4v52"    (alternative) - standard EM physics Geant4 5.2
+    5. "binary"   (optional) - binary cascade for protons and neutrons with
+                  energy below 3 GeV
+    6. "elastic"  (optional) - elastic scattering of hadrons
 
  3- AN EVENT : THE PRIMARY GENERATOR
 
@@ -50,10 +54,53 @@ $Id: README,v 1.4 2003-08-29 17:12:58 vnivanch Exp $
      and its energy are set in the PrimaryGeneratorAction class, and can
      changed via the G4 build-in commands of ParticleGun class.
 
- 7- OUTPUT
+ 4- OUTPUT
+
+     The batch regime of simulation can be started 
+       $G4WORKDIR/bin/$G4SYSTEM/TestEm9 TestEm9.in
+     where TestEm9.in is the example of macro file for batch job.
 
      As a result of simulation the number of secondaries produced
      in different regions are averaged. The average energy depositions
      in active absorbers and EM as well as RMS of these values are shown.
      The number of hits in pads of VD is printed out.
 
+ 5- VISUALISATION
+
+     To use visualisation the environment variable G4_VIS_USE should be 
+     defined. An interactive session starts if no macro file is specified 
+     in the command line:
+       $G4WORKDIR/bin/$G4SYSTEM/TestEm9
+
+     To start visualisation one can issur 
+     >/control/execute vis.mac
+     >/run/beamOn 1
+
+ 6- ANALYSIS
+
+     To create histograms/ntuple for further analysis one should define
+     environment variable G4ANALYSIS_USE and setup local AIDA implementation.
+     The example should be recompiled:
+
+     gmake analclean
+     gmake
+      
+     The macro file csi.mac can be used as exmple of macro for analysis. It
+     can be executed in the following way:
+     $G4WORKDIR/bin/$G4SYSTEM/TestEm9 csi.mac
+
+ 7- Using the Anaphe implementation of the AIDA 3.0 histograms:
+ 
+
+     In order to use the Anaphe implementation of the AIDA 3.0 interfaces,
+     the 'aida-config' command (which is used in the GNUmakefile) is
+     available at:
+     /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/aida-config
+
+     In order to run the executable, you need to source the following
+     script (once):
+     $HOME/bin/setupAnaphe.csh  (or $HOME/bin/setupAnaphe)
+
+     At cern 'setupAnaphe' is available at:
+     /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe.csh
+     (or /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe)

@@ -52,7 +52,8 @@ void PhysListHadronElastic::ConstructProcess()
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pManager = particle->GetProcessManager();
-    if (particle->GetPDGMass() > 110.*MeV && theElasticProcess.IsApplicable(*particle)) { 
+    if (particle->GetPDGMass() > 110.*MeV && theElasticProcess.IsApplicable(*particle)
+        && !particle->IsShortLived()) { 
       pManager->AddDiscreteProcess(&theElasticProcess);
       G4cout << "### Elastic model are registered for " 
              << particle->GetParticleName()

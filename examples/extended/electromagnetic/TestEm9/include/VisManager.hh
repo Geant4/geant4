@@ -25,8 +25,6 @@
 
 //---------------------------------------------------------------------------
 //
-//---------------------------------------------------------------------------
-//
 // ClassName:   VisManager
 //
 // Class Description:
@@ -51,9 +49,6 @@
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VisManager.hh"

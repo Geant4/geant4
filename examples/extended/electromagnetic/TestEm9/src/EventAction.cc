@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.2 2003-10-13 15:41:31 vnivanch Exp $
+// $Id: EventAction.cc,v 1.3 2003-10-31 12:08:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -60,7 +60,7 @@ void EventAction::BeginOfEventAction(const G4Event*)
   // New event
   nEvt++;
   HistoManager* hi = HistoManager::GetPointer();
-  hi->AddEvent();
+  hi->BeginOfEvent();
 
   // Switch on verbose mode
 
@@ -90,7 +90,7 @@ void EventAction::BeginOfEventAction(const G4Event*)
 
 void EventAction::EndOfEventAction(const G4Event* evt)
 {
-  (HistoManager::GetPointer())->SaveEvent();
+  (HistoManager::GetPointer())->EndOfEvent();
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
   if(pVVisManager) {

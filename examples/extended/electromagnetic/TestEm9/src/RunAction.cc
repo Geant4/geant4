@@ -53,7 +53,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4int id = aRun->GetRunID();
   G4cout << "### Run " << id << " start" << G4endl;
-  (HistoManager::GetPointer())->BeginOfHisto();
+  (HistoManager::GetPointer())->BeginOfRun();
 
 #ifdef G4VIS_USE
   G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -74,7 +74,7 @@ void RunAction::EndOfRunAction(const G4Run*)
 {
 
   G4cout << "RunAction: End of run actions are started" << G4endl;
-  (HistoManager::GetPointer())->EndOfHisto();
+  (HistoManager::GetPointer())->EndOfRun();
 
 #ifdef G4VIS_USE
   if (G4VVisManager::GetConcreteInstance())

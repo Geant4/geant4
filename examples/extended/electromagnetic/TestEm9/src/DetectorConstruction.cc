@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.2 2003-08-29 16:38:36 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.3 2003-10-31 12:08:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,18 +66,18 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:ecalLength(36.*cm),
- ecalWidth(6.*cm),
- vertexLength(10.*cm),
- padLength(0.1*mm),
- padWidth(0.02*mm),
- absLength(2.*mm),
- logicC(0),
+:logicC(0),
  logicA1(0),
  logicA2(0)
 {
   detectorMessenger = new DetectorMessenger(this);
   DefineMaterials();
+  ecalLength   = 36.*cm;
+  ecalWidth    = 6.*cm;
+  vertexLength = 3.*cm;
+  padLength    = 0.1*mm;
+  padWidth     = 0.02*mm;
+  absLength    = 2.*mm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -219,19 +219,20 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
-  //G4RegionStore::GetInstance()->Clean();
+  //  G4RegionStore::GetInstance()->Clean();
 
   if(vertexLength < padLength*5.0) vertexLength = padLength*5.0;
   G4double gap    = 0.01*mm;
-  G4double york   = 10*cm;
+  G4double biggap = 2.*cm;
+  G4double york   = 10.*cm;
 
-           worldZ = 0.5*(vertexLength + absLength*10.5 + ecalLength*1.5 + york);
+           worldZ = 2.*vertexLength + 3.*absLength + 0.5*(ecalLength + york) + biggap*2.;
   G4double worldX = ecalWidth*3.0;
-  G4double vertexZ= -worldZ + vertexLength*0.5 + absLength*2.5;
-  G4double absZ2  = -worldZ + vertexLength     + absLength*6.0;
-  G4double ecalZ  = -worldZ + vertexLength     + absLength*7.5 + ecalLength*0.5;
-  G4double yorkZ  = -worldZ + vertexLength     + absLength*9.5 + ecalLength
-                            + york*0.5;
+  G4double vertexZ= -worldZ + vertexLength*2.0 + absLength     + biggap;
+  G4double absZ2  = -worldZ + vertexLength*4.0 + absLength*3.5 + biggap;
+  G4double ecalZ  = -worldZ + vertexLength*4.0 + absLength*4.0 + ecalLength*0.5 + 2.*biggap;
+  G4double yorkZ  = -worldZ + vertexLength*4.0 + absLength*5.0 + ecalLength
+                            + york*0.5 + 3.*biggap;
 
   //
   // World
@@ -309,45 +310,49 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   //Vertex volume
 
-  G4Box* solidVV = new G4Box("VolV",worldX,worldX,vertexLength*0.5+absLength*2.5);
+  G4Box* solidVV = new G4Box("VolV",worldX,worldX,vertexLength*2.+absLength+gap);
   G4LogicalVolume* logicVV = new G4LogicalVolume( solidVV,worldMaterial,"VolV");
   G4VPhysicalVolume* physVV = new G4PVPlacement(0,G4ThreeVector(0.,0.,vertexZ),
                                        "VolV",logicVV,world,false,0);
 
-
   //Absorber
 
   logicA1 = new G4LogicalVolume( solidA,absMaterial,"Abs1");
-  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,vertexLength*0.5+absLength*1.5),
+  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,vertexLength*2.-absLength*0.5),
                                        "Abs1",logicA1,physVV,false,0);
 
   //Vertex
 
+  G4double vertWidth = ecalWidth/5.;
+  G4int npads = (G4int)(vertWidth/padWidth);
+  npads = (npads/2)*2 + 1;
+  x0 = -0.5*padWidth*((G4double)(npads-1));
+  G4double x1 = abs(x0) + 0.5*padWidth + gap; 
+  G4double z  = -(vertexLength+absLength);
+
+  G4Box* solidVD = new G4Box("VertDet",x1,ecalWidth*0.5+gap,padLength*0.5);
+  G4LogicalVolume* logicVD = new G4LogicalVolume( solidVD,vertMaterial,"VertDet");
+
   G4Box* solidV = new G4Box("Vert",padWidth*0.5,ecalWidth*0.5,padLength*0.5);
   G4LogicalVolume* logicV = new G4LogicalVolume( solidV,vertMaterial,"Vert");
-  G4int npads = (G4int)(ecalWidth/padWidth);
-  npads = (npads/2)*2 + 1;
-  k = 0;
-  x0 = -0.5*padWidth*((G4double)(npads-1));
-  G4double z  = (vertexLength-padLength)*0.5;
 
   for (i=0; i<3; i++) {
-    x = x0;
-    y = z*(i - 1);
-    for (j=0; j<npads; j++) {
+    pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,z),"VertDet",logicVD,
+                                    physVV,false,i);
+    z += vertexLength;
+  }
+  x = x0;
 
-      pv = new G4PVPlacement(0,G4ThreeVector(x,0.,y),"Vert",logicV,
-                                    physVV,false,k);
-      k++;
-      x += padWidth;
-    }
+  for (j=0; j<npads; j++) {
+
+    pv = new G4PVPlacement(0,G4ThreeVector(x,0.,0.),logicV,"Vert",logicVD,
+                                    false,k);
+    x += padWidth;
   }
 
   G4cout << "Vertex is " << G4BestUnit(vertexLength,"Length")
          << " of 3 layers of Si of " << G4BestUnit(padLength,"Length")
          << " npads= " << npads
-    //         << " x0= " << x0
-    //     << " z= " << z
 	 << G4endl;
 
   // Define region for the vertex detector
@@ -364,12 +369,28 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   // color regions
 
-  G4VisAttributes* regVcolor = new G4VisAttributes(G4Colour(1., 0., 0.));
-  logicVV->SetVisAttributes(regVcolor);
-  logicA3->SetVisAttributes(regVcolor);
+  logicVV-> SetVisAttributes(G4VisAttributes::Invisible);
+  logicV-> SetVisAttributes(G4VisAttributes::Invisible);
+  logicE-> SetVisAttributes(G4VisAttributes::Invisible);
+  logicYV-> SetVisAttributes(G4VisAttributes::Invisible);
+
+  G4VisAttributes* regWcolor = new G4VisAttributes(G4Colour(0.3, 0.3, 0.3));
+  logicW->SetVisAttributes(regWcolor);
+
+  G4VisAttributes* regVcolor = new G4VisAttributes(G4Colour(0., 0.3, 0.7));
+  logicVD->SetVisAttributes(regVcolor);
+
+  G4VisAttributes* regCcolor = new G4VisAttributes(G4Colour(0., 0.7, 0.3));
+  logicC->SetVisAttributes(regCcolor);
+
+  G4VisAttributes* regAcolor = new G4VisAttributes(G4Colour(1., 0.5, 0.5));
+  logicA1->SetVisAttributes(regAcolor);
+  logicA2->SetVisAttributes(regAcolor);
+  logicA3->SetVisAttributes(regAcolor);
+  logicA4->SetVisAttributes(regAcolor);
 
   G4VisAttributes* regMcolor = new G4VisAttributes(G4Colour(1., 1., 0.));
-  logicYV->SetVisAttributes(regMcolor);
+  logicY->SetVisAttributes(regMcolor);
 
   // always return world
   //

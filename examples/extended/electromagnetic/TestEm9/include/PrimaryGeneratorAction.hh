@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.1 2003-07-14 17:10:15 vnivanch Exp $
+// $Id: PrimaryGeneratorAction.hh,v 1.2 2003-10-31 12:08:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,17 +53,21 @@ class DetectorConstruction;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  public:
-    PrimaryGeneratorAction(DetectorConstruction*);    
-   ~PrimaryGeneratorAction();
+public:
+  PrimaryGeneratorAction(DetectorConstruction*);    
+  ~PrimaryGeneratorAction();
 
-  public:
-    void GeneratePrimaries(G4Event*);
-    G4ParticleGun* GetParticleGun() {return particleGun;};
+public:
+  void GeneratePrimaries(G4Event*);
+  G4ParticleGun* GetParticleGun() {return particleGun;};
     
-  private:
-    G4ParticleGun*              particleGun;
-    DetectorConstruction*  detector; 
+private:
+
+  PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
+  PrimaryGeneratorAction(const PrimaryGeneratorAction&);
+
+  G4ParticleGun*         particleGun;
+  DetectorConstruction*  detector; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

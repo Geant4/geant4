@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.1 2003-07-14 17:10:14 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.2 2003-10-31 12:08:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,57 +57,58 @@ class DetectorMessenger;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
+public:
 
-    DetectorConstruction();
-   ~DetectorConstruction();
+  DetectorConstruction();
+  ~DetectorConstruction();
 
-  public:
+public:
 
-     void SetEcalMaterial(const G4String&);
-     void SetAbsMaterial(const G4String&);
-     void SetEcalLength (G4double val)   {ecalLength = val;};
-     void SetEcalWidth  (G4double val)   {ecalWidth = val;};
-     void SetVertexLength (G4double val) {vertexLength = val;};
-     void SetPadLength  (G4double val)   {padLength = val;};
-     void SetPadWidth  (G4double val)    {padWidth = val;};
-     void SetAbsLength(G4double val)     {absLength = val;};
+  void SetEcalMaterial(const G4String&);
+  void SetAbsMaterial(const G4String&);
+  void SetEcalLength (G4double val)   {ecalLength = val;};
+  void SetEcalWidth  (G4double val)   {ecalWidth = val;};
+  void SetVertexLength (G4double val) {vertexLength = val;};
+  void SetPadLength  (G4double val)   {padLength = val;};
+  void SetPadWidth  (G4double val)    {padWidth = val;};
+  void SetAbsLength(G4double val)     {absLength = val;};
 
+  G4VPhysicalVolume* Construct();
 
-     G4VPhysicalVolume* Construct();
+  void UpdateGeometry();
 
-     void UpdateGeometry();
+  G4double GetWorldSizeZ()            {return worldZ;}
 
-     G4double GetWorldSizeZ()            {return worldZ;}
+private:
 
-  private:
+  void DefineMaterials();
+  G4VPhysicalVolume* ConstructVolumes();
 
-     G4double ecalLength;
-     G4double ecalWidth;
-     G4double vertexLength;
-     G4double padLength;
-     G4double padWidth;
-     G4double absLength;
-     G4double worldZ;
+  DetectorConstruction & operator=(const DetectorConstruction &right);
+  DetectorConstruction(const DetectorConstruction&);
 
-     G4Material* calMaterial;
-     G4Material* vertMaterial;
-     G4Material* absMaterial;
-     G4Material* worldMaterial;
-     G4Material* yorkMaterial;
+  G4double ecalLength;
+  G4double ecalWidth;
+  G4double vertexLength;
+  G4double padLength;
+  G4double padWidth;
+  G4double absLength;
+  G4double worldZ;
 
-     G4LogicalVolume* logicC;
-     G4LogicalVolume* logicA1;
-     G4LogicalVolume* logicA2;
-     G4LogicalVolume* logicA3;
-     G4LogicalVolume* logicA4;
+  G4Material* calMaterial;
+  G4Material* vertMaterial;
+  G4Material* absMaterial;
+  G4Material* worldMaterial;
+  G4Material* yorkMaterial;
 
-     DetectorMessenger* detectorMessenger;  //pointer to the Messenger
+  G4LogicalVolume* logicC;
+  G4LogicalVolume* logicA1;
+  G4LogicalVolume* logicA2;
+  G4LogicalVolume* logicA3;
+  G4LogicalVolume* logicA4;
 
-  private:
+  DetectorMessenger* detectorMessenger;  //pointer to the Messenger
 
-     void DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

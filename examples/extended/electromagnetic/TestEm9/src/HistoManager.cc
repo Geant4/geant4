@@ -35,7 +35,6 @@
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
-#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -56,22 +55,9 @@ HistoManager* HistoManager::GetPointer()
 HistoManager::HistoManager()
 {
   verbose = 1;
-  histName = G4String("histo.hbook");
-  nHisto = 10;
   nEvt1  = -1;
   nEvt2  = -1;
-  maxEnergy = 50.0*MeV;
-  beamEnergy= 1.*GeV;
-  maxEnergyAbs = 10.*MeV;
-  thKinE    = 1.*MeV;
-  nBinsE = 100;
-  nBinsEA= 40;
-  nBinsED= 100;
-  nTuple = false;
-
-#ifdef G4ANALYSIS_USE
-  ntup = 0;
-#endif
+  bookHisto();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -81,15 +67,59 @@ HistoManager::~HistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void HistoManager::BeginOfHisto()
+void HistoManager::bookHisto()
 {
-  G4cout << "### Histo start initialisation nHisto= " << nHisto << G4endl;
+  maxEnergy = 50.0*MeV;
+  beamEnergy= 1.*GeV;
+  maxEnergyAbs = 10.*MeV;
+  thKinE    = 1.*MeV;
+  nBinsE = 100;
+  nBinsEA= 40;
+  nBinsED= 100;
+  nTuple = false;
+  nHisto = 10;
 
-  n_evt  = 0;
-  n_elec = 0;
-  n_posit= 0;
-  n_gam  = 0;
-  n_step = 0;
+  histo.add1D("10",
+    "Energy deposit (MeV) in central crystal",nBinsED,0.0,beamEnergy,MeV);
+
+  histo.add1D("11",
+    "Energy deposit (MeV) in 3x3",nBinsED,0.0,beamEnergy,MeV);
+
+  histo.add1D("12",
+    "Energy deposit (MeV) in 5x5",nBinsED,0.0,beamEnergy,MeV);
+
+  histo.add1D("13",
+    "Energy (MeV) of delta-electrons",nBinsE,0.0,maxEnergy,MeV);
+
+  histo.add1D("14",
+    "Energy (MeV) of gammas",nBinsE,0.0,maxEnergy,MeV);
+
+  histo.add1D("15",
+    "Energy (MeV) in abs1",nBinsEA,0.0,maxEnergyAbs,MeV);
+
+  histo.add1D("16",
+    "Energy (MeV) in abs2",nBinsEA,0.0,maxEnergyAbs,MeV);
+
+  histo.add1D("17",
+    "Energy (MeV) in abs3",nBinsEA,0.0,maxEnergyAbs,MeV);
+
+  histo.add1D("18",
+    "Energy (MeV) in abs4",nBinsEA,0.0,maxEnergyAbs,MeV);
+
+  histo.add1D("19",
+    "Number of vertex hits",20,-0.5,19.5,1.0);
+
+  if(nTuple) {
+    histo.addTuple( "100", "Dose deposite","float r, z, e" );
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void HistoManager::BeginOfEvent()
+{
+  n_evt++;
+
   Eabs1  = 0.0;
   Eabs2  = 0.0;
   Eabs3  = 0.0;
@@ -99,18 +129,61 @@ void HistoManager::BeginOfHisto()
   for (int i=0; i<25; i++) {
     E[i] = 0.0;
   }
+}
 
-  if(0 < nHisto) bookHisto();
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void HistoManager::EndOfEvent()
+{
+  G4double e9 = 0.0;
+  G4double e25= 0.0;
+  for (int i=0; i<25; i++) {
+    e25 += E[i];
+    if( ( 6<=i &&  8>=i) || (11<=i && 13>=i) || (16<=i && 18>=i)) e9 += E[i];
+  }
+  histo.fill(0,E[12],1.0);
+  histo.fill(1,e9,1.0);
+  histo.fill(2,e25,1.0);
+  histo.fill(5,Eabs1,1.0);
+  histo.fill(6,Eabs2,1.0);
+  histo.fill(7,Eabs3,1.0);
+  histo.fill(8,Eabs4,1.0);
+  float nn = (double)(Nvertex.size());
+  histo.fill(9,nn,1.0);
+
+  if(nTuple) histo.addRow();
+
+  Eabs1  = 0.0;
+  Eabs2  = 0.0;
+  Eabs3  = 0.0;
+  Eabs4  = 0.0;
+  Evertex.clear();
+  Nvertex.clear();
+  for (int i=0; i<25; i++) {
+    E[i] = 0.0;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void HistoManager::BeginOfRun()
+{
+  n_evt  = 0;
+  n_elec = 0;
+  n_posit= 0;
+  n_gam  = 0;
+  n_step = 0;
+  histo.book();
 
   if(verbose > 0) {
-    G4cout << "Histo: Histograms are booked and run has been started"
+    G4cout << "HistoManager: Histograms are booked and run has been started"
            << G4endl;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void HistoManager::EndOfHisto()
+void HistoManager::EndOfRun()
 {
 
   G4cout << "Histo: End of run actions are started" << G4endl;
@@ -132,140 +205,26 @@ void HistoManager::EndOfHisto()
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
 
-#ifdef G4ANALYSIS_USE
   // normalise histograms
   for(G4int i=0; i<nHisto; i++) {
-    histo[i]->scale(x);
+    histo.scale(i,x);
   }
 
-  // Write histogram file
-  tree->commit();
-  G4cout << "Closing the tree..." << G4endl;
-  tree->close();
-  G4cout << "Histograms and Ntuples are saved" << G4endl;
-
-#endif
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void HistoManager::SaveEvent()
-{
-#ifdef G4ANALYSIS_USE
-  G4double e9 = 0.0;
-  G4double e25= 0.0;
-  for (int i=0; i<25; i++) {
-    e25 += E[i];
-    if( ( 6<=i &&  8>=i) || (11<=i && 13>=i) || (16<=i && 18>=i)) e9 += E[i];
-  }
-  histo[0]->fill((float)E[12],1.0);
-  histo[1]->fill((float)e9,1.0);
-  histo[2]->fill((float)e25,1.0);
-  histo[5]->fill((float)Eabs1,1.0);
-  histo[6]->fill((float)Eabs2,1.0);
-  histo[7]->fill((float)Eabs3,1.0);
-  histo[8]->fill((float)Eabs4,1.0);
-  float nn = (float)(Nvertex.size());
-  histo[9]->fill(nn,1.0);
-
-  if(ntup) {
-    ntup->addRow();
-  }
-#endif
-  Eabs1  = 0.0;
-  Eabs2  = 0.0;
-  Eabs3  = 0.0;
-  Eabs4  = 0.0;
-  Evertex.clear();
-  Nvertex.clear();
-  for (int i=0; i<25; i++) {
-    E[i] = 0.0;
-  }
+  histo.save();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void HistoManager::SaveToTuple(const G4String& parname, G4double val)
 {
-  if(2 < verbose) G4cout << "Save to tuple " << parname << "   " << val << G4endl;
-#ifdef G4ANALYSIS_USE
-  if(ntup) ntup->fill( ntup->findColumn(parname), (float)val);
-#endif
+  if(nTuple) histo.fillTuple(parname, val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void HistoManager::SaveToTuple(const G4String& parname,G4double val, G4double)
 {
-  if(2 < verbose) G4cout << "Save to tuple " << parname << "   " << val << G4endl;
-#ifdef G4ANALYSIS_USE
-  if(ntup) ntup->fill( ntup->findColumn(parname), (float)val);
-#endif
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void HistoManager::bookHisto()
-{
-#ifdef G4ANALYSIS_USE
-  G4cout << "### HistoManager books " << nHisto << " histograms " << G4endl;
-  // Creating the analysis factory
-  std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
-
-  // Creating the tree factory
-  std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
-
-  // Creating a tree mapped to a new hbook file.
-    tree = tf->create(histName,"hbook",false,false);
-  //  tree = tf->create(histName,"XML",false,false,"uncompress");
-  G4cout << "Tree store : " << tree->storeName() << G4endl;
-
-  histo.resize(nHisto);
-
-  // Creating a histogram factory, whose histograms will be handled by the tree
-  std::auto_ptr< AIDA::IHistogramFactory > hf(af->createHistogramFactory( *tree ));
-
-  // Creating an 1-dimensional histograms in the root directory of the tree
-
-  histo[0] = hf->createHistogram1D("10",
-    "Energy deposit (MeV) in central crystal",nBinsED,0.0,beamEnergy);
-
-  histo[1] = hf->createHistogram1D("11",
-    "Energy deposit (MeV) in 3x3",nBinsED,0.0,beamEnergy);
-
-  histo[2] = hf->createHistogram1D("12",
-    "Energy deposit (MeV) in 5x5",nBinsED,0.0,beamEnergy);
-
-  histo[3] = hf->createHistogram1D("13",
-    "Energy (MeV) of delta-electrons",nBinsE,0.0,maxEnergy/MeV);
-
-  histo[4] = hf->createHistogram1D("14",
-    "Energy (MeV) of gammas",nBinsE,0.0,maxEnergy/MeV);
-
-  histo[5] = hf->createHistogram1D("15",
-    "Energy (MeV) in abs1",nBinsEA,0.0,maxEnergyAbs/MeV);
-
-  histo[6] = hf->createHistogram1D("16",
-    "Energy (MeV) in abs2",nBinsEA,0.0,maxEnergyAbs/MeV);
-
-  histo[7] = hf->createHistogram1D("17",
-    "Energy (MeV) in abs3",nBinsEA,0.0,maxEnergyAbs/MeV);
-
-  histo[8] = hf->createHistogram1D("18",
-    "Energy (MeV) in abs4",nBinsEA,0.0,maxEnergyAbs/MeV);
-
-  histo[9] = hf->createHistogram1D("19",
-    "Number of vertex hits",20,-0.5,19.5);
-
-  // Creating a tuple factory, whose tuples will be handled by the tree
-  std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
-
-  // If using Anaphe HBOOK implementation, there is a limitation on the
-  // length of the variable names in a ntuple
-  if(nTuple) {
-     ntup = tpf->create( "100", "Dose deposite","float r, z, e" );
-  }
-#endif
+  if(nTuple) histo.fillTuple(parname, val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -284,9 +243,7 @@ void HistoManager::AddDeltaElectron(const G4DynamicParticle* elec)
 {
   G4double e = elec->GetKineticEnergy()/MeV;
   if(e > 0.0) n_elec++;
-#ifdef G4ANALYSIS_USE
-  if(3 < nHisto) histo[3]->fill((float)e,1.0);
-#endif
+  histo.fill(3,e,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -295,9 +252,7 @@ void HistoManager::AddPhoton(const G4DynamicParticle* ph)
 {
   G4double e = ph->GetKineticEnergy()/MeV;
   if(e > 0.0) n_gam++;
-#ifdef G4ANALYSIS_USE
-  if(4 < nHisto) histo[4]->fill((float)e,1.0);
-#endif
+  histo.fill(4,e,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

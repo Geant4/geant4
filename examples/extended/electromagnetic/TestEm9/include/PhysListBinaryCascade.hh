@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListBinaryCascade.hh,v 1.2 2003-10-13 16:31:50 vnivanch Exp $
+// $Id: PhysListBinaryCascade.hh,v 1.3 2003-10-31 12:08:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -50,26 +50,26 @@
 
 class PhysListBinaryCascade : public G4VPhysicsConstructor
 {
-  public:
-    PhysListBinaryCascade(const G4String& name = "binary");
-    virtual ~PhysListBinaryCascade();
+public:
+  PhysListBinaryCascade(const G4String& name = "binary");
+  virtual ~PhysListBinaryCascade();
 
-  public:
-    // This method will be invoked in the Construct() method.
-    // each particle type will be instantiated
-    void ConstructParticle() {};
+public:
+  // This method will be invoked in the Construct() method.
+  // each particle type will be instantiated
+  void ConstructParticle() {};
 
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type
-    void ConstructProcess();
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  void ConstructProcess();
 
-  private:
+private:
 
-    G4ProtonInelasticProcess      theIPproton;
-    G4NeutronInelasticProcess     theIPneutron;
-    G4ProtonInelasticCrossSection theXSecProton;
-    G4ProtonInelasticCrossSection theXSecNeutron;
+  G4ProtonInelasticProcess      theIPproton;
+  G4NeutronInelasticProcess     theIPneutron;
+  G4ProtonInelasticCrossSection theXSecProton;
+  G4ProtonInelasticCrossSection theXSecNeutron;
 
 };
 

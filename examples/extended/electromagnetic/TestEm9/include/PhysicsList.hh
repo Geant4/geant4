@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.1 2003-07-14 17:10:15 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.2 2003-10-31 12:08:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,42 +46,47 @@ class G4ProductionCuts;
 
 class PhysicsList: public G4VModularPhysicsList
 {
-  public:
-    PhysicsList();
-   ~PhysicsList();
+public:
+  PhysicsList();
+  ~PhysicsList();
 
-    void ConstructParticle();
+  void ConstructParticle();
 
-    void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
+  void SetCuts();
+  void SetCutForGamma(G4double);
+  void SetCutForElectron(G4double);
+  void SetCutForPositron(G4double);
 
-    void AddPhysicsList(const G4String& name);
-    void ConstructProcess();
+  void AddPhysicsList(const G4String& name);
+  void ConstructProcess();
 
-    void AddStepMax();
-    StepMax* GetStepMaxProcess() {return stepMaxProcess;};
+  void AddStepMax();
+  StepMax* GetStepMaxProcess() {return stepMaxProcess;};
 
-    void SetVertexCut(G4double val);
-    void SetMuonCut(G4double val);
+  void SetVertexCut(G4double val);
+  void SetMuonCut(G4double val);
 
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
+private:
 
-    G4VPhysicsConstructor*  emPhysicsList;
-    G4VPhysicsConstructor*  generalPhysicsList;
-    G4VPhysicsConstructor*  particleList;
-    std::vector<G4VPhysicsConstructor*>  hadronPhys;
-    G4String emName;
+  // hide assignment operator
+  PhysicsList & operator=(const PhysicsList &right);
+  PhysicsList(const PhysicsList&);
 
-    StepMax* stepMaxProcess;
+  G4double cutForGamma;
+  G4double cutForElectron;
+  G4double cutForPositron;
 
-    PhysicsListMessenger* pMessenger;
-    G4ProductionCuts* vertexDetectorCuts;
-    G4ProductionCuts* muonDetectorCuts;
+  G4VPhysicsConstructor*  emPhysicsList;
+  G4VPhysicsConstructor*  generalPhysicsList;
+  G4VPhysicsConstructor*  particleList;
+  std::vector<G4VPhysicsConstructor*>  hadronPhys;
+  G4String emName;
+
+  StepMax* stepMaxProcess;
+
+  PhysicsListMessenger* pMessenger;
+  G4ProductionCuts* vertexDetectorCuts;
+  G4ProductionCuts* muonDetectorCuts;
 
 };
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.hh,v 1.1 2003-07-14 17:26:22 vnivanch Exp $
+// $Id: StepMax.hh,v 1.2 2003-10-31 12:08:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,32 +40,35 @@ class StepMaxMessenger;
 
 class StepMax : public G4VDiscreteProcess
 {
-  public:
+public:
 
-     StepMax(const G4String& processName = "UserMaxStep");
-    ~StepMax();
+  StepMax(const G4String& processName = "UserMaxStep");
+  ~StepMax();
 
-     G4bool IsApplicable(const G4ParticleDefinition&);
+  G4bool IsApplicable(const G4ParticleDefinition&);
 
-     void SetMaxStep(G4double);
+  void SetMaxStep(G4double);
 
-     G4double GetMaxStep() {return MaxChargedStep;};
+  G4double GetMaxStep() {return MaxChargedStep;};
 
-     G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
+  G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
 			                       G4double previousStepSize,
 			                       G4ForceCondition* condition);
 
-     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-     G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
-     {return 0.;};    // it is not needed here !
+  G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+  {return 0.;};    // it is not needed here !
 
-  private:
+private:
 
-     G4double MaxChargedStep;
-     G4double ProposedStep;
+  StepMax & operator=(const StepMax &right);
+  StepMax(const StepMax&);
 
-     StepMaxMessenger*  pMess;
+  G4double MaxChargedStep;
+  G4double ProposedStep;
+
+  StepMaxMessenger*  pMess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -48,16 +48,19 @@ class HistoManager;
 class TrackingAction : public G4UserTrackingAction
 {
 
-  public:
-    TrackingAction();
-    ~TrackingAction();
+public:
+  TrackingAction();
+  ~TrackingAction();
 
-    void PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*) {};
+  void PreUserTrackingAction(const G4Track*);
+  void PostUserTrackingAction(const G4Track*) {};
 
-  private:
+private:
 
-    HistoManager* theHisto;
+  TrackingAction & operator=(const TrackingAction &right);
+  TrackingAction(const TrackingAction&);
+
+  HistoManager* theHisto;
 
 };
 

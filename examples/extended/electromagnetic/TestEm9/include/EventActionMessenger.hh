@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventActionMessenger.hh,v 1.1 2003-10-13 15:42:25 vnivanch Exp $
+// $Id: EventActionMessenger.hh,v 1.2 2003-10-31 12:08:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,16 +40,17 @@ class G4UIcmdWithAnInteger;
 
 class EventActionMessenger: public G4UImessenger
 {
-  public:
-    EventActionMessenger(EventAction*);
-   ~EventActionMessenger();
+public:
+  EventActionMessenger(EventAction*);
+  ~EventActionMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    EventAction* eventAction;   
-    G4UIcmdWithAString* DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;    
+private:
+
+  EventAction* eventAction;   
+  G4UIcmdWithAString* DrawCmd;
+  G4UIcmdWithAnInteger* PrintCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,7 +20,8 @@
 #/vis/open DAWNFILE
 #
 # Draw scene
-/vis/viewer/zoom 1.4
+/vis/viewer/set/viewpointThetaPhi 90 0 deg
+#/vis/viewer/zoom 1.4
 /vis/viewer/flush
 #
 # for drawing the tracks
@@ -28,5 +29,6 @@
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 #
-/testem/event/drawTracks all
+#/testem/event/drawTracks all
+/testem/event/drawTracks charged
 

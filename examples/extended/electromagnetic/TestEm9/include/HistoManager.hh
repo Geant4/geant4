@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.2 2003-10-13 16:31:50 vnivanch Exp $
+// $Id: HistoManager.hh,v 1.3 2003-10-31 12:08:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef HistoManager_h
@@ -50,11 +50,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4DataVector.hh"
 #include "G4Track.hh"
-
-#ifdef G4ANALYSIS_USE
-#include <memory> // for the auto_ptr(T>
-#include "AIDA/AIDA.h"
-#endif
+#include "Histo.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -64,100 +60,95 @@ class HistoManager
 public:
   // With description
 
-    static HistoManager* GetPointer();
+  static HistoManager* GetPointer();
 
-    HistoManager();
+private:
 
-   ~HistoManager();
-
-    void BeginOfHisto();
-  // In this method histogramms are booked
-
-    void EndOfHisto();
-  // In this method bookHisto method is called in which histogramms are filled
+  HistoManager();
 
 public: // Without description
 
-    void SetHistoName(const G4String& name) {histName = name;};
-    void bookHisto();
-  //   AIDA::ITuple* GetNtuple() const {return ntup;};
-    void SaveToTuple(const G4String&, G4double);
-    void SaveToTuple(const G4String&, G4double, G4double);
-    void SaveEvent();
-    G4double GetTrackLength() const {return trackLength;};
-    void ResetTrackLength() {trackLength = 0.0, trackAbs = true;};
-    void SetTrackOutAbsorber() {trackAbs = false;};
-    G4bool GetTrackInAbsorber() const {return trackAbs;};
-    void AddTrackLength(G4double x)   {trackLength += x;};
-    void AddEndPoint(G4double);
-    void AddEnergy(G4double, G4double);
-    void AddDeltaElectron(const G4DynamicParticle*);
-    void AddPhoton(const G4DynamicParticle*);
-    void AddPositron(const G4DynamicParticle*) {n_posit++;};
-    void SetVerbose(G4int val) {verbose = val;};
-    G4int GetVerbose() const {return verbose;};
-    void SetHistoNumber(G4int val) {nHisto = val;};
-    void SetNtuple(G4bool val) {nTuple = val;};
+  ~HistoManager();
 
-    void SetFirstEventToDebug(G4int val) {nEvt1 = val;};
-    G4int FirstEventToDebug() const {return nEvt1;};
-    void SetLastEventToDebug(G4int val) {nEvt2 = val;};
-    G4int LastEventToDebug() const {return nEvt2;};
+  void BeginOfEvent();
+  void EndOfEvent();
 
-    void SetMaxEnergy(G4double val) {maxEnergy = val;};
-    G4double  GetMaxEnergy() const {return maxEnergy;};
-    void SetThresholdEnergy(G4double val) {thKinE = val;};
-    void SetThresholdZ(G4double val) {thPosZ = val;};
-    void AddEvent() {n_evt++;};
-    void AddStep() {n_step++;};
+  void BeginOfRun();
+  void EndOfRun();
 
-    void AddEnergy(G4double edep, G4int idx, G4int copyNo);
-    void ScoreNewTrack(const G4Track* aTrack);
+  void bookHisto();
+
+  void SaveToTuple(const G4String&, G4double);
+  void SaveToTuple(const G4String&, G4double, G4double);
+  void SaveEvent();
+  G4double GetTrackLength() const {return trackLength;};
+  void ResetTrackLength() {trackLength = 0.0, trackAbs = true;};
+  void SetTrackOutAbsorber() {trackAbs = false;};
+  G4bool GetTrackInAbsorber() const {return trackAbs;};
+  void AddTrackLength(G4double x)   {trackLength += x;};
+  void AddEndPoint(G4double);
+  void AddEnergy(G4double, G4double);
+  void AddDeltaElectron(const G4DynamicParticle*);
+  void AddPhoton(const G4DynamicParticle*);
+  void AddPositron(const G4DynamicParticle*) {n_posit++;};
+  void SetVerbose(G4int val) {verbose = val;};
+  G4int GetVerbose() const {return verbose;};
+  void SetHistoNumber(G4int val) {nHisto = val;};
+  void SetNtuple(G4bool val) {nTuple = val;};
+
+  void SetFirstEventToDebug(G4int val) {nEvt1 = val;};
+  G4int FirstEventToDebug() const {return nEvt1;};
+  void SetLastEventToDebug(G4int val) {nEvt2 = val;};
+  G4int LastEventToDebug() const {return nEvt2;};
+
+  void SetMaxEnergy(G4double val) {maxEnergy = val;};
+  G4double  GetMaxEnergy() const {return maxEnergy;};
+  void SetThresholdEnergy(G4double val) {thKinE = val;};
+  void SetThresholdZ(G4double val) {thPosZ = val;};
+  void AddStep() {n_step++;};
+
+  void AddEnergy(G4double edep, G4int idx, G4int copyNo);
+  void ScoreNewTrack(const G4Track* aTrack);
 
 private:
 
   // MEMBERS
-    static HistoManager* fManager;
+  static HistoManager* fManager;
 
-    G4String histName;
+  G4int nHisto;
+  G4int verbose;
+  G4int nEvt1;
+  G4int nEvt2;
 
-#ifdef G4ANALYSIS_USE
-    std::vector<AIDA::IHistogram1D*> histo;
-    AIDA::ITuple* ntup;
-    AIDA::ITree* tree;
-#endif
-    G4int nHisto;
-    G4int verbose;
-    G4int nEvt1;
-    G4int nEvt2;
+  G4double beamEnergy;
+  G4double maxEnergy;
+  G4double maxEnergyAbs;
+  G4double thKinE;
+  G4double thPosZ;
 
-    G4double beamEnergy;
-    G4double maxEnergy;
-    G4double maxEnergyAbs;
-    G4double thKinE;
-    G4double thPosZ;
+  G4double trackLength;
+  G4bool trackAbs;        // Track is in absorber
+  G4int n_evt;
+  G4int n_elec;
+  G4int n_posit;
+  G4int n_gam;
+  G4int n_step;
+  G4int n_gamph;
+  G4int n_gam_tar;
+  G4int n_step_target;
+  G4int tCounter;
+  G4int nBinsE, nBinsEA, nBinsED;
+  G4bool nTuple;
 
-    G4double trackLength;
-    G4bool trackAbs;        // Track is in absorber
-    G4int n_evt;
-    G4int n_elec;
-    G4int n_posit;
-    G4int n_gam;
-    G4int n_step;
-    G4int n_gamph;
-    G4int n_gam_tar;
-    G4int n_step_target;
-    G4int tCounter;
-    G4int nBinsE, nBinsEA, nBinsED;
-    G4bool nTuple;
+  G4double Eabs1, Eabs2, Eabs3, Eabs4;
+  G4double E[25];
+  G4DataVector Evertex;
+  G4DataVector Nvertex;
 
-    G4double Eabs1, Eabs2, Eabs3, Eabs4;
-    G4double E[25];
-    G4DataVector Evertex;
-    G4DataVector Nvertex;
+  std::vector<G4int> tScore;
+  std::vector<G4int> tType;
 
-    std::vector<G4int> tScore;
-    std::vector<G4int> tType;
+  Histo  histo;
 };
 
 #endif

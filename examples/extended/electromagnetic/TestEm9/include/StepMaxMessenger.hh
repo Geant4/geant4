@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMaxMessenger.hh,v 1.1 2003-07-14 17:10:15 vnivanch Exp $
+// $Id: StepMaxMessenger.hh,v 1.2 2003-10-31 12:08:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,15 +39,15 @@ class G4UIcmdWithADoubleAndUnit;
 
 class StepMaxMessenger: public G4UImessenger
 {
-  public:
-    StepMaxMessenger(StepMax*);
-   ~StepMaxMessenger();
+public:
+  StepMaxMessenger(StepMax*);
+  ~StepMaxMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    StepMax* stepMax;
-    G4UIcmdWithADoubleAndUnit* StepMaxCmd;
+private:
+  StepMax* stepMax;
+  G4UIcmdWithADoubleAndUnit* StepMaxCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

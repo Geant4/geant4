@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2003-10-24 12:25:06 maire Exp $
+$Id: History,v 1.9 2003-10-31 12:08:50 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31-10-03 V.Ivanchenko (testem9-V05-02-04)
+- Update geometry and visualisation
+- Update README
+- Add Histo and HistoMessenger classes - generic analysis modules
 
 24-10-03 mma (testem9-V05-02-03)
 - PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..

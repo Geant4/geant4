@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmG4v52.hh,v 1.1 2003-10-13 15:41:30 vnivanch Exp $
+// $Id: PhysListEmG4v52.hh,v 1.2 2003-10-31 12:08:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,18 +37,18 @@
 
 class PhysListEmG4v52 : public G4VPhysicsConstructor
 {
-  public: 
-    PhysListEmG4v52(const G4String& name = "g4v52");
-   ~PhysListEmG4v52();
+public: 
+  PhysListEmG4v52(const G4String& name = "g4v52");
+  ~PhysListEmG4v52();
 
-  public: 
-    // This method is dummy for physics. 
-    void ConstructParticle() {};
+public: 
+  // This method is dummy for physics. 
+  void ConstructParticle() {};
  
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
-    void ConstructProcess();
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
