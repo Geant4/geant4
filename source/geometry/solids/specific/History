@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2000-06-26 09:54:33 gcosmo Exp $
+$Id: History,v 1.8 2000-06-26 15:36:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,6 +22,8 @@ committal in the CVS repository !
 - G4Polycone.cc: fixed memory leak by invoking destruction of member
   enclosingCylinder, which was not cleaned up in the destructor.
   This fixes problem report #107.
+- G4Polycone.hh: added forward declaration of struct G4PolyconeHistorical
+  and made it friend, for porting on KCC --strict. This fixes report #110.
 - G4Polyhedra.hh: fixed typo in method name. Changed GetNumSIde() to
   GetNumSide(). This fixes problem report #105.
 
