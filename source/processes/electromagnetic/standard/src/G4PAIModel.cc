@@ -49,7 +49,6 @@
 #include "G4ParticleDefinition.hh"
 
 
-
 ////////////////////////////////////////////////////////////////////////
 
 G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
@@ -625,6 +624,7 @@ G4PAIModel::GetPostStepTransfer( G4double scaledTkin )
     if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break ;
   }
   iPlace = iTkin - 1 ;
+  if(iPlace < 0) iPlace = 0;
   dNdxCut1 = (*fdNdxCutVector)(iPlace) ;  
 
   //  G4cout<<"iPlace = "<<iPlace<<endl ;
