@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.9 2001-07-11 10:08:58 gunter Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.10 2001-07-30 23:34:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,24 +56,11 @@
 #include "G4Xt.hh"
 #include <X11/Shell.h>
 
-static G4ViewParameters viewingParameters;
-void G4OpenGLXmViewerSecondaryLoopPostAction ();
-
 void G4OpenGLXmViewer::ShowView () {
 
-  viewingParameters = fVP;
   G4Xt::getInstance () -> SecondaryLoop ();
 
 }
-
-void G4OpenGLXmViewerSecondaryLoopPostAction ()
-{
-  if(G4Xt::getInstance () -> GetExitSecondaryLoopCode ()==OGL_EXIT_CODE)
-    {
-      G4VisManager::GetInstance() -> SetCurrentViewParameters() = viewingParameters;
-    }
-}
-
 
 void G4OpenGLXmViewer::GetXmConnection () {
   
@@ -109,7 +96,7 @@ void G4OpenGLXmViewer::GetXmConnection () {
 *toplevel*primaryColorSetId: 3\n\
 *toplevel*secondaryColorSetId: 3\n\
 ");
-  interactorManager->AddSecondaryLoopPostAction ((G4SecondaryLoopAction)G4OpenGLXmViewerSecondaryLoopPostAction);
+  //  interactorManager->AddSecondaryLoopPostAction ((G4SecondaryLoopAction)G4OpenGLXmViewerSecondaryLoopPostAction);
   
   shell = XtAppCreateShell ((String)fName.data(),(String)fName.data(),topLevelShellWidgetClass,XtDisplay(toplevel),NULL,0); 
   interactorManager->AddShell (shell);

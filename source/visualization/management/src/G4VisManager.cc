@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.30 2001-07-27 22:33:27 johna Exp $
+// $Id: G4VisManager.cc,v 1.31 2001-07-30 23:34:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -255,100 +255,6 @@ G4bool G4VisManager::RegisterGraphicsSystem (G4VGraphicsSystem* pSystem) {
   }
 }
 
-void G4VisManager::CopyViewParameters () {
-  if (IsValidView ()) {
-    fVP = fpViewer -> GetViewParameters ();
-  }
-}
-
-/***********
-void G4VisManager::Clear () {
-
-  // Clear current scene and current view, marking all its views as
-  // needing refreshing.  This is a comprehensive clear which clears
-  // both framebuffers of a double buffered system and clears the
-  // scene's graphics databse (display lists, etc.) and clears the
-  // current scene data.
-
-  if (IsValidView ()) {
-
-    fpViewer -> ClearView ();
-    // Clears current buffer, i.e., back buffer in case of double
-    // buffered system.
-
-    fpViewer -> FinishView ();
-    // Swaps buffers of double buffered systems.
-
-    fpViewer -> ClearView ();
-    // Clears the swapped buffer.
-
-    fpViewer -> NeedKernelVisit ();
-    // Informs all views of need to revisit kernel.
-
-    fpSceneHandler -> ClearStore ();
-    // Clears the graphics database (display lists) if any.
-
-    fSD.Clear ();
-    fpSceneHandler -> SetSceneData (fSD);
-    // Clears current scene data - then updates scene.
-  }
-}
-*****************/
-
-/****************
-void G4VisManager::ClearScene () {
-
-  // Clear current scene, marking all its views as needing refreshing.
-  // Clears the scene handler's graphics database (display lists, etc.)
-
-  if (IsValidView ()) {
-
-    fpViewer -> NeedKernelVisit ();
-    // Informs all views of need to revisit kernel.
-
-    fpSceneHandler -> ClearStore ();
-    // Clears the graphics database (display lists) if any.
-
-    fSD.Clear ();
-    fpSceneHandler -> SetSceneData (fSD);
-    // Clears current scene data - then updates scene.
-  }
-}
-********************/
-
-void G4VisManager::ClearView () {
-
-  // Clear visible window of current view (both buffers of a double
-  // buffered system).
-
-  if (IsValidView ()) {
-
-    fpViewer -> ClearView ();
-    // Clears current buffer, i.e., back buffer in case of double
-    // buffered system.
-
-    fpViewer -> FinishView ();
-    // Swaps buffers of double buffered systems.
-
-    fpViewer -> ClearView ();
-    // Clears the swapped buffer.
-  }
-}
-
-void G4VisManager::Draw () {
-  if (IsValidView ()) {
-    fpViewer -> SetViewParameters (fVP);
-    fpViewer -> SetView ();
-    fpViewer -> DrawView ();
-  }
-}
-
-void G4VisManager::Show () {
-  if (IsValidView ()) {
-     fpViewer -> ShowView ();
-  }
-}
-
 void G4VisManager::Draw (const G4Polyline& line,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
@@ -520,19 +426,20 @@ void G4VisManager::CreateViewer (G4String name) {
       // Make it possible for user action code to Draw.
       fpConcreteInstance = this;
 
+      const G4ViewParameters& vp = fpViewer->GetViewParameters();
       G4bool warnings = false;
-      if (fVP.IsCulling () && fVP.IsCullingInvisible ()) {
+      if (vp.IsCulling () && vp.IsCullingInvisible ()) {
 	warnings = true;
 	G4cout << "G4VisManager::CreateViewer: new viewer created:";
 	if (fVerbose > 0) {
-	  G4cout << " view parameters are:\n  " << fVP;
+	  G4cout << " view parameters are:\n  " << vp;
 	}
 	G4cout <<
 	  "\n  NOTE: objects with visibility flag set to \"false\""
 	  " will not be drawn!"
 	  "\n  \"/vis/set/culling off\" to Draw such objects.";
       }
-      if (fVP.IsCullingCovered ()) {
+      if (vp.IsCullingCovered ()) {
 	if (!warnings) {
 	  G4cout << "G4VisManager::CreateViewer: new viewer created:";
 	}
@@ -790,57 +697,6 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
   IsValidView ();  // Checks.
 }
 
-void G4VisManager::PrintCurrentSystems () const {
-  if (fpGraphicsSystem && fpSceneHandler && fpViewer) {
-    G4int nSystems = fAvailableGraphicsSystems.size ();
-    if (nSystems <= 0) {
-      G4cout << "No graphics systems available yet." << G4endl;
-    }
-    else {
-      PrintAvailableGraphicsSystems ();
-    }
-  }
-  else PrintInvalidPointers ();
-}
-
-void G4VisManager::PrintCurrentSystem () const {
-  if (fpGraphicsSystem && fpSceneHandler && fpViewer) {
-    G4cout << "Current graphics system is: " << *fpGraphicsSystem;
-    G4cout << G4endl;
-  }
-  else PrintInvalidPointers ();
-}
-
-void G4VisManager::PrintCurrentScene () const {
-  if (fpGraphicsSystem && fpSceneHandler && fpViewer) {
-    G4cout << "Current Scene is: " << fpSceneHandler -> GetName ();
-    G4cout << '\n' << *fpSceneHandler;
-    G4cout << G4endl;
-  }
-  else PrintInvalidPointers ();
-}
-
-void G4VisManager::PrintCurrentView () const {
-  if (fpGraphicsSystem && fpSceneHandler && fpViewer) {
-    G4cout << "Current View is: ";
-    G4cout << fpGraphicsSystem -> GetName () << '-'
-	   << fpSceneHandler  -> GetSceneHandlerId () << '-'
-	   << fpViewer   -> GetViewId ()
-	   << " selected (check: " << fpViewer -> GetName () << ").";
-    G4cout << '\n' << *fpViewer;
-    G4cout << "\nCurrent view parameters";
-    if (fVP != fpViewer -> GetViewParameters ()) {
-      G4cout << " differ in the following respect:\n";
-      fVP.PrintDifferences (fpViewer -> GetViewParameters ());
-    }
-    else {
-      G4cout << " are same."
-	   << G4endl;
-    }
-  }
-  else PrintInvalidPointers ();
-}
-
 void G4VisManager::PrintAllGraphicsSystems () const {
   G4cout <<
     "\nThe following graphics systems drivers are supported in the"
@@ -938,14 +794,6 @@ void G4VisManager::PrintInvalidPointers () const {
     if (!fpViewer ) G4cout << "\nNull viewer pointer. ";
   }
   G4cout << G4endl;
-}
-
-void G4VisManager::RefreshCurrentView  () {  // Soft clear, then redraw.
-  if (IsValidView ()) {
-    fpViewer -> ClearView ();  // Soft clear, i.e., clears buffer only.
-    Draw ();
-    Show ();
-  }
 }
 
 void G4VisManager::EndOfEvent () {
@@ -1080,14 +928,7 @@ G4bool G4VisManager::IsValidView () {
   return isValid;
 }
 
-void G4VisManager::PrintCommandDeprecation(const G4String& message) {
-  G4cout <<
-    "**** DEPRECATED COMMAND ***"
-    "\n****  Will be discontinued as a \"/vis/\" command after Geant4 3.0."
-    "\n****  Will still be available as a \"/vis~/\" command for a while."
-    "\n****  " << message << G4endl;
-}
-
+///////////////////////////////////////////////////////////////////////
 // "No functionality" graphics systems to trap accidental attempt to
 // use unbuilt systems.
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.28 2001-07-11 10:09:19 gunter Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.29 2001-07-30 23:34:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -273,12 +273,10 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
     }
   }
 
-  fpVisManager->SetCurrentViewParameters().SetWindowSizeHint
-    (windowSizeHint, windowSizeHint);
+  fpVisManager->SetWindowSizeHint (windowSizeHint, windowSizeHint);
   // These are picked up in the G4VViewer constructor.  The problem is
   // these have to be set *before* construction, i.e., before we have
-  // a viewer.  We have to find another way since we will be
-  // eliminating the vis manager's view parameters.
+  // a viewer.
 
   // Create viewer.
   fpVisManager -> CreateViewer (newName);

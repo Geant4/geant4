@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.34 2001-07-24 22:02:03 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.35 2001-07-30 23:34:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -277,13 +277,13 @@ NI /vis/viewer/clone
   lights are set to move with camera.
   Affects current viewer.
 
-/vis/viewer/set/zoom [<factor>]
-  default:                 1
+/vis/viewer/zoom [<factor>]
+  default:            1
   Multiplies magnification by this factor.
   Affects current viewer.
 
-/vis/viewer/set/zoomTo [<factor>]
-  default:                   1
+/vis/viewer/zoomTo [<factor>]
+  default:             1
   Magnifies by this factor relative to standard view.
   Affects current viewer.
 

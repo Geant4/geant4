@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc,v 1.14 2001-07-11 10:09:18 gunter Exp $
+// $Id: G4VViewer.cc,v 1.15 2001-07-30 23:34:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,8 +60,8 @@ fNeedKernelVisit (true)
   fShortName.strip ();
 
   G4VisManager* pVisMan = G4VisManager::GetInstance();
-  G4double xHint = pVisMan->GetCurrentViewParameters().GetWindowSizeHintX();
-  G4double yHint = pVisMan->GetCurrentViewParameters().GetWindowSizeHintY();
+  G4int xHint, yHint;
+  pVisMan->GetWindowSizeHint(xHint, yHint);
   fVP.SetWindowSizeHint(xHint,yHint);
   fDefaultVP.SetWindowSizeHint(xHint,yHint);
 }
