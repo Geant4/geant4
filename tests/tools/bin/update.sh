@@ -1,5 +1,5 @@
 #! /bin/sh
-# $Id: update.sh,v 1.13 2000-08-01 08:24:56 stesting Exp $
+# $Id: update.sh,v 1.14 2000-12-12 14:55:28 stesting Exp $
 # For tagset NNN, extract and check  bonsai<NNN>.sdb then run update.sh.
 # Usage: update.sh [-n] < bonsai<NNN>.sdb >& update<NNN>.log
 
@@ -43,9 +43,7 @@ fi
 
 # Make $G4WORKDIR/stt directory :
 dir=$G4WORKDIR/stt
-if [ -d $dir ] ; then
- echo "" > /dev/null
-else 
+if [ ! -d $dir ] ; then
  echo "$dir does not exist."
  echo "This is now an error.  Create a directory or a symbolic link"
  echo "  to a directory by hand or in a calling script."
@@ -53,9 +51,7 @@ fi
 #
 # Make $G4WORKDIR/stt/$G4SYSTEM directory :
 dir=$G4WORKDIR/stt/$G4SYSTEM
-if [ -d $dir ] ; then
- echo "" > /dev/null
-else 
+if [ ! -d $dir ] ; then
  mkdir $dir
  echo "$dir created."
 fi
