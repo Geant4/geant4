@@ -4,28 +4,22 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE:                                                              #
-#        Nov      07, 2001                                            #
-#        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
-#        June     20, 2001                                            #
-#        November 26, 2000                                            #
-#        October  17, 2000                                            # 
+#        Nov      14, 2001                                            #
 #                                                                     #
-#  CONTENTS: A macro to demonstrate creation of a "multi-page"        #
-#            PostScript file                                          #
+#  CONTENTS: A macro to demonstrate batch visualization to generate   #
+#            PostScript file with the DAWNFILE driver                 #
 #                                                                     #
-#  USAGE:  % setenv G4DAWNFILE_MAX_FILE_NUM  1                        #
-#          % setenv DAWN_BATCH               a                        #
-#          % gmake visclean                                           #
+#          % setenv DAWN_BATCH               1                        #
+#          % make visclean                                            #
 #          % $G4BINDIR/exampleN03                                     #
 #          Idle> /control/execute visTutor/exN03Vis8.mac              #
 #          Idle> exit                                                 #
-#          % gv g4_00.eps                                             #
-#                                                                     #
-#          Then click, "<<", ">>" etc to traverse pages               #
+#          % gv g4_00.eps &                                           #
+#          % gv g4_01.eps &                                           #
+#          % gv g4_02.eps &                                           #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window,                    #
 #                                  DAWN (version 3.85 or after)       #
-#                                  gv (Ghostview), Tcl/Tk             #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #
@@ -38,14 +32,6 @@
 #    * Unnecessary                                                    #
 #                                                                     # 
 #  ADDITIONAL NOTES:                                                  #
-#    * If you execute this macro plural times, all the views are      #
-#      sequentially appended to the file "g4_00.eps".                 #
-#      For example if you execute it two times, a 6-page (3+3 page)   #
-#      PostScript file is made.                                       #
-#      Unset environmental variables to initialize your environment:  #
-#                                                                     # 
-#       % unsetenv G4DAWNFILE_MAX_FILE_NUM                            #
-#       % unsetenv DAWN_BATCH                                         # 
 #                                                                     # 
 #######################################################################
 
@@ -53,34 +39,23 @@
 # Creation of a multi-page PostScript file with the DAWNFILE driver
 ####################################################################
 
-# Invoke the DAWNFILE driver 
+# Invoke the DAWNFILE driver
 /vis/open DAWNFILE
 
-# Set viewing parameters
-/vis/viewer/reset
-/vis/viewer/zoom               0.9 
-/vis/viewer/set/viewpointThetaPhi  35 35
+# Add the world volume to the current scene
+/vis/drawVolume
 
-# Generate page 1: Absorber
-/vis/drawVolume           Absorber 
-/vis/scene/add/axes       0 0 0 500 mm
-/vis/scene/add/text       0 0 0 mm  30 -150 -200   Page1/3:Absorber 
-/vis/viewer/flush
+# Add trajectories to the current scene
+#  Note: This command is not necessary in exampleN03,
+#        since the C++ method DrawTrajectory() is 
+#        described in the event action.
+#/vis/scene/add/trajectories
 
-# Generate page 2: Gap
-/vis/drawVolume           Gap
-/vis/scene/add/axes       0 0 0 500 mm
-/vis/scene/add/text       0 0 0 mm 30 -100 -200   Page2/3:Gap
-/vis/viewer/flush
+# Set camera 
+/vis/viewer/reset 
+/vis/viewer/zoom              1.5
+/vis/viewer/set/viewpointThetaPhi 70 20
 
-# Generate page 3: World
-/vis/viewer/set/culling   global  false
-/vis/drawVolume           
-/vis/scene/add/axes       0 0 0 500 mm
-/vis/scene/add/text       0 0 0 mm 50 -100 -200   Page3/3:world
-/vis/viewer/flush
-
-# Make the culling on for next visualization
-#  Note: You may also use "/vis/viewer/reset" 
-#        for this initialization. 
-/vis/viewer/set/culling   global  true
+# Visualize events added to the current scene
+/tracking/storeTrajectory 1
+/run/beamOn 3
