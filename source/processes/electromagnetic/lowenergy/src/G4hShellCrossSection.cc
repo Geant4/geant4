@@ -34,6 +34,7 @@
 // 23 Oct 2001 A. Mantero   1st implementation
 // 24 Oct 2001 MGP          Cleaned up
 // 30 Oct 2001 V.Ivanchenko Include formula (53)
+// 07 Oct 2002 V.Ivanchenko Fix in formula (53)
 //
 // -------------------------------------------------------------------
 
@@ -73,19 +74,19 @@ G4std::vector<G4double> G4hShellCrossSection::Probabilities(
   G4std::vector<G4double> crossSections;
 
   // Partial and total cross-section used for normalization of crossSections:
-  G4double aCrossSection = 0.;
   G4double totalCrossSection = 0.;
 
   // In this loop we calculate cross-section for every shell in the atom
   for (size_t k=0;  k<nShells;  k++)
     {
       G4double bindingEnergy = transitionManager->Shell(Z,k)->BindingEnergy();
-      G4double xDelta = deltaEnergy/bindingEnergy;
-      G4double y = incidentEnergy*electron_mass_c2/(bindingEnergy*hMass);
-      G4double x = 1.0 + xDelta;
+      G4double xEnergy = 0.5*bindingEnergy;
+      G4double y = incidentEnergy*electron_mass_c2/(xEnergy*hMass);
+      G4double dele = deltaEnergy + xEnergy;
+      G4double x = electron_mass_c2/dele;
 
-      aCrossSection = (x/(xDelta*(1. + 1./y)) 
-                    + 4.*log(2.7 + sqrt(y))/3.)/ (x*x*x);
+      G4double aCrossSection = (dele/(xEnergy*(1. + 1./y)) 
+                             + 4.*log(2.7 + sqrt(y))/3.) * x*x*x;
     
       // Calculation of total cross-section
       totalCrossSection += aCrossSection;

@@ -81,6 +81,7 @@
 // 12 Jun   2002 V.Ivanchenko Fix in fluctuations - if tmax<2*Ipot Gaussian
 //                            fluctuations enables
 // 20 Sept  2002 V.Ivanchenko Clean up energy ranges for models
+// 07 Oct   2002 V.Ivanchenko Clean up initialisation of fluorescence
 
 // -----------------------------------------------------------------------
 
@@ -453,6 +454,9 @@ void G4hLowEnergyIonisation::BuildDataForFluorescence(
   }
 
   // fill data for fluorescence
+
+  deexcitationManager.SetCutForSecondaryPhotons(minGammaEnergy);
+  deexcitationManager.SetCutForAugerElectrons(minElectronEnergy);
 
   G4double mass = aParticleType.GetPDGMass();
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
@@ -1908,8 +1912,6 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 void G4hLowEnergyIonisation::SetCutForSecondaryPhotons(G4double cut)
 {
   minGammaEnergy = cut;
-  deexcitationManager.SetCutForSecondaryPhotons(cut);
-  theFluo = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1917,8 +1919,6 @@ void G4hLowEnergyIonisation::SetCutForSecondaryPhotons(G4double cut)
 void G4hLowEnergyIonisation::SetCutForAugerElectrons(G4double cut)
 {
   minElectronEnergy = cut;
-  deexcitationManager.SetCutForAugerElectrons(cut);
-  theFluo = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
