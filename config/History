@@ -1,4 +1,4 @@
-$Id: History,v 1.75 1999-11-17 15:41:56 gcosmo Exp $
+$Id: History,v 1.76 1999-11-18 16:26:30 stesting Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th November 1999  John Allison (config-V00-01-10)
+- Added isotope_production/include to -I list (Hans-Peter).
 
 17th November 1999  Youhei Morita (config-V00-01-09)
 - moved schema header files to G4INSTALL/schema/include
