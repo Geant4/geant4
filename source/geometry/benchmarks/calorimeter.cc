@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: calorimeter.cc,v 1.4 2002-01-09 16:17:55 gcosmo Exp $
+// $Id: calorimeter.cc,v 1.5 2003-11-04 09:38:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // calorimeter
@@ -35,6 +35,7 @@
 #include <math.h>
 
 #include "G4GeometryManager.hh"
+#include "G4LogicalVolumeStore.hh"
 #include "BuildCalorimeter.hh"
 #include "Shoot.hh"
 #include "G4Timer.hh"
