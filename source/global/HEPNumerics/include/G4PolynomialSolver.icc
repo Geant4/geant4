@@ -1,0 +1,239 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+//
+// 
+// class G4PolynomialSolver
+//
+// Implementation
+//
+// 19.12.00 E.Medernach, First implementation
+//
+
+
+#include "G4CSGSolid.hh"
+   	
+#include "G4VoxelLimits.hh"
+#include "G4AffineTransform.hh"
+
+#include "G4VPVParameterisation.hh"
+
+#include "meshdefs.hh"
+
+// #include "G4VGraphicsScene.hh"
+#include "G4Polyhedron.hh"
+#include "G4NURBS.hh"
+#include "G4NURBStube.hh"
+#include "G4NURBScylinder.hh"
+#include "G4NURBStubesector.hh"
+
+
+#define EPSILON 1e-12
+#define INFINITY 1e+12
+/* Maybe ITERATION could be a parameter ? */
+#define ITERATION 12 // 20 But 8 is really enough for Newton with a good guess
+#define NOINTERSECTION kInfinity
+
+
+
+template <class T, class F>
+G4PolynomialSolver<T,F>::G4PolynomialSolver (T* typeF,F func,F deriv,G4double precision)
+{
+  Precision = precision ;
+  FunctionClass = typeF ;
+  Function = func ;
+  Derivative = deriv ;  
+}
+
+template <class T, class F>
+G4PolynomialSolver<T,F>::~G4PolynomialSolver ()
+{
+  ;  
+}
+
+template <class T, class F>
+G4double G4PolynomialSolver<T,F>::solve(G4double IntervalMin,
+					G4double IntervalMax)
+{
+  return Newton(IntervalMin,IntervalMax);  
+}
+
+
+/* If we want to be general this could work for any
+   polynomial of order more that 4 if we find the (ORDER + 1)
+   control points
+*/
+#define NBBEZIER 5
+
+template <class T, class F>
+int G4PolynomialSolver<T,F>::BezierClipping(/*T* typeF,F func,F deriv,*/
+					    G4double *IntervalMin,G4double *IntervalMax)
+{
+  /** BezierClipping is a clipping interval Newton method **/
+  /** It works by clipping the area where the polynomial is **/
+
+  G4double P[NBBEZIER][2],D[2];
+  G4double NewMin,NewMax;
+
+  int IntervalIsVoid = 1;
+  
+  /*** Calculating Control Points  ***/
+  /* We see the polynomial as a Bezier curve for some control points to find */
+
+  /*
+    For 5 control points (polynomial of degree 4) this is:
+    
+    0     p0 = F((*IntervalMin))
+    1/4   p1 = F((*IntervalMin)) + ((*IntervalMax) - (*IntervalMin))/4 * F'((*IntervalMin))
+    2/4   p2 = 1/6 * (16*F(((*IntervalMax) + (*IntervalMin))/2) - (p0 + 4*p1 + 4*p3 + p4))  
+    3/4   p3 = F((*IntervalMax)) - ((*IntervalMax) - (*IntervalMin))/4 * F'((*IntervalMax))
+    1     p4 = F((*IntervalMax))
+  */  
+
+  /* x,y,z,dx,dy,dz are constant during searching */
+
+  D[0] = (FunctionClass->*Derivative)(*IntervalMin);
+  
+  P[0][0] = (*IntervalMin);
+  P[0][1] = (FunctionClass->*Function)(*IntervalMin);
+  
+
+  if (fabs(P[0][1]) < Precision) {
+    return 1;
+  }
+  
+  if (((*IntervalMax) - (*IntervalMin)) < EPSILON) {
+    return 1;
+  }
+
+  P[1][0] = (*IntervalMin) + ((*IntervalMax) - (*IntervalMin))/4;
+  P[1][1] = P[0][1] + (((*IntervalMax) - (*IntervalMin))/4.0) * D[0];
+
+  D[1] = (FunctionClass->*Derivative)(*IntervalMax);
+
+  P[4][0] = (*IntervalMax);
+  P[4][1] = (FunctionClass->*Function)(*IntervalMax);
+  
+  P[3][0] = (*IntervalMax) - ((*IntervalMax) - (*IntervalMin))/4;
+  P[3][1] = P[4][1] - ((*IntervalMax) - (*IntervalMin))/4 * D[1];
+
+  P[2][0] = ((*IntervalMax) + (*IntervalMin))/2;
+  P[2][1] = (16*(FunctionClass->*Function)(((*IntervalMax)+(*IntervalMin))/2) -
+	     (P[0][1] + 4*P[1][1] + 4*P[3][1] + P[4][1]))/6 ;
+
+#if DEBUGTORUS
+  G4cout << "G4Torus::SafeNewton    IntervalMin = " << (*IntervalMin) << G4endl ;
+  G4cout << "G4Torus::SafeNewton    IntervalMax = " << (*IntervalMax) << G4endl ;
+  G4cout << "G4Torus::SafeNewton    P[0] = " << P[0][1] << G4endl ;
+  G4cout << "G4Torus::SafeNewton    P[1] = " << P[1][1] << G4endl ;
+  G4cout << "G4Torus::SafeNewton    P[2] = " << P[2][1] << G4endl ;
+  G4cout << "G4Torus::SafeNewton    P[3] = " << P[3][1] << G4endl ;
+  G4cout << "G4Torus::SafeNewton    P[4] = " << P[4][1] << G4endl ;
+#endif
+
+  {
+    G4double Intersection ;
+    int i,j;
+  
+    NewMin = (*IntervalMax) ;
+    NewMax = (*IntervalMin) ;    
+
+    for (i=0;i<5;i++)
+      for (j=i+1;j<5;j++)
+	{
+	  /* there is an intersection only if each have different signs */
+	  if (((P[j][1] > -Precision) && (P[i][1] < Precision)) ||
+	      ((P[j][1] < Precision) && (P[i][1] > -Precision))) {
+	    IntervalIsVoid  = 0;
+	    Intersection = P[j][0] - P[j][1]*((P[i][0] - P[j][0])/(P[i][1] - P[j][1]));
+	    if (Intersection < NewMin) {
+	      NewMin = Intersection;
+	    }
+	    if (Intersection > NewMax) {
+	      NewMax = Intersection;
+	    }
+	  }
+	}
+
+    
+    if (IntervalIsVoid != 1) {
+      (*IntervalMax) = NewMax;
+      (*IntervalMin) = NewMin;
+    }
+  }
+  
+  if (IntervalIsVoid == 1) {
+    return -1;
+  }
+  
+  return 0;
+}
+
+template <class T, class F>
+G4double G4PolynomialSolver<T,F>::Newton (G4double IntervalMin,G4double IntervalMax)
+{
+  /* So now we have a good guess and an interval where if there are an intersection the root must be */
+
+  G4double Value = 0;
+  G4double Gradient = 0;
+  G4double Lambda ;
+
+  int i=0;
+  int j=0;
+  
+  
+  /* Reduce interval before applying Newton Method */
+  {
+    int NewtonIsSafe ;
+
+    while ((NewtonIsSafe = BezierClipping(&IntervalMin,&IntervalMax)) == 0) ;
+
+    if (NewtonIsSafe == -1) {
+      return NOINTERSECTION;
+    }
+  }
+
+  Lambda = IntervalMin;
+  Value = (FunctionClass->*Function)(Lambda);
+
+
+  //  while ((fabs(Value) > Precision)) {
+  while (j != -1) {
+	  
+    Value = (FunctionClass->*Function)(Lambda);
+
+    Gradient = (FunctionClass->*Derivative)(Lambda);
+
+    Lambda = Lambda - Value/Gradient ;
+
+#if DEBUGTORUS
+    G4cout << "Newton     Iteration " << i << G4endl ;
+    G4cout << "Newton     Lambda = " << Lambda << " Value = " << Value << " Grad = " << Gradient << G4endl;
+    G4cout << "Newton     IntervalMin = " << IntervalMin << " IntervalMax = " << IntervalMax << G4endl ;
+#endif
+
+    if (fabs(Value) <= Precision) {
+      j ++;
+      if (j == 2) {
+	j = -1;	
+      }      
+    } else {
+      i ++;
+      
+      if (i > ITERATION) 
+	return NOINTERSECTION;
+    }    
+  }
+
+
+#if DEBUGTORUS
+  G4cout << "Newton    Exiting with Lambda = " << Lambda << G4endl ;
+  G4cout << "Newton    Exiting with Value = " << Value << G4endl ;
+#endif
+
+  return Lambda ;
+}
