@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.hh,v 1.3 1999-01-27 16:13:09 broglia Exp $
+// $Id: G4FPlane.hh,v 1.4 1999-05-12 13:56:33 sgiani Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Broglia
@@ -19,7 +19,12 @@
 //       - closest intersection 
 //       - intersection by a ray
 //
+// Corrections by S.Giani:
 //
+// - SurfaceNormal always returns the direction of NormalX, always containing
+//   the correct orientation for all faces.
+// - Addition of default argument sense = 1 in the second constructor.
+
 
 #ifndef __PLANESURFACE_H
 #define __PLANESURFACE_H
@@ -46,7 +51,8 @@ public:
   
   // Constructor used by G4BREPSolidBox and G4BREPSolidPolyhedra
   G4FPlane(const G4Point3DVector* pVec, 
-	   const G4Point3DVector* iVec= 0);
+	   const G4Point3DVector* iVec= 0,
+	   int sense = 1);
 
   // hit point of the ray on the surface
   G4Point3D hitpoint;
@@ -95,9 +101,6 @@ public:
 
   G4Vector3D SurfaceNormal(const G4Point3D& Pt)const 
   {
-    if( !sameSense )
-      return -NormalX->GetDir();
-    else
       return NormalX->GetDir();
   }
   
