@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2000-05-20 05:00:52 stanaka Exp $
+$Id: History,v 1.15 2000-06-05 09:54:36 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-06-00 M.Maire
+- cleanup of ExN03EventAction to limit the amount of output with
+  exampleN03.large_N.in
+  
 20th May 2000 Satoshi Tanaka 
 - exNO3VisX.mac's are updated corresponding to development 
   of the new vis commands.

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03PhysicsList.hh,v 1.5 1999-12-15 14:49:24 gunter Exp $
+// $Id: ExN03PhysicsList.hh,v 1.6 2000-06-05 09:54:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,10 +29,10 @@ class ExN03PhysicsList: public G4VUserPhysicsList
 
   protected:
     // Construct particle and physics
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+    void ConstructParticle();
+    void ConstructProcess();
  
-    virtual void SetCuts();
+    void SetCuts();
 
   public:
     // Set/Get cut values 

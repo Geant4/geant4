@@ -1,4 +1,4 @@
-# $Id: run2.mac,v 1.3 1999-11-15 11:10:26 maire Exp $
+# $Id: run2.mac,v 1.4 2000-06-05 09:54:36 maire Exp $
 #
 # Macro file of "exampleN03.cc"
 #
@@ -6,6 +6,7 @@
 # (otherwise type: /control/execute prerunN03.mac)
 # (graphic needed: OpenGL or Mesa) 
 #
+/control/verbose 2
 # 
 # electron 30 MeV to the direction (1.,0.,0.)
 # 1 event
