@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2003-04-22 19:01:32 asaim Exp $
+$Id: History,v 1.85 2003-04-22 23:26:23 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -31,7 +31,6 @@ Apr 03, 2003, M.Asai (run-V05-00-09)
 
 Mar 17, 2003, M.Asai (run-V05-00-08)
 - Recover obsolete commands of /run/particle.
-- Remove redundant BuildPhysicsTable in initialization of G4RunManager.
 
 Mar 14, 2003, H.Kurashige (run-V05-00-07)
 - Revert G4VUserPhysicsList::ResetCuts
