@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.17 2004-07-26 04:52:38 asaim Exp $
+// $Id: G4SteppingManager2.cc,v 1.18 2004-11-10 11:23:27 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -263,7 +263,8 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 // at least one process is necessary to destory the particle  
 // exit with warning 
    if(NofInactiveProc==MAXofAtRestLoops){ 
-     G4Exception("G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " );
+     //     G4Exception("G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " );
+     G4cerr << "G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " << G4endl;
    }
 
    (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
@@ -312,7 +313,7 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 	 
 	 // If this 2ndry particle has 'zero' kinetic energy, make sure
 	 // it invokes a rest process at the beginning of the tracking
-	 if(tempSecondaryTrack->GetKineticEnergy() <= 0.){
+	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
@@ -386,7 +387,7 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 
 	 // If this 2ndry particle has 'zero' kinetic energy, make sure
 	 // it invokes a rest process at the beginning of the tracking
-	 if(tempSecondaryTrack->GetKineticEnergy() <= 0.){
+	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
@@ -400,7 +401,12 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
      } //end of loop on secondary 
      
      // Set the track status according to what the process defined
-     fTrack->SetTrackStatus( fParticleChange->GetStatusChange() );
+     // if kinetic energy >0, otherwise set  fStopButAlive
+     if  ( fTrack->GetKineticEnergy() < DBL_MIN) {
+       fTrack->SetTrackStatus( fStopButAlive );
+     } else {
+       fTrack->SetTrackStatus( fParticleChange->GetStatusChange() );
+     }
 
      // clear ParticleChange
      fParticleChange->Clear();
@@ -486,7 +492,7 @@ void G4SteppingManager::InvokePSDIP(size_t np)
 
             // If this 2ndry particle has 'zero' kinetic energy, make sure
             // it invokes a rest process at the beginning of the tracking
-	    if(tempSecondaryTrack->GetKineticEnergy() <= 0.){
+	    if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	      G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
 	      if (pm->GetAtRestProcessVector()->entries()>0){
 		tempSecondaryTrack->SetTrackStatus( fStopButAlive );
@@ -524,7 +530,7 @@ void G4SteppingManager::ApplyProductionCut(G4Track* aSecondary)
   if( aSecondary->GetKineticEnergy()<tProdThreshold )
   {
     tBelowCutEnergyAndSafety = true;
-    if(aSecondary->GetDynamicParticle()->GetCharge() !=0.0)
+    if(abs(aSecondary->GetDynamicParticle()->GetCharge()) > DBL_MIN)
     {
       G4double currentRange
         = G4LossTableManager::Instance()->GetRange(aSecondary->GetDefinition(),
