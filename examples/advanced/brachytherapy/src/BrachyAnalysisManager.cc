@@ -31,7 +31,7 @@ BrachyAnalysisManager::BrachyAnalysisManager() :
  
  
   
- //parameters for the TreeFactory
+  //parameters for the TreeFactory
   bool fileExists = false;
   bool readOnly   = false;
   std::string fileName="Brachy3.hbk";
@@ -51,7 +51,7 @@ BrachyAnalysisManager::~BrachyAnalysisManager()
   delete tupFact;
   tupFact=0;
 
-   delete histFact;
+  delete histFact;
   histFact=0;
 
   delete theTree;
@@ -77,23 +77,23 @@ void BrachyAnalysisManager::book()
   //you could do  histFact->create2D("20","Energy, pos",300 ,-150.,150.,300,-15  //0.,150.);
  
 
- IHistogram2D *h2 = histFact->create2D("20","Energy, pos",300 ,-150.,150.,300,-150.,150.);
+  IHistogram2D *h2 = histFact->create2D("20","Energy, pos",300 ,-150.,150.,300,-150.,150.);
  
-// check for non-zero
+  // check for non-zero
 
- IHistogram1D *h3 = histFact->create1D("30","Initial Energy", 100,0.,1.);
- // check for non-zero
+  IHistogram1D *h3 = histFact->create1D("30","Initial Energy", 100,0.,1.);
+  // check for non-zero
 
- //Ntuple management
- std::string columnNames = "float energy, float x, float z";
- std::string options = "";
- ITuple *tup = tupFact->create("1","brachy",columnNames, options);
- // check for non-zero ...
- if (tup) G4cout<<"The Ntuple is non-zero"<<G4endl;
+  //Ntuple management
+  std::string columnNames = "float energy, float x, float z";
+  std::string options = "";
+  ITuple *tup = tupFact->create("1","brachy",columnNames, options);
+  // check for non-zero ...
+  if (tup) G4cout<<"The Ntuple is non-zero"<<G4endl;
 }
  
 
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 void BrachyAnalysisManager::analyse(G4double xx,G4double zz,G4float en)

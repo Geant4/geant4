@@ -22,73 +22,73 @@
 //
 //    ********************************
 //    *                              *
-//    *     BrachyWaterBoxHit.cc     *
+//    *     BrachyPhantomHit.cc      *
 //    *                              *
 //    ********************************
 
-#include "BrachyWaterBoxHit.hh"
+#include "BrachyPhantomHit.hh"
 #include "G4ios.hh"
 #include "G4VVisManager.hh"
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
 
-G4Allocator<BrachyWaterBoxHit> BrachyWaterBoxHitAllocator;
+G4Allocator<BrachyPhantomHit> BrachyPhantomHitAllocator;
 
 //....
 
-BrachyWaterBoxHit::BrachyWaterBoxHit(G4LogicalVolume* logVol,G4int XID,G4int ZID)
-:m_pLogV(logVol),m_XID(XID),m_ZID(ZID)
+BrachyPhantomHit::BrachyPhantomHit(G4LogicalVolume* logVol,G4int XID,G4int ZID)
+  :m_pLogV(logVol),m_XID(XID),m_ZID(ZID)
 {
- m_Edep=0;
+  m_Edep=0;
 }
 
 //....
 
-BrachyWaterBoxHit::~BrachyWaterBoxHit()
-{
-}
-
-//....
-
-BrachyWaterBoxHit::BrachyWaterBoxHit(const BrachyWaterBoxHit &right)
-{
- m_XID = right.m_XID;
- m_ZID = right.m_ZID;
- m_Edep = right.m_Edep;
- m_Pos = right.m_Pos;
- m_Rot = right.m_Rot;
- m_pLogV = right.m_pLogV;
-}
-
-//....
-
-const BrachyWaterBoxHit& BrachyWaterBoxHit::operator=(const BrachyWaterBoxHit &right)
-{
- m_XID = right.m_XID;
- m_ZID = right.m_ZID;
- m_Edep = right.m_Edep;
- m_Pos = right.m_Pos;
- m_Rot = right.m_Rot;
- m_pLogV = right.m_pLogV;
- return *this;
-}
-
-//....
-
-int BrachyWaterBoxHit::operator==(const BrachyWaterBoxHit &right) const
-{
- return((m_XID==right.m_XID)&&(m_ZID==right.m_ZID));
-}
-
-//....
-
-void BrachyWaterBoxHit::Draw()
+BrachyPhantomHit::~BrachyPhantomHit()
 {
 }
 
 //....
 
-void BrachyWaterBoxHit::Print()
+BrachyPhantomHit::BrachyPhantomHit(const BrachyPhantomHit &right)
+{
+  m_XID = right.m_XID;
+  m_ZID = right.m_ZID;
+  m_Edep = right.m_Edep;
+  m_Pos = right.m_Pos;
+  m_Rot = right.m_Rot;
+  m_pLogV = right.m_pLogV;
+}
+
+//....
+
+const BrachyPhantomHit& BrachyPhantomHit::operator=(const BrachyPhantomHit &right)
+{
+  m_XID = right.m_XID;
+  m_ZID = right.m_ZID;
+  m_Edep = right.m_Edep;
+  m_Pos = right.m_Pos;
+  m_Rot = right.m_Rot;
+  m_pLogV = right.m_pLogV;
+  return *this;
+}
+
+//....
+
+int BrachyPhantomHit::operator==(const BrachyPhantomHit &right) const
+{
+  return((m_XID==right.m_XID)&&(m_ZID==right.m_ZID));
+}
+
+//....
+
+void BrachyPhantomHit::Draw()
+{
+}
+
+//....
+
+void BrachyPhantomHit::Print()
 {
 }

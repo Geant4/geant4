@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyDetectorMessenger.cc,v 1.1 2002-06-13 15:02:21 guatelli Exp $
+// $Id: BrachyDetectorMessenger.cc,v 1.2 2002-06-18 22:30:31 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* Det)
-:Detector(Det)
+  :Detector(Det)
 { 
   detDir = new G4UIdirectory("/detector/");
   detDir->SetGuidance(" detector control.");
@@ -50,18 +50,7 @@ BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* De
   AbsMaterCmd->SetGuidance("Select Material of the detector.");
   AbsMaterCmd->SetParameterName("choice",false);
   AbsMaterCmd->AvailableForStates(Idle);
-  
- 
-  
-  
-
-  UpdateCmd = new G4UIcmdWithoutParameter("/detector/update",this);
-  UpdateCmd->SetGuidance("Update detector material");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(Idle);
-      
-  
+   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,11 +68,9 @@ BrachyDetectorMessenger::~BrachyDetectorMessenger()
 void BrachyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == AbsMaterCmd )
-   { Detector->SetAbsorberMaterial(newValue);}
+    { Detector->SetAbsorberMaterial(newValue);}
    
-  
-  //if( command == UpdateCmd )
-  // { Detector->UpdateGeometry(); }
+ 
 
   
 }
