@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.20 2003-04-14 20:07:29 asaim Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.21 2003-04-14 20:13:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -169,11 +169,9 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   dumpCutValuesCmd->SetGuidance("Dump a list of production threshold values in range and energy");
   dumpCutValuesCmd->SetGuidance("for all registered material-cuts-couples.");
   dumpCutValuesCmd->SetGuidance("Dumping a list takes place when you issue 'beamOn' and");
-  dumpCutValuesCmd->SetGuidance("actual conversion tables from range to energy are
-available.");
+  dumpCutValuesCmd->SetGuidance("actual conversion tables from range to energy are available.");
   dumpCutValuesCmd->SetGuidance("If you want a list 'immediately', use '/run/dumpRegion' for threshold");
-  dumpCutValuesCmd->SetGuidance("list given in gange only. Also, '/run/dumpCouples'
-gives you the
+  dumpCutValuesCmd->SetGuidance("list given in gange only. Also, '/run/dumpCouples' gives you the");
   dumpCutValuesCmd->SetGuidance("current list if you have already issued 'run/beamOn' at least once.");
   dumpCutValuesCmd->SetParameterName("particle",true);
   dumpCutValuesCmd->SetDefaultValue("all");
