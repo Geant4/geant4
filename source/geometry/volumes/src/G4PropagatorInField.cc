@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.1 1999-02-17 17:36:57 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.2 1999-07-01 17:56:22 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -222,10 +222,10 @@ G4PropagatorInField::
 				       
 #ifdef G4VERBOSE
   if( do_loop_count >= GetMaxLoopCount() ){
-//   G4cerr << "G4PropagateInField: Particle is looping - must be killed" << endl;
-     G4cerr << "G4PropagateInField: Particle is looping - " 
+
+     G4cerr << "G4PropagateInField: Warning: Particle is looping - " 
 	    << " tracking in field will be stopped. " << endl;
-     G4cerr << " Has performed " << do_loop_count << " steps in Field " 
+     G4cerr << " It has performed " << do_loop_count << " steps in Field " 
 	    << " while a maximum of " << GetMaxLoopCount() << " are allowed. "
 	    << endl;
      //G4cerr << " In future this will be treated better/quicker. " << endl;
@@ -461,14 +461,41 @@ G4PropagatorInField::LocateIntersectionPoint(
 
        } // Endif (Intersects_AF)
 
+       // Ensure that the new endpoints are not further apart in space than on the curve
+       //  due to different errors in the integration
+       G4double linDistSq, curveDist; 
+       linDistSq= (  CurrentB_PointVelocity.Position() 
+		   - CurrentA_PointVelocity.Position() ).mag2(); 
+       curveDist=  CurrentB_PointVelocity.CurveS() -
+                   CurrentA_PointVelocity.CurveS();
+       if( curveDist*(curveDist+2*perMillion ) < linDistSq ){
+	  //  Re-integrate to obtain a new B
+	  G4FieldTrack   newEndpoint= CurrentA_PointVelocity;
+	  GetChordFinder()->GetIntegrationDriver()
+	    ->AccurateAdvance(newEndpoint, curveDist, GetEpsilonStep() );
+	  CurrentB_PointVelocity= newEndpoint;
+	  G4cerr << "G4PropagatorInField::LocateIntersectionPoint: " 
+		 << "  Warning: Integration inaccuracy requires an adjustment in the step's endpoint " 
+		 << "   Two mid-points are further apart than their curve length difference" 
+		 << endl 
+		 << "   Dist = "       << sqrt(linDistSq)
+		 << " curve length = " << curveDist
+		 << endl; 
+       }
+       if( curveDist < 0.0 ) {
+	  G4Exception("G4PropagatorInField::LocateIntersectionPoint : the final curve point is not further along than the original.");
+       }
+
     } // EndIf ( E is close enough to the curve, ie point F. )
       // tests ChordAF_Vector.mag() <= maximum_lateral_displacement 
 
 #ifdef G4VERBOSE
     if( Verbose() > 1 )
-        printStatus( CurveStartPointVelocity,  CurveEndPointVelocity,
+        // printStatus( CurveStartPointVelocity,  CurveEndPointVelocity,
+        printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
                  -1.0, NewSafety,  substep_no, 0); //  startVolume);
 #endif
+
     substep_no++;
 
   } while ( ( ! found_approximate_intersection ) && 
