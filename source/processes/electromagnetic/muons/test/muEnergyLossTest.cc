@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: muEnergyLossTest.cc,v 1.5 2004-08-17 18:19:13 vnivanch Exp $
+// $Id: muEnergyLossTest.cc,v 1.6 2004-12-02 08:20:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-----------------------------------------------------------------
@@ -219,7 +219,7 @@ int main()
      
   
     energy = 1.*GeV + mass ;
-    momentum=sqrt(energy*energy-mass*mass) ;
+    momentum=std::sqrt(energy*energy-mass*mass) ;
   
     G4ParticleMomentum theMomentum(momentum,0.,0.);
   
@@ -676,7 +676,7 @@ int main()
     sloss /= nbev ;
     sloss = (sloss-mloss*mloss)/nbev ;
     if(sloss>0.)
-     sloss = sqrt(sloss) ;
+     sloss = std::sqrt(sloss) ;
     else
      sloss = 0. ;
  
@@ -810,7 +810,7 @@ int main()
     theTimer.Stop();
     mloss /= nbev ;
     sloss /= nbev ;
-    sloss = sqrt((sloss-mloss*mloss)/nbev) ;
+    sloss = std::sqrt((sloss-mloss*mloss)/nbev) ;
  
     previousStepSize = cutinrange ;
     stepLimit = theParticleBremsstrahlung.GetMeanFreePath(                                           
@@ -966,7 +966,7 @@ int main()
     theTimer.Stop();
     mloss /= nbev ;
     sloss /= nbev ;
-    sloss = sqrt((sloss-mloss*mloss)/nbev) ;
+    sloss = std::sqrt((sloss-mloss*mloss)/nbev) ;
  
     previousStepSize = cutinrange ;
     stepLimit = theParticlePairProduction.GetMeanFreePath(               
@@ -1108,7 +1108,7 @@ int main()
     theTimer.Stop();
     mloss /= nbev ;
     sloss /= nbev ;
-    sloss = sqrt((sloss-mloss*mloss)/nbev) ;
+    sloss = std::sqrt((sloss-mloss*mloss)/nbev) ;
  
     previousStepSize = cutinrange ;
     stepLimit = theParticleNuclearInteraction.GetMeanFreePath(                  

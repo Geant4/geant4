@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh,v 1.13 2004-10-25 13:32:52 vnivanch Exp $
+// $Id: G4MuPairProductionModel.hh,v 1.14 2004-12-02 08:20:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -205,9 +205,9 @@ void G4MuPairProductionModel::SetCurrentElement(G4double Z)
 {
   if(Z != currentZ) {
     currentZ = Z;
-    z13 = pow(Z,0.333333333);
+    z13 = std::pow(Z,0.333333333);
     z23 = z13*z13;
-    lnZ = log(Z);
+    lnZ = std::log(Z);
   }
 }
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.hh,v 1.24 2004-11-10 08:49:09 vnivanch Exp $
+// $Id: G4MuIonisation.hh,v 1.25 2004-12-02 08:20:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -150,7 +150,7 @@ inline G4double G4MuIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
                                                           G4double cut)
 {
   G4double x = 0.5*cut/electron_mass_c2;
-  G4double g = x*ratio + sqrt((1. + x)*(1. + x*ratio*ratio));
+  G4double g = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
   return mass*(g - 1.0);
 }
 

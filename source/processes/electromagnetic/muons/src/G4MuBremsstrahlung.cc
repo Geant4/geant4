@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.34 2004-11-10 08:49:10 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.35 2004-12-02 08:20:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,6 +68,8 @@
 #include "G4UniversalFluctuation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
   : G4VEnergyLossProcess(name),

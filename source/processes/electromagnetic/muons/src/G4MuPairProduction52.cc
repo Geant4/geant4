@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction52.cc,v 1.3 2004-11-10 08:49:10 vnivanch Exp $
+// $Id: G4MuPairProduction52.cc,v 1.4 2004-12-02 08:20:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4MuPairProduction52 physics process ---------------------------
@@ -71,6 +71,8 @@ G4double G4MuPairProduction52::UpperBoundLambda = 1000000.*TeV;
 G4int	 G4MuPairProduction52::NbinLambda = 150;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+using namespace std;
 
 G4MuPairProduction52::G4MuPairProduction52(const G4String& processName)
   : G4VMuEnergyLoss(processName),
@@ -755,7 +757,7 @@ G4VParticleChange* G4MuPairProduction52::PostStepDoIt(const G4Track& trackData,
    G4int NBINminus1 = NBIN-1;
    for (G4int iz=0; iz<nzdat; iz++)
    {
-     del = abs(lnZ-log(zdat[iz])) ;
+     del = fabs(lnZ-log(zdat[iz])) ;
      if(del<delmin)
      {
         delmin=del ;
@@ -765,7 +767,7 @@ G4VParticleChange* G4MuPairProduction52::PostStepDoIt(const G4Track& trackData,
    delmin = 1.e10 ;
    for (G4int it=0; it<ntdat; it++)
    {
-     del = abs(log(KineticEnergy)-log(tdat[it])) ;
+     del = fabs(log(KineticEnergy)-log(tdat[it])) ;
      if(del<delmin)
      {
        delmin=del;

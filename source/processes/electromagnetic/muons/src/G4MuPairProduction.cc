@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc,v 1.44 2004-11-10 08:49:10 vnivanch Exp $
+// $Id: G4MuPairProduction.cc,v 1.45 2004-12-02 08:20:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,6 +75,8 @@
 #include "G4UniversalFluctuation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4MuPairProduction::G4MuPairProduction(const G4String& name)
   : G4VEnergyLossProcess(name),

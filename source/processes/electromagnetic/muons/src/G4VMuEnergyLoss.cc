@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.30 2004-10-25 08:32:55 vnivanch Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.31 2004-12-02 08:20:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -103,7 +103,7 @@ G4int    G4VMuEnergyLoss::Ndeltamax = 100                   ;
 
 G4EnergyLossMessenger* G4VMuEnergyLoss::eLossMessenger = 0 ;
 
-// constructor and destructor
+using namespace std;
 
 G4VMuEnergyLoss::G4VMuEnergyLoss(const G4String& processName)
    : G4VEnergyLoss (processName),
@@ -365,8 +365,8 @@ void G4VMuEnergyLoss::BuildDEDXTable(
 
    //  if((subSecFlag) && (aParticleType.GetParticleName()=="mu+"))
    //  {
-   //    G4cout << std::setw(20) << (*theMaterialTable)[mat]->GetName()
-   //         << std::setw(15) << MinDeltaEnergy[mat]/keV ;
+   //    G4cout << setw(20) << (*theMaterialTable)[mat]->GetName()
+   //         << setw(15) << MinDeltaEnergy[mat]/keV ;
    //      if(LowerLimitForced[mat])
    //           G4cout << "  lower limit forced." << G4endl;
    //      else
@@ -445,7 +445,7 @@ G4double G4VMuEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
                     *KineticEnergy+RangeCoeffC ;
 
   //   compute the Step limit ..............
-     G4double r = std::min(finalRange, couple->GetProductionCuts()
+     G4double r = min(finalRange, couple->GetProductionCuts()
                  ->GetProductionCut(idxG4ElectronCut));
      if(fRangeNow>r)
        {
@@ -558,7 +558,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
         postsafety =
           navigator->ComputeSafety(stepData.GetPostStepPoint()->GetPosition());
 
-        safety = std::min(presafety,postsafety) ;
+        safety = min(presafety,postsafety) ;
         if (safety < rcut)
         {
 
@@ -597,7 +597,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
           {
             T0=G4EnergyLossTables::GetPreciseEnergyFromRange(
                                              G4Electron::Electron(),
-                                             std::min(presafety,postsafety),
+                                             min(presafety,postsafety),
                                              couple) ;
 
         // absolute lower limit for T0
