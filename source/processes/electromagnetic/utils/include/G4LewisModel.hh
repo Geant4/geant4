@@ -102,15 +102,15 @@ public:
                     const G4MaterialCutsCouple* couple,
 		    const G4ParticleDefinition* particle,
 		          G4double& kineticEnergy,
-			  G4double& lambda,
-			  G4double& range,
-			  G4double  truePathLength);
+			  G4double lambda,
+			  G4double range,
+			  G4double truePathLength);
 
-  G4double TrueStepLength(G4double& geomStepLength);
+  G4double TrueStepLength(G4double geomStepLength);
 
-  G4double SampleCosineTheta(G4double& trueStepLength);
+  G4double SampleCosineTheta(G4double trueStepLength);
 
-  G4double SampleDisplacement(G4double& trueStepLength);
+  G4double SampleDisplacement();
 
   G4double MaxSecondaryEnergy(const G4DynamicParticle*) {return 0.0;};
 
@@ -141,6 +141,7 @@ private:
   G4double taubig;
   G4double tausmall;
   G4double taulim;
+  G4double currentTau;
   G4double dtrl;
   G4double NuclCorrPar;
   G4double FactPar;

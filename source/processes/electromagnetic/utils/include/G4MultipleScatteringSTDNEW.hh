@@ -66,7 +66,7 @@ class G4MultipleScatteringSTDNEW : public G4VMultipleScattering
 {
 public:    // with description
 
-  G4MultipleScatteringSTDNEW(const G4String& processName="mscSTDNEW");
+  G4MultipleScatteringSTDNEW(const G4String& processName="msc");
 
   ~G4MultipleScatteringSTDNEW();
 
@@ -116,11 +116,11 @@ private:        // data members
   G4double facrange;
   G4double tlimit;
   G4double tlimitmin;
-  G4double cf;
   G4double dtrl;
   G4double NuclCorrPar;
   G4double FactPar;
   G4double facxsi;
+  G4double cf;
 
   G4int    stepnolastmsc;
   G4int    nsmallstep;

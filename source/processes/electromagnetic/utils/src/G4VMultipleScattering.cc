@@ -32,7 +32,7 @@
 //
 // Creation date: 25.03.2003
 //
-// Modifications:
+// Modifications: 13.04.03 Change printout (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -55,7 +55,6 @@
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLogVector.hh"
-#include "G4ProcessManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Region.hh"
@@ -135,7 +134,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
       G4PhysicsVector* aVector = PhysicsVector(couple);
-      modelManager->FillLambdaVector(aVector, couple);
+      modelManager->FillLambdaVector(aVector, couple, false);
 
       // Insert vector for this material into the table
       theLambdaTable->insert(aVector) ;
@@ -179,9 +178,10 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
 {
   fParticleChange.Initialize(track);
   G4double kineticEnergy = track.GetKineticEnergy();
+  G4double truestep = step.GetStepLength();
 
   if (kineticEnergy > 0.0) {
-    G4double cth  = currentModel->SampleCosineTheta(trueStepLength);
+    G4double cth  = currentModel->SampleCosineTheta(truestep);
     G4double sth  = sqrt(1.-cth*cth);
     G4double phi  = twopi*G4UniformRand();
     G4double dirx = sth*cos(phi);
@@ -203,12 +203,16 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
   }
   */
 
+   // G4cout << "PostStep: sth= " << sth << " trueLength= " << truestep << " tLast= " << truePathLength << G4endl;
+
     if (latDisplasment) {
 
-      G4double safety = (step.GetPostStepPoint())->GetSafety();
+      G4double safety = step.GetPostStepPoint()->GetSafety();
       if ( safety > 0.0) {
-        G4double r = currentModel->SampleDisplacement(trueStepLength);
+        G4double r = currentModel->SampleDisplacement();
         if (r > safety) r = safety;
+
+     //   G4cout << "r= " << r << " safety= " << safety << G4endl;
 
         // sample direction of lateral displacement
         G4double phi  = twopi*G4UniformRand();
@@ -245,7 +249,7 @@ void G4VMultipleScattering::PrintInfoDefinition() const
            << " in " << nBins << " bins."
            << G4endl;
   }
-  if(2 < verboseLevel) {
+  if (1 < verboseLevel) {
       G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
       if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
   }

@@ -87,7 +87,7 @@ public:
   G4double AlongStepGetPhysicalInteractionLength(
                                             const G4Track&,
                                                   G4double  previousStepSize,
-                                                  G4double  currentMinimumStep,
+                                                  G4double  currentMinimalStep,
                                                   G4double& currentSafety,
                                                   G4GPILSelection* selection);
      // The function overloads the corresponding function of the base
@@ -128,7 +128,7 @@ public:
 
   G4double ContinuousStepLimit(const G4Track& track,
                                      G4double previousStepSize,
-                                     G4double currentMinimumStep,
+                                     G4double currentMinimalStep,
                                      G4double& currentSafety);
   // This method does not used for tracking, it is intended only for tests
 
@@ -144,7 +144,7 @@ public:
 
   virtual G4double TruePathLengthLimit(const G4Track& track,
                                              G4double& lambda,
-                                             G4double currentMinimumStep) = 0;
+                                             G4double currentMinimalStep) = 0;
 
 
 protected:
@@ -160,7 +160,7 @@ protected:
 
   G4double GetContinuousStepLimit(const G4Track& track,
                                         G4double previousStepSize,
-                                        G4double currentMinimumStep,
+                                        G4double currentMinimalStep,
                                         G4double& currentSafety);
   // This method is used for tracking, it returns step limit
 
@@ -246,14 +246,14 @@ inline G4double G4VMultipleScattering::GetMeanFreePath(const G4Track& track,
 inline G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double previousStepSize,
-                             G4double currentMinimumStep,
+                             G4double currentMinimalStep,
                              G4double& currentSafety,
                              G4GPILSelection* selection)
 {
   // get Step limit proposed by the process
   valueGPILSelectionMSC = NotCandidateForSelection;
   G4double steplength = GetContinuousStepLimit(track,previousStepSize,
-                                              currentMinimumStep,currentSafety);
+                                              currentMinimalStep,currentSafety);
   // set return value for G4GPILSelection
   *selection = valueGPILSelectionMSC;
   return  steplength;
@@ -264,7 +264,7 @@ inline G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
 inline G4double G4VMultipleScattering::GetContinuousStepLimit(
                                           const G4Track& track,
                                                 G4double,
-                                                G4double currentMinimumStep,
+                                                G4double currentMinimalStep,
                                                 G4double&)
 {
   DefineMaterial(track.GetMaterialCutsCouple());
@@ -273,8 +273,12 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
   const G4ParticleDefinition* p = track.GetDefinition();
   lambda0 = GetLambda(p, e);
   currentRange = G4LossTableManager::Instance()->GetRange(p,e,currentCouple);
-  truePathLength = TruePathLengthLimit(track,lambda0,currentMinimumStep);
-  if (truePathLength < currentMinimumStep) valueGPILSelectionMSC = CandidateForSelection;
+  truePathLength = TruePathLengthLimit(track,lambda0,currentMinimalStep);
+//  G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "
+//         << lambda0 << " range= " << currentRange
+//	 << " currentMinStep= " << currentMinimalStep << G4endl;
+  if (truePathLength < currentMinimalStep ||
+      truePathLength == currentRange) valueGPILSelectionMSC = CandidateForSelection;
   geomPathLength = currentModel->GeomPathLength(theLambdaTable,currentCouple,
            p,e,lambda0,currentRange,truePathLength);
   if(geomPathLength > lambda0) geomPathLength = lambda0;
@@ -287,10 +291,10 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
 inline G4double G4VMultipleScattering::ContinuousStepLimit(
                                  const G4Track& track,
                                        G4double previousStepSize,
-                                       G4double currentMinimumStep,
+                                       G4double currentMinimalStep,
                                        G4double& currentSafety)
 {
-  return GetContinuousStepLimit(track,previousStepSize,currentMinimumStep,
+  return GetContinuousStepLimit(track,previousStepSize,currentMinimalStep,
                                       currentSafety);
 }
 
@@ -320,6 +324,7 @@ inline G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(
   if (geomStepLength == geomPathLength) trueStepLength = truePathLength;
   else    trueStepLength = currentModel->TrueStepLength(geomStepLength);
   fParticleChange.SetTrueStepLength(trueStepLength);
+//  G4cout << "AlongStep: trueLength= " << trueStepLength << " geomLength= "<< geomStepLength << " zlast= " << geomPathLength << G4endl;
   return &fParticleChange;
 }
 

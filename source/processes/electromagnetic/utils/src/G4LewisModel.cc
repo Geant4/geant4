@@ -395,9 +395,9 @@ G4double G4LewisModel::GeomPathLength(
                     const G4MaterialCutsCouple* couple,
 		    const G4ParticleDefinition* particle,
 		          G4double& T0,
-			  G4double& lambda,
-			  G4double& range,
-			  G4double  truePathLength)
+			  G4double lambda,
+			  G4double range,
+			  G4double truePathLength)
 {
   //  do the true -> geom transformation
   const G4double ztmax = 201./203.;
@@ -429,7 +429,6 @@ G4double G4LewisModel::GeomPathLength(
     } else {
       lambda1 = CrossSection(couple->GetMaterial(),particle,T1,0.0,1.0);
     }
-
     if (T0 > particle->GetPDGMass()) alam = lambda0*tPathLength/(lambda0-lambda1) ;
     G4double blam = 1.+alam/lambda0 ;
     if (tPathLength < 2.*dtrl*range) {
@@ -467,12 +466,12 @@ G4double G4LewisModel::GeomPathLength(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LewisModel::TrueStepLength(G4double& geomStepLength)
+G4double G4LewisModel::TrueStepLength(G4double geomStepLength)
 {
   G4double trueLength = geomStepLength;
   if (geomStepLength > lambda0*tausmall) {
-
     G4double blam = 1.+alam/lambda0;
+//    G4cout << "alam= " << alam << " blam= " << blam << " lambda1= " << lambda1 << G4endl;
     if (lambda1 < 0.) {
       trueLength = -lambda0*log(1.-geomStepLength/lambda0) ;
 
@@ -495,58 +494,57 @@ G4double G4LewisModel::TrueStepLength(G4double& geomStepLength)
 
       } else {
         G4double clam = 1.+alam/lambdam;
+//    G4cout << "clam= " << clam << " zm= " << zm << " cthm= " << cthm << G4endl;
         if(clam*(geomStepLength-zm)/(alam*cthm) < 1.)
           trueLength = 0.5*tPathLength + alam*(1.-
                 exp(log(1.-clam*(geomStepLength-zm)/(alam*cthm)))/clam) ;
+        else
+          trueLength = tPathLength;
       }
     }
+//    G4cout << "tLenth= " << trueLength << " tpl= " << tPathLength << G4endl;
     if(trueLength > tPathLength) trueLength = tPathLength;
     if(trueLength < geomStepLength) trueLength = geomStepLength;
   }
-  tPathLength = trueLength;
 
-  return tPathLength;
+  return trueLength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LewisModel::SampleCosineTheta(G4double& trueStepLength)
+G4double G4LewisModel::SampleCosineTheta(G4double trueStepLength)
 {
   G4double cth = 1.0;
-  G4double tau = trueStepLength/lambda0;
-
-  if (tau > taubig)
-  {
-    cth = -1.+2.*G4UniformRand();
-  }
-  else if (tau >= tausmall)
+  currentTau = trueStepLength/lambda0;
+//  G4cout << "tau= " << currentTau << " lambda1= " << lambda1 << " lambdam= " << lambdam << G4endl;
+  if (currentTau > taubig) cth = -1.+2.*G4UniformRand();
+  else if (currentTau >= tausmall)
   {
     if(lambda1 > 0.)
     {
       if (lambdam < 0.)
-        tau = -alam*log(1.-trueStepLength/alam)/lambda0 ;
+        currentTau = -alam*log(1.-trueStepLength/alam)/lambda0 ;
       else
-        tau = -log(cthm)-alam*log(1.-(trueStepLength-0.5*tPathLength)/alam)/lambdam ;
+        currentTau = -log(cthm)-alam*log(1.-(trueStepLength-0.5*tPathLength)/alam)/lambdam ;
     }
-    if(tau > taubig) cth = -1.+2.*G4UniformRand();
-
+    if(currentTau > taubig) cth = -1.+2.*G4UniformRand();
     else
     {
-     const G4double amax = 25. ;
+      const G4double amax = 25. ;
       const G4double tau0 = 0.02  ;
 
       G4double a;
 
-      G4double w = log(tau/tau0) ;
-      if (tau < tau0) a = (alfa1-alfa2*w)/tau ;
-      else            a = (alfa1+alfa3*w)/tau ;
-      
+      G4double w = log(currentTau/tau0) ;
+      if (currentTau < tau0) a = (alfa1-alfa2*w)/currentTau ;
+      else            a = (alfa1+alfa3*w)/currentTau ;
+
       G4double x0 = 1.-xsi/a ;
       if(x0 < 0.) x0 = 0. ;
 
       // from continuity of the 1st derivatives
       G4double c = a*(b-x0) ;
-      if(a*tau < c0) c = c0*(b-x0)/tau ;
+      if(a*currentTau < c0) c = c0*(b-x0)/currentTau ;
 
       if(c == 1.) c=1.000001 ;
       if(c == 2.) c=2.000001 ;
@@ -564,7 +562,7 @@ G4double G4LewisModel::SampleCosineTheta(G4double& trueStepLength)
       G4double ebx= exp((c-1.)*log(bx)) ;
 
       G4double xmean2  = (x0*eb1+ebx+(eb1*bx-b1*ebx)/(2.-c))/(eb1-ebx) ;
-      G4double xmeanth = exp(-tau) ;
+      G4double xmeanth = exp(-currentTau) ;
 
       G4double cnorm1 = a/eaa ;
       G4double cnorm2 = (c-1.)*eb1*ebx/(eb1-ebx) ;
@@ -577,14 +575,18 @@ G4double G4LewisModel::SampleCosineTheta(G4double& trueStepLength)
       G4double qprob = (f1x0+f2x0)*xmeanth/(f2x0*xmean1+f1x0*xmean2) ;
 
       // protection against qprob > 1
-      // *******************************************
       if(qprob > 1.)
       {
         qprob = 1. ;
         prob = (xmeanth-xmean2)/(xmean1-xmean2) ;
       }
-      // *******************************************
-
+      /*
+      G4cout << "tau= " << currentTau << " prob= " << prob << " qprob= " << qprob << G4endl;
+      G4cout << "ea= " << ea << " eaa= " << eaa << " a= " << a
+              << " b= " << b << " b1= " << b1 << " bx= " << bx
+	      << " ebx= " << ebx << " eb1= " << eb1 << " c= " << c
+	      << G4endl;
+	      */
       // sampling of costheta
       if (G4UniformRand() < qprob)
       {
@@ -604,29 +606,27 @@ G4double G4LewisModel::SampleCosineTheta(G4double& trueStepLength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LewisModel::SampleDisplacement(G4double& trueStepLength)
+G4double G4LewisModel::SampleDisplacement()
 {
   const G4double kappa = 2.5;
   const G4double kappapl1 = kappa+1.;
   const G4double kappami1 = kappa-1.;
   G4double rmean = 0.0;
-  G4double tau = trueStepLength/lambda0;
-  if (tau < taulim)
-  {
-    rmean = kappa*tau*tau*tau*(1.-kappapl1*tau/4.)/6. ;
-  }
-  else if (tau > tausmall)
-  {
-    G4double etau = 0.0;
-    if (tau<taubig) etau = exp(-tau);
-    rmean = -kappa*tau;
-    rmean = -exp(rmean)/(kappa*kappami1);
-    rmean += tau-kappapl1/kappa+kappa*etau/kappami1;
-  }
+  if (currentTau >= tausmall) {
+    if (currentTau < taulim) {
+      rmean = kappa*currentTau*currentTau*currentTau*(1.-kappapl1*currentTau*0.25)/6. ;
 
-  if (rmean>0.) rmean = 2.*lambda0*sqrt(rmean/3.);
-  else          rmean = 0.;
-
+    } else {
+      G4double etau = 0.0;
+      if (currentTau<taubig) etau = exp(-currentTau);
+      rmean = -kappa*currentTau;
+      rmean = -exp(rmean)/(kappa*kappami1);
+      rmean += currentTau-kappapl1/kappa+kappa*etau/kappami1;
+   // G4cout << "tau= " << currentTau << " lambda0= " << lambda0 << " etau= " << etau << " kappa= " << kappa << G4endl;
+    }
+    if (rmean>0.) rmean = 2.*lambda0*sqrt(rmean/3.0);
+    else          rmean = 0.;
+  }
   return rmean;
 }
 

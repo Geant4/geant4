@@ -40,6 +40,7 @@
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 The set of models is defined for region (V.Ivanchenko)
 // 06-03-03 Fix in energy intervals for models (V.Ivanchenko)
+// 13-04-03 Add startFromNull (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -452,7 +453,8 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
-                                  const G4MaterialCutsCouple* couple)
+                                  const G4MaterialCutsCouple* couple,
+				        G4bool startFromNull)
 {
 
   // vectors to provide continues dE/dx
@@ -539,7 +541,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
     }
 
     G4double cross = models[regModels->ModelIndex(k)]->CrossSection(material,particle,e,cut,e)*fac;
-    if(j==0 && cross < perMillion) cross = 0.0;
+    if(j==0 && startFromNull) cross = 0.0;
 
     if(1 < verboseLevel) {
       G4cout << "FillLambdaVector: " << j << ".   e(MeV)= " << e/MeV
@@ -556,7 +558,8 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
-                                     const G4MaterialCutsCouple* couple)
+                                     const G4MaterialCutsCouple* couple,
+   				           G4bool startFromNull)
 {
   if(0 < verboseLevel) {
     G4cout << "G4EmModelManager::BuildLambdaSubTable() for particle "
@@ -640,7 +643,7 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
     }
 
     G4double cross=models[regModels->ModelIndex(k)]->CrossSection(material,particle,e,subcut,cut)*fac;
-    if(j==0 && cross < perMillion) cross = 0.0;
+    if(j==0 && startFromNull) cross = 0.0;
 
     if(1 < verboseLevel) {
         G4cout << "BuildLambdaTable: e(MeV)= " << e/MeV

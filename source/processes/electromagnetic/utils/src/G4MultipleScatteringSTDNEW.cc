@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTDNEW.cc,v 1.2 2003-04-04 14:33:34 vnivanch Exp $
+// $Id: G4MultipleScatteringSTDNEW.cc,v 1.3 2003-04-14 01:52:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -82,6 +82,7 @@ G4MultipleScatteringSTDNEW::G4MultipleScatteringSTDNEW(const G4String& processNa
        NuclCorrPar (0.0615),
        FactPar(0.40),
        facxsi(1.0),
+       cf(1.001),
        stepnolastmsc(-1000000),
        nsmallstep(5),
        samplez(true)
@@ -148,6 +149,7 @@ G4double G4MultipleScatteringSTDNEW::TruePathLengthLimit(const G4Track&  track,
 
       } else if (stepno > stepnolastmsc && stepno - stepnolastmsc < nsmallstep
               && tPathLength > tlimit) {
+        tlimit *= cf;
         tPathLength = tlimit;
       }
     }

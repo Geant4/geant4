@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.34 2003-03-17 15:23:33 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.35 2003-04-14 01:52:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -58,6 +58,7 @@
 //          path length, step dependence reduced with new
 //          method
 // 17-03-03 cut per region, V.Ivanchenko
+// 13-04-03 add initialisation in GetContinuesStepLimit + change table size (V.Ivanchenko)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,6 +69,7 @@
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
 #include "Randomize.hh"
+#include "G4ProductionCutsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -153,13 +155,14 @@ void G4MultipleScattering::BuildPhysicsTable(
       }
 
   // create table
-    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-    G4int numOfMaterials = G4Material::GetNumberOfMaterials();
+    const G4ProductionCutsTable* theCoupleTable=
+          G4ProductionCutsTable::GetProductionCutsTable();
+    size_t numOfCouples = theCoupleTable->GetTableSize();
 
-    theTransportMeanFreePathTable = new G4PhysicsTable(numOfMaterials);
+    theTransportMeanFreePathTable = new G4PhysicsTable(numOfCouples);
 
   // loop for materials
-    for (G4int J=0; J<numOfMaterials; J++)
+    for (size_t i=0; i<numOfCouples; i++)
     {
 
       //  create physics vector and fill it
@@ -167,7 +170,8 @@ void G4MultipleScattering::BuildPhysicsTable(
                           LowestKineticEnergy,HighestKineticEnergy,TotBin);
 
       // get elements in the material
-      const G4Material* material = (*theMaterialTable)[J];
+      const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
+      const G4Material* material = couple->GetMaterial();
       const G4ElementVector* theElementVector = material->GetElementVector();
       const G4double* NbOfAtomsPerVolume =
                                      material->GetVecNbOfAtomsPerVolume();
@@ -204,6 +208,7 @@ void G4MultipleScattering::BuildPhysicsTable(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4MultipleScattering::ComputeTransportCrossSection(
                    const G4ParticleDefinition& aParticleType,
                          G4double KineticEnergy,
@@ -324,11 +329,11 @@ G4double G4MultipleScattering::ComputeTransportCrossSection(
    G4double ParticleMass = aParticleType.GetPDGMass();
 
   // correction if particle .ne. e-/e+            
-  // compute equivalent kinetic energy 
+  // compute equivalent kinetic energy
   // lambda depends on p*beta ....
    G4double Mass = ParticleMass ;
    if((aParticleType.GetParticleName() != "e-") &&    
-      (aParticleType.GetParticleName() != "e+") )     
+      (aParticleType.GetParticleName() != "e+") )
    {
      //  TAU = Tkin/ParticleMass , tau = Tkin_scaled/electronmass
      //  p*beta = Mass*TAU*(TAU+2.)/(TAU+1.) =
@@ -451,7 +456,6 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
 {
   G4double zPathLength,tPathLength;
   const G4DynamicParticle* aParticle;
-  G4Material* aMaterial;
   G4double tau,zt,cz,cz1,grej,grej0;
   const G4double expmax = 100., ztmax = (2.*expmax+1.)/(2.*expmax+3.) ;
   const G4double tmax = 1.e20*mm ;
@@ -463,8 +467,8 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
 
   tPathLength = currentMinimumStep;
 
-  aMaterial = track.GetMaterial();
-  materialIndex = aMaterial->GetIndex();
+  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
+  materialIndex = couple->GetIndex();
 
   aParticle = track.GetDynamicParticle();
   T0 = aParticle->GetKineticEnergy();
@@ -472,11 +476,17 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
   lambda0 = (*theTransportMeanFreePathTable)
             (materialIndex)->GetValue(T0,isOut);
 
-  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
 
   range = G4EnergyLossTables::GetRange(aParticle->GetDefinition(),
                                        T0,couple);
 
+  //VI Initialisation at the beginning of the step
+  cthm = 1.;
+  lambda1 = -1.;
+  lambdam = -1.;
+  alam    = range;
+  blam    = 1.+alam/lambda0 ;
+  zm      = 1.;
   // special treatment near boundaries ?
   if (boundary)
   {
@@ -521,8 +531,12 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
     }
   }
 
+  //VI control on range
+  if (tPathLength >= range) {
+    tPathLength = range;
+    valueGPILSelectionMSC = CandidateForSelection;
+  }
   //  do the true -> geom transformation
-  lambda1 = -1.;
   zmean = tPathLength;
 
   tau   = tPathLength/lambda0 ;
@@ -590,18 +604,19 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VParticleChange* G4MultipleScattering::AlongStepDoIt(
-                                       const G4Track& track,const G4Step& Step)
+                                       const G4Track& track,const G4Step& step)
 {
   // only a geom path->true path transformation is performed
 
   fParticleChange.Initialize(track);
 
-  G4double geomPathLength = track.GetStepLength();
+  G4double geomPathLength = step.GetStepLength();
 
   G4double truePathLength = 0. ;
 
-  if(geomPathLength/lambda0 < tausmall) truePathLength = geomPathLength;
-  else if(geomPathLength == zLast)        truePathLength = tLast;
+  //VI change order of if operators 
+  if(geomPathLength == zLast)                truePathLength = tLast;
+  else if(geomPathLength/lambda0 < tausmall) truePathLength = geomPathLength;
   else
   {
     if(lambda1 < 0.) truePathLength = -lambda0*log(1.-geomPathLength/lambda0) ;
@@ -639,10 +654,12 @@ G4VParticleChange* G4MultipleScattering::AlongStepDoIt(
       truePathLength = tLast ;
   }
 
+  //VI truePath length cannot be smaller than geomPathLength
+  if (truePathLength < geomPathLength) truePathLength = geomPathLength;
   fParticleChange.SetTrueStepLength(truePathLength);
 
   return &fParticleChange;
-  
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -664,14 +681,14 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
   if(KineticEnergy > 0.)
   {
     //  change direction first ( scattering ) 
-    G4double cth =1 ;
+    G4double cth = 1.0 ;
     G4double tau = truestep/lambda0 ;
 
     if     (tau < tausmall) cth =  1.;
     else if(tau > taubig)   cth = -1.+2.*G4UniformRand();
     else
     {
-      if(lambda1 > 0.) 
+      if(lambda1 > 0.)
       {
        if(lambdam < 0.)
         tau = -alam*log(1.-truestep/alam)/lambda0 ;
@@ -712,7 +729,7 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
        else
          ea = 0. ;
        eaa = 1.-ea ; 
-       xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;       
+       xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;
 
        b1 = b+1. ;
        bx=b-x0 ;
@@ -722,7 +739,7 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
 
        xmeanth = exp(-tau) ;
 
-       cnorm1 = a/eaa ; 
+       cnorm1 = a/eaa ;
        cnorm2 = (c-1.)*eb1*ebx/(eb1-ebx) ;
        f1x0 = cnorm1*exp(-a*(1.-x0)) ;
        f2x0 = cnorm2/exp(c*log(b-x0)) ;
@@ -768,10 +785,10 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
 
   if (fLatDisplFlag)
     {
-      // compute mean lateral displacement, only for safety > tolerance ! 
+      // compute mean lateral displacement, only for safety > tolerance !
       G4double safetyminustolerance = stepData.GetPostStepPoint()->GetSafety();
       G4double rmean, etau;
-      
+
       if (safetyminustolerance > 0.)
       {
         if     (tau < tausmall)  rmean = 0.;
@@ -803,7 +820,7 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
           // compute new endpoint of the Step
 	  G4ThreeVector newPosition = stepData.GetPostStepPoint()->GetPosition()
 					    + rmean*latDirection;
-    
+
 	  G4Navigator* navigator =
 	                   G4TransportationManager::GetTransportationManager()
 			   ->GetNavigatorForTracking();
@@ -832,7 +849,7 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
            << G4endl;
     return false;
   }
-  
+
   G4cout << GetProcessName() << " for " << particle->GetParticleName()
          << ": Success to store the PhysicsTables in "  
          << directory << G4endl;

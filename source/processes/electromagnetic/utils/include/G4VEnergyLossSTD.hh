@@ -431,6 +431,7 @@ inline G4double G4VEnergyLossSTD::GetMeanFreePath(const G4Track& track,
   }
   G4double x = DBL_MAX;
   if(0.0 < preStepLambda) x = 1.0/preStepLambda;
+//  G4cout << GetProcessName() << ": e= " << preStepKinEnergy << " mfp= " << x << G4endl;
   return x;
 }
 

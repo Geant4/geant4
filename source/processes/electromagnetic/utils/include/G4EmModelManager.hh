@@ -39,6 +39,7 @@
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 The set of models is defined for region (V.Ivanchenko)
 // 26-03-03 Add GetDEDXDispersion (V.Ivanchenko)
+// 13-04-03 Add startFromNull (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -129,9 +130,11 @@ public:
 
   void FillDEDXVector(G4PhysicsVector*, const G4MaterialCutsCouple*);
 
-  void FillLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*);
+  void FillLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
+                        G4bool startFromNull = true);
 
-  void FillSubLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*);
+  void FillSubLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*,
+                           G4bool startFromNull = true);
 
   G4VEmModel* SelectModel(G4double& energy, size_t& index);
 
