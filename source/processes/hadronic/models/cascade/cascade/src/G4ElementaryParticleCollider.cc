@@ -1136,7 +1136,8 @@ generateOutgoingKindsFor2toMany(
   G4double ptot = 0.0;
   G4int ml = 0;
 
-  for(G4int i = 0; i < il; i++) {
+  G4int i(0);
+  for(i = 0; i < il; i++) {
     ptot += sig[i];
 
     if(sl <= ptot) {
@@ -1186,7 +1187,6 @@ generateOutgoingKindsFor2toMany(
   };      
 
 
-  G4int i(0);
   for(i = 0; i < mult; i++)  
     kinds.push_back(ifkn[l - 1][ml][i + ks]);
 
