@@ -26,6 +26,7 @@
 // The aproximation of additional ion energy loss fluctuations 
 // Q.Yang et al., NIM B61(1991)149-155.
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
+// and Physics Reference Manual
 
 // -------------------------------------------------------------------
 //
@@ -38,11 +39,11 @@
 class G4IonYangFluctuationModel : public G4VLowEnergyModel
 {
 
-public:
+public: 
 
-  G4IonYangFluctuationModel(const G4String& name) ;
+  G4IonYangFluctuationModel(const G4String& name);
 
-  ~G4IonYangFluctuationModel() ;
+  ~G4IonYangFluctuationModel();
 
   G4double TheValue(const G4DynamicParticle* particle,
 	       	          const G4Material* material);

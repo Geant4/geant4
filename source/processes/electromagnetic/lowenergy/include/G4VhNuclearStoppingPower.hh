@@ -24,6 +24,8 @@
 // Class Description: 
 //
 // Hadrons/ions nuclear stopping power parameterisation
+// Virtual class to provide an interface before nucleare stopping
+// power model and G4hLowEnergyIonisation.
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------

@@ -28,7 +28,7 @@
 // eds. J.W. Mayer and E. Rimini (Academic Press, New York, 1977).
 // Q.Yang et al., NIM B61(1991)149-155.
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
-
+// and Physics Reference Manual
 
 // -------------------------------------------------------------------
 
@@ -41,11 +41,11 @@
 class G4IonChuFluctuationModel : public G4VLowEnergyModel
 {
 
-public:
+public: // With description
 
-  G4IonChuFluctuationModel(const G4String& name) ;
+  G4IonChuFluctuationModel(const G4String& name);
 
-  ~G4IonChuFluctuationModel() ;
+  ~G4IonChuFluctuationModel();
 
   G4double TheValue(const G4DynamicParticle* particle,
 	       	          const G4Material* material);

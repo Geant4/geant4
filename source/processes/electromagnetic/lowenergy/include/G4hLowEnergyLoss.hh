@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.hh,v 1.9 2000-11-03 10:29:51 pia Exp $
+// $Id: G4hLowEnergyLoss.hh,v 1.10 2001-05-25 12:38:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -30,13 +30,9 @@
 // The energy loss for other charged hadrons is calculated from the p/pbar
 // tables with scaled kinetic energy.
 //
-// **************************************************************************** 
-// It is assumed that the cut in range is the same for all the charged hadrons! 
-// ****************************************************************************
-//
-// 7/10/98 some bugs fixed + some cleanup , L.Urban 
-// 22/10/98 cleanup , L.Urban
-// 02/02/99 several bugs fixed, L.Urban
+// 7/10/98  L.Urban some bugs fixed + some cleanup 
+// 22/10/98 L.Urban cleanup
+// 02/02/99 L.Urban several bugs fixed
 // 31/03/00 V.Ivanchenko rename to lowenergy as G4hLowEnergyLoss.hh 
 // 09/08/00 V.Ivanchenko remove GetContinuousStepLimit and IsApplicable
 //

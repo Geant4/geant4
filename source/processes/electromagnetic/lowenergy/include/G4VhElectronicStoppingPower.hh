@@ -24,6 +24,8 @@
 // Class Description: 
 //
 // Low energy hadrons/ions electronic stopping power parametrisation
+// Virtual class to provide the interface between G4hLowEnergyIonisation
+// and a model of energy loss of low energy proton or alpha particle.
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------

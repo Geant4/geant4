@@ -26,7 +26,7 @@
 // Electronic stopping power parameterised according to
 // J.F.Ziegler, Helium Stopping Powers and
 // Ranges in All Elemental Matter, Vol.4, Pergamon Press, 1977
-// Further documentation available from http://www.ge.infn.it/geant4/lowE//
+// Further documentation available from http://www.ge.infn.it/geant4/lowE/
 
 // -------------------------------------------------------------------
 //
