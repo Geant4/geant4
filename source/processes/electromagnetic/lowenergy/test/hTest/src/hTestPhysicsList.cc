@@ -44,6 +44,7 @@
 #include "hTestPhysicsListMessenger.hh"
 #include "hTestLowEPhysicsList.hh"
 #include "hTestStanPhysicsList.hh"
+#include "hTestStanMAPhysicsList.hh"
 #include "hTestHadronPhysicsList.hh"
 #include "hTestHadronPhysicsList1.hh"
 #include "hTestStepCut.hh"
@@ -347,11 +348,16 @@ void hTestPhysicsList::SetEMPhysicsList(const G4String& name)
 
   // Define hadronic process class
   G4String stand = G4String("Standard");
+  G4String standn= G4String("StandardNew");
   G4String lowe  = G4String("LowEnergy");
   G4String none  = G4String("none");
 
   if(name == stand) {
     theEMList = new hTestStanPhysicsList();
+    theEMList->SetVerbose(verbose);
+
+  } else if (name == standn) {
+    theEMList = new hTestStanMAPhysicsList();
     theEMList->SetVerbose(verbose);
 
   } else if (name == lowe) {
