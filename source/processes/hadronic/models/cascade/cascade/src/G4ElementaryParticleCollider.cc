@@ -81,30 +81,22 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	  for(G4int i = 0; i < particles.size(); i++) 
 	    particles[i].printParticle();
 	}
-	cout << "1" << endl;
+
 	if(!particles.empty()) { // convert back to Lab
-	  cout << "2" << endl;
+
 
 	  /*	
 		if(verboseLevel > 2){
 		vector<G4double> totscm(4, 0.0); // moded as private variables
-		cout << "3" << endl;
 		vector<G4double> totlab(4, 0.0);
-		cout << "4" << endl;
 		}
 	
 	  */
 
-
 	  particleIterator ipart;
-	  cout << "5" << endl;
-	  for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-	    cout << "6" << endl;
-	
+	  for(ipart = particles.begin(); ipart != particles.end(); ipart++) {	
 	    if(verboseLevel > 2){
-	      cout << "7" << endl;
 	      vector<G4double> mom_scm = ipart->getMomentum();
-	      cout << "8" << endl;
 	      cout << mom_scm[0] << " " <<  mom_scm[1] << " " <<  mom_scm[2] << " " <<  mom_scm[3] << endl;
 
 	      for(G4int i = 0; i < 4; i++) {
@@ -112,16 +104,12 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 		cout << "8" << "/" << i << endl;
 	      }
 	    }
-	    cout << "9" << endl;
 	    vector<G4double> mom = 
 	      convertToSCM.backToTheLab(ipart->getMomentum());
-	    cout << "10" << endl;
-
 	
 	    if(verboseLevel > 2){
 	      for(G4int i = 0; i < 4; i++) totlab[i] += mom[i];
 	    }
-       
 
 	    ipart->setMomentum(mom); 
 	  };
