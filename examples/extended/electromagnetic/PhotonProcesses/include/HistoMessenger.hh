@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoMessenger.hh,v 1.3 2004-06-30 11:13:58 maire Exp $
+// $Id: HistoMessenger.hh,v 1.4 2005-03-03 15:03:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,6 +58,7 @@ class HistoMessenger: public G4UImessenger
    G4UIdirectory*          histoDir;   
    G4UIcmdWithAString*     factoryCmd;
    G4UIcmdWithAString*     typeCmd;
+   G4UIcmdWithAString*     optionCmd;   
    G4UIcommand*            histoCmd;
    G4UIcmdWithAnInteger*   rmhistoCmd;
 
