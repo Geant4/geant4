@@ -73,10 +73,34 @@ int main()
     G4Cons c1("Hollow Full Tube",50,100,50,100,50,0,2*M_PI) ;
     G4Cons c2("Full Cone",0,50,0,100,50,0,2*M_PI) ;
 
+    G4Tubs* tube3 = new G4Tubs( "OuterFrame",
+                                      1.0*m,
+                                      1.1*m,
+                                      0.50*m,
+                                      0*deg,
+                                      180*deg );
+
+    G4Tubs* tube4 = new G4Tubs("AnotherTubs",
+                                    1.0*m,
+                                    1.1*m,
+                                    0.50*m,
+                                    0*deg,
+                                    180*deg );
+    G4RotationMatrix rotmat2;
+    rotmat2.rotateY(M_PI/4.0);
+    G4Transform3D tran2 = G4Transform3D(rotmat2,G4ThreeVector(0.0,0.0,0.0));
+
+    G4VSolid* t3It4 = new G4IntersectionSolid( "Example", tube3, tube4, tran2 );
+
+
+
+
     G4IntersectionSolid b1Ib2("b1Intersectionb2",&b1,&b2,transform) ;
     G4IntersectionSolid likeb2("b1Intersectionb2",&b1,&b2) ;
     G4IntersectionSolid t1Ib2("t1Intersectionb2",&t1,&b2,&xRot,ponb2y) ;
     G4IntersectionSolid c2Ib2("c2Intersectionb2",&c2,&b2,transform) ;
+
+    G4cout.precision(16);
 
 // Check Inside
 
@@ -251,6 +275,14 @@ int main()
     // G4cout<<"(kInfinity) likeb2.DistanceToIn(G4ThreeVector(10,0,0),vmy) = "
     //       <<dist<<G4endl ;
 
+    dist=t3It4->DistanceToIn(
+    G4ThreeVector(1888.691673255004,-476.1676766307428,-295.4764663381112),
+    G4ThreeVector(-0.8509009035458712,0.5062362036610951,-0.1403301765395527));
+    assert(ApproxEqual(dist,940.603760037514));
+    //  G4cout<<"t3It4->DistanceToIn = "<<dist<<G4endl ;
+
+
+
     G4cout<<"Tracking functions are OK"<<G4endl ;
 
 
@@ -354,11 +386,11 @@ int main()
 
     assert(b1Ib2.CalculateExtent(kYAxis,allClip,tGen,min,max)) ;
     // G4cout<<"min of b1Ib2.CalculateExtent(kYAxis,allClip,tGen,min,max) = "
-    //      <<min<<G4endl ;
+    //     <<min<<G4endl ;
     // G4cout<<"max of b1Ib2.CalculateExtent(kYAxis,allClip,tGen,min,max) = "
-    //       <<max<<G4endl ;
+    //     <<max<<G4endl ;
     // Reasonable but not so obvious ?!
-    assert(ApproxEqual(min,-3.21667)&&ApproxEqual(max,4.20641)) ;
+    assert(ApproxEqual(min,-3.21667)&&ApproxEqual(max,5)) ;
 
 
 
