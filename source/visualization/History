@@ -1,4 +1,4 @@
-$Id: History,v 1.22 1999-06-29 18:06:27 johna Exp $
+$Id: History,v 1.23 1999-07-03 10:52:25 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+vis-01-00-15a  3rd July 1999  John Allison
+- Improved README (Guy).
+- Corrected a fprintf statement in G4OpenGLXViewer::spewWireframeEPS.
 
 vis-01-00-15  29th June 1999  John Allison
 - Moved #include <rw/tvhdict.h> from G4OpenGLSceneHandler.hh to .cc.
