@@ -1,4 +1,4 @@
-/*  "$Id: scl_hash.cc,v 1.3 2000-01-21 13:43:15 gcosmo Exp $"; */
+/*  "$Id: scl_hash.cc,v 1.4 2001-04-20 19:07:14 gcosmo Exp $"; */
 
 /*
  * Dynamic hashing, after CACM April 1988 pp 446-457, by Per-Ake Larson.
@@ -109,7 +109,7 @@ HASHcreate(unsigned count)
     ** minimum SEGMENT_SIZE, then convert into segments.
     */
     i = SEGMENT_SIZE;
-    while (i < count)
+    while (i < int(count))
 	i <<= 1;
     count = DIV(i, SEGMENT_SIZE);
 
@@ -124,7 +124,7 @@ HASHcreate(unsigned count)
     /*
     ** Allocate initial 'i' segments of buckets
     */
-    for (i = 0; i < count; i++)  
+    for (i = 0; i < int(count); i++)  
 /*	table->Directory[i] = (struct Element **) calloc(SEGMENT_SIZE,sizeof(struct Element));*/
       {
 	table->Directory[i] = new struct Element * [SEGMENT_SIZE];

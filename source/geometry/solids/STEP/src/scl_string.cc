@@ -10,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: scl_string.cc,v 1.3 2000-01-21 13:43:15 gcosmo Exp $ */
+/* $Id: scl_string.cc,v 1.4 2001-04-20 19:07:14 gcosmo Exp $ */
 
 #include <scl_string.h>
 #include <stdio.h>
@@ -46,7 +46,7 @@ SCLstring::SCLstring (const char * str, int lim)
 
   // check the length
   int l;
-  if (lim && (strlen (str) > lim)) l = lim;
+  if (lim && (int(strlen (str)) > lim)) l = lim;
   else l = strlen (str);
 
   _strBufSize = newBufSize (l);
