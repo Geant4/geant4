@@ -40,7 +40,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
       
   AR := LIB
   ECHO := echo -e
-  FC := f77
+  FC := g77
 #  FCLIBS := -lf2c
   ifndef OGLFLAGS
     OGLFLAGS  :=
