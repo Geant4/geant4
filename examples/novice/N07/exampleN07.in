@@ -1,0 +1,18 @@
+/control/verbose 2
+/run/dumpRegion
+/run/dumpCouples
+/run/beamOn 10
+/run/setCutForRegion Calor-A 2 mm
+/run/setCutForRegion Calor-B 2 cm
+/run/setCutForRegion Calor-C 20 cm
+/run/dumpRegion
+/run/dumpCouples
+/run/beamOn 10
+/N07/setAbsMat Water
+/N07/setGapMat Air
+/run/dumpRegion
+/run/dumpCouples
+/run/beamOn 10
+/run/setCutForRegion Calor-A 1 mm
+/run/setCutForRegion Calor-B 1 cm
+/run/setCutForRegion Calor-C 10 cm
