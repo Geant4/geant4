@@ -58,7 +58,7 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	    
 #ifdef G4ANALYSIS_USE
 	    analysisManager->InsGamLeavSam(gammaLeavingSample/keV);  
-#endif; 
+#endif
 	  }
       }
   }
@@ -75,7 +75,7 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	    
 #ifdef G4ANALYSIS_USE
 	    analysisManager->InsEleLeavSam(eleLeavingSample/keV);  
-#endif; 
+#endif
 	  }
       }
   }
@@ -102,7 +102,7 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	     
 #ifdef G4ANALYSIS_USE
 	     analysisManager->InsGamBornSample(gammaBornInSample/keV);  
-#endif; 
+#endif
 	     
 	   }
 	 }
@@ -122,7 +122,7 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	     
 #ifdef G4ANALYSIS_USE
 	     analysisManager->InsEleBornSample(eleBornInSample/keV);  
-#endif; 
+#endif
 	     
 	   }
 	 }
