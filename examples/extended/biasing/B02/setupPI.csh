@@ -52,6 +52,7 @@ if ( ${?LD_LIBRARY_PATH} == 0 ) then
 endif
 
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}}/exampleB02
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PYTHON_LIB_DIR}
 setenv LD_LIBRARY_PATH ${PI_BASE_DIR}/${PI_VER}/app/releases/SEAL/SEAL_1_3_4/rh73_gcc32/lib:$LD_LIBRARY_PATH
 setenv LD_LIBRARY_PATH /afs/cern.ch/sw/lcg/external/Python/2.2.2/rh73_gcc32/lib:$LD_LIBRARY_PATH
