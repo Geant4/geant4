@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatTrapSide.cc,v 1.4 2004-12-02 09:31:32 gcosmo Exp $
+// $Id: G4FlatTrapSide.cc,v 1.5 2004-12-08 10:20:37 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -197,6 +197,7 @@ G4int G4FlatTrapSide::DistanceToSurface(const G4ThreeVector &gp,
          if (distance[0] >= 0) isvalid[0] = true;
    }
 
+
    fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                   isvalid[0], 1, validate, &gp, &gv);
 
@@ -208,7 +209,6 @@ G4int G4FlatTrapSide::DistanceToSurface(const G4ThreeVector &gp,
    G4cerr << "        dist[0]     : " << distance[0] << G4endl;
    G4cerr << "        areacode[0] : " << areacode[0] << G4endl;
    G4cerr << "        isvalid[0]  : " << isvalid[0]  << G4endl;
-   }
 #endif
    return 1;
 }

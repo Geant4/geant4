@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBoxSide.hh,v 1.3 2004-12-02 09:31:31 gcosmo Exp $
+// $Id: G4TwistedBoxSide.hh,v 1.4 2004-12-08 10:20:33 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,8 @@
 #define __G4TWISTEDBOXSIDE__
 
 #include "G4VSurface.hh"
+
+#include <vector>
 
 class G4TwistedBoxSide : public G4VSurface
 {
@@ -122,5 +124,6 @@ G4ThreeVector G4TwistedBoxSide::NormAng( G4double phi, G4double u )
 
   return nvec.unit() ;
 }
+
 
 #endif

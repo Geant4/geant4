@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.hh,v 1.6 2004-12-02 09:31:31 gcosmo Exp $
+// $Id: G4TwistedTrapSide.hh,v 1.7 2004-12-08 10:20:34 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,8 @@
 #define __G4TWISTEDTRAPSIDE__
 
 #include "G4VSurface.hh"
+
+#include <vector>
 
 class G4TwistedTrapSide : public G4VSurface
 {
@@ -74,6 +76,9 @@ class G4TwistedTrapSide : public G4VSurface
                                           G4ThreeVector  gxx[],
                                           G4double       distance[],
                                           G4int          areacode[]);
+
+
+
   private:
 
     virtual G4int GetAreaCode(const G4ThreeVector &xx, 
@@ -102,6 +107,7 @@ class G4TwistedTrapSide : public G4VSurface
     G4double fPhiTwist;   // twist angle ( dphi in surface equation)
 
     G4double fAngleSide;
+
 };   
 
 //========================================================
@@ -110,6 +116,7 @@ class G4TwistedTrapSide : public G4VSurface
 
 inline
 G4double G4TwistedTrapSide::Xcoef(G4double u)
+
 {
   // attention a = 2 fDx1 
   //           d = 2 fDx2
@@ -150,5 +157,6 @@ G4ThreeVector G4TwistedTrapSide::NormAng( G4double phi, G4double u )
                       /(8.*b) ) ;
   return nvec.unit();
 }
+
 
 #endif

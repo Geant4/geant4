@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.hh,v 1.9 2004-11-10 18:04:43 link Exp $
+// $Id: G4VSurface.hh,v 1.10 2004-12-08 10:20:35 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -256,10 +256,10 @@ class G4VSurface
 
     private:
 
-      G4double             fDistance[2];
-      G4ThreeVector        fXX[2];
-      G4int                fAreacode[2];
-      G4bool               fIsValid[2];
+      G4double             fDistance[4];
+      G4ThreeVector        fXX[4];
+      G4int                fAreacode[4];
+      G4bool               fIsValid[4];
       G4int                fNXX;
       G4ThreeVector        fLastp;
       G4ThreeVector        fLastv;
@@ -331,6 +331,24 @@ class G4VSurface
 //========================================================
 // inline functions
 //========================================================
+
+struct Intersection {
+    
+  G4double phi ;  // parameter phi
+  G4double u ;    // parameter u
+  G4ThreeVector xx ;   // intersection point in cartesian
+  G4double distance ;  // distance to intersection
+  G4int areacode;      // the areacode of the intersection
+  G4bool isvalid ;     // valid intersection ??
+
+} ;
+  
+
+inline
+G4bool DistanceSort( const Intersection &a, const Intersection &b) 
+{
+  return a.distance < b.distance ;
+}
 
 #include "G4VSurface.icc"
 

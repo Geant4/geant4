@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatBoxSide.cc,v 1.3 2004-12-02 09:31:31 gcosmo Exp $
+// $Id: G4FlatBoxSide.cc,v 1.4 2004-12-08 10:20:36 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -206,7 +206,6 @@ G4int G4FlatBoxSide::DistanceToSurface(const G4ThreeVector &gp,
    G4cerr << "        dist[0]     : " << distance[0] << G4endl;
    G4cerr << "        areacode[0] : " << areacode[0] << G4endl;
    G4cerr << "        isvalid[0]  : " << isvalid[0]  << G4endl;
-   }
 #endif
    return 1;
 }

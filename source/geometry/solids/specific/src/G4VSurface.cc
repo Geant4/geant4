@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.cc,v 1.9 2004-11-13 18:26:26 gcosmo Exp $
+// $Id: G4VSurface.cc,v 1.10 2004-12-08 10:20:40 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,7 @@
 // --------------------------------------------------------------------
 
 #include "G4VSurface.hh"
+#include <iomanip>
 
 const G4int  G4VSurface::sOutside        = 0x00000000;
 const G4int  G4VSurface::sInside         = 0x10000000;
@@ -273,10 +274,10 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
    G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
 #endif
    
-   G4ThreeVector gxx[2];
-   G4double      distance[2]    = {kInfinity, kInfinity};
-   G4int         areacode[2]    = {sOutside, sOutside};
-   G4bool        isvalid[2]     = {false, false};
+   G4ThreeVector gxx[4];
+   G4double      distance[4]    = {kInfinity, kInfinity, kInfinity, kInfinity};
+   G4int         areacode[4]    = {sOutside, sOutside, sOutside, sOutside};
+   G4bool        isvalid[4]     = {false, false, false, false};
    G4double      bestdistance   = kInfinity;
    G4int         besti          = -1;  
    G4ThreeVector bestgxx(kInfinity, kInfinity, kInfinity);
@@ -336,10 +337,10 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
          for (G4int j=0; j< nneighbours; j++) {
             // if on corner, nneighbours = 2.
             // if on boundary, nneighbours = 1.
-            G4ThreeVector tmpgxx[2];
-            G4double      tmpdist[2]     = {kInfinity, kInfinity};
-            G4int         tmpareacode[2] = {sOutside, sOutside};
-            G4bool        tmpisvalid[2]  = {false, false};
+            G4ThreeVector tmpgxx[4];
+            G4double      tmpdist[4]     = {kInfinity, kInfinity, kInfinity, kInfinity};
+            G4int         tmpareacode[4] = {sOutside, sOutside, sOutside, sOutside};
+            G4bool        tmpisvalid[4]  = {false, false, false, false };
                   
             G4int tmpnxx = neighbours[j]->DistanceToSurface(
                                           gp, gv, tmpgxx, tmpdist,
@@ -426,6 +427,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
       G4cout << "      bestdist : " << bestdistance << G4endl;
       G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
    } 
+
 #endif
 
    return bestdistance;
@@ -446,10 +448,10 @@ G4double G4VSurface::DistanceToOut(const G4ThreeVector &gp,
    G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
 #endif
 
-   G4double      distance[2]    = {kInfinity, kInfinity};
-   G4int         areacode[2]    = {sOutside, sOutside};
-   G4bool        isvalid [2]    = {false, false};
-   G4ThreeVector gxx[2];
+   G4double      distance[4]    = {kInfinity, kInfinity, kInfinity, kInfinity};
+   G4int         areacode[4]    = {sOutside, sOutside, sOutside, sOutside};
+   G4bool        isvalid [4]    = {false, false, false, false};
+   G4ThreeVector gxx[4];
    G4int         nxx;
    G4double      bestdistance   = kInfinity;
    G4int         besti          = -1;
@@ -511,9 +513,9 @@ G4double G4VSurface::DistanceTo(const G4ThreeVector &gp,
    G4cout << "      gp   : " << gp << G4endl;
    G4cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << G4endl;
 #endif
-   G4double distance[2] = {kInfinity, kInfinity};
-   G4int    areacode[2] = {sOutside, sOutside};
-   G4ThreeVector gxx[2];
+   G4double distance[4] = {kInfinity, kInfinity, kInfinity, kInfinity};
+   G4int    areacode[4] = {sOutside, sOutside, sOutside, sOutside};
+   G4ThreeVector gxx[4];
    G4int nxx;
 
    nxx = DistanceToSurface(gp, gxx, distance, areacode);
@@ -843,7 +845,7 @@ void G4VSurface::DebugPrint() const
 
 G4VSurface::CurrentStatus::CurrentStatus() 
 {
-  for (size_t i=0; i<2; i++)
+  for (size_t i=0; i<4; i++)
   {
     fDistance[i] = kInfinity;
     fAreacode[i] = sOutside;
@@ -919,13 +921,13 @@ G4VSurface::CurrentStatus::ResetfDone(EValidate     validate,
      if (!v || (v && *v == fLastv)) return;
   }         
   G4ThreeVector xx(kInfinity, kInfinity, kInfinity);
-  for (size_t i=0; i<2; i++)
+  for (size_t i=0; i<4; i++)
   {
     fDistance[i] = kInfinity;
     fAreacode[i] = sOutside;
     fIsValid[i]  = false;
-    fXX[i] = xx[i];
-  }
+    fXX[i] = xx;   // bug in old code ( was fXX[i] =  xx[i]  )
+    }
   fNXX   = 0;
   fLastp.set(kInfinity, kInfinity, kInfinity);
   fLastv.set(kInfinity, kInfinity, kInfinity);
