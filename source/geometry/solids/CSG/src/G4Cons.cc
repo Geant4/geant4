@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.cc,v 1.14 2000-10-18 15:46:28 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.15 2000-10-26 13:09:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -1925,7 +1925,7 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
   G4double tanRMin,secRMin,pRMin ;
   G4double tanRMax,secRMax,pRMax ;
   G4double safePhi,phiC,cosPhiC,sinPhiC,ePhi ;
-
+/*
   if( Inside(p) == kOutside )
   {
     G4cout.precision(16) ;
@@ -1945,6 +1945,7 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
     //  G4Exception("Invalid call in G4Cons::DistanceToOut(p), p is outside") ;
     G4cout << "G4Cons::DistanceToOut(p), p is outside ?!" << G4endl ;
   }
+*/
   rho = sqrt(p.x()*p.x() + p.y()*p.y()) ;
   safeZ = fDz - fabs(p.z()) ;
 
