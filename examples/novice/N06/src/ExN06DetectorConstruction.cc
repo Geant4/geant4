@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06DetectorConstruction.cc,v 1.10 2003-03-26 12:09:07 maire Exp $
+// $Id: ExN06DetectorConstruction.cc,v 1.11 2003-04-17 21:11:13 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -199,7 +199,7 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
 // Water Tank
 //
   G4OpticalSurface* OpWaterSurface = new G4OpticalSurface("WaterSurface");
-  OpWaterSurface->SetType(dielectric_metal);
+  OpWaterSurface->SetType(dielectric_dielectric);
   OpWaterSurface->SetFinish(polished);
   OpWaterSurface->SetModel(glisur);
 
