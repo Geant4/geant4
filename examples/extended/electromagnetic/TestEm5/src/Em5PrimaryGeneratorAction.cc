@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PrimaryGeneratorAction.cc,v 1.3 2001-07-11 09:57:50 gunter Exp $
+// $Id: Em5PrimaryGeneratorAction.cc,v 1.4 2001-10-16 11:56:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em5PrimaryGeneratorAction.hh"
 
@@ -40,11 +40,11 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
  G4String Em5PrimaryGeneratorAction::thePrimaryParticleName="e-" ; 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5PrimaryGeneratorAction::Em5PrimaryGeneratorAction(
                                             Em5DetectorConstruction* Em5DC)
@@ -58,7 +58,7 @@ Em5PrimaryGeneratorAction::Em5PrimaryGeneratorAction(
   gunMessenger = new Em5PrimaryGeneratorMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5PrimaryGeneratorAction::~Em5PrimaryGeneratorAction()
 {
@@ -66,7 +66,7 @@ Em5PrimaryGeneratorAction::~Em5PrimaryGeneratorAction()
   delete gunMessenger;  
 }
   
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PrimaryGeneratorAction::SetDefaultKinematic()
 {    
@@ -86,7 +86,7 @@ void Em5PrimaryGeneratorAction::SetDefaultKinematic()
   particleGun->SetParticlePosition(G4ThreeVector(x0, 0*cm, 0*cm));  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
@@ -98,12 +98,12 @@ void Em5PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4String Em5PrimaryGeneratorAction::GetPrimaryName()
 {
    return thePrimaryParticleName;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

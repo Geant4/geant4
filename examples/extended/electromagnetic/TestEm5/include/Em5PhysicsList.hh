@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsList.hh,v 1.4 2001-07-11 09:57:48 gunter Exp $
+// $Id: Em5PhysicsList.hh,v 1.5 2001-10-16 11:56:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em5PhysicsList_h
 #define Em5PhysicsList_h 1
@@ -38,7 +38,7 @@ class Em5DetectorConstruction;
 class Em5PhysicsListMessenger;
 class Em5StepCut;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em5PhysicsList: public G4VUserPhysicsList
 {
@@ -86,6 +86,8 @@ class Em5PhysicsList: public G4VUserPhysicsList
     Em5PhysicsListMessenger* physicsListMessenger;
     Em5StepCut* pStepCut;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

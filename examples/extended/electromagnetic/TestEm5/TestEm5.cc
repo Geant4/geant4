@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm5.cc,v 1.5 2001-07-11 09:57:46 gunter Exp $
+// $Id: TestEm5.cc,v 1.6 2001-10-16 11:56:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -45,7 +45,7 @@
 #include "Em5SteppingAction.hh"
 #include "Em5SteppingVerbose.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
 
@@ -57,7 +57,7 @@ int main(int argc,char** argv) {
     
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
-
+  
   // set mandatory initialization classes
   Em5DetectorConstruction* detector;
   detector = new Em5DetectorConstruction;
@@ -116,5 +116,5 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

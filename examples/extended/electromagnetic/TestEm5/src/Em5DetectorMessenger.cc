@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em5DetectorMessenger.cc,v 1.3 2001-07-11 09:57:50 gunter Exp $
+// $Id: Em5DetectorMessenger.cc,v 1.4 2001-10-16 11:56:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em5DetectorMessenger.hh"
 
@@ -38,7 +38,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5DetectorMessenger::Em5DetectorMessenger(Em5DetectorConstruction * Em5Det)
 :Em5Detector(Em5Det)
@@ -105,7 +105,7 @@ Em5DetectorMessenger::Em5DetectorMessenger(Em5DetectorConstruction * Em5Det)
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5DetectorMessenger::~Em5DetectorMessenger()
 {
@@ -121,36 +121,36 @@ Em5DetectorMessenger::~Em5DetectorMessenger()
   delete Em5detDir;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == AbsMaterCmd )
-   { Em5Detector->SetAbsorberMaterial(newValue);}
+  if ( command == AbsMaterCmd )
+   {Em5Detector->SetAbsorberMaterial(newValue);}
    
-  if( command == WorldMaterCmd )
-   { Em5Detector->SetWorldMaterial(newValue);}
+  if ( command == WorldMaterCmd )
+   {Em5Detector->SetWorldMaterial(newValue);}
    
-  if( command == AbsThickCmd )
-   { Em5Detector->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));}
+  if ( command == AbsThickCmd )
+  {Em5Detector->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));}
    
-  if( command == AbsSizYZCmd )
-   { Em5Detector->SetAbsorberSizeYZ(AbsSizYZCmd->GetNewDoubleValue(newValue));}
+  if ( command == AbsSizYZCmd )
+   {Em5Detector->SetAbsorberSizeYZ(AbsSizYZCmd->GetNewDoubleValue(newValue));}
    
-  if( command == AbsXposCmd )
-   { Em5Detector->SetAbsorberXpos(AbsXposCmd->GetNewDoubleValue(newValue));}
+  if ( command == AbsXposCmd )
+   {Em5Detector->SetAbsorberXpos(AbsXposCmd->GetNewDoubleValue(newValue));}
    
-  if( command == WorldXCmd )
-   { Em5Detector->SetWorldSizeX(WorldXCmd->GetNewDoubleValue(newValue));}
+  if ( command == WorldXCmd )
+   {Em5Detector->SetWorldSizeX(WorldXCmd->GetNewDoubleValue(newValue));}
    
-  if( command == WorldYZCmd )
-   { Em5Detector->SetWorldSizeYZ(WorldYZCmd->GetNewDoubleValue(newValue));}
+  if ( command == WorldYZCmd )
+   {Em5Detector->SetWorldSizeYZ(WorldYZCmd->GetNewDoubleValue(newValue));}
    
-  if( command == UpdateCmd )
-   { Em5Detector->UpdateGeometry(); }
+  if  ( command == UpdateCmd )
+   {Em5Detector->UpdateGeometry(); }
 
   if( command == MagFieldCmd )
-   { Em5Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
+   {Em5Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

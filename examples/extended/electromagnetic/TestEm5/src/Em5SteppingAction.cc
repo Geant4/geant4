@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingAction.cc,v 1.4 2001-07-11 09:57:51 gunter Exp $
+// $Id: Em5SteppingAction.cc,v 1.5 2001-10-16 11:56:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em5DetectorConstruction.hh"
 #include "G4EnergyLossTables.hh"
@@ -44,7 +44,7 @@
 #include "g4std/iomanip"
 #include "G4UImanager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5SteppingAction::Em5SteppingAction(Em5DetectorConstruction* DET,
                                      Em5EventAction* EA,
@@ -55,21 +55,20 @@ Em5SteppingAction::Em5SteppingAction(Em5DetectorConstruction* DET,
   steppingMessenger = new Em5SteppingMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5SteppingAction::~Em5SteppingAction()
 {
   delete steppingMessenger ;
  }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
 
-  G4double Edep,Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,xend,yend,zend,rend ;
-  G4double Tkin ;
-  G4int evno = eventaction->GetEventno() ; 
+  G4double Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,yend,zend,rend;
+  G4int evno = eventaction->GetEventno(); 
 
   IDnow = evno+10000*(aStep->GetTrack()->GetTrackID())+
           100000000*(aStep->GetTrack()->GetParentID()); 
@@ -204,5 +203,5 @@ void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
       
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

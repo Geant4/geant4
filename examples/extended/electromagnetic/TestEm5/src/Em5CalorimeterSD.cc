@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em5CalorimeterSD.cc,v 1.3 2001-07-11 09:57:49 gunter Exp $
+// $Id: Em5CalorimeterSD.cc,v 1.4 2001-10-16 11:56:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em5CalorimeterSD.hh"
 
@@ -42,7 +42,7 @@
   
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5CalorimeterSD::Em5CalorimeterSD(G4String name,
                                    Em5DetectorConstruction* det)
@@ -52,14 +52,14 @@ Em5CalorimeterSD::Em5CalorimeterSD(G4String name,
   HitID = new G4int[500];
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5CalorimeterSD::~Em5CalorimeterSD()
 {
   delete [] HitID;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 {
@@ -68,7 +68,7 @@ void Em5CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
   for (G4int j=0;j<1; j++) {HitID[j] = -1;};
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool Em5CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 {
@@ -106,7 +106,7 @@ G4bool Em5CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
   return true;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5CalorimeterSD::EndOfEvent(G4HCofThisEvent* HCE)
 {
@@ -116,16 +116,16 @@ void Em5CalorimeterSD::EndOfEvent(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID,CalCollection);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5CalorimeterSD::clear()
 {} 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 void Em5CalorimeterSD::PrintAll()
 {} 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em5RunAction.hh,v 1.6 2001-07-11 09:57:48 gunter Exp $
+// $Id: Em5RunAction.hh,v 1.7 2001-10-16 11:56:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em5RunAction_h
 #define Em5RunAction_h 1
@@ -36,7 +36,7 @@
 #include "globals.hh"
 #include "g4std/iostream"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em5RunMessenger;
 class G4Run;
@@ -46,7 +46,7 @@ class G4Run;
  class HepHistogram;
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em5RunAction : public G4UserRunAction
 {
@@ -186,6 +186,8 @@ class Em5RunAction : public G4UserRunAction
     Em5RunMessenger* runMessenger;
     G4int saveRndm;    
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

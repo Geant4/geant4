@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: Em5StepCut.hh,v 1.4 2001-07-11 09:57:48 gunter Exp $
+// $Id: Em5StepCut.hh,v 1.5 2001-10-16 11:56:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em5StepCut_h
 #define Em5StepCut_h 1
@@ -35,7 +35,7 @@
 #include "G4VDiscreteProcess.hh"
 #include "G4Step.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em5StepCut : public G4VDiscreteProcess
 {
@@ -66,7 +66,7 @@ class Em5StepCut : public G4VDiscreteProcess
      G4double MaxChargedStep;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // inlined function members implementation
 
@@ -89,7 +89,7 @@ inline G4double Em5StepCut::PostStepGetPhysicalInteractionLength(
   return ProposedStep;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4VParticleChange* Em5StepCut::PostStepDoIt(const G4Track& aTrack,
                                                    const G4Step&        )
@@ -99,7 +99,7 @@ inline G4VParticleChange* Em5StepCut::PostStepDoIt(const G4Track& aTrack,
    return &aParticleChange;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsList.cc,v 1.8 2001-07-11 09:57:50 gunter Exp $
+// $Id: Em5PhysicsList.cc,v 1.9 2001-10-16 11:56:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Always place it in front!
 //   
@@ -46,7 +46,7 @@
 #include "G4ios.hh"
 #include "g4std/iomanip"                
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5PhysicsList::Em5PhysicsList(Em5DetectorConstruction* p)
 :G4VUserPhysicsList()
@@ -62,14 +62,14 @@ Em5PhysicsList::Em5PhysicsList(Em5DetectorConstruction* p)
   physicsListMessenger = new Em5PhysicsListMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5PhysicsList::~Em5PhysicsList()
 {
   delete physicsListMessenger; 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PhysicsList::ConstructParticle()
 {
@@ -84,7 +84,7 @@ void Em5PhysicsList::ConstructParticle()
   ConstructBarions();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PhysicsList::ConstructBosons()
 {
@@ -95,7 +95,8 @@ void Em5PhysicsList::ConstructBosons()
   // gamma
   G4Gamma::GammaDefinition();
 }
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PhysicsList::ConstructLeptons()
 {
@@ -111,7 +112,7 @@ void Em5PhysicsList::ConstructLeptons()
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PhysicsList::ConstructMesons()
 {
@@ -123,7 +124,7 @@ void Em5PhysicsList::ConstructMesons()
   G4KaonMinus::KaonMinusDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PhysicsList::ConstructBarions()
 {
@@ -132,7 +133,7 @@ void Em5PhysicsList::ConstructBarions()
   G4AntiProton::AntiProtonDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PhysicsList::ConstructProcess()
 {
@@ -141,7 +142,7 @@ void Em5PhysicsList::ConstructProcess()
   ConstructGeneral();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -159,7 +160,7 @@ void Em5PhysicsList::ConstructProcess()
 
 #include "G4hIonisation.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PhysicsList::ConstructEM()
 {
@@ -211,7 +212,7 @@ void Em5PhysicsList::ConstructEM()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Decay.hh"
 #include "Em5StepCut.hh"
@@ -239,7 +240,7 @@ void Em5PhysicsList::ConstructGeneral()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PhysicsList::SetCuts()
 {
@@ -289,11 +290,12 @@ void Em5PhysicsList::SetCuts()
   ////theTimer.Stop();
   ////G4cout.precision(6);
   ////G4cout << G4endl ;
-  ////G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<G4endl;
+  ////G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " 
+  ////<<G4endl;
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PhysicsList::SetGammaCut(G4double val)
 {
@@ -301,7 +303,7 @@ void Em5PhysicsList::SetGammaCut(G4double val)
   cutForGamma = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PhysicsList::SetElectronCut(G4double val)
 {
@@ -309,7 +311,7 @@ void Em5PhysicsList::SetElectronCut(G4double val)
   cutForElectron = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PhysicsList::SetProtonCut(G4double val)
 {
@@ -317,7 +319,7 @@ void Em5PhysicsList::SetProtonCut(G4double val)
   cutForProton = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PhysicsList::SetCutsByEnergy(G4double val)
 {
@@ -350,7 +352,7 @@ void Em5PhysicsList::SetCutsByEnergy(G4double val)
   SetCutValueForOthers(cut);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PhysicsList::GetRange(G4double val)
 {
@@ -367,7 +369,7 @@ void Em5PhysicsList::GetRange(G4double val)
   G4cout << "range    : " << cut / mm << " (mm)" << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5PhysicsList::SetMaxStep(G4double step)
 {
@@ -375,4 +377,4 @@ void Em5PhysicsList::SetMaxStep(G4double step)
   G4cout << " MaxChargedStep=" << step/mm << " mm" << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

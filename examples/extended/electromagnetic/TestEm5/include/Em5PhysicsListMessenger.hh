@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsListMessenger.hh,v 1.3 2001-07-11 09:57:48 gunter Exp $
+// $Id: Em5PhysicsListMessenger.hh,v 1.4 2001-10-16 11:56:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em5PhysicsListMessenger_h
 #define Em5PhysicsListMessenger_h 1
@@ -38,7 +38,7 @@
 class Em5PhysicsList;
 class G4UIcmdWithADoubleAndUnit;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em5PhysicsListMessenger: public G4UImessenger
 {
@@ -60,6 +60,8 @@ class Em5PhysicsListMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* eCmd;
     G4UIcmdWithADoubleAndUnit* setMaxStepCmd;     
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

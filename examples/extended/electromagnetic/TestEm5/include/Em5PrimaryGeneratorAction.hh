@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PrimaryGeneratorAction.hh,v 1.3 2001-07-11 09:57:48 gunter Exp $
+// $Id: Em5PrimaryGeneratorAction.hh,v 1.4 2001-10-16 11:56:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em5PrimaryGeneratorAction_h
 #define Em5PrimaryGeneratorAction_h 1
@@ -40,7 +40,7 @@ class G4Event;
 class Em5DetectorConstruction;
 class Em5PrimaryGeneratorMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em5PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
@@ -61,6 +61,8 @@ class Em5PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     
     Em5PrimaryGeneratorMessenger* gunMessenger;     
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

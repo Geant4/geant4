@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em5DetectorConstruction.hh,v 1.3 2001-07-11 09:57:47 gunter Exp $
+// $Id: Em5DetectorConstruction.hh,v 1.4 2001-10-16 11:56:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em5DetectorConstruction_h
 #define Em5DetectorConstruction_h 1
@@ -45,7 +45,7 @@ class G4UniformMagField;
 class Em5DetectorMessenger;
 class Em5CalorimeterSD;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em5DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -126,7 +126,7 @@ class Em5DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* ConstructCalorimeter();     
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void Em5DetectorConstruction::ComputeCalorParameters()
 {
@@ -140,6 +140,8 @@ inline void Em5DetectorConstruction::ComputeCalorParameters()
         WorldSizeX = 1.5*AbsorberThickness; WorldSizeYZ= 1.2*AbsorberSizeYZ;
        } 	
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -21,20 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsListMessenger.cc,v 1.3 2001-07-11 09:57:50 gunter Exp $
+// $Id: Em5PhysicsListMessenger.cc,v 1.4 2001-10-16 11:56:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em5PhysicsListMessenger.hh"
 
 #include "Em5PhysicsList.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5PhysicsListMessenger::Em5PhysicsListMessenger(Em5PhysicsList * List)
 :Em5List(List)
@@ -81,7 +81,7 @@ Em5PhysicsListMessenger::Em5PhysicsListMessenger(Em5PhysicsList * List)
   setMaxStepCmd->SetUnitCategory("Length");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5PhysicsListMessenger::~Em5PhysicsListMessenger()
 {
@@ -93,9 +93,10 @@ Em5PhysicsListMessenger::~Em5PhysicsListMessenger()
   delete setMaxStepCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
-void Em5PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void Em5PhysicsListMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
 {
   if(command == cutGCmd)
     { Em5List->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue));}
@@ -111,5 +112,5 @@ void Em5PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue
     { Em5List->SetMaxStep(setMaxStepCmd->GetNewDoubleValue(newValue));}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

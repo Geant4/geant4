@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em5EventActionMessenger.cc,v 1.3 2001-07-11 09:57:50 gunter Exp $
+// $Id: Em5EventActionMessenger.cc,v 1.4 2001-10-16 11:56:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em5EventActionMessenger.hh"
 
@@ -37,7 +37,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5EventActionMessenger::Em5EventActionMessenger(Em5EventAction* EvAct)
 :eventAction(EvAct)
@@ -62,7 +62,7 @@ Em5EventActionMessenger::Em5EventActionMessenger(Em5EventAction* EvAct)
   PrintCmd->AvailableForStates(Idle);     
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5EventActionMessenger::~Em5EventActionMessenger()
 {
@@ -71,9 +71,10 @@ Em5EventActionMessenger::~Em5EventActionMessenger()
   delete PrintCmd;    
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em5EventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+void Em5EventActionMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
 { 
   if(command == setVerboseCmd)
     {eventAction->setEventVerbose(setVerboseCmd->GetNewIntValue(newValue));}
@@ -85,4 +86,4 @@ void Em5EventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}               
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

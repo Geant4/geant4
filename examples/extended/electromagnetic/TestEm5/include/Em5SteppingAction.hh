@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingAction.hh,v 1.3 2001-07-11 09:57:49 gunter Exp $
+// $Id: Em5SteppingAction.hh,v 1.4 2001-10-16 11:56:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em5SteppingAction_h
 #define Em5SteppingAction_h 1
@@ -43,7 +43,7 @@ class Em5RunAction;
 class Em5EventAction;
 class Em5SteppingMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em5SteppingAction : public G4UserSteppingAction
 {
@@ -64,5 +64,7 @@ class Em5SteppingAction : public G4UserSteppingAction
     G4int evnoold ;
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

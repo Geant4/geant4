@@ -12,15 +12,14 @@
 /calor/update
 /gun/setDefault
 #
-/vis/camera/zoom 1.4
-/vis/drawVolume
+#/vis/viewer/zoom 1.4
 #
 /gun/particle e-
 /gun/energy 500 keV
 /tracking/verbose 1
 #
-/step/setMaxStep 1 mm
-/run/beamOn 20
+#/step/setMaxStep 1 mm
+#/run/beamOn 20
 #
 #/step/setMaxStep 2 mum
 #/run/beamOn 20

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em5DetectorConstruction.cc,v 1.6 2001-07-11 09:57:50 gunter Exp $
+// $Id: Em5DetectorConstruction.cc,v 1.7 2001-10-16 11:56:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em5DetectorConstruction.hh"
 #include "Em5DetectorMessenger.hh"
@@ -49,13 +49,13 @@
 
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5DetectorConstruction::Em5DetectorConstruction()
-:solidWorld(NULL),logicWorld(NULL),physiWorld(NULL),
+:AbsorberMaterial(NULL),WorldMaterial(NULL),defaultWorld(true),
+ solidWorld(NULL),logicWorld(NULL),physiWorld(NULL),
  solidAbsorber(NULL),logicAbsorber(NULL),physiAbsorber(NULL),
- AbsorberMaterial(NULL),WorldMaterial(NULL),
- magField(NULL),calorimeterSD(NULL),defaultWorld(true)
+ magField(NULL),calorimeterSD(NULL)
 {
   // default parameter values of the calorimeter
   AbsorberThickness = 1.*cm;
@@ -67,14 +67,14 @@ Em5DetectorConstruction::Em5DetectorConstruction()
   detectorMessenger = new Em5DetectorMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5DetectorConstruction::~Em5DetectorConstruction()
 { 
   delete detectorMessenger;
  }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* Em5DetectorConstruction::Construct()
 {
@@ -82,7 +82,7 @@ G4VPhysicalVolume* Em5DetectorConstruction::Construct()
   return ConstructCalorimeter();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5DetectorConstruction::DefineMaterials()
 { 
@@ -90,11 +90,9 @@ void Em5DetectorConstruction::DefineMaterials()
  
 G4String name, symbol;             //a=mass of a mole;
 G4double a, z, density;            //z=mean number of protons;  
-G4int iz, n;                       //iz=number of protons  in an isotope; 
-                                   // n=number of nucleons in an isotope;
 
 G4int ncomponents, natoms;
-G4double abundance, fractionmass;
+G4double fractionmass;
 G4double temperature, pressure;
 
 //
@@ -197,7 +195,7 @@ ArCO2->AddMaterial(CO2,  fractionmass=0.2156);
 
 //another way to define mixture of gas per volume
 density = 1.8223*mg/cm3;
-G4Material* NewArCO2 = new G4Material(name="NewArgonCO2", density, ncomponents=3);
+G4Material* NewArCO2 = new G4Material(name="NewArgonCO2",density,ncomponents=3);
 NewArCO2->AddElement (elAr, natoms=8);
 NewArCO2->AddElement (elC,  natoms=2);
 NewArCO2->AddElement (elO,  natoms=4);
@@ -211,7 +209,7 @@ ArCH4->AddElement (elH,  natoms=28);
 
 //Xenon-methane-propane
 density = 4.9196*mg/cm3;
-G4Material* XeCH = new G4Material(name="XenonMethanePropane", density, ncomponents=3,
+G4Material* XeCH = new G4Material("XenonMethanePropane", density, ncomponents=3,
                    kStateGas,temperature=293.15*kelvin, pressure=1*atmosphere);
 XeCH->AddElement (elXe, natoms=875);
 XeCH->AddElement (elC,  natoms=225);
@@ -224,7 +222,7 @@ XeCH->AddElement (elH,  natoms=700);
 density     = universe_mean_density;    //from PhysicalConstants.h
 pressure    = 3.e-18*pascal;
 temperature = 2.73*kelvin;
-G4Material* Vacuum = new G4Material(name="Galactic", z=1., a=1.01*g/mole, density,
+G4Material* Vacuum = new G4Material("Galactic", z=1., a=1.01*g/mole,density,
                      kStateGas,temperature,pressure);
 		     
 G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -234,7 +232,7 @@ G4cout << *(G4Material::GetMaterialTable()) << G4endl;
   WorldMaterial    = Vacuum;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 G4VPhysicalVolume* Em5DetectorConstruction::ConstructCalorimeter()
 {
@@ -305,23 +303,25 @@ G4VPhysicalVolume* Em5DetectorConstruction::ConstructCalorimeter()
   return physiWorld;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5DetectorConstruction::PrintCalorParameters()
 {
-  G4cout << "\n The  WORLD   is made of " 
-         << G4BestUnit(WorldSizeX,"Length") << " of " << WorldMaterial->GetName();
+  G4cout << "\n The  WORLD   is made of "  << G4BestUnit(WorldSizeX,"Length")
+         << " of " << WorldMaterial->GetName();
   G4cout << ". The transverse size (YZ) of the world is " 
          << G4BestUnit(WorldSizeYZ,"Length") << G4endl;
   G4cout << " The ABSORBER is made of " 
-         <<G4BestUnit(AbsorberThickness,"Length")<< " of " << AbsorberMaterial->GetName();
+         <<G4BestUnit(AbsorberThickness,"Length")
+	 << " of " << AbsorberMaterial->GetName();
   G4cout << ". The transverse size (YZ) is " 
          << G4BestUnit(AbsorberSizeYZ,"Length") << G4endl;
-  G4cout << " X position of the middle of the absorber " << G4BestUnit(XposAbs,"Length");
+  G4cout << " X position of the middle of the absorber "
+         << G4BestUnit(XposAbs,"Length");
   G4cout << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 {
@@ -334,7 +334,7 @@ void Em5DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
      }                  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 {
@@ -347,7 +347,7 @@ void Em5DetectorConstruction::SetWorldMaterial(G4String materialChoice)
      }
 }
     
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5DetectorConstruction::SetAbsorberThickness(G4double val)
 {
@@ -355,7 +355,7 @@ void Em5DetectorConstruction::SetAbsorberThickness(G4double val)
   AbsorberThickness = val;
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5DetectorConstruction::SetAbsorberSizeYZ(G4double val)
 {
@@ -363,7 +363,7 @@ void Em5DetectorConstruction::SetAbsorberSizeYZ(G4double val)
   AbsorberSizeYZ = val;
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5DetectorConstruction::SetWorldSizeX(G4double val)
 {
@@ -371,7 +371,7 @@ void Em5DetectorConstruction::SetWorldSizeX(G4double val)
   defaultWorld = false;
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5DetectorConstruction::SetWorldSizeYZ(G4double val)
 {
@@ -379,14 +379,14 @@ void Em5DetectorConstruction::SetWorldSizeYZ(G4double val)
   defaultWorld = false;
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5DetectorConstruction::SetAbsorberXpos(G4double val)
 {
   XposAbs  = val;
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5DetectorConstruction::SetMagField(G4double fieldValue)
 {
@@ -406,12 +406,12 @@ void Em5DetectorConstruction::SetMagField(G4double fieldValue)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 void Em5DetectorConstruction::UpdateGeometry()
 {
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

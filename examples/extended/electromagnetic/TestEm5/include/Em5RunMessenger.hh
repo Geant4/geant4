@@ -22,13 +22,13 @@
 //
 
 //
-// $Id: Em5RunMessenger.hh,v 1.3 2001-07-11 09:57:48 gunter Exp $
+// $Id: Em5RunMessenger.hh,v 1.4 2001-10-16 11:56:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em5RunMessenger_h
 #define Em5RunMessenger_h 1
@@ -37,7 +37,7 @@
 #include "G4UImessenger.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em5RunAction;
 class G4UIdirectory;
@@ -46,7 +46,7 @@ class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithADouble;
 class G4UIcmdWithAString;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em5RunMessenger: public G4UImessenger
 {
@@ -110,6 +110,8 @@ class Em5RunMessenger: public G4UImessenger
    G4UIcmdWithAString*        RndmReadCmd;    
  
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
