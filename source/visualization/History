@@ -1,4 +1,4 @@
-$Id: History,v 1.157 2001-09-10 11:03:39 johna Exp $
+$Id: History,v 1.158 2001-10-02 00:12:24 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+1st October 2001  Joseph Perl
+- Added first version of pure C++ HepRep driver, HepRepFile.
+  See HepRepFile/README for details.
 
 10th September 2001  John Allison  (not tagged but needs greps-V03-02-04)
 - Added BeginOfRun, BeginOfEvent and EndOfRun to G4VisManager, invoked via
