@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.26 2002-03-26 18:16:37 maire Exp $
+// $Id: G4hIonisation.cc,v 1.27 2002-03-27 21:49:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process -------------------------------
@@ -46,6 +46,7 @@
 // 25-09-01 completion of RetrievePhysicsTable() (mma)
 // 29-10-01 all static functions no more inlined
 // 08-11-01 Charge renamed zparticle; added to the dedx
+// 27-03-03 Bug fix in scaling of lambda table (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 
@@ -146,7 +147,15 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
   BuildDEDXTable(aParticleType);
 
+  if(2 < verboseLevel) {
+    G4cout << "MeanFreePathTable is built for " 
+           << aParticleType.GetParticleName() << G4endl; 
+    G4cout << (*theMeanFreePathTable) << G4endl;
+  }
+
+
   if (&aParticleType == theProton)  PrintInfoDefinition();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -200,6 +209,12 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 {
  // Build mean free path tables for the delta ray production process
  //     tables are built for MATERIALS 
+
+  if(0 < verboseLevel) {
+    G4cout << "G4hIonisation::BuildLambdaTable() for process " 
+           << GetProcessName() << " and particle " 
+           << aParticleType.GetParticleName() << G4endl;
+  }
  
  //create table
  //
@@ -235,6 +250,16 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
      // ( --> it will be the same for all the elements in this material)
      G4double DeltaThreshold =G4std::max(DeltaCutInKinEnergy[J],Tmincut);
      
+     if(1 < verboseLevel) {
+       G4cout << "### For material " << material->GetName()
+              << " Tcut(MeV)= " << DeltaThreshold/MeV
+              << " Tmin(MeV)= " << LowerBoundLambda/MeV
+              << " Tmax(MeV)= " << UpperBoundLambda/MeV
+              << " nbins= "  << NbinLambda
+              << G4endl;
+     }
+
+
      for ( G4int i = 0 ; i < NbinLambda ; i++ )
         {
           G4double LowEdgeEnergy = aVector->GetLowEdgeEnergy(i);
@@ -375,6 +400,7 @@ G4double G4hIonisation::ComputeCrossSectionPerAtom(
  //
  // nb: cross section formula is OK for spin=0 and 1/2 only ! 
      
+ initialMass = aParticleType.GetPDGMass();
  G4double particleMass = initialMass;
            
  G4double TotalEnergy = KineticEnergy + particleMass;
