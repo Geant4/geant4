@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (27-June-2003)
+                                (27-August-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -86,13 +86,39 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : silicon oxide
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88022e+295 J      e- 1.11613 GeV    e+ 1.0625 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run : 0
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.34s Real=0.36s Sys=0.02s
+  User=0.32s Real=0.34s Sys=0.02s
     1000.000           1           0     Na24[0.0]
         46.4           1   1.551e+05     e-
     1.34e+03           1   1.551e+05     anti_nu_e
@@ -107,12 +133,38 @@ Run Summary
 #/grdm/nucleusLimits 24 24 10 10
 /gun/ion 10 24 10 0
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.172 GeV    e+ 1.116 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : silicon oxide
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.116 GeV    e+ 1.062 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.31s Real=0.33s Sys=0.02s
+  User=0.31s Real=0.32s Sys=0.01s
        1e+03           1           0     Ne24[0.0]
          375           1       255.1     e-
     1.62e+03           1       255.1     anti_nu_e
@@ -132,12 +184,38 @@ Run Summary
 #/grdm/nucleusLimits 24 24 9 9
 /gun/ion 9 24 9 0
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.172 GeV    e+ 1.116 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : silicon oxide
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.116 GeV    e+ 1.062 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.48s Real=0.48s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
        1e+03           1           0     F24[0.0]
     1.09e+04           1     0.02878     e-
     1.86e+03           1     0.02878     anti_nu_e
@@ -161,6 +239,32 @@ Run Summary
 #/grdm/nucleusLimits 24 24 13 13
 /gun/ion 13 24 13 0
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.172 GeV    e+ 1.116 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : silicon oxide
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.116 GeV    e+ 1.062 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
 Run terminated.
@@ -183,6 +287,32 @@ Run Summary
 #/grdm/nucleusLimits 24 24 11 11
 /gun/ion 11 24 11 472
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.172 GeV    e+ 1.116 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : silicon oxide
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.116 GeV    e+ 1.062 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
 Run terminated.
@@ -205,12 +335,38 @@ Run Summary
 #/grdm/nucleusLimits 46 46 24 24
 /gun/ion 24 46 24 0
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.172 GeV    e+ 1.116 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : silicon oxide
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.116 GeV    e+ 1.062 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.16s Real=0.2s Sys=0s
+  User=0.16s Real=0.84s Sys=0s
        1e+03           1           0     Cr46[0.0]
      2.6e+03           1      0.1036     e+
          511           1      0.1036     gamma
@@ -230,12 +386,38 @@ Run Summary
 /grdm/nucleusLimits 215 215 84 84
 /gun/ion 84 215 84 0
 /run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Vacuum
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.172 GeV    e+ 1.116 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : silicon oxide
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88e+295 J      e- 1.116 GeV    e+ 1.062 GeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.05s Real=0.07s Sys=0s
+  User=0.06s Real=0.06s Sys=0s
        1e+03           1           0     Po215[0.0]
     7.39e+03           1   1.956e-05     alpha
          140           1   1.956e-05     Pb211[0.0]

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (27-June-2003)
+                                (27-August-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -223,12 +223,42 @@ PAI matcuts name  = Kr20CO2
 PAI matcuts index = 2
 
 PAI DeltaCutInKineticEnergyNow = 34.9467 keV
-### Run 0 start.
+Region DefaultRegionForTheWorld
+ Materials : Air Aluminium Kr20CO2 Mylar 
+ Production cuts :  gamma 1 mm     e- 1 cm     e+ 1 cm 
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
-----------------------------------------
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 cm     e+ 1 cm 
+ Energy thresholds :  gamma 990 eV     e- 8.0829 keV    e+ 8.0829 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1 mm     e- 1 cm     e+ 1 cm 
+ Energy thresholds :  gamma 6.88731 keV    e- 4.54874 MeV    e+ 4.2772 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Kr20CO2
+ Range cuts        :  gamma 1 mm     e- 1 cm     e+ 1 cm 
+ Energy thresholds :  gamma 990 eV     e- 34.9467 keV    e+ 34.3073 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Mylar
+ Range cuts        :  gamma 1 mm     e- 1 cm     e+ 1 cm 
+ Energy thresholds :  gamma 2.97898 keV    e- 2.74594 MeV    e+ 2.58201 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
@@ -244,13 +274,19 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
      100.00          0k         3        7         20         0.00    World
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.92s Real=2.06s Sys=0s
+  User=1.91s Real=1.91s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=40.2593 +- 0.20516  mm  
@@ -277,14 +313,14 @@ Run Summary
 #
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
-Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
 G4SDManager deleted.
 EventManager deleted.
 UImanager deleted.
 StateManager deleted.
+RunManagerKernel is deleted.
 RunManager is deleting.

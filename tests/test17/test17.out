@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (27-June-2003)
+                                (27-August-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
@@ -222,7 +222,7 @@ EvtNo= 727  length= 0.00913492  xend= 0.0020026
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.34s Real=4.33s Sys=1.96s
+  User=2.53s Real=5.1s Sys=1.72s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 999 for proton with Ekin = 0.5 MeV
@@ -241,13 +241,32 @@ Average Number photons per event   = 0
 #
 /gun/particle anti_proton
 /run/beamOn 1000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV     e- 4.01595 eV     e+ 4.01595 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.07536 keV    e- 84.6034 keV    e+ 83.5687 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 1 start.
 Start Run processing.
 EvtNo= 44  length= 0.00969012  xend= 0.00406808
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.48s Real=4.72s Sys=1.85s
+  User=2.61s Real=4.32s Sys=1.65s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 999 for anti_proton with Ekin = 0.5 MeV
@@ -263,13 +282,32 @@ Average Number photons per event   = 0
 /gun/particle IonC12
 /gun/energy 6000 keV
 /run/beamOn 1000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV     e- 4.01595 eV     e+ 4.01595 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.07536 keV    e- 84.6034 keV    e+ 83.5687 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 2 start.
 Start Run processing.
 EvtNo= 575  length= 0.0085652  xend= 0.00356476
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.95s Real=4.75s Sys=1.67s
+  User=2.9s Real=4.57s Sys=1.65s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 999 for IonC12 with Ekin = 6 MeV
@@ -287,12 +325,31 @@ Average Number photons per event   = 0
 /gun/particle proton
 /gun/energy 500 keV
 /run/beamOn 100
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV     e- 4.01595 eV     e+ 4.01595 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.07536 keV    e- 84.6034 keV    e+ 83.5687 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 3 start.
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=8.01s Real=8.22s Sys=0.15s
+  User=8.09s Real=8.47s Sys=0.23s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV
@@ -312,12 +369,31 @@ Average Number photons per event   = 0.19
 /test17/cutAugerEnergy 250 eV
  Cut for Auger electrons = 0.25 keV
 /run/beamOn 100
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV     e- 4.01595 eV     e+ 4.01595 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.07536 keV    e- 84.6034 keV    e+ 83.5687 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 4 start.
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=8.36s Real=8.59s Sys=0.12s
+  User=8.48s Real=8.59s Sys=0.11s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV
