@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.cc,v 1.10 2003-05-13 18:37:19 gcosmo Exp $
+// $Id: G4PVReplica.cc,v 1.1 2003-10-01 14:58:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -189,10 +189,4 @@ void G4PVReplica::GetReplicationData( EAxis& axis,
   width = fwidth;
   offset = foffset;
   consuming = true;
-}
-
-void G4PVReplica::Setup(G4VPhysicalVolume *pMother)
-{
-  SetMother(pMother);
-  if (pMother) SetMotherLogical(pMother->GetLogicalVolume());
 }

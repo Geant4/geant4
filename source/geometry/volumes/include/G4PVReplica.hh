@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.hh,v 1.7 2003-05-13 18:37:19 gcosmo Exp $
+// $Id: G4PVReplica.hh,v 1.1 2003-10-01 14:58:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,7 +112,6 @@ class G4PVReplica : public G4VPhysicalVolume
                                     G4double& width,
                                     G4double& offset,
                                     G4bool& consuming) const;
-    virtual void Setup(G4VPhysicalVolume *pMother);
 
  private:
 

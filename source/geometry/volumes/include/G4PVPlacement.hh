@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.hh,v 1.8 2003-05-13 18:37:19 gcosmo Exp $
+// $Id: G4PVPlacement.hh,v 1.1 2003-10-01 14:57:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -118,10 +118,6 @@ class G4PVPlacement : public G4VPhysicalVolume
     G4int GetCopyNo() const;
     void  SetCopyNo(G4int CopyNo);
       // Gets and sets the copy number of the volume.
-
-    void Setup(G4VPhysicalVolume *pMother);
-      // Sets the pointer to the mother volume.
-      // Must not be called when geometry closed.
 
   public:  // without description
 

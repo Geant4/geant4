@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.hh,v 1.9 2003-06-16 16:51:46 gunter Exp $
+// $Id: G4AssemblyVolume.hh,v 1.1 2003-10-01 14:55:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

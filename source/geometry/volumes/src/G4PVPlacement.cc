@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.9 2003-05-14 09:34:05 gcosmo Exp $
+// $Id: G4PVPlacement.cc,v 1.1 2003-10-01 14:57:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -145,11 +145,6 @@ void G4PVPlacement::GetReplicationData( EAxis&,
                                         G4bool&   ) const
 {
   // No-operations
-}
-
-void G4PVPlacement::Setup(G4VPhysicalVolume *pMother)
-{
-  SetMother(pMother);
 }
 
 //  

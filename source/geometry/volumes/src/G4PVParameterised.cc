@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.cc,v 1.7 2002-10-23 16:11:11 gcosmo Exp $
+// $Id: G4PVParameterised.cc,v 1.1 2003-10-01 14:56:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
