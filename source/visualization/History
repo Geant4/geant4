@@ -1,4 +1,4 @@
-$Id: History,v 1.231 2003-11-12 13:15:13 johna Exp $
+$Id: History,v 1.232 2003-11-12 13:43:31 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -27,6 +27,8 @@ History file for visualization category
 12th November 2003  John Allison
 - Bug in /vis/scene/add/volume: requestedDepthOfDescent now correctly
   propagated to "world" volume.
+- Change initialisation of G4VSceneHandler so that there is always a
+  clear on first drawing  - fMarkForClearingTransientStore(true).
 - Removed redundant code from G4VisManager::::EndOfRun.
 
 6th November 2003  John Allison  (vis-V05-02-03)
