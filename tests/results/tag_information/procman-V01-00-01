@@ -1,0 +1,19 @@
+  I've committed a new tag of "procman-V01-00-01" for process/management
+category. 
+   
+  New features in the tag are:
+
+-  Use STL vector instead of RW vectors (except for G4ProcessVector) 
+-  Add registration of process into ProcessTable in copy constructor  
+
+  The second point is modification to fix a problem that Process Table does not
+recognize processes attached to ions which are created on the fly.
+
+  The first point is modification for migration from RW to STL. G4ProcessVector,
+however, still uses RW vector (i.e. use RW-STL interface) because it widely used
+in Geant4 (in tracking and many processes) and changes will cause big effects in
+many places. I'm now working to estimate the effects and after that I'll propose
+design change of G4ProcessVector.
+  
+ Best Regards,
+                                                Hisaya  
