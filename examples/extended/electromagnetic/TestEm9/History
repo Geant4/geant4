@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2003-11-25 18:20:31 vnivanch Exp $
+$Id: History,v 1.15 2003-11-26 14:44:43 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,7 +13,10 @@ track of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+
      ----------------------------------------------------------
+26-11-03 V.Ivanchenko (testem9-V05-02-09)
+- Fix StepMax
 
 25-11-03 V.Ivanchenko (testem9-V05-02-08)
 - Fix geometry (G.Cosmo)
