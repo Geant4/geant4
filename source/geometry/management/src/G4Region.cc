@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.6 2003-03-22 19:17:02 vnivanch Exp $
+// $Id: G4Region.cc,v 1.7 2003-03-24 10:17:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,12 +69,15 @@ G4Region::~G4Region()
 // ScanVolumeTree:
 //  - Scans recursively the 'lv' logical volume tree, retrieves
 //    and places all materials in the list.
+//  - The boolean flag 'region' identifies if the volume tree must
+//    have region reset (false) or if the current region must be
+//    associated to the logical volume 'lv' and its tree (true).
 // *******************************************************************
 //
 void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
 {
-  // If logical volume is going to become regions, add material
-  // to the list of not already present
+  // If logical volume is going to become a region, add 
+  // its material to the list if not already present
   //
   G4Region* currentRegion = 0;
   size_t noDaughters = lv->GetNoDaughters();
@@ -83,8 +86,6 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
   if (region)
   {
     currentRegion = this;
-    lv->SetRegion(currentRegion);
-
     pos = G4std::find(fMaterials.begin(),fMaterials.end(),volMat);
     if (pos == fMaterials.end())
     {
@@ -93,11 +94,21 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     }
   }
 
+  // Set the LV region to be either the current region or NULL,
+  // according to the boolean selector
+  //
+  lv->SetRegion(currentRegion);
+
+  // Stop recursion here if no further daughters are involved
+  //
   if(noDaughters==0) return;
 
   G4VPhysicalVolume* daughterPVol = lv->GetDaughter(0);
   if (daughterPVol->IsParameterised())
   {
+    // Adopt special treatment in case of parameterised volumes,
+    // where parameterisation involves a new material scan
+    //
     G4VPVParameterisation* pParam = daughterPVol->GetParameterisation();
     size_t repNo = daughterPVol->GetMultiplicity();
     for (register size_t rep=0; rep<repNo; rep++)
@@ -111,7 +122,6 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
       }
     }
     G4LogicalVolume* daughterLVol = daughterPVol->GetLogicalVolume();
-//    daughterLVol->SetRegion(currentRegion);
     ScanVolumeTree(daughterLVol, region);
   }
   else
@@ -121,10 +131,9 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
       G4LogicalVolume* daughterLVol = lv->GetDaughter(i)->GetLogicalVolume();
       if (!daughterLVol->IsRootRegion())
       {
-        // Sets daughter's LV to be a region and stores materials in
+        // Set daughter's LV to be a region and store materials in
         // the materials list, if the LV is not already a root region
         //
-//        daughterLVol->SetRegion(currentRegion);
         ScanVolumeTree(daughterLVol, region);
       }
     }
@@ -145,7 +154,7 @@ void G4Region::AddRootLogicalVolume(G4LogicalVolume* lv)
   pos = G4std::find(fRootVolumes.begin(),fRootVolumes.end(),lv);
   if (pos == fRootVolumes.end())
   {
-    // Inserts the root volume in the list and set it as root region
+    // Insert the root volume in the list and set it as root region
     //
     fRootVolumes.push_back(lv);
     lv->SetRegionRootFlag(true);
