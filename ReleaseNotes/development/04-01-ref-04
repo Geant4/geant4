@@ -102,11 +102,11 @@ g3tog4                                  g3tog4-V04-01-00
 - Fix in G4gsdvn G4gsposp to enable larger number of clone volumes 
 - Fix for division defined in a mother with not yet defined parameters. 
 
-examples
+examples                                examples-V04-01-01
 --------
 - Updated reference outputs
 
-tests
+tests                                   tests-V04-01-01
 -----
 - Updated reference outputs
 - test17 (test17-V04-01-00)
