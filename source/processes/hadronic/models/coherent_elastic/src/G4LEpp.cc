@@ -644,15 +644,17 @@
  G4LEpp::G4LEpp() : 
      G4HadronicInteraction()
   {
-    theParticleChange.SetNumberOfSecondaries(1);
+    //    theParticleChange.SetNumberOfSecondaries(1);
    
-    SetMinEnergy(10.*MeV);
-    SetMaxEnergy(1200.*MeV);
+    //    SetMinEnergy(10.*MeV);
+    //    SetMaxEnergy(1200.*MeV);
+    SetMinEnergy(0.*MeV);
+    SetMaxEnergy(1200.*GeV);
   }
 
  G4LEpp::~G4LEpp()
   {
-    theParticleChange.Clear();
+    //    theParticleChange.Clear();
   }
 
 G4VParticleChange*
@@ -667,6 +669,7 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
     G4double Py = aParticle->GetMomentum().y()/GeV;
     G4double Pz = aParticle->GetMomentum().z()/GeV;
     G4double ek = aParticle->GetKineticEnergy()/GeV;
+    G4ThreeVector theInitial = aParticle->GetMomentum();
     //
     if (verboseLevel > 1) {
       G4double E = aParticle->GetTotalEnergy()/GeV;
@@ -706,6 +709,7 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
     //
     // Find energy bin
     //
+    G4cout << "StaRTING TO FIND THE ENERGY BIN!!!!!!"<<G4endl;
     G4int je1 = 0;
     G4int je2 = NENERGY - 1;
     do {
@@ -761,7 +765,9 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
     x = p*sin(theta)*cos(phi)*GeV;
     y = p*sin(theta)*sin(phi)*GeV;
     z = p*cos(theta)*GeV;
+    p *= GeV;
     G4DynamicParticle *p0 = new G4DynamicParticle;
+    p0->SetDefinition(aParticle->GetDefinition());
     p0->SetMomentum(G4ThreeVector(x, y, z));
     targetParticle->SetMomentum(G4ThreeVector(-x, -y, -z));
     //
@@ -775,20 +781,27 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       if (abs(x) > 0.000001*GeV)ph = atan2(y,x);
       cosp = cos(ph);
       sinp = sin(ph);
-      a = (cost*cosp*x - sinp*y + sint*cosp*z)*GeV;
-      b = (cost*sinp*x + cosp*y + sint*sinp*z)*GeV;
-      c = (-sint*x              + cost*z)*GeV;
-      p0->SetMomentum(G4ThreeVector(a, b, c));
-      targetParticle->SetMomentum(G4ThreeVector(-a, -b, -c));
+      a = (cost*cosp*x - sinp*y + sint*cosp*z);
+      b = (cost*sinp*x + cosp*y + sint*sinp*z);
+      c = (-sint*x              + cost*z);
+      G4ThreeVector it(a,b,c);
+      p0->SetMomentum(it);
+      G4ThreeVector aTargetMom = theInitial - it;
+      targetParticle->SetMomentum(aTargetMom);
     }
     else {
       if (z < 0) {
-        p0->SetMomentum(-aParticle->GetMomentum().z());
-        targetParticle->SetMomentum(-targetParticle->GetMomentum().z());
+        G4ThreeVector it(0,0,-aParticle->GetMomentum().z());
+        p0->SetMomentum(it);
+        G4ThreeVector aTargetMom = theInitial - it;
+        targetParticle->SetMomentum(aTargetMom);
       }
       else
       {
-        p0->SetMomentum(aParticle->GetMomentum().z());
+        G4ThreeVector it(0,0,aParticle->GetMomentum().z());
+        p0->SetMomentum(it);
+        G4ThreeVector aTargetMom = theInitial - it;
+        targetParticle->SetMomentum(aTargetMom);
       }
     }
     if (theta < 90) {
