@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2002-07-10 14:52:42 dressel Exp $
+$Id: History,v 1.11 2002-07-11 16:23:56 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July, 11th, 2002 M.Dressel - internal-2-geombias-V04-01-01
+  added clases for contruction of a simple geometry with 
+  importance values and messengers.
 
 July, 10th, 2002 M.Dressel - internal-1-geombias-V04-01-01
  change in G4Sigma: the sum over the weights is returned by GetWsum 
