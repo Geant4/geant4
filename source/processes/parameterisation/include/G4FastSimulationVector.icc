@@ -45,7 +45,7 @@ T* G4FastSimulationVector<T>::remove (const T* a)
       if (**it==*a) 
 	{
 	  T* tmp=*it;
-	  erase(it);
+	  std_pvector::erase(it);
 	  return tmp;
 	} 
     }
@@ -61,7 +61,7 @@ T* G4FastSimulationVector<T>::removeAt (G4int i)
   if(it!=std_pvector::end())
     {
       T* tmp = std_pvector::operator[](i);
-      erase(it);
+      std_pvector::erase(it);
       return tmp;
     }
   else
