@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.hh,v 1.11 2003-12-09 14:39:45 japost Exp $
+// $Id: G4FieldTrack.hh,v 1.12 2004-01-13 12:27:05 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -118,7 +118,7 @@ class  G4FieldTrack
      inline void LoadFromArray(const G4double valArr[ncompSVEC], G4int noVarsIntegrated); 
      
      friend  std::ostream&
-             operator<<( std::ostream& os, G4FieldTrack& SixVec);
+             operator<<( std::ostream& os, const G4FieldTrack& SixVec);
 
    private:
 

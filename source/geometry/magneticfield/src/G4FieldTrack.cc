@@ -21,18 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.cc,v 1.6 2003-10-31 14:35:54 gcosmo Exp $
+// $Id: G4FieldTrack.cc,v 1.7 2004-01-13 12:27:05 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 
 #include "G4FieldTrack.hh"
 
-std::ostream& operator<<( std::ostream& os, G4FieldTrack& SixVec)
+std::ostream& operator<<( std::ostream& os, const G4FieldTrack& SixVec)
 {
-     G4double *SixV = SixVec.SixVector;
-     os << " X= " << SixV[0] << " " << SixV[1] << " " << SixV[2] << " ";
-     os << " V= " << SixV[3] << " " << SixV[4] << " " << SixV[5] << " ";
+     const G4double *SixV = SixVec.SixVector;
+     os << " ( ";
+     os << " X= " << SixV[0] << " " << SixV[1] << " " << SixV[2] << " ";  // Position
+     os << " V= " << SixV[3] << " " << SixV[4] << " " << SixV[5] << " ";  // Momentum
+     os << " v2= " << G4ThreeVector(SixV[3], SixV[4], SixV[5]).mag();     // mom magnitude
+     os << " mdm= " << SixVec.fMomentumDir.mag(); 
      os << " l= " << SixVec.GetCurveLength();
+     os << " ) ";
      return os;
 }
