@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.13 2003-12-10 19:17:24 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.14 2003-12-10 20:36:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -359,6 +359,11 @@ G4PropagatorInField::ComputeStep(
            << " A difference of: "
            << OriginalState.GetCurveLength() + TruePathLength 
               - End_PointAndTangent.GetCurveLength() << G4endl;
+    G4cerr << " Original state= " << OriginalState   << G4endl
+	   << " Proposed state= " << End_PointAndTangent << G4endl;
+    G4Exception("G4PropagatorInField::ComputeStep()", "IncorrectProposedEndPoint",
+		FatalException, 
+		"Curve length mis-match between original state and proposed endpoint of propagation.");
   }
 #endif
 
@@ -635,7 +640,9 @@ G4PropagatorInField::LocateIntersectionPoint(
 	  recalculatedEndPoint= true;
 	  IntersectedOrRecalculatedFT= newEndPointFT;  // So that we can return it, 
 	                                           //  if it is the endpoint!
-	  // G4cout <<"Setting return G4FT to new endpoint " << newEndPointFT  << G4endl;
+	  if( fVerboseLevel > 2 ){
+  	     G4cout <<"G4PiF::LIP> Setting return G4FT to new endpoint " << newEndPointFT  << G4endl;
+	  }
        }
        if( curveDist < 0.0 )
        {
