@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2003-05-05 16:19:57 hpw Exp $
+# $Id: GNUmakefile,v 1.3 2003-10-08 14:53:20 hpw Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -27,12 +27,17 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/processes/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
-	    -I$(G4BASE)/processes/hadronic/models/generator/de_excitation/include \
-	    -I$(G4BASE)/processes/hadronic/models/generator/management/include \
-	    -I$(G4BASE)/processes/hadronic/models/generator/util/include \
-	    -I$(G4BASE)/processes/hadronic/models/generator/pre_equilibrium/include \
-	    -I$(G4BASE)/processes/hadronic/models/generator/diffractive_string/include \
-	    -I$(G4BASE)/processes/hadronic/models/generator/scattering/include \
+	    -I$(G4BASE)/processes/hadronic/models/management/include \
+	    -I$(G4BASE)/processes/hadronic/models/util/include \
+	    -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
+            -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \
