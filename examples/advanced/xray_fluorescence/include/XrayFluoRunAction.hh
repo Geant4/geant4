@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoRunAction.hh
-// GEANT4 tag $Name:  xray_fluo-V04-01-03
+// GEANT4 tag $Name:  xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -107,7 +107,6 @@ private:
   
   //stores the values (second column of the file) of the 
   //response function 
-
   //G4std::map<G4int,G4DataVector*,G4std::less<G4int> > dataMap;
   
   //read the data for protons and alpha spectra

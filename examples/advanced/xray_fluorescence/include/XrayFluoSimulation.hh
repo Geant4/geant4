@@ -21,63 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoPhysicsListMessenger.hh
+// $Id: XrayFluo.cc
 // GEANT4 tag $Name: xray_fluo-V03-02-00
 //
-// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+// Author: Alfonso Mantero (alfonso.mantero@ge.infn.it)
 //
 // History:
 // -----------
-//  28 Nov 2001  Elena Guardincerri   Created
+// 24 8 2002 Alfonso Mantero      Created
 //
 // -------------------------------------------------------------------
 
-
-#ifndef XrayFluoPhysicsListMessenger_h
-#define XrayFluoPhysicsListMessenger_h 1
-
 #include "globals.hh"
-#include "G4UImessenger.hh"
 
-class XrayFluoPhysicsList;
-class G4UIdirectory;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithADouble;
-class G4UIcmdWithADoubleAndUnit;
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+class XrayFluoSimulation{
 
-class XrayFluoPhysicsListMessenger: public G4UImessenger
-{
-  
 public:
-
-  XrayFluoPhysicsListMessenger(XrayFluoPhysicsList*);
-  ~XrayFluoPhysicsListMessenger();
   
-  void SetNewValue(G4UIcommand*, G4String);
+  XrayFluoSimulation(G4int seed);
   
-private:
+  ~XrayFluoSimulation();
+  
+  void RunSimulation(int argc,char** argv);
+  
+private: 
 
-  XrayFluoPhysicsList*          XrayFluoList;
+  G4int dir;
 
-  G4UIdirectory* lowEnDir;
-  G4UIcmdWithADoubleAndUnit* cutGLowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutELowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutGELowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutSecPhotCmd;
-  G4UIcmdWithADoubleAndUnit* cutSecElecCmd;
-  G4UIcmdWithADoubleAndUnit* cutGCmd;
-  G4UIcmdWithADoubleAndUnit* cutECmd;
-  G4UIcmdWithADoubleAndUnit* cutPCmd;
-  G4UIcmdWithADoubleAndUnit* eCmd;
 };
-
-#endif
-
-
-
-
-
 
 
 

@@ -21,63 +21,44 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoPhysicsListMessenger.hh
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// $Id: XrayFluoVdetectorType.hh
+// GEANT4 tag $Name:
 //
-// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+// Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //
 // History:
 // -----------
-//  28 Nov 2001  Elena Guardincerri   Created
+//  19 Jun 2003  Alfonso Mantero Created
 //
 // -------------------------------------------------------------------
 
-
-#ifndef XrayFluoPhysicsListMessenger_h
-#define XrayFluoPhysicsListMessenger_h 1
+#ifndef XrayFluoVDetectorType_hh
+#define XrayFluoVDetectorType_hh 1
 
 #include "globals.hh"
-#include "G4UImessenger.hh"
 
-class XrayFluoPhysicsList;
-class G4UIdirectory;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithADouble;
-class G4UIcmdWithADoubleAndUnit;
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+class XrayFluoVDetectorType
 
-class XrayFluoPhysicsListMessenger: public G4UImessenger
 {
-  
 public:
-
-  XrayFluoPhysicsListMessenger(XrayFluoPhysicsList*);
-  ~XrayFluoPhysicsListMessenger();
   
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual ~XrayFluoVDetectorType();
+  virtual G4String GetDetectorMaterial()=0;
+  virtual G4double ResponseFunction(G4double)=0;
+  //returns a random value of the energy measured according to the tabulated
+  //peack just lower of the energy deposited. the third integer not always is used. 
+  //when it used, user must specify it, otherwise, he gets a runtime error.
+  virtual G4double GetInfData(G4double,G4double,G4int=0)=0;
+  //returns a random value of the energy measured according to the tabulated
+  //peack just upper of the energy deposited. the third integer not always is used. 
+  //when it used, user must specify it, otherwise, he gets a runtime error.
+  virtual G4double GetSupData(G4double,G4double,G4int=0)=0;
+  virtual void LoadResponseData(G4String)=0;
+  virtual void LoadEfficiencyData(G4String)=0;
   
-private:
-
-  XrayFluoPhysicsList*          XrayFluoList;
-
-  G4UIdirectory* lowEnDir;
-  G4UIcmdWithADoubleAndUnit* cutGLowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutELowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutGELowLimCmd;
-  G4UIcmdWithADoubleAndUnit* cutSecPhotCmd;
-  G4UIcmdWithADoubleAndUnit* cutSecElecCmd;
-  G4UIcmdWithADoubleAndUnit* cutGCmd;
-  G4UIcmdWithADoubleAndUnit* cutECmd;
-  G4UIcmdWithADoubleAndUnit* cutPCmd;
-  G4UIcmdWithADoubleAndUnit* eCmd;
+protected:
+  
+  XrayFluoVDetectorType();
 };
 
 #endif
-
-
-
-
-
-
-
-

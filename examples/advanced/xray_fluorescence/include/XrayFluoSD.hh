@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoHPGeSD.hh
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// $Id: XrayFluoSD.hh
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -32,8 +32,8 @@
 //
 // -------------------------------------------------------------------
 
-#ifndef XrayFluoHpGe_h
-#define XrayFluoHPGeSD_h 1
+#ifndef XrayFluoSD_hh
+#define XrayFluoSD_hh 1
 
 #include "G4VSensitiveDetector.hh"
 #include "globals.hh"
@@ -45,12 +45,12 @@ class G4Step;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class XrayFluoHPGeSD : public G4VSensitiveDetector
+class XrayFluoSD : public G4VSensitiveDetector
 {
 public:
   
-  XrayFluoHPGeSD(G4String, XrayFluoDetectorConstruction* );
-  ~XrayFluoHPGeSD();
+  XrayFluoSD(G4String, XrayFluoDetectorConstruction* );
+  ~XrayFluoSD();
   
   void Initialize(G4HCofThisEvent*);
   void EndOfEvent(G4HCofThisEvent*);

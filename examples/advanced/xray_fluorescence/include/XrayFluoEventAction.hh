@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoEventAction.hh
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -86,8 +86,8 @@ private:
   //this method distributes the energy deposit (which must be given as
   //argument) according to the response function stored in the file 
   //response.dat
-
   //public: G4double ResponseFunction(G4double);
+
   
 
 };

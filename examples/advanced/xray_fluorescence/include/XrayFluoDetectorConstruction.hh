@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoDetectorConstruction.hh
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -32,10 +32,12 @@
 //
 // -------------------------------------------------------------------
 
-#ifndef XrayFluoDetectorConstruction_h
-#define XrayFluoDetectorConstruction_h 1
+#ifndef XrayFluoDetectorConstruction_hh
+#define XrayFluoDetectorConstruction_hh 1
 
 #include "XrayFluoSiLiDetectorType.hh"
+#include "XrayFluoHPGeDetectorType.hh"
+#include "XrayFluoSD.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
@@ -48,8 +50,9 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class XrayFluoDetectorMessenger;
-class XrayFluoHPGeSD;
-class XrayFluoVDetectorType;
+
+//class XrayFluoSD;
+//class XrayFluoVDetectorType;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -163,7 +166,6 @@ private:
   G4Material*        Dia1Material;
   G4Material*        Dia3Material;
   G4Material*        defaultMaterial;
-<<<<<<< XrayFluoDetectorConstruction.hh
   
   G4Material*        dolorite;
   G4Material*        FeMaterial;
@@ -253,7 +255,7 @@ private:
   
   XrayFluoDetectorMessenger* detectorMessenger; //pointer to the Messenger
 
-  XrayFluoHPGeSD* HPGeSD;  //pointer to the sensitive detector
+  XrayFluoSD* HPGeSD;  //pointer to the sensitive detector
   
 private:
   
