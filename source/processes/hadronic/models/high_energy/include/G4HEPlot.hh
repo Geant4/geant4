@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEPlot.hh,v 1.3 1999-12-15 14:52:54 gunter Exp $
+// $Id: G4HEPlot.hh,v 1.4 2001-05-03 08:59:16 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -17,7 +17,7 @@
 
 class G4HEPlot
  {
-  protected:
+  public:
      G4double Xstart;
      G4double Xbin;
      G4double Weight;
@@ -29,8 +29,6 @@ class G4HEPlot
      G4double WeightUnderflow;
      G4double* Xvalue;
      G4double* Yvalue;
-
-  public:
 
    G4HEPlot(){ };
 
@@ -73,13 +71,17 @@ class G4HEPlot
 
    void Scale( G4double s, const G4HEPlot & p);
 
-   void XScale( G4double a, G4double b, const G4HEPlot & p); 
+   void XScale( G4double a, G4double b); 
+
+   void Shift( G4int nshift);
 
    void Log( G4double s, const G4HEPlot & p);
 
    void Sqrt( G4double s, const G4HEPlot & p);
 
    void Reset();
+
+   void LinearFit(G4double& a, G4double& b);
 
    void Fill(G4double x, G4double w);
 

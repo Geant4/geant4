@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEVector.cc,v 1.5 2000-08-09 07:24:21 hpw Exp $
+// $Id: G4HEVector.cc,v 1.6 2001-05-03 08:59:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -17,6 +17,7 @@
 // G4 Gheisha friend class G4GHEVector
 // J.L. Chuma, TRIUMF, 22-Feb-1996
 // last modified: H. Fesefeldt 02-July--1998
+// Fesefeldt, bug fixed in Defs1, 14 August 2000
 
 #include "G4HEVector.hh"
 
@@ -39,6 +40,12 @@ G4HEVector::G4HEVector(const G4DynamicParticle * aParticle)
      particleType     = aParticle->GetDefinition()->GetParticleType();
   }
   
+G4double G4HEVector::Amax(G4double a, G4double b)
+  {
+     G4double c = a;
+     if(b > a) c = b;
+     return c;
+  } 
 
 G4String G4HEVector::getParticleName(G4int aCode, G4int aBaryon)
    {
@@ -110,7 +117,7 @@ G4HEVector::setMomentumAndUpdate( const G4ParticleMomentum mom )
      py = mom.y();
      pz = mom.z();
      energy        = sqrt(mass*mass + px*px + py*py + pz*pz);
-     kineticEnergy = G4std::max(0.,energy - mass);
+     kineticEnergy = Amax(0.,energy - mass);
      return;
    }
 
@@ -121,7 +128,7 @@ G4HEVector::setMomentumAndUpdate( const G4ParticleMomentum * mom )
      py = mom->y();
      pz = mom->z();
      energy        = sqrt(mass*mass + px*px + py*py + pz*pz);
-     kineticEnergy = G4std::max(0.,energy - mass);
+     kineticEnergy = Amax(0.,energy - mass);
      return;
    }
 
@@ -157,7 +164,7 @@ G4HEVector::setMomentumAndUpdate( G4double x, G4double y, G4double z )
      py = y;
      pz = z;
      energy        = sqrt(mass*mass + px*px + py*py + pz*pz);
-     kineticEnergy = G4std::max(0.,energy-mass);
+     kineticEnergy = Amax(0.,energy-mass);
      return;
    }
 
@@ -175,7 +182,7 @@ G4HEVector::setMomentumAndUpdate( G4double x, G4double y )
      px = x;
      py = y;
      energy = sqrt(mass*mass + px*px + py*py + pz*pz);
-     kineticEnergy = G4std::max(0.,energy-mass);
+     kineticEnergy = Amax(0.,energy-mass);
      return;
    }
 
@@ -191,7 +198,7 @@ G4HEVector::setMomentumAndUpdate( G4double z )
    {
      pz = z;
      energy = sqrt(mass*mass + px*px + py*py + pz*pz);
-     kineticEnergy = G4std::max(0.,energy-mass);
+     kineticEnergy = Amax(0.,energy-mass);
      return;
    }
 
@@ -305,10 +312,10 @@ G4HEVector::setMass( G4double m )
 void 
 G4HEVector::setMassAndUpdate( G4double m )
    {
-     kineticEnergy = G4std::max(0., energy - mass);
+     kineticEnergy = Amax(0., energy - mass);
      mass = m;
      energy = kineticEnergy + mass;
-     G4double momnew = sqrt(G4std::max(0., energy*energy - mass*mass));
+     G4double momnew = sqrt(Amax(0., energy*energy - mass*mass));
      if ( momnew == 0.0) 
         {
          px = 0.;
@@ -429,6 +436,11 @@ G4HEVector::getBaryonNumber()
    }
 
 G4int 
+G4HEVector::getStrangenessNumber()
+   {
+     return strangeness;
+   }
+G4int 
 G4HEVector::getQuarkContent(G4int flavor)
    {
      if(flavor > 0 && flavor < 8)
@@ -489,6 +501,7 @@ G4HEVector::setZero()
      particleName  = "";
      particleType  = "";
      baryon        = 0;
+     strangeness   = 0;
    }
 
 void 
@@ -503,12 +516,13 @@ G4HEVector::Add( const G4HEVector & p1, const G4HEVector & p2 )
        mass = -1. * sqrt( -b );
      else
        mass = sqrt( b );
-     kineticEnergy = G4std::max(0.,energy - mass);
+     kineticEnergy = Amax(0.,energy - mass);
      charge        = p1.charge + p2.charge;
      code          = 0;
      particleName  = "";
      particleType  = "";
      baryon        = 0;
+     strangeness   = 0;
    }
 
 void 
@@ -523,12 +537,13 @@ G4HEVector::Sub( const G4HEVector & p1, const G4HEVector & p2 )
        mass = -1. * sqrt( -b );
      else
        mass = sqrt( b );
-     kineticEnergy = G4std::max(0.,energy - mass);
+     kineticEnergy = Amax(0.,energy - mass);
      charge        = p1.charge - p2.charge;
      code          = 0;
      particleName  = "";
      particleType  = "";
      baryon        = 0;
+     strangeness   = 0;
    }
 
 void 
@@ -541,7 +556,7 @@ G4HEVector::Lor( const G4HEVector & p1, const G4HEVector & p2 )
      pz = p1.pz + a*p2.pz; 
      energy = sqrt( sqr(p1.mass) + px*px + py*py + pz*pz);
      mass = p1.mass;
-     kineticEnergy = G4std::max(0.,energy - mass);
+     kineticEnergy = Amax(0.,energy - mass);
      timeOfFlight  = p1.timeOfFlight;
      side          = p1.side;
      flag          = p1.flag;
@@ -549,6 +564,7 @@ G4HEVector::Lor( const G4HEVector & p1, const G4HEVector & p2 )
      particleName  = p1.particleName;
      particleType  = p1.particleType; 
      baryon        = p1.baryon;
+     strangeness   = p1.strangeness;
    }
 
 G4double 
@@ -657,6 +673,7 @@ G4HEVector::SmulAndUpdate( const G4HEVector & p, G4double h)
      particleName  = p.particleName;
      particleType  = p.particleType;
      baryon        = p.baryon;
+     strangeness   = p.strangeness;
      return;
    }
  
@@ -679,6 +696,7 @@ G4HEVector::Norz( const G4HEVector & p )
      particleName  = p.particleName;
      particleType  = p.particleType;
      baryon        = p.baryon;
+     strangeness   = p.strangeness;
      return;
    }
 
@@ -791,243 +809,270 @@ G4HEVector::setDefinition(G4String name)
             mass = 0.1395700;
             charge = 1.;
             code = 211;
-            particleType = "meson";
+            particleType = "Meson";
             particleName = name;
             baryon       = 0;
+            strangeness  = 0;
 	  }
         else if(name == "PionZero")
           {
              mass = 0.1349764;
              charge = 0.;
              code = 111;
-             particleType = "meson";
+             particleType = "Meson";
              particleName = name;
-             baryon       = 0; 
+             baryon       = 0;
+             strangeness  = 0; 
           }
         else if(name == "PionMinus")
           {
               mass = 0.1395700;
               charge = -1.;
               code = -211;
-              particleType = "meson";
+              particleType = "Meson";
               particleName = name;
               baryon       = 0;
+              strangeness  = 0;
           }        
         else if(name == "KaonPlus")
           {
               mass = 0.493677;
               charge = 1.;
               code = 321;
-              particleType = "meson";
+              particleType = "Meson";
               particleName = name;
               baryon       = 0;
+              strangeness  = 1;
           }
         else if(name == "KaonZero")
           {
               mass = 0.497672;
               charge = 0.;
               code = 311;
-              particleType = "meson";
+              particleType = "Meson";
               particleName = name;
               baryon       = 0;
+              strangeness  = 1;
           }
         else if(name == "AntiKaonZero")
           {
               mass = 0.497672;
               charge = 0.;
               code = -311;
-              particleType = "meson";
+              particleType = "Meson";
               particleName = name;
               baryon       = 0;
+              strangeness  =-1;
           }
         else if(name == "KaonMinus")
           {
               mass = 0.493677;
               charge = -1.;
               code = -321;
-              particleType = "meson";
+              particleType = "Meson";
               particleName = name;
               baryon       = 0;
+              strangeness  = -1;          
           }
         else if(name == "KaonZeroShort")
           {
               mass = 0.497672;
               charge = 0.;
               code = 310;
-              particleType = "meson";
+              particleType = "Meson";
               particleName = name;
               baryon       = 0;
+              strangeness  = 0;
           }
         else if(name == "KaonZeroLong")
           {
               mass = 0.497672;
               charge = 0.;
               code = 130;
-              particleType = "meson";
+              particleType = "Meson";
               particleName = name;
               baryon       = 0;
+              strangeness  = 0;
           }
         else if(name == "Proton")
           {
               mass = 0.9382723;
               charge = 1.;
               code = 2212;
-              particleType = "baryon";
+              particleType = "Baryon";
               particleName = name;
               baryon       = 1;
+              strangeness  = 0;
           }
         else if(name == "AntiProton")
           {
               mass = 0.9382723;
               charge = -1.;
               code = -2212;
-              particleType = "baryon";
+              particleType = "Baryon";
               particleName = name;
               baryon       = -1;
+              strangeness  = 0;
 	  }
         else if(name == "Neutron")
           {
               mass = 0.93956563;
               charge = 0.;
               code = 2112;
-              particleType = "baryon";
+              particleType = "Baryon";
               particleName = name;
               baryon       = 1;
+              strangeness  = 0;
           }
         else if(name == "AntiNeutron")
           {
               mass = 0.93956563;
               charge = 0.;
               code = -2112;
-              particleType = "baryon";
+              particleType = "Baryon";
               particleName = name;
               baryon = -1;
+              strangeness  = 0;
           }
         else if(name == "Lambda")
           {
               mass = 1.115684; 
               charge = 0.;
               code = 3122;
-              particleType = "baryon";
+              particleType = "Baryon";
               particleName = name;
               baryon = 1;
+              strangeness  = -1;
           }
         else if(name == "AntiLambda")
           {
               mass = 1.115684;
               charge = 0.;
               code = -3122;
-              particleType = "baryon";
+              particleType = "Baryon";
               particleName = name;
               baryon = -1;
+              strangeness  = 1;
           }
         else if(name == "SigmaPlus")
           {
               mass = 1.18937;
               charge = 1.;
               code = 3222;
-              particleType = "baryon";
+              particleType = "Baryon";
               particleName = name;
               baryon       = 1;
+              strangeness  = -1;
           }
         else if(name == "SigmaZero") 
           {
               mass = 1.19255;
               charge = 0.;
               code = 3212;
-              particleType = "baryon";
+              particleType = "Baryon";
               particleName = name;
               baryon       = 1;
+              strangeness  = -1;
           }
         else if(name == "SigmaMinus")
           {
               mass = 1.19744;
               charge = -1.;
               code = 3112;
-              particleType = "baryon";
+              particleType = "Baryon";
               particleName = name;
               baryon       = 1;
+              strangeness  = -1;
           }
         else if(name == "AntiSigmaPlus") 
           {
               mass = 1.18937;
               charge = -1.;
               code = -3222;
-              particleType = "baryon";
+              particleType = "Baryon";
               particleName = name;
               baryon = -1;
+              strangeness  = 1;
           }
         else if(name == "AntiSigmaZero")
           {
               mass = 1.19255;
               charge = 0.;
               code = -3212;
-              particleType = "baryon";
+              particleType = "Baryon";
               particleName = name;
               baryon       = -1;
+              strangeness  = 1;
           }        
         else if(name == "AntiSigmaMinus")
           {
               mass = 1.19744;
               charge = 1.;
               code = -3112;
-              particleType = "baryon";
+              particleType = "Baryon";
               particleName = name;
               baryon       = -1;
+              strangeness  = 1;
           }
         else if(name == "XiZero")
           {
               mass = 1.3149;
               charge = 0.;
               code = 3322;
-              particleType = "baryon";
+              particleType = "Baryon";
               particleName = name;
               baryon       = 1;
+              strangeness  = -2;
           }        
         else if(name == "XiMinus")
           {
               mass = 1.32132;
               charge = -1.;
               code = 3312;
-              particleType = "baryon";
+              particleType = "Baryon";
               particleName = name;
               baryon       = 1;
+              strangeness  = -2;
           }
         else if(name == "AntiXiZero")
           {
                mass = 1.3149;
                charge = 0.;
                code = -3322;
-               particleType = "baryon";
+               particleType = "Baryon";
                particleName = name;
                baryon = -1;
+               strangeness  = 2;
           }        
         else if(name == "AntiXiMinus")
           {
                mass = 1.32132;
                charge = 1.;
                code = -3312;
-               particleType = "baryon";
+               particleType = "Baryon";
                particleName = name;
                baryon       = -1;
+               strangeness  = 2;
           }
         else if(name == "OmegaMinus")
           {
                mass = 1.67245;
                charge = -1.;
                code = 3334;
-               particleType = "baryon";
+               particleType = "Baryon";
                particleName = name;
                baryon       = 1;
+               strangeness  = -3;
           }        
         else if(name == "AntiOmegaMinus")
           {
                mass = 1.67245;
                charge = 1.;
                code = -3334;
-               particleType = "baryon";
+               particleType = "Baryon";
                particleName = name;
                baryon       = -1;
+               strangeness  = 3;
           }
         else if(name == "Deuteron")
           {
@@ -1037,6 +1082,7 @@ G4HEVector::setDefinition(G4String name)
                particleType = "Nucleus";
                particleName = name;
                baryon       = 2;
+               strangeness  = 0;
           }        
         else if(name == "Triton")
           {
@@ -1046,6 +1092,7 @@ G4HEVector::setDefinition(G4String name)
                particleType = "Nucleus";
                particleName = name;
                baryon       = 3;
+               strangeness  = 0;
           }
         else if(name == "Alpha")
           {
@@ -1055,6 +1102,7 @@ G4HEVector::setDefinition(G4String name)
                particleType = "Nucleus";
                particleName = name;
                baryon       = 4;
+               strangeness  = 0;
           }
         else if(name == "Gamma")
           {
@@ -1064,6 +1112,7 @@ G4HEVector::setDefinition(G4String name)
                particleType = "Boson";
                particleName = name;
                baryon = 0;
+               strangeness  = 0;
           }
         else
           {
@@ -1124,7 +1173,7 @@ G4int G4HEVector::FillQuarkContent()
       }
     }
 
-  } else if (particleType == "meson") {
+  } else if (particleType == "Meson") {
     //   -- exceptions --
     if (tempPDGcode == 310) spin = 0;        //K0s
     if (tempPDGcode == 130) {     //K0l

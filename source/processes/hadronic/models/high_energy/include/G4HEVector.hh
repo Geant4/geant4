@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEVector.hh,v 1.4 1999-12-15 16:42:00 gunter Exp $
+// $Id: G4HEVector.hh,v 1.5 2001-05-03 08:59:16 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,6 +37,7 @@ class G4HEVector
      G4String particleName;
      G4String particleType;
      G4int    baryon;
+     G4int    strangeness;
      enum {NumberOfQuarkFlavor = 8};
      G4int theQuarkContent[NumberOfQuarkFlavor];
      G4int theAntiQuarkContent[NumberOfQuarkFlavor];
@@ -61,6 +62,7 @@ class G4HEVector
      particleName     = "";
      particleType     = "";
      baryon           = 0;
+     strangeness      = 0;
    }
 
 
@@ -80,31 +82,33 @@ class G4HEVector
      particleName  = p.particleName;
      particleType  = p.particleType;
      baryon        = p.baryon;
+     strangeness   = p.strangeness;
    }
 
 
   G4HEVector & operator = ( const G4HEVector & p )
    {
-     if ( this != &p ) {
-       px            = p.px;
-       py            = p.py;
-       pz            = p.pz;
-       energy        = p.energy;
-       kineticEnergy = p.kineticEnergy;
-       mass          = p.mass;
-       charge        = p.charge;
-       timeOfFlight  = p.timeOfFlight;
-       side          = p.side;
-       flag          = p.flag;
-       code          = p.code;
-       particleName  = p.particleName;
-       particleType  = p.particleType;
-       baryon        = p.baryon;
-     }
+     px            = p.px;
+     py            = p.py;
+     pz            = p.pz;
+     energy        = p.energy;
+     kineticEnergy = p.kineticEnergy;
+     mass          = p.mass;
+     charge        = p.charge;
+     timeOfFlight  = p.timeOfFlight;
+     side          = p.side;
+     flag          = p.flag;
+     code          = p.code;
+     particleName  = p.particleName;
+     particleType  = p.particleType;
+     baryon        = p.baryon;
+     strangeness   = p.strangeness;
      return *this;
    }
 
    ~G4HEVector(){ };
+
+   G4double Amax(G4double a, G4double b);
 
    G4String getParticleName(G4int code, G4int baryon);
  
@@ -173,6 +177,8 @@ class G4HEVector
    G4String getName();
 
    G4int getBaryonNumber();
+
+   G4int getStrangenessNumber();
 
    G4int getQuarkContent(G4int flavor);
 

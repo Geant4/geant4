@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEPionPlusInelastic.hh,v 1.4 2000-12-14 09:02:42 hpw Exp $
+// $Id: G4HEPionPlusInelastic.hh,v 1.5 2001-05-03 08:59:16 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -18,13 +18,6 @@
 #ifndef G4HEPionPlusInelastic_h
 #define G4HEPionPlusInelastic_h 1
 
-// Class Description
-// Final state production model for PionPlus inelastic scattering above 20 GeV; 
-// To be used in your physics list in case you need this physics.
-// In this case you want to register an object of this class with 
-// the corresponding process.
-// Class Description - End
-
 #include "G4HEInelastic.hh"
 
 class G4HEPionPlusInelastic : public G4HEInelastic  
@@ -32,7 +25,11 @@ class G4HEPionPlusInelastic : public G4HEInelastic
  public: 
         G4HEPionPlusInelastic() : G4HEInelastic()
            {
-             G4int    vecLen       = 0;
+             G4double theMinEnergy =  1*GeV;
+             G4double theMaxEnergy = 10*TeV;
+             G4int MAXPART      = 512;
+             G4int verboseLevel = 0; 
+             G4int vecLen       = 0;
            }
 
         ~G4HEPionPlusInelastic(){ };
@@ -43,8 +40,6 @@ class G4HEPionPlusInelastic : public G4HEInelastic
 
         G4int  GetNumberOfSecondaries()
                { return vecLength; }         
-
- private:
 
         void   FirstIntInCasPionPlus(G4bool &inElastic, const G4double availableEnergy,
                                      G4HEVector pv[],
