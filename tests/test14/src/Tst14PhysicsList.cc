@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst14PhysicsList.cc,v 1.19 2003-02-23 17:22:15 pia Exp $
+// $Id: Tst14PhysicsList.cc,v 1.20 2003-02-23 22:40:43 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -72,8 +72,6 @@ Tst14PhysicsList::Tst14PhysicsList(): G4VModularPhysicsList(),
   // Particles
   RegisterPhysics( new Tst14Particles("particles") );
 
-  // Transportation
-  AddTransportation();
 }
 
 
@@ -85,62 +83,65 @@ Tst14PhysicsList::~Tst14PhysicsList()
 
 void Tst14PhysicsList::AddPhysicsList(const G4String& name)
 {
+
+  G4cout << "Adding PhysicsList chunk " << name << G4endl;
+
   // Register standard processes for photons
   if (name == "photon-standard") 
     {
       if (photonIsRegistered) 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name  
 		 << " cannot be registered ---- photon List already existing" << G4endl;
 	} 
       else 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
 	  RegisterPhysics( new Tst14PhotonStandard(name) );
 	  photonIsRegistered = true;
 	}
     }
   // Register LowE-EPDL processes for photons
-  else if (name == "photon-epdl") 
+  if (name == "photon-epdl") 
     {
       if (photonIsRegistered) 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name  
 		 << " cannot be registered ---- photon List already existing" << G4endl;
 	} 
       else 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
 	  RegisterPhysics( new Tst14PhotonEPDL(name) );
 	  photonIsRegistered = true;
 	}
    } 
   // Register processes a' la Penelope for photons
-  else if (name == "photon-penelope")
+  if (name == "photon-penelope")
     {
      if (photonIsRegistered) 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name  
 		 << " cannot be registered ---- photon List already existing" << G4endl;
 	} 
       else 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
 	  RegisterPhysics( new Tst14PhotonPenelope(name) );
 	  photonIsRegistered = true;
 	}
     }
   // Register polarised processes for photons
-  else if (name == "photon-polarised")
+  if (name == "photon-polarised")
     {
       if (photonIsRegistered) 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name  
 		 << " cannot be registered ---- photon List already existing" << G4endl;
 	} 
       else 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
 	  RegisterPhysics( new Tst14PhotonPolarised(name) );
 	  photonIsRegistered = true;
 	}
@@ -150,41 +151,42 @@ void Tst14PhysicsList::AddPhysicsList(const G4String& name)
     {
       if (electronIsRegistered) 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name  
 		 << " cannot be registered ---- electron List already existing" << G4endl;
 	} 
       else 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
-	  RegisterPhysics( new Tst14ElectronStandard(name) );	  electronIsRegistered = true;
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst14ElectronStandard(name) );	  
+	  electronIsRegistered = true;
 	}
     }
   // Register LowE-EEDL processes for electrons
-  else if (name == "electron-epdl") 
+  if (name == "electron-eedl") 
     {
       if (electronIsRegistered) 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name  
 		 << " cannot be registered ---- electron List already existing" << G4endl;
 	} 
       else 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
 	  RegisterPhysics( new Tst14ElectronEEDL(name) );
 	  electronIsRegistered = true;
 	}
    } 
   // Register processes a' la Penelope for electrons
-  else if (name == "electron-penelope")
+  if (name == "electron-penelope")
     {
      if (electronIsRegistered) 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name 
 		 << " cannot be registered ---- electron List already existing" << G4endl;
 	} 
       else 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
 	  RegisterPhysics( new Tst14ElectronPenelope(name) );
 	  electronIsRegistered = true;
 	}
@@ -194,20 +196,20 @@ void Tst14PhysicsList::AddPhysicsList(const G4String& name)
     {
       if (positronIsRegistered) 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name  
 		 << " cannot be registered ---- positron List already existing" << G4endl;
 	} 
       else 
 	{
-	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
 	  RegisterPhysics( new Tst14PositronStandard(name) );
-	  electronIsRegistered = true;
+	  positronIsRegistered = true;
 	}
     }
-  // Invalid List name
-  else 
+
+  if (electronIsRegistered && positronIsRegistered && photonIsRegistered)
     {
-      G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << " is not defined" << G4endl;
+      G4cout << "PhysicsList for electron, positron and photon registered" << G4endl;
     }
 }
 
