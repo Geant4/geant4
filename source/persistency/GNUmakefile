@@ -19,10 +19,11 @@ G4ODBMS_INSTALLATION := true
 
 SUBDIRS = global \
           digits+hits/digits digits+hits/hits events run geometry/global \
-          geometry/solids/CSG geometry/solids/Boolean geometry/management \
+          geometry/solids/CSG geometry/solids/specific \
+          geometry/solids/Boolean geometry/management \
           management
 SUBLIBS = G4pglobal G4pdigits G4phits G4pevents G4prun G4pgeomGlobal \
-          G4pcsg G4pgeomBoolean G4pgeomn \
+          G4pcsg G4pspecsolids G4pgeomBoolean G4pgeomn \
           G4pmanagement
 
 ifndef G4INSTALL
