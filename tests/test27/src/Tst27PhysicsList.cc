@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst27PhysicsList.cc,v 1.3 2003-11-17 16:41:20 jwellisc Exp $
+// $Id: Tst27PhysicsList.cc,v 1.4 2003-12-04 15:33:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -325,7 +325,7 @@ void Tst27PhysicsList::ConstructHad()
     
     G4BinaryCascade * theBC = new G4BinaryCascade;
     G4BinaryLightIonReaction * theIonBC= new G4BinaryLightIonReaction;
-    theIonBC->SetMinEnergy(80*MeV);
+    theIonBC->SetMinEnergy(1*MeV);
     theIonBC->SetMaxEnergy(20*GeV);
     
     G4TripathiCrossSection * TripathiCrossSection= new G4TripathiCrossSection;
@@ -608,7 +608,7 @@ void Tst27PhysicsList::ConstructHad()
 	 theInelasticProcess->AddDataSet(TripathiCrossSection);
 	 theInelasticProcess->AddDataSet(aShen);
          G4BinaryLightIonReaction * theGenIonBC= new G4BinaryLightIonReaction;
-         theGenIonBC->SetMinEnergy(1*MeV);
+         theGenIonBC->SetMinEnergy(0*MeV);
          theGenIonBC->SetMaxEnergy(10*GeV);
 	 theInelasticProcess->RegisterMe(theGenIonBC);
          theInelasticProcess->RegisterMe(theTheoModel);
