@@ -1,0 +1,30 @@
+$Id: History,v 1.1 2001-11-06 18:45:57 sadilov Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarise all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov  06, 2001   S. Sadilov (configure-V03-02-00)
+------------------------
+- Oldconfig.U: 
+		a) it was introduced distinguishing for 'egcs' and 'g++'
+		b) 
+
+- Oldconfig.U	    
+  Loc.U	    
+  Tr.U	    
+  lns.U: it was removed some 'echo' printing
+
