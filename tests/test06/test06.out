@@ -4,8 +4,11 @@ PreInit> # Macro file test06.in
 PreInit> # for tests of basic e.m. processes in integral approach + new p.e. effect
 PreInit> #   (G4PhotoAbsorption).
 PreInit> #
-PreInit> PreInit> # /run/verbose 2
+PreInit> PreInit> /run/verbose 2
 PreInit> /run/initialize
+userDetector->Construct() start.
+physicsList->Construct() start.
+physicsList->setCut() start.
 Tst06PhysicsList::SetCuts:CutLength : 1 (mm)
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all ZSandia crossSection below 50 KeV
@@ -73,6 +76,12 @@ SimpleBox is now made of Al
 Idle> /gun/particle gamma
 Idle> /gun/energy 500 MeV
 Idle> /run/beamOn 100
+Start closing geometry.
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=25.77s Real=38.3s Sys=1.07s
 Idle> #
 Idle> # electron 500 MeV in Air
 Idle> #
@@ -81,5 +90,19 @@ SimpleBox is now made of Air
 Idle> /gun/particle e-
 Idle> /gun/energy 500 MeV
 Idle> /run/beamOn 100
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=2.16s Real=2.67s Sys=0.03s
 Idle> #
-Idle> 
+Idle> G4 kernel has come to Quit state.
+Deletion of G4 kernel class start.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManager is deleting.

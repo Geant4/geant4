@@ -196,13 +196,13 @@ Start Run processing.
 ----------------------------------------
 >>> Event 0
      10 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.7e+02 MeV       total track length:      16 cm 
-        Gap: total energy:      13 MeV       total track length:     6.1 cm 
-    177 trajectories stored in this event.
+   Absorber: total energy: 2.8e+02 MeV       total track length:      14 cm 
+        Gap: total energy:      12 MeV       total track length:     5.9 cm 
+    195 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.29s Real=0.32s Sys=0.02s
+  User=0.28s Real=0.33s Sys=0.03s
 Idle> #
 Idle> # list the existing physics processes
 Idle> /process/list
@@ -221,17 +221,17 @@ Start Run processing.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 213871825, 121375221
+ Current couple of seeds = 2089514513, 1200712414
 ----------------------------------------
 >>> Event 0
-     10 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.7e+02 MeV       total track length:      14 cm 
-        Gap: total energy:      17 MeV       total track length:     8.5 cm 
-    177 trajectories stored in this event.
+     9 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 2.8e+02 MeV       total track length:      15 cm 
+        Gap: total energy:      17 MeV       total track length:     7.6 cm 
+    195 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.23s Real=0.26s Sys=0.03s
+  User=0.25s Real=0.28s Sys=0.02s
 Idle> #
 Idle> # switch on MultipleScattering
 Idle> /process/activate msc
@@ -261,17 +261,17 @@ Start Run processing.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1053016644, 852736205
+ Current couple of seeds = 900551276, 1952365952
 ----------------------------------------
 >>> Event 0
-     28 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 4.1e+02 MeV       total track length:      91 cm 
-        Gap: total energy:      85 MeV       total track length:     2.3 m  
-    201 trajectories stored in this event.
+     21 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 4.2e+02 MeV       total track length:      98 cm 
+        Gap: total energy:      68 MeV       total track length:     1.9 m  
+    176 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.86s Real=0.94s Sys=0.08s
+  User=0.62s Real=0.71s Sys=0.09s
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
