@@ -46,9 +46,10 @@ StatusCode GDMLExpressionEvaluator::RegisterPhysConstant( const define::quantity
   expr += physc->get_unit();
   expr += ")";
   
-  std::cout << "Expression evaluator:: evaluating string: " << expr << std::endl;
+  //std::cout << "Expression evaluator:: evaluating string: " << expr << std::endl;
   
-  double value = fCalc.evaluate( expr.c_str() );
+  double value      = fCalc.evaluate( expr.c_str() );
+  double unit_value = fCalc.evaluate( physc->get_unit().c_str() );
   
   if( fCalc.status() != HepTool::Evaluator::OK )
   {
@@ -60,7 +61,7 @@ StatusCode GDMLExpressionEvaluator::RegisterPhysConstant( const define::quantity
   }
   
   std::cout << "Expression evaluator:: Registering quantity "
-            << physc->get_name() << ": " << value << physc->get_unit() << std::endl;
+            << physc->get_name() << ": " << (value/unit_value) << physc->get_unit() << std::endl;
   
   //fCalc.setVariable( physc->get_name().c_str(), expr.c_str() );
   fCalc.setVariable( physc->get_name().c_str(), value );
@@ -70,7 +71,10 @@ StatusCode GDMLExpressionEvaluator::RegisterPhysConstant( const define::quantity
 //StatusCode GDMLExpressionEvaluator::RegisterExpression( const GDMLExpression* e )
 StatusCode GDMLExpressionEvaluator::RegisterExpression( const define::expression* e )
 {
-  double value = fCalc.evaluate( e->get_text().c_str() );
+  std::string expr = "(";
+  expr += e->get_text();
+  expr += ")";
+  double value = fCalc.evaluate( expr.c_str() );
   
   if( fCalc.status() != HepTool::Evaluator::OK )
   {
@@ -98,14 +102,15 @@ double GDMLExpressionEvaluator::Eval( const char* expr )
   double result = fCalc.evaluate( expr );
   if( fCalc.status() != HepTool::Evaluator::OK )
   {
-    std::cout << "------";
+    std::cerr << expr << std::endl;
+    //std::cerr << "------";
     for (int i=0; i<fCalc.error_position(); i++)
     {
-      std::cout << "-";
+      std::cerr << "-";
     }
-    std::cout << "^\a" << std::endl;
+    std::cerr << "^\a" << std::endl;
     fCalc.print_error();
-    std::cout << std::endl;
+    std::cerr << std::endl;
   }
   return result;
 }
