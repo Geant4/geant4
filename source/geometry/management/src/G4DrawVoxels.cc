@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DrawVoxels.cc,v 1.6 1999-08-03 09:52:47 graignac Exp $
+// $Id: G4DrawVoxels.cc,v 1.7 1999-08-03 10:44:45 graignac Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@ void G4DrawVoxels::SetBoundingBoxVisAttributes(G4VisAttributes& VA_boundingbox){
 void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
 					 const G4SmartVoxelHeader* header,
 					 G4VoxelLimits& limit,
-					 G4PlacedPolyhedronList* ppl)
+					 G4PlacedPolyhedronList* ppl) const
 {
 //######################################################################################################################
 // Let's draw the selected voxelisation now !
@@ -84,7 +84,7 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
    ppl->insert(G4PlacedPolyhedron(bounding_polyhedronBox,G4Translate3D(t_centerofBoundingBox)));
    
    G4ThreeVector t_FirstCenterofVoxelPlane;
-   G4VisAttributes* voxelsVisAttributes;
+   const G4VisAttributes* voxelsVisAttributes;
 
    G4ThreeVector unit_translation_vector;
    G4ThreeVector current_translation_vector;
@@ -165,7 +165,7 @@ G4DrawVoxels::G4DrawVoxels(){
 	fBoundingBoxVisAttributes.SetColour(G4Colour(.3,0.,.2));
 }
 
-G4AffineTransform G4DrawVoxels::GetAbsoluteTransformation(const G4VPhysicalVolume* pv){
+G4AffineTransform G4DrawVoxels::GetAbsoluteTransformation(const G4VPhysicalVolume* pv) const{
   //Initialisation of the transformation to be computed
   G4AffineTransform transf; //default constructor ie Id
 
@@ -186,7 +186,7 @@ G4AffineTransform G4DrawVoxels::GetAbsoluteTransformation(const G4VPhysicalVolum
 
 
 
-G4PlacedPolyhedronList* G4DrawVoxels::CreatePlacedPolyhedra(const G4LogicalVolume* lv){
+G4PlacedPolyhedronList* G4DrawVoxels::CreatePlacedPolyhedra(const G4LogicalVolume* lv) const{
    G4PlacedPolyhedronList* pplist=new G4PlacedPolyhedronList;
    G4VoxelLimits limits;  // Working object for recursive call.
    ComputeVoxelPolyhedra(lv,lv->GetVoxelHeader(),limits,pplist);
@@ -194,7 +194,7 @@ G4PlacedPolyhedronList* G4DrawVoxels::CreatePlacedPolyhedra(const G4LogicalVolum
 }
 
 
-void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv){
+void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv) const{
    
    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
