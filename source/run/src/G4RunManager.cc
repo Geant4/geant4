@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.32 2001-10-05 23:31:55 asaim Exp $
+// $Id: G4RunManager.cc,v 1.33 2001-10-22 17:03:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,7 @@
 #include "G4UserRunAction.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4GeometryManager.hh"
+#include "G4GeomTestMessenger.hh"
 #include "G4SDManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
@@ -78,6 +79,7 @@ G4RunManager::G4RunManager()
   eventManager = new G4EventManager();
   timer = new G4Timer();
   runMessenger = new G4RunMessenger(this);
+  geomTestMessenger = new G4GeomTestMessenger();
   previousEvents = new G4std::vector<G4Event*>;
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
@@ -99,6 +101,7 @@ G4RunManager::~G4RunManager()
   if(verboseLevel>1) G4cout << "Deletion of G4 kernel class start." << G4endl;
   delete timer;
   delete runMessenger;
+  delete geomTestMessenger;
   physicsList->RemoveProcessManager();
   G4ParticleTable::GetParticleTable()->DeleteMessenger();
   G4ProcessTable::GetProcessTable()->DeleteMessenger();
@@ -205,7 +208,7 @@ void G4RunManager::RunInitialization()
     if(verboseLevel>1) G4cout << "Start closing geometry." << G4endl;
     G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
     geomManager->OpenGeometry();
-    geomManager->CloseGeometry(geometryToBeOptimized);
+    geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>0);
     geometryNeedsToBeClosed = false;
   }
   G4StateManager* stateManager = G4StateManager::GetStateManager();

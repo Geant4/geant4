@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.18 2001-07-19 00:25:21 asaim Exp $
+// $Id: G4RunManager.hh,v 1.19 2001-10-22 17:03:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,10 +78,11 @@ class G4UserSteppingAction;
 class G4VPhysicalVolume;
 class G4Timer;
 class G4RunMessenger;
+class G4GeomTestMessenger;
 class G4DCtable;
 class G4Run;
-#include "G4Event.hh"
 
+#include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "globals.hh"
 #include "g4std/vector"
@@ -190,6 +191,7 @@ class G4RunManager
 
   private:
     G4RunMessenger* runMessenger;
+    G4GeomTestMessenger* geomTestMessenger;
 
   protected:
     G4bool geometryInitialized;
