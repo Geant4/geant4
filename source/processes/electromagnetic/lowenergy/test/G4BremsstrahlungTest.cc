@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BremsstrahlungTest.cc,v 1.2 2000-06-22 02:26:31 pia Exp $
+// $Id: G4BremsstrahlungTest.cc,v 1.3 2000-07-11 18:40:02 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -27,8 +27,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <fstream>
-#include <iomanip>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4Material.hh"
 #include "G4VContinuousDiscreteProcess.hh"
@@ -42,8 +42,6 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
-#include "G4Proton.hh"
-#include "G4AntiProton.hh"
 
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
@@ -59,46 +57,17 @@
 
 HepTupleManager* hbookManager;
 
-int main()
+G4int main()
 {
 
   // Setup
 
-  G4int niter = 100000;
+  G4int nIterations = 100000;
   G4int materialId = 3;
   G4int test = 0;
 
-  G4cout << "Test AlongStepDoIt [1] or PostStepDoIt [2] ?" << G4endl;
-  cin >> test;
-  if ( !(test == 1 || test == 2))
-    {
-      G4Exception("Wrong input");
-    }
-
-  G4cout << "How many interactions? " << G4endl;
-  G4cin >> niter;
-
-  if (niter <= 0)
-   {
-     G4Exception("Wrong input");
-   }
-
-  G4double initEnergy = 1*MeV; 
-  G4double initX = 0.; 
-  G4double initY = 0.; 
-  G4double initZ = 1.;
-
-  G4cout << "Enter the initial particle energy E (MeV)" << G4endl; 
-  G4cin >> initEnergy ;
-
-  initEnergy = initEnergy * MeV;
-
-  if (initEnergy  <= 0.)
-   {
-     G4Exception("Wrong input");
-   }
-
   G4cout.setf( ios::scientific, ios::floatfield );
+
   // -------------------------------------------------------------------
 
   // ---- HBOOK initialization
@@ -169,6 +138,30 @@ int main()
   csi->AddElement(Cs,1);
   csi->AddElement(I,1);
 
+
+  // Interactive set-up
+
+  G4cout << "Test AlongStepDoIt [1] or PostStepDoIt [2] ?" << G4endl;
+  cin >> test;
+  if ( !(test == 1 || test == 2)) G4Exception("Wrong input");
+
+  G4cout << "How many interactions? " << G4endl;
+  G4cin >> nIterations;
+
+  if (nIterations <= 0) G4Exception("Wrong input");
+
+  G4double initEnergy = 1*MeV; 
+  G4double initX = 0.; 
+  G4double initY = 0.; 
+  G4double initZ = 1.;
+
+  G4cout << "Enter the initial particle energy E (MeV)" << G4endl; 
+  G4cin >> initEnergy ;
+
+  initEnergy = initEnergy * MeV;
+
+  if (initEnergy  <= 0.) G4Exception("Wrong input");
+
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
  G4int nMaterials = theMaterialTable->length();
@@ -184,8 +177,10 @@ int main()
   G4cout << "Which material? " << G4endl;
   G4cin >> materialId;
 
+  G4Material* material = (*theMaterialTable)(materialId) ;
+
   G4cout << "The selected material is: "
-	 << (*theMaterialTable)(materialId)->GetName()
+	 << material->GetName()
 	 << G4endl;
 
   G4double dimX = 1*mm;
@@ -196,12 +191,13 @@ int main()
 
   G4Box* theFrame = new G4Box ("Frame",dimX, dimY, dimZ);
   
-  G4LogicalVolume* LogicalFrame = new G4LogicalVolume(theFrame,
+  G4LogicalVolume* logicalFrame = new G4LogicalVolume(theFrame,
 						      (*theMaterialTable)(materialId),
 						      "LFrame", 0, 0, 0);
+  logicalFrame->SetMaterial(material); 
   
-  G4PVPlacement* PhysicalFrame = new G4PVPlacement(0,G4ThreeVector(),
-						   "PFrame",LogicalFrame,0,false,0);
+  G4PVPlacement* physicalFrame = new G4PVPlacement(0,G4ThreeVector(),
+						   "PFrame",logicalFrame,0,false,0);
   
   // Particle definitions
 
@@ -229,10 +225,10 @@ int main()
     {
       bremProcess = new G4LowEnergyBremsstrahlung;
     }
-  else
-    {
-      bremProcess = new G4eBremsstrahlung;
-    }
+    else
+      {
+        bremProcess = new G4eBremsstrahlung;
+      }
 
   G4ProcessManager* eProcessManager = new G4ProcessManager(electron);
   electron->SetProcessManager(eProcessManager);
@@ -242,8 +238,7 @@ int main()
   
   G4double eEnergy = initEnergy*MeV;
   G4ParticleMomentum eDirection(initX,initY,initZ);
-  G4DynamicParticle el(G4Electron::Electron(),eDirection,eEnergy);
-  
+  G4DynamicParticle dynamicElectron(G4Electron::Electron(),eDirection,eEnergy);
 
   // Track 
 
@@ -251,28 +246,24 @@ int main()
   //  G4ThreeVector aPosition(0.,0.,0.001*mm);
   G4double aTime = 0. ;
 
-  G4Track* eTrack = new G4Track(&el,aTime,aPosition);
+  G4Track* eTrack = new G4Track(&dynamicElectron,aTime,aPosition);
 
-  // MGP Check next statement
-  G4Track& aTrack = (*eTrack);
-
-  
   // do I really need this?
 
-  G4GRSVolume* touche = new G4GRSVolume(PhysicalFrame, NULL, aPosition);   
+  G4GRSVolume* touche = new G4GRSVolume(physicalFrame, 0, aPosition);   
   eTrack->SetTouchable(touche);
  
  // Step 
 
   G4Step* step = new G4Step();  
-  G4Step& aStep = (*step);
   step->SetTrack(eTrack);
 
   G4StepPoint* aPoint = new G4StepPoint();
-  (*aPoint).SetPosition(aPosition);
+  aPoint->SetPosition(aPosition);
+  aPoint->SetMaterial(material);
   G4double safety = 10000.*cm;
-  (*aPoint).SetSafety(safety);
-  (*step).SetPreStepPoint(aPoint);
+  aPoint->SetSafety(safety);
+  step->SetPreStepPoint(aPoint);
   
   // Check applicability
   
@@ -285,77 +276,56 @@ int main()
 
   bremProcess->BuildPhysicsTable(*electron);
 	
-  G4Material* apttoMaterial ;
-  G4String MaterialName ;
-
   // --------- Test the DoIt 
 
-  apttoMaterial = (*theMaterialTable)(materialId) ;
-
-  G4cout << "DoIt in material " << apttoMaterial->GetName() << G4endl;
-
-  LogicalFrame->SetMaterial(apttoMaterial); 
+  G4cout << "DoIt in material " << material->GetName() << G4endl;
 
   G4int iteration = 0;   
  
-  G4VParticleChange* dummy;
-  G4Track* finalParticle;
-  G4String particleName;  
-  G4double dedx = 0;
-  G4double dedxnow = 0;
-  G4double dx = 0;
-  G4ThreeVector vecdx;
-  G4double xChange, yChange, zChange;
 
-  for (G4int iter=0; iter<niter; iter++)
+  for (G4int iter=0; iter<nIterations; iter++)
     {
       step->SetStepLength(1*micrometer);
 
       G4cout  <<  "Iteration = "  <<  iter 
 	      << "  -  Step Length = " 
-	      << (*step).GetStepLength()/mm << " mm "
+	      << step->GetStepLength()/mm << " mm "
 	      << G4endl;
 
-      aTrack.SetStep(step); //this function should be added because
-      // the Step Length is not accessible from
-      // aTrack but you should use Step
+      eTrack->SetStep(step); 
  
       G4cout  <<  "Iteration = "  <<  iter 
 	      << "  -  Step Length = " 
 	      << step->GetStepLength()/mm << " mm "
 	      << G4endl;
 
-      //     G4cout << aTrack.GetStep()->GetStepLength()/mm 
+      //     G4cout << eTrack->GetStep()->GetStepLength()/mm 
       //	     << G4endl;
 
-      //      bremProcess->GetConstraints(&el,apttoMaterial);
-      
-      if (test == 1) dummy = bremProcess->AlongStepDoIt(aTrack, *step);
-      if (test == 2) dummy = bremProcess->PostStepDoIt(aTrack, *step);
+      G4VParticleChange* dummy;
+      if (test == 1) dummy = bremProcess->AlongStepDoIt(*eTrack, *step);
+      if (test == 2) dummy = bremProcess->PostStepDoIt(*eTrack, *step);
 
       G4ParticleChange* particleChange = (G4ParticleChange*) dummy;
       
       // Primary physical quantities 
 
-      G4double pEnChange = 0.;
-      G4double pxChange = 0.;
-      G4double pyChange = 0.;
-      G4double pzChange = 0.;
-      G4double pChange = 0.;
+      G4double energyChange = particleChange->GetEnergyChange();
+      G4double dedx = initEnergy - energyChange ;
+      G4double dedxNow = dedx / (step->GetStepLength());
       
-      pEnChange = particleChange->GetEnergyChange();
-      dedx = initEnergy - pEnChange ;
-      dedxnow = dedx / (*step).GetStepLength();
-      
-      pxChange  = particleChange->GetMomentumChange()->x();
-      pyChange  = particleChange->GetMomentumChange()->y();
-      pzChange  = particleChange->GetMomentumChange()->z();
-      pChange   = sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
-      
-      xChange = particleChange->GetPositionChange()->x();
-      yChange = particleChange->GetPositionChange()->y();
-      zChange = particleChange->GetPositionChange()->z();
+      G4ThreeVector eChange = particleChange->CalcMomentum(energyChange,
+							   (*particleChange->GetMomentumChange()),
+							   particleChange->GetMassChange());
 
+      G4double pxChange  = eChange.x();
+      G4double pyChange  = eChange.y();
+      G4double pzChange  = eChange.z();
+      G4double pChange   = sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
+      
+      G4double xChange = particleChange->GetPositionChange()->x();
+      G4double yChange = particleChange->GetPositionChange()->y();
+      G4double zChange = particleChange->GetPositionChange()->z();
 
       G4cout << "---- Primary after the step ---- " << G4endl;
  
@@ -365,7 +335,7 @@ int main()
       //	     << zChange << "   " 
       //	     << G4endl;
 
-      G4cout << "---- Energy: " << pEnChange/MeV << " MeV,  " 
+      G4cout << "---- Energy: " << energyChange/MeV << " MeV,  " 
 	     << "(px,py,pz): ("
 	     << pxChange/MeV << ","
 	     << pyChange/MeV << "," 
@@ -373,14 +343,14 @@ int main()
 	     << G4endl;
 
       G4cout << "---- Energy loss (dE) = " << dedx/keV << " keV" << G4endl;
-      //      G4cout << "Stopping power (dE/dx)=" << dedxnow << G4endl;
+      //      G4cout << "Stopping power (dE/dx)=" << dedxNow << G4endl;
       
       // Secondaries 
 
       ntuple1->column("eprimary", initEnergy);
-      ntuple1->column("energyf", pEnChange);
+      ntuple1->column("energyf", energyChange);
       ntuple1->column("de", dedx);
-      ntuple1->column("dedx", dedxnow);
+      ntuple1->column("dedx", dedxNow);
       ntuple1->column("pxch", xChange);
       ntuple1->column("pych", pyChange);
       ntuple1->column("pzch", pzChange);
@@ -388,13 +358,6 @@ int main()
       ntuple1->dumpData(); 
 
       // Secondaries physical quantities 
-      
-      G4double e = 0;
-      G4double eKin = 0;
-      G4double Px = 0; 
-      G4double Py = 0; 
-      G4double Pz = 0; 
-      G4double P = 0; 
       
       hNSec->accumulate(particleChange->GetNumberOfSecondaries());
       hDebug->accumulate(particleChange->GetLocalEnergyDeposit());
@@ -405,14 +368,14 @@ int main()
 	  // per secondary; filled here just for convenience, to avoid
 	  // complicated logic to dump ntuple when there are no secondaries
 	  
-	  finalParticle = particleChange->GetSecondary(i) ;
+	  G4Track* finalParticle = particleChange->GetSecondary(i) ;
 	  
-	  e    = finalParticle->GetTotalEnergy();
-	  eKin = finalParticle->GetKineticEnergy();
-	  Px   = (finalParticle->GetMomentum()).x();
-	  Py   = (finalParticle->GetMomentum()).y();
-	  Pz   = (finalParticle->GetMomentum()).z();
-	  P    = sqrt(Px*Px+Py*Py+Pz*Pz);
+	  G4double e    = finalParticle->GetTotalEnergy();
+	  G4double eKin = finalParticle->GetKineticEnergy();
+	  G4double px   = (finalParticle->GetMomentum()).x();
+	  G4double py   = (finalParticle->GetMomentum()).y();
+	  G4double pz   = (finalParticle->GetMomentum()).z();
+	  G4double p   = sqrt(px*px+py*py+pz*pz);
 
 	  if (e > initEnergy)
 	    {
@@ -422,19 +385,19 @@ int main()
 		 
 	    }
 
-	  particleName = finalParticle->GetDefinition()->GetParticleName();
+	  G4String particleName = finalParticle->GetDefinition()->GetParticleName();
 	  G4cout  << "==== Final " 
 		  <<  particleName  <<  " "  
 		  << "energy: " <<  e/MeV  <<  " MeV,  " 
 		  << "eKin: " <<  eKin/MeV  <<  " MeV, " 
 		  << "(px,py,pz): ("
-		  <<  Px/MeV  <<  "," 
-		  <<  Py/MeV  <<  ","
-		  <<  Pz/MeV  << ") MeV "
+		  <<  px/MeV  <<  "," 
+		  <<  py/MeV  <<  ","
+		  <<  pz/MeV  << ") MeV "
 		  <<  G4endl;   
 	  
 	  hEKin->accumulate(eKin);
-	  hP->accumulate(sqrt(Px*Px+Py*Py+Pz*Pz));
+	  hP->accumulate(p);
 	  
 	  G4int partType;
 	  if (particleName == "e-") partType = 1;
@@ -443,10 +406,10 @@ int main()
 	  
 	  // Fill the secondaries ntuple
           ntuple2->column("eprimary",initEnergy);
-	  ntuple2->column("px", Px);
-	  ntuple2->column("py", Py);
-	  ntuple2->column("pz", Pz);
-	  ntuple2->column("p", P);
+	  ntuple2->column("px", px);
+	  ntuple2->column("py", py);
+	  ntuple2->column("pz", pz);
+	  ntuple2->column("p", p);
 	  ntuple2->column("e", e);
 	  ntuple2->column("ekin", eKin);
 	  ntuple2->column("type", partType);
@@ -466,6 +429,27 @@ int main()
   delete hbookManager;
   
   // delete materials and elements
+  //  delete Be;
+  //  delete Graphite;
+  //  delete Al;
+  //  delete Si;
+  //  delete LAr;
+  //  delete Fe;
+  //  delete Cu;
+  //  delete W;
+  //  delete Pb;
+  //  delete U;
+  //  delete H;
+  //  delete maO;
+  //  delete C;
+  //  delete Cs;
+  //  delete I;
+  //  delete O;
+  //  delete water;
+  //  delete ethane;
+  //  delete csi;
+  //  delete step;
+  //  delete touche;
   //  delete Be;
   //  delete Graphite;
   //  delete Al;
