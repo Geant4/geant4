@@ -171,7 +171,7 @@ examples                                         examples-V06-00-02
     + DetectorConstruction: changed surface model between
       OpWaterSurface and OpAirSurface.
 
-tests                                            tests-V06-00-02
+tests                                            tests-V06-00-04
 -----
 - Updated reference outputs.
 - tests/test14 (test14-V06-00-00)
