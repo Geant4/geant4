@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.hh,v 1.11 2001-10-13 17:10:51 asaim Exp $
+// $Id: G4UIcommandTree.hh,v 1.12 2001-10-16 08:14:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,8 +46,8 @@ class G4UIcommandTree
       G4UIcommandTree(G4String thePathName);
       G4UIcommandTree(const char * thePathName);
       ~G4UIcommandTree();
-      int operator==(const G4UIcommandTree &right) const;
-      int operator!=(const G4UIcommandTree &right) const;
+      G4int operator==(const G4UIcommandTree &right) const;
+      G4int operator!=(const G4UIcommandTree &right) const;
 
   public:
       void AddNewCommand(G4UIcommand * newCommand);
@@ -76,7 +76,7 @@ class G4UIcommandTree
       { return tree.size(); };
       inline G4int GetCommandEntry() const
       { return command.size(); };
-      inline G4UIcommandTree * GetTree(int i)
+      inline G4UIcommandTree * GetTree(G4int i)
       { return tree[i-1]; };
       inline G4UIcommandTree * GetTree(G4String comName)
       { 
@@ -87,7 +87,7 @@ class G4UIcommandTree
         }
         return NULL;
       };
-      inline G4UIcommand * GetCommand(int i)
+      inline G4UIcommand * GetCommand(G4int i)
       { return command[i-1]; };
       inline const G4String GetTitle() const
       { 

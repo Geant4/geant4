@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIaliasList.cc,v 1.3 2001-10-05 00:50:41 asaim Exp $
+// $Id: G4UIaliasList.cc,v 1.4 2001-10-16 08:14:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,19 +33,19 @@ G4UIaliasList::G4UIaliasList()
 
 G4UIaliasList::~G4UIaliasList()
 {
-  int i;
-  int n_treeEntry = alias.size();
+  G4int i;
+  G4int n_treeEntry = alias.size();
   for( i=0; i < n_treeEntry; i++ )
   { delete alias[i]; 
     delete value[i]; }
 }
 
-int G4UIaliasList::operator==(const G4UIaliasList &right) const
+G4int G4UIaliasList::operator==(const G4UIaliasList &right) const
 {
   return ( this == &right );
 }
 
-int G4UIaliasList::operator!=(const G4UIaliasList &right) const
+G4int G4UIaliasList::operator!=(const G4UIaliasList &right) const
 {
   return ( this != &right );
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIparameter.hh,v 1.4 2001-07-11 10:01:14 gunter Exp $
+// $Id: G4UIparameter.hh,v 1.5 2001-10-16 08:14:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,8 +63,8 @@ class G4UIparameter
       // NOT to invoke this by him/herself.
 
   public:
-      int operator==(const G4UIparameter &right) const;
-      int operator!=(const G4UIparameter &right) const;
+      G4int operator==(const G4UIparameter &right) const;
+      G4int operator!=(const G4UIparameter &right) const;
 
       G4int CheckNewValue(G4String newValue);
       void List();
@@ -141,12 +141,12 @@ class G4UIparameter
 
   private:
     // --- the following is used by CheckNewValue() -------
-    int TypeCheck(G4String newValue );
-    int RangeCheck(G4String newValue );
-    int CandidateCheck(G4String newValue );
-    int IsInt(const char* str, short maxDigit);
-    int IsDouble(const char* str);
-    int ExpectExponent(const char* str);
+    G4int TypeCheck(G4String newValue );
+    G4int RangeCheck(G4String newValue );
+    G4int CandidateCheck(G4String newValue );
+    G4int IsInt(const char* str, short maxDigit);
+    G4int IsDouble(const char* str);
+    G4int ExpectExponent(const char* str);
     //  syntax nodes
     yystype Expression( void );
     yystype LogicalORExpression( void );
@@ -158,24 +158,24 @@ class G4UIparameter
     yystype UnaryExpression( void );
     yystype PrimaryExpression( void );
     //  semantics routines
-    int Eval2( yystype arg1, int op, yystype arg2 );
-    int CompareInt( int arg1, int op, int arg2);
-    int CompareDouble( double arg1, int op, double arg2);
+    G4int Eval2( yystype arg1, G4int op, yystype arg2 );
+    G4int CompareInt( G4int arg1, G4int op, G4int arg2);
+    G4int CompareDouble( double arg1, G4int op, double arg2);
     //  utility 
     tokenNum Yylex( void );     // returns next token
-    int G4UIpGetc( void );     // read one char from rangeBuf
-    int G4UIpUngetc( int c );  // put back  
-    int Backslash( int c );
-    int Follow( int expect, int ifyes, int ifno );
-    G4String TokenToStr(int token);
+    G4int G4UIpGetc( void );     // read one char from rangeBuf
+    G4int G4UIpUngetc( G4int c );  // put back  
+    G4int Backslash( G4int c );
+    G4int Follow( G4int expect, G4int ifyes, G4int ifno );
+    G4String TokenToStr(G4int token);
     //void PrintToken(void);  // debug
     //  data
     G4String rangeBuf;
-    int bp;                  // buffer pointer for rangeBuf
+    G4int bp;                  // buffer pointer for rangeBuf
     tokenNum token;
     yystype yylval;
     yystype newVal;
-    int paramERR;
+    G4int paramERR;
    //------------ end of CheckNewValue() related member --------------
 
 };

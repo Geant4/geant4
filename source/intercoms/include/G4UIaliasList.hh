@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIaliasList.hh,v 1.2 2001-10-02 00:32:06 asaim Exp $
+// $Id: G4UIaliasList.hh,v 1.3 2001-10-16 08:14:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,8 +45,8 @@ class G4UIaliasList
       ~G4UIaliasList();
 
   private:
-      int operator==(const G4UIaliasList &right) const;
-      int operator!=(const G4UIaliasList &right) const;
+      G4int operator==(const G4UIaliasList &right) const;
+      G4int operator!=(const G4UIaliasList &right) const;
 
   public:
       void RemoveAlias(G4String aliasName);

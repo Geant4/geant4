@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIbatch.cc,v 1.8 2001-09-28 19:56:09 asaim Exp $
+// $Id: G4UIbatch.cc,v 1.9 2001-10-16 08:14:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,7 +55,7 @@ G4UIsession * G4UIbatch::SessionStart()
   if(!openFailed)
   {
     char commandLine[256];
-    int lineLength = 255;
+    G4int lineLength = 255;
 
     while(1)
     {

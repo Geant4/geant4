@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIparameter.cc,v 1.8 2001-10-16 07:33:44 gcosmo Exp $
+// $Id: G4UIparameter.cc,v 1.9 2001-10-16 08:14:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -76,12 +76,12 @@ G4UIparameter::G4UIparameter(const char * theName, char theType, G4bool theOmitt
 G4UIparameter::~G4UIparameter()
 { }
 
-int G4UIparameter::operator==(const G4UIparameter &right) const
+G4int G4UIparameter::operator==(const G4UIparameter &right) const
 {
   return ( this == &right );
 }
 
-int G4UIparameter::operator!=(const G4UIparameter &right) const
+G4int G4UIparameter::operator!=(const G4UIparameter &right) const
 {
   return ( this != &right );
 }
@@ -130,7 +130,7 @@ void G4UIparameter::SetDefaultValue(G4double theDefaultValue)
 //#include "checkNewValue_debug.icc"
 //#define DEBUG 1
 
-int G4UIparameter::
+G4int G4UIparameter::
 CheckNewValue( G4String newValue ) {
     if( TypeCheck(newValue) == 0) return fParameterUnreadable;
     if( ! parameterRange.isNull() )
@@ -140,11 +140,11 @@ CheckNewValue( G4String newValue ) {
     return 0;   // succeeded
 }
 
-int G4UIparameter::
+G4int G4UIparameter::
 CandidateCheck(G4String newValue) {
     G4Tokenizer candidateTokenizer(parameterCandidate);
     G4String aToken;
-    int iToken = 0;
+    G4int iToken = 0;
     while( ! (aToken=candidateTokenizer()).isNull() )
     {
       iToken++;
@@ -154,7 +154,7 @@ CandidateCheck(G4String newValue) {
     return 0;
 }
 
-int G4UIparameter::
+G4int G4UIparameter::
 RangeCheck(G4String newValue) {
     yystype result;
     bp = 0;                   // reset buffer pointer for G4UIpGetc()
@@ -180,7 +180,7 @@ RangeCheck(G4String newValue) {
 }
 
 
-int G4UIparameter::
+G4int G4UIparameter::
 TypeCheck(G4String newValue)
 {
     char type = toupper( parameterType );
@@ -216,14 +216,14 @@ TypeCheck(G4String newValue)
 }
 
 
-int G4UIparameter::
+G4int G4UIparameter::
 IsInt(const char* buf, short maxDigits)  // do not allow any G4std::ws
 {
     const char* p= buf;
-    int length=0;
+    G4int length=0;
     if( *p == '+' || *p == '-') { ++p; }
-    if( isdigit( (int)(*p) )) {
-        while( isdigit( (int)(*p) )) { ++p;  ++length; }
+    if( isdigit( (G4int)(*p) )) {
+        while( isdigit( (G4int)(*p) )) { ++p;  ++length; }
         if( *p == '\0' ) {
             if( length > maxDigits) {
                 G4cerr <<"digit length exceeds"<<G4endl;
@@ -240,22 +240,22 @@ IsInt(const char* buf, short maxDigits)  // do not allow any G4std::ws
 }
 
 
-int G4UIparameter::
+G4int G4UIparameter::
 ExpectExponent(const char* str)   // used only by IsDouble()
 {
-    int maxExplength;
+    G4int maxExplength;
     if( IsInt( str, maxExplength=7 )) return 1;
     else return 0;
 }
 
-int G4UIparameter::
+G4int G4UIparameter::
 IsDouble(const char* buf)  // see state diagram for this spec.
 {
     const char* p= buf;
     switch( *p) {
         case '+':  case '-': ++p;
             if( isdigit(*p) ) {
-                 while( isdigit( (int)(*p) )) { ++p; }
+                 while( isdigit( (G4int)(*p) )) { ++p; }
                  switch ( *p ) {
                      case '\0':    return 1;  //break;
                      case 'E':  case 'e':
@@ -264,7 +264,7 @@ IsDouble(const char* buf)  // see state diagram for this spec.
                          if( *p == '\0' )  return 1;
                          if( *p == 'e' || *p =='E' ) return ExpectExponent(++p );
                          if( isdigit(*p) ) {
-                             while( isdigit( (int)(*p) )) { ++p; }
+                             while( isdigit( (G4int)(*p) )) { ++p; }
                              if( *p == '\0' )  return 1;
                              if( *p == 'e' || *p =='E') return ExpectExponent(++p);
                          } else return 0;   break;
@@ -273,7 +273,7 @@ IsDouble(const char* buf)  // see state diagram for this spec.
             }
             if( *p == '.' ) { ++p;
                  if( isdigit(*p) ) {
-                     while( isdigit( (int)(*p) )) { ++p; }
+                     while( isdigit( (G4int)(*p) )) { ++p; }
                      if( *p == '\0' )  return 1;
                      if( *p == 'e' || *p =='E')  return ExpectExponent(++p);
                  }
@@ -281,20 +281,20 @@ IsDouble(const char* buf)  // see state diagram for this spec.
             break;
         case '.':  ++p;
             if( isdigit(*p) ) {
-                 while( isdigit( (int)(*p) )) { ++p; }
+                 while( isdigit( (G4int)(*p) )) { ++p; }
                  if( *p == '\0' )  return 1;
                  if( *p == 'e' || *p =='E' )  return ExpectExponent(++p);
             }    break;
         default: // digit is expected
             if( isdigit(*p) ) {
-                 while( isdigit( (int)(*p) )) { ++p; }
+                 while( isdigit( (G4int)(*p) )) { ++p; }
                  if( *p == '\0' )  return 1;
                  if( *p == 'e' || *p =='E')  return ExpectExponent(++p);
                  if( *p == '.' ) { ++p;
                       if( *p == '\0' )  return 1;
                       if( *p == 'e' || *p =='E')  return ExpectExponent(++p);
                       if( isdigit(*p) ) {
-                          while( isdigit( (int)(*p) )) { ++p; }
+                          while( isdigit( (G4int)(*p) )) { ++p; }
                           if( *p == '\0' )  return 1;
                           if( *p == 'e' || *p =='E') return ExpectExponent(++p);
                       }
@@ -393,7 +393,7 @@ yystype G4UIparameter::
 EqualityExpression(void)
 { 
     yystype  arg1, arg2;
-    int operat;
+    G4int operat;
     yystype result;
     #ifdef DEBUG
         G4cerr << " EqualityExpression()" <<G4endl;
@@ -424,7 +424,7 @@ yystype G4UIparameter::
 RelationalExpression(void)
 { 
     yystype  arg1, arg2;
-    int operat;
+    G4int operat;
     yystype result;
     #ifdef DEBUG
         G4cerr << " RelationalExpression()" <<G4endl;
@@ -547,13 +547,13 @@ PrimaryExpression(void)
 
 //---------------- semantic routines ---------------------------------
 
-int G4UIparameter::
-Eval2(yystype arg1, int op, yystype arg2)
+G4int G4UIparameter::
+Eval2(yystype arg1, G4int op, yystype arg2)
 {
     if( (arg1.type != IDENTIFIER) && (arg2.type != IDENTIFIER)) {
         G4cerr << parameterName
              << ": meaningless comparison "
-             << int(arg1.type) << " " << int(arg2.type) << G4endl;
+             << G4int(arg1.type) << " " << G4int(arg2.type) << G4endl;
         paramERR = 1;
     }
     char type = toupper( parameterType );
@@ -603,10 +603,10 @@ Eval2(yystype arg1, int op, yystype arg2)
     return 0;
 }
 
-int G4UIparameter::
-CompareInt(int arg1, int op, int arg2)
+G4int G4UIparameter::
+CompareInt(G4int arg1, G4int op, G4int arg2)
 {   
-    int result=-1;
+    G4int result=-1;
     G4String opr;
     switch (op) {
        case GT:  result = ( arg1 >  arg2); opr= ">" ;  break;
@@ -628,10 +628,10 @@ CompareInt(int arg1, int op, int arg2)
     return result;
 }
 
-int G4UIparameter::
-CompareDouble(double arg1, int op, double arg2)
+G4int G4UIparameter::
+CompareDouble(G4double arg1, G4int op, G4double arg2)
 {   
-    int result=-1;
+    G4int result=-1;
     G4String opr;
     switch (op) {
         case GT:  result = ( arg1 >  arg2); opr= ">";   break;
@@ -658,7 +658,7 @@ CompareDouble(double arg1, int op, double arg2)
 tokenNum G4UIparameter::
 Yylex()         // reads input and returns token number KR486
 {               // (returns EOF)
-    int c;             
+    G4int c;             
     G4String buf;
 
     while(( c= G4UIpGetc())==' '|| c=='\t' || c== '\n' )
@@ -713,10 +713,10 @@ Yylex()         // reads input and returns token number KR486
 }
 
 
-int G4UIparameter::
-Follow(int expect, int ifyes, int ifno)
+G4int G4UIparameter::
+Follow(G4int expect, G4int ifyes, G4int ifno)
 {
-    int c = G4UIpGetc();
+    G4int c = G4UIpGetc();
     if ( c== expect)
           return ifyes;
     G4UIpUngetc(c);
@@ -724,16 +724,16 @@ Follow(int expect, int ifyes, int ifno)
 }
 
 //------------------ low level routines -----------------------------
-int G4UIparameter::
+G4int G4UIparameter::
 G4UIpGetc() {                        // emulation of getc() 
-    int length = parameterRange.length();
+    G4int length = parameterRange.length();
     if( bp < length)
         return  parameterRange(bp++);
     else 
         return EOF;
 }
-int G4UIparameter::
-G4UIpUngetc(int c) {                 // emulation of ungetc() 
+G4int G4UIparameter::
+G4UIpUngetc(G4int c) {                 // emulation of ungetc() 
     if (c<0) return -1;
     if (bp >0 && c == parameterRange(bp-1)) {
          --bp;

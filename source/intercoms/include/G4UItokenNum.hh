@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItokenNum.hh,v 1.3 2001-07-11 10:01:15 gunter Exp $
+// $Id: G4UItokenNum.hh,v 1.4 2001-10-16 08:14:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UItokenNum.hh
@@ -51,11 +51,11 @@ enum  tokenNum {
 
 typedef struct yystype {
     tokenNum      type;
-    double   D;
-    int      I;
+    G4double D;
+    G4int    I;
     char     C;
     G4String S;
-    int operator==(const yystype &right) const
+    G4int operator==(const yystype &right) const
     { return (this == &right); }
 } yystype;
  

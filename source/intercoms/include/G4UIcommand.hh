@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.hh,v 1.9 2001-10-11 13:29:15 gcosmo Exp $
+// $Id: G4UIcommand.hh,v 1.10 2001-10-16 08:14:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,8 +56,8 @@ class G4UIcommand
   public: 
       virtual ~G4UIcommand();
 
-      int operator==(const G4UIcommand &right) const;
-      int operator!=(const G4UIcommand &right) const;
+      G4int operator==(const G4UIcommand &right) const;
+      G4int operator!=(const G4UIcommand &right) const;
 
       G4int DoIt(G4String parameterList);
       G4String GetCurrentValue();
@@ -106,7 +106,7 @@ class G4UIcommand
       { return rangeString; };
       inline G4int GetGuidanceEntries() const
       { return commandGuidance.size(); }
-      inline const G4String GetGuidanceLine(int i) const
+      inline const G4String GetGuidanceLine(G4int i) const
       { return commandGuidance[i]; }
       inline const G4String GetCommandPath() const
       { return commandPath; }
@@ -114,7 +114,7 @@ class G4UIcommand
       { return commandName; }
       inline G4int GetParameterEntries() const
       { return parameter.size(); }
-      inline G4UIparameter * GetParameter(int i) const
+      inline G4UIparameter * GetParameter(G4int i) const
       { return parameter[i]; }
       inline G4std::vector<G4ApplicationState>* GetStateList()
       { return &availabelStateList; }
@@ -147,15 +147,15 @@ class G4UIcommand
       }
 
   protected:
-    int CheckNewValue(G4String newValue);
+    G4int CheckNewValue(G4String newValue);
 
     // --- the following is used by CheckNewValue() --------
   private:
-    int TypeCheck(G4String newValue);
-    int RangeCheck(G4String newValue);
-    int IsInt(const char* str, short maxLength);
-    int IsDouble(const char* str);
-    int ExpectExponent(const char* str);
+    G4int TypeCheck(G4String newValue);
+    G4int RangeCheck(G4String newValue);
+    G4int IsInt(const char* str, short maxLength);
+    G4int IsDouble(const char* str);
+    G4int ExpectExponent(const char* str);
     //  syntax nodes
     yystype Expression( void );
     yystype LogicalORExpression( void );
@@ -167,26 +167,26 @@ class G4UIcommand
     yystype UnaryExpression( void );
     yystype PrimaryExpression( void );
     //  semantics routines
-    int Eval2( yystype arg1, int op, yystype arg2 );
-    int CompareInt( int arg1, int op, int arg2);
-    int CompareDouble( double arg1, int op, double arg2);
+    G4int Eval2( yystype arg1, G4int op, yystype arg2 );
+    G4int CompareInt( G4int arg1, G4int op, G4int arg2);
+    G4int CompareDouble( G4double arg1, G4int op, G4double arg2);
     //  utility 
     tokenNum Yylex( void );      // returns next token
     unsigned IndexOf( G4String ); // returns the index of the var name
     unsigned IsParameter( G4String ); // returns 1 or 0
-    int G4UIpGetc( void );      // read one char from rangeBuf
-    int G4UIpUngetc( int c );   // put back  
-    int Backslash( int c );
-    int Follow( int expect, int ifyes, int ifno );
-    G4String TokenToStr(int token);
+    G4int G4UIpGetc( void );      // read one char from rangeBuf
+    G4int G4UIpUngetc( G4int c );   // put back  
+    G4int Backslash( G4int c );
+    G4int Follow( G4int expect, G4int ifyes, G4int ifno );
+    G4String TokenToStr(G4int token);
     void PrintToken(void);      // for debug
     //  data
     G4String rangeBuf;
-    int bp;                      // buffer pointer for rangeBuf
+    G4int bp;                      // buffer pointer for rangeBuf
     tokenNum token;
     yystype yylval;
     G4std::vector<yystype>  newVal;
-    int paramERR;
+    G4int paramERR;
 };
 
 #endif

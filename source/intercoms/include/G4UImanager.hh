@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh,v 1.15 2001-10-11 13:29:16 gcosmo Exp $
+// $Id: G4UImanager.hh,v 1.16 2001-10-16 08:14:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -62,8 +62,8 @@ class G4UImanager : public G4VStateDependent
   private:
       G4UImanager(const G4UImanager &right);
       const G4UImanager & operator=(const G4UImanager &right);
-      int operator==(const G4UImanager &right) const;
-      int operator!=(const G4UImanager &right) const;
+      G4int operator==(const G4UImanager &right) const;
+      G4int operator!=(const G4UImanager &right) const;
 
   public: // with description
       G4String GetCurrentValues(const char * aCommand);
@@ -162,11 +162,11 @@ class G4UImanager : public G4VStateDependent
 
   public: // with description
       G4String GetCurrentStringValue(const char * aCommand, 
-	    int parameterNumber=1, G4bool reGet=true);
+	    G4int parameterNumber=1, G4bool reGet=true);
       G4int GetCurrentIntValue(const char * aCommand, 
-	    int parameterNumber=1, G4bool reGet=true);
+	    G4int parameterNumber=1, G4bool reGet=true);
       G4double GetCurrentDoubleValue(const char * aCommand,
-	    int parameterNumber=1, G4bool reGet=true);
+	    G4int parameterNumber=1, G4bool reGet=true);
       G4String GetCurrentStringValue(const char * aCommand, 
 	    const char * aParameterName, G4bool reGet=true);
       G4int GetCurrentIntValue(const char * aCommand, 
