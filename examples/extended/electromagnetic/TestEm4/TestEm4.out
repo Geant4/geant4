@@ -21,8 +21,8 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
  Material: FluorCarbonate     density:  1.610 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  22.435 cm 
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  38.74 %  Abundance  50.00 %
-   --->  Element: Fluorine  N   Z =  9.0   N =  19.0   A =  18.99 g/mole  fractionMass:  61.26 %  Abundance  50.00 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  38.74 %  Abundance  50.00 %
+   --->  Element: Fluorine (N)   Z =  9.0   N =  19.0   A =  18.99 g/mole  fractionMass:  61.26 %  Abundance  50.00 %
 
 phot:  Total cross sections from Sandia parametrisation. 
 PhysicsList::SetCuts:CutLength : 1 (mm)
@@ -99,7 +99,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=15.59s Real=427.56s Sys=40.68s
+  User=15.86s Real=428.13s Sys=38.47s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

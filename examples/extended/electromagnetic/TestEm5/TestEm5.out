@@ -39,10 +39,10 @@ PhysicsList::AddPhysicsList: <standard>
 userDetector->Construct() start.
 
  Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
-   --->  Element: Galactic      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
-   --->  Element:  Silicon      Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  The  WORLD   is made of 30.75 mum of Galactic. The transverse size (YZ) of the world is 1.2 mm 
  The ABSORBER is made of 20.5 mum of Silicon. The transverse size (YZ) is 1 mm 
@@ -59,14 +59,10 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /gun/particle pi+ 
 /gun/energy 5 GeV
 #
-/testem/histo/setHisto 6 100 -0.25 0.25 mrad
+/testem/histo/setFileName testem5
+/testem/histo/setFileType hbook
+/testem/histo/setHisto 6 100 -0.25 0.25 mrad 
 ----> SetHisto 6: (transmit, charged) : projected angle at exit (mrad);  100 bins from -0.25 mrad to 0.25 mrad
-#
-#
-/testem/histo/setFileType hbook		#for paw	
-###/testem/histo/setFileType root		#for root
-###/testem/histo/setFileType XML		#for jaida
-/testem/histo/setFileName run0.aida 
 #
 /run/beamOn 100000
 G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
@@ -227,7 +223,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=47.49s Real=869.33s Sys=84.8s
+  User=44.03s Real=879.04s Sys=82.67s
 
  ======================== run summary ======================
 
