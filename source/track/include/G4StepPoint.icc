@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.icc,v 1.8 2003-05-07 20:08:37 asaim Exp $
+// $Id: G4StepPoint.icc,v 1.9 2004-08-12 00:50:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -167,6 +167,11 @@
    inline 
      void G4StepPoint::SetMaterialCutsCouple(const G4MaterialCutsCouple* materialCutsCouple)
    {fpMaterialCutsCouple = materialCutsCouple; }
+
+   inline G4VSensitiveDetector* G4StepPoint::GetSensitiveDetector() const
+   { return fpSensitiveDetector; }
+   inline void G4StepPoint::SetSensitiveDetector(G4VSensitiveDetector* aValue)
+   { fpSensitiveDetector = aValue; }
 
    inline void G4StepPoint::SetWeight(G4double aValue)
    { fWeight = aValue; }

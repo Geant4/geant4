@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.hh,v 1.13 2003-09-19 19:08:14 kurasige Exp $
+// $Id: G4StepPoint.hh,v 1.14 2004-08-12 00:50:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,6 +58,7 @@ class G4VProcess;
 #include "G4LogicalVolume.hh"
 
 class G4MaterialCutsCouple;
+class G4VSensitiveDetector;
 /////////////////
 class G4StepPoint
 ///////////////// 
@@ -135,6 +136,9 @@ class G4StepPoint
   const G4MaterialCutsCouple* GetMaterialCutsCouple() const;
   void SetMaterialCutsCouple(const G4MaterialCutsCouple*);
 
+  G4VSensitiveDetector* GetSensitiveDetector() const;
+  void SetSensitiveDetector(G4VSensitiveDetector*);
+
   G4double GetSafety() const;
   void SetSafety(const G4double aValue);
 
@@ -189,6 +193,7 @@ class G4StepPoint
       // Material of the volmue
    const G4MaterialCutsCouple* fpMaterialCutsCouple;
       // MaterialCutsCouple of the volmue
+   G4VSensitiveDetector* fpSensitiveDetector;
    G4double fSafety;
    G4ThreeVector fPolarization;
    G4StepStatus fStepStatus;

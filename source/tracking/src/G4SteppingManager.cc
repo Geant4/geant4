@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.32 2003-11-10 08:52:33 gcosmo Exp $
+// $Id: G4SteppingManager.cc,v 1.33 2004-08-12 00:50:11 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -216,7 +216,7 @@ G4StepStatus G4SteppingManager::Stepping()
    fCurrentVolume = fStep->GetPreStepPoint()->GetPhysicalVolume();
    StepControlFlag =  fStep->GetControlFlag();
    if( fCurrentVolume != 0 && StepControlFlag != AvoidHitInvocation) {
-      fSensitive = fCurrentVolume->GetLogicalVolume()->
+      fSensitive = fStep->GetPreStepPoint()->
                                    GetSensitiveDetector();
       if( fSensitive != 0 ) {
         fSensitive->Hit(fStep);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc,v 1.10 2003-03-05 04:42:53 kurasige Exp $
+// $Id: G4Step.icc,v 1.11 2004-08-12 00:50:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -183,6 +183,7 @@ inline
    fpPreStepPoint->SetTouchableHandle(fpTrack->GetTouchableHandle());
    fpPreStepPoint->SetMaterial( fpTrack->GetTouchable()->GetVolume()->GetLogicalVolume()->GetMaterial());
    fpPreStepPoint->SetMaterialCutsCouple( fpTrack->GetTouchable()->GetVolume()->GetLogicalVolume()->GetMaterialCutsCouple());
+   fpPreStepPoint->SetSensitiveDetector( fpTrack->GetTouchable()->GetVolume()->GetLogicalVolume()->GetSensitiveDetector());
    fpPreStepPoint->SetPolarization(fpTrack->GetPolarization());
    fpPreStepPoint->SetSafety(0.);
    fpPreStepPoint->SetStepStatus(fUndefined);

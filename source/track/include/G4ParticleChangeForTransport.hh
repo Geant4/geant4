@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.hh,v 1.13 2004-05-08 15:28:13 kurasige Exp $
+// $Id: G4ParticleChangeForTransport.hh,v 1.14 2004-08-12 00:50:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,7 @@
 #include "G4ParticleChange.hh"
 
 class G4MaterialCutsCouple;
-
+class G4VSensitiveDetector;
 
 class G4ParticleChangeForTransport: public G4ParticleChange
 { 
@@ -98,6 +98,10 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     void SetMaterialCutsCoupleInTouchable(const G4MaterialCutsCouple* fMaterialCutsCouple);
     //  Get/Set the materialCutsCouple in the touchable of the current particle.
 
+    G4VSensitiveDetector* GetSensitiveDetectorInTouchable() const;
+    void SetSensitiveDetectorInTouchable(G4VSensitiveDetector* fSensitiveDetector);
+    //  Get/Set the sensitive detector in the touchable of the current particle.
+
     G4bool GetMomentumChanged() const;
     void SetMomentumChanged(G4bool b);
 
@@ -109,6 +113,8 @@ class G4ParticleChangeForTransport: public G4ParticleChange
   void SetMaterialChange(G4Material* fMaterial);
   const G4MaterialCutsCouple* GetMaterialCutsCoupleChange() const;
   void SetMaterialCutsCoupleChange(const G4MaterialCutsCouple* fMaterialCutsCouple);
+  G4VSensitiveDetector* GetSensitiveDetectorChange() const;
+  void SetSensitiveDetectorChange(G4VSensitiveDetector* fSensitiveDetector);
 
   public:
     virtual void DumpInfo() const;
@@ -130,6 +136,7 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     //  The flag which is set if mometum is changed in this stepi
     G4Material* theMaterialChange;
     const G4MaterialCutsCouple* theMaterialCutsCoupleChange;
+    G4VSensitiveDetector* theSensitiveDetectorChange;
      // The material (and MaterialCutsCouple) where given track
      // currently locates
 
