@@ -1,0 +1,90 @@
+#include "G4ElementIsoCrossSections.hh"
+
+template <class IsoIsoCrossSectionType>
+G4ElementIsoCrossSections<IsoIsoCrossSectionType>::
+G4ElementIsoCrossSections()
+{
+  nIsotopes = 0;
+  theData = NULL;
+}
+
+template <class IsoIsoCrossSectionType>
+G4ElementIsoCrossSections<IsoIsoCrossSectionType>::
+~G4ElementIsoCrossSections()
+{
+  for(G4int i=0; i<nIsotopes; i++)
+  {
+    delete theData[i];
+  }
+  delete theData;
+}
+
+template <class IsoIsoCrossSectionType>
+void G4ElementIsoCrossSections<IsoIsoCrossSectionType>::
+Init(const G4Element * anElement)
+{
+  G4int Z = G4int(anElement->GetZ()+0.001);
+  nIsotopes = anElement->GetNumberOfIsotopes();
+  G4bool useIsotopesFromElement = true;
+  if( nIsotopes == 0 ) 
+  {
+    nIsotopes += theStableOnes.GetNumberOfIsotopes(Z);
+    useIsotopesFromElement = false;
+  }
+  theData = new IsoIsoCrossSectionType * [nIsotopes];
+  if(useIsotopesFromElement)
+  {
+    for (G4int i=0; i<nIsotopes; i++)
+    {
+      G4int A = anElement->GetIsotope(i)->GetN();
+      G4double frac = anElement->GetRelativeAbundanceVector()[i]/perCent;
+      theData[i] = new IsoIsoCrossSectionType;
+      theData[i]->Init(A, Z, frac);
+    }
+  }
+  else 
+  {
+    G4int first = theStableOnes.GetFirstIsotope(Z);
+    for(G4int i=0; i<theStableOnes.GetNumberOfIsotopes(Z); i++)
+    {
+      G4int A = theStableOnes.GetIsotopeNucleonCount(first+i);
+      G4double frac = theStableOnes.GetAbundance(first+i);
+      theData[i] = new IsoIsoCrossSectionType;
+      theData[i]->Init(A, Z, frac);
+    }
+  }
+}
+
+template <class IsoIsoCrossSectionType>
+G4double G4ElementIsoCrossSections<IsoIsoCrossSectionType>::
+GetCrossSection(G4double anEnergy)
+{
+  G4double result = 0;
+  for(G4int i=0; i<nIsotopes; i++)
+  {
+    result += theData[i]->GetCrossSection(anEnergy); // this is already weighted with relative abundance
+  }
+  crossSectionBuffer = result;
+  return result;
+}
+
+template <class IsoIsoCrossSectionType>
+G4IsoResult * G4ElementIsoCrossSections<IsoIsoCrossSectionType>::
+GetProductIsotope(G4double anEnergy)
+{
+  G4double running = 0;
+  G4int index;
+  G4double random = G4UniformRand();
+  for(G4int i=0; i<nIsotopes; i++)
+  {
+    running += theData[i]->GetCrossSection(anEnergy);
+    index = i;
+    if(running/crossSectionBuffer > random) break;
+  }
+  G4String result = theData[index]->GetProductIsotope(anEnergy);
+  G4Nucleus nucleus(theData[index]->GetA(), theData[index]->GetZ());
+  G4IsoResult * theResult = new G4IsoResult(result, nucleus);
+  return theResult;
+}
+
+

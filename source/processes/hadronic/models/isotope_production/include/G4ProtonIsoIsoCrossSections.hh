@@ -1,17 +1,17 @@
-#ifndef G4NeutronIsoIsoCrossSections_h
-#define G4NeutronIsoIsoCrossSections_h
+#ifndef G4ProtonIsoIsoCrossSections_h
+#define G4ProtonIsoIsoCrossSections_h
 
 #include "G4NeutronHPVector.hh"
 #include "G4IsoProdCrossSections.hh"
 #include "G4NeutronHPNames.hh"
 
-class G4NeutronIsoIsoCrossSections
+class G4ProtonIsoIsoCrossSections
 {
 
 public:
 
-  G4NeutronIsoIsoCrossSections();
-  ~G4NeutronIsoIsoCrossSections();
+  G4ProtonIsoIsoCrossSections();
+  ~G4ProtonIsoIsoCrossSections();
   void Init(G4int A, G4int Z, G4double frac);
   G4double GetCrossSection(G4double anEnergy);
   G4String GetProductIsotope(G4double anEnergy);

@@ -1,13 +1,13 @@
-#ifndef G4NeutronIsoProdCrossSections_h
-#define G4NeutronIsoProdCrossSections_h
+#ifndef G4IsoProdCrossSections_h
+#define G4IsoProdCrossSections_h
 
 #include "globals.hh"
 #include "G4NeutronHPVector.hh"
 
-class G4NeutronIsoProdCrossSections
+class G4IsoProdCrossSections
 {
 public:
-  G4NeutronIsoProdCrossSections(G4String aString)
+  G4IsoProdCrossSections(G4String aString)
   { theProductName=aString; }
   void Init(G4std::ifstream & aDataSet);
   G4double GetProductionCrossSection(G4double anEnergy);
