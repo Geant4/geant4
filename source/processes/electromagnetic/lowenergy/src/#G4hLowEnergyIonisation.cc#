@@ -91,9 +91,6 @@
 // 26 Apr   2003 V.Ivanchenko fix for stepLimit
 // 30 Mar   2004 S.Saliceti add shellCS data member and expFlag variable, 
 //                          atom total cross section for the Empiric Model
-// 28 May   2004 V.Ivanchenko fix for ionisation of antiprotons in complex materials
-// 30 Aug   2004 V.Ivanchenko use energy limit for parameterisation from model
-
 
 // -----------------------------------------------------------------------
 
@@ -231,7 +228,6 @@ void G4hLowEnergyIonisation::InitializeParametrisation()
   // Define models for parametrisation of electronic energy losses
   theBetheBlochModel = new G4hBetheBlochModel("Bethe-Bloch") ;
   theProtonModel = new G4hParametrisedLossModel(theProtonTable) ;
-  protonHighEnergy = theProtonModel->HighEnergyLimit(0, 0);
   theAntiProtonModel = new G4QAOLowEnergyLoss(theAntiProtonTable) ;
   theNuclearStoppingModel = new G4hNuclearStoppingModel(theNuclearTable) ;
   theIonEffChargeModel = new G4hIonEffChargeSquare("Ziegler1988") ;
@@ -768,7 +764,7 @@ G4double G4hLowEnergyIonisation::GetMeanFreePath(const G4Track& trackData,
    *condition = NotForced ;
 
    G4double kineticEnergy = (aParticle->GetKineticEnergy())*initialMass/(aParticle->GetMass());
-   charge = aParticle->GetCharge()/eplus;
+   charge = aParticle->GetCharge();
    chargeSquare = theIonEffChargeModel->TheValue(aParticle, material);
 
    if(kineticEnergy < LowestKineticEnergy) meanFreePath = DBL_MAX;
@@ -806,7 +802,6 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   // Scale the kinetic energy
 
   G4double tscaled = kineticEnergy*massRatio ;
-  fBarkas = 0.0;
 
   if(charge > 0.0) {
 
@@ -817,11 +812,14 @@ G4double G4hLowEnergyIonisation::GetConstraints(
     fdEdx = G4EnergyLossTables::GetDEDX(theProton, tscaled, couple)
           * chargeSquare ;
 
+    if(tscaled > highEnergy) {
         // Correction for positive ions
-    if(theBarkas && tscaled > highEnergy) { 
-        fBarkas = BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare
-                + BlochTerm(material,tscaled,chargeSquare);
+      if(theBarkas) {
+        fdEdx += BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare;
+        fdEdx += BlochTerm(material,tscaled,chargeSquare);
+      }
     }
+
     // Antiprotons and negative hadrons
   } else {
 
@@ -831,22 +829,16 @@ G4double G4hLowEnergyIonisation::GetConstraints(
     fdEdx = G4EnergyLossTables::GetDEDX(theAntiProton, tscaled, couple)
           * chargeSquare ;
 
-    if(theBarkas && tscaled > highEnergy) { 
-        fBarkas = -BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare;
-                + BlochTerm(material,tscaled,chargeSquare);
+    if(tscaled > highEnergy) {
+
+      // Correction for positive ions
+      if(theBarkas) {
+        fdEdx -= BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare;
+        fdEdx += BlochTerm(material,tscaled,chargeSquare);
+      }
     }
   }
-  /*
-  const G4Material* mat = couple->GetMaterial();
-  G4double fac = gram/(MeV*cm2*mat->GetDensity());
-  G4cout << particle->GetDefinition()->GetParticleName()
-         << " in " << mat->GetName()
-         << " E(MeV)= " << kineticEnergy/MeV
-	 << " dedx(MeV*cm^2/g)= " << fdEdx*fac
-	 << " barcas(MeV*cm^2/gram)= " << fBarkas*fac
-	 << " Q^2= " << chargeSquare
-	 << G4endl;
-  */
+
   // scaling back
   fRangeNow /= (chargeSquare*massRatio) ;
   dx        /= (chargeSquare*massRatio) ;
@@ -857,14 +849,12 @@ G4double G4hLowEnergyIonisation::GetConstraints(
 
   if (fRangeNow > r) {
     stepLimit = dRoverRange*fRangeNow + r*(1.0 - dRoverRange)*(2.0 - r/fRangeNow);
+    if(rndmStepFlag) stepLimit = r + (stepLimit-r)*G4UniformRand() ;
     if (stepLimit > fRangeNow) stepLimit = fRangeNow;
   }
   // compute the (random) Step limit in standard energy range
   if(tscaled > highEnergy ) {
 
-    // add Barkas correction directly to dedx
-    fdEdx  += fBarkas;
- 
     if(stepLimit > fRangeNow - dx*0.9) stepLimit = fRangeNow - dx*0.9 ;
 
   // Step limit in low energy range
@@ -939,12 +929,16 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
       }
       eloss /= massRatio ;
 
-      // Barkas correction at big step      
-      eloss += fBarkas*step;
-
     // step shorter than linear step limit
     } else {
       eloss = step*fdEdx ;
+    }
+    // Correction for positive ions
+    if(theBarkas && 1.0 < charge) {
+      G4double ts = tscaled - eloss*0.5*massRatio;
+      if(ts < protonHighEnergy) ts = protonHighEnergy;
+      eloss += BarkasTerm(material,ts)*charge*chargeSquare*step;
+      eloss += BlochTerm(material,ts,chargeSquare)*step;
     }
     if(nStopping && tscaled < protonHighEnergy) {
       nloss = (theNuclearStoppingModel->TheValue(particle, material))*step;
@@ -964,7 +958,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   }
 
   //  stop particle if the kinetic energy <= MinKineticEnergy
-  if (finalT*massRatio <= MinKineticEnergy ) {
+  if (finalT <= MinKineticEnergy ) {
 
      finalT = 0.0;
       if(!particle->GetDefinition()->GetProcessManager()->
@@ -975,9 +969,11 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   }
 
   aParticleChange.SetEnergyChange( finalT );
-  eloss = kineticEnergy-finalT;
+  G4double edep = kineticEnergy-finalT;
 
   // Deexcitation only of ionised atoms
+  eloss = std::min(edep, eloss);
+
   G4double hMass = particle->GetMass();
   std::vector<G4DynamicParticle*>* newpart = 0;
   G4DynamicParticle* part = 0;
@@ -1006,9 +1002,9 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
       if(part) {
 
         e = part->GetKineticEnergy();
-        if(e <= eloss) {
+        if(e <= edep) {
 
-          eloss -= e;
+          edep -= e;
           q = G4UniformRand();
           time = deltaT*q + t;
           position  = deltaR*q;
@@ -1026,7 +1022,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
     delete newpart;
   }
 
-  aParticleChange.SetLocalEnergyDeposit(eloss);
+  aParticleChange.SetLocalEnergyDeposit(edep);
   return &aParticleChange ;
 }
 
@@ -1090,15 +1086,14 @@ G4double G4hLowEnergyIonisation::AntiProtonParametrisedDEDX(
   // The proton model is used + Barkas correction
   } else {
     if(kineticEnergy < protonLowEnergy) {
-      eloss = theProtonModel->TheValue(G4Proton::Proton(),material,protonLowEnergy)
-          * sqrt(kineticEnergy/protonLowEnergy) ;
+      eloss = theProtonModel->TheValue(G4Proton::Proton(),material,protonLowEnergy);
 
     // Parametrisation
     } else {
       eloss = theProtonModel->TheValue(G4Proton::Proton(),material,
                                        kineticEnergy);
     }
-    //if(theBarkas) eloss -= 2.0*BarkasTerm(material, kineticEnergy);
+    if(theBarkas) eloss -= 2.0*BarkasTerm(material, kineticEnergy);
   }
 
   // Delta rays energy

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 //
 // GEANT4 Class file
 //
@@ -35,13 +35,15 @@
 // 24 Oct 2001 MGP          Cleaned up
 // 30 Oct 2001 V.Ivanchenko Include formula (53)
 // 07 Oct 2002 V.Ivanchenko Fix in formula (53)
-//
-// -------------------------------------------------------------------
+// 22 Apr 2004 S.Saliceti   Add testFlag variable and GetCrossSection method
+// ----------------------------------------------------------------------------
 
 #include "globals.hh"
 #include "G4hShellCrossSection.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4Electron.hh"
+#include "G4Proton.hh"
+#include "G4ParticleDefinition.hh"
 
 G4hShellCrossSection::G4hShellCrossSection()
 { }
@@ -49,6 +51,7 @@ G4hShellCrossSection::G4hShellCrossSection()
 
 G4hShellCrossSection::~G4hShellCrossSection()
 { }
+
 
 
 std::vector<G4double> G4hShellCrossSection::GetCrossSection(G4int Z,
@@ -65,13 +68,13 @@ std::vector<G4double> G4hShellCrossSection::Probabilities(
                                               G4int Z, 
 			                      G4double incidentEnergy, 
 					      G4double hMass, 
-					      G4double deltaEnergy) const
+					      G4double deltaEnergy,
+					      G4bool testFlag) const
 {
   // Cross-sections for proton ionization calculated as in
   // "M. Gryzinski, Two-Particle Collisions. I. General Relations for 
   // Collisions in the Laboratory system, Phys.Rev. 138 A305"
   // Other reference papers are Gryzinski's "Paper I" and "Paper II"
-
   // V.Ivanchenko add only implementation of the formula (53) 
   // last factor neglected because it is 1 with a good accuracy
 
@@ -83,9 +86,6 @@ std::vector<G4double> G4hShellCrossSection::Probabilities(
   // Vector that stores the calculated cross-sections for each shell:
   std::vector<G4double> crossSections;
 
-  // Partial and total cross-section used for normalization of crossSections:
-  G4double totalCrossSection = 0.;
-
   // In this loop we calculate cross-section for every shell in the atom
   for (size_t k=0;  k<nShells;  k++)
     {
@@ -96,23 +96,52 @@ std::vector<G4double> G4hShellCrossSection::Probabilities(
       G4double x = electron_mass_c2/dele;
 
       G4double aCrossSection = (dele/(xEnergy*(1. + 1./y)) 
-                             + 4.*log(2.7 + sqrt(y))/3.) * x*x*x;
-    
-      // Calculation of total cross-section
-      totalCrossSection += aCrossSection;
-    
-      // Fill the vector of cross sections with the value just calculated
-      crossSections.push_back(aCrossSection);    
-    }
+                             + 4.*log(2.7 + sqrt(y))/3.) * x*x*x;    
 
-  // Normalization of relative cross-sections to 1
-  for (size_t j=0; j<nShells; j++)
-    {
-      crossSections[j] = crossSections[j] / totalCrossSection;
-    }
-  
-  // Returns the normalized vector 
+       // Fill the vector of cross sections with the value just calculated
+      crossSections.push_back(aCrossSection);
+
+       if (testFlag) 
+  	{
+	  G4cout <<"Element: " <<Z<<" Shell: "<<k<<" Particle Energy(MeV): "<<incidentEnergy/MeV<<G4endl;
+          G4cout <<"Delta Ray Energy(MeV): "<< deltaEnergy/MeV<<" Binding Energy(MeV): "<<bindingEnergy/MeV<<G4endl;
+	  G4cout <<"Cross Section: "<<aCrossSection/barn<<" barns"<< G4endl;
+ 	}
+     }
+
   return crossSections;
 }
 
+
+// Normalization of relative cross-sections to 1
+
+std::vector<G4double> G4hShellCrossSection::Probabilities(
+                                              G4int Z, 
+			                      G4double incidentEnergy, 
+					      G4double hMass, 
+					      G4double deltaEnergy
+					      ) const
+{  
+  std::vector<G4double> crossSection = GetCrossSection(Z, incidentEnergy, hMass, deltaEnergy,true);
+  G4double nShells = crossSection.size();
+
+  // Partial and total cross-section used for normalization of crossSections:
+  G4double totalCrossSection = 0.;
+  
+  // Calculation of total cross-section
+  for (size_t j=0; j<nShells; j++)
+    {      
+      totalCrossSection += crossSection[j];  // equivalent to totalCrossSection = totalCrossSection + aCrossSection  
+    }
+
+  // Calculation of normal cross section
+  for(size_t i=0; i<nShells; i++)     
+    {
+      crossSection[i] = crossSection[i] / totalCrossSection;
+    }
+  // Returns the normalized vector
+  return crossSection;
+}
+  
+  
 
