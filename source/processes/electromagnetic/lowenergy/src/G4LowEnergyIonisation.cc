@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.32 2000-04-07 13:42:54 lefebure Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.33 2000-04-07 15:40:28 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -145,7 +145,7 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
   {
    RecorderOfElectronProcess[CounterOfElectronProcess] = (*this).theLossTable ;
    CounterOfElectronProcess++;
-   InfoDefinition();  
+   PrintInfoDefinition();  
    }
    else
    {
@@ -1710,7 +1710,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
 void G4LowEnergyIonisation::PrintInfoDefinition()
 {
   G4String comments = "Low energy ionisation code ";
-           comments += "with first implementation of the continuous dE/dx part."   
+           comments += "with first implementation of the continuous dE/dx part.";   
            comments += "\n At present it can be used for electrons only ";
            comments += " in the energy range [250 eV,100 GeV]";
   G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
