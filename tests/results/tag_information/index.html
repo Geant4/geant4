@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>System Testing report on large-N tests</title>
-<!-- Changed by: Serguei SADILOV, 24-Feb-2003 -->
+<!-- Changed by: Serguei SADILOV,  3-Apr-2003 -->
 </head>
 
 <body>
@@ -11,60 +11,66 @@
 </div>
 
 Report on Errors and Warnings arising from system testing on the
-<b><blink>geant4-05-00-ref-01</blink></b> development tag.
+<b><blink>geant4-05-00-ref-03</blink></b> development tag.
 <p>
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
       for all platforms. 
 <pre>
-              +         +         +          +           +         +          +          +        
-              ^         ^         ^          ^           ^         ^          ^          ^        
------------+---------+---------+----------+----------+----------+----------+----------+----------+
-           | SUN-CC  | SUN-CC  |Linux-egcs|Linux-egcs|Linux-g++ |Linux-g++ | Linux-g++| Linux-g++|
-           |optim_ISO|debug_ISO|egcs.optim|egcs.debug|opt.NEWGCC|deb.NEWGCC| 7.2.opt  | 7.2.deb  |
------------+---------+---------+----------+----------+----------+----------+----------+----------+
-test01     |         |         |          |          |          |          |          |          |
-test02     |         |         |          |          |          |          |          |          |
-test02.h   |         |         |          |          |          |          |          |          |
-test05     |         |         |          |          |          |          |          |          |
------------+---------+---------+----------+----------+----------+----------+----------+----------+
-test06     |         |         |          |          |          |          |          |          |
-test07     |         |         |          |          |          |          |          |          |
-test09     |         |         |          |          |          |          |          |          |
-test10     |         |         |          |          |          |          |          |          |
------------+---------+---------+----------+----------+----------+----------+----------+----------+
-test11     |         |         |          |          |          |          |          |          |
-test12     |         |         |          |          |          |          |          |          |
-test13     | WL6     | WL6     | WL6      | WL6      | WL6      | WL6      | WL6      | WL6      |
-test14     |         |         |          |          |          |          |          |          |
-test15     |         |         |          |          |          |          |          |          |
------------+---------+---------+----------+----------+----------+----------+----------+----------+
-test16     |         |         |          |          |          |          |          |          |
-test17     |         |         |          |          |          |          |          |          |
-test18     |         |         |          |          |          |          |          |          |
-test20     |         |         |          |          |          |          |          |          |
-test21     | WL1     | WL1     | WL1      | WL1      | WL1      |  WL1     | WL1      | WL1      |
-test22     |         |         | WL2      |          | WL2      |          | WL2      |          |
------------+---------+---------+----------+----------+----------+----------+----------+----------+
-test103    |         |         |          |          |          |          |          |          |
-test104    |         |         |          |          |          |          |          |          |
-test104.Em |         |         |          |          |          |          |          |          |
-test502    |         |         |          |          |          |          |          |          |
-test506    |         |         |          |          |          |          |          |          |
-test508    |         |         |          |          |          |          |          |          |
-test5010   |         |         |          |          |          |          |          |          |
------------+---------+---------+----------+----------+----------+----------+----------+----------+
+                                                                                                                       waiting   waiting
+                                                                                                                       results   results
+-----------+---------+---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+
+           | SUN-CC  | SUN-CC  | SUN-CC  | SUN-CC  |Linux-egcs|Linux-egcs|Linux-g++ |Linux-g++ | Linux-g++| Linux-g++| WIN32-VC| WIN32-VC|
+           |optim_ISO|debug_ISO|optim_54 |debug_54 |egcs.optim|egcs.debug|opt.NEWGCC|deb.NEWGCC| 7.2.opt  | 7.2.deb  |   optim |   debug |
+-----------+---------+---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+
+test01     |         |         |         |         |          |          |          |          |          |          |         |         |
+test02     |         |         |         |         |          |          |          |          |          |          |         |         |
+test02.h   |         |         |         |         |          |          |          |          |          |          |         |         |
+test05     |         |         |         |         |          |          |          |          |          |          |         |         |
+-----------+---------+---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+
+test06     |         |         |         |         |          |          |          |          |          |          |         |         |
+test07     |         |         |         |         |          |          |          |          |          |          |         |         |
+test09     |         |         |         |         |          |          |          |          |          |          |         |         |
+test10     |         |         |         |         |          |          |          |          |          |          |         |         |
+-----------+---------+---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+
+test11     |         |         |         |         |          |          |          |          |          |          |         |         |
+test12     |         |         |         |         |          |          |          |          |          |          |         |         |
+test13     | WL1 EL1 | WL1 EL1 | WL1 EL2 | WL1 EL2 | WL1      | WL1      | WL1      | WL1      | WL1      | WL1      |         |         |
+test14     |         |         |         |         |          |          |          |          |          |          |         |         |
+test15     |         |         |         |         |          |          |          |          |          |          |         |         |
+-----------+---------+---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+
+test16     |         |         |         |         |          |          |          |          |          |          |         |         |
+test17     |         |         |         |         |          |          |          |          |          |          |         |         |
+test18     |         |         |         |         |          |          |          |          |          |          |         |         |
+test20     |         |         |         |         |          |          |          |          |          |          |         |         |
+test21     | WL2     | WL2     |WL2345EL4|WL2345EL4| WL2      | WL2      |     EL3  |  WL237   | WL23467  | WL23467  |         |         |
+test22     |         |         |         |         |          |          |          |          |          |          |         |         |
+-----------+---------+---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+
+test103    |         |         |         |         |          |          |          |          |          |          |         |         |
+test104    |         |         |         |         |          |          |          |          |          |          |         |         |
+test104.Em |         |         |         |         |          |          |          |          |          |          |         |         |
+test502    |         |         |         |         |          |          |          |          |          |          |         |         |
+test506    |         |         |         |         |          |          |          |          |          |          |         |         |
+test508    |         |         |         |         |          |          |          |          |          |          |         |         |
+test5010   |         |         |         |         |          |          |          |          |          |          |         |         |
+-----------+---------+---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+
 
  abend  - crash without clue
  Labend - crash in large_N test
  testing - under testing now
  ? - last time was!
- WL - warning in large_N test
+ WL - warning in large_N test (the warning in tests is usually a combination: WL23 means WL2 and WL3 [fortunatly < 10 :])
  EL - error in large_N test
 
  It would be really nice to get rid of these warnings, particularly for the Large_N tests.
  You can find debug info concerning these cases.
 
 WL1
+--------
+*** Error in G4HEInelastic::GenerateNBodyEvent
+    total mass (4.69395) >= total energy (4.51751)
+
+
+WL2
 -------
 
 *!*G4QE::Fr: Cann't correct 3727.38+1875.61=5602.99>5599.7
@@ -75,16 +81,272 @@ WL1
 *!*G4QE::Fr: Cann't correct 22335.8+938.272=23274.1>23267.2
 *!*G4QE::Fr: Cann't correct 21409.2+493.68=21902.9>21855.4
 
-WL2
---------
 
-*G4QHadron::DecayIn3: iM=24214.9, tM=939.566, sM=22335.8, fM=939.566, m12(s+f)=23275.4, d=3.41061e-12
+WL3
+---
+boostVector computed for a non-timelike LorentzVector 
+at line 185 in file LorentzVector.cc
+
+WL4
+---
+***G4Q::HQ: (2) qM=0,rPDG=22,dm=-9681.69
+
+WL5
+---
+***G4QEnv::HadrQE:M=NaN<gsM=22341.8,dM=NaN, tPDG=90011013, t4M=(NaN,NaN,NaN;NaN)
 
 WL6
---------
-*** Error in G4HEInelastic::GenerateNBodyEvent
-    total mass (4.69395) >= total energy (4.51751)
+---
+*G4Q::HQ:*Boost* q4M=(1385.51,-1055.34,112.116;1745.27),P=1745.27 > E=1745.27
 
+WL7
+---
+*G4QH::RDIn2:*Boost* 4M=(1385.51,-1055.34,112.116;1745.27),e-p=-4.77396e-15
+
+WL8
+---
+*G4Quasmon::FillHadronVector:PDG=90004999,M=3896.66
+
+
+EL1
+----
+====================================================================
+
+#
+# proton at 1 TeV in Pb
+#
+/gun/particle proton
+/gun/energy 1 TeV
+/mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+/run/beamOn 2000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No
+ Material : Air
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m
+ Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
+
+Index : 1     used in the geometry : No      recalculation needed : No
+ Material : Aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m
+ Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No
+ Material : Lead
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m
+ Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J
+ Region(s) which use this couple :
+    DefaultRegionForTheWorld
+
+====================================================================
+
+*** Error in G4HEInelastic::GenerateNBodyEvent
+    total mass (3.75826) >= total energy (3.03154)
+*** Error in G4HEInelastic::GenerateNBodyEvent
+    total mass (1.87913) >= total energy (1.01386)
+t@1 (l@1) signal SEGV (no mapping at the fault address) in G4ReactionProduct::GetSide at line 134 in file "G4ReactionProduct.hh"
+  134       { return side; }
+(/opt/SUNWspro/bin/../WS6U1/bin/sparcv9/dbx) where
+current thread: t@1
+=>[1] G4ReactionProduct::GetSide(this = 0x3ff00000), line 134 in "G4ReactionProduct.hh"
+  [2] G4ReactionDynamics::GenerateXandPt(this = 0x29ba964, vec = CLASS, vecLen = 129, modifiedOriginal = CLASS, originalIncident = 0x2dbd830, currentParticle = CLASS, targetParticle = CLASS, targetNucleus = CLASS, incidentHasChanged = false, targetHasChanged = true, leadFlag = false, leadingStrangeParticle = CLASS), line 351 in "G4ReactionDynamics.cc"
+  [3] G4InelasticInteraction::CalculateMomenta(this = 0x29ba898, vec = CLASS, vecLen = 129, originalIncident = 0x2dbd830, originalTarget = 0xa980a68, modifiedOriginal = CLASS, targetNucleus = CLASS, currentParticle = CLASS, targetParticle = CLASS, incidentHasChanged = false, targetHasChanged = true, quasiElastic = false), line 257 in "G4InelasticInteraction.cc"
+  [4] G4LEPionPlusInelastic::ApplyYourself(this = 0x29ba898, aTrack = CLASS, targetNucleus = CLASS), line 113 in "G4LEPionPlusInelastic.cc"
+  [5] G4HadronicProcess::GeneralPostStepDoIt(this = 0x29b91e8, aTrack = CLASS, aStep = CLASS), line 107 in "G4HadronicProcess.cc"
+  [6] G4HadronInelasticProcess::PostStepDoIt(this = 0x29b91e8, aTrack = CLASS, aStep = CLASS), line 97 in "G4HadronInelasticProcess.hh"
+  [7] G4SteppingManager::InvokePSDIP(this = 0x258dd38, np = 4U), line 533 in "G4SteppingManager2.cc"
+  [8] G4SteppingManager::InvokePostStepDoItProcs(this = 0x258dd38), line 510 in "G4SteppingManager2.cc"
+  [9] G4SteppingManager::Stepping(this = 0x258dd38), line 196 in "G4SteppingManager.cc"
+  [10] G4TrackingManager::ProcessOneTrack(this = 0x25626e8, apValueG4Track = 0xad70f70), line 118 in "G4TrackingManager.cc"
+  [11] G4EventManager::ProcessOneEvent(this = 0x258dcf8, anEvent = 0x257a900), line 150 in "G4EventManager.cc"
+  [12] G4RunManager::DoEventLoop(this = 0x258dc40, n_event = 2000, macroFile = (nil), n_select = -1), line 279 in "G4RunManager.cc"
+  [13] G4RunManager::BeamOn(this = 0x258dc40, n_event = 2000, macroFile = (nil), n_select = -1), line 176 in "G4RunManager.cc"
+  [14] G4RunMessenger::SetNewValue(this = 0x25bcc40, command = 0x25bd810, newValue = CLASS), line 227 in "G4RunMessenger.cc"
+  [15] G4UIcommand::DoIt(this = 0x25bd810, parameterList = CLASS), line 206 in "G4UIcommand.cc"
+  [16] G4UImanager::ApplyCommand(this = 0x258e290, aCmd = 0xffbee324 "/run/beamOn 2000"), line 396 in "G4UImanager.cc"
+  [17] G4UIbatch::SessionStart(this = 0x25fbb70), line 81 in "G4UIbatch.cc"
+  [18] G4UImanager::ExecuteMacroFile(this = 0x258e290, fileName = 0x25fbb50 "test13.large_N.in"), line 218 in "G4UImanager.cc"
+  [19] G4UIcontrolMessenger::SetNewValue(this = 0x258e470, command = 0x258f328, newValue = CLASS), line 172 in "G4UIcontrolMessenger.cc"
+  [20] G4UIcommand::DoIt(this = 0x258f328, parameterList = CLASS), line 206 in "G4UIcommand.cc"
+  [21] G4UImanager::ApplyCommand(this = 0x258e290, aCmd = 0x25f3af0 "/control/execute test13.large_N.in"), line 396 in "G4UImanager.cc"
+  [22] G4UImanager::ApplyCommand(this = 0x258e290, aCmd = CLASS), line 340 in "G4UImanager.cc"
+  [23] main(argc = 2, argv = 0xffbef0e4), line 70 in "test13.cc"
+
+EL2
+---
+#
+# proton at 1 TeV in Pb
+#
+/gun/particle proton
+/gun/energy 1 TeV
+/mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+/run/beamOn 2000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No
+ Material : Air
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m
+ Energy thresholds :  gamma 3.15422 keV    e- 378.379 keV    e+ 364.659 keV
+
+Index : 1     used in the geometry : No      recalculation needed : No
+ Material : Aluminium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m
+ Energy thresholds :  gamma 2.88022e+295 J      e- 1.17246 GeV    e+ 1.11613 GeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No
+ Material : Lead
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m
+ Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.8802
+2e+295 J
+ Region(s) which use this couple :
+    DefaultRegionForTheWorld
+
+====================================================================
+
+t@1 (l@1) signal SEGV (no mapping at the fault address) in G4ReactionDynamics::GenerateXandPt at 0x54e8c4
+0x0054e8c4: GenerateXandPt+0x1ec4:      ld      [%l1 + 0x68], %l0
+(dbx) where
+current thread: t@1
+=>[1] G4ReactionDynamics::GenerateXandPt(0x1071b24, 0xffbed658, 0xffbed654, 0xffbed860, 0x126e5a0, 0xffbed988), at 0x54e8c4
+  [2] G4InelasticInteraction::CalculateMomenta(0xae6c00, 0xae6cd0, 0x0, 0xffbed3f8, 0x3453758, 0xffbed860), at 0x536b70
+  [3] G4LEPionPlusInelastic::ApplyYourself(0x1071a58, 0x4fb400, 0x1070648, 0x3453758, 0x1071a60, 0xffbed658), at 0x4fbcac
+  [4] G4HadronicProcess::GeneralPostStepDoIt(0xd43e30, 0x35b3c78, 0x10703a8, 0xa4b800, 0x4fb7f8, 0x126e5a0), at 0x53186c
+  [5] G4HadronInelasticProcess::PostStepDoIt(0x10703a8, 0x35b3c78, 0xd43e30, 0x0, 0xed68c8, 0x35b3c78), at 0xbcf04
+  [6] G4SteppingManager::InvokePSDIP(0xd54768, 0x4, 0x10703a8, 0xe94508, 0x10, 0xe7d6e0), at 0x6aaeac
+  [7] G4SteppingManager::InvokePostStepDoItProcs(0xd54768, 0xd43e30, 0xd54930, 0x4, 0x4, 0x6), at 0x6aadd8
+  [8] G4SteppingManager::Stepping(0xd54768, 0xd43e30, 0xd54930, 0xd54930, 0x35b3c78, 0x0), at 0x6a6254
+  [9] G4TrackingManager::ProcessOneTrack(0xd0fc10, 0xd43e30, 0x35b3c78, 0xd54768, 0x0, 0x3), at 0x691fd8
+  [10] G4EventManager::ProcessOneEvent(0xd54728, 0xd41aa8, 0x2, 0xb8bc00, 0x32283d8, 0x64bed8), at 0x64c148
+  [11] G4RunManager::DoEventLoop(0xd546a8, 0x7d0, 0x0, 0xffbeded4, 0xd35fd0, 0xffffffff), at 0x57b368
+  [12] G4RunManager::BeamOn(0xd546a8, 0x7d0, 0x0, 0xffffffff, 0xaee358, 0x57ad54), at 0x57ad24
+  [13] G4RunMessenger::SetNewValue(0xd675b0, 0xd67d68, 0xffbee118, 0x1, 0x1308078, 0xd67d68), at 0x581204
+  [14] G4UIcommand::DoIt(0xd67d68, 0x192, 0xa6e35f, 0xa6e36b, 0x18f, 0xa6e35d), at 0x881778
+  [15] G4UImanager::ApplyCommand(0xd54c90, 0xa, 0xb, 0x2b856d0, 0xffbee3c8, 0xffbee308), at 0x891904
+  [16] G4UIbatch::SessionStart(0xd7f200, 0xd7f288, 0x0, 0xff1c120c, 0xa889bc, 0xa6faf6), at 0x8aa050
+  [17] G4UImanager::ExecuteMacroFile(0xd54c90, 0xd7f1d8, 0xb7d578, 0x88598c, 0xd7f200, 0xd7f200), at 0x890914
+  [18] G4UIcontrolMessenger::SetNewValue(0xd54e18, 0xd55290, 0xffbee610, 0x1, 0xd54c90, 0xd55290), at 0x8ae3e0
+  [19] G4UIcommand::DoIt(0xd55290, 0x0, 0xa6e35f, 0xa6e36b, 0x18f, 0xa6e35d), at 0x881778
+  [20] G4UImanager::ApplyCommand(0xd54c90, 0xf, 0x10, 0xd7c038, 0xd7bf50, 0xffbee800), at 0x891904
+  [21] main(0x2, 0xffbef044, 0xd76fd8, 0xa889bc, 0xffbee8d8, 0xffbee8cc), at 0xacdb0
+
+
+EL3
+---
+Event number 4966
+Event number 4967
+
+Program received signal SIGSEGV, Segmentation fault.
+0x2b6b953e in G4ReactionProduct::GetSide ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4hadronic_util.so
+(gdb) where
+#0  0x2b6b953e in G4ReactionProduct::GetSide ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4hadronic_util.so
+#1  0x2b69449e in G4ReactionDynamics::GenerateXandPt ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4hadronic_util.so
+#2  0x2b6107dd in G4InelasticInteraction::CalculateMomenta ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4hadronic_mgt.so
+#3  0x2b549b48 in G4LEProtonInelastic::ApplyYourself ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4hadronic_LE.so
+#4  0x2b60e7f5 in G4HadronicProcess::GeneralPostStepDoIt ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4hadronic_mgt.so
+#5  0x2b60cbae in G4HadronInelasticProcess::PostStepDoIt ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4hadronic_mgt.so
+#6  0x2b8f8560 in G4SteppingManager::InvokePSDIP ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4tracking.so
+#7  0x2b8f84b7 in G4SteppingManager::InvokePostStepDoItProcs ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4tracking.so
+#8  0x2b8f5f9d in G4SteppingManager::Stepping ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4tracking.so
+#9  0x2b8fe6d5 in G4TrackingManager::ProcessOneTrack ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4tracking.so
+#10 0x2b83d147 in G4EventManager::ProcessOneEvent ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4event.so
+#11 0x2b4b4316 in G4RunManager::DoEventLoop ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4run.so
+#12 0x2b4b3936 in G4RunManager::BeamOn ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4run.so
+#13 0x2b4c1e74 in G4RunMessenger::SetNewValue ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4run.so
+#14 0x2bc37d6a in G4UIcommand::DoIt ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4intercoms.so
+#15 0x2bc55ed4 in G4UImanager::ApplyCommand ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4intercoms.so
+#16 0x2bc2d799 in G4UIbatch::SessionStart ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4intercoms.so
+#17 0x2bc50268 in G4UImanager::ExecuteMacroFile ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4intercoms.so
+#18 0x2bc4ce11 in G4UIcontrolMessenger::SetNewValue ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4intercoms.so
+#19 0x2bc37d6a in G4UIcommand::DoIt ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4intercoms.so
+#20 0x2bc55ed4 in G4UImanager::ApplyCommand ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4intercoms.so
+---Type <return> to continue, or q <return> to quit---
+#21 0x2bc5480a in G4UImanager::ApplyCommand ()
+   from /afs/cern.ch/sw/geant4/stt/dev2/Linux-g++/optim_NEWGCC/lib/Linux-g++/libG4intercoms.so
+#22 0x804f78e in main ()
+#23 0x2bd799cb in __libc_start_main () at ../sysdeps/generic/libc-start.c:122
+
+
+EL4
+---
+Event number 11615
+Event number 11616
+boostVector computed for a non-timelike LorentzVector
+at line 185 in file LorentzVector.cc
+boostVector computed for a non-timelike LorentzVector
+at line 185 in file LorentzVector.cc
+boostVector computed for a non-timelike LorentzVector
+at line 185 in file LorentzVector.cc
+boostVector computed for a non-timelike LorentzVector
+at line 185 in file LorentzVector.cc
+***G4Q::HQ: (2) qM=0,rPDG=22,dm=-0.000765383
+***G4QEnv::HadrQE:M=NaN<gsM=22341.8,dM=NaN, tPDG=90011013, t4M=(NaN,NaN,NaN;NaN)
+t@1 (l@1) signal SEGV (no mapping at the fault address) in G4QEnvironment::EvaporateResidual at 0x171c28
+0x00171c28: EvaporateResidual+0x0020:   st      %i0, [%sp + 0x90]
+dbx: read of 4 bytes at address ff3ea140 failed -- Error 0
+(dbx) where
+current thread: t@1
+=>[1] G4QEnvironment::EvaporateResidual(0x12a9648, 0x0, 0x0, 0x1153e98, 0x0, 0x1340754), at 0x171c28
+  [2] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [3] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [4] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [5] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [6] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [7] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [8] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [9] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [10] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [11] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [12] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [13] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [14] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [15] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [16] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [17] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [18] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [19] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [20] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [21] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [22] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [23] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [24] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [25] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [26] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [27] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [28] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [29] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [30] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [31] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [32] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [33] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [34] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [35] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
+  [36] G4QEnvironment::EvaporateResidual(0x0, 0x1, 0x0, 0x0, 0x18, 0x171800), at 0x1778c4
 
 
 </pre>
