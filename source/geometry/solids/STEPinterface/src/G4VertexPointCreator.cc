@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VertexPointCreator.cc,v 1.2 2000-01-21 13:46:07 gcosmo Exp $
+// $Id: G4VertexPointCreator.cc,v 1.3 2000-02-25 16:36:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,6 @@ G4VertexPointCreator::~G4VertexPointCreator() {}
 
 void G4VertexPointCreator::CreateG4Geometry(STEPentity& Ent)
 {
-  // G4Point3d *point;
   G4Point3D *point;
 
   G4String attrName("vertex_geometry");
@@ -42,8 +41,11 @@ void G4VertexPointCreator::CreateG4Geometry(STEPentity& Ent)
   // Get the geometric point  
   STEPentity* TmpEnt= *Attr->ptr.c;
   void * tmp =G4GeometryTable::CreateObject(*TmpEnt);
+  if (!tmp)
+    G4cerr << "WARNING - G4VertexPointCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL point (G4Point3D) !" << G4endl
+	   << "\tVertex point NOT created." << G4endl;
   
-  // point = (G4Point3d*)tmp;
   point = (G4Point3D*)tmp;
   createdObject = point;
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EllipseCreator.cc,v 1.2 2000-01-21 13:46:01 gcosmo Exp $
+// $Id: G4EllipseCreator.cc,v 1.3 2000-02-25 16:36:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@ void G4EllipseCreator::CreateG4Geometry(STEPentity& Ent)
   
   // L. Broglia
   // G4Placement* place;
-  G4Axis2Placement3D* place;
+  G4Axis2Placement3D* place=0;
 
   Ent.ResetAttributes();
   STEPattribute* Attr = Ent.NextAttribute();

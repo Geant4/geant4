@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Axis2Placement3dCreator.cc,v 1.2 2000-01-21 13:45:58 gcosmo Exp $
+// $Id: G4Axis2Placement3dCreator.cc,v 1.3 2000-02-25 16:36:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -44,19 +44,34 @@ void G4Axis2Placement3dCreator::CreateG4Geometry(STEPentity& Ent)
   // Get point on surface
   STEPentity* TmpEnt = *Attr->ptr.c;
   void * tmp = G4GeometryTable::CreateObject(*TmpEnt);
-  srfPoint = *(G4Point3D*)tmp;
+  if (tmp)
+    srfPoint = *(G4Point3D*)tmp;
+  else
+    G4cerr << "WARNING - G4Axis2Placement3dCreator::CreateG4Geometry" << G4endl
+           << "\tPoint on surface (G4Point3D) NULL !" << G4endl
+	   << "\tThis will result as an incorrect placement." << G4endl;
     
   // Get axis
   Attr = Ent.NextAttribute();
   TmpEnt = *Attr->ptr.c;
   tmp =G4GeometryTable::CreateObject(*TmpEnt);
-  axis = *(G4Vector3D*)tmp;
+  if (tmp)
+    axis = *(G4Vector3D*)tmp;
+  else
+    G4cerr << "WARNING - G4Axis2Placement3dCreator::CreateG4Geometry" << G4endl
+           << "\tPlacement axis (G4Vector3D) NULL !" << G4endl
+	   << "\tThis will result as an incorrect placement." << G4endl;
 
   // Get direction
   Attr = Ent.NextAttribute();
   TmpEnt = *Attr->ptr.c;
   tmp =G4GeometryTable::CreateObject(*TmpEnt);
-  dir = *(G4Vector3D*)tmp;  
+  if (tmp)
+    dir = *(G4Vector3D*)tmp;  
+  else
+    G4cerr << "WARNING - G4Axis2Placement3dCreator::CreateG4Geometry" << G4endl
+           << "\tPlacement direction (G4Vector3D) NULL !" << G4endl
+	   << "\tThis will result as an incorrect placement." << G4endl;
   
   createdObject = new G4Axis2Placement3D(dir, axis, srfPoint);
 }

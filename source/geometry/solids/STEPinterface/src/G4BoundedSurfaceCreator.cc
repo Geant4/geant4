@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BoundedSurfaceCreator.cc,v 1.3 2000-01-21 13:45:58 gcosmo Exp $
+// $Id: G4BoundedSurfaceCreator.cc,v 1.4 2000-02-25 16:36:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -47,21 +47,36 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   if(complexEnt->EntityExists("B_Spline_Surface"))
     {
       subEnt = complexEnt->EntityPart("B_Spline_Surface");
-      bSpline =(SdaiB_spline_surface*)G4GeometryTable::CreateObject(*subEnt);      
+      bSpline =(SdaiB_spline_surface*)G4GeometryTable::CreateObject(*subEnt);
+      if (!bSpline)
+        G4cerr << "WARNING - G4BoundedSurfaceCreator::CreateG4Geometry" << G4endl
+               << "\tComplex entity part -BSpline surface- not found !" << G4endl;
     }
   
   if(complexEnt->EntityExists("B_Spline_Surface_With_Knots"))
     {
       subEnt = complexEnt->EntityPart("B_Spline_Surface_With_Knots");
       bSplineWithKnots =(SdaiB_spline_surface_with_knots*)G4GeometryTable::CreateObject(*subEnt);
+      if (!bSplineWithKnots)
+        G4cerr << "WARNING - G4BoundedSurfaceCreator::CreateG4Geometry" << G4endl
+               << "\tComplex entity part -BSpline surface with knots- not found !" << G4endl;
     }
 
   if(complexEnt->EntityExists("Rational_B_Spline_Surface"))
     {
       subEnt = complexEnt->EntityPart("Rational_B_Spline_Surface");
       rationalBSpline =(SdaiRational_b_spline_surface*)G4GeometryTable::CreateObject(*subEnt);
+      if (!rationalBSpline)
+        G4cerr << "WARNING - G4BoundedSurfaceCreator::CreateG4Geometry" << G4endl
+               << "\tComplex entity part -Rational BSpline surface- not found !" << G4endl;
     }
 
+  if ((!bSpline) || (!bSplineWithKnots) || (!rationalBSpline))
+  {
+    G4cerr << "\tComplex Bounded Surface NOT created." << G4endl;
+    createdObject = 0;
+    return;
+  }
 
   G4int u,v;
   u=bSpline->u_degree_();
@@ -132,7 +147,11 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 //      Entity = instanceManager.GetSTEPentity(Index);
         Entity = instanceManager.GetApplication_instance(Index);
 	void *tmp =G4GeometryTable::CreateObject(*Entity);
-	controlPoints.put(a,b,*(G4PointRat*)tmp);
+	if (tmp)
+	  controlPoints.put(a,b,*(G4PointRat*)tmp);
+	else
+          G4cerr << "WARNING - G4BoundedSurfaceCreator::CreateG4Geometry" << G4endl
+                 << "\tNULL control point (G4PointRat) detected." << G4endl;
       }  
   
   
@@ -151,7 +170,7 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
       multiNode = (IntNode*)multiNode->NextNode();
     }
   
-  G4KnotVector *uKnots  = new G4KnotVector(totalUKnotCount);
+  G4KnotVector uKnots(totalUKnotCount);
 
   RealNode* knotNode = (RealNode*)knotAggr->GetHead();
   multiNode = (IntNode*)multAggr->GetHead();
@@ -166,7 +185,7 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 
       for(G4int b=0;b<multValue;b++)
 	{
-	  uKnots->PutKnot(index, knotValue);
+	  uKnots.PutKnot(index, knotValue);
 	  index++;
 	}
       knotNode = (RealNode*)knotNode->NextNode();
@@ -189,7 +208,7 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
       totalVKnotCount += multiNode->value;
       multiNode = (IntNode*)multiNode->NextNode();
     }
-  G4KnotVector *vKnots  = new G4KnotVector(totalVKnotCount);
+  G4KnotVector vKnots(totalVKnotCount);
 
   knotNode = (RealNode*)knotAggr->GetHead();
   multiNode = (IntNode*)multAggr->GetHead();
@@ -205,7 +224,7 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 
       for(G4int b=0;b<multValue;b++)
 	{
-	  vKnots->PutKnot(index, knotValue);
+	  vKnots.PutKnot(index, knotValue);
 	  index++;
 	}
       knotNode = (RealNode*)knotNode->NextNode();
@@ -257,16 +276,17 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
     }
 
   controlPoints.SetWeights(ratVector);
-
+  delete [] ratVector;
   
   // create BSpline
   G4BSplineSurface* bSplineSrf = new G4BSplineSurface(
 						   u,
 						   v,
-						   *uKnots,
-						   *vKnots,
+						   uKnots,
+						   vKnots,
 						   controlPoints
-						     );  
+						     );
+  createdObject = bSplineSrf;
 }
 
 void G4BoundedSurfaceCreator::CreateSTEPGeometry(void * G4obj)

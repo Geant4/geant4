@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SphericalSurfaceCreator.cc,v 1.2 2000-01-21 13:46:07 gcosmo Exp $
+// $Id: G4SphericalSurfaceCreator.cc,v 1.3 2000-02-25 16:36:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,13 +54,18 @@ void G4SphericalSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   radius = *Attr->ptr.r;
 
   
-  G4SphericalSurface* aG4sphere = 
-    new G4SphericalSurface( (*place).GetLocation() ,
-			    (*place).GetPX()       ,
-			    (*place).GetPZ()       , 
-			    radius                 ,
-			    0, 2*M_PI              ,
-			    0, M_PI                 );
+  G4SphericalSurface* aG4sphere = 0;
+  if (place)
+    aG4sphere = new G4SphericalSurface( (*place).GetLocation() ,
+					(*place).GetPX()       ,
+					(*place).GetPZ()       , 
+					radius                 ,
+					0, 2*M_PI              ,
+					0, M_PI                 );
+  else
+    G4cerr << "WARNING - G4SphericalSurfaceCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL axis placement (G4Axis2Placement3D) !" << G4endl
+	   << "\tSpherical Surface NOT created." << G4endl;
 
   createdObject = aG4sphere;
 }

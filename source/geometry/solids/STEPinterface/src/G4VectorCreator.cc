@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VectorCreator.cc,v 1.2 2000-01-21 13:46:07 gcosmo Exp $
+// $Id: G4VectorCreator.cc,v 1.3 2000-02-25 16:36:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,10 +49,17 @@ void G4VectorCreator::CreateG4Geometry(STEPentity& Ent)
   Attr = Ent.NextAttribute();
   Magnitude = *Attr->ptr.r;
 
-  createdObject = new G4ThreeVector(Magnitude * place->x(),
-				    Magnitude * place->y(),
-				    Magnitude * place->z()
-				    );
+  G4ThreeVector* vec = 0;
+  if (place)
+    vec = new G4ThreeVector(Magnitude * place->x(),
+			    Magnitude * place->y(),
+			    Magnitude * place->z() );
+  else
+    G4cerr << "WARNING - G4VectorCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL orientation (G4ThreeVector) !" << G4endl
+	   << "\tEntity NOT created." << G4endl;
+
+  createdObject = vec;
 }
 
 void G4VectorCreator::CreateSTEPGeometry(void* G4obj)

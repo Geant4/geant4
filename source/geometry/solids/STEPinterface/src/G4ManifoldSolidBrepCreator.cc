@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ManifoldSolidBrepCreator.cc,v 1.2 2000-01-21 13:46:03 gcosmo Exp $
+// $Id: G4ManifoldSolidBrepCreator.cc,v 1.3 2000-02-25 16:36:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,11 @@ void G4ManifoldSolidBrepCreator::CreateG4Geometry(STEPentity& Ent)
   // Get solid
   STEPentity* TmpEnt = *Attr->ptr.c;
   void *tmp =G4GeometryTable::CreateObject(*TmpEnt);
+  if (!tmp)
+    G4cerr << "WARNING - G4ManifoldSolidBrepCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL pointer to BREP Solid !" << G4endl
+	   << "\tBREP Solid NOT created." << G4endl;
+
   sld = (G4BREPSolid*)tmp; 
   createdObject = sld;
 }

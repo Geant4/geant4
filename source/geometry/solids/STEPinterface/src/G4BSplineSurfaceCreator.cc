@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurfaceCreator.cc,v 1.2 2000-01-21 13:45:58 gcosmo Exp $
+// $Id: G4BSplineSurfaceCreator.cc,v 1.3 2000-02-25 16:36:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -112,7 +112,11 @@ void G4BSplineSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 //      Entity = instanceManager.GetSTEPentity(Index);
         Entity = instanceManager.GetApplication_instance(Index);
 	void *tmp =G4GeometryTable::CreateObject(*Entity);
-	controlPoints.put(a,b,*(G4PointRat*)tmp);
+	if (tmp)
+	  controlPoints.put(a,b,*(G4PointRat*)tmp);
+	else
+          G4cerr << "WARNING - G4BSplineSurfaceCreator::CreateG4Geometry" << G4endl
+                 << "\tNULL control point (G4PointRat) detected." << G4endl;
       }  
   
   createdObject = bSpline;

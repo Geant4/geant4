@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AdvancedBrepShapeRepresentationCreator.cc,v 1.2 2000-01-21 13:45:49 gcosmo Exp $
+// $Id: G4AdvancedBrepShapeRepresentationCreator.cc,v 1.3 2000-02-25 16:36:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,10 +37,10 @@ G4AdvancedBrepShapeRepresentationCreator::
    ~G4AdvancedBrepShapeRepresentationCreator(){}
 
 
-void G4AdvancedBrepShapeRepresentationCreator::CreateG4Geometry(STEPentity& Ent)
+void G4AdvancedBrepShapeRepresentationCreator::CreateG4Geometry(STEPentity& sEnt)
 {
   G4String attrName("items");
-  STEPattribute *Attr = GetNamedAttribute(attrName, Ent);
+  STEPattribute *Attr = GetNamedAttribute(attrName, sEnt);
   EntityAggregate *ea = (EntityAggregate*)Attr->ptr.a;
   
   // Get parts of this shape  
@@ -68,38 +68,44 @@ void G4AdvancedBrepShapeRepresentationCreator::CreateG4Geometry(STEPentity& Ent)
   {
    ent = en->node; 
    void *tmp = G4GeometryTable::CreateObject(*ent); 
-    
-   if( !strcmp(ent->EntityName(), "Axis2_Placement_3d") )
+
+   if (tmp)
    {
-     // Get placement 
-     place = (G4Axis2Placement3D*)tmp;  
-     placement = 1;
+     if( !strcmp(ent->EntityName(), "Axis2_Placement_3d") )
+     {
+       // Get placement 
+       place = (G4Axis2Placement3D*)tmp;  
+       placement = 1;
+     }
+     else
+       if( !strcmp(ent->EntityName(), "Manifold_Solid_Brep") )
+       {
+         // Get solid    
+         sld = (G4BREPSolid*)tmp; 
+         nbofsolids++;
+
+         G4int id = ent->GetFileId();
+         sld->SetId(id);
+
+         // Create the placed solid 
+         if(placement)
+	   placedSld = new G4PlacedSolid(sld, place);
+         else
+	   placedSld = new G4PlacedSolid(sld, place0);
+       
+         placedSldV->append(placedSld);
+       }
    }
    else
-     if( !strcmp(ent->EntityName(), "Manifold_Solid_Brep") )
-     {
-       // Get solid    
-       sld = (G4BREPSolid*)tmp; 
-       nbofsolids++;
+     G4cerr << "WARNING - G4AdvancedBrepShapeRepresentationCreator::CreateG4Geometry" << G4endl
+            << "\tEntity part for " << ent->EntityName() << " NOT found." << G4endl;
 
-       G4int id = ent->GetFileId();
-       sld->SetId(id);
-
-       // Create the placed solid 
-       if(placement)
-	 placedSld = new G4PlacedSolid(sld, place);
-       else
-	 placedSld = new G4PlacedSolid(sld, place0);
-       
-       placedSldV->append(placedSld);
-     }
-   
    en = (EntityNode*)en->NextNode();
   }
 
   // Get geometric_representation_context, but it is not used
   attrName = "context_of_items";
-  Attr = GetNamedAttribute(attrName, Ent);
+  Attr = GetNamedAttribute(attrName, sEnt);
   
   createdObject = placedSldV;
 }

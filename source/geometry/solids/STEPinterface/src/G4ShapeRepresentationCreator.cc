@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShapeRepresentationCreator.cc,v 1.2 2000-01-21 13:46:06 gcosmo Exp $
+// $Id: G4ShapeRepresentationCreator.cc,v 1.3 2000-02-25 16:36:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,10 +56,18 @@ void G4ShapeRepresentationCreator::CreateG4Geometry(STEPentity& Ent)
       // place =(G4Placement*)G4GeometryTable::CreateObject(*TmpEnt);
       place =(G4Axis2Placement3D*)G4GeometryTable::CreateObject(*TmpEnt);
 
-      placements->append(place);
+      if (place)
+        placements->append(place);
       en = (EntityNode*)en->NextNode();
     }
   
+  G4int placementNum = placements->entries();
+  if (placementNum != placementCount)
+    G4cerr << "WARNING - G4ShapeRepresentationCreator::CreateG4Geometry" << G4endl
+           << "\tTotal of " << placementNum << " G4Axis2Placement3D components created, out of "
+	   << placementCount << " expected !" << G4endl
+	   << "\tEntity not correctly instantiated." << G4endl;
+
   attrName="context_of_items";
   Attr = GetNamedAttribute(attrName, Ent);
   TmpEnt = *Attr->ptr.c;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CylindricalSurfaceCreator.cc,v 1.2 2000-01-21 13:46:00 gcosmo Exp $
+// $Id: G4CylindricalSurfaceCreator.cc,v 1.3 2000-02-25 16:36:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -53,10 +53,16 @@ void G4CylindricalSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   Attr = GetNamedAttribute(attrNameR, Ent);
   radius = *Attr->ptr.r;
    
-  G4CylindricalSurface* aG4cylinder = 
-    new G4CylindricalSurface( (*place).GetLocation() ,
-			      (*place).GetAxis()     ,
-			      radius                );
+  G4CylindricalSurface* aG4cylinder = 0;
+  if (place)
+    aG4cylinder = new G4CylindricalSurface( (*place).GetLocation() ,
+			                    (*place).GetAxis()     ,
+			                    radius                );
+  else
+    G4cerr << "WARNING - G4CylindricalSurfaceCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL axis placement (G4Axis2Placement3D) !" << G4endl
+	   << "\tCylindrical Surface NOT created." << G4endl;
+
   createdObject = aG4cylinder;
 }
 

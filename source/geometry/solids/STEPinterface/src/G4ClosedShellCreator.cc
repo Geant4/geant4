@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ClosedShellCreator.cc,v 1.2 2000-01-21 13:45:59 gcosmo Exp $
+// $Id: G4ClosedShellCreator.cc,v 1.3 2000-02-25 16:36:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,26 +43,28 @@ void G4ClosedShellCreator::CreateG4Geometry(STEPentity& Ent)
  
   G4SurfaceVector SurfaceVec;  
 
-  for(G4int a=0; a<FaceCount;a++)
+  for(size_t a=0; a<FaceCount;a++)
   {
     TmpEnt = ((EntityNode*)Node)->node;
-    void *tmp =::G4GeometryTable::CreateObject(*TmpEnt);
-    SurfaceVec.append((G4Surface*)tmp);     
+    void *tmp = G4GeometryTable::CreateObject(*TmpEnt);
+    if (tmp) SurfaceVec.append((G4Surface*)tmp);
     Node = Node->NextNode();
   }      
 
   // create G4solid
-  G4Surface** srfVec =  new G4Surface*[FaceCount];
-  
-  for(G4int b=0;b<FaceCount;b++)
+  G4int SurfNum = SurfaceVec.entries();
+  G4Surface** srfVec =  new G4Surface*[SurfNum];
+  if (SurfNum != FaceCount)
+    G4cerr << "WARNING - G4ClosedShellCreator::CreateG4Geometry" << G4endl
+           << "\tTotal of " << SurfNum << " G4Surface components created, out of "
+	   << FaceCount << " expected !" << G4endl
+	   << "\tBREP Solid not correctly instantiated." << G4endl;
+  for(size_t b=0;b<SurfNum;b++)
     srfVec[b] = (SurfaceVec[b]);    
     
-  G4BREPSolid* sld = new G4BREPSolid(" ", srfVec, FaceCount);
+  G4BREPSolid* sld = new G4BREPSolid(" ", srfVec, SurfNum);
 
   createdObject = sld;
-
-  // delete [] srfVec;
-  // delete sld;
 }
 
 void G4ClosedShellCreator::CreateSTEPGeometry(void* G4obj)

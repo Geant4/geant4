@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ItemDefinedTransformationCreator.cc,v 1.2 2000-01-21 13:46:02 gcosmo Exp $
+// $Id: G4ItemDefinedTransformationCreator.cc,v 1.3 2000-02-25 16:36:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,22 +44,30 @@ void G4ItemDefinedTransformationCreator::CreateG4Geometry(STEPentity& Ent)
   STEPattribute *Attr = GetNamedAttribute(attrName, Ent);
   STEPentity* TmpEnt = *Attr->ptr.c;
   void *tmp =G4GeometryTable::CreateObject(*TmpEnt);
+  if (!tmp)
+    G4cerr << "WARNING - G4ItemDefinedTransformationCreator::CreateG4Geometry" << G4endl
+           << "\t" << attrName << ": unexpected NULL axis placement (G4Axis2Placement3D) !"
+	   << G4endl;
 
   // L. Broglia
   // place = (G4Placement*)tmp;
   place = (G4Axis2Placement3D*)tmp;
 
-  places->append(place);
+  if (place) places->append(place);
   attrName="transform_item_2";
     Attr = GetNamedAttribute(attrName, Ent);
   TmpEnt = *Attr->ptr.c;
   tmp =G4GeometryTable::CreateObject(*TmpEnt);
+  if (!tmp)
+    G4cerr << "WARNING - G4ItemDefinedTransformationCreator::CreateG4Geometry" << G4endl
+           << "\t" << attrName << ": unexpected NULL axis placement (G4Axis2Placement3D) !"
+	   << G4endl;
 
   // L. Broglia
   // place = (G4Placement*)tmp;
   place = (G4Axis2Placement3D*)tmp;
 
-  places->append(place);
+  if (place) places->append(place);
 
   createdObject = places;
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AssemblyCreator.cc,v 1.4 2000-01-21 13:45:57 gcosmo Exp $
+// $Id: G4AssemblyCreator.cc,v 1.5 2000-02-25 16:36:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -61,7 +61,10 @@ void G4AssemblyCreator::ReadStepFile()
 }
 
 void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
-{  
+{
+  G4cout << G4endl
+         << "Creating assembly of G4 solids ..." << G4endl;
+  
   // Advanced_Brep_Shape_Representation are created into
   // Context_Dependent_Shape_Representation and
   // Shape_Definition_Representation
@@ -79,7 +82,7 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
   
   STEPentity* ent=0;
   index = 0;
-  int tmpindex;
+  int tmpindex = 0;
   
   void *tmp = 0;
   G4PlacedSolidVector* psv = new G4PlacedSolidVector();
@@ -92,44 +95,49 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
     index = 0;
     const char* keyw = "Context_Dependent_Shape_Representation";
 
-    //#define G4_STEPINTERFACE_DEBUG 1 
 #ifdef G4_STEPINTERFACE_DEBUG
-    G4cout<<"\n\n Creating the " << keyw << G4endl;
+    G4cout << "\n\n Creating the " << keyw << G4endl;
 #endif
   
     for( a=0; a< ConDepShapes; a++)
     {
 #ifdef G4_STEPINTERFACE_DEBUG
-      G4cout<<"loop "<<a+1<<" of "<<ConDepShapes<<G4endl;
+      G4cout << "loop " << a+1 << " of " << ConDepShapes << G4endl;
 #endif     
 
-      // Be careful, tmpindex not correspond to STEPfile_id !
-      tmpindex = instanceManager.GetIndex(instanceManager.GetApplication_instance(keyw, index));
-      
-//    ent = instanceManager.GetSTEPentity(tmpindex);
-      ent = instanceManager.GetApplication_instance(tmpindex);
-      
+      ent = instanceManager.GetApplication_instance(keyw, index);
+
       if(ent!= ENTITY_NULL)
       {
-	tmp =G4GeometryTable::CreateObject(*ent);
-	
-	G4PlacedSolidVector* tmpV = (G4PlacedSolidVector*)tmp; 
-	G4int entr = tmpV->entries();
+        // Be careful, tmpindex not correspond to STEPfile_id !
+        tmpindex = instanceManager.GetIndex(ent);
 
-	for(G4int b=0; b<entr; b++)
+      	tmp = G4GeometryTable::CreateObject(*ent);	
+	if (!tmp)
 	{
-	  ps =  tmpV->at(b);
-	  psv->append(ps);
+	   G4cerr << "--- GeometryTable::CreateG4Geometry()" << G4endl;
+	   G4cerr << "    No correspondent G4 geometry created for entity: "
+	          << ent->EntityName() << G4endl;
+	}
+	else
+	{
+	  G4PlacedSolidVector* tmpV = (G4PlacedSolidVector*)tmp; 
+	  G4int entr = tmpV->entries();
+
+	  for(G4int b=0; b<entr; b++)
+	  {
+	    ps =  tmpV->at(b);
+	    psv->append(ps);
+	  }
 	}
 
 	index = ent->STEPfile_id ;
 
 #ifdef G4_STEPINTERFACE_DEBUG
-	G4cout << keyw << " find in index " << index << G4endl;
+	G4cout << keyw << " found in index " << index << G4endl;
 #endif
 
       }
-      
       // Set index to the true value
       index = tmpindex + 1;
       ent=0;
@@ -142,38 +150,46 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
     const char* key = "Shape_Definition_Representation";
     
 #ifdef G4_STEPINTERFACE_DEBUG
-    G4cout <<"\n Creating the " << key << G4endl;
+    G4cout << "\n Creating the " << key << G4endl;
 #endif
 
     for(a=0; a<  ShapeDefReps ; a++)
     {
 #ifdef G4_STEPINTERFACE_DEBUG
-      G4cout<<"loop "<<a+1<<" of "<<ShapeDefReps<<G4endl;
+      G4cout << "loop " << a+1 << " of " << ShapeDefReps << G4endl;
 #endif
       
-      // Be careful, tmpindex not correspond to STEPfile_id !
-      tmpindex = instanceManager.GetIndex(instanceManager.GetApplication_instance(key, index));
-    
-//    ent = instanceManager.GetSTEPentity(tmpindex);
-      ent = instanceManager.GetApplication_instance(tmpindex);
-    
+      ent = instanceManager.GetApplication_instance(key, index);
+
       if(ent!= ENTITY_NULL)
       {
+        // Be careful, tmpindex not correspond to STEPfile_id !
+        tmpindex = instanceManager.GetIndex(ent);
+    
 	tmp = G4GeometryTable::CreateObject(*ent);
-
-	G4PlacedSolidVector* tmpV = (G4PlacedSolidVector*)tmp; 
-	G4int entr = tmpV->entries();
-
-	for(G4int b=0; b<entr; b++)
+	if (!tmp)
 	{
-	  ps =  tmpV->at(b);
-	  psv->append(ps);
+	   G4cerr << "--- GeometryTable::CreateG4Geometry()" << G4endl;
+	   G4cerr << "    No correspondent G4 geometry created for entity: "
+	          << ent->EntityName() << G4endl;
 	}
+	else
+	{
+	  G4PlacedSolidVector* tmpV = (G4PlacedSolidVector*)tmp; 
+	  G4int entr = tmpV->entries();
 
+	  for(G4int b=0; b<entr; b++)
+	  {
+	    ps =  tmpV->at(b);
+	    psv->append(ps);
+	  }
+	}
 	index = ent->STEPfile_id ;
+
 #ifdef G4_STEPINTERFACE_DEBUG
-	G4cout<< key << " find in index "<< index << G4endl;
+	G4cout << key << " found in index "<< index << G4endl;
 #endif
+
       }
       
       // Set index to the true value

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ConicalSurfaceCreator.cc,v 1.2 2000-01-21 13:45:59 gcosmo Exp $
+// $Id: G4ConicalSurfaceCreator.cc,v 1.3 2000-02-25 16:36:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -54,10 +54,15 @@ void G4ConicalSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   angle = *Attr->ptr.r; // Be careful, angle is in degree
    
 
-  G4ConicalSurface* aG4cone = 
-    new G4ConicalSurface( (*place).GetLocation() ,
-			  (*place).GetAxis()     ,
-			  angle * 2*M_PI/360      );
+  G4ConicalSurface* aG4cone = 0;
+  if (place)
+    aG4cone = new G4ConicalSurface( (*place).GetLocation() ,
+			            (*place).GetAxis()     ,
+			            abs(angle * 2*M_PI/360) );
+  else
+    G4cerr << "WARNING - G4ConicalSurfaceCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL axis placement (G4Axis2Placement3D) !" << G4endl
+	   << "\tConical Surface NOT created." << G4endl;
 
   createdObject = aG4cone;
 }

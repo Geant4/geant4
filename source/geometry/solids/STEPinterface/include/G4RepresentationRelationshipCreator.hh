@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RepresentationRelationshipCreator.hh,v 1.2 2000-01-21 13:45:30 gcosmo Exp $
+// $Id: G4RepresentationRelationshipCreator.hh,v 1.3 2000-02-25 16:36:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -46,7 +46,6 @@ class G4RepresentationRelationshipCreator: private G4GeometryCreator
 
   private:
 
-    static G4int placeCount;
     static G4RepresentationRelationshipCreator csc;
 };
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FaceSurfaceCreator.cc,v 1.2 2000-01-21 13:46:01 gcosmo Exp $
+// $Id: G4FaceSurfaceCreator.cc,v 1.3 2000-02-25 16:36:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,6 +41,10 @@ void G4FaceSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   STEPentity* TmpEnt = *Attr->ptr.c;
   void *tmp =G4GeometryTable::CreateObject(*TmpEnt);
   srf = (G4Surface*)tmp;
+  if (!tmp)
+    G4cerr << "WARNING - G4FaceSurfaceCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL pointer to G4Surface !" << G4endl
+	   << "\tFace Surface NOT created." << G4endl;
   
   Attr = Ent.NextAttribute();
   //  sense = *Attr->ptr.b;

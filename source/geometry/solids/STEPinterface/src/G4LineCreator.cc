@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LineCreator.cc,v 1.2 2000-01-21 13:46:03 gcosmo Exp $
+// $Id: G4LineCreator.cc,v 1.3 2000-02-25 16:36:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,14 +46,23 @@ void G4LineCreator::CreateG4Geometry(STEPentity& Ent)
   // Get the line origin  
   STEPentity* TmpEnt = *Attr->ptr.c;
   void *tmp =G4GeometryTable::CreateObject(*TmpEnt);
-  origin = *(G4ThreeVector*)tmp;
+  if (tmp)
+    origin = *(G4ThreeVector*)tmp;
+  else
+    G4cerr << "WARNING - G4LineCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL origin (G4ThreeVector) for G4Line !" << G4endl
+	   << "\tG4Line origin set to (0,0,0)." << G4endl;
 
   // Get the line direction  
   Attr = Ent.NextAttribute();  
   TmpEnt = *Attr->ptr.c;
   tmp =G4GeometryTable::CreateObject(*TmpEnt);
-  dir = *(G4ThreeVector*)tmp;
-
+  if (tmp)
+    dir = *(G4ThreeVector*)tmp;
+  else
+    G4cerr << "WARNING - G4LineCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL direction (G4ThreeVector) for G4Line !" << G4endl
+	   << "\tG4Line direction set to (0,0,0)." << G4endl;
 
   G4Line* line = new G4Line();
   line->Init(origin, dir);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EdgeLoopCreator.cc,v 1.2 2000-01-21 13:46:01 gcosmo Exp $
+// $Id: G4EdgeLoopCreator.cc,v 1.3 2000-02-25 16:36:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,15 +40,21 @@ void G4EdgeLoopCreator::CreateG4Geometry(STEPentity& Ent)
   STEPentity* TmpEnt=0;
 
   G4int EdgeCount = Aggr->EntryCount();
-  G4CurveVector* CurveVec = new G4CurveVector[EdgeCount];
+  G4CurveVector* CurveVec = new G4CurveVector;
 
   for(G4int a=0; a<EdgeCount;a++)
     {
       TmpEnt = ((EntityNode*)Node)->node;
       void *tmp =G4GeometryTable::CreateObject(*TmpEnt);
-      CurveVec->append((G4Curve*)tmp);
+      if (tmp) CurveVec->append((G4Curve*)tmp);
       Node = Node->NextNode();
     }      
+
+  G4int EdgeNum = CurveVec->entries();
+  if (EdgeNum != EdgeCount)
+    G4cerr << "WARNING - G4EdgeLoopCreator::CreateG4Geometry" << G4endl
+           << "\tTotal of " << EdgeNum << " G4Curve components created, out of "
+           << EdgeCount << " expected !" << G4endl;
 
   createdObject = CurveVec;
 }

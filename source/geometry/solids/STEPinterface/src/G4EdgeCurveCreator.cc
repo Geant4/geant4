@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EdgeCurveCreator.cc,v 1.2 2000-01-21 13:46:00 gcosmo Exp $
+// $Id: G4EdgeCurveCreator.cc,v 1.3 2000-02-25 16:36:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -33,7 +33,7 @@ G4EdgeCurveCreator::~G4EdgeCurveCreator() {}
 void G4EdgeCurveCreator::CreateG4Geometry(STEPentity& Ent)
 {
   G4Point3D *pt1,*pt2;
-  G4Curve* crv;
+  G4Curve* crv=0;
   G4bool sameSense;
 
   // Get start point
@@ -42,6 +42,9 @@ void G4EdgeCurveCreator::CreateG4Geometry(STEPentity& Ent)
   STEPentity* TmpEnt = *Attr->ptr.c;
   void *tmp =G4GeometryTable::CreateObject(*TmpEnt);
   pt1 = (G4Point3D*)tmp;
+  if (!tmp)
+    G4cerr << "WARNING - G4EdgeCurveCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL edge-start (G4Point3D) !" << G4endl;
 
   // Get end point
   attrName = "edge_end";
@@ -49,20 +52,38 @@ void G4EdgeCurveCreator::CreateG4Geometry(STEPentity& Ent)
   TmpEnt = *Attr->ptr.c;
   tmp =G4GeometryTable::CreateObject(*TmpEnt);
   pt2 = (G4Point3D*)tmp;
+  if (!tmp)
+    G4cerr << "WARNING - G4EdgeCurveCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL edge-end (G4Point3D) !" << G4endl;
   
   // Get curve
   attrName = "edge_geometry";
   Attr = GetNamedAttribute(attrName, Ent);  
   TmpEnt = *Attr->ptr.c;
   tmp =G4GeometryTable::CreateObject(*TmpEnt);
-  crv = (G4Curve*)tmp;
   
-  // set the bounds
-  G4Point3D p1(pt1->x(), pt1->y(), pt1->z());
-  G4Point3D p2(pt2->x(), pt2->y(), pt1->z());
+  if ((!pt1) || (!pt2))
+  {
+    G4cerr << "\tEdge Curve NOT created." << G4endl;
+    createdObject = 0;
+    return;
+  }
 
-  crv->SetBounds(p1, p2);
+  if (tmp)
+  {
+    crv = (G4Curve*)tmp;
+  
+    // set the bounds
+    G4Point3D p1(pt1->x(), pt1->y(), pt1->z());
+    G4Point3D p2(pt2->x(), pt2->y(), pt1->z());
 
+    crv->SetBounds(p1, p2);
+  }
+  else
+    G4cerr << "WARNING - G4EdgeCurveCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL curve (G4Curve) !" << G4endl
+	   << "\tEdge Curve NOT created." << G4endl;
+  
   //get sense info
   Attr = Ent.NextAttribute();  
   //  sameSense = *Attr->ptr.b;

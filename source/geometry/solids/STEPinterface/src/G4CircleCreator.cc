@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CircleCreator.cc,v 1.2 2000-01-21 13:45:59 gcosmo Exp $
+// $Id: G4CircleCreator.cc,v 1.3 2000-02-25 16:36:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,13 +45,18 @@ void G4CircleCreator::CreateG4Geometry(STEPentity& Ent)
     Attr = Ent.NextAttribute();
   
   // Get the placement
-  SelectNode* SelectN = (SelectNode*)Attr->ptr.sh;
-  SdaiSelect* Select = (SdaiSelect*)SelectN;
+  // SelectNode* SelectN = (SelectNode*)Attr->ptr.sh;
+  // SdaiSelect* Select = (SdaiSelect*)SelectN;
+  SdaiSelect* Select = Attr->ptr.sh;
   SdaiAxis2_placement* Place = (SdaiAxis2_placement*)Select;
   STEPentity* TmpEnt = Place->operator SdaiAxis2_placement_3dH();
   void * tmp =G4GeometryTable::CreateObject(*TmpEnt);
  
-  place = *(G4Axis2Placement3D*)tmp;
+  if (tmp)
+    place = *(G4Axis2Placement3D*)tmp;
+  else
+    G4cerr << "WARNING - G4CircleCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL axis placement (G4Axis2Placement3D) detected." << G4endl;
   
   Attr = Ent.NextAttribute();	
   radius = *Attr->ptr.r;

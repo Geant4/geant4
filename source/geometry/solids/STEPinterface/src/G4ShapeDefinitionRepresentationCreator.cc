@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShapeDefinitionRepresentationCreator.cc,v 1.3 2000-01-21 13:46:06 gcosmo Exp $
+// $Id: G4ShapeDefinitionRepresentationCreator.cc,v 1.4 2000-02-25 16:36:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,11 @@ void G4ShapeDefinitionRepresentationCreator::CreateG4Geometry(STEPentity& Ent)
   STEPentity* TmpEnt = *Attr->ptr.c;
   void *tmp =G4GeometryTable::CreateObject(*TmpEnt);
   G4PlacedSolid* ps = (G4PlacedSolid*)tmp;
+  if (!tmp)
+    G4cerr << "WARNING - G4ShapeDefinitionRepresentationCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL pointer to G4PlacedSolid !" << G4endl
+	   << "\tEntity NOT created." << G4endl;
+
   createdObject = ps;
 
 /*

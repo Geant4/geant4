@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ToroidalSurfaceCreator.cc,v 1.2 2000-01-21 13:46:07 gcosmo Exp $
+// $Id: G4ToroidalSurfaceCreator.cc,v 1.3 2000-02-25 16:36:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,11 +53,18 @@ void G4ToroidalSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   minorRadius = *Attr->ptr.r;
 
   
-  G4ToroidalSurface* aTorus = new G4ToroidalSurface( (*place).GetLocation() ,
-						     (*place).GetPZ()       ,
-						     (*place).GetPX()       ,
-						     minorRadius          ,
-						     majorRadius            );
+  G4ToroidalSurface* aTorus = 0;
+  if (place)
+    aTorus = new G4ToroidalSurface( (*place).GetLocation() ,
+				    (*place).GetPZ()       ,
+				    (*place).GetPX()       ,
+				    minorRadius            ,
+				    majorRadius            );
+  else
+    G4cerr << "WARNING - G4ToroidalSurfaceCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL axis placement (G4Axis2Placement3D) !" << G4endl
+	   << "\tToroidal Surface NOT created." << G4endl;
+
   createdObject = aTorus;
 
 }

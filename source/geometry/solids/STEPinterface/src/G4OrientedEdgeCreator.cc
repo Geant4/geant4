@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OrientedEdgeCreator.cc,v 1.2 2000-01-21 13:46:03 gcosmo Exp $
+// $Id: G4OrientedEdgeCreator.cc,v 1.3 2000-02-25 16:36:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,7 @@ G4OrientedEdgeCreator::~G4OrientedEdgeCreator() {}
 void G4OrientedEdgeCreator::CreateG4Geometry(STEPentity& Ent)
 {
   G4int orientation;
-  G4Curve* crv;
+  G4Curve* crv=0;
   
   G4String attrName("edge_element");
   STEPattribute *Attr = GetNamedAttribute(attrName, Ent);
@@ -42,13 +42,20 @@ void G4OrientedEdgeCreator::CreateG4Geometry(STEPentity& Ent)
   // Get curve
   STEPentity* TmpEnt = *Attr->ptr.c;
   void *tmp =G4GeometryTable::CreateObject(*TmpEnt);
-  crv = (G4Curve*)tmp; 
+  if (tmp)
+  {
+    crv = (G4Curve*)tmp; 
 
-  // Get orientation
-  Attr = Ent.NextAttribute();
-  orientation = *Attr->ptr.i;// INTEGER_TYPE
+    // Get orientation
+    Attr = Ent.NextAttribute();
+    orientation = *Attr->ptr.i;// INTEGER_TYPE
 
-  crv->SetSameSense(orientation);
+    crv->SetSameSense(orientation);
+  }
+  else
+    G4cerr << "WARNING - G4OrientedEdgeCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL pointer to G4Curve !" << G4endl
+	   << "\tOriented Edge NOT created." << G4endl;
 
   createdObject = crv;
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GeometryTable.cc,v 1.5 2000-01-21 13:46:02 gcosmo Exp $
+// $Id: G4GeometryTable.cc,v 1.6 2000-02-25 16:36:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,6 +76,11 @@ void* G4GeometryTable::CreateObject(STEPentity& Ent)
   G4String name = Ent.EntityName();
   G4GeometryCreator* gctmp = GetObject(name);
 
+#ifdef G4_STEPINTERFACE_DEBUG
+  G4cout << "G4GeometryTable::CreateObject(STEPentity&) - "
+         << "Found STEPEntity " << name << " :" << G4endl;
+#endif
+
   if(gctmp)
   {
     gctmp->CreateG4Geometry(Ent);
@@ -95,8 +100,8 @@ void* G4GeometryTable::CreateObject(STEPentity& Ent)
   else
   {
     G4String err = "Geometry creator for entity " + name +  " not found.";
-    G4cout << err << G4endl;
-    //      G4Exception(err);
+    G4cerr << err << G4endl;
+    // G4Exception(err);
     return 0;
   } 
 }
@@ -114,9 +119,9 @@ void* G4GeometryTable::CreateSTEPObject(void* G4obj, G4String& objName)
     }
   else
     {
-      G4String err = "\nSTEP creator for entity " + objName +  " not found.\n";
-      G4cout << err;
-      //      G4Exception(err);
+      G4String err = "STEP creator for entity " + objName +  " not found.";
+      G4cerr << err << G4endl;
+      // G4Exception(err);
       return 0;
     }
 
@@ -186,7 +191,7 @@ G4SphericalSurfaceCreator s6;
 G4ConicalSurfaceCreator s7;
 G4BSplineSurfaceCreator s8;
 G4BoundedSurfaceCreator s9;
-G4RationalBSplineSurfaceCreator s10;
+//G4RationalBSplineSurfaceCreator s10;
 G4BSplineSurfaceWithKnotsCreator s11;
 
 G4ClosedShellCreator sc1;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.3 2000-01-21 13:45:58 gcosmo Exp $
+// $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.4 2000-02-25 16:36:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -105,6 +105,12 @@ void G4BSplineCurveWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
     Entity = instanceManager.GetApplication_instance(Index);
 
     void *tmp =G4GeometryTable::CreateObject(*Entity);
+    if (!tmp)
+    {
+      G4cerr << "ERROR - G4BSplineCurveWithKnotsCreator::CreateG4Geometry" << G4endl
+             << "\tUnexpected NULL control point!" << G4endl;
+      G4Exception("G4BSplineCurveWithKnotsCreator: NULL G4Point3D* ?");
+    }
     G4Point3D* pt = (G4Point3D*) tmp;
     G4Point3D Pt(pt->x(), pt->y(), pt->z());
 

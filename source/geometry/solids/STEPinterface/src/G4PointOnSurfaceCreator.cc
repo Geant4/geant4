@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PointOnSurfaceCreator.cc,v 1.2 2000-01-21 13:46:04 gcosmo Exp $
+// $Id: G4PointOnSurfaceCreator.cc,v 1.3 2000-02-25 16:36:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,12 +44,15 @@ void G4PointOnSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
     Attr = Ent.NextAttribute();	
 
   // Get basis surface
-    STEPentity* TmpEnt= *Attr->ptr.c;
+  STEPentity* TmpEnt= *Attr->ptr.c;
   void * tmp =G4GeometryTable::CreateObject(*TmpEnt);
   srf = (G4Surface*)tmp;
+  if (!tmp)
+    G4cerr << "WARNING - G4PointOnSurfaceCreator::CreateG4Geometry" << G4endl
+           << "\tUnexpected NULL pointer to G4Surface !" << G4endl;
 
   // Get parameter values
-    Attr = Ent.NextAttribute();	
+  Attr = Ent.NextAttribute();	
   pval1 = *Attr->ptr.r;
   Attr = Ent.NextAttribute();	
   pval2 = *Attr->ptr.r;
