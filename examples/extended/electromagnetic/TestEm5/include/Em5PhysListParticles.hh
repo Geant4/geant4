@@ -21,65 +21,45 @@
 // ********************************************************************
 //
 //
-// $Id: Em5EventAction.hh,v 1.5 2003-04-30 14:12:32 maire Exp $
+// $Id: Em5PhysListParticles.hh,v 1.1 2003-04-30 14:12:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em5EventAction_h
-#define Em5EventAction_h 1
+#ifndef Em5PhysListParticles_h
+#define Em5PhysListParticles_h 1
 
-#include "G4UserEventAction.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class Em5RunAction;
-class Em5EventActionMessenger;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em5EventAction : public G4UserEventAction
+class Em5PhysListParticles : public G4VPhysicsConstructor
 {
-  public:
-    Em5EventAction(Em5RunAction* Em5RA);
-   ~Em5EventAction();
+  public: 
+    Em5PhysListParticles(const G4String& name = "particles");
+    virtual ~Em5PhysListParticles();
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
-    G4int GetEventno();
-    void setEventVerbose(G4int level);
-    
-    void CountStepsCharged() ;
-    void CountStepsNeutral() ;
-    void AddCharged() ;
-    void AddNeutral() ;
-    void AddE();
-    void AddP();   
-    void SetTr();
-    void SetRef();
-    
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int val)  {printModulo = val;};
-        
-  private:
-    G4int    calorimeterCollID;
-    Em5EventActionMessenger*  eventMessenger;
-    Em5RunAction* runaction;
-    G4int verboselevel;
-    G4double nstep,nstepCharged,nstepNeutral;
-    G4double Nch,Nne;
-    G4double NE,NP;
-    G4double Transmitted,Reflected ;
-    
-    G4String drawFlag;
-    G4int    printModulo;             
+  public: 
+    // This method will be invoked in the Construct() method. 
+    // each particle type will be instantiated
+    virtual void ConstructParticle();
+ 
+    // This method is dummy.
+    virtual void ConstructProcess() {};
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
-    
+
+
+
+
+
+
+

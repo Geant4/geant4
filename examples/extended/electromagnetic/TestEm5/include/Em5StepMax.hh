@@ -21,65 +21,53 @@
 // ********************************************************************
 //
 //
-// $Id: Em5EventAction.hh,v 1.5 2003-04-30 14:12:32 maire Exp $
+// $Id: Em5StepMax.hh,v 1.1 2003-04-30 14:12:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em5EventAction_h
-#define Em5EventAction_h 1
+#ifndef Em5StepMax_h
+#define Em5StepMax_h 1
 
-#include "G4UserEventAction.hh"
 #include "globals.hh"
+#include "G4VDiscreteProcess.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Step.hh"
 
-class Em5RunAction;
-class Em5EventActionMessenger;
+class Em5StepMaxMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em5EventAction : public G4UserEventAction
+class Em5StepMax : public G4VDiscreteProcess
 {
-  public:
-    Em5EventAction(Em5RunAction* Em5RA);
-   ~Em5EventAction();
+  public:     
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
-    G4int GetEventno();
-    void setEventVerbose(G4int level);
-    
-    void CountStepsCharged() ;
-    void CountStepsNeutral() ;
-    void AddCharged() ;
-    void AddNeutral() ;
-    void AddE();
-    void AddP();   
-    void SetTr();
-    void SetRef();
-    
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int val)  {printModulo = val;};
-        
+     Em5StepMax(const G4String& processName ="UserStepMax");
+    ~Em5StepMax();
+
+     G4bool   IsApplicable(const G4ParticleDefinition&);    
+     void     SetMaxStep(G4double);
+     G4double GetMaxStep() {return MaxChargedStep;};
+     
+     G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
+			                     G4double   previousStepSize,
+			                     G4ForceCondition* condition);
+
+     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+
+     G4double GetMeanFreePath(const G4Track& aTrack,G4double previousStepSize,
+                              G4ForceCondition* condition)
+     {return 0.;};     // it is not needed here !
+
   private:
-    G4int    calorimeterCollID;
-    Em5EventActionMessenger*  eventMessenger;
-    Em5RunAction* runaction;
-    G4int verboselevel;
-    G4double nstep,nstepCharged,nstepNeutral;
-    G4double Nch,Nne;
-    G4double NE,NP;
-    G4double Transmitted,Reflected ;
-    
-    G4String drawFlag;
-    G4int    printModulo;             
+
+     G4double    MaxChargedStep;
+     Em5StepMaxMessenger* pMess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
-    

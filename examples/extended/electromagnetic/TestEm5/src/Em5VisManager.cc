@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5VisManager.cc,v 1.7 2002-11-13 21:39:59 duns Exp $
+// $Id: Em5VisManager.cc,v 1.8 2003-04-30 14:12:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

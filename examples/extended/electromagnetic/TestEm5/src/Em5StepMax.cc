@@ -20,60 +20,43 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: Em5StepCut.hh,v 1.5 2001-10-16 11:56:28 maire Exp $
+// $Id: Em5StepMax.cc,v 1.1 2003-04-30 14:12:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em5StepCut_h
-#define Em5StepCut_h 1
-
-#include "globals.hh"
-#include "G4VDiscreteProcess.hh"
-#include "G4Step.hh"
+#include "Em5StepMax.hh"
+#include "Em5StepMaxMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em5StepCut : public G4VDiscreteProcess
+Em5StepMax::Em5StepMax(const G4String& processName)
+ : G4VDiscreteProcess(processName),MaxChargedStep(DBL_MAX)
 {
-  public:     
+  pMess = new Em5StepMaxMessenger(this);
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-     Em5StepCut(const G4String& processName ="UserStepCut" )
-         : G4VDiscreteProcess(processName),MaxChargedStep(DBL_MAX) {};
-
-    ~Em5StepCut() {};
-    
-     void SetMaxStep(G4double step) {MaxChargedStep = step;};
-     
-     G4double PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-			     G4double   previousStepSize,
-			     G4ForceCondition* condition
-			    );
-
-     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
-
-     G4double GetMeanFreePath(const G4Track& aTrack,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            ) {return 0.;};     // it is not needed here !
-
-  private:
-
-     G4double MaxChargedStep;
-};
+Em5StepMax::~Em5StepMax() { delete pMess; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
-// inlined function members implementation
 
-inline G4double Em5StepCut::PostStepGetPhysicalInteractionLength(
-                             const G4Track& aTrack,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition )
+G4bool Em5StepMax::IsApplicable(const G4ParticleDefinition& particle) 
+{ 
+  return (particle.GetPDGCharge() != 0.);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void Em5StepMax::SetMaxStep(G4double step) {MaxChargedStep = step;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double Em5StepMax::PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
+                                                    G4double previousStepSize,
+                                                  G4ForceCondition* condition )
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
@@ -82,8 +65,7 @@ inline G4double Em5StepCut::PostStepGetPhysicalInteractionLength(
 
   if((MaxChargedStep > 0.) &&
      (aTrack.GetVolume() != NULL) &&
-     (aTrack.GetVolume()->GetName() == "Absorber") &&
-     (aTrack.GetDynamicParticle()->GetDefinition()->GetPDGCharge() != 0.))
+     (aTrack.GetVolume()->GetName() == "Absorber"))
      ProposedStep = MaxChargedStep;
 
   return ProposedStep;
@@ -91,8 +73,7 @@ inline G4double Em5StepCut::PostStepGetPhysicalInteractionLength(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4VParticleChange* Em5StepCut::PostStepDoIt(const G4Track& aTrack,
-                                                   const G4Step&        )
+G4VParticleChange* Em5StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
    // do nothing
    aParticleChange.Initialize(aTrack);
@@ -101,5 +82,4 @@ inline G4VParticleChange* Em5StepCut::PostStepDoIt(const G4Track& aTrack,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
 

@@ -5,10 +5,15 @@
 #
 /control/verbose 2
 /run/verbose 2
-/tracking/verbose 0
+#
+#  select EM PhysicsList
+#
+#/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
 #
 /testem/phys/setGCut 2.13 mm    
 /testem/phys/setECut 7.0  mum
+#
 /run/initialize
 #
 /testem/det/setAbsMat Silicon   

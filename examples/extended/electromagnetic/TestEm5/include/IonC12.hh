@@ -21,65 +21,48 @@
 // ********************************************************************
 //
 //
-// $Id: Em5EventAction.hh,v 1.5 2003-04-30 14:12:32 maire Exp $
+// $Id: IonC12.hh,v 1.1 2003-04-30 14:12:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
+// Each class inheriting from G4VIon
+// corresponds to a particle type; one and only one
+// instance for each class is guaranteed.
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em5EventAction_h
-#define Em5EventAction_h 1
+#ifndef IonC12_h
+#define IonC12_h 1
 
-#include "G4UserEventAction.hh"
 #include "globals.hh"
+#include "G4ios.hh"
+#include "G4VIon.hh"
 
-class Em5RunAction;
-class Em5EventActionMessenger;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class Em5EventAction : public G4UserEventAction
+class IonC12 : public G4VIon
 {
-  public:
-    Em5EventAction(Em5RunAction* Em5RA);
-   ~Em5EventAction();
+ private:
+   static IonC12 theIon;
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
-    G4int GetEventno();
-    void setEventVerbose(G4int level);
-    
-    void CountStepsCharged() ;
-    void CountStepsNeutral() ;
-    void AddCharged() ;
-    void AddNeutral() ;
-    void AddE();
-    void AddP();   
-    void SetTr();
-    void SetRef();
-    
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int val)  {printModulo = val;};
-        
-  private:
-    G4int    calorimeterCollID;
-    Em5EventActionMessenger*  eventMessenger;
-    Em5RunAction* runaction;
-    G4int verboselevel;
-    G4double nstep,nstepCharged,nstepNeutral;
-    G4double Nch,Nne;
-    G4double NE,NP;
-    G4double Transmitted,Reflected ;
-    
-    G4String drawFlag;
-    G4int    printModulo;             
+ public:
+   IonC12(
+       const G4String&     aName,        G4double            mass,
+       G4double            width,        G4double            charge,   
+       G4int               iSpin,        G4int               iParity,    
+       G4int               iConjugation, G4int               iIsospin,   
+       G4int               iIsospin3,    G4int               gParity,
+       const G4String&     pType,        G4int               lepton,      
+       G4int               baryon,       G4int               encoding,
+       G4bool              stable,       G4double            lifetime,
+       G4DecayTable        *decaytable
+   );
+   virtual ~IonC12();
+  
+   static IonC12*    IonDefinition();
+   static IonC12*    Ion();
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.......
 
 #endif
-
-    

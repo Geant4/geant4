@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5DetectorConstruction.cc,v 1.10 2003-04-01 16:51:51 maire Exp $
+// $Id: Em5DetectorConstruction.cc,v 1.11 2003-04-30 14:12:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -164,6 +164,7 @@ density = 1.000*g/cm3;
 G4Material* H2O = new G4Material(name="Water", density, ncomponents=2);
 H2O->AddElement(elH, natoms=2);
 H2O->AddElement(elO, natoms=1);
+H2O->GetIonisation()->SetMeanExcitationEnergy(75*eV);
 
 //
 // define a material from elements.   case 2: mixture by fractional mass

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsListMessenger.hh,v 1.8 2003-03-06 17:55:09 maire Exp $
+// $Id: Em5PhysicsListMessenger.hh,v 1.9 2003-04-30 14:12:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 
 class Em5PhysicsList;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -44,19 +45,22 @@ class Em5PhysicsListMessenger: public G4UImessenger
 {
   public:
   
-    Em5PhysicsListMessenger(Em5PhysicsList*);
+    Em5PhysicsListMessenger(Em5PhysicsList* );
    ~Em5PhysicsListMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
   
-    Em5PhysicsList*            Em5List;
-
-    G4UIcmdWithADoubleAndUnit* cutGCmd;
-    G4UIcmdWithADoubleAndUnit* cutECmd;
-    G4UIcmdWithADoubleAndUnit* rCmd;
-    G4UIcmdWithADoubleAndUnit* MaxStepCmd;     
+    Em5PhysicsList* pPhysicsList;
+    
+    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
+    G4UIcmdWithADoubleAndUnit* electCutCmd;
+    G4UIcmdWithADoubleAndUnit* positCutCmd;    
+    G4UIcmdWithADoubleAndUnit* allCutCmd;
+    G4UIcmdWithADoubleAndUnit* rangeCmd;       
+    G4UIcmdWithAString*        pListCmd;
+    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

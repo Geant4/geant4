@@ -21,65 +21,51 @@
 // ********************************************************************
 //
 //
-// $Id: Em5EventAction.hh,v 1.5 2003-04-30 14:12:32 maire Exp $
+// $Id: Em5PhysListGeneral.cc,v 1.1 2003-04-30 14:12:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#ifndef Em5EventAction_h
-#define Em5EventAction_h 1
-
-#include "G4UserEventAction.hh"
-#include "globals.hh"
-
-class Em5RunAction;
-class Em5EventActionMessenger;
+#include "Em5PhysListGeneral.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em5EventAction : public G4UserEventAction
+Em5PhysListGeneral::Em5PhysListGeneral(const G4String& name)
+   :  G4VPhysicsConstructor(name)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+Em5PhysListGeneral::~Em5PhysListGeneral()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Em5PhysListGeneral::ConstructProcess()
 {
-  public:
-    Em5EventAction(Em5RunAction* Em5RA);
-   ~Em5EventAction();
+  // Add Decay Process
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
-    G4int GetEventno();
-    void setEventVerbose(G4int level);
-    
-    void CountStepsCharged() ;
-    void CountStepsNeutral() ;
-    void AddCharged() ;
-    void AddNeutral() ;
-    void AddE();
-    void AddP();   
-    void SetTr();
-    void SetRef();
-    
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int val)  {printModulo = val;};
-        
-  private:
-    G4int    calorimeterCollID;
-    Em5EventActionMessenger*  eventMessenger;
-    Em5RunAction* runaction;
-    G4int verboselevel;
-    G4double nstep,nstepCharged,nstepNeutral;
-    G4double Nch,Nne;
-    G4double NE,NP;
-    G4double Transmitted,Reflected ;
-    
-    G4String drawFlag;
-    G4int    printModulo;             
-};
+  G4Decay* fDecayProcess = new G4Decay();
+
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+
+    if (fDecayProcess->IsApplicable(*particle)) { 
+
+      pmanager ->AddProcess(fDecayProcess);
+
+      // set ordering for PostStepDoIt and AtRestDoIt
+      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
+      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
+
+    }
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
-
-    

@@ -21,65 +21,44 @@
 // ********************************************************************
 //
 //
-// $Id: Em5EventAction.hh,v 1.5 2003-04-30 14:12:32 maire Exp $
+// $Id: Em5PhysListEmModel.hh,v 1.1 2003-04-30 14:12:33 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em5EventAction_h
-#define Em5EventAction_h 1
+#ifndef Em5PhysListEmModel_h
+#define Em5PhysListEmModel_h 1
 
-#include "G4UserEventAction.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class Em5RunAction;
-class Em5EventActionMessenger;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em5EventAction : public G4UserEventAction
+class Em5PhysListEmModel : public G4VPhysicsConstructor
 {
-  public:
-    Em5EventAction(Em5RunAction* Em5RA);
-   ~Em5EventAction();
+  public: 
+    Em5PhysListEmModel(const G4String& name = "model");
+    virtual ~Em5PhysListEmModel();
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
-    G4int GetEventno();
-    void setEventVerbose(G4int level);
-    
-    void CountStepsCharged() ;
-    void CountStepsNeutral() ;
-    void AddCharged() ;
-    void AddNeutral() ;
-    void AddE();
-    void AddP();   
-    void SetTr();
-    void SetRef();
-    
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int val)  {printModulo = val;};
-        
-  private:
-    G4int    calorimeterCollID;
-    Em5EventActionMessenger*  eventMessenger;
-    Em5RunAction* runaction;
-    G4int verboselevel;
-    G4double nstep,nstepCharged,nstepNeutral;
-    G4double Nch,Nne;
-    G4double NE,NP;
-    G4double Transmitted,Reflected ;
-    
-    G4String drawFlag;
-    G4int    printModulo;             
+  public: 
+    // This method is dummy for physics. 
+    virtual void ConstructParticle() {};
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    virtual void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
-    
+
+
+
+
+
+
+

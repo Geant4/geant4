@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5EventAction.cc,v 1.9 2002-06-06 17:23:22 maire Exp $
+// $Id: Em5EventAction.cc,v 1.10 2003-04-30 14:12:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

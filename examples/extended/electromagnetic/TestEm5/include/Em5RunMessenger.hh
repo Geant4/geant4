@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: Em5RunMessenger.hh,v 1.5 2001-11-28 16:08:18 maire Exp $
+// $Id: Em5RunMessenger.hh,v 1.6 2003-04-30 14:12:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

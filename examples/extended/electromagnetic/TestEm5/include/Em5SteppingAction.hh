@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingAction.hh,v 1.5 2002-06-05 15:43:43 urban Exp $
+// $Id: Em5SteppingAction.hh,v 1.6 2003-04-30 14:12:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
