@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.hh,v 1.1 2003-10-06 10:02:25 maire Exp $
+// $Id: PhysListEmStandard.hh,v 1.2 2003-10-17 17:57:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,6 +49,10 @@ class PhysListEmStandard : public G4VPhysicsConstructor
     // each physics process will be instantiated and
     // registered to the process manager of each particle type 
     void ConstructProcess();
+
+  private:
+
+    G4double bremThreshold;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

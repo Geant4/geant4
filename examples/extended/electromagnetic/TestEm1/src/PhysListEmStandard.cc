@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.1 2003-10-06 10:02:32 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.2 2003-10-17 17:57:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,7 @@
 #include "G4MultipleScattering.hh"
 
 #include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
+#include "G4eBremsstrahlungCMS.hh"
 #include "G4eplusAnnihilation.hh"
 
 #include "G4MuIonisation.hh"
@@ -51,7 +51,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandard::PhysListEmStandard(const G4String& name)
-   :  G4VPhysicsConstructor(name)
+  :  G4VPhysicsConstructor(name),bremThreshold(DBL_MAX)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,6 +64,7 @@ PhysListEmStandard::~PhysListEmStandard()
 void PhysListEmStandard::ConstructProcess()
 {
   // Add standard EM Processes
+  bremThreshold = 1.*MeV;
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -81,13 +82,17 @@ void PhysListEmStandard::ConstructProcess()
       //electron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+      G4eBremsstrahlungCMS* br = new G4eBremsstrahlungCMS();
+      br->SetGammaThreshold(bremThreshold);
+      pmanager->AddProcess(br,                       -1,-1,3);
 	    
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+      G4eBremsstrahlungCMS* br = new G4eBremsstrahlungCMS();
+      br->SetGammaThreshold(bremThreshold);
+      pmanager->AddProcess(br,                       -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
       
     } else if( particleName == "mu+" || 

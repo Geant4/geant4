@@ -1,4 +1,4 @@
-# $Id: run05.mac,v 1.6 2003-10-06 10:02:20 maire Exp $
+# $Id: run05.mac,v 1.7 2003-10-17 17:57:49 vnivanch Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -12,6 +12,7 @@
 #
 /testem/phys/setGCut  2.2 mm
 /testem/phys/setECut  95 cm
+/testem/phys/setPCut  95 cm
 #
 /run/initialize
 #
