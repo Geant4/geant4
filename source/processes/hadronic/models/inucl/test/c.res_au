@@ -1,0 +1,3283 @@
+ watchers set 14
+ total inelastic 1761
+ fission: A 186 Z 74 eexs 364.17 Wn 0.0443049 Wf 8.88463e-05
+ fission: A 185 Z 76 eexs 358.387 Wn 0.0529182 Wf 0.00366034
+ fission: A 190 Z 78 eexs 232.351 Wn 0.0213742 Wf 0.00039845
+ ---- EVENT ------ 100
+ fission: A 186 Z 75 eexs 270.618 Wn 0.0490171 Wf 3.17257e-05
+ fission: A 173 Z 74 eexs 119.771 Wn 0.0109018 Wf 1.27807e-06
+ fission: A 190 Z 78 eexs 370.477 Wn 0.0341283 Wf 0.0160633
+ ---- EVENT ------ 200
+ fission: A 188 Z 79 eexs 280.588 Wn 0.0337406 Wf 0.014279
+ ---- EVENT ------ 300
+ fission: A 191 Z 79 eexs 327.155 Wn 0.0294902 Wf 0.0174094
+ ---- EVENT ------ 400
+ ---- EVENT ------ 500
+ fission: A 197 Z 81 eexs 149.202 Wn 0.00919359 Wf 0.000329153
+ fission: A 191 Z 78 eexs 307.832 Wn 0.0478987 Wf 0.00269728
+ fission: A 187 Z 79 eexs 288.203 Wn 0.023421 Wf 0.0227364
+ ---- EVENT ------ 600
+ fission: A 192 Z 79 eexs 322.376 Wn 0.0433048 Wf 0.0115944
+ fission: A 183 Z 75 eexs 350.731 Wn 0.0374391 Wf 0.00131027
+ fission: A 189 Z 78 eexs 252.278 Wn 0.0381814 Wf 0.00113508
+ ---- EVENT ------ 700
+ fission: A 191 Z 79 eexs 240.795 Wn 0.0213204 Wf 0.00183199
+ ---- EVENT ------ 800
+ fission: A 190 Z 78 eexs 314.236 Wn 0.0294711 Wf 0.00446672
+ fission: A 189 Z 78 eexs 372.718 Wn 0.0509918 Wf 0.0226432
+ fission: A 187 Z 78 eexs 334.197 Wn 0.0440005 Wf 0.0181977
+ ---- EVENT ------ 900
+ fission: A 188 Z 76 eexs 523.256 Wn 0.0491334 Wf 0.0343225
+ ---- EVENT ------ 1000
+ fission: A 188 Z 76 eexs 335.085 Wn 0.0362719 Wf 0.000670702
+ ---- EVENT ------ 1100
+ fission: A 190 Z 77 eexs 338.391 Wn 0.0527924 Wf 0.00178768
+ fission: A 184 Z 78 eexs 214.033 Wn 0.0154447 Wf 0.00203843
+ ---- EVENT ------ 1200
+ ---- EVENT ------ 1300
+ fission: A 184 Z 78 eexs 150.475 Wn 0.00901877 Wf 0.000159868
+ fission: A 188 Z 78 eexs 313.469 Wn 0.0280463 Wf 0.00839073
+ fission: A 189 Z 78 eexs 326.661 Wn 0.0467237 Wf 0.0083413
+ ---- EVENT ------ 1400
+ fission: A 190 Z 79 eexs 228.687 Wn 0.0301126 Wf 0.00177825
+ ---- EVENT ------ 1500
+ ---- EVENT ------ 1600
+ fission: A 189 Z 79 eexs 307.007 Wn 0.0266122 Wf 0.0198009
+ ---- EVENT ------ 1700
+ fission: A 190 Z 78 eexs 474.655 Wn 0.041114 Wf 0.108168
+ fission: A 188 Z 76 eexs 433.172 Wn 0.0438521 Wf 0.00660585
+ ---- EVENT ------ 1800
+ ---- EVENT ------ 1900
+ fission: A 189 Z 77 eexs 295.806 Wn 0.0315657 Wf 0.000820292
+ ---- EVENT ------ 2000
+ ---- EVENT ------ 2100
+ fission: A 194 Z 80 eexs 325.228 Wn 0.0259296 Wf 0.0249936
+ ---- EVENT ------ 2200
+ ---- EVENT ------ 2300
+ ---- EVENT ------ 2400
+ ---- EVENT ------ 2500
+ fission: A 192 Z 78 eexs 406.943 Wn 0.0377319 Wf 0.0184105
+ ---- EVENT ------ 2600
+ fission: A 192 Z 78 eexs 342.283 Wn 0.0327327 Wf 0.00453095
+ ---- EVENT ------ 2700
+ fission: A 189 Z 76 eexs 411.656 Wn 0.0658209 Wf 0.00296604
+ ---- EVENT ------ 2800
+ ---- EVENT ------ 2900
+ fission: A 188 Z 76 eexs 297.678 Wn 0.0327526 Wf 0.000226343
+ fission: A 192 Z 80 eexs 202.801 Wn 0.0144426 Wf 0.00198643
+ fission: A 191 Z 79 eexs 215.325 Wn 0.0185884 Wf 0.0007873
+ ---- EVENT ------ 3000
+ fission: A 185 Z 78 eexs 270.85 Wn 0.0339761 Wf 0.00753225
+ fission: A 190 Z 79 eexs 298.092 Wn 0.0383896 Wf 0.0120096
+ fission: A 174 Z 76 eexs 134.823 Wn 0.00507137 Wf 0.000155902
+ ---- EVENT ------ 3100
+ fission: A 189 Z 78 eexs 374.345 Wn 0.0511304 Wf 0.0233994
+ ---- EVENT ------ 3200
+ fission: A 190 Z 78 eexs 391.376 Wn 0.0356896 Wf 0.024531
+ fission: A 191 Z 79 eexs 369.015 Wn 0.0328624 Wf 0.0415775
+ fission: A 193 Z 78 eexs 428.591 Wn 0.0612933 Wf 0.0207619
+ ---- EVENT ------ 3300
+ fission: A 182 Z 74 eexs 421.082 Wn 0.043587 Wf 0.00193762
+ fission: A 191 Z 79 eexs 314.338 Wn 0.0283837 Wf 0.0130266
+ ---- EVENT ------ 3400
+ ---- EVENT ------ 3500
+ fission: A 192 Z 79 eexs 283.748 Wn 0.0391413 Wf 0.00446506
+ ---- EVENT ------ 3600
+ fission: A 185 Z 76 eexs 295.212 Wn 0.0465645 Wf 0.000714604
+ fission: A 186 Z 75 eexs 395.662 Wn 0.0616997 Wf 0.00123885
+ fission: A 192 Z 78 eexs 356.64 Wn 0.0339188 Wf 0.00633246
+ fission: A 189 Z 79 eexs 243.685 Wn 0.0206645 Wf 0.00394776
+ fission: A 186 Z 77 eexs 282.171 Wn 0.039698 Wf 0.00170607
+ ---- EVENT ------ 3700
+ fission: A 191 Z 78 eexs 295.205 Wn 0.0464741 Wf 0.00192277
+ ---- EVENT ------ 3800
+ fission: A 186 Z 77 eexs 375.604 Wn 0.0488066 Wf 0.0158893
+ ---- EVENT ------ 3900
+ fission: A 185 Z 76 eexs 357.716 Wn 0.0528582 Wf 0.00360369
+ ---- EVENT ------ 4000
+ ---- EVENT ------ 4100
+ fission: A 186 Z 77 eexs 231.243 Wn 0.0333407 Wf 0.000341952
+ ---- EVENT ------ 4200
+ fission: A 187 Z 78 eexs 233.18 Wn 0.0325606 Wf 0.00129388
+ fission: A 192 Z 78 eexs 425.937 Wn 0.0390428 Wf 0.0265743
+ fission: A 193 Z 78 eexs 511.715 Wn 0.0664975 Wf 0.0887879
+ ---- EVENT ------ 4300
+ fission: A 191 Z 78 eexs 307.815 Wn 0.0478968 Wf 0.00269608
+ ---- EVENT ------ 4400
+ fission: A 184 Z 78 eexs 371.267 Wn 0.028644 Wf 0.0856987
+ ---- EVENT ------ 4500
+ ---- EVENT ------ 4600
+ ---- EVENT ------ 4700
+ ---- EVENT ------ 4800
+ ---- EVENT ------ 4900
+ ---- EVENT ------ 5000
+ ---- EVENT ------ 5100
+ fission: A 188 Z 78 eexs 337.298 Wn 0.0300537 Wf 0.014452
+ ---- EVENT ------ 5200
+ fission: A 186 Z 76 eexs 388.527 Wn 0.0387371 Wf 0.00510138
+ ---- EVENT ------ 5300
+ fission: A 188 Z 80 eexs 359.155 Wn 0.0260465 Wf 0.146576
+ ---- EVENT ------ 5400
+ fission: A 191 Z 81 eexs 61.4976 Wn 0.000944831 Wf 0.0259661
+ fission: A 189 Z 78 eexs 306.165 Wn 0.0445905 Wf 0.00508789
+ ---- EVENT ------ 5500
+ fission: A 189 Z 78 eexs 350.211 Wn 0.0489919 Wf 0.0141446
+ ---- EVENT ------ 5600
+ fission: A 189 Z 77 eexs 453.527 Wn 0.0440983 Wf 0.0288017
+ fission: A 193 Z 80 eexs 263.071 Wn 0.0343754 Wf 0.00752837
+ fission: A 191 Z 77 eexs 490.366 Wn 0.0476791 Wf 0.0305192
+ ---- EVENT ------ 5700
+ fission: A 194 Z 80 eexs 292.655 Wn 0.0231883 Wf 0.0118075
+ ---- EVENT ------ 5800
+ ---- EVENT ------ 5900
+ ---- EVENT ------ 6000
+ fission: A 182 Z 78 eexs 111.455 Wn 0.004405 Wf 4.099e-05
+ ---- EVENT ------ 6100
+ fission: A 189 Z 76 eexs 354.978 Wn 0.0610626 Wf 0.000767692
+ fission: A 193 Z 80 eexs 258.452 Wn 0.0338167 Wf 0.00664871
+ ---- EVENT ------ 6200
+ ---- EVENT ------ 6300
+ ---- EVENT ------ 6400
+ fission: A 188 Z 78 eexs 303.846 Wn 0.0272007 Wf 0.00665112
+ ---- EVENT ------ 6500
+ fission: A 181 Z 74 eexs 371.071 Wn 0.056495 Wf 0.000892637
+ ---- EVENT ------ 6600
+ fission: A 185 Z 76 eexs 363.803 Wn 0.0533965 Wf 0.00414599
+ ---- EVENT ------ 6700
+ ---- EVENT ------ 6800
+ fission: A 189 Z 77 eexs 477.607 Wn 0.0455595 Wf 0.0439771
+ ---- EVENT ------ 6900
+ fission: A 191 Z 80 eexs 162.922 Wn 0.0193334 Wf 0.000569687
+ ---- EVENT ------ 7000
+ fission: A 188 Z 77 eexs 398.372 Wn 0.0544473 Wf 0.0136257
+ fission: A 188 Z 77 eexs 277.099 Wn 0.0426083 Wf 0.00069366
+ ---- EVENT ------ 7100
+ ---- EVENT ------ 7200
+ fission: A 182 Z 76 eexs 380.206 Wn 0.0332299 Wf 0.0157046
+ ---- EVENT ------ 7300
+ ---- EVENT ------ 7400
+ ---- EVENT ------ 7500
+ fission: A 188 Z 76 eexs 353.077 Wn 0.0378314 Wf 0.00107589
+ ---- EVENT ------ 7600
+ fission: A 191 Z 81 eexs 50.4286 Wn 0.000482217 Wf 0.000522059
+ fission: A 189 Z 77 eexs 398.278 Wn 0.0403388 Wf 0.00991124
+ ---- EVENT ------ 7700
+ fission: A 189 Z 79 eexs 232.84 Wn 0.0195594 Wf 0.00285981
+ fission: A 190 Z 79 eexs 279.469 Wn 0.0363466 Wf 0.00758208
+ ---- EVENT ------ 7800
+ fission: A 191 Z 77 eexs 281.839 Wn 0.0312488 Wf 0.00023986
+ ---- EVENT ------ 7900
+ fission: A 185 Z 79 eexs 206.845 Wn 0.014254 Wf 0.0023322
+ fission: A 185 Z 78 eexs 298.466 Wn 0.0369517 Wf 0.0147734
+ ---- EVENT ------ 8000
+ fission: A 193 Z 77 eexs 235.848 Wn 0.0264199 Wf 1.74535e-05
+ fission: A 182 Z 78 eexs 121.498 Wn 0.00527633 Wf 7.88934e-05
+ ---- EVENT ------ 8100
+ ---- EVENT ------ 8200
+ fission: A 189 Z 77 eexs 360.175 Wn 0.0373747 Wf 0.00431044
+ fission: A 189 Z 78 eexs 383.718 Wn 0.0519138 Wf 0.0281948
+ fission: A 189 Z 78 eexs 189.847 Wn 0.0290518 Wf 0.000113616
+ fission: A 184 Z 76 eexs 366.989 Wn 0.0348153 Wf 0.00625394
+ ---- EVENT ------ 8300
+ ---- EVENT ------ 8400
+ fission: A 191 Z 79 eexs 179.715 Wn 0.0145488 Wf 0.000192841
+ ---- EVENT ------ 8500
+ fission: A 181 Z 75 eexs 373.714 Wn 0.0364185 Wf 0.00464412
+ ---- EVENT ------ 8600
+ ---- EVENT ------ 8700
+ fission: A 185 Z 78 eexs 239.063 Wn 0.0302098 Wf 0.00313827
+ fission: A 194 Z 78 eexs 242.871 Wn 0.0231622 Wf 0.000109542
+ ---- EVENT ------ 8800
+ fission: A 188 Z 78 eexs 337.97 Wn 0.0301085 Wf 0.0146663
+ ---- EVENT ------ 8900
+ fission: A 195 Z 80 eexs 252.259 Wn 0.0358029 Wf 0.00292136
+ fission: A 189 Z 78 eexs 293.595 Wn 0.0432035 Wf 0.00368858
+ ---- EVENT ------ 9000
+ ---- EVENT ------ 9100
+ fission: A 188 Z 78 eexs 315.525 Wn 0.0282243 Wf 0.00880893
+ fission: A 189 Z 79 eexs 223.36 Wn 0.0185734 Wf 0.00212673
+ fission: A 184 Z 78 eexs 188.359 Wn 0.0128904 Wf 0.00082797
+ fission: A 190 Z 78 eexs 342.897 Wn 0.0319307 Wf 0.0088229
+ ---- EVENT ------ 9200
+ fission: A 189 Z 76 eexs 342.066 Wn 0.0598204 Wf 0.000544841
+ ---- EVENT ------ 9300
+ ---- EVENT ------ 9400
+ ---- EVENT ------ 9500
+ fission: A 187 Z 79 eexs 323.645 Wn 0.0264088 Wf 0.0488168
+ fission: A 184 Z 78 eexs 228.609 Wn 0.0168534 Wf 0.00321979
+ fission: A 187 Z 76 eexs 393.899 Wn 0.0602167 Wf 0.00406499
+ ---- EVENT ------ 9600
+ fission: A 182 Z 76 eexs 231.681 Wn 0.0202684 Wf 0.000315006
+ ---- EVENT ------ 9700
+ fission: A 192 Z 78 eexs 421.907 Wn 0.0387703 Wf 0.0246188
+ fission: A 187 Z 76 eexs 316.379 Wn 0.0530438 Wf 0.000594199
+ fission: A 188 Z 76 eexs 350.075 Wn 0.037577 Wf 0.000996294
+ ---- EVENT ------ 9800
+ fission: A 192 Z 78 eexs 321.111 Wn 0.030899 Wf 0.00268521
+ fission: A 187 Z 77 eexs 319.172 Wn 0.0321447 Wf 0.00319601
+ fission: A 190 Z 78 eexs 351.013 Wn 0.0325942 Wf 0.0105792
+ fission: A 193 Z 79 eexs 372.021 Wn 0.0334819 Wf 0.0252352
+ ---- EVENT ------ 9900
+ fission: A 185 Z 77 eexs 402.198 Wn 0.0365729 Wf 0.0358834
+ ---- EVENT ------ 10000
+ fission: A 183 Z 75 eexs 378.362 Wn 0.0396479 Wf 0.00253814
+ ---- EVENT ------ 10100
+ fission: A 189 Z 79 eexs 235.804 Wn 0.0198639 Wf 0.00312841
+ ---- EVENT ------ 10200
+ fission: A 191 Z 80 eexs 203.678 Wn 0.0253565 Wf 0.00267144
+ fission: A 190 Z 78 eexs 342.527 Wn 0.0319001 Wf 0.00874924
+ ---- EVENT ------ 10300
+ ---- EVENT ------ 10400
+ ---- EVENT ------ 10500
+ fission: A 190 Z 79 eexs 308.767 Wn 0.0395062 Wf 0.0154189
+ fission: A 193 Z 80 eexs 376.245 Wn 0.0457836 Wf 0.0901644
+ ---- EVENT ------ 10600
+ fission: A 188 Z 78 eexs 279.395 Wn 0.0249589 Wf 0.00354639
+ ---- EVENT ------ 10700
+ ---- EVENT ------ 10800
+ fission: A 184 Z 75 eexs 283.18 Wn 0.0463446 Wf 0.000124902
+ ---- EVENT ------ 10900
+ ---- EVENT ------ 11000
+ fission: A 188 Z 76 eexs 293.028 Wn 0.0322876 Wf 0.00019551
+ fission: A 187 Z 78 eexs 239.513 Wn 0.0333983 Wf 0.00158201
+ ---- EVENT ------ 11100
+ ---- EVENT ------ 11200
+ fission: A 188 Z 76 eexs 400.107 Wn 0.0415374 Wf 0.00328172
+ fission: A 192 Z 80 eexs 243.795 Wn 0.0184703 Wf 0.00703286
+ ---- EVENT ------ 11300
+ ---- EVENT ------ 11400
+ fission: A 192 Z 79 eexs 494.607 Wn 0.0565819 Wf 0.274549
+ fission: A 190 Z 79 eexs 168.202 Wn 0.0213041 Wf 0.000174596
+ fission: A 188 Z 78 eexs 318.761 Wn 0.0285027 Wf 0.00950327
+ fission: A 186 Z 76 eexs 389.467 Wn 0.0388069 Wf 0.00520666
+ ---- EVENT ------ 11500
+ fission: A 189 Z 78 eexs 263.698 Wn 0.0396443 Wf 0.00160555
+ ---- EVENT ------ 11600
+ ---- EVENT ------ 11700
+ fission: A 182 Z 76 eexs 208.785 Wn 0.0178237 Wf 0.000132431
+ fission: A 187 Z 77 eexs 162.846 Wn 0.0148015 Wf 9.89148e-06
+ fission: A 186 Z 76 eexs 280.839 Wn 0.0293596 Wf 0.000308841
+ fission: A 192 Z 78 eexs 242.432 Wn 0.0231329 Wf 0.000252377
+ fission: A 192 Z 79 eexs 262.016 Wn 0.0365514 Wf 0.00244452
+ ---- EVENT ------ 11800
+ fission: A 190 Z 78 eexs 272.674 Wn 0.0255652 Wf 0.00145572
+ fission: A 190 Z 79 eexs 376.94 Wn 0.0457962 Wf 0.0631479
+ ---- EVENT ------ 11900
+ fission: A 194 Z 80 eexs 318.469 Wn 0.0253769 Wf 0.021536
+ ---- EVENT ------ 12000
+ fission: A 188 Z 76 eexs 479.777 Wn 0.0467566 Wf 0.0161411
+ ---- EVENT ------ 12100
+ ---- EVENT ------ 12200
+ fission: A 187 Z 78 eexs 304.534 Wn 0.0410373 Wf 0.00927931
+ ---- EVENT ------ 12300
+ ---- EVENT ------ 12400
+ fission: A 192 Z 77 eexs 342.474 Wn 0.0564185 Wf 0.000942713
+ fission: A 188 Z 78 eexs 419.165 Wn 0.0360796 Wf 0.0716892
+ ---- EVENT ------ 12500
+ ---- EVENT ------ 12600
+ ---- EVENT ------ 12700
+ fission: A 193 Z 77 eexs 503.933 Wn 0.0490242 Wf 0.0210784
+ ---- EVENT ------ 12800
+ ---- EVENT ------ 12900
+ fission: A 190 Z 76 eexs 313.871 Wn 0.0356762 Wf 0.000158882
+ ---- EVENT ------ 13000
+ fission: A 182 Z 77 eexs 350.708 Wn 0.0391375 Wf 0.0310653
+ fission: A 185 Z 78 eexs 350.997 Wn 0.0419302 Wf 0.0451301
+ fission: A 189 Z 78 eexs 250.62 Wn 0.037964 Wf 0.00107769
+ fission: A 187 Z 78 eexs 250.994 Wn 0.0348722 Wf 0.00224323
+ fission: A 191 Z 77 eexs 485.024 Wn 0.0473704 Wf 0.0277962
+ ---- EVENT ------ 13100
+ fission: A 191 Z 78 eexs 481.694 Wn 0.0621464 Wf 0.0933075
+ fission: A 185 Z 77 eexs 265.5 Wn 0.0251001 Wf 0.00152167
+ ---- EVENT ------ 13200
+ ---- EVENT ------ 13300
+ fission: A 195 Z 80 eexs 180.187 Wn 0.0252979 Wf 0.000222689
+ ---- EVENT ------ 13400
+ fission: A 186 Z 76 eexs 511.923 Wn 0.046458 Wf 0.051321
+ ---- EVENT ------ 13500
+ fission: A 191 Z 77 eexs 484.595 Wn 0.0473455 Wf 0.0275873
+ fission: A 190 Z 80 eexs 138.809 Wn 0.00752819 Wf 0.000195384
+ fission: A 191 Z 80 eexs 235.989 Wn 0.0296745 Wf 0.0071886
+ ---- EVENT ------ 13600
+ ---- EVENT ------ 13700
+ fission: A 190 Z 77 eexs 373.78 Wn 0.0560707 Wf 0.00418209
+ ---- EVENT ------ 13800
+ fission: A 193 Z 80 eexs 268.683 Wn 0.0350432 Wf 0.00872733
+ ---- EVENT ------ 13900
+ fission: A 189 Z 76 eexs 508.444 Wn 0.071872 Wf 0.0196207
+ fission: A 188 Z 78 eexs 294 Wn 0.0263142 Wf 0.00519944
+ ---- EVENT ------ 14000
+ fission: A 190 Z 76 eexs 480.682 Wn 0.048393 Wf 0.00856727
+ ---- EVENT ------ 14100
+ fission: A 187 Z 78 eexs 154.957 Wn 0.0206858 Wf 5.19224e-05
+ fission: A 191 Z 80 eexs 257.047 Wn 0.0322725 Wf 0.0126805
+ fission: A 195 Z 81 eexs 155.566 Wn 0.00930661 Wf 0.000610099
+ ---- EVENT ------ 14200
+ fission: A 191 Z 77 eexs 487.99 Wn 0.0475425 Wf 0.0292808
+ ---- EVENT ------ 14300
+ fission: A 191 Z 81 eexs 119.535 Wn 0.00521867 Wf 5.21867
+ fission: A 179 Z 73 eexs 409.703 Wn 0.0439544 Wf 0.000905564
+ fission: A 189 Z 79 eexs 405.653 Wn 0.0342307 Wf 0.13548
+ fission: A 192 Z 78 eexs 281.843 Wn 0.0272162 Wf 0.00090923
+ ---- EVENT ------ 14400
+ fission: A 190 Z 78 eexs 261.313 Wn 0.0244248 Wf 0.00103519
+ ---- EVENT ------ 14500
+ fission: A 191 Z 77 eexs 383.631 Wn 0.0405092 Wf 0.00370415
+ fission: A 189 Z 78 eexs 418.593 Wn 0.0546161 Wf 0.0542637
+ ---- EVENT ------ 14600
+ fission: A 190 Z 77 eexs 400.441 Wn 0.0582739 Wf 0.00749372
+ ---- EVENT ------ 14700
+ fission: A 192 Z 79 eexs 346.493 Wn 0.0456448 Wf 0.0198011
+ fission: A 191 Z 79 eexs 324.863 Wn 0.0292949 Wf 0.0165442
+ fission: A 192 Z 79 eexs 455.29 Wn 0.0541695 Wf 0.148694
+ fission: A 186 Z 78 eexs 177.869 Wn 0.0131017 Wf 0.000243976
+ ---- EVENT ------ 14800
+ fission: A 173 Z 73 eexs 240.387 Wn 0.0201595 Wf 9.19625e-05
+ ---- EVENT ------ 14900
+ ---- EVENT ------ 15000
+ fission: A 194 Z 79 eexs 235.04 Wn 0.034563 Wf 0.000497976
+ fission: A 191 Z 79 eexs 409.099 Wn 0.0357677 Wf 0.0874971
+ ---- EVENT ------ 15100
+ ---- EVENT ------ 15200
+ fission: A 190 Z 79 eexs 204.395 Wn 0.0267605 Wf 0.000774404
+ ---- EVENT ------ 15300
+ fission: A 187 Z 78 eexs 269.499 Wn 0.0371308 Wf 0.00379626
+ ---- EVENT ------ 15400
+ fission: A 191 Z 80 eexs 303.25 Wn 0.0374132 Wf 0.0376794
+ fission: A 190 Z 78 eexs 325.637 Wn 0.0304717 Wf 0.00590196
+ ---- EVENT ------ 15500
+ fission: A 190 Z 80 eexs 133.621 Wn 0.00701377 Wf 0.000147671
+ ---- EVENT ------ 15600
+ ---- EVENT ------ 15700
+ fission: A 192 Z 78 eexs 391.395 Wn 0.0366079 Wf 0.0134482
+ fission: A 191 Z 78 eexs 514.521 Wn 0.0639899 Wf 0.156662
+ ---- EVENT ------ 15800
+ ---- EVENT ------ 15900
+ fission: A 187 Z 78 eexs 448.426 Wn 0.0530166 Wf 0.151207
+ fission: A 192 Z 80 eexs 207.087 Wn 0.0148751 Wf 0.00229693
+ ---- EVENT ------ 16000
+ fission: A 192 Z 79 eexs 346.39 Wn 0.0456352 Wf 0.0197578
+ ---- EVENT ------ 16100
+ fission: A 194 Z 80 eexs 239.108 Wn 0.0182561 Wf 0.00275777
+ fission: A 192 Z 78 eexs 306.303 Wn 0.0295541 Wf 0.00181883
+ fission: A 187 Z 78 eexs 353.171 Wn 0.0457458 Wf 0.0271056
+ ---- EVENT ------ 16200
+ ---- EVENT ------ 16300
+ ---- EVENT ------ 16400
+ fission: A 193 Z 80 eexs 144.163 Wn 0.0172563 Wf 8.98722e-05
+ ---- EVENT ------ 16500
+ ---- EVENT ------ 16600
+ fission: A 189 Z 79 eexs 416.072 Wn 0.0349296 Wf 0.161442
+ fission: A 188 Z 79 eexs 124.136 Wn 0.0124832 Wf 3.9063e-05
+ fission: A 194 Z 80 eexs 382.476 Wn 0.0302829 Wf 0.0787048
+ ---- EVENT ------ 16700
+ fission: A 194 Z 80 eexs 333.46 Wn 0.0265915 Wf 0.0298356
+ ---- EVENT ------ 16800
+ ---- EVENT ------ 16900
+ fission: A 187 Z 76 eexs 385.009 Wn 0.0594983 Wf 0.00333591
+ fission: A 192 Z 78 eexs 273.998 Wn 0.0264348 Wf 0.000717102
+ fission: A 190 Z 78 eexs 310.281 Wn 0.0291171 Wf 0.00404467
+ ---- EVENT ------ 17000
+ ---- EVENT ------ 17100
+ fission: A 191 Z 77 eexs 561.611 Wn 0.0513748 Wf 0.0969575
+ ---- EVENT ------ 17200
+ fission: A 191 Z 80 eexs 254.615 Wn 0.0319809 Wf 0.0119072
+ fission: A 189 Z 78 eexs 269.804 Wn 0.0404023 Wf 0.00191904
+ fission: A 188 Z 78 eexs 349.767 Wn 0.0310563 Wf 0.0189012
+ fission: A 188 Z 78 eexs 184.784 Wn 0.0150237 Wf 0.00014075
+ ---- EVENT ------ 17300
+ fission: A 190 Z 78 eexs 308.536 Wn 0.0289597 Wf 0.00386952
+ ---- EVENT ------ 17400
+ fission: A 189 Z 78 eexs 291.92 Wn 0.043014 Wf 0.00352979
+ ---- EVENT ------ 17500
+ fission: A 193 Z 80 eexs 312.677 Wn 0.0398854 Wf 0.0250666
+ ---- EVENT ------ 17600
+ fission: A 184 Z 74 eexs 306.626 Wn 0.0368344 Wf 3.77838e-05
+ ---- EVENT ------ 17700
+ fission: A 192 Z 78 eexs 270.869 Wn 0.0261188 Wf 0.00065086
+ fission: A 188 Z 79 eexs 353.742 Wn 0.0408336 Wf 0.0682187
+ fission: A 190 Z 80 eexs 262.099 Wn 0.0195594 Wf 0.0151989
+ fission: A 185 Z 76 eexs 267.99 Wn 0.0433241 Wf 0.000309985
+ ---- EVENT ------ 17800
+ ---- EVENT ------ 17900
+ ---- EVENT ------ 18000
+ fission: A 184 Z 76 eexs 372.324 Wn 0.0352217 Wf 0.00702754
+ fission: A 187 Z 76 eexs 330.951 Wn 0.0545612 Wf 0.000886714
+ ---- EVENT ------ 18100
+ fission: A 192 Z 80 eexs 360.716 Wn 0.0283449 Wf 0.0977105
+ ---- EVENT ------ 18200
+ ---- EVENT ------ 18300
+ ---- EVENT ------ 18400
+ ---- EVENT ------ 18500
+ fission: A 193 Z 79 eexs 274.909 Wn 0.0250485 Wf 0.00250384
+ ---- EVENT ------ 18600
+ ---- EVENT ------ 18700
+ fission: A 181 Z 74 eexs 378.716 Wn 0.057126 Wf 0.0010753
+ fission: A 191 Z 80 eexs 256.334 Wn 0.0321872 Wf 0.0124495
+ fission: A 192 Z 80 eexs 324.04 Wn 0.0255144 Wf 0.0476835
+ ---- EVENT ------ 18800
+ fission: A 191 Z 77 eexs 300.476 Wn 0.0331552 Wf 0.000428593
+ fission: A 190 Z 78 eexs 236.689 Wn 0.0218442 Wf 0.000463779
+ fission: A 192 Z 78 eexs 507.738 Wn 0.0439832 Wf 0.108826
+ ---- EVENT ------ 18900
+ fission: A 187 Z 77 eexs 240.028 Wn 0.0241958 Wf 0.000309204
+ ---- EVENT ------ 19000
+ fission: A 185 Z 76 eexs 271.134 Wn 0.0437158 Wf 0.000343126
+ fission: A 190 Z 79 eexs 226.081 Wn 0.0297648 Wf 0.00163477
+ ---- EVENT ------ 19100
+ fission: A 189 Z 79 eexs 404.855 Wn 0.0341764 Wf 0.13365
+ fission: A 192 Z 79 eexs 300.387 Wn 0.0410008 Wf 0.00684647
+ ---- EVENT ------ 19200
+ fission: A 189 Z 80 eexs 314.882 Wn 0.0361231 Wf 0.0564514
+ ---- EVENT ------ 19300
+ ---- EVENT ------ 19400
+ ---- EVENT ------ 19500
+ fission: A 193 Z 79 eexs 364.361 Wn 0.0328895 Wf 0.0215625
+ fission: A 186 Z 78 eexs 219.597 Wn 0.0175399 Wf 0.00119428
+ fission: A 190 Z 78 eexs 343.407 Wn 0.0319728 Wf 0.00892536
+ ---- EVENT ------ 19600
+ fission: A 191 Z 78 eexs 248.902 Wn 0.040642 Wf 0.000473115
+ fission: A 191 Z 79 eexs 235.013 Wn 0.0207128 Wf 0.00152678
+ ---- EVENT ------ 19700
+ fission: A 189 Z 79 eexs 436.532 Wn 0.0362489 Wf 0.225096
+ ---- EVENT ------ 19800
+ fission: A 189 Z 79 eexs 174.787 Wn 0.0132643 Wf 0.0003543
+ ---- EVENT ------ 19900
+ fission: A 186 Z 78 eexs 142.407 Wn 0.00918488 Wf 4.15048e-05
+ ---- EVENT ------ 20000
+ fission: A 196 Z 79 eexs 453.279 Wn 0.0595 Wf 0.0504586
+ fission: A 184 Z 76 eexs 224.603 Wn 0.0214656 Wf 0.000101644
+ ---- EVENT ------ 20100
+ fission: A 188 Z 78 eexs 360.652 Wn 0.0319054 Wf 0.023699
+ ---- EVENT ------ 20200
+ fission: A 190 Z 78 eexs 307.368 Wn 0.028854 Wf 0.00375603
+ fission: A 188 Z 79 eexs 358.277 Wn 0.0412225 Wf 0.0743324
+ fission: A 186 Z 78 eexs 127.008 Wn 0.00749217 Wf 1.58473e-05
+ ---- EVENT ------ 20300
+ ---- EVENT ------ 20400
+ fission: A 188 Z 78 eexs 343.423 Wn 0.0305502 Wf 0.0165098
+ fission: A 192 Z 76 eexs 523.801 Wn 0.0517948 Wf 0.00976751
+ ---- EVENT ------ 20500
+ fission: A 183 Z 76 eexs 224.387 Wn 0.0336561 Wf 0.000157153
+ fission: A 181 Z 75 eexs 357.672 Wn 0.0351827 Wf 0.00323012
+ fission: A 183 Z 76 eexs 354.24 Wn 0.048253 Wf 0.0065741
+ fission: A 191 Z 79 eexs 217.046 Wn 0.0187774 Wf 0.000836578
+ ---- EVENT ------ 20600
+ ---- EVENT ------ 20700
+ fission: A 189 Z 77 eexs 381.596 Wn 0.039081 Wf 0.00696091
+ fission: A 190 Z 77 eexs 395.291 Wn 0.0578649 Wf 0.00671796
+ ---- EVENT ------ 20800
+ ---- EVENT ------ 20900
+ fission: A 193 Z 79 eexs 297.119 Wn 0.0271614 Wf 0.00456096
+ ---- EVENT ------ 21000
+ fission: A 185 Z 74 eexs 371.02 Wn 0.0665045 Wf 0.000168379
+ fission: A 192 Z 77 eexs 265.82 Wn 0.0475641 Wf 9.02817e-05
+ ---- EVENT ------ 21100
+ fission: A 193 Z 79 eexs 240.814 Wn 0.0215826 Wf 0.000887162
+ ---- EVENT ------ 21200
+ fission: A 191 Z 78 eexs 238.05 Wn 0.0391237 Wf 0.000325544
+ ---- EVENT ------ 21300
+ fission: A 189 Z 76 eexs 363.126 Wn 0.0618141 Wf 0.000946116
+ ---- EVENT ------ 21400
+ fission: A 183 Z 76 eexs 242.385 Wn 0.0361082 Wf 0.000302123
+ fission: A 189 Z 76 eexs 232.843 Wn 0.0462112 Wf 1.30715e-05
+ fission: A 190 Z 76 eexs 327.412 Wn 0.0369611 Wf 0.000238911
+ ---- EVENT ------ 21500
+ ---- EVENT ------ 21600
+ ---- EVENT ------ 21700
+ fission: A 190 Z 80 eexs 337.714 Wn 0.025846 Wf 0.0796314
+ ---- EVENT ------ 21800
+ ---- EVENT ------ 21900
+ fission: A 189 Z 78 eexs 301.837 Wn 0.04412 Wf 0.00456226
+ ---- EVENT ------ 22000
+ fission: A 190 Z 79 eexs 268.896 Wn 0.0351307 Wf 0.00575203
+ ---- EVENT ------ 22100
+ fission: A 192 Z 79 eexs 163.872 Wn 0.0222839 Wf 5.83636e-05
+ ---- EVENT ------ 22200
+ fission: A 191 Z 77 eexs 352.337 Wn 0.0379487 Wf 0.00176309
+ fission: A 186 Z 78 eexs 142.661 Wn 0.0092129 Wf 4.21171e-05
+ fission: A 191 Z 80 eexs 454.799 Wn 0.049895 Wf 0.546143
+ fission: A 191 Z 80 eexs 261.756 Wn 0.0328309 Wf 0.0142981
+ fission: A 192 Z 80 eexs 179.896 Wn 0.0120968 Wf 0.000855496
+ fission: A 186 Z 75 eexs 191.762 Wn 0.0369823 Wf 8.02321e-07
+ ---- EVENT ------ 22300
+ fission: A 184 Z 78 eexs 286.003 Wn 0.0220437 Wf 0.0148334
+ fission: A 187 Z 77 eexs 341.4 Wn 0.0340833 Wf 0.00547118
+ ---- EVENT ------ 22400
+ ---- EVENT ------ 22500
+ fission: A 188 Z 78 eexs 429.75 Wn 0.0367688 Wf 0.0861273
+ ---- EVENT ------ 22600
+ fission: A 188 Z 78 eexs 308.265 Wn 0.0275916 Wf 0.00740738
+ fission: A 190 Z 80 eexs 243.908 Wn 0.017898 Wf 0.00946757
+ fission: A 190 Z 78 eexs 338.723 Wn 0.0315839 Wf 0.00802187
+ ---- EVENT ------ 22700
+ fission: A 191 Z 79 eexs 296.973 Wn 0.0268267 Wf 0.00861246
+ ---- EVENT ------ 22800
+ fission: A 190 Z 78 eexs 332.457 Wn 0.0310561 Wf 0.00693696
+ fission: A 183 Z 75 eexs 495.579 Wn 0.0472273 Wf 0.0256021
+ ---- EVENT ------ 22900
+ ---- EVENT ------ 23000
+ fission: A 191 Z 80 eexs 252.78 Wn 0.0317595 Wf 0.0113502
+ fission: A 191 Z 77 eexs 341.252 Wn 0.0369842 Wf 0.0013311
+ ---- EVENT ------ 23100
+ ---- EVENT ------ 23200
+ ---- EVENT ------ 23300
+ ---- EVENT ------ 23400
+ fission: A 182 Z 78 eexs 122.964 Wn 0.00540622 Wf 8.62812e-05
+ ---- EVENT ------ 23500
+ ---- EVENT ------ 23600
+ ---- EVENT ------ 23700
+ ---- EVENT ------ 23800
+ ---- EVENT ------ 23900
+ ---- EVENT ------ 24000
+ ---- EVENT ------ 24100
+ ---- EVENT ------ 24200
+ fission: A 192 Z 79 eexs 283.151 Wn 0.0390727 Wf 0.00439494
+ ---- EVENT ------ 24300
+ fission: A 191 Z 81 eexs 86.0794 Wn 0.00245668 Wf 2.45668
+ fission: A 189 Z 77 eexs 373.384 Wn 0.0384393 Wf 0.00581322
+ ---- EVENT ------ 24400
+ fission: A 195 Z 80 eexs 265.702 Wn 0.0375049 Wf 0.00429123
+ ---- EVENT ------ 24500
+ fission: A 190 Z 78 eexs 479.933 Wn 0.0414189 Wf 0.117772
+ ---- EVENT ------ 24600
+ fission: A 191 Z 78 eexs 489.314 Wn 0.0625931 Wf 0.105552
+ fission: A 178 Z 76 eexs 277.29 Wn 0.0201603 Wf 0.00548981
+ ---- EVENT ------ 24700
+ ---- EVENT ------ 24800
+ fission: A 191 Z 79 eexs 215.463 Wn 0.0186035 Wf 0.00079115
+ fission: A 189 Z 78 eexs 389.938 Wn 0.0524198 Wf 0.0318251
+ ---- EVENT ------ 24900
+ fission: A 184 Z 76 eexs 370.685 Wn 0.0350975 Wf 0.00678147
+ fission: A 191 Z 78 eexs 262.258 Wn 0.0424284 Wf 0.000730285
+ ---- EVENT ------ 25000
+ ---- EVENT ------ 25100
+ fission: A 191 Z 81 eexs 110.408 Wn 0.00441117 Wf 4.41117
+ fission: A 183 Z 75 eexs 365.232 Wn 0.0386212 Wf 0.00186701
+ ---- EVENT ------ 25200
+ fission: A 174 Z 72 eexs 174.086 Wn 0.0157278 Wf 1.85959e-07
+ ---- EVENT ------ 25300
+ fission: A 191 Z 79 eexs 297.147 Wn 0.0268427 Wf 0.00864937
+ fission: A 186 Z 74 eexs 276.936 Wn 0.0357884 Wf 4.52884e-06
+ ---- EVENT ------ 25400
+ ---- EVENT ------ 25500
+ fission: A 191 Z 79 eexs 131.508 Wn 0.00883852 Wf 1.42901e-05
+ fission: A 186 Z 76 eexs 417.524 Wn 0.0408042 Wf 0.00935408
+ fission: A 189 Z 77 eexs 433.94 Wn 0.0428332 Wf 0.0200594
+ ---- EVENT ------ 25600
+ fission: A 188 Z 76 eexs 428.282 Wn 0.0435237 Wf 0.00597904
+ fission: A 194 Z 80 eexs 219.618 Wn 0.0163364 Wf 0.00147903
+ ---- EVENT ------ 25700
+ fission: A 190 Z 78 eexs 302.052 Wn 0.0283687 Wf 0.00327469
+ ---- EVENT ------ 25800
+ fission: A 195 Z 80 eexs 210.726 Wn 0.0300439 Wf 0.000753241
+ ---- EVENT ------ 25900
+ fission: A 180 Z 76 eexs 380.75 Wn 0.0305425 Wf 0.0288778
+ fission: A 191 Z 79 eexs 339.177 Wn 0.0304959 Wf 0.0226093
+ fission: A 189 Z 78 eexs 418.611 Wn 0.0546174 Wf 0.0542819
+ fission: A 192 Z 78 eexs 508.421 Wn 0.04402 Wf 0.110006
+ ---- EVENT ------ 26000
+ fission: A 191 Z 80 eexs 194.613 Wn 0.0240717 Wf 0.00195913
+ fission: A 190 Z 76 eexs 461.898 Wn 0.0472555 Wf 0.00595465
+ ---- EVENT ------ 26100
+ fission: A 186 Z 78 eexs 158.452 Wn 0.0109628 Wf 9.85736e-05
+ ---- EVENT ------ 26200
+ fission: A 182 Z 77 eexs 297.742 Wn 0.0342859 Wf 0.00981418
+ ---- EVENT ------ 26300
+ fission: A 192 Z 78 eexs 284.893 Wn 0.0275158 Wf 0.000995058
+ ---- EVENT ------ 26400
+ ---- EVENT ------ 26500
+ ---- EVENT ------ 26600
+ ---- EVENT ------ 26700
+ fission: A 191 Z 78 eexs 461.379 Wn 0.0608962 Wf 0.0665193
+ fission: A 186 Z 78 eexs 349.67 Wn 0.0292096 Wf 0.0334483
+ ---- EVENT ------ 26800
+ fission: A 191 Z 78 eexs 376.504 Wn 0.0545956 Wf 0.0134317
+ ---- EVENT ------ 26900
+ fission: A 188 Z 78 eexs 341.952 Wn 0.0304317 Wf 0.0159941
+ ---- EVENT ------ 27000
+ fission: A 186 Z 77 eexs 307.684 Wn 0.0424838 Wf 0.00337676
+ fission: A 189 Z 79 eexs 255.67 Wn 0.0218566 Wf 0.00553548
+ ---- EVENT ------ 27100
+ ---- EVENT ------ 27200
+ fission: A 194 Z 80 eexs 412.536 Wn 0.0323453 Wf 0.134438
+ ---- EVENT ------ 27300
+ ---- EVENT ------ 27400
+ ---- EVENT ------ 27500
+ fission: A 182 Z 74 eexs 251.911 Wn 0.0286435 Wf 1.34384e-05
+ ---- EVENT ------ 27600
+ fission: A 189 Z 78 eexs 437.1 Wn 0.0559243 Wf 0.0751314
+ ---- EVENT ------ 27700
+ fission: A 190 Z 79 eexs 283.405 Wn 0.0367886 Wf 0.00837872
+ ---- EVENT ------ 27800
+ ---- EVENT ------ 27900
+ ---- EVENT ------ 28000
+ fission: A 188 Z 78 eexs 393.904 Wn 0.0343555 Wf 0.0453793
+ ---- EVENT ------ 28100
+ fission: A 186 Z 76 eexs 381.173 Wn 0.0381849 Wf 0.00433996
+ ---- EVENT ------ 28200
+ fission: A 192 Z 80 eexs 284.064 Wn 0.0221522 Wf 0.0197357
+ fission: A 193 Z 79 eexs 276.226 Wn 0.025177 Wf 0.00259843
+ ---- EVENT ------ 28300
+ ---- EVENT ------ 28400
+ ---- EVENT ------ 28500
+ fission: A 192 Z 80 eexs 284.756 Wn 0.0222129 Wf 0.0200608
+ ---- EVENT ------ 28600
+ fission: A 183 Z 76 eexs 343.423 Wn 0.0472792 Wf 0.00514211
+ ---- EVENT ------ 28700
+ ---- EVENT ------ 28800
+ fission: A 191 Z 81 eexs 99.9825 Wn 0.00353229 Wf 3.53229
+ fission: A 187 Z 77 eexs 285.952 Wn 0.0290144 Wf 0.00131563
+ ---- EVENT ------ 28900
+ fission: A 191 Z 79 eexs 393.931 Wn 0.0347037 Wf 0.0666192
+ fission: A 191 Z 80 eexs 376.624 Wn 0.0441912 Wf 0.156473
+ ---- EVENT ------ 29000
+ fission: A 188 Z 76 eexs 405.114 Wn 0.0419025 Wf 0.00366314
+ ---- EVENT ------ 29100
+ fission: A 178 Z 72 eexs 455.536 Wn 0.0477354 Wf 0.000671455
+ ---- EVENT ------ 29200
+ ---- EVENT ------ 29300
+ fission: A 190 Z 79 eexs 226.966 Wn 0.0298833 Wf 0.00168239
+ ---- EVENT ------ 29400
+ fission: A 188 Z 80 eexs 282.856 Wn 0.0201834 Wf 0.0320182
+ fission: A 193 Z 79 eexs 286.767 Wn 0.0261908 Wf 0.00347128
+ ---- EVENT ------ 29500
+ fission: A 192 Z 78 eexs 410.031 Wn 0.0379496 Wf 0.0195659
+ ---- EVENT ------ 29600
+ fission: A 191 Z 78 eexs 451.007 Wn 0.060223 Wf 0.0556416
+ fission: A 188 Z 78 eexs 236.265 Wn 0.0206719 Wf 0.000987906
+ ---- EVENT ------ 29700
+ fission: A 187 Z 76 eexs 479.723 Wn 0.0660471 Wf 0.0220416
+ ---- EVENT ------ 29800
+ ---- EVENT ------ 29900
+ fission: A 189 Z 77 eexs 349.848 Wn 0.0365135 Wf 0.00338246
+ ---- EVENT ------ 30000
+ ---- EVENT ------ 30100
+ fission: A 190 Z 80 eexs 238.613 Wn 0.0174043 Wf 0.00819008
+ ---- EVENT ------ 30200
+ ---- EVENT ------ 30300
+ fission: A 187 Z 78 eexs 362.045 Wn 0.0465247 Wf 0.0324125
+ ---- EVENT ------ 30400
+ fission: A 186 Z 78 eexs 317.597 Wn 0.0266527 Wf 0.0169737
+ fission: A 194 Z 80 eexs 334.653 Wn 0.0266864 Wf 0.0305999
+ ---- EVENT ------ 30500
+ fission: A 193 Z 76 eexs 435.99 Wn 0.0740156 Wf 0.00116312
+ fission: A 188 Z 78 eexs 349.358 Wn 0.0310239 Wf 0.0187386
+ fission: A 189 Z 78 eexs 255.142 Wn 0.0385539 Wf 0.0012403
+ ---- EVENT ------ 30600
+ ---- EVENT ------ 30700
+ fission: A 191 Z 80 eexs 308.04 Wn 0.0379048 Wf 0.0417642
+ ---- EVENT ------ 30800
+ fission: A 192 Z 78 eexs 330.923 Wn 0.0317616 Wf 0.0034379
+ fission: A 189 Z 77 eexs 343.236 Wn 0.0359486 Wf 0.00288393
+ ---- EVENT ------ 30900
+ fission: A 187 Z 78 eexs 216.931 Wn 0.0303289 Wf 0.000748957
+ fission: A 188 Z 78 eexs 274.026 Wn 0.0244484 Wf 0.0030636
+ ---- EVENT ------ 31000
+ fission: A 188 Z 77 eexs 288.891 Wn 0.0440001 Wf 0.000983837
+ ---- EVENT ------ 31100
+ fission: A 188 Z 78 eexs 356.243 Wn 0.0315643 Wf 0.0216429
+ fission: A 190 Z 77 eexs 414.57 Wn 0.0593578 Wf 0.010037
+ ---- EVENT ------ 31200
+ ---- EVENT ------ 31300
+ fission: A 190 Z 78 eexs 453.649 Wn 0.0398573 Wf 0.0763758
+ fission: A 188 Z 78 eexs 289.19 Wn 0.0258732 Wf 0.00459481
+ ---- EVENT ------ 31400
+ fission: A 186 Z 78 eexs 179.826 Wn 0.0133153 Wf 0.000265444
+ fission: A 192 Z 79 eexs 281.139 Wn 0.0388403 Wf 0.00416517
+ fission: A 188 Z 76 eexs 298.232 Wn 0.0328076 Wf 0.000230287
+ ---- EVENT ------ 31500
+ fission: A 189 Z 79 eexs 408.859 Wn 0.0344477 Wf 0.143054
+ fission: A 193 Z 78 eexs 317.125 Wn 0.0513592 Wf 0.00169649
+ ---- EVENT ------ 31600
+ ---- EVENT ------ 31700
+ ---- EVENT ------ 31800
+ ---- EVENT ------ 31900
+ fission: A 191 Z 79 eexs 341.589 Wn 0.030694 Wf 0.0237986
+ ---- EVENT ------ 32000
+ fission: A 189 Z 78 eexs 248.447 Wn 0.0376771 Wf 0.00100625
+ ---- EVENT ------ 32100
+ ---- EVENT ------ 32200
+ ---- EVENT ------ 32300
+ fission: A 189 Z 77 eexs 368.365 Wn 0.0380395 Wf 0.00519592
+ ---- EVENT ------ 32400
+ ---- EVENT ------ 32500
+ fission: A 190 Z 80 eexs 281.13 Wn 0.0212366 Wf 0.0240568
+ fission: A 191 Z 81 eexs 133.135 Wn 0.00646992 Wf 6.46992
+ ---- EVENT ------ 32600
+ ---- EVENT ------ 32700
+ ---- EVENT ------ 32800
+ fission: A 188 Z 78 eexs 291.721 Wn 0.0261059 Wf 0.00490502
+ ---- EVENT ------ 32900
+ ---- EVENT ------ 33000
+ ---- EVENT ------ 33100
+ fission: A 191 Z 79 eexs 377.506 Wn 0.0335034 Wf 0.048996
+ ---- EVENT ------ 33200
+ fission: A 187 Z 78 eexs 409.043 Wn 0.0502857 Wf 0.0780039
+ fission: A 189 Z 78 eexs 229.101 Wn 0.0350233 Wf 0.000528546
+ ---- EVENT ------ 33300
+ fission: A 184 Z 76 eexs 214.887 Wn 0.020364 Wf 6.86488e-05
+ ---- EVENT ------ 33400
+ ---- EVENT ------ 33500
+ ---- EVENT ------ 33600
+ ---- EVENT ------ 33700
+ fission: A 179 Z 76 eexs 288.469 Wn 0.034006 Wf 0.0052326
+ ---- EVENT ------ 33800
+ fission: A 189 Z 79 eexs 272.58 Wn 0.0234861 Wf 0.00866631
+ ---- EVENT ------ 33900
+ ---- EVENT ------ 34000
+ fission: A 191 Z 76 eexs 438.348 Wn 0.0717764 Wf 0.00257832
+ fission: A 184 Z 76 eexs 410.021 Wn 0.037927 Wf 0.015267
+ ---- EVENT ------ 34100
+ fission: A 183 Z 76 eexs 275.965 Wn 0.0402795 Wf 0.00088502
+ ---- EVENT ------ 34200
+ ---- EVENT ------ 34300
+ fission: A 188 Z 78 eexs 398.943 Wn 0.0347086 Wf 0.0498281
+ ---- EVENT ------ 34400
+ fission: A 192 Z 78 eexs 232.935 Wn 0.0220899 Wf 0.00017839
+ ---- EVENT ------ 34500
+ fission: A 188 Z 79 eexs 115.56 Wn 0.0111175 Wf 2.18463e-05
+ ---- EVENT ------ 34600
+ ---- EVENT ------ 34700
+ fission: A 188 Z 78 eexs 296.167 Wn 0.0265111 Wf 0.00549314
+ ---- EVENT ------ 34800
+ fission: A 190 Z 78 eexs 347.786 Wn 0.0323321 Wf 0.00984785
+ ---- EVENT ------ 34900
+ ---- EVENT ------ 35000
+ fission: A 190 Z 77 eexs 570.925 Wn 0.0683206 Wf 0.145815
+ fission: A 185 Z 74 eexs 354.068 Wn 0.0649954 Wf 0.000104412
+ fission: A 192 Z 78 eexs 441.51 Wn 0.0400688 Wf 0.0354603
+ ---- EVENT ------ 35100
+ ---- EVENT ------ 35200
+ ---- EVENT ------ 35300
+ fission: A 185 Z 77 eexs 170.568 Wn 0.0144954 Wf 4.10424e-05
+ fission: A 194 Z 79 eexs 213.421 Wn 0.0314557 Wf 0.00022404
+ fission: A 189 Z 78 eexs 342.35 Wn 0.0482555 Wf 0.0119101
+ ---- EVENT ------ 35400
+ ---- EVENT ------ 35500
+ fission: A 194 Z 78 eexs 327.641 Wn 0.0314991 Wf 0.00155987
+ fission: A 190 Z 79 eexs 202.798 Wn 0.0265314 Wf 0.000730233
+ fission: A 194 Z 80 eexs 182.595 Wn 0.0125425 Wf 0.000369874
+ fission: A 188 Z 79 eexs 305.522 Wn 0.0363412 Wf 0.0254015
+ fission: A 190 Z 78 eexs 322.182 Wn 0.0301717 Wf 0.00543039
+ ---- EVENT ------ 35600
+ fission: A 191 Z 79 eexs 346.869 Wn 0.0311234 Wf 0.0265901
+ fission: A 186 Z 78 eexs 272.687 Wn 0.0227226 Wf 0.00574526
+ fission: A 192 Z 78 eexs 244.653 Wn 0.0233736 Wf 0.000273055
+ ---- EVENT ------ 35700
+ fission: A 191 Z 79 eexs 233.552 Wn 0.020558 Wf 0.00145686
+ fission: A 188 Z 77 eexs 383.325 Wn 0.0532415 Wf 0.00998959
+ ---- EVENT ------ 35800
+ ---- EVENT ------ 35900
+ fission: A 189 Z 77 eexs 477.134 Wn 0.0455318 Wf 0.0436227
+ ---- EVENT ------ 36000
+ fission: A 189 Z 80 eexs 224.738 Wn 0.0261309 Wf 0.00634139
+ fission: A 195 Z 79 eexs 357.817 Wn 0.0331405 Wf 0.0102626
+ fission: A 185 Z 75 eexs 336.87 Wn 0.0387447 Wf 0.000412572
+ fission: A 191 Z 81 eexs 88.9285 Wn 0.0026665 Wf 2.6665
+ fission: A 187 Z 78 eexs 354.265 Wn 0.0458431 Wf 0.027717
+ ---- EVENT ------ 36100
+ ---- EVENT ------ 36200
+ fission: A 189 Z 79 eexs 268.172 Wn 0.0230673 Wf 0.00773366
+ fission: A 189 Z 79 eexs 204.888 Wn 0.0166016 Wf 0.00114258
+ ---- EVENT ------ 36300
+ fission: A 195 Z 80 eexs 140.543 Wn 0.0184939 Wf 2.89401e-05
+ ---- EVENT ------ 36400
+ ---- EVENT ------ 36500
+ fission: A 190 Z 78 eexs 224.481 Wn 0.02051 Wf 0.000299814
+ ---- EVENT ------ 36600
+ fission: A 188 Z 78 eexs 344.328 Wn 0.0306229 Wf 0.0168341
+ ---- EVENT ------ 36700
+ fission: A 189 Z 78 eexs 316.582 Wn 0.045694 Wf 0.00656997
+ ---- EVENT ------ 36800
+ ---- EVENT ------ 36900
+ ---- EVENT ------ 37000
+ ---- EVENT ------ 37100
+ ---- EVENT ------ 37200
+ ---- EVENT ------ 37300
+ fission: A 191 Z 79 eexs 287.188 Wn 0.0259196 Wf 0.00674197
+ ---- EVENT ------ 37400
+ fission: A 191 Z 77 eexs 342.855 Wn 0.0371256 Wf 0.00138719
+ ---- EVENT ------ 37500
+ fission: A 190 Z 78 eexs 309.276 Wn 0.0290266 Wf 0.00394302
+ fission: A 192 Z 79 eexs 291.948 Wn 0.0400707 Wf 0.00553071
+ ---- EVENT ------ 37600
+ fission: A 186 Z 78 eexs 271.042 Wn 0.0225708 Wf 0.00550186
+ ---- EVENT ------ 37700
+ ---- EVENT ------ 37800
+ fission: A 187 Z 76 eexs 348.018 Wn 0.0562324 Wf 0.0013817
+ fission: A 187 Z 77 eexs 310.942 Wn 0.0313958 Wf 0.00259128
+ ---- EVENT ------ 37900
+ fission: A 190 Z 76 eexs 444.226 Wn 0.0461263 Wf 0.00416585
+ ---- EVENT ------ 38000
+ ---- EVENT ------ 38100
+ ---- EVENT ------ 38200
+ fission: A 182 Z 76 eexs 156.927 Wn 0.011912 Wf 1.07102e-05
+ fission: A 191 Z 81 eexs 60.2682 Wn 0.000885914 Wf 0.0176371
+ ---- EVENT ------ 38300
+ ---- EVENT ------ 38400
+ fission: A 189 Z 78 eexs 294.158 Wn 0.043267 Wf 0.00374339
+ fission: A 188 Z 77 eexs 388.386 Wn 0.0536543 Wf 0.0111049
+ ---- EVENT ------ 38500
+ fission: A 188 Z 78 eexs 322.504 Wn 0.0288218 Wf 0.010364
+ ---- EVENT ------ 38600
+ fission: A 187 Z 75 eexs 451.728 Wn 0.0496823 Wf 0.00294046
+ fission: A 192 Z 78 eexs 350.933 Wn 0.0334527 Wf 0.00555345
+ ---- EVENT ------ 38700
+ ---- EVENT ------ 38800
+ fission: A 192 Z 78 eexs 409.165 Wn 0.0378888 Wf 0.0192358
+ ---- EVENT ------ 38900
+ fission: A 190 Z 78 eexs 331.468 Wn 0.030972 Wf 0.00677789
+ ---- EVENT ------ 39000
+ fission: A 186 Z 76 eexs 268.325 Wn 0.028072 Wf 0.000205575
+ ---- EVENT ------ 39100
+ fission: A 189 Z 78 eexs 391.666 Wn 0.0525585 Wf 0.0329023
+ ---- EVENT ------ 39200
+ fission: A 190 Z 79 eexs 346.736 Wn 0.0431793 Wf 0.0350279
+ fission: A 190 Z 77 eexs 512.275 Wn 0.0655234 Wf 0.0590038
+ ---- EVENT ------ 39300
+ fission: A 188 Z 77 eexs 407.782 Wn 0.0551696 Wf 0.0164415
+ ---- EVENT ------ 39400
+ fission: A 185 Z 77 eexs 298.13 Wn 0.0282308 Wf 0.00372513
+ fission: A 190 Z 76 eexs 393.601 Wn 0.0425431 Wf 0.00136195
+ fission: A 184 Z 75 eexs 327.646 Wn 0.051196 Wf 0.000481108
+ fission: A 185 Z 76 eexs 464.208 Wn 0.0607495 Wf 0.0307137
+ fission: A 191 Z 81 eexs 84.6283 Wn 0.00235217 Wf 2.35217
+ fission: A 190 Z 78 eexs 234.464 Wn 0.0216037 Wf 0.000429216
+ ---- EVENT ------ 39500
+ ---- EVENT ------ 39600
+ fission: A 191 Z 79 eexs 409.356 Wn 0.0357854 Wf 0.0878948
+ ---- EVENT ------ 39700
+ ---- EVENT ------ 39800
+ fission: A 183 Z 77 eexs 169.245 Wn 0.0128856 Wf 9.77193e-05
+ ---- EVENT ------ 39900
+ fission: A 187 Z 80 eexs 293.127 Wn 0.031239 Wf 0.0376414
+ ---- EVENT ------ 40000
+ ---- EVENT ------ 40100
+ fission: A 187 Z 78 eexs 345.186 Wn 0.0450248 Wf 0.0229851
+ ---- EVENT ------ 40200
+ ---- EVENT ------ 40300
+ fission: A 188 Z 78 eexs 497.977 Wn 0.0407803 Wf 0.255254
+ fission: A 189 Z 79 eexs 297.177 Wn 0.0257456 Wf 0.0158042
+ fission: A 186 Z 78 eexs 168.128 Wn 0.0120322 Wf 0.000157453
+ ---- EVENT ------ 40400
+ fission: A 183 Z 74 eexs 420.303 Wn 0.0652948 Wf 0.00130143
+ ---- EVENT ------ 40500
+ fission: A 189 Z 78 eexs 178.742 Wn 0.0272124 Wf 6.82948e-05
+ ---- EVENT ------ 40600
+ fission: A 187 Z 77 eexs 327.204 Wn 0.0328591 Wf 0.00389941
+ ---- EVENT ------ 40700
+ fission: A 180 Z 75 eexs 254.626 Wn 0.0347528 Wf 0.000274406
+ fission: A 186 Z 78 eexs 305.555 Wn 0.0256397 Wf 0.0129126
+ fission: A 191 Z 79 eexs 250.343 Wn 0.0223073 Wf 0.00244873
+ fission: A 188 Z 76 eexs 271.111 Wn 0.030009 Wf 9.41297e-05
+ ---- EVENT ------ 40800
+ ---- EVENT ------ 40900
+ ---- EVENT ------ 41000
+ fission: A 182 Z 78 eexs 126.714 Wn 0.00574096 Wf 0.000107789
+ ---- EVENT ------ 41100
+ fission: A 188 Z 75 eexs 209.784 Wn 0.0439643 Wf 6.80422e-07
+ fission: A 191 Z 79 eexs 421.053 Wn 0.0365772 Wf 0.107718
+ ---- EVENT ------ 41200
+ fission: A 192 Z 80 eexs 283.952 Wn 0.0221424 Wf 0.0196838
+ ---- EVENT ------ 41300
+ fission: A 190 Z 78 eexs 310.451 Wn 0.0291324 Wf 0.00406206
+ fission: A 190 Z 78 eexs 247.731 Wn 0.0230198 Wf 0.000672643
+ fission: A 190 Z 79 eexs 341.027 Wn 0.0426554 Wf 0.0311528
+ ---- EVENT ------ 41400
+ fission: A 178 Z 72 eexs 302.968 Wn 0.0359708 Wf 9.41544e-06
+ fission: A 190 Z 78 eexs 327.115 Wn 0.0305992 Wf 0.00611418
+ ---- EVENT ------ 41500
+ fission: A 186 Z 78 eexs 140.989 Wn 0.00902797 Wf 3.82111e-05
+ ---- EVENT ------ 41600
+ fission: A 191 Z 79 eexs 162.015 Wn 0.0124675 Wf 8.35893e-05
+ fission: A 185 Z 78 eexs 150.431 Wn 0.0176107 Wf 0.000102531
+ fission: A 190 Z 78 eexs 439.61 Wn 0.0389773 Wf 0.0599821
+ ---- EVENT ------ 41700
+ ---- EVENT ------ 41800
+ ---- EVENT ------ 41900
+ ---- EVENT ------ 42000
+ fission: A 190 Z 77 eexs 313.008 Wn 0.0501609 Wf 0.000910712
+ fission: A 188 Z 78 eexs 363.942 Wn 0.0321574 Wf 0.0253402
+ fission: A 187 Z 78 eexs 431 Wn 0.0518518 Wf 0.113644
+ ---- EVENT ------ 42100
+ fission: A 192 Z 80 eexs 213.029 Wn 0.0154708 Wf 0.00279351
+ fission: A 187 Z 77 eexs 303.666 Wn 0.0307192 Wf 0.00214126
+ ---- EVENT ------ 42200
+ fission: A 186 Z 79 eexs 119.07 Wn 0.0102074 Wf 7.26331e-05
+ fission: A 188 Z 78 eexs 267.636 Wn 0.0238324 Wf 0.00256301
+ ---- EVENT ------ 42300
+ fission: A 190 Z 79 eexs 301.81 Wn 0.0387828 Wf 0.0131155
+ ---- EVENT ------ 42400
+ fission: A 186 Z 76 eexs 265.432 Wn 0.0277679 Wf 0.000186497
+ ---- EVENT ------ 42500
+ fission: A 190 Z 78 eexs 345.029 Wn 0.0321063 Wf 0.00925787
+ fission: A 186 Z 78 eexs 324.612 Wn 0.0272294 Wf 0.0198055
+ ---- EVENT ------ 42600
+ ---- EVENT ------ 42700
+ ---- EVENT ------ 42800
+ fission: A 189 Z 77 eexs 244.644 Wn 0.0261312 Wf 0.000156776
+ fission: A 191 Z 78 eexs 362.116 Wn 0.0533267 Wf 0.00986747
+ fission: A 190 Z 77 eexs 322.9 Wn 0.0512163 Wf 0.00119314
+ ---- EVENT ------ 42900
+ fission: A 191 Z 80 eexs 296.163 Wn 0.036672 Wf 0.0322572
+ fission: A 186 Z 78 eexs 197.857 Wn 0.0152613 Wf 0.000549302
+ ---- EVENT ------ 43000
+ fission: A 192 Z 78 eexs 294.416 Wn 0.0284363 Wf 0.00130941
+ ---- EVENT ------ 43100
+ ---- EVENT ------ 43200
+ ---- EVENT ------ 43300
+ ---- EVENT ------ 43400
+ ---- EVENT ------ 43500
+ fission: A 191 Z 81 eexs 94.7042 Wn 0.00310927 Wf 3.10927
+ ---- EVENT ------ 43600
+ fission: A 187 Z 78 eexs 329.06 Wn 0.0435084 Wf 0.01627
+ ---- EVENT ------ 43700
+ ---- EVENT ------ 43800
+ fission: A 189 Z 79 eexs 343.644 Wn 0.0296643 Wf 0.043138
+ ---- EVENT ------ 43900
+ ---- EVENT ------ 44000
+ fission: A 187 Z 78 eexs 295.631 Wn 0.0400883 Wf 0.00747679
+ fission: A 188 Z 77 eexs 323.596 Wn 0.0477661 Wf 0.00251741
+ ---- EVENT ------ 44100
+ fission: A 189 Z 77 eexs 383.265 Wn 0.0392096 Wf 0.00721673
+ ---- EVENT ------ 44200
+ fission: A 187 Z 78 eexs 232.861 Wn 0.0325179 Wf 0.00128061
+ ---- EVENT ------ 44300
+ ---- EVENT ------ 44400
+ fission: A 187 Z 79 eexs 258.87 Wn 0.0207603 Wf 0.0111727
+ ---- EVENT ------ 44500
+ fission: A 196 Z 79 eexs 336.787 Wn 0.0498499 Wf 0.00456796
+ fission: A 180 Z 75 eexs 288.623 Wn 0.0386322 Wf 0.000789964
+ ---- EVENT ------ 44600
+ ---- EVENT ------ 44700
+ fission: A 188 Z 76 eexs 327.066 Wn 0.0355497 Wf 0.00053809
+ ---- EVENT ------ 44800
+ ---- EVENT ------ 44900
+ ---- EVENT ------ 45000
+ fission: A 188 Z 78 eexs 352.618 Wn 0.0312809 Wf 0.0200689
+ fission: A 187 Z 77 eexs 372.609 Wn 0.0366087 Wf 0.0109431
+ ---- EVENT ------ 45100
+ fission: A 188 Z 77 eexs 475.438 Wn 0.0597211 Wf 0.056281
+ fission: A 190 Z 78 eexs 405.904 Wn 0.0367248 Wf 0.0324793
+ fission: A 187 Z 78 eexs 374.331 Wn 0.0475654 Wf 0.0412145
+ ---- EVENT ------ 45200
+ fission: A 187 Z 79 eexs 293.76 Wn 0.0239058 Wf 0.0257893
+ ---- EVENT ------ 45300
+ fission: A 193 Z 79 eexs 352.138 Wn 0.0319198 Wf 0.0166546
+ fission: A 190 Z 78 eexs 292.854 Wn 0.0275133 Wf 0.00256616
+ ---- EVENT ------ 45400
+ fission: A 189 Z 80 eexs 254.703 Wn 0.0297507 Wf 0.0143439
+ ---- EVENT ------ 45500
+ fission: A 192 Z 80 eexs 310.376 Wn 0.0243982 Wf 0.0357406
+ ---- EVENT ------ 45600
+ ---- EVENT ------ 45700
+ fission: A 188 Z 78 eexs 361.139 Wn 0.0319428 Wf 0.0239359
+ fission: A 191 Z 78 eexs 496.763 Wn 0.0630186 Wf 0.118857
+ fission: A 193 Z 79 eexs 227.95 Wn 0.0202054 Wf 0.000572969
+ ---- EVENT ------ 45800
+ ---- EVENT ------ 45900
+ fission: A 193 Z 78 eexs 335.956 Wn 0.0533356 Wf 0.00275753
+ fission: A 188 Z 78 eexs 209.97 Wn 0.0178538 Wf 0.000392864
+ ---- EVENT ------ 46000
+ ---- EVENT ------ 46100
+ fission: A 190 Z 78 eexs 267.985 Wn 0.0250983 Wf 0.00126723
+ ---- EVENT ------ 46200
+ fission: A 181 Z 74 eexs 373.295 Wn 0.0566804 Wf 0.000942729
+ fission: A 184 Z 76 eexs 326.55 Wn 0.0315308 Wf 0.00241877
+ ---- EVENT ------ 46300
+ ---- EVENT ------ 46400
+ fission: A 192 Z 78 eexs 570.475 Wn 0.047104 Wf 0.277609
+ fission: A 192 Z 80 eexs 279.329 Wn 0.0217345 Wf 0.0176281
+ ---- EVENT ------ 46500
+ fission: A 189 Z 77 eexs 323.95 Wn 0.034238 Wf 0.0017745
+ fission: A 188 Z 75 eexs 397.879 Wn 0.0663235 Wf 0.000596083
+ fission: A 189 Z 79 eexs 398.606 Wn 0.0337473 Wf 0.120034
+ ---- EVENT ------ 46600
+ fission: A 190 Z 78 eexs 307.691 Wn 0.0288833 Wf 0.00378714
+ ---- EVENT ------ 46700
+ ---- EVENT ------ 46800
+ ---- EVENT ------ 46900
+ ---- EVENT ------ 47000
+ fission: A 188 Z 77 eexs 380.82 Wn 0.0530345 Wf 0.00947454
+ fission: A 187 Z 78 eexs 239.6 Wn 0.0334097 Wf 0.00158632
+ ---- EVENT ------ 47100
+ ---- EVENT ------ 47200
+ fission: A 188 Z 77 eexs 474.32 Wn 0.0596542 Wf 0.0552306
+ fission: A 192 Z 79 eexs 350.75 Wn 0.0460387 Wf 0.0216741
+ fission: A 186 Z 78 eexs 339.833 Wn 0.0284469 Wf 0.0273597
+ ---- EVENT ------ 47300
+ fission: A 187 Z 77 eexs 471.204 Wn 0.0432721 Wf 0.0691481
+ fission: A 188 Z 78 eexs 201.629 Wn 0.0169297 Wf 0.000284656
+ ---- EVENT ------ 47400
+ ---- EVENT ------ 47500
+ ---- EVENT ------ 47600
+ fission: A 191 Z 78 eexs 468.39 Wn 0.0613376 Wf 0.0748833
+ ---- EVENT ------ 47700
+ ---- EVENT ------ 47800
+ fission: A 186 Z 78 eexs 451.274 Wn 0.036074 Wf 0.201448
+ ---- EVENT ------ 47900
+ fission: A 192 Z 78 eexs 391.594 Wn 0.0366225 Wf 0.0135034
+ fission: A 183 Z 76 eexs 182.814 Wn 0.0273592 Wf 2.5909e-05
+ ---- EVENT ------ 48000
+ fission: A 188 Z 77 eexs 323.065 Wn 0.047712 Wf 0.00248368
+ ---- EVENT ------ 48100
+ ---- EVENT ------ 48200
+ ---- EVENT ------ 48300
+ fission: A 188 Z 77 eexs 363.895 Wn 0.0515867 Wf 0.00655832
+ fission: A 191 Z 79 eexs 252.701 Wn 0.0225478 Wf 0.00262549
+ ---- EVENT ------ 48400
+ ---- EVENT ------ 48500
+ ---- EVENT ------ 48600
+ fission: A 185 Z 76 eexs 397.527 Wn 0.05617 Wf 0.00862513
+ ---- EVENT ------ 48700
+ fission: A 184 Z 78 eexs 163.471 Wn 0.0103523 Wf 0.000296408
+ fission: A 188 Z 76 eexs 419.977 Wn 0.0429552 Wf 0.00503318
+ ---- EVENT ------ 48800
+ fission: A 180 Z 76 eexs 210.27 Wn 0.0160753 Wf 0.000331546
+ ---- EVENT ------ 48900
+ ---- EVENT ------ 49000
+ fission: A 197 Z 80 eexs 184.685 Wn 0.028504 Wf 0.000117283
+ ---- EVENT ------ 49100
+ fission: A 190 Z 79 eexs 379.741 Wn 0.0460263 Wf 0.0665335
+ fission: A 183 Z 75 eexs 359.66 Wn 0.0381731 Wf 0.00163265
+ ---- EVENT ------ 49200
+ ---- EVENT ------ 49300
+ ---- EVENT ------ 49400
+ fission: A 193 Z 78 eexs 366.249 Wn 0.0562391 Wf 0.00566901
+ ---- EVENT ------ 49500
+ fission: A 187 Z 79 eexs 169.274 Wn 0.0116725 Wf 0.000616222
+ fission: A 191 Z 81 eexs 230.395 Wn 0.0157524 Wf 15.7524
+ ---- EVENT ------ 49600
+ fission: A 186 Z 78 eexs 212.166 Wn 0.0167704 Wf 0.000925727
+ ---- EVENT ------ 49700
+ fission: A 189 Z 79 eexs 191.017 Wn 0.0150807 Wf 0.000684916
+ ---- EVENT ------ 49800
+ fission: A 190 Z 78 eexs 365.142 Wn 0.0337157 Wf 0.0143599
+ fission: A 190 Z 78 eexs 189.209 Wn 0.0164631 Wf 7.05596e-05
+ fission: A 189 Z 79 eexs 167.028 Wn 0.0123849 Wf 0.000251562
+ ---- EVENT ------ 49900
+ ---- EVENT ------ 50000
+ fission: A 195 Z 79 eexs 288.742 Wn 0.0270435 Wf 0.00183712
+ ---- EVENT ------ 50100
+ fission: A 191 Z 78 eexs 407.147 Wn 0.0570905 Wf 0.0248962
+ fission: A 192 Z 78 eexs 289.657 Wn 0.0279792 Wf 0.00114305
+ ---- EVENT ------ 50200
+ fission: A 190 Z 78 eexs 343.381 Wn 0.0319707 Wf 0.00892004
+ fission: A 192 Z 77 eexs 345.63 Wn 0.0567298 Wf 0.00102414
+ ---- EVENT ------ 50300
+ fission: A 192 Z 80 eexs 144.475 Wn 0.00841904 Wf 0.000172988
+ ---- EVENT ------ 50400
+ ---- EVENT ------ 50500
+ fission: A 189 Z 78 eexs 366.215 Wn 0.05043 Wf 0.0198272
+ fission: A 192 Z 79 eexs 218.721 Wn 0.0308001 Wf 0.000607229
+ fission: A 191 Z 80 eexs 342.039 Wn 0.04119 Wf 0.0830486
+ fission: A 187 Z 77 eexs 350.146 Wn 0.0348135 Wf 0.00668921
+ ---- EVENT ------ 50600
+ fission: A 183 Z 78 eexs 198.295 Wn 0.0220724 Wf 0.00171211
+ ---- EVENT ------ 50700
+ ---- EVENT ------ 50800
+ fission: A 190 Z 79 eexs 296.023 Wn 0.0381686 Wf 0.011429
+ ---- EVENT ------ 50900
+ fission: A 186 Z 75 eexs 491.159 Wn 0.0679798 Wf 0.00901882
+ fission: A 190 Z 77 eexs 304.415 Wn 0.0492116 Wf 0.000714355
+ ---- EVENT ------ 51000
+ fission: A 190 Z 78 eexs 253.215 Wn 0.0235926 Wf 0.000803185
+ fission: A 184 Z 76 eexs 257.848 Wn 0.0250461 Wf 0.000336525
+ ---- EVENT ------ 51100
+ fission: A 195 Z 79 eexs 245.408 Wn 0.0226521 Wf 0.000481494
+ fission: A 190 Z 78 eexs 468.101 Wn 0.0407294 Wf 0.0971993
+ ---- EVENT ------ 51200
+ fission: A 188 Z 78 eexs 410.579 Wn 0.0355063 Wf 0.0615645
+ ---- EVENT ------ 51300
+ fission: A 184 Z 75 eexs 368.565 Wn 0.0549885 Wf 0.00139027
+ fission: A 190 Z 78 eexs 321.986 Wn 0.0301545 Wf 0.00540454
+ ---- EVENT ------ 51400
+ ---- EVENT ------ 51500
+ ---- EVENT ------ 51600
+ fission: A 188 Z 78 eexs 378.391 Wn 0.0332389 Wf 0.0337602
+ fission: A 188 Z 78 eexs 198.58 Wn 0.0165884 Wf 0.000251977
+ ---- EVENT ------ 51700
+ fission: A 189 Z 79 eexs 278.084 Wn 0.0240031 Wf 0.00996238
+ ---- EVENT ------ 51800
+ fission: A 185 Z 77 eexs 355.771 Wn 0.0331406 Wf 0.0142664
+ fission: A 191 Z 79 eexs 271.606 Wn 0.02443 Wf 0.00447647
+ ---- EVENT ------ 51900
+ ---- EVENT ------ 52000
+ fission: A 185 Z 74 eexs 412.623 Wn 0.0697831 Wf 0.000490531
+ ---- EVENT ------ 52100
+ fission: A 189 Z 78 eexs 337.697 Wn 0.04781 Wf 0.0107363
+ ---- EVENT ------ 52200
+ ---- EVENT ------ 52300
+ fission: A 194 Z 79 eexs 292.482 Wn 0.0417956 Wf 0.00288494
+ fission: A 190 Z 78 eexs 315.892 Wn 0.0296183 Wf 0.0046544
+ fission: A 188 Z 78 eexs 308.728 Wn 0.0276323 Wf 0.00749064
+ fission: A 186 Z 77 eexs 288.183 Wn 0.0403769 Wf 0.00201624
+ ---- EVENT ------ 52400
+ fission: A 190 Z 78 eexs 261.817 Wn 0.024476 Wf 0.00105134
+ ---- EVENT ------ 52500
+ fission: A 190 Z 80 eexs 351.332 Wn 0.0268719 Wf 0.103078
+ ---- EVENT ------ 52600
+ fission: A 186 Z 78 eexs 297.379 Wn 0.024935 Wf 0.0106537
+ ---- EVENT ------ 52700
+ fission: A 189 Z 79 eexs 408.52 Wn 0.0344248 Wf 0.142236
+ ---- EVENT ------ 52800
+ fission: A 188 Z 76 eexs 399.053 Wn 0.0414598 Wf 0.00320597
+ ---- EVENT ------ 52900
+ fission: A 189 Z 76 eexs 302.973 Wn 0.0556387 Wf 0.000174242
+ ---- EVENT ------ 53000
+ fission: A 191 Z 80 eexs 263.733 Wn 0.0330628 Wf 0.0150267
+ fission: A 192 Z 80 eexs 258.271 Wn 0.0198274 Wf 0.0103952
+ ---- EVENT ------ 53100
+ fission: A 188 Z 78 eexs 300.085 Wn 0.0268647 Wf 0.00606044
+ fission: A 185 Z 77 eexs 193.865 Wn 0.0172902 Wf 0.000121662
+ fission: A 193 Z 79 eexs 324.667 Wn 0.0296265 Wf 0.00898683
+ fission: A 188 Z 76 eexs 334.484 Wn 0.0362184 Wf 0.00065986
+ ---- EVENT ------ 53200
+ fission: A 191 Z 80 eexs 275.961 Wn 0.0344667 Wf 0.020264
+ fission: A 188 Z 78 eexs 317.693 Wn 0.0284111 Wf 0.00926911
+ fission: A 188 Z 78 eexs 199.67 Wn 0.0167106 Wf 0.000263276
+ fission: A 188 Z 79 eexs 410.973 Wn 0.0453631 Wf 0.187684
+ ---- EVENT ------ 53300
+ fission: A 192 Z 80 eexs 323.463 Wn 0.025468 Wf 0.0471191
+ ---- EVENT ------ 53400
+ fission: A 191 Z 78 eexs 304.915 Wn 0.0475755 Wf 0.00249796
+ fission: A 183 Z 73 eexs 398.557 Wn 0.0495322 Wf 0.00012596
+ fission: A 191 Z 78 eexs 501.16 Wn 0.0632646 Wf 0.127381
+ ---- EVENT ------ 53500
+ fission: A 190 Z 80 eexs 297.737 Wn 0.022648 Wf 0.0350017
+ fission: A 192 Z 79 eexs 358.421 Wn 0.0467347 Wf 0.0254352
+ ---- EVENT ------ 53600
+ fission: A 191 Z 77 eexs 436.789 Wn 0.0443569 Wf 0.0113455
+ fission: A 191 Z 78 eexs 351.954 Wn 0.0523902 Wf 0.00787275
+ ---- EVENT ------ 53700
+ fission: A 189 Z 77 eexs 373.467 Wn 0.0384458 Wf 0.00582394
+ ---- EVENT ------ 53800
+ ---- EVENT ------ 53900
+ fission: A 186 Z 78 eexs 239.948 Wn 0.019594 Wf 0.00228515
+ ---- EVENT ------ 54000
+ fission: A 187 Z 77 eexs 454.417 Wn 0.0422641 Wf 0.0520464
+ ---- EVENT ------ 54100
+ fission: A 183 Z 77 eexs 474.816 Wn 0.0384749 Wf 0.205014
+ ---- EVENT ------ 54200
+ fission: A 174 Z 72 eexs 391.188 Wn 0.0363117 Wf 0.000794517
+ ---- EVENT ------ 54300
+ ---- EVENT ------ 54400
+ ---- EVENT ------ 54500
+ fission: A 190 Z 78 eexs 425.014 Wn 0.0380267 Wf 0.046269
+ fission: A 193 Z 80 eexs 356.586 Wn 0.0440853 Wf 0.0622144
+ ---- EVENT ------ 54600
+ fission: A 183 Z 76 eexs 237.618 Wn 0.0354741 Wf 0.000255619
+ ---- EVENT ------ 54700
+ fission: A 189 Z 76 eexs 375.599 Wn 0.0629182 Wf 0.00128943
+ fission: A 182 Z 77 eexs 165.625 Wn 0.0182057 Wf 0.000128835
+ ---- EVENT ------ 54800
+ ---- EVENT ------ 54900
+ fission: A 190 Z 79 eexs 384.856 Wn 0.0464412 Wf 0.07312
+ ---- EVENT ------ 55000
+ ---- EVENT ------ 55100
+ ---- EVENT ------ 55200
+ fission: A 178 Z 74 eexs 305.538 Wn 0.0286178 Wf 0.000526203
+ ---- EVENT ------ 55300
+ ---- EVENT ------ 55400
+ fission: A 186 Z 77 eexs 401.109 Wn 0.0508262 Wf 0.0263353
+ ---- EVENT ------ 55500
+ fission: A 190 Z 78 eexs 361.302 Wn 0.033415 Wf 0.0132322
+ fission: A 194 Z 78 eexs 419.062 Wn 0.0386505 Wf 0.012667
+ fission: A 192 Z 78 eexs 302.923 Wn 0.0292398 Wf 0.00165907
+ ---- EVENT ------ 55600
+ fission: A 192 Z 79 eexs 262.764 Wn 0.0366437 Wf 0.00249805
+ fission: A 191 Z 79 eexs 162.992 Wn 0.0125832 Wf 8.78001e-05
+ fission: A 188 Z 76 eexs 443.941 Wn 0.0445588 Wf 0.00819298
+ ---- EVENT ------ 55700
+ fission: A 187 Z 76 eexs 294.29 Wn 0.0505711 Wf 0.000310057
+ fission: A 185 Z 78 eexs 283.675 Wn 0.0353909 Wf 0.0103898
+ ---- EVENT ------ 55800
+ ---- EVENT ------ 55900
+ fission: A 191 Z 77 eexs 371 Wn 0.0395038 Wf 0.00276848
+ ---- EVENT ------ 56000
+ fission: A 186 Z 78 eexs 421.412 Wn 0.0342369 Wf 0.124309
+ ---- EVENT ------ 56100
+ ---- EVENT ------ 56200
+ ---- EVENT ------ 56300
+ fission: A 192 Z 79 eexs 226.296 Wn 0.0318662 Wf 0.000792247
+ ---- EVENT ------ 56400
+ fission: A 192 Z 78 eexs 255.926 Wn 0.0245755 Wf 0.000401945
+ fission: A 192 Z 79 eexs 326.943 Wn 0.0437624 Wf 0.0128722
+ ---- EVENT ------ 56500
+ fission: A 190 Z 78 eexs 376.298 Wn 0.034572 Wf 0.0181185
+ ---- EVENT ------ 56600
+ ---- EVENT ------ 56700
+ ---- EVENT ------ 56800
+ ---- EVENT ------ 56900
+ fission: A 192 Z 80 eexs 363.986 Wn 0.0285859 Wf 0.103798
+ fission: A 189 Z 78 eexs 323.334 Wn 0.0463879 Wf 0.00771628
+ ---- EVENT ------ 57000
+ fission: A 191 Z 78 eexs 306.407 Wn 0.0477412 Wf 0.00259828
+ ---- EVENT ------ 57100
+ fission: A 184 Z 78 eexs 184.336 Wn 0.0124832 Wf 0.000709485
+ fission: A 183 Z 77 eexs 159.885 Wn 0.0118158 Wf 6.14242e-05
+ ---- EVENT ------ 57200
+ fission: A 191 Z 77 eexs 357.419 Wn 0.0383807 Wf 0.00199887
+ ---- EVENT ------ 57300
+ fission: A 192 Z 78 eexs 301.454 Wn 0.0291023 Wf 0.00159353
+ ---- EVENT ------ 57400
+ fission: A 186 Z 78 eexs 319.119 Wn 0.0267787 Wf 0.0175568
+ fission: A 182 Z 73 eexs 311.52 Wn 0.0570282 Wf 1.44797e-05
+ ---- EVENT ------ 57500
+ fission: A 190 Z 80 eexs 224.618 Wn 0.016078 Wf 0.00548543
+ ---- EVENT ------ 57600
+ fission: A 189 Z 78 eexs 395.553 Wn 0.0528674 Wf 0.035442
+ fission: A 194 Z 81 eexs 200.908 Wn 0.0222531 Wf 0.00316738
+ fission: A 184 Z 76 eexs 187.786 Wn 0.0171654 Wf 2.01008e-05
+ fission: A 181 Z 78 eexs 100.328 Wn 0.00671814 Wf 3.00131e-05
+ ---- EVENT ------ 57700
+ fission: A 188 Z 77 eexs 331.844 Wn 0.0485937 Wf 0.00309458
+ fission: A 188 Z 77 eexs 433.268 Wn 0.0570106 Wf 0.02675
+ ---- EVENT ------ 57800
+ fission: A 190 Z 79 eexs 210.173 Wn 0.0275804 Wf 0.000953386
+ fission: A 188 Z 77 eexs 276.474 Wn 0.0425328 Wf 0.000680601
+ ---- EVENT ------ 57900
+ ---- EVENT ------ 58000
+ ---- EVENT ------ 58100
+ fission: A 189 Z 79 eexs 179.756 Wn 0.0138241 Wf 0.000436882
+ ---- EVENT ------ 58200
+ ---- EVENT ------ 58300
+ fission: A 192 Z 80 eexs 204.836 Wn 0.0146482 Wf 0.00212916
+ ---- EVENT ------ 58400
+ fission: A 182 Z 76 eexs 366.396 Wn 0.0322246 Wf 0.0118189
+ ---- EVENT ------ 58500
+ fission: A 185 Z 74 eexs 301.787 Wn 0.0595891 Wf 1.9585e-05
+ fission: A 190 Z 80 eexs 281.471 Wn 0.021266 Wf 0.0242483
+ fission: A 184 Z 74 eexs 418.723 Wn 0.0461762 Wf 0.000848678
+ fission: A 191 Z 77 eexs 350.198 Wn 0.0377651 Wf 0.00167136
+ fission: A 190 Z 78 eexs 313.703 Wn 0.0294236 Wf 0.00440774
+ fission: A 192 Z 78 eexs 473.551 Wn 0.0420494 Wf 0.0622134
+ ---- EVENT ------ 58600
+ fission: A 189 Z 78 eexs 421.852 Wn 0.0548525 Wf 0.057523
+ fission: A 184 Z 77 eexs 345.334 Wn 0.0423945 Wf 0.0154939
+ ---- EVENT ------ 58700
+ fission: A 190 Z 78 eexs 360.754 Wn 0.0333719 Wf 0.0130778
+ ---- EVENT ------ 58800
+ ---- EVENT ------ 58900
+ fission: A 188 Z 78 eexs 286.75 Wn 0.0256474 Wf 0.00431164
+ ---- EVENT ------ 59000
+ fission: A 193 Z 80 eexs 326.912 Wn 0.041312 Wf 0.0341176
+ fission: A 184 Z 76 eexs 264.671 Wn 0.0257445 Wf 0.000420304
+ ---- EVENT ------ 59100
+ fission: A 185 Z 76 eexs 382.955 Wn 0.0550134 Wf 0.00633964
+ fission: A 181 Z 76 eexs 269.935 Wn 0.0356871 Wf 0.00157779
+ ---- EVENT ------ 59200
+ ---- EVENT ------ 59300
+ fission: A 194 Z 80 eexs 171.911 Wn 0.0114227 Wf 0.000232358
+ ---- EVENT ------ 59400
+ ---- EVENT ------ 59500
+ fission: A 190 Z 80 eexs 263.352 Wn 0.0196716 Wf 0.0156819
+ fission: A 187 Z 75 eexs 430.514 Wn 0.0482823 Wf 0.00187115
+ ---- EVENT ------ 59600
+ fission: A 180 Z 78 eexs 104.909 Wn 0.00325164 Wf 6.84233e-05
+ fission: A 187 Z 77 eexs 356.492 Wn 0.0353323 Wf 0.00771334
+ ---- EVENT ------ 59700
+ ---- EVENT ------ 59800
+ fission: A 191 Z 79 eexs 389.616 Wn 0.0343933 Wf 0.0615308
+ fission: A 194 Z 80 eexs 296.281 Wn 0.0235033 Wf 0.0128905
+ fission: A 193 Z 80 eexs 246.781 Wn 0.0323682 Wf 0.00480292
+ ---- EVENT ------ 59900
+ fission: A 189 Z 79 eexs 233.838 Wn 0.0196621 Wf 0.00294796
+ fission: A 188 Z 76 eexs 319.442 Wn 0.0348472 Wf 0.000433805
+ ---- EVENT ------ 60000
+ fission: A 190 Z 76 eexs 411.143 Wn 0.0438463 Wf 0.00204165
+ fission: A 190 Z 79 eexs 263.615 Wn 0.0345079 Wf 0.00498823
+ ---- EVENT ------ 60100
+ fission: A 190 Z 78 eexs 447.423 Wn 0.0394711 Wf 0.0686792
+ ---- EVENT ------ 60200
+ ---- EVENT ------ 60300
+ fission: A 190 Z 80 eexs 171.29 Wn 0.010801 Wf 0.000872337
+ fission: A 187 Z 78 eexs 340.07 Wn 0.0445526 Wf 0.0206371
+ fission: A 188 Z 78 eexs 396.579 Wn 0.0345435 Wf 0.0476962
+ ---- EVENT ------ 60400
+ fission: A 193 Z 78 eexs 350.205 Wn 0.0547418 Wf 0.00390381
+ ---- EVENT ------ 60500
+ fission: A 187 Z 76 eexs 420.343 Wn 0.0622166 Wf 0.00711757
+ fission: A 183 Z 76 eexs 258.146 Wn 0.038129 Wf 0.000510899
+ fission: A 189 Z 79 eexs 319.592 Wn 0.0276919 Wf 0.026142
+ ---- EVENT ------ 60600
+ fission: A 191 Z 79 eexs 234.901 Wn 0.0207009 Wf 0.00152133
+ ---- EVENT ------ 60700
+ fission: A 186 Z 77 eexs 351.037 Wn 0.046688 Wf 0.00942525
+ fission: A 189 Z 78 eexs 387.994 Wn 0.0522628 Wf 0.0306492
+ ---- EVENT ------ 60800
+ fission: A 186 Z 78 eexs 242.308 Wn 0.0198268 Wf 0.00245351
+ fission: A 190 Z 76 eexs 344.456 Wn 0.0385061 Wf 0.000388217
+ fission: A 187 Z 79 eexs 209.348 Wn 0.0158934 Wf 0.0026857
+ ---- EVENT ------ 60900
+ fission: A 182 Z 74 eexs 498.277 Wn 0.0482286 Wf 0.00900256
+ ---- EVENT ------ 61000
+ fission: A 193 Z 79 eexs 337.08 Wn 0.0306826 Wf 0.0119552
+ ---- EVENT ------ 61100
+ fission: A 192 Z 80 eexs 314.015 Wn 0.0246987 Wf 0.0386405
+ fission: A 191 Z 80 eexs 272.676 Wn 0.0340948 Wf 0.0187263
+ ---- EVENT ------ 61200
+ ---- EVENT ------ 61300
+ fission: A 189 Z 78 eexs 334.284 Wn 0.0474785 Wf 0.00993962
+ ---- EVENT ------ 61400
+ fission: A 184 Z 78 eexs 326.702 Wn 0.0253576 Wf 0.0363244
+ ---- EVENT ------ 61500
+ fission: A 193 Z 78 eexs 401.497 Wn 0.0592359 Wf 0.0121284
+ fission: A 185 Z 77 eexs 210.172 Wn 0.0191783 Wf 0.000236776
+ ---- EVENT ------ 61600
+ fission: A 185 Z 78 eexs 295.11 Wn 0.036604 Wf 0.0136621
+ fission: A 191 Z 80 eexs 279.977 Wn 0.0349163 Wf 0.0222876
+ ---- EVENT ------ 61700
+ ---- EVENT ------ 61800
+ fission: A 191 Z 79 eexs 237.712 Wn 0.0209973 Wf 0.0016634
+ ---- EVENT ------ 61900
+ fission: A 188 Z 78 eexs 184.207 Wn 0.0149576 Wf 0.0001372
+ ---- EVENT ------ 62000
+ ---- EVENT ------ 62100
+ fission: A 187 Z 78 eexs 269.036 Wn 0.0370761 Wf 0.0037486
+ ---- EVENT ------ 62200
+ ---- EVENT ------ 62300
+ fission: A 192 Z 78 eexs 263.291 Wn 0.0253433 Wf 0.000511813
+ ---- EVENT ------ 62400
+ fission: A 193 Z 80 eexs 287.159 Wn 0.0371599 Wf 0.01388
+ ---- EVENT ------ 62500
+ fission: A 188 Z 77 eexs 335.477 Wn 0.0489505 Wf 0.00338297
+ ---- EVENT ------ 62600
+ ---- EVENT ------ 62700
+ ---- EVENT ------ 62800
+ fission: A 188 Z 78 eexs 391.97 Wn 0.0342188 Wf 0.0437648
+ fission: A 191 Z 77 eexs 362.07 Wn 0.0387703 Wf 0.0022382
+ fission: A 191 Z 79 eexs 249.015 Wn 0.0221714 Wf 0.0023537
+ ---- EVENT ------ 62900
+ fission: A 189 Z 79 eexs 295.453 Wn 0.0255915 Wf 0.0151792
+ ---- EVENT ------ 63000
+ fission: A 181 Z 77 eexs 158.892 Wn 0.0103065 Wf 0.000145359
+ ---- EVENT ------ 63100
+ fission: A 187 Z 78 eexs 261.109 Wn 0.0361243 Wf 0.00300637
+ fission: A 178 Z 74 eexs 246.207 Wn 0.022967 Wf 7.67127e-05
+ ---- EVENT ------ 63200
+ ---- EVENT ------ 63300
+ ---- EVENT ------ 63400
+ ---- EVENT ------ 63500
+ fission: A 186 Z 76 eexs 280.377 Wn 0.0293128 Wf 0.000304349
+ fission: A 182 Z 75 eexs 499.361 Wn 0.0593017 Wf 0.0369409
+ fission: A 190 Z 78 eexs 328.104 Wn 0.0306843 Wf 0.00625984
+ ---- EVENT ------ 63600
+ fission: A 191 Z 77 eexs 333.645 Wn 0.0363039 Wf 0.00109089
+ ---- EVENT ------ 63700
+ fission: A 191 Z 77 eexs 253.384 Wn 0.0281356 Wf 8.973e-05
+ ---- EVENT ------ 63800
+ ---- EVENT ------ 63900
+ fission: A 181 Z 73 eexs 347.198 Wn 0.0423993 Wf 7.45603e-05
+ ---- EVENT ------ 64000
+ ---- EVENT ------ 64100
+ fission: A 188 Z 78 eexs 180.52 Wn 0.0145337 Wf 0.000116255
+ fission: A 186 Z 78 eexs 327.443 Wn 0.0274592 Wf 0.0210569
+ fission: A 191 Z 78 eexs 319.731 Wn 0.049182 Wf 0.00365886
+ ---- EVENT ------ 64200
+ fission: A 187 Z 78 eexs 152.276 Wn 0.0202287 Wf 4.4893e-05
+ ---- EVENT ------ 64300
+ fission: A 191 Z 79 eexs 291.774 Wn 0.0263475 Wf 0.0075703
+ fission: A 191 Z 80 eexs 234.304 Wn 0.0294594 Wf 0.00685324
+ ---- EVENT ------ 64400
+ fission: A 190 Z 79 eexs 440.671 Wn 0.0505546 Wf 0.190357
+ ---- EVENT ------ 64500
+ fission: A 187 Z 77 eexs 268.983 Wn 0.027302 Wf 0.000797468
+ fission: A 192 Z 79 eexs 394.841 Wn 0.049809 Wf 0.0519678
+ ---- EVENT ------ 64600
+ fission: A 186 Z 76 eexs 436.609 Wn 0.0420736 Wf 0.0136067
+ fission: A 189 Z 78 eexs 263.887 Wn 0.039668 Wf 0.00161457
+ fission: A 190 Z 78 eexs 457.048 Wn 0.0400655 Wf 0.0808872
+ ---- EVENT ------ 64700
+ ---- EVENT ------ 64800
+ fission: A 177 Z 74 eexs 297.622 Wn 0.040274 Wf 0.000630314
+ ---- EVENT ------ 64900
+ fission: A 183 Z 76 eexs 191.991 Wn 0.0288281 Wf 4.02656e-05
+ ---- EVENT ------ 65000
+ fission: A 193 Z 78 eexs 224.824 Wn 0.0393485 Wf 8.42596e-05
+ ---- EVENT ------ 65100
+ fission: A 182 Z 76 eexs 216.037 Wn 0.0186106 Wf 0.000176414
+ ---- EVENT ------ 65200
+ fission: A 189 Z 76 eexs 420.965 Wn 0.0665061 Wf 0.0036292
+ fission: A 188 Z 78 eexs 347.106 Wn 0.030845 Wf 0.0178643
+ ---- EVENT ------ 65300
+ ---- EVENT ------ 65400
+ ---- EVENT ------ 65500
+ fission: A 190 Z 79 eexs 303.814 Wn 0.0389928 Wf 0.0137468
+ ---- EVENT ------ 65600
+ ---- EVENT ------ 65700
+ fission: A 187 Z 79 eexs 314.656 Wn 0.0256743 Wf 0.0405558
+ ---- EVENT ------ 65800
+ fission: A 189 Z 77 eexs 336.062 Wn 0.0353233 Wf 0.00241617
+ ---- EVENT ------ 65900
+ fission: A 187 Z 77 eexs 328.382 Wn 0.0329626 Wf 0.00401306
+ fission: A 188 Z 78 eexs 298.031 Wn 0.0266798 Wf 0.00575717
+ ---- EVENT ------ 66000
+ fission: A 190 Z 77 eexs 297.768 Wn 0.0484559 Wf 0.000588712
+ fission: A 191 Z 77 eexs 326.877 Wn 0.0356859 Wf 0.000909787
+ ---- EVENT ------ 66100
+ ---- EVENT ------ 66200
+ fission: A 189 Z 79 eexs 293.678 Wn 0.0254321 Wf 0.0145578
+ fission: A 188 Z 78 eexs 253.165 Wn 0.0224025 Wf 0.00167944
+ fission: A 189 Z 78 eexs 358.343 Wn 0.0497326 Wf 0.0168258
+ fission: A 186 Z 78 eexs 205.386 Wn 0.0160597 Wf 0.000726872
+ ---- EVENT ------ 66300
+ fission: A 191 Z 78 eexs 331.618 Wn 0.0504094 Wf 0.00490046
+ ---- EVENT ------ 66400
+ fission: A 186 Z 77 eexs 307.425 Wn 0.0424569 Wf 0.00335461
+ fission: A 189 Z 79 eexs 352.47 Wn 0.0303588 Wf 0.0513818
+ ---- EVENT ------ 66500
+ fission: A 190 Z 79 eexs 304.451 Wn 0.0390593 Wf 0.0139528
+ fission: A 185 Z 77 eexs 265.758 Wn 0.0251259 Wf 0.00153324
+ ---- EVENT ------ 66600
+ fission: A 189 Z 78 eexs 457.261 Wn 0.0572589 Wf 0.105474
+ ---- EVENT ------ 66700
+ ---- EVENT ------ 66800
+ fission: A 188 Z 78 eexs 217.408 Wn 0.018666 Wf 0.000516903
+ ---- EVENT ------ 66900
+ fission: A 190 Z 79 eexs 309.422 Wn 0.0395734 Wf 0.0156525
+ fission: A 190 Z 78 eexs 368.044 Wn 0.0339409 Wf 0.0152661
+ ---- EVENT ------ 67000
+ ---- EVENT ------ 67100
+ ---- EVENT ------ 67200
+ fission: A 191 Z 78 eexs 315.747 Wn 0.0487586 Wf 0.00330854
+ fission: A 191 Z 77 eexs 370.174 Wn 0.0394368 Wf 0.00271523
+ ---- EVENT ------ 67300
+ fission: A 191 Z 79 eexs 286.063 Wn 0.025814 Wf 0.00655103
+ ---- EVENT ------ 67400
+ fission: A 183 Z 75 eexs 503.592 Wn 0.0476552 Wf 0.0293345
+ ---- EVENT ------ 67500
+ ---- EVENT ------ 67600
+ fission: A 189 Z 79 eexs 291.617 Wn 0.0252463 Wf 0.0138633
+ ---- EVENT ------ 67700
+ ---- EVENT ------ 67800
+ ---- EVENT ------ 67900
+ fission: A 186 Z 80 eexs 114.596 Wn 0.00421139 Wf 5.66999e-05
+ ---- EVENT ------ 68000
+ fission: A 190 Z 78 eexs 221.976 Wn 0.0202319 Wf 0.000273164
+ ---- EVENT ------ 68100
+ fission: A 187 Z 79 eexs 194.714 Wn 0.0143752 Wf 0.00163596
+ ---- EVENT ------ 68200
+ fission: A 185 Z 76 eexs 304.277 Wn 0.0475714 Wf 0.000924959
+ fission: A 186 Z 79 eexs 173.66 Wn 0.0179851 Wf 0.00107148
+ ---- EVENT ------ 68300
+ fission: A 187 Z 75 eexs 410.107 Wn 0.0468445 Wf 0.00118215
+ fission: A 187 Z 79 eexs 327.188 Wn 0.026694 Wf 0.0524425
+ ---- EVENT ------ 68400
+ fission: A 190 Z 78 eexs 250.59 Wn 0.0233193 Wf 0.000738214
+ ---- EVENT ------ 68500
+ fission: A 188 Z 79 eexs 285.661 Wn 0.0342861 Wf 0.0161229
+ fission: A 192 Z 78 eexs 498.895 Wn 0.0434998 Wf 0.0945154
+ ---- EVENT ------ 68600
+ fission: A 190 Z 79 eexs 329.866 Wn 0.0416028 Wf 0.0246243
+ ---- EVENT ------ 68700
+ ---- EVENT ------ 68800
+ fission: A 192 Z 78 eexs 217.507 Wn 0.0203472 Wf 9.76197e-05
+ fission: A 188 Z 78 eexs 328.697 Wn 0.0293432 Wf 0.011935
+ ---- EVENT ------ 68900
+ fission: A 189 Z 80 eexs 276.412 Wn 0.0321827 Wf 0.0243583
+ fission: A 188 Z 78 eexs 295.536 Wn 0.0264539 Wf 0.00540626
+ fission: A 187 Z 78 eexs 310.164 Wn 0.0416229 Wf 0.0106002
+ ---- EVENT ------ 69000
+ fission: A 187 Z 78 eexs 177.734 Wn 0.0244393 Wf 0.000158564
+ ---- EVENT ------ 69100
+ ---- EVENT ------ 69200
+ fission: A 190 Z 77 eexs 451.244 Wn 0.0619268 Wf 0.0204441
+ ---- EVENT ------ 69300
+ ---- EVENT ------ 69400
+ fission: A 189 Z 79 eexs 173.964 Wn 0.0131713 Wf 0.000341973
+ ---- EVENT ------ 69500
+ fission: A 181 Z 75 eexs 372.166 Wn 0.0363017 Wf 0.00448765
+ ---- EVENT ------ 69600
+ fission: A 189 Z 78 eexs 368.222 Wn 0.0506048 Wf 0.0206622
+ ---- EVENT ------ 69700
+ fission: A 191 Z 79 eexs 331.834 Wn 0.0298853 Wf 0.0192964
+ fission: A 187 Z 78 eexs 324.079 Wn 0.043023 Wf 0.0145702
+ fission: A 190 Z 79 eexs 193.551 Wn 0.0251834 Wf 0.000513909
+ ---- EVENT ------ 69800
+ ---- EVENT ------ 69900
+ fission: A 192 Z 79 eexs 284.675 Wn 0.0392477 Wf 0.00457599
+ fission: A 187 Z 78 eexs 127.112 Wn 0.0158013 Wf 9.4446e-06
+ ---- EVENT ------ 70000
+ fission: A 191 Z 79 eexs 244.073 Wn 0.0216616 Wf 0.00202689
+ fission: A 187 Z 79 eexs 257.893 Wn 0.0206687 Wf 0.0108954
+ fission: A 177 Z 75 eexs 114.064 Wn 0.00611547 Wf 8.13705e-07
+ ---- EVENT ------ 70100
+ fission: A 187 Z 78 eexs 342.617 Wn 0.0447888 Wf 0.0217793
+ fission: A 190 Z 78 eexs 288.476 Wn 0.027099 Wf 0.00227798
+ ---- EVENT ------ 70200
+ fission: A 187 Z 76 eexs 330.177 Wn 0.0544828 Wf 0.000868513
+ ---- EVENT ------ 70300
+ fission: A 192 Z 79 eexs 335.185 Wn 0.044571 Wf 0.0154852
+ ---- EVENT ------ 70400
+ ---- EVENT ------ 70500
+ fission: A 190 Z 78 eexs 325.569 Wn 0.0304659 Wf 0.00589239
+ fission: A 191 Z 78 eexs 495.048 Wn 0.0629216 Wf 0.11567
+ fission: A 189 Z 79 eexs 264.32 Wn 0.0226979 Wf 0.00698959
+ fission: A 192 Z 78 eexs 303.263 Wn 0.0292716 Wf 0.00167461
+ ---- EVENT ------ 70600
+ ---- EVENT ------ 70700
+ ---- EVENT ------ 70800
+ fission: A 185 Z 75 eexs 251.676 Wn 0.0300083 Wf 2.49481e-05
+ fission: A 184 Z 75 eexs 343.669 Wn 0.0527513 Wf 0.00074184
+ ---- EVENT ------ 70900
+ ---- EVENT ------ 71000
+ fission: A 182 Z 76 eexs 311.513 Wn 0.027844 Wf 0.00336208
+ ---- EVENT ------ 71100
+ fission: A 192 Z 79 eexs 318.053 Wn 0.0428651 Wf 0.0104865
+ fission: A 186 Z 79 eexs 434.178 Wn 0.0436486 Wf 0.420569
+ fission: A 187 Z 77 eexs 387.236 Wn 0.0377179 Wf 0.0148258
+ ---- EVENT ------ 71200
+ fission: A 190 Z 78 eexs 271.844 Wn 0.0254829 Wf 0.00142071
+ ---- EVENT ------ 71300
+ fission: A 193 Z 79 eexs 255.385 Wn 0.0230968 Wf 0.00140958
+ fission: A 189 Z 80 eexs 150.252 Wn 0.0158063 Wf 0.000416386
+ ---- EVENT ------ 71400
+ fission: A 188 Z 79 eexs 316.14 Wn 0.037389 Wf 0.0319883
+ fission: A 185 Z 77 eexs 327.771 Wn 0.0308507 Wf 0.00767396
+ fission: A 194 Z 80 eexs 240.848 Wn 0.0184244 Wf 0.00290723
+ ---- EVENT ------ 71500
+ fission: A 186 Z 78 eexs 232.007 Wn 0.0188021 Wf 0.00178806
+ ---- EVENT ------ 71600
+ ---- EVENT ------ 71700
+ fission: A 187 Z 78 eexs 217.22 Wn 0.0303696 Wf 0.000756592
+ fission: A 185 Z 78 eexs 168.715 Wn 0.0204602 Wf 0.000247562
+ ---- EVENT ------ 71800
+ ---- EVENT ------ 71900
+ fission: A 193 Z 77 eexs 264.752 Wn 0.0297757 Wf 5.52493e-05
+ fission: A 191 Z 80 eexs 334.376 Wn 0.04048 Wf 0.0715676
+ fission: A 189 Z 76 eexs 311.431 Wn 0.0566008 Wf 0.000226238
+ ---- EVENT ------ 72000
+ fission: A 188 Z 77 eexs 262.407 Wn 0.040788 Wf 0.000437492
+ ---- EVENT ------ 72100
+ fission: A 192 Z 80 eexs 315.252 Wn 0.0248004 Wf 0.039671
+ fission: A 185 Z 77 eexs 342.291 Wn 0.0320599 Wf 0.0106568
+ ---- EVENT ------ 72200
+ fission: A 189 Z 79 eexs 213.279 Wn 0.0175054 Wf 0.00152704
+ fission: A 189 Z 78 eexs 251.797 Wn 0.0381185 Wf 0.00111818
+ ---- EVENT ------ 72300
+ ---- EVENT ------ 72400
+ fission: A 189 Z 76 eexs 330.39 Wn 0.0586402 Wf 0.000394258
+ fission: A 186 Z 78 eexs 284.54 Wn 0.0238005 Wf 0.00778439
+ fission: A 179 Z 76 eexs 130.643 Wn 0.0134752 Wf 1.02264e-05
+ ---- EVENT ------ 72500
+ fission: A 188 Z 78 eexs 368.492 Wn 0.0325024 Wf 0.0277712
+ fission: A 190 Z 78 eexs 341.65 Wn 0.0318275 Wf 0.00857663
+ fission: A 188 Z 78 eexs 387.771 Wn 0.0339195 Wf 0.0404303
+ ---- EVENT ------ 72600
+ fission: A 185 Z 76 eexs 368.513 Wn 0.0538047 Wf 0.00461274
+ ---- EVENT ------ 72700
+ fission: A 190 Z 76 eexs 374.887 Wn 0.0410755 Wf 0.00086387
+ ---- EVENT ------ 72800
+ fission: A 187 Z 79 eexs 282.346 Wn 0.0229034 Wf 0.0198539
+ fission: A 186 Z 77 eexs 237.717 Wn 0.0342124 Wf 0.000428958
+ ---- EVENT ------ 72900
+ fission: A 191 Z 79 eexs 281.601 Wn 0.0253919 Wf 0.0058381
+ fission: A 183 Z 76 eexs 428.107 Wn 0.054 Wf 0.02911
+ fission: A 188 Z 77 eexs 327.854 Wn 0.0481963 Wf 0.00280249
+ ---- EVENT ------ 73000
+ ---- EVENT ------ 73100
+ fission: A 192 Z 78 eexs 355.899 Wn 0.0338586 Wf 0.0062262
+ ---- EVENT ------ 73200
+ fission: A 191 Z 80 eexs 228.133 Wn 0.0286621 Wf 0.00573408
+ fission: A 191 Z 79 eexs 339.335 Wn 0.030509 Wf 0.0226858
+ ---- EVENT ------ 73300
+ fission: A 184 Z 78 eexs 164.924 Wn 0.0105014 Wf 0.000316367
+ fission: A 187 Z 78 eexs 293.621 Wn 0.03987 Wf 0.00711404
+ ---- EVENT ------ 73400
+ fission: A 185 Z 76 eexs 273.098 Wn 0.0439581 Wf 0.000365337
+ ---- EVENT ------ 73500
+ fission: A 194 Z 79 eexs 388.247 Wn 0.0511163 Wf 0.0262241
+ fission: A 184 Z 76 eexs 385.976 Wn 0.0362344 Wf 0.00939509
+ ---- EVENT ------ 73600
+ fission: A 190 Z 78 eexs 417.22 Wn 0.0375037 Wf 0.0401307
+ ---- EVENT ------ 73700
+ ---- EVENT ------ 73800
+ fission: A 191 Z 78 eexs 381.144 Wn 0.0549911 Wf 0.0147964
+ ---- EVENT ------ 73900
+ fission: A 190 Z 78 eexs 259.206 Wn 0.0242098 Wf 0.00096991
+ ---- EVENT ------ 74000
+ ---- EVENT ------ 74100
+ ---- EVENT ------ 74200
+ ---- EVENT ------ 74300
+ ---- EVENT ------ 74400
+ fission: A 189 Z 78 eexs 221.755 Wn 0.033967 Wf 0.000406804
+ fission: A 190 Z 78 eexs 388.665 Wn 0.0354919 Wf 0.0232512
+ fission: A 188 Z 78 eexs 117.456 Wn 0.00714607 Wf 2.60589e-06
+ ---- EVENT ------ 74500
+ fission: A 188 Z 78 eexs 314.933 Wn 0.0281732 Wf 0.00868672
+ ---- EVENT ------ 74600
+ fission: A 186 Z 76 eexs 331.164 Wn 0.0341025 Wf 0.0013057
+ fission: A 188 Z 78 eexs 291.502 Wn 0.0260858 Wf 0.00487743
+ fission: A 181 Z 77 eexs 229.152 Wn 0.0174574 Wf 0.00214634
+ ---- EVENT ------ 74700
+ ---- EVENT ------ 74800
+ ---- EVENT ------ 74900
+ fission: A 189 Z 76 eexs 315.374 Wn 0.057038 Wf 0.00025478
+ ---- EVENT ------ 75000
+ fission: A 184 Z 76 eexs 297.629 Wn 0.0289466 Wf 0.00112566
+ ---- EVENT ------ 75100
+ fission: A 189 Z 78 eexs 378.374 Wn 0.0514702 Wf 0.0253664
+ fission: A 188 Z 78 eexs 419.26 Wn 0.0360859 Wf 0.0718084
+ fission: A 190 Z 77 eexs 313.663 Wn 0.050232 Wf 0.000927445
+ ---- EVENT ------ 75200
+ fission: A 191 Z 81 eexs 50.5842 Wn 0.000487626 Wf 0.000555883
+ fission: A 190 Z 78 eexs 284.088 Wn 0.0266791 Wf 0.0020174
+ ---- EVENT ------ 75300
+ fission: A 182 Z 76 eexs 361.957 Wn 0.0318935 Wf 0.0107606
+ ---- EVENT ------ 75400
+ fission: A 196 Z 80 eexs 189.914 Wn 0.0140605 Wf 0.000224757
+ fission: A 185 Z 75 eexs 333.445 Wn 0.0384362 Wf 0.000375082
+ ---- EVENT ------ 75500
+ fission: A 195 Z 79 eexs 312.519 Wn 0.0292638 Wf 0.00348242
+ ---- EVENT ------ 75600
+ fission: A 186 Z 74 eexs 304.724 Wn 0.0387697 Wf 1.31474e-05
+ fission: A 191 Z 76 eexs 615.52 Wn 0.0803917 Wf 0.0601482
+ ---- EVENT ------ 75700
+ fission: A 190 Z 78 eexs 421.796 Wn 0.0378121 Wf 0.0436428
+ ---- EVENT ------ 75800
+ fission: A 185 Z 75 eexs 436.246 Wn 0.0464022 Wf 0.00436102
+ fission: A 187 Z 77 eexs 420.567 Wn 0.0400809 Wf 0.0283704
+ ---- EVENT ------ 75900
+ fission: A 186 Z 77 eexs 284.007 Wn 0.0399069 Wf 0.00179617
+ ---- EVENT ------ 76000
+ ---- EVENT ------ 76100
+ fission: A 190 Z 79 eexs 451.847 Wn 0.0512944 Wf 0.227324
+ fission: A 188 Z 79 eexs 292.405 Wn 0.0349981 Wf 0.0188821
+ fission: A 189 Z 78 eexs 331.61 Wn 0.0472161 Wf 0.00935147
+ ---- EVENT ------ 76200
+ fission: A 187 Z 75 eexs 261.513 Wn 0.0330205 Wf 1.35913e-05
+ ---- EVENT ------ 76300
+ fission: A 185 Z 77 eexs 369.711 Wn 0.0342173 Wf 0.019058
+ fission: A 189 Z 79 eexs 292.731 Wn 0.0253468 Wf 0.014235
+ ---- EVENT ------ 76400
+ fission: A 181 Z 76 eexs 309.968 Wn 0.039954 Wf 0.00456131
+ fission: A 192 Z 78 eexs 357.895 Wn 0.0340203 Wf 0.00651588
+ ---- EVENT ------ 76500
+ fission: A 191 Z 78 eexs 197.771 Wn 0.0329232 Wf 6.58968e-05
+ fission: A 189 Z 78 eexs 252.66 Wn 0.0382312 Wf 0.00114864
+ fission: A 189 Z 78 eexs 408.928 Wn 0.0538993 Wf 0.04552
+ fission: A 190 Z 80 eexs 374.236 Wn 0.0285267 Wf 0.155777
+ ---- EVENT ------ 76600
+ fission: A 175 Z 75 eexs 131.957 Wn 0.00683667 Wf 1.06392e-05
+ ---- EVENT ------ 76700
+ fission: A 190 Z 78 eexs 420.396 Wn 0.0377181 Wf 0.0425409
+ fission: A 191 Z 79 eexs 306.083 Wn 0.0276519 Wf 0.0107342
+ ---- EVENT ------ 76800
+ fission: A 192 Z 78 eexs 475.311 Wn 0.0421533 Wf 0.0640923
+ fission: A 191 Z 78 eexs 451.536 Wn 0.060258 Wf 0.0561565
+ ---- EVENT ------ 76900
+ fission: A 184 Z 76 eexs 331.034 Wn 0.0319134 Wf 0.00270447
+ ---- EVENT ------ 77000
+ fission: A 187 Z 77 eexs 291.731 Wn 0.0295797 Wf 0.00154796
+ fission: A 187 Z 76 eexs 287.484 Wn 0.0497647 Wf 0.000250751
+ fission: A 189 Z 77 eexs 322.761 Wn 0.0341294 Wf 0.00172032
+ ---- EVENT ------ 77100
+ ---- EVENT ------ 77200
+ fission: A 193 Z 79 eexs 251.638 Wn 0.0227121 Wf 0.00125512
+ fission: A 192 Z 78 eexs 279.75 Wn 0.0270093 Wf 0.000854101
+ ---- EVENT ------ 77300
+ ---- EVENT ------ 77400
+ fission: A 180 Z 74 eexs 300.014 Wn 0.0309752 Wf 0.000191561
+ fission: A 189 Z 78 eexs 281.389 Wn 0.0417961 Wf 0.00265872
+ ---- EVENT ------ 77500
+ ---- EVENT ------ 77600
+ fission: A 192 Z 78 eexs 486.197 Wn 0.0427853 Wf 0.0768568
+ fission: A 188 Z 79 eexs 355.407 Wn 0.0409771 Wf 0.0704125
+ fission: A 188 Z 78 eexs 404.65 Wn 0.035103 Wf 0.0553177
+ fission: A 188 Z 78 eexs 315.379 Wn 0.0282118 Wf 0.0087788
+ ---- EVENT ------ 77700
+ ---- EVENT ------ 77800
+ ---- EVENT ------ 77900
+ fission: A 189 Z 79 eexs 344.549 Wn 0.0297362 Wf 0.0439277
+ ---- EVENT ------ 78000
+ ---- EVENT ------ 78100
+ fission: A 188 Z 79 eexs 215.03 Wn 0.0258819 Wf 0.00229651
+ ---- EVENT ------ 78200
+ fission: A 190 Z 78 eexs 342.655 Wn 0.0319107 Wf 0.00877459
+ ---- EVENT ------ 78300
+ fission: A 190 Z 78 eexs 308.832 Wn 0.0289865 Wf 0.00389882
+ ---- EVENT ------ 78400
+ ---- EVENT ------ 78500
+ ---- EVENT ------ 78600
+ ---- EVENT ------ 78700
+ ---- EVENT ------ 78800
+ fission: A 186 Z 77 eexs 327.522 Wn 0.0444859 Wf 0.00550232
+ fission: A 189 Z 78 eexs 309.314 Wn 0.0449284 Wf 0.00550212
+ ---- EVENT ------ 78900
+ fission: A 187 Z 78 eexs 296.689 Wn 0.0402026 Wf 0.00767409
+ ---- EVENT ------ 79000
+ fission: A 184 Z 78 eexs 189.382 Wn 0.0129937 Wf 0.000860562
+ fission: A 187 Z 76 eexs 404.81 Wn 0.0610661 Wf 0.00514691
+ ---- EVENT ------ 79100
+ fission: A 185 Z 77 eexs 299.797 Wn 0.0283837 Wf 0.0038877
+ ---- EVENT ------ 79200
+ ---- EVENT ------ 79300
+ fission: A 198 Z 81 eexs 254.781 Wn 0.034227 Wf 0.0118224
+ ---- EVENT ------ 79400
+ fission: A 189 Z 77 eexs 301.871 Wn 0.0321598 Wf 0.000975507
+ fission: A 188 Z 77 eexs 402.716 Wn 0.0547837 Wf 0.0148686
+ ---- EVENT ------ 79500
+ ---- EVENT ------ 79600
+ fission: A 190 Z 78 eexs 332.275 Wn 0.0310407 Wf 0.00690753
+ ---- EVENT ------ 79700
+ fission: A 193 Z 77 eexs 289.692 Wn 0.0324606 Wf 0.000132266
+ fission: A 190 Z 77 eexs 499.473 Wn 0.064832 Wf 0.0477697
+ ---- EVENT ------ 79800
+ fission: A 187 Z 78 eexs 186.363 Wn 0.0257982 Wf 0.000230947
+ fission: A 190 Z 78 eexs 255.609 Wn 0.0238403 Wf 0.000866604
+ ---- EVENT ------ 79900
+ fission: A 185 Z 74 eexs 293.759 Wn 0.0586448 Wf 1.46608e-05
+ fission: A 191 Z 77 eexs 367.946 Wn 0.0392551 Wf 0.00257601
+ ---- EVENT ------ 80000
+ fission: A 189 Z 78 eexs 375.584 Wn 0.0512354 Wf 0.0239899
+ fission: A 183 Z 76 eexs 249.075 Wn 0.03698 Wf 0.000379455
+ ---- EVENT ------ 80100
+ ---- EVENT ------ 80200
+ fission: A 191 Z 78 eexs 396.24 Wn 0.0562334 Wf 0.0201021
+ ---- EVENT ------ 80300
+ ---- EVENT ------ 80400
+ fission: A 186 Z 76 eexs 362.847 Wn 0.0367567 Wf 0.00285622
+ ---- EVENT ------ 80500
+ fission: A 192 Z 79 eexs 224.259 Wn 0.0315821 Wf 0.000738335
+ ---- EVENT ------ 80600
+ fission: A 179 Z 76 eexs 136.024 Wn 0.0143112 Wf 1.4573e-05
+ ---- EVENT ------ 80700
+ fission: A 190 Z 77 eexs 375.56 Wn 0.0562246 Wf 0.00435427
+ fission: A 184 Z 76 eexs 332.131 Wn 0.0320063 Wf 0.00277864
+ fission: A 189 Z 80 eexs 225.281 Wn 0.0261993 Wf 0.00644262
+ ---- EVENT ------ 80800
+ fission: A 188 Z 78 eexs 259.717 Wn 0.0230558 Wf 0.00204049
+ ---- EVENT ------ 80900
+ ---- EVENT ------ 81000
+ fission: A 182 Z 76 eexs 383.262 Wn 0.0334474 Wf 0.0166996
+ ---- EVENT ------ 81100
+ fission: A 184 Z 76 eexs 337.408 Wn 0.0324492 Wf 0.00316045
+ fission: A 189 Z 79 eexs 354.709 Wn 0.0305326 Wf 0.0536749
+ ---- EVENT ------ 81200
+ fission: A 192 Z 79 eexs 474.516 Wn 0.0553872 Wf 0.201911
+ fission: A 186 Z 78 eexs 396.722 Wn 0.0326088 Wf 0.081281
+ ---- EVENT ------ 81300
+ ---- EVENT ------ 81400
+ fission: A 188 Z 78 eexs 241.012 Wn 0.0211646 Wf 0.00115173
+ fission: A 193 Z 79 eexs 276.253 Wn 0.0251796 Wf 0.00260038
+ fission: A 193 Z 79 eexs 352.131 Wn 0.0319193 Wf 0.0166523
+ ---- EVENT ------ 81500
+ fission: A 196 Z 81 eexs 240.018 Wn 0.0298256 Wf 0.00997713
+ fission: A 187 Z 79 eexs 290.162 Wn 0.0235926 Wf 0.0237759
+ fission: A 188 Z 78 eexs 166.466 Wn 0.0129008 Wf 5.92622e-05
+ ---- EVENT ------ 81600
+ fission: A 182 Z 74 eexs 300.927 Wn 0.0337934 Wf 8.02545e-05
+ fission: A 194 Z 80 eexs 348.44 Wn 0.0277644 Wf 0.0407185
+ ---- EVENT ------ 81700
+ fission: A 189 Z 78 eexs 332.072 Wn 0.0472616 Wf 0.00945099
+ ---- EVENT ------ 81800
+ fission: A 191 Z 79 eexs 213.715 Wn 0.018411 Wf 0.00074345
+ ---- EVENT ------ 81900
+ fission: A 192 Z 80 eexs 303.447 Wn 0.0238191 Wf 0.0307257
+ ---- EVENT ------ 82000
+ ---- EVENT ------ 82100
+ fission: A 188 Z 78 eexs 312.554 Wn 0.0279668 Wf 0.00821033
+ ---- EVENT ------ 82200
+ fission: A 186 Z 78 eexs 121.312 Wn 0.0068751 Wf 1.06461e-05
+ fission: A 186 Z 76 eexs 179.905 Wn 0.0176711 Wf 4.6293e-06
+ ---- EVENT ------ 82300
+ fission: A 188 Z 78 eexs 267.89 Wn 0.023857 Wf 0.00258145
+ fission: A 184 Z 76 eexs 431.094 Wn 0.0393197 Wf 0.0228056
+ fission: A 190 Z 80 eexs 149.996 Wn 0.00864905 Wf 0.000342269
+ fission: A 192 Z 78 eexs 215.59 Wn 0.0201266 Wf 9.02358e-05
+ fission: A 191 Z 81 eexs 135.414 Wn 0.00668384 Wf 6.68384
+ ---- EVENT ------ 82400
+ fission: A 194 Z 79 eexs 202.137 Wn 0.0297434 Wf 0.000141767
+ fission: A 191 Z 81 eexs 119.925 Wn 0.0052538 Wf 5.2538
+ fission: A 186 Z 78 eexs 257.326 Wn 0.0212822 Wf 0.00378963
+ ---- EVENT ------ 82500
+ fission: A 191 Z 80 eexs 370.208 Wn 0.0436588 Wf 0.139735
+ ---- EVENT ------ 82600
+ ---- EVENT ------ 82700
+ ---- EVENT ------ 82800
+ fission: A 191 Z 79 eexs 198.995 Wn 0.0167649 Wf 0.000429199
+ ---- EVENT ------ 82900
+ ---- EVENT ------ 83000
+ ---- EVENT ------ 83100
+ ---- EVENT ------ 83200
+ ---- EVENT ------ 83300
+ ---- EVENT ------ 83400
+ ---- EVENT ------ 83500
+ fission: A 186 Z 78 eexs 374.161 Wn 0.0310292 Wf 0.0538498
+ ---- EVENT ------ 83600
+ fission: A 187 Z 78 eexs 478.809 Wn 0.0548954 Wf 0.24274
+ ---- EVENT ------ 83700
+ fission: A 191 Z 78 eexs 439.623 Wn 0.0594556 Wf 0.045519
+ ---- EVENT ------ 83800
+ fission: A 189 Z 80 eexs 246.985 Wn 0.0288479 Wf 0.0117451
+ fission: A 191 Z 78 eexs 336.481 Wn 0.0508965 Wf 0.00550439
+ ---- EVENT ------ 83900
+ fission: A 191 Z 79 eexs 238.88 Wn 0.02112 Wf 0.00172568
+ fission: A 190 Z 77 eexs 355.646 Wn 0.0544444 Wf 0.00273785
+ fission: A 188 Z 77 eexs 349.128 Wn 0.0502502 Wf 0.0046841
+ ---- EVENT ------ 84000
+ ---- EVENT ------ 84100
+ fission: A 189 Z 78 eexs 435.735 Wn 0.0558306 Wf 0.0733846
+ ---- EVENT ------ 84200
+ fission: A 193 Z 79 eexs 282.298 Wn 0.0257641 Wf 0.00307477
+ ---- EVENT ------ 84300
+ fission: A 187 Z 76 eexs 367.21 Wn 0.0579845 Wf 0.00221039
+ ---- EVENT ------ 84400
+ fission: A 190 Z 77 eexs 466.691 Wn 0.062912 Wf 0.0270938
+ ---- EVENT ------ 84500
+ fission: A 191 Z 80 eexs 262.314 Wn 0.0328965 Wf 0.0145007
+ fission: A 185 Z 76 eexs 460.553 Wn 0.0605258 Wf 0.0287946
+ fission: A 191 Z 81 eexs 72.9031 Wn 0.0015728 Wf 0.633169
+ fission: A 190 Z 76 eexs 435.173 Wn 0.0455245 Wf 0.00344798
+ ---- EVENT ------ 84600
+ fission: A 184 Z 78 eexs 243.754 Wn 0.01828 Wf 0.005005
+ fission: A 193 Z 80 eexs 115.102 Wn 0.0123062 Wf 1.41995e-05
+ ---- EVENT ------ 84700
+ ---- EVENT ------ 84800
+ fission: A 190 Z 78 eexs 298.034 Wn 0.0279975 Wf 0.00294693
+ ---- EVENT ------ 84900
+ fission: A 188 Z 78 eexs 217.025 Wn 0.0186244 Wf 0.000509778
+ ---- EVENT ------ 85000
+ fission: A 190 Z 77 eexs 385.1 Wn 0.0570324 Wf 0.00538629
+ fission: A 191 Z 77 eexs 441.883 Wn 0.0446954 Wf 0.0125319
+ fission: A 190 Z 76 eexs 346.778 Wn 0.0387105 Wf 0.000413841
+ fission: A 190 Z 78 eexs 192.973 Wn 0.0169076 Wf 8.36419e-05
+ ---- EVENT ------ 85100
+ ---- EVENT ------ 85200
+ ---- EVENT ------ 85300
+ fission: A 193 Z 78 eexs 408.683 Wn 0.0598013 Wf 0.0140383
+ fission: A 189 Z 78 eexs 395.045 Wn 0.0528273 Wf 0.0351011
+ ---- EVENT ------ 85400
+ ---- EVENT ------ 85500
+ ---- EVENT ------ 85600
+ ---- EVENT ------ 85700
+ ---- EVENT ------ 85800
+ fission: A 186 Z 76 eexs 375.971 Wn 0.0377872 Wf 0.00386293
+ ---- EVENT ------ 85900
+ fission: A 188 Z 78 eexs 317.654 Wn 0.0284078 Wf 0.00926077
+ fission: A 171 Z 73 eexs 105.023 Wn 0.00464291 Wf 7.56582e-08
+ ---- EVENT ------ 86000
+ fission: A 176 Z 74 eexs 193.259 Wn 0.015089 Wf 2.21316e-05
+ fission: A 185 Z 77 eexs 267.794 Wn 0.0253289 Wf 0.00162706
+ ---- EVENT ------ 86100
+ fission: A 185 Z 78 eexs 266.151 Wn 0.0334431 Wf 0.00666711
+ ---- EVENT ------ 86200
+ fission: A 189 Z 79 eexs 377.244 Wn 0.0322277 Wf 0.0820779
+ ---- EVENT ------ 86300
+ fission: A 189 Z 79 eexs 239.991 Wn 0.0202909 Wf 0.0035438
+ ---- EVENT ------ 86400
+ fission: A 188 Z 78 eexs 427.695 Wn 0.0366365 Wf 0.0831423
+ fission: A 184 Z 77 eexs 255.506 Wn 0.0331091 Wf 0.00163035
+ ---- EVENT ------ 86500
+ ---- EVENT ------ 86600
+ fission: A 186 Z 77 eexs 403.392 Wn 0.0509987 Wf 0.0275086
+ fission: A 188 Z 78 eexs 250.541 Wn 0.022138 Wf 0.00155087
+ fission: A 190 Z 79 eexs 318.52 Wn 0.0404932 Wf 0.0192219
+ ---- EVENT ------ 86700
+ ---- EVENT ------ 86800
+ ---- EVENT ------ 86900
+ ---- EVENT ------ 87000
+ fission: A 192 Z 80 eexs 225.115 Wn 0.0166668 Wf 0.00408301
+ ---- EVENT ------ 87100
+ fission: A 185 Z 78 eexs 310.099 Wn 0.0381279 Wf 0.0192377
+ ---- EVENT ------ 87200
+ fission: A 188 Z 77 eexs 266.218 Wn 0.0412697 Wf 0.000494494
+ ---- EVENT ------ 87300
+ fission: A 185 Z 78 eexs 365.222 Wn 0.0431395 Wf 0.0592939
+ ---- EVENT ------ 87400
+ fission: A 194 Z 80 eexs 204.253 Wn 0.0147823 Wf 0.000863222
+ ---- EVENT ------ 87500
+ fission: A 191 Z 79 eexs 298.678 Wn 0.0269826 Wf 0.00897989
+ fission: A 187 Z 78 eexs 226.516 Wn 0.0316598 Wf 0.00103981
+ ---- EVENT ------ 87600
+ fission: A 194 Z 80 eexs 348.874 Wn 0.0277978 Wf 0.0410787
+ ---- EVENT ------ 87700
+ fission: A 186 Z 76 eexs 385.669 Wn 0.0385239 Wf 0.00479269
+ ---- EVENT ------ 87800
+ fission: A 190 Z 78 eexs 292.085 Wn 0.0274408 Wf 0.00251335
+ fission: A 189 Z 78 eexs 421.347 Wn 0.0548161 Wf 0.0570078
+ ---- EVENT ------ 87900
+ ---- EVENT ------ 88000
+ fission: A 189 Z 76 eexs 465.214 Wn 0.0694454 Wf 0.00889432
+ ---- EVENT ------ 88100
+ ---- EVENT ------ 88200
+ fission: A 191 Z 78 eexs 378.851 Wn 0.0547964 Wf 0.0141077
+ fission: A 188 Z 78 eexs 252.851 Wn 0.0223708 Wf 0.00166357
+ ---- EVENT ------ 88300
+ fission: A 181 Z 76 eexs 241.394 Wn 0.0322717 Wf 0.000657924
+ fission: A 187 Z 78 eexs 345.746 Wn 0.045076 Wf 0.0232555
+ fission: A 189 Z 79 eexs 418.935 Wn 0.0351184 Wf 0.169283
+ ---- EVENT ------ 88400
+ ---- EVENT ------ 88500
+ ---- EVENT ------ 88600
+ fission: A 181 Z 75 eexs 275.407 Wn 0.027869 Wf 0.000353945
+ fission: A 183 Z 76 eexs 282.314 Wn 0.0410129 Wf 0.00106562
+ fission: A 191 Z 77 eexs 456.03 Wn 0.0456096 Wf 0.0164151
+ fission: A 188 Z 78 eexs 229.57 Wn 0.0199687 Wf 0.000790695
+ ---- EVENT ------ 88700
+ ---- EVENT ------ 88800
+ fission: A 190 Z 77 eexs 364.154 Wn 0.0552209 Wf 0.00334966
+ fission: A 185 Z 78 eexs 265.038 Wn 0.0333157 Wf 0.00647497
+ ---- EVENT ------ 88900
+ fission: A 188 Z 77 eexs 353.658 Wn 0.0506677 Wf 0.005202
+ ---- EVENT ------ 89000
+ fission: A 189 Z 78 eexs 374.055 Wn 0.0511058 Wf 0.0232631
+ ---- EVENT ------ 89100
+ fission: A 186 Z 76 eexs 405.173 Wn 0.0399448 Wf 0.00726697
+ fission: A 190 Z 78 eexs 370.218 Wn 0.0341085 Wf 0.0159768
+ ---- EVENT ------ 89200
+ fission: A 183 Z 76 eexs 247.849 Wn 0.0368219 Wf 0.000364144
+ fission: A 185 Z 75 eexs 453.564 Wn 0.0475124 Wf 0.00617914
+ ---- EVENT ------ 89300
+ fission: A 191 Z 80 eexs 174.399 Wn 0.0210923 Wf 0.000918983
+ fission: A 186 Z 77 eexs 349.313 Wn 0.0465325 Wf 0.00907276
+ ---- EVENT ------ 89400
+ fission: A 184 Z 76 eexs 289.981 Wn 0.0282285 Wf 0.000906327
+ fission: A 190 Z 79 eexs 223.452 Wn 0.0294111 Wf 0.00150007
+ fission: A 188 Z 78 eexs 374.721 Wn 0.0329681 Wf 0.0314221
+ fission: A 185 Z 75 eexs 444.325 Wn 0.0469274 Wf 0.00514036
+ fission: A 189 Z 76 eexs 427.804 Wn 0.0669939 Wf 0.004196
+ ---- EVENT ------ 89500
+ fission: A 192 Z 80 eexs 352.599 Wn 0.027739 Wf 0.083904
+ fission: A 192 Z 80 eexs 249.194 Wn 0.0189808 Wf 0.00815993
+ fission: A 186 Z 77 eexs 352.245 Wn 0.0467964 Wf 0.00967918
+ ---- EVENT ------ 89600
+ fission: A 183 Z 78 eexs 234.292 Wn 0.0265861 Wf 0.00528854
+ ---- EVENT ------ 89700
+ fission: A 191 Z 78 eexs 358.576 Wn 0.0530044 Wf 0.00912814
+ ---- EVENT ------ 89800
+ fission: A 186 Z 78 eexs 195.642 Wn 0.0150248 Wf 0.000504617
+ ---- EVENT ------ 89900
+ fission: A 189 Z 78 eexs 333.716 Wn 0.047423 Wf 0.00981208
+ ---- EVENT ------ 90000
+ ---- EVENT ------ 90100
+ fission: A 188 Z 78 eexs 292.405 Wn 0.0261685 Wf 0.00499186
+ ---- EVENT ------ 90200
+ fission: A 188 Z 77 eexs 163.293 Wn 0.0256176 Wf 5.96146e-06
+ fission: A 191 Z 79 eexs 380.734 Wn 0.0337433 Wf 0.0521005
+ fission: A 186 Z 77 eexs 379.365 Wn 0.0491154 Wf 0.0171563
+ ---- EVENT ------ 90300
+ fission: A 187 Z 78 eexs 262.743 Wn 0.0363226 Wf 0.0031482
+ ---- EVENT ------ 90400
+ fission: A 188 Z 76 eexs 374.86 Wn 0.0396119 Wf 0.00183933
+ ---- EVENT ------ 90500
+ fission: A 192 Z 80 eexs 267.47 Wn 0.0206704 Wf 0.0131644
+ fission: A 192 Z 79 eexs 311.706 Wn 0.042208 Wf 0.00902448
+ fission: A 188 Z 78 eexs 403.242 Wn 0.0350062 Wf 0.0539173
+ ---- EVENT ------ 90600
+ fission: A 189 Z 78 eexs 187.214 Wn 0.0286219 Wf 0.000101056
+ fission: A 185 Z 77 eexs 313.183 Wn 0.0295873 Wf 0.0054281
+ ---- EVENT ------ 90700
+ fission: A 190 Z 80 eexs 349.057 Wn 0.0267028 Wf 0.0987974
+ ---- EVENT ------ 90800
+ fission: A 186 Z 78 eexs 129.944 Wn 0.00781266 Wf 1.92698e-05
+ ---- EVENT ------ 90900
+ ---- EVENT ------ 91000
+ fission: A 192 Z 78 eexs 274.012 Wn 0.0264362 Wf 0.000717424
+ fission: A 191 Z 78 eexs 321.139 Wn 0.0493301 Wf 0.00379004
+ ---- EVENT ------ 91100
+ fission: A 191 Z 79 eexs 339.332 Wn 0.0305087 Wf 0.0226842
+ fission: A 186 Z 76 eexs 289.64 Wn 0.0302385 Wf 0.000405892
+ fission: A 190 Z 78 eexs 252.152 Wn 0.0234821 Wf 0.000776318
+ ---- EVENT ------ 91200
+ fission: A 190 Z 80 eexs 203.401 Wn 0.0140142 Wf 0.00282329
+ fission: A 192 Z 78 eexs 227.856 Wn 0.0215228 Wf 0.000147108
+ ---- EVENT ------ 91300
+ ---- EVENT ------ 91400
+ ---- EVENT ------ 91500
+ ---- EVENT ------ 91600
+ ---- EVENT ------ 91700
+ fission: A 188 Z 78 eexs 432.41 Wn 0.036939 Wf 0.0901282
+ fission: A 188 Z 78 eexs 186.118 Wn 0.0151764 Wf 0.000149253
+ fission: A 193 Z 80 eexs 218.205 Wn 0.0285921 Wf 0.00200183
+ ---- EVENT ------ 91800
+ ---- EVENT ------ 91900
+ fission: A 187 Z 77 eexs 368.412 Wn 0.0362818 Wf 0.0100063
+ ---- EVENT ------ 92000
+ fission: A 188 Z 76 eexs 250.867 Wn 0.0277734 Wf 4.47342e-05
+ ---- EVENT ------ 92100
+ fission: A 191 Z 79 eexs 256.08 Wn 0.0228902 Wf 0.00289757
+ fission: A 190 Z 77 eexs 288.193 Wn 0.0473334 Wf 0.000441467
+ fission: A 187 Z 76 eexs 382.972 Wn 0.0593302 Wf 0.00318586
+ ---- EVENT ------ 92200
+ ---- EVENT ------ 92300
+ fission: A 189 Z 79 eexs 409.482 Wn 0.0344897 Wf 0.144567
+ fission: A 185 Z 75 eexs 361.192 Wn 0.0408425 Wf 0.000786378
+ ---- EVENT ------ 92400
+ fission: A 185 Z 78 eexs 337.414 Wn 0.0407225 Wf 0.0344061
+ ---- EVENT ------ 92500
+ fission: A 193 Z 80 eexs 248.247 Wn 0.0325531 Wf 0.00500784
+ fission: A 182 Z 77 eexs 207.957 Wn 0.0240253 Wf 0.000732868
+ fission: A 189 Z 80 eexs 317.107 Wn 0.0363373 Wf 0.0590724
+ ---- EVENT ------ 92600
+ fission: A 193 Z 80 eexs 223.478 Wn 0.029314 Wf 0.0023751
+ fission: A 186 Z 78 eexs 327.432 Wn 0.0274584 Wf 0.0210523
+ ---- EVENT ------ 92700
+ ---- EVENT ------ 92800
+ ---- EVENT ------ 92900
+ fission: A 192 Z 78 eexs 386.733 Wn 0.0362616 Wf 0.0122078
+ ---- EVENT ------ 93000
+ fission: A 189 Z 78 eexs 229.053 Wn 0.0350165 Wf 0.000527661
+ fission: A 186 Z 77 eexs 400.396 Wn 0.0507721 Wf 0.0259779
+ ---- EVENT ------ 93100
+ fission: A 190 Z 78 eexs 376.456 Wn 0.0345839 Wf 0.0181775
+ fission: A 191 Z 78 eexs 371.873 Wn 0.0541943 Wf 0.0121794
+ ---- EVENT ------ 93200
+ ---- EVENT ------ 93300
+ fission: A 181 Z 76 eexs 204.553 Wn 0.027355 Wf 0.000173442
+ fission: A 191 Z 78 eexs 552.188 Wn 0.0658637 Wf 0.27332
+ fission: A 187 Z 78 eexs 233.56 Wn 0.0326114 Wf 0.00130982
+ ---- EVENT ------ 93400
+ ---- EVENT ------ 93500
+ ---- EVENT ------ 93600
+ ---- EVENT ------ 93700
+ fission: A 187 Z 79 eexs 253.899 Wn 0.0202925 Wf 0.00982141
+ fission: A 189 Z 79 eexs 414.674 Wn 0.0348369 Wf 0.157727
+ fission: A 190 Z 78 eexs 295.751 Wn 0.0277849 Wf 0.00277354
+ ---- EVENT ------ 93800
+ fission: A 191 Z 78 eexs 317.7 Wn 0.0489669 Wf 0.00347647
+ ---- EVENT ------ 93900
+ fission: A 192 Z 79 eexs 325.389 Wn 0.0436075 Wf 0.0124245
+ ---- EVENT ------ 94000
+ fission: A 189 Z 78 eexs 276.539 Wn 0.0412196 Wf 0.00232392
+ ---- EVENT ------ 94100
+ ---- EVENT ------ 94200
+ fission: A 187 Z 78 eexs 254.61 Wn 0.0353248 Wf 0.0024946
+ ---- EVENT ------ 94300
+ ---- EVENT ------ 94400
+ ---- EVENT ------ 94500
+ fission: A 188 Z 76 eexs 420.528 Wn 0.0429934 Wf 0.00509168
+ fission: A 183 Z 77 eexs 296.842 Wn 0.025898 Wf 0.00699717
+ ---- EVENT ------ 94600
+ fission: A 188 Z 78 eexs 316.828 Wn 0.0283367 Wf 0.0090832
+ ---- EVENT ------ 94700
+ ---- EVENT ------ 94800
+ fission: A 191 Z 81 eexs 61.7045 Wn 0.000954928 Wf 0.027687
+ ---- EVENT ------ 94900
+ ---- EVENT ------ 95000
+ ---- EVENT ------ 95100
+ fission: A 191 Z 77 eexs 423.075 Wn 0.0434204 Wf 0.00862615
+ fission: A 184 Z 76 eexs 229.105 Wn 0.0219677 Wf 0.00012104
+ fission: A 185 Z 76 eexs 408.479 Wn 0.0569998 Wf 0.0107848
+ ---- EVENT ------ 95200
+ ---- EVENT ------ 95300
+ fission: A 195 Z 79 eexs 306.326 Wn 0.0286981 Wf 0.00296415
+ ---- EVENT ------ 95400
+ ---- EVENT ------ 95500
+ fission: A 195 Z 80 eexs 271.49 Wn 0.0382145 Wf 0.00503017
+ ---- EVENT ------ 95600
+ fission: A 189 Z 77 eexs 329.416 Wn 0.0347324 Wf 0.00204298
+ fission: A 192 Z 80 eexs 212.734 Wn 0.0154414 Wf 0.00276694
+ ---- EVENT ------ 95700
+ ---- EVENT ------ 95800
+ fission: A 192 Z 77 eexs 364.416 Wn 0.0585068 Wf 0.001648
+ fission: A 189 Z 79 eexs 312.005 Wn 0.027045 Wf 0.0221416
+ ---- EVENT ------ 95900
+ fission: A 190 Z 78 eexs 307.378 Wn 0.0288549 Wf 0.003757
+ ---- EVENT ------ 96000
+ fission: A 185 Z 76 eexs 295.435 Wn 0.0465897 Wf 0.000719232
+ ---- EVENT ------ 96100
+ ---- EVENT ------ 96200
+ ---- EVENT ------ 96300
+ ---- EVENT ------ 96400
+ fission: A 187 Z 75 eexs 455.317 Wn 0.0499101 Wf 0.00316669
+ fission: A 189 Z 77 eexs 343.659 Wn 0.035985 Wf 0.00291376
+ fission: A 173 Z 74 eexs 199.69 Wn 0.0220668 Wf 0.000125759
+ fission: A 182 Z 76 eexs 225.949 Wn 0.0196673 Wf 0.000256191
+ fission: A 185 Z 78 eexs 100.441 Wn 0.0094037 Wf 3.44254e-06
+ ---- EVENT ------ 96500
+ fission: A 190 Z 78 eexs 428.583 Wn 0.0382625 Wf 0.0493411
+ fission: A 181 Z 74 eexs 429.597 Wn 0.0608879 Wf 0.00335897
+ ---- EVENT ------ 96600
+ fission: A 189 Z 79 eexs 152.847 Wn 0.0107666 Wf 0.000127325
+ ---- EVENT ------ 96700
+ fission: A 178 Z 74 eexs 238.938 Wn 0.022213 Wf 5.82432e-05
+ fission: A 195 Z 79 eexs 291.557 Wn 0.0273133 Wf 0.00198772
+ ---- EVENT ------ 96800
+ ---- EVENT ------ 96900
+ ---- EVENT ------ 97000
+ fission: A 189 Z 77 eexs 334.442 Wn 0.0351803 Wf 0.00232018
+ fission: A 190 Z 78 eexs 306.806 Wn 0.028803 Wf 0.00370243
+ fission: A 185 Z 77 eexs 396.661 Wn 0.036186 Wf 0.0323378
+ ---- EVENT ------ 97100
+ fission: A 191 Z 79 eexs 361.7 Wn 0.032299 Wf 0.0359825
+ fission: A 193 Z 79 eexs 266.776 Wn 0.0242463 Wf 0.00198253
+ fission: A 187 Z 76 eexs 430.457 Wn 0.0629304 Wf 0.00872968
+ ---- EVENT ------ 97200
+ ---- EVENT ------ 97300
+ fission: A 190 Z 78 eexs 365.918 Wn 0.0337761 Wf 0.0145975
+ fission: A 191 Z 79 eexs 294.178 Wn 0.0265698 Wf 0.00803792
+ ---- EVENT ------ 97400
+ fission: A 187 Z 79 eexs 189.515 Wn 0.0138285 Wf 0.00135733
+ fission: A 190 Z 78 eexs 311.353 Wn 0.0292135 Wf 0.00415556
+ fission: A 185 Z 78 eexs 316.588 Wn 0.0387652 Wf 0.0221907
+ ---- EVENT ------ 97500
+ fission: A 187 Z 77 eexs 354.97 Wn 0.0352087 Wf 0.00745619
+ ---- EVENT ------ 97600
+ fission: A 191 Z 80 eexs 388.58 Wn 0.0451556 Wf 0.192278
+ fission: A 192 Z 80 eexs 282.597 Wn 0.0220232 Wf 0.0190613
+ ---- EVENT ------ 97700
+ ---- EVENT ------ 97800
+ fission: A 189 Z 78 eexs 256.532 Wn 0.0387333 Wf 0.00129432
+ ---- EVENT ------ 97900
+ fission: A 189 Z 78 eexs 355.614 Wn 0.0494864 Wf 0.0158809
+ ---- EVENT ------ 98000
+ fission: A 190 Z 78 eexs 386.029 Wn 0.0352984 Wf 0.022063
+ fission: A 192 Z 78 eexs 357.979 Wn 0.0340271 Wf 0.00652833
+ fission: A 190 Z 78 eexs 371.774 Wn 0.0342278 Wf 0.0165029
+ ---- EVENT ------ 98100
+ fission: A 188 Z 76 eexs 325.277 Wn 0.0353863 Wf 0.000511845
+ ---- EVENT ------ 98200
+ fission: A 191 Z 80 eexs 262.348 Wn 0.0329005 Wf 0.0145131
+ ---- EVENT ------ 98300
+ fission: A 186 Z 78 eexs 199.154 Wn 0.0153995 Wf 0.000576987
+ ---- EVENT ------ 98400
+ ---- EVENT ------ 98500
+ fission: A 188 Z 78 eexs 270.526 Wn 0.0241121 Wf 0.00278
+ fission: A 193 Z 79 eexs 303.114 Wn 0.0277123 Wf 0.00531666
+ ---- EVENT ------ 98600
+ fission: A 190 Z 80 eexs 208.188 Wn 0.0144849 Wf 0.00330162
+ fission: A 192 Z 78 eexs 340.265 Wn 0.0325624 Wf 0.00431737
+ ---- EVENT ------ 98700
+ fission: A 187 Z 77 eexs 347.948 Wn 0.0346317 Wf 0.0063631
+ fission: A 188 Z 78 eexs 212.522 Wn 0.0181337 Wf 0.000432216
+ ---- EVENT ------ 98800
+ fission: A 189 Z 78 eexs 311.395 Wn 0.0451496 Wf 0.00579147
+ fission: A 189 Z 78 eexs 447.768 Wn 0.0566419 Wf 0.0900731
+ fission: A 192 Z 80 eexs 212.325 Wn 0.0154005 Wf 0.0027304
+ ---- EVENT ------ 98900
+ fission: A 189 Z 78 eexs 210.581 Wn 0.032307 Wf 0.000267503
+ ---- EVENT ------ 99000
+ ---- EVENT ------ 99100
+ ---- EVENT ------ 99200
+ fission: A 192 Z 79 eexs 214.816 Wn 0.0302402 Wf 0.000527124
+ ---- EVENT ------ 99300
+ fission: A 189 Z 78 eexs 353.387 Wn 0.0492837 Wf 0.0151444
+ ---- EVENT ------ 99400
+ fission: A 193 Z 78 eexs 466.149 Wn 0.0638349 Wf 0.0413606
+ ---- EVENT ------ 99500
+ fission: A 187 Z 77 eexs 315.416 Wn 0.031805 Wf 0.00290645
+ fission: A 191 Z 79 eexs 198.906 Wn 0.0167548 Wf 0.000427712
+ ---- EVENT ------ 99600
+ fission: A 185 Z 77 eexs 195.758 Wn 0.0175125 Wf 0.000131907
+ ---- EVENT ------ 99700
+ fission: A 191 Z 78 eexs 264.742 Wn 0.0427509 Wf 0.000789391
+ ---- EVENT ------ 99800
+ fission: A 192 Z 80 eexs 377.396 Wn 0.0295548 Wf 0.132274
+ fission: A 187 Z 77 eexs 275.708 Wn 0.0279901 Wf 0.000976679
+ ---- EVENT ------ 99900
+ fission: A 190 Z 77 eexs 434.368 Wn 0.0607866 Wf 0.0148536
+ fission: A 188 Z 79 eexs 307.931 Wn 0.0365819 Wf 0.0267847
+ fission: A 189 Z 79 eexs 247.675 Wn 0.0210648 Wf 0.00442692
+ fission: A 195 Z 81 eexs 153.463 Wn 0.00909137 Wf 0.000554764
+ ---- EVENT ------ 100000
+ Number of events 100000
+ average multiplicity 18.2609
+ average proton number 3.58567
+ average neutron number 14.371
+ average nucleon Ekin 0.0322994
+ average proton Ekin 0.0837441
+ average neutron Ekin 0.0194636
+ average pion number 0.30429
+ average pion Ekin 0.131226
+ average pi+ 0.11592
+ average pi- 0.05914
+ average pi0 0.12923
+ average A 123.989
+ average Z 51.8948
+ average A after casc. 192.859
+ average Z after casc. 77.2629
+ average Exitation Energy 2.17403
+ average Exitation Energy after casc. 159.744
+ average QP 3.78143
+ average QN 4.46969
+ average HP 5.51855
+ average HN 6.87326
+ average num of fragments 1.83484
+ fission prob. 0.01173 c.sec 20.6565
+ ===================================================== 
+ ********** Izotop analysis ****************** 
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ **** izotop Z **** 0
+ A 1 exp.cs 33520 err 12.4
+ sim. cs 25307.2 err 21.1107
+ ratio 0.754989 err 0.000688944
+ simulated production rate 14.371
+ A 0 exp.cs 217.4 err 1.22
+ sim. cs 227.574 err 2.00189
+ ratio 1.0468 err 0.0109226
+ simulated production rate 0.12923
+ not found in simulations 0
+ not found in exper: 0
+ simulated production rate 14.371
+ simulated production rate 0.12923
+ matched 2 CHSQ 177.829
+ raw chsq 126493
+ average ratio 0.900894 err 0.00580575
+ lhood 1.22305
+ exper. cs 33737.4 err 13.62
+ inucl. cs 25534.8 err 23.1126
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ **** izotop Z **** 1
+ A 1 exp.cs 7645 err 6.08
+ sim. cs 6314.36 err 10.5449
+ ratio 0.825947 err 0.00152775
+ simulated production rate 3.58567
+ A 0 exp.cs 109.4 err 0.96
+ sim. cs 204.135 err 1.896
+ ratio 1.86595 err 0.0238426
+ simulated production rate 0.11592
+ not found exper.: A 2 exp.cs 658.7 err 4.2
+ not found exper.: A 3 exp.cs 338.6 err 3.1
+ not found in simulations 2
+ not found in exper: 0
+ simulated production rate 3.58567
+ simulated production rate 0.11592
+ matched 2 CHSQ 59.7885
+ raw chsq 14298.6
+ average ratio 1.34595 err 0.0126852
+ lhood 1.58619
+ exper. cs 8751.7 err 14.34
+ inucl. cs 6518.5 err 12.441
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ **** izotop Z **** 1
+ A 2 exp.cs 658.7 err 4.2
+ sim. cs 443.948 err 2.79606
+ ratio 0.673976 err 0.00604037
+ simulated production rate 0.2521
+ A 3 exp.cs 338.6 err 3.1
+ sim. cs 255.31 err 2.12038
+ ratio 0.754016 err 0.00932042
+ simulated production rate 0.14498
+ not found in simulations 0
+ not found in exper: 0
+ simulated production rate 0.14498
+ simulated production rate 0.2521
+ matched 2 CHSQ 30.0406
+ raw chsq 3609.74
+ average ratio 0.713996 err 0.0076804
+ lhood 1.40927
+ exper. cs 997.3 err 7.3
+ inucl. cs 699.258 err 4.91643
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ **** izotop Z **** -1
+ A 0 exp.cs 198.3 err 1
+ sim. cs 104.146 err 1.35425
+ ratio 0.525192 err 0.00732489
+ simulated production rate 0.05914
+ not found in simulations 0
+ not found in exper: 0
+ simulated production rate 0.05914
+ matched 1 CHSQ 64.8212
+ raw chsq 4201.79
+ average ratio 0.525192 err 0.00732489
+ lhood 1.90407
+ exper. cs 198.3 err 1
+ inucl. cs 104.146 err 1.35425
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ **** izotop Z **** 2
+ A 3 exp.cs 28.2 err 1
+ sim. cs 21.1848 err 0.61079
+ ratio 0.751235 err 0.0343335
+ simulated production rate 0.01203
+ A 4 exp.cs 781 err 5
+ sim. cs 729.054 err 3.5831
+ ratio 0.933488 err 0.00753417
+ simulated production rate 0.414
+ not found in simulations 0
+ not found in exper: 0
+ simulated production rate 0.414
+ simulated production rate 0.01203
+ matched 2 CHSQ 5.71036
+ raw chsq 130.433
+ average ratio 0.842361 err 0.0209338
+ lhood 1.23125
+ exper. cs 809.2 err 6
+ inucl. cs 750.239 err 4.1939
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ **** izotop Z **** 80
+ A 196 exp.cs 1.54 err 0.2
+ sim. cs 1.12704 err 0.14088
+ ratio 0.731844 err 0.131917
+ simulated production rate 0.00064
+ A 195 exp.cs 2.87 err 0.37
+ sim. cs 1.51446 err 0.163308
+ ratio 0.527686 err 0.0886894
+ simulated production rate 0.00086
+ A 194 exp.cs 3.61 err 0.47
+ sim. cs 2.85282 err 0.224139
+ ratio 0.790255 err 0.120169
+ simulated production rate 0.00162
+ A 193 exp.cs 4.44 err 0.38
+ sim. cs 2.30691 err 0.201556
+ ratio 0.519574 err 0.0635465
+ simulated production rate 0.00131
+ A 192 exp.cs 4.22 err 0.47
+ sim. cs 3.13458 err 0.234947
+ ratio 0.742791 err 0.0997175
+ simulated production rate 0.00178
+ A 191 exp.cs 4.17 err 0.45
+ sim. cs 2.37735 err 0.20461
+ ratio 0.570108 err 0.078693
+ simulated production rate 0.00135
+ A 190 exp.cs 4.05 err 0.43
+ sim. cs 3.39873 err 0.244646
+ ratio 0.839193 err 0.107646
+ simulated production rate 0.00193
+ A 189 exp.cs 2.81 err 0.25
+ sim. cs 2.50062 err 0.209847
+ ratio 0.8899 err 0.108836
+ simulated production rate 0.00142
+ A 188 exp.cs 2.14 err 0.24
+ sim. cs 2.90565 err 0.226205
+ ratio 1.35778 err 0.185366
+ simulated production rate 0.00165
+ A 187 exp.cs 1.68 err 0.15
+ sim. cs 2.23647 err 0.198455
+ ratio 1.33123 err 0.167576
+ simulated production rate 0.00127
+ A 186 exp.cs 1.03 err 0.1
+ sim. cs 2.25408 err 0.199234
+ ratio 2.18843 err 0.28733
+ simulated production rate 0.00128
+ A 185 exp.cs 0.72 err 0.09
+ sim. cs 1.46163 err 0.160435
+ ratio 2.03004 err 0.337703
+ simulated production rate 0.00083
+ A 184 exp.cs 0.47 err 0.05
+ sim. cs 1.761 err 0.1761
+ ratio 3.74681 err 0.547051
+ simulated production rate 0.001
+ A 183 exp.cs 0.18 err 0.05
+ sim. cs 1.12704 err 0.14088
+ ratio 6.26133 err 1.90725
+ simulated production rate 0.00064
+ A 182 exp.cs 0.11 err 0.02
+ sim. cs 0.96855 err 0.130599
+ ratio 8.805 err 1.99312
+ simulated production rate 0.00055
+ A 181 exp.cs 0.04 err 0.01
+ sim. cs 0.40503 err 0.0844546
+ ratio 10.1258 err 3.29637
+ simulated production rate 0.00023
+ A 179 exp.cs 0.008 err 0.01
+ sim. cs 0.15849 err 0.05283
+ ratio 19.8113 err 25.6294
+ simulated production rate 9e-05
+ A 178 exp.cs 0.003 err 0.001
+ sim. cs 0.03522 err 0.0249043
+ ratio 11.74 err 9.17758
+ simulated production rate 2e-05
+ not found in simulations 0
+ not found in exper: 2
+ simulated production rate 9e-05
+ simulated production rate 0.00128
+ simulated production rate 0.00178
+ simulated production rate 0.00162
+ simulated production rate 0.00165
+ simulated production rate 0.00055
+ simulated production rate 0.00193
+ simulated production rate 0.00083
+ simulated production rate 0.00086
+ simulated production rate 0.00131
+ simulated production rate 0.001
+ simulated production rate 0.00142
+ simulated production rate 0.00064
+ simulated production rate 0.00127
+ extra simul.: A 180 sim. cs 0.31698 err 0.0747129
+ simulated production rate 0.00018
+ extra simul.: A 197 sim. cs 0.26415 err 0.0682032
+ simulated production rate 0.00015
+ simulated production rate 0.00135
+ simulated production rate 0.00064
+ simulated production rate 0.00023
+ simulated production rate 2e-05
+ matched 18 CHSQ 0.831887
+ raw chsq 224.22
+ average ratio 4.05605 err 2.46267
+ lhood 3.8661
+ exper. cs 34.091 err 3.741
+ inucl. cs 33.1068 err 3.16095
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ **** izotop Z **** 77
+ A 171 exp.cs 0.07 err 0.03
+ sim. cs 0.05283 err 0.0305014
+ ratio 0.754714 err 0.542664
+ simulated production rate 3e-05
+ A 172 exp.cs 0.29 err 0.19
+ sim. cs 0.22893 err 0.0634938
+ ratio 0.789414 err 0.561636
+ simulated production rate 0.00013
+ A 173 exp.cs 0.82 err 0.22
+ sim. cs 0.86289 err 0.12327
+ ratio 1.0523 err 0.319854
+ simulated production rate 0.00049
+ A 174 exp.cs 1.54 err 0.2
+ sim. cs 2.09559 err 0.192102
+ ratio 1.36077 err 0.216314
+ simulated production rate 0.00119
+ A 175 exp.cs 3.16 err 0.4
+ sim. cs 3.66288 err 0.253975
+ ratio 1.15914 err 0.167297
+ simulated production rate 0.00208
+ A 176 exp.cs 6.19 err 0.79
+ sim. cs 5.24778 err 0.303996
+ ratio 0.847784 err 0.118823
+ simulated production rate 0.00298
+ A 177 exp.cs 9.58 err 1.22
+ sim. cs 9.31569 err 0.40503
+ ratio 0.97241 err 0.130853
+ simulated production rate 0.00529
+ A 178 exp.cs 13.35 err 1.26
+ sim. cs 9.94965 err 0.418585
+ ratio 0.745292 err 0.0770139
+ simulated production rate 0.00565
+ A 179 exp.cs 17.35 err 1.39
+ sim. cs 12.0805 err 0.461234
+ ratio 0.69628 err 0.0617934
+ simulated production rate 0.00686
+ A 180 exp.cs 18.93 err 1.51
+ sim. cs 11.9044 err 0.45786
+ ratio 0.628862 err 0.0556895
+ simulated production rate 0.00676
+ A 181 exp.cs 20.13 err 2.59
+ sim. cs 14.3698 err 0.503042
+ ratio 0.713848 err 0.0951852
+ simulated production rate 0.00816
+ A 182 exp.cs 19.63 err 1.82
+ sim. cs 13.049 err 0.479367
+ ratio 0.664748 err 0.0662939
+ simulated production rate 0.00741
+ A 183 exp.cs 19.43 err 1.81
+ sim. cs 14.1584 err 0.49933
+ ratio 0.72869 err 0.0725828
+ simulated production rate 0.00804
+ A 184 exp.cs 18.09 err 1.68
+ sim. cs 12.732 err 0.473509
+ ratio 0.703816 err 0.0704089
+ simulated production rate 0.00723
+ A 185 exp.cs 15.71 err 1.46
+ sim. cs 13.5773 err 0.488975
+ ratio 0.864246 err 0.0861382
+ simulated production rate 0.00771
+ A 186 exp.cs 13.51 err 1.26
+ sim. cs 10.3723 err 0.427383
+ ratio 0.767749 err 0.0782803
+ simulated production rate 0.00589
+ A 187 exp.cs 11.52 err 1.08
+ sim. cs 10.4427 err 0.428832
+ ratio 0.906487 err 0.0927784
+ simulated production rate 0.00593
+ A 188 exp.cs 8.97 err 1.15
+ sim. cs 8.04777 err 0.376459
+ ratio 0.897187 err 0.122441
+ simulated production rate 0.00457
+ A 189 exp.cs 8.05 err 1.03
+ sim. cs 8.6289 err 0.389814
+ ratio 1.07191 err 0.145449
+ simulated production rate 0.0049
+ A 190 exp.cs 6.02 err 0.77
+ sim. cs 5.86413 err 0.321352
+ ratio 0.974108 err 0.135549
+ simulated production rate 0.00333
+ A 191 exp.cs 5.04 err 0.54
+ sim. cs 6.09306 err 0.327565
+ ratio 1.20894 err 0.14492
+ simulated production rate 0.00346
+ A 192 exp.cs 4.18 err 0.54
+ sim. cs 5.42388 err 0.309054
+ ratio 1.29758 err 0.183211
+ simulated production rate 0.00308
+ A 193 exp.cs 3.54 err 0.45
+ sim. cs 6.37482 err 0.335053
+ ratio 1.8008 err 0.24771
+ simulated production rate 0.00362
+ not found in simulations 0
+ not found in exper: 3
+ simulated production rate 0.0049
+ simulated production rate 0.00686
+ simulated production rate 0.00589
+ simulated production rate 0.00741
+ simulated production rate 0.00333
+ simulated production rate 0.00346
+ simulated production rate 0.00676
+ simulated production rate 0.00804
+ extra simul.: A 194 sim. cs 3.80376 err 0.258813
+ simulated production rate 0.00216
+ simulated production rate 0.00565
+ simulated production rate 0.00308
+ simulated production rate 0.00771
+ simulated production rate 0.00816
+ simulated production rate 0.00362
+ extra simul.: A 195 sim. cs 3.96225 err 0.26415
+ simulated production rate 0.00225
+ simulated production rate 0.00457
+ simulated production rate 0.00723
+ simulated production rate 0.00529
+ simulated production rate 0.00119
+ simulated production rate 0.00298
+ simulated production rate 0.00593
+ simulated production rate 0.00208
+ simulated production rate 0.00013
+ simulated production rate 0.00049
+ simulated production rate 3e-05
+ extra simul.: A 170 sim. cs 0.01761 err 0.01761
+ simulated production rate 1e-05
+ matched 23 CHSQ 0.583305
+ raw chsq 179.99
+ average ratio 0.939438 err 0.164908
+ lhood 1.32146
+ exper. cs 225.1 err 23.39
+ inucl. cs 192.319 err 8.61036
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ **** izotop Z **** 73
+ A 162 exp.cs 0.31 err 0.04
+ sim. cs 0.29937 err 0.0726079
+ ratio 0.96571 err 0.265303
+ simulated production rate 0.00017
+ A 163 exp.cs 1.21 err 0.11
+ sim. cs 0.93333 err 0.128203
+ ratio 0.771347 err 0.127056
+ simulated production rate 0.00053
+ A 164 exp.cs 3.07 err 0.29
+ sim. cs 2.04276 err 0.189666
+ ratio 0.665394 err 0.0881336
+ simulated production rate 0.00116
+ A 165 exp.cs 5.32 err 0.5
+ sim. cs 3.73332 err 0.256405
+ ratio 0.701752 err 0.0816875
+ simulated production rate 0.00212
+ A 166 exp.cs 8.68 err 0.81
+ sim. cs 5.07168 err 0.298852
+ ratio 0.584295 err 0.0644858
+ simulated production rate 0.00288
+ A 167 exp.cs 11.48 err 1.46
+ sim. cs 7.67796 err 0.367708
+ ratio 0.668812 err 0.0908889
+ simulated production rate 0.00436
+ A 168 exp.cs 12.19 err 1.43
+ sim. cs 7.58991 err 0.365593
+ ratio 0.622634 err 0.0789584
+ simulated production rate 0.00431
+ A 169 exp.cs 13.1 err 1.4
+ sim. cs 8.39997 err 0.384608
+ ratio 0.641219 err 0.0745517
+ simulated production rate 0.00477
+ A 170 exp.cs 12.22 err 1.48
+ sim. cs 6.63897 err 0.341924
+ ratio 0.543287 err 0.0715014
+ simulated production rate 0.00377
+ A 171 exp.cs 9.34 err 1.15
+ sim. cs 6.81507 err 0.346429
+ ratio 0.729665 err 0.0971964
+ simulated production rate 0.00387
+ A 172 exp.cs 7.51 err 0.97
+ sim. cs 3.57483 err 0.250904
+ ratio 0.476009 err 0.0699729
+ simulated production rate 0.00203
+ A 173 exp.cs 5.55 err 0.71
+ sim. cs 3.59244 err 0.251521
+ ratio 0.647286 err 0.0943963
+ simulated production rate 0.00204
+ A 174 exp.cs 3.36 err 0.43
+ sim. cs 1.88427 err 0.182159
+ ratio 0.560795 err 0.0899437
+ simulated production rate 0.00107
+ A 175 exp.cs 2.26 err 0.29
+ sim. cs 1.88427 err 0.182159
+ ratio 0.833748 err 0.133949
+ simulated production rate 0.00107
+ A 176 exp.cs 1.4 err 0.14
+ sim. cs 1.03899 err 0.135265
+ ratio 0.742136 err 0.12183
+ simulated production rate 0.00059
+ A 177 exp.cs 0.76 err 0.08
+ sim. cs 0.8805 err 0.124522
+ ratio 1.15855 err 0.204248
+ simulated production rate 0.0005
+ A 178 exp.cs 0.43 err 0.04
+ sim. cs 0.42264 err 0.086271
+ ratio 0.982884 err 0.220482
+ simulated production rate 0.00024
+ A 179 exp.cs 0.22 err 0.03
+ sim. cs 0.29937 err 0.0726079
+ ratio 1.36077 err 0.378624
+ simulated production rate 0.00017
+ A 180 exp.cs 0.12 err 0.03
+ sim. cs 0.29937 err 0.0726079
+ ratio 2.49475 err 0.86896
+ simulated production rate 0.00017
+ A 181 exp.cs 0.06 err 0.02
+ sim. cs 0.10566 err 0.0431355
+ ratio 1.761 err 0.928128
+ simulated production rate 6e-05
+ A 182 exp.cs 0.01 err 0.008
+ sim. cs 0.15849 err 0.05283
+ ratio 15.849 err 13.7358
+ simulated production rate 9e-05
+ not found in simulations 0
+ not found in exper: 9
+ simulated production rate 0.00107
+ simulated production rate 0.00288
+ simulated production rate 0.00377
+ simulated production rate 0.00212
+ simulated production rate 0.00204
+ simulated production rate 0.00477
+ extra simul.: A 187 sim. cs 0.03522 err 0.0249043
+ simulated production rate 2e-05
+ simulated production rate 0.00107
+ simulated production rate 0.00436
+ simulated production rate 0.00387
+ simulated production rate 0.00431
+ simulated production rate 0.00017
+ simulated production rate 0.00053
+ simulated production rate 0.00059
+ simulated production rate 0.00024
+ simulated production rate 0.00203
+ simulated production rate 0.0005
+ simulated production rate 0.00116
+ extra simul.: A 185 sim. cs 0.07044 err 0.03522
+ simulated production rate 4e-05
+ simulated production rate 9e-05
+ extra simul.: A 183 sim. cs 0.14088 err 0.0498086
+ simulated production rate 8e-05
+ simulated production rate 0.00017
+ extra simul.: A 184 sim. cs 0.14088 err 0.0498086
+ simulated production rate 8e-05
+ simulated production rate 0.00017
+ extra simul.: A 161 sim. cs 0.14088 err 0.0498086
+ simulated production rate 8e-05
+ simulated production rate 6e-05
+ extra simul.: A 186 sim. cs 0.01761 err 0.01761
+ simulated production rate 1e-05
+ extra simul.: A 158 sim. cs 0.01761 err 0.01761
+ simulated production rate 1e-05
+ extra simul.: A 160 sim. cs 0.05283 err 0.0305014
+ simulated production rate 3e-05
+ extra simul.: A 188 sim. cs 0.01761 err 0.01761
+ simulated production rate 1e-05
+ matched 21 CHSQ 0.806145
+ raw chsq 286.593
+ average ratio 1.60767 err 0.851719
+ lhood 2.11673
+ exper. cs 98.6 err 11.418
+ inucl. cs 63.9771 err 4.49886
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ **** izotop Z **** 61
+ not found exper.: A 133 exp.cs 0.01 err 0.006
+ A 134 exp.cs 0.04 err 0.01
+ sim. cs 0.01761 err 0.01761
+ ratio 0.44025 err 0.453799
+ simulated production rate 1e-05
+ A 135 exp.cs 0.1 err 0.018
+ sim. cs 0.01761 err 0.01761
+ ratio 0.1761 err 0.17893
+ simulated production rate 1e-05
+ A 136 exp.cs 0.16 err 0.027
+ sim. cs 0.05283 err 0.0305014
+ ratio 0.330188 err 0.19861
+ simulated production rate 3e-05
+ A 137 exp.cs 0.21 err 0.034
+ sim. cs 0.21132 err 0.0610028
+ ratio 1.00629 err 0.333059
+ simulated production rate 0.00012
+ A 138 exp.cs 0.22 err 0.034
+ sim. cs 0.3522 err 0.0787543
+ ratio 1.60091 err 0.435154
+ simulated production rate 0.0002
+ A 139 exp.cs 0.22 err 0.031
+ sim. cs 0.3522 err 0.0787543
+ ratio 1.60091 err 0.423123
+ simulated production rate 0.0002
+ A 140 exp.cs 0.16 err 0.023
+ sim. cs 0.24654 err 0.0658906
+ ratio 1.54087 err 0.467606
+ simulated production rate 0.00014
+ A 141 exp.cs 0.11 err 0.025
+ sim. cs 0.3522 err 0.0787543
+ ratio 3.20182 err 1.02084
+ simulated production rate 0.0002
+ A 142 exp.cs 0.08 err 0.018
+ sim. cs 0.15849 err 0.05283
+ ratio 1.98113 err 0.796738
+ simulated production rate 9e-05
+ A 143 exp.cs 0.04 err 0.005
+ sim. cs 0.14088 err 0.0498086
+ ratio 3.522 err 1.32075
+ simulated production rate 8e-05
+ A 144 exp.cs 0.02 err 0.003
+ sim. cs 0.05283 err 0.0305014
+ ratio 2.6415 err 1.5757
+ simulated production rate 3e-05
+ not found in simulations 1
+ not found in exper: 1
+ simulated production rate 8e-05
+ simulated production rate 0.0002
+ simulated production rate 9e-05
+ simulated production rate 0.0002
+ simulated production rate 0.00014
+ simulated production rate 0.0002
+ simulated production rate 1e-05
+ simulated production rate 0.00012
+ simulated production rate 3e-05
+ simulated production rate 3e-05
+ simulated production rate 1e-05
+ extra simul.: A 145 sim. cs 0.03522 err 0.0249043
+ simulated production rate 2e-05
+ matched 11 CHSQ 0.644491
+ raw chsq 50.2597
+ average ratio 1.64018 err 0.654937
+ lhood 2.58197
+ exper. cs 1.37 err 0.234
+ inucl. cs 1.98993 err 0.586922
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ **** izotop Z **** 79
+ A 178 exp.cs 0.12 err 0.02
+ sim. cs 0.3522 err 0.0787543
+ ratio 2.935 err 0.818532
+ simulated production rate 0.0002
+ A 177 exp.cs 0.04 err 0.005
+ sim. cs 0.15849 err 0.05283
+ ratio 3.96225 err 1.41056
+ simulated production rate 9e-05
+ A 176 exp.cs 0.01 err 0.002
+ sim. cs 0.07044 err 0.03522
+ ratio 7.044 err 3.79331
+ simulated production rate 4e-05
+ A 196 exp.cs 57.98 err 5.46
+ sim. cs 43.8489 err 0.878737
+ ratio 0.756276 err 0.0728136
+ simulated production rate 0.0249
+ A 195 exp.cs 41.06 err 3.8
+ sim. cs 43.8313 err 0.878561
+ ratio 1.06749 err 0.101084
+ simulated production rate 0.02489
+ A 194 exp.cs 30.99 err 2.87
+ sim. cs 19.5295 err 0.586442
+ ratio 0.630187 err 0.0613532
+ simulated production rate 0.01109
+ A 193 exp.cs 29.38 err 2.72
+ sim. cs 18.015 err 0.563245
+ ratio 0.613173 err 0.0599173
+ simulated production rate 0.01023
+ A 192 exp.cs 25.19 err 2.41
+ sim. cs 13.8062 err 0.49308
+ ratio 0.548084 err 0.0559712
+ simulated production rate 0.00784
+ A 191 exp.cs 23.38 err 2.25
+ sim. cs 15.8842 err 0.528887
+ ratio 0.679393 err 0.0691849
+ simulated production rate 0.00902
+ A 190 exp.cs 21.25 err 1.83
+ sim. cs 11.922 err 0.458199
+ ratio 0.561034 err 0.0529081
+ simulated production rate 0.00677
+ A 189 exp.cs 18.76 err 1.55
+ sim. cs 13.8062 err 0.49308
+ ratio 0.73594 err 0.0662428
+ simulated production rate 0.00784
+ A 188 exp.cs 15.47 err 1.36
+ sim. cs 11.0943 err 0.442007
+ ratio 0.717149 err 0.0692182
+ simulated production rate 0.0063
+ A 187 exp.cs 13.92 err 1.22
+ sim. cs 12.0981 err 0.46157
+ ratio 0.869114 err 0.0830767
+ simulated production rate 0.00687
+ A 186 exp.cs 11.77 err 1.02
+ sim. cs 9.38613 err 0.406558
+ ratio 0.797462 err 0.0772605
+ simulated production rate 0.00533
+ A 185 exp.cs 8.61 err 1.09
+ sim. cs 9.56223 err 0.410355
+ ratio 1.1106 err 0.148456
+ simulated production rate 0.00543
+ A 184 exp.cs 6.97 err 0.67
+ sim. cs 7.07922 err 0.353079
+ ratio 1.01567 err 0.109992
+ simulated production rate 0.00402
+ A 183 exp.cs 5 err 0.61
+ sim. cs 5.88174 err 0.321834
+ ratio 1.17635 err 0.157288
+ simulated production rate 0.00334
+ A 182 exp.cs 3.42 err 0.29
+ sim. cs 4.06791 err 0.267649
+ ratio 1.18945 err 0.127661
+ simulated production rate 0.00231
+ A 181 exp.cs 1.8 err 0.23
+ sim. cs 2.9937 err 0.229606
+ ratio 1.66317 err 0.247859
+ simulated production rate 0.0017
+ A 180 exp.cs 0.91 err 0.12
+ sim. cs 1.4088 err 0.157509
+ ratio 1.54813 err 0.267649
+ simulated production rate 0.0008
+ A 179 exp.cs 0.36 err 0.05
+ sim. cs 0.81006 err 0.119437
+ ratio 2.25017 err 0.455787
+ simulated production rate 0.00046
+ not found in simulations 0
+ not found in exper: 2
+ simulated production rate 0.00543
+ simulated production rate 0.00902
+ simulated production rate 0.02489
+ simulated production rate 0.0249
+ simulated production rate 0.01109
+ simulated production rate 0.00784
+ simulated production rate 0.01023
+ simulated production rate 0.00784
+ simulated production rate 0.0008
+ simulated production rate 0.00402
+ simulated production rate 0.00533
+ simulated production rate 0.00677
+ simulated production rate 0.00334
+ simulated production rate 0.00687
+ simulated production rate 9e-05
+ simulated production rate 0.0017
+ simulated production rate 0.0063
+ simulated production rate 0.00231
+ extra simul.: A 197 sim. cs 1.44402 err 0.159465
+ simulated production rate 0.00082
+ simulated production rate 0.00046
+ simulated production rate 4e-05
+ simulated production rate 0.0002
+ extra simul.: A 175 sim. cs 0.01761 err 0.01761
+ simulated production rate 1e-05
+ matched 21 CHSQ 0.855228
+ raw chsq 322.554
+ average ratio 1.51762 err 0.39553
+ lhood 1.97291
+ exper. cs 316.39 err 29.577
+ inucl. cs 247.068 err 8.39371
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ **** izotop Z **** 78
+ A 178 exp.cs 3.04 err 0.39
+ sim. cs 8.91066 err 0.396127
+ ratio 2.93114 err 0.397971
+ simulated production rate 0.00506
+ A 177 exp.cs 1.43 err 0.18
+ sim. cs 5.77608 err 0.318931
+ ratio 4.03922 err 0.555199
+ simulated production rate 0.00328
+ A 176 exp.cs 0.57 err 0.07
+ sim. cs 3.78615 err 0.258213
+ ratio 6.64237 err 0.933075
+ simulated production rate 0.00215
+ A 175 exp.cs 0.18 err 0.02
+ sim. cs 1.62012 err 0.168909
+ ratio 9.00067 err 1.37139
+ simulated production rate 0.00092
+ A 196 exp.cs 21.4 err 9.68
+ sim. cs 51.7558 err 0.954683
+ ratio 2.41849 err 1.09488
+ simulated production rate 0.02939
+ A 195 exp.cs 21.34 err 5.86
+ sim. cs 21.4842 err 0.615091
+ ratio 1.00676 err 0.277956
+ simulated production rate 0.0122
+ A 194 exp.cs 21.28 err 2.54
+ sim. cs 20.093 err 0.594843
+ ratio 0.94422 err 0.116118
+ simulated production rate 0.01141
+ A 193 exp.cs 18.56 err 2.32
+ sim. cs 12.4327 err 0.467909
+ ratio 0.669863 err 0.0874458
+ simulated production rate 0.00706
+ A 192 exp.cs 19.99 err 1.87
+ sim. cs 16.4477 err 0.538186
+ ratio 0.822798 err 0.0815429
+ simulated production rate 0.00934
+ A 191 exp.cs 19.84 err 1.85
+ sim. cs 13.0666 err 0.479691
+ ratio 0.6586 err 0.0659998
+ simulated production rate 0.00742
+ A 190 exp.cs 19.86 err 1.85
+ sim. cs 16.9937 err 0.547045
+ ratio 0.855672 err 0.0843329
+ simulated production rate 0.00965
+ A 189 exp.cs 21.86 err 2.04
+ sim. cs 13.454 err 0.48675
+ ratio 0.615464 err 0.0616009
+ simulated production rate 0.00764
+ A 188 exp.cs 22.05 err 2.06
+ sim. cs 16.9937 err 0.547045
+ ratio 0.770687 err 0.0761551
+ simulated production rate 0.00965
+ A 187 exp.cs 21.04 err 1.96
+ sim. cs 14.2113 err 0.50026
+ ratio 0.675441 err 0.0672638
+ simulated production rate 0.00807
+ A 186 exp.cs 21.88 err 2.8
+ sim. cs 18.966 err 0.577919
+ ratio 0.866818 err 0.114029
+ simulated production rate 0.01077
+ A 185 exp.cs 19.84 err 2.3
+ sim. cs 16.0251 err 0.531227
+ ratio 0.807717 err 0.0973896
+ simulated production rate 0.0091
+ A 184 exp.cs 18.4 err 2.36
+ sim. cs 19.6351 err 0.588026
+ ratio 1.06713 err 0.140552
+ simulated production rate 0.01115
+ A 183 exp.cs 16.04 err 2.06
+ sim. cs 17.61 err 0.556877
+ ratio 1.09788 err 0.145211
+ simulated production rate 0.01
+ A 182 exp.cs 15.5 err 1.99
+ sim. cs 19.0364 err 0.578992
+ ratio 1.22816 err 0.162044
+ simulated production rate 0.01081
+ A 181 exp.cs 11.63 err 1.49
+ sim. cs 14.6515 err 0.50795
+ ratio 1.2598 err 0.167207
+ simulated production rate 0.00832
+ A 180 exp.cs 8.16 err 1.05
+ sim. cs 16.2012 err 0.534138
+ ratio 1.98544 err 0.263732
+ simulated production rate 0.0092
+ A 179 exp.cs 5.49 err 0.7
+ sim. cs 11.0415 err 0.440954
+ ratio 2.0112 err 0.268721
+ simulated production rate 0.00627
+ not found in simulations 0
+ not found in exper: 4
+ simulated production rate 0.02939
+ simulated production rate 0.00742
+ simulated production rate 0.00807
+ simulated production rate 0.00832
+ simulated production rate 0.00965
+ simulated production rate 0.00934
+ simulated production rate 0.01081
+ simulated production rate 0.00215
+ simulated production rate 0.00965
+ simulated production rate 0.0091
+ simulated production rate 0.01141
+ simulated production rate 0.01077
+ simulated production rate 0.01
+ simulated production rate 0.00706
+ simulated production rate 0.0122
+ simulated production rate 0.00764
+ simulated production rate 0.0092
+ simulated production rate 0.00627
+ simulated production rate 0.00506
+ simulated production rate 0.01115
+ simulated production rate 0.00328
+ simulated production rate 0.00092
+ extra simul.: A 174 sim. cs 0.75723 err 0.115476
+ simulated production rate 0.00043
+ extra simul.: A 173 sim. cs 0.24654 err 0.0658906
+ simulated production rate 0.00014
+ extra simul.: A 172 sim. cs 0.07044 err 0.03522
+ simulated production rate 4e-05
+ extra simul.: A 171 sim. cs 0.01761 err 0.01761
+ simulated production rate 1e-05
+ matched 22 CHSQ 0.766641
+ raw chsq 284.466
+ average ratio 1.92616 err 0.301355
+ lhood 2.2388
+ exper. cs 329.38 err 47.44
+ inucl. cs 351.284 err 11.424
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ **** izotop Z **** 72
+ A 176 exp.cs 0.13 err 0.02
+ sim. cs 0.29937 err 0.0726079
+ ratio 2.30285 err 0.661411
+ simulated production rate 0.00017
+ A 175 exp.cs 0.31 err 0.04
+ sim. cs 0.36981 err 0.0806992
+ ratio 1.19294 err 0.302424
+ simulated production rate 0.00021
+ A 174 exp.cs 0.56 err 0.07
+ sim. cs 0.95094 err 0.129407
+ ratio 1.69811 err 0.313776
+ simulated production rate 0.00054
+ A 173 exp.cs 0.96 err 0.12
+ sim. cs 1.17987 err 0.144144
+ ratio 1.22903 err 0.214818
+ simulated production rate 0.00067
+ A 172 exp.cs 1.82 err 0.17
+ sim. cs 1.95471 err 0.185533
+ ratio 1.07402 err 0.143025
+ simulated production rate 0.00111
+ A 171 exp.cs 3.05 err 0.31
+ sim. cs 2.41257 err 0.20612
+ ratio 0.791007 err 0.105028
+ simulated production rate 0.00137
+ A 170 exp.cs 4.6 err 0.52
+ sim. cs 5.14212 err 0.30092
+ ratio 1.11785 err 0.142295
+ simulated production rate 0.00292
+ A 169 exp.cs 6.05 err 0.75
+ sim. cs 6.3396 err 0.334126
+ ratio 1.04787 err 0.141154
+ simulated production rate 0.0036
+ A 168 exp.cs 8.49 err 0.84
+ sim. cs 9.75594 err 0.41449
+ ratio 1.14911 err 0.123732
+ simulated production rate 0.00554
+ A 167 exp.cs 9.72 err 1.24
+ sim. cs 11.3408 err 0.446892
+ ratio 1.16675 err 0.155784
+ simulated production rate 0.00644
+ A 166 exp.cs 10.46 err 1.33
+ sim. cs 14.9157 err 0.512508
+ ratio 1.42597 err 0.187818
+ simulated production rate 0.00847
+ A 165 exp.cs 9.98 err 1.18
+ sim. cs 12.732 err 0.473509
+ ratio 1.27575 err 0.158127
+ simulated production rate 0.00723
+ A 164 exp.cs 8.48 err 0.79
+ sim. cs 14.1761 err 0.49964
+ ratio 1.6717 err 0.16651
+ simulated production rate 0.00805
+ A 163 exp.cs 5.93 err 0.48
+ sim. cs 8.66412 err 0.390609
+ ratio 1.46107 err 0.135372
+ simulated production rate 0.00492
+ A 162 exp.cs 3.83 err 0.36
+ sim. cs 7.23771 err 0.35701
+ ratio 1.88974 err 0.200599
+ simulated production rate 0.00411
+ A 161 exp.cs 1.67 err 0.17
+ sim. cs 3.94464 err 0.263562
+ ratio 2.36206 err 0.287617
+ simulated production rate 0.00224
+ A 160 exp.cs 0.57 err 0.06
+ sim. cs 2.06037 err 0.190481
+ ratio 3.61468 err 0.506409
+ simulated production rate 0.00117
+ A 159 exp.cs 0.14 err 0.02
+ sim. cs 0.73962 err 0.114126
+ ratio 5.283 err 1.11091
+ simulated production rate 0.00042
+ not found in simulations 0
+ not found in exper: 8
+ simulated production rate 0.00644
+ simulated production rate 0.00847
+ simulated production rate 0.00723
+ simulated production rate 0.00292
+ simulated production rate 0.00805
+ simulated production rate 0.00117
+ simulated production rate 0.00224
+ simulated production rate 0.00492
+ simulated production rate 0.00554
+ simulated production rate 0.00411
+ simulated production rate 0.00111
+ simulated production rate 0.0036
+ extra simul.: A 158 sim. cs 0.45786 err 0.0897937
+ simulated production rate 0.00026
+ simulated production rate 0.00054
+ extra simul.: A 177 sim. cs 0.28176 err 0.07044
+ simulated production rate 0.00016
+ simulated production rate 0.00137
+ simulated production rate 0.00067
+ extra simul.: A 157 sim. cs 0.08805 err 0.0393772
+ simulated production rate 5e-05
+ simulated production rate 0.00042
+ extra simul.: A 179 sim. cs 0.07044 err 0.03522
+ simulated production rate 4e-05
+ simulated production rate 0.00021
+ simulated production rate 0.00017
+ extra simul.: A 178 sim. cs 0.22893 err 0.0634938
+ simulated production rate 0.00013
+ extra simul.: A 180 sim. cs 0.05283 err 0.0305014
+ simulated production rate 3e-05
+ extra simul.: A 183 sim. cs 0.01761 err 0.01761
+ simulated production rate 1e-05
+ extra simul.: A 156 sim. cs 0.01761 err 0.01761
+ simulated production rate 1e-05
+ matched 18 CHSQ 0.651876
+ raw chsq 137.681
+ average ratio 1.76408 err 0.280934
+ lhood 1.89265
+ exper. cs 76.75 err 8.47
+ inucl. cs 105.431 err 5.48043
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ **** izotop Z **** 66
+ A 157 exp.cs 0.14 err 0.02
+ sim. cs 0.56352 err 0.0996172
+ ratio 4.02514 err 0.914852
+ simulated production rate 0.00032
+ A 156 exp.cs 0.25 err 0.05
+ sim. cs 1.09182 err 0.138661
+ ratio 4.36728 err 1.03468
+ simulated production rate 0.00062
+ A 155 exp.cs 0.41 err 0.05
+ sim. cs 1.2327 err 0.147336
+ ratio 3.00659 err 0.513394
+ simulated production rate 0.0007
+ A 154 exp.cs 0.69 err 0.06
+ sim. cs 2.65911 err 0.216395
+ ratio 3.85378 err 0.458972
+ simulated production rate 0.00151
+ A 153 exp.cs 0.91 err 0.09
+ sim. cs 3.24024 err 0.238874
+ ratio 3.5607 err 0.439227
+ simulated production rate 0.00184
+ A 152 exp.cs 1.07 err 0.11
+ sim. cs 4.52577 err 0.28231
+ ratio 4.22969 err 0.508613
+ simulated production rate 0.00257
+ A 151 exp.cs 1.23 err 0.15
+ sim. cs 4.13835 err 0.269956
+ ratio 3.36451 err 0.465318
+ simulated production rate 0.00235
+ A 150 exp.cs 1.31 err 0.14
+ sim. cs 4.59621 err 0.284498
+ ratio 3.50856 err 0.433313
+ simulated production rate 0.00261
+ A 149 exp.cs 1.15 err 0.11
+ sim. cs 3.08175 err 0.232958
+ ratio 2.67978 err 0.32671
+ simulated production rate 0.00175
+ A 148 exp.cs 0.91 err 0.09
+ sim. cs 3.18741 err 0.236918
+ ratio 3.50265 err 0.433343
+ simulated production rate 0.00181
+ A 147 exp.cs 0.55 err 0.1
+ sim. cs 1.65534 err 0.170735
+ ratio 3.00971 err 0.629138
+ simulated production rate 0.00094
+ not found in simulations 0
+ not found in exper: 8
+ simulated production rate 0.00094
+ simulated production rate 0.00257
+ simulated production rate 0.00184
+ simulated production rate 0.00261
+ simulated production rate 0.00235
+ simulated production rate 0.00175
+ simulated production rate 0.00181
+ simulated production rate 0.00151
+ extra simul.: A 146 sim. cs 0.95094 err 0.129407
+ simulated production rate 0.00054
+ extra simul.: A 158 sim. cs 0.19371 err 0.0584058
+ simulated production rate 0.00011
+ simulated production rate 0.00032
+ simulated production rate 0.00062
+ extra simul.: A 159 sim. cs 0.19371 err 0.0584058
+ simulated production rate 0.00011
+ simulated production rate 0.0007
+ extra simul.: A 144 sim. cs 0.07044 err 0.03522
+ simulated production rate 4e-05
+ extra simul.: A 145 sim. cs 0.29937 err 0.0726079
+ simulated production rate 0.00017
+ extra simul.: A 161 sim. cs 0.03522 err 0.0249043
+ simulated production rate 2e-05
+ extra simul.: A 142 sim. cs 0.01761 err 0.01761
+ simulated production rate 1e-05
+ extra simul.: A 160 sim. cs 0.03522 err 0.0249043
+ simulated production rate 2e-05
+ matched 11 CHSQ 1.51876
+ raw chsq 279.103
+ average ratio 3.55531 err 0.559778
+ lhood 3.54802
+ exper. cs 8.62 err 0.97
+ inucl. cs 31.7684 err 2.73972
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ **** izotop Z **** 65
+ A 153 exp.cs 0.21 err 0.03
+ sim. cs 0.45786 err 0.0897937
+ ratio 2.18029 err 0.529004
+ simulated production rate 0.00026
+ A 152 exp.cs 0.33 err 0.03
+ sim. cs 0.65157 err 0.107117
+ ratio 1.97445 err 0.370922
+ simulated production rate 0.00037
+ A 151 exp.cs 0.49 err 0.05
+ sim. cs 1.44402 err 0.159465
+ ratio 2.94698 err 0.443101
+ simulated production rate 0.00082
+ A 150 exp.cs 0.62 err 0.08
+ sim. cs 1.37358 err 0.155527
+ ratio 2.21545 err 0.380322
+ simulated production rate 0.00078
+ A 149 exp.cs 0.77 err 0.1
+ sim. cs 1.62012 err 0.168909
+ ratio 2.10405 err 0.35041
+ simulated production rate 0.00092
+ A 148 exp.cs 0.88 err 0.11
+ sim. cs 1.44402 err 0.159465
+ ratio 1.64093 err 0.273697
+ simulated production rate 0.00082
+ A 147 exp.cs 0.93 err 0.09
+ sim. cs 1.62012 err 0.168909
+ ratio 1.74206 err 0.247807
+ simulated production rate 0.00092
+ A 146 exp.cs 0.8 err 0.08
+ sim. cs 0.81006 err 0.119437
+ ratio 1.01258 err 0.180395
+ simulated production rate 0.00046
+ A 145 exp.cs 0.54 err 0.1
+ sim. cs 0.38742 err 0.0825982
+ ratio 0.717444 err 0.202604
+ simulated production rate 0.00022
+ A 144 exp.cs 0.28 err 0.1
+ sim. cs 0.1761 err 0.0556877
+ ratio 0.628929 err 0.300013
+ simulated production rate 0.0001
+ not found in simulations 0
+ not found in exper: 6
+ simulated production rate 0.00092
+ extra simul.: A 156 sim. cs 0.1761 err 0.0556877
+ simulated production rate 0.0001
+ simulated production rate 0.00078
+ simulated production rate 0.00082
+ simulated production rate 0.00037
+ simulated production rate 0.00082
+ simulated production rate 0.00046
+ simulated production rate 0.00026
+ simulated production rate 0.00092
+ extra simul.: A 159 sim. cs 0.01761 err 0.01761
+ simulated production rate 1e-05
+ simulated production rate 0.00022
+ extra simul.: A 154 sim. cs 0.24654 err 0.0658906
+ simulated production rate 0.00014
+ simulated production rate 0.0001
+ extra simul.: A 155 sim. cs 0.14088 err 0.0498086
+ simulated production rate 8e-05
+ extra simul.: A 142 sim. cs 0.03522 err 0.0249043
+ simulated production rate 2e-05
+ extra simul.: A 158 sim. cs 0.01761 err 0.01761
+ simulated production rate 1e-05
+ matched 10 CHSQ 0.832214
+ raw chsq 69.2581
+ average ratio 1.71632 err 0.327828
+ lhood 1.92707
+ exper. cs 5.85 err 0.77
+ inucl. cs 10.6188 err 1.49842
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ ===================================================== 
+ total exper c.s. 1096.15 err 126.01 tot inucl c.s. 1037.56 err 46.3933
+ checked total 155 lhood 2.319
+ average ratio 1.99155 err 0.662193
+ global chsq 0.276301
