@@ -183,22 +183,22 @@
     debug.push_back(momentum);
     debug.dump();
 
-    //Make the fragment
-    G4Fragment aProRes;
-    aProRes.SetA(resA);
-    aProRes.SetZ(resZ);
-    aProRes.SetNumberOfParticles(0);
-    aProRes.SetNumberOfCharged(0);
-    aProRes.SetNumberOfHoles(G4lrint(a1)-resA);
-    aProRes.SetMomentum(momentum);
-    G4ParticleDefinition * resDef(0);
-//    G4cout << "G4BinaryLiightIonReaction: spectator particles A Z : " 
-//           << resA << " " << resZ << G4endl;
     
     // call precompound model
     G4ReactionProductVector * proFrag(0);
     if(resZ>0 && resA>1) 
     {
+      //  Make the fragment
+      G4Fragment aProRes;
+      aProRes.SetA(resA);
+      aProRes.SetZ(resZ);
+      aProRes.SetNumberOfParticles(0);
+      aProRes.SetNumberOfCharged(0);
+      aProRes.SetNumberOfHoles(G4lrint(a1)-resA);
+      aProRes.SetMomentum(momentum);
+      G4ParticleDefinition * resDef(0);
+//       G4cout << "G4BinaryLiightIonReaction: spectator particles A Z : " 
+//           << resA << " " << resZ << G4endl;
       resDef = G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ);  
       aProRes.SetParticleDefinition(resDef);
       proFrag = theProjectileFragmentation.DeExcite(aProRes);
