@@ -72,8 +72,8 @@ ulimit -a
 # Check if INPROGRESS
 ##########################
 if [ -e $G4WORKDIR/inprogress.stat ]; then
-echo "In progress already!"
-exit 
+  echo "In progress already!"
+  exit 
 fi
 
 ###########################################
@@ -91,22 +91,22 @@ EOF
 ######################################################################
 if [ X$NONINCREMENTAL = X ]
 then
-cd ${G4WORKDIR}/stt/${G4SYSTEM}
-NEXT_NUMBER=$[`ls -c1 gmake.log.*|sort|tail -1|cut -d "." -f3`+1]
-mv gmake.log gmake.log.${NEXT_NUMBER}
+  cd ${G4WORKDIR}/stt/${G4SYSTEM}
+  NEXT_NUMBER=$[`ls -c1 gmake.log.*|sort|tail -1|cut -d "." -f3`+1]
+  mv gmake.log gmake.log.${NEXT_NUMBER}
 else
-cd ${G4WORKDIR}
-if [ -d stt.${REFTAG} ]
-then
-echo stt.${REFTAG} already exists - aborting.
-exit
-fi
-echo CREATE stt.${REFTAG} and RESET stt symbolic link.
-mkdir stt.${REFTAG}
-rm -rf stt
-ln -s stt.${REFTAG} stt
-echo 'REMOVE bin/* lib/* tmp/*'
-rm -r bin/* lib/* tmp/*
+  cd ${G4WORKDIR}
+  if [ -d stt.${REFTAG} ]
+  then
+    echo stt.${REFTAG} already exists - aborting.
+    exit
+  fi
+  echo CREATE stt.${REFTAG} and RESET stt symbolic link.
+  mkdir stt.${REFTAG}
+  rm -rf stt
+  ln -s stt.${REFTAG} stt
+  echo 'REMOVE bin/* lib/* tmp/*'
+  rm -r bin/* lib/* tmp/*
 fi
 ########################################################
 
@@ -118,23 +118,13 @@ cd ${G4WORKDIR}
 
 if [ X$ACTION = Xbuild -o X$ACTION = Xall  ]
 then
-#################
-# Maybe workaround about first building sublibs without TMPDIR,
-# but as afr as I know decision - use granular libs.
-# Shortlived decision - first build ALL without TMPDIR - then
-# with it.
-################
-#${G4INSTALL}/tests/tools/bin/build_specific.sh &
-#${G4INSTALL}/tests/tools/bin/build.sh
-. ${G4INSTALL}/tests/tools/bin/tmpenv.sh
-${G4INSTALL}/tests/tools/bin/build.sh $ACTARG1 $ACTARG2
-#unset $TMPDIR
-#${G4INSTALL}/tests/tools/bin/build.sh test all
+  . ${G4INSTALL}/tests/tools/bin/tmpenv.sh
+  ${G4INSTALL}/tests/tools/bin/build.sh $ACTARG1 $ACTARG2
 fi
 
 if [ X$ACTION = Xrun -o X$ACTION = Xall  ]
 then
-${G4INSTALL}/tests/tools/bin/run.sh $ACTARG3
+  ${G4INSTALL}/tests/tools/bin/run.sh $ACTARG3
 fi
 ####################################################################
 
