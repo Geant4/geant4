@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.97 2004-09-03 14:40:46 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.98 2004-09-08 09:44:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -230,7 +230,6 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& )
   // Build table for energy loss due to soft brems
   // the tables are built for *MATERIALS* binning is taken from LowEnergyLoss
 
-  G4double twoln10 = 2.0*log(10.0);
   G4double lowKineticEnergy  = GetLowerBoundEloss();
   G4double highKineticEnergy = GetUpperBoundEloss();
   size_t   totBin = GetNbinEloss();
@@ -278,15 +277,16 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& )
     G4double tCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[m];
     if(tCut > highKineticEnergy) tCut = highKineticEnergy;
     cutForDelta.push_back(tCut);
-
+    /*
     // Parameterisation of density coorection
+    G4double twoln10 = 2.0*log(10.0);
     G4double cden  = material->GetIonisation()->GetCdensity();
     G4double mden  = material->GetIonisation()->GetMdensity();
     G4double aden  = material->GetIonisation()->GetAdensity();
     G4double x0den = material->GetIonisation()->GetX0density();
     G4double x1den = material->GetIonisation()->GetX1density();
     G4double eDensity = material->GetElectronDensity();
-
+    */
     const G4ElementVector* theElementVector = material->GetElementVector();
     size_t NumberOfElements = material->GetNumberOfElements() ;
     const G4double* theAtomicNumDensityVector =
