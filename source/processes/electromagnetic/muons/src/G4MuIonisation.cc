@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.22 2001-11-07 06:08:31 urban Exp $
+// $Id: G4MuIonisation.cc,v 1.23 2001-11-07 16:26:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------- G4MuIonisation physics process ------------------------------
@@ -100,7 +100,7 @@ G4int G4MuIonisation::GetNbinLambda()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MuIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
+void G4MuIonisation::BuildPhysicsTable(const G4ParticleDefinition& ParticleType)
 // just call BuildLossTable+BuildLambdaTable
 {
   // get bining from EnergyLoss
@@ -108,9 +108,9 @@ void G4MuIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType
   HighestKineticEnergy = GetUpperBoundEloss();
   TotBin               = GetNbinEloss();
 
-  BuildLossTable(aParticleType);
+  BuildLossTable(ParticleType);
 
-  if (aParticleType.GetPDGCharge() > 0.)
+  if (ParticleType.GetPDGCharge() > 0.)
     {
       RecorderOfmuplusProcess[CounterOfmuplusProcess]   = (*this).theLossTable;
       CounterOfmuplusProcess++;
@@ -121,15 +121,16 @@ void G4MuIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType
       CounterOfmuminusProcess++;
     }
  
-  if( !EqualCutVectors(G4Electron::Electron()->GetLengthCuts(), lastelectronCutInRange) )  
-     BuildLambdaTable(aParticleType);
+  if( !EqualCutVectors(G4Electron::Electron()
+                               ->GetLengthCuts(), lastelectronCutInRange))  
+     BuildLambdaTable(ParticleType);
  
-  G4VMuEnergyLoss::BuildDEDXTable(aParticleType);
+  G4VMuEnergyLoss::BuildDEDXTable(ParticleType);
 
-  if(&aParticleType == G4MuonPlus::MuonPlus())  PrintInfoDefinition();
+  if(&ParticleType == G4MuonPlus::MuonPlus())  PrintInfoDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 {
@@ -145,7 +146,7 @@ void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
  theLossTable = new G4PhysicsTable(numOfMaterials);
   
  // get delta cut in energy 
- G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetEnergyCuts() ;
+ G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetEnergyCuts();
   
  //  loop for materials
  //
@@ -193,7 +194,7 @@ void G4MuIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
  theMeanFreePathTable = new G4PhysicsTable(numOfMaterials);
 
  // get electron cut in kinetic energy
- G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetEnergyCuts() ;
+ G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetEnergyCuts();
  
  // loop for materials 
 
@@ -287,7 +288,7 @@ G4double G4MuIonisation::ComputeRestrictedMeandEdx (
 
      // shell correction 
      G4double* ShellCorrectionVector = material->GetIonisation()->
-                                       GetShellCorrectionVector();				                
+                                       GetShellCorrectionVector();
      const G4double bg2lim = 0.0169, taulim = 8.4146e-3;
      G4double sh = 0., xs = 1.;
      if (bg2 > bg2lim) for (G4int k=0; k<3; k++)
@@ -452,11 +453,11 @@ G4VParticleChange* G4MuIonisation::PostStepDoIt(const G4Track& trackData,
  G4double betasquare=Psquare/Esquare; 
  G4double summass = ParticleMass + electron_mass_c2;
  G4double MaxKineticEnergyTransfer = 2.*electron_mass_c2*Psquare
-                      /(summass*summass+2.*electron_mass_c2*KineticEnergy);      
+                      /(summass*summass+2.*electron_mass_c2*KineticEnergy);
  G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
  
  // get electron cut in kinetic energy
- G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetEnergyCuts() ;
+ G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetEnergyCuts();
  G4double DeltaThreshold = DeltaCutInKineticEnergy[aMaterial->GetIndex()];
 
  // sampling kinetic energy of the delta ray 
