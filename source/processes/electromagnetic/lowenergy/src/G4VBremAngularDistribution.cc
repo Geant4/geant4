@@ -42,7 +42,7 @@
 // Abstract base class for Bremsstrahlung Angular Distribution Generation
 //
 // Class Description: End 
-//
+
 // -------------------------------------------------------------------
 //
 //    
@@ -51,7 +51,7 @@
 
 //    
 
-G4VBremAngularDistribution::G4VBremAngularDistribution(const G4String& name)
+G4VBremAngularDistribution::G4VBremAngularDistribution(const G4String& ) // name
 {;}
 
 //    
