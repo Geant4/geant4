@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2000-01-17 10:36:40 johna Exp $
+$Id: History,v 1.60 2000-01-29 00:49:39 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,16 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+29th January 2000  Makoto Asai
+- Introduction of G4RayTracer (visualization/RayTracer/...)
+- Migration of G4RayTracer
+  affected files :
+    visualization/GNUmakefile
+    visualization/management/include/MyVisManager.cc
+    visualization/management/src/G4VisManager.cc
+  affected files in other directory :
+    config/G4VIS_BUILD.gmk
+    config/G4VIS_USE.gmk
 
 vis-V01-00-03  17th January 2000  John Allison
 - Added protection for no voxelisation in G4LogicalVolumeModel.cc.
