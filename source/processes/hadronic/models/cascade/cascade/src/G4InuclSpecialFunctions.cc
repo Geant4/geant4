@@ -1,4 +1,5 @@
 #include "G4InuclSpecialFunctions.hh"
+#include "Randomize.hh"
 
 G4double G4InuclSpecialFunctions::getAL(G4double A) {
 
@@ -75,9 +76,8 @@ G4double G4InuclSpecialFunctions::inuclRndm() {
   if (verboseLevel > 3) {
     G4cout << " >>> G4InuclSpecialFunctions::inuclRndm" << G4endl;
   }
-    return drand48();
-  //G4double rnd = G4UniformRand(); 
-  //return rnd;
+  G4double rnd = G4UniformRand(); 
+  return rnd;
 } 
 
 G4double G4InuclSpecialFunctions::randomGauss(G4double sigma) {
