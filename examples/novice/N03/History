@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2004-06-14 08:30:32 gcosmo Exp $
+$Id: History,v 1.76 2004-11-11 17:47:29 gbarrand Exp $
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+11-11-04 Guy Barrand
+- gui.mac : gun pulldown menu.
+
 08-04-04 Guy Barrand (exampleN03-V06-01-00)
 - exampleN03.cc : Windows : Have G4UI_USE_WIN32 in order to have 
   a default Windows GUI coworking with the OpenGL Windows driver.
