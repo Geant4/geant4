@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.18 2003-08-06 15:22:18 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.19 2003-08-08 08:21:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -136,8 +136,8 @@ private:
 
 inline G4bool G4ionIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && p.GetParticleType() == "nucleus"
-                                  && !p.IsShortLived());
+  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived() &&
+          (p.GetParticleType() == "nucleus" || p.GetParticleType() == "static_nucleus"));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
