@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.2 2004-03-18 08:02:38 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.3 2004-04-08 07:54:00 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -396,7 +396,8 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4DynamicParticle* theSec = 0; // Prototype to fill particle in the G4ParticleChange
 	for(G4int is=0; is<nsec; is++)
 	{
-      G4double ener=cascE->at(is);
+
+      G4double ener=cascE->operator[](is);
       if(ener>0) theSec = new G4DynamicParticle(G4Electron::Electron(),RndmDir(),ener);
       else       theSec = new G4DynamicParticle(G4Gamma::Gamma(),RndmDir(),-ener);
       G4Track* aNewTrack = new G4Track(theSec, localtime, position );

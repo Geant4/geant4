@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.cc,v 1.1 2004-03-17 13:01:44 mkossov Exp $
+// $Id: G4QIsotope.cc,v 1.2 2004-04-08 07:54:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QIsotope class ----------------
@@ -619,11 +619,11 @@ G4QIsotope::G4QIsotope()
    G4double last=0.;
    if(n) for(G4int j=0; j<n; j++)
    {
-     G4int    nn =is->at(j).first; // #ofNeutrons in the isotope
-     G4double cur=is->at(j).second;// value of the summed abundancy
+     G4int    nn =is->operator[](j).first; // #ofNeutrons in the isotope
+     G4double cur=is->operator[](j).second;// value of the summed abundancy
      std::pair<G4int,G4double>* aP = new std::pair<G4int,G4double>(nn,cur-last);
      last=cur;                     // Update the summed value
-     std::pair<G4int,G4double>* sP = new std::pair<G4int,G4double>(is->at(j));
+     std::pair<G4int,G4double>* sP = new std::pair<G4int,G4double>(is->operator[](j));
      a->push_back(aP);
      s->push_back(sP);
 #ifdef pdebug
@@ -638,7 +638,7 @@ G4QIsotope::G4QIsotope()
  std::vector<std::pair<G4int,G4double>*>*c=new std::vector<std::pair<G4int,G4double>*>(n);
    if(n) for(G4int j=0; j<n; j++)  // Cross sections are 0. by default
    {
-     std::pair<G4int,G4double>* cP = new std::pair<G4int,G4double>(is->at(j).first,0.);
+     std::pair<G4int,G4double>* cP = new std::pair<G4int,G4double>(is->operator[](j).first,0.);
      c->push_back(cP);
 #ifdef pdebug
 	 G4cout<<"G4QIsotope::Constructor: CrosSecPair i="<<i<<", j="<<j<<" is filled"<<G4endl;
@@ -664,15 +664,15 @@ G4QIsotope::~G4QIsotope()          // The QIsotopes are destructed only in theEn
   {
     std::vector<std::pair<G4int,G4double>*>* curA=natElements[i];
     G4int nn=curA->size();         // Can not be 0 by definition
-    if(nn) for(G4int n=0; n<nn; n++) delete curA->at(n); // Delete pair(N,Ab)
+    if(nn) for(G4int n=0; n<nn; n++) delete curA->operator[](n); // Delete pair(N,Ab)
     delete curA;                   // Delet abundancy vector
     std::vector<std::pair<G4int,G4double>*>* curS=natSumAbund[i];
     G4int ns=curS->size();         // Can not be 0 by definition
-    if(ns) for(G4int m=0; m<ns; m++) delete curS->at(m); // Delete pair(N,Ab)
+    if(ns) for(G4int m=0; m<ns; m++) delete curS->operator[](m); // Delete pair(N,Ab)
     delete curS;                   // Delet abundancy vector
     std::vector<std::pair<G4int,G4double>*>* curC=natIsoCrosS[i];
     G4int nc=curC->size();         // Can not be 0 by definition
-    if(nc) for(G4int k=0; k<nc; k++) delete curC->at(k); // Delete pair(N,CS)
+    if(nc) for(G4int k=0; k<nc; k++) delete curC->operator[](k); // Delete pair(N,CS)
     delete curC;                   // Delete cross section vector
   }
   G4int nP=newElems.size();
@@ -682,7 +682,7 @@ G4QIsotope::~G4QIsotope()          // The QIsotopes are destructed only in theEn
     G4int nEn=nEl->second->size();
     if(nEn) for(G4int k=0; k<nEn; k++)
     {
-      std::pair<G4int,G4double>* curA=nEl->second->at(k);
+      std::pair<G4int,G4double>* curA=nEl->second->operator[](k);
       delete curA;                 // Delete vect<pair(N,Abundancy)*>
     }
     delete nEl;                    // Delete vect<IndZ,vect<pair(N,Ab)*>*> newElementVector
@@ -691,7 +691,7 @@ G4QIsotope::~G4QIsotope()          // The QIsotopes are destructed only in theEn
     G4int nSn=nSA->second->size();
     if(nSn) for(G4int n=0; n<nSn; n++)
     {
-      std::pair<G4int,G4double>* curS=nSA->second->at(n);
+      std::pair<G4int,G4double>* curS=nSA->second->operator[](n);
       delete curS;                 // Delete vect<pair(N,SumAbund)*>
     }
     delete nSA;                    // Delete vect<IndZ,vect<pair(N,SA)*>*> newSumAbunVector
@@ -700,7 +700,7 @@ G4QIsotope::~G4QIsotope()          // The QIsotopes are destructed only in theEn
     G4int nCn=nCS->second->size();
     if(nCn) for(G4int m=0; m<nCn; m++)
     {
-      std::pair<G4int,G4double>* curC = nCS->second->at(m);
+      std::pair<G4int,G4double>* curC = nCS->second->operator[](m);
       delete curC;                 // Delete vect<pair(N,CrossSect)*>
     }
     delete nCS;                    // Delete vect<IndZ,vect<pair(N,CS)*>*> newIsoCroSVector
@@ -1586,8 +1586,8 @@ G4int G4QIsotope::InitElement(G4int Z, G4int index, // Ret: -1 - Empty, -2 - Wro
   G4double sumAbu=0;                  // Summ of abbundancies
   for(G4int j=0; j<I; j++)
   {
-    G4int N=abund->at(j).first;
-    G4double abu=abund->at(j).second;
+    G4int N=abund->operator[](j).first;
+    G4double abu=abund->operator[](j).second;
     sumAbu+=abu;
     if(j==I-1.)
     {
@@ -1602,9 +1602,9 @@ G4int G4QIsotope::InitElement(G4int Z, G4int index, // Ret: -1 - Empty, -2 - Wro
         G4cerr<<"--Worning--G4QIsotope::InitEl:(-2)WrongAbund,Z="<<Z<<",i="<<index<<G4endl;
         for(G4int k=0; k<I-1; k++)
         {
-          delete A->at(k);
-          delete S->at(k);
-          delete C->at(k);
+          delete A->operator[](k);
+          delete S->operator[](k);
+          delete C->operator[](k);
         }
         delete A; 
         delete S;
@@ -1670,14 +1670,14 @@ G4int G4QIsotope::GetNeutrons(G4int Z, G4int index) // If theElem doesn't exist,
   G4int nn = abu->size();             // A#Of UserDefinedIsotopes for the newElement
   if(nn>0)
   {
-    if(nn==1) return abu->at(0)->first;
+    if(nn==1) return abu->operator[](0)->first;
     else
     {
       G4double rnd=G4UniformRand();
       G4int j=0;
-      for(j=0; j<nn; j++) if(rnd<abu->at(j)->second) break;
+      for(j=0; j<nn; j++) if(rnd<abu->operator[](j)->second) break;
       if(j>=nn) j=nn-1;
-      return abu->at(j)->first;
+      return abu->operator[](j)->first;
     }
   }
   else
@@ -1851,10 +1851,10 @@ G4double G4QIsotope::GetMeanCrossSection(G4int Z, G4int index)
     G4double sum=0.;
     for(G4int j=0; j<nis; j++)
 	{
-      G4double cur=ab->at(j)->second;
+      G4double cur=ab->operator[](j)->second;
       G4double abunda=cur-last;
       last=cur;
-      sum+=abunda*cs->at(j)->second;
+      sum+=abunda*cs->operator[](j)->second;
     }
     return sum;
   }
@@ -1917,16 +1917,16 @@ G4int G4QIsotope::GetCSNeutrons(G4int Z, G4int index)
     std::vector<G4double> scs(nis);
     for(G4int j=0; j<nis; j++)
 	{
-      G4double cur=ab->at(j)->second;
+      G4double cur=ab->operator[](j)->second;
       G4double abunda=cur-last;
       last=cur;
-      sum+=abunda*cs->at(j)->second;;
+      sum+=abunda*cs->operator[](j)->second;;
       scs.push_back(sum);
     }
     G4double rnd=sum*G4UniformRand();
     sum=0;
     G4int k=0;
     if(nis>1) for(k=0; k<nis; k++) if(rnd<scs[k]) break;
-    return ab->at(k)->first;
+    return ab->operator[](k)->first;
   }
 }
