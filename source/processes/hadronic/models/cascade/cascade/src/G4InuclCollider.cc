@@ -368,9 +368,11 @@ G4InteractionCase G4InuclCollider::bulletTargetSetter(G4InuclParticle* bullet,
     }; 
   }
   else {
-    if(G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) { 
-      if(G4InuclElementaryParticle* part = 
-	 dynamic_cast<G4InuclElementaryParticle*>(target)) {
+    G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet);
+    if(nuclei_bullet) { 
+      G4InuclElementaryParticle* part =
+         dynamic_cast<G4InuclElementaryParticle*>(target);
+      if(part) {
 	interCase.setInterCase(1);
 	interCase.setBulletTarget(target, bullet);
       };
