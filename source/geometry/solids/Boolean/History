@@ -1,5 +1,5 @@
 
-$Id: History,v 1.6 2000-04-11 16:05:06 johna Exp $
+$Id: History,v 1.7 2000-04-12 08:37:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,14 +20,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
- Apr 11   2000   J. Allison
+ Apr 11   2000  John Allison
 
-- CreatePolyhedron implemented for BooleanSolids.
-- G4DisplacedSolid: reversed implementation of GetFrameRotation and
+  - CreatePolyhedron implemented for BooleanSolids.
+  - G4DisplacedSolid: reversed implementation of GetFrameRotation and
     GetObjectRotation, removing inappropriate invertion.
-- G4DisplacedSolid::GetConstituentMovedSolid() made const.
+  - G4DisplacedSolid::GetConstituentMovedSolid() made const.
 
- Gen 19   2000	Gabriele Cosmo		geom-solid-bool-V01-00-00
+ Jan 19   2000	Gabriele Cosmo		geom-solid-bool-V01-00-00
 
   - Syncronized file versions with HEAD (essentially CVS headers changes)
   - Fixed cases of G4std::min which were not migrated on the HEAD in files:
