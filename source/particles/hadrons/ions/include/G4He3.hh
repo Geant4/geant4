@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4He3.hh,v 1.3 1999-12-15 14:51:01 gunter Exp $
+// $Id: G4He3.hh,v 1.4 2001-03-12 05:45:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,6 +60,8 @@ class G4He3 : public G4VIon
    static G4double* GetCutsInEnergy() {return theHe3KineticEnergyCuts;};
 
    void SetCuts(G4double aCut); 
+   virtual void RestoreCuts(G4double cutInLength,
+			    const G4double* cutInEnergy );
 };
 
 inline void G4He3::SetCuts(G4double aCut)
@@ -69,6 +71,12 @@ inline void G4He3::SetCuts(G4double aCut)
   theHe3KineticEnergyCuts = theKineticEnergyCuts;
   
 }
-
+inline void G4He3::RestoreCuts(G4double cutInLength,
+			    const G4double* cutInEnergy )
+{
+  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
+  theHe3LengthCut = theCutInMaxInteractionLength;  
+  theHe3KineticEnergyCuts = theKineticEnergyCuts;
+}
 #endif
 

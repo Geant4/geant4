@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KaonZero.hh,v 1.3 1999-12-15 14:51:04 gunter Exp $
+// $Id: G4KaonZero.hh,v 1.4 2001-03-12 05:45:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,6 +66,16 @@ class G4KaonZero : public G4VMeson
    static G4double* GetCutsInEnergy() {return theKaonZeroKineticEnergyCuts;};
 
    virtual void        SetCuts(G4double aCut);
+   virtual void RestoreCuts(G4double cutInLength,
+			    const G4double* cutInEnergy );
 };
+
+inline void G4KaonZero::RestoreCuts(G4double cutInLength,
+			    const G4double* cutInEnergy )
+{
+  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
+  theKaonZeroLengthCut = theCutInMaxInteractionLength;  
+  theKaonZeroKineticEnergyCuts = theKineticEnergyCuts;
+}
 
 #endif

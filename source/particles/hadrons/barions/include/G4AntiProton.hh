@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiProton.hh,v 1.4 1999-12-15 14:50:54 gunter Exp $
+// $Id: G4AntiProton.hh,v 1.5 2001-03-12 05:45:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,6 +67,8 @@ class G4AntiProton : public G4VBaryon
    static G4double* GetCutsInEnergy() {return theAntiProtonKineticEnergyCuts;};
 
    virtual void SetCuts(G4double aCut); 
+   virtual void RestoreCuts(G4double cutInLength,
+			    const G4double* cutInEnergy );
 };
 
 inline void G4AntiProton::SetCuts(G4double aCut)
@@ -74,7 +76,14 @@ inline void G4AntiProton::SetCuts(G4double aCut)
   CalcEnergyCuts(aCut);
   theAntiProtonLengthCut = theCutInMaxInteractionLength;  
   theAntiProtonKineticEnergyCuts = theKineticEnergyCuts;
-  
+}
+
+inline void G4AntiProton::RestoreCuts(G4double cutInLength,
+				      const G4double* cutInEnergy )
+{
+  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
+  theAntiProtonLengthCut = theCutInMaxInteractionLength;  
+  theAntiProtonKineticEnergyCuts = theKineticEnergyCuts;
 }
 
 inline G4AntiProton* G4AntiProton::AntiProton()

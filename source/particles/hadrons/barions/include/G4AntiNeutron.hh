@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiNeutron.hh,v 1.4 1999-12-15 14:50:54 gunter Exp $
+// $Id: G4AntiNeutron.hh,v 1.5 2001-03-12 05:45:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,6 +66,16 @@ class G4AntiNeutron : public G4VBaryon
    static G4double* GetCutsInEnergy() {return theAntiNeutronKineticEnergyCuts;};
 
    virtual void SetCuts(G4double aCut); 
+   virtual void RestoreCuts(G4double cutInLength,
+			    const G4double* cutInEnergy );
 };
 
+inline
+ void G4AntiNeutron::RestoreCuts(G4double cutInLength,
+			    const G4double* cutInEnergy )
+{
+  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
+  theAntiNeutronLengthCut = theCutInMaxInteractionLength;  
+  theAntiNeutronKineticEnergyCuts = theKineticEnergyCuts;
+}
 #endif

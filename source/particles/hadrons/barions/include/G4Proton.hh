@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Proton.hh,v 1.5 2000-02-25 07:37:11 kurasige Exp $
+// $Id: G4Proton.hh,v 1.6 2001-03-12 05:45:41 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,9 @@ class G4Proton : public G4VBaryon
    static G4double* GetCutsInEnergy() {return theProtonKineticEnergyCuts;};
 
    virtual void SetCuts(G4double aCut); 
-
+   virtual void RestoreCuts(G4double cutInLength,
+			    const G4double* cutInEnergy );
+      
  public:  //With Description
    G4int    GetAtomicNumber() const;
    G4int    GetAtomicMass() const;
@@ -82,8 +84,15 @@ inline void G4Proton::SetCuts(G4double aCut)
 {
   CalcEnergyCuts(aCut);
   theProtonLengthCut = theCutInMaxInteractionLength;  
-  theProtonKineticEnergyCuts = theKineticEnergyCuts;
-  
+  theProtonKineticEnergyCuts = theKineticEnergyCuts;  
+}
+
+inline void G4Proton::RestoreCuts(G4double cutInLength,
+			    const G4double* cutInEnergy )
+{
+  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
+  theProtonLengthCut = theCutInMaxInteractionLength;  
+  theProtonKineticEnergyCuts = theKineticEnergyCuts;  
 }
 
 inline G4Proton* G4Proton::Proton()
