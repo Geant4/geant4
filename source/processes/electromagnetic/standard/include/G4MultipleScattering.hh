@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.hh,v 1.5 1999-09-30 08:43:00 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.6 1999-10-15 12:55:40 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -134,11 +134,15 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
    G4double Tlimit ;
 
+   // model parameters
    G4double scatteringparameter;
    G4double tuning;
    G4double cpar;
+
+   // with/without lateral displacement
    G4bool fLatDisplFlag ;
 
+   // nuclear size effect correction
    G4double NuclCorrPar ;
    G4double FactPar ;
 

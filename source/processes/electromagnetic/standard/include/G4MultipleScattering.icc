@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.icc,v 1.4 1999-10-14 14:22:35 urban Exp $
+// $Id: G4MultipleScattering.icc,v 1.5 1999-10-15 12:56:12 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -21,6 +21,7 @@
 // **************************************************************
 // 25/11/97: mods for KinEnergy > HighestLimit
 // 22/10/98: cleanup , L.Urban
+// 15/10/99: bugfix, some accuracy problems fixed , L.Urban
 //---------------------------------------------------------------
 
 inline G4double G4MultipleScattering::GetContinuousStepLimit(
@@ -51,13 +52,14 @@ inline G4double G4MultipleScattering::GetContinuousStepLimit(
 
   if((lastMaterial != aMaterial) || (lastKineticEnergy != KineticEnergy))
   {
-    lastMaterial = aMaterial;
     lastKineticEnergy = KineticEnergy ;
     materialIndex = aMaterial->GetIndex() ;
 
-    if((KineticEnergy >= Tlimit)||(stepFlag != 1))
+    if((lastMaterial != aMaterial)||(KineticEnergy >= Tlimit)||(stepFlag != 1))
     fTransportMeanFreePath = (*theTransportMeanFreePathTable)
                              (materialIndex)->GetValue(KineticEnergy,isOut);
+
+    lastMaterial = aMaterial;
 
     if(KineticEnergy < Tlimit)
     {
@@ -77,12 +79,17 @@ inline G4double G4MultipleScattering::GetContinuousStepLimit(
   else if(stepFlag == 0)
   {
     tau = tPathLength/fTransportMeanFreePath ;
-    zPathLength = fTransportMeanFreePath*(1.-exp(-tau)) ;
+    if(tau < perMillion)
+      zPathLength = tPathLength ;
+    else
+      zPathLength = fTransportMeanFreePath*(1.-exp(-tau)) ;
   }
   else
   {
     tau = tPathLength/range ; 
-    if(tau<0.99) 
+    if(tau<perMillion)
+      zPathLength = range*(1.-exp(-alpha1*tau))/alpha1 ;
+    else if(tau<0.99) 
       zPathLength = range*(1.-exp(alpha1*log(1.-tau)))/alpha1 ;
     else
       zPathLength = range/alpha1 ;
@@ -129,11 +136,17 @@ inline G4VParticleChange* G4MultipleScattering::AlongStepDoIt(
   else if(stepFlag == 0)
   {
     tau = geomPathLength/fTransportMeanFreePath ;
-    truePathLength = -fTransportMeanFreePath*log(1.-tau) ; 
+    if(tau<perMillion)
+      truePathLength = fTransportMeanFreePath*tau ; 
+    else
+      truePathLength = -fTransportMeanFreePath*log(1.-tau) ; 
   }
   else 
   {
-    truePathLength = range*(1.-exp(log(1.-alpha1*geomPathLength/range)/
+    if(geomPathLength/range < perMillion)
+      truePathLength = range*(1.-exp(-geomPathLength/range)) ;
+    else
+      truePathLength = range*(1.-exp(log(1.-alpha1*geomPathLength/range)/
                                      alpha1)) ;
   }
 
