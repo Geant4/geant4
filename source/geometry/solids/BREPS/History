@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2002-10-28 11:31:17 gcosmo Exp $
+$Id: History,v 1.45 2002-11-06 23:33:10 radoone Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+07/11/2002 : R. Chytracek      breps-V04-01-02
+- All BREP solids + G4PlacedSolids now implement virtual StreamInfo(...) method
+  end properly expose their construction parameters via this interface to an
+  std::ostream instance.
 
 28/10/2002 : G. Cosmo          breps-V04-01-01
 - G4BREPSolid[.hh.cc]: added implementation of StreamInfo() to comply with ne interface
