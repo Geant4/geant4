@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2002-11-23 12:29:19 dressel Exp $
+$Id: History,v 1.11 2002-11-25 10:13:59 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+Nov 25th M. Dressel
+  added src/G4Trajectory.cc.
 
 Nov 23th M. Dressel 
   change of parallel geometry 
