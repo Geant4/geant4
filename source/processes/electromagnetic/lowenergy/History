@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2000-06-22 02:35:25 pia Exp $
+$Id: History,v 1.21 2000-06-22 02:38:20 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,7 +21,7 @@ committal in the CVS repository !
 	     MGP: Bug fix in G4VeLowEnergyLoss (calculation of fluctuations);
 	     correction to prevent log of negative argument
              Fixes problems with test14 in system testing on HP 
-	     To be better verified 
+	     To be further verified 
 
 22.06.2000 - MGP, tag emlowen-V01-01-20
 	     Minor improvements in test/G4BremsstrahlungTest and
