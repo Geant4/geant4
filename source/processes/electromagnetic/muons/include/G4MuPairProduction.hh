@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.hh,v 1.16 2003-11-12 16:18:23 vnivanch Exp $
+// $Id: G4MuPairProduction.hh,v 1.17 2004-01-21 18:05:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,6 +46,7 @@
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -172,12 +173,12 @@ inline void G4MuPairProduction::SecondariesPostStep(
   std::vector<G4DynamicParticle*>* newp =
          model->SampleSecondaries(couple, dp, tcut, kinEnergy);
   if(newp) {
-    aParticleChange.SetNumberOfSecondaries(2);
+    fParticleChange.SetNumberOfSecondaries(2);
     G4DynamicParticle* elpos = (*newp)[0];
-    aParticleChange.AddSecondary(elpos);
+    fParticleChange.AddSecondary(elpos);
     kinEnergy -= elpos->GetKineticEnergy();
     elpos = (*newp)[1];
-    aParticleChange.AddSecondary(elpos);
+    fParticleChange.AddSecondary(elpos);
     kinEnergy -= elpos->GetKineticEnergy();
     delete newp;
   }

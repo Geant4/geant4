@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.39 2004-01-14 18:01:57 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.40 2004-01-21 18:05:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,7 +78,8 @@ G4LossTableManager* G4LossTableManager::theInstance = 0;
 G4LossTableManager* G4LossTableManager::Instance()
 {
   if(0 == theInstance) {
-    theInstance = new G4LossTableManager();
+    static G4LossTableManager manager;
+    theInstance = &manager;
   }
   return theInstance;
 }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.3 2004-01-14 18:01:57 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.4 2004-01-21 18:05:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -71,13 +71,14 @@
 #include "G4Track.hh"
 #include "G4EmModelManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4ParticleChangeForLoss.hh"
 
 class G4Step;
 class G4ParticleDefinition;
 class G4VEmModel;
 class G4VEmFluctuationModel;
 class G4DataVector;
-class G4VParticleChange;
+//class G4VParticleChange;
 class G4PhysicsTable;
 class G4PhysicsVector;
 class G4VSubCutoffProcessor;
@@ -320,6 +321,10 @@ private:
   G4VEnergyLossProcess & operator=(const G4VEnergyLossProcess &right);
 
 // =====================================================================
+
+protected:
+
+  G4ParticleChangeForLoss               fParticleChange;
 
 private:
 

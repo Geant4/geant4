@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.17 2003-11-12 16:18:23 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.hh,v 1.18 2004-01-21 18:05:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,7 @@
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -119,7 +120,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4MuBremsstrahlung::MinPrimaryEnergy(const G4ParticleDefinition*,
-                                                        const G4Material*, 
+                                                        const G4Material*,
                                                               G4double cut)
 {
   return cut;
@@ -145,8 +146,8 @@ inline void G4MuBremsstrahlung::SecondariesPostStep(
 {
   G4DynamicParticle* gamma = model->SampleSecondary(couple, dp, tcut, kinEnergy);
   if(gamma) {
-    aParticleChange.SetNumberOfSecondaries(1);
-    aParticleChange.AddSecondary(gamma);
+    fParticleChange.SetNumberOfSecondaries(1);
+    fParticleChange.AddSecondary(gamma);
     kinEnergy -= gamma->GetKineticEnergy();
   }
 }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.hh,v 1.17 2003-11-12 16:18:23 vnivanch Exp $
+// $Id: G4MuIonisation.hh,v 1.18 2004-01-21 18:05:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,6 +55,7 @@
 // 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -154,7 +155,7 @@ inline G4double G4MuIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dynP
   G4double gamma= dynParticle->GetKineticEnergy()/mass + 1.0;
   G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
                   (1. + 2.0*gamma*ratio + ratio*ratio);
-  
+
   return tmax;
 }
 
@@ -163,7 +164,7 @@ inline G4double G4MuIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dynP
 #include "G4VSubCutoffProcessor.hh"
 
 inline std::vector<G4Track*>*  G4MuIonisation::SecondariesAlongStep(
-                           const G4Step&   step, 
+                           const G4Step&   step,
 	             	         G4double& tmax,
 			         G4double& eloss,
                                  G4double& kinEnergy)
@@ -191,13 +192,13 @@ inline void G4MuIonisation::SecondariesPostStep(
                                                    G4double& kinEnergy)
 {
   G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
-  aParticleChange.SetNumberOfSecondaries(1);
-  aParticleChange.AddSecondary(delta);
+  fParticleChange.SetNumberOfSecondaries(1);
+  fParticleChange.AddSecondary(delta);
   G4ThreeVector finalP = dp->GetMomentum();
   kinEnergy -= delta->GetKineticEnergy();
   finalP -= delta->GetMomentum();
   finalP = finalP.unit();
-  aParticleChange.SetMomentumDirectionChange(finalP);
+  fParticleChange.SetProposedMomentumDirection(finalP);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

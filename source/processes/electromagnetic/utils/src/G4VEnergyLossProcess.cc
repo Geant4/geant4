@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.3 2004-01-12 18:59:41 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.4 2004-01-21 18:05:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,6 +66,7 @@
 // 03-11-03 Fix initialisation problem in RetrievePhysicsTable (V.Ivanchenko)
 // 04-11-03 Add checks in RetrievePhysicsTable (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -140,6 +141,8 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   maxKinEnergy         = 100.0*GeV;
   maxKinEnergyForRange = 1.0*GeV;
   lowKinEnergy         = minKinEnergy*faclow;
+
+  pParticleChange = &fParticleChange;
 
   // default dRoverRange and finalRange
   SetStepFunction(defaultIntegralRange, 1.0*mm);
@@ -580,16 +583,16 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaSubTable()
 G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
                                                    const G4Step& step)
 {
-  aParticleChange.Initialize(track);
+  fParticleChange.InitializeForAlongStep(track);
   // The process has range table - calculate energy loss
-  if(!theRangeTable) return &aParticleChange;
+  if(!theRangeTable) return &fParticleChange;
 
   // Get the actual (true) Step length
   G4double length = step.GetStepLength();
   G4double eloss  = 0.0;
   G4bool b;
 
-  /*    
+  /*
   if(-1 < verboseLevel) {
     const G4ParticleDefinition* d = track.GetDefinition();
     G4cout << "AlongStepDoIt for "
@@ -696,7 +699,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
     G4int n = newp->size();
     if(n > 0) {
-      aParticleChange.SetNumberOfSecondaries(n);
+      fParticleChange.SetNumberOfSecondaries(n);
       G4Track* t;
       G4double e;
       for (G4int i=0; i<n; i++) {
@@ -706,7 +709,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
         if (pd != G4Gamma::Gamma() && pd != G4Electron::Electron() ) e += pd->GetPDGMass();
 
         preStepKinEnergy -= e;
-        aParticleChange.AddSecondary(t);
+        pParticleChange->AddSecondary(t);
       }
     }
     delete newp;
@@ -728,14 +731,14 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     eloss += preStepKinEnergy;
     preStepKinEnergy = 0.0;
 
-    if (hasRestProcess) aParticleChange.SetStatusChange(fStopButAlive);
-    else                aParticleChange.SetStatusChange(fStopAndKill);
+    if (hasRestProcess) fParticleChange.SetStatusChange(fStopButAlive);
+    else                fParticleChange.SetStatusChange(fStopAndKill);
   }
 
-  aParticleChange.SetEnergyChange(preStepKinEnergy);
-  aParticleChange.SetLocalEnergyDeposit(eloss);
+  fParticleChange.SetProposedKineticEnergy(preStepKinEnergy);
+  fParticleChange.SetLocalEnergyDeposit(eloss);
 
-  return &aParticleChange;
+  return &fParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -743,7 +746,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
                                                   const G4Step& step)
 {
-  aParticleChange.Initialize(track);
+  fParticleChange.InitializeForPostStep(track);
   G4double finalT = track.GetKineticEnergy();
   G4double postStepScaledEnergy = finalT*massRatio;
 
@@ -776,15 +779,15 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
     SecondariesPostStep(currentModel,currentCouple,dynParticle,tcut,finalT);
 
   if (finalT <= 0.0) {
-    aParticleChange.SetEnergyChange(0.0);
+    fParticleChange.SetProposedKineticEnergy(0.0);
 
-    if (hasRestProcess) aParticleChange.SetStatusChange(fStopButAlive);
-    else                aParticleChange.SetStatusChange(fStopAndKill);
+    if (hasRestProcess) fParticleChange.SetStatusChange(fStopButAlive);
+    else                fParticleChange.SetStatusChange(fStopAndKill);
 
-    return pParticleChange;
+    return &fParticleChange;
   }
 
-  aParticleChange.SetEnergyChange(finalT);
+  fParticleChange.SetProposedKineticEnergy(finalT);
 
   return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
 }
