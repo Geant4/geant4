@@ -1,0 +1,179 @@
+
+                       geant4-06-02-ref-01
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o New implementation of G4Allocator based on a pool of memory-chunks.
+    The size of a single chunk is kept at 1Kb as for the old allocator.
+    This implementation replaces the old G4Allocator based on pages and
+    no longer portable on the new gcc-3.4.0 compiler.
+  o Correction in G4MscModel::SampleCosTheta() for high-energy particles
+    at small step. Fixes some observed deflection of direction for particles
+    at high energies.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following (tags marked with (*)
+are also included in the public patch-01 to release 6.2):
+
+digits_hits                                      digits_hits-V06-02-00	(*)
+-----------
+- Trivial fixes for removal of redundant semicolons in the code, to
+  allow for porting on gcc-3.4.X.
+
+event                                            events-V06-02-00	(*)
+-----
+- Trivial fixes for removal of redundant semicolons in the code, to
+  allow for porting on gcc-3.4.X.
+
+geometry/divisions                               divisions-V06-02-00	(*)
+------------------
+- Removed unnecessary forward declaration of HepTransform3D from
+  G4ParameterisationBox and G4VDivisionParameterisation.
+
+geometry/navigation                              geomnav-V06-02-00	(*)
+-------------------
+- Fixed zero step-length problem in G4ReplicaNavigation::ComputeStep()
+  for cases where different replica types are coincident.
+  Resolves problem report #633.
+- G4NormalNavigation: added extra verbosity to print out information
+  for each solid which returns a 'lowest-yet' step, including the mother
+  volume. It is activated by setting verbose level to 2 or more.
+
+geometry/solids/BREPS                            breps-V06-02-00	(*)
+---------------------
+- G4BREPSolidPolyhedra and G4BREPSolidPCone:
+  Fixed usage of tolerances fir handling surface distances.
+  Implemented SurfaceNormal(p) to follow original specifications for G4VSolid.
+- G4BREPSolid: fixed usage of tolerances for handling surface distances.
+- Some code cleanup.
+
+geometry/solids/CSG                              geom-csg-V06-02-00	(*)
+-------------------
+- Fixes curing rare conditions of loops at boundaries for G4Orb and G4Sphere.
+  Addresses problem report #547.
+
+global                                           global-V06-02-00
+------
+- New implementation of G4Allocator based on a pool of memory-chunks.
+  The size of a single chunk is kept at 1Kb as for the old allocator.
+  This implementation replaces the old G4Allocator based on pages and no
+  longer portable on the new gcc-3.4.0 compiler.
+  The new allocator also supports the standard interface required for STL
+  containers, in case it will be used as alternative allocator instead of
+  the default std::allocator.
+  o New classes: G4AllocatorPool
+  o Removed classes: G4AllocatorPage, G4AllocatorUnit.
+- Added unit test for allocation of std::vector collections.
+
+materials                                        materials-V06-02-00
+---------
+- Added protection in G4AtomicShells::GetNumberOfShells(Z).
+  Fixes problem report #643.
+
+processes/electromagnetic/standard               stand-V06-02-00	(*)
+----------------------------------
+- Improved cross-section parametrisation at low energy for ComptonScattering.
+
+processes/electromagnetic/utils                  utils-V06-02-01	(*)
+-------------------------------
+- Correction in G4MscModel::SampleCosTheta() for high-energy particles
+  at small step. Fixes some observed deflection of direction for
+  particles at high energies.
+- Fixed a problem of G4VEnergyLossProcess observed for ions at small
+  cuts in range (ionization, charge>1).
+
+processes/hadronic/models/cascade/cascade        ghad-bert-cas-V06-02-00   (*)
+-----------------------------------------
+- Trivial fixes for removal of redundant semicolons in the code, to
+  allow for porting on gcc-3.4.X.
+
+proc../had../models/chiral_inv_phase_space/body  ghad-chips-body-V06-02-00 (*)
+-----------------------------------------------
+- Fix for clusterization in G4QNucleus.
+  Correcting problem observed in system-testing.
+- Fixed initialization of secondary values dZ,dN,dS in G4QNucleus.
+
+processes/hadronic/util                          ghad-util-V06-02-00	(*)
+-----------------------
+- Trivial fixes for removal of redundant semicolons in the code, to
+  allow for porting on gcc-3.4.X.
+
+run                                              run-V06-02-00		(*)
+---
+- Updated date in G4RunManagerKernel for release 6.2.p01.
+
+tracking                                         tracking-V06-02-01	(*)
+--------
+- Fix in G4SteppingManager to correct the ordering of secondary tracks
+  generated in a step.
+- Moved inlined constructor/destructor for G4Vtrajectory and
+  G4VtrajectoryPoint to not inline, and corrected signature of
+  operator==() to canonical form. 
+
+visualization                                    vis-V06-02-00
+-------------
+- management:  (visman-V06-02-00)	(*)
+  o Made G4VViewer::ProcessView() public, since used as
+    private friend by some client classes.
+- OpenGL:   (opengl-V06-02-02)
+  o Hidden line *and/or* hidden surface removal now work for OGL*X
+    and OGL*Xm.
+- Correction to guidance of /vis/viewer/set/hiddenEdge.
+- Small improvement to README of /vis/scene/add/axes.
+
+source/Configure                                 Configure-V06-02-00	(*)
+----------------
+- Corrected behavior for setting of CLHEP_BASE_DIR in case the path
+  is set to '/usr' or '/usr/local'. Fixes problem report #638.
+
+source/GNUmakefile                               source-gmk-V06-02-02	(*) 
+------------------
+- Fixed search path from absolute to relative. Addresses problem report #644.
+
+source/hadronic_lists                            ghad-lists-V06-02-00	(*)
+---------------------
+- Corrected user GNUmakefile sample, to allow for proper installation
+  when global compound libraries are used.
+
+examples                                         examples-V06-02-00
+--------
+- Updated reference outputs.
+- advanced
+  o composite_calorimeter (ccal-V06-02-00)		(*)
+    + Fixed configuration setup for hadronic physics lists, to allow
+      for proper installation when global compound libraries are used.
+  o lAr_calorimeter (lAr_calorimeter-V06-02-00)		(*)
+    + Fixed configuration setup for hadronic physics lists, to allow
+      for proper installation when global compound libraries are used.
+  o Rich (Rich-V06-02-00)				(*)
+    + Corrected to new visualization commands in input macro.
+  o xray_telescope (xraytel-V06-02-00)			(*)
+    + Corrected to new visualization commands in input macro.
+- extended
+  o analysis/A01 (exampleA01-V06-02-00)			(*)
+    + Fixed configuration setup for hadronic physics lists, to allow
+      for proper installation when global compound libraries are used.
+  o electromagnetic/MuonProcesses (muonprocesses-V06-02-00)
+    + Modified HistoManager and Messenger in order to allow a multirun job.
+  o electromagnetic/PhotonProcesses (photonprocesses-V06-02-00)
+    + Modified HistoManager and Messenger in order to allow a multirun job.
+  o electromagnetic/TestEm3 (testem3-V06-02-00)
+    + Modified HistoManager and Messenger in order to allow a multirun job.
+    + Removed static ionC12. Use generic ion instead.
+  o electromagnetic/TestEm7 (testem7-V06-02-00)
+    + Reset histo and dose calculation by run.
+    + Introduced RunAction::FillHisto() method.
+    + Compute projected range of primary particle (new class TrackingAction).
+    + Removed static ionC12. Use generic ion instead.
+  o geometry/olap (olapex-V06-02-00)			(*)
+    + Reordered storage of parameters for solids according to arguments
+      order in construction in SolidAnalyser. Resolving issue in problem
+      report #635.
+
+tests                                            tests-V06-02-00
+-----
+- Updated reference outputs.
+- test201 (test201-V06-02-00)
+  o Corrected to new visualization commands in input macro.
