@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.24 2005-03-21 16:04:56 allison Exp $
+// $Id: G4UnitsTable.cc,v 1.25 2005-03-21 18:28:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
@@ -413,7 +413,8 @@ G4BestUnit::~G4BestUnit()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4BestUnit::operator G4String () const {
+G4BestUnit::operator G4String () const
+{
   std::ostringstream oss;
   oss << *this;
   return oss.str();
