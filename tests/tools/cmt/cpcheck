@@ -1,0 +1,7 @@
+#!/bin/sh -f
+fullname=$1
+name=`basename $fullname`
+if test -f $G4INSTALL/include/$name ; then
+echo $fullname
+fi
+cp $fullname $G4INSTALL/include/.
