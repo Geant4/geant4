@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-04-26 11:18:36 maire Exp $
+$Id: History,v 1.6 2000-04-27 14:11:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+27 apr 00 mma  (em-V01-01-01)
+- G4endl (dec/iso)      
+     
 26 apr 00 mma  (em-V01-01-00)
 - all EnergyLoss classes renamed G4V... 
   Most classes in standard and muons affected.
