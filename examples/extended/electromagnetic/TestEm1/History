@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2001-12-07 11:49:07 maire Exp $
+$Id: History,v 1.17 2002-02-06 14:06:05 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,12 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+06-02-02 mma (testem1-V04-00-00)
      
 06-12-01  mma
 - In PrimaryGeneratorAction, possibility to fix the vertex at front face, 
   and to randomize the beam spot.
 - command /gun/rndm in PrimaryGeneratorMessenger
 - similar functionality in geant3: gukine.F
+- change output precision in RunAction (+uglast.F)
      
 29-11-01  mma (testem1-V03-02-02) 
 - EventAction: DrawTrack "none"
