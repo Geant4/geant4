@@ -31,7 +31,7 @@
 // Customer:     ESA/ESTEC
 //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: G4GeneralParticleSourceMessenger.hh,v 1.6 2001-07-19 12:39:14 flei Exp $
+// $Id: G4GeneralParticleSourceMessenger.hh,v 1.7 2001-10-19 16:48:28 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -125,6 +125,9 @@ private: //commands
   G4UIcmdWithADoubleAndUnit  *halfzCmd;
   G4UIcmdWithADoubleAndUnit  *radiusCmd;
   G4UIcmdWithADoubleAndUnit  *radius0Cmd;
+  G4UIcmdWithADoubleAndUnit  *possigmarCmd;
+  G4UIcmdWithADoubleAndUnit  *possigmaxCmd;
+  G4UIcmdWithADoubleAndUnit  *possigmayCmd;
   G4UIcmdWithADoubleAndUnit  *paralpCmd;
   G4UIcmdWithADoubleAndUnit  *partheCmd;
   G4UIcmdWithADoubleAndUnit  *parphiCmd;  
@@ -137,6 +140,9 @@ private: //commands
   G4UIcmdWithADoubleAndUnit  *maxthetaCmd;
   G4UIcmdWithADoubleAndUnit  *minphiCmd;
   G4UIcmdWithADoubleAndUnit  *maxphiCmd;
+  G4UIcmdWithADoubleAndUnit  *angsigmarCmd;
+  G4UIcmdWithADoubleAndUnit  *angsigmaxCmd;
+  G4UIcmdWithADoubleAndUnit  *angsigmayCmd;
   G4UIcmdWithABool           *useuserangaxisCmd;
   G4UIcmdWithABool           *surfnormCmd;
 
@@ -144,6 +150,7 @@ private: //commands
   G4UIcmdWithADoubleAndUnit  *eminCmd;
   G4UIcmdWithADoubleAndUnit  *emaxCmd;
   G4UIcmdWithADoubleAndUnit  *monoenergyCmd;
+  G4UIcmdWithADoubleAndUnit  *engsigmaCmd;
   G4UIcmdWithADouble         *alphaCmd;
   G4UIcmdWithADouble         *tempCmd;
   G4UIcmdWithADouble         *ezeroCmd;

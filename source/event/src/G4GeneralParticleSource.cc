@@ -38,7 +38,7 @@
 //       Technical Note (TN) on the physics and algorithms
 //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: G4GeneralParticleSource.cc,v 1.13 2001-07-19 12:39:14 flei Exp $
+// $Id: G4GeneralParticleSource.cc,v 1.14 2001-10-19 16:48:28 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -114,10 +114,13 @@ G4GeneralParticleSource::G4GeneralParticleSource()
   halfz = 0.;
   Radius = 0.;
   Radius0 = 0.;
+  SR = 0.;
+  SX = 0.;
+  SY = 0.;
   ParAlpha = 0.;
   ParTheta = 0.;
   ParPhi = 0.;
-  CentreCoords = (0.,0.,0.);
+  CentreCoords = G4ThreeVector(0., 0., 0.);
   Rotx = HepXHat;
   Roty = HepYHat;
   Rotz = HepZHat;
@@ -136,6 +139,9 @@ G4GeneralParticleSource::G4GeneralParticleSource()
   MaxTheta = pi;
   MinPhi = 0.;
   MaxPhi = twopi;
+  DR = 0.;
+  DX = 0.;
+  DY = 0.;
   UserDistType = "NULL";
   IPDFThetaExist = false;
   IPDFPhiExist = false;
@@ -147,6 +153,7 @@ G4GeneralParticleSource::G4GeneralParticleSource()
   Emax = 0.;
   alpha = 0.;
   Ezero = 0.;
+  SE = 0.;
   Temp = 0.;
   grad = 0.;
   cept = 0.;
@@ -251,6 +258,21 @@ void G4GeneralParticleSource::SetRadius0(G4double rad)
   Radius0 = rad;
 }
 
+void G4GeneralParticleSource::SetBeamSigmaInR(G4double r)
+{
+  SR = r;
+}
+
+void G4GeneralParticleSource::SetBeamSigmaInX(G4double r)
+{
+  SX = r;
+}
+
+void G4GeneralParticleSource::SetBeamSigmaInY(G4double r)
+{
+  SY = r;
+}
+
 void G4GeneralParticleSource::SetParAlpha(G4double paralp)
 {
   ParAlpha = paralp;
@@ -295,7 +317,7 @@ void G4GeneralParticleSource::ConfineSourceToVolume(G4String Vname)
   G4bool found = false;
   if(verbosityLevel == 2)
     G4cout << PVStore->size() << G4endl;
-  while (!found && i<PVStore->size()) {
+  while (!found && i<G4int(PVStore->size())) {
     tempPV = (*PVStore)[i];
     found  = tempPV->GetName() == theRequiredVolumeName;
     if(verbosityLevel == 2)
@@ -330,13 +352,60 @@ void G4GeneralParticleSource::GeneratePointSource()
       G4cout << "Error SourcePosType is not set to Point" << G4endl;
 }
 
+void G4GeneralParticleSource::GeneratePointsInBeam()
+{
+  G4double x, y, z, r, phi;
+
+  G4ThreeVector RandPos;
+  G4double tempx, tempy, tempz;
+  z = 0.;
+  // Private Method to create points in a plane
+  if(Shape == "Circle")
+    {
+      r = G4RandGauss::shoot(0.0,SR) ;
+      phi = twopi * G4UniformRand();
+      x = r*cos(phi) ;
+      y = r*sin(phi) ;
+    }  
+  else
+    {
+      // all other cases default to Rectangle case
+      x = G4RandGauss::shoot(0.0,SX);
+      y = G4RandGauss::shoot(0.0,SY);
+    } 
+  // Apply Rotation Matrix
+  // x * Rotx, y * Roty and z * Rotz
+  if(verbosityLevel == 2)
+    {
+      G4cout << "Raw position " << x << "," << y << "," << z << G4endl;
+    }
+  tempx = (x * Rotx.x()) + (y * Roty.x()) + (z * Rotz.x());
+  tempy = (x * Rotx.y()) + (y * Roty.y()) + (z * Rotz.y());
+  tempz = (x * Rotx.z()) + (y * Roty.z()) + (z * Rotz.z());
+
+  RandPos.setX(tempx);
+  RandPos.setY(tempy);
+  RandPos.setZ(tempz);
+
+  // Translate
+  particle_position = CentreCoords + RandPos;
+  if(verbosityLevel >= 1)
+    {
+      if(verbosityLevel == 2)
+	{
+	  G4cout << "Rotated Position " << RandPos << G4endl;
+	}
+      G4cout << "Rotated and Translated position " << particle_position << G4endl;
+    }
+}
+
 void G4GeneralParticleSource::GeneratePointsInPlane()
 {
   G4double x, y, z;
   G4double expression;
   G4ThreeVector RandPos;
   G4double tempx, tempy, tempz;
-  z = 0.;
+  x = y = z = 0.;
 
   if(SourcePosType != "Plane" && verbosityLevel >= 1)
     G4cout << "Error: SourcePosType is not Plane" << G4endl;
@@ -452,15 +521,16 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
   //Private method to create points on a surface
   G4double theta, phi;
   G4double x, y, z;
+  x = y = z = 0.;
   G4ThreeVector RandPos;
-  G4double tempx, tempy, tempz;
+  //  G4double tempx, tempy, tempz;
 
   if(SourcePosType != "Surface" && verbosityLevel >= 1)
     G4cout << "Error SourcePosType not Surface" << G4endl;
 
   if(Shape == "Sphere")
     {
-      G4double tantheta, tanphi;
+      G4double tantheta;
       theta = GenRandTheta();
       phi = GenRandPhi();
 
@@ -487,7 +557,7 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
     }
   else if(Shape == "Ellipsoid")
     {
-      G4double testrand, theta, phi, minphi, maxphi, middlephi;
+      G4double theta, phi, minphi, maxphi, middlephi;
       G4double answer, constant;
 
       constant = pi/(halfx*halfx) + pi/(halfy*halfy) + 
@@ -858,7 +928,7 @@ void G4GeneralParticleSource::GeneratePointsInVolume()
   G4ThreeVector RandPos;
   G4double tempx, tempy, tempz;
   G4double x, y, z;
-
+  x = y = z = 0.;
   if(SourcePosType != "Volume" && verbosityLevel >= 1)
     G4cout << "Error SourcePosType not Volume" << G4endl;
   //Private method to create points in a volume
@@ -994,8 +1064,9 @@ G4bool G4GeneralParticleSource::IsSourceConfined()
 
 void G4GeneralParticleSource::SetAngDistType(G4String atype)
 {
-  if(atype != "iso" && atype != "cos" && atype != "user" && atype != "planar")
-    G4cout << "Error, distribution must be iso, cos, planar or user" << G4endl;
+  if(atype != "iso" && atype != "cos" && atype != "user" && atype != "planar"
+     && atype != "beam1d" && atype != "beam2d")
+    G4cout << "Error, distribution must be iso, cos, planar, beam1d, beam2d or user" << G4endl;
   else
     AngDistType = atype;
   if (AngDistType == "cos") MaxTheta = pi/2. ;
@@ -1049,6 +1120,21 @@ void G4GeneralParticleSource::SetMaxPhi(G4double maxp)
   MaxPhi = maxp;
 }
 
+void G4GeneralParticleSource::SetBeamSigmaInAngR(G4double r)
+{
+  DR = r;
+}
+
+void G4GeneralParticleSource::SetBeamSigmaInAngX(G4double r)
+{
+  DX = r;
+}
+
+void G4GeneralParticleSource::SetBeamSigmaInAngY(G4double r)
+{
+  DY = r;
+}
+
 void G4GeneralParticleSource::UserDefAngTheta(G4ThreeVector input)
 {
   if(UserDistType == "NULL") UserDistType = "theta";
@@ -1089,12 +1175,60 @@ void G4GeneralParticleSource::SetUseUserAngAxis(G4bool userang)
   UserAngRef = userang;
 }
 
+void G4GeneralParticleSource::GenerateBeamFlux()
+{
+  // generates isotropic flux.
+  // No vectors are needed.
+  G4double theta, phi;
+  G4double px, py, pz;
+  if (AngDistType == "beam1d") 
+    { 
+      theta = G4RandGauss::shoot(0.0,DR);
+      phi = twopi * G4UniformRand();
+    }
+  else 
+    { 
+      px = G4RandGauss::shoot(0.0,DX);
+      py = G4RandGauss::shoot(0.0,DY);
+      theta = sqrt (px*px + py*py);
+      if (theta != 0.) { 
+	phi = acos(px/theta);
+	if ( py < 0.) phi = -phi;
+      }
+      else
+	{ 
+	  phi = 0.0;
+	}
+    }
+  px = -sin(theta) * cos(phi);
+  py = -sin(theta) * sin(phi);
+  pz = -cos(theta);
+  // Apply Angular Rotation Matrix
+  // x * AngRef1, y * AngRef2 and z * AngRef3
+  G4double finx, finy, finz;
+  finx = (px * AngRef1.x()) + (py * AngRef2.x()) + (pz * AngRef3.x());
+  finy = (px * AngRef1.y()) + (py * AngRef2.y()) + (pz * AngRef3.y());
+  finz = (px * AngRef1.z()) + (py * AngRef2.z()) + (pz * AngRef3.z());
+  G4double ResMag = sqrt((finx*finx) + (finy*finy) + (finz*finz));
+  finx = finx/ResMag;
+  finy = finy/ResMag;
+  finz = finz/ResMag;
+
+  particle_momentum_direction.setX(finx);
+  particle_momentum_direction.setY(finy);
+  particle_momentum_direction.setZ(finz);
+
+  // particle_momentum_direction now holds unit momentum vector.
+  if(verbosityLevel >= 1)
+    G4cout << "Generating beam vector: " << particle_momentum_direction << G4endl;
+}
+
 void G4GeneralParticleSource::GenerateIsotropicFlux()
 {
   // generates isotropic flux.
   // No vectors are needed.
   G4double rndm, rndm2;
-  G4double px, py, pz, pmag;
+  G4double px, py, pz;
 
   // generate rand nos. but make sure in theta/phi limits
   /*  Colin's old stuff
@@ -1233,9 +1367,9 @@ void G4GeneralParticleSource::GenerateCosineLawFlux()
 {
   // Method to generate flux distributed with a cosine law
   // such as is in TIMM.
-  G4double px, py, pz, pmag;
+  G4double px, py, pz;
   G4double rndm, rndm2;
-  G4double resultx, resulty, resultz;
+  //  G4double resultx, resulty, resultz;
 
   /*  Colin's old implementation which is very slow
 
@@ -1591,6 +1725,10 @@ void G4GeneralParticleSource::SetMonoEnergy(G4double menergy)
   Emax = menergy;
 }
 
+void G4GeneralParticleSource::SetBeamSigmaInE(G4double e)
+{
+  SE = e;
+}
 void G4GeneralParticleSource::SetAlpha(G4double alp)
 {
   alpha = alp;
@@ -1641,7 +1779,7 @@ void G4GeneralParticleSource::ArbEnergyHisto(G4ThreeVector input)
 
 void G4GeneralParticleSource::EpnEnergyHisto(G4ThreeVector input)
 {
-  G4double elo, ehi, val;
+  G4double ehi, val;
   ehi = input.x();
   val = input.y();
   if(verbosityLevel == 2)
@@ -1770,7 +1908,7 @@ void G4GeneralParticleSource::ArbInterpolate(G4String IType)
   if(EnergyDisType != "Arb")
     G4cout << "Error: this is for arbitrary distributions" << G4endl;
   IntType = IType;
-  G4int i=0;
+
 
   // Calcuate Emin and Emax, mainly for use in debugging
   G4int len = G4int(ArbEnergyH.GetVectorLength());
@@ -2244,9 +2382,16 @@ void G4GeneralParticleSource::GenerateMonoEnergetic()
   particle_energy = MonoEnergy;
 }
 
+void G4GeneralParticleSource::GenerateGaussEnergies()
+{
+  // Method to generate Gaussian particles.
+  particle_energy = G4RandGauss::shoot(MonoEnergy,SE);
+  if (particle_energy < 0) particle_energy = 0.;
+}
+
 void G4GeneralParticleSource::GenerateLinearEnergies()
 {
-  G4double energy, rndm;
+  G4double rndm;
   G4double emaxsq = pow(Emax,2.); //Emax squared
   G4double eminsq = pow(Emin,2.); //Emin squared
   G4double intersq = pow(cept,2.); //cept squared
@@ -2482,6 +2627,7 @@ void G4GeneralParticleSource::GenUserHistEnergies()
       G4int ii;
       G4int maxbin = G4int(UDefEnergyH.GetVectorLength());
       G4double bins[256], vals[256], sum;
+      sum=0.;
       //      UDefEnergyH.DumpValues();
       G4double mass = particle_definition->GetPDGMass();
       //      G4cout << mass << G4endl;
@@ -3250,6 +3396,8 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
     {
       if(SourcePosType == "Point")
 	GeneratePointSource();
+      else if(SourcePosType == "Beam")
+	GeneratePointsInBeam();
       else if(SourcePosType == "Plane")
 	GeneratePointsInPlane();
       else if(SourcePosType == "Surface")
@@ -3293,6 +3441,8 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
     GenerateCosineLawFlux();
   else if(AngDistType == "planar")
     GeneratePlanarFlux();
+  else if(AngDistType == "beam1d" || AngDistType == "beam2d" )
+    GenerateBeamFlux();
   else if(AngDistType == "user")
     GenerateUserDefFlux();
   else
@@ -3306,6 +3456,8 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
     GeneratePowEnergies();
   else if(EnergyDisType == "Exp")
     GenerateExpEnergies();
+  else if(EnergyDisType == "Gauss")
+    GenerateGaussEnergies();
   else if(EnergyDisType == "Brem")
     GenerateBremEnergies();
   else if(EnergyDisType == "Bbody")
@@ -3365,8 +3517,11 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
   }
   evt->AddPrimaryVertex( vertex );
   if(verbosityLevel > 1)
-    G4cout << " Primary Vetex generated "<< G4endl;   
+    G4cout << " Primary Vetex generated !"<< G4endl;   
 }
+
+
+
 
 
 
