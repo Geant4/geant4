@@ -41,6 +41,8 @@
 using namespace HEPREP;
 using namespace std;
 
+#define SDEBUG 1
+
 G4HepRepViewer::G4HepRepViewer (G4VSceneHandler& sceneHandler, const G4String& name)
         : G4VViewer (sceneHandler, sceneHandler.IncrementViewCount(), name) {
 
@@ -77,14 +79,16 @@ void G4HepRepViewer::SetView () {
 
 
 /* NOTE:
-    /vis/viewer/flush calls /vis/viewer/refresh followed by /vis/viewer/update
-    /vis/viewer/refrash calls SetView, ClearView, DrawView
-    /vis/viewer/update calls ShowView
+    /run/beamOn         calls ShowView for every event (unless accumulate is set)
+    /vis/viewer/flush   calls /vis/viewer/refresh followed by /vis/viewer/update
+    /vis/viewer/refresh calls SetView, ClearView, DrawView
+    /vis/viewer/update  calls ShowView
 */
 void G4HepRepViewer::DrawView () {
 #ifdef SDEBUG
     cout << "G4HepRepViewer::DrawView" << endl;
 #endif
+    ProcessScene();
 }
 
 void G4HepRepViewer::ShowView () {

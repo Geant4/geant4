@@ -87,7 +87,7 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4S
           rootVolumeName        ("Geometry"),
           baseName              (""),
           eventNumber           (1),
-          eventNumberWidth      (10),
+          eventNumberWidth      (-1),
           extension             (""),
           writeMultipleFiles    (false),
           currentDepth          (0),
@@ -135,60 +135,68 @@ void G4HepRepSceneHandler::open(G4String name) {
 #endif
         writer = factory->createHepRepWriter(&cout, false, false);
         out  = NULL;
+        baseName = name;
+        extension = "";
+        writeMultipleFiles = false;
+        eventNumber = 0;
+        eventNumberWidth = 0;        
     } else if (name == "stderr") {
 #ifdef SDEBUG
         cout << "G4HepRepSceneHandler::Open() stderr" << endl;
 #endif
         writer = factory->createHepRepWriter(&cerr, false, false);
         out = NULL;
+        baseName = name;
+        extension = "";
+        writeMultipleFiles = false;
+        eventNumber = 0;
+        eventNumberWidth = 0;        
     } else {
 #ifdef SDEBUG
         cout << "G4HepRepSceneHandler::Open() " << name << endl;
 #endif
-        const unsigned int numberOfExtensions = 4;
-        string ext[numberOfExtensions] = {".heprep", ".heprep.xml", ".heprep.zip", ".heprep.gz"};
-        unsigned int i=0;
-        while (i < numberOfExtensions) {
-            int dot = name.size() - ext[i].size();
-            if ((dot >= 0) && 
-                (name.substr(dot, ext[i].size()) == ext[i])) break;
-            i++;
-        }
+        if (eventNumberWidth < 0) {
+            // derive filename(s)
+            // check for extensions
+            const unsigned int numberOfExtensions = 4;
+            string ext[numberOfExtensions] = {".heprep", ".heprep.xml", ".heprep.zip", ".heprep.gz"};
+            unsigned int i=0;
+            while (i < numberOfExtensions) {
+                int dot = name.size() - ext[i].size();
+                if ((dot >= 0) && 
+                    (name.substr(dot, ext[i].size()) == ext[i])) break;
+                i++;
+            }
         
-        if (i != numberOfExtensions) {
-            extension = ext[i];
-            int dot = name.length() - extension.length();
-            baseName = (dot >= 0) ? name.substr(0, dot) : "";
-        } else {  
-            extension = ".heprep.zip";
-            baseName = name;
-        }
+            if (i != numberOfExtensions) {
+                extension = ext[i];
+                int dot = name.length() - extension.length();
+                baseName = (dot >= 0) ? name.substr(0, dot) : "";
+            } else {  
+                extension = ".heprep.zip";
+                baseName = name;
+            }
         
-        // look for 0000 pattern in G4Output-0000.heprep
-        unsigned int digit = baseName.length()-1;
-        char c = baseName.at(digit);
-        while (isdigit(c)) {
-            digit--;
-            c = baseName.at(digit);
-        }
-        writeMultipleFiles = (digit < baseName.length()-1);
+            // look for 0000 pattern in G4Output-0000.heprep
+            int digit = baseName.length()-1; 
+            while (digit >= 0) {
+                if (!isdigit(baseName.at(digit))) break;
+                digit--;
+            }
+            writeMultipleFiles = (digit > 0) || ((digit == 0) && isdigit(baseName.at(0)));
 
-        if (writeMultipleFiles) {
-            // defer opening "multiple" file to closeHepRep
-            
-            eventNumber = atoi(baseName.substr(digit+1).c_str());
-            eventNumberWidth = baseName.length() - 1 - digit;
-            baseName = baseName.substr(0, digit+1);
-        } else {
-            // open single file here
-            openFile(name);
-            
-            // use baseName, eventNo and extension for entries in zip if applicable
-            eventNumber = 1;
-            eventNumberWidth = 10;
-            baseName = "event-";
-            extension = ".heprep";
-        }        
+            if (writeMultipleFiles) {
+                eventNumber = atoi(baseName.substr(digit+1).c_str());
+                eventNumberWidth = baseName.length() - 1 - digit;
+                baseName = baseName.substr(0, digit+1);
+            } else {
+                // open single file here
+                openFile(baseName+extension);
+        
+                eventNumber = 1;
+                eventNumberWidth = 10;
+            }   
+        }    
     }
 }
 
@@ -245,11 +253,7 @@ bool G4HepRepSceneHandler::closeHepRep() {
 
     // open heprep file
     if (writer == NULL) {
-        if (GetScene() == NULL) {
-            open(G4String("G4HepRepOutput.heprep.zip"));
-        } else { 
-            open(GetScene()->GetName());
-        }
+        open((GetScene() == NULL) ? G4String("G4HepRepOutput.heprep.zip") : GetScene()->GetName());
     }
     
     if (writeMultipleFiles) {

@@ -65,9 +65,15 @@ G4HepRepOutput.heprep.zip, use:
 /vis/open HepRepXML
 
 
-To write an event, use:
+To write 10 events, use:
 
-/run/beamOn 1
+/run/beamOn 10
+
+
+(Optional) To accumulate multiple (5) G4 events into one HepRep event, use:
+/vis/scene/endOfEventAction accumulate
+/run/beamOn 5
+/vis/viewer/update
 
 
 (Optional) To close the file, remove the SceneHandler, use:
