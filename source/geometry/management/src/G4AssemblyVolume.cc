@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.7 2002-06-05 18:18:50 radoone Exp $
+// $Id: G4AssemblyVolume.cc,v 1.8 2002-06-07 13:40:42 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,6 +80,14 @@ G4AssemblyVolume::~G4AssemblyVolume()
 // Add and place the given volume according to the specified
 // translation and rotation.
 //
+// The rotation matrix passed in can be 0 = identity or an address even of an object
+// on the upper stack frame. During assembly imprint, it creates anyway a new matrix
+// and keeps track of it so it can delete it later at destruction time.
+// This new policy has been adopted since user has no control on the way the rotations
+// are combined it's safer doing it this way.
+//
+// WARNING! This interface will likely change in the next major release of Geant4 from
+//          a pointer to a reference due to the reason above
 void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
                                         G4ThreeVector&    translation,
                                         G4RotationMatrix* pRotation )
@@ -107,32 +115,42 @@ void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
   fTriplets.push_back( toAdd );
 }
 
-/**
- * Create an instance of an assembly volume inside of the specified
- * mother volume. This works analogically to making stamp imprints.
- * This method makes use of the Geant4 affine transformation class.
- * The algorithm is defined as follows:
- * 
- * Having rotation matrix Rm and translation vector Tm to be applied
- * inside the mother and rotation matrix Ra and translation vector Ta
- * to be applied inside the assembly itself for each of the participating
- * volumes the resulting transformation is
- *
- * Tfinal = Ta * Tm
- *
- * where Ta and Tm are constructed as
- *
- *       -1                                     -1
- * Ta = Ra  * Ta           and            Tm = Rm  * Tm
- *
- * which in words means that we create first the affine transformations
- * by inverse rotation matrices and translations for mother and assembly.
- * The resulting final transformation to be applied to each of the
- * participating volumes is their product.
- * IMPORTANT NOTE!
- * The order of multiplication is reversed when comparing to CLHEP 3D
- * transformation matrix(G4Transform3D class).
- */
+//
+// Create an instance of an assembly volume inside of the specified
+// mother volume. This works analogically to making stamp imprints.
+// This method makes use of the Geant4 affine transformation class.
+// The algorithm is defined as follows:
+//  
+// Having rotation matrix Rm and translation vector Tm to be applied
+// inside the mother and rotation matrix Ra and translation vector Ta
+// to be applied inside the assembly itself for each of the participating
+// volumes the resulting transformation is
+//  
+// Tfinal = Ta * Tm
+//  
+// where Ta and Tm are constructed as
+//  
+//        -1                                     -1
+// Ta = Ra  * Ta           and            Tm = Rm  * Tm
+//  
+// which in words means that we create first the affine transformations
+// by inverse rotation matrices and translations for mother and assembly.
+// The resulting final transformation to be applied to each of the
+// participating volumes is their product.
+//
+// IMPORTANT NOTE!
+// The order of multiplication is reversed when comparing to CLHEP 3D
+// transformation matrix(G4Transform3D class).
+//  
+// The rotation matrix passed in can be 0 = identity or an address even of an object
+// on the upper stack frame. During assembly imprint, it creates anyway a new matrix
+// and keeps track of it so it can delete it later at destruction time.
+// This new policy has been adopted since user has no control on the way the rotations
+// are combined it's safer doing it this way.
+//
+// WARNING! This interface will likely change in the next major release of Geant4 from
+//          a pointer to a reference due to the reason above
+//
 void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
                                     G4ThreeVector&    translationInMother,
                                     G4RotationMatrix* pRotationInMother )
@@ -143,6 +161,11 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
   numberOfDaughters++;
 
   ImprintsCountPlus();
+  
+  if( pRotationInMother == 0 ) {
+    // Make it by default an indentity matrix;
+    pRotationInMother = const_cast<G4RotationMatrix*>( &G4RotationMatrix::IDENTITY );
+  }
 
   for( unsigned int   i = 0; i < fTriplets.size(); i++ )
   {

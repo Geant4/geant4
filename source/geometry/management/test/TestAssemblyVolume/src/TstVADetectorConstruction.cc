@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TstVADetectorConstruction.cc,v 1.5 2001-11-29 15:17:34 radoone Exp $
+// $Id: TstVADetectorConstruction.cc,v 1.6 2002-06-07 13:41:45 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -324,9 +324,10 @@ void TstVADetectorConstruction::ConstructAssembly()
     // Rotation of the assembly inside the world
     G4RotationMatrix        Rm;
 
-    // Fill the assembly by the plates  
+    // Fill the assembly by the plates
+    // Test if 0 pointer instead of matrix works, it should create an identity by default
     Ta.setX( caloX/4. );  Ta.setY( caloY/4. );  Ta.setZ( 0. );
-    assemblyDetector->AddPlacedVolume( plateLV, Ta, &Ra );
+    assemblyDetector->AddPlacedVolume( plateLV, Ta, 0 );
     
     Ta.setX( -1*caloX/4. );  Ta.setY( caloY/4. );  Ta.setZ( 0. );
     assemblyDetector->AddPlacedVolume( plateLV, Ta, &Ra );
