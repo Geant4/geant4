@@ -78,6 +78,7 @@ private:
   static void CameraSensorCB(void*,SoSensor*);
   void pointAt(const SbVec3f & targetpoint, const SbVec3f & upvector);
   void lookAt(const SbVec3f & dir, const SbVec3f & up);
+  void lookedAt(SbVec3f & dir, SbVec3f & up);
 private:
   G4bool CompareForKernelVisit(G4ViewParameters&);
   void DrawDetector();

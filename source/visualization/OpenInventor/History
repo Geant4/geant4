@@ -1,4 +1,4 @@
-$Id: History,v 1.55 2004-11-24 15:14:50 gbarrand Exp $
+$Id: History,v 1.56 2004-11-24 23:43:52 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+24th November 2004  John Allison
+- Fixed SetView to respond to view parameters and CameraSensorCB to
+  provide view parameters. Target point not quite right. Only for
+  orthogonal view so far.
 
 24th November 2004  Guy Barrand
 - So*.cc : have #ifdef G4VIS_BUILD_OI_DRIVER instead of OIX_DRIVER !!!

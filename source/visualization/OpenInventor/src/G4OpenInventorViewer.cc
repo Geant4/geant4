@@ -196,13 +196,35 @@ void G4OpenInventorViewer::SetView () {
 	       (float)up.z());
   sbUp.normalize();
   // Need Coin's fSoCamera->pointAt(sbTarget,sbUp); not in the SGI API
-  // Coin's code stole
+  // Stole Coin's code...
   pointAt(sbTarget,sbUp);
 
   //fSoCamera->height.setValue(10);
   //fSoCamera->nearDistance.setValue((float)pnear);
   //fSoCamera->farDistance.setValue((float)pfar);
   //fSoCamera->focalDistance.setValue((float)cameraDistance);
+
+  if (fVP.GetFieldHalfAngle() == 0.) {
+    /*
+G4OpenGLViewer:
+    glOrtho (left, right, bottom, top, pnear, pfar);
+SoOrthographicCamera:
+  SoSFFloat height;
+  virtual void scaleHeight(float scalefactor);
+  virtual SbViewVolume getViewVolume(float useaspectratio = 0.0f) const;
+    */
+  }
+  else {
+    /*
+G4OpenGLViewer:
+    glFrustum (left, right, bottom, top, pnear, pfar);
+SoPerspectiveCamera:
+  SoSFFloat heightAngle;
+  virtual void scaleHeight(float scalefactor);
+  virtual SbViewVolume getViewVolume(float useaspectratio = 0.0f) const;
+    */
+  }
+
 }
 
 //COIN_FUNCTION_EXTENSION
@@ -248,6 +270,36 @@ G4OpenInventorViewer::lookAt(const SbVec3f & dir, const SbVec3f & up)
   fSoCamera->orientation.setValue(SbRotation(rot));
 }
 
+void
+G4OpenInventorViewer::lookedAt(SbVec3f & dir, SbVec3f & up)
+{
+  SbRotation rot = fSoCamera->orientation.getValue();
+  SbMatrix mrot; rot.getValue(mrot);
+
+  SbVec3f x, y, z;
+
+  // create a rotation matrix
+  x[0] = mrot[0][0];
+  x[1] = mrot[0][1];
+  x[2] = mrot[0][2];
+
+  y[0] = mrot[1][0];
+  y[1] = mrot[1][1];
+  y[2] = mrot[1][2];
+
+  z[0] = mrot[2][0];
+  z[1] = mrot[2][1];
+  z[2] = mrot[2][2];
+
+  dir = -z;
+  dir.normalize();
+  up = SbVec3f(0.f,1.f,0.f);  // Choose y-axis if possible.
+  if (abs(up.dot(z)) > 1.e-6) {
+    up = y;
+    up.normalize();
+  }
+}
+
 void G4OpenInventorViewer::DrawView () {
   //G4cout << "debug Iv::DrawViewer " <<G4endl;
   KernelVisitDecision();
@@ -262,10 +314,12 @@ void G4OpenInventorViewer::ShowView () {
 void G4OpenInventorViewer::CameraSensorCB(void* aThis,SoSensor*) { 
   G4OpenInventorViewer* This = (G4OpenInventorViewer*)aThis;
 
-  SbVec3f direction;
-  This->fSoCamera->orientation.getValue().multVec(SbVec3f(0,0,-1),direction);
+  SbVec3f direction, up;
+  This->lookedAt(direction, up);
   This->fVP.SetViewpointDirection
     (G4Vector3D(-direction[0],-direction[1],-direction[2]));
+  This->fVP.SetUpVector
+    (G4Vector3D(up[0],up[1],up[2]));
 
   SbVec3f pos = This->fSoCamera->position.getValue();
   SbVec3f target = pos + direction * This->fSoCamera->focalDistance.getValue();
