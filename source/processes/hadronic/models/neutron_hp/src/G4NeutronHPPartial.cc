@@ -85,7 +85,7 @@ G4NeutronHPVector * G4NeutronHPPartial::GetY(G4double e1)
     if(i==0) 
     {
       theBuff.SetInterpolationManager(data[0].GetInterpolationManager());
-      for(G4int ii=0;ii<GetNEntries(0);i++) 
+      for(G4int ii=0;ii<GetNEntries(0);ii++) 
       {
         theBuff.SetX(ii, GetX(0,ii));
         theBuff.SetY(ii, GetY(0,ii));
