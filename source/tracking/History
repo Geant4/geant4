@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2002-12-16 12:04:33 gcosmo Exp $
+$Id: History,v 1.60 2003-03-17 11:13:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Mar 17, 2003, G.Cosmo (tracking-V05-00-01)
+- G4SteppingVerbose.cc: fixed retrieval of phys-volume name, adding
+  check for NULL pointer for post-step physical volume returned.
 
 Dec 16, 2002, G.Cosmo (tracking-V05-00-00)
 - Merged branch "geant4-04-01-ref-02-cuts-branch" to HEAD.
