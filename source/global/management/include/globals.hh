@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: globals.hh,v 1.15 2000-01-19 11:12:44 gcosmo Exp $
+// $Id: globals.hh,v 1.16 2001-06-15 12:57:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -23,6 +23,7 @@
 // 22.09.98 G.Cosmo - Removed min/max/sqr/abs functions and replaced with
 //                    inclusion of CLHEP/config/TemplateFunctions.h for CLHEP-1.3
 // 15.12.99 G.Gracia - Included min, max definitions for NT with ISO standard
+// 15.06.01 G.Cosmo - Removed cbrt() definition
 
 #ifndef GLOBALS_HH
 #define GLOBALS_HH
@@ -69,11 +70,6 @@
 
 // Includes some additional definitions
 #include "templates.hh"
-
-// cbrt() function - define G4_NO_CBRT if the function is not available
-#ifdef G4_NO_CBRT
-  static double cbrt(double x) { return pow(x,1./3.); }
-#endif
 
 // System of Units and Physical Constants
 ////#include <CLHEP/Units/PhysicalConstants.h>
