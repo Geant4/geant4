@@ -23,8 +23,10 @@ XrayFluoSteppingAction::~XrayFluoSteppingAction()
 
 void XrayFluoSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
+#ifdef G4ANALYSIS_USE
   XrayFluoAnalysisManager* analysis  = XrayFluoAnalysisManager::getInstance();
   analysis->analyseStepping(aStep);
+#endif
 }	 
 
 

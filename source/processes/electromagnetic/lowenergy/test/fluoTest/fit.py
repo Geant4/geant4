@@ -1,3 +1,5 @@
+hm.selectStore("xrayfluo.his")
+histoGamDet     = hm.load1D(1)
 
 # prepare to fit the histo h1
 # creating a vector from a histogram

@@ -1,17 +1,17 @@
 
 # tell HistoManger where to find the histograms:
-hm.selectStore("fluotesthisto.hbook")
+hm.selectStore("xrayfluo.his")
 
 # ... and load them into memory:
-histoGamDet     = hm.load1D(10)
-histoGamDetPre  = hm.load1D(20)
-histoGamLeavSam = hm.load1D(30)
-histoEleLeavSam = hm.load1D(40)
-histoGamLST     = hm.load1D(50)
-histoGamLSP     = hm.load1D(60)
-histoGamBornSam = hm.load1D(70) 
-histoEleBornSam = hm.load1D(80)
-histoSpectrum   = hm.load1D(90)
+histoGamDet     = hm.load1D(1)
+histoGamDetPre  = hm.load1D(6)
+histoGamLeavSam = hm.load1D(4)
+histoEleLeavSam = hm.load1D(5)
+histoProtRD     = hm.load1D(8)
+histoProtLS     = hm.load1D(9)
+histoGamBornSam = hm.load1D(2) 
+histoEleBornSam = hm.load1D(3)
+histoSpectrum   = hm.load1D(7)
 
 # set plotter to 4*2 zones
 pl.zone(5,2)
@@ -20,8 +20,8 @@ hplot(histoGamDet)
 hplot(histoGamDetPre)
 hplot(histoGamLeavSam)
 hplot(histoEleLeavSam)
-hplot(histoGamLST)
-hplot(histoGamLSP)
+hplot(histoProtRD)
+hplot(histoProtLS)
 hplot(histoGamBornSam)
 hplot(histoEleBornSam)
 hplot(histoSpectrum)
@@ -34,19 +34,19 @@ wait()
 # set plotter to 1*1 zones
 pl.zone(1,1)
 
-#titoli:
+#titols:
 pl.xAxisOption ("title","energy of the electrons generated in the sample")
 pl.xAxisOption ("label","E (keV)")
 pl.yAxisOption("title","counts")
 
 pl.textStyle("fontsize","10.")
-#colore dell'istogramma
+#color of the histogram
 pl.dataStyle("linecolor", "red")
 
-#disegna il reticolo anche sopra e a destra
+#draw a grid even on the top and on the right of the plot
 #pl.zoneOption("mirrorAxis","yes") 
 
-#mette una legenda per collegare il colore all'istogramma
+#legend
 pl.dataOption("legend","EleBorn")
 
 
@@ -57,7 +57,7 @@ pl.psPrint("hEleBornSam.ps")
 
 
 
-#titoli:
+#titols:
 pl.xAxisOption ("title","energy of the gammas generated in the sample")
 pl.xAxisOption ("label","E (keV)")
 pl.yAxisOption("title","counts")
@@ -66,10 +66,10 @@ pl.textStyle("fontsize","10.")
 #colore dell'istogramma
 pl.dataStyle("linecolor", "blue")
 
-#disegna il reticolo anche sopra e a destra
+#draw a grid even on the top and on the right of the plot
 #pl.zoneOption("mirrorAxis","yes") 
 
-#mette una legenda per collegare il colore all'istogramma
+#legend
 pl.dataOption("legend","GamBorn")
 
 
@@ -77,7 +77,7 @@ hplot(histoGamBornSam)
 wait()
 pl.psPrint("hGamBornSam.ps")
 
-#titoli:
+#titols:
 pl.xAxisOption ("title","energy deposit in the detector")
 pl.xAxisOption ("label","E (keV)")
 pl.yAxisOption("title","counts")
@@ -87,7 +87,7 @@ pl.textStyle("fontsize","10.")
 pl.dataStyle("linecolor", "green")
 
 
-#mette una legenda per collegare il colore all'istogramma
+
 pl.dataOption("legend","EnergyDep")
 
 
@@ -101,14 +101,12 @@ pl.xAxisOption ("label","E (keV)")
 pl.yAxisOption("title","counts")
 
 pl.textStyle("fontsize","10.")
-#colore dell'istogramma
+
 pl.dataStyle("linecolor", "yellow")
 
-#disegna il reticolo anche sopra e a destra
 #pl.zoneOption("mirrorAxis","yes") 
 
-#mette una legenda per collegare il colore all'istogramma
-pl.dataOption("legend","M-Flare")
+pl.dataOption("legend","B-Flare")
 
 
 hplot(histoSpectrum)
@@ -121,13 +119,11 @@ pl.xAxisOption ("label","E (keV)")
 pl.yAxisOption("title","counts")
 
 pl.textStyle("fontsize","10.")
-#colore dell'istogramma
+
 pl.dataStyle("linecolor", "blue")
 
-#disegna il reticolo anche sopra e a destra
 #pl.zoneOption("mirrorAxis","yes") 
 
-#mette una legenda per collegare il colore all'istogramma
 pl.dataOption("legend","photonsDet")
 
 
@@ -140,16 +136,12 @@ pl.xAxisOption ("label","E (keV)")
 pl.yAxisOption("title","counts")
 
 pl.textStyle("fontsize","10.")
-#colore dell'istogramma
+
 pl.dataStyle("linecolor", "red")
 
-#disegna il reticolo anche sopra e a destra
 #pl.zoneOption("mirrorAxis","yes") 
 
-#mette una legenda per collegare il colore all'istogramma
 pl.dataOption("legend","electronsLeav")
-
-
 
 hplot(histoEleLeavSam)
 wait()
@@ -166,14 +158,11 @@ pl.dataStyle("linecolor", "red")
 #disegna il reticolo anche sopra e a destra
 #pl.zoneOption("mirrorAxis","yes") 
 
-#mette una legenda per collegare il colore all'istogramma
 pl.dataOption("legend","photonsLeav")
 
 hplot(histoGamLeavSam)
 wait()
 pl.psPrint("hGamLeav.ps")
-
-
 
 pl.xAxisOption ("title","history of photons")
 pl.xAxisOption ("label","E (keV)")
@@ -203,3 +192,8 @@ pl.overlay(v2)
 
 wait()
 pl.psPrint("history.ps")
+
+
+
+
+

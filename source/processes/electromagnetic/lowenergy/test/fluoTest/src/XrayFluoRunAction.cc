@@ -88,18 +88,21 @@ G4cout << "### Run " << aRun << " start." << G4endl;
       G4UImanager* UI = G4UImanager::GetUIpointer(); 
       UI->ApplyCommand("/vis/scene/notifyHandlers");
     } 
+#ifdef G4ANALYSIS_USE
  // Book histograms and ntuples
   XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
   analysis->book();
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoRunAction::EndOfRunAction(const G4Run* aRun )
 {
+#ifdef G4ANALYSIS_USE
  XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
   analysis->finish();
-
+#endif
   // Run ended, update the visualization
 if (G4VVisManager::GetConcreteInstance()) {
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
