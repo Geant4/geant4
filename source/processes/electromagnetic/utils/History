@@ -1,4 +1,4 @@
-$Id: History,v 1.114 2003-10-14 07:53:52 vnivanch Exp $
+$Id: History,v 1.115 2003-10-20 17:06:34 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 Oct 03: V.Ivant (utils-V05-02-08)
+- Minor change of interface to G4EmFluctuationModel for PAI development
+- Update logic of the messenger and G4LossTableManager to provide independence 
+  on command sequence
+- Increase verbosity for store/retrieve tables
 
 14 Oct 03: V.Ivant (utils-V05-02-07)
 - Update verbose/printout
