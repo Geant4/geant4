@@ -30,7 +30,7 @@ set<HepRepType*> DefaultHepRepTypeTree::getTypes() {
     return types;
 }
 
-HepRepType* DefaultHepRepTypeTree::getType(string name) {
+HepRepType* DefaultHepRepTypeTree::getType(string /*typeName*/) {
     cerr << "DefaultHepRepTypeTree::getType(string) not implemented." << endl;
     return NULL;
 }
