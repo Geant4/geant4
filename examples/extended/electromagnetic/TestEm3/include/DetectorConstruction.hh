@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.4 2004-01-15 17:49:32 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.5 2004-01-16 14:14:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -88,6 +88,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4double    GetAbsorThickness(G4int i) {return AbsorThickness[i];};      
      
      const G4VPhysicalVolume* GetphysiWorld()        {return physiWorld;};
+     const G4Material*        GetWorldMaterial()     {return defaultMaterial;};
      const G4VPhysicalVolume* GetAbsorber(G4int i)   {return physiAbsor[i];};
                  
   private:

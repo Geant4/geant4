@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.5 2004-01-15 17:57:52 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.6 2004-01-16 14:14:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -242,6 +242,7 @@ void DetectorConstruction::DefineMaterials()
   density     = universe_mean_density;    //from PhysicalConstants.h
   pressure    = 3.e-18*pascal;
   temperature = 2.73*kelvin;
+  defaultMaterial =
   new G4Material("Galactic", z=1., a=1.008*g/mole, density,
                              kStateGas,temperature,pressure);
 
