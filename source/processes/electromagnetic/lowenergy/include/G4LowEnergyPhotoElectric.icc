@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.icc,v 1.19 2001-07-11 10:02:38 gunter Exp $
+// $Id: G4LowEnergyPhotoElectric.icc,v 1.20 2001-09-23 20:06:59 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@
 
 //    ..
 
-inline G4bool G4LowEnergyPhotoElectric::IsApplicable(const G4ParticleDefinition& particle)
+inline G4bool G4LowEnergyOldPhotoElectric::IsApplicable(const G4ParticleDefinition& particle)
 {
    return ( &particle == G4Gamma::Gamma() ); 
 }
@@ -45,7 +45,7 @@ inline G4bool G4LowEnergyPhotoElectric::IsApplicable(const G4ParticleDefinition&
 //    ..
 
 inline G4double 
-G4LowEnergyPhotoElectric::GetMeanFreePath(const G4Track& aTrack, G4double,
+G4LowEnergyOldPhotoElectric::GetMeanFreePath(const G4Track& aTrack, G4double,
                                           G4ForceCondition*)
 {
   // returns the gamma mean free path in GEANT4 internal units
@@ -73,7 +73,7 @@ G4LowEnergyPhotoElectric::GetMeanFreePath(const G4Track& aTrack, G4double,
 
 //    ..
 
-inline G4double G4LowEnergyPhotoElectric::GetCrossSection(G4DynamicParticle* aDynamicGamma,
+inline G4double G4LowEnergyOldPhotoElectric::GetCrossSection(G4DynamicParticle* aDynamicGamma,
 			                                  G4Element* anElement)
  
 // gives the microscopic total cross section in GEANT4 internal units

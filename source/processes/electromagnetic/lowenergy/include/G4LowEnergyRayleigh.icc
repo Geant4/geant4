@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyRayleigh.icc,v 1.13 2001-07-11 10:02:38 gunter Exp $
+// $Id: G4LowEnergyRayleigh.icc,v 1.14 2001-09-23 20:06:59 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,11 +32,11 @@
 //                   by A.Forti 1999/03/02
 // ***************************************************************
 
-inline G4bool G4LowEnergyRayleigh::IsApplicable(const G4ParticleDefinition& particle){
+inline G4bool G4LowEnergyOldRayleigh::IsApplicable(const G4ParticleDefinition& particle){
    return ( &particle == G4Gamma::Gamma() ); 	
 }
 
-inline G4double G4LowEnergyRayleigh::GetMeanFreePath(const G4Track& aTrack, G4double, G4ForceCondition*){
+inline G4double G4LowEnergyOldRayleigh::GetMeanFreePath(const G4Track& aTrack, G4double, G4ForceCondition*){
 
 // returns the gamma mean free path in GEANT4 internal units
    const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();

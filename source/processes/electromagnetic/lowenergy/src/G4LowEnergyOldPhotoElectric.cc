@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyOldPhotoElectric.cc,v 1.1 2001-09-23 19:56:42 pia Exp $
+// $Id: G4LowEnergyOldPhotoElectric.cc,v 1.2 2001-09-23 20:07:07 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@
 // --------------------------------------------------------------
 
 // This Class Header
-#include "G4LowEnergyPhotoElectricOld.hh"
+#include "G4LowEnergyOldPhotoElectric.hh"
 
 // Collaborating Class Headers
 #include "G4EnergyLossTables.hh"

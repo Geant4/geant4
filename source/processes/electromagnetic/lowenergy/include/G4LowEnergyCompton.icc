@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyCompton.icc,v 1.14 2001-07-11 10:02:36 gunter Exp $
+// $Id: G4LowEnergyCompton.icc,v 1.15 2001-09-23 20:06:59 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,13 +33,13 @@
 // ***************************************************************
 
 inline G4bool 
-G4LowEnergyCompton::IsApplicable(const G4ParticleDefinition& particle){
+G4LowEnergyOldCompton::IsApplicable(const G4ParticleDefinition& particle){
 
    return ( &particle == G4Gamma::Gamma() ); 
 }
 
 inline G4double 
-G4LowEnergyCompton::GetMeanFreePath(const G4Track& aTrack, G4double, G4ForceCondition*){
+G4LowEnergyOldCompton::GetMeanFreePath(const G4Track& aTrack, G4double, G4ForceCondition*){
 
   // returns the gamma mean free path in GEANT4 internal units
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
