@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertiesTable.hh,v 1.4 1999-11-05 21:28:59 gum Exp $
+// $Id: G4MaterialPropertiesTable.hh,v 1.5 1999-11-09 20:28:15 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,9 +122,8 @@ private:
 	/////////////////////////
 
 	G4std::map<G4String, G4MaterialPropertyVector*, less<G4String> > MPT;
-	typedef typename G4std::map<G4String, G4MaterialPropertyVector*,
+	typedef G4std::map<G4String, G4MaterialPropertyVector*,
 	  less<G4String> >::iterator MPTiterator;
-
 };
 
 #endif /* G4MaterialPropertiesTable_h */
