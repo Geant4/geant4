@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26SteppingAction.cc,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
+// $Id: Tst26SteppingAction.cc,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,16 +40,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Tst26SteppingAction.hh"
-#include "Tst26DetectorConstruction.hh"
-#include "Tst26RunAction.hh"
+#include "Tst26EventAction.hh"
 #include "G4SteppingManager.hh"
 #include "G4VTouchable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst26SteppingAction::Tst26SteppingAction(Tst26DetectorConstruction* det,
-                                     Tst26RunAction* run)
-:Tst26Det(det),Tst26Run(run)
+Tst26SteppingAction::Tst26SteppingAction(Tst26EventAction* evt)
+:Tst26Event(evt)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,34 +59,22 @@ Tst26SteppingAction::~Tst26SteppingAction()
 
 void Tst26SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
- G4Track* aTrack = aStep->GetTrack();
- const G4VTouchable*  preStepTouchable= aStep->GetPreStepPoint()->GetTouchable();
- const G4VTouchable* postStepTouchable= aStep->GetPostStepPoint()->GetTouchable();
+  G4double edep = aStep->GetTotalEnergyDeposit();
+  if(edep == 0.) return;
 
- // energy deposit
- //
- G4int SlideNb(0), RingNb(0);
- if (preStepTouchable->GetHistoryDepth()>0)
- {
-   if (Tst26Det->GetnRtot()>1)
-     RingNb  = preStepTouchable->GetReplicaNumber(1);
-   if (Tst26Det->GetnLtot()>1)
-     SlideNb = preStepTouchable->GetReplicaNumber();
- }
-         
- G4double dEStep = aStep->GetTotalEnergyDeposit();
- if (dEStep > 0.)
-   Tst26Run->fillPerStep(dEStep,SlideNb,RingNb);
-
- // particle flux
- //  
- if ((Tst26Det->GetnLtot()>1)&&
-     (postStepTouchable->GetVolume()))
-   {
-     G4int next = postStepTouchable->GetReplicaNumber();
-     if (next != SlideNb)
-        Tst26Run->particleFlux(aTrack->GetDefinition(), (SlideNb+next)/2);
-   }  
+  const G4VPhysicalVolume* pv = aStep->GetPreStepPoint()->GetPhysicalVolume();
+  const G4LogicalVolume* lv = pv->GetLogicalVolume();
+  G4int volumeIndex = -1;
+  
+  G4int copyNo = pv->GetCopyNo();
+  G4String name = lv->GetName();
+  if(name == "Ecal") volumeIndex = 0;
+  else if(name == "Abs1") volumeIndex = 1;
+  else if(name == "Abs2") volumeIndex = 2;
+  else if(name == "Abs3") volumeIndex = 3;
+  else if(name == "Abs4") volumeIndex = 4;
+  else if(name == "Vert") volumeIndex = 5;
+  if(volumeIndex>=0) Tst26Event->AddEnergy(edep, volumeIndex, copyNo);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26DetectorMessenger.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
+// $Id: Tst26DetectorMessenger.hh,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,9 +67,13 @@ class Tst26DetectorMessenger: public G4UImessenger
     
     G4UIdirectory*             testemDir;
     G4UIcmdWithAString*        MaterCmd;
-    G4UIcmdWith3Vector*        LBinCmd;
-    G4UIcmdWith3Vector*        RBinCmd;
-    G4UIcmdWithADoubleAndUnit* FieldCmd;
+    G4UIcmdWithAString*        LBinCmd;
+    G4UIcmdWithADoubleAndUnit* l1Cmd;
+    G4UIcmdWithADoubleAndUnit* l2Cmd;
+    G4UIcmdWithADoubleAndUnit* l3Cmd;
+    G4UIcmdWithADoubleAndUnit* l4Cmd;
+    G4UIcmdWithADoubleAndUnit* l5Cmd;
+    G4UIcmdWithADoubleAndUnit* l6Cmd;
     G4UIcmdWithoutParameter*   UpdateCmd;
 };
 

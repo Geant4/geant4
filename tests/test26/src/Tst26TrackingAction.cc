@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26TrackingAction.cc,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
+// $Id: Tst26TrackingAction.cc,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,24 +42,40 @@
 #include "Tst26TrackingAction.hh"
 #include "Tst26RunAction.hh"
 
-#include "G4TrackingManager.hh"
 #include "G4Track.hh"
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Tst26TrackingAction::Tst26TrackingAction(Tst26RunAction* run)
-:Tst26Run(run)
+  :Tst26Run(run),
+   vertex(0),
+   muon(0)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Tst26TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
+void Tst26TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
-  //count total track length
-  G4double charge = aTrack->GetDefinition()->GetPDGCharge();
-  G4double TrLeng = aTrack->GetTrackLength();
-  
-  Tst26Run->fillPerTrack(charge,TrLeng);     
+  if(!vertex) vertex = (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
+  if(!muon)   muon = (G4RegionStore::GetInstance())->GetRegion("MuonDetector");
+  if(1 == track->GetTrackID()) return;
+  G4int regionIndex = 0;
+  const G4Region* r = track->GetVolume()->GetLogicalVolume()->GetRegion();
+  if(r == vertex) regionIndex = 1;
+  else if(r == muon) regionIndex = 2;
+  G4int particleIndex = -1;
+  const G4ParticleDefinition* pd = track->GetDefinition();
+  if(G4Gamma::Gamma() == pd) particleIndex = 0;
+  else if(G4Electron::Electron() == pd) particleIndex = 1;
+  else if(G4Positron::Positron() == pd) particleIndex = 2;
+ 
+  if(particleIndex >= 0) Tst26Run->AddParticle(particleIndex,regionIndex); 
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

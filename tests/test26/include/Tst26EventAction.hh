@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26EventAction.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
+// $Id: Tst26EventAction.hh,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+#include "g4std/vector"
 
 class Tst26RunAction;
 class G4Event;
@@ -60,15 +61,24 @@ class Tst26EventAction : public G4UserEventAction
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
     
-    void SetDrawFlag   (G4String val)  {drawFlag    = val;};
     void SetPrintModulo(G4int    val)  {printModulo = val;};
-    
+    void AddEnergy(G4double, G4int, G4int);     
+
   private:
   
-    Tst26RunAction*             Tst26Run;
-    G4String                  drawFlag;
-    G4int                     printModulo;          
-   
+    Tst26RunAction*   Tst26Run;
+    G4String          drawFlag;
+    G4int             printModulo;          
+    G4double          E1;
+    G4double          E9;
+    G4double          E25;
+    G4double          Eabs1;
+    G4double          Eabs2;
+    G4double          Eabs3;
+    G4double          Eabs4;
+    G4double          Eth;
+    G4std::vector<G4double> Evert;
+    G4std::vector<G4int>    Nvert;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysicsListMessenger.cc,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
+// $Id: Tst26PhysicsListMessenger.cc,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,34 +50,27 @@
 Tst26PhysicsListMessenger::Tst26PhysicsListMessenger(Tst26PhysicsList* pPhys)
 :pPhysicsList(pPhys)
 {   
-  gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setGCut",this);  
-  gammaCutCmd->SetGuidance("Set gamma cut.");
-  gammaCutCmd->SetParameterName("Gcut",false);
-  gammaCutCmd->SetUnitCategory("Length");
-  gammaCutCmd->SetRange("Gcut>0.0");
-  gammaCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  wCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/WorldCuts",this);  
+  wCutCmd->SetGuidance("Set cuts for the World");
+  wCutCmd->SetParameterName("Gcut",false);
+  wCutCmd->SetUnitCategory("Length");
+  wCutCmd->SetRange("Gcut>0.0");
+  wCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  electCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setECut",this);  
-  electCutCmd->SetGuidance("Set electron cut.");
-  electCutCmd->SetParameterName("Ecut",false);
-  electCutCmd->SetUnitCategory("Length");
-  electCutCmd->SetRange("Ecut>0.0");
-  electCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  eCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/VertexCuts",this);  
+  eCutCmd->SetGuidance("Set cuts for the Vertex Detector");
+  eCutCmd->SetParameterName("Ecut",false);
+  eCutCmd->SetUnitCategory("Length");
+  eCutCmd->SetRange("Ecut>0.0");
+  eCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  mCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/MuonCuts",this);  
+  mCutCmd->SetGuidance("Set cuts for the Muon Detector");
+  mCutCmd->SetParameterName("Ecut",false);
+  mCutCmd->SetUnitCategory("Length");
+  mCutCmd->SetRange("Ecut>0.0");
+  mCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  protoCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setPCut",this);  
-  protoCutCmd->SetGuidance("Set positron cut.");
-  protoCutCmd->SetParameterName("Pcut",false);
-  protoCutCmd->SetUnitCategory("Length");
-  protoCutCmd->SetRange("Pcut>0.0");
-  protoCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
-
-  allCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setCuts",this);  
-  allCutCmd->SetGuidance("Set cut for all.");
-  allCutCmd->SetParameterName("cut",false);
-  allCutCmd->SetUnitCategory("Length");
-  allCutCmd->SetRange("cut>0.0");
-  allCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
-
   pListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
   pListCmd->SetGuidance("Add modula physics list.");
   pListCmd->SetParameterName("PList",false);
@@ -88,10 +81,9 @@ Tst26PhysicsListMessenger::Tst26PhysicsListMessenger(Tst26PhysicsList* pPhys)
 
 Tst26PhysicsListMessenger::~Tst26PhysicsListMessenger()
 {
-  delete gammaCutCmd;
-  delete electCutCmd;
-  delete protoCutCmd;
-  delete allCutCmd;
+  delete wCutCmd;
+  delete eCutCmd;
+  delete mCutCmd;
   delete pListCmd;
 }
 
@@ -100,23 +92,15 @@ Tst26PhysicsListMessenger::~Tst26PhysicsListMessenger()
 void Tst26PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 {       
-  if( command == gammaCutCmd )
-   { pPhysicsList->SetCutForGamma(gammaCutCmd->GetNewDoubleValue(newValue));}
+  if( command == wCutCmd )
+   { pPhysicsList->SetCutForWorld(wCutCmd->GetNewDoubleValue(newValue));}
      
-  if( command == electCutCmd )
-   { pPhysicsList->SetCutForElectron(electCutCmd->GetNewDoubleValue(newValue));}
+  if( command == eCutCmd )
+   { pPhysicsList->SetCutForVertex(eCutCmd->GetNewDoubleValue(newValue));}
+
+  if( command == mCutCmd )
+   { pPhysicsList->SetCutForMuon(mCutCmd->GetNewDoubleValue(newValue));}
      
-  if( command == protoCutCmd )
-   { pPhysicsList->SetCutForPositron(protoCutCmd->GetNewDoubleValue(newValue));}
-
-  if( command == allCutCmd )
-    {
-      G4double cut = allCutCmd->GetNewDoubleValue(newValue);
-      pPhysicsList->SetCutForGamma(cut);
-      pPhysicsList->SetCutForElectron(cut);
-      pPhysicsList->SetCutForPositron(cut);
-    } 
-
   if( command == pListCmd )
    { pPhysicsList->AddPhysicsList(newValue);}
 }

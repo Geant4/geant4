@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysicsList.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
+// $Id: Tst26PhysicsList.hh,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -58,15 +58,14 @@ class Tst26PhysicsList: public G4VModularPhysicsList
     void AddPhysicsList(const G4String& name);
     
     void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
+    void SetCutForWorld(G4double);
+    void SetCutForVertex(G4double);
+    void SetCutForMuon(G4double);
        
   private:
-    G4double cutForGamma;
-    G4double cutForElectron; 
-    G4double cutForPositron;
-    G4double currentDefaultCut;
+    G4double cutForWorld;
+    G4double cutForVertex; 
+    G4double cutForMuon; 
 
     G4bool   emPhysicsListIsRegistered;
     

@@ -43,6 +43,9 @@
 #include "Tst26PhysListGeneral.hh"
 #include "Tst26PhysListEmStandard.hh"
 #include "Tst26PhysListEmModel.hh"
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
+#include "G4ProductionCuts.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,10 +53,9 @@
 Tst26PhysicsList::Tst26PhysicsList() : G4VModularPhysicsList(),
   emPhysicsListIsRegistered(false)
 {   
-  currentDefaultCut   = 1.0*mm;
-  cutForGamma         = currentDefaultCut;
-  cutForElectron      = currentDefaultCut;
-  cutForPositron      = currentDefaultCut;
+  cutForWorld         = 1.0*mm;
+  cutForVertex        = 0.001*mm;
+  cutForMuon          = 10.*mm;
 
   pMessenger = new Tst26PhysicsListMessenger(this);
 
@@ -122,48 +124,57 @@ void Tst26PhysicsList::SetCuts()
 {
      
   if (verboseLevel >0){
-    G4cout << "Tst26PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
+    G4cout << "Tst26PhysicsList::SetCuts" << G4endl;
   }  
 
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");   
+  SetCutValue(cutForWorld, "gamma");
+  SetCutValue(cutForWorld, "e-");
+  SetCutValue(cutForWorld, "e+");   
+
+  G4ProductionCuts* vertexCuts = new G4ProductionCuts();
   
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton
-  SetCutValue(currentDefaultCut, "proton");
-  SetCutValue(currentDefaultCut, "anti_proton");
-     
-  SetCutValueForOthers(currentDefaultCut);
+  vertexCuts->SetProductionCut(cutForVertex, 0);  
+  vertexCuts->SetProductionCut(cutForVertex, 1);  
+  vertexCuts->SetProductionCut(cutForVertex, 2);  
+
+  G4ProductionCuts* muonCuts = new G4ProductionCuts();
+  
+  muonCuts->SetProductionCut(cutForMuon, 0);  
+  muonCuts->SetProductionCut(cutForMuon, 1);  
+  muonCuts->SetProductionCut(cutForMuon, 2);  
+  
+  G4Region* region = (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
+  region->SetProductionCuts(vertexCuts);
+  region = (G4RegionStore::GetInstance())->GetRegion("MuonDetector");
+  region->SetProductionCuts(muonCuts);
   
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Tst26PhysicsList::SetCutForGamma(G4double cut)
+void Tst26PhysicsList::SetCutForWorld(G4double cut)
 {
   ResetCuts();
-  cutForGamma = cut;
+  cutForWorld = cut;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Tst26PhysicsList::SetCutForElectron(G4double cut)
+void Tst26PhysicsList::SetCutForVertex(G4double cut)
 {
   ResetCuts();
-  cutForElectron = cut;
+  cutForVertex = cut;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Tst26PhysicsList::SetCutForPositron(G4double cut)
+void Tst26PhysicsList::SetCutForMuon(G4double cut)
 {
   ResetCuts();
-  cutForPositron = cut;
+  cutForMuon = cut;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26TrackingAction.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
+// $Id: Tst26TrackingAction.hh,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,6 +43,7 @@
 #include "G4UserTrackingAction.hh"
 
 class Tst26RunAction;
+class G4Region;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,12 +53,19 @@ class Tst26TrackingAction : public G4UserTrackingAction {
     Tst26TrackingAction(Tst26RunAction*);
    ~Tst26TrackingAction() {};
    
-    void PostUserTrackingAction(const G4Track*);
+    void PreUserTrackingAction(const G4Track*);
     
   private:
-    Tst26RunAction* Tst26Run;  
+    Tst26RunAction* Tst26Run;
+    const G4Region* vertex;  
+    const G4Region* muon;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+

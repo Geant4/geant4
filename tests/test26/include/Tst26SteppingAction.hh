@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26SteppingAction.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
+// $Id: Tst26SteppingAction.hh,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,22 +44,21 @@
 
 #include "G4UserSteppingAction.hh"
 
-class Tst26DetectorConstruction;
-class Tst26RunAction;
+class Tst26EventAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Tst26SteppingAction : public G4UserSteppingAction
 {
   public:
-    Tst26SteppingAction(Tst26DetectorConstruction*,Tst26RunAction*);
+    Tst26SteppingAction(Tst26EventAction*);
    ~Tst26SteppingAction();
 
     void UserSteppingAction(const G4Step*);
   
   private:
-  Tst26DetectorConstruction* Tst26Det;
-  Tst26RunAction*            Tst26Run;  
+ 
+    Tst26EventAction*            Tst26Event;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26DetectorConstruction.cc,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
+// $Id: Tst26DetectorConstruction.cc,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,18 +43,16 @@
 #include "Tst26DetectorConstruction.hh"
 #include "Tst26DetectorMessenger.hh"
 
-#include "G4Tubs.hh"
+#include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
-#include "G4UniformMagField.hh"
-#include "G4FieldManager.hh"
+
 #include "G4TransportationManager.hh"
 
 #include "G4RunManager.hh"
-
-#include "G4VisAttributes.hh"
-#include "G4Colour.hh"
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
@@ -62,12 +60,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Tst26DetectorConstruction::Tst26DetectorConstruction()
-:nLtot(20),nRtot(20),dLradl(1.),dRradl(0.25),
- myMaterial(0),magField(0)  ,
- EcalLength(0.),EcalRadius(0.)    ,
- solidEcal(0) ,logicEcal(0) ,physiEcal(0),
- solidSlice(0),logicSlice(0),physiSlice(0),
- solidRing(0) ,logicRing(0) ,physiRing(0) 
+:ecalLength(20.*cm),
+ ecalWidth(4.*cm),
+ vertexLength(3.*cm),
+ padLength(0.1*mm),
+ padWidth(0.02*mm),
+ absLength(2.*mm),
+ logicC(0),
+ logicA1(0),
+ logicA2(0)
 {
   detectorMessenger = new Tst26DetectorMessenger(this);
 }
@@ -147,12 +148,18 @@ void Tst26DetectorConstruction::DefineMaterials()
   //Al
     a = 26.98*g/mole;
     density = 2.7*g/cm3;
-    ma = new G4Material(name="Al", z=13., a, density);
+    absMaterial = new G4Material(name="Al", z=13., a, density);
+
+    //Si
+    density = 2.330*g/cm3;
+    a = 28.09*g/mole;
+    vertMaterial = new G4Material(name="Si", z=14., a, density);
+
         
   //Fe
     a = 55.85*g/mole;
     density = 7.87*g/cm3;
-    ma = new G4Material(name="Fe", z=26., a, density);
+    yorkMaterial = new G4Material(name="Fe", z=26., a, density);
     
   //BGO
     density = 7.10*g/cm3;
@@ -181,113 +188,198 @@ void Tst26DetectorConstruction::DefineMaterials()
     G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //choose material
-  myMaterial = PbWO;
+  calMaterial = PbWO;
+  worldMaterial = Air;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 G4VPhysicalVolume* Tst26DetectorConstruction::ConstructVolumes()
 {
-  G4double Radl = myMaterial->GetRadlen();
+  if(vertexLength < padLength*5.0) vertexLength = padLength*5.0;
+  G4double gap    = 0.01*mm;
+  G4double york   = 10*cm;
 
-  G4double dL = dLradl*Radl, dR = dRradl*Radl;  
-  EcalLength = nLtot*dL; EcalRadius = nRtot*dR;
+  G4double worldZ = vertexLength + absLength*10.5 + ecalLength*1.5 + york;
+  G4double worldX = ecalWidth*3.0;
+  G4double vertexZ= vertexLength*0.5 + absLength*2.5;
+  G4double absZ2  = vertexLength     + absLength*6.0;
+  G4double ecalZ  = vertexLength     + absLength*7.5 + ecalLength*0.5;
+  G4double yorkZ  = vertexLength + absLength*9.5 + ecalLength + york*0.5;
   
+  //   
+  // World
+  //
+  G4Box* solidW = new G4Box("World",worldX,worldX,worldZ);
+  G4LogicalVolume* logicW = new G4LogicalVolume( solidW,worldMaterial,
+                                                "World");
+  G4VPhysicalVolume* world = new G4PVPlacement(0,G4ThreeVector(),
+                                       "World",logicW,0,false,0);
+
   //   
   // Ecal
   //
-  solidEcal = new G4Tubs("Ecal",0.,EcalRadius,0.5*EcalLength,0.,360*deg);
-  logicEcal = new G4LogicalVolume( solidEcal,myMaterial,"Ecal",0,0,0);
-  physiEcal = new G4PVPlacement(0,G4ThreeVector(),
-                                "Ecal",logicEcal,0,false,0);
-				
-  // Ring
-  //
-  for (G4int i=0; i<nRtot; i++)
-     {
-      solidRing = new G4Tubs("Ring",i*dR,(i+1)*dR,0.5*EcalLength,0.,360*deg);
-      logicRing = new G4LogicalVolume(solidRing,myMaterial,"Ring",0,0,0);
-      physiRing = new G4PVPlacement(0,G4ThreeVector(),"Ring",logicRing,
-                                    physiEcal,false,i);
-				                   				
-      // Slice
-      solidSlice = new G4Tubs("Slice",i*dR,(i+1)*dR,0.5*dL,0.,360*deg);
-      logicSlice = new G4LogicalVolume(solidSlice,myMaterial,"Slice",0,0,0);
-      logicSlice-> SetVisAttributes(G4VisAttributes::Invisible);
-      if (nLtot >1)
-        physiSlice = new G4PVReplica("Slice",logicSlice,physiRing,
-                                    kZAxis,nLtot,dL);
-      else
-        physiSlice = new G4PVPlacement(0,G4ThreeVector(),"Slice",logicSlice,
-                                    physiRing,false,0);
-     }				                   
+  G4Box* solidE = new G4Box("VolE",worldX,worldX,ecalLength*0.5 + gap);
+  G4LogicalVolume* logicE = new G4LogicalVolume( solidE,worldMaterial,
+                                                "VolE");
+  G4VPhysicalVolume* physE = new G4PVPlacement(0,G4ThreeVector(0.,0.,ecalZ),
+                                       "VolE",logicE,world,false,0);
+
+  G4Box* solidC = new G4Box("Ecal",ecalWidth*0.5,ecalWidth*0.5,ecalLength*0.5);
+  logicC = new G4LogicalVolume( solidC,calMaterial,"Ecal");
+
+  G4cout << "Ecal is " << G4BestUnit(ecalLength,"Length") 
+       << " of " << calMaterial->GetName() << G4endl; 
+ 				
+  // Crystals
+
+  G4double x0 = -(ecalWidth + gap)*2.0;
+  G4double y  = x0;
+  G4double x;
+  G4int k = 0;
+  G4VPhysicalVolume* pv;
+  G4int i,j; 
+
+  for (i=0; i<5; i++) {
+    x  = x0;
+    for (j=0; j<5; j++) {
+
+      pv = new G4PVPlacement(0,G4ThreeVector(x,y,0.),"Ecal",logicC,
+                                    physE,false,k);
+      k++;
+      x += ecalWidth + gap;
+    }
+    y += ecalWidth + gap;
+  }                  
+
+  //Absorber
+
+  G4Box* solidA = new G4Box("Abso",worldX,worldX,absLength*0.5);
+  logicA2 = new G4LogicalVolume( solidA,absMaterial,"Abs2");
+  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,absZ2),
+                                       "Abs2",logicA2,world,false,0);
+
+  G4cout << "Absorber is " << G4BestUnit(absLength,"Length") 
+       << " of " << absMaterial->GetName() << G4endl; 
+
+  //York
+
+  G4Box* solidYV = new G4Box("VolY",worldX,worldX,york*0.5+absLength);
+  G4LogicalVolume* logicYV = new G4LogicalVolume( solidYV,yorkMaterial,"VolY");
+  G4VPhysicalVolume* physYV = new G4PVPlacement(0,G4ThreeVector(0.,0.,yorkZ),
+                                       "VolY",logicYV,world,false,0);
+
+  G4Box* solidY = new G4Box("York",worldX,worldX,york*0.5);
+  G4LogicalVolume* logicY = new G4LogicalVolume( solidY,yorkMaterial,"York");
+  pv = new G4PVPlacement(0,G4ThreeVector(),
+                                       "York",logicY,physYV,false,0);
+
+  logicA3 = new G4LogicalVolume( solidA,absMaterial,"Abs3");
+  logicA4 = new G4LogicalVolume( solidA,absMaterial,"Abs4");
+  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,-(york+absLength)*0.5),
+                                       "Abs3",logicA3,physYV,false,0);
+  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,(york+absLength)*0.5),
+                                       "Abs4",logicA4,physYV,false,0);
+
+  //Vertex volume
+
+  G4Box* solidVV = new G4Box("VolV",worldX,worldX,vertexLength*0.5+absLength*2.5);
+  G4LogicalVolume* logicVV = new G4LogicalVolume( solidVV,worldMaterial,"VolV");
+  G4VPhysicalVolume* physVV = new G4PVPlacement(0,G4ThreeVector(0.,0.,vertexZ),
+                                       "VolV",logicVV,world,false,0);
 
 
-  G4cout << "Absorber is " << G4BestUnit(EcalLength,"Length") 
-       << " of " << myMaterial->GetName() << G4endl; 
+  //Absorber
 
+  logicA1 = new G4LogicalVolume( solidA,absMaterial,"Abs1");
+  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,vertexLength*0.5+absLength*1.5),
+                                       "Abs1",logicA1,physVV,false,0);
 
-  G4VisAttributes* VisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  VisAtt->SetVisibility(true);
-  logicEcal->SetVisAttributes(VisAtt);
-  
-  //
-  //always return the physical World
-  //
-  return physiEcal;
+  //Vertex
+
+  G4Box* solidV = new G4Box("Vert",padWidth*0.5,ecalWidth*0.5,padLength*0.5);
+  G4LogicalVolume* logicV = new G4LogicalVolume( solidV,vertMaterial,"Vert");
+  G4int npads = (G4int)(ecalWidth/padWidth);
+  npads = (npads/2)*2 + 1;
+  k = 0;
+  x0 = -0.5*padWidth*((G4double)(npads-1));
+  G4double z  = (vertexLength-padLength)*0.5;
+
+  for (i=0; i<3; i++) {
+    x = x0;
+    y = z*(i - 1);
+    for (j=0; j<npads; j++) {
+
+      pv = new G4PVPlacement(0,G4ThreeVector(x,0.,y),"Vert",logicV,
+                                    physVV,false,k);
+      k++;
+      x += padWidth;
+    }
+  }                  
+
+  G4cout << "Vertex is " << G4BestUnit(vertexLength,"Length") 
+         << " of 3 layers of Si of " << G4BestUnit(padLength,"Length") 
+         << " npads= " << npads
+    //         << " x0= " << x0
+    //     << " z= " << z
+	 << G4endl; 
+
+  // Define region for the vertex detector
+
+  G4RegionStore* rs = G4RegionStore::GetInstance();
+  G4Region* regionV  = rs->GetRegion("VertexDetector");
+  if( !regionV ) {
+    regionV = new G4Region("VertexDetector");
+    regionV->AddRootLogicalVolume(logicVV);
+    regionV->AddRootLogicalVolume(logicA3);
+  }
+
+  // Define region for the muon detector
+
+  G4Region* regionM  = rs->GetRegion("MuonDetector");
+  if( !regionM ) {
+    regionM = new G4Region("MuonDetector");
+    regionM->AddRootLogicalVolume(logicYV);
+  }
+
+  return world;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Tst26DetectorConstruction::SetMaterial(G4String materialChoice)
+void Tst26DetectorConstruction::SetEcalMaterial(const G4String& materialChoice)
 {
   // search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
   if (pttoMaterial)
-     {myMaterial = pttoMaterial;
-      logicEcal->SetMaterial(myMaterial); 
+     {
+        calMaterial = pttoMaterial;
+        if(logicC) logicC->SetMaterial(calMaterial); 
      }             
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Tst26DetectorConstruction::SetLBining(G4ThreeVector Value)
+void Tst26DetectorConstruction::SetAbsMaterial(const G4String& materialChoice)
 {
-  nLtot = (G4int)Value(0); dLradl = Value(1);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Tst26DetectorConstruction::SetRBining(G4ThreeVector Value)
-{
-  nRtot = (G4int)Value(0); dRradl = Value(1);
-}
- 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Tst26DetectorConstruction::SetMagField(G4double fieldValue)
-{
-  //apply a global uniform magnetic field along Z axis
-  G4FieldManager* fieldMgr 
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-    
-  if(magField) delete magField;		//delete the existing magn field
-  
-  if(fieldValue!=0.)			// create a new one if non nul
-  { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
-    fieldMgr->SetDetectorField(magField);
-    fieldMgr->CreateChordFinder(magField);
-  } else {
-    magField = 0;
-    fieldMgr->SetDetectorField(magField);
-  }
+  // search the material by its name   
+  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  if (pttoMaterial)
+     {
+        absMaterial = pttoMaterial;
+        if(logicA1) logicA1->SetMaterial(absMaterial); 
+        if(logicA2) logicA2->SetMaterial(absMaterial); 
+     }             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 void Tst26DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
+  G4VPhysicalVolume* v = ConstructVolumes();
+  G4RunManager* rm = G4RunManager::GetRunManager();
+  rm->GeometryHasBeenModified();
+  rm->DefineWorldVolume(v);
+  rm->ResetNavigator();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysicsListMessenger.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
+// $Id: Tst26PhysicsListMessenger.hh,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,10 +64,9 @@ class Tst26PhysicsListMessenger: public G4UImessenger
   
     Tst26PhysicsList* pPhysicsList;
     
-    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;    
+    G4UIcmdWithADoubleAndUnit* wCutCmd;
+    G4UIcmdWithADoubleAndUnit* eCutCmd;
+    G4UIcmdWithADoubleAndUnit* mCutCmd;
     G4UIcmdWithAString*        pListCmd;
     
 };

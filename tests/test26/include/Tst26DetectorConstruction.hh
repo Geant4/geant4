@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26DetectorConstruction.hh,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
+// $Id: Tst26DetectorConstruction.hh,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,51 +64,40 @@ class Tst26DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
      
-     void SetMaterial(G4String);
-     void SetLBining (G4ThreeVector);
-     void SetRBining (G4ThreeVector);      
-     void SetMagField(G4double);
+     void SetEcalMaterial(const G4String&);
+     void SetAbsMaterial(const G4String&);
+     void SetEcalLength (G4double val)   {ecalLength = val;};
+     void SetEcalWidth  (G4double val)   {ecalWidth = val;};      
+     void SetVertexLength (G4double val) {vertexLength = val;};
+     void SetPadLength  (G4double val)   {padLength = val;};      
+     void SetPadWidth  (G4double val)    {padWidth = val;};      
+     void SetAbsLength(G4double val)     {absLength = val;};
      
      G4VPhysicalVolume* Construct();
 
      void UpdateGeometry();
      
-  public:
-  
-     const 
-     G4VPhysicalVolume* GetEcal() {return physiEcal;};
-     G4Material*    GetMaterial() {return myMaterial;};
-
-     G4int    GetnLtot()      {return nLtot;};
-     G4int    GetnRtot()      {return nRtot;};
-     G4double GetdLradl()     {return dLradl;}; 
-     G4double GetdRradl()     {return dRradl;};
-     G4double GetfullLength() {return EcalLength;};
-     G4double GetfullRadius() {return EcalRadius;};   
-                 
   private:
      
-     G4int    nLtot,  nRtot;          // nb of bins: longitudinal and radial
-     G4double dLradl, dRradl;         // bin thickness (in radl unit)
-     
-     G4Material* myMaterial;          //pointer to the material
-     G4UniformMagField* magField;     //pointer to the mag field
-                                     
-     G4double EcalLength;             //full length of the Calorimeter
-     G4double EcalRadius;             //radius  of the Calorimeter
-       
-     G4Tubs*            solidEcal;    //pointer to the solid calorimeter 
-     G4LogicalVolume*   logicEcal;    //pointer to the logical calorimeter
-     G4VPhysicalVolume* physiEcal;    //pointer to the physical calorimeter
-          
-     G4Tubs*            solidSlice;   //pointer to the solid  L-slice 
-     G4LogicalVolume*   logicSlice;   //pointer to the logical L-slide
-     G4VPhysicalVolume* physiSlice;   //pointer to the physical L-slide
-     
-     G4Tubs*            solidRing;    //pointer to the solid  R-slice 
-     G4LogicalVolume*   logicRing;    //pointer to the logical R-slide
-     G4VPhysicalVolume* physiRing;    //pointer to the physical R-slide
-     
+     G4double ecalLength;    
+     G4double ecalWidth;
+     G4double vertexLength;
+     G4double padLength;
+     G4double padWidth;
+     G4double absLength;
+  
+     G4Material* calMaterial;          
+     G4Material* vertMaterial;          
+     G4Material* absMaterial;          
+     G4Material* worldMaterial;
+     G4Material* yorkMaterial;
+
+     G4LogicalVolume* logicC;
+     G4LogicalVolume* logicA1;
+     G4LogicalVolume* logicA2;
+     G4LogicalVolume* logicA3;
+     G4LogicalVolume* logicA4;
+        
      Tst26DetectorMessenger* detectorMessenger;  //pointer to the Messenger   
       
   private:
@@ -117,7 +106,7 @@ class Tst26DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* ConstructVolumes();     
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #endif
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test26.cc,v 1.2 2003-02-01 18:14:57 vnivanch Exp $
+// $Id: test26.cc,v 1.3 2003-02-06 11:53:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -67,15 +67,16 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new Tst26PhysicsList);
   
-  Tst26PrimaryGeneratorAction* primary = new Tst26PrimaryGeneratorAction(detector);
+  Tst26PrimaryGeneratorAction* primary = new Tst26PrimaryGeneratorAction();
   runManager->SetUserAction(primary);
         
   // set user action classes
-  Tst26RunAction* RunAct = new Tst26RunAction(detector,primary);
+  Tst26RunAction* RunAct = new Tst26RunAction(primary);
   runManager->SetUserAction(RunAct);
-  runManager->SetUserAction(new Tst26EventAction   (RunAct));
+  Tst26EventAction* EvtAct = new Tst26EventAction   (RunAct); 
+  runManager->SetUserAction(EvtAct);
   runManager->SetUserAction(new Tst26TrackingAction(RunAct));
-  runManager->SetUserAction(new Tst26SteppingAction(detector,RunAct)); 
+  runManager->SetUserAction(new Tst26SteppingAction(EvtAct)); 
   
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
