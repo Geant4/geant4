@@ -21,44 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: StandaloneVisAction.cc,v 1.4 2005-03-03 16:45:34 allison Exp $
+// $Id: G4LogoVisAction.hh,v 1.1 2005-03-03 16:45:34 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
-#include "StandaloneVisAction.hh"
+#ifndef G4LOGOVISACTION_HH
+#define G4LOGOVISACTION_HH
 
-#include "G4VVisManager.hh"
-#include "G4VisAttributes.hh"
-#include "G4Polyhedron.hh"
-#include "G4Box.hh"
-#include "G4SubtractionSolid.hh"
+#include "G4VUserVisAction.hh"
 
-void StandaloneVisAction::Draw() {
-  G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
-  if (pVisManager) {
+class G4LogoVisAction: public G4VUserVisAction {
+  void Draw();
+};
 
-    // Simple box...
-    pVisManager->Draw(G4Box("box",2*m,2*m,2*m),
-		      G4VisAttributes(G4Colour(1,1,0)));
+#endif
 
-    // Boolean solid...
-    G4Box boxA("boxA",3*m,3*m,3*m);
-    G4Box boxB("boxB",1*m,1*m,1*m);
-    G4SubtractionSolid subtracted("subtracted_boxes",&boxA,&boxB,
-                       G4Translate3D(3*m,3*m,3*m));
-    pVisManager->Draw(subtracted,
-                      G4VisAttributes(G4Colour(0,1,1)),
-                      G4Translate3D(-6*m,-6*m,-6*m));
-
-    // Same, but explicit polyhedron...
-    G4Polyhedron* pA = G4Box("boxA",3*m,3*m,3*m).CreatePolyhedron();
-    G4Polyhedron* pB = G4Box("boxB",1*m,1*m,1*m).CreatePolyhedron();
-    pB->Transform(G4Translate3D(3*m,3*m,3*m));
-    G4Polyhedron* pSubtracted = new G4Polyhedron(pA->subtract(*pB));
-    G4VisAttributes subVisAtts(G4Colour(0,1,1));
-    pSubtracted->SetVisAttributes(&subVisAtts);
-    pVisManager->Draw(*pSubtracted,G4Translate3D(6*m,6*m,6*m));
-    delete pA;
-    delete pB;
-    delete pSubtracted;
-  }
-}

@@ -21,44 +21,31 @@
 // ********************************************************************
 //
 //
-// $Id: StandaloneVisAction.cc,v 1.4 2005-03-03 16:45:34 allison Exp $
+// $Id: G4Logo.cc,v 1.1 2005-03-03 16:45:34 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
-#include "StandaloneVisAction.hh"
+#include "globals.hh"
+#include "G4VisExecutive.hh"
+#include "G4VisExtent.hh"
+#include "G4UImanager.hh"
+#include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 
-#include "G4VVisManager.hh"
-#include "G4VisAttributes.hh"
-#include "G4Polyhedron.hh"
-#include "G4Box.hh"
-#include "G4SubtractionSolid.hh"
+#include "G4LogoVisAction.hh"
 
-void StandaloneVisAction::Draw() {
-  G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
-  if (pVisManager) {
+int main() {
 
-    // Simple box...
-    pVisManager->Draw(G4Box("box",2*m,2*m,2*m),
-		      G4VisAttributes(G4Colour(1,1,0)));
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize ();
 
-    // Boolean solid...
-    G4Box boxA("boxA",3*m,3*m,3*m);
-    G4Box boxB("boxB",1*m,1*m,1*m);
-    G4SubtractionSolid subtracted("subtracted_boxes",&boxA,&boxB,
-                       G4Translate3D(3*m,3*m,3*m));
-    pVisManager->Draw(subtracted,
-                      G4VisAttributes(G4Colour(0,1,1)),
-                      G4Translate3D(-6*m,-6*m,-6*m));
+  visManager->SetUserAction(new G4LogoVisAction);
 
-    // Same, but explicit polyhedron...
-    G4Polyhedron* pA = G4Box("boxA",3*m,3*m,3*m).CreatePolyhedron();
-    G4Polyhedron* pB = G4Box("boxB",1*m,1*m,1*m).CreatePolyhedron();
-    pB->Transform(G4Translate3D(3*m,3*m,3*m));
-    G4Polyhedron* pSubtracted = new G4Polyhedron(pA->subtract(*pB));
-    G4VisAttributes subVisAtts(G4Colour(0,1,1));
-    pSubtracted->SetVisAttributes(&subVisAtts);
-    pVisManager->Draw(*pSubtracted,G4Translate3D(6*m,6*m,6*m));
-    delete pA;
-    delete pB;
-    delete pSubtracted;
-  }
+  G4UImanager* UI = G4UImanager::GetUIpointer ();
+  UI->ApplyCommand ("/control/execute G4Logo.g4m");
+
+  G4UIsession* session = new G4UIterminal(new G4UItcsh);
+  session->SessionStart();
+
+  delete session;
+  delete visManager;
 }
