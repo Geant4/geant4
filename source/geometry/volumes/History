@@ -1,4 +1,4 @@
-$Id: History,v 1.90 2002-11-27 17:51:09 gcosmo Exp $
+$Id: History,v 1.91 2002-11-29 18:21:26 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 29th, 2002      J. Apostolakis - geomvol-V04-01-08
+- G4PropagatorInField:  Use safety in G4PropagatorInField.
+    (Adds to the state of this class).
 
 Nov 27th, 2002      G. Cosmo - geomvol-V04-01-07
 - G4BlockingList.cc: fixed initialisation of fBlockTagNo to 1.
