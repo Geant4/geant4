@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.24 2002-08-19 18:33:29 asaim Exp $
+// $Id: G4RunManager.hh,v 1.25 2002-08-20 17:39:01 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -135,6 +135,8 @@ class G4RunManager
     //  Usually, this method is invoked from InitializeGeometry() protected method
     // of this class. But, in case all of geometry has already created and kept in
     // the ODBMS, the pointer to the world physical volume can be set by this method.
+    virtual void ResetNavigator() const;
+    // Resets state of navigator for tracking, needed for geometry updates.
     virtual void AbortRun(G4bool softAbort=false);
     //  This method safely aborts the current event loop even if an event is in progress.
     // This method is available for Geant4 states of GeomClosed and EventProc. The state

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.49 2002-08-19 18:33:30 asaim Exp $
+// $Id: G4RunManager.cc,v 1.50 2002-08-20 17:39:41 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -456,6 +456,33 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
   if(pVVisManager) pVVisManager->GeometryHasChanged();
 
   geometryNeedsToBeClosed = true;
+}
+
+void G4RunManager::ResetNavigator() const
+{
+  G4StateManager*    stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState currentState = stateManager->GetCurrentState();
+  
+  if(!initializedAtLeastOnce)
+  {
+    G4cerr << " Geant4 kernel should be initialized" << G4endl;
+    G4cerr << " Navigator is not touched..."         << G4endl;
+    return;
+  }
+
+  if( currentState != Idle )
+  {
+    G4cerr << " Geant4 kernel not in Idle state" << G4endl;
+    G4cerr << " Navigator is not touched..."     << G4endl;
+    return;
+  }
+  
+  // We have to tweak the navigator's state in case a geometry has been modified between runs
+  // By the following call we ensure that navigator's state is reset properly
+  G4ThreeVector center(0,0,0);
+  G4TransportationManager::GetTransportationManager()
+      ->GetNavigatorForTracking()
+      ->LocateGlobalPointAndSetup(center,0,false);  
 }
 
 void G4RunManager::rndmSaveThisRun()
