@@ -9,7 +9,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: sdaiString.cc,v 1.1 2000-01-21 13:43:19 gcosmo Exp $ */
+/* $Id: sdaiString.cc,v 1.2 2001-11-29 16:46:51 gcosmo Exp $ */
 
 #include <sdai.h>
 #include "g4std/strstream"
@@ -92,7 +92,11 @@ SCLP23(String)::STEPread (G4std::istream& in, ErrorDescriptor *err)
     in >> c;
 
 	// remember the current format state to restore the previous settings
+#ifdef G4USE_STD_NAMESPACE
+    std::ios::fmtflags flags = in.flags();
+#else
     long int flags = in.flags();
+#endif
     in.unsetf(G4std::ios::skipws);
 
     if (c == STRING_DELIM)
