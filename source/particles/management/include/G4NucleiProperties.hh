@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiProperties.hh,v 1.2 1999-04-14 10:28:14 kurasige Exp $
+// $Id: G4NucleiProperties.hh,v 1.3 1999-05-26 14:05:15 larazb Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,8 @@
 // ------------------------------------------------------------
 // Hadronic Process: Nuclear De-excitations by V. Lara (Oct 1998)
 // Migrate into particles category by H.Kurashige (17 Nov. 98)
+// Added Shell-Pairing corrections to the Cameron mass 
+// excess formula by V.Lara (9 May 99)
 // 
 #ifndef G4NucleiProperties_h
 #define G4NucleiProperties_h 1
@@ -40,57 +42,71 @@ public:
   // Destructor
   ~G4NucleiProperties() { };
 
-  enum { NTZ = 130, NTAZ = 200 };
-
-private:
-
-  // Calculate Mass Excess according to Cameron's liquid drop formula
-  // (shell corrections are not included)
-  static G4double CameronMassExcess(const G4int A, const G4int Z);
-  // (shell corrections are included)
-  static G4double PSCorrectedCameronMassExcess( const G4int A, const G4int Z );
-
-  static G4double  AtomicMass(G4double Z, G4double A);
-
-
 
 public:
 
-  // Calculate Mass Excess of nucleus A,Z
-  static G4double GetMassExcess(const G4int A, const G4int Z)
-    {
-      if (A < 1 || Z < 0 || Z > A) {
-	G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
-	       << " and Z = " << Z << endl;
-	return 0.0;
-      } else {
-	if (G4NucleiPropertiesTable::IsInTable(Z,A))
-	  return G4NucleiPropertiesTable::GetMassExcess(Z,A);
-	//	else if (Z >= NTZ || A - Z >= NTAZ) return PSCorrectedCameronMassExcess(A,Z)*MeV;
-	else return CameronMassExcess(A,Z)*MeV;
-      }
-    }
+	// Calculate Mass Excess of nucleus A,Z
+	static G4double GetMassExcess(const G4int A, const G4int Z)
+	{
+		if (A < 1 || Z < 0 || Z > A) {
+			G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
+					 << " and Z = " << Z << endl;
+			return 0.0;
+		} else {
+			if (G4NucleiPropertiesTable::IsInTable(Z,A)) return G4NucleiPropertiesTable::GetMassExcess(Z,A);
+			else return MassExcess(A,Z);
+		}
+	}
 
-  static G4double GetAtomicMass(const G4double A, const G4double Z)
-    {
-      if (Z < 0 || Z > A) {
-	G4cout << "G4NucleiProperties::GetAtomicMass: Wrong values for A = " << A 
-	       << " and Z = " << Z << endl;	return 0.0;
-      } else if (abs(A - G4int(A)) > 1.e-10) {
-	return AtomicMass(Z,A);
-      } else {
-	if (G4NucleiPropertiesTable::IsInTable(Z,A))
-	  return G4NucleiPropertiesTable::GetAtomicMass(Z,A);
-	else return AtomicMass(Z,A);
-      }
-    }
-
+	static G4double GetAtomicMass(const G4double A, const G4double Z)
+	{
+		if (Z < 0 || Z > A) {
+			G4cout << "G4NucleiProperties::GetAtomicMass: Wrong values for A = " << A 
+					 << " and Z = " << Z << endl;	return 0.0;
+		} else if (abs(A - G4int(A)) > 1.e-10) {
+			return AtomicMass(Z,A);
+		} else {
+			if (G4NucleiPropertiesTable::IsInTable(Z,A))
+					return G4NucleiPropertiesTable::GetAtomicMass(Z,A);
+			else return AtomicMass(Z,A);
+		}
+	}
+	
+	static G4double GetBindingEnergy(const G4int A, const G4int Z)
+	{
+		if (A < 1 || Z < 0 || Z > A) {
+			G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
+					 << " and Z = " << Z << endl;
+			return 0.0;
+		} else {
+			if (G4NucleiPropertiesTable::IsInTable(Z,A)) return G4NucleiPropertiesTable::GetBindingEnergy(Z,A);
+			else return BindingEnergy(A,Z);
+		}
+	}
+		
+	static G4double GetNuclearMass(const G4double A, const G4double Z);
 
 private:
 
-  static const G4double daTZ[NTZ];
+	// Calculate Mass Excess according to Cameron's liquid drop formula
+//	static G4double CameronMassExcess(const G4int A, const G4int Z);
 
-  static const G4double daTAZ[NTAZ];
+	static G4double  AtomicMass(G4double Z, G4double A);
+	
+	static G4double BindingEnergy(G4double A, G4double Z);
+
+	static G4double MassExcess(G4double A, G4double Z)
+	{return GetNuclearMass(Z,A) - A*amu_c2;}
+	
+	
+
+//private:
+ 
+//  enum { TableSize = 200 };
+
+//  static const G4double SPZTable[TableSize];
+
+//  static const G4double SPNTable[TableSize];
 };
 
 #endif

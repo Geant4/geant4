@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiPropertiesTableA.cc,v 1.2 1999-05-26 12:59:53 stesting Exp $
+// $Id: G4NucleiPropertiesTableA.cc,v 1.3 1999-05-26 14:05:17 larazb Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -923,7 +923,18 @@ G4int G4NucleiPropertiesTable::MaxZ(G4int A)
 
 
 
-
+G4double G4NucleiPropertiesTable::GetNuclearMass(G4int Z, G4int A)
+{
+	G4int i=GetIndex(Z, A);	
+	if (i >= 0){
+		// In order to not introduce dependences with other tables (PDG) 
+		const G4double neutronMass = GetAtomicMass(0,1);
+		const G4double protonMass = GetAtomicMass(1,1) - electron_mass_c2;
+		return protonMass*G4double(Z)+neutronMass*G4double(A-Z) - GetBindingEnergy(Z, A);
+	} else { 
+		return 0.0;
+	}
+}
 
 
 

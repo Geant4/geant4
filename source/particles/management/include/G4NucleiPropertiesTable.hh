@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiPropertiesTable.hh,v 1.4 1999-05-26 12:54:49 stesting Exp $
+// $Id: G4NucleiPropertiesTable.hh,v 1.5 1999-05-26 14:05:15 larazb Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,6 +67,10 @@ public:
 
   // Operation: GetMassExcess
   static G4double GetMassExcess(G4int Z, G4int A); 
+
+
+	// Operation: GetNuclearMass
+	static G4double GetNuclearMass(G4int Z, G4int A);
 
   // Operation: GetBindingEnergy
   static G4double GetBindingEnergy(G4int Z, G4int A);
@@ -194,7 +198,6 @@ inline G4bool G4NucleiPropertiesTable::IsInTable(G4int Z, G4int A)
 {
     return (Z <= A && A >= 1 && A <= 273 && GetIndex(Z, A) >= 0);
 }
-
 
 
 #endif
