@@ -477,8 +477,6 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
   source /lal/CMT/v1r10/mgr/setup.csh
   source /projects/HEPVis/v5r2/cmt/cleanup.csh
   source /projects/HEPVis/v5r2/cmt/setup.csh
-  setenv SOFREEXTROOT ${SOFREEROOT}
-  setenv SOFREEXTCONFIG ${SOFREECONFIG}
   setenv G4VIS_BUILD_OIX_DRIVER 1
   setenv G4VIS_USE_OIX 1
   setenv TTFLIBS "-L/lal/freetype/1.3.1/Linux/lib -lttf"
