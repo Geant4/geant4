@@ -1,4 +1,4 @@
-$Id: History,v 1.213 2003-05-28 08:03:41 gcosmo Exp $
+$Id: History,v 1.214 2003-06-06 16:22:50 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+6th June 2003  Gabriele Cosmo (config-V05-01-02)
+- architecture.gmk and specific setups in sys: get rid of G4_HAVE_BOOL
+  macro. Now using default 'bool' type, defined in all supported compilers.
 
 28th May 2003  Gabriele Cosmo (config-V05-01-01)
 - architecture.gmk, binmake.gmk: added flags G4LIB_BUILD_STEP/G4USE_STEP
