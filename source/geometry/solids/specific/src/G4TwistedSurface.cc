@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedSurface.cc,v 1.3 2004-05-19 15:21:54 link Exp $
+// $Id: G4TwistedSurface.cc,v 1.4 2004-05-24 12:09:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,16 +68,16 @@ G4TwistedSurface::G4TwistedSurface(const G4String         &name,
    SetBoundaries();
 }
 
-G4TwistedSurface::G4TwistedSurface(const G4String      &name,
-				   G4double      EndInnerRadius[2],
-				   G4double      EndOuterRadius[2],
-				   G4double      DPhi,
-				   G4double      EndPhi[2],
-				   G4double      EndZ[2], 
-				   G4double      InnerRadius,
-				   G4double      OuterRadius,
-				   G4double      Kappa,
-				   G4int         handedness)
+G4TwistedSurface::G4TwistedSurface(const G4String     &name,
+                                         G4double      EndInnerRadius[2],
+                                         G4double      EndOuterRadius[2],
+                                         G4double      DPhi,
+                                         G4double      EndPhi[2],
+                                         G4double      EndZ[2], 
+                                         G4double      InnerRadius,
+                                         G4double      OuterRadius,
+                                         G4double      Kappa,
+                                         G4int         handedness)
   : G4VSurface(name)
 {  
    fHandedness = handedness;   // +z = +ve, -z = -ve
@@ -389,28 +389,29 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
       for (G4int k=0; k<2; k++) {
          if (!isvalid[k]) continue;
 
-	 G4ThreeVector xxonsurface(xx[k].x(), fKappa * fabs(xx[k].x()) * xx[k].z() , xx[k].z());
-	 G4double      deltaY  =  (xx[k] - xxonsurface).mag();
+         G4ThreeVector xxonsurface(xx[k].x(), fKappa * fabs(xx[k].x())
+                                              * xx[k].z() , xx[k].z());
+         G4double      deltaY  =  (xx[k] - xxonsurface).mag();
 
-	 if ( deltaY > 0.5*kCarTolerance ) {
+         if ( deltaY > 0.5*kCarTolerance ) {
 
-	   G4int maxcount = 10;
-	   G4int l;
-	   G4double      lastdeltaY = deltaY; 
-	   G4ThreeVector last = deltaY; 
-	   for (l=0; l<maxcount; l++) {
-	     G4ThreeVector surfacenormal = GetNormal(xxonsurface); 
-	     distance[k] = DistanceToPlaneWithV(p, v, xxonsurface,
-						surfacenormal, xx[k]);
-	     deltaY      = (xx[k] - xxonsurface).mag();
-	     if (deltaY > lastdeltaY) {
+           G4int maxcount = 10;
+           G4int l;
+           G4double      lastdeltaY = deltaY; 
+           G4ThreeVector last = deltaY; 
+           for (l=0; l<maxcount; l++) {
+             G4ThreeVector surfacenormal = GetNormal(xxonsurface); 
+             distance[k] = DistanceToPlaneWithV(p, v, xxonsurface,
+                                                surfacenormal, xx[k]);
+             deltaY      = (xx[k] - xxonsurface).mag();
+             if (deltaY > lastdeltaY) {
                
-	     }
-	     gxx[k]      = ComputeGlobalPoint(xx[k]);
+             }
+             gxx[k]      = ComputeGlobalPoint(xx[k]);
 
                if (deltaY <= 0.5*kCarTolerance) {
             
-		 break;
+                 break;
                }
                xxonsurface.set(xx[k].x(),
                                fKappa * fabs(xx[k].x()) * xx[k].z(),
@@ -438,7 +439,7 @@ G4int G4TwistedSurface::DistanceToSurface(const G4ThreeVector &gp,
       return 0;
    }
    G4Exception("G4TwistedSurface::DistanceToSurface(p,v)",
-	       "InvalidCondition", FatalException, "Illegal operation !");
+               "InvalidCondition", FatalException, "Illegal operation !");
    return 1;
 }
 
@@ -704,8 +705,8 @@ G4double G4TwistedSurface::DistanceToPlane(const G4ThreeVector &p,
    // if p is behind of both surfaces, abort.
    if (distToanm * distTocmn > 0 && distToanm < 0) {
      G4Exception("G4TwistedSurface::DistanceToPlane()",
-	         "InvalidCondition", FatalException,
-		 "Point p is behind the surfaces.");
+                 "InvalidCondition", FatalException,
+                 "Point p is behind the surfaces.");
    }
 
    // if p is on surface, return 0.
@@ -830,7 +831,7 @@ G4int G4TwistedSurface::GetAreaCode(const G4ThreeVector &xx,
       return areacode;
    } else {
       G4Exception("G4TwistedSurface::GetAreaCode()",
-	          "NotImplemented", FatalException,
+                  "NotImplemented", FatalException,
                   "Feature NOT implemented !");
    }
    return areacode;
@@ -840,10 +841,10 @@ G4int G4TwistedSurface::GetAreaCode(const G4ThreeVector &xx,
 //* SetCorners( arglist ) -------------------------------------------------
 
 void G4TwistedSurface::SetCorners(
-				  G4double      endInnerRad[2],
-				  G4double      endOuterRad[2],
-				  G4double      endPhi[2],
-				  G4double      endZ[2])
+                                  G4double      endInnerRad[2],
+                                  G4double      endOuterRad[2],
+                                  G4double      endPhi[2],
+                                  G4double      endZ[2])
 {
    // Set Corner points in local coodinate.   
 
@@ -883,7 +884,7 @@ void G4TwistedSurface::SetCorners(
              << "        fAxis[0] = " << fAxis[0] << G4endl
              << "        fAxis[1] = " << fAxis[1] << G4endl;
       G4Exception("G4TwistedSurface::SetCorners()",
-	          "NotImplemented", FatalException,
+                  "NotImplemented", FatalException,
                   "Feature NOT implemented !");
    }
 }
@@ -897,7 +898,7 @@ void G4TwistedSurface::SetCorners(
 void G4TwistedSurface::SetCorners()
 {
    G4Exception("G4TwistedSurface::SetCorners()",
-	       "NotImplemented", FatalException,
+               "NotImplemented", FatalException,
                "Method NOT implemented !");
 }
 
@@ -941,7 +942,7 @@ void G4TwistedSurface::SetBoundaries()
              << "        fAxis[0] = " << fAxis[0] << G4endl
              << "        fAxis[1] = " << fAxis[1] << G4endl;
       G4Exception("G4TwistedSurface::SetCorners()",
-	          "NotImplemented", FatalException,
+                  "NotImplemented", FatalException,
                   "Feature NOT implemented !");
    }
 }

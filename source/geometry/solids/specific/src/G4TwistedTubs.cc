@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.3 2004-05-19 15:21:35 link Exp $
+// $Id: G4TwistedTubs.cc,v 1.4 2004-05-24 12:09:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -187,12 +187,12 @@ G4TwistedTubs::~G4TwistedTubs()
 //* ComputeDimensions -------------------------------------------------
 
 void G4TwistedTubs::ComputeDimensions(G4VPVParameterisation* /* p */ ,
-				      const G4int            /* n  */ ,
-				      const G4VPhysicalVolume* /* pRep */ )
+                                      const G4int            /* n  */ ,
+                                      const G4VPhysicalVolume* /* pRep */ )
 {
   G4Exception("G4TwistedTubs::ComputeDimensions()",
               "NotSupported", FatalException,
-	      "G4TwistedTubs does not support Parameterisation.");
+              "G4TwistedTubs does not support Parameterisation.");
 }
 
 
@@ -577,8 +577,8 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
       G4ThreeVector normal = SurfaceNormal(p);
       if (normal*v < 0) {
 
-	*tmpdist = 0;
-	return fLastDistanceToInWithV.value;
+        *tmpdist = 0;
+        return fLastDistanceToInWithV.value;
       } 
    }
       
@@ -955,37 +955,37 @@ void G4TwistedTubs::CreateSurfaces()
    G4ThreeVector n (0, 0, -1);
 
    fLowerEndcap = new G4FlatSurface("LowerEndcap",
-				    fEndInnerRadius, fEndOuterRadius,
-				    fDPhi, fEndPhi, fEndZ, -1) ;
+                                    fEndInnerRadius, fEndOuterRadius,
+                                    fDPhi, fEndPhi, fEndZ, -1) ;
 
    fUpperEndcap = new G4FlatSurface("UpperEndcap",  
-				    fEndInnerRadius, fEndOuterRadius,
-				    fDPhi, fEndPhi, fEndZ, 1) ;
+                                    fEndInnerRadius, fEndOuterRadius,
+                                    fDPhi, fEndPhi, fEndZ, 1) ;
 
    G4RotationMatrix    rotHalfDPhi;
    rotHalfDPhi.rotateZ(0.5*fDPhi);
 
    fLatterTwisted = new G4TwistedSurface("LatterTwisted",
-					 fEndInnerRadius, fEndOuterRadius,
-					 fDPhi,	fEndPhi, fEndZ, 
-					 fInnerRadius, fOuterRadius, fKappa,
+                                         fEndInnerRadius, fEndOuterRadius,
+                                         fDPhi, fEndPhi, fEndZ, 
+                                         fInnerRadius, fOuterRadius, fKappa,
                                          1 ) ; 
    fFormerTwisted = new G4TwistedSurface("FormerTwisted", 
-					 fEndInnerRadius, fEndOuterRadius,
-					 fDPhi,	fEndPhi, fEndZ, 
-					 fInnerRadius, fOuterRadius, fKappa,
+                                         fEndInnerRadius, fEndOuterRadius,
+                                         fDPhi, fEndPhi, fEndZ, 
+                                         fInnerRadius, fOuterRadius, fKappa,
                                          -1 ) ; 
 
    fInnerHype = new G4HyperbolicSurface("InnerHype",
-					fEndInnerRadius, fEndOuterRadius,
-					fDPhi, fEndPhi, fEndZ, 
-					fInnerRadius, fOuterRadius,fKappa,
-					fTanInnerStereo, fTanOuterStereo, -1) ;
+                                        fEndInnerRadius, fEndOuterRadius,
+                                        fDPhi, fEndPhi, fEndZ, 
+                                        fInnerRadius, fOuterRadius,fKappa,
+                                        fTanInnerStereo, fTanOuterStereo, -1) ;
    fOuterHype = new G4HyperbolicSurface("OuterHype", 
-					fEndInnerRadius, fEndOuterRadius,
-					fDPhi, fEndPhi, fEndZ, 
-					fInnerRadius, fOuterRadius,fKappa,
-					fTanInnerStereo, fTanOuterStereo, 1) ;
+                                        fEndInnerRadius, fEndOuterRadius,
+                                        fDPhi, fEndPhi, fEndZ, 
+                                        fInnerRadius, fOuterRadius,fKappa,
+                                        fTanInnerStereo, fTanOuterStereo, 1) ;
 
 
    // set neighbour surfaces.

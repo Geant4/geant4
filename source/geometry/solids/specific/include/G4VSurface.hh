@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.hh,v 1.3 2004-05-19 15:25:33 link Exp $
+// $Id: G4VSurface.hh,v 1.4 2004-05-24 12:09:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,8 +44,6 @@
 // --------------------------------------------------------------------
 #ifndef __G4VSURFACE__
 #define __G4VSURFACE__
-
-#include <iomanip.h>
 
 #include "G4VSolid.hh"
 #include "geomdefs.hh"
@@ -100,7 +98,7 @@ class G4VSurface
                                              G4int         areacode[],
                                              G4bool        isvalid[],
                                        EValidate validate=kValidateWithTol) = 0;
-                                             
+
    virtual G4int     DistanceToSurface(const G4ThreeVector &gp,
                                              G4ThreeVector gxx[],
                                              G4double      distance[],
@@ -108,8 +106,9 @@ class G4VSurface
                                              
    void              DebugPrint();
 
-   // get method
-   virtual G4ThreeVector GetNormal(const G4ThreeVector &xx, G4bool isGlobal) = 0;
+   // get methods
+
+   virtual G4ThreeVector GetNormal(const G4ThreeVector &xx,G4bool isGlobal) = 0;
    
    virtual G4String      GetName() const { return fName; }
    virtual void          GetBoundaryParameters(const G4int   &areacode,
@@ -163,13 +162,11 @@ class G4VSurface
    inline void SetAxis(G4int i, const EAxis axis)  { fAxis[i] = axis; }
    inline void SetNeighbours(G4VSurface* axis0min, G4VSurface* axis1min, 
                              G4VSurface* axis0max, G4VSurface* axis1max);
-  //   inline void SetSolid(G4VSolid *solid)  { fSolid = solid; }
 
  protected:  // with description
  
    // get methods
 
-  //   inline  G4VSolid*     GetSolid()      { return fSolid; } 
    inline  G4VSurface**  GetNeighbours() { return fNeighbours; } 
    inline  G4int         GetNeighbours(G4int areacode, G4VSurface* surfaces[]);
    inline  G4ThreeVector GetCorner(G4int areacode) const;
@@ -273,7 +270,7 @@ class G4VSurface
         if (p) {
           fLastp = *p;
         } else {
-	  G4Exception("G4VSurface::CurrentStatus::CurrentStatus()",
+          G4Exception("G4VSurface::CurrentStatus::CurrentStatus()",
                       "InvalidCondition", FatalException,
                       "SetCurrentStatus: p = 0!");
         }
@@ -360,9 +357,9 @@ class G4VSurface
          // kAxis1 & kAxisMin, kAxis1 & kAxisMax
          if ((areacode & kAxis0) && (areacode & kAxis1)) {
             G4cerr << "ERROR - G4VSurface::Boundary::GetBoundaryParameters()"
-	           << G4endl
+                   << G4endl
                    << "        Located in the corner area. This function"
-		   << "        returns a direction vector of a boundary line."
+                   << "        returns a direction vector of a boundary line."
                    << "        areacode = " << areacode << G4endl;
             G4Exception("G4VSurface::Boundary::GetBoundaryParameters()",
                         "InvalidCondition", FatalException,
@@ -404,9 +401,9 @@ class G4VSurface
  private:
                      
    G4VSurface    *fNeighbours[4]; // {0,1,2,3} = kAxis0min, kAxis1min, 
-                                       //             kAxis0max, kAxis1max
-   G4ThreeVector fCorners[4];    // corners of the surface in local coordinate
-   Boundary      fBoundaries[4]; // boundaries of the surface.
+                                  //             kAxis0max, kAxis1max
+   G4ThreeVector fCorners[4];     // corners of the surface in local coordinate
+   Boundary      fBoundaries[4];  // boundaries of the surface.
    G4String      fName;
    
    struct
@@ -417,8 +414,6 @@ class G4VSurface
        G4bool        withTol;
        G4int         amIOnLeftSide;
    } fAmIOnLeftSide ;
-
-  //   G4VSolid           *fSolid; 
 };
 
 //========================================================

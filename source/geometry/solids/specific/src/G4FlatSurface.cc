@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatSurface.cc,v 1.3 2004-05-19 15:22:03 link Exp $
+// $Id: G4FlatSurface.cc,v 1.4 2004-05-24 12:09:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,13 +72,13 @@ G4FlatSurface::G4FlatSurface(const G4String         &name,
 
 
 
-G4FlatSurface::G4FlatSurface( const G4String            &name,
-			      G4double         EndInnerRadius[2],
-			      G4double         EndOuterRadius[2],
-			      G4double         DPhi,
-			      G4double         EndPhi[2],
-			      G4double         EndZ[2], 
-			      G4int            handedness ) 
+G4FlatSurface::G4FlatSurface( const G4String        &name,
+                                    G4double         EndInnerRadius[2],
+                                    G4double         EndOuterRadius[2],
+                                    G4double         DPhi,
+                                    G4double         EndPhi[2],
+                                    G4double         EndZ[2], 
+                                    G4int            handedness ) 
   : G4VSurface(name)
 {
    fHandedness = handedness;   // +z = +ve, -z = -ve
@@ -389,7 +389,7 @@ G4int G4FlatSurface::GetAreaCode(const G4ThreeVector &xx,
              << "        fAxis[0] = " << fAxis[0] << G4endl
              << "        fAxis[1] = " << fAxis[1] << G4endl;
       G4Exception("G4FlatSurface::GetAreaCode()", "NotImplemented",
-	          FatalException, "Feature NOT implemented !");
+                  FatalException, "Feature NOT implemented !");
    }
    return areacode;
 }
@@ -434,7 +434,7 @@ void G4FlatSurface::SetCorners()
              << "        fAxis[0] = " << fAxis[0] << G4endl
              << "        fAxis[1] = " << fAxis[1] << G4endl;
       G4Exception("G4FlatSurface::SetCorners()", "NotImplemented",
-	          FatalException, "Feature NOT implemented !");
+                  FatalException, "Feature NOT implemented !");
    }
 }
 
@@ -477,6 +477,6 @@ void G4FlatSurface::SetBoundaries()
              << "        fAxis[0] = " << fAxis[0] << G4endl
              << "        fAxis[1] = " << fAxis[1] << G4endl;
       G4Exception("G4FlatSurface::SetBoundaries()", "NotImplemented",
-	          FatalException, "Feature NOT implemented !");
+                  FatalException, "Feature NOT implemented !");
    }
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.cc,v 1.3 2004-05-19 15:22:39 link Exp $
+// $Id: G4VSurface.cc,v 1.4 2004-05-24 12:09:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,6 @@
 //                 from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
 
-#include <iomanip.h>
 #include "G4VSurface.hh"
 
 const G4int  G4VSurface::kOutside        = 0x00000000;
@@ -235,8 +234,8 @@ G4double G4VSurface::DistanceToBoundary(G4int areacode,
       G4cerr << "ERROR - G4VSurface::DistanceToBoundary()" << G4endl
              << "        Point is in the corner area. This function returns"
              << G4endl
-	     << "        a direction vector of a boundary line." << G4endl
-	     << "        areacode = " << areacode << G4endl;
+             << "        a direction vector of a boundary line." << G4endl
+             << "        areacode = " << areacode << G4endl;
       G4Exception("G4VSurface::DistanceToBoundary()", "InvalidSetup",
                   FatalException, "Point is in the corner area.");
    } else if (IsAxis0(areacode) || IsAxis1(areacode)) {
@@ -607,8 +606,8 @@ void G4VSurface::GetBoundaryParameters(const G4int         &areacode,
    }
 
    G4cerr << "ERROR - G4VSurface::GetBoundaryParameters()" << G4endl
-          << "        Boundary at areacode " << hex << areacode << dec
-          << G4endl
+          << "        Boundary at areacode " << std::hex << areacode
+          << std::dec << G4endl
           << "        is not be registered." << G4endl;
    G4Exception("G4VSurface::GetBoundaryParameters()", "InvalidSetup",
                FatalException, "Not registered boundary.");
@@ -819,8 +818,10 @@ void G4VSurface::DebugPrint()
    G4cout << "/* G4VSurface::DebugPrint():-------------------------------"
           << G4endl;
    G4cout << "/* Name = " << fName << G4endl;
-   G4cout << "/* Axis = " << hex << fAxis[0] << " " << hex << fAxis[1] 
-          << " (0,1,2,3,5 = kXAxis,kYAxis,kZAxis,kRho,kPhi)" << dec << G4endl;
+   G4cout << "/* Axis = " << std::hex << fAxis[0] << " "
+          << std::hex << fAxis[1] 
+          << " (0,1,2,3,5 = kXAxis,kYAxis,kZAxis,kRho,kPhi)"
+          << std::dec << G4endl;
    G4cout << "/* BoundaryLimit(in local) fAxis0(min, max) = ("<<fAxisMin[0] 
           << ", " << fAxisMax[0] << ")" << G4endl;
    G4cout << "/* BoundaryLimit(in local) fAxis1(min, max) = ("<<fAxisMin[1] 

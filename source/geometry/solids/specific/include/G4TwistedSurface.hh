@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedSurface.hh,v 1.3 2004-05-19 15:24:07 link Exp $
+// $Id: G4TwistedSurface.hh,v 1.4 2004-05-24 12:09:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,7 +54,7 @@ class G4TwistedSurface : public G4VSurface
    G4TwistedSurface(const G4String         &name,
                     const G4RotationMatrix &rot,   // 0.5*(phi-width segment)
                     const G4ThreeVector    &tlate,
-                    G4int          handedness, // R-hand = 1, L-hand = -1
+                          G4int    handedness, // R-hand = 1, L-hand = -1
                     const G4double kappa,      // tan(TwistAngle/2)/fZHalfLen
                     const EAxis    axis0 = kXAxis,
                     const EAxis    axis1 = kZAxis,
@@ -63,16 +63,16 @@ class G4TwistedSurface : public G4VSurface
                           G4double axis0max = kInfinity,
                           G4double axis1max = kInfinity );
     
-  G4TwistedSurface(const G4String &name,
-		   G4double      EndInnerRadius[2],
-		   G4double      EndOuterRadius[2],
-		   G4double      DPhi,
-		   G4double      EndPhi[2],
-		   G4double      EndZ[2], 
-		   G4double      InnerRadius,
-		   G4double      OuterRadius,
-		   G4double      Kappa,
-		   G4int handedness);
+   G4TwistedSurface(const G4String     &name,
+                          G4double      EndInnerRadius[2],
+                          G4double      EndOuterRadius[2],
+                          G4double      DPhi,
+                          G4double      EndPhi[2],
+                          G4double      EndZ[2], 
+                          G4double      InnerRadius,
+                          G4double      OuterRadius,
+                          G4double      Kappa,
+                          G4int         handedness);
 
    virtual ~G4TwistedSurface();
    
@@ -110,11 +110,11 @@ class G4TwistedSurface : public G4VSurface
                                    G4bool         withTol = true);
 
    virtual void SetCorners();
-  //    virtual void SetCorners(G4TwistedTubs *solid);
+
    virtual void SetCorners(  G4double      endInnerRad[2],
-			     G4double      endOuterRad[2],
-			     G4double      endPhi[2],
-			     G4double      endZ[2] ) ;
+                             G4double      endOuterRad[2],
+                             G4double      endPhi[2],
+                             G4double      endZ[2] ) ;
 
    virtual void SetBoundaries();
 

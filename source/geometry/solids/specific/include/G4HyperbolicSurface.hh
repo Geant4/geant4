@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HyperbolicSurface.hh,v 1.3 2004-05-19 15:24:52 link Exp $
+// $Id: G4HyperbolicSurface.hh,v 1.4 2004-05-24 12:09:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,19 +65,18 @@ class G4HyperbolicSurface : public G4VSurface
                              G4double  axis0max = kInfinity,
                              G4double  axis1max = kInfinity); 
                              
-
-  G4HyperbolicSurface(const G4String      &name,
-		      G4double         EndInnerRadius[2],
-		      G4double         EndOuterRadius[2],
-		      G4double         DPhi,
-		      G4double         EndPhi[2],
-		      G4double         EndZ[2], 
-		      G4double         InnerRadius,
-		      G4double         OuterRadius,
-		      G4double         Kappa,
-		      G4double         TanInnerStereo,
-		      G4double         TanOuterStereo,
-		      G4int            handedness) ;
+  G4HyperbolicSurface(const G4String  &name,
+                            G4double   EndInnerRadius[2],
+                            G4double   EndOuterRadius[2],
+                            G4double   DPhi,
+                            G4double   EndPhi[2],
+                            G4double   EndZ[2], 
+                            G4double   InnerRadius,
+                            G4double   OuterRadius,
+                            G4double   Kappa,
+                            G4double   TanInnerStereo,
+                            G4double   TanOuterStereo,
+                            G4int      handedness) ;
 
    virtual ~G4HyperbolicSurface();
 
@@ -108,19 +107,17 @@ class G4HyperbolicSurface : public G4VSurface
    virtual G4int GetAreaCodeInPhi(const G4ThreeVector &xx, 
                                         G4bool withTol = true);
    virtual void SetCorners();
-  //   virtual void SetCorners(G4TwistedTubs *solid);
-  virtual void SetCorners(   
-			  G4double         EndInnerRadius[2],
-			  G4double         EndOuterRadius[2],
-			  G4double         DPhi,
-			  G4double         EndPhi[2],
-			  G4double         EndZ[2] 
-			  );
+
+   virtual void SetCorners(G4double         EndInnerRadius[2],
+                           G4double         EndOuterRadius[2],
+                           G4double         DPhi,
+                           G4double         EndPhi[2],
+                           G4double         EndZ[2]);
    virtual void SetBoundaries();
 
   private:
    
-   G4double          fKappa;	    // tan(TwistedAngle/2)/HalfLenZ;
+   G4double          fKappa;        // tan(TwistedAngle/2)/HalfLenZ;
    G4double          fTanStereo;    // tan(StereoAngle)
    G4double          fTan2Stereo;   // tan(StereoAngle)**2
    G4double          fR0;           // radius at z = 0

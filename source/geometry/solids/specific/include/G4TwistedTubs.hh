@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.hh,v 1.2 2003-11-14 14:46:16 gcosmo Exp $
+// $Id: G4TwistedTubs.hh,v 1.3 2004-05-24 12:09:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -177,7 +177,6 @@ class G4TwistedTubs : public G4VSolid
                      
   void         CreateSurfaces();
 
-  
   static void  AddPolyToExtent( const G4ThreeVector     &v0,
                                 const G4ThreeVector     &v1,
                                 const G4ThreeVector     &w1,

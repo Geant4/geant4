@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HyperbolicSurface.cc,v 1.3 2004-05-19 15:22:14 link Exp $
+// $Id: G4HyperbolicSurface.cc,v 1.4 2004-05-24 12:09:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,16 +77,16 @@ G4HyperbolicSurface::G4HyperbolicSurface(const G4String         &name,
 }
 
 G4HyperbolicSurface::G4HyperbolicSurface(const G4String      &name,
-					 G4double         EndInnerRadius[2],
-					 G4double         EndOuterRadius[2],
-					 G4double         DPhi,
-					 G4double         EndPhi[2],
-					 G4double         EndZ[2], 
-					 G4double         InnerRadius,
-					 G4double         OuterRadius,
-					 G4double         Kappa,
-					 G4double         TanInnerStereo,
-					 G4double         TanOuterStereo,
+                                         G4double         EndInnerRadius[2],
+                                         G4double         EndOuterRadius[2],
+                                         G4double         DPhi,
+                                         G4double         EndPhi[2],
+                                         G4double         EndZ[2], 
+                                         G4double         InnerRadius,
+                                         G4double         OuterRadius,
+                                         G4double         Kappa,
+                                         G4double         TanInnerStereo,
+                                         G4double         TanOuterStereo,
                                          G4int            handedness)
    : G4VSurface(name)
 {
@@ -214,8 +214,8 @@ EInside G4HyperbolicSurface::Inside(const G4ThreeVector &gp)
       } else {
          G4cout << "WARNING - G4HyperbolicSurface::Inside()" << G4endl
                 << "          Invalid option !" << G4endl
-		<< "          name, areacode, distanceToOut = "
-                << GetName() << ", " << hex << areacode << dec << ", "
+                << "          name, areacode, distanceToOut = "
+                << GetName() << ", " << std::hex << areacode << std::dec << ", "
                 << distanceToOut << G4endl;
       }
    }
@@ -477,7 +477,7 @@ G4int G4HyperbolicSurface::DistanceToSurface(const G4ThreeVector &gp,
       return 0;
    }
    G4Exception("G4HyperbolicSurface::DistanceToSurface(p,v)",
-	       "InvalidCondition", FatalException, "Illegal operation !");
+               "InvalidCondition", FatalException, "Illegal operation !");
    return 1;
 }
 
@@ -739,7 +739,7 @@ G4int G4HyperbolicSurface::GetAreaCode(const G4ThreeVector &xx,
              << "        fAxis[0] = " << fAxis[0] << G4endl
              << "        fAxis[1] = " << fAxis[1] << G4endl;
       G4Exception("G4HyperbolicSurface::GetAreaCode()",
-	          "NotImplemented", FatalException,
+                  "NotImplemented", FatalException,
                   "Feature NOT implemented !");
    }
    return areacode;
@@ -796,12 +796,12 @@ G4int G4HyperbolicSurface::GetAreaCodeInPhi(const G4ThreeVector &xx,
 //* SetCorners(EndInnerRadius, EndOuterRadius,DPhi,EndPhi,EndZ) -------
 
 void G4HyperbolicSurface::SetCorners(
-				     G4double         EndInnerRadius[2],
-				     G4double         EndOuterRadius[2],
-				     G4double         DPhi,
-				     G4double         endPhi[2],
-				     G4double         endZ[2] 
-				     )
+                                     G4double         EndInnerRadius[2],
+                                     G4double         EndOuterRadius[2],
+                                     G4double         DPhi,
+                                     G4double         endPhi[2],
+                                     G4double         endZ[2] 
+                                     )
 {
    // Set Corner points in local coodinate.
 
@@ -850,7 +850,7 @@ void G4HyperbolicSurface::SetCorners(
              << "        fAxis[0] = " << fAxis[0] << G4endl
              << "        fAxis[1] = " << fAxis[1] << G4endl;
       G4Exception("G4HyperbolicSurface::SetCorners()",
-	          "NotImplemented", FatalException,
+                  "NotImplemented", FatalException,
                   "Feature NOT implemented !");
    }
 }
@@ -862,7 +862,7 @@ void G4HyperbolicSurface::SetCorners(
 void G4HyperbolicSurface::SetCorners()
 {
    G4Exception("G4HyperbolicSurface::SetCorners()",
-	       "NotImplemented", FatalException,
+               "NotImplemented", FatalException,
                "Method NOT implemented !");
 }
 
@@ -906,7 +906,7 @@ void G4HyperbolicSurface::SetBoundaries()
              << "        fAxis[0] = " << fAxis[0] << G4endl
              << "        fAxis[1] = " << fAxis[1] << G4endl;
       G4Exception("G4HyperbolicSurface::SetBoundaries()",
-	          "NotImplemented", FatalException,
+                  "NotImplemented", FatalException,
                   "Feature NOT implemented !");
    }
 }

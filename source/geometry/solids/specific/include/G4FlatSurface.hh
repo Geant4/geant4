@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatSurface.hh,v 1.3 2004-05-19 15:24:44 link Exp $
+// $Id: G4FlatSurface.hh,v 1.4 2004-05-24 12:09:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,14 +64,13 @@ class G4FlatSurface : public G4VSurface
                        G4double          axis0max = kInfinity,
                        G4double          axis1max = kInfinity );
                        
-  G4FlatSurface( const G4String            &name,
-		 G4double         EndInnerRadius[2],
-		 G4double         EndOuterRadius[2],
-		 G4double         DPhi,
-		 G4double         EndPhi[2],
-		 G4double         EndZ[2], 
-		 G4int            handedness ) ;
-
+   G4FlatSurface( const G4String        &name,
+                        G4double         EndInnerRadius[2],
+                        G4double         EndOuterRadius[2],
+                        G4double         DPhi,
+                        G4double         EndPhi[2],
+                        G4double         EndZ[2], 
+                        G4int            handedness ) ;
 
    virtual ~G4FlatSurface();
    virtual G4ThreeVector  GetNormal(const G4ThreeVector & /* xx */ ,
