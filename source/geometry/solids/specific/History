@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2004-06-07 08:46:53 gcosmo Exp $
+$Id: History,v 1.40 2004-07-29 15:11:33 link Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,19 +17,48 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< History
+<<<<<<< History
+<<<<<<< History
+<<<<<<< History
+29-Jul-2004, O.Link 
+- first version of G4TwistedTrapezoid added. This solid-class is 
+  adapted from G4TwistedTubs and is build on 4 twisted sides 
+  (implemented in G4TwistedTrapSide.cc)
+- G4TwistedTubs is cleaned from backpointer fSolid
+- renaming of Variables (confusing code: kInside vs ::kInside)
+
+19-Mar-2004, O.Link (geom-specific-V06-01-00)
+- G4TwistedTubs added
+  Integration in Geant4 from original version in Jupiter-2.5.02 application.
+  Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
+  Cleanup of code (debugging messages, compiler errors ..
+  Migration of /g4std to new convention
+  New organisation of class G4TwistedTubs: now independent of XXXSurface)
+  Remove Backpointer fSolid from XXXSurface to G4TwistedTubs.
+  New form of Constructors (G4TwistedSurface, G4HyperbolicSurface, G4FlatSurface)
+  Change in DistanceToIn of G4TwistedSurface (roundoff correction)
+
+=======
+=======
+=======
+=======
 07-Jun-2004, G.Cosmo (geom-specific-V06-01-04)
 - Fixed compilation problem in G4TwistedSurface.cc on WIN32-VC.
 
+>>>>>>> 1.39
 28-May-2004, G.Cosmo (geom-specific-V06-01-03)
 - Fixed archiving problem on WIN32-VC7: replaced structs with classes
   in G4VSurface.
 - Replaced misleading names for masks in G4VSurface and moved inlined
   methods of nested classes to .cc.
 
+>>>>>>> 1.38
 25-May-2004, G.Cosmo (geom-specific-V06-01-02)
 - Fixed compilation problem on SUN-CC. Made EValidate enum public in
   G4VSurface.hh.
 
+>>>>>>> 1.37
 24-May-2004, G.Cosmo (geom-specific-V06-01-01)
 - Removed compilation warnings and minor cleanup...
 
@@ -48,6 +77,7 @@ committal in the CVS repository !
     G4FlatSurface.
   o Change in G4TwistedSurface::DistanceToIn(p,v,...): roundoff correction.
 
+>>>>>>> 1.36
 12-Jan-2004, G.Cosmo (geom-specific-V06-00-00)
 - G4PolyhedraSide.cc: fixed bug in which particles could "leak" out the
   center of a face if inner radius = 0.
