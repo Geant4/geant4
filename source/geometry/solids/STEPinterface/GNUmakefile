@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:08:21 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2001-11-30 10:25:58 gcosmo Exp $
 # -------------------------------------------------------------
 # GNUmakefile for STEP library.  Gabriele Cosmo, 15/11/96.
 # -------------------------------------------------------------
@@ -21,5 +21,15 @@ CPPFLAGS  += \
              -I$(G4BASE)/global/HEPGeometry/include \
              -I$(G4BASE)/graphics_reps/include
 
+# To avoid incompatibilities with ANSI standard treatment of strings, the
+# NIST STEP reader on gcc-2.95.X and later must be compiled in non-ANSI mode.
+#
+ifneq (,$(findstring Linux-g++,$(G4SYSTEM)))
+  ansi_options = -Wall -ansi -pedantic
+  NCXX = $(filter-out $(ansi_options),$(CXXFLAGS))
+  NCPP = $(CPPFLAGS)
+  CXXFLAGS := $(NCXX)
+  CPPFLAGS := $(NCPP) -w
+endif
 
 include $(G4INSTALL)/config/common.gmk

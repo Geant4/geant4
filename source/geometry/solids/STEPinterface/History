@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2001-09-21 16:12:17 gcosmo Exp $
+$Id: History,v 1.11 2001-11-30 10:25:59 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30th November 2001  Gabriele Cosmo (stepinterface-V03-02-01)
+- Fix to GNUmakefile for compilation on gcc-2.96.98 and gcc-3.0.2 compilers to
+  overcome warnings produced by strict ANSI compilation.
 
 21st Septmber 2001  Gabriele Cosmo (stepinterface-V03-02-00)
 - G4Axis2Placement3dCreator::CreateG4Geometry(): added check to 
