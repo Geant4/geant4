@@ -19,12 +19,12 @@
 #/test31/HistoName           hbook.paw
 /test31/HistoName            el_st_ma1000_8.paw
 /test31/HistoNumber          5
-/test31/NumberOfEvents       1000
+/test31/NumberOfEvents       0
 /test31/gun/beamE            1000.0 MeV
 #
 /process/eLoss/preciseRange  true
-/process/eLoss/integral      true
 /run/initialize
+/process/eLoss/integral      true
 #
 /gun/particle e-
 #/gun/particle gamma
@@ -32,5 +32,5 @@
 #/gun/particle alpha
 #/gun/energy 10.0 MeV
 #
-#/run/beamOn 10
+/run/beamOn 1000
 

@@ -18,8 +18,9 @@
 /test31/WorldMaterial        Vacuum
 /test31/HistoName            el_st1000_8.paw
 /test31/HistoNumber          5
-/test31/NumberOfEvents       1000
+/test31/NumberOfEvents       0
 /test31/gun/beamE            1000.0 MeV
+/run/initialize
 #
 /gun/particle e-
 #/gun/particle gamma
@@ -27,5 +28,5 @@
 #/gun/particle alpha
 #/gun/energy 10.0 MeV
 #
-#/run/beamOn 10
+/run/beamOn 1000
 
