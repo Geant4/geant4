@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LESigmaMinusInelastic.hh,v 1.7 2003-07-01 15:49:03 hpw Exp $
+// $Id: G4LESigmaMinusInelastic.hh,v 1.8 2003-10-31 18:04:16 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy SigmaMinus Inelastic Process
@@ -59,7 +59,7 @@
  private:
     
     void Cascade(                               // derived from CASSM
-      G4FastVector<G4ReactionProduct,128> &vec,
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
       G4int &vecLen,
       const G4HadProjectile *originalIncident,
       G4ReactionProduct &currentParticle,

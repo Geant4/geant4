@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEProtonInelastic.hh,v 1.8 2003-07-01 15:49:03 hpw Exp $
+// $Id: G4LEProtonInelastic.hh,v 1.9 2003-10-31 18:04:16 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy Proton Inelastic Process
@@ -60,7 +60,7 @@
  private:
     
     void Cascade(                               // derived from CASP
-      G4FastVector<G4ReactionProduct,128> &vec,
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
       G4int &vecLen,
       const G4HadProjectile *originalIncident,
       G4ReactionProduct &currentParticle,

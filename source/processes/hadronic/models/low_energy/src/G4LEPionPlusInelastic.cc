@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEPionPlusInelastic.cc,v 1.10 2003-07-01 15:49:05 hpw Exp $
+// $Id: G4LEPionPlusInelastic.cc,v 1.11 2003-10-31 18:04:17 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: PionPlus Inelastic Process
@@ -99,7 +99,7 @@
     G4bool incidentHasChanged = false;
     G4bool targetHasChanged = false;
     G4bool quasiElastic = false;
-    G4FastVector<G4ReactionProduct,128> vec;  // vec will contain the secondary particles
+    G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
     G4int vecLen = 0;
     vec.Initialize( 0 );
     
@@ -124,7 +124,7 @@
  
  void
   G4LEPionPlusInelastic::Cascade(
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
    const G4HadProjectile *originalIncident,
    G4ReactionProduct &currentParticle,

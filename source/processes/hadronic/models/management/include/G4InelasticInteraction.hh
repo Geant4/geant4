@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InelasticInteraction.hh,v 1.1 2003-10-07 11:34:42 hpw Exp $
+// $Id: G4InelasticInteraction.hh,v 1.2 2003-10-31 18:04:57 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Inelastic Interaction 
@@ -47,7 +47,8 @@
 #include "G4ReactionProduct.hh"
 #include "G4ParticleTypes.hh" 
 #include "Randomize.hh"
- 
+#include "G4ReactionDynamics.hh"
+
  class G4InelasticInteraction : public G4HadronicInteraction
  {
  public:
@@ -68,16 +69,16 @@
                                        G4ReactionProduct &leadParticle );
     
     void SetUpPions( const G4int np, const G4int nm, const G4int nz,
-                     G4FastVector<G4ReactionProduct,128> &vec,
+                     G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
                      G4int &vecLen );
     
-    void Rotate(G4FastVector<G4ReactionProduct,128> &vec, G4int &vecLen);
+    void Rotate(G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec, G4int &vecLen);
 
     void GetNormalizationConstant( const G4double availableEnergy,
                                    G4double &n,
                                    G4double &anpn );
     
-    void CalculateMomenta( G4FastVector<G4ReactionProduct,128> &vec,
+    void CalculateMomenta( G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
                            G4int &vecLen,
                            const G4HadProjectile *originalIncident,
                            const G4DynamicParticle *originalTarget,
@@ -89,7 +90,7 @@
                            G4bool &targetHasChanged,
                            G4bool quasiElastic );
     
-    void SetUpChange( G4FastVector<G4ReactionProduct,128> &vec,
+    void SetUpChange( G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
                       G4int &vecLen,
                       G4ReactionProduct &currentParticle,
                       G4ReactionProduct &targetParticle,

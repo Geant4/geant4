@@ -54,7 +54,7 @@
  private:
     
     void Cascade(                               // derived from CASN
-      G4FastVector<G4ReactionProduct,128> &vec,
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
       G4int &vecLen,
       const G4HadProjectile *originalIncident,
       G4ReactionProduct &currentParticle,

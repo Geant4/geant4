@@ -94,7 +94,7 @@
 */
  
  G4bool G4ReactionDynamics::GenerateXandPt(
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int &vecLen,
    G4ReactionProduct &modifiedOriginal,   // Fermi motion & evap. effects included
    const G4HadProjectile *originalIncident,   // the original incident particle
@@ -987,7 +987,7 @@
       else
         pseudoParticle[6].SetMomentum( pseudoParticle[6].GetMomentum() * (-pp/pp1) );
       
-      G4FastVector<G4ReactionProduct,128> tempV;  // tempV contains the backward nucleons
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE> tempV;  // tempV contains the backward nucleons
       tempV.Initialize( backwardNucleonCount );
       G4int tempLen = 0;
       if( targetParticle.GetSide() == -3 )tempV.SetElement( tempLen++, &targetParticle );
@@ -1206,7 +1206,7 @@
       tempR[0] = currentParticle;
       tempR[1] = targetParticle;
       for( i=0; i<vecLen; ++i )tempR[i+2] = *vec[i];
-      G4FastVector<G4ReactionProduct,128> tempV;
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE> tempV;
       tempV.Initialize( vecLen+2 );
       G4int tempLen = 0;
       for( i=0; i<vecLen+2; ++i )tempV.SetElement( tempLen++, &tempR[i] );
@@ -1353,7 +1353,7 @@
   }
  
  void G4ReactionDynamics::SuppressChargedPions(
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int &vecLen,
    const G4ReactionProduct &modifiedOriginal,
    G4ReactionProduct &currentParticle,
@@ -1428,7 +1428,7 @@
   }
  
  G4bool G4ReactionDynamics::TwoCluster(
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int &vecLen,
    G4ReactionProduct &modifiedOriginal, // Fermi motion & evap. effects included
    const G4HadProjectile *originalIncident, // the original incident particle
@@ -1849,7 +1849,7 @@
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     if( forwardCount > 1 )     // tempV will contain the forward particles
     {
-      G4FastVector<G4ReactionProduct,128> tempV;
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE> tempV;
       tempV.Initialize( forwardCount );
       G4bool constantCrossSection = true;
       G4int tempLen = 0;
@@ -1887,7 +1887,7 @@
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     if( backwardCount > 1 )   //  tempV will contain the backward particles,
     {                         //  but not those created from the intranuclear cascade
-      G4FastVector<G4ReactionProduct,128> tempV;
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE> tempV;
       tempV.Initialize( backwardCount );
       G4bool constantCrossSection = true;
       G4int tempLen = 0;
@@ -2091,7 +2091,7 @@
       tempR[1] = targetParticle;
       for( i=0; i<vecLen; ++i )tempR[i+2] = *vec[i];
 
-      G4FastVector<G4ReactionProduct,128> tempV;
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE> tempV;
       tempV.Initialize( vecLen+2 );
       G4bool constantCrossSection = true;
       G4int tempLen = 0;
@@ -2243,7 +2243,7 @@
   }
  
  void G4ReactionDynamics::TwoBody(
-  G4FastVector<G4ReactionProduct,128> &vec,
+  G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
   G4int &vecLen,
   G4ReactionProduct &modifiedOriginal,
   const G4DynamicParticle */*originalTarget*/,
@@ -2501,7 +2501,7 @@
  G4double G4ReactionDynamics::GenerateNBodyEvent(
   const G4double totalEnergy,                // MeV
   const G4bool constantCrossSection,
-  G4FastVector<G4ReactionProduct,128> &vec,
+  G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
   G4int &vecLen )
   {
 //      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
@@ -2780,7 +2780,7 @@
    const G4ReactionProduct &modifiedOriginal,
    G4ReactionProduct &currentParticle,
    G4ReactionProduct &targetParticle,
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int &vecLen )
   {
     const G4double pjx = modifiedOriginal.GetMomentum().x()/MeV;
@@ -2841,7 +2841,7 @@
   const G4Nucleus &targetNucleus,
   G4ReactionProduct &currentParticle,
   G4ReactionProduct &targetParticle,
-  G4FastVector<G4ReactionProduct,128> &vec,
+  G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
   G4int &vecLen )
   {
     // derived from original FORTRAN code in GENXPT and TWOCLU by H. Fesefeldt
@@ -3113,7 +3113,7 @@
    const G4ReactionProduct &modifiedOriginal,
    G4double spall,
    const G4Nucleus &targetNucleus,
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int &vecLen )
   {
     // derived from original FORTRAN code in GENXPT and TWOCLU by H. Fesefeldt
@@ -3259,7 +3259,7 @@
    const G4ReactionProduct &modifiedOriginal,
    G4ReactionProduct &currentParticle,
    G4ReactionProduct &targetParticle,
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int &vecLen )
   {
     const G4double pOriginal = modifiedOriginal.GetTotalMomentum()/MeV;
@@ -3296,7 +3296,7 @@
   }
 
  void G4ReactionDynamics::ProduceStrangeParticlePairs(
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int &vecLen,
    const G4ReactionProduct &modifiedOriginal,
    const G4DynamicParticle *originalTarget, 
@@ -3841,7 +3841,7 @@
     //
     // use phase space routine in centre of mass system
     //
-    G4FastVector<G4ReactionProduct,128> tempV;
+    G4FastVector<G4ReactionProduct,GHADLISTSIZE> tempV;
     tempV.Initialize( nt );
     G4int tempLen = 0;
     tempV.SetElement( tempLen++, v[0] );

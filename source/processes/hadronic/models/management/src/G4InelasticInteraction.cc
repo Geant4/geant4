@@ -92,7 +92,7 @@
    const G4int np,
    const G4int nm,
    const G4int nz,
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int &vecLen )
   {
     if( np+nm+nz == 0 )return;
@@ -167,7 +167,7 @@
  
  void
   G4InelasticInteraction::CalculateMomenta(
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int &vecLen,
    const G4HadProjectile *originalIncident,   // the original incident particle
    const G4DynamicParticle *originalTarget,
@@ -317,7 +317,7 @@
   }
  
  void G4InelasticInteraction::
- Rotate(G4FastVector<G4ReactionProduct,128> &vec, G4int &vecLen)
+ Rotate(G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec, G4int &vecLen)
  {
    G4double rotation = 2.*pi*G4UniformRand();
    cache = rotation;
@@ -332,7 +332,7 @@
 
  void
   G4InelasticInteraction::SetUpChange(
-   G4FastVector<G4ReactionProduct,128> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int &vecLen,
    G4ReactionProduct &currentParticle,
    G4ReactionProduct &targetParticle,
