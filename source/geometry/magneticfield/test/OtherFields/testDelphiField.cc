@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testDelphiField.cc,v 1.2 2001-07-11 09:59:15 gunter Exp $
+// $Id: testDelphiField.cc,v 1.3 2002-03-28 17:58:40 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -115,7 +115,8 @@ G4VPhysicalVolume* BuildGeometry()
     G4Box *mySmallBox= new G4Box("smaller cube",2.5*m,2.5*m,2.5*m);
     G4Box *myTinyBox=  new G4Box("tiny  cube",.25*m,.25*m,.25*m);
 
-    G4Box *myVariableBox=new G4Box("Variable Box",10,5,5);
+    // G4Box *myVariableBox=
+    new G4Box("Variable Box",10,5,5);
 
     //  World Volume
     //
@@ -145,25 +146,31 @@ G4VPhysicalVolume* BuildGeometry()
 //
 //  1) Two big boxes in the world volume
 //
-    G4PVPlacement *BigTg1Phys=new G4PVPlacement(0,G4ThreeVector(0,0,-15*m),
+    // G4PVPlacement *BigTg1Phys=
+    new G4PVPlacement(0,G4ThreeVector(0,0,-15*m),
 						"Big Target 1",BigBoxLog,
 						worldPhys,false,0);
-    G4PVPlacement *BigTg2Phys=new G4PVPlacement(0,G4ThreeVector(0,0, 15*m),
+    // G4PVPlacement *BigTg2Phys=
+    new G4PVPlacement(0,G4ThreeVector(0,0, 15*m),
 						"Big Target 2",BigBoxLog,
 						worldPhys,false,0);
 
 //  2) Four (medium) boxes in X & Y near the origin of the world volume
 //
-    G4PVPlacement *MedTg3a_Phys=new G4PVPlacement(0,G4ThreeVector(0, 7.5*m,0),
+    // G4PVPlacement *MedTg3a_Phys=
+    new G4PVPlacement(0,G4ThreeVector(0, 7.5*m,0),
 					      "Target 3a",smallBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *MedTg3b_Phys=new G4PVPlacement(0,G4ThreeVector(0,-7.5*m,0),
+    // G4PVPlacement *MedTg3b_Phys=
+    new G4PVPlacement(0,G4ThreeVector(0,-7.5*m,0),
 					      "Target 3b",smallBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *MedTg3c_Phys=new G4PVPlacement(0,G4ThreeVector(-7.5*m,0,0),
+    // G4PVPlacement *MedTg3c_Phys=
+    new G4PVPlacement(0,G4ThreeVector(-7.5*m,0,0),
 					      "Target 3c",smallBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *MedTg3d_Phys=new G4PVPlacement(0,G4ThreeVector( 7.5*m,0,0),
+    // G4PVPlacement *MedTg3d_Phys=
+    new G4PVPlacement(0,G4ThreeVector( 7.5*m,0,0),
 					      "Target 3d",smallBoxLog,
 					      worldPhys,false,0);
 
@@ -171,29 +178,37 @@ G4VPhysicalVolume* BuildGeometry()
 //  3) Eight small boxes around the origin of the world volume 
 //        (in +-X, +-Y & +-Z)
 //
-    G4PVPlacement *SmTg4a_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4a_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m, 0.3*m,0.3*m), "Target 4a",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4b_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4b_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m,-0.3*m,0.3*m), "Target 4b",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4c_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4c_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector(-0.3*m,-0.3*m,0.3*m), "Target 4c",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4d_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4d_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector(-0.3*m, 0.3*m,0.3*m), "Target 4d",tinyBoxLog,
 					      worldPhys,false,0);
 
-    G4PVPlacement *SmTg4e_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4e_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m, 0.3*m,-0.3*m), "Target 4e",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4f_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4f_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m,-0.3*m,-0.3*m), "Target 4f",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4g_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4g_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector(-0.3*m,-0.3*m,-0.3*m), "Target 4g",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4h_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4h_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector(-0.3*m, 0.3*m,-0.3*m), "Target 4h",tinyBoxLog,
 					      worldPhys,false,0);
 
@@ -240,7 +255,7 @@ G4FieldManager* SetupField(G4int type)
       case 5: pStepper = new G4HelixExplicitEuler( fEquation ); break;
       case 6: pStepper = new G4HelixImplicitEuler( fEquation ); break;
       case 7: pStepper = new G4HelixSimpleRunge( fEquation ); break;
-      // case 8: pStepper = new G4CashKarpRKF45( fEquation );    break;
+      case 8: pStepper = new G4CashKarpRKF45( fEquation );    break;
       case 9: pStepper = new G4RKG3_Stepper( fEquation );    break;
       default: pStepper = 0;
     }
@@ -261,13 +276,17 @@ G4FieldManager* SetupField(G4int type)
 
 G4PropagatorInField*  SetupPropagator( G4int type)
 {
-    G4FieldManager* fieldMgr= SetupField( type) ;
+    // G4FieldManager* fieldMgr= 
+    SetupField( type) ;
 
     // G4ChordFinder  theChordFinder( &MagField, 0.05*mm ); // Default stepper
  
     G4PropagatorInField *thePropagator = 
       G4TransportationManager::GetTransportationManager()->
        GetPropagatorInField ();
+
+    // Let us test the new Minimum Epsilon Step functionality
+    thePropagator -> SetMinimumEpsilonStep( 1.0e-4 ) ; 
 
     return thePropagator;
 }
@@ -344,13 +363,18 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
        UnitMomentum = (G4ThreeVector(0.,0.6,0.8) 
 		    + (float)iparticle * G4ThreeVector(0.1, 0.2, 0.3)).unit();
 
+       G4double momentum = (0.5+iparticle*10.0) * proton_mass_c2; 
 
-       // ->GetChordFinder().SetChargeAndMomentum(
-
+       G4double kineticEnergy =  momentum*momentum /
+                  ( sqrt( momentum*momentum + proton_mass_c2 * proton_mass_c2 ) 
+		    + proton_mass_c2 );
+       G4double velocity = momentum / ( proton_mass_c2 + kineticEnergy );
+       G4double labTof= 10.0*ns, properTof= 0.1*ns;
+       G4ThreeVector Spin(1.0, 0.0, 0.0);
+                                                   // Momentum in Mev/c ?
        SetChargeMomentumMass(
 		      +1,                    // charge in e+ units
-		  (0.5+iparticle*10.0) * proton_mass_c2,
-                                             // Momentum in Mev/c ?
+		      momentum, 
 		      proton_mass_c2); 
        G4cout << G4endl;
        G4cout << "Test PropagateMagField: ***********************" << G4endl
@@ -368,8 +392,20 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 	  // G4cerr << "Starting Step " << istep << " in volume " 
 	       // << located->GetName() << G4endl;
 
-	  step_len=pMagFieldPropagator->ComputeStep( Position, UnitMomentum, 
-						     physStep, safety
+          G4FieldTrack  initTrack( Position, 
+				   UnitMomentum,
+				   0.0,            // starting S curve len
+				   kineticEnergy,
+				   proton_mass_c2,
+				   velocity,
+				   labTof, 
+				   properTof,
+				   0              // or &Spin
+				   ); 
+
+	  step_len=pMagFieldPropagator->ComputeStep( initTrack, 
+						     physStep, 
+						     safety
 #ifdef G4MAG_CHECK_VOLUME
 						     ,located);
 #else

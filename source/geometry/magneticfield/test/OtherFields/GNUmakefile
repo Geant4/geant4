@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.1 2001-03-28 17:10:05 japost Exp $
+# $Id: GNUmakefile,v 1.2 2002-03-28 17:58:39 japost Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := testOtherField
+name := testDelphiField
 G4TARGET := $(name)
 G4EXLIB := true
 
