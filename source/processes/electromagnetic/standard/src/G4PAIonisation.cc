@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.cc,v 1.13 2000-09-22 14:46:38 grichine Exp $
+// $Id: G4PAIonisation.cc,v 1.14 2001-02-01 15:12:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -489,14 +489,15 @@ G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
 
   E = aParticle->GetKineticEnergy() ;
 
+  G4double mass = aParticle->GetDefinition()->GetPDGMass() ;
+  G4double gamma = 1.0 + E/mass ;
+
+  if( gamma < 1.2 ) return &aParticleChange ; 
+
   G4double Charge = aParticle->GetDefinition()->GetPDGCharge() ;
-
   G4double Chargesquare = Charge*Charge ;
-
-  G4double MassRatio = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass() ;
-
+  G4double MassRatio = proton_mass_c2/mass ;
   ScaledE = E*MassRatio ;
-
 
   ParticleCutInKineticEnergyNow =
                (aParticle->GetDefinition()->GetEnergyCuts())[index] ;
