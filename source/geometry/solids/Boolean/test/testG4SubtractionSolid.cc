@@ -105,6 +105,25 @@ int main()
     G4SubtractionSolid   t1Sb3("t1Subtractionb3",&t1,&b3,transform) ;
     G4SubtractionSolid   b1Sb4("t1Subtractionb3",&b1,&b4,transform) ;
 
+    G4Tubs* outside = new G4Tubs( "OuterFrame",
+                      1.0*m,            // inner radius
+                      1.1*m,            // outer radius
+                      0.01*m,           // half-thickness in z
+                      -15*deg,          // start angle
+                      30*deg );         // total angle
+
+   G4Box* cutout = new G4Box( "Cutout",    // name
+                   0.02*m,      // half-width (x)
+                   0.25*m,      // half-height (y)
+                   0.01001*m ); // half-thickness (z)
+
+G4Transform3D tran = G4Translate3D( 1.03*m, 0.0, 0.0 );
+
+G4VSolid* solid = new G4SubtractionSolid( "drcExample", outside,cutout, tran );
+
+
+   G4cout.precision(16) ;
+
 // Check Inside
 
     assert(b1Sb2.Inside(pzero)==kOutside);
@@ -331,6 +350,19 @@ int main()
 
     dist=t1Sb3.DistanceToIn(G4ThreeVector(0,36,0),vx);
     assert(ApproxEqual(dist,10));
+
+    dist=solid->DistanceToIn(
+    G4ThreeVector(1462.639634076807,-1183.908767887379,1926.359643354072),
+    G4ThreeVector(-0.1985206962900923,0.5639538694097884,-0.8015894000810041));
+    //  G4cout<<"solid.DistanceToIn(p,v) = "<<dist<<G4endl ;
+    assert(ApproxEqual(dist,2390.7));
+
+    dist=solid->DistanceToIn(
+    G4ThreeVector(1572.774744032383,-1704.268426706159,1922.635294938558),
+    G4ThreeVector(-0.2113262591952278,0.6627445069650045,-0.7184086098191366));
+    // G4cout<<"solid.DistanceToIn(p,v) = "<<dist<<G4endl ;
+    assert(ApproxEqual(dist,2663.0611));
+
 
     G4cout<<"Tracking functions are OK"<<G4endl ;
 
