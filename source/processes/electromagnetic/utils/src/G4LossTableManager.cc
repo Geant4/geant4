@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.54 2005-02-15 19:35:11 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.55 2005-03-11 12:28:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,6 +55,7 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
 // 13-01-04 Fix problem which takes place for inactivate eIoni (V.Ivanchenko)
 // 25-01-04 Fix initialisation problem for ions (V.Ivanchenko)
+// 11-03-05 Shift verbose level by 1 (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -140,7 +141,7 @@ G4LossTableManager::G4LossTableManager()
   maxEnergyActive = false;
   maxEnergyForMuonsActive = false;
   stepFunctionActive = false;
-  verbose = 0;
+  verbose = 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -297,7 +298,7 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
 	if(dm < 5.*MeV) p->SetMaxKinEnergy(maxKinEnergyForMuons);
       }
 
-      if(0 < verbose) {
+      if(1 < verbose) {
         G4cout << "For " << p->GetProcessName()
                << " for " << part_vector[j]->GetParticleName()
                << " tables_are_built= " << tables_are_built[j]
@@ -339,7 +340,7 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
                                                  G4VEnergyLossProcess* p)
 {
 
-  if(0 < verbose) {
+  if(1 < verbose) {
     G4cout << "### G4LossTableManager::BuildDEDXTable() is requested for "
            << aParticle->GetParticleName()
 	   << " and process " << p->GetProcessName()
@@ -365,7 +366,7 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
     }
   }
 
-  if(0 < verbose) {
+  if(1 < verbose) {
     G4cout << "### G4LossTableManager::BuildDEDXTable end: "
            << "all_tables_are_built= " << all_tables_are_built
            << G4endl;
@@ -413,7 +414,7 @@ void G4LossTableManager::CopyTables(const G4ParticleDefinition* part,
 
 G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition* aParticle)
 {
-  if(0 < verbose) {
+  if(1 < verbose) {
     G4cout << "G4LossTableManager::BuildTables() for "
            << aParticle->GetParticleName() << G4endl;
   }
@@ -488,7 +489,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
       loss_list[j]->SetSubLambdaTable(lambdaTable);
     }
   }
-  if (0 < verbose) {
+  if (1 < verbose) {
     G4cout << "G4LossTableManager::BuildTables: Tables are built for "
            << aParticle->GetParticleName()
 	   << "; ionisation process: " << em->GetProcessName()

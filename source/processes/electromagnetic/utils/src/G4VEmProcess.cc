@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.17 2005-03-09 19:49:42 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.18 2005-03-11 12:28:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // 30-06-04 make it to be pure discrete process (V.Ivanchenko)
 // 30-09-08 optimise integral option (V.Ivanchenko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 11-03-05 Shift verbose level by 1, add applyCuts and killPrimary flags (V.Ivantchenko)
 //
 //
 // Class Description:
@@ -82,11 +83,14 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   integral(false),
   meanFreePath(true),
   aboveCSmax(true),
-  buildLambdaTable(true)
+  buildLambdaTable(true),
+  killPrimary(false),
+  applyCuts(false),
+  nRegions(0)
 {
-
-  minKinEnergy    = 0.1*keV;
-  maxKinEnergy    = 100.0*GeV;
+  SetVerboseLevel(1);
+  minKinEnergy = 0.1*keV;
+  maxKinEnergy = 100.0*GeV;
 
   pParticleChange = &fParticleChange;
 
@@ -108,7 +112,7 @@ G4VEmProcess::~G4VEmProcess()
 void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
   if(!particle) particle = &part;
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::PreparePhysicsTable() for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
@@ -150,7 +154,7 @@ void G4VEmProcess::Clear()
 
 void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
@@ -161,9 +165,9 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     BuildLambdaTable();
     FindLambdaMax();
   }
-  if(-1 < verboseLevel) PrintInfoDefinition();
+  if(0 < verboseLevel) PrintInfoDefinition();
 
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::BuildPhysicsTable() done for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
@@ -175,7 +179,7 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
 void G4VEmProcess::BuildLambdaTable()
 {
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::BuildLambdaTable() for process "
            << GetProcessName() << " and particle "
            << particle->GetParticleName()
@@ -199,7 +203,7 @@ void G4VEmProcess::BuildLambdaTable()
     }
   }
 
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "Lambda table is built for "
            << particle->GetParticleName()
            << G4endl;
@@ -253,7 +257,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   // Integral approach
   if (integral) {
     G4double lx = GetLambda(finalT, currentCouple);
-    if(preStepLambda<lx && 0 < verboseLevel) {
+    if(preStepLambda<lx && 1 < verboseLevel) {
       G4cout << "WARING: for " << particle->GetParticleName() 
              << " and " << GetProcessName()
              << " E(MeV)= " << finalT/MeV
@@ -267,6 +271,8 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 
   G4VEmModel* currentModel = SelectModel(finalT);
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
+
+  //  currentModel->SelectRandomAtomAndShell(currentMaterial,dynParticle,fluo,auger);
 
   /*
   if(0 < verboseLevel) {
@@ -283,6 +289,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
                                                               currentCouple,
 		                                              dynParticle);
   G4double edep = fParticleChange.GetLocalEnergyDeposit();
+  G4double esec = 0.0;
   if (newp) {
     G4int num = newp->size();
     if(num > 0) {
@@ -296,23 +303,24 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
         G4double e = dp->GetKineticEnergy();
 	G4bool good = true;
 	if (p == G4Gamma::Gamma()) {
-	   if (e < gcut) {
-	     good = false;
-	     edep += e;
-	   }
+	   if (e < gcut) good = false;
+
 	} else if (p == G4Electron::Electron()) {
-	   if (e < ecut) {
-	     good = false;
-	     edep += e;
-	   }
+	   if (e < ecut) good = false;
+
 	} else if (p == G4Positron::Positron()) {
-	   if (e < pcut) {
-	     good = false;
-	     edep += e + electron_mass_c2;
-	   }
+	   if (e < pcut) good = false;
+           e += electron_mass_c2;
         }
-        if (good) fParticleChange.AddSecondary(dp);
-        else      delete dp;
+
+        if (good || !applyCuts) {
+          fParticleChange.AddSecondary(dp);
+          esec += e;
+
+	} else {
+          delete dp;
+          edep += e;
+	}
       }
     }
     delete newp;
@@ -326,13 +334,15 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 
 void G4VEmProcess::PrintInfoDefinition()
 {
-  G4cout << G4endl << GetProcessName() << ":  " << G4endl
-         << "      Lambda tables from threshold to "
-         << G4BestUnit(maxKinEnergy,"Energy")
-         << " in " << nLambdaBins << " bins."
-         << G4endl;
-
   if(0 < verboseLevel) {
+    G4cout << G4endl << GetProcessName() << ":  " << G4endl
+           << "      Lambda tables from threshold to "
+           << G4BestUnit(maxKinEnergy,"Energy")
+           << " in " << nLambdaBins << " bins."
+           << G4endl;
+  }
+
+  if(1 < verboseLevel) {
     G4cout << "Tables are built for " << particle->GetParticleName()
            << G4endl;
 
@@ -404,7 +414,7 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 			  	          const G4String& directory,
 			  	                G4bool ascii)
 {
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::RetrievePhysicsTable() for "
            << part->GetParticleName() << " and process "
 	   << GetProcessName() << G4endl;
@@ -419,13 +429,13 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
   filename = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
   yes = G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTable,filename,ascii);
   if ( yes ) {
-    if (-1 < verboseLevel) {
+    if (0 < verboseLevel) {
       G4cout << "Lambda table for " << particleName << " is Retrieved from <"
              << filename << ">"
              << G4endl;
     }
   } else {
-    if (-1 < verboseLevel) {
+    if (1 < verboseLevel) {
       G4cout << "Lambda table for " << particleName << " in file <"
              << filename << "> is not exist"
              << G4endl;
@@ -440,7 +450,7 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 void G4VEmProcess::FindLambdaMax()
 {
   if(1 < verboseLevel) {
-    G4cout << "### FindLambdaMax: " << particle->GetParticleName() 
+    G4cout << "### G4VEmProcess::FindLambdaMax: " << particle->GetParticleName() 
            << " and process " << GetProcessName() << G4endl; 
   }
   size_t n = theLambdaTable->length();
@@ -552,6 +562,27 @@ G4PhysicsVector* G4VEmProcess::LambdaPhysicsVector(const G4MaterialCutsCouple*)
 {
   G4PhysicsVector* v = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nLambdaBins);
   return v;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetBuildTableFlag(G4bool val)
+{
+  buildLambdaTable = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetKillPrimaryFlag(G4bool val)
+{
+  killPrimary = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetApplyCutsFlag(G4bool val)
+{
+  applyCuts = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

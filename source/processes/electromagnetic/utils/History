@@ -1,4 +1,4 @@
-$Id: History,v 1.188 2005-03-07 18:36:10 vnivanch Exp $
+$Id: History,v 1.189 2005-03-11 12:28:46 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 March 05: V.Ivant (utils-V07-00-02)
+- Shift verbose level, set default value 1
+- Add flags "ApplyCuts" and "KillPrimary" to G4VEmProcess
+- Add G4EmCorrection class
 
 07 March 05: V.Ivant (utils-V07-00-01)
 - Fix bug in initialisation of G4VEmProcess

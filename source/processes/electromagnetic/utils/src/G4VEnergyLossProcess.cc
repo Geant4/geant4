@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.45 2004-12-09 10:38:02 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.46 2005-03-11 12:28:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,6 +78,7 @@
 // 06-08-04 Clear up names of member functions (V.Ivanchenko)
 // 27-08-04 Add NeedBuildTables method (V.Ivanchneko)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
+// 11-03-05 Shift verbose level by 1 (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -164,7 +165,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
 
   // default dRoverRange and finalRange
   SetStepFunction(defaultIntegralRange, 1.0*mm);
-  SetVerboseLevel(0);
+  SetVerboseLevel(1);
 
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);
@@ -209,7 +210,7 @@ G4VEnergyLossProcess::~G4VEnergyLossProcess()
 
 void G4VEnergyLossProcess::Clear()
 {
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::Clear() for " << GetProcessName() << G4endl;
   }
 
@@ -237,7 +238,7 @@ void G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     else particle = &part;
   }
 
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::PreparePhysicsTable for "
            << GetProcessName()
            << " for " << part.GetParticleName()
@@ -324,7 +325,7 @@ void G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
   lManager->EnergyLossProcessIsInitialised(particle, this);
 
-  if (0 < verboseLevel) {
+  if (1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::Initialise() is done "
            << " chargeSqRatio= " << chargeSqRatio
            << " massRatio= " << massRatio
@@ -343,7 +344,7 @@ void G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
 void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
   //    G4cout << "========================================================" << G4endl;
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() for "
            << GetProcessName()
@@ -356,9 +357,9 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   if(!tablesAreBuilt && &part == particle)
     G4LossTableManager::Instance()->BuildPhysicsTable(particle, this);
 
-  if(-1 < verboseLevel && (&part == particle) && !baseParticle) PrintInfoDefinition();
+  if(0 < verboseLevel && (&part == particle) && !baseParticle) PrintInfoDefinition();
 
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() done for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
@@ -412,7 +413,7 @@ void G4VEnergyLossProcess::AddSubCutoffProcessor(G4VSubCutoffProcessor* p,
 G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable()
 {
 
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::BuildDEDXTable() for "
            << GetProcessName()
            << " and particle " << particle->GetParticleName()
@@ -424,7 +425,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable()
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << numOfCouples << " materials"
            << " minKinEnergy= " << minKinEnergy
            << " maxKinEnergy= " << maxKinEnergy
@@ -433,7 +434,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable()
 
   for(size_t i=0; i<numOfCouples; i++) {
 
-    if(1 < verboseLevel) 
+    if(2 < verboseLevel) 
       G4cout << "G4VEnergyLossProcess::BuildDEDXVector flag=  " << theDEDXTable->GetFlag(i) << G4endl;
 
     if (theDEDXTable->GetFlag(i)) {
@@ -448,7 +449,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable()
     }
   }
 
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::BuildDEDXTable(): table is built for "
            << particle->GetParticleName()
            << G4endl;
@@ -463,7 +464,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable()
 G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTableForPreciseRange()
 {
 
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::BuildDEDXTableForPreciseRange() for "
            << GetProcessName()
            << " and particle " << particle->GetParticleName()
@@ -496,7 +497,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTableForPreciseRange()
     }
   }
 
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::BuildDEDXTableForPreciseRange(): table is built for "
            << particle->GetParticleName()
            << G4endl;
@@ -511,7 +512,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTableForPreciseRange()
 G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable()
 {
 
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::BuildLambdaTable() for process "
            << GetProcessName() << " and particle "
            << particle->GetParticleName()
@@ -537,7 +538,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable()
     }
   }
 
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "Lambda table is built for "
            << particle->GetParticleName()
            << G4endl;
@@ -550,7 +551,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable()
 
 G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaSubTable()
 {
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::BuildLambdaSubTable() for process "
            << GetProcessName() << " and particle "
            << particle->GetParticleName() << G4endl;
@@ -575,7 +576,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaSubTable()
     }
   }
 
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "Table is built for "
            << particle->GetParticleName()
            << G4endl;
@@ -781,7 +782,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
 
 void G4VEnergyLossProcess::PrintInfoDefinition()
 {
-  if(-1 < verboseLevel) {
+  if(0 < verboseLevel) {
     G4cout << G4endl << GetProcessName() << ":   tables are built for  "
            << particle->GetParticleName()
            << G4endl
@@ -1132,10 +1133,12 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(const G4ParticleDefinition* part,
     if( !theSubLambdaTable->StorePhysicsTable(name,ascii)) res = false;
   }
   if ( res ) {
-    G4cout << "Physics tables are stored for " << particle->GetParticleName()
-           << " and process " << GetProcessName()
-	   << " in the directory <" << directory
-	   << "> " << G4endl;
+    if(0 < verboseLevel) {
+      G4cout << "Physics tables are stored for " << particle->GetParticleName()
+             << " and process " << GetProcessName()
+	     << " in the directory <" << directory
+	     << "> " << G4endl;
+    }
   } else {
     G4cout << "Fail to store Physics Tables for " << particle->GetParticleName()
            << " and process " << GetProcessName()
@@ -1154,7 +1157,7 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* pa
   G4bool res = true;
   const G4String particleName = part->GetParticleName();
 
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
  //   G4cout << "========================================================" << G4endl;
     G4cout << "G4VEnergyLossProcess::RetrievePhysicsTable() for "
            << particleName << " and process " << GetProcessName()
@@ -1172,14 +1175,14 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* pa
       yes = theDEDXTable->ExistPhysicsTable(filename);
       if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(theDEDXTable,filename,ascii);
       if(yes) {
-        if (-1 < verboseLevel) {
+        if (0 < verboseLevel) {
           G4cout << "DEDX table for " << particleName << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;
         }
       } else {
         fpi = false;
-        if (0 < verboseLevel) {
+        if (1 < verboseLevel) {
           G4cout << "DEDX table for " << particleName << " from file <"
                  << filename << "> is not Retrieved"
                  << G4endl;
@@ -1190,7 +1193,7 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* pa
       yes = theRangeTableForLoss->ExistPhysicsTable(filename);
       if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(theRangeTableForLoss,filename,ascii);
       if(yes) {
-        if (-1 < verboseLevel) {
+        if (0 < verboseLevel) {
           G4cout << "Range table for loss for " << particleName << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;
@@ -1208,13 +1211,13 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* pa
       yes = theDEDXunRestrictedTable->ExistPhysicsTable(filename);
       if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(theDEDXunRestrictedTable,filename,ascii);
       if(yes) {
-        if (-1 < verboseLevel) {
+        if (0 < verboseLevel) {
           G4cout << "Non-restricted DEDX table for " << particleName << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;
         }
       } else {
-        if (0 < verboseLevel) {
+        if (1 < verboseLevel) {
           G4cout << "Non-restricted DEDX table for " << particleName << " from file <"
                  << filename << "> is not Retrieved"
                  << G4endl;
@@ -1225,7 +1228,7 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* pa
       yes = thePreciseRangeTable->ExistPhysicsTable(filename);
       if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(thePreciseRangeTable,filename,ascii);
       if(yes) {
-        if (-1 < verboseLevel) {
+        if (0 < verboseLevel) {
           G4cout << "Precise Range table for " << particleName << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;
@@ -1239,7 +1242,7 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* pa
       yes = theInverseRangeTable->ExistPhysicsTable(filename);
       if(yes)  yes = G4PhysicsTableHelper::RetrievePhysicsTable(theInverseRangeTable,filename,ascii);
       if(yes) {
-        if (-1 < verboseLevel) {
+        if (0 < verboseLevel) {
           G4cout << "InverseRange table for " << particleName << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;
@@ -1258,7 +1261,7 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* pa
       yes = theLambdaTable->ExistPhysicsTable(filename);
       if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTable,filename,ascii);
       if(yes) {
-        if (-1 < verboseLevel) {
+        if (0 < verboseLevel) {
           G4cout << "Lambda table for " << particleName << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;
@@ -1276,7 +1279,7 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* pa
       yes = theSubLambdaTable->ExistPhysicsTable(filename);
       if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(theSubLambdaTable,filename,ascii);
       if(yes) {
-        if (-1 < verboseLevel) {
+        if (0 < verboseLevel) {
           G4cout << "SubLambda table for " << particleName << " is Retrieved from <"
                  << filename << ">"
                  << G4endl;

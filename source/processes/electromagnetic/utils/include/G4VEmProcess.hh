@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.15 2004-11-10 08:54:59 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.16 2005-03-11 12:28:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -170,7 +170,7 @@ protected:
                                          G4double previousStepSize,
                                          G4ForceCondition* condition);
 
-  virtual G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*) = 0;
+  virtual G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
 
   G4VEmModel* SelectModel(G4double& kinEnergy);
 
@@ -182,6 +182,8 @@ protected:
   G4double GetElectronEnergyCut();
 
   void SetBuildTableFlag(G4bool val);
+  void SetKillPrimaryFlag(G4bool val);
+  void SetApplyCutsFlag(G4bool val);
 
 private:
 
@@ -244,6 +246,14 @@ private:
   G4bool                       meanFreePath;
   G4bool                       aboveCSmax;
   G4bool                       buildLambdaTable;
+  G4bool                       killPrimary;
+  G4bool                       applyCuts;
+
+  G4int                        nRegions;
+  std::vector<G4Region*>       regions;
+  std::vector<G4bool>          flagsFluo;
+  std::vector<G4bool>          flagsAuger;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -383,14 +393,6 @@ inline G4double G4VEmProcess::GetElectronEnergyCut()
 {
   return (*theCutsElectron)[currentMaterialIndex];
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::SetBuildTableFlag(G4bool val)
-{
-  buildLambdaTable = val;
-}
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
