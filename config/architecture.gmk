@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.43 1999-10-28 04:41:27 yhajime Exp $
+# $Id: architecture.gmk,v 1.44 1999-10-28 06:41:24 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -13,9 +13,7 @@
 # List of the supported architectures/compilers and related flavors for
 # the environment variable G4SYSTEM:
 #
-#          AIX-xlC     AIX 4.3, (xlC) C Set ++ for AIX (default)
-#
-#          SUN-CC      SunOS 5.6, CC 4.2 compiler
+#          SUN-CC      SunOS 5.6, CC 4.2 compiler (default)
 #
 #          HP-aCC      HP-UX 10.20, aCC A.01.09 compiler
 #
@@ -26,9 +24,9 @@
 #          Linux-g++   Linux (Red Hat 5.1), egcs 1.1
 #
 #          WIN32-VC    NT and Microsoft Visual C++ 5.0 or Microsoft Visual C++ 6.0
-#                       and using CYGWIN32 tools ( make, g++ as "makedepend", sh...)
-#                       ( Note: you will need to set your environment, see installation
-#                               guide.)
+#                      and using CYGWIN32 tools ( make, g++ as "makedepend", sh...)
+#                      Note: you will need to set your environment, see installation
+#                            guide.
 #
 #          WIN32-VC-NICE  alias for the above, although NICE is not used anymore.
 #
@@ -37,6 +35,16 @@
 #				for g++ installed locally, because not full 
 #				installation on NICE)
 #
+#    Note: If G4ODBMS is defined, it calls for HEP_ODBMS setup files in
+#          $(HEP_ODBMS_DIR)/etc/.
+#
+
+# Definition of HEP_ODBMS_LIBS, OBJY_LIBS and OSPACE_LIBS by HepODBMS
+ifdef G4ODBMS
+  # variables LHCXXTOP and PLATF are used in HepODBMS setup
+  include $(HEP_ODBMS_DIR)/etc/$(OS).mk
+  G4ODBMS_LIBS := $(HEP_ODBMS_LIBS) $(OBJY_LIBS) $(OSPACE_LIBS)
+endif
 
 MAKEFLAGS= --no-print-directory
 
@@ -47,10 +55,10 @@ ifdef G4USE_STL
   CPPFLAGS  += -DG4USE_STL
 endif
 
-# If not specified, the default platform for G4SYSTEM is IBM-AIX ...
+# If not specified, the default platform for G4SYSTEM is SUN-CC ...
 #
 ifndef G4SYSTEM
-  G4SYSTEM := AIX-xlC
+  G4SYSTEM := SUN-CC
 endif
 
 # If not specified, the default path for G4 installation G4INSTALL is
@@ -419,14 +427,6 @@ ifeq ($(G4SYSTEM),AIX-xlC)
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
-  ifdef G4ODBMS
-    ifeq ($(OBJY_VERS),4.0.2)
-      OBJY_LDLIB := oo_shar.4.02
-    endif
-    ifeq ($(OBJY_VERS),5.1)
-      OBJY_LDLIB := oo
-    endif
-  endif
   CPPFLAGS += -DG4NOT_ISO_DELETES
   ifdef G4USE_STL
     CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM)
@@ -466,14 +466,6 @@ ifeq ($(G4SYSTEM),SUN-CC)
   endif
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
-  endif
-  ifdef G4ODBMS
-    ifeq ($(OBJY_VERS),4.0.2)
-      OBJY_LDLIB := oo
-    endif
-    ifeq ($(OBJY_VERS),5.1)
-      OBJY_LDLIB := oo
-    endif
   endif
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
   LOADLIBS += -L/usr/lib -lsocket -lnsl
@@ -519,14 +511,6 @@ ifeq ($(G4SYSTEM),HP-aCC)
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
     OGLLIBS   += -L/opt/graphics/common/lib -lXwindow -lhpgfx -lXhp11 -ldld
-  endif
-  ifdef G4ODBMS
-    ifeq ($(OBJY_VERS),4.0.2)
-      OBJY_LDLIB := oo
-    endif
-    ifeq ($(OBJY_VERS),5.1)
-      OBJY_LDLIB := oo
-    endif
   endif
   CPPFLAGS += -DG4NOT_ISO_DELETES
   ifdef G4USE_STL
@@ -740,7 +724,6 @@ endif
 ifndef G4_NO_STORE_TRAJECTORY
   CPPFLAGS += -DG4_STORE_TRAJECTORY
 endif
-
 
 #
 # Template setup - repositories, special options etc
