@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelRunAction.cc,v 1.5 2001-11-23 17:39:04 santin Exp $
+// $Id: GammaRayTelRunAction.cc,v 1.6 2001-11-28 15:18:31 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -84,7 +84,7 @@ void GammaRayTelRunAction::BeginOfRunAction(const G4Run* aRun)
   // If analysis is used reset the histograms
 #ifdef G4ANALYSIS_USE
   GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
-  analysis->BeginOfRun();
+  analysis->BeginOfRun(aRun->GetRunID());
 #endif
 }
 

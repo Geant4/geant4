@@ -87,7 +87,7 @@ public:
 
   ~GammaRayTelAnalysis();
 
-  void BeginOfRun();
+  void BeginOfRun(G4int n);
   void EndOfRun(G4int n);
   void EndOfEvent(G4int flag);
 

@@ -125,10 +125,11 @@ void GammaRayTelAnalysis::InsertHits(int nplane)
    of each run; here we put the inizialization so that the histograms have 
    always the right dimensions depending from the detector geometry
 */
-void GammaRayTelAnalysis::BeginOfRun() 
+void GammaRayTelAnalysis::BeginOfRun(G4int n) 
 { 
   float sizexy, sizez;
   int Nstrip, Nplane, Ntile, N;
+  char name[30];
 
   // Relevant data from the detector to set the histograms dimensions
   Nplane = GammaRayTelDetector->GetNbOfTKRLayers();
@@ -139,7 +140,8 @@ void GammaRayTelAnalysis::BeginOfRun()
   N = Nstrip*Ntile;      
 
   if (histoManager) {
-    histoManager->selectStore("GammaRayTel.hbook");
+    sprintf(name,"gammaraytel%d.hbook", n);
+    histoManager->selectStore(name);
 
     // Check if deleteHisto is enough, maybe we need to delete the object
     histoManager->deleteHisto("1");
@@ -195,8 +197,9 @@ void GammaRayTelAnalysis::BeginOfRun()
   else
     plotter->zone(1,1,0,0);
 
+  sprintf(name,"gammaraytel%d.hbook::1", n);
   // Book ntuples
-  ntuple = ntFactory->createC("GammaRayTel.hbook::1");
+  ntuple = ntFactory->createC(name);
 
   //  Add and bind the attributes to the ntuple
   if ( !( ntuple->addAndBind( "energy", ntEnergy) &&
