@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Tubs.cc,v 1.3 1999-12-15 14:50:10 gunter Exp $
+// $Id: testG4Tubs.cc,v 1.4 2000-05-17 16:12:24 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,8 +34,25 @@
 #include "G4AffineTransform.hh"
 #include "G4VoxelLimits.hh"
 
+///////////////////////////////////////////////////////////////////
+//
+// Dave's auxiliary function
+
+const G4String OutputInside(const EInside a)
+{
+	switch(a) {
+		case kInside:  return "Inside"; 
+		case kOutside: return "Outside";
+		case kSurface: return "Surface";
+	}
+	return "????";
+}
+
+
 G4bool testG4Tubs()
 {
+    G4cout.precision(16) ;
+
     G4ThreeVector pzero(0,0,0);
 
     G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
@@ -67,10 +84,50 @@ G4bool testG4Tubs()
 
     G4Tubs t5("Hole Sector #5",50*mm,100*mm,50*mm,0.0,270.0*deg);
 
+    G4Tubs tube6("tube6",750,760,350,0.31415926535897931,5.6548667764616276);
+
+    G4Tubs tube7("tube7",2200,3200,2500,-0.68977164349384879,3.831364227270472);
+
+
 // Check name
     assert(t1.GetName()=="Solid Tube #1");
 
 // Check Inside
+
+	//
+	// Make a tub
+	//
+	G4Tubs *arc = new G4Tubs( "outer", 1*m, 1.1*m, 0.01*m, -15*deg, 30*deg );
+	
+	//
+	// First issue: 
+	//   A point on the start phi surface just beyond the
+	//   start angle but still well within tolerance 
+	//   is found to be "outside" by G4Tubs::Inside
+	//
+	//   pt1 = exactly on phi surface (within precision)
+	//   pt2 = t1 but slightly higher, and still on tolerant surface
+	//   pt3 = t1 but slightly lower, and still on tolerant surface
+	//
+	G4ThreeVector pt1( 1.05*m*cos(-15*deg),
+	                   1.05*m*sin(-15*deg),
+			      0*m );
+			  
+        G4ThreeVector pt2 = pt1 + G4ThreeVector(0,0.001*kCarTolerance,0) ;
+        G4ThreeVector pt3 = pt1 - G4ThreeVector(0,0.001*kCarTolerance,0) ;
+	
+	EInside a1 = arc->Inside(pt1);
+	EInside a2 = arc->Inside(pt2);
+	EInside a3 = arc->Inside(pt3);
+	
+	// G4cout << "Point pt1 is " << OutputInside(a1) << G4endl;
+        assert(a1==kSurface);
+	// G4cout << "Point pt2 is " << OutputInside(a2) << G4endl;
+        assert(a2==kSurface);
+	// G4cout << "Point pt3 is " << OutputInside(a3) << G4endl;
+	assert(a3==kSurface);
+
+
     assert(t1.Inside(pzero)==kInside);
     assert(t1.Inside(pbigx)==kOutside);
 
@@ -129,25 +186,47 @@ G4bool testG4Tubs()
 
 
     Dist=t3.DistanceToOut(G4ThreeVector(0,10,0),vx,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t3.DistanceToOut((0,10,0),vx) = "<<Dist<<G4endl;
-    //    assert(ApproxEqual(Dist,0));
+    // G4cout<<"Dist=t3.DistanceToOut((0,10,0),vx) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,0));
 
     Dist=t3.DistanceToOut(G4ThreeVector(0.5,10,0),vx,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t3.DistanceToOut((0.5,10,0),vx) = "<<Dist<<G4endl;
+    // G4cout<<"Dist=t3.DistanceToOut((0.5,10,0),vx) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,48.489795));
 
     Dist=t3.DistanceToOut(G4ThreeVector(-0.5,9,0),vx,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t3.DistanceToOut((-0.5,9,0),vx) = "<<Dist<<G4endl;
+    // G4cout<<"Dist=t3.DistanceToOut((-0.5,9,0),vx) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,0.5));
 
     Dist=t3.DistanceToOut(G4ThreeVector(-5,9.5,0),vx,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t3.DistanceToOut((-5,9.5,0),vx) = "<<Dist<<G4endl;
+    // G4cout<<"Dist=t3.DistanceToOut((-5,9.5,0),vx) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,5));
 
     Dist=t3.DistanceToOut(G4ThreeVector(-5,9.5,0),vmy,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t3.DistanceToOut((-5,9.5,0),vmy) = "<<Dist<<G4endl;
+    // G4cout<<"Dist=t3.DistanceToOut((-5,9.5,0),vmy) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,9.5));
 
     Dist=t3.DistanceToOut(G4ThreeVector(-5,9,0),vxmy,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t3.DistanceToOut((-5,9,0),vxmy) = "<<Dist<<G4endl;
+    // G4cout<<"Dist=t3.DistanceToOut((-5,9,0),vxmy) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,7.0710678));
+
+    // bug #76
+    Dist=tube6.DistanceToOut(
+    G4ThreeVector(-388.20504321896431,-641.71398957741451,332.85995254027955),
+    G4ThreeVector(-0.47312863350457468,-0.782046391443315, 0.40565100491504164),
+    calcNorm,pgoodNorm,pNorm);
+    // G4cout<<"Dist=tube6.DistanceToOut(p,v) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,10.940583));
+
+    // bug #91
+    Dist=tube7.DistanceToOut(
+    G4ThreeVector(-2460,1030,-2500),
+    G4ThreeVector(-0.086580540180167642,0.070084247882560638,0.9937766390194761),
+    calcNorm,pgoodNorm,pNorm);
+    // G4cout<<"Dist=tube7.DistanceToOut(p,v) = "<<Dist<<G4endl;
+    // assert(ApproxEqual(Dist,4950.348576972614));
 
     G4cout<<G4endl ;
+
 
 //DistanceToIn(P)
 
@@ -203,28 +282,36 @@ G4bool testG4Tubs()
     //  G4cout<<"Dist=t2.DistanceToIn((49.5,-0.5,0),vmx) = "<<Dist<<G4endl;
    
     Dist=t5.DistanceToIn(G4ThreeVector(30.0,-20.0,0),vxy);
-    G4cout<<"Dist=t5.DistanceToIn((30.0,-20.0,0),vxy) = "<<Dist<<G4endl;
+    // G4cout<<"Dist=t5.DistanceToIn((30.0,-20.0,0),vxy) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,28.284271));
    
     Dist=t5.DistanceToIn(G4ThreeVector(30.0,-70.0,0),vxy);
-    G4cout<<"Dist=t5.DistanceToIn((30.0,-70.0,0),vxy) = "<<Dist<<G4endl;
+    // G4cout<<"Dist=t5.DistanceToIn((30.0,-70.0,0),vxy) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,kInfinity));
    
     Dist=t5.DistanceToIn(G4ThreeVector(30.0,-20.0,0),vmxmy);
-    G4cout<<"Dist=t5.DistanceToIn((30.0,-20.0,0),vmxmy) = "<<Dist<<G4endl;
+    //  G4cout<<"Dist=t5.DistanceToIn((30.0,-20.0,0),vmxmy) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,42.426407));
    
     Dist=t5.DistanceToIn(G4ThreeVector(30.0,-70.0,0),vmxmy);
-    G4cout<<"Dist=t5.DistanceToIn((30.0,-70.0,0),vmxmy) = "<<Dist<<G4endl;
+    // G4cout<<"Dist=t5.DistanceToIn((30.0,-70.0,0),vmxmy) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,kInfinity));
    
     Dist=t5.DistanceToIn(G4ThreeVector(50.0,-20.0,0),vy);
-    G4cout<<"Dist=t5.DistanceToIn((50.0,-20.0,0),vy) = "<<Dist<<G4endl;
+    // G4cout<<"Dist=t5.DistanceToIn((50.0,-20.0,0),vy) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,20));
 
     Dist=t5.DistanceToIn(G4ThreeVector(100.0,-20.0,0),vy);
-    G4cout<<"Dist=t5.DistanceToIn((100.0,-20.0,0),vy) = "<<Dist<<G4endl;
+    // G4cout<<"Dist=t5.DistanceToIn((100.0,-20.0,0),vy) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,kInfinity));
    
     Dist=t5.DistanceToIn(G4ThreeVector(30.0,-50.0,0),vmx);
-    G4cout<<"Dist=t5.DistanceToIn((30.0,-50.0,0),vmx) = "<<Dist<<G4endl;
+    //  G4cout<<"Dist=t5.DistanceToIn((30.0,-50.0,0),vmx) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,30));
    
     Dist=t5.DistanceToIn(G4ThreeVector(30.0,-100.0,0),vmx);
-    G4cout<<"Dist=t5.DistanceToIn((30.0,-100.0,0),vmx) = "<<Dist<<G4endl;
+    //  G4cout<<"Dist=t5.DistanceToIn((30.0,-100.0,0),vmx) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,kInfinity));
    
 
 
@@ -352,4 +439,10 @@ G4int main()
     assert(testG4Tubs());
     return 0;
 }
+
+
+
+
+
+
 
