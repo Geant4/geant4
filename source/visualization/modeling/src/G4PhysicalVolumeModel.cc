@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.23 2003-11-12 13:05:10 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.24 2004-09-13 18:07:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,6 +99,9 @@ void G4PhysicalVolumeModel::CalculateExtent () {
     fpMP = &mParams;
     DescribeYourselfTo (bsScene);
     fExtent = bsScene.GetBoundingSphereExtent ();
+    if (!(fExtent.GetXmin() < fExtent.GetXmax())) {
+      fExtent = fpTopPV -> GetLogicalVolume () -> GetSolid () -> GetExtent ();
+    }
     fpMP = tempMP;
     fRequestedDepth = tempRequestedDepth;
   }
