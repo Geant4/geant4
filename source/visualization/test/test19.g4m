@@ -72,11 +72,6 @@ help /vis/sceneHandler/create
 /vis/draw/text     0 0 0 mm 50 -120 -200   exampleN03
 /vis/viewer/show
 #
-#/vis/sceneHandler/create RayTracer
-#/vis/viewer/create
-#/vis/viewer/refresh
-#/vis/viewer/show
-#
 /vis/set/drawing_style 0
 /vis/camera/projection_style 0
 #
@@ -312,9 +307,15 @@ help /vis/sceneHandler/create
 /run/beamOn
 /gun/direction 1 -1 0
 /run/beamOn
+/vis/viewer/show
 #...end
-# For spheres...
-/gun/direction 0 1 0
-/gun/position 205 0 150 cm
-/run/beamOn
+#
+/vis/camera/viewpoint 30 30
+/vis/camera/projection_style 1 30
+/vis/viewer/refresh
+/vis/viewer/show
+#
+/vis/sceneHandler/create RayTracer
+/vis/viewer/create
+/vis/viewer/refresh
 /vis/viewer/show
