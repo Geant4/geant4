@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.cc,v 1.10 2001-10-16 08:14:32 gcosmo Exp $
+// $Id: G4UIcommandTree.cc,v 1.11 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,12 +33,6 @@
 G4UIcommandTree::G4UIcommandTree()
 :guidance(NULL)
 { }
-
-G4UIcommandTree::G4UIcommandTree(G4String thePathName)
-:guidance(NULL)
-{
-  pathName = thePathName;
-}
 
 G4UIcommandTree::G4UIcommandTree(const char * thePathName)
 :guidance(NULL)
@@ -158,11 +152,11 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand *aCommand)
   }
 }
 
-G4UIcommand * G4UIcommandTree::FindPath(G4String commandPath)
+G4UIcommand * G4UIcommandTree::FindPath(const char* commandPath)
 {
-  if( commandPath.index( pathName ) == G4std::string::npos )
-  { return NULL; }
   G4String remainingPath = commandPath;
+  if( remainingPath.index( pathName ) == G4std::string::npos )
+  { return NULL; }
   remainingPath.remove(0,pathName.length());
   G4int i = remainingPath.first('/');
   if( i == G4int(G4std::string::npos) )
@@ -248,7 +242,7 @@ void G4UIcommandTree::List()
   }
 }
 
-G4String G4UIcommandTree::CreateFileName(G4String pName)
+G4String G4UIcommandTree::CreateFileName(const char* pName)
 {
   G4String fn = pName;
   G4int idxs;
@@ -258,9 +252,10 @@ G4String G4UIcommandTree::CreateFileName(G4String pName)
   return fn;
 }
 
-G4String G4UIcommandTree::ModStr(G4String str)
+G4String G4UIcommandTree::ModStr(const char* strS)
 {
   G4String sx;
+  G4String str = strS;
   for(G4int i=0;i<G4int(str.length());i++)
   {
     char c = str(i);

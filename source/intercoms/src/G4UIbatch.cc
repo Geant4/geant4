@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIbatch.cc,v 1.9 2001-10-16 08:14:32 gcosmo Exp $
+// $Id: G4UIbatch.cc,v 1.10 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,14 +29,13 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 
-G4UIbatch::G4UIbatch(G4String fileName,G4UIsession* prevSession) 
+G4UIbatch::G4UIbatch(const char* fileName,G4UIsession* prevSession) 
  : previousSession(prevSession), macroFileName(fileName),
    openFailed(false)
 {
-  const char* theFileName = fileName;
   UImanager = G4UImanager::GetUIpointer();
   UImanager->SetSession(this);
-  macroFile.open((char*)theFileName);
+  macroFile.open((char*)fileName);
   if(macroFile.fail())
   {
     G4cerr << "macro file <" << fileName << "> could not open."
@@ -105,7 +104,7 @@ G4UIsession * G4UIbatch::SessionStart()
   return previousSession;
 }
 
-void G4UIbatch::PauseSessionStart(G4String Prompt) 
+void G4UIbatch::PauseSessionStart(const char* Prompt) 
 {
   G4cout << "Pause session <" << Prompt << "> start." << G4endl;
   SessionStart();

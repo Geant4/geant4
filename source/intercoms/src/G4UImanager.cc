@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.20 2001-11-24 18:37:11 asaim Exp $
+// $Id: G4UImanager.cc,v 1.21 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -212,12 +212,6 @@ void G4UImanager::RemoveCommand(G4UIcommand * aCommand)
 
 void G4UImanager::ExecuteMacroFile(const char * fileName)
 {
-  G4String fn = fileName;
-  ExecuteMacroFile(fn);
-}
-
-void G4UImanager::ExecuteMacroFile(G4String fileName)
-{
   G4UIsession* batchSession = new G4UIbatch(fileName,session);
   session = batchSession;
   G4UIsession* previousSession = session->SessionStart();
@@ -225,9 +219,10 @@ void G4UImanager::ExecuteMacroFile(G4String fileName)
   session = previousSession;
 }
 
-void G4UImanager::LoopS(G4String valueList)
+void G4UImanager::LoopS(const char* valueList)
 {
-  G4Tokenizer parameterToken( valueList );
+  G4String vl = valueList;
+  G4Tokenizer parameterToken(vl);
   G4String mf = parameterToken();
   G4String vn = parameterToken();
   G4String c1 = parameterToken();
@@ -247,14 +242,6 @@ void G4UImanager::LoopS(G4String valueList)
 void G4UImanager::Loop(const char * macroFile,const char * variableName,
                    G4double initialValue,G4double finalValue,G4double stepSize)
 {
-  G4String mf = macroFile;
-  G4String vn = variableName;
-  Loop(mf,vn,initialValue,finalValue,stepSize);
-}
-
-void G4UImanager::Loop(G4String macroFile,G4String variableName,
-                   G4double initialValue,G4double finalValue,G4double stepSize)
-{
   G4String cd;
   for(G4double d=initialValue;d<=finalValue;d+=stepSize)
   {
@@ -267,9 +254,10 @@ void G4UImanager::Loop(G4String macroFile,G4String variableName,
   Foreach(macroFile,variableName,cd);
 }
 
-void G4UImanager::ForeachS(G4String valueList)
+void G4UImanager::ForeachS(const char* valueList)
 {
-  G4Tokenizer parameterToken( valueList );
+  G4String vl = valueList;
+  G4Tokenizer parameterToken(vl);
   G4String mf = parameterToken();
   G4String vn = parameterToken();
   G4String c1 = parameterToken();
@@ -285,31 +273,21 @@ void G4UImanager::ForeachS(G4String valueList)
 void G4UImanager::Foreach(const char * macroFile,const char * variableName,
                    const char * candidates)
 {
-  G4String mf = macroFile;
-  G4String vn = variableName;
-  G4String cd = candidates;
-  Foreach(mf,vn,cd);
-}
-
-void G4UImanager::Foreach(G4String macroFile,G4String variableName,G4String candidates)
-{
-  G4Tokenizer parameterToken( candidates );
+  G4String candidatesString = candidates;
+  G4Tokenizer parameterToken( candidatesString );
   G4String cd;
   while(!((cd=parameterToken()).isNull()))
   {
-    SetAlias(variableName+" "+cd);
+    G4String vl = variableName;
+    vl += " ";
+    vl += cd;
+    SetAlias(vl);
     ExecuteMacroFile(macroFile);
   }
 }
 
 
-G4int G4UImanager::ApplyCommand(const char * aCommand)
-{
-  G4String theCommand = aCommand;
-  return ApplyCommand(theCommand);
-}
-
-G4String G4UImanager::SolveAlias(G4String aCmd)
+G4String G4UImanager::SolveAlias(const char* aCmd)
 {
   G4String aCommand = aCmd;
   G4int ia = aCommand.index("{");
@@ -356,11 +334,10 @@ G4String G4UImanager::SolveAlias(G4String aCmd)
   return aCommand;
 }
 
-G4int G4UImanager::ApplyCommand(G4String aCommand)
+G4int G4UImanager::ApplyCommand(const char * aCmd)
 {
-  G4String aCmd = SolveAlias(aCommand);
-  if(aCmd.isNull()) return fAliasNotFound;
-  aCommand = aCmd;
+  G4String aCommand = SolveAlias(aCmd);
+  if(aCommand.isNull()) return fAliasNotFound;
   if(verboseLevel) G4cout << aCommand << G4endl;
   G4String commandString;
   G4String commandParameter;
@@ -411,17 +388,16 @@ G4int G4UImanager::ApplyCommand(G4String aCommand)
   return targetCommand->DoIt( commandParameter );
 }
 
-void G4UImanager::StoreHistory(G4String fileName)
+void G4UImanager::StoreHistory(const char* fileName)
 { StoreHistory(true,fileName); }
 
-void G4UImanager::StoreHistory(G4bool historySwitch,G4String fileName)
+void G4UImanager::StoreHistory(G4bool historySwitch,const char* fileName)
 {
   if(historySwitch)
   {
     if(saveHistory)
     { historyFile.close(); }
-    const char* theFileName = fileName;
-    historyFile.open((char*)theFileName);
+    historyFile.open((char*)fileName);
     saveHistory = true;
   }
   else
@@ -432,12 +408,12 @@ void G4UImanager::StoreHistory(G4bool historySwitch,G4String fileName)
   saveHistory = historySwitch;
 }
 
-void G4UImanager::PauseSession(G4String msg)
+void G4UImanager::PauseSession(const char* msg)
 {
   if(session) session->PauseSessionStart(msg); 
 }
 
-void G4UImanager::ListCommands(G4String direct)
+void G4UImanager::ListCommands(const char* direct)
 {
   G4UIcommandTree* comTree = FindDirectory(direct);
   if(comTree)
@@ -459,7 +435,8 @@ G4UIcommandTree* G4UImanager::FindDirectory(const char* dirName)
   while( idx < G4int(targetDir.length())-1 )
   {
     G4int i = targetDir.index("/",idx);
-    comTree = comTree->GetTree(targetDir(0,i+1));
+    G4String targetDirString = targetDir(0,i+1);
+    comTree = comTree->GetTree(targetDirString);
     if( comTree == NULL )
     { return NULL; }
     idx = i+1;
@@ -485,27 +462,21 @@ G4bool G4UImanager::Notify(G4ApplicationState requestedState)
   return true;
 }
 
-void G4UImanager::Interact()
-{
-  Interact(G4String("G4> "));
-}
+//void G4UImanager::Interact()
+//{
+//  Interact(G4String("G4> "));
+//}
 
-void G4UImanager::Interact(const char * pC)
-{
-  G4String cc = pC;
-  Interact(cc);
-}
-
-void G4UImanager::Interact(G4String pC)
-{
-  G4cerr << "G4UImanager::Interact() is out of date and is not used anymore." << G4endl;
-  G4cerr << "This method will be removed shortly!!!" << G4endl;
-  G4cerr << "In case of main() use" << G4endl;
-  G4cerr << "    G4UIsession * session = new G4UIterminal;" << G4endl;
-  G4cerr << "    session->SessionStart();" << G4endl;
-  G4cerr << "In other cases use" << G4endl;
-  G4cerr << "    G4StateManager::GetStateManager()->Pause();" << G4endl;
-}
+//void G4UImanager::Interact(const char * pC)
+//{
+//  G4cerr << "G4UImanager::Interact() is out of date and is not used anymore." << G4endl;
+//  G4cerr << "This method will be removed shortly!!!" << G4endl;
+//  G4cerr << "In case of main() use" << G4endl;
+//  G4cerr << "    G4UIsession * session = new G4UIterminal;" << G4endl;
+//  G4cerr << "    session->SessionStart();" << G4endl;
+//  G4cerr << "In other cases use" << G4endl;
+//  G4cerr << "    G4StateManager::GetStateManager()->Pause();" << G4endl;
+//}
 
 
 
@@ -517,15 +488,10 @@ void G4UImanager::SetCoutDestination(G4UIsession *const value)
 
 void G4UImanager::SetAlias(const char * aliasLine)
 {
-  G4String aL = aliasLine;
-  SetAlias(aL);
-}
-
-void G4UImanager::SetAlias(G4String aliasLine)
-{
-  G4int i = aliasLine.index(" ");
-  G4String aliasName = aliasLine(0,i);
-  G4String aliasValue = aliasLine(i+1,aliasLine.length()-(i+1));
+  G4String aLine = aliasLine;
+  G4int i = aLine.index(" ");
+  G4String aliasName = aLine(0,i);
+  G4String aliasValue = aLine(i+1,aLine.length()-(i+1));
   if(aliasValue(0)=='"')
   { 
     G4String strippedValue;
@@ -542,12 +508,7 @@ void G4UImanager::SetAlias(G4String aliasLine)
 void G4UImanager::RemoveAlias(const char * aliasName)
 {
   G4String aL = aliasName;
-  RemoveAlias(aL);
-}
-
-void G4UImanager::RemoveAlias(G4String aliasName)
-{
-  G4String targetAlias = aliasName.strip(G4String::both);
+  G4String targetAlias = aL.strip(G4String::both);
   aliasList->RemoveAlias(targetAlias);
 }
 

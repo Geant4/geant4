@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh,v 1.16 2001-10-16 08:14:31 gcosmo Exp $
+// $Id: G4UImanager.hh,v 1.17 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -77,20 +77,16 @@ class G4UImanager : public G4VStateDependent
       //  This command remove the registered command. After invokation of this
       // command, that particular command cannot be applied.
       void ExecuteMacroFile(const char * fileName);
-      void ExecuteMacroFile(G4String fileName);
       //  A macro file defined by the argument will be read by G4UIbatch object.
       void Loop(const char * macroFile,const char * variableName,
                    G4double initialValue,G4double finalValue,G4double stepSize=1.0);
-      void Loop(G4String macroFile,G4String variableName,
-                   G4double initialValue,G4double finalValue,G4double stepSize=1.0);
       // Execute a macro file more than once with a loop counter.
-      void Foreach(const char * macroFile,const char * variableName,const char * candidates);
-      void Foreach(G4String macroFile,G4String variableName,G4String candidates);
+      void Foreach(const char * macroFile,const char * variableName,
+                                                        const char * candidates);
       // Execute a macro file more than once with an aliased variable which takes
       // a value in the candidate list.
       G4int ApplyCommand(const char * aCommand);
-      G4int ApplyCommand(G4String aCommand);
-      //  These two methods are identical. A command (and parameter(s)) given
+      //  A command (and parameter(s)) given
       // by the method's argument will be applied. Zero will be returned in 
       // case the command is successfully executed. Positive non-zero value
       // will be returned if the command couldn't be executed. The meaning of
@@ -98,48 +94,45 @@ class G4UImanager : public G4VStateDependent
       //   The returned number : xyy
       //        x00 : G4CommandStatus.hh enumeration
       //         yy : the problematic parameter (first found)
-      void StoreHistory(G4String fileName="G4history.macro");
+      void StoreHistory(const char* fileName = "G4history.macro");
       void StoreHistory(G4bool historySwitch,
-             G4String fileName="G4history.macro");
+                        const char* fileName = "G4history.macro");
       //  The executed commands will be stored in the defined file. If 
       // "historySwitch" is false, saving will be suspended.
-      void ListCommands(G4String direc);
+      void ListCommands(const char* direc);
       //  All commands registored under the given directory will be listed to
       // G4cout.
       void SetAlias(const char * aliasLine);
-      void SetAlias(G4String aliasLine);
       //  Define an alias. The first word of "aliasLine" string is the
       // alias name and the remaining word(s) is(are) string value
       // to be aliased.
       void RemoveAlias(const char * aliasName);
-      void RemoveAlias(G4String aliasName);
       //  Remove the defined alias.
       void ListAlias();
       //  Print all aliases.
-      G4String SolveAlias(G4String aCmd);
+      G4String SolveAlias(const char* aCmd);
       //  Convert a command string which contains alias(es).
       void CreateHTML(const char* dir = "/");
       //  Generate HTML files for defined UI commands
 
 
   public: 
-      void LoopS(G4String valueList);
-      void ForeachS(G4String valueList);
+      void LoopS(const char* valueList);
+      void ForeachS(const char* valueList);
       //  These methods are used by G4UIcontrolMessenger to use Loop() and Foreach() methods.
       virtual G4bool Notify(G4ApplicationState requestedState);
       //  This method is exclusively invoked by G4StateManager and the user
       // must not use this method.
  
   private:
-      void PauseSession(G4String msg);
+      void PauseSession(const char* msg);
       void CreateMessenger();
       G4UIcommandTree* FindDirectory(const char* dirName);
 
-  public:
+  //public:
   // following three methods will be removed quite soon.
-      void Interact();
-      void Interact(const char * promptCharacters);
-      void Interact(G4String promptCharacters);
+  //    void Interact();
+  //    void Interact(const char * promptCharacters);
 
   private:
       static G4UImanager * fUImanager;

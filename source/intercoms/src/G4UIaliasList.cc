@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIaliasList.cc,v 1.4 2001-10-16 08:14:32 gcosmo Exp $
+// $Id: G4UIaliasList.cc,v 1.5 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,7 +50,7 @@ G4int G4UIaliasList::operator!=(const G4UIaliasList &right) const
   return ( this != &right );
 }
 
-void G4UIaliasList::AddNewAlias(G4String aliasName, G4String aliasValue)
+void G4UIaliasList::AddNewAlias(const char* aliasName, const char* aliasValue)
 {
   if(FindAlias(aliasName))
   {
@@ -64,7 +64,7 @@ void G4UIaliasList::AddNewAlias(G4String aliasName, G4String aliasValue)
   value.push_back(newValue);
 }
 
-void G4UIaliasList::RemoveAlias(G4String aliasName)
+void G4UIaliasList::RemoveAlias(const char* aliasName)
 {
   G4int i = FindAliasID(aliasName);
   if(i<0)
@@ -77,7 +77,7 @@ void G4UIaliasList::RemoveAlias(G4String aliasName)
   value.erase(value.begin()+i);
 }
 
-void G4UIaliasList::ChangeAlias(G4String aliasName, G4String aliasValue)
+void G4UIaliasList::ChangeAlias(const char* aliasName, const char* aliasValue)
 {
   G4int i = FindAliasID(aliasName);
   if(i<0)
@@ -88,7 +88,7 @@ void G4UIaliasList::ChangeAlias(G4String aliasName, G4String aliasValue)
   *(value[i]) = aliasValue;
 }
 
-G4String* G4UIaliasList::FindAlias(G4String aliasName)
+G4String* G4UIaliasList::FindAlias(const char* aliasName)
 {
   G4int i = FindAliasID(aliasName);
   if(i<0)
@@ -96,7 +96,7 @@ G4String* G4UIaliasList::FindAlias(G4String aliasName)
   return value[i];
 }
 
-G4int G4UIaliasList::FindAliasID(G4String aliasName)
+G4int G4UIaliasList::FindAliasID(const char* aliasName)
 {
   G4int i_entry = alias.size();
   for(G4int i=0;i<i_entry;i++)

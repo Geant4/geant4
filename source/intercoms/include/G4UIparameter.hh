@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIparameter.hh,v 1.5 2001-10-16 08:14:31 gcosmo Exp $
+// $Id: G4UIparameter.hh,v 1.6 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ class G4UIparameter
       G4int operator==(const G4UIparameter &right) const;
       G4int operator!=(const G4UIparameter &right) const;
 
-      G4int CheckNewValue(G4String newValue);
+      G4int CheckNewValue(const char* newValue);
       void List();
 
   private:
@@ -141,9 +141,9 @@ class G4UIparameter
 
   private:
     // --- the following is used by CheckNewValue() -------
-    G4int TypeCheck(G4String newValue );
-    G4int RangeCheck(G4String newValue );
-    G4int CandidateCheck(G4String newValue );
+    G4int TypeCheck(const char* newValue );
+    G4int RangeCheck(const char* newValue );
+    G4int CandidateCheck(const char* newValue );
     G4int IsInt(const char* str, short maxDigit);
     G4int IsDouble(const char* str);
     G4int ExpectExponent(const char* str);

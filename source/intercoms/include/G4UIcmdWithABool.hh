@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithABool.hh,v 1.4 2001-07-11 10:01:12 gunter Exp $
+// $Id: G4UIcmdWithABool.hh,v 1.5 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,7 +47,7 @@ class G4UIcmdWithABool : public G4UIcommand
     (const char * theCommandPath,G4UImessenger * theMessenger);
     //  Constructor. The command string with full path directory
     // and the pointer to the messenger must be given.
-    G4bool GetNewBoolValue(G4String paramString);
+    G4bool GetNewBoolValue(const char* paramString);
     //  Convert string which represents a boolean value to G4bool.
     G4String ConvertToString(G4bool intValue);
     //  Convert a boolean value to a string. This method must be used by 

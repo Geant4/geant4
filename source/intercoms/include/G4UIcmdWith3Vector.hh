@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWith3Vector.hh,v 1.4 2001-07-11 10:01:12 gunter Exp $
+// $Id: G4UIcmdWith3Vector.hh,v 1.5 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,7 +44,7 @@ class G4UIcmdWith3Vector : public G4UIcommand
     (const char * theCommandPath,G4UImessenger * theMessenger);
     //  Constructor. The command string with full path directory
     // and the pointer to the messenger must be given.
-    G4ThreeVector GetNew3VectorValue(G4String paramString);
+    G4ThreeVector GetNew3VectorValue(const char* paramString);
     //  Convert string which represents three double values to
     // G4ThreeVector.
     G4String ConvertToString(G4ThreeVector vec);

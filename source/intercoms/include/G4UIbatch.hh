@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIbatch.hh,v 1.4 2001-07-11 10:01:11 gunter Exp $
+// $Id: G4UIbatch.hh,v 1.5 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $id$
@@ -48,7 +48,7 @@ class G4UImanager;
 class G4UIbatch : public G4UIsession 
 {
   public: // with description
-      G4UIbatch(G4String fileName,G4UIsession* prevSession=NULL);
+      G4UIbatch(const char* fileName,G4UIsession* prevSession=NULL);
       //  Constructor. 
       //  "prevSession" must be NULL if this class is constructed
       // from main().
@@ -56,7 +56,7 @@ class G4UIbatch : public G4UIsession
       ~G4UIbatch();
 
       G4UIsession * SessionStart();
-      void PauseSessionStart(G4String Prompt);
+      void PauseSessionStart(const char* Prompt);
   
   private:
       G4UImanager * UImanager;

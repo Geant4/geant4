@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.3 2001-07-11 10:01:16 gunter Exp $
+// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.4 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,38 +40,35 @@ G4UIcmdWithADoubleAndUnit::G4UIcmdWithADoubleAndUnit
   untParam->SetParameterName("Unit");
 }
 
-G4double G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(G4String paramString)
+G4double G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(const char* paramString)
 {
   G4double vl;
   char unts[30];
   
-  const char* t = paramString;
-  G4std::istrstream is((char*)t);
+  G4std::istrstream is((char*)paramString);
   is >> vl >> unts;
   G4String unt = unts;
   
   return (vl*ValueOf(unt));
 }
 
-G4double G4UIcmdWithADoubleAndUnit::GetNewDoubleRawValue(G4String paramString)
+G4double G4UIcmdWithADoubleAndUnit::GetNewDoubleRawValue(const char* paramString)
 {
   G4double vl;
   char unts[30];
   
-  const char* t = paramString;
-  G4std::istrstream is((char*)t);
+  G4std::istrstream is((char*)paramString);
   is >> vl >> unts;
   
   return vl;
 }
 
-G4double G4UIcmdWithADoubleAndUnit::GetNewUnitValue(G4String paramString)
+G4double G4UIcmdWithADoubleAndUnit::GetNewUnitValue(const char* paramString)
 {
   G4double vl;
   char unts[30];
   
-  const char* t = paramString;
-  G4std::istrstream is((char*)t);
+  G4std::istrstream is((char*)paramString);
   is >> vl >> unts;
   G4String unt = unts;
   

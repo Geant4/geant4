@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.hh,v 1.10 2001-10-16 08:14:31 gcosmo Exp $
+// $Id: G4UIcommand.hh,v 1.11 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,9 +79,9 @@ class G4UIcommand
       virtual void List();
 
   public:
-      static G4double ValueOf(G4String unitName);
-      static G4String CategoryOf(G4String unitName);
-      static G4String UnitsList(G4String unitCategory);
+      static G4double ValueOf(const char* unitName);
+      static G4String CategoryOf(const char* unitName);
+      static G4String UnitsList(const char* unitCategory);
 
   private:  
       void G4UIcommandCommonConstructorCode (const char * theCommandPath);
@@ -102,15 +102,15 @@ class G4UIcommand
       //  All the C++ syntax of relational operators are allowed for the
       // range expression.
   public:
-      inline const G4String GetRange() const
+      inline const G4String & GetRange() const
       { return rangeString; };
       inline G4int GetGuidanceEntries() const
       { return commandGuidance.size(); }
-      inline const G4String GetGuidanceLine(G4int i) const
+      inline const G4String & GetGuidanceLine(G4int i) const
       { return commandGuidance[i]; }
-      inline const G4String GetCommandPath() const
+      inline const G4String & GetCommandPath() const
       { return commandPath; }
-      inline const G4String GetCommandName() const
+      inline const G4String & GetCommandName() const
       { return commandName; }
       inline G4int GetParameterEntries() const
       { return parameter.size(); }
@@ -147,12 +147,12 @@ class G4UIcommand
       }
 
   protected:
-    G4int CheckNewValue(G4String newValue);
+    G4int CheckNewValue(const char* newValue);
 
     // --- the following is used by CheckNewValue() --------
   private:
-    G4int TypeCheck(G4String newValue);
-    G4int RangeCheck(G4String newValue);
+    G4int TypeCheck(const char* t);
+    G4int RangeCheck(const char* t);
     G4int IsInt(const char* str, short maxLength);
     G4int IsDouble(const char* str);
     G4int ExpectExponent(const char* str);
@@ -172,8 +172,8 @@ class G4UIcommand
     G4int CompareDouble( G4double arg1, G4int op, G4double arg2);
     //  utility 
     tokenNum Yylex( void );      // returns next token
-    unsigned IndexOf( G4String ); // returns the index of the var name
-    unsigned IsParameter( G4String ); // returns 1 or 0
+    unsigned IndexOf( const char* ); // returns the index of the var name
+    unsigned IsParameter( const char* ); // returns 1 or 0
     G4int G4UIpGetc( void );      // read one char from rangeBuf
     G4int G4UIpUngetc( G4int c );   // put back  
     G4int Backslash( G4int c );

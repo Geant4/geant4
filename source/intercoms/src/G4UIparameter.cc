@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIparameter.cc,v 1.10 2001-10-23 07:51:37 gcosmo Exp $
+// $Id: G4UIparameter.cc,v 1.11 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -131,7 +131,7 @@ void G4UIparameter::SetDefaultValue(G4double theDefaultValue)
 //#define DEBUG 1
 
 G4int G4UIparameter::
-CheckNewValue( G4String newValue ) {
+CheckNewValue(const char* newValue ) {
     if( TypeCheck(newValue) == 0) return fParameterUnreadable;
     if( ! parameterRange.isNull() )
     { if( RangeCheck(newValue) == 0 ) return fParameterOutOfRange; }
@@ -141,7 +141,7 @@ CheckNewValue( G4String newValue ) {
 }
 
 G4int G4UIparameter::
-CandidateCheck(G4String newValue) {
+CandidateCheck(const char* newValue) {
     G4Tokenizer candidateTokenizer(parameterCandidate);
     G4String aToken;
     G4int iToken = 0;
@@ -155,11 +155,10 @@ CandidateCheck(G4String newValue) {
 }
 
 G4int G4UIparameter::
-RangeCheck(G4String newValue) {
+RangeCheck(const char* newValue) {
     yystype result;
     bp = 0;                   // reset buffer pointer for G4UIpGetc()
-    const char* t = newValue;
-    G4std::istrstream is((char*)t); 
+    G4std::istrstream is((char*)newValue); 
     char type = toupper( parameterType );
     switch (type) {
         case 'D': { is >> newVal.D; } break;
@@ -181,30 +180,31 @@ RangeCheck(G4String newValue) {
 
 
 G4int G4UIparameter::
-TypeCheck(G4String newValue)
+TypeCheck(const char* newValue)
 {
+    G4String newValueString(newValue);
     char type = toupper( parameterType );
     switch(type) {
         case 'D':
-            if( IsDouble(newValue.data())== 0) {
+            if( IsDouble(newValueString.data())== 0) {
                 G4cerr<<newValue<<": double value expected."
                     << G4endl;
                 return 0;
              } break;
         case 'I':
-            if( IsInt(newValue.data(),20)== 0) {
+            if( IsInt(newValueString.data(),20)== 0) {
                 G4cerr<<newValue<<": integer expected."
                     << G4endl;
                 return 0;
              } break;
         case 'S': break;
         case 'B':
-             newValue.toUpper();
-             if (  newValue == "Y" || newValue == "N"
-                  ||newValue == "YES" || newValue == "NO"
-                  ||newValue == "1"   || newValue == "0"
-                  ||newValue == "T" || newValue == "F"
-                  ||newValue == "TRUE" || newValue == "FALSE") 
+             newValueString.toUpper();
+             if (  newValueString == "Y" || newValueString == "N"
+                  ||newValueString == "YES" || newValueString == "NO"
+                  ||newValueString == "1"   || newValueString == "0"
+                  ||newValueString == "T" || newValueString == "F"
+                  ||newValueString == "TRUE" || newValueString == "FALSE") 
                   return 1;
              else {
                     G4cerr<<newValue<<": bool expected." << G4endl;

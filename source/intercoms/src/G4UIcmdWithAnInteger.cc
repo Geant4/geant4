@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithAnInteger.cc,v 1.3 2001-07-11 10:01:16 gunter Exp $
+// $Id: G4UIcmdWithAnInteger.cc,v 1.4 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,11 +37,10 @@ G4UIcmdWithAnInteger::G4UIcmdWithAnInteger
   SetParameter(intParam);
 }
 
-G4int G4UIcmdWithAnInteger::GetNewIntValue(G4String paramString)
+G4int G4UIcmdWithAnInteger::GetNewIntValue(const char* paramString)
 {
   G4int vl;
-  const char* t = paramString;
-  G4std::istrstream is((char*)t);
+  G4std::istrstream is((char*)paramString);
   is >> vl;
   return vl;
 }

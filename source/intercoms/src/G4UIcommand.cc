@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc,v 1.18 2001-10-23 07:51:36 gcosmo Exp $
+// $Id: G4UIcommand.cc,v 1.19 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -279,19 +279,19 @@ G4bool G4UIcommand::IsAvailable()
   return av;
 }
 
-G4double G4UIcommand::ValueOf(G4String unitName)
+G4double G4UIcommand::ValueOf(const char* unitName)
 {
    G4double value = 0.;
    value = G4UnitDefinition::GetValueOf(unitName);
    return value;              
 }
 
-G4String G4UIcommand::CategoryOf(G4String unitName)
+G4String G4UIcommand::CategoryOf(const char* unitName)
 {
    return G4UnitDefinition::GetCategory(unitName);
 }
 
-G4String G4UIcommand::UnitsList(G4String unitCategory)
+G4String G4UIcommand::UnitsList(const char* unitCategory)
 {
   G4String retStr;
   G4UnitsTable& UTbl = G4UnitDefinition::GetUnitsTable();
@@ -350,7 +350,7 @@ void G4UIcommand::List()
 //#define DEBUG 1
 
 G4int G4UIcommand::
-CheckNewValue(G4String newValue)
+CheckNewValue(const char * newValue)
 {
    yystype result;
    // if( TypeCheck(newValue) == 0 ) return 1;
@@ -362,11 +362,10 @@ CheckNewValue(G4String newValue)
 // ------------------ type check routines -------------------
 
 G4int G4UIcommand::
-TypeCheck(G4String newValues)
+TypeCheck(const char * t)
 {
     G4String aNewValue;
     char type;
-    const char* t = newValues;
     G4std::istrstream is((char*)t);
     for (unsigned i=0; i< parameter.size(); i++) {
         is >> aNewValue;
@@ -497,11 +496,10 @@ IsDouble(const char* buf)
 
 // ------------------ range Check routines -------------------
 G4int G4UIcommand::
-RangeCheck(G4String newValue) {
+RangeCheck(const char* t) {
     yystype result;
     char type;
     bp = 0;                 // reset buffer pointer for G4UIpGetc()
-    const char* t = newValue;
     G4std::istrstream is((char*)t);
     for (unsigned i=0; i< parameter.size(); i++) {
         type= toupper(parameter[i]->GetParameterType());
@@ -878,7 +876,7 @@ CompareDouble(G4double arg1, G4int op, G4double arg2)
 }
 
 unsigned G4UIcommand::
-IndexOf( G4String nam)
+IndexOf(const char* nam)
 {
     unsigned i;
     G4String pname;
@@ -896,7 +894,7 @@ IndexOf( G4String nam)
 
 
 unsigned G4UIcommand::
-IsParameter(G4String nam)
+IsParameter(const char* nam)
 {
     G4String pname;
     for(unsigned i=0;  i<parameter.size(); i++)  

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithABool.cc,v 1.3 2001-07-11 10:01:16 gunter Exp $
+// $Id: G4UIcmdWithABool.cc,v 1.4 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,7 +37,7 @@ G4UIcmdWithABool::G4UIcmdWithABool
   SetParameter(blParam);
 }
 
-G4bool G4UIcmdWithABool::GetNewBoolValue(G4String paramString)
+G4bool G4UIcmdWithABool::GetNewBoolValue(const char* paramString)
 {
   G4String v = paramString;
   v.toUpper();

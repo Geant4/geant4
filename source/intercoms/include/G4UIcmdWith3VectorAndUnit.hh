@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWith3VectorAndUnit.hh,v 1.4 2001-07-11 10:01:12 gunter Exp $
+// $Id: G4UIcmdWith3VectorAndUnit.hh,v 1.5 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,14 +44,14 @@ class G4UIcmdWith3VectorAndUnit : public G4UIcommand
     (const char * theCommandPath,G4UImessenger * theMessenger);
     //  Constructor. The command string with full path directory
     // and the pointer to the messenger must be given.
-    G4ThreeVector GetNew3VectorValue(G4String paramString);
+    G4ThreeVector GetNew3VectorValue(const char* paramString);
     //  Convert string which represents three double values and a unit to
     // G4ThreeVector. Values are converted to the Geant4 internal unit.
-    G4ThreeVector GetNew3VectorRawValue(G4String paramString);
+    G4ThreeVector GetNew3VectorRawValue(const char* paramString);
     //  Convert string which represents three double values and a unit to
     // G4ThreeVector. Values are NOT converted to the Geant4 internal unit
     // but just as the given string.
-    G4double GetNewUnitValue(G4String paramString);
+    G4double GetNewUnitValue(const char* paramString);
     //  Convert the unit string to the value of the unit. "paramString"
     // must contain three double values AND a unit string.
     G4String ConvertToString(G4ThreeVector vec,const char * unitName);

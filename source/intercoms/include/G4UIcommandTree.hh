@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.hh,v 1.12 2001-10-16 08:14:31 gcosmo Exp $
+// $Id: G4UIcommandTree.hh,v 1.13 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,7 +43,6 @@ class G4UIcommandTree
 {
   public:
       G4UIcommandTree();
-      G4UIcommandTree(G4String thePathName);
       G4UIcommandTree(const char * thePathName);
       ~G4UIcommandTree();
       G4int operator==(const G4UIcommandTree &right) const;
@@ -52,15 +51,15 @@ class G4UIcommandTree
   public:
       void AddNewCommand(G4UIcommand * newCommand);
       void RemoveCommand(G4UIcommand * aCommand);
-      G4UIcommand * FindPath(G4String commandPath);
+      G4UIcommand * FindPath(const char* commandPath);
       void List();
       void ListCurrent();
       void ListCurrentWithNum();
       void CreateHTML();
 
   private:
-      G4String CreateFileName(G4String pName);
-      G4String ModStr(G4String str);
+      G4String CreateFileName(const char* pName);
+      G4String ModStr(const char* strS);
 
       G4std::vector<G4UIcommand*> command;
       G4std::vector<G4UIcommandTree*> tree;
@@ -78,8 +77,9 @@ class G4UIcommandTree
       { return command.size(); };
       inline G4UIcommandTree * GetTree(G4int i)
       { return tree[i-1]; };
-      inline G4UIcommandTree * GetTree(G4String comName)
+      inline G4UIcommandTree * GetTree(const char* comNameC)
       { 
+        G4String comName = comNameC;
         for( size_t i=0; i < tree.size(); i++)
         {
           if( comName == tree[i]->GetPathName() )

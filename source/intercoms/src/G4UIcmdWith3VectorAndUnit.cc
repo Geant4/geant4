@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWith3VectorAndUnit.cc,v 1.3 2001-07-11 10:01:16 gunter Exp $
+// $Id: G4UIcmdWith3VectorAndUnit.cc,v 1.4 2002-04-26 22:03:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,40 +44,37 @@ G4UIcmdWith3VectorAndUnit::G4UIcmdWith3VectorAndUnit
   untParam->SetParameterName("Unit");
 }
 
-G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorValue(G4String paramString)
+G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorValue(const char* paramString)
 {
   G4double vx;
   G4double vy;
   G4double vz;
   char unts[30];
-  const char* t = paramString;
-  G4std::istrstream is((char*)t);
+  G4std::istrstream is((char*)paramString);
   is >> vx >> vy >> vz >> unts;
   G4String unt = unts;
   G4double uv = ValueOf(unt);
   return G4ThreeVector(vx*uv,vy*uv,vz*uv);
 }
 
-G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorRawValue(G4String paramString)
+G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorRawValue(const char* paramString)
 {
   G4double vx;
   G4double vy;
   G4double vz;
   char unts[30];
-  const char* t = paramString;
-  G4std::istrstream is((char*)t);
+  G4std::istrstream is((char*)paramString);
   is >> vx >> vy >> vz >> unts;
   return G4ThreeVector(vx,vy,vz);
 }
 
-G4double G4UIcmdWith3VectorAndUnit::GetNewUnitValue(G4String paramString)
+G4double G4UIcmdWith3VectorAndUnit::GetNewUnitValue(const char* paramString)
 {
   G4double vx;
   G4double vy;
   G4double vz;
   char unts[30];
-  const char* t = paramString;
-  G4std::istrstream is((char*)t);
+  G4std::istrstream is((char*)paramString);
   is >> vx >> vy >> vz >> unts;
   G4String unt = unts;
   return ValueOf(unt);
