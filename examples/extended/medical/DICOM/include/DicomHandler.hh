@@ -33,7 +33,7 @@
 #define DicomHandler_h 1
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "globals.hh"
 class dicomHandler
 {
 private:
@@ -64,8 +64,16 @@ public:
     max=0;
   };
   // Variables with the pertinent informations of a DICOM image
-  int tag_dictionnary;
-  int rows, columns,bits_stored,bits_allocated,high_bits, len;
+
+
+private:
+  G4int tag_dictionnary;
+  G4int rows;
+  G4int columns;
+
+public:
+ 
+ int bits_stored,bits_allocated,high_bits, len;
   char pixel_spacing[300],pixel_spacing_X[300],pixel_spacing_Y[300];
   char slice_tickness[300];
   int rescale_slope, rescale_intercept;
