@@ -1,4 +1,4 @@
-$Id: History,v 1.7 1999-04-15 05:58:55 kurasige Exp $
+$Id: History,v 1.8 1999-04-16 06:31:42 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Apr. 16, 99  H.Kurashige (particles-01-00-05a, partman-01-00-05a)
+-  Fixed a bug in G4ParticleWithCuts to ensure unit independence (Laszlo)
+
 - Apr. 15, 99  H.Kurashige (particles-01-00-05, partman-01-00-05)
 -  Added invocation of G4VUserPhysicsList::BuildPhysicsTable for ions created on the fly (G4IonTable::GetIon)
 -  Removed comment out statements in G4ParticleDefinition constructor
