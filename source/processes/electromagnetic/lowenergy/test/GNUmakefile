@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.11 2002-06-18 14:08:34 pia Exp $
+# $Id: GNUmakefile,v 1.12 2002-07-31 16:11:47 vnivanch Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -17,6 +17,7 @@ G4EXEC_BUILD = true
 include $(G4INSTALL)/config/architecture.gmk
 #
 # ---- Not clear why I need this here... MGP, 18 June 2002
+#      VI - will not run without in AIDA 4.0.4
 OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
 LOADLIBS += $(OGLLIBS)
 # ----
@@ -26,10 +27,6 @@ LOADLIBS += $(OGLLIBS)
 #
 CPPFLAGS += `aida-config --useHBook --include`
 LDFLAGS  += `aida-config --useHBook --lib`
-
-# old:
-#LDFLAGS  += -L/cern/pro/lib
-#LOADLIBS += -lpacklib $(FCLIBS)
 
 include $(G4INSTALL)/config/binmake.gmk
 

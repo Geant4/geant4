@@ -203,6 +203,8 @@ void hTestDetectorConstruction::DefineMaterials()
   a = 207.19*g/mole;
   ma = new G4Material(name="Lead"     , z=82., a, density);
 
+  ma = new G4Material("Uranium", z=92., 238.03*g/mole, 18.95*g/cm3);
+
 //
 // define a material from elements.   case 1: chemical molecule
 //
