@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.12 2003-11-07 15:55:31 maire Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.13 2003-11-13 10:10:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -229,43 +229,44 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
         loss += (1.-2.*G4UniformRand())*e2Fluct;   
       else if (loss>0.)
         loss += (1.-2.*G4UniformRand())*e1Fluct;   
-
+      if(loss < 0.) loss = 0.0;
+      
       // ionisation .......................................
-     if(a3 > 0.) {
-       if(a3>alim) {
-         siga=sqrt(a3) ;
-         p3 = std::max(0.,G4RandGauss::shoot(a3,siga)+0.5);
-       } else {
-         p3 = G4double(G4Poisson(a3));
-       }
-       G4double lossc = 0.;
-       if(p3 > 0) {
-         G4double na = 0.; 
-         G4double alfa = 1.;
-         if (p3 > nmaxCont2) {
-           G4double rfac   = p3/(nmaxCont2+p3);
-           G4double namean = p3*rfac;
-           G4double sa     = nmaxCont1*rfac;
-           na              = G4RandGauss::shoot(namean,sa);
-           if (na > 0.) {
-             alfa   = w1*(nmaxCont2+p3)/(w1*nmaxCont2+p3);
-             G4double alfa1  = alfa*log(alfa)/(alfa-1.);
-             G4double ea     = na*ipotFluct*alfa1;
-             G4double sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
-             lossc += G4RandGauss::shoot(ea,sea);
-           }
-         }
+      if(a3 > 0.) {
+        if(a3>alim) {
+          siga=sqrt(a3) ;
+          p3 = std::max(0.,G4RandGauss::shoot(a3,siga)+0.5);
+        } else {
+          p3 = G4double(G4Poisson(a3));
+        }
+        G4double lossc = 0.;
+        if(p3 > 0) {
+          G4double na = 0.; 
+          G4double alfa = 1.;
+          if (p3 > nmaxCont2) {
+            G4double rfac   = p3/(nmaxCont2+p3);
+            G4double namean = p3*rfac;
+            G4double sa     = nmaxCont1*rfac;
+            na              = G4RandGauss::shoot(namean,sa);
+            if (na > 0.) {
+              alfa   = w1*(nmaxCont2+p3)/(w1*nmaxCont2+p3);
+              G4double alfa1  = alfa*log(alfa)/(alfa-1.);
+              G4double ea     = na*ipotFluct*alfa1;
+              G4double sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
+              lossc += G4RandGauss::shoot(ea,sea);
+            }
+          }
 
-         if (p3 > na) {
-           w2 = alfa*ipotFluct;
-           G4double w  = (tmax-w2)/tmax;      
-           G4int    nb = G4int(p3-na);
-           for (G4int k=0; k<nb; k++) {
-             lossc += w2/(1.-w*G4UniformRand());
-	   }
-         }
-       }        
-       loss += lossc;  
+          if (p3 > na) {
+            w2 = alfa*ipotFluct;
+            G4double w  = (tmax-w2)/tmax;      
+            G4int    nb = G4int(p3-na);
+            for (G4int k=0; k<nb; k++) {
+              lossc += w2/(1.-w*G4UniformRand());
+	    }
+          }
+        }        
+        loss += lossc;  
       }
     } 
 
