@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraPhysicsList.cc,v 1.3 2003-11-07 12:02:37 vnivanch Exp $
+// $Id: TiaraPhysicsList.cc,v 1.4 2003-11-20 08:31:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -611,8 +611,7 @@ void TiaraPhysicsList::ConstructGeneral()
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (theDecayProcess->IsApplicable(*particle) &&
-        !particle->IsShortLived()) { 
+    if (theDecayProcess->IsApplicable(*particle)) { 
       pmanager ->AddProcess(theDecayProcess);
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
