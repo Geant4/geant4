@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffConfigurator.cc,v 1.2 2002-10-16 16:27:01 dressel Exp $
+// $Id: G4WeightCutOffConfigurator.cc,v 1.3 2002-11-04 10:47:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -52,7 +52,7 @@ G4WeightCutOffConfigurator(const G4String &particlename,
   fPlaced(false)
 {
   if (!fWeightCutOffProcess) {
-    G4std::G4Exception("ERROR:G4WeightCutOffConfigurator::G4WeightCutOffConfigurator: new failed to create G4WeightCutOffProcess!");
+    G4Exception("ERROR:G4WeightCutOffConfigurator::G4WeightCutOffConfigurator: new failed to create G4WeightCutOffProcess!");
   }
 }
 

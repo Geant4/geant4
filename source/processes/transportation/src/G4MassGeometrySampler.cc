@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassGeometrySampler.cc,v 1.6 2002-10-30 10:19:21 dressel Exp $
+// $Id: G4MassGeometrySampler.cc,v 1.7 2002-11-04 10:47:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -86,7 +86,7 @@ G4bool G4MassGeometrySampler::IsConfigured() const{
 
   G4bool isconf = false;
   if (fIsConfigured) {
-   G4std::G4cout << "G4MassGeometrySampler::CheckIfInit some initalization exists, use  ClearSampling() before a new initialization" << G4endl;
+   G4cout << "G4MassGeometrySampler::CheckIfInit some initalization exists, use  ClearSampling() before a new initialization" << G4endl;
    isconf = true;
   }
   return isconf;
@@ -97,7 +97,7 @@ PrepareScoring(G4VScorer *scorer){
   fMScoreConfigurator = 
     new G4MScoreConfigurator(fParticleName, *scorer);
   if (!fMScoreConfigurator) {
-    G4std::G4Exception("ERROR:G4MassGeometrySampler::PrepareScoring: new failed to ccreate G4MScoreConfigurator!");
+    G4Exception("ERROR:G4MassGeometrySampler::PrepareScoring: new failed to ccreate G4MScoreConfigurator!");
   }
 }
 
@@ -112,7 +112,7 @@ PrepareImportanceSampling(G4VIStore *istore,
 				    *fIStore,
 				    ialg);
   if (!fMImportanceConfigurator) {
-    G4std::G4Exception("ERROR:G4MassGeometrySampler::PrepareImportanceSampling: new failed to ccreate G4MImportanceConfigurator!");
+    G4Exception("ERROR:G4MassGeometrySampler::PrepareImportanceSampling: new failed to ccreate G4MImportanceConfigurator!");
   }
   
 }
@@ -123,7 +123,7 @@ PrepareWeightRoulett(G4double wsurvive,
 		     G4double isource) {
   fGCellFinder = new G4MassGCellFinder;
   if (!fGCellFinder) {
-    G4std::G4Exception("ERROR:G4MassGeometrySampler::PrepareWeightRoulett: new failed to create G4MassGCellFinder!");
+    G4Exception("ERROR:G4MassGeometrySampler::PrepareWeightRoulett: new failed to create G4MassGCellFinder!");
   }
   
   fWeightCutOffConfigurator = 
@@ -134,7 +134,7 @@ PrepareWeightRoulett(G4double wsurvive,
 				   fIStore,
 				   *fGCellFinder);
   if (!fWeightCutOffConfigurator) {
-    G4std::G4Exception("ERROR:G4MassGeometrySampler::PrepareWeightRoulett: new failed to ccreate G4WeightCutOffConfigurator!");
+    G4Exception("ERROR:G4MassGeometrySampler::PrepareWeightRoulett: new failed to ccreate G4WeightCutOffConfigurator!");
   }
   
 

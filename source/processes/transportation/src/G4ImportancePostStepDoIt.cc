@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportancePostStepDoIt.cc,v 1.7 2002-10-16 16:27:00 dressel Exp $
+// $Id: G4ImportancePostStepDoIt.cc,v 1.8 2002-11-04 10:47:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,7 +37,8 @@
 #include "G4VImportanceSplitExaminer.hh"
 #include "G4Nsplit_Weight.hh"
 #include "G4VTrackTerminator.hh"
-#include "G4StringConversion.hh"
+#include "g4std/strstream"
+
 
 G4ImportancePostStepDoIt::
 G4ImportancePostStepDoIt(const G4VTrackTerminator &TrackTerminator)
@@ -65,9 +66,15 @@ void G4ImportancePostStepDoIt::DoIt(const G4Track& aTrack,
   }
   else {
     // wrong answer
-    G4String m("G4ImportancePostStepDoIt::DoIt: sampler returned nw = ");
-    m += G4std::str(nw);
-    G4std::G4Exception(m);
+    char st[200];
+    G4std::ostrstream os(st,200);
+    os << "G4ImportancePostStepDoIt::DoIt: sampler returned nw = "
+       << nw
+       << "\n"
+       << '\0';
+    G4String m(st);
+    
+    G4Exception(m);
   }
 }
 
@@ -85,7 +92,7 @@ void G4ImportancePostStepDoIt::Split(const G4Track &aTrack,
     ptrack->SetWeight(nw.fW);
     
     if (ptrack->GetMomentumDirection() != aTrack.GetMomentumDirection()) {
-      G4std::G4Exception("ERROR - G4ImportancePostStepDoIt::Split: (ptrack->GetMomentumDirection() != aTrack.GetMomentumDirection()");
+      G4Exception("ERROR - G4ImportancePostStepDoIt::Split: (ptrack->GetMomentumDirection() != aTrack.GetMomentumDirection()");
     }
     
     aParticleChange->AddSecondary(ptrack);

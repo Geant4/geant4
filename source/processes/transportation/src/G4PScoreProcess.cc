@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScoreProcess.cc,v 1.5 2002-10-22 13:26:04 dressel Exp $
+// $Id: G4PScoreProcess.cc,v 1.6 2002-11-04 10:47:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -47,7 +47,7 @@ G4PScoreProcess::G4PScoreProcess(G4VParallelStepper &astepper,
 {
   G4VProcess::pParticleChange = new G4ParticleChange;
   if (!G4VProcess::pParticleChange) {
-    G4std::G4Exception("ERROR:G4PScoreProcess::G4PScoreProcess: new failed to create G4ParticleChange!");
+    G4Exception("ERROR:G4PScoreProcess::G4PScoreProcess: new failed to create G4ParticleChange!");
   }
 }
 
@@ -62,7 +62,7 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				     G4ForceCondition* condition)
 {
   *condition = Forced;
-  return G4std::kInfinity;
+  return kInfinity;
 }
   
 G4VParticleChange * 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.cc,v 1.7 2002-10-16 16:27:00 dressel Exp $
+// $Id: G4ParallelTransport.cc,v 1.8 2002-11-04 10:47:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -34,7 +34,8 @@
 #include "G4ParallelTransport.hh"
 #include "G4VPGeoDriver.hh"
 #include "G4VParallelStepper.hh"
-#include "G4StringConversion.hh"
+#include "g4std/strstream"
+
 
 G4ParallelTransport::G4ParallelTransport(G4VPGeoDriver &pgeodriver,
 					 G4VParallelStepper &aStepper,
@@ -48,7 +49,7 @@ G4ParallelTransport::G4ParallelTransport(G4VPGeoDriver &pgeodriver,
   fInitStep(false)
 {
   if (!fParticleChange) {
-    G4std::G4Exception("ERROR:G4ParallelTransport::G4ParallelTransport: new failed to create G4ParticleChange!");
+    G4Exception("ERROR:G4ParallelTransport::G4ParallelTransport: new failed to create G4ParticleChange!");
   }
 
   G4VProcess::pParticleChange = fParticleChange;
@@ -107,9 +108,14 @@ G4ParallelTransport::PostStepDoIt(const G4Track& aTrack,
 				  const G4Step& aStep)
 {
   if (!(aStep.GetStepLength() > 0.)) {
-    G4String m("G4PArallelTransport::InitPostDoIt: StepLength() == 0.\n");
-    m += "pos: " + G4std::str(aTrack.GetPosition()) + ", " 
-      + "dir: " +  G4std::str(aTrack.GetMomentumDirection()) + "\n";
+    char st[1000];
+    G4std::ostrstream os(st,1000);
+    os << "G4PArallelTransport::InitPostDoIt: StepLength() == 0.\n"
+       << "pos: " << aTrack.GetPosition() << ", " 
+       << "dir: " << aTrack.GetMomentumDirection() << "\n"
+       << '\0';
+    G4String m(st);
+
     Warning(m);
   }
 
@@ -125,14 +131,14 @@ G4ParallelTransport::PostStepDoIt(const G4Track& aTrack,
     
 void G4ParallelTransport::Error(const G4String &m)
 {
-  G4std::G4cout << "ERROR - G4ParallelTransport::" << m << G4endl;
-  G4std::G4Exception("Program aborted.");
+  G4cout << "ERROR - G4ParallelTransport::" << m << G4endl;
+  G4Exception("Program aborted.");
 }
 
 void G4ParallelTransport::Warning(const G4String &m)
 {
-  G4std::G4cout << "WARNING - G4ParallelTransport: " << G4endl;
-  G4std::G4cout << m << G4endl;
+  G4cout << "WARNING - G4ParallelTransport: " << G4endl;
+  G4cout << m << G4endl;
 }
 
 G4double G4ParallelTransport::

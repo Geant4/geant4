@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreConfigurator.cc,v 1.3 2002-10-22 13:26:04 dressel Exp $
+// $Id: G4MScoreConfigurator.cc,v 1.4 2002-11-04 10:47:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -60,7 +60,7 @@ void G4MScoreConfigurator::Configure(G4VSamplerConfigurator *preConf)
 {
   fMScoreProcess = new G4MScoreProcess(fScorer);
   if (!fMScoreProcess) {
-    G4std::G4Exception("ERROR: G4MScoreConfigurator::Configure: new failed to create G4MScoreProcess!");
+    G4Exception("ERROR: G4MScoreConfigurator::Configure: new failed to create G4MScoreProcess!");
   }
   fPlacer.AddProcessAsSecondDoIt(fMScoreProcess);
 }

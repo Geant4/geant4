@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGeometrySampler.cc,v 1.5 2002-10-30 10:19:21 dressel Exp $
+// $Id: G4ParallelGeometrySampler.cc,v 1.6 2002-11-04 10:47:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -91,7 +91,7 @@ void G4ParallelGeometrySampler::ClearSampling() {
 G4bool G4ParallelGeometrySampler::IsConfigured() const{
   G4bool isconf = false;
   if (fIsConfigured) {
-    G4std::G4cout << "G4ParallelGeometrySampler::CheckIfInit some initalization exists, use  ClearSampling() before a new initialization" << G4endl;
+    G4cout << "G4ParallelGeometrySampler::CheckIfInit some initalization exists, use  ClearSampling() before a new initialization" << G4endl;
     isconf =  true;
   }
   return isconf;
@@ -108,7 +108,7 @@ PrepareImportanceSampling(G4VIStore *istore,
 				  *istore,
 				  ialg);
   if (!fPImportanceConfigurator) {
-    G4std::G4Exception("ERROR:G4ParallelGeometrySampler::PrepareImportanceSampling: new failed to create G4PImportanceConfigurator!");
+    G4Exception("ERROR:G4ParallelGeometrySampler::PrepareImportanceSampling: new failed to create G4PImportanceConfigurator!");
   }
 }
 
@@ -119,7 +119,7 @@ void G4ParallelGeometrySampler::PrepareScoring(G4VScorer *scorer){
 			     GetParallelStepper(), 
 			     *scorer);
   if (!fPScoreConfigurator) {
-    G4std::G4Exception("ERROR:G4ParallelGeometrySampler::PrepareScoring: new failed to create G4PScoreConfigurator!");
+    G4Exception("ERROR:G4ParallelGeometrySampler::PrepareScoring: new failed to create G4PScoreConfigurator!");
   }
   
 }
@@ -129,7 +129,7 @@ PrepareWeightRoulett(G4double wsuvive, G4double wlimit, G4double isource){
   fGCellFinder = new G4ParallelGCellFinder(fParallelWorld.
 					   GetParallelStepper());
   if (!fGCellFinder) {
-    G4std::G4Exception("ERROR:G4ParallelGeometrySampler::PrepareWeightRoulett: new failed to create G4ParallelGCellFinder!");
+    G4Exception("ERROR:G4ParallelGeometrySampler::PrepareWeightRoulett: new failed to create G4ParallelGCellFinder!");
   }
 
   fWeightCutOffConfigurator = 
@@ -140,7 +140,7 @@ PrepareWeightRoulett(G4double wsuvive, G4double wlimit, G4double isource){
 				   fIStore,
 				   *fGCellFinder);
   if (!fWeightCutOffConfigurator) {
-    G4std::G4Exception("ERROR:G4ParallelGeometrySampler::PrepareWeightRoulett: new failed to create G4WeightCutOffConfigurator!");
+    G4Exception("ERROR:G4ParallelGeometrySampler::PrepareWeightRoulett: new failed to create G4WeightCutOffConfigurator!");
   }
   
 }
@@ -161,7 +161,7 @@ void G4ParallelGeometrySampler::Configure(){
 	new G4ParallelTransportConfigurator(fParticleName,
 					    fParallelWorld);
       if (!fParallelTransportConfigurator) {
-	G4std::G4Exception("ERROR:G4ParallelGeometrySampler::Configure: new failed to create G4ParallelTransportConfigurator!");
+	G4Exception("ERROR:G4ParallelGeometrySampler::Configure: new failed to create G4ParallelTransportConfigurator!");
       }
       fConfigurators.push_back(fParallelTransportConfigurator);
     }

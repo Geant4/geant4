@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.cc,v 1.9 2002-10-16 16:27:00 dressel Exp $
+// $Id: G4MassImportanceProcess.cc,v 1.10 2002-11-04 10:47:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -48,7 +48,7 @@ G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
    fImportancePostStepDoIt(*fTrackTerminator)
 {
   if (!fParticleChange) {
-    G4std::G4Exception("ERROR:G4MassImportanceProcess::G4MassImportanceProcess: new failed to create G4ParticleChange!");
+    G4Exception("ERROR:G4MassImportanceProcess::G4MassImportanceProcess: new failed to create G4ParticleChange!");
   }
   G4VProcess::pParticleChange = fParticleChange;
 }
@@ -64,7 +64,7 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				     G4ForceCondition* condition)
 {
   *condition = Forced;
-  return G4std::kInfinity;
+  return kInfinity;
 }
   
 G4VParticleChange *
@@ -73,9 +73,9 @@ G4MassImportanceProcess::PostStepDoIt(const G4Track &aTrack,
 {
   fParticleChange->Initialize(aTrack);
   if (aStep.GetPostStepPoint()->GetStepStatus() == fGeomBoundary
-      && aStep.GetStepLength() > G4std::kCarTolerance) {
+      && aStep.GetStepLength() > kCarTolerance) {
     if (aTrack.GetTrackStatus()==fStopAndKill) {
-      G4std::G4cout << "G4MassImportanceProcess::PostStepDoIt StopAndKill" << G4endl;
+      G4cout << "G4MassImportanceProcess::PostStepDoIt StopAndKill" << G4endl;
     }
 
     G4StepPoint *prepoint = aStep.GetPreStepPoint();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MImportanceConfigurator.cc,v 1.2 2002-10-16 16:27:00 dressel Exp $
+// $Id: G4MImportanceConfigurator.cc,v 1.3 2002-11-04 10:47:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -73,7 +73,7 @@ G4MImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf){
 				fIStore, 
 				terminator);
   if (!fMassImportanceProcess) {
-    G4std::G4Exception("ERROR: G4MImportanceConfigurator::Configure: new failed to create  G4MassImportanceProcess!");
+    G4Exception("ERROR: G4MImportanceConfigurator::Configure: new failed to create  G4MassImportanceProcess!");
   }
   fPlacer.AddProcessAsSecondDoIt(fMassImportanceProcess);
 }

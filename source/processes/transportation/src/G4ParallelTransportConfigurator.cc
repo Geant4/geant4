@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransportConfigurator.cc,v 1.2 2002-10-16 16:27:00 dressel Exp $
+// $Id: G4ParallelTransportConfigurator.cc,v 1.3 2002-11-04 10:47:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -57,7 +57,7 @@ Configure(G4VSamplerConfigurator *preConf){
     G4ParallelTransport(fPWorld.GetGeoDriver(), 
 			fPWorld.GetParallelStepper());
   if (!fParallelTransport) {
-    G4std::G4Exception("ERROR:G4ParallelTransportConfigurator::Configure new failed to create G4ParallelTransport!");
+    G4Exception("ERROR:G4ParallelTransportConfigurator::Configure new failed to create G4ParallelTransport!");
   }
   fPlacer.AddProcessAsSecondDoIt(fParallelTransport);
 }

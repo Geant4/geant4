@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffProcess.cc,v 1.3 2002-10-22 13:26:05 dressel Exp $
+// $Id: G4WeightCutOffProcess.cc,v 1.4 2002-11-04 10:47:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -56,7 +56,7 @@ G4WeightCutOffProcess(G4double wsurvival,
   fGCellFinder(aGCellFinder)
 {
   if (!fParticleChange) {
-    G4std::G4Exception("ERROR:G4WeightCutOffProcess::G4WeightCutOffProcess: new failed to create G4ParticleChange!");
+    G4Exception("ERROR:G4WeightCutOffProcess::G4WeightCutOffProcess: new failed to create G4ParticleChange!");
   }
   G4VProcess::pParticleChange = fParticleChange;
 }
@@ -72,7 +72,7 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				     G4ForceCondition* condition)
 {
   *condition = Forced;
-  return G4std::kInfinity;
+  return kInfinity;
 }
   
 G4VParticleChange * 

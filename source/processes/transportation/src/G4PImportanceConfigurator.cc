@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceConfigurator.cc,v 1.2 2002-10-16 16:27:00 dressel Exp $
+// $Id: G4PImportanceConfigurator.cc,v 1.3 2002-11-04 10:47:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -53,7 +53,7 @@ G4PImportanceConfigurator(const G4String &particlename,
   fParallelImportanceProcess(0)
 {
   if (!fIalgorithm) {
-    G4std::G4Exception("ERROR:G4PImportanceConfigurator::G4PImportanceConfigurator: no fIalgorithm!");
+    G4Exception("ERROR:G4PImportanceConfigurator::G4PImportanceConfigurator: no fIalgorithm!");
   }
 }
 
@@ -81,7 +81,7 @@ Configure(G4VSamplerConfigurator *preConf){
 				    fPWorld.GetParallelStepper(),
 				    terminator);
   if (!fParallelImportanceProcess) {
-    G4std::G4Exception("ERROR:G4PImportanceConfigurator::Configure: new failed to create G4ParallelImportanceProcess!");
+    G4Exception("ERROR:G4PImportanceConfigurator::Configure: new failed to create G4ParallelImportanceProcess!");
   }
   
   fPlacer.AddProcessAsSecondDoIt(fParallelImportanceProcess); 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreProcess.cc,v 1.8 2002-10-22 13:26:04 dressel Exp $
+// $Id: G4MScoreProcess.cc,v 1.9 2002-11-04 10:47:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,7 +45,7 @@ G4MScoreProcess::G4MScoreProcess(G4VScorer &aScorer,
 {
   G4VProcess::pParticleChange = new G4ParticleChange;
   if (!G4VProcess::pParticleChange) {
-    G4std::G4Exception("ERROR:G4MScoreProcess::G4MScoreProcess new failed to create G4ParticleChange!");
+    G4Exception("ERROR:G4MScoreProcess::G4MScoreProcess new failed to create G4ParticleChange!");
   }
 }
 
@@ -60,7 +60,7 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				     G4ForceCondition* condition)
 {
   *condition = Forced;
-  return G4std::kInfinity;
+  return kInfinity;
 }
   
 G4VParticleChange * 
@@ -68,7 +68,7 @@ G4MScoreProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
 {
   pParticleChange->Initialize(aTrack);
 
-  if (aStep.GetStepLength() > G4std::kCarTolerance) {
+  if (aStep.GetStepLength() > kCarTolerance) {
     G4StepPoint *prepoint = aStep.GetPreStepPoint();
     G4StepPoint *postpoint = aStep.GetPostStepPoint();
   
