@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.23 2001-09-10 10:52:01 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.24 2002-10-24 15:11:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,8 @@
 #include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
+#include "G4VTrajectory.hh"
+#include "G4VHit.hh"
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
   fSystem                (system),
@@ -177,6 +179,14 @@ void G4VSceneHandler::AddThis (const G4Polyhedra& polyhedra) {
 
 void G4VSceneHandler::AddThis (const G4VSolid& solid) {
   RequestPrimitives (solid);
+}
+
+void G4VSceneHandler::AddThis (const G4VTrajectory& traj) {
+  traj.DrawTrajectory();
+}
+
+void G4VSceneHandler::AddThis (const G4VHit& hit) {
+  ((G4VHit&)hit).Draw(); // Cast to non-const because Draw is non-const!!!!
 }
 
 void G4VSceneHandler::AddViewerToList (G4VViewer* pViewer) {

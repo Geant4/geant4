@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.18 2001-08-14 18:36:07 johna Exp $
+// $Id: G4VSceneHandler.hh,v 1.19 2002-10-24 15:10:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,6 +86,8 @@ public: // With description
   virtual void AddThis (const G4Polycone&);
   virtual void AddThis (const G4Polyhedra&);
   virtual void AddThis (const G4VSolid&);  // For solids not above.
+  virtual void AddThis (const G4VTrajectory&);
+  virtual void AddThis (const G4VHit&);
 
   ///////////////////////////////////////////////////////////////
   // Other inherited functions.

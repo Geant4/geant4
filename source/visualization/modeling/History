@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2002-10-24 14:52:51 johna Exp $
+$Id: History,v 1.19 2002-10-24 15:06:24 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,7 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
-24th October 2002  John Allison (vis-V04-01-00)
+24th October 2002  John Allison (vis-V04-01-03)
 - Changes for AddThis(const G4VTrajectory&) and (const G4VHit&).
 
 23rd February 2002  John Allison (vis-V04-00-02)

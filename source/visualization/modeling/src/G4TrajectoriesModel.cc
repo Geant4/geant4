@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.cc,v 1.10 2002-02-24 01:35:52 johna Exp $
+// $Id: G4TrajectoriesModel.cc,v 1.11 2002-10-24 15:07:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
         // Representation with a circle at each step should be an option 
         // choosable from a command.
 	// (*TC) [iT] -> DrawTrajectory (50);
-	(*TC) [iT] -> DrawTrajectory ();
+	sceneHandler.AddThis (*((*TC) [iT]));
       }
     }
   }
