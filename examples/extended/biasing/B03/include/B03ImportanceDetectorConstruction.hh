@@ -21,35 +21,36 @@
 // ********************************************************************
 //
 //
-// $Id: B03PrimaryGeneratorAction.cc,v 1.5 2002-11-08 17:35:19 dressel Exp $
+// $Id: B03ImportanceDetectorConstruction.hh,v 1.1 2002-11-08 17:35:18 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
+#ifndef B03ImportanceDetectorConstruction_hh 
+#define B03ImportanceDetectorConstruction_hh  B03ImportanceDetectorConstruction_hh 
+
 #include "globals.hh"
+#include "g4std/map"
+#include "B03PVolumeStore.hh"
+class G4VPhysicalVolume;
 
-#include "B03PrimaryGeneratorAction.hh"
 
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4Neutron.hh"
-#include "G4ThreeVector.hh"
 
-B03PrimaryGeneratorAction::B03PrimaryGeneratorAction()
+class B03ImportanceDetectorConstruction
 {
-  G4int n_particle = 1;
-  particleGun = new G4ParticleGun(n_particle);
-  particleGun->SetParticleDefinition(G4Neutron::NeutronDefinition());
-  particleGun->SetParticleEnergy(10.0*MeV);
-  particleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -90.0005*cm));
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.0, 0.0, 1.0));
-}
+public:
+  B03ImportanceDetectorConstruction();
+  ~B03ImportanceDetectorConstruction();
 
-B03PrimaryGeneratorAction::~B03PrimaryGeneratorAction()
-{
-  delete particleGun;
-}
+  const G4VPhysicalVolume &GetPhysicalVolumeByName(const G4String& name) const;
+  G4VPhysicalVolume &GetWorldVolume() const;
+  G4String ListPhysNamesAsG4String();
+  G4String GetCellName(G4int i);
+  G4GeometryCell GetGeometryCell(G4int i);
 
-void B03PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
-  particleGun->GeneratePrimaryVertex(anEvent);
-}
+private:
+  void Construct();
+  B03PVolumeStore fPVolumeStore;;
+  G4VPhysicalVolume *fWorldVolume;
+};
+
+#endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB03.cc,v 1.7 2002-08-29 15:37:25 dressel Exp $
+// $Id: exampleB03.cc,v 1.8 2002-11-08 17:35:17 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,50 +34,52 @@
 // 
 // --------------------------------------------------------------
 
-#include "G4VPhysicalVolume.hh"
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
 
-#include "B03DetectorConstruction.hh"
-#include "B03PhysicsList.hh"
-#include "B03PrimaryGeneratorAction.hh"
+#include "G4CellScorerStore.hh"
 
-// Files specific for biasing
-#include "G4MassImportanceSampler.hh"
-#include "G4IStore.hh"
+// class for special output
+#include "G4ScoreTable.hh"
 
+#include "B03App.hh"
+
+
+#include "Python.h"
+
+extern "C" {
+  void initB03Appc();
+}
 int main(int argc, char **argv)
 {  
 
-  G4int numberOfEvent = 1000;
+  // output
+  //  B03AppStruct *app = 0;
+  if (argc==2 && G4String(argv[1]) == G4String("-python")) {
+    /* Pass argv[0] to the Python interpreter */
+    Py_SetProgramName(argv[0]);
+    
+    /* Initialize the Python interpreter.  Required. */
+    Py_Initialize();
 
-  G4String random_status_out_file, random_status_in_file;
-  G4long myseed = 345354;
+    initB03Appc();
+    FILE *pyrc = fopen("python.rc","r");
+    if (pyrc) {
+      PyRun_SimpleFile(pyrc,"python.rc");
+    }
+    else {
+      G4cout  << "exampleB03: python.rc not found" << G4endl;
+    }
+    PyRun_InteractiveLoop(stdin, "/dev/stdin");
+  } 
+  else {
+    B03AppBase &base = B03AppBase::GetB03AppBase();
+  }
 
-  HepRandom::setTheSeed(myseed);
+  //  app = GetB03AppStruct();
 
-  G4RunManager *runManager = new G4RunManager;
-  
-  // create the detector      ---------------------------
-  B03DetectorConstruction *detector = new B03DetectorConstruction();
-  runManager->SetUserInitialization(detector);
-  //  ---------------------------------------------------
-  runManager->SetUserInitialization(new B03PhysicsList);
-  runManager->SetUserAction(new B03PrimaryGeneratorAction);
-  runManager->Initialize();
-
-  // the IStore is filled during detector construction
-  G4IStore &aIstore = *detector->GetIStore();
-  // create the importance sampler for biasing in the tracking world
-  G4MassImportanceSampler mim(aIstore, "neutron");
-  mim.Initialize();
-
-  G4UImanager* UI;
-
-  UI = G4UImanager::GetUIpointer();
-  UI->ApplyCommand("/control/execute init.mac");   
-
-  runManager->BeamOn(numberOfEvent);
+  //  G4ScoreTable sp(app->fIStore);
+  //  sp.Print(app->fCS_store->GetMapGeometryCellCellScorer(), &G4cout);
 
   return 0;
 }
+

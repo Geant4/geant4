@@ -21,35 +21,42 @@
 // ********************************************************************
 //
 //
-// $Id: B03PrimaryGeneratorAction.cc,v 1.5 2002-11-08 17:35:19 dressel Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: B03PVolumeStore.hh,v 1.1 2002-11-08 17:35:18 dressel Exp $
+// GEANT4 tag 
 //
+// ----------------------------------------------------------------------
+// Class B03PVolumeStore
+//
+// Class description:
+//
+// ...
+
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// ----------------------------------------------------------------------
+
+#ifndef B03PVolumeStore_hh
+#define B03PVolumeStore_hh B03PVolumeStore_hh
 
 #include "globals.hh"
+#include "g4std/set"
+#include "G4GeometryCell.hh"
+#include "G4GeometryCellComp.hh"
 
-#include "B03PrimaryGeneratorAction.hh"
+typedef G4std::set< G4GeometryCell, G4GeometryCellComp > B03SetGeometryCell;
 
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4Neutron.hh"
-#include "G4ThreeVector.hh"
+class B03PVolumeStore {
+public:
+  B03PVolumeStore();
+  ~B03PVolumeStore();
+  
+  void AddPVolume(const G4GeometryCell &cell);
+  const G4VPhysicalVolume *GetPVolume(const G4String &name) const;
+  G4String GetPNames() const;
 
-B03PrimaryGeneratorAction::B03PrimaryGeneratorAction()
-{
-  G4int n_particle = 1;
-  particleGun = new G4ParticleGun(n_particle);
-  particleGun->SetParticleDefinition(G4Neutron::NeutronDefinition());
-  particleGun->SetParticleEnergy(10.0*MeV);
-  particleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -90.0005*cm));
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.0, 0.0, 1.0));
-}
+private:
+  B03SetGeometryCell fSetGeometryCell;
+};
 
-B03PrimaryGeneratorAction::~B03PrimaryGeneratorAction()
-{
-  delete particleGun;
-}
 
-void B03PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
-  particleGun->GeneratePrimaryVertex(anEvent);
-}
+
+#endif
