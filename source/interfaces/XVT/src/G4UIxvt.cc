@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIxvt.cc,v 1.4 2001-07-11 10:01:19 gunter Exp $
+// $Id: G4UIxvt.cc,v 1.5 2002-12-04 22:03:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef G4UI_BUILD_XVT_SESSION
@@ -126,7 +126,7 @@ G4bool G4UIxvt::breakRequested(G4ApplicationState previousState,
 
   G4bool ans = false;
 
-  if(previousState==Idle && requestedState==GeomClosed && brktbl[0])
+  if(previousState==G4State_Idle && requestedState==G4State_GeomClosed && brktbl[0])
   { 
     writeGeantToXvt("====== BREAKPOINT NOTIFICATION ======");
     writeGeantToXvt("BreakPoint at: BEGIN OF RUN");
@@ -136,7 +136,7 @@ G4bool G4UIxvt::breakRequested(G4ApplicationState previousState,
     ans = true;
   }
 
-  if(previousState==GeomClosed && requestedState==EventProc && brktbl[1])
+  if(previousState==G4State_GeomClosed && requestedState==G4State_EventProc && brktbl[1])
   { 
     writeGeantToXvt("====== BREAKPOINT NOTIFICATION ======");
     writeGeantToXvt("BreakPoint at: BEGIN OF EVENT");
@@ -146,7 +146,7 @@ G4bool G4UIxvt::breakRequested(G4ApplicationState previousState,
     ans = true;
   }
 
-  if(previousState==EventProc && requestedState==GeomClosed && brktbl[2])
+  if(previousState==G4State_EventProc && requestedState==G4State_GeomClosed && brktbl[2])
   {     
     writeGeantToXvt("====== BREAKPOINT NOTIFICATION ======");
     writeGeantToXvt("BreakPoint at: END OF EVENT");
@@ -156,7 +156,7 @@ G4bool G4UIxvt::breakRequested(G4ApplicationState previousState,
     ans = true;
   }
 
-  if(previousState==GeomClosed && requestedState==Idle && brktbl[3])
+  if(previousState==G4State_GeomClosed && requestedState==G4State_Idle && brktbl[3])
   { 
     writeGeantToXvt("====== BREAKPOINT NOTIFICATION ======");
     writeGeantToXvt("BreakPoint at: END OF RUN");    
