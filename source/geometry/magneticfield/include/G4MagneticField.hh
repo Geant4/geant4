@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticField.hh,v 1.9 2001-12-04 17:35:51 gcosmo Exp $
+// $Id: G4MagneticField.hh,v 1.10 2001-12-04 17:47:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,6 +39,7 @@
 #ifndef G4MAGNETIC_FIELD_DEF
 #define G4MAGNETIC_FIELD_DEF
 
+#include "G4Types.hh"
 #include "G4Field.hh"
 
 class G4MagneticField : public G4Field
