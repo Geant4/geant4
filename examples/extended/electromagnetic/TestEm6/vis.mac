@@ -1,0 +1,34 @@
+#  run by   /control/execute vis.mac
+
+/control/verbose 2
+/run/verbose 2
+/run/initialize
+
+# change the material
+# /calor/setMat Be
+
+# change the geometry, go to 10 layers longitudinally of 1 radlength each
+/calor/setLbin 10 1.0
+/calor/update
+
+# invoge OGLIX driver to directly show
+/vis/open OGLIX
+# or alternatively invoke the DAWNFILE driver with the possibility to save ps files
+# /vis/open DAWNFILE
+
+# Set camera 
+/vis/viewer/set/viewpointThetaPhi 85 170
+
+# Create an empty scene and add the detector geometry to it
+/vis/drawVolume
+# /vis/viewer/flush
+
+# Visualize events added to the current scene
+/tracking/storeTrajectory 1
+# draw only charged:
+# /event/drawTracks charged
+# draw all (charged and neutral)
+/event/drawTracks all
+
+# show axes at origin x,y,z = 0,50,0 mm  of 10 mm length
+/vis/scene/add/axes 0 50 0 10 mm
