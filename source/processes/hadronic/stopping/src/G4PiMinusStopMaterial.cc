@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopMaterial.cc,v 1.7 2001-10-04 20:00:42 hpw Exp $
+// $Id: G4PiMinusStopMaterial.cc,v 1.8 2001-10-05 16:09:44 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,8 +63,6 @@
 G4PiMinusStopMaterial::G4PiMinusStopMaterial()
   
 {
-  //  _definitions = new G4RWTPtrOrderedVector<G4ParticleDefinition>();
-  //  _momenta = new G4RWTPtrOrderedVector<G4LorentzVector>();
   _definitions = 0;
   _momenta = 0;
   _distributionE = 0;
@@ -81,7 +79,7 @@ G4PiMinusStopMaterial::~G4PiMinusStopMaterial()
   if (_definitions != 0) delete _definitions;
   _definitions = 0;
 
-  for(G4int i=0; i<_momenta->size(); i++) delete(*_momenta)[i];
+  for(unsigned int i=0; i<_momenta->size(); i++) delete(*_momenta)[i];
   if (_momenta != 0) delete _momenta;
 
   delete _distributionE;
@@ -190,7 +188,7 @@ G4double G4PiMinusStopMaterial::RecoilEnergy(const G4double mass)
 {
   G4ThreeVector p(0.,0.,0.);
   
-  for (G4int i = 0; i< _momenta->size(); i++)
+  for (unsigned int i = 0; i< _momenta->size(); i++)
     {
       p = p + (*_momenta)[i]->vect();
     }

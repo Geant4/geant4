@@ -228,7 +228,8 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
   }
   
   G4ReactionProductVector * tmpHadrons = NULL;
-  G4int i, ii, dummy;
+  G4int ii, dummy;
+  unsigned int i;
   if(theEnergyAngData != NULL)
   {
     tmpHadrons = theEnergyAngData->Sample(eKinetic);
@@ -236,7 +237,8 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
   else if(theAngularDistribution!= NULL)
   {
     G4bool * Done = new G4bool[nDef];
-    for(i=0; i<nDef; i++) Done[i] = false;
+    G4int i0;
+    for(i0=0; i0<nDef; i0++) Done[i0] = false;
     if(tmpHadrons == NULL) 
     {
       tmpHadrons = new G4ReactionProductVector;
@@ -251,14 +253,14 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
       }
     }
     G4ReactionProduct * aHadron;
-    for(i=0; i<nDef; i++)
+    for(i0=0; i0<nDef; i0++)
     {
-      if(!Done[i])
+      if(!Done[i0])
       {
         aHadron = new G4ReactionProduct;
 	if(theEnergyDistribution!=NULL)
 	{
-	  aHadron->SetDefinition(theDefs[i]);
+	  aHadron->SetDefinition(theDefs[i0]);
 	  aHadron->SetKineticEnergy(theEnergyDistribution->Sample(eKinetic, dummy));
 	}
 	else
@@ -358,7 +360,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
       if(thePhotons==NULL) thePhotons = new G4ReactionProductVector;
       if(theOtherPhotons != NULL)
       {
-        for(G4int ii=0; ii<theOtherPhotons->size(); ii++)
+        for(unsigned int ii=0; ii<theOtherPhotons->size(); ii++)
         {
           thePhotons->push_back(theOtherPhotons->operator[](ii));
         }
@@ -370,8 +372,8 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
   }
   
 // fill the result
-  G4int nSecondaries = tmpHadrons->size();
-  G4int nPhotons = 0;
+  unsigned int nSecondaries = tmpHadrons->size();
+  unsigned int nPhotons = 0;
   if(thePhotons!=NULL) nPhotons = thePhotons->size();
   nSecondaries += nPhotons;
   theResult.SetNumberOfSecondaries(nSecondaries);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HESigmaZeroInelastic.cc,v 1.6 2001-08-01 17:10:12 hpw Exp $
+// $Id: G4HESigmaZeroInelastic.cc,v 1.7 2001-10-05 16:10:42 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,7 +48,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
     G4HEVector * pv = new G4HEVector[MAXPART];
     theParticleChange.Initialize( aTrack );
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
+//    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
     G4HEVector incidentParticle(aParticle);
      
     G4HELambdaInelastic theLambdaInelastic;

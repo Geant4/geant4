@@ -35,7 +35,7 @@
     if(i>nEntries) G4Exception("Skipped some index numbers in G4NeutronHPList");
     if(i==nPoints)
     {
-      nPoints *= 1.5;
+      nPoints = static_cast<G4int>(1.5*nPoints);
       G4double * buff = new G4double[nPoints];
       for (G4int j=0; j<nEntries; j++) buff[j] = theData[j];
       delete [] theData;

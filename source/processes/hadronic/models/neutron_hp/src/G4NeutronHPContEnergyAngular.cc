@@ -29,7 +29,7 @@
 G4ReactionProduct * G4NeutronHPContEnergyAngular::Sample(G4double anEnergy, G4double massCode, G4double mass)
 {
    G4ReactionProduct * result;
-   G4int i,ii,iii;
+   G4int i;
    G4int it;
    for(i=0;i<nEnergy;i++)
    {

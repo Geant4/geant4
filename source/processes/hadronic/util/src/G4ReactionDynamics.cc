@@ -1061,7 +1061,7 @@
     pseudoParticle[3].SetTotalEnergy(
      sqrt( pOriginal*pOriginal + mOriginal*mOriginal )*GeV );
     
-    G4double ekin0 = pseudoParticle[3].GetKineticEnergy()/GeV;
+//    G4double ekin0 = pseudoParticle[3].GetKineticEnergy()/GeV;
     
     pseudoParticle[4].SetMomentum( 0.0, 0.0, 0.0 );
     pseudoParticle[4].SetMass( protonMass*numberofFinalStateNucleons*MeV );
@@ -1910,7 +1910,7 @@
     pseudoParticle[5].SetMass( protonMass*numberofFinalStateNucleons*MeV );
     pseudoParticle[5].SetTotalEnergy( protonMass*numberofFinalStateNucleons*MeV );
     
-    G4double ekin0 = pseudoParticle[4].GetKineticEnergy()/GeV;
+//    G4double ekin0 = pseudoParticle[4].GetKineticEnergy()/GeV;
     G4double theoreticalKinetic =
       pseudoParticle[4].GetTotalEnergy()/GeV + pseudoParticle[5].GetTotalEnergy()/GeV;
     
@@ -2095,7 +2095,6 @@
     // The b values are parametrizations from experimental data.
     // Not available values are taken from those of similar reactions.
     //
-    G4int i;
     G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
     G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
     G4ParticleDefinition *aPiZero = G4PionZero::PionZero();
@@ -2114,16 +2113,16 @@
     const G4double pOriginal = modifiedOriginal.GetMomentum().mag()/GeV;
     G4double currentMass = currentParticle.GetMass()/GeV;
     G4double targetMass = targetParticle.GetDefinition()->GetPDGMass()/GeV;
-    G4double centerofmassEnergy = sqrt( mOriginal*mOriginal +
-                                        targetMass*targetMass +
-                                        2.0*targetMass*etOriginal );  // GeV
+//    G4double centerofmassEnergy = sqrt( mOriginal*mOriginal +
+//                                        targetMass*targetMass +
+//                                        2.0*targetMass*etOriginal );  // GeV
     targetMass = targetParticle.GetMass()/GeV;
     const G4double atomicWeight = targetNucleus.GetN();
-    const G4double atomicNumber = targetNucleus.GetZ();
+//    const G4double atomicNumber = targetNucleus.GetZ();
     
     G4double etCurrent = currentParticle.GetTotalEnergy()/GeV;
     G4double pCurrent = currentParticle.GetTotalMomentum()/GeV;
-    G4double ekCurrent = currentParticle.GetKineticEnergy()/GeV;
+//    G4double ekCurrent = currentParticle.GetKineticEnergy()/GeV;
     G4double cmEnergy = sqrt( currentMass*currentMass +
                               targetMass*targetMass +
                               2.0*targetMass*etCurrent );  // in GeV
@@ -2559,7 +2558,7 @@
      G4double ran;
      
      if( x > 9.9 )    // use normal distribution with sigma^2 = <x>
-       iran = G4std::max( 0.0, x+normal()*sqrt(x) );
+       iran = static_cast<G4int>(G4std::max( 0.0, x+normal()*sqrt(x) ) );
      else {
       G4int mm = G4int(5.0*x);
       if( mm <= 0 )   // for very small x try iran=1,2,3
@@ -2686,12 +2685,9 @@
     //    inclusive distributions, but it is necessary for momentum conservation
     //
     const G4double atomicWeight = targetNucleus.GetN();
-    const G4double atomicNumber = targetNucleus.GetZ();
     const G4double logWeight = log(atomicWeight);
     
     G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
-    G4ParticleDefinition *aProton = G4Proton::Proton();
-    G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
     G4ParticleDefinition *aPiZero = G4PionZero::PionZero();
     
@@ -2706,7 +2702,7 @@
     //  Some smearing in transverse direction from Fermi motion
     //
     G4float pp, pp1;
-    G4double alekw, pix, piy, piz, p, rthnve, phinve;
+    G4double alekw, p, rthnve, phinve;
     G4double r1, r2, a1, ran1, ran2, xxh, exh, pxTemp, pyTemp, pzTemp;
     
     r1 = twopi*G4UniformRand();
@@ -3658,8 +3654,7 @@
     tempV.SetElement( tempLen++, v[1] );
     if( nt == 3 )tempV.SetElement( tempLen++, v[2] );
     G4bool constantCrossSection = true;
-    G4double wgt =
-      GenerateNBodyEvent( pseudo2.GetMass()/MeV, constantCrossSection, tempV, tempLen );
+    GenerateNBodyEvent( pseudo2.GetMass()/MeV, constantCrossSection, tempV, tempLen );
     v[0]->Lorentz( *v[0], pseudo2 );
     v[1]->Lorentz( *v[1], pseudo2 );
     if( nt == 3 )v[2]->Lorentz( *v[2], pseudo2 );

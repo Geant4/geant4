@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectronNucleusDataSet.cc,v 1.3 2001-08-01 17:03:14 hpw Exp $
+// $Id: G4ElectronNucleusDataSet.cc,v 1.4 2001-10-05 16:08:34 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,4 +35,5 @@
 G4double G4ElectronNucleusDataSet::GetCrossSection(const G4DynamicParticle* aPart,
                                                        const G4Element* anEle)
 {
+  return -1.;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiNeutronInelastic.cc,v 1.5 2001-08-01 17:11:00 hpw Exp $
+// $Id: G4LEAntiNeutronInelastic.cc,v 1.6 2001-10-05 16:11:31 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: AntiNeutron Inelastic Process
@@ -273,8 +273,6 @@
     G4ParticleDefinition *aProton = G4Proton::Proton();
     G4ParticleDefinition *anAntiProton = G4AntiProton::AntiProton();
     G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
-    G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
-    G4ParticleDefinition *aPiZero = G4PionZero::PionZero();
     
     // energetically possible to produce pion(s)  -->  inelastic scattering
     //                                   otherwise quasi-elastic scattering

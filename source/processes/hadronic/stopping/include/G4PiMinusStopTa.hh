@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopTa.hh,v 1.6 2001-10-04 20:00:41 hpw Exp $
+// $Id: G4PiMinusStopTa.hh,v 1.7 2001-10-05 16:09:44 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,12 +63,6 @@ public:
 
   // Destructor
   virtual ~G4PiMinusStopTa();
-
-  // Definitions of absorption products
-  //  virtual G4RWTValOrderedVector<G4String>* DefinitionVector();
-
-  // 4-vectors of absorption products
-  //  virtual G4RWTPtrOrderedVector<G4LorentzVector>* P4Vector();
 
   // Number of final nucleons, out of generated absorption products
   virtual G4double FinalNucleons();

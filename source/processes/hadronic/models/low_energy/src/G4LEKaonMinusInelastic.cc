@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonMinusInelastic.cc,v 1.6 2001-08-01 17:11:06 hpw Exp $
+// $Id: G4LEKaonMinusInelastic.cc,v 1.7 2001-10-05 16:11:31 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy KaonMinus Inelastic Process
@@ -45,7 +45,6 @@
     // create the target particle
     
     G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
-    G4double targetMass = originalTarget->GetDefinition()->GetPDGMass();
     G4ReactionProduct targetParticle( originalTarget->GetDefinition() );
     
     if( verboseLevel > 1 )

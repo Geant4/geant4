@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaGiantResonanceDataSet.hh,v 1.4 2001-08-01 17:03:08 hpw Exp $
+// $Id: G4GammaGiantResonanceDataSet.hh,v 1.5 2001-10-05 16:08:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,6 +69,7 @@ public:
      if( aParticle->GetDefinition()->GetPDGEncoding()==22 &&
          aParticle->GetKineticEnergy()/MeV<ThresholdEnergy(i)
        ) result = true;
+     return result;
    }
 
    G4double GetCrossSection(const G4DynamicParticle* aParticle,

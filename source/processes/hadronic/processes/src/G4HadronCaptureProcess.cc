@@ -97,15 +97,13 @@ GetMeanFreePathBasic(const G4DynamicParticle* aParticle,
    const G4ElementVector* theElementVector;
    const G4double* theAtomicNumDensityVector;
 
-   G4int J = aMaterial->GetIndex();
-
    theElementVector = aMaterial->GetElementVector();
    theAtomicNumDensityVector = aMaterial->GetAtomicNumDensityVector();
    G4double aTemp = aMaterial->GetTemperature();
 
    G4double sigma = 0.;
 
-   for (G4int i = 0; i < aMaterial->GetNumberOfElements(); i++) {
+   for (unsigned int i = 0; i < aMaterial->GetNumberOfElements(); i++) {
      sigma = sigma + theAtomicNumDensityVector[i] * 
              GetMicroscopicCrossSection(aParticle, (*theElementVector)(i), aTemp);
    }
@@ -135,29 +133,4 @@ DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
    }
 
    theCrossSectionDataStore->DumpPhysicsTable(aParticleType);
-
-   //   RWBoolean exists = thePhysicsDictionary.contains(&aParticleType);
-   //   if (verboseLevel > 1) {
-   //      G4cout << "DumpPhysicsTable: exists=" << exists << G4endl;
-   //   }
-   //   if (!exists) {
-   //      G4cout << "DumpPhysicsTable: no phyics table for " << 
-   //              aParticleType.GetParticleName() << G4endl;
-   //      return;
-   //   }
-   //   G4PhysicsTable* pt = thePhysicsDictionary.findValue(&aParticleType);
-   //
-   //   const G4ElementTable* et = G4Element::GetElementTable();
-   //   G4int numOfElements = G4Element::GetNumberOfElements();
-   //   if (verboseLevel > 1)
-   //      G4cout << "DumpPhysicsTable: numOfElements=" << numOfElements << G4endl;
-   //   G4LPhysicsFreeVector* pv;
-   //   for (G4int J = 0; J < numOfElements; J++) { 
-   //      G4cout << G4endl << "Capture cross section data for " << 
-   //              aParticleType.GetParticleName() << " on " <<
-   //              ((*et)[J])->GetName() << G4endl << G4endl;
-   //      G4cout << G4endl << "Ek(GeV)    sigma(mb)" << G4endl << G4endl;
-   //      pv = (G4LPhysicsFreeVector*)(*thePhysicsTable)(J);
-   //      pv->DumpValues();
-   //   }
 }

@@ -121,10 +121,6 @@ private:
 // Note: DEC compiler won't accept "const G4ParticleDefinition" here
 // because it instantiates the ClearAndDestroy method that deletes the 
 // pointers in the dictionary.
-  //   G4RWTPtrHashDictionary<G4ParticleDefinition, G4PhysicsTable> 
-  //     thePhysicsDictionary;
-
-  //   G4HadronCrossSections theCrossSectionData;
 
    G4CrossSectionDataStore* theCrossSectionDataStore;
 

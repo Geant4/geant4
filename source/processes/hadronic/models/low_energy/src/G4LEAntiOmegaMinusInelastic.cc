@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiOmegaMinusInelastic.cc,v 1.4 2001-08-01 17:11:00 hpw Exp $
+// $Id: G4LEAntiOmegaMinusInelastic.cc,v 1.5 2001-10-05 16:11:31 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: AntiOmegaMinus Inelastic Process
@@ -147,7 +147,7 @@
     //
     const G4double mOriginal = originalIncident->GetDefinition()->GetPDGMass()/MeV;
     const G4double etOriginal = originalIncident->GetTotalEnergy()/MeV;
-    const G4double pOriginal = originalIncident->GetTotalMomentum()/MeV;
+//    const G4double pOriginal = originalIncident->GetTotalMomentum()/MeV;
     const G4double targetMass = targetParticle.GetMass()/MeV;
     G4double centerofmassEnergy = sqrt( mOriginal*mOriginal +
                                         targetMass*targetMass +

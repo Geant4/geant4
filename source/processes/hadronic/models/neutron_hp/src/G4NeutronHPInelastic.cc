@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.10 2001-07-26 09:27:31 hpw Exp $
+// $Id: G4NeutronHPInelastic.cc,v 1.11 2001-10-05 16:11:55 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NeutronHPInelastic.hh"
@@ -47,7 +47,6 @@
     dirName = dirName + tString;
     numEle = G4Element::GetNumberOfElements();
     theInelastic = new G4NeutronHPChannelList[numEle];
-    G4bool toBeInitialised = true;
 
     for (G4int i=0; i<numEle; i++)
     { 

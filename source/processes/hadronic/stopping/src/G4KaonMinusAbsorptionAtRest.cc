@@ -126,7 +126,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
   // Secondary interactions
   
   G4DynamicParticle* thePion;
-  G4int i;
+  unsigned int i;
   for(i = 0; i < absorptionProducts->size(); i++)
     {
       thePion = (*absorptionProducts)[i];
@@ -173,10 +173,8 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
   
   G4double productEnergy = 0.;
   G4ThreeVector pProducts(0.,0.,0.);
-  G4int nN = 0;
-  G4int nP = 0;
 
-  G4int nAbsorptionProducts = 0;
+  unsigned int nAbsorptionProducts = 0;
   if (absorptionProducts != 0) nAbsorptionProducts = absorptionProducts->size();
   
   for ( i = 0; i<nAbsorptionProducts; i++)
@@ -227,7 +225,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
 
   G4ReactionProductVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,energyDeposit,pNucleus);
   
-  G4int nFragmentationProducts = 0;
+  unsigned int nFragmentationProducts = 0;
   if (fragmentationProducts != 0) nFragmentationProducts = fragmentationProducts->size();
   
   //Initialize ParticleChange
@@ -536,9 +534,9 @@ G4DynamicParticle* G4KaonMinusAbsorptionAtRest::SigmaLambdaConversion(G4DynamicP
   //           -G4NucleiPropertiesTable::GetAtomicMass(newZ,A)
   //           -nucleonMass;
   // equivalent to -'initialBindingEnergy+nucleus.GetBindingEnergy' !
-  G4double massDifference =
-    -G4NucleiPropertiesTable::GetBindingEnergy(Z,A)
-    +G4NucleiPropertiesTable::GetBindingEnergy(newZ,A);
+  //G4double massDifference =
+  //  -G4NucleiPropertiesTable::GetBindingEnergy(Z,A)
+  //  +G4NucleiPropertiesTable::GetBindingEnergy(newZ,A);
   
   
   // Add energy and momentum to nucleus, change Z,A 

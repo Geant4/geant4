@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReactionProductVector.hh,v 1.6 2001-10-04 20:00:44 hpw Exp $
+// $Id: G4ReactionProductVector.hh,v 1.7 2001-10-05 16:10:06 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,14 +39,7 @@
 #include "G4ReactionProduct.hh"
 #include "g4std/vector"
 
-// #ifdef STL
-// //in future use STL vector as container of reaction products ...
-// typedef Vector<G4ReactionProduct> G4ReactionProductVector;
-// #elseifdef RWT
-
 typedef G4std::vector<G4ReactionProduct *> G4ReactionProductVector;
 struct DeleteReactionProduct{ void operator()(G4ReactionProduct * aR){delete aR;} };
-
-// #endif
 
 #endif

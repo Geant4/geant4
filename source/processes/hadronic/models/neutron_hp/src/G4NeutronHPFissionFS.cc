@@ -161,15 +161,16 @@
       G4int nPhotons = 0;
       if(thePhotons!=NULL) nPhotons = thePhotons->size();
       theResult.SetNumberOfSecondaries(nPhotons+Prompt+delayed);
-      for(i=0; i<Prompt; i++)
+      G4int i0;
+      for(i0=0; i0<Prompt; i0++)
       {
-        theResult.AddSecondary(theNeutrons->operator[](i));
+        theResult.AddSecondary(theNeutrons->operator[](i0));
       }
-      for(i=Prompt; i<Prompt+delayed; i++)
+      for(i0=Prompt; i0<Prompt+delayed; i0++)
       {
-        G4double time = -log(G4UniformRand())/theDecayConstants[i-Prompt];
+        G4double time = -log(G4UniformRand())/theDecayConstants[i0-Prompt];
         time += theResult.GetTimeChange();        
-        theResult.AddSecondary(theNeutrons->operator[](i), time);
+        theResult.AddSecondary(theNeutrons->operator[](i0), time);
       }
       delete theNeutrons;   
     }

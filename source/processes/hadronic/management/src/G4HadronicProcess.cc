@@ -113,7 +113,7 @@
     theIsoResult = new G4IsoParticleChange;
     G4bool done = false;
     G4IsoResult * anIsoResult = NULL;
-    for(G4int i=0; i<theProductionModels.size(); i++)
+    for(unsigned int i=0; i<theProductionModels.size(); i++)
     {
       anIsoResult = theProductionModels[i]->GetIsotope(aTrack, aNucleus);
       if(anIsoResult!=NULL)

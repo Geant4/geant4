@@ -108,15 +108,13 @@ GetMeanFreePathBasic(const G4DynamicParticle* aParticle,
    const G4ElementVector* theElementVector;
    const G4double* theAtomicNumDensityVector;
 
-   G4int J = aMaterial->GetIndex();
-
    theElementVector = aMaterial->GetElementVector();
    theAtomicNumDensityVector = aMaterial->GetAtomicNumDensityVector();
    G4double aTemp = aMaterial->GetTemperature();
 
    G4double sigma = 0.;
 
-   for (G4int i = 0; i < aMaterial->GetNumberOfElements(); i++) {
+   for (unsigned int i = 0; i < aMaterial->GetNumberOfElements(); i++) {
      sigma = sigma + theAtomicNumDensityVector[i] *
              GetMicroscopicCrossSection(aParticle, (*theElementVector)(i), aTemp);
    }

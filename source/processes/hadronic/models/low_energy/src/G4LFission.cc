@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LFission.cc,v 1.7 2001-08-01 17:11:19 hpw Exp $
+// $Id: G4LFission.cc,v 1.8 2001-10-05 16:11:32 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -86,7 +86,6 @@ G4LFission::ApplyYourself(const G4Track & aTrack,G4Nucleus & targetNucleus)
    theParticleChange.Initialize(aTrack);
 
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-   const G4Material* aMaterial = aTrack.GetMaterial();
 
    G4double N = targetNucleus.GetN();
    G4double Z = targetNucleus.GetZ();
@@ -187,8 +186,6 @@ G4LFission::ApplyYourself(const G4Track & aTrack,G4Nucleus & targetNucleus)
                                      ekin*MeV);
       theParticleChange.AddSecondary(aGamma);
    }
-
-   G4double ex = exn + exg;
 
 // Distribute momentum vectors and do Lorentz transformation
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LCapture.cc,v 1.6 2001-08-01 17:10:58 hpw Exp $
+// $Id: G4LCapture.cc,v 1.7 2001-10-05 16:11:31 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,7 +62,7 @@ G4LCapture::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    theParticleChange.Initialize(aTrack);
 
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-   const G4Material* aMaterial = aTrack.GetMaterial();
+//   const G4Material* aMaterial = aTrack.GetMaterial();
 
    theParticleChange.SetStatusChange(fStopAndKill);
    G4double N = targetNucleus.GetN();
@@ -75,7 +75,6 @@ G4LCapture::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    G4double E = aParticle->GetTotalEnergy()/GeV;
    G4double E0 = aParticle->GetDefinition()->GetPDGMass()/GeV;
    G4double Q = aParticle->GetDefinition()->GetPDGCharge();
-   G4double pv6 = aParticle->GetDefinition()->GetPDGCharge();
    if (verboseLevel > 1) {
       G4cout << "G4LCapture:ApplyYourself: incident particle:" << G4endl;
       G4cout << "P      " << P << " GeV/c" << G4endl;

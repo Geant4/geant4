@@ -21,12 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleVector.hh,v 1.6 2001-10-04 20:00:43 hpw Exp $
+// $Id: G4ParticleVector.hh,v 1.7 2001-10-05 16:10:06 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ------------------------------------------------------------
-// HPW decoupling theo models from RW (Mon Mar 16 1998)
-// ------------------------------------------------------------
 
 #ifndef G4ParticleVector_h
 #define G4ParticleVector_h 1
@@ -36,11 +33,7 @@
 #include "G4DynamicParticle.hh"
 #include "g4std/vector"
 
-// #ifdef STL
-// for future use STL vector as container 
-// typedef Vector<G4DynamicParticle> G4ParticleVector;
-// #elseifdef RWT
-
 typedef G4std::vector<G4DynamicParticle *> G4ParticleVector;
+struct DeleteDynamicParticle {void operator()(G4DynamicParticle*aP) {delete aP;}};
 
 #endif

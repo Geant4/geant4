@@ -70,46 +70,6 @@ G4HadronFissionProcess::BuildThePhysicsTable(G4ParticleDefinition& aParticleType
 
    theCrossSectionDataStore->BuildPhysicsTable(aParticleType);
 
-   //   G4double LowEdgeEnergy, Value;
-   //   G4bool isOutRange;
-   //
-   //   static const G4ElementTable* theElementTable;
-   //   theElementTable = G4Element::GetElementTable();
-   //   G4int numOfElements = G4Element::GetNumberOfElements();
-   //   if (verboseLevel > 1) {
-   //      G4cout << "BuildThePhysicsTable: numOfElements " << numOfElements << G4endl;
-   //      G4cout << "BuildThePhysicsTable: thePhysicsTable " << thePhysicsTable << G4endl;
-   //      G4cout << "  for particle: " << aParticleType.GetParticleName() << " " <<
-   //              aParticleType.GetPDGEncoding() << G4endl;
-   //   }
-   //   RWBoolean exists = thePhysicsDictionary.contains(&aParticleType);
-   //   if (verboseLevel > 1) {
-   //      G4cout << "exists=" << exists << G4endl;
-   //   }
-   //   if (exists) {
-   //      thePhysicsTable = thePhysicsDictionary.findValue(&aParticleType);
-   //      if (verboseLevel > 1) {
-   //         G4cout << "  Retrieve tPT=" << thePhysicsTable << G4endl;
-   //      }
-   //// Remove any previous items from table
-   //      thePhysicsTable->clearAndDestroy();
-   //      thePhysicsTable->resize(numOfElements);
-   //   }
-   //   else {
-   //      thePhysicsTable = new G4PhysicsTable(numOfElements);
-   //      if (verboseLevel > 1) {
-   //         G4cout << "  make new tPT=" << thePhysicsTable << G4endl;
-   //         G4cout << "  entries() = " << thePhysicsTable->entries() << G4endl;
-   //      }
-   //      thePhysicsDictionary.insertKeyAndValue(&aParticleType, thePhysicsTable);
-   //   }
-   //// Make a PhysicsVector for each element
-   //   for (G4int J = 0; J < numOfElements; J++) { 
-   //      (*thePhysicsTable)(J) =
-   //         theCrossSectionData.MakePhysicsVector(*this,
-   //                                               aParticleType,
-   //                                               (*theElementTable)[J]);
-   //   }
 }
 
 
@@ -136,15 +96,13 @@ G4HadronFissionProcess::GetMeanFreePathBasic(const G4DynamicParticle* aParticle,
    const G4ElementVector* theElementVector;
    const G4double* theAtomicNumDensityVector;
 
-   G4int J = aMaterial->GetIndex();
-
    theElementVector = aMaterial->GetElementVector();
    theAtomicNumDensityVector = aMaterial->GetAtomicNumDensityVector();
    G4double aTemp = aMaterial->GetTemperature();
 
    G4double sigma = 0.;
 
-   for (G4int i = 0; i < aMaterial->GetNumberOfElements(); i++) {
+   for (unsigned int i = 0; i < aMaterial->GetNumberOfElements(); i++) {
      sigma = sigma + theAtomicNumDensityVector[i] * 
              GetMicroscopicCrossSection(aParticle, (*theElementVector)(i), aTemp);
    }
@@ -169,28 +127,4 @@ DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
 
    theCrossSectionDataStore->DumpPhysicsTable(aParticleType);
 
-   //   RWBoolean exists = thePhysicsDictionary.contains(&aParticleType);
-   //   if (verboseLevel > 1) {
-   //      G4cout << "DumpPhysicsTable: exists=" << exists << G4endl;
-   //   }
-   //   if (!exists) {
-   //      G4Exception("G4HadronFissionProcess::DumpPhysicsTable: "
-   //                  "no physics table for particle");
-   //      return;
-   //   }
-   //   G4PhysicsTable* pt = thePhysicsDictionary.findValue(&aParticleType);
-   //
-   //   const G4ElementTable* et = G4Element::GetElementTable();
-   //   G4int numOfElements = G4Element::GetNumberOfElements();
-   //   if (verboseLevel > 1)
-   //      G4cout << "DumpPhysicsTable: numOfElements=" << numOfElements << G4endl;
-   //   G4LPhysicsFreeVector* pv;
-   //   for (G4int J = 0; J < numOfElements; J++) { 
-   //      G4cout << G4endl << "Fission cross section data for " << 
-   //              aParticleType.GetParticleName() << " on " <<
-   //              ((*et)[J])->GetName() << G4endl << G4endl;
-   //      G4cout << G4endl << "Ek(GeV)    sigma(mb)" << G4endl << G4endl;
-   //      pv = (G4LPhysicsFreeVector*)(*thePhysicsTable)(J);
-   //      pv->DumpValues();
-   //   }
 }

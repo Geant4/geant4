@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DistributionGenerator.cc,v 1.7 2001-10-04 20:00:41 hpw Exp $
+// $Id: G4DistributionGenerator.cc,v 1.8 2001-10-05 16:09:44 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,7 +59,7 @@ G4DistributionGenerator::G4DistributionGenerator(G4std::vector<G4double>& x,
   assert (x.size() == (values.size() + 1));
 
   G4double tot = 0.;
-  int i;
+  unsigned int i;
   for (i=0; i<values.size(); i++) { tot += values[i]; }
   assert (tot > 0.);
   
@@ -98,7 +98,7 @@ G4double G4DistributionGenerator::Generate(G4double ranflat)
   G4double xRandom = _x[0];
 
   G4int bin = _cumProb.size() - 1;
-  int i;
+  unsigned int i;
   for (i=1; i<_cumProb.size(); i++)
     {
       if (ranflat >= _cumProb[i-1] && ranflat < _cumProb[i])
@@ -107,7 +107,7 @@ G4double G4DistributionGenerator::Generate(G4double ranflat)
 	}
     }
 
-  if (bin >= 0 && bin < (_cumProb.size()-1) && bin < (_x.size()-1)) 
+  if (bin >= 0 && bin < static_cast<G4int>(_cumProb.size()-1) && bin < static_cast<G4int>(_x.size()-1)) 
     {
       G4double coeff = (ranflat - _cumProb[bin]) *  (_x[bin+1] - _x[bin]) / 
                    (_cumProb[bin+1] - _cumProb[bin]);

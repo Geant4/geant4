@@ -92,7 +92,7 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     G4double random = G4UniformRand();
     G4double sum = 0;
     const G4ElementVector *theElementVector = aMaterial->GetElementVector();
-    G4int i;
+    unsigned int i;
     for(i=0; i<aMaterial->GetNumberOfElements(); ++i )
     {
       sum += aMaterial->GetAtomicNumDensityVector()[i];

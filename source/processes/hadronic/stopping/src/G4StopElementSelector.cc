@@ -198,7 +198,7 @@ G4double  G4StopElementSelector::GetMuonCaptureRate(G4double Z, G4double A)
           (2.0 * (A - Z) /  Z  + abs(a2ze - 1.) ) * b0c / (A * 4.) );
 
   // == Mu capture data are taken if exist 
-  for (G4int j = 0; j < ListZE; j++) {
+  for (unsigned int j = 0; j < ListZE; j++) {
     if( ListZExp[j] == i + 1) {
       lambda = ListCaptureVel[j] / microsecond;
       break;

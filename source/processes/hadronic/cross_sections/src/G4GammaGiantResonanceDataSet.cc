@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaGiantResonanceDataSet.cc,v 1.4 2001-08-01 17:03:14 hpw Exp $
+// $Id: G4GammaGiantResonanceDataSet.cc,v 1.5 2001-10-05 16:08:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -84,13 +84,13 @@ G4double G4GammaGiantResonanceDataSet::AbsorbtionByNucleus(G4int i, G4double E)
   static G4double YD[nPtD] = {89.6,92.2,94.4,104.0,101.8,98.1,84.0,78.5,75.4,70.9,
                               65.0,58.4,52.0, 45.4, 37.0,34.8,34.0,35.5,37.0,38.0};
   // Cross section gamma-Be (J.Ahrens Nucl.Phys. A335(1980)67-74)"Pion threshold"
-  static const G4int nPtPT = 25;
-  static G4double XPT[nPtPT]={32.3,35.7,38.6,42.1,45.6,49.3,52.2,54.9,57.0,60.0,
-                              63.0,66.0,68.3,70.1,73.7,77.4,80.5,83.1,86.3,89.9,
-                              92.6,94.4,96.8,99.3,102.2};
-  static G4double YPT[nPtPT]={ 5.2, 4.5, 4.7, 5.2, 6.0, 7.3, 8.7, 9.9,11.0,13.9,
-                              15.9,17.5,19.5,21.0,23.8,26.9,29.5,31.7,33.9,36.0,
-                              37.2,38.0,39.0,40.0,39.8};
+//  static const G4int nPtPT = 25;
+//  static G4double XPT[nPtPT]={32.3,35.7,38.6,42.1,45.6,49.3,52.2,54.9,57.0,60.0,
+//                              63.0,66.0,68.3,70.1,73.7,77.4,80.5,83.1,86.3,89.9,
+//                              92.6,94.4,96.8,99.3,102.2};
+//  static G4double YPT[nPtPT]={ 5.2, 4.5, 4.7, 5.2, 6.0, 7.3, 8.7, 9.9,11.0,13.9,
+//                              15.9,17.5,19.5,21.0,23.8,26.9,29.5,31.7,33.9,36.0,
+//                              37.2,38.0,39.0,40.0,39.8};
   // Cross section gamma-Be (J.Ahrens Nucl.Phys. A335(1980)67-74)"Low energy part"
   static const G4int nPtB  = 19;
   static G4double XB[nPtB] = { 4.0, 5.1, 5.5, 6.6, 7.6, 8.8, 9.7,10.5,11.3,12.2,

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiXiMinusInelastic.cc,v 1.6 2001-08-01 17:09:54 hpw Exp $
+// $Id: G4HEAntiXiMinusInelastic.cc,v 1.7 2001-10-05 16:10:40 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,7 +47,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
     G4HEVector * pv = new G4HEVector[MAXPART];
     theParticleChange.Initialize( aTrack );
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
+//    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
     const G4double A = targetNucleus.GetN();
     const G4double Z = targetNucleus.GetZ();
     G4HEVector incidentParticle(aParticle);
@@ -214,12 +214,12 @@ G4HEAntiXiMinusInelastic::FirstIntInCasAntiXiMinus( G4bool &inElastic,
    static const G4int   numMulAn = 400;
    static const G4int   numSec   = 60;
 
-   G4int              neutronCode = Neutron.getCode();
+//   G4int              neutronCode = Neutron.getCode();
    G4int              protonCode  = Proton.getCode();
 
    G4int               targetCode = targetParticle.getCode();
-   G4double          incidentMass = incidentParticle.getMass();
-   G4double        incidentEnergy = incidentParticle.getEnergy();
+//   G4double          incidentMass = incidentParticle.getMass();
+//   G4double        incidentEnergy = incidentParticle.getEnergy();
    G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
 
    static G4bool first = true;

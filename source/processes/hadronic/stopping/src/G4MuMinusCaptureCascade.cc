@@ -94,7 +94,7 @@ G4double G4MuMinusCaptureCascade::GetKShellEnergy(G4double Z)
                                                G4double Xuser)
 {
   G4double Yuser = 0.0;
-  G4int i;
+  size_t i;
 
   if(N < 1) return Yuser;
 
@@ -228,7 +228,7 @@ void G4MuMinusCaptureCascade::DoBoundMuonMinusDecay(G4double Z, G4double massA,
 {
   // Simulation on Decay of mu- on a K-shell of the muonic atom
 
-  G4double Energy, r, x;
+  G4double Energy, x;
   G4double xmax = ( 1.0 + Emass*Emass/ (MuMass*MuMass) );
   G4double KEnergy = GetKShellEnergy(Z);
 

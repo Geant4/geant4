@@ -138,19 +138,7 @@
    G4ReactionProduct &modifiedOriginal,
    G4ReactionProduct &targetParticle,
    G4Nucleus &targetNucleus )
-  {
-    G4ParticleDefinition *aProton = G4Proton::Proton();
-    G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
-    G4ParticleDefinition *aDeuteron = G4Deuteron::Deuteron();
-    G4ParticleDefinition *aTriton = G4Triton::Triton();
-    G4ParticleDefinition *anAlpha = G4Alpha::Alpha();
-    
-    const G4double aProtonMass = aProton->GetPDGMass()/MeV;
-    const G4double aNeutronMass = aNeutron->GetPDGMass()/MeV;
-    const G4double aDeuteronMass = aDeuteron->GetPDGMass()/MeV;
-    const G4double aTritonMass = aTriton->GetPDGMass()/MeV;
-    const G4double anAlphaMass = anAlpha->GetPDGMass()/MeV;
-    
+  {        
     const G4double A = targetNucleus.GetN();    // atomic weight
     const G4double Z = targetNucleus.GetZ();    // atomic number
     

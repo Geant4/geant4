@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.7 2001-10-04 20:00:41 hpw Exp $
+// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.8 2001-10-05 16:09:44 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -104,7 +104,7 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   G4double Z;
   G4double random = G4UniformRand();
   const G4ElementVector* theElementVector = material->GetElementVector();
-  G4int i;
+  unsigned int i;
   G4double sum = 0;
   G4double totalsum=0;
   for(i=0; i<material->GetNumberOfElements(); ++i)
@@ -146,11 +146,11 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   G4double pNucleus = (stopAbsorption.RecoilMomentum()).mag();
   G4ReactionProductVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,excitation,pNucleus);
 
-  G4int nAbsorptionProducts = 0;
+  unsigned int nAbsorptionProducts = 0;
   if (absorptionProducts != 0)     
     { nAbsorptionProducts  =  absorptionProducts->size(); }
 
-  G4int nFragmentationProducts = 0;
+  unsigned int nFragmentationProducts = 0;
   if (fragmentationProducts != 0) 
     { nFragmentationProducts = fragmentationProducts->size(); }
   

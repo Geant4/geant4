@@ -366,7 +366,6 @@ G4HEInelastic::StrangeParticlePairProduction(
    G4int antilambdaCode = AntiLambda.getCode();    
 
    G4double incidentMass = incidentParticle.getMass();
-   G4double incidentEnergy = incidentParticle.getEnergy();
    G4int incidentCode = incidentParticle.getCode();
 
    G4double targetMass = targetParticle.getMass();
@@ -633,14 +632,11 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
    G4String mesonType     = PionPlus.getType();
    G4String baryonType    = Proton.getType(); 
    
-   G4int    targetCode   = targetParticle.getCode();
    G4double targetMass   = targetParticle.getMass();
-   G4double targetCharge = targetParticle.getCharge();
 
    G4int    incidentCode          = incidentParticle.getCode();
    G4double incidentMass          = incidentParticle.getMass();
    G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
-   G4double incidentCharge        = incidentParticle.getCharge();
    G4double incidentEnergy        = incidentParticle.getEnergy();
    G4double incidentKineticEnergy = incidentParticle.getKineticEnergy();
    G4String incidentType          = incidentParticle.getType();
@@ -649,7 +645,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
    
                                                               // some local variables
 
-   G4int i, j, k, l;
+   G4int i, j, l;
 
    if (verboseLevel > 1) G4cout << " G4HEInelastic::HighEnergyCascading " << G4endl;
    successful = false; 
@@ -766,7 +762,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
 
    G4double centerOfMassEnergy = sqrt( sqr(incidentMass)+sqr(targetMass)
                                       +2.0*targetMass*incidentEnergy );
-   G4double availableEnergy    = centerOfMassEnergy - ( targetMass + incidentMass );
+//   G4double availableEnergy    = centerOfMassEnergy - ( targetMass + incidentMass );
 
    G4double tavai1      = centerOfMassEnergy/2.0 - incidentMass;
    G4double tavai2      = centerOfMassEnergy/2.0 - targetMass;           
@@ -1589,7 +1585,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
      if( atomicWeight > 1.5 && G4UniformRand() > sprob ) 
      {
 
-       G4double ekw, tex, cost, sint, pp, eka, etb;
+       G4double cost, sint, pp, eka;
        G4int spall, nbl;
                                      //  first add protons and neutrons
 
@@ -1798,7 +1794,6 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
    G4double incidentTotalMomentum   = incidentParticle.getTotalMomentum();
    G4double incidentCharge          = incidentParticle.getCharge(); 
    G4double incidentMass            = incidentParticle.getMass();
-   G4int    incidentCode            = incidentParticle.getCode(); 
    G4double targetMass              = targetParticle.getMass();
    G4int    pionPlusCode            = PionPlus.getCode();
    G4int    pionMinusCode           = PionMinus.getCode();
@@ -2128,28 +2123,18 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
    G4int protonCode       = Proton.getCode();
    G4double protonMass    = Proton.getMass();
    G4int neutronCode      = Neutron.getCode();
-   G4double neutronMass   = Neutron.getMass();
    G4double kaonPlusMass  = KaonPlus.getMass();
-   G4int kaonPlusCode     = KaonPlus.getCode();   
-   G4int kaonMinusCode    = KaonMinus.getCode();
-   G4int kaonZeroSCode    = KaonZeroShort.getCode(); 
-   G4int kaonZeroLCode    = KaonZeroLong.getCode();
-   G4int kaonZeroCode     = KaonZero.getCode();
-   G4int antiKaonZeroCode = AntiKaonZero.getCode(); 
    G4int pionPlusCode     = PionPlus.getCode();    
    G4int pionZeroCode     = PionZero.getCode();    
    G4int pionMinusCode    = PionMinus.getCode(); 
    G4String mesonType     = PionPlus.getType();
    G4String baryonType    = Proton.getType(); 
    
-   G4int    targetCode   = targetParticle.getCode();
    G4double targetMass   = targetParticle.getMass();
-   G4double targetCharge = targetParticle.getCharge();
 
    G4int    incidentCode          = incidentParticle.getCode();
    G4double incidentMass          = incidentParticle.getMass();
    G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
-   G4double incidentCharge        = incidentParticle.getCharge();
    G4double incidentEnergy        = incidentParticle.getEnergy();
    G4double incidentKineticEnergy = incidentParticle.getKineticEnergy();
    G4String incidentType          = incidentParticle.getType();
@@ -2158,7 +2143,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
    
                                                               // some local variables
 
-   G4int i, j, k, l;
+   G4int i, j;
    
    if(verboseLevel > 1) G4cout << " G4HEInelastic::HighEnergyClusterProduction " << G4endl;
 
@@ -2267,7 +2252,6 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
        xpnhmf *= xhmf/rpnhmf;
      }
    npnhmf = Poisson( xpnhmf );
-   G4int ntarg = nshhmf + npnhmf;
 
    while (npnhmf > 0)
      {
@@ -2826,7 +2810,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
      if( atomicWeight > 1.5 && G4UniformRand() > sprob) 
      {
 
-       G4double ekw, tex, cost, sint, ekin2, ran, pp, eka;
+       G4double cost, sint, ekin2, ran, pp, eka;
        G4int spall, nbl;
                                      //  first add protons and neutrons
 
@@ -3019,7 +3003,6 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
    G4int protonCode       = Proton.getCode();
    G4double protonMass    = Proton.getMass();
    G4int neutronCode      = Neutron.getCode();
-   G4double neutronMass   = Neutron.getMass();
    G4double kaonPlusMass  = KaonPlus.getMass();
    G4int kaonPlusCode     = KaonPlus.getCode();   
    G4int kaonMinusCode    = KaonMinus.getCode();
@@ -3033,14 +3016,11 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
    G4String mesonType     = PionPlus.getType();
    G4String baryonType    = Proton.getType(); 
    
-   G4int    targetCode   = targetParticle.getCode();
    G4double targetMass   = targetParticle.getMass();
-   G4double targetCharge = targetParticle.getCharge();
 
    G4int    incidentCode          = incidentParticle.getCode();
    G4double incidentMass          = incidentParticle.getMass();
    G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
-   G4double incidentCharge        = incidentParticle.getCharge();
    G4double incidentEnergy        = incidentParticle.getEnergy();
    G4double incidentKineticEnergy = incidentParticle.getKineticEnergy();
    G4String incidentType          = incidentParticle.getType();
@@ -3049,7 +3029,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
    
                                                               // some local variables
 
-   G4int i, j, k, l;
+   G4int i, j, l;
 
    if(verboseLevel > 1) G4cout << " G4HEInelastic::MediumEnergyCascading " << G4endl;
 
@@ -3164,7 +3144,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
 
    G4double centerOfMassEnergy = sqrt( sqr(incidentMass)+sqr(targetMass)
                                       +2.0*targetMass*incidentEnergy );
-   G4double availableEnergy    = centerOfMassEnergy - ( targetMass + incidentMass );
+//   G4double availableEnergy    = centerOfMassEnergy - ( targetMass + incidentMass );
 
    G4double tavai1      = centerOfMassEnergy/2.0 - incidentMass;
    G4double tavai2      = centerOfMassEnergy/2.0 - targetMass;           
@@ -3662,7 +3642,6 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
 
      
        G4HEVector* tempV = new G4HEVector[18];
-       G4double totalMass = 0.0;
        npg = 0;
        for( i=0; i < vecLen; i++ )  
          {
@@ -3906,7 +3885,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
    if( atomicWeight > 1.5 ) 
      {
 
-       G4double ekw, tex, sprob, cost, sint, pp, eka, etb;
+       G4double sprob, cost, sint, pp, eka;
        G4int spall, nbl;
                                      //  sprob is the probability of self-absorption in heavy molecules
 
@@ -4099,28 +4078,18 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
    G4int protonCode       = Proton.getCode();
    G4double protonMass    = Proton.getMass();
    G4int neutronCode      = Neutron.getCode();
-   G4double neutronMass   = Neutron.getMass();
    G4double kaonPlusMass  = KaonPlus.getMass();
-   G4int kaonPlusCode     = KaonPlus.getCode();   
-   G4int kaonMinusCode    = KaonMinus.getCode();
-   G4int kaonZeroSCode    = KaonZeroShort.getCode(); 
-   G4int kaonZeroLCode    = KaonZeroLong.getCode();
-   G4int kaonZeroCode     = KaonZero.getCode();
-   G4int antiKaonZeroCode = AntiKaonZero.getCode(); 
    G4int pionPlusCode     = PionPlus.getCode();    
    G4int pionZeroCode     = PionZero.getCode();    
    G4int pionMinusCode    = PionMinus.getCode(); 
    G4String mesonType     = PionPlus.getType();
    G4String baryonType    = Proton.getType(); 
    
-   G4int    targetCode   = targetParticle.getCode();
    G4double targetMass   = targetParticle.getMass();
-   G4double targetCharge = targetParticle.getCharge();
 
    G4int    incidentCode          = incidentParticle.getCode();
    G4double incidentMass          = incidentParticle.getMass();
    G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
-   G4double incidentCharge        = incidentParticle.getCharge();
    G4double incidentEnergy        = incidentParticle.getEnergy();
    G4double incidentKineticEnergy = incidentParticle.getKineticEnergy();
    G4String incidentType          = incidentParticle.getType();
@@ -4129,7 +4098,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
    
                                                               // some local variables
 
-   G4int i, j, k, l;
+   G4int i, j;
    
    if(verboseLevel > 1) G4cout << " G4HEInelastic::MediumEnergyClusterProduction " << G4endl;
 
@@ -4763,7 +4732,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
    if( atomicWeight > 1.5 ) 
      {
 
-       G4double ekw, tex, sprob, cost, sint, ekin2, ran, pp, eka;
+       G4double sprob, cost, sint, ekin2, ran, pp, eka;
        G4int spall, nbl;
                                      //  sprob is the probability of self-absorption in heavy molecules
 
@@ -4952,30 +4921,13 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
 //  All quantities on the G4HEVector Array pv are in GeV- units.
 
    G4int protonCode       = Proton.getCode();
-   G4double protonMass    = Proton.getMass();
-   G4int neutronCode      = Neutron.getCode();
-   G4double neutronMass   = Neutron.getMass();
-   G4double kaonPlusMass  = KaonPlus.getMass();
-   G4int kaonPlusCode     = KaonPlus.getCode();   
-   G4int kaonMinusCode    = KaonMinus.getCode();
-   G4int kaonZeroSCode    = KaonZeroShort.getCode(); 
-   G4int kaonZeroLCode    = KaonZeroLong.getCode();
-   G4int kaonZeroCode     = KaonZero.getCode();
-   G4int antiKaonZeroCode = AntiKaonZero.getCode(); 
-   G4int pionPlusCode     = PionPlus.getCode();    
-   G4int pionZeroCode     = PionZero.getCode();    
-   G4int pionMinusCode    = PionMinus.getCode(); 
    G4String mesonType     = PionPlus.getType();
    G4String baryonType    = Proton.getType(); 
    
-   G4int    targetCode   = targetParticle.getCode();
    G4double targetMass   = targetParticle.getMass();
-   G4double targetCharge = targetParticle.getCharge();
 
-   G4int    incidentCode          = incidentParticle.getCode();
    G4double incidentMass          = incidentParticle.getMass();
    G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
-   G4double incidentCharge        = incidentParticle.getCharge();
    G4double incidentEnergy        = incidentParticle.getEnergy();
    G4double incidentKineticEnergy = incidentParticle.getKineticEnergy();
    G4String incidentType          = incidentParticle.getType();
@@ -5086,7 +5038,7 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
    if( atomicWeight > 1.5 ) 
      {
 
-       G4double ekw, tex, sprob, cost, sint, ekin2, ran, pp, eka;
+       G4double sprob, cost, sint, ekin2, ran, pp, eka;
        G4double ekin, cfa, ekin1, phi, pvMass, pvEnergy;
        G4int spall, nbl;
                                      //  sprob is the probability of self-absorption in heavy molecules
@@ -5302,7 +5254,7 @@ G4HEInelastic::ElasticScattering(G4bool &successful,
      }
    G4double eps = 0.001;
    G4int ind1 = 10;
-   G4double t, val;
+   G4double t;
    G4int ier1;
    ier1 = rtmi(&t, t1, t2, eps, ind1, aa, bb, cc, dd, rr);
    if (verboseLevel > 1) 
@@ -5709,9 +5661,9 @@ G4HEInelastic::NBodyPhaseSpace(G4int npart, G4HEVector pv[],
        G4double rm1 = pvcms.getMass() - rm;
        rm -= pv[2].getMass();
        wps = (npart-3)*pow(rm1/sqr(M_2PI), npart-4)/(4*M_PI*pvcms.getMass());
-       for (i=3; i=npart-1;i++) wps /= i-2;
+       for (i=3; (i=npart-1);i++) wps /= i-2; // @@@@@@@@@@ bug @@@@@@@@@
        G4double xxx = rm1/sqr(M_2PI);
-       for (i=1; i=npart-4; i++) wps /= xxx/i;
+       for (i=1; (i=npart-4); i++) wps /= xxx/i; // @@@@@@@@@@ bug @@@@@@@@@
        wps /= (4*M_PI*pvcms.getMass());
        G4double p2,cost,sint,phi;
        j = 1;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopAbsorption.cc,v 1.9 2001-10-04 20:00:41 hpw Exp $
+// $Id: G4PiMinusStopAbsorption.cc,v 1.10 2001-10-05 16:09:44 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -88,7 +88,7 @@ G4DynamicParticleVector* G4PiMinusStopAbsorption::DoAbsorption()
 
   if (defNucleons != 0)
     {
-      for (G4int i=0; i<defNucleons->size(); i++)
+      for (unsigned int i=0; i<defNucleons->size(); i++)
 	{
 	  if ( (*defNucleons)[i] == G4Proton::Proton())
 	    {
@@ -108,7 +108,7 @@ G4DynamicParticleVector* G4PiMinusStopAbsorption::DoAbsorption()
 
   if (defNucleons != 0 && p4Nucleons != 0)
     {
-      int nNucleons = p4Nucleons->size();
+      unsigned int nNucleons = p4Nucleons->size();
       
       G4double seen = _materialAlgo->FinalNucleons() / 2.;
       G4int maxN = nNucleons;
@@ -138,7 +138,7 @@ G4ThreeVector G4PiMinusStopAbsorption::RecoilMomentum()
 {
   G4ThreeVector pProducts(0.,0.,0.);
   
-  for (G4int i = 0; i< _absorptionProducts->size(); i++)
+  for (unsigned int i = 0; i< _absorptionProducts->size(); i++)
     {
       pProducts = pProducts + (*_absorptionProducts)[i]->GetMomentum();
     }

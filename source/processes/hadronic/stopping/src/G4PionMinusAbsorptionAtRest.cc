@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionMinusAbsorptionAtRest.cc,v 1.4 2001-08-01 17:12:37 hpw Exp $
+// $Id: G4PionMinusAbsorptionAtRest.cc,v 1.5 2001-10-05 16:09:44 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -51,9 +51,9 @@
 G4PionMinusAbsorptionAtRest::G4PionMinusAbsorptionAtRest(const G4String& processName)
   : G4VRestProcess (processName),       // initialization
   massPionMinus(G4PionMinus::PionMinus()->GetPDGMass()/GeV),
-  pdefPionMinus(G4PionMinus::PionMinus()),
   pdefGamma(G4Gamma::Gamma()),
   pdefPionZero(G4PionZero::PionZero()),
+  pdefPionMinus(G4PionMinus::PionMinus()),
   pdefProton(G4Proton::Proton()),
   pdefNeutron(G4Neutron::Neutron()),
   pdefDeuteron(G4Deuteron::Deuteron()),

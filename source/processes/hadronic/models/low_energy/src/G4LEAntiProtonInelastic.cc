@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiProtonInelastic.cc,v 1.5 2001-08-01 17:11:01 hpw Exp $
+// $Id: G4LEAntiProtonInelastic.cc,v 1.6 2001-10-05 16:11:31 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: AntiProton Inelastic Process
@@ -276,8 +276,6 @@
     G4ParticleDefinition *aProton       = G4Proton::Proton();
     G4ParticleDefinition *anAntiNeutron = G4AntiNeutron::AntiNeutron();
     G4ParticleDefinition *aPiPlus       = G4PionPlus::PionPlus();
-    G4ParticleDefinition *aPiMinus      = G4PionMinus::PionMinus();
-    G4ParticleDefinition *aPiZero       = G4PionZero::PionZero();
     
     const G4double anhl[] = {1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.90,
                              0.6,0.52,0.47,0.44,0.41,0.39,0.37,0.35,0.34,0.24,

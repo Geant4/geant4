@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LightMedia.cc,v 1.4 2001-08-01 17:12:44 hpw Exp $
+// $Id: G4LightMedia.cc,v 1.5 2001-10-05 16:10:06 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Light Media Charge and/or Strangeness Exchange
@@ -37,10 +37,8 @@
     const G4Nucleus & targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
-    G4ParticleDefinition* aProton = G4Proton::Proton();
     G4ParticleDefinition* aPiZero = G4PionZero::PionZero();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -77,11 +75,9 @@
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
-    G4ParticleDefinition* aProton = G4Proton::Proton();
     G4ParticleDefinition* aKaonZS = G4KaonZeroShort::KaonZeroShort();
     G4ParticleDefinition* aKaonZL = G4KaonZeroLong::KaonZeroLong();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -112,12 +108,10 @@
     const G4DynamicParticle* incidentParticle,
     const G4Nucleus& targetNucleus )
   {
-    G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition* aProton = G4Proton::Proton();
     G4ParticleDefinition* aKaonPlus = G4KaonPlus::KaonPlus();
     G4ParticleDefinition* aKaonZL = G4KaonZeroLong::KaonZeroLong();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -176,9 +170,7 @@
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
-    G4ParticleDefinition* aProton = G4Proton::Proton();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -204,10 +196,8 @@
     const G4Nucleus& targetNucleus )
   {
     G4ParticleDefinition* aProton = G4Proton::Proton();
-    G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition* anAntiNeutron = G4AntiNeutron::AntiNeutron();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -234,10 +224,8 @@
     const G4DynamicParticle* incidentParticle,
     const G4Nucleus& targetNucleus )
   {
-    G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition* aProton = G4Proton::Proton();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -262,11 +250,9 @@
     const G4DynamicParticle* incidentParticle,
     const G4Nucleus& targetNucleus )
   {
-    G4ParticleDefinition* aProton = G4Proton::Proton();
     G4ParticleDefinition* aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition* anAntiProton = G4AntiProton::AntiProton();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -296,9 +282,7 @@
     G4ParticleDefinition* aSigmaPlus = G4SigmaPlus::SigmaPlus();
     G4ParticleDefinition* aSigmaMinus = G4SigmaMinus::SigmaMinus();
     G4ParticleDefinition* aSigmaZero = G4SigmaZero::SigmaZero();
-    G4ParticleDefinition* aLambda = G4Lambda::Lambda();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -376,9 +360,7 @@
     G4ParticleDefinition* anAntiSigmaPlus = G4AntiSigmaPlus::AntiSigmaPlus();
     G4ParticleDefinition* anAntiSigmaMinus = G4AntiSigmaMinus::AntiSigmaMinus();
     G4ParticleDefinition* anAntiSigmaZero = G4AntiSigmaZero::AntiSigmaZero();
-    G4ParticleDefinition* anAntiLambda = G4AntiLambda::AntiLambda();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -457,9 +439,7 @@
     G4ParticleDefinition* aProton = G4Proton::Proton();
     G4ParticleDefinition* aLambda = G4Lambda::Lambda();
     G4ParticleDefinition* aSigmaZero = G4SigmaZero::SigmaZero();
-    G4ParticleDefinition* aSigmaPlus = G4SigmaPlus::SigmaPlus();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -521,9 +501,7 @@
     G4ParticleDefinition* aProton = G4Proton::Proton();
     G4ParticleDefinition* aLambda = G4Lambda::Lambda();
     G4ParticleDefinition* aSigmaZero = G4SigmaZero::SigmaZero();
-    G4ParticleDefinition* aSigmaMinus = G4SigmaMinus::SigmaMinus();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -585,9 +563,7 @@
     G4ParticleDefinition* aProton = G4Proton::Proton();
     G4ParticleDefinition* anAntiLambda = G4AntiLambda::AntiLambda();
     G4ParticleDefinition* anAntiSigmaZero = G4AntiSigmaZero::AntiSigmaZero();
-    G4ParticleDefinition* anAntiSigmaPlus = G4AntiSigmaPlus::AntiSigmaPlus();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -646,9 +622,7 @@
     G4ParticleDefinition* aProton = G4Proton::Proton();
     G4ParticleDefinition* anAntiLambda = G4AntiLambda::AntiLambda();
     G4ParticleDefinition* anAntiSigmaZero = G4AntiSigmaZero::AntiSigmaZero();
-    G4ParticleDefinition* anAntiSigmaMinus = G4AntiSigmaMinus::AntiSigmaMinus();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -711,9 +685,7 @@
     G4ParticleDefinition* aSigmaMinus = G4SigmaMinus::SigmaMinus();
     G4ParticleDefinition* aSigmaPlus = G4SigmaPlus::SigmaPlus();
     G4ParticleDefinition* aXiMinus = G4XiMinus::XiMinus();
-    G4ParticleDefinition* aXiZero = G4XiZero::XiZero();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -796,10 +768,8 @@
     G4ParticleDefinition* aLambda = G4Lambda::Lambda();
     G4ParticleDefinition* aSigmaZero = G4SigmaZero::SigmaZero();
     G4ParticleDefinition* aSigmaMinus = G4SigmaMinus::SigmaMinus();
-    G4ParticleDefinition* aXiMinus = G4XiMinus::XiMinus();
     G4ParticleDefinition* aXiZero = G4XiZero::XiZero();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -888,9 +858,7 @@
     G4ParticleDefinition* aSigmaMinus = G4SigmaMinus::SigmaMinus();
     G4ParticleDefinition* aSigmaPlus = G4SigmaPlus::SigmaPlus();
     G4ParticleDefinition* aXiMinus = G4XiMinus::XiMinus();
-    G4ParticleDefinition* aXiZero = G4XiZero::XiZero();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -977,10 +945,8 @@
     G4ParticleDefinition* aLambda = G4Lambda::Lambda();
     G4ParticleDefinition* aSigmaZero = G4SigmaZero::SigmaZero();
     G4ParticleDefinition* aSigmaMinus = G4SigmaMinus::SigmaMinus();
-    G4ParticleDefinition* aXiMinus = G4XiMinus::XiMinus();
     G4ParticleDefinition* aXiZero = G4XiZero::XiZero();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -1066,9 +1032,7 @@
     G4ParticleDefinition* aSigmaPlus = G4SigmaPlus::SigmaPlus();
     G4ParticleDefinition* aXiMinus = G4XiMinus::XiMinus();
     G4ParticleDefinition* aXiZero = G4XiZero::XiZero();
-    G4ParticleDefinition* anOmegaMinus = G4OmegaMinus::OmegaMinus();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
@@ -1169,9 +1133,7 @@
     G4ParticleDefinition* aSigmaPlus = G4SigmaPlus::SigmaPlus();
     G4ParticleDefinition* aXiMinus = G4XiMinus::XiMinus();
     G4ParticleDefinition* aXiZero = G4XiZero::XiZero();
-    G4ParticleDefinition* anOmegaMinus = G4OmegaMinus::OmegaMinus();
     
-    const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
     
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();

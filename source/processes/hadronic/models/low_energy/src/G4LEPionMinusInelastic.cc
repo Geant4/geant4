@@ -42,7 +42,7 @@
     // create the target particle
     
     G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
-    G4double targetMass = originalTarget->GetDefinition()->GetPDGMass();
+//    G4double targetMass = originalTarget->GetDefinition()->GetPDGMass();
     G4ReactionProduct targetParticle( originalTarget->GetDefinition() );
     
     if( verboseLevel > 1 )

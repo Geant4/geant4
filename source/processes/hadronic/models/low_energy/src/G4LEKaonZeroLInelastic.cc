@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonZeroLInelastic.cc,v 1.6 2001-08-01 17:11:08 hpw Exp $
+// $Id: G4LEKaonZeroLInelastic.cc,v 1.7 2001-10-05 16:11:32 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy KaonZeroLong Inelastic Process
@@ -212,7 +212,6 @@
     
     const G4double expxu = 82.;           // upper bound for arg. of exp
     const G4double expxl = -expxu;        // lower bound for arg. of exp
-    G4ParticleDefinition *aKaonPlus = G4KaonPlus::KaonPlus();
     G4ParticleDefinition *aKaonMinus = G4KaonMinus::KaonMinus();
     G4ParticleDefinition *aKaonZS = G4KaonZeroShort::KaonZeroShort();
     G4ParticleDefinition *aKaonZL = G4KaonZeroLong::KaonZeroLong();

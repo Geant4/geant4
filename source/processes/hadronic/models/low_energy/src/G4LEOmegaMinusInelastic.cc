@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEOmegaMinusInelastic.cc,v 1.4 2001-08-01 17:11:11 hpw Exp $
+// $Id: G4LEOmegaMinusInelastic.cc,v 1.5 2001-10-05 16:11:32 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: OmegaMinus Inelastic Process
@@ -44,7 +44,7 @@
     // create the target particle
     
     G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
-    G4double targetMass = originalTarget->GetDefinition()->GetPDGMass();
+//    G4double targetMass = originalTarget->GetDefinition()->GetPDGMass();
     G4ReactionProduct targetParticle( originalTarget->GetDefinition() );
     
     if( verboseLevel > 1 )
@@ -145,7 +145,7 @@
     //
     const G4double mOriginal = originalIncident->GetDefinition()->GetPDGMass();
     const G4double etOriginal = originalIncident->GetTotalEnergy();
-    const G4double pOriginal = originalIncident->GetTotalMomentum();
+//    const G4double pOriginal = originalIncident->GetTotalMomentum();
     const G4double targetMass = targetParticle.GetMass();
     G4double centerofmassEnergy = sqrt( mOriginal*mOriginal +
                                         targetMass*targetMass +

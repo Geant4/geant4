@@ -132,7 +132,7 @@
   {
     const G4double N = targetNucleus.GetN();    // atomic weight
     const G4double Z = targetNucleus.GetZ();    // atomic number
-    G4double currentKinetic = originalIncident->GetKineticEnergy()/MeV;
+//    G4double currentKinetic = originalIncident->GetKineticEnergy()/MeV;
     //
     // calculate Q-value of reactions
     //
