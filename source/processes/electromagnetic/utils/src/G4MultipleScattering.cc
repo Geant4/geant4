@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.22 2002-06-11 08:06:47 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.23 2002-08-12 08:48:20 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -46,7 +46,8 @@
 // 24-04-02 some minor changes in boundary algorithm, L.Urban
 // 06-05-02 bug fixed in GetContinuousStepLimit, L.Urban
 // 24-05-02 changes in angle distribution and boundary algorithm, L.Urban
-// 11-06-06 bug fixed in ComputeTransportCrossSection, L.Urban
+// 11-06-02 bug fixed in ComputeTransportCrossSection, L.Urban
+// 12-08-02 bug fixed in PostStepDoIt (lateral displacement), L.Urban
 //
 // -----------------------------------------------------------------------------
 //
@@ -65,7 +66,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
      : G4VContinuousDiscreteProcess(processName),
        theTransportMeanFreePathTable(0),
        fTransportMeanFreePath (1.e12),kappa(2.5),
-       taubig(10.),tausmall(1.e-12),taulim(1.e-6),
+       taubig(10.),tausmall(1.e-15),taulim(1.e-5),
        LowestKineticEnergy(0.1*keV),
        HighestKineticEnergy(100.*TeV),
        TotBin(100),
@@ -682,7 +683,7 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
       if (safetyminustolerance > 0.)
       {
         if     (tau < tausmall)  rmean = 0.; 
-        else if(tau < taulim)    rmean = 5.*tau*tau*tau/12.;
+        else if(tau < taulim) rmean = kappa*tau*tau*tau*(1.-kappapl1*tau/4.)/6. ;
         else
         {
           if(tau<taubig) etau = exp(-tau);
