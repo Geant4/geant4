@@ -82,8 +82,6 @@ Ionic processes for deuteron
 phot:  Total cross sections from Sandia parametrisation. 
 Hadronic processes for kaon+
 Hadronic processes for kaon-
-MuonMinusCaptureAtRest is created 
-MuonMinusCaptureAtRest is created 
 Hadronic processes for pi+
 Hadronic processes for pi-
 Hadronic processes for proton
@@ -243,7 +241,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.55s Real=7.22s Sys=1.67s
+  User=5.63s Real=7.26s Sys=1.57s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
@@ -286,7 +284,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.43s Real=7.27s Sys=1.84s
+  User=5.35s Real=7.24s Sys=1.83s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV
@@ -326,7 +324,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=8.77s Real=11.14s Sys=2.36s
+  User=8.68s Real=11.15s Sys=2.35s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for IonC12 with Ekin = 6 MeV
@@ -368,7 +366,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=37.73s Real=37.84s Sys=0.11s
+  User=38.13s Real=39.01s Sys=0.27s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV
@@ -412,7 +410,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=38.63s Real=38.82s Sys=0.19s
+  User=38.95s Real=39.71s Sys=0.23s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV

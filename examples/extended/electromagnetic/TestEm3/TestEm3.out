@@ -56,9 +56,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /gun/energy 1 GeV
 #
 /testem/run/setHisto 0 100 700. 1000. MeV
----->SetHisto: Edep in absorber 0 (MeV) ; 100 bins from 700 MeV to 1000MeV
 /testem/run/setHisto 1 100   0.  300. MeV
----->SetHisto: Edep in absorber 1 (MeV) ; 100 bins from 0 MeV to 300MeV
 #
 /testem/event/printModulo 50
 #
@@ -205,19 +203,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=103.82s Real=118.72s Sys=6.18s
+  User=99.87s Real=107.59s Sys=6.12s
 
 -------------------------------------------------------------
                                    total energy dep                total tracklen       mean energy leaving per layer 
  
- Absorber0 (        Lead) : 810.30 MeV +- 18.33 MeV       56.15 cm  +-  1.36 cm                 264.31 MeV +- 44.43 MeV
- Absorber1 ( liquidArgon) : 177.37 MeV +- 15.49 MeV       87.83 cm  +-  7.90 cm                 260.64 MeV +- 44.53 MeV
+ Absorber0 (        Lead) : 809.91 MeV +- 17.92 MeV       56.14 cm  +-  1.36 cm                 263.87 MeV +- 44.68 MeV
+ Absorber1 ( liquidArgon) : 177.78 MeV +- 15.10 MeV       88.06 cm  +-  7.65 cm                 260.19 MeV +- 44.77 MeV
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1185474782, 972042352
+ Current couple of seeds = 2089542955, 2016324627
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
