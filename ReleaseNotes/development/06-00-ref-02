@@ -149,7 +149,7 @@ visualization/OpenGL
 - Fixed wrong order of statements in G4OpenGLXViewer desctructor.
   Fixes bug report #581.
 
-examples                                         examples-V06-00-02
+examples                                         examples-V06-00-01
 --------
 - Updated reference outputs.
 - advanced:
@@ -163,7 +163,7 @@ examples                                         examples-V06-00-02
   o TestEm7 (testem7-V06-00-00)
     + Removed "add binary" from TestEm7.in macro.
 
-tests                                            tests-V06-00-02
+tests                                            tests-V06-00-01
 -----
 - Updated reference outputs.
 - tests/test40 (test40-V06-00-01)
