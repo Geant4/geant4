@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessSet.cc,v 1.6 1999-12-15 14:54:27 gunter Exp $
+// $Id: G4VisManMessSet.cc,v 1.7 2000-05-02 09:58:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -656,7 +656,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	G4cout << "Available views:";
 	for (int iView = 0; iView < nViewTotal; iView++) {
 	  const G4VViewer* pView = vList [iView];
-	  const G4VSceneHandler* pScene = pView -> GetScene ();
+	  const G4VSceneHandler* pScene = pView -> GetSceneHandler ();
 	  const G4VGraphicsSystem* pSystem = pScene -> GetGraphicsSystem ();
 	  G4cout << "\n  " << iView << ") " << pView -> GetName ();
 	}

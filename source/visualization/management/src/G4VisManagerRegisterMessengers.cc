@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.11 2000-01-11 17:22:32 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.12 2000-05-02 09:58:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,7 @@
 #include "G4VisCommandsRefresh.hh"
 #include "G4VisCommandsSet.hh"
 #include "G4VisCommandsShow.hh"
+// END OLD STYLE!!
 
 #include "G4ios.hh"
 #include <assert.h>
@@ -76,7 +77,8 @@ manages a list of scenes.
 * /vis/scene/set/notifyOption immediate|delayed
 * /vis/scene/set/modelingStyle [<modeling-style>]
 /vis/scene/notifyHandlers
-
+* /vis/scene/add/axes
+* /vis/scene/add/text
 
 Scene Handlers
 ==============
@@ -103,23 +105,121 @@ A viewer opens windows and draws to the screen, hardcopy, etc.  It can
 be dumb (a non-interactive window) or intelligent (respond to mouse
 clicks, spawn other windows, change viewpoint, etc.).
 
-/vis/viewer/create [<scene-handler>] [<viewer-name>]
-/vis/viewer/list
-/vis/viewer/select [<viewer-name>]
+* /vis/viewer/clear
+
+/vis/viewer/create [<scene-handler>]           [<viewer-name>]
+  default:     current scene handler name    auto-generated name
+
+/vis/viewer/list   [<viewer-name>]    [<verbosity>]
+  default:             all                  0
+
+/vis/viewer/select <viewer-name>
+  default:          no default
+
 /vis/viewer/refresh [<viewer-name>]
+  default:       current viewer name
+
 /vis/viewer/remove <viewer-name>
-* /vis/viewer/set/style wireframe|surface|logical
-* /vis/viewer/set/viewpoint
-* /vis/viewer/set/notifyOption immediate|delayed
+  default:          no default
+
+/vis/viewer/reset [<viewer-name>]
+  default:      current viewer name
+
+* /vis/viewer/style wireframe|surface  (or /vis/viewer/set/style?)
+*or* /vis/viewer/surface   ) ( opposites, i.e., one
+*or* /vis/viewer/wireframe ) ( negates the other.
+* /vis/viewer/edge true|false
+* /vis/viewer/hiddenLine true|false
+
+From /vis/set/:
+* /vis/viewer/cull * Global culling flag.  Does not change specific
+                     culling flags.
+* /vis/viewer/cull_covered_daughters * Cull (i.e., do not Draw)
+                                       daughters covered by opaque
+                                       mothers.
+* /vis/viewer/cull_invisible_objects * Cull (i.e., do not Draw)
+                                       "invisible" objects.
+* /vis/viewer/cull_by_density * Cull (i.e., do not Draw) geometry
+                                objects with density less than
+                                specified - on/off and density (g / cm3).
+*obsolete - implemented elsewhere* /vis/viewer/drawing_style
+                                 * Style of drawing (wireframe, etc.).
+* /vis/viewer/marker_choices * Choices for marker drawing (hidden by
+                               surfaces, etc.).
+*obsolete* /vis/viewer/rep_style * Style of graphics representation
+                                   for geometrical volumes (polyhedron,
+                                   NURBS,...).
+*obsolete* /vis/viewer/scene * Several ways of setting the scene.  For
+                               example, choosing a physical volume.
+* /vis/viewer/section_plane * Set plane for drawing section (DCUT).
+                              Specify plane by x y z units nx ny nz,
+                              e.g., for a y-z plane at x = 1 cm:
+                              /vis~/set/section_plane on 1 0 0 cm 1 0 0
+* /vis/viewer/sides * Number of sides per circle in polygon approximation.
+*no longer needed - implemented elsewhere* /vis/viewer/verbose
+                                         * Controls amount of printing
+                                           (0 = quiet).
+*no longer needed - implemented elsewhere* /vis/viewer/view
+                                         * Make this view current.
+
+From /vis/camera/:
+*no longer needed - implemented elsewhere* /vis/viewer/reset
+                            * Resets dolly, pan and zoom.  Regains
+                              "Standard View".
+* /vis/viewer/dolly *   Moves the camera in by this distance.  Reset
+                        with /vis~/camera/reset.
+*special* /vis/viewer/orbit * Orbits the scene about the up-vector, lights
+                              fixed to the scene.  Draws N frames, the camera
+                              rotated Delta-beta about the up-vector each
+                              frame.
+* /vis/viewer/panBy * Moves the camera incrementatly right and up by these
+                      amounts.  Reset with /vis~/camera/reset.
+* /vis/viewer/panTo * Moves the camera to this position right and up
+                      relative to standard target point.  Reset with
+                      /vis~/camera/reset.
+* /vis/viewer/projection_style * Projection style (orthogonal, perspective).
+*or* /vis/viewer/orthgonal
+*or* /vis/viewer/perspective [<field-angle>] [deg|rad]
+  default:                        30          deg
+*special* /vis/viewer/spin * Spins the scene about the up-vector, lights
+                             fixed to the camera.  Draws N frames, the scene
+                             rotated Delta-beta about the up-vector each frame.
+* /vis/viewer/viewpoint * Set direction from target to camera as theta, phi
+                          (in degrees).  Also changes lightpoint direction if
+                          lights are set to move with camera.
+*or* /vis/viewer/viewpointThetaPhi <theta> <phi> [deg|rad]
+*or* /vis/viewer/viewpointVector [<x>] [<y>] [<z>]
+  default:                         0     0     1
+* /vis/viewer/window_size_hint * Size in pixels (Square window `size x size').
+                                 Affects future create_view commands (hint
+                                 only).
+* /vis/viewer/zoomBy * Multiplies magnification by this factor.  Reset with
+                       /vis~/camera/reset.
+* /vis/viewer/zoomTo * Magnifies by this factor realtive to standard view.
+                       Reset with /vis~/camera/reset.
+
+From /vis/lights:
+* /vis/viewer/lights move-with-camera|move-with-object
+*or* /vis/viewer/lightsMoveWithCamera ) ( Opposites, i.e., one
+*or* /vis/viewer/lightsMoveWithObject ) ( negates the other.
+* /vis/viewer/lightsThetaPhi <theta> <phi> [deg|rad]
+* /vis/viewer/lightsVector [<x>] [<y>] [<z>]
+  default:                   0     0     1
+
+* /vis/viewer/notifyOption immediate|delayed
 * /vis/viewer/notifyHandler
 * /vis/viewer/clone
+
 /vis/viewer/show [<viewer-name>]
+  default:     current viewer name
+
 /vis/viewer/update - synonym for /vis/viewer/show.
 
 
 Global Commands
 ===============
 
+* /vis/verbose
 * /vis/copy/sceneAndView <from-viewer-name> <to-viewer-name>
 
 
@@ -208,6 +308,7 @@ or some such.
   fMessengerList.append (new G4VisCommandViewerList);
   fMessengerList.append (new G4VisCommandViewerRefresh);
   fMessengerList.append (new G4VisCommandViewerRemove);
+  fMessengerList.append (new G4VisCommandViewerReset);
   fMessengerList.append (new G4VisCommandViewerSelect);
   fMessengerList.append (new G4VisCommandViewerShow);
 

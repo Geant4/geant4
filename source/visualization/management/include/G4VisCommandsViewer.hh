@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.hh,v 1.7 2000-01-11 17:22:29 johna Exp $
+// $Id: G4VisCommandsViewer.hh,v 1.8 2000-05-02 09:58:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -24,7 +24,6 @@ public:
   G4VVisCommandViewer ();
   ~G4VVisCommandViewer ();
 protected:
-  G4String ShortName (const G4String &);
   void UpdateCandidateLists ();
 };
 
@@ -68,6 +67,17 @@ public:
   // Uses compiler defaults for copy constructor and assignment.
   G4VisCommandViewerRemove ();
   ~G4VisCommandViewerRemove ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4UIcmdWithAString* fpCommand;
+};
+
+class G4VisCommandViewerReset: public G4VVisCommandViewer {
+public:
+  // Uses compiler defaults for copy constructor and assignment.
+  G4VisCommandViewerReset ();
+  ~G4VisCommandViewerReset ();
   G4String GetCurrentValue (G4UIcommand* command);
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
