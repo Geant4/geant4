@@ -41,10 +41,7 @@
 #include "G4IonAr40.hh"
 #include "G4IonFe56.hh"
 #include "G4Electron.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class G4Run;
+#include "G4Run.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -63,6 +60,7 @@ public: // With description
 
 public: // Without description
 
+    G4int RunID() const {return run->GetRunID();};
     G4int EventNo() const {return nEvents;};
     void CountEvent()  {nEvents++;};
     void CountParticles(G4int nc, G4int nn)
@@ -77,7 +75,10 @@ public: // Without description
     void FillEn(G4double e) {kinEnergy0 = e;};
     void FillDef(const G4ParticleDefinition* p) {part0 = p;};
 
+
   private:
+
+    const G4Run* run;
 
     G4double edepTot;
     G4double length;

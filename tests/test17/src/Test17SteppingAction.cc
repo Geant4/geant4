@@ -55,10 +55,11 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4double Edep,Theta,xend,Tkin;
 
   G4double Tsec = aStep->GetPreStepPoint()->GetKineticEnergy();
-  G4int evno = eventaction->GetEventNo() ; 
+  G4int evno = eventaction->GetEventNo(); 
+  G4int runo = runaction->RunID(); 
+  G4int trno = aStep->GetTrack()->GetTrackID(); 
 
-  IDnow = evno+10000*(aStep->GetTrack()->GetTrackID())+
-          100000000*(aStep->GetTrack()->GetParentID()); 
+  IDnow = trno + evno*10000 + 100000000*runo; 
 
   Tkin  = aStep->GetTrack()->GetKineticEnergy(); 
   Edep  = aStep->GetTotalEnergyDeposit();         
@@ -70,7 +71,7 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
   // new particle
   if(IDnow != IDold) {
     IDold=IDnow ;
-    if(IDnow == 10000) {
+    if(trno == 1) {
       runaction->FillEn(Tsec);
       runaction->FillDef(aStep->GetTrack()->
                          GetDynamicParticle()->GetDefinition());

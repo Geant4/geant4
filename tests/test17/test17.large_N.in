@@ -25,3 +25,11 @@
 /gun/particle ion
 /gun/ion 6 12 6
 /run/beamOn 10000
+#scaled energy
+/gun/particle ion
+/gun/ion 26 56 26
+/run/beamOn 1000
+#scaled energy
+/gun/particle ion
+/gun/ion 6 12 6
+/run/beamOn 1000

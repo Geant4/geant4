@@ -51,6 +51,7 @@ Test17RunAction::~Test17RunAction()
 void Test17RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+  run     = aRun;
   edepTot = 0.;
   length  = 0.;
   length2 = 0.;
