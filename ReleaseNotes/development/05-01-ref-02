@@ -7,6 +7,9 @@ Some of the development/fixes included since the last reference tag are:
   o Enhanced commands in G4GeometryMessenger for controlling geometry
     overlaps: added possibility to control recursion depth and resolution
     of the test.
+  o Standardised registration/deregistration mechanism for physical volumes,
+    fixed incorrect behavior in deregistration of daughters in G4LogicalVolume
+    when physical volumes are explicitely deleted.
   o Improved design on EM low-energy module to allow for multiple models
     of Bremsstrahlung angular distribution. Updated data-set to version 2.2.
   o Important fix in MultipleScattering algorithms: fixed angle
@@ -33,13 +36,31 @@ event                                   event-V05-01-00
 
 geometry/management                     geommng-V05-01-01
 -------------------
-- G4LogicalVolume: notify removal of root-logical-volume from G4Region
-  in case of deletion of a logical-volume from the destructor, instead
-  that from DeRegister() method.
-- G4LogicalVolumeStore: removed redundant check and call to
-  RemoveRootLogicalVolume() from Clean() method.
-- G4Region: removed redundant calls to ScanVolumeTree() and
-  UpdateMaterials() from RemoveRootLogicalVolume() method.
+- G4LogicalVolume:
+  o added method ClearDaughters() to be used for resetting the list of
+    daughters to a logical volume in the use-case when only the physical
+    volume store is cleared at run-time.
+  o notify removal of root-logical-volume from G4Region in case of deletion
+    of a logical-volume from the destructor, instead that from DeRegister()
+    method.
+- GVPhysicalVolume:
+  o Added pointer to mother logical volume (will replace in future releases
+    the pointer to mother physical volume) and related accessors.
+  o Standardised registration mechanism as daughter for constructor using
+    the pointer to the mother's PV.
+- G4PVPlacement/Replica/Parameterised:
+  o Standardised registration mechanism as daughter for constructor using
+    the pointer to the mother's PV.
+- G4Region:
+  o Removed redundant calls to ScanVolumeTree() and UpdateMaterials() from
+    RemoveRootLogicalVolume() method.
+- G4LogicalVolumeStore:
+  o removed redundant check and call to RemoveRootLogicalVolume() from
+    Clean() method.
+- G4PhysicalVolumeStore:
+  o Added notification mechanism to logical volumes in the Clean() method
+    to update the list of daughters.
+  o Update mother's LV list of daughters when deregistering a volume.
 
 geometry/solids/Boolean                 geom-bool-V05-01-01
 -----------------------
@@ -105,6 +126,13 @@ processes/electromagnetic/lowenergy     emlowen-V05-01-03
   private interface of G4eBremsstrahlungSpectrum.
 - Cleared pedantic warnings on Linux-g++ platform.
 - Requires a new version of the data-set: G4EMLOW2.2. 
+
+processes/electromagnetic/standard      stand-V05-01-00
+----------------------------------
+- Fix in SupressionFunction in bremsstrahlung STD.
+- Fix in dedx for e- ionisation STD for E<1keV.
+- Set default number 120 bins for dedx table in G4eIonisation.
+- Updated PAI model: included high energy transfers.
 
 processes/electromagnetic/utils         utils-V05-01-01
 -------------------------------
