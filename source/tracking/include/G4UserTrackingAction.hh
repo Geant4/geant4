@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserTrackingAction.hh,v 1.2 1999-03-24 04:45:33 tsasaki Exp $
+// $Id: G4UserTrackingAction.hh,v 1.3 1999-04-15 08:47:10 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,6 +30,7 @@ class G4UserTrackingAction;
 #define G4UserTrackingAction_h 1
 
 class G4TrackingManager;              // Forward declaration
+class G4Track;
 
 ///////////////////////////
 class G4UserTrackingAction 
@@ -41,29 +42,17 @@ class G4UserTrackingAction
 //--------
 
 // Constructor & Destructor
-   G4UserTrackingAction(){};
-   virtual ~G4UserTrackingAction(){}
+   G4UserTrackingAction(){;}
+   virtual ~G4UserTrackingAction(){;}
 
 // Member functions
    void SetTrackingManagerPointer(G4TrackingManager* pValue);
-   virtual void PreUserTrackingAction(){}
-   virtual void PostUserTrackingAction(){}
+   virtual void PreUserTrackingAction(const G4Track* aTrack){;}
+   virtual void PostUserTrackingAction(const G4Track* aTrack){;}
 
 //----------- 
    protected:
 //----------- 
-
-// Member functions
-   inline const G4TrackingManager* GetTrackingManager() {
-      return fpTrackingManager;
-   }
-   inline G4TrackingManager* GetOmnipotentTrackingManager() {
-      return fpTrackingManager;
-   }
-
-//--------- 
-   private:
-//--------- 
 
 // Member data
    G4TrackingManager* fpTrackingManager;

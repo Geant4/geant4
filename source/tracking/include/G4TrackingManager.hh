@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingManager.hh,v 1.2 1999-03-24 04:43:37 tsasaki Exp $
+// $Id: G4TrackingManager.hh,v 1.3 1999-04-15 08:47:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,7 +38,7 @@ class G4TrackingManager;
 #include "G4StepStatus.hh"             // Include from 'tracking'
 #include "G4UserTrackingAction.hh"     // Include from 'tracking'
 #include "G4UserSteppingAction.hh"     // Include from 'tracking'
-#include "G4Trajectory.hh"             // Include from 'tracking'
+#include "G4VTrajectory.hh"             // Include from 'tracking'
 
 
 ////////////////////////
@@ -72,7 +72,8 @@ class G4TrackingManager
 
    G4UserTrackingAction* GetUserTrackingAction() const;
 
-   G4Trajectory* GimmeTrajectory() const;
+   G4VTrajectory* GimmeTrajectory() const;
+   void SetTrajectory(G4VTrajectory* aTrajectory);
     
    G4TrackVector* GimmeSecondaries() const;
 
@@ -83,6 +84,7 @@ class G4TrackingManager
 
    void SetVerboseLevel(G4int vLevel);
    G4int GetVerboseLevel() const;
+
 
 // Other member functions
 
@@ -112,7 +114,7 @@ class G4TrackingManager
    G4Track* fpTrack;
    G4SteppingManager* fpSteppingManager;
    G4UserTrackingAction* fpUserTrackingAction;
-   G4Trajectory* fpTrajectory;
+   G4VTrajectory* fpTrajectory;
    G4bool StoreTrajectory;
    G4int verboseLevel;
 
@@ -145,7 +147,7 @@ class G4TrackingManager
      return fpUserTrackingAction; 
    }
 
-   inline G4Trajectory* G4TrackingManager::GimmeTrajectory() const { 
+   inline G4VTrajectory* G4TrackingManager::GimmeTrajectory() const { 
      return fpTrajectory ; 
    }
     

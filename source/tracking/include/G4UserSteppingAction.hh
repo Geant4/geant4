@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserSteppingAction.hh,v 1.2 1999-03-24 04:45:21 tsasaki Exp $
+// $Id: G4UserSteppingAction.hh,v 1.3 1999-04-15 08:47:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -24,13 +24,10 @@
 //
 //---------------------------------------------------------------
 
-class G4UserSteppingAction;
-
 #ifndef G4UserSteppingAction_h
 #define G4UserSteppingAction_h 1
 
-#include "globals.hh"                  // Include from 'global'
-#include "G4Track.hh"                  // Include from 'tracking'
+class G4Step;
 class G4SteppingManager;               // Forward declaration
 
 ///////////////////////////
@@ -43,28 +40,16 @@ class G4UserSteppingAction
 //--------
 
 // Constructor and destructors
-   G4UserSteppingAction(){}
-   virtual ~G4UserSteppingAction(){}
+   G4UserSteppingAction(){;}
+   virtual ~G4UserSteppingAction(){;}
 
 // Member functions
    void SetSteppingManagerPointer(G4SteppingManager* pValue);
-   virtual void UserSteppingAction(){}
+   virtual void UserSteppingAction(const G4Step* aStep){;}
 
-//----------- 
+//-----------
    protected:
-//----------- 
-
-// Member functions
-   inline const G4SteppingManager* GetSteppingManager() {
-      return fpSteppingManager;
-   }
-   inline G4SteppingManager* GetOmnipotentSteppingManager() {
-      return fpSteppingManager;
-   }
-
-//---------
-   private:
-//---------
+//-----------
 
 // Member data
    G4SteppingManager* fpSteppingManager;

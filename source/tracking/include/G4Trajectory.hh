@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.hh,v 1.2 1999-03-24 04:44:29 tsasaki Exp $
+// $Id: G4Trajectory.hh,v 1.3 1999-04-15 08:47:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,9 +34,11 @@ class G4Trajectory;
 #ifndef G4Trajectory_h
 #define G4Trajectory_h 1
 
+#include "G4VTrajectory.hh"
+#include "G4Allocator.hh"
 #include <stdlib.h>                 // Include from 'system'
 #include "G4ios.hh"               // Include from 'system'
-#include <rw/tvordvec.h>            // RWTValOrderedVector
+#include <rw/tpordvec.h>            // RWTValOrderedVector
 #include "globals.hh"               // Include from 'global'
 #include "G4ParticleDefinition.hh"  // Include from 'particle+matter'
 #include "G4TrajectoryPoint.hh"     // Include from 'tracking'
@@ -46,7 +48,7 @@ class G4Trajectory;
 class G4Polyline;                   // Forward declaration.
 
 ///////////////////
-class G4Trajectory
+class G4Trajectory : public G4VTrajectory
 ///////////////////
 {
 
@@ -55,12 +57,15 @@ class G4Trajectory
 //--------
 
 // Constructor/Destrcutor
-   G4Trajectory(G4Track* aTrack);
+   G4Trajectory(const G4Track* aTrack);
    G4Trajectory(G4Trajectory &);
-   ~G4Trajectory();
+   virtual ~G4Trajectory();
 
 // Operators
-   inline int operator == (const G4Trajectory& right){return (this==&right);}; 
+   inline void* operator new(size_t);
+   inline void  operator delete(void*);
+   inline int operator == (const G4Trajectory& right) const
+   {return (this==&right);} 
 
 // Get/Set functions 
    inline G4int GetTrackID() const
@@ -75,12 +80,12 @@ class G4Trajectory
    { return PDGEncoding; }
 
 // Other member functions
-   void ShowTrajectory();
-     // Print all information of the trajectory to stdout
-
-   void DrawTrajectory(G4int i_mode=0);
-
-   void AppendStep(G4Step* aStep);
+   virtual void ShowTrajectory() const;
+   virtual void DrawTrajectory(G4int i_mode=0) const;
+   virtual void AppendStep(const G4Step* aStep);
+   virtual int GetPointEntries() const { return positionRecord->entries(); }
+   virtual G4VTrajectoryPoint* GetPoint(G4int i) const 
+   { return (*positionRecord)[i]; }
 
    G4ParticleDefinition* GetParticleDefinition();
 
@@ -88,7 +93,7 @@ class G4Trajectory
    private:
 //---------
 
-  RWTValOrderedVector<G4TrajectoryPoint> positionRecord;
+  RWTPtrOrderedVector<G4VTrajectoryPoint>* positionRecord;
   G4int fTrackID;
   G4int fParentID;
   G4String ParticleName;
@@ -96,6 +101,20 @@ class G4Trajectory
   G4int    PDGEncoding;
 
 };
+
+extern G4Allocator<G4Trajectory> aTrajectoryAllocator;
+
+inline void* G4Trajectory::operator new(size_t)
+{
+  void* aTrajectory;
+  aTrajectory = (void*)aTrajectoryAllocator.MallocSingle();
+  return aTrajectory;
+}
+
+inline void G4Trajectory::operator delete(void* aTrajectory)
+{
+  aTrajectoryAllocator.FreeSingle((G4Trajectory*)aTrajectory);
+}
 
 #endif
 

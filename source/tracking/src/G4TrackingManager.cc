@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingManager.cc,v 1.2 1999-03-24 04:46:43 tsasaki Exp $
+// $Id: G4TrackingManager.cc,v 1.3 1999-04-15 08:47:22 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -22,6 +22,7 @@
 
 #include "G4TrackingManager.hh"
 #include "G4TrackingMessenger.hh"
+#include "G4Trajectory.hh"
 #include "G4ios.hh"
 
 G4TrackingMessenger * messenger;
@@ -57,16 +58,14 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   GimmeSecondaries()->clearAndDestroy();    
 
   // Pre tracking user intervention process.
+  fpTrajectory = NULL;
   if( fpUserTrackingAction != NULL ) {
-     fpUserTrackingAction->PreUserTrackingAction();
+     fpUserTrackingAction->PreUserTrackingAction(fpTrack);
   }
 #ifdef G4_STORE_TRAJECTORY
   // Construct a trajectory if it is requested
-  if(StoreTrajectory) { 
-     fpTrajectory = new G4Trajectory(fpTrack); 
-  }
-  else { 
-     fpTrajectory = NULL; 
+  if(StoreTrajectory&&(!fpTrajectory)) { 
+     fpTrajectory = new G4Trajectory(fpTrack); // default trajectory concrete class object
   }
 #endif
 
@@ -105,7 +104,7 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
 
   // Post tracking user intervention process.
   if( fpUserTrackingAction != NULL ) {
-     fpUserTrackingAction->PostUserTrackingAction();
+     fpUserTrackingAction->PostUserTrackingAction(fpTrack);
   }
 
   // Destruct the trajectory if it was created
@@ -115,6 +114,14 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   if( (!StoreTrajectory)&&fpTrajectory ) {
       delete fpTrajectory;
   }
+}
+
+void G4TrackingManager::SetTrajectory(G4VTrajectory* aTrajectory)
+{
+#ifndef G4_STORE_TRAJECTORY
+  G4Exception("G4TrackingManager::SetTrajectory is invoked without G4_STORE_TRAJECTORY compilor option");
+#endif
+  fpTrajectory = aTrajectory;
 }
 
 //////////////////////////////////////
