@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.27 2004-11-10 08:55:00 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.28 2004-11-29 14:44:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,7 +89,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
 {
   minKinEnergy = 100.0*eV;
   maxKinEnergy = 100.0*TeV;
-  SetVerboseLevel(0);
+  //SetVerboseLevel(0);
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);
 
@@ -103,8 +103,6 @@ G4VMultipleScattering::~G4VMultipleScattering()
   if (theLambdaTable) theLambdaTable->clearAndDestroy();
   (G4LossTableManager::Instance())->DeRegister(this);
 }
-
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -142,8 +140,8 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
              << num
              << G4endl;
     }
-    if (verboseLevel>=0 && ( num == "e-" || num == "mu+" || num == "proton"
-                        || num == "pi-")) PrintInfoDefinition();
+    if((verboseLevel>=0) && ( num == "e-" || num == "mu+" || num == "proton" || num == "pi-")) 
+      PrintInfoDefinition();
     if(2 < verboseLevel) G4cout << *theLambdaTable << G4endl;
   }
 
@@ -163,6 +161,15 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
     currentCouple = 0;
     firstParticle = &part;
     currentParticle = &part;
+  }
+
+  if(0 < verboseLevel) {
+//    G4cout << "========================================================" << G4endl;
+    G4cout << "### G4VMultipleScattering::PrepearPhysicsTable() for "
+           << GetProcessName()
+           << " and particle " << part.GetParticleName()
+           << " local particle " << firstParticle->GetParticleName()
+           << G4endl;
   }
 
   if(firstParticle == &part) {
@@ -255,6 +262,7 @@ void G4VMultipleScattering::PrintInfoDefinition()
 {
   G4cout << G4endl << GetProcessName() << ":  Model variant of multiple scattering "
          << "for " << firstParticle->GetParticleName()
+         << " " << verboseLevel
          << G4endl;
   if (theLambdaTable) {
     G4cout << "      Lambda tables from "

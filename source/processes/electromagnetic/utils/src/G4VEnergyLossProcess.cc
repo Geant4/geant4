@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.42 2004-11-17 18:22:13 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.43 2004-11-29 14:44:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -349,9 +349,9 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
-           << "; local: " << particle->GetParticleName()
-           << "; base: " << baseParticle->GetParticleName()
-           << G4endl;
+           << "; local: " << particle->GetParticleName();
+    if(baseParticle) G4cout << "; base: " << baseParticle->GetParticleName();
+    G4cout << G4endl;
   }
 
   if(!tablesAreBuilt && &part == particle)
@@ -420,11 +420,6 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable()
            << G4endl;
   }
 
-  // vectors to provide continues dE/dx
-  G4DataVector factor;
-  G4DataVector dedxLow;
-  G4DataVector dedxHigh;
-
   // Access to materials
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
@@ -472,11 +467,6 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTableForPreciseRange()
            << " and particle " << particle->GetParticleName()
            << G4endl;
   }
-
-  // vectors to provide continues dE/dx
-  G4DataVector factor;
-  G4DataVector dedxLow;
-  G4DataVector dedxHigh;
 
   // Access to materials
   const G4ProductionCutsTable* theCoupleTable=

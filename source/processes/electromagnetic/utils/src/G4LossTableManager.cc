@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.48 2004-11-19 08:44:06 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.49 2004-11-29 14:44:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -379,7 +379,7 @@ void G4LossTableManager::CopyTables(const G4ParticleDefinition* part,
   for (G4int j=0; j<n_loss; j++) {
 
     G4VEnergyLossProcess* proc = loss_vector[j];
-    if(proc == base_proc) tables_are_built[j] = true;
+    if(proc == base_proc || proc->Particle() == part) tables_are_built[j] = true;
 
     if (!tables_are_built[j] && part == base_part_vector[j]) {
       tables_are_built[j] = true;
