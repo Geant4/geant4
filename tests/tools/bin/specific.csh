@@ -456,7 +456,8 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
 # Core :
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /geant4/geant4-03-02-ref-07
-  setenv G4WORKDIR $G4INSTALL
+#  setenv G4WORKDIR $G4INSTALL
+  setenv G4WORKDIR /archos/geant4/geant4-03-02-ref-07
   setenv G4STTDIR $G4WORKDIR/stt
   setenv G4LIB $G4WORKDIR/lib
   setenv G4SYSTEM Linux-g++
@@ -520,8 +521,8 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
 #  setenv PATH ${PATH}:/lal/jas/2.0alpha4/release
 #  setenv PATH "${PATH}:/lal/DAWN/dawn_3_85a/Linux/bin"
 # Examples :
-  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/tmp/${G4SYSTEM}/AnaEx01
-#  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/tmp/${G4SYSTEM}/dm_example
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/AnaEx01
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/DMX
 endif
 
 if ( `uname -n` == "lx-si1.lal.in2p3.fr" ) then
