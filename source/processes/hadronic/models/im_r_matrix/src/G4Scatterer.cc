@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.3 2003-10-27 15:44:19 hpw Exp $ //
+// $Id: G4Scatterer.cc,v 1.4 2003-10-28 14:03:27 hpw Exp $ //
 //
 
 #include "globals.hh"
@@ -265,6 +265,9 @@ G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
 //   G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
    G4LorentzVector pInitial=trk1.Get4Momentum() + trk2.Get4Momentum();
    G4double energyBalance = pInitial.t();
+   G4double pxBalance = pInitial.vect().x();
+   G4double pyBalance = pInitial.vect().y();
+   G4double pzBalance = pInitial.vect().z();
    G4int chargeBalance = trk1.GetDefinition()->GetPDGCharge()
                        + trk2.GetDefinition()->GetPDGCharge();
    G4int baryonBalance = trk1.GetDefinition()->GetBaryonNumber()
@@ -333,12 +336,18 @@ G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
        for(size_t hpw=0; hpw<products->size(); hpw++)
        {
          energyBalance-=products->operator[](hpw)->Get4Momentum().t();
+         pxBalance-=products->operator[](hpw)->Get4Momentum().vect().x();
+         pyBalance-=products->operator[](hpw)->Get4Momentum().vect().y();
+         pzBalance-=products->operator[](hpw)->Get4Momentum().vect().z();
 	 chargeBalance-=products->operator[](hpw)->GetDefinition()->GetPDGCharge();
          baryonBalance-=products->operator[](hpw)->GetDefinition()->GetBaryonNumber();
        }
        if(getenv("ScattererEnergyBalanceCheck"))
          std::cout << "DEBUGGING energy balance A: "
 	           <<energyBalance<<" "
+	           <<pxBalance<<" "
+	           <<pyBalance<<" "
+	           <<pzBalance<<" "
 		   <<chargeBalance<<" "
 		   <<baryonBalance<<" "
 		   <<G4endl;
