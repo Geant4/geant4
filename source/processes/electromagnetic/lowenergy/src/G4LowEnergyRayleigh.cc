@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.15 2000-01-26 09:50:01 lefebure Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.16 2000-03-07 10:02:23 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -225,8 +225,8 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
     const G4FirstLevel* oneAtomFF
       = (*theFormFactorTable)[ZNumVec->index(elementZ)];
 
-    DataFormFactor = util.DataLogInterpolation(x, (*(*oneAtomFF)[0]), 
-					       (*(*oneAtomFF)[1]))/cm;
+    DataFormFactor = util.DataLogInterpolation(x/cm, (*(*oneAtomFF)[0]), 
+					       (*(*oneAtomFF)[1]));
     RandomFormFactor = G4UniformRand()*elementZ*elementZ;
 
     Theta = Theta_Half*2;
