@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.4 2003-12-02 14:39:03 gcosmo Exp $
+$Id: History,v 1.5 2003-12-02 14:58:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,7 +9,7 @@ $Id: History,v 1.4 2003-12-02 14:39:03 gcosmo Exp $
                       Category History file
                       ---------------------
 
-02.12.2003 - G.Cosmo (Rich-V05-02-00)
+02.12.2003 - G.Cosmo (lAr_calorimeter-V05-02-01)
              Fixed compilation errors if histograms disabled.
              Fixed compilation warnings ...
 
