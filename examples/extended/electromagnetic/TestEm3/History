@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2000-11-24 11:02:55 stesting Exp $
+$Id: History,v 1.4 2000-12-07 12:38:24 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+07-12-00  mma (testem3-V02-00-03 & testem-noHist)
+          remove hbook histograms: GNUmakefile,runAction,eventAction
+				   
+06-12-00  mma (testem3-V02-00-02 & testem-withHist)
+          update of init.mac for new vis commands.
+	  G4UItcsh in the main()
+	  
 25th November 2000 Steve O'Neale (tagset210)
 - Update test outputs for min.delta energy cut and table printout
 - Update test outputs em tags 1 percent change in deposited energy

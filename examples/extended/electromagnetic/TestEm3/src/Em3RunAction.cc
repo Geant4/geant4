@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3RunAction.cc,v 1.4 2000-01-21 09:11:07 maire Exp $
+// $Id: Em3RunAction.cc,v 1.5 2000-12-07 12:38:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,10 +26,6 @@
 #include "Randomize.hh"
 #include "g4std/iomanip"
 
-#ifndef G4NOHIST
- #include "CLHEP/Hist/HBookFile.h"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
@@ -45,26 +41,12 @@ Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
 Em3RunAction::~Em3RunAction()
 {
   delete runMessenger;
-  
-#ifndef G4NOHIST  
- // Delete HBOOK stuff
-  delete ntuple;
-  delete hbookManager;
-#endif  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Em3RunAction::bookHisto()
-{
-#ifndef G4NOHIST
-  // init hbook
-  hbookManager = new HBookFile("TestEm3.ntupl", 68);
-
-  // book a ntuple
-  ntuple = hbookManager->ntuple("sum per event");
-#endif   
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -136,11 +118,6 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << G4endl;  
   G4cout.setf(oldform,G4std::ios::floatfield);
   G4cout.precision(oldprec);
-  
-#ifndef G4NOHIST  
-  // Write histogram file 
-  hbookManager->write();
-#endif  
   
   // save Rndm status
   if (saveRndm == 1)
