@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2001-05-02 15:52:51 pia Exp $
+$Id: History,v 1.62 2001-05-07 20:14:26 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07.05.2001 - MGP, tag emlowen-V03-01-03
+             Removal of RW remnants, moved to STL containers
+
+07.05.2001 - MGP, tag emlowen-V03-01-02
+             Same as emlowen-V03-01-01, with some improvements in tests
 
 02.05.2001 - MGP, tag emlowen-V03-01-01
              Same as emlowen-V03-01-00, with a first implementation of 
