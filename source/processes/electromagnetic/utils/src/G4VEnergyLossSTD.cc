@@ -53,6 +53,7 @@
 // 10-03-03 Add Ion registration (V.Ivanchenko)
 // 22-03-03 Add Initialisation of cash (V.Ivanchenko)
 // 26-03-03 Remove finalRange modification (V.Ivanchenko)
+// 09-04-03 Fix problem of negative range limit for non integral (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -114,7 +115,8 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   rndmStepFlag(false),
   hasRestProcess(true),
   tablesAreBuilt(false),
-  integral(true)
+  integral(true),
+  meanFreePath(false)
 {
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);
@@ -250,7 +252,6 @@ void G4VEnergyLossSTD::Initialise()
 void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
   currentCouple = 0;
-  oldTrackID = -1;
   preStepLambda = 0.0;
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::BuildPhysicsTable() for "
@@ -866,9 +867,6 @@ void G4VEnergyLossSTD::SetStepLimits(G4double v1, G4double v2)
 {
   dRoverRange = v1;
   finalRange = v2;
-  c1lim=dRoverRange;
-  c2lim=2.*(1-dRoverRange)*finalRange;
-  c3lim=-(1.-dRoverRange)*finalRange*finalRange;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -42,6 +42,7 @@
 // 17-02-03 Fix problem of store/restore tables (V.Ivanchenko)
 // 26-02-03 Region dependent step limit (V.Ivanchenko)
 // 26-03-03 Add GetDEDXDispersion (V.Ivanchenko)
+// 09-04-03 Fix problem of negative range limit for non integral (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -230,6 +231,9 @@ public:
                                      G4double currentMinimumStep,
                                      G4double& currentSafety);
 
+  void      ResetNumberOfInteractionLengthLeft();
+  // reset (determine the value of)NumberOfInteractionLengthLeft
+
 protected:
 
   virtual G4double GetMeanFreePath(const G4Track& track,
@@ -310,7 +314,6 @@ private:
   const G4Material*           currentMaterial;
   const G4MaterialCutsCouple* currentCouple;
   size_t                      currentMaterialIndex;
-  G4int                       oldTrackID;
 
   G4int    nDEDXBins;
   G4int    nLambdaBins;
@@ -330,18 +333,14 @@ private:
   G4double linLossLimit;
   G4double minSubRange;
   G4double dRoverRange;
-  //G4double maxFinalStep;
   G4double finalRange;
-  G4double c1lim;
-  G4double c2lim;
-  G4double c3lim;
 
   G4bool lossFluctuationFlag;
   G4bool rndmStepFlag;
   G4bool hasRestProcess;
   G4bool tablesAreBuilt;
   G4bool integral;
-
+  G4bool meanFreePath;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -354,6 +353,7 @@ inline void G4VEnergyLossSTD::DefineMaterial(const G4MaterialCutsCouple* couple)
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
     currentMaterialIndex = couple->GetIndex();
+    meanFreePath = true;
   }
 }
 
@@ -410,14 +410,17 @@ inline G4double G4VEnergyLossSTD::GetMeanFreePath(const G4Track& track,
                                                         G4double,
                                                         G4ForceCondition* cond)
 {
-  G4bool b;
   *cond = NotForced;
 
   DefineMaterial(track.GetMaterialCutsCouple());
   preStepKinEnergy = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
-  preStepLambda = (((*theLambdaTable)[currentMaterialIndex])->
+  if (meanFreePath) {
+    G4bool b;
+    preStepLambda = (((*theLambdaTable)[currentMaterialIndex])->
                       GetValue(preStepScaledEnergy, b)) * chargeSqRatio;
+    if (integral) meanFreePath = false;
+  }
   G4double x = DBL_MAX;
   if(0.0 < preStepLambda) x = 1.0/preStepLambda;
   return x;
@@ -430,25 +433,35 @@ inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
 {
   G4double x = DBL_MAX;
 
-  if(theRangeTable) {
+  if (theRangeTable) {
     G4bool b;
     fRange = ((*theRangeTable)[currentMaterialIndex])->
-                GetValue(preStepScaledEnergy, b)*reduceFactor;
+            GetValue(preStepScaledEnergy, b)*reduceFactor;
+    x = fRange;
 
-    if(integral) {
-      x = fRange;
-
-    } else {
+    if( !integral ) {
       G4double r = G4std::min(finalRange, currentCouple->GetProductionCuts()
                  ->GetProductionCut(idxG4ElectronCut));
-      x = dRoverRange*fRange + r*(1.0 - dRoverRange)*(2.0 - r/fRange);
-      if(rndmStepFlag) x = r + (x-r)*G4UniformRand();
-      if(x > fRange) x = fRange;
+      if (fRange > r) {
+
+        x = dRoverRange*fRange + r*(1.0 - dRoverRange)*(2.0 - r/fRange);
+        if(rndmStepFlag) x = r + (x-r)*G4UniformRand();
+        if(x > fRange) x = fRange;
+      }
     }
   }
 
   return x;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEnergyLossSTD::ResetNumberOfInteractionLengthLeft()
+{
+  meanFreePath = true;
+  G4VProcess::ResetNumberOfInteractionLengthLeft();
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
