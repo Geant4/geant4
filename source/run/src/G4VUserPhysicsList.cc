@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.24 2001-10-16 08:35:51 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.25 2001-10-20 02:01:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -937,7 +937,7 @@ G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory,
     fOut.setf(G4std::ios::scientific);
   
     // material name and density
-    for (size_t idx=0; idx<numberOfMaterial; ++idx){
+    for (size_t idx=0; idx<size_t(numberOfMaterial); ++idx){
       fOut << G4std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetName();
       fOut << G4std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetDensity()/(g/cm3) << G4endl;
     }
@@ -958,7 +958,7 @@ G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory,
     fOut.write( (char*)(&numberOfMaterial), sizeof (G4int));
     
     // material name and density
-    for (size_t imat=0; imat<numberOfMaterial; ++imat){
+    for (size_t imat=0; imat<size_t(numberOfMaterial); ++imat){
       G4String name =  ((*matTable)[imat])->GetName();
       G4double density = ((*matTable)[imat])->GetDensity()/(g/cm3);
       for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
@@ -1232,7 +1232,7 @@ G4bool G4VUserPhysicsList::CheckMaterialInfo(const G4String& directory,
   }
   
   // list of material
-  for (size_t idx=0; idx<numberOfMaterial; ++idx){
+  for (size_t idx=0; idx<size_t(numberOfMaterial); ++idx){
     // check eof
     if(fIn.eof()) {
 #ifdef G4VERBOSE  
