@@ -34,4 +34,12 @@ ifeq ($(G4SYSTEM),AIX-xlC)
     CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
     CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
   endif
+
+  define build-granular-shared-lib
+    @echo "Shared Libraries not supported on $(G4SYSTEM)
+  endef
+  define build-global-shared-lib
+    @echo "Shared Libraries not supported on $(G4SYSTEM)
+  endef
+
 endif

@@ -49,4 +49,12 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   ifndef OGLLIBS
     OGLLIBS   := -lGLU  -lGL
   endif
+
+  define build-granular-shared-lib
+    @echo "Shared Libraries not supported on $(G4SYSTEM)
+  endef
+  define build-global-shared-lib
+    @echo "Shared Libraries not supported on $(G4SYSTEM)
+  endef
+
 endif

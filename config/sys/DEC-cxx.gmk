@@ -38,4 +38,12 @@ ifeq ($(G4SYSTEM),DEC-cxx)
       CPPFLAGS += -DG4USE_STD_NAMESPACE
     endif
   endif
+
+  define build-granular-shared-lib
+    @echo "Shared Libraries not supported on $(G4SYSTEM)
+  endef
+  define build-global-shared-lib
+    @echo "Shared Libraries not supported on $(G4SYSTEM)
+  endef
+
 endif

@@ -49,5 +49,13 @@ ifeq ($(G4SYSTEM),WIN32-g++)
   ifdef G4ODBMS
     G4OODDLX_FLAGS += -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd=""
   endif
+
+  define build-granular-shared-lib
+    @echo "Shared Libraries not supported on $(G4SYSTEM)
+  endef
+  define build-global-shared-lib
+    @echo "Shared Libraries not supported on $(G4SYSTEM)
+  endef
+
 endif
 
