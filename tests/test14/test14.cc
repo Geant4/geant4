@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test14.cc,v 1.3 1999-06-14 23:28:45 aforti Exp $
+// $Id: test14.cc,v 1.4 1999-06-22 16:59:04 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -25,19 +25,23 @@
 int main(int argc,char** argv) {
 
   // Set the default random engine to RanecuEngine
-  RanecuEngine defaultEngine;
-  HepRandom::setTheEngine(&defaultEngine);
+  HepRandom::setTheEngine(new RanecuEngine);
 
   // Run manager
   G4RunManager * runManager = new G4RunManager;
 
   // UserInitialization classes
-  runManager->SetUserInitialization(new Tst14DetectorConstruction);
+  Tst14DetectorConstruction* detector;
+  detector = new Tst14DetectorConstruction;
+
+  runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new Tst14PhysicsList);
 
   // UserAction classes
-  runManager->SetUserAction(new Tst14RunAction);
-  runManager->SetUserAction(new Tst14PrimaryGeneratorAction);
+  runManager->SetUserAction(new Tst14PrimaryGeneratorAction(detector));
+  Tst14RunAction* runaction = new Tst14RunAction;
+  runManager->SetUserAction(runaction);
+
   //runManager->SetUserAction(new Tst14SteppingAction);
   runManager->SetUserAction(new Tst14TrackingAction);
 
