@@ -23,9 +23,9 @@
 
 #include "UIcmdWithNucleusAndUnit.hh"
 #ifdef WIN32
-#  include "g4std/Strstream"
+#  include <Strstream>
 #else
-#  include "g4std/strstream"
+#  include <strstream>
 #endif
 ////////////////////////////////////////////////////////////////////////////////
 //
