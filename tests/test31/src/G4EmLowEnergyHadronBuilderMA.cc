@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmLowEnergyHadronBuilderMA.cc,v 1.1 2004-09-21 10:43:48 vnivanch Exp $
+// $Id: G4EmLowEnergyHadronBuilderMA.cc,v 1.2 2004-10-15 14:13:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -45,7 +45,7 @@
 #include "G4MultipleScattering.hh"
 
 #include "G4hLowEnergyIonisation.hh"
-#include "G4hLowEnergyIonisationMA.hh"
+//#include "G4hLowEnergyIonisationMA.hh"
 
 #include "G4Electron.hh"
 #include "G4Proton.hh"
@@ -78,7 +78,7 @@ void G4EmLowEnergyHadronBuilderMA::ConstructProcess()
   // Add standard EM Processes
   theParticleIterator->reset();
 
-  G4hLowEnergyIonisationMA* proc;
+  G4hLowEnergyIonisation* proc;
   const G4String table_name = "ICRU_R49He";
 
   while( (*theParticleIterator)() ){
@@ -91,8 +91,8 @@ void G4EmLowEnergyHadronBuilderMA::ConstructProcess()
 
       if (particleName == "GenericIon") {
 
-        proc = new G4hLowEnergyIonisationMA();
-        proc->SetElectronicStoppingPowerModel(table_name);
+        proc = new G4hLowEnergyIonisation();
+        //proc->SetElectronicStoppingPowerModel(table_name);
         pmanager->AddProcess(new G4MultipleScattering,   -1, 1,1);
         pmanager->AddProcess(proc, -1, 2,2);
 
@@ -100,8 +100,8 @@ void G4EmLowEnergyHadronBuilderMA::ConstructProcess()
 	         (particle->GetPDGCharge() != 0.0) &&
 	         (particle->GetParticleName() != "chargedgeantino")) {
 
-        proc = new G4hLowEnergyIonisationMA();
-        proc->SetElectronicStoppingPowerModel(table_name);
+        proc = new G4hLowEnergyIonisation();
+        //proc->SetElectronicStoppingPowerModel(table_name);
         pmanager->AddProcess(new G4MultipleScattering,   -1,1,1);
         pmanager->AddProcess(proc, -1,2,2);
       }

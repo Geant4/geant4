@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.9 2004-09-16 14:28:14 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.10 2004-10-15 14:13:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -114,55 +114,53 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  G4bool yes = false;
+  if(emBuilderIsRegisted) {
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">"
+           << " fail - PhysicsList is already registered " << G4endl;
+    return;    
+  }
 
-  if ("standard" == name && !emBuilderIsRegisted) {
+  if ("standard" == name) {
     RegisterPhysics(new G4EmQEDBuilder());
     RegisterPhysics(new G4EmMuonBuilder());
     RegisterPhysics(new G4EmHadronBuilder());
     RegisterPhysics(new DecaysBuilder());
     emBuilderIsRegisted = true;
-    yes = true;
 
-  } else if ("standard70" == name && !emBuilderIsRegisted) {
+  } else if ("standard70" == name) {
     RegisterPhysics(new G4EmQEDBuilder70());
     RegisterPhysics(new G4EmMuonBuilder());
     RegisterPhysics(new G4EmHadronBuilder());
     RegisterPhysics(new DecaysBuilder());
     emBuilderIsRegisted = true;
-    yes = true;
 
-  } else if ("g4v52" == name && !emBuilderIsRegisted) {
+  } else if ("g4v52" == name) {
     RegisterPhysics(new G4EmQEDBuilder52());
     RegisterPhysics(new G4EmMuonBuilder52());
     RegisterPhysics(new G4EmHadronBuilder52());
     RegisterPhysics(new DecaysBuilder());
     emBuilderIsRegisted = true;
-    yes = true;
 
-  } else if ("lowenergy" == name && !emBuilderIsRegisted) {
+  } else if ("lowenergy" == name) {
     RegisterPhysics(new G4EmLowEnergyQEDBuilder());
     RegisterPhysics(new G4EmMuonBuilder());
     RegisterPhysics(new G4EmLowEnergyHadronBuilder());
     RegisterPhysics(new DecaysBuilder());
     emBuilderIsRegisted = true;
-    yes = true;
 
-  } else if ("lowenergyMA" == name && !emBuilderIsRegisted) {
+  } else if ("lowenergyMA" == name) {
     RegisterPhysics(new G4EmQEDBuilder());
     RegisterPhysics(new G4EmMuonBuilder());
     RegisterPhysics(new G4EmLowEnergyHadronBuilderMA());
     RegisterPhysics(new DecaysBuilder());
     emBuilderIsRegisted = true;
-    yes = true;
 
-  } else if ("penelope" == name && !emBuilderIsRegisted) {
+  } else if ("penelope" == name) {
     RegisterPhysics(new G4EmPenelopeQEDBuilder());
     RegisterPhysics(new G4EmMuonBuilder());
     RegisterPhysics(new G4EmLowEnergyHadronBuilder());
     RegisterPhysics(new DecaysBuilder());
     emBuilderIsRegisted = true;
-    yes = true;
 
   } else if ("high_energy" == name ) {
     RegisterPhysics(new G4EmHighEnergyBuilder());
@@ -177,7 +175,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">"
            << " fail - name is unknown " << G4endl;
   }
-  if (verbose>0 && yes) {
+  if (verbose>0 && emBuilderIsRegisted) {
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
   }
 }
