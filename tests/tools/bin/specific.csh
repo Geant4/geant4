@@ -407,7 +407,7 @@ if ( `uname -n` == "lx1.lal.in2p3.fr" ) then
   setenv CPPVERBOSE 1
   set prompt='g4-lx1> ' 
 endif
-#
+
 if ( `uname -n` == "papou1" ) then
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /geant4/geant4-01-00-ref-02
@@ -450,10 +450,9 @@ if ( `uname -n` == "papou1" ) then
   setenv CPPVERBOSE 1
   set prompt='g4-papou1> ' 
 endif
-# Comments :
-# --------
-#
+
 if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100" || `uname -n` == "pcal26" ) then
+  set prompt='g4-pc-gbp> ' 
 # Core :
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /geant4/geant4-03-02-ref-07
@@ -475,8 +474,8 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
   setenv OGLHOME /lal/Mesa/3.2/Linux
 # Inventor driver :
   source /lal/CMT/v1r10/mgr/setup.csh
-  source /projects/HEPVis/v5r2/cmt/cleanup.csh
-  source /projects/HEPVis/v5r2/cmt/setup.csh
+  source /projects/HEPVis/v5r2p1/cmt/cleanup.csh
+  source /projects/HEPVis/v5r2p1/cmt/setup.csh
   setenv G4VIS_BUILD_OIX_DRIVER 1
   setenv G4VIS_USE_OIX 1
   setenv TTFLIBS "-L/lal/freetype/1.3.1/Linux/lib -lttf"
@@ -488,9 +487,9 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
   setenv XENVIRONMENT $G4INSTALL/examples/novice/N03/visTutor/g4Xt.xrm
 # AIDA :
 #  setenv G4ANALYSIS_USE 1
-## Falsetto implementation :
+# Falsetto implementation :
 #  source /projects/Falsetto/v1/cmt/setup.csh
-## Lab implementation :
+# Lab implementation :
 #  source /projects/Lab/v6/cmt/cleanup.csh
 #  source /projects/Lab/v6/cmt/setup.csh
 #  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
@@ -502,28 +501,24 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
 #  setenv G4VIS_USE_DAWNFILE          1
 #  setenv G4VIS_USE_VRML              1
 #  setenv G4VIS_USE_VRMLFILE          1
-  # Things needed by the Geant4/vis/drivers :
-  # OPACS :
-  #setenv G4UI_BUILD_WO_SESSION       1
-  #setenv G4VIS_BUILD_OPACS_DRIVER    1
-  #setenv G4UI_USE_WO                 1
-  #setenv G4VIS_USE_OPACS             1
-  #source /lal/OPACS/v3/setup.csh
-  #
-  # java :
+# OPACS :
+#  setenv G4UI_BUILD_WO_SESSION       1
+#  setenv G4VIS_BUILD_OPACS_DRIVER    1
+#  setenv G4UI_USE_WO                 1
+#  setenv G4VIS_USE_OPACS             1
+#  source /lal/OPACS/v3/setup.csh
+# jas :
 #  setenv JDKHOME /lal/JDK/1.2.2/Linux
 #  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$JDKHOME/jre/lib/i386:$JDKHOME/jre/lib/i386/classic:$JDKHOME/jre/lib/i386/native_threads
-  # jas :
 #  set jars=/lal/jas/2.0alpha4/release/lib
 #  setenv CLASSPATH ${CLASSPATH}:$jars/collections.jar:$jars/hep.jar:$jars/jas.jar
 #  setenv PATH ${PATH}:/lal/jas/2.0alpha4/release
 #  setenv PATH "${PATH}:/lal/DAWN/dawn_3_85a/Linux/bin"
+# Examples :
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/tmp/${G4SYSTEM}/AnaEx01
 #  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/tmp/${G4SYSTEM}/dm_example
-  set prompt='g4-pc-gbp> ' 
 endif
-#
-#
+
 if ( `uname -n` == "lx-si1.lal.in2p3.fr" ) then
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /geant4/geant4-03-02-ref-00
@@ -564,7 +559,7 @@ if ( `uname -n` == "lx-si1.lal.in2p3.fr" ) then
   # CLHEP :
   setenv CLHEP_BASE_DIR /lal/CLHEP/1.6.0.0/Linux-gxx
 endif
-#
+
 if ( `uname -n | grep lxplus` != "" ) then
 if ( `whoami` == "gbarrand" ) then
   setenv CVSROOT   /afs/cern.ch/sw/geant4/cvs
@@ -612,6 +607,3 @@ if ( `whoami` == "gbarrand" ) then
   set prompt='g4-lxplus> ' 
 endif
 endif
-#
-####################################################
-####################################################
