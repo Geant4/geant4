@@ -2,7 +2,7 @@
                  Geant4 5.1 Release Notes
                  ------------------------
 
-                                                      30th April 2003
+                                                      30 April 2003
 
 These are the main new features/fixes included in this release since the
 last public release (for the detailed list of fixes/additions, please refer
@@ -311,6 +311,7 @@ Contents
   7. Known Run-Time Warnings
   8. Items for migration of user code
 
+
 1. Supported and Tested Platforms
 ---------------------------------
 
@@ -330,6 +331,7 @@ Platforms configured but not tested and not supported:
   o SGI V6.5.5, CC 7.2.1
   o AIX 4.3.2, xlC 6.0 
   o MacOS 10.2, gcc 2.95.2 / gcc-3.2
+
 
 2. AIDA and CLHEP
 -----------------
@@ -418,5 +420,19 @@ We believe none give rise to incorrect behaviour.
 8. Items for migration of user code
 -----------------------------------
 
+o User applications having user-defined production cuts will work with
+  no required transition to the new interface, as long as regions are
+  not used. The new interface for setting production cuts will be
+  required for using the 'cuts-by-region' feature (see the User's
+  Guide for Application Developers).
+  The old interface for setting/controlling production cuts (methods
+  and UI commands) will be made obsolete in the next public release and
+  later-on removed.
+o Advanced applications making use of sub-classed run-manager will have
+  to migrate to the new initialisation scheme and interface defined in
+  G4RunManager.
+o Applications making use of the prototype STD EM processes and messenger
+  will have to migrate according to the design iteration implemented in
+  this new release.
 o The new data sets for low-energy EM processes G4EMLOW2.1 is required
   for applications making use of such processes.
