@@ -1,5 +1,5 @@
 #
-# ------ WIN32/VC ------
+# ------ WIN32/VC ------    Visual-C++ 6.0 SP5
 #
 ifeq ($(G4SYSTEM),WIN32-VC)
   CXX       := CL

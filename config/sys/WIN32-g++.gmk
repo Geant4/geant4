@@ -3,8 +3,7 @@
 #                                  cygnus b20 with cygwin1.dll 1.1.5 patch
 #                                  Windows 95 4.00.1111
 #
-# Sys file by Stefano Agostinelli, July 2000
-# IST Group: Franca Foppiano, Stefania Garelli, Stefano Agostinelli
+# Stefano Agostinelli - IST Group, Genova
 #
 ifeq ($(G4SYSTEM),WIN32-g++)
   CXX       := g++
