@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2000-11-20 15:39:53 gcosmo Exp $
+$Id: History,v 1.17 2001-01-26 15:16:18 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Jan 26 2001, F. Lei
+- bug fixing in G4GeneralSourceParticle.cc
+ replace: 
+          posphi = acos(tx/sin(posthe));
+ 
+ with:
+          if (posthe != 0. && posthe != pi) 
+             posphi = acos(tx/sin(posthe)); 
+          else 
+             posphi = 0.0;
+	  endif
 
 Nov 20 2000, G.Cosmo (event-V02-00-04)
 - Removed data-logs from test directory.

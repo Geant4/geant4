@@ -21,6 +21,17 @@
 // CHANGE HISTORY
 // --------------
 //
+// 26-01-2001, F. Lei
+// replace: 
+//          posphi = acos(tx/sin(posthe));
+// 
+// with:
+//          if (posthe != 0. && posthe != pi) 
+//             posphi = acos(tx/sin(posthe)); 
+//          else 
+//             posphi = 0.0;
+//          endif
+//
 // 10-Nov-2000, F. Lei
 //    some bug fixing:
 //          i) dclared ' G4int count' in all ****Interpolation functions
@@ -28,7 +39,7 @@
 //              as default.
 //
 // 09-Nov-2000, F Lei
-//    Changed to a fast mplementation for generating iso and cos angular directions 
+//    Changed to a fast implementation for generating iso and cos angular directions 
 //
 // Version 1.1, 18 October 2000, Modified to inherit from G4VPrimaryGenerator.
 // New name at the request of M. Asai.
@@ -261,7 +272,6 @@ void G4GeneralParticleSource::ConfineSourceToVolume(G4String Vname)
     found  = tempPV->GetName() == theRequiredVolumeName;
     if(verbosityLevel == 2)
       G4cout << i << " " << " " << tempPV->GetName() << " " << theRequiredVolumeName << " " << found << G4endl;
-
     if (!found)
       {i++;}
   }
@@ -298,7 +308,6 @@ void G4GeneralParticleSource::GeneratePointsInPlane()
   G4double expression;
   G4ThreeVector RandPos;
   G4double tempx, tempy, tempz;
-
   z = 0.;
 
   if(SourcePosType != "Plane" && verbosityLevel >= 1)
@@ -1112,7 +1121,11 @@ void G4GeneralParticleSource::GenerateIsotropicFlux()
   tz = tz/tt;
   //  G4cout << "unit position " << tx << " " << ty << " " << tz << G4endl;
   posthe = acos(tz);
-  posphi = acos(tx/sin(posthe));
+  if (posthe != 0. && posthe != pi) 
+    posphi = acos(tx/sin(posthe)); 
+  else 
+    posphi = 0.0;
+  endif
   //  G4cout << "Posthe and posphi " << posthe << " " << posphi << G4endl;
   G4double finx, finy, finz;
   finx = (px*cos(posthe)*cos(posphi)) - (py*sin(posphi)) + (pz*sin(posthe)*cos(posphi));
