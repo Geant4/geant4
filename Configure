@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.17 2001-12-14 11:52:39 sadilov Exp $
+# $Id: Configure,v 1.18 2001-12-14 12:15:58 sadilov Exp $
 #
-# Generated on Fri Dec 14 12:51:05 CET 2001 [metaconfig 3.0 PL70]
+# Generated on Fri Dec 14 13:14:20 CET 2001 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2211,7 +2211,7 @@ Where will be directory to copy all Geant4 headers?
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
-dflt=$g4include
+dflt=$g4install/include
 fn='d~+'
 rp=$g4message
 . ./getfile
