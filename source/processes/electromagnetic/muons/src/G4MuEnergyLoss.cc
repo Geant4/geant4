@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuEnergyLoss.cc,v 1.11 2000-02-17 09:08:07 urban Exp $
+// $Id: G4MuEnergyLoss.cc,v 1.12 2000-03-07 17:22:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -62,7 +62,7 @@ G4PhysicsTable* G4MuEnergyLoss::themuminusRangeCoeffBTable = NULL ;
 G4PhysicsTable* G4MuEnergyLoss::themuminusRangeCoeffCTable = NULL ;
  
 G4double G4MuEnergyLoss::LowerBoundEloss = 1.*keV ;
-G4double G4MuEnergyLoss::UpperBoundEloss = 10000.*TeV ;;
+G4double G4MuEnergyLoss::UpperBoundEloss = 10000.*TeV ;
 G4int    G4MuEnergyLoss::NbinEloss = 100 ;
 G4double G4MuEnergyLoss::RTable,G4MuEnergyLoss::LOGRTable;
 
