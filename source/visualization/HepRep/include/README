@@ -6,8 +6,11 @@ G4HepRepFileViewer.hh
 HepRepXMLWriter.hh
 
 the other sources (heprep2) are copies from the FreeHEP library
-(java.freehep.org) and are maintained there. Changes made here may
-be overwritten.
+(java.freehep.org) and are maintained there. 
+
+The files starting with G4 are geant4 compliant, the others may not be.
+
+Changes made here may be overwritten.
 
 12 Nov 2002
 Mark Donszelmann

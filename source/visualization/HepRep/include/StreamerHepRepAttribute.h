@@ -13,7 +13,7 @@
 /**
  *
  * @author M.Donszelmann
- * @version $Id: StreamerHepRepAttribute.h,v 1.1 2002-11-13 07:06:19 duns Exp $
+ * @version $Id: StreamerHepRepAttribute.h,v 1.2 2002-11-13 18:39:02 duns Exp $
  */
 
 class StreamerHepRepAttribute : public virtual HEPREP::HepRepAttribute {

@@ -1,6 +1,6 @@
 /**
  * @author Mark Donszelmann
- * @version $Id: G4HepRepSceneHandler.cc,v 1.4 2002-11-13 07:08:13 duns Exp $
+ * @version $Id: G4HepRepSceneHandler.cc,v 1.5 2002-11-13 18:39:39 duns Exp $
  */
 
 #include <vector>
@@ -96,8 +96,8 @@ void G4HepRepSceneHandler::open() {
 	heprep = factory->createHepRep();
 	heprep->addLayer("Geometry");
 	heprep->addLayer("Event");
-	heprep->addLayer("Track");
 	heprep->addLayer("CalHit");
+	heprep->addLayer("Track");
 	heprep->addLayer("Hit");
 
     HepRepTreeID* treeID = factory->createHepRepTreeID("G4Types", "1.0");

@@ -26,7 +26,7 @@
 /**
  *
  * @author M.Donszelmann
- * @version $Id: XMLHepRepStreamer.h,v 1.1 2002-11-13 07:06:42 duns Exp $
+ * @version $Id: XMLHepRepStreamer.h,v 1.2 2002-11-13 18:39:26 duns Exp $
  */
 class XMLHepRepStreamer : public XMLWriter, public virtual HEPREP::HepRepWriter {
 

@@ -1,6 +1,6 @@
 /**
  * @author Mark Donszelmann
- * @version $Id: G4HepRep.hh,v 1.3 2002-11-13 07:05:59 duns Exp $
+ * @version $Id: G4HepRep.hh,v 1.4 2002-11-13 18:38:40 duns Exp $
  */
 #ifndef G4HEPREP_HH
 #define G4HEPREP_HH 1

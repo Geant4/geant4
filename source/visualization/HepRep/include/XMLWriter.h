@@ -16,7 +16,7 @@
  *
  * @author Tony Johnson
  * @author Mark Donszelmann
- * @version $Id: XMLWriter.h,v 1.1 2002-11-13 07:06:49 duns Exp $
+ * @version $Id: XMLWriter.h,v 1.2 2002-11-13 18:39:33 duns Exp $
  */
 class XMLWriter {
 
