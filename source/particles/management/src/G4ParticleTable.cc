@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.21 2004-08-31 19:10:50 asaim Exp $
+// $Id: G4ParticleTable.cc,v 1.22 2004-12-08 00:07:24 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -56,7 +56,7 @@
 
 ////////////////////
 G4ParticleTable::G4ParticleTable():verboseLevel(0),fParticleMessenger(0),noName(" "),
-readyToUse(false)
+readyToUse(true)
 {
   fDictionary = new G4PTblDictionary();
   fIterator   = new G4PTblDicIterator( *fDictionary );
