@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.cc,v 1.10 2002-09-02 13:25:26 dressel Exp $
+// $Id: G4ParallelNavigator.cc,v 1.11 2002-09-02 15:22:33 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,12 +45,10 @@ G4ParallelNavigator::G4ParallelNavigator(G4VPhysicalVolume &aWorldVolume)
   fNavigator(new G4Navigator), 
   fNlocated(0),
   fMaxShiftedTrys(10),
+  fCurrentTouchableH((fNavigator->SetWorldVolume(&aWorldVolume),
+		      fNavigator->CreateTouchableHistory())),
   fVerbose(1)
-{
-  //  fNavigator->SetVerboseLevel(6);
-  fNavigator->SetWorldVolume(&aWorldVolume);
-  fCurrentTouchableH = fNavigator->CreateTouchableHistory();
-}
+{}
 
 G4ParallelNavigator::~G4ParallelNavigator()
 {

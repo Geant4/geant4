@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pstring.cc,v 1.3 2002-08-29 15:30:51 dressel Exp $
+// $Id: G4Pstring.cc,v 1.4 2002-09-02 15:22:33 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -49,7 +49,7 @@ G4String str(const double &d)
 
 G4String str(const G4ThreeVector &v)
 {
-  G4String out = "(";
+  G4String out = G4String("(");
   out += str(v.x());
   out += ", "; 
   out += str(v.y()); 

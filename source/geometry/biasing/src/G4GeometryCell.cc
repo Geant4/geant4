@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCell.cc,v 1.2 2002-09-02 13:25:26 dressel Exp $
+// $Id: G4GeometryCell.cc,v 1.3 2002-09-02 15:22:32 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,6 +42,21 @@ G4GeometryCell::G4GeometryCell(const G4VPhysicalVolume &aVolume,
 
 G4GeometryCell::~G4GeometryCell()
 {}
+
+G4GeometryCell::G4GeometryCell(const G4GeometryCell &rhs){
+  *this = rhs;
+}
+
+G4GeometryCell &G4GeometryCell::operator=(const G4GeometryCell &rhs){
+  if (this == &rhs) {
+    return *this;
+  }
+  fVPhysiclaVolume = rhs.fVPhysiclaVolume; // this is treated 
+                                           // as identifyer
+  fRepNum = rhs.fRepNum;
+  return *this;
+}
+
 
 G4bool G4GeometryCellComp::operator() (const G4GeometryCell &k1,
                               const G4GeometryCell &k2) const

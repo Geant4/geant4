@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCellImportance.cc,v 1.1 2002-09-02 13:25:46 dressel Exp $
+// $Id: G4GeometryCellImportance.cc,v 1.2 2002-09-02 15:22:33 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,7 +37,7 @@
 G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCellImportance &gCelli)
 {
   for (G4GeometryCellImportance::const_iterator it = gCelli.begin();
-       it != gCelli.end(); it++) {
+       it != gCelli.end(); ++it) {
     out << (*it).first << ", importance = ";
     out << (*it).second << "\n";
   }
