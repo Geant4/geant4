@@ -5,9 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst14DetectorMessenger.hh,v 1.2 1999-06-14 14:28:33 aforti Exp $
+// $Id: Tst14DetectorMessenger.hh,v 1.3 1999-06-14 23:25:26 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef Tst14DetectorMessenger_h
 #define Tst14DetectorMessenger_h 1
@@ -18,16 +22,37 @@
 class Tst14DetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithoutParameter;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Tst14DetectorMessenger: public G4UImessenger
 {
   public:
-    Tst14DetectorMessenger(Tst14DetectorConstruction * myDC);
-    void SetNewValue(G4UIcommand * command,G4String newValues);
+    Tst14DetectorMessenger(Tst14DetectorConstruction* );
+   ~Tst14DetectorMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
   private:
-    Tst14DetectorConstruction * myDetector;
-    G4UIdirectory *      mydetDir;
-    G4UIcmdWithAString * selMatCmd;
+    Tst14DetectorConstruction*   Tst14Detector;
+    
+    G4UIdirectory*             Tst14detDir;
+
+    G4UIcmdWithAString*        AbsMaterCmd;
+    G4UIcmdWithADoubleAndUnit* AbsThickCmd;
+    G4UIcmdWithADoubleAndUnit* AbsRadCmd;
+
+    G4UIcmdWithADoubleAndUnit* AbsZposCmd;
+
+    G4UIcmdWithAString*        WorldMaterCmd;
+    G4UIcmdWithADoubleAndUnit* WorldZCmd;
+    G4UIcmdWithADoubleAndUnit* WorldRCmd;
+
+    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
+    G4UIcmdWithoutParameter*   UpdateCmd;
 
 };
 
