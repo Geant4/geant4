@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolume.hh,v 1.1 1999-01-07 16:07:14 gunter Exp $
+// $Id: G4LogicalVolume.hh,v 1.2 1999-02-15 10:58:13 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,6 +104,11 @@
 // void SetVoxelHeader(G4VoxelHeader *pVoxel)
 //   Sets VoxelHeader.
 //
+// G4double GetSmartless()
+//   Gets user defined optimisation quality
+// void SetSmartless(G4double)
+//   Sets user defined optimisation quality
+//
 // void BecomeEnvelopeForFastSimulation(G4FastSimulationManager* );
 //   Makes this an Envelope for given FastSimulationManager. 
 //   Ensures that all its daughter volumes get it too - unless they 
@@ -151,6 +156,8 @@
 //   Pointer (possibly NULL) to user Step limit object for this node
 // G4VoxelHeader *fVoxel
 //   Pointer (possibly NULL) to optimisation info objects
+// G4double smartless
+//   Quality for optimisation, average number of voxels to be spent per content 
 // G4FastSimulationManager *fFastSimulationManager
 //   Pointer (possibly NULL) to G4FastSimulationManager object
 // G4bool fIsEnvelope
@@ -159,6 +166,7 @@
 //   weight used in the event biasing technique
 //
 // History:
+// 12.02.99 S.Giani: Added user defined optimisation quality
 // 09.11.98 J. Apostolakis:  Changed G4MagneticField to G4FieldManager
 // 09.11.98 M. Verderi & JA. : added  BiasWeight member and Get/Set methods
 // 10.20.97 P. MoraDeFreitas : added pointer to a FastSimulation
@@ -223,6 +231,9 @@ public:
     G4SmartVoxelHeader* GetVoxelHeader() const;
     void SetVoxelHeader(G4SmartVoxelHeader *pVoxel);
     
+    G4double GetSmartless();
+    void SetSmartless(G4double s);
+    
     G4bool operator == ( const G4LogicalVolume& lv) const;
 
     const G4VisAttributes* GetVisAttributes () const;
@@ -252,6 +263,7 @@ private:
     G4VSolid *fSolid;
     G4UserLimits *fUserLimits;
     G4SmartVoxelHeader *fVoxel;
+    G4double fSmartless;
     const G4VisAttributes* fVisAttributes;
     G4FastSimulationManager *fFastSimulationManager;
     G4bool fIsEnvelope;

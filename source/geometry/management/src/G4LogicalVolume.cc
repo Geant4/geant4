@@ -5,13 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolume.cc,v 1.1 1999-01-07 16:07:20 gunter Exp $
+// $Id: G4LogicalVolume.cc,v 1.2 1999-02-15 10:58:17 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4LogicalVolume Implementation
 //
 // History:
+// 12.02.99 S.Giani: Deafult initialization of voxelization quality.
 // 10.20.97 - P. MoraDeFreitas : "Fast" replaces "Parameterisation" in
 //            class/method names. (release B.00 for parameterisation).
 // 04.08.97 P.MoraDeFreitas/J.A. Added methods for ParameterisedSimulation 
@@ -28,7 +29,7 @@ G4LogicalVolume::G4LogicalVolume( G4VSolid *pSolid,  G4Material *pMaterial,
 				  G4FieldManager *pFieldMgr,
 				  G4VSensitiveDetector *pSDetector,
 				  G4UserLimits *pULimits) : 
-   fDaughters(0), fVoxel(0), fVisAttributes (0) , fFastSimulationManager (0),
+   fDaughters(0), fVoxel(0), fSmartless(2.), fVisAttributes (0) , fFastSimulationManager (0),
    fIsEnvelope(FALSE), fFieldManager(pFieldMgr)
 {
     SetSolid(pSolid);
