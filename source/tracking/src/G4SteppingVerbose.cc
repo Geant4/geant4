@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.11 2002-11-06 02:24:34 tsasaki Exp $
+// $Id: G4SteppingVerbose.cc,v 1.12 2002-12-12 16:16:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -369,6 +369,7 @@ void G4SteppingVerbose::DPSLAlongStep()
 /////////////////////////////////////////////
 {
   CopyState();
+
   if( verboseLevel > 5 ){
     G4cout << "    ++ProposedStep(AlongStep) = " 
 	   << G4std::setw( 9) << G4BestUnit(physIntLength , "Length")
@@ -392,10 +393,9 @@ void G4SteppingVerbose::DPSLAlongStep()
 void G4SteppingVerbose::TrackingStarted()
 ////////////////////////////////////////////////
 {
+  CopyState();
 
-  //  CopyState();
-
-G4int prec = G4cout.precision(3);
+  G4int prec = G4cout.precision(3);
   if( verboseLevel > 0 ){
 
 #ifdef G4_USE_G4BESTUNIT_FOR_VERBOSE
@@ -445,6 +445,7 @@ void G4SteppingVerbose::AlongStepDoItOneByOne()
 //////////////////////////////////////////////////////
 { 
   CopyState();
+
   if(verboseLevel >= 4){ 
     G4cout << G4endl;
     G4cout << " >>AlongStepDoIt (process by process): "
@@ -489,6 +490,7 @@ void G4SteppingVerbose::PostStepDoItOneByOne()
 //////////////////////////////////////////////////////
 {
   CopyState();
+
   if(fStepStatus != fPostStepDoItProc) return;
 
   if(verboseLevel >= 4){ 
