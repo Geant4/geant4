@@ -24,6 +24,9 @@
 // models of an medium energy (~ 0.5 - 5 GeV) intra-nuclear transport.
 // If you have any questions, please contact 
 // package writer aatos.heikkinen@cern.ch.
+// --------------------------------------------------------------------
+#ifndef G4CASCADEINTERFACE_H
+#define G4CASCADEINTERFACE_H 1
 
 #include "G4Nucleon.hh"
 #include "G4Nucleus.hh"

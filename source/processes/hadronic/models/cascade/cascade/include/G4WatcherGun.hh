@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4WATCHER_GUN_HH
+#define G4WATCHER_GUN_HH
+
 #include "G4NuclWatcher.hh"
 #include "g4std/vector"
 

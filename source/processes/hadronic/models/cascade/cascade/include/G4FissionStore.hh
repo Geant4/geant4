@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4FISSION_STORE_HH
+#define G4FISSION_STORE_HH
+
 #include "G4FissionConfiguration.hh"
 
 #include "g4std/vector"

@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4REGIONMODEL
+#define G4REGIONMODEL
+
 #include "G4ios.hh"
 #include "g4std/vector"
 #include <math.h>
