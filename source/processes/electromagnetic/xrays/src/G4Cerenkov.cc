@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cerenkov.cc,v 1.8 2000-09-19 03:12:45 gum Exp $
+// $Id: G4Cerenkov.cc,v 1.9 2000-11-13 01:09:48 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -17,7 +17,11 @@
 // Version:     2.1
 // Created:     1996-02-21  
 // Author:      Juliet Armstrong
-// Updated:     2000-09-18 by Peter Gumplinger
+// Updated:     2000-11-12 by Peter Gumplinger
+//              > add check on CerenkovAngleIntegrals->IsFilledVectorExist()
+//              in method GetAverageNumberOfPhotons 
+//              > and a test for MeanNumPhotons <= 0.0 in DoIt
+//              2000-09-18 by Peter Gumplinger
 //              > change: aSecondaryPosition=x0+rand*aStep.GetDeltaPosition();
 //                        aSecondaryTrack->SetTouchable(0);
 //              1999-10-29 by Peter Gumplinger
@@ -126,6 +130,16 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	G4double MeanNumPhotons = 
                  GetAverageNumberOfPhotons(aParticle,aMaterial,Rindex);
+
+        if (MeanNumPhotons <= 0.0) {
+
+                // return unchanged particle and no secondaries
+
+                aParticleChange.SetNumberOfSecondaries(0);
+ 
+                return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
+
+        }
 
         G4double step_length;
         step_length = aStep.GetStepLength();
@@ -443,6 +457,8 @@ G4Cerenkov::GetAverageNumberOfPhotons(const G4DynamicParticle* aParticle,
 
 	G4PhysicsOrderedFreeVector* CerenkovAngleIntegrals =
 	(G4PhysicsOrderedFreeVector*)((*thePhysicsTable)(materialIndex));
+
+        if(!(CerenkovAngleIntegrals->IsFilledVectorExist()))return 0.0;
 
 	// Min and Max photon momenta  
 	G4double Pmin = Rindex->GetMinPhotonMomentum();
