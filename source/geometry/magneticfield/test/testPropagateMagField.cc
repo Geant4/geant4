@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.21 2003-10-29 09:53:23 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.22 2003-10-29 09:59:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -97,9 +97,7 @@ class G4LinScale : public G4VPVParameterisation
   virtual void ComputeDimensions(G4Para &,
 				 const G4int ,
 				 const G4VPhysicalVolume*) const {}
-  virtual void ComputeDimensions(G4Orb &,
-				 const G4int ,
-				 const G4VPhysicalVolume*) const {}
+  // virtual void ComputeDimensions(G4Orb &, const G4int , const G4VPhysicalVolume*) const {}
 };
 G4LinScale myParam;
 
@@ -384,10 +382,8 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 
 
        for( int istep=0; istep < 14; istep++ ){ 
-   //        // G4cerr << "UnitMomentum Magnitude is " << UnitMomentum.mag() << G4endl;
+          // G4cerr << "UnitMomentum Magnitude is " << UnitMomentum.mag() << G4endl;
 	  located= pNavig->LocateGlobalPointAndSetup(Position);
-	  //  Is the following better ?? It would need "changes"
-	  // located= pMagFieldPropagator->LocateGlobalPointAndSetup(Position);
 	  // G4cerr << "Starting Step " << istep << " in volume " 
 	       // << located->GetName() << G4endl;
 
@@ -404,12 +400,8 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 
 	  step_len=pMagFieldPropagator->ComputeStep( initTrack, 
 						     physStep, 
-						     safety
-#ifdef G4MAG_CHECK_VOLUME
-						     ,located);
-#else
-	                                             );
-#endif
+						     safety,
+						     located);
 	  //       --------------------
 	  EndPosition=     pMagFieldPropagator->EndPosition();
 	  EndUnitMomentum= pMagFieldPropagator->EndMomentumDir();
@@ -439,22 +431,51 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
     return(1);
 }
 
-// int main(int argc, char** argv)
+// Main program
+// -------------------------------
 int main(int argc, char **argv)
 {
     G4VPhysicalVolume *myTopNode;
-    G4int type;
-    myTopNode=BuildGeometry();	// Build the geometry
-    G4GeometryManager::GetInstance()->CloseGeometry(false);
+    G4int type, optim;
+    G4bool optimise=true;
 
     type = 8 ;
 
-    if( argc == 2 )
+    if( argc >= 2 )
       type = atoi(argv[1]);
 
+    if( argc >=3 ){
+      optim= atoi(argv[2]);
+      if( optim == 0 ) { optimise = false; }
+    }
+
+    G4cout << " Testing with stepper number " << type; 
+    G4cout << " and optimisation " ; 
+    if (optimise)   G4cout << "on"; 
+    else            G4cout << "off"; 
+    G4cout << G4endl;
+
+    // Create the geometry & field 
+    myTopNode=BuildGeometry();	// Build the geometry
+    G4GeometryManager::GetInstance()->CloseGeometry(false);
+
+    // Setup the propagator (will be overwritten by testG4Propagator ...)
+    pMagFieldPropagator= SetupPropagator(type);
+    G4cout << " Using default values for " 
+	   << " Min Eps = "  <<   pMagFieldPropagator->GetMinimumEpsilonStep()
+           << " and "
+	   << " MaxEps = " <<  pMagFieldPropagator->GetMaximumEpsilonStep()
+	   << G4endl; 
+
+// Do the tests without voxels
+    G4cout << " Test with no voxels" << G4endl; 
     testG4PropagatorInField(myTopNode, type);
+
+    pMagFieldPropagator->SetUseSafetyForOptimization(optimise); 
 
 // Repeat tests but with full voxels
+    G4cout << " Test with full voxels" << G4endl; 
+
     G4GeometryManager::GetInstance()->OpenGeometry();
     G4GeometryManager::GetInstance()->CloseGeometry(true);
 
@@ -462,15 +483,36 @@ int main(int argc, char **argv)
 
     G4GeometryManager::GetInstance()->OpenGeometry();
 
+    G4cout << G4endl
+	   << "----------------------------------------------------------"
+	   << G4endl; 
 
 // Repeat tests with full voxels and modified parameters
+    G4cout << "Test with more accurate parameters " << G4endl; 
 
-    pMagFieldPropagator->SetMaximumEpsilonStep(0.001);
-    pMagFieldPropagator->SetMinimumEpsilonStep(1.0e-07);
+    G4double  maxEpsStep= 0.001;
+    G4double  minEpsStep= 2.5e-8;
+    G4cout << " Setting values for Min Eps = " << minEpsStep 
+           << " and MaxEps = " << maxEpsStep << G4endl; 
+
+    pMagFieldPropagator->SetMaximumEpsilonStep(maxEpsStep);
+    pMagFieldPropagator->SetMinimumEpsilonStep(minEpsStep);
 
     G4GeometryManager::GetInstance()->OpenGeometry();
     G4GeometryManager::GetInstance()->CloseGeometry(true);
 
+    testG4PropagatorInField(myTopNode, type);
+
+    G4GeometryManager::GetInstance()->OpenGeometry();
+
+    optimise = ! optimise;
+// Repeat tests but with the opposite optimisation choice
+    G4cout << " Now test with optimisation " ; 
+    if (optimise)   G4cout << "on"; 
+    else            G4cout << "off"; 
+    G4cout << G4endl;
+
+    pMagFieldPropagator->SetUseSafetyForOptimization(optimise); 
     testG4PropagatorInField(myTopNode, type);
 
     G4GeometryManager::GetInstance()->OpenGeometry();
@@ -547,16 +589,11 @@ void report_endPV(G4ThreeVector    Position,
        } else {
 	 G4cout << std::setw(12) << "OutOfWorld" << " ";
        }
-
 #if 0
        if( endVolume != 0) 
-       {
 	 G4cout << std::setw(12) << endVolume()->GetName() << " ";
-       } 
        else 
-       {
 	 G4cout << std::setw(12) << "OutOfWorld" << " ";
-       }
 #endif
        G4cout << G4endl;
     }
