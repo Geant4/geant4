@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SamplingPostStepAction.cc,v 1.1 2003-11-26 14:51:12 gcosmo Exp $
+// $Id: G4SamplingPostStepAction.cc,v 1.2 2004-10-19 00:59:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -62,7 +62,7 @@ void G4SamplingPostStepAction::DoIt(const G4Track& aTrack,
   else if (nw.fN==1)
   {
     // don't split, but weight may be changed ! 
-    aParticleChange->SetWeightChange(nw.fW);
+    aParticleChange->ProposeWeight(nw.fW);
   }
   else if (nw.fN==0)
   {
@@ -89,7 +89,7 @@ void G4SamplingPostStepAction::Split(const G4Track &aTrack,
                                      const G4Nsplit_Weight &nw,
                                            G4ParticleChange *aParticleChange)
 {
-  aParticleChange->SetWeightChange(nw.fW);
+  aParticleChange->ProposeWeight(nw.fW);
   aParticleChange->SetNumberOfSecondaries(nw.fN-1);
   
   for (G4int i=1;i<nw.fN;i++)

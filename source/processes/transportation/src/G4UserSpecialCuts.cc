@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSpecialCuts.cc,v 1.13 2004-09-09 10:13:44 maire Exp $
+// $Id: G4UserSpecialCuts.cc,v 1.14 2004-10-19 00:59:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -138,9 +138,9 @@ G4UserSpecialCuts::PostStepDoIt( const G4Track& aTrack,
 //
 {
    aParticleChange.Initialize(aTrack);
-   aParticleChange.SetEnergyChange(0.) ;
-   aParticleChange.SetLocalEnergyDeposit (aTrack.GetKineticEnergy()) ;
-   aParticleChange.SetStatusChange(fStopAndKill);
+   aParticleChange.ProposeEnergy(0.) ;
+   aParticleChange.ProposeLocalEnergyDeposit(aTrack.GetKineticEnergy()) ;
+   aParticleChange.ProposeTrackStatus(fStopAndKill);
    return &aParticleChange;
 }
 

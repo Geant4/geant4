@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWWnTransportProcess.cc,v 1.3 2003-11-26 14:51:50 gcosmo Exp $
+// $Id: G4ParallelWWnTransportProcess.cc,v 1.4 2004-10-19 00:59:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -93,7 +93,7 @@ void G4ParallelWWnTransportProcess::Error(const G4String &m)
 
 void G4ParallelWWnTransportProcess::KillTrack() const
 {
-  fParticleChange->SetStatusChange(fStopAndKill);
+  fParticleChange->ProposeTrackStatus(fStopAndKill);
 }
 
 const G4String &G4ParallelWWnTransportProcess::GetName() const

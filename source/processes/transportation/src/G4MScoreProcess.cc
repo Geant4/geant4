@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreProcess.cc,v 1.11 2003-11-26 14:51:49 gcosmo Exp $
+// $Id: G4MScoreProcess.cc,v 1.12 2004-10-19 00:59:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -92,7 +92,7 @@ G4MScoreProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
   if (fKillTrack)
   {
     fKillTrack = false;
-    pParticleChange->SetStatusChange(fStopAndKill);
+    pParticleChange->ProposeTrackStatus(fStopAndKill);
   }
 
   return G4VProcess::pParticleChange;

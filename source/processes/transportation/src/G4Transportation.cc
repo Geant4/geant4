@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.48 2004-10-08 08:42:59 asaim Exp $
+// $Id: G4Transportation.cc,v 1.49 2004-10-19 00:59:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -426,7 +426,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 #endif
   }            
 
-  fParticleChange.SetTrueStepLength(geometryStepLength) ;
+  fParticleChange.ProposeTrueStepLength(geometryStepLength) ;
 
   return geometryStepLength ;
 }
@@ -443,12 +443,12 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
 
   //  Code for specific process 
   //
-  fParticleChange.SetPositionChange(fTransportEndPosition) ;
-  fParticleChange.SetMomentumChange(fTransportEndMomentumDir) ;
-  fParticleChange.SetEnergyChange(fTransportEndKineticEnergy) ;
+  fParticleChange.ProposePosition(fTransportEndPosition) ;
+  fParticleChange.ProposeMomentumDirection(fTransportEndMomentumDir) ;
+  fParticleChange.ProposeEnergy(fTransportEndKineticEnergy) ;
   fParticleChange.SetMomentumChanged(fMomentumChanged) ;
 
-  fParticleChange.SetPolarizationChange(fTransportEndSpin);
+  fParticleChange.ProposePolarization(fTransportEndSpin);
   
   G4double deltaTime = 0.0 ;
 
@@ -494,15 +494,15 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
      deltaTime = fCandidateEndGlobalTime - startTime ;
   }
 
-  fParticleChange.SetTimeChange( fCandidateEndGlobalTime ) ;
+  fParticleChange.ProposeGlobalTime( fCandidateEndGlobalTime ) ;
 
   // Now Correct by Lorentz factor to get "proper" deltaTime
   
   G4double  restMass       = track.GetDynamicParticle()->GetMass() ;
   G4double deltaProperTime = deltaTime*( restMass/track.GetTotalEnergy() ) ;
 
-  fParticleChange.SetProperTimeChange(track.GetProperTime() + deltaProperTime) ;
-  //fParticleChange. SetTrueStepLength( track.GetStepLength() ) ;
+  fParticleChange.ProposeProperTime(track.GetProperTime() + deltaProperTime) ;
+  //fParticleChange. ProposeTrueStepLength( track.GetStepLength() ) ;
 
   // If the particle is caught looping or is stuck (in very difficult
   // boundaries) in a magnetic field (doing many steps) 
@@ -512,7 +512,7 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   {
       // Kill the looping particle 
       //
-      fParticleChange.SetStatusChange( fStopAndKill )  ;
+      fParticleChange.ProposeTrackStatus( fStopAndKill )  ;
 #ifdef G4VERBOSE
       G4cout << " G4Transportation is killing track that is looping or stuck "
              << G4endl
@@ -560,7 +560,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
   //                             to corresponding members in G4Track)
   // fParticleChange.Initialize(track) ;  // To initialise TouchableChange
 
-  fParticleChange.SetStatusChange(track.GetTrackStatus()) ;
+  fParticleChange.ProposeTrackStatus(track.GetTrackStatus()) ;
 
   // If the Step was determined by the volume boundary,
   // logically relocate the particle
@@ -582,7 +582,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     //
     if( fCurrentTouchableHandle->GetVolume() == 0 )
     {
-       fParticleChange.SetStatusChange( fStopAndKill ) ;
+       fParticleChange.ProposeTrackStatus( fStopAndKill ) ;
     }
     retCurrentTouchable = fCurrentTouchableHandle ;
     fParticleChange.SetTouchableHandle( fCurrentTouchableHandle ) ;
@@ -700,8 +700,8 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
   // ( <const_cast> pNewMaterial ) ;
   // ( <const_cast> pNewSensitiveDetector) ;
 
-  fParticleChange.SetMaterialChange( (G4Material *) pNewMaterial ) ;
-  fParticleChange.SetSensitiveDetectorChange( (G4VSensitiveDetector *) pNewSensitiveDetector ) ;
+  fParticleChange.SetMaterialInTouchable( (G4Material *) pNewMaterial ) ;
+  fParticleChange.SetSensitiveDetectorInTouchable( (G4VSensitiveDetector *) pNewSensitiveDetector ) ;
 
   const G4MaterialCutsCouple* pNewMaterialCutsCouple = 0;
   if( pNewVol != 0 )
@@ -718,7 +718,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
                              ->GetMaterialCutsCouple(pNewMaterial,
                                pNewMaterialCutsCouple->GetProductionCuts());
   }
-  fParticleChange.SetMaterialCutsCoupleChange( pNewMaterialCutsCouple );
+  fParticleChange.SetMaterialCutsCoupleInTouchable( pNewMaterialCutsCouple );
 
   // temporarily until Get/Set Material of ParticleChange, 
   // and StepPoint can be made const. 

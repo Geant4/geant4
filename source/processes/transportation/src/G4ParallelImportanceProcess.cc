@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.cc,v 1.16 2003-11-26 14:51:50 gcosmo Exp $
+// $Id: G4ParallelImportanceProcess.cc,v 1.17 2004-10-19 00:59:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -90,7 +90,7 @@ void G4ParallelImportanceProcess::Error(const G4String &m)
 
 void G4ParallelImportanceProcess::KillTrack() const
 {
-  fParticleChange->SetStatusChange(fStopAndKill);
+  fParticleChange->ProposeTrackStatus(fStopAndKill);
 }
 
 const G4String &G4ParallelImportanceProcess::GetName() const
