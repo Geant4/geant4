@@ -279,6 +279,7 @@ void G4Fancy3DNucleus::ChoosePositions()
 	G4double maxR=GetNuclearRadius(0.01);   //  there are no nucleons at a
 	                                        //  relative Density of 0.01
 	G4int jr=0;
+	G4int jx,jy;
 	G4double arand[600];
 	G4double *prand=arand;
 //	G4int Attempt=0;
@@ -292,8 +293,10 @@ void G4Fancy3DNucleus::ChoosePositions()
 		    jr=std::min(600,9*(myA - i));
 		    HepRandom::getTheEngine()->flatArray(jr, prand );
 		}
-		aPos=G4ThreeVector( (2*arand[--jr]-1.),
-	   				   (2*arand[--jr]-1.),
+		jx=--jr;
+		jy=--jr;
+		aPos=G4ThreeVector( (2*arand[jx]-1.),
+	   				   (2*arand[jy]-1.),
 					   (2*arand[--jr]-1.));
 	   } while (aPos.mag2() > 1. );
 	   aPos *=maxR;
