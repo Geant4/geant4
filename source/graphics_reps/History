@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.52 2004-07-28 15:44:21 johna Exp $
+cvs log $Id: History,v 1.53 2004-11-11 16:40:37 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11th November 2004  J.Allison  (greps-V06-02-01 - requires vis-V06-02-05)
+- Removed G4Polymarker::line.  Use G4Polyline instead.
+- Improved commenting of G4AttDef.
 
 28th July 2004  J.Allison  (greps-V06-02-00)
 - Introduced force auxiliary edge visible.
