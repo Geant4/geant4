@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01FieldSetup.cc,v 1.5 2004-03-23 14:34:59 japost Exp $
+// $Id: F01FieldSetup.cc,v 1.6 2004-03-23 14:51:04 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   User Field setup class implementation.
@@ -187,29 +187,31 @@ void F01FieldSetup::SetFieldValue(G4double fieldStrength)
 #ifdef G4VERBOSE
   G4cout << "Setting Field strength to " 
 	 << fieldStrength / gauss  << " Gauss."; // << G4endl;
-  G4double fieldValue[6],  position[4]; 
-  position[0] = position[1] = position[2] = position[3] = 0.0; 
-  G4ThreeVector fieldVec(0.0,0.0,0.0);
 #endif
 
-  if(fMagneticField) delete fMagneticField;
-  fMagneticField = new  G4UniformMagField(G4ThreeVector(0,0,fieldStrength));
-
-  //  Set this as the field of the global Field Manager
-  GetGlobalFieldManager()->SetDetectorField(fMagneticField);
-
-  // Must now notify equation of new field
-  fEquation->SetFieldObj( fMagneticField ); 
+  G4ThreeVector fieldSetVec(0.0, 0.0, fieldStrength);
+  this->SetFieldValue( fieldSetVec ); 
+  //    *************
 
 #ifdef G4VERBOSE
-  fMagneticField->GetFieldValue( position, fieldValue);
-  fieldVec= G4ThreeVector(fieldValue[0], fieldValue[1], fieldValue[2]); 
-  // G4cout << " fMagneticField is now " << fMagneticField 
-  G4cout << " Magnetic field vector is " 
-	 << fieldVec / gauss << " G " << G4endl; 
+  G4double fieldValue[6],  position[4]; 
+  position[0] = position[1] = position[2] = position[3] = 0.0; 
+  if( fieldStrength != 0.0 ){
+    fMagneticField->GetFieldValue( position, fieldValue);
+    G4ThreeVector fieldVec(fieldValue[0], fieldValue[1], fieldValue[2]); 
+    // G4cout << " fMagneticField is now " << fMagneticField 
+    G4cout << " Magnetic field vector is " 
+	   << fieldVec / gauss << " G " << G4endl; 
+  }else{
+    if( fMagneticField == 0 )
+      G4cout << " Magnetic field pointer is null." << G4endl;
+    else
+      G4Exception("F01FieldSetup::SetFieldValue(double)",
+		  "IncorrectForZeroField",
+		  FatalException,
+		  "fMagneticField ptr should be set to 0 for no field."); 
+  }
 #endif
-
-  //  CreateStepperAndChordFinder();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
