@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidSphere.cc,v 1.5 2001-07-11 09:59:42 gunter Exp $
+// $Id: G4BREPSolidSphere.cc,v 1.6 2002-11-06 23:29:39 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,10 +35,10 @@
 #include "G4SphericalSurface.hh"
 
 G4BREPSolidSphere::G4BREPSolidSphere(const G4String& name,
-				     const G4Vector3D& o,
+				     const G4Vector3D& origin,
 				     const G4Vector3D& xhat, 
 				     const G4Vector3D& zhat,
-				     G4double r)
+				     G4double radius)
   : G4BREPSolid(name)
 {
   SurfaceVec    = new G4Surface*[1];
@@ -46,8 +46,14 @@ G4BREPSolidSphere::G4BREPSolidSphere(const G4String& name,
   G4double ph2  = 2*M_PI;
   G4double th1  = 0;
   G4double th2  = M_PI;
-  SurfaceVec[0] = new G4SphericalSurface(o, xhat, zhat, r, ph1, ph2, th1, th2);
+  SurfaceVec[0] = new G4SphericalSurface(origin, xhat, zhat, radius, ph1, ph2, th1, th2);
   nb_of_surfaces = 1;
+  
+  constructorParams.origin = origin;
+	constructorParams.xhat   = xhat;
+	constructorParams.zhat   = zhat;
+	constructorParams.radius = radius;
+  
   active=1;
   Initialize();
 }
@@ -128,3 +134,17 @@ G4double G4BREPSolidSphere::DistanceToOut(const G4ThreeVector& Pt) const
 {
   return  fabs(SurfaceVec[0]->HowNear(Pt));
 }
+
+// Streams solid contents to output stream.
+G4std::ostream& G4BREPSolidSphere::StreamInfo(G4std::ostream& os) const
+{
+  G4BREPSolid::StreamInfo( os )
+  << "\n origin: " << constructorParams.origin
+  << "\n xhat:   " << constructorParams.xhat
+  << "\n zhat:   " << constructorParams.zhat
+  << "\n radius: " << constructorParams.radius
+  << "\n-----------------------------------------------------------\n";
+
+  return os;
+}
+

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidTorus.hh,v 1.5 2001-07-11 09:59:31 gunter Exp $
+// $Id: G4BREPSolidTorus.hh,v 1.6 2002-11-06 23:28:52 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -62,12 +62,23 @@ class G4BREPSolidTorus : public G4BREPSolid
   ~G4BREPSolidTorus();
     // Empty destructor.
 
+  virtual G4std::ostream& StreamInfo(G4std::ostream& os) const;
+    // Streams solid contents to output stream.
+
  private:
 
   G4BREPSolidTorus(const G4BREPSolidTorus&);
   G4BREPSolidTorus& operator=(const G4BREPSolidTorus&);
     // Private copy constructor and assignment operator.
 
+  struct {
+    G4ThreeVector origin;
+    G4ThreeVector axis;
+    G4ThreeVector direction;
+    G4double      MinRadius;
+    G4double      MaxRadius;
+  } constructorParams;
+  
 };
 
 #endif

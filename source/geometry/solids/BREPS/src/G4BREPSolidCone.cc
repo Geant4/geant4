@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidCone.cc,v 1.7 2001-07-11 09:59:41 gunter Exp $
+// $Id: G4BREPSolidCone.cc,v 1.8 2002-11-06 23:29:34 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -101,6 +101,15 @@ G4BREPSolidCone::G4BREPSolidCone(const G4String& name,
 
   nb_of_surfaces = 3;
   active=1;
+  
+  // Save constructor parameters
+  constructorParams.origin       = origin;
+  constructorParams.axis         = axis;
+  constructorParams.direction    = direction;
+  constructorParams.length       = length;
+  constructorParams.radius       = radius;
+  constructorParams.large_radius = large_radius;
+  
   Initialize();
 }
 
@@ -198,3 +207,19 @@ G4double G4BREPSolidCone::DistanceToOut(const G4ThreeVector& Pt) const
   if(dist1 > dist3) dist1 = dist3;  
   return dist1;
 }
+
+// Streams solid contents to output stream.
+G4std::ostream& G4BREPSolidCone::StreamInfo(G4std::ostream& os) const
+{
+  G4BREPSolid::StreamInfo( os )
+  << "\n origin:       " << constructorParams.origin
+  << "\n axis:         " << constructorParams.axis
+  << "\n direction:    " << constructorParams.direction
+  << "\n length:       " << constructorParams.length
+  << "\n radius:       " << constructorParams.radius
+  << "\n large_radius: " << constructorParams.large_radius
+  << "\n-----------------------------------------------------------\n";
+
+  return os;
+}
+

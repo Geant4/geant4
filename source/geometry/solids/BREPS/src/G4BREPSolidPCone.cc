@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.27 2002-10-16 14:40:19 radoone Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.28 2002-11-06 23:29:37 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -416,51 +416,38 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
     nb_of_surfaces--;    
   }
 
+  // Save contructor parameters
+  constructorParams.start_angle    = start_angle;
+  constructorParams.opening_angle  = opening_angle;
+  constructorParams.num_z_planes   = num_z_planes;
+  constructorParams.z_start        = z_start;
+  constructorParams.z_values       = 0;
+  constructorParams.RMIN           = 0;
+  constructorParams.RMAX           = 0;
+  
+  if( num_z_planes > 0 ) {               
+    constructorParams.z_values       = new G4double[num_z_planes];
+    constructorParams.RMIN           = new G4double[num_z_planes];
+    constructorParams.RMAX           = new G4double[num_z_planes];
+    for( G4int idx = 0; idx < num_z_planes; idx++ ) {
+      constructorParams.z_values[idx] = z_values[idx];
+      constructorParams.RMIN[idx]     = RMIN[idx];
+      constructorParams.RMAX[idx]     = RMAX[idx];      
+    }
+  }
+
   active=1;
   Initialize();
-
-  // Store the original parameters, to be used in visualisation
-  original_parameters.Start_angle= start_angle;
-  original_parameters.Opening_angle= opening_angle;		   
-  original_parameters.Num_z_planes= num_z_planes; 
-  // original_parameters.z_start= z_start;		   
-  original_parameters.Z_values= new G4double[num_z_planes];
-  original_parameters.Rmin= new G4double[nb_of_surfaces];
-  original_parameters.Rmax= new G4double[nb_of_surfaces];
-  
-  for(int is=0;is<num_z_planes;is++)
-  {
-    original_parameters.Z_values[is]= z_values[is]; 
-    original_parameters.Rmin[is]= RMIN[is];
-    original_parameters.Rmax[is]= RMAX[is];
-  }
-
-  // z_values[0]  should be equal to z_start, for consistency 
-  //   with what the constructor does.
-  // Otherwise the z_values that are given are used 
-  //   shifted by   z_values[0] - z_start: 
-  //  (because z_values are only used in 
-  //    line 26:      Length = z_values[a+1] - z_values[a]; 
-  //  )                                                      // JA Apr 2, 97
-  
-  /*
-  if( z_values[0] != z_start )
-  {
-    G4cerr << "ERROR in creating G4BREPSolidPCone: "  
-           << " z_values[0]= " << z_values[0] << " is not equal to " 
-           << " z_start= " , z_start; 
-    // G4Exception(" Error in creating G4BREPSolidPCone: z_values[0] must be equal to z_start" );
-    original_parameters.Z_values[0]= z_start;
-  }
-  */ 
-  
 }
 
 G4BREPSolidPCone::~G4BREPSolidPCone()
 {
-  delete [] original_parameters.Z_values;
-  delete [] original_parameters.Rmin;
-  delete [] original_parameters.Rmax;
+  if( constructorParams.num_z_planes > 0 ) {
+    delete [] constructorParams.z_values;
+    delete [] constructorParams.RMIN;
+    delete [] constructorParams.RMIN;
+  }  
+
 }
 
 void G4BREPSolidPCone::Initialize()
@@ -796,6 +783,32 @@ G4double G4BREPSolidPCone::DistanceToOut(const G4ThreeVector& Pt) const
     return fabs(Dist);
 }
 
+// Streams solid contents to output stream.
+G4std::ostream& G4BREPSolidPCone::StreamInfo(G4std::ostream& os) const
+{  
+  G4BREPSolid::StreamInfo( os )
+  << "\n start_angle:   " << constructorParams.start_angle
+  << "\n opening_angle: " << constructorParams.opening_angle
+  << "\n num_z_planes:  " << constructorParams.num_z_planes
+  << "\n z_start:       " << constructorParams.z_start
+  << "\n z_values:      ";
+  G4int idx;
+  for( idx = 0; idx < constructorParams.num_z_planes; idx++ ) {
+    os << constructorParams.z_values[idx] << " ";
+  }
+  os << "\n RMIN:          "; 
+  for( idx = 0; idx < constructorParams.num_z_planes; idx++ ) {
+    os << constructorParams.RMIN[idx] << " ";
+  }
+  os << "\n RMAX:          ";
+  for( idx = 0; idx < constructorParams.num_z_planes; idx++ ) {
+    os << constructorParams.RMAX[idx] << " ";
+  }
+  os << "\n-----------------------------------------------------------\n";
+
+  return os;
+}
+
 void G4BREPSolidPCone::Reset() const
 {
   Active(1);
@@ -863,10 +876,12 @@ G4Surface* G4BREPSolidPCone::ComputePlanarSurface( G4double r1, G4double r2,
 
 G4Polyhedron* G4BREPSolidPCone::CreatePolyhedron() const
 {
-  return new G4PolyhedronPcon( original_parameters.Start_angle, 
-			       original_parameters.Opening_angle, 
-			       original_parameters.Num_z_planes, 
-			       original_parameters.Z_values,
-			       original_parameters.Rmin,
-			       original_parameters.Rmax);
+  return new G4PolyhedronPcon(
+                               constructorParams.start_angle, 
+			                         constructorParams.opening_angle, 
+			                         constructorParams.num_z_planes, 
+			                         constructorParams.z_values,
+			                         constructorParams.RMIN,
+			                         constructorParams.RMAX
+                             );
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidTorus.cc,v 1.5 2001-07-11 09:59:42 gunter Exp $
+// $Id: G4BREPSolidTorus.cc,v 1.6 2002-11-06 23:29:40 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -46,6 +46,14 @@ G4BREPSolidTorus::G4BREPSolidTorus(const    G4String& name,
   SurfaceVec[0] = new G4ToroidalSurface( origin, axis, direction,
 					 MinRadius, MaxRadius);
   nb_of_surfaces = 1;
+  
+  // Save constructor parameters
+  constructorParams.origin       = origin;
+  constructorParams.axis         = axis;
+  constructorParams.direction    = direction;
+  constructorParams.MinRadius    = MinRadius;
+  constructorParams.MaxRadius    = MaxRadius;
+  
   active = 1;
   Initialize();
 }
@@ -53,3 +61,18 @@ G4BREPSolidTorus::G4BREPSolidTorus(const    G4String& name,
 G4BREPSolidTorus::~G4BREPSolidTorus()
 {
 }
+
+// Streams solid contents to output stream.
+G4std::ostream& G4BREPSolidTorus::StreamInfo(G4std::ostream& os) const
+{
+  G4BREPSolid::StreamInfo( os )
+  << "\n origin:       " << constructorParams.origin
+  << "\n axis:         " << constructorParams.axis
+  << "\n direction:    " << constructorParams.direction
+  << "\n MinRadius:    " << constructorParams.MinRadius
+  << "\n MaxRadius:    " << constructorParams.MaxRadius
+  << "\n-----------------------------------------------------------\n";
+
+  return os;
+}
+

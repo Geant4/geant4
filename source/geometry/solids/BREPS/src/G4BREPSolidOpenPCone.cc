@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidOpenPCone.cc,v 1.6 2001-07-11 09:59:41 gunter Exp $
+// $Id: G4BREPSolidOpenPCone.cc,v 1.7 2002-11-06 23:29:36 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -47,14 +47,16 @@ G4BREPSolidOpenPCone::G4BREPSolidOpenPCone
                                    G4double RMAX[]
                                    )
  : G4IntersectionSolid ( name,
-                         new G4BREPSolidPCone ( name,
-                                                start_angle,
-						opening_angle, 
-                                                num_z_planes,
-                                                z_start, z_values,
-                                                RMIN, RMAX ),
-                         new G4Tubs( "IntersectionTubs", 0., 1., 1.,
-                                     start_angle, opening_angle ) )
+                         new G4BREPSolidPCone( name,
+                                               start_angle, opening_angle, 
+                                               num_z_planes, z_start, z_values,
+                                               RMIN, RMAX
+                                             ),
+                         new G4Tubs( "IntersectionTubs",
+                                     0., 1., 1., start_angle, opening_angle
+                                   )
+                       )
+   //, constructorParams.z_values( 0 ), constructorParams.RMIN( 0 ), constructorParams.RMAX( 0 )
 {
 
 // compute max radius
@@ -78,3 +80,12 @@ void G4BREPSolidOpenPCone::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
   scene.AddThis ( *this );
 }
+
+// Streams solid contents to output stream.
+G4std::ostream& G4BREPSolidOpenPCone::StreamInfo(G4std::ostream& os) const
+{  
+  G4IntersectionSolid::StreamInfo( os );
+
+  return os;
+}
+

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidPolyhedra.hh,v 1.9 2002-02-13 17:39:48 radoone Exp $
+// $Id: G4BREPSolidPolyhedra.hh,v 1.10 2002-11-06 23:28:50 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -112,6 +112,9 @@ public:  // with description
     // solid to any boundary of this solid.
     // Return 0 if the point is already outside.	
 
+  virtual G4std::ostream& StreamInfo(G4std::ostream& os) const;
+    // Streams solid contents to output stream.
+
 public:
 
   G4Polyhedron* CreatePolyhedron () const;
@@ -149,17 +152,19 @@ private:
   //   The following is only utilised in storing the shape parameters for
   //  use in visualising this shape.  J.A. Feb  24, 1997
   //
-  struct PGonParameters
-  {
-     G4double  Start_angle;
-     G4double  Opening_angle;		   
-     int       Sides; 
-     int       Num_z_planes; 
-     // G4double z_start;		   
-     G4double  *Z_values;
-     G4double  *Rmin;
-     G4double  *Rmax;
-  }  original_parameters;
+  // R. Chytracek, Nov 2002, Update to new IO dumping mechanism
+  
+  struct {
+    G4double  start_angle;
+    G4double  opening_angle;
+    G4int     sides;
+    G4int     num_z_planes;
+    G4double  z_start;               
+    G4double* z_values;
+    G4double* RMIN;
+    G4double* RMAX;
+  } constructorParams;
+      
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidBox.hh,v 1.5 2001-07-11 09:59:30 gunter Exp $
+// $Id: G4BREPSolidBox.hh,v 1.6 2002-11-06 23:28:45 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -63,6 +63,9 @@ public: // with description
     // Determines if the point Pt is inside, outside or on the surface
     // of the solid.
 
+  virtual G4std::ostream& StreamInfo(G4std::ostream& os) const;
+    // Streams solid contents to output stream.
+
 private:
 
   G4BREPSolidBox(const G4BREPSolidBox&);
@@ -72,6 +75,7 @@ private:
 private:
 
   G4RotationMatrix Rotation;
+  G4Point3D constructorParams[8];
 
 };
 

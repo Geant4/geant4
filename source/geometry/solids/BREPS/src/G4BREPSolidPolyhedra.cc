@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.22 2002-02-14 18:39:12 radoone Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.23 2002-11-06 23:29:38 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -64,8 +64,8 @@
 #include "g4std/strstream"
 
 G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
-					   G4double phi1,
-					   G4double dphi,
+					   G4double start_angle,
+					   G4double opening_angle,
 					   G4int    sides,
 					   G4int    num_z_planes,      
 					   G4double z_start,
@@ -76,7 +76,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
 {
   G4int sections           = num_z_planes - 1;
   
-  if( dphi >= 2*pi-perMillion ) {
+  if( opening_angle >= 2*pi-perMillion ) {
     nb_of_surfaces = 2*(sections * sides) + 2;
   } else {
     nb_of_surfaces = 2*(sections * sides) + 4;
@@ -93,7 +93,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   G4Point3D  LocalOrigin(0,0,z_start);    
   G4double   Length;
   G4int      Count     = 0 ;
-  G4double   PartAngle = (dphi)/sides;
+  G4double   PartAngle = (opening_angle)/sides;
 
 
   ///////////////////////////////////////////////////
@@ -199,7 +199,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     
     if( Length != 0.0 ) {
       TmpAxis= XAxis;
-      TmpAxis.rotateZ(phi1);
+      TmpAxis.rotateZ(start_angle);
       
       // L. Broglia: Be careful in the construction of the planes, see G4FPlane 
       for( G4int b = 0; b < sides; b++ ) {
@@ -342,7 +342,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         }
         
         TmpAxis= XAxis;
-        TmpAxis.rotateZ(phi1);
+        TmpAxis.rotateZ(start_angle);
         
         // Compute the outer planar surface
         MaxSurfaceVec[Count]  = ComputePlanarSurface( RMAX[a], RMAX[a+1], LocalOrigin, TmpAxis, sides, PartAngle, OuterSurfSense );
@@ -353,7 +353,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         Count++;
         
         TmpAxis= XAxis;
-        TmpAxis.rotateZ(phi1);
+        TmpAxis.rotateZ(start_angle);
         
         // Compute the inner planar surface
         MaxSurfaceVec[Count]  = ComputePlanarSurface( RMIN[a], RMIN[a+1], LocalOrigin, TmpAxis, sides, PartAngle, InnerSurfSense );
@@ -415,7 +415,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         }
         
         TmpAxis= XAxis;
-        TmpAxis.rotateZ(phi1);
+        TmpAxis.rotateZ(start_angle);
         
         MaxSurfaceVec[Count]  = ComputePlanarSurface( R1, R2, LocalOrigin, TmpAxis, sides, PartAngle, SurfSense );
         if( MaxSurfaceVec[Count] == 0 ) {
@@ -432,11 +432,11 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     LocalOrigin = LocalOrigin + (Length*Axis);
   } // End of for loop over z sections
   
-  if(dphi >= 2*pi-perMillion) {
+  if(opening_angle >= 2*pi-perMillion) {
     // Create the end planes for the configuration where delta phi >= 2*PI
     
     TmpAxis = XAxis;
-    TmpAxis.rotateZ(phi1);	
+    TmpAxis.rotateZ(start_angle);	
     
     MaxSurfaceVec[Count] = ComputePlanarSurface( RMIN[0], RMAX[0], Origin, TmpAxis, sides, PartAngle, ENormal );
     
@@ -448,7 +448,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
 
     // Reset plane axis
     TmpAxis = XAxis;
-    TmpAxis.rotateZ(phi1);
+    TmpAxis.rotateZ(start_angle);
     
     MaxSurfaceVec[Count] = ComputePlanarSurface( RMIN[sections], RMAX[sections], LocalOrigin, TmpAxis, sides, PartAngle, EInverse );
     
@@ -464,9 +464,9 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     // Create the lateral planars
     TmpAxis             = XAxis;
     G4Vector3D TmpAxis2 = XAxis;
-    TmpAxis.rotateZ(phi1);
-    TmpAxis2.rotateZ(phi1);
-    TmpAxis2.rotateZ(dphi);	
+    TmpAxis.rotateZ(start_angle);
+    TmpAxis2.rotateZ(start_angle);
+    TmpAxis2.rotateZ(start_angle);	
     
     LocalOrigin      = Origin;
     G4int points     = sections*2+2;
@@ -494,8 +494,8 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     MaxSurfaceVec[Count++] = new G4FPlane( &GapPointList2, 0, EInverse );
     
     TmpAxis = XAxis;
-    TmpAxis.rotateZ(phi1);	
-    TmpAxis.rotateZ(dphi);
+    TmpAxis.rotateZ(start_angle);	
+    TmpAxis.rotateZ(opening_angle);
     
     // Create end planes 
     G4Point3DVector EndPointList ((sides+1)*2);
@@ -564,46 +564,27 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   // Note radii are not scaled because this BREP uses the radius of the
   // circumscribed circle and also graphics_reps/G4Polyhedron uses the radius of
   // the circumscribed circle.
-  original_parameters.Start_angle= phi1;
-  original_parameters.Opening_angle= dphi;		   
-  original_parameters.Sides= sides;
-  original_parameters.Num_z_planes= num_z_planes; 
-  original_parameters.Z_values= new G4double[num_z_planes];
-  original_parameters.Rmin= new G4double[num_z_planes];
-  original_parameters.Rmax= new G4double[num_z_planes];
   
-  G4double rFactor = 1.;
-
-  for(G4int is=0;is<num_z_planes;is++)
-  {
-    original_parameters.Z_values[is]= z_values[is]; 
-    original_parameters.Rmin[is]= RMIN[is]/rFactor;
-    original_parameters.Rmax[is]= RMAX[is]/rFactor;
-  }
-
-  ///////////////////////////////////////////////////
-  // Print for debugging
-
-#ifdef G4VERBOSE
-  static G4int print_pgone_parameters = 1;
+  // Save contructor parameters
+  constructorParams.start_angle    = start_angle;
+  constructorParams.opening_angle  = opening_angle;
+  constructorParams.sides          = sides;
+  constructorParams.num_z_planes   = num_z_planes;
+  constructorParams.z_start        = z_start;
+  constructorParams.z_values       = 0;
+  constructorParams.RMIN           = 0;
+  constructorParams.RMAX           = 0;
   
-  if(print_pgone_parameters)
-  {
-    G4cout << "Parameters of the G4PGone " << name << G4endl;
-    G4cout << "  starting angle =" << original_parameters.Start_angle << G4endl;
-    G4cout << "  opening angle =" << original_parameters.Opening_angle << G4endl;
-    G4cout << "  sides =" << original_parameters.Sides << G4endl;
-    G4cout << "  nb of z planes=" << original_parameters.Num_z_planes << G4endl;
-
-    for (G4int nb = 0; nb <= sections; nb++)
-    {
-      G4cout << "   Z[" << nb << "] = " << original_parameters.Z_values[nb];
-      G4cout << "   Rmin[" << nb << "] = " << original_parameters.Rmin[nb];
-      G4cout << "   Rmax[" << nb << "] = " << original_parameters.Rmax[nb] 
-	     << G4endl;
-    }   
+  if( num_z_planes > 0 ) {               
+    constructorParams.z_values       = new G4double[num_z_planes];
+    constructorParams.RMIN           = new G4double[num_z_planes];
+    constructorParams.RMAX           = new G4double[num_z_planes];
+    for( G4int idx = 0; idx < num_z_planes; idx++ ) {
+      constructorParams.z_values[idx] = z_values[idx];
+      constructorParams.RMIN[idx]     = RMIN[idx];
+      constructorParams.RMAX[idx]     = RMAX[idx];      
+    }
   }
-#endif
 
   // z_values[0]  should be equal to z_start, for consistency 
   //   with what the constructor does.
@@ -617,7 +598,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
       " z_values[0]= " << z_values[0] << " is not equal to " << 
       " z_start= " << z_start;
     // G4Exception(" Error in creating G4BREPSolidPolyhedra: z_values[0] must be equal to z_start" );
-    original_parameters.Z_values[0]= z_start; 
+    constructorParams.z_values[0]= z_start; 
   }
 
   active=1;
@@ -626,9 +607,11 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
 
 G4BREPSolidPolyhedra::~G4BREPSolidPolyhedra()
 {
-  delete[] original_parameters.Z_values;
-  delete[] original_parameters.Rmin;
-  delete[] original_parameters.Rmax;
+  if( constructorParams.num_z_planes > 0 ) {
+    delete [] constructorParams.z_values;
+    delete [] constructorParams.RMIN;
+    delete [] constructorParams.RMIN;
+  }  
 }
 
 void G4BREPSolidPolyhedra::Initialize()
@@ -1006,6 +989,33 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(const G4ThreeVector& Pt) const
   }
 }
 
+// Streams solid contents to output stream.
+G4std::ostream& G4BREPSolidPolyhedra::StreamInfo(G4std::ostream& os) const
+{  
+  G4BREPSolid::StreamInfo( os )
+  << "\n start_angle:   " << constructorParams.start_angle
+  << "\n opening_angle: " << constructorParams.opening_angle
+  << "\n sides:         " << constructorParams.sides
+  << "\n num_z_planes:  " << constructorParams.num_z_planes
+  << "\n z_start:       " << constructorParams.z_start
+  << "\n z_values:      ";
+  G4int idx;
+  for( idx = 0; idx < constructorParams.num_z_planes; idx++ ) {
+    os << constructorParams.z_values[idx] << " ";
+  }
+  os << "\n RMIN:          "; 
+  for( idx = 0; idx < constructorParams.num_z_planes; idx++ ) {
+    os << constructorParams.RMIN[idx] << " ";
+  }
+  os << "\n RMAX:          ";
+  for( idx = 0; idx < constructorParams.num_z_planes; idx++ ) {
+    os << constructorParams.RMAX[idx] << " ";
+  }
+  os << "\n-----------------------------------------------------------\n";
+
+  return os;
+}
+
 G4Surface* G4BREPSolidPolyhedra::CreateTrapezoidalSurface( G4double r1, G4double r2,
                                                            const G4Point3D& origin, G4double distance,
                                                            G4Vector3D& xAxis, G4double partAngle,
@@ -1111,11 +1121,11 @@ G4Surface* G4BREPSolidPolyhedra::ComputePlanarSurface( G4double r1, G4double r2,
 
 G4Polyhedron* G4BREPSolidPolyhedra::CreatePolyhedron() const
 {
-  return new G4PolyhedronPgon( original_parameters.Start_angle, 
-			       original_parameters.Opening_angle, 
-			       original_parameters.Sides, 
-			       original_parameters.Num_z_planes, 
-			       original_parameters.Z_values,
-			       original_parameters.Rmin,
-			       original_parameters.Rmax);
+  return new G4PolyhedronPgon( constructorParams.start_angle, 
+			       constructorParams.opening_angle, 
+			       constructorParams.sides, 
+			       constructorParams.num_z_planes, 
+			       constructorParams.z_values,
+			       constructorParams.RMIN,
+			       constructorParams.RMAX);
 }

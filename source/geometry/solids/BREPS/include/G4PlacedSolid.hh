@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PlacedSolid.hh,v 1.7 2001-07-11 09:59:36 gunter Exp $
+// $Id: G4PlacedSolid.hh,v 1.8 2002-11-06 23:28:53 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -59,6 +59,9 @@ public:  // with description
   inline G4RotationMatrix* GetRotation() const;
   inline G4ThreeVector*    GetTranslation() const;
     // Accessors.
+
+  G4std::ostream& StreamInfo(G4std::ostream& os) const;
+    // Streams solid contents to output stream.
 
 private:
 
