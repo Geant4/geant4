@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.3 2001-10-25 02:30:55 pia Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.4 2001-11-02 17:33:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // Modifications: 
 // 10.10.2001 MGP           Revision to improve code quality and 
 //                          consistency with design
+// 02.11.2001 VI            Optimize sampling of energy 
 //
 // -------------------------------------------------------------------
 //
@@ -318,15 +319,15 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
   G4double aria2 = 0.0;
   a1 = G4std::max(t0,t1);
   a2 = G4std::min(tm,t2);
-  G4double c2 = p[13];
-  if(a1 < a2) aria2 = p[12] * (pow(a2, c2 + 1.) - pow(a1, c2 + 1.)) /(c2 + 1.);
+  G4double c2 = p[13] + 1.;
+  if(a1 < a2) aria2 = p[12] * (pow(a2, c2) - pow(a1, c2)) /c2;
   G4double aria3 = 0.0;
   a1 = G4std::max(t0,t2);
   a2 = G4std::max(tm,t2);
   if(a1 < a2) aria3 = IntSpectrum(4, a1, a2, bindingEnergy, p);
 
   G4double aria = (aria1 + aria2 + aria3)*G4UniformRand();
-  G4double amaj, fun, q;
+  G4double amaj, aleft, fun, q, q1, q2, q3;
 
   //======= First function to sample =====
 
@@ -335,22 +336,50 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
     a1 = G4std::min(t0,t1);
     a2 = G4std::min(tm,t1);
     amaj = MaxFunction(6, a1, a2, bindingEnergy, p);
+    aleft = 1.21*Function(6, a1, bindingEnergy, p);
 
-    do {
+    if(aleft > amaj) {
 
-      tDelta = a1 + G4UniformRand()*(a2 - a1);
-      fun  = Function(6, tDelta, bindingEnergy, p);
+      q3 = (a1 + bindingEnergy);
+      aleft *= q3*q3; 
+      q1 = 1./q3;
+      q2 = 1./(a2 + bindingEnergy);
 
-      if(fun > amaj) {
-        G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:" 
-               << " 1st majoranta " << amaj 
-               << " < " << fun
-               << G4endl;
-      }
+      do {
 
-      q = amaj*G4UniformRand();
+        q3 = q1 + G4UniformRand()*(q2 - q1);
+        tDelta = 1./q3 - bindingEnergy;
+        fun  = Function(6, tDelta, bindingEnergy, p)/(q3*q3);
 
-    } while (q >= fun);
+        if(fun > aleft) {
+          G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:" 
+                 << " 1st majoranta " << aleft 
+                 << " < " << fun
+                 << G4endl;
+        }
+
+        q = aleft*G4UniformRand();
+
+      } while (q >= fun);
+
+    } else {
+
+      do {
+
+        tDelta = a1 + G4UniformRand()*(a2 - a1);
+        fun  = Function(6, tDelta, bindingEnergy, p);
+
+        if(fun > amaj) {
+          G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:" 
+                 << " 1st majoranta " << amaj 
+                 << " < " << fun
+                 << G4endl;
+        }
+
+        q = amaj*G4UniformRand();
+
+      } while (q >= fun);
+    }
 
   //======= Second function to sample =====
 
@@ -358,7 +387,6 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
     a1 = G4std::max(t0,t1);
     a2 = G4std::min(tm,t2);
-    c2+= 1.0;
     a1 = pow(a1, c2);
     a2 = pow(a2, c2);
     q  = a1 + G4UniformRand()*(a2 - a1);
@@ -371,22 +399,50 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
     a1 = G4std::max(t0,t2);
     a2 = G4std::max(tm,t2);
     amaj = MaxFunction(4, a1, a2, bindingEnergy, p);
+    aleft = 1.21*Function(4, a1, bindingEnergy, p);
 
-    do {
+    if(aleft > amaj) {
 
-      tDelta = a1 + G4UniformRand()*(a2 - a1);
-      fun  = Function(4, tDelta, bindingEnergy, p);
+      q3 = (a1 + bindingEnergy);
+      aleft *= q3*q3; 
+      q1 = 1./q3;
+      q2 = 1./(a2 + bindingEnergy);
 
-      if(fun > amaj) {
-        G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:" 
-               << " 3d majoranta " << amaj 
-               << " < " << fun
-               << G4endl;
-      }
+      do {
 
-      q = amaj*G4UniformRand();
+        q3 = q1 + G4UniformRand()*(q2 - q1);
+        tDelta = 1./q3 - bindingEnergy;
+        fun  = Function(4, tDelta, bindingEnergy, p)/(q3*q3);
 
-    } while (q >= fun);
+        if(fun > aleft) {
+          G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:" 
+                 << " 3st majoranta " << aleft 
+                 << " < " << fun
+                 << G4endl;
+        }
+
+        q = aleft*G4UniformRand();
+
+      } while (q >= fun);
+
+    } else {
+
+      do {
+
+        tDelta = a1 + G4UniformRand()*(a2 - a1);
+        fun  = Function(4, tDelta, bindingEnergy, p);
+
+        if(fun > amaj) {
+          G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:" 
+                 << " 3d majoranta " << amaj 
+                 << " < " << fun
+                 << G4endl;
+        }
+
+        q = amaj*G4UniformRand();
+
+      } while (q >= fun);
+    }
   }
 
   p.clear();
