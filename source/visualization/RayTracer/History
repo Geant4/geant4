@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2003-09-18 11:14:02 johna Exp $
+$Id: History,v 1.20 2003-09-18 11:15:49 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,7 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-18th September 2003  John Alison  (raytracer-V05-02-01, greps-V05-02-00)
+18th September 2003  John Allison  (raytracer-V05-02-01, greps-V05-02-00)
 - Introduced G4VRTScanner and its default concrete implementation,
   G4RTSimpleScanner.  It controls the shooting order of rays.
 - Added new command /vis/rayTracer/backgroundColour.
