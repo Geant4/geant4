@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.12 2004-01-26 09:05:55 gcosmo Exp $
+// $Id: G4Orb.cc,v 1.13 2004-06-30 13:28:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -29,8 +29,10 @@
 //
 // History:
 //
+// 30.06.04 V.Grichine - bug fixed in DistanceToIn(p,v) on Rmax surface
 // 20.08.03 V.Grichine - created
-// --------------------------------------------------------------------
+//
+//////////////////////////////////////////////////////////////
 
 #include <assert.h>
 
@@ -380,8 +382,10 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
   else
   {
     if ( c > -fRmaxTolerance*fRmax )  // on surface  
-    {             
-      if ( pDotV3d >= 0 ) return snxt = kInfinity;
+    {
+      d2 = pDotV3d*pDotV3d - c ;             
+      //  if ( pDotV3d >= 0 ) return snxt = kInfinity;
+      if ( d2 < fRmaxTolerance*fRmax) return snxt = kInfinity;
       else                return snxt = 0.;
     }
     else // inside ???
@@ -463,8 +467,8 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
 
       d2 = pDotV3d*pDotV3d - c;
 
-      if( ( c > -fRmaxTolerance*fRmax) &&    // on tolerant surface
-          ( ( pDotV3d >= 0 ) || ( d2 < 0 )) )     // leaving outside from Rmax 
+      if( ( c > -fRmaxTolerance*fRmax) &&         // on tolerant surface
+	  ( ( pDotV3d >= 0 )   || ( d2 < 0 )) )   // leaving outside from Rmax 
                                                   // not re-entering
       {
         if(calcNorm)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Orb.cc,v 1.1 2003-08-21 14:34:05 grichine Exp $
+// $Id: testG4Orb.cc,v 1.2 2004-06-30 13:33:25 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Orb Test File
@@ -124,13 +124,25 @@ int main(void)
     pNorm=&norm;
     pgoodNorm=&goodNorm;
 
-    G4Orb s1("Solid G4Orb",50);
+  G4Orb s1("Solid G4Orb",50);
 
- G4Orb s10("s10",0.018*mm);
+  G4Orb s10("s10",0.018*mm);
 
- G4ThreeVector s10p(0.01160957408065766*mm,
-0.01308205826682229*mm,0.004293345210644617*mm);
+  G4Orb* solidD1= new G4Orb("D1", 2.7*cm);
 
+  G4ThreeVector s10p(0.01160957408065766*mm,
+                     0.01308205826682229*mm,
+                     0.004293345210644617*mm);
+
+  G4ThreeVector positionKip(-5.1427112977805294,
+                            25.37671986392073,
+                            -7.6534050889634502);
+  G4ThreeVector directionKip(-0.90020960513809678,
+                             -0.052042885743481759,
+                              0.43233575477931813);
+
+
+  G4cout.precision(16);
 
 
 #ifdef NDEBUG
@@ -204,16 +216,31 @@ int main(void)
 
      
 // Checking G4Orb::DistanceToIn(P)
+
     Dist=s1.DistanceToIn(ponrmax1);
     assert(ApproxEqual(Dist,0));
 
 // Checking G4Orb::DistanceToIn(P,V)
+
     Dist=s1.DistanceToIn(ponzmax,vz);
     G4cout<<"s1.DistanceToIn(ponzmax,vz) = "<<Dist<<G4endl;
     Dist=s1.DistanceToIn(pbigy,vy);
     assert(Dist==kInfinity);
     Dist=s1.DistanceToIn(pbigy,vmy);
     assert(ApproxEqual(Dist,50));
+
+  // Checking In/Out both return zeros
+
+  Dist = solidD1->DistanceToIn(positionKip, directionKip);
+  G4cout << " Dist In  (pos, uKipp) = " << Dist << G4endl;
+
+  Dist = solidD1->DistanceToOut(positionKip, directionKip);
+  G4cout << " Dist Out (pos, uKipp) = " << Dist << G4endl;
+     
+  G4cout << "   Dot( pos, uKipp) = " << positionKip.dot(directionKip)<< G4endl;
+
+  inside = solidD1->Inside(positionKip);
+  G4cout<<"solidD1->Inside(positionKip) = " << OutputInside(inside)<<G4endl ;
 
 
 
