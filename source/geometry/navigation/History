@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2004-06-11 14:58:00 gcosmo Exp $
+$Id: History,v 1.27 2004-06-15 16:44:19 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      --------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 25th, 2004 - G.Cosmo  (geomnav-V06-01-02)
+------------------------
+- Relax exception in G4Navigator::ComputeStep() for stuck tracks.
+  Event get aborted after 25 zero steps.
 
 Jun 11th, 2004 - G.Cosmo  (geomnav-V06-01-01)
 ------------------------
