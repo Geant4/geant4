@@ -1,5 +1,6 @@
 Simulation of the TIARA experiment using importance sampling
 ============================================================
+
 This example is a simulation of the neutron shielding experiment TIARA
 see http://idsun1.kek.jp/nakao/research/tiara/tiara.htm.
 The example is ment to provide a realistic example for
@@ -16,6 +17,11 @@ The simulated neutron fluxes are compared to the published
 experimental data. The efficiency of applying importance sampling
 depends strongly on the shied thickness and importance configuration.
 The efficiency of the simulations may be obtained as FOM values.
+
+See also "Geant4 User's Guide 
+For Application Developers", Chapter "Toolkit Fundamentals"
+Section  "Event Biasing Techniques" and references there.
+
 
 
 The example has been tested on CERN RH 7.3 with the
@@ -49,7 +55,7 @@ in the three cases:
    "AIDA_DIR"  (e.g. /afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp)
    "ANAPHE_SCRIPTS" (e.g. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.4/scripts)
 
-   Finally source the script env.Common.csh
+   Finally source the script envCommon.csh
 
 
 1.2) No afs but a local Anphe and AIDA installation:
@@ -63,7 +69,7 @@ in the three cases:
    "AIDA_DIR"  (e.g. /users/dressel/AIDA/3.0.0/3.0.0/AIDA/3.0/src/cpp)
    "ANAPHE_SCRIPTS" (e.g. ${ANAPHETOP}/share/LHCXX/5.0.5/scripts)
 
-   Finally source the script env.Common.csh
+   Finally source the script envCommon.csh
 
 
 1.3) No afs and no Anaphe and no AIDA (e.g. for system testing):
@@ -71,7 +77,7 @@ in the three cases:
    You don't want to use Anaphe and AIDA and you don't have no afs access.
    Make sure "G4ANALYSIS_USE" is unset (e.g. unsetenv G4ANALYSIS_USE).
 
-   Set "PYTHONVERSION" (e.g. to  2.2)
+   Set "PYTHONVERSION" (2.2 or higher)
    Set "PYTHON_INCLUDE_DIR" (e.g. to  /usr/include/python${PYTHONVERSION})
    Set "PYTHON_LIB_DIR" (e.g. to /usr/lib/python${PYTHONVERSION}/config)
 
@@ -79,7 +85,7 @@ in the three cases:
 
    Set "CLHEP_BASE_DIR" (e.g. to  /users/dressel/CLHEP)
 
-   Finally source the script env.Common.csh
+   Finally source the script envCommon.csh
 
 
 2) Building the example
@@ -146,6 +152,10 @@ results may be viewed e.g. using lizard and scripts:
          an unbiased simulation set the importance values to one (see  
          runSim.py)
   
+
+The modules (dataAcess, extractShelve) imported in the above steps are 
+placed in source/py_modules in files named after the module ending with 
+".py".
 
 Since the simulation time used by "runSim.py" is only 5 minutes the
 calculated results have large errors. If you want to see a better result
@@ -216,3 +226,29 @@ run / - directory for running the example
 
 
 
+5) Techicalities about this example
+===================================
+
+ This example is composed out of a layer of classes written in C++
+(source/tiara/include, source/tiara/src), a layer of python
+shadow classes created by swig (source/CLHEPWrapper, 
+source/G4KernelWrapper, source/TiaraWrapper) and layer of 
+python modules (source/py_modules). 
+ The C++ layer under source/tiara provides lower level classes closely
+related to the Geant4 kernel. 
+ The shadow classes in the source/*Wrapper directories provide classes 
+that may be instantiated in a python script or session. This way the 
+lower level C++ code can be used directly for scripting in python. The 
+shadow classes are declared in the files with extensions ".i" in the 
+source/*Wrapper/include directories. Swig is used to create C++ code for 
+a library that can be loaded into python and python modules (files with 
+extensions .py in the source/*Wrapper directories). When the python 
+modules created by swig are imported into python (in a session or a 
+script) the corresponding C++ library is automatically loaded as well.
+ The python modules in source/py_modules provide classes and functions
+that may be changed or customized more frequently than the C++ classes
+in source/tiara. These classes complete the construction of geometries
+take care of the procedure of setting up the simulation, the run sequence
+and the analysis after the simulation has been ran.
+ The script runSim.py is an commented example of using the python modules
+to run a simulation.

@@ -30,7 +30,7 @@ setenv CLHEP_BASE_DIR ${ANAPHETOP}/specific/${PLATF}/CLHEP/1.8.0.0/
 
 else
 
-echo "envCommon.csh: INFO: Anaphe is not used since NAPHE_SCRIPTS or ANAPHETOP or AIDA_DIR is not set"
+echo "envCommon.csh: INFO: Anaphe is not used since ANAPHE_SCRIPTS or ANAPHETOP or AIDA_DIR is not set"
 
 endif
 
