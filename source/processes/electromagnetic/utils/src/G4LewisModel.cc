@@ -451,13 +451,17 @@ G4double G4LewisModel::GeomPathLength(
     if (tPathLength < exp(log(tmax)/(2.*cz))) {
       G4double cz1 = 1.+cz ;
       G4double grej0 = exp(cz1*log(cz*tPathLength/cz1))/cz ;
-      G4double grej  = grej0;
-      do {
-        zmean = tPathLength*exp(log(G4UniformRand())/cz1) ;
-        grej  = exp(cz*log(zmean))*(tPathLength-zmean) ;
-        if (grej > grej0)
-	    G4cout << "G4LewisModel: Warning! majoranta " << grej0 << " < " << grej << G4endl;
-      } while (grej < grej0*G4UniformRand()) ;
+      if (grej0 > 0.0) {
+        G4double grej;
+        do {
+          zmean = tPathLength*exp(log(G4UniformRand())/cz1) ;
+          grej  = exp(cz*log(zmean))*(tPathLength-zmean) ;
+          if (grej > grej0) {
+	     G4cout << "G4LewisModel: Warning! majoranta " << grej0 << " < " << grej 
+	            << " grej/grej0= " << grej/grej0 << G4endl;
+          }
+        } while (grej < grej0*G4UniformRand()) ;
+      }
     }
   }
 

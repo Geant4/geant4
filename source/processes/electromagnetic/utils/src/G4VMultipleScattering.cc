@@ -240,7 +240,7 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
 
 void G4VMultipleScattering::PrintInfoDefinition() const
 {
-  G4cout << G4endl << GetProcessName() << ":  " << G4endl;
+  G4cout << G4endl << GetProcessName() << ":  Model variant of multiple scattering " << G4endl;
   if (theLambdaTable) {
     G4cout << "      Lambda tables from "
            << G4BestUnit(MinKinEnergy(),"Energy")

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.15 2003-02-06 18:05:25 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.16 2003-04-18 12:44:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------- G4MultipleScattering physics process --------------------------
@@ -40,7 +40,8 @@
 // 24-04-02 some minor changes in boundary algorithm, L.Urban
 // 24-05-02 changes in data members, L.Urban
 // 30-10-02 changes in data members, L.Urban 
-// 05-02-03 changes in data members, L.Urban 
+// 05-02-03 changes in data members, L.Urban
+// 18-04-03 Change signature of  GetTransportMeanFreePath (V.Ivanchenko)
 //------------------------------------------------------------------------------
 
 // class description
@@ -126,12 +127,12 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
      // This function overloads a virtual function of the base class.
      // It is invoked by the ProcessManager of the Particle.
 
-			    
+
    G4double GetTransportMeanFreePath(
-                          G4double KineticEnergy,const G4Material* material);
+                          G4double KineticEnergy,const G4MaterialCutsCouple* couple);
      // Just a utility method to get the values of the transport
      //  mean free path . (It is not used inside the class.)
-   
+
    G4VParticleChange* AlongStepDoIt(const G4Track& aTrack,const G4Step& aStep);
      // The geometrical step length --> true path length transformation
      // is performed here (the inverse of the transformation done
