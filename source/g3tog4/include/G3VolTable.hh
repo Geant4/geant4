@@ -20,7 +20,7 @@ private:
 public:
   VolTableEntry* PutVTE(VolTableEntry* aVTE);  
   RWTPtrHashDictionary <G4String, VolTableEntry>* GetVTD() ;
-  VolTableEntry* GetVTE(G4String& Vname);
+  VolTableEntry* GetVTE(const G4String& Vname);
   void ListVTE();
   G3VolTable();
   virtual ~G3VolTable();

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.cc,v 1.12 1999-05-28 23:03:35 lockman Exp $
+// $Id: G3VolTable.cc,v 1.13 1999-05-28 23:12:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -26,7 +26,7 @@ G3VolTable::~G3VolTable(){
 };
 
 VolTableEntry*
-G3VolTable::GetVTE(G4String& Vname) {
+G3VolTable::GetVTE(const G4String& Vname) {
   return _VTD->findValue(&Vname);
 };
 
