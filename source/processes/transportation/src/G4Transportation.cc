@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.19 2001-07-19 13:27:39 gcosmo Exp $
+// $Id: G4Transportation.cc,v 1.20 2001-08-17 00:07:44 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -122,6 +122,14 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
 {
   G4double geometryStepLength, newSafety ; 
   fParticleIsLooping = false ;
+
+  if(track.GetCurrentStepNumber()==1) {
+     // reset safety value 
+     fPreviousSafety    = 0.0 ; 
+     fPreviousSftOrigin = G4ThreeVector(0.,0.,0.) ;
+     // ChordFinder reset internal state
+     fFieldPropagator->GetChordFinder()->ResetStepEstimate();
+  }
 
   // GPILSelection is set to defaule value of CandidateForSelection
   // It is a return value
