@@ -1,5 +1,5 @@
 
-$Id: History,v 1.15 2000-11-20 17:56:00 gcosmo Exp $
+$Id: History,v 1.16 2000-11-22 16:10:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Nov 22  2000  Vladimir Grichine    geom-solid-bool-V02-00-03
+
+  - Added new set methods for matrix/vectors to G4DisplacedSolid:
+      SetTransform(G4AffineTransform&),
+      SetDirectTransform(G4AffineTransform&),
+      SetFrameRotation(const G4RotationMatrix&),
+      SetFrameTranslation(const G4ThreeVector&),
+      SetObjectRotation(const G4RotationMatrix&),
+      SetObjectTranslation(const G4ThreeVector&).
 
  Nov 20  2000  Gabriele Cosmo       geom-solid-bool-V02-00-02
 
