@@ -1,14 +1,14 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: G4HcalTB96.cc
-// Date: 08/00 S.Banerjee
-// Modifications: 
+// File: CCalG4Hall.cc
+// Description: CCalG4Hall Geometry factory class to construct G4 geometry 
+//              of the experimental hall
 ///////////////////////////////////////////////////////////////////////////////
-#include "G4HcalTB96.hh"
+#include "CCalG4Hall.hh"
 
 #include "CCalMaterialFactory.hh"
 
-#include "G4HcalTB96HCal.hh"
-#include "G4CrystalMatrix.hh"
+#include "CCalG4Hcal.hh"
+#include "CCalG4Ecal.hh"
 
 #include "utils.hh"
 
@@ -21,21 +21,21 @@
 //#define pdebug
 
 ////////////////////////////////////////////////////////////////////
-// G4HcalTB96 constructor & destructor...
+// CCalG4Hall constructor & destructor...
 ////////////////////////////////////////////////////////////////////
 
-G4HcalTB96::G4HcalTB96(const G4String &name):
-  HcalTB96(name),CCalG4Able(name) {}
+CCalG4Hall::CCalG4Hall(const G4String &name):
+  CCalHall(name),CCalG4Able(name) {}
 
-G4HcalTB96::~G4HcalTB96() {}
+CCalG4Hall::~CCalG4Hall() {}
 
 ////////////////////////////////////////////////////////////////////
-// G4HcalTB96 methods...
+// CCalG4Hall methods...
 ////////////////////////////////////////////////////////////////////
 
-G4VPhysicalVolume* G4HcalTB96::constructIn(G4VPhysicalVolume* mother) {
+G4VPhysicalVolume* CCalG4Hall::constructIn(G4VPhysicalVolume* mother) {
 
-  cout << "==>> Constructing G4HcalTB96..." << endl;
+  cout << "==>> Constructing CCalG4Hall..." << endl;
 
   ///////////////////////////////////////////////////////////////
   //Pointers to the Rotation Matrices and to the Materials
@@ -67,20 +67,20 @@ G4VPhysicalVolume* G4HcalTB96::constructIn(G4VPhysicalVolume* mother) {
        << " at (0,0,0) with no rotation" << endl;
 #endif  
 
-  cout << "<<== End of G4HcalTB96 construction ..." << endl;
+  cout << "<<== End of CCalG4Hall construction ..." << endl;
 
   return volume;
 }
 
-void G4HcalTB96::constructDaughters(){
+void CCalG4Hall::constructDaughters(){
   //Hadron Calorimeter
-  G4HcalTB96HCal* hcal = new G4HcalTB96HCal("HadronCalorimeter");
+  CCalG4Hcal* hcal = new CCalG4Hcal("HadronCalorimeter");
   addDetector(hcal);
   AddCCalG4Able(hcal);
 
   //Crystal matrix
-  G4CrystalMatrix* xtalmod = new G4CrystalMatrix("CrystalMatrixModule");
-  xtalmod->setType(G4CrystalMatrix::module1);
-  addDetector(xtalmod);
-  AddCCalG4Able(xtalmod);
+  CCalG4Ecal* ecal = new CCalG4Ecal("CrystalMatrixModule");
+  ecal->setType(CCalG4Ecal::module1);
+  addDetector(ecal);
+  AddCCalG4Able(ecal);
 }

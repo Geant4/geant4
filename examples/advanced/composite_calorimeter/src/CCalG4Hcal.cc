@@ -1,9 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: G4HcalTB96HCal.cc
-// Date: 08/00 S. Banerjee
-// Modifications: 
+// File: CCalG4Hcal.cc
+// Description: CCalG4Hcal Factory class to construct the G4 geometry of the
+//              hadron calorimeter
 ///////////////////////////////////////////////////////////////////////////////
-#include "G4HcalTB96HCal.hh"
+#include "CCalG4Hcal.hh"
 
 #include "CCalMaterialFactory.hh"
 #include "CCalRotationMatrixFactory.hh"
@@ -24,13 +24,13 @@
 //#define sdebug
 
 ////////////////////////////////////////////////////////////////////
-// G4HcalTB96HCal constructor & destructor...
+// CCalG4Hcal constructor & destructor...
 ////////////////////////////////////////////////////////////////////
 
-G4HcalTB96HCal::G4HcalTB96HCal(const G4String &name):
-  HcalTB96HCal(name), CCalG4Able(name), sclLog(0), absLog(0) {}
+CCalG4Hcal::CCalG4Hcal(const G4String &name):
+  CCalHcal(name), CCalG4Able(name), sclLog(0), absLog(0) {}
 
-G4HcalTB96HCal::~G4HcalTB96HCal(){
+CCalG4Hcal::~CCalG4Hcal(){
   if (sclLog)
     delete[] sclLog;
   if (absLog)
@@ -38,11 +38,11 @@ G4HcalTB96HCal::~G4HcalTB96HCal(){
 }
 
 ////////////////////////////////////////////////////////////////////
-// G4HcalTB96HCal methods...
+// CCalG4Hcal methods...
 ////////////////////////////////////////////////////////////////////
 
-G4VPhysicalVolume* G4HcalTB96HCal::constructIn(G4VPhysicalVolume* mother) {
-  cout << "==>> Constructing G4HcalTB96HCal..." << endl;
+G4VPhysicalVolume* CCalG4Hcal::constructIn(G4VPhysicalVolume* mother) {
+  cout << "==>> Constructing CCalG4Hcal..." << endl;
 
   //Common logical volumes between methods.
 #ifdef debug
@@ -178,7 +178,7 @@ G4VPhysicalVolume* G4HcalTB96HCal::constructIn(G4VPhysicalVolume* mother) {
 }
 
 
-G4LogicalVolume* G4HcalTB96HCal::constructScintillatorLayer(G4int lay) {
+G4LogicalVolume* CCalG4Hcal::constructScintillatorLayer(G4int lay) {
 
   //Pointers to the Materials
   CCalMaterialFactory* matfact       = CCalMaterialFactory::getInstance();
@@ -287,7 +287,7 @@ G4LogicalVolume* G4HcalTB96HCal::constructScintillatorLayer(G4int lay) {
 }
 
 
-G4LogicalVolume* G4HcalTB96HCal::constructAbsorberLayer(G4int lay) {
+G4LogicalVolume* CCalG4Hcal::constructAbsorberLayer(G4int lay) {
 
   //Pointers to the Materials
   CCalMaterialFactory* matfact       = CCalMaterialFactory::getInstance();
@@ -309,7 +309,7 @@ G4LogicalVolume* G4HcalTB96HCal::constructAbsorberLayer(G4int lay) {
 }
 
 
-void G4HcalTB96HCal::constructSensitive(){
+void CCalG4Hcal::constructSensitive(){
 
   if (allSensitiveLogs.size()>0) {
     CCalSensitiveDetectors* sensDets = CCalSensitiveDetectors::getInstance();
@@ -323,9 +323,9 @@ void G4HcalTB96HCal::constructSensitive(){
 #endif
     }
   } else {
-    G4cerr << "G4HcalTB96HCal ERROR: Could not construct Sensitive Detector" 
+    G4cerr << "CCalG4Hcal ERROR: Could not construct Sensitive Detector" 
 	   << endl;
   }
 }
 
-void G4HcalTB96HCal::constructDaughters() {}
+void CCalG4Hcal::constructDaughters() {}

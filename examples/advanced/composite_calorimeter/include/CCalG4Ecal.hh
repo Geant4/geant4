@@ -1,26 +1,24 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: G4CrystalMatrix.hh
-// Date:          06/09/9
-// Modifications: 27/03/00 S.B. In OSCAR
+// File: CCalG4Ecal.hh
 // Description: Equipped to describe crystal matrix for different testbeam run
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef G4CrystalMatrix_h
-#define G4CrystalMatrix_h 1
+#ifndef CCalG4Ecal_h
+#define CCalG4Ecal_h 1
 
-#include "CrystalMatrix.hh"
+#include "CCalEcal.hh"
 #include "CCalG4Able.hh"
 #include <vector>
 
 typedef G4LogicalVolume* ptrG4Log;
 
-class G4CrystalMatrix: public CrystalMatrix, public CCalG4Able {
+class CCalG4Ecal: public CCalEcal, public CCalG4Able {
 public:
   //Backward or Forward type
   enum CMType {module1, module2};
 
   //Constructor and Destructor
-  G4CrystalMatrix(const G4String &name);
-  virtual ~G4CrystalMatrix();
+  CCalG4Ecal(const G4String &name);
+  virtual ~CCalG4Ecal();
 
   void setType(CMType ty)    {type = ty;}
   

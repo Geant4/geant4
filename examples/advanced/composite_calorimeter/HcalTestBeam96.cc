@@ -5,7 +5,7 @@
 
 //#define VIS_USE
 
-#include "HcalTestBeam96DetectorConstruction.hh"
+#include "CCalDetectorConstruction.hh"
 #include "CCalEndOfEventAction.hh"
 #include "CCalRunAction.hh"
 
@@ -27,7 +27,7 @@ int main(int argc,char** argv) {
 #endif        
 
   G4RunManager * runManager = new G4RunManager;
-  runManager->SetUserInitialization(new HcalTestBeam96DetectorConstruction);
+  runManager->SetUserInitialization(new CCalDetectorConstruction);
   runManager->SetUserInitialization(new HcalTestBeam99PhysicsList);     
 
   ////////////////////////////

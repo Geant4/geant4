@@ -1,19 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CrystalMatrix.cc
-// Date:             09/99 S.B.
-// Modifications: 06/09/99 S.B.
-//                27/03/00 S.B. In OSCAR
+// File: CCalEcal.cc
+// Description: CCalEcal Geometry factory class for crystal matrix
 ///////////////////////////////////////////////////////////////////////////////
-#include "CrystalMatrix.hh"
+#include "CCalEcal.hh"
 
 #include <fstream>
 #include "utils.hh"
 
 //#define debug
 
-CrystalMatrix::~CrystalMatrix() {}
+CCalEcal::~CCalEcal() {}
 
-int CrystalMatrix::readFile() {
+int CCalEcal::readFile() {
   ///////////////////////////////////////////////////////////////
   //Let's open the file
   cout << " ==> Opening file " << File() << " to read elements..."
@@ -85,4 +83,4 @@ int CrystalMatrix::readFile() {
 
 }
 
-void CrystalMatrix::constructDaughters() {}
+void CCalEcal::constructDaughters() {}

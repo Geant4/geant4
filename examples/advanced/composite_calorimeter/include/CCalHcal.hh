@@ -1,19 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: HcalTB96HCal.hh
-// Date: 08/00 
-// Modifications: 
+// File: CCalHcal.hh
 // Description: Equipped to construct the geometry of the hadron calorimeter
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef HcalTB96HCal_h
-#define HcalTB96HCal_h 1
+#ifndef CCalHcal_h
+#define CCalHcal_h 1
 
 #include "CCalDetector.hh"
 
-class HcalTB96HCal: public CCalDetector {
+class CCalHcal: public CCalDetector {
 public:
   //Constructor and Destructor
-  HcalTB96HCal(const G4String &name);
-  virtual ~HcalTB96HCal();
+  CCalHcal(const G4String &name);
+  virtual ~CCalHcal();
 
   //Get Methods
   G4String getGenMat()                    const {return genMaterial;}

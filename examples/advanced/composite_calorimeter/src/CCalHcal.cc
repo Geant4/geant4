@@ -1,22 +1,21 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: HcalTB96HCal.cc
-// Date: 08/00 S.Banerjee
-// Modifications:
+// File: CCalHcal.cc
+// Description: CCalHcal Geometry factory class for the hadron calorimeter
 ///////////////////////////////////////////////////////////////////////////////
-#include "HcalTB96HCal.hh"
+#include "CCalHcal.hh"
 
 #include <fstream.h>
 #include "utils.hh"
 
 //#define debug
 
-HcalTB96HCal::HcalTB96HCal(const G4String &name):
+CCalHcal::CCalHcal(const G4String &name):
   CCalDetector(name),xposBox(0),typeLayerScnt(0),mothLayerScnt(0),
   xposLayerScnt(0),typeLayerAbs(0),mothLayerAbs(0),xposLayerAbs(0),
   dx_2Absorber(0),dy_2ScntLayer(0),dx_2ScntLayer(0),dx_2Wrapper(0),
   dx_2FrontPlastic(0),dx_2BackPlastic(0),dx_2Scintillator(0) {}
 
-HcalTB96HCal::~HcalTB96HCal() {
+CCalHcal::~CCalHcal() {
   if (xposBox)
     delete[] xposBox;
   if (typeLayerScnt)
@@ -47,7 +46,7 @@ HcalTB96HCal::~HcalTB96HCal() {
     delete[] dx_2Scintillator;
 }
 
-int HcalTB96HCal::readFile() {
+int CCalHcal::readFile() {
   ///////////////////////////////////////////////////////////////
   //Let's open the file
   cout << " ==> Opening file " << File() << " to read elements..."
@@ -165,5 +164,5 @@ int HcalTB96HCal::readFile() {
 
 }
 
-void HcalTB96HCal::constructDaughters() {
+void CCalHcal::constructDaughters() {
 }

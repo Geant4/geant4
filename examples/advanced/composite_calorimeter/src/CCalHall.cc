@@ -1,23 +1,22 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: HcalTB96.cc
-// Date: 08/00 S.Banerjee
-// Modifications:
+// File: CCalHall.cc
+// Description: CCalHall Geometry factory class for the experimental hall
 ///////////////////////////////////////////////////////////////////////////////
-#include "HcalTB96.hh"
+#include "CCalHall.hh"
 
 #include <fstream.h>
 #include "utils.hh"
 
-#include "HcalTB96HCal.hh"
-#include "CrystalMatrix.hh"
+#include "CCalHcal.hh"
+#include "CCalEcal.hh"
 
 //#define debug
 
-HcalTB96::HcalTB96(const G4String &name): CCalDetector(name) {}
+CCalHall::CCalHall(const G4String &name): CCalDetector(name) {}
 
-HcalTB96::~HcalTB96() {}
+CCalHall::~CCalHall() {}
 
-int HcalTB96::readFile() {
+int CCalHall::readFile() {
   ///////////////////////////////////////////////////////////////
   //Let's open the file
   cout << " ==> Opening file " << File() << " to read elements..."
@@ -48,10 +47,10 @@ int HcalTB96::readFile() {
 
 }
 
-void HcalTB96::constructDaughters() {
-  HcalTB96HCal* hcal = new HcalTB96HCal("HadronCalorimeter");
+void CCalHall::constructDaughters() {
+  CCalHcal* hcal = new CCalHcal("HadronCalorimeter");
   addDetector(hcal);
   
-  CrystalMatrix* xtalmod = new CrystalMatrix("CrystalMatrixModule");
-  addDetector(xtalmod);
+  CCalEcal* ecal = new CCalEcal("CrystalMatrixModule");
+  addDetector(ecal);
 }

@@ -1,50 +1,48 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CrystalMatrix.h
-// Date:             09/99 S.B.
-// Modifications: 06/09/99 S.B.
-//                27/03/00 S.B. In OSCAR
+// File: CCalEcal.hh
+// Description: CCalEcal Geometry factory class for crystal matrix
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef CrystalMatrix_h
-#define CrystalMatrix_h 1
+#ifndef CCalEcal_h
+#define CCalEcal_h 1
 
 #include "CCalDetector.hh"
 
-class CrystalMatrix: public CCalDetector {
+class CCalEcal: public CCalDetector {
 public:
   //Constructor and Destructor
-  CrystalMatrix(const G4String &name):
+  CCalEcal(const G4String &name):
     CCalDetector(name) {}
-  virtual ~CrystalMatrix();
+  virtual ~CCalEcal();
 
   //Get Methods
-  G4String getGenMat() const {return genMat;}
-  double getWidBox()   const {return widBox;}
-  double getLengBox()  const {return lengBox;}
-  double getXpos()     const {return xpos;}
-  double getYpos()     const {return ypos;}
-  double getZpos()     const {return zpos;}
-  double getThetaX()   const {return thetaX;}
-  double getPhiX()     const {return phiX;}
-  double getThetaY()   const {return thetaY;}
-  double getPhiY()     const {return phiY;}
-  double getThetaZ()   const {return thetaZ;}
-  double getPhiZ()     const {return phiZ;}
-  G4String getLayMat()             const {return layMat;}
-  int getLayNum()                  const {return layNum;}
-  double getLayRadius()            const {return layRadius;}
-  double getLayAngle()             const {return layAngle;}
-  double getLengFront()            const {return lengFront;}
-  double getLayPar(unsigned int i) const {return layPar[i];}
+  G4String getGenMat()               const {return genMat;}
+  double getWidBox()                 const {return widBox;}
+  double getLengBox()                const {return lengBox;}
+  double getXpos()                   const {return xpos;}
+  double getYpos()                   const {return ypos;}
+  double getZpos()                   const {return zpos;}
+  double getThetaX()                 const {return thetaX;}
+  double getPhiX()                   const {return phiX;}
+  double getThetaY()                 const {return thetaY;}
+  double getPhiY()                   const {return phiY;}
+  double getThetaZ()                 const {return thetaZ;}
+  double getPhiZ()                   const {return phiZ;}
+  G4String getLayMat()               const {return layMat;}
+  int getLayNum()                    const {return layNum;}
+  double getLayRadius()              const {return layRadius;}
+  double getLayAngle()               const {return layAngle;}
+  double getLengFront()              const {return lengFront;}
+  double getLayPar(unsigned int i)   const {return layPar[i];}
   G4String getCrystMat()             const {return crystMat;}
   int getCrystNum()                  const {return crystNum;}
   double getCrystLength()            const {return crystLength;}
   double getCrystTol()               const {return crystTol;}
   double getCrystPar(unsigned int i) const {return crystPar[i];}
-  G4String getSuppMat()        const {return suppMat;}
-  double getDxSupp()           const {return dxSupp;}
-  double getDySupp()           const {return dySupp;}
-  double getDzSupp()           const {return dzSupp;}
-  double getDistSupp()         const {return distSupp;}
+  G4String getSuppMat()              const {return suppMat;}
+  double getDxSupp()                 const {return dxSupp;}
+  double getDySupp()                 const {return dySupp;}
+  double getDzSupp()                 const {return dzSupp;}
+  double getDistSupp()               const {return distSupp;}
 
 
 protected:

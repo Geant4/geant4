@@ -1,9 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: HcalTestBeam96DetectorConstruction.cc
-// Author: S.Banerjee
-// Modifications: 23/08/00 
+// File: CCalDetectorConstruction.cc
+// Description: CCalDetectorConstruction user action class to construct 
+//              detector geometry
 ///////////////////////////////////////////////////////////////////////////////
-#include "HcalTestBeam96DetectorConstruction.hh"
+#include "CCalDetectorConstruction.hh"
 
 //#define debug
 
@@ -15,7 +15,7 @@
 #include "CCalRotationMatrixFactory.hh"
 #include "CCalSensAssign.hh"
 #include "CCalMagneticField.hh"
-#include "G4HcalTB96.hh"
+#include "CCalG4Hall.hh"
 #include "utils.hh"
 
 #include "CCalEcalOrganization.hh"
@@ -28,11 +28,11 @@
 #include "G4SimpleRunge.hh"
 #include "G4TransportationManager.hh"
 
-HcalTestBeam96DetectorConstruction::HcalTestBeam96DetectorConstruction() {}
+CCalDetectorConstruction::CCalDetectorConstruction() {}
 
-HcalTestBeam96DetectorConstruction::~HcalTestBeam96DetectorConstruction() {}
+CCalDetectorConstruction::~CCalDetectorConstruction() {}
 
-G4VPhysicalVolume* HcalTestBeam96DetectorConstruction::Construct() {
+G4VPhysicalVolume* CCalDetectorConstruction::Construct() {
 
   /////////
   //Instantiate for the first time the materials and rotations
@@ -82,18 +82,18 @@ G4VPhysicalVolume* HcalTestBeam96DetectorConstruction::Construct() {
   }
 
 #ifdef debug
-  G4cout << tab << "HcalTestBeam96DetectorConstruction: Starting timer!!!" 
+  G4cout << tab << "CCalDetectorConstruction: Starting timer!!!" 
          << endl;
   G4Timer timer;
   timer.Start();
 #endif
 
   //HCAL Test Beam 96
-  G4HcalTB96*  testBeamHCal96 = new G4HcalTB96("HcalTB96");
+  CCalG4Hall*  testBeamHCal96 = new CCalG4Hall("HcalTB96");
   testBeamHCal96->constructHierarchy();
 #ifdef debug
   timer.Stop();
-  G4cout << tab << "HcalTestBeam96DetectorConstruction: Total time to "
+  G4cout << tab << "CCalDetectorConstruction: Total time to "
          << "construct the geometry: " << timer << endl;
 #endif //debug
   G4VPhysicalVolume* volume = testBeamHCal96->PhysicalVolume(0);

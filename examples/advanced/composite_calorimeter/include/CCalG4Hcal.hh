@@ -1,24 +1,22 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: G4HcalTB96HCal.hh
-// Date: 08/0
-// Modifications: 
+// File: CCalG4Hcal.hh
 // Description: Euipped to construct the G4 geometry of the hadron calorimeter
 //              in the 96 test beam run
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef G4HcalTB96HCal_h
-#define G4HcalTB96HCal_h 1
+#ifndef CCalG4Hcal_h
+#define CCalG4Hcal_h 1
 
-#include "HcalTB96HCal.hh"
+#include "CCalHcal.hh"
 #include "CCalG4Able.hh"
 #include <vector>
 
 typedef G4LogicalVolume* ptrG4Log;
 
-class G4HcalTB96HCal: public HcalTB96HCal, public CCalG4Able {
+class CCalG4Hcal: public CCalHcal, public CCalG4Able {
 public:
   //Constructor and Destructor
-  G4HcalTB96HCal(const G4String &name);
-  virtual ~G4HcalTB96HCal();
+  CCalG4Hcal(const G4String &name);
+  virtual ~CCalG4Hcal();
 
 protected:
   //This methods actually constructs the volume.

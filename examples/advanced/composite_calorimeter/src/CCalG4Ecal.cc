@@ -1,12 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: G4CrystalMatrix.cc
-// Date: 08/99 S.B.
-// Modifications: 10/99 Naming convention
-//                03/00 In OSCAR
-//                06/09/01 S.B. Top level in logical volume
+// File: CCalG4Ecal.cc
+// Description: CCalG4Ecal Factory class to construct the G4 geometry of the
+//              electromagnetic calorimeter
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "G4CrystalMatrix.hh"
+#include "CCalG4Ecal.hh"
 
 #include "CCalMaterialFactory.hh"
 #include "CCalRotationMatrixFactory.hh"
@@ -28,26 +26,26 @@
 //#define sdebug
 
 //Initialize static logical volumes
-G4LogicalVolume* G4CrystalMatrix::crystalmatrixLog = 0;
+G4LogicalVolume* CCalG4Ecal::crystalmatrixLog = 0;
 
 //Initialize static prefix name
-G4String G4CrystalMatrix::idName = "CrystalMatrix";
+G4String CCalG4Ecal::idName = "CrystalMatrix";
 
 ////////////////////////////////////////////////////////////////////
-// G4CrystalMatrix constructor & destructor...
+// CCalG4Ecal constructor & destructor...
 ////////////////////////////////////////////////////////////////////
 
-G4CrystalMatrix::G4CrystalMatrix(const G4String &name):
-  CrystalMatrix(name), CCalG4Able(name), type(module1) {}
+CCalG4Ecal::CCalG4Ecal(const G4String &name):
+  CCalEcal(name), CCalG4Able(name), type(module1) {}
 
-G4CrystalMatrix::~G4CrystalMatrix() {}
+CCalG4Ecal::~CCalG4Ecal() {}
 
 ////////////////////////////////////////////////////////////////////
-// G4CrystalMatrix methods...
+// CCalG4Ecal methods...
 ////////////////////////////////////////////////////////////////////
 
-G4VPhysicalVolume* G4CrystalMatrix::constructIn(G4VPhysicalVolume* mother) {
-  cout << "==>> Constructing G4Crystalmatrix..." << endl;
+G4VPhysicalVolume* CCalG4Ecal::constructIn(G4VPhysicalVolume* mother) {
+  cout << "==>> Constructing CCalG4Ecal..." << endl;
 
   ///////////////////////////////////////////////////////////////
   // Construction of global volume as a Box
@@ -115,13 +113,13 @@ G4VPhysicalVolume* G4CrystalMatrix::constructIn(G4VPhysicalVolume* mother) {
 				      idName, crystalmatrixLog,
 				      mother, false, num);
   }
-  cout << "<<== End of G4CrystalMatrix construction ..." << endl;
+  cout << "<<== End of CCalG4Ecal construction ..." << endl;
 
   return crystalmatrix;
 }
 
 
-G4LogicalVolume* G4CrystalMatrix::constructGlobal() {
+G4LogicalVolume* CCalG4Ecal::constructGlobal() {
 
   //Pointers to the Materials and Rotation Matrix factory
   CCalMaterialFactory* matfact       = CCalMaterialFactory::getInstance();
@@ -248,7 +246,7 @@ G4LogicalVolume* G4CrystalMatrix::constructGlobal() {
   return glog;
 }
 
-void G4CrystalMatrix::constructSensitive() {
+void CCalG4Ecal::constructSensitive() {
 
 #ifdef debug
   cout << "Now registering CrystalMatrix LogicalVolume's to SD's:" << endl;

@@ -1,19 +1,18 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: G4HcalTB96.hh
-// Date: 08/00
-// Modifications: 
+// File: CCalG4Hall.hh
+// Description: Equipped to construct G4 geometry of the experimental hall
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef G4HcalTB96_h
-#define G4HcalTB96_h 1
+#ifndef CCalG4Hall_h
+#define CCalG4Hall_h 1
 
-#include "HcalTB96.hh"
+#include "CCalHall.hh"
 #include "CCalG4Able.hh"
 
-class G4HcalTB96: public HcalTB96, public CCalG4Able {
+class CCalG4Hall: public CCalHall, public CCalG4Able {
 public:
   //Constructor and Destructor
-  G4HcalTB96(const G4String &name);
-  virtual ~G4HcalTB96();
+  CCalG4Hall(const G4String &name);
+  virtual ~CCalG4Hall();
   
 protected:
   //This methods actually constructs the volume.
