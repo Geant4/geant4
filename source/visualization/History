@@ -1,4 +1,4 @@
-$Id: History,v 1.134 2001-07-10 23:22:25 johna Exp $
+$Id: History,v 1.135 2001-07-14 21:50:38 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,16 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+14th July 2001  John Allison  (vis-V03-02-01)
+- Included raytracer-V03-02-00 (minor cosmetics).
+- Minor changes in G4OpenGLXViewer.cc to eliminate pedantic ISO C++ warnings.
+- Merged vis-V03-02-patch01 (below) to head.
+- Included new disclaimer.
+
+14th July 2001  John Allison (vis-V03-02-patch01 in branch geant4-03-02-branch)
+- Fixed crash in optimised mode: added Initialise() to viewers so
+  that windows are opened after viewers are fully constructed.
 
 10th July 2001  John Allison  (vis-V03-02-00)
 - Removed old-style commands.
