@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.7 1999-04-09 04:51:35 fbehner Exp $
+# $Id: binmake.gmk,v 1.8 1999-04-12 11:12:53 johna Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -139,9 +139,7 @@ ifdef GLOBALLIBS
 else
 # Add - for case of granular libraries - those which are needed
 #   twice because of circular dependencies...
-#
-  LDLIBS3 := -lG4track -lG4volumes -lG4magneticfield
-  LDLIBS3 += -lG4emutils -lG4detector
+#  LDLIBS3 += (none at the moment, hopefully never)
 endif
 
 # LDLIBS3 contains the first set of low level libraries...
@@ -196,6 +194,7 @@ endif
 sources := $(wildcard $(G4TARGET).cc)
 objects := $(patsubst %.cc,$(G4TMPDIR)/exe/%.o,$(sources))
 dependencies := $(patsubst %.cc,$(G4TMPDIR)/exe/%.d,$(sources))
+unique := $(shell echo $$$$)
 
 .PHONY: bin clean clean_bin
 
@@ -276,50 +275,44 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
 	@echo Making dependency for file $<...
-ifeq ($(G4SYSTEM),Linux-g++)
-	@($(ECHO) -n $(G4TMPDIR)/exe/ ; \
+	@($(ECHO) $(G4TMPDIR)/exe/\\c ; \
 	g++ -MM $(RWINCGPP) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
-else
-	@($(ECHO) $(G4TMPDIR)/\\c ; \
-	g++ -MM $(RWINCGPP) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
-endif
 -include $(dependencies)
 
-$(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map: $(G4WORKDIR)/bin/$(G4SYSTEM)/liblist
-	@rm -f libname.map;
-	@rm -f /tmp/G4_all_lib_makefiles;
-	@rm -f /tmp/G4_granlib_makefiles;
-	@rm -f /tmp/G4libname.map.starter;
+$(G4TMP)/$(G4SYSTEM)/libname.map: $(G4BINDIR)/liblist
 	@echo "Searching $(G4INSTALL)/source"
 	@echo '  for GNUmakefiles containing "name" and sorting...'
 	@find $(G4INSTALL)/source \
 	  -name GNUmakefile -exec ggrep -l 'name :=' {} \; \
 	  | sort \
-	  > /tmp/G4_all_lib_makefiles;
+	  > /tmp/G4_all_lib_makefiles.$(unique);
 	@echo "Weeding out global level GNUmakefiles and non-libraries..."
-	@for i in `cat /tmp/G4_all_lib_makefiles`; \
+	@for i in `cat /tmp/G4_all_lib_makefiles.$(unique)`; \
 	do \
 	  ggrep -q SUBDIR $$i || \
 	  ggrep -q G4hepgeometry $$i || \
-	  echo $$i >> /tmp/G4_granlib_makefiles; \
+	  echo $$i >> /tmp/G4_granlib_makefiles.$(unique); \
 	done
 	@echo "Making libname.map starter file..."
-	@touch /tmp/G4libname.map.starter;
-	@for i in `cat /tmp/G4_granlib_makefiles`; \
+	@touch /tmp/G4libname.map.starter.$(unique);
+	@for i in `cat /tmp/G4_granlib_makefiles.$(unique)`; \
 	do \
-	  ggrep 'name :=' $$i | cut -d \  -f 3 >> /tmp/G4libname.map.starter; \
-	  echo $$i >> /tmp/G4libname.map.starter; \
+	  ggrep 'name :=' $$i | cut -d \  -f 3 \
+	  >> /tmp/G4libname.map.starter.$(unique); \
+	  echo $$i >> /tmp/G4libname.map.starter.$(unique); \
 	done
 	@echo "Making libname.map..."
-	$(G4WORKDIR)/bin/$(G4SYSTEM)/liblist -l \
-	  $(G4WORKDIR)/tmp/$(G4SYSTEM)/*/*.d \
-	  < /tmp/G4libname.map.starter \
-	  > $(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map
-	@rm -f /tmp/G4_all_lib_makefiles;
-	@rm -f /tmp/G4_granlib_makefiles;
-	@rm -f /tmp/G4libname.map.starter;
+	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ]; then mkdir $(G4TMP)/$(G4SYSTEM);fi
+	@rm -f $(G4TMP)/$(G4SYSTEM)/libname.map;
+	$(G4BINDIR)/liblist -l \
+	  -d $(G4TMP)/$(G4SYSTEM) \
+	  < /tmp/G4libname.map.starter.$(unique) \
+	  > $(G4TMP)/$(G4SYSTEM)/libname.map
+	@rm -f /tmp/G4_all_lib_makefiles.$(unique);
+	@rm -f /tmp/G4_granlib_makefiles.$(unique);
+	@rm -f /tmp/G4libname.map.starter.$(unique);
 
-$(G4WORKDIR)/bin/$(G4SYSTEM)/liblist: $(G4INSTALL)/config/liblist.c
+$(G4BINDIR)/liblist: $(G4INSTALL)/config/liblist.c
 	@echo "Compiling liblist.c..."
 	@echo "WARNING: This assumes you are using granular libraries!"
 	@echo "WARNING: If you did not intend this, interrupt now (CTRL-C)!"
@@ -332,8 +325,8 @@ $(G4WORKDIR)/bin/$(G4SYSTEM)/liblist: $(G4INSTALL)/config/liblist.c
 	@echo "            or..."
 	@echo "         b) Make granular libraries, i.e., do not use the"
 	@echo "            global target when doing gmake."
-	@cc -g -o $(G4WORKDIR)/bin/$(G4SYSTEM)/liblist \
-	  $(G4INSTALL)/config/liblist.c
+	@if [ ! -d $(G4BINDIR) ] ; then mkdir $(G4BINDIR) ;fi
+	cc -g -o $(G4BINDIR)/liblist $(G4INSTALL)/config/liblist.c
 
 clean:
 	@echo Cleaning up ...
