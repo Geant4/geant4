@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DrawVoxels.hh,v 1.8 2000-04-20 16:49:46 gcosmo Exp $
+// $Id: G4DrawVoxels.hh,v 1.9 2000-06-06 13:18:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,7 +14,8 @@
 // Class description:
 //
 // Utility class for the visualization of voxels in the detector geometry.
-// Define G4DrawVoxelsDebug for debugging information printed to G4cout.
+// Define G4DrawVoxelsDebug in the environment at compilation for debugging
+// information printed to G4cout.
 
 // History:
 // 03/08/1999 The G4VisAttributes have been made member data for lifetime
@@ -38,9 +39,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
 
-#define voxel_width 0;
-
-#define G4DrawVoxelsDebug
+#define voxel_width 0
 
 // ***********************************************************************
 
