@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.29 2002-06-07 10:25:02 flongo Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.30 2002-11-08 07:59:05 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -39,6 +39,7 @@
 // 11.08.2001 MGP - Major revision according to a design iteration
 // 06.10.2001 MGP - Added strategy to test range for secondary generation
 // 05.06.2002 F.Longo and G.Depaola  - bug fixed in angular distribution
+// 20.10.2002 G. Depaola - Change sampling method of theta
 //
 // --------------------------------------------------------------------
 
@@ -117,15 +118,6 @@ void G4LowEnergyRayleigh::BuildPhysicsTable(const G4ParticleDefinition& photon)
 G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, 
 						     const G4Step& aStep)
 {
-  // The scattered gamma energy is sampled according to Form Factors 
-  // multiplied by the Rayleigh distribution with a pure rejection technique.  
-  // EGS4 W.R. Nelson et al. The EGS4 Code System. SLAC-Report-265 , December 1985 
-  // Expression of the angular distribution as Rayleigh distribution and 
-  // Form factors is taken from D. E. Cullen "A simple model of photon transport" 
-  // NIM B Phys. 101 (1995). Method of sampling with form factors is different.
-  // Reference to the article is from J. Stepanek New Photon, Positron
-  // and Electron Interaction Data for GEANT in Energy Range from 1 eV to 10 TeV 
-  // (draft). 
 
   aParticleChange.Initialize(aTrack);
 
@@ -147,30 +139,36 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack,
   G4Material* material = aTrack.GetMaterial();
   G4int Z = crossSectionHandler->SelectRandomAtom(material,photonEnergy0);
   
-  // Sample the energy of the scattered photon 
+  // Sample the angle of the scattered photon 
 
   G4double wlPhoton = h_Planck*c_light/photonEnergy0;
 
-  G4double gReject;
+  G4double gReject,x,dataFormFactor;
   G4double randomFormFactor;
   G4double cosTheta;
   G4double sinTheta;
+  G4double fcostheta;
 
   do
     {
-      G4double thetaHalf = G4UniformRand() * pi / 2.;
-      G4double sinThetaHalf = sin(thetaHalf);
-      G4double x = sinThetaHalf / (wlPhoton/cm);
-      G4double dataFormFactor = formFactorData->FindValue(x,Z-1);
+      do
+      {
+      cosTheta = 2. * G4UniformRand() - 1.;
+      fcostheta = ( 1. + cosTheta*cosTheta)/2.;
+      } while (fcostheta < G4UniformRand());
+
+      G4double sinThetaHalf = sqrt((1. - cosTheta) / 2.);
+      x = sinThetaHalf / (wlPhoton/cm);
+      if (x > 1.e+005) 
+         dataFormFactor = formFactorData->FindValue(x,Z-1);
+      else
+         dataFormFactor = formFactorData->FindValue(0.,Z-1);
       randomFormFactor = G4UniformRand() * Z * Z;
-      G4double theta = thetaHalf*2;
-      cosTheta = cos(theta);
-      sinTheta = sin(theta);
-      G4double sqrRayl = sqrt(27./32.)*(1 + cosTheta * cosTheta)*sinTheta;
-      gReject = sqrRayl * dataFormFactor * dataFormFactor;
+      sinTheta = sqrt(1. - cosTheta*cosTheta);
+      gReject = dataFormFactor * dataFormFactor;
       
     } while( gReject < randomFormFactor);
-  
+
   // Scattered photon angles. ( Z - axis along the parent photon)
   G4double phi = twopi * G4UniformRand() ;
   G4double dirX = sinTheta*cos(phi);
