@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.18 2002-05-15 10:06:33 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.19 2002-05-17 17:56:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,9 +93,9 @@ G4SmartVoxelHeader::G4SmartVoxelHeader(G4LogicalVolume* pVolume,
 // ***************************************************************************
 //
 G4SmartVoxelHeader::G4SmartVoxelHeader(G4LogicalVolume* pVolume,
-               const G4VoxelLimits& pLimits,
-               const G4VolumeNosVector* pCandidates,
-               G4int pSlice)
+                                 const G4VoxelLimits& pLimits,
+                                 const G4VolumeNosVector* pCandidates,
+                                       G4int pSlice)
   : fminEquivalent(pSlice),
     fmaxEquivalent(pSlice),
     fparamAxis(kUndefined)

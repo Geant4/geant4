@@ -21,153 +21,192 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.8 2001-07-11 09:59:20 gunter Exp $
+// $Id: G4LogicalVolume.cc,v 1.9 2002-05-17 17:56:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4LogicalVolume Implementation
 //
 // History:
-// 12.02.99 S.Giani: Deafult initialization of voxelization quality.
-// 10.20.97 - P. MoraDeFreitas : "Fast" replaces "Parameterisation" in
-//            class/method names. (release B.00 for parameterisation).
-// 04.08.97 P.MoraDeFreitas/J.A. Added methods for ParameterisedSimulation 
-// 19.08.96 P.Kent Modified for G4VSensitive Detector
-// 11.07.95 P.Kent Initial version
+// 17.05.02 G.Cosmo: Added flag for optional optimisation
+// 12.02.99 S.Giani: Default initialization of voxelization quality
+// 04.08.97 P.M.DeFreitas: Added methods for parameterised simulation 
+// 19.08.96 P.Kent: Modified for G4VSensitive Detector
+// 11.07.95 P.Kent: Initial version
+// ********************************************************************
 
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
 
-// Constructor - set member data and add to logical Store, zero voxel ptr
-//               Initialises daughter vector to 0 length
+// ********************************************************************
+// Constructor - sets member data and adds to logical Store,
+//               voxel pointer for optimisation set to 0 by default.
+//               Initialises daughter vector to 0 length.
+// ********************************************************************
 //
-G4LogicalVolume::G4LogicalVolume( G4VSolid *pSolid, G4Material *pMaterial,
-				  const G4String& name,
-				  G4FieldManager *pFieldMgr,
-				  G4VSensitiveDetector *pSDetector,
-				  G4UserLimits *pULimits)
- : fDaughters(0,(G4VPhysicalVolume*)0), fFieldManager(pFieldMgr), fVoxel(0),
-   fSmartless(2.), fVisAttributes (0), fFastSimulationManager (0), fIsEnvelope(FALSE)
+G4LogicalVolume::G4LogicalVolume( G4VSolid* pSolid,
+                                  G4Material* pMaterial,
+                            const G4String& name,
+                                  G4FieldManager* pFieldMgr,
+                                  G4VSensitiveDetector* pSDetector,
+                                  G4UserLimits* pULimits,
+                                  G4bool optimise )
+ : fDaughters(0,(G4VPhysicalVolume*)0), fFieldManager(pFieldMgr),
+   fVoxel(0), fOptimise(optimise), fSmartless(2.), fVisAttributes (0),
+   fFastSimulationManager (0), fIsEnvelope(false)
 {
-    SetSolid(pSolid);
-    SetMaterial(pMaterial);
-    SetName(name);
-    SetSensitiveDetector(pSDetector);
-    SetUserLimits(pULimits);    
-    // Add to solid Store
-    G4LogicalVolumeStore::Register(this);
+  SetSolid(pSolid);
+  SetMaterial(pMaterial);
+  SetName(name);
+  SetSensitiveDetector(pSDetector);
+  SetUserLimits(pULimits);    
+  //
+  // Add to solid Store
+  //
+  G4LogicalVolumeStore::Register(this);
 }
 
-// Destructor - remove from solid Store
+// ********************************************************************
+// Destructor - Removes itself from solid Store
 // NOTE: Not virtual
+// ********************************************************************
 //
 G4LogicalVolume::~G4LogicalVolume()
 {
-    G4LogicalVolumeStore::DeRegister(this);
+  G4LogicalVolumeStore::DeRegister(this);
 }
 
-//  As this method is recursive, inlining it is harder (and asking for it 
-//  is pointless if not counterproductive: it will increase code size)
+// ********************************************************************
+// SetFastSimulationManager
+//
+// NOTE: recursive method, not inlined.
+// ********************************************************************
 //
 void
-G4LogicalVolume::SetFastSimulationManager(
-                         G4FastSimulationManager* pNewFastSimul,
-	                 G4bool IsEnvelope) 
+G4LogicalVolume::
+SetFastSimulationManager( G4FastSimulationManager* pNewFastSimul,
+                          G4bool IsEnvelope ) 
 {
-  if(!fIsEnvelope || IsEnvelope) {
-     fIsEnvelope=IsEnvelope;
-     fFastSimulationManager = pNewFastSimul;
+  if( !fIsEnvelope || IsEnvelope )
+  {
+    fIsEnvelope = IsEnvelope;
+    fFastSimulationManager = pNewFastSimul;
 
-     G4int NoDaughters=GetNoDaughters();
-     while((NoDaughters--)>0){
-        G4LogicalVolume *DaughterLogVol; 
-        DaughterLogVol= GetDaughter(NoDaughters)->GetLogicalVolume();
-        if(DaughterLogVol->GetFastSimulationManager() != pNewFastSimul) {
-           DaughterLogVol->SetFastSimulationManager(pNewFastSimul,FALSE);
-        }
-     }
+    G4int NoDaughters = GetNoDaughters();
+    while ( (NoDaughters--)>0 )
+    {
+      G4LogicalVolume* DaughterLogVol; 
+      DaughterLogVol = GetDaughter(NoDaughters)->GetLogicalVolume();
+      if( DaughterLogVol->GetFastSimulationManager() != pNewFastSimul )
+      {
+        DaughterLogVol->SetFastSimulationManager(pNewFastSimul,false);
+      }
+    }
   }
 }
 
+// ********************************************************************
+// ClearEnvelopeForFastSimulation
+// ********************************************************************
+//
 void
-G4LogicalVolume::ClearEnvelopeForFastSimulation(G4LogicalVolume* motherLogVol) 
+G4LogicalVolume::ClearEnvelopeForFastSimulation( G4LogicalVolume* motherLogVol )
 {
-  if( fIsEnvelope ) {
-     G4FastSimulationManager* NewFastSimulationVal=NULL;
+  if( fIsEnvelope )
+  {
+    G4FastSimulationManager* NewFastSimulationVal = 0;
 
-     // This is no longer an envelope !
-     fIsEnvelope=FALSE;
+    // This is no longer an envelope !
+    //
+    fIsEnvelope = false;
 
-     if( motherLogVol == NULL ) {
-	motherLogVol = this->FindMotherLogicalVolumeForEnvelope();
-
-     } else {
-        //  Check that motherLogVol is this' mother.
-        //   If not, raise exception and set it to NULL.
-        if ( FALSE ){
-	   G4Exception(
-            "G4LogicalVolume::ClearEnvelope Gave wrong mother LogicalVolume" );
-	   motherLogVol = NULL;
-	}
-     }
-     // Reset the ParameterisedSimulation values of self and all daughters
-     //    (after ensuring the mother was given correctly or was found)
-     if( motherLogVol != NULL ) {
-	  NewFastSimulationVal = motherLogVol->
-	    GetFastSimulationManager();
-	  this->SetFastSimulationManager (NewFastSimulationVal,
-					    FALSE);
-     }
-  }else{
-     G4Exception("Called G4LogicalVolume::ClearEnvelope for a non-envelope Logical Volume" );
+    if( motherLogVol == 0 )
+    {
+      motherLogVol = this->FindMotherLogicalVolumeForEnvelope();
+    }
+    else
+    {
+      // Check that "motherLogVol" is this mother.
+      // If not, raise exception and set it to 0.
+      //
+      if ( false )
+      {
+        G4cerr << "ERROR - Wrong mother LogicalVolume !" << G4endl;
+        G4Exception("ERROR - G4LogicalVolume::ClearEnvelopeForFastSimulation");
+        motherLogVol = 0;
+      }
+    }
+    // Reset its ParameterisedSimulation values and those of all daughters
+    // (after ensuring the mother was given correctly or was found)
+    //
+    if( motherLogVol != 0 )
+    {
+      NewFastSimulationVal = motherLogVol->GetFastSimulationManager();
+      this->SetFastSimulationManager(NewFastSimulationVal, false);
+    }
+  }
+  else
+  {
+    G4cerr << "ERROR - Called ClearEnvelope() for non-envelope Logical Volume !"
+           << G4endl;
+    G4Exception("ERROR - G4LogicalVolume::ClearEnvelope");
   }
 }
 
+// ********************************************************************
+// SetFieldManager
+// ********************************************************************
+//
 void
 G4LogicalVolume::SetFieldManager(G4FieldManager* pNewFieldMgr,
                                  G4bool          forceAllDaughters) 
 {
   fFieldManager = pNewFieldMgr;
 
-  G4int NoDaughters=GetNoDaughters();
-  while((NoDaughters--)>0){
-    G4LogicalVolume *DaughterLogVol; 
-    DaughterLogVol= GetDaughter(NoDaughters)->GetLogicalVolume();
-    if(forceAllDaughters || (DaughterLogVol->GetFieldManager() != 0)) {
+  G4int NoDaughters = GetNoDaughters();
+  while ( (NoDaughters--)>0 )
+  {
+    G4LogicalVolume* DaughterLogVol; 
+    DaughterLogVol = GetDaughter(NoDaughters)->GetLogicalVolume();
+    if ( forceAllDaughters || (DaughterLogVol->GetFieldManager() != 0) )
+    {
       DaughterLogVol->SetFieldManager(pNewFieldMgr, forceAllDaughters);
     }
   }
-
 }
 
-//  The following method returns a meaningful result IF and only IF
-//  the current logical volume has exactly one physical volume that
-//  uses it.
+
+// ********************************************************************
+// FindMotherLogicalVolumeForEnvelope
+//
+// Returns a meaningful result IF and only IF the current logical
+// volume has exactly one physical volume that uses it.
+// ********************************************************************
 //
 G4LogicalVolume* 
 G4LogicalVolume::FindMotherLogicalVolumeForEnvelope()
 {
-  G4LogicalVolume* motherLogVol= 0;
-  G4LogicalVolumeStore *Store = G4LogicalVolumeStore::GetInstance();
+  G4LogicalVolume* motherLogVol = 0;
+  G4LogicalVolumeStore* Store = G4LogicalVolumeStore::GetInstance();
 
   // Look for the current volume's mother volume.
-
-  for (size_t LV=0;LV < Store->size(); LV++){
-     G4LogicalVolume *aLogVol;
-    
-     aLogVol= (*Store)[LV];
-     if( (aLogVol!=this) &&         // Don't look for it inside itself...
-	(aLogVol->GetFastSimulationManager()!=NULL)){
-      
-        for (G4int daughter=0; daughter < aLogVol->GetNoDaughters();
-	     daughter++){
-	   if( aLogVol->GetDaughter(daughter)->GetLogicalVolume()==this) { 
-	      // "- Oh Dear, aLogVol is my mother !!!"
-	      motherLogVol = aLogVol;
-	      break;
-	   }
-	}
-     }
+  //
+  for ( size_t LV=0; LV < Store->size(); LV++ )
+  {
+    G4LogicalVolume* aLogVol = (*Store)[LV]; // Don't look for it inside itself!
+    if( (aLogVol!=this) && (aLogVol->GetFastSimulationManager()!=0) )
+    {
+      for ( G4int daughter=0; daughter<aLogVol->GetNoDaughters(); daughter++ )
+      {
+        if( aLogVol->GetDaughter(daughter)->GetLogicalVolume()==this )
+        { 
+          // aLogVol is the mother !!!
+          //
+          motherLogVol = aLogVol;
+          break;
+        }
+      }
+    }
   }
   return motherLogVol;
 }

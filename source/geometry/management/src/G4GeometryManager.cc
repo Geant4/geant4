@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.9 2002-04-26 16:23:37 gcosmo Exp $
+// $Id: G4GeometryManager.cc,v 1.10 2002-05-17 17:56:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
@@ -135,9 +135,10 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
        delete head;
        volume->SetVoxelHeader(0);
      }
-     if ((volume->GetNoDaughters()>=kMinVoxelVolumesLevel1&&allOpts) ||
-         (volume->GetNoDaughters()==1 &&
-          volume->GetDaughter(0)->IsReplicated()==true))
+     if (    (volume->IsToOptimise())
+          && (volume->GetNoDaughters()>=kMinVoxelVolumesLevel1&&allOpts)
+          || ( (volume->GetNoDaughters()==1)
+            && (volume->GetDaughter(0)->IsReplicated()==true) ) ) 
      {
 #ifdef G4GEOMETRY_VOXELDEBUG
        G4cout << "**** G4GeometryManager::BuildOptimisations" << G4endl
