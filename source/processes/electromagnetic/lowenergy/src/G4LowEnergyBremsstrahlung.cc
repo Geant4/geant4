@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.3 1999-05-29 14:17:18 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.4 1999-06-01 22:40:17 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,12 +73,12 @@ G4LowEnergyBremsstrahlung::~G4LowEnergyBremsstrahlung()
      }
 
      if (ATable) {
-        ATable->clearAndDestroy();
+       // ATable->clearAndDestroy();
         delete ATable;
      }
 
      if (BTable) {
-        BTable->clearAndDestroy();
+       //  BTable->clearAndDestroy();
         delete BTable;
      }
 
@@ -122,10 +122,10 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
     BuildATable();
     BuildBTable();
 
-  if(&aParticleType==G4Electron::Electron())
-    PrintInfoDefinition();
+    //  if(&aParticleType==G4Electron::Electron())
+    // PrintInfoDefinition();
+    //}
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType)
@@ -493,7 +493,8 @@ void G4LowEnergyBremsstrahlung::BuildCrossSectionTable(){
  
   if (theCrossSectionTable) {
     
-    theCrossSectionTable->clearAndDestroy(); delete theCrossSectionTable; 
+    theCrossSectionTable->clearAndDestroy(); 
+    delete theCrossSectionTable; 
   }
 
   G4int par[4] = {82, 0, 0, 0}; G4String name("eedl.asc");
@@ -506,23 +507,44 @@ void G4LowEnergyBremsstrahlung::BuildCrossSectionTable(){
 
 void G4LowEnergyBremsstrahlung::BuildATable(){
 
-  if (ATable) {
+  char* path = getenv("G4LEDATA");
+
+  if(!path){ 
     
-    ATable->clearAndDestroy(); delete ATable; 
+    G4Exception("G4LEDATA environment variable not set");
   }
 
-  RWTPtrSlist< RWTPtrSlist<G4DataVector> > AlocTable; 
-  ifstream afile("./data/bremstr.acoeff");
+  G4String path_string(path);
+  G4String _filename("bremstr.acoeff");
+  G4String dir_file = path_string + "/" + _filename;
+  ifstream afile;
+  afile.open(dir_file.data(), ios::in | ios::nocreate);
+  filebuf* lsdp = afile.rdbuf();
+
+  if(!lsdp->is_open()){
+
+    G4String excep = "Error!!!! data file: " + dir_file + " NOT found";
+    G4Exception(excep);
+  }
+
+  if (ATable) {
+    
+    //ATable->clearAndDestroy(); 
+    delete ATable; 
+  }
+
+  ATable = new G4SecondLevel();
+  
   G4double a,b;
   G4int k = 0;
-  RWTPtrSlist<G4DataVector>* OneElementATable = new RWTPtrSlist<G4DataVector>();
-  OneElementATable->insert(new G4DataVector());
-  OneElementATable->insert(new G4DataVector());
+  G4FirstLevel* OneElementATable = new G4FirstLevel();
+  OneElementATable->insert(new G4Data());
+  OneElementATable->insert(new G4Data());
 
   for(;;){
 
     afile>>a>>b;
-
+    cout<<"a: "<<a<<" b: "<<b<<endl;
     if(afile.eof()){
 
       afile.close();
@@ -530,37 +552,56 @@ void G4LowEnergyBremsstrahlung::BuildATable(){
     }
 
     if(a){
-
+      
       (*OneElementATable)[0]->append(a);
       (*OneElementATable)[1]->append(b);
     }
 
     else{
 
-      AlocTable.insertAt(k,OneElementATable);
-      OneElementATable = new RWTPtrSlist<G4DataVector>();
-      OneElementATable->insert(new G4DataVector());
-      OneElementATable->insert(new G4DataVector());
+      ATable->insertAt(k,OneElementATable);
+      OneElementATable = new G4FirstLevel();
+      OneElementATable->insert(new G4Data());
+      OneElementATable->insert(new G4Data());
       k++;
     }
   }
-
-  ATable = new  RWTPtrSlist< RWTPtrSlist<G4DataVector> >(AlocTable);
 }
 
 void G4LowEnergyBremsstrahlung::BuildBTable(){
 
-  if (BTable) {
+  char* path = getenv("G4LEDATA");
+
+  if(!path){ 
     
-    BTable->clearAndDestroy(); delete BTable; 
+    G4Exception("G4LEDATA environment variable not set");
   }
 
-  ifstream bfile("./data/bremstr.bcoeff");
+  G4String path_string(path);
+  G4String _filename("bremstr.bcoeff");
+  G4String dir_file = path_string + "/" + _filename;
+  ifstream bfile;
+  bfile.open(dir_file.data(), ios::in | ios::nocreate);
+  filebuf* lsdp = bfile.rdbuf();
+
+  if(!lsdp->is_open()){
+
+    G4String excep = "Error!!!! data file: " + dir_file + " NOT found";
+    G4Exception(excep);
+  }
+
+  if (BTable) {
+    
+    //BTable->clearAndDestroy(); 
+    delete BTable; 
+  }
+
   G4double a,b;
 
-  RWTPtrSlist<G4DataVector> BlocTable;
-  BlocTable.insert(new G4DataVector());
-  BlocTable.insert(new G4DataVector());
+  BTable = new G4FirstLevel();
+
+  BTable->insert(new G4Data());
+  BTable->insert(new G4Data());
 
   for(;;){
 
@@ -572,12 +613,11 @@ void G4LowEnergyBremsstrahlung::BuildBTable(){
       break;
     }
 
-    BlocTable[0]->append(a);
-    BlocTable[1]->append(b);
+    (*BTable)[0]->insert(a);
+    (*BTable)[1]->insert(b);
     
   }
 
-  BTable = new RWTPtrSlist<G4DataVector>(BlocTable);
 }
 
 
