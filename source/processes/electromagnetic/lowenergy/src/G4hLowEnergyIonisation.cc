@@ -1261,7 +1261,7 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
   // Select atom and shell
   G4int Z = SelectRandomAtom(couple, KineticEnergy);
 
-   G4cout << "Fluorescence is switched :" << theFluo << G4endl; 
+  //   G4cout << "Fluorescence is switched :" << theFluo << G4endl; 
 
   if(theFluo && Z > 5) {
     
@@ -1271,7 +1271,7 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
       // Atom total cross section for the Empiric Model    
       shellCS->SetTotalCS(totalCrossSectionMap[Z]);
       if (shell==1) {
-	aParticleChange.SetLocalEnergyDeposit (KineticEnergy);
+	aParticleChange.ProposeLocalEnergyDeposit (KineticEnergy);
 	aParticleChange.ProposeEnergy(0);
       }
     }
@@ -1358,7 +1358,7 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
     }
 
   aParticleChange.ProposeEnergy( finalKineticEnergy );
-  aParticleChange.SetLocalEnergyDeposit (edep);
+  aParticleChange.ProposeLocalEnergyDeposit (edep);
   aParticleChange.SetNumberOfSecondaries(totalNumber);
   aParticleChange.AddSecondary(theDeltaRay);
 
