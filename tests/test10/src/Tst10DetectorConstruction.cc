@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10DetectorConstruction.cc,v 1.10 2004-11-12 14:42:56 link Exp $
+// $Id: Tst10DetectorConstruction.cc,v 1.11 2005-03-18 15:54:02 link Exp $
 // ------------------------------------------------------------
 //  GEANT 4 class header file 
 //
@@ -49,6 +49,7 @@
 #include "G4Polycone.hh"
 #include "G4TwistedBox.hh"
 #include "G4TwistedTrap.hh"
+#include "G4TwistedTrd.hh"
 #include "G4LogicalBorderSurface.hh"
 #include "G4OpticalSurface.hh"
 #include "G4LogicalVolume.hh"
@@ -143,9 +144,29 @@ Tst10DetectorConstruction::SelectDetector( const G4String& val )
   {
     aVolume = new G4TwistedBox("aTwistedBox",40*deg,5*cm,10*cm,15*cm);
   }
+  else if (val == "TwistedTrd")
+  {
+    aVolume = new G4TwistedTrd("aTwistedTrd",5*cm,10*cm,8*cm,15*cm,18*cm,20*deg);
+  }
   else if (val == "TwistedTrap")
   {
     aVolume = new G4TwistedTrap("aTwistedTrap",40*deg,5*cm,10*cm,8*cm,15*cm);
+  }
+  else if ( val == "TwistedTrap2") 
+  {
+    aVolume = new G4TwistedTrap("aTwistedTrap2",
+				   20*deg,    // twist angle
+				   80*cm,         // half z length
+				   10*deg,      // direction between end planes
+				   40*deg,        // defined by polar and azimutal angles.
+				   8*cm,        // half y length at -pDz
+				   11*cm,        // half x length at -pDz,-pDy
+				   16*cm,        // half x length at -pDz,+pDy
+				   8*cm,        // half y length at +pDz
+				   11*cm,         // half x length at +pDz,-pDy
+				   16*cm,        // half x length at +pDz,+pDy
+				   -50*deg        // tilt angle at +pDz
+				   ) ;
   }
   else
   {
