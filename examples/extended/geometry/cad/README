@@ -1,0 +1,25 @@
+$Id: README,v 1.1 2002-06-20 10:00:54 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                     CAD STEP interface example 
+                     --------------------------
+
+This is an example using particle tracking in STEP CAD-models through
+AP203 compliant STEP descriptions. The model can be changed by invoking
+the UI command "/mydet/SelectDetector <model-name>", where
+<model-name> is the name of the STEP file <model-name>.stp which
+describes the detector geometry.
+Due to limitations of the NIST STEP reader, a correct behavior can be
+assured only for non-ISO/ANSI setup for the supported compilers as
+specified in the notes for the SCL-3.2 package. Therefore, the GNUmakefile
+in this example has been modified to force non-ISO/ANSI compilation on
+Linux platforms.
+AP203 STEP files showing errors in the reading process, can be formatted
+using the PERL scripts provided in the "scripts" directory; most patterns
+will be corrected. If errors are still observed, please inform us so that
+the scripts can be enhanced.
+

@@ -1,0 +1,15 @@
+/mydet/SelectDetector rod_place_asm
+/tracking/verbose 1
+#
+# Initialize GEANT4
+#
+/run/initialize
+#
+# Run 3 events
+#
+/run/beamOn 3
+#
+# Termination
+#
+exit
+
