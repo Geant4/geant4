@@ -1,4 +1,4 @@
-$Id: History,v 1.80 2000-05-22 08:46:41 johna Exp $
+$Id: History,v 1.81 2000-05-22 09:09:23 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,8 +25,10 @@ History file for visualization category
 ---------------------------------------
 
 22nd May 2000  John Allison  (vis-V01-01-05)
-- Many bug fixes in OpenGL (opengl-V01-01-00) - see OpenGL/History.  Main
-  feature: workaround for bug in Mesa which slowed OpenGLXm.
+- Many bug fixes from in OpenGL (opengl-V01-01-00) - see OpenGL/History.  Main
+  features:
+  o workaround for bug in Mesa which slowed OpenGLXm (Guy Barrand).
+  o multiple OpenGLXm windows no longer cause crash on exit (Guy).
 - modeling-V01-01-00: Added G4VTreeGraphicsScene (DTREE).
 - G4Scene::IsEmpty if empty of RunDurationModels - VisManager adds world in
   this case.
