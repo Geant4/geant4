@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.6 1999-04-14 10:28:26 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.7 1999-04-15 04:34:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,6 +53,8 @@ G4IonTable::~G4IonTable()
   for (idx=(fIonList->entries()-1); idx >=0 ; idx--) {
     G4ParticleDefinition* particle = (*fIonList)(idx);
     name = particle->GetParticleName();
+
+    // keep the particle object if static
     if        (name == "alpha") {
  
     } else if (name == "deuteron") {
@@ -73,7 +75,7 @@ G4IonTable::~G4IonTable()
       delete particle;
     }
   }
-  // remove all scontents in the Ion List 
+  // remove all contents in the Ion List 
   fIonList->clear();
 
   delete fIonList;
@@ -149,23 +151,40 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
       G4cout << "G4IonTable::GetIon() : create ion of " << name << endl;
     } 
 #endif
+    // create command string for addProcManager
     char cmdAdd[60];
     ostrstream osAdd(cmdAdd,60);
     osAdd << "/run/particle/addProcManager "<< name << '\0';
+    // set /control/verbose 0
+    G4int tempVerboseLevel = G4UImanager::GetUIpointer()->GetVerboseLevel();
+    G4UImanager::GetUIpointer()->SetVerboseLevel(0);
+    // issue /run/particle/addProcManage
     G4UImanager::GetUIpointer()->ApplyCommand(cmdAdd);
-    
-    G4ParticleDefinition* alpha=G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
-    if (alpha->GetEnergyCuts() != 0) {
-      ion->SetCuts( alpha->GetLengthCuts());
+    // retreive  /control/verbose 
+    G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
+ 
+    // Set cut value same as "GenericIon"
+    G4ParticleDefinition* genericIon=G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
+
+    if (genericIon->GetEnergyCuts() != 0) {
+      ion->SetCuts( genericIon->GetLengthCuts());
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()> 1) {
-      G4cout << "G4IonTable::GetIon() : cut value =" << alpha->GetLengthCuts()/mm << "[mm]" <<endl;
-    } 
+      if (GetVerboseLevel()> 1) {
+	G4cout << "G4IonTable::GetIon() : cut value =" << genericIon->GetLengthCuts()/mm << "[mm]" <<endl;
+      } 
 #endif      
+      // Build Physics Tables for the ion
+      // create command string for buildPhysicsTable
       char cmdBld[60];
       ostrstream osBld(cmdBld,60);
       osBld << "/run/particle/buildPhysicsTable "<< name << '\0';
+      // set /control/verbose 0
+      tempVerboseLevel = G4UImanager::GetUIpointer()->GetVerboseLevel();
+      G4UImanager::GetUIpointer()->SetVerboseLevel(0);
+      // issue /run/particle/buildPhysicsTable
       G4UImanager::GetUIpointer()->ApplyCommand(cmdBld);
+      // retreive  /control/verbose 
+      G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
     }
   }
   return ion;  
