@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastStep.cc,v 1.12 2003-06-16 17:12:39 gunter Exp $
+// $Id: G4FastStep.cc,v 1.13 2004-11-25 23:34:13 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -83,7 +83,7 @@ void G4FastStep::Initialize(const G4FastTrack& fastTrack)
 void G4FastStep::KillPrimaryTrack()
 {
   SetPrimaryTrackFinalKineticEnergy(0.) ;
-  SetStatusChange(fStopAndKill) ;
+  ProposeTrackStatus(fStopAndKill) ;
 }
 
 //--------------------
@@ -91,8 +91,8 @@ void G4FastStep::KillPrimaryTrack()
 //--------------------
 void 
 G4FastStep::
-SetPrimaryTrackFinalPosition(const G4ThreeVector &position,
-			     G4bool localCoordinates)
+ProposePrimaryTrackFinalPosition(const G4ThreeVector &position,
+				 G4bool localCoordinates)
 {
   // Compute the position coordinate in global
   // reference system if needed ...
@@ -104,13 +104,21 @@ SetPrimaryTrackFinalPosition(const G4ThreeVector &position,
   thePositionChange = globalPosition;
 }
 
+void 
+G4FastStep::
+SetPrimaryTrackFinalPosition(const G4ThreeVector &position,
+			     G4bool localCoordinates)
+{
+  ProposePrimaryTrackFinalPosition(position, localCoordinates);
+}
+
 //--------------------
 //
 //--------------------
 void 
 G4FastStep::
-SetPrimaryTrackFinalMomentum(const G4ThreeVector &momentum,
-			     G4bool localCoordinates)
+ProposePrimaryTrackFinalMomentumDirection(const G4ThreeVector &momentum,
+					  G4bool localCoordinates)
 {
   // Compute the momentum in global reference
   // system if needed ...
@@ -122,15 +130,22 @@ SetPrimaryTrackFinalMomentum(const G4ThreeVector &momentum,
   SetMomentumChange(globalMomentum.unit());
 }
 
+void 
+G4FastStep::
+SetPrimaryTrackFinalMomentum(const G4ThreeVector &momentum,
+			     G4bool localCoordinates)
+{
+  ProposePrimaryTrackFinalMomentumDirection(momentum, localCoordinates);
+}
 
 //--------------------
 //
 //--------------------
 void 
 G4FastStep::
-SetPrimaryTrackFinalKineticEnergyAndDirection(G4double kineticEnergy,
-					      const G4ThreeVector &direction,
-					      G4bool localCoordinates)
+ProposePrimaryTrackFinalKineticEnergyAndDirection(G4double kineticEnergy,
+						  const G4ThreeVector &direction,
+						  G4bool localCoordinates)
 {
   // Compute global direction if needed...
   G4ThreeVector globalDirection = direction;
@@ -142,13 +157,22 @@ SetPrimaryTrackFinalKineticEnergyAndDirection(G4double kineticEnergy,
   SetPrimaryTrackFinalKineticEnergy(kineticEnergy);
 }
 
+void 
+G4FastStep::
+SetPrimaryTrackFinalKineticEnergyAndDirection(G4double kineticEnergy,
+					      const G4ThreeVector &direction,
+					      G4bool localCoordinates)
+{
+  ProposePrimaryTrackFinalKineticEnergyAndDirection(kineticEnergy, direction, localCoordinates);
+}
+
 //--------------------
 //
 //--------------------
 void 
 G4FastStep::
-SetPrimaryTrackFinalPolarization(const G4ThreeVector &polarization,
-				 G4bool localCoordinates)
+ProposePrimaryTrackFinalPolarization(const G4ThreeVector &polarization,
+				     G4bool localCoordinates)
 {
   // Compute polarization in global system if needed:
   G4ThreeVector globalPolarization(polarization);
@@ -157,6 +181,14 @@ SetPrimaryTrackFinalPolarization(const G4ThreeVector &polarization,
       TransformAxis(globalPolarization);  
   // Feed the particle globalPolarization:
   thePolarizationChange = globalPolarization;
+}
+
+void 
+G4FastStep::
+SetPrimaryTrackFinalPolarization(const G4ThreeVector &polarization,
+				 G4bool localCoordinates)
+{
+  ProposePrimaryTrackFinalPolarization(polarization, localCoordinates);
 }
 
 //--------------------
