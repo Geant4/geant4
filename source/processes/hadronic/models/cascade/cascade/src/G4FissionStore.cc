@@ -23,7 +23,7 @@ G4FissionConfiguration G4FissionStore::generateConfiguration(G4double amax,
 
 // G4cout << " amax " << amax << " ic " << configurations.size() << G4endl;
 
-  for(G4int i = 0; i < configurations.size(); i++) {
+  for(G4int i = 0; i < G4int(configurations.size()); i++) {
 
     G4double ez = configurations[i].ezet;
     G4double pr = ez - amax;
@@ -41,7 +41,7 @@ G4FissionConfiguration G4FissionStore::generateConfiguration(G4double amax,
   G4double st = totProb * rand;
   G4int igen = 0;
 
-  while (probs[igen] <= st && igen < configurations.size()) igen++;
+  while (probs[igen] <= st && igen < G4int(configurations.size())) igen++;
 
 // G4cout << " igen " << igen << G4endl;
 

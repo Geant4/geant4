@@ -8,7 +8,7 @@ typedef vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef vector<G4InuclNuclei>::iterator nucleiIterator;
 	 
 G4InuclCollider::G4InuclCollider()
-  : verboseLevel(2) {
+  : verboseLevel(1) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4InuclCollider::G4InuclCollider" << G4endl;
@@ -32,7 +32,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
     dynamic_cast<G4InuclElementaryParticle*>(target);
   
   if(particle1 && particle2) { // particle + particle 
-    if (verboseLevel > 1) {
+    if (verboseLevel > 2) {
       particle1->printParticle();
       particle2->printParticle();
     }
@@ -90,14 +90,14 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
        	
       G4double ekin = convertToTargetRestFrame.getKinEnergyInTheTRS();
 
-      if (verboseLevel > 1) {
+      if (verboseLevel > 3) {
 	G4cout << " ekin in trs " << ekin << G4endl;
       }
 
       if(inelasticInteractionPossible(bullet, target, ekin)) {
 	convertToTargetRestFrame.toTheTargetRestFrame();
 
-	if (verboseLevel > 1) {
+	if (verboseLevel > 3) {
 	  G4cout << " degenerated? " << convertToTargetRestFrame.trivial() << G4endl;
 	}
 
@@ -136,7 +136,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	    output = theIntraNucleiCascader->collide(&nbullet, &ntarget);
 	  };   
 
-	  if (verboseLevel > 0) {
+	  if (verboseLevel > 3) {
 	    G4cout << " After Cascade " << G4endl;
 
 	    output.printCollisionOutput();
@@ -164,7 +164,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	    else {
 	      output = theNonEquilibriumEvaporator->collide(0, &cascad_rec_nuclei);
 
-	      if (verboseLevel > 1) {
+	      if (verboseLevel > 3) {
 		G4cout << " After NonEquilibriumEvaporator " << G4endl;
 
 		output.printCollisionOutput();
@@ -178,7 +178,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 
 	      output = theEquilibriumEvaporator->collide(0, &exiton_rec_nuclei);
 
-	      if (verboseLevel > 1) {
+	      if (verboseLevel > 3) {
 		G4cout << " After EquilibriumEvaporator " << G4endl;
 
 		output.printCollisionOutput();
@@ -239,7 +239,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	  }; 
 	};
 
-	if (verboseLevel > 1) {
+	if (verboseLevel > 3) {
 	  G4cout << " InuclCollider -> can not generate acceptable inter. after " 
 		 << itry_max << " attempts " << G4endl;
 	}
@@ -250,7 +250,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
       }
       else {
 
-	if (verboseLevel > 1) {
+	if (verboseLevel > 3) {
 	  G4cout << " InuclCollider -> inelastic interaction is impossible " << G4endl
 		 << " due to the coulomb barirer " << G4endl;
 	}

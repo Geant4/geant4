@@ -2,7 +2,7 @@
 #include <math.h>
 
 G4Analyser::G4Analyser()
-  :verboseLevel(2)  {
+  :verboseLevel(1)  {
 
 if (verboseLevel > 3) {
     G4cout << " >>> G4Analyser::G4Analyser" << G4endl;
@@ -39,7 +39,7 @@ void G4Analyser::setInelCsec(G4double csec,
   inel_csec = csec; // mb
   withNuclei = withn;
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " total inelastic " << inel_csec << G4endl;
   }
 }
@@ -247,7 +247,7 @@ void G4Analyser::handleWatcherStatistics() {
 
   const G4double small = 1.0e-10;
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " ===================================================== " << G4endl;
     G4cout << " ********** Izotop analysis ****************** " << G4endl;
   };
@@ -299,7 +299,7 @@ void G4Analyser::handleWatcherStatistics() {
     fgr = pow(10.0, sqrt(fgr / checked)); 
   };
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " ===================================================== " << G4endl;
     G4cout << " total exper c.s. " << tot_exper << " err " << tot_exper_err <<
       " tot inucl c.s. " << tot_inucl << " err " << tot_inucl_err << G4endl;

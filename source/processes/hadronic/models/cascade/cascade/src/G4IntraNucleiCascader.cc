@@ -12,7 +12,7 @@
 typedef vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4IntraNucleiCascader::G4IntraNucleiCascader()
-  : verboseLevel(2) {
+  : verboseLevel(1) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4IntraNucleiCascader::G4IntraNucleiCascader" << G4endl;
@@ -31,7 +31,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   const G4int reflection_cut = 500;
   //  const G4double eexs_cut = 0.0001;
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     bullet->printParticle();
     target->printParticle();
   }
@@ -50,7 +50,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
   G4double ekin_in; 
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     model.printModel();
     G4cout << " intitial momentum  E " << momentum_in[0] << " Px " << momentum_in[1] 
 	   << " Py " << momentum_in[2] << " Pz " << momentum_in[3] << G4endl;
@@ -115,14 +115,14 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     while(!cascad_particles.empty() && !model.empty()) {
       iloop++;
 
-      if (verboseLevel > 1) {
+      if (verboseLevel > 3) {
 	G4cout << " ***** number of cparticles " << cascad_particles.size() << G4endl;
 	cascad_particles.back().print();
       }
 
       new_cascad_particles = model.generateParticleFate(cascad_particles.back(),
 							theElementaryParticleCollider);
-      if (verboseLevel > 1) {
+      if (verboseLevel > 3) {
 	G4cout << " new particles " << new_cascad_particles.size() << G4endl;
       }
 
@@ -131,14 +131,14 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	cascad_particles.pop_back();
 	if(model.stillInside(new_cascad_particles[0])) { // particle survives 
 
-	  if (verboseLevel > 1) {
+	  if (verboseLevel > 3) {
 	    G4cout << " still inside " << G4endl;
 	  }
 
 	  if(new_cascad_particles[0].getNumberOfReflections() < reflection_cut &&
 	     model.worthToPropagate(new_cascad_particles[0])) { // it's ok
 
-	    if (verboseLevel > 1) {
+	    if (verboseLevel > 3) {
 	      G4cout << " survives " << G4endl;
 	    }
 
@@ -146,7 +146,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	  }
 	  else { // it becomes an exiton 
 
-	    if (verboseLevel > 1) {
+	    if (verboseLevel > 3) {
 	      G4cout << " becomes an exiton " << G4endl;
 	    }
 
@@ -155,7 +155,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	}
 	else { // goes out
 
-	  if (verboseLevel > 1) {
+	  if (verboseLevel > 3) {
 	    G4cout << " **** goes out **** " << G4endl;
 
 	    new_cascad_particles[0].print();
@@ -178,7 +178,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
     // cascad is finished -> check, whether it's o'k
 
-    if (verboseLevel > 1) {
+    if (verboseLevel > 3) {
       G4cout << " ***** cascad finished ******* " << G4endl
 	     << " output_particles  " << output_particles.size() <<  G4endl;
     }
@@ -195,7 +195,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       if(ipart->nucleon()) afin -= 1.0;
     };
 
-    if (verboseLevel > 1) {
+    if (verboseLevel > 3) {
       G4cout << "  afin " << afin << " zfin " << zfin <<  G4endl;
     }
 
@@ -207,7 +207,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       momentum_out[0] += mass;        
       for(int j = 0; j < 4; j++) momentum_out[j] = momentum_in[j] - momentum_out[j];
 
-      if (verboseLevel > 1) {
+      if (verboseLevel > 3) {
 	G4cout << "  Eex + Ekin " << momentum_out[0]  <<  G4endl;
       }
 
@@ -219,7 +219,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	G4double ekin = sqrt(mass * mass + pnuc) - mass;
 	G4double Eex = 1000.0 * (momentum_out[0] - ekin);
 
-	if (verboseLevel > 1) {
+	if (verboseLevel > 3) {
 	  G4cout << "  Eex  " << Eex  <<  G4endl;
 	}
 
@@ -284,7 +284,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   */
 #endif
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " IntraNucleiCascader-> no inelastic interaction after " << itry_max << " attempts "
 	   << G4endl;
   }
@@ -316,7 +316,7 @@ G4bool G4IntraNucleiCascader::goodCase(G4double a,
 
     if(eexs < eexs_max) good = true;
 
-    if (verboseLevel > 1) {
+    if (verboseLevel > 3) {
       G4cout << " eexs " << eexs << " max " << eexs_max << " dm " << dm << G4endl;
     }
   };

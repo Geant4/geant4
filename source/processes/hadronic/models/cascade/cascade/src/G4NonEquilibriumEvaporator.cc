@@ -8,7 +8,7 @@
 #include "G4LorentzConvertor.hh"
 
 G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator()
-: verboseLevel(2) {
+: verboseLevel(1) {
 
 if (verboseLevel > 3) {
     G4cout << " >>> G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator" << G4endl;
@@ -106,7 +106,7 @@ if (verboseLevel > 3) {
     while(try_again) {
       if(A >= a_cut && Z >= z_cut && EEXS > eexs_cut) { // ok
 
-	if(verboseLevel > 1) {
+	if(verboseLevel > 2) {
 	  G4cout << " A " << A << " Z " << Z << " EEXS " << EEXS << G4endl; 
 	}
 

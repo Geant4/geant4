@@ -5,9 +5,9 @@
 #include "G4LorentzConvertor.hh"
 
 G4EquilibriumEvaporator::G4EquilibriumEvaporator()
-  : verboseLevel(2) {
+  : verboseLevel(1) {
   
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::G4EquilibriumEvaporator" << G4endl;
   }
 }
@@ -99,7 +99,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
       while(try_again && itry_global < itry_global_max) {
 	itry_global++;
 
-	if(verboseLevel > 1){
+	if(verboseLevel > 2){
 	  G4cout << " A " << A << " Z " << Z << " EEXS " << EEXS << G4endl;
 	}
 
@@ -113,7 +113,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
 
 	if(timeToBigBang(A, Z, EEXS)) { // big bang
       
-	  if(verboseLevel > 1){
+	  if(verboseLevel > 2){
 	    G4cout << " big bang in eql step " << G4endl;
 	  }
 
@@ -223,7 +223,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
 	    };  
 	    //   again time to decide what next
 
-	    if(verboseLevel > 1){
+	    if(verboseLevel > 2){
 	      G4cout << " wn " << W[0] << " wp " << W[1] << " wd " << W[2] << endl
 		     << " wh3 " << W[3] << " wt " << W[4] << " whe4 " << W[5] << endl
 		     << " wfi " << W[6] << G4endl;
@@ -344,7 +344,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
 	      
 		  G4int itry = 0;
 		  G4double EPR = -1.0;
-		  G4double S;
+		  G4double S = 0.0;
 
 		  while(itry < itry_max && EPR < 0.0) {
 		    itry++;
@@ -487,7 +487,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
 
 		nuclei.setExitationEnergy(EEXS);
 
-		if(verboseLevel > 1){
+		if(verboseLevel > 2){
 		  G4cout << " fission: A " << A << " Z " << Z << " eexs " << EEXS <<
 		    " Wn " << W[0] << " Wf " << W[6] << G4endl;
 		}
@@ -581,7 +581,7 @@ G4bool G4EquilibriumEvaporator::timeToBigBang(G4double a,
 G4bool G4EquilibriumEvaporator::goodRemnant(G4double a, 
 					    G4double z) const {
   
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::goodRemnant" << G4endl;
   }
 
@@ -593,7 +593,7 @@ G4double G4EquilibriumEvaporator::getQF(G4double x,
 					G4double a,
 					G4double z, 
 					G4double e) const {
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::getQF" << G4endl;
   }
   
@@ -652,7 +652,7 @@ if (verboseLevel > 3) {
   const G4double XMIN = 0.6761;
   const G4double XMAX = 0.8274;
 
-  G4double QFF;
+  G4double QFF = 0.0;
 
   if(x < XMIN || x > XMAX) {
 
@@ -680,7 +680,7 @@ G4double G4EquilibriumEvaporator::getAF(G4double x,
 					G4double z, 
 					G4double e) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::getAF" << G4endl;
   }
 
@@ -696,7 +696,7 @@ if (verboseLevel > 3) {
 G4double G4EquilibriumEvaporator::getPARLEVDEN(G4double A, 
 					       G4double Z) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::getPARLEVDEN" << G4endl;
   }
 
@@ -707,7 +707,7 @@ if (verboseLevel > 3) {
 
 G4double G4EquilibriumEvaporator::getE0(G4double A) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::getE0" << G4endl;
   }
 
@@ -715,5 +715,3 @@ if (verboseLevel > 3) {
 
   return e0;   
 }
-
-

@@ -4,7 +4,7 @@
 #include "G4FissionConfiguration.hh"
 
 G4Fissioner::G4Fissioner()
-  : verboseLevel(2) {
+  : verboseLevel(1) {
   
   if (verboseLevel > 3) {
     G4cout << " >>> G4Fissioner::G4Fissioner" << G4endl;
@@ -26,7 +26,7 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* bullet,
 
   if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
 
-    if (verboseLevel > 1) {
+    if (verboseLevel > 3) {
       G4cout << " Fissioner input " << G4endl;
 
       nuclei_target->printParticle();
@@ -156,7 +156,7 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* bullet,
 	nuclei2.setEnergy();
 	output.addTargetFragment(nuclei2);
 
-	if (verboseLevel > 1) {
+	if (verboseLevel > 3) {
 	  nuclei1.printParticle();
 	  nuclei2.printParticle();
 	}
