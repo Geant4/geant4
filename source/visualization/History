@@ -1,4 +1,4 @@
-$Id: History,v 1.81 2000-05-22 09:09:23 johna Exp $
+$Id: History,v 1.82 2000-05-28 13:59:32 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,16 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+26 May 2000  Guy Barrand
+- management/src/G4VisCommandsScene.
+  Protect against a null pointer for aScene in NotifyHandlers::SetNewValue.
+- OPACS/src/G4WoViewer.cc :
+  Change camera name checking so that a viewer created
+  by the GUI (Wo) could be hooked.
+- OPACS/src/G4GoSceneHandler.cc :
+  Change circle rendering.
+- OpenInventor/G4OpenInventorSceneHandler : protect against null pointers.
 
 22nd May 2000  John Allison  (vis-V01-01-05)
 - Many bug fixes from in OpenGL (opengl-V01-01-00) - see OpenGL/History.  Main
