@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2002-10-06 11:52:31 asaim Exp $
+$Id: History,v 1.46 2002-10-28 10:06:00 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+Oct 28 2002, M.Dressel (cand-V04-01-04)
+- added include/G4CellScorer.hh include/G4CellScorerStore.hh include/G4ScoreTable.hh include/G4Scorer.hh src/G4CellScorer.cc src/G4CellScorerStore.cc src/G4ScoreTable.cc src/G4Scorer.cc
+
 
 Oct 06 2002, M.Asai (event-V04-01-03)
 - Protect user's mis-use of destructor of G4TrajectoryContainer.
