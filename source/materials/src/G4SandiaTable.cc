@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SandiaTable.cc,v 1.3 1999-04-20 13:32:05 grichine Exp $
+// $Id: G4SandiaTable.cc,v 1.4 1999-11-10 15:45:42 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -178,7 +178,7 @@ G4SandiaTable::SandiaIntervals(G4int Z[],
   }
   fMaxInterval += 2 ;
 
-  G4cout<<"fMaxInterval = "<<fMaxInterval<<endl ;
+//  G4cout<<"fMaxInterval = "<<fMaxInterval<<endl ;
 
   fPhotoAbsorptionCof = new G4double* [fMaxInterval] ;
 
