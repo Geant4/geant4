@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2004-11-09 09:46:18 hpw Exp $
+# $Id: GNUmakefile,v 1.2 2004-11-27 17:17:38 gcosmo Exp $
 # ---------------------------------------------------------------
 # GNUmakefile for parameterisations library.  G.Cosmo, 14/11/2000
 # ---------------------------------------------------------------
@@ -8,10 +8,6 @@ name := G4parmodels
 ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
-
-GLOBLIBS  = libG4processes.lib libG4digits_hits.lib libG4track.lib
-GLOBLIBS += libG4particles.lib libG4geometry.lib libG4materials.lib
-GLOBLIBS += libG4graphics_reps.lib libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 
