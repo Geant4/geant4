@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.23 2003-08-29 07:34:04 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.24 2003-10-07 08:31:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,7 @@
 // 26-04-03 Fix retrieve tables (V.Ivanchenko)
 // 13-05-03 Add calculation of precise range (V.Ivanchenko)
 // 23-07-03 Add exchange with G4EnergyLossTables (V.Ivanchenko)
+// 05-10-03 Add G4VEmProcesses registration andd Verbose command (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -61,6 +62,7 @@
 #include "G4ProcessManager.hh"
 #include "G4Electron.hh"
 #include "G4VMultipleScattering.hh"
+#include "G4VEmProcess.hh"
 
 G4LossTableManager* G4LossTableManager::theInstance = 0;
 
@@ -84,7 +86,12 @@ G4LossTableManager::~G4LossTableManager()
   size_t msc = msc_vector.size();
   for (size_t j=0; j<msc; j++) {
     if(msc_vector[j] ) delete msc_vector[j];
-  }  Clear();
+  }
+  size_t emp = emp_vector.size();
+  for (size_t j=0; j<emp; j++) {
+    if(emp_vector[j] ) delete emp_vector[j];
+  }
+ Clear();
   delete theMessenger;
   delete tableBuilder;
 }
@@ -184,6 +191,23 @@ void G4LossTableManager::DeRegister(G4VMultipleScattering* p)
   size_t msc = msc_vector.size();
   for (size_t i=0; i<msc; i++) {
     if(msc_vector[i] == p) msc_vector[i] = 0;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::Register(G4VEmProcess* p)
+{
+  emp_vector.push_back(p);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::DeRegister(G4VEmProcess* p)
+{
+  size_t emp = emp_vector.size();
+  for (size_t i=0; i<emp; i++) {
+    if(emp_vector[i] == p) emp_vector[i] = 0;
   }
 }
 
@@ -615,6 +639,10 @@ void G4LossTableManager::SetMinEnergy(G4double val)
   for (size_t j=0; j<msc; j++) {
     if(msc_vector[j]) msc_vector[j]->SetMinKinEnergy(val);
   }
+  size_t emp = emp_vector.size();
+  for (size_t j=0; j<emp; j++) {
+    if(emp_vector[j]) emp_vector[j]->SetMinKinEnergy(val);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -629,6 +657,28 @@ void G4LossTableManager::SetMaxEnergy(G4double val)
   size_t msc = msc_vector.size();
   for (size_t j=0; j<msc; j++) {
     if(msc_vector[j]) msc_vector[j]->SetMaxKinEnergy(val);
+  }
+  size_t emp = emp_vector.size();
+  for (size_t j=0; j<emp; j++) {
+    if(emp_vector[j]) emp_vector[j]->SetMaxKinEnergy(val);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4LossTableManager::SetVerbose(G4int val)
+{
+  verbose = val;
+  for(G4int i=0; i<n_loss; i++) {
+    if(loss_vector[i]) loss_vector[i]->SetVerboseLevel(val);
+  }
+  size_t msc = msc_vector.size();
+  for (size_t j=0; j<msc; j++) {
+    if(msc_vector[j]) msc_vector[j]->SetVerboseLevel(val);
+  }
+  size_t emp = emp_vector.size();
+  for (size_t j=0; j<emp; j++) {
+    if(emp_vector[j]) emp_vector[j]->SetVerboseLevel(val);
   }
 }
 
@@ -651,5 +701,3 @@ void G4LossTableManager::SetBuildPreciseRange(G4bool val)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-

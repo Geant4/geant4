@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.15 2003-07-23 11:36:25 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.16 2003-10-07 08:31:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,6 +45,7 @@
 // 26-03-03 Add GetDEDXDispersion (V.Ivanchenko)
 // 02-04-03 Change messenger (V.Ivanchenko)
 // 23-07-03 Add exchange with G4EnergyLossTables (V.Ivanchenko)
+// 05-10-03 Add G4VEmProcesses registration (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -74,6 +75,7 @@ class G4MaterialCutsCouple;
 class G4EnergyLossMessenger;
 class G4ParticleDefinition;
 class G4VMultipleScattering;
+class G4VEmProcess;
 
 class G4LossTableManager
 {
@@ -115,6 +117,10 @@ public:
   void Register(G4VMultipleScattering* p);
 
   void DeRegister(G4VMultipleScattering* p);
+  
+  void Register(G4VEmProcess* p);
+
+  void DeRegister(G4VEmProcess* p);
 
   void RegisterIon(const G4ParticleDefinition* aParticle, G4VEnergyLossSTD* p);
 
@@ -139,6 +145,8 @@ public:
   void SetStepLimits(G4double v1, G4double v2);
 
   void SetBuildPreciseRange(G4bool val);
+ 
+  void SetVerbose(G4int val);
 
   G4EnergyLossMessenger* GetMessenger();
 
@@ -167,6 +175,7 @@ private:
   std::vector<G4PhysicsTable*> range_vector;
   std::vector<G4PhysicsTable*> inv_range_vector;
   std::vector<G4VMultipleScattering*> msc_vector;
+  std::vector<G4VEmProcess*> emp_vector;
 
   // cash
   G4VEnergyLossSTD*    currentLoss;
