@@ -1,3 +1,29 @@
+$Id: History,v 1.2 2000-01-19 20:03:50 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Sub-Category History file
+                      -------------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all directory-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Jan   19th, 2000   G. Cosmo                -  geomsolids-V01-00-00
+
+- Syncronized HEAD versioning of files after ISO-C++ migration
+  (essentially CVS headers changes).
+- CSG: fixed bug in DistanceToIn(p,v). (V.Grichine)
+  Modified files: G4Trap.cc and testG4Trap.cc.
+
 Dec    1st, 1998   J. Apostolakis          -  solids-00-04-02
 
   Small additions to History
