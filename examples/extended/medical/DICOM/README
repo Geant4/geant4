@@ -35,11 +35,11 @@ In the application  the phantom is placed on a table.
  
 ---> 2) Installation:
 
- -example enviroment with the compiler 3.2                              
+ -example enviroment with the compiler 3.2.3                              
  -a standard Geant4 example GNUmakefile is provided            
 
 setup with:                                                    
-compiler = gcc-3.2
+compiler = gcc-3.2.3
 G4SYSTEM = linux-g++  
 
 The following environment variables need to be set:            
