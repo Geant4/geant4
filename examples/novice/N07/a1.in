@@ -1,0 +1,4 @@
+/run/particle/verbose 3
+/run/beamOn 10
+/control/shell mkdir -p physTable
+/run/particle/storePhysicsTable physTable
