@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.30 2002-07-29 14:36:35 gcosmo Exp $
+// $Id: G4PropagatorInField.icc,v 1.31 2002-10-29 18:36:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,8 +42,9 @@
 inline
 G4ChordFinder* G4PropagatorInField::GetChordFinder()
 {
-  // Now only the "Chord Finder" of the global Field Mgr is used
-  //
+  // The "Chord Finder" of the current Field Mgr is used
+  //    -- this could be of the global field manager
+  //        or that of another, from the current volume 
   return fCurrentFieldMgr->GetChordFinder(); 
 }
 
@@ -54,9 +55,9 @@ void G4PropagatorInField::SetChargeMomentumMass(
             G4double Mass)              // in ? units
 {
   GetChordFinder()->SetChargeMomentumMass(Charge, Momentum, Mass);
-//   fCharge = Charge;
-//   fInitialMomentumModulus = Momentum;
-//   fMass = Mass; 
+  fCharge = Charge;
+  fInitialMomentumModulus = Momentum;
+  fMass = Mass; 
 }
 
 //  Obtain the final space-point and velocity (normal) at the end of the Step
