@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2001-07-22 01:00:58 johna Exp $
+$Id: History,v 1.11 2001-07-24 21:51:38 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+24th July 2001  John Allison  (modeling-V03-02-02)
+- Added G4VModel::SetExtent(const G4VisExtent&).
+- Cosmetic improvements to G4BoundingSphereScene.
+- Augmented G4ScaleModel::fGlobalTag.
 
 21st July 2001  John Allison  (modeling-V03-02-01)
 - Added G4ScaleModel.
