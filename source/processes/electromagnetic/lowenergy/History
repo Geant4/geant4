@@ -1,4 +1,4 @@
-$Id: History,v 1.133 2002-02-28 17:29:18 pia Exp $
+$Id: History,v 1.134 2002-03-27 09:41:44 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27.03.2002 - VNI, tag emlowen-V04-00-01
+             Bug fix in hadron Fluo  and in deexcitation 
 
 28.02.2002 - MGP, tag emlowen-V04-00-00
              V.Ivanchenko bug fix for GenericIons 
@@ -35,6 +38,7 @@ committal in the CVS repository !
              Removed static inline functions, as requested by G. Cosmo
              to satisfy porting requirements
 
+>>>>>>> 1.133
 15.11.2001 - MGP, tag emlowen-V03-02-45
              Bug fix in G4FluoData 
              Physics improvement in Bremsstrahlung
