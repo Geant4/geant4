@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2002-02-26 18:43:31 vnivanch Exp $
+$Id: History,v 1.29 2002-02-27 11:24:52 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-26 feb 02: mma (muons-V0
+27 feb 02: mma (muons-V04-00-01)
 - V.Ivanchenko G4VMuEnergyLoss - PostStep->PreStep for touchebleHandler 
      
 10 fev 02: mma (muons-V04-00-00)
