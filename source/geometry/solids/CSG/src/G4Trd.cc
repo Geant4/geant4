@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trd.cc,v 1.2 1999-04-16 09:29:56 grichine Exp $
+// $Id: G4Trd.cc,v 1.3 1999-11-19 16:10:14 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -27,7 +27,8 @@
 
 #include <math.h>
 
-
+/////////////////////////////////////////////////////////////////////////
+//
 // Constructor - check & set half widths
 
 G4Trd::G4Trd(const G4String& pName,
@@ -38,10 +39,15 @@ G4Trd::G4Trd(const G4String& pName,
   CheckAndSetAllParameters (pdx1, pdx2, pdy1, pdy2, pdz);
 }
 
+/////////////////////////////////////////////////////////////////////////
+//
+// Set and check (coplanarity) of trd parameters
+
 void
 G4Trd::CheckAndSetAllParameters (G4double pdx1,  G4double pdx2,
 				 G4double pdy1,  G4double pdy2,
-				 G4double pdz) {
+				 G4double pdz) 
+{
   if (pdx1>0&&pdx2>0&&pdy1>0&&pdy2>0&&pdz>0)
     {
       fDx1=pdx1; fDx2=pdx2;
@@ -51,7 +57,7 @@ G4Trd::CheckAndSetAllParameters (G4double pdx1,  G4double pdx2,
   else
     {
       if (pdx1>=0 && pdx2>=0 && pdy1>=0 && pdy2>=0 && pdz>=0)
-        {
+      {
           // G4double  Minimum_length= (1+per_thousand) * kCarTolerance/2.;
           //  FIX-ME : temporary solution for ZERO or very-small parameters.
           G4double  Minimum_length= kCarTolerance/2.;
@@ -60,20 +66,21 @@ G4Trd::CheckAndSetAllParameters (G4double pdx1,  G4double pdx2,
           fDy1=max(pdy1,Minimum_length); 
           fDy2=max(pdy2,Minimum_length); 
           fDz=max(pdz,Minimum_length);
-        }
-      else
-        G4Exception("Error in G4Trd::G4Trd - One or more parameters are < 0");
+      }
+      else G4Exception("Error in G4Trd::G4Trd - One or more parameters are < 0");
     }
 }
 
-// -------------------------------------------------------------
-
+//////////////////////////////////////////////////////////////////////////
+//
 // Destructor
 
 G4Trd::~G4Trd()
 {}
 
-// -----------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////
+//
+//
 
 void G4Trd::SetAllParameters (G4double pdx1, G4double pdx2, G4double pdy1, 
                               G4double pdy2, G4double pdz) 
@@ -82,8 +89,8 @@ void G4Trd::SetAllParameters (G4double pdx1, G4double pdx2, G4double pdy1,
 }
 
 
-// -----------------------------------------------------------------------
-
+/////////////////////////////////////////////////////////////////////////
+//
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
@@ -95,8 +102,8 @@ void G4Trd::SetAllParameters (G4double pdx1, G4double pdx2, G4double pdy1,
 }
 
 
-// -------------------------------------------------------
-
+///////////////////////////////////////////////////////////////////////////
+//
 // Calculate extent under transform and specified limit
 
 G4bool G4Trd::CalculateExtent(const EAxis pAxis,
@@ -273,8 +280,8 @@ G4bool G4Trd::CalculateExtent(const EAxis pAxis,
 
 }
 
-// ----------------------------------------------------------------
-
+///////////////////////////////////////////////////////////////////
+//
 // Return whether point inside/outside/on surface, using tolerance
 
 EInside G4Trd::Inside(const G4ThreeVector& p) const
@@ -333,8 +340,8 @@ EInside G4Trd::Inside(const G4ThreeVector& p) const
     return in;
 }
 
-// --------------------------------------------------------------------
-
+//////////////////////////////////////////////////////////////////////////
+//
 // Calculate side nearest to p, and return normal
 // If two sides are equidistant, normal of first side (x/y/z) 
 // encountered returned
@@ -409,8 +416,8 @@ G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p) const
     return norm;   
 }
 
-// -----------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////////
+//
 // Calculate distance to shape from outside - return kInfinity if no intersection
 //
 // ALGORITHM:
@@ -716,8 +723,8 @@ G4double G4Trd::DistanceToIn(const G4ThreeVector& p,
     return snxt;
 }
 
-// -------------------------------------------------------------------
- 
+/////////////////////////////////////////////////////////////////////////
+//
 // Approximate distance to shape
 // Calculate perpendicular distances to z/x/y surfaces, return largest
 // which is the most fast estimation of shortest distance to Trd
@@ -761,8 +768,8 @@ G4double G4Trd::DistanceToIn(const G4ThreeVector& p) const
     return safe;
 }
 
-// ----------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
 // Calcluate distance to surface of shape from inside
 // Calculate distance to x/y/z planes - smallest is exiting distance
 // - z planes have std. check for tolerance
@@ -776,7 +783,7 @@ G4double G4Trd::DistanceToOut(const G4ThreeVector& p,
 			        G4bool *validNorm,
                                 G4ThreeVector *n) const
 {
-  ESide side,snside;
+    ESide side = kUndefined, snside;
     G4double snxt,pdist;
     G4double central,ss1,ss2,ds1,ds2,sn,sn2;
     G4double tanxz,cosxz,tanyz,cosyz;
@@ -1148,8 +1155,8 @@ G4double G4Trd::DistanceToOut(const G4ThreeVector& p,
     return snxt; 
 }
 
-// --------------------------------------------------------------------
-
+///////////////////////////////////////////////////////////////////////////
+//
 // Calculate exact shortest distance to any boundary from inside
 // - Returns 0 is point outside
 
@@ -1182,8 +1189,8 @@ G4double G4Trd::DistanceToOut(const G4ThreeVector& p) const
     return safe;	   
 }
 
-// -------------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////////
+//
 // Create a List containing the transformed vertices
 // Ordering [0-3] -fDz cross section
 //          [4-7] +fDz cross section such that [0] is below [4],
@@ -1223,6 +1230,10 @@ G4Trd::CreateRotatedVertices(const G4AffineTransform& pTransform) const
     return vertices;
 }
 
+///////////////////////////////////////////////////////////////////////
+//
+// Methods for visualisation
+
 void G4Trd::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
   scene.AddThis (*this);
@@ -1245,5 +1256,11 @@ G4NURBS* G4Trd::CreateNURBS () const
   //  return new G4NURBSbox (fDx, fDy, fDz);
   return 0;
 }
+
+//
+//
+///////////////////////////////////////////////////////////////////////////
+
+
 
 

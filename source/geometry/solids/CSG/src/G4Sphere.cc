@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Sphere.cc,v 1.2 1999-04-16 09:29:55 grichine Exp $
+// $Id: G4Sphere.cc,v 1.3 1999-11-19 16:10:12 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -18,7 +18,8 @@
 // 09.10.98 V. Grichine modifications in Distance ToOut(p,v,...)
 // 12.11.98 V.Grichine bug fixed in DistanceToIn(p,v), theta intersections
 // 25.11.98 V.Grichine bug fixed in DistanceToIn(p,v), phi intersections
-// 
+// 18.11.99 V.Grichine, side = kNull in Distance ToOut(p,v,...)
+//
 
 #include <assert.h>
 
@@ -44,6 +45,8 @@ enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
 
 enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 
+/////////////////////////////////////////////////////////////////////
+//
 // Destructor
 
 G4Sphere::~G4Sphere()
@@ -51,6 +54,8 @@ G4Sphere::~G4Sphere()
    ;
 }
 
+////////////////////////////////////////////////////////////////////////
+//
 // constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
 //             - note if pDPhi>2PI then reset to 2PI
 
@@ -120,10 +125,11 @@ G4Sphere::G4Sphere(const G4String& pName,
 
 }
 
-// -------------------------------------------------------------------------------------
-
+//////////////////////////////////////////////////////////////////////////
+//
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
+
 void G4Sphere::ComputeDimensions(G4VPVParameterisation* p,
                               const G4int n,
                               const G4VPhysicalVolume* pRep)
@@ -131,13 +137,14 @@ void G4Sphere::ComputeDimensions(G4VPVParameterisation* p,
     p->ComputeDimensions(*this,n,pRep);
 }
 
-// --------------------------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////////
+//
 // Calculate extent under transform and specified limit
-G4bool G4Sphere::CalculateExtent(const EAxis pAxis,
-			      const G4VoxelLimits& pVoxelLimit,
-			      const G4AffineTransform& pTransform,
-			      G4double& pMin, G4double& pMax) const
+
+G4bool G4Sphere::CalculateExtent( const EAxis pAxis,
+			          const G4VoxelLimits& pVoxelLimit,
+			          const G4AffineTransform& pTransform,
+			                G4double& pMin, G4double& pMax) const
 {
     if ( fDPhi==2.0*M_PI && fDTheta==M_PI)  // !pTransform.IsRotated() &&
 	{
@@ -361,8 +368,8 @@ G4bool G4Sphere::CalculateExtent(const EAxis pAxis,
 	}
 }
 
-// --------------------------------------------------------------------------------------------
-
+///////////////////////////////////////////////////////////////////////////
+//
 // Return whether point inside/outside/on surface
 // Split into radius, phi, theta checks
 // Each check modifies `in', or returns as approprate
@@ -507,8 +514,8 @@ EInside G4Sphere::Inside(const G4ThreeVector& p) const
     return in;
 }
 
-// -----------------------------------------------------------------------------------------
-
+/////////////////////////////////////////////////////////////////////
+//
 // Return unit normal of surface closest to p
 // - note if point on z axis, ignore phi divided sides
 // - unsafe if point close to z axis a rmin=0 - no explicit checks
@@ -654,7 +661,7 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p) const
     return norm;
 }
 
-//////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 // Calculate distance to shape from outside, along normalised vector
 // - return kInfinity if no intersection, or intersection distance <= tolerance
@@ -674,7 +681,7 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p) const
 //        - if valid intersection(r,phi), return smallest intersection of
 //          inner shell & theta intersection
 //
-
+//
 // NOTE:
 // - `if valid' (above) implies tolerant checking of intersection points
 //
@@ -909,55 +916,6 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 	       }
 	    }
 	 }
-
-/*
-//	 if (rad2 > tolIRMax2 && pDotV3d >= 0 )    // go away from convex 
-//	 {                                         // outer radious surface
-//	    if (segPhi)
-//	    {
-// Use inner phi tolerant boundary -> if on tolerant
-// phi boundaries, phi intersect code handles leaving/entering checks
-//
-// 	        cosPsi=(p.x()*cosCPhi+p.y()*sinCPhi)/sqrt(rho2);
-//
-//		if (cosPsi >= cosHDPhiIT)
-//		{ 
-//
-// inside radii, delta r -ve, inside phi
-//
-//		   if (segTheta)
-//		   {
-//		      if ( pTheta >= tolSTheta + kAngTolerance && 
-//                         pTheta <= tolETheta - kAngTolerance          )
-//		      {
-//			 return snxt=kInfinity;
-//		      }
-//		   }
-//		   else      // strictly inside Theta in both cases
-//		   {
-//		      return snxt=kInfinity;
-//		   }
-//		}
-//	     }
-//	     else
-//	     {
-//		if (segTheta)
-//		{
-//		   if ( pTheta >= tolSTheta + kAngTolerance && 
-//                      pTheta <= tolETheta - kAngTolerance         )
-//		   {
-//		      return snxt=kInfinity;
-//		   }
-//		}
-//		else   // strictly inside Theta in both cases
-//		{
-//				    return snxt=kInfinity;
-//		}
-//	     }
-//	  }
-//
-  */ 
-
      }
 
 // Inner spherical shell intersection
@@ -1076,59 +1034,6 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 		    }
 		 }				    
 	      }
-
-/* ******************************************************************************
-//
-//		// Leaving from Theta/Phi corners ?? of inner radious surface
-//
-//	     else if ( abs(s) < kRadTolerance && pDotV3d <= 0 )
-//	     {
-//		if ( segPhi )
-//		{
-//
-// Use inner phi tolerant boundary -> if on tolerant
-// phi boundaries, phi intersect code handles leaving/entering checks
-//
-//		   cosPsi = (p.x()*cosCPhi + p.y()*sinCPhi)/sqrt(rho2) ;
-//
-//		   if (cosPsi<=cosHDPhiIT && cosPsi>=cosHDPhiOT)
-//		   { 
-//
-// inside radii, delta r -ve, inside phi
-//
-//		      if (segTheta)
-//		      {
-//			 if ( pTheta >= tolSTheta + kAngTolerance && 
-//                            pTheta <= tolETheta - kAngTolerance)
-//			 {
-//			    return snxt=kInfinity;
-//			 }
-//		      }
-//		      else
-//		      {
-//			 return snxt=kInfinity;
-//		      }
-//		   }
-//		}
-//		else
-//		{
-//		   if ( segTheta )
-//		   {
-//		      if ( pTheta >= tolSTheta + kAngTolerance && 
-//                         pTheta <= tolETheta - kAngTolerance     )
-//		      {
-//			 return snxt = kInfinity ;
-//		      }
-//		   }
-//		   else
-//		   {
-//		      return snxt = kInfinity ;
-//		   }
-//		}
-//	     }
-//
-   */
-
 	  }
        }
     }
@@ -1856,8 +1761,8 @@ G4double G4Sphere::DistanceToIn(const G4ThreeVector& p) const
     return safe;
 }
 
-// -----------------------------------------------------------------------------------------
-
+/////////////////////////////////////////////////////////////////////
+//
 // Calculate distance to surface of shape from `inside', allowing for tolerance
 // - Only Calc rmax intersection if no valid rmin intersection
 
@@ -2547,8 +2452,8 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 	return snxt;
 }
 
-// ----------------------------------------------------------------------------------------------
-
+/////////////////////////////////////////////////////////////////////////
+//
 // Calcluate distance (<=actual) to closest surface of shape from inside
 
 G4double G4Sphere::DistanceToOut(const G4ThreeVector& p) const
@@ -2633,8 +2538,8 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p) const
     return safe;
 }
 
-// -------------------------------------------------------------------------------------------
-
+//////////////////////////////////////////////////////////////////////////
+//
 // Create a List containing the transformed vertices
 // Ordering [0-3] -fDz cross section
 //          [4-7] +fDz cross section such that [0] is below [4],
@@ -2760,7 +2665,9 @@ G4Sphere::CreateRotatedVertices(const G4AffineTransform& pTransform,
     return vertices;
 }
 
-// ---------------------------------------------------------------------------------------
+/////////////////////////////////////////////////////////////////////////////
+//
+// Methods for visualisation
 
 void G4Sphere::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.10 1999-10-26 12:57:21 grichine Exp $
+// $Id: G4Tubs.cc,v 1.11 1999-11-19 16:10:14 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,6 +21,7 @@
 // 25.05.99 V.Grichine, bugs fixed in DistanceToIn(p,v) 
 // 28.05.99 V.Grichine, bugs fixed in  Distance ToOut(p,v,...)
 // 13.10.99 V.Grichine, bugs fixed in DistanceToIn(p,v) 
+// 19.11.99 V. Grichine, side = kNull in Distance ToOut(p,v,...)
 
 
 #include "G4Tubs.hh"
@@ -40,8 +41,11 @@
 #include "G4NURBStubesector.hh"
 #include "G4VisExtent.hh"
 
+/////////////////////////////////////////////////////////////////////////
+//
 // Constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
 //             - note if pdphi>2PI then reset to 2PI
+
 G4Tubs::G4Tubs(const G4String &pName,
 	       G4double pRMin,
 	       G4double pRMax,
@@ -52,25 +56,27 @@ G4Tubs::G4Tubs(const G4String &pName,
 {
 // Check z-len
     if (pDz>0)
-	{
-	    fDz=pDz;
-	}
+    {
+       fDz=pDz;
+    }
     else
-	{
-	    G4Exception("Error in G4Tubs::G4Tubs - invalid z half-length");
-	}
+    {
+       G4Exception("Error in G4Tubs::G4Tubs - invalid z half-length");
+    }
 
 // Check radii
+
     if (pRMin<pRMax&&pRMin>=0)
-	{
-	    fRMin=pRMin; fRMax=pRMax;
-	}
+    {
+       fRMin=pRMin; fRMax=pRMax;
+    }
     else
-	{
-	    G4Exception("Error in G4Tubs::G4Tubs - invalid radii");
-	}
+    {
+       G4Exception("Error in G4Tubs::G4Tubs - invalid radii");
+    }
 
 // Check angles
+
     if (pDPhi>=2.0*M_PI)
 	{
 	    fDPhi=2*M_PI;
@@ -88,6 +94,7 @@ G4Tubs::G4Tubs(const G4String &pName,
 	}
 	
 // Ensure psphi in 0-2PI or -2PI-0 range if shape crosses 0
+
     fSPhi = pSPhi;
 
     if ( fSPhi < 0 )
@@ -105,12 +112,18 @@ G4Tubs::G4Tubs(const G4String &pName,
     }
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
 // Destructor
+
 G4Tubs::~G4Tubs()
 {;}
 
+/////////////////////////////////////////////////////////////////////////
+//
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
+
 void G4Tubs::ComputeDimensions(G4VPVParameterisation* p,
                               const G4int n,
                               const G4VPhysicalVolume* pRep)
@@ -118,8 +131,10 @@ void G4Tubs::ComputeDimensions(G4VPVParameterisation* p,
     p->ComputeDimensions(*this,n,pRep);
 }
 
-
+////////////////////////////////////////////////////////////////////////
+//
 // Calculate extent under transform and specified limit
+
 G4bool G4Tubs::CalculateExtent(const EAxis pAxis,
 			      const G4VoxelLimits& pVoxelLimit,
 			      const G4AffineTransform& pTransform,
@@ -325,7 +340,10 @@ G4bool G4Tubs::CalculateExtent(const EAxis pAxis,
 	}
 }
 
+///////////////////////////////////////////////////////////////////////////
+//
 // Return whether point inside/outside/on surface
+
 EInside G4Tubs::Inside(const G4ThreeVector& p) const
 {
     G4double r2,pPhi,tolRMin,tolRMax;
@@ -464,6 +482,8 @@ EInside G4Tubs::Inside(const G4ThreeVector& p) const
     return in;
 }
 
+///////////////////////////////////////////////////////////////////////////
+//
 // Return unit normal of surface closest to p
 // - note if point on z axis, ignore phi divided sides
 // - unsafe if point close to z axis a rmin=0 - no explicit checks
@@ -786,7 +806,8 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 //		  }
 //	       }
 //	    }
-*/ ///////////////////////////////////////////////////////////////////////
+
+************************************************************************* */ 
 
        else 
        {
@@ -1039,7 +1060,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p) const
     return safe;
 }
 
-//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 //
 // Calculate distance to surface of shape from `inside', allowing for tolerance
 // - Only Calc rmax intersection if no valid rmin intersection
@@ -1050,7 +1071,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 			        G4bool *validNorm,
                                 G4ThreeVector *n    ) const
 {
-   ESide side,sider,sidephi;
+   ESide side = kNull ,sider,sidephi;
 
    G4double snxt,sr,sphi,pdist;
 
@@ -1567,7 +1588,10 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
     return snxt;
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
 // Calcluate distance (<=actual) to closest surface of shape from inside
+
 G4double G4Tubs::DistanceToOut(const G4ThreeVector& p) const
 {
     G4double safe,rho,safeR1,safeR2,safeZ;
@@ -1617,6 +1641,8 @@ G4double G4Tubs::DistanceToOut(const G4ThreeVector& p) const
     return safe;	
 }
 
+/////////////////////////////////////////////////////////////////////////
+//
 // Create a List containing the transformed vertices
 // Ordering [0-3] -fDz cross section
 //          [4-7] +fDz cross section such that [0] is below [4],
@@ -1625,6 +1651,7 @@ G4double G4Tubs::DistanceToOut(const G4ThreeVector& p) const
 //  Caller has deletion resposibility
 //  Potential improvement: For last slice, use actual ending angle
 //                         to avoid rounding error problems.
+
 G4ThreeVectorList*
 G4Tubs::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
@@ -1685,11 +1712,16 @@ G4Tubs::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 		}
 	}
     else
-	{
-	    G4Exception("G4Tubs::CreateRotatedVertices Out of memory - Cannot alloc vertices");
-	}
+    {
+      G4Exception("G4Tubs::CreateRotatedVertices Out of memory - Cannot alloc vertices");
+    }
     return vertices;
 }
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Methods for visualisation
+
 
 void G4Tubs::DescribeYourselfTo (G4VGraphicsScene& scene) const {
   scene.AddThis (*this);
@@ -1726,3 +1758,8 @@ G4NURBS* G4Tubs::CreateNURBS () const {
   }
   return pNURBS;
 }
+
+//
+//
+/////////////////////////////////// End of G4Tubs.cc ////////////////////////
+

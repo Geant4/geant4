@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hype.cc,v 1.2 1999-04-16 09:29:54 grichine Exp $
+// $Id: G4Hype.cc,v 1.3 1999-11-19 16:10:10 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Hype: this class implements in G4 the volume equivalent 
@@ -982,14 +982,15 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
     }
 }
 
-
-
+////////////////////////////////////////////////////////////////////////
+//
 // Calculate distance to surface of shape from `inside', allowing for tolerance
+
 G4double G4Hype::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 			       const G4bool calcNorm, G4bool *validNorm,G4ThreeVector *n) const
 {
     G4double snxt=kInfinity;			// snxt = default return value
-    ESide side;
+    ESide side = kUndefined ;
     double xi,yi,zi;  // service parameters
     double zero_tolerance=1E-6;
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.cc,v 1.4 1999-04-29 09:46:34 grichine Exp $
+// $Id: G4Cons.cc,v 1.5 1999-11-19 16:10:09 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -14,6 +14,7 @@
 //
 // History:
 //
+// 18.11.99 V.Grichine side = kNull initialisation in DistanceToOut(p,v,...)
 // 28.04.99 V. Grichine bugs fixed in  Distance ToOut(p,v,...) and  
 //          Distance ToIn(p,v)
 // 09.10.98 V. Grichine modifications in Distance ToOut(p,v,...)
@@ -35,6 +36,8 @@
 #include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
+////////////////////////////////////////////////////////////////////////
+//
 // Private enum: Not for external use - used by distanceToOut
 
 enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
@@ -43,6 +46,8 @@ enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
 
 enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
 
+///////////////////////////////////////////////////////////////////////
+//
 // Destructor
 
 G4Cons::~G4Cons()
@@ -50,7 +55,8 @@ G4Cons::~G4Cons()
    ;
 }
 
-
+//////////////////////////////////////////////////////////////////////////
+//
 // constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
 //               - note if pDPhi>2PI then reset to 2PI
 
@@ -61,59 +67,62 @@ G4Cons::G4Cons( const G4String& pName,
 	        G4double pSPhi, G4double pDPhi) : G4CSGSolid(pName)
 {
 // Check z-len
+
     if (pDz>0)
-	{
-	   fDz=pDz;
-	}
+    {
+       fDz=pDz;
+    }
     else
-	{
-	    G4Exception("Error in G4Cons::G4Cons - invalid z half-length");
-	}
+    {
+       G4Exception("Error in G4Cons::G4Cons - invalid z half-length");
+    }
 
 // Check radii
-    if (pRmin1<pRmax1 && pRmin2<pRmax2 && pRmin1>=0 && pRmin2>=0)
-	{
-	   fRmin1=pRmin1; fRmax1=pRmax1;
-	   fRmin2=pRmin2; fRmax2=pRmax2;
-	}
+
+    if ( pRmin1 < pRmax1 && pRmin2 < pRmax2 && pRmin1 >= 0 && pRmin2 >= 0 )
+    {
+       fRmin1=pRmin1; fRmax1=pRmax1;
+       fRmin2=pRmin2; fRmax2=pRmax2;
+    }
     else
-	{
-	    G4Exception("Error in G4Cons::G4Cons - invalid radii");
-	}
+    {
+       G4Exception("Error in G4Cons::G4Cons - invalid radii");
+    }
 
 // Check angles
-    if (pDPhi>=2.0*M_PI)
-	{
-	   fDPhi=2*M_PI;
-	   fSPhi=0;
-	}
+
+    if ( pDPhi >= 2.0*M_PI )
+    {
+       fDPhi=2*M_PI;
+       fSPhi=0;
+    }
     else
-	{
-	    if (pDPhi>0)
-		{
-		   fDPhi=pDPhi;
-		}
-	    else
-		{
-		    G4Exception("Error in G4Cons::G4Cons - invalid pDPhi");
-		}
+    {
+       if ( pDPhi > 0 )
+       {
+	  fDPhi = pDPhi ;
+       }
+       else
+       {
+	  G4Exception("Error in G4Cons::G4Cons - invalid pDPhi");
+       }
 	
 // Ensure pSPhi in 0-2PI or -2PI-0 range if shape crosses 0
-	    if (pSPhi<0)
-		{
-		   fSPhi=2.0*M_PI-fmod(fabs(pSPhi),2.0*M_PI);
-		}
-	    else
-		{
-		   fSPhi=fmod(pSPhi,2.0*M_PI);
-		}
-	    
-	    if (fSPhi+fDPhi>2.0*M_PI) fSPhi-=2.0*M_PI;
-	}
+
+       if (pSPhi < 0)
+       {
+	  fSPhi = 2.0*M_PI - fmod(fabs(pSPhi),2.0*M_PI) ;
+       }
+       else
+       {
+	  fSPhi=fmod(pSPhi,2.0*M_PI);
+       }	    
+       if (fSPhi+fDPhi>2.0*M_PI) fSPhi-=2.0*M_PI;
+    }
 }
 
-// -----------------------------------------------------------------------------------------
-
+/////////////////////////////////////////////////////////////////////
+//
 // Return whether point inside/outside/on surface
 
 EInside G4Cons::Inside(const G4ThreeVector& p) const
@@ -269,8 +278,8 @@ EInside G4Cons::Inside(const G4ThreeVector& p) const
     return in;
 }
 
-// ----------------------------------------------------------------------------------
-
+/////////////////////////////////////////////////////////////////////////
+//
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
@@ -282,8 +291,8 @@ void G4Cons::ComputeDimensions(G4VPVParameterisation* p,
 }
 
 
-// -------------------------------------------------------------------------------------
-
+///////////////////////////////////////////////////////////////////////////
+//
 // Calculate extent under transform and specified limit
 
 G4bool G4Cons::CalculateExtent(const EAxis pAxis,
@@ -497,8 +506,8 @@ G4bool G4Cons::CalculateExtent(const EAxis pAxis,
 	}
 }
 
-// -----------------------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
 // Return unit normal of surface closest to p
 // - note if point on z axis, ignore phi divided sides
 // - unsafe if point close to z axis a rmin=0 - no explicit checks
@@ -1256,396 +1265,8 @@ G4double G4Cons::DistanceToIn(const G4ThreeVector& p,
     return snxt;
 }
 
-
-
-/*  ****************************************************************************************
-
-// Calculate distance to shape from outside, along normalised vector
-// - return kInfinity if no intersection, or intersection distance <= tolerance
-//
-// - Compute the intersection with the z planes 
-//        - if at valid r, phi, return
-//
-// -> If point is outer outer radius, compute intersection with rmax1/2 cone
-//        - if at valid phi,z return
-//
-// -> Compute intersection with inner cone, taking largest +ve root
-//        - if valid (in z,phi) Store intersction
-//
-//    -> If phi segmented, compute intersections with phi half planes
-//        - return smallest of valid phi intersections and
-//          inner cone intersection
-//
-// NOTE:
-// - Precalculations for phi trigonometry are Done `just in time'
-// - `if valid' (above) implies tolerant checking of intersection points
-
-G4double G4Cons::DistanceToIn(const G4ThreeVector& p,
-                              const G4ThreeVector& v) const
-{
-
-    G4double snxt=kInfinity;			// snxt = default return value
-
-// Precalculated trig for phi intersections - used by r,z intersections to
-//                                            check validity
-    G4bool seg;				// true if segmented
-    G4double hDPhiT,cosHDPhiT;		// half dphi + tolerance
-    G4double cPhi,sinCPhi,cosCPhi;	// central phi
-
-    G4double tolDz;			// Generous delta z
-    G4double tanRMax,secRMax,rMaxAv;	// Data for outer cone
-    G4double tanRMin,secRMin,rMinAv;	// Data for inner cone
-
-    G4double tolRMin,tolRMin2,tolRMax,tolRMax2;
-
-    G4double rout,rin;			// radii of cones at p.z
-    G4double s,xi,yi,zi,ri,rho2,cosPsi;	// Intersection point variables
-
-    G4double t1,t2,t3,b,c,d;		// Quadratic solver variables 
-    G4double nt1,nt2,nt3;
-
-    G4double Comp;
-    G4double cosSPhi,sinSPhi;		// Trig for phi start intersect
-    G4double ePhi,cosEPhi,sinEPhi;	// for phi end intersect
-
-//
-// Set phi divided flag and precalcs
-//
-    if (fDPhi<2.0*M_PI)
-	{
-	    seg=true;
-	    hDPhiT=0.5*fDPhi;		// half delta phi
-	    cPhi=fSPhi+hDPhiT;;
-	    hDPhiT+=0.5*kAngTolerance;	// hDPhiT= Tolerant half delta phi 
-	    sinCPhi=sin(cPhi);
-	    cosCPhi=cos(cPhi);
-	    cosHDPhiT=cos(hDPhiT);
-	}
-    else
-	{
-	    seg=false;
-	}
-
-    tanRMin=(fRmin2-fRmin1)*0.5/fDz;
-    secRMin=sqrt(1.0+tanRMin*tanRMin);
-    rMinAv=(fRmin1+fRmin2)*0.5;
-    
-    tanRMax=(fRmax2-fRmax1)*0.5/fDz;
-    secRMax=sqrt(1.0+tanRMax*tanRMax);
-    rMaxAv=(fRmax1+fRmax2)*0.5;
-    
-//
-// Intersection with Z surfaces
-//
-    if (fabs(p.z())>=fDz)
-	{
-	    if (p.z()*v.z()<0)		// at +Z going in -Z or visa versa
-		{
-		    s=(fabs(p.z())-fDz)/fabs(v.z());	// Z intersect distance
-		    xi=p.x()+s*v.x();	// Intersection coords
-		    yi=p.y()+s*v.y();
-		    rho2=xi*xi+yi*yi;
-
-// Calculate tolerant radii^2 at intersection plane
-		    if (p.z()<=0)
-			{
-			    tolRMin=fRmin1-kRadTolerance;
-			    tolRMax2=(fRmax1+kRadTolerance)*(fRmax1+kRadTolerance);
-			}
-		    else
-			{
-			    tolRMin=fRmin2-kRadTolerance;
-			    tolRMax2=(fRmax2+kRadTolerance)*(fRmax2+kRadTolerance);
-			}
-		    if (tolRMin>0)
-			{
-			    tolRMin2=tolRMin*tolRMin;
-			}
-		    else
-			{
-			    tolRMin2=0;
-			}
-
-// Check validity of intersection
-		    if (tolRMin2<=rho2&&rho2<=tolRMax2)
-			{
-			    if (seg&&rho2)
-				{
-// Psi = angle made with central (average) phi of shape
-				    cosPsi=(xi*cosCPhi+yi*sinCPhi)/sqrt(rho2);
-				    if (cosPsi>=cosHDPhiT)
-					{
-					    return s;
-					}
-				}
-			    else
-				{
-				    return s;
-				}
-
-			}
-		}
-	}
-// -> Does not intersect z surfaces
-
-    tolDz=fDz+kCarTolerance;
-
-//
-// Intersection with outer cone (possible return) and
-//                   inner cone (must also check phi)
-//
-
-// Intersection point (xi,yi,zi) on line x=p.x+t*v.x etc.
-//
-// Intersects with x^2+y^2=(a*z+b)^2
-//
-// where a=tanRMax or tanRMin
-//       b=rMaxAv  or rMinAv
-//
-// (vx^2+vy^2-(a*vz)^2)t^2+2t(pxvx+pyvy-a*vz(a*pz+b))+px^2+py^2-(a*pz+b)^2=0;
-//     t1                        t2                      t3  
-//
-//  \--------u-------/       \-----------v----------/ \---------w--------/
-//
-
-    t1=1.0-v.z()*v.z();
-    t2=p.x()*v.x()+p.y()*v.y();
-    t3=p.x()*p.x()+p.y()*p.y();
-    rin=tanRMin*p.z()+rMinAv;
-    rout=tanRMax*p.z()+rMaxAv;
-
-// Outer Cone Intersection
-//
-// Must be outside or on outer cone for valid intersection
-
-    nt2=t2-tanRMax*v.z()*rout;
-    nt3=t3-rout*rout;			// rho(point)>rho(cone at p.z)
-    if (nt3>=0)
-         {
-	    nt1=t1-(tanRMax*v.z())*(tanRMax*v.z());
-//	    nt2=t2-tanRMax*v.z()*rout;
-//	    nt3=t3-rout*rout;
-	    if (nt1)
-		{
-//
-// Equation quadratic => 2 roots : first root must be valid intersection
-//
-		    b=nt2/nt1;
-		    c=nt3/nt1;
-		    d=b*b-c;
-		    if (d>=0)
-			{
-			    s=-b-sqrt(d);
-			    if (s>=0)	// If 'forwards'
-				{
-// Check z intersection
-				    zi=p.z()+s*v.z();
-				    if (fabs(zi)<=tolDz)
-					{
-// Z ok. Check phi intersection if reqd
-					    if (!seg)
-						{ return s; }
-					    else
-						{
-						    xi=p.x()+s*v.x();
-						    yi=p.y()+s*v.y();
-						    ri=rMaxAv+zi*tanRMax;
-						    cosPsi=(xi*cosCPhi+
-							    yi*sinCPhi)/ri;
-						    if (cosPsi>=cosHDPhiT)
-							{ return s; }
-						}
-					} // end if fabs(zi)
-				} // end if (s>=0)
-    
-			}
-		}
-	    else if (nt2)
-		{
-//
-// Equation linear => 1 root - just touches outer cone
-//
-		    s=-0.5*nt3/nt2;
-		    if (s>=0)	// If 'forwards'
-			{
-// Check z intersection
-			    zi=p.z()+s*v.z();
-			    if (fabs(zi)<=tolDz)
-				{
-// Z ok. Check phi intersection if reqd
-				    if (!seg)
-					{ return s; }
-				    else
-					{
-					    xi=p.x()+s*v.x();
-					    yi=p.y()+s*v.y();
-					    ri=rMaxAv+zi*tanRMax;
-					    cosPsi=(xi*cosCPhi+
-						    yi*sinCPhi)/ri;
-					    if (cosPsi>=cosHDPhiT)
-						{ return s; }
-					}
-				} // end if fabs(zi)
-			} // end if (s>=0)
-		}
-	}
-    else
-	{
-// Inside outer cone
-// check not inside, and heading through G4Cons (-> 0 to in)
-	    if (t3>rin*rin&&nt2<0&&fabs(p.z())<=fDz)
-		{
-// Inside cones, delta r -ve, inside z extent
-		    if (seg)
-			{
-			    cosPsi=(p.x()*cosCPhi+p.y()*sinCPhi)/sqrt(t3);
-			    if (cosPsi>=cosHDPhiT)
-				{
-				    return 0;
-				}
-			}
-		    else
-			{
-			    return 0;
-			}
-		}
-	}
-
-//
-// Inner Cone Intersection
-//
-    if (fRmin1||fRmin2)
-	{
-	    nt1=t1-(tanRMin*v.z())*(tanRMin*v.z());
-	    nt2=t2-tanRMin*v.z()*rin;
-	    nt3=t3-rin*rin;
-	    if (nt1)
-		{
-//
-// Equation quadratic => 2 roots : second root must be valid intersection
-// (Point is outside/on surface & know outer cone Hit was bad)
-//
-		    b=nt2/nt1;
-		    c=nt3/nt1;
-		    d=b*b-c;
-		    if (d>=0)
-			{
-			    s=-b+sqrt(d);
-			    if (s>=0)	// If 'forwards'
-				{
-// Check z intersection
-				    zi=p.z()+s*v.z();
-				    if (fabs(zi)<=tolDz)
-					{
-// Z ok. Check phi intersection if reqd
-					    if (!seg)
-						{ return s; }
-					    else
-						{
-						    xi=p.x()+s*v.x();
-						    yi=p.y()+s*v.y();
-						    ri=rMinAv+zi*tanRMin;
-						    cosPsi=(xi*cosCPhi+
-							    yi*sinCPhi)/ri;
-						    if (cosPsi>=cosHDPhiT)
-							{ snxt=s; }
-						}
-					} // end if fabs(zi)
-				} // end if (s>=0)
-			}
-		}
-//
-// No need to check linear case - earlier phi intersections will be valid
-//
-
-
-//
-// Intersection with phi surfaces
-//
-	    if (seg)
-		{
-// First phi surface (`S'tarting phi)
-		    sinSPhi=sin(fSPhi);
-		    cosSPhi=cos(fSPhi);
-		    Comp=v.x()*sinSPhi-v.y()*cosSPhi;// Compnent towards
-		    if (Comp)
-			{
-			    s=(p.y()*cosSPhi-p.x()*sinSPhi)/Comp;
-			    if (s>=kCarTolerance&&s<snxt)
-				{
-				    zi=p.z()+s*v.z();
-				    if (fabs(zi)<=tolDz)
-					{
-					    xi=p.x()+s*v.x();
-					    yi=p.y()+s*v.y();
-					    rho2=xi*xi+yi*yi;
-					    tolRMin=rMinAv+zi*tanRMin;
-					    if (tolRMin>kRadTolerance)
-						{
-						    tolRMin2=(tolRMin-kRadTolerance)*(tolRMin-kRadTolerance);
-						}
-					    else
-						{
-						    tolRMin2=0;
-						}
-					    tolRMax=rMaxAv+zi*tanRMax+kRadTolerance;
-					    tolRMax2=tolRMax*tolRMax;
-					    
-					    
-					    if (rho2>=tolRMin2&&rho2<=tolRMax2)
-						{
-// z and r intersections good - check intersecting with correct half-plane
-					      if ((yi*cosCPhi-xi*sinCPhi)<=0)
-						  snxt=s;
-						}
-					}
-				}
-			}
-
-// Second phi surface (`E'nding phi)
-		    ePhi=fSPhi+fDPhi;
-		    sinEPhi=sin(ePhi);
-		    cosEPhi=cos(ePhi);
-		    Comp=v.x()*sinEPhi-v.y()*cosEPhi;// Compnent towards
-		    if (Comp)
-			{
-			    s=(p.y()*cosEPhi-p.x()*sinEPhi)/Comp;
-			    if (s>=kCarTolerance&&s<snxt)
-				{
-				    zi=p.z()+s*v.z();
-				    if (fabs(zi)<=tolDz)
-					{
-					    xi=p.x()+s*v.x();
-					    yi=p.y()+s*v.y();
-					    rho2=xi*xi+yi*yi;
-					    tolRMin=rMinAv+zi*tanRMin;
-					    if (tolRMin>kRadTolerance)
-						{
-						    tolRMin2=(tolRMin-kRadTolerance)*(tolRMin-kRadTolerance);
-						}
-					    else
-						{
-						    tolRMin2=0;
-						}
-					    tolRMax=rMaxAv+zi*tanRMax+kRadTolerance;
-					    tolRMax2=tolRMax*tolRMax;
-
-					    if (rho2>=tolRMin2&&rho2<=tolRMax2)
-						{
-// z and r intersections good - check intersecting with correct half-plane
-					      if ((yi*cosCPhi-xi*sinCPhi)>=0)
-						  snxt=s;
-						}
-					}
-				}
-			}
-		}
-	}
-    return snxt;
-
-}
-**********************************************************************************    */
- 
+//////////////////////////////////////////////////////////////////////////////
+// 
 // Calculate distance (<= actual) to closest surface of shape from outside
 // - Calculate distance to z, radial planes
 // - Only to phi planes if outside phi extent
@@ -1717,13 +1338,13 @@ G4double G4Cons::DistanceToIn(const G4ThreeVector& p) const
 // Calculate distance to surface of shape from `inside', allowing for tolerance
 // - Only Calc rmax intersection if no valid rmin intersection
 
-G4double G4Cons::DistanceToOut(const G4ThreeVector& p,
-			       const G4ThreeVector& v,
-			       const G4bool calcNorm,
-			       G4bool *validNorm,
-			       G4ThreeVector *n) const
+G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
+			        const G4ThreeVector& v,
+			        const G4bool calcNorm,
+			              G4bool *validNorm,
+			              G4ThreeVector *n) const
 {
-    ESide side,sider,sidephi;
+    ESide side = kNull,sider,sidephi;
 
     G4double snxt,sr,sphi,pdist;
 
@@ -1867,7 +1488,7 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p,
 	     }			      
 	     if ( (ri < 0) || (sr < kRadTolerance/2) )
 	     {
-// Safety: if both roots -ve ensure that sr cannot `win' distancetoout
+// Safety: if both roots -ve ensure that sr cannot `win' distance to out
 
 		sr2=-b+sqrt(d);
 		zi=p.z()+sr2*v.z();
@@ -2041,6 +1662,7 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p,
 // 					}
 
 // Patch 4.4.95 - root above cross-over point
+
 				    sr2=-b-sqrt(d);
 				    zi=p.z()+sr2*v.z();
 				    ri=tanRMin*zi+rMinAv;
@@ -2058,7 +1680,9 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p,
 					|| (sr2<kRadTolerance/2))
 					{
 					    sr3=-b+sqrt(d);
+
 // Safety: if both roots -ve ensure that sr cannot `win' distancetoout
+
 					    if  (sr3>kCarTolerance*0.5)
 					      {
 					        if(sr3<sr)
@@ -2489,8 +2113,8 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p,
     return snxt;
 }
 
-// -----------------------------------------------------------------------------------
-
+//////////////////////////////////////////////////////////////////
+//
 // Calculate distance (<=actual) to closest surface of shape from inside
 
 G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
@@ -2546,9 +2170,8 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
     return safe;	
 }
 
-// ------------------------------------------------------------------------------------
-
-
+////////////////////////////////////////////////////////////////////////////
+//
 // Create a List containing the transformed vertices
 // Ordering [0-3] -fDz cross section
 //          [4-7] +fDz cross section such that [0] is below [4],
@@ -2635,7 +2258,9 @@ G4Cons::CreateRotatedVertices(const G4AffineTransform& pTransform) const
     return vertices;
 }
 
-// ----------------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////
+//
+// Methods for visualisation
 
 void G4Cons::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
@@ -2664,6 +2289,12 @@ G4NURBS* G4Cons::CreateNURBS () const
     return new G4NURBSbox (RMax, RMax, fDz);       // Box for now!!!
 }
 
-//  ******************************* End of G4Cons.cc file **********************************
+//
+//
+/////////////////////////////// End of G4Cons.cc file //////////////////////
+
+
+
+
 
 

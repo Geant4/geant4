@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trap.cc,v 1.3 1999-06-04 17:19:16 sgiani Exp $
+// $Id: G4Trap.cc,v 1.4 1999-11-19 16:10:13 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -14,10 +14,11 @@
 //
 // History:
 // 21.03.95 P.Kent: Modified for `tolerant' geometry
-// 9.9.96   V. Grichine: Final modifications before to commit
-// 1.11.96 V.Grichine Costructors for Right Angular Wedge from STEP & G4Trd/Para
-// 8.12.97 J.Allison Added "nominal" constructor and method SetAllParameters.
-// 4.6.99  S.Giani: Fixed CalculateExtent in rotated case. 
+//  9.09.96 V. Grichine: Final modifications before to commit
+//  1.11.96 V.Grichine Costructor for Right Angular Wedge from STEP & G4Trd/Para
+//  8.12.97 J.Allison: Added "nominal" constructor and method SetAllParameters.
+//  4.06.99 S.Giani: Fixed CalculateExtent in rotated case. 
+// 19.11.99 V.Grichine, kUndefined was added to Eside enum
 
 #include <math.h>
 #include "G4Trap.hh"
@@ -32,11 +33,20 @@
 #include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
+////////////////////////////////////////////////////////////////////////
+//
+// Accuracy of coplanarity
+
 const G4double kCoplanar_Tolerance=1E-4;
 
-                                      // Private enum: Not for external use   	
-enum Eside {ks0,ks1,ks2,ks3,kPZ,kMZ};
+//////////////////////////////////////////////////////////////////////////
+//
+// Private enum: Not for external use 
+  	
+enum Eside {kUndefined,ks0,ks1,ks2,ks3,kPZ,kMZ};
 
+////////////////////////////////////////////////////////////////////////
+//
 // Destructor
 
 G4Trap::~G4Trap()
@@ -44,7 +54,10 @@ G4Trap::~G4Trap()
     ;
 }
 
-// Constructor - check and set half-widths as well as angles: final check of coplanarity
+//////////////////////////////////////////////////////////////////////////
+//
+// Constructor - check and set half-widths as well as angles: 
+// final check of coplanarity
 
 G4Trap::G4Trap( const G4String& pName,
 	        G4double pDz,
@@ -54,8 +67,8 @@ G4Trap::G4Trap( const G4String& pName,
 	        G4double pDy2, G4double pDx3, G4double pDx4,
 	        G4double pAlp2) : G4CSGSolid(pName)
 {
-    if (pDz>0 && pDy1>0 && pDx1>0 && pDx2>0 && pDy2>0 && pDx3>0 && pDx4>0)
-	{
+   if (pDz>0 && pDy1>0 && pDx1>0 && pDx2>0 && pDy2>0 && pDx3>0 && pDx4>0)
+   {
 	   fDz=pDz;
 	   fTthetaCphi=tan(pTheta)*cos(pPhi);
 	   fTthetaSphi=tan(pTheta)*sin(pPhi);
@@ -71,19 +84,18 @@ G4Trap::G4Trap( const G4String& pName,
 	   fTalpha2=tan(pAlp2);
 
 	   MakePlanes();
-	}
+    }
     else
-	{
-	    G4Exception("Error in G4Trap::G4Trap - Invalid Length G4Trapmeters");
-	}
+    {
+       G4Exception("Error in G4Trap::G4Trap - Invalid Length G4Trap parameters");
+    }
 }
 
-// --------------------------------------------------------------------------
-
-
-// Constructor - Design of trapezoid based on 8 G4ThreeVector parameters, which are its vertices.
-// Checking of planarity with preparation of fPlanes[] and than calculation of other members
-
+////////////////////////////////////////////////////////////////////////////
+//
+// Constructor - Design of trapezoid based on 8 G4ThreeVector parameters, 
+// which are its vertices. Checking of planarity with preparation of 
+// fPlanes[] and than calculation of other members
 
 G4Trap::G4Trap( const G4String& pName,
 	        const G4ThreeVector pt[8]) : G4CSGSolid(pName)
@@ -147,8 +159,8 @@ G4Trap::G4Trap( const G4String& pName,
     
 }
 
-// --------------------------------------------------------------------------------------
-
+//////////////////////////////////////////////////////////////////////////////
+//
 // Constructor for Right Angular Wedge from STEP
 
 G4Trap::G4Trap( const G4String& pName,
@@ -217,8 +229,8 @@ G4Trap::G4Trap( const G4String& pName,
 	}
 }
 
-// -------------------------------------------------------------------------------
-
+///////////////////////////////////////////////////////////////////////////////
+//
 // Constructor for G4Trd
 
 G4Trap::G4Trap( const G4String& pName,
@@ -286,8 +298,8 @@ G4Trap::G4Trap( const G4String& pName,
 	}
 }
 
-// --------------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////////
+//
 // Constructor for G4Para
 
 G4Trap::G4Trap( const G4String& pName,
@@ -357,9 +369,11 @@ G4Trap::G4Trap( const G4String& pName,
 	}
 }
 
-  // Nominal constructor for G4Trap whose parameters are to be set by
-  // a G4VPramaterisation later.  Check and set half-widths as well as
-  // angles: final check of coplanarity
+///////////////////////////////////////////////////////////////////////////
+//
+// Nominal constructor for G4Trap whose parameters are to be set by
+// a G4VParamaterisation later.  Check and set half-widths as well as
+// angles: final check of coplanarity
 
 G4Trap::G4Trap( const G4String& pName) :
   G4CSGSolid (pName),
@@ -375,8 +389,11 @@ G4Trap::G4Trap( const G4String& pName) :
   fDx4        (1.),
   fTalpha2    (0.)
 {
+  ;
 }
 
+///////////////////////////////////////////////////////////////////////
+//
 // Set all parameters, as for constructor - check and set half-widths
 // as well as angles: final check of coplanarity
 
@@ -411,10 +428,14 @@ void G4Trap::SetAllParameters ( G4double pDz,
 	   MakePlanes();
 	}
     else
-	{
-	    G4Exception("Error in G4Trap::SetAll - Invalid Length G4Trapmeters");
-	}
+    {
+       G4Exception("Error in G4Trap::SetAll - Invalid Length G4Trap parameters");
+    }
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Checking of coplanarity
 
 G4bool G4Trap::MakePlanes()
 {
@@ -431,34 +452,34 @@ G4bool G4Trap::MakePlanes()
   pt[6]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,+fDz*fTthetaSphi+fDy2,+fDz);
   pt[7]=G4ThreeVector(+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,+fDz*fTthetaSphi+fDy2,+fDz);
   // Bottom side with normal approx. -Y
-  good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
-  if (!good)
-    {
-      G4Exception("G4Trap::G4Trap - face at ~-Y not planar");
-    }
+
+  good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]) ;
+
+  if (!good) G4Exception("G4Trap::G4Trap - face at ~-Y not planar");
+
   // Top side with normal approx. +Y
+
   good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
-  if (!good)
-    {
-      G4Exception("G4Trap::G4Trap - face at ~+Y not planar");
-    }
+
+  if (!good) G4Exception("G4Trap::G4Trap - face at ~+Y not planar");
+
   // Front side with normal approx. -X
+
   good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
-  if (!good)
-    {
-      G4Exception("G4Trap::G4Trap - face at ~-X not planar");
-    }
+
+  if (!good) G4Exception("G4Trap::G4Trap - face at ~-X not planar");
+   
   // Back side iwth normal approx. +X
+
   good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
-  if (!good)
-    {
-      G4Exception("G4Trap::G4Trap - face at ~+X not planar");
-    }
+
+  if (!good) G4Exception("G4Trap::G4Trap - face at ~+X not planar");
+    
   return good;
 }
 
-// --------------------------------------------------------------------------
-
+//////////////////////////////////////////////////////////////////////////////
+//
 // Calculate the coef's of the plane p1->p2->p3->p4->p1
 // where the ThreeVectors 1-4 are in anti-clockwise order when viewed from
 // infront of the plane.
@@ -482,12 +503,12 @@ G4bool G4Trap::MakePlane( const G4ThreeVector& p1,
     v14 = p4-p1;
     Vcross=v12.cross(v13);
 
-    if (fabs(Vcross.dot(v14)/(Vcross.mag()*v14.mag()))>kCoplanar_Tolerance)
-	{
-	    good=false;
-	}
+    if (fabs(Vcross.dot(v14)/(Vcross.mag()*v14.mag())) > kCoplanar_Tolerance)
+    {
+       good=false;
+    }
     else
-	{
+    {
     
 // a,b,c correspond to the x/y/z components of the normal vector to the plane
 	   
@@ -505,20 +526,26 @@ G4bool G4Trap::MakePlane( const G4ThreeVector& p1,
 	   //b = -(p4.x() - p2.x())*(p3.z() - p1.z()) + (p3.x() - p1.x())*(p4.z() - p2.z()) ; 
 	   //c = +(p4.x() - p2.x())*(p3.y() - p1.y()) - (p3.x() - p1.x())*(p4.y() - p2.y()) ;
 	   s=sqrt(a*a+b*b+c*c);   // so now vector plane.(a,b,c) is unit 
-	   plane.a=a/s;
-	   plane.b=b/s;
-	   plane.c=c/s;
-                          // Calculate D: p1 in in plane so D=-n.p1.Vect()
-	    
-	    plane.d=-(plane.a*p1.x()+plane.b*p1.y()+plane.c*p1.z());
-	    good=true;
-	}
-    return good;
+
+	   if( s > 0 )
+	   {
+		plane.a=a/s;
+		plane.b=b/s;
+		plane.c=c/s;
+	   }
+	   else 
+                G4Exception("Invalid parameters in G4Trap::MakePlane") ;
+
+// Calculate D: p1 in in plane so D=-n.p1.Vect()
+	   
+   plane.d=-(plane.a*p1.x()+plane.b*p1.y()+plane.c*p1.z());
+   good=true;
+ }
+ return good;
 }
 
-// -----------------------------------------------------------------------
-
-
+//////////////////////////////////////////////////////////////////////////////
+//
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
@@ -530,8 +557,8 @@ G4bool G4Trap::MakePlane( const G4ThreeVector& p1,
 }
 
 
-// ----------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
 // Calculate extent under transform and specified limit
 
 G4bool G4Trap::CalculateExtent(const EAxis pAxis,
@@ -809,8 +836,8 @@ G4bool G4Trap::CalculateExtent(const EAxis pAxis,
 }
 
 
-// ------------------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////
+//
 // Return whether point inside/outside/on surface, using tolerance
 
 EInside G4Trap::Inside(const G4ThreeVector& p) const
@@ -854,8 +881,8 @@ EInside G4Trap::Inside(const G4ThreeVector& p) const
     return in;
 }
 
-// ----------------------------------------------------------------------------
-
+/////////////////////////////////////////////////////////////////////////////
+//
 // Calculate side nearest to p, and return normal
 // If 2+ sides equidistant, first side's normal returned (arbitrarily)
 
@@ -891,8 +918,8 @@ G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p) const
 	}
 }
 
-// -----------------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////////
+//
 // Calculate distance to shape from outside - return kInfinity if no intersection
 //
 // ALGORITHM:
@@ -1028,8 +1055,8 @@ G4double G4Trap::DistanceToIn(const G4ThreeVector& p,
     return snxt;
 }
 
-// ---------------------------------------------------------------------------------
-
+///////////////////////////////////////////////////////////////////////////
+//
 // Calculate exact shortest distance to any boundary from outside
 // This is the best fast estimation of the shortest distance to trap
 // - Returns 0 is ThreeVector inside
@@ -1040,16 +1067,17 @@ G4double G4Trap::DistanceToIn(const G4ThreeVector& p) const
     G4int i;
     safe=fabs(p.z())-fDz;
     for (i=0;i<4;i++)
-	{
-	    Dist=fPlanes[i].a*p.x()+fPlanes[i].b*p.y()+fPlanes[i].c*p.z()+fPlanes[i].d;
-	    if (Dist > safe) safe=Dist;
-	}
+    {
+      Dist=fPlanes[i].a*p.x()+fPlanes[i].b*p.y()+fPlanes[i].c*p.z()+fPlanes[i].d;
+
+      if (Dist > safe) safe=Dist;
+    }
     if (safe<0) safe=0;
     return safe;	
 }
 
-// ----------------------------------------------------------------------------------
-
+/////////////////////////////////////////////////////////////////////////////////
+//
 // Calcluate distance to surface of shape from inside
 // Calculate distance to x/y/z planes - smallest is exiting distance
 
@@ -1057,7 +1085,7 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 			       const G4bool calcNorm,
 			       G4bool *validNorm,G4ThreeVector *n) const
 {
-    Eside side;
+    Eside side = kUndefined ;
     G4double snxt;		// snxt = return value
     G4double pdist,Comp,vdist,max;
 //
@@ -1100,9 +1128,9 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 		}
 	}
     else
-	{
+    {
        snxt=kInfinity;
-	}
+    }
 
 //
 // Intersections with planes[0] (expanded because of setting enum)
@@ -1116,10 +1144,10 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 		{
 // Leaving immediately
 		    if (calcNorm)
-			{
+		    {
 			    *validNorm=true;
-			    *n=G4ThreeVector(fPlanes[0].a,fPlanes[0].b,fPlanes[0].c);
-			}
+		      *n=G4ThreeVector(fPlanes[0].a,fPlanes[0].b,fPlanes[0].c);
+		    }
 		    return snxt=0;
 		}
 	}
@@ -1143,10 +1171,10 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 	    if (Comp>0)
 		{
 		    if (calcNorm)
-			{
+		    {
 			    *validNorm=true;
-			    *n=G4ThreeVector(fPlanes[0].a,fPlanes[0].b,fPlanes[0].c);
-			}
+		      *n=G4ThreeVector(fPlanes[0].a,fPlanes[0].b,fPlanes[0].c);
+		    }
 		    return snxt=0;
 		}
 	}
@@ -1164,10 +1192,10 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 		{
 // Leaving immediately
 		    if (calcNorm)
-			{
+		    {
 			    *validNorm=true;
-			    *n=G4ThreeVector(fPlanes[1].a,fPlanes[1].b,fPlanes[1].c);
-			}
+		      *n=G4ThreeVector(fPlanes[1].a,fPlanes[1].b,fPlanes[1].c);
+		    }
 		    return snxt=0;
 		}
 	}
@@ -1191,10 +1219,10 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 	    if (Comp>0)
 		{
 		    if (calcNorm)
-			{
+		    {
 			    *validNorm=true;
-			    *n=G4ThreeVector(fPlanes[1].a,fPlanes[1].b,fPlanes[1].c);
-			}
+		      *n=G4ThreeVector(fPlanes[1].a,fPlanes[1].b,fPlanes[1].c);
+		    }
 		    return snxt=0;
 		}
 	}
@@ -1211,10 +1239,10 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 		{
 // Leaving immediately
 		    if (calcNorm)
-			{
+		    {
 			    *validNorm=true;
-			    *n=G4ThreeVector(fPlanes[2].a,fPlanes[2].b,fPlanes[2].c);
-			}
+		      *n=G4ThreeVector(fPlanes[2].a,fPlanes[2].b,fPlanes[2].c);
+		    }
 		    return snxt=0;
 		}
 	}
@@ -1238,10 +1266,10 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 	    if (Comp>0)
 		{
 		    if (calcNorm)
-			{
+		    {
 			    *validNorm=true;
-			    *n=G4ThreeVector(fPlanes[2].a,fPlanes[2].b,fPlanes[2].c);
-			}
+		       *n=G4ThreeVector(fPlanes[2].a,fPlanes[2].b,fPlanes[2].c);
+		    }
 		    return snxt=0;
 		}
 	}
@@ -1258,10 +1286,10 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 		{
 // Leaving immediately
 		    if (calcNorm)
-			{
+		    {
 			    *validNorm=true;
-			    *n=G4ThreeVector(fPlanes[3].a,fPlanes[3].b,fPlanes[3].c);
-			}
+		      *n=G4ThreeVector(fPlanes[3].a,fPlanes[3].b,fPlanes[3].c);
+		    }
 		    return snxt=0;
 		}
 	}
@@ -1285,10 +1313,10 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 	    if (Comp>0)
 		{
 		    if (calcNorm)
-			{
+		    {
 			    *validNorm=true;
-			    *n=G4ThreeVector(fPlanes[3].a,fPlanes[3].b,fPlanes[3].c);
-			}
+		      *n=G4ThreeVector(fPlanes[3].a,fPlanes[3].b,fPlanes[3].c);
+		    }
 		    return snxt=0;
 		}
 	}
@@ -1298,7 +1326,7 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 	{
 	    *validNorm=true;
 	    switch(side)
-		{
+	    {
 		case ks0:
 		    *n=G4ThreeVector(fPlanes[0].a,fPlanes[0].b,fPlanes[0].c);
 		    break;
@@ -1317,41 +1345,38 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 		case kPZ:
 		    *n=G4ThreeVector(0,0,1);
 		    break;
-		}
+	    }
 	}
     return snxt;
 }
 
-// ---------------------------------------------------------------------------------------
-
-
+//////////////////////////////////////////////////////////////////////////////
+//
 // Calculate exact shortest distance to any boundary from inside
 // - Returns 0 is ThreeVector outside
 
 G4double G4Trap::DistanceToOut(const G4ThreeVector& p) const
 {
-    G4double safe,Dist;
-    G4int i;
-    safe=fDz-fabs(p.z());
-    if (safe<0)
-    {
-       safe=0;
-    }
-    else
-    {
+  G4double safe,Dist;
+  G4int i;
+  safe=fDz-fabs(p.z());
+
+  if (safe<0) safe=0;
+  else
+  {
     for (i=0;i<4;i++)
-	{
-	    Dist=-(fPlanes[i].a*p.x()+fPlanes[i].b*p.y()+fPlanes[i].c*p.z()+fPlanes[i].d);
-	    if (Dist<safe) safe=Dist;
-	}
-    if (safe<0) safe=0;
+    {
+     Dist=-(fPlanes[i].a*p.x()+fPlanes[i].b*p.y()+fPlanes[i].c*p.z()+fPlanes[i].d);
+
+      if (Dist<safe) safe=Dist;
     }
-    return safe;	
+    if (safe<0) safe=0;
+  }
+  return safe;	
 }
 
-// ----------------------------------------------------------------------------
-
-
+//////////////////////////////////////////////////////////////////////////
+//
 // Create a List containing the transformed vertices
 // Ordering [0-3] -fDz cross section
 //          [4-7] +fDz cross section such that [0] is below [4],
@@ -1391,6 +1416,9 @@ G4Trap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
     return vertices;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// Methods for visualisation
 
 void G4Trap::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Para.cc,v 1.2 1999-04-16 09:29:54 grichine Exp $
+// $Id: G4Para.cc,v 1.3 1999-11-19 16:10:11 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -15,6 +15,7 @@
 // History:
 // 21.03.95 P.Kent Modified for `tolerant' geom
 // 31.10.96 V.Grichine Modifications according G4Box/Tubs before to commit
+// 18.11.99 V. Grichine , kIndefined was added to ESide
 
 #include <math.h>
 #include "G4Para.hh"
@@ -29,48 +30,57 @@
 #include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
-// Private enum: Not for external use   	
-enum ESide {kPX,kMX,kPY,kMY,kPZ,kMZ};
+// Private enum: Not for external use 
+  	
+enum ESide {kUndefined,kPX,kMX,kPY,kMY,kPZ,kMZ};
 
 // used internally for normal routine
+
 enum ENSide {kNZ,kNX,kNY};
 
+/////////////////////////////////////////////////////////////////////
+//
 // Constructor - check and set half-widths
 
 void G4Para::SetAllParameters(G4double pDx, G4double pDy, G4double pDz, 
             G4double pAlpha, G4double pTheta, G4double pPhi)
 {
-    if (pDx>0&&pDy>0&&pDz>0)
-	{
+  if (pDx>0&&pDy>0&&pDz>0)
+  {
 	   fDx=pDx;
 	   fDy=pDy;
 	   fDz=pDz;
 	   fTalpha=tan(pAlpha);
 	   fTthetaCphi=tan(pTheta)*cos(pPhi);
 	   fTthetaSphi=tan(pTheta)*sin(pPhi);
-	}
-    else
-	{
-	   G4Exception("Error in G4Para::SetAllParameters - Invalid Length Parameters");
-	}
+  }
+  else
+  {
+    G4Exception("Error in G4Para::SetAllParameters - Invalid Length Parameters");
+  }
 }
+
+///////////////////////////////////////////////////////////////////////////
+//
 
 G4Para::G4Para(const G4String& pName,G4double pDx, G4double pDy, G4double pDz,
            G4double pAlpha, G4double pTheta,G4double pPhi) : G4CSGSolid(pName)
 {
     if (pDx>0&&pDy>0&&pDz>0)
-        {
+    {
            SetAllParameters( pDx, pDy, pDz, pAlpha, pTheta, pPhi);
-	}
+    }
     else
-	{
-	   G4Exception("Error in G4Para::G4Para - Invalid Length Parameters");
-	}
+    {
+       G4Exception("Error in G4Para::G4Para - Invalid Length Parameters");
+    }
 }
-// ----------------------------------------------------------------------------
 
-// Constructor - Design of trapezoid based on 8 G4ThreeVector parameters, which are its vertices.
-// Checking of planarity with preparation of fPlanes[] and than calculation of other members
+////////////////////////////////////////////////////////////////////////
+//
+// Constructor - Design of trapezoid based on 8 G4ThreeVector parameters, 
+// which are its vertices. Checking of planarity with preparation of 
+// fPlanes[] and than calculation of other members
 
 
 G4Para::G4Para( const G4String& pName,
@@ -107,16 +117,16 @@ G4Para::G4Para( const G4String& pName,
     
 }
 
-// --------------------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////
+//
 
 G4Para::~G4Para()
 {
    ;
 }
 
-// -----------------------------------------------------------------------------
-
-
+//////////////////////////////////////////////////////////////////////////
+//
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
@@ -128,8 +138,8 @@ G4Para::~G4Para()
 }
 
 
-// ----------------------------------------------------------------------
-
+//////////////////////////////////////////////////////////////
+//
 // Calculate extent under transform and specified limit
 
 G4bool G4Para::CalculateExtent(const EAxis pAxis,
@@ -333,9 +343,10 @@ G4bool G4Para::CalculateExtent(const EAxis pAxis,
    return flag;
 }
 
-// --------------------------------------------------------------------------------
-
+/////////////////////////////////////////////////////////////////////////////
+//
 // Check in p is inside/on surface/outside solid
+
 EInside G4Para::Inside(const G4ThreeVector& p) const
 {
     EInside in=kOutside;
@@ -380,8 +391,8 @@ EInside G4Para::Inside(const G4ThreeVector& p) const
     return in;
 }
 
-// -----------------------------------------------------------------------
-
+///////////////////////////////////////////////////////////////////////////
+//
 // Calculate side nearest to p, and return normal
 // If 2+ sides equidistant, first side's normal returned (arbitrarily)
 
@@ -465,8 +476,8 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p) const
     return norm;
 }
 
-// ---------------------------------------------------------------------------
-
+//////////////////////////////////////////////////////////////////////////////
+//
 // Calculate distance to shape from outside - return kInfinity if no intersection
 //
 // ALGORITHM:
@@ -648,8 +659,8 @@ G4double G4Para::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) con
     return snxt;
 }
 
-// ----------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////////
+//
 // Calculate exact shortest distance to any boundary from outside
 // - Returns 0 is point inside
 
@@ -692,16 +703,16 @@ G4double G4Para::DistanceToIn(const G4ThreeVector& p) const
     return safe;	
 }
 
-// ---------------------------------------------------------------------------
-
+//////////////////////////////////////////////////////////////////////////
+//
 // Calcluate distance to surface of shape from inside
 // Calculate distance to x/y/z planes - smallest is exiting distance
 
 G4double G4Para::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
-			     const G4bool calcNorm,
-			     G4bool *validNorm,G4ThreeVector *n) const
+			       const G4bool calcNorm,
+			       G4bool *validNorm,G4ThreeVector *n) const
 {
-    ESide side;
+    ESide side = kUndefined ;
     G4double snxt;		// snxt = return value
     G4double max,tmax;
     G4double yt,vy,xt,vx;
@@ -933,8 +944,8 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
     return snxt;
 }
 
-// -------------------------------------------------------------------------
-
+/////////////////////////////////////////////////////////////////////////////
+//
 // Calculate exact shortest distance to any boundary from inside
 // - Returns 0 is point outside
 
@@ -977,8 +988,8 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p) const
     return safe;	
 }
 
-// ----------------------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////////////
+//
 // Create a List containing the transformed vertices
 // Ordering [0-3] -fDz cross section
 //          [4-7] +fDz cross section such that [0] is below [4],
@@ -1018,6 +1029,9 @@ G4ThreeVectorList*
     return vertices;
 }
 
+////////////////////////////////////////////////////////////////////////////
+//
+// Methods for visualisation
 
 void G4Para::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
@@ -1068,5 +1082,8 @@ G4NURBS* G4Para::CreateNURBS () const
    return 0 ;
 }
 
+//
+//
+///////////////////////////  End of G4Para.cc ///////////////////////////
 
-// ********************************  End of G4Para.cc   ********************************
+

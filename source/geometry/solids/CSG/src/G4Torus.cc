@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.2 1999-04-16 09:29:55 grichine Exp $
+// $Id: G4Torus.cc,v 1.3 1999-11-19 16:10:12 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,6 +15,7 @@
 //
 // 30.10.96 V. Grichine First implementation with G4Tubs elements in Fs
 // 09.10.98 V. Grichine modifications in Distance ToOut(p,v,...)
+// 19.11.99 V. Grichine side = kNull in Distance ToOut(p,v,...)
 
 #include "G4Torus.hh"
 
@@ -33,8 +34,12 @@
 #include "G4NURBStubesector.hh"
 #include "G4VisExtent.hh"
 
+
+///////////////////////////////////////////////////////////////
+//
 // Constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
 //             - note if pdphi>2PI then reset to 2PI
+
 G4Torus::G4Torus(const G4String &pName,
 	       G4double pRmin,
 	       G4double pRmax,
@@ -60,19 +65,20 @@ G4Torus::SetAllParameters(
 	   fRtor=pRtor;
 	}
     else
-	{
-	    G4Exception("Error in G4Torus::SetAllParameters - invalid swept radius");
-	}
+    {
+      G4Exception("Error in G4Torus::SetAllParameters - invalid swept radius");
+    }
 
 // Check radii
+
     if (pRmin<pRmax&&pRmin>=0)
-	{
+    {
 	   fRmin=pRmin; fRmax=pRmax;
-	}
+    }
     else
-	{
-	    G4Exception("Error in G4Torus::SetAllParameters - invalid radii");
-	}
+    {
+      G4Exception("Error in G4Torus::SetAllParameters - invalid radii");
+    }
 
 // Check angles
     if (pDPhi>=2.0*M_PI)
@@ -80,18 +86,19 @@ G4Torus::SetAllParameters(
 	    fDPhi=2*M_PI;
 	}
     else
-	{
-	    if (pDPhi>0)
-		{
+    {
+       if (pDPhi>0)
+       {
 		    fDPhi = pDPhi;
-		}
-	    else
-		{
-		    G4Exception("Error in G4Torus::SetAllParameters - invalid dphi");
-		}
-	}
+       }
+       else
+       {
+	  G4Exception("Error in G4Torus::SetAllParameters - invalid dphi");
+       }
+    }
 	
 // Ensure psphi in 0-2PI or -2PI-0 range if shape crosses 0
+
     fSPhi = pSPhi;
 
     if (fSPhi<0)
@@ -109,12 +116,15 @@ G4Torus::SetAllParameters(
 	}
 }
 
+//////////////////////////////////////////////////////////////////////
+//
 // Destructor
+
 G4Torus::~G4Torus()
 {;}
 
-// --------------------------------------------------------------------------
-
+//////////////////////////////////////////////////////////////////////
+//
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
@@ -125,13 +135,14 @@ void G4Torus::ComputeDimensions(G4VPVParameterisation* p,
     p->ComputeDimensions(*this,n,pRep);
 }
 
-// -------------------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////
+//
 // Test function for study of intersections of a ray (starting from p along
 // v) with the torus
 
-G4int  G4Torus::TorusRoots( G4double Ri,
-			   const G4ThreeVector& p,
-			   const G4ThreeVector& v) const
+G4int  G4Torus::TorusRoots(       G4double Ri,
+			    const G4ThreeVector& p,
+			    const G4ThreeVector& v) const
 {
    // Define roots  Si (generally real >=0) for intersection with
    // torus (Ri = fRmax or fRmin) of ray p +S*v . General equation is :
@@ -177,12 +188,13 @@ G4int  G4Torus::TorusRoots( G4double Ri,
    return num ;      
 }
 
-// ---------------------------------------------------------------------
+/////////////////////////////////////////////////////////////////////////
+//
+// Auxiliary method for solving (in real numbers) biquadratic equation
+// Algorithm based on : Graphics Gems I by Jochen Schwartz
 
 G4int G4Torus::SolveBiQuadratic(double c[], double s[]  ) const
 {
-// From Graphics Gems I by Jochen Schwartz
-
     G4double  coeffs[ 4 ];
     G4double  z, u, v, sub;
     G4double  A, B, C, D;
@@ -204,12 +216,15 @@ G4int G4Torus::SolveBiQuadratic(double c[], double s[]  ) const
     q = 0.125*A2*A - 0.5*A*B + C;
     r = - 3.0/256*A2*A2 + 1.0/16*A2*B - 0.25*A*C + D;
 
-    if(q==0) // y^4 + py^2 + r = 0 and z=y^2 so y = +-sqrt(z1) and y = +-sqrt(z2)
+    // y^4 + py^2 + r = 0 and z=y^2 so y = +-sqrt(z1) and y = +-sqrt(z2)
+   
+    if(q==0) 
     {
         coeffs[ 0 ] = r;
 	coeffs[ 1 ] = p;
 	coeffs[ 2 ] = 1;
-	num = SolveQuadratic(coeffs, s);
+	num = SolveQuadratic(coeffs, s) ;
+
         if(num)
 	{
           if(num==2)
@@ -272,6 +287,7 @@ G4int G4Torus::SolveBiQuadratic(double c[], double s[]  ) const
 	coeffs[ 3 ] = 1;
 	num = SolveCubic(coeffs, s);
 	s[ num++ ] = 0;
+
 	for(j=1;j<num;j++) // picksort of roots in ascending order
 	{
 	   sub = s[j] ;
@@ -303,19 +319,13 @@ G4int G4Torus::SolveBiQuadratic(double c[], double s[]  ) const
 	u = z * z - r;
 	v = 2 * z - p;
 
-	if (u==0)
-	    u = 0;
-	else if (u > 0)
-	    u = sqrt(u);
-	else
-	    return 0;
+	if (u==0)        u = 0 ;
+	else if (u > 0)  u = sqrt(u) ;
+	else             return 0 ;
 
-	if (v==0)
-	    v = 0;
-	else if (v > 0)
-	    v = sqrt(v);
-	else
-	    return 0;
+	if (v==0)        v = 0 ;
+	else if (v > 0)  v = sqrt(v);
+	else             return 0 ;
 
 	coeffs[ 0 ] = z - u;
 	coeffs[ 1 ] = q < 0 ? -v : v;
@@ -340,11 +350,13 @@ G4int G4Torus::SolveBiQuadratic(double c[], double s[]  ) const
     return num;
 }
 
-// -------------------------------------------------------------------------
+/////////////////////////////////////////////////////////////////////////////
+//
+// Auxiliary method for solving of cubic equation in real numbers
+// From Graphics Gems I bu Jochen Schwartz
 
 G4int G4Torus::SolveCubic(double c[], double s[]  ) const
 {
-// From Graphics Gems I bu Jochen Schwartz
     G4int     i, num;
     G4double  sub;
     G4double  A, B, C;
@@ -414,11 +426,13 @@ G4int G4Torus::SolveCubic(double c[], double s[]  ) const
     return num;
 }
 
-// ---------------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////
+//
+// Auxiliary method for solving quadratic equations in real numbers
+// From Graphics Gems I by Jochen Schwartz
 
 G4int G4Torus::SolveQuadratic(double c[], double s[] ) const
 {
-// From Graphics Gems I by Jochen Schwartz
     G4double p, q, D;
 
     // normal form: x^2 + px + q = 0 
@@ -430,23 +444,24 @@ G4int G4Torus::SolveQuadratic(double c[], double s[] ) const
 
     if (D==0)
     {
-	s[ 0 ] = - p; // Generally we have two equal roots ?!
+	s[ 0 ] = - p;  // Generally we have two equal roots ?!
 	return 1;      // But consider them as one for geometry
     }
     else if (D > 0)
     {
 	G4double sqrt_D = sqrt(D);
 
-	s[ 0 ] = - p - sqrt_D ; // in ascending order !
+	s[ 0 ] = - p - sqrt_D ;  // in ascending order !
 	s[ 1 ] = - p + sqrt_D ;
 	return 2;
     }
     return 0;
 }
 
-// ---------------------------------------------------------------------------
-
+/////////////////////////////////////////////////////////////////////////////
+//
 // Calculate extent under transform and specified limit
+
 G4bool G4Torus::CalculateExtent(const EAxis pAxis,
 			      const G4VoxelLimits& pVoxelLimit,
 			      const G4AffineTransform& pTransform,
@@ -635,6 +650,7 @@ G4bool G4Torus::CalculateExtent(const EAxis pAxis,
 // If point inside then we are confident that the solid completely
 // envelopes the clipping volume. Hence set min/max extents according
 // to clipping volume extents along the specified axis.
+
 		    G4ThreeVector clipCentre(
 			(pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
 			(pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
@@ -652,8 +668,8 @@ G4bool G4Torus::CalculateExtent(const EAxis pAxis,
 	}
 }
 
-// -----------------------------------------------------------------
-
+////////////////////////////////////////////////////////////////////////////////
+//
 // Return whether point inside/outside/on surface
 
 EInside G4Torus::Inside(const G4ThreeVector& p) const
@@ -753,8 +769,8 @@ EInside G4Torus::Inside(const G4ThreeVector& p) const
     return in;
 }
 
-// -----------------------------------------------------------------------
-
+/////////////////////////////////////////////////////////////////////////////
+//
 // Return unit normal of surface closest to p
 // - note if point on z axis, ignore phi divided sides
 // - unsafe if point close to z axis a rmin=0 - no explicit checks
@@ -855,6 +871,8 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p) const
     return norm;
 }
 
+///////////////////////////////////////////////////////////////////////
+//
 // Calculate distance to shape from outside, along normalised vector
 // - return kInfinity if no intersection, or intersection distance <= tolerance
 //
@@ -883,6 +901,7 @@ G4double G4Torus::DistanceToIn(const G4ThreeVector& p,
 
 // Precalculated trig for phi intersections - used by r,z intersections to
 //                                            check validity
+
     G4bool seg;				// true if segmented
     G4double hDPhi,hDPhiOT,hDPhiIT,cosHDPhiOT,cosHDPhiIT;
 					// half dphi + outer tolerance
@@ -1121,6 +1140,7 @@ G4double G4Torus::DistanceToIn(const G4ThreeVector& p,
  			    if (it2>=tolORMin2 && it2<=tolORMax2)
  			    {
 //  r intersection is good - check intersecting with correct half-plane
+
 			       if ((yi*cosCPhi-xi*sinCPhi)<=0)	snxt=sphi;
  			    }    
 			 }
@@ -1129,6 +1149,7 @@ G4double G4Torus::DistanceToIn(const G4ThreeVector& p,
 		}
 	    
 // Second phi surface (`E'nding phi)
+
 	    ePhi=fSPhi+fDPhi;
 	    sinEPhi=sin(ePhi);
 	    cosEPhi=cos(ePhi);
@@ -1151,9 +1172,11 @@ G4double G4Torus::DistanceToIn(const G4ThreeVector& p,
 			 zi=p.z()+sphi*v.z();
  			 rhoi2=xi*xi+yi*yi;
                          it2 = fabs(rhoi2+zi*zi +Rtor2 - 2*fRtor*sqrt(rhoi2)) ;
+
  			 if (it2>=tolORMin2 && it2<=tolORMax2)
  			 {
 // z and r intersections good - check intersecting with correct half-plane
+
 			    if ((yi*cosCPhi-xi*sinCPhi)>=0)	snxt=sphi;
  			 }    
 		       }
@@ -1165,8 +1188,8 @@ G4double G4Torus::DistanceToIn(const G4ThreeVector& p,
     return snxt;
 }
 
-// ----------------------------------------------------------------------
-
+/////////////////////////////////////////////////////////////////////////////
+//
 // Calculate distance (<= actual) to closest surface of shape from outside
 // - Calculate distance to z, radial planes
 // - Only to phi planes if outside phi extent
@@ -1215,6 +1238,8 @@ G4double G4Torus::DistanceToIn(const G4ThreeVector& p) const
     return safe;
 }
 
+///////////////////////////////////////////////////////////////////////////
+//
 // Calculate distance to surface of shape from `inside', allowing for tolerance
 // - Only Calc rmax intersection if no valid rmin intersection
 
@@ -1224,10 +1249,11 @@ G4double G4Torus::DistanceToOut(const G4ThreeVector& p,
 			        G4bool *validNorm,
 				G4ThreeVector  *n    ) const
 {
-    ESide side,sidephi;
-    G4double snxt=kInfinity,sphi,c[5],s[4];
+    ESide side = kNull, sidephi ;
+    G4double snxt=kInfinity, sphi,c[5],s[4];
 
-// Vars for phi intersection:
+// Vars for phi intersection
+
     G4double sinSPhi,cosSPhi,ePhi,sinEPhi,cosEPhi;
     G4double cPhi,sinCPhi,cosCPhi;
     G4double pDistS,compS,pDistE,compE,sphi2,xi,yi,zi,vphi;
@@ -1239,7 +1265,7 @@ G4double G4Torus::DistanceToOut(const G4ThreeVector& p,
    // c[4]*S^4 + c[3]*S^3 +c[2]*S^2 + c[1]*S + c[0] = 0 .
    
    G4int    i,j,num ;
-  G4double Rtor2=fRtor*fRtor, Rmax2=fRmax*fRmax, Rmin2=fRmin*fRmin ;
+   G4double Rtor2=fRtor*fRtor, Rmax2=fRmax*fRmax, Rmin2=fRmin*fRmin ;
    G4double rho2 = p.x()*p.x()+p.y()*p.y();
    G4double rho = sqrt(rho2) ;
    G4double pt2 = fabs(rho2+p.z()*p.z() + Rtor2 - 2*fRtor*rho) ;
@@ -1653,7 +1679,10 @@ G4double G4Torus::DistanceToOut(const G4ThreeVector& p,
     return snxt;
 }
 
+/////////////////////////////////////////////////////////////////////////
+//
 // Calcluate distance (<=actual) to closest surface of shape from inside
+
 G4double G4Torus::DistanceToOut(const G4ThreeVector& p) const
 {
     G4double safe,safeR1,safeR2;
@@ -1705,6 +1734,8 @@ G4double G4Torus::DistanceToOut(const G4ThreeVector& p) const
     return safe;	
 }
 
+/////////////////////////////////////////////////////////////////////////////
+//
 // Create a List containing the transformed vertices
 // Ordering [0-3] -fRtor cross section
 //          [4-7] +fRtor cross section such that [0] is below [4],
@@ -1713,6 +1744,7 @@ G4double G4Torus::DistanceToOut(const G4ThreeVector& p) const
 //  Caller has deletion resposibility
 //  Potential improvement: For last slice, use actual ending angle
 //                         to avoid rounding error problems.
+
 G4ThreeVectorList*
    G4Torus::CreateRotatedVertices(const G4AffineTransform& pTransform,
 				  G4int& noPolygonVertices) const
@@ -1724,7 +1756,9 @@ G4ThreeVectorList*
     G4int crossSection,noCrossSections;
 
 // Compute no of cross-sections necessary to mesh tube
+
     noCrossSections=G4int (fDPhi/kMeshAngleDefault)+1;
+
     if (noCrossSections<kMinMeshSections)
 	{
 	    noCrossSections=kMinMeshSections;
@@ -1781,6 +1815,8 @@ G4ThreeVectorList*
     return vertices;
 }
 
+///////////////////////////////////////////////////////////////////////
+//
 // No implementation for Visualisation Functions
 
 void G4Torus::DescribeYourselfTo (G4VGraphicsScene& scene) const {
@@ -1819,3 +1855,9 @@ G4NURBS* G4Torus::CreateNURBS () const {
   }
   return pNURBS;
 }
+
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+

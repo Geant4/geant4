@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Box.cc,v 1.2 1999-04-13 11:05:04 sgiani Exp $
+// $Id: G4Box.cc,v 1.3 1999-11-19 16:10:09 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,7 +28,10 @@
 #include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
+////////////////////////////////////////////////////////////////////////
+//
 // Constructor - check & set half widths
+
 G4Box::G4Box(const G4String& pName, G4double pX,
 	  G4double pY, G4double pZ) : G4CSGSolid(pName)
 {
@@ -43,12 +46,18 @@ G4Box::G4Box(const G4String& pName, G4double pX,
 
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
 // Destructor
+
 G4Box::~G4Box()
 {}
 
+////////////////////////////////////////////////////////////////////////
+//
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
+
 void G4Box::ComputeDimensions(G4VPVParameterisation* p,
                               const G4int n,
                               const G4VPhysicalVolume* pRep)
@@ -56,8 +65,10 @@ void G4Box::ComputeDimensions(G4VPVParameterisation* p,
     p->ComputeDimensions(*this,n,pRep);
 }
 
-
+//////////////////////////////////////////////////////////////////////////
+//
 // Calculate extent under transform and specified limit
+
 G4bool G4Box::CalculateExtent(const EAxis pAxis,
 			      const G4VoxelLimits& pVoxelLimit,
 			      const G4AffineTransform& pTransform,
@@ -213,7 +224,10 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
 	}
 }
 
+/////////////////////////////////////////////////////////////////////////
+//
 // Return whether point inside/outside/on surface, using tolerance
+
 EInside G4Box::Inside(const G4ThreeVector& p) const
 {
     EInside in=kOutside;
@@ -253,9 +267,12 @@ EInside G4Box::Inside(const G4ThreeVector& p) const
     return in;
 }
 
+///////////////////////////////////////////////////////////////////////
+//
 // Calculate side nearest to p, and return normal
 // If two sides are equidistant, normal of first side (x/y/z) 
 // encountered returned
+
 G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
 {
     G4double distx,disty,distz;
@@ -299,6 +316,8 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
     return norm;
 }
 
+///////////////////////////////////////////////////////////////////////////
+//
 // Calculate distance to box from an outside point
 // - return kInfinity if no intersection.
 //
@@ -447,7 +466,9 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) cons
    }
    return smin ;
 }
- 
+
+//////////////////////////////////////////////////////////////////////////
+// 
 // Appoximate distance to box.
 // Returns largest perpendicular distance to the closest x/y/z sides of
 // the box, which is the most fast estimation of the shortest distance to box
@@ -466,22 +487,24 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p) const
     return safe;
 }
 
+/////////////////////////////////////////////////////////////////////////
+//
 // Calcluate distance to surface of box from inside
 // by calculating distances to box's x/y/z planes.
 // Smallest distance is exact distance to exiting.
 // - Eliminate one side of each pair by considering direction of v
 // - when leaving a surface & v.close, return 0
 
-G4double G4Box::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
-			      const G4bool calcNorm,
-			      G4bool *validNorm,G4ThreeVector *n) const
+G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
+			       const G4bool calcNorm,
+			       G4bool *validNorm,G4ThreeVector *n) const
 {
-  ESide side;
+  ESide side = kUndefined ;
   G4double pdist,stmp,snxt;
 
   if (calcNorm) *validNorm = true ; // All normals are valid
 
-  // X planes  --------------------------------------------
+  // X planes  
 
   if (v.x() > 0)
   {
@@ -524,7 +547,7 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
     snxt=kInfinity;
   }
 
-  // Y planes  ------------------------------------------
+  // Y planes  
 
   if (v.y()>0)
   {
@@ -573,7 +596,7 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
      }
   }
 
-  // Z planes  -----------------------------------------------
+  // Z planes  
 
   if (v.z()>0)
   {
@@ -651,8 +674,11 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
   return snxt;
 }
 
+////////////////////////////////////////////////////////////////////////////
+//
 // Calculate exact shortest distance to any boundary from inside
 // - If outside return 0
+
 G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
 {
     G4double safx1,safx2,safy1,safy2,safz1,safz2,safe;
@@ -665,6 +691,7 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
     safz2=fDz+p.z();	
 	
 // shortest Dist to any boundary now MIN(safx1,safx2,safy1..)
+
     if (safx2<safx1) safe=safx2;
     else             safe=safx1;
     if (safy1<safe) safe=safy1;
@@ -676,6 +703,8 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
     return safe;	
 }
 
+////////////////////////////////////////////////////////////////////////
+//
 // Create a List containing the transformed vertices
 // Ordering [0-3] -fDz cross section
 //          [4-7] +fDz cross section such that [0] is below [4],
@@ -715,18 +744,29 @@ G4Box::CreateRotatedVertices(const G4AffineTransform& pTransform) const
     return vertices;
 }
 
-void G4Box::DescribeYourselfTo (G4VGraphicsScene& scene) const {
+//////////////////////////////////////////////////////////////////////////
+//
+// Methods for visualisation
+
+void G4Box::DescribeYourselfTo (G4VGraphicsScene& scene) const 
+{
   scene.AddThis (*this);
 }
 
-G4VisExtent G4Box::GetExtent() const {
+G4VisExtent G4Box::GetExtent() const 
+{
   return G4VisExtent (-fDx, fDx, -fDy, fDy, -fDz, fDz);
 }
 
-G4Polyhedron* G4Box::CreatePolyhedron () const {
+G4Polyhedron* G4Box::CreatePolyhedron () const 
+{
   return new G4PolyhedronBox (fDx, fDy, fDz);
 }
 
-G4NURBS* G4Box::CreateNURBS () const {
+G4NURBS* G4Box::CreateNURBS () const 
+{
   return new G4NURBSbox (fDx, fDy, fDz);
 }
+
+
+
