@@ -1,4 +1,4 @@
-# $Id: run2b.mac,v 1.1 2003-11-07 21:30:27 japost Exp $
+# $Id: run2b.mac,v 1.2 2003-11-27 11:03:57 japost Exp $
 #
 # Macro file for "exampleNTST.cc"
 # 
@@ -23,3 +23,4 @@
 /run/initialize
 /run/beamOn 1000
 
+/NTST/getFieldStats
