@@ -174,7 +174,7 @@
     if(i>nEntries) G4Exception("Skipped some index numbers in G4NeutronHPVector");
     if(i==nPoints)
     {
-      nPoints *= 1.5;
+      nPoints = static_cast<G4int>(1.5*nPoints);
       G4NeutronHPDataPoint * buff = new G4NeutronHPDataPoint[nPoints];
       for (G4int j=0; j<nEntries; j++) buff[j] = theData[j];
       delete [] theData;

@@ -18,7 +18,7 @@ G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
   G4int i;
   G4double eMax = GetTarget()->GetMass()+GetNeutron()->GetMass()
                   - theActualStateQValue;
-  theCurrentMultiplicity = mean;
+  theCurrentMultiplicity = static_cast<G4int>(mean);
   G4ReactionProduct * tmp;
   for(i=0;i<multi;i++)
   {

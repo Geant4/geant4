@@ -21,7 +21,7 @@
     G4String filename = aFile.GetName();
     theBaseA = aFile.GetA();
     theBaseZ = aFile.GetZ();
-    if(!dbool) 
+    if(!dbool  || ( Z<2.5 && ( abs(theBaseZ - Z)>0.0001 || abs(theBaseA - A)>0.0001) ) )
     {
       hasAnyData = false;
       hasFSData = false; 

@@ -42,7 +42,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
   G4String filename = aFile.GetName();
   theBaseA = aFile.GetA();
   theBaseZ = aFile.GetZ();
-  if(!dbool || (abs(Z-1)<0.0001 && ( abs(theBaseZ - Z)>0.0001 || abs(theBaseA - A)>0.0001)))
+  if(!dbool || ( Z<2.5 && ( abs(theBaseZ - Z)>0.0001 || abs(theBaseA - A)>0.0001)))
   {
     if(getenv("NeutronHPNamesLogging")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
     hasAnyData = false;

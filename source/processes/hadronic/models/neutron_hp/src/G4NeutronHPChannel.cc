@@ -37,7 +37,7 @@
   G4bool G4NeutronHPChannel::Register(G4NeutronHPFinalState *theFS)
   {
     registerCount++;
-    G4int Z = theElement->GetZ();
+    G4int Z = static_cast<G4int>(theElement->GetZ()+0.0001);
     if(registerCount<5)
     {
       Z = Z-registerCount;
@@ -183,7 +183,7 @@
     {
 //      G4cout << "G4NeutronHPChannel::ApplyYourself theFinalState->Initialize+"<<G4endl;
 //      G4cout << "G4NeutronHPChannel::ApplyYourself theFinalState->Initialize-"<<G4endl;
-      it = niso*G4UniformRand();
+      it = static_cast<G4int>(niso*G4UniformRand());
     }
     else
     {

@@ -133,7 +133,7 @@
     G4String filename = aFile.GetName();
     theBaseA = A;
     theBaseZ = G4int(Z+.5);
-    if(!dbool)
+    if(!dbool || ( Z<2.5 && ( abs(theBaseZ - Z)>0.0001 || abs(theBaseA - A)>0.0001)))
     {
       hasAnyData = false;
       hasFSData = false; 

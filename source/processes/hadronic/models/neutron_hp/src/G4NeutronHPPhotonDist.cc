@@ -192,7 +192,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
       actualMult[i] = RandPoisson::shoot(current); // max cut-off still missing @@@
       if(nDiscrete==1&&current<1.0001) 
       {
-        actualMult[i] = current;
+        actualMult[i] = static_cast<G4int>(current);
         if(current<1) 
         {
           actualMult[i] = 0;

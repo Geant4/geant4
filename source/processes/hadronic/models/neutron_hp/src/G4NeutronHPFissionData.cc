@@ -83,7 +83,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   // MC integration loop
   G4int counter = 0;
   G4double buffer = 0;
-  G4int size = G4std::max(10., aT/60*kelvin);
+  G4int size = static_cast<G4int>(G4std::max(10., aT/60*kelvin) );
   G4ThreeVector neutronVelocity = 1./G4Neutron::Neutron()->GetPDGMass()*theNeutron.GetMomentum();
   G4double neutronVMag = neutronVelocity.mag();
   while(counter == 0 || abs(buffer-result/counter) > 0.01*buffer)

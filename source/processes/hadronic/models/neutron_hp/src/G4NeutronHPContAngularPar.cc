@@ -38,8 +38,8 @@
                                     G4int angularRep, G4int interpolE)
   {
     G4ReactionProduct * result = new G4ReactionProduct;
-    G4int Z = massCode/1000;
-    G4int A = massCode-1000*Z;
+    G4int Z = static_cast<G4int>(massCode/1000);
+    G4int A = static_cast<G4int>(massCode-1000*Z);
     if(massCode==0)
     {
       result->SetDefinition(G4Gamma::Gamma());

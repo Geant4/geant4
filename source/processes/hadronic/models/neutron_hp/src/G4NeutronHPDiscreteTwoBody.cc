@@ -18,8 +18,8 @@
 G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4double massCode, G4double mass)
 { // Interpolation still only for the most used parts; rest to be Done @@@@@
    G4ReactionProduct * result = new G4ReactionProduct;
-   G4int Z = massCode/1000;
-   G4int A = massCode-1000*Z;
+   G4int Z = static_cast<G4int>(massCode/1000);
+   G4int A = static_cast<G4int>(massCode-1000*Z);
 
    if(massCode==0)
    {
