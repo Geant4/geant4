@@ -1,338 +1,131 @@
 \section{Geant4 cascade model}
 
-%     of an intermediate-energy intranuclear cascade and evaporation models. 
-%[outline, and general description, overview]
-
 In inelastic particle nucleus collision a fast phase ($10^{-23} - 10^{-22} s$) of INC results to highly exited nucleus, 
 and is followed possible by fission and pre-equilibrium emission. A slower $10^{-18} - 10^{-16} s$ compound nucleus phase follows with evaportaion.
-A Boltzman equation must be solved to treat physical processesses of collision in detail.
+A Boltzman equation must be solved to treat physical proces of collision in detail.
  
-
 Intranuclear cascade (INC) model developed by Bertini \cite{bertini68, bertini69, bertini71}, solves the Boltzman equation on the average.
-Nuclear model consist of a three-region approximation to the continuously changing density distribution of nuclear matter within nuclei.
-Reletivistic kinematics is applied throughout the cascade, with accurate conservation of energy and momentum.
-
-INC model had been implemented in several codes such as HETC \cite{alsmiller90}. 
+The model had been implemented in several codes such as HETC \cite{alsmiller90}. 
 Our model is based on re-engineering of INUCL code  \cite{titarenko99a}.
-Models included are Bertini intra-nuclear cascade model with exitons, pre-equilibrium model, simple nucleus explosion model, 
+Models included are Bertini intranuclear cascade model with exitons, pre-equilibrium model, simple nucleus explosion model, 
 fission model, and evaporation model. 
 
-%Protons and neurons are assumed to have a zero-temperature ::: Fermi distribution. Hence, their kinetic energy range from zero to the zero-temperature Fermi energies calculated from the dencity of nucleids in ecah region.
-%range of projectiles allowed p, n, pi and nuclei.
-%From a few Mev to 10 GeV for n, p, pi and up to about 100 MeV / nucleon for nuclei.
-
-% particles p, n, pi, D, T, He3, He4,\gamma
-% (INUCLN with neutrino 31.3.98)
-% pion aborption
-% pre-equilibrium exiton model 
-
-
+Nuclear model consist of a three-region approximation to the continuously changing density distribution of nuclear matter within nuclei.
+Reletivistic kinematics is applied throughout the cascade.
 Cascade is stopped when all the particles, which can escape the nucleus, do it. 
 Then conformity with the energy - conservation law is checked.
-%and the given event is accepted, if $E_{exitation} > E_{cut} \approx $a few $MeV$.
 
-
-%Our implementation consists of three concentric spheres, each with uniform density of neutrons and protons.
-%Nucleon  are supposed to to move in a radius-dependent well which incorporates both muclear and Coulomb effects.
-
-%[Nuclear density]
-%Nuclear density distribution are derived from the $Re(V_{opt}(r))$ distribution. 
-%In cascade part, nucleus is divided into a finite number of zones with constant density.
-
-% Short sketch of the model:
-
-% \begin{itemize}
-% \item If an interaction is supposed to happen, the impact point onto thenucleus is calculated
-% \item the nucleus is split into three different regions with different potentials, nucleon densities and Fermi energies.
-
-% \item nucleon-projectile interction is chosen according to partial cross-sections
-% \item the products of the interaction are tracked trough the regions  until the energy drops below a cut-off energy.
-% \end{itemize}
-
-%In the following sections we give the overview of submodel basic features.
-
-%Originally the INUCL code was published in 1983 \cite{stepanov}.
-%Comprison of results between INCUL and LAHET, CEM95, HETC, CASCADE,
-%YIELDX, and ALICE code are presented in Refs. \cite{titarenko99a}.
 
 \subsection{Model limits}
 
-Reactions from 100~MeV to 5~GeV energy are treated for proton, neutron, pions, photon and nuclear isotopes.
+Particles treated are proton, neutron, pions, photon and nuclear isotopes.
+Bullet particle can be proton, neutron or  pion.
 Range of targets allowed is arbitrary.
-
 
 The necessary condition of validity of the INC model is $\lambda_{B} / v << \tau_{c} << \Delta t$, 
 where $\delta_{B}$ is the de Broglie wavelenth of the nucleons, v is the average relative N-N velocity and $\Delta t$ is the time interval between collisions.
-At energies higher than $\approx$ 10 GeV) the INC picture breaks down, 
-also physical foundation comes approximate at energies less than $200 MeV$, and needs to be supported with pre-quilibrium model.
+So the physical foundation comes approximate at energies less than $200 MeV$, and needs to be supported with pre-quilibrium model.
+also at energies higher than $\approx$ 10 GeV) the INC picture breaks down.
+Model has been tested against experimental with bullet kinetic energy  between 100~MeV and 5~GeV.
 
 \subsection{Intranuclear cascade model}
 
-
-
 Basic steps of the INC model are summarised below:
-
-%G4BertiniNucleiModel.cc:951:  if (ab < max_a_for_cascad) { /// first decide whether it will be cascad or compound final nuclei
 
 \begin{enumerate}
 \item The spatial point, where the incident particle enters, is selected uniformly over the projected area of the nucleus.
 \item Total particle-particle crossections and region-depenent nucleon densities are used to select a path lenght for the projectile particle.
 \item The momentum of the struck nucleon, the type of reaction and four momentum of the reaction products are determined.
 \item Exiton model is updated as the cascade proceeds.
-\item If Pauli exclusion principle allows and $E_{particle} > E_{cutoff}$, step (2) is performed to transport the products.
+\item If Pauli exclusion principle allows and $E_{particle} > E_{cutoff}$ = 2~MeV, step (2) is performed to transport the products.
 \end{enumerate}
 
-After INC, the residual excitation energy of the resulting nucleus (A', Z') are used as input for non-equilibrium model.
+After INC, the residual excitation energy of the resulting nucleus is used as input for non-equilibrium model.
 
 \subsection{Nuclei model}
 
-Some of the basic featusers of the nuclei are:
+Some of the basic features of the nuclei are:
 
 \begin{itemize}
-\item The nucleons are assumed to to have a Fermi gas momentum distribution. Fermi energy calculated in a local density approximation.
-\item Nuclear density effects are recalculated after each step.
+\item The nucleons are assumed to to have a Fermi gas momentum distribution. Fermi energy calculated in a local density approximation i.e. 
+Fermi energy is made radius dependent with Fermi momentum $p_{F}(r) = (\frac{3 \pi^2 \rho(r)}{2})^\frac{1}{3}$.
+%\item Nuclear density effects are recalculated after each step.
 \item Nucleons binding energies (BE) are calculated using mass formula.
-A parametrization of the nuclear binding energy uses combintaion of Kummel mass formula, or
-experimental data. Asymptotic high temperature mass formula is used if it's impossible to use experimental data.
+A parametrization of the nuclear binding energy uses combination of Kummel mass formula, and
+experimental data. Also, asymptotic high temperature mass formula is used if it's impossible to use experimental data.
 \end{itemize}
 
 \subsubsection{Initialization}
-Nuclear radius is defined using A dependent parametrization. 
-
+The initialization phase fixes of nucleus radius  and momentum according to Fermi gas model.
 
 If target is Hydrogen (A = 1) direct particle-particle collision is performed, 
 and no nuclear modelling is used. 
 
-
-If $1 < A < 4$, a nuclei model consisting one layer with radius of 8.0 fermi is created.
-
+If $1 < A < 4$, a nuclei model consisting one layer with radius of 8.0 fm is created.
 
 For $4 < A < 11$, nuclei model is composed of three consentric spheres $i = \{1, 2, 3\}$ with radius
 $$r_{i}(\alpha_{i}) = \sqrt{C_{1}^{2} (1 - \frac{1}{A}) + 6.4} \sqrt{-log( \alpha_{i})}$$
 
 Here $\alpha_{i} = \{0.01, 0.3, 0.7\}$ and $C_{1} = 3.3836 A^{1/3}$
 
-% CU2 = sqrt(CU1 * (1.0 - 1.0 / a) + 6.4);
-% for (G4int i = 0; i < number_of_zones; i++) {
-% G4double y = sqrt(-log(alfa3[i]));
-% zone_radii.push_back(CU2 * y);
-
-If $A > 11$, nuclei model with three consentric spheres is used. The shere radius is now defined as:
+If $A > 11$, nuclei model with three consentric spheres is also used. The shere radius is now defined as:
 $$r_{i}(\alpha_{i}) =  C_{2} \log({\frac{1 + e^{- \frac{C_{1}}{C_{2}}}}{\alpha_{i}} - 1}) + C_{1}$$
 
 where $C_{2} = 1.7234$.
 
-The potential energy for nucleon N is
-$$ E_{potential}^{N} = \frac{p_{f}^2}{2 m^{N}} + E_{binding}^{N}(A, Z)$$
+The potential energy V for nucleon N is
+$$ V_{N} = \frac{p_{F}^2}{2 m_{N}} + BE_{N}(A, Z)$$
 
-where $p_f$ is a momentum of degenerate Fermi gas. %:::
+where $p_f$ is a Fermi momentum and BE a binding energy. 
  
-%$$p_{f} = 1.932 rd^{\frac{1}{3}}$$, $$rd = \frac{3 Z}{4\pi V_{t}} \frac{v_i}{r_{i}^3}$$, 
-%where $V_t$ is total nucleon volume,  and $v_i = is calu
-% G4double rd = dd0 * v[i] / v1[i];
-%      rod.push_back(rd);
-%      G4double pff = pf_coeff * pow(rd, one_third);
+Impulse distribution in each region follows Fermi distribution with zero temperature.
 
-%vz.push_back(0.5 * pff * pff / mproton + binding_energies[0]);
-%, where $p_{f} = 1.932 rd^{1/3}$
+\begin{equation}
+ f(p) = c p ^2
+ \end{equation}
 
-%G4double dd0 = 3.0 * z * oneBypiTimes4 / tot_vol;
-%G4double rd = dd0 * v[i] / v1[i];
- %G4double pff = pf_coeff * pow(rd, one_third);
+ where
 
-%G4double CU = cuu * pow(a, one_third);
-%G4double D1 = CU / AU;
-% G4double D = exp(-D1);
-%D = e^{- C_{1} / C_{2}}
-%G4double y = log((1.0 + D)/alfa3[i] - 1.0);
-%zone_radii.push_back(CU + AU * y);
+ \begin{equation}
+ \int_0^{p_F} f(p) dp = n_{p}   or  n_{n}
+ \end{equation}
 
-%Nuclear radius parameterization: By the definition R(A) is derived from eq. $Den(R(A)) = 0.01 Den max$.
-%Nuclear radius uses parameterization. If A 
+ where $n_p$ and $n_n$ are the number of protons or neutrons in region.
+ $P_f$ is impulse corresponding the Fermi energy
 
-
-%For pions $V_{opt}$ is taken to be constant (about 7 MeV).
-%Smooth liquid high energy formula  has  
-%\item The potential well depth is taken to be 7 MeV.
-
-
-
-%Impulse distribution
-
-%Distribution of potential energy.
-
-%[Mass formula]
-
-% Continuous charge dencity
-% \begin{equation}
-% \rho(r) = \frac{\rho_1}{e^{\frac{r-c}{a}}+1}
-% \end{equation}
-
-% where $a= 0.545~fm$ and $cA^{1/3} = 1.07~fm$. $A$ is mass number and $\rho_1$ mormalization parameter.
-
-% In the code the nucleus is composed of three consentric spheres, 
-% corresponding $0.9$, $0.2$, and $0.01$ of the maximal dencity.
-% In every reqion the dencity is uniform, 
-% and defined as mean value of continuos charge distribution.
-% Normalization is set so that when integrating over the reqions, correct number of nucleons is achieved.
+ \begin{equation}
+ E_f = \frac{p_F^2}{2 m_N} = \frac{\hbar^2}{2 m_N}(\frac{3 \pi^{2}}{v})^\frac{2}{3}
+ \end{equation}
  
-% \subsubsection{Impulse distribution}
-% Impulse distribution in each region follows Fermi distribution with zero temperature.
-
-% \begin{equation}
-% f(p) = c p ^2
-% \end{equation}
-
-% where
-
-% \begin{equation}
-% \int_0^{P_f} f(p) dp = n_p or n_n
-% \end{equation}
-
-% where $n_p$ and $n_n$ are the number of protons or neutrons in region.
-% $P_f$ is impulse corresponding the Fermi energy
-
-
-% \begin{equation}
-% E_f = \frac{P_f^2}{2m} = \frac{\hbar^2}{2m}(\frac{3\pi^2n}{v})^\frac{2}{3}
-% \end{equation}
- 
-% which depend on the dencity $n/v$ of particles, 
-% and which is different for each particle and each region. 
-% The total distribution as on composite does not follow Fermi distribution with zero temperature.
-
-% \subsubsection{Distribution of potential energy}
-% The binding energy is systematically set to be $7~MeV$. 
-% In each region protons and neutrons have different potential energy.  
-
-%\subsubsection{Quantum effects}
+ which depend on the dencity $n/v$ of particles. 
+ and which is different for each particle and each region. 
 
 \subsubsection{Pauli exclusion principle}
 Pauli exclusion principle forbids interactions where the products would be in occupied states.
 Following an assumption of completely degenerate Fermi gas, the levels are filled from the lowest level.
 The minimum energy allowed for the product of collision correspond to the lowest unfilled level of system, which is the Fermi energy in the region. 
-So in practice, Pauli exclusion prinsiple is taken into account by accepting only secondary nucleons which have $E_n > E_f$.
+So in practice, Pauli exclusion prinsiple is taken into account by accepting only secondary nucleons which have $E_N > E_f$.
 
-% Constrains imposed by the Pauli exclusion principle 
-% are taken into account 
-% by comparing energies of secondary particles.
-% If among socondary particles 
-% there is a nucleon with the energy lower than the Fermi energy 
-% $E < E_F$, then this interaction is consideres prohibited,
-% and the trajectori of the particle is traced further from the forbideden point.
-
-% Energies of particles are compared with the so-called cut-off energy $E_{cutoff}$.
-% Particles with the energy $E > E_{cutoff}$ participate in the development of the INC.
-% Typical values are listed in Table~\ref{table:cutoff}.
-
-% \begin{table}[!hbt]
-% \caption{Typical cut-off values for HETC particles.}
-
-% \hspace{0.5cm}
-
-% \label{table:cutoff} 
-% \centering
-% \begin{tabular}{lcll}
-% \hline
-% \em Particel    & \em cut-off           \\
-% \em Particel    & \em enrgy [MeV]       \\[2.5ex] 
-% \hline
-% $p$             & $15$                  \\
-% $n$             & $15$                  \\
-% $\mu$           & $0.2$                 \\
-% $\pi^\pm$       & $2$                   \\
-% \hline
-% \end{tabular} 
-% \end{table}
-
-
-% \subsubsection{Description of INC}
-
-% A key feature of this model is that, at sufficiently high energies,
-% the initial phase of reaction can be treated int terms of collisions
-% of the incident particle with individual nucleons inside the nucleus. 
-% The struck nucleons can cause further collisions, giving rise to a
-% particle ``cascede'' inside the nucleos; hence the term intranuclear
-% cascade describing this process.
-
-% \begin{figure}
-%   \begin{center}
-%     \leavevmode
-%     \rotatebox{0}{\mbox{\epsfxsize=8cm \epsfysize=6cm \epsffile{\PIC /mc.eps}}}
-%         \caption{Schematic diagram describing Monte Carlo simulation of INC. 400 MeV proton in colliding withnucleus, 
-% Here. for simplicity only one region is used. Crosses incicate Pauli-plocking}
-%   \label{sibtoo}
-%   \end{center}
-
-% \end{figure}
-
-% The implementation of the INC model is briefly described in the following steps:
-% \newcounter{list}
-% \begin{list}{\upshape \arabic{list}. }
-%         {\usecounter{list}
-%         \setlength{\labelwidth}{2cm}\setlength{\leftmargin}{2.6cm}
-%         \setlength{\labelsep}{0.5cm}\setlength{\rightmargin}{1cm}
-%         \setlength{\parsep}{0.5ex plus0.2ex minus0.1ex}
-%         \setlength{\itemsep}{0ex plus0.2ex}} %slshape
-% \item The spatial point where the incident particle enters the nucleus is determined by selecting it uniformly from the circle presenting the area of the nucleus projected on a plane.
-% \item A path length for the distance the particle travels before
-%         collision is selected by using the total particle-particle
-%         cross-sections and region-dependent nucleon densities.% (three
-% %        different regions).
-% \item If the particle escapes the nucleus without a collision, it will
-%         no longer be tracked in the INC model. Otherwise, the momentum
-%         of the struck nucleon, the type of reaction and the energy and
-%         direction of the reaction products are determined.
-% \item If the collision is not forbidden by the Pauli exclusion principle and
-%         if the kinetic energy of the product is above a predefined
-%         cutoff energy, the algorithm goes to step 2 to transport all
-%         the products further in the nucleus.
-% \item When the cascade is completed, the mass $A'$ and charge $Z'$ of
-%         the residual nucleus are determined from their conservation
-%         laws. Also the residual excitation energy $E^*$ is determined
-%         from the energy conservation law.
-% \end{list}             
-% %\end{minipage}
-
-
-% After the INC has been accomplished, $A'$, $Z'$ and $E^*$ are
-% used as input for the pre-equilibrium and the subsequent evaporation
-% algorithms to determine the number, type and energy of nucleons and
-% heavier particles ($d$, $t$, :::HET and $\alpha$ particles)
-% emitted. The remaining excitation energy is assumed to dissipate by
-% photon emission. 
-% %The $A$ and $Z$ of the final nucleus are then determined.
-% \subsubsection{Scaling model}
-% The information (particle types, energies, direction cosines, etc.)
-% obtained from the INC can be given as input to scaling routines, 
-% that use an extrapolation model to obtain the description of the collision products 
-% corresponding to the actual energy or the particle.
-% \subsection{Pre-equilibrium model}
-% \subsubsection{Separtion between INC and evaporation}
 
 \subsubsection{Cross sections and kinematics}
 
-%Probabllility for interactions during INC is obtained using free (N, N) cross-sections. 
 Path lengths of nucleons in the nucleus are sampled according to the local density and to free N-N cross sections.
 Angles after collisions are sampled from experimental differential cross sections.
 %{\sc Geant4} cascade model uses tabulated cross-sections.
 Tabulated total reaction cross-sections are calculated by Letaw's formulation \cite{letaw83, letaw93, pearlstein89}.
-%$45 A^0.7 (1+0.016 sin(5.3-2.63 log10(A)))^(1-0.62 exp(-E / 200) sin(10.9 E^(-0.28)))
+%:::$45 A^0.7 (1+0.016 sin(5.3-2.63 log10(A)))^(1-0.62 exp(-E / 200) sin(10.9 E^(-0.28)))
 For N-N cross-sections parametrizations based on the experimental energy and isospin dependent data. 
 The parameterization described in \cite{barashenkov72} is used. 
 
-% interaction crosssections
-% (all data for (N, N) and (pi, N) interactions (dn/dsigma, d3sigma/d3p, 
-%             partial multiplicity for npi<=5  error 10-20\%)
-
-%Cross-sections for production of one or two $\pi$ are included. 
-
-%pion absorption
-
-
-%Total inelastic cross section has to be taken from outside to normalize all data. 
-% \item 
-
+For pion the INC crossections are privded to treat elestic collisions and following inelstics channels
+pi- n -> pi0 n,
+pi0 p -> pi+ n and
+ pi0 n -> pi- p.
+Alo multiple production is implemented.
+Pion absorption cannels are 
+$\pi^{+}$ + nn $\rightarrow$ pn, $\pi^{+}$ + pn $\rightarrow$ pp, 
+$\pi^{0}$ + nn $\rightarrow$ X , $\pi^{0}$ + pn $\rightarrow$ pn,      $\pi^{0}$ + pp $\rightarrow$ pp, 
+$\pi^{-}$ + nn $\rightarrow$ X , $\pi^{-}$ + pn $\rightarrow$ nn , and $\pi^{-}$ + pp $\rightarrow$ pn.
 \subsection{Pre-equilibrium model}
 
 {\sc Geant4} cascade model implements exiton model proposed by Griffin \cite{griffin66, griffin67}.
@@ -343,82 +136,11 @@ For practical implementation of exiton model we use parameters  from \cite{riban
 
 In exiton model the posible selection rules for a particle-hole configuarations in the cource of the cascade are:
 $\Delta p = 0, \pm 1$  $\Delta h = 0, \pm 1$  $\Delta n = 0, \pm 2$,
-%
 where p is the number of particle, h is number of holes and n = p + h is the number of exitons. 
 
-% ::: p g exito
-% %What criteria for p-h excitation? is the next phase precompound or compound'? Only pions. The next phase is precompound. 
-%Initial conditions are defined during the cascad phase: 
-%p -number of "particles", i.e. nucleons, which can not escape the nucleus and have too small interaction probability; 
-%h - number of "holes" = number of nuclear nucleons involved in the cascade; energy - momentum of the exiton system derived from the conservation law.
+Cascade pre-equilibrium model uses target exitation data, 
+exiton configuration for neutron and proton to produce non-equilibrium evaporation.
 
-%exiton master equation
-
-% the Monte Carlo calculation of nuclear
-% reactions in the framework of the Cascade-Exciton Model (CEM) of
-% nuclear reactions. The CEM assumes that reactions occur in three
-% stages. The first stage is the intranuclear cascade. The excited
-% residual nucleus formed after the  emission of cascade particles
-% determines the particle-hole configuration that is a starting point
-% for the second preequilibrium stage of the reaction. The subsequent
-% relaxation of the nuclear excitation is treated in terms of the
-% exciton model of preequilibrium decay which includes the description
-% of the equilibrium evaporative stage of the reaction.
-
-
-%  The CEM95 code is intended for calculation of reaction, elastic,
-%  fission and total cross sections;  excitation functions; nuclide
-%  yields, energy and angular spectra; double differential cross
-%  sections; mean multiplicities, i.e., number of ejectiles per incident
-%  bombarding particle; ejectile yields; mean energies and production
-%  cross sections for neutrons, protons, deuterons, tritons, He3, He4,
-%  pions-, pions0, and pions+ emitted in nucleon- and pion-induced
-%  reactions using the Cascade-Exciton Model (CEM) of Nuclear
-%  Reactions. A detailed description of the CEM may be found in
-%  Ref.1. Part of primary version of the code concerning the
-%  preequilibrium and equilibrium stages of reactions is published in
-%  Ref.2. The Dubna version of the  intranuclear cascade model used in
-%  the CEM95 is described in detail  in the monograph 3. A detailed
-%  description of the subroutines used at the cascade stage of reaction
-%  may be found in Ref.4. All the models incorporated in the CEM95 for
-%  description of the level density parameter are given in Ref.5. All
-%  the models incorporated in the CEM95 to take into account competition
-%  between particle emission and fission at the compound stage of the
-%  reactions are described in  Ref.6. Exemplary results obtained with
-%  the code CEM95 may be found in Refs.7,8.
-
-% 9.
-% STATUS
-% IAEA1247/01: 21-APR-1995 tested at NEADB
-% 1015.
-
-% NAME AND ESTABLISHMENT OF AUTHORS -.
-
-%   Dr. Mashnik Stepan
-%   Laboratory of Theoretical Physics
-%   Joint Institute for Nuclear Research
-%   141980 DUBNA
-%   Moscow Region
-%   RUSSIAN FEDERATION
-
-% A.  Cross Section and Resonance Integral Calculations                              
-% Computation of reaction  cross sections  from nuclear theory such  as        the  optical  or  Hauser Feshbach models,  resonance cross  sections  by        Breit Wigner or  multilevel theory, determination of differential  cross sections, cross section evaluation, and compilation programs.
-% Keywords: evaporation model, high-energy reactions, nuclear cascades,
-% nuclear models. \cite{gudima83}, \cite{mashnik94} 
-
-% \begin{itemize}
-
-% \item 
-% %\item CEM95 http://www.nea.fr/abs/html/iaea1247.html, http://www.nea.fr/abs/html/iaea1247.html}
-
-% \end{itemize}
-
-
-Cascade pre-equilibrium model uses target exitation data, exiton configuration for neutron and proton to produce non-equilibrium evaporation.
-%Implementation inclues holes and quasiparticles.
-
-% \subsubsection{Precompound phase}
-% %, describe the PE model used, parameters, i.e., partial state densities, transition rates? 
 
 Parametrisations of the level density, is tabulated both with A and Z dependence and with high temperature 
 behaviour (the nuclei binding energy using smooth liquid high energy formula).
@@ -426,49 +148,13 @@ behaviour (the nuclei binding energy using smooth liquid high energy formula).
 N $\rightarrow$ N - 2, N $\rightarrow$ N - 1 N $\rightarrow$ N, N $\rightarrow$ N + 2,  channels are treated.
 The angular distribution is isotropic in the frame of rest of the exiton system.
 
-% The outline of the pre-equilibrium model is as follows~\cite{ferrari96}:
-% \begin{list}{\upshape \arabic{list}. }
-%         {\usecounter{list}
-%         \setlength{\labelwidth}{2cm}\setlength{\leftmargin}{2.6cm}
-%         \setlength{\labelsep}{0.5cm}\setlength{\rightmargin}{1cm}
-%         \setlength{\parsep}{0.5ex plus0.2ex minus0.1ex}
-%         \setlength{\itemsep}{0ex plus0.2ex}} %slshape
-%     \item For a given excitation energy $E$, atomic number $A$ and
-%       number of excitons $n$ the equilibrium number of excitons
-%       $n_{eq}=\sqrt{0.5 + 2 g E}$ is calculated ($g$ is the single
-%       particle level density). Now if the current exciton number
-%       $n\geq n_{eq}$ or the excitation energy is below a predefined
-%       level (i.e. 50~MeV), then the pre-equilibrium algorithm is
-%       finished and further emission of fragments is done with an
-%       equilibrium model (here the evaporation model). If $n<n_{eq}$,
-%       the next step is performed.
-% \item   The transition probabilities and emission probabilities for $n$, $p$, 
-%         $d$, $t$, :::HET and :::HEF are calculated for
-%         the current nucleus. The probabilities are normalized, and one
-%         subprocess (emission or transition) is selected.
-% \item   In case of a transition the number of excitons is updated, if
-%         necessary, and the algorithm returns to step~1. Otherwise 
-%         the next step is performed.
-% \item   The kinetic energy of the fragment is selected.
-% \item   Momentum direction angles of the fragment are sampled from an
-%         isotropic distribution in the exciton system rest frame. The
-%         momentum is then boosted to the nucleus rest frame.
-% \item   Characteristics of the residual nucleus ($A$, $Z$, $E$ and 
-%         momentum $P$) are updated. The algorithm returns to step~1.
-% \end{list}             
-% %\end{minipage}
-
-% In HETC pre-equilibrium code have been used to replace the INC in in energy range $E < 200~MeV$.
-
 \subsection{Break-up models}
 
+
 Fermi break-up is allowed only in some extreme cases, i.e. for light nuclei ($A < 12$ and  $3 (A - Z) < Z < 6$ ) and $E_{exitation} > 3 E_{binding}$ 
-%If the light nuclei exitation energy is higher than three times the binding energy, 
-%the nuclei expolision is performed. 
 Simple explosion model decays the nuleus into neutrons and protons and decreases exotic evaporation processes.
 
 
-%The mechanism of nuclear fission \cite{bohr39}.
 Fission model is phenomenological model using potential minimization. Binding energy paramerization is used and
 some features of the fission statistical model are incorporated \cite{fong69}.
 
@@ -487,139 +173,3 @@ The evaporation model ends with  emission chain which is followed until E$_{exit
 
 %Evaporation (Weisskopf - Ewing) 
 %Weisskopf-Ewing evaporation in competition with fission. 
-%Emissions of n,p,d,t,He3,He4,gamma is allowed. 
-%Level densities derived from exp.data are used. 
-%Angular momentum and spin dependence are not included. 
-
-%Parameters used: level densities, inverse cross-sections or transmission coefficient, 
-%choice of optical model parameters if relevant (or reference to source), 
-%range of excitations allowed, inclusive or exclusive results? 
-
-
-% } else { // normal chain
-
-%         if (EEXS > cut_off_energy) { 
-
-%           G4double E0 = getE0(A);
-%           G4double parlev = getPARLEVDEN(A, Z);
-%           G4double u1 = parlev * A;
-%           G4std::pair<G4std::vector<G4double>, G4std::vector<G4double> > parms = paraMaker(Z);
-%           G4std::vector<G4double> AK = parms.first;
-%           G4std::vector<G4double> CPA = parms.second;
-%           G4double DM0 = bindingEnergy(A, Z);   
-%           G4int i(0);
-
-%           for (i = 0; i < 6; i++) {
-%             A1[i] = A - AN[i];
-%             Z1[i] = Z - Q[i];
-%             u[i] = parlev * A1[i];
-%             TM[i] = -0.1;
-
-%             if (goodRemnant(A1[i], Z1[i])) {
-%               G4double QB = DM0 - bindingEnergy(A1[i], Z1[i]) - Q1[i];
-%               V[i] = coul_coeff * Z * Q[i] * AK[i] / (1.0 + EEXS / E0) /
-%                 (pow(A1[i], one_third) + pow(AN[i], one_third));
-%               TM[i] = EEXS - QB - V[i] * A / A1[i];  
-%             };
-%           }; 
-      
-%           G4double ue = 2.0 * sqrt(u1 * EEXS);
-%           G4double prob_sum = 0.0;
-        
-%           if (TM[0] > cut_off_energy) {
-%             G4double AL = getAL(A);
-%             W[0] = BE * pow(A1[0], two_thirds) * G[0] * AL;
-%             G4double TM1 = 2.0 * sqrt(u[0] * TM[0]) - ue;
-
-%             if (TM1 > huge) {
-%               TM1 = huge;
-
-%             } else if (TM1 < small) {
-%               TM1 = small;
-%             };
-%             W[0] = W[0] * exp(TM1);        
-%             prob_sum += W[0];
-
-%           } else {
-%             W[0] = 0.0;
-%           }; 
-      
-%           for (i = 1; i < 6; i++) {
-
-%             if (TM[i] > cut_off_energy) {
-%               W[i] = BE * pow(A1[i], two_thirds) * G[i] * (1.0 + CPA[i]);
-%               G4double TM1 = 2.0 * sqrt(u[i] * TM[i]) - ue;
-
-%               if (TM1 > huge) {
-%                 TM1 = huge;
-
-%               } else if (TM1 < small) {
-%                 TM1 = small;
-%               };
-%               W[i] = W[i] * exp(TM1);              
-%               prob_sum += W[i];
-
-%             } else {
-%               W[i] = 0.0;
-%             }; 
-%           };
-
-%Other parameters are the same as in ([1], see 5a.) 
-
-% \subsection{Evaporation model}
-
-% After the pre-equilibrium model, the nucleus is assumed to be in an
-% excited state, but in an internal thermal equilibrium.  The excitation
-% leads to emission of nucleons, light nuclei and $\gamma$ particles,
-% which are handled with the evaporation and de-excitation algorithms
-% \cite{iljinov92}.
-
-% %described in {\bf Chapter}. 
-
-% The evaporation algorithm %described in Fig.~\ref{fig:hetcVuokaavio} 
-% %is quite straight-forward. It 
-% consists of subsequent evaporation cycles, which are repeated until no
-% further evaporation is energetically possible.
-% %as long as the nucleus remains excited. 
-% On
-% each evaporation cycle, one particle ($n$, $p$, $d$, $t$, :::HET or
-% :::HEF) is sampled and emitted. The emission probabilities are obtained
-% according to the statistical evaporation theory of
-% Weisskopf~\cite{weisskopf37},where the probability to emit a
-% particle $i$ with kinetic energy between $\epsilon$ and $d\epsilon$
-% from a compound nucleus excited to an energy $E^*$ (measured from the
-% ground state) is
-% \begin{equation}\label{eq:weisskopf}
-%         P_i(\epsilon)d\epsilon = \frac{(2S_i+1)m_i}{\pi^2 \hbar^3} \sigma_{inv,i}(\epsilon)
-%         \frac{\rho_f(E^*- Q_i - \epsilon)}{\rho_i(E^*)}\epsilon d\epsilon,
-% \end{equation}
-% where $\rho$'s are the nuclear level densities for final and the
-% initial nuclei, $\sigma_{inv,i}$ is the cross-section for the inverse
-% reaction (total cross-section for capture of particle $i$ of energy
-% $\epsilon$ by the residual nucleus), $S_i$ and $m_i$ are spin and mass
-% of the emitted particle and $Q$ is its separation energy. This formula
-% also describes the kinetic energy distribution of the emitted particle.  The
-% state of the residual nucleus is updated when another cycle begins.
-% When no further particle emission is possible, the (still excited)
-% residual nucleus is given to the de-excitation algorithm. It is also
-% possible that there is no residual nucleus, as in the splitting of
-% :::BEE.
-
-% In the de-excitation algorithm, the remaining excitation energy of the
-% residual nucleus is used to emit photons, which are uniformly
-% distributed in the CMS frame. Their kinetic energy is sampled from a
-% uniform distribution between zero and the residual excitation energy.
-% Photons from this energy distribution are emitted as long as the
-% remaining excitation energy is positive; otherwise the kinetic energy
-% of the emitted photon is greater than the remaining excitation energy,
-% and in this case it is set to be equal to the remaining excitation
-% energy, which then goes to zero. This also ends the de-excitation
-% algorithm.
-
-
-
-
-
-
-
-
