@@ -14,8 +14,6 @@
 /plots/setElowGamma  0.1 MeV
 /plots/setEhighGamma 1. GeV
 #
-/run/initialize
-#
 /calor/setAbsMat Lead 
 /calor/setAbsThick 0.15 mm  
 /calor/setAbsYZ 10. cm

@@ -7,8 +7,6 @@
 #control/saveHistory
 /run/verbose 2
 #
-/run/initialize
-#
 /calor/setAbsMat Gold      
 /calor/setAbsThick 19.296 mum  
 /calor/setAbsYZ 10. cm

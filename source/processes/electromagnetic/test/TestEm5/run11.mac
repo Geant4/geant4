@@ -7,8 +7,6 @@
 #control/saveHistory
 /run/verbose 2
 #
-/run/initialize
-#
 /calor/setAbsMat Silicon   
 /calor/setAbsThick  61.0 mum  
 /calor/setAbsYZ 10. cm
@@ -16,7 +14,7 @@
 #
 #  hist file name
 /plots/sethistName geant4.plot11
-#  PLOT: energy deposit distribution in absorber............................
+#  PLOT: energy deposit distribution in absorber
 /plots/setnbinEn 55
 /plots/setEnlow 0.0 MeV
 /plots/setEnhigh 1.1  MeV  
