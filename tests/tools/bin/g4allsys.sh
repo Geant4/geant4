@@ -18,6 +18,10 @@ do
     if [ X$host = X\# ]
     then
 	echo "String is comment: $host $devprod $debopt $tag $action $actarg1 $actarg2 $actarg3 $nonincremental"
+    elif [ X$host = X\% ]
+    then
+	echo "String is local command (intended for sleep): $devprod $debopt $tag $action $actarg1 $actarg2 $actarg3 $nonincremental"
+	$devprod $debopt $tag $action $actarg1 $actarg2 $actarg3 $nonincremental
     else
         echo $command
 	echo $PATH >>  $host.$devprod.$debopt.log 2>&1 
