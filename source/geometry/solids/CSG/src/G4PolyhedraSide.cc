@@ -3,6 +3,14 @@
 //
 // Implemenation of the face representing one segmented side of a Polyhedra
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 
 #include "G4PolyhedraSide.hh"
 #include "G4IntersectingCone.hh"
@@ -57,6 +65,7 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
 	//
 	numSide = theNumSide;
 	deltaPhi = phiTotal/theNumSide;
+	endPhi = startPhi+phiTotal;
 	
 	vecs = new G4PolyhedraSideVec[numSide];
 	
@@ -287,7 +296,7 @@ G4PolyhedraSide::~G4PolyhedraSide()
 //	v		= (in) direction of line segment (assumed a unit vector)
 //	A, B		= (in) 2d transform variables (see note top of file)
 //	normSign	= (in) desired sign for dot product with normal (see below)
-//	surfTolerance	= (in) minimum distance from the surface (can be < 0, see below)
+//	surfTolerance	= (in) minimum distance from the surface
 //	vecs		= (in) Vector set array
 //	distance	= (out) distance to surface furfilling all requirements
 //	distFromSurface = (out) distance from the surface
@@ -306,12 +315,12 @@ G4PolyhedraSide::~G4PolyhedraSide()
 //      we are outside and want to go in, normSign should be set to -1.0.
 //      Don't set normSign to zero, or you will get no intersections!
 //
-//    * surfTolerance: see notes on argument "surfTolerance" in routine "IntersectSide".
+//    * surfTolerance: see notes on argument "surfTolerance" in routine "IntersectSidePlane".
 //      ----HOWEVER---- We should *not* apply this surface tolerance if the starting
 //      point is not within phi or z of the surface. Specifically, if the starting
 //      point p angle in x/y places it on a separate side from the intersection or
 //      if the starting point p is outside the z bounds of the segment, surfTolerance
-//      must be ignored are we should *always* accept the intersection! 
+//      must be ignored or we should *always* accept the intersection! 
 //      This is simply because the sides do not have infinite extent.
 //      
 //
@@ -320,53 +329,118 @@ G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &
 				   G4double &distance, G4double &distFromSurface,
 				   G4ThreeVector &normal, G4bool &allBehind )
 {
-	G4int nside, i1, i2, iStart;
 	G4double normSign = outgoing ? +1 : -1;
 	
 	allBehind = true;	// this is always true for this face
 
 	//
-	// Is the starting point outside z bounds?
+	// Which phi segment does the starting point p belong to?
+	// If we are not on a segment (i.e. in the phi gap), PhiSegment
+	// returns the value -1.
 	//
-	iStart = (p.z() < cone->ZLo() || p.z() > cone->ZHi()) ? -1 : 0;
+	G4int iStart = PhiSegment( p.phi() );
 	
-	if (iStart==0) {
+	//
+	// ------------------TO BE IMPLEMENTED---------------------
+	// Testing the intersection of individual phi faces is
+	// pretty straight forward. The simple thing therefore is to
+	// form a loop and check them all in sequence.
+	//
+	// But, I really, really worry about one day someone making
+	// a polygon with a thousands sides. A linear search
+	// would be a bad idea in such a case.
+	//
+	// So, it would be nice to be able to quickly decide
+	// which face would be intersected. One can make a very
+	// good guess by using the intersection with a cone.
+	// However, this is only reliable in 99% of the cases.
+	//
+	// My solution: make a decent guess as to the one or
+	// two potential faces might get intersected, and then
+	// test them. If we have the wrong face, use the test
+	// to make a better guess.
+	//
+	// Since we might have two guesses, form a queue of
+	// potential intersecting faces. Keep an array of 
+	// already tested faces to avoid doing one more than
+	// once.
+	//
+	// Result: at worst, an iterative search. On average,
+	// two tests would be required.
+	//
+	G4ThreeVector q = p + v;
+
+	G4int face = 0;
+	G4PolyhedraSideVec *vec = vecs;
+	do {
 		//
-		// Which phi segment does the starting point p belong to?
+		// Correct normal?
 		//
-		iStart = PhiSegment( p.phi() );
-	}
+		G4double dotProd = normSign*v.dot(vec->normal);
+		if (dotProd <= 0) continue;
 	
-	//
-	// Check for two possible intersections
-	//
-	nside = LineHitsSegments( p, v, &i1, &i2 );
-	
-	if (nside==0) return false;
-	
-	//
-	// Try the first side first. LineHitsSegments is suppose to return
-	// the nearest intersection first. If this succeeds, we are done.
-	//
-	if (IntersectSidePlane( p, v, vecs[i1], normSign,
-				(i1 == iStart) ? surfTolerance : 0,
-			        distance, distFromSurface )) {
-		normal = vecs[i1].normal;
-		return true;
-	}
-	
-	if (nside==2) {
 		//
-		// No luck? Well, we have the second side
+		// Is this face in front of the point along the trajectory?
 		//
-		if (IntersectSidePlane( p, v, vecs[i2], normSign,
-					(i2 == iStart) ? surfTolerance : 0,
-				        distance, distFromSurface )) {
-			normal = vecs[i2].normal;
-			return true;
+		G4ThreeVector delta = p - vec->center;
+		distFromSurface = -normSign*delta.dot(vec->normal);
+		
+		if (distFromSurface < (face == iStart ? -surfTolerance : 0)) continue;
+
+		//
+		// Calculate distance to intersection point
+		//
+		distance = distFromSurface/dotProd;
+		
+		//
+		// Do we remain on this particular face?
+		//
+		G4ThreeVector intersect = p + distance*v;		
+
+		if ( face != PhiSegment( intersect.phi() ) ) continue;
+		
+		//
+		// We found an intersecting face. Do we intersect 
+		// within the RZ bounds?
+		//
+		G4ThreeVector ic = intersect - vec->center;
+		G4double atRZ = vec->surfRZ.dot(ic);
+
+		if (atRZ < 0) {
+			if (r[0] > 0.0) {
+
+				if (atRZ < -lenRZ*1.2) return false;	// Forget it! Missed by a mile.
+
+				G4ThreeVector qa = q - vec->edges[0]->corner[0],
+					      qb = q - vec->edges[1]->corner[0];
+				G4ThreeVector qacb = qa.cross(qb);
+				if (normSign*qacb.dot(v) < 0) return false;
+
+				if (distFromSurface < 0) {
+					if (atRZ < -lenRZ-surfTolerance) return false;
+				}
+			}
 		}
-	}
-	
+		else if (atRZ > 0) {
+			if (r[1] > 0.0) {
+
+				if (atRZ > lenRZ*1.2) return false;	// Missed by a mile
+
+				G4ThreeVector qa = q - vec->edges[0]->corner[1],
+					      qb = q - vec->edges[1]->corner[1];
+				G4ThreeVector qacb = qa.cross(qb);
+				if (normSign*qacb.dot(v) >= 0) return false;
+
+				if (distFromSurface < 0) {
+					if (atRZ > lenRZ+surfTolerance) return false;
+				}
+			}
+		}
+		
+		normal = vec->normal;
+		return true;
+	} while( ++vec, ++face < numSide );
+
 	//
 	// Oh well. Better luck next time.
 	//
@@ -548,6 +622,21 @@ void G4PolyhedraSide::CalculateExtent( const EAxis axis,
 //            = +1.0 normal is unchanged
 //            = -1.0 normal is reversed (now points inward)
 //
+// Arguments:
+//	p		- (in) Point
+//	v		- (in) Direction
+//	vec		- (in) Description record of the side plane
+//	normSign	- (in) Sign (+/- 1) to apply to normal
+//	surfTolerance	- (in) Surface tolerance (generally > 0, see below)
+//	distance	- (out) Distance along v to intersection
+//	distFromSurface - (out) Distance from surface normal
+//
+// Notes:
+// 	surfTolerance	- Used to decide if a point is behind the surface,
+//			  a point is allow to be -surfTolerance behind the
+//			  surface (as measured along the normal), but *only*
+//			  if the point is within the r/z bounds + surfTolerance
+//			  of the segment.
 //
 G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p, const G4ThreeVector &v,
 					    const G4PolyhedraSideVec vec,
@@ -570,7 +659,7 @@ G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p, const G4Thre
 	G4ThreeVector delta = p - vec.center;
 	distFromSurface = -normSign*delta.dot(vec.normal);
 		
-	if (distFromSurface < surfTolerance) return false;
+	if (distFromSurface < -surfTolerance) return false;
 
 	//
 	// Calculate precise distance to intersection with the side
@@ -595,6 +684,7 @@ G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p, const G4Thre
 	//
 	G4ThreeVector ic = p + distance*v - vec.center;
 	G4double atRZ = vec.surfRZ.dot(ic);
+	
 	if (atRZ < 0) {
 		if (r[0]==0) return true;		// Can't miss!
 		
@@ -605,6 +695,10 @@ G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p, const G4Thre
 			      qb = q - vec.edges[1]->corner[0];
 		G4ThreeVector qacb = qa.cross(qb);
 		if (normSign*qacb.dot(v) < 0) return false;
+		
+		if (distFromSurface < 0) {
+			if (atRZ < -lenRZ-surfTolerance) return false;
+		}
 	}
 	else if (atRZ > 0) {
 		if (r[1]==0) return true;		// Can't miss!
@@ -616,6 +710,10 @@ G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p, const G4Thre
 			      qb = q - vec.edges[1]->corner[1];
 		G4ThreeVector qacb = qa.cross(qb);
 		if (normSign*qacb.dot(v) >= 0) return false;
+		
+		if (distFromSurface < 0) {
+			if (atRZ > lenRZ+surfTolerance) return false;
+		}
 	}
 
 	return true;
@@ -625,7 +723,7 @@ G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p, const G4Thre
 //
 // LineHitsSegments
 //
-// Calculate which phi segments a line intersections in three dimensions.
+// Calculate which phi segments a line intersects in three dimensions.
 // No check is made as to whether the intersections are within the z bounds of
 // the segment.
 //
@@ -638,16 +736,19 @@ G4int G4PolyhedraSide::LineHitsSegments( const G4ThreeVector &p, const G4ThreeVe
 	//
 	G4int n = cone->LineHitsCone( p, v, &s1, &s2 );
 	
-	//
-	// Check intersections
-	//
 	if (n==0) return 0;
 	
+	//
+	// Try first intersection.
+	//
 	*i1 = PhiSegment( atan2( p.y() + s1*v.y(), p.x() + s1*v.x() ) );
 	if (n==1) {
 		return (*i1 < 0) ? 0 : 1;
 	}
 	
+	//
+	// Try second intersection
+	//
 	*i2 = PhiSegment( atan2( p.y() + s2*v.y(), p.x() + s2*v.x() ) );
 	if (*i1 == *i2) return 0;
 	
@@ -681,7 +782,7 @@ G4int G4PolyhedraSide::ClosestPhiSegment( const G4double phi0 )
 	G4double phi = phi0;
 	
 	while( phi < startPhi ) phi += 2*M_PI;
-	G4double d1 = phi-startPhi-deltaPhi;
+	G4double d1 = phi-endPhi;
 
 	while( phi > startPhi ) phi -= 2*M_PI;
 	G4double d2 = startPhi-phi;

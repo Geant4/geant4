@@ -4,14 +4,29 @@
 // Implementation of a CSG polyhedra, as an inherited class of G4VCSGfaceted.
 //
 // To be done:
-//    * Checks for bad input should be improved. It is now possible for
-//      users to specify crazy polyhedra parameters without complaint that
-//      could produce unpredictable results.
 //    * Cracks: there are probably small cracks in the seams between the
 //      phi face (G4PolyPhiFace) and sides (G4PolyhedraSide) that are not
 //      entirely leakproof. Also, I am not sure all vertices are leak proof.
 //    * Many optimizations are possible, but not implemented.
 //    * Visualization needs to be updated outside of this routine.
+//
+// Utility classes:
+//    * G4EnclosingCylinder: I decided a quick check of geometry would be a
+//      good idea (for CPU speed). If the quick check fails, the regular
+//      full-blown G4VCSGfaceted version is invoked.
+//    * G4ReduciblePolygon: Really meant as a check of input parameters,
+//      this utility class also "converts" the GEANT3-like PGON/PCON
+//      arguments into the newer ones.
+// Both these classes are implemented outside this file because they are
+// shared with G4Polycone.
+//
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
 //
 #include "G4Polyhedra.hh"
 #include "G4PolyhedraSide.hh"
@@ -19,7 +34,7 @@
 
 #include "G4Polyhedron.hh"
 #include "G4EnclosingCylinder.hh"
-
+#include "G4ReduciblePolygon.hh"
 
 //
 // Constructor (GEANT3 style parameters)
@@ -45,7 +60,7 @@ G4Polyhedra::G4Polyhedra( G4String name,
 	G4double convertRad = cos(0.5*phiTotal/theNumSide);
 
 	//
-	// Real ugly
+	// Some historical ugliness
 	//
 	original_parameters.exist = true;
 	
@@ -63,30 +78,20 @@ G4Polyhedra::G4Polyhedra( G4String name,
 		original_parameters.Rmin[i] = rInner[i]/convertRad;
 		original_parameters.Rmax[i] = rOuter[i]/convertRad;
 	}
-		
+	
+	
 	//
-	// Translate GEANT3 into generic parameters
-	// Duplicate vertices and divided surfaces are (or should be) dealt with
-	// by routine "Create."
+	// Build RZ polygon using special PCON/PGON GEANT3 constructor
 	//
-	G4double *r = new G4double[numZPlanes*2];
-	G4double *z = new G4double[numZPlanes*2];
+	G4ReduciblePolygon *rz = new G4ReduciblePolygon( rInner, rOuter, zPlane, numZPlanes );
+	rz->ScaleA( 1/convertRad );
 	
-	G4double *rOut = r + numZPlanes,
-		 *zOut = z + numZPlanes,
-		 *rIn = rOut-1,
-		 *zIn = zOut-1;
-		 
-	for( i=0; i < numZPlanes; i++, rOut++, zOut++, rIn--, zIn-- ) {
-		*rOut = rOuter[i]/convertRad;
-		*rIn  = rInner[i]/convertRad;
-		*zOut = *zIn = zPlane[i];
-	}
+	//
+	// Do the real work
+	//
+	Create( phiStart, phiTotal, theNumSide, rz );
 	
-	Create( phiStart, phiTotal, theNumSide, numZPlanes*2, r, z );
-	
-	delete [] r;
-	delete [] z;
+	delete rz;
 }
 
 
@@ -103,7 +108,11 @@ G4Polyhedra::G4Polyhedra( G4String name,
 {
 	original_parameters.exist = false;
 	
-	Create( phiStart, phiTotal, theNumSide, numRZ, r, z );
+	G4ReduciblePolygon *rz = new G4ReduciblePolygon( r, z, numRZ );
+	
+	Create( phiStart, phiTotal, theNumSide, rz );
+	
+	delete rz;
 }
 
 
@@ -115,10 +124,29 @@ G4Polyhedra::G4Polyhedra( G4String name,
 void G4Polyhedra::Create( const G4double phiStart,
             	     	  const G4double phiTotal,
  		          const G4double theNumSide,	
-		     	  const G4int	numRZ,
-		     	  const G4double r[],
-	             	  const G4double z[]	  )
+		     	  G4ReduciblePolygon *rz  )
 {
+	//
+	// Perform checks of rz values
+	//
+	if (rz->Amin() < 0.0) 
+		G4Exception( "G4Polyhedra: Illegal input parameters: All R values must be >= 0" );
+		
+	G4double rzArea = rz->Area();
+	if (rzArea < -kCarTolerance) 
+		G4Exception( "G4Polyhedra: Illegal input parameters: R/Z values must be specified counter-clockwise" );
+	else if (rzArea < -kCarTolerance)
+		G4Exception( "G4Polyhedra: Illegal input parameters: R/Z cross section is zero or near zero" );
+		
+	if ((!rz->RemoveDuplicateVertices( kCarTolerance )) || 
+	    (!rz->RemoveRedundantVertices( kCarTolerance ))     ) 
+	    	G4Exception( "G4Polyhedra: Illegal input parameters: Too few unique R/Z values" );
+
+	if (rz->CrossesItself( 1/kInfinity )) 
+		G4Exception( "G4Polyhedra: Illegal input parameters: R/Z segments cross" );
+
+	numCorner = rz->NumVertices();
+
         //
         // Phi opening? Account for some possible roundoff, and interpret
         // nonsense value as representing no phi opening
@@ -147,35 +175,21 @@ void G4Polyhedra::Create( const G4double phiStart,
 	numSide = theNumSide;
 	
 	//
-	// Allocate corner array. We may not end up using all of this array,
-	// since we delete duplicate corners, but that's not so bad
+	// Allocate corner array. 
 	//
-	corners = new G4PolyhedraSideRZ[numRZ];
+	corners = new G4PolyhedraSideRZ[numCorner];
 
 	//
-	// Copy corners, avoiding duplicates on the way
+	// Copy corners
 	//
-	// We should also look for divided conical surfaces...
-	// We must also look for overlapping surfaces...
-	//
+	G4ReduciblePolygonIterator iterRZ(rz);
+	
 	G4PolyhedraSideRZ *next = corners;
-	const G4double *rOne = r;
-	const G4double *zOne = z;
-	const G4double *rNext, *zNext;
-	G4bool	 notFinished;
+	iterRZ.Begin();
 	do {
-		rNext = rOne + 1;
-		zNext = zOne + 1;
-		if (notFinished = (rNext < r+numRZ)) {
-			if (*rNext == *rOne && *zNext == *zOne) continue;
-		}
-		
-		next->r = *rOne;
-		next->z = *zOne;
-		next++;
-	} while( rOne=rNext, zOne=zNext, notFinished );
-			
-	numCorner = next - corners;
+		next->r = iterRZ.GetA();
+		next->z = iterRZ.GetB();
+	} while( ++next, iterRZ.Next() );
 	
 	//
 	// Allocate face pointer array
@@ -211,8 +225,8 @@ void G4Polyhedra::Create( const G4double phiStart,
 		//
 		// Construct phi open edges
 		//
-		*face++ = new G4PolyPhiFace( r, z, numRZ, startPhi, phiTotal/numSide, true  );
-		*face++ = new G4PolyPhiFace( r, z, numRZ, endPhi,   phiTotal/numSide, false );
+		*face++ = new G4PolyPhiFace( rz, startPhi, phiTotal/numSide, endPhi );
+		*face++ = new G4PolyPhiFace( rz, endPhi,   phiTotal/numSide, startPhi );
 	}
 	
 	//
@@ -223,8 +237,7 @@ void G4Polyhedra::Create( const G4double phiStart,
 	//
 	// Make enclosingCylinder
 	//
-	enclosingCylinder = new G4EnclosingCylinder( r, z, numRZ, 
-						     phiIsOpen, phiStart, phiTotal );
+	enclosingCylinder = new G4EnclosingCylinder( rz, phiIsOpen, phiStart, phiTotal );
 }
 
 
@@ -248,12 +261,15 @@ G4Polyhedra::~G4Polyhedra()
 //
 // Inside
 //
+// This is an override of G4VCSGfaceted::Inside, created in order to speed things
+// up by first checking with G4EnclosingCylinder.
+//
 EInside G4Polyhedra::Inside( const G4ThreeVector &p ) const
 {
 	//
 	// Quick test
 	//
-	if (enclosingCylinder->Outside(p)) return kOutside;
+	if (enclosingCylinder->MustBeOutside(p)) return kOutside;
 
 	//
 	// Long answer
@@ -265,12 +281,15 @@ EInside G4Polyhedra::Inside( const G4ThreeVector &p ) const
 //
 // DistanceToIn
 //
+// This is an override of G4VCSGfaceted::Inside, created in order to speed things
+// up by first checking with G4EnclosingCylinder.
+//
 G4double G4Polyhedra::DistanceToIn( const G4ThreeVector &p, const G4ThreeVector &v ) const
 {
 	//
 	// Quick test
 	//
-	if (enclosingCylinder->Misses(p,v)) return kInfinity;
+	if (enclosingCylinder->ShouldMiss(p,v)) return kInfinity;
 	
 	//
 	// Long answer
@@ -295,10 +314,7 @@ void G4Polyhedra::ComputeDimensions( G4VPVParameterisation* p,
 G4Polyhedron *G4Polyhedra::CreatePolyhedron() const
 { 
 	//
-	// It is *really* unfortunate how the design in /graphics_reps is
-	// written to parallel the design in /geometry/solids. Ugly, ugly, ugly.
-	//
-	// This has to be fixed, but I won't do it now. Fake it for the moment.
+	// This has to be fixed in visualization. Fake it for the moment.
 	// 
 	if (original_parameters.exist) {
 	
@@ -311,7 +327,7 @@ G4Polyhedron *G4Polyhedra::CreatePolyhedron() const
 					     original_parameters.Rmax);
 	}
 	else {
-		G4Exception( "G4Polyhedra: waiting for graphics_reps to catch up" );
+		G4cerr << "G4Polyhedra: visualization of this type of G4Polyhedra is not supported at this time" << endl;
 		return 0;
 	}
 

@@ -3,6 +3,14 @@
 //
 // Implemenation of the face representing one conical side of a polycone
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 
 #include "G4PolyconeSide.hh"
 #include "G4IntersectingCone.hh"
@@ -145,7 +153,7 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &v
 			// Apply tolerance, but only if the point is outside 
 			// the edges of the cone
 			//
-			if (distFromSurface > (distOutside2 > 0 ? 0 : surfTolerance)) {
+			if (distFromSurface > (distOutside2 > 0 ? 0 : -surfTolerance)) {
 				//
 				// Good intersection. Return now, since it is the closest.
 				//
@@ -190,7 +198,7 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &v
 			// Apply tolerance, but only if the point is outside 
 			// the edges of the cone
 			//
-			if (distFromSurface > (distOutside2 > 0 ? 0 : surfTolerance)) {
+			if (distFromSurface > (distOutside2 > 0 ? 0 : -surfTolerance)) {
 				//
 				// Good intersection. Return now, since it is the closest.
 				//
