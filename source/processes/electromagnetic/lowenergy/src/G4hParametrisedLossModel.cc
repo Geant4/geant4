@@ -57,7 +57,7 @@
 #include "G4hZiegler1977He.hh"
 #include "G4hZiegler1985p.hh"
 #include "G4hSRIM2000p.hh"
-#include "G4hSRIM2003p.hh"
+//#include "G4hSRIM2003p.hh"
 #include "G4hICRU49p.hh"
 #include "G4hICRU49He.hh"
 #include "G4DynamicParticle.hh"
