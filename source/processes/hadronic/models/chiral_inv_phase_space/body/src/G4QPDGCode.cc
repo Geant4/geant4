@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.29 2003-06-16 17:04:26 gunter Exp $
+// $Id: G4QPDGCode.cc,v 1.30 2003-06-25 14:12:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -745,7 +745,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   else 
   {
     if(G4NucleiPropertiesTable::IsInTable(Z,A)) m=k+G4NucleiProperties::GetNuclearMass(A,Z);
-    else m+=-sh[Z]-sh[N]+b1*D*D*pow(A,b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(A,b9)+b6/A);
+    else m+=-sh[Z]-sh[N]+b1*D*D*pow(G4double(A),b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(G4double(A),b9)+b6/A);
   }
   G4double maxM= k+Z*mP+N*mN+S*mL+.001;       // @@ .001 ?? Wings of the Mass parabola
   if(m>maxM) m=maxM;
