@@ -454,47 +454,57 @@ endif
 # --------
 #
 if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100" || `uname -n` == "pcal26" ) then
+# Core :
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /geant4/geant4-03-02-ref-07
   setenv G4WORKDIR $G4INSTALL
-  setenv G4STTDIR  $G4WORKDIR/stt
-  setenv G4LIB     $G4WORKDIR/lib
-  setenv G4SYSTEM  Linux-g++
-  setenv G4DEBUG   1
+  setenv G4STTDIR $G4WORKDIR/stt
+  setenv G4LIB $G4WORKDIR/lib
+  setenv G4SYSTEM Linux-g++
+  setenv G4DEBUG 1
   setenv G4LIB_BUILD_SHARED 1
   setenv CPPVERBOSE 1
-  # G4 build flags :
-#  setenv G4UI_BUILD_XM_SESSION       1
-#  setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
-#  setenv G4VIS_BUILD_OPENGLX_DRIVER  1
-#  setenv G4VIS_BUILD_OIX_DRIVER      1
+  setenv CLHEP_BASE_DIR /lal/CLHEP/1.7.0.0/Linux-gxx
+  setenv LD_LIBRARY_PATH ${G4INSTALL}/lib/${G4SYSTEM}
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$CLHEP_BASE_DIR/lib
+# OpenGL driver :
+  setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
+  setenv G4VIS_BUILD_OPENGLX_DRIVER 1
+  setenv G4VIS_USE_OPENGLXM 1
+  setenv G4VIS_USE_OPENGLX 1
+  setenv OGLHOME /lal/Mesa/3.2/Linux
+# Inventor driver :
+  source /lal/CMT/v1r10/mgr/setup.csh
+  source /projects/HEPVis/v5r2/cmt/cleanup.csh
+  source /projects/HEPVis/v5r2/cmt/setup.csh
+  setenv SOFREEXTROOT ${SOFREEROOT}
+  setenv SOFREEXTCONFIG ${SOFREECONFIG}
+  setenv G4VIS_BUILD_OIX_DRIVER 1
+  setenv G4VIS_USE_OIX 1
+  setenv TTFLIBS "-L/lal/freetype/1.3.1/Linux/lib -lttf"
+  setenv OIVFLAGS "-I$HEPVISROOT/include -I$SOFREEROOT/include -I$SOFREEXTROOT/include"
+  setenv OIVLIBS "-L$SOFREEXTROOT/$SOFREEXTCONFIG -lSoFreeXt -L$HEPVISROOT/$HEPVISCONFIG -lHEPVisXt -lHEPVis ${TTFLIBS} -L$SOFREEROOT/$SOFREECONFIG -lSoFree"
+# UI Xm :
+  setenv G4UI_BUILD_XM_SESSION 1
+  setenv G4UI_USE_XM 1
+  setenv XENVIRONMENT $G4INSTALL/examples/novice/N03/visTutor/g4Xt.xrm
+# AIDA :
+#  setenv G4ANALYSIS_USE 1
+## Falsetto implementation :
+#  source /projects/Falsetto/v1/cmt/setup.csh
+## Lab implementation :
+#  source /projects/Lab/v6/cmt/cleanup.csh
+#  source /projects/Lab/v6/cmt/setup.csh
+#  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
+#  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
+# Else :
 #  setenv G4VIS_BUILD_DAWN_DRIVER     1
-#  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
 #  setenv G4VIS_BUILD_VRML_DRIVER     1
-#  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
-  # G4 use flags :
-#  setenv G4UI_USE_XM                 1
-#  setenv G4VIS_USE_OPENGLXM          1
-#  setenv G4VIS_USE_OPENGLX           1
-#  setenv G4VIS_USE_OIX               1
 #  setenv G4VIS_USE_DAWN              1
 #  setenv G4VIS_USE_DAWNFILE          1
 #  setenv G4VIS_USE_VRML              1
 #  setenv G4VIS_USE_VRMLFILE          1
-#  setenv G4ANALYSIS_USE_JAS          1
-#  setenv G4ANALYSIS_USE_LIZARD       1
-  # CLHEP :
-  setenv CLHEP_BASE_DIR /lal/CLHEP/1.7.0.0/Linux-gxx
-  # Lab :
-  setenv G4ANALYSIS_USE_LAB          1
-  source /projects/Lab/v6/cmt/setup.csh
   # Things needed by the Geant4/vis/drivers :
-  #setenv OGLHOME        /usr/X11R6
-#  setenv OGLHOME        /lal/Mesa/3.2/Linux
-#  setenv TTFLIBS        "-L/lal/freetype/1.3.1/Linux/lib -lttf"
-#  setenv OIVFLAGS       "-I$HEPVISROOT/include -I$SOFREEROOT/include"
-#  setenv OIVLIBS        "-L$HEPVISROOT/$HEPVISCONFIG -lHEPVisXm -lHEPVisXt -lHEPVis ${TTFLIBS} -L$SOFREEROOT/$SOFREECONFIG -lSoFreeXt -lSoFree"
-  #setenv SOFREEUSER     $OIVHOME/user/
   # OPACS :
   #setenv G4UI_BUILD_WO_SESSION       1
   #setenv G4VIS_BUILD_OPACS_DRIVER    1
@@ -509,12 +519,7 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
 #  set jars=/lal/jas/2.0alpha4/release/lib
 #  setenv CLASSPATH ${CLASSPATH}:$jars/collections.jar:$jars/hep.jar:$jars/jas.jar
 #  setenv PATH ${PATH}:/lal/jas/2.0alpha4/release
-  # Else :
-  #setenv XENVIRONMENT   g4Xt.xrm
 #  setenv PATH "${PATH}:/lal/DAWN/dawn_3_85a/Linux/bin"
-  alias g4AnaEx01 "cd $G4INSTALL/examples/extended/analysis/AnaEx01"
-  alias AnaEx01   "$G4WORKDIR/bin/$G4SYSTEM/AnaEx01"
-  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/lib/${G4SYSTEM}
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/tmp/${G4SYSTEM}/AnaEx01
 #  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4INSTALL}/tmp/${G4SYSTEM}/dm_example
   set prompt='g4-pc-gbp> ' 
