@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.4 2000-11-08 10:02:00 kurasige Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.5 2000-11-08 12:40:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,7 +83,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   buildPTCmd->AvailableForStates(Init,Idle,GeomClosed,EventProc);
 
   // /run/particle/storePhysicsTable command
-  storeCmd = new G4UIcmdWithAString("/run/particle/store",this);
+  storeCmd = new G4UIcmdWithAString("/run/particle/storePhysicsTable",this);
   storeCmd->SetGuidance("Store Physics Table");
   storeCmd->SetGuidance("  Enter directory name");
   storeCmd->SetParameterName("dirName",true);
@@ -91,7 +91,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   storeCmd->AvailableForStates(Idle);
 
   //  /run/particle/retrievePhysicsTable command
-  retrieveCmd = new G4UIcmdWithAString("/run/particle/retrieve",this);
+  retrieveCmd = new G4UIcmdWithAString("/run/particle/retrievePhysicsTable",this);
   retrieveCmd->SetGuidance("Retrieve Physics Table");
   retrieveCmd->SetGuidance("  Enter directory name or OFF to switch off");
   retrieveCmd->SetParameterName("dirName",true);
