@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.cc,v 1.5 1999-04-15 06:38:05 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.6 1999-05-03 01:52:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -872,7 +872,7 @@ void G4ProcessManager::DumpInfo()
 
     // process attribute    
     G4ProcessAttribute* pAttr = (*theAttrVector)(idx);
-    // staus
+    // status
     if ( pAttr-> isActive ) {
       G4cout << " Active ";
     } else {
@@ -968,6 +968,31 @@ void G4ProcessManager::EndTracking()
 {
   if (fActive) return ActivateProcess(index);
   else         return InActivateProcess(index);
+}
+
+/////////////////////////////////////////////
+ G4bool G4ProcessManager::GetProcessActivation(G4VProcess *aProcess) const
+{
+  return GetProcessActivation(GetProcessIndex(aProcess));
+} 
+
+
+/////////////////////////////////////////////
+ G4bool G4ProcessManager::GetProcessActivation(G4int index) const
+{
+  if (index <0) {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cout << "G4ProcessManager::GetProcessActivation  ";
+      G4cout << " process (or its index) not found ";
+    }
+#endif
+	return false;
+  }
+  // process attribute    
+  G4ProcessAttribute* pAttr = (*theAttrVector)(index);
+  // status
+  return pAttr-> isActive;
 }
 
 

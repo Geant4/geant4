@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.hh,v 1.2 1999-04-13 09:44:59 kurasige Exp $
+// $Id: G4ProcessManager.hh,v 1.3 1999-05-03 01:52:36 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,10 +22,9 @@
 //    Added vector of processes at rest, 06 May 1996
 // ------------------------------------------------------------
 //   New Physics scheme           8 Jan. 1997  H.Kurahige
-//                               20 Apr. 1997  M.Asai
-//                               14 June 1997  H.Kurahige
 //   Add SetProcessOrdering methods     27 Mar 1998  H.Kurahige
-//   Add copy constructor (deep copy)   28 June 1998 H.Kurashige 
+//   Add copy constructor (deep copy)   28 June 1998 H.Kurashige
+//   Add GetProcessActivation     3 May. 1999 H.Kurashige
 // ------------------------------------------------------------
 
 #ifndef G4ProcessManager_h
@@ -42,22 +41,26 @@
 class G4ProcessManagerMessenger;
 class G4ProcessAttribute;
 
+//  Indexes for ProcessVector
 enum G4ProcessVectorTypeIndex
 { 
-  typeGPIL = 0, typeDoIt =1
+  	typeGPIL = 0,	// for GetPhysicalInteractionLength 
+	typeDoIt =1		// for DoIt
 };
-
 enum G4ProcessVectorDoItIndex
 {
-  idxAll = -1, 
-  idxAtRest = 0, idxAlongStep = 1, idxPostStep =2
+  	idxAll = -1,		// for all DoIt/GPIL 
+  	idxAtRest = 0, 		// for AtRestDoIt/GPIL
+	idxAlongStep = 1, 	// for AlongStepDoIt/GPIL
+	idxPostStep =2		// for AlongSTepDoIt/GPIL
 };
-      
+
+//  enumeration for Ordering Parameter      
 enum G4ProcessVectorOrdering
 { 
-   ordInActive = -1,
-   ordDefault = INT_MAX/2,
-   ordLast    = INT_MAX
+   	ordInActive = -1,			// ordering parameter to indicate InActive DoIt
+   	ordDefault = INT_MAX/2,		// default ordering parameter
+   	ordLast    = INT_MAX		// ordering parameter to indicate the last DoIt
 };
 
 class G4ProcessManager 
@@ -229,6 +232,10 @@ class G4ProcessManager
       //  Set activation flag. 
       //  return value is pointer to the applied process.
       //  (0 value will be returned in case of errors)
+
+      G4bool GetProcessActivation(G4VProcess *aProcess) const;
+      G4bool GetProcessActivation(G4int      index) const;
+      //  Get activation flag. 
 
       G4ParticleDefinition*  GetParticleType() const;
       // get the particle type 
