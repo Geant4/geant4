@@ -1,4 +1,4 @@
-// $Id: TstDrawVox01PhysicsList.hh,v 1.1 1999-07-28 17:56:44 graignac Exp $
+// $Id: TstDrawVox01PhysicsList.hh,v 1.2 2000-11-21 13:22:52 gcosmo Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -33,7 +33,7 @@ class TstDrawVox01PhysicsList: public G4VUserPhysicsList
     virtual void ConstructBosons();
     virtual void ConstructLeptons();
     virtual void ConstructMesons();
-    virtual void ConstructBarions();
+    virtual void ConstructBaryons();
     virtual void ConstructIons();
 
   protected:
