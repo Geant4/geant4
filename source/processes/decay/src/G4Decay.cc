@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.11 2001-08-22 08:12:39 kurasige Exp $
+// $Id: G4Decay.cc,v 1.12 2002-02-09 04:28:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,7 @@
 //   remove G4ParticleMomentum  6 Feb. 99 H.Kurashige
 //   modified  IsApplicable to activate G4Decay for resonances  1 Mar. 00 H.Kurashige 
 //   Add External Decayer         23 Feb. 2001  H.Kurashige
+//   change LowestBinValue,HighestBinValue and TotBin(200) 9 Feb. 2002
 //
 
 #include "G4Decay.hh"
@@ -56,9 +57,9 @@
 G4Decay::G4Decay(const G4String& processName)
                                :G4VRestDiscreteProcess(processName, fDecay),
 				verboseLevel(1),
-				LowestBinValue(1.0e-3),
-                                HighestBinValue(10.0),
-                                TotBin(200),
+				LowestBinValue(1.0e-10),
+                                HighestBinValue(1000.0),
+                                TotBin(1000),
                                 aPhysicsTable(0),
                                 pExtDecayer(0)
 {
