@@ -82,7 +82,7 @@
 # with the VRML2FILE driver.
 #################################################
 
-# Invoke the DAWNFILE driver
+# Invoke the VRML2FILE driver
 /vis/open VRML2FILE
 
 # Create a new scene 
