@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2003-05-08 17:19:22 gcosmo Exp $
+$Id: History,v 1.99 2003-05-20 07:52:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 20th, 2003      G. Cosmo - geomvol-V05-01-01
+- G4GeometryMessenger[.hh.cc]:
+  o Added new commands for controlling geometry overlaps: added recursion
+    to line_test and cylinder_test; added possibility to customise the
+    resolution and shape of grid/cylinder for the test; added ability to
+    select depth of recursion in the geometry tree.
+  o Added explicit call to OpenGeometry() in method CheckGeometry() to
+    force cleanup of voxelisation when command navigator/reset is called.
+- Coworks with tag "geomver-V05-01-00" for geometry/verification.
+- Does NOT include changes in "geomvol-V04-01-08".
 
 May 8th, 2003       G. Cosmo - geomvol-V05-01-00
 - G4PropagatorInField.cc: fix in ComputeStep() to avoid step computation
