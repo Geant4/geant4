@@ -816,7 +816,7 @@ G4cout<<G4endl<<" Q2 "<< ranQ2<<" Hdr Mom Tet "<<outMomHdr
                                                    G4Nucleus & targetNucleus)
   {
      G4double result = true;
-     if(targetNucleus.GetN() <5) result = false;
+     if(targetNucleus.GetN() <4) result = false;
      if(targetNucleus.GetN() >238) result = false;
      return result;
   }
