@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.2 2000-11-16 21:54:20 sgarelli Exp $
+$Id: History,v 1.3 2000-12-10 08:42:44 chauvie Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,4 +16,7 @@ $Id: History,v 1.2 2000-11-16 21:54:20 sgarelli Exp $
              (minrev) Data fully compliant to Geant4 types.
              (newfea) LowEnergy option available (see BRACHY_OPT_USELOWENERGY in BrachyPhysicsList.cc).
 
+10.12.2000 - Stephane Chauvie
+             (minrev) DOS -> Unix text conversion.
+             (newfea) Added Low Energy Electromagnetic physics. Removed switch to standard.
 
