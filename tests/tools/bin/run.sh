@@ -77,7 +77,7 @@ if [ $1 = "all" ] ; then
   nice $G4INSTALL/tests/tools/bin/run.sh test504
   nice $G4INSTALL/tests/tools/bin/run.sh test505
   nice $G4INSTALL/tests/tools/bin/run.sh test506
-  nice $G4INSTALL/tests/tools/bin/run.sh test508
+#   nice $G4INSTALL/tests/tools/bin/run.sh test508
   if [ $G4USE_HEPODBMS ] ; then
     nice $G4INSTALL/tests/tools/bin/run.sh test401
     nice $G4INSTALL/tests/tools/bin/run.sh test402
