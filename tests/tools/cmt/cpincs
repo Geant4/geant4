@@ -6,6 +6,11 @@
 
 echo "Warning : test, tests directories under source must be removed."
 
+if [ -z "$G4INSTALL" ]; then
+  echo "You have to set environment variable G4INSTALL !"
+  exit
+fi
+
 /bin/rm -R -f $G4INSTALL/include
 mkdir $G4INSTALL/include
 
