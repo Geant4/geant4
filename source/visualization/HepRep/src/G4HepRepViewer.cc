@@ -47,6 +47,10 @@ G4HepRepViewer::G4HepRepViewer (G4VSceneHandler& scene, const G4String& name)
 #ifdef DEBUG
     G4cout << "G4HepRepViewer::G4HepRepViewer" << G4endl;
 #endif
+
+  // Make changes to view parameters for HepRep...
+  fVP.SetCulling(false);
+  fDefaultVP.SetCulling(false);
 }
 
 

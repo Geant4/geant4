@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.8 2002-11-26 07:14:57 duns Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.9 2002-12-11 16:05:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -124,8 +124,6 @@ protected:
   G4int                fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
-  const G4ModelingParameters* fpOriginalMP;  // Keeps pointer to original.
-  G4ModelingParameters* fpNonCullingMP;      // For temporary non-culling.
 
 private:
   HepRepXMLWriter *hepRepXMLWriter;

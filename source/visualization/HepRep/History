@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2002-12-09 17:14:36 duns Exp $
+$Id: History,v 1.24 2002-12-11 16:05:16 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+
+11th December 2002  John Allison  (vis-V04-01-10)
+- Fixed default view parameters (global culling false).
+
 9th December 2002 Mark Donszelmann
 - Fixed bug that files were left open. Will close now, apart from stdin/stderr
 - Fixed color call not to use array creation.

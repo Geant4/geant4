@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeViewer.cc,v 1.4 2001-07-11 10:09:08 gunter Exp $
+// $Id: G4ASCIITreeViewer.cc,v 1.5 2002-12-11 16:08:50 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4ASCIITreeViewer.hh"
@@ -31,6 +31,10 @@
 
 G4ASCIITreeViewer::G4ASCIITreeViewer
 (G4VSceneHandler& sceneHandler, const G4String& name):
-  G4VTreeViewer(sceneHandler, name) {}
+  G4VTreeViewer(sceneHandler, name) {
+  // Make changes to view parameters for ASCIITree...
+  fVP.SetCulling(false);
+  fDefaultVP.SetCulling(false);
+}
 
 G4ASCIITreeViewer::~G4ASCIITreeViewer() {}

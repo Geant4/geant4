@@ -30,6 +30,10 @@
 
 G4GAGTreeViewer::G4GAGTreeViewer
 (G4VSceneHandler& sceneHandler, const G4String& name):
-  G4VTreeViewer(sceneHandler, name) {}
+  G4VTreeViewer(sceneHandler, name) {
+  // Make changes to view parameters for GAGTree...
+  fVP.SetCulling(false);
+  fDefaultVP.SetCulling(false);
+}
 
 G4GAGTreeViewer::~G4GAGTreeViewer() {}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.33 2002-11-25 18:14:40 gcosmo Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.34 2002-12-11 16:10:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -714,11 +714,12 @@ G4VisCommandSceneAddTrajectories::G4VisCommandSceneAddTrajectories () {
   fpCommand -> SetGuidance
     ("Causes trajectories, if any, to be drawn at the end of processiing an"
      "\nevent. The drawing mode is an integer that is passed to the"
-     "\nDrawTrajectory method.  The default implementation in G4VTrajectory"
-     "\ndraws the trajectory as a polyline and, if drawing-mode>0, draws"
-     "\nmarkers of screen size drawing-mode/10 in pixels at each step and"
-     "\nauxiliary point, if any.  So drawing-mode == 50 is a good choice."
-     "\n(Enable storing with \"/tracking/storeTrajectory 1\".)"
+     "\nDrawTrajectory method.  The default implementation in G4VTrajectory,"
+     "\nif drawing-mode > 0, draws the trajectory as a polyline and, if"
+     "\ndrawing-mode != 0, draws markers of screen size abs(drawing-mode)/1000"
+     "\nin pixels at each step and auxiliary point, if any.  So drawing-mode"
+     "\n== 5000 is a good choice."
+     "\nEnable storing with \"/tracking/storeTrajectory 1\"."
      "\nSee also \"/vis/scene/endOfEventAction\".");
   fpCommand -> SetParameterName ("drawing-mode", omitable = true);
   fpCommand -> SetDefaultValue (0);

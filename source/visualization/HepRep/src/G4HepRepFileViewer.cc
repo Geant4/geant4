@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileViewer.cc,v 1.6 2002-02-02 04:00:27 perl Exp $
+// $Id: G4HepRepFileViewer.cc,v 1.7 2002-12-11 16:05:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4HepRepFileViewer.hh"
@@ -40,6 +40,9 @@ G4HepRepFileViewer::G4HepRepFileViewer
 (G4VSceneHandler& sceneHandler, const G4String& name):
   G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name) {
   hepRepXMLWriter = ((G4HepRepFileSceneHandler*)(&sceneHandler))->GetHepRepXMLWriter();
+  // Make changes to view parameters for HepRep...
+  fVP.SetCulling(false);
+  fDefaultVP.SetCulling(false);
 }
 
 G4HepRepFileViewer::~G4HepRepFileViewer() {}

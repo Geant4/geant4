@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.hh,v 1.7 2001-08-24 21:42:13 johna Exp $
+// $Id: G4VTreeSceneHandler.hh,v 1.8 2002-12-11 16:08:49 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,8 +81,6 @@ protected:
   G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
   const G4Transform3D* fpCurrentObjectTransformation;
-  const G4ModelingParameters* fpOriginalMP;  // Keeps pointer to original.
-  G4ModelingParameters* fpNonCullingMP;      // For temporary non-culling.
 };
 
 #include "G4VTreeSceneHandler.icc"

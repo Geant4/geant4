@@ -116,14 +116,14 @@ NI                      [<copy-no>] [<depth>]
 
 /vis/scene/add/trajectories [drawing-mode] [<sensitive-volume-name>]
   default:                       0         (this argument not impl'd yet.)
-  Causes trajectories, if any, to be drawn at the end of processiing an event.
-  The drawing mode is an integer that is passed to the DrawTrajectory method.
-  The default implementation in G4VTrajectory draws the trajectory as a
-  polyline and, if drawing-mode>0, draws markers of screen size
-  drawing-mode/10 in pixels at each step and auxiliary point, if any.  So
-  drawing-mode == 50 is a good choice.
-  (Enable storing with "/tracking/storeTrajectory 1".)
-  See also "/vis/scene/endOfEventAction".
+  Causes trajectories, if any, to be drawn at the end of processiing
+  an event.  The drawing mode is an integer that is passed to the
+  DrawTrajectory method.  The default implementation in G4VTrajectory,
+  if drawing-mode > 0, draws the trajectory as a polyline and, if
+  drawing-mode != 0, draws markers of screen size abs(drawing-mode)/1000
+  in pixels at each step and auxiliary point, if any.  So drawing-mode
+  == 5000 is a good choice.  (Enable storing with
+  "/tracking/storeTrajectory 1".)  See also "/vis/scene/endOfEventAction".
 
 NI /vis/scene/add/transientObjects ???????????? (JA 9/Aug/01)
 
