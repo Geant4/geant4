@@ -1,4 +1,4 @@
-$Id: History,v 1.140 2001-07-24 22:19:51 johna Exp $
+$Id: History,v 1.141 2001-07-25 21:23:21 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+25th July 2001  John Allison  (vis-V03-02-07)
+- Improved access to models (modeling-V03-02-03).
+- Made G4VSceneHandler::fpModel non-const G4VModel* for convenience.
+- Improved checks and warning messages in /vis/scene/add/scale.
 
 24th July 2001  John Allison  (vis-V03-02-06)
 - Needs greps-V03-02-01 for small interface change to G4Scale.
