@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.25 2005-03-03 16:28:12 allison Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.26 2005-03-09 23:48:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -36,31 +36,6 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4ios.hh"
 #include <strstream>
-
-G4VVisCommandSceneHandler::G4VVisCommandSceneHandler () {}
-
-G4VVisCommandSceneHandler::~G4VVisCommandSceneHandler () {}
-
-void G4VVisCommandSceneHandler::UpdateCandidateLists () {
-
-  const G4SceneHandlerList& list =
-    fpVisManager -> GetAvailableSceneHandlers ();
-
-  G4String sceneHandlerNameList;
-  for (size_t iScene = 0; iScene < list.size (); iScene++) {
-    G4VSceneHandler* sceneHandler = list [iScene];
-    sceneHandlerNameList += sceneHandler -> GetName () + " ";
-  }
-  sceneHandlerNameList = sceneHandlerNameList.strip ();
-  sceneHandlerNameCommandsIterator i;
-  for (i = sceneHandlerNameCommands.begin ();
-       i != sceneHandlerNameCommands.end (); ++i) {
-    G4String candidates = sceneHandlerNameList;
-    if ((*i) -> GetCommandPath () == G4String ("/vis/sceneHandler/list"))
-      candidates += " all";
-    (*i) -> GetParameter (0) -> SetParameterCandidates (candidates);
-  }
-}
 
 ////////////// /vis/sceneHandler/attach ///////////////////////////////////////
 
@@ -78,7 +53,6 @@ G4VisCommandSceneHandlerAttach::G4VisCommandSceneHandlerAttach () {
   fpCommand -> SetParameterName ("scene-name",
 				 omitable = true,
 				 currentAsDefault = true);
-  sceneNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandSceneHandlerAttach::~G4VisCommandSceneHandlerAttach () {
@@ -314,8 +288,6 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
   // Attach scene.
   if (fpVisManager -> GetCurrentScene ())
     G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/sceneHandler/attach");
-
-  UpdateCandidateLists ();
 }
 
 ////////////// /vis/sceneHandler/list ///////////////////////////////////////
@@ -340,7 +312,6 @@ G4VisCommandSceneHandlerList::G4VisCommandSceneHandlerList () {
   parameter -> SetCurrentAsDefault (false);
   parameter -> SetDefaultValue (0);
   fpCommand -> SetParameter (parameter);
-  sceneHandlerNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandSceneHandlerList::~G4VisCommandSceneHandlerList () {
@@ -358,15 +329,26 @@ void G4VisCommandSceneHandlerList::SetNewValue (G4UIcommand*,
   is >> name >> verbosityString;
   G4VisManager::Verbosity verbosity =
     fpVisManager->GetVerbosityValue(verbosityString);
+  const G4VSceneHandler* currentSceneHandler =
+    fpVisManager -> GetCurrentSceneHandler ();
+  G4String currentName;
+  if (currentSceneHandler) currentName = currentSceneHandler->GetName();
 
   const G4SceneHandlerList& list = fpVisManager -> GetAvailableSceneHandlers ();
   G4bool found = false;
   for (size_t iSH = 0; iSH < list.size (); iSH++) {
+    const G4String& iName = list [iSH] -> GetName ();
     if (name != "all") {
-      if (name != list [iSH] -> GetName ()) continue;
+      if (name != iName) continue;
     }
     found = true;
-    G4cout << "Scene handler \"" << list [iSH] -> GetName () << "\""
+    if (iName == currentName) {
+      G4cout << "  (current)";
+    }
+    else {
+      G4cout << "           ";
+    }
+    G4cout << " scene handler \"" << list [iSH] -> GetName () << "\""
 	   << " (" << list [iSH] -> GetGraphicsSystem () -> GetName () << ")";
     if (verbosity >= G4VisManager::parameters) {
       G4cout << "\n  " << *(list [iSH]);
@@ -382,80 +364,6 @@ void G4VisCommandSceneHandlerList::SetNewValue (G4UIcommand*,
   }
 }
 
-////////////// /vis/sceneHandler/remove ///////////////////////////////////////
-
-G4VisCommandSceneHandlerRemove::G4VisCommandSceneHandlerRemove () {
-  G4bool omitable, currentAsDefault;
-  fpCommand = new G4UIcmdWithAString ("/vis/sceneHandler/remove", this);
-  fpCommand -> SetGuidance ("/vis/sceneHandler/remove <scene-handler-name>");
-  fpCommand -> SetGuidance ("Removes scene handlers.");
-  fpCommand -> SetGuidance
-    ("Specify scene handler by name (\"/vis/sceneHandler/list\""
-     "\n  to see possibilities).");
-  fpCommand -> SetParameterName ("scene-handler-name",
-				 omitable = false,
-				 currentAsDefault = true);
-  sceneHandlerNameCommands.push_back (fpCommand);
-}
-
-G4VisCommandSceneHandlerRemove::~G4VisCommandSceneHandlerRemove () {
-  delete fpCommand;
-}
-
-G4String G4VisCommandSceneHandlerRemove::GetCurrentValue (G4UIcommand*) {
-  G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler ();
-  if (sceneHandler) {
-    return sceneHandler -> GetName ();
-  }
-  else {
-    return "none";
-  }
-}
-
-void G4VisCommandSceneHandlerRemove::SetNewValue (G4UIcommand*,
-						  G4String newValue) {
-
-  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-
-  G4String& removeName = newValue;
-  G4VSceneHandler* currentSceneHandler =
-    fpVisManager -> GetCurrentSceneHandler ();
-  G4String currentName;
-  if (currentSceneHandler) {
-    currentName = currentSceneHandler -> GetName ();
-  }
-
-  G4SceneHandlerList& list = fpVisManager -> SetAvailableSceneHandlers ();
-  G4SceneHandlerListIterator iSH;
-  for (iSH = list.begin(); iSH != list.end(); ++iSH) {
-    if ((*iSH) -> GetName () == removeName) break;
-  }
-
-  if (iSH == list.end()) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: Scene handler \"" << removeName <<
-	"\" not found - \"/vis/sceneHandler/list\" to see possibilities."
-	     << G4endl;
-    }
-    return;
-  }
-
-  if (verbosity >= G4VisManager::confirmations) {
-    G4cout << "Scene handler \"" << removeName << "\" removed." << G4endl;
-  }
-  if (removeName == currentName) {
-    fpVisManager -> DeleteCurrentSceneHandler ();
-  }
-  else {
-    list.erase (iSH);
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Current scene handler unchanged." << G4endl;
-    }
-  }
-
-  UpdateCandidateLists ();
-}
-
 ////////////// /vis/sceneHandler/select ///////////////////////////////////////
 
 G4VisCommandSceneHandlerSelect::G4VisCommandSceneHandlerSelect () {
@@ -469,7 +377,6 @@ G4VisCommandSceneHandlerSelect::G4VisCommandSceneHandlerSelect () {
   fpCommand -> SetParameterName ("scene-handler-name",
 				 omitable = true,
 				 currentAsDefault = true);
-  sceneHandlerNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandSceneHandlerSelect::~G4VisCommandSceneHandlerSelect () {

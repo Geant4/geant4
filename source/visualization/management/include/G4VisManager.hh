@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.37 2005-03-09 16:29:35 allison Exp $
+// $Id: G4VisManager.hh,v 1.38 2005-03-09 23:48:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -231,12 +231,6 @@ public: // With description
 
   void CreateViewer  (G4String name = "");
   // Creates viewer for the current scene handler.
-
-  void DeleteCurrentSceneHandler ();
-  // Leaves current scene handler and viewer undefined!
-
-  void DeleteCurrentViewer ();
-  // Leaves current scene and view undefined!
 
 private:
 

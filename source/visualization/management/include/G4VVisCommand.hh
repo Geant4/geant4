@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh,v 1.16 2004-08-03 15:57:44 johna Exp $
+// $Id: G4VVisCommand.hh,v 1.17 2005-03-09 23:48:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
@@ -59,13 +59,6 @@ protected:
 
   // Data members.
   static G4VisManager* fpVisManager;
-  static  std::vector<G4UIcommand*> sceneNameCommands;
-  typedef std::vector<G4UIcommand*>::iterator sceneNameCommandsIterator; 
-  static  std::vector<G4UIcommand*> sceneHandlerNameCommands;
-  typedef std::vector<G4UIcommand*>::iterator
-    sceneHandlerNameCommandsIterator;
-  static  std::vector<G4UIcommand*> viewerNameCommands;
-  typedef std::vector<G4UIcommand*>::iterator viewerNameCommandsIterator; 
 };
 
 #include "G4VVisCommand.icc"

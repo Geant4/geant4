@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.62 2005-03-03 16:13:08 allison Exp $
+// $Id: G4VisManager.cc,v 1.63 2005-03-09 23:48:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -497,102 +497,6 @@ void G4VisManager::CreateViewer (G4String name) {
   else PrintInvalidPointers ();
 }
 
-void G4VisManager::DeleteCurrentSceneHandler () {
-  if (fVerbosity >= confirmations) {
-    G4cout << "G4VisManager::DeleteCurrentSceneHandler: scene handler \""
-	   << fpSceneHandler -> GetName ()
-	   << "\"\n  and its viewer(s) are being deleted."
-	   << G4endl;
-  }
-  if(fpSceneHandler) {
-    fAvailableSceneHandlers.remove (fpSceneHandler);
-    delete fpSceneHandler;
-  }
-  const G4SceneHandlerList& sceneHandlerList = fAvailableSceneHandlers;
-  G4int nSH = sceneHandlerList.size ();
-  G4int iSH;
-  for (iSH = 0; iSH < nSH; iSH++) {
-    if (sceneHandlerList [iSH] -> GetViewerList ().size ()) break;
-  }
-  if (iSH < nSH) {
-    fpSceneHandler = sceneHandlerList [iSH];
-    fpViewer = fpSceneHandler -> GetViewerList () [0];
-    if (fVerbosity >= confirmations) {
-      G4cout << "  Scene handler is now \""
-	     << fpSceneHandler -> GetName ();
-      G4cout << "\"\n  and viewer now \""
-	     << fpViewer -> GetName ()
-	     << "." << G4endl;
-    }
-    IsValidView ();  // Check.
-  }
-  else if (nSH) {
-    fpSceneHandler = fAvailableSceneHandlers [0];
-    fpViewer = 0;
-    // Make it impossible for user action code to Draw.
-    SetConcreteInstance(0);
-    if (fVerbosity >= warnings) {
-      G4cout << "WARNING: scene handler is now \""
-	     << fpSceneHandler -> GetName ();
-      G4cout << "\" but it has no viewers -\n  please create one."
-	     << G4endl;
-    }
-  }
-  else {
-    fpSceneHandler = 0;
-    fpViewer  = 0;
-    // Make it impossible for user action code to Draw.
-    SetConcreteInstance(0);
-    if (fVerbosity >= warnings) {
-      G4cout <<
-	"WARNING: There are now no scene handlers left."
-	"\n  /vis/sceneHandler/select to select a scene handler and"
-	"\n  /vis/viewer/select to select a viewer,"
-	"\n  or maybe you will have to create one."
-	     << G4endl;
-    }
-  }
-}
-
-void G4VisManager::DeleteCurrentViewer () {
-  if (fVerbosity >= confirmations) {
-    G4cout << "G4VisManager::DeleteCurrentViewer: viewer \""
-	   << fpViewer -> GetName () 
-	   << "\" being deleted."
-	   << G4endl;
-  }
-  if (fpViewer ) {
-    fpViewer -> GetSceneHandler () -> RemoveViewerFromList (fpViewer);
-    delete fpViewer;
-  }
-  const G4ViewerList& viewerList = fpSceneHandler -> GetViewerList ();
-  if (viewerList.size () > 0) {
-    fpViewer = viewerList [0];
-    fpSceneHandler -> SetCurrentViewer (fpViewer);
-    if (IsValidView ()) {
-      if (fVerbosity >= confirmations) {
-	G4cout << "  Viewer is now \""
-	       << fpViewer -> GetName ()
-	       << "\"." << G4endl;
-      }
-    }
-  }
-  else {
-    fpViewer = 0;
-    fpSceneHandler -> SetCurrentViewer (0);
-    // Make it impossible for user action code to Draw.
-    SetConcreteInstance(0);
-    if (fVerbosity >= warnings) {
-      G4cout <<
-	"WARNING: There are now no viewers left for this scene handler."
-	"\n  /vis/sceneHandler/select to select a different scene handler"
-	"\n  and /vis/viewer/select to select a viewer, or maybe you will"
-	"\n  have to create some."
-	     << G4endl;
-    }
-  }
-}
-
 void G4VisManager::GeometryHasChanged () {
   if (fVerbosity >= confirmations) {
     G4cout << "G4VisManager::GeometryHasChanged() called." << G4endl;
@@ -819,7 +723,6 @@ void G4VisManager::RegisterMessengers () {
   fMessengerList.push_back (new G4VisCommandSceneEndOfRunAction);
   fMessengerList.push_back (new G4VisCommandSceneList);
   fMessengerList.push_back (new G4VisCommandSceneNotifyHandlers);
-  fMessengerList.push_back (new G4VisCommandSceneRemove);
   fMessengerList.push_back (new G4VisCommandSceneSelect);
 
   directory = new G4UIdirectory ("/vis/scene/add/");
@@ -842,7 +745,6 @@ void G4VisManager::RegisterMessengers () {
   fMessengerList.push_back (new G4VisCommandSceneHandlerAttach);
   fMessengerList.push_back (new G4VisCommandSceneHandlerCreate);
   fMessengerList.push_back (new G4VisCommandSceneHandlerList);
-  fMessengerList.push_back (new G4VisCommandSceneHandlerRemove);
   fMessengerList.push_back (new G4VisCommandSceneHandlerSelect);
 
   directory = new G4UIdirectory ("/vis/viewer/");
@@ -855,7 +757,6 @@ void G4VisManager::RegisterMessengers () {
   fMessengerList.push_back (new G4VisCommandViewerList);
   fMessengerList.push_back (new G4VisCommandViewerPan);
   fMessengerList.push_back (new G4VisCommandViewerRefresh);
-  fMessengerList.push_back (new G4VisCommandViewerRemove);
   fMessengerList.push_back (new G4VisCommandViewerReset);
   fMessengerList.push_back (new G4VisCommandViewerSelect);
   fMessengerList.push_back (new G4VisCommandViewerUpdate);

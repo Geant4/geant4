@@ -1,4 +1,4 @@
-$Id: History,v 1.280 2005-03-09 17:01:51 allison Exp $
+$Id: History,v 1.281 2005-03-09 23:48:15 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,27 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+9th March 2005  John Allison
+- Removed "remove" and "edit" commands.
+- G4VisManager: removed "Delete" methods. (Removing or deleting an
+  existing scene, scene handler or viewer is very messy and not
+  necessary.  When a user creates a new one, he/she may leave the old
+  one around without harm.  It may be left unused or selected again later
+  if the user wants.)
+- Removed automatic parameter candidate specification for commands
+  that take an argument that is a scene, scene handler or viewer
+  name - it is checked in SetNewValue methods.  (The code was just
+  too complicated and, anyway, the result hindered, rather than
+  helped the user, because it restricted the parameter values and
+  mis-typing gave obscure messages.  Now the messages are clearer and,
+  as the guidance points out, the list of possible names can be
+  obtained with a "list" command.)
+- Made "list" commands flag current items.
+- Improved guidance for /vis/scene commands.  Still to do (groan!):
+    /vis/scene/add
+    /vis/sceneHandler
+    /vis/viewer
 
 9th March 2005  John Allison  (vis-V07-00-10, needs greps-V07-00-01)
 - Refined logo and scale.

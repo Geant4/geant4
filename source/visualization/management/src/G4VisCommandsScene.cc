@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.39 2005-03-03 16:36:52 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.40 2005-03-09 23:48:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -49,34 +49,15 @@ G4String G4VVisCommandScene::CurrentSceneName () {
   return currentSceneName;
 }
 
-void G4VVisCommandScene::UpdateCandidateLists () {
-
-  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  G4int iScene, nScenes = sceneList.size ();
-  G4String nameList;
-  for (iScene = 0; iScene < nScenes; iScene++) {
-    nameList += sceneList [iScene] -> GetName () + " ";
-  }
-  nameList = nameList.strip ();
-  sceneNameCommandsIterator i;
-  for (i = sceneNameCommands.begin (); i != sceneNameCommands.end (); ++i) {
-    (*i)->GetParameter (0) -> SetParameterCandidates (nameList);
-  }
-}
-
 ////////////// /vis/scene/create ///////////////////////////////////////
 
 G4VisCommandSceneCreate::G4VisCommandSceneCreate (): fId (0) {
-  G4bool omitable, currentAsDefault;
+  G4bool omitable;
   fpCommand = new G4UIcmdWithAString ("/vis/scene/create", this);
-  fpCommand -> SetGuidance ("/vis/scene/create [<scene-name>]");
-  fpCommand -> SetGuidance ("Creates an empty scene.");
-  fpCommand -> SetGuidance ("Invents a name if not supplied.");
-  fpCommand -> SetGuidance ("This scene becomes current.");
-  fpCommand -> SetParameterName ("scene-name",
-				 omitable = true,
-				 currentAsDefault = true);
-  sceneNameCommands.push_back (fpCommand);
+  fpCommand -> SetGuidance
+    ("Creates an empty scene. Invents a name if not supplied."
+     "\nThis scene becomes current.");
+  fpCommand -> SetParameterName ("scene-name", omitable = true);
 }
 
 G4VisCommandSceneCreate::~G4VisCommandSceneCreate () {
@@ -91,7 +72,7 @@ G4String G4VisCommandSceneCreate::NextName () {
 }
 
 G4String G4VisCommandSceneCreate::GetCurrentValue (G4UIcommand*) {
-  return NextName ();
+  return "";
 }
 
 void G4VisCommandSceneCreate::SetNewValue (G4UIcommand*, G4String newValue) {
@@ -125,72 +106,8 @@ void G4VisCommandSceneCreate::SetNewValue (G4UIcommand*, G4String newValue) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "New empty scene \"" << newName << "\" created." << G4endl;
     }
-
-    UpdateCandidateLists ();
   }
   UpdateVisManagerScene (newName);
-}
-
-////////////// /vis/scene/edit ///////////////////////////////////////
-
-G4VisCommandSceneEdit::G4VisCommandSceneEdit () {
-  G4bool omitable, currentAsDefault;
-  fpCommand = new G4UIcmdWithAString ("/vis/scene/edit", this);
-  fpCommand -> SetGuidance ("/vis/scene/edit [<scene-name>]");
-  fpCommand -> SetGuidance ("Edits a scene (default current scene).");
-  fpCommand -> SetGuidance ("This scene becomes current.");
-  fpCommand -> SetParameterName ("scene-name",
-				 omitable = true,
-				 currentAsDefault = true);
-  sceneNameCommands.push_back (fpCommand);
-}
-
-G4VisCommandSceneEdit::~G4VisCommandSceneEdit () {
-  delete fpCommand;
-}
-
-G4String G4VisCommandSceneEdit::GetCurrentValue (G4UIcommand*) {
-  return CurrentSceneName ();
-}
-
-void G4VisCommandSceneEdit::SetNewValue (G4UIcommand*, G4String newValue) {
-
-  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-
-  G4String sceneName;
-  std::istrstream is (newValue);
-  is >> sceneName;
-
-  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  G4int iScene, nScenes = sceneList.size ();
-  G4Scene* pScene;
-  for (iScene = 0; iScene < nScenes; iScene++) {
-    pScene = sceneList [iScene];
-    if (pScene -> GetName () == sceneName) break;
-  }
-  if (iScene >= nScenes) {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: G4VisCommandSceneEdit::SetNewValue: Scene \""
-	     << sceneName << "\" not found."
-	"\n  /vis/scene/list to see scenes."
-	     << G4endl;
-    }
-    return;
-  }
-  else {
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Scene \"" << sceneName << "\" contains:" << G4endl;
-      G4String uiCommand ("/vis/scene/list ");
-      uiCommand += sceneName;
-      uiCommand += " confirmations";
-      G4UImanager::GetUIpointer () -> ApplyCommand (uiCommand);
-      G4cout <<
-      "BUT...YOU CAN DO NOTHING YET - /vis/scene/edit FACILITY IN PREPARATION."
-	     << G4endl;
-    }
-  }
-
-  UpdateVisManagerScene (sceneName);
 }
 
 ////////////// /vis/scene/endOfEventAction ////////////////////////////
@@ -199,15 +116,12 @@ G4VisCommandSceneEndOfEventAction::G4VisCommandSceneEndOfEventAction () {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString ("/vis/scene/endOfEventAction", this);
   fpCommand -> SetGuidance
-    ("/vis/scene/endOfEventAction [accumulate|refresh]");
+    ("accumulate: viewer accumulates hits, etc., event by event, or");
   fpCommand -> SetGuidance
-    ("Requests viewer"
-     "\na) to accumulate hits, etc., event by event, or"
-     "\nb) to show them at end of event or, for direct-screen viewers,"
-     "\n   to refresh the screen just before drawing the next event."
-     "\n Detector remains or is redrawn.");
-  fpCommand -> SetParameterName ("action",
-				 omitable = true);
+    ("refresh: viewer shows them at end of event or, for direct-screen"
+     "\n  viewers, refreshes the screen just before drawing the next event.");
+  fpCommand -> SetGuidance ("The detector remains or is redrawn.");
+  fpCommand -> SetParameterName ("action", omitable = true);
   fpCommand -> SetCandidates ("accumulate refresh");
   fpCommand -> SetDefaultValue ("refresh");
 }
@@ -275,15 +189,13 @@ G4VisCommandSceneEndOfRunAction::G4VisCommandSceneEndOfRunAction () {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString ("/vis/scene/endOfRunAction", this);
   fpCommand -> SetGuidance
-    ("/vis/scene/endOfRunAction [accumulate|refresh]");
+    ("accumulate: viewer accumulates hits, etc., run by run, or");
   fpCommand -> SetGuidance
-    ("Requests viewer"
-     "\na) to accumulate hits, etc., run by run, or"
-     "\nb) to show them at end of run or, for direct-screen viewers,"
-     "\n   to refresh the screen just before drawing the next event."
-     "\n Detector remains or is redrawn.");
-  fpCommand -> SetParameterName ("action",
-				 omitable = true);
+    ("refresh: viewer shows them at end of run or, for direct-screen"
+     "\n  viewers, refreshes the screen just before drawing the first"
+     "\n  event of the next run.");
+  fpCommand -> SetGuidance ("The detector remains or is redrawn.");
+  fpCommand -> SetParameterName ("action", omitable = true);
   fpCommand -> SetCandidates ("accumulate refresh");
   fpCommand -> SetDefaultValue ("refresh");
 }
@@ -350,23 +262,15 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
 G4VisCommandSceneList::G4VisCommandSceneList () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/list", this);
-  fpCommand -> SetGuidance ("/vis/scene/list [<scene-name>] [<verbosity>]");
-  fpCommand -> SetGuidance ("Lists scene(s).");
-  fpCommand -> SetGuidance ("<scene-name> default is \"all\"");
   fpCommand -> SetGuidance
-    ("See /vis/verbose for definition of verbosity.");
+    ("Lists scene(s).  See /vis/verbose for definition of verbosity.");
   G4UIparameter* parameter;
-  parameter = new G4UIparameter ("scene-name", 's',
-				 omitable = true);
-  parameter -> SetCurrentAsDefault (false);
+  parameter = new G4UIparameter ("scene-name", 's', omitable = true);
   parameter -> SetDefaultValue ("all");
   fpCommand -> SetParameter (parameter);
-  parameter = new G4UIparameter ("verbosity", 's',
-				 omitable = true);
-  parameter -> SetCurrentAsDefault (false);
+  parameter = new G4UIparameter ("verbosity", 's', omitable = true);
   parameter -> SetDefaultValue (0);
   fpCommand -> SetParameter (parameter);
-  sceneNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandSceneList::~G4VisCommandSceneList () {
@@ -383,6 +287,9 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand*, G4String newValue) {
   is >> name >> verbosityString;
   G4VisManager::Verbosity verbosity =
     fpVisManager->GetVerbosityValue(verbosityString);
+  const G4Scene* currentScene = fpVisManager -> GetCurrentScene ();
+  G4String currentName;
+  if (currentScene) currentName = currentScene->GetName();
 
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
   G4int iScene, nScenes = sceneList.size ();
@@ -394,7 +301,13 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand*, G4String newValue) {
       if (name != iName) continue;
     }
     found = true;
-    G4cout << "Scene name: \"" << iName << "\"";
+    if (iName == currentName) {
+      G4cout << "  (current)";
+    }
+    else {
+      G4cout << "           ";
+    }
+    G4cout << " scene \"" << iName << "\"";
     if (verbosity >= G4VisManager::confirmations) {
       G4int i;
       G4cout << "\n  Run-duration models:";
@@ -436,18 +349,16 @@ G4VisCommandSceneNotifyHandlers::G4VisCommandSceneNotifyHandlers () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/notifyHandlers", this);
   fpCommand -> SetGuidance
-    ("/vis/scene/notifyHandlers [<scene-name>] [r[efresh]|f[lush]]");
-  fpCommand -> SetGuidance
     ("Notifies scene handlers of possible changes of scene and forces a"
-     "reconstruction of any graphical databases.");
-  fpCommand -> SetGuidance ("<scene-name> default is current scene name.");
-  fpCommand -> SetGuidance
-    ("Clears and refreshes all viewers of current scene."
+     "\nreconstruction of any graphical databases."
+     "\nClears and refreshes all viewers of current scene."
      "\n  The default action \"refresh\" does not issue \"update\" (see"
      "\n    /vis/viewer/update)."
      "\nIf \"flush\" is specified, it issues an \"update\" as well as"
-     "\n  \"refresh\".  Useful for refreshing and initiating post-processing"
+     "\n  \"refresh\" - useful for refreshing and initiating post-processing"
      "\n  for graphics systems which need post-processing.");
+  fpCommand -> SetGuidance 
+    ("The <scene-name> default is the current scene name.");
   fpCommand -> SetGuidance
     ("This command does not change current scene, scene handler or viewer.");
   G4UIparameter* parameter;
@@ -458,8 +369,8 @@ G4VisCommandSceneNotifyHandlers::G4VisCommandSceneNotifyHandlers () {
   parameter = new G4UIparameter ("refresh-flush", 's',
 				 omitable = true);
   parameter -> SetDefaultValue("refresh");
+  parameter -> SetParameterCandidates("refresh flush");
   fpCommand -> SetParameter (parameter);
-  sceneNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandSceneNotifyHandlers::~G4VisCommandSceneNotifyHandlers () {
@@ -555,93 +466,15 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
   }
 }
 
-////////////// /vis/scene/remove ///////////////////////////////////////
-
-G4VisCommandSceneRemove::G4VisCommandSceneRemove () {
-  G4bool omitable, currentAsDefault;
-  fpCommand = new G4UIcmdWithAString ("/vis/scene/remove", this);
-  fpCommand -> SetGuidance ("/vis/scene/remove <scene-name>");
-  fpCommand -> SetGuidance ("Removes scenes.");
-  fpCommand -> SetGuidance
-    ("/vis/scene/list to see possibilities.");
-  fpCommand -> SetParameterName ("scene-name",
-				 omitable = false,
-				 currentAsDefault = true);
-  sceneNameCommands.push_back (fpCommand);
-}
-
-G4VisCommandSceneRemove::~G4VisCommandSceneRemove () {
-  delete fpCommand;
-}
-
-G4String G4VisCommandSceneRemove::GetCurrentValue (G4UIcommand*) {
-  return CurrentSceneName ();
-}
-
-void G4VisCommandSceneRemove::SetNewValue (G4UIcommand*, G4String newValue) {
-
-  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-
-  G4String& removeName = newValue;
-  const G4String& currentSceneName =
-    fpVisManager -> GetCurrentScene () -> GetName ();
-  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  G4SceneListIterator iScene;
-  for (iScene = sceneList.begin(); iScene != sceneList.end(); ++iScene) {
-    if ((*iScene) -> GetName () == removeName) break;
-  }
-  if (iScene != sceneList.end()) {
-    delete *iScene;
-    sceneList.erase (iScene);
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Scene \"" << removeName << "\" removed." << G4endl;
-    }
-    UpdateCandidateLists ();
-    if (sceneList.empty ()) {
-      if (verbosity >= G4VisManager::warnings) {
-	G4cout << "WARNING: No scenes left.  Please create a new one."
-	       << G4endl;
-      }
-      UpdateVisManagerScene ();
-    }
-    else {
-      if (currentSceneName == removeName) {
-	if (verbosity >= G4VisManager::warnings) {
-	  G4cout << "WARNING: Current scene is now \""
-		 << fpVisManager -> GetCurrentScene () -> GetName ()
-		 << "\"" << G4endl;
-	}
-	UpdateVisManagerScene (sceneList [0] -> GetName ());
-      }
-      else {
-	if (verbosity >= G4VisManager::confirmations) {
-	  G4cout << "Current scene unchanged." << G4endl;
-	}
-      }
-    }
-  }
-  else {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: Scene \"" << removeName
-	     << "\" not found - \"/vis/scene/list\" to see possibilities."
-	     << G4endl;
-    }
-  }
-}
-
 ////////////// /vis/scene/select ///////////////////////////////////////
 
 G4VisCommandSceneSelect::G4VisCommandSceneSelect () {
-  G4bool omitable, currentAsDefault;
+  G4bool omitable;
   fpCommand = new G4UIcmdWithAString ("/vis/scene/select", this);
-  fpCommand -> SetGuidance ("/vis/scene/select [<scene-name>]");
-  fpCommand -> SetGuidance ("Selects current scene.");
-  fpCommand -> SetGuidance
-    ("Specify scene by name (\"/vis/scene/list\" to see possibilities).");
-  fpCommand -> SetParameterName ("scene-name",
-				 omitable = true,
-				 currentAsDefault = true);
-  sceneNameCommands.push_back (fpCommand);
+  fpCommand -> SetGuidance 
+    ("Selects a scene and makes it current.  \"/vis/scene/list\" to see"
+     "\n possible scene names.");
+  fpCommand -> SetParameterName ("scene-name", omitable = false);
 }
 
 G4VisCommandSceneSelect::~G4VisCommandSceneSelect () {
@@ -649,7 +482,7 @@ G4VisCommandSceneSelect::~G4VisCommandSceneSelect () {
 }
 
 G4String G4VisCommandSceneSelect::GetCurrentValue (G4UIcommand*) {
-  return CurrentSceneName ();
+  return "";
 }
 
 void G4VisCommandSceneSelect::SetNewValue (G4UIcommand*, G4String newValue) {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc,v 1.14 2005-03-03 16:28:12 allison Exp $
+// $Id: G4VVisCommand.cc,v 1.15 2005-03-09 23:48:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
@@ -37,12 +37,6 @@
 G4VVisCommand::~G4VVisCommand () {}
 
 G4VisManager* G4VVisCommand::fpVisManager = 0;
-
-std::vector <G4UIcommand*> G4VVisCommand::sceneNameCommands;
-
-std::vector <G4UIcommand*> G4VVisCommand::sceneHandlerNameCommands;
-
-std::vector <G4UIcommand*> G4VVisCommand::viewerNameCommands;
 
 G4String G4VVisCommand::ConvertToString
 (G4double x, G4double y, const char * unitName)

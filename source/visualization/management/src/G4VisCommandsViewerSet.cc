@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.30 2005-03-03 16:28:12 allison Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.31 2005-03-09 23:48:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -50,7 +50,6 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
      "\nCopies view parameters (except the autoRefresh status) from"
      "\n  from-viewer to current viewer.");
   fpCommandAll->SetParameterName ("from-viewer-name",omitable = false);
-  viewerNameCommands.push_back (fpCommandAll);
 
   fpCommandAutoRefresh = new G4UIcmdWithABool
     ("/vis/viewer/set/autoRefresh",this);
