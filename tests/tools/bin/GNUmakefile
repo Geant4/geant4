@@ -1,6 +1,6 @@
 include $(G4INSTALL)/config/architecture.gmk
 
-$(shell if [ ! -d $(G4SYSTEM) ]\; then mkdir $(G4SYSTEM) \; fi)
+DUMMY := $(shell if [ ! -d $(G4SYSTEM) ]\; then mkdir $(G4SYSTEM) \; fi)
 
 .PHONY: $(G4SYSTEM)/.depend
 
