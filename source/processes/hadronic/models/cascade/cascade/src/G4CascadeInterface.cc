@@ -44,7 +44,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 #ifdef debug_G4CascadeInterface
   static G4int counter(0);
   counter++;
-  G4cerr << "Reaction number "<< counter << G4endl;
+  G4cerr << "Reaction number "<< counter << " "<<aTrack.GetDynamicParticle()->GetDefinition()->GetParticleName()<<" "<< aTrack.GetDynamicParticle()->GetKineticEnergy()<<G4endl;
 #endif
   
   if (verboseLevel > 3) {
@@ -163,6 +163,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   G4std::vector<G4InuclElementaryParticle> particles =       output.getOutgoingParticles();
 
   G4int numSecondaries = nucleiFragments.size()+particles.size();
+  theResult.SetStatusChange(fStopAndKill);
   theResult.SetNumberOfSecondaries(numSecondaries);
 
   if(!particles.empty()) { 
