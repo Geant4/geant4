@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst14ElectronPenelope.cc,v 1.1 2003-02-23 17:47:05 pia Exp $
+// $Id: Tst14ElectronPenelope.cc,v 1.2 2003-05-21 08:21:43 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -37,6 +37,8 @@
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MultipleScattering.hh"
+#include "G4LowEnergyIonisation.hh"
+#include "G4PenelopeBremsstrahlung.hh"
 
 
 Tst14ElectronPenelope::Tst14ElectronPenelope(const G4String& name): G4VPhysicsConstructor(name)
@@ -59,8 +61,11 @@ void Tst14ElectronPenelope::ConstructProcess()
      
       if (particleName == "e-") 
 	{
-	  manager->AddProcess(new G4MultipleScattering, -1, 1,1);
-	  // Ionisation and Bremsstrahlung not available yet
+	  manager->AddProcess(new G4MultipleScattering,     -1, 1,1);
+	  manager->AddProcess(new G4LowEnergyIonisation,    -1, 2,2);
+	  manager->AddProcess(new G4PenelopeBremsstrahlung, -1,-1,3);
 	}   
+ 	  // Ionisation not available yet
+         
     }
 }
