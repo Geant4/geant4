@@ -7,8 +7,8 @@
 /physics/addPhysics ion-ICRU
 #
 #### Add Hadronic Physics, muon physics and decay
-#/physics/addPhysics hadronic-bertini
-/physics/addPhysics hadronic-binary
+/physics/addPhysics hadronic-bertini
+#/physics/addPhysics hadronic-binary
 /physics/addPhysics muon-standard
 /physics/addPhysics decay
 ##############################

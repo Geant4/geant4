@@ -97,13 +97,6 @@ The user can not switch between these two configurations interactively.
 /configuration/AddRoof Off  -> destroy the pyramid log
 /roof/thickness 1. m        -> set the height (x) of the pyramid log
 
-
-- The user can select the format of the output file if the analysis
-is active
-
-/analysis/formatFile hbook
-/analysis/formatFile xml
-
 2. PHYSICS LIST
 
 The user can select the physics processes to activate interactively as 
@@ -117,8 +110,8 @@ The example is provided of:
 - Decay
 - Hadronic processes for p and alpha particles as primary particles.
 
-The user can choose the Bertini cascade approach or the binary cascade approach for
-the modeling of proton hadronic physics.
+The user can choose the Bertini cascade approach or the
+ binary cascade approach for the modeling of proton hadronic physics.
 
 3. PRIMARY PARTICLES
 
@@ -180,7 +173,7 @@ UI commands:
 
 In the Basic configuration, the user can change interactively the 
 energy of primary particles:
-example: /gun/energy 1.MeV
+example: /gun/energy 1. MeV
 
 4. STEPPING
 
@@ -194,7 +187,10 @@ Available UI command:
 5. ANALYSIS
 
 if ANALYSIS_USE = 1 in the variable environment, the output of
-the simulation is remsim.hbk           
+the simulation is remsim.hbk or remsim.xml.
+The default output file is remsim.hbk. 
+The user can change the format of the output file interactively as shown
+in section 5.1
                                  
 The file contains histograms:                                              
     - 10 (1)   Energy Deposit (MeV)in the phantom (astronaut) versus 
@@ -216,6 +212,14 @@ The file contains histograms:
     - 80 (2)   Project the coordinate of the hits on the plane xy
   
     - 90 (2)   Project the  energy  deposit of the hits on the plane xy
+
+5.1 UI
+
+- The user can select the format of the output file if the analysis
+is active:
+
+/analysis/formatFile hbook
+/analysis/formatFile xml
 
 6.SET-UP 
                                                                         

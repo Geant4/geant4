@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPhysicsList.cc,v 1.7 2004-11-23 14:37:47 guatelli Exp $
+// $Id: RemSimPhysicsList.cc,v 1.8 2004-11-23 15:43:41 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli
@@ -51,7 +51,7 @@ RemSimPhysicsList::RemSimPhysicsList(): G4VModularPhysicsList(),
                                         muonIsRegistered(false)
 {
   defaultCutValue = 1.* mm;
-  SetVerboseLevel(1);
+  //  SetVerboseLevel(1);
 
   messenger = new RemSimPhysicsListMessenger(this);
  

@@ -5,12 +5,13 @@
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
 /physics/addPhysics ion-ICRU
+#################################
 # Activate hadronic physics
 #/physics/addPhysics hadronic-bertini
 #/physics/addPhysics muon-standard
 #/physics/addPhysics decay
 # Sets some default verbose
-#
+#######################################
 /control/verbose 1
 /run/verbose 1
 /event/verbose 0
@@ -18,7 +19,7 @@
 /run/initialize
 /gun/particleType proton
 /gun/generator Moon
-/gun/energy 1. GeV
+/run/data gcrZ=1.txt
 /configuration/choose moon
 /configuration/AddRoof On
 #/configuration/AddRoof Off

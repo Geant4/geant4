@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimSteppingAction.cc,v 1.5 2004-05-22 12:57:07 guatelli Exp $
+// $Id: RemSimSteppingAction.cc,v 1.6 2004-11-23 15:43:41 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -103,7 +103,6 @@ void RemSimSteppingAction::UserSteppingAction(const G4Step* aStep)
 	    {
 	     G4double initialEnergy = primaryAction -> GetInitialEnergy(); 
 	     G4double particleEnergy = aStep->GetTrack() -> GetKineticEnergy();
-    
              if ( particleName == "proton" || 
                   particleName == "alpha"  || 
                   particleName == "IonO16" || 
@@ -117,6 +116,7 @@ void RemSimSteppingAction::UserSteppingAction(const G4Step* aStep)
 	    }
 	}
     }
+#endif
 
   //analysis of hadronic physics
   if (hadronic == "On")
@@ -146,7 +146,6 @@ void RemSimSteppingAction::UserSteppingAction(const G4Step* aStep)
 	      G4cout << "Hadronic Process:" << process << G4endl;
 	}
     }
-#endif
 }
 void RemSimSteppingAction::SetHadronicAnalysis(G4String value)    
 {
