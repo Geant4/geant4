@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.18 2002-04-22 14:20:12 johna Exp $
+// $Id: test19.cc,v 1.19 2004-07-01 15:51:34 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,7 +120,9 @@ int main (int argc, char** argv) {
   runManager -> SetUserAction (new MySteppingAction);
 
   //Initialize G4 kernel
-  runManager->Initialize();
+  //runManager->Initialize();  // Do this with /run/initialize so that
+			       // you can, optionally, choose detector
+			       // (/test19det/detector N) first.
 
 #ifdef G4VIS_USE
   // Instantiate and initialise Visualization Manager.
