@@ -1,5 +1,8 @@
-// Class describing solid placements for boolean operations
-// 
+// Class description
+//
+//  A displaced solid is a solid that has been shifted from its original
+//   frame of reference to a new one.   It is meant to be used only for
+//   simplifying the implementation of "Boolean solids". 
 //
 // History:
 //
@@ -16,7 +19,7 @@
 
 class G4DisplacedSolid    : public G4VSolid
 {
-public:
+public:  // With description 
                   G4DisplacedSolid( const G4String& pName,
                                        G4VSolid* pSolid ,
                                        G4RotationMatrix* rotMatrix,
@@ -26,16 +29,24 @@ public:
                                        G4VSolid* pSolid ,
                                  const G4Transform3D& transform  ) ;
 
+public: 
+                  G4DisplacedSolid( const G4String& pName,
+                                    G4VSolid* pSolid ,
+				    const G4AffineTransform directTransform );
+         // For use in instantiating a transient instance from a persistent one:
+
+public:  // With description 
          virtual ~G4DisplacedSolid() ;
+  // 
+  // It also has all the methods that a solid requires, eg. 
+    EInside Inside( const G4ThreeVector& p ) const ;
 
-
-
+public: 
      G4bool CalculateExtent(const EAxis pAxis,
 			    const G4VoxelLimits& pVoxelLimit,
 			    const G4AffineTransform& pTransform,
 				  G4double& pMin, G4double& pMax) const ;
        
-    EInside Inside( const G4ThreeVector& p ) const ;
 
     G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const ;
 
@@ -57,6 +68,8 @@ public:
 	                    const G4int n,
                             const G4VPhysicalVolume* pRep ) ;
                                    
+public:  // With description 
+
     virtual G4GeometryType  GetEntityType() const 
     { return G4String("G4DisplacedSolid"); }
 
@@ -69,9 +82,15 @@ public:
     G4VSolid*                GetConstituentSolid();
     const G4AffineTransform  GetTransform() const; 
     
+    // Get the rotation/translation, as applied to the frame of reference
     G4RotationMatrix         GetFrameRotation() const;
     G4ThreeVector            GetFrameTranslation() const; 
 
+    // Get the rotation/translation, as applied to the object
+    G4RotationMatrix         GetObjectRotation() const;
+    G4ThreeVector            GetObjectTranslation() const; 
+
+public:
     // For creating graphical representations   (ie for visualisation)
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4VisExtent   GetExtent        () const ;
