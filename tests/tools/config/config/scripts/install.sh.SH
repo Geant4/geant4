@@ -88,6 +88,13 @@ export NeutronHPCrossSections
 echo "On this machine the NeutronHPCrossSections=\$NeutronHPCrossSections"
 fi
 
+#+
+if [ X$g4elasticdata != X ] ; then 
+G4ELASTICDATA="$g4elasticdata"
+export G4ELASTICDATA
+echo "On this machine the G4ELASTICDATA=\$g4elasticdata"
+fi
+
 #
 # g4clhep.U
 #
@@ -369,6 +376,12 @@ G4LIB_USE_GRANULAR=1
 export G4LIB_USE_GRANULAR
 rm -rf $g4conf/g4make.log
 $g4make 2>&1 | tee $g4conf/g4make.log
+fi
+
+if [ X$g4lib_build_dll = Xy ] ; then
+echo ""
+rm -rf $g4conf/g4make.log
+$g4make dll 2>&1 | tee $g4conf/g4make.log
 fi
 
 # Check for errors in log file

@@ -73,6 +73,12 @@ setenv NeutronHPCrossSections "$g4neutronhpcrosssections"
 echo "On this machine the NeutronHPCrossSections=\$NeutronHPCrossSections"
 endif
 
+#+
+if ( X$g4elasticdata != X ) then
+setenv G4ELASTICDATA "$g4elasticdata"
+echo "On this machine the G4ELASTICDATA=\$g4elasticdata"
+endif
+
 #
 # g4clhep.U
 #
