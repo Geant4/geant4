@@ -1,0 +1,252 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (31-Jul-2002)
+             Copyright : Geant4 Collaboration
+**********************************************
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  FukuiRenderer (DAWN)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+/run/verbose 1
+#
+#  select EM PhysicsList
+#
+/testem/phys/addPhysics  model
+#/testem/phys/addPhysics  standard
+#
+/testem/phys/setCuts 5.0 mm
+/run/initialize
+
+***** Table : Nb of materials = 9 *****
+
+ Material: Air            density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m
+   --->  Element: NitrogenN   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material: Water            density:  1.000 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm
+   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material: lAr            density:  1.390 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm
+   --->  Element: lAr    Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Al            density:  2.700 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm
+   --->  Element: Al    Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Fe            density:  7.870 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm
+   --->  Element: Fe    Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: BGO            density:  7.100 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.41 %  Abundance  63.16 %
+   --->  Element: GermaniumGe   Z = 32.0   N =  72.6   A =  72.59 g/mole  fractionMass:  17.48 %  Abundance  15.79 %
+   --->  Element: BismuthBi   Z = 83.0   N = 209.0   A = 208.98 g/mole  fractionMass:  67.10 %  Abundance  21.05 %
+
+ Material: PbWO4            density:  8.280 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.924 mm
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  14.07 %  Abundance  66.67 %
+   --->  Element: LeadPb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass:  45.53 %  Abundance  16.67 %
+   --->  Element: TungstenW   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  40.40 %  Abundance  16.67 %
+
+ Material: Tungsten            density: 19.300 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm
+   --->  Element: TungstenW   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Lead            density: 11.350 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm
+   --->  Element: LeadPb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+
+Absorber is 17.848 cm of PbWO4
+
+phot:  Total cross sections from Sandia parametrisation. 
+Em2PhysicsList::SetCuts:CutLength : 1 mm
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+
+eIoni:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+
+hIoni:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+
+muIoni:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+
+MuBrems:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+MuPairProd:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+
+MuBrems:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+MuPairProd:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+============= The cut Energy ==============================
+                      gamma            e-           
+Cut in range       
+ Air                            5 mm             5 mm
+   Water                            5 mm             5 mm
+   lAr                            5 mm             5 mm
+   Al                            5 mm             5 mm
+   Fe                            5 mm             5 mm
+   BGO                            5 mm             5 mm
+   PbWO4                            5 mm             5 mm
+   Tungsten                            5 mm             5 mm
+   Lead                            5 mm             5 mm
+Cut in energy
+ Air                          990 eV          3.24 keV
+   Water                         5.78 keV          1.16 MeV
+   lAr                         13.6 keV          1.16 MeV
+   Al                         14.6 keV          2.31 MeV
+   Fe                         46.4 keV          6.11 MeV
+   BGO                          126 keV          4.72 MeV
+   PbWO4                          137 keV          5.34 MeV
+   Tungsten                          241 keV            13 MeV
+   Lead                          204 keV          6.83 MeV
+===================================================
+#
+/testem/det/setMat Water
+/testem/det/setLbin 9 1.11
+/testem/det/setRbin 6 0.111
+/testem/det/update
+Absorber is 3.60564 m of Water
+#
+/testem/event/printModulo 20
+#
+/gun/particle e-
+/gun/energy 1 GeV
+/run/beamOn 100
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
+Start Run processing.
+
+---> Begin of Event: 0
+
+---> Begin of Event: 20
+
+---> Begin of Event: 40
+
+---> Begin of Event: 60
+
+---> Begin of Event: 80
+Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=5.87s Real=6.23s Sys=0.26s
+                 LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
+
+        bin              Mean         rms                 bin            Mean      rms 
+
+    0.00-> 1.11 radl:   12.58%       5.30%             0-> 1.11 radl:   12.58%     5.30% 
+    1.11-> 2.22 radl:   23.85%       9.95%             0-> 2.22 radl:   36.43%    13.16% 
+    2.22-> 3.33 radl:   22.18%       9.52%             0-> 3.33 radl:   58.61%    16.17% 
+    3.33-> 4.44 radl:   14.36%       7.89%             0-> 4.44 radl:   72.97%    15.41% 
+    4.44-> 5.55 radl:    9.35%       6.69%             0-> 5.55 radl:   82.32%    13.50% 
+    5.55-> 6.66 radl:    5.51%       5.48%             0-> 6.66 radl:   87.83%    11.97% 
+    6.66-> 7.77 radl:    2.54%       3.20%             0-> 7.77 radl:   90.37%    10.44% 
+    7.77-> 8.88 radl:    1.80%       3.49%             0-> 8.88 radl:   92.17%     8.50% 
+    8.88-> 9.99 radl:    1.03%       2.39%             0-> 9.99 radl:   93.20%     7.61% 
+
+
+
+                  RADIAL PROFILE                         CUMULATIVE  RADIAL PROFILE
+
+        bin              Mean         rms                 bin            Mean      rms 
+
+    0.00-> 0.11 radl:   66.31%      10.78%             0-> 0.11 radl:   66.31%    10.78% 
+    0.11-> 0.22 radl:   15.55%       6.57%             0-> 0.22 radl:   81.86%     8.33% 
+    0.22-> 0.33 radl:    5.83%       3.71%             0-> 0.33 radl:   87.69%     7.76% 
+    0.33-> 0.44 radl:    2.63%       1.84%             0-> 0.44 radl:   90.32%     7.69% 
+    0.44-> 0.56 radl:    1.82%       1.38%             0-> 0.56 radl:   92.14%     7.58% 
+    0.56-> 0.67 radl:    1.06%       1.04%             0-> 0.67 radl:   93.20%     7.61% 
+
+                              SUMMARY
+                         energy deposit :   93.20 % E0 +-    7.61 % E0
+                         charged traklen:   13.45 radl +-    1.10 radl
+                         neutral traklen:  204.04 radl +-   24.43 radl
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 134990405, 73697489
+----------------------------------------
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.
