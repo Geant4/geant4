@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Para1.cc,v 1.4 2002-01-08 16:16:56 gcosmo Exp $
+// $Id: testG4Para1.cc,v 1.5 2004-09-13 16:26:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -60,7 +60,7 @@ G4bool testG4Para()
     G4ThreeVector vmxmy(-1/sqrt(2.0),-1/sqrt(2.0),0);
     G4ThreeVector vxmy(1/sqrt(2.0),-1/sqrt(2.0),0);
 
-    G4double Dist;
+    G4double Dist, vol, volCheck;
     G4ThreeVector *pNorm,norm;
     G4bool *pgoodNorm,goodNorm,calcNorm=true;
 
@@ -86,6 +86,13 @@ G4bool testG4Para()
 // Check name
     assert(trap1.GetName()=="Test Boxlike #1");
     //    assert(trap2.GetName()=="Test Trdlike #2");
+
+// check cubic volume 
+
+    vol = trap1.GetCubicVolume();
+    volCheck = 8*20*30*40;
+    assert(ApproxEqual(vol,volCheck));
+
 
 // Check Inside
     assert(trap1.Inside(pzero)==kInside);

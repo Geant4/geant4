@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Trd.cc,v 1.6 2002-01-08 16:16:57 gcosmo Exp $
+// $Id: testG4Trd.cc,v 1.7 2004-09-13 16:26:54 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -77,7 +77,7 @@ G4bool testG4Trd()
     G4ThreeVector vmxmy(-1/sqrt(2.0),-1/sqrt(2.0),0);
     G4ThreeVector vxmy(1/sqrt(2.0),-1/sqrt(2.0),0);
 
-    G4double Dist;
+    G4double Dist, vol, volCheck;
     G4ThreeVector *pNorm,norm;
     G4bool *pgoodNorm,goodNorm,calcNorm=true;
 
@@ -94,6 +94,12 @@ G4bool testG4Trd()
 // Check name
     assert(trd1.GetName()=="Test Box #1");
     assert(trd2.GetName()=="Test Trd");
+
+// check cubic volume
+
+    vol = trd1.GetCubicVolume();
+    volCheck = 8*20*30*40;
+    assert(ApproxEqual(vol,volCheck));
 
 // Check Inside
 

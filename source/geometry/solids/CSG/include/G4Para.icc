@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.icc,v 1.1 2002-10-28 11:43:03 gcosmo Exp $
+// $Id: G4Para.icc,v 1.2 2004-09-13 16:26:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -102,4 +102,16 @@ void G4Para::SetThetaAndPhi(double pTheta, double pPhi)
 {
   fTthetaCphi=tan(pTheta)*cos(pPhi);
   fTthetaSphi=tan(pTheta)*sin(pPhi);
+}
+
+///////////////////////////////////////////////////
+//
+// It is like G4Box, since para transformations keep the volume to be const
+
+inline
+G4double G4Para::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   fCubicVolume = 8*fDx*fDy*fDz; 
+  return fCubicVolume;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.icc,v 1.1 2002-10-28 11:43:04 gcosmo Exp $
+// $Id: G4Trd.icc,v 1.2 2004-09-13 16:26:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -90,4 +90,14 @@ inline
 void G4Trd::SetZHalfLength(G4double val)
 {
   fDz= val;
+}
+
+///////////////////////////////////////////////////
+
+inline
+G4double G4Trd::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   fCubicVolume = 2*fDz*( (fDx1+fDx2)*(fDy1+fDy2) + (fDx2-fDx1)*(fDy2-fDy1)/3 ); 
+  return fCubicVolume;
 }

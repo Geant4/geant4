@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.hh,v 1.9 2003-06-16 16:53:27 gunter Exp $
+// $Id: G4Trd.hh,v 1.10 2004-09-13 16:26:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,6 +79,7 @@ class G4Trd : public G4CSGSolid
     inline G4double GetYHalfLength1() const;
     inline G4double GetYHalfLength2() const;
     inline G4double GetZHalfLength()  const;
+    inline G4double GetCubicVolume();
 
     // Modifiers
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Trap.cc,v 1.8 2002-01-08 16:16:57 gcosmo Exp $
+// $Id: testG4Trap.cc,v 1.9 2004-09-13 16:26:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -67,7 +67,7 @@ G4bool testG4Trap()
     G4ThreeVector vxz(1/sqrt(2.0),0,1/sqrt(2.0));
     G4ThreeVector vyz(0,1/sqrt(2.0),1/sqrt(2.0));
 
-    G4double Dist, dist ;
+    G4double Dist, dist, vol, volCheck ;
     G4ThreeVector *pNorm,norm;
     G4bool *pgoodNorm,goodNorm,calcNorm=true;
 
@@ -97,6 +97,25 @@ G4bool testG4Trap()
 
     assert(trap1.GetName()=="Test Boxlike #1");
     assert(trap2.GetName()=="Test Trdlike #2");
+
+// Check cubic volume
+
+    vol = trap1.GetCubicVolume();
+    volCheck = 8*20*30*40;
+    assert(ApproxEqual(vol,volCheck));
+
+    vol = trap4.GetCubicVolume();
+    volCheck = 8*50*50*50;
+    assert(ApproxEqual(vol,volCheck));
+
+    vol = trap3.GetCubicVolume();
+    volCheck = 8*50*50*50;
+    assert(ApproxEqual(vol,volCheck));
+
+    vol = trap2.GetCubicVolume();
+    volCheck = 2*40.*( (20.+40.)*(10.+30.) + (30.-10.)*(40.-20.)/3. );
+    assert(ApproxEqual(vol,volCheck));
+
 
 // Check Inside
 

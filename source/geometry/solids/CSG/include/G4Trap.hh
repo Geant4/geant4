@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.hh,v 1.8 2003-06-16 16:53:26 gunter Exp $
+// $Id: G4Trap.hh,v 1.9 2004-09-13 16:26:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -163,8 +163,10 @@ class G4Trap : public G4CSGSolid
     inline G4double GetXHalfLength4() const;
     inline G4double GetTanAlpha2()    const;
     inline TrapSidePlane GetSidePlane( G4int n ) const;
-
     inline G4ThreeVector GetSymAxis() const;
+    inline G4double GetCubicVolume();
+
+
       //
       // Returns coordinates of unit vector along straight
       // line joining centers of -/+fDz planes   
