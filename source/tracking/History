@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2002-01-21 22:02:25 gcosmo Exp $
+$Id: History,v 1.29 2002-01-23 03:17:26 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan 22, 02 M.Asai (tracking-V04-00-01)
+- G4SteppingManager.cc
+  o Issue G4Exception if a primary track starts outside of the world.
 
 Jan 21, 02 T.Sasaki (tracking-V04-00-00)
 - G4SteppingManager[.hh.cc]:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.25 2002-01-22 18:22:34 tsasaki Exp $
+// $Id: G4SteppingManager.cc,v 1.26 2002-01-23 03:17:26 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -311,6 +311,15 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
 
 // If track is already outside the world boundary, kill it
    if( fCurrentVolume==0 ){
+       // If the track is a primary, stop processing
+       if(fTrack->GetParentID()==0)
+       {
+        G4cerr << "Primary particle starting at "
+               << fTrack->GetPosition()
+               << " is outside of the world volume." << G4endl;
+        G4Exception("G4SteppingManager::Primary vertex outside of the world");
+       }
+
        fTrack->SetTrackStatus( fStopAndKill );
        G4cerr << "G4SteppingManager::SetInitialStep(): warning: "
               << "initial track position is outside world! "
