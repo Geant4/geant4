@@ -6,20 +6,16 @@ To add a graphics system:
      class G4XXXSceneHandler: public G4VSceneHandler
      class G4XXXViewer: virtual public G4VViewer
 
-2) If it requires external libraries, introduce two new environment
-   variables G4VIS_BUILD_XXX_DRIVER and G4VIS_USE_XXX and make the
-   modifications to:
+   These should be placed in their own sub-directory under
+   visualization, together with a GNUmakefile and a History file.
 
-     source/visualization/management/include/MyVisManager.cc
-     (similarly all examples vis managers)
-     source/visualization/management/src/G4VisManager.cc
-     config/G4VIS_BUILD.gmk
-     config/G4VIS_USE.gmk
+2) Add to SUBDIRS and SUBLIBS in visualization/GNUmakefile.
 
-   In any case, augment the informational printing in G4VisManager.cc.
+3) Look at the XXX graphics system teamplate in visualization/XXX and
+   use it to build your graphics system.
 
-3) Look at ASCIITree (and VTree) as an example of a minimal graphics
-   system.
+   You might also find it useful to look at ASCIITree (and VTree) as
+   an example of a minimal graphics system.
 
    Look at FukuiRenderer as an example of a system which implements
    AddThis methods for some solids.
@@ -30,174 +26,19 @@ To add a graphics system:
 
      immediate (no display lists) )   ( X-windows
      stored (uses display lists)  ) x ( X with motif - interactive
-                                      ( Win32 (6 combinations) and much
+                                      ( Win32
 
-   use is made of inheritance to avoid code duplication.
+   (6 combinations) and much use is made of inheritance to avoid code
+   duplication.)
 
-4) Here follows a minimal class definition.  Only *pure* virtual
-   functions are mentioned.  It will probably be necessary to implement
-   several other virtual functions, depending on the functionality of
-   your system.
+4) If it requires external libraries, introduce two new environment
+   variables G4VIS_BUILD_XXX_DRIVER and G4VIS_USE_XXX and make the
+   modifications to:
 
-===================================================================
-include/G4XXX.hh
-===================================================================
-#ifndef G4XXX_HH
-#define G4XXX_HH
+     source/visualization/management/include/MyVisManager.cc
+     (similarly all examples vis managers)
+     source/visualization/management/src/G4VisManager.cc
+     config/G4VIS_BUILD.gmk
+     config/G4VIS_USE.gmk
 
-#include "G4VGraphicsSystem.hh"
-
-class G4XXX: public G4VGraphicsSystem {
-public:
-  G4XXX ();
-  virtual ~G4XXX ();
-  G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
-  G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
-};
-
-#endif
-===================================================================
-
-===================================================================
-include/G4XXXSceneHandler.hh
-===================================================================
-#ifndef G4XXXSCENEHANDLER_HH
-#define G4XXXSCENEHANDLER_HH
-
-#include "G4VSceneHandler.hh"
-
-class G4XXXSceneHandler: public G4VSceneHandler {
-
-public:
-  G4XXXSceneHandler(G4VGraphicsSystem& system,
-                      const G4String& name);
-  virtual ~G4XXXSceneHandler ();
-
-  virtual void AddPrimitive (const G4Circle&);
-  virtual void AddPrimitive (const G4NURBS&);
-  virtual void AddPrimitive (const G4Polyhedron&);
-  virtual void AddPrimitive (const G4Polyline&);
-  virtual void AddPrimitive (const G4Square&);
-  virtual void AddPrimitive (const G4Text&);
-
-protected:
-  static G4int         fSceneIdCount;  // Counter for Tree scene handlers.
-  static G4int         fSceneCount;    // No. of extanct scene handlers.
-};
-
-#endif
-===================================================================
-
-===================================================================
-include/G4XXXViewer.hh
-===================================================================
-#ifndef G4XXXVIEWER_HH
-#define G4XXXVIEWER_HH
-
-#include "G4VViewer.hh"
-
-class G4XXXViewer: virtual public G4VViewer {
-public:
-  G4XXXViewer(G4VSceneHandler&,const G4String& name);
-  virtual ~G4XXXViewer();
-  void SetView();
-  void ClearView();
-  void DrawView();
-};
-
-#endif
-===================================================================
-
-===================================================================
-src/G4XXX.cc
-===================================================================
-G4XXX::G4XXX ():
-  G4VGraphicsSystem ("Full Name",
-                     "Nickname",
-                     "A description - could run to many lines - "
-                     "\n advantages, disadvantages, etc.",
-                     G4VGraphicsSystem::<type>)  // See enum.
-  {}
-
-G4XXX::~G4XXX () {}
-
-G4VSceneHandler* G4XXX::CreateSceneHandler (const G4String& name) {
-  G4VSceneHandler* pScene = new G4XXXSceneHandler (*this, name);
-  G4cout << G4XXXSceneHandler::GetSceneCount ()
-         << ' ' << fName << " scene handlers extanct." << G4endl;
-  return  pScene;
-}
-
-G4VViewer* G4XXX::CreateViewer (G4VSceneHandler& scene,
-                                  const G4String& name) {
-  G4VViewer* pView =
-    new G4XXXViewer ((G4XXXSceneHandler&) scene, name);
-  if (pView) {
-    if (pView -> GetViewId () < 0) {
-      G4cerr << "G4XXX::CreateViewer: error flagged by negative"
-        " view id in G4XXXViewer creation."
-        "\n Destroying view and returning null pointer."
-           << G4endl;
-      delete pView;
-      pView = 0;
-    }
-  }
-  else {
-    G4cerr << "G4XXX::CreateViewer: null pointer on"
-      " new G4XXXViewer." << G4endl;
-  }
-  return pView;
-}
-===================================================================
-
-===================================================================
-src/G4XXXSceneHandler.cc
-===================================================================
-#include "G4XXXSceneHandler.hh"
-
-#include "G4VSolid.hh"
-#include "G4PhysicalVolumeModel.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
-
-G4int G4XXXSceneHandler::fSceneIdCount = 0;
-// Counter for XXX scene handlers.
-
-G4int G4XXXSceneHandler::fSceneCount = 0;
-// No. of extanct scene handlers.
-
-G4XXXSceneHandler::G4XXXSceneHandler(G4VGraphicsSystem& system,
-                                         const G4String& name):
-  G4VSceneHandler(system, fSceneIdCount++, name)
-{
-  fSceneCount++;
-}
-
-G4XXXSceneHandler::~G4XXXSceneHandler () {}
-===================================================================
-
-===================================================================
-src/G4XXXViewer.cc
-===================================================================
-#include "G4XXXViewer.hh"
-
-#include "G4ios.hh"
-#include "g4std/strstream"
-
-#include "G4VSceneHandler.hh"
-
-G4XXXViewer::G4XXXViewer
-(G4VSceneHandler& sceneHandler, const G4String& name):
-  G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name) {}
-
-G4XXXViewer::~G4XXXViewer() {}
-
-void G4XXXViewer::SetView() {}
-
-void G4XXXViewer::ClearView() {}
-
-void G4XXXViewer::DrawView() {
-  NeedKernelVisit ();  // Always need to visit G4 kernel.
-  ProcessView ();
-}
-===================================================================
+   In any case, augment the informational printing in G4VisManager.cc.
