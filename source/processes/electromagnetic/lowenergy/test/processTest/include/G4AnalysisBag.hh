@@ -87,7 +87,6 @@ private:
   IHistoManager* histoManager;
   NTupleFactory* factory;
 
-
 };
 
 #endif

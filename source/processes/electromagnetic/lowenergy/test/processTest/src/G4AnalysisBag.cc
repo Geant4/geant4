@@ -35,18 +35,24 @@
 #include "G4AnalysisBag.hh"
 #include "G4Ntuple.hh"
 
-#include "CLHEP/Hist/TupleManager.h"
-#include "CLHEP/Hist/HBookFile.h"
-#include "CLHEP/Hist/Histogram.h"
-#include "CLHEP/Hist/Tuple.h"
+// New Histogramming (from AIDA and Anaphe):
+#include "Interfaces/IHistoManager.h"
+#include "Interfaces/IHistogram1D.h"
+#include "Interfaces/IHistogram2D.h"
+
+// For NtupleTag from Anaphe
+#include "NtupleTag/LizardNTupleFactory.h"
+using namespace Lizard;
 
 G4AnalysisBag::G4AnalysisBag()
 {
-  hbookManager = new HBookFile("processTest.hbook", 39);
+
+  histoManager = createIHistoManager();
 }
 
 G4AnalysisBag::~G4AnalysisBag()
 { 
+  delete factory;
   delete hbookManager;
 
   G4int n = ntuples.size();
@@ -71,8 +77,11 @@ G4AnalysisBag* G4AnalysisBag::getInstance()
 
 void G4AnalysisBag::init(const G4String& file)
 {
-  hbookManager = new HBookFile(file, 39);
-}
+  G4String name = file + ".hbook";
+  hbookManager->selectStore(name);
+
+  // Create a nTuple factory:
+  NTupleFactory* factory = createNTupleFactory();}
 
 void G4AnalysisBag::addNtuple(G4Ntuple* ntuple)
 {
