@@ -338,12 +338,14 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
         G4cout << " - Particle energy[GeV] = "<< originalEnergy/GeV<<G4endl;
         G4cout << " - Material = "<<aMaterial->GetName()<<G4endl;
         G4cout << " - Particle type = "<<aParticle->GetDefinition()->GetParticleName()<<G4endl;
-	result = 0;
+	result = 0; // here would still be leaking...
 	if(reentryCount>100)
 	{
            G4Exception("G4HadronicProcess", "007", FatalException,
 	  "GetHadronicProcess: Reentering ApplyYourself too often - GeneralPostStepDoIt failed.");  
 	}
+        G4Exception("G4HadronicProcess", "007", FatalException,
+	  "GetHadronicProcess: GeneralPostStepDoIt failed (Reentering ApplyYourself not yet supported.)");  
       }
       catch(G4HadronicException aR)
       {
@@ -555,7 +557,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
           theTotalResult->SetEnergyChange( 0.0 );
 	}
       }
-      if(aR->GetStatusChange()==suspend)
+      else if(aR->GetStatusChange()==suspend)
       {
         theTotalResult->SetStatusChange(fSuspend);
 	if(xBiasOn)
@@ -564,7 +566,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 	              "Cannot cross-section bias a process that suspends tracks.");
 	}
       }
-      if(aR->GetStatusChange()!=stopAndKill )
+      else if(aR->GetStatusChange()!=stopAndKill )
       {
 	if(xBiasOn && G4UniformRand()<XBiasSurvivalProbability())
 	{
@@ -585,6 +587,12 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 	  newDirection*=aR->GetTrafoToLab();
 	  theTotalResult->SetMomentumDirectionChange(newDirection.vect());
 	}
+      }
+      else
+      {
+          G4cerr << "Track status is "<< aR->GetStatusChange()<<G4endl;
+	  G4Exception("G4HadronicProcess", "007", FatalException,
+	              "use of unsupported track-status.");
       }
 
       theTotalResult->SetLocalEnergyDeposit(aR->GetLocalEnergyDeposit());
@@ -636,6 +644,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 	
 	theTotalResult->AddSecondary(track);
       }
+      aR->Clear();
       return;
 }
  /* end of file */
