@@ -1,0 +1,30 @@
+# $Id: run12.draw,v 1.1 2001-02-20 12:34:41 maire Exp $
+#
+# Macro file for "TestEm3.cc" 
+# (can be run in batch, without graphic)
+#
+# Iron-scintillator 1 layer; proton 500 MeV
+# (to test the BirkAttenuation() function)
+#
+/control/verbose 2
+#
+/calor/setNbOfLayers 1
+/calor/setNbOfAbsor 2
+/calor/setAbsor 0 Iron 1 cm
+/calor/setAbsor 1 Scintillator 1 cm
+/calor/setSizeYZ 2 cm
+/calor/update
+/gun/setDefault
+#
+/vis/camera/zoom 1.5
+/vis/drawVolume
+#
+/run/particle/setCut 1 mm
+/run/initialize
+#
+/run/verbose 2
+/tracking/verbose 1
+#
+/gun/particle proton
+/gun/energy 500 MeV
+/run/beamOn 1
