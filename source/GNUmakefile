@@ -1,11 +1,11 @@
-# $Id: GNUmakefile,v 1.59 2004-06-07 14:12:59 gcosmo Exp $
+# $Id: GNUmakefile,v 1.60 2004-06-09 07:14:38 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
 #                Composite libraries are built.
 # "gmake includes" places header files .h/.hh in $G4INCLUDE
 # "gmake libmap" forces rebuilding of map-file for granular libraries.
-# "gmake dll" forces building of global libraries and generates DLLs on WIN32
+# "gmake dll" forces building of DLLs global libraries and generates DLLs on WIN32
 # "gmake clean_libs" removes just archive (.a) and shared (.so) libraries
 #                    of current platform installation.
 # "gmake clean" removes installation of current platform.
@@ -97,12 +97,16 @@ $(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
 
 dll: win32def
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-	@echo "Verifying existence of global libraries ..."
-	@$(MAKE) global
+	@echo "Verifying existence of global libraries for DLLs ..."
+	@$(MAKE) kernel_global G4LIB_BUILD_DLL=1
 	@echo "Building Windows DLL libraries ..."
-	@$(MAKE) kernel_global G4LIB_BUILD_SHARED=1
-	@echo "Clearing temporary DLL files ..."
+	@$(MAKE) kernel_global G4LIB_BUILD_DLL=1 G4LIB_BUILD_SHARED=1
+	@echo "Clearing temporary DLL objects and temporaries ..."
 	@rm -rf $(G4LIBDIR)/*.def $(G4LIBDIR)/*.exp
+	@rm -rf $(G4TMPDIR)/*
+ifdef G4USE_G3TOG4
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
+endif
 	@echo "Done !"
 else
 	@echo "Sorry !"
