@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2003-04-04 02:02:46 duns Exp $
+$Id: History,v 1.5 2003-04-04 17:29:39 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,7 +10,7 @@ $Id: History,v 1.4 2003-04-04 02:02:46 duns Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------
-3rd April 2003 Mark Donszelmann (examples-V05-00-02)
+3rd April 2003 Mark Donszelmann (examples-analysis-A01-V05-00-00)
 - Added 2 more histograms to the example
 - Fixed NullPointerException by letting SDManager delete the detectors created in
   DetectorConstruction.cc
