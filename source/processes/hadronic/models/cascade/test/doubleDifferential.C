@@ -53,11 +53,10 @@ while (i < nm) {
   r->cd(i);
   gPad->SetBorderMode(0);
   gPad->Draw();
-  //  gPad->SetLogy();
+   gPad->SetLogy();
   //gPad->SetLogx();
   i++;
 };
-
 
 // Change default style 
 gStyle->SetStatW(0.30);
@@ -69,9 +68,31 @@ gStyle->SetOptStat(10);
 r->cd(1);
 ntuple->SetLineColor(1);
 ntuple->SetFillColor(0);
-ntuple->Draw("eKin", "typePart==1");
+ntuple->Draw("eKin", "typePart==1 ");
 
+r->cd(2);
+//ntuple->SetLineColor(1);
+//ntuple->SetFillColor(0);
+//ntuple->Draw("eKin", "typePart==1 && sqrt(momX*momX+momY*momY) > 0.0");
+ntuple->Draw("eKin", "typePart==1 && sqrt(momX*momX+momY*momY) > 0.1");
+r->cd(3);
+ntuple->SetLineWidth(1);
+ntuple->Draw("eKin", "typePart==1 && sqrt(momX*momX+momY*momY)/momZ > 0 && sqrt(momX*momX+momY*momY)/momZ < 1");
+ntuple->SetLineWidth(2);
+ntuple->Draw("eKin", "typePart==1 && sqrt(momX*momX+momY*momY)/momZ > 1 && sqrt(momX*momX+momY*momY)/momZ < 2", "same");
+ntuple->SetLineWidth(3);
+ntuple->Draw("eKin", "typePart==1 && sqrt(momX*momX+momY*momY)/momZ > 2 && sqrt(momX*momX+momY*momY)/momZ < 3", "same");
+ntuple->SetLineWidth(1);
+ntuple->Draw("eKin", "typePart==1 && sqrt(momX*momX+momY*momY)/momZ > 3 && sqrt(momX*momX+momY*momY)/momZ < 4", "same");
 
+r->cd(4);
+ntuple->SetLineWidth(1); // .18 = 10 deg
+ntuple->Draw("eKin", "typePart==1 && sqrt(momX*momX+momY*momY)/momZ > 0.18 && sqrt(momX*momX+momY*momY)/momZ < 0.36");  // 10-20 deg tan(20)=0.36=pt/pl
+ntuple->SetLineWidth(2);
+ntuple->Draw("eKin", "typePart==1 && sqrt(momX*momX+momY*momY)/momZ > 1.19 && sqrt(momX*momX+momY*momY)/momZ < 2.75", "same");  // 50-70
+
+ntuple->SetLineWidth(3);
+ntuple->Draw("eKin", "typePart==1 && sqrt(momX*momX+momY*momY)/momZ > 5.67", "same");  // 80-
 
 r->Update();
 
