@@ -38,7 +38,7 @@ class G4HadronicInteractionRegistry
   
   protected:
 
-  G4HadronicInteractionRegistry(G4String aString) 
+  G4HadronicInteractionRegistry(G4String ) 
   { G4Exception("G4HadronicInteractionRegistry meant as a singleton; please do not inherit");}
 
   private:
@@ -49,7 +49,7 @@ class G4HadronicInteractionRegistry
        G4HadronicInteractionRegistry() {nModels = 0;}
 
   //  !!!  Assignment operation is forbidden !!!
-      const G4HadronicInteractionRegistry & operator=(const G4HadronicInteractionRegistry &right) 
+      const G4HadronicInteractionRegistry & operator=(const G4HadronicInteractionRegistry &) 
       { return *this;}
 
   void AddModel(G4HadronicInteraction * aModel);
