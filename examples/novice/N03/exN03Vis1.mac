@@ -1,0 +1,181 @@
+#######################################################################
+#  MACRO FILE NAME: exN03Vis1.mac                                     #
+#                                                                     #
+#  AUTHOR(S): Satoshi Tanaka                                          #
+#                                                                     #
+#  DATE: September 12, 1999                                           #
+#                                                                     #
+#  CONTENTS: A basic macro for visualization of detector geometry     #
+#                                                                     #
+#  USAGE:  % $G4BINDIR/exampleN03  exN03Vis1.mac                      #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
+#                                  DAWN, Ghostview, Tcl/Tk            #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv OGLHOME     ... (e.g. /usr/local)                       #
+#    % setenv G4VIS_BUILD_OPENGLX_DRIVER   1                          # 
+#    % setenv G4VIS_BUILD_DAWNFILE_DRIVER  1                          #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:               #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv G4VIS_USE_OPENGLX            1                          #
+#    % setenv G4VIS_USE_DAWNFILE           1                          #
+#                                                                     # 
+#  Addional Notes:                                                    #
+#                                                                     #
+#######################################################################
+
+#####################################################
+# Visualization with OGLSX (OpenGL Stored X) driver
+#####################################################
+
+# Create "scene-0" 
+/vis/scene/create
+
+# Invoke the OGLSX driver 
+/vis/sceneHandler/create OGLSX
+/vis/viewer/create
+
+# Add detector geometry to the current scene
+/vis/scene/add/volume
+
+# Set camera parameters. 
+#   angle: (theta,phi) = (0, 0)
+#   zoom : 0.8 of the full screen size
+#
+# Note: The command "/vis/camera/reset" resets the zoom 
+#       factor to one.  But it does not reset viewpoint.
+#
+/vis/camera/reset
+/vis/camera/viewpoint 0 0
+/vis/camera/zoom      0.8 
+
+# Visualize detector geometry with coordinate axes.
+#     x-axis:red,  y-axis:green,  z-axis:blue
+#
+#  Note: The command "/vis/scene/notifyHandlers" 
+#        does not co-work with "/vis/draw/axes".
+#        In future, /vis/scene/add/axes will be implemented.
+#        It will be used as follows:
+#          Idle> /vis/scene/add/volume
+#          Idle> /vis/scene/add/axes
+#          Idle> /vis/scene/notifyHandlers
+/vis/draw/current
+/vis/draw/axes       0 0 0 500
+/vis/show/view 
+
+# Slide show (spinning) of the view created above.
+#  Draw 60 frame with steps of 3 degrees.
+/vis/camera/reset
+/vis/camera/viewpoint  20 20
+/vis/camera/zoom       0.8 
+/vis/camera/spin       60 3
+
+# Bird's-eye view of the detector
+/vis/camera/reset
+/vis/camera/viewpoint 20 70
+/vis/camera/zoom       0.8 
+/vis/scene/notifyHandlers
+
+##########################################################
+# Visualization with DAWNFILE driver
+#
+#  * The visualized view is saved to a vectorized
+#    EPS file "g4.eps"  
+#
+#  * In order to make the file "g4.eps" printable, 
+#    append the "showpage" PostScript command to the file 
+#    You can do it with the 4th page of the DAWN GUI panel 
+#    or by hand.
+##########################################################
+
+#-----
+# Create "scene-1" (Absorber.0)
+/vis/scene/create
+
+# Invoke the DAWNFILE driver 
+/vis/sceneHandler/create DAWNFILE
+/vis/viewer/create
+
+# Attach the current visualization driver to "scene-1".
+# This line is omittable.
+/vis/sceneHandler/attach scene-1
+
+# Bird's-eye view of the detector geometry with coordinate axes.
+#  viewpoint  : (theta,phi) = (35*deg, 35*deg), 
+#  zoom factor: 0.9 of the full screen size
+#  coordinate axes:
+#     x-axis:red,  y-axis:green,  z-axis:blue
+/vis/scene/add/volume Absorber 0
+/vis/camera/reset
+/vis/camera/zoom      0.9 
+/vis/camera/viewpoint 35 35
+/vis/draw/current
+/vis/draw/axes     0 0 0 500
+/vis/draw/text     0 0 0 mm 50 -120 -200   Absorber.0 
+/vis/show/view 
+
+#-----  
+# Create "scene-2" (Gap.0)
+/vis/scene/create
+
+# Invoke the DAWNFILE driver 
+/vis/sceneHandler/create DAWNFILE
+/vis/viewer/create
+
+# Attach the current visualization driver to "scene-2".
+# This line is omittable.
+/vis/sceneHandler/attach scene-2
+
+# Bird's-eye view of the detector geometry with coordinate axes.
+#  viewpoint  : (theta,phi) = (35*deg, 35*deg), 
+#  zoom factor: 0.9 of the full screen size
+#  coordinate axes:
+#     x-axis:red,  y-axis:green,  z-axis:blue
+/vis/scene/add/volume Gap 0
+/vis/camera/reset
+/vis/camera/zoom      0.9 
+/vis/camera/viewpoint 35 35
+/vis/draw/current
+/vis/draw/axes     0 0 0 500
+/vis/draw/text     0 0 0 mm 50 -120 -200   Gap.0
+/vis/show/view 
+
+#-----
+# Create "scene-3" (world)
+/vis/scene/create
+
+# Invoke the DAWNFILE driver 
+/vis/sceneHandler/create DAWNFILE
+/vis/viewer/create
+
+# Attach the current visualization driver to "scene-3".
+# This line is omittable.
+/vis/sceneHandler/attach scene-3
+
+# Bird's-eye view of the detector geometry with coordinate axes.
+#  viewpoint  : (theta,phi) = (35*deg, 35*deg), 
+#  zoom factor: 0.9 of the full screen size
+#  coordinate axes:
+#     x-axis:red,  y-axis:green,  z-axis:blue
+#  
+#  Note: The argument of /vis/scene/add/volume, "world",
+#        is omittable.
+#  Note: "/vis/set/culling off" makes invisible volume 
+#        "world" visible.
+#
+/vis/scene/add/volume world
+/vis/camera/reset
+/vis/camera/zoom      0.9 
+/vis/camera/viewpoint 35 35
+/vis/set/culling      off
+/vis/draw/current
+/vis/draw/axes     0 0 0 500
+/vis/draw/text     0 0 0 mm 50 -120 -200   world
+/vis/show/view 
+
+

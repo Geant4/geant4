@@ -1,0 +1,132 @@
+#######################################################################
+#  MACRO FILE NAME: exN03Vis2.mac                                     #
+#                                                                     #
+#  AUTHOR(S): Satoshi Tanaka                                          #
+#                                                                     #
+#  DATE: September 12, 1999                                           #
+#                                                                     #
+#  CONTENTS: A basic macro for visualization of events                #
+#                                                                     #
+#  USAGE:  % $G4BINDIR/exampleN03  exN03Vis2.mac                      #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
+#                                  DAWN, Ghostview, Tcl/Tk            #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv OGLHOME     ... (e.g. /usr/local)                       #
+#    % setenv G4VIS_BUILD_OPENGLX_DRIVER   1                          # 
+#    % setenv G4VIS_BUILD_DAWNFILE_DRIVER  1                          #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv G4VIS_USE_OPENGLX            1                          #
+#    % setenv G4VIS_USE_DAWNFILE           1                          #
+#                                                                     # 
+#  Addional Notes:                                                    #
+#                                                                     #
+#######################################################################
+
+#########################################################
+Setting to store particle trajactories for visualization
+#########################################################
+/tracking/storeTrajectory 1
+#/vis/scene/include/trajectories
+
+#####################################################
+# Visualization with OGLSX (OpenGL Stored X) driver
+#####################################################
+
+# Create "scene-0" 
+/vis/scene/create
+
+# Invoke the OGLSX driver 
+/vis/sceneHandler/create OGLSX
+/vis/viewer/create
+
+# Add detector geometry to the current scene
+/vis/scene/add/volume
+
+# Set culling policy.  
+#   The policy is "to skip visualizing low-density volumes 
+#   of less than 1.0 g/cm^3". 
+/vis/set/culling          on
+/vis/set/cull_by_density  on  1.
+
+# Set drawing style.
+#   The drawing style is "hidden-surface removal",
+#   with which the low-density culling set above works.
+#   Commonly-used drawing styles are as follows:
+#        0: wireframe  
+#        1: hidden-line removal 
+#        2: hidden-surface removal 
+/vis/set/drawing_style  2
+
+# Set camera parameters. 
+#  viewpoint  : (theta,phi) = (10*deg, 10*deg).
+#  zoom factor: 0.9 x (full screen size)
+/vis/camera/reset
+/vis/camera/viewpoint   10  10
+/vis/camera/zoom        0.9 
+
+# Generate one event and visualize it.
+#  Note: The visualization commands are described
+#        in the Run Action.
+/run/beamOn 1
+
+# Slide show (spinning). 
+#  Draw 18 frames with steps of 10 degrees.
+#  The stored mode of the OpenGL driver keeps the 
+#  previously visualized event in the display list. 
+#  So the particle trajectories are also rotated 
+#  together with the detector geometry.
+/vis/camera/spin      18 10
+
+# Side view 
+/vis/camera/reset
+/vis/camera/viewpoint 0 0
+/vis/scene/notifyHandlers
+
+
+##########################################################
+# Visualization with DAWNFILE driver
+#
+#  * The visualized view is saved to a vectorized
+#    EPS file "g4.eps"  
+#
+#  * In order to make the file "g4.eps" printable, 
+#    append the "showpage" PostScript command to the file 
+#    You can do it with the 4th page of the DAWN GUI panel.
+#    or by hand.
+##########################################################
+
+# Create "scene-1" 
+/vis/scene/create
+
+# Invoke the DAWNFILE driver 
+/vis/sceneHandler/create DAWNFILE
+/vis/viewer/create
+
+# Set the drawing style to "wireframe". 
+#        0: wireframe  
+#        1: hidden-line removal 
+#        2: hidden-surface removal 
+/vis/set/drawing_style   0
+
+# Generate many events and visualize them. 
+#  viewpoint  : (theta,phi) = (90*deg, 0) 
+#  zoom factor: 0.9 x (full screen size)
+/vis/camera/reset
+/vis/camera/viewpoint   45 45
+/vis/camera/zoom        1.5
+/run/beamOn             50
+
+# Generate many events and visualize them. 
+#  viewpoint  : (theta,phi) = (90*deg, 0) 
+#  zoom factor: 5 x (full screen size)
+/vis/camera/reset
+/vis/camera/viewpoint   90 0
+/vis/camera/zoom        5
+/run/beamOn             50

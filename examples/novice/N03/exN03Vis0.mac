@@ -1,0 +1,75 @@
+#######################################################################
+#  MACRO FILE NAME: exN03Vis0.mac                                     #
+#                                                                     #
+#  AUTHOR(S): Satoshi Tanaka                                          #
+#                                                                     #
+#  DATE: September 12, 1999                                           #
+#                                                                     #
+#  CONTENTS: A simplest macro to demonstrate visualization of         #
+#            detector geometry and events                             #
+#                                                                     #
+#  USAGE:  % $G4BINDIR/exampleN03  exN03Vis0.mac                      #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
+#                                  DAWN, Ghostview, Tcl/Tk            #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv OGLHOME     ... (e.g. /usr/local)                       #
+#    % setenv G4VIS_BUILD_OPENGLX_DRIVER   1                          # 
+#    % setenv G4VIS_BUILD_DAWNFILE_DRIVER  1                          #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv G4VIS_USE_OPENGLX            1                          #
+#    % setenv G4VIS_USE_DAWNFILE           1                          #
+#                                                                     #
+#  Addional Notes:                                                    #
+#                                                                     #
+#######################################################################
+
+##########################################
+# Visualization of detector geometry with 
+#  the OGLSX driver
+##########################################
+
+# Create "scene-0" 
+/vis/scene/create
+
+# Invoke the OGLIX driver
+/vis/sceneHandler/create OGLIX
+/vis/viewer/create
+
+# Add volume to scene-0
+/vis/scene/add/volume
+
+# Visualize detector geometry
+/vis/scene/notifyHandlers
+
+################################################
+# Visualization of events with DAWNFILE driver
+#
+#  * The visualized view is saved to a vectorized
+#    EPS file "g4.eps"  
+#
+#  * In order to make the file "g4.eps" printable, 
+#    append the "showpage" PostScript command to the file 
+#    You can do it with the 4th page of the DAWN GUI panel 
+#    or by hand.
+##########################################################
+
+# Create "scene-1" 
+/vis/scene/create
+
+# Invoke the DAWNFILE driver
+/vis/sceneHandler/create DAWNFILE
+/vis/viewer/create
+
+# Add volume to scene-1
+/vis/scene/add/volume
+
+# Visualize one event
+/tracking/storeTrajectory 1
+/run/beamOn 1
