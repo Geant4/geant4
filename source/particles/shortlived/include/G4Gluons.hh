@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Gluons.hh,v 1.1 1999-01-07 16:10:39 gunter Exp $
+// $Id: G4Gluons.hh,v 1.2 1999-04-13 08:18:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,10 +46,34 @@ class G4Gluons : public G4VShortLivedParticle
    );
    G4Gluons*    GluonsDefinition(){return this;};
    G4Gluons*    Gluons(){return this;};
+   virtual      ~G4Gluons(){}
 };
 
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

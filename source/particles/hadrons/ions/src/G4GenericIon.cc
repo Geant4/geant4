@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GenericIon.cc,v 1.1 1999-01-07 16:10:07 gunter Exp $
+// $Id: G4GenericIon.cc,v 1.2 1999-04-13 08:24:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,11 @@ G4GenericIon::G4GenericIon(
            lepton,baryon,encoding,stable,lifetime,decaytable )
 {
 }
+
+G4GenericIon::~G4GenericIon()
+{
+}
+
 //!!!!
 //!!!! this particle is not used for tracking
 //!!!! all properties except name and type are meaningless

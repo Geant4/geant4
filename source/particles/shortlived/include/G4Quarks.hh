@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quarks.hh,v 1.1 1999-01-07 16:10:39 gunter Exp $
+// $Id: G4Quarks.hh,v 1.2 1999-04-13 08:18:28 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,10 +46,21 @@ class G4Quarks : public G4VShortLivedParticle
    );
    G4Quarks*    QuarksDefinition(){return this;};
    G4Quarks*    Quarks(){return this;};
+   virtual      ~G4Quarks(){}
 };
 
 
 #endif
+
+
+
+
+
+
+
+
+
+
 
 
 

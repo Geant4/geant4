@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4He3.hh,v 1.1 1999-01-07 16:10:05 gunter Exp $
+// $Id: G4He3.hh,v 1.2 1999-04-13 08:24:06 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,6 +52,8 @@ class G4He3 : public G4VIon
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
+   virtual ~G4He3();
+
    static G4He3*    He3Definition();
    static G4He3*    He3() {return &theHe3;}
    static G4double GetCuts() {return theHe3LengthCut;}   

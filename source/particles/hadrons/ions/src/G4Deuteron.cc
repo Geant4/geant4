@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Deuteron.cc,v 1.1 1999-01-07 16:10:06 gunter Exp $
+// $Id: G4Deuteron.cc,v 1.2 1999-04-13 08:24:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,10 @@ G4Deuteron::G4Deuteron(
  : G4VIon( aName,mass,width,charge,iSpin,iParity,
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable )
+{
+}
+
+G4Deuteron::~G4Deuteron()
 {
 }
 

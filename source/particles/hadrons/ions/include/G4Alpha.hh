@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Alpha.hh,v 1.1 1999-01-07 16:10:05 gunter Exp $
+// $Id: G4Alpha.hh,v 1.2 1999-04-13 08:24:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,6 +56,8 @@ class G4Alpha : public G4VIon
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
+   virtual ~G4Alpha();
+  
    static G4Alpha*    AlphaDefinition();
    static G4Alpha*    Alpha(){return &theAlpha;}
    static G4double GetCuts() {return theAlphaLengthCut;}   

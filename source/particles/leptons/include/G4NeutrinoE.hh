@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutrinoE.hh,v 1.1 1999-01-07 16:10:22 gunter Exp $
+// $Id: G4NeutrinoE.hh,v 1.2 1999-04-13 08:20:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,12 +58,14 @@ class G4NeutrinoE : public G4VLepton
    );
 
  public: 
+   virtual ~G4NeutrinoE(){}
+
    static G4NeutrinoE* NeutrinoEDefinition();
    static G4NeutrinoE* NeutrinoE(){return &theNeutrinoE;}
    static G4double  GetCuts() {return theNeutrinoELengthCut;}   
    static G4double* GetCutsInEnergy() {return theNeutrinoEKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 #endif

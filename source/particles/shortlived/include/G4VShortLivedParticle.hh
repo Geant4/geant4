@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VShortLivedParticle.hh,v 1.1 1999-01-07 16:10:40 gunter Exp $
+// $Id: G4VShortLivedParticle.hh,v 1.2 1999-04-13 08:18:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,7 +59,19 @@ class G4VShortLivedParticle : public G4ParticleDefinition
    G4int operator==(const G4VShortLivedParticle &right) const;
    G4int operator!=(const G4VShortLivedParticle &right) const;
 
+  public:
+      // These methods concerning cut values are not supported for shortlives
+      virtual void              ResetCuts();
+      virtual void              SetCuts(G4double );
+      virtual void              ReCalcCuts();
+      virtual G4double      	GetLengthCuts() const;
+      virtual G4double*	        GetEnergyCuts() const;
+      virtual G4double      	GetEnergyThreshold(const G4Material* ) const;
 
 };
 
 #endif
+
+
+
+

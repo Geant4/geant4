@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiSigmaMinus.hh,v 1.1 1999-01-07 16:09:51 gunter Exp $
+// $Id: G4AntiSigmaMinus.hh,v 1.2 1999-04-13 08:25:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,12 +56,14 @@ class G4AntiSigmaMinus : public G4VBarion
    );
 
  public:
+   virtual ~G4AntiSigmaMinus(){}
+
    static G4AntiSigmaMinus* AntiSigmaMinusDefinition();
    static G4AntiSigmaMinus* AntiSigmaMinus() {return &theAntiSigmaMinus;}
    static G4double GetCuts() {return theAntiSigmaMinusLengthCut;}   
    static G4double* GetCutsInEnergy() {return theAntiSigmaMinusKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 inline void G4AntiSigmaMinus::SetCuts(G4double aCut)
