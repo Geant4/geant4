@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2001-11-27 14:24:07 japost Exp $
+$Id: History,v 1.39 2001-12-10 08:38:55 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,9 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Nov.27, 01  J. Apostolakis (track-V03-02-07)  for H. Kurashige
-- Modified G4ParticleChange::AddSecondary to use touchable handle - by Hisaya
-   (only one of the AddSecondary methods has been modified - to date)
+Dec. 10, 01  H.Kurashige (track-V03-02-08)
+- Modified assignment operator so that fCurrentStepNumber is set to 0
 
 Nov.10, 01 (track-V03-02-06)
 - Fixed bugs in assignment operators in G4Track
