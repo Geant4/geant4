@@ -134,7 +134,7 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 6.33 s
+total time for build X-ray TR tables = 6.41 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em8PhysicsList::SetCuts:CutLength : 1 mm 
@@ -236,10 +236,6 @@ hIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
- G4ParticleWithCuts::GetEnergyCuts  Production Cut is not defined for [kaon+]
- G4ParticleWithCuts::GetEnergyCuts  Production Cut is not defined for [kaon-]
- G4ParticleWithCuts::GetEnergyCuts  Production Cut is not defined for [pi+]
- G4ParticleWithCuts::GetEnergyCuts  Production Cut is not defined for [pi-]
 #
 #control/saveHistory
 #
@@ -524,26 +520,26 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   11 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            0k World
+     100.00         0.01         0.01            0k World
        0.00         0.00         0.00           11k Radiator
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       96.00         11k         1      305        376         0.00    Radiator
-       4.00          0k         3        7         20         0.00    World
+       4.00          0k         3        7         20         0.01    World
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=123.88s Real=126.35s Sys=1.34s
+  User=124.29s Real=126.25s Sys=1.14s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=162.79 +- 4.11509  mm  

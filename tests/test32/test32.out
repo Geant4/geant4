@@ -149,7 +149,7 @@ Threshold in range           10 cm           10 cm           10 cm
 
 ### Run 0 start.
 number of event = 1000
- User=20.73s Real=29.07s Sys=4.93s
+ User=21.15s Real=27.05s Sys=5.57s
 #
 /gun/particle proton
 /run/beamOn 1000
@@ -191,7 +191,7 @@ Threshold in range           10 cm           10 cm           10 cm
 
 ### Run 1 start.
 number of event = 1000
- User=15.23s Real=21.29s Sys=4.05s
+ User=14.79s Real=18.9s Sys=4.1s
 /gun/particle pi-
 /run/beamOn 1000
 
@@ -232,7 +232,7 @@ Threshold in range           10 cm           10 cm           10 cm
 
 ### Run 2 start.
 number of event = 1000
- User=20.62s Real=31.87s Sys=5.66s
+ User=20.59s Real=25.81s Sys=4.97s
 /gun/particle pi+
 /run/beamOn 1000
 
@@ -273,4 +273,4 @@ Threshold in range           10 cm           10 cm           10 cm
 
 ### Run 3 start.
 number of event = 1000
- User=19.7s Real=27.27s Sys=4.97s
+ User=18.41s Real=23.12s Sys=4.7s

@@ -13,6 +13,7 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
   G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)

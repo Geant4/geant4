@@ -445,28 +445,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=61s Real=9.8e+02s Sys=74s
+  User=67s Real=3.8e+03s Sys=5.4e+02s
  ================== run summary =====================
  end of Run TotNbofEvents = 100000
-    mean charged track length   in absorber=0.0209219 +- 1.25732e-05  mm  
+    mean charged track length   in absorber=0.0209429 +- 1.35344e-05  mm  
 
-            mean energy deposit in absorber=0.00665304 +- 1.99526e-05  MeV 
+            mean energy deposit in absorber=0.00665123 +- 2.00323e-05  MeV 
 
- mean number of steps in absorber (charged) =0.05666 +- 0.00118646      
- mean number of steps in absorber (neutral) =1e-05 +- 9.99995e-06      
+ mean number of steps in absorber (charged) =0.05793 +- 0.00119847      
+ mean number of steps in absorber (neutral) =2e-05 +- 1.4142e-05      
 
-   mean number of charged secondaries = 0.0368 +- 0.000625985
+   mean number of charged secondaries = 0.03765 +- 0.000637279
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.0368  and e+s =0
+   mean number of e-s =0.03765  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1709217199, 336175147
+ Current couple of seeds = 1231089820, 877699904
 ----------------------------------------
 #
 Graphics systems deleted.

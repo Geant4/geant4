@@ -144,7 +144,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.02s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -208,7 +208,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.72s Real=0.79s Sys=0.07s
+  User=0s Real=0s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -240,7 +240,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.6s Real=1.6s Sys=0.03s
+  User=1.5s Real=3.5s Sys=0.12s
 
 ========= Table of registered couples ==============================
 
@@ -272,7 +272,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.8s Real=1.8s Sys=0.02s
+  User=1.1s Real=5.3s Sys=0.03s
 
 ========= Table of registered couples ==============================
 
@@ -304,7 +304,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=3.9s Real=4s Sys=0.17s
+  User=7.1s Real=8.8s Sys=0.18s
 SimpleBox is now made of Cu
 
 ========= Table of registered couples ==============================
@@ -337,7 +337,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.28s Real=0.3s Sys=0.02s
+  User=0.38s Real=0.4s Sys=0.01s
 
 ========= Table of registered couples ==============================
 
@@ -369,7 +369,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.48s Real=0.5s Sys=0.02s
+  User=0.45s Real=0.47s Sys=0.01s
 
 ========= Table of registered couples ==============================
 
@@ -401,7 +401,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.4s Real=1.5s Sys=0.02s
+  User=1.7s Real=1.7s Sys=0.02s
 
 ========= Table of registered couples ==============================
 
@@ -433,7 +433,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.2s Real=2.2s Sys=0.02s
+  User=2.3s Real=2.7s Sys=0.09s
 
 ========= Table of registered couples ==============================
 
@@ -465,7 +465,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.8s Real=2.9s Sys=0.04s
+  User=2.8s Real=2.9s Sys=0.05s
 
 ========= Table of registered couples ==============================
 
@@ -497,8 +497,40 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=6s Real=6.1s Sys=0.09s
+  User=5.9s Real=6.4s Sys=0.16s
 SimpleBox is now made of U
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : H
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 9.9e+02 eV     e- 7.1e+02 keV    e+ 6.8e+02 keV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.43s Real=0.86s Sys=0.03s
 
 ========= Table of registered couples ==============================
 
@@ -562,7 +594,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -594,7 +626,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.5s Real=1.5s Sys=0.04s
+  User=0.01s Real=0.01s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -626,7 +658,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=3.7s Real=3.8s Sys=0.08s
+  User=2.2s Real=5.9s Sys=0.11s
 
 ========= Table of registered couples ==============================
 
@@ -658,39 +690,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=5.1s Real=5.3s Sys=0.12s
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : H
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 9.9e+02 eV     e- 7.1e+02 keV    e+ 6.8e+02 keV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=7.8s Real=7.9s Sys=0.03s
+  User=8.1s Real=9.3s Sys=0.15s
 SimpleBox is now made of U
 
 ========= Table of registered couples ==============================
@@ -723,7 +723,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.11s Real=0.11s Sys=0s
+  User=0.72s Real=0.73s Sys=0.01s
 
 ========= Table of registered couples ==============================
 
@@ -755,7 +755,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.1s Real=0.1s Sys=0s
+  User=2.5s Real=2.5s Sys=0.01s
 
 ========= Table of registered couples ==============================
 
@@ -787,7 +787,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2s Real=2.1s Sys=0.04s
+  User=0.18s Real=0.18s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -819,7 +819,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=3.7s Real=3.8s Sys=0.05s
+  User=1.6s Real=1.8s Sys=0.02s
 
 ========= Table of registered couples ==============================
 
@@ -851,7 +851,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=6.9s Real=7s Sys=0.14s
+  User=6.3s Real=6.8s Sys=0.19s
 
 ========= Table of registered couples ==============================
 
@@ -883,7 +883,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=5s Real=5.1s Sys=0.11s
+  User=0.27s Real=0.27s Sys=0s
 SimpleBox is now made of Si
 
 ========= Table of registered couples ==============================
@@ -948,6 +948,38 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
+  User=0.01s Real=0.01s Sys=0s
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : H
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 9.9e+02 eV     e- 7.1e+02 keV    e+ 6.8e+02 keV
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
   User=0s Real=0s Sys=0s
 
 ========= Table of registered couples ==============================
@@ -980,7 +1012,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.03s Sys=0s
+  User=0.69s Real=1.9s Sys=0.07s
 
 ========= Table of registered couples ==============================
 
@@ -1012,7 +1044,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.41s Real=0.49s Sys=0.08s
+  User=0.62s Real=5.2s Sys=0.05s
 
 ========= Table of registered couples ==============================
 
@@ -1044,39 +1076,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.2s Real=1.3s Sys=0.06s
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : H
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 9.9e+02 eV     e- 7.1e+02 keV    e+ 6.8e+02 keV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=1.4s Real=1.8s Sys=0.07s
+  User=1.3s Real=1.8s Sys=0.05s
 SimpleBox is now made of Si
 
 ========= Table of registered couples ==============================
@@ -1109,7 +1109,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.21s Real=0.29s Sys=0.04s
+  User=0.18s Real=0.18s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -1141,7 +1141,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.18s Real=0.37s Sys=0.03s
+  User=0.22s Real=0.22s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -1173,7 +1173,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.19s Real=0.19s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -1205,7 +1205,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.4s Real=1.4s Sys=0.03s
+  User=0.24s Real=0.26s Sys=0.02s
 
 ========= Table of registered couples ==============================
 
@@ -1237,7 +1237,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1s Real=1.1s Sys=0.08s
+  User=0.72s Real=0.74s Sys=0.02s
 
 ========= Table of registered couples ==============================
 
@@ -1269,7 +1269,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.6s Real=1.8s Sys=0.07s
+  User=1.1s Real=2.4s Sys=0.1s
 SimpleBox is now made of H
 
 ========= Table of registered couples ==============================
@@ -1462,7 +1462,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 SimpleBox is now made of H
 
 ========= Table of registered couples ==============================

@@ -16,9 +16,16 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
   G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+
+You are using the ExN04HadronPhysics
+ - Note that this hadronic physics list is not optimized for any particular usage
+ - If you which to have a starting point tailorer for particular area of work,
+   please visit the physics list WWW pages available from the geant4 home page.
+
 
 ========= Table of registered couples ==============================
 
@@ -172,9 +179,9 @@ Index : 5     used in the geometry : No      recalculation needed : No
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     10 hits are stored in ExN04TrackerHitsCollection.
-     4 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.318774 (GeV)
+     5 hits are stored in ExN04TrackerHitsCollection.
+     6 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.289532 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 
 ========= Table of registered couples ==============================
@@ -225,16 +232,16 @@ Index : 5     used in the geometry : No      recalculation needed : No
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     9 hits are stored in ExN04TrackerHitsCollection.
-     22 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 5.77155 (GeV)
+     6 hits are stored in ExN04TrackerHitsCollection.
+     28 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.81344 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 1
-     8 hits are stored in ExN04TrackerHitsCollection.
-     29 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 5.24691 (GeV)
+     5 hits are stored in ExN04TrackerHitsCollection.
+     59 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 32.7724 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -3,25 +3,7 @@
                                 (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully chosen to use the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
-  G4HepRep (HepRepXML)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-#
-/testem/phys/setGCut 2.20 mm
-/testem/phys/setECut 6.05 mum
-# 
-/run/initialize
+G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
 
 ***** Table : Nb of materials = 11 *****
 
@@ -32,7 +14,7 @@ Current available graphics systems are:
  Material: H2liquid     density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923 m  
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+ Material:    Water H_2O   density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
 
@@ -61,6 +43,26 @@ Current available graphics systems are:
    --->  Element:  Uranium      Z = 92.0   N = 238.0   A = 238.03 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
 
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+/tracking/verbose 0
+#
+/testem/phys/setGCut 2.20 mm
+/testem/phys/setECut 6.05 mum
+#
+/run/initialize
 
  The Box is 20 m   of Aluminium
 
@@ -292,18 +294,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=12s Real=37s Sys=2.2s
+  User=11s Real=14s Sys=2.3s
 
- nb tracks/event   neutral:    27.8100   charged:   700.3100
- nb  steps/event   neutral:   151.8700   charged:  1338.0800
+ nb tracks/event   neutral:    27.7000   charged:   694.4100
+ nb  steps/event   neutral:   148.4900   charged:  1328.5200
 
  nb of process calls per event: 
           eIoni       eBrem       compt        phot        conv     annihil
-      1311.6600     25.0000    124.0600     26.3900      1.4200      1.4200
+      1302.1000     25.1000    120.7900     26.3800      1.3200      1.3200
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1272479250, 468362791
+ Current couple of seeds = 579848635, 1313654518
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
