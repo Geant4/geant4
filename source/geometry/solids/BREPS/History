@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2000-08-28 08:57:39 gcosmo Exp $
+$Id: History,v 1.17 2000-11-09 08:25:51 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,37 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09/11/2000 : G. Cosmo            breps-V02-00-01
+- QA code revision and cleanup (+fixes from CodeWizard filtering):
+  o Added (private) declarations of copy constructor and assignment operator
+    where needed: all surfaces, BREP solids, G4CompositeCurve G4OsloMatrix,
+    G4PlacedSolid, G4SurfaceList.
+  o Defined/fixed copy contructor and assignment operator to curves/conics,
+    G4Axis2Placement3D. Added equality check on operator= where needed.
+  o Added "const" qualifier to accessor methods, wherever needed.
+  o Made destructor "virtual" wherever missing and added empty destructor
+    to all BREP solids.
+  o Changed virtual functions to non-inline wherever's the case.
+  o Moved "public" data members to protected or private and defined
+    accessors methods for them: G4BREPSolid, G4BezierSurface, G4ConvexHull,
+    G4OsloMatrix, G4Surface, G4SurfaceBoundary, G4SurfaceList, G4UVHit.
+    Changed classes involved to invoke accessors.
+  o Changed return value to be "const" pointer to functions:
+    - G4BREPSolid::GetPlace()
+    - G4BREPSolid::GetBBox()
+    - G4PlacedSolid::GetSolid()
+    - G4PlacedSolid::GetRotation()
+    - G4PlacedSolid::GetTraslation()
+  o G4Assembly: fix in destructor, added call to clearAndDestroy().
+  o G4BREPSolid: changed method NumberOfFaces() to GetNumberOfFaces().
+  o G4Curve: fixed obsolete workaround for XlC compiler.
+  o G4OsloMatrix: changed internal class "Matrix" to "G4PointMatrix" and
+    updated classes making use of it.
+  o G4ThreeMat: removed unused overloaded operators =, +, -, +=, -=, *.
+  o Added "inline" qualifier to methods' declarations where missing.
+  o Added more description to BREP solid classes for the Software Reference
+    Manual.
 
 28/08/2000 : G. Cosmo            breps-V02-00-00
 - General reorganisation and code cleanup. No functional changes.
