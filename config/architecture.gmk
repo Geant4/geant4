@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.96 2004-06-07 15:50:55 gcosmo Exp $
+# $Id: architecture.gmk,v 1.97 2004-06-07 17:52:58 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -115,9 +115,7 @@ endif
 # CLHEP path, etc.
 #
 ifndef CLHEP_BASE_DIR
-  echo "ERROR - No path to CLHEP software installation defined !"
-  echo "        Please, define CLHEP_BASE_DIR in your environment."
-  exit 1
+  CLHEP_BASE_DIR    := $(shell ls CLHEP_BASE_DIR--UNDEFINED)
 endif
 ifndef CLHEP_INCLUDE_DIR
   CLHEP_INCLUDE_DIR := $(CLHEP_BASE_DIR)/include
