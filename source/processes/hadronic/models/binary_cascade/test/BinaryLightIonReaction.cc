@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BinaryLightIonReaction.cc,v 1.6 2003-06-19 14:39:15 gunter Exp $
+// $Id: BinaryLightIonReaction.cc,v 1.7 2003-08-05 12:49:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -75,9 +75,14 @@
     }
     return 0;
   }
+
+extern "C" int ecpt();
  
  int main()
   {
+
+    ecpt();
+    
     G4cout.setf( std::ios::scientific, std::ios::floatfield );
     std::ofstream outFile( "InInelasticAlpha.listing.GetMeanFreePath", std::ios::out);
     outFile.setf( std::ios::scientific, std::ios::floatfield );
@@ -256,10 +261,14 @@ int j = 0;
 	     QValue += aFinalState->GetEnergyChange();
 	     if(theParticles[i]->GetBaryonNumber()<0) QValue+= 2.*theParticles[i]->GetPDGMass();
 	   }
+           G4double esec(0);
+	   G4ThreeVector psec(0);
            for(isec=0;isec<aFinalState->GetNumberOfSecondaries();isec++)
            {
              second = aFinalState->GetSecondary(isec);
              aSec = const_cast<G4DynamicParticle *> (second->GetDynamicParticle());
+	     esec+= aSec->GetTotalEnergy();
+	     psec+= aSec->GetMomentum();
              G4cout << aSec->GetTotalEnergy()<<" ";
              G4cout << aSec->GetMomentum().x()<<" ";
              G4cout << aSec->GetMomentum().y()<<" ";
@@ -317,7 +326,8 @@ int j = 0;
 	   G4cout << "QVALUE = "<<QValue<<" "<<hpw<<" ";
 //	   G4cout <<QValueM1<<" "<<QValueM2<<" "
 	   G4cout <<G4endl;
-           delete aParticle;
+	   G4cout <<"Event Total e/p " << esec/MeV << " " << psec/MeV<< G4endl;
+          delete aParticle;
            delete aTrack;
            aFinalState->Clear();
          }  // event loop
