@@ -68,6 +68,9 @@ class SBTrun {
 	inline void SetMaxErrors( const G4int newMaxErrors ) { maxErrors = newMaxErrors; }
 	inline G4int GetMaxErrors() const { return maxErrors; }
 
+  static G4String GetCurrentSolid(void) ; 
+  static void SetCurrentSolid(G4String SolidName) ;
+
 	protected:
 	G4ThreeVector	GetRandomPoint() const;
 	G4double	GaussianRandom(const G4double cutoff) const;
@@ -79,7 +82,8 @@ class SBTrun {
 				  const SBTrunPointList *inside, const G4ThreeVector point, G4std::ostream &logger );
 
 	void	ReportError( G4int *nError, const G4ThreeVector p, 
-			     const G4ThreeVector v, const G4String comment, G4std::ostream &logger );
+			     const G4ThreeVector v, G4double distance,
+			     const G4String comment, G4std::ostream &logger );
 	void 	ClearErrors();		
 	G4int 	CountErrors() const;		
 	
@@ -92,6 +96,7 @@ class SBTrun {
 			grids;
 	G4int		maxPoints,
 			maxErrors;
+        
 			
 	
 	typedef struct sSBTrunErrorList {
@@ -101,6 +106,10 @@ class SBTrun {
 	} SBTrunErrorList;
 	
 	SBTrunErrorList *errorList;
+
+        private:
+  static G4String CurrentSolid; /* Solid to be tested, used to visualize */
+    
 
 };
 

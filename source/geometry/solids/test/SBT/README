@@ -426,6 +426,11 @@ No check is made that the current solid is identical to the solid
 used to make the log file. It is up to the user to ensure this
 (using the appropriate "/solid/" command if necessary).
 
+    NOTE:
+    This has changed. The current solid is written in the log file
+    So the ErrorView script could convert a log file to a visualization
+    script that could be run by SBT.
+
 The following commands are supported:
 
    1. /test/draw <error number>

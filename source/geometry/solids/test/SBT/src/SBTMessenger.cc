@@ -22,8 +22,7 @@
 //
 // Constructor
 //
-SBTMessenger::SBTMessenger( const G4String prefix, const G4SolidQuery *theSolidQuery,
-			    SBTVisManager *theVisManager )
+SBTMessenger::SBTMessenger( const G4String prefix, const G4SolidQuery *theSolidQuery, SBTVisManager *theVisManager )
 {
 	//
 	// Store solid query
@@ -129,6 +128,14 @@ SBTMessenger::SBTMessenger( const G4String prefix, const G4SolidQuery *theSolidQ
 	com = prefix+"debugToOutPV";
 	debugToOutPVCmd = new G4UIcmdWithAnInteger( com, this );
 	debugToOutPVCmd->SetGuidance( "Call G4VSolid::DistanceToOut(p,v) for error listed in log file" );
+
+	//
+	// Pause command
+	//
+	com = prefix+"pause";
+	pauseCmd = new G4UIcmdWithoutParameter( com, this );
+	pauseCmd->SetGuidance( " Wait for a key " );
+	
 }
 
 
@@ -312,6 +319,12 @@ void SBTMessenger::SetNewValue( G4UIcommand *command, G4String newValues )
 	else if (command == debugToOutPVCmd) {
 		SBTMessenger::DebugToOutPV debugger( solidQuery->GetSolid(), tester );
 		Debug( debugToOutPVCmd->GetNewIntValue( newValues ), &debugger );
+	}
+	else if (command == pauseCmd) {
+	  char c;
+	  
+	  G4cout << "Pause" << G4endl ;
+	  G4cin.get(c);
 	}
 	else {
 		G4Exception( "Unrecognized command" );

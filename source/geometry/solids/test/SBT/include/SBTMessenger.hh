@@ -111,6 +111,7 @@ class SBTMessenger : public G4UImessenger
 	G4UIcmdWithAnInteger		*debugToInPVCmd;
 	G4UIcmdWithAnInteger		*debugToOutPCmd;
 	G4UIcmdWithAnInteger		*debugToOutPVCmd;
+	G4UIcmdWithoutParameter		*pauseCmd;
 };
 
 #endif

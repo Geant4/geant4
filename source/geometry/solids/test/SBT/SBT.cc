@@ -11,7 +11,15 @@
 #include "SBTvoxelMessenger.hh"
 #include "SBTVisManager.hh"
 
-int main()
+/*
+MEDERNACH Emmanuel
+Aug 2000
+
+You could now run SBT with an argument script
+and exit SBT.
+*/
+
+int main(int argc,char *argv[])
 {
         // Initialize visualization manager
         SBTVisManager *visManager = new SBTVisManager;
@@ -34,7 +42,26 @@ int main()
 		
 	// Give control to interactive terminal
 	G4UIsession *session = new G4UIterminal;
-	session->SessionStart();
+	/* 
+	   MEDERNACH Emmanuel
+	   Aug 2000
+	   
+	   when run with an argument, run each scripts and exit
+	 */
+	if (argc > 1)
+	  {
+	    G4UImanager * UI = G4UImanager::GetUIpointer();
+	    G4UIsession * session = new G4UIterminal;
+
+	    for (int i=1;i<argc;i++)
+	      {
+		UI->ApplyCommand("/control/execute "+G4String(argv[i]));
+	      }
+	  }
+	else
+	  {
+	    session->SessionStart();
+	  }
 	
 	// All finished...
 	delete session;

@@ -4,6 +4,8 @@
 // Implementation of a messenger for constructing solids interactively
 //
 
+#include "SBTrun.hh"
+
 #include "G4InteractiveSolid.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithPargs.hh"
@@ -702,6 +704,19 @@ void G4InteractiveSolid::MakeMeDircTest()
 //
 void G4InteractiveSolid::SetNewValue( G4UIcommand *command, G4String newValues )
 {
+  /*
+    MEDERNACH Emmanuel
+    Aug 2000
+
+    We want to retrieve the current solid
+    So we keep the current solid command
+   */
+
+
+  G4String CurrentSolid = command->GetCommandPath() + " " + newValues ;
+
+  SBTrun::SetCurrentSolid (CurrentSolid);
+
 	if (command == boxCmd) 
 		MakeMeABox( newValues );
 	else if (command == boxCmd) 
