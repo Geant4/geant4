@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2002-05-09 19:33:41 gum Exp $
+$Id: History,v 1.14 2002-05-09 20:37:34 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-06 may 02: P. Gumplinger (xrays-V04-00-02)
+09 may 02: P. Gumplinger (xrays-V04-00-03)
+- changed method 'DoIt' in G4Scintillation so that origin of optical photons is
+  the PostStepPoint location in case energy is lost to the medium by a neutral
+  particle.
+
+09 may 02: P. Gumplinger (xrays-V04-00-02)
 - changed method 'IsApplicable' for G4Scintillation to return .false. when it 
   is called for an optical photon.
 
