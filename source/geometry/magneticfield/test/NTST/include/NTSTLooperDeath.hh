@@ -46,23 +46,23 @@ public:
 
   virtual G4double
   AlongStepGetPhysicalInteractionLength( const G4Track&,
-					 G4double  previousStepSize,
-					 G4double  currentMinimumStep,
-					 G4double& currentSafety,
-					 G4GPILSelection* selection )
+					 G4double  , // previousStepSize,
+					 G4double  , // currentMinimumStep,
+					 G4double& , // currentSafety,
+					 G4GPILSelection* ) // selection )
     { return -1.0; }
 
-  virtual G4VParticleChange* AlongStepDoIt( const G4Track &track,
-					    const G4Step &step )
+  virtual G4VParticleChange* AlongStepDoIt( const G4Track & , // track,
+					    const G4Step & ) // step
     { return 0; }
  
   virtual G4double
-  AtRestGetPhysicalInteractionLength( const G4Track &track,
-				      G4ForceCondition *force )
+  AtRestGetPhysicalInteractionLength( const G4Track &,          // track,
+				      G4ForceCondition * )      // force )
     { return -1.0; }
 
   virtual G4VParticleChange*
-  AtRestDoIt( const G4Track &track, const G4Step &step )
+  AtRestDoIt( const G4Track &, const G4Step & )     // track, step )
     { return 0; }
 
 
