@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.13 2004-12-02 08:20:37 vnivanch Exp $
+// $Id: G4MuBetheBlochModel.cc,v 1.14 2004-12-03 17:32:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,15 +60,17 @@ G4double G4MuBetheBlochModel::wgi[]={ 0.0506,0.1112,0.1569,0.1813,0.1813,0.1569,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+using namespace std;
+
 G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p,
                                          const G4String& nam)
   : G4VEmModel(nam),
   particle(0),
   limitKinEnergy(100.*keV),
-  logLimitKinEnergy(std::log(limitKinEnergy)),
+  logLimitKinEnergy(log(limitKinEnergy)),
   highKinEnergy(100.*TeV),
   lowKinEnergy(1.0*GeV),
-  twoln10(2.0*std::log(10.0)),
+  twoln10(2.0*log(10.0)),
   bg2lim(0.0169),
   taulim(8.4146e-3),
   alphaprime(fine_structure_const/twopi)
@@ -141,7 +143,7 @@ G4double G4MuBetheBlochModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
 {
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tau   = kineticEnergy/mass;
-  G4double cutEnergy = std::min(cut,tmax);
+  G4double cutEnergy = min(cut,tmax);
   G4double gam   = tau + 1.0;
   G4double bg2   = tau * (tau+2.0);
   G4double beta2 = bg2/(gam*gam);
@@ -159,17 +161,17 @@ G4double G4MuBetheBlochModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
             material->GetIonisation()->GetShellCorrectionVector();
   G4double eDensity = material->GetElectronDensity();
 
-  G4double dedx = std::log(2.0*electron_mass_c2*bg2*cutEnergy/eexc2)-(1.0 + cutEnergy/tmax)*beta2;
+  G4double dedx = log(2.0*electron_mass_c2*bg2*cutEnergy/eexc2)-(1.0 + cutEnergy/tmax)*beta2;
 
   G4double totEnergy = kineticEnergy + mass;
   G4double del = 0.5*cutEnergy/totEnergy;
   dedx += del*del;
 
   // density correction
-  G4double x = std::log(bg2)/twoln10;
+  G4double x = log(bg2)/twoln10;
   if ( x >= x0den ) {
     dedx -= twoln10*x - cden ;
-    if ( x < x1den ) dedx -= aden*std::pow((x1den-x),mden) ;
+    if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
   }
 
   // shell correction
@@ -187,7 +189,7 @@ G4double G4MuBetheBlochModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
 	x *= bg2lim ;
 	sh += shellCorrectionVector[k]/x;
     }
-    sh *= std::log(tau/taul)/std::log(taulim/taul);
+    sh *= log(tau/taul)/log(taulim/taul);
   }
   dedx -= sh;
 
@@ -198,16 +200,16 @@ G4double G4MuBetheBlochModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
   // radiative corrections of R. Kokoulin
   if (cutEnergy > limitKinEnergy) {
 
-    G4double logtmax = std::log(cutEnergy);
+    G4double logtmax = log(cutEnergy);
     G4double logstep = logtmax - logLimitKinEnergy;
     G4double dloss = 0.0;
     G4double ftot2= 0.5/(totEnergy*totEnergy);
 
     for (G4int ll=0; ll<8; ll++)
     {
-      G4double ep = std::exp(logLimitKinEnergy + xgi[ll]*logstep);
-      G4double a1 = std::log(1.0 + 2.0*ep/electron_mass_c2);
-      G4double a3 = std::log(4.0*totEnergy*(totEnergy - ep)/massSquare);
+      G4double ep = exp(logLimitKinEnergy + xgi[ll]*logstep);
+      G4double a1 = log(1.0 + 2.0*ep/electron_mass_c2);
+      G4double a3 = log(4.0*totEnergy*(totEnergy - ep)/massSquare);
       dloss += wgi[ll]*(1.0 - beta2*ep/tmax + ep*ep*ftot2)*a1*(a3 - a1);
     }
     dedx += dloss*logstep*alphaprime;
@@ -228,29 +230,29 @@ G4double G4MuBetheBlochModel::CrossSection(const G4MaterialCutsCouple* couple,
 {
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double maxEnergy = std::min(tmax,maxKinEnergy);
+  G4double maxEnergy = min(tmax,maxKinEnergy);
   if(cutEnergy < maxEnergy) {
 
     G4double totEnergy = kineticEnergy + mass;
     G4double energy2   = totEnergy*totEnergy;
     G4double beta2     = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
 
-    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*std::log(maxEnergy/cutEnergy)/tmax
+    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax
           + 0.5*(maxEnergy - cutEnergy)/energy2;
 
     // radiative corrections of R. Kokoulin
     if (maxEnergy > limitKinEnergy) {
 
-      G4double logtmax = std::log(maxEnergy);
-      G4double logtmin = std::log(std::max(cutEnergy,limitKinEnergy));
+      G4double logtmax = log(maxEnergy);
+      G4double logtmin = log(max(cutEnergy,limitKinEnergy));
       G4double logstep = logtmax - logtmin;
       G4double dcross  = 0.0;
 
       for (G4int ll=0; ll<8; ll++)
       {
-        G4double ep = std::exp(logtmin + xgi[ll]*logstep);
-        G4double a1 = std::log(1.0 + 2.0*ep/electron_mass_c2);
-        G4double a3 = std::log(4.0*totEnergy*(totEnergy - ep)/massSquare);
+        G4double ep = exp(logtmin + xgi[ll]*logstep);
+        G4double a1 = log(1.0 + 2.0*ep/electron_mass_c2);
+        G4double a3 = log(4.0*totEnergy*(totEnergy - ep)/massSquare);
         dcross += wgi[ll]*(1.0/ep - beta2/tmax + 0.5*ep/energy2)*a1*(a3 - a1);
       }
 
@@ -275,8 +277,8 @@ G4DynamicParticle* G4MuBetheBlochModel::SampleSecondary(
                                    G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryEnergy(dp);
-  G4double maxKinEnergy = std::min(maxEnergy,tmax);
-  G4double minKinEnergy = std::min(minEnergy,maxKinEnergy);
+  G4double maxKinEnergy = min(maxEnergy,tmax);
+  G4double minKinEnergy = min(minEnergy,maxKinEnergy);
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double totEnergy     = kineticEnergy + mass;
@@ -285,7 +287,7 @@ G4DynamicParticle* G4MuBetheBlochModel::SampleSecondary(
  
   G4double grej  = 1.;
   if(tmax > limitKinEnergy) {
-    G4double a0    = std::log(2.*totEnergy/mass);
+    G4double a0    = log(2.*totEnergy/mass);
     grej  += alphaprime*a0*a0;
   }
 
@@ -300,8 +302,8 @@ G4DynamicParticle* G4MuBetheBlochModel::SampleSecondary(
     f = 1.0 - beta2*deltaKinEnergy/tmax + 0.5*deltaKinEnergy*deltaKinEnergy/etot2;
 
     if(deltaKinEnergy > limitKinEnergy) {
-      G4double a1 = std::log(1.0 + 2.0*deltaKinEnergy/electron_mass_c2);
-      G4double a3 = std::log(4.0*totEnergy*(totEnergy - deltaKinEnergy)/massSquare);
+      G4double a1 = log(1.0 + 2.0*deltaKinEnergy/electron_mass_c2);
+      G4double a3 = log(4.0*totEnergy*(totEnergy - deltaKinEnergy)/massSquare);
       f *= (1. + alphaprime*a1*(a3 - a1));
     }
 
@@ -317,16 +319,16 @@ G4DynamicParticle* G4MuBetheBlochModel::SampleSecondary(
   } while( grej*G4UniformRand() > f );
 
   G4double deltaMomentum =
-           std::sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
-  G4double totMomentum = totEnergy*std::sqrt(beta2);
+           sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
+  G4double totMomentum = totEnergy*sqrt(beta2);
   G4double cost = deltaKinEnergy * (totEnergy + electron_mass_c2) /
                                    (deltaMomentum * totMomentum);
 
-  G4double sint = std::sqrt(1.0 - cost*cost);
+  G4double sint = sqrt(1.0 - cost*cost);
 
   G4double phi = twopi * G4UniformRand() ;
 
-  G4ThreeVector deltaDirection(sint*std::cos(phi),sint*std::sin(phi), cost) ;
+  G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
   G4ThreeVector direction = dp->GetMomentumDirection();
   deltaDirection.rotateUz(direction);
 
@@ -339,13 +341,13 @@ G4DynamicParticle* G4MuBetheBlochModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4MuBetheBlochModel::SampleSecondaries(
+vector<G4DynamicParticle*>* G4MuBetheBlochModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
+  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   G4DynamicParticle* delta = SampleSecondary(couple,dp,tmin,maxEnergy);
   vdp->push_back(delta);
 
