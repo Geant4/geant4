@@ -161,6 +161,10 @@ Cut in energy
 # if too many tracks cause core dump => storeTrajectory 0
 /tracking/storeTrajectory 1
 #/vis/scene/include/trajectories
+#
+# Flush visualization
+/vis/viewer/update
+
 Idle> /run/particle/dumpCutValues
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
@@ -202,13 +206,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.5s Real=0.57s Sys=0.03s
+  User=0.5s Real=0.75s Sys=0.03s
 Idle> #
 Idle> # list the existing physics processes
 Idle> /process/list
      Transportation,                msc,              hIoni,              eIoni
-              eBrem,            annihil,             MuIoni,            MuBrems
-         MuPairProd,               phot,              compt,               conv
+              eBrem,            annihil,               phot,              compt
+               conv,             MuIoni,            MuBrems,         MuPairProd
               Decay
 Idle> #
 Idle> # switch off MultipleScattering
@@ -231,7 +235,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.46s Real=0.48s Sys=0.02s
+  User=0.43s Real=0.46s Sys=0.03s
 Idle> #
 Idle> # switch on MultipleScattering
 Idle> /process/activate msc
@@ -271,7 +275,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.2s Real=1.3s Sys=0.04s
+  User=1.1s Real=1.2s Sys=0.1s
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
