@@ -239,16 +239,7 @@ Idle> /gun/particle mu-
 Idle> /run/beamOn 1
 ### Run 0 start.
 Start Run processing.
->>>>>>>> Primary direction: (-0.60338,0.67296,-0.42786)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = mu-,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0     -1.5        0     1e+03        0        0         0        HALL Transportation
-    2 -3.59e+03    4e+03 -2.54e+03     1e+03        0 5.95e+03  5.95e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu-,   Track ID = 1,   Parent ID = 0
@@ -256,46 +247,20 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0     -1.5        0     1e+03        0        0         0        HALL Transportation
-    2 -3.59e+03    4e+03 -2.54e+03     1e+03        0 5.95e+03  5.95e+03  OutOfWorld Transportation
+    1        0      200        0     1e+03        0      202       202        TBD2 Transportation
+    2        0      360        0     1e+03        0      160       362        HALL Transportation
+    3        0    4e+03        0     1e+03        0 3.64e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
-    2 trajectories stored in this event.
+    1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0.01s Real=0.08s Sys=0s
 Idle> /gun/particle mu+
 Idle> /run/beamOn 1
 ### Run 1 start.
 Start Run processing.
->>>>>>>> Primary direction: (0.062566,0.26335,0.96267)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1    0.109    -1.04     1.68     1e+03        0     1.75      1.75        TBD1 Transportation
-    2    0.168   -0.792     2.59     1e+03        0    0.943      2.69        TBD1 Transportation
-    3    0.206   -0.634     3.17     1e+03        0    0.601      3.29        TBD1 Transportation
-    4    0.232   -0.522     3.58     1e+03        0    0.424      3.71        TBD1 Transportation
-    5    0.252   -0.437     3.88     1e+03        0    0.321      4.04        TBD1 Transportation
-    6    0.269    -0.37     4.13     1e+03        0    0.257      4.29        TBD1 Transportation
-    7    0.282   -0.313     4.34     1e+03        0    0.214      4.51        TBD1 Transportation
-    8    0.294   -0.264     4.52     1e+03        0    0.185      4.69        TBD1 Transportation
-    9    0.304   -0.221     4.68     1e+03        0    0.165      4.86        TBD1 Transportation
-   10    0.313   -0.181     4.82     1e+03        0    0.151      5.01        TBD1 Transportation
-   11    0.322   -0.143     4.96     1e+03        0    0.142      5.15        TBD1 Transportation
-   12    0.331   -0.107     5.09     1e+03        0    0.137      5.29        TBD1 Transportation
-   13    0.339  -0.0721     5.22     1e+03        0    0.134      5.42        TBD1 Transportation
-   14    0.348  -0.0365     5.35     1e+03        0    0.135      5.56        TBD1 Transportation
-   15    0.356 -1.94e-16     5.48     1e+03        0    0.139       5.7        TBD1 Transportation
-   16     46.6      195      716     1e+03        0      739       744        TBD2 Transportation
-   17     83.6      350 1.29e+03     1e+03        0      591  1.34e+03        TBD2 Transportation
-   18      121      506 1.85e+03     1e+03        0      591  1.93e+03        TBD2 Transportation
-   19      130      546    2e+03     1e+03        0      151  2.08e+03        HALL Transportation
-   20      260 1.09e+03    4e+03     1e+03        0 2.08e+03  4.16e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -303,51 +268,20 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1    0.109    -1.04     1.68     1e+03        0     1.75      1.75        TBD1 Transportation
-    2    0.168   -0.792     2.59     1e+03        0    0.943      2.69        TBD1 Transportation
-    3    0.206   -0.634     3.17     1e+03        0    0.601      3.29        TBD1 Transportation
-    4    0.232   -0.522     3.58     1e+03        0    0.424      3.71        TBD1 Transportation
-    5    0.252   -0.437     3.88     1e+03        0    0.321      4.04        TBD1 Transportation
-    6    0.269    -0.37     4.13     1e+03        0    0.257      4.29        TBD1 Transportation
-    7    0.282   -0.313     4.34     1e+03        0    0.214      4.51        TBD1 Transportation
-    8    0.294   -0.264     4.52     1e+03        0    0.185      4.69        TBD1 Transportation
-    9    0.304   -0.221     4.68     1e+03        0    0.165      4.86        TBD1 Transportation
-   10    0.313   -0.181     4.82     1e+03        0    0.151      5.01        TBD1 Transportation
-   11    0.322   -0.143     4.96     1e+03        0    0.142      5.15        TBD1 Transportation
-   12    0.331   -0.107     5.09     1e+03        0    0.137      5.29        TBD1 Transportation
-   13    0.339  -0.0721     5.22     1e+03        0    0.134      5.42        TBD1 Transportation
-   14    0.348  -0.0365     5.35     1e+03        0    0.135      5.56        TBD1 Transportation
-   15    0.356 -1.94e-16     5.48     1e+03        0    0.139       5.7        TBD1 Transportation
-   16     46.6      195      716     1e+03        0      739       744        TBD2 Transportation
-   17     83.6      350 1.29e+03     1e+03        0      591  1.34e+03        TBD2 Transportation
-   18      121      506 1.85e+03     1e+03        0      591  1.93e+03        TBD2 Transportation
-   19      130      546    2e+03     1e+03        0      151  2.08e+03        HALL Transportation
-   20      260 1.09e+03    4e+03     1e+03        0 2.08e+03  4.16e+03  OutOfWorld Transportation
+    1        0      200        0     1e+03        0      202       202        TBD2 Transportation
+    2        0      360        0     1e+03        0      160       362        HALL Transportation
+    3        0    4e+03        0     1e+03        0 3.64e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
-    2 trajectories stored in this event.
+    1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.02s Sys=0.01s
+  User=0s Real=0s Sys=0s
 Idle> /gun/particle e-
 Idle> /run/beamOn 1
 ### Run 2 start.
 Start Run processing.
->>>>>>>> Primary direction: (-0.1667,-0.96858,0.18456)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1    -33.7     -197     37.3     1e+03        0      202       202        TBD2 Transportation
-    2    -60.8     -355     67.3     1e+03        0      163       365        TBD2 Transportation
-    3    -87.9     -513     97.4     1e+03        0      163       528        TBD2 Transportation
-    4     -115     -670      127     1e+03        0      163       690        TBD2 Transportation
-    5     -142     -828      157     1e+03        0      163       853        TBD2 Transportation
-    6     -169     -986      188     1e+03        0      163  1.02e+03        HALL Transportation
-    7     -688   -4e+03      762     1e+03        0 3.11e+03  4.13e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -355,36 +289,20 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1    -33.7     -197     37.3     1e+03        0      202       202        TBD2 Transportation
-    2    -60.8     -355     67.3     1e+03        0      163       365        TBD2 Transportation
-    3    -87.9     -513     97.4     1e+03        0      163       528        TBD2 Transportation
-    4     -115     -670      127     1e+03        0      163       690        TBD2 Transportation
-    5     -142     -828      157     1e+03        0      163       853        TBD2 Transportation
-    6     -169     -986      188     1e+03        0      163  1.02e+03        HALL Transportation
-    7     -688   -4e+03      762     1e+03        0 3.11e+03  4.13e+03  OutOfWorld Transportation
+    1        0      200        0     1e+03        0      202       202        TBD2 Transportation
+    2        0      360        0     1e+03        0      160       362        HALL Transportation
+    3        0    4e+03        0     1e+03        0 3.64e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
-    2 trajectories stored in this event.
+    1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 Idle> /gun/particle e+
 Idle> /run/beamOn 1
 ### Run 3 start.
 Start Run processing.
->>>>>>>> Primary direction: (-0.19026,-0.19158,0.96286)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e+,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1     -140     -143      709     1e+03        0      737       737        TBD2 Transportation
-    2     -253     -256 1.28e+03     1e+03        0      593  1.33e+03        TBD2 Transportation
-    3     -366     -370 1.85e+03     1e+03        0      593  1.92e+03        TBD2 Transportation
-    4     -395     -399    2e+03     1e+03        0      155  2.08e+03        HALL Transportation
-    5     -790     -797    4e+03     1e+03        0 2.08e+03  4.15e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
@@ -392,13 +310,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1     -140     -143      709     1e+03        0      737       737        TBD2 Transportation
-    2     -253     -256 1.28e+03     1e+03        0      593  1.33e+03        TBD2 Transportation
-    3     -366     -370 1.85e+03     1e+03        0      593  1.92e+03        TBD2 Transportation
-    4     -395     -399    2e+03     1e+03        0      155  2.08e+03        HALL Transportation
-    5     -790     -797    4e+03     1e+03        0 2.08e+03  4.15e+03  OutOfWorld Transportation
+    1        0      200        0     1e+03        0      202       202        TBD2 Transportation
+    2        0      360        0     1e+03        0      160       362        HALL Transportation
+    3        0    4e+03        0     1e+03        0 3.64e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
-    2 trajectories stored in this event.
+    1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -411,16 +327,7 @@ Idle> /gun/particle mu-
 Idle> /run/beamOn 1
 ### Run 4 start.
 Start Run processing.
->>>>>>>> Primary direction: (0.72177,-0.45857,-0.51842)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = mu-,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0      1.5        0     1e+03        0        0         0        HALL Transportation
-    2    4e+03 -2.54e+03 -2.87e+03     1e+03        0 5.54e+03  5.54e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (1,0,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu-,   Track ID = 1,   Parent ID = 0
@@ -428,10 +335,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0      1.5        0     1e+03        0        0         0        HALL Transportation
-    2    4e+03 -2.54e+03 -2.87e+03     1e+03        0 5.54e+03  5.54e+03  OutOfWorld Transportation
+    1      200      1.5        0     1e+03        0      200       200        TBD2 Transportation
+    2      360      1.5        0     1e+03        0      160       360        HALL Transportation
+    3    4e+03      1.5        0     1e+03        0 3.64e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
-    2 trajectories stored in this event.
+    1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -440,16 +348,7 @@ Idle> /gun/particle mu+
 Idle> /run/beamOn 1
 ### Run 5 start.
 Start Run processing.
->>>>>>>> Primary direction: (0.98888,0.11362,-0.095924)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0      1.5        0     1e+03        0        0         0        HALL Transportation
-    2    4e+03      461     -388     1e+03        0 4.04e+03  4.04e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (1,0,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -457,37 +356,20 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0      1.5        0     1e+03        0        0         0        HALL Transportation
-    2    4e+03      461     -388     1e+03        0 4.04e+03  4.04e+03  OutOfWorld Transportation
+    1      200      1.5        0     1e+03        0      200       200        TBD2 Transportation
+    2      360      1.5        0     1e+03        0      160       360        HALL Transportation
+    3    4e+03      1.5        0     1e+03        0 3.64e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
-    2 trajectories stored in this event.
+    1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0s Sys=0s
 Idle> /gun/particle e-
 Idle> /run/beamOn 1
 ### Run 6 start.
 Start Run processing.
->>>>>>>> Primary direction: (-0.18529,0.27871,0.94233)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1   -0.187     1.78    0.952     1e+03        0     1.01      1.01        TBD1 Transportation
-    2   -0.469      2.2     2.38     1e+03        0     1.52      2.53        TBD1 Transportation
-    3   -0.953     2.93     4.85     1e+03        0     2.62      5.14        TBD1 Transportation
-    4    -2.02     4.54     10.3     1e+03        0     5.77      10.9        TBD1 Transportation
-    5    -6.58     11.4     33.5     1e+03        0     24.6      35.5        TBD1 Transportation
-    6     -110      167      560     1e+03        0      558       594        TBD2 Transportation
-    7     -199      300 1.01e+03     1e+03        0      478  1.07e+03        TBD2 Transportation
-    8     -287      433 1.46e+03     1e+03        0      478  1.55e+03        TBD2 Transportation
-    9     -376      567 1.91e+03     1e+03        0      478  2.03e+03        TBD2 Transportation
-   10     -393      593    2e+03     1e+03        0     94.4  2.12e+03        HALL Transportation
-   11     -787 1.18e+03    4e+03     1e+03        0 2.12e+03  4.24e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (1,0,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -495,37 +377,20 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1   -0.187     1.78    0.952     1e+03        0     1.01      1.01        TBD1 Transportation
-    2   -0.469      2.2     2.38     1e+03        0     1.52      2.53        TBD1 Transportation
-    3   -0.953     2.93     4.85     1e+03        0     2.62      5.14        TBD1 Transportation
-    4    -2.02     4.54     10.3     1e+03        0     5.77      10.9        TBD1 Transportation
-    5    -6.58     11.4     33.5     1e+03        0     24.6      35.5        TBD1 Transportation
-    6     -110      167      560     1e+03        0      558       594        TBD2 Transportation
-    7     -199      300 1.01e+03     1e+03        0      478  1.07e+03        TBD2 Transportation
-    8     -287      433 1.46e+03     1e+03        0      478  1.55e+03        TBD2 Transportation
-    9     -376      567 1.91e+03     1e+03        0      478  2.03e+03        TBD2 Transportation
-   10     -393      593    2e+03     1e+03        0     94.4  2.12e+03        HALL Transportation
-   11     -787 1.18e+03    4e+03     1e+03        0 2.12e+03  4.24e+03  OutOfWorld Transportation
+    1      200      1.5        0     1e+03        0      200       200        TBD2 Transportation
+    2      360      1.5        0     1e+03        0      160       360        HALL Transportation
+    3    4e+03      1.5        0     1e+03        0 3.64e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
-    2 trajectories stored in this event.
+    1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 Idle> /gun/particle e+
 Idle> /run/beamOn 1
 ### Run 7 start.
 Start Run processing.
->>>>>>>> Primary direction: (-0.39962,0.79262,-0.46049)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e+,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0      1.5        0     1e+03        0        0         0        HALL Transportation
-    2 -2.02e+03    4e+03 -2.32e+03     1e+03        0 5.04e+03  5.04e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (1,0,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
@@ -533,14 +398,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0      1.5        0     1e+03        0        0         0        HALL Transportation
-    2 -2.02e+03    4e+03 -2.32e+03     1e+03        0 5.04e+03  5.04e+03  OutOfWorld Transportation
+    1      200      1.5        0     1e+03        0      200       200        TBD2 Transportation
+    2      360      1.5        0     1e+03        0      160       360        HALL Transportation
+    3    4e+03      1.5        0     1e+03        0 3.64e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
-    2 trajectories stored in this event.
+    1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 Idle> #
 Idle> # Termination
 Idle> #

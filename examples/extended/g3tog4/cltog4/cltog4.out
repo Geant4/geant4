@@ -184,16 +184,7 @@ Idle> /gun/particle chargedgeantino
 Idle> /run/beamOn 10
 ### Run 0 start.
 Start Run processing.
->>>>>>>> Primary direction: (-0.60338,0.67296,-0.42786)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = chargedgeantino,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2 -3.6e+03    4e+03 -2.55e+03     1e+03        0 5.97e+03  5.97e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = chargedgeantino,   Track ID = 1,   Parent ID = 0
@@ -201,23 +192,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2 -3.6e+03    4e+03 -2.55e+03     1e+03        0 5.97e+03  5.97e+03  OutOfWorld Transportation
->>>>>>>> Primary direction: (-0.083976,0.45606,0.88598)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = chargedgeantino,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1    -38.9      196      410     1e+03        0      463       463        TBD2 Transportation
-    2    -67.9      354      716     1e+03        0      345       808        TBD2 Transportation
-    3    -96.8      511 1.02e+03     1e+03        0      345  1.15e+03        TBD2 Transportation
-    4     -126      668 1.33e+03     1e+03        0      345   1.5e+03        TBD2 Transportation
-    5     -155      826 1.63e+03     1e+03        0      345  1.84e+03        TBD2 Transportation
-    6     -184      983 1.94e+03     1e+03        0      345  2.19e+03        HALL Transportation
-    7     -379 2.04e+03    4e+03     1e+03        0 2.33e+03  4.51e+03  OutOfWorld Transportation
+    1        0      200        0     1e+03        0      215       215        TBD2 Transportation
+    2        0      360        0     1e+03        0      160       375        HALL Transportation
+    3        0    4e+03        0     1e+03        0 3.64e+03  4.02e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = chargedgeantino,   Track ID = 1,   Parent ID = 0
@@ -225,23 +203,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1    -38.9      196      410     1e+03        0      463       463        TBD2 Transportation
-    2    -67.9      354      716     1e+03        0      345       808        TBD2 Transportation
-    3    -96.8      511 1.02e+03     1e+03        0      345  1.15e+03        TBD2 Transportation
-    4     -126      668 1.33e+03     1e+03        0      345   1.5e+03        TBD2 Transportation
-    5     -155      826 1.63e+03     1e+03        0      345  1.84e+03        TBD2 Transportation
-    6     -184      983 1.94e+03     1e+03        0      345  2.19e+03        HALL Transportation
-    7     -379 2.04e+03    4e+03     1e+03        0 2.33e+03  4.51e+03  OutOfWorld Transportation
->>>>>>>> Primary direction: (0.29968,0.71363,-0.63318)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = chargedgeantino,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2 1.69e+03    4e+03 -3.56e+03     1e+03        0 5.63e+03  5.63e+03  OutOfWorld Transportation
+    1        0      200        0     1e+03        0      215       215        TBD2 Transportation
+    2        0      360        0     1e+03        0      160       375        HALL Transportation
+    3        0    4e+03        0     1e+03        0 3.64e+03  4.02e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = chargedgeantino,   Track ID = 1,   Parent ID = 0
@@ -249,18 +214,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2 1.69e+03    4e+03 -3.56e+03     1e+03        0 5.63e+03  5.63e+03  OutOfWorld Transportation
->>>>>>>> Primary direction: (-0.84383,0.2601,-0.46935)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = chargedgeantino,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2   -4e+03 1.22e+03 -2.22e+03     1e+03        0 4.74e+03  4.74e+03  OutOfWorld Transportation
+    1        0      200        0     1e+03        0      215       215        TBD2 Transportation
+    2        0      360        0     1e+03        0      160       375        HALL Transportation
+    3        0    4e+03        0     1e+03        0 3.64e+03  4.02e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = chargedgeantino,   Track ID = 1,   Parent ID = 0
@@ -268,38 +225,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2   -4e+03 1.22e+03 -2.22e+03     1e+03        0 4.74e+03  4.74e+03  OutOfWorld Transportation
->>>>>>>> Primary direction: (0.16769,0.98025,0.10486)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = chargedgeantino,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1    0.977    -9.29    0.611     1e+03        0     5.82      5.82        TBD1 Transportation
-    2     1.42    -6.69    0.889     1e+03        0     2.65      8.48        TBD1 Transportation
-    3     1.68    -5.17     1.05     1e+03        0     1.55        10        TBD1 Transportation
-    4     1.85    -4.16     1.16     1e+03        0     1.03      11.1        TBD1 Transportation
-    5     1.98    -3.43     1.24     1e+03        0     0.75      11.8        TBD1 Transportation
-    6     2.08    -2.86      1.3     1e+03        0    0.581      12.4        TBD1 Transportation
-    7     2.16    -2.39     1.35     1e+03        0    0.473      12.9        TBD1 Transportation
-    8     2.22       -2     1.39     1e+03        0    0.401      13.3        TBD1 Transportation
-    9     2.28    -1.66     1.43     1e+03        0    0.351      13.6        TBD1 Transportation
-   10     2.34    -1.35     1.46     1e+03        0    0.316      13.9        TBD1 Transportation
-   11     2.38    -1.06     1.49     1e+03        0    0.292      14.2        TBD1 Transportation
-   12     2.43    -0.79     1.52     1e+03        0    0.277      14.5        TBD1 Transportation
-   13     2.48   -0.526     1.55     1e+03        0    0.269      14.8        TBD1 Transportation
-   14     2.52   -0.265     1.58     1e+03        0    0.267        15        TBD1 Transportation
-   15     2.57 -1.39e-15      1.6     1e+03        0     0.27      15.3        TBD1 Transportation
-   16     36.2      197     22.6     1e+03        0      201       216        TBD2 Transportation
-   17     63.2      354     39.5     1e+03        0      161       377        TBD2 Transportation
-   18     90.2      512     56.4     1e+03        0      161       538        TBD2 Transportation
-   19      117      670     73.3     1e+03        0      161       699        TBD2 Transportation
-   20      144      828     90.1     1e+03        0      161       860        TBD2 Transportation
-   21      171      985      107     1e+03        0      161  1.02e+03        HALL Transportation
-   22      687    4e+03      430     1e+03        0 3.08e+03   4.1e+03  OutOfWorld Transportation
+    1        0      200        0     1e+03        0      215       215        TBD2 Transportation
+    2        0      360        0     1e+03        0      160       375        HALL Transportation
+    3        0    4e+03        0     1e+03        0 3.64e+03  4.02e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = chargedgeantino,   Track ID = 1,   Parent ID = 0
@@ -307,43 +236,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1    0.977    -9.29    0.611     1e+03        0     5.82      5.82        TBD1 Transportation
-    2     1.42    -6.69    0.889     1e+03        0     2.65      8.48        TBD1 Transportation
-    3     1.68    -5.17     1.05     1e+03        0     1.55        10        TBD1 Transportation
-    4     1.85    -4.16     1.16     1e+03        0     1.03      11.1        TBD1 Transportation
-    5     1.98    -3.43     1.24     1e+03        0     0.75      11.8        TBD1 Transportation
-    6     2.08    -2.86      1.3     1e+03        0    0.581      12.4        TBD1 Transportation
-    7     2.16    -2.39     1.35     1e+03        0    0.473      12.9        TBD1 Transportation
-    8     2.22       -2     1.39     1e+03        0    0.401      13.3        TBD1 Transportation
-    9     2.28    -1.66     1.43     1e+03        0    0.351      13.6        TBD1 Transportation
-   10     2.34    -1.35     1.46     1e+03        0    0.316      13.9        TBD1 Transportation
-   11     2.38    -1.06     1.49     1e+03        0    0.292      14.2        TBD1 Transportation
-   12     2.43    -0.79     1.52     1e+03        0    0.277      14.5        TBD1 Transportation
-   13     2.48   -0.526     1.55     1e+03        0    0.269      14.8        TBD1 Transportation
-   14     2.52   -0.265     1.58     1e+03        0    0.267        15        TBD1 Transportation
-   15     2.57 -1.39e-15      1.6     1e+03        0     0.27      15.3        TBD1 Transportation
-   16     36.2      197     22.6     1e+03        0      201       216        TBD2 Transportation
-   17     63.2      354     39.5     1e+03        0      161       377        TBD2 Transportation
-   18     90.2      512     56.4     1e+03        0      161       538        TBD2 Transportation
-   19      117      670     73.3     1e+03        0      161       699        TBD2 Transportation
-   20      144      828     90.1     1e+03        0      161       860        TBD2 Transportation
-   21      171      985      107     1e+03        0      161  1.02e+03        HALL Transportation
-   22      687    4e+03      430     1e+03        0 3.08e+03   4.1e+03  OutOfWorld Transportation
->>>>>>>> Primary direction: (-0.15423,-0.9699,0.18841)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = chargedgeantino,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1    -29.1     -198     35.5     1e+03        0      189       189        TBD2 Transportation
-    2    -54.2     -356     66.2     1e+03        0      163       351        TBD2 Transportation
-    3    -79.3     -514     96.9     1e+03        0      163       514        TBD2 Transportation
-    4     -104     -672      128     1e+03        0      163       677        TBD2 Transportation
-    5     -130     -830      158     1e+03        0      163       840        TBD2 Transportation
-    6     -155     -988      189     1e+03        0      163     1e+03        HALL Transportation
-    7     -634   -4e+03      774     1e+03        0 3.11e+03  4.11e+03  OutOfWorld Transportation
+    1        0      200        0     1e+03        0      215       215        TBD2 Transportation
+    2        0      360        0     1e+03        0      160       375        HALL Transportation
+    3        0    4e+03        0     1e+03        0 3.64e+03  4.02e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = chargedgeantino,   Track ID = 1,   Parent ID = 0
@@ -351,39 +247,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1    -29.1     -198     35.5     1e+03        0      189       189        TBD2 Transportation
-    2    -54.2     -356     66.2     1e+03        0      163       351        TBD2 Transportation
-    3    -79.3     -514     96.9     1e+03        0      163       514        TBD2 Transportation
-    4     -104     -672      128     1e+03        0      163       677        TBD2 Transportation
-    5     -130     -830      158     1e+03        0      163       840        TBD2 Transportation
-    6     -155     -988      189     1e+03        0      163     1e+03        HALL Transportation
-    7     -634   -4e+03      774     1e+03        0 3.11e+03  4.11e+03  OutOfWorld Transportation
->>>>>>>> Primary direction: (-0.6148,-0.082941,-0.78431)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = chargedgeantino,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2     -274      -52     -350     1e+03        0      446       446      BOX1_1 Transportation
-    3     -298    -55.2     -380     1e+03        0     38.3       485      BOX2_2 Transportation
-    4     -314    -57.3     -400     1e+03        0     25.5       510      BOX1_1 Transportation
-    5     -353    -62.6     -450     1e+03        0     63.8       574        HALL Transportation
-    6     -588    -94.3     -750     1e+03        0      383       956      BOX1_2 Transportation
-    7     -611    -97.5     -780     1e+03        0     38.3       995      BOX2_3 Transportation
-    8     -627    -99.6     -800     1e+03        0     25.5  1.02e+03      BOX1_2 Transportation
-    9     -666     -105     -850     1e+03        0     63.8  1.08e+03        HALL Transportation
-   10     -901     -137 -1.15e+03     1e+03        0      383  1.47e+03      BOX1_3 Transportation
-   11     -925     -140 -1.18e+03     1e+03        0     38.3   1.5e+03      BOX2_4 Transportation
-   12     -941     -142 -1.2e+03     1e+03        0     25.5  1.53e+03      BOX1_3 Transportation
-   13     -980     -147 -1.25e+03     1e+03        0     63.8  1.59e+03        HALL Transportation
-   14 -1.22e+03     -179 -1.55e+03     1e+03        0      383  1.98e+03      BOX1_4 Transportation
-   15 -1.24e+03     -182 -1.58e+03     1e+03        0     38.3  2.01e+03      BOX2_5 Transportation
-   16 -1.25e+03     -184 -1.6e+03     1e+03        0     25.5  2.04e+03      BOX1_4 Transportation
-   17 -1.29e+03     -189 -1.65e+03     1e+03        0     63.8   2.1e+03        HALL Transportation
-   18 -3.14e+03     -438   -4e+03     1e+03        0    3e+03   5.1e+03  OutOfWorld Transportation
+    1        0      200        0     1e+03        0      215       215        TBD2 Transportation
+    2        0      360        0     1e+03        0      160       375        HALL Transportation
+    3        0    4e+03        0     1e+03        0 3.64e+03  4.02e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = chargedgeantino,   Track ID = 1,   Parent ID = 0
@@ -391,39 +258,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2     -274      -52     -350     1e+03        0      446       446      BOX1_1 Transportation
-    3     -298    -55.2     -380     1e+03        0     38.3       485      BOX2_2 Transportation
-    4     -314    -57.3     -400     1e+03        0     25.5       510      BOX1_1 Transportation
-    5     -353    -62.6     -450     1e+03        0     63.8       574        HALL Transportation
-    6     -588    -94.3     -750     1e+03        0      383       956      BOX1_2 Transportation
-    7     -611    -97.5     -780     1e+03        0     38.3       995      BOX2_3 Transportation
-    8     -627    -99.6     -800     1e+03        0     25.5  1.02e+03      BOX1_2 Transportation
-    9     -666     -105     -850     1e+03        0     63.8  1.08e+03        HALL Transportation
-   10     -901     -137 -1.15e+03     1e+03        0      383  1.47e+03      BOX1_3 Transportation
-   11     -925     -140 -1.18e+03     1e+03        0     38.3   1.5e+03      BOX2_4 Transportation
-   12     -941     -142 -1.2e+03     1e+03        0     25.5  1.53e+03      BOX1_3 Transportation
-   13     -980     -147 -1.25e+03     1e+03        0     63.8  1.59e+03        HALL Transportation
-   14 -1.22e+03     -179 -1.55e+03     1e+03        0      383  1.98e+03      BOX1_4 Transportation
-   15 -1.24e+03     -182 -1.58e+03     1e+03        0     38.3  2.01e+03      BOX2_5 Transportation
-   16 -1.25e+03     -184 -1.6e+03     1e+03        0     25.5  2.04e+03      BOX1_4 Transportation
-   17 -1.29e+03     -189 -1.65e+03     1e+03        0     63.8   2.1e+03        HALL Transportation
-   18 -3.14e+03     -438   -4e+03     1e+03        0    3e+03   5.1e+03  OutOfWorld Transportation
->>>>>>>> Primary direction: (-0.23706,-0.79942,0.55202)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = chargedgeantino,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1    -52.8     -193      123     1e+03        0      223       223        TBD2 Transportation
-    2    -98.3     -346      229     1e+03        0      192       414        TBD2 Transportation
-    3     -144     -500      335     1e+03        0      192       606        TBD2 Transportation
-    4     -189     -653      441     1e+03        0      192       798        TBD2 Transportation
-    5     -235     -807      547     1e+03        0      192       990        TBD2 Transportation
-    6     -280     -960      653     1e+03        0      192  1.18e+03        HALL Transportation
-    7 -1.18e+03   -4e+03 2.75e+03     1e+03        0  3.8e+03  4.98e+03  OutOfWorld Transportation
+    1        0      200        0     1e+03        0      215       215        TBD2 Transportation
+    2        0      360        0     1e+03        0      160       375        HALL Transportation
+    3        0    4e+03        0     1e+03        0 3.64e+03  4.02e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = chargedgeantino,   Track ID = 1,   Parent ID = 0
@@ -431,23 +269,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1    -52.8     -193      123     1e+03        0      223       223        TBD2 Transportation
-    2    -98.3     -346      229     1e+03        0      192       414        TBD2 Transportation
-    3     -144     -500      335     1e+03        0      192       606        TBD2 Transportation
-    4     -189     -653      441     1e+03        0      192       798        TBD2 Transportation
-    5     -235     -807      547     1e+03        0      192       990        TBD2 Transportation
-    6     -280     -960      653     1e+03        0      192  1.18e+03        HALL Transportation
-    7 -1.18e+03   -4e+03 2.75e+03     1e+03        0  3.8e+03  4.98e+03  OutOfWorld Transportation
->>>>>>>> Primary direction: (0.10018,-0.97302,-0.20786)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = chargedgeantino,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2      410   -4e+03     -851     1e+03        0  4.1e+03   4.1e+03  OutOfWorld Transportation
+    1        0      200        0     1e+03        0      215       215        TBD2 Transportation
+    2        0      360        0     1e+03        0      160       375        HALL Transportation
+    3        0    4e+03        0     1e+03        0 3.64e+03  4.02e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = chargedgeantino,   Track ID = 1,   Parent ID = 0
@@ -455,18 +280,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2      410   -4e+03     -851     1e+03        0  4.1e+03   4.1e+03  OutOfWorld Transportation
->>>>>>>> Primary direction: (-0.76489,-0.64397,-0.015835)
-
-*********************************************************************************************************
-* G4Track Information:   Particle = chargedgeantino,   Track ID = 2,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2   -4e+03 -3.38e+03    -82.8     1e+03        0 5.23e+03  5.23e+03  OutOfWorld Transportation
+    1        0      200        0     1e+03        0      215       215        TBD2 Transportation
+    2        0      360        0     1e+03        0      160       375        HALL Transportation
+    3        0    4e+03        0     1e+03        0 3.64e+03  4.02e+03  OutOfWorld Transportation
+>>>>>>>> Primary direction: (0,1,0)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = chargedgeantino,   Track ID = 1,   Parent ID = 0
@@ -474,12 +291,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      -15        0     1e+03        0        0         0        TBD1 initStep
-    1        0      -15        0     1e+03        0        0         0        HALL Transportation
-    2   -4e+03 -3.38e+03    -82.8     1e+03        0 5.23e+03  5.23e+03  OutOfWorld Transportation
+    1        0      200        0     1e+03        0      215       215        TBD2 Transportation
+    2        0      360        0     1e+03        0      160       375        HALL Transportation
+    3        0    4e+03        0     1e+03        0 3.64e+03  4.02e+03  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.06s Real=0.07s Sys=0.01s
+  User=0.02s Real=0.02s Sys=0s
 Idle> #
 Idle> # Termination
 Idle> #

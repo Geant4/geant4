@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4PrimaryGeneratorAction.cc,v 1.1 2000-07-24 11:23:50 gcosmo Exp $
+// $Id: G3toG4PrimaryGeneratorAction.cc,v 1.2 2000-08-01 09:44:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,10 +38,10 @@ G3toG4PrimaryGeneratorAction::~G3toG4PrimaryGeneratorAction(){
 
 void 
 G3toG4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
-  G4ThreeVector direction = GetRandomDirection();
-  G4cout << ">>>>>>>> Primary direction: " << direction << G4endl;
-  particleGun->SetParticleMomentumDirection( direction.unit() ) ;
-  particleGun->GeneratePrimaryVertex(anEvent);
+  //G4ThreeVector direction = GetRandomDirection();
+  //particleGun->SetParticleMomentumDirection( direction.unit() ) ;
+  G4cout << ">>>>>>>> Primary direction: " 
+         << particleGun->GetParticleMomentumDirection() << G4endl;
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 
