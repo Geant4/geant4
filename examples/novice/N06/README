@@ -1,4 +1,4 @@
-$Id: README,v 1.1 1999-01-07 16:06:20 gunter Exp $
+$Id: README,v 1.2 2002-05-17 00:13:54 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,6 +22,7 @@ G4VUserPhysicsList
 
  ==> define particles; including *** G4OpticalPhoton     ***
      define processes; including *** G4Cerenkov          ***
+                                 *** G4Scintillation     ***
                                  *** G4OpAbsorption      ***
                                  *** G4OpRayleigh        ***
                                  *** G4OpBoundaryProcess ***
