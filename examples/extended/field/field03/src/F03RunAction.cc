@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03RunAction.cc,v 1.3 2001-10-15 17:20:51 gcosmo Exp $
+// $Id: F03RunAction.cc,v 1.4 2001-10-25 14:54:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 F03RunAction::F03RunAction()
-  : saveRndm(1)
+  : saveRndm(0)
 {
   runMessenger = new F03RunMessenger(this);
 }
