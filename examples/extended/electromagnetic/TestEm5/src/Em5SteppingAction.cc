@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingAction.cc,v 1.7 2002-06-05 15:43:44 urban Exp $
+// $Id: Em5SteppingAction.cc,v 1.8 2002-06-05 15:49:18 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,9 +71,12 @@ Em5SteppingAction::~Em5SteppingAction()
 void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
 
+#ifndef G4NOHIST
   const G4double cn = pi/(64800.*runaction->GetdTh()) ;
   const G4double cnback = pi/(64800.*runaction->GetdThback()) ;
-  G4double wg,Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,yend,zend,rend;
+  G4double wg ;
+#endif
+  G4double Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,yend,zend,rend;
   G4int evno = eventaction->GetEventno(); 
 
   IDnow = evno+10000*(aStep->GetTrack()->GetTrackID())+
