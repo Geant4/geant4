@@ -134,8 +134,8 @@ G4PiNuclearCrossSection()
 G4PiNuclearCrossSection::
 ~G4PiNuclearCrossSection()
 {
-  for_each(thePimData.begin(), thePimData.end(), G4PiData::Delete());
-  for_each(thePipData.begin(), thePipData.end(), G4PiData::Delete());
+  G4std::for_each(thePimData.begin(), thePimData.end(), G4PiData::Delete());
+  G4std::for_each(thePipData.begin(), thePipData.end(), G4PiData::Delete());
 }
 
 G4double G4PiNuclearCrossSection::
