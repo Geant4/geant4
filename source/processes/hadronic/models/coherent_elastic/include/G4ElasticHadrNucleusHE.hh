@@ -65,6 +65,9 @@
          G4HadFinalState * ApplyYourself( const G4HadProjectile  &aTrack,
                                                 G4Nucleus        &aNucleus);
 
+         G4bool IsApplicable(const G4HadProjectile &aTrack, 
+                               G4Nucleus & targetNucleus);
+			       
          G4double RandomElastic0( const G4DynamicParticle *   aHadron,
                                         G4Nucleus *           aNucleus);
 

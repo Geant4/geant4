@@ -99,13 +99,13 @@
   G4Exception(" This nucleus is very light for this model !!!");
          }
 
-  if(Nucleus>208)
+  if(Nucleus>238)
          {
   G4Exception(" This nucleus is very heavy for this model !!!");
          }
 
   if(HadrEnergy < 1.5)
-  G4Exception(" The hadron energy is very low for this model !!!");
+  G4cout <<" The hadron energy is very low for this model !!!"<<G4endl;
 
       G4HadronValues::GetHadronValues(aHadron);
       GetTotalCrossSection(aHadron, aNucleus);

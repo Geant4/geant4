@@ -31,7 +31,7 @@
   G4Exception(" This nucleus is very light for this model !!!");
          }
 
-  if(iNnucl>208)
+  if(iNnucl>238)
          {
   G4Exception(" This nucleus is very heavy for this model !!!");
          }
@@ -39,7 +39,7 @@
        G4double  dHdrEnergy = aHadron->GetTotalEnergy()/1000;
 
   if(dHdrEnergy < 1.5) 
-  G4Exception(" The hadron energy is very low for this model !!!");
+  G4cout <<" The hadron energy is very low for this model !!!"<<G4endl;
 
         CreationArray (aHadron, aNucleus);
 
@@ -71,7 +71,7 @@
   G4Exception(" This nucleus is very light for this model !!!");
          }
 
-  if(iNnucl>208)
+  if(iNnucl>238)
          {
   G4Exception(" This nucleus is very heavy for this model !!!");
          }
@@ -79,7 +79,7 @@
        G4double  dHdrEnergy = aHadron->GetTotalEnergy()/1000;
 
   if(dHdrEnergy < 1.5) 
-  G4Exception(" The hadron energy is very low for this model !!!");
+  G4cout <<" The hadron energy is very low for this model !!!"<<G4endl;
 
         Factorials1[0] = 1;
           for( ii = 1; ii<110; ii++)
@@ -122,6 +122,7 @@
 
 //  ---------   The writing of array into sName File  ---------
 
+       // std::cout << "We write the data to "<< sNameFile<<" !!!!!!!!!!!!!"<<std::endl;
        std::ofstream TestFile(sNameFile, std::ios::out);
              TestFile.setf(std::ios::scientific, 
                            std::ios::floatfield);
@@ -162,7 +163,7 @@
   G4Exception(" This nucleus is very light for this model !!!");
          }
 
-  if(aNuc>208.5)
+  if(aNuc>238.5)
          {
   G4Exception(" This nucleus is very heavy for this model !!!");
          }
@@ -170,7 +171,7 @@
        G4double  dHdrEnergy = aHadron->GetTotalEnergy()/1000;
 
   if(dHdrEnergy < 1.5) 
-  G4Exception(" The hadron energy is very low for this model !!!");
+  G4cout <<" The hadron energy is very low for this model !!!"<<G4endl;
 
         std::ifstream TestFile(sNameFile);
         TestFile.setf(std::ios::scientific);
@@ -230,7 +231,7 @@
   G4Exception(" This nucleus is very light for this model !!!");
          }
 
-  if(iNnucl>208)
+  if(iNnucl>238)
          {
   G4Exception(" This nucleus is very heavy for this model !!!");
          }
@@ -238,7 +239,7 @@
        G4double  dHdrEnergy = aHadron->GetTotalEnergy()/1000;
 
   if(dHdrEnergy < 1.5) 
-  G4Exception(" The hadron energy is very low for this model !!!");
+  G4cout <<" The hadron energy is very low for this model !!!"<<G4endl;
 
                 MyIonTable  = new G4IonTable();
  
@@ -365,7 +366,7 @@
   G4Exception(" This nucleus is very light for this model !!!");
          }
 
-  if(iNnucl>208)
+  if(iNnucl>238)
          {
   G4Exception(" This nucleus is very heavy for this model !!!");
          }
@@ -810,6 +811,16 @@ G4cout<<G4endl<<" Q2 "<< ranQ2<<" Hdr Mom Tet "<<outMomHdr
 /////       return &theParticleChange;
        return &theParticleChange;
   }
+  
+  G4bool G4ElasticHadrNucleusHE::IsApplicable(const G4HadProjectile &, 
+                                                   G4Nucleus & targetNucleus)
+  {
+     G4double result = true;
+     if(targetNucleus.GetN() <5) result = false;
+     if(targetNucleus.GetN() >238) result = false;
+     return result;
+  }
+  
 //  ==========================================================
 //  +++++++  The randomization of one dimensional array ++++++
     G4double G4ElasticHadrNucleusHE::RandomElastic0(
