@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.3 2002-12-16 13:50:08 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.4 2002-12-16 17:36:39 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef  G4ANALYSIS_USE
@@ -50,6 +50,7 @@
 #include "AIDA/ITreeFactory.h"
 #include "AIDA/ITree.h"
 #include "AIDA/ITuple.h"
+#include "Tst50PrimaryGeneratorAction.hh"
 
 Tst50AnalysisManager* Tst50AnalysisManager::instance = 0;
 
@@ -68,20 +69,23 @@ Tst50AnalysisManager::Tst50AnalysisManager() :
   
  //parameters for the TreeFactory
  
-  std::string fileName="Test_500kev.hbk";
+  std::string fileName="Test50.hbk";
   theTree = treeFact->create(fileName,"hbook",false, true);
 
   delete treeFact;
  
   histFact = aFact->createHistogramFactory( *theTree );
   //  tupFact  = aFact->createTupleFactory    ( *theTree );
- 
+
+  p_Primary= new Tst50PrimaryGeneratorAction();
+  initial_energy= p_Primary->GetInitialEnergy();
 }
 
 
 
 Tst50AnalysisManager::~Tst50AnalysisManager() 
 { 
+  delete  p_Primary;
  // delete tupFact;
   //tupFact=0;
 
@@ -109,19 +113,13 @@ void Tst50AnalysisManager::book()
  
 
 
- h1= histFact->createHistogram1D("10","Energy Deposit", 3000000,0.,0.03);
+ h1= histFact->createHistogram1D("10","Energy Deposit",initial_energy*50. ,0.,initial_energy);
 
  // in questo istogramma  metto il deposito di energia di ogni evento nel target
- h2= histFact->createHistogram1D("20","primary_processes", 6000,0.,6.);
 
- h3= histFact->createHistogram1D("30","transmitted gamma",200,0.,2.);
-}
+
  
-void Tst50AnalysisManager::primary_processes(G4int process)
-{
- h2->fill(process) ;
 }
-
 
  //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -131,12 +129,6 @@ void Tst50AnalysisManager::energy_deposit(G4double En)
   h1->fill(En);
 }
 
-
-void Tst50AnalysisManager::trans_particles()
-{
- h3->fill(1);
-
-}
 void Tst50AnalysisManager::finish() 
 {  
   // write all histograms to file

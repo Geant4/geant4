@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.4 2002-12-16 13:50:08 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.5 2002-12-16 17:36:39 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -127,37 +127,28 @@ IDnow = evno+10000*(Step->GetTrack()->GetTrackID())+
           if (process=="LowEnPhotoElec") 
 	    { //G4cout<< "processo del fotone-------------------------"
 	      // <<" 1"<<G4endl; 
-#ifdef G4ANALYSIS_USE
-	  analysis->primary_processes(3);
-#endif
+	  runaction->primary_processes(3);
 	}
       if (process=="Transportation") 
            { 
-#ifdef G4ANALYSIS_USE
-	     analysis->primary_processes(1);
-#endif
-	}
+
+runaction->primary_processes(1);	
+}
 	
  if (process=="LowEnRayleigh") 
            {
-#ifdef G4ANALYSIS_USE
-	     analysis->primary_processes(2);
-	     // G4cout<< "processo del fotone-------------------------"
-	     //      << 2<<G4endl;
-#endif
+
+	     runaction->primary_processes(2);
 	}
  if (process=="LowEnCompton") 
            { 
-#ifdef G4ANALYSIS_USE
-	     analysis->primary_processes(4);
-#endif
-	   }
+
+	     runaction->primary_processes(4);	 
+  }
 
 if (process=="LowEnConversion") 
            { 
-#ifdef G4ANALYSIS_USE
-	     analysis->primary_processes(5);
-#endif 
+	     runaction->primary_processes(5);	
 	   }
 
 
@@ -173,10 +164,8 @@ if (process=="LowEnConversion")
       
       if(KinE ==initial_energy)
 	{
-#ifdef G4ANALYSIS_USE
-analysis->trans_particles(); 
-#endif 
-//G4cout<<" fotone trasmesso"<<G4endl;
+
+
  runaction->Trans_number();
 }}}}
 }

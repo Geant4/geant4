@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.cc,v 1.2 2002-12-16 13:50:08 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.3 2002-12-16 17:36:39 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,6 +65,11 @@ Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
       UI->ApplyCommand("/vis/scene/notifyHandlers");
     } 
   number=0;
+  numberTransp=0;
+  numberRay=0;
+  numberPh=0; 
+  numberCo=0;
+  numberPair=0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,6 +86,12 @@ void Tst50RunAction::EndOfRunAction(const G4Run*)
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
     }
   G4cout<<"Number of transmitted gamma: "<<number<<G4endl;
+
+  G4cout<<numberTransp <<" processo di trasporto"<< G4endl;
+  G4cout<<numberRay<<" processi Rayleigh"<<G4endl;
+  G4cout<<numberPh<< " processi fotoelettrici"<<G4endl;
+  G4cout<<numberCo<< " processi Compton"<< G4endl;
+  G4cout<<numberPair<< " processi di produzione di coppie"<< G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,4 +99,13 @@ void Tst50RunAction::EndOfRunAction(const G4Run*)
 void  Tst50RunAction::Trans_number()
 {
   number= number+1;
+}
+
+void  Tst50RunAction::primary_processes(G4int i)
+{
+  if( i==1) numberTransp=numberTransp+1;
+  if( i==2) numberRay= numberRay+1;
+  if( i==3) numberPh= numberPh+1;
+  if( i==4) numberCo= numberCo+1;
+  if( i==5) numberPair= numberPair+1;
 }

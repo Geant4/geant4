@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.3 2002-12-16 13:50:08 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.4 2002-12-16 17:36:39 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -146,7 +146,7 @@ a=26.98*g/mole;
 
     G4double xtarget = 20.0*cm;
     G4double ytarget = 20.0*cm;
-    G4double ztarget =0.5*mm;
+    G4double ztarget =5.*mm;
       
    
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.3 2002-12-16 13:50:08 guatelli Exp $
+// $Id: Tst50EventAction.cc,v 1.4 2002-12-16 17:36:39 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,7 +72,7 @@ if (hit_CollID==-1)
  
 void Tst50EventAction::EndOfEventAction(const G4Event* evt)
 {
- G4int prec = G4cout.precision(10);
+
   
   // extracted from hits, compute the total energy deposit 
 
