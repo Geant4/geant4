@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedLambdaConstructor.hh,v 1.6 2001-07-11 10:02:05 gunter Exp $
+// $Id: G4ExcitedLambdaConstructor.hh,v 1.7 2003-05-19 17:11:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -131,7 +131,7 @@ inline
 }
 
 inline
- G4int  G4ExcitedLambdaConstructor::GetQuarkContents(G4int iQ, G4int iIso3)
+ G4int  G4ExcitedLambdaConstructor::GetQuarkContents(G4int iQ, G4int )
 {
   G4int quark=0;
   if ( iQ == 0 ){
@@ -154,7 +154,7 @@ inline
 }
 
 inline 
- G4String G4ExcitedLambdaConstructor::GetName(G4int iIso3, G4int iState)
+ G4String G4ExcitedLambdaConstructor::GetName(G4int , G4int iState)
 {
   G4String particle = name[iState];
   return particle;

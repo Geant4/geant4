@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.14 2003-04-29 04:25:58 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.15 2003-05-19 17:10:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,7 +73,7 @@ G4ProductionCutsTable::G4ProductionCutsTable()
   defaultProductionCuts = new G4ProductionCuts();
 }
 
-G4ProductionCutsTable::G4ProductionCutsTable(const G4ProductionCutsTable& right)
+G4ProductionCutsTable::G4ProductionCutsTable(const G4ProductionCutsTable& )
 {;}
 
 G4ProductionCutsTable::~G4ProductionCutsTable()

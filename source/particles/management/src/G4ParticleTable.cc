@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.18 2001-07-11 10:02:03 gunter Exp $
+// $Id: G4ParticleTable.cc,v 1.19 2003-05-19 17:10:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -267,7 +267,7 @@ G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
 }
 
 ////////////////////
-G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int J, G4int Q)
+G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int , G4int )
 {
    if (Z<=0) return 0;
    if (A<Z) return 0;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.3 2003-01-07 23:52:24 asaim Exp $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.4 2003-05-19 17:10:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -431,7 +431,8 @@ G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
       G4cout << "G4VRangeToEnergyConverter::ConvertCutToKineticEnergy ";
       G4cout << "  for " << theParticle->GetParticleName() << G4endl;
       G4cout << "The cut in range [" << theCutInLength/mm << " (mm)]  ";
-      G4cout << " is too big  " << G4endl; 
+      G4cout << " is too big  " ;
+      G4cout << " for material  idx=" << materialIndex <<G4endl; 
       G4cout << "The cut in energy is set" << DBL_MAX/GeV << "GeV " <<G4endl; 
     }
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.16 2003-04-11 11:48:40 asaim Exp $
+// $Id: G4ParticleDefinition.cc,v 1.17 2003-05-19 17:10:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,7 +116,7 @@ G4ParticleDefinition::G4ParticleDefinition(
 #endif
 }
 
-G4ParticleDefinition::G4ParticleDefinition(const G4ParticleDefinition &right)
+G4ParticleDefinition::G4ParticleDefinition(const G4ParticleDefinition &)
 {
   G4Exception("You call Copy Constructor of G4ParticleDefinition ");
 }

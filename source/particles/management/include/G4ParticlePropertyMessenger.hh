@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticlePropertyMessenger.hh,v 1.5 2001-07-11 10:01:57 gunter Exp $
+// $Id: G4ParticlePropertyMessenger.hh,v 1.6 2003-05-19 17:10:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -75,7 +75,7 @@ class G4ParticlePropertyMessenger: public G4UImessenger
     virtual G4String GetCurrentValue(G4UIcommand * command);
 
   private:
-    G4ParticlePropertyMessenger(const G4ParticlePropertyMessenger&){};
+    G4ParticlePropertyMessenger(const G4ParticlePropertyMessenger&):G4UImessenger(){};
 
   private:
     G4ParticleDefinition* SetCurrentParticle();

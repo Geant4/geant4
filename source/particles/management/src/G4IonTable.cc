@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.33 2003-03-10 08:43:53 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.34 2003-05-19 17:10:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -167,7 +167,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
 ////////////////////
 // -- GetIon methods  ------
 ////////////////////
-G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
+G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int , G4int )
 {
   return GetIon(Z, A);
 }
@@ -489,7 +489,7 @@ G4VIsotopeTable* G4IonTable::GetIsotopeTable() const
 
 
 ////////////////////
-G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4double E, G4int J)
+G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4double E, G4int )
 {
   if (fIsotopeTable ==0) return 0;
 
