@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagHelicalStepper.cc,v 1.6 2000-11-20 17:29:04 gcosmo Exp $
+// $Id: G4MagHelicalStepper.cc,v 1.7 2001-03-22 18:48:03 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagHelicalStepper.hh"
@@ -29,6 +29,9 @@ G4MagHelicalStepper::~G4MagHelicalStepper()
 {
 }
 
+// Constant for determining unit conversion when using normal as integrand.
+const G4double G4MagHelicalStepper::fUnitConstant = 0.299792458 * (GeV/(tesla*m));
+
 void
 G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 				   G4ThreeVector   Bfld,    
@@ -48,7 +51,13 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 
   G4double Bmag = Bfld.mag();
   const G4double *pIn = yIn+3;
-  G4ThreeVector initTangent= G4ThreeVector( pIn[0], pIn[1], pIn[2]);  
+  G4ThreeVector initMomentum= G4ThreeVector( pIn[0], pIn[1], pIn[2]);
+  G4double      momentumVal = initMomentum.mag();
+  G4ThreeVector initTangent = (1.0/momentumVal) * initMomentum;  // .unit();  
+
+  // fCof = fUnitConstant*particleCharge/MomentumXc;
+  G4double particleCharge = fPtrMagEqOfMot->FCof() / (eplus*c_light); 
+  G4double fCoefficient = (fUnitConstant / momentumVal) * particleCharge;
 
   // for too small magnetic fields there is no curvature
   // (include momentum here) FIXME
@@ -74,7 +83,8 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 
     // calculate the radius^-1 of the helix and the stepping angle
 
-    R_1  = - fPtrMagEqOfMot->FCof() * Bmag;  // / B_v_P - but this cancels
+    // R_1  = - fPtrMagEqOfMot->FCof() * Bmag;  // / B_v_P - but this cancels
+    R_1  = - fCoefficient * Bmag;  // / B_v_P - but this cancels
 
     // again in Theta - so we don't need it.
     if( fabs(R_1) < 1e-10 ) {
@@ -85,7 +95,7 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 
       // Trigonometrix
       
-      if( Theta < - approc_limit || Theta > approc_limit ) {
+      if( fabs(Theta) > approc_limit ) {
 	SinT2    = sin(0.5 * Theta);
 	CosT2    = cos(0.5 * Theta);
 	// SinT     = sin(Theta);
@@ -104,8 +114,9 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 
       // the actual "rotation"
 
-      positionMove  = h * ( CosT2 * vperp +
-			    SinT2 * B_x_P + vpar );
+      G4double R = 1.0 / R_1; 
+      // positionMove  = h * ( CosT2 * vperp + SinT2 * B_x_P + vpar );
+      positionMove  = R * ( SinT * vperp + (1-CosT) * B_x_P) + h * vpar;
       endTangent    = (CosT * vperp + SinT * B_x_P + vpar);
 
       // Store the resulting position and tangent
@@ -113,9 +124,9 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
       yHelix[1]   = yIn[1] + positionMove.y(); 
       yHelix[2]   = yIn[2] + positionMove.z(); 
 				
-      yHelix[3] = endTangent.x();
-      yHelix[4] = endTangent.y();
-      yHelix[5] = endTangent.z();
+      yHelix[3] = momentumVal * endTangent.x();
+      yHelix[4] = momentumVal * endTangent.y();
+      yHelix[5] = momentumVal * endTangent.z();
 
       // Store and/or calculate parameters for chord distance.
     }
