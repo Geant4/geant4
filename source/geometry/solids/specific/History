@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2002-01-10 16:27:42 gcosmo Exp $
+$Id: History,v 1.21 2002-05-08 13:51:26 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-May-2002, J.Allison (geom-solids-specific-V04-00-01)
+- Implemented G4EllipticalTube::CreatePolyhedron.
 
 10-Jan-2002, G.Cosmo (geom-solids-specific-V04-00-00)
 - Updated unit tests.

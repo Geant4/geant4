@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.10 2001-07-11 10:00:16 gunter Exp $
+// $Id: G4EllipticalTube.cc,v 1.11 2002-05-08 13:51:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -636,15 +636,11 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p ) const
 //
 G4Polyhedron* G4EllipticalTube::CreatePolyhedron() const
 {
-	if (dx==dy) {
-		//
-		// Special case (useful for debugging)
-		//
-		return new G4PolyhedronTubs( 0.0, dx, dz, 0, 2*M_PI );
-	}
-	
-	G4cerr << "G4EllipticalTube: visualization of this type of solid is not supported at this time" << G4endl;
-	return 0;
+        // create cylinder with radius=1...
+        G4Polyhedron* eTube = new G4PolyhedronTube(0.,1.,dz);
+        // apply non-uniform scaling...
+	eTube->Transform(G4Scale3D(dx,dy,1.));
+	return  eTube;
 }
 
 
