@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: lArCal.cc,v 1.1 2002-10-01 14:02:38 ahoward Exp $
+// $Id: lArCal.cc,v 1.2 2002-10-02 20:54:53 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,16 +30,16 @@
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "ExN03VisManager.hh"
+#include "FCALVisManager.hh"
 #endif
 
 #include "FCALTestbeamSetup.hh"
 #include "FCALPhysicsList.hh"
-#include "ExN03PrimaryGeneratorAction.hh"
-#include "ExN03RunAction.hh"
-#include "FcalTBEventAction.hh"
-#include "ExN03SteppingAction.hh"
-#include "ExN03SteppingVerbose.hh"
+#include "FCALPrimaryGeneratorAction.hh"
+#include "FCALRunAction.hh"
+#include "FCALTBEventAction.hh"
+#include "FCALSteppingAction.hh"
+#include "FCALSteppingVerbose.hh"
 
 int main(int argc,char** argv) {
 
@@ -47,7 +47,7 @@ int main(int argc,char** argv) {
   HepRandom::setTheEngine(new RanecuEngine);
   
   //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new ExN03SteppingVerbose);
+  G4VSteppingVerbose::SetInstance(new FCALSteppingVerbose);
      
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
@@ -71,15 +71,15 @@ int main(int argc,char** argv) {
   
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new ExN03VisManager;
+  G4VisManager* visManager = new FCALVisManager;
   visManager->Initialize();
 #endif
     
   // set user action classes
-  runManager->SetUserAction(new ExN03PrimaryGeneratorAction());
-  runManager->SetUserAction(new ExN03RunAction);
-  ExN03SteppingAction* StepAction = new ExN03SteppingAction;
-  runManager->SetUserAction(new FcalTBEventAction(StepAction));
+  runManager->SetUserAction(new FCALPrimaryGeneratorAction());
+  runManager->SetUserAction(new FCALRunAction);
+  FCALSteppingAction* StepAction = new FCALSteppingAction;
+  runManager->SetUserAction(new FCALTBEventAction(StepAction));
   runManager->SetUserAction(StepAction);
   
   //Initialize G4 kernel
