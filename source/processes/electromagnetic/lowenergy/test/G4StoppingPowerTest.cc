@@ -279,7 +279,6 @@ int main(int argc,char** argv)
   G4ProcessManager *gmanager, *elecManager, *positManager,  
                    *protManager, *aprotManager, *ionManager;
 
-
   string line, line1;
   G4bool end = true;
   for(G4int run=0; run<100; run++) {
