@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.cc,v 1.2 2002-04-09 17:40:16 gcosmo Exp $
+// $Id: G4ParallelTransport.cc,v 1.3 2002-05-02 08:43:24 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,7 +42,8 @@ G4ParallelTransport::G4ParallelTransport(G4VPGeoDriver &pgeodriver,
  : G4VProcess(aName), 
    fPgeodriver(pgeodriver),
    fPStepper(aStepper),
-   fCrossBoundary(false)
+  fCrossBoundary(false),
+  fInitStep(false)
 {
   fParticleChange = new G4ParticleChange;
   G4VProcess::pParticleChange = fParticleChange;
@@ -52,14 +53,21 @@ G4ParallelTransport::~G4ParallelTransport()
 {
   delete fParticleChange;
 }
-  
+
+
+void G4ParallelTransport::StartTracking(){
+  fInitStep = true;
+}
+void G4ParallelTransport::EndTracking(){}
+
 G4double 
 G4ParallelTransport::
 PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				     G4double   previousStepSize,
 				     G4ForceCondition* condition)
 {
-  if (aTrack.GetCurrentStepNumber()!=1 &&  previousStepSize==0.) {
+  if (aTrack.GetCurrentStepNumber()!=1 &&  previousStepSize==0. &&
+      ! fInitStep) {
     G4String m = "GPIL CurrentStepNumber() = ";
     m += str(aTrack.GetCurrentStepNumber()); 
     m += " &&  previousStepSize==0\n";
@@ -70,10 +78,12 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 
   G4double stepLength;
 
-  // if this function is called on a new track let the navigator know about it
-  G4bool initStep = (aTrack.GetCurrentStepNumber() == 1);
+  // if this function is called on a new track let the navigator 
+  // know about it
+  //  G4bool initStep = (aTrack.GetCurrentStepNumber() == 1);
 
-  if (initStep) {
+  if (fInitStep) {
+    fInitStep = false;
     stepLength = fPgeodriver.
       ComputeStepLengthInit(aTrack.GetPosition(),
 			    aTrack.GetMomentumDirection());

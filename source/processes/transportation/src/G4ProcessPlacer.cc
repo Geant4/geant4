@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.cc,v 1.2 2002-04-09 17:40:16 gcosmo Exp $
+// $Id: G4ProcessPlacer.cc,v 1.3 2002-05-02 08:43:24 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -47,29 +47,44 @@ G4ProcessPlacer::G4ProcessPlacer(const G4String &particlename)
 void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
 {
   G4cout << "  ProcessName: " << process->GetProcessName() << G4endl;
-  
+
   G4ProcessVector* processGPILVec = 
     GetProcessManager().GetPostStepProcessVector(typeGPIL);
   G4cout << "The initial GPILVec: " << G4endl;
   PrintProcVec(processGPILVec);
   G4int  lenGPIL = processGPILVec->length();
-
+  
   G4ProcessVector* processDoItVec = 
     GetProcessManager().GetPostStepProcessVector(typeDoIt); 
   G4cout << "The initial DoItVec: " << G4endl;
   PrintProcVec(processDoItVec);
-  
-  // the logic
-  if (sol == eSecond) {
-    processGPILVec->insertAt(lenGPIL-1, process);
-    processDoItVec->insertAt(1, process);
-  }
-  else if (sol == eLast) {
-    processGPILVec->insertAt(0, process);
-    processDoItVec->insert(process);
+
+  if (sol == eLast) {  
+    GetProcessManager().AddProcess(process,
+				   ordInActive,
+				   ordInActive,
+				   ordLast);
   } 
-  else {
-    G4cout << "G4ProcessPlacer::AddProcessAs Error" << G4endl;
+  else if (sol == eSecond) {
+    // get transportation process
+    G4VProcess *transportation = 
+     (* (GetProcessManager().GetProcessList()))[0];
+
+    if (!transportation) {
+      G4Exception(" G4ProcessPlacer:: could not get process id=0");
+    }
+    if (transportation->GetProcessName() != "Transportation") {
+      G4cout << transportation->GetProcessName() << G4endl;
+      G4Exception(" G4ProcessPlacer:: process id=0 is not Transportation");
+    }
+
+    // place the given proces as first for the moment
+    GetProcessManager().AddProcess(process);
+    GetProcessManager().SetProcessOrderingToFirst(process, 
+						  idxPostStep);
+    // place transportation first again
+    GetProcessManager().SetProcessOrderingToFirst(transportation, 
+						  idxPostStep);
   }
   
   // for verification inly
@@ -125,3 +140,5 @@ void G4ProcessPlacer::PrintProcVec(G4ProcessVector* processVec)
     G4cout << "   " << (*processVec)[pi]->GetProcessName() << G4endl;
   }
 }
+
+

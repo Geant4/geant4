@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.hh,v 1.3 2002-04-10 13:14:17 dressel Exp $
+// $Id: G4ParallelTransport.hh,v 1.4 2002-05-02 08:43:23 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -75,6 +75,10 @@ public:  // with description
     // move a track in a "parallel" geometry
     // and update a G4PArallelStepper
 
+  virtual void StartTracking();
+  virtual void EndTracking();
+
+
   G4VParallelStepper &GetPStepper(){return fPStepper;}
     // get the fPStepper
 
@@ -111,6 +115,7 @@ private:
   G4VPGeoDriver &fPgeodriver;
   G4VParallelStepper &fPStepper;
   G4bool fCrossBoundary;
+  G4bool fInitStep;
 
 };
 
