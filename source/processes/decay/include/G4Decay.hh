@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.hh,v 1.11 2004-08-13 08:16:59 kurasige Exp $
+// $Id: G4Decay.hh,v 1.12 2004-09-22 04:03:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -149,14 +149,14 @@ class G4Decay : public G4VRestDiscreteProcess
      void  SetVerboseLevel(G4int value);
      G4int GetVerboseLevel() const;
 
-  private:
+  protected:
      G4int verboseLevel;
      // controle flag for output message
      //  0: Silent
      //  1: Warning message
      //  2: More
 
-  private:
+  protected:
     // HighestValue.
     const G4double HighestValue;
  

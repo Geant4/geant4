@@ -106,8 +106,6 @@ G4VParticleChange* G4DecayWithSpin::DecayIt(const G4Track& aTrack, const G4Step&
 
        G4ThreeVector B(fieldValue[0],fieldValue[1],fieldValue[2]);
 
-       G4double fRemainderLifeTime = this->GetRemainderLifeTime();
-
        parent_polarization = Spin_Precession(aStep,B,fRemainderLifeTime);
 
     }

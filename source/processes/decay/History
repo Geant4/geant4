@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2004-09-21 21:44:49 gum Exp $
+$Id: History,v 1.18 2004-09-22 04:03:14 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,8 +20,6 @@ committal in the CVS repository !
 - Sep 17, 04 P. Gumplinger (decay-V06-02-02)
 - Add G4DecayWithSpin class and allow for dependency to
   /geometry/navigation in GNUmakefile
-
-- Aug. 13, 04 H.Kurashige(decay-V06-02-xx)
 - Fixed the problem of determination of particle's decay time
   for the case the particle stops due to energy loss.  
 
