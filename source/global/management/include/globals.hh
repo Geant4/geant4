@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: globals.hh,v 1.14 2000-01-06 14:27:09 gcosmo Exp $
+// $Id: globals.hh,v 1.15 2000-01-19 11:12:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,7 +45,9 @@
 #endif
 
 #include "g4std/algorithm"
-#define CLHEP_MAX_MIN_DEFINED
+#ifndef CLHEP_MAX_MIN_DEFINED
+  #define CLHEP_MAX_MIN_DEFINED
+#endif
 
 #if defined(WIN32) && defined(G4USE_STD_NAMESPACE)
 // For NT with Native STL (used in ISO standard mode)
