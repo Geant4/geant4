@@ -45,6 +45,19 @@
 
 class SoSeparator;
 
+template class RWTPtrSlistDictionary<RWCString, G4MaterialPropertyVector>;
+template class RWTPtrSlistDictionary<RWCString, G4ParticleDefinition>;
+template class RWTPtrSlistDictionary<int, G4ParticleDefinition>;
+template class RWTPtrSlistDictionaryIterator<RWCString, G4MaterialPropertyVector>;
+template class RWTPtrSlistDictionaryIterator<RWCString, G4ParticleDefinition>;
+template class RWTPtrSlistDictionaryIterator<int, G4ParticleDefinition>;
+template class RWTValSlistDictionary<RWCString, void*>;
+template class RWTValSlistDictionary<_WidgetRec*, RWCString>;
+template class RWTValSlistDictionary<const G4ParticleDefinition*, G4EnergyLossTablesHelper>;
+template class RWTValSlistDictionary<const G4VPhysicalVolume*, SoSeparator*>;
+template class RWTValSlistDictionary<unsigned long, int>;
+template class RWTValVector<yystype>;
+
 template class RWTPtrHashDictionary<RWCString, G4MaterialPropertyVector>;
 template class RWTPtrHashDictionary<RWCString, G4ParticleDefinition>;
 template class RWTPtrHashDictionary<int, G4ParticleDefinition>;
