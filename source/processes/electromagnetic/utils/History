@@ -1,4 +1,4 @@
-$Id: History,v 1.118 2003-10-30 16:21:01 gcosmo Exp $
+$Id: History,v 1.119 2003-11-03 19:39:57 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 Nov 03: V.Ivant (utils-V05-02-11)
+- Remove STD processes
+- Fix problem of RetrievePhysicsTable 
 
 30 Oct 03: G.Cosmo (utils-V05-02-10)
 - Fixed compilation problem on Windows in G4LossTableManager.cc for multiple
