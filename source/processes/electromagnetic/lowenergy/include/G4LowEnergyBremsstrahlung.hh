@@ -22,7 +22,7 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.29 2002-07-19 17:37:55 vnivanch Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.30 2002-07-19 17:44:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -79,7 +79,7 @@ public:
   
   void PrintInfoDefinition();
         
-  //protected:
+protected:
 
   G4double GetMeanFreePath(const G4Track& track,
 			   G4double previousStepSize,
