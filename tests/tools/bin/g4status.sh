@@ -18,10 +18,10 @@ fi
 ACCOUNT=stesting
 
 echo -e PID "\t" HOSTNAME "\t" FLAVOUR "\n"
-ps uaxw|grep $ACCOUNT|grep rsh|sort -k 15|awk '{print $2,$14,$15}' -|while read pid host pname
+ps uaxww|grep "l $ACCOUNT"|grep rsh|sort -k 15|awk '{print $2,$15,$16}' -|while read pid host pname
 do
 
-if [ X`echo $pname|cut -d "." -f2` = Xd ]
+if [ X`echo $pname|cut -d "." -f3` = Xd ]
  then
     flavour=DEBUG
  else
