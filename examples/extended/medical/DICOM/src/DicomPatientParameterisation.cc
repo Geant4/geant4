@@ -139,28 +139,28 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int, // NoVoxels,
   char sliceLocationBuf[300];
   char compressionBuf[300];
   char fullFileName[300];
-  readData = G4std::fopen("Data.dat","r");
-  G4std::fscanf(readData,"%s",compressionBuf);
+  readData = std::fopen("Data.dat","r");
+  std::fscanf(readData,"%s",compressionBuf);
   compression = atoi(compressionBuf);
-  G4std::fscanf(readData,"%s",maxBuf);
+  std::fscanf(readData,"%s",maxBuf);
   max = atoi(maxBuf);
-  G4std::fscanf(readData,"%s",name);
-  G4std::fclose(readData);
+  std::fscanf(readData,"%s",name);
+  std::fclose(readData);
 
-  G4std::sprintf(fullFileName,"%s.g4",name);
-  readData = G4std::fopen(fullFileName,"r");
+  std::sprintf(fullFileName,"%s.g4",name);
+  readData = std::fopen(fullFileName,"r");
 
-  G4std::fscanf(readData,"%s %s",rowsBuf,columnsBuf);
+  std::fscanf(readData,"%s %s",rowsBuf,columnsBuf);
   rows = atoi(rowsBuf);
   columns = atoi(columnsBuf);
-  G4std::fscanf(readData,"%s %s",pixelSpacingXBuf,pixelSpacingYBuf);
+  std::fscanf(readData,"%s %s",pixelSpacingXBuf,pixelSpacingYBuf);
   pixelSpacingX = atof(pixelSpacingXBuf);
   pixelSpacingY = atof(pixelSpacingYBuf);
-  G4std::fscanf(readData,"%s",sliceThicknessBuf);
+  std::fscanf(readData,"%s",sliceThicknessBuf);
   sliceThickness = atoi(sliceThicknessBuf);
-  G4std::fscanf(readData,"%s",sliceLocationBuf);
+  std::fscanf(readData,"%s",sliceLocationBuf);
   sliceLocation = atof(sliceLocationBuf);
-  G4std::fscanf(readData,"%s",compressionBuf);
+  std::fscanf(readData,"%s",compressionBuf);
   compression = atoi(compressionBuf);
     
   GetDensity( maxDensity , minDensity );

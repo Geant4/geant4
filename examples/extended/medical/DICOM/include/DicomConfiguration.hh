@@ -44,7 +44,7 @@
 #define DicomConfiguration_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 class DicomConfiguration
 {
@@ -63,7 +63,7 @@ public:
 
   G4int GetTotalNumberOfFile() {return totalNumberOfFile;}
 
-  G4std::vector<G4String> GetListOfFile() {return listOfFile;}
+  std::vector<G4String> GetListOfFile() {return listOfFile;}
 
   G4int GetTotalRows() {return totalRows;}
 
@@ -84,7 +84,7 @@ public:
 private:
   G4int compressionValue;
   G4int totalNumberOfFile;	
-  G4std::vector<G4String> listOfFile;
+  std::vector<G4String> listOfFile;
   G4int totalRows;
   G4int totalColumns;
   G4double xPixelSpacing;
@@ -92,7 +92,7 @@ private:
   G4double sliceTickness;
   G4double sliceLocation; 
   G4int compressionUsed;
-  G4std::vector<G4double> densityValue;	
+  std::vector<G4double> densityValue;	
 };
 #endif
 

@@ -38,7 +38,7 @@
 #define DicomPatientConstructor_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 class DicomPatientConstructor
 {

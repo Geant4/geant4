@@ -49,7 +49,7 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
-#include "g4std/vector"
+#include <vector>
 
 class DicomConfiguration;
 class DicomPatientConstructor;

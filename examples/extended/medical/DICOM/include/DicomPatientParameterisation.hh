@@ -39,7 +39,7 @@
 
 #include "globals.hh"
 #include "G4VPVParameterisation.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -144,10 +144,10 @@ private:
   G4double sliceThickness;
   G4double sliceLocation;
 
-  G4std::vector<G4double> density;
-  G4std::vector<G4double> patientPlacementX;
-  G4std::vector<G4double> patientPlacementY;
-  G4std::vector<G4double> patientPlacementZ;
+  std::vector<G4double> density;
+  std::vector<G4double> patientPlacementX;
+  std::vector<G4double> patientPlacementY;
+  std::vector<G4double> patientPlacementZ;
 
 
   //G4LogicalVolume* LogicalVolumeParam;
