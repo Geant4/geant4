@@ -1,4 +1,4 @@
-$Id: History,v 1.106 2001-10-04 17:52:59 pia Exp $
+$Id: History,v 1.107 2001-10-08 15:19:38 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08.10.2001 - MGP, tag emlowen-V03-02-24
+             Modified G4CrossSectionHandler to inherit from base class
+             Minor design iteration in G4VEMDataSet and G4VDataSetAlgorithm
+             Encapsulated range test to generate secondaries into a 
+             strategy pattern; implemented in photon processes
 
 04.10.2001 - MGP, tag emlowen-V03-02-23
              Fluorescence according to the new design introduced 
