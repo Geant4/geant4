@@ -17,11 +17,13 @@ Al
 #energy(MeV)
 585.
 #elim(MeV)
-20.
+2.
 #emaxpi(MeV)
 250.
 #emax(MeV)
-500.
+600.
+#nbinse
+120
 #nbinsd
 50
 #nbinspi

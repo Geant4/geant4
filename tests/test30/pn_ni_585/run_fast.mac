@@ -23,9 +23,9 @@ Ni
 #emax(MeV)
 600.
 #nbinse
-200
+120
 #nbinsd
-80
+50
 #nbinspi
 25
 #nangle

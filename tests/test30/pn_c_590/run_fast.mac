@@ -7,13 +7,13 @@
 #verbose
 0
 #events
-100000
+20000
 //--------Proton_processes
 #particle
 proton
 //--------
 #material
-Ni
+C
 #energy(MeV)
 585.
 #elim(MeV)
@@ -21,7 +21,7 @@ Ni
 #emaxpi(MeV)
 250.
 #emax(MeV)
-600.
+500.
 #nbinse
 120
 #nbinsd
@@ -39,21 +39,6 @@ Ni
 #anglespi
 22.5 45. 60. 90. 135.
 //--------
-#generator
-LEparametrisation
-#paw
-par.paw
-#run
-//#generator
-//preCompound
-//#paw
-//prec.paw
-//#run
-#generator
-CHIPS
-#paw
-chips.paw
-#run
 #generator
 kinetic
 #paw

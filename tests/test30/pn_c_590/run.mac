@@ -13,7 +13,7 @@
 proton
 //--------
 #material
-Ni
+C
 #energy(MeV)
 585.
 #elim(MeV)
