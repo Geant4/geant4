@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2002-12-09 10:06:15 gcosmo Exp $
+$Id: History,v 1.10 2003-01-30 10:56:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+January 30, 2003  Gabriele Cosmo (test01-V05-00-00)
+- Corrected technique for switching detector geometry, according to latest developments
+  in G4RunManager.
 
 December 9, 2002  Gabriele Cosmo (test01-V04-01-00)
 - Removed usage of obsolete libTools for histograms, removed from setup in GNUmakefile.

@@ -31,7 +31,7 @@
 #include "G4ios.hh"
 
 Tst10DetectorMessenger::Tst10DetectorMessenger(Tst10DetectorConstruction * myDC)
-:myDetector(myDC)
+  : myDetector(myDC)
 {
   G4String defParam;
 
@@ -49,12 +49,13 @@ Tst10DetectorMessenger::Tst10DetectorMessenger(Tst10DetectorConstruction * myDC)
   myDetector->SelectDetector(defParam="Sphere");
 }
 
-void Tst10DetectorMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
+void Tst10DetectorMessenger::SetNewValue(G4UIcommand * command,
+                                         G4String newValues)
 {
   if( command == selDetCmd )
   {
     myDetector->SelectDetector(newValues);
-		myDetector->SwitchDetector();
+    myDetector->SwitchDetector();
   }
   return;
 }

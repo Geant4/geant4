@@ -23,6 +23,7 @@
 
 #include "Tst01DetectorConstruction.hh"
 
+#include "G4ios.hh"
 #include "Tst01DetectorMessenger.hh"
 
 #include "G4Material.hh"
@@ -58,7 +59,7 @@
 #include "G4GeometryManager.hh"
 #include "G4StateManager.hh"
 #include "G4UImanager.hh"
-#include "G4ios.hh"
+#include "G4RunManager.hh"
 #include "G4TransportationManager.hh"
 
 //////////////////////////////////////////////////////////////////
@@ -123,33 +124,23 @@ void Tst01DetectorConstruction::SwitchDetector()
   { 
     case 1:
     {
-      G4TransportationManager::GetTransportationManager()->
-                               GetNavigatorForTracking()->
-                               SetWorldVolume(honeycombDetector);
       fWorldPhysVol = honeycombDetector ;
       break;
     }
     case 2:
     {
-      G4TransportationManager::GetTransportationManager()->
-                               GetNavigatorForTracking()->
-                               SetWorldVolume(AssemblyDetector);
       fWorldPhysVol = AssemblyDetector ;
       break;
     }
     default:
     {
-      G4TransportationManager::GetTransportationManager()->
-                               GetNavigatorForTracking()->
-                               SetWorldVolume(simpleBoxDetector);
       fWorldPhysVol = simpleBoxDetector ;
     }
   }
-  
-  G4ThreeVector center(0,0,0);
-  G4TransportationManager::GetTransportationManager()->
-                           GetNavigatorForTracking()->
-                           LocateGlobalPointAndSetup(center,0,false);
+  G4RunManager* theRunManager = G4RunManager::GetRunManager();
+  theRunManager->GeometryHasBeenModified();
+  theRunManager->DefineWorldVolume(fWorldPhysVol);
+  theRunManager->ResetNavigator();
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -457,7 +448,7 @@ void Tst01DetectorConstruction::ConstructDetectors()
 
   // Define world volume for Assembly detector
   G4Box* AssemblyBox                   = new G4Box( "AssemblyBox", worldX/2., worldY/2., worldZ/2. );
-  G4LogicalVolume* AssemblyDetectorLog = new G4LogicalVolume( AssemblyBox, selectedMaterial, "AssemblyDetectorLog", 0, 0, 0);
+  AssemblyDetectorLog                  = new G4LogicalVolume( AssemblyBox, selectedMaterial, "AssemblyDetectorLog", 0, 0, 0);
   AssemblyDetector                     = new G4PVPlacement(0, G4ThreeVector(), "AssemblyDetector", AssemblyDetectorLog, 0, false, 0);
 
   // Define a calorimeter plate

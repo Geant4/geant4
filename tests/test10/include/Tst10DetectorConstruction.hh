@@ -20,14 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10DetectorConstruction.hh,v 1.2 2001-07-11 10:09:48 gunter Exp $
+// $Id: Tst10DetectorConstruction.hh,v 1.3 2003-01-30 10:59:07 gcosmo Exp $
 // ------------------------------------------------------------
-//	GEANT 4 class header file 
+//  GEANT 4 class header file 
 //
 //      This class is a class derived from G4VUserDetectorConstruction
 //      for constructing all particles and processes.
 //
-//	History
+//  History
 //        first version              09 Sept. 1998 by S.Magni
 // ------------------------------------------------------------
 
@@ -50,17 +50,17 @@ class Tst10DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
      G4VPhysicalVolume* Construct();
-		 G4VPhysicalVolume* SelectDetector (G4String val);
-		 void SwitchDetector (void);
-		 void SetMaterial( void );
-	private:
-	   Tst10DetectorMessenger* detectorMessenger;
-		 G4VSolid* aVolume;
-		 G4VPhysicalVolume* PhysicalVolume;
-		 G4Material* Water;
-		 G4Material* Water1;
-		 G4OpticalSurface* aSurface;
+     G4VPhysicalVolume* SelectDetector (const G4String& val);
+     void SwitchDetector();
+     void SetMaterial();
+
+  private:
+     Tst10DetectorMessenger* detectorMessenger;
+     G4VSolid* aVolume;
+     G4VPhysicalVolume* PhysicalVolume;
+     G4Material* Water;
+     G4Material* Water1;
+     G4OpticalSurface* aSurface;
 };
 
 #endif
-

@@ -20,12 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10DetectorConstruction.cc,v 1.4 2001-07-11 10:09:48 gunter Exp $
+// $Id: Tst10DetectorConstruction.cc,v 1.5 2003-01-30 10:59:07 gcosmo Exp $
 // ------------------------------------------------------------
-//	GEANT 4 class header file 
+//  GEANT 4 class header file 
 //
 //      This is a version for maximum particle set
-//	History
+//  History
 //        first version              09  Sept. 1998 by S.Magni
 // ------------------------------------------------------------
 
@@ -56,142 +56,142 @@
 #include "G4GeometryManager.hh"
 #include "G4StateManager.hh"
 #include "G4UImanager.hh"
+#include "G4RunManager.hh"
 #include "G4ios.hh"
 
-Tst10DetectorConstruction::Tst10DetectorConstruction() {
+Tst10DetectorConstruction::Tst10DetectorConstruction()
+  : aVolume(0), PhysicalVolume(0), Water(0), Water1(0), aSurface(0)
+{
   detectorMessenger = new Tst10DetectorMessenger (this);
 }
 
-Tst10DetectorConstruction::~Tst10DetectorConstruction(){
-;
+Tst10DetectorConstruction::~Tst10DetectorConstruction()
+{
 }
 
-void Tst10DetectorConstruction::SwitchDetector( void ) {
-  G4UImanager::GetUIpointer()->ApplyCommand("/run/geometryModified"); 
-}
-G4VPhysicalVolume* Tst10DetectorConstruction::SelectDetector( G4String val ) {
-
-//------------------- A Volume ----------------------
-
-if (val == "Sphere")
-// 	aVolume = new G4Sphere ( "aSphere", 8.0*cm, 10.0*cm, 
-// 					 0.0*deg, 300.0*deg,30.0*deg, 110.0*deg);
-	aVolume = new G4Sphere ( "aSphere", 8.0*cm, 10.0*cm, 
-					 0.0*deg, 360.0*deg,0.0*deg, 130.0*deg);
-else if (val == "Box") 				 
-	aVolume = new G4Box ( "aBox", 10*cm, 10*cm, 10*cm );
-else if (val == "Cone") 			 
-	aVolume = new G4Cons ( "aCone", 2*cm, 6*cm, 8*cm, 14*cm, 10*cm, 10*deg,
-          	300*deg );	
-else if (val == "Tube")
-	aVolume = new G4Tubs ( "aTube", 5*cm, 10*cm, 7*cm, 70*deg, 100*deg);
-else if (val == "Hype")
-	aVolume = new G4Hype ("aHype", 10*cm, 20*cm, 0*deg, 360*deg, 10*cm );
-else if (val == "Torus")
-	aVolume = new G4Torus ("aTorus", 10*cm, 15*cm, 20*cm, 0*deg, 60*deg);
-else if (val == "Para")
-	aVolume = new G4Para ("aPara", 8*cm, 10*cm, 12*cm, 30*deg, 45*deg, 60*deg);
-else if (val == "Trd")
-	aVolume = new G4Trd ("aTrd", 8*cm, 10*cm, 7*cm, 9*cm, 10*cm);
-else {
-  G4cout << "You don't select valid shape " << G4endl;
-	exit (1);
+void Tst10DetectorConstruction::SwitchDetector()
+{
+  G4RunManager* theRunManager = G4RunManager::GetRunManager();
+  theRunManager->GeometryHasBeenModified();
+  theRunManager->DefineWorldVolume(PhysicalVolume);
+  theRunManager->ResetNavigator();
 }
 
-  G4Box * Hall 
-       = new G4Box("Hall", 1*m, 1*m, 1*m );
-  G4LogicalVolume * Hall_log 
-      = new G4LogicalVolume (Hall, Water, "Hall_L", 0,0,0);
+G4VPhysicalVolume*
+Tst10DetectorConstruction::SelectDetector( const G4String& val )
+{
+  //------------------- A Volume ----------------------
+
+  if (val == "Sphere")
+   aVolume = new G4Sphere ( "aSphere", 8.0*cm, 10.0*cm, 
+                             0.0*deg, 360.0*deg,0.0*deg, 130.0*deg);
+  else if (val == "Box")          
+    aVolume = new G4Box ( "aBox", 10*cm, 10*cm, 10*cm );
+  else if (val == "Cone")        
+    aVolume = new G4Cons ( "aCone", 2*cm, 6*cm, 8*cm, 14*cm,
+                           10*cm, 10*deg, 300*deg );  
+  else if (val == "Tube")
+    aVolume = new G4Tubs ( "aTube", 5*cm, 10*cm, 7*cm, 70*deg, 100*deg);
+  else if (val == "Hype")
+    aVolume = new G4Hype ("aHype", 10*cm, 20*cm, 0*deg, 360*deg, 10*cm );
+  else if (val == "Torus")
+    aVolume = new G4Torus ("aTorus", 10*cm, 15*cm, 20*cm, 0*deg, 60*deg);
+  else if (val == "Para")
+    aVolume = new G4Para ("aPara", 8*cm, 10*cm, 12*cm, 30*deg, 45*deg, 60*deg);
+  else if (val == "Trd")
+    aVolume = new G4Trd ("aTrd", 8*cm, 10*cm, 7*cm, 9*cm, 10*cm);
+  else
+  {
+    G4Exception("Tst10DetectorConstruction::SelectDetector() - Invalid shape!");
+  }
+
+  G4Box * Hall
+          = new G4Box("Hall", 1*m, 1*m, 1*m );
+  G4LogicalVolume * Hall_log
+          = new G4LogicalVolume (Hall, Water, "Hall_L", 0,0,0);
   PhysicalVolume
-      = new G4PVPlacement(0,G4ThreeVector(),"Hall_P", 
-	                  Hall_log, 0, false, 0);
+          = new G4PVPlacement(0,G4ThreeVector(),"Hall_P",Hall_log,0,false,0);
    
   G4LogicalVolume * aVolume_log 
-		= new G4LogicalVolume(aVolume, Water1, "aVolume_L", 0,0,0);
+    = new G4LogicalVolume(aVolume, Water1, "aVolume_L", 0,0,0);
   G4VPhysicalVolume * aVolume_phys1
-		= new G4PVPlacement(0,G4ThreeVector(50*cm, 0*cm, 0*cm),val, 
+    = new G4PVPlacement(0,G4ThreeVector(50*cm, 0*cm, 0*cm),val, 
                         aVolume_log, PhysicalVolume, false, 0);
   G4VPhysicalVolume * aVolume_phys2
-		= new G4PVPlacement(0,G4ThreeVector(-50*cm, 0*cm, 0*cm),val, 
+    = new G4PVPlacement(0,G4ThreeVector(-50*cm, 0*cm, 0*cm),val, 
                         aVolume_log, PhysicalVolume, false, 0);
   G4VPhysicalVolume * aVolume_phys3
-		= new G4PVPlacement(0,G4ThreeVector(0*cm, 50*cm, 0*cm),val, 
+    = new G4PVPlacement(0,G4ThreeVector(0*cm, 50*cm, 0*cm),val, 
                         aVolume_log, PhysicalVolume, false, 0);
   G4VPhysicalVolume * aVolume_phys4
-		= new G4PVPlacement(0,G4ThreeVector(0*cm, -50*cm, 0*cm),val, 
+    = new G4PVPlacement(0,G4ThreeVector(0*cm, -50*cm, 0*cm),val, 
                         aVolume_log, PhysicalVolume, false, 0);
   G4VPhysicalVolume * aVolume_phys5
-		= new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 50*cm),val, 
+    = new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 50*cm),val, 
                         aVolume_log, PhysicalVolume, false, 0);
   G4VPhysicalVolume * aVolume_phys6
-		= new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, -50*cm),val, 
+    = new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, -50*cm),val, 
                         aVolume_log, PhysicalVolume, false, 0);
 
+  // ------------ Surfaces definition ------------------
 
-// ------------ Surfaces definition ------------------
-
-	G4LogicalBorderSurface* BorderSurfaces[12]; 	
-	BorderSurfaces[0] = new G4LogicalBorderSurface("VolumeSurface",
+  G4LogicalBorderSurface* BorderSurfaces[12];   
+  BorderSurfaces[0] = new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aVolume_phys1,
                                aSurface);
-	BorderSurfaces[1] = new G4LogicalBorderSurface("VolumeSurface",
+  BorderSurfaces[1] = new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aVolume_phys2,
                                aSurface);
-	BorderSurfaces[2] = new G4LogicalBorderSurface("VolumeSurface",
+  BorderSurfaces[2] = new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aVolume_phys3,
                                aSurface);
-	BorderSurfaces[3] = new G4LogicalBorderSurface("VolumeSurface",
+  BorderSurfaces[3] = new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aVolume_phys4,
                                aSurface);
-	BorderSurfaces[4] = new G4LogicalBorderSurface("VolumeSurface",
+  BorderSurfaces[4] = new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aVolume_phys5,
                                aSurface);
-	BorderSurfaces[5] = new G4LogicalBorderSurface("VolumeSurface",
+  BorderSurfaces[5] = new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aVolume_phys6,
                                aSurface);
-	BorderSurfaces[6] = new G4LogicalBorderSurface("VolumeSurface",
+  BorderSurfaces[6] = new G4LogicalBorderSurface("VolumeSurface",
                                aVolume_phys1,
                                PhysicalVolume,
                                aSurface);
-	BorderSurfaces[7] = new G4LogicalBorderSurface("VolumeSurface",
+  BorderSurfaces[7] = new G4LogicalBorderSurface("VolumeSurface",
                                aVolume_phys2,
                                PhysicalVolume,
                                aSurface);
-	BorderSurfaces[8] = new G4LogicalBorderSurface("VolumeSurface",
+  BorderSurfaces[8] = new G4LogicalBorderSurface("VolumeSurface",
                                aVolume_phys3,
                                PhysicalVolume,
                                aSurface);
-	BorderSurfaces[9] = new G4LogicalBorderSurface("VolumeSurface",
+  BorderSurfaces[9] = new G4LogicalBorderSurface("VolumeSurface",
                                aVolume_phys4,
                                PhysicalVolume,
                                aSurface);
-	BorderSurfaces[10] = new G4LogicalBorderSurface("VolumeSurface",
+  BorderSurfaces[10] = new G4LogicalBorderSurface("VolumeSurface",
                                aVolume_phys5,
                                PhysicalVolume,
                                aSurface);
-	BorderSurfaces[11] = new G4LogicalBorderSurface("VolumeSurface",
+  BorderSurfaces[11] = new G4LogicalBorderSurface("VolumeSurface",
                                aVolume_phys6,
                                PhysicalVolume,
                                aSurface);
-															 
-G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()
-                ->SetWorldVolume(PhysicalVolume);
-//if (G4VVisManager::GetConcreteInstance()!=NULL)
-//  G4VVisManager::GetConcreteInstance()->SetWorldVolume(PhysicalVolume);
 
-G4cout << "You select " << val << " detector" << G4endl;
+  G4cout << "You select " << val << " detector" << G4endl;
 
-return PhysicalVolume;
+  return PhysicalVolume;
 }
 
-void Tst10DetectorConstruction::SetMaterial( void ) {
-
+void Tst10DetectorConstruction::SetMaterial()
+{
   G4String name, symbol;
   G4double density = 1.00*g/cm3;
   G4double a, iz;
@@ -212,13 +212,13 @@ void Tst10DetectorConstruction::SetMaterial( void ) {
   G4double RINDEX_WATER1 [NUMENTRIES];
   G4double REFLECTIVITY [NUMENTRIES];
   G4double EFFICIENCY [NUMENTRIES];
-	
+  
   for (int i=0; i<NUMENTRIES; i++) {
-	  RINDEX_WATER1[i]=5.0;
-	  RINDEX_WATER[i]=1.33;
-	  REFLECTIVITY[i]=0.9;
-	  EFFICIENCY[i]=1.0;
-	}	
+    RINDEX_WATER1[i]=5.0;
+    RINDEX_WATER[i]=1.33;
+    REFLECTIVITY[i]=0.9;
+    EFFICIENCY[i]=1.0;
+  }  
   G4double PHENERGY[NUMENTRIES] =
             { 0.0, 1.0, 2.0, 3.0, 4.0};
   G4MaterialPropertiesTable *WaterMPT = new G4MaterialPropertiesTable();
@@ -236,18 +236,13 @@ void Tst10DetectorConstruction::SetMaterial( void ) {
   SurfaceMPT->AddProperty("REFLECTIVITY", PHENERGY, REFLECTIVITY, NUMENTRIES);
   SurfaceMPT->AddProperty("EFFICIENCY", PHENERGY, EFFICIENCY, NUMENTRIES);
   aSurface->SetMaterialPropertiesTable ( SurfaceMPT );
-
-
 }
-G4VPhysicalVolume* Tst10DetectorConstruction::Construct() {
 
+G4VPhysicalVolume* Tst10DetectorConstruction::Construct()
+{
   SetMaterial();
 
-//-------------------Hall ----------------------------------
-	
-  G4VPhysicalVolume * Hall_phys = SelectDetector ("Sphere");
-
-  return Hall_phys;
+  //-------------------Hall ----------------------------------
+  
+  return SelectDetector ("Sphere");
 }
-
-
