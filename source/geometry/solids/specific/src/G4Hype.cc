@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.15 2004-12-02 09:31:32 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.16 2004-12-10 16:22:38 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -170,7 +170,7 @@ G4bool G4Hype::CalculateExtent( const EAxis axis,
   // defined in meshdefs.hh
   //
   G4int numPhi = kMaxMeshSections;
-  G4double sigPhi = 2*M_PI/numPhi;
+  G4double sigPhi = twopi/numPhi;
   G4double rFudge = 1.0/std::cos(0.5*sigPhi);
   
   //

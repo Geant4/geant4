@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator4.cc,v 1.3 2003-12-05 17:07:06 gcosmo Exp $
+// $Id: testG4Navigator4.cc,v 1.4 2004-12-10 16:20:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,7 +115,7 @@ G4VPhysicalVolume* BuildGeometry()
 						 "Container3",0,0,0);
     
     G4RotationMatrix *rot=new G4RotationMatrix();
-    rot->rotateZ(M_PI/2);
+    rot->rotateZ(pi/2);
     G4PVPlacement *box3Phys=new G4PVPlacement(rot,G4ThreeVector(35,35,35),
 					      "Container3",box3Log,
 					      worldPhys,false,0);

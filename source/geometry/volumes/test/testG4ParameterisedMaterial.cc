@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $ $
+// $Id: testG4ParameterisedMaterial.cc,v 1.8 2004-12-10 16:20:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -139,7 +139,7 @@ private:
     G4double fTwistAngle;
 };
 
-G4double    angle1= 15.0*M_PI/180.;
+G4double    angle1= 15.0*pi/180.;
 MoveRot_andMaterial myParam(angle1);
 
 // Build simple geometry:

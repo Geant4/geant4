@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPara.cc,v 1.9 2004-12-02 09:31:22 gcosmo Exp $
+// $Id: G4ParameterisationPara.cc,v 1.10 2004-12-10 16:20:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPara Implementation file
@@ -64,7 +64,7 @@ G4VParameterisationPara( EAxis axis, G4int nDiv, G4double width,
                    msol->GetYHalfLength(),
                    msol->GetZHalfLength(),
                    std::atan(msol->GetTanAlpha()),
-                   M_PI - msol->GetSymAxis().theta(),
+                   pi - msol->GetSymAxis().theta(),
                    msol->GetSymAxis().phi());
    
     msol = newSolid;

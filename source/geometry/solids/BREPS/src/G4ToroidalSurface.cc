@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ToroidalSurface.cc,v 1.8 2004-12-02 09:31:27 gcosmo Exp $
+// $Id: G4ToroidalSurface.cc,v 1.9 2004-12-10 16:22:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -398,8 +398,8 @@ G4int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
     G4double t = 2 * std::sqrt(-p);
     
     s[ 0 ] =   t * std::cos(phi);
-    s[ 1 ] = - t * std::cos(phi + M_PI / 3);
-    s[ 2 ] = - t * std::cos(phi - M_PI / 3);
+    s[ 1 ] = - t * std::cos(phi + pi / 3);
+    s[ 2 ] = - t * std::cos(phi - pi / 3);
     num = 3;
   }
   else // one real solution 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01DetectorConstruction.cc,v 1.4 2004-12-02 09:31:34 gcosmo Exp $
+// $Id: Sc01DetectorConstruction.cc,v 1.5 2004-12-10 16:22:40 gcosmo Exp $
 // 
 //  GEANT 4 class header file 
 //
@@ -382,7 +382,7 @@ G4String cryoMotherName = "LAr::Barrel::Cryostat::MotherVolume";
 G4Polycone* cryoMotherShape =
    new G4Polycone(cryoMotherName,          // name
                    0.,                     // starting phi
-                   2.*M_PI,                // total phi
+                   twopi,                  // total phi
                    lastPlaneCryo,          // number of z planes
                    cryoMotherZplan,        // position of z planes    
                    cryoMotherRin,          // tangent distance to inner surface

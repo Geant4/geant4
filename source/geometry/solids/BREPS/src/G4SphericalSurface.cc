@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SphericalSurface.cc,v 1.8 2004-12-02 09:31:27 gcosmo Exp $
+// $Id: G4SphericalSurface.cc,v 1.9 2004-12-10 16:22:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,9 +45,9 @@ G4SphericalSurface::G4SphericalSurface() : G4Surface()
 	z_axis = G4Vector3D( 0.0, 0.0, 1.0 );
         radius = 1.0;
 	phi_1 = 0.0;
-	phi_2 = 2*M_PI;
+	phi_2 = 2*pi;
 	theta_1 = 0.0;
-	theta_2 = M_PI;
+	theta_2 = pi;
 	//	OuterBoundary = new G4BREPPolyline();
     }
 */
@@ -61,9 +61,6 @@ G4SphericalSurface::G4SphericalSurface( const G4Vector3D&,
 					G4double th1, G4double th2) 
   //: G4Surface( o )
 { 
-  // Normal constructor
-  G4double twopi = 2.0 * M_PI;
-
   // Require both x_axis and z_axis to be unit vectors
   G4double xhatmag = xhat.mag();
   if ( xhatmag != 0.0 )
@@ -104,7 +101,7 @@ G4SphericalSurface::G4SphericalSurface( const G4Vector3D&,
 
   //  Require phi_1 in the range: 0 <= phi_1 < 2*PI
   //  and phi_2 in the range: phi_1 < phi_2 <= phi_1 + 2*PI
-  if ( ( ph1 >= 0.0 ) && ( ph1 < 2*M_PI ) )
+  if ( ( ph1 >= 0.0 ) && ( ph1 < 2*pi ) )
     phi_1 = ph1;	
   else 
   {
@@ -128,7 +125,7 @@ G4SphericalSurface::G4SphericalSurface( const G4Vector3D&,
 	 
   //  Require theta_1 in the range: 0 <= theta_1 < PI 
   //  and theta-2 in the range: theta_1 < theta_2 <= theta_1 + PI
-  if ( ( th1 >= 0.0 ) && ( th1 < M_PI ) ) 
+  if ( ( th1 >= 0.0 ) && ( th1 < pi ) ) 
     theta_1 = th1;
   else
   {
@@ -139,7 +136,7 @@ G4SphericalSurface::G4SphericalSurface( const G4Vector3D&,
     theta_1 = 0.0;
   }	  
   
-  if  ( ( th2 > theta_1 ) && ( th2 <= ( theta_1 + M_PI ) ) ) 
+  if  ( ( th2 > theta_1 ) && ( th2 <= ( theta_1 + pi ) ) ) 
     theta_2 =th2;	      
   else 
   {
@@ -147,7 +144,7 @@ G4SphericalSurface::G4SphericalSurface( const G4Vector3D&,
 	   << "--upper polar limit is out of range\n"
 	   << "\tDefault angle of PI is used.\n";
     
-    theta_2 = M_PI;
+    theta_2 = pi;
   } 
 }
 
@@ -466,8 +463,8 @@ G4double G4SphericalSurface::distanceAlongHelix( G4int which_way,
 			s[0] = -s[0];
 			s[1] = -s[1];
 		}
-		s[2] = s[0] + 2.0 * M_PI;
-		s[3] = s[1] + 2.0 * M_PI;
+		s[2] = s[0] + twopi;
+		s[3] = s[1] + twopi;
 	}
 //
 //  Order the possible solutions by increasing turning angle
@@ -678,7 +675,7 @@ G4int G4SphericalSurface::WithinBoundary( const G4Vector3D& x ) const
   G4double theta = std::acos( pz / x.mag() );  // acos in range 0 to PI
   
   //  Normal case
-  if ( theta_2 <= M_PI ) 
+  if ( theta_2 <= pi ) 
   {
     if ( ( theta < theta_1 ) || ( theta > theta_2 ) )
       return 0;
@@ -687,14 +684,13 @@ G4int G4SphericalSurface::WithinBoundary( const G4Vector3D& x ) const
   //  this is for the case that theta_2 is greater than PI
   else 
   {
-    theta += M_PI;
+    theta += pi;
     if ( ( theta < theta_1 ) || ( theta > theta_2 ) )
       return 0;
   }
 
   //  now check if within azimuthal angle limits
   G4double phi = std::atan2( py, px );  // atan2 in range -PI to PI
-  G4double twopi = 2.0 * M_PI;
   
   if ( phi < 0.0 )
     phi += twopi;
@@ -729,7 +725,7 @@ G4double G4SphericalSurface::Scale() const
 G4double G4SphericalSurface::Area() const
 {
   //  Returns the Area of a G4SphericalSurface
-  return ( 2.0*( theta_2 - theta_1 )*( phi_2 - phi_1)*radius*radius/M_PI );
+  return ( 2.0*( theta_2 - theta_1 )*( phi_2 - phi_1)*radius*radius/pi );
 }
 
 
@@ -752,7 +748,6 @@ void G4SphericalSurface::resize( G4double r,
   }
 
   //  Require azimuthal angles to be within bounds
-  G4double twopi = 2.0 * M_PI;
   
   if ( ( ph1 >= 0.0 ) && ( ph1 < twopi ) )
     phi_1 = ph1;
@@ -775,7 +770,7 @@ void G4SphericalSurface::resize( G4double r,
   }
 
   //  Require polar angles to be within bounds
-  if ( ( th1 >= 0.0 ) && ( th1 < M_PI ) )
+  if ( ( th1 >= 0.0 ) && ( th1 < pi ) )
     theta_1 = th1;
   else 
   {
@@ -784,7 +779,7 @@ void G4SphericalSurface::resize( G4double r,
 	   << "\tOriginal value of " << theta_1 << " is retained.\n";
   }
   
-  if ( ( th2 > theta_1 ) && ( th2 <= ( theta_1 + M_PI ) ) )
+  if ( ( th2 > theta_1 ) && ( th2 <= ( theta_1 + pi ) ) )
     theta_2 = th2;
   else
   {
@@ -859,7 +854,7 @@ G4double G4SphericalSurface::gropeAlongHelix( const Helix* hx ) const
 //  Take up to a user-settable number of turns along the Helix,
 //  groping for an intersection point.
 	for ( G4int k = 1; k < max_iter; k++ ) {
-		turn_angle = 2.0 * M_PI * k / one_over_f;
+		turn_angle = twopi * k / one_over_f;
 		dist_along = turn_angle * std::fabs( rhp );
 		d_new = HowNear( hx->position( dist_along ) );
 		if ( ( d_old < 0.0 && d_new > 0.0 ) ||
@@ -873,7 +868,7 @@ G4double G4SphericalSurface::gropeAlongHelix( const Helix* hx ) const
 				itr++;
 				if ( itr > 50 )
 					return turn_angle;
-				turn_angle -= fk * M_PI;
+				turn_angle -= fk * pi;
 				dist_along = turn_angle * std::fabs( rhp );
 				d_new = HowNear( hx->position( dist_along ) );
 				if ( ( d_old < 0.0 && d_new > 0.0 ) ||

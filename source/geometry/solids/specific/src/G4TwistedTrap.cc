@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TwistedTrap.cc,v 1.4 2004-12-02 09:31:33 gcosmo Exp $
+// $Id: G4TwistedTrap.cc,v 1.5 2004-12-10 16:22:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,7 @@ G4TwistedTrap::G4TwistedTrap(const G4String &pname,
        && ( pDy   > 2*kCarTolerance)
        && ( pDz   > 2*kCarTolerance) 
        && ( std::fabs(twistedangle) > 2*kAngTolerance )
-       && ( std::fabs(twistedangle) < M_PI/2 ) )
+       && ( std::fabs(twistedangle) < halfpi ) )
     {
       
       SetFields(twistedangle, pDx1, pDx2, pDy, pDz);

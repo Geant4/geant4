@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidSphere.cc,v 1.8 2004-12-02 09:31:25 gcosmo Exp $
+// $Id: G4BREPSolidSphere.cc,v 1.9 2004-12-10 16:22:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,9 +43,9 @@ G4BREPSolidSphere::G4BREPSolidSphere(const G4String& name,
 {
   SurfaceVec    = new G4Surface*[1];
   G4double ph1  = 0;
-  G4double ph2  = 2*M_PI;
+  G4double ph2  = 2*pi;
   G4double th1  = 0;
-  G4double th2  = M_PI;
+  G4double th2  = pi;
   SurfaceVec[0] = new G4SphericalSurface(origin, xhat, zhat, radius, ph1, ph2, th1, th2);
   nb_of_surfaces = 1;
   

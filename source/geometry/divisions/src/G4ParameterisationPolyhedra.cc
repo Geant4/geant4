@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc,v 1.9 2004-12-02 09:31:22 gcosmo Exp $
+// $Id: G4ParameterisationPolyhedra.cc,v 1.10 2004-12-10 16:20:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolyhedra Implementation file
@@ -105,8 +105,8 @@ ConvertRadiusFactor(const G4Polyhedra& phedra) const
   G4double phiTotal = phedra.GetEndPhi() - phedra.GetStartPhi();
   G4int nofSides = phedra.GetOriginalParameters()->numSide;
   
-  if ( (phiTotal <=0) || (phiTotal > 2*M_PI+kAngTolerance) )
-    phiTotal = 2*M_PI;
+  if ( (phiTotal <=0) || (phiTotal > 2*pi+kAngTolerance) )
+    phiTotal = 2*pi;
   
   return std::cos(0.5*phiTotal/nofSides);
 }  

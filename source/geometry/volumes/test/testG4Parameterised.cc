@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Parameterised.cc,v 1.8 2004-12-02 09:31:35 gcosmo Exp $
+// $Id: testG4Parameterised.cc,v 1.9 2004-12-10 16:20:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,7 +122,7 @@ private:
     G4double fTwistAngle;
 };
 
-G4double    angle1= 15.0*M_PI/180.;
+G4double    angle1= 15.0*pi/180.;
 MoveNRotate myParam(angle1);
 
 

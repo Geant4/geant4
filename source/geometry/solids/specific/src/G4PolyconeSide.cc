@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.9 2004-12-02 09:31:32 gcosmo Exp $
+// $Id: G4PolyconeSide.cc,v 1.10 2004-12-10 16:22:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,8 +73,8 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
     //
     // Set phi values to our conventions
     //
-    while (deltaPhi < 0.0) deltaPhi += 2.0*M_PI;
-    while (startPhi < 0.0) startPhi += 2.0*M_PI;
+    while (deltaPhi < 0.0) deltaPhi += twopi;
+    while (startPhi < 0.0) startPhi += twopi;
     
     //
     // Calculate corner coordinates
@@ -92,7 +92,7 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
   }
   else
   {
-    deltaPhi = 2*M_PI;
+    deltaPhi = twopi;
     startPhi = 0.0;
   }
   
@@ -466,7 +466,7 @@ G4double G4PolyconeSide::Extent( const G4ThreeVector axis )
   if (phiIsOpen)
   {
     G4double phi = axis.phi();
-    while( phi < startPhi ) phi += 2*M_PI;
+    while( phi < startPhi ) phi += twopi;
     
     if (phi > deltaPhi+startPhi)
     {
@@ -896,7 +896,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
     // Finally, check phi
     //
     G4double phi = p.phi();
-    while( phi < startPhi ) phi += 2*M_PI;
+    while( phi < startPhi ) phi += twopi;
     
     if (phi > startPhi+deltaPhi)
     {
@@ -904,7 +904,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
       // Oops. Are we closer to the start phi or end phi?
       //
       G4double d1 = phi-startPhi-deltaPhi;
-      while( phi > startPhi ) phi -= 2*M_PI;
+      while( phi > startPhi ) phi -= twopi;
       G4double d2 = startPhi-phi;
       
       if (d2 < d1) d1 = d2;
@@ -949,7 +949,7 @@ G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector &hit,
     // PolyPhiFace. See PolyPhiFace::InsideEdgesExact
     //
     G4double phi = hit.phi();
-    while( phi < startPhi-phiTolerant ) phi += 2*M_PI;
+    while( phi < startPhi-phiTolerant ) phi += twopi;
     
     if (phi > startPhi+deltaPhi+phiTolerant) return false;
     

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testExitNormalNav.cc,v 1.5 2003-12-01 16:19:10 gcosmo Exp $
+// $Id: testExitNormalNav.cc,v 1.6 2004-12-10 16:20:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   Testing the product of Exit Normal of the Navigator for
@@ -60,27 +60,27 @@ G4VPhysicalVolume* BuildGeometry()
     prot90d_X =  new G4RotationMatrix();
     prot180d_X = new G4RotationMatrix();
     prot270d_X = new G4RotationMatrix();
-    prot90d_X->rotateX(M_PI*0.5);
-    prot180d_X->rotateX(M_PI);
-    prot270d_X->rotateX(M_PI*1.5);
+    prot90d_X->rotateX(pi*0.5);
+    prot180d_X->rotateX(pi);
+    prot270d_X->rotateX(pi*1.5);
 
     // Rotations in Y
     G4RotationMatrix *prot90d_Y, *prot180d_Y, *prot270d_Y;
     prot90d_Y =  new G4RotationMatrix();
     prot180d_Y = new G4RotationMatrix();
     prot270d_Y = new G4RotationMatrix();
-    prot90d_Y->rotateY(M_PI*0.5);
-    prot180d_Y->rotateY(M_PI);
-    prot270d_Y->rotateY(M_PI*1.5);
+    prot90d_Y->rotateY(pi*0.5);
+    prot180d_Y->rotateY(pi);
+    prot270d_Y->rotateY(pi*1.5);
 
     // Rotations in Z
     G4RotationMatrix *prot90d_Z, *prot180d_Z, *prot270d_Z;
     prot90d_Z =  new G4RotationMatrix();
     prot180d_Z = new G4RotationMatrix();
     prot270d_Z = new G4RotationMatrix();
-    prot90d_Z->rotateZ(M_PI*0.5);
-    prot180d_Z->rotateZ(M_PI);
-    prot270d_Z->rotateZ(-M_PI*0.5);
+    prot90d_Z->rotateZ(pi*0.5);
+    prot180d_Z->rotateZ(pi);
+    prot270d_Z->rotateZ(-pi*0.5);
 
     // Solids
     G4Box *myBigBox=  new G4Box("BigBox-World",200.*cm,200.*cm,200.*cm);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.9 2004-12-02 09:31:23 gcosmo Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.10 2004-12-10 16:20:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -297,7 +297,7 @@ G4ReplicaNavigation::DistanceToOutPhi(const G4ThreeVector &localPoint,
                                       const G4double width) const
 {
   // Phi Intersection
-  // NOTE: width<=M_PI by definition
+  // NOTE: width<=pi by definition
   //
   G4double sinSPhi, cosSPhi;
   G4double pDistS, pDistE, compS, compE, Dist, dist2, yi;

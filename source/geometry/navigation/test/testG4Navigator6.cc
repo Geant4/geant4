@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator6.cc,v 1.3 2004-12-02 09:31:24 gcosmo Exp $
+// $Id: testG4Navigator6.cc,v 1.4 2004-12-10 16:20:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,7 +69,7 @@ const G4double kTubeNoRow = 10;
 const G4double kTubeNoColumn = 11; // Should be odd for symmetrical array
 
 const G4double kBoxDx=kTubeNoRow*kTubeRadius;
-const G4double yDelta=2.0*kTubeRadius*std::sin(M_PI/3.0);
+const G4double yDelta=2.0*kTubeRadius*std::sin(pi/3.0);
 const G4double kBoxDy=(kTubeNoColumn-1)*yDelta*0.5+kTubeRadius;
 const G4double kBoxDz=kTubeHalfHeight;
 

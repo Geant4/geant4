@@ -251,8 +251,8 @@ G4int G4ApproxPolySolver::SolveCubic( G4double c[], G4double s[] ) const
     G4double t = 2 * std::sqrt(-p);
 
     s[ 0 ] =   t * std::cos(phi);
-    s[ 1 ] = - t * std::cos(phi + M_PI / 3);
-    s[ 2 ] = - t * std::cos(phi - M_PI / 3);
+    s[ 1 ] = - t * std::cos(phi + pi / 3);
+    s[ 2 ] = - t * std::cos(phi - pi / 3);
     num = 3;
   }
   else // one real solution 

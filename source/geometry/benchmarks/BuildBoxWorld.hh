@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildBoxWorld.hh,v 1.5 2002-01-09 16:17:55 gcosmo Exp $
+// $Id: BuildBoxWorld.hh,v 1.6 2004-12-10 16:20:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef BUILDBOXWORLD_HH
@@ -37,7 +37,7 @@ G4VPhysicalVolume* BuildBoxWorld()
 {
     G4Box *myWorldBox= new G4Box ("WBox",10000*mm,10000*mm,10000*mm);
     G4Box *myTargetBox = new G4Box ("TBox",100*mm,200*mm,400*mm);
-    //G4Cons *myTargetBox = new G4Cons ("TBox",100*mm,200*mm,400*mm,600*mm,200*mm,0,2*M_PI);
+    //G4Cons *myTargetBox = new G4Cons ("TBox",100*mm,200*mm,400*mm,600*mm,200*mm,0,2*pi);
  
     G4LogicalVolume *myWorldLog=new G4LogicalVolume(myWorldBox,0,
 						    "WLog",0,0,0);

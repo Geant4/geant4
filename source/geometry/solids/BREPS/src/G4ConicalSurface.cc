@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConicalSurface.cc,v 1.9 2004-12-02 09:31:25 gcosmo Exp $
+// $Id: G4ConicalSurface.cc,v 1.10 2004-12-10 16:22:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -71,12 +71,12 @@ G4ConicalSurface::G4ConicalSurface( const G4Point3D&,
   }
 
   //  Require angle to range from 0 to PI/2
-  if ( ( e > 0.0 ) && ( e < ( 0.5 * M_PI ) ) )
+  if ( ( e > 0.0 ) && ( e < ( 0.5 * pi ) ) )
     angle = e;
   else {
     G4cerr << "WARNING - G4ConicalSurface::G4ConicalSurface" << G4endl
 	   << "\tAsked for angle out of allowed range of 0 to "
-	   << 0.5*M_PI << " (PI/2): " << e << G4endl
+	   << 0.5*pi << " (PI/2): " << e << G4endl
 	   << "\tDefault angle of 1.0 is used." << G4endl;    
 
     angle = 1.0;
@@ -343,8 +343,8 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
    s[0] = -s[0];
    s[1] = -s[1];
    }
-   s[2] = s[0] + 2.0 * M_PI;
-   s[3] = s[1] + 2.0 * M_PI;
+   s[2] = s[0] + 2.0 * pi;
+   s[3] = s[1] + 2.0 * pi;
    }
    }
    //
@@ -559,8 +559,8 @@ void G4ConicalSurface::SetAngle( G4double e )
 {
   //  Reset the angle of the G4ConicalSurface
   //  Require angle to range from 0 to PI/2
-  //	if ( ( e > 0.0 ) && ( e < ( 0.5 * M_PI ) ) )
-  if ( (e > 0.0) && (e <= ( 0.5 * M_PI )) )
+  //	if ( ( e > 0.0 ) && ( e < ( 0.5 * pi ) ) )
+  if ( (e > 0.0) && (e <= ( 0.5 * pi )) )
     angle = e;
   //  use old value (do not change angle) if out of the range, 
   //but Print message
@@ -568,7 +568,7 @@ void G4ConicalSurface::SetAngle( G4double e )
   {
     G4cerr << "WARNING - G4ConicalSurface::SetAngle" << G4endl
 	   << "\tAsked for angle out of allowed range of 0 to "
-	   << 0.5*M_PI << " (PI/2):" << e << G4endl
+	   << 0.5*pi << " (PI/2):" << e << G4endl
 	   << "\tDefault angle of " << angle << " is used." << G4endl;
   }
 }

@@ -809,7 +809,7 @@ void G4InteractiveSolid::MakeMeBooleanSolid1(G4String)
 	
 	
 	G4RotationMatrix rm;
-	rm.rotateY(M_PI/4.0);
+	rm.rotateY(pi/4.0);
 
 	G4Transform3D tran = G4Transform3D(rm,G4ThreeVector(0.0,0.0,0.0));
 	

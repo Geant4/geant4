@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.hh,v 1.10 2004-09-22 08:25:32 gcosmo Exp $
+// $Id: G4Cons.hh,v 1.11 2004-12-10 16:22:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,7 +36,7 @@
 //   half-length fDz, inner and outer radii specified at -fDz and +fDz.
 //   The Phi segment is described by a starting fSPhi angle, and the
 //   +fDPhi delta angle for the shape.
-//   If the delta angle is >=2*M_PI, the shape is treated as continuous
+//   If the delta angle is >=2*pi, the shape is treated as continuous
 //   in Phi
 //
 //   Member Data:

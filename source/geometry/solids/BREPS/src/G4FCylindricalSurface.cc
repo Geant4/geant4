@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FCylindricalSurface.cc,v 1.14 2004-12-02 09:31:26 gcosmo Exp $
+// $Id: G4FCylindricalSurface.cc,v 1.15 2004-12-10 16:22:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -103,7 +103,7 @@ void G4FCylindricalSurface::PrintOn( std::ostream& os ) const
 
 G4double G4FCylindricalSurface::Area() const 
 {
-  return ( 2.0 * M_PI * radius * length );
+  return ( 2.0 * pi * radius * length );
 }
 
 

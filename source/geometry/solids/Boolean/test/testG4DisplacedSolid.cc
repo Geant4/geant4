@@ -93,7 +93,7 @@ int main()
     
 // NOTE: xRot = rotation such that x axis->y axis & y axis->-x axis
 
-    xRot.rotateZ(-M_PI*0.5) ;
+    xRot.rotateZ(-pi*0.5) ;
 
     G4Transform3D transform(xRot,pzero) ;
 
@@ -103,10 +103,10 @@ int main()
 
     G4Tubs t1("Solid Tube #1",0,50,50,0,360);
     G4Tubs t2("Hole Tube #2",45,50,50,0,360);
-    G4Tubs t3("Solid cutted Tube #3",0,50,50,0,M_PI/2.0);
+    G4Tubs t3("Solid cutted Tube #3",0,50,50,0,pi/2.0);
 
-    G4Cons c1("Hollow Full Tube",50,100,50,100,50,0,2*M_PI),
-	   c2("Full Cone",0,50,0,100,50,0,2*M_PI) ;
+    G4Cons c1("Hollow Full Tube",50,100,50,100,50,0,2*pi),
+	   c2("Full Cone",0,50,0,100,50,0,2*pi) ;
 
     G4IntersectionSolid b1Ib2("b1Intersectionb2",&b1,&b2),
                         t1Ib2("t1Intersectionb2",&t1,&b2),
@@ -309,7 +309,7 @@ int main()
     assert(ApproxEqual(min,-160)&&ApproxEqual(max,-80));
 
     G4RotationMatrix r90Z;
-    r90Z.rotateZ(M_PI/2);
+    r90Z.rotateZ(pi/2);
     G4AffineTransform tRotZ(r90Z,pzero);
 
     assert(b1.CalculateExtent(kXAxis,limit,tRotZ,min,max));
@@ -337,9 +337,9 @@ int main()
     allClip.AddLimit(kYAxis,-5,+5);
     allClip.AddLimit(kZAxis,-5,+5);
     G4RotationMatrix genRot;
-    genRot.rotateX(M_PI/6);
-    genRot.rotateY(M_PI/6);
-    genRot.rotateZ(M_PI/6);
+    genRot.rotateX(pi/6);
+    genRot.rotateY(pi/6);
+    genRot.rotateZ(pi/6);
     G4AffineTransform tGen(genRot,vx);
 
     assert(b1.CalculateExtent(kXAxis,allClip,tGen,min,max));

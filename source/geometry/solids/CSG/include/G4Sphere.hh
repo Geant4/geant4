@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.11 2004-09-08 15:13:51 grichine Exp $
+// $Id: G4Sphere.hh,v 1.12 2004-12-10 16:22:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,10 +37,10 @@
 //
 //   The phi and theta segments are described by a starting angle,
 //   and the +ve delta angle for the shape.
-//   If the delta angle is >=2*M_PI, or >=M_PI the shape is treated as
+//   If the delta angle is >=2*pi, or >=pi the shape is treated as
 //   continuous in phi or theta respectively.
 //
-//   Theta must lie between 0-PI (incl).
+//   Theta must lie between 0-pi (incl).
 //
 //   Member Data:
 //

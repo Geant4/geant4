@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: replicaCal.cc,v 1.5 2004-12-02 09:31:21 gcosmo Exp $
+// $Id: replicaCal.cc,v 1.6 2004-12-10 16:20:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,7 +121,7 @@ G4VPhysicalVolume* BuildReplicaCal(G4Material* Air)
 int main()
 {
   G4ThreeVector pos(0,0,-10*x0+0.01*cm);
-  G4double phi=M_PI*0.5,theta=15*deg;
+  G4double phi=pi*0.5,theta=15*deg;
   G4ThreeVector dir(std::cos(phi)*std::sin(theta),std::sin(phi)*std::sin(theta),std::cos(theta));
   G4VPhysicalVolume *myTopNode;
   G4Timer timer;

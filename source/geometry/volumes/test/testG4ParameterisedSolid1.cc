@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ParameterisedSolid1.cc,v 1.11 2004-12-02 09:31:35 gcosmo Exp $
+// $Id: testG4ParameterisedSolid1.cc,v 1.12 2004-12-10 16:20:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -130,9 +130,9 @@ class BoxesAndSpheres : public G4VPVParameterisation
     pSphere.SetInsideRadius( nrad *  5. * mm);
     pSphere.SetOuterRadius ( nrad * 10. * mm);
     pSphere.SetStartPhiAngle  (0.);
-    pSphere.SetDeltaPhiAngle  (2*M_PI);
+    pSphere.SetDeltaPhiAngle  (2*pi);
     pSphere.SetStartThetaAngle(0);
-    pSphere.SetDeltaThetaAngle(M_PI);
+    pSphere.SetDeltaThetaAngle(pi);
   }
  
   virtual void ComputeDimensions(G4Tubs &,
@@ -174,7 +174,7 @@ class BoxesAndSpheres : public G4VPVParameterisation
     G4Sphere* fSphere;
 };
 
-G4double    angle1= 15.0*deg;          // M_PI/180. ;
+G4double    angle1= 15.0*deg;          // pi/180. ;
 BoxesAndSpheres myParam(angle1,3,4);
 
 // Build simple geometry:

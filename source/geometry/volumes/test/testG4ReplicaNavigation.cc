@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ReplicaNavigation.cc,v 1.9 2004-12-02 09:31:35 gcosmo Exp $
+// $Id: testG4ReplicaNavigation.cc,v 1.10 2004-12-10 16:20:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,7 +122,7 @@ G4bool testG4ReplicaNavigation()
   //
   G4Sphere* fSphereP = new G4Sphere("Sliced Sphere Phi",0.,80.,0*deg,90*deg,0*deg,360*deg);
   G4LogicalVolume* phiSphereLog= new G4LogicalVolume(fSphereP, 0, "PhiSlice", 0, 0, 0);
-  G4PVReplica phiRep("TestPhi",phiSphereLog,pMotherVol2P,kPhi,4,M_PI*0.5);
+  G4PVReplica phiRep("TestPhi",phiSphereLog,pMotherVol2P,kPhi,4,pi*0.5);
   G4Sphere* fSphereR = new G4Sphere("Sliced Sphere Rho",0.,20.,0*deg,360*deg,0*deg,360*deg);
   G4LogicalVolume* rhoSphereLog= new G4LogicalVolume(fSphereR, 0, "RhoSlice", 0, 0, 0);
   G4PVReplica radRep("TestRho",rhoSphereLog,pMotherVol2R,kRho,4,20);
@@ -212,7 +212,7 @@ G4bool testG4ReplicaNavigation()
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(0,0,0));
   assert(ApproxEqual(Dist,0));
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(10,0,0));
-  assert(ApproxEqual(Dist,10*std::sin(M_PI*0.25)));
+  assert(ApproxEqual(Dist,10*std::sin(pi*0.25)));
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(-10,0,0));
   assert(Dist==0);
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(10,10,0));
@@ -220,7 +220,7 @@ G4bool testG4ReplicaNavigation()
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(10,-10,0));
   assert(ApproxEqual(Dist,0));
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(10,5,0));
-  assert(ApproxEqual(Dist,std::sqrt(125.)*std::sin(M_PI*0.25-std::atan(0.5))));
+  assert(ApproxEqual(Dist,std::sqrt(125.)*std::sin(pi*0.25-std::atan(0.5))));
 
   Dist=repNav.DistanceToOut(&radRep,0,G4ThreeVector(0,0,0));
   assert(ApproxEqual(Dist,20));
@@ -301,10 +301,10 @@ G4bool testG4ReplicaNavigation()
   assert(ApproxEqual(Dist,10));
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(10,0,0),
 			    G4ThreeVector(-1/std::sqrt(2.),1/std::sqrt(2.),0));
-  assert(ApproxEqual(Dist,10*std::sin(M_PI*0.25)));
+  assert(ApproxEqual(Dist,10*std::sin(pi*0.25)));
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(10,0,0),
 			    G4ThreeVector(-1/std::sqrt(2.),-1/std::sqrt(2.),0));
-  assert(ApproxEqual(Dist,10*std::sin(M_PI*0.25)));
+  assert(ApproxEqual(Dist,10*std::sin(pi*0.25)));
 
 
   Dist=repNav.DistanceToOut(&radRep,0,G4ThreeVector(0,0,0),

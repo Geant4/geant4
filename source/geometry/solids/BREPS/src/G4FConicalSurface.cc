@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FConicalSurface.cc,v 1.17 2004-12-02 09:31:26 gcosmo Exp $
+// $Id: G4FConicalSurface.cc,v 1.18 2004-12-10 16:22:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -204,7 +204,7 @@ G4double G4FConicalSurface::Area() const
  //  Returns the Area of a G4FConicalSurface
   G4double rdif = large_radius - small_radius; 
   
-  return ( M_PI * ( small_radius + large_radius ) * 
+  return ( pi * ( small_radius + large_radius ) * 
 	   std::sqrt( length * length  +  rdif * rdif ) );
 }
 

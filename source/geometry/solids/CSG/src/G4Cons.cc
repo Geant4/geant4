@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.33 2004-12-02 09:31:28 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.34 2004-12-10 16:22:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -126,9 +126,9 @@ G4Cons::G4Cons( const G4String& pName,
 
   // Check angles
 
-  if ( pDPhi >= 2.0*M_PI )
+  if ( pDPhi >= twopi )
   {
-    fDPhi=2*M_PI;
+    fDPhi=twopi;
     fSPhi=0;
   }
   else
@@ -145,10 +145,10 @@ G4Cons::G4Cons( const G4String& pName,
 
     // Ensure pSPhi in 0-2PI or -2PI-0 range if shape crosses 0
 
-    if ( pSPhi < 0 ) fSPhi = 2.0*M_PI - std::fmod(std::fabs(pSPhi),2.0*M_PI) ;
-    else             fSPhi = std::fmod(pSPhi,2.0*M_PI) ;
+    if ( pSPhi < 0 ) fSPhi = twopi - std::fmod(std::fabs(pSPhi),twopi) ;
+    else             fSPhi = std::fmod(pSPhi,twopi) ;
       
-    if (fSPhi + fDPhi > 2.0*M_PI) fSPhi -= 2.0*M_PI ;
+    if (fSPhi + fDPhi > twopi) fSPhi -= twopi ;
   }
 }
 
@@ -183,13 +183,13 @@ EInside G4Cons::Inside(const G4ThreeVector& p) const
   {
     if (r2 < tolRMin*tolRMin || r2 >= tolRMax*tolRMax) in = kSurface;
   }
-  if ( ( fDPhi < 2*M_PI - kAngTolerance ) &&
+  if ( ( fDPhi < twopi - kAngTolerance ) &&
        ( (p.x() != 0.0 ) || (p.y() != 0.0) ) )
   {
     pPhi = std::atan2(p.y(),p.x()) ;
 
-    if ( pPhi < fSPhi - kAngTolerance*0.5  )             pPhi += 2*M_PI ; 
-    else if ( pPhi > fSPhi + fDPhi + kAngTolerance*0.5 ) pPhi -= 2*M_PI; 
+    if ( pPhi < fSPhi - kAngTolerance*0.5  )             pPhi += twopi ; 
+    else if ( pPhi > fSPhi + fDPhi + kAngTolerance*0.5 ) pPhi -= twopi; 
     
     if ( (pPhi < fSPhi - kAngTolerance*0.5) ||          
          (pPhi > fSPhi + fDPhi + kAngTolerance*0.5) )   return in = kOutside;
@@ -200,7 +200,7 @@ EInside G4Cons::Inside(const G4ThreeVector& p) const
              (pPhi > fSPhi + fDPhi - kAngTolerance*0.5) )  in = kSurface ;
     }
   }
-  else if( fDPhi < 2*M_PI - kAngTolerance )  in = kSurface ;
+  else if( fDPhi < twopi - kAngTolerance )  in = kSurface ;
 
   return in ;
 }
@@ -229,7 +229,7 @@ G4bool G4Cons::CalculateExtent( const EAxis              pAxis,
                     G4double&          pMax  ) const
 {
   if ( !pTransform.IsRotated() && 
-        fDPhi == 2.0*M_PI && fRmin1 == 0 && fRmin2 == 0 )
+        fDPhi == twopi && fRmin1 == 0 && fRmin2 == 0 )
   {
     // Special case handling for unrotated solid cones
     // Compute z/x/y mins and maxs for bounding box respecting limits,
@@ -488,13 +488,13 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
       side    = kNRMax ;
     }
   }
-  if ( fDPhi < 2.0*M_PI && rho )  // Protected against (0,0,z) 
+  if ( fDPhi < twopi && rho )  // Protected against (0,0,z) 
   {
     phi = std::atan2(p.y(),p.x()) ;
 
-    if (phi < 0) phi += 2*M_PI ;
+    if (phi < 0) phi += twopi ;
 
-    if (fSPhi < 0) distSPhi = std::fabs(phi - (fSPhi + 2.0*M_PI))*rho ;
+    if (fSPhi < 0) distSPhi = std::fabs(phi - (fSPhi + twopi))*rho ;
     else           distSPhi = std::fabs(phi - fSPhi)*rho ;
 
     distEPhi = std::fabs(phi - fSPhi - fDPhi)*rho ;
@@ -593,7 +593,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   //
   // Set phi divided flag and precalcs
   //
-  if (fDPhi < 2.0*M_PI)
+  if (fDPhi < twopi)
   {
     seg        = true ;
     hDPhi      = 0.5*fDPhi ;    // half delta phi
@@ -1190,7 +1190,7 @@ G4double G4Cons::DistanceToIn(const G4ThreeVector& p) const
   }
   if ( safeZ > safe ) safe = safeZ ;
 
-  if ( fDPhi < 2.0*M_PI && rho )
+  if ( fDPhi < twopi && rho )
   {
     phiC    = fSPhi + fDPhi*0.5 ;
     cosPhiC = std::cos(phiC) ;
@@ -1605,7 +1605,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
   //
   // Phi Intersection
   
-  if ( fDPhi < 2.0*M_PI )
+  if ( fDPhi < twopi )
   {
     sinSPhi = std::sin(fSPhi) ;
     cosSPhi = std::cos(fSPhi) ;
@@ -1686,7 +1686,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         if ( pDistS <= pDistE )  sidephi = kSPhi ;
         else                     sidephi = kEPhi ;
 
-        if ( fDPhi > M_PI )
+        if ( fDPhi > pi )
         {
           if (compS < 0 && compE < 0) sphi = 0.0 ;
           else                        sphi = kInfinity ;
@@ -1704,7 +1704,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
       {
         // Outside full starting plane, inside full ending plane
 
-        if ( fDPhi > M_PI )
+        if ( fDPhi > pi )
         {
           if ( compE < 0.0 )
           {
@@ -1764,7 +1764,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         // Must be pDistS<0&&pDistE>0
         // Inside full starting plane, outside full ending plane
 
-        if (fDPhi > M_PI)
+        if (fDPhi > pi)
         {
           if ( compS < 0.0 )
           {
@@ -1857,7 +1857,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         *validNorm=false ;  // Rmin is inconvex
         break ;
       case kSPhi:
-        if ( fDPhi <= M_PI )
+        if ( fDPhi <= pi )
         {
           *n         = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0) ;
           *validNorm = true ;
@@ -1865,7 +1865,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         else   *validNorm = false ;
         break ;
       case kEPhi:
-        if ( fDPhi <= M_PI )
+        if ( fDPhi <= pi )
         {
           *n         = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0) ;
           *validNorm = true ;
@@ -1966,7 +1966,7 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
 
   // Check if phi divided, Calc distances closest phi plane
 
-  if (fDPhi < 2.0*M_PI)
+  if (fDPhi < twopi)
   {
     // Above/below central phi of G4Cons?
 
@@ -2032,7 +2032,7 @@ G4Cons::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   // If complete in phi, set start angle such that mesh will be at RMax
   // on the x axis. Will give better extent calculations when not rotated.
 
-  if (fDPhi == M_PI*2.0 && fSPhi == 0.0 )
+  if (fDPhi == twopi && fSPhi == 0.0 )
   {
     sAngle = -meshAngle*0.5 ;
   }

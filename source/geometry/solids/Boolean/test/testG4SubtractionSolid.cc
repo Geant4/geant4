@@ -93,7 +93,7 @@ int main()
     
 // NOTE: xRot = rotation such that x axis->-x axis & y axis->-y axis
 
-    xRot.rotateZ(-M_PI) ;
+    xRot.rotateZ(-pi) ;
 
     G4Transform3D transform(xRot,G4ThreeVector(0,30,0)) ;
 
@@ -106,13 +106,13 @@ int main()
     
     // t2\t3 for DistanceToIn
 
-    G4Tubs t2("Hole Tube #2",50,60,50,0,2*M_PI); 
+    G4Tubs t2("Hole Tube #2",50,60,50,0,2*pi); 
  
-    G4Tubs t3("Hole Tube #3",45,55,50,M_PI/4.,M_PI*3./2.);
+    G4Tubs t3("Hole Tube #3",45,55,50,pi/4.,pi*3./2.);
 
-    G4Cons c1("Hollow Full Tube",50,100,50,100,50,0,2*M_PI),
+    G4Cons c1("Hollow Full Tube",50,100,50,100,50,0,2*pi),
 
-	   c2("Full Cone",0,50,0,100,50,0,2*M_PI) ;
+	   c2("Full Cone",0,50,0,100,50,0,2*pi) ;
 
     G4SubtractionSolid b1Sb2("b1Sb2",&b1,&b2),
 
@@ -161,17 +161,17 @@ int main()
                               0*deg,
                               180*deg );
     G4RotationMatrix rotmat3;
-    rotmat3.rotateY(M_PI/4.0);
+    rotmat3.rotateY(pi/4.0);
     G4Transform3D tran3 = G4Transform3D(rotmat3,G4ThreeVector(0.0,0.0,0.0));
 
     G4VSolid* c3Ic4 = new G4SubtractionSolid( "Example", cone3, cone4, tran3 );
 
 
-  //G4Torus* insp    = new G4Torus("Isp", 7.5*cm, 8.1*cm, 15.6*cm,  0, 2*M_PI);
-  //G4Tubs*  tmptube = new G4Tubs("TMPT", 7.5*cm, 15.6*cm, 8.1*cm, 0, 2*M_PI);
+  //G4Torus* insp    = new G4Torus("Isp", 7.5*cm, 8.1*cm, 15.6*cm,  0, 2*pi);
+  //G4Tubs*  tmptube = new G4Tubs("TMPT", 7.5*cm, 15.6*cm, 8.1*cm, 0, 2*pi);
 
   G4RotationMatrix* rotDz5 = new G4RotationMatrix();
-  rotDz5->rotateZ(M_PI/2.);
+  rotDz5->rotateZ(pi/2.);
 
   // G4SubtractionSolid* inn = new G4SubtractionSolid("Innerpart", insp,
   //                                  tmptube, rotDz5, G4ThreeVector(0,0,0));
@@ -498,7 +498,7 @@ int main()
     assert(ApproxEqual(min,-160)&&ApproxEqual(max,-80));
 
     G4RotationMatrix r90Z;
-    r90Z.rotateZ(M_PI/2);
+    r90Z.rotateZ(pi/2);
     G4AffineTransform tRotZ(r90Z,pzero);
 
     assert(b1.CalculateExtent(kXAxis,limit,tRotZ,min,max));
@@ -525,9 +525,9 @@ int main()
     allClip.AddLimit(kZAxis,-5,+5);
 
     G4RotationMatrix genRot;
-    genRot.rotateX(M_PI/6);
-    genRot.rotateY(M_PI/6);
-    genRot.rotateZ(M_PI/6);
+    genRot.rotateX(pi/6);
+    genRot.rotateY(pi/6);
+    genRot.rotateZ(pi/6);
     G4AffineTransform tGen(genRot,vx);
 
     assert(b1.CalculateExtent(kXAxis,allClip,tGen,min,max));

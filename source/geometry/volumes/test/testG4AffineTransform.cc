@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4AffineTransform.cc,v 1.7 2004-12-02 09:31:35 gcosmo Exp $
+// $Id: testG4AffineTransform.cc,v 1.8 2004-12-10 16:20:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,7 +38,7 @@ G4bool testG4AffineTransform()
 	G4ThreeVector zeroVec,xVec(1,0,0),xyzVec(1,1,1),xyzrotVec(-1,1,1);
 	G4RotationMatrix identity,xRot;
 // NOTE: xRot = rotation such that x axis->y axis & y axis->-x axis
-	xRot.rotateZ(-M_PI*0.5);
+	xRot.rotateZ(-pi*0.5);
 
 	G4AffineTransform origin;
 	assert(origin.NetRotation()==identity);

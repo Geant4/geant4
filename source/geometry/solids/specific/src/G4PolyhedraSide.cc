@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.cc,v 1.8 2004-12-02 09:31:32 gcosmo Exp $
+// $Id: G4PolyhedraSide.cc,v 1.9 2004-12-10 16:22:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,10 +69,10 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
   // Set phi to our convention
   //
   startPhi = thePhiStart;
-  while (startPhi < 0.0) startPhi += 2.0*M_PI;
+  while (startPhi < 0.0) startPhi += twopi;
   
   phiIsOpen = thePhiIsOpen;
-  phiTotal = (phiIsOpen) ? thePhiTotal : 2*M_PI;
+  phiTotal = (phiIsOpen) ? thePhiTotal : twopi;
   
   allBehind = isAllBehind;
     
@@ -899,10 +899,10 @@ G4int G4PolyhedraSide::ClosestPhiSegment( G4double phi0 )
   //
   G4double phi = phi0;
   
-  while( phi < startPhi ) phi += 2*M_PI;
+  while( phi < startPhi ) phi += twopi;
   G4double d1 = phi-endPhi;
 
-  while( phi > startPhi ) phi -= 2*M_PI;
+  while( phi > startPhi ) phi -= twopi;
   G4double d2 = startPhi-phi;
   
   return (d2 < d1) ? 0 : numSide-1;
@@ -923,8 +923,8 @@ G4int G4PolyhedraSide::PhiSegment( G4double phi0 )
   // that is less than 2*PI
   //
   G4double phi = phi0 - startPhi;
-  while( phi < 0      ) phi += 2*M_PI;
-  while( phi > 2*M_PI ) phi -= 2*M_PI;
+  while( phi < 0      ) phi += twopi;
+  while( phi > twopi ) phi -= twopi;
 
   //
   // Divide

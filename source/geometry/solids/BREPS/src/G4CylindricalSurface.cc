@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CylindricalSurface.cc,v 1.6 2004-12-02 09:31:26 gcosmo Exp $
+// $Id: G4CylindricalSurface.cc,v 1.7 2004-12-10 16:22:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -389,7 +389,7 @@ G4double G4CylindricalSurface::distanceAlongHelix( G4int which_way,
 //  Test to see if axes of Helix and G4CylindricalSurface are parallel, in which
 //  case there are exact solutions.
 	if ( ( std::fabs( ah.AngleBetween(ac) ) < FLT_EPSILO )
-	  || ( std::fabs( ah.AngleBetween(ac) - M_PI ) < FLT_EPSILO ) ) {
+	  || ( std::fabs( ah.AngleBetween(ac) - pi ) < FLT_EPSILO ) ) {
 	  	special_case = 1;
 //  If, in addition, gamma is a zero vector or is parallel to the
 //  G4CylindricalSurface axis, this simplifies the previous case.
@@ -400,7 +400,7 @@ G4double G4CylindricalSurface::distanceAlongHelix( G4int which_way,
 		else {
 			ghat = gamma / gamma.Magnitude();
 			if ( ( std::fabs( ghat.AngleBetween(ac) ) < FLT_EPSILO )
-			  || ( std::fabs( ghat.AngleBetween(ac) - M_PI ) <
+			  || ( std::fabs( ghat.AngleBetween(ac) - pi ) <
 			  				       FLT_EPSILO ) )
 				special_case = 3;
 		}
@@ -420,7 +420,7 @@ G4double G4CylindricalSurface::distanceAlongHelix( G4int which_way,
 //  initial G4Vector3D of the Helix line up and their origins are the same.
 //  This will require a higher order approximation than the general case.
 	if ( ( ( std::fabs( dh.AngleBetween(ac) ) < FLT_EPSILO )
-	    || ( std::fabs( dh.AngleBetween(ac) - M_PI ) < FLT_EPSILO ) )
+	    || ( std::fabs( dh.AngleBetween(ac) - pi ) < FLT_EPSILO ) )
 	    && ( gamma == zerovec ) )
 		special_case = 2;
 //
@@ -451,8 +451,8 @@ G4double G4CylindricalSurface::distanceAlongHelix( G4int which_way,
 					s[0] = -s[0];
 					s[1] = -s[1];
 				}
-				s[2] = s[0] + 2.0 * M_PI;
-				s[3] = s[1] + 2.0 * M_PI;
+				s[2] = s[0] + 2.0 * pi;
+				s[3] = s[1] + 2.0 * pi;
 			}
 	}
 //
@@ -503,11 +503,11 @@ G4double G4CylindricalSurface::distanceAlongHelix( G4int which_way,
 //				}
 				if ( std::fabs( s1 ) <= 1.0 ) {
 					s[0] = std::acos( s1 );
-					s[2] = 2.0 * M_PI - s[0];
+					s[2] = 2.0 * pi - s[0];
 				}
 				if ( std::fabs( s2 ) <= 1.0 ) {
 					s[1] = std::acos( s2 );
-					s[3] = 2.0 * M_PI - s[1];
+					s[3] = 2.0 * pi - s[1];
 				}
 //  Must take only solutions which satisfy original unsquared equation:
 //  Gsin(s) - Hcos(s) + F = 0.  Take best solution of pair and set false
@@ -866,7 +866,7 @@ G4double G4CylindricalSurface::gropeAlongHelix( const Helix* hx ) const
 //  Take up to a user-settable number of turns along the Helix,
 //  groping for an intersection point.
 	for ( G4int k = 1; k < max_iter; k++ ) {
-		turn_angle = 2.0 * M_PI * k / one_over_f;
+		turn_angle = 2.0 * pi * k / one_over_f;
 		dist_along = turn_angle * std::fabs( rhp );
 		d_new = HowNear( hx->position( dist_along ) );
 		if ( ( d_old < 0.0 && d_new > 0.0 ) ||
@@ -880,7 +880,7 @@ G4double G4CylindricalSurface::gropeAlongHelix( const Helix* hx ) const
 				itr++;
 				if ( itr > 50 )
 					return turn_angle;
-				turn_angle -= fk * M_PI;
+				turn_angle -= fk * pi;
 				dist_along = turn_angle * std::fabs( rhp );
 				d_new = HowNear( hx->position( dist_along ) );
 				if ( ( d_old < 0.0 && d_new > 0.0 ) ||

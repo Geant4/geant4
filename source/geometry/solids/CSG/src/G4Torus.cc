@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.39 2004-12-02 09:31:28 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.40 2004-12-10 16:22:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,7 +122,7 @@ G4Torus::SetAllParameters( G4double pRmin,
 
   // Check angles
 
-  if ( pDPhi >= 2.0*M_PI )  fDPhi = 2*M_PI ;
+  if ( pDPhi >= twopi )  fDPhi = twopi ;
   else
   {
     if (pDPhi > 0)   fDPhi = pDPhi ;
@@ -140,10 +140,10 @@ G4Torus::SetAllParameters( G4double pRmin,
 
   fSPhi = pSPhi;
 
-  if (fSPhi < 0)  fSPhi = 2.0*M_PI-std::fmod(std::fabs(fSPhi),2.0*M_PI) ;
-  else fSPhi = std::fmod(fSPhi,2.0*M_PI) ;
+  if (fSPhi < 0)  fSPhi = twopi-std::fmod(std::fabs(fSPhi),twopi) ;
+  else fSPhi = std::fmod(fSPhi,twopi) ;
 
-  if (fSPhi+fDPhi > 2.0*M_PI) fSPhi-=2.0*M_PI ;
+  if (fSPhi+fDPhi > twopi) fSPhi-=twopi ;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -458,8 +458,8 @@ G4int G4Torus::SolveCubic( G4double c[], G4double s[] ) const
     G4double t = 2 * std::sqrt(-p);
 
     s[ 0 ] =   t * std::cos(phi);
-    s[ 1 ] = - t * std::cos(phi + M_PI / 3);
-    s[ 2 ] = - t * std::cos(phi - M_PI / 3);
+    s[ 1 ] = - t * std::cos(phi + pi / 3);
+    s[ 2 ] = - t * std::cos(phi - pi / 3);
     num = 3;
   }
   else // one real solution 
@@ -765,7 +765,7 @@ G4bool G4Torus::CalculateExtent( const EAxis pAxis,
                                  const G4AffineTransform& pTransform,
                                        G4double& pMin, G4double& pMax) const
 {
-  if (!pTransform.IsRotated() && fDPhi==2.0*M_PI && fRmin==0)
+  if (!pTransform.IsRotated() && fDPhi==twopi && fRmin==0)
   {
     // Special case handling for unrotated solid torus
     // Compute x/y/z mins and maxs for bounding box respecting limits,
@@ -985,7 +985,7 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
       
   if (pt2 >= tolRMin*tolRMin && pt2 <= tolRMax*tolRMax )
   {
-    if ( fDPhi == 2*M_PI || pt2 == 0 )  // on torus swept axis
+    if ( fDPhi == twopi || pt2 == 0 )  // on torus swept axis
     {
       in = kInside ;
     }
@@ -996,13 +996,13 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
 
       pPhi = std::atan2(p.y(),p.x()) ;
 
-      if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ;   // 0<=pPhi<2pi
+      if ( pPhi < -kAngTolerance*0.5 ) pPhi += twopi ;   // 0<=pPhi<2pi
       if ( fSPhi >= 0 )
       {
           if ( (std::abs(pPhi) < kAngTolerance*0.5)
-            && (std::abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5) )
+            && (std::abs(fSPhi + fDPhi - twopi) < kAngTolerance*0.5) )
           { 
-            pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
+            pPhi += twopi ; // 0 <= pPhi < 2pi
           }
           if ( (pPhi >= fSPhi - kAngTolerance*0.5)
             && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
@@ -1012,7 +1012,7 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
       }
       else  // fSPhi < 0
       {
-          if ( (pPhi <= fSPhi + 2*M_PI - kAngTolerance*0.5)
+          if ( (pPhi <= fSPhi + twopi - kAngTolerance*0.5)
             && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) )  ;
           else
           {
@@ -1030,7 +1030,7 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
 
     if (pt2 >= tolRMin*tolRMin && pt2 <= tolRMax*tolRMax)
     {
-      if (fDPhi == 2*M_PI || pt2 == 0 ) // Continuous in phi or on z-axis
+      if (fDPhi == twopi || pt2 == 0 ) // Continuous in phi or on z-axis
       {
         in = kSurface ;
       }
@@ -1038,13 +1038,13 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
       {
         pPhi = std::atan2(p.y(),p.x()) ;
 
-        if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ;   // 0<=pPhi<2pi
+        if ( pPhi < -kAngTolerance*0.5 ) pPhi += twopi ;   // 0<=pPhi<2pi
         if ( fSPhi >= 0 )
         {
           if ( (std::abs(pPhi) < kAngTolerance*0.5)
-            && (std::abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5) )
+            && (std::abs(fSPhi + fDPhi - twopi) < kAngTolerance*0.5) )
           { 
-            pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
+            pPhi += twopi ; // 0 <= pPhi < 2pi
           }
           if ( (pPhi >= fSPhi - kAngTolerance*0.5)
             && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
@@ -1054,7 +1054,7 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
         }
         else  // fSPhi < 0
         {
-          if ( (pPhi <= fSPhi + 2*M_PI - kAngTolerance*0.5)
+          if ( (pPhi <= fSPhi + twopi - kAngTolerance*0.5)
             && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) )  ;
           else
           {
@@ -1108,13 +1108,13 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
     distMin = distRMax ;
     side    = kNRMax ;
   }    
-  if (fDPhi < 2.0*M_PI && rho )
+  if (fDPhi < twopi && rho )
   {
     phi = std::atan2(p.y(),p.x()) ; // Protected against (0,0,z) (above rho !=0)
 
-    if (phi < 0) phi += 2*M_PI ;
+    if (phi < 0) phi += twopi ;
 
-    if (fSPhi < 0 ) distSPhi = std::fabs(phi-(fSPhi+2.0*M_PI))*rho ;
+    if (fSPhi < 0 ) distSPhi = std::fabs(phi-(fSPhi+twopi))*rho ;
     else            distSPhi = std::fabs(phi-fSPhi)*rho ;
 
     distEPhi = std::fabs(phi - fSPhi - fDPhi)*rho ;
@@ -1209,7 +1209,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
 
   // Set phi divided flag and precalcs
 
-  if ( fDPhi < 2.0*M_PI )
+  if ( fDPhi < twopi )
   {
     seg        = true ;
     hDPhi      = 0.5*fDPhi ;    // half delta phi
@@ -1542,7 +1542,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p ) const
   if (safe1 > safe2) safe = safe1;
   else               safe = safe2;
 
-  if ( fDPhi < 2.0*M_PI && rho )
+  if ( fDPhi < twopi && rho )
   {
     phiC    = fSPhi + fDPhi*0.5 ;
     cosPhiC = std::cos(phiC) ;
@@ -1732,7 +1732,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
       }
     }      // if(Rmin)
   }  
-  if (fDPhi < 2.0*M_PI)  // Phi Intersections
+  if (fDPhi < twopi)  // Phi Intersections
   {
     sinSPhi = std::sin(fSPhi) ;
     cosSPhi = std::cos(fSPhi) ;
@@ -1821,7 +1821,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
         {
           sidephi = kEPhi ;
         }
-          if (fDPhi>M_PI)
+          if (fDPhi>pi)
         {
           if (compS<0&&compE<0) sphi=0;
           else sphi=kInfinity;
@@ -1845,7 +1845,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
       {
         // Outside full starting plane, inside full ending plane
 
-        if (fDPhi>M_PI)
+        if (fDPhi>pi)
         {
           if (compE<0)
           {
@@ -1913,7 +1913,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
         // Must be pDistS<0&&pDistE>0
         // Inside full starting plane, outside full ending plane
 
-        if (fDPhi>M_PI)
+        if (fDPhi>pi)
         {
           if (compS<0)
           {
@@ -2048,7 +2048,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 #if DEBUGTORUS
         G4cout << "G4Torus::DistanceToOut    Side is SPhi" << G4endl ;
 #endif
-        if (fDPhi <= M_PI )
+        if (fDPhi <= pi )
         {
           *n=G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
           *validNorm=true;
@@ -2060,7 +2060,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 #if DEBUGTORUS
         G4cout << "G4Torus::DistanceToOut    Side is EPhi" << G4endl ;
 #endif
-        if (fDPhi <= M_PI)
+        if (fDPhi <= pi)
         {
           *n=G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
           *validNorm=true;
@@ -2148,7 +2148,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
 
 // Check if phi divided, Calc distances closest phi plane
 
-  if (fDPhi<2.0*M_PI) // Above/below central phi of Torus?
+  if (fDPhi<twopi) // Above/below central phi of Torus?
   {
     phiC    = fSPhi + fDPhi*0.5 ;
     cosPhiC = std::cos(phiC) ;
@@ -2208,7 +2208,7 @@ G4Torus::CreateRotatedVertices( const G4AffineTransform& pTransform,
   // If complete in phi, set start angle such that mesh will be at fRmax
   // on the x axis. Will give better extent calculations when not rotated.
 
-  if ( fDPhi == M_PI*2.0 && fSPhi == 0 )
+  if ( fDPhi == pi*2.0 && fSPhi == 0 )
   {
     sAngle = -meshAngle*0.5 ;
   }
@@ -2304,7 +2304,7 @@ G4NURBS* G4Torus::CreateNURBS () const
   G4NURBS* pNURBS;
   if (fRmin != 0) 
   {
-    if (fDPhi >= 2.0 * M_PI) 
+    if (fDPhi >= 2.0 * pi) 
     {
       pNURBS = new G4NURBStube(fRmin, fRmax, fRtor);
     }
@@ -2315,7 +2315,7 @@ G4NURBS* G4Torus::CreateNURBS () const
   }
   else 
   {
-    if (fDPhi >= 2.0 * M_PI) 
+    if (fDPhi >= 2.0 * pi) 
     {
       pNURBS = new G4NURBScylinder (fRmax, fRtor);
     }
@@ -2622,7 +2622,7 @@ G4double G4Torus::SolveNumeric( const G4ThreeVector& p,
     G4cout << "G4Torus::SolveNumeric    theta = " << theta << G4endl;
 #endif 
 
-    if (theta < 0) theta += 2*M_PI;
+    if (theta < 0) theta += twopi;
     
     // We have to verify if this root is inside the region between
     // fSPhi and fSPhi + fDPhi

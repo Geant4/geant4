@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator5.cc,v 1.4 2004-12-02 09:31:23 gcosmo Exp $
+// $Id: testG4Navigator5.cc,v 1.5 2004-12-10 16:20:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,21 +52,21 @@ G4VPhysicalVolume* BuildGeometry()
 {
 
     G4Box *worldBox= new G4Box ("cube",50,50,50);
-    G4Tubs *fullTube= new G4Tubs("tube",0,10,10,0,2*M_PI);
-    G4Tubs *fullTubeSlice= new G4Tubs("tube slice",0,2,10,0,2*M_PI);
+    G4Tubs *fullTube= new G4Tubs("tube",0,10,10,0,2*pi);
+    G4Tubs *fullTubeSlice= new G4Tubs("tube slice",0,2,10,0,2*pi);
 
-    G4Tubs *hollowTube= new G4Tubs("hollow tube",2,8,10,0,2*M_PI);
-    G4Tubs *hollowTubeSlice= new G4Tubs("hollow tube slice",2,4,10,0,2*M_PI);
+    G4Tubs *hollowTube= new G4Tubs("hollow tube",2,8,10,0,2*pi);
+    G4Tubs *hollowTubeSlice= new G4Tubs("hollow tube slice",2,4,10,0,2*pi);
 
-    G4Tubs *hphiTube= new G4Tubs("phi tube",2,8,10,-M_PI*0.5,M_PI);
-    G4Tubs *hphiTubeSlice= new G4Tubs("phi tube slice",2,8,10,0,M_PI*0.25);
+    G4Tubs *hphiTube= new G4Tubs("phi tube",2,8,10,-pi*0.5,pi);
+    G4Tubs *hphiTubeSlice= new G4Tubs("phi tube slice",2,8,10,0,pi*0.25);
 
 
-    G4Tubs *allTube= new G4Tubs("all tube",2,10,10,0,2*M_PI);
-    G4Tubs *allTubeZSlice= new G4Tubs("all tube z slice",2,10,2,0,2*M_PI);
-    G4Tubs *allTubeZRSlice=new G4Tubs("all tube zr slice",2,6,2,0,2*M_PI);
+    G4Tubs *allTube= new G4Tubs("all tube",2,10,10,0,2*pi);
+    G4Tubs *allTubeZSlice= new G4Tubs("all tube z slice",2,10,2,0,2*pi);
+    G4Tubs *allTubeZRSlice=new G4Tubs("all tube zr slice",2,6,2,0,2*pi);
     G4Tubs *allTubeZRPSlice=new G4Tubs("all tube zrp slice",2,6,
-				       2,-M_PI*0.25,M_PI*0.5);
+				       2,-pi*0.25,pi*0.5);
 
 
     G4LogicalVolume *worldLog=new G4LogicalVolume(worldBox,0,
@@ -135,7 +135,7 @@ G4VPhysicalVolume* BuildGeometry()
 //  G4PVReplica *hphiTubeSlicePhys=
                           new G4PVReplica("hphiTubeSlice",
 					  hphiTubeSliceLog,hphiTubePhys,
-					  kPhi,4,M_PI*0.25,-M_PI*0.5);
+					  kPhi,4,pi*0.25,-pi*0.5);
 
     // Tube replicated along z, then r then phi (!)
 
@@ -174,7 +174,7 @@ G4VPhysicalVolume* BuildGeometry()
                                      new G4PVReplica("allTubeZRPSlice",
 						     allTubeZRPSliceLog,
 						     allTubeZRSlicePhys,
-						     kPhi,4,M_PI*0.5,-M_PI*0.25);
+						     kPhi,4,pi*0.5,-pi*0.25);
 
 
     return worldPhys;

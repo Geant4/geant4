@@ -136,7 +136,7 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
     break;
 	
   case SPHERE:
-    testVolume = new G4Sphere ("sphere_test",0.8*m,1.0*m, startPhi, deltaPhi,0.0, M_PI);
+    testVolume = new G4Sphere ("sphere_test",0.8*m,1.0*m, startPhi, deltaPhi,0.0, pi);
     fprintf(stderr,"OK defining a Sphere\n");
     break;
     
@@ -184,11 +184,11 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
 	G4String Name = "testTrapezoid";
 	testVolume = new G4Trap (Name,
 							 1.0*m,
-							 0.0,M_PI,
+							 0.0,pi,
 							 2.4*m,1.0*m,2.0*m,
 							 0.0,
 							 2.4*m,1.0*m,2.0*m,
-							 M_PI);
+							 pi);
   }
   break;
   
