@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:13:52 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2000-10-24 13:24:15 gcosmo Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for process management library.  Gabriele Cosmo, 4/4/97.
 # --------------------------------------------------------------------
@@ -19,7 +19,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/particles/management/include \
-            -I$(G4BASE)/processes/electromagnetic/utils/include \
             -I$(G4BASE)/materials/include
 
 include $(G4INSTALL)/config/common.gmk
