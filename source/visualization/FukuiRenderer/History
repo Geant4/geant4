@@ -1,3 +1,7 @@
+DAWN-V00-01-02  Satoshi TANAKA	Nov 01, 1999  
+- Separation of BeginModeling() and FRBeginModeling().
+  Co-workable with /run/beamOn with the new vis commands.
+
 DAWN-V00-01-01  Satoshi TANAKA	Aug 26, 1999  
 - Protection for invalid calling of BeginModeling
 - .DAWN.history ==> .DAWN_1.history 
