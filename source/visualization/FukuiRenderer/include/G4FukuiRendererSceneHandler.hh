@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.hh,v 1.12 2005-01-27 20:04:27 johna Exp $
+// $Id: G4FukuiRendererSceneHandler.hh,v 1.13 2005-02-09 21:17:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,10 +92,10 @@ public:
   }
   void AddSolid ( const G4VSolid& solid  );
   void AddCompound ( const G4VTrajectory& traj) {
-    G4VSceneHandler::AddSolid(traj);
+    G4VSceneHandler::AddCompound(traj);
   }
   void AddCompound ( const G4VHit& hit) {
-    G4VSceneHandler::AddSolid(hit);
+    G4VSceneHandler::AddCompound(hit);
   }
 
   void ClearTransientStore();  // Used for triggering detector re-drawing.
