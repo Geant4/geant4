@@ -20,12 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#define test31TrackingAction_CPP
 
 //---------------------------------------------------------------------------
 //
-// ClassName:   test31TrackingAction
-//  
+// ClassName:   TrackingAction
+//
 // Description: Implementation file for MC truth.
 //
 // Author:      V.Ivanchenko 17/03/01
@@ -38,7 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "test31TrackingAction.hh"
+#include "TrackingAction.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Track.hh"
@@ -47,27 +46,26 @@
 #include "G4Electron.hh"
 #include "G4EventManager.hh"
 #include "G4Event.hh"
+#include "Histo.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-test31TrackingAction::test31TrackingAction():
-  theHisto(test31Histo::GetPointer())
+TrackingAction::TrackingAction():
+  theHisto(Histo::GetPointer())
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-test31TrackingAction::~test31TrackingAction()
+TrackingAction::~TrackingAction()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void test31TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
+void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
-
-  G4ParticleDefinition* particle = aTrack->GetDefinition();
-  G4String name = particle->GetParticleName();
-  theHisto->ResetTrackLength();
+  theHisto->ScoreNewTrack(aTrack);
   G4int pid = aTrack->GetParentID();
+  const G4String name = aTrack->GetDefinition()->GetParticleName();
 
   if(1 < theHisto->GetVerbose() &&
     (theHisto->GetMaxEnergy() < aTrack->GetKineticEnergy() && pid > 0))
@@ -82,60 +80,6 @@ void test31TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
            << G4endl;
   }
 
-  //Save primary parameters
-
-  if(0 == pid) {
-
-    //    theHisto->StartEvent();
-
-    G4double kinE = aTrack->GetKineticEnergy();
-    theHisto->SaveToTuple("tkin", kinE/MeV);
-
-    G4double mass = 0.0;
-    if(particle) {
-      mass = particle->GetPDGMass();
-      theHisto->SaveToTuple("mass", mass/MeV);
-      //theHisto->SaveToTuple("char",(particle->GetPDGCharge())/eplus);
-      G4double beta = 1.;
-      if(mass > 0.) beta = sqrt(kinE*(kinE + 2.0*mass))/(kinE + mass);
-
-      theHisto->SaveToTuple("beta", beta);
-    }
-
-    G4ThreeVector pos = aTrack->GetPosition();
-    G4ThreeVector dir = aTrack->GetMomentumDirection();
-    /*
-    theHisto->SaveToTuple("X0",(pos.x())/mm);
-    theHisto->SaveToTuple("Y0",(pos.y())/mm);
-    theHisto->SaveToTuple("Z0",(pos.z())/mm);
-    */
-    if(1 < theHisto->GetVerbose()) {
-      G4cout << "test31TrackingAction: Primary kinE(MeV)= " << kinE/MeV
-           << "; m(MeV)= " << mass/MeV
-           << "; pos= " << pos << ";  dir= " << dir << G4endl;
-    }
-
-    // delta-electron
-  } else if (0 < pid && "e-" == name) {
-    if(1 < theHisto->GetVerbose()) {
-      G4cout << "test31TrackingAction: Secondary electron " << G4endl;
-    }
-    theHisto->AddDeltaElectron(aTrack->GetDynamicParticle());
-
-  } else if (0 < pid && "e+" == name) {
-    if(1 < theHisto->GetVerbose()) {
-      G4cout << "test31TrackingAction: Secondary positron " << G4endl;
-    }
-    theHisto->AddPositron(aTrack->GetDynamicParticle());
-
-  } else if (0 < pid && "gamma" == name) {
-    if(1 < theHisto->GetVerbose()) {
-      G4cout << "test31TrackingAction: Secondary gamma " << G4endl;
-    }
-    theHisto->AddPhoton(aTrack->GetDynamicParticle());
-
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-

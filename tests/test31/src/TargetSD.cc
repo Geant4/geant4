@@ -20,62 +20,79 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#ifndef test31PrimaryGeneratorMessenger_h
-#define test31PrimaryGeneratorMessenger_h 1
-
-//---------------------------------------------------------------------------
+// -------------------------------------------------------------
 //
-// ClassName:   test31PrimaryGeneratorAction
-//  
-// Description: Definition of physics list parameters via UI interface
 //
-// Author:      V.Ivanchenko 26/09/00
+//      ---------- TargetSD -------------
+//              
+//  Modified:
 //
-//----------------------------------------------------------------------------
-//
+// -------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include "TargetSD.hh"
+
+#include "G4RunManager.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Track.hh"
+#include "G4Positron.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithADouble.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithAString.hh"
+#include "Histo.hh"
+#include "G4HCofThisEvent.hh"
+#include "G4TouchableHistory.hh"
+#include "G4Step.hh"
+#include "G4Gamma.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class test31PrimaryGeneratorAction;
+TargetSD::TargetSD(const G4String& name)
+ :G4VSensitiveDetector(name),
+  theHisto(Histo::GetPointer()),
+  evno(0)
+{}
 
-class test31PrimaryGeneratorMessenger: public G4UImessenger
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+TargetSD::~TargetSD()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void TargetSD::Initialize(G4HCofThisEvent*)
 {
-  public:
-  
-    test31PrimaryGeneratorMessenger(test31PrimaryGeneratorAction* gen);
-   ~test31PrimaryGeneratorMessenger();
-    
-    void SetNewValue(G4UIcommand* command, G4String newValue);
+  evno++;
+  if(0 < theHisto->GetVerbose())
+    G4cout << "TargetSD: Begin Of Event # " << evno << G4endl;
 
-  private:
-  
-    test31PrimaryGeneratorAction*  theGen;
+}
 
-    G4UIcmdWithADoubleAndUnit* beamXCmd;
-    G4UIcmdWithADoubleAndUnit* beamYCmd;
-    G4UIcmdWithADoubleAndUnit* beamZCmd;
-    G4UIcmdWithADoubleAndUnit* beamECmd;
-    G4UIcmdWithADoubleAndUnit* sigmaXCmd;
-    G4UIcmdWithADoubleAndUnit* sigmaYCmd;
-    G4UIcmdWithADoubleAndUnit* sigmaZCmd;
-    G4UIcmdWithADoubleAndUnit* sigmaECmd;
-    G4UIcmdWithADoubleAndUnit* maxThetaCmd;
-    G4UIcmdWithADouble* beamBetaCmd;
-    G4UIcmdWithADouble* sigmaBetaCmd;
-    G4UIcmdWithAString* partCmd;
-    G4UIcmdWithAString* randCmd;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-};
+G4bool TargetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
+{
+  const G4Track* track = aStep->GetTrack();
+  if(track->GetTrackID() == 1) theHisto->AddStepInTarget();
+  return true;
+}
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void TargetSD::EndOfEvent(G4HCofThisEvent*)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void TargetSD::clear()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+void TargetSD::PrintAll()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventActionMessenger.hh,v 1.1 2004-07-27 08:33:03 vnivanch Exp $
+// $Id: EventActionMessenger.hh,v 1.2 2004-07-27 08:38:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

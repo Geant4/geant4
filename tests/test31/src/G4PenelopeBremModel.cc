@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremModel.cc,v 1.1 2004-07-27 08:33:04 vnivanch Exp $
+// $Id: G4PenelopeBremModel.cc,v 1.2 2004-07-27 08:36:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
