@@ -15,6 +15,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 9, 99  Y.Morita (persistency-V00-01-04)
+- Bug fix in G4PEvent, G4PHCofThisEvent, G4PVHitsCollection,
+  G4PersistencyManager, G4PersistentEventMan
+- Mod GNUmakefile
+
 November 8, 99  Y.Morita (persistency-V00-01-02)
 - Modified HepVArray/HepRefVArray to d_Varray<>, d_Varray<d_Ref<>>
 - Modified ooRef() to d_Ref<>
