@@ -1516,6 +1516,11 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
       PrintKTVector(kt_inside, G4std::string("DoTimeStep - inside before"));
       PrintKTVector(&theSecondaryList, G4std::string(" theSecondaryList "));
   }
+
+  delete kt_inside;
+  delete kt_outside;
+  delete kt_gone_in;
+
   currentA +=secondaryBarions_in - secondaryBarions_out;
   currentZ +=secondaryCharge_in - secondaryCharge_out;
 //  if particles stepped into nucleus, add their mass to nucleus
@@ -1646,6 +1651,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
   //debug.push_back("======> DoTimeStep 1.5"); debug.dump();
   UpdateTracksAndCollisions(&addFinals,0 ,0);
 
+  delete kt_gone_out;
 
 //  G4cout << "DoTimeStep: Collisions left: " << theCollisionMgr->Entries() << G4endl;
 //  G4cerr <<"G4BinaryCascade::DoTimeStep: exit "<<G4endl;
