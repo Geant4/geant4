@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BlockingList.cc,v 1.4 2001-07-11 10:00:32 gunter Exp $
+// $Id: G4BlockingList.cc,v 1.5 2002-04-19 08:22:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,6 +29,16 @@
 //
 
 #include "G4BlockingList.hh"
+
+G4BlockingList::G4BlockingList(G4int maxDefault,G4int stride)
+  : fStride(stride), fBlockingList(maxDefault,0)
+{
+}
+
+// Do nothing destructor
+G4BlockingList::~G4BlockingList()
+{
+}
 
 // Clear List and reset tag
 // Fix: Out of line for HP-CC

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.29 2001-12-11 16:03:19 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.30 2002-04-19 08:22:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -51,6 +51,40 @@
 
 const G4double  G4PropagatorInField::fEpsilonMinDefault = 5.0e-7;  
 const G4double  G4PropagatorInField::fEpsilonMaxDefault = 0.05;
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Constructors and destructor
+
+
+G4PropagatorInField::G4PropagatorInField(G4Navigator    *theNavigator, 
+		                         G4FieldManager *detectorFieldMgr)
+  : fDetectorFieldMgr(detectorFieldMgr), 
+    fCurrentFieldMgr(detectorFieldMgr), 
+    fNavigator(theNavigator),
+    End_PointAndTangent(G4ThreeVector(0.,0.,0.),
+			G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0,0.0),
+    fVerboseLevel(0),
+    fEpsilonMin(fEpsilonMinDefault),
+    fEpsilonMax(fEpsilonMaxDefault),  
+    fmax_loop_count(10000),
+    fNoZeroStep(0)
+{
+     // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
+
+     fActionThreshold_NoZeroSteps= 2; 
+     fSevereActionThreshold_NoZeroSteps= 10; 
+     fAbandonThreshold_NoZeroSteps= 50; 
+     // fMidPoint_CurveLen_of_LastAttempt= -1;
+     fFull_CurveLen_of_LastAttempt= -1; 
+     fLast_ProposedStepLength= -1; 
+
+     fLargestAcceptableStep= 1000.0 * meter;
+}
+
+G4PropagatorInField::~G4PropagatorInField()
+{
+}
 
 ///////////////////////////////////////////////////////////////////////////
 //

@@ -21,32 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.icc,v 1.5 2001-07-11 10:00:28 gunter Exp $
+// $Id: G4NavigationHistory.icc,v 1.6 2002-04-19 08:22:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4NavigationHistory Inline implementation
 //
-
-inline
-G4NavigationHistory::G4NavigationHistory()
-  : fNavHistory(kHistoryMax), fStackDepth(0)
-{
-	Reset();	// Reset depth
-	Clear();
-}
-
-inline
-G4NavigationHistory::G4NavigationHistory(const G4NavigationHistory &h)
-  : fNavHistory(h.fNavHistory), fStackDepth(h.fStackDepth)
-{
-}
-
-inline G4NavigationHistory::~G4NavigationHistory()
-{
-	Reset();	// To delete all but one current entries!
-        // delete fNavHistory(0);
-}
 
 inline
 G4NavigationHistory&

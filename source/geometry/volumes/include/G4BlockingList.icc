@@ -21,22 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4BlockingList.icc,v 1.5 2001-07-11 10:00:27 gunter Exp $
+// $Id: G4BlockingList.icc,v 1.6 2002-04-19 08:21:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4BlockingList  Inlined Implementation
 //
-
-inline G4BlockingList::G4BlockingList(G4int maxDefault,G4int stride)
-  : fStride(stride), fBlockingList(maxDefault,0)
-{
-}
-
-// Do nothing destructor
-inline G4BlockingList::~G4BlockingList()
-{
-}
 
 inline G4int G4BlockingList::Length() const
 {

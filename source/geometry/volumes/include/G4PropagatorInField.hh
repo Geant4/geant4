@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.21 2002-02-26 17:31:33 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.22 2002-04-19 08:22:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,7 +70,7 @@ class G4PropagatorInField
 			G4FieldManager *detectorFieldMgr);
 
    G4PropagatorInField( G4Navigator   *theNavigator );
-  ~G4PropagatorInField(){};
+  ~G4PropagatorInField();
 
    G4double ComputeStep(G4FieldTrack  &pFieldTrack,
  			G4double pCurrentProposedStepLength,
