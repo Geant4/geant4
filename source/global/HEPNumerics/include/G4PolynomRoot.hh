@@ -26,8 +26,38 @@
 // GEANT 4 class header file
 //
 //
+// Implementation of Jenkins-Traub real polynomial root finder.
+//
+//
+//  INPUT:
+//
+//    op - double precision vector of coefficients in order of
+//         decreasing powers.
+//    degree - integer degree of polynomial
+// 
+//  OUTPUT:
+//    zeror,zeroi - output double precision vectors of the
+//                  real and imaginary parts of the zeros.
+// 
+//  RETURN:
+//    returnval:   -1 if leading coefficient is zero, otherwise
+//                    number of roots found. 
+//
+// Example:
+// 
+//    G4PolynomRoot trapEq ;
+//    G4double coef[8] ;
+//    G4double zr[7] , zi[7] ;
+//
+//    G4int num = trapEq.FindRoots(coef,7,zr,zi);
+//
+//
+// Author: Oliver.Link@cern.ch
+//
+//
 // G4PolynomRoot
 //
+
 #ifndef G4POLYNOMROOT_HH
 #define G4POLYNOMROOT_HH
 
