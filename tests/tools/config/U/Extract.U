@@ -1,4 +1,4 @@
-?RCS: $Id: Extract.U,v 1.1 2001-05-17 10:12:21 sadilov Exp $
+?RCS: $Id: Extract.U,v 1.2 2001-06-28 09:07:44 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2001/05/17 10:12:21  sadilov
+?RCS: Import 'config'.
+?RCS:
 ?RCS: Revision 1.4  2000/12/19 07:23:31  sadilov
 ?RCS: Moving 'extracted files'+'config.sh' to '.config/bin/$g4system'
 ?RCS: (instead of [simple] 'bin/$g4system' previously).
@@ -56,7 +59,7 @@ if test -f $src/MANIFEST; then
 	set x `awk '{print $1}' <$src/MANIFEST | grep '\.SH'`
 else
 #	echo "(Looking for .SH files under the source directory.)"
-	set x `(cd $src; find . -name "*.SH" -print)`
+	set x `(cd $src; find ./config/scripts -name "*.SH" -print)`
 fi
 shift
 case $# in
