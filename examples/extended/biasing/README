@@ -3,31 +3,31 @@
                         --------------------------
 
 This directory includes example applications to demonstrate the usage of
-different biasing techniques supported in Geant4, or possible from the user
-applications.
+different biasing techniques supported in Geant4, or possible from the 
+user applications.
 
 
 General remark to biasing
 -------------------------
 The tools provided for importance sampling (or geometrical splitting and
-Russian roulette) require the user to have a good understanding of the physics
-in the problem. This is because the user has to decide which particle types 
-have to be biased, define the regions (physical volumes, replicas) and 
-assign importances to that regions. If this is not done properly the results
-can not expected to describe a real experiment. 
-The examples given here only demonstrate how to use the tools technically. They
-don't intend to produce physical correct results.
+Russian roulette) require the user to have a good understanding of the 
+physics in the problem. This is because the user has to decide which 
+particle types have to be biased, define the regions (physical volumes, 
+replicas) and assign importances to that regions. If this is not done 
+properly it can not be expected that the results describe a real 
+experiment. The examples given here only demonstrate how to use the tools
+technically. They don't intend to produce physical correct results.
 
 General remark to scoring
 -------------------------
-A interface G4VPScorer is provided for the user. The user may create his own
-class to perform the desired scoring. The user defined class therefore  
-should inherit from the interface G4VPScorer. 
+A interface G4VPScorer is provided for the user. The user may create his 
+own class to perform the desired scoring. The user defined class 
+therefore should inherit from the interface G4VPScorer. 
 There are two example scorers G4PScorer and G4PIScorer provided. 
 When scoring is done in a "scoring" or in a "importance" geometry
-special action has to be taken to preferred counting of
+special action has to be taken to prevent counting of
 "collisions" with boundaries of the tracking geometry as interactions.
-This is different handled when scoring is done in the tracking geometry.
+This is differently handled when scoring is done in the tracking geometry.
 The scorers B01Scorer and B02Scorer show the difference in that case.
 The Scorer B06Scorer checks for consistency of importance and weight.
 
@@ -61,11 +61,11 @@ scored values.
 
 I. 2. Example B02
 -----------------
-This example shows how to use scoring in a "parallel" or "scoring" geometry.
-In this example a tracking and a scoring geometry is constructed. 
-Gammas are scored in the scoring geometry. The scored values are dumped
-to the screen after the run. How to access the score values more exclusively
-is shown in example B01.
+This example shows how to use scoring in a "parallel" or "scoring" 
+geometry. In this example a tracking and a scoring geometry is 
+constructed. Gammas are scored in the scoring geometry. The scored values
+are dumped to the screen after the run. How to access the score values 
+more exclusively is shown in example B01.
 
 
 II. Examples for biasing without scoring
@@ -101,7 +101,7 @@ The physics list used in this example creates only processes for
 gammas and neutrons. Other particles that my be produce
 will have no processes and can therefore not produce 
 any particles.
-The idea is to have the simulation performing somewhat like a transportation
-Monte Carlo that only knows about neutrons and gammas and is only
-used in limited energy range.
+The idea is to have the simulation performing somewhat like a 
+transportation Monte Carlo that only knows about neutrons and gammas and 
+is only used in a limited energy range.
 

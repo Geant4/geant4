@@ -4,7 +4,7 @@
 #include "G4VPScorer.hh"
 #include "G4PMapPtkTallys.hh"
 
-#include <iostream>
+#include "g4std/iostream"
 
 class G4Step;
 class G4PStep;
@@ -21,7 +21,7 @@ private:
   G4PMapPtkTallys fPtkTallys;
 };
 
-ostream& operator<<(ostream &out, const B01Scorer &ps);
+G4std::ostream& operator<<(G4std::ostream &out, const B01Scorer &ps);
 
 #endif
 

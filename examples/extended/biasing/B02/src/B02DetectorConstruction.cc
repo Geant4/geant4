@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "B02DetectorConstruction.hh"
 
 #include "G4Material.hh"
