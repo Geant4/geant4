@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01ElectroMagneticField.cc,v 1.4 2001-03-29 16:30:00 grichine Exp $
+// $Id: F01ElectroMagneticField.cc,v 1.5 2001-03-30 15:12:12 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -92,10 +92,12 @@ F01ElectroMagneticField::~F01ElectroMagneticField()
 void F01ElectroMagneticField::UpdateField()
 {
   SetStepper();
-  G4cout<<"The minimal step is equal to "<<fMinStep/mm<<" mm"<<G4endl;
+  G4cout<<"The minimal step is equal to "<<fMinStep/mm<<" mm"<<G4endl ;
+
   fFieldManager->SetDetectorField(fMagneticField );
 
   if(fChordFinder) delete fChordFinder;
+
   fChordFinder = new G4ChordFinder( fMagneticField, fMinStep,fStepper);
 
   fFieldManager->SetChordFinder( fChordFinder );
@@ -120,39 +122,39 @@ void F01ElectroMagneticField::SetStepper()
       break;
     case 1:  
       fStepper = new G4ImplicitEuler( fEquation );      
-      G4cout<<"G4ImplicitEuler is calledS"<<G4endl;     
+      G4cout<<"G4ImplicitEuler is called"<<G4endl;     
       break;
     case 2:  
       fStepper = new G4SimpleRunge( fEquation );        
-      G4cout<<"G4SimpleRunge is calledS"<<G4endl;     
+      G4cout<<"G4SimpleRunge is called"<<G4endl;     
       break;
     case 3:  
       fStepper = new G4SimpleHeum( fEquation );         
-      G4cout<<"G4SimpleHeum is calledS"<<G4endl;     
+      G4cout<<"G4SimpleHeum is called"<<G4endl;     
       break;
     case 4:  
       fStepper = new G4ClassicalRK4( fEquation );       
-      G4cout<<"G4ClassicalRK4 (default) is calledS"<<G4endl;     
+      G4cout<<"G4ClassicalRK4 (default) is called"<<G4endl;     
       break;
     case 5:  
       fStepper = new G4HelixExplicitEuler( fEquation ); 
-      G4cout<<"G4HelixExplicitEuler is calledS"<<G4endl;     
+      G4cout<<"G4HelixExplicitEuler is called"<<G4endl;     
       break;
     case 6:  
       fStepper = new G4HelixImplicitEuler( fEquation ); 
-      G4cout<<"G4HelixImplicitEuler is calledS"<<G4endl;     
+      G4cout<<"G4HelixImplicitEuler is called"<<G4endl;     
       break;
     case 7:  
       fStepper = new G4HelixSimpleRunge( fEquation );   
-      G4cout<<"G4HelixSimpleRunge is calledS"<<G4endl;     
+      G4cout<<"G4HelixSimpleRunge is called"<<G4endl;     
       break;
     case 8:  
       fStepper = new G4CashKarpRKF45( fEquation );      
-      G4cout<<"G4CashKarpRKF45 is calledS"<<G4endl;     
+      G4cout<<"G4CashKarpRKF45 is called"<<G4endl;     
       break;
     case 9:  
       fStepper = new G4RKG3_Stepper( fEquation );       
-      G4cout<<"G4RKG3_Stepper is calledS"<<G4endl;     
+      G4cout<<"G4RKG3_Stepper is called"<<G4endl;     
       break;
     default: fStepper = 0;
   }

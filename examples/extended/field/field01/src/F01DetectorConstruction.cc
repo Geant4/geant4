@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01DetectorConstruction.cc,v 1.1 2001-03-27 16:22:19 grichine Exp $
+// $Id: F01DetectorConstruction.cc,v 1.2 2001-03-30 15:12:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ F01DetectorConstruction::F01DetectorConstruction()
   WorldSizeZ = 80.*cm;
   WorldSizeR = 20.*cm;
 
-  AbsorberThickness = 40.0*mm;
+  AbsorberThickness = 10.0*mm;
 
   AbsorberRadius   = 10.*cm;
   zAbsorber = 36.*cm ;
@@ -433,48 +433,7 @@ G4VPhysicalVolume* F01DetectorConstruction::ConstructCalorimeter()
                                  false,			//no boolean operation
                                  0);			//copy number
 
-  /**************************
-
-  G4Tubs* solidElectrode = new G4Tubs("Electrode",0.,AbsorberRadius,
-                                       fElectrodeThick/2.,0.,twopi); 
-                          
-  G4LogicalVolume* logicElectrode = new G4LogicalVolume(solidElectrode,
-                                        fElectrodeMat, "Electrode"); 
-
-  G4double zElectrode = zAbsorber - AbsorberThickness/2. - 
-                        fElectrodeThick/2. - 0.01*mm;    
-      			                  
-  G4VPhysicalVolume*    physiElectrode = new G4PVPlacement(0,		   
-      		                       G4ThreeVector(0.,0.,zElectrode),        
-                                        "Electrode",logicElectrode,
-                                         physiWorld,false,0);    
-  
-
-
-  G4Tubs* solidGap = new G4Tubs("Gap",0.,AbsorberRadius,fGapThick/2.,0.,twopi); 
-                          
-  G4LogicalVolume* logicGap = new G4LogicalVolume(solidGap,fGapMat, "Gap"); 
-
-  G4double zGap = zElectrode - fElectrodeThick/2. - fGapThick/2. - 0.01*mm ;    
-      			                  
-  G4VPhysicalVolume*    physiGap = new G4PVPlacement(0,		   
-      		                       G4ThreeVector(0.,0.,zGap),        
-                                        "Gap",logicGap,physiWorld,false,0); 
-
-  G4Tubs* solidWindow = new G4Tubs("Window",0.,AbsorberRadius,
-                                    fWindowThick/2.,0.,twopi); 
-                          
-  G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
-                                     fWindowMat, "Window"); 
-
-  G4double zWindow = zGap - fGapThick/2. - fWindowThick/2. - 0.01*mm ;    
-      			                  
-  G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0,		   
-      		                       G4ThreeVector(0.,0.,zWindow),        
-                                        "Window",logicWindow,physiWorld,false,0); 
-
-  ************ */
-                             
+                            
   // Absorber
 
   if (AbsorberThickness > 0.) 
