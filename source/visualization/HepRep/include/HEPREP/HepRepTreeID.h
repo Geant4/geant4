@@ -7,7 +7,7 @@
 #ifndef HEPREP_HEPREPTREEID_H
 #define HEPREP_HEPREPTREEID_H 1
 
-// Copyright 2000-2002, FreeHEP.
+// Copyright 2000-2003, FreeHEP.
 
 #include <string>
 
@@ -56,8 +56,9 @@ public:
      * Returns a deep copy of this treeID.
      *
      * @return copy of this treeID.
+     * @throws CloneNotSupportedException if copying is not possible.
      */
-    virtual HepRepTreeID * copy() = 0;
+//    HepRepTreeID* copy() throws CloneNotSupportedException;
 }; // class
 } // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPTREEID_H */

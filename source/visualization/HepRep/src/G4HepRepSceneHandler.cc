@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.70 2004-02-05 18:41:49 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.71 2004-05-26 06:16:21 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -1012,7 +1012,7 @@ HepRepTypeTree* G4HepRepSceneHandler::getGeometryTypeTree() {
 HepRepType* G4HepRepSceneHandler::getGeometryRootType() {
     if (_geometryRootType == NULL) {
         // Create the top level Geometry Type.
-        _geometryRootType = factory->createHepRepType(NULL, rootVolumeName);
+        _geometryRootType = factory->createHepRepType((HepRepTypeTree*)NULL, rootVolumeName);
         _geometryRootType->addAttValue("Layer", geometryLayer);
     
         // Add attdefs used by all geometry types.
@@ -1129,7 +1129,7 @@ HepRepTypeTree* G4HepRepSceneHandler::getEventTypeTree() {
 HepRepType* G4HepRepSceneHandler::getEventType() {
     if (_eventType == NULL) {
         // Create the top level Event Type.
-        _eventType = factory->createHepRepType(NULL, "Event");
+        _eventType = factory->createHepRepType((HepRepTypeTree*)NULL, "Event");
         _eventType->addAttValue("Layer", eventLayer);
 
         // add defaults for Events

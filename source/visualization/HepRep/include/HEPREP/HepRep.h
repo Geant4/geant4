@@ -7,8 +7,9 @@
 #ifndef HEPREP_HEPREP_H
 #define HEPREP_HEPREP_H 1
 
-// Copyright 2000-2003, FreeHEP.
+// Copyright 2000-2004, FreeHEP.
 
+#include <set>
 #include <string>
 #include <vector>
 
@@ -17,14 +18,15 @@
 #include "HEPREP/HepRepAction.h"
 #include "HEPREP/HepRepAttDef.h"
 #include "HEPREP/HepRepAttribute.h"
+#include "HEPREP/HepRepAttributeListener.h"
 #include "HEPREP/HepRepAttValue.h"
 #include "HEPREP/HepRepConstants.h"
 #include "HEPREP/HepRepDefinition.h"
 #include "HEPREP/HepRepFactory.h"
+#include "HEPREP/HepRepFrameListener.h"
 #include "HEPREP/HepRepInstance.h"
 #include "HEPREP/HepRepInstanceTree.h"
 #include "HEPREP/HepRepIterator.h"
-#include "HEPREP/HepRepIteratorListener.h"
 #include "HEPREP/HepRepPoint.h"
 #include "HEPREP/HepRepSelectFilter.h"
 #include "HEPREP/HepRepTreeID.h"
@@ -37,7 +39,6 @@ namespace HEPREP {
 class HepRepAction;
 class HepRepInstanceTree;
 class HepRepSelectFilter;
-class HepRepType;
 class HepRepTypeTree;
 
 /**
@@ -61,22 +62,21 @@ public:
      *
      * @param layer name of layer to be added to the back of the list.
      */
-    virtual bool addLayer(std::string layer) = 0;
+    virtual void addLayer(std::string layer) = 0;
 
     /**
      * Returns the list of layers.
      *
      * @return the known layer names, in the order back-to-front.
      */
-    virtual std::vector<std::string>  * getLayerOrder() = 0;
+    virtual std::vector<std::string>  getLayerOrder() = 0;
 
     /**
      * Add a typetree to this heprep.
      *
      * @param typeTree to be added.
-     * @return false only if the tree is written immediately to some stream.
      */
-    virtual bool addTypeTree(HepRepTypeTree * typeTree) = 0;
+    virtual void addTypeTree(HepRepTypeTree * typeTree) = 0;
 
     /**
      * Remove a typetree from this heprep.
@@ -90,7 +90,7 @@ public:
      *
      * @return collection of HepRepTypeTrees.
      */
-    virtual std::vector<HepRepTypeTree *>  * getTypeTrees() = 0;
+    virtual std::set<HepRepTypeTree *>  getTypeTrees() = 0;
 
     /**
      * Returns a named and versioned typetree.
@@ -108,15 +108,13 @@ public:
      * @param name name of type.
      * @return named HepRepType.
      */
-    virtual HepRepType * getType(std::string name) = 0;
-
+//    HepRepType* getType(String name);
     /**
      * Adds an instancetree to this heprep.
      *
      * @param instanceTree to be added.
-     * @return false only if the tree is written immediately to some stream.
      */
-    virtual bool addInstanceTree(HepRepInstanceTree * instanceTree) = 0;
+    virtual void addInstanceTree(HepRepInstanceTree * instanceTree) = 0;
 
     /**
      * Overlays an instancetree to this heprep, overriding attributes and adding children.
@@ -137,7 +135,7 @@ public:
      *
      * @return collection of HepRepInstanceTrees.
      */
-    virtual std::vector<HepRepInstanceTree *>  * getInstanceTrees() = 0;
+    virtual std::set<HepRepInstanceTree *>  getInstanceTrees() = 0;
 
     /**
      * Returns a named and versioned instancetree.

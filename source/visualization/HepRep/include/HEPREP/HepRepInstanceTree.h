@@ -7,18 +7,19 @@
 #ifndef HEPREP_HEPREPINSTANCETREE_H
 #define HEPREP_HEPREPINSTANCETREE_H 1
 
-// Copyright 2000-2002, FreeHEP.
+// Copyright 2000-2004, FreeHEP.
 
+#include <set>
 #include <vector>
 
 #include "HEPREP/HepRepTreeID.h"
 
 namespace HEPREP {
 
-class HepRep;
 class HepRepInstance;
 class HepRepSelectFilter;
 class HepRepTreeID;
+class HepRepTypeTree;
 
 /**
  * HepRepInstanceTree interface.
@@ -42,9 +43,8 @@ public:
      * Adds an instance to this instancetree.
      *
      * @param instance to be added.
-     * @return false only if written immediately to a stream.
      */
-    virtual bool addInstance(HepRepInstance * instance) = 0;
+    virtual void addInstance(HepRepInstance * instance) = 0;
 
     /**
      * Removes an instance from this instancetree.
@@ -58,22 +58,21 @@ public:
      *
      * @return collection of HepRepInstances.
      */
-    virtual std::vector<HepRepInstance *>  * getInstances() = 0;
+    virtual std::vector<HepRepInstance *>  getInstances() = 0;
 
     /**
      * Adds a related instance tree to this instancetree.
      *
      * @param instanceTree related instancetree.
-     * @return false only if written immediately to a stream.
      */
-    virtual bool addInstanceTree(HepRepTreeID * instanceTree) = 0;
+    virtual void addInstanceTree(HepRepTreeID * instanceTree) = 0;
 
     /**
      * Returns a collection of associated instance trees.
      *
      * @return collection of HepRepTreeIDs.
      */
-    virtual std::vector<HepRepTreeID *>  * getInstanceTrees() = 0;
+    virtual std::set<HepRepTreeID *>  getInstanceTrees() = 0;
 
     /**
      * Returns the associated typetree.
@@ -85,13 +84,10 @@ public:
     /**
      * Returns a deep copy of this instancetree.
      *
-     * @param heprep needed to find the associated type.
      * @param filter to filter the instances.
      * @return copy of this instancetree.
      */
-    virtual HepRepInstanceTree * copy(HepRep * heprep, HepRepSelectFilter * filter = NULL) = 0;
-
-    virtual HepRepTreeID * copy() = 0;
+    virtual HepRepInstanceTree * copy(HepRepTypeTree * typeTree, HepRepSelectFilter * filter = NULL) = 0;
 }; // class
 } // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPINSTANCETREE_H */

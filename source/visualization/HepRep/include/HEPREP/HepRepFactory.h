@@ -119,6 +119,14 @@ public:
      * @param parent to add this type to.
      * @param name of the type to create.
      */
+    virtual HepRepType * createHepRepType(HepRepTypeTree * parent, std::string name) = 0;
+
+    /**
+     * Creates a HepRepType.
+     *
+     * @param parent to add this type to.
+     * @param name of the type to create.
+     */
     virtual HepRepType * createHepRepType(HepRepType * parent, std::string name) = 0;
 
     /**

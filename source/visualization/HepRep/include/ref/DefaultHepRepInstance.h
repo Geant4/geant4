@@ -24,7 +24,7 @@
 class DefaultHepRepInstance : public DefaultHepRepAttribute, public virtual HEPREP::HepRepInstance {
 
     private:
-        void* parent;
+        HEPREP::HepRepInstance* parent;
         HEPREP::HepRepType* type;
         std::vector<HEPREP::HepRepPoint*> points;
         std::vector<HEPREP::HepRepInstance*> instances;
@@ -35,14 +35,15 @@ class DefaultHepRepInstance : public DefaultHepRepAttribute, public virtual HEPR
         ~DefaultHepRepInstance();
 
         void overlay(HEPREP::HepRepInstance * instance);
-        HEPREP::HepRepInstance* copy(HEPREP::HepRep* heprep, HEPREP::HepRepInstance* parent, HEPREP::HepRepSelectFilter* filter);
-        HEPREP::HepRepInstance* copy(HEPREP::HepRep* heprep, HEPREP::HepRepInstanceTree* parent, HEPREP::HepRepSelectFilter* filter);
+        HEPREP::HepRepInstance* copy(HEPREP::HepRepTypeTree* typeTree, HEPREP::HepRepInstance* parent, HEPREP::HepRepSelectFilter* filter);
+        HEPREP::HepRepInstance* copy(HEPREP::HepRepTypeTree* typeTree, HEPREP::HepRepInstanceTree* parent, HEPREP::HepRepSelectFilter* filter);
         HEPREP::HepRepType* getType();
-        bool addPoint(HEPREP::HepRepPoint* point);
-        std::vector<HEPREP::HepRepPoint *>* getPoints();
-        bool addInstance(HEPREP::HepRepInstance* instance);
+        void addPoint(HEPREP::HepRepPoint* point);
+        std::vector<HEPREP::HepRepPoint *> getPoints();
+        HEPREP::HepRepInstance* getSuperInstance();
+        void addInstance(HEPREP::HepRepInstance* instance);
         void removeInstance(HEPREP::HepRepInstance* instance);
-        std::vector<HEPREP::HepRepInstance *>* getInstances();
+        std::vector<HEPREP::HepRepInstance *> getInstances();
 
         HEPREP::HepRepAttValue* getAttValue(std::string name);
 

@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
 #include "HEPREP/HepRep.h"
 #include "HEPREP/HepRepSelectFilter.h"
@@ -24,21 +25,20 @@ class DefaultHepRepInstanceTree : public DefaultHepRepTreeID, public virtual HEP
     private:
         HEPREP::HepRepTreeID* typeTree;
         std::vector<HEPREP::HepRepInstance*> instances;
-        std::vector<HEPREP::HepRepTreeID*> instanceTrees;
+        std::set<HEPREP::HepRepTreeID*> instanceTrees;
 
     public:
         DefaultHepRepInstanceTree(std::string name, std::string version, HEPREP::HepRepTreeID* typeTree);
         ~DefaultHepRepInstanceTree();
 
         void overlay(HEPREP::HepRepInstanceTree * instanceTree);
-        HEPREP::HepRepInstanceTree* copy(HEPREP::HepRep* heprep, HEPREP::HepRepSelectFilter* filter);
-        HEPREP::HepRepTreeID* copy();
-        bool addInstance(HEPREP::HepRepInstance* instance);
+        HEPREP::HepRepInstanceTree* copy(HEPREP::HepRepTypeTree* typeTree, HEPREP::HepRepSelectFilter* filter);
+        void addInstance(HEPREP::HepRepInstance* instance);
         void removeInstance(HEPREP::HepRepInstance* instance);
-        std::vector<HEPREP::HepRepInstance*>* getInstances();
-        bool addInstanceTree(HEPREP::HepRepTreeID* treeID);
+        std::vector<HEPREP::HepRepInstance*> getInstances();
+        void addInstanceTree(HEPREP::HepRepTreeID* treeID);
         HEPREP::HepRepTreeID* getTypeTree();
-        std::vector<HEPREP::HepRepTreeID*>* getInstanceTrees();
+        std::set<HEPREP::HepRepTreeID*> getInstanceTrees();
 };
 
 #endif

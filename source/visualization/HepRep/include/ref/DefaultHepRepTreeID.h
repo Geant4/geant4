@@ -27,7 +27,6 @@ class DefaultHepRepTreeID : public virtual HEPREP::HepRepTreeID {
         void setQualifier(std::string qualifier);
         std::string getName();
         std::string getVersion();
-        HEPREP::HepRepTreeID* copy();
 };
 
 #endif

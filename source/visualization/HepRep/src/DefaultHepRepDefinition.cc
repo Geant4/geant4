@@ -13,29 +13,28 @@ DefaultHepRepDefinition::DefaultHepRepDefinition()
 }
 
 DefaultHepRepDefinition::~DefaultHepRepDefinition() {
-    vector<HepRepAttDef *>* list = getAttDefsFromNode();
-    for (vector<HepRepAttDef*>::iterator i1 = list->begin(); i1 != list->end(); i1++) {
+    set<HepRepAttDef *> list = getAttDefsFromNode();
+    for (set<HepRepAttDef*>::iterator i1 = list.begin(); i1 != list.end(); i1++) {
         delete (*i1);
     }
 }
 
-vector<HepRepAttDef *>* DefaultHepRepDefinition::getAttDefsFromNode() {
-    attList.clear();
+set<HepRepAttDef *> DefaultHepRepDefinition::getAttDefsFromNode() {
+    set<HepRepAttDef*> attSet;
     for (map<string, HepRepAttDef*>::iterator i = attDefs.begin(); i != attDefs.end(); i++) {
-        attList.push_back((*i).second);
+        attSet.insert((*i).second);
     }
-    return &attList;
+    return attSet;
 }
 
-bool DefaultHepRepDefinition::addAttDef(HepRepAttDef* hepRepAttDef) {
+void DefaultHepRepDefinition::addAttDef(HepRepAttDef* hepRepAttDef) {
     string lowerCaseName = hepRepAttDef->getLowerCaseName();
     if (attDefs[lowerCaseName] != NULL) delete attDefs[lowerCaseName];
     attDefs[lowerCaseName] = hepRepAttDef;
-    return true;
 }
 
-bool DefaultHepRepDefinition::addAttDef(string name, string desc, string type, string extra) {
-    return addAttDef(new DefaultHepRepAttDef(name, desc, type, extra));
+void DefaultHepRepDefinition::addAttDef(string name, string desc, string type, string extra) {
+    addAttDef(new DefaultHepRepAttDef(name, desc, type, extra));
 }
 
 HepRepAttDef* DefaultHepRepDefinition::getAttDefFromNode(string name) {

@@ -60,7 +60,7 @@ public:
      * @param layerOrder to be written.
      * @return false in case of a stream problem.
      */
-    virtual bool write(std::vector<std::string>  * layerOrder) = 0;
+    virtual bool write(std::vector<std::string>  layerOrder) = 0;
 
     /**
      * Writes a HepRepTypeTree.

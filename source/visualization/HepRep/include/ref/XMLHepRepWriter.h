@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <stack>
+#include <set>
 #include <vector>
 
 #include "zipios++/zipoutputstream.h"
@@ -45,7 +46,7 @@ class XMLHepRepWriter : public virtual HEPREP::HepRepWriter {
 
         bool close();
         bool write(HEPREP::HepRep* heprep, std::string name);
-        bool write(std::vector<std::string> *layers);
+        bool write(std::vector<std::string> layers);
         bool write(HEPREP::HepRepTypeTree* typeTree);
         bool write(HEPREP::HepRepType* type);
         bool write(HEPREP::HepRepTreeID* treeID);

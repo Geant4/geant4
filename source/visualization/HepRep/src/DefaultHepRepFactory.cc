@@ -67,6 +67,10 @@ HepRepType* DefaultHepRepFactory::createHepRepType (HepRepType* parent, string n
     return new DefaultHepRepType(parent, name);
 }
 
+HepRepType* DefaultHepRepFactory::createHepRepType (HepRepTypeTree* parent, string name) {
+    return new DefaultHepRepType(parent, name);
+}
+
 HepRepTypeTree* DefaultHepRepFactory::createHepRepTypeTree (HepRepTreeID* treeID) {
     return new DefaultHepRepTypeTree(treeID);
 }

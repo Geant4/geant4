@@ -15,8 +15,16 @@ DefaultHepRepType::DefaultHepRepType(HepRepType* parentType, string typeName)
     }
 }
 
+DefaultHepRepType::DefaultHepRepType(HepRepTypeTree* parentTypeTree, string typeName)
+    : DefaultHepRepDefinition(), parent(NULL), name(typeName) {
+    this->description = "No Description";
+    this->infoURL = "No Info URL";
+    
+    parentTypeTree->addType(this);
+}
+
 DefaultHepRepType::~DefaultHepRepType() {
-    for (vector<HepRepType*>::iterator i1 = types.begin(); i1 != types.end(); i1++) {
+    for (set<HepRepType*>::iterator i1 = types.begin(); i1 != types.end(); i1++) {
         delete (*i1);
     }
 }
@@ -56,8 +64,8 @@ HepRepAttValue* DefaultHepRepType::getAttValue(string attName) {
     return value;
 }
 
-HepRepType* DefaultHepRepType::copy(HepRep*, HepRepType*) {
-    cerr << "DefaultHepRepType::copy(HepRep*, HepRepType*) not implemented." << endl;
+HepRepType* DefaultHepRepType::copy(HepRepType*) {
+    cerr << "DefaultHepRepType::copy(HepRepType*) not implemented." << endl;
     return NULL;
 }
 
@@ -85,12 +93,11 @@ void DefaultHepRepType::setInfoURL(string info) {
     this->infoURL = info;
 }
 
-bool DefaultHepRepType::addType(HepRepType* type) {
-    types.push_back(type);
-    return true;
+void DefaultHepRepType::addType(HepRepType* type) {
+    types.insert(type);
 }
 
-vector<HepRepType*>* DefaultHepRepType::getTypes() {
-    return &types;
+set<HepRepType*> DefaultHepRepType::getTypes() {
+    return types;
 }
 

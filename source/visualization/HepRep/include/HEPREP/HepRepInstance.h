@@ -7,7 +7,7 @@
 #ifndef HEPREP_HEPREPINSTANCE_H
 #define HEPREP_HEPREPINSTANCE_H 1
 
-// Copyright 2000-2002, FreeHEP.
+// Copyright 2000-2004, FreeHEP.
 
 #include <vector>
 
@@ -15,11 +15,11 @@
 
 namespace HEPREP {
 
-class HepRep;
 class HepRepInstanceTree;
 class HepRepPoint;
 class HepRepSelectFilter;
 class HepRepType;
+class HepRepTypeTree;
 
 /**
  * HepRepInstance interface.
@@ -45,9 +45,8 @@ public:
      * Adds an sub-instance to this instance.
      *
      * @param instance sub-instance.
-     * @return false only if written immediately to a stream.
      */
-    virtual bool addInstance(HepRepInstance * instance) = 0;
+    virtual void addInstance(HepRepInstance * instance) = 0;
 
     /**
      * Removes a sub-instance from this instance.
@@ -61,7 +60,7 @@ public:
      *
      * @return collection of HepRepInstances.
      */
-    virtual std::vector<HepRepInstance *>  * getInstances() = 0;
+    virtual std::vector<HepRepInstance *>  getInstances() = 0;
 
     /**
      * Returns the associated type for this instance.
@@ -74,36 +73,56 @@ public:
      * Adds a point to this instance.
      *
      * @param point to be added.
-     * @return false only if written immediately to a stream.
      */
-    virtual bool addPoint(HepRepPoint * point) = 0;
+    virtual void addPoint(HepRepPoint * point) = 0;
 
     /**
      * Returns a collection of all points this instance keeps.
      *
      * @return collection of HepRepPoints.
      */
-    virtual std::vector<HepRepPoint *>  * getPoints() = 0;
+    virtual std::vector<HepRepPoint *>  getPoints() = 0;
+
+    /**
+     * Fills a double[3][n] array with the coordinates of all points, if
+     * none of the points have any attributes defined on them.
+     * The actual number of points filled is returned. In case the number
+     * of points is larger than n, or if any points have attributes, -1 is returned.
+     * One could then call getPoint().
+     *
+     * @see #getPoints()
+     *
+     * @param xyz a double[3][n] array to be filled with points.
+     * @return number of points filled in xyz, or -1 in case of error or non-implementation.
+     *
+     * ONLY in JAVA
+     */
+    /**
+     * Returns the parent of this instance.
+     *
+     * @return parent of instance, or null if top-level.
+     */
+    virtual HepRepInstance * getSuperInstance() = 0;
 
     /**
      * Returns a deep copy of this instance.
      *
-     * @param heprep needed to find the associated type.
+     * @param typeTree needed to find the associated type.
      * @param parent to which the copy is added.
      * @param filter run on all instances before copying.
      * @return copy of this instance.
      */
-    virtual HepRepInstance * copy(HepRep * heprep, HepRepInstance * parent, HepRepSelectFilter * filter = NULL) = 0;
+    virtual HepRepInstance * copy(HepRepTypeTree * typeTree, HepRepInstance * parent, HepRepSelectFilter * filter = NULL) = 0;
 
     /**
      * Returns a deep copy of this instance.
      *
-     * @param heprep needed to find the associated type.
+     * @param typeTree needed to find the associated type.
      * @param parent to which the copy is added.
      * @param filter run on all instances before copying.
      * @return copy of this instance.
      */
-    virtual HepRepInstance * copy(HepRep * heprep, HepRepInstanceTree * parent, HepRepSelectFilter * filter = NULL) = 0;
+    virtual HepRepInstance * copy(HepRepTypeTree * typeTree, HepRepInstanceTree * parent, HepRepSelectFilter * filter = NULL) = 0;
 }; // class
 } // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPINSTANCE_H */
