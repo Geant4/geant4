@@ -29,8 +29,7 @@
 // Cvs tag :  $ Name $
 
 #include "G4Timer.hh"
-#include <stdio.h>
-#include <math.h>
+#include <cmath>
 #include <fstream>
 #include <stdlib.h>
 #include "G4ios.hh" 
@@ -111,7 +110,7 @@ int main(int, char **)
 
   G4cout<<"\n\n==================================================";
   G4ThreeVector start( 0, 0, -30);
-  G4ThreeVector dir(1./sqrt(2.), 1./sqrt(2.), 0);
+  G4ThreeVector dir(1./std::sqrt(2.), 1./std::sqrt(2.), 0);
   G4double   d;
   G4int z;
   

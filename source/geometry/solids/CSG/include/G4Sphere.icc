@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.icc,v 1.4 2004-10-10 10:44:18 johna Exp $
+// $Id: G4Sphere.icc,v 1.5 2004-12-02 09:31:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -158,7 +158,7 @@ inline
 G4double G4Sphere::GetCubicVolume()
 {
   if(fCubicVolume != 0.) ;
-  else   fCubicVolume = fDPhi*(cos(fSTheta)-cos(fSTheta+fDTheta))*
+  else   fCubicVolume = fDPhi*(std::cos(fSTheta)-std::cos(fSTheta+fDTheta))*
                               (fRmax*fRmax*fRmax-fRmin*fRmin*fRmin)/3.; 
   return fCubicVolume;
 }

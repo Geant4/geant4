@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.17 2003-11-22 10:11:41 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.18 2004-12-02 09:31:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,7 +92,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   G4double phiTotal = thePhiTotal;
   if ( (phiTotal <=0) || (phiTotal >= 2*M_PI*(1-DBL_EPSILON)) )
     phiTotal = 2*M_PI;
-  G4double convertRad = cos(0.5*phiTotal/theNumSide);
+  G4double convertRad = std::cos(0.5*phiTotal/theNumSide);
 
   //
   // Some historical stuff
@@ -471,7 +471,7 @@ G4bool G4Polyhedra::Reset()
   G4double phiTotal = original_parameters->Opening_angle;
   if ( (phiTotal <=0) || (phiTotal >= 2*M_PI*(1-DBL_EPSILON)) )
     phiTotal = 2*M_PI;
-  G4double convertRad = cos(0.5*phiTotal/original_parameters->numSide);
+  G4double convertRad = std::cos(0.5*phiTotal/original_parameters->numSide);
   rz->ScaleA( 1/convertRad );
 
   Create( original_parameters->Start_angle, phiTotal,

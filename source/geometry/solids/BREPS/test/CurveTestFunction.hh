@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: CurveTestFunction.hh,v 1.6 2003-06-16 16:53:01 gunter Exp $
+// $Id: CurveTestFunction.hh,v 1.7 2004-12-02 09:31:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -111,9 +111,9 @@ void TestCurve(G4Curve* c)
     G4double  pMax = c->GetPMax();
 
     if (pMax>0) 
-      u2-= floor((u2-u)/pMax+0.5)*pMax;
+      u2-= std::floor((u2-u)/pMax+0.5)*pMax;
     
-    G4bool error= abs(u-u2) > 0.0001;
+    G4bool error= std::abs(u-u2) > 0.0001;
     
     if (i<5 || error) 
     {
@@ -199,7 +199,7 @@ void TestProject(G4Curve* c, const G4Transform3D& tr)
     G4Point3D p2 = projC->GetPoint(u);
     G4bool error = false;
  
-    if (abs(p2.z())>0.0001) 
+    if (std::abs(p2.z())>0.0001) 
     {
       error= true;
       G4cout << "Error: the projection is not in the xy plane!" << G4endl;

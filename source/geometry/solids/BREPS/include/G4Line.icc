@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Line.icc,v 1.7 2001-07-11 09:59:35 gunter Exp $
+// $Id: G4Line.icc,v 1.8 2004-12-02 09:31:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -137,9 +137,9 @@ G4int G4Line::IntersectRay2D(const G4Ray& ray)
   
   G4int nbinter = 0;
 
-  if (fabs(denom) < kCarTolerance) 
+  if (std::fabs(denom) < kCarTolerance) 
   {
-    if (fabs(num1) < kCarTolerance) 
+    if (std::fabs(num1) < kCarTolerance) 
     {
       // identical lines
     } 

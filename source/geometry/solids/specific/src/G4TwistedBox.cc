@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBox.cc,v 1.2 2004-11-13 18:26:25 gcosmo Exp $
+// $Id: G4TwistedBox.cc,v 1.3 2004-12-02 09:31:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,8 +72,8 @@ G4TwistedBox::G4TwistedBox(const G4String &pname,
   if ( (    pDx  > 2*kCarTolerance)
        && ( pDy  > 2*kCarTolerance)
        && ( pDz   > 2*kCarTolerance) 
-       && ( fabs(twistedangle) > 2*kAngTolerance )
-       && ( fabs(twistedangle) < M_PI/2 ) )
+       && ( std::fabs(twistedangle) > 2*kAngTolerance )
+       && ( std::fabs(twistedangle) < M_PI/2 ) )
     {
       
       SetFields(twistedangle, pDx, pDy, pDz);
@@ -137,7 +137,7 @@ G4bool G4TwistedBox::CalculateExtent( const EAxis        pAxis,
                                              G4double          &pMax ) const
 {
 
-  G4double maxRad = sqrt( fDx*fDx + fDy*fDy);
+  G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
 
   if (!pTransform.IsRotated())
     {
@@ -323,7 +323,7 @@ G4TwistedBox::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   if (vertices)
   {
 
-    G4double maxRad = sqrt( fDx*fDx + fDy*fDy);
+    G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
 
     G4ThreeVector vertex0(-maxRad,-maxRad,-fDz) ;
     G4ThreeVector vertex1(maxRad,-maxRad,-fDz) ;
@@ -372,8 +372,8 @@ EInside G4TwistedBox::Inside(const G4ThreeVector& p) const
    *tmpin = kOutside ;
 
    G4double phi = - p.z()/(2*fDz) * fPhiTwist ;
-   G4double cphi = cos(phi) ;
-   G4double sphi = sin(phi) ;
+   G4double cphi = std::cos(phi) ;
+   G4double sphi = std::sin(phi) ;
    G4double posx = p.x() * cphi - p.y() * sphi   ;
    G4double posy = p.x() * sphi + p.y() * cphi   ;
    G4double posz = p.z()  ;
@@ -390,23 +390,23 @@ EInside G4TwistedBox::Inside(const G4ThreeVector& p) const
     G4endl ;
 #endif 
 
-  if ( fabs(posx) <= fDx - kCarTolerance*0.5 )
+  if ( std::fabs(posx) <= fDx - kCarTolerance*0.5 )
   {
-    if (fabs(posy) <= fDy - kCarTolerance*0.5 )
+    if (std::fabs(posy) <= fDy - kCarTolerance*0.5 )
     {
-      if      (fabs(posz) <= fDz - kCarTolerance*0.5 ) *tmpin = kInside ;
-      else if (fabs(posz) <= fDz + kCarTolerance*0.5 ) *tmpin = kSurface ;
+      if      (std::fabs(posz) <= fDz - kCarTolerance*0.5 ) *tmpin = kInside ;
+      else if (std::fabs(posz) <= fDz + kCarTolerance*0.5 ) *tmpin = kSurface ;
     }
-    else if (fabs(posy) <= fDy + kCarTolerance*0.5 )
+    else if (std::fabs(posy) <= fDy + kCarTolerance*0.5 )
     {
-      if (fabs(posz) <= fDz + kCarTolerance*0.5 ) *tmpin = kSurface ;
+      if (std::fabs(posz) <= fDz + kCarTolerance*0.5 ) *tmpin = kSurface ;
     }
   }
-  else if (fabs(posx) <= fDx + kCarTolerance*0.5 )
+  else if (std::fabs(posx) <= fDx + kCarTolerance*0.5 )
   {
-    if (fabs(posy) <= fDy + kCarTolerance*0.5 )
+    if (std::fabs(posy) <= fDy + kCarTolerance*0.5 )
     {
-      if (fabs(posz) <= fDz + kCarTolerance*0.5) *tmpin = kSurface ;
+      if (std::fabs(posz) <= fDz + kCarTolerance*0.5) *tmpin = kSurface ;
     }
   }
   
@@ -609,13 +609,13 @@ G4double G4TwistedBox::DistanceToIn (const G4ThreeVector& p) const
          // Initialize
 
         G4double safex, safey, safez, safe = 0.0 ;
-        G4double maxRad = sqrt( fDx*fDx + fDy*fDy);
+        G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
 
         G4cout << "maxRad = " << maxRad << G4endl ;
 
-        safex = fabs(p.x()) - maxRad ;
-        safey = fabs(p.y()) - maxRad ;
-        safez = fabs(p.z()) - fDz ;
+        safex = std::fabs(p.x()) - maxRad ;
+        safey = std::fabs(p.y()) - maxRad ;
+        safez = std::fabs(p.z()) - fDz ;
         
         if (safex > safe) safe = safex ;
         if (safey > safe) safe = safey ;
@@ -1011,7 +1011,7 @@ void G4TwistedBox::DescribeYourselfTo (G4VGraphicsScene& scene) const
 G4VisExtent G4TwistedBox::GetExtent() const 
 {
 
-  G4double maxRad = sqrt( fDx*fDx + fDy*fDy);
+  G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
 
   return G4VisExtent(-maxRad, maxRad ,
                      -maxRad, maxRad ,
@@ -1032,7 +1032,7 @@ G4Polyhedron* G4TwistedBox::CreatePolyhedron () const
 
 G4NURBS* G4TwistedBox::CreateNURBS () const 
 {
-  G4double maxRad = sqrt( fDx*fDx + fDy*fDy);
+  G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
    return new G4NURBStube(maxRad, maxRad, fDz); 
    // Tube for now!!!
 }

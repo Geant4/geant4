@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidCone.cc,v 1.12 2003-06-16 16:52:45 gunter Exp $
+// $Id: G4BREPSolidCone.cc,v 1.13 2004-12-02 09:31:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -149,9 +149,9 @@ G4ThreeVector G4BREPSolidCone::SurfaceNormal(const G4ThreeVector& Pt) const
 
 G4double G4BREPSolidCone::DistanceToIn(const G4ThreeVector& Pt) const
 {
-  G4double dist1 = fabs(SurfaceVec[0]->HowNear(Pt));
-  G4double dist2 = fabs(SurfaceVec[1]->ClosestDistanceToPoint(Pt));
-  G4double dist3 = fabs(SurfaceVec[2]->ClosestDistanceToPoint(Pt));  
+  G4double dist1 = std::fabs(SurfaceVec[0]->HowNear(Pt));
+  G4double dist2 = std::fabs(SurfaceVec[1]->ClosestDistanceToPoint(Pt));
+  G4double dist3 = std::fabs(SurfaceVec[2]->ClosestDistanceToPoint(Pt));  
   if(dist1 > dist2) dist1 = dist2;
   if(dist1 > dist3) dist1 = dist3;  
   return dist1;
@@ -200,9 +200,9 @@ G4double G4BREPSolidCone::DistanceToOut(register const G4ThreeVector& Pt,
 
 G4double G4BREPSolidCone::DistanceToOut(const G4ThreeVector& Pt) const
 {
-  G4double dist1 = fabs(SurfaceVec[0]->HowNear(Pt));
-  G4double dist2 = fabs(SurfaceVec[1]->ClosestDistanceToPoint(Pt));
-  G4double dist3 = fabs(SurfaceVec[2]->ClosestDistanceToPoint(Pt));  
+  G4double dist1 = std::fabs(SurfaceVec[0]->HowNear(Pt));
+  G4double dist2 = std::fabs(SurfaceVec[1]->ClosestDistanceToPoint(Pt));
+  G4double dist3 = std::fabs(SurfaceVec[2]->ClosestDistanceToPoint(Pt));  
   if(dist1 > dist2) dist1 = dist2;
   if(dist1 > dist3) dist1 = dist3;  
   return dist1;

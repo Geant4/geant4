@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Torus.cc,v 1.8 2004-09-08 15:13:53 grichine Exp $
+// $Id: testG4Torus.cc,v 1.9 2004-12-02 09:31:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,7 +34,7 @@
 
 #include "G4ios.hh"
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 
 #include "globals.hh"
 #include "geomdefs.hh"
@@ -90,22 +90,22 @@ G4bool testG4Torus()
    G4ThreeVector ponrmax(190,0,0);
    G4ThreeVector ponrmin(0,110,0);
    G4ThreeVector ponrtor(0,100,0);
-   G4ThreeVector ponphi1(100/sqrt(2.),100/sqrt(2.),0) ;
-   G4ThreeVector ponphi2(-100/sqrt(2.),100/sqrt(2.),0) ;
-   G4ThreeVector ponphi12(120/sqrt(2.),120/sqrt(2.),0) ;
-   G4ThreeVector ponphi22(-120/sqrt(2.),120/sqrt(2.),0) ;
-   G4ThreeVector ponphi23(-120/sqrt(2.)+0.5,120/sqrt(2.),0) ;
+   G4ThreeVector ponphi1(100/std::sqrt(2.),100/std::sqrt(2.),0) ;
+   G4ThreeVector ponphi2(-100/std::sqrt(2.),100/std::sqrt(2.),0) ;
+   G4ThreeVector ponphi12(120/std::sqrt(2.),120/std::sqrt(2.),0) ;
+   G4ThreeVector ponphi22(-120/std::sqrt(2.),120/std::sqrt(2.),0) ;
+   G4ThreeVector ponphi23(-120/std::sqrt(2.)+0.5,120/std::sqrt(2.),0) ;
     
 
    G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
    G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
-   G4ThreeVector vxy(1/sqrt(2.0),1/sqrt(2.0),0);
-   G4ThreeVector vmxy(-1/sqrt(2.0),1/sqrt(2.0),0);
-   G4ThreeVector vmxmy(-1/sqrt(2.0),-1/sqrt(2.0),0);
-   G4ThreeVector vxmy(1/sqrt(2.0),-1/sqrt(2.0),0);
+   G4ThreeVector vxy(1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+   G4ThreeVector vmxy(-1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+   G4ThreeVector vmxmy(-1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
+   G4ThreeVector vxmy(1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
 
-   G4ThreeVector pstart((Rtor+Rmax)/sqrt(2.0),(Rtor+Rmax)/sqrt(2.0),0) ;
-   G4ThreeVector vdirect(1/sqrt(2.0),-1/sqrt(2.0),0) ;
+   G4ThreeVector pstart((Rtor+Rmax)/std::sqrt(2.0),(Rtor+Rmax)/std::sqrt(2.0),0) ;
+   G4ThreeVector vdirect(1/std::sqrt(2.0),-1/std::sqrt(2.0),0) ;
    
    G4ThreeVector pother(110,0,0);
    vdirect = vdirect.unit() ;

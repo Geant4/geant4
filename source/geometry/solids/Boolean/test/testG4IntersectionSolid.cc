@@ -25,7 +25,7 @@
 // 
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 
 #include "globals.hh"
 #include "geomdefs.hh"
@@ -65,11 +65,11 @@ int main()
 
     G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
     G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
-    G4ThreeVector vxy(1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxy(-1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxmy(-1/sqrt(2.0),-1/sqrt(2.0),0);
-    G4ThreeVector vxmy(1/sqrt(2.0),-1/sqrt(2.0),0);
-    G4ThreeVector vxmz(1/sqrt(2.0),0,-1/sqrt(2.0));
+    G4ThreeVector vxy(1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+    G4ThreeVector vmxy(-1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+    G4ThreeVector vmxmy(-1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
+    G4ThreeVector vxmy(1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
+    G4ThreeVector vxmz(1/std::sqrt(2.0),0,-1/std::sqrt(2.0));
 
     G4double dist;
     G4ThreeVector *pNorm,norm;
@@ -198,7 +198,7 @@ int main()
     assert(ApproxEqual(dist,10)&&ApproxEqual(norm,vmz)&&*pgoodNorm);
 
     dist=b1Ib2.DistanceToOut(pzero,vxy,calcNorm,pgoodNorm,pNorm);
-    assert(ApproxEqual(dist,sqrt(200.0))&&*pgoodNorm);
+    assert(ApproxEqual(dist,std::sqrt(200.0))&&*pgoodNorm);
 
     dist=b1Ib2.DistanceToOut(G4ThreeVector(10,5,0),vx,calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,0)&&ApproxEqual(*pNorm,vx)&&*pgoodNorm);

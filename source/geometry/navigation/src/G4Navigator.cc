@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.16 2004-11-17 17:18:31 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.17 2004-12-02 09:31:23 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -624,7 +624,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       //
       if( shiftOriginSafSq >= sqr(fPreviousSafety) )
       {
-        G4double shiftOrigin = sqrt(shiftOriginSafSq);
+        G4double shiftOrigin = std::sqrt(shiftOriginSafSq);
         G4double diffShiftSaf = shiftOrigin - fPreviousSafety;
 
         if( diffShiftSaf > fAccuracyForWarning )
@@ -633,7 +633,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
                       "UnexpectedPositionShift", JustWarning,
                       "Accuracy ERROR or slightly inaccurate position shift.");
           G4cerr << "     The Step's starting point has moved " 
-                 << sqrt(moveLenSq)/mm << " mm " << G4endl
+                 << std::sqrt(moveLenSq)/mm << " mm " << G4endl
                  << "     since the last call to a Locate method." << G4endl;
           G4cerr << "     This has resulted in moving " 
                  << shiftOrigin/mm << " mm " 
@@ -674,7 +674,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
         {
           G4cerr << "WARNING - G4Navigator::ComputeStep()" << G4endl
                  << "          The Step's starting point has moved "
-                 << sqrt(moveLenSq) << "," << G4endl
+                 << std::sqrt(moveLenSq) << "," << G4endl
                  << "          which has taken it to the limit of"
                  << " the current safety. " << G4endl;
         }

@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2004-11-24 14:05:27 gcosmo Exp $
+$Id: History,v 1.39 2004-12-02 09:36:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      --------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 2nd, 2004 - G.Cosmo  (geomnav-V06-02-08)
+-----------------------
+- Implemented migration to <cmath> for standard mathematical functions.
 
 Nov 24th, 2004 - G.Cosmo  (geomnav-V06-02-07)
 ------------------------

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ParameterisedSolid1.cc,v 1.10 2003-12-01 16:19:11 gcosmo Exp $
+// $Id: testG4ParameterisedSolid1.cc,v 1.11 2004-12-02 09:31:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -249,7 +249,7 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
     assert(located->GetCopyNo()== 1);
 #if 0 
 //  G4cout << " Local coords = " << myNav.GetCurrentLocalCoordinate() << G4endl;
-    G4ThreeVector ExpectedPosition(5*cos(angle1),-5.*sin(angle1),0.);
+    G4ThreeVector ExpectedPosition(5*std::cos(angle1),-5.*std::sin(angle1),0.);
     G4cout << " Expected     = " << ExpectedPosition << G4endl;
     assert(ApproxEqual(myNav.CurrentLocalCoordinate(),ExpectedPosition ));
     if(!ApproxEqual(myNav.CurrentLocalCoordinate(),ExpectedPosition ))
@@ -426,7 +426,7 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
     StartPoint= EndPoint;
     physStep=kInfinity;
     Step=myNav.ComputeStep(StartPoint,xHat,physStep,safety);
-    assert(ApproxEqual(Step,90.-10./cos(angle1)));
+    assert(ApproxEqual(Step,90.-10./std::cos(angle1)));
     EndPoint= StartPoint + Step * xHat;   //  Should be near  90, 0, 0
     assert(safety==0.);
     myNav.SetGeometricallyLimitedStep();
@@ -438,11 +438,11 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
     StartPoint= EndPoint;
     physStep=kInfinity;
     Step=myNav.ComputeStep(StartPoint,xHat,physStep,safety);
-    assert(ApproxEqual(Step,20./cos(angle1)));
+    assert(ApproxEqual(Step,20./std::cos(angle1)));
     assert(ApproxEqual(safety,0));
     myNav.SetGeometricallyLimitedStep();
     EndPoint += Step * xHat;   //  Should be near 110, 0, 0
-    assert(ApproxEqual(EndPoint,G4ThreeVector(100.+10./cos(angle1),0,0)));
+    assert(ApproxEqual(EndPoint,G4ThreeVector(100.+10./std::cos(angle1),0,0)));
     located=myNav.LocateGlobalPointAndSetup( EndPoint );
     assert(located->GetName()=="World");
 
@@ -451,7 +451,7 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
     StartPoint= EndPoint;
     physStep=kInfinity;
     Step=myNav.ComputeStep(StartPoint,xHat,physStep,safety);
-    assert(ApproxEqual(Step,100.-10.*(1./cos(angle1)+1./cos(2.*angle1))));
+    assert(ApproxEqual(Step,100.-10.*(1./std::cos(angle1)+1./std::cos(2.*angle1))));
     EndPoint= StartPoint + Step * xHat;   //  Should near  0, 190, 0
     assert(safety<=Step);
     myNav.SetGeometricallyLimitedStep();
@@ -463,11 +463,11 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
     StartPoint= EndPoint;
     physStep=kInfinity;
     Step=myNav.ComputeStep(StartPoint,xHat,physStep,safety);
-    assert(ApproxEqual(Step,20./cos(2.*angle1)));
+    assert(ApproxEqual(Step,20./std::cos(2.*angle1)));
     assert(ApproxEqual(safety,0));
     myNav.SetGeometricallyLimitedStep();
     EndPoint += Step * xHat;   //  Should be near 210, 0, 0
-    assert(ApproxEqual(EndPoint,G4ThreeVector(200.+10./cos(2.*angle1),0,0)));
+    assert(ApproxEqual(EndPoint,G4ThreeVector(200.+10./std::cos(2.*angle1),0,0)));
     located=myNav.LocateGlobalPointAndSetup( EndPoint );
     assert(located->GetName()=="World");
 
@@ -477,7 +477,7 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
     StartPoint= EndPoint;
     physStep=kInfinity;
     Step=myNav.ComputeStep(StartPoint,xHat,physStep,safety);
-    assert(ApproxEqual(Step,(100.-10./cos(2.*angle1)-10.)*mm));
+    assert(ApproxEqual(Step,(100.-10./std::cos(2.*angle1)-10.)*mm));
     EndPoint= StartPoint + Step * xHat;   //  Should be    290, 0, 0
     assert(ApproxEqual(EndPoint,G4ThreeVector(290.*mm,0,0)));
     assert(safety==0.); // Started from a surface

@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Para2.cc,v 1.4 2002-01-08 16:16:57 gcosmo Exp $
+// $Id: testG4Para2.cc,v 1.5 2004-12-02 09:31:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Test of G4Para
 // Includes all/most of the tests Done for a box
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 #include "G4ios.hh"
 
 #include "globals.hh"
@@ -151,13 +151,13 @@ int main(void)
     if (OutRange(Dist,20))
 	G4cout << "Error A1 " << Dist << G4endl;
     Dist=p2.DistanceToOut(pzero);
-    if (OutRange(Dist,50*cos(pi/6)))
+    if (OutRange(Dist,50*std::cos(pi/6)))
 	G4cout << "Error A2 " << Dist << G4endl;
      Dist=p3.DistanceToOut(pzero);
-    if (OutRange(Dist,50*cos(pi/6)))
+    if (OutRange(Dist,50*std::cos(pi/6)))
 	G4cout << "Error A3 " << Dist << G4endl;
     Dist=p5.DistanceToOut(pzero);
-    if (OutRange(Dist,2*50/sqrt(5.)))
+    if (OutRange(Dist,2*50/std::sqrt(5.)))
 	G4cout << "Error A4 " << Dist << G4endl;
 
      Dist=p1.DistanceToOut(px);
@@ -194,7 +194,7 @@ int main(void)
     if (OutRange(Dist,40)||OutRange(norm,vmz)||!*pgoodNorm)
  	G4cout << "Error F " << Dist << G4endl;
     Dist=p1.DistanceToOut(pzero,vxy,calcNorm,pgoodNorm,pNorm);
-    if (OutRange(Dist,sqrt(800.))||!*pgoodNorm)
+    if (OutRange(Dist,std::sqrt(800.))||!*pgoodNorm)
  	G4cout << "Error F " << Dist << G4endl;
 
     Dist=p1.DistanceToOut(ponxside,vx,calcNorm,pgoodNorm,pNorm);
@@ -237,7 +237,7 @@ int main(void)
  	G4cout << "Error F " << Dist << G4endl;
 
     Dist=p3.DistanceToIn(pbigx);
-    if (OutRange(Dist,50*cos(pi/6)))
+    if (OutRange(Dist,50*std::cos(pi/6)))
 	G4cout << "Error G1 " << Dist <<G4endl;
     Dist=p3.DistanceToIn(pbigy);
     if (OutRange(Dist,50))

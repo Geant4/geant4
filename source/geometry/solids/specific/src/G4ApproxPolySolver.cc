@@ -63,7 +63,7 @@ G4int G4ApproxPolySolver::SolveBiQuadratic( G4double c[], G4double s[]  ) const
   q = 0.125*A2*A - 0.5*A*B + C;
   r = - 3.0/256*A2*A2 + 1.0/16*A2*B - 0.25*A*C + D;
 
-  // y^4 + py^2 + r = 0 and z=y^2 so y = +-sqrt(z1) and y = +-sqrt(z2)
+  // y^4 + py^2 + r = 0 and z=y^2 so y = +-std::sqrt(z1) and y = +-std::sqrt(z2)
    
   if(q==0) 
   {
@@ -80,15 +80,15 @@ G4int G4ApproxPolySolver::SolveBiQuadratic( G4double c[], G4double s[]  ) const
         {
           if(s[0]==0) // Three roots and one of them == 0
           {
-            s[2] = sqrt(s[1]) ;
+            s[2] = std::sqrt(s[1]) ;
             s[1] = s[0] ;
             s[0] = -s[2] ;
             num++ ;
           }
           else        // Four roots
           {
-            s[2] = sqrt(s[0]) ;
-            s[3] = sqrt(s[1]) ;
+            s[2] = std::sqrt(s[0]) ;
+            s[3] = std::sqrt(s[1]) ;
             s[0] = -s[3] ;
             s[1] = -s[2] ;
             num +=2 ;
@@ -103,7 +103,7 @@ G4int G4ApproxPolySolver::SolveBiQuadratic( G4double c[], G4double s[]  ) const
           }
           else          // Two roots
           {
-            s[0] = -sqrt(s[1]) ;
+            s[0] = -std::sqrt(s[1]) ;
             s[1] = -s[0] ;
           }
         }
@@ -116,7 +116,7 @@ G4int G4ApproxPolySolver::SolveBiQuadratic( G4double c[], G4double s[]  ) const
           if(s[0]==0) ; 
           else
           {
-            s[1] = sqrt(s[0]) ;
+            s[1] = std::sqrt(s[0]) ;
             s[0] = -s[1] ;
             num +=1 ;
           }
@@ -169,11 +169,11 @@ G4int G4ApproxPolySolver::SolveBiQuadratic( G4double c[], G4double s[]  ) const
     v = 2 * z - p;
 
     if (u==0)        u = 0 ;
-    else if (u > 0)  u = sqrt(u) ;
+    else if (u > 0)  u = std::sqrt(u) ;
     else             return 0 ;
 
     if (v==0)        v = 0 ;
-    else if (v > 0)  v = sqrt(v);
+    else if (v > 0)  v = std::sqrt(v);
     else             return 0 ;
 
     coeffs[ 0 ] = z - u;
@@ -239,7 +239,7 @@ G4int G4ApproxPolySolver::SolveCubic( G4double c[], G4double s[] ) const
     }
     else // one single and one double solution 
     {
-      G4double u = pow(-q,1./3.);
+      G4double u = std::pow(-q,1./3.);
       s[ 0 ] = 2 * u;
       s[ 1 ] = - u;
       num = 2;
@@ -247,19 +247,19 @@ G4int G4ApproxPolySolver::SolveCubic( G4double c[], G4double s[] ) const
   }
   else if (D < 0) // Casus irreducibilis: three real solutions
   {
-    G4double phi = 1.0/3 * acos(-q / sqrt(-p3));
-    G4double t = 2 * sqrt(-p);
+    G4double phi = 1.0/3 * std::acos(-q / std::sqrt(-p3));
+    G4double t = 2 * std::sqrt(-p);
 
-    s[ 0 ] =   t * cos(phi);
-    s[ 1 ] = - t * cos(phi + M_PI / 3);
-    s[ 2 ] = - t * cos(phi - M_PI / 3);
+    s[ 0 ] =   t * std::cos(phi);
+    s[ 1 ] = - t * std::cos(phi + M_PI / 3);
+    s[ 2 ] = - t * std::cos(phi - M_PI / 3);
     num = 3;
   }
   else // one real solution 
   {
-    G4double sqrt_D = sqrt(D);
-    G4double u = pow(sqrt_D - q,1./3.);
-    G4double v = - pow(sqrt_D + q,1./3.);
+    G4double sqrt_D = std::sqrt(D);
+    G4double u = std::pow(sqrt_D - q,1./3.);
+    G4double v = - std::pow(sqrt_D + q,1./3.);
 
     s[ 0 ] = u + v;
     num = 1;
@@ -311,7 +311,7 @@ G4int G4ApproxPolySolver::SolveBiQuadraticNew( G4double c[], G4double s[] ) cons
     if( D>0 ) return 0;
     else 
     {
-      s[0] = sqrt( sqrt( -D ) );
+      s[0] = std::sqrt( std::sqrt( -D ) );
       s[1] = -s[0];
       return 2;
     }
@@ -344,7 +344,7 @@ G4int G4ApproxPolySolver::SolveBiQuadraticNew( G4double c[], G4double s[] ) cons
     G4double vm1 = -1.0e99, vm2 ;
     for( i=0; i<3; i++ ) 
     {
-      v[i] = fabs( s[i] ) ;
+      v[i] = std::fabs( s[i] ) ;
       if( v[i] > vm1 ) vm1 = v[i] ;
     }
     if( vm1 == v[0] ) 
@@ -369,13 +369,13 @@ G4int G4ApproxPolySolver::SolveBiQuadraticNew( G4double c[], G4double s[] ) cons
     else if( vm2 == v[1] ) j = 1 ;
     else j = 2 ;
 
-    w1 = sqrt( s[i] );
-    w2 = sqrt( s[j] );
+    w1 = std::sqrt( s[i] );
+    w2 = std::sqrt( s[j] );
   } 
   else 
   {
     num = 2;
-    w1 = w2 = sqrt( s[1] );
+    w1 = w2 = std::sqrt( s[1] );
   }
   if( w1*w2 != 0. ) w3 = -q/( 8.0*w1*w2 ) ;
   else              w3 = 0.0 ;
@@ -436,17 +436,17 @@ G4int G4ApproxPolySolver::SolveCubicNew( G4double c[], G4double s[],
 
   if( cubic_discr > delta ) 
   {
-    h2 = sqrt( cubic_discr );
+    h2 = std::sqrt( cubic_discr );
     u = -h1+h2;
     v = -h1-h2;
-    if( u < 0 ) u = -pow(-u,1./3.);
-    else u = pow(u,1./3.);
-    if( v < 0 ) v = -pow(-v,1./3.);
-    else v = pow(v,1./3.);
+    if( u < 0 ) u = -std::pow(-u,1./3.);
+    else u = std::pow(u,1./3.);
+    if( v < 0 ) v = -std::pow(-v,1./3.);
+    else v = std::pow(v,1./3.);
     s[0] = u+v-sub;
     s[1] = -(u+v)/2.0-sub;
-    s[2] = fabs(u-v)*sqrt(3.0)/2.0;
-    if( fabs(u) <= eps || fabs(v) <= eps ) 
+    s[2] = std::fabs(u-v)*std::sqrt(3.0)/2.0;
+    if( std::fabs(u) <= eps || std::fabs(v) <= eps ) 
     {
       y[0] = s[0] ;
       for( i=0; i<2; i++ ) 
@@ -457,25 +457,25 @@ G4int G4ApproxPolySolver::SolveCubicNew( G4double c[], G4double s[],
       return 1;
     }
   }
-  else if( fabs(cubic_discr) <= delta ) 
+  else if( std::fabs(cubic_discr) <= delta ) 
   {
     cubic_discr = 0.;
 
-    if( h1 < 0 ) u = pow(-h1,1./3.);
-    else         u = -pow(h1,1./3.);
+    if( h1 < 0 ) u = std::pow(-h1,1./3.);
+    else         u = -std::pow(h1,1./3.);
 
     s[0] =  u + u - sub ;
     s[1] = -u - sub ;
     s[2] = s[1] ;
 
-    if( fabs(h1) <= eps ) 
+    if( std::fabs(h1) <= eps ) 
     {
       y[0] = s[0];
       for( i=0; i<2; i++ ) 
       {
         h1 = (3.0*y[i]+2.*A)*y[i]+B;
 
-        if( fabs(h1) > delta )
+        if( std::fabs(h1) > delta )
           y[i+1] = y[i]-(((y[i]+A)*y[i]+B)*y[i]+C)/h1;
         else 
         {
@@ -490,12 +490,12 @@ G4int G4ApproxPolySolver::SolveCubicNew( G4double c[], G4double s[],
   }
   else 
   {
-    h3 =fabs(p/3.);
-    h3 = sqrt(h3*h3*h3);
-    h2 = acos(-h1/h3)/3.;
-    h1 = pow(h3,1./3.);
-    u = h1*cos(h2);
-    v = sqrt(3.)*h1*sin(h2);
+    h3 =std::fabs(p/3.);
+    h3 = std::sqrt(h3*h3*h3);
+    h2 = std::acos(-h1/h3)/3.;
+    h1 = std::pow(h3,1./3.);
+    u = h1*std::cos(h2);
+    v = std::sqrt(3.)*h1*std::sin(h2);
     s[0] = u+u-sub;
     s[1] = -u-v-sub;
     s[2] = -u+v-sub;
@@ -540,7 +540,7 @@ G4int G4ApproxPolySolver::SolveQuadratic( G4double c[], G4double s[] ) const
   }
   else if (D > 0)
   {
-    G4double sqrt_D = sqrt(D);
+    G4double sqrt_D = std::sqrt(D);
 
     s[ 0 ] = - p - sqrt_D ;  // in ascending order !
     s[ 1 ] = - p + sqrt_D ;

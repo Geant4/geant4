@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: replicaCal.cc,v 1.4 2002-01-09 16:17:55 gcosmo Exp $
+// $Id: replicaCal.cc,v 1.5 2004-12-02 09:31:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,7 +122,7 @@ int main()
 {
   G4ThreeVector pos(0,0,-10*x0+0.01*cm);
   G4double phi=M_PI*0.5,theta=15*deg;
-  G4ThreeVector dir(cos(phi)*sin(theta),sin(phi)*sin(theta),cos(theta));
+  G4ThreeVector dir(std::cos(phi)*std::sin(theta),std::sin(phi)*std::sin(theta),std::cos(theta));
   G4VPhysicalVolume *myTopNode;
   G4Timer timer;
 

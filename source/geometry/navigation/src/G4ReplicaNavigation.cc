@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.8 2004-11-24 14:00:21 gcosmo Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.9 2004-12-02 09:31:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -85,7 +85,7 @@ G4ReplicaNavigation::Inside(const G4VPhysicalVolume *pVol,
     case kXAxis:
     case kYAxis:
     case kZAxis:
-      coord = fabs(localPoint(axis))-width*0.5;
+      coord = std::fabs(localPoint(axis))-width*0.5;
       if ( coord<=-kCarTolerance*0.5 )
       {
         in = kInside;
@@ -98,7 +98,7 @@ G4ReplicaNavigation::Inside(const G4VPhysicalVolume *pVol,
     case kPhi:
       if ( localPoint.y()||localPoint.x() )
       {
-        coord = fabs(atan2(localPoint.y(),localPoint.x()))-width*0.5;
+        coord = std::fabs(std::atan2(localPoint.y(),localPoint.x()))-width*0.5;
         if ( coord<=-kAngTolerance*0.5 )
         {
           in = kInside;
@@ -199,11 +199,11 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
     case kPhi:
       if ( localPoint.y()<=0 )
       {
-        safety = localPoint.x()*sin(width*0.5)+localPoint.y()*cos(width*0.5);
+        safety = localPoint.x()*std::sin(width*0.5)+localPoint.y()*std::cos(width*0.5);
       }
       else
       {
-        safety = localPoint.x()*sin(width*0.5)-localPoint.y()*cos(width*0.5);
+        safety = localPoint.x()*std::sin(width*0.5)-localPoint.y()*std::cos(width*0.5);
       }
       break;
     case kRho:
@@ -303,8 +303,8 @@ G4ReplicaNavigation::DistanceToOutPhi(const G4ThreeVector &localPoint,
   G4double pDistS, pDistE, compS, compE, Dist, dist2, yi;
   if ( localPoint.x()||localPoint.y() )
   {
-    sinSPhi = sin(-width*0.5);  // SIN of starting phi plane
-    cosSPhi = cos(width*0.5);   // COS of starting phi plane
+    sinSPhi = std::sin(-width*0.5);  // SIN of starting phi plane
+    cosSPhi = std::cos(width*0.5);   // COS of starting phi plane
 
     // pDist -ve when inside
     //
@@ -421,7 +421,7 @@ G4ReplicaNavigation::DistanceToOutPhi(const G4ThreeVector &localPoint,
   {
     // On z axis + travel not || to z axis -> use direction vector
     //
-    Dist = (fabs(localDirection.phi())<=width*0.5) ? kInfinity : 0;
+    Dist = (std::fabs(localDirection.phi())<=width*0.5) ? kInfinity : 0;
   }
   return Dist;
 }
@@ -480,7 +480,7 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
       {
         b  = t2/t1;
         c  = deltaR/t1;
-        sr = -b+sqrt(b*b-c);
+        sr = -b+std::sqrt(b*b-c);
       }
       else
       {
@@ -506,7 +506,7 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
           // NOTE: Should use
           // rho-rmin>kRadTolerance*0.5 - [no sqrts for efficiency]
           //
-          sr = (deltaR>kRadTolerance*0.5) ? -b-sqrt(d2) : 0;
+          sr = (deltaR>kRadTolerance*0.5) ? -b-std::sqrt(d2) : 0;
         }
         else
         {
@@ -514,7 +514,7 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
           //
           deltaR = t3-rmax*rmax;
           c  = deltaR/t1;
-          sr = -b+sqrt(b*b-c);
+          sr = -b+std::sqrt(b*b-c);
         }
       }
       else
@@ -524,7 +524,7 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
         deltaR = t3-rmax*rmax;
         b  = t2/t1;
         c  = deltaR/t1;
-        sr = -b+sqrt(b*b-c);
+        sr = -b+std::sqrt(b*b-c);
       }
     }
   }
@@ -578,8 +578,8 @@ G4ReplicaNavigation::ComputeTransformation(const G4int replicaNo,
     case kPhi:
       val = -(offset+width*(replicaNo+0.5));
       SetPhiTransformation(val,pVol);
-      cosv = cos(val);
-      sinv = sin(val);
+      cosv = std::cos(val);
+      sinv = std::sin(val);
       tmpx = point.x()*cosv-point.y()*sinv;
       tmpy = point.x()*sinv+point.y()*cosv;
       point.setY(tmpy);

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01DetectorConstruction.cc,v 1.3 2004-11-29 14:53:18 link Exp $
+// $Id: Sc01DetectorConstruction.cc,v 1.4 2004-12-02 09:31:34 gcosmo Exp $
 // 
 //  GEANT 4 class header file 
 //
@@ -235,7 +235,7 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
 
 //--------- Visualization attributes -------------------------------
 
-  G4VisAttributes* BoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  //  G4VisAttributes* BoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   //  Hall_log  ->SetVisAttributes(BoxVisAtt);
   Hall_log  ->SetVisAttributes (G4VisAttributes::Invisible);
 
@@ -408,8 +408,8 @@ G4Polycone* cryoMotherShape =
                                        Water1,
                                       "lvCone");
 
-  G4VPhysicalVolume*  pvCone = new G4PVPlacement(0,
-                         G4ThreeVector( 0, 0, 316.0*cm + 22.5*cm ),
+// G4VPhysicalVolume*  pvCone =
+    new G4PVPlacement(0, G4ThreeVector( 0, 0, 316.0*cm + 22.5*cm ),
                                        lvCone ,
                                       "pvCone",
                                        lvPolycone,

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatSurface.cc,v 1.7 2004-11-10 18:04:45 link Exp $
+// $Id: G4FlatSurface.cc,v 1.8 2004-12-02 09:31:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -162,7 +162,7 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
    // if p is on surface, distance = 0. 
    //
 
-   if (fabs(p.z()) == 0.) {   // if p is on the plane
+   if (std::fabs(p.z()) == 0.) {   // if p is on the plane
       distance[0] = 0;
       G4ThreeVector xx = p;
       gxx[0] = ComputeGlobalPoint(xx);
@@ -267,11 +267,11 @@ G4int G4FlatSurface::DistanceToSurface(const G4ThreeVector &gp,
 
    // The plane is placed on origin with making its normal 
    // parallel to z-axis. 
-   if (fabs(p.z()) <= 0.5 * kCarTolerance) {   // if p is on the plane, return 1
+   if (std::fabs(p.z()) <= 0.5 * kCarTolerance) {   // if p is on the plane, return 1
       distance[0] = 0;
       xx = p;
    } else {
-      distance[0] = fabs(p.z());
+      distance[0] = std::fabs(p.z());
       xx.set(p.x(), p.y(), 0);  
    }
 
@@ -408,23 +408,23 @@ void G4FlatSurface::SetCorners()
       
       G4double x, y, z;
       // corner of Axis0min and Axis1min
-         x = fAxisMin[rhoaxis]*cos(fAxisMin[phiaxis]);
-         y = fAxisMin[rhoaxis]*sin(fAxisMin[phiaxis]);
+         x = fAxisMin[rhoaxis]*std::cos(fAxisMin[phiaxis]);
+         y = fAxisMin[rhoaxis]*std::sin(fAxisMin[phiaxis]);
          z = 0;
          SetCorner(sC0Min1Min, x, y, z);
       // corner of Axis0max and Axis1min
-         x = fAxisMax[rhoaxis]*cos(fAxisMin[phiaxis]);
-         y = fAxisMax[rhoaxis]*sin(fAxisMin[phiaxis]);
+         x = fAxisMax[rhoaxis]*std::cos(fAxisMin[phiaxis]);
+         y = fAxisMax[rhoaxis]*std::sin(fAxisMin[phiaxis]);
          z = 0;
          SetCorner(sC0Max1Min, x, y, z);
       // corner of Axis0max and Axis1max
-         x = fAxisMax[rhoaxis]*cos(fAxisMax[phiaxis]);
-         y = fAxisMax[rhoaxis]*sin(fAxisMax[phiaxis]);
+         x = fAxisMax[rhoaxis]*std::cos(fAxisMax[phiaxis]);
+         y = fAxisMax[rhoaxis]*std::sin(fAxisMax[phiaxis]);
          z = 0;
          SetCorner(sC0Max1Max, x, y, z);
       // corner of Axis0min and Axis1max
-         x = fAxisMin[rhoaxis]*cos(fAxisMax[phiaxis]);
-         y = fAxisMin[rhoaxis]*sin(fAxisMax[phiaxis]);
+         x = fAxisMin[rhoaxis]*std::cos(fAxisMax[phiaxis]);
+         y = fAxisMin[rhoaxis]*std::sin(fAxisMax[phiaxis]);
          z = 0;
          SetCorner(sC0Min1Max, x, y, z);
        

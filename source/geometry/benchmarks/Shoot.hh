@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Shoot.hh,v 1.7 2003-02-05 15:47:47 gcosmo Exp $
+// $Id: Shoot.hh,v 1.8 2004-12-02 09:31:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef SHOOT_HH
@@ -108,7 +108,7 @@ void MagneticShoot(const G4int numShoot,
 
   G4double momentum = 0.05*proton_mass_c2;
   G4double kineticEnergy = momentum*momentum /
-       (sqrt(momentum*momentum+proton_mass_c2*proton_mass_c2)+proton_mass_c2);
+       (std::sqrt(momentum*momentum+proton_mass_c2*proton_mass_c2)+proton_mass_c2);
   G4double velocity = momentum / (proton_mass_c2+kineticEnergy);
   G4double labTof= 10.*ns;
   G4double properTof= 0.1*ns;
@@ -160,7 +160,7 @@ void MagneticShoot(const G4int numShoot,
       */
       momentum = (0.5+i*0.1) * proton_mass_c2;
       kineticEnergy = momentum*momentum /
-       (sqrt(momentum*momentum+proton_mass_c2*proton_mass_c2)+proton_mass_c2);
+       (std::sqrt(momentum*momentum+proton_mass_c2*proton_mass_c2)+proton_mass_c2);
       velocity = momentum / (proton_mass_c2+kineticEnergy);
 
       pFieldMgr->GetChordFinder()

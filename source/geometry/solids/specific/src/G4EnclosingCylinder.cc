@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnclosingCylinder.cc,v 1.5 2002-10-30 13:52:23 gcosmo Exp $
+// $Id: G4EnclosingCylinder.cc,v 1.6 2004-12-02 09:31:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,13 +63,13 @@ G4EnclosingCylinder::G4EnclosingCylinder( const G4ReduciblePolygon *rz,
   phiIsOpen = thePhiIsOpen;
   if ( phiIsOpen )
   {    
-    rx1 = cos(startPhi);
-    ry1 = sin(startPhi);
+    rx1 = std::cos(startPhi);
+    ry1 = std::sin(startPhi);
     dx1 = +ry1*10*kCarTolerance;
     dy1 = -rx1*10*kCarTolerance;
     
-    rx2 = cos(startPhi+totalPhi);
-    ry2 = sin(startPhi+totalPhi);
+    rx2 = std::cos(startPhi+totalPhi);
+    ry2 = std::sin(startPhi+totalPhi);
     dx2 = -ry2*10*kCarTolerance;
     dy2 = +rx2*10*kCarTolerance;
   }

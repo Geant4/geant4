@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBoxSide.cc,v 1.4 2004-11-29 16:34:38 link Exp $
+// $Id: G4TwistedBoxSide.cc,v 1.5 2004-12-02 09:31:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -189,11 +189,11 @@ G4int G4TwistedBoxSide::DistanceToSurface(const G4ThreeVector &gp,
 
   if ( v.z() == 0. ) {         
 
-    if ( fabs(p.z()) <= L ) {     // intersection possible in z
+    if ( std::fabs(p.z()) <= L ) {     // intersection possible in z
  
       PhiR = p.z() * fPhiTwist / L ;  // phi is determined by the z-position 
-      uR = (2*p.y()*v.x() - 2*p.x()*v.y() + a*v.y()*cos(PhiR) - a*v.x()*sin(PhiR) ) /
-        (2*v.x()*cos(PhiR) + 2*v.y()*sin(PhiR)) ;
+      uR = (2*p.y()*v.x() - 2*p.x()*v.y() + a*v.y()*std::cos(PhiR) - a*v.x()*std::sin(PhiR) ) /
+        (2*v.x()*std::cos(PhiR) + 2*v.y()*std::sin(PhiR)) ;
       //      G4cout  << "solution vz = 0 : "  << PhiR << " , " << uR << G4endl ;
 
     }
@@ -209,7 +209,7 @@ G4int G4TwistedBoxSide::DistanceToSurface(const G4ThreeVector &gp,
       return 0;
 
 
-    }  // end fabs(p.z() <= L 
+    }  // end std::fabs(p.z() <= L 
 
   } // end v.z() == 0
   
@@ -262,12 +262,12 @@ G4int G4TwistedBoxSide::DistanceToSurface(const G4ThreeVector &gp,
       G4cout << "Solution " << i << " : " << s[i] << G4endl ;
 #endif
 
-      G4double stmp = fmod(s[i] , pi2) ;
+      G4double stmp = std::fmod(s[i] , pi2) ;
       if ( s[i] < 0 && stmp > 0 ) { stmp -= 2*pi ; }
       G4double ztmp = L*s[i]/fPhiTwist ;
-      if ( fabs(ztmp)<fDz+ctol ) {
+      if ( std::fabs(ztmp)<fDz+ctol ) {
         PhiR = stmp ;
-        uR = (2*L*PhiR*v.y() - 2*phipzvy + 2*phipyvz - a*phivz * sin(PhiR))/(2.*phivz*cos(PhiR)) ;
+        uR = (2*L*PhiR*v.y() - 2*phipzvy + 2*phipyvz - a*phivz * std::sin(PhiR))/(2.*phivz*std::cos(PhiR)) ;
         
 #ifdef G4SPECSDEBUG
         G4cout << "solution " << i << " = " << PhiR << " , " << uR  << G4endl ;
@@ -601,10 +601,10 @@ void G4TwistedBoxSide::SetCorners()
   if (fAxis[0] == kYAxis && fAxis[1] == kZAxis) {
     
     G4double x, y, z;
-    G4double acos = fDx * cos(fPhiTwist/2) ;
-    G4double asin = fDx * sin(fPhiTwist/2) ;
-    G4double bcos = fDy * cos(fPhiTwist/2) ;
-    G4double bsin = fDy * sin(fPhiTwist/2) ;
+    G4double acos = fDx * std::cos(fPhiTwist/2) ;
+    G4double asin = fDx * std::sin(fPhiTwist/2) ;
+    G4double bcos = fDy * std::cos(fPhiTwist/2) ;
+    G4double bsin = fDy * std::sin(fPhiTwist/2) ;
 
     // corner of Axis0min and Axis1min
     x = acos - bsin ;
@@ -692,8 +692,8 @@ void G4TwistedBoxSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u)
   phi = p.z()/(2*fDz)*fPhiTwist ;
 
 #if 0
-  G4ThreeVector  X0 ( fDx * cos(phi), fDx * sin(phi) , p.z() ) ;  // basis with u=0
-  G4ThreeVector dvec  ( - sin(phi), cos(phi) ,0. ) ;   // direction vector
+  G4ThreeVector  X0 ( fDx * std::cos(phi), fDx * std::sin(phi) , p.z() ) ;  // basis with u=0
+  G4ThreeVector dvec  ( - std::sin(phi), std::cos(phi) ,0. ) ;   // direction vector
   G4ThreeVector xx ;                                   // the intersection point on the line
 
   DistanceToLine(p ,X0 , dvec , xx) ;
@@ -706,7 +706,7 @@ void G4TwistedBoxSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u)
   // analytical form of the above calculation.
   // See mathematica notbook: dirBox.m
 
-  u = p.y() * cos(phi) - p.x()*sin(phi) ;
+  u = p.y() * std::cos(phi) - p.x()*std::sin(phi) ;
 
 }
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.34 2004-07-02 16:40:45 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.35 2004-12-02 09:31:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -625,7 +625,7 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
     {
       G4double hownear = surface->HowNear(Pt);
       
-      if( fabs( hownear ) < sqrHalfTolerance )
+      if( std::fabs( hownear ) < sqrHalfTolerance )
       {
         return kSurface;
       }
@@ -635,7 +635,7 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
         isIntersected = true;
         hownear = surface->GetDistance();
         
-        if ( fabs( hownear ) < dist )
+        if ( std::fabs( hownear ) < dist )
         {
           dist         = hownear;
           WhichSurface = a;
@@ -650,9 +650,9 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
   }
 
   // Find the point of intersection on the surface and the normal
-  // !!!! be carefull the distance is sqrt(dist) !!!!
+  // !!!! be carefull the distance is std::sqrt(dist) !!!!
 
-  dist = sqrt( dist );
+  dist = std::sqrt( dist );
   G4Vector3D IntersectionPoint = Pttmp + dist*Vtmp;
   G4Vector3D Normal =
              SurfaceVec[WhichSurface]->SurfaceNormal( IntersectionPoint );
@@ -680,7 +680,7 @@ G4BREPSolidPCone::SurfaceNormal(const G4ThreeVector& Pt) const
   G4int normSurface = 0;
   for(isurf = 0; isurf < nb_of_surfaces; isurf++)
   {
-    G4double dist = fabs(SurfaceVec[isurf]->HowNear(Pt));
+    G4double dist = std::fabs(SurfaceVec[isurf]->HowNear(Pt));
     if( minDist > dist )
     {
       minDist = dist;
@@ -742,7 +742,7 @@ G4double G4BREPSolidPCone::DistanceToIn(const G4ThreeVector& Pt) const
   //   called only if the point is outside )
   //
   for(a = 0; a < nb_of_surfaces; a++)
-    if( fabs(Dist) > fabs(dists[a]) ) 
+    if( std::fabs(Dist) > std::fabs(dists[a]) ) 
       //if( dists[a] >= 0)
       Dist = dists[a];
   
@@ -753,7 +753,7 @@ G4double G4BREPSolidPCone::DistanceToIn(const G4ThreeVector& Pt) const
     //
     return 0;
   else 
-    return fabs(Dist);
+    return std::fabs(Dist);
 }
 
 G4double G4BREPSolidPCone::DistanceToIn(register const G4ThreeVector& Pt, 
@@ -793,7 +793,7 @@ G4double G4BREPSolidPCone::DistanceToIn(register const G4ThreeVector& Pt,
       G4Vector3D Norm = SurfaceVec[a]->SurfaceNormal(Pttmp);
       G4double hownear = SurfaceVec[a]->HowNear(Pt);
       
-      if( (Norm * Vtmp) < 0 && fabs(hownear) < sqrHalfTolerance )
+      if( (Norm * Vtmp) < 0 && std::fabs(hownear) < sqrHalfTolerance )
         return 0;
       
       if( (SurfaceVec[a]->Intersect(r)) )
@@ -817,7 +817,7 @@ G4double G4BREPSolidPCone::DistanceToIn(register const G4ThreeVector& Pt,
   // SurfaceVec->Distance is in fact the squared distance
   //
   if(ShortestDistance != kInfinity)
-    return( sqrt(ShortestDistance) );
+    return( std::sqrt(ShortestDistance) );
   else
     // no intersection
     //
@@ -871,7 +871,7 @@ G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt,
       G4Vector3D Norm = SurfaceVec[a]->SurfaceNormal(Pttmp);
       G4double hownear = SurfaceVec[a]->HowNear(Pt);
       
-      if( (Norm * Vtmp) > 0 && fabs( hownear ) < sqrHalfTolerance )
+      if( (Norm * Vtmp) > 0 && std::fabs( hownear ) < sqrHalfTolerance )
         return 0;
       
       // test if the ray intersect the surface
@@ -898,7 +898,7 @@ G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt,
   // SurfaceVec->Distance is in fact the squared distance
   //
   if(ShortestDistance != kInfinity)
-    return sqrt(ShortestDistance);
+    return std::sqrt(ShortestDistance);
   else
     // if no intersection is founded, the point is outside
     //
@@ -934,7 +934,7 @@ G4double G4BREPSolidPCone::DistanceToOut(const G4ThreeVector& Pt) const
   //   called only if the point is inside )
 
   for(a = 0; a < nb_of_surfaces; a++)
-    if( fabs(Dist) > fabs(dists[a]) ) 
+    if( std::fabs(Dist) > std::fabs(dists[a]) ) 
       //if( dists[a] <= 0)
       Dist = dists[a];
   
@@ -945,7 +945,7 @@ G4double G4BREPSolidPCone::DistanceToOut(const G4ThreeVector& Pt) const
     //
     return 0;
   else
-    return fabs(Dist);
+    return std::fabs(Dist);
 }
 
 std::ostream& G4BREPSolidPCone::StreamInfo(std::ostream& os) const

@@ -24,7 +24,7 @@
 
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 
 #include "globals.hh"
 #include "geomdefs.hh"
@@ -79,15 +79,15 @@ int main()
 
     G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
     G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
-    G4ThreeVector vxy(1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxy(-1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxmy(-1/sqrt(2.0),-1/sqrt(2.0),0);
-    G4ThreeVector vxmy(1/sqrt(2.0),-1/sqrt(2.0),0);
+    G4ThreeVector vxy(1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+    G4ThreeVector vmxy(-1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+    G4ThreeVector vmxmy(-1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
+    G4ThreeVector vxmy(1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
 
-    G4ThreeVector vxz(1/sqrt(2.0),0,1/sqrt(2.0));
-    G4ThreeVector vxmz(1/sqrt(2.0),0,-1/sqrt(2.0));
-    G4ThreeVector vmxz(-1/sqrt(2.0),0,1/sqrt(2.0));
-    G4ThreeVector vmxmz(-1/sqrt(2.0),0,-1/sqrt(2.0));
+    G4ThreeVector vxz(1/std::sqrt(2.0),0,1/std::sqrt(2.0));
+    G4ThreeVector vxmz(1/std::sqrt(2.0),0,-1/std::sqrt(2.0));
+    G4ThreeVector vmxz(-1/std::sqrt(2.0),0,1/std::sqrt(2.0));
+    G4ThreeVector vmxmz(-1/std::sqrt(2.0),0,-1/std::sqrt(2.0));
 
     G4double dist, vol, volCheck, diff;
     G4ThreeVector *pNorm,norm;
@@ -219,7 +219,7 @@ int main()
   // t2Ut4.SetCubVolStatistics(10000000);
   vol = t2Ut4.GetCubicVolume();
   volCheck = 2.*pi*50.*50.*50.;
-  diff = abs(vol-volCheck)/volCheck;
+  diff = std::abs(vol-volCheck)/volCheck;
   G4cout<<"vol = "<<vol<<"; volCheck = "<<volCheck<<"; rel. diff = "<<diff<<G4endl;
   //  assert(ApproxEqual(vol,volCheck));
 
@@ -301,7 +301,7 @@ int main()
     normal=t1Ub3.SurfaceNormal(G4ThreeVector(-10,55,0));
     assert(ApproxEqual(normal,G4ThreeVector(-1,0,0)));
 
-    normal=t1Ub3.SurfaceNormal(G4ThreeVector(50.0/sqrt(2.0),50.0/sqrt(2.0),0));
+    normal=t1Ub3.SurfaceNormal(G4ThreeVector(50.0/std::sqrt(2.0),50.0/std::sqrt(2.0),0));
     assert(ApproxEqual(normal,vxy));
 
 
@@ -365,7 +365,7 @@ int main()
     assert(ApproxEqual(dist,40)&&ApproxEqual(norm,vmz)); // &&*pgoodNorm);
 
     dist=b1Ub2.DistanceToOut(pzero,vxy,calcNorm,pgoodNorm,pNorm);
-    assert(ApproxEqual(dist,sqrt(800.))); // &&*pgoodNorm);
+    assert(ApproxEqual(dist,std::sqrt(800.))); // &&*pgoodNorm);
 
     dist=b1Ub2.DistanceToOut(ponb2x,vx,calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,10)&&ApproxEqual(*pNorm,vx)); // &&*pgoodNorm);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceBoundary.cc,v 1.12 2003-10-28 13:42:31 gcosmo Exp $
+// $Id: G4SurfaceBoundary.cc,v 1.13 2004-12-02 09:31:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -163,7 +163,7 @@ void G4SurfaceBoundary::IntersectRay2D(const G4Ray& ray,
     G4CurveRayIntersection isTmp(c, ray);
     c.IntersectRay2D(ray, isTmp);
     
-    if (fabs(isTmp.GetDistance()) < fabs(is.GetDistance())) 
+    if (std::fabs(isTmp.GetDistance()) < std::fabs(is.GetDistance())) 
       is= isTmp;
   }
 

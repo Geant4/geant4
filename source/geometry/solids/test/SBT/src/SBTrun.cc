@@ -124,8 +124,8 @@ G4double SBTrun::GaussianRandom(const G4double cutoff) const {
   do {
     answer = -3.0;
     for( G4int j = 0; j < 6; j++ ) answer += G4UniformRand();
-    answer *= sqrt(2.0);
-  } while( fabs(answer) > cutoff );
+    answer *= std::sqrt(2.0);
+  } while( std::fabs(answer) > cutoff );
 
   return(answer);
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: G4BREPSolidTorusTest.cc,v 1.8 2003-06-16 16:53:08 gunter Exp $
+// $Id: G4BREPSolidTorusTest.cc,v 1.9 2004-12-02 09:31:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -33,9 +33,7 @@
 
 
 #include "G4Timer.hh"
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
+#include <cmath>
 #include <fstream>
 #include "G4ios.hh" 
 #include "G4BREPSolid.hh"

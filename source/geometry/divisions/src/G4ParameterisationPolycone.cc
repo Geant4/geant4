@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolycone.cc,v 1.9 2004-05-17 07:20:41 gcosmo Exp $
+// $Id: G4ParameterisationPolycone.cc,v 1.10 2004-12-02 09:31:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolycone Implementation file
@@ -386,7 +386,7 @@ G4double G4ParameterisationPolyconeZ::GetMaxParameter() const
 {
   G4Polycone* msol = (G4Polycone*)(fmotherSolid);
   G4PolyconeHistorical* origparamMother = msol->GetOriginalParameters();
-  return abs (origparamMother->Z_values[origparamMother->Num_z_planes-1]
+  return std::abs (origparamMother->Z_values[origparamMother->Num_z_planes-1]
              -origparamMother->Z_values[0]);
 }
 

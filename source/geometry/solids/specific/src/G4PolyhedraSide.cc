@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.cc,v 1.7 2004-01-06 18:07:02 davidw Exp $
+// $Id: G4PolyhedraSide.cc,v 1.8 2004-12-02 09:31:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,10 +96,10 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
   // ...this is where we start
   //
   G4double phi = startPhi;
-  G4ThreeVector a1( r[0]*cos(phi), r[0]*sin(phi), z[0] ),
-          b1( r[1]*cos(phi), r[1]*sin(phi), z[1] ),
-          c1( prevRZ->r*cos(phi), prevRZ->r*sin(phi), prevRZ->z ),
-          d1( nextRZ->r*cos(phi), nextRZ->r*sin(phi), nextRZ->z ),
+  G4ThreeVector a1( r[0]*std::cos(phi), r[0]*std::sin(phi), z[0] ),
+          b1( r[1]*std::cos(phi), r[1]*std::sin(phi), z[1] ),
+          c1( prevRZ->r*std::cos(phi), prevRZ->r*std::sin(phi), prevRZ->z ),
+          d1( nextRZ->r*std::cos(phi), nextRZ->r*std::sin(phi), nextRZ->z ),
           a2, b2, c2, d2;
   G4PolyhedraSideEdge *edge = edges;
           
@@ -110,10 +110,10 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
     // ...this is where we are going
     //
     phi += deltaPhi;
-    a2 = G4ThreeVector( r[0]*cos(phi), r[0]*sin(phi), z[0] );
-    b2 = G4ThreeVector( r[1]*cos(phi), r[1]*sin(phi), z[1] );
-    c2 = G4ThreeVector( prevRZ->r*cos(phi), prevRZ->r*sin(phi), prevRZ->z );
-    d2 = G4ThreeVector( nextRZ->r*cos(phi), nextRZ->r*sin(phi), nextRZ->z );
+    a2 = G4ThreeVector( r[0]*std::cos(phi), r[0]*std::sin(phi), z[0] );
+    b2 = G4ThreeVector( r[1]*std::cos(phi), r[1]*std::sin(phi), z[1] );
+    c2 = G4ThreeVector( prevRZ->r*std::cos(phi), prevRZ->r*std::sin(phi), prevRZ->z );
+    d2 = G4ThreeVector( nextRZ->r*std::cos(phi), nextRZ->r*std::sin(phi), nextRZ->z );
     
     G4ThreeVector tt;  
     
@@ -229,7 +229,7 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
   
   if (phiIsOpen)
   {
-    // G4double rFact = cos(0.5*deltaPhi);
+    // G4double rFact = std::cos(0.5*deltaPhi);
     //
     // If phi is open, we need to patch up normals of the
     // first and last edges and their corresponding
@@ -274,7 +274,7 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
   // on the surface of one of our sides in order to calculate the distance
   // from the edge. (see routine DistanceAway)
   //
-  edgeNorm = 1.0/sqrt( 1.0 + lenPhi[1]*lenPhi[1] );
+  edgeNorm = 1.0/std::sqrt( 1.0 + lenPhi[1]*lenPhi[1] );
 }
 
 
@@ -508,10 +508,10 @@ G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p,
       G4ThreeVector ps = p - vec->center; 
       
       G4double rz = ps.dot(vec->surfRZ);
-      if (fabs(rz) > lenRZ+surfTolerance) return false; 
+      if (std::fabs(rz) > lenRZ+surfTolerance) return false; 
 
       G4double pp = ps.dot(vec->surfPhi);
-      if (fabs(pp) > lenPhi[0] + lenPhi[1]*rz + surfTolerance) return false;
+      if (std::fabs(pp) > lenPhi[0] + lenPhi[1]*rz + surfTolerance) return false;
     }
       
 
@@ -583,7 +583,7 @@ EInside G4PolyhedraSide::Inside( const G4ThreeVector &p,
   //
   // Use distance along normal to decide return value
   //
-  if ( (fabs(norm) < tolerance) && (*bestDistance < 2.0*tolerance) )
+  if ( (std::fabs(norm) < tolerance) && (*bestDistance < 2.0*tolerance) )
     return kSurface;
   else if (norm < 0)
     return kInside;
@@ -857,7 +857,7 @@ G4int G4PolyhedraSide::LineHitsSegments( const G4ThreeVector &p,
   //
   // Try first intersection.
   //
-  *i1 = PhiSegment( atan2( p.y() + s1*v.y(), p.x() + s1*v.x() ) );
+  *i1 = PhiSegment( std::atan2( p.y() + s1*v.y(), p.x() + s1*v.x() ) );
   if (n==1)
   {
     return (*i1 < 0) ? 0 : 1;
@@ -866,7 +866,7 @@ G4int G4PolyhedraSide::LineHitsSegments( const G4ThreeVector &p,
   //
   // Try second intersection
   //
-  *i2 = PhiSegment( atan2( p.y() + s2*v.y(), p.x() + s2*v.x() ) );
+  *i2 = PhiSegment( std::atan2( p.y() + s2*v.y(), p.x() + s2*v.x() ) );
   if (*i1 == *i2) return 0;
   
   if (*i1 < 0)
@@ -1115,8 +1115,8 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
       //
       // Inside bounds! No penalty.
       //
-      return fabs(distFaceNorm);
+      return std::fabs(distFaceNorm);
     }
   }
-  return sqrt( distFaceNorm*distFaceNorm + distOut2 );
+  return std::sqrt( distFaceNorm*distFaceNorm + distOut2 );
 }

@@ -124,7 +124,7 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
     G4double	rmin[3]	    = {  6.24*mm, 0*mm, 0*mm },
       rmax[3]     = {  6.24*mm, 6.24*mm, 6.24*mm };
       // Rib thickness 0.41, height 6.42
-      startPhi = -atan2( 0.5*0.41, 6.42 );
+      startPhi = -std::atan2( 0.5*0.41, 6.42 );
       deltaPhi = -2.0*startPhi;
       testVolume = new G4Polyhedra( "natalia",
 									startPhi, deltaPhi, 1, 3, z_values, rmin, rmax );

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.hh,v 1.6 2004-11-10 18:04:42 link Exp $
+// $Id: G4TwistedTubs.hh,v 1.7 2004-12-02 09:31:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -199,9 +199,9 @@ class G4TwistedTubs : public G4VSolid
  
   G4double fInnerStereo;       // Inner-hype stereo angle
   G4double fOuterStereo;       // Outer-hype stereo angle
-  G4double fTanInnerStereo;    // tan(innerStereoAngle)
-  G4double fTanOuterStereo;    // tan(outerStereoAngle)
-  G4double fKappa;             // tan(fPhiTwist/2)/fZHalfLen;
+  G4double fTanInnerStereo;    // std::tan(innerStereoAngle)
+  G4double fTanOuterStereo;    // std::tan(outerStereoAngle)
+  G4double fKappa;             // std::tan(fPhiTwist/2)/fZHalfLen;
   G4double fEndInnerRadius[2]; // Inner-hype radii endcaps [0] -ve z, [1] +ve z
   G4double fEndOuterRadius[2]; // Outer-hype radii endcaps [0] -ve z, [1] +ve z
   G4double fEndPhi[2];         // Phi endcaps, [0] = -ve z, [1] = +ve z
@@ -316,33 +316,33 @@ void G4TwistedTubs::SetFields(G4double phitwist, G4double innerrad,
    fOuterRadius2 = fOuterRadius * fOuterRadius;
    
    G4int    maxi; 
-   if (fabs(fEndZ[0]) >= fabs(fEndZ[1])) {
-      fZHalfLength = fabs(fEndZ[0]);
+   if (std::fabs(fEndZ[0]) >= std::fabs(fEndZ[1])) {
+      fZHalfLength = std::fabs(fEndZ[0]);
       maxi = 0;
    } else {
-      fZHalfLength = fabs(fEndZ[1]);
+      fZHalfLength = std::fabs(fEndZ[1]);
       maxi = 1;
    }
 
    G4double parity         = (fPhiTwist > 0 ? 1 : -1); 
-   G4double tanHalfTwist   = tan(0.5 * fPhiTwist);
-   G4double innerNumerator = fabs(fInnerRadius * tanHalfTwist) * parity;
-   G4double outerNumerator = fabs(fOuterRadius * tanHalfTwist) * parity;
+   G4double tanHalfTwist   = std::tan(0.5 * fPhiTwist);
+   G4double innerNumerator = std::fabs(fInnerRadius * tanHalfTwist) * parity;
+   G4double outerNumerator = std::fabs(fOuterRadius * tanHalfTwist) * parity;
 
    fTanInnerStereo    = innerNumerator / fZHalfLength; 
    fTanOuterStereo    = outerNumerator / fZHalfLength; 
    fTanInnerStereo2   = fTanInnerStereo * fTanInnerStereo;
    fTanOuterStereo2   = fTanOuterStereo * fTanOuterStereo;
-   fInnerStereo       = atan2(innerNumerator,  fZHalfLength); 
-   fOuterStereo       = atan2(outerNumerator,  fZHalfLength); 
-   fEndInnerRadius[0] = sqrt(fInnerRadius2 + fEndZ2[0] * fTanInnerStereo2);
-   fEndInnerRadius[1] = sqrt(fInnerRadius2 + fEndZ2[1] * fTanInnerStereo2);
-   fEndOuterRadius[0] = sqrt(fOuterRadius2 + fEndZ2[0] * fTanOuterStereo2);
-   fEndOuterRadius[1] = sqrt(fOuterRadius2 + fEndZ2[1] * fTanOuterStereo2);
+   fInnerStereo       = std::atan2(innerNumerator,  fZHalfLength); 
+   fOuterStereo       = std::atan2(outerNumerator,  fZHalfLength); 
+   fEndInnerRadius[0] = std::sqrt(fInnerRadius2 + fEndZ2[0] * fTanInnerStereo2);
+   fEndInnerRadius[1] = std::sqrt(fInnerRadius2 + fEndZ2[1] * fTanInnerStereo2);
+   fEndOuterRadius[0] = std::sqrt(fOuterRadius2 + fEndZ2[0] * fTanOuterStereo2);
+   fEndOuterRadius[1] = std::sqrt(fOuterRadius2 + fEndZ2[1] * fTanOuterStereo2);
 
    fKappa          = tanHalfTwist / fZHalfLength;
-   fEndPhi[0]      = atan2(fEndZ[0] * tanHalfTwist, fZHalfLength);
-   fEndPhi[1]      = atan2(fEndZ[1] * tanHalfTwist, fZHalfLength);
+   fEndPhi[0]      = std::atan2(fEndZ[0] * tanHalfTwist, fZHalfLength);
+   fEndPhi[1]      = std::atan2(fEndZ[1] * tanHalfTwist, fZHalfLength);
 
 #ifdef G4SPECSDEBUG
    G4cout << "/********* G4TwistedTubs::SetFields() Field Parameters ***************** " << G4endl;

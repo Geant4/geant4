@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.hh,v 1.5 2004-11-13 18:26:25 gcosmo Exp $
+// $Id: G4TwistedTrapSide.hh,v 1.6 2004-12-02 09:31:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -124,8 +124,8 @@ G4ThreeVector G4TwistedTrapSide::SurfacePoint( G4double phi, G4double u )
 {
   // function to calculate a point on the surface, given by parameters phi,u
 
-  G4ThreeVector SurfPoint ( Xcoef(u) * cos(phi) - u * sin(phi),
-                            Xcoef(u) * sin(phi) + u * cos(phi),
+  G4ThreeVector SurfPoint ( Xcoef(u) * std::cos(phi) - u * std::sin(phi),
+                            Xcoef(u) * std::sin(phi) + u * std::cos(phi),
                             2*fDz*phi/fPhiTwist );
   return SurfPoint ;
 
@@ -144,8 +144,8 @@ G4ThreeVector G4TwistedTrapSide::NormAng( G4double phi, G4double u )
   G4double b2 = b*b ;
   G4double d2 = d*d ;
   G4double a2 = a*a ;
-  G4ThreeVector nvec( ( L * (2*b*cos(phi) + (a-d)*sin(phi)))/2.,
-                      -(L*((a-d)*cos(phi) - 2*b*sin(phi)))/2.,
+  G4ThreeVector nvec( ( L * (2*b*std::cos(phi) + (a-d)*std::sin(phi)))/2.,
+                      -(L*((a-d)*std::cos(phi) - 2*b*std::sin(phi)))/2.,
                       (dphi*(-b*d2 + 8*b2*u - 4*a*d*u + 2*d2*u + a2*(b + 2*u)))
                       /(8.*b) ) ;
   return nvec.unit();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4TwistedTubs.cc,v 1.1 2004-05-19 15:29:18 link Exp $
+// $Id: testG4TwistedTubs.cc,v 1.2 2004-12-02 09:31:34 gcosmo Exp $
 // GEANT4 tag $Name: 
 //
 
@@ -32,7 +32,7 @@
 //             Ensure asserts are compiled in
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 
 #include "globals.hh"
 #include "geomdefs.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4TwistedBox.cc,v 1.2 2004-11-12 14:32:57 link Exp $
+// $Id: testG4TwistedBox.cc,v 1.3 2004-12-02 09:31:34 gcosmo Exp $
 // GEANT4 tag $Name: 
 //
 
@@ -32,7 +32,7 @@
 //             Ensure asserts are compiled in
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 
 #include "globals.hh"
 #include "geomdefs.hh"
@@ -53,8 +53,8 @@ G4ThreeVector Pos(G4double phi, G4double psi, G4double b, G4double L, G4double d
   G4cout << "L = " << L << G4endl ;
   G4cout << "dphi = " << dphi << G4endl ;
 
-  G4double fx = b/2 * cos(phi) - b/2 * sin(phi) * tan (psi) ;
-  G4double fy = b/2 * sin(phi) + b/2 * cos(phi) * tan (psi) ;
+  G4double fx = b/2 * std::cos(phi) - b/2 * std::sin(phi) * std::tan (psi) ;
+  G4double fy = b/2 * std::sin(phi) + b/2 * std::cos(phi) * std::tan (psi) ;
   G4double fz = L * phi / dphi ;
   
   G4ThreeVector vec(fx,fy,fz) ;
@@ -66,7 +66,7 @@ G4ThreeVector NormAng( G4double phi, G4double psi, G4double b, G4double L, G4dou
 {
   // function to calculate the norm at a given point on the surface
 
-  G4ThreeVector nvec( L*cos(phi), L*sin(phi), b*dphi*tan(psi));
+  G4ThreeVector nvec( L*std::cos(phi), L*std::sin(phi), b*dphi*std::tan(psi));
   return nvec.unit() ;
 }
 
@@ -83,7 +83,7 @@ G4bool testG4TwistedBox()
     G4double dphi = 30.*deg;
 
     G4double phi1 = 10.*deg ;
-    G4double psi1 = 0.1*atan(a/b);
+    G4double psi1 = 0.1*std::atan(a/b);
     G4cout <<  "phi1, psi1 = " << phi1 << " , " << psi1 << G4endl ;
 
     G4ThreeVector psurf1 = Pos( phi1, psi1 , b, L, dphi ) ;
@@ -93,10 +93,10 @@ G4bool testG4TwistedBox()
     G4ThreeVector psurf2 ( 0,0,L/2) ;
     G4ThreeVector psurf3 ( 0,0,-L/2) ;
 
-    G4ThreeVector pcorner1 = Pos( dphi/2, atan(a/b), b, L, dphi ) ; 
-    G4ThreeVector pcorner2 = Pos( dphi/2, -atan(a/b), b, L, dphi ) ; 
-    G4ThreeVector pcorner3 = Pos( -dphi/2, atan(a/b), b, L, dphi ) ; 
-    G4ThreeVector pcorner4 = Pos( -dphi/2, -atan(a/b), b, L, dphi ) ; 
+    G4ThreeVector pcorner1 = Pos( dphi/2, std::atan(a/b), b, L, dphi ) ; 
+    G4ThreeVector pcorner2 = Pos( dphi/2, -std::atan(a/b), b, L, dphi ) ; 
+    G4ThreeVector pcorner3 = Pos( -dphi/2, std::atan(a/b), b, L, dphi ) ; 
+    G4ThreeVector pcorner4 = Pos( -dphi/2, -std::atan(a/b), b, L, dphi ) ; 
 
     G4ThreeVector normvec = NormAng(phi1,psi1,b,L,dphi) ;
     G4ThreeVector pnormout1 = psurf1 + 22.124 * normvec ;

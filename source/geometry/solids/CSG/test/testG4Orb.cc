@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Orb.cc,v 1.3 2004-09-10 09:38:29 grichine Exp $
+// $Id: testG4Orb.cc,v 1.4 2004-12-02 09:31:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Orb Test File
@@ -37,7 +37,7 @@
 
 #include "G4ios.hh"
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 #include "globals.hh"
 #include "geomdefs.hh"
 
@@ -59,7 +59,7 @@
 
 //G4bool ApproxEqual(const G4double check,const G4double target)
 //{
-//    return (fabs(check-target)<kApproxEqualTolerance) ? true : false ;
+//    return (std::fabs(check-target)<kApproxEqualTolerance) ? true : false ;
 //}
 
 // Return true if the 3vector check is approximately equal to target
@@ -96,26 +96,26 @@ int main(void)
     G4ThreeVector pbigmx(-100,0,0),pbigmy(0,-100,0),pbigmz(0,0,-100);
 
     G4ThreeVector ponrmin1(45,0,0),ponrmax1(50,0,0),ponzmax(0,0,50),
-	    ponrmin2(45/sqrt(2.),45/sqrt(2.),0),
+	    ponrmin2(45/std::sqrt(2.),45/std::sqrt(2.),0),
             ponrmin3(0,0,-45),ponrminJ(0,0,-300),ponrmaxJ(0,0,-500),
-	    ponrmax2(50/sqrt(2.),50/sqrt(2.),0);
-    G4ThreeVector ponphi1(48/sqrt(2.),-48/sqrt(2.),0),
-	          ponphi2(48/sqrt(2.),48/sqrt(2.),0),
+	    ponrmax2(50/std::sqrt(2.),50/std::sqrt(2.),0);
+    G4ThreeVector ponphi1(48/std::sqrt(2.),-48/std::sqrt(2.),0),
+	          ponphi2(48/std::sqrt(2.),48/std::sqrt(2.),0),
 	          pInPhi(48*0.866,-24,0),
-	          pOverPhi(-48/sqrt(2.),48/sqrt(2.),0);
-    G4ThreeVector pontheta1(0,48*sin(pi/4),48*cos(pi/4)),
-	    pontheta2(0,48*sin(pi/4),-48*cos(pi/4));
+	          pOverPhi(-48/std::sqrt(2.),48/std::sqrt(2.),0);
+    G4ThreeVector pontheta1(0,48*std::sin(pi/4),48*std::cos(pi/4)),
+	    pontheta2(0,48*std::sin(pi/4),-48*std::cos(pi/4));
 
-    G4ThreeVector ptestphi1(-100,-45/sqrt(2.),0),
-	    ptestphi2(-100,45/sqrt(2.),0);
+    G4ThreeVector ptestphi1(-100,-45/std::sqrt(2.),0),
+	    ptestphi2(-100,45/std::sqrt(2.),0);
 
-    G4ThreeVector ptesttheta1(0,48/sqrt(2.),100),
-	    ptesttheta2(0,48/sqrt(2.),-100);
+    G4ThreeVector ptesttheta1(0,48/std::sqrt(2.),100),
+	    ptesttheta2(0,48/std::sqrt(2.),-100);
 
     G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
     G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
-    G4ThreeVector vxy(1/sqrt(2.),1/sqrt(2.),0),vmxmy(-1/sqrt(2.),-1/sqrt(2.),0);
-    G4ThreeVector vxmy(1/sqrt(2.),-1/sqrt(2.),0),vmxy(-1/sqrt(2.),1/sqrt(2.),0);
+    G4ThreeVector vxy(1/std::sqrt(2.),1/std::sqrt(2.),0),vmxmy(-1/std::sqrt(2.),-1/std::sqrt(2.),0);
+    G4ThreeVector vxmy(1/std::sqrt(2.),-1/std::sqrt(2.),0),vmxy(-1/std::sqrt(2.),1/std::sqrt(2.),0);
     G4ThreeVector v345exit1(-0.8,0.6,0),v345exit2(0.8,0.6,0),
 	          v345exit3(0.6,0.8,0);
     G4ThreeVector norm,*pNorm;
@@ -337,7 +337,7 @@ int main(void)
       {
         assert(s1.CalculateExtent(kYAxis,xTestClip,origin,min,max));
 // Calc max y coordinate
-	G4double testMax=(xTest<0) ? sqrt(50*50-xTest*xTest) : 50;
+	G4double testMax=(xTest<0) ? std::sqrt(50*50-xTest*xTest) : 50;
 	assert (ApproxEqual(min,-testMax) && ApproxEqual(max,testMax));
       }
     }
@@ -355,7 +355,7 @@ int main(void)
       {
         assert(s1.CalculateExtent(kXAxis,yTestClip,origin,min,max));
 // Calc max y coordinate
-	G4double testMax=(yTest<0) ? sqrt(50*50-yTest*yTest) : 50;
+	G4double testMax=(yTest<0) ? std::sqrt(50*50-yTest*yTest) : 50;
 	assert (ApproxEqual(min,-testMax) && ApproxEqual(max,testMax));
       }
     }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.1 2004-11-26 16:58:10 grichine Exp $
+// $Id: SteppingAction.cc,v 1.2 2004-12-02 09:31:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -68,7 +68,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //  G4cout << "Step in " << mat->GetName() << "   idx= " << idx << " edep= " << edep << G4endl;
   // G4int volumeIndex = -1;
 
-  G4int copyNo = pv->GetCopyNo();
+  // G4int copyNo = pv->GetCopyNo();
   G4String name = lv->GetName();
   // G4cout<<name<<" "<<aStep->GetStepLength()<<"  ";
   if(name == "aVolume_L")

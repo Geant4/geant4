@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons2.cc,v 1.11 2004-09-08 15:13:53 grichine Exp $
+// $Id: testG4Cons2.cc,v 1.12 2004-12-02 09:31:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
 // Basic checks on each function + awkward cases for tracking / geom algorithms
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 #include "G4ios.hh"
 
 #include "globals.hh"
@@ -87,10 +87,10 @@ int main(void)
 	
 	G4ThreeVector   ponmiz(0,75,-50),ponplz(0,75,50);
 	
-	G4ThreeVector	ponr1(sqrt(50*50/2.0),sqrt(50*50/2.0),0),
-	                ponr2(sqrt(100*100/2.0),sqrt(100*100/2.0),0),
-	        	ponphi1(60*cos(pi/6),-60*sin(pi/6),0),
-		        ponphi2(60*cos(pi/6),60*sin(pi/6),0),
+	G4ThreeVector	ponr1(std::sqrt(50*50/2.0),std::sqrt(50*50/2.0),0),
+	                ponr2(std::sqrt(100*100/2.0),std::sqrt(100*100/2.0),0),
+	        	ponphi1(60*std::cos(pi/6),-60*std::sin(pi/6),0),
+		        ponphi2(60*std::cos(pi/6),60*std::sin(pi/6),0),
 	                ponr2b(150,0,0);
 	
 	G4ThreeVector pnearplz(45,45,45),pnearmiz(45,45,-45);
@@ -100,19 +100,19 @@ int main(void)
 	
 	G4ThreeVector pparr1(0,25,-150);   // Test case parallel to both rs of c8
 	G4ThreeVector pparr2(0,75,-50),pparr3(0,125,50);
-	G4ThreeVector vparr(0,1./sqrt(5.),2./sqrt(5.)); 
+	G4ThreeVector vparr(0,1./std::sqrt(5.),2./std::sqrt(5.)); 
 
-	G4ThreeVector vnphi1(-sin(pi/6),-cos(pi/6),0),
-	              vnphi2(-sin(pi/6),cos(pi/6),0);
+	G4ThreeVector vnphi1(-std::sin(pi/6),-std::cos(pi/6),0),
+	              vnphi2(-std::sin(pi/6),std::cos(pi/6),0);
 
   G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1),
 	        vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1),
-		vxy(1./sqrt(2.),1./sqrt(2.),0),
-	        vxmy(1./sqrt(2.),-1./sqrt(2.),0),
-	        vmxmy(-1./sqrt(2.),-1./sqrt(2.),0),
-	        vmxy(-1./sqrt(2.),1./sqrt(2.),0),
-                vx2mz(1.0/sqrt(5.0),0,-2.0/sqrt(5.0)),
-	        vxmz(1./sqrt(2.),0,-1./sqrt(2.));
+		vxy(1./std::sqrt(2.),1./std::sqrt(2.),0),
+	        vxmy(1./std::sqrt(2.),-1./std::sqrt(2.),0),
+	        vmxmy(-1./std::sqrt(2.),-1./std::sqrt(2.),0),
+	        vmxy(-1./std::sqrt(2.),1./std::sqrt(2.),0),
+                vx2mz(1.0/std::sqrt(5.0),0,-2.0/std::sqrt(5.0)),
+	        vxmz(1./std::sqrt(2.),0,-1./std::sqrt(2.));
 	
 	G4RotationMatrix r90X,r90Y,r90Z,r180X,r45X,r30Y;
 	
@@ -141,8 +141,8 @@ int main(void)
 
   G4ThreeVector pct10(60,0,0);
   G4ThreeVector pct10mx(-50,0,0);
-  G4ThreeVector pct10phi1(60*cos(10.*degree),60*sin(10*degree),0);
-  G4ThreeVector pct10phi2(60*cos(50.*degree),-60*sin(50*degree),0);
+  G4ThreeVector pct10phi1(60*std::cos(10.*degree),60*std::sin(10*degree),0);
+  G4ThreeVector pct10phi2(60*std::cos(50.*degree),-60*std::sin(50*degree),0);
 
   G4ThreeVector pct10e1(-691-500,174,      404 );
 
@@ -161,21 +161,21 @@ int main(void)
   a1=pct10e2.x()-pct10e1.x();
   a2=pct10e2.y()-pct10e1.y();
   a3=pct10e2.z()-pct10e1.z();
-  am=sqrt(a1*a1+a2*a2+a3*a3);
+  am=std::sqrt(a1*a1+a2*a2+a3*a3);
   G4ThreeVector  d1(a1/am,a2/am,a3/am);
   G4cout<<d1.x()<<"\t"<<d1.y()<<"\t"<<d1.z()<<G4endl;
 
   a1=pct10e3.x()-pct10e2.x();
   a2=pct10e3.y()-pct10e2.y();
   a3=pct10e3.z()-pct10e2.z();
-  am=sqrt(a1*a1+a2*a2+a3*a3);
+  am=std::sqrt(a1*a1+a2*a2+a3*a3);
   G4ThreeVector  d2(a1/am,a2/am,a3/am);
   G4cout<<d2.x()<<"\t"<<d2.y()<<"\t"<<d2.z()<<G4endl;
 
   a1=pct10e4.x()-pct10e3.x();
   a2=pct10e4.y()-pct10e3.y();
   a3=pct10e4.z()-pct10e3.z();
-  am=sqrt(a1*a1+a2*a2+a3*a3);
+  am=std::sqrt(a1*a1+a2*a2+a3*a3);
   G4ThreeVector  d3(a1/am,a2/am,a3/am);
   G4cout<<d3.x()<<"\t"<<d3.y()<<"\t"<<d3.z()<<G4endl;
 
@@ -309,10 +309,10 @@ int main(void)
 	if (OutRange(norm,G4ThreeVector(0,0,-1)))
 	    G4cout << "Error B " << norm << G4endl;
 	norm=c1.SurfaceNormal(ponr1);
-	if (OutRange(norm,G4ThreeVector(-1.0/sqrt(2.0),-1.0/sqrt(2.0),0)))
+	if (OutRange(norm,G4ThreeVector(-1.0/std::sqrt(2.0),-1.0/std::sqrt(2.0),0)))
 	    G4cout << "Error C " << norm << G4endl;
 	norm=c1.SurfaceNormal(ponr2);
-	if (OutRange(norm,G4ThreeVector(1.0/sqrt(2.0),1.0/sqrt(2.0),0)))
+	if (OutRange(norm,G4ThreeVector(1.0/std::sqrt(2.0),1.0/std::sqrt(2.0),0)))
 	    G4cout << "Error D " << norm << G4endl;
 	norm=c3.SurfaceNormal(ponphi1);
 	if (OutRange(norm,vnphi1))
@@ -389,7 +389,7 @@ int main(void)
 	    G4cout << "Error PhiS 1" << dist << G4endl;
 	dist=c3.DistanceToOut(ponphi1,vy,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(dist,2*60*sin(pi/6))||
+	if (OutRange(dist,2*60*std::sin(pi/6))||
 	    OutRange(*pNorm,vnphi2)||
 	    !*pgoodNorm)
 	    G4cout << "Error PhiS 2" << dist << G4endl;
@@ -402,7 +402,7 @@ int main(void)
 	    G4cout << "Error PhiE 1" << dist << G4endl;
 	dist=c3.DistanceToOut(ponphi2,vmy,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(dist,2*60*sin(pi/6))||
+	if (OutRange(dist,2*60*std::sin(pi/6))||
 	    OutRange(*pNorm,vnphi1)||
 	    !*pgoodNorm)
 	    G4cout << "Error PhiS 2" << dist << G4endl;
@@ -436,13 +436,13 @@ int main(void)
 
 // Test case for rmax root bug
 	dist=c7.DistanceToOut(ponr2,vmx,calcNorm,pgoodNorm,pNorm);
-	if (OutRange(dist,100/sqrt(2.)-sqrt(95*95-100*100/2.))||*pgoodNorm)
+	if (OutRange(dist,100/std::sqrt(2.)-std::sqrt(95*95-100*100/2.))||*pgoodNorm)
 	    G4cout << "Error rmax root bug" << dist << G4endl;
 
 // Parallel radii test cases
 	dist=c8a.DistanceToOut(pparr2,vparr,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(dist,100.*sqrt(5.)/2.)||
+	if (OutRange(dist,100.*std::sqrt(5.)/2.)||
                      !*pgoodNorm||
                      OutRange(*pNorm,vz))
 	    G4cout << "Error solid parr2a " <<dist << G4endl;
@@ -474,7 +474,7 @@ int main(void)
 	    G4cout << "Error solid parr3a " <<dist << G4endl;
 	dist=c8a.DistanceToOut(pparr3,-vparr,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(dist,100*sqrt(5.)/2.)||
+	if (OutRange(dist,100*std::sqrt(5.)/2.)||
 	    !*pgoodNorm||
 	    OutRange(*pNorm,vmz))
 	    G4cout << "Error solid parr3b " <<dist << G4endl;
@@ -489,13 +489,13 @@ int main(void)
 	*pNorm=pNorm->unit();
 	if (OutRange(dist,50)||
 	    !*pgoodNorm||
-	    OutRange(*pNorm,G4ThreeVector(0,2./sqrt(5.0),-1./sqrt(5.0))))
+	    OutRange(*pNorm,G4ThreeVector(0,2./std::sqrt(5.0),-1./std::sqrt(5.0))))
 	    G4cout << "Error solid parr3d " <<dist << G4endl;
 
 
 	dist=c8b.DistanceToOut(pparr2,vparr,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(dist,100*sqrt(5.)/2.)||
+	if (OutRange(dist,100*std::sqrt(5.)/2.)||
                      !*pgoodNorm||
                      OutRange(*pNorm,vz))
 	    G4cout << "Error hollow parr2a " <<dist << G4endl;
@@ -526,7 +526,7 @@ int main(void)
 	    G4cout << "Error hollow parr3a " <<dist << G4endl;
 	dist=c8b.DistanceToOut(pparr3,-vparr,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(dist,100.*sqrt(5.)/2.)||
+	if (OutRange(dist,100.*std::sqrt(5.)/2.)||
 	    !*pgoodNorm||
 	    OutRange(*pNorm,vmz))
 	    G4cout << "Error hollow parr3b " <<dist << G4endl;
@@ -541,7 +541,7 @@ int main(void)
 	*pNorm=pNorm->unit();
 	if (OutRange(dist,50)||
 	    !*pgoodNorm||
-	    OutRange(*pNorm,G4ThreeVector(0,2./sqrt(5.),-1.0/sqrt(5.))))
+	    OutRange(*pNorm,G4ThreeVector(0,2./std::sqrt(5.),-1.0/std::sqrt(5.))))
 	    G4cout << "Error hollow parr3d " <<dist << G4endl;
 
 	dist=c9.DistanceToOut(G4ThreeVector(1e3*kRadTolerance,0,50),
@@ -637,11 +637,11 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
 	  G4cout << "Error C " << dist << G4endl;
 
 	dist=c4.DistanceToIn(pply);
-	if (OutRange(dist,120*sin(pi/3)))
+	if (OutRange(dist,120*std::sin(pi/3)))
 	  G4cout << "Error D " << dist << G4endl;
 
 	dist=c4.DistanceToIn(pmiy);
-	if (OutRange(dist,120*sin(pi/3)))
+	if (OutRange(dist,120*std::sin(pi/3)))
 	  G4cout << "Error D " << dist << G4endl;
 
 	dist=c1.DistanceToIn(pplz);
@@ -649,7 +649,7 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
 	    G4cout << "Error E " << dist << G4endl;
 // Check with both rmins=0
 	dist=c5.DistanceToIn(pplx);
-	if (OutRange(dist,20./sqrt(2.)))
+	if (OutRange(dist,20./std::sqrt(2.)))
 	  G4cout << "Error F " << dist << G4endl;
 
 	/////////////////////////////////////////////////////
@@ -767,7 +767,7 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
 	if (OutRange(dist,70))
 	  G4cout << "Error E " << dist << G4endl;
 	dist=c3.DistanceToIn(pydx,vmy);
-	if (OutRange(dist,150-60*tan(pi/6)))
+	if (OutRange(dist,150-60*std::tan(pi/6)))
 	  G4cout << "Error F " << dist << G4endl;
 
 	dist=c1.DistanceToIn(pplx,vmx);
@@ -796,7 +796,7 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
 	if (OutRange(dist,0))
 	    G4cout << "Error J" << dist << G4endl;
 	dist=c1.DistanceToIn(ponr1,vmx);
-	if (OutRange(dist,2.0*sqrt(50*50/2.)))
+	if (OutRange(dist,2.0*std::sqrt(50*50/2.)))
 	    G4cout << "Error J2" << dist << G4endl;
 
 	dist=c1.DistanceToIn(ponr2,vmxmy);
@@ -805,7 +805,7 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
 
 // Parallel test case -> parallel to both radii
 	dist=c8b.DistanceToIn(pparr1,vparr);
-	if (OutRange(dist,100*sqrt(5.)/2.))
+	if (OutRange(dist,100*std::sqrt(5.)/2.))
 	    G4cout << "Error parr1 " << dist << G4endl;
 	dist=c8b.DistanceToIn(pparr2,-vparr);
 	if (OutRange(dist,kInfinity))

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatBoxSide.cc,v 1.2 2004-11-13 18:26:25 gcosmo Exp $
+// $Id: G4FlatBoxSide.cc,v 1.3 2004-12-02 09:31:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -142,7 +142,7 @@ G4int G4FlatBoxSide::DistanceToSurface(const G4ThreeVector &gp,
    // if p is on surface, distance = 0. 
    //
 
-   if (fabs(p.z()) == 0.) {   // if p is on the plane
+   if (std::fabs(p.z()) == 0.) {   // if p is on the plane
       distance[0] = 0;
       G4ThreeVector xx = p;
       gxx[0] = ComputeGlobalPoint(xx);
@@ -248,11 +248,11 @@ G4int G4FlatBoxSide::DistanceToSurface(const G4ThreeVector &gp,
 
    // The plane is placed on origin with making its normal 
    // parallel to z-axis. 
-   if (fabs(p.z()) <= 0.5 * kCarTolerance) {   // if p is on the plane, return 1
+   if (std::fabs(p.z()) <= 0.5 * kCarTolerance) {   // if p is on the plane, return 1
       distance[0] = 0;
       xx = p;
    } else {
-      distance[0] = fabs(p.z());
+      distance[0] = std::fabs(p.z());
       xx.set(p.x(), p.y(), 0);  
    }
 

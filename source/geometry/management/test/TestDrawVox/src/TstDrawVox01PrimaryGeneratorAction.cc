@@ -97,10 +97,10 @@ void TstDrawVox01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   case randomDirectionGun:
 
     costheta = RandFlat::shoot (-1., 1.);
-    sintheta = sqrt (1. - costheta * costheta);
+    sintheta = std::sqrt (1. - costheta * costheta);
     phi      = RandFlat::shoot (twopi);
-    cosphi   = cos (phi);
-    sinphi   = sin (phi);
+    cosphi   = std::cos (phi);
+    sinphi   = std::sin (phi);
     particleGun->SetParticleMomentumDirection
       (G4ThreeVector (sintheta * cosphi, sintheta * sinphi, costheta));
 
@@ -147,10 +147,10 @@ void TstDrawVox01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	RandFlat::shoot (worldExtent.GetZmin (), worldExtent.GetZmax ())));
 
     costheta = RandFlat::shoot (-1., 1.);
-    sintheta = sqrt (1. - costheta * costheta);
+    sintheta = std::sqrt (1. - costheta * costheta);
     phi      = RandFlat::shoot (twopi);
-    cosphi   = cos (phi);
-    sinphi   = sin (phi);
+    cosphi   = std::cos (phi);
+    sinphi   = std::sin (phi);
     particleGun->SetParticleMomentumDirection
       (G4ThreeVector (sintheta * cosphi, sintheta * sinphi, costheta));
 

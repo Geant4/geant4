@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Hype.cc,v 1.4 2002-01-08 16:38:03 gcosmo Exp $
+// $Id: testG4Hype.cc,v 1.5 2004-12-02 09:31:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,7 +32,7 @@
 //             Ensure asserts are compiled in
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 
 #include "globals.hh"
 #include "geomdefs.hh"
@@ -56,10 +56,10 @@ G4bool testG4Hype()
 
     G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
     G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
-    G4ThreeVector vxy(1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxy(-1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxmy(-1/sqrt(2.0),-1/sqrt(2.0),0);
-    G4ThreeVector vxmy(1/sqrt(2.0),-1/sqrt(2.0),0);
+    G4ThreeVector vxy(1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+    G4ThreeVector vmxy(-1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+    G4ThreeVector vmxmy(-1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
+    G4ThreeVector vxmy(1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
 
     G4double Dist;
     G4ThreeVector *pNorm,norm;
@@ -229,7 +229,7 @@ G4bool testG4Hype()
 // Test y clipping ok
 
     // Hype end Outer Radius -> clipping scale
-    double eOR=sqrt(tan(yesStereo)*tan(yesStereo)*len*len+oR1*oR1);
+    double eOR=std::sqrt(std::tan(yesStereo)*std::tan(yesStereo)*len*len+oR1*oR1);
 
     for (G4double xTest=-100;xTest<100;xTest+=9)
 	{
@@ -243,7 +243,7 @@ G4bool testG4Hype()
 		{
 		   assert(t1.CalculateExtent(kYAxis,xTestClip,origin,min,max));
 // Calc max y coordinate
-		   G4double testMax=(xTest<0) ? sqrt(eOR*eOR-xTest*xTest) : eOR;
+		   G4double testMax=(xTest<0) ? std::sqrt(eOR*eOR-xTest*xTest) : eOR;
 		   assert ((min < -testMax) && (max > testMax));
 		}
 	}
@@ -261,7 +261,7 @@ G4bool testG4Hype()
 		{
 		   assert(t1.CalculateExtent(kXAxis,yTestClip,origin,min,max));
 // Calc max y coordinate
-		   G4double testMax=(yTest<0) ? sqrt(eOR*eOR-yTest*yTest) : eOR;
+		   G4double testMax=(yTest<0) ? std::sqrt(eOR*eOR-yTest*yTest) : eOR;
 		   assert ((min < -testMax) && (max > testMax));
 		}
 	}

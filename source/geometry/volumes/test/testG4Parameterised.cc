@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Parameterised.cc,v 1.7 2003-12-01 16:19:10 gcosmo Exp $
+// $Id: testG4Parameterised.cc,v 1.8 2004-12-02 09:31:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -309,7 +309,7 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
     StartPoint= EndPoint;
     physStep=kInfinity;
     Step=myNav.ComputeStep(StartPoint,yHat,physStep,safety);
-    assert(ApproxEqual(Step,90.-10./cos(angle1)));
+    assert(ApproxEqual(Step,90.-10./std::cos(angle1)));
     EndPoint= StartPoint + Step * yHat;   //  Should near  0, 90, 0
     assert(safety<=Step);
     myNav.SetGeometricallyLimitedStep();
@@ -319,7 +319,7 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
     StartPoint= EndPoint;
     physStep=kInfinity;
     Step=myNav.ComputeStep(StartPoint,yHat,physStep,safety);
-    assert(ApproxEqual(Step,20./cos(angle1)));
+    assert(ApproxEqual(Step,20./std::cos(angle1)));
     assert(ApproxEqual(safety,0));
     myNav.SetGeometricallyLimitedStep();
     EndPoint += Step * yHat;   //  Should be near 0, 110, 0
@@ -331,7 +331,7 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
     StartPoint= EndPoint;
     physStep=kInfinity;
     Step=myNav.ComputeStep(StartPoint,yHat,physStep,safety);
-    assert(ApproxEqual(Step,100.-10.*(1./cos(angle1)+1./cos(2.*angle1))));
+    assert(ApproxEqual(Step,100.-10.*(1./std::cos(angle1)+1./std::cos(2.*angle1))));
     EndPoint= StartPoint + Step * yHat;   //  Should near  0, 190, 0
     assert(safety<=Step);
     myNav.SetGeometricallyLimitedStep();
@@ -341,7 +341,7 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
     StartPoint= EndPoint;
     physStep=kInfinity;
     Step=myNav.ComputeStep(StartPoint,yHat,physStep,safety);
-    assert(ApproxEqual(Step,20./cos(2.*angle1)));
+    assert(ApproxEqual(Step,20./std::cos(2.*angle1)));
     assert(ApproxEqual(safety,0));
     myNav.SetGeometricallyLimitedStep();
     EndPoint += Step * yHat;   //  Should be near 0, 110, 0
@@ -353,7 +353,7 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
     StartPoint= EndPoint;
     physStep=kInfinity;
     Step=myNav.ComputeStep(StartPoint,yHat,physStep,safety);
-    assert(ApproxEqual(Step, 300. - 10./cos(2.*angle1) ));
+    assert(ApproxEqual(Step, 300. - 10./std::cos(2.*angle1) ));
     assert(ApproxEqual(safety,0));
     myNav.SetGeometricallyLimitedStep();
     EndPoint += Step * yHat;   //  Should be near 0, 110, 0

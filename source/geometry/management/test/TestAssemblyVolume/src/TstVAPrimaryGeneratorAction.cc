@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TstVAPrimaryGeneratorAction.cc,v 1.4 2001-07-11 09:59:25 gunter Exp $
+// $Id: TstVAPrimaryGeneratorAction.cc,v 1.5 2004-12-02 09:31:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -103,10 +103,10 @@ void TstVAPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   case randomDirectionGun:
 
     costheta = RandFlat::shoot (-1., 1.);
-    sintheta = sqrt (1. - costheta * costheta);
+    sintheta = std::sqrt (1. - costheta * costheta);
     phi      = RandFlat::shoot (twopi);
-    cosphi   = cos (phi);
-    sinphi   = sin (phi);
+    cosphi   = std::cos (phi);
+    sinphi   = std::sin (phi);
     particleGun->SetParticleMomentumDirection
       (G4ThreeVector (sintheta * cosphi, sintheta * sinphi, costheta));
 
@@ -153,10 +153,10 @@ void TstVAPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	RandFlat::shoot (worldExtent.GetZmin (), worldExtent.GetZmax ())));
 
     costheta = RandFlat::shoot (-1., 1.);
-    sintheta = sqrt (1. - costheta * costheta);
+    sintheta = std::sqrt (1. - costheta * costheta);
     phi      = RandFlat::shoot (twopi);
-    cosphi   = cos (phi);
-    sinphi   = sin (phi);
+    cosphi   = std::cos (phi);
+    sinphi   = std::sin (phi);
     particleGun->SetParticleMomentumDirection
       (G4ThreeVector (sintheta * cosphi, sintheta * sinphi, costheta));
 

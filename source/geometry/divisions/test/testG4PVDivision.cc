@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4PVDivision.cc,v 1.1 2003-06-16 15:11:43 gcosmo Exp $
+// $Id: testG4PVDivision.cc,v 1.2 2004-12-02 09:31:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // test for G4PVDivision classes
@@ -301,7 +301,7 @@ void generateScanPointsForTube()
     // any Z, phi close initial phi
     G4double phi = 1.*deg;
     //t?    if( theExtraPars.size() > 0 ) phi = (theExtraPars[0]+1.)*deg;
-    G4ThreeVector pR( cos(phi), sin(phi), theWorldDim/100. );
+    G4ThreeVector pR( std::cos(phi), std::sin(phi), theWorldDim/100. );
     G4double rho = (ii+0.001) * theWorldDim/numberOfPoints;
     pR.setRho( rho );
     pR += centre;
@@ -313,7 +313,7 @@ void generateScanPointsForTube()
   for( ii = 0; ii < numberOfPoints; ii++ ) {
     G4double phi = (ii+0.001) * 360*deg/numberOfPoints;
     // any rho (=1), any Z
-    G4ThreeVector pR( cos(phi), sin(phi), theWorldDim/100. );
+    G4ThreeVector pR( std::cos(phi), std::sin(phi), theWorldDim/100. );
     pR += centre;
     fout << pR.x() << " " << pR.y() << " " << pR.z() << G4endl;
   }
@@ -324,7 +324,7 @@ void generateScanPointsForTube()
     //any rho (=1), phi close initial phi
     G4double phi = 1.*deg;
     //t?  if( theExtraPars.size() > 0 ) phi = (theExtraPars[0]+1.)*deg;
-    G4ThreeVector pR( cos(phi), sin(phi),0.);
+    G4ThreeVector pR( std::cos(phi), std::sin(phi),0.);
     G4double Z = -theWorldDim + (ii+0.001) * 2*theWorldDim / numberOfPoints;
     pR.setZ( Z );
     pR += centre;

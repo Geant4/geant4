@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineSurface.cc,v 1.12 2003-03-28 13:11:53 gcosmo Exp $
+// $Id: G4BSplineSurface.cc,v 1.13 2004-12-02 09:31:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -475,7 +475,7 @@ G4PointRat& G4BSplineSurface::InternalEvalCrv(int i, G4ControlPoints* crv)
     k1 = tmp_knots->GetKnot((j + ord - 1));
     k2 = tmp_knots->GetKnot(j); 
     
-    if ((abs(k1 - k2)) > kCarTolerance )
+    if ((std::abs(k1 - k2)) > kCarTolerance )
     { 
       /* L. Broglia		
       register G4PointRat* pts1 = &crv->get(i,j-1);

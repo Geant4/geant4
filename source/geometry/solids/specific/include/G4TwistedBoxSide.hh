@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBoxSide.hh,v 1.2 2004-11-13 18:26:24 gcosmo Exp $
+// $Id: G4TwistedBoxSide.hh,v 1.3 2004-12-02 09:31:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -106,8 +106,8 @@ G4ThreeVector G4TwistedBoxSide::SurfacePoint( G4double phi, G4double u )
 {
   // function to calculate a point on the surface, given by parameters phi,u
 
-  G4ThreeVector SurfPoint ( fDx * cos(phi) - u * sin(phi),
-                            fDx * sin(phi) + u * cos(phi),
+  G4ThreeVector SurfPoint ( fDx * std::cos(phi) - u * std::sin(phi),
+                            fDx * std::sin(phi) + u * std::cos(phi),
                             2*fDz*phi/fPhiTwist );
   return SurfPoint ;
 }
@@ -118,7 +118,7 @@ G4ThreeVector G4TwistedBoxSide::NormAng( G4double phi, G4double u )
   // function to calculate the norm at a given point on the surface
 
   G4double L = 2*fDz ;
-  G4ThreeVector nvec( L*cos(phi), L*sin(phi), fPhiTwist*u);
+  G4ThreeVector nvec( L*std::cos(phi), L*std::sin(phi), fPhiTwist*u);
 
   return nvec.unit() ;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Tubs.cc,v 1.13 2004-09-08 15:13:53 grichine Exp $
+// $Id: testG4Tubs.cc,v 1.14 2004-12-02 09:31:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,7 +37,7 @@
 // 21.5.99 V. Grichine tests of phi-intersections (t3 and t4)
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 
 #include "globals.hh"
 #include "geomdefs.hh"
@@ -79,10 +79,10 @@ G4bool testG4Tubs()
 
     G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
     G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
-    G4ThreeVector vxy(1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxy(-1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxmy(-1/sqrt(2.0),-1/sqrt(2.0),0);
-    G4ThreeVector vxmy(1/sqrt(2.0),-1/sqrt(2.0),0);
+    G4ThreeVector vxy(1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+    G4ThreeVector vmxy(-1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+    G4ThreeVector vmxmy(-1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
+    G4ThreeVector vxmy(1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
 
     G4double Dist, vol;
     G4ThreeVector *pNorm,norm;
@@ -147,8 +147,8 @@ G4bool testG4Tubs()
 	//   pt2 = t1 but slightly higher, and still on tolerant surface
 	//   pt3 = t1 but slightly lower, and still on tolerant surface
 	//
-	G4ThreeVector pt1( 1.05*m*cos(-15*deg),
-	                   1.05*m*sin(-15*deg),
+	G4ThreeVector pt1( 1.05*m*std::cos(-15*deg),
+	                   1.05*m*std::sin(-15*deg),
 			      0*m );
  			  
         G4ThreeVector pt2 = pt1 + G4ThreeVector(0,0.001*kCarTolerance,0) ;
@@ -966,7 +966,7 @@ G4bool testG4Tubs()
       {
 	assert(t1.CalculateExtent(kYAxis,xTestClip,origin,min,max));
 // Calc max y coordinate
-// G4double testMax=(xTest<0) ? sqrt(50*50-xTest*xTest) : 50;
+// G4double testMax=(xTest<0) ? std::sqrt(50*50-xTest*xTest) : 50;
 // assert (ApproxEqual(min,-testMax)&&ApproxEqual(max,testMax));
       }
     }
@@ -986,7 +986,7 @@ G4bool testG4Tubs()
       {
 	assert(t1.CalculateExtent(kXAxis,yTestClip,origin,min,max));
 // Calc max y coordinate
-	      //  G4double testMax=(yTest<0) ? sqrt(50*50-yTest*yTest) : 50;
+	      //  G4double testMax=(yTest<0) ? std::sqrt(50*50-yTest*yTest) : 50;
 	      //  assert (ApproxEqual(min,-testMax)&&ApproxEqual(max,testMax));
       }
     }

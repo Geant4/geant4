@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: calorimeter.cc,v 1.5 2003-11-04 09:38:57 gcosmo Exp $
+// $Id: calorimeter.cc,v 1.6 2004-12-02 09:31:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // calorimeter
@@ -50,7 +50,7 @@ int main()
     G4ThreeVector origin(0,0,0),pMX(-500,0,0);
     G4ThreeVector vx(1,0,0);
     G4ThreeVector vy(0,1,0);
-    G4ThreeVector vxy(1/sqrt(2.0),1/sqrt(2.0),0);
+    G4ThreeVector vxy(1/std::sqrt(2.0),1/std::sqrt(2.0),0);
     G4VPhysicalVolume *myTopNode;
     G4Timer timer;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidSphere.cc,v 1.7 2003-06-16 16:52:50 gunter Exp $
+// $Id: G4BREPSolidSphere.cc,v 1.8 2004-12-02 09:31:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -81,7 +81,7 @@ G4ThreeVector G4BREPSolidSphere::SurfaceNormal(const G4ThreeVector& Pt) const
 
 G4double G4BREPSolidSphere::DistanceToIn(const G4ThreeVector& Pt) const
 {
-  return  fabs(SurfaceVec[0]->HowNear(Pt));
+  return  std::fabs(SurfaceVec[0]->HowNear(Pt));
 }
 
 
@@ -97,7 +97,7 @@ G4double G4BREPSolidSphere::DistanceToIn(register const G4ThreeVector& Pt,
   if(Result>0)
   {
     ShortestDistance = SurfaceVec[0]->GetDistance();
-    return sqrt(ShortestDistance);
+    return std::sqrt(ShortestDistance);
   }
   return kInfinity; 
 }
@@ -124,7 +124,7 @@ G4double G4BREPSolidSphere::DistanceToOut(register const G4ThreeVector& Pt,
     }
 
     ShortestDistance = SurfaceVec[0]->GetDistance();
-    return sqrt(ShortestDistance);
+    return std::sqrt(ShortestDistance);
   }
   return kInfinity; 
 }
@@ -132,7 +132,7 @@ G4double G4BREPSolidSphere::DistanceToOut(register const G4ThreeVector& Pt,
 
 G4double G4BREPSolidSphere::DistanceToOut(const G4ThreeVector& Pt) const
 {
-  return  fabs(SurfaceVec[0]->HowNear(Pt));
+  return  std::fabs(SurfaceVec[0]->HowNear(Pt));
 }
 
 // Streams solid contents to output stream.

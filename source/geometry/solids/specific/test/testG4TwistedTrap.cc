@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4TwistedTrap.cc,v 1.2 2004-11-24 17:03:12 link Exp $
+// $Id: testG4TwistedTrap.cc,v 1.3 2004-12-02 09:31:34 gcosmo Exp $
 // GEANT4 tag $Name: 
 //
 
@@ -32,7 +32,7 @@
 //             Ensure asserts are compiled in
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 
 #include "globals.hh"
 #include "geomdefs.hh"
@@ -67,8 +67,8 @@ G4ThreeVector Pos(G4double phi, G4double u, G4double a, G4double b, G4double d, 
 
   G4double w = Xcoef(u,a,b,d) ;
 
-  G4double fx = w * cos(phi) - u * sin(phi)  ;
-  G4double fy = w * sin(phi) + u * cos(phi)  ;
+  G4double fx = w * std::cos(phi) - u * std::sin(phi)  ;
+  G4double fy = w * std::sin(phi) + u * std::cos(phi)  ;
   G4double fz = L * phi / dphi ;
   
   G4ThreeVector vec(fx,fy,fz) ;
@@ -84,8 +84,8 @@ G4ThreeVector NormAng( G4double phi, G4double u, G4double a, G4double b, G4doubl
   G4double d2 = d*d ;
   G4double a2 = a*a ;
 
-  G4ThreeVector nvec( ( L * (2*b*cos(phi) + (a-d)*sin(phi)))/2.,
-                      -(L*((a-d)*cos(phi) - 2*b*sin(phi)))/2.,
+  G4ThreeVector nvec( ( L * (2*b*std::cos(phi) + (a-d)*std::sin(phi)))/2.,
+                      -(L*((a-d)*std::cos(phi) - 2*b*std::sin(phi)))/2.,
                       (dphi*(-b*d2 + 8*b2*u - 4*a*d*u + 2*d2*u + a2*(b + 2*u)))
                       /(8.*b) ) ;
 

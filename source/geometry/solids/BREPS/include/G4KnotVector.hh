@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KnotVector.hh,v 1.7 2001-07-11 09:59:35 gunter Exp $
+// $Id: G4KnotVector.hh,v 1.8 2004-12-02 09:31:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,7 +37,7 @@
 #ifndef __KNOTVECTOR_H
 #define __KNOTVECTOR_H
 
-#include <math.h>
+#include <cmath>
 #include "geomdefs.hh"
 
 class G4KnotVector

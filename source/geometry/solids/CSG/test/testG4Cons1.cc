@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons1.cc,v 1.5 2002-08-10 13:40:49 grichine Exp $
+// $Id: testG4Cons1.cc,v 1.6 2004-12-02 09:31:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,7 +32,7 @@
 //             Ensure asserts are compiled in
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 #include "G4ios.hh"
 #include "globals.hh"
 #include "geomdefs.hh"
@@ -56,10 +56,10 @@ G4bool testG4Cons()
 
     G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
     G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
-    G4ThreeVector vxy(1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxy(-1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxmy(-1/sqrt(2.0),-1/sqrt(2.0),0);
-    G4ThreeVector vxmy(1/sqrt(2.0),-1/sqrt(2.0),0);
+    G4ThreeVector vxy(1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+    G4ThreeVector vmxy(-1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+    G4ThreeVector vmxmy(-1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
+    G4ThreeVector vxmy(1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
 
     G4double Dist;
     G4ThreeVector *pNorm,norm;
@@ -240,7 +240,7 @@ G4bool testG4Cons()
 		{
 		   assert(t1.CalculateExtent(kYAxis,xTestClip,origin,min,max));
 // Calc max y coordinate
-		   G4double testMax=(xTest<0) ? sqrt(50*50-xTest*xTest) : 50;
+		   G4double testMax=(xTest<0) ? std::sqrt(50*50-xTest*xTest) : 50;
 		   assert (ApproxEqual(min,-testMax)
 			   &&ApproxEqual(max,testMax));
 		}
@@ -259,7 +259,7 @@ G4bool testG4Cons()
 		{
 		   assert(t1.CalculateExtent(kXAxis,yTestClip,origin,min,max));
 // Calc max y coordinate
-		   G4double testMax=(yTest<0) ? sqrt(50*50-yTest*yTest) : 50;
+		   G4double testMax=(yTest<0) ? std::sqrt(50*50-yTest*yTest) : 50;
 		   assert (ApproxEqual(min,-testMax)
 			   &&ApproxEqual(max,testMax));
 		}

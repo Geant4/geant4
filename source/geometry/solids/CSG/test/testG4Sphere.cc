@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.14 2004-11-11 14:24:25 grichine Exp $
+// $Id: testG4Sphere.cc,v 1.15 2004-12-02 09:31:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -37,7 +37,7 @@
 
 #include "G4ios.hh"
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 #include "globals.hh"
 #include "geomdefs.hh"
 
@@ -59,7 +59,7 @@
 
 //G4bool ApproxEqual(const G4double check,const G4double target)
 //{
-//    return (fabs(check-target)<kApproxEqualTolerance) ? true : false ;
+//    return (std::fabs(check-target)<kApproxEqualTolerance) ? true : false ;
 //}
 
 // Return true if the 3vector check is approximately equal to target
@@ -96,26 +96,26 @@ int main(void)
     G4ThreeVector pbigmx(-100,0,0),pbigmy(0,-100,0),pbigmz(0,0,-100);
 
     G4ThreeVector ponrmin1(45,0,0),ponrmax1(50,0,0),ponzmax(0,0,50),
-	    ponrmin2(45/sqrt(2.),45/sqrt(2.),0),
+	    ponrmin2(45/std::sqrt(2.),45/std::sqrt(2.),0),
             ponrmin3(0,0,-45),ponrminJ(0,0,-300),ponrmaxJ(0,0,-500),
-	    ponrmax2(50/sqrt(2.),50/sqrt(2.),0);
-    G4ThreeVector ponphi1(48/sqrt(2.),-48/sqrt(2.),0),
-	          ponphi2(48/sqrt(2.),48/sqrt(2.),0),
+	    ponrmax2(50/std::sqrt(2.),50/std::sqrt(2.),0);
+    G4ThreeVector ponphi1(48/std::sqrt(2.),-48/std::sqrt(2.),0),
+	          ponphi2(48/std::sqrt(2.),48/std::sqrt(2.),0),
 	          pInPhi(48*0.866,-24,0),
-	          pOverPhi(-48/sqrt(2.),48/sqrt(2.),0);
-    G4ThreeVector pontheta1(0,48*sin(pi/4),48*cos(pi/4)),
-	    pontheta2(0,48*sin(pi/4),-48*cos(pi/4));
+	          pOverPhi(-48/std::sqrt(2.),48/std::sqrt(2.),0);
+    G4ThreeVector pontheta1(0,48*std::sin(pi/4),48*std::cos(pi/4)),
+	    pontheta2(0,48*std::sin(pi/4),-48*std::cos(pi/4));
 
-    G4ThreeVector ptestphi1(-100,-45/sqrt(2.),0),
-	    ptestphi2(-100,45/sqrt(2.),0);
+    G4ThreeVector ptestphi1(-100,-45/std::sqrt(2.),0),
+	    ptestphi2(-100,45/std::sqrt(2.),0);
 
-    G4ThreeVector ptesttheta1(0,48/sqrt(2.),100),
-	    ptesttheta2(0,48/sqrt(2.),-100);
+    G4ThreeVector ptesttheta1(0,48/std::sqrt(2.),100),
+	    ptesttheta2(0,48/std::sqrt(2.),-100);
 
     G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
     G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
-    G4ThreeVector vxy(1/sqrt(2.),1/sqrt(2.),0),vmxmy(-1/sqrt(2.),-1/sqrt(2.),0);
-    G4ThreeVector vxmy(1/sqrt(2.),-1/sqrt(2.),0),vmxy(-1/sqrt(2.),1/sqrt(2.),0);
+    G4ThreeVector vxy(1/std::sqrt(2.),1/std::sqrt(2.),0),vmxmy(-1/std::sqrt(2.),-1/std::sqrt(2.),0);
+    G4ThreeVector vxmy(1/std::sqrt(2.),-1/std::sqrt(2.),0),vmxy(-1/std::sqrt(2.),1/std::sqrt(2.),0);
     G4ThreeVector v345exit1(-0.8,0.6,0),v345exit2(0.8,0.6,0),
 	          v345exit3(0.6,0.8,0);
     G4ThreeVector norm,*pNorm;
@@ -218,8 +218,8 @@ G4ThreeVector s9v(-0.6542770611918751,
 
   G4double  radOne = 100.0*mm;
   G4double  angle = -1.0*degree - 0.25*kAngTolerance;
-  G4ThreeVector  ptPhiMinus= G4ThreeVector( radOne*cos(angle) ,
-                                           radOne*sin(angle),
+  G4ThreeVector  ptPhiMinus= G4ThreeVector( radOne*std::cos(angle) ,
+                                           radOne*std::sin(angle),
                                            0.0 );
 
 
@@ -447,12 +447,12 @@ G4ThreeVector s9v(-0.6542770611918751,
     Dist=s2.DistanceToIn(ponrmin2,vx);
     assert(Dist==0);
     Dist=s2.DistanceToIn(ponrmin2,vmx);
-    assert(ApproxEqual(Dist,90/sqrt(2.)));
+    assert(ApproxEqual(Dist,90/std::sqrt(2.)));
 
 
     Dist=s3.DistanceToIn(ptesttheta1,vmz);
     //    G4cout<<"s3.DistanceToIn(ptesttheta1,vmz) = "<<Dist<<G4endl;
-    assert(ApproxEqual(Dist,100-48/sqrt(2.)));
+    assert(ApproxEqual(Dist,100-48/std::sqrt(2.)));
     Dist=s3.DistanceToIn(pontheta1,vz);
     //    G4cout<<"s3.DistanceToIn(pontheta1,vz) = "<<Dist<<G4endl;
     assert(Dist==kInfinity);
@@ -486,7 +486,7 @@ G4ThreeVector s9v(-0.6542770611918751,
      assert(ApproxEqual(Dist,45));
 
      Dist=s4.DistanceToIn(ptestphi1,vx);
-     assert(ApproxEqual(Dist,100+45/sqrt(2.)));
+     assert(ApproxEqual(Dist,100+45/std::sqrt(2.)));
      Dist=s4.DistanceToIn(ponphi1,vmxmy);
      assert(Dist==kInfinity);
      Dist=s4.DistanceToIn(ponphi1,vxy);
@@ -494,7 +494,7 @@ G4ThreeVector s9v(-0.6542770611918751,
      assert(ApproxEqual(Dist,0));
 
      Dist=s4.DistanceToIn(ptestphi2,vx);
-     assert(ApproxEqual(Dist,100+45/sqrt(2.)));
+     assert(ApproxEqual(Dist,100+45/std::sqrt(2.)));
      Dist=s4.DistanceToIn(ponphi2,vmxy);
      assert(Dist==kInfinity);
      Dist=s4.DistanceToIn(ponphi2,vxmy);
@@ -504,7 +504,7 @@ G4ThreeVector s9v(-0.6542770611918751,
      Dist=s3.DistanceToIn(pzero,vx);
      assert(ApproxEqual(Dist,45));
      Dist=s3.DistanceToIn(ptesttheta1,vmz);
-     assert(ApproxEqual(Dist,100-48/sqrt(2.)));
+     assert(ApproxEqual(Dist,100-48/std::sqrt(2.)));
      Dist=b216.DistanceToIn(p216,v216);
      // G4cout<<"b216.DistanceToIn(p216,v216) = "<<Dist<<G4endl;
 
@@ -538,7 +538,7 @@ G4ThreeVector s9v(-0.6542770611918751,
     assert(s3.CalculateExtent(kYAxis,limit,origin,min,max));
     assert(min<=-50&&max>=50);
     assert(s3.CalculateExtent(kZAxis,limit,origin,min,max));
-    assert(min<=-50/sqrt(2.)&&max>=50/sqrt(2.));
+    assert(min<=-50/std::sqrt(2.)&&max>=50/std::sqrt(2.));
     
     G4ThreeVector pmxmymz(-100,-110,-120);
     G4AffineTransform tPosOnly(pmxmymz);
@@ -554,7 +554,7 @@ G4ThreeVector s9v(-0.6542770611918751,
     assert(s3.CalculateExtent(kYAxis,limit,tPosOnly,min,max));
     assert(min<=-160&&max>=-60);
     assert(s3.CalculateExtent(kZAxis,limit,tPosOnly,min,max));
-    assert(min<=-170+50/sqrt(2.)&&max>=-70-50/sqrt(2.));
+    assert(min<=-170+50/std::sqrt(2.)&&max>=-70-50/std::sqrt(2.));
     
     G4RotationMatrix r90Z;
     r90Z.rotateZ(halfpi);
@@ -578,7 +578,7 @@ G4ThreeVector s9v(-0.6542770611918751,
     assert(s3.CalculateExtent(kYAxis,limit,tRotZ,min,max));
     assert(min<=-50&&max>=50);
     assert(s3.CalculateExtent(kZAxis,limit,tRotZ,min,max));
-    assert(min<=-50/sqrt(2.)&&max>=50/sqrt(2.));
+    assert(min<=-50/std::sqrt(2.)&&max>=50/std::sqrt(2.));
     
 // Check that clipped away
     G4VoxelLimits xClip;
@@ -661,7 +661,7 @@ G4ThreeVector s9v(-0.6542770611918751,
 		{
 		   assert(s1.CalculateExtent(kYAxis,xTestClip,origin,min,max));
 // Calc max y coordinate
-		   G4double testMax=(xTest<0) ? sqrt(50*50-xTest*xTest) : 50;
+		   G4double testMax=(xTest<0) ? std::sqrt(50*50-xTest*xTest) : 50;
 		   assert (ApproxEqual(min,-testMax)
 			   &&ApproxEqual(max,testMax));
 		}
@@ -680,7 +680,7 @@ G4ThreeVector s9v(-0.6542770611918751,
 		{
 		   assert(s1.CalculateExtent(kXAxis,yTestClip,origin,min,max));
 // Calc max y coordinate
-		   G4double testMax=(yTest<0) ? sqrt(50*50-yTest*yTest) : 50;
+		   G4double testMax=(yTest<0) ? std::sqrt(50*50-yTest*yTest) : 50;
 		   assert (ApproxEqual(min,-testMax)
 			   &&ApproxEqual(max,testMax));
 		}
@@ -691,10 +691,10 @@ G4ThreeVector s9v(-0.6542770611918751,
 
         G4Sphere SpAroundX("SpAroundX",  10.*mm, 1000.*mm, -1.0*degree, 2.0*degree, 0.*degree, 180.0*degree );
 
-	G4double  sinOneDeg = sin( 1.0 * degree );
+	G4double  sinOneDeg = std::sin( 1.0 * degree );
 	  radOne = 100.0 * mm;
 
-	G4ThreeVector  ptPhiSurfExct= G4ThreeVector( radOne * cos( -1.0 * degree ) , 
+	G4ThreeVector  ptPhiSurfExct= G4ThreeVector( radOne * std::cos( -1.0 * degree ) , 
 			             - radOne *  sinOneDeg, 
 				      0.0 );
         G4cout << " Starting from point " << ptPhiSurfExct << G4endl;
@@ -724,15 +724,15 @@ G4ThreeVector s9v(-0.6542770611918751,
 			   -270.0*degree, 280.0*degree,          //  start Phi,   delta Phi
 			    0.*degree, 180.0*degree );        //  start Theta, delta Theta
         G4double phiPoint = 160.0 * degree; 
-        G4ThreeVector  StartPt( radOne * cos(phiPoint), radOne * sin(phiPoint), 0.0); 
+        G4ThreeVector  StartPt( radOne * std::cos(phiPoint), radOne * std::sin(phiPoint), 0.0); 
         G4cout << "For sphere " << SphDeepNeg.GetName() << G4endl;
         G4cout << " Starting from point " << ptPhiSurfExct << G4endl;
 
         checkPoint( SphDeepNeg, StartPt,  0.0,  vy,   kInside); 
 
         // Try the edges  
-        G4ThreeVector  NegEdgePt( radOne * cos(-270.0*degree), radOne * sin(-270.0*degree), 0.0); 
-        G4ThreeVector  PosEdgePt( radOne * cos(10.0*degree), radOne * sin(10.0*degree), 0.0); 
+        G4ThreeVector  NegEdgePt( radOne * std::cos(-270.0*degree), radOne * std::sin(-270.0*degree), 0.0); 
+        G4ThreeVector  PosEdgePt( radOne * std::cos(10.0*degree), radOne * std::sin(10.0*degree), 0.0); 
 
         G4cout << "--------------------------------------------------------" << G4endl; 
 	G4cout << " New point " << NegEdgePt << " should be at Neg edge of -270.0 degrees " <<  G4endl;

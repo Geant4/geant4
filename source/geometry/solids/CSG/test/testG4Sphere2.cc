@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere2.cc,v 1.1 2003-11-13 19:33:31 japost Exp $
+// $Id: testG4Sphere2.cc,v 1.2 2004-12-02 09:31:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -37,7 +37,7 @@
 
 #include "G4ios.hh"
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 #include "globals.hh"
 #include "geomdefs.hh"
 
@@ -59,7 +59,7 @@
 
 //G4bool ApproxEqual(const G4double check,const G4double target)
 //{
-//    return (fabs(check-target)<kApproxEqualTolerance) ? true : false ;
+//    return (std::fabs(check-target)<kApproxEqualTolerance) ? true : false ;
 //}
 
 // Return true if the 3vector check is approximately equal to target
@@ -96,26 +96,26 @@ int main(void)
     G4ThreeVector pbigmx(-100,0,0),pbigmy(0,-100,0),pbigmz(0,0,-100);
 
     G4ThreeVector ponrmin1(45,0,0),ponrmax1(50,0,0),ponzmax(0,0,50),
-	    ponrmin2(45/sqrt(2.),45/sqrt(2.),0),
+	    ponrmin2(45/std::sqrt(2.),45/std::sqrt(2.),0),
             ponrmin3(0,0,-45),ponrminJ(0,0,-300),ponrmaxJ(0,0,-500),
-	    ponrmax2(50/sqrt(2.),50/sqrt(2.),0);
-    G4ThreeVector ponphi1(48/sqrt(2.),-48/sqrt(2.),0),
-	          ponphi2(48/sqrt(2.),48/sqrt(2.),0),
+	    ponrmax2(50/std::sqrt(2.),50/std::sqrt(2.),0);
+    G4ThreeVector ponphi1(48/std::sqrt(2.),-48/std::sqrt(2.),0),
+	          ponphi2(48/std::sqrt(2.),48/std::sqrt(2.),0),
 	          pInPhi(48*0.866,-24,0),
-	          pOverPhi(-48/sqrt(2.),48/sqrt(2.),0);
-    G4ThreeVector pontheta1(0,48*sin(pi/4),48*cos(pi/4)),
-	    pontheta2(0,48*sin(pi/4),-48*cos(pi/4));
+	          pOverPhi(-48/std::sqrt(2.),48/std::sqrt(2.),0);
+    G4ThreeVector pontheta1(0,48*std::sin(pi/4),48*std::cos(pi/4)),
+	    pontheta2(0,48*std::sin(pi/4),-48*std::cos(pi/4));
 
-    G4ThreeVector ptestphi1(-100,-45/sqrt(2.),0),
-	    ptestphi2(-100,45/sqrt(2.),0);
+    G4ThreeVector ptestphi1(-100,-45/std::sqrt(2.),0),
+	    ptestphi2(-100,45/std::sqrt(2.),0);
 
-    G4ThreeVector ptesttheta1(0,48/sqrt(2.),100),
-	    ptesttheta2(0,48/sqrt(2.),-100);
+    G4ThreeVector ptesttheta1(0,48/std::sqrt(2.),100),
+	    ptesttheta2(0,48/std::sqrt(2.),-100);
 
     G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
     G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
-    G4ThreeVector vxy(1/sqrt(2.),1/sqrt(2.),0),vmxmy(-1/sqrt(2.),-1/sqrt(2.),0);
-    G4ThreeVector vxmy(1/sqrt(2.),-1/sqrt(2.),0),vmxy(-1/sqrt(2.),1/sqrt(2.),0);
+    G4ThreeVector vxy(1/std::sqrt(2.),1/std::sqrt(2.),0),vmxmy(-1/std::sqrt(2.),-1/std::sqrt(2.),0);
+    G4ThreeVector vxmy(1/std::sqrt(2.),-1/std::sqrt(2.),0),vmxy(-1/std::sqrt(2.),1/std::sqrt(2.),0);
     G4ThreeVector v345exit1(-0.8,0.6,0),v345exit2(0.8,0.6,0),
 	          v345exit3(0.6,0.8,0);
     G4ThreeVector norm,*pNorm;
@@ -130,10 +130,10 @@ int main(void)
 
         G4Sphere SpAroundX("SpAroundX",  10.*mm, 1000.*mm, -1.0*degree, 2.0*degree, 0.*degree, 180.0*degree );
 
-	G4double  sinOneDeg = sin( 1.0 * degree );
+	G4double  sinOneDeg = std::sin( 1.0 * degree );
 	G4double  radOne = 100.0 * mm;
 
-	G4ThreeVector  ptPhiSurfExct= G4ThreeVector( radOne * cos( -1.0 * degree ) , 
+	G4ThreeVector  ptPhiSurfExct= G4ThreeVector( radOne * std::cos( -1.0 * degree ) , 
 			             - radOne *  sinOneDeg, 
 				      0.0 );
         G4cout << " Starting from point " << ptPhiSurfExct << G4endl;
@@ -163,15 +163,15 @@ int main(void)
 			   -270.0*degree, 280.0*degree,          //  start Phi,   delta Phi
 			    0.*degree, 180.0*degree );        //  start Theta, delta Theta
         G4double phiPoint = 160.0 * degree; 
-        G4ThreeVector  StartPt( radOne * cos(phiPoint), radOne * sin(phiPoint), 0.0); 
+        G4ThreeVector  StartPt( radOne * std::cos(phiPoint), radOne * std::sin(phiPoint), 0.0); 
         G4cout << "For sphere " << SphDeepNeg.GetName() << G4endl;
         G4cout << " Starting from point " << ptPhiSurfExct << G4endl;
 
         checkPoint( SphDeepNeg, StartPt,  0.0,  vy,   kInside); 
 
         // Try the edges  
-        G4ThreeVector  NegEdgePt( radOne * cos(-270.0*degree), radOne * sin(-270.0*degree), 0.0); 
-        G4ThreeVector  PosEdgePt( radOne * cos(10.0*degree), radOne * sin(10.0*degree), 0.0); 
+        G4ThreeVector  NegEdgePt( radOne * std::cos(-270.0*degree), radOne * std::sin(-270.0*degree), 0.0); 
+        G4ThreeVector  PosEdgePt( radOne * std::cos(10.0*degree), radOne * std::sin(10.0*degree), 0.0); 
 
         G4cout << "--------------------------------------------------------" << G4endl; 
 	G4cout << " New point " << NegEdgePt << " should be at Neg edge of -270.0 degrees " <<  G4endl;
@@ -190,7 +190,7 @@ int main(void)
 	checkPoint( SphDeepNeg, PosEdgePt,  radOne*kAngTolerance * 1.25,  -vy,   kInside); 
 
         G4double radMax= 1000.0 * mm; 
-	NegEdgePt = G4ThreeVector( radMax * cos(-270.0*degree), radMax * sin(-270.0*degree), 0.0); 
+	NegEdgePt = G4ThreeVector( radMax * std::cos(-270.0*degree), radMax * std::sin(-270.0*degree), 0.0); 
         G4cout << "--------------------------------------------------------" << G4endl; 
 	G4cout << " New point " << NegEdgePt << " should be at RadMax / Neg edge of -270.0 degrees " <<  G4endl;
 	checkPoint( SphDeepNeg, NegEdgePt,  0.0,  -vx,   kSurface); 
@@ -199,7 +199,7 @@ int main(void)
 	checkPoint( SphDeepNeg, NegEdgePt,  radMax*kAngTolerance * 1.25,  -vx,   kSurface); 
 	checkPoint( SphDeepNeg, NegEdgePt, -radMax*kAngTolerance * 1.25,  -vx,   kOutside); 
 
-        PosEdgePt= G4ThreeVector( radMax * cos(10.0*degree), radMax * sin(10.0*degree), 0.0); 
+        PosEdgePt= G4ThreeVector( radMax * std::cos(10.0*degree), radMax * std::sin(10.0*degree), 0.0); 
 	G4cout << "--------------------------------------------------------" << G4endl; 
 	G4cout << " New point " << PosEdgePt << " should be at RadMax Pos edge of +10.0 degrees " <<  G4endl;
         checkPoint( SphDeepNeg, PosEdgePt,  0.0,  -vy,   kSurface); 
@@ -208,7 +208,7 @@ int main(void)
 	checkPoint( SphDeepNeg, PosEdgePt, -radMax*kAngTolerance * 1.25,  -vy,   kOutside); 
 	checkPoint( SphDeepNeg, PosEdgePt,  radMax*kAngTolerance * 1.25,  -vy,   kSurface); 
 
-	G4ThreeVector NormInDir = - cos(10.0*degree) * vy + sin(10.0*degree) * vx; 
+	G4ThreeVector NormInDir = - std::cos(10.0*degree) * vy + std::sin(10.0*degree) * vx; 
         checkPoint( SphDeepNeg, PosEdgePt,  0.0,  -vy,   kSurface); 
 	checkPoint( SphDeepNeg, PosEdgePt,  radMax*kAngTolerance * 0.25, NormInDir, kSurface); 
 	checkPoint( SphDeepNeg, PosEdgePt, -radMax*kAngTolerance * 0.25, NormInDir, kSurface); 

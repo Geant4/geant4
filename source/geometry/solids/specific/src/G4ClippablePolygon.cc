@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClippablePolygon.cc,v 1.9 2003-10-28 17:15:56 gcosmo Exp $
+// $Id: G4ClippablePolygon.cc,v 1.10 2004-12-02 09:31:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -263,7 +263,7 @@ G4bool G4ClippablePolygon::InFrontOf( const G4ClippablePolygon &other,
   G4bool answer;
   G4ThreeVector normalOther = other.GetNormal();
   
-  if (fabs(normalOther(axis)) > fabs(normal(axis)))
+  if (std::fabs(normalOther(axis)) > std::fabs(normal(axis)))
   {
     G4double minP, maxP;
     GetPlanerExtent( *minPointOther, normalOther, minP, maxP );
@@ -328,7 +328,7 @@ G4bool G4ClippablePolygon::BehindOf( const G4ClippablePolygon &other,
   G4bool answer;
   G4ThreeVector normalOther = other.GetNormal();
   
-  if (fabs(normalOther(axis)) > fabs(normal(axis)))
+  if (std::fabs(normalOther(axis)) > std::fabs(normal(axis)))
   {
     G4double minP, maxP;
     GetPlanerExtent( *maxPointOther, normalOther, minP, maxP );

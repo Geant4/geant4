@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: G4BREPSolidPConeTest.cc,v 1.14 2003-06-16 16:53:05 gunter Exp $
+// $Id: G4BREPSolidPConeTest.cc,v 1.15 2004-12-02 09:31:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -30,11 +30,8 @@
 // modification of old G4Gerep test
 //
 
-
 #include "G4Timer.hh"
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
+#include <cmath>
 #include "G4ios.hh" 
 #include "G4BREPSolid.hh"
 #include "G4BREPSolidPCone.hh"

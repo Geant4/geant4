@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FCylindricalSurface.cc,v 1.13 2003-06-16 16:52:57 gunter Exp $
+// $Id: G4FCylindricalSurface.cc,v 1.14 2004-12-02 09:31:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -192,7 +192,7 @@ G4int G4FCylindricalSurface::Intersect( const G4Ray& ry )
     return 0;
   else 
   {
-    G4double root = sqrt( radical );
+    G4double root = std::sqrt( radical );
     s[0] = ( - B + root ) / ( 2. * A );
     s[1] = ( - B - root ) / ( 2. * A );
   }
@@ -242,13 +242,13 @@ G4double G4FCylindricalSurface::HowNear( const G4Vector3D& x ) const
   G4Vector3D downcorner = G4Vector3D ( radius, 0 , origin.z());
   G4Vector3D xd;  
   
-  xd = G4Vector3D ( sqrt ( x.x()*x.x() + x.y()*x.y() ) , 0 , x.z() );
+  xd = G4Vector3D ( std::sqrt ( x.x()*x.x() + x.y()*x.y() ) , 0 , x.z() );
     
   
   G4double Zinter = (xd.z()) ;
   
   if ( ((Zinter >= downcorner.z()) && (Zinter <=upcorner.z())) ) {
-    hownear = fabs( radius - xd.x() );
+    hownear = std::fabs( radius - xd.x() );
   } else {
     hownear = std::min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
   }
@@ -260,7 +260,7 @@ G4int G4FCylindricalSurface::WithinBoundary( const G4Vector3D& x ) const
 {
   //  return 1 if point x is within the boundaries of the G4FCylindricalSurface
   //  return 0 otherwise (assume it is on the cylinder)
-  if ( fabs( ( x - Position.GetLocation()) * Position.GetAxis() )
+  if ( std::fabs( ( x - Position.GetLocation()) * Position.GetAxis() )
        <= 0.5 * length )
     return 1;
   else

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.2 2004-09-07 08:57:57 gcosmo Exp $
+// $Id: G4ReflectionFactory.cc,v 1.3 2004-12-02 09:31:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -774,7 +774,7 @@ void G4ReflectionFactory::CheckScale(const G4Scale3D& scale) const
   G4double diff = 0.;
   for (G4int i=0; i<4; i++)
     for (G4int j=0; j<4; j++) 
-      diff += abs(scale(i,j) - fScale(i,j));  
+      diff += std::abs(scale(i,j) - fScale(i,j));  
 
   if (diff > fScalePrecision)
   {

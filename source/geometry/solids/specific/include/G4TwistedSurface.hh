@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedSurface.hh,v 1.6 2004-11-13 18:26:24 gcosmo Exp $
+// $Id: G4TwistedSurface.hh,v 1.7 2004-12-02 09:31:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,7 @@ class G4TwistedSurface : public G4VSurface
                     const G4RotationMatrix &rot,   // 0.5*(phi-width segment)
                     const G4ThreeVector    &tlate,
                           G4int    handedness, // R-hand = 1, L-hand = -1
-                    const G4double kappa,      // tan(TwistAngle/2)/fZHalfLen
+                    const G4double kappa,      // std::tan(TwistAngle/2)/fZHalfLen
                     const EAxis    axis0 = kXAxis,
                     const EAxis    axis1 = kZAxis,
                           G4double axis0min = -kInfinity,
@@ -120,7 +120,7 @@ class G4TwistedSurface : public G4VSurface
 
   private:
 
-   G4double       fKappa;          // tan(TwistedAngle/2)/HalfLenZ;
+   G4double       fKappa;          // std::tan(TwistedAngle/2)/HalfLenZ;
 };   
 
 

@@ -26,7 +26,7 @@
 
 #include <assert.h>
 #include <iomanip>
-#include <math.h>
+#include <cmath>
 
 #include "globals.hh"
 #include "geomdefs.hh"

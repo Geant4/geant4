@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.icc,v 1.5 2004-10-10 10:39:24 johna Exp $
+// $Id: G4Hype.icc,v 1.6 2004-12-02 09:31:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -68,7 +68,7 @@ void G4Hype::SetInnerRadius (G4double newIRad)
     innerRadius= newIRad;
     innerRadius2= newIRad*newIRad;
     endInnerRadius2=HypeInnerRadius2(halfLenZ);
-    endInnerRadius=sqrt(endInnerRadius2);
+    endInnerRadius=std::sqrt(endInnerRadius2);
     fCubicVolume = 0.;
     fpPolyhedron = 0;
   }
@@ -79,7 +79,7 @@ void G4Hype::SetOuterRadius (G4double newORad)
     outerRadius= newORad;
     outerRadius2=newORad*newORad;
     endOuterRadius2=HypeOuterRadius2(halfLenZ);
-    endOuterRadius=sqrt(endOuterRadius2);
+    endOuterRadius=std::sqrt(endOuterRadius2);
     fCubicVolume = 0.;
     fpPolyhedron = 0;
   } 
@@ -95,11 +95,11 @@ void G4Hype::SetZHalfLength (G4double newHLZ)
 inline
 void G4Hype::SetInnerStereo (G4double newISte) 
   { 
-    innerStereo= fabs(newISte);
-    tanInnerStereo=tan(innerStereo);
+    innerStereo= std::fabs(newISte);
+    tanInnerStereo=std::tan(innerStereo);
     tanInnerStereo2=tanInnerStereo*tanInnerStereo;
     endInnerRadius2=HypeInnerRadius2(halfLenZ);
-    endInnerRadius=sqrt(endInnerRadius2);
+    endInnerRadius=std::sqrt(endInnerRadius2);
     fCubicVolume = 0.;
     fpPolyhedron = 0;
   }
@@ -107,11 +107,11 @@ void G4Hype::SetInnerStereo (G4double newISte)
 inline
 void G4Hype::SetOuterStereo (G4double newOSte)
   { 
-    outerStereo= fabs(newOSte);
-    tanOuterStereo=tan(outerStereo);
+    outerStereo= std::fabs(newOSte);
+    tanOuterStereo=std::tan(outerStereo);
     tanOuterStereo2=tanOuterStereo*tanOuterStereo;
     endOuterRadius2=HypeOuterRadius2(halfLenZ);
-    endOuterRadius=sqrt(endOuterRadius2);
+    endOuterRadius=std::sqrt(endOuterRadius2);
     fCubicVolume = 0.;
     fpPolyhedron = 0;
   }

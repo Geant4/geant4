@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.cc,v 1.8 2004-11-29 16:34:39 link Exp $
+// $Id: G4TwistedTrapSide.cc,v 1.9 2004-12-02 09:31:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -196,11 +196,11 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 
   if ( v.z() == 0. ) {         
 
-    if ( fabs(p.z()) <= L ) {     // intersection possible in z
+    if ( std::fabs(p.z()) <= L ) {     // intersection possible in z
  
       PhiR = p.z() * fPhiTwist / L ;  // phi is determined by the z-position 
-      uR =  (b*(4*p.y()*v.x() - 4*p.x()*v.y() + apd*v.y()*cos(PhiR) - apd*v.x()*sin(PhiR)))/
-        (2.*((2*b*v.x() - amd *v.y())*cos(PhiR) + ( amd * v.x() + 2*b*v.y())*sin(PhiR)));
+      uR =  (b*(4*p.y()*v.x() - 4*p.x()*v.y() + apd*v.y()*std::cos(PhiR) - apd*v.x()*std::sin(PhiR)))/
+        (2.*((2*b*v.x() - amd *v.y())*std::cos(PhiR) + ( amd * v.x() + 2*b*v.y())*std::sin(PhiR)));
 
       //      G4cout  << "solution vz = 0 : "  << PhiR << " , " << uR << G4endl ;
 
@@ -217,7 +217,7 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
       return 0;
 
 
-    }  // end fabs(p.z() <= L 
+    }  // end std::fabs(p.z() <= L 
 
   } // end v.z() == 0
   
@@ -286,12 +286,12 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 #ifdef G4SPECSDEBUG
       G4cout << "Solution " << i << " : " << s[i] << G4endl ;
 #endif
-      G4double stmp = fmod(s[i] , pi2) ;
+      G4double stmp = std::fmod(s[i] , pi2) ;
       if ( s[i] < 0 && stmp > 0 ) { stmp -= 2*pi ; }
       G4double ztmp = L*s[i]/fPhiTwist ;
-      if ( fabs(ztmp)<fDz+ctol ) {
+      if ( std::fabs(ztmp)<fDz+ctol ) {
         PhiR = stmp ;
-        uR = b * ( 4*phiyz + 4*Lvy*PhiR - apd*phivz*sin(PhiR) ) / (2.*phivz*(2*b*cos(PhiR) + amd*sin(PhiR) )) ;
+        uR = b * ( 4*phiyz + 4*Lvy*PhiR - apd*phivz*std::sin(PhiR) ) / (2.*phivz*(2*b*std::cos(PhiR) + amd*std::sin(PhiR) )) ;
 
 #ifdef G4SPECSDEBUG
         G4cout << "solution " << i << " = " << PhiR << " , " << uR  << G4endl ;
@@ -632,12 +632,12 @@ void G4TwistedTrapSide::SetCorners()
   if (fAxis[0] == kYAxis && fAxis[1] == kZAxis) {
     
     G4double x, y, z;
-    G4double a1cos = fDx1 * cos(fPhiTwist/2) ;
-    G4double a1sin = fDx1 * sin(fPhiTwist/2) ;
-    G4double a2cos = fDx2 * cos(fPhiTwist/2) ;
-    G4double a2sin = fDx2 * sin(fPhiTwist/2) ;
-    G4double bcos = fDy * cos(fPhiTwist/2) ;
-    G4double bsin = fDy * sin(fPhiTwist/2) ;
+    G4double a1cos = fDx1 * std::cos(fPhiTwist/2) ;
+    G4double a1sin = fDx1 * std::sin(fPhiTwist/2) ;
+    G4double a2cos = fDx2 * std::cos(fPhiTwist/2) ;
+    G4double a2sin = fDx2 * std::sin(fPhiTwist/2) ;
+    G4double bcos = fDy * std::cos(fPhiTwist/2) ;
+    G4double bsin = fDy * std::sin(fPhiTwist/2) ;
 
     // corner of Axis0min and Axis1min
     x = a1cos - bsin ;
@@ -725,9 +725,9 @@ void G4TwistedTrapSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u)
   
 #if 0
   phi = p.z()/(2*fDz)*fPhiTwist ;
-  G4ThreeVector  X0 ( Xcoef(0.) * cos(phi), Xcoef(0.) * sin(phi) , p.z() ) ;  // basis with u=0
-  G4ThreeVector dvec  ( - (fDx1-fDx2)/(2*fDy) * cos(phi) - sin(phi), 
-                        cos(phi) - (fDx1-fDx2)/(2*fDy)*sin(phi) ,
+  G4ThreeVector  X0 ( Xcoef(0.) * std::cos(phi), Xcoef(0.) * std::sin(phi) , p.z() ) ;  // basis with u=0
+  G4ThreeVector dvec  ( - (fDx1-fDx2)/(2*fDy) * std::cos(phi) - std::sin(phi), 
+                        std::cos(phi) - (fDx1-fDx2)/(2*fDy)*std::sin(phi) ,
                         0. ) ;   // direction vector
 
   G4ThreeVector xx ;                                   // the intersection point on the line
@@ -742,8 +742,8 @@ void G4TwistedTrapSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u)
 
   phi = p.z()/(2*fDz)*fPhiTwist ;
 
-  G4double cphi = cos(phi) ;
-  G4double sphi = sin(phi) ;
+  G4double cphi = std::cos(phi) ;
+  G4double sphi = std::sin(phi) ;
   G4double c0 = (fDx2-fDx1)/(2*fDy) ;
 
   // this formula is the analytical form of the procedure used above.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator5.cc,v 1.3 2003-12-05 17:07:06 gcosmo Exp $
+// $Id: testG4Navigator5.cc,v 1.4 2004-12-02 09:31:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -255,8 +255,8 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     located=myNav.LocateGlobalPointAndSetup(pos);
     assert(located->GetName()=="World");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
-    assert(ApproxEqual(Step,sqrt(200.)-10.));
-    assert(ApproxEqual(safety,sqrt(200.)-10.));
+    assert(ApproxEqual(Step,std::sqrt(200.)-10.));
+    assert(ApproxEqual(safety,std::sqrt(200.)-10.));
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
@@ -333,8 +333,8 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     located=myNav.LocateGlobalPointAndSetup(pos);
     assert(located->GetName()=="World");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
-    assert(ApproxEqual(Step,sqrt(200.)-8.));
-    assert(ApproxEqual(safety,sqrt(200.)-8.));
+    assert(ApproxEqual(Step,std::sqrt(200.)-8.));
+    assert(ApproxEqual(safety,std::sqrt(200.)-8.));
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
@@ -397,14 +397,14 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     located=myNav.LocateGlobalPointAndSetup(pos);
     assert(located->GetName()=="World");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
-    assert(ApproxEqual(Step,10.-sqrt(48.)));
-    assert(ApproxEqual(safety,sqrt(116.)-8.));
+    assert(ApproxEqual(Step,10.-std::sqrt(48.)));
+    assert(ApproxEqual(safety,std::sqrt(116.)-8.));
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(pos);
     assert(located->GetName()=="hphiTubeSlice");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
-    assert(ApproxEqual(Step,sqrt(48.)-4.));
+    assert(ApproxEqual(Step,std::sqrt(48.)-4.));
     assert(ApproxEqual(safety,0));
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();
@@ -425,7 +425,7 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     located=myNav.LocateGlobalPointAndSetup(pos);
     assert(located->GetName()=="hphiTubeSlice");
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
-    assert(ApproxEqual(Step,sqrt(48.)-4.));
+    assert(ApproxEqual(Step,std::sqrt(48.)-4.));
     assert(ApproxEqual(safety,0));
     pos+=Step*dir;
     myNav.SetGeometricallyLimitedStep();

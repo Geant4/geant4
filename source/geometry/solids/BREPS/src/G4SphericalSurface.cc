@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SphericalSurface.cc,v 1.7 2003-06-16 16:52:58 gunter Exp $
+// $Id: G4SphericalSurface.cc,v 1.8 2004-12-02 09:31:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -243,7 +243,7 @@ G4double G4SphericalSurface::distanceAlongRay( G4int which_way,
 //  quit with no intersection if the radical is negative
 	if ( radical < 0.0 )
 		return Dist;
-	G4double root = sqrt( radical );
+	G4double root = std::sqrt( radical );
 	s[0] = -b + root;
 	s[1] = -b - root;
 //  order the possible solutions by increasing distance along the Ray
@@ -350,7 +350,7 @@ G4int G4SphericalSurface::Intersect( const G4Ray& ry )
   if ( radical < 0.0 )
     return 0;
   
-  G4double root = sqrt( radical );
+  G4double root = std::sqrt( radical );
   s[0] = -b + root;
   s[1] = -b - root;
 
@@ -448,7 +448,7 @@ G4double G4SphericalSurface::distanceAlongHelix( G4int which_way,
 	G4double B = 2.0 * gamma * beta;
 	G4double C = gamma * gamma  -  rs * rs;
 //  Case if quadratic term is zero
-	if ( fabs( A ) < FLT_EPSILO ) {
+	if ( std::fabs( A ) < FLT_EPSILO ) {
 		if ( B == 0.0 )  // no intersection, quit
 			return Dist;
 		else		 // B != 0
@@ -459,7 +459,7 @@ G4double G4SphericalSurface::distanceAlongHelix( G4int which_way,
 		G4double radical = B * B  -  4.0 * A * C;
 		if ( radical < 0.0 )  // no intersection, quit
 			return Dist;
-		G4double root = sqrt( radical );
+		G4double root = std::sqrt( radical );
 		s[0] = ( -B + root ) / ( 2.0 * A );       	     
 		s[1] = ( -B - root ) / ( 2.0 * A );       	     
 		if ( rh < 0.0 ) {
@@ -479,7 +479,7 @@ G4double G4SphericalSurface::distanceAlongHelix( G4int which_way,
 	for ( isoln = 0; isoln < maxsoln; isoln++ ) {
 		if ( s[isoln] >= 0.0 ) {
 //  Calculate distance along Helix and position and G4Vector3D vectors.
-			Dist = s[isoln] * fabs( rhp );
+			Dist = s[isoln] * std::fabs( rhp );
 			p = hx->position( Dist );
 			G4Vector3D d = hx->direction( Dist );
 //  Now do approximation to get remaining distance to correct this solution
@@ -536,11 +536,11 @@ G4double G4SphericalSurface::distanceAlongHelix( G4int which_way,
 				   }
 				}
 //  Test if distance is less than the surface precision, if so Terminate loop.
-				if ( fabs( delta / sc ) <= SURFACE_PRECISION )
+				if ( std::fabs( delta / sc ) <= SURFACE_PRECISION )
 					break;
 //  Ff delta has not changed sufficiently from the previous iteration, 
 //  skip out of this loop.
-				if ( fabs( ( delta - delta0 ) / sc ) <=
+				if ( std::fabs( ( delta - delta0 ) / sc ) <=
 				                           SURFACE_PRECISION )
 					break;
 //  If delta has increased in absolute value from the previous iteration
@@ -548,8 +548,8 @@ G4double G4SphericalSurface::distanceAlongHelix( G4int which_way,
 //  solution is too far from the real solution.  Try groping for a solution.
 //  If not found, Reset distance to large number, indicating no intersection
 //  with the G4SphericalSurface.
-				if ( ( fabs( delta ) > fabs( delta0 ) ) ) {
-					Dist = fabs( rhp ) * 
+				if ( ( std::fabs( delta ) > std::fabs( delta0 ) ) ) {
+					Dist = std::fabs( rhp ) * 
 					       gropeAlongHelix( hx );
 					if ( Dist < 0.0 ) {
 						Dist = FLT_MAXX;
@@ -675,7 +675,7 @@ G4int G4SphericalSurface::WithinBoundary( const G4Vector3D& x ) const
   G4double pz = x * z_axis;
 
   //  check if within polar angle limits
-  G4double theta = acos( pz / x.mag() );  // acos in range 0 to PI
+  G4double theta = std::acos( pz / x.mag() );  // acos in range 0 to PI
   
   //  Normal case
   if ( theta_2 <= M_PI ) 
@@ -693,7 +693,7 @@ G4int G4SphericalSurface::WithinBoundary( const G4Vector3D& x ) const
   }
 
   //  now check if within azimuthal angle limits
-  G4double phi = atan2( py, px );  // atan2 in range -PI to PI
+  G4double phi = std::atan2( py, px );  // atan2 in range -PI to PI
   G4double twopi = 2.0 * M_PI;
   
   if ( phi < 0.0 )
@@ -860,7 +860,7 @@ G4double G4SphericalSurface::gropeAlongHelix( const Helix* hx ) const
 //  groping for an intersection point.
 	for ( G4int k = 1; k < max_iter; k++ ) {
 		turn_angle = 2.0 * M_PI * k / one_over_f;
-		dist_along = turn_angle * fabs( rhp );
+		dist_along = turn_angle * std::fabs( rhp );
 		d_new = HowNear( hx->position( dist_along ) );
 		if ( ( d_old < 0.0 && d_new > 0.0 ) ||
 		     ( d_old > 0.0 && d_new < 0.0 ) ) {
@@ -869,12 +869,12 @@ G4double G4SphericalSurface::gropeAlongHelix( const Helix* hx ) const
 //  a solution lies in between, use a binary search to pin the point down
 //  to the surface precision, but don't do more than 50 iterations.
 			G4int itr = 0;
-			while ( fabs( d_new / scal ) > SURFACE_PRECISION ) {
+			while ( std::fabs( d_new / scal ) > SURFACE_PRECISION ) {
 				itr++;
 				if ( itr > 50 )
 					return turn_angle;
 				turn_angle -= fk * M_PI;
-				dist_along = turn_angle * fabs( rhp );
+				dist_along = turn_angle * std::fabs( rhp );
 				d_new = HowNear( hx->position( dist_along ) );
 				if ( ( d_old < 0.0 && d_new > 0.0 ) ||
 				     ( d_old > 0.0 && d_new < 0.0 ) )

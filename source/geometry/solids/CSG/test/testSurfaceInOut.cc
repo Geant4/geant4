@@ -34,7 +34,7 @@
 
 #include "G4ios.hh"
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 #include "globals.hh"
 #include "geomdefs.hh"
 #include "Randomize.hh"
@@ -73,7 +73,7 @@
 
 //G4bool ApproxEqual(const G4double check,const G4double target)
 //{
-//    return (fabs(check-target)<kApproxEqualTolerance) ? true : false ;
+//    return (std::fabs(check-target)<kApproxEqualTolerance) ? true : false ;
 //}
 
 // Return true if the 3vector check is approximately equal to target
@@ -114,12 +114,12 @@ G4ThreeVector GetRandomUnitVector()
   cosTheta = -1. + 2.*G4UniformRand();
   if( cosTheta > 1.)  cosTheta = 1.;
   if( cosTheta < -1.) cosTheta = -1.;
-  sinTheta = sqrt( 1. - cosTheta*cosTheta );
+  sinTheta = std::sqrt( 1. - cosTheta*cosTheta );
   
   phi = 2*pi*G4UniformRand();
 
-  vx = sinTheta*cos(phi);
-  vy = sinTheta*sin(phi);
+  vx = sinTheta*std::cos(phi);
+  vy = sinTheta*std::sin(phi);
   vz = cosTheta;
 
   return G4ThreeVector(vx,vy,vz);
@@ -194,12 +194,12 @@ G4ThreeVector GetVectorOnOrb(G4Orb& orb)
   cosTheta = -1. + 2.*G4UniformRand();
   if( cosTheta > 1.)  cosTheta = 1.;
   if( cosTheta < -1.) cosTheta = -1.;
-  sinTheta = sqrt( 1. - cosTheta*cosTheta );
+  sinTheta = std::sqrt( 1. - cosTheta*cosTheta );
   
   phi = 2*pi*G4UniformRand();
 
-  px = radius*sinTheta*cos(phi);
-  py = radius*sinTheta*sin(phi);
+  px = radius*sinTheta*std::cos(phi);
+  py = radius*sinTheta*std::sin(phi);
   pz = radius*cosTheta;
 
   return G4ThreeVector(px,py,pz);
@@ -226,11 +226,11 @@ G4ThreeVector GetVectorOnSphere(G4Sphere& sphere)
   {
     radius   = pRmax -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand(); 
 
-    cosTheta = cos(theta2+0.5*kAngTolerance) + 
-              (cos(theta1-0.5*kAngTolerance)-cos(theta2+0.5*kAngTolerance))*G4UniformRand();
+    cosTheta = std::cos(theta2+0.5*kAngTolerance) + 
+              (std::cos(theta1-0.5*kAngTolerance)-std::cos(theta2+0.5*kAngTolerance))*G4UniformRand();
     if( cosTheta > 1.)  cosTheta = 1.;
     if( cosTheta < -1.) cosTheta = -1.;
-    sinTheta = sqrt( 1. - cosTheta*cosTheta );
+    sinTheta = std::sqrt( 1. - cosTheta*cosTheta );
   
     phi      = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
   }
@@ -238,11 +238,11 @@ G4ThreeVector GetVectorOnSphere(G4Sphere& sphere)
   {
     radius   = pRmin -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand(); 
 
-    cosTheta = cos(theta2+0.5*kAngTolerance) + 
-              (cos(theta1-0.5*kAngTolerance)-cos(theta2+0.5*kAngTolerance))*G4UniformRand();
+    cosTheta = std::cos(theta2+0.5*kAngTolerance) + 
+              (std::cos(theta1-0.5*kAngTolerance)-std::cos(theta2+0.5*kAngTolerance))*G4UniformRand();
     if( cosTheta > 1.)  cosTheta = 1.;
     if( cosTheta < -1.) cosTheta = -1.;
-    sinTheta = sqrt( 1. - cosTheta*cosTheta );
+    sinTheta = std::sqrt( 1. - cosTheta*cosTheta );
   
     phi      = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
   }
@@ -250,11 +250,11 @@ G4ThreeVector GetVectorOnSphere(G4Sphere& sphere)
   {
     radius   = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand(); 
 
-    cosTheta = cos(theta2+0.5*kAngTolerance) + 
-              (cos(theta1-0.5*kAngTolerance)-cos(theta2+0.5*kAngTolerance))*G4UniformRand();
+    cosTheta = std::cos(theta2+0.5*kAngTolerance) + 
+              (std::cos(theta1-0.5*kAngTolerance)-std::cos(theta2+0.5*kAngTolerance))*G4UniformRand();
     if( cosTheta > 1.)  cosTheta = 1.;
     if( cosTheta < -1.) cosTheta = -1.;
-    sinTheta = sqrt( 1. - cosTheta*cosTheta );
+    sinTheta = std::sqrt( 1. - cosTheta*cosTheta );
   
     phi      = phi1 -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
   }
@@ -262,11 +262,11 @@ G4ThreeVector GetVectorOnSphere(G4Sphere& sphere)
   {
     radius   = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand(); 
 
-    cosTheta = cos(theta2+0.5*kAngTolerance) + 
-              (cos(theta1-0.5*kAngTolerance)-cos(theta2+0.5*kAngTolerance))*G4UniformRand();
+    cosTheta = std::cos(theta2+0.5*kAngTolerance) + 
+              (std::cos(theta1-0.5*kAngTolerance)-std::cos(theta2+0.5*kAngTolerance))*G4UniformRand();
     if( cosTheta > 1.)  cosTheta = 1.;
     if( cosTheta < -1.) cosTheta = -1.;
-    sinTheta = sqrt( 1. - cosTheta*cosTheta );
+    sinTheta = std::sqrt( 1. - cosTheta*cosTheta );
   
     phi      = phi2 -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
   }
@@ -274,11 +274,11 @@ G4ThreeVector GetVectorOnSphere(G4Sphere& sphere)
   {
     radius   = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand(); 
 
-    cosTheta = cos(theta1+0.5*kAngTolerance) + 
-              (cos(theta1-0.5*kAngTolerance)-cos(theta1+0.5*kAngTolerance))*G4UniformRand();
+    cosTheta = std::cos(theta1+0.5*kAngTolerance) + 
+              (std::cos(theta1-0.5*kAngTolerance)-std::cos(theta1+0.5*kAngTolerance))*G4UniformRand();
     if( cosTheta > 1.)  cosTheta = 1.;
     if( cosTheta < -1.) cosTheta = -1.;
-    sinTheta = sqrt( 1. - cosTheta*cosTheta );
+    sinTheta = std::sqrt( 1. - cosTheta*cosTheta );
   
     phi      = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
   }
@@ -286,17 +286,17 @@ G4ThreeVector GetVectorOnSphere(G4Sphere& sphere)
   {
     radius   = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand(); 
 
-    cosTheta = cos(theta2+0.5*kAngTolerance) + 
-              (cos(theta2-0.5*kAngTolerance)-cos(theta2+0.5*kAngTolerance))*G4UniformRand();
+    cosTheta = std::cos(theta2+0.5*kAngTolerance) + 
+              (std::cos(theta2-0.5*kAngTolerance)-std::cos(theta2+0.5*kAngTolerance))*G4UniformRand();
     if( cosTheta > 1.)  cosTheta = 1.;
     if( cosTheta < -1.) cosTheta = -1.;
-    sinTheta = sqrt( 1. - cosTheta*cosTheta );
+    sinTheta = std::sqrt( 1. - cosTheta*cosTheta );
   
     phi      = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
   }
 
-  px = radius*sinTheta*cos(phi);
-  py = radius*sinTheta*sin(phi);
+  px = radius*sinTheta*std::cos(phi);
+  py = radius*sinTheta*std::sin(phi);
   pz = radius*cosTheta;
 
   return G4ThreeVector(px,py,pz);
@@ -358,8 +358,8 @@ G4ThreeVector GetVectorOnTubs(G4Tubs& tubs)
     phi    = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
   }
 
-  px = radius*cos(phi);
-  py = radius*sin(phi);
+  px = radius*std::cos(phi);
+  py = radius*std::sin(phi);
   
   return G4ThreeVector(px,py,pz);
 }
@@ -427,8 +427,8 @@ G4ThreeVector GetVectorOnCons(G4Cons& cons)
     phi    = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
   }
 
-  px = radius*cos(phi);
-  py = radius*sin(phi);
+  px = radius*std::cos(phi);
+  py = radius*std::sin(phi);
   
   return G4ThreeVector(px,py,pz);
 }
@@ -489,8 +489,8 @@ G4ThreeVector GetVectorOnTorus(G4Torus& torus)
     phi    = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
   }
 
-  px = radius*cos(phi);
-  py = radius*sin(phi);
+  px = radius*std::cos(phi);
+  py = radius*std::sin(phi);
   
   return G4ThreeVector(px,py,pz);
 }

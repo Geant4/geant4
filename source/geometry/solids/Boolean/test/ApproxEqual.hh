@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ApproxEqual.hh,v 1.4 2001-07-11 09:59:53 gunter Exp $
+// $Id: ApproxEqual.hh,v 1.5 2004-12-02 09:31:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -49,7 +49,7 @@ const G4double kApproxEqualTolerance = 1E-3; // was -6
 
 G4bool ApproxEqual(const G4double check,const G4double target)
 {
-    return (fabs(check-target)<kApproxEqualTolerance) ?true:false;
+    return (std::fabs(check-target)<kApproxEqualTolerance) ?true:false;
 }
 
 // Return true if the 3vector check is approximately equal to target

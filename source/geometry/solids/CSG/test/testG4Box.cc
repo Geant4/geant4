@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Box.cc,v 1.6 2004-09-08 15:13:53 grichine Exp $
+// $Id: testG4Box.cc,v 1.7 2004-12-02 09:31:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,7 +29,7 @@
 //             Ensure asserts are compiled in
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 
 #include "globals.hh"
 #include "geomdefs.hh"
@@ -54,11 +54,11 @@ G4bool testG4Box()
 
     G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
     G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
-    G4ThreeVector vxy(1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxy(-1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxmy(-1/sqrt(2.0),-1/sqrt(2.0),0);
-    G4ThreeVector vxmy(1/sqrt(2.0),-1/sqrt(2.0),0);
-    G4ThreeVector vxmz(1/sqrt(2.0),0,-1/sqrt(2.0));
+    G4ThreeVector vxy(1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+    G4ThreeVector vmxy(-1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+    G4ThreeVector vmxmy(-1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
+    G4ThreeVector vxmy(1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
+    G4ThreeVector vxmz(1/std::sqrt(2.0),0,-1/std::sqrt(2.0));
 
     G4double Dist;
     G4ThreeVector *pNorm,norm;
@@ -133,7 +133,7 @@ G4bool testG4Box()
     Dist=b1.DistanceToOut(pzero,vmz,calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(Dist,40)&&ApproxEqual(norm,vmz)&&*pgoodNorm);
     Dist=b1.DistanceToOut(pzero,vxy,calcNorm,pgoodNorm,pNorm);
-    assert(ApproxEqual(Dist,sqrt(800.))&&*pgoodNorm);
+    assert(ApproxEqual(Dist,std::sqrt(800.))&&*pgoodNorm);
 
     Dist=b1.DistanceToOut(ponxside,vx,calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(Dist,0)&&ApproxEqual(*pNorm,vx)&&*pgoodNorm);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4AffineTransform.cc,v 1.6 2003-06-16 16:55:01 gunter Exp $
+// $Id: testG4AffineTransform.cc,v 1.7 2004-12-02 09:31:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -174,7 +174,7 @@ G4double MaxAbsDiff(const G4AffineTransform &tf1,
 		{
                   G4double absdiff; 
 
-		  absdiff= fabs(tf1[i]-tf2[i]);
+		  absdiff= std::fabs(tf1[i]-tf2[i]);
                   maxabs= std::max(absdiff, maxabs); 
 		}
 	return maxabs;

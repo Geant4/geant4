@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.30 2004-10-13 13:21:58 gcosmo Exp $
+// $Id: G4BREPSolid.cc,v 1.31 2004-12-02 09:31:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -339,7 +339,7 @@ G4int G4BREPSolid::IsBox()
   {
     srf2 = SurfaceVec[b];
     G4Vector3D Normal2 = ((srf2)->Norm())->GetDir();
-    Result = fabs(Normal1 * Normal2);
+    Result = std::fabs(Normal1 * Normal2);
     
     if((Result != 0) && (Result != 1))
       return 0;
@@ -359,9 +359,9 @@ G4int G4BREPSolid::IsBox()
   G4Vector3D x_axis(1,0,0);
   G4Vector3D y_axis(0,1,0);
   
-  if(((fabs(x_axis * Normal1) == 1) && (fabs(y_axis * Normal1) == 0)) ||
-     ((fabs(x_axis * Normal1) == 0) && (fabs(y_axis * Normal1) == 1)) ||
-     ((fabs(x_axis * Normal1) == 0) && (fabs(y_axis * Normal1) == 0)))
+  if(((std::fabs(x_axis * Normal1) == 1) && (std::fabs(y_axis * Normal1) == 0)) ||
+     ((std::fabs(x_axis * Normal1) == 0) && (std::fabs(y_axis * Normal1) == 1)) ||
+     ((std::fabs(x_axis * Normal1) == 0) && (std::fabs(y_axis * Normal1) == 0)))
     AxisBox=1;
   else 
     Box=1;
@@ -839,7 +839,7 @@ G4double G4BREPSolid::DistanceToIn(const G4ThreeVector& Pt) const
   //   called only if the point is outside )
   //
   for(a = 0; a < nb_of_surfaces; a++)
-    if( fabs(Dist) > fabs(dists[a]) ) 
+    if( std::fabs(Dist) > std::fabs(dists[a]) ) 
       //if( dists[a] >= 0)
         Dist = dists[a];
   
@@ -848,7 +848,7 @@ G4double G4BREPSolid::DistanceToIn(const G4ThreeVector& Pt) const
   if(Dist == kInfinity)
     return 0;  // the point is inside the solid or on a surface
   else
-    return fabs(Dist);
+    return std::fabs(Dist);
 }
 
 G4double G4BREPSolid::DistanceToIn(register const G4ThreeVector& Pt, 
@@ -917,7 +917,7 @@ G4double G4BREPSolid::DistanceToIn(register const G4ThreeVector& Pt,
   // SurfaceVec->Distance is in fact the squared distance
   //
   if(ShortestDistance != kInfinity)
-    return sqrt(ShortestDistance);
+    return std::sqrt(ShortestDistance);
   else
     return kInfinity;  // No intersection
 }
@@ -987,7 +987,7 @@ G4double G4BREPSolid::DistanceToOut(register const G4ThreeVector& P,
   // SurfaceVec->Distance is in fact the squared distance
   //
   if(ShortestDistance != kInfinity)
-    return sqrt(ShortestDistance);
+    return std::sqrt(ShortestDistance);
   else
     return 0.0;  // No intersection is found, the point is outside
 }
@@ -1022,7 +1022,7 @@ G4double G4BREPSolid::DistanceToOut(const G4ThreeVector& Pt)const
   //   called only if the point is inside )
   //
   for(a = 0; a < nb_of_surfaces; a++)
-    if( fabs(Dist) > fabs(dists[a]) ) 
+    if( std::fabs(Dist) > std::fabs(dists[a]) ) 
       //if( dists[a] <= 0)
         Dist = dists[a];
   
@@ -1031,7 +1031,7 @@ G4double G4BREPSolid::DistanceToOut(const G4ThreeVector& Pt)const
   if(Dist == kInfinity)
     return 0;  // The point is ouside the solid or on a surface
   else
-    return fabs(Dist);
+    return std::fabs(Dist);
 }
 
 void G4BREPSolid::DescribeYourselfTo (G4VGraphicsScene& scene) const 
@@ -1424,9 +1424,9 @@ G4Point3D G4BREPSolid::Scope() const
   G4Point3D Max = bbox->GetBoxMax();
   G4Point3D Min = bbox->GetBoxMin();  
   
-  scope.setX(fabs(Max.x()) - fabs(Min.x()));
-  scope.setY(fabs(Max.y()) - fabs(Min.y()));
-  scope.setZ(fabs(Max.z()) - fabs(Min.z()));
+  scope.setX(std::fabs(Max.x()) - std::fabs(Min.x()));
+  scope.setY(std::fabs(Max.y()) - std::fabs(Min.y()));
+  scope.setZ(std::fabs(Max.z()) - std::fabs(Min.z()));
   
   return scope;
 }

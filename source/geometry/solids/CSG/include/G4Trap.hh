@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.hh,v 1.9 2004-09-13 16:26:53 grichine Exp $
+// $Id: G4Trap.hh,v 1.10 2004-12-02 09:31:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,8 +62,8 @@
 //   Member Data:
 //
 //      fDz     Half-length along the z axis
-//      fTthetaCphi = tan(pTheta)*cos(pPhi)  These combinations are suitable for
-//      fTthetaSphi = tan(pTheta)*sin(pPhi)  creation of the trapezoid corners
+//      fTthetaCphi = std::tan(pTheta)*std::cos(pPhi)  These combinations are suitable for
+//      fTthetaSphi = std::tan(pTheta)*std::sin(pPhi)  creation of the trapezoid corners
 //
 //      fDy1    Half-length along y of the face at -fDz
 //      fDx1    Half-length along x of the side at y=-fDy1 of the face at -fDz

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Trap.cc,v 1.10 2004-11-15 10:24:31 grichine Exp $
+// $Id: testG4Trap.cc,v 1.11 2004-12-02 09:31:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,7 +29,7 @@
 //             Ensure asserts are compiled in
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 #include "G4ios.hh"
 
 #include "globals.hh"
@@ -55,17 +55,17 @@ G4bool testG4Trap()
 
     G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1);
     G4ThreeVector vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1);
-    G4ThreeVector vxy(1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxy(-1/sqrt(2.0),1/sqrt(2.0),0);
-    G4ThreeVector vmxmy(-1/sqrt(2.0),-1/sqrt(2.0),0);
-    G4ThreeVector vxmy(1/sqrt(2.0),-1/sqrt(2.0),0);
+    G4ThreeVector vxy(1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+    G4ThreeVector vmxy(-1/std::sqrt(2.0),1/std::sqrt(2.0),0);
+    G4ThreeVector vmxmy(-1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
+    G4ThreeVector vxmy(1/std::sqrt(2.0),-1/std::sqrt(2.0),0);
 
-    G4ThreeVector vxmz(1/sqrt(2.0),0,-1/sqrt(2.0));
-    G4ThreeVector vymz(0,1/sqrt(2.0),-1/sqrt(2.0));
-    G4ThreeVector vmxmz(-1/sqrt(2.0),0,-1/sqrt(2.0));
-    G4ThreeVector vmymz(0,-1/sqrt(2.0),-1/sqrt(2.0));
-    G4ThreeVector vxz(1/sqrt(2.0),0,1/sqrt(2.0));
-    G4ThreeVector vyz(0,1/sqrt(2.0),1/sqrt(2.0));
+    G4ThreeVector vxmz(1/std::sqrt(2.0),0,-1/std::sqrt(2.0));
+    G4ThreeVector vymz(0,1/std::sqrt(2.0),-1/std::sqrt(2.0));
+    G4ThreeVector vmxmz(-1/std::sqrt(2.0),0,-1/std::sqrt(2.0));
+    G4ThreeVector vmymz(0,-1/std::sqrt(2.0),-1/std::sqrt(2.0));
+    G4ThreeVector vxz(1/std::sqrt(2.0),0,1/std::sqrt(2.0));
+    G4ThreeVector vyz(0,1/std::sqrt(2.0),1/std::sqrt(2.0));
 
     G4double Dist, dist, vol, volCheck ;
     G4ThreeVector *pNorm,norm;
@@ -190,7 +190,7 @@ G4bool testG4Trap()
     normal=trap1.SurfaceNormal(ponmzsidey);
     assert(ApproxEqual(normal,G4ThreeVector(0,0,-1)));
 
-    double cosa = 4/sqrt(17.), sina = 1/sqrt(17.), tanga = 1.0/4.0 ;
+    double cosa = 4/std::sqrt(17.), sina = 1/std::sqrt(17.), tanga = 1.0/4.0 ;
     
     normal=trap2.SurfaceNormal(ponxside);
     assert(ApproxEqual(normal,G4ThreeVector(cosa,0,-sina)));
@@ -245,7 +245,7 @@ G4bool testG4Trap()
     Dist=trap1.DistanceToOut(pzero,vmz,calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(Dist,40)&&ApproxEqual(norm,vmz)&&*pgoodNorm);
     Dist=trap1.DistanceToOut(pzero,vxy,calcNorm,pgoodNorm,pNorm);
-    assert(ApproxEqual(Dist,sqrt(800.))&&*pgoodNorm);
+    assert(ApproxEqual(Dist,std::sqrt(800.))&&*pgoodNorm);
 
     Dist=trap1.DistanceToOut(ponxside,vx,calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(Dist,0)&&ApproxEqual(*pNorm,vx)&&*pgoodNorm);
@@ -273,7 +273,7 @@ G4bool testG4Trap()
     Dist=trap2.DistanceToOut(pzero,vmz,calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(Dist,40)&&ApproxEqual(norm,vmz)&&*pgoodNorm);
     Dist=trap2.DistanceToOut(pzero,vxy,calcNorm,pgoodNorm,pNorm);
-    assert(ApproxEqual(Dist,sqrt(800.))&&*pgoodNorm);
+    assert(ApproxEqual(Dist,std::sqrt(800.))&&*pgoodNorm);
 
     Dist=trap2.DistanceToOut(ponxside,vx,calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(Dist,0)&&ApproxEqual(*pNorm,G4ThreeVector(cosa,0,-sina))&&*pgoodNorm);
@@ -389,7 +389,7 @@ G4bool testG4Trap()
 
     dist=trap1.DistanceToIn(G4ThreeVector(0,40,0),vxmy);
     // G4cout<<"trap1.DistanceToIn(G4ThreeVector(0,40,0),vxmy) = "<<dist<<G4endl ;
-    assert(ApproxEqual(dist,10.0*sqrt(2.0)));
+    assert(ApproxEqual(dist,10.0*std::sqrt(2.0)));
 
     dist=trap1.DistanceToIn(G4ThreeVector(0,40,50),vxmy);
     // G4cout<<"trap1.DistanceToIn(G4ThreeVector(0,40,50),vxmy) = "<<dist<<G4endl ;
@@ -411,7 +411,7 @@ G4bool testG4Trap()
 
     dist=trap1.DistanceToIn(G4ThreeVector(0,0,50),vymz);
     // G4cout<<"trap1.DistanceToIn(G4ThreeVector(0,0,50),vymz) = "<<dist<<G4endl ;
-    assert(ApproxEqual(dist,10.0*sqrt(2.0)));
+    assert(ApproxEqual(dist,10.0*std::sqrt(2.0)));
 
     dist=trap1.DistanceToIn(G4ThreeVector(0,0,80),vymz);
     // G4cout<<"trap1.DistanceToIn(G4ThreeVector(0,0,80),vymz) = "<<dist<<G4endl ;

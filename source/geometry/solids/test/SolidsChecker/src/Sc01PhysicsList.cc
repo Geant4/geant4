@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01PhysicsList.cc,v 1.2 2004-11-10 07:43:14 grichine Exp $
+// $Id: Sc01PhysicsList.cc,v 1.3 2004-12-02 09:31:34 gcosmo Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -90,7 +90,7 @@ void Sc01PhysicsList::ConstructEM()
   while( (*theParticleIterator)() )
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
+    // G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "opticalphoton") 

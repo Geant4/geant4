@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.icc,v 1.5 2004-11-13 18:26:25 gcosmo Exp $
+// $Id: G4VSurface.icc,v 1.6 2004-12-02 09:31:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,7 +77,7 @@ G4double G4VSurface::DistanceToPlane(const G4ThreeVector &p,
    //      xx = p - t*n
    //
    //         where
-   //         t = n * (p - x0) / abs(n)
+   //         t = n * (p - x0) / std::abs(n)
    //
    G4double t;
    G4ThreeVector n = n0.unit();

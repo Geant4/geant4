@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.27 2004-07-02 16:32:25 gcosmo Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.28 2004-12-02 09:31:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -204,8 +204,8 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   {
     if( z_values[idx-1] > z_values[idx] )
     {
-      G4double toothdist = fabs( z_values[idx-1] - z_values[idx] );
-      G4double aftertoothdist = fabs( z_values[idx+1] - z_values[idx] );
+      G4double toothdist = std::fabs( z_values[idx-1] - z_values[idx] );
+      G4double aftertoothdist = std::fabs( z_values[idx+1] - z_values[idx] );
       if( toothdist > aftertoothdist )
       {
         // Check for possible intersection
@@ -932,7 +932,7 @@ G4BREPSolidPolyhedra::SurfaceNormal(const G4ThreeVector& Pt) const
   G4int normPlane = 0;
   for(iplane = 0; iplane < nb_of_surfaces; iplane++)
   {
-    G4double dist = fabs(SurfaceVec[iplane]->HowNear(Pt));
+    G4double dist = std::fabs(SurfaceVec[iplane]->HowNear(Pt));
     if( minDist > dist )
     {
       minDist = dist;
@@ -995,7 +995,7 @@ G4double G4BREPSolidPolyhedra::DistanceToIn(const G4ThreeVector& Pt) const
   //   called only if the point is outside )
   //
   for(a = 0; a < nb_of_surfaces; a++)
-    if( fabs(Dist) > fabs(dists[a]) ) 
+    if( std::fabs(Dist) > std::fabs(dists[a]) ) 
       //if( dists[a] >= 0)
       Dist = dists[a];
   
@@ -1009,7 +1009,7 @@ G4double G4BREPSolidPolyhedra::DistanceToIn(const G4ThreeVector& Pt) const
   }
   else 
   {
-    return fabs(Dist);
+    return std::fabs(Dist);
   }
 }
 
@@ -1086,7 +1086,7 @@ G4BREPSolidPolyhedra::DistanceToIn(register const G4ThreeVector& Pt,
   //
   if(ShortestDistance != kInfinity)
   {
-    return sqrt(ShortestDistance);
+    return std::sqrt(ShortestDistance);
   }
   else  // no intersection
   {
@@ -1176,7 +1176,7 @@ G4BREPSolidPolyhedra::DistanceToOut(register const G4ThreeVector& Pt,
   //
   if((ShortestDistance != kInfinity) && (parity&1))
   {
-    return sqrt(ShortestDistance);
+    return std::sqrt(ShortestDistance);
   }
   else
   {
@@ -1219,7 +1219,7 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(const G4ThreeVector& Pt) const
 
   for(a = 0; a < nb_of_surfaces; a++)
   {
-    if( fabs(Dist) > fabs(dists[a]) )
+    if( std::fabs(Dist) > std::fabs(dists[a]) )
     {
       //if( dists[a] <= 0)
       Dist = dists[a];
@@ -1237,7 +1237,7 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(const G4ThreeVector& Pt) const
   else
   {
     // return Dist;
-    return fabs(Dist);
+    return std::fabs(Dist);
   }
 }
 

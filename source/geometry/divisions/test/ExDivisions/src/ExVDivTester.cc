@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExVDivTester.cc,v 1.2 2004-05-13 14:57:18 gcosmo Exp $
+// $Id: ExVDivTester.cc,v 1.3 2004-12-02 09:31:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class ExVDivTester Implementation file
@@ -547,7 +547,7 @@ void ExVDivTester::GenerateScanPointsAsTubs()
     // any Z, phi close initial phi
     G4double phi = 0.*deg;
     //  if( theExtraPars.size() > 0 ) phi = (theExtraPars[0]+1.)*deg;
-    G4ThreeVector pR( cos(phi), sin(phi), 0. );
+    G4ThreeVector pR( std::cos(phi), std::sin(phi), 0. );
     G4double rho = (ii+0.5) * theWorldLengthXY/numberOfPoints;
     pR.setRho( rho );
     pR += centre;
@@ -560,7 +560,7 @@ void ExVDivTester::GenerateScanPointsAsTubs()
   {
     G4double phi = (ii+0.5) * 360*deg/numberOfPoints;
     // any Z
-    //    G4ThreeVector pR( cos(phi), sin(phi), theWorldLengthXY/100. );
+    //    G4ThreeVector pR( std::cos(phi), std::sin(phi), theWorldLengthXY/100. );
     //    pR += centre;
     G4ThreeVector pR( centre );
     pR.setPhi( phi );

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TwistedTrap.cc,v 1.3 2004-11-24 17:03:09 link Exp $
+// $Id: G4TwistedTrap.cc,v 1.4 2004-12-02 09:31:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,8 +74,8 @@ G4TwistedTrap::G4TwistedTrap(const G4String &pname,
        && ( pDx2  > 2*kCarTolerance)
        && ( pDy   > 2*kCarTolerance)
        && ( pDz   > 2*kCarTolerance) 
-       && ( fabs(twistedangle) > 2*kAngTolerance )
-       && ( fabs(twistedangle) < M_PI/2 ) )
+       && ( std::fabs(twistedangle) > 2*kAngTolerance )
+       && ( std::fabs(twistedangle) < M_PI/2 ) )
     {
       
       SetFields(twistedangle, pDx1, pDx2, pDy, pDz);
@@ -138,7 +138,7 @@ G4bool G4TwistedTrap::CalculateExtent( const EAxis        pAxis,
 
 
   G4double maxSide = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
-  G4double maxRad = sqrt( maxSide*maxSide + fDy*fDy);
+  G4double maxRad = std::sqrt( maxSide*maxSide + fDy*fDy);
 
   if (!pTransform.IsRotated())
     {
@@ -325,7 +325,7 @@ G4TwistedTrap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   {
 
     G4double maxSide = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
-    G4double maxRad = sqrt( maxSide*maxSide + fDy*fDy);
+    G4double maxRad = std::sqrt( maxSide*maxSide + fDy*fDy);
 
     G4ThreeVector vertex0(-maxRad,-maxRad,-fDz) ;
     G4ThreeVector vertex1(maxRad,-maxRad,-fDz) ;
@@ -374,8 +374,8 @@ EInside G4TwistedTrap::Inside(const G4ThreeVector& p) const
    *tmpin = kOutside ;
 
    G4double phi = - p.z()/(2*fDz) * fPhiTwist ;  // rotate the point to z=0
-   G4double cphi = cos(phi) ;
-   G4double sphi = sin(phi) ;
+   G4double cphi = std::cos(phi) ;
+   G4double sphi = std::sin(phi) ;
    G4double posx = p.x() * cphi - p.y() * sphi   ;
    G4double posy = p.x() * sphi + p.y() * cphi   ;
    G4double posz = p.z()  ;
@@ -395,23 +395,23 @@ EInside G4TwistedTrap::Inside(const G4ThreeVector& p) const
 
 #endif 
 
-  if ( fabs(posx) <= wpos - kCarTolerance*0.5 )
+  if ( std::fabs(posx) <= wpos - kCarTolerance*0.5 )
   {
-    if (fabs(posy) <= fDy - kCarTolerance*0.5 )
+    if (std::fabs(posy) <= fDy - kCarTolerance*0.5 )
     {
-      if      (fabs(posz) <= fDz - kCarTolerance*0.5 ) *tmpin = kInside ;
-      else if (fabs(posz) <= fDz + kCarTolerance*0.5 ) *tmpin = kSurface ;
+      if      (std::fabs(posz) <= fDz - kCarTolerance*0.5 ) *tmpin = kInside ;
+      else if (std::fabs(posz) <= fDz + kCarTolerance*0.5 ) *tmpin = kSurface ;
     }
-    else if (fabs(posy) <= fDy + kCarTolerance*0.5 )
+    else if (std::fabs(posy) <= fDy + kCarTolerance*0.5 )
     {
-      if (fabs(posz) <= fDz + kCarTolerance*0.5 ) *tmpin = kSurface ;
+      if (std::fabs(posz) <= fDz + kCarTolerance*0.5 ) *tmpin = kSurface ;
     }
   }
-  else if (fabs(posx) <= wpos + kCarTolerance*0.5 )
+  else if (std::fabs(posx) <= wpos + kCarTolerance*0.5 )
   {
-    if (fabs(posy) <= fDy + kCarTolerance*0.5 )
+    if (std::fabs(posy) <= fDy + kCarTolerance*0.5 )
     {
-      if (fabs(posz) <= fDz + kCarTolerance*0.5) *tmpin = kSurface ;
+      if (std::fabs(posz) <= fDz + kCarTolerance*0.5) *tmpin = kSurface ;
     }
   }
   
@@ -616,13 +616,13 @@ G4double G4TwistedTrap::DistanceToIn (const G4ThreeVector& p) const
         G4double safex, safey, safez, safe = 0.0 ;
 
         G4double maxSide = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
-        G4double maxRad = sqrt( maxSide*maxSide + fDy*fDy);
+        G4double maxRad = std::sqrt( maxSide*maxSide + fDy*fDy);
 
         G4cout << "maxRad = " << maxRad << G4endl ;
 
-        safex = fabs(p.x()) - maxRad ;
-        safey = fabs(p.y()) - maxRad ;
-        safez = fabs(p.z()) - fDz ;
+        safex = std::fabs(p.x()) - maxRad ;
+        safey = std::fabs(p.y()) - maxRad ;
+        safez = std::fabs(p.z()) - fDz ;
         
         if (safex > safe) safe = safex ;
         if (safey > safe) safe = safey ;
@@ -1020,7 +1020,7 @@ G4VisExtent G4TwistedTrap::GetExtent() const
 {
 
   G4double maxSide = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
-  G4double maxRad = sqrt( maxSide*maxSide + fDy*fDy);
+  G4double maxRad = std::sqrt( maxSide*maxSide + fDy*fDy);
 
   return G4VisExtent(-maxRad, maxRad ,
                      -maxRad, maxRad ,
@@ -1042,7 +1042,7 @@ G4Polyhedron* G4TwistedTrap::CreatePolyhedron () const
 G4NURBS* G4TwistedTrap::CreateNURBS () const 
 {
   G4double maxSide = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
-  G4double maxRad = sqrt( maxSide*maxSide + fDy*fDy);
+  G4double maxRad = std::sqrt( maxSide*maxSide + fDy*fDy);
 
   return new G4NURBStube(maxRad, maxRad, fDz); 
    // Tube for now!!!

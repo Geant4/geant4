@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ApproxEqual.hh,v 1.5 2003-12-01 16:19:10 gcosmo Exp $
+// $Id: ApproxEqual.hh,v 1.6 2004-12-02 09:31:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -73,7 +73,7 @@ class MyNavigator : public G4Navigator
 
 G4bool ApproxEqual(const G4double check,const G4double target)
 {
-    return (fabs(check-target)<kApproxEqualTolerance) ?true:false;
+    return (std::fabs(check-target)<kApproxEqualTolerance) ?true:false;
 }
 
 // Return true if the 3vector check is approximately equal to target

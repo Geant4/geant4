@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.38 2004-10-10 10:44:30 johna Exp $
+// $Id: G4Torus.cc,v 1.39 2004-12-02 09:31:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -140,8 +140,8 @@ G4Torus::SetAllParameters( G4double pRmin,
 
   fSPhi = pSPhi;
 
-  if (fSPhi < 0)  fSPhi = 2.0*M_PI-fmod(fabs(fSPhi),2.0*M_PI) ;
-  else fSPhi = fmod(fSPhi,2.0*M_PI) ;
+  if (fSPhi < 0)  fSPhi = 2.0*M_PI-std::fmod(std::fabs(fSPhi),2.0*M_PI) ;
+  else fSPhi = std::fmod(fSPhi,2.0*M_PI) ;
 
   if (fSPhi+fDPhi > 2.0*M_PI) fSPhi-=2.0*M_PI ;
 }
@@ -270,7 +270,7 @@ G4int G4Torus::SolveBiQuadratic( G4double c[], G4double s[]  ) const
   q = 0.125*A2*A - 0.5*A*B + C;
   r = - 3.0/256*A2*A2 + 1.0/16*A2*B - 0.25*A*C + D;
 
-  // y^4 + py^2 + r = 0 and z=y^2 so y = +-sqrt(z1) and y = +-sqrt(z2)
+  // y^4 + py^2 + r = 0 and z=y^2 so y = +-std::sqrt(z1) and y = +-std::sqrt(z2)
    
   if(q==0) 
   {
@@ -287,15 +287,15 @@ G4int G4Torus::SolveBiQuadratic( G4double c[], G4double s[]  ) const
         {
           if(s[0]==0) // Three roots and one of them == 0
           {
-            s[2] = sqrt(s[1]) ;
+            s[2] = std::sqrt(s[1]) ;
             s[1] = s[0] ;
             s[0] = -s[2] ;
             num++ ;
           }
           else        // Four roots
           {
-            s[2] = sqrt(s[0]) ;
-            s[3] = sqrt(s[1]) ;
+            s[2] = std::sqrt(s[0]) ;
+            s[3] = std::sqrt(s[1]) ;
             s[0] = -s[3] ;
             s[1] = -s[2] ;
             num +=2 ;
@@ -310,7 +310,7 @@ G4int G4Torus::SolveBiQuadratic( G4double c[], G4double s[]  ) const
           }
           else          // Two roots
           {
-            s[0] = -sqrt(s[1]) ;
+            s[0] = -std::sqrt(s[1]) ;
             s[1] = -s[0] ;
           }
         }
@@ -323,7 +323,7 @@ G4int G4Torus::SolveBiQuadratic( G4double c[], G4double s[]  ) const
           if(s[0]==0) ; 
           else
           {
-            s[1] = sqrt(s[0]) ;
+            s[1] = std::sqrt(s[0]) ;
             s[0] = -s[1] ;
             num +=1 ;
           }
@@ -376,11 +376,11 @@ G4int G4Torus::SolveBiQuadratic( G4double c[], G4double s[]  ) const
     v = 2 * z - p;
 
     if (u==0)        u = 0 ;
-    else if (u > 0)  u = sqrt(u) ;
+    else if (u > 0)  u = std::sqrt(u) ;
     else             return 0 ;
 
     if (v==0)        v = 0 ;
-    else if (v > 0)  v = sqrt(v);
+    else if (v > 0)  v = std::sqrt(v);
     else             return 0 ;
 
     coeffs[ 0 ] = z - u;
@@ -446,7 +446,7 @@ G4int G4Torus::SolveCubic( G4double c[], G4double s[] ) const
     }
     else // one single and one double solution 
     {
-      G4double u = pow(-q,1./3.);
+      G4double u = std::pow(-q,1./3.);
       s[ 0 ] = 2 * u;
       s[ 1 ] = - u;
       num = 2;
@@ -454,19 +454,19 @@ G4int G4Torus::SolveCubic( G4double c[], G4double s[] ) const
   }
   else if (D < 0) // Casus irreducibilis: three real solutions
   {
-    G4double phi = 1.0/3 * acos(-q / sqrt(-p3));
-    G4double t = 2 * sqrt(-p);
+    G4double phi = 1.0/3 * std::acos(-q / std::sqrt(-p3));
+    G4double t = 2 * std::sqrt(-p);
 
-    s[ 0 ] =   t * cos(phi);
-    s[ 1 ] = - t * cos(phi + M_PI / 3);
-    s[ 2 ] = - t * cos(phi - M_PI / 3);
+    s[ 0 ] =   t * std::cos(phi);
+    s[ 1 ] = - t * std::cos(phi + M_PI / 3);
+    s[ 2 ] = - t * std::cos(phi - M_PI / 3);
     num = 3;
   }
   else // one real solution 
   {
-    G4double sqrt_D = sqrt(D);
-    G4double u = pow(sqrt_D - q,1./3.);
-    G4double v = - pow(sqrt_D + q,1./3.);
+    G4double sqrt_D = std::sqrt(D);
+    G4double u = std::pow(sqrt_D - q,1./3.);
+    G4double v = - std::pow(sqrt_D + q,1./3.);
 
     s[ 0 ] = u + v;
     num = 1;
@@ -518,7 +518,7 @@ G4int G4Torus::SolveBiQuadraticNew( G4double c[], G4double s[] ) const
     if( D>0 ) return 0;
     else 
     {
-      s[0] = sqrt( sqrt( -D ) );
+      s[0] = std::sqrt( std::sqrt( -D ) );
       s[1] = -s[0];
       return 2;
     }
@@ -551,7 +551,7 @@ G4int G4Torus::SolveBiQuadraticNew( G4double c[], G4double s[] ) const
     G4double vm1 = -1.0e99, vm2 ;
     for( i=0; i<3; i++ ) 
     {
-      v[i] = fabs( s[i] ) ;
+      v[i] = std::fabs( s[i] ) ;
       if( v[i] > vm1 ) vm1 = v[i] ;
     }
     if( vm1 == v[0] ) 
@@ -576,13 +576,13 @@ G4int G4Torus::SolveBiQuadraticNew( G4double c[], G4double s[] ) const
     else if( vm2 == v[1] ) j = 1 ;
     else j = 2 ;
 
-    w1 = sqrt( s[i] );
-    w2 = sqrt( s[j] );
+    w1 = std::sqrt( s[i] );
+    w2 = std::sqrt( s[j] );
   } 
   else 
   {
     num = 2;
-    w1 = w2 = sqrt( s[1] );
+    w1 = w2 = std::sqrt( s[1] );
   }
   if( w1*w2 != 0. ) w3 = -q/( 8.0*w1*w2 ) ;
   else              w3 = 0.0 ;
@@ -643,17 +643,17 @@ G4int G4Torus::SolveCubicNew( G4double c[], G4double s[],
 
   if( cubic_discr > delta ) 
   {
-    h2 = sqrt( cubic_discr );
+    h2 = std::sqrt( cubic_discr );
     u = -h1+h2;
     v = -h1-h2;
-    if( u < 0 ) u = -pow(-u,1./3.);
-    else u = pow(u,1./3.);
-    if( v < 0 ) v = -pow(-v,1./3.);
-    else v = pow(v,1./3.);
+    if( u < 0 ) u = -std::pow(-u,1./3.);
+    else u = std::pow(u,1./3.);
+    if( v < 0 ) v = -std::pow(-v,1./3.);
+    else v = std::pow(v,1./3.);
     s[0] = u+v-sub;
     s[1] = -(u+v)/2.0-sub;
-    s[2] = fabs(u-v)*sqrt(3.0)/2.0;
-    if( fabs(u) <= eps || fabs(v) <= eps ) 
+    s[2] = std::fabs(u-v)*std::sqrt(3.0)/2.0;
+    if( std::fabs(u) <= eps || std::fabs(v) <= eps ) 
     {
       y[0] = s[0] ;
       for( i=0; i<2; i++ ) 
@@ -664,25 +664,25 @@ G4int G4Torus::SolveCubicNew( G4double c[], G4double s[],
       return 1;
     }
   }
-  else if( fabs(cubic_discr) <= delta ) 
+  else if( std::fabs(cubic_discr) <= delta ) 
   {
     cubic_discr = 0.;
 
-    if( h1 < 0 ) u = pow(-h1,1./3.);
-    else         u = -pow(h1,1./3.);
+    if( h1 < 0 ) u = std::pow(-h1,1./3.);
+    else         u = -std::pow(h1,1./3.);
 
     s[0] =  u + u - sub ;
     s[1] = -u - sub ;
     s[2] = s[1] ;
 
-    if( fabs(h1) <= eps ) 
+    if( std::fabs(h1) <= eps ) 
     {
       y[0] = s[0];
       for( i=0; i<2; i++ ) 
       {
         h1 = (3.0*y[i]+2.*A)*y[i]+B;
 
-        if( fabs(h1) > delta )
+        if( std::fabs(h1) > delta )
           y[i+1] = y[i]-(((y[i]+A)*y[i]+B)*y[i]+C)/h1;
         else 
         {
@@ -697,12 +697,12 @@ G4int G4Torus::SolveCubicNew( G4double c[], G4double s[],
   }
   else 
   {
-    h3 =fabs(p/3.);
-    h3 = sqrt(h3*h3*h3);
-    h2 = acos(-h1/h3)/3.;
-    h1 = pow(h3,1./3.);
-    u = h1*cos(h2);
-    v = sqrt(3.)*h1*sin(h2);
+    h3 =std::fabs(p/3.);
+    h3 = std::sqrt(h3*h3*h3);
+    h2 = std::acos(-h1/h3)/3.;
+    h1 = std::pow(h3,1./3.);
+    u = h1*std::cos(h2);
+    v = std::sqrt(3.)*h1*std::sin(h2);
     s[0] = u+u-sub;
     s[1] = -u-v-sub;
     s[2] = -u+v-sub;
@@ -747,7 +747,7 @@ G4int G4Torus::SolveQuadratic( G4double c[], G4double s[] ) const
   }
   else if (D > 0)
   {
-    G4double sqrt_D = sqrt(D);
+    G4double sqrt_D = std::sqrt(D);
 
     s[ 0 ] = - p - sqrt_D ;  // in ascending order !
     s[ 1 ] = - p + sqrt_D ;
@@ -862,8 +862,8 @@ G4bool G4Torus::CalculateExtent( const EAxis pAxis,
           // Y limits don't cross max/min x => compute max delta x,
           // hence new mins/maxs
           //
-          diff1   = sqrt(fRmax*fRmax - yoff1*yoff1) ;
-          diff2   = sqrt(fRmax*fRmax - yoff2*yoff2) ;
+          diff1   = std::sqrt(fRmax*fRmax - yoff1*yoff1) ;
+          diff2   = std::sqrt(fRmax*fRmax - yoff2*yoff2) ;
           maxDiff = (diff1 > diff2) ? diff1:diff2 ;
           newMin  = xoffset - maxDiff ;
           newMax  = xoffset + maxDiff ;
@@ -887,8 +887,8 @@ G4bool G4Torus::CalculateExtent( const EAxis pAxis,
           // X limits don't cross max/min y => compute max delta y,
           // hence new mins/maxs
           //
-          diff1   = sqrt(fRmax*fRmax - xoff1*xoff1) ;
-          diff2   = sqrt(fRmax*fRmax - xoff2*xoff2) ;
+          diff1   = std::sqrt(fRmax*fRmax - xoff1*xoff1) ;
+          diff2   = std::sqrt(fRmax*fRmax - xoff2*xoff2) ;
           maxDiff = (diff1 > diff2) ? diff1 : diff2 ;
           newMin  = yoffset - maxDiff ;
           newMax  = yoffset + maxDiff ;
@@ -976,7 +976,7 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
   EInside in = kOutside ;
                                               // General precals
   r2  = p.x()*p.x() + p.y()*p.y() ;
-  pt2 = r2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*sqrt(r2) ;
+  pt2 = r2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*std::sqrt(r2) ;
 
   if (fRmin) tolRMin = fRmin + kRadTolerance*0.5 ;
   else       tolRMin = 0 ;
@@ -994,13 +994,13 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
       // Try inner tolerant phi boundaries (=>inside)
       // if not inside, try outer tolerant phi boundaries
 
-      pPhi = atan2(p.y(),p.x()) ;
+      pPhi = std::atan2(p.y(),p.x()) ;
 
       if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ;   // 0<=pPhi<2pi
       if ( fSPhi >= 0 )
       {
-          if ( (abs(pPhi) < kAngTolerance*0.5)
-            && (abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5) )
+          if ( (std::abs(pPhi) < kAngTolerance*0.5)
+            && (std::abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5) )
           { 
             pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
           }
@@ -1036,13 +1036,13 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
       }
       else // Try outer tolerant phi boundaries only
       {
-        pPhi = atan2(p.y(),p.x()) ;
+        pPhi = std::atan2(p.y(),p.x()) ;
 
         if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ;   // 0<=pPhi<2pi
         if ( fSPhi >= 0 )
         {
-          if ( (abs(pPhi) < kAngTolerance*0.5)
-            && (abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5) )
+          if ( (std::abs(pPhi) < kAngTolerance*0.5)
+            && (std::abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5) )
           { 
             pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
           }
@@ -1081,16 +1081,16 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   G4double distRMin,distRMax,distSPhi,distEPhi,distMin;
 
   rho2 = p.x()*p.x() + p.y()*p.y();
-  rho = sqrt(rho2) ;
-  pt2 = fabs(rho2+p.z()*p.z() +fRtor*fRtor - 2*fRtor*rho) ;
-  pt = sqrt(pt2) ;
+  rho = std::sqrt(rho2) ;
+  pt2 = std::fabs(rho2+p.z()*p.z() +fRtor*fRtor - 2*fRtor*rho) ;
+  pt = std::sqrt(pt2) ;
 
-  distRMax = fabs(pt - fRmax) ;
+  distRMax = std::fabs(pt - fRmax) ;
 
 
   if(fRmin)  // First minimum radius
   {
-    distRMin = fabs(pt - fRmin) ;
+    distRMin = std::fabs(pt - fRmin) ;
 
     if (distRMin < distRMax)
     {
@@ -1110,14 +1110,14 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   }    
   if (fDPhi < 2.0*M_PI && rho )
   {
-    phi = atan2(p.y(),p.x()) ; // Protected against (0,0,z) (above rho !=0)
+    phi = std::atan2(p.y(),p.x()) ; // Protected against (0,0,z) (above rho !=0)
 
     if (phi < 0) phi += 2*M_PI ;
 
-    if (fSPhi < 0 ) distSPhi = fabs(phi-(fSPhi+2.0*M_PI))*rho ;
-    else            distSPhi = fabs(phi-fSPhi)*rho ;
+    if (fSPhi < 0 ) distSPhi = std::fabs(phi-(fSPhi+2.0*M_PI))*rho ;
+    else            distSPhi = std::fabs(phi-fSPhi)*rho ;
 
-    distEPhi = fabs(phi - fSPhi - fDPhi)*rho ;
+    distEPhi = std::fabs(phi - fSPhi - fDPhi)*rho ;
 
     if (distSPhi < distEPhi) // Find new minimum
     {
@@ -1141,10 +1141,10 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
                             p.z()/pt                  ) ;
       break;
     case kNSPhi:
-      norm = G4ThreeVector(sin(fSPhi),-cos(fSPhi),0) ;
+      norm = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0) ;
       break;
     case kNEPhi:
-      norm = G4ThreeVector(-sin(fSPhi+fDPhi),cos(fSPhi+fDPhi),0) ;
+      norm = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0) ;
       break;
     default:
       DumpInfo();
@@ -1216,10 +1216,10 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
     cPhi       = fSPhi + hDPhi ;
     hDPhiOT    = hDPhi+0.5*kAngTolerance ;  // outers tol' half delta phi 
     hDPhiIT    = hDPhi - 0.5*kAngTolerance ;
-    sinCPhi    = sin(cPhi) ;
-    cosCPhi    = cos(cPhi) ;
-    cosHDPhiOT = cos(hDPhiOT) ;
-    cosHDPhiIT = cos(hDPhiIT) ;
+    sinCPhi    = std::sin(cPhi) ;
+    cosCPhi    = std::cos(cPhi) ;
+    cosHDPhiOT = std::cos(hDPhiOT) ;
+    cosHDPhiIT = std::cos(hDPhiIT) ;
   }
   else seg = false ;
 
@@ -1241,9 +1241,9 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
   G4int    i, j, num ;
   G4double Rtor2 = fRtor*fRtor, Rmax2 = fRmax*fRmax, Rmin2 = fRmin*fRmin ;
   G4double rho2  = p.x()*p.x()+p.y()*p.y();
-  G4double rho   = sqrt(rho2) ;
-  G4double pt2   = fabs(rho2+p.z()*p.z() +Rtor2 - 2*fRtor*rho) ;
-  //   G4double pt = sqrt(pt2) ;
+  G4double rho   = std::sqrt(rho2) ;
+  G4double pt2   = std::fabs(rho2+p.z()*p.z() +Rtor2 - 2*fRtor*rho) ;
+  //   G4double pt = std::sqrt(pt2) ;
   G4double pDotV = p.x()*v.x() + p.y()*v.y() + p.z()*v.z() ;
   G4double pRad2 = p.x()*p.x() + p.y()*p.y() + p.z()*p.z() ;
   G4double vDotNmax = pDotV - fRtor*(v.x()*p.x() + v.y()*p.y())/rho ;
@@ -1322,7 +1322,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
             yi     = p.y() + s[i]*v.y() ;
             rhoi2  = xi*xi + yi*yi ;
             inum   = xi*cosCPhi + yi*sinCPhi ;
-            cosPsi = inum/sqrt(rhoi2) ;
+            cosPsi = inum/std::sqrt(rhoi2) ;
 
             if (cosPsi >= cosHDPhiIT)
             {
@@ -1409,7 +1409,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
               yi     = p.y() + s[i]*v.y() ;
               rhoi2  = xi*xi + yi*yi ;
               inum   = xi*cosCPhi + yi*sinCPhi ;
-              cosPsi = inum/sqrt(rhoi2) ;
+              cosPsi = inum/std::sqrt(rhoi2) ;
 
               if ( cosPsi >= cosHDPhiIT && s[i] < snxt )
               {
@@ -1440,8 +1440,8 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
 
   if (seg)
   {                                      
-    sinSPhi = sin(fSPhi) ; // First phi surface (`S'tarting phi)
-    cosSPhi = cos(fSPhi) ;
+    sinSPhi = std::sin(fSPhi) ; // First phi surface (`S'tarting phi)
+    cosSPhi = std::cos(fSPhi) ;
     Comp    = v.x()*sinSPhi - v.y()*cosSPhi ;  // Component in outwards
                                                // normal direction                    
     if (Comp < 0 )
@@ -1459,7 +1459,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
           yi    = p.y() + sphi*v.y() ;
           zi    = p.z() + sphi*v.z() ;
           rhoi2 = xi*xi + yi*yi ;
-          it2   = fabs(rhoi2 + zi*zi + Rtor2 - 2*fRtor*sqrt(rhoi2)) ;
+          it2   = std::fabs(rhoi2 + zi*zi + Rtor2 - 2*fRtor*std::sqrt(rhoi2)) ;
 
           if ( it2 >= tolORMin2 && it2 <= tolORMax2 )
           {
@@ -1472,8 +1472,8 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
       }
     }
     ePhi=fSPhi+fDPhi;    // Second phi surface (`E'nding phi)
-    sinEPhi=sin(ePhi);
-    cosEPhi=cos(ePhi);
+    sinEPhi=std::sin(ePhi);
+    cosEPhi=std::cos(ePhi);
     Comp=-(v.x()*sinEPhi-v.y()*cosEPhi);
         
     if ( Comp < 0 )   // Component in outwards normal dirn
@@ -1491,7 +1491,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
           yi    = p.y() + sphi*v.y() ;
           zi    = p.z() + sphi*v.z() ;
           rhoi2 = xi*xi + yi*yi ;
-          it2   = fabs(rhoi2 + zi*zi + Rtor2 - 2*fRtor*sqrt(rhoi2)) ;
+          it2   = std::fabs(rhoi2 + zi*zi + Rtor2 - 2*fRtor*std::sqrt(rhoi2)) ;
 
           if (it2 >= tolORMin2 && it2 <= tolORMax2)
           {
@@ -1532,9 +1532,9 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p ) const
 #endif
 
   rho2 = p.x()*p.x() + p.y()*p.y() ;
-  rho  = sqrt(rho2) ;
-  pt2  = fabs(rho2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*rho) ;
-  pt   = sqrt(pt2) ;
+  rho  = std::sqrt(rho2) ;
+  pt2  = std::fabs(rho2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*rho) ;
+  pt   = std::sqrt(pt2) ;
 
   safe1 = fRmin - pt ;
   safe2 = pt - fRmax ;
@@ -1545,20 +1545,20 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p ) const
   if ( fDPhi < 2.0*M_PI && rho )
   {
     phiC    = fSPhi + fDPhi*0.5 ;
-    cosPhiC = cos(phiC) ;
-    sinPhiC = sin(phiC) ;
+    cosPhiC = std::cos(phiC) ;
+    sinPhiC = std::sin(phiC) ;
     cosPsi  = (p.x()*cosPhiC + p.y()*sinPhiC)/rho ;
 
-    if (cosPsi < cos(fDPhi*0.5) ) // Psi=angle from central phi to point
+    if (cosPsi < std::cos(fDPhi*0.5) ) // Psi=angle from central phi to point
     {                             // Point lies outside phi range
       if ((p.y()*cosPhiC - p.x()*sinPhiC) <= 0 )
       {
-        safePhi = fabs(p.x()*sin(fSPhi) - p.y()*cos(fSPhi)) ;
+        safePhi = std::fabs(p.x()*std::sin(fSPhi) - p.y()*std::cos(fSPhi)) ;
       }
       else
       {
         ePhi    = fSPhi + fDPhi ;
-        safePhi = fabs(p.x()*sin(ePhi) - p.y()*cos(ePhi)) ;
+        safePhi = std::fabs(p.x()*std::sin(ePhi) - p.y()*std::cos(ePhi)) ;
       }
       if (safePhi > safe) safe = safePhi ;
     }
@@ -1606,9 +1606,9 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
   G4int    i,j,num ;
   G4double Rtor2 = fRtor*fRtor, Rmax2 = fRmax*fRmax, Rmin2 = fRmin*fRmin ;
   G4double rho2  = p.x()*p.x()+p.y()*p.y();
-  G4double rho   = sqrt(rho2) ;
-  G4double pt2   = fabs(rho2 + p.z()*p.z() + Rtor2 - 2*fRtor*rho) ;
-  G4double pt    = sqrt(pt2) ;
+  G4double rho   = std::sqrt(rho2) ;
+  G4double pt2   = std::fabs(rho2 + p.z()*p.z() + Rtor2 - 2*fRtor*rho) ;
+  G4double pt    = std::sqrt(pt2) ;
   G4double pDotV = p.x()*v.x() + p.y()*v.y() + p.z()*v.z() ;
   G4double pRad2 = p.x()*p.x() + p.y()*p.y() + p.z()*p.z() ;
    
@@ -1734,14 +1734,14 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
   }  
   if (fDPhi < 2.0*M_PI)  // Phi Intersections
   {
-    sinSPhi = sin(fSPhi) ;
-    cosSPhi = cos(fSPhi) ;
+    sinSPhi = std::sin(fSPhi) ;
+    cosSPhi = std::cos(fSPhi) ;
     ePhi    = fSPhi + fDPhi ;
-    sinEPhi = sin(ePhi) ;
-    cosEPhi = cos(ePhi) ;
+    sinEPhi = std::sin(ePhi) ;
+    cosEPhi = std::cos(ePhi) ;
     cPhi    = fSPhi + fDPhi*0.5 ;
-    sinCPhi = sin(cPhi) ;
-    cosCPhi = cos(cPhi) ;
+    sinCPhi = std::sin(cPhi) ;
+    cosCPhi = std::cos(cPhi) ;
 
     if ( p.x() || p.y() ) // Check if on z axis (rho not needed later)
     {
@@ -1986,7 +1986,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
       // On z axis + travel not || to z axis -> if phi of vector direction
       // within phi of shape, Step limited by rmax, else Step =0
 
-      vphi=atan2(v.y(),v.x());
+      vphi=std::atan2(v.y(),v.x());
       if (fSPhi<vphi&&vphi<fSPhi+fDPhi)
       {
         sphi=kInfinity;
@@ -2023,9 +2023,9 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
         yi    =p.y() + snxt*v.y() ;
         zi    = p.z() + snxt*v.z() ;
         rhoi2 = xi*xi + yi*yi ;
-        rhoi  = sqrt(rhoi2) ;
-        it2   = fabs(rhoi2 + zi*zi + fRtor*fRtor - 2*fRtor*rhoi) ;
-        it    = sqrt(it2) ;
+        rhoi  = std::sqrt(rhoi2) ;
+        it2   = std::fabs(rhoi2 + zi*zi + fRtor*fRtor - 2*fRtor*rhoi) ;
+        it    = std::sqrt(it2) ;
         iDotxyNmax = (1-fRtor/rhoi) ;
         if(iDotxyNmax >= -kRadTolerance) // really convex part of Rmax
         {                       
@@ -2050,7 +2050,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 #endif
         if (fDPhi <= M_PI )
         {
-          *n=G4ThreeVector(sin(fSPhi),-cos(fSPhi),0);
+          *n=G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
           *validNorm=true;
         }
         else *validNorm = false ;
@@ -2062,7 +2062,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 #endif
         if (fDPhi <= M_PI)
         {
-          *n=G4ThreeVector(-sin(fSPhi+fDPhi),cos(fSPhi+fDPhi),0);
+          *n=G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
           *validNorm=true;
         }
         else *validNorm = false ;
@@ -2114,9 +2114,9 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
   G4double rho2,rho,pt2,pt ;
   G4double safePhi,phiC,cosPhiC,sinPhiC,ePhi;
   rho2 = p.x()*p.x() + p.y()*p.y() ;
-  rho  = sqrt(rho2) ;
-  pt2  = fabs(rho2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*rho) ;
-  pt   = sqrt(pt2) ;
+  rho  = std::sqrt(rho2) ;
+  pt2  = std::fabs(rho2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*rho) ;
+  pt   = std::sqrt(pt2) ;
 
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
@@ -2151,17 +2151,17 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
   if (fDPhi<2.0*M_PI) // Above/below central phi of Torus?
   {
     phiC    = fSPhi + fDPhi*0.5 ;
-    cosPhiC = cos(phiC) ;
-    sinPhiC = sin(phiC) ;
+    cosPhiC = std::cos(phiC) ;
+    sinPhiC = std::sin(phiC) ;
 
     if ((p.y()*cosPhiC-p.x()*sinPhiC)<=0)
     {
-      safePhi = -(p.x()*sin(fSPhi) - p.y()*cos(fSPhi)) ;
+      safePhi = -(p.x()*std::sin(fSPhi) - p.y()*std::cos(fSPhi)) ;
     }
     else
     {
       ePhi    = fSPhi + fDPhi ;
-      safePhi = (p.x()*sin(ePhi) - p.y()*cos(ePhi)) ;
+      safePhi = (p.x()*std::sin(ePhi) - p.y()*std::cos(ePhi)) ;
     }
     if (safePhi < safe) safe = safePhi ;
   }
@@ -2203,7 +2203,7 @@ G4Torus::CreateRotatedVertices( const G4AffineTransform& pTransform,
     noCrossSections=kMaxMeshSections;
   }
   meshAngle = fDPhi/(noCrossSections - 1) ;
-  meshRMax  = (fRtor + fRmax)/cos(meshAngle*0.5) ;
+  meshRMax  = (fRtor + fRmax)/std::cos(meshAngle*0.5) ;
 
   // If complete in phi, set start angle such that mesh will be at fRmax
   // on the x axis. Will give better extent calculations when not rotated.
@@ -2226,8 +2226,8 @@ G4Torus::CreateRotatedVertices( const G4AffineTransform& pTransform,
       // Compute coordinates of cross section at section crossSection
 
       crossAngle=sAngle+crossSection*meshAngle;
-      cosCrossAngle=cos(crossAngle);
-      sinCrossAngle=sin(crossAngle);
+      cosCrossAngle=std::cos(crossAngle);
+      sinCrossAngle=std::sin(crossAngle);
 
       rMaxX=meshRMax*cosCrossAngle;
       rMaxY=meshRMax*sinCrossAngle;
@@ -2400,7 +2400,7 @@ G4double G4Torus::SolveNumeric( const G4ThreeVector& p,
              << " Rmax = " << GetRmax() << G4endl ;
 #endif
 
-      if (fabs(GetRmin()) > POLEPSILON)
+      if (std::fabs(GetRmin()) > POLEPSILON)
       {
 
 #if DEBUGTORUS
@@ -2422,7 +2422,7 @@ G4double G4Torus::SolveNumeric( const G4ThreeVector& p,
         // PROBLEM: This may be a problem of precision
         //          if we are near kCarTolerance ...
         //
-        if (fabs(lambda) < kCarTolerance)
+        if (std::fabs(lambda) < kCarTolerance)
         {
           G4double Lx,Ly,Lz;
           G4double scal;
@@ -2616,7 +2616,7 @@ G4double G4Torus::SolveNumeric( const G4ThreeVector& p,
        (p.y()+ lambda*v.y())*(p.y()+ lambda*v.y()) +
        (p.z()+ lambda*v.z())*(p.z()+ lambda*v.z())) > POLEPSILON)
   {
-    G4double theta = atan2(p.y() + lambda*v.y(),p.x() + lambda*v.x());
+    G4double theta = std::atan2(p.y() + lambda*v.y(),p.x() + lambda*v.x());
 
 #if DEBUGTORUS
     G4cout << "G4Torus::SolveNumeric    theta = " << theta << G4endl;
@@ -2652,7 +2652,7 @@ G4double G4Torus::SolveNumeric( const G4ThreeVector& p,
       // and [fSPhi + fDPhi]
 
       G4double IntersectPlanar ;
-      IntersectPlanar = -(p.y()-p.x()*tan(fSPhi))/(v.y()-v.x()*tan(fSPhi));
+      IntersectPlanar = -(p.y()-p.x()*std::tan(fSPhi))/(v.y()-v.x()*std::tan(fSPhi));
 
 #if DEBUGTORUS
       G4cout << "G4Torus::SolveNumeric    IntersectPlanar = "
@@ -2663,8 +2663,8 @@ G4double G4Torus::SolveNumeric( const G4ThreeVector& p,
       //
       if (IntersectPlanar < lambda)
       { 
-        IntersectPlanar = - (p.y() - p.x()*tan(fSPhi + fDPhi))
-                          / (v.y() - v.x()*tan(fSPhi + fDPhi)) ;
+        IntersectPlanar = - (p.y() - p.x()*std::tan(fSPhi + fDPhi))
+                          / (v.y() - v.x()*std::tan(fSPhi + fDPhi)) ;
 #if DEBUGTORUS
   G4cout << "G4Torus::SolveNumeric    IntersectPlanar (2) = "
          << IntersectPlanar << G4endl ;
@@ -2802,13 +2802,13 @@ void G4Torus::BVMIntersection( G4double x,G4double y,G4double z,
     }
     else
     {
-      d = sqrt(d) ;
+      d = std::sqrt(d) ;
       NewL[2] = (d - b)/(2*a);
       NewL[3] = (-d - b)/(2*a);
       if (NewL[2] < 0.0) valid[2] = 0;
-      if (fabs(z + NewL[2]*dz) - Rmin > POLEPSILON) valid[2] = 0;
+      if (std::fabs(z + NewL[2]*dz) - Rmin > POLEPSILON) valid[2] = 0;
       if (NewL[3] < 0.0) valid[3] = 0;
-      if (fabs(z + NewL[3]*dz) - Rmin > POLEPSILON) valid[3] = 0;
+      if (std::fabs(z + NewL[3]*dz) - Rmin > POLEPSILON) valid[3] = 0;
     }
   }
   else
@@ -2824,20 +2824,20 @@ void G4Torus::BVMIntersection( G4double x,G4double y,G4double z,
 
 /*  SQRT Test --------------------------------------------------- 
 
-    // Try This to see precision issue with sqrt(~ 0)
+    // Try This to see precision issue with std::sqrt(~ 0)
     //
     G4double DistToZ ;
     G4double result;
     G4double guess;
   
-    DistToZ = sqrt(x*x + y*y) ;
+    DistToZ = std::sqrt(x*x + y*y) ;
   
     if ((DistToZ < (Rmax - Rmin)) || (DistToZ > (Rmax + Rmin)))
     {
       return -1.0 ;
     }
   
-    result = sqrt((Rmin + Rmax - DistToZ)*(Rmin - Rmax + DistToZ));
+    result = std::sqrt((Rmin + Rmax - DistToZ)*(Rmin - Rmax + DistToZ));
 
     if (dz < 0)
     {
@@ -2895,13 +2895,13 @@ void G4Torus::BVMIntersection( G4double x,G4double y,G4double z,
     }
     else
     {
-      d = sqrt(d) ;
+      d = std::sqrt(d) ;
       NewL[4] = (d - b)/(2*a);
       NewL[5] = (-d - b)/(2*a);
       if (NewL[4] < 0.0) valid[4] = 0;
-      if (fabs(z + NewL[4]*dz) - Rmin > POLEPSILON) valid[4] = 0;
+      if (std::fabs(z + NewL[4]*dz) - Rmin > POLEPSILON) valid[4] = 0;
       if (NewL[5] < 0.0) valid[5] = 0;
-      if (fabs(z + NewL[5]*dz) - Rmin > POLEPSILON) valid[5] = 0;
+      if (std::fabs(z + NewL[5]*dz) - Rmin > POLEPSILON) valid[5] = 0;
     }
   }
   else
@@ -3021,7 +3021,7 @@ G4double G4Torus::DistanceToTorus ( G4double x, G4double y, G4double z,
       case 1:
         if (SortL[0] < POLEPSILON)
         {
-          if (fabs(TorusEquation(x,y,z,Rmax,Rmin)) < TORUSPRECISION)
+          if (std::fabs(TorusEquation(x,y,z,Rmax,Rmin)) < TORUSPRECISION)
           {
             return 0.0;
           }
@@ -3037,7 +3037,7 @@ G4double G4Torus::DistanceToTorus ( G4double x, G4double y, G4double z,
       case 3:
         if (SortL[0] < POLEPSILON)
         {
-          if (fabs(TorusEquation(x,y,z,Rmax,Rmin)) < TORUSPRECISION)
+          if (std::fabs(TorusEquation(x,y,z,Rmax,Rmin)) < TORUSPRECISION)
           {
             return 0.0;
           }

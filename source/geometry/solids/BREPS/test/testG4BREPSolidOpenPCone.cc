@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: testG4BREPSolidOpenPCone.cc,v 1.5 2003-06-16 16:53:09 gunter Exp $
+// $Id: testG4BREPSolidOpenPCone.cc,v 1.6 2004-12-02 09:31:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -31,10 +31,8 @@
 //
 
 
-#include <stdio.h>
-#include <math.h>
+#include <cmath>
 #include <fstream>
-#include <stdlib.h>
 #include "G4ios.hh" 
 #include "G4BREPSolid.hh"
 #include "G4BREPSolidOpenPCone.hh"
