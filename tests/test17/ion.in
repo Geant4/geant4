@@ -5,19 +5,43 @@
 /control/verbose 2
 /run/verbose 1
 #/calor/setAbsMat Iron
+/calor/setAbsMat Water
+#/calor/setAbsMat Air
 #/testem/phys/addPhysics  standard
-/testem/phys/addPhysics  lowenergy
-#/testem/phys/addPhysics  lowenergyNew
-/testem/phys/setCuts 1 mm
+#/testem/phys/addPhysics  g4v52
+#/testem/phys/addPhysics  lowenergy
+/testem/phys/addPhysics  lowenergyNew
+#/testem/phys/setCuts 0.01 mm
+/testem/phys/setCuts 1000 mm
 #
 /run/initialize
 #
-/gun/particle proton
-/gun/energy 50 keV
-/tracking/verbose 1
+#/gun/particle proton
+/tracking/verbose 0
 #
 /gun/particle ion
-/gun/ion 26 56 26
+#/gun/ion 26 56 26
 #/gun/ion 24 52 24
-#/gun/ion 14 28 14
+/gun/ion 6 12 6
+/gun/energy 0.01 MeV
+/run/beamOn 100
+/gun/energy 0.03162 MeV
+/run/beamOn 100
+/gun/energy 0.1 MeV
+/run/beamOn 100
+/gun/energy 0.3162 MeV
+/run/beamOn 100
+/gun/energy 1.0 MeV
+/run/beamOn 100
+/gun/energy 3.162 MeV
+/run/beamOn 100
+/gun/energy 10. MeV
+/run/beamOn 100
+/gun/energy 31.62 MeV
+/run/beamOn 100
+/gun/energy 100 MeV
+/run/beamOn 100
+/gun/energy 316.2 MeV
+/run/beamOn 100
+/gun/energy 1000 MeV
 /run/beamOn 100

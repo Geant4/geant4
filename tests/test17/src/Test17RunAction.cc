@@ -105,13 +105,17 @@ void Test17RunAction::EndOfRunAction(const G4Run*)
   G4cout << " ================== run summary =====================" << G4endl;
 
   G4String name = "";
-  if(part0) name = part0->GetParticleName();
-
+  G4double mass = 0.0;
+  if(part0) {
+    name = part0->GetParticleName();
+    mass = part0->GetPDGMass();
+  }
+  G4double p = sqrt(kinEnergy0*(kinEnergy0 + 2.0*mass))/MeV;
   G4cout << G4endl;
   //  G4int prec = G4cout.precision(6);
   G4cout << " end of Run TotNbofEvents = " <<  nEvents
          << " for " <<  name
-         << " with Ekin = " << kinEnergy0/MeV << " MeV" << G4endl ;
+         << " with Ekin = " << kinEnergy0/MeV << " MeV" << " p= " << p << " MeV/c" << G4endl;
   G4cout << "    Track Length in absorber = " <<
           length/micrometer     << " +- " << sigl/micrometer   <<
           "  microns " << G4endl;
