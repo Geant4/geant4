@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2001-01-25 16:42:55 urban Exp $
+$Id: History,v 1.8 2001-02-05 17:50:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-24 jan 01: L. Urban
+
+05 feb 01: G. Cosmo (muons-V03-00-02)
+- STL migration for G4OrderedTable and G4DataVector.
+  Modified files: G4IMuBremsstrahlung.cc, G4IMuPairProduction.cc,
+                  G4MuBremsstrahlung.cc, G4MuPairProduction.cc
+
+24 jan 01: L. Urban (muons-V03-00-01)
 - bug fixed in muon bremstrahlung , in G4MuBremstrahlung.cc 
    in PostStepDoIt.
  

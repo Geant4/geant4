@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.13 2001-01-24 15:22:06 urban Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.14 2001-02-05 17:50:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
@@ -210,6 +210,7 @@ void G4MuBremsstrahlung::BuildLambdaTable(
       delete theMeanFreePathTable;
   }
   theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  PartialSumSigma.clearAndDestroy();
   PartialSumSigma.resize(G4Material::GetNumberOfMaterials());
 
   G4PhysicsLogVector* ptrVector;
@@ -249,7 +250,7 @@ void G4MuBremsstrahlung::ComputePartialSumSigma(
                                     aMaterial->GetAtomicNumDensityVector();
    G4double GammaEnergyCut = (G4Gamma::Gamma()->GetCutsInEnergy())[Imate];
 
-   PartialSumSigma(Imate) = new G4ValVector(NbOfElements);
+   PartialSumSigma[Imate] = new G4DataVector();
 
    G4double SIGMA = 0. ;
 
@@ -260,7 +261,7 @@ void G4MuBremsstrahlung::ComputePartialSumSigma(
                                             (*theElementVector)(Ielem)->GetZ(), 
                                             (*theElementVector)(Ielem)->GetA(), 
                                                  GammaEnergyCut );
-        PartialSumSigma(Imate)->insertAt(Ielem, SIGMA);
+        PartialSumSigma[Imate]->push_back(SIGMA);
    }
 }
 
@@ -595,9 +596,9 @@ G4Element* G4MuBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
   const G4int NumberOfElements = aMaterial->GetNumberOfElements();
   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
 
-  G4double rval = G4UniformRand()*((*PartialSumSigma(Index))(NumberOfElements-1));
+  G4double rval = G4UniformRand()*((*PartialSumSigma[Index])[NumberOfElements-1]);
   for ( G4int i=0; i < NumberOfElements; i++ )
-    if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
+    if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)(i));
   G4cout << " WARNING !!! - The Material " << aMaterial->GetName()
        << " has no elements, NULL pointer returned." << G4endl;
   return NULL;

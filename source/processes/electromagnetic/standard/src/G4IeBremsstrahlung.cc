@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeBremsstrahlung.cc,v 1.5 2000-04-25 14:33:08 maire Exp $
+// $Id: G4IeBremsstrahlung.cc,v 1.6 2001-02-05 17:53:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -928,7 +928,9 @@ void G4IeBremsstrahlung::BuildLambdaTable(const G4ParticleDefinition& ParticleTy
    }
    theMeanFreePathTable = new G4PhysicsTable( G4Material::GetNumberOfMaterials() ) ;
 
+   PartialSumSigma.clearAndDestroy();
    PartialSumSigma.resize( G4Material::GetNumberOfMaterials() );
+
    G4PhysicsLogVector* ptrVector;
    for ( G4int J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
        { 
@@ -966,7 +968,7 @@ void G4IeBremsstrahlung::ComputePartialSumSigma(const G4ParticleDefinition* Part
    const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
    G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[Imate];
 
-   PartialSumSigma(Imate) = new G4ValVector(NbOfElements);
+   PartialSumSigma[Imate] = new G4DataVector();
 
    G4double SIGMA = 0. ;
 
@@ -976,7 +978,7 @@ void G4IeBremsstrahlung::ComputePartialSumSigma(const G4ParticleDefinition* Part
                  ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
                                                  (*theElementVector)(Ielem)->GetZ(), 
                                                  GammaEnergyCut );
-        PartialSumSigma(Imate)->insertAt(Ielem, SIGMA);
+        PartialSumSigma[Imate]->push_back(SIGMA);
    }
 }
 
@@ -1402,9 +1404,9 @@ G4Element* G4IeBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
   const G4int NumberOfElements = aMaterial->GetNumberOfElements();
   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
 
-  G4double rval = G4UniformRand()*((*PartialSumSigma(Index))(NumberOfElements-1));
+  G4double rval = G4UniformRand()*((*PartialSumSigma[Index])[NumberOfElements-1]);
   for ( G4int i=0; i < NumberOfElements; i++ )
-    if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
+    if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)(i));
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
        << "' has no elements, NULL pointer returned." << G4endl;
   return NULL;

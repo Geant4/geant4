@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2001-01-24 14:55:12 urban Exp $
+$Id: History,v 1.18 2001-02-05 17:53:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,16 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+05 feb 01: G.Cosmo (stand-V03-00-02)
+- Migration to STL for G4DataVector and G4OrderedTable.
+  Modified files: G4SynchrotronRadiation.hh, G4IeBremsstrahlung.cc,
+                  G4eBremsstrahlung.cc.
+
 23 jan 01: mma (stand-V03-00-01)
 - corrections in e/hEnergyLoss.cc: AlongStepDoIt L.Urban 23-01-01
   PostStep information is not used any more in AlongStepDoIt
- when generating sub-cutoff delta rays. (bug found by Babar)
+  when generating sub-cutoff delta rays. (bug found by Babar)
      
 16 jan 01: mma (stand-V03-00-00)
 - small corrections in e/hEnergyLoss.cc L.Urban 11-01-01
   to ensure consistency between cut in range and step limitation
- due to energy loss (finalRange data member <-> cut in range)
+  due to energy loss (finalRange data member <-> cut in range)
 - change in energy loss computation in eBrems.hh and .cc L.Urban 11-01-01
   parametrization of energy loss due to soft brems has been corrected,
   it was too big for big cut values.
