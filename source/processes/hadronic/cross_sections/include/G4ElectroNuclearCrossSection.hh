@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.hh,v 1.3 2001-11-15 09:48:11 hpw Exp $
+// $Id: G4ElectroNuclearCrossSection.hh,v 1.4 2001-11-27 15:08:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -143,7 +143,7 @@ inline G4double G4ElectroNuclearCrossSection::DFun(G4double x)
 inline G4double G4ElectroNuclearCrossSection::Fun(G4double x)
 {return (lastLE*HighEnergyPhi(x)-HighEnergyFun(x));}
 
-inline G4double G4ElectroNuclearCrossSection::HighEnergyPhi(G4double lE)
+inline G4double G4ElectroNuclearCrossSection::HighEnergyPhi(G4double lEn)
 {
   static const G4double le=log(2000.);
   static const G4double c1=0.16;
@@ -159,10 +159,10 @@ inline G4double G4ElectroNuclearCrossSection::HighEnergyPhi(G4double lE)
   if     (lastH<.005) f2=f21;
   else if(lastH<0.01) f2=f22;
   else if(lastH<0.07) f2=f23;
-  return f1*(exp(c1*lE)-e1)+f2*(exp(c2*lE)-e2);
+  return f1*(exp(c1*lEn)-e1)+f2*(exp(c2*lEn)-e2);
 }
 
-inline G4double G4ElectroNuclearCrossSection::HighEnergyFun(G4double lE)
+inline G4double G4ElectroNuclearCrossSection::HighEnergyFun(G4double lEn)
 {
   static const G4double le=log(2000.);
   static const G4double c1=0.16;
@@ -180,8 +180,8 @@ inline G4double G4ElectroNuclearCrossSection::HighEnergyFun(G4double lE)
   if     (lastH<.005) f2=f21;
   else if(lastH<0.01) f2=f22;
   else if(lastH<0.07) f2=f23;
-  G4double h1=c1*lE;
-  G4double h2=c2*lE;
+  G4double h1=c1*lEn;
+  G4double h2=c2*lEn;
   return f1*((h1-1.)*exp(h1)-e1)+f2*((h2-1.)*exp(h2)-e2);
 }
 
