@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProPerpSpin.cc,v 1.12 2003-06-16 16:51:22 gunter Exp $
+// $Id: testProPerpSpin.cc,v 1.13 2003-10-29 10:00:35 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -66,7 +66,7 @@ class G4LinScale : public G4VPVParameterisation
   
   virtual void ComputeDimensions(G4Box &pBox,
 				 const G4int n,
-				 const G4VPhysicalVolume* pRep) const
+				 const G4VPhysicalVolume* ) const
   {
     pBox.SetXHalfLength(10);
     pBox.SetYHalfLength(5+n);
@@ -299,7 +299,7 @@ void  ObsoleteSetChargeMomentumMass(G4double charge, G4double MomentumXc, G4doub
 //
 // Test Stepping
 //
-G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
+G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int ) // type
 {
     void report_endPV(G4ThreeVector    Position, 
                   G4ThreeVector UnitVelocity,
@@ -314,16 +314,20 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
                   G4VPhysicalVolume* startVolume);
 
     G4UniformMagField MagField(10.*tesla, 0., 0.);  // Tesla Defined ? 
-    G4Navigator   *pNavig= G4TransportationManager::
-                    GetTransportationManager()-> GetNavigatorForTracking();
-    G4PropagatorInField *pMagFieldPropagator= SetupPropagator(type);
+    G4TransportationManager* transportMgr = G4TransportationManager::GetTransportationManager();
+    G4Navigator* pNavig=  transportMgr-> GetNavigatorForTracking();
+    // G4Navigator   *pNavig= G4TransportationManager::
+    //               GetTransportationManager()-> GetNavigatorForTracking();
 
+    // G4PropagatorInField *pMagFieldPropagator= SetupPropagator(type);
+    G4PropagatorInField *pMagFieldPropagator= 
+                            transportMgr->GetPropagatorInField(); 
+      
     pMagFieldPropagator->SetChargeMomentumMass(  
 			    +1.,                    // charge in e+ units
 			    0.1*GeV,                // Momentum in Mev/c ?
 			    0.105658387*GeV );
     pNavig->SetWorldVolume(pTopNode);
-
 
     G4VPhysicalVolume *located;
     G4double step_len, physStep, safety;
@@ -480,9 +484,21 @@ int main(int argc, char **argv)
     if( argc == 2 )
       type = atoi(argv[1]);
 
+    // Setup the Propagator and register it with the Transportation Manager
+    G4PropagatorInField *pMagFieldPropagator= SetupPropagator(type);
+
+    G4cout << " Using the following values for " 
+	   << " Min Eps = " <<  pMagFieldPropagator->GetMinimumEpsilonStep()
+           << " and "
+	   << " Max Eps = " <<  pMagFieldPropagator->GetMaximumEpsilonStep()
+	   << G4endl; 
+
+// Do the tests without voxels
+    G4cout << " Test with no voxels" << G4endl; 
     testG4PropagatorInField(myTopNode, type);
 
 // Repeat tests but with full voxels
+    G4cout << " Test with full voxels" << G4endl; 
     G4GeometryManager::GetInstance()->OpenGeometry();
     G4GeometryManager::GetInstance()->CloseGeometry(true);
 
@@ -494,8 +510,8 @@ int main(int argc, char **argv)
 
 
 void report_endPV(G4ThreeVector    Position, 
-                  G4ThreeVector UnitVelocity,
-                  G4ThreeVector Spin,
+                  G4ThreeVector , // UnitVelocity,
+                  G4ThreeVector , // Spin,
 		  G4double step_len, 
                   G4double physStep, 
                   G4double safety,
