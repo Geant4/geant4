@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.cc,v 1.6 2003-01-17 17:14:15 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.7 2003-01-27 13:47:44 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,6 +69,7 @@ Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
       UI->ApplyCommand("/vis/scene/notifyHandlers");
     } 
   number=0;
+  numberB=0;
   numberTransp=0;
   numberRay=0;
   numberPh=0; 
@@ -105,7 +106,10 @@ G4cout<<"---------- Particelle primarie gamma -------------- "<<number<<G4endl;
   G4cout<<numberPh<< " processi fotoelettrici"<<G4endl;
   G4cout<<numberCo<< " processi Compton"<< G4endl;
   G4cout<<numberPair<< " processi di produzione di coppie"<< G4endl;}
-  
+ 
+  G4cout<<"particelle trasmesse"<<number<<G4endl;
+  G4cout<<"particelle bacscatterate"<<numberB<<G4endl;
+ 
 }
 
 
@@ -115,7 +119,10 @@ void  Tst50RunAction::Trans_number()
 {
   number= number+1;
 }
-
+void  Tst50RunAction::Back_number()
+{
+  numberB= numberB+1;
+}
 void  Tst50RunAction::primary_processes(G4int i)
 {
   if( i==1) numberTransp=numberTransp+1;

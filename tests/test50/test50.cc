@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.11 2003-01-17 17:14:13 guatelli Exp $
+// $Id: test50.cc,v 1.12 2003-01-27 13:47:43 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,11 +64,11 @@ HepRandom::setTheEngine(new RanecuEngine);
  G4bool end=true;
  G4bool SP=false;
  G4String filename="test50.txt";
-
+ G4cout<<argc<<":argc"<<G4endl;
  G4cout.setf(ios::scientific, ios::floatfield);
    
 
-if (argc<1){G4cout <<"Input file is not specified!"<<G4endl;}
+if (argc==1){G4cout <<"Input file is not specified!"<<G4endl;}
  ifstream* fin=new ifstream();
  string fname=argv[1];
  fin->open(fname.c_str());
@@ -201,7 +201,7 @@ G4std::ofstream ofs;
   UI->ApplyCommand("/event/verbose 0");
   UI->ApplyCommand("/tracking/verbose 0");
   
-  if(argc<1)
+  if(argc==2)
   // Define (G)UI terminal for interactive mode  
   { 
     // G4UIterminal is a (dumb) terminal.
@@ -212,7 +212,7 @@ G4std::ofstream ofs;
       session = new G4UIterminal();
 #endif    
 
-    UI->ApplyCommand("/control/execute/");
+    UI->ApplyCommand("/control/execute ");
    
 
     session->SessionStart();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.13 2003-01-17 17:14:15 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.14 2003-01-27 13:47:44 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,6 +113,9 @@ IDnow = run_ID+1000*evno+10000*(Step->GetTrack()->GetTrackID())+
     KinE = Step->GetTrack()->GetKineticEnergy();
 
 //    EDep = Step->GetTrack()->GetTotalEnergyDeposit();
+    XIMD=0.;
+    YIMD=0.;
+    ZIMD=1.;
 
     XPos = Step->GetTrack()->GetPosition().x();
     YPos = Step->GetTrack()->GetPosition().y();
@@ -124,35 +127,33 @@ IDnow = run_ID+1000*evno+10000*(Step->GetTrack()->GetTrackID())+
     
     G4String particle_name= p_Primary->GetParticle(); 
     // ---------- energy of primary transmitted particles-----------// 
-    /*  
+     
 if(0 == Step->GetTrack()->GetParentID() ) 
   {
-   
-	G4cout<<"--------"<<Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()<<G4endl;
-    G4cout<<"-------------"<<Step->GetTrack()->GetVolume()->GetName()              <<"-----------------------"<<G4endl;
-
-
+    if(StoppingPower==false && Range==false && RadiationY==false)
+      {
+    if(particle_name=="e-")
+      {  
 if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
-  G4cout<<"arrivi dentro al target"<<G4endl; 
-  G4cout<<"-------------"<<Step->GetTrack()->GetNextVolume()->GetName()<<G4endl;
+ 
+ 
     if(Step->GetTrack()->GetNextVolume()->GetName() == "World" ) {
- G4cout<<"arrivi dentro al WORLD"<<G4endl;   
+
    //volume in cui si esce e' il target 
  G4cout<<XMoD<<YMoD<<ZMoD<<G4endl;   
-      if(XMoD==0 && YMoD==0 && ZMoD==1){G4cout<<KinE<<G4endl;
-      analysis->energy_transmitted(KinE);
-       runaction->Trans_number();
+    MMoD=sqrt(pow(XMoD,2.0)+pow(YMoD,2.0)+pow(ZMoD,2.0));
+    MIMD=sqrt(pow(XIMD,2.0)+pow(YIMD,2.0)+pow(ZIMD,2.0));
+   
+   
+    G4cout<<(XMoD*XIMD+YMoD*YIMD+ZMoD*ZIMD)/(MMoD*MIMD)<<G4endl;
+    G4cout<<ZMoD<<G4endl;
+    
+    if (ZMoD>0)runaction->Trans_number();
+    if(ZMoD<0) runaction->Back_number();
 
-       }}}}
+    }}}}}
    
-// Theta = 0;
 /*
-    } else if (MIMD == 0) {
-	Theta = 0;
-    } else {   
-	Theta = acos((XMoD*XIMD+YMoD*YIMD+ZMoD*ZIMD)/(MMoD*MIMD))
-    }
-   
     //susanna, istogrammo i processi delle particelle primarie// 
 
    G4String particle_name= p_Primary->GetParticle(); 
@@ -167,7 +168,6 @@ if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
    
 
    }
-  
    
 
 if(particle_name=="gamma")
@@ -263,6 +263,7 @@ if(pmtfile.is_open()){
 }}
 }}}
 }
+
 if(Range)
 {
 G4std::ofstream pmtfile(filename, G4std::ios::app);
