@@ -39,6 +39,7 @@
 #include "Test30HadronProduction.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4PreCompoundModel.hh"
+#include "G4BinaryCascade.hh"
 
 class G4VProcess;
 class G4Material;
@@ -56,6 +57,8 @@ class Test30Physics
     G4double GetNucleusMass() {return theProcess->GetMass();};
     G4ExcitationHandler* GetDeExcitation() {return theDeExcitation;};
     G4PreCompoundModel* GetPreCompound() {return thePreCompound;};
+    void setCutOnP(G4double val) {if(hkmod) hkmod->setCutOnP(val);};
+    void setCutOnPPP(G4double val) {if(hkmod) hkmod->setCutOnPPP(val);};
 
   private:
 
@@ -64,6 +67,7 @@ class Test30Physics
     Test30HadronProduction* theProcess;
     G4ExcitationHandler*    theDeExcitation;
     G4PreCompoundModel*     thePreCompound;
+    G4BinaryCascade*        hkmod;
 };
 
 #endif

@@ -121,6 +121,8 @@ int main(int argc, char** argv)
   G4double  emax     = 160.*MeV;
   G4double  emaxpi   = 200.*MeV;
   G4double ebinlog   = 2.0*MeV;
+  G4double eBound    = 70.*MeV;
+  G4double kBound    = 0.2;
   G4Material* material = 0;
   G4bool nevap = false;
   G4bool gtran = false;
@@ -246,6 +248,8 @@ int main(int argc, char** argv)
   G4cout << "#HETCEmission" << G4endl;
   G4cout << "#GNASHTransition" << G4endl;
   G4cout << "#GEMEvaporation" << G4endl;
+  G4cout << "#eBound" << G4endl;
+  G4cout << "#kBound" << G4endl;
 
 
 
@@ -309,6 +313,11 @@ int main(int argc, char** argv)
       } else if(line == "#step(mm)") {
         (*fin) >> theStep;
         theStep *= mm;
+      } else if(line == "#eBound(MeV)") {
+        (*fin) >> eBound;
+        eBound *= MeV;
+      } else if(line == "#kBound") {
+        (*fin) >> kBound;
       } else if(line == "#material") {
         (*fin) >> nameMat;
       } else if(line == "#particle") {
@@ -365,14 +374,18 @@ int main(int argc, char** argv)
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
     G4ExcitationHandler* theDeExcitation = phys->GetDeExcitation();
     G4PreCompoundModel* thePreCompound = phys->GetPreCompound();
-    if (gtran) thePreCompound->UseGNASHTransition();
-    if (gemis) thePreCompound->UseHETCEmission();
+    if (gtran && thePreCompound) thePreCompound->UseGNASHTransition();
+    if (gemis && thePreCompound) thePreCompound->UseHETCEmission();
     if (nevap) {
       G4Evaporation* evp = new G4Evaporation();
       evp->SetGEMChannel();
       theDeExcitation->SetEvaporation(evp);
     }
     G4double amass = phys->GetNucleusMass();
+    if(nameGen == "binary") {
+      phys->setCutOnP(eBound);
+      phys->setCutOnPPP(kBound);
+    }
 
     const G4ParticleDefinition* proton = G4Proton::Proton();
     const G4ParticleDefinition* neutron = G4Neutron::Neutron();
@@ -412,11 +425,11 @@ int main(int argc, char** argv)
     // Creating a tree mapped to a new hbook file.
     G4std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,  "hbook", false, true) );
     G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
- 
+
     // Creating a tuple factory, whose tuples will be handled by the tree
     //   G4std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
-    const G4int nhisto = 56; 
+    const G4int nhisto = 56;
     AIDA::IHistogram1D* h[nhisto];
     //    AIDA::IHistogram2D* h2;
     //AIDA::ITuple* ntuple1 = 0;
@@ -460,7 +473,7 @@ int main(int argc, char** argv)
       h[15]=hf->createHistogram1D("16","delta E (MeV)",20,-1.,1.);
       h[16]=hf->createHistogram1D("17","delta Pz (GeV)",20,-1.,1.);
       h[17]=hf->createHistogram1D("18","delta Pt (GeV)",20,-1.,1.);
-      
+
       h[18]=hf->createHistogram1D("19","E (MeV) for pi0",100,0.,energy);
       h[19]=hf->createHistogram1D("20","Pz (MeV) for pi0",100,-pmax,pmax);
       h[20]=hf->createHistogram1D("21","Pt (MeV) for pi0",100,0.,pmax);
@@ -768,44 +781,44 @@ int main(int argc, char** argv)
             h[11]->fill(e/MeV, 1.0);
 	    h[21]->fill(e/MeV, factor);
 	    h[24]->fill(cos(theta), factora);
-		
+
           } else if(pd == pin) {
-    
+
 	    h[1]->fill(4.0, 1.0);
-            h[4]->fill(pz/MeV, 1.0); 
+            h[4]->fill(pz/MeV, 1.0);
             h[8]->fill(pt/MeV, 1.0);
             h[12]->fill(e/MeV, 1.0);
             for(G4int kk=0; kk<nanglpi; kk++) {
               if(bngpi1[kk] <= thetad && thetad <= bngpi2[kk]) {
-                h[40+kk]->fill(e/MeV, cngpi[kk]); 
+                h[40+kk]->fill(e/MeV, cngpi[kk]);
                 break;
 	      }
 	    }
-						
+
           } else if(pd == pip) {
-    
-	    h[1]->fill(3.0, 1.0);		
-            h[5]->fill(pz/MeV, 1.0); 
+
+	    h[1]->fill(3.0, 1.0);
+            h[5]->fill(pz/MeV, 1.0);
             h[9]->fill(pt/MeV, 1.0);
             h[13]->fill(e/MeV, 1.0);
             for(G4int kk=0; kk<nanglpi; kk++) {
               if(bngpi1[kk] <= thetad && thetad <= bngpi2[kk]) {
-                h[45+kk]->fill(e/MeV, cngpi[kk]); 
+                h[45+kk]->fill(e/MeV, cngpi[kk]);
                 break;
 	      }
 	    }
 
 	  } else if(pd == pi0) {
-    
-	    h[1]->fill(5.0, 1.0);	
-	    h[18]->fill(e/MeV, 1.0);		
-	    h[19]->fill(pz/MeV, 1.0); 
+
+	    h[1]->fill(5.0, 1.0);
+	    h[18]->fill(e/MeV, 1.0);
+	    h[19]->fill(pz/MeV, 1.0);
 	    h[20]->fill(pt/MeV, 1.0);
 
 	  } else if(pd == neutron) {
-    
-	    h[1]->fill(2.0, 1.0);	  
-            h[6]->fill(pz/MeV, 1.0); 
+
+	    h[1]->fill(2.0, 1.0);
+            h[6]->fill(pz/MeV, 1.0);
             h[10]->fill(pt/MeV, 1.0);
             h[14]->fill(e/MeV, 1.0);
 	    h[22]->fill(e/MeV, factor);
@@ -827,21 +840,21 @@ int main(int argc, char** argv)
 	    }
 
 	  } else if(pd == deu) {
-	    h[1]->fill(6.0, 1.0);	
+	    h[1]->fill(6.0, 1.0);
 	  } else if(pd == tri) {
-	    h[1]->fill(7.0, 1.0);	
+	    h[1]->fill(7.0, 1.0);
 	  } else if(pd == alp) {
-	    h[1]->fill(8.0, 1.0);							
+	    h[1]->fill(8.0, 1.0);
 	  } else {
-	    h[1]->fill(9.0, 1.0);	
+	    h[1]->fill(9.0, 1.0);
 	  }
 	}
         if(i<n) delete aChange->GetSecondary(i);
       }
-								
+
       if(verbose > 0) {
         G4cout << "Energy/Momentum balance= " << labv << G4endl;
-      }	
+      }
 
 
       px = labv.px();	

@@ -22,6 +22,10 @@
 /test31/NumberOfEvents       1000
 /test31/gun/beamE            1000.0 MeV
 #
+/process/eLoss/preciseRange  true
+/process/eLoss/integral      false
+/run/initialize
+#
 /gun/particle e-
 #/gun/particle gamma
 #/gun/particle proton

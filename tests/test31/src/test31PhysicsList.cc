@@ -40,6 +40,7 @@
 #include "test31LEparametrised.hh"
 #include "test31CHIPS.hh"
 #include "test31IonSpecial.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,6 +48,7 @@ test31PhysicsList::test31PhysicsList() : G4VModularPhysicsList(),
   emPhysicsListIsRegistered(false),
   hadPhysicsListIsRegistered(false)
 {
+  G4LossTableManager::Instance();
   currentDefaultCut   = 1.0*mm;
   cutForGamma         = currentDefaultCut;
   cutForElectron      = currentDefaultCut;

@@ -154,6 +154,7 @@ void Test30Physics::Initialise()
   theProcess = 0;
   theDeExcitation = 0;
   thePreCompound = 0;
+  hkmod = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -223,7 +224,8 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
     hkm->SetDeExcitation(pcm);
-  
+    hkmod = hkm;
+
   } else if(gen_name == "binary_no_pc") {
     G4BinaryCascade* hkm = new G4BinaryCascade();
     sg = new Test30VSecondaryGenerator(hkm, mat);

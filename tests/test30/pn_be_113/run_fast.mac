@@ -1,13 +1,13 @@
 //---------------------------------------
 //        Macro file for test30
-//         examine PostStepDoIt 
+//         examine PostStepDoIt
 //        for hadronic physics
 //      Created: 13.03.2002 V.Ivanchenko
-//--------------------------------------- 
+//---------------------------------------
 #verbose
 0
 #events
-100000
+50000
 //--------Proton_processes
 #particle
 proton
@@ -33,8 +33,10 @@ Be
 #dangle
 5.
 //--------
+#kBound
+0.2
 #generator
-kinetic
+binary
 #paw
 kin.paw
 #run
