@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.5 1999-02-07 17:32:15 johna Exp $
+// $Id: G4VisManager.hh,v 1.6 1999-08-27 10:25:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,9 +115,11 @@ class G4VisManager: public G4VVisManager, public G4VStateDependent {
   friend class G4VisCommandSetCullInvisible;
   friend class G4VisCommandShowView;
 
-public:
+protected:  // Only the subclass can instantiate.
 
   G4VisManager ();
+
+public:
 
   virtual ~G4VisManager ();
 
