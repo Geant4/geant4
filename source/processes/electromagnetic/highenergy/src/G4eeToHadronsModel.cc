@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.cc,v 1.1 2004-11-19 18:46:14 vnivanch Exp $
+// $Id: G4eeToHadronsModel.cc,v 1.2 2004-12-01 18:13:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,8 @@
 #include "G4PhysicsLogVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4eeToHadronsModel::G4eeToHadronsModel(const G4Vee2hadrons* m, 
 				             G4int ver,
@@ -131,7 +133,7 @@ void G4eeToHadronsModel::Initialise(const G4ParticleDefinition*,
 
   lowKinEnergy  = 0.5*emin*emin/electron_mass_c2 - 2.0*electron_mass_c2;
 
-  epeak = std::min(model->PeakEnergy(), emax);
+  epeak = min(model->PeakEnergy(), emax);
   peakKinEnergy  = 0.5*epeak*epeak/electron_mass_c2 - 2.0*electron_mass_c2;
 
   if(verbose>0) {
@@ -219,13 +221,13 @@ G4DynamicParticle* G4eeToHadronsModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4eeToHadronsModel::SampleSecondaries(
+vector<G4DynamicParticle*>* G4eeToHadronsModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle* dParticle,
                                    G4double,
                                    G4double)
 {
-  std::vector<G4DynamicParticle*>* newp = 0;
+  vector<G4DynamicParticle*>* newp = 0;
   if(crossPerElectron) {
     G4double t = dParticle->GetKineticEnergy();
     G4double e = 2.0*electron_mass_c2*sqrt(1.0 + 0.5*t/electron_mass_c2);
@@ -250,7 +252,7 @@ std::vector<G4DynamicParticle*>* G4eeToHadronsModel::SampleSecondaries(
           dp->Set4Momentum(v);
 	}
       } else {
-        newp = new std::vector<G4DynamicParticle*>;
+        newp = new vector<G4DynamicParticle*>;
       }
       gLv.boost(inBoost);
       gamma->Set4Momentum(gLv);
@@ -315,7 +317,7 @@ G4DynamicParticle* G4eeToHadronsModel::GenerateCMPhoton(G4double e)
 
   G4double s0 = crossBornPerElectron->GetValue(e, b);
   G4double de = (emax - emin)/(G4double)nbins;
-  G4double x0 = std::min(de,e - emin)/e;
+  G4double x0 = min(de,e - emin)/e;
   G4double ds = crossBornPerElectron->GetValue(e, b)
               *(del*pow(x0,bt) - bt*(x0 - 0.25*x0*x0));
   G4double e1 = e*(1. - x0);
@@ -346,7 +348,7 @@ G4DynamicParticle* G4eeToHadronsModel::GenerateCMPhoton(G4double e)
       x  = 1. - epeak/e;
       G4double s2 = crossBornPerElectron->GetValue(epeak, b);
       G4double w2 = bt*(del*pow(x,btm1) - 1.0 + 0.5*x);
-      grej = std::max(grej,s2*w2);
+      grej = max(grej,s2*w2);
       //G4cout << "epeak= " << epeak << " s2= " << s2 << " w2= " << w2 
       //     << " grej= " << grej << G4endl;
     }

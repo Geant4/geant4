@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToTwoPiModel.cc,v 1.1 2004-11-19 18:46:14 vnivanch Exp $
+// $Id: G4eeToTwoPiModel.cc,v 1.2 2004-12-01 18:13:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,6 +55,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+using namespace std;
+
 G4eeToTwoPiModel::G4eeToTwoPiModel(G4eeCrossSections* cr):
   cross(cr)
 {
@@ -81,8 +83,8 @@ void G4eeToTwoPiModel::Initialise()
 G4PhysicsVector* G4eeToTwoPiModel::PhysicsVector(G4double emin, 
                                                  G4double emax) const
 {
-  G4double tmin = std::max(emin, 2.0*massPi);
-  G4double tmax = std::max(tmin, emax);
+  G4double tmin = max(emin, 2.0*massPi);
+  G4double tmax = max(tmin, emax);
   G4int nbins = (G4int)((tmax - tmin)/MeV);
   G4PhysicsVector* v = new G4PhysicsLinearVector(emin,emax,nbins);
   return v;
@@ -90,10 +92,10 @@ G4PhysicsVector* G4eeToTwoPiModel::PhysicsVector(G4double emin,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4eeToTwoPiModel::SampleSecondaries(
+vector<G4DynamicParticle*>* G4eeToTwoPiModel::SampleSecondaries(
 	    G4double e, const G4ThreeVector& direction) const
 {
-  std::vector<G4DynamicParticle*>* newp = new std::vector<G4DynamicParticle*>;
+  vector<G4DynamicParticle*>* newp = new vector<G4DynamicParticle*>;
   G4double tkin = 0.5*e - massPi;
   if(tkin < 0.0) tkin = 0.0;
   G4double cost;

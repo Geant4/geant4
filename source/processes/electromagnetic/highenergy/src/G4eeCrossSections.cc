@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeCrossSections.cc,v 1.1 2004-11-19 18:46:14 vnivanch Exp $
+// $Id: G4eeCrossSections.cc,v 1.2 2004-12-01 18:13:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,14 +53,12 @@
 #include "G4KaonZeroLong.hh"
 #include "G4PhysicsLinearVector.hh"
 
-//#include <string>
 #include <iostream>
 #include <fstream>
-//#include <iomanip>
-//#include <cstdlib>
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4eeCrossSections::G4eeCrossSections()
 {
@@ -163,7 +161,7 @@ void G4eeCrossSections::Initialise()
   G4String w0, w1, w2;
   G4int nbins;
   const G4String fname = "wrhopi.wid"; 
-  std::ifstream  fi(fname.c_str()); 
+  ifstream  fi(fname.c_str()); 
   fi >> w0 >> nbins >> w1 >> emin >> w2 >> emax;
   emin *= MeV;
   emax *= MeV;
@@ -186,16 +184,16 @@ void G4eeCrossSections::Initialise()
 G4double G4eeCrossSections::CrossSection2pi(G4double e) 
 {
  
-  std::complex<G4double> xr(cos(PhRho),sin(PhRho));
-  std::complex<G4double> xo(cos(PhOm2Pi),sin(PhOm2Pi));
-  std::complex<G4double> xf(cos(PhPhi2Pi),sin(PhPhi2Pi));
+  complex<G4double> xr(cos(PhRho),sin(PhRho));
+  complex<G4double> xo(cos(PhOm2Pi),sin(PhOm2Pi));
+  complex<G4double> xf(cos(PhPhi2Pi),sin(PhPhi2Pi));
 
   G4double s = e*e;
-  std::complex<G4double> drho = DpRho(e);
-  std::complex<G4double> dom  = DpOm(e);
-  std::complex<G4double> dphi = DpPhi(e);
+  complex<G4double> drho = DpRho(e);
+  complex<G4double> dom  = DpOm(e);
+  complex<G4double> dphi = DpPhi(e);
 
-  std::complex<G4double> amp = 
+  complex<G4double> amp = 
       sqrt(Width2p(s,MsRho,GRho,1.0,MsPi)*MsRho3*BrRhoEe*GRho)*xr/drho
     + sqrt(Width2p(s,MsOm,GOm,BrOm2Pi,MsPi)*MsOm3*BrOmEe*GOm)*xo/dom
     + sqrt(Width2p(s,MsPhi,GPhi,BrPhi2Pi,MsPi)*MsPhi3*BrPhiEe*GPhi)*xf/dphi;
@@ -289,25 +287,25 @@ G4double G4eeCrossSections::WidthPhi(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::complex<G4double> G4eeCrossSections::DpRho(G4double e) 
+complex<G4double> G4eeCrossSections::DpRho(G4double e) 
 {
-  std::complex<G4double> d(MsRho*MsRho - e*e, -e*WidthRho(e));
+  complex<G4double> d(MsRho*MsRho - e*e, -e*WidthRho(e));
   return d;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::complex<G4double> G4eeCrossSections::DpOm(G4double e) 
+complex<G4double> G4eeCrossSections::DpOm(G4double e) 
 {
-  std::complex<G4double> d(MsOm*MsOm - e*e, -e*WidthOm(e));
+  complex<G4double> d(MsOm*MsOm - e*e, -e*WidthOm(e));
   return d;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::complex<G4double> G4eeCrossSections::DpPhi(G4double e) 
+complex<G4double> G4eeCrossSections::DpPhi(G4double e) 
 {
-  std::complex<G4double> d(MsPhi*MsPhi - e*e, -e*WidthPhi(e));
+  complex<G4double> d(MsPhi*MsPhi - e*e, -e*WidthPhi(e));
   return d;
 }
 

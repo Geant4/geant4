@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.cc,v 1.1 2004-11-19 18:46:13 vnivanch Exp $
+// $Id: G4AnnihiToMuPair.cc,v 1.2 2004-12-01 18:13:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
@@ -49,7 +49,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// constructor
+using namespace std;
 
 G4AnnihiToMuPair::G4AnnihiToMuPair(const G4String& processName,
     G4ProcessType type):G4VDiscreteProcess (processName, type)

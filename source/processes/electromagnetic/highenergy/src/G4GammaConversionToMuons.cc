@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc,v 1.1 2004-11-19 18:46:14 vnivanch Exp $
+// $Id: G4GammaConversionToMuons.cc,v 1.2 2004-12-01 18:13:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
@@ -40,7 +40,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-// constructor
+using namespace std;
 
 G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
     G4ProcessType type):G4VDiscreteProcess (processName, type),
@@ -316,7 +316,7 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     thetaPlus =GammaMuonInv*(u+xiHalf)/xPlus;
     thetaMinus=GammaMuonInv*(u-xiHalf)/xMinus;
 
-  } while ( abs(thetaPlus)>pi || abs(thetaMinus) >pi);
+  } while ( fabs(thetaPlus)>pi || fabs(thetaMinus) >pi);
 
   // now construct the vectors
   // azimuthal symmetry, take phi0 at random between 0 and 2 pi
