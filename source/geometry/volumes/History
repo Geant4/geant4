@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2001-10-24 15:33:47 gcosmo Exp $
+$Id: History,v 1.52 2001-11-01 18:59:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,9 @@ committal in the CVS repository !
 Oct 18th, 2001       J. Apostolakis - geomvol-V03-02-01
  - Added a new 'maximum' epsilon value in G4PropagatorInField,
     as some ill-conditions appear to be due to large proposed relative errors.
+
+Nov 1st, 2001        G. Cosmo - geomvol-V03-02-00b
+- G4GeometryMessenger.cc: fixed definition of unit category for tolerance.
 
 Oct 24th, 2001       G. Cosmo - geomvol-V03-02-00a
 - Moved G4GeomTestMessenger from geometry/verification to geometry/volumes.
