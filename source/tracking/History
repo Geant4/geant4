@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2001-12-04 18:31:17 japost Exp $
+$Id: History,v 1.27 2001-12-06 10:06:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 06, 01 G.Cosmo (tracking-V03-02-05)
+- G4SteppingVerbose.cc: removed trigraph warning on Linux-g++.
 
 Nov 27, 01 J.Apostolakis (tracking-V03-02-04)
   Correction to the use the touchable Handle for secondary tracks,
