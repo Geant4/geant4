@@ -20,13 +20,16 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EventAction.hh,v 1.3 2002-12-13 11:34:28 gunter Exp $
+// $Id: A01EventAction.hh,v 1.4 2003-08-14 23:27:26 duns Exp $
 // --------------------------------------------------------------
 //
 #ifndef A01EventAction_h
 #define A01EventAction_h 1
 
+#ifdef G4ANALYSIS_USE
+
 #include "AIDA/AIDA.h"
+
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
@@ -69,5 +72,6 @@ class A01EventAction : public G4UserEventAction
     inline void SetVerbose(G4int val) { verboseLevel = val; }
     inline G4int GetVerbose() const { return verboseLevel; }
 };
+#endif // G4ANALYSIS_USE
 
 #endif

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01app.cc,v 1.3 2002-12-13 11:34:27 gunter Exp $
+// $Id: A01app.cc,v 1.4 2003-08-14 23:27:25 duns Exp $
 // --------------------------------------------------------------
 //
 // --------------------------------------------------------------
@@ -39,8 +39,12 @@
 #include "A01DetectorConstruction.hh"
 #include "A01PhysicsList.hh"
 #include "A01PrimaryGeneratorAction.hh"
-#include "A01EventAction.hh"
+
 #include "A01TrackingAction.hh"
+
+#ifdef G4ANALYSIS_USE
+#include "A01EventAction.hh"
+#endif
 
 #ifdef G4VIS_USE
 #include "A01VisManager.hh"
@@ -68,7 +72,10 @@ int main(int argc,char** argv)
   runManager->SetUserAction(new A01PrimaryGeneratorAction);
 
   // optional user action classes
+#ifdef G4ANALYSIS_USE
   runManager->SetUserAction(new A01EventAction);
+#endif
+
   runManager->SetUserAction(new A01TrackingAction);
 
   if(argc>1)

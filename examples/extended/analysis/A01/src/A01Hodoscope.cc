@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01Hodoscope.cc,v 1.4 2003-07-11 21:32:02 duns Exp $
+// $Id: A01Hodoscope.cc,v 1.5 2003-08-14 23:27:26 duns Exp $
 // --------------------------------------------------------------
 //
 #include "A01Hodoscope.hh"
@@ -50,6 +50,7 @@ void A01Hodoscope::Initialize(G4HCofThisEvent*HCE)
   { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(hitsCollection); }
   HCE->AddHitsCollection(HCID,hitsCollection);
 }
+
 
 G4bool A01Hodoscope::ProcessHits(G4Step*aStep,G4TouchableHistory*/*ROhist*/)
 {

@@ -20,9 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EventAction.cc,v 1.4 2002-12-20 21:40:30 duns Exp $
+// $Id: A01EventAction.cc,v 1.5 2003-08-14 23:27:26 duns Exp $
 // --------------------------------------------------------------
 //
+#ifdef G4ANALYSIS_USE
 
 #include "A01EventAction.hh"
 #include "A01EventActionMessenger.hh"
@@ -310,5 +311,5 @@ void A01EventAction::EndOfEventAction(const G4Event* evt)
   }
 }
 
-
+#endif // G4ANALYSIS_USE
 
