@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.hh,v 1.2 1999-04-13 07:58:33 kurasige Exp $
+// $Id: G4ParticleTable.hh,v 1.3 1999-04-23 00:48:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,11 +58,7 @@ class G4ParticleTable
 
  public:
    virtual ~G4ParticleTable();
-
-   void RemoveAllParticles();
-   // remove all particles from G4ParticleTable and 
-   // delete them if they were created dynamically  (i.e. not static objects) 
-
+  
    static G4ParticleTable* GetParticleTable();
    // return the pointer to G4ParticleTable object
    //   G4ParticleTable is a "singleton" and can get its pointer by this function
@@ -135,6 +131,11 @@ class G4ParticleTable
    void                 DeleteMessenger();
   // create/delete messenger for the particle table 
  
+ protected:  
+   void RemoveAllParticles();
+   // remove all particles from G4ParticleTable and 
+   // delete them if they were created dynamically  (i.e. not static objects) 
+
  protected:
    static unsigned HashFun(const G4String& particle_name);
    static unsigned EncodingHashFun(const G4int& aEndcoding);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.7 1999-04-15 04:34:34 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.8 1999-04-23 00:48:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -135,7 +135,7 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
 #endif
       return 0;
     } 
-    G4double mass = GetIonMass(Z, A) + electronMass*G4double(Q);
+    G4double mass =  GetNucleusMass(Z, A) + electronMass*G4double(Z-Q);
     G4double charge =  G4double(Q)*eplus;
     // create an ion
     //   spin, parity, isospin values are fixed
@@ -205,7 +205,7 @@ G4String G4IonTable::GetIonName(G4int Z, G4int A, G4int J, G4int Q) const
   return name;
 }
 
-G4double  G4IonTable::GetIonMass(G4int Z, G4int A) const
+G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A) const
 {
   G4ParticleDefinition* ion=0;
   G4double mass;
@@ -228,11 +228,18 @@ G4double  G4IonTable::GetIonMass(G4int Z, G4int A) const
 	mass = ion->GetPDGMass();
   }else {
     // This routine returns mass of nuclei (w/o including electron mass) 
-    mass =  G4NucleiProperties::GetAtomicMass(G4double(A),G4double(Z));
-    mass -= electronMass*G4double(Z);
+    //   mass = Z*proton_mass + (A-Z)*neutron_mass - binding energy
+     G4double bindingEnergy = G4NucleiPropertiesTable::GetBindingEnergy(Z, A);
+     mass = G4double(Z)*protonMass + G4double(A-Z)*neutronMass - bindingEnergy;
   }
   return mass;
 }
+
+G4double  G4IonTable::GetIonMass(G4int Z, G4int A) const
+{
+   return GetNucleusMass(Z,A);
+}
+
 
 G4bool G4IonTable::IsIon(G4ParticleDefinition* particle) const
 {
