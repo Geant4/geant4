@@ -46,13 +46,12 @@
 #include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 
-
-//class G4HepRep;
+#include "G4HepRepMessenger.hh"
 
 class G4HepRepSceneHandler: public G4VSceneHandler {
 
     public:
-        G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4String& name = "");
+        G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepMessenger& messenger, const G4String& name = "");
         virtual ~G4HepRepSceneHandler ();
 
         void AddThis (const G4Box& box)                 { G4VSceneHandler::AddThis (box); }
@@ -151,11 +150,14 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         G4String getParentTypeName(int currentDepth);
 
         // initialized Member Variables
+        G4HepRepMessenger& messenger;
         G4String geometryLayer, eventLayer, calHitLayer;
         G4String trajectoryLayer, trajectoryPointLayer, hitLayer;
         G4String rootVolumeName;
         
         G4String baseName;
+        G4String eventNumberPrefix;
+        G4String eventNumberSuffix;
         G4int eventNumber;
         G4int eventNumberWidth;
         G4String extension;

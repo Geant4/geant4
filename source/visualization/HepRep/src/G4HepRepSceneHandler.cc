@@ -76,8 +76,9 @@ G4int G4HepRepSceneHandler::sceneCount = 0;
 //#define SDEBUG 1
 //#define PDEBUG 1
 
-G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4String& name)
+G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepMessenger& heprepMessenger, const G4String& name)
         : G4VSceneHandler (system, sceneCount++, name),
+          messenger             (heprepMessenger),
           geometryLayer         ("Geometry"),
           eventLayer            ("Event"),
           calHitLayer           ("CalHit"),
@@ -86,6 +87,8 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4S
           hitLayer              ("Hit"),
           rootVolumeName        ("Geometry"),
           baseName              (""),
+          eventNumberPrefix     (""),
+          eventNumberSuffix     (""),
           eventNumber           (1),
           eventNumberWidth      (-1),
           extension             (""),
@@ -136,6 +139,8 @@ void G4HepRepSceneHandler::open(G4String name) {
         writer = factory->createHepRepWriter(&cout, false, false);
         out  = NULL;
         baseName = name;
+        eventNumberPrefix = "";
+        eventNumberSuffix = "";
         extension = "";
         writeMultipleFiles = false;
         eventNumber = 0;
@@ -147,6 +152,8 @@ void G4HepRepSceneHandler::open(G4String name) {
         writer = factory->createHepRepWriter(&cerr, false, false);
         out = NULL;
         baseName = name;
+        eventNumberPrefix = "";
+        eventNumberSuffix = "";
         extension = "";
         writeMultipleFiles = false;
         eventNumber = 0;
@@ -177,24 +184,42 @@ void G4HepRepSceneHandler::open(G4String name) {
                 baseName = name;
             }
         
-            // look for 0000 pattern in G4Output-0000.heprep
-            int digit = baseName.length()-1; 
-            while (digit >= 0) {
-                if (!isdigit(baseName.at(digit))) break;
-                digit--;
+            writeMultipleFiles = false;
+            int startDigit = -1; int endDigit = -1;
+            string suffix = messenger.getEventNumberSuffix();
+            if (suffix != "") {
+                // look for 0000 pattern in suffix
+                endDigit = suffix.length()-1; 
+                while (endDigit >= 0) {
+                    if (isdigit(suffix.at(endDigit))) break;
+                    endDigit--;
+                }
+                if (endDigit < 0) {
+                    cerr << "/vis/heprep/appendEventNumberSuffix contains no digits" << endl;
+                } else {
+                    writeMultipleFiles = true;
+                    startDigit = endDigit;
+                    while (startDigit >= 0) {
+                        if (!isdigit(suffix.at(startDigit))) break;
+                        startDigit--;
+                    }
+                    startDigit++;
+                }                
             }
-            writeMultipleFiles = (digit > 0) || ((digit == 0) && isdigit(baseName.at(0)));
 
             if (writeMultipleFiles) {
-                eventNumber = atoi(baseName.substr(digit+1).c_str());
-                eventNumberWidth = baseName.length() - 1 - digit;
-                baseName = baseName.substr(0, digit+1);
+                eventNumberPrefix = suffix.substr(0, startDigit);
+                eventNumber = atoi(suffix.substr(startDigit, endDigit).c_str());
+                eventNumberWidth = endDigit +1 - startDigit;
+                eventNumberSuffix = suffix.substr(endDigit+1);
             } else {
                 // open single file here
                 openFile(baseName+extension);
         
                 eventNumber = 1;
                 eventNumberWidth = 10;
+                eventNumberPrefix = "";
+                eventNumberSuffix = "";
             }   
         }    
     }
@@ -257,7 +282,7 @@ bool G4HepRepSceneHandler::closeHepRep() {
     
     if (writeMultipleFiles) {
         stringstream fileName;
-        fileName << baseName << setw(eventNumberWidth) << setfill('0') << eventNumber << extension;
+        fileName << baseName << eventNumberPrefix << setw(eventNumberWidth) << setfill('0') << eventNumber << eventNumberSuffix << extension;
         openFile(fileName.str());
     }
         

@@ -21,32 +21,37 @@
 // ********************************************************************
 //
 //
+//
+#ifndef G4HepRepMessenger_HH
+#define G4HepRepMessenger_HH 1
 
-/**
- * @author Mark Donszelmann
- */
-#ifndef G4HEPREP_HH
-#define G4HEPREP_HH 1
+#include "G4UImessenger.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcommand.hh"
 
-//G4
-#include "G4VGraphicsSystem.hh"
-
-class G4HepRepMessenger;
-
-class G4HepRep: public G4VGraphicsSystem {
+class G4HepRepMessenger : public G4UImessenger {
+    
     public:
-        G4HepRep ();
-        virtual ~G4HepRep ();
-        G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
-        G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name = "");
+        G4HepRepMessenger();
+        virtual ~G4HepRepMessenger();
 
-        void removeSceneHandler();
-        void removeViewer();
+        virtual G4String GetCurrentValue(G4UIcommand * command);
+        virtual void SetNewValue(G4UIcommand * command, G4String newValue);
+        
+        virtual G4String getEventNumberSuffix();
+        virtual G4bool appendGeometry();
 
-    private:
-        G4VSceneHandler* sceneHandler;
-        G4VViewer* viewer;
-        G4HepRepMessenger* messenger;        
+
+    private:            
+        G4UIdirectory* heprepDirectory;
+        
+        G4String suffix;
+        G4UIcmdWithAString* setEventNumberSuffixCommand;
+        
+        G4bool geometry;
+//        G4UIcmdWithABool* appendGeometryCommand;
 };
 
 #endif

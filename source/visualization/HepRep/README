@@ -46,11 +46,13 @@ for stdout and stderr.
 /vis/scene/create filename.heprep.zip
 
 
-(Optional) To create separate files for each event, use a filename such as 
-filename-0001.heprep.zip to start writing files from 0001 to 9999 (or up),
-while filename-55.heprep.zip will start writing files from 55 to 99 (or up).
+(Optional) To create separate files for each event, you can set a suffix such as 
+"-0001" to start writing files from filename-0001.heprep.zip to 
+filename-9999.heprep.zip (or up), while "-55-sub" will start write files 
+filename-55-sub.heprep.zip to filename-99-sub.heprep.zip (or up).
 
-/vis/scene/create filename-0001.heprep.zip
+/vis/heprep/setEventNumberSuffix -0001
+(Note: suffix has to contain at least one digit)
 
 
 (Optional) To route the HepRep XML output to stdout (or stderr), 

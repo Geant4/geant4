@@ -33,6 +33,7 @@
 #include "G4Types.hh"
 #include "G4HepRepViewer.hh"
 #include "G4HepRepSceneHandler.hh"
+#include "G4HepRepMessenger.hh"
 
 //This
 #include "G4HepRep.hh"
@@ -47,9 +48,11 @@ G4HepRep::G4HepRep ()
                              G4VGraphicsSystem::threeD),
           sceneHandler(NULL),
           viewer(NULL) {
+    messenger = new G4HepRepMessenger();
 }
 
 G4HepRep::~G4HepRep () {
+    delete messenger;
 }
 
 G4VSceneHandler* G4HepRep::CreateSceneHandler (const G4String& name) {
@@ -57,7 +60,7 @@ G4VSceneHandler* G4HepRep::CreateSceneHandler (const G4String& name) {
         cout << "G4HepRep::CreateSceneHandler: Cannot create more than one G4HepRepSceneHandler" << endl;
         return NULL;
     }
-    sceneHandler = new G4HepRepSceneHandler (*this, name);
+    sceneHandler = new G4HepRepSceneHandler (*this, *messenger, name);
     return sceneHandler;
 }
 
