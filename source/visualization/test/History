@@ -1,7 +1,13 @@
-$Id: History,v 1.4 2000-04-12 12:53:03 johna Exp $
+$Id: History,v 1.5 2000-05-22 07:28:22 johna Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+22nd May 2000  John Allison
+- Invoke G4UItcsh in G4UIterminal in test19.cc (needs interfaces-V01-01-00).
+- Evgeni's node positions to avoid shared faces/edges in
+  MyDetectorConstruction.cc.
+- Changed colour of intercepts in MySteppingAction.cc.
 
 12th April 2000  John Allison  vis-V01-01-01
 - Added more boolean shapes and window to test.
