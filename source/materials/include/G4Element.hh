@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.10 2001-07-17 15:54:37 verderi Exp $
+// $Id: G4Element.hh,v 1.11 2001-09-13 08:57:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,7 +45,7 @@
 // in volume definitions via the G4Material class.
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // 09-07-96, new data members added by L.Urban
 // 17-01-97, aesthetic rearrangement, M.Maire
@@ -63,7 +63,7 @@
 // 30-03-01, suppression of the warning message in GetElement
 // 17-07-01, migration to STL, M. Verderi
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4ELEMENT_HH
 #define G4ELEMENT_HH
@@ -81,7 +81,7 @@ class G4Element;              //forward declaration
 typedef G4std::vector<G4Element*> G4ElementTable;
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Element
 {
@@ -132,9 +132,11 @@ public:  // with description
     G4IsotopeVector* GetIsotopeVector()    const {return theIsotopeVector;};
     
     //vector of relative abundance of each isotope:
-    G4double* GetRelativeAbundanceVector() const {return fRelativeAbundanceVector;};
+    G4double* GetRelativeAbundanceVector() const 
+                     {return fRelativeAbundanceVector;};
     
-    const G4Isotope* GetIsotope(G4int iso) const {return (*theIsotopeVector)[iso];};
+    const G4Isotope* GetIsotope(G4int iso) const 
+                     {return (*theIsotopeVector)[iso];};
 
     //the (static) Table of Elements:
     static const  G4ElementTable* GetElementTable() {return &theElementTable;};
@@ -195,7 +197,7 @@ private:
     // Isotope vector contains constituent isotopes of the element   
     size_t fNumberOfIsotopes;    // Number of isotopes added to the element
     G4IsotopeVector* theIsotopeVector;
-    G4double* fRelativeAbundanceVector;     // Fraction of nb of atomes per volume
+    G4double* fRelativeAbundanceVector;     // Fraction nb of atomes per volume
                                             // for each constituent
 
     // Set up the static Table of Elements
@@ -210,7 +212,7 @@ private:
     G4IonisParamElm* fIonisation;  // Pointer to ionisation parameters
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
 G4Element* G4Element::GetElement(G4String elementName)
@@ -218,12 +220,14 @@ G4Element* G4Element::GetElement(G4String elementName)
   // search the element by its name 
   for (size_t J=0 ; J<theElementTable.size() ; J++)
    {
-    if(theElementTable[J]->GetName() == elementName)
+    if (theElementTable[J]->GetName() == elementName)
       return theElementTable[J];
    }
    
   // the element does not exist in the table 
   return NULL;   
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.9 2001-07-17 15:54:40 verderi Exp $
+// $Id: G4Element.cc,v 1.10 2001-09-13 08:57:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // 26-06-96: Code uses operators (+=, *=, ++, -> etc.) correctly, P. Urban
 // 09-07-96: new data members added by L.Urban
@@ -42,14 +42,14 @@
 // 02-05-01: check identical Z in AddIsotope (marc)
 // 03-05-01, flux.precision(prec) at begin/end of operator<<
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Element.hh"
 #include "g4std/iomanip"
 
 G4ElementTable G4Element::theElementTable;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Constructor to Generate an element from scratch
 
@@ -85,15 +85,10 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
 
     // Store in table and set the index
     theElementTable.push_back(this);
-    G4ElementTable::const_iterator iter;
-    size_t pos = 0;
-    fIndexInTable = -1;
-    for (iter = theElementTable.begin(); iter != theElementTable.end(); iter++, pos++)
-	if (**iter==*this) {fIndexInTable = pos;  break;}
-    if (-1 == fIndexInTable) G4Exception("Element not found");
+    fIndexInTable = theElementTable.size() - 1;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Constructor to Generate element from a List of 'nIsotopes' isotopes, added
 // via AddIsotope
@@ -111,7 +106,7 @@ G4Element::G4Element(const G4String& name, const G4String& symbol, G4int nIsotop
     fRelativeAbundanceVector = new G4double[nIsotopes];
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Add an isotope to the element
 
@@ -159,16 +154,11 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 
       // Store in table and set the index
       theElementTable.push_back(this);
-      G4ElementTable::const_iterator iter;
-      size_t pos = 0;
-      fIndexInTable = -1;
-      for (iter = theElementTable.begin(); iter != theElementTable.end(); iter++, pos++)
-	if (**iter==*this) {fIndexInTable = pos;  break;}
-      if (-1 == fIndexInTable) G4Exception("Element not found");
-    }
+      fIndexInTable = theElementTable.size() - 1;      
+     }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4Element::InitializePointers()
 {
@@ -178,7 +168,7 @@ void G4Element::InitializePointers()
     fIonisation = NULL;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Element::~G4Element()
 {
@@ -188,7 +178,7 @@ G4Element::~G4Element()
   if (fIonisation)              delete    fIonisation;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4Element::ComputeDerivedQuantities()
 {
@@ -203,7 +193,7 @@ void G4Element::ComputeDerivedQuantities()
      fIonisation = new G4IonisParamElm(fZeff);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4Element::ComputeCoulombFactor()
 {
@@ -218,7 +208,7 @@ void G4Element::ComputeCoulombFactor()
   fCoulomb = (k1*az4 + k2 + 1./(1.+az2))*az2 - (k3*az4 + k4)*az4;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4Element::ComputeLradTsaiFactor()
 {
@@ -239,7 +229,7 @@ void G4Element::ComputeLradTsaiFactor()
   fRadTsai = 4*alpha_rcl2*fZeff*(fZeff*(Lrad-fCoulomb) + Lprad); 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4Element::GetAtomicShell(G4int i) const
 {
@@ -248,7 +238,7 @@ G4double G4Element::GetAtomicShell(G4int i) const
   return fAtomicShells[i];
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Element::G4Element(G4Element& right)
 {
@@ -257,15 +247,10 @@ G4Element::G4Element(G4Element& right)
 
       // Store this new element in table and set the index
       theElementTable.push_back(this);
-      G4ElementTable::const_iterator iter;
-      size_t pos = 0;
-      fIndexInTable = -1;
-      for (iter = theElementTable.begin(); iter != theElementTable.end(); iter++, pos++)
-	if (**iter==*this) {fIndexInTable = pos;  break;}
-      if (-1 == fIndexInTable) G4Exception("Element not found");
+      fIndexInTable = theElementTable.size() - 1;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const G4Element& G4Element::operator=(const G4Element& right)
 {
@@ -298,26 +283,25 @@ const G4Element& G4Element::operator=(const G4Element& right)
 	    }
 	}   
       ComputeDerivedQuantities();
-      fIndexInTable = right.fIndexInTable;
      } 
   return *this;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int G4Element::operator==(const G4Element& right) const
 {
   return (this == (G4Element*) &right);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int G4Element::operator!=(const G4Element& right) const
 {
   return (this != (G4Element*) &right);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4std::ostream& operator<<(G4std::ostream& flux, G4Element* element)
 { 
@@ -325,11 +309,12 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4Element* element)
   long prec = flux.precision(3);
   
   flux
-    << " Element: " << G4std::setw(8) << element->fName << G4std::setw(3) << element->fSymbol
+    << " Element: " << G4std::setw(8) << element->fName << G4std::setw(3)
+                    << element->fSymbol
     << "   Z = " << G4std::setw(4) << G4std::setprecision(1) <<  element->fZeff 
     << "   N = " << G4std::setw(5) << G4std::setprecision(1) <<  element->fNeff
-    << "   A = " << G4std::setw(6) << G4std::setprecision(2) << (element->fAeff)/(g/mole) 
-    << " g/mole";
+    << "   A = " << G4std::setw(6) << G4std::setprecision(2)
+                 << (element->fAeff)/(g/mole) << " g/mole";
    
   for (size_t i=0; i<element->fNumberOfIsotopes; i++)
   flux 
@@ -342,7 +327,7 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4Element* element)
   return flux;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
  G4std::ostream& operator<<(G4std::ostream& flux, G4Element& element)
 {
@@ -350,7 +335,7 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4Element* element)
   return flux;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
      
 G4std::ostream& operator<<(G4std::ostream& flux, G4ElementTable ElementTable)
 {
@@ -364,4 +349,4 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4ElementTable ElementTable)
    return flux;
 }
       
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....          
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.cc,v 1.8 2001-08-31 16:11:57 gum Exp $
+// $Id: G4MaterialPropertyVector.cc,v 1.9 2001-09-13 08:57:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -154,7 +154,7 @@ void G4MaterialPropertyVector::RemoveElement(G4double aPhotonMomentum)
 
 	newElement = new G4MPVEntry(aPhotonMomentum, DBL_MAX);
 
-	G4std::vector<G4MPVEntry*>::const_iterator i;
+	G4std::vector<G4MPVEntry*>::iterator i;
 	for (i = MPV.begin(); i != MPV.end(); i++)
 	  if (**i == *newElement) {success = *i; break;}
 	//	success = MPV.remove(newElement);

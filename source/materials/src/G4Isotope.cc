@@ -21,22 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.7 2001-07-17 15:54:40 verderi Exp $
+// $Id: G4Isotope.cc,v 1.8 2001-09-13 08:57:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // 17-07-01, migration to STL. M. Verderi.
 // 03-05-01, flux.precision(prec) at begin/end of operator<<
 // 29-01-97: Forbidden to create Isotope with Z<1 or N<Z, M.Maire
 // 26-06-96: Code uses operators (+=, *=, ++, -> etc.) correctly, P. Urban
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Isotope.hh"
 #include "g4std/iomanip"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4IsotopeTable G4Isotope::theIsotopeTable;
 
@@ -44,26 +44,21 @@ G4IsotopeTable G4Isotope::theIsotopeTable;
 G4Isotope::G4Isotope(const G4String& Name, G4int Z, G4int N, G4double A)
 : fName(Name), fZ(Z), fN(N), fA(A)
 {
-    if (Z<1) G4Exception
-      (" ERROR! It is not allowed to create an Isotope with Z < 1" );
+  if (Z<1) G4Exception
+    (" ERROR! It is not allowed to create an Isotope with Z < 1" );
 
-    if (N<Z) G4Exception
-      (" ERROR! Attempt to create an Isotope with N < Z !!!" );
+  if (N<Z) G4Exception
+    (" ERROR! Attempt to create an Isotope with N < Z !!!" );
 
-    theIsotopeTable.push_back(this);
-    G4IsotopeTable::const_iterator iter;
-    size_t pos = 0;
-    fIndexInTable = -1;
-    for (iter = theIsotopeTable.begin(); iter != theIsotopeTable.end(); iter++, pos++)
-      if (**iter==*this) {fIndexInTable = pos;  break;}
-    if (-1 == fIndexInTable) G4Exception("Isotope not found");
+  theIsotopeTable.push_back(this);
+  fIndexInTable = theIsotopeTable.size() - 1;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Isotope::~G4Isotope() {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Isotope::G4Isotope(G4Isotope& right)
 {
@@ -71,15 +66,10 @@ G4Isotope::G4Isotope(G4Isotope& right)
   
   //insert this new isotope in table
   theIsotopeTable.push_back(this);
-  G4IsotopeTable::const_iterator iter;
-  size_t pos = 0;
-  fIndexInTable = -1;
-  for (iter = theIsotopeTable.begin(); iter != theIsotopeTable.end(); iter++, pos++)
-    if (**iter==*this) {fIndexInTable = pos;  break;}
-  if (-1 == fIndexInTable) G4Exception("Isotope not found");
+  fIndexInTable = theIsotopeTable.size() - 1;  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Isotope & G4Isotope::operator=(const G4Isotope& right)
 {
@@ -89,31 +79,25 @@ G4Isotope & G4Isotope::operator=(const G4Isotope& right)
     fZ = right.fZ;
     fN = right.fZ;
     fA = right.fA;
-    G4IsotopeTable::const_iterator iter;
-    size_t pos = 0;
-    fIndexInTable = -1;
-    for (iter = theIsotopeTable.begin(); iter != theIsotopeTable.end(); iter++, pos++)
-      if (**iter==*this) {fIndexInTable = pos;  break;}
-    if (-1 == fIndexInTable) G4Exception("Isotope not found");
   }
   return *this;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int G4Isotope::operator==(const G4Isotope &right) const
 {
   return (this == (G4Isotope *) &right);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int G4Isotope::operator!=(const G4Isotope &right) const
 {
   return (this != (G4Isotope *) &right);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4std::ostream& operator<<(G4std::ostream& flux, G4Isotope* isotope)
 {
@@ -132,7 +116,7 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4Isotope* isotope)
   return flux;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
  G4std::ostream& operator<<(G4std::ostream& flux, G4Isotope& isotope)
 {
@@ -140,7 +124,7 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4Isotope* isotope)
   return flux;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
      
 G4std::ostream& operator<<(G4std::ostream& flux, G4IsotopeTable IsotopeTable)
 {
@@ -155,4 +139,4 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4IsotopeTable IsotopeTable)
    return flux;
 }
       
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.9 2001-07-17 15:54:38 verderi Exp $
+// $Id: G4Isotope.hh,v 1.10 2001-09-13 08:57:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // class description
 //
@@ -39,13 +39,13 @@
 // Isotopes can be assembled into elements via the G4Element class.
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // 30.03.01: suppression of the warnig message in GetIsotope
 // 04.08.98: new method GetIsotope(isotopeName) (mma)
 // 17.01.97: aesthetic rearrangement (mma)
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4ISOTOPE_HH
 #define G4ISOTOPE_HH
@@ -57,7 +57,7 @@
 class G4Isotope;
 typedef G4std::vector<G4Isotope*> G4IsotopeTable;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo......
 
 class G4Isotope
 {
@@ -115,7 +115,7 @@ class G4Isotope
     size_t   fIndexInTable;      // index in the Isotope Table
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
 G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
@@ -123,12 +123,14 @@ G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
   // search the isotope by its name 
   for (size_t J=0 ; J<theIsotopeTable.size() ; J++)
    {
-    if(theIsotopeTable[J]->GetName() == isotopeName)
+    if (theIsotopeTable[J]->GetName() == isotopeName)
       return theIsotopeTable[J];
    }
    
   // the isotope does not exist in the table
   return NULL;          
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
