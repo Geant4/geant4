@@ -5,17 +5,24 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Para.hh,v 1.3 1999-12-15 14:50:06 gunter Exp $
+// $Id: G4Para.hh,v 1.4 2000-04-07 12:55:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// class G4Para
 //
-// A G4Parallepiped, essentially a box with half lengths dx,dy,dz `skewed'
-// so that there are angles theta & phi of the polar line joining the faces at
-// +-dz in z, and alpha formed by the y axis and the plane joinng the
-// centre of the faces G4Parallel to the z-x plane at -dy and +dy.
+// --------------------------------------------------------------------
+// GEANT 4 class header file
 //
-// A G4Para is defined by:
+// G4Para
+//
+// Class description:
+//
+//   A G4Parallepiped, essentially a box with half lengths dx,dy,dz
+//   `skewed' so that there are angles theta & phi of the polar line
+//   joining the faces at +-dz in z, and alpha formed by the y axis
+//   and the plane joinng the centre of the faces G4Parallel to the
+//   z-x plane at -dy and +dy.
+//
+//   A G4Para is defined by:
 //	dx,dy,dz	Half-length in x,y,z
 //	alpha		Angle formed by the y axis and by the plane joining
 //			the centre of the faces G4Parallel to the z-x plane
@@ -24,10 +31,10 @@
 //			faces at -dz and +dz in z
 //	phi		Azimuthal angle of the line joining the centres of the
 //			faces at -dz and +dz in z
-// Member data:
+//   Member data:
 //
-// Note that the angles parameters are not stored - precomputed trig is
-// stored instead.
+//   Note that the angles parameters are not stored - precomputed trig is
+//   stored instead.
 //
 //      fDx   Half-length in x
 //      fDy   Half-length in y
@@ -36,11 +43,12 @@
 //      fTalpha       Tan of alpha
 //      fTthetaCphi   Tan theta * Cos phi
 //      fTthetaSphi   Tan theta * Sin phi
-//
+
 // History:
 // 21.3.94 P.Kent Old C++ code converted to tolerant geometry
 // 31.10.96 V.Grichine Modifications according G4Box/Tubs before to commit
 // 18.11.99 V.Grichine , kUndefined was added to ESide
+// --------------------------------------------------------------------
 
 #ifndef G4Para_HH
 #define G4Para_HH

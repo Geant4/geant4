@@ -5,41 +5,47 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Box.hh,v 1.3 1999-12-15 14:50:06 gunter Exp $
+// $Id: G4Box.hh,v 1.4 2000-04-07 12:55:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// --------------------------------------------------------------------
+// GEANT 4 class header file
+//
 // 
-// class G4Box
+// G4Box
 //
-// A Box is a cuboid of given half lengths dx,dy,dz. The Box is
-// centred on the origin with sides parallel to the x/y/z axes.
+// Class description:
 //
-// Member functions:
+//   A Box is a cuboid of given half lengths dx,dy,dz. The Box is
+//   centred on the origin with sides parallel to the x/y/z axes.
 //
-// As inherited from G4CSGSolid +
+//   Member functions:
 //
-// G4Box(const G4String& pName, G4double pX,
-//        G4double pY, G4double pZ)
-//   Construct a box with name, and half lengths pX,pY,pZ
+//   As inherited from G4CSGSolid +
 //
-// G4double GetXHalfLength() const
-// G4double GetYHalfLength() const
-// G4double GetZHalfLength() const
+//     G4Box(const G4String& pName, G4double pX,
+//           G4double pY, G4double pZ)
 //
-//   Return the respective parameter
+//     - Construct a box with name, and half lengths pX,pY,pZ
 //
-// Protected:
+//     G4double GetXHalfLength() const
+//     G4double GetYHalfLength() const
+//     G4double GetZHalfLength() const
+//
+//     - Return the respective parameter
+//
+//   Protected:
 // 
-// G4ThreeVectorList*
-// CreateRotatedVertices(const G4AffineTransform& pTransform) const
+//     G4ThreeVectorList*
+//     CreateRotatedVertices(const G4AffineTransform& pTransform) const
 // 
-//   Create the List of transformed vertices in the format required
-//   for G4VSolid:: ClipCrossSection and ClipBetweenSections.
+//     - Create the List of transformed vertices in the format required
+//       for G4VSolid:: ClipCrossSection and ClipBetweenSections.
 //
-// Member Data: (private)
+//   Member Data: (private)
 //
-// fDx,fDy,fDz - The box's half-widths
-//
+//     fDx,fDy,fDz - The box's half-widths
+
 // History:
 // 30.06.95 P.Kent Converted from source code developed end 94
 // 27.03.96 J.Allison Added virtual functions DescribeYourselfTo and
@@ -48,7 +54,7 @@
 //                     and    SendPolyhedronTo to CreatePolyhedron.
 // 27.03.98 J.Apostolakis Inherit from G4CSGSolid (not G4VSolid).
 // 18.11.99  J.Apostolakis, V.Grichine: kUndefined was added to ESide
-
+// --------------------------------------------------------------------
 
 #ifndef G4BOX_HH
 #define G4BOX_HH

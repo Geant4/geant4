@@ -5,22 +5,28 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Sphere.hh,v 1.2 1999-12-15 14:50:06 gunter Exp $
+// $Id: G4Sphere.hh,v 1.3 2000-04-07 12:55:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// class G4Sphere
 //
-// A G4Sphere is, in the general case, section of a spherical shell, between
-// specified phii and theta angles
+// --------------------------------------------------------------------
+// GEANT 4 class header file
 //
-// The phi and theta segments are described by a starting angle,
-// and the +ve delta angle for the shape.
-// If the delta angle is >=2*M_PI, or >=M_PI the shape is treated as
-// continuous in phi or theta respectively.
+// G4Sphere
 //
-// Theta must lie between 0-PI (incl).
+// Class description:
 //
-// Member Data:
+//   A G4Sphere is, in the general case, section of a spherical shell,
+//   between specified phii and theta angles
+//
+//   The phi and theta segments are described by a starting angle,
+//   and the +ve delta angle for the shape.
+//   If the delta angle is >=2*M_PI, or >=M_PI the shape is treated as
+//   continuous in phi or theta respectively.
+//
+//   Theta must lie between 0-PI (incl).
+//
+//   Member Data:
 //
 //	fRmin	inner radius
 //	fRmax	outer radius
@@ -32,17 +38,15 @@
 //	fDTheta	delta angle of the segment in radians
 //
 //     
-//
-// Note:
+//   Note:
 //      Internally fSPhi & fDPhi are adjusted so that fDPhi<=2PI,
 //      and fDPhi+fSPhi<=2PI. This enables simpler comparisons to be
 //      made with (say) Phi of a point.
-//
-//
-//
+
 // History:
 // 28.3.94 P.Kent Old C++ code converted to tolerant geometry
 // 17.9.96 V.Grichine Final modifications to commit
+// --------------------------------------------------------------------
 
 #ifndef G4Sphere_HH
 #define G4Sphere_HH

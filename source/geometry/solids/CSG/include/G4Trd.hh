@@ -5,63 +5,71 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trd.hh,v 1.3 1999-12-15 14:50:06 gunter Exp $
+// $Id: G4Trd.hh,v 1.4 2000-04-07 12:55:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
-// class G4Trd
-//
-// A Trd is a trapezoid with the x and y dimensions varying along z
-// functions:
-//
-// As inherited from G4CSGSolid +
-//
-// G4Trd( const G4String& pName,
-//        G4double pdx1, G4double pdx2,
-//        G4double pdy1, G4double pdy2,
-//        G4double pdz )
-//   Construct a trapezoid with name, and half lengths dpx1,dpx2,dpy1,
-//   dpy2,dpz
-//
-// G4double GetXHalfLength1() const
-// G4double GetXHalfLength2() const
-// G4double GetYHalfLength1() const
-// G4double GetYHalfLength2() const
-// G4double GetZHalfLength()  const
-//
-//   Return the respective parameter
-//
-// void SetXHalfLength1(G4double) 
-// void SetXHalfLength2(G4double)
-// void SetYHalfLength1(G4double)
-// void SetYHalfLength2(G4double)
-// void SetZHalfLength(G4double)
-//
-//   Set the respective parameter
-//
-// Protected:
 // 
-// G4ThreeVectorList*
-// CreateRotatedVertices(const G4AffineTransform& pTransform) const
-// 
-//   Create the List of transformed vertices in the format required
-//   for G4CSGSolid:: ClipCrossSection and ClipBetweenSections.
+// --------------------------------------------------------------------
+// GEANT 4 class header file
 //
-
-// Member Data:
-
+//
+// G4Trd
+//
+// Class description:
+//
+//   A Trd is a trapezoid with the x and y dimensions varying along z
+//   functions:
+//
+//   As inherited from G4CSGSolid +
+//
+//     G4Trd( const G4String& pName,
+//            G4double pdx1, G4double pdx2,
+//            G4double pdy1, G4double pdy2,
+//            G4double pdz )
+//
+//       - Construct a trapezoid with name, and half lengths
+//         dpx1,dpx2,dpy1,dpy2,dpz
+//
+//     G4double GetXHalfLength1() const
+//     G4double GetXHalfLength2() const
+//     G4double GetYHalfLength1() const
+//     G4double GetYHalfLength2() const
+//     G4double GetZHalfLength()  const
+//
+//       - Return the respective parameter
+//
+//     void SetXHalfLength1(G4double) 
+//     void SetXHalfLength2(G4double)
+//     void SetYHalfLength1(G4double)
+//     void SetYHalfLength2(G4double)
+//     void SetZHalfLength(G4double)
+//
+//       - Set the respective parameter
+//
+//   Protected:
+// 
+//     G4ThreeVectorList*
+//     CreateRotatedVertices(const G4AffineTransform& pTransform) const
+// 
+//       - Create the List of transformed vertices in the format required
+//         for G4CSGSolid:: ClipCrossSection and ClipBetweenSections.
+//
+//
+//   Member Data:
+//
 //     fDx1    Half-length along x at the surface positioned at -dz
 //     fDx2    Half-length along x at the surface positioned at +dz
 //     fDy1    Half-length along y at the surface positioned at -dz
 //     fDy2    Half-length along y at the surface positioned at +dz
 //     fDz     Half-length along z axis
-//
+
 // History:
 // 19.11.99 V.Grichine, kUndefined was added to Eside enum 
 // 21.04.97 J. Apostolakis         Added Set Methods.
 // 19.08.96 P. Kent, V. Grichine ->Fs in accordance with G4Box
 // 17.02.95 P.Kent Exiting normal return
 // 12.01.95 P.Kent Old prototype code converted to thick geometry
+// --------------------------------------------------------------------
 
 #ifndef G4TRD_HH
 #define G4TRD_HH

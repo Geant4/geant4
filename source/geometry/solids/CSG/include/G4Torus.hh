@@ -5,46 +5,49 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.hh,v 1.2 1999-12-15 14:50:06 gunter Exp $
+// $Id: G4Torus.hh,v 1.3 2000-04-07 12:55:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// class G4Torus
+// --------------------------------------------------------------------
+// GEANT 4 class header file
 //
-// A torus or torus segment with curved sides parallel to
-// the z-axis. The torus has a specified swept radius
-//  about which it is centred, and a given
-// minimum and maximum radius. A minimum radius of 0
-// signifies a filled torus . The torus segment is
-// specified by starting and delta
-// angles for phi, with 0 being the +x axis, PI/2
-// the +y axis. A delta angle of 2PI signifies a
-// complete, unsegmented torus/cylindr.
+// G4Torus
 //
-// Member functions:
+// Class description:
 //
-// As inherited from G4CSGSolid+
+//   A torus or torus segment with curved sides parallel to the z-axis.
+//   The torus has a specified swept radius about which it is centered,
+//   and a given minimum and maximum radius. A minimum radius of 0
+//   signifies a filled torus.
+//   The torus segment is specified by starting and delta angles for phi,
+//   with 0 being the +x axis, PI/2 the +y axis. A delta angle of 2PI
+//   signifies a complete, unsegmented torus/cylindr.
 //
-// G4Torus(const G4String      &pName
-//          G4double      pRmin
-//          G4double      pRmax
-//          G4double      pRtor
-//          G4double      pSPhi
-//          G4double      pDPhi )
+//   Member functions:
 //
-//   Construct a torus with the given name and dimensions.
-//   The angles are provided is radians. pRtor >= pRmax
+//   As inherited from G4CSGSolid+
+//
+//     G4Torus(const G4String      &pName
+//             G4double      pRmin
+//             G4double      pRmax
+//             G4double      pRtor
+//             G4double      pSPhi
+//             G4double      pDPhi )
+//
+//     - Construct a torus with the given name and dimensions.
+//       The angles are provided is radians. pRtor >= pRmax
 //
 //
-// Protected:
+//   Protected:
 //
-// G4ThreeVectorList*
-// CreateRotatedVertices(const G4AffineTransform& pTransform) const
+//     G4ThreeVectorList*
+//     CreateRotatedVertices(const G4AffineTransform& pTransform) const
 //
-//   Create the List of transformed vertices in the format required
-//   for G4VSolid:: ClipCrossSection and ClipBetweenSections.
+//     - Create the List of transformed vertices in the format required
+//       for G4VSolid:: ClipCrossSection and ClipBetweenSections.
 //   
-// Member Data:
+//   Member Data:
 //
 //	fRmin	Inside radius
 //	fRmax	Outside radius
@@ -56,17 +59,17 @@
 //
 //	fDPhi	Delta angle of the segment in radians
 //
-//    You could find very often in G4Torus:: functions the values like pt or
-//    it . These are the distances from p or i G4ThreeVector points in the
-//    plane (Z axis points p or i) to fRtor point in XY plane. This value is
-//    similar to rho for G4Tubs and is used for definiton of the point
-//    relative to fRmin and fRmax, i.e. for solution of inside/outside
-//    problems
-//
-// 
+//   You could find very often in G4Torus:: functions the values like pt or
+//   it . These are the distances from p or i G4ThreeVector points in the
+//   plane (Z axis points p or i) to fRtor point in XY plane. This value is
+//   similar to rho for G4Tubs and is used for definiton of the point
+//   relative to fRmin and fRmax, i.e. for solution of inside/outside
+//   problems
+ 
 // History:
 // 30.10.96 V.Grichine     First version of G4Torus
 // 21.04.98 J.Apostolakis  Added SetAllParameters function
+// --------------------------------------------------------------------
 
 #ifndef G4Torus_HH
 #define G4Torus_HH

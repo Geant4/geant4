@@ -5,17 +5,25 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.hh,v 1.2 1999-12-15 14:50:06 gunter Exp $
+// $Id: G4Cons.hh,v 1.3 2000-04-07 12:55:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// class G4Cons
 //
-// A G4Cons is, in the general case, a Phi segment of a cone, with half-length
-// fDz, inner and outer radii specified at -fDz and +fDz. The Phi segment is
-// described by a starting fSPhi angle, and the +fDPhi delta angle for the shape.
-// If the delta angle is >=2*M_PI, the shape is treated as continuous in Phi
+// --------------------------------------------------------------------
+// GEANT 4 class header file
 //
-// Member Data:
+// G4Cons
+//
+// Class description:
+//
+//   A G4Cons is, in the general case, a Phi segment of a cone, with
+//   half-length fDz, inner and outer radii specified at -fDz and +fDz.
+//   The Phi segment is described by a starting fSPhi angle, and the
+//   +fDPhi delta angle for the shape.
+//   If the delta angle is >=2*M_PI, the shape is treated as continuous
+//   in Phi
+//
+//   Member Data:
 //
 //	fRmin1	inside radius at  -fDz
 //	fRmin2	inside radius at  +fDz
@@ -26,14 +34,15 @@
 //	fSPhi	starting angle of the segment in radians
 //	fDPhi	delta angle of the segment in radians
 //
-// Note:
+//   Note:
 //      Internally fSPhi & fDPhi are adjusted so that fDPhi<=2PI,
 //      and fDPhi+fSPhi<=2PI. This enables simpler comparisons to be
 //      made with (say) Phi of a point.
-//
+
 // History:
 // 19.3.94 P.Kent Old C++ code converted to tolerant geometry
 // 13.9.96 V.Grichine Final modifications to commit
+// --------------------------------------------------------------------
 
 #ifndef G4Cons_HH
 #define G4Cons_HH

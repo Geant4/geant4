@@ -5,19 +5,25 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trap.hh,v 1.2 1999-12-15 14:50:06 gunter Exp $
+// $Id: G4Trap.hh,v 1.3 2000-04-07 12:55:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// class G4Trap
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class header file
 //
-// A G4Trap is a general trapezoid: The faces perpendicular to the z planes
-// are tapezia, and their centres are not necessarily on a line parallel to
-// the z axis.
+// G4Trap
 //
-// Note that of the 11 parameters desribed below, only 9 are really
-// independent - a check for planarity is made in the calculation of the
-// equation for each plane. If the planes are not parallel, a call to
-// G4Exception is made.
+// Class description:
+//
+//   A G4Trap is a general trapezoid: The faces perpendicular to the
+//   z planes are trapezia, and their centres are not necessarily on
+//   a line parallel to the z axis.
+//
+//   Note that of the 11 parameters described below, only 9 are really
+//   independent - a check for planarity is made in the calculation of the
+//   equation for each plane. If the planes are not parallel, a call to
+//   G4Exception is made.
 //
 //      pDz     Half-length along the z-axis
 //      pTheta  Polar angle of the line joining the centres of the faces
@@ -30,110 +36,117 @@
 //      pAlp1   Angle with respect to the y axis from the centre of the side
 //              at y=-pDy1 to the centre at y=+pDy1 of the face at -pDz
 //
-//      pDy2     Half-length along y of the face at +pDz
+//      pDy2    Half-length along y of the face at +pDz
 //      pDx3    Half-length along x of the side at y=-pDy2 of the face at +pDz
 //      pDx4    Half-length along x of the side at y=+pDy2 of the face at +pDz
 //      pAlp2   Angle with respect to the y axis from the centre of the side
 //              at y=-pDy2 to the centre at y=+pDy2 of the face at +pDz
 //
 //
-// Member Data:
+//   Member Data:
 //
 //      fDz     Half-length along the z axis
 //      fTthetaCphi = tan(pTheta)*cos(pPhi)   These combinations are suitable for
 //      fTthetaSphi = tan(pTheta)*sin(pPhi)   creation of the trapezoid corners
 //
-//      fDy1     Half-length along y of the face at -fDz
+//      fDy1    Half-length along y of the face at -fDz
 //      fDx1    Half-length along x of the side at y=-fDy1 of the face at -fDz
 //      fDx2    Half-length along x of the side at y=+fDy1 of the face at -fDz
 //      fTalpha1   Tan of Angle with respect to the y axis from the centre of
-//                 the side at y=-fDy1 to the centre at y=+fDy1 of the face at -fDz
+//                 the side at y=-fDy1 to the centre at y=+fDy1 of the face
+//                 at -fDz
 //
-//      fDy2     Half-length along y of the face at +fDz
+//      fDy2    Half-length along y of the face at +fDz
 //      fDx3    Half-length along x of the side at y=-fDy2 of the face at +fDz
 //      fDx4    Half-length along x of the side at y=+fDy2 of the face at +fDz
 //      fTalpha2   Tan of Angle with respect to the y axis from the centre of
 //                 the side at y=-fDy1 to the centre at y=+fDy1 of the face at -fDz
 //
 //      TrapSidePlane fPlanes[4] Plane equations of the faces not at +/-fDz
-//                             *** order is important !!! : 
+//                             *** order is important !!!
 //  
 //
-// Member functions:
+//   Member functions:
 //
-// As inherited from G4CSGSolid +  Constructors
+//   As inherited from G4CSGSolid +  Constructors
 //
-//   G4Trap( const G4String& pName,
-//            G4double pDz,
-//	      G4double pTheta, G4double pPhi,
-//	      G4double pDy1, G4double pDx1, G4double pDx2,
-//	      G4double pAlp1,
-//	      G4double pDy2, G4double pDx3, G4double pDx4,
-//	      G4double pAlp2)
-//   which prepare plane equations and corner coordinates from parameters
-// &
-//   G4Trap( const G4string& pName,
-//           const G4ThreeVector pt[8]) 
-//   which prepare plane equations and parameters from corner coordinates
-// &
 //     G4Trap( const G4String& pName,
-//              G4double pZ,
-//	        G4double pY,
-//	        G4double pX, G4double pLTX);
-//   for Right Angular Wedge from STEP
+//             G4double pDz,
+//	       G4double pTheta, G4double pPhi,
+//	       G4double pDy1, G4double pDx1, G4double pDx2,
+//	       G4double pAlp1,
+//	       G4double pDy2, G4double pDx3, G4double pDx4,
+//	       G4double pAlp2)
 //
-// & Constructor for G4Trd	     
+//       - which prepare plane equations and corner coordinates from
+//         parameters
+//
+//     G4Trap( const G4string& pName,
+//             const G4ThreeVector pt[8])
+//
+//       - which prepare plane equations and parameters from corner
+//         coordinates
+//
+//     G4Trap( const G4String& pName,
+//             G4double pZ,
+//	       G4double pY,
+//	       G4double pX, G4double pLTX);
+//
+//       - for Right Angular Wedge from STEP
+//
+//   & Constructor for G4Trd	     
 //	     
 //     G4Trap( const G4String& pName,
-//              G4double pDx1,  G4double pDx2,
-//	        G4double pDy1,  G4double pDy2,
-//              G4double pDz);
+//             G4double pDx1,  G4double pDx2,
+//	       G4double pDy1,  G4double pDy2,
+//             G4double pDz);
 //
-// & Constructor for G4Para
+//   & Constructor for G4Para
 //	     
 //     G4Trap(const G4String& pName,
-//	     G4double pDx, G4double pDy, G4double pDz,
-//	     G4double pAlpha, G4double pTheta, G4double pPhi);
+//	      G4double pDx, G4double pDy, G4double pDz,
+//	      G4double pAlpha, G4double pTheta, G4double pPhi);
 //
-// + Access functions that return the respective parameter
+//   + Access functions that return the respective parameter
 //
-// G4double GetZHalfLength()  const
-// G4ThreeVector GetSymAxis() const Returns coordinates of unit vector along straight
-//                                  line joining centers of -/+fDz planes   
-// G4double GetYHalfLength1() const
-// G4double GetXHalfLength1() const
-// G4double GetXHalfLength2() const
-// G4double GetTanAlpha1()    const
+//     G4double GetZHalfLength()  const
+//     G4ThreeVector GetSymAxis() const
+//       - Returns coordinates of unit vector along straight
+//         line joining centers of -/+fDz planes   
+//     G4double GetYHalfLength1() const
+//     G4double GetXHalfLength1() const
+//     G4double GetXHalfLength2() const
+//     G4double GetTanAlpha1()    const
 //
-// G4double GetYHalfLength2() const
-// G4double GetXHalfLength3() const
-// G4double GetXHalfLength4() const
-// G4double GetTanAlpha2()    const
+//     G4double GetYHalfLength2() const
+//     G4double GetXHalfLength3() const
+//     G4double GetXHalfLength4() const
+//     G4double GetTanAlpha2()    const
 //
-// TrapSidePlane GetSidePlane(G4int n ) const  ;  n = 0,1,2,3
+//     TrapSidePlane GetSidePlane(G4int n ) const  ;  n = 0,1,2,3
 //
-// Protected:
-//    G4bool MakePlane( G4ThreeVector& p1,
-//                      G4ThreeVector& p2,
-//		        G4ThreeVector& p3, 
-//		        G4ThreeVector& p4,
-//		        TrapSidePlane& plane ) 
+//   Protected:
+//
+//     G4bool MakePlane( G4ThreeVector& p1,
+//                       G4ThreeVector& p2,
+//		         G4ThreeVector& p3, 
+//		         G4ThreeVector& p4,
+//		         TrapSidePlane& plane ) 
 //
 // 
-//   G4ThreeVectorList*
-//   CreateRotatedVertices(const G4Transform& pTransform) const
+//     G4ThreeVectorList*
+//     CreateRotatedVertices(const G4Transform& pTransform) const
 // 
-//   Create the List of transformed vertices in the format required
-//   for G4CSGSolid:: ClipCrossSection and ClipBetweenSections.
-//
-//
+//       - Create the List of transformed vertices in the format required
+//         for G4CSGSolid:: ClipCrossSection and ClipBetweenSections.
+
 // History:
 //
 // 23.3.94 P.Kent: Old C++ code converted to tolerant geometry
 // 9.9.96  V.Grichine: Final modifications before to commit 
 // 1.11.96 V.Grichine Costructors for Right Angular Wedge from STEP & G4Trd/Para
 // 8.12.97 J.Allison Added "nominal" contructor and method SetAllParameters.
-
+// --------------------------------------------------------------------
 
 #ifndef G4Trap_HH
 #define G4Trap_HH

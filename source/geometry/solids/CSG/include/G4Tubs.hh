@@ -5,46 +5,52 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.hh,v 1.2 1999-12-15 14:50:06 gunter Exp $
+// $Id: G4Tubs.hh,v 1.3 2000-04-07 12:55:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// class G4Tubs
+// --------------------------------------------------------------------
+// GEANT 4 class header file
 //
-// A tube or tube segment with curved sides parallel to
-// the z-axis. The tube has a specified half-length along
-// the z axis, about which it is centred, and a given
-// minimum and maximum radius. A minimum radius of 0
-// signifies a filled tube /cylinder. The tube segment is
-// specified by starting and delta
-// angles for phi, with 0 being the +x axis, PI/2
-// the +y axis. A delta angle of 2PI signifies a
-// complete, unsegmented tube/cylinder.
+// 
+// G4Tubs
 //
-// Member functions:
+// Class description:
 //
-// As inherited from G4VSolid+
+//   A tube or tube segment with curved sides parallel to
+//   the z-axis. The tube has a specified half-length along
+//   the z axis, about which it is centred, and a given
+//   minimum and maximum radius. A minimum radius of 0
+//   signifies a filled tube /cylinder. The tube segment is
+//   specified by starting and delta angles for phi, with 0
+//   being the +x axis, PI/2 the +y axis.
+//   A delta angle of 2PI signifies a complete, unsegmented
+//   tube/cylinder.
 //
-// G4Tubs(const G4String      &pName
-//              G4double      pRMin
-//              G4double      pRMax
-//              G4double      pDz
-//              G4double      pSPhi
-//              G4double      pDPhi )
+//   Member functions:
 //
-//   Construct a tubs with the given name and dimensions.
-//   The angles are provided is radians.
+//   As inherited from G4VSolid+
+//
+//     G4Tubs(const G4String      &pName
+//            G4double      pRMin
+//            G4double      pRMax
+//            G4double      pDz
+//            G4double      pSPhi
+//            G4double      pDPhi )
+//
+//       - Construct a tubs with the given name and dimensions.
+//         The angles are provided is radians.
 //
 //
-// Protected:
+//   Protected:
 //
-// G4ThreeVectorList*
-// CreateRotatedVertices(const G4AffineTransform& pTransform) const
+//     G4ThreeVectorList*
+//     CreateRotatedVertices(const G4AffineTransform& pTransform) const
 //
-//   Create the List of transformed vertices in the format required
-//   for G4VSolid:: ClipCrossSection and ClipBetweenSections.
+//       - Create the List of transformed vertices in the format required
+//         for G4VSolid:: ClipCrossSection and ClipBetweenSections.
 //   
-// Member Data:
+//   Member Data:
 //
 //	fRMin	Inner radius
 //	fRMax	Outer radius
@@ -55,14 +61,14 @@
 //              fSPhi>-2PI
 //
 //	fDPhi	Delta angle of the segment in radians
-//
-//
+
 // History:
 // 10.8.95 P.Kent General cleanup, use G4VSolid extent helper functions
 //                to CaluclateExtent
 // 23.1.94 P.Kent Converted to `tolerant' geometry
 // 19.07.96 J.Allison G4GraphicsScene - see G4Box.
 // 22.07.96 J.Allison Changed SendPolyhedronTo to CreatePolyhedron.
+// --------------------------------------------------------------------
 
 #ifndef G4TUBS_HH
 #define G4TUBS_HH
