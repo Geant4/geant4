@@ -266,17 +266,15 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 //    if ( timeStep > 1e30 ) {
 //	G4cout << " Name :" << kt->GetDefinition()->GetParticleName() << G4endl;
 //    }
-// @hpw@ debugging: free transport..... @@@@@@@@@@@@@@@
-//gf	pos = pos+(currTimeStep*c_light/mom.e())*mom.vect();
-//gf	kt->SetPosition(pos);
-//gf	continue;
-// @hpw@ debugging: free transport.....
 
 // Get the time of intersections with the nucleus surface.
     G4double t_enter, t_leave;
 // if the particle does not intersecate with the nucleus go to next particle
     if(!GetSphereIntersectionTimes(kt, t_enter, t_leave))
-      continue;
+    {
+       kt->SetState(G4KineticTrack::miss_nucleus);
+       continue;
+    }  
 
 /*
  *    G4cout <<" timeStep, Intersection times tenter, tleave  "
@@ -320,6 +318,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 // FixMe: should be "pushed back?"
 //      for the moment take it past teh nucleus, so we'll not worry next time..
 	  FreeTransport(kt, 1.1*t_leave);   // take past nucleus
+          kt->SetState(G4KineticTrack::miss_nucleus);
 	  continue;
 	}
 //

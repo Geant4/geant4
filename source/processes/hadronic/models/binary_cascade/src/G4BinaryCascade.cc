@@ -1517,10 +1517,6 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
       PrintKTVector(&theSecondaryList, G4std::string(" theSecondaryList "));
   }
 
-  delete kt_inside;
-  delete kt_outside;
-  delete kt_gone_in;
-
   currentA +=secondaryBarions_in - secondaryBarions_out;
   currentZ +=secondaryCharge_in - secondaryCharge_out;
 //  if particles stepped into nucleus, add their mass to nucleus
@@ -1649,8 +1645,30 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
 //  G4cout << "DoTimeStep: timeStep " << theTimeStep << G4endl;
 //  G4cout << "DoTimeStep: Collisions left: " << theCollisionMgr->Entries() << G4endl;
   //debug.push_back("======> DoTimeStep 1.5"); debug.dump();
+
+// Add track missing nucleus to addFinals
+  for_each( kt_outside->begin(),kt_outside->end(),
+           SelectFromKTV(&addFinals,G4KineticTrack::miss_nucleus));
+    
+
+// Check no track is part in next collision, ie.
+//  this step was to far, and collisions should not occur any more 
+  if ( theCollisionMgr->Entries()> 0 )
+  {
+ //	     G4cout << " DoTimeStep - WARNING: deleting current collision!" << G4endl;
+	G4KineticTrack * nextPrimary = theCollisionMgr->GetNextCollision()->GetPrimary();
+	iter = find(addFinals.begin(),addFinals.end(),nextPrimary);
+	if ( iter !=  addFinals.end() )
+	{
+	   success=false;
+	   G4cout << " DoTimeStep - WARNING: deleting current collision!" << G4endl;
+	}
+  }
   UpdateTracksAndCollisions(&addFinals,0 ,0);
 
+  delete kt_inside;
+  delete kt_outside;
+  delete kt_gone_in;
   delete kt_gone_out;
 
 //  G4cout << "DoTimeStep: Collisions left: " << theCollisionMgr->Entries() << G4endl;
