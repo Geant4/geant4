@@ -1,0 +1,16 @@
+LIST
+C
+C     Tungsten-Silicium  50 layers; electon 1 GeV
+C
+MATE   11  (Imat1) 10 (Imat2)
+CALOR  50 (nbLay) 0.2(thck1) 0.03 (thck2) 40. (calorYZ) 0. (field)
+TRIG   100
+KINE   3 (Itype) 1.0 (Ekine) -5.75 (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
+DEBUG  10  5 100
+SWIT   0 (draw) 1 (save)
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.0e-6 (bcute/m) 2*120.0e-6 (dcute/m)
+ABAN   0
+LOSS   1
+HADR   0
+TIME   2=1.
