@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-07 16:14:10 gunter Exp $
+$Id: History,v 1.2 1999-11-25 14:35:00 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov  25, 1999   J. Apostolakis  transport-V00-01-01
+
+  transportation.cc: Added protection for the case of a zero step (when there is a field)
+
+  UserSpecialCuts:  Protection to use min range and min kinE only for charged particles
+
+
+June  9, 1999   J. Apostolakis  transport-01-00-02
+
+  Added a protection so that full relocation is not used for very small moves.
+
 
 Dec   4, 1998   J. Apostolakis  transport-00-04-01
 
