@@ -1,4 +1,4 @@
-$Id: README,v 1.16 2002-06-18 21:15:13 griccard Exp $
+$Id: README,v 1.17 2002-12-05 16:00:44 flongo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,7 +8,7 @@ $Id: README,v 1.16 2002-06-18 21:15:13 griccard Exp $
                             gammaray_telescope
                             ------------------
                      F.Longo, R.Giannitrapani & G.Santin
-                     December 2000
+                     December 2002
 
 --------------------------------------------------------------
 Acknowledgments to GEANT4 people, in particular to R.Nartallo, 
@@ -23,7 +23,7 @@ anticoincidence system. In this version, the three detectors are made
 sensitive but only the hits on the tracker strips are registered and relevant 
 information (energy deposition, position etc) are dumped to an external
 ASCII file for subsequent analysis. If the user has set up the 
-AIDA (version 2.2 or compatible) environment or Anaphe/Lizard is available, 
+AIDA (version 3.0 or compatible) environment or Anaphe/Lizard is available, 
 then some histograms with relevant hits information are displayed 
 and saved as PostScript files, and histograms and ntuples with
 relevant information are stored on a HBOOK file.
@@ -53,6 +53,14 @@ The main features of this example are
 1. Setting up the environment variables
 ---------------------------------------
 
+ - Setup for storing ASCII data 
+
+  If you want to store the output data in an ASCII file 'Tracks_x.dat'
+  where x stays for the run number. You should specify the environment 
+  variable:
+
+  setenv G4STORE_DATA 1
+
  - Setup for Visualization 
 
   IMPORTANT: be sure that your Geant4 installation has been done 
@@ -70,8 +78,6 @@ The main features of this example are
  - Setup for Xmotif user interface
   
   setenv G4UI_USE_XM  1    
-  (IMPORTANT: Do not set G4ANALYSIS_USE_NTUPLE	when using XM!)
-	
 
  - Set up for analysis using AIDA
 
@@ -86,15 +92,9 @@ The main features of this example are
 
  (on a CERN machine with the gcc-2.95 compiler)
 
-  setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/4.0.3/bin
-  source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.3/install/sharedstart.csh
-
- (on a CERN machine with the egcs-2.91.66 compiler (G4SYSTEM Linux-egcs)
-
-  setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/4.0.3-sec/bin
-  source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.3-sec/install/sharedstart.csh
-
-
+  setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/5.0.2/bin
+  source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/install/sharedstart.csh
+  ln -s /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/scripts/* ~/bin/.
 
 2. Sample run
 -------------
