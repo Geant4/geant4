@@ -20,7 +20,7 @@
 /**
  *
  * @author M.Donszelmann
- * @version $Id: XMLHepRepStreamerFactory.h,v 1.3 2002-11-13 18:50:28 duns Exp $
+ * @version $Id: XMLHepRepStreamerFactory.h,v 1.4 2002-11-13 19:05:15 duns Exp $
  */
 class XMLHepRepStreamerFactory : public virtual HEPREP::HepRepFactory {
 

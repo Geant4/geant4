@@ -18,7 +18,7 @@
 /**
  *
  * @author M.Donszelmann
- * @version $Id: StreamerHepRepInstanceTree.h,v 1.3 2002-11-13 18:50:02 duns Exp $
+ * @version $Id: StreamerHepRepInstanceTree.h,v 1.4 2002-11-13 19:04:57 duns Exp $
  */
 class StreamerHepRepInstanceTree : public DefaultHepRepTreeID, public virtual HEPREP::HepRepInstanceTree {
 

@@ -10,7 +10,7 @@
 /**
  *
  * @author M.Donszelmann
- * @version $Id: DefaultHepRepTreeID.h,v 1.3 2002-11-13 18:49:30 duns Exp $
+ * @version $Id: DefaultHepRepTreeID.h,v 1.4 2002-11-13 19:04:28 duns Exp $
  */
 
 class DefaultHepRepTreeID : public virtual HEPREP::HepRepTreeID {

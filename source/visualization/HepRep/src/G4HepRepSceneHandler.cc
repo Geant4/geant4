@@ -24,7 +24,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: G4HepRepSceneHandler.cc,v 1.6 2002-11-13 18:50:38 duns Exp $
+ * @version $Id: G4HepRepSceneHandler.cc,v 1.7 2002-11-13 19:05:25 duns Exp $
  */
 
 #include "g4std/vector"
@@ -442,7 +442,23 @@ void G4HepRepSceneHandler::AddThis (const G4VSolid& solid) {
     G4VSceneHandler::AddThis (solid);
 }
 
-void G4HepRepSceneHandler::PreAddThis (const G4Transform3D& objectTransformation,
+void G4HepRepSceneHandler::AddThis (const G4VTrajectory& traj) {
+#ifdef DEBUG
+    G4cout << "G4HepRepSceneHandler::AddThis(G4VTrajectory&) " << G4endl;
+#endif
+    G4VSceneHandler::AddThis (traj);
+}
+
+void G4HepRepSceneHandler::AddThis (const G4VHit& hit) {
+#ifdef DEBUG
+    G4cout << "G4HepRepSceneHandler::AddThis(G4VHit&) " << G4endl;
+#endif
+    G4VSceneHandler::AddThis (hit);
+}
+
+void 
+G4HepRepSceneHandler::PreAddThis 
+(const G4Transform3D& objectTransformation,
 			                           const G4VisAttributes& visAttribs) {
 
     G4VSceneHandler::PreAddThis (objectTransformation, visAttribs);

@@ -24,7 +24,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: G4HepRepSceneHandler.hh,v 1.5 2002-11-13 18:49:37 duns Exp $
+ * @version $Id: G4HepRepSceneHandler.hh,v 1.6 2002-11-13 19:04:34 duns Exp $
  */
 
 #ifndef G4HEPREPSCENEHANDLER_HH
@@ -67,6 +67,9 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void AddThis (const G4Polycone&);
         void AddThis (const G4Polyhedra&);
         void AddThis (const G4VSolid&);
+  	void AddThis (const G4VTrajectory&);
+  	void AddThis (const G4VHit&);
+
         void PreAddThis (const G4Transform3D& objectTransformation,
 			             const G4VisAttributes& visAttribs);
         void PostAddThis ();
