@@ -21,14 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.22 2001-10-22 14:52:18 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.23 2001-11-26 11:21:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
 // 
-// This routine implements an algorithm to track a particle in a       //
-//  non-uniform magnetic field. It utilises an ODE solver (with        //
-//  the Runge - Kutta method) to evolve the particle, and drives it    //
+//  This class implements an algorithm to track a particle in a
+//  non-uniform magnetic field. It utilises an ODE solver (with
+//  the Runge - Kutta method) to evolve the particle, and drives it
 //  until the particle has traveled a set distance or it enters a new 
 //  volume.
 // 
@@ -514,7 +513,7 @@ G4PropagatorInField::LocateIntersectionPoint(
 	  GetChordFinder()->GetIntegrationDriver()
 	    ->AccurateAdvance(newEndpoint, curveDist, GetEpsilonStep() );
 	  CurrentB_PointVelocity= newEndpoint;
-#ifdef G4DEBUG
+#ifdef G4DEBUG_NAVIGATION
           static int noInaccuracyWarnings = 0; 
           const  int maxNoWarnings = 10;
 	  if(   (noInaccuracyWarnings < maxNoWarnings ) 
