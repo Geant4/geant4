@@ -11,9 +11,14 @@
 # Guy Barrand barrand@lal.in2p3.fr
 ####################################################
 
-if ( `pwd | grep /dev/` != "" ) then
-  setenv REF dev
-else
+setenv REF undefined
+if ( `pwd | grep /stt/dev1/` != "" ) then
+  setenv REF dev1
+endif
+if ( `pwd | grep /stt/dev2/` != "" ) then
+  setenv REF dev2
+endif
+if ( `pwd | grep /stt/prod/` != "" ) then
   setenv REF prod
 endif
 
@@ -23,6 +28,15 @@ else
   setenv DEBOPT optim
 endif
 
+# Generaal G4 build flags :
+setenv G4UI_BUILD_TERMINAL_SESSION 1
+setenv G4UI_BUILD_GAG_SESSION      1
+setenv G4VIS_BUILD_DAWN_DRIVER     1
+setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+setenv G4VIS_BUILD_VRML_DRIVER     1
+setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+setenv G4VIS_BUILD_RAYTRACER_DRIVER 1
+
 if ( `uname -n | grep rsplus` != "" ) then
   setenv G4USE_OSPACE 1
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
@@ -30,24 +44,17 @@ if ( `uname -n | grep rsplus` != "" ) then
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
-  # G4 build flags :
-  setenv G4UI_BUILD_TERMINAL_SESSION 1
-  setenv G4UI_BUILD_GAG_SESSION      1
+  # Other G4 build flags :
   #####setenv G4UI_BUILD_XM_SESSION       1
   #####setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
   setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
   ##### setenv G4VIS_BUILD_OIX_DRIVER      1
-  setenv G4VIS_BUILD_DAWN_DRIVER     1
-  setenv DAWN_BSD_UNIX_DOMAIN 1
-  setenv DAWN_HOME /afs/cern.ch/sw/geant4/dev/DAWN/AIX-AFS
-  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  setenv G4VIS_BUILD_VRML_DRIVER     1
-  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 
-if ( `uname -n | grep dxplus` != "" ) then
+if ( `uname -n | grep dxplus` != "" || \
+     `uname -n | grep dcosf01` != "" ) then
   if ( $?G4STTNONISO ) then
     setenv DEBOPT ${DEBOPT}_NONISO
     setenv G4USE_OSPACE 1
@@ -56,26 +63,21 @@ if ( `uname -n | grep dxplus` != "" ) then
     setenv DEBOPT ${DEBOPT}_ISO
     setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
   endif
+  if ( `uname -n | grep dcosf01` != "" ) then
+    setenv CLHEP_LIB CLHEP-cxx62
+  endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM DEC-cxx
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
-  setenv G4UI_BUILD_TERMINAL_SESSION 1
-  setenv G4UI_BUILD_GAG_SESSION      1
   #####setenv G4UI_BUILD_XM_SESSION       1
   #####setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
   setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
   ##### setenv G4VIS_BUILD_OIX_DRIVER      1
-  setenv G4VIS_BUILD_DAWN_DRIVER     1
-  setenv DAWN_BSD_UNIX_DOMAIN 1
-  setenv DAWN_HOME /afs/cern.ch/sw/geant4/dev/DAWN/AIX-AFS
-  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  setenv G4VIS_BUILD_VRML_DRIVER     1
-  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 
 if ( `uname -n | grep pcgeant`   != "" || \
@@ -86,20 +88,12 @@ if ( `uname -n | grep pcgeant`   != "" || \
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
-  setenv G4UI_BUILD_TERMINAL_SESSION 1
-  setenv G4UI_BUILD_GAG_SESSION      1
   #####setenv G4UI_BUILD_XM_SESSION       1
   #####setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
   setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
   ##### setenv G4VIS_BUILD_OIX_DRIVER      1
-  setenv G4VIS_BUILD_DAWN_DRIVER     1
-  setenv DAWN_BSD_UNIX_DOMAIN 1
-  setenv DAWN_HOME /afs/cern.ch/sw/geant4/dev/DAWN/AIX-AFS
-  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  setenv G4VIS_BUILD_VRML_DRIVER     1
-  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 
 if ( `uname -n | grep sgmedia` != "" ) then
@@ -110,39 +104,42 @@ if ( `uname -n | grep sgmedia` != "" ) then
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
-  #######setenv G4UI_BUILD_TERMINAL_SESSION 1
-  #######setenv G4UI_BUILD_GAG_SESSION      1
   #######setenv G4UI_BUILD_XM_SESSION       1
   setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   setenv G4VIS_BUILD_OIX_DRIVER      1
-  setenv G4VIS_BUILD_DAWN_DRIVER     1
-  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  setenv G4VIS_BUILD_VRML_DRIVER     1
-  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 
 if ( `uname -n | grep sun` != "" ) then
-  setenv G4USE_OSPACE 1
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
-  setenv G4SYSTEM SUN-CC
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  if ( $?G4STTNONISO ) then
+    setenv G4SYSTEM SUN-CC
+    setenv DEBOPT ${DEBOPT}_NONISO
+    setenv G4USE_OSPACE 1
+    setenv PATH `echo $PATH | sed s/SUNWspro50/SUNWspro/`
+    # Persistency...
+    if ( $?G4USE_HEPODBMS ) then  # Protect against double calling.
+    else
+      source $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.csh
+      setenv G4EXAMPLE_FDID 207
+    endif
+  else
+    setenv G4SYSTEM SUN-CC5
+    setenv DEBOPT ${DEBOPT}_ISO
+    unsetenv G4USE_OSPACE
+    setenv PATH `echo $PATH | sed s/SUNWspro50/SUNWspro/`
+    setenv PATH `echo $PATH | sed s/SUNWspro/SUNWspro50/`
+    # Persistency...
+    unsetenv G4USE_HEPODBMS
+  endif
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
-  setenv G4UI_BUILD_TERMINAL_SESSION 1
-  setenv G4UI_BUILD_GAG_SESSION      1
   #######setenv G4UI_BUILD_XM_SESSION       1
   #######setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   #######setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   #######setenv G4VIS_BUILD_OIX_DRIVER      1
-  setenv G4VIS_BUILD_DAWN_DRIVER     1
-  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  setenv G4VIS_BUILD_VRML_DRIVER     1
-  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
-# Persistency...
-  source $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.csh
-  setenv G4EXAMPLE_FDID 207
 endif
 
 if ( `uname -n | grep hp` != "" ) then
@@ -153,16 +150,10 @@ if ( `uname -n | grep hp` != "" ) then
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
-  setenv G4UI_BUILD_TERMINAL_SESSION 1
-  setenv G4UI_BUILD_GAG_SESSION      1
   ######setenv G4UI_BUILD_XM_SESSION       1
   setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   setenv G4VIS_BUILD_OIX_DRIVER      1
-  setenv G4VIS_BUILD_DAWN_DRIVER     1
-  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  setenv G4VIS_BUILD_VRML_DRIVER     1
-  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 
 if ( `uname -n` == aleph ) then
@@ -366,9 +357,3 @@ endif
 # --------
 ####################################################
 ####################################################
-
-
-
-
-
-
