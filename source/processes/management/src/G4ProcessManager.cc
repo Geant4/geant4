@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.cc,v 1.6 1999-05-03 01:52:40 kurasige Exp $
+// $Id: G4ProcessManager.cc,v 1.7 1999-05-10 17:12:21 fbehner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -256,7 +256,7 @@ G4ProcessAttribute* G4ProcessManager::GetAttribute(G4int index) const
 #endif
    // re-ordering attribute vector 
     G4ProcessAttribute *pAttr = 0;
-    for (G4int i=0; i<theAttrVector->length(); i++){
+    for (G4int i=0; i<theAttrVector->entries(); i++){
       if ( ((*theAttrVector)[i])->idxProcessList == index) {
 	pAttr = (*theAttrVector)[i];
 	break;
@@ -277,7 +277,7 @@ G4int G4ProcessManager::InsertAt(G4int ip, G4VProcess* process, G4int ivec)
 {
   G4ProcessVector* pVector = theProcVector[ivec];
   // check position
-  if ( (ip<0) || (ip > pVector->length()) ) return -1;
+  if ( (ip<0) || (ip > pVector->entries()) ) return -1;
 
   // insert in pVector
   pVector->insertAt(ip, process);
@@ -305,7 +305,7 @@ G4int G4ProcessManager::RemoveAt(G4int ip, G4VProcess* process, G4int ivec)
 {
   G4ProcessVector* pVector = theProcVector[ivec];
   // check position
-  if ( (ip<0) || (ip >= pVector->length()) ) return -1;
+  if ( (ip<0) || (ip >= pVector->entries()) ) return -1;
 
   //check pointer and remove
   if ((*pVector)[ip]== process) {
@@ -339,7 +339,7 @@ G4int G4ProcessManager::RemoveAt(G4int ip, G4VProcess* process, G4int ivec)
 G4int G4ProcessManager::FindInsertPosition(G4int ord, G4int ivec)
 {
   G4ProcessVector* pVector = theProcVector[ivec];
-  G4int ip =  pVector->length();
+  G4int ip =  pVector->entries();
   G4int tmp = INT_MAX;
 
   // find insert position
@@ -391,7 +391,7 @@ G4int G4ProcessManager::AddProcess(
 
   //add aProcess to process List
   theProcessList->insert(aProcess);  
-  G4int idx = (theProcessList->length()) - 1;
+  G4int idx = (theProcessList->entries()) - 1;
 
   // check size of the ProcessVector[0]
   if (numberOfProcesses != idx){
@@ -474,7 +474,7 @@ G4VProcess* G4ProcessManager::RemoveProcess(G4int index)
     for (G4int ivec=0; ivec<SizeOfProcVectorArray; ivec++) {
       G4ProcessVector* pVector = theProcVector[ivec];
       G4int idx = pAttr->idxProcVector[ivec];
-      if ((idx >= 0)  && (idx < pVector->length())) {
+      if ((idx >= 0)  && (idx < pVector->entries())) {
         //remove
 	if (RemoveAt(idx, removedProcess, ivec) <0) {
 #ifdef G4VERBOSE
@@ -499,7 +499,7 @@ G4VProcess* G4ProcessManager::RemoveProcess(G4int index)
 	  G4cerr << "particle["<<theParticleType->GetParticleName()<<"] " ;
 	  G4cerr << "process["<<removedProcess->GetProcessName()<< "]  " ;
 	  G4cerr << "index(=" << idx << ") of process vector";
-	  G4cerr << "[size:" << pVector->length() << "] out of range" <<endl;
+	  G4cerr << "[size:" << pVector->entries() << "] out of range" <<endl;
 	}
 #endif
 	G4Exception((const char*)(aErrorMessage)); 
@@ -730,7 +730,7 @@ G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
 
       if (idx<0) {
         // corresponding DoIt is not active  
-      } else if ((idx >= 0)  && (idx < pVector->length())) {
+      } else if ((idx >= 0)  && (idx < pVector->entries())) {
         //check pointer and set to 0
         if ((*pVector)[idx]== pProcess) {
 	  (*pVector)[idx]= 0;
@@ -755,7 +755,7 @@ G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
 	  G4cerr << "particle["<<theParticleType->GetParticleName()<<"] " ;
 	  G4cerr << "process["<<pProcess->GetProcessName()<<"]   " ;
 	  G4cerr << "index(=" << idx << ") of process vector";
-	  G4cerr << "[size:" << pVector->length() << "] out of range" << endl;
+	  G4cerr << "[size:" << pVector->entries() << "] out of range" << endl;
 	}
 #endif
 	G4Exception((const char*)aErrorMessage); 
@@ -803,7 +803,7 @@ G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
       G4int idx = pAttr->idxProcVector[i];
        if (idx<0) {
         // corresponding DoIt is not active  
-       } else if ((idx >= 0)  && (idx < pVector->length())) {
+       } else if ((idx >= 0)  && (idx < pVector->entries())) {
         //check pointer and set
 	if ((*pVector)[idx]== 0) {
 	  (*pVector)[idx] = pProcess;
@@ -828,7 +828,7 @@ G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
 	  G4cerr << "particle["<<theParticleType->GetParticleName()<<"] " ;
 	  G4cerr << "process["<<pProcess->GetProcessName()<<"]   " ;
 	  G4cerr << "index(=" << idx <<")of process vector";
-	  G4cerr << "[size:" << pVector->length() << "] out of range" << endl;
+	  G4cerr << "[size:" << pVector->entries() << "] out of range" << endl;
 	}
 #endif
 	G4Exception((const char*)aErrorMessage); 
@@ -864,7 +864,7 @@ void G4ProcessManager::DumpInfo()
   delete aMessage;
 
   // loop over all processes
-  for (G4int idx=0; idx <theProcessList->length(); idx++){
+  for (G4int idx=0; idx <theProcessList->entries(); idx++){
     // process name/type
     G4cout << "[" << idx << "]";
     G4cout << "=== process[" << ((*theProcessList)(idx))->GetProcessName()<< " :"; 
@@ -909,7 +909,7 @@ void G4ProcessManager::CreateGPILvectors()
 {
 //-- create GetPhysicalInteractionLength process vectors just as the inverse
 //-- order of DoIt process vector
-  for(G4int k=0; k<theProcessList->length(); k++) {
+  for(G4int k=0; k<theProcessList->entries(); k++) {
     GetAttribute((*theProcessList)(k))->idxProcVector[0]=-1;
     GetAttribute((*theProcessList)(k))->idxProcVector[2]=-1;
     GetAttribute((*theProcessList)(k))->idxProcVector[4]=-1;
@@ -937,7 +937,7 @@ void G4ProcessManager::CreateGPILvectors()
 //////////////////////////////////////////
 void G4ProcessManager::StartTracking()
 {
-  for (G4int idx = 0; idx<theProcessList->length(); idx++){
+  for (G4int idx = 0; idx<theProcessList->entries(); idx++){
     if (GetAttribute(idx)->isActive)
       ((*theProcessList)[idx])->StartTracking();
   }
@@ -947,7 +947,7 @@ void G4ProcessManager::StartTracking()
 /////////////////////////////////////////////
 void G4ProcessManager::EndTracking()
 {
-  for (G4int idx = 0; idx<theProcessList->length(); idx++){
+  for (G4int idx = 0; idx<theProcessList->entries(); idx++){
     if (GetAttribute(idx)->isActive)
       ((*theProcessList)[idx])->EndTracking();
   }
