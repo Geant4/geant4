@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqMagElectricField.cc,v 1.10 2003-10-31 14:35:53 gcosmo Exp $
+// $Id: G4EqMagElectricField.cc,v 1.11 2003-11-05 17:31:59 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,6 +36,7 @@
 // -------------------------------------------------------------------
 
 #include "G4EqMagElectricField.hh"
+#include "globals.hh"
 
 void  
 G4EqMagElectricField::SetChargeMomentumMass(G4double particleCharge, // e+ units
