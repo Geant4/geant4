@@ -45,7 +45,7 @@
 test31PhysicsList::test31PhysicsList() : G4VModularPhysicsList(),
   emPhysicsListIsRegistered(false),
   hadPhysicsListIsRegistered(false)
-{   
+{
   currentDefaultCut   = 1.0*mm;
   cutForGamma         = currentDefaultCut;
   cutForElectron      = currentDefaultCut;
@@ -55,7 +55,7 @@ test31PhysicsList::test31PhysicsList() : G4VModularPhysicsList(),
   nuclStop = true;
   barkas   = true;
   table    = "";
-  verbose  = 1;
+  verbose  = 0;
 
   pMessenger = new test31PhysicsListMessenger(this);
 
@@ -182,6 +182,11 @@ void test31PhysicsList::SetCuts()
     G4cout << "test31PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  
+
+  // Limit for low energy electromagnetic particles
+  G4Gamma   ::SetEnergyRange(100.0*eV,100.0*GeV);
+  G4Electron::SetEnergyRange(100.0*eV,100.0*GeV);
+  G4Positron::SetEnergyRange(100.0*eV,100.0*GeV);
 
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma

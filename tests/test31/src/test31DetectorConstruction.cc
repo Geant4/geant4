@@ -27,11 +27,11 @@
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
 //      ---------- test31DetectorConstruction -------
-//              
-//  Modified: 05.04.01 Vladimir Ivanchenko new design of test31 
-// 
+//
+//  Modified: 05.04.01 Vladimir Ivanchenko new design of test31
+//
 // -------------------------------------------------------------
-	
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -202,7 +202,7 @@ void test31DetectorConstruction::DefineMaterials()
   density = 11.35*g/cm3;
   a = 207.19*g/mole;
   ma = new G4Material(name="Lead"     , z=82., a, density);
-  
+
 //
 // define a material from elements.   case 1: chemical molecule
 //
@@ -214,7 +214,7 @@ void test31DetectorConstruction::DefineMaterials()
   ma->AddElement(elO, natoms=1);
   G4double exc = ma->GetIonisation()->FindMeanExcitationEnergy("H_2O");
   ma->GetIonisation()->SetMeanExcitationEnergy(exc);
-  
+
   density = 0.0006672*g/cm3;
   ma = new G4Material("Methane", density, 2);
   ma->SetChemicalFormula("CH_4");
@@ -235,12 +235,16 @@ void test31DetectorConstruction::DefineMaterials()
   ma->SetChemicalFormula("C_2H_6");
   ma->AddElement(elH,6);
   ma->AddElement(elC,2);
-  
+
   ma = new G4Material ("CsI" , 4.51*g/cm3, 2);
   ma->SetChemicalFormula("CsI");
   ma->AddElement(Cs,1);
   ma->AddElement(I,1);
-  
+
+  density = 19.35*g/cm3;
+  a = 183.85*g/mole;
+  ma = new G4Material(name="Tangsten"     , z=74., a, density);
+
 //
 // define a material from elements.   case 2: mixture by fractional mass
 //

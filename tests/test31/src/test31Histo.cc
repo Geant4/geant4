@@ -36,20 +36,6 @@
 #include "test31Histo.hh"
 #include "g4std/iomanip"
 
-#include <memory> // for the auto_ptr(T>
-
-#include "AIDA/IAnalysisFactory.h"
-
-#include "AIDA/ITreeFactory.h"
-#include "AIDA/ITree.h"
-
-#include "AIDA/IHistogramFactory.h"
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogram2D.h"
-
-#include "AIDA/ITupleFactory.h"
-#include "AIDA/ITuple.h"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 test31Histo* test31Histo::fManager = 0;
@@ -188,39 +174,39 @@ void test31Histo::bookHisto()
   n_step = 0;
 
   // Creating the analysis factory
-  G4std::auto_ptr< IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+  G4std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
 
   // Creating the tree factory
-  G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
+  G4std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
   // Creating a tree mapped to a new hbook file.
-  tree = tf->create(histName,false,false,"hbook");
+  tree = tf->create(histName,"hbook",false,false);
   G4cout << "Tree store : " << tree->storeName() << G4endl;
  
   histo.resize(nHisto);
 
   // Creating a histogram factory, whose histograms will be handled by the tree
-  G4std::auto_ptr< IHistogramFactory > hf(af->createHistogramFactory( *tree ));
+  G4std::auto_ptr< AIDA::IHistogramFactory > hf(af->createHistogramFactory( *tree ));
 
   // Creating an 1-dimensional histograms in the root directory of the tree
 
-  if(0 < nHisto) histo[0] = hf->create1D("10",
+  if(0 < nHisto) histo[0] = hf->createHistogram1D("10",
     "Energy deposit (MeV) in absorber (mm)",NumberOfAbsorbers,0.0,zmax);
 
-  if(1 < nHisto) histo[1] = hf->create1D("11",
+  if(1 < nHisto) histo[1] = hf->createHistogram1D("11",
     "Energy (MeV) of secondary electrons",50,0.0,maxEnergy/MeV);
 
-  if(2 < nHisto) histo[2] = hf->create1D("12",
+  if(2 < nHisto) histo[2] = hf->createHistogram1D("12",
     "Theta (degrees) of delta-electrons",36,0.0,180.);
 
-  if(3 < nHisto) histo[3] = hf->create1D("13",
+  if(3 < nHisto) histo[3] = hf->createHistogram1D("13",
     "Energy (MeV) of secondary gamma",50,0.0,maxEnergy/MeV);
 
-  if(4 < nHisto) histo[4] = hf->create1D("14",
+  if(4 < nHisto) histo[4] = hf->createHistogram1D("14",
     "Theta (degrees) of secondary gamma",36,0.0,180.);
 
   // Creating a tuple factory, whose tuples will be handled by the tree
-  G4std::auto_ptr< ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+  G4std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
   // If using Anaphe HBOOK implementation, there is a limitation on the 
   // length of the variable names in a ntuple

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2002-07-26 14:53:32 vnivanch Exp $
+# $Id: GNUmakefile,v 1.3 2003-01-14 11:58:25 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -14,12 +14,11 @@ endif
 .PHONY: all
 all: lib bin
 
+CPPFLAGS += -DG4ANALYSIS_USE
+
 include $(G4INSTALL)/config/architecture.gmk
 
-OGLLIBS    := -L$(OGLHOME)/lib -lGLU -lGL
-LOADLIBS   += $(OGLLIBS)
-CPPFLAGS   += `aida-config --useHBook --include`
-LDFLAGS    += `aida-config --useHBook --lib`
-#EXTRALIBS += -L$(OGLHOME)/lib -lGL
+CPPFLAGS   += `aida-config --include`
+LDFLAGS    += `aida-config --lib`
 
 include $(G4INSTALL)/config/binmake.gmk

@@ -53,75 +53,75 @@ test31PrimaryGeneratorMessenger::test31PrimaryGeneratorMessenger(
   beamXCmd->SetGuidance("Set X position of the center of the beam.");
   beamXCmd->SetParameterName("beamX",true);
   beamXCmd->SetUnitCategory("Length");
-  beamXCmd->AvailableForStates(PreInit,Idle);
+  beamXCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   beamYCmd = new G4UIcmdWithADoubleAndUnit("/test31/gun/beamY",this);
   beamYCmd->SetGuidance("Set Y position of the center of the beam.");
   beamYCmd->SetParameterName("beamY",true);
   beamYCmd->SetUnitCategory("Length");
-  beamYCmd->AvailableForStates(PreInit,Idle);
+  beamYCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   beamZCmd = new G4UIcmdWithADoubleAndUnit("/test31/gun/beamZ",this);
   beamZCmd->SetGuidance("Set Z of the entry point of the beam.");
   beamZCmd->SetParameterName("beamZ",true);
   beamZCmd->SetUnitCategory("Length");
-  beamZCmd->AvailableForStates(PreInit,Idle);
+  beamZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   sigmaXCmd = new G4UIcmdWithADoubleAndUnit("/test31/gun/sigmaX",this);
   sigmaXCmd->SetGuidance("Set the beam Gussian width for X");
   sigmaXCmd->SetParameterName("sigmaX",false);
   sigmaXCmd->SetUnitCategory("Length");
-  sigmaXCmd->AvailableForStates(PreInit,Idle);
+  sigmaXCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   sigmaYCmd = new G4UIcmdWithADoubleAndUnit("/test31/gun/sigmaY",this);
   sigmaYCmd->SetGuidance("Set the beam Gussian width for Y");
   sigmaYCmd->SetParameterName("sigmaY",false);
   sigmaYCmd->SetUnitCategory("Length");
-  sigmaYCmd->AvailableForStates(PreInit,Idle);
+  sigmaYCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   sigmaZCmd = new G4UIcmdWithADoubleAndUnit("/test31/gun/sigmaZ",this);
   sigmaZCmd->SetGuidance("Set the beam Gussian width for Y");
   sigmaZCmd->SetParameterName("sigmaZ",false);
   sigmaZCmd->SetUnitCategory("Length");
-  sigmaZCmd->AvailableForStates(PreInit,Idle);
+  sigmaZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   sigmaECmd = new G4UIcmdWithADoubleAndUnit("/test31/gun/sigmaE",this);
   sigmaECmd->SetGuidance("Set the beam Gussian width for energy");
   sigmaECmd->SetParameterName("sigmaE",false);
   sigmaECmd->SetUnitCategory("Energy");
-  sigmaECmd->AvailableForStates(PreInit,Idle);
+  sigmaECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   beamECmd = new G4UIcmdWithADoubleAndUnit("/test31/gun/beamE",this);
   beamECmd->SetGuidance("Set the beam kinetic energy");
   beamECmd->SetParameterName("beamE",false);
   beamECmd->SetUnitCategory("Energy");
-  beamECmd->AvailableForStates(PreInit,Idle);
+  beamECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   beamBetaCmd = new G4UIcmdWithADouble("/test31/gun/beamBeta",this);
   beamBetaCmd->SetGuidance("Set the beam velocity");
   beamBetaCmd->SetParameterName("beamBeta",false);
-  beamBetaCmd->AvailableForStates(PreInit,Idle);
+  beamBetaCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   sigmaBetaCmd = new G4UIcmdWithADouble("/test31/gun/sigmaBeta",this);
   sigmaBetaCmd->SetGuidance("Set the sigma velocity");
   sigmaBetaCmd->SetParameterName("sigmaBeta",false);
-  sigmaBetaCmd->AvailableForStates(PreInit,Idle);
+  sigmaBetaCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   randCmd = new G4UIcmdWithAString("/test31/gun/random",this);
   randCmd->SetGuidance("Set the name of the random distribution (gauss,flatE,flatBeta)");
   randCmd->SetParameterName("rand",false);
-  randCmd->AvailableForStates(PreInit,Idle);
+  randCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   partCmd = new G4UIcmdWithAString("/test31/gun/particle",this);
   partCmd->SetGuidance("Set the name of the particle");
   partCmd->SetParameterName("part",false);
-  partCmd->AvailableForStates(PreInit,Idle);
+  partCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   maxThetaCmd = new G4UIcmdWithADoubleAndUnit("/test31/gun/maxTheta",this);
   maxThetaCmd->SetGuidance("Set the beam maxTheta in degrees.");
   maxThetaCmd->SetParameterName("maxTheta",false);
   maxThetaCmd->SetUnitCategory("Angle");
-  maxThetaCmd->AvailableForStates(PreInit,Idle);
+  maxThetaCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
 }
 

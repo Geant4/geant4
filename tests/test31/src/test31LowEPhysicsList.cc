@@ -63,7 +63,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-test31LowEPhysicsList::test31LowEPhysicsList(const G4String& name, 
+test31LowEPhysicsList::test31LowEPhysicsList(const G4String& name,
   G4int ver, G4bool nuc, G4bool bar, const G4String& tab) :
   G4VPhysicsConstructor(name),
   verbose(ver),
@@ -83,12 +83,15 @@ void test31LowEPhysicsList::ConstructParticle()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
+
 void test31LowEPhysicsList::ConstructProcess()
 {
   G4cout << "LowEnergy Electromagnetic PhysicsList is initilized" << G4endl;
-  G4ParticleDefinition* proton = G4Proton::ProtonDefinition();     
-  G4ParticleDefinition* antiproton = G4AntiProton::AntiProtonDefinition();     
+  G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
+  G4ParticleDefinition* antiproton = G4AntiProton::AntiProtonDefinition();
+  // nuclStop = false;
+  G4double eCut = 0.1*keV;
+  G4double gCut = 0.3*keV;
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -98,47 +101,48 @@ void test31LowEPhysicsList::ConstructProcess()
     G4String particleType = particle->GetParticleType();
     G4double charge = particle->GetPDGCharge();
 
-    if(0 < verbose) G4cout << "LowE EM processes for " << particleName << G4endl; 
-     
+    if(0 < verbose) G4cout << "LowE EM processes for " << particleName << G4endl;
+
     if (particleName == "gamma") {
-      if(0 < verbose) G4cout << "LowE gamma" << G4endl; 
+      if(0 < verbose) G4cout << "LowE gamma" << G4endl;
       pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh());
       G4LowEnergyPhotoElectric* pe = new G4LowEnergyPhotoElectric();
-      pe->SetCutForLowEnSecPhotons(1.0*keV);
-      pe->SetCutForLowEnSecElectrons(1.0*keV);
-      pe->ActivateAuger(true);
+      pe->SetCutForLowEnSecPhotons(gCut);
+      pe->SetCutForLowEnSecElectrons(eCut);
+      //pe->ActivateAuger(true);
       pmanager->AddDiscreteProcess(pe);
       pmanager->AddDiscreteProcess(new G4LowEnergyCompton());
-      pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion());    
-      
+      pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion());
+
     } else if (particleName == "e-") {
-      if(0 < verbose) G4cout << "LowE e-" << G4endl; 
+      if(0 < verbose) G4cout << "LowE e-" << G4endl;
       pmanager->AddProcess(new G4MultipleScattering(), -1, 1,1);
       G4LowEnergyIonisation* lei = new G4LowEnergyIonisation();
-      lei->SetCutForLowEnSecPhotons(1.0*MeV);
-      lei->SetCutForLowEnSecElectrons(1.0*MeV);
+      lei->SetCutForLowEnSecPhotons(gCut);
+      lei->SetCutForLowEnSecElectrons(eCut);
       //lei->SetEnlossFluc(false);
-      // lei->ActivateAuger(true);
+      //lei->ActivateAuger(true);
+      lei->ActivateFluorescence(true);
       lei->SetVerboseLevel(verbose);
       G4LowEnergyBremsstrahlung* bre = new G4LowEnergyBremsstrahlung();
       bre->SetVerboseLevel(verbose);
       pmanager->AddProcess(lei,  -1, 2,2);
-      pmanager->AddProcess(bre,  -1,-1,3);   
+      pmanager->AddProcess(bre,  -1,-1,3);
 
     } else if (particleName == "e+") {
-      if(0 < verbose) G4cout << "LowE e+" << G4endl; 
+      if(0 < verbose) G4cout << "LowE e+" << G4endl;
       pmanager->AddProcess(new G4MultipleScattering(), -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation(),   0,-1,4);
-  
-    } else if( particleName == "mu+" || 
+
+    } else if( particleName == "mu+" ||
                particleName == "mu-"    ) {
-      if(0 < verbose) G4cout << "LowE " << particleName << G4endl; 
+      if(0 < verbose) G4cout << "LowE " << particleName << G4endl;
       pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
       pmanager->AddProcess(new G4MuIonisation(),      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung(),  -1,-1,3);
-      pmanager->AddProcess(new G4MuPairProduction(),  -1,-1,4);       	       
+      pmanager->AddProcess(new G4MuPairProduction(),  -1,-1,4);
       if(particleName == "mu-") 
         pmanager->AddProcess(new G4MuonMinusCaptureAtRest(),0,-1,-1);
 
@@ -173,7 +177,7 @@ void test31LowEPhysicsList::ConstructProcess()
          table == G4String("ICRU_R49He") ||
          table == G4String("ICRU_R49PowersHe") ) {
 
-	if(particle->GetPDGCharge() > 0.0) 
+	if(particle->GetPDGCharge() > 0.0)
           hIon->SetElectronicStoppingPowerModel(proton,table);
         else
           hIon->SetElectronicStoppingPowerModel(antiproton,table);

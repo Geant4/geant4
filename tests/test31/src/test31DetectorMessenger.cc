@@ -65,119 +65,119 @@ test31DetectorMessenger::test31DetectorMessenger(test31DetectorConstruction* h):
   AbsMaterCmd = new G4UIcmdWithAString("/test31/AbsorberMaterial",this);
   AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
   AbsMaterCmd->SetParameterName("AbsoberMaterial",false);
-  AbsMaterCmd->AvailableForStates(PreInit,Idle);
+  AbsMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   WorldMaterCmd = new G4UIcmdWithAString("/test31/WorldMaterial",this);
   WorldMaterCmd->SetGuidance("Select Material of the World.");
   WorldMaterCmd->SetParameterName("WorldMaterial",false);
-  WorldMaterCmd->AvailableForStates(PreInit,Idle);
+  WorldMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   NumOfAbsCmd = new G4UIcmdWithAnInteger("/test31/NumberOfAbsorbers",this);
   NumOfAbsCmd->SetGuidance("Set number of absorbers");
   NumOfAbsCmd->SetParameterName("Nabs",false);
-  NumOfAbsCmd->AvailableForStates(PreInit,Idle);
+  NumOfAbsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/test31/AbsorberThick",this);
   AbsThickCmd->SetGuidance("Set Thickness of the Absorber");
   AbsThickCmd->SetParameterName("SizeZ",false);  
   AbsThickCmd->SetRange("SizeZ>0.");
   AbsThickCmd->SetUnitCategory("Length");  
-  AbsThickCmd->AvailableForStates(PreInit,Idle);
+  AbsThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   AbsGapCmd = new G4UIcmdWithADoubleAndUnit("/test31/AbsorberGap",this);
   AbsGapCmd->SetGuidance("Set gap between absorbers");
   AbsGapCmd->SetParameterName("SizeZ",false);  
   AbsGapCmd->SetRange("SizeZ>0.");
   AbsGapCmd->SetUnitCategory("Length");  
-  AbsGapCmd->AvailableForStates(PreInit,Idle);
+  AbsGapCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   AbsSizYZCmd = new G4UIcmdWithADoubleAndUnit("/test31/AbsorberXY",this);
   AbsSizYZCmd->SetGuidance("Set sizeXY of the Absorber");
   AbsSizYZCmd->SetParameterName("SizeYZ",false);
   AbsSizYZCmd->SetRange("SizeYZ>0.");
   AbsSizYZCmd->SetUnitCategory("Length");
-  AbsSizYZCmd->AvailableForStates(PreInit,Idle);
+  AbsSizYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
     
   WorldXCmd = new G4UIcmdWithADoubleAndUnit("/test31/WorldZ",this);
   WorldXCmd->SetGuidance("Set Z size of the World");
   WorldXCmd->SetParameterName("WSizeX",false);
   WorldXCmd->SetRange("WSizeX>0.");
   WorldXCmd->SetUnitCategory("Length");
-  WorldXCmd->AvailableForStates(PreInit,Idle);
+  WorldXCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
     
   UpdateCmd = new G4UIcmdWithoutParameter("/test31/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(PreInit,Idle);
+  UpdateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
       
   XMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/test31/FieldX",this);  
   XMagFieldCmd->SetGuidance("Define magnetic field along X");
   XMagFieldCmd->SetGuidance("Magnetic field will be in X direction.");
   XMagFieldCmd->SetParameterName("Bx",false);
   XMagFieldCmd->SetUnitCategory("Magnetic flux density");
-  XMagFieldCmd->AvailableForStates(PreInit,Idle);  
+  XMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
   YMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/test31/FieldY",this);  
   YMagFieldCmd->SetGuidance("Define magnetic field along Y");
   YMagFieldCmd->SetGuidance("Magnetic field will be in Y direction.");
   YMagFieldCmd->SetParameterName("By",false);
   YMagFieldCmd->SetUnitCategory("Magnetic flux density");
-  YMagFieldCmd->AvailableForStates(PreInit,Idle);  
+  YMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
   ZMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/test31/FieldZ",this);  
   ZMagFieldCmd->SetGuidance("Define magnetic field along Z");
   ZMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   ZMagFieldCmd->SetParameterName("Bz",false);
   ZMagFieldCmd->SetUnitCategory("Magnetic flux density");
-  ZMagFieldCmd->AvailableForStates(PreInit,Idle);  
+  ZMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
   HistoCmd = new G4UIcmdWithAString("/test31/HistoName",this);
   HistoCmd->SetGuidance("Set the name of the histo file");
   HistoCmd->SetParameterName("histo",false);
-  HistoCmd->AvailableForStates(PreInit,Idle);
+  HistoCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   ntupCmd = new G4UIcmdWithABool("/hTest/ntuple",this);
   ntupCmd->SetGuidance("Set number ntuple to fill"); 
   ntupCmd->SetParameterName("ntuple",false);
-  ntupCmd->AvailableForStates(PreInit,Idle);
+  ntupCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   NumOfEvt = new G4UIcmdWithAnInteger("/test31/NumberOfEvents",this);
   NumOfEvt->SetGuidance("Set number of event to be simulated");
   NumOfEvt->SetParameterName("Nevt",false);
-  NumOfEvt->AvailableForStates(PreInit,Idle);
+  NumOfEvt->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   verbCmd = new G4UIcmdWithAnInteger("/test31/verbose",this);
   verbCmd->SetGuidance("Set verbose for test31");
   verbCmd->SetParameterName("verb",false);
-  verbCmd->AvailableForStates(PreInit,Idle);
+  verbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   intCmd = new G4UIcmdWithAnInteger("/test31/numberAbsToSave",this);
   intCmd->SetGuidance("Set number of absorbers for which "); 
   intCmd->SetGuidance("the energy is saved to tuple");
   intCmd->SetParameterName("numberAbsToSave",false);
-  intCmd->AvailableForStates(PreInit);
+  intCmd->AvailableForStates(G4State_PreInit);
 
   nhistCmd = new G4UIcmdWithAnInteger("/test31/HistoNumber",this);
   nhistCmd->SetGuidance("Set number of histograms to fill"); 
   nhistCmd->SetParameterName("HistoNumber",false);
-  nhistCmd->AvailableForStates(PreInit,Idle);
+  nhistCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   nDebugSCmd = new G4UIcmdWithAnInteger("/test31/nFirstEventToDebug",this);
   nDebugSCmd->SetGuidance("Set number of the first event to debug"); 
   nDebugSCmd->SetParameterName("nFirstEventToDebug",false);
-  nDebugSCmd->AvailableForStates(PreInit,Idle);
+  nDebugSCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   nDebugECmd = new G4UIcmdWithAnInteger("/test31/nLastEventToDebug",this);
   nDebugECmd->SetGuidance("Set number of the last event to debug"); 
   nDebugECmd->SetParameterName("nLastEventToDebug",false);
-  nDebugECmd->AvailableForStates(PreInit,Idle);
+  nDebugECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   DeltaECmd = new G4UIcmdWithADoubleAndUnit("/test31/maxDeltaEnergy",this);  
   DeltaECmd->SetGuidance("Define scale of delta-Energy histogram");
   DeltaECmd->SetParameterName("DeltaE",false);
   DeltaECmd->SetUnitCategory("Energy");
-  DeltaECmd->AvailableForStates(PreInit,Idle);  
+  DeltaECmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
   
 }
 
