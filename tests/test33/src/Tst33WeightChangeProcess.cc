@@ -61,7 +61,7 @@ Tst33WeightChangeProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &)
     G4double newWeight = w * (lowestRelativeWeight + 
 			      relativeWeightRange * G4UniformRand());
     
-    aParticleChange->SetWeightChange(newWeight);
+    aParticleChange->ProposeWeight(newWeight);
   }
   return aParticleChange;
 }
