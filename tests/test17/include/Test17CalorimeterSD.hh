@@ -16,12 +16,13 @@
 #ifndef Test17CalorimeterSD_h
 #define Test17CalorimeterSD_h 1
 
-#include "G4VSensitiveDetector.hh"
 #include "globals.hh"
+#include "G4VSensitiveDetector.hh"
 
 class Test17DetectorConstruction;
 class G4HCofThisEvent;
 class G4Step;
+
 #include "Test17CalorHit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -41,10 +42,12 @@ public: // Without description
 
   private:
   
-      Test17CalorHitsCollection*  CalCollection;      
-      Test17DetectorConstruction* Detector;
-      G4int*                   HitID;
+      Test17DetectorConstruction* detector;
 };
 
 #endif
+
+
+
+
 

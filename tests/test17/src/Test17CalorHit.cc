@@ -11,8 +11,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Test17CalorHit.hh"
-
-G4Allocator<Test17CalorHit> Test17CalorHitAllocator;
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -57,4 +56,15 @@ void Test17CalorHit::Print()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+
+
+
+
+
+
+
+
 

@@ -23,7 +23,6 @@
 #include "Test17DetectorMessenger.hh"
 
 #include "Test17CalorimeterSD.hh"
-
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
@@ -33,9 +32,7 @@
 #include "G4TransportationManager.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
-
 #include "G4Colour.hh"
-
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

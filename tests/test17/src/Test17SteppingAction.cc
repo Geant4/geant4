@@ -93,25 +93,12 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
     }
   }
 
-  // After step in absorber
-  if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber") {
-
-    // Count number of steps in absorber
-    if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-	        GetPDGCharge()) != 0.0) ) {
-         eventaction->CountStepsCharged() ;
-
-    } else {
-      if ((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-                  GetParticleName()) == "gamma") 
-         eventaction->CountStepsNeutral() ;
-    }
-
     // Primary 
-    if(0 == aStep->GetTrack()->GetParentID() ) {
+  if(0 == aStep->GetTrack()->GetParentID() ) {
+    eventaction->CountStepsCharged(aStep->GetStepLength()) ;
 
-      // Stopping or end of track
-      if((0.0 == Tkin) || 
+    // Stopping or end of track
+    if((0.0 == Tkin) || 
          (aStep->GetTrack()->GetNextVolume()->GetName()=="World") ) {
 
             xend= aStep->GetTrack()->GetPosition().x()/mm ;
@@ -123,21 +110,21 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
             runaction->SaveToTuple("TEND",Tkin/MeV,1000.0);
             runaction->SaveToTuple("TET",Theta/deg,1000.0);      
             runaction->AddnStepsCharged(xend) ;
-      }
-      rend = sqrt(xend*xend + yend*yend) ;
+    }
+    rend = sqrt(xend*xend + yend*yend) ;
 
-    //secondary
-    } else {
+  //secondary
+  } else {
 
-      if ( aStep->GetTrack()->GetNextVolume()->GetName() == "World" ) {
+    if ( aStep->GetTrack()->GetNextVolume()->GetName() == "World" ) {
 
-        // charged secondaries forward
-        if(aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
+      // charged secondaries forward
+      if(aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
                   GetPDGCharge() != 0.0 ) { 
 
-          eventaction->SetTr();
+        eventaction->SetTr();
 
-          if(0.5*pi > Theta) {
+        if(0.5*pi > Theta) {
             runaction->FillTh(Theta) ;
             runaction->FillTt(Tkin) ;
             yend= aStep->GetTrack()->GetPosition().y() ;
@@ -146,20 +133,23 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
             runaction->FillR(rend);
 
   	 // charged secondaries backword
-          } else {
+        } else {
             eventaction->SetRef();
             Thetaback = pi - Theta ;
             runaction->FillThBack(Thetaback) ;
             runaction->FillTb(Tsec) ;
-          }
+        }
  
         // gammas
-        } else {
+      } else {
           if (0.5*pi > Theta) runaction->FillGammaSpectrum(Tkin) ;
-        }
       }
     }
   }
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+
 

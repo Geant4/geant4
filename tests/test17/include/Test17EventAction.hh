@@ -36,7 +36,7 @@ public: // Without description
     G4int GetEventno();
     void setEventVerbose(G4int level);
     
-    void CountStepsCharged() ;
+    void CountStepsCharged(G4double step) ;
     void CountStepsNeutral() ;
     void AddCharged() ;
     void AddNeutral() ;
@@ -48,7 +48,6 @@ public: // Without description
     void SetDrawFlag(G4String val)  {drawFlag = val;};
     
   private:
-    G4int    calorimeterCollID;
     Test17EventActionMessenger*  eventMessenger;
     Test17RunAction* runaction;
     G4int verboselevel;
@@ -57,6 +56,8 @@ public: // Without description
     G4double NE,NP;
     G4double Transmitted,Reflected ;
     G4double EnergyDeposition ;
+    G4double totLAbs ;
+    G4double totEAbs ;
 
     G4String drawFlag;
 };

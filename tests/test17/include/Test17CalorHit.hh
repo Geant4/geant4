@@ -16,9 +16,8 @@
 #ifndef Test17CalorHit_h
 #define Test17CalorHit_h 1
 
+#include "globals.hh"
 #include "G4VHit.hh"
-#include "G4THitsCollection.hh"
-#include "G4Allocator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -31,9 +30,6 @@ public: // Without description
       Test17CalorHit(const Test17CalorHit&);
       const Test17CalorHit& operator=(const Test17CalorHit&);
       int operator==(const Test17CalorHit&) const;
-
-      inline void* operator new(size_t);
-      inline void  operator delete(void*);
 
       void Print();
       
@@ -49,33 +45,15 @@ public: // Without description
      
   private:
   
-      G4double EdepAbs, TrackLengthAbs;
-      G4double EdepGap, TrackLengthGap;
+      G4double EdepAbs;
+      G4double TrackLengthAbs;
+      G4double EdepGap;
+
+      G4double TrackLengthGap;
       
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-typedef G4THitsCollection<Test17CalorHit> Test17CalorHitsCollection;
-
-extern G4Allocator<Test17CalorHit> Test17CalorHitAllocator;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void* Test17CalorHit::operator new(size_t)
-{
-  void* aHit;
-  aHit = (void*) Test17CalorHitAllocator.MallocSingle();
-  return aHit;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void Test17CalorHit::operator delete(void* aHit)
-{
-  Test17CalorHitAllocator.FreeSingle((Test17CalorHit*) aHit);
-}
-
 #endif
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 

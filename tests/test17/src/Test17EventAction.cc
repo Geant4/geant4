@@ -13,13 +13,10 @@
 
 #include "Test17RunAction.hh"
 
-#include "Test17CalorHit.hh"
 #include "Test17EventActionMessenger.hh"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4TrajectoryContainer.hh"
@@ -30,8 +27,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Test17EventAction::Test17EventAction(Test17RunAction* Test17RA)
-:calorimeterCollID(-1),eventMessenger(NULL),
- verboselevel(0),runaction(Test17RA),drawFlag("all")
+: eventMessenger(NULL),
+  verboselevel(0),
+  runaction(Test17RA),
+  drawFlag("all")
 {
   eventMessenger = new Test17EventActionMessenger(this);
 }
@@ -48,13 +47,6 @@ Test17EventAction::~Test17EventAction()
 void Test17EventAction::BeginOfEventAction(const G4Event* evt)
 {  
 
-
-  if(calorimeterCollID==-1)
-  {
-    G4SDManager * SDman = G4SDManager::GetSDMpointer();
-    calorimeterCollID = SDman->GetCollectionID("CalCollection");
-  } 
-
   EnergyDeposition = 0.0;
 
   if(verboselevel>1)
@@ -68,38 +60,14 @@ void Test17EventAction::BeginOfEventAction(const G4Event* evt)
   NP=0.;
   Transmitted=0.;
   Reflected  =0.;
+  totEAbs =0.;
+  totLAbs =0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Test17EventAction::EndOfEventAction(const G4Event* evt)
 {
-
-  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  Test17CalorHitsCollection* CHC = NULL;
-  if (HCE)
-      CHC = (Test17CalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
-
-  if (CHC)
-   {
-    int n_hit = CHC->entries();
-   // if(verboselevel==2)
-   // G4cout << "     " << n_hit
-   //      << " hits are stored in Test17CalorHitsCollection." << G4endl;
-
-    G4double totEAbs=0, totLAbs=0;
-    for (int i=0;i<n_hit;i++)
-      { totEAbs += (*CHC)[i]->GetEdepAbs(); 
-        totLAbs += (*CHC)[i]->GetTrakAbs();
-      }
-  if(verboselevel==2)
-    G4cout
-       << "   Absorber: total energy: " << G4std::setw(7) << 
-                             G4BestUnit(totEAbs,"Energy")
-       << "       total track length: " << G4std::setw(7) <<
-                             G4BestUnit(totLAbs,"Length")
-       << G4endl;           
-
    // count event, add deposits to the sum ...
     runaction->CountEvent() ;
     runaction->AddTrackLength(totLAbs) ;
@@ -117,11 +85,9 @@ void Test17EventAction::EndOfEventAction(const G4Event* evt)
     runaction->SaveToTuple("EDEP",EnergyDeposition);      
 
     runaction->SaveEvent();
-  }
 
-
-  if(verboselevel>0)
-    G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
+    if(verboselevel>0)
+      G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -141,8 +107,9 @@ void Test17EventAction::setEventVerbose(G4int level)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17EventAction::CountStepsCharged()
+void Test17EventAction::CountStepsCharged(G4double step)
 {
+  totLAbs += step ;
   nstepCharged += 1. ;
 }
 
@@ -171,6 +138,7 @@ void Test17EventAction::AddNeutral()
 
 void Test17EventAction::AddE(G4double En) 
 {
+  totEAbs +=En;
   EnergyDeposition += En;
   NE += 1.;
 }
@@ -198,6 +166,12 @@ void Test17EventAction::SetRef()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
+
+
+
+
+
+
 
 
 
