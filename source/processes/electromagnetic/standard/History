@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2003-04-07 10:20:27 vnivanch Exp $
+$Id: History,v 1.85 2003-04-08 18:04:25 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08 Apr 03: V.Ivant (stand-V05-00-09)
+- finalRange is region aware
 
 07 Apr 03: V.Ivant (stand-V05-00-08)
 - G4VhEnergyLoss, G4hIonisation - fix problem of several runs with

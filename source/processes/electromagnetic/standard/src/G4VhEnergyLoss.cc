@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.41 2003-04-07 16:55:38 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.42 2003-04-08 18:04:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,6 +55,7 @@
 // 15-01-03 Migrade to cut per region (V.Ivanchenko)
 // 25-03-03 add finalRangeRequested (mma)
 // 07-04-03 add verbosity (V.Ivanchenko)
+// 08-04-03 finalRange is region aware (V.Ivanchenko)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -203,8 +204,9 @@ void G4VhEnergyLoss::BuildDEDXTable(
   //set physically consistent value for finalRange
   //and parameters for en.loss step limit
   if (finalRangeRequested > 0.) { finalRange = finalRangeRequested;}
+/*
   else
-   { 
+   {
     for (size_t idxMate=0; idxMate<numOfCouples; idxMate++)
      {
       G4double rcut = theCoupleTable->GetMaterialCutsCouple(idxMate)
@@ -212,11 +214,11 @@ void G4VhEnergyLoss::BuildDEDXTable(
 
       if (finalRange > rcut) finalRange = rcut;
      }
-   } 
+   }
   c1lim = dRoverRange;
   c2lim = 2.*(1.-dRoverRange)*finalRange;
   c3lim = -(1.-dRoverRange)*finalRange*finalRange;
-
+*/
   // create table if there is no table or there is a new cut value
   // create/fill proton or antiproton tables depending on the charge
   G4double Charge = aParticleType.GetPDGCharge()/eplus;
@@ -225,7 +227,7 @@ void G4VhEnergyLoss::BuildDEDXTable(
   if (Charge>0.) {theDEDXTable= theDEDXpTable;}
   else           {theDEDXTable= theDEDXpbarTable;}
 
-  G4String pname = aParticleType.GetParticleName(); 
+  G4String pname = aParticleType.GetParticleName();
   if( !theDEDXTable || (CutsWhereModified() &&
       (pname == "proton" || pname == "anti_proton")) )
 
@@ -439,14 +441,17 @@ G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
 
  // compute the (random) Step limit
  //
+ G4double r = G4std::min(finalRange, couple->GetProductionCuts()
+                 ->GetProductionCut(idxG4ElectronCut));
  G4double StepLimit;
- if (fRangeNow > finalRange)
+ if (fRangeNow > r)
   {
-   StepLimit = (c1lim*fRangeNow+c2lim+c3lim/fRangeNow);
+    StepLimit = dRoverRange*fRangeNow + r*(1.0 - dRoverRange)*(2.0 - r/fRangeNow);
+    //   StepLimit = (c1lim*fRangeNow+c2lim+c3lim/fRangeNow);
 
-   //  randomise this value
-   if(rndmStepFlag) StepLimit=finalRange+(StepLimit-finalRange)*G4UniformRand();
-   if(StepLimit > fRangeNow) StepLimit = fRangeNow;
+    //  randomise this value
+    if (rndmStepFlag) StepLimit=finalRange+(StepLimit-finalRange)*G4UniformRand();
+    if (StepLimit > fRangeNow) StepLimit = fRangeNow;
   }
  else StepLimit = fRangeNow;
 

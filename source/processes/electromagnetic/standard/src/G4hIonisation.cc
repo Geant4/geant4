@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.37 2003-04-07 17:07:12 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.38 2003-04-08 18:04:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process -------------------------------
@@ -52,6 +52,7 @@
 // 15-01-03 Migrade to cut per region (V.Ivanchenko)
 // 10-03-03 Use SubType for GenericIons (V.Ivanchenko)
 // 07-04-03 Fix problem of several runs (V.Ivanchenko)
+// 08-04-03 finalRange is region aware (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 
@@ -698,7 +699,10 @@ void G4hIonisation::PrintInfoDefinition()
          << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,
                                                   "Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy")
-         << " in " << TotBin << " bins. \n";
+         << " in " << TotBin << " bins. "
+	 << "\n        Step function: finalRange(mm)= " << finalRange
+	 << ",  dRoverRange= " << dRoverRange
+	 << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

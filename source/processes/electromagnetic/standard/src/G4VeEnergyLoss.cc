@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.29 2003-03-25 13:43:51 maire Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.30 2003-04-08 18:04:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,6 +45,7 @@
 // 15-01-03 Migrade to cut per region (V.Ivanchenko)
 // 10-03-03 remove tails of old cuts (V.Ivanchenko)
 // 25-03-03 add finalRangeRequested (mma)
+// 08-04-03 finalRange is region aware (V.Ivanchenko)
 // -----------------------------------------------------------------------------
 
 
@@ -184,6 +185,7 @@ void G4VeEnergyLoss::BuildDEDXTable(
   //set physically consistent value for finalRange
   //and parameters for en.loss step limit
   if (finalRangeRequested > 0.) { finalRange = finalRangeRequested;}
+  /*
   else
    {
     for (size_t idxMate=0; idxMate<numOfCouples; idxMate++)
@@ -197,7 +199,7 @@ void G4VeEnergyLoss::BuildDEDXTable(
   c1lim = dRoverRange;
   c2lim = 2.*(1.-dRoverRange)*finalRange;
   c3lim = -(1.-dRoverRange)*finalRange*finalRange;
-
+*/
   // Build energy loss table as a sum of the energy loss due to the
   // different processes.
 

@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.cc,v 1.26 2003-01-17 18:55:44 vnivanch Exp $
+// $Id: G4eIonisation.cc,v 1.27 2003-04-08 18:04:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4eIonisation physics process --------------------------------
 //                by Laszlo Urban, 20 March 1997
 //------------------------------------------------------------------------------
 //
-// 07-04-98 remove 'tracking cut' of the ionizing particle, mma 
+// 07-04-98 remove 'tracking cut' of the ionizing particle, mma
 // 04-09-98 new methods SetBining() PrintInfo()
 // 07-09-98 Cleanup
 // 02-02-99 correction inDoIt , L.Urban
@@ -42,6 +42,7 @@
 // 07-11-01 particleMass and Charge become local variables
 // 26-03-02 change access to cuts in BuildLossTables (V.Ivanchenko)
 // 16-01-03 Migrade to cut per region (V.Ivanchenko)
+// 08-04-03 finalRange is region aware (V.Ivanchenko)
 //------------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -598,7 +599,7 @@ G4bool G4eIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 void G4eIonisation::PrintInfoDefinition()
 {
   G4String comments = "delta cross sections from Moller+Bhabha. "
@@ -609,7 +610,10 @@ void G4eIonisation::PrintInfoDefinition()
          << "\n        PhysicsTables from "
 	 << G4BestUnit(LowerBoundLambda,"Energy")
          << " to " << G4BestUnit(UpperBoundLambda,"Energy") 
-         << " in " << NbinLambda << " bins. \n";
-}         
+         << " in " << NbinLambda << " bins."
+	 << "\n        Step function: finalRange(mm)= " << finalRange
+	 << ",  dRoverRange= " << dRoverRange 
+	 << G4endl;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
