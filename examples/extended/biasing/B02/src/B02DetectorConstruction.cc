@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02DetectorConstruction.cc,v 1.6 2002-11-22 17:47:58 dressel Exp $
+// $Id: B02DetectorConstruction.cc,v 1.7 2003-02-19 08:24:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,7 +38,6 @@
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-#include "PhysicalConstants.h"
 
 // for importance biasing
 #include "G4IStore.hh"

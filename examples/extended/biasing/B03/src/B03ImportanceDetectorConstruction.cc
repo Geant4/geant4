@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B03ImportanceDetectorConstruction.cc,v 1.2 2002-11-22 17:47:58 dressel Exp $
+// $Id: B03ImportanceDetectorConstruction.cc,v 1.3 2003-02-19 08:24:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,7 +35,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
-#include "PhysicalConstants.h"
 
 
 B03ImportanceDetectorConstruction::B03ImportanceDetectorConstruction()

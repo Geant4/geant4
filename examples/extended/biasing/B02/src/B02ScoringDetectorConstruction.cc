@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02ScoringDetectorConstruction.cc,v 1.5 2002-07-11 08:12:22 dressel Exp $
+// $Id: B02ScoringDetectorConstruction.cc,v 1.6 2003-02-19 08:24:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,7 +34,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
-#include "PhysicalConstants.h"
 
 G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
 {  
