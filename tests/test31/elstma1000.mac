@@ -4,7 +4,7 @@
 #================================================ 
 /control/verbose 2
 /run/verbose 1
-/tracking/verbose 0
+/tracking/verbose 2
 /event/verbose 0
 /test31/verbose 0
 #
@@ -24,7 +24,7 @@
 #/test31/HistoName           hbook.paw 
 /test31/HistoName            el_st_ma1000.paw 
 /test31/HistoNumber          5
-/test31/NumberOfEvents       1000
+/test31/NumberOfEvents       2
 /test31/gun/beamE            1000.0 MeV
 #
 /gun/particle e-
