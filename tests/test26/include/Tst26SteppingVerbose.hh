@@ -21,72 +21,37 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26EventAction.hh,v 1.4 2003-03-13 12:00:12 maire Exp $
+// $Id: Tst26SteppingVerbose.hh,v 1.1 2003-03-13 12:00:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-/////////////////////////////////////////////////////////////////////////
+//   This class manages the verbose outputs in G4SteppingManager. 
+//   It inherits from G4SteppingVerbose.
+//   It shows how to extract informations during the tracking of a particle.
 //
-// test26: Cut per region physics
-//
-// Created: 31.01.03 V.Ivanchenko
-//
-// Modified:
-//
-////////////////////////////////////////////////////////////////////////
-//
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Tst26EventAction_h
-#define Tst26EventAction_h 1
+class Tst26SteppingVerbose;
 
-#include "G4UserEventAction.hh"
-#include "globals.hh"
-#include "g4std/vector"
+#ifndef Tst26SteppingVerbose_h
+#define Tst26SteppingVerbose_h 1
 
-class Tst26RunAction;
-class Tst26EventMessenger;
+#include "G4SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Tst26EventAction : public G4UserEventAction
+class Tst26SteppingVerbose : public G4SteppingVerbose 
 {
-  public:
-  
-    Tst26EventAction(Tst26RunAction*);
-   ~Tst26EventAction();
+ public:
+   
+  Tst26SteppingVerbose();
+ ~Tst26SteppingVerbose();
 
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
-    
-    void SetPrintModulo(G4int    val)  {printModulo = val;};
-    void SetDrawFlag   (G4String val)  {drawFlag    = val;}; 
-       
-    void AddEnergy(G4double, G4int, G4int);     
+  void StepInfo();
+  void TrackingStarted();
 
-  private:
-  
-    Tst26RunAction*   Tst26Run;
-    G4String          drawFlag;
-    G4int             printModulo;          
-    G4double          E1;
-    G4double          E9;
-    G4double          E25;
-    G4double          Eabs1;
-    G4double          Eabs2;
-    G4double          Eabs3;
-    G4double          Eabs4;
-    G4double          Eth;
-    G4std::vector<G4double> Evert;
-    G4std::vector<G4int>    Nvert;
-    
-    Tst26EventMessenger* eventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

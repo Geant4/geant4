@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PrimaryGeneratorAction.cc,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
+// $Id: Tst26PrimaryGeneratorAction.cc,v 1.4 2003-03-13 12:00:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,13 +41,17 @@
 
 #include "Tst26PrimaryGeneratorAction.hh"
 
+#include "Tst26DetectorConstruction.hh"
+
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst26PrimaryGeneratorAction::Tst26PrimaryGeneratorAction()
+Tst26PrimaryGeneratorAction::Tst26PrimaryGeneratorAction(
+                                                 Tst26DetectorConstruction* det)
+:detector(det)						 
 {
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
@@ -56,7 +60,6 @@ Tst26PrimaryGeneratorAction::Tst26PrimaryGeneratorAction()
                  = G4ParticleTable::GetParticleTable()->FindParticle("e-");
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
   particleGun->SetParticleEnergy(1.*GeV);
 }
 
@@ -71,6 +74,8 @@ Tst26PrimaryGeneratorAction::~Tst26PrimaryGeneratorAction()
 
 void Tst26PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+  G4double zVertex = - (detector->GetWorldSizeZ());
+  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));  
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 

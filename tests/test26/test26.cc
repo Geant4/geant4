@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test26.cc,v 1.3 2003-02-06 11:53:24 vnivanch Exp $
+// $Id: test26.cc,v 1.4 2003-03-13 12:00:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -41,6 +41,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 
@@ -51,6 +52,12 @@
 #include "Tst26EventAction.hh"
 #include "Tst26TrackingAction.hh"
 #include "Tst26SteppingAction.hh"
+#include "Tst26SteppingVerbose.hh"
+
+
+#ifdef G4VIS_USE
+#include "Tst26VisManager.hh"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,16 +65,25 @@ int main(int argc,char** argv) {
  
   //choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
-       
+  
+  //my Verbose output class
+  G4VSteppingVerbose::SetInstance(new Tst26SteppingVerbose);
+         
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
   // set mandatory initialization classes
-  Tst26DetectorConstruction* detector = new Tst26DetectorConstruction;
-  runManager->SetUserInitialization(detector);
+  Tst26DetectorConstruction* det = new Tst26DetectorConstruction;
+  runManager->SetUserInitialization(det);
   runManager->SetUserInitialization(new Tst26PhysicsList);
   
-  Tst26PrimaryGeneratorAction* primary = new Tst26PrimaryGeneratorAction();
+#ifdef G4VIS_USE
+  // Visualization, if you choose to have it!
+  G4VisManager* visManager = new Tst26VisManager;
+  visManager->Initialize();
+#endif
+  
+  Tst26PrimaryGeneratorAction* primary = new Tst26PrimaryGeneratorAction(det);
   runManager->SetUserAction(primary);
         
   // set user action classes
@@ -84,7 +100,13 @@ int main(int argc,char** argv) {
   if (argc==1)   // Define UI terminal for interactive mode.
     {
       G4UIsession * session = 0;
+#ifdef G4UI_USE_TCSH
+      session = new G4UIterminal(new G4UItcsh);      
+#else
       session = new G4UIterminal();
+#endif    
+
+      UI->ApplyCommand("/control/execute vis.mac");          
       session->SessionStart();
       delete session;
     }
@@ -94,7 +116,10 @@ int main(int argc,char** argv) {
       G4String fileName = argv[1];
       UI->ApplyCommand(command+fileName);
     }
-
+    
+#ifdef G4VIS_USE
+  delete visManager;
+#endif
   delete runManager;
 
   return 0;

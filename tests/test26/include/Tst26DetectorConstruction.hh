@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26DetectorConstruction.hh,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
+// $Id: Tst26DetectorConstruction.hh,v 1.4 2003-03-13 12:00:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,6 +77,8 @@ class Tst26DetectorConstruction : public G4VUserDetectorConstruction
 
      void UpdateGeometry();
      
+     G4double GetWorldSizeZ() {return worldZ;}
+     
   private:
      
      G4double ecalLength;    
@@ -85,6 +87,7 @@ class Tst26DetectorConstruction : public G4VUserDetectorConstruction
      G4double padLength;
      G4double padWidth;
      G4double absLength;
+     G4double worldZ;
   
      G4Material* calMaterial;          
      G4Material* vertMaterial;          

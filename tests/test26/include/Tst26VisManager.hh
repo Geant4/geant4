@@ -21,72 +21,52 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26EventAction.hh,v 1.4 2003-03-13 12:00:12 maire Exp $
+// $Id: Tst26VisManager.hh,v 1.1 2003-03-13 12:00:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-/////////////////////////////////////////////////////////////////////////
-//
-// test26: Cut per region physics
-//
-// Created: 31.01.03 V.Ivanchenko
-//
-// Modified:
-//
-////////////////////////////////////////////////////////////////////////
-//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Tst26EventAction_h
-#define Tst26EventAction_h 1
+// Example Visualization Manager implementing virtual function
+//   RegisterGraphicsSystems.  Exploits C-pre-processor variables
+//   G4VIS_USE_DAWN, etc., which are set by the GNUmakefiles if
+//   environment variables of the same name are set.
 
-#include "G4UserEventAction.hh"
-#include "globals.hh"
-#include "g4std/vector"
+// So all you have to do is set environment variables and compile and
+//   instantiate this in your main().
 
-class Tst26RunAction;
-class Tst26EventMessenger;
+// Alternatively, you can implement an empty function here and just
+//   register the systems you want in your main(), e.g.:
+//   G4VisManager* myVisManager = new MyVisManager;
+//   myVisManager -> RegisterGraphicsSystem (new MyGraphicsSystem);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Tst26EventAction : public G4UserEventAction
-{
-  public:
-  
-    Tst26EventAction(Tst26RunAction*);
-   ~Tst26EventAction();
+#ifndef Tst26VisManager_h
+#define Tst26VisManager_h 1
 
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
-    
-    void SetPrintModulo(G4int    val)  {printModulo = val;};
-    void SetDrawFlag   (G4String val)  {drawFlag    = val;}; 
-       
-    void AddEnergy(G4double, G4int, G4int);     
+#ifdef G4VIS_USE
 
-  private:
-  
-    Tst26RunAction*   Tst26Run;
-    G4String          drawFlag;
-    G4int             printModulo;          
-    G4double          E1;
-    G4double          E9;
-    G4double          E25;
-    G4double          Eabs1;
-    G4double          Eabs2;
-    G4double          Eabs3;
-    G4double          Eabs4;
-    G4double          Eth;
-    G4std::vector<G4double> Evert;
-    G4std::vector<G4int>    Nvert;
-    
-    Tst26EventMessenger* eventMessenger;
+#include "G4VisManager.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class Tst26VisManager: public G4VisManager {
+
+public:
+
+  Tst26VisManager ();
+
+private:
+
+  void RegisterGraphicsSystems ();
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
-    
+#endif

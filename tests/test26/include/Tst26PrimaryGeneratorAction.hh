@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PrimaryGeneratorAction.hh,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
+// $Id: Tst26PrimaryGeneratorAction.hh,v 1.4 2003-03-13 12:00:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,13 +47,14 @@
 #include "globals.hh"
 
 class G4Event;
+class Tst26DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Tst26PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    Tst26PrimaryGeneratorAction();    
+    Tst26PrimaryGeneratorAction(Tst26DetectorConstruction*);    
    ~Tst26PrimaryGeneratorAction();
 
   public:
@@ -61,7 +62,8 @@ class Tst26PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleGun* GetParticleGun() {return particleGun;};
     
   private:
-    G4ParticleGun*              particleGun; 
+    G4ParticleGun*              particleGun;
+    Tst26DetectorConstruction*  detector; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

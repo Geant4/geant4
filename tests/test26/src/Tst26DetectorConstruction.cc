@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26DetectorConstruction.cc,v 1.5 2003-03-06 10:39:42 vnivanch Exp $
+// $Id: Tst26DetectorConstruction.cc,v 1.6 2003-03-13 12:00:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,6 +53,9 @@
 #include "G4RunManager.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
+
+#include "G4VisAttributes.hh"
+#include "G4Colour.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
@@ -212,12 +215,13 @@ G4VPhysicalVolume* Tst26DetectorConstruction::ConstructVolumes()
   G4double gap    = 0.01*mm;
   G4double york   = 10*cm;
 
-  G4double worldZ = vertexLength + absLength*10.5 + ecalLength*1.5 + york;
+           worldZ = 0.5*(vertexLength + absLength*10.5 + ecalLength*1.5 + york);
   G4double worldX = ecalWidth*3.0;
-  G4double vertexZ= vertexLength*0.5 + absLength*2.5;
-  G4double absZ2  = vertexLength     + absLength*6.0;
-  G4double ecalZ  = vertexLength     + absLength*7.5 + ecalLength*0.5;
-  G4double yorkZ  = vertexLength + absLength*9.5 + ecalLength + york*0.5;
+  G4double vertexZ= -worldZ + vertexLength*0.5 + absLength*2.5;
+  G4double absZ2  = -worldZ + vertexLength     + absLength*6.0;
+  G4double ecalZ  = -worldZ + vertexLength     + absLength*7.5 + ecalLength*0.5;
+  G4double yorkZ  = -worldZ + vertexLength     + absLength*9.5 + ecalLength 
+                            + york*0.5;
   
   //   
   // World
@@ -354,6 +358,17 @@ G4VPhysicalVolume* Tst26DetectorConstruction::ConstructVolumes()
     regionM->AddRootLogicalVolume(logicYV);
   }
 
+  // color regions
+
+  G4VisAttributes* regVcolor = new G4VisAttributes(G4Colour(1., 0., 0.));
+  logicVV->SetVisAttributes(regVcolor);  
+  logicA3->SetVisAttributes(regVcolor);
+  
+  G4VisAttributes* regMcolor = new G4VisAttributes(G4Colour(1., 1., 0.));
+  logicYV->SetVisAttributes(regMcolor);
+  
+  // always return world
+  //
   return world;
 }
 

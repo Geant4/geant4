@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26EventAction.cc,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
+// $Id: Tst26EventAction.cc,v 1.4 2003-03-13 12:00:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,9 +41,13 @@
 
 #include "Tst26EventAction.hh"
 
+#include "Tst26EventMessenger.hh"
 #include "Tst26RunAction.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
+#include "G4TrajectoryContainer.hh"
+#include "G4Trajectory.hh"
+#include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
@@ -51,14 +55,19 @@
 
 Tst26EventAction::Tst26EventAction(Tst26RunAction* run)
 :Tst26Run(run),
+ drawFlag("all"),
  printModulo(100),
  Eth(1.0*keV)
-{}
+{
+  eventMessenger = new Tst26EventMessenger(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Tst26EventAction::~Tst26EventAction()
-{}
+{
+  delete eventMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -93,6 +102,25 @@ void Tst26EventAction::EndOfEventAction(const G4Event* evt)
     }
   }
   Tst26Run->AddEvent(E1, E9, E25, Eabs1, Eabs2, Eabs3, Eabs4, nPad);
+  
+  // extract the trajectories and draw them
+  //
+  if (G4VVisManager::GetConcreteInstance())
+    {
+     G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
+     G4int n_trajectories = 0;
+     if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+
+     for (G4int i=0; i<n_trajectories; i++) 
+        { G4Trajectory* trj = (G4Trajectory*)
+	                                ((*(evt->GetTrajectoryContainer()))[i]);
+          if (drawFlag == "all") trj->DrawTrajectory(1000);
+          else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
+                                  trj->DrawTrajectory(1000);
+          else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
+                                  trj->DrawTrajectory(1000);
+        }
+   }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

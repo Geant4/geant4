@@ -21,72 +21,63 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26EventAction.hh,v 1.4 2003-03-13 12:00:12 maire Exp $
+// $Id: Tst26EventMessenger.cc,v 1.1 2003-03-13 12:00:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-/////////////////////////////////////////////////////////////////////////
-//
-// test26: Cut per region physics
-//
-// Created: 31.01.03 V.Ivanchenko
-//
-// Modified:
-//
-////////////////////////////////////////////////////////////////////////
-//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Tst26EventAction_h
-#define Tst26EventAction_h 1
+#include "Tst26EventMessenger.hh"
 
-#include "G4UserEventAction.hh"
+#include "Tst26EventAction.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "globals.hh"
-#include "g4std/vector"
-
-class Tst26RunAction;
-class Tst26EventMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Tst26EventAction : public G4UserEventAction
+Tst26EventMessenger::Tst26EventMessenger(Tst26EventAction* EvAct)
+:eventAction(EvAct)
 {
-  public:
+  eventDir = new G4UIdirectory("/testem/event/");
+  eventDir->SetGuidance("event control");
+   
+  DrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
+  DrawCmd->SetGuidance("Draw the tracks in the event");
+  DrawCmd->SetGuidance("  Choice : none, charged,neutral, all(default)");
+  DrawCmd->SetParameterName("choice",true);
+  DrawCmd->SetDefaultValue("all");
+  DrawCmd->SetCandidates("none charged neutral all");
+  DrawCmd->AvailableForStates(G4State_Idle);
   
-    Tst26EventAction(Tst26RunAction*);
-   ~Tst26EventAction();
-
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
-    
-    void SetPrintModulo(G4int    val)  {printModulo = val;};
-    void SetDrawFlag   (G4String val)  {drawFlag    = val;}; 
-       
-    void AddEnergy(G4double, G4int, G4int);     
-
-  private:
-  
-    Tst26RunAction*   Tst26Run;
-    G4String          drawFlag;
-    G4int             printModulo;          
-    G4double          E1;
-    G4double          E9;
-    G4double          E25;
-    G4double          Eabs1;
-    G4double          Eabs2;
-    G4double          Eabs3;
-    G4double          Eabs4;
-    G4double          Eth;
-    G4std::vector<G4double> Evert;
-    G4std::vector<G4int>    Nvert;
-    
-    Tst26EventMessenger* eventMessenger;
-};
+  PrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
+  PrintCmd->SetGuidance("Print events modulo n");
+  PrintCmd->SetParameterName("EventNb",false);
+  PrintCmd->SetRange("EventNb>0");
+  PrintCmd->AvailableForStates(G4State_Idle);     
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+Tst26EventMessenger::~Tst26EventMessenger()
+{
+  delete DrawCmd;
+  delete PrintCmd;
+  delete eventDir;   
+}
 
-    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Tst26EventMessenger::SetNewValue( G4UIcommand* command,G4String newValue)
+{ 
+  if(command == DrawCmd)
+    {eventAction->SetDrawFlag(newValue);}
+       
+  if(command == PrintCmd)
+    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
