@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2002-05-30 11:58:14 gcosmo Exp $
+$Id: History,v 1.102 2002-07-03 15:28:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 21, 2002 G.Cosmo (global-V04-01-00)
+- G4Allocator.hh: changed definition of page size to become data-member of
+  G4Allocator. fPageSize is now computed according to the size of the object
+  to be allocated. The default size is 1024 bytes for objects whose size is
+  less than 512 bytes, 10 times the size of the object otherwise.
+  To be benchmarked before put it in production.
 
 May 30, 2002 G.Cosmo (global-V04-00-08)
 - G4DataVector.cc: initialise to zero values in collection for contructor
