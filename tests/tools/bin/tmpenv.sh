@@ -5,7 +5,7 @@ ulimit -m 100000
 if [ X$REFTREE = Xref ]; then
 echo "Nothing set for TMPDIR!"
 else
-export TMPDIR=/afs/cern.ch/sw/geant4/stt/ref/Linux-g++/other.tmp
+export TMPDIR=/afs/cern.ch/sw/geant4/stt/ref/Linux-g++/optim/other.tmp
 fi
 fi
 
@@ -16,9 +16,9 @@ fi
 if [ `uname -n | grep hpplus` ]; then
 echo "Nothing set for limit!"
 if [ X$REFTREE = Xref ]; then
-export TMPDIR=/afs/cern.ch/sw/geant4/stt/ref/Linux-g++/other.tmp
+export TMPDIR=/afs/cern.ch/sw/geant4/stt/ref/Linux-g++/optim/other.tmp
 else
-export TMPDIR=/afs/cern.ch/sw/geant4/stt/ref/Linux-g++/other.tmp
+export TMPDIR=/afs/cern.ch/sw/geant4/stt/ref/Linux-g++/optim/other.tmp
 fi
 fi
 
@@ -32,9 +32,9 @@ if [ `uname -n | grep sgmedia` ]; then
 ulimit -s 200000
 ulimit -m 400000
 if [ X$REFTREE = Xref ]; then
-export TMPDIR=/afs/cern.ch/sw/geant4/stt/ref/Linux-g++/other.tmp
+export TMPDIR=/afs/cern.ch/sw/geant4/stt/ref/Linux-g++/optim/other.tmp
 else
-export TMPDIR=/afs/cern.ch/sw/geant4/stt/ref/Linux-g++/other.tmp
+export TMPDIR=/afs/cern.ch/sw/geant4/stt/ref/Linux-g++/optim/other.tmp
 fi
 fi
 
