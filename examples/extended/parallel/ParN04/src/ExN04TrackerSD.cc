@@ -37,7 +37,7 @@ ExN04TrackerSD::ExN04TrackerSD(G4String name)
 
 ExN04TrackerSD::~ExN04TrackerSD(){;}
 
-void ExN04TrackerSD::Initialize(G4HCofThisEvent*HCE)
+void ExN04TrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
   static int HCID = -1;
   trackerCollection = new ExN04TrackerHitsCollection
@@ -61,7 +61,8 @@ G4bool ExN04TrackerSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 }
 
 void ExN04TrackerSD::EndOfEvent(G4HCofThisEvent*)
-{;}
+{
+}
 
 void ExN04TrackerSD::clear()
 {
@@ -74,4 +75,3 @@ void ExN04TrackerSD::DrawAll()
 void ExN04TrackerSD::PrintAll()
 {
 } 
-

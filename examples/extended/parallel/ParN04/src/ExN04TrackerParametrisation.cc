@@ -45,8 +45,7 @@ void ExN04TrackerParametrisation::ComputeTransformation
 }
 
 void ExN04TrackerParametrisation::ComputeDimensions
-(G4Tubs & trackerLayer, const G4int copyNo,
- const G4VPhysicalVolume*) const
+(G4Tubs& trackerLayer, const G4int copyNo, const G4VPhysicalVolume*) const
 {
   trackerLayer.SetInnerRadius(tracker_radius[copyNo]);
   trackerLayer.SetOuterRadius(tracker_radius[copyNo]+tracker_thick);

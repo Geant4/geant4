@@ -20,37 +20,53 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: ExN04VisManager.hh,v 1.1 2003-12-03 14:28:03 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
 
-#ifndef ExN04DetectorConstruction_h
-#define ExN04DetectorConstruction_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
+// Example Visualization Manager implementing virtual function
+//   RegisterGraphicsSystems.  Exploits C-pre-processor variables
+//   G4VIS_USE_DAWN, etc., which are set by the GNUmakefiles if
+//   environment variables of the same name are set.
 
-class G4VPhysicalVolume;
-class G4Material;
+// So all you have to do is set environment variables and compile and
+//   instantiate this in your main().
 
-class ExN04DetectorConstruction : public G4VUserDetectorConstruction
-{
-  public:
-    ExN04DetectorConstruction();
-    ~ExN04DetectorConstruction();
+// Alternatively, you can implement an empty function here and just
+//   register the systems you want in your main(), e.g.:
+//   G4VisManager* myVisManager = new MyVisManager;
+//   myVisManager -> RegisterGraphicsSystem (new MyGraphicsSystem);
 
-  public:
-     G4VPhysicalVolume* Construct();
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  private:
-     void DefineMaterials();
+#ifndef ExN04VisManager_h
+#define ExN04VisManager_h 1
 
-#include "ExN04DetectorParameterDef.hh"
+#ifdef G4VIS_USE
 
-  G4Material* Air;
-  G4Material* Ar;
-  G4Material* Silicon;
-  G4Material* Scinti;
-  G4Material* Lead;
+#include "G4VisManager.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class ExN04VisManager: public G4VisManager {
+
+public:
+
+  ExN04VisManager ();
+
+private:
+
+  void RegisterGraphicsSystems ();
 
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
 
+#endif

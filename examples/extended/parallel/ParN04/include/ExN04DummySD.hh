@@ -35,10 +35,10 @@ class ExN04DummySD : public G4VSensitiveDetector
 {
 public:
   ExN04DummySD();
-  ~ExN04DummySD() {};
+  ~ExN04DummySD() {}
   
   void Initialize(G4HCofThisEvent*) {}
-  G4bool ProcessHits(G4Step*, G4TouchableHistory*) {return false;}
+  G4bool ProcessHits(G4Step*,G4TouchableHistory*) {return false;}
   void EndOfEvent(G4HCofThisEvent*) {}
   void clear() {}
   void DrawAll() {}

@@ -20,37 +20,57 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: ExN04RunAction.cc,v 1.1 2003-12-03 14:32:50 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExN04DetectorConstruction_h
-#define ExN04DetectorConstruction_h 1
+#include "ExN04RunAction.hh"
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
+#include "G4Run.hh"
+#include "G4RunManager.hh"
+#include "G4UImanager.hh"
+#include "G4VVisManager.hh"
+#include "G4ios.hh"
 
-class G4VPhysicalVolume;
-class G4Material;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN04DetectorConstruction : public G4VUserDetectorConstruction
+ExN04RunAction::ExN04RunAction()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ExN04RunAction::~ExN04RunAction()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExN04RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  public:
-    ExN04DetectorConstruction();
-    ~ExN04DetectorConstruction();
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+  
+  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
 
-  public:
-     G4VPhysicalVolume* Construct();
+  if (G4VVisManager::GetConcreteInstance())
+    {
+      G4UImanager* UI = G4UImanager::GetUIpointer();
+      UI->ApplyCommand("/vis/scene/notifyHandlers");
+    } 
+}
 
-  private:
-     void DefineMaterials();
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN04DetectorParameterDef.hh"
+void ExN04RunAction::EndOfRunAction(const G4Run*)
+{
+  if (G4VVisManager::GetConcreteInstance())
+    {
+     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+    }
+}
 
-  G4Material* Air;
-  G4Material* Ar;
-  G4Material* Silicon;
-  G4Material* Scinti;
-  G4Material* Lead;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-};
 
-#endif
 

@@ -20,37 +20,38 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: ExN04SteppingVerbose.hh,v 1.1 2003-12-03 14:32:49 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//   This class manages the verbose outputs in G4SteppingManager. 
+//   It inherits from G4SteppingVerbose.
+//   It shows how to extract informations during the tracking of a particle.
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExN04DetectorConstruction_h
-#define ExN04DetectorConstruction_h 1
+class ExN04SteppingVerbose;
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
+#ifndef ExN04SteppingVerbose_h
+#define ExN04SteppingVerbose_h 1
 
-class G4VPhysicalVolume;
-class G4Material;
+#include "G4SteppingVerbose.hh"
 
-class ExN04DetectorConstruction : public G4VUserDetectorConstruction
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class ExN04SteppingVerbose : public G4SteppingVerbose 
 {
-  public:
-    ExN04DetectorConstruction();
-    ~ExN04DetectorConstruction();
+ public:
+   
+  ExN04SteppingVerbose();
+ ~ExN04SteppingVerbose();
 
-  public:
-     G4VPhysicalVolume* Construct();
-
-  private:
-     void DefineMaterials();
-
-#include "ExN04DetectorParameterDef.hh"
-
-  G4Material* Air;
-  G4Material* Ar;
-  G4Material* Silicon;
-  G4Material* Scinti;
-  G4Material* Lead;
+  void StepInfo();
+  void TrackingStarted();
 
 };
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#endif

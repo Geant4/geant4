@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04MuonPhysics.hh,v 1.1 2002-03-05 15:22:11 gcosmo Exp $
+// $Id: ExN04MuonPhysics.hh,v 1.2 2003-12-03 14:28:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,15 +67,15 @@ class ExN04MuonPhysics : public G4VPhysicsConstructor
 
   protected:
    // Muon physics
+   G4MuIonisation         fMuPlusIonisation;
    G4MultipleScattering   fMuPlusMultipleScattering;
    G4MuBremsstrahlung     fMuPlusBremsstrahlung ;
    G4MuPairProduction     fMuPlusPairProduction;
-   G4MuIonisation         fMuPlusIonisation;
 
+   G4MuIonisation         fMuMinusIonisation;
    G4MultipleScattering   fMuMinusMultipleScattering;
    G4MuBremsstrahlung     fMuMinusBremsstrahlung ;
    G4MuPairProduction     fMuMinusPairProduction;
-   G4MuIonisation         fMuMinusIonisation;
 
    G4MuonMinusCaptureAtRest fMuMinusCaptureAtRest;
 

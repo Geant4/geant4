@@ -20,37 +20,39 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: ExN04RunAction.hh,v 1.1 2003-12-03 14:32:49 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExN04DetectorConstruction_h
-#define ExN04DetectorConstruction_h 1
+#ifndef ExN04RunAction_h
+#define ExN04RunAction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
+#include "G4UserRunAction.hh"
 #include "globals.hh"
 
-class G4VPhysicalVolume;
-class G4Material;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN04DetectorConstruction : public G4VUserDetectorConstruction
+class G4Run;
+
+class ExN04RunAction : public G4UserRunAction
 {
   public:
-    ExN04DetectorConstruction();
-    ~ExN04DetectorConstruction();
+    ExN04RunAction();
+   ~ExN04RunAction();
 
   public:
-     G4VPhysicalVolume* Construct();
-
-  private:
-     void DefineMaterials();
-
-#include "ExN04DetectorParameterDef.hh"
-
-  G4Material* Air;
-  G4Material* Ar;
-  G4Material* Silicon;
-  G4Material* Scinti;
-  G4Material* Lead;
-
+    void BeginOfRunAction(const G4Run*);
+    void EndOfRunAction(const G4Run*);
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
+
+
+
+
 
