@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.29 2005-03-09 16:23:21 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.30 2005-03-15 13:00:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -400,7 +400,9 @@ void G4PhysicalVolumeModel::DescribeSolid
       G4Polyhedron clipper(*fpClippingPolyhedron);  // Local copy.
       clipper.Transform(theAT.inverse());
 
+      G4Polyhedron::SetNumberOfRotationSteps (fpMP->GetNoOfSides());
       G4Polyhedron* pClippee = pSol->GetPolyhedron();
+      G4Polyhedron::ResetNumberOfRotationSteps ();
       if (pClippee)  // Solid can provide.
 	{
 	  G4Polyhedron clipped(pClippee->subtract(clipper));
