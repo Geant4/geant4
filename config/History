@@ -1,4 +1,4 @@
-$Id: History,v 1.84 1999-11-30 19:39:56 morita Exp $
+$Id: History,v 1.85 1999-12-01 14:41:26 morita Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1st December 1999  Youhei Morita
+- architecture.gmk: added G4EXAMPLE_BOOT and G4EXAMPLE_FD
+- common.gmk: copy only the .hh files
+- binmake.gmk: added persistent include paths
+               added new targed cleandb, newboot, newfd
+               added G4SKIP_DEPEND for dependencies
 
 29th November 1999  Youhei Morita
 - architecture.gmk: added G4SYSTEM to G4SCHEMA_DIR, G4TMPSCHEMA_DIR
