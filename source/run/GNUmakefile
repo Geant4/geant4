@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999-10-07 15:48:30 johna Exp $
+# $Id: GNUmakefile,v 1.3 2000-10-24 14:00:56 gcosmo Exp $
 # ----------------------------------------------------------
 # GNUmakefile for run library.  Gabriele Cosmo, 3/4/1997.
 # ----------------------------------------------------------
@@ -11,25 +11,15 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -I$(G4BASE)/global/management/include \
+CPPFLAGS += \
+            -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/particles/management/include \
-            -I$(G4BASE)/particles/bosons/include \
-            -I$(G4BASE)/particles/leptons/include \
-            -I$(G4BASE)/particles/hadrons/barions/include \
-            -I$(G4BASE)/particles/hadrons/ions/include \
-            -I$(G4BASE)/particles/hadrons/mesons/include \
-	    -I$(G4BASE)/particles/shortlived/include \
             -I$(G4BASE)/processes/management/include \
-            -I$(G4BASE)/processes/general/include \
-            -I$(G4BASE)/processes/electromagnetic/standard/include \
-            -I$(G4BASE)/processes/electromagnetic/muons/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
-            -I$(G4BASE)/processes/electromagnetic/xrays/include \
-            -I$(G4BASE)/processes/hadronic/include \
             -I$(G4BASE)/processes/transportation/include \
             -I$(G4BASE)/processes/decay/include \
             -I$(G4BASE)/geometry/management/include \
