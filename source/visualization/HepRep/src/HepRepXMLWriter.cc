@@ -22,7 +22,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.cc,v 1.3 2001-12-13 12:04:26 gunter Exp $
+// 	$Id: HepRepXMLWriter.cc,v 1.4 2002-01-14 22:31:28 perl Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -43,6 +43,7 @@
 
 HepRepXMLWriter::HepRepXMLWriter()
 {
+  isOpen = false;
 }
 
 void HepRepXMLWriter::addType(const char* name)
@@ -210,7 +211,7 @@ void HepRepXMLWriter::addAttValue (const char* name,
 
 void HepRepXMLWriter::open(const char* filespec)
 {
-  if (fout.good())
+  if (isOpen)
     fout.close();
 
   fout.open(filespec);
@@ -221,6 +222,7 @@ void HepRepXMLWriter::open(const char* filespec)
     fout << "<heprep:heprep xmlns:heprep=\"http://www.freehep.org/HepRep\"" << G4endl;
     fout << "  xmlns:xsi=\"http://www.w3.org/1999/XMLSchema-instance\" xsi:schemaLocation=\"HepRep.xsd\">" << G4endl;
 
+    isOpen = true;
     inType = false;
     inInstance = false;
     inPrimitive = false;

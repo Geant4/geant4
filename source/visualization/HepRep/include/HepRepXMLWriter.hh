@@ -22,7 +22,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.hh,v 1.4 2001-12-13 12:04:25 gunter Exp $
+// 	$Id: HepRepXMLWriter.hh,v 1.5 2002-01-14 22:31:25 perl Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -81,6 +81,7 @@ public:
 private:
   G4std::ofstream fout;
 
+  bool isOpen;
   bool inType;
   bool inInstance;
   bool inPrimitive;

@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2001-11-19 15:08:37 johna Exp $
+$Id: History,v 1.10 2002-01-14 22:31:20 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+
+14th January 2002  Joseph Perl
+- Corrected handling for already open file in HepRepXMLWriter.
 
 19th November 2001  John Allison  (vis-V03-02-19)
 - Added G4HEPREPFILEDEBUG to control debug code.
