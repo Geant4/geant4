@@ -1,0 +1,56 @@
+                           SolidsChecker Test
+
+
+SolidsChecker test is random shooting test allowing one to use random shooting with large
+statistics for testing of G4 solid tracking functions. Detector messenger allows one 
+to select a solid from the following list:
+
+G4Box    /mydet/SelectDetector Box
+
+G4Tubs   /mydet/SelectDetector Tube
+
+G4Cons   /mydet/SelectDetector Cone
+
+etc ... (se Sc01DetectorConstruction.cc file)
+
+
+/event/printModulo command allows us to fix the number of event where tracking functions 
+show wrong behaviour. For those events the trackin verbose level should be increased to 
+observe the details of steps. See runCheck.mac file for details.
+
+After compilation the test can be run by:
+
+SolidsChecker runCheck.mac
+
+
+                            runCheck.mac macro file
+
+here is some example of macro file:
+
+#
+# Macro file of "SolidsChecker.cc"
+# for Optical photons geometry test
+#
+/run/initialize
+#/geometry/test/recursive_test
+/particle/list
+#/tracking/verbose 1
+#
+#/mydet/SelectDetector Cone
+#
+/mydet/SelectDetector Sphere
+#
+/event/printModulo 100000
+/run/beamOn 1000000
+/event/printModulo 10000
+#/tracking/verbose 3
+/run/beamOn 100000
+#
+#/run/beamOn 353561 Torus
+#/run/beamOn 6236 Cone
+#
+#/event/printModulo 10000
+#/run/beamOn 100000
+#/event/printModulo 100000
+#/run/beamOn 1000000
+

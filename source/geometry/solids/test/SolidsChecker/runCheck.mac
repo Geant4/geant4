@@ -1,5 +1,5 @@
 #
-# Macro file of "test10.cc"
+# Macro file of "SolidsChecker.cc"
 # for Optical photons geometry test
 #
 /run/initialize
@@ -9,14 +9,16 @@
 #
 #/mydet/SelectDetector Cone
 #
-/mydet/SelectDetector Torus
+/mydet/SelectDetector Sphere
 #
 /event/printModulo 100000
-/run/beamOn 353561
-#/run/beamOn 6236
-/event/printModulo 1
-/tracking/verbose 3
-/run/beamOn 1
+/run/beamOn 1000000
+/event/printModulo 10000
+#/tracking/verbose 3
+/run/beamOn 100000
+#
+#/run/beamOn 353561 Torus
+#/run/beamOn 6236 Cone
 #
 #/event/printModulo 10000
 #/run/beamOn 100000
