@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiProperties.hh,v 1.6 1999-09-22 14:47:05 larazb Exp $
+// $Id: G4NucleiProperties.hh,v 1.7 1999-10-13 11:04:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,46 +48,12 @@ public:
 public:
 
 	// Calculate Mass Excess of nucleus A,Z
-	static G4double GetMassExcess(const G4int A, const G4int Z)
-	{
-		if (A < 1 || Z < 0 || Z > A) {
-			G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
-					 << " and Z = " << Z << endl;
-			return 0.0;
-		} else {
-			if (G4NucleiPropertiesTable::IsInTable(Z,A)) return G4NucleiPropertiesTable::GetMassExcess(Z,A);
-			else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)) return G4NucleiPropertiesTheoreticalTable::GetMassExcess(Z,A);
-			else return MassExcess(A,Z);
-		}
-	}
+	static G4double GetMassExcess(const G4int A, const G4int Z);
 
-	static G4double GetAtomicMass(const G4double A, const G4double Z)
-	{
-		if (Z < 0 || Z > A) {
-			G4cout << "G4NucleiProperties::GetAtomicMass: Wrong values for A = " << A 
-					 << " and Z = " << Z << endl;	return 0.0;
-		} else if (abs(A - G4int(A)) > 1.e-10) {
-			return AtomicMass(Z,A);
-		} else {
-			if (G4NucleiPropertiesTable::IsInTable(Z,A)) return G4NucleiPropertiesTable::GetAtomicMass(Z,A);
-			else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)) return G4NucleiPropertiesTheoreticalTable::GetAtomicMass(Z,A);
-			else return AtomicMass(Z,A);
-		}
-	}
+	static G4double GetAtomicMass(const G4double A, const G4double Z);
 	
-	static G4double GetBindingEnergy(const G4int A, const G4int Z)
-	{
-		if (A < 1 || Z < 0 || Z > A) {
-			G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
-					 << " and Z = " << Z << endl;
-			return 0.0;
-		} else {
-			if (G4NucleiPropertiesTable::IsInTable(Z,A)) return G4NucleiPropertiesTable::GetBindingEnergy(Z,A);
-			else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)) return G4NucleiPropertiesTheoreticalTable::GetBindingEnergy(Z,A);
-			else return BindingEnergy(A,Z);
-		}
-	}
-		
+	static G4double GetBindingEnergy(const G4int A, const G4int Z);
+	
 	static G4double GetNuclearMass(const G4double A, const G4double Z);
 
 private:
@@ -103,5 +69,67 @@ private:
 	
 	
 };
+
+inline
+ G4double G4NucleiProperties::GetMassExcess(const G4int A, const G4int Z)
+{
+  if (A < 1 || Z < 0 || Z > A) {
+    G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
+	   << " and Z = " << Z << endl;
+    return 0.0;
+
+  } else {
+
+    if (G4NucleiPropertiesTable::IsInTable(Z,A)){
+      return G4NucleiPropertiesTable::GetMassExcess(Z,A);
+    } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)){
+      return G4NucleiPropertiesTheoreticalTable::GetMassExcess(Z,A);
+    } else {
+      return MassExcess(A,Z);
+    }
+  }
+
+}
+
+inline 
+ G4double G4NucleiProperties::GetAtomicMass(const G4double A, const G4double Z)
+{
+  if (Z < 0 || Z > A) {
+    G4cout << "G4NucleiProperties::GetAtomicMass: Wrong values for A = " << A 
+	   << " and Z = " << Z << endl;	return 0.0;
+
+  } else if (abs(A - G4int(A)) > 1.e-10) {
+    return AtomicMass(A,Z);
+
+  } else {
+    if (G4NucleiPropertiesTable::IsInTable(Z,A)) {
+      return G4NucleiPropertiesTable::GetAtomicMass(Z,A);
+    } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)){
+      return G4NucleiPropertiesTheoreticalTable::GetAtomicMass(Z,A);
+    } else {
+      return AtomicMass(A,Z);
+    }
+  }
+}
+
+inline 
+ G4double G4NucleiProperties::GetBindingEnergy(const G4int A, const G4int Z)
+{
+  if (A < 1 || Z < 0 || Z > A) {
+    G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
+	   << " and Z = " << Z << endl;
+    return 0.0;
+
+  } else {
+    if (G4NucleiPropertiesTable::IsInTable(Z,A)) {
+      return G4NucleiPropertiesTable::GetBindingEnergy(Z,A);
+    } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)) {
+      return G4NucleiPropertiesTheoreticalTable::GetBindingEnergy(Z,A);
+    }else {
+      return BindingEnergy(A,Z);
+    }
+
+  }
+}
 
 #endif
