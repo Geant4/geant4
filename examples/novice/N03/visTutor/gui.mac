@@ -15,13 +15,13 @@
 #
 # Vis menu :
 /gui/addMenu vis Vis
-/gui/addButton vis Vis0 "/control/execute exN03Vis0.mac"
-/gui/addButton vis Vis1 "/control/execute exN03Vis1.mac"
-/gui/addButton vis Vis2 "/control/execute exN03Vis2.mac"
-/gui/addButton vis Vis3 "/control/execute exN03Vis3.mac"
-/gui/addButton vis Vis4 "/control/execute exN03Vis4.mac"
-/gui/addButton vis Vis5 "/control/execute exN03Vis5.mac"
-/gui/addButton vis Vis6 "/control/execute exN03Vis6.mac"
+/gui/addButton vis Vis0 "/control/execute visTutor/exN03Vis0.mac"
+/gui/addButton vis Vis1 "/control/execute visTutor/exN03Vis1.mac"
+/gui/addButton vis Vis2 "/control/execute visTutor/exN03Vis2.mac"
+/gui/addButton vis Vis3 "/control/execute visTutor/exN03Vis3.mac"
+/gui/addButton vis Vis4 "/control/execute visTutor/exN03Vis4.mac"
+/gui/addButton vis Vis5 "/control/execute visTutor/exN03Vis5.mac"
+/gui/addButton vis Vis6 "/control/execute visTutor/exN03Vis6.mac"
 #
 # To limit the output flow in the "dump" widget :
 /event/printModulo 100

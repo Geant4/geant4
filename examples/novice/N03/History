@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2002-03-08 10:50:24 maire Exp $
+$Id: History,v 1.50 2002-06-25 10:19:41 ribon Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-06-02 ribon (exampleN03-V04-00-02)
+- fixed paths to macros in visTutor/gui.mac.  
      
 07-03-02 mma (exampleN03-V04-00-01)
 - remove cutForGamma, cutForElectron ..etc..
