@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.21 2001-10-24 16:27:46 maire Exp $
+// $Id: G4hIonisation.cc,v 1.22 2001-10-29 16:23:42 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//---------------- G4hIonisation physics process ---------------------
+//---------------- G4hIonisation physics process -------------------------------
 //                 by Laszlo Urban, 30 May 1997 
 //------------------------------------------------------------------------------
 //
@@ -44,6 +44,7 @@
 // 29-08-01 PostStepDoIt: correction for spin 1/2 (instead of 1) (mma)
 // 17-09-01 migration of Materials to pure STL (mma)
 // 25-09-01 completion of RetrievePhysicsTable() (mma)
+// 29-10-01 all static functions no more inlined
 //
 //------------------------------------------------------------------------------
 
@@ -78,6 +79,36 @@ G4hIonisation::~G4hIonisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4hIonisation::SetLowerBoundLambda(G4double val) 
+     {LowerBoundLambda = val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void G4hIonisation::SetUpperBoundLambda(G4double val) 
+     {UpperBoundLambda = val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void G4hIonisation::SetNbinLambda(G4int n) 
+     {NbinLambda = n;}
+	    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4hIonisation::GetLowerBoundLambda() 
+         {return LowerBoundLambda;}
+	    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4double G4hIonisation::GetUpperBoundLambda() 
+         {return UpperBoundLambda;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4int G4hIonisation::GetNbinLambda() 
+      {return NbinLambda;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+      
 void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 // just call BuildLossTable+BuildLambdaTable
 {

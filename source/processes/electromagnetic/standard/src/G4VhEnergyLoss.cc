@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.25 2001-10-24 16:27:45 maire Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.26 2001-10-29 16:23:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,7 +44,8 @@
 // 28/05/01: V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 10/09/01: bugfix in subcutoff delta generation, L.Urban
 // 12/09/01: min.delta cut is set as rcut/100 + some optimisation, L.Urban
-// 17-09-01: migration of Materials to pure STL (mma) 
+// 17-09-01: migration of Materials to pure STL (mma)
+// 29-10-01 all static functions no more inlined (mma) 
 // --------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -119,11 +120,61 @@ G4VhEnergyLoss::~G4VhEnergyLoss()
 {
      if(theLossTable) {
         theLossTable->clearAndDestroy();
-        delete theLossTable; theLossTable = NULL;
+        delete theLossTable; theLossTable = 0;
      }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void  G4VhEnergyLoss::SetNbOfProcesses(G4int nb) 
+      {NbOfProcesses=nb;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void  G4VhEnergyLoss::PlusNbOfProcesses()        
+      {NbOfProcesses++ ;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void  G4VhEnergyLoss::MinusNbOfProcesses()       
+      {NbOfProcesses-- ;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int G4VhEnergyLoss::GetNbOfProcesses()         
+      {return NbOfProcesses;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void  G4VhEnergyLoss::SetLowerBoundEloss(G4double val) 
+      {LowerBoundEloss=val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void  G4VhEnergyLoss::SetUpperBoundEloss(G4double val) 
+      {UpperBoundEloss=val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void  G4VhEnergyLoss::SetNbinEloss(G4int nb)           
+      {NbinEloss=nb;}
+    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VhEnergyLoss::GetLowerBoundEloss() 
+         {return LowerBoundEloss;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4double G4VhEnergyLoss::GetUpperBoundEloss() 
+         {return UpperBoundEloss;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4int G4VhEnergyLoss::GetNbinEloss()       
+      {return NbinEloss;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void G4VhEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.cc,v 1.20 2001-10-24 16:27:44 maire Exp $
+// $Id: G4PAIonisation.cc,v 1.21 2001-10-29 16:23:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -118,7 +118,13 @@ G4PAIonisation::~G4PAIonisation()
 /////////////////////////////////////////////////////////////////////////
 //
 //
+G4double G4PAIonisation::GetMaxKineticEnergy() {return HighestKineticEnergy;}
+G4double G4PAIonisation::GetMinKineticEnergy() {return LowestKineticEnergy;}
+G4int    G4PAIonisation::GetBinNumber()        {return TotBin;}
 
+/////////////////////////////////////////////////////////////////////////
+//
+//
 
 void G4PAIonisation::ComputeSandiaPhotoAbsCof()
 {

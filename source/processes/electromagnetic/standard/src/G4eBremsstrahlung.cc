@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.cc,v 1.22 2001-10-24 16:27:45 maire Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.23 2001-10-29 16:23:42 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,7 +43,8 @@
 // 28-05-01 : V.Ivanchenko minor changes to provide ANSI -wall compilation
 // 09-08-01 : new methods Store/Retrieve PhysicsTable (mma)
 // 17-09-01 : migration of Materials to pure STL (mma)
-// 21-09-01  completion of RetrievePhysicsTable() (mma)  
+// 21-09-01  completion of RetrievePhysicsTable() (mma)
+// 29-10-01: all static functions no more inlined (mma)
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -86,8 +87,48 @@ G4eBremsstrahlung::~G4eBremsstrahlung()
    }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4eBremsstrahlung::SetLowerBoundLambda(G4double val) 
+     {LowerBoundLambda = val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void G4eBremsstrahlung::SetUpperBoundLambda(G4double val) 
+     {UpperBoundLambda = val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void G4eBremsstrahlung::SetNbinLambda(G4int n)            
+     {NbinLambda = n;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4double G4eBremsstrahlung::GetLowerBoundLambda()         
+         {return LowerBoundLambda;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4double G4eBremsstrahlung::GetUpperBoundLambda()         
+         {return UpperBoundLambda;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4int G4eBremsstrahlung::GetNbinLambda()                  
+      {return NbinLambda;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4eBremsstrahlung::SetLPMflag(G4bool val) 
+     {LPMflag = val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4bool G4eBremsstrahlung::GetLPMflag()         
+       {return LPMflag;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
 void G4eBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 //  just call BuildLossTable+BuildLambdaTable
 {

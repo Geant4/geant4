@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPAIenergyLoss.cc,v 1.4 2001-10-24 16:27:45 maire Exp $
+// $Id: G4VPAIenergyLoss.cc,v 1.5 2001-10-29 16:23:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -120,7 +120,26 @@ G4VPAIenergyLoss::~G4VPAIenergyLoss()
      }
 
 }
- 
+
+/////////////////////////////////////////////////////////////////////////
+//
+
+G4double G4VPAIenergyLoss::GetMaxKineticEnergy() {return UpperBoundEloss;}
+G4double G4VPAIenergyLoss::GetMinKineticEnergy() {return LowerBoundEloss;}
+G4int    G4VPAIenergyLoss::GetBinNumber()        {return NbinEloss;} 
+
+void  G4VPAIenergyLoss::SetNbOfProcesses(G4int nb) {NbOfProcesses=nb;}
+void  G4VPAIenergyLoss::PlusNbOfProcesses()        {NbOfProcesses++ ;}
+void  G4VPAIenergyLoss::MinusNbOfProcesses()       {NbOfProcesses-- ;}
+G4int G4VPAIenergyLoss::GetNbOfProcesses()         {return NbOfProcesses;}
+
+void G4VPAIenergyLoss::SetLowerBoundEloss(G4double val) {LowerBoundEloss=val;}
+void G4VPAIenergyLoss::SetUpperBoundEloss(G4double val) {UpperBoundEloss=val;}
+void G4VPAIenergyLoss::SetNbinEloss(G4int nb)		{NbinEloss=nb;}
+
+G4double G4VPAIenergyLoss::GetLowerBoundEloss() {return LowerBoundEloss;}
+G4double G4VPAIenergyLoss::GetUpperBoundEloss() {return UpperBoundEloss;}
+G4int    G4VPAIenergyLoss::GetNbinEloss()	{return NbinEloss;}
  
 /////////////////////////////////////////////////////////////////////////
 //

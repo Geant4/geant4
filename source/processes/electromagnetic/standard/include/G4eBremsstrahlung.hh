@@ -21,20 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.hh,v 1.12 2001-09-21 09:50:53 maire Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.13 2001-10-29 16:23:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //      ------------ G4eBremsstrahlung physics process ------
-//                     by Michel Maire, 24 July 1996
+//                     by Laszlo Urban, 24 July 1996
 // 
-// 1-10-96 : new type G4OrderedTable;  ComputePartialSumSigma()
-// 20/03/97: new energy loss+ionisation+brems scheme, L.Urban
-// 01-09-98, new method  PrintInfo() 
-// 10/02/00  modifications , new e.m. structure, L.Urban
-// 07/08/00  new cross section/en.loss parametrisation, LPM flag , L.Urban
-// 09-08-01: new methods Store/Retrieve PhysicsTable (mma)
-// 19-09-01: come back to previous process name "eBrem" 
+// 01-10-96 new type G4OrderedTable;  ComputePartialSumSigma()
+// 20-03-97 new energy loss+ionisation+brems scheme, L.Urban
+// 01-09-98 new method  PrintInfo() 
+// 10-02-00 modifications , new e.m. structure, L.Urban
+// 07-08-00 new cross section/en.loss parametrisation, LPM flag , L.Urban
+// 09-08-01 new methods Store/Retrieve PhysicsTable (mma)
+// 19-09-01 come back to previous process name "eBrem"
+// 29-10-01 all static functions no more inlined (mma)  
 // ------------------------------------------------------------
 
 // Class description
@@ -166,16 +167,18 @@ class G4eBremsstrahlung : public G4VeEnergyLoss
 
   public:
 
-    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
-    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
-    static void SetNbinLambda(G4int n)            {NbinLambda = n;};
-    static G4double GetLowerBoundLambda()         {return LowerBoundLambda;};
-    static G4double GetUpperBoundLambda()         {return UpperBoundLambda;};
-    static G4int GetNbinLambda()                  {return NbinLambda;};
+    static void SetLowerBoundLambda(G4double val);
+    static void SetUpperBoundLambda(G4double val);
+    static void SetNbinLambda(G4int n);
+    static G4double GetLowerBoundLambda();
+    static G4double GetUpperBoundLambda();
+    static G4int GetNbinLambda();
 
-    static void   SetLPMflag(G4bool val) {LPMflag = val;};
-    static G4bool GetLPMflag()         {return LPMflag;};
+    static void   SetLPMflag(G4bool val);
+    static G4bool GetLPMflag();
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4eBremsstrahlung.icc"
   

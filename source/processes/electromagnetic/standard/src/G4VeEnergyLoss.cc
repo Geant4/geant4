@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.18 2001-10-24 16:27:45 maire Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.19 2001-10-29 16:23:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 
-// --------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // 18/11/98  , L. Urban
 //  It is a modified version of G4VeEnergyLoss:
 //  continuous energy loss with generation of subcutoff delta rays
@@ -37,8 +37,9 @@
 // 28/05/01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 11/09/01  minor correction in 'subcutoff' delta generation, L.Urban
 // 12/09/01  min.delta cut is set as rcut/100 + some optimisation, L.Urban
-// 17-09-01, migration of Materials to pure STL (mma) 
-// --------------------------------------------------------------
+// 17-09-01, migration of Materials to pure STL (mma)
+// 29-10-01 all static functions no more inlined (mma) 
+// -----------------------------------------------------------------------------
 
  
 #include "G4VeEnergyLoss.hh"
@@ -46,8 +47,8 @@
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Initialisation of static data members
 // -------------------------------------
@@ -83,7 +84,7 @@ G4double G4VeEnergyLoss::UpperBoundEloss = 100.*TeV ;
 G4int    G4VeEnergyLoss::NbinEloss = 150 ;
 G4double G4VeEnergyLoss::RTable,G4VeEnergyLoss::LOGRTable;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 // constructor and destructor
  
@@ -99,7 +100,7 @@ G4VeEnergyLoss::G4VeEnergyLoss(const G4String& processName)
      Ndeltamax(100)
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VeEnergyLoss::~G4VeEnergyLoss() 
 {
@@ -110,8 +111,57 @@ G4VeEnergyLoss::~G4VeEnergyLoss()
        }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+void  G4VeEnergyLoss::SetNbOfProcesses(G4int nb) 
+      {NbOfProcesses=nb;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void  G4VeEnergyLoss::PlusNbOfProcesses()
+      {NbOfProcesses++ ;}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void  G4VeEnergyLoss::MinusNbOfProcesses()
+      {NbOfProcesses-- ;}
+      
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int G4VeEnergyLoss::GetNbOfProcesses()
+      {return NbOfProcesses;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4VeEnergyLoss::SetLowerBoundEloss(G4double val)
+     {LowerBoundEloss=val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void G4VeEnergyLoss::SetUpperBoundEloss(G4double val)
+     {UpperBoundEloss=val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void G4VeEnergyLoss::SetNbinEloss(G4int nb)
+     {NbinEloss=nb;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VeEnergyLoss::GetLowerBoundEloss()
+         {return LowerBoundEloss;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4double G4VeEnergyLoss::GetUpperBoundEloss()
+         {return UpperBoundEloss;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4int G4VeEnergyLoss::GetNbinEloss()
+      {return NbinEloss;}
+    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
 void G4VeEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
 {
@@ -244,7 +294,8 @@ void G4VeEnergyLoss::BuildDEDXTable(
                              LowerBoundEloss,UpperBoundEloss,NbinEloss);
 
        // invert the range table
-       theInverseRangeElectronTable = BuildInverseRangeTable(theRangeElectronTable,
+       theInverseRangeElectronTable = BuildInverseRangeTable(
+                              theRangeElectronTable,
                               theeRangeCoeffATable,
                               theeRangeCoeffBTable,
                               theeRangeCoeffCTable,
@@ -281,7 +332,8 @@ void G4VeEnergyLoss::BuildDEDXTable(
                              LowerBoundEloss,UpperBoundEloss,NbinEloss);
 
        // invert the range table
-       theInverseRangePositronTable = BuildInverseRangeTable(theRangePositronTable,
+       theInverseRangePositronTable = BuildInverseRangeTable(
+                              theRangePositronTable,
                               thepRangeCoeffATable,
                               thepRangeCoeffBTable,
                               thepRangeCoeffCTable,
@@ -312,7 +364,8 @@ void G4VeEnergyLoss::BuildDEDXTable(
 //     {
 //       G4cout << G4endl;
 //       G4cout.precision(5) ;
-//       G4cout << " eIoni   Minimum Delta cut in range=" << MinDeltaCutInRange/mm
+//       G4cout << " eIoni   Minimum Delta cut in range=" 
+//              << MinDeltaCutInRange/mm
 //              << "  mm." << G4endl;
 //       G4cout <<  G4endl;
 //       G4cout << "           material       min.delta energy(keV) " << G4endl;
@@ -327,7 +380,8 @@ void G4VeEnergyLoss::BuildDEDXTable(
        {
 	 // set default MinDeltaCutInRange to rcut/10.
 	 if(!setMinDeltaCutInRange )
-	   MinDeltaCutInRange = (G4Electron::Electron()->GetEnergyCuts())[mat]/10. ;
+	   MinDeltaCutInRange = (G4Electron::Electron()
+	                                       ->GetEnergyCuts())[mat]/10.;
          LowerLimitForced[mat] = false ;
          
          MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
@@ -354,7 +408,7 @@ void G4VeEnergyLoss::BuildDEDXTable(
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
       
 G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
                                                  const G4Step&  stepData)
@@ -642,7 +696,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   return &aParticleChange;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
    

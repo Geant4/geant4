@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.hh,v 1.11 2001-10-24 16:27:44 maire Exp $
+// $Id: G4VhEnergyLoss.hh,v 1.12 2001-10-29 16:23:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -50,8 +50,9 @@
 // 7/10/98 some bugs fixed + some cleanup , L.Urban 
 // 22/10/98 cleanup , L.Urban
 // 02/02/99 several bugs fixed, L.Urban
-// 10/02/00  modifications , new e.m. structure, L.Urban
-// 10/09/01  bugfix in subcutoff delta generation, L.Urban
+// 10/02/00 modifications , new e.m. structure, L.Urban
+// 10/09/01 bugfix in subcutoff delta generation, L.Urban
+// 29-10-01 all static functions no more inlined (mma)
 //
 
 #ifndef G4VhEnergyLoss_h
@@ -144,27 +145,27 @@ class G4VhEnergyLoss : public G4VEnergyLoss
 //  static part of the cc:  // With description
   public:
 
-    static void  SetNbOfProcesses(G4int nb) {NbOfProcesses=nb;};
+    static void  SetNbOfProcesses(G4int nb);
     // Sets number of processes giving contribution to the energy loss
 
-    static void  PlusNbOfProcesses()        {NbOfProcesses++ ;};
+    static void  PlusNbOfProcesses();
     // Increases number of processes giving contribution to the energy loss
 
-    static void  MinusNbOfProcesses()       {NbOfProcesses-- ;};
+    static void  MinusNbOfProcesses();
     // Decreases number of processes giving contribution to the energy loss
 
-    static G4int GetNbOfProcesses()         {return NbOfProcesses;};
+    static G4int GetNbOfProcesses();
     // Gets number of processes giving contribution to the energy loss
     // ( default value = 1)
  
 
-    static void SetLowerBoundEloss(G4double val) {LowerBoundEloss=val;};
-    static void SetUpperBoundEloss(G4double val) {UpperBoundEloss=val;};
-    static void SetNbinEloss(G4int nb)           {NbinEloss=nb;};
+    static void SetLowerBoundEloss(G4double val);
+    static void SetUpperBoundEloss(G4double val);
+    static void SetNbinEloss(G4int nb);
 
-    static G4double GetLowerBoundEloss() {return LowerBoundEloss;};
-    static G4double GetUpperBoundEloss() {return UpperBoundEloss;};
-    static G4int    GetNbinEloss()       {return NbinEloss;};
+    static G4double GetLowerBoundEloss();
+    static G4double GetUpperBoundEloss();
+    static G4int    GetNbinEloss();
 
 
   protected:

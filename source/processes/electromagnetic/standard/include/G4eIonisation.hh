@@ -21,16 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.hh,v 1.14 2001-09-28 15:38:14 maire Exp $
+// $Id: G4eIonisation.hh,v 1.15 2001-10-29 16:23:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//--------------- G4eIonisation physics process -----------------------
+//--------------- G4eIonisation physics process --------------------------------
 //                by Laszlo Urban, 20 March 1997 
 //
 // 10-02-00 modifications , new e.m. structure, L.Urban
 // 03-08-01 new methods Store/Retrieve PhysicsTable (mma)
 // 13-08-01 new function ComputeRestrictedMeandEdx() (mma)
 // 19-09-01 come back to previous ProcessName "eIoni"
+// 29-10-01 all static functions no more inlined (mma)
 //
 //------------------------------------------------------------------------------
 
@@ -148,14 +149,14 @@ class G4eIonisation : public G4VeEnergyLoss
 
   public:  // with description
 
-    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
-    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
-    static void SetNbinLambda(G4int n) {NbinLambda = n;};
+    static void SetLowerBoundLambda(G4double val);
+    static void SetUpperBoundLambda(G4double val);
+    static void SetNbinLambda(G4int n);
         // set the parameters of the mean free path table.
 	
-    static G4double GetLowerBoundLambda() { return LowerBoundLambda;}; 
-    static G4double GetUpperBoundLambda() { return UpperBoundLambda;}; 
-    static G4int GetNbinLambda() {return NbinLambda;};
+    static G4double GetLowerBoundLambda(); 
+    static G4double GetUpperBoundLambda(); 
+    static G4int GetNbinLambda();
         // get the parameters of the mean free path table.
 	
 };

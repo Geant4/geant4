@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.hh,v 1.15 2001-09-28 15:38:14 maire Exp $
+// $Id: G4hIonisation.hh,v 1.16 2001-10-29 16:23:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ---------- G4hIonisation physics process ---------------------
+// --------------- G4hIonisation physics process -------------------------------
 //                 by Laszlo Urban, 30 May 1997 
 // -----------------------------------------------------------------------------
 //
@@ -34,7 +34,8 @@
 // 10/02/00 modifications , new e.m. structure, L.Urban
 // 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
 // 14-08-01 new function ComputeRestrictedMeandEdx() + 'cleanup' (mma)
-// 19-09-01 come back to previous process name "hIoni" 
+// 19-09-01 come back to previous process name "hIoni"
+// 29-10-01 all static functions no more inlined 
 //
 // -----------------------------------------------------------------------------
 
@@ -152,15 +153,15 @@ class G4hIonisation : public G4VhEnergyLoss
 
   public:  // with description
 
-    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
-    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
-    static void SetNbinLambda(G4int n) {NbinLambda = n;};
-        // set the parameters of the mean free path table.
+    static void SetLowerBoundLambda(G4double val);
+    static void SetUpperBoundLambda(G4double val);
+    static void SetNbinLambda(G4int n);
+    // set the parameters of the mean free path table.
 	    
-    static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
-    static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
-    static G4int GetNbinLambda() {return NbinLambda;};
-      // get the parameters of the mean free path table.
+    static G4double GetLowerBoundLambda();
+    static G4double GetUpperBoundLambda();
+    static G4int GetNbinLambda();
+    // get the parameters of the mean free path table.
 };
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

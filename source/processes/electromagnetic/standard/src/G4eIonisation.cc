@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.cc,v 1.20 2001-10-24 16:27:46 maire Exp $
+// $Id: G4eIonisation.cc,v 1.21 2001-10-29 16:23:42 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//--------------- G4eIonisation physics process -----------------------
+//--------------- G4eIonisation physics process --------------------------------
 //                by Laszlo Urban, 20 March 1997 
 //------------------------------------------------------------------------------
 //
@@ -38,6 +38,7 @@
 // 13-08-01  new function ComputeRestrictedMeandEdx()  (mma)
 // 17-09-01  migration of Materials to pure STL (mma) 
 // 21-09-01  completion of RetrievePhysicsTable() (mma)
+// 29-10-01 all static functions no more inlined (mma)
 //------------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,8 +68,38 @@ G4eIonisation::~G4eIonisation()
        {theMeanFreePathTable->clearAndDestroy(); delete theMeanFreePathTable;}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4eIonisation::SetLowerBoundLambda(G4double val) 
+     {LowerBoundLambda = val;}
+    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void G4eIonisation::SetUpperBoundLambda(G4double val) 
+     {UpperBoundLambda = val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void G4eIonisation::SetNbinLambda(G4int n) 
+     {NbinLambda = n;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+	
+G4double G4eIonisation::GetLowerBoundLambda() 
+        {return LowerBoundLambda;}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4double G4eIonisation::GetUpperBoundLambda() 
+        {return UpperBoundLambda;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+     
+G4int G4eIonisation::GetNbinLambda() 
+     {return NbinLambda;}
+    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+	
 void G4eIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 // just call BuildLossTable+BuildLambdaTable
 {

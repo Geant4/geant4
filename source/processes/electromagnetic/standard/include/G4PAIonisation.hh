@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.hh,v 1.10 2001-10-24 16:27:44 maire Exp $
+// $Id: G4PAIonisation.hh,v 1.11 2001-10-29 16:23:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -133,9 +133,9 @@ class G4PAIonisation : public G4VPAIenergyLoss
 
   //    static                                   
 
-    static G4double GetMaxKineticEnergy() { return HighestKineticEnergy ; } ;
-    static G4double GetMinKineticEnergy() { return  LowestKineticEnergy ; } ;
-    static G4int    GetBinNumber()        { return               TotBin ; } ;
+    static G4double GetMaxKineticEnergy();
+    static G4double GetMinKineticEnergy();
+    static G4int    GetBinNumber();
 
   // Access to Sandia table coefficients
 
