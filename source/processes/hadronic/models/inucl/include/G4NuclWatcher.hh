@@ -85,101 +85,106 @@ void print() {
   G4double inucl_cs = 0.0;
   G4double inucl_cs_err = 0.0;
   vector<G4bool> not_used(simulated_cs.size(), true);
-  int nmatched = exper_as.size();
-  int nused = simulated_cs.size();
-  double lhood = 0.;
+  G4int nmatched = exper_as.size();
+  G4int nused = simulated_cs.size();
+  G4double lhood = 0.0;
   
-  for(int iz = 0; iz < exper_as.size(); iz++) {
-    double a = exper_as[iz];
+  for(G4int iz = 0; iz < exper_as.size(); iz++) {
+    G4double a = exper_as[iz];
     exp_cs += exper_cs[iz];
     exp_cs_err += exper_err[iz];
-    bool found = false;
-    for(int i = 0; i < simulated_as.size(); i++) {
+    G4bool found = false;
+    for(G4int i = 0; i < simulated_as.size(); i++) {
       if(fabs(simulated_as[i] - a) < small) {
-        double rat = simulated_cs[i]/exper_cs[iz];
+        G4double rat = simulated_cs[i]/exper_cs[iz];
 	lhood += log10(rat)*log10(rat);
-	double rat_err = sqrt(simulated_errors[i]*simulated_errors[i] +
+	G4double rat_err = sqrt(simulated_errors[i]*simulated_errors[i] +
 	 exper_err[iz]*exper_err[iz]*rat*rat)/exper_cs[iz];
 	average_ratio += rat;
 	aver_rat_err += rat_err; 
-        cout << " A " << a << " exp.cs " << exper_cs[iz] << " err " << 
-	  exper_err[iz] << endl << 
-	" sim. cs " << simulated_cs[i] << " err " << simulated_errors[i] << endl
-	<< " ratio " << rat << " err " << rat_err << endl;
-	cout << " simulated production rate " << simulated_prob[i] << endl;  	  
+
+        G4cout << " A " << a << " exp.cs " << exper_cs[iz] << " err " << 
+	  exper_err[iz] << G4endl << 
+	" sim. cs " << simulated_cs[i] << " err " << simulated_errors[i] << G4endl
+	<< " ratio " << rat << " err " << rat_err << G4endl;
+	G4cout << " simulated production rate " << simulated_prob[i] << G4endl;  	  
+
 	not_used[i] = false;
-	izotop_chsq += (rat - 1.)*(rat - 1.)/rat_err/rat_err; 
+	izotop_chsq += (rat - 1.0)*(rat - 1.0)/rat_err/rat_err; 
 	found = true;
 	nused--;
         break;
       };
     };
     if(!found) {
-      cout << " not found exper.: A " << a << " exp.cs " << exper_cs[iz] 
-           << " err " << exper_err[iz] << endl;
+      G4cout << " not found exper.: A " << a << " exp.cs " << exper_cs[iz] 
+           << " err " << exper_err[iz] << G4endl;
     }
      else {
       nmatched--;
     };
   };
-  cout << " not found in simulations " << nmatched << endl;
-  cout << " not found in exper: " << nused << endl;
-    for(int i = 0; i < simulated_as.size(); i++) {
+
+  G4cout << " not found in simulations " << nmatched << G4endl;
+  G4cout << " not found in exper: " << nused << G4endl;
+    for(G4int i = 0; i < simulated_as.size(); i++) {
       inucl_cs += simulated_cs[i];
       inucl_cs_err += simulated_errors[i];
       if(not_used[i]) 
-        cout << " extra simul.: A " << simulated_as[i] <<
+        G4cout << " extra simul.: A " << simulated_as[i] <<
 	" sim. cs " << simulated_cs[i] << " err " << simulated_errors[i] 
-	 << endl;
-	cout << " simulated production rate " << simulated_prob[i] << endl;  	  
+	 << G4endl;
+	G4cout << " simulated production rate " << simulated_prob[i] << G4endl;  	  
     };
-  int matched = exper_as.size() - nmatched;
+  G4int matched = exper_as.size() - nmatched;
   if(matched > 0) {
     aver_lhood = lhood;
     aver_matched = matched;    
-    lhood = pow(10.,sqrt(lhood/matched));
-    cout << " matched " << matched << " CHSQ " << sqrt(izotop_chsq)/matched
-                          << endl
-      << " raw chsq " << izotop_chsq << endl
+    lhood = pow(10.0, sqrt(lhood/matched));
+
+    G4cout << " matched " << matched << " CHSQ " << sqrt(izotop_chsq)/matched
+                          << G4endl
+      << " raw chsq " << izotop_chsq << G4endl
       << " average ratio " << average_ratio/matched 
-      << " err " << aver_rat_err/matched << endl 
-      << " lhood " << lhood << endl;
+      << " err " << aver_rat_err/matched << G4endl 
+      << " lhood " << lhood << G4endl;
   }
    else {
-    izotop_chsq = 0.;
-    aver_lhood = 0.;    
-  };    
-  cout << " exper. cs " << exp_cs << " err " << exp_cs_err << endl
-       << " inucl. cs " << inucl_cs << " err " << inucl_cs_err << endl;
-  cout <<  " ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ "
-  << endl;
+    izotop_chsq = 0.0;
+    aver_lhood = 0.0;    
+  }; 
+   
+  G4cout << " exper. cs " << exp_cs << " err " << exp_cs_err << G4endl
+       << " inucl. cs " << inucl_cs << " err " << inucl_cs_err << G4endl;
+  G4cout <<  " ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ "
+  << G4endl;
 };
 
-double getLhood() const { return aver_lhood; };
+G4double getLhood() const { return aver_lhood; };
 
-double getNmatched() const { return aver_matched; };
+G4double getNmatched() const { return aver_matched; };
 
 private: 
 
-double nuclz;
-double izotop_chsq;
-double average_ratio;
-double aver_rat_err;
-double aver_lhood;
-double aver_matched;
+G4double nuclz;
+G4double izotop_chsq;
+G4double average_ratio;
+G4double aver_rat_err;
+G4double aver_lhood;
+G4double aver_matched;
 
-vector<double> exper_as;
-vector<double> exper_cs;
-vector<double> exper_err;
+vector<G4double> exper_as;
+vector<G4double> exper_cs;
+vector<G4double> exper_err;
 
-vector<double> simulated_as;
-vector<double> simulated_cs;
-vector<double> simulated_errors;
-vector<double> simulated_prob;
+vector<G4double> simulated_as;
+vector<G4double> simulated_cs;
+vector<G4double> simulated_errors;
+vector<G4double> simulated_prob;
 
-bool checkable;
-bool nucleable;
+G4bool checkable;
+G4bool nucleable;
 
 };        
 
-#endif // NUCL_WATCHER_H 
+#endif // G4NUCL_WATCHER_HH 
