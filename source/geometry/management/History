@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2001-02-07 17:30:56 gcosmo Exp $
+$Id: History,v 1.18 2001-03-07 17:45:59 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 07, 2001  G. Cosmo
+- G4PVPlacement.hh: corrected comments to constructor with G4RotationMatrix*
+  as argument, to correspond to specifications in the User's Manual.
+- G4AssemblyVolume.cc: corrected comments about unique PV identifiers
+  (by R.Chytracek).
 
 February 07, 2001  G. Cosmo                geommng-V03-00-00
 - Introduced first implementation of G4AssemblyVolume, a helper class to
