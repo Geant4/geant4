@@ -12,8 +12,8 @@
 #
 #  select EM PhysicsList
 #
-/testem/phys/addPhysics      model
-#/testem/phys/addPhysics      standard
+/testem/phys/addPhysics  model
+#/testem/phys/addPhysics  standard
 #
 /testem/phys/setCuts 5.0 mm
 /run/initialize

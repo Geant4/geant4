@@ -6,6 +6,8 @@
 #
 /control/verbose 2
 /run/verbose 2
+#
+/testem/phys/addPhysics standard
 /run/initialize
 #
 # Create empty scene ("world" is default)
@@ -29,5 +31,5 @@
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 #
-/em2/drawTracks charged
+/testem/event/drawTracks charged
 

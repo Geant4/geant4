@@ -29,10 +29,10 @@
 #include "Em2PhysicsListMessenger.hh"
  
 #include "G4UnitsTable.hh"
-#include "Em2Particles.hh"
-#include "Em2GeneralPhysics.hh"
-#include "Em2StandardEM.hh"
-#include "Em2ModelEM.hh"
+#include "Em2PhysListParticles.hh"
+#include "Em2PhysListGeneral.hh"
+#include "Em2PhysListEmStandard.hh"
+#include "Em2PhysListEmModel.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,10 +50,10 @@ Em2PhysicsList::Em2PhysicsList() : G4VModularPhysicsList(),
   SetVerboseLevel(1);
 
   // Particles
-  RegisterPhysics( new Em2Particles("particles") );
+  RegisterPhysics( new Em2PhysListParticles("particles") );
 
   // General Physics
-  RegisterPhysics( new Em2GeneralPhysics("general") );
+  RegisterPhysics( new Em2PhysListGeneral("general") );
 
 }
 
@@ -72,7 +72,7 @@ void Em2PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "Em2PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
-  if("standard" == name) {
+  if(name == "standard") {
 
     if (emPhysicsListIsRegistered) {
 
@@ -81,11 +81,11 @@ void Em2PhysicsList::AddPhysicsList(const G4String& name)
              << G4endl;
     } else {
 
-      RegisterPhysics( new Em2StandardEM(name) );
+      RegisterPhysics( new Em2PhysListEmStandard(name) );
       emPhysicsListIsRegistered = true;
     }
 
-  } else if("model" == name) {
+  } else if(name == "model") {
 
     if (emPhysicsListIsRegistered) {
 
@@ -94,7 +94,7 @@ void Em2PhysicsList::AddPhysicsList(const G4String& name)
              << G4endl;
     } else {
 
-      RegisterPhysics( new Em2ModelEM(name) );
+      RegisterPhysics( new Em2PhysListEmModel(name) );
       emPhysicsListIsRegistered = true;
     }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PrimaryGeneratorAction.cc,v 1.4 2001-10-25 15:12:07 maire Exp $
+// $Id: Em2PrimaryGeneratorAction.cc,v 1.5 2002-10-31 13:58:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,8 +50,6 @@ Em2PrimaryGeneratorAction::Em2PrimaryGeneratorAction(
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   particleGun->SetParticleEnergy(5.*GeV);
-  G4double position = -0.5*(Em2Detector->GetfullLength());
-  particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +63,7 @@ Em2PrimaryGeneratorAction::~Em2PrimaryGeneratorAction()
 
 void Em2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the begining of event
+  //this function is called at the begin of event
   //
   G4double position = -0.5*(Em2Detector->GetfullLength());
   particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));     

@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2002-10-28 17:59:38 vnivanch Exp $
+$Id: README,v 1.8 2002-10-31 13:58:28 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,18 +21,26 @@ $Id: README,v 1.7 2002-10-28 17:59:38 vnivanch Exp $
      the commands defined in the DetectorMessenger class.
   
      Material can be choosen: Air Water lAr Al Fe BGO PbWO4 Pb.
-     eg: /calor/setMat PbWO4
+     eg: /testem/det/setMat PbWO4
       
      The size of the slices and rings are expressed in radiation length units
      and can be changed.
-     eg: /calor/setLbin 20   1.    ---> 20 slices of 1. radl
-         /calor/setRbin  5   0.25  --->  5 rings of 0.25 radl
-         /calor/update             ---> rebuild the geometry
+     eg: /testem/det/setLbin 20   1.    ---> 20 slices of 1. radl
+         /testem/det/setRbin  5   0.25  --->  5 rings of 0.25 radl
+         /testem/det/update             ---> rebuild the geometry
       
      An uniform magnetic field along the cylinder axis can be set.
-     eg: /calor/setField 5 tesla 
- 	    
- 2- AN EVENT : THE PRIMARY GENERATOR
+     eg: /testem/det/setField 5 tesla 
+     
+ 2- PHYSICS LISTS
+
+    Physics Lists are subdivided on 4 following modules:
+    1. "particles" - particle definitions  
+    2. "general" - decays and transportation  
+    3. "standard" (alternative) - standard EM physics
+    4. "model"    (alternative) - standard EM physics using model approach
+      	    
+ 3- AN EVENT : THE PRIMARY GENERATOR
  
      The primary kinematic consists of a single particle which hits the
      cylinder perpendicular to the input face. The type of the particle
@@ -42,7 +50,7 @@ $Id: README,v 1.7 2002-10-28 17:59:38 vnivanch Exp $
  	
      A RUN is a set of events.
  				
- 3- VISUALIZATION
+ 4- VISUALIZATION
  
      The Visualization Manager is set in the main().
      The initialisation of the drawing is done via the commands
@@ -56,7 +64,7 @@ $Id: README,v 1.7 2002-10-28 17:59:38 vnivanch Exp $
      Optionaly one can choose to draw all particles, only the charged one,
      or none. This command is defined in EventActionMessenger class.
  	
- 4- PHYSICS DEMO
+ 5- PHYSICS DEMO
  
      The particle's type and the physic processes which will be available
      in this example are set in PhysicsList class.
@@ -65,10 +73,10 @@ $Id: README,v 1.7 2002-10-28 17:59:38 vnivanch Exp $
      allows to activate/inactivate the processes one by one.
      
      The threshold for producing secondaries can be changed.
-     eg: /run/particle/setCut 100 microm
+     eg: /testem/phys/setCuts 100 microm
          /run/initialize
 	  	
- 5- HOW TO START ?
+ 6- HOW TO START ?
  
      - compile and link to generate an executable
  		% cd TestEm2
@@ -80,9 +88,8 @@ $Id: README,v 1.7 2002-10-28 17:59:38 vnivanch Exp $
      - execute TestEm2 in 'interactive mode' with visualization
  		% TestEm2
  		....
- 		Idle> type your commands. For instance:
- 		Idle> /control/execute newgeom.mac
- 		....
+ 		Idle> type your commands
+  		....
  		Idle> exit
  	
  7- HISTOGRAMS
@@ -110,7 +117,7 @@ $Id: README,v 1.7 2002-10-28 17:59:38 vnivanch Exp $
  Note that histograms are disabled via the flag G4NOHIST in the GNUmakefile.
  
 
- 7- Using the Anaphe implementation of the AIDA 2.2 histograms:
+ 8- Using the Anaphe implementation of the AIDA 2.2 histograms:
  --------------------------------------------------------------
 
  In order to use the Anaphe implementation of the AIDA 2.2 interfaces, 
@@ -129,12 +136,4 @@ $Id: README,v 1.7 2002-10-28 17:59:38 vnivanch Exp $
  After this, you will have access to the 'aida-config' command which
  is used in the GNUmakefile.
 
- 8- Modular Physics Lists
- ------------------------
-
- Physics Lists are subdivided on 5 following modules: 
-    1. "GeneralPhysics" - decays and transportation  
-    2. "Particles" - particle definitions
-    3. "HadronicElastic" (optional) - process of elestic scattering of hadrons
-    4. "StandardEM" (alternative) - standard EM physics
-    5. "ModelEM" (alternative) - standard EM physics using model approach 
+ 

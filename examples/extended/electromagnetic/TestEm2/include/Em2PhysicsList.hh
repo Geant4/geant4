@@ -21,26 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysicsList.hh,v 1.6 2002-10-14 15:56:11 vnivanch Exp $
+// $Id: Em2PhysicsList.hh,v 1.7 2002-10-31 13:58:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-// Class Description:
-//      This class is an derived class of G4VPhysicsConstructor
+// 14.10.02 (V.Ivanchenko) provide modular list on base of old Em2PhysicsList
 //
-// --------------------------------------------------------------------------- 
-//	History
-//        Created:       14.10.02  V.Ivanchenko provide modular list on base 
-//                                 of old Em2PhysicsList
-//
-//        Modified:      
-// 
-// ---------------------------------------------------------------------------
-//
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,11 +44,11 @@ class Em2PhysicsListMessenger;
 class Em2PhysicsList: public G4VModularPhysicsList
 {
   public:
-
     Em2PhysicsList();
    ~Em2PhysicsList();
 
     void AddPhysicsList(const G4String& name);
+    
     void SetCuts();
     void SetCutForGamma(G4double);
     void SetCutForElectron(G4double);
