@@ -1,4 +1,4 @@
-$Id: History,v 1.4 1999-11-30 12:10:11 gcosmo Exp $
+$Id: History,v 1.5 1999-11-30 12:21:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 30, 99      G. Cosmo              geommng-V00-01-02
+November 30, 99      G. Cosmo              geommng-V00-01-01a
 
 G4DrawVoxels.cc:
 
