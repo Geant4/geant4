@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComplexTest.cc,v 1.14 2002-07-19 17:34:39 vnivanch Exp $
+// $Id: G4ComplexTest.cc,v 1.15 2002-07-26 09:33:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -381,7 +381,7 @@ int main(int argc,char** argv)
     G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
 
     // Creating a tree mapped to a new hbook file.
-    G4std::auto_ptr< ITree > tree( tf->create( hFile, false, true, "hbook" ) );
+    G4std::auto_ptr< ITree > tree( tf->create( hFile,false,false,"hbook" ) );
     G4cout << "Tree store : " << tree->storeName() << G4endl;
  
     // Creating a tuple factory, whose tuples will be handled by the tree

@@ -373,7 +373,7 @@ int main(int argc,char** argv)
     G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
 
     // Creating a tree mapped to a new hbook file.
-    G4std::auto_ptr< ITree > tree( tf->create( hFile, false, true, "hbook" ) );
+    G4std::auto_ptr< ITree > tree( tf->create( hFile, false,false, "hbook" ) );
     G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
  
     // Creating a tuple factory, whose tuples will be handled by the tree
