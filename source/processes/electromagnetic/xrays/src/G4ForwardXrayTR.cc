@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ForwardXrayTR.cc,v 1.1 1999-01-07 16:11:29 gunter Exp $
+// $Id: G4ForwardXrayTR.cc,v 1.2 1999-04-13 09:27:49 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ForwardXrayTR class -- implementation file
@@ -37,8 +37,8 @@
 
 // Table initialization
 
-G4PhysicsTable* G4ForwardXrayTR::fAngleDistrTable  = NULL ;
-G4PhysicsTable* G4ForwardXrayTR::fEnergyDistrTable = NULL ;
+// G4PhysicsTable* G4ForwardXrayTR::fAngleDistrTable  = NULL ;
+// G4PhysicsTable* G4ForwardXrayTR::fEnergyDistrTable = NULL ;
 
 
 // Initialization of local constants
@@ -54,13 +54,20 @@ G4int    G4ForwardXrayTR::fBinTR            =   50        ;
 G4double G4ForwardXrayTR::fMinProtonTkin = 100.0*GeV  ;
 G4double G4ForwardXrayTR::fMaxProtonTkin = 100.0*TeV  ;
 G4int    G4ForwardXrayTR::fTotBin        =  50        ;
+// Proton energy vector initialization
+
+G4PhysicsLogVector* G4ForwardXrayTR::
+fProtonEnergyVector = new G4PhysicsLogVector(fMinProtonTkin,
+                                             fMaxProtonTkin,
+                                                    fTotBin  ) ;
 
 G4double G4ForwardXrayTR::fPlasmaCof = 4.0*pi*fine_structure_const*
                                        hbarc*hbarc*hbarc/electron_mass_c2 ;
+
 G4double G4ForwardXrayTR::fCofTR     = fine_structure_const/pi ;
 
 
-
+/*   ************************************************************************
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -79,7 +86,7 @@ G4ForwardXrayTR::G4ForwardXrayTR()
   static 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
   G4int numOfMat = theMaterialTable->length() ;
-
+  fGammaCutInKineticEnergy = new G4double[numOfMat] ;
   fGammaCutInKineticEnergy = fPtrGamma->GetCutsInEnergy() ;
   fMatIndex1 = -1 ;
   fMatIndex2 = -1 ;
@@ -103,7 +110,8 @@ G4ForwardXrayTR::G4ForwardXrayTR()
         fSigma1 = fPlasmaCof*(mat1->GetElectronDensity()) ;
         fSigma2 = fPlasmaCof*(mat2->GetElectronDensity()) ;
 
-        fGammaTkinCut = fGammaCutInKineticEnergy[jMat] ; // TR photon in jMat !
+//        fGammaTkinCut = fGammaCutInKineticEnergy[jMat] ; // TR photon in jMat !
+          fGammaTkinCut = 0.0 ;
 
         if(fGammaTkinCut > fTheMinEnergyTR) // setting of min/max TR energies 
 	{
@@ -175,6 +183,10 @@ G4ForwardXrayTR::G4ForwardXrayTR()
   }          // iMat
 }
 
+
+****************************************************************  */
+
+
 //////////////////////////////////////////////////////////////////////
 //
 // Constructor for creation of physics tables (angle and energy TR 
@@ -185,27 +197,80 @@ G4ForwardXrayTR::G4ForwardXrayTR()
 // of TR on the interface between them
 
 
-G4ForwardXrayTR::G4ForwardXrayTR(       G4Material* pMat1,
-                                        G4Material* pMat2,
-                                  const G4String& processName            )
-  : G4TransitionRadiation(processName) 
+G4ForwardXrayTR::
+G4ForwardXrayTR( const G4String& matName1,   //  G4Material* pMat1,
+		 const G4String& matName2,    //  G4Material* pMat2,
+                 const G4String& processName                          )
+  :        G4TransitionRadiation(processName) 
+{
+  //  fMatIndex1 = pMat1->GetIndex() ;
+  //  fMatIndex2 = pMat2->GetIndex() ;
+  G4int iMat, jMat ;
+  static 
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
+
+  G4int numOfMat = theMaterialTable->length() ;
+
+  for(iMat=0;iMat<numOfMat;iMat++)    // check first material name
+  {
+    if( matName1 == (*theMaterialTable)[iMat]->GetName() )
+    {
+      fMatIndex1 = (*theMaterialTable)[iMat]->GetIndex() ;
+      break ;
+    }
+  }
+  if(iMat == numOfMat)
+  {
+    G4Exception("Invalid first material name in G4ForwardXrayTR constructor") ;
+  }
+
+  for(iMat=0;iMat<numOfMat;iMat++)    // check second material name
+  {
+    if( matName2 == (*theMaterialTable)[iMat]->GetName() )
+    {
+      fMatIndex2 = (*theMaterialTable)[iMat]->GetIndex() ;
+      break ;
+    }
+  }
+  if(iMat == numOfMat)
+  {
+    G4Exception("Invalid second material name in G4ForwardXrayTR constructor") ;
+  }
+  //  G4cout<<"G4ForwardXray constructor is called"<<endl ;
+  BuildXrayTRtables() ;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// Destructor
+//
+
+G4ForwardXrayTR::~G4ForwardXrayTR()
+{
+	;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Build physics tables for energy and angular distributions of X-ray TR photon
+
+void G4ForwardXrayTR::BuildXrayTRtables()
 {
   G4int iMat, jMat, iTkin, iTR, iPlace ;
   static 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
+
   G4int numOfMat = theMaterialTable->length() ;
 
+  fGammaCutInKineticEnergy = new G4double[numOfMat] ;
   fGammaCutInKineticEnergy = fPtrGamma->GetCutsInEnergy() ;
-  fMatIndex1 = pMat1->GetIndex() ;
-  fMatIndex2 = pMat2->GetIndex() ;
-  fAngleDistrTable  = new G4PhysicsTable(numOfMat*(numOfMat - 1)*fTotBin) ;
-  fEnergyDistrTable = new G4PhysicsTable(numOfMat*(numOfMat - 1)*fTotBin) ;
 
-        G4PhysicsLogVector* aVector = new G4PhysicsLogVector(fMinProtonTkin,
-                                                             fMaxProtonTkin,
-                                                                    fTotBin  ) ;
+  fAngleDistrTable  = new G4PhysicsTable(2*fTotBin) ;
+  fEnergyDistrTable = new G4PhysicsTable(2*fTotBin) ;
 
-  for(iMat=0;iMat<numOfMat;iMat++) // loop over pairs of different materials
+
+  for(iMat=0;iMat<numOfMat;iMat++)     // loop over pairs of different materials
   {
     if( iMat != fMatIndex1 && iMat != fMatIndex2 ) continue ;
 
@@ -223,9 +288,11 @@ G4ForwardXrayTR::G4ForwardXrayTR(       G4Material* pMat1,
         fSigma1 = fPlasmaCof*(mat1->GetElectronDensity()) ;
         fSigma2 = fPlasmaCof*(mat2->GetElectronDensity()) ;
 
-        fGammaTkinCut = fGammaCutInKineticEnergy[jMat] ; // TR photon in jMat !
+        // fGammaTkinCut = fGammaCutInKineticEnergy[jMat] ; // TR photon in jMat !
 
-        if(fGammaTkinCut > fTheMinEnergyTR) // setting of min/max TR energies 
+        fGammaTkinCut = 0.0 ;
+
+        if(fGammaTkinCut > fTheMinEnergyTR)    // setting of min/max TR energies 
 	{
           fMinEnergyTR = fGammaTkinCut ;
 	}
@@ -244,17 +311,15 @@ G4ForwardXrayTR::G4ForwardXrayTR(       G4Material* pMat1,
         for(iTkin=0;iTkin<fTotBin;iTkin++)      // Lorentz factor loop
 	{
           G4PhysicsLogVector* 
-                    energyVector = new G4PhysicsLogVector(fMinEnergyTR,
-                                                             fMaxEnergyTR,
-                                                                   fBinTR  ) ;
-          G4PhysicsLinearVector* 
-                     angleVector = new G4PhysicsLinearVector(        0.0,
-                                                             fMaxThetaTR,
-                                                                  fBinTR  ) ;
-          G4double energySum = 0.0 ;
-          G4double angleSum  = 0.0 ;
-          fGamma = 1.0 +   (aVector->GetLowEdgeEnergy(iTkin)/proton_mass_c2) ;
+                    energyVector = new G4PhysicsLogVector( fMinEnergyTR,
+                                                           fMaxEnergyTR,
+                                                           fBinTR         ) ;
+
+          fGamma = 1.0 +   (fProtonEnergyVector->
+                            GetLowEdgeEnergy(iTkin)/proton_mass_c2) ;
+
           fMaxThetaTR = 10000.0/(fGamma*fGamma) ;
+ 
           if(fMaxThetaTR > fTheMaxAngle)
           { 
             fMaxThetaTR = fTheMaxAngle ;
@@ -266,6 +331,14 @@ G4ForwardXrayTR::G4ForwardXrayTR(       G4Material* pMat1,
               fMaxThetaTR = fTheMinAngle ;
 	    }
 	  }
+   // G4cout<<endl<<"fGamma = "<<fGamma<<"  fMaxThetaTR = "<<fMaxThetaTR<<endl ;
+          G4PhysicsLinearVector* 
+                     angleVector = new G4PhysicsLinearVector(        0.0,
+                                                             fMaxThetaTR,
+                                                                  fBinTR  ) ;
+          G4double energySum = 0.0 ;
+          G4double angleSum  = 0.0 ;
+
           energyVector->PutValue(fBinTR-1,energySum) ;
           angleVector->PutValue(fBinTR-1,angleSum)   ;
 
@@ -276,16 +349,19 @@ G4ForwardXrayTR::G4ForwardXrayTR(       G4Material* pMat1,
 
             angleSum  += fCofTR*AngleSum(angleVector->GetLowEdgeEnergy(iTR),
                                          angleVector->GetLowEdgeEnergy(iTR+1)) ;
+
             energyVector->PutValue(iTR,energySum) ;
-            angleVector->PutValue(iTR,angleSum)   ;
+            angleVector ->PutValue(iTR,angleSum)   ;
 	  }
+	  // G4cout<<"sumE = "<<energySum<<" ; sumA = "<<angleSum<<endl ;
+
           if(jMat < iMat)
 	  {
-            iPlace = (iMat*(numOfMat-1)+jMat)*fTotBin+iTkin ;
+            iPlace = fTotBin+iTkin ;   // (iMat*(numOfMat-1)+jMat)*
 	  }
           else   // jMat > iMat right part of matrices (jMat-1) ! 
 	  {
-            iPlace = (iMat*(numOfMat-1)+jMat-1)*fTotBin+iTkin ;
+            iPlace = iTkin ;  // (iMat*(numOfMat-1)+jMat-1)*fTotBin+
 	  } 
           fEnergyDistrTable->insertAt(iPlace,energyVector) ;
           fAngleDistrTable->insertAt(iPlace,angleVector) ;
@@ -293,17 +369,7 @@ G4ForwardXrayTR::G4ForwardXrayTR(       G4Material* pMat1,
       }      //         jMat != iMat
     }        //     jMat
   }          // iMat
-}
-
-
-//////////////////////////////////////////////////////////////////////
-//
-// Destructor
-//
-
-G4ForwardXrayTR::~G4ForwardXrayTR()
-{
-	;
+  //  G4cout<<"G4ForwardXrayTR::BuildXrayTRtables have been called"<<endl ;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -470,7 +536,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 				                const G4Step&  aStep)
 {
   aParticleChange.Initialize(aTrack);
-
+  //  G4cout<<"call G4ForwardXrayTR::PostStepDoIt"<<endl ;
   G4int iMat, jMat, iTkin, iPlace, numOfMat, numOfTR, iTR, iTransfer ;
 
   G4double energyPos, anglePos, energyTR, theta, phi, dirX, dirY, dirZ ;
@@ -486,7 +552,8 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
   {
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }
-  if (aTrack.GetStepLength()<=kCarTolerance/2)
+  if (aTrack.GetStepLength() <= kCarTolerance*0.5)
+
   {
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }
@@ -530,34 +597,37 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
   G4double kinEnergy     = aParticle->GetKineticEnergy() ;
   G4double massRatio = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass() ;
   G4double TkinScaled = kinEnergy*massRatio ;
-  G4PhysicsLogVector* 
-  aLogVector = new G4PhysicsLogVector(fMinProtonTkin,fMaxProtonTkin,fTotBin) ;
   for(iTkin=0;iTkin<fTotBin;iTkin++)
   {
-    if(TkinScaled < aLogVector->GetLowEdgeEnergy(iTkin)) // <= ?
+    if(TkinScaled < fProtonEnergyVector->GetLowEdgeEnergy(iTkin)) // <= ?
     {
       break ;
     }     
   }
   if(jMat < iMat)
   {
-    iPlace = (iMat*(numOfMat - 1) + jMat)*fTotBin + iTkin - 1 ;
+    iPlace = fTotBin + iTkin - 1 ; // (iMat*(numOfMat - 1) + jMat)*
   }
   else
   {
-    iPlace = (iMat*(numOfMat - 1) + jMat - 1)*fTotBin + iTkin - 1 ;
+    iPlace = iTkin - 1 ;  // (iMat*(numOfMat - 1) + jMat - 1)*fTotBin + 
   }
-  G4PhysicsVector*  energyVector1 = (*fEnergyDistrTable)(iPlace)     ;
-  G4PhysicsVector*  energyVector2 = (*fEnergyDistrTable)(iPlace + 1) ;
+  //  G4PhysicsVector*  energyVector1 = (*fEnergyDistrTable)(iPlace)     ;
+  //  G4PhysicsVector*  energyVector2 = (*fEnergyDistrTable)(iPlace + 1) ;
 
-  G4PhysicsVector*   angleVector1 = (*fAngleDistrTable)(iPlace)      ;
-  G4PhysicsVector*   angleVector2 = (*fAngleDistrTable)(iPlace + 1)  ;
+  //  G4PhysicsVector*   angleVector1 = (*fAngleDistrTable)(iPlace)      ;
+  //  G4PhysicsVector*   angleVector2 = (*fAngleDistrTable)(iPlace + 1)  ;
 
   G4ParticleMomentum particleDir = aParticle->GetMomentumDirection() ;
 
   if(iTkin == fTotBin)                 // TR plato, try from left
   {
-    numOfTR = RandPoisson::shoot( ((*energyVector1)(0)+(*angleVector1)(0))
+ // G4cout<<iTkin<<" mean TR number = "<<( (*(*fEnergyDistrTable)(iPlace))(0) +
+ //                                   (*(*fAngleDistrTable)(iPlace))(0) )
+ //      *chargeSq*0.5<<endl ;
+
+    numOfTR = RandPoisson::shoot( ( (*(*fEnergyDistrTable)(iPlace))(0) +
+                                    (*(*fAngleDistrTable)(iPlace))(0) )
                                     *chargeSq*0.5 ) ;
     if(numOfTR == 0)
     {
@@ -565,24 +635,33 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
     }
     else
     {
+      // G4cout<<"Number of X-ray TR photons = "<<numOfTR<<endl ;
+
       aParticleChange.SetNumberOfSecondaries(numOfTR);
+
       for(iTR=0;iTR<numOfTR;iTR++)
       {
-        energyPos = (*energyVector1)(0)*G4UniformRand() ;
+        energyPos = (*(*fEnergyDistrTable)(iPlace))(0)*G4UniformRand() ;
         for(iTransfer=0;iTransfer<fBinTR-1;iTransfer++)
 	{
-          if(energyPos >= (*energyVector1)(iTransfer)) break ;
+          if(energyPos >= (*(*fEnergyDistrTable)(iPlace))(iTransfer)) break ;
 	}
-        energyTR = energyVector1->GetLowEdgeEnergy(iTransfer) ;
+        energyTR = (*fEnergyDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+
+	// G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<endl ;
+
         kinEnergy -= energyTR ; 
         aParticleChange.SetEnergyChange(kinEnergy);
 
-        anglePos = (*angleVector1)(0)*G4UniformRand() ;
+        anglePos = (*(*fAngleDistrTable)(iPlace))(0)*G4UniformRand() ;
         for(iTransfer=0;iTransfer<fBinTR-1;iTransfer++)
 	{
-          if(anglePos >= (*angleVector1)(iTransfer)) break ;
+          if(anglePos > (*(*fAngleDistrTable)(iPlace))(iTransfer)) break ;
 	}
-        theta = sqrt(angleVector1->GetLowEdgeEnergy(iTransfer)) ;
+        theta = sqrt((*fAngleDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1)) ;
+
+	// G4cout<<iTransfer<<" :  theta = "<<theta<<endl ;
+
         phi = twopi*G4UniformRand() ;
         dirX = sin(theta)*cos(phi)  ;
         dirY = sin(theta)*sin(phi)  ;
@@ -604,13 +683,22 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
     } 
     else          // general case: Tkin between two vectors of the material
     {
-      E1 = aLogVector->GetLowEdgeEnergy(iTkin - 1) ; 
-      E2 = aLogVector->GetLowEdgeEnergy(iTkin)     ;
+      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
+      E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
        W = 1.0/(E2 - E1) ;
       W1 = (E2 - TkinScaled)*W ;
       W2 = (TkinScaled - E1)*W ;
-      numOfTR = RandPoisson::shoot((((*energyVector1)(0)+(*angleVector1)(0))*W1 + 
-                                    ((*energyVector2)(0)+(*angleVector2)(0))*W2)
+
+  // G4cout<<iTkin<<" mean TR number = "<<(((*(*fEnergyDistrTable)(iPlace))(0)+
+  // (*(*fAngleDistrTable)(iPlace))(0))*W1 + 
+  //                                ((*(*fEnergyDistrTable)(iPlace + 1))(0)+
+  // (*(*fAngleDistrTable)(iPlace + 1))(0))*W2)
+  //                                    *chargeSq*0.5<<endl ;
+
+      numOfTR = RandPoisson::shoot((((*(*fEnergyDistrTable)(iPlace))(0)+
+(*(*fAngleDistrTable)(iPlace))(0))*W1 + 
+                                    ((*(*fEnergyDistrTable)(iPlace + 1))(0)+
+(*(*fAngleDistrTable)(iPlace + 1))(0))*W2)
                                     *chargeSq*0.5 ) ;
       if(numOfTR == 0)
       {
@@ -618,30 +706,40 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
       }
       else
       {
+        // G4cout<<"Number of X-ray TR photons = "<<numOfTR<<endl ;
+
         aParticleChange.SetNumberOfSecondaries(numOfTR);
         for(iTR=0;iTR<numOfTR;iTR++)
         {
-          energyPos = ((*energyVector1)(0)*W1+
-                       (*energyVector2)(0)*W2)*G4UniformRand() ;
+          energyPos = ((*(*fEnergyDistrTable)(iPlace))(0)*W1+
+                       (*(*fEnergyDistrTable)(iPlace + 1))(0)*W2)*G4UniformRand() ;
           for(iTransfer=0;iTransfer<fBinTR-1;iTransfer++)
   	  {
-            if(energyPos >= ((*energyVector1)(iTransfer)*W1+
-                             (*energyVector2)(iTransfer)*W2)) break ;
+            if(energyPos >= ((*(*fEnergyDistrTable)(iPlace))(iTransfer)*W1+
+                       (*(*fEnergyDistrTable)(iPlace + 1))(iTransfer)*W2)) break ;
    	  }
-          energyTR = (energyVector1->GetLowEdgeEnergy(iTransfer))*W1+
-                     (energyVector2->GetLowEdgeEnergy(iTransfer))*W2 ;
+          energyTR = ((*fEnergyDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer))*W1+
+               ((*fEnergyDistrTable)(iPlace + 1)->GetLowEdgeEnergy(iTransfer))*W2 ;
+
+	  // G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<endl ;
+
           kinEnergy -= energyTR ; 
           aParticleChange.SetEnergyChange(kinEnergy);
 
-          anglePos = ((*angleVector1)(0)*W1+
-                       (*angleVector2)(0)*W2)*G4UniformRand() ;
+          anglePos = ((*(*fAngleDistrTable)(iPlace))(0)*W1+
+                       (*(*fAngleDistrTable)(iPlace + 1))(0)*W2)*G4UniformRand() ;
           for(iTransfer=0;iTransfer<fBinTR-1;iTransfer++)
 	  {
-            if(anglePos >= ((*angleVector1)(iTransfer)*W1+
-                             (*angleVector2)(iTransfer)*W2)) break ;
+            if(anglePos > ((*(*fAngleDistrTable)(iPlace))(iTransfer)*W1+
+                      (*(*fAngleDistrTable)(iPlace + 1))(iTransfer)*W2)) break ;
 	  }
-          theta = sqrt((angleVector1->GetLowEdgeEnergy(iTransfer))*W1+
-                  (angleVector2->GetLowEdgeEnergy(iTransfer))*W2) ;
+          theta = sqrt(((*fAngleDistrTable)(iPlace)->
+                        GetLowEdgeEnergy(iTransfer-1))*W1+
+                  ((*fAngleDistrTable)(iPlace + 1)->
+                        GetLowEdgeEnergy(iTransfer-1))*W2) ;
+
+	  // G4cout<<iTransfer<<" : theta = "<<theta<<endl ;
+
           phi = twopi*G4UniformRand() ;
           dirX = sin(theta)*cos(phi)  ;
           dirY = sin(theta)*sin(phi)  ;
@@ -783,4 +881,6 @@ G4ForwardXrayTR::GetThetaTR(G4int iMat, G4int jMat, G4int iTkin) const
 
 
 
-// end of G4ForwardXrayTR implementation file --------------------------
+// end of G4ForwardXrayTR implementation file 
+//
+///////////////////////////////////////////////////////////////////////////

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TransitionRadiation.hh,v 1.1 1999-01-07 16:11:29 gunter Exp $
+// $Id: G4TransitionRadiation.hh,v 1.2 1999-04-13 09:26:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TransitionRadiation  -- header file
@@ -32,8 +32,9 @@
 
 #include "G4VDiscreteProcess.hh"
 #include "G4Material.hh"
+// #include "G4OpBoundaryProcess.hh"
 
-class G4TransitionRadiation : public G4VDiscreteProcess
+class G4TransitionRadiation : public   G4VDiscreteProcess    
 {
 public:
 
