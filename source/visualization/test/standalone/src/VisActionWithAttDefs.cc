@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: VisActionWithAttDefs.cc,v 1.2 2005-03-26 22:39:48 allison Exp $
+// $Id: VisActionWithAttDefs.cc,v 1.3 2005-03-28 10:33:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "VisActionWithAttDefs.hh"
@@ -45,7 +45,7 @@ VisActionWithAttDefs::VisActionWithAttDefs ()
   (*fpAttDefs)["name"] = G4AttDef("name","Name of box","","","G4String");
   (*fpAttDefs)["dimX"] = G4AttDef("dimX","Half x-side","","","G4BestUnit");
   (*fpAttDefs)["dimY"] = G4AttDef("dimY","Half y-side","","","km");
-  (*fpAttDefs)["dimZ"] = G4AttDef("dimZ","Half z-side","","","G4BestUni");
+  (*fpAttDefs)["dimZ"] = G4AttDef("dimZ","Half z-side","","RubBish","G4BestUni");
   (*fpAttDefs)["dims"] =
     G4AttDef("dims","Half sides","","G4ThreeVector","G4BestUnit");
 
