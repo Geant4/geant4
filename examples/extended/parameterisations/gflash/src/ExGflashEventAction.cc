@@ -1,4 +1,4 @@
-
+// Created by Joanna Weng 26.11.2004
 using namespace std;
 
 #include "ExGflashEventAction.hh"
@@ -110,6 +110,7 @@ void ExGflashEventAction::EndOfEventAction(const G4Event *evt)
 		}
 		G4double max=0;
 		G4int index=0;
+		//Find crystal with maximum energy
 		for (int i=0;i<100;i++) 
 		{
 			//std::cout << i <<"  " << energyincrystal[i] << std::endl;
@@ -120,11 +121,13 @@ void ExGflashEventAction::EndOfEventAction(const G4Event *evt)
 			}
 		}	
 	//std::cout << index <<" NMAX  " << index << std::endl;	
-	
+
+	// 3x3 matrix of crystals around the crystal with the maximum energy deposit
 	G4double e3x3 = energyincrystal[index]+energyincrystal[index+1]+energyincrystal[index-1]+
 	energyincrystal[index-10]+energyincrystal[index-9]+energyincrystal[index-11]+
 	energyincrystal[index+10]+energyincrystal[index+11]+energyincrystal[index+9];
-	
+
+	// 5x5 matrix of crystals around the crystal with the maximum energy deposit	
 	G4double e5x5 = energyincrystal[index]+energyincrystal[index+1]+energyincrystal[index-1]+energyincrystal[index+2]+energyincrystal[index-2]+
 	energyincrystal[index-10]+energyincrystal[index-9]+energyincrystal[index-11]+energyincrystal[index-8]+energyincrystal[index-12]+
 	energyincrystal[index+10]+energyincrystal[index+11]+energyincrystal[index+9]+energyincrystal[index+12]+energyincrystal[index+8];
