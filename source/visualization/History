@@ -1,4 +1,4 @@
-$Id: History,v 1.116 2001-05-18 14:14:30 johna Exp $
+$Id: History,v 1.117 2001-05-21 14:07:18 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,13 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+21st May 2001 John Allison (vis-V03-01-01)
+- Minor bug corrections (mostly to fix things that used to work with the
+  old /vis~/ commands but ceased to work with the new /vis/commands:
+  o If a scene is empty at drawing time, the "world" is added.
+  o Window size hint now works for OpenGL.
+- Fixed some minor warnings for strict C++ (size_t, etc.).
 
 18th May 2001 John Allison
 - Removed unnecessary virtual inheritance of G4VViewer in G4RayTracerViewer.
