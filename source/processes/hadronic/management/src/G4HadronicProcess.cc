@@ -102,7 +102,7 @@
 	     << targetNucleus.GetZ()<<" "
 	     << G4endl;
     }
-    ResetNumberOfInteractionLengthLeft();
+    ClearNumberOfInteractionLengthLeft();
     if(isoIsOnAnyway!=-1)
     {
       if(isoIsEnabled||isoIsOnAnyway)
