@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2000-08-22 22:22:46 vnivanch Exp $
+$Id: History,v 1.35 2000-09-04 18:17:06 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04.09.2000 - MGP, tag emlowen-V02-00-04
+             Same as emlowen-V02-00-03, with V.I.'s new implementations
+	     and fixes (see below, July-August 2000)
+
+04.09.2000 - MGP, tag emlowen-V02-00-03
+             Same as emlowen-V02-00-02, with Gabriele's fixes 
+             (see below, 03.08.2000)
 
 22.08.2000 - V.Ivanchenko: A bug in Nuclear Stopping Power was fixed.
              The calculation of step limit for low energy
