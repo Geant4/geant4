@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeComptonTest.cc,v 1.1 2002-12-16 11:35:16 pandola Exp $
+// $Id: G4PenelopeComptonTest.cc,v 1.2 2003-03-13 17:31:21 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,10 +55,10 @@
 #include "G4VDiscreteProcess.hh"
 #include "G4VProcess.hh"
 #include "G4ProcessManager.hh"
-
 #include "G4PenelopeCompton.hh"
 #include "G4LowEnergyCompton.hh"
 #include "G4ComptonScattering.hh"
+#include "G4RunManager.hh"
 
 #include "G4EnergyLossTables.hh"
 #include "G4VParticleChange.hh"
@@ -81,6 +81,8 @@
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
 #include "G4Step.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4MaterialCutsCouple.hh"
 
 #include "G4UnitsTable.hh"
 #include "AIDA/IManagedObject.h"
@@ -178,7 +180,7 @@ G4int main()
   
   if (initEnergy  <= 0.) G4Exception("Wrong input");
 
-  static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
 
@@ -193,7 +195,7 @@ G4int main()
   G4cout << "Which material? " << G4endl;
   G4cin >> materialId;
   
-  G4Material* material = (*theMaterialTable)[materialId] ;
+  G4Material* material = (*theMaterialTable)[materialId];
 
   G4cout << "The selected material is: "
 	 << material->GetName()
@@ -214,31 +216,41 @@ G4int main()
   
   G4PVPlacement* physicalFrame = new G4PVPlacement(0,G4ThreeVector(),
 						   "PFrame",logicalFrame,0,false,0);
-  
+  G4RunManager* rm = new G4RunManager();
+  G4cout << "World is defined " << G4endl;
+  rm->GeometryHasBeenModified();
+  rm->DefineWorldVolume(physicalFrame);
+
   // Particle definitions
   
   G4ParticleDefinition* gamma = G4Gamma::GammaDefinition();
   G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
   G4ParticleDefinition* positron = G4Positron::PositronDefinition();
-  
-  gamma->SetCuts(1*micrometer);
-  electron->SetCuts(1*micrometer);
-  positron->SetCuts(1*micrometer);
 
+
+  G4ProductionCutsTable* cutsTable = G4ProductionCutsTable::GetProductionCutsTable();
+  G4ProductionCuts* cuts = cutsTable->GetDefaultProductionCuts();
+  G4double cutG=1*micrometer;
+  G4double cutE=1*micrometer;
+  cuts->SetProductionCut(cutG, 0); //gammas
+  cuts->SetProductionCut(cutE, 1); //electrons
+  cuts->SetProductionCut(cutE, 2); //positrons
+  G4cout << "Cuts are defined " << G4endl;
+ 
   G4Gamma::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
   G4Electron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
   G4Positron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  
+  cutsTable->UpdateCoupleTable(); 
+  (G4ProductionCutsTable::GetProductionCutsTable())->DumpCouples();
 
-  G4cout<<"the cut in energy for gamma in: "<<
-    (*theMaterialTable)[materialId]->GetName()
-	<<" is: "<< gamma->GetEnergyCuts()[materialId]/keV << " keV" << G4endl;
-  G4cout<<"the cut in energy for e- in: "<<
-    (*theMaterialTable)[materialId]->GetName()
-	<<" is: "<< electron->GetEnergyCuts()[materialId]/keV << " keV" << G4endl;
-  
-  // Processes 
-  
-  
+  //cutsTable->DumpCouples();
+  const G4MaterialCutsCouple* theCouple = cutsTable->GetMaterialCutsCouple(material,cuts);
+  G4int indx=theCouple->GetIndex();
+  G4cout << "Indice: " << indx << G4endl;
+
+
+  // Processes    
   G4int processType;
   G4cout << "Standard [1] or LowEnergy[2] or Penelope [3] Compton Scattering?" << G4endl;
   G4cin >> processType;
@@ -335,21 +347,21 @@ G4int main()
   pProcessManager->
     SetProcessOrdering(theeplusAnnihilation,       idxPostStep,4);
   
-  // G4LowEnergyIonisation IonisationProcess;
-  // eProcessManager->AddProcess(&IonisationProcess);
-  // eProcessManager->SetProcessOrdering(&IonisationProcess,idxAlongStep,1);
-  // eProcessManager->SetProcessOrdering(&IonisationProcess,idxPostStep, 1);
+  G4LowEnergyIonisation IonisationProcess;
+  eProcessManager->AddProcess(&IonisationProcess);
+  eProcessManager->SetProcessOrdering(&IonisationProcess,idxAlongStep,1);
+  eProcessManager->SetProcessOrdering(&IonisationProcess,idxPostStep, 1);
   
-  // G4LowEnergyBremsstrahlung BremstrahlungProcess;
-  // eProcessManager->AddProcess(&BremstrahlungProcess);
-  // eProcessManager->SetProcessOrdering(&BremstrahlungProcess,idxAlongStep,1);
-  // eProcessManager->SetProcessOrdering(&BremstrahlungProcess,idxPostStep, 1);
+  G4LowEnergyBremsstrahlung BremstrahlungProcess;
+  eProcessManager->AddProcess(&BremstrahlungProcess);
+  eProcessManager->SetProcessOrdering(&BremstrahlungProcess,idxAlongStep,1);
+  eProcessManager->SetProcessOrdering(&BremstrahlungProcess,idxPostStep, 1);
   
-  // G4eIonisation IonisationPlusProcess;
-  // pPositronProcessManager->AddProcess(&IonisationPlusProcess);
-  // pProcessManager->
-  //        SetProcessOrdering(&IonisationPlusProcess,idxAlongStep,1);
-  // pProcessManager->SetProcessOrdering(&IonisationPlusProcess,idxPostStep,1);
+  G4eIonisation IonisationPlusProcess;
+  pProcessManager->AddProcess(&IonisationPlusProcess);
+  pProcessManager->
+    SetProcessOrdering(&IonisationPlusProcess,idxAlongStep,1);
+  pProcessManager->SetProcessOrdering(&IonisationPlusProcess,idxPostStep,1);
 
 
 
@@ -380,6 +392,7 @@ G4int main()
   G4StepPoint* aPoint = new G4StepPoint();
   aPoint->SetPosition(aPosition);
   aPoint->SetMaterial(material);
+  aPoint->SetMaterialCutsCouple(theCouple);
   G4double safety = 10000.*cm;
   aPoint->SetSafety(safety);
   step->SetPreStepPoint(aPoint);
@@ -396,12 +409,10 @@ G4int main()
     }
   
   // Initialize the physics tables (in which material?)
-  //G4cout << "Prima del build" << G4endl;
   gammaProcess->BuildPhysicsTable(*gamma);
-  //G4cout << "Dopo il buildt" << G4endl;
 
   theeminusMultipleScattering->BuildPhysicsTable(*electron);
-  theeminusIonisation->BuildPhysicsTable(*electron);        
+  theeminusIonisation->BuildPhysicsTable(*electron);   
   theeminusBremsstrahlung->BuildPhysicsTable(*electron);
   theeplusMultipleScattering->BuildPhysicsTable(*positron);
   theeplusIonisation->BuildPhysicsTable(*positron);
@@ -446,6 +457,7 @@ G4int main()
   G4ComptonScattering* gammaStdProcess =
     (G4ComptonScattering*) gammaProcess;
   
+
   
   for (G4int i=0 ; i<pntNum; i++)
     {
@@ -509,7 +521,9 @@ G4int main()
       
       G4VParticleChange* dummy;
       dummy = gammaProcess->PostStepDoIt(*gTrack, *step);
-     
+      
+      G4cout << "Dopo il PostStep" << G4endl;
+      
       G4ParticleChange* particleChange = (G4ParticleChange*) dummy;
       
       // Primary physical quantities 
@@ -651,7 +665,6 @@ G4int main()
   tree->close();
   
   delete step;
-
 
   G4cout << "END OF THE MAIN PROGRAM" << G4endl;
   return 0;
