@@ -1,0 +1,72 @@
+         Quick installation on Linux (might work elsewhere)
+         ==================================================
+
+NOTE: tag names and CLHEP versions, etc., will change.  These are
+representative and apply on 2nd August 2001.
+
+NOTE: as for csh.  For sh, ksh, bash, replace setenv by export and put
+'=' between name and value, e.g., export G4=<your G4 working
+directory>.
+
+1)   setenv G4 <your G4 working directory>
+     setenv SCRATCH <your-work-directory>  (for binaries)
+
+2)   cd $G4
+     cvs co -r geant4-03-02-ref-01 geant4
+
+3) Needs CLHEP1.7: go to Geant4 Web Page, Download, CLHEP version 1.6
+   (sic), CLHEP, "LINUX V1.7 using egcs 1.1.2" and untar into, say,
+   G4/CLHEP1.7/.  (egcs 1.1.2 is the default compiler on Noric.)
+     cd $G4
+     mkdir CLHEP1.7
+     cd CLHEP1.7
+     tar xzf clhep-1.7.0.0-egcs-1.1.2.tar.gz
+
+4) Optionally, update to later subtags:
+     cd $G4/geant4/source/visualization
+     cvs update -d -P -r vis-V03-02-09
+     # Look at History: it will tell you you also need:
+     cd $G4/geant4/config
+     cvs update -d -P -r config-V03-02-01
+     cd $G4/geant4/graphics_reps
+     cvs update -d -P -r greps-V03-02-01
+     cd $G4/geant4/intercoms
+     cvs update -d -P -r intercoms-V03-02-02
+     cd $G4/geant4/global
+     cvs update -d -P -r global-V03-02-01
+
+5)   setenv G4INSTALL $G4/geant4
+     setenv G4BIN $SCRATCH/bin
+     setenv G4LIB $SCRATCH/lib
+     setenv G4TMP $SCRATCH/tmp
+     setenv G4SYSTEM Linux-g++
+     setenv G4LEVELGAMMADATA $G4INSTALL/data/PhotonEvaporation
+     setenv CLHEP_BASE_DIR $G4/CLHEP1.7
+     setenv LD_LIBRARY_PATH $LD_LIBRARY_PATH:$CLHEP_BASE_DIR/lib
+
+5) VIS and UI variables (the BUILD variables are for installers, the
+   USE for users - you are both!):
+     setenv G4VIS_BUILD_OPENGLX_DRIVER 1
+     setenv G4VIS_USE_OPENGLX 1
+     setenv G4UI_BUILD_TERMINAL_SESSION 1   (*)
+     setenv G4UI_USE_TERMINAL 1
+     setenv OGLHOME /usr/X11                (Might not be necessary)
+
+6) If you're more adventurous, have motif or lesstif...
+     setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
+     setenv G4VIS_USE_OPENGLXM 1
+     setenv G4UI_BUILD_XM_SESSION 1
+     setenv G4UI_USE_XM 1
+
+7) ...or want to try GAG (Japanese GUI):
+     setenv G4UI_BUILD_GAG_SESSION 1       (*)
+     setenv G4UI_USE_GAG 1
+
+8) Optionally:
+     setenv G4DEBUG 1
+
+9)   cd $G4INSTALL/source
+     gmake >& gmake.log &
+
+10)  cd $G4INSTALL/examples/novice/N03
+     gmake >& gmake.log &

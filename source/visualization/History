@@ -1,4 +1,4 @@
-$Id: History,v 1.143 2001-07-30 23:34:17 johna Exp $
+$Id: History,v 1.144 2001-08-03 23:30:14 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+3rd August 2001  John Allison
+- Added README.quick.
 
 30th July 2001  John Allison  (vis-V03-02-09)
 - Eliminated view parameters from G4VisManager.  Now, each view maintains its
