@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.12 2002-05-20 16:31:50 grichine Exp $
+// $Id: G4PAIxSection.cc,v 1.13 2002-10-14 17:34:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,8 +97,6 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
       fA2             = new G4double[fIntervalNumber+2] ;
       fA3             = new G4double[fIntervalNumber+2] ;
       fA4             = new G4double[fIntervalNumber+2] ;
-
-   fIntervalNumber--;
       for(i=1;i<=fIntervalNumber;i++)
       {
          fEnergyInterval[i] = (*theMaterialTable)[materialIndex]->
@@ -169,10 +167,7 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
          fDifPAIxSection[i]        = 0.0 ;   
          fIntegralPAIxSection[i]   = 0.0 ;   
       }
-      **************************************************  */  
- 
-      fThomasReicheKuhn  = 2*pi*pi*hbarc*hbarc*fine_structure_const/electron_mass_c2 ;
-      fThomasReicheKuhn *= fElectronDensity ;      
+      **************************************************  */   
 
       InitPAI() ;  // create arrays allocated above
       
@@ -201,7 +196,6 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
                              GetElectronDensity() ;
 
       fIntervalNumber         = intNumber ;
-   fIntervalNumber--;
 
 // (*theMaterialTable)[materialIndex]->GetSandiaTable()->GetMatNbOfIntervals() ;
 
@@ -292,8 +286,6 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       */ ////////////////////////
 
       // Preparation of fSplineEnergy array corresponding to min ionisation, G~4
-      fThomasReicheKuhn  = 2*pi*pi*hbarc*hbarc*fine_structure_const/electron_mass_c2 ;
-      fThomasReicheKuhn *= fElectronDensity ;      
       
       G4double   betaGammaSqRef = 
       fLorentzFactor[fRefGammaNumber]*fLorentzFactor[fRefGammaNumber] - 1;
@@ -308,7 +300,6 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
          fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
          fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
-         fNormalisedTerm[i] = fIntegralTerm[i]/fThomasReicheKuhn;
       }
       IntegralPAIxSection() ;
       IntegralCerenkov() ;
@@ -351,47 +342,40 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
                            ( thisMaterialZ ,
                       (*theMaterialTable)[materialIndex]->GetFractionVector() ,
         		     numberOfElements,fIntervalNumber) ;
-   fIntervalNumber--;
+
 
       fEnergyInterval = new G4double[fIntervalNumber+2] ;
       fA1             = new G4double[fIntervalNumber+2] ;
       fA2             = new G4double[fIntervalNumber+2] ;
       fA3             = new G4double[fIntervalNumber+2] ;
       fA4             = new G4double[fIntervalNumber+2] ;
-
       for(i=1;i<=fIntervalNumber;i++)
       {
-        fEnergyInterval[i] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,0) ;
+         fEnergyInterval[i] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,0) ;
 
-        fA1[i] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,1)*fDensity ;
-        fA2[i] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,2)*fDensity ;
-        fA3[i] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,3)*fDensity ;
-        fA4[i] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,4)*fDensity ;
+   fA1[i]             = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,1)*fDensity ;
+   fA2[i]             = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,2)*fDensity ;
+   fA3[i]             = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,3)*fDensity ;
+   fA4[i]             = thisMaterialSandiaTable.GetPhotoAbsorpCof(i,4)*fDensity ;
 
-        if( i == 1 || i == fIntervalNumber)
-	{
+         if( i == 1 || i == fIntervalNumber)
+	 {
 	   // G4cout<<fEnergyInterval[i]<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
 	   //         <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl ;
-	}
-        if(fEnergyInterval[i] >= maxEnergyTransfer)
-        {
+	 }
+         if(fEnergyInterval[i] >= maxEnergyTransfer)
+         {
             fEnergyInterval[i] = maxEnergyTransfer ;
 	    fIntervalNumber = i ;
 	    break;
-        }
-	//G4cout<<i<<"  "<<fEnergyInterval[i]<<"  "<<fA1[i]<<"  "<<fA2[i]<<"  "
-	//         <<fA3[i]<<"  "<<fA4[i]<<G4endl<<G4endl ;
+         }
       }   
       if(fEnergyInterval[fIntervalNumber] != maxEnergyTransfer)
       {
-         fIntervalNumber += 1 ;
+         fIntervalNumber++;
          fEnergyInterval[fIntervalNumber] = maxEnergyTransfer ;
       }
-      for(i=1;i<=fIntervalNumber;i++)
-      {
-        //G4cout<<i<<"  "<<fEnergyInterval[i]<<"  "<<fA1[i]<<"  "<<fA2[i]<<"  "
-	//    <<fA3[i]<<"  "<<fA4[i]<<G4endl ;
-      }
+
       // Now checking, if two borders are too close together
 
       for(i=1;i<fIntervalNumber;i++)
@@ -436,8 +420,7 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       */ ////////////////////////
 
       // Preparation of fSplineEnergy array corresponding to min ionisation, G~4
-      fThomasReicheKuhn  = 2*pi*pi*hbarc*hbarc*fine_structure_const/electron_mass_c2 ;
-      fThomasReicheKuhn *= fElectronDensity ;      
+      
       G4double   betaGammaSqRef = 
       fLorentzFactor[fRefGammaNumber]*fLorentzFactor[fRefGammaNumber] - 1;
 
@@ -451,7 +434,6 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
          fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
          fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
-         fNormalisedTerm[i] = fIntegralTerm[i]/fThomasReicheKuhn;
       }
       IntegralPAIxSection() ;
       IntegralCerenkov() ;
@@ -522,7 +504,6 @@ void G4PAIxSection::InitPAI()
          fDifPAIxSection[i] = DifPAIxSection(i,betaGammaSq);
          fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
          fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
-         fNormalisedTerm[i] = fIntegralTerm[i]/fThomasReicheKuhn;
       }
       IntegralPAIxSection() ;
       IntegralCerenkov() ;
@@ -576,12 +557,12 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 	                    RutherfordIntegral(j,fEnergyInterval[j],
                                                  fSplineEnergy[i]    ) ;
     }
-    //  G4cout<<i<<"\t"<<fSplineEnergy[i]<<"\t"<<fIntegralTerm[i]<<"\n"<<G4endl;
+      // G4cout<<i<<"\t"<<fSplineEnergy[i]<<"\t"<<fIntegralTerm[i]<<"\n"<<G4endl;
   } 
   fNormalizationCof = 2*pi*pi*hbarc*hbarc*fine_structure_const/electron_mass_c2 ;
   fNormalizationCof *= fElectronDensity/fIntegralTerm[fSplineNumber] ;
 
-  // G4cout<<"fNormalizationCof = "<<fNormalizationCof<<G4endl ;
+   // G4cout<<"fNormalizationCof = "<<fNormalizationCof<<G4endl ;
 
 	  // Calculation of PAI differrential cross-section (1/(keV*cm))
 	  // in the energy points near borders of energy intervals
@@ -699,20 +680,13 @@ G4double G4PAIxSection::RutherfordIntegral( G4int k,
 				            G4double x1,
 			  	            G4double x2   )
 {
-   G4double  c1, c2, c3, d1, d2, d3, d4, integral ;
+   G4double  c1, c2, c3 ;
    
    c1 = (x2 - x1)/x1/x2 ;
    c2 = (x2 - x1)*(x2 + x1)/x1/x1/x2/x2 ;
    c3 = (x2 - x1)*(x1*x1 + x1*x2 + x2*x2)/x1/x1/x1/x2/x2/x2 ;
-  
-   d1 = fA1[k]*log(x2/x1) ;
-   d2 = fA2[k]*c1 ;
-   d3 = fA3[k]*c2/2. ;
-   d4 = fA4[k]*c3/3 ;
-
-   integral = d1 + d2 + d3 + d4 ;
-   return integral ;   
-   //  return  fA1[k]*log(x2/x1) + fA2[k]*c1 + fA3[k]*c2/2 + fA4[k]*c3/3 ;
+   
+   return  fA1[k]*log(x2/x1) + fA2[k]*c1 + fA3[k]*c2/2 + fA4[k]*c3/3 ;
 
 }   // end of RutherfordIntegral 
 
