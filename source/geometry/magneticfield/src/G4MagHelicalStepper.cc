@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.cc,v 1.8 2001-07-11 09:59:12 gunter Exp $
+// $Id: G4MagHelicalStepper.cc,v 1.9 2002-01-07 13:20:23 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagHelicalStepper.hh"
@@ -67,9 +67,9 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 
   G4double Bmag = Bfld.mag();
   const G4double *pIn = yIn+3;
-  G4ThreeVector initMomentum= G4ThreeVector( pIn[0], pIn[1], pIn[2]);
-  G4double      momentumVal = initMomentum.mag();
-  G4ThreeVector initTangent = (1.0/momentumVal) * initMomentum;  // .unit();  
+  G4ThreeVector initVelocity= G4ThreeVector( pIn[0], pIn[1], pIn[2]);
+  G4double      velocityVal = initVelocity.mag();
+  G4ThreeVector initTangent = (1.0/velocityVal) * initVelocity;  // .unit();  
 
   // fCof = fUnitConstant*particleCharge/MomentumXc;
   G4double particleCharge = fPtrMagEqOfMot->FCof() / (eplus*c_light); 
