@@ -36,6 +36,7 @@
 //
 // Modifications: 
 // 02 Jun 2003                                First implementation acording with new design
+//                5 Nov 2003  MGP             Fixed std namespace
 //
 // Class Description: 
 //
@@ -97,8 +98,8 @@ G4double G4Generator2BS::PolarAngle(const G4double initial_energy,
 
 
   // Calculate Maximum value 
-  G4double gMaximum = max(gfunction0,gfunction1);
-  gMaximum = max(gMaximum,gfunctionEmax);
+  G4double gMaximum = std::max(gfunction0,gfunction1);
+  gMaximum = std::max(gMaximum,gfunctionEmax);
 
   G4double rand, gfunctionTest, randTest;
 
