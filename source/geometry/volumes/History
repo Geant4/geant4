@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2001-12-06 18:15:03 gcosmo Exp $
+$Id: History,v 1.60 2001-12-06 18:18:25 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Dec  6th, 2001       J. Apostolakis - geomvol-V03-02-05
+- G4Navigator
+  Fix for Locate Global Point Within Volume:
+     Clear state variables (that had erroneously been forgotten).
 
 Dec  6th, 2001       R. Chytracek - geomvol-V03-02-04
 - G4Navigator:
