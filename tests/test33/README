@@ -13,8 +13,6 @@ Please run the executable once for each macro file.
 
 Environment settings:
 =====================
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}
-
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$G4WORKDIR/lib/${G4SYSTEM}:${CLHEP_BASE_DIR}/lib
 
 
