@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagErrorStepper.cc,v 1.10 2002-11-09 03:04:08 japost Exp $
+// $Id: G4MagErrorStepper.cc,v 1.11 2002-11-20 18:14:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagErrorStepper.hh"
@@ -44,6 +44,7 @@ G4MagErrorStepper::Stepper( const G4double yInput[],
 		                  G4double yError []      )
 {  
    const G4int nvar = this->GetNumberOfVariables() ;
+   const G4int maxvar= GetNumberOfStateVariables();
 
    G4int i;
    // correction for Richardson Extrapolation.
@@ -54,7 +55,10 @@ G4MagErrorStepper::Stepper( const G4double yInput[],
    for(i=0;i<nvar;i++) yInitial[i]=yInput[i];
    yInitial[7]= yInput[7];    // Copy the time in case ... even if not really needed
    yMiddle[7] = yInput[7];  // Copy the time from initial value 
-   yOutput[7] = yInput[7]; // -> dumb stepper does it too for RK4
+   yOneStep[7] = yInput[7]; // As it contributes to final value of yOutput ?
+   // yOutput[7] = yInput[7];  // -> dumb stepper does it too for RK4
+   for(i=nvar;i<maxvar;i++) yOutput[i]=yInput[i];
+   // yError[7] = 0.0;         
 
    G4double halfStep = hstep * 0.5; 
 
