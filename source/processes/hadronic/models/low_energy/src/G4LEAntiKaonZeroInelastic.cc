@@ -21,19 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonZeroSInelastic.cc,v 1.5 2001-08-01 17:11:09 hpw Exp $
+// $Id: G4LEAntiKaonZeroInelastic.cc,v 1.1 2002-11-16 10:36:33 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
- // Hadronic Process: Low Energy KaonZeroShort Inelastic Process
+ // Hadronic Process: Low Energy KaonZeroLong Inelastic Process
  // J.L. Chuma, TRIUMF, 11-Feb-1997
  // Last modified: 27-Mar-1997
  // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
  
-#include "G4LEKaonZeroSInelastic.hh"
+#include "G4LEAntiKaonZeroInelastic.hh"
 #include "Randomize.hh"
  
  G4VParticleChange *
-  G4LEKaonZeroSInelastic::ApplyYourself( const G4Track &aTrack,
+  G4LEAntiKaonZeroInelastic::ApplyYourself( const G4Track &aTrack,
                                          G4Nucleus &targetNucleus )
   {
     theParticleChange.Initialize( aTrack );
@@ -47,7 +47,7 @@
     if( verboseLevel > 1 )
     {
       G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEKaonZeroSInelastic::ApplyYourself called" << G4endl;
+      G4cout << "G4LEAntiKaonZeroInelastic::ApplyYourself called" << G4endl;    
       G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << ", ";
       G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
@@ -119,7 +119,7 @@
   }
  
  void
-  G4LEKaonZeroSInelastic::Cascade(
+  G4LEAntiKaonZeroInelastic::Cascade(
    G4FastVector<G4ReactionProduct,128> &vec,
    G4int& vecLen,
    const G4DynamicParticle *originalIncident,
@@ -129,9 +129,9 @@
    G4bool &targetHasChanged,
    G4bool &quasiElastic )
   {
-    // derived from original FORTRAN code CASK0 by H. Fesefeldt (13-Sep-1987)
+    // derived from original FORTRAN code CASK0B by H. Fesefeldt (13-Sep-1987)
     //
-    // K0Short undergoes interaction with nucleon within a nucleus.  Check if it is
+    // K0Long undergoes interaction with nucleon within a nucleus.  Check if it is
     // energetically possible to produce pions/kaons.  In not, assume nuclear excitation
     // occurs and input particle is degraded in energy. No other particles are produced.
     // If reaction is possible, find the correct number of pions/protons/neutrons
@@ -141,16 +141,13 @@
     //
     const G4double mOriginal = originalIncident->GetDefinition()->GetPDGMass()/MeV;
     const G4double etOriginal = originalIncident->GetTotalEnergy()/MeV;
+    const G4double pOriginal = originalIncident->GetTotalMomentum()/MeV;
     const G4double targetMass = targetParticle.GetMass()/MeV;
     G4double centerofmassEnergy = sqrt( mOriginal*mOriginal +
                                         targetMass*targetMass +
                                         2.0*targetMass*etOriginal );
     G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
-    if( availableEnergy <= G4PionPlus::PionPlus()->GetPDGMass()/MeV )
-    {
-      quasiElastic = true;
-      return;
-    }
+
     static G4bool first = true;
     const G4int numMul = 1200;
     const G4int numSec = 60;
@@ -167,9 +164,9 @@
       for( i=0; i<numMul; ++i )protmul[i] = 0.0;
       for( i=0; i<numSec; ++i )protnorm[i] = 0.0;
       counter = -1;
-      for( np=0; np<(numSec/3); ++np )
+      for( np=0; np<numSec/3; ++np )
       {
-        for( nm=G4std::max(0,np-1); nm<=(np+1); ++nm )
+        for( nm=G4std::max(0,np-2); nm<=np; ++nm )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
@@ -188,9 +185,9 @@
       for( i=0; i<numMul; ++i )neutmul[i] = 0.0;
       for( i=0; i<numSec; ++i )neutnorm[i] = 0.0;
       counter = -1;
-      for( np=0; np<numSec/3; ++np )
+      for( np=0; np<(numSec/3); ++np )
       {
-        for( nm=G4std::max(0,np-2); nm<=np; ++nm )
+        for( nm=G4std::max(0,np-1); nm<=(np+1); ++nm )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
@@ -215,62 +212,99 @@
     
     const G4double expxu = 82.;           // upper bound for arg. of exp
     const G4double expxl = -expxu;        // lower bound for arg. of exp
-    G4ParticleDefinition *aKaonPlus = G4KaonPlus::KaonPlus();
-    G4ParticleDefinition *aKaonZL = G4KaonZeroLong::KaonZeroLong();
+    G4ParticleDefinition *aKaonMinus = G4KaonMinus::KaonMinus();
     G4ParticleDefinition *aKaonZS = G4KaonZeroShort::KaonZeroShort();
+    G4ParticleDefinition *aKaonZL = G4KaonZeroLong::KaonZeroLong();
     G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition *aProton = G4Proton::Proton();
-    G4int ieab = static_cast<G4int>(5.0*availableEnergy*MeV/GeV);
-    const G4double supp[] = {0.,0.4,0.55,0.65,0.75,0.82,0.86,0.90,0.94,0.98};
-    G4double test, w0, wp, wt, wm;
-    if( (availableEnergy*MeV/GeV < 2.0) && (G4UniformRand() >= supp[ieab]) )
+    G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
+    G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
+    G4ParticleDefinition *aPiZero = G4PionZero::PionZero();
+    G4ParticleDefinition *aLambda = G4Lambda::Lambda();
+    G4ParticleDefinition *aSigmaPlus = G4SigmaPlus::SigmaPlus();
+    G4ParticleDefinition *aSigmaMinus = G4SigmaMinus::SigmaMinus();
+    G4ParticleDefinition *aSigmaZero = G4SigmaZero::SigmaZero();
+    const G4double cech[] = {1.,1.,1.,0.70,0.60,0.55,0.35,0.25,0.18,0.15};
+    G4int iplab = G4int(G4std::min( 9.0, 5.0*pOriginal*MeV/GeV ));
+    if( (pOriginal*MeV/GeV <= 2.0) && (G4UniformRand() < cech[iplab]) )
     {
-      //
-      // suppress high multiplicity events at low momentum
-      // only one pion will be produced
-      //
-      nm = np = nz = 0;
-      if( targetParticle.GetDefinition() == aNeutron )
+      np = nm = nz = nt = 0;
+      iplab = G4int(G4std::min( 19.0, pOriginal*MeV/GeV*10.0 ));
+      const G4double cnk0[] = {0.17,0.18,0.17,0.24,0.26,0.20,0.22,0.21,0.34,0.45,
+                               0.58,0.55,0.36,0.29,0.29,0.32,0.32,0.33,0.33,0.33};
+      if( G4UniformRand() > cnk0[iplab] )
       {
-        test = exp( G4std::min( expxu, G4std::max( expxl, -(1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
-        w0 = test/2.0;
-        test = exp( G4std::min( expxu, G4std::max( expxl, -(-1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
-        wm = test*1.5;
-        if( G4UniformRand() < w0/(w0+wm) )
-          nz = 1;
-        else
-          nm = 1;
-      }
-      else  // target is a proton
-      {
-        test = exp( G4std::min( expxu, G4std::max( expxl, -(1.0+b[1])*(1.0+b[1])/(2.0*c*c) ) ) );
-        w0 = test;
-        wp = test;
-        test = exp( G4std::min( expxu, G4std::max( expxl, -(-1.0+b[1])*(-1.0+b[1])/(2.0*c*c) ) ) );
-        wm = test;
-        wt = w0+wp+wm;
-        wp += w0;
         G4double ran = G4UniformRand();
-        if( ran < w0/wt )
-          nz = 1;
-        else if( ran < wp/wt )
-          np = 1;
-        else
-          nm = 1;
+        if( ran < 0.25 )         // k0Long n --> pi- s+
+        {
+          if( targetParticle.GetDefinition() == aNeutron )
+          {
+            currentParticle.SetDefinitionAndUpdateE( aPiMinus );
+            targetParticle.SetDefinitionAndUpdateE( aSigmaPlus );
+            incidentHasChanged = true;
+            targetHasChanged = true;
+          }
+        }
+        else if( ran < 0.50 )  // k0Long p --> pi+ s0  or  k0Long n --> pi0 s0
+        {
+          if( targetParticle.GetDefinition() == aNeutron )
+            currentParticle.SetDefinitionAndUpdateE( aPiZero );
+          else
+            currentParticle.SetDefinitionAndUpdateE( aPiPlus );
+          targetParticle.SetDefinitionAndUpdateE( aSigmaZero );
+          incidentHasChanged = true;
+          targetHasChanged = true;
+        }
+        else if( ran < 0.75 )  // k0Long n --> pi+ s-
+        {
+          if( targetParticle.GetDefinition() == aNeutron )
+          {
+            currentParticle.SetDefinitionAndUpdateE( aPiPlus );
+            targetParticle.SetDefinitionAndUpdateE( aSigmaMinus );
+            incidentHasChanged = true;
+            targetHasChanged = true;
+          }
+        }
+        else                   // k0Long p --> pi+ L  or  k0Long n --> pi0 L
+        {
+          if( targetParticle.GetDefinition() == aNeutron )
+            currentParticle.SetDefinitionAndUpdateE( aPiZero );
+          else
+            currentParticle.SetDefinitionAndUpdateE( aPiPlus );
+          targetParticle.SetDefinitionAndUpdateE( aLambda );
+          incidentHasChanged = true;
+          targetHasChanged = true;
+        }
+      }
+      else   // ran <= cnk0
+      {
+        quasiElastic = true;
+        if( targetParticle.GetDefinition() == aNeutron )
+        {
+          currentParticle.SetDefinitionAndUpdateE( aKaonMinus );
+          targetParticle.SetDefinitionAndUpdateE( aProton );
+          incidentHasChanged = true;
+          targetHasChanged = true;
+        }
       }
     }
-    else //  (availableEnergy*MeV/GeV >= 2.0) || (G4UniformRand() < supp[ieab])
+    else  // (pOriginal > 2.0*GeV) || (random number >= cech[iplab])
     {
+      if( availableEnergy < aPiPlus->GetPDGMass()/MeV )
+      {
+        quasiElastic = true;
+        return;
+      }
       G4double n, anpn;
       GetNormalizationConstant( availableEnergy, n, anpn );
       G4double ran = G4UniformRand();
-      G4double dum, excs = 0.0;
+      G4double dum, test, excs = 0.0;
       if( targetParticle.GetDefinition() == aProton )
       {
         counter = -1;
-        for( np=0; np<numSec/3 && ran>=excs; ++np )
+        for( np=0; (np<numSec/3) && (ran>=excs); ++np )
         {
-          for( nm=G4std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
+          for( nm=G4std::max(0,np-2); nm<=np && ran>=excs; ++nm )
           {
             for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
             {
@@ -298,13 +332,35 @@
           return;
         }
         np--; nm--; nz--;
+        switch( np-nm )
+        {
+         case 1:
+           if( G4UniformRand() < 0.5 )
+           {
+             currentParticle.SetDefinitionAndUpdateE( aKaonMinus );
+             incidentHasChanged = true;
+           }
+           else
+           {
+             targetParticle.SetDefinitionAndUpdateE( aNeutron );
+             targetHasChanged = true;
+           }
+         case 0:
+           break;
+         default:
+           currentParticle.SetDefinitionAndUpdateE( aKaonMinus );
+           targetParticle.SetDefinitionAndUpdateE( aNeutron );
+           incidentHasChanged = true;
+           targetHasChanged = true;
+           break;
+        }
       }
       else  // target must be a neutron
       {
         counter = -1;
         for( np=0; np<numSec/3 && ran>=excs; ++np )
         {
-          for( nm=G4std::max(0,np-2); nm<=np && ran>=excs; ++nm )
+          for( nm=G4std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
           {
             for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
             {
@@ -332,70 +388,108 @@
           return;
         }
         np--; nm--; nz--;
-      }
-    }
-    if( targetParticle.GetDefinition() == aProton )
-    {
-      switch( np-nm )
-      {
-       case 0:
-         if( G4UniformRand() < 0.25 )
-         {
-           currentParticle.SetDefinitionAndUpdateE( aKaonPlus );
-           targetParticle.SetDefinitionAndUpdateE( aNeutron );
+        switch( np-nm )
+        {
+         case 0:
+           currentParticle.SetDefinitionAndUpdateE( aKaonMinus );
+           targetParticle.SetDefinitionAndUpdateE( aProton );
            incidentHasChanged = true;
            targetHasChanged = true;
-         }
-         break;
-       case 1:
-         targetParticle.SetDefinitionAndUpdateE( aNeutron );
-         targetHasChanged = true;
-         break;
-       default:
-         targetParticle.SetDefinitionAndUpdateE( aNeutron );
-         targetHasChanged = true;
-         break;
-      }
-    }
-    else   // targetParticle is a neutron
-    {
-      switch( np-nm )          // seems wrong, charge not conserved
-      {
-       case 1:
-         if( G4UniformRand() < 0.5 )
-         {
-           currentParticle.SetDefinitionAndUpdateE( aKaonPlus );
+           break;
+         case 1:
+           currentParticle.SetDefinitionAndUpdateE( aKaonMinus );
            incidentHasChanged = true;
-         }
-         else
-         {
+           break;
+         default:
            targetParticle.SetDefinitionAndUpdateE( aProton );
            targetHasChanged = true;
-         }
-         break;
-       case 2:
-         currentParticle.SetDefinitionAndUpdateE( aKaonPlus );
-         incidentHasChanged = true;
-         targetParticle.SetDefinitionAndUpdateE( aProton );
-         targetHasChanged = true;
-         break;
-       default:
-         break;
+           break;
+        }
+      }
+      if( G4UniformRand() >= 0.5 )
+      {
+        if( currentParticle.GetDefinition() == aKaonMinus &&
+            targetParticle.GetDefinition() == aNeutron )
+        {
+          ran = G4UniformRand();
+          if( ran < 0.68 )
+          {
+            currentParticle.SetDefinitionAndUpdateE( aPiMinus );
+            targetParticle.SetDefinitionAndUpdateE( aLambda );
+          }
+          else if( ran < 0.84 )
+          {
+            currentParticle.SetDefinitionAndUpdateE( aPiMinus );
+            targetParticle.SetDefinitionAndUpdateE( aSigmaZero );
+          }
+          else
+          {
+            currentParticle.SetDefinitionAndUpdateE( aPiZero );
+            targetParticle.SetDefinitionAndUpdateE( aSigmaMinus );
+          }
+        }
+        else if( (currentParticle.GetDefinition() == aKaonZS ||
+                  currentParticle.GetDefinition() == aKaonZL ) &&
+                 targetParticle.GetDefinition() == aProton )
+        {
+          ran = G4UniformRand();
+          if( ran < 0.68 )
+          {
+            currentParticle.SetDefinitionAndUpdateE( aPiPlus );
+            targetParticle.SetDefinitionAndUpdateE( aLambda );
+          }
+          else if( ran < 0.84 )
+          {
+            currentParticle.SetDefinitionAndUpdateE( aPiZero );
+            targetParticle.SetDefinitionAndUpdateE( aSigmaPlus );
+          }
+          else
+          {
+            currentParticle.SetDefinitionAndUpdateE( aPiPlus );
+            targetParticle.SetDefinitionAndUpdateE( aSigmaZero );
+          }
+        }
+        else
+        {
+          ran = G4UniformRand();
+          if( ran < 0.67 )
+          {
+            currentParticle.SetDefinitionAndUpdateE( aPiZero );
+            targetParticle.SetDefinitionAndUpdateE( aLambda );
+          }
+          else if( ran < 0.78 )
+          {
+            currentParticle.SetDefinitionAndUpdateE( aPiMinus );
+            targetParticle.SetDefinitionAndUpdateE( aSigmaPlus );
+          }
+          else if( ran < 0.89 )
+          {
+            currentParticle.SetDefinitionAndUpdateE( aPiZero );
+            targetParticle.SetDefinitionAndUpdateE( aSigmaZero );
+          }
+          else
+          {
+            currentParticle.SetDefinitionAndUpdateE( aPiPlus );
+            targetParticle.SetDefinitionAndUpdateE( aSigmaMinus );
+          }
+        }
+        incidentHasChanged = true;
+        targetHasChanged = true;
       }
     }
-    if( currentParticle.GetDefinition() == aKaonZS )
+    if( currentParticle.GetDefinition() == aKaonZL )
     {
       if( G4UniformRand() >= 0.5 )
       {
-        currentParticle.SetDefinitionAndUpdateE( aKaonZL);
+        currentParticle.SetDefinitionAndUpdateE( aKaonZS );
         incidentHasChanged = true;
       }
     }
-    if( targetParticle.GetDefinition() == aKaonZS )
+    if( targetParticle.GetDefinition() == aKaonZL )
     {
       if( G4UniformRand() >= 0.5 )
       {
-        targetParticle.SetDefinitionAndUpdateE( aKaonZL );
+        targetParticle.SetDefinitionAndUpdateE( aKaonZS );
         targetHasChanged = true;
       }
     }
