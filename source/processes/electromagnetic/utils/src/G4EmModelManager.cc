@@ -366,7 +366,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
       if (e >= upperEkin[0]) {
         for(k=1; k<nEmModels; k++) {
           fac *= (1.0 + factor[k]*upperEkin[k-1]/e);
-          if(e <= upperEkin[k]) break;
+          if(e <= upperEkin[k] || k == nEmModels-1) break;
         }
       }
     }
@@ -464,7 +464,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
       if(e >= upperEkin[0]) {
         for(k=1; k<nEmModels; k++) {
           fac *= (1.0 + factor[k]*upperEkin[k-1]/e);
-          if(e <= upperEkin[k]) break;
+          if(e <= upperEkin[k] || k == nEmModels-1) break;
         }
       }
     }
@@ -476,7 +476,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
     }
 
     if(1 < verboseLevel) {
-        G4cout << "BuildLambdaTable: e(MeV)= " << e/MeV
+      G4cout << "BuildLambdaTable: " << j << ".   e(MeV)= " << e/MeV
                << "  cross(1/mm)= " << cross*mm
                << " fac= " << fac
                << G4endl;
@@ -568,7 +568,7 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
       if(e >= upperEkin[0]) {
         for(k=1; k<nEmModels; k++) {
           fac *= (1.0 + factor[k]*upperEkin[k-1]/e);
-          if(e <= upperEkin[k]) break;
+          if(e <= upperEkin[k] || k == nEmModels-1) break;
         }
       }
     }

@@ -40,6 +40,7 @@
 // 26-12-02 Secondary production moved to derived classes (VI)
 // 04-01-03 Fix problem of very small steps for ions (VI)
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
+// 24-01-03 Temporarily close a control on usage of couples (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -823,9 +824,12 @@ void G4VEnergyLossSTD::SetInverseRangeTable(G4PhysicsTable* p)
 
 G4PhysicsVector* G4VEnergyLossSTD::DEDXPhysicsVector(const G4MaterialCutsCouple* couple)
 {
-  G4int nbins = 3;
-  if( couple->IsUsed() ) nbins = nDEDXBins;
-  return new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nbins);
+  //G4int nbins = 2;
+  G4int nbins =  nDEDXBins;
+  //if( couple->IsUsed() ) nbins = nDEDXBins;
+  //  G4double xmax = maxKinEnergy*exp( log(maxKinEnergy/minKinEnergy) / ((G4double)(nbins-1)) );
+  G4PhysicsVector* v = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nbins);
+  return v;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -833,11 +837,13 @@ G4PhysicsVector* G4VEnergyLossSTD::DEDXPhysicsVector(const G4MaterialCutsCouple*
 G4PhysicsVector* G4VEnergyLossSTD::LambdaPhysicsVector(const G4MaterialCutsCouple* couple)
 {
   G4double cut  = (*theCuts)[couple->GetIndex()];
-  G4int nbins = 2;
-  if( couple->IsUsed() && cut < maxKinEnergy) nbins = nLambdaBins;
+  //G4int nbins = 2;
+  G4int nbins = nLambdaBins;
+  //if( couple->IsUsed() ) nbins = nLambdaBins;
   G4double tmin = G4std::max(MinPrimaryEnergy(particle, couple->GetMaterial(), cut),
                                minKinEnergy);
   if(tmin >= maxKinEnergy) tmin = 0.5*maxKinEnergy;
+  //  G4double xmax = maxKinEnergy*exp(log(maxKinEnergy/tmin)/((G4double)(nbins-1)) );
   G4PhysicsVector* v = new G4PhysicsLogVector(tmin, maxKinEnergy, nbins);
   return v;
 }

@@ -111,7 +111,6 @@ G4PhysicsTable* G4LossTableBuilder::BuildRangeTable(
     G4double ehigh = pv->GetLowEdgeEnergy(nbins);
     G4PhysicsLogVector* v = new G4PhysicsLogVector(elow, ehigh, nbins);
 
-    pv              = (*dedxTable)[i];
     G4double dedx1  = pv->GetValue(elow, b);
     G4double range  = 0.5*elow/dedx1;
     v->PutValue(0,range);
