@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisation.cc,v 1.8 2000-04-25 14:33:12 maire Exp $
+// $Id: G4eIonisation.cc,v 1.9 2000-04-27 14:06:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -229,7 +229,7 @@ void G4eIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
      ( &aParticleType == G4Positron::Positron()))
   {
      G4cout << " The ELECTRON energy cuts needed to compute energy loss/mean free path "
-               " for POSITRON , too. " << endl;
+               " for POSITRON , too. " << G4endl;
      G4Exception(" Call SetCut for e- first !!!!!!") ;
   }
    
