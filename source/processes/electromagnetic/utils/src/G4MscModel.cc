@@ -41,6 +41,7 @@
 //          (L.Urban)
 // 30-05-03 misprint in SampleCosineTheta corrected(L.Urban)
 // 27-03-03 Rename (V.Ivanchenko)
+// 04-06-03 Fix compilation warnings (V.Ivanchenko)
 //
 //
 
@@ -445,8 +446,8 @@ G4double G4MscModel::GeomPathLength(
     G4double T1 = theManager->GetEnergy(particle,range-tPathLength,couple);
 
     if (theLambdaTable) {
-      G4bool b;
-      lambda1 = ((*theLambdaTable)[couple->GetIndex()])->GetValue(T1,b);
+      G4bool bb;
+      lambda1 = ((*theLambdaTable)[couple->GetIndex()])->GetValue(T1,bb);
     } else {
       lambda1 = CrossSection(material,particle,T1,0.0,1.0);
     }

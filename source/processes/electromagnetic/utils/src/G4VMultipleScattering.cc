@@ -32,7 +32,10 @@
 //
 // Creation date: 25.03.2003
 //
-// Modifications: 13.04.03 Change printout (V.Ivanchenko)
+// Modifications:
+// 
+// 13.04.03 Change printout (V.Ivanchenko)
+// 04-06-03 Fix compilation warnings (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -238,7 +241,7 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VMultipleScattering::PrintInfoDefinition() const
+void G4VMultipleScattering::PrintInfoDefinition()
 {
   G4cout << G4endl << GetProcessName() << ":  Model variant of multiple scattering " << G4endl;
   if (theLambdaTable) {

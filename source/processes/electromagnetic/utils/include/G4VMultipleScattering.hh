@@ -94,7 +94,7 @@ public:
      // class.It limits the step near to boundaries only
      // and invokes the method GetContinuousStepLimit at every step.
 
-  virtual void PrintInfoDefinition() const;
+  virtual void PrintInfoDefinition();
   // Print out of the class parameters
 
   void SetBinning(G4int nbins);
