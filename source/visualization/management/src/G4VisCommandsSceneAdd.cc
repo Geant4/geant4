@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.42 2004-12-07 23:41:01 perl Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.43 2005-02-04 16:39:08 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -897,15 +897,14 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 	G4cout << ", copy no. " << copyNo << ",";
       }
       G4cout << " found at depth " << foundDepth
-	     << ",\n  with ";
+	     << ",\n  with a requested depth of further descent of ";
       if (requestedDepthOfDescent < 0) {
-	G4cout << "unlimited (-1)";
+	G4cout << "<0 (unlimited)";
       }
       else {
 	G4cout << requestedDepthOfDescent;
       }
-      G4cout << " further requested depth of descent"
-	     << ",\n  has been added to scene \"" << currentSceneName << "\"."
+      G4cout << ",\n  has been added to scene \"" << currentSceneName << "\"."
 	     << G4endl;
     }
   }
