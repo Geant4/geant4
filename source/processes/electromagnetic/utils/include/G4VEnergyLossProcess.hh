@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.12 2004-05-05 10:12:15 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.13 2004-05-05 18:34:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -532,7 +532,7 @@ inline G4double G4VEnergyLossProcess::GetMeanFreePath(const G4Track& track,
   }
   G4double x = DBL_MAX;
   if(0.0 < preStepLambda) x = 1.0/preStepLambda;
-//  G4cout << GetProcessName() << ": e= " << preStepKinEnergy << " mfp= " << x << G4endl;
+  // G4cout << GetProcessName() << ": e= " << preStepKinEnergy << " mfp= " << x << G4endl;
   return x;
 }
 

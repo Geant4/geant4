@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.22 2004-04-29 18:40:50 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.23 2004-05-05 18:34:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -275,11 +275,11 @@ inline G4double G4LossTableManager::GetRange(
     std::map<PD, G4VEnergyLossProcess*, std::less<PD> >::const_iterator pos;
     if ((pos = loss_map.find(currentParticle)) != loss_map.end()) {
       currentLoss = (*pos).second;
+      if(!currentLoss->RangeTable()) currentLoss = 0;
     } else {
       currentLoss = 0;
 //      ParticleHaveNoLoss(aParticle);
     }
-    if(!currentLoss->RangeTable()) currentLoss = 0;
   }
   G4double x;
   if(currentLoss) {
