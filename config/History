@@ -1,4 +1,4 @@
-$Id: History,v 1.61 1999-10-26 08:11:47 gcosmo Exp $
+$Id: History,v 1.62 1999-10-27 14:16:40 stesting Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26th October 1999  John Allison.
+- Augmented liblist to look for dependencies on auto-generated
+  headers in $G4TMP.
 
 26th October 1999  Gabriele Cosmo (config-V00-01-03)
 - Removed AIX-xlC as default platform for G4SYSTEM in architecture.gmk.

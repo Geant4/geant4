@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.7 1999-07-02 12:27:38 stesting Exp $ */
+/* $Id: liblist.c,v 1.8 1999-10-27 14:14:25 stesting Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -126,10 +126,10 @@ int main (int argc, char** argv) {
 
   struct libmap_
     {
-      char *lib;
-      char *trigger;
-      int used;
-      char **uses;
+      char *lib;      /* Library name, e.g., G4run. */
+      char *trigger;  /* Source directory, e.g., source/run/.  */
+      int used;       /* True if used by these dependency files.  */
+      char **uses;    /* List of library names which this library uses.  */
       struct libmap_ *next;
   };
 
@@ -307,41 +307,71 @@ int main (int argc, char** argv) {
 	{
 	  userLibmapPtr=0;
 	}
-      
+
       /* Look for a "used" library and add it to the "user" uses list... */
-      do
+      bufferPtr=strtok(NULL,"\n");  /* Start *after* ":". */
+      if (!bufferPtr) 
 	{
-	  for(libmapPtr=libmap;libmapPtr;libmapPtr=libmapPtr->next)
-	    {
-	      strcpy(workbuf,libmapPtr->trigger);
-	      strcat(workbuf,"/include");
-	      ptr=strstr(buffer,workbuf);
-	      if(ptr)
-		{
-		  libmapPtr->used=1;
-		  if(userLibmapPtr)
-		    {
-		      for(pp=userLibmapPtr->uses;*pp;pp++)
-			{
-			  if(strcmp(*pp,libmapPtr->lib)==0)break;
-			}
-		      if(!*pp)*pp=libmapPtr->lib;
-		    }
-		}
-	    }
-	  fgets(buffer,BUFSIZE,fp);
+	  fprintf(stderr,"  WARNING: It seems there is nothing after \':\' in dependency file %s.\n", rargv[i]);
+	}
+      else {
+	do
+	  {
+	    for(libmapPtr=libmap;libmapPtr;libmapPtr=libmapPtr->next)
+	      {
+		/* Look for trigger string. */
+		strcpy(workbuf,libmapPtr->trigger);
+		strcat(workbuf,"/include");
+		ptr=strstr(bufferPtr,workbuf);
+		if(ptr && (userLibmapPtr != libmapPtr))
+		  {
+		    libmapPtr->used=1;
+		    if(userLibmapPtr)
+		      {
+			for(pp=userLibmapPtr->uses;*pp;pp++)
+			  {
+			    if(strcmp(*pp,libmapPtr->lib)==0)break;
+			  }
+			if(!*pp)*pp=libmapPtr->lib;
+		      }
+		  }
+		/* Also look for library name in case header files are
+		   placed in temporary directories under a subdirectory
+		   with the same name as the library name.  This can
+		   happen with Objectivity which makes header files
+		   from .ddl files and places them in a temporary
+		   directory. */
+		strcpy(workbuf,libmapPtr->lib);
+		strcat(workbuf,"/");
+		ptr=strstr(bufferPtr,workbuf);
+		if(ptr && (userLibmapPtr != libmapPtr))
+		  {
+		    libmapPtr->used=1;
+		    if(userLibmapPtr)
+		      {
+			for(pp=userLibmapPtr->uses;*pp;pp++)
+			  {
+			    if(strcmp(*pp,libmapPtr->lib)==0)break;
+			  }
+			if(!*pp)*pp=libmapPtr->lib;
+		      }
+		  }
+	      }
+	    fgets(buffer,BUFSIZE,fp);
+	    bufferPtr=buffer;
 
 #ifdef _WIN32
-      while ( ptr=strchr(buffer,'\\') ) *ptr='/';
+	    while ( ptr=strchr(buffer,'\\') ) *ptr='/';
 
-      while (ntg4tmp1 &&  (ptr=strstr(buffer,ntg4tmp1)) )
-        {
-          for(nti=0;nti<strlen(ntg4tmp1);nti++) ptr[nti]=' ';
-        }
+	    while (ntg4tmp1 &&  (ptr=strstr(buffer,ntg4tmp1)) )
+	      {
+		for(nti=0;nti<strlen(ntg4tmp1);nti++) ptr[nti]=' ';
+	      }
 #endif
-  
-	} while(!feof(fp));
-      fclose(fp);
+
+	  } while(!feof(fp));
+	fclose(fp);
+      }
     }
 
 #ifdef _WIN32
