@@ -1,4 +1,4 @@
-$Id: History,v 1.12 2000-04-11 16:15:10 johna Exp $
+$Id: History,v 1.13 2000-04-12 08:25:41 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-11/04/2000   J. Allison
-
+11/04/2000 : J. Allison
 - Removed implementations of G4VisExtent GetExtent() in most sub-classes
-    of G4VSolid (a default implementation exists in G4VSolid).
+  of G4VSolid (a default implementation exists in G4VSolid).
+  Files changed: G4BREPSolid[.hh.cc].
 - All implementations of DescribeYourselfTo (G4VGraphicsScene& scene) const
-    now correctly written: scene.AddThis(*this);
+  now correctly written: scene.AddThis(*this).
+  Files changed: G4BREPSolidOpenPCone.cc.
 
 25/02/2000 : G. Cosmo		  breps-V01-00-02
  G4BSplineSurface[.hh.cc]
