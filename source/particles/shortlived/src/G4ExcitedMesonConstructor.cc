@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.1 1999-01-07 16:10:41 gunter Exp $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.2 1999-04-23 00:50:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,14 +90,14 @@ void G4ExcitedMesonConstructor::ConstructMesons(G4int iState, G4int iType)
   //             stable         lifetime    decay table 
   
   
-  G4String name;
+  G4String aName;
   G4ParticleDefinition* particle;
   
   for ( G4int iIso3=(-1)*iIsoSpin[iType]; iIso3<=iIsoSpin[iType]; iIso3+=2) {
-    name= GetName(iIso3, iState, iType);
+    aName= GetName(iIso3, iState, iType);
 
     particle = new G4ExcitedMesons(            
-             name,   mass[iState][iType],         width[iState][iType],    
+             aName,   mass[iState][iType],         width[iState][iType],    
 		 GetCharge(iIso3,iType),                 iSpin[iState],
 			iParity[iState],    iChargeConjugation[iState],
                         iIsoSpin[iType],                         iIso3,   
@@ -112,7 +112,7 @@ void G4ExcitedMesonConstructor::ConstructMesons(G4int iState, G4int iType)
       particle->SetAntiPDGEncoding(GetEncoding(iIso3, iState, iType));
     }
 
-    particle->SetDecayTable(CreateDecayTable( name, iIso3, iState, iType));
+    particle->SetDecayTable(CreateDecayTable( aName, iIso3, iState, iType));
   }
 }
 
