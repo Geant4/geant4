@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProjectedSurface.cc,v 1.1 1999-01-07 16:07:45 gunter Exp $
+// $Id: G4ProjectedSurface.cc,v 1.2 1999-05-20 17:39:22 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ProjectedSurface.hh"
@@ -90,10 +90,10 @@ void G4ProjectedSurface::CalcBBox()
   // Loop to search the whole control point mesh
   // for the minimum and maximum values for x and y.
   G4double box_minx,box_miny,box_maxx,box_maxy;
-  box_minx = INFINITY;
-  box_miny = INFINITY;
-  box_maxx  = -INFINITY;
-  box_maxy  = -INFINITY;
+  box_minx = kInfinity;
+  box_miny = kInfinity;
+  box_maxx  = -kInfinity;
+  box_maxy  = -kInfinity;
     
   G4double bminx,bminy,bmaxx,bmaxy,tmpx,tmpy;
   bminx = box_minx; bminy = box_miny;

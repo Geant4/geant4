@@ -1285,7 +1285,7 @@ int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref,
 	   
 	  if(( Dir * Norm ) >= 0)
 	  {
-	    Dist = INFINITY;
+	    Dist = kInfinity;
 	    srf->Deactivate();
 	  }
 	  
@@ -1294,7 +1294,7 @@ int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref,
 	}
 	else
 	{
-	  Dist = INFINITY;
+	  Dist = kInfinity;
 	  srf->Deactivate();
 	}
       }
@@ -1314,7 +1314,7 @@ int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref,
 	if(TestDistance > Dist)
 	{
 	  // Hit behind ray starting point, no intersection.
-	  Dist = INFINITY;
+	  Dist = kInfinity;
 	  srf->Deactivate();
 	}
 	else
@@ -1337,7 +1337,7 @@ int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref,
 	    //if(( Dir * Norm ) >= 0)
 	    if(( Dir * Norm ) < 0)
 	    {
-	      Dist = INFINITY;
+	      Dist = kInfinity;
 	      srf->Deactivate();
 	    }
 	    
