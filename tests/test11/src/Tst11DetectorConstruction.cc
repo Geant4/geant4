@@ -94,7 +94,11 @@ void Tst11DetectorConstruction::SelectMaterialPointer()
   {
     a = 238.*g/mole;
     density = 21.*g/cm3;
-    U  = new G4Material(name="Lead", z=92., a, density);
+    U  = new G4Material(name="Uranium", density, 1);
+    G4Element * elU = new G4Element(name="Uranium", "U138", 1);
+    G4Isotope * isoU = new G4Isotope("U238", 92, 238, a);
+    elU->AddIsotope(isoU, 100.0);
+    U->AddElement(elU, 1);
   }
 
   if(materialChoice=="Air")
@@ -114,7 +118,7 @@ G4VPhysicalVolume* Tst11DetectorConstruction::Construct()
 {
   SelectMaterialPointer();
 
-  G4Box * mySimpleBox = new G4Box("SBox",20*cm, 20*cm, 20*cm);
+  G4Box * mySimpleBox = new G4Box("SBox",5*cm, 5*cm, 20*m);
   simpleBoxLog = new G4LogicalVolume( mySimpleBox,
                                       selectedMaterial,"SLog",0,0,0);
   G4VPhysicalVolume* simpleBoxDetector = new G4PVPlacement(0,G4ThreeVector(),
