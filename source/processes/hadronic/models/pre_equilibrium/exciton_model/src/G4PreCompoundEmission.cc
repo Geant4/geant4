@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.3 2003-08-28 14:41:10 lara Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.4 2003-09-18 14:46:06 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear Preequilibrium
@@ -330,11 +330,58 @@ G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4
 	}
       else 
         {
-          continue;
+          break;
         }
     }
     
-  tot *= pow(g,p+h)/(fact[static_cast<G4int>(p)]*fact[static_cast<G4int>(h)]*fact[static_cast<G4int>(p+h)-1]);
+
+  G4double factp(0.0);
+  G4int ph = static_cast<G4int>(p);
+  if (ph < 51) 
+    {
+      factp = fact[ph];
+    }
+  else
+    {
+      factp = fact[50];
+      for (G4int n = 51; n < ph+1; ++n)
+        {
+          factp *= static_cast<G4double>(n);
+        }
+    }
+
+  G4double facth(0.0);
+  ph = static_cast<G4int>(h);
+  if (ph < 51) 
+    {
+      facth = fact[ph];
+    }
+  else
+    {
+      facth = fact[50];
+      for (G4int n = 51; n < ph+1; ++n)
+        {
+          facth *= static_cast<G4double>(n);
+        }
+    }
+  G4double factph(0.0);
+  ph = static_cast<G4int>(p+h)-1;
+  if (ph < 51)
+    {
+      factph = fact[ph];
+    }
+  else
+    {
+      factph = fact[50];
+      for (G4int n = 51; n < ph+1; ++n)
+        {
+          factph *= static_cast<G4double>(n);
+        }
+    }
+  
+  tot *= pow(g,p+h)/factph;
+  tot /= factp;
+  tot /= facth;
     
   return tot;
 }
