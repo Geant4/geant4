@@ -575,7 +575,7 @@ int main(int argc, char** argv)
       G4int n = aChange->GetNumberOfSecondaries();
       G4int nn= n;
 			
-      if(iter==100*(iter/100)) G4cerr << "##### " << iter << "-th event  #####" << G4endl;
+      if(iter==100*(iter/100)) G4cout << "##### " << iter << "-th event  #####" << G4endl;
 			 					
       for(G4int i=0; i<n+1; i++) {
 
