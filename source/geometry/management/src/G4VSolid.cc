@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.10 2002-03-13 11:19:30 grichine Exp $
+// $Id: G4VSolid.cc,v 1.11 2002-04-16 08:21:08 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -30,6 +30,7 @@
 //
 // History:
 //
+//  15.04.02 V.Grichine, bug fixed in ClipPoligon: clip only one axis
 //  13.03.02 V.Grichine, cosmetics of voxel limit functions  
 //  15.11.00 D.Williams, V.Grichine change in CalculateClippedPolygonExtent:
 //                                  else if(component>pMax) ---> if
@@ -92,36 +93,6 @@ void G4VSolid::ComputeDimensions(G4VPVParameterisation* p,
     G4Exception("G4VSolid::ComputeDimensions called illegally: not overloaded by derived class");
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Calculate the maximum and minimum extents of the convex polygon pPolygon
-// along the axis pAxis, within the limits pVoxelLimit
-//
-
-void G4VSolid::CalculateClippedPolygonExtent(G4ThreeVectorList& pPolygon,
-					  const G4VoxelLimits& pVoxelLimit,
-					  const EAxis pAxis, 
-					  G4double& pMin, G4double& pMax) const
-{
-  G4int noLeft,i;
-  G4double component;
-  ClipPolygon(pPolygon,pVoxelLimit);
-  noLeft = pPolygon.size();
-
-  if (noLeft)
-  {
-    for (i=0;i<noLeft;i++)
-    {
-      component = pPolygon[i].operator()(pAxis);
-      //   G4cout <<component<<"\t";
- 
-      if (component < pMin)  pMin = component;      
-// else 
-      if (component > pMax)  pMax = component;      
-    }
-  }
-}
-
 ///////////////////////////////////////////////////////////////////////////
 // 
 // Calculate the maximum and minimum extents of the polygon described
@@ -147,7 +118,7 @@ void G4VSolid::ClipCrossSection(       G4ThreeVectorList* pVertices,
   polygon.push_back((*pVertices)[pSectionIndex+1]);
   polygon.push_back((*pVertices)[pSectionIndex+2]);
   polygon.push_back((*pVertices)[pSectionIndex+3]);
-
+  //  G4cout<<"ClipCrossSection: 0-1-2-3"<<G4endl;
   CalculateClippedPolygonExtent(polygon,pVoxelLimit,pAxis,pMin,pMax);
   return;
 }
@@ -176,6 +147,7 @@ void G4VSolid::ClipBetweenSections(      G4ThreeVectorList* pVertices,
   polygon.push_back((*pVertices)[pSectionIndex+4]);
   polygon.push_back((*pVertices)[pSectionIndex+5]);
   polygon.push_back((*pVertices)[pSectionIndex+1]);
+  // G4cout<<"ClipBetweenSections: 0-4-5-1"<<G4endl;
   CalculateClippedPolygonExtent(polygon,pVoxelLimit,pAxis,pMin,pMax);
   polygon.clear();
 
@@ -183,6 +155,7 @@ void G4VSolid::ClipBetweenSections(      G4ThreeVectorList* pVertices,
   polygon.push_back((*pVertices)[pSectionIndex+5]);
   polygon.push_back((*pVertices)[pSectionIndex+6]);
   polygon.push_back((*pVertices)[pSectionIndex+2]);
+  // G4cout<<"ClipBetweenSections: 1-5-6-2"<<G4endl;
   CalculateClippedPolygonExtent(polygon,pVoxelLimit,pAxis,pMin,pMax);
   polygon.clear();
 
@@ -190,6 +163,7 @@ void G4VSolid::ClipBetweenSections(      G4ThreeVectorList* pVertices,
   polygon.push_back((*pVertices)[pSectionIndex+6]);
   polygon.push_back((*pVertices)[pSectionIndex+7]);
   polygon.push_back((*pVertices)[pSectionIndex+3]);
+  //  G4cout<<"ClipBetweenSections: 2-6-7-3"<<G4endl;
   CalculateClippedPolygonExtent(polygon,pVoxelLimit,pAxis,pMin,pMax);
   polygon.clear();
 
@@ -197,8 +171,61 @@ void G4VSolid::ClipBetweenSections(      G4ThreeVectorList* pVertices,
   polygon.push_back((*pVertices)[pSectionIndex+7]);
   polygon.push_back((*pVertices)[pSectionIndex+4]);
   polygon.push_back((*pVertices)[pSectionIndex]);
+  //  G4cout<<"ClipBetweenSections: 3-7-4-0"<<G4endl;
   CalculateClippedPolygonExtent(polygon,pVoxelLimit,pAxis,pMin,pMax);
   return;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Calculate the maximum and minimum extents of the convex polygon pPolygon
+// along the axis pAxis, within the limits pVoxelLimit
+//
+
+void G4VSolid::CalculateClippedPolygonExtent(G4ThreeVectorList& pPolygon,
+					  const G4VoxelLimits& pVoxelLimit,
+					  const EAxis pAxis, 
+					  G4double& pMin, G4double& pMax) const
+{
+  G4int noLeft,i;
+  G4double component;
+  /*  
+  G4cout<<G4endl;
+  for(i = 0 ; i < pPolygon.size() ; i++ )
+  {
+      G4cout<<i<<"\t"<<"p.x = "<<pPolygon[i].operator()(pAxis)<<"\t"
+	//            <<"p.y = "<<pPolygon[i].y()<<"\t"
+        //             <<"p.z = "<<pPolygon[i].z()<<"\t"
+            <<G4endl;
+  }	    
+  G4cout<<G4endl;
+  */  
+  ClipPolygon(pPolygon,pVoxelLimit,pAxis);
+  noLeft = pPolygon.size();
+
+  if ( noLeft )
+  {
+    //  G4cout<<G4endl;
+    for (i=0;i<noLeft;i++)
+    {
+      component = pPolygon[i].operator()(pAxis);
+      //  G4cout <<i<<"\t"<<component<<G4endl;
+ 
+      if (component < pMin) 
+      { 
+	//  G4cout <<i<<"\t"<<"Pmin = "<<component<<G4endl;
+        pMin = component;      
+      }
+      if (component > pMax)
+      {  
+	//  G4cout <<i<<"\t"<<"PMax = "<<component<<G4endl;
+        pMax = component;  
+      }    
+    }
+    //  G4cout<<G4endl;
+  }
+  // G4cout<<"pMin = "<<pMin<<"\t"<<"pMax = "<<pMax<<G4endl;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -222,59 +249,64 @@ void G4VSolid::ClipBetweenSections(      G4ThreeVectorList* pVertices,
 // NOTE: Execessive copying during clipping
 
 void G4VSolid::ClipPolygon(      G4ThreeVectorList& pPolygon,
-			   const G4VoxelLimits& pVoxelLimit    ) const
+			   const G4VoxelLimits& pVoxelLimit,
+                           const EAxis              pAxis          ) const
 {
   G4ThreeVectorList outputPolygon;
 
   if ( pVoxelLimit.IsLimited() )
   {
-    if (pVoxelLimit.IsXLimited())
+    if (pVoxelLimit.IsXLimited() && pAxis == kXAxis)
     {
       G4VoxelLimits simpleLimit1;
       simpleLimit1.AddLimit(kXAxis,pVoxelLimit.GetMinXExtent(),kInfinity);
+      //  G4cout<<"MinXExtent()"<<G4endl;
       ClipPolygonToSimpleLimits(pPolygon,outputPolygon,simpleLimit1);
+   
       pPolygon.clear();
 
-      if (!outputPolygon.size())    return;
+      if ( !outputPolygon.size() )  return;
 			
       G4VoxelLimits simpleLimit2;
+      //  G4cout<<"MaxXExtent()"<<G4endl;
       simpleLimit2.AddLimit(kXAxis,-kInfinity,pVoxelLimit.GetMaxXExtent());
       ClipPolygonToSimpleLimits(outputPolygon,pPolygon,simpleLimit2);
 
-      if (!pPolygon.size())         return;		
+      if ( !pPolygon.size() )       return;		
       else                          outputPolygon.clear();	
     }
-    if (pVoxelLimit.IsYLimited())
+    if ( pVoxelLimit.IsYLimited() && pAxis == kYAxis)
     {
       G4VoxelLimits simpleLimit1;
       simpleLimit1.AddLimit(kYAxis,pVoxelLimit.GetMinYExtent(),kInfinity);
       ClipPolygonToSimpleLimits(pPolygon,outputPolygon,simpleLimit1);
 
-// Must always clear pPolygon - for clip to simpleLimit2 and incase of
+// Must always clear pPolygon - for clip to simpleLimit2 and in case of
 // early exit
+
       pPolygon.clear();
 
-      if (!outputPolygon.size())    return;
+      if ( !outputPolygon.size() )  return;
 			
       G4VoxelLimits simpleLimit2;
       simpleLimit2.AddLimit(kYAxis,-kInfinity,pVoxelLimit.GetMaxYExtent());
       ClipPolygonToSimpleLimits(outputPolygon,pPolygon,simpleLimit2);
 
-      if (!pPolygon.size())         return;
+      if ( !pPolygon.size() )       return;
       else                          outputPolygon.clear();	
     }
-    if (pVoxelLimit.IsZLimited())
+    if ( pVoxelLimit.IsZLimited() && pAxis == kZAxis)
     {
       G4VoxelLimits simpleLimit1;
       simpleLimit1.AddLimit(kZAxis,pVoxelLimit.GetMinZExtent(),kInfinity);
       ClipPolygonToSimpleLimits(pPolygon,outputPolygon,simpleLimit1);
 
-// Must always clear pPolygon - for clip to simpleLimit2 and incase of
+// Must always clear pPolygon - for clip to simpleLimit2 and in case of
 // early exit
 
       pPolygon.clear();
 
-      if (!outputPolygon.size())    return;
+      if ( !outputPolygon.size() )  return;
 			
       G4VoxelLimits simpleLimit2;
       simpleLimit2.AddLimit(kZAxis,-kInfinity,pVoxelLimit.GetMaxZExtent());
@@ -300,8 +332,8 @@ void G4VSolid::ClipPolygonToSimpleLimits( G4ThreeVectorList& pPolygon,
 
   for (i = 0 ; i < noVertices ; i++ )
   {
-    vStart=pPolygon[i];
-
+    vStart = pPolygon[i];
+    //  G4cout<<"i = "<<i<<G4endl;
     if ( i == noVertices-1 )    vEnd = pPolygon[0];
     else                        vEnd = pPolygon[i+1];
 		
@@ -316,7 +348,7 @@ void G4VSolid::ClipPolygonToSimpleLimits( G4ThreeVectorList& pPolygon,
       else
       {
 // vStart inside, vEnd outside -> output crossing point
-
+	// G4cout<<"vStart inside, vEnd outside"<<G4endl;
         pVoxelLimit.ClipToLimits(vStart,vEnd);
 	outputPolygon.push_back(vEnd);
       }	    
@@ -326,14 +358,16 @@ void G4VSolid::ClipPolygonToSimpleLimits( G4ThreeVectorList& pPolygon,
       if (pVoxelLimit.Inside(vEnd))
       {
 // vStart outside, vEnd inside -> output inside section
+	//  G4cout<<"vStart outside, vEnd inside"<<G4endl;
 
         pVoxelLimit.ClipToLimits(vStart,vEnd);
 	outputPolygon.push_back(vStart);
-	outputPolygon.push_back(vEnd);
+	outputPolygon.push_back(vEnd);  
       }
-      else
-// Both point outside -> no output
+      else  // Both point outside -> no output
       {
+	// outputPolygon.push_back(vStart);
+	// outputPolygon.push_back(vEnd);  
       }
     }
   }

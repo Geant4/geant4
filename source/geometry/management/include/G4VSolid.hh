@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.9 2001-07-11 09:59:19 gunter Exp $
+// $Id: G4VSolid.hh,v 1.10 2002-04-16 08:21:07 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -188,6 +188,9 @@ class G4VSolid
       // If the solid is a "G4DisplacedSolid", return a self pointer
       // else return 0.
 
+  //  virtual G4ThreeVectorList* 
+  //  CreateRotatedVertices(const G4AffineTransform& pTransform) const = 0 ;
+
   protected:  // with description
 
     void CalculateClippedPolygonExtent(G4ThreeVectorList& pPolygon,
@@ -233,8 +236,9 @@ class G4VSolid
       //
       // No modifications are made to pVertices.
 
-    void ClipPolygon(G4ThreeVectorList& pPolygon,
-		     const G4VoxelLimits& pVoxelLimit) const;
+    void ClipPolygon(      G4ThreeVectorList& pPolygon,
+		     const G4VoxelLimits& pVoxelLimit,
+                     const EAxis              pAxis      ) const;
       // Clip the specified convex polygon to the given limits, where
       // the polygon is described by the vertices at (0),(1),...,(n),(0) in
       // pPolygon. 
@@ -244,7 +248,7 @@ private:
 
     void ClipPolygonToSimpleLimits(G4ThreeVectorList& pPolygon,
 				   G4ThreeVectorList& outputPolygon,
-				   const G4VoxelLimits& pVoxelLimit) const;
+			     const G4VoxelLimits&     pVoxelLimit   ) const;
       // Clip the specified convex polygon to the given limits, storing the
       // result in outputPolygon. The voxel limits must be limited in one
       // *plane* only: This is achieved by having only x or y or z limits,

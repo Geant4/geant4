@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelLimits.cc,v 1.5 2002-03-14 17:29:10 grichine Exp $
+// $Id: G4VoxelLimits.cc,v 1.6 2002-04-16 08:21:08 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VoxelLimits
@@ -95,7 +95,7 @@ G4bool G4VoxelLimits::ClipToLimits( G4ThreeVector& pStart,
   {
 // Trivially outside, no intersection with region
 
-    remainsAfterClip=false;
+    remainsAfterClip = false;
   }
   else if ( sCode == 0 && eCode == 0 )
   {
@@ -118,7 +118,20 @@ G4bool G4VoxelLimits::ClipToLimits( G4ThreeVector& pStart,
     x2 = pEnd.x() ;
     y2 = pEnd.y() ;
     z2 = pEnd.z() ;
-
+    /*
+    if( abs(x1-x2) < kCarTolerance*kCarTolerance)
+    {
+      G4cout<<"x1 = "<<x1<<"\t"<<"x2 = "<<x2<<G4endl; 
+    }   
+    if( abs(y1-y2) < kCarTolerance*kCarTolerance)
+    {
+      G4cout<<"y1 = "<<y1<<"\t"<<"y2 = "<<y2<<G4endl; 
+    }   
+    if( abs(z1-z2) < kCarTolerance*kCarTolerance)
+    {
+      G4cout<<"z1 = "<<z1<<"\t"<<"z2 = "<<z2<<G4endl; 
+    } 
+    */  
     while ( sCode != eCode )
     {
 // Copy vectors to work variables x1-z1,x2-z2
@@ -203,6 +216,7 @@ G4bool G4VoxelLimits::ClipToLimits( G4ThreeVector& pStart,
 	  z2  = fzAxisMax;
 	}
       }
+      //  G4endl; G4cout<<"x1 = "<<x1<<"\t"<<"x2 = "<<x2<<G4endl<<G4endl;
       pStart = G4ThreeVector(x1,y1,z1);
       pEnd   = G4ThreeVector(x2,y2,z2);
       sCode  = OutCode(pStart);
