@@ -39,7 +39,7 @@
 #include "test31PreCompound.hh"
 #include "test31LEparametrised.hh"
 #include "test31CHIPS.hh"
-
+#include "test31IonSpecial.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -89,7 +89,7 @@ void test31PhysicsList::AddPhysicsList(const G4String& name)
 
     if (emPhysicsListIsRegistered) {
 
-      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">" 
+      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">"
              << " cannot be register additionally to existing one"
              << G4endl;
     } else {
@@ -110,7 +110,7 @@ void test31PhysicsList::AddPhysicsList(const G4String& name)
       RegisterPhysics( new test31ModelEM(name) );
       emPhysicsListIsRegistered = true;
     }
-  
+
   } else if("modelnew" == name) {
 
     if (emPhysicsListIsRegistered) {
@@ -128,7 +128,7 @@ void test31PhysicsList::AddPhysicsList(const G4String& name)
 
     if (emPhysicsListIsRegistered) {
 
-      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">" 
+      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">"
              << " cannot be register additionally to existing one"
              << G4endl;
     } else {
@@ -141,7 +141,7 @@ void test31PhysicsList::AddPhysicsList(const G4String& name)
 
     if (hadPhysicsListIsRegistered) {
 
-      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">" 
+      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">"
              << " cannot be register additionally to existing one"
              << G4endl;
     } else {
@@ -154,7 +154,7 @@ void test31PhysicsList::AddPhysicsList(const G4String& name)
 
     if (hadPhysicsListIsRegistered) {
 
-      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">" 
+      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">"
              << " cannot be register additionally to existing one"
              << G4endl;
     } else {
@@ -167,7 +167,7 @@ void test31PhysicsList::AddPhysicsList(const G4String& name)
 
     if (hadPhysicsListIsRegistered) {
 
-      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">" 
+      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">"
              << " cannot be register additionally to existing one"
              << G4endl;
     } else {
@@ -175,6 +175,11 @@ void test31PhysicsList::AddPhysicsList(const G4String& name)
       RegisterPhysics( new test31CHIPS(name) );
       hadPhysicsListIsRegistered = true;
     }
+  
+  } else if("ionSpecial" == name) {
+
+    RegisterPhysics( new test31IonSpecial(name) );
+
   } else if("elastic" == name) {
 
     RegisterPhysics( new test31HadronElastic(name) );
@@ -206,8 +211,8 @@ void test31PhysicsList::SetCuts()
   // because some processes for e+/e- need cut values for gamma
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");   
-  
+  SetCutValue(cutForPositron, "e+");
+
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
