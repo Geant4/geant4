@@ -52,6 +52,7 @@ INCFLAGS := \
             -I$(G4BASE)/processes/hadronic/models/generator/string_common/include \
             -I$(G4BASE)/processes/hadronic/models/generator/pre_equilibrium/include \
             -I$(G4BASE)/processes/hadronic/models/generator/management/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/kinetic_model/include \
             -I$(G4BASE)/processes/hadronic/processes/include \
             -I$(G4BASE)/processes/hadronic/stopping/include \
             -I$(G4BASE)/processes/hadronic/util/include \

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEInelasticTest.cc,v 1.7 2002-07-13 07:48:29 jwellisc Exp $
+// $Id: G4LEInelasticTest.cc,v 1.8 2002-07-18 13:47:36 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -36,14 +36,14 @@
 #include "G4HadronInelasticProcess.hh"
  
 #include "G4ProtonInelasticProcess.hh"
-// #include "G4PreCompoundModel.hh"
-// #include "G4QGSModel.hh"
-// #include "G4QGSParticipants.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
+#include "G4QGSModel.hh"
+#include "G4QGSParticipants.hh"
 // #include "G4StringChipsParticleLevelInterface.hh"
-// #include "G4TheoFSGenerator.hh"
-// #include "G4VLongitudinalStringDecay.hh"
-// #include "G4ExcitedStringDecay.hh"
-// #include "G4QGSMFragmentation.hh"
+#include "G4TheoFSGenerator.hh"
+#include "G4VLongitudinalStringDecay.hh"
+#include "G4ExcitedStringDecay.hh"
+#include "G4QGSMFragmentation.hh"
 #include "G4LEProtonInelastic.hh"
 
 #include "G4DynamicParticle.hh"
@@ -160,19 +160,20 @@
    theProton->SetProcessManager(theProtonProcessManager);
    G4ProtonInelasticProcess theInelasticProcess; 
    G4LEProtonInelastic theProtonModel;
-//    G4ExcitationHandler theHandler;
-//   G4PreCompoundModel theProtonModel(&theHandler);
-//    G4TheoFSGenerator * theTheoModel = new G4TheoFSGenerator;
-//    G4QGSModel<G4QGSParticipants> * theStringModel = new G4QGSModel<G4QGSParticipants>;
+//   theProtonModel.ForceEnergyConservation(false);
+    G4ExcitationHandler theHandler;
+    G4TheoFSGenerator * theTheoModel = new G4TheoFSGenerator;
+    G4QGSModel<G4QGSParticipants> * theStringModel = new G4QGSModel<G4QGSParticipants>;
+    G4GeneratorPrecompoundInterface theCascade;
 //    G4StringChipsParticleLevelInterface * theCascade = new G4StringChipsParticleLevelInterface;
-//     theTheoModel->SetTransport(theCascade);
-//     theTheoModel->SetHighEnergyGenerator(theStringModel);
-//     theTheoModel->SetMinEnergy(20*GeV);
-//     theTheoModel->SetMaxEnergy(100*TeV);
-//     G4VLongitudinalStringDecay * theFragmentation;
-//     theFragmentation = new G4QGSMFragmentation;
-//     G4ExcitedStringDecay theStringDecay(theFragmentation);
-//     theStringModel->SetFragmentationModel(&theStringDecay);
+     theTheoModel->SetTransport(&theCascade);
+     theTheoModel->SetHighEnergyGenerator(theStringModel);
+     theTheoModel->SetMinEnergy(20*GeV);
+     theTheoModel->SetMaxEnergy(100*TeV);
+     G4VLongitudinalStringDecay * theFragmentation;
+     theFragmentation = new G4QGSMFragmentation;
+     G4ExcitedStringDecay theStringDecay(theFragmentation);
+     theStringModel->SetFragmentationModel(&theStringDecay);
 
 
 //   theInelasticProcess.RegisterMe(theTheoModel);
@@ -290,7 +291,7 @@ int j = 0;
 	       if(aSec->GetDefinition()->GetBaryonNumber() < 0)
 	       {
                  QValue += aSec->GetTotalEnergy();
-                 QValue += aSec->GetDefinition()->GetPDGMass();
+                 QValue += G4Neutron::Neutron()->GetPDGMass();
  	         if(isec!=0) QValueM1 += aSec->GetTotalEnergy();
  	         if(isec!=0) QValueM1 += aSec->GetDefinition()->GetPDGMass();
 	         if(isec>1) QValueM2 += aSec->GetTotalEnergy();
@@ -301,13 +302,25 @@ int j = 0;
 	       {
                  G4double ss = 0;
 	         ss +=aSec->GetDefinition()->GetPDGMass();
-	         ss -=G4Neutron::Neutron()->GetPDGMass();
+		 if(aSec->GetDefinition() == G4Proton::Proton())
+		 {
+		   ss -=G4Proton::Proton()->GetPDGMass();
+		 }
+		 else
+		 {
+	           ss -=G4Neutron::Neutron()->GetPDGMass();
+		 }
 	         ss += aSec->GetKineticEnergy();
 	         QValue += ss;
 	         if(isec!=0) QValueM1 += ss;
 	         if(isec>1) QValueM2 += ss;
 	         G4cout << "found a Baryon !!!" <<G4endl;
 	       }
+	     }
+	     else if(aSec->GetDefinition()->GetPDGEncoding() == 0)
+	     {
+	       QValue += aSec->GetKineticEnergy();
+	       G4cout << "found a ion !!!" <<G4endl;
 	     }
 	     else
 	     {
