@@ -70,11 +70,13 @@ f->Write();
    ntuple->SetLineColor(1);
    ntuple->SetFillStyle(1001);
    ntuple->SetFillColor(45);
-   ntuple->Draw("momX","momY");
+//   ntuple->Draw("momX","momY");
+   ntuple->Draw("eKin", "typePart==1");
    ntuple->SetFillColor(38);
-   ntuple->Draw("2*momZ","momY>10","same");
+// ntuple->Draw("2*momZ","momY>10","same");
+   ntuple->Draw("eKin","typePart==2","same");
    ntuple->SetFillColor(5);
-   ntuple->Draw("1.3*momY+2","(momX^2+momY^2>4) && eKin>0","same");
+   ntuple->Draw("eKin","(typePart==2 && momZ>200)","same");
    c1->Update();
    //
    // Display the profile of two columns
