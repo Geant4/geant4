@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEInelastic.cc,v 1.4 1999-12-15 14:52:55 gunter Exp $
+// $Id: G4HEInelastic.cc,v 1.5 2000-07-09 09:48:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -23,7 +23,7 @@
 // Last modified: 29-July-1998 
 // HPW, fixed bug in getting pdgencoding for nuclei
 // Hisaya, fixed HighEnergyCascading
- 
+// Fesefeldt, fixed bug in TuningOfHighEnergyCascading, 23 June 2000 
 #include "G4HEInelastic.hh"
 #include "G4HEVector.hh"
 #include "G4ParticleDefinition.hh"
@@ -1885,7 +1885,7 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
        pvmx[4].Print(4);
      }
  
-   G4int ledpar = 0;
+   G4int ledpar = -1;
    G4double redpar = 0.;
    G4double gespar = 0.;
    G4int incidentS =   incidentParticle.getQuarkContent( 3 )
@@ -1974,27 +1974,48 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
        pvmx[8].Add3(pvmx[8], pv[i] );
      } 
 
-  if (ledpar > 0)
+  if (ledpar >= 0)
      { 
-      if(verboseLevel > 1)
-        {
+       if(verboseLevel > 1)
+       {
           G4cout << " Leading Particle found : " << ledpar << G4endl;
           pv[ledpar].Print(ledpar);
-        }
-       pvmx[4].Sub3(pvmx[8], pvmx[9] );
-       G4double ptled = pv[ledpar].Length() * sqrt(1. - sqr(pvmx[9].CosAng( pv[ledpar] )));
-       pv[ledpar].Sub3( pv[ledpar], pvmx[4] );
-       pvmx[5].Smul( pvmx[9], pv[ledpar].Length()*pvmx[9].CosAng(pv[ledpar])/pvmx[9].Length());
-       pvmx[6].Cross( pvmx[9], pv[ledpar]);
-       pvmx[6].Cross( pvmx[6], pvmx[9]);
-       pvmx[6].Smul( pvmx[6], ptled/pvmx[6].Length());
-       pv[ledpar].Add3( pvmx[5], pvmx[6] );
-       pv[ledpar].setMassAndUpdate( pv[ledpar].getMass());
+          pvmx[8].Print(-2);
+          incidentParticle.Print(-1);
+       }
+       pvmx[4].Sub3(incidentParticle,pvmx[8]);
+       pvmx[5].Smul(incidentParticle, incidentParticle.CosAng(pvmx[4])
+                                     *pvmx[4].Length()/incidentParticle.Length());
+       pv[ledpar].Add3(pv[ledpar],pvmx[5]);
+
+       pv[ledpar].SmulAndUpdate( pv[ledpar], 1.);
        if(verboseLevel > 1)
-	 {
+       {
            pv[ledpar].Print(ledpar);
-         }  
+       }  
      }
+  if(conserveEnergy)
+  {
+    G4double ekinhf = 0.;
+    for(i=0; i<vecLen; i++)
+    {
+      ekinhf += pv[i].getKineticEnergy();
+      if(pv[i].getMass() < 0.7) ekinhf += pv[i].getMass();
+    }
+    if(incidentParticle.getMass() < 0.7) ekinhf -= incidentParticle.getMass();
+    if(ledpar < 0)
+    {
+      ekinhf = incidentParticle.getKineticEnergy()/ekinhf;
+      for(i=0; i<vecLen; i++) pv[i].setKineticEnergyAndUpdate(ekinhf*pv[i].getKineticEnergy());
+    }
+    else
+    {
+      ekinhf = incidentParticle.getKineticEnergy() - ekinhf;
+      ekinhf += pv[ledpar].getKineticEnergy();
+      if(ekinhf < 0.) ekinhf = 0.;
+      pv[ledpar].setKineticEnergyAndUpdate(ekinhf);
+    }
+  }  
   delete [] reddec;
   delete [] pvmx;
   return;
