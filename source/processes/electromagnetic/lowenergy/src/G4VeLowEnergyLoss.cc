@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.20 2003-02-11 19:19:12 vnivanch Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.21 2003-04-24 11:24:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,6 +40,7 @@
 // 23/11/01  V.Ivanchenko Move static member-functions from header to source
 // 22/01/03  V.Ivanchenko Cut per region
 // 11/02/03  V.Ivanchenko Add limits to fluctuations
+// 24/04/03  V.Ivanchenko Fix the problem of table size
 //
 // --------------------------------------------------------------
 
@@ -62,7 +63,7 @@ G4double     G4VeLowEnergyLoss::c2lim = 2.*(1.-dRoverRange)*finalRange ;
 G4double     G4VeLowEnergyLoss::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
 
-//    
+//
 
 G4VeLowEnergyLoss::G4VeLowEnergyLoss()
                    :G4VContinuousDiscreteProcess("No Name Loss Process"),
@@ -73,7 +74,7 @@ G4VeLowEnergyLoss::G4VeLowEnergyLoss()
   G4Exception("G4VeLowEnergyLoss:: default constructor is called");
 }
 
-//    
+//
 
 G4VeLowEnergyLoss::G4VeLowEnergyLoss(const G4String& aName , G4ProcessType aType)
                   : G4VContinuousDiscreteProcess(aName, aType),
@@ -125,7 +126,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeTable(
 // Build range table from the energy loss table
 {
 
-   G4int numOfCouples = G4Material::GetNumberOfMaterials();
+   G4int numOfCouples = theDEDXTable->length();
 
    if(theRangeTable)
    { theRangeTable->clearAndDestroy();
