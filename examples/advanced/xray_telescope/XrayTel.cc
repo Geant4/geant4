@@ -76,6 +76,7 @@
 #include "G4UImanager.hh"
 #include "G4UIGAG.hh"
 #include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 #include "XrayTelDetectorConstruction.hh"
 #include "XrayTelPhysicsList.hh"
 #include "XrayTelVisManager.hh"
@@ -110,8 +111,13 @@ int main( int argc, char** argv )
     
   // get the pointer to the User Interface manager 
   G4UImanager *UI = G4UImanager::GetUIpointer();  
+  G4UIsession * session;
   if ( argc==1 ){
-    G4UIsession * session = new G4UIGAG;
+#ifdef G4UI_USE_TCSH
+    session = new G4UIterminal(new G4UItcsh);
+#else
+    session = new G4UIGAG;
+#endif
     //G4UIsession * session = new G4UIterminal;
     session->SessionStart();
     delete session;
