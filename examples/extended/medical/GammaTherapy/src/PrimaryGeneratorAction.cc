@@ -99,8 +99,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double y = y0;
   G4double z = fDetector->GetGeneratorPosZ();
   do {
-    if(0.0 < sigmaX) x += G4RandGauss::shoot(0.0,sigmaX);
-    if(0.0 < sigmaY) y += G4RandGauss::shoot(0.0,sigmaY);
+    if(0.0 < sigmaX) x = G4RandGauss::shoot(x0,sigmaX);
+    if(0.0 < sigmaY) y = G4RandGauss::shoot(y0,sigmaY);
   } while (x*x + y*y > rMax2);
 
   position  = G4ThreeVector(x,y,z);
