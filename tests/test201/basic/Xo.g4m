@@ -1,0 +1,3 @@
+/vis/sceneHandler/create Xo xo
+/vis/viewer/create xo viewer_xo
+/vis/sceneHandler/attach scene_1

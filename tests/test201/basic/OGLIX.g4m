@@ -1,0 +1,3 @@
+/vis/sceneHandler/create OGLIX oglix
+/vis/viewer/create oglix viewer_oglix
+/vis/sceneHandler/attach scene_1

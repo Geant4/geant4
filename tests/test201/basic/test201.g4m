@@ -13,7 +13,6 @@
 /interactor/addButton vis "Create scene" "/control/execute scene.g4m"
 /interactor/addButton vis "OpenGL X" "/control/execute OGLIX.g4m"
 /interactor/addButton vis "Inventor X11" "/control/execute OIX11.g4m"
-/interactor/addButton vis "Wo" "/control/execute Wo.g4m"
 /interactor/addButton vis "Xo" "/control/execute Xo.g4m"
 /interactor/addButton vis "Inventor WIN32" "/control/execute OIWIN32.g4m"
 #/interactor/addButton vis "Inventor WIN32/2" "/control/execute OIWIN322.g4m"

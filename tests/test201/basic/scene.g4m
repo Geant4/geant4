@@ -1,3 +1,4 @@
+/vis/scene/create scene_1
 /vis/scene/add/volume expHall_P
 /vis/scene/add/volume calo_phys_0
 /vis/scene/add/volume calo_phys_1
@@ -5,3 +6,4 @@
 /vis/scene/add/volume tracker_phys
 #/vis/scene/include/hits
 /vis/scene/include/trajectories
+
