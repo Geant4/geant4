@@ -17,6 +17,11 @@
 #include "G4Track.hh"
 #include "globals.hh"
 #include "G4SteppingManager.hh"
+#include "G4VVisManager.hh"
+#include "G4Colour.hh"
+#include "G4Polyline.hh" 
+#include "G4VisAttributes.hh"
+#include "G4ThreeVector.hh"
 
 #include "g4std/vector"
 
@@ -58,6 +63,42 @@ void ZIIISteppingAction::UserSteppingAction(const G4Step* fStep)
     Weights.push_back ( fStep->GetPreStepPoint()->GetWeight() );
     Times.push_back((fStep->GetPreStepPoint()->GetGlobalTime() - fStep->GetPreStepPoint()->GetLocalTime()) / s );
     drawEvent = true;
+  }
+
+  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+
+  if (pVVisManager) {
+
+        //----- Get the Stepping Manager
+        const G4SteppingManager* pSM = fpSteppingManager;
+
+        //----- Define a line segment 
+        G4Polyline polyline;
+
+        G4String name = pSM->GetTrack()->GetDefinition()->GetParticleName();
+//        G4double charge = pSM->GetTrack()->GetDefinition()->GetPDGCharge();
+//        G4double mass = pSM->GetTrack()->GetDefinition()->GetPDGMass();
+        G4Colour colour;
+        if  (name == "neutron") colour = G4Colour(1., 0., 0.);
+        else if (name == "gamma" ) colour = G4Colour(0., 0., 1.);
+        else                  colour = G4Colour(0., 1., 0.);
+        G4VisAttributes attribs(colour);
+        polyline.SetVisAttributes(attribs);
+        G4Point3D * start = new G4Point3D(pSM->GetStep()->GetPreStepPoint()->GetPosition() );
+        G4Point3D * end = new G4Point3D(pSM->GetStep()->GetPostStepPoint()->GetPosition() );
+        polyline.push_back(*start);
+        polyline.push_back(*end);
+        delete start;
+        delete end;
+
+        //----- Call a drawing method for G4Polyline 
+        pVVisManager -> Draw(polyline); // Step 2 of the Clear-Draw-Show process
+      
+
+
+
+
+
   }
 
 }

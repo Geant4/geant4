@@ -43,7 +43,7 @@ G4Element* elementXe = new G4Element( "Xenon", "Xe", 54., 131.29*g/mole );
 
 // Materials from Combination
 
-G4Material* Glass = new G4Material("Glass",  2.2*g/cm3, 5, kStateSolid, 273.15*kelvin, 1.0*atmosphere );
+G4Material* Glass = new G4Material("Glass",  2.2*g/cm3, 3, kStateSolid, 273.15*kelvin, 1.0*atmosphere );
 Glass->AddElement( elementO, 0.66-5.0E-5 );
 Glass->AddElement( elementSi, 0.34 );
 Glass->AddElement( elementK, 5.0E-5 );

@@ -118,14 +118,14 @@ void ZIIIEventAction::EndOfEventAction(const G4Event* evt)
      G4int n_trajectories = 0;
      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
 
-     for (G4int i=0; i<n_trajectories; i++) 
-        { G4Trajectory* trj = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
-          if (drawFlag == "all") trj->DrawTrajectory(50);
-          else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                                  trj->DrawTrajectory(50);
-          else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-                                  trj->DrawTrajectory(50);				   
-        }
+//     for (G4int i=0; i<n_trajectories; i++) 
+//        { G4Trajectory* trj = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
+//          if (drawFlag == "all") trj->DrawTrajectory(50);
+//          else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
+//                          trj->DrawTrajectory(50);
+//          else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
+//                                  trj->DrawTrajectory(50);				   
+// }
   }             
 }
 

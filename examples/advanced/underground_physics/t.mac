@@ -21,6 +21,8 @@
 /event/verbose 0
 /tracking/verbose 0
 
+/control/execute v.mac
+
 /grdm/analogueMC 1
 /grdm/verbose 0
 
@@ -45,4 +47,7 @@
 /grdm/allVolumes
 #/grdm/noVolumes
 #/grdm/selectVolume logical_PMT_Glass_body
-/run/beamOn 20
+/run/beamOn 10
+
+
+

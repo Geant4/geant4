@@ -1,0 +1,33 @@
+#             such as the DAWNFILE, VRMLFILE, OpenGL Motif drivers.   #
+#             You can execute, e.g. "/vis/draw/axes" before executing #
+#             "/vis/viewer/update" to visualize coordinate axes.      #
+#                                                                     #
+#######################################################################
+
+###########################################
+# Visualization of detector geometry 
+#  with the OGLSX (OpenGL Stored X) driver
+###########################################
+
+# Invoke the OGLSX driver 
+##/vis/open OGLSX
+# Invoke the DAWNFILE driver 
+/vis/open DAWNFILE
+
+# Visualize the detector geometry 
+#  with the defalut camera parameters
+/vis/camera/reset
+/vis/drawVolume
+/vis/viewer/update
+
+# Slide show (spinning) of the view visualized above.
+#  Draw 60 frames with steps of 3 degrees.
+/vis/camera/reset
+/vis/camera/viewpoint  70 50
+/vis/camera/zoom       1.0
+
+
+
+
+
+
