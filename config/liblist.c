@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.3 1999-03-02 16:02:08 fbehner Exp $ */
+/* $Id: liblist.c,v 1.4 1999-04-09 04:49:55 fbehner Exp $ */
 /*
 Given libname.map file and a list of .d dependency files liblist produces:
   a) with no options, a library list ordered according to the libname.map,
@@ -158,7 +158,10 @@ int main (int argc, char** argv) {
   if(directory)
     {
       if(rargc==0)
-	rargv=parsedir(directory,&rargc);
+	{
+	  dbegin=0;
+	  rargv=parsedir(directory,&rargc);
+	}
       else
 	{
 	  fprintf(stderr,"If you specify a directory don't also specify files\n");
