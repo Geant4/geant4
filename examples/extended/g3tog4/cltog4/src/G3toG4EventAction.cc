@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4EventAction.cc,v 1.3 2001-10-23 13:32:36 gcosmo Exp $
+// $Id: G3toG4EventAction.cc,v 1.4 2003-07-04 15:45:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,12 +58,12 @@ G3toG4EventAction::~G3toG4EventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G3toG4EventAction::BeginOfEventAction(const G4Event* Ev)
+void G3toG4EventAction::BeginOfEventAction(const G4Event*)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G3toG4EventAction::EndOfEventAction(const G4Event* Ev)
+void G3toG4EventAction::EndOfEventAction(const G4Event*)
 {
   const G4Event* evt = fpEventManager->GetConstCurrentEvent();
 
