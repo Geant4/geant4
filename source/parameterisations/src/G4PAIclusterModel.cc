@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIclusterModel.cc,v 1.2 2001-01-22 08:43:13 grichine Exp $
+// $Id: G4PAIclusterModel.cc,v 1.3 2001-02-01 11:21:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -49,7 +49,7 @@ G4PAIclusterModel::~G4PAIclusterModel()
 
 G4bool G4PAIclusterModel::IsApplicable(const G4ParticleDefinition& particle)
 {
-  return  ( particle.GetPDGCharge() != 0.0 ) ; 
+  return  ( particle.GetPDGCharge() != 0.0 && particle.GetPDGMass() != 0 ) ; 
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -65,10 +65,12 @@ G4bool G4PAIclusterModel::IsApplicable(const G4ParticleDefinition& particle)
 
 G4bool G4PAIclusterModel::ModelTrigger(const G4FastTrack& fastTrack) 
 {
-  //  if (gamma >= 100.0) return true  ;
-  //  else                return false ;
-
-  return true ;
+  G4double kinEnergy, mass, gamma ;
+  kinEnergy  = fastTrack.GetPrimaryTrack()->GetKineticEnergy() ;
+  mass       = fastTrack.GetPrimaryTrack()->GetDefinition()->GetPDGMass() ;
+  gamma      = 1.0 + kinEnergy/mass ;
+  if (gamma >= 1.2) return true  ;
+  else              return false ;
 }
 
 //////////////////////////////////////////////////////////////////////////////
