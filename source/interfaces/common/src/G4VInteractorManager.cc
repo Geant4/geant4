@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VInteractorManager.cc,v 1.6 1999-11-02 20:06:49 barrand Exp $
+// $Id: G4VInteractorManager.cc,v 1.7 1999-11-10 15:23:23 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -137,7 +137,7 @@ void G4VInteractorManager::AddDispatcher (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_dispatcher==NULL) return;
-  if(find(dispatchers.begin(),dispatchers.end(),a_dispatcher)!=dispatchers.end()) return;
+  if(G4std::find(dispatchers.begin(),dispatchers.end(),a_dispatcher)!=dispatchers.end()) return;
   dispatchers.push_back(a_dispatcher);
 }
 /***************************************************************************/
@@ -147,7 +147,7 @@ void G4VInteractorManager::RemoveDispatcher (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  remove(dispatchers.begin(),dispatchers.end(),a_dispatcher);
+  G4std::remove(dispatchers.begin(),dispatchers.end(),a_dispatcher);
 }
 /***************************************************************************/
 void G4VInteractorManager::DispatchEvent (
@@ -174,7 +174,7 @@ void G4VInteractorManager::AddSecondaryLoopPreAction (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_preAction==NULL) return;
-  if(find(preActions.begin(),preActions.end(),a_preAction)!=preActions.end()) return;
+  if(G4std::find(preActions.begin(),preActions.end(),a_preAction)!=preActions.end()) return;
   preActions.push_back(a_preAction);
 }
 /***************************************************************************/
@@ -196,7 +196,7 @@ void G4VInteractorManager::AddSecondaryLoopPostAction (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_postAction==NULL) return;
-  if(find(postActions.begin(),postActions.end(),a_postAction)!=postActions.end()) return;
+  if(G4std::find(postActions.begin(),postActions.end(),a_postAction)!=postActions.end()) return;
   postActions.push_back(a_postAction);
 }
 /***************************************************************************/
@@ -268,7 +268,7 @@ void G4VInteractorManager::AddShell (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_shell==NULL) return;
-  if(find(shells.begin(),shells.end(),a_shell)!=shells.end()) return;
+  if(G4std::find(shells.begin(),shells.end(),a_shell)!=shells.end()) return;
   shells.push_back(a_shell);
 }
 /***************************************************************************/
@@ -278,7 +278,7 @@ void G4VInteractorManager::RemoveShell (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {  
-  remove(shells.begin(),shells.end(),a_shell);
+  G4std::remove(shells.begin(),shells.end(),a_shell);
 }
 /***************************************************************************/
 void G4VInteractorManager::SetParentInteractor (
