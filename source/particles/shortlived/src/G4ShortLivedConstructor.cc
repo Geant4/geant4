@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedConstructor.cc,v 1.2 1999-06-09 17:28:18 kurasige Exp $
+// $Id: G4ShortLivedConstructor.cc,v 1.3 1999-10-03 09:11:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -299,7 +299,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 #include "G4ExcitedMesonConstructor.hh"
 void G4ShortLivedConstructor::ConstructResonances()
 {
-  ConstructBarions();
+  ConstructBaryons();
   ConstructMesons();
 
   // N*
@@ -330,7 +330,7 @@ void G4ShortLivedConstructor::ConstructResonances()
 
 
 #include "G4ExcitedBaryons.hh"
-void G4ShortLivedConstructor::ConstructBarions()
+void G4ShortLivedConstructor::ConstructBaryons()
 {
   G4DecayTable*   decayTable;
   G4VDecayChannel* mode;

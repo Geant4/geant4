@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedConstructor.hh,v 1.1 1999-01-07 16:10:39 gunter Exp $
+// $Id: G4ShortLivedConstructor.hh,v 1.2 1999-10-03 09:11:47 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@ class G4ShortLivedConstructor
  
   protected:
     void ConstructResonances();
-    void ConstructBarions();
+    void ConstructBaryons();
     void ConstructMesons();
     void ConstructQuarks();
 
