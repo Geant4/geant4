@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#include "Tst50ProtonEEDL.hh"
+#include "Tst50AlphaICRU49.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MultipleScattering.hh"
@@ -28,13 +28,13 @@
 #include "G4hLowEnergyIonisation.hh"
 #include "G4hLowEnergyLoss.hh"
 
-Tst50ProtonEEDL::Tst50ProtonEEDL(const G4String& name): G4VPhysicsConstructor(name)
+Tst50AlphaICRU49::Tst50AlphaICRU49(const G4String& name): G4VPhysicsConstructor(name)
 { }
 
-Tst50ProtonEEDL::~Tst50ProtonEEDL()
+Tst50AlphaICRU49::~Tst50AlphaICRU49()
 { }
 
-void Tst50ProtonEEDL::ConstructProcess()
+void Tst50AlphaICRU49::ConstructProcess()
 {
 
 theParticleIterator->reset();
@@ -45,14 +45,15 @@ theParticleIterator->reset();
       G4ProcessManager* manager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
      
-      if (particleName == "proton" )
+      if (particleName == "alpha")
 	{
 	  G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
           // G4VProcess*  multipleScattering= new G4MultipleScattering(); 
 	  ionisation -> SetEnlossFluc(false); 
 
           ionisation -> SetNuclearStoppingOn() ;
-
+          ionisation -> SetElectronicStoppingPowerModel(particle, "ICRU_49He");
+          ionisation -> SetNuclearStoppingPowerModel("ICRU_49");
 	  manager->AddProcess(ionisation,-1,2,2);
           //  manager->AddProcess(multipleScattering,-1,1,1);  	
 	}	

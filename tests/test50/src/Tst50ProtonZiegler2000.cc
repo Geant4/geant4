@@ -20,67 +20,56 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50PhysicsList.hh,v 1.12 2004-07-20 15:11:12 guatelli Exp $
+// $Id: Tst50ProtonZiegler2000.cc,v 1.1 2004-07-20 15:11:13 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Original author unknown (contact: Maria.Grazia.Pia@cern.ch)
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
 // History:
 // -----------
-// 22 Feb 2003 MGP          Redesigned for modular PhysicsList
+// 17 May     2003 SG          Designed for modular Physics List with
+// Ziegler model for the Stopping Power and CSDArange and Stopping Power 
+//conditions set
 //
 // -------------------------------------------------------------------
 
-// Class description:
-// System test for e/gamma, standard photon processes for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+#include "Tst50ProtonZiegler2000.hh"
+#include "G4ProcessManager.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4MultipleScattering.hh"
+#include "G4Proton.hh"
+#include "G4hLowEnergyIonisation.hh"
+#include "G4hLowEnergyLoss.hh"
+#include "G4hSRIM2000p.hh"
+Tst50ProtonZiegler2000::Tst50ProtonZiegler2000(const G4String& name): G4VPhysicsConstructor(name)
+{ }
 
-// -------------------------------------------------------------------
+Tst50ProtonZiegler2000::~Tst50ProtonZiegler2000()
+{ }
 
-#ifndef TST50PHYSICSLIST_HH
-#define TST50PHYSICSLIST_HH 1
+void Tst50ProtonZiegler2000::ConstructProcess()
+{
 
-#include "G4VModularPhysicsList.hh"
-#include "globals.hh"
+  theParticleIterator->reset();
 
-class Tst50PhysicsListMessenger;
-
-class Tst50PhysicsList: public G4VModularPhysicsList {
-public:
-  
-  Tst50PhysicsList();
-
-  virtual ~Tst50PhysicsList();
-
-  virtual void SetCuts();
-  
-  // Register PhysicsList chunks
-  void AddPhysicsList(const G4String& name);
-
-  // Production thresholds, expressed in range
-  void SetGammaCut(G4double cut);
-  void SetElectronCut(G4double cut);
-  void SetParticleCut(G4double value);
-  // Production thresholds, expressed in energy, for photons, electrons and both
-private:
-
-  G4bool electronIsRegistered;
-  G4bool positronIsRegistered;
-  G4bool photonIsRegistered;
-  G4bool protonIsRegistered;
-  G4bool alphaIsRegistered;
-  G4double cutForGamma;
-  G4double cutForElectron;
-
-  Tst50PhysicsListMessenger* messenger;
-
-};
-
-#endif
-
-
-
-
-
-
-
+  while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* manager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
+     
+      if (particleName == "proton") 
+	{
+	  // G4VProcess*  multipleScattering= new G4MultipleScattering(); 
+	  G4hLowEnergyIonisation* ion = new G4hLowEnergyIonisation();
+	  
+	  ion -> SetElectronicStoppingPowerModel(particle, "SRIM2000p");
+	  // ion -> SetNuclearStoppingPowerModel("Ziegler1985");
+          ion -> SetNuclearStoppingOn() ;
+	  //  manager->AddProcess(multipleScattering,-1,1,1);  	
+	  ion -> SetEnlossFluc(false);
+          
+          manager->AddProcess(ion,-1,2,2);
+	}
+    }
+}
