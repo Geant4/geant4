@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.28 2004-06-01 05:44:36 hpw Exp $
+# $Id: GNUmakefile,v 1.29 2004-06-01 08:08:44 gcosmo Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -30,19 +30,17 @@ SUBLIBS += G4emutils
 SUBLIBS += G4xrays 
 SUBLIBS += G4emlowenergy
 
-SUBDIRS += hadronic/management 
-SUBDIRS += hadronic/util
-SUBDIRS += hadronic/processes
 SUBDIRS += hadronic/cross_sections
-SUBDIRS += hadronic/stopping
+SUBDIRS += hadronic/management 
 SUBDIRS += hadronic/models/abrasion
 SUBDIRS += hadronic/models/binary_cascade
+SUBDIRS += hadronic/models/cascade/cascade
 SUBDIRS += hadronic/models/cascade/evaporation
 SUBDIRS += hadronic/models/cascade/utils
-SUBDIRS += hadronic/models/cascade/cascade
 SUBDIRS += hadronic/models/chiral_inv_phase_space/body
 SUBDIRS += hadronic/models/chiral_inv_phase_space/interface
 SUBDIRS += hadronic/models/coherent_elastic
+SUBDIRS += hadronic/models/de_excitation/ablation
 SUBDIRS += hadronic/models/de_excitation/evaporation
 SUBDIRS += hadronic/models/de_excitation/fermi_breakup
 SUBDIRS += hadronic/models/de_excitation/fission
@@ -52,7 +50,6 @@ SUBDIRS += hadronic/models/de_excitation/management
 SUBDIRS += hadronic/models/de_excitation/multifragmentation
 SUBDIRS += hadronic/models/de_excitation/photon_evaporation
 SUBDIRS += hadronic/models/de_excitation/util
-SUBDIRS += hadronic/models/de_excitation/ablation
 SUBDIRS += hadronic/models/em_dissociation
 SUBDIRS += hadronic/models/high_energy
 SUBDIRS += hadronic/models/im_r_matrix
@@ -61,15 +58,18 @@ SUBDIRS += hadronic/models/leading_particle
 SUBDIRS += hadronic/models/low_energy
 SUBDIRS += hadronic/models/management
 SUBDIRS += hadronic/models/neutron_hp
-SUBDIRS += hadronic/models/photolepton_hadron/muon_nuclear
 SUBDIRS += hadronic/models/parton_string/diffraction
 SUBDIRS += hadronic/models/parton_string/hadronization
 SUBDIRS += hadronic/models/parton_string/management
 SUBDIRS += hadronic/models/parton_string/qgsm
+SUBDIRS += hadronic/models/photolepton_hadron/muon_nuclear
 SUBDIRS += hadronic/models/pre_equilibrium/exciton_model
 SUBDIRS += hadronic/models/radioactive_decay
 SUBDIRS += hadronic/models/theo_high_energy
 SUBDIRS += hadronic/models/util
+SUBDIRS += hadronic/processes
+SUBDIRS += hadronic/stopping
+SUBDIRS += hadronic/util
 
 SUBLIBS +=  G4hadronic_abrasion
 SUBLIBS +=  G4hadronic_xsect 
