@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2003-12-10 18:31:00 japost Exp $
+$Id: History,v 1.18 2003-12-11 01:35:20 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 11th, 2003 - J.Apostolakis  (geomnav-V05-02-15)
+------------------------------
+ Refined re-setting of finalSection, using restoredFullEndpoint
+  --> Endpoint recalculation is returned only for final section.
+  (trial fix in -14 is replaced by above code)
+
+ Fixed ReEstimateEndPoint which ignored return code of AccurateAdvance
+   and moved to short end-point for long requests
+   it now leaves the endpoint unchanged, when it cannot improve it
+
+ Few format changes for PrintStatus!
 
 Dec 10th, 2003 - J.Apostolakis  (geomnav-V05-02-14)
 ------------------------------
