@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.13 2003-11-02 14:01:22 gcosmo Exp $
+// $Id: G4VSolid.hh,v 1.14 2004-09-06 08:25:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -164,7 +164,12 @@ class G4VSolid
                                    const G4VPhysicalVolume* pRep);
       // Throw exception if ComputeDimensions called frrom an illegal
       // derived class.
-                                   
+
+    virtual G4double GetCubicVolume() {return 0.;}
+      // Returns an estimation of the solid volume in internal units.
+      // This method will become pure-virtual as soon as an implementation
+      // for all the implemented solids is provided.
+
     virtual G4GeometryType  GetEntityType() const = 0;
       // Provide identification of the class of an object.
       // (required for persistency and STEP interface)
