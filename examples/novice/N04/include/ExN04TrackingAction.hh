@@ -9,9 +9,9 @@ class ExN04TrackingAction : public G4UserTrackingAction {
 
   public:
     ExN04TrackingAction(){};
-    ~ExN04TrackingAction(){};
+    virtual ~ExN04TrackingAction(){};
    
-    void PreUserTrackingAction();
+    virtual void PreUserTrackingAction(const G4Track*);
 
 };
 

@@ -4,16 +4,13 @@
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
 
-void ExN04TrackingAction::PreUserTrackingAction()
+void ExN04TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
-  G4TrackingManager* trackingManager = GetOmnipotentTrackingManager();
-  G4Track* aTrack = trackingManager->GetTrack();
-
   // Create trajectory only for primaries
   if(aTrack->GetParentID()==0)
-  { trackingManager->SetStoreTrajectory(true); }
+  { fpTrackingManager->SetStoreTrajectory(true); }
   else
-  { trackingManager->SetStoreTrajectory(false); }
+  { fpTrackingManager->SetStoreTrajectory(false); }
 }
 
 

@@ -24,7 +24,7 @@ ExN04StackingAction::~ExN04StackingAction()
 { delete theMessenger; }
 
 G4ClassificationOfNewTrack 
-ExN04StackingAction::ClassifyNewTrack(G4Track *const aTrack)
+ExN04StackingAction::ClassifyNewTrack(const G4Track * aTrack)
 {
   G4ClassificationOfNewTrack classification = fWaiting;
   switch(stage)
