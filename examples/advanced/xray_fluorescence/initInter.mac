@@ -1,5 +1,5 @@
 #
-# Macro file for the initialization phase of "exampleN03.cc"
+# Macro file for the initialization phase of XRay_Fluorescence
 # when runing in interactive mode
 #
 # Sets some default verbose
@@ -29,3 +29,12 @@
 # (if too many tracks cause core dump => storeTrajectory 0)
 
 /tracking/storeTrajectory 1
+/vis/viewer/set/viewpointThetaPhi  60 30
+
+# this is not to redraw every single event
+
+/vis/scene/endOfEventAction accumulate
+
+
+
+
