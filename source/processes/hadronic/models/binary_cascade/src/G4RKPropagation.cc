@@ -329,6 +329,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	G4ThreeVector boost= transfer / sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
 	new4Mom*=G4LorentzRotation(boost);
 	kt->Set4Momentum(new4Mom);
+        kt->SetState(G4KineticTrack::inside);
 //     G4cout <<" Enter Nucleus - E/Field/Sum: " <<kt->GetTrackingMomentum().e() << " / "
 //    	   << (*theFieldMap)[encoding]->GetField(kt->GetPosition()) << " / "
 //	   << kt->GetTrackingMomentum().e()-currentField->GetField(kt->GetPosition())
@@ -426,6 +427,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	   G4ThreeVector boost= transfer / sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
 	   new4Mom*=G4LorentzRotation(boost);
 	   kt->Set4Momentum(new4Mom);
+	   kt->SetState(G4KineticTrack::gone_out);
 //old	   kt->Update4Momentum(newE);
 //	   G4cout << "%%%% beyond update %%%% "<< kt->GetTrackingMomentum()<<G4endl;
 //	   G4cout << "Field values: "<<currentField->GetField(savePos)<<" "
@@ -441,7 +443,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
       G4double newE = kt->GetTrackingMomentum().e()+currentField->GetField(kt->GetPosition());
 //      G4cout << " leave nucleus, E in/out: " << kt->GetTrackingMomentum() << " / " << newE <<G4endl;
       if(newE < kt->GetActualMass())
-      {  // the particle cannot exit the nucleus
+      {  // the particle cannot exit the nucleus  @@@ GF check.
 	continue;
       }
 	G4double newP = sqrt(newE*newE- sqr(kt->GetActualMass()));
@@ -450,6 +452,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	G4ThreeVector boost= transfer / sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
 	new4Mom*=G4LorentzRotation(boost);
 	kt->Set4Momentum(new4Mom);
+	kt->SetState(G4KineticTrack::gone_out);
 //old      kt->Update4Momentum(newE);
     }
 
