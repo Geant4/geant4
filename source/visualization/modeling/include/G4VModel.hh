@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.hh,v 1.10 2001-07-22 00:57:11 johna Exp $
+// $Id: G4VModel.hh,v 1.11 2001-07-24 21:51:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,6 +83,8 @@ public: // With description
   // Model transformation, i.e., position and orientation of model in world.
 
   void SetModelingParameters (const G4ModelingParameters*);
+
+  void SetExtent (const G4VisExtent&);
 
   virtual G4bool Validate ();
   // Validate, but allow internal changes (hence non-const function).

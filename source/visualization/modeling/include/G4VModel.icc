@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.icc,v 1.7 2001-07-11 10:09:21 gunter Exp $
+// $Id: G4VModel.icc,v 1.8 2001-07-24 21:51:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,4 +50,8 @@ inline const G4Transform3D& G4VModel::GetTransformation () const {
 
 inline void G4VModel::SetModelingParameters (const G4ModelingParameters* pMP) {
   fpMP = pMP;
+}
+
+inline void G4VModel::SetExtent (const G4VisExtent& extent) {
+  fExtent = extent;
 }
