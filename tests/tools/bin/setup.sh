@@ -24,6 +24,7 @@ if [ `pwd | grep /stt/prod/` ]; then
 fi
 if [ $found = no ]; then
   echo Cannot find sensible tree - pwd should contain /stt/prod/, etc.
+  pwd
   exit
 fi
 
