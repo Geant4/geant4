@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.1 2002-11-26 17:57:49 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.2 2002-11-29 11:19:30 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -29,6 +29,7 @@
  
 #include "Tst50DetectorConstruction.hh"
 #include "Tst50DetectorMessenger.hh"
+#include "G4UserLimits.hh"
 
 #include "Tst50TrackerSD.hh"
 
@@ -56,6 +57,11 @@ Tst50DetectorConstruction::Tst50DetectorConstruction()
 {
   //  fpMagField = new Tst50MagneticField();
   detectorMessenger = new Tst50DetectorMessenger(this);
+
+// set fUserLimit true to have the limit on step lenght
+ 
+ fUseUserLimits = false;//non fa nulla se c'e false ,devo mettere true 
+ theMaxStep= 0.0001*mm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -169,6 +175,17 @@ density=4.51*g/cm3;
   solidTarget = new G4Box("target", xtarget, ytarget, ztarget);
   //  logicTarget = new G4LogicalVolume(solidTarget,TargetMater,"Target",0,0,0);
   logicTarget = new G4LogicalVolume(solidTarget,CsI,"Target",0,0,0);
+ 
+ // create UserLimits
+  if (theUserLimits != NULL) delete theUserLimits;
+  theUserLimits= new G4UserLimits(//DBL_MAX,  //step max
+					      //DBL_MAX,  // track max
+					      theMaxStep);
+	
+ // attach UserLimits   
+  if (fUseUserLimits) {
+    logicTarget->SetUserLimits(theUserLimits);
+  }
 
   physiTarget = new G4PVPlacement(0,               // no rotation
 				  G4ThreeVector(),  // at (x,y,z)
@@ -243,7 +260,29 @@ void Tst50DetectorConstruction::setTargetMaterial(G4String materialName)
 
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+ void  Tst50DetectorConstruction::SetMaxStep(G4double value)
+{ 
+  theMaxStep = value; 
+  if (theUserLimits != NULL) 
+  {
+    theUserLimits->SetMaxAllowedStep(value);
+  }
+}
+
+void  Tst50DetectorConstruction::UseUserLimits(G4bool isUse) 
+{
+  fUseUserLimits = isUse;
+  if ( fUseUserLimits && (theUserLimits!= NULL)) 
+  {logicTarget->SetUserLimits(theUserLimits);
+  }    
+} 
+
+
+
+
+
+
+
 
 
 

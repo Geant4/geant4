@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingVerbose.cc,v 1.1 2002-11-26 17:57:49 guatelli Exp $
+// $Id: Tst50SteppingVerbose.cc,v 1.2 2002-11-29 11:19:30 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,8 +62,11 @@ void Tst50SteppingVerbose::StepInfo()
 	     << G4std::setw( 9) << "dEStep"     << " "  
 	     << G4std::setw(10) << "StepLeng"     
 	     << G4std::setw(10) << "TrakLeng" 
-	     << G4std::setw(10) << "Volume"    << "  "
-	     << G4std::setw(10) << "Process"   << G4endl;	          
+	     << G4std::setw(10) << "Volume"    << "  " 
+	     << G4std::setw(10) << "PreStepPointVolume"<<"  "
+             << G4std::setw(10) << "PostStepPointVolume"<<"  "
+	     << G4std::setw(10) << "Process"   << G4endl;	
+          
     }
 
     G4cout << G4std::setw(5) << fTrack->GetCurrentStepNumber() << " "
@@ -82,17 +85,25 @@ void Tst50SteppingVerbose::StepInfo()
       G4cout << G4std::setw(10) << "OutOfWorld";
     }
 
+    G4cout<< G4std::setw(10)<<fStep->GetPreStepPoint()->GetPhysicalVolume()
+                                                                  ->GetName();
+
+ if( fTrack->GetNextVolume() != 0 ) { 
+  G4cout<< G4std::setw(10)<<fStep->GetPostStepPoint()->GetPhysicalVolume()
+    ->GetName();}
+ else{ G4cout << G4std::setw(10) << "OutOfWorld";}
+
     if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
       G4cout << "  " 
         << G4std::setw(10) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
-	                                ->GetProcessName();
+	->GetProcessName()<<"   ";
     } else {
       G4cout << "   UserLimit";
     }
 
     G4cout << G4endl;
 
-    if( verboseLevel == 2 ){
+    if( verboseLevel == 10 ){
       G4int tN2ndariesTot = fN2ndariesAtRestDoIt +
 	                    fN2ndariesAlongStepDoIt +
 	                    fN2ndariesPostStepDoIt;

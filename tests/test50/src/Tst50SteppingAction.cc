@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.2 2002-11-27 18:14:18 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.3 2002-11-29 11:19:30 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,11 +36,14 @@
 #include "Tst50EventAction.hh"
 #include <math.h> // standard c math library
 #include "Tst50AnalysisManager.hh"
+#include "Tst50PrimaryGeneratorAction.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA):
-IDold(-1),eventaction (EA) 
-{ }
+Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA, Tst50PrimaryGeneratorAction* PG):
+  IDold(-1),eventaction (EA), p_Primary(PG) 
+{ 
+  initial_energy= p_Primary->GetInitialEnergy();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -143,16 +146,19 @@ if (process=="LowEnConversion")
 
 
 	}
-      //per il coeff di attenuazione//
-
-if(0 == Step->GetTrack()->GetParentID() )   
-  { if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
-    
+      //per il coeff di attenuazione// 
+      G4cout<<Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()<<G4endl; 
+ if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
+   
     if(Step->GetTrack()->GetNextVolume()->GetName() == "World" ) {
+
    //volume in cui si esce e' il target 
-    if(XMoD==0 && YMoD==0 && ZMoD==1){ 
-      if(KinE == 20.*keV)
-	{analysis->trans_particles(); G4cout<<" fotone trasmesso"<<G4endl;}}}}}
+    if(XMoD==0 && YMoD==0 && ZMoD==1){
+      
+      if(KinE ==initial_energy)
+	{
+analysis->trans_particles(); G4cout<<" fotone trasmesso"<<G4endl;}}}}
+}
   
     /*
     G4cout << "UserSteppingAction:"
@@ -172,7 +178,7 @@ if(0 == Step->GetTrack()->GetParentID() )
 	   << G4endl;
     */
    
-}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

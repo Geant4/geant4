@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.hh,v 1.1 2002-11-26 17:57:48 guatelli Exp $
+// $Id: Tst50DetectorConstruction.hh,v 1.2 2002-11-29 11:19:29 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +38,7 @@ class G4Box;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
+class G4UserLimits;
 class Tst50DetectorMessenger;
 class  Tst50TrackerSD;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,8 +61,15 @@ class Tst50DetectorConstruction : public G4VUserDetectorConstruction
      G4double GetWorldFullLength()   {return fWorldLength;}; 
   */
      void setTargetMaterial (G4String);
-
-     
+public:
+ void      UseUserLimits(G4bool value); 
+  void  SetMaxStep(G4double value); 
+ 
+private:
+ G4bool           fUseUserLimits;
+ G4UserLimits*    theUserLimits; 
+ G4double         theMaxStep;
+    
   private:
 
      G4Box*             solidWorld;    // pointer to the solid envelope 

@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.1 2002-11-26 17:57:48 guatelli Exp $
+// $Id: test50.cc,v 1.2 2002-11-29 11:19:29 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,14 +68,15 @@ int main(int argc,char** argv) {
 #endif
    
   // UserAction classes
-  runManager->SetUserAction(new Tst50PrimaryGeneratorAction(Tst50detector));
+  Tst50PrimaryGeneratorAction* p_Primary=new Tst50PrimaryGeneratorAction(); 
+  runManager->SetUserAction(p_Primary);
   runManager->SetUserAction(new Tst50RunAction);  
 
   Tst50EventAction *pEventAction=new Tst50EventAction();
  
    runManager->SetUserAction(pEventAction );
      
- Tst50SteppingAction* steppingaction =new Tst50SteppingAction(pEventAction);
+ Tst50SteppingAction* steppingaction =new Tst50SteppingAction(pEventAction, p_Primary);
  runManager->SetUserAction(steppingaction);
 
   //Initialize G4 kernel

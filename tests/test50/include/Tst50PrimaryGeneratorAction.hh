@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimaryGeneratorAction.hh,v 1.1 2002-11-26 17:57:48 guatelli Exp $
+// $Id: Tst50PrimaryGeneratorAction.hh,v 1.2 2002-11-29 11:19:29 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,8 +31,10 @@
 #define Tst50PrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4ios.hh"
+#include "globals.hh"
 
-class Tst50DetectorConstruction;
+
 class G4ParticleGun;
 class G4Event;
 
@@ -41,19 +43,34 @@ class G4Event;
 class Tst50PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    Tst50PrimaryGeneratorAction(Tst50DetectorConstruction*);    
+    Tst50PrimaryGeneratorAction();    
    ~Tst50PrimaryGeneratorAction();
+    
+  G4double GetInitialEnergy();
 
   public:
     void GeneratePrimaries(G4Event*);
-
+    
   private:
     G4ParticleGun* particleGun;
-    Tst50DetectorConstruction* myDetector;
+   
+    G4double energy;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+inline G4double Tst50PrimaryGeneratorAction::GetInitialEnergy()
+{
+  return energy;
 
+}
 #endif
+
+
+
+
+
+
+
+
 
 

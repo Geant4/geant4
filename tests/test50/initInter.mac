@@ -34,7 +34,9 @@
 
 # create 30 30 view
 #/vis/viewer/set/viewpointThetaPhi 30 30
-/run/beamOn 1000
+/run/beamOn 50
+exit
+
 
 
 

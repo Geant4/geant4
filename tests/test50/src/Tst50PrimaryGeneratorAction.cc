@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimaryGeneratorAction.cc,v 1.1 2002-11-26 17:57:49 guatelli Exp $
+// $Id: Tst50PrimaryGeneratorAction.cc,v 1.2 2002-11-29 11:19:30 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Tst50PrimaryGeneratorAction.hh"
-#include "Tst50DetectorConstruction.hh"
+//#include "Tst50DetectorConstruction.hh"
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -38,13 +38,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst50PrimaryGeneratorAction::Tst50PrimaryGeneratorAction(
-                                               Tst50DetectorConstruction* myDC)
-:myDetector(myDC)
+Tst50PrimaryGeneratorAction::Tst50PrimaryGeneratorAction()
+
 {
   G4int n_particle = 1;
   particleGun = new G4ParticleGun(n_particle);
-
+  energy=200.0*keV;   
 // default particle
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
@@ -52,7 +51,7 @@ Tst50PrimaryGeneratorAction::Tst50PrimaryGeneratorAction(
    G4ParticleDefinition* particle = particleTable->FindParticle("gamma");
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(20.0*keV);
+  particleGun->SetParticleEnergy(energy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,11 +65,21 @@ Tst50PrimaryGeneratorAction::~Tst50PrimaryGeneratorAction()
 
 void Tst50PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
-  //  G4double position = -0.5*(myDetector->GetWorldFullLength());
+  
   particleGun->SetParticlePosition(G4ThreeVector(0.*m,0.*m,-1.*m));
   
   particleGun->GeneratePrimaryVertex(anEvent);
+  
+
 }
+
+
+
+
+
+
+
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
