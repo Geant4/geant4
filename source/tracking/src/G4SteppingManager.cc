@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.17 2001-07-15 04:54:47 kurasige Exp $
+// $Id: G4SteppingManager.cc,v 1.18 2001-11-07 10:47:37 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,7 +53,7 @@
 //////////////////////////////////////
 G4SteppingManager::G4SteppingManager()
 //////////////////////////////////////
-  : verboseLevel(0), fUserSteppingAction(NULL)
+  : fUserSteppingAction(NULL), verboseLevel(0)
 {
 
 // Construct simple 'has-a' related objects

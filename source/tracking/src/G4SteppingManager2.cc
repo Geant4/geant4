@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.2 2001-07-11 10:08:42 gunter Exp $
+// $Id: G4SteppingManager2.cc,v 1.3 2001-11-07 10:48:16 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -223,7 +223,7 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
    fN2ndariesAtRestDoIt = 0;
    shortestLifeTime = DBL_MAX;
 
-   int NofInactiveProc=0;
+   unsigned int NofInactiveProc=0;
    for( size_t ri=0 ; ri < MAXofAtRestLoops ; ri++ ){
      fCurrentProcess = (*fAtRestGetPhysIntVector)[ri];
      if (fCurrentProcess== NULL) {

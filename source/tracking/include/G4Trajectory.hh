@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.hh,v 1.13 2001-07-11 10:08:41 gunter Exp $
+// $Id: G4Trajectory.hh,v 1.14 2001-11-07 10:39:46 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -115,11 +115,11 @@ public: // with description
 //---------
 
   TrajectoryPointContainer* positionRecord;
-  G4int fTrackID;
-  G4int fParentID;
-  G4String ParticleName;
-  G4double PDGCharge;
-  G4int    PDGEncoding;
+  G4int                     fTrackID;
+  G4int                     fParentID;
+  G4int                     PDGEncoding;
+  G4double                  PDGCharge;
+  G4String                  ParticleName;
 
 };
 
