@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDigitizer.hh,v 1.1 2001-10-24 13:12:00 flongo Exp $
+// $Id: GammaRayTelDigitizer.hh,v 1.2 2001-11-29 09:34:17 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -42,6 +42,8 @@
 #include "globals.hh"
 //#include "g4std/vector"
 
+class GammaRayTelDigitizerMessenger;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class GammaRayTelDigitizer : public G4VDigitizerModule
@@ -50,14 +52,16 @@ public:
   
   GammaRayTelDigitizer(G4String name);
   ~GammaRayTelDigitizer();
-
+  
   void Digitize();
+  void SetThreshold(G4double val) { Energy_Threshold = val;}
   
 private:
-
+  
   GammaRayTelDigitsCollection*  DigitsCollection;
   G4double Energy_Threshold;
-  
+  GammaRayTelDigitizerMessenger* digiMessenger;
+
 };
 
 #endif

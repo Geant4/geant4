@@ -21,62 +21,69 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.hh,v 1.5 2001-11-29 09:34:17 flongo Exp $
+// $Id: GammaRayTelDigitizerMessenger.cc,v 1.1 2001-11-29 09:34:17 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // ------------------------------------------------------------
-//      GEANT 4 class header file
+//      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
 //
 //
-//      ------------ GammaRayTelPrimaryGeneratorAction  ------
-//           by G.Santin, F.Longo & R.Giannitrapani (30 nov 2000)
+//      ------------ GammaRayTelDigitizerMessenger  ------
+//           by F.Longo, G.Santin & R.Giannitrapani (27 nov 2001)
 //
 // ************************************************************
 
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifndef GammaRayTelPrimaryGeneratorAction_h
-#define GammaRayTelPrimaryGeneratorAction_h 1
+#include "GammaRayTelDigitizerMessenger.hh"
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "globals.hh"
-
-class G4ParticleGun;
-class G4Event;
-class GammaRayTelDetectorConstruction;
-class GammaRayTelPrimaryGeneratorMessenger;
+#include "GammaRayTelDigitizer.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class GammaRayTelPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+GammaRayTelDigitizerMessenger::GammaRayTelDigitizerMessenger
+(GammaRayTelDigitizer* GammaRayTelDigit)
+  :GammaRayTelAction(GammaRayTelDigit)
+{ 
+  ThresholdCmd = new G4UIcmdWithADoubleAndUnit("/digitizer/Threshold",this);
+  ThresholdCmd->SetGuidance("Energy deposition threshold for TKR digi generation");
+  ThresholdCmd->SetParameterName("choice",true);
+  ThresholdCmd->SetDefaultValue((G4double)20.*keV);
+  ThresholdCmd->SetRange("Threshold >=0.");
+  ThresholdCmd->SetUnitCategory("Energy");  
+  ThresholdCmd->AvailableForStates(PreInit,Idle);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+GammaRayTelDigitizerMessenger::~GammaRayTelDigitizerMessenger()
 {
-public:
+  delete ThresholdCmd;
+}
 
-  GammaRayTelPrimaryGeneratorAction(GammaRayTelDetectorConstruction*);    
-  ~GammaRayTelPrimaryGeneratorAction();
-  
-public:
-  void GeneratePrimaries(G4Event*);
-  void SetRndmFlag(G4String val) { rndmFlag = val;}
-  void SetSourceType(G4int val) { nSourceType = val;}
-  void SetSpectrumType(G4int val) { nSpectrumType = val;}
-  void SetVertexRadius(G4double val) { dVertexRadius = val;}
-  
-private:
-  G4ParticleGun*                particleGun;	  
-  GammaRayTelDetectorConstruction*    GammaRayTelDetector;  
-  GammaRayTelPrimaryGeneratorMessenger* gunMessenger; 
-  G4String                      rndmFlag;    //flag for a random impact point
-  G4int                         nSourceType;
-  G4double                      dVertexRadius;
-  G4int                         nSpectrumType;
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#endif
+void GammaRayTelDigitizerMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+{ 
+  if( command == ThresholdCmd )
+    { 
+      GammaRayTelAction->SetThreshold
+	(ThresholdCmd->GetNewDoubleValue(newValue));
+    }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+
+
+
+
+
+
 
 
 

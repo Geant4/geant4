@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDigitizer.cc,v 1.1 2001-10-24 13:12:23 flongo Exp $
+// $Id: GammaRayTelDigitizer.cc,v 1.2 2001-11-29 09:34:17 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -35,6 +35,7 @@
 
 #include "GammaRayTelDigitizer.hh"
 #include "GammaRayTelDigi.hh"
+#include "GammaRayTelDigitizerMessenger.hh"
 
 #include "GammaRayTelTrackerHit.hh"
 #include "G4EventManager.hh"
@@ -51,15 +52,22 @@
 GammaRayTelDigitizer::GammaRayTelDigitizer(G4String name)
   :G4VDigitizerModule(name)
 {
-  Energy_Threshold = 120.*keV;
+
+
   G4String colName = "DigitsCollection";
   collectionName.push_back(colName);
+  Energy_Threshold = 120.*keV;
+
+//create a messenger for this class
+  digiMessenger = new GammaRayTelDigitizerMessenger(this);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 GammaRayTelDigitizer::~GammaRayTelDigitizer()
 {
+  delete digiMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -131,6 +139,7 @@ void GammaRayTelDigitizer::Digitize()
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 
 

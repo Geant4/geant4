@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2001-11-28 18:21:44 griccard Exp $
+$Id: README,v 1.5 2001-11-29 09:34:17 flongo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,12 +19,13 @@ GammaRayTel is an example of application of Geant4 in a space
 envinronment. It simulates a typical telescope for gamma ray analysis;
 the detector setup is composed by a tracker made with silicon planes,
 subdivided in ladders and strips, a CsI calorimeter and an
-anticoincidence system. In this version, only the tracker is made
-sensitive; the hits on the tracker strips are registered and relevant 
+anticoincidence system. In this version, the three detectors are made
+sensitive but only the hits on the tracker strips are registered and relevant 
 information (energy deposition, position etc) are dumped to an external
 ASCII file for subsequent analysis. If Lizard is available on the user
-platform, than some histograms with relevant hits information are 
-displayed and saved as PostScript files.
+platform, then some histograms with relevant hits information are 
+displayed and saved as PostScript files, and histograms and ntuples with
+relevant information are stored on a HBOOK file.
 
 The main features of this example are
 
@@ -39,10 +40,9 @@ The main features of this example are
      subdivisions of the planes of the tracker (strips) without
      affecting in a relevant way the simulation performances
 
-  d) Histogramming and ntuple for Linux platform via the 
-     Lizard/Anaphne system (tested on Linux platform); this is a preliminary 
-     feature of GEANT4, so expect some changes and/or improvements in 
-     future releases 
+  d) Histograms and Ntuples for Linux platform via the Lizard system; 
+     This are a preliminary feature of Anaphe, so expect some changes 
+     and/or improvements in future releases 
      
   e) User interfaces via Xmotif or normal terminal provided
 
@@ -77,10 +77,17 @@ The main features of this example are
   setenv G4ANALYSIS_USE               1 # Use the analysis tools
 
   and be sure to have the right path to the Lizard library, inserting this
-  on the .tcshrc (on the CERN machine)
+  on the .tcshrc:
+
+ (on a CERN machine with the gcc-2.95 compiler)
   
-  setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/3.6.4/bin
-  source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.4/install/sharedstart.csh
+  setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/3.6.5/bin
+  source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.5/install/sharedstart.csh
+
+ (on a CERN machine with the egcs-1.1.2 compiler)
+
+  setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/3.6.5-sec/bin
+  source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.5-sec/install/sharedstart.csh
 
 
 2. Sample run
@@ -153,8 +160,9 @@ The main features of this example are
 7. Hit 
 ------
 
- In this version only the hits from the TKR are recorded. Each hit
- contains the following information
+ In this version the hits from the TKR the CAL and the ACD are generated. 
+ Only the hit from the TRK are saved. Each TKR hit contains the following 
+ information
 
   a) ID of the event (this is important for multiple events run)
   b) Energy deposition of the particle in the strip (keV)
@@ -197,7 +205,20 @@ The main features of this example are
  for next releases. 
 
 
-9. Classes Overview
+9. Digi
+--------
+
+ For the TKR also the digits corresponding to the Hits are generated. 
+ A digi is generated when the hit energy deposit is greater than a threshold 
+ (in this example setted at 120 keV). 
+ The TKR digi information are stored on the same file Tracks_N.dat and contain:
+
+  a) ID of the event (this is important for multiple events run)
+  b) Number of the strip 
+  c) Number of the plane
+  d) Type of the plane (1=X  0=Y)
+
+10. Classes Overview
 -------------------
 
  This is the overview of the classes defined in this example
@@ -223,7 +244,7 @@ The main features of this example are
 	Messenger for interactive geometry parameters 
 	modification via the User Interface
 	
-  GammaRayTelAnalysisManager
+  GammaRayTelAnalysis
 	Analysis manager class with Lizard tool (experimental)
 
   GammaRayTelAnalysisMessenger
@@ -236,14 +257,33 @@ The main features of this example are
   GammaRayTelEventAction
 	User event action class
 
-  GammaRayTelPayloadHit
+  GammaRayTelTrackerHit
 	Description of the hits on the tracker
 
-  GammaRayTelPayloadROGeometry
+  GammaRayTelDigi
+	Description of the digi on the tracker
+
+  GammaRayTelDigitizer
+	Description of the digitizer for the tracker
+
+  GammaRayTelTrackerROGeometry
 	Description of the readout geometry for strips subdivision
 
-  GammaRayTelPayloadSD
-	Description of the sensitive detector
+  GammaRayTelTrackerSD
+	Description of the TKR sensitive detector
+
+  GammaRayTelAnticoincidenceHit
+	Description of the hits on the anticoincidence
+
+  GammaRayTelAnticoincidenceSD
+	Description of the ACD sensitive detector
+
+  GammaRayTelCalorimeterHit
+	Description of the hits on the calorimeter
+
+  GammaRayTelCalorimeterSD
+	Description of the CAL sensitive detector
+
 
 
 

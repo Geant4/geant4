@@ -21,62 +21,48 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.hh,v 1.5 2001-11-29 09:34:17 flongo Exp $
+// $Id: GammaRayTelDigitizerMessenger.hh,v 1.1 2001-11-29 09:34:17 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
 //
 //
-//      ------------ GammaRayTelPrimaryGeneratorAction  ------
-//           by G.Santin, F.Longo & R.Giannitrapani (30 nov 2000)
+//      ------------ GammaRayTelDigitizerMessenger  ------
+//           by F.Longo, G.Santin & R.Giannitrapani (29 nov 2001) 
 //
 // ************************************************************
 
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifndef GammaRayTelPrimaryGeneratorAction_h
-#define GammaRayTelPrimaryGeneratorAction_h 1
+#ifndef GammaRayTelDigitizerMessenger_h
+#define GammaRayTelDigitizerMessenger_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4ParticleGun;
-class G4Event;
-class GammaRayTelDetectorConstruction;
-class GammaRayTelPrimaryGeneratorMessenger;
+class GammaRayTelDigitizer;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class GammaRayTelPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class GammaRayTelDigitizerMessenger: public G4UImessenger
 {
 public:
-
-  GammaRayTelPrimaryGeneratorAction(GammaRayTelDetectorConstruction*);    
-  ~GammaRayTelPrimaryGeneratorAction();
+  GammaRayTelDigitizerMessenger(GammaRayTelDigitizer*);
+  ~GammaRayTelDigitizerMessenger();
   
-public:
-  void GeneratePrimaries(G4Event*);
-  void SetRndmFlag(G4String val) { rndmFlag = val;}
-  void SetSourceType(G4int val) { nSourceType = val;}
-  void SetSpectrumType(G4int val) { nSpectrumType = val;}
-  void SetVertexRadius(G4double val) { dVertexRadius = val;}
+  void SetNewValue(G4UIcommand*, G4String);
   
 private:
-  G4ParticleGun*                particleGun;	  
-  GammaRayTelDetectorConstruction*    GammaRayTelDetector;  
-  GammaRayTelPrimaryGeneratorMessenger* gunMessenger; 
-  G4String                      rndmFlag;    //flag for a random impact point
-  G4int                         nSourceType;
-  G4double                      dVertexRadius;
-  G4int                         nSpectrumType;
+  GammaRayTelDigitizer* GammaRayTelAction; 
+  G4UIcmdWithADoubleAndUnit*  ThresholdCmd;
+
 };
 
 #endif
-
 
 
