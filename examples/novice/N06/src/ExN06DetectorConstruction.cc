@@ -116,6 +116,7 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
 //              3.767E-9*GeV, 3.884E-9*GeV, 4.010E-9*GeV, 4.144E-9*GeV };
 
   G4double RINDEX1[NUMENTRIES] =
+
             { 1.3435, 1.344,  1.3445, 1.345,  1.3455,
               1.346,  1.3465, 1.347,  1.3475, 1.348,
               1.3485, 1.3492, 1.35,   1.3505, 1.351,
@@ -145,17 +146,29 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
            3000.0*cm, 2850.0*cm, 2700.0*cm, 2450.0*cm, 2200.0*cm, 1950.0*cm,
            1750.0*cm, 1450.0*cm };
 
-  G4double SCINTILLATION[NUMENTRIES] =
+  G4double SCINTILLATION_FAST[NUMENTRIES] =
             { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00 };
+  G4double SCINTILLATION_SLOW[NUMENTRIES] =
+            { 0.01, 1.00, 2.00, 3.00, 4.00, 5.00, 6.00,
+              7.00, 8.00, 9.00, 8.00, 7.00, 6.00, 4.00,
+              3.00, 2.00, 1.00, 0.01, 1.00, 2.00, 3.00,
+              4.00, 5.00, 6.00, 7.00, 8.00, 9.00, 8.00,
+              7.00, 6.00, 5.00, 4.00 };
 
   G4MaterialPropertiesTable *myMPT1 = new G4MaterialPropertiesTable();
   myMPT1->AddProperty("RINDEX", PPCKOV, RINDEX1, NUMENTRIES);
   myMPT1->AddProperty("ABSLENGTH",PPCKOV, ABSORPTION1, NUMENTRIES);
-  myMPT1->AddProperty("SCINTILLATION",PPCKOV, SCINTILLATION, NUMENTRIES);
+  myMPT1->AddProperty("FASTCOMPONENT",PPCKOV, SCINTILLATION_FAST, NUMENTRIES);
+  myMPT1->AddProperty("SLOWCOMPONENT",PPCKOV, SCINTILLATION_SLOW, NUMENTRIES);
+  myMPT1->AddConstProperty("SCINTILLATIONYIELD",100./MeV);
+  myMPT1->AddConstProperty("RESOLUTIONSCALE",1.0);
+  myMPT1->AddConstProperty("FASTTIMECONSTANT", 1.*ns);
+  myMPT1->AddConstProperty("SLOWTIMECONSTANT",10.*ns);
+  myMPT1->AddConstProperty("YIELDRATIO",0.8);
   Water->SetMaterialPropertiesTable(myMPT1);
 
   G4MaterialPropertiesTable *myMPT2 = new G4MaterialPropertiesTable();
