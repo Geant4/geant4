@@ -162,7 +162,7 @@
 	G4double localPfermi = theFermi.GetFermiMomentum(localDensity);
 	G4double nucMass = aNuc->GetDefinition()->GetPDGMass();
 	G4double localFermiEnergy = sqrt(nucMass*nucMass + localPfermi*localPfermi) - nucMass;
-	G4double deltaE = localFermiEnergy - aNuc->GetMomentum().t();
+	G4double deltaE = localFermiEnergy - (aNuc->GetMomentum().t()-aNuc->GetMomentum().mag());
 	theStatisticalExEnergy += deltaE;
       }
       debug.push_back("collected a hit"); debug.dump();
@@ -217,10 +217,6 @@
     if(resZ>0 && resA>1) 
     {
       //  Make the fragment
-//      G4double m_fragment=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(resZ,resA);
-//      G4cout << " Fragment a,z, Mass Fragment, mass spect-mom, exitationE " 
-//             << resA <<" "<< resZ <<" "<< m_fragment <<" "
-//             << momentum.mag() <<" "<< momentum.mag() - m_fragment << G4endl;
       G4Fragment aProRes;
       aProRes.SetA(resA);
       aProRes.SetZ(resZ);
@@ -228,11 +224,21 @@
       aProRes.SetNumberOfCharged(0);
       aProRes.SetNumberOfHoles(G4lrint(a1)-resA);
       momentum *= boost_spectator_mom;
+      G4double m_fragment=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(resZ,resA);
+      momentum.setT(momentum.t()-momentum.mag()+m_fragment+std::max(0.,theStatisticalExEnergy) );
+      momentum.setX(0);
+      momentum.setY(0);
+      momentum.setZ(0);
       aProRes.SetMomentum(momentum);
       G4ParticleDefinition * resDef;
       resDef = G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ);  
       aProRes.SetParticleDefinition(resDef);
-      proFrag = theProjectileFragmentation.DeExcite(aProRes);
+      proFrag = theHandler.BreakItUp(aProRes);
+      
+      G4cout << " Fragment a,z, Mass Fragment, mass spect-mom, exitationE " 
+             << resA <<" "<< resZ <<" "<< m_fragment <<" "
+             << momentum.mag() <<" "<< momentum.mag() - m_fragment 
+	     << " "<<theStatisticalExEnergy << G4endl;
     }
     else if(resA!=0)
     {
