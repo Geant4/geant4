@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleMessenger.cc,v 1.2 1999-04-13 08:00:30 kurasige Exp $
+// $Id: G4ParticleMessenger.cc,v 1.3 1999-08-19 08:18:33 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,10 +59,10 @@ G4ParticleMessenger::G4ParticleMessenger(G4ParticleTable* pTable)
   //Commnad   /particle/list
   listCmd = new G4UIcmdWithAString("/particle/list",this);
   listCmd->SetGuidance("List name of particles.");
-  listCmd->SetGuidance(" all(default)/lepton/baryon/meson");
+  listCmd->SetGuidance(" all(default)/lepton/baryon/meson/nucleus/quarks");
   listCmd->SetParameterName("particle type", true);
   listCmd->SetDefaultValue("all");
-  listCmd->SetCandidates("all lepton baryon meson");
+  listCmd->SetCandidates("all lepton baryon meson nucleus quarks");
 
   //Commnad   /particle/find 
   findCmd = new G4UIcmdWithAnInteger("/particle/find",this);
@@ -94,9 +94,9 @@ void G4ParticleMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     G4int counter = 0;
     G4ParticleTable::G4PTblDicIterator *piter = theParticleTable->GetIterator();
     piter -> reset();
+    // newValues.toLower();  temporaly commented out
     while( (*piter)() ){
       G4ParticleDefinition *particle = piter->value();
-      newValues.toLower();
       if ((newValues=="all") || (newValues==particle->GetParticleType())) {
         G4cout << setw(19) << particle->GetParticleName();
 	if ((counter++)%4 == 3) {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.cc,v 1.5 1999-08-18 10:19:19 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.6 1999-08-19 08:18:32 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -142,18 +142,42 @@ G4int G4ParticleDefinition::FillQuarkContents()
       //  It means error if the return value is differnt from
       //  this->thePDGEncoding.
 {
+  G4int flavor;
+  for (flavor= 0; flavor<NumberOfQuarkFlavor-1; flavor++){
+    theQuarkContent[flavor]     = 0;
+    theAntiQuarkContent[flavor] = 0;
+  }
+
   G4PDGCodeChecker checker;
 
-  G4int temp = checker.CheckPDGCode(thePDGEncoding, theParticleType, thePDGiSpin);
+  G4int temp = checker.CheckPDGCode(thePDGEncoding, theParticleType);
 
-  if (( temp != 0)&&((theParticleType == "meson")||(theParticleType == "baryon"))) {
-    G4int flavor;
-    for (flavor= 0; flavor<NumberOfQuarkFlavor-1; flavor+=2){
+  if ( temp != 0) {
+    for (flavor= 0; flavor<NumberOfQuarkFlavor-1; flavor++){
       theQuarkContent[flavor]     = checker.GetQuarkContent(flavor);
       theAntiQuarkContent[flavor] = checker.GetAntiQuarkContent(flavor);
     }
-    if (!checker.CheckCharge(thePDGCharge) ){
-      temp = 0;
+    if ((theParticleType == "meson")||(theParticleType == "baryon")) {
+      // check charge
+      if (!checker.CheckCharge(thePDGCharge) ){
+	temp = 0;
+#ifdef G4VERBOSE
+	if (verboseLevel>1) {
+	  G4cout << " illegal charge (" << thePDGCharge/eplus;
+	  G4cout << " PDG code=" << thePDGEncoding <<endl;
+	}
+#endif
+      }
+      // check spin 
+      if (checker.GetSpin() != thePDGiSpin) {
+	temp=0;
+#ifdef G4VERBOSE
+	if (verboseLevel>1) {
+	  G4cout << " illegal SPIN (" << thePDGiSpin << "/2";
+	  G4cout << " PDG code=" << thePDGEncoding <<endl;
+	}
+#endif
+      }
     }
   }
   return temp;

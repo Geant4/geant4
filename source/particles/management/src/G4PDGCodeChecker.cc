@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PDGCodeChecker.cc,v 1.1 1999-08-18 09:15:25 kurasige Exp $
+// $Id: G4PDGCodeChecker.cc,v 1.2 1999-08-19 08:18:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,18 +23,18 @@
 
 #include "G4PDGCodeChecker.hh"
 
+/////////////
 G4PDGCodeChecker::G4PDGCodeChecker()
 {
   code = 0;
-  verboseLevel = 1;
+  verboseLevel = 3;
 }
 
+/////////////
 G4int  G4PDGCodeChecker::CheckPDGCode( G4int    PDGcode, 
-				       G4String particleType, 
-				       G4int    PDGiSpin)
+				       G4String particleType)
 {
   code = PDGcode;
-  thePDGiSpin  = PDGiSpin;
   theParticleType = particleType;
 
   // clear QuarkContents
@@ -70,6 +70,7 @@ G4int  G4PDGCodeChecker::CheckPDGCode( G4int    PDGcode,
   return code;
 }
  
+/////////////
 G4int G4PDGCodeChecker::CheckForBaryons()
 {
   G4int   tempPDGcode = code;
@@ -143,16 +144,6 @@ G4int G4PDGCodeChecker::CheckForBaryons()
     return 0;
   }
   
-  // check spin 
-  if (spin != thePDGiSpin) {
-#ifdef G4VERBOSE
-    if (verboseLevel>1) {
-      G4cout << " illegal SPIN (" << thePDGiSpin << "/2";
-      G4cout << " PDG code=" << code <<endl;
-    }
-#endif
-    return 0;
-  }
 
   // Fill Quark contents
   if (tempPDGcode >0) {
@@ -164,9 +155,11 @@ G4int G4PDGCodeChecker::CheckForBaryons()
     theAntiQuarkContent[quark2-1] ++;
     theAntiQuarkContent[quark3-1] ++;
   }
+
   return code;
 }
  
+/////////////
 G4int G4PDGCodeChecker::CheckForMesons()
 {
   G4int   tempPDGcode = code;
@@ -210,18 +203,7 @@ G4int G4PDGCodeChecker::CheckForMesons()
     return 0;
   }
 
-  // check spin 
-  if ( spin != thePDGiSpin) {
-#ifdef G4VERBOSE
-    if (verboseLevel>1) {
-      G4cout << " illegal SPIN (" << thePDGiSpin << "/2)";
-      G4cout << " PDG code=" << code <<endl;
-    }
-#endif
-    return 0;
-  }
-
-  
+ 
   // check heavier quark type
   if (quark2 & 1) {
     // down type qurak
@@ -247,6 +229,7 @@ G4int G4PDGCodeChecker::CheckForMesons()
 
   
 
+/////////////
 G4int G4PDGCodeChecker::CheckForDiQuarks()
 {
   if ((quark1 ==0) || (quark2 ==0) || (quark3 !=0)) {
@@ -281,6 +264,7 @@ G4int G4PDGCodeChecker::CheckForDiQuarks()
   return code;
 }
  
+/////////////
 G4int G4PDGCodeChecker::CheckForQuarks()
 {
   if ( abs(quark1)>NumberOfQuarkFlavor ) {
@@ -306,6 +290,7 @@ G4int G4PDGCodeChecker::CheckForQuarks()
   return code;
 }
 
+/////////////
 G4bool G4PDGCodeChecker::CheckCharge(G4double thePDGCharge) const
 {
   // check charge
@@ -329,6 +314,7 @@ G4bool G4PDGCodeChecker::CheckCharge(G4double thePDGCharge) const
   return true;
 }
 
+/////////////
 void G4PDGCodeChecker::GetDigits(G4int PDGcode)
 {
   G4int temp = abs(PDGcode);

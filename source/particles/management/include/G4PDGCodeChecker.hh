@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PDGCodeChecker.hh,v 1.1 1999-08-18 09:15:13 kurasige Exp $
+// $Id: G4PDGCodeChecker.hh,v 1.2 1999-08-19 08:18:08 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@ class G4PDGCodeChecker
   G4PDGCodeChecker();
   ~G4PDGCodeChecker(){};
 
-  G4int  CheckPDGCode(G4int code, G4String type, G4int iPGDSpin);
+  G4int  CheckPDGCode(G4int code, G4String type);
 
   G4int  GetQuarkContent(G4int flavor) const ;
   G4int  GetAntiQuarkContent(G4int flavor) const;
@@ -94,7 +94,7 @@ inline
   if ((flavor>=0)&&(flavor<NumberOfQuarkFlavor)) {
     value = theQuarkContent[flavor];
   }
-  return flavor;
+  return value;
 }
 
 inline
@@ -104,7 +104,7 @@ inline
   if ((flavor>=0)&&(flavor<NumberOfQuarkFlavor)) {
     value = theAntiQuarkContent[flavor];
   }
-  return flavor;
+  return value;
 }
 
 
