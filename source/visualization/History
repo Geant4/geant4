@@ -1,4 +1,4 @@
-$Id: History,v 1.220 2003-02-28 19:21:20 perl Exp $
+$Id: History,v 1.221 2003-05-30 13:01:18 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+30th May 2003  John Allison  (vis-V05-00-02)
+- Improved README.built_in_commands.  Removed unlikely-to-be-implemented
+  commands.
+- Eliminated pedantic warnings.
 
 28th February 2003  Joseph Perl
 - Minor Fix to HepRep - see History file.

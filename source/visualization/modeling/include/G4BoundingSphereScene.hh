@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.hh,v 1.12 2002-10-24 14:53:27 johna Exp $
+// $Id: G4BoundingSphereScene.hh,v 1.13 2003-05-30 13:01:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,7 +81,7 @@ public:
   ////////////////////////////////////////////////////////////////
   // Functions not used by required by the abstract interface.
 
-  virtual void BeginPrimitives (const G4Transform3D& objectTransformation) {}
+  virtual void BeginPrimitives (const G4Transform3D&) {}
   virtual void EndPrimitives () {}
   virtual void AddPrimitive (const G4Polyline&)   {}
   virtual void AddPrimitive (const G4Scale&)      {}

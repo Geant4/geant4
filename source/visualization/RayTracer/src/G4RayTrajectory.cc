@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.cc,v 1.9 2002-10-16 11:42:48 johna Exp $
+// $Id: G4RayTrajectory.cc,v 1.10 2003-05-30 13:01:21 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -111,7 +111,7 @@ void G4RayTrajectory::AppendStep(const G4Step* aStep)
   positionRecord->push_back(trajectoryPoint);
 }
 
-void G4RayTrajectory::ShowTrajectory(G4std::ostream& os) const
+void G4RayTrajectory::ShowTrajectory(G4std::ostream&) const
 { }
 
 void G4RayTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)

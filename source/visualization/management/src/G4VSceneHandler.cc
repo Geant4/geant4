@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.25 2002-11-11 18:37:13 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.26 2003-05-30 13:01:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -427,7 +427,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   EndPrimitives ();
 }
 
-void G4VSceneHandler::ProcessScene (G4VViewer& view) {
+void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   fReadyForTransients = false;
 

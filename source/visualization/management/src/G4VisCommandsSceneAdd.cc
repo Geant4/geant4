@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.36 2003-05-06 14:58:53 mora Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.37 2003-05-30 13:01:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -99,8 +99,7 @@ G4String G4VisCommandSceneAddAxes::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand* command,
-					    G4String newValue) {
+void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
@@ -155,12 +154,11 @@ G4VisCommandSceneAddGhosts::~G4VisCommandSceneAddGhosts () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneAddGhosts::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneAddGhosts::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
-					      G4String newValue) {
+void G4VisCommandSceneAddGhosts::SetNewValue(G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
@@ -269,12 +267,11 @@ G4VisCommandSceneAddHits::~G4VisCommandSceneAddHits () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneAddHits::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneAddHits::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddHits::SetNewValue (G4UIcommand* command,
-						G4String newValue) {
+void G4VisCommandSceneAddHits::SetNewValue (G4UIcommand*, G4String) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
@@ -333,7 +330,7 @@ G4String G4VisCommandSceneAddLogicalVolume::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
+void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
 						     G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
@@ -442,8 +439,7 @@ G4String G4VisCommandSceneAddScale::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand* command,
-					    G4String newValue) {
+void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
@@ -670,8 +666,7 @@ G4String G4VisCommandSceneAddText::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddText::SetNewValue (G4UIcommand* command,
-					    G4String newValue) {
+void G4VisCommandSceneAddText::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
@@ -741,12 +736,12 @@ G4VisCommandSceneAddTrajectories::~G4VisCommandSceneAddTrajectories () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneAddTrajectories::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneAddTrajectories::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand* command,
-					      G4String newValue) {
+void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
+						    G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
@@ -810,11 +805,11 @@ G4VisCommandSceneAddVolume::~G4VisCommandSceneAddVolume () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneAddVolume::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneAddVolume::GetCurrentValue (G4UIcommand*) {
   return "world 0 -1";
 }
 
-void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
+void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 					      G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.cc,v 1.7 2001-08-24 20:36:29 johna Exp $
+// $Id: G4VModel.cc,v 1.8 2003-05-30 13:01:33 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,7 +51,7 @@ G4String G4VModel::GetCurrentDescription () const {
   return G4String("Default Current Description");
 }
 
-G4bool G4VModel::Validate (G4bool warn) {
+G4bool G4VModel::Validate (G4bool) {
   return true;
 }
 

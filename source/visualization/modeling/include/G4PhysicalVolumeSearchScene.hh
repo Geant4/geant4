@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.hh,v 1.10 2002-10-24 14:53:38 johna Exp $
+// $Id: G4PhysicalVolumeSearchScene.hh,v 1.11 2003-05-30 13:01:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,7 +76,7 @@ public:
   ////////////////////////////////////////////////////////////////
   // Functions not used but required by the abstract interface.
 
-  virtual void BeginPrimitives (const G4Transform3D& objectTransformation) {}
+  virtual void BeginPrimitives (const G4Transform3D&) {}
   virtual void EndPrimitives () {}
   virtual void AddPrimitive (const G4Polyline&)   {}
   virtual void AddPrimitive (const G4Scale&)       {}

@@ -129,7 +129,7 @@ void G4GAGTreeSceneHandler::EndModeling ()
   G4VTreeSceneHandler::EndModeling ();  
 }
 
-void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid& solid) 
+void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid&) 
 {
 //////////////////////////////
   G4String        cur_abs_pv_name ;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTTrackingAction.cc,v 1.3 2001-07-11 10:09:04 gunter Exp $
+// $Id: G4RTTrackingAction.cc,v 1.4 2003-05-30 13:01:21 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,7 +38,7 @@
 #include "G4ios.hh"
 
 
-void G4RTTrackingAction :: PreUserTrackingAction(const G4Track* aTrack)
+void G4RTTrackingAction :: PreUserTrackingAction(const G4Track*)
 {
   G4RayTrajectory* aTrajectory=new G4RayTrajectory;
   fpTrackingManager->SetTrajectory(aTrajectory);
