@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2002-01-16 09:00:26 gcosmo Exp $
+$Id: History,v 1.33 2002-01-22 22:51:01 radoone Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22/01/2002 : R. Chytracek
+- Temporary fix of Inside() method in BREPSolidPCone.
+- Updated BREPSolidPCone unit test.
 
 16/01/2001 : R. Chytracek        breps-V04-00-00
 - G4BREPSolidPCone: bugfix for problem report #320.
