@@ -3,15 +3,12 @@ PreInit> #
 PreInit> # Macro file test02.in
 PreInit> # for tests of basic e.m. processes
 PreInit> #
-PreInit> PreInit> /run/verbose 2
+PreInit> PreInit> # /run/verbose 2
 PreInit> /run/initialize
-userDetector->Construct() start.
-physicsList->Construct() start.
 
 ionIoni:    Knock-on electron cross sections . 
          MeanFreePath is computed at tracking time.
          delta ray energy sampled from  differential Xsection.
-physicsList->setCut() start.
 Tst02PhysicsList::SetCuts:CutLength : 1 (mm)
 
 conv:  Total cross sections from a parametrisation(L.Urban). Good description from 1.5 MeV to 100 GeV for all Z. 
@@ -79,12 +76,6 @@ SimpleBox is now made of Al
 Idle> /gun/particle gamma
 Idle> /gun/energy 500 MeV
 Idle> /run/beamOn 1
-Start closing geometry.
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.16s Real=0.95s Sys=0s
 Idle> #
 Idle> # electron 500 MeV in Air
 Idle> #
@@ -93,19 +84,5 @@ SimpleBox is now made of Air
 Idle> /gun/particle e-
 Idle> /gun/energy 500 MeV
 Idle> /run/beamOn 1
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
 Idle> #
-Idle> G4 kernel has come to Quit state.
-Deletion of G4 kernel class start.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserRunAction deleted.
-UserPrimaryGenerator deleted.
-EventManager deleted.
-UImanager deleted.
-StateManager deleted.
-RunManager is deleting.
+Idle> 

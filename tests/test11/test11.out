@@ -2,10 +2,8 @@ SimpleBox is now made of Pb
 PreInit> #
 PreInit> # Auto-generated test input file for test11 hadronics.
 PreInit> #
-PreInit> PreInit> /run/verbose 2
+PreInit> PreInit> # /run/verbose 2
 PreInit> /run/initialize
-userDetector->Construct() start.
-physicsList->Construct() start.
 
 ionIoni:    Knock-on electron cross sections . 
          MeanFreePath is computed at tracking time.

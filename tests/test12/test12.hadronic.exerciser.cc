@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test12.hadronic.exerciser.cc,v 1.1 1999-01-08 16:35:40 gunter Exp $
+// $Id: test12.hadronic.exerciser.cc,v 1.2 1999-02-12 10:15:22 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,7 +54,7 @@ int main (int argc, char** argv) {
     "\n# Auto-generated test input file for test12 hadronics."
     "\n#"
     "\n/control/verbose 2"
-    "\n/run/verbose 2"
+    "\n# /run/verbose 2"
     "\n/run/initialize"
     "\n/gun/direction 1 0 0"
     "\n#";

@@ -4,7 +4,7 @@ PreInit> #
 PreInit> # Macro file of "skeleton.cc"
 PreInit> # for tracking performance test
 PreInit> #
-PreInit> PreInit> /run/verbose 2
+PreInit> PreInit> # /run/verbose 2
 PreInit> #
 PreInit> # SimpleBox geometry made by Pb
 PreInit> # Geantino 100 GeV to the direction (1.,0.,0.)
@@ -18,9 +18,6 @@ PreInit> /gun/particle geantino
 PreInit> /gun/energy 100 GeV
 PreInit> /gun/direction 1 0 0
 PreInit> /run/initialize
-userDetector->Construct() start.
-physicsList->Construct() start.
-physicsList->setCut() start.
 Tst01PhysicsList::SetCuts:CutLength : 1 (mm)
 
 conv:  Total cross sections from a parametrisation(L.Urban). Good description from 1.5 MeV to 100 GeV for all Z. 
@@ -81,8 +78,6 @@ MuPairProd:  cross sections from R. Kokoulin
     PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
 Idle> /tracking/verbose 1
 Idle> /run/beamOn 1
-Start closing geometry.
-Start Run processing.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -91,17 +86,8 @@ Start Run processing.
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+05        0        0         0       SPhys initStep
     1    2e+04        0        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0.08s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 10
-  User=0s Real=0s Sys=0s
 Idle> #
 Idle> # SimpleBox geometry made by Al
 Idle> # Geantino 100 GeV to the direction (0.,1.,0.)
@@ -112,7 +98,6 @@ SimpleBox is now made of Al
 Idle> /gun/direction 0 1 0
 Idle> /tracking/verbose 1
 Idle> /run/beamOn 1
-Start Run processing.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -121,17 +106,8 @@ Start Run processing.
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+05        0        0         0       SPhys initStep
     1        0    2e+04        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 10
-  User=0s Real=0s Sys=0s
 Idle> #
 Idle> # SimpleBox geometry made by Air
 Idle> # Geantino 100 GeV to the direction (1.,1.,0.)
@@ -142,7 +118,6 @@ SimpleBox is now made of Air
 Idle> /gun/direction 1 1 0
 Idle> /tracking/verbose 1
 Idle> /run/beamOn 1
-Start Run processing.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -151,17 +126,8 @@ Start Run processing.
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+05        0        0         0       SPhys initStep
     1    2e+04    2e+04        0     1e+05        0 2.83e+04  2.83e+04  OutOfWorld Transportation
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 10
-  User=0s Real=0s Sys=0s
 Idle> #
 Idle> # Honeycomb geometry
 Idle> # Geantino 100 GeV to the direction (1.,0.,0.)
@@ -172,7 +138,6 @@ Now Detector is Honeycomb
 Idle> /gun/direction 1 0 0
 Idle> /tracking/verbose 1
 Idle> /run/beamOn 1
-Start Run processing.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -210,17 +175,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    28 1.23e+04        0        0     1e+05        0      450  1.23e+04     CalPhys Transportation
    29  1.5e+04        0        0     1e+05        0  2.7e+03   1.5e+04       WPhys Transportation
    30    2e+04        0        0     1e+05        0    5e+03     2e+04  OutOfWorld Transportation
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0.04s Sys=0.01s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 10
-  User=0s Real=0s Sys=0s
 Idle> #
 Idle> # Honeycomb geometry
 Idle> # Geantino 100 GeV to the direction (0.,1.,0.)
@@ -229,7 +185,6 @@ Idle> #
 Idle> /gun/direction 0 1 0
 Idle> /tracking/verbose 1
 Idle> /run/beamOn 1
-Start Run processing.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -290,17 +245,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    51        0 1.02e+04        0     1e+05        0      335  1.02e+04     CalPhys Transportation
    52        0  1.5e+04        0     1e+05        0 4.83e+03   1.5e+04       WPhys Transportation
    53        0    2e+04        0     1e+05        0    5e+03     2e+04  OutOfWorld Transportation
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.01s Real=0.18s Sys=0.04s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 10
-  User=0.01s Real=0.03s Sys=0s
 Idle> #
 Idle> # Honeycomb geometry
 Idle> # Geantino 100 GeV to the direction (1.,1.,0.)
@@ -309,7 +255,6 @@ Idle> #
 Idle> /gun/direction 1 1 0
 Idle> /tracking/verbose 1
 Idle> /run/beamOn 1
-Start Run processing.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -388,24 +333,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    69 1.02e+04 1.02e+04        0     1e+05        0      444  1.44e+04     CalPhys Transportation
    70  1.5e+04  1.5e+04        0     1e+05        0 6.81e+03  2.12e+04       WPhys Transportation
    71    2e+04    2e+04        0     1e+05        0 7.07e+03  2.83e+04  OutOfWorld Transportation
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.02s Real=0.14s Sys=0.01s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 10
-  User=0.03s Real=0.07s Sys=0s
-Idle> G4 kernel has come to Quit state.
-Deletion of G4 kernel class start.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserRunAction deleted.
-UserPrimaryGenerator deleted.
-EventManager deleted.
-UImanager deleted.
-StateManager deleted.
-RunManager is deleting.
+Idle> 
