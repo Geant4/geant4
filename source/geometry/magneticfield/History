@@ -1,4 +1,4 @@
-$Id: History,v 1.60 2002-06-07 18:30:29 japost Exp $
+$Id: History,v 1.61 2002-06-25 08:37:39 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun  25th, 2002   J. Apostolakis - field-V04-00-05
+--------------------------------
+- G4ChordFinder.cc
+  In NewStep:  fixed case of stepTrial >> stepTrialOld, to take large multiple - not small;
+       (it was treated the same as stepTrial << old)
+  Added guard for stepTrial==0.0 in FindNextChord
+- G4MagIntegratorDriver.cc
+  Added protection against error of 0.0 in ComputeNewStepSize.
+
+- G4EquationOfMotion
+  Made RightHandSide an inline method 
+  In GetFieldValue signature of Point is double[4], instead of double[3]
+  Defined G4maximum_number_of_field_components as enum
+
 Jun   7th, 2002   J. Apostolakis - field-V04-00-04
 --------------------------------
  - G4Mag_SpinEqRhs.cc
@@ -32,6 +47,18 @@ May  31st, 2002   J. Apostolakis - field-V04-00-03
  - G4MagIntegratorDriver
     o More information in debug printing (tangent cosine, norm)
 
+May   7th, 2002   J. Apostolakis
+--------------------------------
+- G4MagIntegratorDriver  -  ( on trunk )
+  * Fix to update the field track for steps smaller than the chord finder's 
+minstep. 
+
+
+April 19th, 2002  J. Apostolakis   (not included in tag field-V04-00-02)
+--------------------------------
+- G4MagIntegratorDriver.hh,cc     (on trunk)
+  * Bug fix:  last step can now only be triggerred if x+h > x2.
+  * Debugging methods improved.
 
 May   7th, 2002   J. Apostolakis - field-V04-00-02
 --------------------------------
