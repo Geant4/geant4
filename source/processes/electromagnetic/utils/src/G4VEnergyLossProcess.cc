@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.31 2004-08-27 08:39:51 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.32 2004-09-09 10:57:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -775,9 +775,11 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   /*
   if(-1 < verboseLevel) {
     const G4ParticleDefinition* pd = dynParticle->GetDefinition();
-    G4cout << "G4VEnergyLossProcess::PostStepDoIt: Sample secondary; E= " << finalT/MeV
+    G4cout << GetProcessName() 
+           << "::PostStepDoIt: Sample secondary; E= " << finalT/MeV
            << " MeV; model= (" << currentModel->LowEnergyLimit(pd)
            << ", " <<  currentModel->HighEnergyLimit(pd) << ")"
+           << "  preStepLambda= " << preStepLambda
            << G4endl;
   }
   */
@@ -936,7 +938,7 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
       }
       theEnergyOfCrossSectionMax[i] = emax;
       theCrossSectionMax[i] = smax;
-      if(2 < verboseLevel) {
+      if(1 < verboseLevel) {
         G4cout << "For " << particle->GetParticleName() 
                << " Max CS at i= " << i << " emax(MeV)= " << emax/MeV
                << " lambda= " << smax << G4endl;

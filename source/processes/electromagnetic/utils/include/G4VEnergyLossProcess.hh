@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.30 2004-08-27 08:39:51 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.31 2004-09-09 10:57:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,6 +55,7 @@
 // 03-08-04 Add DEDX table to all processes for control on integral range(V.Ivanchenko)
 // 06-08-04 Clear up names of member functions (V.Ivanchenko)
 // 27-08-04 Add NeedBuildTables method (V.Ivanchneko)
+// 09-09-04 Bug fix for the integral mode with 2 peaks (V.Ivanchneko)
 //
 // Class Description:
 //
@@ -566,10 +567,14 @@ inline void G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e)
     preStepLambda = GetLambdaForScaledEnergy(e);
   } else {
     aboveCSmax  = true;
-    e *= lambdaFactor;
-    if(e > mfpKinEnergy) {
-      mfpKinEnergy = e;
-      preStepLambda = GetLambdaForScaledEnergy(e);
+    G4double e1 = e*lambdaFactor;
+    if(e1 > mfpKinEnergy) {
+      preStepLambda  = GetLambdaForScaledEnergy(e);
+      G4double preStepLambda1 = GetLambdaForScaledEnergy(e1);
+      if(preStepLambda1 > preStepLambda) {
+        mfpKinEnergy = e1;
+        preStepLambda = preStepLambda1;
+      }
     } else {
       preStepLambda = chargeSqRatio*theCrossSectionMax[currentMaterialIndex];
     }
@@ -593,7 +598,7 @@ inline G4double G4VEnergyLossProcess::GetMeanFreePath(const G4Track& track,
     if(0.0 < preStepLambda) preStepMFP = 1.0/preStepLambda;
     else                    preStepMFP = DBL_MAX;
   }
-  //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<< " eCSmax= " <<mfpKinEnergy<< " mfp= "<<preStepMFP<<G4endl;
+  //  G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<< " eCSmax= " <<mfpKinEnergy<< " mfp= "<<preStepMFP<<G4endl;
   return preStepMFP;
 }
 
