@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.22 2005-03-03 16:04:14 allison Exp $
+// $Id: G4SubtractionSolid.cc,v 1.23 2005-03-10 09:53:48 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -116,8 +116,8 @@ G4SubtractionSolid::CalculateExtent( const EAxis pAxis,
 
 EInside G4SubtractionSolid::Inside( const G4ThreeVector& p ) const
 {
-  EInside positionA = fPtrSolidA->Inside(p) ;
-  EInside positionB = fPtrSolidB->Inside(p) ;
+  EInside positionA = fPtrSolidA->Inside(p);
+  EInside positionB = fPtrSolidB->Inside(p);
   
   if(positionA == kInside && positionB == kOutside)
   {
@@ -125,16 +125,19 @@ EInside G4SubtractionSolid::Inside( const G4ThreeVector& p ) const
   }
   else
   {
-    if((positionA == kInside && positionB == kSurface) ||
-       (positionB == kOutside && positionA == kSurface) ||
-       (positionA == kSurface && positionB == kSurface)   )
-    {
-      return kSurface ;
-    }
-    else
-    {
-      return kOutside ;
-    }
+#ifndef G4NEW_SURF_NORMAL  
+    if(( positionA == kInside && positionB == kSurface  ) ||
+       ( positionB == kOutside && positionA == kSurface ) ||
+       ( positionA == kSurface && positionB == kSurface )   )  return kSurface;
+#else
+    if(( positionA == kInside && positionB == kSurface) ||
+       ( positionB == kOutside && positionA == kSurface) ||
+       ( positionA == kSurface && positionB == kSurface &&
+         ( fPtrSolidA->SurfaceNormal(p) - 
+           fPtrSolidB->SurfaceNormal(p) ).mag2() > 
+            1000*kRadTolerance )                            )  return kSurface;
+#endif
+    else  return kOutside;
   }
 }
 
