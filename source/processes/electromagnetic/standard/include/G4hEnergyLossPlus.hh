@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.hh,v 1.1 1999-03-05 09:03:24 urban Exp $
+// $Id: G4hEnergyLossPlus.hh,v 1.2 1999-04-28 15:07:53 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -298,6 +298,12 @@ class G4hEnergyLossPlus : public G4VContinuousDiscreteProcess
     static G4double RTable,LOGRTable; // LOGRTable=log(HighestKineticEnergy
                                       //          /LowestKineticEnergy)/TotBin
                                       //   RTable = exp(LOGRTable)
+    
+
+    static G4double c0N,c1N,c2N,c3N ;    // coeffs to compute nb of deltas
+    static G4int Ndeltamax ;             // upper limit for nb of subcutoff
+                                         // delta rays in one step
+
 
 };
  

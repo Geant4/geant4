@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.cc,v 1.3 1999-04-15 13:05:05 urban Exp $
+// $Id: G4hEnergyLossPlus.cc,v 1.4 1999-04-28 15:07:16 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -29,6 +29,7 @@
 // 07/12/98 : works for ions as well+ bug corrected, L.Urban
 // 02/02/99 : several bugs fixed, L.Urban
 // 01/03/99 : creation of sub-cutoff delta rays, L.Urban
+// 28/04/99 : bug fixed in DoIt , L.Urban
 // --------------------------------------------------------------
 
 #include "G4hEnergyLossPlus.hh"
@@ -118,6 +119,12 @@ G4double G4hEnergyLossPlus::LowestKineticEnergy= 1.00*keV;
 G4double G4hEnergyLossPlus::HighestKineticEnergy= 100.*TeV;
 G4int G4hEnergyLossPlus::TotBin;
 G4double G4hEnergyLossPlus::RTable,G4hEnergyLossPlus::LOGRTable;
+
+G4double G4hEnergyLossPlus::c0N       = 9.0e-21*MeV*MeV*mm*mm ;
+G4double G4hEnergyLossPlus::c1N       = 25.0e-21*keV*mm*mm    ;
+G4double G4hEnergyLossPlus::c2N       = 13.25e-21*keV*mm*mm   ;
+G4double G4hEnergyLossPlus::c3N       = 0.500e-21*mm*mm       ;
+G4int    G4hEnergyLossPlus::Ndeltamax = 100                   ;
 
 // constructor and destructor
  
@@ -1102,12 +1109,6 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
                               const G4Track& trackData,const G4Step& stepData) 
  // compute the energy loss after a step 
 {
-  static const G4double c0=9.0e-21*MeV*MeV*mm*mm ; 
-  static const G4double c1=25.0e-21*keV*mm*mm ;
-  static const G4double c2=13.25e-21*keV*mm*mm ;
-  static const G4double c3=0.500e-21*mm*mm ;
-  static const G4double epsil=0.5*eV  ;
-
   const G4DynamicParticle* aParticle;
   G4Material* aMaterial;
   G4double E,finalT,Step,ChargeSquare,MeanLoss ;
@@ -1172,6 +1173,7 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
   G4double rcut,T0,presafety,postsafety,
            delta,fragment,Tmax,mass ;
   G4double frperstep,x1,y1,z1,dx,dy,dz,dTime,time0,DeltaTime;
+  G4double epsil = MinKineticEnergy/2. ;
 
   MinDeltaEnergyNow = MinDeltaEnergy[index] ;
   Tc=G4Electron::Electron()->GetCutsInEnergy()[index];
@@ -1249,7 +1251,7 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
         if(T0<MinDeltaEnergyNow) T0=MinDeltaEnergyNow ;
 
         // compute nb of delta rays to be generated
-        G4int N=int(fragment*(c0/(E*T0)+c1/T0-(c2+c3*T0)/Tc)* 
+        G4int N=int(fragment*(c0N/(E*T0)+c1N/T0-(c2N+c3N*T0)/Tc)* 
                 (aMaterial->GetTotNbOfElectPerVolume())+0.5) ;
 
         if(N > 0)

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLossPlus.cc,v 1.6 1999-03-15 12:11:23 urban Exp $
+// $Id: G4eEnergyLossPlus.cc,v 1.7 1999-04-28 15:07:14 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // $Id: 
@@ -26,6 +26,7 @@
 //  It is a modified version of G4eEnergyLoss:
 //  continuous energy loss with generation of subcutoff delta rays
 // 02/02/99  important correction in AlongStepDoIt , L.Urban
+// 28/04/99  bug fixed (unit independece now),L.Urban
 // --------------------------------------------------------------
  
 #include "G4eEnergyLossPlus.hh"
@@ -104,7 +105,10 @@ G4eEnergyLossPlus::G4eEnergyLossPlus(const G4String& processName)
      probLimFluct (0.01),
      nmaxDirectFluct (100),
      nmaxCont1(4),
-     nmaxCont2(16)
+     nmaxCont2(16),
+     c1N(2.86e-23*MeV*mm*mm),
+     c2N(c1N*MeV/10.),
+     Ndeltamax(100)
 {
  //create (only once) EnergyLoss messenger 
  if(!eLossMessenger) eLossMessenger = new G4EnergyLossMessenger();
@@ -939,7 +943,7 @@ G4VParticleChange* G4eEnergyLossPlus::AlongStepDoIt( const G4Track& trackData,
   G4double Step = stepData.GetStepLength();
  
   aParticleChange.Initialize(trackData);
- 
+
   G4double MeanLoss, finalT;
  
   if (E < MinKineticEnergy)   finalT = 0.;
@@ -979,6 +983,7 @@ G4VParticleChange* G4eEnergyLossPlus::AlongStepDoIt( const G4Track& trackData,
     G4double rcut,Tc,T0,presafety,postsafety,safety,
              delta,fragment ;
     G4double frperstep,x1,y1,z1,dx,dy,dz,dTime,time0,DeltaTime;
+    G4double epsil= MinKineticEnergy/2. ;
 
     if(Charge < 0.)
     {
@@ -1051,13 +1056,11 @@ G4VParticleChange* G4eEnergyLossPlus::AlongStepDoIt( const G4Track& trackData,
 
       if(fragment>0.)
       {
-        static const G4double c1N=2.86e-23*MeV/(mm*mm) ;
-        static const G4double c2N=c1N*MeV/10. ;
-        static const G4double epsil=0.5*eV ;
-
         // compute nb of delta rays to be generated
         G4int N=int(fragment*(c1N*(1.-T0/Tc)+c2N/E)*
                 (aMaterial->GetTotNbOfElectPerVolume())/T0+0.5) ;
+        if(N > Ndeltamax)
+           N = Ndeltamax ;
 
         if(N > 0)
         {
