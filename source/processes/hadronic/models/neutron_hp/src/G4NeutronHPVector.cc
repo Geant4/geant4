@@ -70,18 +70,18 @@
   G4NeutronHPVector & G4NeutronHPVector::  
   operator = (const G4NeutronHPVector & right)
   {
+    if(&right == this) return *this;
+    
     G4int i;
     
     totalIntegral = right.totalIntegral;
-    if(right.theIntegral!=NULL) theIntegral = new G4double[nEntries];
+    if(right.theIntegral!=NULL) theIntegral = new G4double[right.nEntries];
     for(i=0; i<right.nEntries; i++)
     {
       SetPoint(i, right.GetPoint(i)); // copy theData
       if(right.theIntegral!=NULL) theIntegral[i] = right.theIntegral[i];
     }
     theManager = right.theManager; 
-    nEntries = right.nEntries;
-    nPoints = right.nPoints;
     label = right.label;
   
     Verbose = right.Verbose;
@@ -262,15 +262,20 @@
   
   void G4NeutronHPVector::ThinOut(G4double precision)
   {
+    // make the new vector
     G4NeutronHPDataPoint * aBuff = new G4NeutronHPDataPoint[nPoints];
     G4double x, x1, x2, y, y1, y2;
-    G4int count = 1, current = 1, start = 1;
+    G4int count = 0, current = 2, start = 1;
+    
+    // First element always goes and is never tested.
     aBuff[0] = theData[0];
+    
+    // Find the rest
     while(current < GetVectorLength())
     {
       x1=aBuff[count].GetX();
-      x2=theData[current].GetX();
       y1=aBuff[count].GetY();
+      x2=theData[current].GetX();
       y2=theData[current].GetY();
       for(G4int j=start; j<current; j++)
       {
@@ -278,16 +283,16 @@
 	y = theInt.Lin(x, x1, x2, y1, y2);
 	if (abs(y-theData[j].GetY())>precision*y)
 	{
-          start = current;
-	  aBuff[count] = theData[current-1];
-	  count++;
+	  aBuff[++count] = theData[current-1]; // for this one, everything was fine
+          start = current; // the next candidate
 	  break;
 	}
       }
       current++ ;
     }
-    aBuff[count++] = theData[GetVectorLength()-1];
+    // The last one also always goes, and is never tested.
+    aBuff[++count] = theData[GetVectorLength()-1];
     delete [] theData;
     theData = aBuff;
-    nEntries = count;
+    nEntries = count+1;
   }
