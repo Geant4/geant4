@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.icc,v 1.9 2004-12-02 09:55:19 gcosmo Exp $
+// $Id: G4MagHelicalStepper.icc,v 1.10 2005-02-15 17:36:05 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Linear Step in regions of no field
@@ -31,7 +31,7 @@
 inline void
 G4MagHelicalStepper::LinearStep( const G4double  yIn[],
                                        G4double  h,
-                                       G4double  yLinear[])
+                                       G4double  yLinear[]) const
 {
   G4double  momentum_val = std::sqrt(yIn[3]*yIn[3] + yIn[4]*yIn[4] + yIn[5]*yIn[5]) ;
   G4double  inv_momentum = 1.0 / momentum_val ;
