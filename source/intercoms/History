@@ -1,4 +1,4 @@
-$Id: History,v 1.8 1999-10-27 16:38:45 johna Exp $
+$Id: History,v 1.9 1999-11-05 06:38:18 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 4, 99, M.Asai (tag intercoms-V01-01-00)
+- G4UImanager.cc is updated for G4cout modification.
+- Comments are enriched for software reference manual.
 
 Oct 26th, 99 J.Allison
 - Prepared G4VVisManager.hh and G4VGraphicsScene.hh for Software
