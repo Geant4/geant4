@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.16 2004-04-08 09:39:38 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.17 2004-11-11 16:11:57 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,9 +34,10 @@
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 
-#include <map>
-
+// Inheritance :
 #include "G4VSceneHandler.hh"
+
+#include <map>
 
 class G4OpenInventor;
 class SoSeparator;
@@ -95,9 +96,11 @@ private:
   void 		ClearStore ();
   void 		ClearTransientStore ();
   void 		RequestPrimitives (const G4VSolid& solid);
-  static 	G4int    fSceneIdCount;   // static counter for OpenInventor scenes.
-  static 	G4int    fSceneCount;     // No. of extanct scene handlers.
   G4double  	GetMarkerSize    ( const G4VMarker&  mark ) ;
+private:
+  static G4int fSceneIdCount;   // static counter for OpenInventor scenes.
+  static G4int fSceneCount;
+private:
   G4ViewParameters fLastVP; // Keeps memory of last view parameters,
          // namely the ones which go with the graphical database
          // (display lists).  A view may interrogate this to decide if
@@ -109,11 +112,12 @@ private:
   // A proper implementation would use geometry hierarchy.
   //
   std::map <const G4LogicalVolume*, SoSeparator*,
-    std::less <const G4LogicalVolume*> > SeparatorMap;
-  SoSeparator *root;
-  SoSeparator *staticRoot;
-  SoSeparator *transientRoot;
-  SoSeparator *currentSeparator;
+    std::less <const G4LogicalVolume*> > fSeparatorMap;
+  SoSeparator* fRoot;
+  SoSeparator* fDetectorRoot;
+  SoSeparator* fTransientRoot;
+  SoSeparator* fCurrentSeparator;
+  G4bool fModelingSolid;
 };
 
 #include "G4OpenInventorSceneHandler.icc"

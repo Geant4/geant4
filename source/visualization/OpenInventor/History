@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2004-11-10 20:17:17 gbarrand Exp $
+$Id: History,v 1.21 2004-11-11 16:11:57 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,17 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+11th November 2004  Guy Barrand
+- End of the first world war.
+- Add SoPolyhedron that permits to visualize directly HepPolyhedron.
+- G4OpenInventorSceneHandler::AddThis : uses the generic
+  SoPolyhedron. Modeling is wireFrame by default.
+  Solid modeling is used only in case visAtb.SetForceSolid(true).
+- G4OpenInventorSceneHandler::PreAddThis : correct a flaw
+  in the non-leaf part ; in case mother not found in fSeparatorMap
+  the SoDetectorTreeKit were added nowhere ! This induced that 
+  exaN03Vis5 displayed no gemetry.
 
 10th November 2004  Guy Barrand
 - SoMarkerSet, SoGL2PSAction : corrections to work with SGI Inventor.

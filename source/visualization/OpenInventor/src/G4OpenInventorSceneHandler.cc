@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.18 2004-11-07 17:03:05 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.19 2004-11-11 16:11:57 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,14 +38,12 @@
 #include <Inventor/nodes/SoCoordinate4.h>
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoDrawStyle.h>
+#include <Inventor/nodes/SoLightModel.h>
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/nodes/SoLineSet.h>
-#include <Inventor/actions/SoWriteAction.h>
 #include <Inventor/nodes/SoCube.h>
 #include <Inventor/nodes/SoSphere.h>
-#include <Inventor/nodes/SoCylinder.h>
 #include <Inventor/nodes/SoFont.h>
-#include <Inventor/fields/SoMFString.h>
 #include <Inventor/nodes/SoText2.h>
 #include <Inventor/nodes/SoFaceSet.h>
 #include <Inventor/nodes/SoNormal.h>
@@ -57,14 +55,20 @@
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/nodes/SoResetTransform.h>
 
+#define USE_SOPOLYHEDRON
+
+#ifndef USE_SOPOLYHEDRON
 #include "HEPVis/nodes/SoBox.h"
 #include "HEPVis/nodes/SoTubs.h"
 #include "HEPVis/nodes/SoCons.h"
 #include "HEPVis/nodes/SoTrd.h"
 #include "HEPVis/nodes/SoTrap.h"
+#endif
 #include "HEPVis/nodes/SoMarkerSet.h"
 typedef HEPVis_SoMarkerSet SoMarkerSet;
 #include "HEPVis/nodekits/SoDetectorTreeKit.h"
+
+#include "Geant4_SoPolyhedron.h"
 
 #include "G4Scene.hh"
 #include "G4NURBS.hh"
@@ -95,50 +99,47 @@ typedef HEPVis_SoMarkerSet SoMarkerSet;
 typedef SoDetectorTreeKit SoDetectorTreeKit;
 G4Point3D translation;
 
+G4int G4OpenInventorSceneHandler::fSceneIdCount = 0;
+
+G4int G4OpenInventorSceneHandler::fSceneCount = 0;
+
 G4OpenInventorSceneHandler::G4OpenInventorSceneHandler (G4OpenInventor& system,
                                           const G4String& name)
 :G4VSceneHandler (system, fSceneIdCount++, name)
-,root(0)
-,staticRoot(0)
-,transientRoot(0)
-,currentSeparator(0)
+,fRoot(0)
+,fDetectorRoot(0)
+,fTransientRoot(0)
+,fCurrentSeparator(0)
+,fModelingSolid(false)
 {
-  //
-  root = new SoSeparator;
-  root->ref();
-  root->setName("Root");
-  //
-  staticRoot = new SoSeparator;
-  staticRoot->setName("StaticRoot");
-  root->addChild(staticRoot);
-  //
-  transientRoot = new SoSeparator;
-  transientRoot->setName("TransientRoot");
-  root->addChild(transientRoot);
-  //
   fSceneCount++;
-  //
-  currentSeparator=transientRoot;
+  fRoot = new SoSeparator;
+  fRoot->ref();
+  fRoot->setName("Root");
+  
+  fDetectorRoot = new SoSeparator;
+  fDetectorRoot->setName("StaticRoot");
+  fRoot->addChild(fDetectorRoot);
+  
+  fTransientRoot = new SoSeparator;
+  fTransientRoot->setName("TransientRoot");
+  fRoot->addChild(fTransientRoot);
+  
+  fCurrentSeparator = fTransientRoot;
 }
 
 G4OpenInventorSceneHandler::~G4OpenInventorSceneHandler ()
 {
-  root->unref();
+  fRoot->unref();
   fSceneCount--;
 }
 
 //
-// Method for handling G4Polyline objects (from tracking or wireframe).
+// Method for handling G4Polyline objects (from tracking).
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
-  if(currentSeparator==0) return;
-  
   G4int nPoints = line.size();
   SbVec3f* pCoords = new SbVec3f[nPoints];
-
-  SoCoordinate3 *polyCoords = new SoCoordinate3;
-  SoDrawStyle *drawStyle = new SoDrawStyle;
-  SoLineSet *pLine = new SoLineSet;
 
   for (G4int iPoint = 0; iPoint < nPoints ; iPoint++) {
     pCoords[iPoint].setValue(line[iPoint].x(),
@@ -152,32 +153,35 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
   SoMaterial *pMaterial = new SoMaterial;
   const G4Colour& c = GetColour (line);
   pMaterial->diffuseColor.setValue(c.GetRed (), c.GetGreen (), c.GetBlue ());
-  currentSeparator->addChild(pMaterial);
+  fCurrentSeparator->addChild(pMaterial);
   
   //
   // Point Set
   // 
+  SoCoordinate3 *polyCoords = new SoCoordinate3;
   polyCoords->point.setValues(0,nPoints,pCoords);
-  currentSeparator->addChild(polyCoords);
+  fCurrentSeparator->addChild(polyCoords);
   
   //
   // Wireframe
   // 
+  SoDrawStyle *drawStyle = new SoDrawStyle;
   drawStyle->style = SoDrawStyle::LINES;
-  currentSeparator->addChild(drawStyle);
+  fCurrentSeparator->addChild(drawStyle);
+
+  SoLineSet *pLine = new SoLineSet;
 #ifdef INVENTOR2_0
   pLine->numVertices.setValues(0,1,(const long *)&nPoints);
 #else 
   pLine->numVertices.setValues(0,1,&nPoints);
 #endif
-  currentSeparator->addChild(pLine);
+  fCurrentSeparator->addChild(pLine);
 
   delete [] pCoords;
 }
 
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   //G4VSceneHandler::AddPrimitive (polymarker);
-  if(currentSeparator==0) return;
 
   G4int pointn = polymarker.size();
   if(pointn<=0) return;
@@ -202,11 +206,11 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   SoMaterial* material = new SoMaterial;
   const G4Colour& c = GetColour (polymarker);
   material->diffuseColor.setValue(c.GetRed (), c.GetGreen (), c.GetBlue ());
-  currentSeparator->addChild(material);
+  fCurrentSeparator->addChild(material);
   
   SoCoordinate3* coordinate3 = new SoCoordinate3;
   coordinate3->point.setValues(0,pointn,points);
-  currentSeparator->addChild(coordinate3);
+  fCurrentSeparator->addChild(coordinate3);
   
   SoMarkerSet* markerSet = new SoMarkerSet;
   markerSet->numPoints = pointn;
@@ -223,7 +227,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
     markerSet->markerIndex = SoMarkerSet::SQUARE_LINE_7_7;
   }break;
   }
-  currentSeparator->addChild(markerSet);
+  fCurrentSeparator->addChild(markerSet);
 
   delete [] points;
 }
@@ -238,7 +242,6 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
 // Method for handling G4Text objects
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text) {
-  if(currentSeparator==0) return;
   //
   // Color
   //
@@ -246,7 +249,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text) {
   const G4Colour& c = GetTextColour (text);
   pMaterial->diffuseColor.setValue(c.GetRed (), c.GetGreen (), c.GetBlue ());
   //pMaterial->diffuseColor.setValue(1.0, 0.0, 1.0); // Magenta so we can see
-  currentSeparator->addChild(pMaterial);
+  fCurrentSeparator->addChild(pMaterial);
 
   //
   // Font
@@ -254,33 +257,29 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text) {
 
   SoFont *g4Font = new SoFont();
   g4Font->size = 20.0;
-  currentSeparator->addChild(g4Font);
+  fCurrentSeparator->addChild(g4Font);
 
   //
   // Text
   // 
-
-  SoMFString *tString = new SoMFString;
-  tString->setValue("This is Text");
-
   SoText2 *g4String = new SoText2();
+  g4String->string.setValue("This is Text");
   g4String->spacing = 2.0;
   g4String->justification = SoText2::LEFT;
-  currentSeparator->addChild(g4String);
+  fCurrentSeparator->addChild(g4String);
 }
 
 //
 // Method for handling G4Circle objects
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Circle& circle) {
-  if(currentSeparator==0) return;
   //
   // Color
   //
   SoMaterial *pMaterial = new SoMaterial;
   const G4Colour& c = GetColour (circle);
   pMaterial->diffuseColor.setValue(c.GetRed (), c.GetGreen (), c.GetBlue ());
-  currentSeparator->addChild(pMaterial);
+  fCurrentSeparator->addChild(pMaterial);
 
   //
   // Dimensions
@@ -300,7 +299,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Circle& circle) {
    
   SoTranslation *cTrans = new SoTranslation;
   cTrans->translation.setValue(cCtr.x(),cCtr.y(),cCtr.z());
-  currentSeparator->addChild(cTrans);
+  fCurrentSeparator->addChild(cTrans);
 
   //
   // Sphere
@@ -308,21 +307,20 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Circle& circle) {
 
   SoSphere *g4Sphere = new SoSphere();
   g4Sphere->radius = size;
-  currentSeparator->addChild(g4Sphere);
+  fCurrentSeparator->addChild(g4Sphere);
 }
 
 //
 // Method for handling G4Square objects - defaults to wireframe
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& Square) {
-  if(currentSeparator==0) return;
   //
   // Color
   //
   SoMaterial *pMaterial = new SoMaterial;
   const G4Colour& c = GetColour (Square);
   pMaterial->diffuseColor.setValue(c.GetRed (), c.GetGreen (), c.GetBlue ());
-  currentSeparator->addChild(pMaterial);
+  fCurrentSeparator->addChild(pMaterial);
 
   //
   // Size
@@ -337,84 +335,20 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& Square) {
    
   SoTranslation *sTrans = new SoTranslation;
   sTrans->translation.setValue(sOrig.x(),sOrig.y(),sOrig.z());
-  currentSeparator->addChild(sTrans);
+  fCurrentSeparator->addChild(sTrans);
   
   SoCube *g4Square = new SoCube();
   g4Square->width =  sSize;
   g4Square->height = sSize;
   g4Square->depth =  sSize;
-  currentSeparator->addChild(g4Square);
+  fCurrentSeparator->addChild(g4Square);
 }
 
 //
 // Method for handling G4Polyhedron objects for drawing solids.
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
-  if(currentSeparator==0) return;
   if (polyhedron.GetNoFacets() == 0) return;
-#define MAXPOLYH        32767
-  //
-  // Assume all facets are convex quadrilaterals.
-  //
-  SbVec3f* polyVerts   = new SbVec3f[MAXPOLYH*4];
-  G4int*   numPolyVert = new G4int [MAXPOLYH];
-  SbVec3f* polyNorms   = new SbVec3f[MAXPOLYH];
-
-  //
-  // Loop through the G4Facets...
-  //
-  G4int vertIdx = 0, polyIdx = 0;
-
-  G4bool notLastFace;
-  G4Normal3D SurfaceUnitNormal;
-
-  do {
-  
-    //
-    // First, find surface normal for the facet...
-    //
-    notLastFace = polyhedron.GetNextUnitNormal (SurfaceUnitNormal);
-    
-    //
-    // Second, set the normal for all vertices in the facet...
-    //
-    polyNorms[polyIdx].setValue(SurfaceUnitNormal.x(),
-                                SurfaceUnitNormal.y(),
-                                SurfaceUnitNormal.z());
-    
-    //
-    // Loop through the four edges of each G4Facet...
-    //
-    G4int faceIdx = 0;
-    G4bool notLastEdge;
-    G4Point3D vertex;
-    G4int edgeFlag=1;
-    do {
-      notLastEdge = polyhedron.GetNextVertex (vertex, edgeFlag);
-      
-      polyVerts[vertIdx].setValue(vertex.x(),
-                                  vertex.y(),
-                                  vertex.z());
-
-      vertIdx++;
-      faceIdx++;
-    } while (notLastEdge);
-
-    numPolyVert[polyIdx] = faceIdx;
-    polyIdx++;
-
-  } while ((notLastFace)&&(polyIdx < MAXPOLYH));
-
-  //
-  // Store Norms
-  //
-  SoNormal *pNorms = new SoNormal;
-  pNorms->vector.setValues(0,polyIdx,polyNorms);
-  currentSeparator->addChild(pNorms);
-  
-  SoNormalBinding *pNormalBinding = new SoNormalBinding;
-  pNormalBinding->value = SoNormalBinding::PER_FACE;
-  currentSeparator->addChild(pNormalBinding);
 
   //
   // Define Material
@@ -422,32 +356,18 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   SoMaterial *pMaterial = new SoMaterial;
   const G4Colour& c = GetColour (polyhedron);
   pMaterial->diffuseColor.setValue(c.GetRed (), c.GetGreen (), c.GetBlue ());
-  currentSeparator->addChild(pMaterial);
+  fCurrentSeparator->addChild(pMaterial);
 
-  //
-  // Store Vertex Coordinates  
-  //
-  SoCoordinate3 *polyCoords = new SoCoordinate3;
-  polyCoords->point.setValues(0,vertIdx,polyVerts);
-  currentSeparator->addChild(polyCoords);
-  
-  //
-  // Define FaceSet
-  //
-  SoFaceSet *pFaceSet = new SoFaceSet;
-#ifdef INVENTOR2_0
-  pFaceSet->numVertices.setValues(0,polyIdx,(const long *)numPolyVert);
-#else 
-  pFaceSet->numVertices.setValues(0,polyIdx,numPolyVert);
-#endif
-  currentSeparator->addChild(pFaceSet);  
+  G4bool modelingSolid = false;
+  SoLightModel* lightModel = new SoLightModel;
+  lightModel->model.setValue(modelingSolid ?
+			     SoLightModel::PHONG:
+			     SoLightModel::BASE_COLOR);
+  fCurrentSeparator->addChild(lightModel);
 
-  //
-  // Clean-up
-  //
-  delete [] polyVerts;
-  delete [] numPolyVert;
-  delete [] polyNorms;
+  Geant4_SoPolyhedron* soPolyhedron = new Geant4_SoPolyhedron(polyhedron);
+  soPolyhedron->solid.setValue(modelingSolid);
+  fCurrentSeparator->addChild(soPolyhedron);  
 }
 
 //
@@ -455,7 +375,6 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 // Knots and Ctrl Pnts MUST be arrays of GLfloats.
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
-  if(currentSeparator==0) return;
 
   G4float *u_knot_array, *u_knot_array_ptr;
   u_knot_array = u_knot_array_ptr = new G4float [nurb.GetnbrKnots(G4NURBS::U)];
@@ -510,7 +429,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   surfSep->addChild(ctlPts);
   surfSep->addChild(oi_nurb);
   
-  currentSeparator->addChild(surfSep);
+  fCurrentSeparator->addChild(surfSep);
 
   //
   // Clean-up
@@ -546,9 +465,9 @@ void G4OpenInventorSceneHandler::BeginPrimitives
   //  
   if (fReadyForTransients) {
     //  
-    // set the destination to "transientRoot"
+    // set the destination to "fTransientRoot"
     //  
-    currentSeparator=transientRoot;
+    fCurrentSeparator = fTransientRoot;
     //  
     // place the transient object:
     //  
@@ -559,8 +478,8 @@ void G4OpenInventorSceneHandler::BeginPrimitives
     //  
     // add a transform.
     //  
-    currentSeparator->addChild(new SoResetTransform);
-    currentSeparator->addChild(xform);
+    fCurrentSeparator->addChild(new SoResetTransform);
+    fCurrentSeparator->addChild(xform);
   }
 }
 
@@ -573,12 +492,12 @@ void G4OpenInventorSceneHandler::EndModeling () {
 
 void G4OpenInventorSceneHandler::ClearStore () {
   G4VSceneHandler::ClearStore();
-  staticRoot->removeAllChildren();
-  transientRoot->removeAllChildren();
+  fDetectorRoot->removeAllChildren();
+  fTransientRoot->removeAllChildren();
 }
 
 void G4OpenInventorSceneHandler::ClearTransientStore () {
-  transientRoot->removeAllChildren();
+  fTransientRoot->removeAllChildren();
 }
 
 void G4OpenInventorSceneHandler::RequestPrimitives (const G4VSolid& solid) {
@@ -588,33 +507,45 @@ void G4OpenInventorSceneHandler::RequestPrimitives (const G4VSolid& solid) {
     G4VSceneHandler::RequestPrimitives (solid);
 }
 
-G4int G4OpenInventorSceneHandler::fSceneIdCount = 0;
 
-G4int G4OpenInventorSceneHandler::fSceneCount = 0;
-
-//
-// These methods add primitives using the HEPVis classes
-//
-void G4OpenInventorSceneHandler::AddThis (const G4Box & Box) {
-  if(currentSeparator==0) return;
+void G4OpenInventorSceneHandler::AddThis (const G4Box & box) {
+#ifdef USE_SOPOLYHEDRON
+  printf("debug : ::AddThis(G4Box) %d : %ld : %ld %ld\n",fModelingSolid,fCurrentSeparator,fDetectorRoot,fTransientRoot);
+  Geant4_SoPolyhedron* soPolyhedron = 
+    new Geant4_SoPolyhedron(box.CreatePolyhedron());
+  soPolyhedron->solid.setValue(fModelingSolid?TRUE:FALSE);
+  fCurrentSeparator->addChild(soPolyhedron);  
+#else
   SoCube *g4Box = new SoCube();
-  g4Box->width =2*Box.GetXHalfLength();
-  g4Box->height=2*Box.GetYHalfLength();
-  g4Box->depth =2*Box.GetZHalfLength(); 
-  currentSeparator->addChild(g4Box);
+  g4Box->width =2*box.GetXHalfLength();
+  g4Box->height=2*box.GetYHalfLength();
+  g4Box->depth =2*box.GetZHalfLength(); 
+  fCurrentSeparator->addChild(g4Box);
+#endif
 }
-void G4OpenInventorSceneHandler::AddThis (const G4Tubs & Tubs) {
-  if(currentSeparator==0) return;
+void G4OpenInventorSceneHandler::AddThis (const G4Tubs & tubs) {
+#ifdef USE_SOPOLYHEDRON
+  Geant4_SoPolyhedron* soPolyhedron = 
+    new Geant4_SoPolyhedron(tubs.CreatePolyhedron());
+  soPolyhedron->solid.setValue(fModelingSolid?TRUE:FALSE);
+  fCurrentSeparator->addChild(soPolyhedron);  
+#else
   SoTubs *g4Tubs = new SoTubs();
-  g4Tubs->pRMin = Tubs.GetRMin();
-  g4Tubs->pRMax = Tubs.GetRMax();
-  g4Tubs->pDz = Tubs.GetDz();
-  g4Tubs->pSPhi = Tubs.GetSPhi();
-  g4Tubs->pDPhi = Tubs.GetDPhi();
-  currentSeparator->addChild(g4Tubs);
+  g4Tubs->pRMin = tubs.GetRMin();
+  g4Tubs->pRMax = tubs.GetRMax();
+  g4Tubs->pDz = tubs.GetDz();
+  g4Tubs->pSPhi = tubs.GetSPhi();
+  g4Tubs->pDPhi = tubs.GetDPhi();
+  fCurrentSeparator->addChild(g4Tubs);
+#endif
 }
 void G4OpenInventorSceneHandler::AddThis (const G4Cons &cons) {
-  if(currentSeparator==0) return;
+#ifdef USE_SOPOLYHEDRON
+  Geant4_SoPolyhedron* soPolyhedron = 
+    new Geant4_SoPolyhedron(cons.CreatePolyhedron());
+  soPolyhedron->solid.setValue(fModelingSolid?TRUE:FALSE);
+  fCurrentSeparator->addChild(soPolyhedron);  
+#else
   SoCons *g4Cons = new SoCons();
   g4Cons->fRmin1 = cons.GetRmin1();
   g4Cons->fRmin2 = cons.GetRmin2();
@@ -623,11 +554,17 @@ void G4OpenInventorSceneHandler::AddThis (const G4Cons &cons) {
   g4Cons->fDz    = cons.GetDz();
   g4Cons->fSPhi  = cons.GetSPhi();
   g4Cons->fDPhi  = cons.GetDPhi();
-  currentSeparator->addChild(g4Cons);
+  fCurrentSeparator->addChild(g4Cons);
+#endif
 }
 
 void G4OpenInventorSceneHandler::AddThis (const G4Trap &trap) {
-  if(currentSeparator==0) return;
+#ifdef USE_SOPOLYHEDRON
+  Geant4_SoPolyhedron* soPolyhedron = 
+    new Geant4_SoPolyhedron(trap.CreatePolyhedron());
+  soPolyhedron->solid.setValue(fModelingSolid?TRUE:FALSE);
+  fCurrentSeparator->addChild(soPolyhedron);  
+#else
   G4ThreeVector SymAxis=trap.GetSymAxis();
     SoTrap *g4Trap = new SoTrap();
   g4Trap->pDz  = trap.GetZHalfLength();
@@ -639,18 +576,25 @@ void G4OpenInventorSceneHandler::AddThis (const G4Trap &trap) {
   g4Trap->pDy2 = trap.GetYHalfLength2();
   g4Trap->pDx3 = trap.GetXHalfLength3();
   g4Trap->pDx4 = trap.GetXHalfLength4();
-  currentSeparator->addChild(g4Trap);
+  fCurrentSeparator->addChild(g4Trap);
+#endif
 }
 
 void G4OpenInventorSceneHandler::AddThis (const G4Trd &trd) {
-  if(currentSeparator==0) return;
+#ifdef USE_SOPOLYHEDRON
+  Geant4_SoPolyhedron* soPolyhedron = 
+    new Geant4_SoPolyhedron(trd.CreatePolyhedron());
+  soPolyhedron->solid.setValue(fModelingSolid?TRUE:FALSE);
+  fCurrentSeparator->addChild(soPolyhedron);  
+#else
   SoTrd *g4Trd = new SoTrd();
   g4Trd->fDx1 = trd.GetXHalfLength1();
   g4Trd->fDx2 = trd.GetXHalfLength2();
   g4Trd->fDy1 = trd.GetYHalfLength1();
   g4Trd->fDy2 = trd.GetYHalfLength2();
   g4Trd->fDz  = trd.GetZHalfLength();
-  currentSeparator->addChild(g4Trd);
+  fCurrentSeparator->addChild(g4Trd);
+#endif
 }
 
 void G4OpenInventorSceneHandler::PreAddThis
@@ -677,7 +621,7 @@ void G4OpenInventorSceneHandler::PreAddThis
   // For leaf parts, we first locate the mother volume and find its separator 
   // through the dictionary.
 
-  // The private member currentSeparator is set to the proper 
+  // The private member fCurrentSeparator is set to the proper 
   // location on in the
   // scene database so that when the solid is actually 
   // added (in addthis), it is
@@ -691,6 +635,14 @@ void G4OpenInventorSceneHandler::PreAddThis
   const double red=g4Col.GetRed ();
   const double green=g4Col.GetGreen ();
   const double blue=g4Col.GetBlue ();
+  if(pVisAttribs->IsForceDrawingStyle()
+    &&(pVisAttribs->GetForcedDrawingStyle()==G4VisAttributes::solid)) {
+    fModelingSolid = true;
+  } else {
+    fModelingSolid = false;
+  }
+  //printf("debug : PreAddThis : %g %g %g : %d\n",
+    //red,green,blue,pVisAttribs->IsVisible());
                
   if(!fpCurrentLV || !fpCurrentPV) return; //GB 
 
@@ -703,6 +655,7 @@ void G4OpenInventorSceneHandler::PreAddThis
   //
   if (fpCurrentLV->GetNoDaughters()!=0 ||
       fpCurrentPV->IsReplicated()) {
+    //printf("debug : PreAddThis : container\n");
 
     //
     // Make the detector tree kit:
@@ -711,13 +664,21 @@ void G4OpenInventorSceneHandler::PreAddThis
 
     SoSeparator* previewSeparator   =  
       (SoSeparator*) g4DetectorTreeKit->getPart("previewSeparator",TRUE);
+    previewSeparator->renderCaching = SoSeparator::OFF;
+
     SoSeparator* fullSeparator =  
       (SoSeparator*) g4DetectorTreeKit->getPart("fullSeparator",   TRUE);
-    previewSeparator->renderCaching=SoSeparator::OFF;
-    fullSeparator->renderCaching=SoSeparator::OFF;
+    fullSeparator->renderCaching = SoSeparator::OFF;
+
     SoMaterial* matColor = (SoMaterial*) 
       g4DetectorTreeKit->getPart("appearance.material", TRUE);
     matColor->diffuseColor.setValue(red,green,blue);
+
+    SoLightModel* lightModel = (SoLightModel*)
+      g4DetectorTreeKit->getPart("appearance.lightModel", TRUE);
+    lightModel->model.setValue(fModelingSolid ?
+			       SoLightModel::PHONG:
+			       SoLightModel::BASE_COLOR);
    
     //
     // Add the full separator to the dictionary; it is indexed by the 
@@ -726,7 +687,7 @@ void G4OpenInventorSceneHandler::PreAddThis
     //       of volumes since it is no longer possible to retrieve the mother
     //       physical volume. The algorithm requires review !   - GC
     //
-    SeparatorMap[fpCurrentPV->GetLogicalVolume()]=fullSeparator;
+    fSeparatorMap[fpCurrentPV->GetLogicalVolume()] = fullSeparator;
 
     //
     // Find out where to add this volume.  This means locating its mother.  
@@ -734,13 +695,18 @@ void G4OpenInventorSceneHandler::PreAddThis
     //
     G4LogicalVolume* MotherVolume = fpCurrentPV->GetMotherLogical();
     if (MotherVolume) {
-      if (SeparatorMap.find(MotherVolume) != SeparatorMap.end()) {
-        SeparatorMap[MotherVolume]->addChild(g4DetectorTreeKit);
+      if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
+        //printf("debug : PreAddThis : mother found in map\n");
+        fSeparatorMap[MotherVolume]->addChild(g4DetectorTreeKit);
+      } else {
+        //printf("debug : PreAddThis : mother not found in map !!!\n");
+        fDetectorRoot->addChild(g4DetectorTreeKit);
       }
     } else {
-      staticRoot->addChild(g4DetectorTreeKit);
+      //printf("debug : PreAddThis : has no mother\n");
+      fDetectorRoot->addChild(g4DetectorTreeKit);
     }
-    currentSeparator = previewSeparator;
+    fCurrentSeparator = previewSeparator;
   } else {
     //
     // This block of code is executed for leaf parts.
@@ -748,13 +714,12 @@ void G4OpenInventorSceneHandler::PreAddThis
     //
     // Locate the mother volume and find it's corresponding full separator
     //
-    currentSeparator = 0;
+    fCurrentSeparator = 0;
     G4LogicalVolume* MotherVolume = fpCurrentPV->GetMotherLogical();
     if (MotherVolume) {
-      if (SeparatorMap.find(MotherVolume) != SeparatorMap.end()) {
-        currentSeparator=SeparatorMap[MotherVolume];
-      }
-      else {
+      if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
+        fCurrentSeparator = fSeparatorMap[MotherVolume];
+      } else {
         G4cerr << "ERROR - G4OpenInventorSceneHandler::PreAddThis()"
                << "        OIScene leaf protocol error. Mother volume "
                << MotherVolume->GetName() <<  " missing." << G4endl;
@@ -765,18 +730,27 @@ void G4OpenInventorSceneHandler::PreAddThis
     }
     //
     // If the mother volume has no full separator, then the solid and its 
-    // attributes will go under "staticRoot"
+    // attributes will go under "fDetectorRoot"
     //
-    if (!currentSeparator) {
+    if (!fCurrentSeparator) {
       SoMaterial* newColor = new SoMaterial();
       newColor->diffuseColor.setValue(red,green,blue);
-      staticRoot->addChild(newColor);
-      currentSeparator=staticRoot;
-    }
-    else {
+      fDetectorRoot->addChild(newColor);
+      SoLightModel* lightModel = new SoLightModel;
+      lightModel->model.setValue(fModelingSolid ?
+			         SoLightModel::PHONG:
+			         SoLightModel::BASE_COLOR);
+      fDetectorRoot->addChild(lightModel);
+      fCurrentSeparator = fDetectorRoot;
+    } else {
       SoMaterial* newColor = new SoMaterial();
       newColor->diffuseColor.setValue(red,green,blue);
-      currentSeparator->addChild(newColor);    
+      fCurrentSeparator->addChild(newColor);    
+      SoLightModel* lightModel = new SoLightModel;
+      lightModel->model.setValue(fModelingSolid ?
+			         SoLightModel::PHONG:
+			         SoLightModel::BASE_COLOR);
+      fCurrentSeparator->addChild(lightModel);
     }
   }
   //
@@ -786,8 +760,8 @@ void G4OpenInventorSceneHandler::PreAddThis
   SoSFMatrix* oiMat = oiTran.GetOIMatrix();
   SoMatrixTransform* xform = new SoMatrixTransform;
   xform->matrix.setValue(oiMat->getValue());
-  currentSeparator->addChild(new SoResetTransform);
-  currentSeparator->addChild(xform);
+  fCurrentSeparator->addChild(new SoResetTransform);
+  fCurrentSeparator->addChild(xform);
 }
 
 

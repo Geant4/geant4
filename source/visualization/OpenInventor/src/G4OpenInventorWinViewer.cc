@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.9 2004-11-10 13:29:19 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.10 2004-11-11 16:11:57 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -150,7 +150,7 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
   fSelection = new SoSelection;
   fSelection->policy = SoSelection::SINGLE;
   fSelection->ref();
-  fSelection->addChild(fG4OpenInventorSceneHandler.root);
+  fSelection->addChild(fG4OpenInventorSceneHandler.fRoot);
 
   G4String wName = fName;
 
