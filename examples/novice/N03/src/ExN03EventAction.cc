@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.cc,v 1.18 2003-05-28 22:34:05 duns Exp $
+// $Id: ExN03EventAction.cc,v 1.19 2003-06-10 12:42:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -132,7 +132,7 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
   
   // extract the trajectories and draw them
   
-  if (G4VVisManager::GetConcreteInstance() && false)
+  if (G4VVisManager::GetConcreteInstance())
     {
      G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
      G4int n_trajectories = 0;
