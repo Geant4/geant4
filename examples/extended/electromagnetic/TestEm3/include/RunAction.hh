@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.6 2004-01-16 08:12:25 vnivanch Exp $
+// $Id: RunAction.hh,v 1.7 2004-01-16 08:20:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,49 +53,51 @@ namespace AIDA {
 
 class RunAction : public G4UserRunAction
 {
-  public:
+public:
 
-    RunAction(DetectorConstruction*);
-   ~RunAction();
+  RunAction(DetectorConstruction*);
+  ~RunAction();
 
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+  void BeginOfRunAction(const G4Run*);
+  void   EndOfRunAction(const G4Run*);
 
-    void fillPerEvent(G4int,G4double,G4double,G4double);
+  void fillPerEvent(G4int,G4double,G4double,G4double);
 
 #ifdef G4ANALYSIS_USE
-    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
-    G4double GetHistoUnit(G4int id) {return histoUnit[id];}
+  AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
+  G4double GetHistoUnit(G4int id) {return histoUnit[id];}
 #endif
 
-    void SetHisto (G4int, G4int, G4double, G4double, G4String);
+  void SetHisto (G4int, G4int, G4double, G4double, G4String);
 
-    void PrintDedxTables();
-    
-  private:
-    
-    std::vector<G4double> sumEAbs; 
-    std::vector<G4double> sum2EAbs; 
-    std::vector<G4double> sumLAbs; 
-    std::vector<G4double> sum2LAbs;
-    std::vector<G4double> sumEleav; 
-    std::vector<G4double> sum2Eleav;       
+  void SetFileName(const G4String& s) {filename = s;};
 
-    DetectorConstruction* Detector;    
-    RunActionMessenger*   runMessenger;        
-    G4String              filename;
-    std::vector<G4String> hid;    
-    std::vector<G4String> htitle;    
-    std::vector<G4int>    hbins;    
-    std::vector<G4double> hmin;    
-    std::vector<G4double> hmax;    
-    std::vector<G4double> histoUnit;
-    G4int  nmax;    
+  void PrintDedxTables();
+    
+private:
+    
+  std::vector<G4double> sumEAbs; 
+  std::vector<G4double> sum2EAbs; 
+  std::vector<G4double> sumLAbs; 
+  std::vector<G4double> sum2LAbs;
+  std::vector<G4double> sumEleav; 
+  std::vector<G4double> sum2Eleav;       
+
+  DetectorConstruction* Detector;    
+  RunActionMessenger*   runMessenger;        
+  G4String              filename;
+  std::vector<G4String> hid;    
+  std::vector<G4String> htitle;    
+  std::vector<G4int>    hbins;    
+  std::vector<G4double> hmin;    
+  std::vector<G4double> hmax;    
+  std::vector<G4double> histoUnit;
+  G4int  nmax;    
     
 #ifdef G4ANALYSIS_USE    
-    AIDA::ITree* tree;
-    AIDA::IHistogramFactory* hf;
-    std::vector<AIDA::IHistogram1D*> histo;
+  AIDA::ITree* tree;
+  AIDA::IHistogramFactory* hf;
+  std::vector<AIDA::IHistogram1D*> histo;
 #endif      
              
 };

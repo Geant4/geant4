@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.7 2004-01-16 08:12:25 vnivanch Exp $
+// $Id: RunAction.cc,v 1.8 2004-01-16 08:20:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,7 +50,8 @@
 RunAction::RunAction(DetectorConstruction* det)
 :Detector(det)
 {
-  nmax = MaxAbsor;
+  //  nmax = MaxAbsor;
+  nmax = 10;
 
   sumEAbs.resize(nmax); 
   sum2EAbs.resize(nmax); 
@@ -98,11 +99,13 @@ void RunAction::SetHisto(G4int k,
   
   G4cout << "---->SetHisto: " << title << " ; " << nbins << " bins from "
          << valmin << " " << unit << " to " << valmax << unit  << G4endl;
-	   
-#ifdef G4ANALYSIS_USE  
+  hid[k] = id[k+1];
+  htitle[k] = title;
+  hbins[k] = nbins;
+  hmin[k] = valmin;
+  hmax[k] = valmax;
   histoUnit[k] = valunit;
-  histo[k] = hf->createHistogram1D(id[k+1],title,nbins,valmin,valmax);
-#endif
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
