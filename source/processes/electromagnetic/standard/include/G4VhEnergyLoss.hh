@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.hh,v 1.1 2000-04-25 14:33:03 maire Exp $
+// $Id: G4VhEnergyLoss.hh,v 1.2 2000-05-23 14:39:27 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -90,9 +90,7 @@ class G4VhEnergyLoss : public G4VEnergyLoss
 
   protected:
 
-    virtual G4double GetConstraints(const G4DynamicParticle *aParticle,
-                            G4Material *aMaterial);
-                                       
+
   private:
 
   // hide  assignment operator 
@@ -100,16 +98,33 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     G4VhEnergyLoss(G4VhEnergyLoss &);
     G4VhEnergyLoss & operator=(const G4VhEnergyLoss &right);
 
+    G4double GetConstraints(const G4DynamicParticle *aParticle,
+                            G4Material *aMaterial);
+                                       
 
 // =====================================================================
 
   public:
 
 
-// ====================================================================
-//  static part of the class
+  protected:
 
-  public:  // With description
+    G4PhysicsTable* theLossTable ;
+   
+    G4double MinKineticEnergy ;
+
+  private:
+
+    static G4PhysicsTable* theDEDXTable ;
+
+    G4double fdEdx;      // computed in GetContraints
+    G4double fRangeNow ; // computed in GetContraints
+    G4double linLossLimit ;
+
+
+// ====================================================================
+//  static part of the cc:  // With description
+  public:
 
     static void  SetNbOfProcesses(G4int nb) {NbOfProcesses=nb;};
     // Sets number of processes giving contribution to the energy loss
@@ -123,8 +138,12 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     static G4int GetNbOfProcesses()         {return NbOfProcesses;};
     // Gets number of processes giving contribution to the energy loss
     // ( default value = 1)
-
  
+
+    static void SetMinDeltaCutInRange(G4double value)
+                                    {MinDeltaCutInRange = value;
+                                     setMinDeltaCutInRange = true ;}
+
     static void SetLowerBoundEloss(G4double val) {LowerBoundEloss=val;};
     static void SetUpperBoundEloss(G4double val) {UpperBoundEloss=val;};
     static void SetNbinEloss(G4int nb)           {NbinEloss=nb;};
@@ -133,9 +152,16 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     static G4double GetUpperBoundEloss() {return UpperBoundEloss;};
     static G4int    GetNbinEloss()       {return NbinEloss;};
 
+
   protected:
 
     static void BuildDEDXTable(const G4ParticleDefinition& aParticleType);
+
+
+  private:
+
+    static const G4Proton* theProton ;
+    static const G4AntiProton* theAntiProton ;
 
 // ====================================================================
 
@@ -161,7 +187,6 @@ class G4VhEnergyLoss : public G4VEnergyLoss
 
     //  processes inherited from G4VhEnergyLoss 
     //   register themselves  in the static array Recorder
-
     static G4int NbOfProcesses     ;
     static G4PhysicsTable** RecorderOfpProcess;
     static G4PhysicsTable** RecorderOfpbarProcess;
@@ -172,26 +197,13 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     static G4double ptableElectronCutInRange;
     static G4double pbartableElectronCutInRange;
 
+    static G4double MinDeltaCutInRange; // minimum cut for delta rays
+    static G4double* MinDeltaEnergy ;
+    static G4bool setMinDeltaCutInRange ;
+
     static G4double Charge ;
 
-    G4PhysicsTable* theLossTable ;
-
-    G4double linLossLimit ;
-   
-    G4double MinKineticEnergy ;
-
-    G4double fdEdx;      // computed in GetContraints
-    G4double fRangeNow ; // computed in GetContraints
-
-    static const G4Proton* theProton ;
-    static const G4AntiProton* theAntiProton ;
-
-    // just to keep hLowEnergyIonisation working ......
-    // ***********************************************
-    static G4double LowestKineticEnergy;
-    static G4double HighestKineticEnergy;
-    static G4int TotBin; 
-    // ***********************************************
+    static G4EnergyLossMessenger* hLossMessenger;
 
   private:
 
@@ -214,7 +226,9 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     static G4PhysicsTable* thepbarRangeCoeffBTable;
     static G4PhysicsTable* thepbarRangeCoeffCTable;
 
-    static G4PhysicsTable* theDEDXTable ;
+    static G4double c0N,c1N,c2N,c3N ;    // coeffs to compute nb of deltas
+    static G4int Ndeltamax ;             // upper limit for nb of subcutoff
+                                         // delta rays in one step
 
 
 };
@@ -223,5 +237,3 @@ class G4VhEnergyLoss : public G4VEnergyLoss
 
 #endif
  
-
-
