@@ -2,7 +2,6 @@
 #include "G4RunManager.hh"
 #include <unistd.h>
 #define _GNU_SOURCE
-#include <getopt.h>
 #include "g4std/set"
 
 #include <iomanip>

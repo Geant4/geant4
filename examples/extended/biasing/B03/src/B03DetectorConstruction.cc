@@ -155,7 +155,7 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
     new G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
 		      name, 0, false, 0);
 
-  vector< G4VPhysicalVolume * > physvolumes;
+  G4std::vector< G4VPhysicalVolume * > physvolumes;
   physvolumes.push_back(worldCylinder_phys);
 
 
@@ -216,7 +216,7 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
   fIStore = new G4IStore(*worldCylinder_phys);
   // for the world volume repnum is -1 !!!!!!!!!!!!!!!!!!!!!!!
   int n = 0;
-  for (vector<G4VPhysicalVolume *>::iterator it = physvolumes.begin();
+  for (G4std::vector<G4VPhysicalVolume *>::iterator it = physvolumes.begin();
        it != physvolumes.end(); it++) {
     double i = pow(2, n++);
     G4cout << "Going to assign importance: " << i << ", to volume" 
