@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50PhysicsList.cc,v 1.13 2003-04-25 08:43:35 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.14 2003-04-28 14:58:57 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -39,11 +39,15 @@
 #include "Tst50PhotonPenelope.hh"
 #include "Tst50PhotonPolarised.hh"
 #include "Tst50ElectronStandard.hh"
+#include "Tst50ElectronStandardback.hh"
 #include "Tst50ElectronEEDL.hh"
 #include "Tst50ElectronEEDLrange.hh"
+#include "Tst50ElectronEEDLback.hh"
 #include "Tst50ElectronPenelope.hh"
 #include "Tst50PositronStandard.hh"
-
+#include "Tst50ProtonStandard.hh"
+#include "Tst50ProtonEEDL.hh"
+#include "Tst50ProtonEEDLziegler.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -59,7 +63,8 @@
 Tst50PhysicsList::Tst50PhysicsList(): G4VModularPhysicsList(),
 				      electronIsRegistered(false), 
 				      positronIsRegistered(false),
-				      photonIsRegistered(false)
+				      photonIsRegistered(false), 
+                                      protonIsRegistered(false)
 {
   defaultCutValue = 1. * mm;
   //cutForGamma = defaultCutValue;
@@ -128,8 +133,8 @@ void Tst50PhysicsList::AddPhysicsList(const G4String& name)
       else 
 	{
 	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
-	  //RegisterPhysics( new Tst50PhotonPenelope(name) );
-	  // photonIsRegistered = true;
+	  RegisterPhysics( new Tst50PhotonPenelope(name) );
+	   photonIsRegistered = true;
 	}
     }
   // Register polarised processes for photons
@@ -162,6 +167,20 @@ void Tst50PhysicsList::AddPhysicsList(const G4String& name)
 	  electronIsRegistered = true;
 	}
     }
+ if (name == "electron-standard-back") 
+    {
+      if (electronIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- electron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50ElectronStandardback(name) );	  
+	  electronIsRegistered = true;
+	}
+    }
   // Register LowE-EEDL processes for electrons
   if (name == "electron-eedl") 
     {
@@ -174,6 +193,20 @@ void Tst50PhysicsList::AddPhysicsList(const G4String& name)
 	{
 	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
 	  RegisterPhysics( new Tst50ElectronEEDL(name) );
+	  electronIsRegistered = true;
+	}
+   } 
+ if (name == "electron-eedl-back") 
+    {
+      if (electronIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- electron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50ElectronEEDLback(name) );
 	  electronIsRegistered = true;
 	}
    } 
@@ -222,6 +255,52 @@ void Tst50PhysicsList::AddPhysicsList(const G4String& name)
 	  positronIsRegistered = true;
 	}
     }
+
+ if (name == "proton-standard") 
+    {
+      if (protonIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- proton e.m. List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50ProtonStandard(name) );
+	  protonIsRegistered = true;
+	}
+    }
+
+ if (name == "proton-eedl") 
+    {
+      if (protonIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- proton e.m. List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50ProtonEEDL(name) );
+	  protonIsRegistered = true;
+	}
+    }
+
+if (name == "proton-eedl-ziegler") 
+    {
+      if (protonIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- proton e.m. List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50ProtonEEDLziegler(name) );
+	  protonIsRegistered = true;
+	}
+    }
+
 
   if (electronIsRegistered && positronIsRegistered && photonIsRegistered)
     {

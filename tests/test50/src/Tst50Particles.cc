@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50Particles.cc,v 1.1 2003-04-25 08:43:34 guatelli Exp $
+// $Id: Tst50Particles.cc,v 1.2 2003-04-28 14:58:56 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -35,6 +35,7 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include "G4Proton.hh"
 
 Tst50Particles::Tst50Particles(const G4String& name)
   :  G4VPhysicsConstructor(name)
@@ -48,4 +49,5 @@ void Tst50Particles::ConstructParticle()
   G4Gamma::GammaDefinition();
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
+  G4Proton :: ProtonDefinition();
 }

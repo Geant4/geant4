@@ -1,7 +1,4 @@
 
-
-
-/*
 #include "Tst50PhotonPenelope.hh"
 
 #include "G4ProcessManager.hh"
@@ -39,5 +36,5 @@ void Tst50PhotonPenelope::ConstructProcess()
 	}   
     }
 }
-*/
+
 

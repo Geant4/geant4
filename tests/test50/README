@@ -1,136 +1,153 @@
---------> Available tests
-1) CSDA range test for e- 
-2) Stopping Power for e-
-4) gamma attenuation coefficient 
-         
+--------> Available tests <----------
 
--------> Test Configuration
-
----*gamma attenuation coefficient:
-
-with Standard Processes
-$G4WORKDIR/bin/Linux-g++/test50 < gamma_attenuation_standard.in
-
-with LowEnergy processes
-$G4WORKDIR/bin/Linux-g++/test50 < gamma_attenuation_low.in
-
----* e- stopping power
+1) CSDA range and Stopping Power test for e-,p 
+2) gamma attenuation coefficient
+3) gamma process' cross section 
+4) e-  backscattering
+5) e-,e+ transmission        
 
 
+--------> Set-up <----------
 
------------------------------------------------------------------------------
-In file.in you can define:
+G4SYSTEM = Linux-g++
+compiler = gcc-3.2
 
-1) The user must define the test type
+no ANALYSIS 
 
-The tests are exclusive with each other
+--------> Modular Physics <----------
 
-////////////////////////////////////////////////////
-   Command            |  Test Type
-////////////////////////////////////////////////////
+choice of physics lists:
+
+--> gamma    - photon-standard (Standard Processes)
+             - photon-epdl     (LowEnergy Processes)
+             - photon-penelope (Penelope Processes)
+
+--> e-       - electron-standard (Standard Processes)
+             - electron-eedl     (LowEnergyProcesses)
+             - electron-eedl-range
+                      (LowEnergy with CSDA range and SP conditions)/                         - electron-standard-back 
+                      (Standard Processes with backscattering conditions )
+             - electron-eedl-back
+                     (LowEnergy  Processes with backscattering conditions )
+             
+--> e+       - positron-standard (Standard Processes)         
+
+--> proton   - proton-standard(Standard Processes)
+             - proton-eedl (stopping power ICRU_49
+               LowEnergy Processes)*       
+             - proton-eedl-ziegler(stopping power Ziegler85
+               LowEnergy Processes)*
+               
+               *processes set for CSDA range and SP
+
+
+--------> How to run <----------
+
+setenv G4WORKDIR workdir
+gmake
+$G4WORKDIR/bin/Linux-g++/test50 file.in
+
+examples of file.in for each kind of test are available in 
+the directory test_input_files
+
  
-   #range             |  CSDA range test for e- 
-   on 
+--------> Output <----------
 
-   #StoppingPower     |  Stopping Power for e-
-   on
+test50_output.txt
 
-   #RadiationYield    |  Radiation Yeld for e-
-   on
 
-   #Foil              |  Energy deposit, transmission, backscattering,
-   on                    bremmstrahlung spectra, track length, 
-                         number of steps in a track, step length, proton mean range,
-                         gamma attenuation coefficient 
+--------> Test description <----------
+
+1) CSDA range and Stopping Power test for e-,p 
+
+experimental set-up: monochromatic e- are delivered from the center of 
+                     a box filled with absorber material with random direction
+
+physics set-up: no multiple scattering
+                no energy loss fluctuations
+                /physics/cutE 1. m : no secondaries
+
+tune parameters: /target/setMaxStep ->important!!
+                 at least 10 steps to calculate CSDA range and StoppingPower 
+
   
-2) The user can change the following features:
+example of file.in for e- test: - test_input_files/SP_lowE_electron.in
 
-///////////////////////////////////////////////////////////////////////////////////////
-   Command |                        |Default configuration     | Other 
-//////////////////////////////////////////////////////////////////////////////////////
+                                - test_input_files/SP_standard_electron.in
 
-#processes |The Geant4  LowE Models |Standard model  
-LowE       |are set for e-, gamma,  |for all the particles  
-           |protons                 |
- 
-#setMaxStep|The max step for all    |the max step is not fixed |it must be set for e-
-on         |the tracks is fixed     |                          |CSDA range and e-
-                                                               |Stopping Power 
 
-#Hadronic  |The hadronic            |the hadronic              |they must be set
-on         |interactions are        |interactions are          |to calculate the mean 
-           |switched on for protons |switched off              |proton range
+example of file.in for proton test: - test_input_files/SP_standard_proton.in
 
-______________________________________________________________________________________
+                                    - test_input_files/SP_lowE_proton.in
+                                    
+                                    - test_input_files/SP_lowE_ziegler_proton.in
 
-How to define parameters for each test in the file.mac:
 
-/////////////////////////////////////////////////////////////////////////////////
-1) e- CSDA  range, e- StoppingPower 
-if the physics is Standard:             /process/eLoss/fluct false
+2) gamma attenuation coefficient
 
-definition of the particle:             /gun/particle e-
+experimental set-up: a monochromatic gamma beam impinges a slab filled up
+                     with absorber material; the slab is placed in vacuum
 
-primary particle initial position:      /gun/position 0. 0. 0.
+physics set-up: all gamma processes must be defined
 
-primary particle initial energy:        /gun/energy 0.1 MeV
+tune parameters: target/setTargetThick -> defines the thickness of the target
+                 /physics/cutE -> defines the secondaries' production thereshold 
 
-primary particle direction is random:   /gun/randomDirection on 
+example of file.in for gamma test: 
+                                  - test_input_files/gamma_standard.in
+                                 
+                                  - test_input_files/gamma_lowE.in
+                                  
+                                  - test_input_files/gamma_penelope.in
+                                
 
-set target material:                    /target/setTargetMat Hydrogen
+3) gamma process' cross section  
 
-the target must be a box:               /target/setTargetThick 1500. cm
-                                        /target/setTargetX 1500. cm
-                                        /target/setTargetY 1500. cm
-                                        /target/update
+experimental set-up: a monochromatic gamma beam impinges a slab filled up
+                     with absorber material; the slab is placed in vacuum
 
-the Max Step must be fixed:            /target/setMaxStep 0.001 cm
-(1/100 of the theorical range value) 
+physics set-up: one single gamma process is  defined
 
-Cut in range high:                     /le/cutE 1. m
-No interest in secondary particles
+tune parameters: target/setTargetThick -> defines the thickness of the target
+                 /physics/cutE -> defines the secondaries' production thereshold 
+example of file.in for gamma cross section  test:    
+                   - test_input_files/gamma_cross_standard.in*
+                   - test_input_files/gamma_cross_lowE.in*
+                   - test_input_files/gamma_cross_penelope.in*
 
-for the tracking:                     /tracking/storeTrajectory 1
-beamOn :                              /run/beamOn 1 
-the e- CSDA or Stopping Power value 
-is fixed. One event is ok
+*example for photoelectric cross section, analogue for other gamma processes.
 
-/////////////////////////////////////////////////////////////////////////////////
-2) Energy deposit, transmission, backscattering,
-   bremmstrahlung spectra, track length, 
-   number of steps in a track, step length, proton mean range,
-   gamma attenuation coefficient 
 
-The test configuration consists in a beam impinging a target;
-il the file.mac you can define:
+4) e- backscattering
 
-1)for the tracking:             /tracking/storeTrajectory 1
-2)the target thickness:         /target/setTargetThick 5. mm
-                                /target/update
-3)the target material:          /target/setTargetMat  Silicon
-                              
-4) the cut in range:            /le/cutE 0.1 micrometer
-if you are interested in
-secondary particles info
-(cut lower, more info on
- secondary particles)
+experimental set-up:  a monochromatic e- beam impinges a slab filled up
+                     with absorber material; the slab is placed in vacuum
 
-5)the primary particle:        /gun/particle gamma
- (e-, e+, gamma, proton)
+physics set-up: all processes for all particles (e-, e+, gamma),
+                Facrange set equal to 0.00005
 
-6)the primary particle energy: /gun/energy 10. MeV
+tune parameters:/physics/cutE ->defines the secondaries' production thereshold 
 
-7)the number of events:        /run/beamOn 1000000
-1000000 for each configuration
+example of file.in for e- backscattering test:    
+                   - test_input_files/backscattering_standard_electron.in
+               
+                   - test_input_files/backscattering_lowE_electron.in
 
-________________________________________________________________________
+5) e-, e+  transmission:
 
---------->Output
+experimental set-up:  a monochromatic e- beam impinges a slab filled up
+                     with absorber material; the slab is placed in vacuum
 
-1) CSDA range test for e- : Range.txt 
-2) Stopping Power for e-  : StoppingPower.txt
-3) Radiation Yield for e-  : radiationYield.txt
-4) particles impinging on a target : test50.hbk
-                                     Transmission.txt
+physics set-up: all processes for all particles (e-, e+, gamma)
 
-                       
+tune parameters:/physics/cutE ->defines the secondaries' production thereshold 
+                /target/setTargetThick -> defines the thickness of the target
+
+example of file.in for e- transmission test with standard processes: 
+                 
+                   - test_input_files/transmission_standard_electron.in
+                     
+example of file.in for e+ transmission test with LowEnergy  processes: 
+                 
+                   - test_input_files/transmission_lowE_positron.in
+  

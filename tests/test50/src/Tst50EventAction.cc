@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.14 2003-03-12 17:21:24 pia Exp $
+// $Id: Tst50EventAction.cc,v 1.15 2003-04-28 14:58:56 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,8 +46,8 @@
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
  
-Tst50EventAction::Tst50EventAction(Tst50PrimaryGeneratorAction* Primary,G4bool RY,G4String file, G4bool foil):
-  hit_CollID(-1),p_Primary(Primary),filename(file),RadiationY(RY),Foil(foil)
+Tst50EventAction::Tst50EventAction(Tst50PrimaryGeneratorAction* Primary):
+  hit_CollID(-1),p_Primary(Primary)
 { }
 
 Tst50EventAction::~Tst50EventAction()
@@ -65,6 +65,8 @@ void Tst50EventAction::BeginOfEventAction(const G4Event*)
  
 void Tst50EventAction::EndOfEventAction(const G4Event* evt)
 {
+
+  /*
   G4double initialEnergy=p_Primary->GetInitialEnergy();
 	
 #ifdef G4ANALYSIS_USE
@@ -83,13 +85,13 @@ void Tst50EventAction::EndOfEventAction(const G4Event* evt)
     }
 #endif
 
-  /*
+  
     G4cout<<"energia iniziale in MeV:"<<initialEnergy/MeV<<G4endl;
     G4cout<<"energia in MeV:"<<energy/MeV<<G4endl;
     G4double radiation=(energy/initialEnergy);
     G4cout<<"Radiation yield:"<< radiation<<G4endl;
  
-  */
+ 
   if (RadiationY)
     {
       G4std::ofstream pmtfile(filename, G4std::ios::app);
@@ -99,6 +101,7 @@ void Tst50EventAction::EndOfEventAction(const G4Event* evt)
 	pmtfile<<'\t'<<radiation<<'\t'<<'\t'<<initialEnergy/MeV<<G4endl;
       }
     }
+  */
   // get number of stored trajectories
   //
   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();

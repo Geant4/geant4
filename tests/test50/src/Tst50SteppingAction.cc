@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.28 2003-04-25 08:43:35 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.29 2003-04-28 14:58:57 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,9 +47,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA, Tst50PrimaryGeneratorAction* PG, Tst50RunAction* RA, 
- Tst50DetectorConstruction* DET,G4String file,G4bool SP,G4bool range, G4bool RY, G4bool foil ):
-  IDold(-1),eventaction (EA), p_Primary(PG), runaction(RA), detector(DET), filename(file), StoppingPower(SP),Range(range),RadiationY(RY), Foil(foil) 
+Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA, Tst50PrimaryGeneratorAction* PG, Tst50RunAction* RA, Tst50DetectorConstruction* DET):
+  IDold(-1),eventaction (EA), p_Primary(PG), runaction(RA), detector(DET) 
 { 
 
   
@@ -68,7 +67,7 @@ Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 G4int evno = eventaction->GetEventno() ;//mi dice a che evento siamo 
 
  G4int run_ID= runaction-> GetRun_ID();
-
+G4bool flag=runaction-> Get_flag();
 //prendo l'energia iniziale delle particelle primarie
   initial_energy= p_Primary->GetInitialEnergy();
  
@@ -299,11 +298,13 @@ if (process=="LowEnConversion"||process=="conv")
 
  */
 
+ if (flag==false)
+   {
  //Stopping Power test
- if(particle_name=="e-")
+ if(particle_name=="e-" || particle_name=="proton" )
       {
 
-G4std::ofstream pmtfile(filename, G4std::ios::app);
+G4std::ofstream pmtfile("Test50_output.txt", G4std::ios::app);
     //new particle 
  if(0 ==Step->GetTrack()->GetParentID() ) {
    
@@ -332,7 +333,7 @@ G4double TotalStoppingPower=(energyLost/stepLength);
 if(pmtfile.is_open()){
 
   if (run_ID==0 && evno==0) { 
-    pmtfile<<" Test ---------> e- Stopping Power <----------"<< 
+    pmtfile<<" Test --------->  "<<particle_name<<"  Stopping Power and CSDA range <----------"<< 
       (detector->GetMaterialName())<<G4endl;
    pmtfile<<"initial energy (MeV)    SP (MeV * cm2/g)     CSDArange (g/cm2)"<<G4endl;
      
@@ -368,7 +369,7 @@ range=0.;
 		   }
  }}
 
-
+   }
  //Radiation yield
 /*
 if (RadiationY)

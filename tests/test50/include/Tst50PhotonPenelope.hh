@@ -1,7 +1,7 @@
 
 #ifndef TST50PHOTONPENELOPE_HH
 #define TST50PHOTONPENELOPE_HH 1
-/*
+
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
@@ -18,6 +18,6 @@ public:
   
   virtual void ConstructProcess();
 };
-*/
+
 #endif
 

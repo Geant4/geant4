@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50PhysicsList.hh,v 1.9 2003-04-25 08:43:34 guatelli Exp $
+// $Id: Tst50PhysicsList.hh,v 1.10 2003-04-28 14:58:56 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Original author unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -78,7 +78,7 @@ private:
   G4bool electronIsRegistered;
   G4bool positronIsRegistered;
   G4bool photonIsRegistered;
-
+  G4bool protonIsRegistered;
   G4double cutForGamma;
   G4double cutForElectron;
 

@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.20 2003-04-25 08:43:33 guatelli Exp $
+// $Id: test50.cc,v 1.21 2003-04-28 14:58:56 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,19 +58,8 @@
 int main(int argc,char** argv) {
        
   HepRandom::setTheEngine(new RanecuEngine);
-
-
-  G4bool rangeOn = false;
-  G4bool maxStep = false;
-  G4bool radiationYield = false;
-  G4bool end = true;
-  G4bool stoppingPower = true;
-  G4bool foil = false;
-  G4bool hadronic = false;
-  G4bool penelope = false;
-  G4bool back = false;
-  
-  G4cout << argc << ":argc" << G4endl;
+ 
+ 
   G4String filename = "Test50_output.txt";  
 
   G4cout.setf(G4std::ios::scientific, G4std::ios::floatfield);
@@ -78,94 +67,11 @@ int main(int argc,char** argv) {
       G4std::ofstream ofs;
       ofs.open(filename);
       {
-	ofs << " Geant4 version:  geant4-05-00 "<< G4endl;
+	ofs << " test50 output "<< G4endl;
       } 
       ofs.close();                     
 		
      
-
-  /*
-  if (argc == 1) { G4cout << "Input file is not specified!" << G4endl; }
-  G4std::ifstream* fin=new G4std::ifstream();
-  G4String fname=argv[1];
-  fin->open(fname.c_str());
-  if ( !fin->is_open() )
-    { 
-      G4cout << "InputFile<" << fname<<">doesn't exist!Exit" << G4endl;
-      exit(1);
-    }
-  // Read input file//
-  G4cout << "Available commands are: " << G4endl;
-  G4cout << "#processes (LowE/Standard/Penelope)" << G4endl; 
-  G4cout << "#range (on/off)" << G4endl;  
-  G4cout << "#setMaxStep (on/off)" << G4endl;
-  G4cout << "#StoppingPower (on/off)" << G4endl; 
-  G4cout << "#RadiationYield (on/off)" << G4endl; 
-  G4cout << "#Foil (on/off)" << G4endl;
-  G4cout << "#Back (on/off)" << G4endl;
-  G4cout << "#Hadronic (on/off)" << G4endl; 
-
-
-  G4String line, line1, line2;
- 
-  do
-    {
-      (*fin) >> line;
-      G4cout << "Next line" << line << G4endl; 
- 
-     if (line == "#processes")
-	{ 
-          line1="";
-	  (*fin) >> line1;
-	  G4cout << "Next line" << line1 << G4endl; 
-	  if (line1 == "LowE") 
-	    { 
-	      lowE=true;
-	      G4cout << "arrivo ai LowEnergy" << G4endl;
-	    }
-	  else if (line1 == "Penelope")
-	    {
-	      penelope = true; 
-	      G4cout << penelope <<" :gamma Penelope processes switched on" << G4endl;
-	    }
-	}
- 
-     if (line == "#range") 
-	{ 
-	  line1 = ""; 
-	  (*fin) >> line1;
-	  if (line1 == "on") 
-	    { 
-	      rangeOn = true; 
-	      G4cout << rangeOn << "range" << G4endl;
-	    } 
-	}       
-
-      if (line == "#setMaxStep") { line1 =" "; (*fin) >> line1;
-      if (line1 == "on") { maxStep = true; G4cout << maxStep << "maxStep" << G4endl;} }       
-
-      if (line == "#StoppingPower") { line1 = ""; (*fin) >> line1;
-      if (line1 == "on") { stoppingPower = true; G4cout << stoppingPower << "StoppingPower" << G4endl;} }       
-   
-      if (line == "#RadiationYield") { line1=""; (*fin) >> line1;
-      if (line1 == "on") { radiationYield = true; G4cout << radiationYield << "RadiationYield" << G4endl;} } 
- 
-      if (line == "#Foil") { line1=""; (*fin) >> line1;
-      if (line1 == "on") { foil = true; G4cout << foil << " :foil configuration set" << G4endl;} }   
- 
-      if (line == "#Back") { line1=""; (*fin) >> line1;
-      if (line1 == "on") { back = true; G4cout << back << " :backscattering experiment set" << G4endl;} }   
-
-      if (line == "#Hadronic") { line1=""; (*fin) >> line1;
-      if (line1 == "on") { hadronic = true; G4cout << hadronic << " :Hadronic proton processes switched on" << G4endl;}}
-
-      if (line == "end") { end = false;}
-
-    } while(end);           
-  
-  */
-   
-  
   G4int seed=time(NULL);
   HepRandom ::setTheSeed(seed);
   // my Verbose output class
@@ -193,16 +99,14 @@ int main(int argc,char** argv) {
   Tst50PrimaryGeneratorAction* p_Primary = new Tst50PrimaryGeneratorAction(); 
   runManager->SetUserAction(p_Primary);
 
-  Tst50RunAction* p_run=new Tst50RunAction(foil); 
+  Tst50RunAction* p_run=new Tst50RunAction(); 
   runManager->SetUserAction(p_run);  
 
-  Tst50EventAction *pEventAction = new Tst50EventAction(p_Primary,radiationYield,filename,foil);
+  Tst50EventAction *pEventAction = new Tst50EventAction(p_Primary);
  
   runManager->SetUserAction(pEventAction);
      
-  Tst50SteppingAction* steppingaction = new Tst50SteppingAction(pEventAction, p_Primary, p_run,
-								Tst50detector, filename, stoppingPower,
-								rangeOn, radiationYield, foil);
+  Tst50SteppingAction* steppingaction = new Tst50SteppingAction(pEventAction, p_Primary, p_run,Tst50detector);
   runManager->SetUserAction(steppingaction);
 
   //Initialize G4 kernel

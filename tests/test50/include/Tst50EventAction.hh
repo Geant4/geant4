@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.hh,v 1.9 2003-03-12 17:21:23 pia Exp $
+// $Id: Tst50EventAction.hh,v 1.10 2003-04-28 14:58:56 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -39,7 +39,7 @@ class Tst50PrimaryGeneratorAction;
 class Tst50EventAction : public G4UserEventAction
 {
 public:
-  Tst50EventAction(Tst50PrimaryGeneratorAction*, G4bool, G4String, G4bool);
+  Tst50EventAction(Tst50PrimaryGeneratorAction*);
   ~Tst50EventAction();
 
   void BeginOfEventAction(const G4Event*);
