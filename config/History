@@ -1,4 +1,4 @@
-$Id: History,v 1.7 1999-04-09 04:54:03 fbehner Exp $
+$Id: History,v 1.8 1999-04-12 11:09:42 johna Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,7 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-9th April 1999 Frank Behner
+12th April 1999  John Allison
+- In liblist.c:  - fixed bug to distinguish, e.g., track from tracking.
+                 - improved printing.
+                 - improved "Usage" comments.
+                 - improved protection against bad input format.
+                 - 
+- In binmake.gmk: - fully implemented -d option.
+                  - Used $(ECHO) to solve platform dependency of echo.
+                  - Gave /tmp files a unique name.
+                  - Removed repeated libraries - no longer necessary, all
+                      circular dependencies seem solved.
+
+9th April 1999  Frank Behner
 - Fixed bug in liblist in -d option
 - Changed binmake.gmk to use liblist -d
 
