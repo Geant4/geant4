@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2000-01-23 09:51:16 tsasaki Exp $
+$Id: History,v 1.10 2000-06-01 03:19:10 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Hune 1, 00 H.Kurashige
+- Add "const" to all G4VTouchable pointer
+
 Jan 23, 00 T.Sasaki 
 - GetCurrentValue() in G4TrackingMessenger.cc have a return value
 - SetUserAction in G4SteppingManager.hh protected null pointers
