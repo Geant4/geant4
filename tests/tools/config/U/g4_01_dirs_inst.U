@@ -30,7 +30,10 @@ esac
 
 case "$g4install" in
 '')
-	g4install=$HOME/geant4
+	if [ X$HOME = X/ ] ; then
+	G4HOME=""
+	fi
+	g4install=$G4HOME/geant4
 	;;
 esac
 
