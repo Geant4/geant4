@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 1999-05-07 13:13:40 stesting Exp $
+# $Id: GNUmakefile,v 1.8 1999-06-02 18:30:22 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -84,9 +84,6 @@ clean_libs:
 	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE) clean_libs); done
 	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE) clean_libs); done
 	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE) clean_libs); done
-ifdef CFRONT
-	@rm -rf $(G4TREP)
-endif
 	@rm -rf $(G4TMP)/$(G4SYSTEM)/libname.map
 
 clean:
