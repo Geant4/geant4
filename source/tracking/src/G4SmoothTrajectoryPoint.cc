@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.cc,v 1.4 2002-10-28 11:11:05 johna Exp $
+// $Id: G4SmoothTrajectoryPoint.cc,v 1.5 2002-11-05 16:15:51 jacek Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,7 +33,7 @@
 
 #include "G4SmoothTrajectoryPoint.hh"
 
-G4Allocator<G4SmoothTrajectoryPoint> aTrajectoryPointAllocator;
+G4Allocator<G4SmoothTrajectoryPoint> aSmoothTrajectoryPointAllocator;
 
 G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint()
 : fAuxiliaryPointVector(0)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.3 2002-10-28 11:11:04 johna Exp $
+// $Id: G4SmoothTrajectory.cc,v 1.4 2002-11-05 16:15:51 jacek Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,7 +48,7 @@
 #include "G4VisAttributes.hh"
 #include "G4VVisManager.hh"
 
-G4Allocator<G4SmoothTrajectory> aTrajectoryAllocator;
+G4Allocator<G4SmoothTrajectory> aSmoothTrajectoryAllocator;
 
 G4SmoothTrajectory::G4SmoothTrajectory()
 :  positionRecord(0), fTrackID(0), fParentID(0),

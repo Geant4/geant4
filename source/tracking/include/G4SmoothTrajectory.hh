@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.hh,v 1.3 2002-10-28 11:10:56 johna Exp $
+// $Id: G4SmoothTrajectory.hh,v 1.4 2002-11-05 16:15:50 jacek Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -124,28 +124,18 @@ public: // with description
 
 };
 
-extern G4Allocator<G4SmoothTrajectory> aTrajectoryAllocator;
+extern G4Allocator<G4SmoothTrajectory> aSmoothTrajectoryAllocator;
 
 inline void* G4SmoothTrajectory::operator new(size_t)
 {
   void* aTrajectory;
-  aTrajectory = (void*)aTrajectoryAllocator.MallocSingle();
+  aTrajectory = (void*)aSmoothTrajectoryAllocator.MallocSingle();
   return aTrajectory;
 }
 
 inline void G4SmoothTrajectory::operator delete(void* aTrajectory)
 {
-  aTrajectoryAllocator.FreeSingle((G4SmoothTrajectory*)aTrajectory);
+  aSmoothTrajectoryAllocator.FreeSingle((G4SmoothTrajectory*)aTrajectory);
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
