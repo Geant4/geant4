@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ThreeVector.hh,v 1.2 1999-12-15 14:49:46 gunter Exp $
+// $Id: G4ThreeVector.hh,v 1.3 1999-12-15 17:17:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -20,8 +20,7 @@
 
 #include "globals.hh"
 #include "geomdefs.hh"
-
-class G4std::ostream;
+#include "g4std/iostream"
 
 class G4ThreeVector {
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.13 1999-12-15 14:50:00 gunter Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.14 1999-12-15 17:17:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -485,7 +485,7 @@ G4ThreeVector G4BREPSolidPCone::SurfaceNormal(const G4ThreeVector& Pt) const
 
     return n;
   } else {
-    cout << "Warning ... PCone not able to return normal .. " << G4endl;
+    G4cout << "Warning ... PCone not able to return normal .. " << G4endl;
     return ( G4ThreeVector(1,0,0));
   }
 }
