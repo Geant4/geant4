@@ -274,6 +274,7 @@ class BooleanProcessor {
   void draw_faces(int, int, int);
   void print_face(int);
   void print_edge(int);
+  int get_processor_error() const {return processor_error;}
 };
 
 inline void ExtFace::invert()
