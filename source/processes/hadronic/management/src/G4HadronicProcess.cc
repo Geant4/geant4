@@ -84,7 +84,7 @@
   }
  
  G4VParticleChange *G4HadronicProcess::GeneralPostStepDoIt(
-  const G4Track &aTrack, const G4Step &aStep )
+  const G4Track &aTrack, const G4Step &)
   {
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
     G4Material *aMaterial = aTrack.GetMaterial();
@@ -181,7 +181,7 @@
   }
   
   G4IsoResult * G4HadronicProcess::
-  ExtractResidualNucleus(const G4Track & aTrack,
+  ExtractResidualNucleus(const G4Track & ,
                          const G4Nucleus & aNucleus,
                          G4VParticleChange * aResult)
   {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.16 2003-02-13 08:37:49 jwellisc Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.17 2003-05-30 10:36:48 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,7 +56,7 @@ G4double  G4ElectroNuclearCrossSection::lastSig=0.;// Last value of the Cross Se
 
 // The main member function giving the gamma-A cross section (E in GeV, CS in mb)
 G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aPart,
-                                                       const G4Element* anEle, G4double T)
+                                                       const G4Element* anEle, G4double )
 {
   static const G4int nE=336; // !!  If you change this, change it in GetFunctions() (*.hh) !!
   static const G4int mL=nE-1;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.hh,v 1.7 2002-12-12 19:16:49 gunter Exp $
+// $Id: G4PhotoNuclearCrossSection.hh,v 1.8 2003-05-30 10:36:48 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,7 +54,7 @@ public:
 
   ~G4PhotoNuclearCrossSection() {}
 
-  G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* anElement)
+  G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* )
   {
 	//return theHadronCrossSections->IsApplicable(aParticle, anElement);
 	// Possible prototype

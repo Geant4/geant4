@@ -2246,11 +2246,11 @@
   G4FastVector<G4ReactionProduct,128> &vec,
   G4int &vecLen,
   G4ReactionProduct &modifiedOriginal,
-  const G4DynamicParticle *originalTarget,
+  const G4DynamicParticle */*originalTarget*/,
   G4ReactionProduct &currentParticle,
   G4ReactionProduct &targetParticle,
   const G4Nucleus &targetNucleus,
-  G4bool &targetHasChanged )
+  G4bool &/* targetHasChanged*/ )
   {
     // 
     // derived from original FORTRAN code TWOB by H. Fesefeldt (15-Sep-1987)

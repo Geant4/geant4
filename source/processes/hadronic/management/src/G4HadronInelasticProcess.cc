@@ -39,8 +39,8 @@
  
  G4double G4HadronInelasticProcess::GetMeanFreePath(
   const G4Track &aTrack,
-  G4double previousStepSize,
-  G4ForceCondition *condition )
+  G4double ,
+  G4ForceCondition *)
   {
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
     if( aParticle->GetDefinition() != theParticle && 

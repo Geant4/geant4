@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LightMedia.cc,v 1.6 2002-12-12 19:18:40 gunter Exp $
+// $Id: G4LightMedia.cc,v 1.7 2003-05-30 10:37:17 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Light Media Charge and/or Strangeness Exchange
@@ -63,8 +63,8 @@
  
   G4DynamicParticle *
    G4LightMedia::PionMinusExchange(
-    const G4DynamicParticle* incidentParticle,
-    const G4Nucleus& targetNucleus )
+    const G4DynamicParticle* ,
+    const G4Nucleus& )
   {
     return (G4DynamicParticle*)NULL;
   }
@@ -143,8 +143,8 @@
  
   G4DynamicParticle *
    G4LightMedia::KaonZeroLongExchange(
-    const G4DynamicParticle* incidentParticle,
-    const G4Nucleus& targetNucleus )
+    const G4DynamicParticle* ,
+    const G4Nucleus& )
   {
     G4ParticleDefinition* aKaonZS = G4KaonZeroShort::KaonZeroShort();
     
@@ -158,8 +158,8 @@
  
   G4DynamicParticle *
    G4LightMedia::KaonMinusExchange(
-    const G4DynamicParticle* incidentParticle,
-    const G4Nucleus& targetNucleus )
+    const G4DynamicParticle* ,
+    const G4Nucleus& )
   {
     return (G4DynamicParticle*)NULL;
   }

@@ -58,7 +58,7 @@ public:
    }
 
    G4double GetCrossSection(const G4DynamicParticle* aParticle,
-                            const G4Element* anElement, G4double aTemperature)
+                            const G4Element* anElement, G4double /*aTemperature*/)
    {
       return theHadronCrossSections->GetInelasticCrossSection(aParticle,
                                                               anElement);

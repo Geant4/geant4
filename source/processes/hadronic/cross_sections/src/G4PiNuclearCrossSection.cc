@@ -162,7 +162,7 @@ G4PiNuclearCrossSection::
 G4double G4PiNuclearCrossSection::
 GetCrossSection(const G4DynamicParticle* aParticle, 
                 const G4Element* anElement,
-                G4double T)
+                G4double )
 {
   // precondition
   G4bool ok = false;

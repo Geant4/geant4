@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.cc,v 1.9 2002-12-12 19:16:52 gunter Exp $
+// $Id: G4PhotoNuclearCrossSection.cc,v 1.10 2003-05-30 10:36:48 hpw Exp $
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -50,7 +50,7 @@ G4double  G4PhotoNuclearCrossSection::lastSP=0.; // Last value of the ShadowingP
 
 // The main member function giving the gamma-A cross section (E in GeV, CS in mb)
 G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aPart,
-                                                     const G4Element* anEle, G4double T)
+                                                     const G4Element* anEle, G4double )
 {
   static const G4double THmin=2.;          // minimum Energy Threshold
   static const G4double dE=1.;             // step for the GDR table
