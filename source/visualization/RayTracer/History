@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2002-10-16 11:42:47 johna Exp $
+$Id: History,v 1.14 2002-11-11 18:18:15 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+11th November 2002  Hajime Yoshida and Minamimoto (raytracer-V04-00-01)
+- Corrected G4RayTracer.cc devide-by-zero.
 
 16th October 2002  John Allison  (raytracer-V04-00-00)
 - Tag for changes in G4VTrajectory, etc.
