@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.21 2004-06-02 09:28:55 gcosmo Exp $
+# $Id: globlib.gmk,v 1.22 2004-06-08 09:38:19 gcosmo Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -113,8 +113,12 @@ clean:
 clean_libs:
 	@echo Removing lib$(name).a/.$(SHEXT) and sub-libraries ...
 	@for lib in $(SUBLIBS); do ( \
-				  rm -f $(G4LIBDIR)/lib$$lib.a;\
-				  rm -f $(G4LIBDIR)/lib$$lib.$(SHEXT) );\
+				  rm -f $(G4LIBDIR)/*$$lib.a;\
+				  rm -f $(G4LIBDIR)/*$$lib.lib;\
+				  rm -f $(G4LIBDIR)/*$$lib.exp;\
+				  rm -f $(G4LIBDIR)/*$$lib.$(SHEXT) );\
 				done
-	@rm -f $(G4LIBDIR)/lib$(name).a
-	@rm -f $(G4LIBDIR)/lib$(name).$(SHEXT)
+	@rm -f $(G4LIBDIR)/*$(name).a
+	@rm -f $(G4LIBDIR)/*$(name).lib
+	@rm -f $(G4LIBDIR)/*$(name).exp
+	@rm -f $(G4LIBDIR)/*$(name).$(SHEXT)
