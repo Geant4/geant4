@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.2 2003-10-13 12:57:39 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.3 2003-10-14 07:50:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -383,7 +383,7 @@ G4bool G4VEmProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
   theLambdaTable = new G4PhysicsTable(numOfCouples);
   yes = theLambdaTable->RetrievePhysicsTable(filename,ascii);
   if ( yes ) {
-      if (0 < verboseLevel) {
+      if (-1 < verboseLevel) {
         G4cout << "Lambda table for " << particleName << " is retrieved from <"
                << filename << ">"
                << G4endl;
@@ -392,7 +392,7 @@ G4bool G4VEmProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
   } else {
       theLambdaTable->clearAndDestroy();
       theLambdaTable = 0;
-      if (0 < verboseLevel) {
+      if (-1 < verboseLevel) {
         G4cout << "Lambda table for " << particleName << " in file <"
                << filename << "> is not exist"
                << G4endl;

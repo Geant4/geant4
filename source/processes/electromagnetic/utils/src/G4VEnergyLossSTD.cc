@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.50 2003-08-29 13:56:16 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.51 2003-10-14 07:50:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1114,14 +1114,14 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
     yes = table->RetrievePhysicsTable(filename,ascii);
     if ( yes ) {
       SetDEDXTable(table);
-      if (0 < verboseLevel) {
+      if (-1 < verboseLevel) {
         G4cout << "DEDX table for " << particleName << " is retrieved from <"
                << filename << ">"
                << G4endl;
       }
     } else {
       table->clearAndDestroy();
-      if (0 < verboseLevel) {
+      if (-1 < verboseLevel) {
         G4cout << "DEDX table for " << particleName << " in file <"
                << filename << "> is not exist"
                << G4endl;
@@ -1133,14 +1133,14 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
     yes = table->RetrievePhysicsTable(filename,ascii);
     if ( yes ) {
       SetRangeTable(table);
-      if (0 < verboseLevel) {
+      if (-1 < verboseLevel) {
         G4cout << "Range table for " << particleName << " is retrieved from <"
                << filename << ">"
                << G4endl;
       }
     } else {
       table->clearAndDestroy();
-      if (0 < verboseLevel) {
+      if (-1 < verboseLevel) {
         G4cout << "Range table for " << particleName << " in file <"
                << filename << "> is not exist"
                << G4endl;
@@ -1152,14 +1152,14 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
     yes = table->RetrievePhysicsTable(filename,ascii);
     if ( yes ) {
       SetInverseRangeTable(table);
-      if (0 < verboseLevel) {
+      if (-1 < verboseLevel) {
         G4cout << "InverseRange table for " << particleName << " is retrieved from <"
                << filename << ">"
                << G4endl;
       }
     } else {
       table->clearAndDestroy();
-      if (0 < verboseLevel) {
+      if (-1 < verboseLevel) {
         G4cout << "InverseRange table for " << particleName << " in file <"
                << filename << "> is not exist"
              << G4endl;
@@ -1171,14 +1171,14 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
     yes = table->RetrievePhysicsTable(filename,ascii);
     if ( yes ) {
       SetLambdaTable(table);
-      if (0 < verboseLevel) {
+      if (-1 < verboseLevel) {
         G4cout << "Lambda table for " << particleName << " is retrieved from <"
                << filename << ">"
                << G4endl;
       }
     } else {
       table->clearAndDestroy();
-      if (0 < verboseLevel) {
+      if (-1 < verboseLevel) {
         G4cout << "Lambda table for " << particleName << " in file <"
                << filename << "> is not exist"
                << G4endl;

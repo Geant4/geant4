@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.11 2003-07-23 11:36:27 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.12 2003-10-14 07:50:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -321,7 +321,7 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(G4ParticleDefinition* part,
   theLambdaTable = new G4PhysicsTable(numOfCouples);
   res = theLambdaTable->RetrievePhysicsTable(filename,ascii);
   if ( res ) {
-    if (0 < verboseLevel) {
+    if (-1 < verboseLevel) {
         G4cout << "Lambda table for " << num << " is retrieved from <"
                << filename << ">"
                << G4endl;
@@ -329,7 +329,7 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(G4ParticleDefinition* part,
   } else {
     theLambdaTable->clearAndDestroy();
     theLambdaTable = 0;
-    if (0 < verboseLevel) {
+    if (-1 < verboseLevel) {
         G4cout << "Lambda table for " << num << " in file <"
                << filename << "> is not exist"
                << G4endl;
