@@ -1,4 +1,4 @@
-$Id: History,v 1.192 2002-06-23 03:36:00 stanaka Exp $
+$Id: History,v 1.193 2002-06-24 07:34:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+24th June 2002  Gabriele Cosmo  (vis-V04-00-10)
+- Exclude latest changes to OpenGL driver (opengl-V04-00-03), causing compilation
+  errors on some platforms (DEC-cxx).
 
 23th June 2002  Satshi Tanaka  (vis-V04-00-09)
 - Bug fixes in G4VRMLXFileSceneHandlerFunc.icc
