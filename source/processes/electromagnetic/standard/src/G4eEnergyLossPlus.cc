@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLossPlus.cc,v 1.12 1999-08-16 09:56:53 maire Exp $
+// $Id: G4eEnergyLossPlus.cc,v 1.13 1999-09-08 15:15:21 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // $Id: 
@@ -31,6 +31,7 @@
  
 #include "G4eEnergyLossPlus.hh"
 #include "G4EnergyLossMessenger.hh"
+#include "G4Poisson.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -1198,7 +1199,6 @@ G4VParticleChange* G4eEnergyLossPlus::AlongStepDoIt( const G4Track& trackData,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4Poisson.hh"
 
 G4double G4eEnergyLossPlus::GetLossWithFluct(const G4DynamicParticle* aParticle,
                                                G4Material* aMaterial,
