@@ -192,7 +192,7 @@ class G4GHEKinematicsVector
            {
              G4double cost = 1.0- 2.0*G4UniformRand();
              G4double sint = std::sqrt(1. - cost*cost);
-             G4double phi  = M_2PI* G4UniformRand();
+             G4double phi  = twopi* G4UniformRand();
              momentum.setX( momnew * sint * std::cos(phi));
              momentum.setY( momnew * sint * std::sin(phi));
              momentum.setZ( momnew * cost);
@@ -232,7 +232,7 @@ class G4GHEKinematicsVector
            {
              G4double cost = 1.0-2.0*G4UniformRand();
              G4double sint = std::sqrt(1. - cost*cost);
-             G4double phi  = M_2PI* G4UniformRand();
+             G4double phi  = twopi* G4UniformRand();
              momentum.setX( momnew * sint * std::cos(phi));
              momentum.setY( momnew * sint * std::sin(phi));
              momentum.setZ( momnew * cost);
@@ -277,7 +277,7 @@ class G4GHEKinematicsVector
             { 
               G4double cost = 1.-2.*G4UniformRand();
               G4double sint = std::sqrt(1.-cost*cost);
-              G4double phi  = M_2PI*G4UniformRand();
+              G4double phi  = twopi*G4UniformRand();
               momentum.setX( momnew*sint*std::cos(phi));
               momentum.setY( momnew*sint*std::sin(phi));
               momentum.setZ( momnew*cost);
