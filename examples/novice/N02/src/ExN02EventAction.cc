@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02EventAction.cc,v 1.8 2002-01-09 17:24:10 ranjard Exp $
+// $Id: ExN02EventAction.cc,v 1.9 2004-03-08 15:14:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,7 +78,7 @@ void ExN02EventAction::EndOfEventAction(const G4Event* evt)
      for (G4int i=0; i<n_trajectories; i++) 
         { G4Trajectory* trj = (G4Trajectory*)
 	                            ((*(evt->GetTrajectoryContainer()))[i]);
-          trj->DrawTrajectory(50);
+          trj->DrawTrajectory(1000);
         }
     }
 }
