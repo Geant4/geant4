@@ -118,8 +118,8 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 {
   static G4int eventcounter=0;
   //if(eventcounter == 100*(eventcounter/100) )
-  if(getenv("KCDEBUG") ) G4cerr << " ######### Reaction number starts ######### "<<eventcounter<<G4endl;
   eventcounter++;
+  if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction number starts ######### "<<eventcounter<<G4endl;
   G4LorentzVector initial4Momentum = aTrack.Get4Momentum();
   if(initial4Momentum.e()-initial4Momentum.m()<theCutOnP/2.)
   {
@@ -205,7 +205,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
       new G4DynamicParticle((*iter)->GetDefinition(),
 			    (*iter)->GetTotalEnergy(),
 			    (*iter)->GetMomentum());
-    if(getenv("KCDEBUG") ) 
+    if(getenv("BCDEBUG") )
     {
       if(abs(aNew->GetDefinition()->GetPDGEncoding()) >100
          && abs(aNew->GetDefinition()->GetPDGEncoding()) < 300) G4cout << "Pion info "<<aNew->GetDefinition()->GetPDGEncoding() <<" "<<aNew->GetKineticEnergy()<<G4endl;
@@ -232,7 +232,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
   delete the3DNucleus;
   the3DNucleus = NULL;  // protect from wrong usage...
 
-  if(getenv("KCDEBUG") ) G4cerr << " ######### Reaction number ends ######### "<<eventcounter<<G4endl;
+  if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction number ends ######### "<<eventcounter<<G4endl;
   return &theParticleChange;
 }
 
@@ -402,11 +402,11 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 
 #ifdef debug_G4BinaryCascade
 
-  PrintKTVector(&theProjectileList,std::string(" theProjectileList");
-  PrintKTVector(&theSecondaryList,std::string(" theSecondaryList");
+  PrintKTVector(&theProjectileList,std::string(" theProjectileList"));
+  PrintKTVector(&theSecondaryList,std::string(" theSecondaryList"));
   G4cout << "theTargetList size: " << theTargetList.size() << G4endl;
-//  PrintKTVector(&theTargetList,std::string(" theTargetList");
-  PrintKTVector(&theCapturedList,std::string(" theCapturedList");
+//  PrintKTVector(&theTargetList,std::string(" theTargetList"));
+  PrintKTVector(&theCapturedList,std::string(" theCapturedList"));
 
   G4cout << " ExcitE be4 Correct : " <<GetExcitationEnergy() << G4endl;
   G4cout << " Mom Transfered to nucleus : " << theMomentumTransfer << " " << theMomentumTransfer.mag() << G4endl;
@@ -752,6 +752,8 @@ void G4BinaryCascade::BuildTargetList()
      //G4cout << "G4BinaryCascade::BuildTargetList(): Warning - invalid nucleus (A,Z)=("
 	//	<< currentA << "," << currentZ << ")" << G4endl;
   }
+//     G4cout << "G4BinaryCascade::BuildTargetList():  nucleus (A,Z)=("
+//		<< currentA << "," << currentZ << ")" << G4endl;
 
 }
 
@@ -1799,7 +1801,7 @@ G4Fragment * G4BinaryCascade::FindFragments()
  * 	 << G4endl;
  */
 //
-//  if(getenv("KCDEBUG") ) G4cerr << "Fragment A, Z "<< a <<" "<< z<<G4endl;
+//  if(getenv("BCDEBUG") ) G4cerr << "Fragment A, Z "<< a <<" "<< z<<G4endl;
   if ( z < 1 ) return 0;
   G4Fragment * fragment = new G4Fragment(a,z,GetFinalNucleusMomentum());
 
