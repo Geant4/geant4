@@ -34,12 +34,6 @@ case "$g4install" in
 	;;
 esac
 
-case "$g4base" in
-'')
-	g4base=$g4install/source
-	;;
-esac
-
 case "$g4workdir" in
 '')
 	g4workdir=$g4install
@@ -100,7 +94,6 @@ g4include=$ans
 
 fi
 
-g4base=$g4install/source
 #if test "X$g4include" = "X[NOT DEFINED]" ; then
 #g4include=""
 #fi
