@@ -20,6 +20,18 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PhysicsList.cc,v 1.3 2004-12-02 10:34:08 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   PhysicsList
+//
+// Author:      V.Ivanchenko 03.05.2004
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -28,163 +40,163 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
-#include "PhysListParticles.hh"
-#include "PhysListGeneral.hh"
-#include "PhysListEmStandard.hh"
-#include "PhysListEmStandardX.hh"
-#include "PhysListEm52.hh"
-#include "PhysListEmPenelope.hh"
-#include "PhysListEmLowenergy.hh"
-#include "PhysListHadronElastic.hh"
-#include "PhysListBinaryCascade.hh"
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
+#include "ParticlesBuilder.hh"
+#include "G4EmQEDBuilder.hh"
+#include "G4EmMuonBuilder.hh"
+#include "G4EmHadronBuilder.hh"
+//#include "G4EmHighEnergyBuilder.hh"
+#include "G4EmQEDBuilder52.hh"
+#include "G4EmQEDBuilder70.hh"
+#include "G4LowEnergyQEDBuilder.hh"
+#include "G4PenelopeQEDBuilder.hh"
+#include "G4EmMuonBuilder52.hh"
+#include "G4EmHadronBuilder52.hh"
+#include "G4StepLimiterBuilder.hh"
+#include "DecaysBuilder.hh"
+#include "EmHadronElasticBuilder.hh"
+#include "EmBinaryCascadeBuilder.hh"
+#include "EmIonBinaryCascadeBuilder.hh"
+#include "EmGammaNucleusBuilder.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
+#include "G4EmProcessOptions.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList()
+PhysicsList::PhysicsList() 
+: G4VModularPhysicsList()
 {
-  G4LossTableManager::Instance();
+  emBuilderIsRegisted = false;
+  decayIsRegisted = false;
+  stepLimiterIsRegisted = false;
+  helIsRegisted = false;
+  bicIsRegisted = false;
+  ionIsRegisted = false;
+  gnucIsRegisted = false;
+  verbose = 0;
+  //  G4LossTableManager::Instance()->SetVerbose(0);
   defaultCutValue = 1.*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
 
-  stepMaxProcess  = 0;
-
   pMessenger = new PhysicsListMessenger(this);
 
-  SetVerboseLevel(1);
-
-   // Particles
-  particleList = new PhysListParticles("particles");
-
-  // General Physics
-  generalPhysicsList = new PhysListGeneral("general");
-
-  // EM physics
-  emName = G4String("standard");
-  emPhysicsList = new PhysListEmStandard(emName);
-
+  // Add Physics builders
+  RegisterPhysics(new ParticlesBuilder());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::~PhysicsList()
-{
-  delete pMessenger;
-  delete generalPhysicsList;
-  delete emPhysicsList;
-  for(size_t i=0; i<hadronPhys.size(); i++) {
-    delete hadronPhys[i];
-  }
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
-  particleList->ConstructParticle();
+  if(verbose > 0) 
+    G4cout << "Construte Particles" << G4endl;
+  G4VModularPhysicsList::ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructProcess()
 {
-  AddTransportation();
-  generalPhysicsList->ConstructProcess();
-  emPhysicsList->ConstructProcess();
-  for(size_t i=0; i<hadronPhys.size(); i++) {
-    hadronPhys[i]->ConstructProcess();
-  }
-  AddStepMax();
+  if(verbose > 0) 
+    G4cout << "Construte Processes" << G4endl;
+  if(!emBuilderIsRegisted) AddPhysicsList("standard");
+  G4VModularPhysicsList::ConstructProcess();
+
+  // Define energy interval for loss processes
+  G4EmProcessOptions emOptions;
+  emOptions.SetMinEnergy(0.1*keV);
+  emOptions.SetMaxEnergy(100.*GeV);
+  emOptions.SetDEDXBinning(90);
+  emOptions.SetLambdaBinning(90);
+  emOptions.SetBuildPreciseRange(false);
+  //emOptions.SetVerbose(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>-1) {
-    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
-  }
-
-  if (name == emName) return;
-
-  if (name == "standard") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard(name);
-
-  } else if (name == "standardX") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardX(name);
-
-  } else if (name == "g4v52") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEm52(name);
-
-  } else if (name == "penelope") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmPenelope(name);
-
-  } else if (name == "lowenergy") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmLowenergy(name);
-
-  } else if (name == "elastic") {
-
-    hadronPhys.push_back( new PhysListHadronElastic(name));
-
-  } else if (name == "binary") {
-
-    hadronPhys.push_back( new PhysListBinaryCascade(name));
-
-  } else {
-
-    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-           << " is not defined"
+  if(verbose > 0) {
+    G4cout << "Add Physics <" << name 
+           << "> emBuilderIsRegisted= " << emBuilderIsRegisted
            << G4endl;
   }
-}
+  if ((name == "standard") && !emBuilderIsRegisted) {
+    RegisterPhysics(new G4EmQEDBuilder());
+    RegisterPhysics(new G4EmMuonBuilder());
+    RegisterPhysics(new G4EmHadronBuilder());
+    emBuilderIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;    
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  } else if (name == "g4v52" && !emBuilderIsRegisted) {
+    RegisterPhysics(new G4EmQEDBuilder52());
+    RegisterPhysics(new G4EmMuonBuilder52());
+    RegisterPhysics(new G4EmHadronBuilder52());
+    emBuilderIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
-#include "StepMax.hh"
+  } else if (name == "standard70" && !emBuilderIsRegisted) {
+    RegisterPhysics(new G4EmQEDBuilder70());
+    RegisterPhysics(new G4EmMuonBuilder());
+    RegisterPhysics(new G4EmHadronBuilder());
+    emBuilderIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
-#include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
+  } else if (name == "lowenergy" && !emBuilderIsRegisted) {
+    RegisterPhysics(new G4LowEnergyQEDBuilder());
+    RegisterPhysics(new G4EmMuonBuilder());
+    RegisterPhysics(new G4EmHadronBuilder());
+    emBuilderIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  } else if (name == "penelope" && !emBuilderIsRegisted) {
+    RegisterPhysics(new G4PenelopeQEDBuilder());
+    RegisterPhysics(new G4EmMuonBuilder());
+    RegisterPhysics(new G4EmHadronBuilder());
+    emBuilderIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
-void PhysicsList::AddStepMax()
-{
-  // Step limitation seen as a process
-  stepMaxProcess = new StepMax();
+  } else if (name == "step_limit" && !stepLimiterIsRegisted) {
+    RegisterPhysics(new G4StepLimiterBuilder());
+    stepLimiterIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
+  } else if (name == "decay" && !decayIsRegisted) {
+    RegisterPhysics(new DecaysBuilder());
+    decayIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
-      if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
-        {
-          pmanager ->AddDiscreteProcess(stepMaxProcess);
-        }
+  } else if (name == "elastic" && !helIsRegisted) {
+    RegisterPhysics(new EmHadronElasticBuilder());
+    helIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+    
+  } else if (name == "binary" && !bicIsRegisted) {
+    RegisterPhysics(new EmBinaryCascadeBuilder());
+    bicIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+    
+  } else if (name == "binary_ion" && !ionIsRegisted) {
+    RegisterPhysics(new EmIonBinaryCascadeBuilder());
+    ionIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+
+  } else if (name == "gamma_nuc" && !gnucIsRegisted) {
+    RegisterPhysics(new EmGammaNucleusBuilder());
+    gnucIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+    
+  } else {
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" 
+           << " fail - module is already regitered or is unknown " << G4endl;
   }
 }
 
@@ -193,18 +205,18 @@ void PhysicsList::AddStepMax()
 void PhysicsList::SetCuts()
 {
 
-  if (verboseLevel >0){
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
 
-  if (verboseLevel>0) DumpCutValuesTable();
+  if (verbose>0) DumpCutValuesTable();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::SetVerbose(G4int val)
+{
+  verbose = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -212,7 +224,6 @@ void PhysicsList::SetCuts()
 void PhysicsList::SetCutForGamma(G4double cut)
 {
   cutForGamma = cut;
-  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -220,7 +231,6 @@ void PhysicsList::SetCutForGamma(G4double cut)
 void PhysicsList::SetCutForElectron(G4double cut)
 {
   cutForElectron = cut;
-  SetParticleCuts(cutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -228,8 +238,6 @@ void PhysicsList::SetCutForElectron(G4double cut)
 void PhysicsList::SetCutForPositron(G4double cut)
 {
   cutForPositron = cut;
-  SetParticleCuts(cutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

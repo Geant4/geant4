@@ -20,56 +20,55 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.3 2004-12-02 10:34:19 vnivanch Exp $
+// $Id: G4StepLimiterPerRegion.hh,v 1.1 2004-12-02 10:34:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Modified:
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
+#ifndef StepMax_h
+#define StepMax_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "G4VDiscreteProcess.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Step.hh"
 
-class PhysicsListMessenger;
+class G4StepLimiterMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class G4StepLimiterPerRegion : public G4VDiscreteProcess
 {
 public:
-  PhysicsList();
-  ~PhysicsList();
 
-  void ConstructParticle();
-  void ConstructProcess();
-  void SetCuts();
+  G4StepLimiterPerRegion(const G4String& processName = "UserMaxStep");
+  ~G4StepLimiterPerRegion();
 
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
+  G4bool IsApplicable(const G4ParticleDefinition&);
 
-  void AddPhysicsList(const G4String&);
-  void SetVerbose(G4int val);
+  void SetMaxStep(G4double);
+
+  G4double GetMaxStep() {return MaxChargedStep;};
+
+  G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
+			                       G4double previousStepSize,
+			                       G4ForceCondition* condition);
+
+  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+
+  G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+  {return 0.;};    // it is not needed here !
 
 private:
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
-  G4bool   emBuilderIsRegisted;
-  G4bool   decayIsRegisted;
-  G4bool   stepLimiterIsRegisted;
-  G4bool   helIsRegisted;
-  G4bool   bicIsRegisted;
-  G4bool   ionIsRegisted;
-  G4bool   gnucIsRegisted;
 
-  PhysicsListMessenger* pMessenger;
+  G4StepLimiterPerRegion & operator=(const G4StepLimiterPerRegion &right);
+  G4StepLimiterPerRegion(const G4StepLimiterPerRegion&);
 
+  G4double MaxChargedStep;
+  G4double ProposedStep;
+
+  G4StepLimiterMessenger*  pMess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

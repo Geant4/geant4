@@ -20,62 +20,44 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.hh,v 1.1 2004-08-03 16:56:21 vnivanch Exp $
+// $Id: G4StepLimiterMessenger.cc,v 1.1 2004-12-02 10:34:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef StepMax_h
-#define StepMax_h 1
+#include "G4StepLimiterMessenger.hh"
 
+#include "G4StepLimiterPerRegion.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "globals.hh"
-#include "G4VDiscreteProcess.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Step.hh"
-
-class Histo;
-class G4VPhysicalVolume;
-class StepMaxMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StepMax : public G4VDiscreteProcess
+G4StepLimiterMessenger::G4StepLimiterMessenger(G4StepLimiterPerRegion* stepM)
+:stepLimiter(stepM)
 {
-  public:
-
-     StepMax(const G4String& processName = "UserMaxStep");
-    ~StepMax();
-
-     G4bool IsApplicable(const G4ParticleDefinition&);
-
-     void SetMaxStep(G4double);
-
-     G4double GetMaxStep() {return MaxChargedStep;};
-
-     G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
-			                       G4double previousStepSize,
-			                       G4ForceCondition* condition);
-
-     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
-
-     G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
-     {return 0.;};    // it is not needed here !
-
-  private:
-
-     G4double MaxChargedStep;
-     G4double ProposedStep;
-     G4double thDensity;
-
-     StepMaxMessenger*  pMess;
-     Histo*             histo;
-     G4VPhysicalVolume* checkVolume;
-     G4VPhysicalVolume* gasVolume;
-     G4bool             first;
-};
+  stepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
+  stepMaxCmd->SetGuidance("Set max allowed step length for the default region");
+  stepMaxCmd->SetParameterName("mxStep",false);
+  stepMaxCmd->SetRange("mxStep>0.");
+  stepMaxCmd->SetUnitCategory("Length");
+  stepMaxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+G4StepLimiterMessenger::~G4StepLimiterMessenger()
+{
+  delete stepMaxCmd;
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4StepLimiterMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == stepMaxCmd)
+    { stepLimiter->SetMaxStep(stepMaxCmd->GetNewDoubleValue(newValue));}
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

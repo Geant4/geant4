@@ -20,59 +20,36 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.3 2004-12-02 10:34:19 vnivanch Exp $
+// $Id: G4StepLimiterMessenger.hh,v 1.1 2004-12-02 10:34:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Modified:
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
+#ifndef G4StepLimiterMessenger_h
+#define G4StepLimiterMessenger_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-class PhysicsListMessenger;
+class G4StepLimiterPerRegion;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class G4StepLimiterMessenger: public G4UImessenger
 {
 public:
-  PhysicsList();
-  ~PhysicsList();
+  G4StepLimiterMessenger(G4StepLimiterPerRegion*);
+  ~G4StepLimiterMessenger();
 
-  void ConstructParticle();
-  void ConstructProcess();
-  void SetCuts();
-
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void AddPhysicsList(const G4String&);
-  void SetVerbose(G4int val);
+  void SetNewValue(G4UIcommand*, G4String);
 
 private:
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
-  G4bool   emBuilderIsRegisted;
-  G4bool   decayIsRegisted;
-  G4bool   stepLimiterIsRegisted;
-  G4bool   helIsRegisted;
-  G4bool   bicIsRegisted;
-  G4bool   ionIsRegisted;
-  G4bool   gnucIsRegisted;
-
-  PhysicsListMessenger* pMessenger;
-
+  G4StepLimiterPerRegion* stepLimiter;
+  G4UIcmdWithADoubleAndUnit* stepMaxCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

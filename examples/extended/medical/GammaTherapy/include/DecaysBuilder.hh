@@ -20,59 +20,52 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.3 2004-12-02 10:34:19 vnivanch Exp $
+//
+// $Id: DecaysBuilder.hh,v 1.1 2004-12-02 10:34:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Modified:
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
+#ifndef DecaysBuilder_h
+#define DecaysBuilder_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class PhysicsListMessenger;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class DecaysBuilder : public G4VPhysicsConstructor
 {
 public:
-  PhysicsList();
-  ~PhysicsList();
+  DecaysBuilder(const G4String& name = "decays");
+  virtual ~DecaysBuilder();
 
-  void ConstructParticle();
-  void ConstructProcess();
-  void SetCuts();
+public:
+  // This method is dummy for physics
+  virtual void ConstructParticle();
 
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void AddPhysicsList(const G4String&);
-  void SetVerbose(G4int val);
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  virtual void ConstructProcess();
 
 private:
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
-  G4bool   emBuilderIsRegisted;
-  G4bool   decayIsRegisted;
-  G4bool   stepLimiterIsRegisted;
-  G4bool   helIsRegisted;
-  G4bool   bicIsRegisted;
-  G4bool   ionIsRegisted;
-  G4bool   gnucIsRegisted;
 
-  PhysicsListMessenger* pMessenger;
+   // hide assignment operator
+  DecaysBuilder & operator=(const DecaysBuilder &right);
+  DecaysBuilder(const DecaysBuilder&);
 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 

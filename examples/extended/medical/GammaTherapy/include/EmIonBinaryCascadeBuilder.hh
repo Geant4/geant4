@@ -20,59 +20,65 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.3 2004-12-02 10:34:19 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Modified:
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// ------------------------------------------------------------
+//	GEANT 4 class header file 
+// Class Description:
+//      This class is an derived class of G4VPhysicsConstructor
+//      It is provide PhysicsList for hadron eleastic process
+//
+// ------------------------------------------------------------
+//	History
+//        Created:       14.10.02  V.Ivanchenko
+//
+//        Modified:
+//
+// ------------------------------------------------------------
+//
+#ifndef EmIonBinaryCascadeBuilder_h
+#define EmIonBinaryCascadeBuilder_h 1
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
-
-#include "G4VModularPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class PhysicsListMessenger;
+class G4HadronInelasticProcess;
+class G4BinaryLightIonReaction;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class PhysicsList: public G4VModularPhysicsList
+class EmIonBinaryCascadeBuilder : public G4VPhysicsConstructor
 {
 public:
-  PhysicsList();
-  ~PhysicsList();
+  EmIonBinaryCascadeBuilder(const G4String& name = "binary_ion");
+  virtual ~EmIonBinaryCascadeBuilder();
 
-  void ConstructParticle();
+public:
+  // This method will be invoked in the Construct() method.
+  // each particle type will be instantiated
+  void ConstructParticle() {};
+
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
   void ConstructProcess();
-  void SetCuts();
-
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void AddPhysicsList(const G4String&);
-  void SetVerbose(G4int val);
 
 private:
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
-  G4bool   emBuilderIsRegisted;
-  G4bool   decayIsRegisted;
-  G4bool   stepLimiterIsRegisted;
-  G4bool   helIsRegisted;
-  G4bool   bicIsRegisted;
-  G4bool   ionIsRegisted;
-  G4bool   gnucIsRegisted;
 
-  PhysicsListMessenger* pMessenger;
-
+  G4HadronInelasticProcess*       theIPdeuteron;
+  G4HadronInelasticProcess*       theIPtriton;
+  G4HadronInelasticProcess*       theIPalpha;
+  G4HadronInelasticProcess*       theIPHe3;
+  G4HadronInelasticProcess*       theIPGenericIon;
+  G4BinaryLightIonReaction*       theBC;
+  G4BinaryLightIonReaction*       theGenIonBC;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 

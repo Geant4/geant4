@@ -20,87 +20,85 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.3 2004-10-11 08:25:44 vnivanch Exp $
+//
+// $Id: G4EmHadronBuilder52.cc,v 1.1 2004-12-02 10:34:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4EmHadronBuilder52
+//
+// Author:      V.Ivanchenko 03.05.2004
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "StepMax.hh"
-#include "StepMaxMessenger.hh"
-#include "Histo.hh"
-#include "G4VPhysicalVolume.hh"
+#include "G4EmHadronBuilder52.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
+
+#include "G4MultipleScattering52.hh"
+
+#include "G4hIonisation52.hh"
+
+#include "G4Electron.hh"
+#include "G4Proton.hh"
+#include "G4GenericIon.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMax::StepMax(const G4String& processName)
- : G4VDiscreteProcess(processName),
-   MaxChargedStep(DBL_MAX),
-   thDensity(0.1*gram/cm3),
-   first(true)
+G4EmHadronBuilder52::G4EmHadronBuilder52(const G4String& name)
+   :  G4VPhysicsConstructor(name)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4EmHadronBuilder52::~G4EmHadronBuilder52()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4EmHadronBuilder52::ConstructParticle()
 {
-  pMess = new StepMaxMessenger(this);
-  histo = Histo::GetPointer();
+  G4Electron::Electron();
+  G4Proton::Proton();
+  G4GenericIon::GenericIon();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMax::~StepMax() { delete pMess; }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
+void G4EmHadronBuilder52::ConstructProcess()
 {
-  return (particle.GetPDGCharge() != 0.);
-}
+  // Add standard EM Processes
+  theParticleIterator->reset();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
 
-void StepMax::SetMaxStep(G4double step) {MaxChargedStep = step;}
+    if(particle->GetPDGMass() > 110.*MeV) {
+      G4ProcessManager* pmanager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double StepMax::PostStepGetPhysicalInteractionLength(
-                                              const G4Track& aTrack,
-                                                    G4double,
-                                                    G4ForceCondition* condition )
-{
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-  ProposedStep = DBL_MAX;
+      if (particleName == "GenericIon") {
 
-  if(first) {
-    //    checkVolume = histo->CheckVolume();
-    gasVolume   = histo->GasVolume();
-    first = false;
-  }
+        pmanager->AddProcess(new G4hIonisation52,      -1, 1, 1);
 
-  G4VPhysicalVolume* pv = aTrack.GetVolume();
+      } else if ((!particle->IsShortLived()) &&
+	         (particle->GetPDGCharge() != 0.0) &&
+	         (particle->GetParticleName() != "chargedgeantino")) {
 
-  if(pv == gasVolume && aTrack.GetPosition().z()<-500.*mm )
-     ProposedStep = 0.0;
-
-  else if((aTrack.GetMaterial())->GetDensity() > thDensity)
-     ProposedStep = MaxChargedStep;
-
-  return ProposedStep;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
-{
-  aParticleChange.Initialize(aTrack);
-  if (ProposedStep == 0.0) {
-    aParticleChange.SetStatusChange(fStopAndKill);
-    if(1 < (Histo::GetPointer())->GetVerbose()) {
-      G4cout << "StepMax: " << aTrack.GetDefinition()->GetParticleName()
-             << " with energy = " << aTrack.GetKineticEnergy()/MeV
-             << " MeV is killed in Check volume at " << aTrack.GetPosition()
-             << G4endl;
+        pmanager->AddProcess(new G4MultipleScattering52,-1,1,1);
+        pmanager->AddProcess(new G4hIonisation52,       -1,2,2);
+      }
     }
   }
-  return &aParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

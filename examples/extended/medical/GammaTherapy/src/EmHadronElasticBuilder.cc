@@ -20,59 +20,54 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.3 2004-12-02 10:34:19 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Modified:
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// 
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
-
-#include "G4VModularPhysicsList.hh"
-#include "globals.hh"
-
-class PhysicsListMessenger;
+#include "EmHadronElasticBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
+#include "G4LElastic.hh"   
+#include "G4HadronElasticProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+EmHadronElasticBuilder::EmHadronElasticBuilder(const G4String& name)
+   :  G4VPhysicsConstructor(name)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+EmHadronElasticBuilder::~EmHadronElasticBuilder()
 {
-public:
-  PhysicsList();
-  ~PhysicsList();
-
-  void ConstructParticle();
-  void ConstructProcess();
-  void SetCuts();
-
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void AddPhysicsList(const G4String&);
-  void SetVerbose(G4int val);
-
-private:
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
-  G4bool   emBuilderIsRegisted;
-  G4bool   decayIsRegisted;
-  G4bool   stepLimiterIsRegisted;
-  G4bool   helIsRegisted;
-  G4bool   bicIsRegisted;
-  G4bool   ionIsRegisted;
-  G4bool   gnucIsRegisted;
-
-  PhysicsListMessenger* pMessenger;
-
-};
+  delete theElasticProcess;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void EmHadronElasticBuilder::ConstructProcess()
+{
+  
+  // Hadron elastic process
+  theElasticProcess = new G4HadronElasticProcess();
+  theElasticProcess->RegisterMe( new G4LElastic() );
+
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pManager = particle->GetProcessManager();
+    if (particle->GetPDGMass() > 110.*MeV && 
+        theElasticProcess->IsApplicable(*particle) &&
+        !particle->IsShortLived()) { 
+      pManager->AddDiscreteProcess(theElasticProcess);
+      /*
+      G4cout << "### Elastic model are registered for " 
+             << particle->GetParticleName()
+             << G4endl;
+      */
+    }
+  }
+
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
