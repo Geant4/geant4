@@ -118,7 +118,7 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 28.94 s
+total time for build X-ray TR tables = 25.32 s
 Em8PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
@@ -182,7 +182,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=41.06 s 
+total time(SetCuts)=40.41 s 
 #
 # Macro file 'run11.mac' for the initialization phase of "TestEm8.cc"
 #
@@ -259,28 +259,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=467.44s Real=470.69s Sys=2.67s
+  User=478.1s Real=489.82s Sys=2.61s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=43.072 +- 0.139551  mm  
+    mean charged track length   in absorber=43.0916 +- 0.170046  mm  
 
-            mean energy deposit in absorber=0.107715 +- 0.00114862  MeV 
+            mean energy deposit in absorber=0.105531 +- 0.00116314  MeV 
 
- mean number of steps in absorber (charged) =511.939 +- 3.34097      
- mean number of steps in absorber (neutral) =5.368 +- 0.0717814      
+ mean number of steps in absorber (charged) =512.368 +- 3.53047      
+ mean number of steps in absorber (neutral) =5.016 +- 0.0725379      
 
-   mean number of charged secondaries = 1.319 +- 0.0355139
+   mean number of charged secondaries = 1.31 +- 0.0370392
 
-   mean number of neutral secondaries = 0.016 +- 0.00396787
+   mean number of neutral secondaries = 0.022 +- 0.00463853
 
-   mean number of e-s =1.319  and e+s =0
+   mean number of e-s =1.31  and e+s =0
 
-(number) transmission coeff=0.089  reflection coeff=0
+(number) transmission coeff=0.099  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1882867964, 1322437216
+ Current couple of seeds = 1249000760, 2104541838
 ----------------------------------------
 #
 #
