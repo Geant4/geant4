@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.13 2003-06-05 16:11:56 japost Exp $
+// $Id: G4MagIntegratorDriver.hh,v 1.14 2003-06-20 22:40:26 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,7 +48,8 @@ class G4MagInt_Driver
 
      G4bool  AccurateAdvance(G4FieldTrack&  y_current,
 		             G4double hstep,
-			     G4double eps); // Requested y_err/hstep
+			     G4double eps,            // Requested y_err/hstep
+			     G4double hinitial=0.0);  // Suggested 1st interval
        // Above drivers for integrator (Runge-Kutta) with stepsize control. 
        // Integrates ODE starting values y_current
        // from current s (s=s0) to s=s0+h with accuracy eps. 
@@ -61,6 +62,19 @@ class G4MagInt_Driver
 				G4double&    dchord_step,
 				G4double&    dyerr )  ;
         // QuickAdvance just tries one Step - it does not ensure accuracy.
+
+     G4bool  QuickAdvance(  G4FieldTrack&      y_posvel,         // INOUT
+		            const G4double     dydx[],  
+		                  G4double     hstep,       // In
+			          G4double&    dchord_step,
+   			          G4double&    dyerr_pos_sq,
+			          G4double&    dyerr_mom_rel_sq
+			    // G4double&    dyerr_ener_sq
+			    ) ;
+       // New QuickAdvance that also just tries one Step
+       //    (so also does not ensure accuracy)
+       //    but does return the errors in  position and
+       //        momentum (normalised: Delta_Integration(p^2)/(p^2) )
 
      G4MagInt_Driver( G4double                hminimum, 
 		      G4MagIntegratorStepper *pItsStepper,
