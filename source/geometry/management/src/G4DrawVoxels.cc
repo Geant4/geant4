@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DrawVoxels.cc,v 1.5 1999-08-03 09:10:01 graignac Exp $
+// $Id: G4DrawVoxels.cc,v 1.6 1999-08-03 09:52:47 graignac Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,7 +26,7 @@
 /****************************/
 
 //Methods that allow changing colors of the drawing
-void G4DrawVoxels::SetVoxelsVisAttributes(G4VisAttributes& VA_voxelX,G4VisAttributes& VA_voxelY,G4CVisAttributes& VA_voxelZ){
+void G4DrawVoxels::SetVoxelsVisAttributes(G4VisAttributes& VA_voxelX,G4VisAttributes& VA_voxelY,G4VisAttributes& VA_voxelZ){
    fVoxelsVisAttributes[0]=VA_voxelX;	//operateur de copie ...
    fVoxelsVisAttributes[1]=VA_voxelY;
    fVoxelsVisAttributes[2]=VA_voxelZ;
@@ -38,7 +38,10 @@ void G4DrawVoxels::SetBoundingBoxVisAttributes(G4VisAttributes& VA_boundingbox){
 
 //#********************************************************************************************************************#
 //#********************************************************************************************************************#
-void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,const G4SmartVoxelHeader* header,G4VoxelLimits& limit,G4PlacedPolyhedronList* ppl)
+void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
+					 const G4SmartVoxelHeader* header,
+					 G4VoxelLimits& limit,
+					 G4PlacedPolyhedronList* ppl)
 {
 //######################################################################################################################
 // Let's draw the selected voxelisation now !
@@ -74,7 +77,7 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,const G4Smar
 
    //Preparing the colored bounding polyhedronBox for the pVolume
    G4PolyhedronBox bounding_polyhedronBox(dx*0.5,dy*0.5,dz*0.5);
-   bounding_polyhedronBox.SetVisAttributes(fBoundingBoxVisAttributes);
+   bounding_polyhedronBox.SetVisAttributes(&fBoundingBoxVisAttributes);
    G4ThreeVector t_centerofBoundingBox((xmin+xmax)*0.5,(ymin+ymax)*0.5,(zmin+zmax)*0.5);
    
    //ppl->resize(ppl->entries()+1);	//manual resize to avoid Rogue grabbing RW_DEFAULT
@@ -156,14 +159,13 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,const G4Smar
 
 //Private Constructor
 G4DrawVoxels::G4DrawVoxels(){
-	fvoxelsVisAttributes[0].SetColour(G4Colour(1.,0.,0.));
-	fvoxelsVisAttributes[1].SetColour(G4Colour(0.,1.,0.));
-	fvoxelsVisAttributes[2].SetColour(G4Colour(0.,0.,1.));
-	fboundingboxVisAttributes.SetColour(G4Colour(.3,0.,.2));
+	fVoxelsVisAttributes[0].SetColour(G4Colour(1.,0.,0.));
+	fVoxelsVisAttributes[1].SetColour(G4Colour(0.,1.,0.));
+	fVoxelsVisAttributes[2].SetColour(G4Colour(0.,0.,1.));
+	fBoundingBoxVisAttributes.SetColour(G4Colour(.3,0.,.2));
 }
 
-G4AffineTransform G4DrawVoxels::GetAbsoluteTransformation(const G4VPhysicalVolume* pv)
-{
+G4AffineTransform G4DrawVoxels::GetAbsoluteTransformation(const G4VPhysicalVolume* pv){
   //Initialisation of the transformation to be computed
   G4AffineTransform transf; //default constructor ie Id
 
@@ -184,7 +186,7 @@ G4AffineTransform G4DrawVoxels::GetAbsoluteTransformation(const G4VPhysicalVolum
 
 
 
-G4PlacedPolyhedronList* G4DrawVoxels::CreatePlacedPolyhedra(const G4LogicalVolume* lv) {
+G4PlacedPolyhedronList* G4DrawVoxels::CreatePlacedPolyhedra(const G4LogicalVolume* lv){
    G4PlacedPolyhedronList* pplist=new G4PlacedPolyhedronList;
    G4VoxelLimits limits;  // Working object for recursive call.
    ComputeVoxelPolyhedra(lv,lv->GetVoxelHeader(),limits,pplist);
