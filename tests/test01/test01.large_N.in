@@ -1,0 +1,75 @@
+#
+# Macro file of "skeleton.cc"
+# for tracking performance test
+#
+/control/verbose 2
+# /run/verbose 2
+#
+# SimpleBox geometry made by Pb
+# Geantino 100 GeV to the direction (1.,0.,0.)
+# 1000 events
+#
+/mydet/SwitchDetector SimpleBox
+/mydet/SelectMaterial Pb
+/gun/particle geantino
+/gun/energy 100 GeV
+/gun/direction 1 0 0
+/run/initialize
+/tracking/verbose 1
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+# SimpleBox geometry made by Al
+# Geantino 100 GeV to the direction (0.,1.,0.)
+# 1000 events
+#
+/mydet/SelectMaterial Al
+/gun/direction 0 1 0
+/tracking/verbose 1
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+# SimpleBox geometry made by Air
+# Geantino 100 GeV to the direction (1.,1.,0.)
+# 1000 events
+#
+/mydet/SelectMaterial Air
+/gun/direction 1 1 0
+/tracking/verbose 1
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+# Honeycomb geometry
+# Geantino 100 GeV to the direction (1.,0.,0.)
+# 1000 events
+#
+/mydet/SwitchDetector Honeycomb
+/gun/direction 1 0 0
+/tracking/verbose 1
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+# Honeycomb geometry
+# Geantino 100 GeV to the direction (0.,1.,0.)
+# 1000 events
+#
+/gun/direction 0 1 0
+/tracking/verbose 1
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+# Honeycomb geometry
+# Geantino 100 GeV to the direction (1.,1.,0.)
+# 1000 events
+#
+/gun/direction 1 1 0
+/tracking/verbose 1
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+exit

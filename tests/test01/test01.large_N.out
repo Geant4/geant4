@@ -1,0 +1,137 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (30-Jun-2000)
+             Copyright : Geant4 Collaboration
+**********************************************
+Now Detector is SimpleBox
+Daughter CSG/Boolean will be made of Pb
+Now CGS is Box
+Now Boolean is Intersection
+fSize = 0
+#
+# Macro file of "skeleton.cc"
+# for tracking performance test
+#
+# /run/verbose 2
+#
+# SimpleBox geometry made by Pb
+# Geantino 100 GeV to the direction (1.,0.,0.)
+# 10 events
+#
+/mydet/SwitchDetector SimpleBox
+Now Detector is SimpleBox
+/mydet/SelectMaterial Pb
+Daughter CSG/Boolean will be made of Pb
+/gun/particle geantino
+/gun/energy 100 GeV
+/gun/direction 1 0 0
+/run/initialize
+Tst01PhysicsList::SetCuts:/tracking/verbose 1
+/run/beamOn 1
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     1e+05        0        0         0       SPhys initStep
+    1    2e+04        0        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
+/tracking/verbose 0
+/run/beamOn 10
+#
+# SimpleBox geometry made by Al
+# Geantino 100 GeV to the direction (0.,1.,0.)
+# 10 events
+#
+/mydet/SelectMaterial Al
+Daughter CSG/Boolean will be made of Al
+/gun/direction 0 1 0
+/tracking/verbose 1
+/run/beamOn 1
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     1e+05        0        0         0       SPhys initStep
+    1        0    2e+04        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
+/tracking/verbose 0
+/run/beamOn 10
+#
+# SimpleBox geometry made by Air
+# Geantino 100 GeV to the direction (1.,1.,0.)
+# 10 events
+#
+/mydet/SelectMaterial Air
+Daughter CSG/Boolean will be made of Air
+/gun/direction 1 1 0
+/tracking/verbose 1
+/run/beamOn 1
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     1e+05        0        0         0       SPhys initStep
+    1    2e+04    2e+04        0     1e+05        0 2.83e+04  2.83e+04  OutOfWorld Transportation
+/tracking/verbose 0
+/run/beamOn 10
+#
+# Honeycomb geometry
+# Geantino 100 GeV to the direction (1.,0.,0.)
+# 10 events
+#
+/mydet/SwitchDetector Honeycomb
+Now Detector is Honeycomb
+/gun/direction 1 0 0
+/tracking/verbose 1
+/run/beamOn 1
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     1e+05        0        0         0       WPhys initStep
+    1    2e+04        0        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
+/tracking/verbose 0
+/run/beamOn 10
+#
+# Honeycomb geometry
+# Geantino 100 GeV to the direction (0.,1.,0.)
+# 10 events
+#
+/gun/direction 0 1 0
+/tracking/verbose 1
+/run/beamOn 1
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     1e+05        0        0         0       WPhys initStep
+    1        0    2e+04        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
+/tracking/verbose 0
+/run/beamOn 10
+#
+# Honeycomb geometry
+# Geantino 100 GeV to the direction (1.,1.,0.)
+# 10 events
+#
+/gun/direction 1 1 0
+/tracking/verbose 1
+/run/beamOn 1
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     1e+05        0        0         0       WPhys initStep
+    1    2e+04    2e+04        0     1e+05        0 2.83e+04  2.83e+04  OutOfWorld Transportation
+/tracking/verbose 0
+/run/beamOn 10
+exit
