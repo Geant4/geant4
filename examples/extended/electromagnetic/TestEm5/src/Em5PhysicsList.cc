@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsList.cc,v 1.11 2002-06-05 15:43:43 urban Exp $
+// $Id: Em5PhysicsList.cc,v 1.12 2002-08-09 14:21:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -342,7 +342,7 @@ void Em5PhysicsList::GetRange(G4double val)
 void Em5PhysicsList::SetMaxStep(G4double step)
 {
   pStepCut->SetMaxStep(step);
-  G4cout << " MaxChargedStep=" << G4BestUnit(step,"length") << G4endl;
+  G4cout << " MaxChargedStep=" << G4BestUnit(step,"Length") << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
