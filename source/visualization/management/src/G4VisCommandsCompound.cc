@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCompound.cc,v 1.4 2000-06-07 08:43:28 johna Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.5 2000-08-19 18:26:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -84,8 +84,11 @@ G4VisCommandOpen::~G4VisCommandOpen() {
 
 void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue) {
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4int keepVerbose = UImanager->GetVerboseLevel();
+  UImanager->SetVerboseLevel(2);
   UImanager->ApplyCommand("/vis/sceneHandler/create " + newValue);
   UImanager->ApplyCommand("/vis/viewer/create");
+  UImanager->SetVerboseLevel(keepVerbose);
 }
 
 ////////////// /vis/specify ///////////////////////////////////////
