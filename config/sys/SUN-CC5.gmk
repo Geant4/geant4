@@ -18,6 +18,7 @@ ifeq ($(G4SYSTEM),SUN-CC5)
     FCFLAGS  += -KPIC
     CCFLAGS  += -KPIC
   endif
+  G4RUNPATHOPTION := -R
   G4_HAVE_BOOL := yes
   CFRONT_G4TEMPLATE_REPOSITORY  := true
   FC     := f77
