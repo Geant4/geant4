@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.12 2000-02-21 16:51:15 johna Exp $
+// $Id: G4VisManager.hh,v 1.13 2000-05-02 09:57:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -270,7 +270,6 @@ public: // With description
   const G4SceneHandlerList&    GetAvailableSceneHandlers   () const;
   const G4SceneList&           GetSceneList                () const;
   G4int                        GetVerboseLevel             () const;
-  G4bool                       IsValidView                 ();
   void              SetCurrentGraphicsSystemAndCreateViewer
                                                 (G4VGraphicsSystem* pSystem);
   void              SetCurrentGraphicsSystem    (G4VGraphicsSystem* pSystem);
@@ -281,6 +280,21 @@ public: // With description
   G4SceneHandlerList& SetAvailableSceneHandlers ();  // Returns lvalue.
   G4SceneList&      SetSceneList                ();  // Returns lvalue.
   void              SetVerboseLevel             (G4int vLevel);
+
+
+  /////////////////////////////////////////////////////////////////////
+  // Utility functions.
+
+  G4String ViewerShortName (const G4String& viewerName) const;
+  // Returns shortened version of viewer name, i.e., up to first space,
+  // if any.
+
+  G4VViewer* GetViewer (const G4String& viewerName) const;
+  // Returns zero if not found.  Can use long or short name, but find
+  // is done on short name.
+
+  G4bool IsValidView ();
+  // True if view is valid.  Prints messages and sanitises varoius data.
 
 protected:
 

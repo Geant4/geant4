@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.15 2000-02-21 16:51:26 johna Exp $
+// $Id: G4VisManager.cc,v 1.16 2000-05-02 09:57:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -471,7 +471,7 @@ void G4VisManager::CreateViewer (G4String name) {
 	G4cout <<
 	  "\n  NOTE: objects with visibility flag set to \"false\""
 	  " will not be drawn!"
-	  "\n  \"/vis~/set/culling off\" to Draw such objects.";
+	  "\n  \"/vis/set/culling off\" to Draw such objects.";
       }
       if (fVP.IsCullingCovered ()) {
 	if (!warnings) {
@@ -481,10 +481,10 @@ void G4VisManager::CreateViewer (G4String name) {
 	G4cout <<
 	  "\n  ALSO: covered objects in solid mode will not be part of"
 	  " the scene!"
-	  "\n  \"/vis~/set/cull_covered_daughters off\" to reverse this.";
+	  "\n  \"/vis/set/cull_covered_daughters off\" to reverse this.";
       }
       if (warnings) {
-	G4cout << "\n  Also see other \"/vis~/set\" commands."
+	G4cout << "\n  Also see other \"/vis/set\" commands."
 	     << G4endl;
       }
     }
@@ -549,7 +549,7 @@ void G4VisManager::DeleteCurrentViewer () {
 	 << fpViewer -> GetName () 
 	 << "\" being deleted.";
   if (fpViewer ) {
-    fpViewer -> GetScene () -> RemoveViewerFromList (fpViewer);
+    fpViewer -> GetSceneHandler () -> RemoveViewerFromList (fpViewer);
     delete fpViewer;
   }
   const G4ViewerList& viewerList = fpSceneHandler -> GetViewerList ();
@@ -726,7 +726,7 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
   G4cout << "G4VisManager::SetCurrentViewer: viewer now "
 	 << pViewer -> GetName ()
 	 << G4endl;
-  fpSceneHandler = fpViewer -> GetScene ();
+  fpSceneHandler = fpViewer -> GetSceneHandler ();
   fpSceneHandler -> SetCurrentViewer (pViewer);
   fpGraphicsSystem = fpSceneHandler -> GetGraphicsSystem ();
   IsValidView ();  // Checks.
@@ -766,7 +766,7 @@ void G4VisManager::PrintCurrentView () const {
   if (fpGraphicsSystem && fpSceneHandler && fpViewer) {
     G4cout << "Current View is: ";
     G4cout << fpGraphicsSystem -> GetName () << '-'
-	   << fpSceneHandler  -> GetSceneId () << '-'
+	   << fpSceneHandler  -> GetSceneHandlerId () << '-'
 	   << fpViewer   -> GetViewId ()
 	   << " selected (check: " << fpViewer -> GetName () << ").";
     G4cout << '\n' << *fpViewer;
@@ -903,6 +903,35 @@ void G4VisManager::EndOfEvent () {
     }
     delete pMP;
   }
+}
+
+G4String G4VisManager::ViewerShortName (const G4String& viewerName) const {
+  G4String viewerShortName (viewerName);
+  viewerShortName = viewerShortName (0, viewerShortName.find (' '));
+  return viewerShortName.strip ();
+}
+
+G4VViewer* G4VisManager::GetViewer (const G4String& viewerName) const {
+  G4String viewerShortName = ViewerShortName (viewerName);
+  G4int nHandlers = fAvailableSceneHandlers.entries ();
+  G4int iHandler, iViewer;
+  G4VSceneHandler* sceneHandler;
+  G4VViewer* viewer;
+  G4bool found = false;
+  for (iHandler = 0; iHandler < nHandlers; iHandler++) {
+    sceneHandler = fAvailableSceneHandlers [iHandler];
+    const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
+    for (iViewer = 0; iViewer < viewerList.entries (); iViewer++) {
+      viewer = viewerList [iViewer];
+      if (viewerShortName == viewer -> GetShortName ()) {
+	found = true;
+	break;
+      }
+    }
+    if (found) break;
+  }
+  if (found) return viewer;
+  else return 0;
 }
 
 G4bool G4VisManager::IsValidView () {
