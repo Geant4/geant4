@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2001-01-29 10:27:10 gcosmo Exp $
+$Id: History,v 1.26 2001-03-19 11:54:49 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,32 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Mar 19th, 2001  J. Apostolakis - field-V03-00-01
+------------------------------
+- Tagging the modification of several classes to integrate in momentum*c_light
+    instead of velocity.  
+  Reason for change:  Velocity integration can result in superluminar
+    velocities,  due to arithmetic inaccuracies.
+  Classes modified: 
+    G4FieldTrack,   (Changed components 3,4,5 of SixVector to Momentum,
+    G4Mag_EqRhs, G4Mag_UsualEqRhs, G4EqMagElectricField
 
-Jan 29th, 2000  G. Cosmo - field-V03-00-00
+Feb 20th, 2001  J. Apostolakis 
+
+- Modified several classes to integrate in momentum instead of velocity.
+
+ G4FieldTrack:
+     Changed components 3,4,5 of SixVector to Momentum,
+     Modified constructor
+     Added energy calculation to "LoadFromArray" method
+     GetEnergy method is now implemented. 
+     Deleted obsolete (old) method names for Curve and Position. New have "Get"
+
+ G4ChordFinder
+     Renamed old-method names of Field Track to new ones. 
+
+Jan 29th, 2001  G. Cosmo - field-V03-00-00
+-------------------------
 
 - Minor fix to G4MagneticField.hh: added explicit call to G4Field() in
   copy constructor. Fixes report #205.
