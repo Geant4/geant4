@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.cc,v 1.32 2003-01-10 12:34:39 vnivanch Exp $
+// $Id: G4PAIonisation.cc,v 1.33 2003-02-12 08:57:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,6 +43,7 @@
 
 #include "G4PAIonisation.hh"
 #include "G4PAIxSection.hh"
+#include "G4Poisson.hh"
 
 const G4double G4PAIonisation:: LowestKineticEnergy = 10.0*keV ; // 100.0*MeV  ;
 const G4double G4PAIonisation::HighestKineticEnergy =  10.*TeV ; // 1000.0*MeV ;  
@@ -622,8 +623,8 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
 
   if(iTkin == G4PAIonisation::GetBinNumber()) // Fermi plato, try from left
   {
-    numOfCollisions = RandPoisson::
-    shoot((*(*fPAItransferBank)(iPlace))(0)*Step*charge2) ;
+    numOfCollisions =
+      G4Poisson((*(*fPAItransferBank)(iPlace))(0)*Step*charge2) ;
     
     //     G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
@@ -644,8 +645,8 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
   {
     if(iTkin == 0) // Tkin is too small, trying from right only
     {
-      numOfCollisions = RandPoisson::
-                        shoot((*(*fPAItransferBank)(iPlace+1))(0)*Step*charge2) ;
+      numOfCollisions =
+        G4Poisson((*(*fPAItransferBank)(iPlace+1))(0)*Step*charge2) ;
 
       //  G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
@@ -675,8 +676,8 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
       // G4cout<<"(*(*fPAItransferBank)(iPlace+1))(0) = "<<
       //     (*(*fPAItransferBank)(iPlace+1))(0)<<G4endl ;
 
-      numOfCollisions = RandPoisson::shoot(
-                     ( (*(*fPAItransferBank)(iPlace))(0)*W1 + 
+      numOfCollisions =
+        G4Poisson( ( (*(*fPAItransferBank)(iPlace))(0)*W1 + 
                      (*(*fPAItransferBank)(iPlace+1))(0)*W2 )*Step*charge2) ;
 
       //  G4cout<<"numOfCollisions = "<<numOfCollisions<<endl ;

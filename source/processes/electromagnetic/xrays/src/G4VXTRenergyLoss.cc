@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.6 2003-01-23 11:26:18 gcosmo Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.7 2003-02-12 08:52:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4Timer.hh"
+#include "G4Poisson.hh"
 
 #include "G4VXTRenergyLoss.hh"
 #include "G4MaterialTable.hh"
@@ -341,7 +342,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
     if(iTkin == fTotBin) 
     {
       meanNumOfTR = (*(*fEnergyDistrTable)(iPlace))(0)*chargeSq*distance ;
-      numOfTR = RandPoisson::shoot(meanNumOfTR) ;
+      numOfTR = G4Poisson(meanNumOfTR) ;
     }
     else
     {
@@ -363,7 +364,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
                   (*(*fAngleDistrTable)(iPlace + 1))(0))*W2)*chargeSq*0.5
               <<G4endl ;
       }
-      numOfTR = RandPoisson::shoot( meanNumOfTR ) ;
+      numOfTR = G4Poisson( meanNumOfTR ) ;
     }
     if( numOfTR == 0 ) // no change, return 
     {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.13 2002-05-16 21:21:14 gum Exp $
+// $Id: G4Cerenkov.cc,v 1.14 2003-02-12 08:52:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -52,6 +52,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+#include "G4Poisson.hh"
 #include "G4Cerenkov.hh"
 
 /////////////////////////
@@ -163,10 +164,7 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	MeanNumPhotons = MeanNumPhotons * step_length;
 
-	// RandPoisson is a utility class.  It provides functions
-	// that act on HepRandom
-
-	G4int NumPhotons = (G4int) RandPoisson::shoot(MeanNumPhotons);
+	G4int NumPhotons = (G4int) G4Poisson(MeanNumPhotons);
 
 	if (NumPhotons <= 0) {
 

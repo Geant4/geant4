@@ -21,17 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.13 2002-10-14 17:34:12 maire Exp $
+// $Id: G4PAIxSection.cc,v 1.14 2003-02-12 08:57:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // G4PAIxSection.cc -- class implementation file
 //
-// GEANT 4 class implementation file --- Copyright CERN 1995
-// CERN Geneva Switzerland
+// GEANT 4 class implementation file
 //
 // For information related to this code, please, contact
-// CERN, CN Division, ASD Group
+// the Geant4 Collaboration.
 //
 // History:
 // 1st version 11.06.97 V. Grichine
@@ -39,12 +38,11 @@
 // 17.05.01 V. Grichine, low energy extension down to 10*keV of proton
 // 28.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
 
-
-
-#include "G4ios.hh"
-#include <math.h>
 #include "G4PAIxSection.hh"
+
 #include "globals.hh"
+#include "G4ios.hh"
+#include "G4Poisson.hh"
 #include "G4Material.hh"
 
 /* ******************************************************************
@@ -1294,7 +1292,7 @@ G4double G4PAIxSection::GetStepEnergyLoss( G4double step )
 
 
   meanNumber = fIntegralPAIxSection[1]*step ;
-  numOfCollisions = RandPoisson::shoot(meanNumber) ;
+  numOfCollisions = G4Poisson(meanNumber) ;
 
   //   G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
@@ -1330,7 +1328,7 @@ G4double G4PAIxSection::GetStepCerenkovLoss( G4double step )
 
 
   meanNumber = fIntegralCerenkov[1]*step ;
-  numOfCollisions = RandPoisson::shoot(meanNumber) ;
+  numOfCollisions = G4Poisson(meanNumber) ;
 
   //   G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
@@ -1366,7 +1364,7 @@ G4double G4PAIxSection::GetStepPlasmonLoss( G4double step )
 
 
   meanNumber = fIntegralPlasmon[1]*step ;
-  numOfCollisions = RandPoisson::shoot(meanNumber) ;
+  numOfCollisions = G4Poisson(meanNumber) ;
 
   //   G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 

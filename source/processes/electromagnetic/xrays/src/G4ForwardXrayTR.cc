@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.cc,v 1.7 2001-10-24 16:40:54 maire Exp $
+// $Id: G4ForwardXrayTR.cc,v 1.8 2003-02-12 08:52:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ForwardXrayTR class -- implementation file
@@ -36,16 +36,11 @@
 // 2nd version 17.12.97 V. Grichine
 // 17-09-01, migration of Materials to pure STL (mma) 
 
-
-#include <math.h>
-
-// #include "G4ios.hh"
-// #include <fstream.h>
-// #include <stdlib.h>
-
 #include "G4ForwardXrayTR.hh"
-#include "G4Material.hh"
+
 #include "globals.hh"
+#include "G4Poisson.hh"
+#include "G4Material.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLinearVector.hh"
@@ -653,9 +648,9 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
  //                                   (*(*fAngleDistrTable)(iPlace))(0) )
  //      *chargeSq*0.5<<G4endl ;
 
-    numOfTR = RandPoisson::shoot( ( (*(*fEnergyDistrTable)(iPlace))(0) +
-                                    (*(*fAngleDistrTable)(iPlace))(0) )
-                                    *chargeSq*0.5 ) ;
+    numOfTR = G4Poisson( ( (*(*fEnergyDistrTable)(iPlace))(0) +
+                           (*(*fAngleDistrTable)(iPlace))(0) )
+                         *chargeSq*0.5 ) ;
     if(numOfTR == 0)
     {
       return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
@@ -722,11 +717,11 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
   // (*(*fAngleDistrTable)(iPlace + 1))(0))*W2)
   //                                    *chargeSq*0.5<<G4endl ;
 
-      numOfTR = RandPoisson::shoot((((*(*fEnergyDistrTable)(iPlace))(0)+
-(*(*fAngleDistrTable)(iPlace))(0))*W1 + 
-                                    ((*(*fEnergyDistrTable)(iPlace + 1))(0)+
-(*(*fAngleDistrTable)(iPlace + 1))(0))*W2)
-                                    *chargeSq*0.5 ) ;
+      numOfTR = G4Poisson((((*(*fEnergyDistrTable)(iPlace))(0)+
+                            (*(*fAngleDistrTable)(iPlace))(0))*W1 + 
+                           ((*(*fEnergyDistrTable)(iPlace + 1))(0)+
+                            (*(*fAngleDistrTable)(iPlace + 1))(0))*W2)
+                          *chargeSq*0.5 ) ;
       if(numOfTR == 0)
       {
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
@@ -834,7 +829,7 @@ G4ForwardXrayTR::GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const
 
   if(iTkin == fTotBin)                 // TR plato, try from left
   {
-    numOfTR = RandPoisson::shoot( (*energyVector1)(0)  ) ;
+    numOfTR = G4Poisson( (*energyVector1)(0)  ) ;
     if(numOfTR == 0)
     {
       return energyTR ;
@@ -862,8 +857,8 @@ G4ForwardXrayTR::GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const
     {             // use trivial mean half/half
       W1 = 0.5 ; 
       W2 = 0.5 ;
-     numOfTR = RandPoisson::shoot( (*energyVector1)(0)*W1 +
-                                   (*energyVector2)(0)*W2  ) ;
+     numOfTR = G4Poisson( (*energyVector1)(0)*W1 +
+                          (*energyVector2)(0)*W2  ) ;
       if(numOfTR == 0)
       {
         return energyTR ;

@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRdEdx.cc,v 1.7 2001-09-18 09:02:04 gcosmo Exp $
+// $Id: G4VXTRdEdx.cc,v 1.8 2003-02-12 08:48:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4Timer.hh"
 
 #include "G4VXTRdEdx.hh"
-#include "Randomize.hh"
+#include "G4Poisson.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "globals.hh"
@@ -116,7 +116,7 @@ void G4VXTRdEdx::DoIt( const G4FastTrack& fastTrack ,
   {
     if(iTkin == fTotBin) 
     {
-      numOfTR = RandPoisson::shoot( (*(*fEnergyDistrTable)(iPlace))(0)*chargeSq ) ;
+      numOfTR = G4Poisson( (*(*fEnergyDistrTable)(iPlace))(0)*chargeSq ) ;
     }
     else
     {
@@ -125,9 +125,9 @@ void G4VXTRdEdx::DoIt( const G4FastTrack& fastTrack ,
        W = 1.0/(E2 - E1) ;
       W1 = (E2 - TkinScaled)*W ;
       W2 = (TkinScaled - E1)*W ;
-      numOfTR = RandPoisson::shoot( ( (*(*fEnergyDistrTable)(iPlace))(0)*W1+
-                                      (*(*fEnergyDistrTable)(iPlace+1))(0)*W2 )
-                                      *chargeSq ) ;
+      numOfTR = G4Poisson( ( (*(*fEnergyDistrTable)(iPlace))(0)*W1+
+                             (*(*fEnergyDistrTable)(iPlace+1))(0)*W2 )
+                           *chargeSq ) ;
     }
 
   // G4cout<<iTkin<<" mean TR number = "<<(((*(*fEnergyDistrTable)(iPlace))(0)+
