@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.23 2003-06-19 14:45:04 gunter Exp $
+// $Id: G4ParticleChange.cc,v 1.24 2003-11-24 10:27:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -250,7 +250,7 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
     pPostStepPoint->SetKineticEnergy( energy );
   } else {
     // stop case
-    pPostStepPoint->SetMomentumDirection(G4ThreeVector(1., 0., 0.));
+    //pPostStepPoint->SetMomentumDirection(G4ThreeVector(1., 0., 0.));
     pPostStepPoint->SetKineticEnergy(0.0);
   }
 
