@@ -3,6 +3,7 @@
 # /afs/cern.ch/sw/geant4/stt/dev1/testtools/geant4/tests/tools/bin
 # ExtractLastLog.plx
 #
+# 20-Nov-2000 stthosts.data table changed to configure for machines
 
 $ActiveExamination="doit";
 $ShowStt=1;
@@ -15,7 +16,7 @@ $SttTag="stt." . "$Tag";
 $TestTop="/afs/cern.ch/sw/geant4/stt/$DevDir";
 $TestLogDir="/afs/cern.ch/sw/geant4/stt/$DevDir/testtools/geant4/tests/tools/bin";
 
-&ReadConfigurationFiles();          # @platforms  @tests and %HostName are global.
+&ReadConfigurationFiles($DevDir);          # @platforms  @tests and %HostName are global.
 &SetInitialTable();
 
 opendir(TL,"$TestLogDir") || die "Failed to opendir TestLog  $TestLogDir $!";
@@ -158,6 +159,7 @@ print "\n\n\n\n\n =================================================\n\n\n\n";
 exit();
 
 sub ReadConfigurationFiles {
+# Argument is $devdir (prod dev1 dev2)
     @tests=("Hosts","Compile","Build");
     open(TESTS,"stttests.data") || die "Failed to open (read) stttests.data $!";
     while ($line = <TESTS> ) {
@@ -169,14 +171,15 @@ sub ReadConfigurationFiles {
     while ($line = <HOSTS> ) {
         next if ($line =~ m/^#/);
         next if ($line =~ m/^%/);
-        if ( $line =~ m/^(\S+)\s+(\S+)\s+(\S+)\s+/ ) { 
-    #       print "$1 $2 $3\n";
+        if ( $line =~ m/^$_[0]\s+(\S+)\s+(\S+)\s+(\S+)\s+/ ) { 
+            print "$1 $2 $3 $4\n";
             push(@platforms,"$2.$3");
             $HostName{"$2.$3"}=$1;
         }
     }
     close(HOSTS);
 }
+
 foreach $platform (sort(@platforms)) { print "$platform\n";}
 
 sub SetInitialTable{
