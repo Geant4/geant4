@@ -52,7 +52,9 @@ DicomGeometry::DicomGeometry()
 }
 
 DicomGeometry::~DicomGeometry()
-{ }
+{ 
+  delete patientConstructor;
+}
 
 void DicomGeometry::InitialisationOfMaterials()
 {
