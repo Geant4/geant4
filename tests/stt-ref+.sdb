@@ -1,50 +1,48 @@
-# $Id: stt-ref+.sdb,v 1.56 1999-06-01 19:01:36 stesting Exp $
+# $Id: stt-ref+.sdb,v 1.57 1999-06-03 12:35:41 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
 # Super-categories
 geant4/config           HEAD
-geant4/data             geant4-00-cand-09c
+geant4/data             cvs_tag_geant4-00-cand-09d
 # geant4/documents - not currently part of reference versions
-geant4/environments     geant4-00-cand-09c
-geant4/examples         HEAD
+geant4/environments     cvs_tag_geant4-00-cand-09d
+geant4/examples         cvs_tag_geant4-00-cand-09d
 # geant4/source - split into categories - see below.
 # geant4/tests - checkout HEAD by hand and use this script.
 # Source categories
-geant4/source/GNUmakefile      geant4-00-cand-09c
-geant4/source/digits+hits      geant4-00-cand-09c
-geant4/source/event            geant4-00-cand-09c
-geant4/source/g3tog4           g3tog4-01-00-06
-geant4/source/geometry/GNUmakefile   geant4-00-cand-09c
-geant4/source/geometry/History       geant4-00-cand-09c
-geant4/source/geometry/magneticfield geant4-00-cand-09c
-geant4/source/geometry/management    geant4-00-cand-09c
-geant4/source/geometry/solids        geant4-00-cand-09c
-geant4/source/geometry/solids/BREPS  geant4-00-cand-09c
-geant4/source/geometry/volumes       geant4-00-cand-09c
-geant4/source/global           geant4-00-cand-09c
+geant4/source/GNUmakefile      cvs_tag_geant4-00-cand-09d
+geant4/source/digits+hits      cvs_tag_geant4-00-cand-09d
+geant4/source/event            cvs_tag_geant4-00-cand-09d
+geant4/source/g3tog4           cvs_tag_geant4-00-cand-09d
+geant4/source/geometry/GNUmakefile   cvs_tag_geant4-00-cand-09d
+geant4/source/geometry/History       cvs_tag_geant4-00-cand-09d
+geant4/source/geometry/magneticfield cvs_tag_geant4-00-cand-09d
+geant4/source/geometry/management    cvs_tag_geant4-00-cand-09d
+geant4/source/geometry/solids        cvs_tag_geant4-00-cand-09d
+geant4/source/geometry/solids/BREPS  cvs_tag_geant4-00-cand-09d
+geant4/source/geometry/volumes       cvs_tag_geant4-00-cand-09d
+geant4/source/global           cvs_tag_geant4-00-cand-09d
 geant4/source/global/STLInterface  HEAD
-geant4/source/graphics_reps    geant4-00-cand-09c
-geant4/source/intercoms        geant4-00-cand-09c
-geant4/source/interfaces       geant4-00-cand-09c
-geant4/source/interfaces/common/src/G4VInteractorManager.cc  1.5
-geant4/source/materials        geant4-00-cand-09c
-geant4/source/particles        geant4-00-cand-09c
-geant4/source/persistency      geant4-00-cand-09c
-geant4/source/processes/GNUmakefile         1.3
-geant4/source/processes/History             geant4-00-cand-09c
-geant4/source/processes/decay	            geant4-00-cand-09c
-geant4/source/processes/electromagnetic	    geant4-00-cand-09c
-geant4/source/processes/electromagnetic/GNUmakefile 1.2
-geant4/source/processes/electromagnetic/lowenergy  HEAD
-geant4/source/processes/hadronic            geant4-00-cand-09c
-geant4/source/processes/management          HEAD
-geant4/source/processes/optical	            geant4-00-cand-09c
-geant4/source/processes/parameterisation    geant4-00-cand-09c
-geant4/source/processes/photolepton_hadron  geant4-00-cand-09c
-geant4/source/processes/transportation      geant4-00-cand-09c
-geant4/source/readout          geant4-00-cand-09c
-geant4/source/run              geant4-00-cand-09c
-geant4/source/track            geant4-00-cand-09c
-geant4/source/tracking         geant4-00-cand-09c
-geant4/source/visualization    vis-01-00-13
+geant4/source/graphics_reps    cvs_tag_geant4-00-cand-09d
+geant4/source/intercoms        cvs_tag_geant4-00-cand-09d
+geant4/source/interfaces       cvs_tag_geant4-00-cand-09d
+geant4/source/materials        cvs_tag_geant4-00-cand-09d
+geant4/source/particles        cvs_tag_geant4-00-cand-09d
+geant4/source/persistency      cvs_tag_geant4-00-cand-09d
+# geant4/source/processes/GNUmakefile         1.3
+geant4/source/processes/History             cvs_tag_geant4-00-cand-09d
+geant4/source/processes/decay	            cvs_tag_geant4-00-cand-09d
+geant4/source/processes/electromagnetic	    cvs_tag_geant4-00-cand-09d
+# geant4/source/processes/electromagnetic/lowenergy  HEAD
+geant4/source/processes/hadronic            cvs_tag_geant4-00-cand-09d
+geant4/source/processes/management          cvs_tag_geant4-00-cand-09d
+geant4/source/processes/optical	            cvs_tag_geant4-00-cand-09d
+geant4/source/processes/parameterisation    cvs_tag_geant4-00-cand-09d
+geant4/source/processes/photolepton_hadron  cvs_tag_geant4-00-cand-09d
+geant4/source/processes/transportation      cvs_tag_geant4-00-cand-09d
+geant4/source/readout          cvs_tag_geant4-00-cand-09d
+geant4/source/run              cvs_tag_geant4-00-cand-09d
+geant4/source/track            cvs_tag_geant4-00-cand-09d
+geant4/source/tracking         cvs_tag_geant4-00-cand-09d
+geant4/source/visualization    cvs_tag_geant4-00-cand-09d
