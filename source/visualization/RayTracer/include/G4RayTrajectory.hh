@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.hh,v 1.8 2001-07-11 10:09:03 gunter Exp $
+// $Id: G4RayTrajectory.hh,v 1.9 2002-10-16 11:42:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,10 +62,10 @@ class G4RayTrajectory : public G4VTrajectory
 
    inline void* operator new(size_t);
    inline void  operator delete(void*);
-   inline int operator == (const G4RayTrajectory& right){return (this==&right);}
+  //   inline int operator == (const G4RayTrajectory& right){return (this==&right);}
 
    virtual void AppendStep(const G4Step*);
-   virtual void ShowTrajectory() const;
+   virtual void ShowTrajectory(G4std::ostream&) const;
    virtual void DrawTrajectory(G4int i_mode=0) const {;}
    virtual int GetPointEntries() const {return positionRecord->size();}
    virtual G4VTrajectoryPoint* GetPoint(G4int i) const 
@@ -73,6 +73,14 @@ class G4RayTrajectory : public G4VTrajectory
    G4RayTrajectoryPoint* GetPointC(G4int i) const 
    { return (*positionRecord)[i]; }
    virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);  
+
+// Get/Set functions to satisfy pure virtual functions of base class.
+   inline G4int GetTrackID() const { return 0; }
+   inline G4int GetParentID() const { return 0; }
+   inline G4String GetParticleName() const { return ""; }
+   inline G4double GetCharge() const { return 0.; }
+   inline G4int GetPDGEncoding() const { return 0; }
+   inline G4ThreeVector GetInitialMomentum() const { return G4ThreeVector(); }
 
    private:
 

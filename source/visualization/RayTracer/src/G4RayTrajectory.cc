@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.cc,v 1.8 2001-07-11 10:09:05 gunter Exp $
+// $Id: G4RayTrajectory.cc,v 1.9 2002-10-16 11:42:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,7 +43,6 @@
 #include "G4ios.hh"
 
 G4Allocator<G4RayTrajectory> G4RayTrajectoryAllocator;
-
 
 G4RayTrajectory :: G4RayTrajectory()
 {
@@ -112,7 +111,7 @@ void G4RayTrajectory::AppendStep(const G4Step* aStep)
   positionRecord->push_back(trajectoryPoint);
 }
 
-void G4RayTrajectory::ShowTrajectory() const
+void G4RayTrajectory::ShowTrajectory(G4std::ostream& os) const
 { }
 
 void G4RayTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)

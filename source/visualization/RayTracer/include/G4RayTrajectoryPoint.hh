@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectoryPoint.hh,v 1.4 2001-07-11 10:09:03 gunter Exp $
+// $Id: G4RayTrajectoryPoint.hh,v 1.5 2002-10-16 11:42:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,8 +54,8 @@ class G4RayTrajectoryPoint :public G4VTrajectoryPoint
 
     inline void *operator new(size_t);
     inline void operator delete(void *aTrajectoryPoint);
-    inline int operator==(const G4RayTrajectoryPoint& right) const
-    { return (this==&right); };
+  //    inline int operator==(const G4RayTrajectoryPoint& right) const
+  // { return (this==&right); };
 
   private:
     const G4VisAttributes* preStepAtt;
@@ -72,7 +72,9 @@ class G4RayTrajectoryPoint :public G4VTrajectoryPoint
     inline G4ThreeVector GetSurfaceNormal() const { return surfaceNormal; }
     inline void SetStepLength(G4double val) { stepLength = val; }
     inline G4double GetStepLength() const { return stepLength; }
-  
+
+    inline const G4ThreeVector GetPosition() const { return G4ThreeVector();}
+    // Dummy function (not used) to satisfy base class pure virtual function.
 };
 
 extern G4Allocator<G4RayTrajectoryPoint> G4RayTrajectoryPointAllocator;
