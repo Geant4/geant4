@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN05.cc,v 1.7 2001-04-27 11:07:08 gcosmo Exp $
+// $Id: exampleN05.cc,v 1.8 2001-04-27 12:50:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,7 +13,7 @@
 //      GEANT 4 - exampleN05
 //
 //      For information related to this code contact:
-//      CERN, IT Division, ASD Group
+//      Geant4 Collaboration
 // --------------------------------------------------------------
 // Comments
 //
@@ -44,13 +44,6 @@
 // G4ParameterisationManagerProcess
 //----------------------------------
 #include "ExN05PhysicsList.hh"
-
-#ifdef GNU_GCC
-  #include "g4rw/tvvector.h"
-  #include "ExN05CalorimeterHit.hh"
-  template class G4RWTValVector<ExN05CalorimeterHit>;
-  template class G4Allocator<ExN05CalorimeterHit>;
-#endif
 
 #include "G4UIterminal.hh"
 #include "G4UImanager.hh"
@@ -136,7 +129,3 @@ int main(int argc, char** argv) {
   delete runManager;
   return EXIT_SUCCESS;
 }
-
-
-
-

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05PionShowerModel.cc,v 1.3 2000-08-03 09:09:40 gcosmo Exp $
+// $Id: ExN05PionShowerModel.cc,v 1.4 2001-04-27 12:50:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05PionShowerModel.hh"
@@ -122,7 +122,7 @@ void ExN05PionShowerModel::Explode(const G4FastTrack& fastTrack)
 	z*zShower +
 	r*cos(phi)*xShower + r*sin(phi)*yShower;
       eSpot.SetPosition(ePoint);
-      feSpotList.insert(eSpot);
+      feSpotList.push_back(eSpot);
     }
 }
 
@@ -130,7 +130,7 @@ void ExN05PionShowerModel::Explode(const G4FastTrack& fastTrack)
 void ExN05PionShowerModel::BuildDetectorResponse()
 {
   // Does the assignation of the energy spots to the sensitive volumes:
-  for (int i = 0; i < feSpotList.entries(); i++)
+  for (int i = 0; i < feSpotList.size(); i++)
     {
       // Draw the energy spot:
       G4Colour red(1.,0.,0.);
@@ -203,9 +203,3 @@ void ExN05PionShowerModel::FillFakeStep(const ExN05EnergySpot &eSpot)
   // set total energy deposit:
   fFakeStep->SetTotalEnergyDeposit(eSpot.GetEnergy());
 }
-
-
-
-
-
-
