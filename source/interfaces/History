@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2001-08-11 22:47:38 johna Exp $
+$Id: History,v 1.41 2001-08-11 22:54:20 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-03 August 2001  John Allison (interfaces-V03-02-00)
+11 August 2001  John Allison (interfaces-V03-02-00)
+- Re-engineered G4UI variables.  Coworks with config-V03-02-04.
 - Changed GNUmakefile so that GAG, TERMINAL and TCSH built by default.
 - Nothing built if G4UI_NONE is set.
 
