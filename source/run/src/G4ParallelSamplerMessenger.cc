@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelSamplerMessenger.cc,v 1.2 2002-07-12 09:30:25 dressel Exp $
+// $Id: G4ParallelSamplerMessenger.cc,v 1.3 2002-07-29 16:03:15 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,12 +38,15 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4ParallelImportanceScoreSampler.hh"
 #include "G4ParallelScoreSampler.hh"
-#include "G4StandardScorer.hh"
-#include "G4StandardScoreTable.hh"
+#include "G4VPrintableScorer.hh"
+#include "G4VPrintableScorerFactory.hh"
 
 G4ParallelSamplerMessenger::
-G4ParallelSamplerMessenger(G4ImportanceGeometryConstructor *igc){
-  fImpGeoConst = igc;
+G4ParallelSamplerMessenger(G4ImportanceGeometryConstructor *igc,
+			   const G4VPrintableScorerFactory &psf) : 
+  fImpGeoConst(igc),
+  fPrintableScorerFactory(psf) 
+{
   fImpCmd = new G4UIcmdWithAString("/imp/importancesample", this);
   fScoreCmd = new G4UIcmdWithAString("/imp/score", this);
   fPrintCmd = new G4UIcmdWithAString("/imp/writefile", this);
@@ -74,10 +77,11 @@ ImpCmdAction(const G4String &particlename) {
   }
   CheckNewParticle(particlename);
   fImpPartilce = particlename;
-  fImpScorer = new G4StandardScorer;
+  fImpScorer = fPrintableScorerFactory.
+    CreatePrintableScorer(particlename);
   fImpSampler = new 
     G4ParallelImportanceScoreSampler(*(fImpGeoConst->GetIStore()),
-				     *fImpScorer,
+				     *fImpScorer->GetPointerToScorer(),
 				     particlename);
   fMapNameSampler[particlename] = fImpSampler;
   fImpSampler->Initialize();
@@ -86,12 +90,14 @@ ImpCmdAction(const G4String &particlename) {
 void G4ParallelSamplerMessenger::
 ScoreCmdAction(const G4String &particlename){
   CheckNewParticle(particlename);
-  G4StandardScorer *s = new G4StandardScorer;
+  G4VPrintableScorer *s = 
+    fPrintableScorerFactory.
+    CreatePrintableScorer(particlename);
   fMapNameScorer[particlename] = s;
   fMapNameSampler[particlename] = new 
     G4ParallelScoreSampler(*(fImpGeoConst->GetWorldVolume()),
 			   particlename,
-			   *s);
+			   *s->GetPointerToScorer());
   fMapNameSampler[particlename]->Initialize();
 }
 void G4ParallelSamplerMessenger::
@@ -101,8 +107,7 @@ PrintCmdAction(const G4String &filename){
     of << "  Results for importanct sampled particle: "
        <<  fImpPartilce << G4endl;
     of << "  --------------------------------------------------"<<G4endl; 
-    G4StandardScoreTable sc_table(fImpGeoConst->GetIStore());
-    sc_table.Print(fImpScorer->GetMapPtkStandardCellScorer(), &of);
+    fImpScorer->PrintTable(&of, fImpGeoConst->GetIStore());
     of << "----------------------------------------------------" 
        << "----------------------------------------------------"
        << "---------------------"
@@ -114,8 +119,7 @@ PrintCmdAction(const G4String &filename){
     of << "  Results for scored particle: " 
        << it->first << G4endl;
     of << "  --------------------------------------------------"<<G4endl; 
-    G4StandardScoreTable sc_table;
-    sc_table.Print(it->second->GetMapPtkStandardCellScorer(), &of);
+    it->second->PrintTable(&of);
     of << "----------------------------------------------------" 
        << "----------------------------------------------------"
        << "---------------------"

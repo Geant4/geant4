@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelSamplerMessenger.hh,v 1.3 2002-07-12 13:39:52 dressel Exp $
+// $Id: G4ParallelSamplerMessenger.hh,v 1.4 2002-07-29 16:03:15 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -60,14 +60,16 @@ class G4ImportanceGeometryConstructor;
 class G4UIcmdWithAString;
 class G4ParallelImportanceScoreSampler;
 class G4ParallelScoreSampler;
-class G4StandardScorer;
+class G4VPrintableScorer;
+class G4VPrintableScorerFactory;
 
 typedef G4std::map<G4String, G4VSampler *> G4MapNameSampler;
-typedef G4std::map<G4String, G4StandardScorer *> G4MapNameScorer;
+typedef G4std::map<G4String, G4VPrintableScorer *> G4MapNameScorer;
 
 class G4ParallelSamplerMessenger : public G4UImessenger {
 public:
-  G4ParallelSamplerMessenger(G4ImportanceGeometryConstructor *igc);
+  G4ParallelSamplerMessenger(G4ImportanceGeometryConstructor *igc,
+			     const G4VPrintableScorerFactory &psf);
     // constructor needs G4ImportanceGeometryConstructor to get
     // a parallel geometry and the importance store
 
@@ -90,13 +92,14 @@ private:
   
 
   G4ImportanceGeometryConstructor *fImpGeoConst;
-
+  const G4VPrintableScorerFactory &fPrintableScorerFactory;
+  
   G4UIcmdWithAString *fImpCmd;
   G4UIcmdWithAString *fScoreCmd;
   G4UIcmdWithAString *fPrintCmd;
 
   G4ParallelImportanceScoreSampler *fImpSampler;
-  G4StandardScorer *fImpScorer;
+  G4VPrintableScorer *fImpScorer;
   G4String fImpPartilce;
   G4MapNameScorer fMapNameScorer;
   G4MapNameSampler fMapNameSampler;
