@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PrimaryGeneratorMessenger.cc,v 1.5 2001-11-05 17:58:02 maire Exp $
+// $Id: Em5PrimaryGeneratorMessenger.cc,v 1.6 2001-12-06 16:20:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,7 @@
 
 #include "Em5PrimaryGeneratorAction.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcmdWithADouble.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -42,7 +43,14 @@ Em5PrimaryGeneratorMessenger::Em5PrimaryGeneratorMessenger(
 { 
  DefaultCmd = new G4UIcmdWithoutParameter("/gun/setDefault",this);
  DefaultCmd->SetGuidance("set/reset the kinematic defined in PrimaryGenerator");
- DefaultCmd->AvailableForStates(Idle);
+ DefaultCmd->AvailableForStates(PreInit,Idle);
+  
+  RndmCmd = new G4UIcmdWithADouble("/gun/rndm",this);
+  RndmCmd->SetGuidance("random lateral extension on the beam");
+  RndmCmd->SetGuidance("in fraction of 0.5*sizeYZ");
+  RndmCmd->SetParameterName("rBeam",false);
+  RndmCmd->SetRange("rBeam>=0.&&rBeam<=1.");
+  RndmCmd->AvailableForStates(Idle);   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,6 +58,7 @@ Em5PrimaryGeneratorMessenger::Em5PrimaryGeneratorMessenger(
 Em5PrimaryGeneratorMessenger::~Em5PrimaryGeneratorMessenger()
 {
   delete DefaultCmd;
+  delete RndmCmd;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,6 +68,9 @@ void Em5PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
 { 
   if (command == DefaultCmd)
     {Em5Action->SetDefaultKinematic();}
+   
+  if (command == RndmCmd)
+   { Em5Action->SetRndmBeam(RndmCmd->GetNewDoubleValue(newValue));}       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

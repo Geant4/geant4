@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PrimaryGeneratorMessenger.hh,v 1.4 2001-10-16 11:56:28 maire Exp $
+// $Id: Em5PrimaryGeneratorMessenger.hh,v 1.5 2001-12-06 16:20:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 
 class Em5PrimaryGeneratorAction;
 class G4UIcmdWithoutParameter;
+class G4UIcmdWithADouble;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,6 +52,7 @@ class Em5PrimaryGeneratorMessenger: public G4UImessenger
   private:
     Em5PrimaryGeneratorAction* Em5Action; 
     G4UIcmdWithoutParameter*   DefaultCmd;
+    G4UIcmdWithADouble*        RndmCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingAction.cc,v 1.5 2001-10-16 11:56:29 maire Exp $
+// $Id: Em5SteppingAction.cc,v 1.6 2001-12-06 16:20:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -140,10 +140,7 @@ void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   if (
       (((aStep->GetTrack()->GetTrackID() == 1) &&
-        (aStep->GetTrack()->GetParentID()== 0)) ||
-        (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName() ==
-        Em5PrimaryGeneratorAction::GetPrimaryName())) 
+        (aStep->GetTrack()->GetParentID()== 0))) 
         &&
         (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber")
         &&
@@ -166,10 +163,7 @@ void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
        
   if (
       (((aStep->GetTrack()->GetTrackID() == 1) &&
-        (aStep->GetTrack()->GetParentID()== 0)) ||
-      (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-       GetParticleName() ==
-       Em5PrimaryGeneratorAction::GetPrimaryName())) 
+        (aStep->GetTrack()->GetParentID()== 0))) 
        &&
       (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber") &&
       (aStep->GetTrack()->GetNextVolume()->GetName()=="World") &&

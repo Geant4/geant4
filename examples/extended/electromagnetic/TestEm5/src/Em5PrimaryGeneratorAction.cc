@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PrimaryGeneratorAction.cc,v 1.4 2001-10-16 11:56:29 maire Exp $
+// $Id: Em5PrimaryGeneratorAction.cc,v 1.5 2001-12-06 16:20:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,11 +38,7 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ios.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
- G4String Em5PrimaryGeneratorAction::thePrimaryParticleName="e-" ; 
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,6 +49,7 @@ Em5PrimaryGeneratorAction::Em5PrimaryGeneratorAction(
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
   SetDefaultKinematic();
+  rndmBeam = 0.;
   
   //create a messenger for this class
   gunMessenger = new Em5PrimaryGeneratorMessenger(this);
@@ -73,13 +70,9 @@ void Em5PrimaryGeneratorAction::SetDefaultKinematic()
   // default particle kinematic
   //
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4String particleName;
   G4ParticleDefinition* particle
-                    = particleTable->FindParticle(particleName="e-");
+                    = particleTable->FindParticle("e-");
   particleGun->SetParticleDefinition(particle);
-  
-  thePrimaryParticleName = particle->GetParticleName();
-
   particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
   particleGun->SetParticleEnergy(30.*MeV);
   G4double x0 = -0.5*(Em5Detector->GetWorldSizeX());
@@ -91,19 +84,20 @@ void Em5PrimaryGeneratorAction::SetDefaultKinematic()
 void Em5PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
-  // 
-  thePrimaryParticleName = particleGun->GetParticleDefinition()->
-                                                GetParticleName();
-   
-  particleGun->GeneratePrimaryVertex(anEvent);
+  //
+  //randomize the beam, if requested.
+  if (rndmBeam > 0.) 
+    {
+      G4ThreeVector oldPosition = particleGun->GetParticlePosition();    
+      G4double rbeam = 0.5*(Em5Detector->GetAbsorberSizeYZ())*rndmBeam;
+      G4double x0 = oldPosition.x();
+      G4double y0 = oldPosition.y() + (2*G4UniformRand()-1.)*rbeam;
+      G4double z0 = oldPosition.z() + (2*G4UniformRand()-1.)*rbeam;
+      particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+      particleGun->GeneratePrimaryVertex(anEvent);
+      particleGun->SetParticlePosition(oldPosition);      
+    }
+  else  particleGun->GeneratePrimaryVertex(anEvent); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4String Em5PrimaryGeneratorAction::GetPrimaryName()
-{
-   return thePrimaryParticleName;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

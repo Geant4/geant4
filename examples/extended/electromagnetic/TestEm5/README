@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2001-11-05 17:57:58 maire Exp $
+$Id: README,v 1.5 2001-12-06 16:20:03 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -34,6 +34,10 @@ $Id: README,v 1.4 2001-11-05 17:57:58 maire Exp $
  	and its energy are set in the PrimaryGeneratorAction class, and can
  	be changed via the G4 build-in commands of ParticleGun class (see
  	the macros provided with this example).
+	
+ 	In addition one can choose randomly the impact point of the incident
+ 	particle. The corresponding interactive command is built in
+ 	PrimaryGeneratorMessenger class.
  	
  	A RUN is a set of events.
  	
