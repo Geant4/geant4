@@ -1,4 +1,4 @@
-$Id: History,v 1.26 1999-10-27 14:50:00 johna Exp $
+$Id: History,v 1.27 1999-10-31 11:37:11 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-26th Octobre 1999  John Allison (examples-V00-01-07)
+29th September 1999  John Allison (examples-V00-01-08)
+- Updated exampleN04 .out files for geant4-00-01-ref-05.
+
+26th October 1999  John Allison (examples-V00-01-07)
 - Tagged Y.Morita's changes to extended/E02 - see extended/E02/History.
 
 20th October 1999  John Allison (examples-V00-01-06)
