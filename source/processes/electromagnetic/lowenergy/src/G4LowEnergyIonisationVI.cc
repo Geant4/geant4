@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisationVI.cc,v 1.10 2001-10-24 18:57:04 pia Exp $
+// $Id: G4LowEnergyIonisationVI.cc,v 1.11 2001-10-24 20:02:19 elena Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -568,31 +568,39 @@ G4LowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
       G4double eTot = 0.0; 
       G4std::vector<G4int> n = shellVacancy->GenerateNumberOfIonisations(material,
 									 incidentEnergy, eLoss);
-      G4std::vector<size_t> counters; 
+     
+G4std::vector<size_t> counters; 
       size_t totCounters = 0;
       size_t totVacancies = 0;
       for (size_t i=0; i<nElements; i++) {
 	counters.push_back(0);
+	
       }
       for (size_t k = 0; k<n.size();k++)
 	{
 	  totVacancies += n[k];
+	
 	}
+      G4cout<<"totVacancies = "<<totVacancies<<G4endl;
       while (totCounters<totVacancies){
 	G4double random = G4UniformRand() * nElements;
+
 	size_t intRandom = (size_t) random;
 	if (intRandom==nElements)
 	  {
 	    intRandom -= 1;
 	  }
-	
+	G4cout<<"intRandom ="<<intRandom<<G4endl;
 	size_t nVacancies = n[intRandom];
 	if (counters[intRandom]<nVacancies)
-	  {counters[intRandom]++;
+	  {G4cout<<" counters[ "<<intRandom<<"]="<<counters[intRandom]<<G4endl;
+	    counters[intRandom]++;
+	    G4cout<<"totCounters ="<<totCounters<<G4endl;
 	  totCounters++;
-	  G4int Z = (G4int)((*theElementVector)[i]->GetZ());
+	  G4int Z = (G4int)((*theElementVector)[intRandom]->GetZ());
+	 
 	  G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
-	  
+	 
 	  if (Z>5 && (maxE>cutForPhotons || maxE>cutForElectrons)&& nVacancies!=0 ) 
 	    {
 	      for(size_t j=0; j<nVacancies; j++) {
