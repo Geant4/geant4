@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedStringDecay.hh,v 1.1 2003-10-07 11:25:40 hpw Exp $
+// $Id: G4ExcitedStringDecay.hh,v 1.2 2004-01-29 17:39:14 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4ExcitedStringDecay_h
@@ -80,6 +80,11 @@ FragmentStrings(const G4ExcitedStringVector * theStrings)
   for ( unsigned int astring=0; astring < theStrings->size(); astring++)
   {
 	KTsum+= theStrings->operator[](astring)->Get4Momentum();
+	if( !(KTsum.e()<1) && !(KTsum.e()>-1) )
+	{
+          throw G4HadronicException(__FILE__, __LINE__, 
+	                           "G4ExcitedStringDecay::FragmentStrings received nan string...");
+	}
         G4KineticTrackVector * generatedKineticTracks = NULL;
   
 	if ( theStrings->operator[](astring)->IsExcited() )
