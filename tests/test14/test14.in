@@ -2,25 +2,64 @@
 # Macro file test14.in
 # for tests of basic low energy e.m. processes (based on test09) 
 #
-/control/verbose 2
-# /run/verbose 2
+#/control/verbose 2
+#/run/verbose 2
+#
 /run/initialize
+/calor/setAbsMat Aluminium
+/calor/setAbsThick 10 cm  
+/calor/setAbsRad 12.0 cm
+/calor/update
+#
+/lowenergy/lowlimG 2.5e-4
+/lowenergy/lowlimE 2.5e-4
+/lowenergy/cutG .01 micrometer
+/lowenergy/cutE .01 micrometer
+/run/initialize
+/run/particle/dumpCutValues
+
+#
 /gun/direction 1 0 0
 #
-# gamma 1 keV in Al
+# gamma 500 eV in Al
 #
-/mydet/SelectMaterial Al
 /tracking/verbose 2
-/run/verbose 2
 /gun/particle gamma
-/gun/energy 1 keV
-/run/beamOn 100
+/gun/energy 10 keV
+/run/beamOn 1000
 #
-# electron 1 keV in Al
+/tracking/verbose 2
+/gun/particle gamma
+/gun/energy 2 keV
+/run/beamOn 1000
+#
+/tracking/verbose 2
+/gun/particle gamma
+/gun/energy 800 eV
+/run/beamOn 1000
+#
+/tracking/verbose 2
+/gun/particle gamma
+/gun/energy 250 eV
+/run/beamOn 1000
+#
+# electron 500 eV in Al
 #
 /gun/particle e-
-/gun/energy 1 keV
-/run/beamOn 100
+/gun/energy 10 keV
+/run/beamOn 1000
+#
+/gun/particle e-
+/gun/energy 2 keV
+/run/beamOn 1000
+#
+/gun/particle e-
+/gun/energy 800 eV
+/run/beamOn 1000
+#
+/gun/particle e-
+/gun/energy 500 eV
+/run/beamOn 1000
 #
 exit
 

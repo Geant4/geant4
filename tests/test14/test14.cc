@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test14.cc,v 1.2 1999-06-14 14:34:28 aforti Exp $
+// $Id: test14.cc,v 1.3 1999-06-14 23:28:45 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,16 +41,18 @@ int main(int argc,char** argv) {
   //runManager->SetUserAction(new Tst14SteppingAction);
   runManager->SetUserAction(new Tst14TrackingAction);
 
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
   if(argc==1)
   {
     // G4UIterminal is a (dumb) terminal.
     G4UIsession* session = new G4UIterminal;
+    UImanager->ApplyCommand("/control/execute prerunTst14.mac");
     session->SessionStart();
     delete session;
   }
   else
   {
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
@@ -59,13 +61,3 @@ int main(int argc,char** argv) {
   delete runManager;
   return 0;
 }
-
-
-
-
-
-
-
-
-
-
