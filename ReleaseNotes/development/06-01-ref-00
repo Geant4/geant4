@@ -95,6 +95,9 @@ processes/electromagnetic/utils                  utils-V06-00-08
 
 processes/hadronic                               ghad-V06-00-05
 ------------------
+- management (ghad-man-V06-00-02)
+  o Fixed bug in G4HadronicProcess for run-time errors reported by
+    Valgrind about double-deletion of strings.
 - models/binary_cascade (ghad-bin-V06-00-03)
   o Fixed a few memory leaks in G4BinaryLightIonReaction.
     Corrected a logic bug.
