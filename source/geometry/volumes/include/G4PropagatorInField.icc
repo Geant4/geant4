@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.icc,v 1.12 2000-11-20 18:59:41 gcosmo Exp $
+// $Id: G4PropagatorInField.icc,v 1.13 2000-11-20 19:02:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,12 +28,13 @@
 inline
 G4PropagatorInField::G4PropagatorInField(G4Navigator    *theNavigator, 
 		                         G4FieldManager *detectorFieldMgr)
-  : fDetectorFieldMgr(detectorFieldMgr), 
-    fCurrentFieldMgr(detectorFieldMgr), 
+  : fDetectorFieldMgr(detectorFieldMgr),
     fNavigator(theNavigator),
     End_PointAndTangent(G4ThreeVector(0.,0.,0.),
 			G4ThreeVector(0.,0.,0.),0.0,0.0),
     fVerboseLevel(0),
+    fDelta_One_Step_Value(fDefault_Delta_One_Step_Value),
+    fDelta_Intersection_Val(fDefault_Delta_Intersection_Val),
     fmax_loop_count(10000)
 {
      // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
@@ -50,7 +51,7 @@ G4ChordFinder* G4PropagatorInField::GetChordFinder()
 {
       // Now only the "Chord Finder" of the global Field Mgr is used
       //  ... 
-      return fCurrentFieldMgr->GetChordFinder(); 
+      return fDetectorFieldMgr->GetChordFinder(); 
 }
 
 inline
@@ -109,14 +110,14 @@ void     G4PropagatorInField::SetMaxLoopCount(G4int new_max)
 inline
 G4double G4PropagatorInField::GetDeltaIntersection() const
 {
-      return fCurrentFieldMgr->GetDeltaIntersection();
+  return fDelta_Intersection_Val;
 } 
 
 inline
 G4double G4PropagatorInField::GetDeltaOneStep() const
 {
-      return fCurrentFieldMgr->GetDeltaOneStep();
-}
+  return fDelta_One_Step_Value;
+}                                    
 
 inline
 void
@@ -135,7 +136,7 @@ void G4PropagatorInField::SetDeltaOneStep(G4double valDeltaOneStep)
 inline
 void G4PropagatorInField::SetDeltaIntersection(G4double valDeltaIntersection)
 {
-  fDetectorFieldMgr->SetAccuraciesWithDeltaOneStep(valDeltaOneStep);
+  fDelta_Intersection_Val = valDeltaIntersection;
 }
 
 inline
