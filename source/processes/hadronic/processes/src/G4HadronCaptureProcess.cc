@@ -5,9 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronCaptureProcess.cc,v 1.2 1999-12-15 14:53:35 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // G4 Process: Low-energy Neutron Capture
 // F.W. Jones, TRIUMF, 03-DEC-96
@@ -56,54 +53,13 @@ BuildThePhysicsTable(G4ParticleDefinition& aParticleType)
    }
 
    theCrossSectionDataStore->BuildPhysicsTable(aParticleType);
-
-   //   G4double LowEdgeEnergy, Value;
-   //   G4bool isOutRange;
-   //
-   //   static const G4ElementTable* theElementTable;
-   //   theElementTable = G4Element::GetElementTable();
-   //   G4int numOfElements = G4Element::GetNumberOfElements();
-   //   if (verboseLevel > 1) {
-   //      G4cout << "BuildThePhysicsTable: numOfElements " << numOfElements << G4endl;
-   //      G4cout << "BuildThePhysicsTable: thePhysicsTable " << thePhysicsTable << G4endl;
-   //      G4cout << "  for particle: " << aParticleType.GetParticleName() << " " <<
-   //              aParticleType.GetPDGEncoding() << G4endl;
-   //   }
-   //   RWBoolean exists = thePhysicsDictionary.contains(&aParticleType);
-   //   if (verboseLevel > 1) {
-   //      G4cout << "exists=" << exists << G4endl;
-   //   }
-   //   if (exists) {
-   //      thePhysicsTable = thePhysicsDictionary.findValue(&aParticleType);
-   //      if (verboseLevel > 1) {
-   //         G4cout << "  Retrieve tPT=" << thePhysicsTable << G4endl;
-   //      }
-   //// Remove any previous items from table
-   //      thePhysicsTable->clearAndDestroy();
-   //      thePhysicsTable->resize(numOfElements);
-   //   }
-   //   else {
-   //      thePhysicsTable = new G4PhysicsTable(numOfElements);
-   //      if (verboseLevel > 1) {
-   //         G4cout << "  make new tPT=" << thePhysicsTable << G4endl;
-   //         G4cout << "  entries() = " << thePhysicsTable->entries() << G4endl;
-   //      }
-   //      thePhysicsDictionary.insertKeyAndValue(&aParticleType, thePhysicsTable);
-   //   }
-   //// Make a PhysicsVector for each element
-   //   for (G4int J = 0; J < numOfElements; J++) { 
-   //      (*thePhysicsTable)(J) =
-   //         theCrossSectionData.MakePhysicsVector(*this,
-   //                                               aParticleType,
-   //                                               (*theElementTable)[J]);
-   //   }
 }
 
 
 G4double 
 G4HadronCaptureProcess::
 GetMicroscopicCrossSection(const G4DynamicParticle* aParticle,
-                           const G4Element* anElement)
+                           const G4Element* anElement, G4double aTemp)
 {
    // gives the microscopic cross section in GEANT4 internal units
 
@@ -111,30 +67,7 @@ GetMicroscopicCrossSection(const G4DynamicParticle* aParticle,
       G4Exception("G4HadronCaptureProcess: no cross section data Store");
       return DBL_MIN;
    }
-   return theCrossSectionDataStore->GetCrossSection(aParticle, anElement);
-
-   //   G4int J ;
-   //   G4bool isOutRange ;
-   //   G4double MicroscopicCrossSection ;
-   //
-   //   RWBoolean exists = 
-   //     thePhysicsDictionary.contains(aParticle->GetDefinition());
-   //   if (!exists) {
-   //      G4Exception("G4HadronCaptureProcess::GetMicroscopicCrossSection: "
-   //                  "no physics table for particle");
-   //      return G4double(0);
-   //   }
-   //   thePhysicsTable = 
-   //      thePhysicsDictionary.findValue(aParticle->GetDefinition());
-   //   if (verboseLevel > 1) {
-   //      G4cout << "  Retrieve tPT=" << thePhysicsTable << G4endl;
-   //   }
-   //
-   //   J = anElement->GetIndex();
-   //   MicroscopicCrossSection = (*((*thePhysicsTable)(J))).
-   //                              GetValue(aParticle->GetKineticEnergy()/GeV,
-   //                                       isOutRange);
-   //   return MicroscopicCrossSection;
+   return theCrossSectionDataStore->GetCrossSection(aParticle, anElement, aTemp);
 }
 
 
@@ -152,12 +85,13 @@ GetMeanFreePathBasic(const G4DynamicParticle* aParticle,
 
    theElementVector = aMaterial->GetElementVector();
    theAtomicNumDensityVector = aMaterial->GetAtomicNumDensityVector();
+   G4double aTemp = aMaterial->GetTemperature();
 
    G4double sigma = 0.;
 
    for (G4int i = 0; i < aMaterial->GetNumberOfElements(); i++) {
      sigma = sigma + theAtomicNumDensityVector[i] * 
-             GetMicroscopicCrossSection(aParticle, (*theElementVector)(i));
+             GetMicroscopicCrossSection(aParticle, (*theElementVector)(i), aTemp);
    }
    if (verboseLevel > 1)
      G4cout << "G4HadronCaptureProcess::GetMeanFreePathBasic: sigma=" 
