@@ -1,0 +1,22 @@
+#
+# runSBT
+# 
+# A script to run SBT with a batch script, and sum up errors in all
+# produced error log files
+#
+# Usage:
+#        runSBT <SBT-directory> <solid-name> [<executable>]
+#
+#
+if ($#argv < 2 | $#argv > 3) then
+  echo "Usage: runSBT <SBT-directory> <solid-name> [<executable>]"
+  exit 1
+else if ($#argv < 3) then
+  set EXECUTABLE=$G4WORKDIR/bin/$G4SYSTEM/SBT
+else
+  set EXECUTABLE=$3
+endif
+#
+rm -f SBT.$2.log
+$EXECUTABLE < $1/$2.geant4 >& SBT.$2.log
+awk -f $1/counterr.awk $2*.log

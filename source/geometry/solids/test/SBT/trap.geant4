@@ -1,0 +1,34 @@
+#
+# GEANT4 SBT Script to test G4Cons
+# DCW 19/3/99 First try
+#
+# Increment the number below when errors become a bit more rare
+#
+test/maxPoints 10000
+#
+# --- trap.a{1,2}.log
+# Here is a trap,  used and getting problems in CMS    May 28, 1999
+#
+/test/gridSizes 0 0 0 m
+/solid/G4Trap   1268.  0 0 295.  1712.2 1870.29 0 295.  1712.2 1870.29 0 mm
+/test/errorFileName trap.a1.log
+/test/run
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName trap.a2.log
+/test/run
+/test/gridSizes 0.01 0.01 0.01 m
+/test/errorFileName trap.a3.log
+/test/run
+
+/test/widths 2 2 2 m
+/test/gridSizes 0.05 0.05 0.05 m
+/test/errorFileName trap.b1.log
+/test/run
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName trap.b2.log
+/test/run
+/test/gridSizes 0.01 0.01 0.01 m
+/test/errorFileName trap.b3.log
+/test/run
+#
+exit

@@ -1,0 +1,17 @@
+MACRO PlotRZD
+|
+| Use paw to plot r/z cross section of polycone test case d
+|
+  vec/create rr(18) r 0.0 0.2 0.3 0.32 0.32 0.4 0.4 0.5 0.5 0.8 0.8 0.9 0.9 0.8 0.8 0.3 0.0 0.0
+  vec/create zz(18) r -0.5 -0.5 -1.1 -1.1 -0.4 -0.4 -1.0 -1.0 -0.4 -1.0 0.0 0.0 0.2 0.2 1.0 0.0 1.0 -0.5
+
+  null -1.2 1.2 -0.2 1.2
+  pline $sigma(NCO(zz)) zz rr
+  
+  do i = 1, $sigma(NCO(zz)-1)
+    i0 = [i]-1
+    xl = zz([i])+0.025
+    yl = rr([i])-0.025
+    text [xl] [yl] [i0] 0.25 0 L
+  enddo
+RETURN

@@ -1,0 +1,84 @@
+#
+# GEANT4 SBT Script to test G4Polyhedra
+# DCW 25/3/99 First try
+#
+# Increment the number below to **really** waste CPU time
+#
+test/maxPoints 100
+#
+# --- polyhedra.a1.log
+# Start with a nice and easy case
+#
+/solid/G4Polyhedra 0 360 8 4 (1.0,1.2,1.4,1.2) (-1.0,-1.0,1.0,1.0)
+/test/errorFileName polyhedra.a1.log
+/test/run
+#
+# --- polyhedra.a2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName polyhedra.a2.log
+/test/run
+#
+#
+# --- polyhedra.b1.log
+# Now add a phi slice
+#
+/solid/G4Polyhedra 0 90 8 4 (1.0,1.2,1.4,1.2) (-1.0,-1.0,1.0,1.0)
+/test/gridSizes 0 0 0 m
+/test/errorFileName polyhedra.b1.log
+/test/run
+#
+# --- polyhedra.b2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName polyhedra.b2.log
+/test/run
+#
+# --- polyhedra.c1.log
+# Build a much more complicated polyhedra
+#
+/solid/G4Polyhedra 0 360 6 17 (0.0,0.2,0.3,0.32,0.32,0.4,0.4,0.5,0.5,0.8,0.8,0.9,0.9,0.8,0.8,0.3,0.0) (-0.5,-0.5,-1.1,-1.1,-0.4,-0.4,-1.0,-1.0,-0.4,-1.0,0.0,0.0,0.2,0.2,1.0,0.0,1.0) 
+/test/gridSizes 0 0 0 m
+/test/errorFileName polyhedra.c1.log
+/test/run
+#
+# --- polyhedra.b2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName polyhedra.c2.log
+/test/run
+#
+# --- polyhedra.d1.log
+# Build a much more complicated polyhedra, now with a slice
+#
+/solid/G4Polyhedra 0 90 2 17 (0.0,0.2,0.3,0.32,0.32,0.4,0.4,0.5,0.5,0.8,0.8,0.9,0.9,0.8,0.8,0.3,0.0) (-0.5,-0.5,-1.1,-1.1,-0.4,-0.4,-1.0,-1.0,-0.4,-1.0,0.0,0.0,0.2,0.2,1.0,0.0,1.0) 
+/test/gridSizes 0 0 0 m
+/test/errorFileName polyhedra.d1.log
+/test/run
+#
+# --- polyhedra.d2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName polyhedra.d2.log
+/test/run
+#
+# --- polyhedra.e1.log
+# Build a much more complicated polyhedra, now with a thin slice
+#
+/solid/G4Polyhedra -1 2 2 17 (0.0,0.2,0.3,0.32,0.32,0.4,0.4,0.5,0.5,0.8,0.8,0.9,0.9,0.8,0.8,0.3,0.0) (-0.5,-0.5,-1.1,-1.1,-0.4,-0.4,-1.0,-1.0,-0.4,-1.0,0.0,0.0,0.2,0.2,1.0,0.0,1.0) 
+/test/gridSizes 0 0 0 m
+/test/errorFileName polyhedra.e1.log
+/test/run
+#
+# --- polyhedra.e2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName polyhedra.e2.log
+/test/run
+#
+exit

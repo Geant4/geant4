@@ -1,0 +1,28 @@
+#
+# GEANT4 SBT Script to test G4Box
+# DCW 19/3/99 
+#
+test/maxPoints 10000
+#
+# --- box.a1.log
+# Start with a nice and easy case
+#
+/solid/G4Box 1 1 1
+/test/errorFileName box.a1.log
+/test/run
+#
+# --- box.a2.log
+# Up the ante ans generate points on a grid
+#
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName box.a2.log
+/test/run
+#
+# --- box.b1.log
+# Try an odd case
+#
+/solid/G4Box 0.001 1 2
+/test/errorFileName box.b1.log
+/test/run
+#
+exit

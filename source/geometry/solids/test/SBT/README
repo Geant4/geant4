@@ -1,0 +1,406 @@
+SBT README      DCW 6/4/99
+
+Solids Batch Test
+-----------------
+
+This facility is designed to test the correct behavior of CSG solids.
+It features:
+
+      1. Interactive creation of solids. Solid parameters can
+         be specified at the UI interface so that varied tests can
+	 be run on solids with different parameters without recompiling
+	 the code.
+	 
+      2. Log file. Errors are listed in a log file for later study.
+      
+      3. Debugging. Errors in a log file can be recreated for later
+         offline debugging.
+	 
+      4. Visualization. Errors in a log file can be recreated offline
+         for visual display, as an aid in debugging.
+	 
+      5. Grids. There is an option to create test trajectories and 
+         points along discrete points in space, to test errors at the
+	 exact intersections with solid edges and corners.
+
+
+Installation
+------------
+
+The standard make file including with SBT links against the full geant4
+libraries (much like a geant4 application). 
+
+It should be possible to produce a makefile that only requires a
+subset of libraries, but this makefile is not supplied in the package.
+
+SBT has been tested on SUN-CC and AIX-xlC platforms.
+
+
+General (Interactive) Use
+-------------------------
+
+The general use of SBT involves the following commands:
+    1. Choosing a solid (with a "/solid/" command)
+    2. Specifying test parameters (with a "/test/" command)
+    3. Running the test (with command "/test/run")
+    4. Repeating as desired
+
+Example session:
+
+/solid/G4Polycone 0 360 4 (1.0,1.2,1.4,1.2) (-1.0,-1.0,1.0,1.0)
+/test/maxPoints 100
+/test/errorFileName mylogfile.log
+/test/run
+
+
+Batch Jobs
+----------
+
+geant4 command scripts for some solids are supplied. They are given
+names <solid>.geant4, e.g. "box.geant4" and "polycone.geant4". Each
+script attempts to run a comprehensive test using several variations
+of each solid, with and without discrete test points. When used they
+produce several log files. The log file are given the names 
+<solid>.<test>.log, e.g. "box.a1.log".
+
+The Unix script "runSBT" is included to do the following:
+     1. Run SBT using a geant4 script
+     2. Tally up in one line the total number of
+        reported errors in all log files
+
+
+Method
+------
+
+SBT creates a set of random points in 3D space, in a Gaussian distribution
+with adjustable mean and width in each dimension. The default is to
+generate points with a distribution centered at zero and with a width
+of 1 meter. This is appropriate for solids of dimensions of roughly 1
+meter on each side.
+
+Adjustments of the mean is possible with the "/test/target" command
+and the widths with the "/test/widths" command. Adjustment of these
+parameters are generally not necessary if enough points are generated
+but may be desirable in order to make the test more efficient.
+Adjustment of the mean may also be desirable for discrete points
+(see description later in this file).
+
+For each generated point, SBT first asks the target solid if the
+point is inside, outside, or on the surface of the solid. Depending
+on the answer, the point is added to a corresponding list of points.
+Each of the three lists (of inside, outside, or surface points) contains
+at most 100 points. If a new point is added to a list that already 
+contains 100 points, it replaces an existing point chosen at random.
+The limitation of 100 points is intended to keep SBT running roughly
+in a CPU time of roughly proportional to the total number of
+points generated.
+
+After being added to its list, each inside point is tested
+against all of the points on the outside list. Similarly, each
+outside point is tested against all of the points on the inside list.
+At the moment, no tests are performed on the surface points.
+The tests are described in more detail below.
+
+Any error encountered is written to a log file. The name of the log
+file by default is "sbt.log", and can be changed with the
+"/test/errorFileName" command. The format of the log file is
+described in more detail below. To prevent flooding of the log file
+by one type of error, if the same error is uncovered more than five
+times, any remaining such errors are suppressed in the log file.
+
+SBT finishes its test when one of the following conditions are met:
+
+     1. The total number of random points reaches a maximum
+     2. The total number of errors reported reaches a maximum
+     
+Value (1) defaults to 10000 points and is set by command "/test/maxPoints".
+Value (2) defaults to 100 errors in the log file and is set by
+command "/test/maxErrors".
+
+
+Choosing the Target Solid
+------------------------
+
+The following commands are available for creating solids:
+
+/solid/G4Box  <dx> <dy> <dz>
+
+/solid/G4Para  <dx> <dy> <dz> <alpha> <theta> <phi>
+
+/solid/G4Trap  <dz> <theta> <phi> <dy1> <dx1> <dx2> <alpha1> <dy2> <dx3> <dx4> <alpha2>
+
+/solid/G4Trd  <dx1> <dx2> <dy1> <dy2> <dz>
+
+/solid/G4Sphere  <rmin> <rmax> <startPhi> <deltaPhi> <startTheta> <deltaTheta>
+
+/solid/G4Torus  <rmin> <rmax> <rtorus> <startPhi> <deltaPhi>
+
+/solid/G4Tubs  <rmin> <rmax> <dz> <startPhi> <deltaPhi>
+
+/solid/G4Cons  <rmin1> <rmax1> <rmin2> <rmax2> <dz> <startPhi> <deltaPhi>
+
+/solid/G4Hype  <innerRadius> <outerRadius> <innerStereo> <outerStereo> <dz>
+
+/solid/G4Polycone  <phiStart> <phiTotal> <numRZ> <r[]> <z[]>
+
+/solid/G4Polyhedra  <phiStart> <phiTotal> <numSides> <numRZ> <r[]> <z[]>
+
+Units are always meters and degrees.
+
+The arrays r[] and z[] have the following syntax:
+
+       (<value1>[,<values2>...])  | (-)
+       
+where *no spaces are allowed*. The special array "(-)" is the empty array.
+
+Examples:
+
+/solid/G4Box 1 1 1
+
+/solid/G4Tubs 0.8 1 1 0 90
+
+/solid/G4Polycone 0 90 4 (1.0,1.2,1.4,1.2) (-1.0,-1.0,1.0,1.0)
+
+
+Log File Format
+---------------
+
+The log file is an ASCII file delimited by newlines. Each line
+that begins with "%" is a comment. Other lines have the format:
+
+<error number> <p.x> <p.y> <p.z> <v.x> <v.y> <v.z>
+
+where p is the position and v is the (unit) direction most closely
+associated with the error. Before each such error line, SBT adds
+a comment describing the error. In addition SBT adds comments
+concerning the test at the beginning and end of the file.
+
+The meaning of the specific errors are described below.
+
+
+Testing Inside Points
+---------------------
+
+See routine SBTrun::TestInsidePoint in file src/SBTrun.cc.
+
+Each inside point is tested against all points in the outside list.
+The tests are, in order:
+
+   1. DistanceToOut(p) is invoked, where p is the inside point being
+      tested. The result must be greater than 0, or the following
+      error is issued in the log file:
+      
+        "TI: DistanceToOut(p) <= 0"
+
+   2. The vector v is calculated from the inside point to the
+      next point in the list of outside points. DistanceToOut(p,v,...)
+      is then invoked. The value must be greater than zero or
+      the following error is issued:
+      
+        "TI: DistanceToOut(p,v) <= 0"
+
+      The result must not be "kInfinity" or the following error is issued:
+      
+        "TI: DistanceToOut(p,v) == kInfinity"
+
+      The result must not be less than the value from step (1), 
+      or the following error is issued:
+      
+        "TI: DistanceToOut(p,v) < DistanceToIn(p)"
+
+   3. If the normal returned by step (2) is valid, the dot product
+      of the normal and v must be greater than zero, or the
+      following error is issued:
+      
+        "TI: Outgoing normal incorrect"
+
+   4. A new point p2 = p + dist*v is calculated, where dist is the
+      value found in step (2). Inside(p2) is then invoked. If the
+      results is "kInside", the following error is issued:
+      
+        "TI: DistanceToOut(p,v) undershoots"
+
+      If the result is "kOutside", the following error is issued:
+      
+        "TI: DistanceToOut(p,v) overshoots"
+
+      In both cases, the value of p is stored in the log file (not p2).
+
+   5. DistanceToIn(p2) is invoked. If the result is not *exactly* zero,
+      the following error is issued:
+      
+        "T02: DistanceToIn(p) should be zero"
+
+   6. DistanceToOut(p2) is invoked. If the result is not *exactly* zero,
+      the following error is issued:
+      
+        "T02: DistanceToOut(p) should be zero"
+
+   7. DistanceToIn(p2,v) is invoked. If the result is not *exactly* zero,
+      the following error is issued:
+      
+        "T02: DistanceToIn(p,v) should be zero"
+
+   8. DistanceToOut(p2,v,...) is invoked. If the result is zero, we have
+      encountered the deadlock condition (track passing through a 
+      corner) that currently plagues the CSG solid specifications.
+      The test on this particular outside point is suspended, and step
+      (2) is skipped to for the next outside point on the list.
+
+      If the result is "kInfinity", the following error is issued:
+      
+        "T02: DistanceToOut(p,v) == kInfinity"
+
+   9. If the normal calculated in step (8) is valid, the dot product
+      of the normal and v must be greater than zero, or the following
+      error is issued:
+      
+        "T02: Outgoing normal incorrect"
+
+  10. The vector p3 = p2 + dist*v is calculated, where dist is the
+      value returned in step 8. Inside(p3) is then invoked. If the
+      result is "kInside", the following error is issued:
+      
+        "T02: DistanceToOut(p,v) undershoots"
+
+      If the result is "kOutside", the following error is issued:
+      
+        "TO2: DistanceToOut(p,v) overshoots"
+
+  11. If the result of step (8) has a valid normal, DistanceToIn(p3,v)
+      is invoked. If the result is not "kInfinity", the following
+      error is issued:
+      
+        "TO2: DistanceToOut incorrectly returns validNorm==true (line of sight)"
+
+      (validNorm is to be returned true only if the solid is entirely
+      behind the surface being exited.)
+
+  12. If the result of step (8) has a valid normal, the vector
+      p3top = pi - p3 is calculated for all points pi on the inside list.
+      The dot production of p3top with the normal (from step (8)) is
+      then calculated. If this dot product for any inside point
+      is positive, then the following error is issued:
+      
+        "T02: DistanceToOut incorrectly returns validNorm==true (horizon)"
+
+      (validNorm is to be returned true only if the solid is entirely
+      behind the plane perpendicular to the normal at the exit point.)
+
+
+Testing Outside Points
+----------------------
+
+See routine SBTrun::TestOutsidePoint in file src/SBTrun.cc.
+
+Each outside point is tested against all points in the inside list.
+The test are, in order:
+
+   1. DistanceToIn(p) is invoked, where p is the target outside
+      point. The result must be greater than zero, or the following
+      error is issued:
+       
+        "T0: DistanceToIn(p) <= 0"
+
+   2. The vector v is calculated from the outside point to the
+      next point in the list of inside points. DistanceToIn(p,v)
+      is then invoked. The value must be greater than zero or
+      the following error is issued:
+
+        "T0: DistanceToIn(p,v) <= 0"
+
+      The result must not be "kInfinity", or the following error
+      is issued:
+      
+        "T0: DistanceToIn(p,v) == kInfinity"
+
+      The result must be greater than the value from step (1),
+      or the following error is issued:
+      
+        "T0: DistanceToIn(p,v) < DistanceToIn(p)"
+
+   3. A new point p2 = p + dist*v is calculated, where dist is the
+      value found in step (2). Inside(p2) is then invoked. If the
+      results is "kOutside", the following error is issued:
+      
+        "TO: DistanceToOut(p,v) undershoots"
+
+      If the result is "kInside", the following error is issued:
+      
+        "TO: DistanceToOut(p,v) overshoots"
+
+      In both cases, the value of p is stored in the log file (not p2).
+
+
+Discrete Points
+---------------
+
+There is an option of generating random points on a grid. The origin
+of the grid always corresponds to the mean value (as set by "/test/target").
+The spacing of the grid is adjusted by command "/test/gridSizes".
+
+
+Debugging
+---------
+
+Once a test is run and a log file created, it is possible to read the
+values from the log file to recreate an error. This is useful in the
+debugger to discover the precise reason for the error.
+
+No check is made that the current solid is identical to the solid
+used to make the log file. It is up to the user to ensure this
+(using the appropriate "/solid/" command if necessary).
+
+The following commands are supported:
+
+   1. /test/draw <error number>
+
+      Draw the error and the solid (if possible) using the currently
+      selected visualization.
+
+   2. /test/debugInside <error number>
+   
+      Invokes the "Inside" method of the test solid.
+
+   3. /test/debugToInP <error number>
+   
+      Invokes the "DistanceToIn(p)" method of the test solid.
+      
+   4. /test/debugToInPV <error number>
+   
+      Invokes the "DistanceToIn(p,v)" method of the test solid.
+      A new point p2 = p + dist*v is calculated, and then the
+      "Inside" method is invoked for that point.
+      
+   5. /test/debugToOutP <error number>
+   
+      Invokes the "DistanceToOut(p)" method of the test solid.
+      
+   6. /test/debugToOutPV <error number>
+   
+      Invokes the "DistanceToOut(p,v,...)" method of the test solid.
+      A new point p2 = p + dist*v is calculated, and then the
+      "Inside" method is invoked for that point.
+
+These commands are intended to be in combination with a debugger (such
+as dbx). To debug a particular error, one sets a break point in the
+relevant routine(s) and issues the appropriate "/test/" command.
+The "/test/draw" command may be useful to isolate the problem.
+
+Clearly, to use the debugger requires that the geant4 libraries linked
+to SBT are compiled with the debug flag on (environment variable G4DEBUG).
+
+
+Problems
+--------
+
+Visualization is used in a manner that may not be entirely consistent
+with its design. This may introduce errors.
+
+SBT uses the random number generator G4UniformRand. It does not appear
+that this random number generator is reproducible across platforms.
+
+Recovering an error from a log file sometimes does not reproduce the
+problem, presumably due to a subtle inaccuracy in translating the double
+values to and/or from the ASCII log file. This despite writing out
+14 digits for the values in the ASCII log file.
