@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIparameter.cc,v 1.2 1999-11-11 15:36:07 gunter Exp $
+// $Id: G4UIparameter.cc,v 1.3 1999-11-15 10:39:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -126,7 +126,7 @@ CheckNewValue( G4String newValue ) {
 
 int G4UIparameter::
 CandidateCheck(G4String newValue) {
-    RWCTokenizer candidateTokenizer(parameterCandidate);
+    G4Tokenizer candidateTokenizer(parameterCandidate);
     G4String aToken;
     int iToken = 0;
     while( ! (aToken=candidateTokenizer()).isNull() )

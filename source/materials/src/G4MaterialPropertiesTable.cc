@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.6 1999-11-11 15:36:10 gunter Exp $
+// $Id: G4MaterialPropertiesTable.cc,v 1.7 1999-11-15 10:39:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,8 +53,8 @@ G4MaterialPropertiesTable::operator =(const G4MaterialPropertiesTable& right)
         while (++rightIterator) {
 		G4MaterialPropertyVector *newProp =
                         new G4MaterialPropertyVector(*(rightIterator.value()));
-                RWCString *newKey =
-                        new RWCString(*(rightIterator.key()));
+                G4String *newKey =
+                        new G4String(*(rightIterator.key()));
                 MPT.insertKeyAndValue(newKey, newProp);
         }
         return *this;
@@ -85,8 +85,8 @@ G4MaterialPropertiesTable::G4MaterialPropertiesTable
         while (++rightIterator) {
 		G4MaterialPropertyVector *newProp =
                         new G4MaterialPropertyVector(*(rightIterator.value()));
-                RWCString *newKey =
-                        new RWCString(*(rightIterator.key()));
+                G4String *newKey =
+                        new G4String(*(rightIterator.key()));
                 MPT.insertKeyAndValue(newKey, newProp);
         }
 }

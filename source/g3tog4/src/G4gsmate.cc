@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsmate.cc,v 1.2 1999-05-06 04:25:48 lockman Exp $
+// $Id: G4gsmate.cc,v 1.3 1999-11-15 10:39:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -16,7 +16,7 @@
 
 //extern int debugOn;
 
-void PG4gsmate(RWCString tokens[])
+void PG4gsmate(G4String tokens[])
 {
   // fill the parameter containers
   G3fillParams(tokens,PTgsmate);
@@ -50,7 +50,7 @@ void G4gsmate(G4int imate, G4String name, G4double ain, G4double zin,
   G4State theState = kStateUndefined;
   G4double thePressure = STP_Pressure;
   G4double theTemperature = STP_Temperature;
-  G4String sname = name.strip(RWCString::both);
+  G4String sname = name.strip(G4String::both);
   G4String symbol;
 
   if (sname == "AIR") {

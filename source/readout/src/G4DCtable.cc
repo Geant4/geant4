@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DCtable.cc,v 1.1 1999-01-07 16:14:13 gunter Exp $
+// $Id: G4DCtable.cc,v 1.2 1999-11-15 10:39:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -27,7 +27,7 @@ G4int G4DCtable::Registor(G4String DMname,G4String DCname)
 G4int G4DCtable::GetCollectionID(G4String DCname)
 {
   G4int i = -1;
-  if(DCname.index("/")==RW_NPOS) // DCname only
+  if(DCname.index("/")==G4std::string::npos) // DCname only
   {
     for(G4int j=0;j<DClist.entries();j++)
     {

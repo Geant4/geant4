@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gspos.cc,v 1.9 1999-05-28 23:03:43 lockman Exp $
+// $Id: G4gspos.cc,v 1.10 1999-11-15 10:39:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -15,7 +15,7 @@
 #include "VolTableEntry.hh"
 #include "G3Pos.hh"
 
-void PG4gspos(RWCString tokens[])
+void PG4gspos(G4String tokens[])
 {
         // fill the parameter containers
     G3fillParams(tokens,PTgspos);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIGAG.cc,v 1.6 1999-11-08 04:12:47 masayasu Exp $
+// $Id: G4UIGAG.cc,v 1.7 1999-11-15 10:39:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UIGAG.cc
@@ -386,7 +386,7 @@ void G4UIGAG::TerminalHelp(G4String newCommand)
 {
   G4UIcommandTree * treeTop = UI->GetTree();
   int i = newCommand.index(" ");
-  if( i != RW_NPOS )
+  if( i != G4std::string::npos )
   {
     G4String newValue = newCommand(i+1,newCommand.length()-(i+1));
     newValue.strip(G4String::both);

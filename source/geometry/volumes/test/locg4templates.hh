@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: locg4templates.hh,v 1.2 1999-11-11 15:36:02 gunter Exp $
+// $Id: locg4templates.hh,v 1.3 1999-11-15 10:39:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,7 +55,7 @@ static G4RWTValOrderedVector<G4Transform3D>        dummy54;
 
 // To have a clean shared lib link with option -Wl,-v :
 void dummyUse () {
- RWCString                dummy35;
+ G4String                dummy35;
  dummy24.clearAndDestroy  ();
 
 // dummy26.boundsCheck     (0);
@@ -128,7 +128,7 @@ template class G4RWTValVector<EVolume>;
 static G4RWTValVector<EVolume> dummy_aCC_1016;
 #include "G4Transform3D.hh"
 template class G4RWTValOrderedVector<G4Transform3D>;
-template class G4RWTValOrderedVector<RWCString>;
+template class G4RWTValOrderedVector<G4String>;
 template class G4RWTValVector<int>;
 static G4RWTValVector<int> dummy_aCC_1017;
 template class G4RWTValVector<EAxis>;

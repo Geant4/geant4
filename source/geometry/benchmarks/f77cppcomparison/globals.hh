@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: globals.hh,v 1.1 1999-01-08 16:31:35 gunter Exp $
+// $Id: globals.hh,v 1.2 1999-11-15 10:39:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -26,7 +26,7 @@ typedef int G4int;
 
 // Typedefs to decouple from library classes
 //#include <rw/cstring.h>
-//typedef RWCString G4String;
+//typedef G4String G4String;
 
 // Boolean - define G4_HAVE_BOOL if bool type available
 #ifdef G4_HAVE_BOOL

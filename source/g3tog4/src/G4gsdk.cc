@@ -5,14 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdk.cc,v 1.1 1999-01-07 16:06:49 gunter Exp $
+// $Id: G4gsdk.cc,v 1.2 1999-11-15 10:39:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4Decay.hh"
 #include "G3toG4.hh"
 #include "G3PartTable.hh"
 
-void PG4gsdk(RWCString tokens[])
+void PG4gsdk(G4String tokens[])
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdk);

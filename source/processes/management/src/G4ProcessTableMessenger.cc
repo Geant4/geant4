@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessTableMessenger.cc,v 1.4 1999-11-11 15:37:52 gunter Exp $
+// $Id: G4ProcessTableMessenger.cc,v 1.5 1999-11-15 10:39:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -186,7 +186,7 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     //Commnad   /process/verbose
 
   } else {
-    RWCTokenizer next( newValue );
+    G4Tokenizer next( newValue );
 
     // check 1st argument
     currentProcessName = G4String(next());

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessCreateView.cc,v 1.3 1999-01-11 00:48:36 allison Exp $
+// $Id: G4VisManMessCreateView.cc,v 1.4 1999-11-15 10:39:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,17 +72,17 @@ void G4VisManMessenger::DoCommandCreateView (const G4String& commandPath,
       int iGS;  // Selector index.
       for (iGS = 0; iGS < nSystems; iGS++) {
 	if (selector.compareTo (gsl [iGS] -> GetName (),
-				RWCString::ignoreCase) == 0 ||
+				G4String::ignoreCase) == 0 ||
 	    selector.compareTo (gsl [iGS] -> GetNickname (),
-				RWCString::ignoreCase) == 0) {
+				G4String::ignoreCase) == 0) {
 	  break;  // Match found.
 	}
       }
       if (iGS < 0 || iGS >= nSystems) {
 	// Invalid command line argument or non.  Print available systems.
 	G4bool help;
-	if (selector.compareTo ("help", RWCString::ignoreCase) == 0 ||
-	    selector.compareTo ("info", RWCString::ignoreCase) == 0)
+	if (selector.compareTo ("help", G4String::ignoreCase) == 0 ||
+	    selector.compareTo ("info", G4String::ignoreCase) == 0)
 	  help = true;
 	else help = false;
 	int maxNameLength = strlen ("class name");
@@ -123,7 +123,7 @@ void G4VisManMessenger::DoCommandCreateView (const G4String& commandPath,
 	    description = gsl [igs] -> GetDescription ();
 	    if (description != "") {
 	      size_t index = 0;
-	      while ((index = description.index ('\n', ++index)) != RW_NPOS) {
+	      while ((index = description.index ('\n', ++index)) != G4std::string::npos) {
 		description.replace (index, 1, "\n   ");
 	      }
 	      G4cout << "\n   " << description;

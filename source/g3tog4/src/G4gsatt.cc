@@ -5,14 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsatt.cc,v 1.4 1999-11-11 15:35:47 gunter Exp $
+// $Id: G4gsatt.cc,v 1.5 1999-11-15 10:39:37 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "g4rw/cstring.h"
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
 
-void PG4gsatt(RWCString tokens[])
+void PG4gsatt(G4String tokens[])
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsatt);

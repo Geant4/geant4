@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.7 1999-05-12 13:58:48 barrand Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.8 1999-11-15 10:39:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -247,9 +247,9 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   int iGS;  // Selector index.
   for (iGS = 0; iGS < nSystems; iGS++) {
     if (graphicsSystem.compareTo (gsl [iGS] -> GetName (),
-				  RWCString::ignoreCase) == 0 ||
+				  G4String::ignoreCase) == 0 ||
 	graphicsSystem.compareTo (gsl [iGS] -> GetNickname (),
-				  RWCString::ignoreCase) == 0) {
+				  G4String::ignoreCase) == 0) {
       break;  // Match found.
     }
   }

@@ -4,7 +4,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tst2HtmlReporter.cc,v 1.2 1999-11-11 15:36:20 gunter Exp $
+// $Id: tst2HtmlReporter.cc,v 1.3 1999-11-15 10:39:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,7 @@
 
 void tst2HtmlReporter::SparseOption(const G4String& option)
 {
-  RWCTokenizer savedToken( option );
+  G4Tokenizer savedToken( option );
   
   // 1st option : base directory
   baseDir = savedToken();

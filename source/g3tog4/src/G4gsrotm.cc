@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsrotm.cc,v 1.5 1999-07-20 14:16:59 lockman Exp $
+// $Id: G4gsrotm.cc,v 1.6 1999-11-15 10:39:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ThreeVector.hh"
@@ -13,7 +13,7 @@
 #include "G3RotTable.hh"
 #include "G3toG4RotationMatrix.hh"
 
-void PG4gsrotm(RWCString tokens[])
+void PG4gsrotm(G4String tokens[])
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsrotm);

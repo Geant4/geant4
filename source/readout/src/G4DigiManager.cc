@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DigiManager.cc,v 1.1 1999-01-07 16:14:14 gunter Exp $
+// $Id: G4DigiManager.cc,v 1.2 1999-11-15 10:39:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,7 +52,7 @@ G4DigiManager::~G4DigiManager()
 void G4DigiManager::AddNewModule(G4VDigitizerModule* DM)
 {
   G4String DMname = DM->GetName();
-  if(DMtable.index(DM) != RW_NPOS)
+  if(DMtable.index(DM) != G4std::string::npos)
   { 
     G4cout << "<" << DMname << "> has already been registored." << endl; 
     return;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImanager.cc,v 1.2 1999-10-28 04:37:18 yhajime Exp $
+// $Id: G4UImanager.cc,v 1.3 1999-11-15 10:39:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,7 +100,7 @@ int parameterNumber, G4bool reGet)
   {
     savedParameters = GetCurrentValues( aCommand );
   }
-  RWCTokenizer savedToken( savedParameters );
+  G4Tokenizer savedToken( savedParameters );
   G4String token;
   for(int i_thParameter=0;i_thParameter<parameterNumber;i_thParameter++)
   {
@@ -211,7 +211,7 @@ int G4UImanager::ApplyCommand(G4String aCommand)
   G4String commandString;
   G4String commandParameter;
   int i = aCommand.index(" ");
-  if( i != RW_NPOS )
+  if( i != G4std::string::npos )
   {
     commandString = aCommand(0,i);
     commandParameter = aCommand(i+1,aCommand.length()-(i+1));

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdvn.cc,v 1.3 1999-05-22 06:31:40 lockman Exp $
+// $Id: G4gsdvn.cc,v 1.4 1999-11-15 10:39:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
@@ -18,7 +18,7 @@
 #include "G3VolTable.hh"
 #include "G3CalcParams.hh"
 
-void PG4gsdvn(RWCString tokens[])
+void PG4gsdvn(G4String tokens[])
 {
   // fill the parameter containers
   G3fillParams(tokens,PTgsdvn);

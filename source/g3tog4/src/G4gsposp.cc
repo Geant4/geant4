@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsposp.cc,v 1.9 1999-05-26 03:50:05 lockman Exp $
+// $Id: G4gsposp.cc,v 1.10 1999-11-15 10:39:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -13,7 +13,7 @@
 #include "G3VolTable.hh"
 #include "G4makevol.hh"
 
-void PG4gsposp(RWCString tokens[]){
+void PG4gsposp(G4String tokens[]){
   // fill the parameter containers
   G3fillParams(tokens,PTgsposp);
   

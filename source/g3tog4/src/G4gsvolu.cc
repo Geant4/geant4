@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsvolu.cc,v 1.4 1999-05-22 06:31:58 lockman Exp $
+// $Id: G4gsvolu.cc,v 1.5 1999-11-15 10:39:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
@@ -18,7 +18,7 @@
 G4bool G3CalcParamsFn(G4double *Rpar, G4int npar, G4double *Rparm,
                        G4String shape, G4String shapem);
 
-void PG4gsvolu(RWCString tokens[]) {
+void PG4gsvolu(G4String tokens[]) {
     // fill the parameter containers
     G3fillParams(tokens,PTgsvolu);
 

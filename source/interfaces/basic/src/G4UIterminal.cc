@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIterminal.cc,v 1.4 1999-10-12 12:02:28 stesting Exp $
+// $Id: G4UIterminal.cc,v 1.5 1999-11-15 10:39:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -96,7 +96,7 @@ void G4UIterminal::ExecuteCommand(G4String aCommand)
       break;
     case fCommandNotFound:
       G4cerr << "command <" << aCommand << "> not found" << endl;
-       if ( aCommand.index("@@") != RW_NPOS) {
+       if ( aCommand.index("@@") != G4std::string::npos) {
        G4cout << "@@G4UIterminal" << endl;
        }
       break;

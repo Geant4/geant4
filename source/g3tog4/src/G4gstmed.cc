@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gstmed.cc,v 1.2 1999-05-06 04:27:09 lockman Exp $
+// $Id: G4gstmed.cc,v 1.3 1999-11-15 10:39:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4LogicalVolume.hh"
@@ -13,7 +13,7 @@
 #include "G3MatTable.hh"
 #include "G3MedTable.hh"
 
-void PG4gstmed(RWCString tokens[])
+void PG4gstmed(G4String tokens[])
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgstmed);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessSet.cc,v 1.4 1999-11-11 15:38:13 gunter Exp $
+// $Id: G4VisManMessSet.cc,v 1.5 1999-11-15 10:39:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -205,8 +205,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
     const char* t = newValues;
     istrstream is ((char*)t); is >> choice >> density;
     G4int iSelector = -1;
-    if (choice.compareTo ("off",RWCString::ignoreCase) == 0) iSelector = 0;
-    if (choice.compareTo ("on",RWCString::ignoreCase) == 0) iSelector = 1;
+    if (choice.compareTo ("off",G4String::ignoreCase) == 0) iSelector = 0;
+    if (choice.compareTo ("on",G4String::ignoreCase) == 0) iSelector = 1;
     if (iSelector < 0) {
       G4cout << "Choice not recognised (on/off)." << endl;
       const G4ViewParameters& getVP = fpVMan -> GetCurrentViewParameters ();
@@ -406,8 +406,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
     istrstream is ((char*)t); is >> choice >> x >> y >> z >> unit
 				  >> nx >> ny >> nz;
     G4int iSelector = -1;
-    if (choice.compareTo ("off",RWCString::ignoreCase) == 0) iSelector = 0;
-    if (choice.compareTo ("on",RWCString::ignoreCase) == 0) iSelector = 1;
+    if (choice.compareTo ("off",G4String::ignoreCase) == 0) iSelector = 0;
+    if (choice.compareTo ("on",G4String::ignoreCase) == 0) iSelector = 1;
     if (iSelector < 0) {
       G4cout << "Choice not recognised (on/off)." << endl;
       const G4ViewParameters& getVP = fpVMan -> GetCurrentViewParameters ();

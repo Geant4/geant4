@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdet.cc,v 1.1 1999-01-07 16:06:48 gunter Exp $
+// $Id: G4gsdet.cc,v 1.2 1999-11-15 10:39:37 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
 #include "G3toG4.hh"
 
-void PG4gsdet(RWCString tokens[])
+void PG4gsdet(G4String tokens[])
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdet);

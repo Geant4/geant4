@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3DetTable.cc,v 1.5 1999-11-11 15:35:44 gunter Exp $
+// $Id: G3DetTable.cc,v 1.6 1999-11-15 10:39:37 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -48,7 +48,7 @@ G3DetTable::MakeHash(G4String& set, G4String& det){;
 };
 
 G3DetTable::G3DetTable(){
-  _Det = new G4RWTPtrHashDictionary<G4String,DetTableEntry>(RWCString::hash);
+  _Det = new G4RWTPtrHashDictionary<G4String,DetTableEntry>(G4String::hash);
 };
 
 G3DetTable::~G3DetTable(){

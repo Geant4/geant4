@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandTemplates.cc,v 1.2 1999-01-09 16:31:18 allison Exp $
+// $Id: G4VisCommandTemplates.cc,v 1.3 1999-11-15 10:39:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,11 +39,11 @@ G4int G4VisButtonCommandMessengerInterpret (G4String newValues) {
   G4String& choice = newValues;
   G4int iSelector = -1;
   if (choice.compareTo ("0") == 0 ||
-      choice.compareTo ("off", RWCString::ignoreCase) == 0 ||
-      choice.compareTo ("false", RWCString::ignoreCase) == 0) iSelector = 0;
+      choice.compareTo ("off", G4String::ignoreCase) == 0 ||
+      choice.compareTo ("false", G4String::ignoreCase) == 0) iSelector = 0;
   if (choice.compareTo ("1") == 0 ||
-      choice.compareTo ("on",  RWCString::ignoreCase) == 0 ||
-      choice.compareTo ("true", RWCString::ignoreCase) == 0) iSelector = 1;
+      choice.compareTo ("on",  G4String::ignoreCase) == 0 ||
+      choice.compareTo ("true", G4String::ignoreCase) == 0) iSelector = 1;
   if (iSelector < 0 || choice.isNull ()) {
     G4cout << "Choice not recognised."
       "\n  Choice is 0 (or off or false) or 1 (or on or true)." << endl;;

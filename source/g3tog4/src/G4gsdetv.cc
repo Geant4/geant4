@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdetv.cc,v 1.3 1999-05-12 08:10:03 lockman Exp $
+// $Id: G4gsdetv.cc,v 1.4 1999-11-15 10:39:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
@@ -15,7 +15,7 @@
 
 class G4VSensitiveDetector;
 
-void PG4gsdetv(RWCString tokens[])
+void PG4gsdetv(G4String tokens[])
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdetv);

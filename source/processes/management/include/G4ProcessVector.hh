@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessVector.hh,v 1.4 1999-11-11 15:37:52 gunter Exp $
+// $Id: G4ProcessVector.hh,v 1.5 1999-11-15 10:39:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,7 @@ class G4ProcessVector : public G4RWTPtrOrderedVector<G4VProcess>
 
   public:
 
-      G4ProcessVector(size_t capac=RWDEFAULT_CAPACITY)
+      G4ProcessVector(size_t capac=G4RWDEFAULT_CAPACITY)
         : G4RWTPtrOrderedVector<G4VProcess>(capac) {;}
       //  Constructor.
 

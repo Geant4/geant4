@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.cc,v 1.15 1999-11-11 15:35:46 gunter Exp $
+// $Id: G3VolTable.cc,v 1.16 1999-11-15 10:39:37 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -16,7 +16,7 @@
 
 G3VolTable::G3VolTable() 
   : _VTD(0), G3toG4TopVTE(0), _FirstKey("UnDefined"), _NVTE(0), _NG3Pos(0){
-    _VTD = new G4RWTPtrHashDictionary<G4String,VolTableEntry>(RWCString::hash);
+    _VTD = new G4RWTPtrHashDictionary<G4String,VolTableEntry>(G4String::hash);
 };
 
 G3VolTable::~G3VolTable(){

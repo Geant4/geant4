@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsmixt.cc,v 1.4 1999-05-18 02:40:46 lockman Exp $
+// $Id: G4gsmixt.cc,v 1.5 1999-11-15 10:39:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -17,7 +17,7 @@
 #include "G3MatTable.hh"
 #include "G4Material.hh"
 
-void PG4gsmixt(RWCString tokens[])
+void PG4gsmixt(G4String tokens[])
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsmixt);
@@ -40,7 +40,7 @@ void PG4gsmixt(RWCString tokens[])
 void G4gsmixt(G4int imate, G4String name, G4double a[], G4double z[],
               G4double dens, G4int nlmat, G4double wmat[]){
   G4int nmate = abs(nlmat);
-  G4String sname = name.strip(RWCString::both);
+  G4String sname = name.strip(G4String::both);
   G4double theDensity = dens*g/cm3;
 
   G4Material* theMixture = new G4Material(name, dens, nmate); 
