@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.hh,v 1.7 2000-09-10 13:58:56 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.8 2000-09-13 09:25:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,10 +53,11 @@ public:
   int operator!=(const G4Quasmon &right) const;
 
   // Static functions
-  static void SetParameters(G4double temperature, G4double ssin2g, G4double etaetap);
+  static void SetParameters(G4double temperature, G4double ssin2g, G4double etaetap, G4double rmedium);
   static void SetTemper(G4double temperature);
   static void SetSOverU(G4double ssin2g);
   static void SetEtaSup(G4double etaetap);
+  static void SetMedium(G4double rmedium);
 
   //Selectors
   G4double          GetTemper()    const;
@@ -95,6 +96,7 @@ private:
   static G4double    Temperature;     // Quasmon Temperature
   static G4double    SSin2Gluons;     // Percent of ssbar sea in a constituen gluon
   static G4double    EtaEtaprime;     // Part of eta-prime in all etas
+  static G4double    MediumRatio;     // Ratio of Vacuum & InMedium Hadronization
   // Hadronic input
   G4LorentzVector    q4Mom;           // 4-momentum of the Quasmon +++++
   G4QContent         valQ;            // Quark Content of Quasmon  +++++

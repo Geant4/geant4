@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadron.hh,v 1.4 2000-09-04 07:44:00 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.5 2000-09-13 09:25:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,6 +38,7 @@ public:
   G4QHadron(G4LorentzVector p);                     // Kinematical Constructor
   G4QHadron(G4int PDGcode, G4LorentzVector p=G4LorentzVector(0.,0.,0.,0.));// CHIPS World Hadron
   G4QHadron(G4QPDGCode QPDG, G4LorentzVector p=G4LorentzVector(0.,0.,0.,0.));// CHIPS World Had.
+  G4QHadron(G4QContent QC, G4LorentzVector p=G4LorentzVector(0.,0.,0.,0.));// QC defined Hadron
   G4QHadron(G4int PDG, G4double m, G4QContent QC);  // Constructor for a Chipolino or a Quasmon
   G4QHadron(G4QPDGCode QPDG, G4double m, G4QContent QC);  // Con. for a Chipolino or a Quasmon
   G4QHadron(G4int PDG, G4LorentzVector p, G4QContent QC);// Constructor for Chipolino or Quasmon

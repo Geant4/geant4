@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadron.cc,v 1.4 2000-09-10 13:58:57 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.5 2000-09-13 09:25:41 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -20,6 +20,7 @@
 
 //#define debug
 //#define pdebug
+//#define sdebug
 
 #include "G4QHadron.hh"
 
@@ -31,7 +32,7 @@ G4QHadron::G4QHadron(G4LorentzVector p) :
   theQPDG(0),theMomentum(p),valQ(0,0,0,0,0,0),nFragm(0)
 {};
 
-// For Chipolino or Quasmon doesn't make any sence
+// For Chipolino or Quasmon doesn't make any sense
 G4QHadron::G4QHadron(G4int PDGCode, G4LorentzVector p) :
   theQPDG(PDGCode),theMomentum(p),nFragm(0)
 {
@@ -40,11 +41,11 @@ G4QHadron::G4QHadron(G4int PDGCode, G4LorentzVector p) :
     if(theMomentum.e()==0.) theMomentum.setE(theQPDG.GetMass());
     valQ=theQPDG.GetQuarkContent();
   }
-  else if(PDGCode>90000000)DefineQC(PDGCode);
+  else if(PDGCode>90000000) DefineQC(PDGCode);
   else cerr<<"***G4QHaron:(P) PDG="<<PDGCode<<", use other constructor"<<endl;
 };
 
-// For Chipolino or Quasmon doesn't make any sence
+// For Chipolino or Quasmon doesn't make any sense
 G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p) :
   theQPDG(QPDG),theMomentum(p),nFragm(0)
 {
@@ -53,8 +54,20 @@ G4QHadron::G4QHadron(G4QPDGCode QPDG, G4LorentzVector p) :
     if(theMomentum.e()==0.) theMomentum.setE(theQPDG.GetMass());
     valQ=theQPDG.GetQuarkContent();
   }
-  else cerr<<"***G4QHaron:(QP) PDG="<<theQPDG.GetPDGCode()<<", use other constructor"<<endl;
+  else
+  {
+    G4cerr<<"***G4QHaron:(QP) PDG="<<theQPDG.GetPDGCode()<<", use other constructor"<<G4endl;
+#ifdef sdebug
+	G4Exception("***G4QHadron: QPDG Constructor failed");
+#endif
+  }
+
 };
+
+// Make sense Chipolino or Quasmon
+G4QHadron::G4QHadron(G4QContent QC, G4LorentzVector p) :
+  valQ(QC),theMomentum(p),nFragm(0)
+{};
 
 G4QHadron::G4QHadron(G4int PDGCode, G4double aMass, G4QContent QC) :
   theQPDG(PDGCode),theMomentum(0.,0.,0., aMass),valQ(QC),nFragm(0)
