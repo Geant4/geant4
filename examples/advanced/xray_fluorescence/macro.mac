@@ -1,7 +1,9 @@
+/control/verbose 1
 /gun/randomVert on
 
 /gun/particle gamma
 
 /gun/energy 6 keV
 
-/run/beamOn 10
+/run/beamOn 30
+
