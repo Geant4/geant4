@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.27 2002-05-02 11:37:22 maire Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.28 2003-01-15 12:10:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,6 +55,8 @@
 //           Simplify public interface (mma)
 // 29-04-02, Generate theta angle of the photoelectron from Sauter-Gavrila
 //           distribution (mma) 
+// 15-01-03, photoelectron theta ditribution : return costeta=1 if gamma>5
+//           (helmut burkhardt)
 //    
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -218,11 +220,13 @@ G4double G4PhotoElectricEffect::ElecThetaDistribution(G4double kineEnergy)
  // incident Gamma.
  // The Sauter-Gavrila distribution for the K-shell is used.
  //
- G4double gamma = 1. + kineEnergy/electron_mass_c2;
+ G4double costeta = 1.;
+ G4double gamma   = 1. + kineEnergy/electron_mass_c2;
+ if (gamma > 5.) return costeta;
  G4double beta  = sqrt(gamma*gamma-1.)/gamma;
  G4double b     = 0.5*gamma*(gamma-1.)*(gamma-2);
     
- G4double rndm,costeta,term,greject,grejsup;
+ G4double rndm,term,greject,grejsup;
  if (gamma < 2.) grejsup = gamma*gamma*(1.+b-beta*b);
  else            grejsup = gamma*gamma*(1.+b+beta*b);
   

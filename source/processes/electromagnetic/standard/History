@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2003-01-13 08:50:10 vnivanch Exp $
+$Id: History,v 1.73 2003-01-15 12:10:27 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+15 jan 03: mma 
+- PhotoElectricEffect::ElecThetaDistribution : if gamma>5 --> costeta=1
+ 
 13 jan 03: V.Ivant (stand-V05-00-01)
 - Fix problem in cut control in G4PAIonisation.cc 
 
