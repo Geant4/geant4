@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2000-11-21 10:59:36 maire Exp $
+$Id: README,v 1.6 2000-11-21 11:43:31 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -95,10 +95,10 @@ $Id: README,v 1.5 2000-11-21 10:59:36 maire Exp $
 	       with the environment variable G4VIS_BUILD_DAWNFILE_DRIVER.
 	    2- exampleN03.cc has been compiled with G4VIS_USE_DAWNFILE.   
  	
-	NN 3: The macros "visN03/exN03VisX.mac" are tutorial macros for 
+	NN 3: The macros "visTutor/exN03VisX.mac" are tutorial macros for 
               visualization.  They can be tried as:
                % $G4BINDIR/exampleN03
-	       idle > /control/execute visN03/exN03VisX.mac
+	       idle > /control/execute visTutor/exN03VisX.mac
               For details, see comment lines  described in the macro files.
               These macros are designed to help your understanding the 
               User's Guide.    
@@ -121,6 +121,8 @@ $Id: README,v 1.5 2000-11-21 10:59:36 maire Exp $
   
         The default command interface, called G4UIterminal, is done via
 	standart cin/G4cout.
+	On Linux and Sun-cc on can use a smarter command interface G4UItcsh.
+	It is enough to set the environment variable G4UI_USE_TCSH
 	
 	On can use a Motif driven command interface (called G4UIXm) if:
 	  1- interfaces category has been compiled with G4UI_BUILD_XM_SESSION
