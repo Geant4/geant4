@@ -97,6 +97,7 @@ int main()
 
     G4IntersectionSolid b1Ib2("b1Intersectionb2",&b1,&b2,transform) ;
     G4IntersectionSolid likeb2("b1Intersectionb2",&b1,&b2) ;
+    G4IntersectionSolid nextb2("b2Intersectionb1",&b2,&b1) ;
     G4IntersectionSolid t1Ib2("t1Intersectionb2",&t1,&b2,&xRot,ponb2y) ;
     G4IntersectionSolid c2Ib2("c2Intersectionb2",&c2,&b2,transform) ;
 
@@ -281,9 +282,30 @@ int main()
     assert(ApproxEqual(dist,940.603760037514));
     //  G4cout<<"t3It4->DistanceToIn = "<<dist<<G4endl ;
 
+    dist=t3It4->DistanceToIn(
+    G4ThreeVector(1355.5204683069741804501973092556,
+                  -900.36862622234150421718368306756,
+                   -85.254645167836457630983204580843),
+    G4ThreeVector(-0.25623628694138916861433585836494,
+                   0.84905863423851268834141592378728,
+                   0.46199826934689036672665451987996));
+    //  assert(ApproxEqual(dist,940.603760037514));
+    assert(ApproxEqual(dist,kInfinity));
+    // G4cout<<"t3It4->DistanceToIn = "<<dist<<G4endl ;
 
+    dist=nextb2.DistanceToIn(G4ThreeVector(10,0,0),vx);
+    assert(ApproxEqual(dist,kInfinity));
 
-    G4cout<<"Tracking functions are OK"<<G4endl ;
+    dist=nextb2.DistanceToIn(G4ThreeVector(0,10,0),vy);
+    assert(ApproxEqual(dist,kInfinity));
+
+    dist=nextb2.DistanceToIn(G4ThreeVector(0,0,10),vz);
+    assert(ApproxEqual(dist,kInfinity));
+
+    dist=nextb2.DistanceToIn(G4ThreeVector(10,10,10),vx);
+    assert(ApproxEqual(dist,kInfinity));
+
+   G4cout<<"Tracking functions are OK"<<G4endl ;
 
 
 //  CalculateExtent
