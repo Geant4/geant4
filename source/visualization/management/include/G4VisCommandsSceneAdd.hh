@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.hh,v 1.6 2001-02-03 18:39:46 johna Exp $
+// $Id: G4VisCommandsSceneAdd.hh,v 1.7 2001-04-10 14:56:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -14,6 +14,18 @@
 #define G4VISCOMMANDSSCENEADD_HH
 
 #include "G4VisCommandsScene.hh"
+
+class G4VisCommandSceneAddAxes: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddAxes ();
+  virtual ~G4VisCommandSceneAddAxes ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddAxes (const G4VisCommandSceneAddAxes&);
+  G4VisCommandSceneAddAxes& operator = (const G4VisCommandSceneAddAxes&);
+  G4UIcommand* fpCommand;
+};
 
 class G4VisCommandSceneAddGhosts: public G4VVisCommandScene {
 public:
@@ -50,6 +62,18 @@ private:
   G4VisCommandSceneAddLogicalVolume (const G4VisCommandSceneAddLogicalVolume&);
   G4VisCommandSceneAddLogicalVolume& operator =
   (const G4VisCommandSceneAddLogicalVolume&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddText: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddText ();
+  virtual ~G4VisCommandSceneAddText ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddText (const G4VisCommandSceneAddText&);
+  G4VisCommandSceneAddText& operator = (const G4VisCommandSceneAddText&);
   G4UIcommand* fpCommand;
 };
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.14 2001-02-23 15:43:27 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.15 2001-04-10 14:56:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -20,6 +20,8 @@
 #include "G4ModelingParameters.hh"
 #include "G4HitsModel.hh"
 #include "G4TrajectoriesModel.hh"
+#include "G4TextModel.hh"
+#include "G4AxesModel.hh"
 #include "G4PhysicalVolumeSearchScene.hh"
 #include "G4VGlobalFastSimulationManager.hh"
 #include "G4ParticleTable.hh"
@@ -31,6 +33,70 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4ios.hh"
 #include "g4std/strstream"
+
+
+////////////// /vis/scene/add/axes //////////////////////////////////
+
+G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/add/axes", this);
+  fpCommand -> SetGuidance
+    ("Draws axes at (x0, y0, z0) of given length.");
+  G4UIparameter* parameter;
+  parameter =  new G4UIparameter ("x0", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("y0", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("z0", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("length", 'd', omitable = true);
+  parameter->SetDefaultValue (1.*m);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("unit", 's', omitable = true);
+  parameter->SetDefaultValue  ("mm");
+  parameter->SetGuidance      ("mm, cm, or m.");
+  fpCommand->SetParameter     (parameter);
+}
+
+G4VisCommandSceneAddAxes::~G4VisCommandSceneAddAxes () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddAxes::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand* command,
+					    G4String newValue) {
+  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
+  if (sceneList.empty ()) {
+    G4cout << "No scenes - please create one before adding anything."
+	   << G4endl;
+    return;
+  }
+
+  G4String unitString;
+  G4double x0, y0, z0, length;
+  const char* s = newValue;
+  G4std::istrstream is ((char*)s);
+  is >> x0 >> y0 >> z0 >> length >> unitString;
+
+  G4double unit = ValueOf(unitString);
+  x0 *= unit; y0 *= unit; z0 *= unit; length *= unit;
+
+  G4VModel* model = new G4AxesModel(x0, y0, z0, length);
+  G4Scene* pScene = fpVisManager -> GetCurrentScene ();
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool succesful = pScene -> AddRunDurationModel (model);
+  UpdateVisManagerScene (currentSceneName);
+  if (succesful) {
+    G4cout << "Axes have been added to scene \"" << currentSceneName << "\""
+	   << G4endl;
+  }
+}
 
 
 ////////////// /vis/scene/add/ghosts ///////////////////////////////////////
@@ -224,6 +290,85 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
 	   << " with requested depth of descent "
 	   << requestedDepthOfDescent
 	   << ",\n  has been added to scene \"" << currentSceneName << "\""
+	   << G4endl;
+  }
+}
+
+
+////////////// /vis/scene/add/text //////////////////////////////////
+
+G4VisCommandSceneAddText::G4VisCommandSceneAddText () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/add/text", this);
+  fpCommand -> SetGuidance 
+    ("Adds text at (x, y, z) unit font_size x_offset y_offset text.");
+  fpCommand -> SetGuidance
+    ("Font size and offsets in pixels.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("x", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("y", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("z", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("unit", 's', omitable = true);
+  parameter->SetDefaultValue  ("mm");
+  parameter->SetGuidance      ("mm, cm, or m.");
+  fpCommand->SetParameter     (parameter);
+  parameter =  new G4UIparameter ("font_size", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("x_offset", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("y_offset", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("text", 's', omitable = true);
+  parameter->SetDefaultValue ("text");
+  fpCommand->SetParameter (parameter);
+}
+
+G4VisCommandSceneAddText::~G4VisCommandSceneAddText () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddText::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddText::SetNewValue (G4UIcommand* command,
+					    G4String newValue) {
+  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
+  if (sceneList.empty ()) {
+    G4cout << "No scenes - please create one before adding anything."
+	   << G4endl;
+    return;
+  }
+
+  G4String text, unitString;
+  G4double x, y, z, font_size, x_offset, y_offset;
+  const char* s = newValue;
+  G4std::istrstream is ((char*)s);
+  is >> x >> y >> z >> unitString >> font_size >> x_offset >> y_offset >> text;
+
+  G4double unit = ValueOf(unitString);
+  x *= unit; y *= unit; z *= unit;
+
+  G4Text g4text(text, G4Point3D(x,y,z));
+  g4text.SetScreenSize(font_size);
+  g4text.SetOffset(x_offset,y_offset);
+  G4VModel* model = new G4TextModel(g4text);
+  G4Scene* pScene = fpVisManager -> GetCurrentScene ();
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool succesful = pScene -> AddRunDurationModel (model);
+  UpdateVisManagerScene (currentSceneName);
+  if (succesful) {
+    G4cout << "Text \"" << text
+	   << "\" has been added to scene \"" << currentSceneName << "\""
 	   << G4endl;
   }
 }

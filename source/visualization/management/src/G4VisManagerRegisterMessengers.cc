@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.27 2001-02-23 15:43:32 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.28 2001-04-10 14:56:44 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -144,10 +144,10 @@ NI /vis/scene/set/modelingStyle [<modeling-style>]
   Refreshes all viewers of current scene.
   Does not issue "update" (see /vis/viewer/update).
 
-NI /vis/scene/add/axes
+/vis/scene/add/axes
   Adds to current scene.
 
-NI /vis/scene/add/text
+/vis/scene/add/text
   Adds to current scene.
 
 
@@ -454,9 +454,11 @@ default: 0 0 0 0 cm 1 0 cm
 
   command = new G4UIdirectory ("/vis/scene/add/");
   command -> SetGuidance ("Add model to current scene.");
+  fMessengerList.push_back (new G4VisCommandSceneAddAxes);
   fMessengerList.push_back (new G4VisCommandSceneAddGhosts);
   fMessengerList.push_back (new G4VisCommandSceneAddHits);
   fMessengerList.push_back (new G4VisCommandSceneAddLogicalVolume);
+  fMessengerList.push_back (new G4VisCommandSceneAddText);
   fMessengerList.push_back (new G4VisCommandSceneAddTrajectories);
   fMessengerList.push_back (new G4VisCommandSceneAddVolume);
 

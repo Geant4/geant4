@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsSystem.hh,v 1.7 2001-02-23 15:43:16 johna Exp $
+// $Id: G4VGraphicsSystem.hh,v 1.8 2001-04-10 14:56:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,7 @@ public: // With description
 
   enum Functionality {
     noFunctionality,
+    nonEuclidian,       // e.g., tree representation of geometry hierarchy.
     twoD,               // Simple 2D, e.g., X (no stored structures).
     twoDStore,          // 2D with stored structures.
     threeD,             // Passive 3D (with stored structures).

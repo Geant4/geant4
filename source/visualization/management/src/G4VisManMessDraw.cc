@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessDraw.cc,v 1.7 2001-02-23 15:43:29 johna Exp $
+// $Id: G4VisManMessDraw.cc,v 1.8 2001-04-10 14:56:44 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -142,6 +142,7 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
 
   /////////////////////////////////////////  /vis~/draw/axes  ////
   if (commandPath == "/vis~/draw/axes") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/scene/add/axes\".");
     if (ViewValid ()) {
       G4double x0, y0, z0;
       G4double length ;
@@ -190,6 +191,7 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
 
   /////////////////////////////////////////  /vis~/draw/text  ////
   if (commandPath == "/vis~/draw/text") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/scene/add/text\".");
     if (ViewValid ()) {
       G4double x, y, z;
       G4double font_size, x_offset, y_offset;
