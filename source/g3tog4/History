@@ -1,7 +1,11 @@
-$Id: History,v 1.54 2004-03-26 14:59:32 gcosmo Exp $
+$Id: History,v 1.55 2004-05-03 07:50:30 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V06-01-01 03-May-2004 G.Cosmo
+- G4gsrotm.cc: commented warning about left-handled coordinates for
+  rotation axes (I.Hrivnacova).
 
 g3tog4-V06-01-00 26-Mar-2004 G.Cosmo
 - Removed hardwired gSeparator constant (a character which is used
