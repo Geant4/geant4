@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.15 2004-09-26 01:18:18 asaim Exp $
+// $Id: G4Navigator.cc,v 1.16 2004-11-17 17:18:31 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -809,38 +809,41 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
               << G4endl;
     }
 #endif
-    if( (fNumberZeroSteps > fActionThreshold_NoZeroSteps-1) && (!fPushed) )
+    if( fNumberZeroSteps > fActionThreshold_NoZeroSteps-1 )
     {
-       // Act to recover this stuck track. Pushing it once along direction
+       // Act to recover this stuck track. Pushing it along direction
        //
        Step += 0.9*kCarTolerance;
-       fPushed = true;
 #ifdef G4VERBOSE
-       G4cerr << "WARNING - G4Navigator::ComputeStep()" << G4endl
-              << "          Track stuck, not moving for " 
-              << fNumberZeroSteps << " steps" << G4endl
-              << "          in volume -" << motherPhysical->GetName()
-              << "- at point " << pGlobalpoint << G4endl
-              << "          direction: " << pDirection << "." << G4endl
-              << "          Potential geometry or navigation problem !"
-              << G4endl
-              << "          Trying pushing it of " << Step << " mm ..."
-              << G4endl;
+       if (!fPushed)
+       {
+         G4cerr << "WARNING - G4Navigator::ComputeStep()" << G4endl
+                << "          Track stuck, not moving for " 
+                << fNumberZeroSteps << " steps" << G4endl
+                << "          in volume -" << motherPhysical->GetName()
+                << "- at point " << pGlobalpoint << G4endl
+                << "          direction: " << pDirection << "." << G4endl
+                << "          Potential geometry or navigation problem !"
+                << G4endl
+                << "          Trying pushing it of " << Step << " mm ..."
+                << G4endl;
+       }
 #endif
-     }
-     if( fNumberZeroSteps > fAbandonThreshold_NoZeroSteps-1 )
-     {
-        // Must kill this stuck track
-        //
-        G4cerr << "ERROR - G4Navigator::ComputeStep()" << G4endl
-               << "        Track stuck, not moving for " 
-               << fNumberZeroSteps << " steps" << G4endl
-               << "        in volume -" << motherPhysical->GetName()
-               << "- at point " << pGlobalpoint << G4endl
-               << "        direction: " << pDirection << "." << G4endl;
-        G4Exception("G4Navigator::ComputeStep()",
-                    "StuckTrack", EventMustBeAborted, 
-                    "Stuck Track: potential geometry or navigation problem.");
+       fPushed = true;
+    }
+    if( fNumberZeroSteps > fAbandonThreshold_NoZeroSteps-1 )
+    {
+      // Must kill this stuck track
+      //
+      G4cerr << "ERROR - G4Navigator::ComputeStep()" << G4endl
+             << "        Track stuck, not moving for " 
+             << fNumberZeroSteps << " steps" << G4endl
+             << "        in volume -" << motherPhysical->GetName()
+             << "- at point " << pGlobalpoint << G4endl
+             << "        direction: " << pDirection << "." << G4endl;
+      G4Exception("G4Navigator::ComputeStep()",
+                  "StuckTrack", EventMustBeAborted, 
+                  "Stuck Track: potential geometry or navigation problem.");
     }
   }
   else
