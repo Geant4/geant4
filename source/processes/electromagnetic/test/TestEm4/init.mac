@@ -7,13 +7,24 @@
 /control/verbose 2
 /run/verbose 2
 #
+# Create empty scene ("world" is default)
+/vis/scene/create
+#
+# Add volume to scene
+/vis/scene/add/volume
+#
+# Create a scene handler for a specific graphics system
 # Edit the next line(s) to choose another graphic system
 #
-#/vis~/create_view/new_graphics_system DAWNFILE
-/vis~/create_view/new_graphics_system OGLIX
-/vis~/camera/zoom 1.5
-/vis~/draw/current
-/vis~/show/view
+#/vis/sceneHandler/create DAWNFILE
+/vis/sceneHandler/create OGLIX
+#
+# Create a viewer
+/vis/viewer/create
+#
+# Draw scene
+/vis/camera/zoom 1.5
+/vis/scene/notifyHandlers
 #
 # for drawing the tracks
 # if too many tracks cause core dump => storeTrajectory 0
