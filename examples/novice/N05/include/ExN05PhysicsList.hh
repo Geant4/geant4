@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05PhysicsList.hh,v 1.2 1999-04-16 12:04:58 kurasige Exp $
+// $Id: ExN05PhysicsList.hh,v 1.3 1999-04-23 04:43:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,10 +40,10 @@ protected:
 protected:
   // these methods Construct physics processes and register them
   void AddParameterisation();
+
   virtual void ConstructGeneral();
   virtual void ConstructEM();
-  virtual void ConstructHad();
-  virtual void ConstructLeptHad();
+
   virtual void AddTransportation();
 };
 

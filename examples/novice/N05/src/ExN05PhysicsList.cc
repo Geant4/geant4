@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05PhysicsList.cc,v 1.2 1999-04-16 12:05:03 kurasige Exp $
+// $Id: ExN05PhysicsList.cc,v 1.3 1999-04-23 04:43:32 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,9 +99,8 @@ void ExN05PhysicsList::ConstructProcess()
 {
   AddTransportation();
   AddParameterisation();
+
   ConstructEM();
-  ConstructLeptHad();
-  ConstructHad();
   ConstructGeneral();
 }
 
@@ -234,11 +233,6 @@ void ExN05PhysicsList::ConstructEM()
   }
 }
 
-void ExN05PhysicsList::ConstructHad()
-{;}
-
-void ExN05PhysicsList::ConstructLeptHad()
-{;}
 
 #include "G4Decay.hh"
 void ExN05PhysicsList::ConstructGeneral()
