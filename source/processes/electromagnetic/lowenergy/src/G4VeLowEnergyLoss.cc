@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.17 2001-11-23 11:45:29 vnivanch Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.18 2002-09-09 08:54:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -503,16 +503,15 @@ G4double G4VeLowEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
 //    
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRangeTable,
-                                   G4PhysicsTable* theRangeCoeffATable,
-                                   G4PhysicsTable* theRangeCoeffBTable,
-                                   G4PhysicsTable* theRangeCoeffCTable,
+                                   G4PhysicsTable*,
+                                   G4PhysicsTable*,
+                                   G4PhysicsTable*,
                                    G4PhysicsTable* theInverseRangeTable,
                                    G4double lowestKineticEnergy,
-                                   G4double highestKineticEnergy,G4int TotBin)
+                                   G4double highestKineticEnergy,G4int nbins)
 // Build inverse table of the range table
 {
-  G4double SmallestRange,BiggestRange ;
-  G4bool isOut ;
+  G4bool b;
 
   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
@@ -522,23 +521,49 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRan
     theInverseRangeTable = new G4PhysicsTable(numOfMaterials);
 
   // loop for materials
-  for (G4int J=0;  J<numOfMaterials; J++)
+  for (G4int i=0;  i<numOfMaterials; i++)
   {
-    SmallestRange = (*theRangeTable)(J)->
-                       GetValue(lowestKineticEnergy,isOut) ;
-    BiggestRange = (*theRangeTable)(J)->
-                       GetValue(highestKineticEnergy,isOut) ;
-    G4PhysicsLogVector* aVector;
-    aVector = new G4PhysicsLogVector(SmallestRange,
-                            BiggestRange,TotBin);
 
-    InvertRangeVector(theRangeTable,
-                      theRangeCoeffATable,
-                      theRangeCoeffBTable,
-                      theRangeCoeffCTable,
-         lowestKineticEnergy,highestKineticEnergy,TotBin,J, aVector);
+    G4PhysicsVector* pv = (*theRangeTable)[i];
+    size_t nbins   = pv->GetVectorLength();
+    G4double elow  = pv->GetLowEdgeEnergy(0);
+    G4double ehigh = pv->GetLowEdgeEnergy(nbins-1);
+    G4double rlow  = pv->GetValue(elow, b);
+    G4double rhigh = pv->GetValue(ehigh, b);
 
-    theInverseRangeTable->insert(aVector);
+    rhigh *= exp(log(rhigh/rlow)/((G4double)(nbins-1)));
+
+    G4PhysicsLogVector* v = new G4PhysicsLogVector(rlow, rhigh, nbins);
+
+    v->PutValue(0,elow);
+    G4double energy1 = elow;
+    G4double range1  = rlow;
+    G4double energy2 = elow;
+    G4double range2  = rlow;
+    size_t ilow      = 0;
+    size_t ihigh;
+
+    for (size_t j=1; j<nbins; j++) {
+
+      G4double range = v->GetLowEdgeEnergy(j);
+
+      for (ihigh=ilow+1; ihigh<nbins; ihigh++) {
+        energy2 = pv->GetLowEdgeEnergy(ihigh);
+        range2  = pv->GetValue(energy2, b); 
+        if(range2 >= range || ihigh == nbins-1) {
+          ilow = ihigh - 1;
+          energy1 = pv->GetLowEdgeEnergy(ilow);
+          range1  = pv->GetValue(energy1, b); 
+          break;
+	}
+      }
+
+      G4double e = log(energy1) + log(energy2/energy1)*log(range/range1)/log(range2/range1);
+
+      v->PutValue(j,exp(e));
+    }
+    theInverseRangeTable->insert(v);
+
   }
   return theInverseRangeTable ;
 }
