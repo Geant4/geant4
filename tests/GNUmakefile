@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.47 2002-11-12 17:56:24 stesting Exp $
+# $Id: GNUmakefile,v 1.48 2002-12-03 08:23:34 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -70,11 +70,13 @@ SUBDIRS += test16 ## n and p Cross-Sections
 SUBDIRS += test17 ## LowEnergy em (protons, antiprotons and ions). 
 SUBDIRS += test18 ## Radioactive decay.
 SUBDIRS += test20 ## Polarised LowE processes.
-SUBDIRS += test21 ## added nov 2001 (info to come).
-SUBDIRS += test22 ## added nov 2001 (info to come).
+SUBDIRS += test21 ## CHIPS as intra-nuclear transport replacement.
+SUBDIRS += test22 ## Gamma and electro-nuclear physics.
 SUBDIRS += test23 ## Cut per material and persistency of physics table.
+SUBDIRS += test24 ## Binary cascade hadronic model.
+SUBDIRS += test25 ## Classical cascade hadronic model.
 SUBDIRS += test32 ## Leading_particle biasing model of G4Mars5Ge on MARS13.
-SUBDIRS += test33 ## Importance biasing and scoring
+SUBDIRS += test33 ## Importance biasing and scoring.
 
 # Tests with hadronic exercisers.
 HADEXERDIRS = test02 test11 test12 test13 test15 test16 test21 
