@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateSpin.cc,v 1.12 2003-10-31 14:36:09 gcosmo Exp $
+// $Id: testPropagateSpin.cc,v 1.13 2003-11-02 16:17:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -98,6 +98,12 @@ class G4LinScale : public G4VPVParameterisation
 				 const G4int ,
 				 const G4VPhysicalVolume*) const {}
   virtual void ComputeDimensions(G4Para &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Polycone &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Polyhedra &,
 				 const G4int ,
 				 const G4VPhysicalVolume*) const {}
 };
