@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyIonisation.hh,v 1.27 2001-10-10 17:37:27 pia Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.28 2001-10-10 17:46:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -45,6 +45,7 @@
 
 #include "G4eLowEnergyLoss.hh"
 #include "G4VEMDataSet.hh"
+#include "G4AtomicDeexcitation.hh"
 
 class G4Track;
 class G4Step;
@@ -98,7 +99,8 @@ private:
   G4DataVector cutForDelta;
   G4double cutForPhotons;
   G4double cutForElectrons;
- 
+  G4AtomicDeexcitation deexcitationManager;
+
 };
 
 #endif

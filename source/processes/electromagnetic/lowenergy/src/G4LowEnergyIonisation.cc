@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.64 2001-10-10 17:37:56 pia Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.65 2001-10-10 17:46:58 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -373,13 +373,14 @@ inline G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& tra
   // Fluorescence should be implemented here
   // Fluorescence data start from element 6
 
-  if(thePrimShVec.size() != 0) thePrimShVec.clear();
-  thePrimShVec.push_back(thePrimaryShell);
+  //  if(thePrimShVec.size() != 0) thePrimShVec.clear();
+  //thePrimShVec.push_back(thePrimaryShell);
 
   size_t nElectrons = 1;
   size_t nTotPhotons = 0;
   size_t nPhotons = 0;
-  
+  G4std::vector<G4DynamicParticle*>* photonVector = 0;
+ 
   // Generation of fluorescence
   if (Z > 5)
     {
