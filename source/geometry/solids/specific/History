@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2003-03-28 09:53:04 gcosmo Exp $
+$Id: History,v 1.25 2003-06-16 13:09:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-Jun-2003, G.Cosmo
+- Added accessors to original_parameters for G4Polycone and G4Polyhedra.
+  Made G4PolyconeHistorical and G4PolyhedraHistorical classes in global
+  scope (temporary solution).
 
 28-Mar-2003, G.Cosmo (geom-specific-V05-00-00)
 - Fixed initialisation of base class in copy contructor for:
