@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.hh,v 1.10 2001-07-11 10:08:41 gunter Exp $
+// $Id: G4VSteppingVerbose.hh,v 1.11 2001-10-11 15:10:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -47,7 +47,6 @@
 class G4SteppingManager;
 
 #include "globals.hh"                 // Include from 'global'
-#include "g4rw/tvordvec.h"  
 class G4Navigator;
 class G4VPhysicalVolume;
 class G4VSensitiveDetector;
