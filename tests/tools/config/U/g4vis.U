@@ -197,143 +197,6 @@ n)
 
 g4message=`cat << EOM
 
-  G4VIS_BUILD_OPENGLWIN32_DRIVER
-  G4VIS_USE_OPENGLWIN32
-
-DESCRIPTION
-
-EOM`
-
-dflt=$g4vis_use_openglwin32
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4vis_build_openglwin32_driver=n
-		g4vis_use_openglwin32=n
-		;;
-	y*|Y*) 
-		g4vis_build_openglwin32_driver=y
-		g4vis_use_openglwin32=y
-		;;
-	esac
-
-g4message=`cat << EOM
-
-  G4VIS_BUILD_OIWIN32_DRIVER
-  G4VIS_USE_OIWIN32
-
-DESCRIPTION
-
-EOM`
-
-dflt=$g4vis_use_oiwin32
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4vis_build_oiwin32_driver=n
-		g4vis_use_oiwin32=n
-		;;
-	y*|Y*) 
-		g4vis_build_oiwin32_driver=y
-		g4vis_use_oiwin32=y
-		;;
-	esac
-
-g4message=`cat << EOM
-
-  G4VIS_BUILD_DAWN_DRIVER
-  G4VIS_USE_DAWN
-
-DAWN drivers are interfaces to the Fukui Renderer DAWN. DAWN is
-a vectorized 3D PostScript processor suited to prepare technical
-high quality outputs for presentation and/or documentation.
-
-EOM`
-
-dflt=$g4vis_use_dawn
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4vis_build_dawn_driver=n
-		g4vis_use_dawn=n
-		;;
-	y*|Y*) 
-		g4vis_build_dawn_driver=y
-		g4vis_use_dawn=y
-		;;
-	esac
-
-g4message=`cat << EOM
-
-  G4VIS_BUILD_DAWNFILE_DRIVER
-  G4VIS_USE_DAWNFILE
-
-DAWN drivers are interfaces to Fukui Renderer DAWN. It is a vectorized 3D 
-PostScript processor, and so well suited to prepare technical high
-quality outputs for presentation and/or documentation. 
-The DAWNFILE driver sends 3D data to DAWN via an intermediate file, 
-named g4.prim in the current directory. The file g4.prim is able to 
-be re-visualized later without the help of Geant4. 
-EOM`
-
-dflt=$g4vis_use_dawnfile
-rp=$g4message
-#. ./myread
-#gans=$ans
-gans=y
-
-	case $gans in
-	
-	n*|N*) 
-		g4vis_build_dawnfile_driver=n
-		g4vis_use_dawnfile=n
-		;;
-	y*|Y*) 
-		g4vis_build_dawnfile_driver=y
-		g4vis_use_dawnfile=y
-		;;
-	esac
-
-g4message=`cat << EOM
-
-  G4VIS_BUILD_OPACS_DRIVER
-  G4VIS_USE_OPACS
-
-OPACS is a visualization environment based on X windows and OpenGL. 
-It is written in ANSI C and is highly portable (UNIX, NT/X11, VMS). 
-EOM`
-
-dflt=$g4vis_use_opacs
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4vis_build_opacs_driver=n
-		g4vis_use_opacs=n
-		;;
-	y*|Y*) 
-		g4vis_build_opacs_driver=y
-		g4vis_use_opacs=y
-		;;
-	esac
-
-g4message=`cat << EOM
-
   G4VIS_BUILD_OPENGLX_DRIVER
   G4VIS_USE_OPENGLX
 
@@ -391,6 +254,63 @@ gans=$ans
 
 g4message=`cat << EOM
 
+  G4VIS_BUILD_OPENGLWIN32_DRIVER
+  G4VIS_USE_OPENGLWIN32
+
+It is an interface to the de facto standard 3D graphics library,
+OpenGL. It is well suited for real-time fast visualization
+and prototyping. The Windows version of the OpenGL libraries is
+required.
+
+EOM`
+
+dflt=$g4vis_use_openglwin32
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_openglwin32_driver=n
+		g4vis_use_openglwin32=n
+		;;
+	y*|Y*) 
+		g4vis_build_openglwin32_driver=y
+		g4vis_use_openglwin32=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_DAWN_DRIVER
+  G4VIS_USE_DAWN
+
+DAWN drivers are interfaces to the Fukui Renderer DAWN. DAWN is
+a vectorized 3D PostScript processor suited to prepare technical
+high quality outputs for presentation and/or documentation.
+
+EOM`
+
+dflt=$g4vis_use_dawn
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_dawn_driver=n
+		g4vis_use_dawn=n
+		;;
+	y*|Y*) 
+		g4vis_build_dawn_driver=y
+		g4vis_use_dawn=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
   G4VIS_BUILD_OIX_DRIVER
   G4VIS_USE_OIX
 
@@ -415,6 +335,93 @@ gans=$ans
 	y*|Y*) 
 		g4vis_build_oix_driver=y
 		g4vis_use_oix=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_OIWIN32_DRIVER
+  G4VIS_USE_OIWIN32
+
+Specifies to build and use the driver for the free X11 version of
+OpenInventor on Windows systems.
+The Windows version of OpenInventor is required.
+
+EOM`
+
+dflt=$g4vis_use_oiwin32
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_oiwin32_driver=n
+		g4vis_use_oiwin32=n
+		;;
+	y*|Y*) 
+		g4vis_build_oiwin32_driver=y
+		g4vis_use_oiwin32=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_DAWNFILE_DRIVER
+  G4VIS_USE_DAWNFILE
+
+DAWN drivers are interfaces to Fukui Renderer DAWN. It is a vectorized 3D 
+PostScript processor, and so well suited to prepare technical high
+quality outputs for presentation and/or documentation. 
+The DAWNFILE driver sends 3D data to DAWN via an intermediate file, 
+named g4.prim in the current directory. The file g4.prim is able to 
+be re-visualized later without the help of Geant4. 
+EOM`
+
+dflt=$g4vis_use_dawnfile
+rp=$g4message
+#. ./myread
+#gans=$ans
+gans=y
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_dawnfile_driver=n
+		g4vis_use_dawnfile=n
+		;;
+	y*|Y*) 
+		g4vis_build_dawnfile_driver=y
+		g4vis_use_dawnfile=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_OPACS_DRIVER
+  G4VIS_USE_OPACS
+
+OPACS is a visualization environment based on X windows and OpenGL. 
+It is written in ANSI C and is highly portable (UNIX, NT/X11, VMS). 
+The version of OPACS installed is required.
+
+EOM`
+
+dflt=$g4vis_use_opacs
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_opacs_driver=n
+		g4vis_use_opacs=n
+		;;
+	y*|Y*) 
+		g4vis_build_opacs_driver=y
+		g4vis_use_opacs=y
 		;;
 	esac
 
@@ -452,7 +459,8 @@ g4message=`cat << EOM
   G4VIS_BUILD_VRML_DRIVER
   G4VIS_USE_VRML
 
-DESCRIPTION
+These driver generate VRML files, which describe 3D scenes to be 
+visualized with a proper VRML viewer.
 
 EOM`
 
