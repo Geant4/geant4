@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Positron.cc,v 1.4 2001-07-11 10:01:54 gunter Exp $
+// $Id: G4Positron.cc,v 1.5 2001-10-15 10:04:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,9 +83,6 @@ G4Positron G4Positron::thePositron(
 );
 
 G4Positron* G4Positron::PositronDefinition() {return &thePositron;}
-// initialization for static cut values
-G4double   G4Positron::thePositronLengthCut = -1.0;
-G4double*  G4Positron::thePositronKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // ************************* ComputeLoss ********************************

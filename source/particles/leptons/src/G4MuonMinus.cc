@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinus.cc,v 1.5 2001-07-11 10:01:54 gunter Exp $
+// $Id: G4MuonMinus.cc,v 1.6 2001-10-15 10:04:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,5 +97,3 @@ G4MuonMinus G4MuonMinus::theMuonMinus(
 );
 
 G4MuonMinus* G4MuonMinus::MuonMinusDefinition() {return &theMuonMinus;}
-G4double   G4MuonMinus::theMuonMinusLengthCut = -1.0;
-G4double*  G4MuonMinus::theMuonMinusKineticEnergyCuts = NULL;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauPlus.cc,v 1.5 2001-07-11 10:01:54 gunter Exp $
+// $Id: G4TauPlus.cc,v 1.6 2001-10-15 10:04:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -124,11 +124,3 @@ G4TauPlus G4TauPlus::theTauPlus(
 
 G4TauPlus* G4TauPlus::TauPlusDefinition(){return &theTauPlus;}
 // initialization for static cut values
-G4double   G4TauPlus::theTauPlusLengthCut = -1.0;
-G4double*  G4TauPlus::theTauPlusKineticEnergyCuts = NULL;
-
-
-
-
-
-

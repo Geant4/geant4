@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutrinoTau.cc,v 1.6 2001-09-19 11:14:37 kurasige Exp $
+// $Id: G4AntiNeutrinoTau.cc,v 1.7 2001-10-15 10:04:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,9 +82,6 @@ G4AntiNeutrinoTau* G4AntiNeutrinoTau::AntiNeutrinoTauDefinition()
 {
   return &theAntiNeutrinoTau;
 }
-// initialization for static cut values
-G4double   G4AntiNeutrinoTau::theAntiNeutrinoTauLengthCut = -1.0;
-G4double*  G4AntiNeutrinoTau::theAntiNeutrinoTauKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // **************************** SetCuts *********************************
@@ -92,12 +89,9 @@ G4double*  G4AntiNeutrinoTau::theAntiNeutrinoTauKineticEnergyCuts = NULL;
 
 void G4AntiNeutrinoTau::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
-  // Set Energy Cut values to zero for all materials
-  SetEnergyCutValues( 0.0*keV);
+   // Set Energy Cut values to lowest  for all materials
+  SetEnergyCutValues(0.0*keV); 
 
-  theAntiNeutrinoTauLengthCut = theCutInMaxInteractionLength;  
-  theAntiNeutrinoTauKineticEnergyCuts = theKineticEnergyCuts;
-  
 }

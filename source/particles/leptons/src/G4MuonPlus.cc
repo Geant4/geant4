@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonPlus.cc,v 1.5 2001-07-11 10:01:54 gunter Exp $
+// $Id: G4MuonPlus.cc,v 1.6 2001-10-15 10:04:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,9 +97,6 @@ G4MuonPlus G4MuonPlus::theMuonPlus(
 );
 
 G4MuonPlus*  G4MuonPlus::MuonPlusDefinition() {return &theMuonPlus;}
-// initialization for static cut values
-G4double   G4MuonPlus::theMuonPlusLengthCut = -1.0;
-G4double*  G4MuonPlus::theMuonPlusKineticEnergyCuts = NULL;
 
 
 

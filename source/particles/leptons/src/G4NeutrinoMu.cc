@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoMu.cc,v 1.6 2001-09-19 11:14:38 kurasige Exp $
+// $Id: G4NeutrinoMu.cc,v 1.7 2001-10-15 10:04:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,21 +82,15 @@ G4NeutrinoMu* G4NeutrinoMu::NeutrinoMuDefinition()
 {
   return &theNeutrinoMu;
 }
-G4double   G4NeutrinoMu::theNeutrinoMuLengthCut = -1.0;
-G4double*  G4NeutrinoMu::theNeutrinoMuKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // **************************** SetCuts *********************************
 // **********************************************************************
 void G4NeutrinoMu::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
- // Set Energy Cut values to zero for all materials
-  SetEnergyCutValues( 0.0*keV);
-
-  theNeutrinoMuLengthCut = theCutInMaxInteractionLength;  
-  theNeutrinoMuKineticEnergyCuts = theKineticEnergyCuts;
-  
+  // Set Energy Cut values to lowest  for all materials
+  SetEnergyCutValues(0.0*keV); 
 }
 

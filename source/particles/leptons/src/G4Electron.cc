@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Electron.cc,v 1.5 2001-09-19 11:14:37 kurasige Exp $
+// $Id: G4Electron.cc,v 1.6 2001-10-15 10:04:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,9 +83,6 @@ G4Electron G4Electron::theElectron(
 );
 
 G4Electron* G4Electron::ElectronDefinition(){return &theElectron;}
-// initialization for static cut values
-G4double   G4Electron::theElectronLengthCut = -1.0;
-G4double*  G4Electron::theElectronKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // ************************* ComputeLoss ********************************
