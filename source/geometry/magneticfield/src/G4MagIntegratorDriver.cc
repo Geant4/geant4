@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.33 2003-06-19 13:57:45 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.34 2003-06-19 14:36:19 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@
 #include "G4MagIntegratorDriver.hh"
 #include "G4FieldTrack.hh"
 #include "geomdefs.hh"         //  for kCarTolerance
-#include "g4std/iomanip"
+#include <iomanip>
 
 //  Stepsize can increase by no more than 5.0
 //           and decrease by no more than 1/10. = 0.1
@@ -63,7 +63,7 @@ G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum,
 				  G4int                   numComponents)
   : fNoIntegrationVariables(numComponents), 
     fMinNoVars(12), 
-    fNoVars( G4std::max( fNoIntegrationVariables, fMinNoVars )),
+    fNoVars( std::max( fNoIntegrationVariables, fMinNoVars )),
     fVerboseLevel(0),
     fNoTotalSteps(0),  fNoBadSteps(0), fNoSmallSteps(0), fNoInitialSmallSteps(0),
     fDyerr_max(0.0), fDyerr_mx2(0.0), 
@@ -73,7 +73,7 @@ G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum,
 // In order to accomodate "Laboratory Time", which is [7], fMinNoVars=8 is required.
 // For proper time of flight and spin,  fMinNoVars must be 12
 
-      // fNoVars= G4std::max( fNoVars, fMinNoVars );  
+      // fNoVars= std::max( fNoVars, fMinNoVars );  
       RenewStepperAndAdjust( pItsStepper );
       fMinimumStep= hminimum;
       fMaxNoSteps = fMaxStepBase / pIntStepper->IntegratorOrder();
@@ -150,7 +150,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 
   G4bool  lastStep= false;
   nstp=1;
-  // G4double  lastStepThreshold = G4std::min( eps * hstep, Hmin() ); 
+  // G4double  lastStepThreshold = std::min( eps * hstep, Hmin() ); 
 
   do{
      G4ThreeVector StartPos( y[0], y[1], y[2] );   
@@ -227,8 +227,8 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 
 #ifdef  G4DEBUG_FIELD
      if(dbg && (nstp>nStpPr)) {
-       G4cout << "hdid="  << G4std::setw(12) << hdid  << " "
-	      << "hnext=" << G4std::setw(12) << hnext << " " << G4endl;
+       G4cout << "hdid="  << std::setw(12) << hdid  << " "
+	      << "hnext=" << std::setw(12) << hnext << " " << G4endl;
        PrintStatus( ystart, x1, y, x, h, (nstp==nStpPr) ? -nstp: nstp); 
      }
 #endif
@@ -445,7 +445,7 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
       {
 	  pIntStepper-> Stepper(y,dydx,h,ytemp,yerr); 
           //            *******
-          G4double eps_pos = eps_rel_max * G4std::max(h, fMinimumStep); 
+          G4double eps_pos = eps_rel_max * std::max(h, fMinimumStep); 
 	  G4double inv_eps_pos_sq = 1.0 / (eps_pos*eps_pos); 
 
 	  // Evaluate accuracy
@@ -462,7 +462,7 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
           // errvel_sq /= eps_rel_max*eps_rel_max; 
           errvel_sq *= inv_eps_vel_sq;
 
-          errmax_sq = G4std::max( errpos_sq, errvel_sq ); // Square of maximum error
+          errmax_sq = std::max( errpos_sq, errvel_sq ); // Square of maximum error
           // errmax = sqrt( errmax_sq );
 	  if(errmax_sq <= 1.0 ) break ; // Step succeeded. 
 
@@ -692,24 +692,24 @@ void G4MagInt_Driver::PrintStatus(
     {
        subStepNo = - subStepNo;        // To allow printing banner
 
-       G4cout << G4std::setw( 6)  << " " 
-	      << G4std::setw( 25) << " G4MagInt_Driver: Current Position  and  Direction" << " "
+       G4cout << std::setw( 6)  << " " 
+	      << std::setw( 25) << " G4MagInt_Driver: Current Position  and  Direction" << " "
 	      << G4endl; 
-       G4cout << G4std::setw( 5) << "Step#" << " "
-	      << G4std::setw( 7) << "s-curve" << " "
-	      << G4std::setw( 9) << "X(mm)" << " "
-	      << G4std::setw( 9) << "Y(mm)" << " "  
-	      << G4std::setw( 9) << "Z(mm)" << " "
-	      << G4std::setw( 8) << " N_x " << " "
-	      << G4std::setw( 8) << " N_y " << " "
-	      << G4std::setw( 8) << " N_z " << " "
-	      << G4std::setw( 7) << " N^2-1 " << " "
-	      << G4std::setw(10) << " N(0).N " << " "
-	      << G4std::setw( 7) << "KinEner " << " "
-	      << G4std::setw(12) << "Track-l" << " "   // Add the Sub-step ??
-	      << G4std::setw(12) << "Step-len" << " " 
-	      << G4std::setw(12) << "Step-len" << " " 
-	      << G4std::setw( 9) << "ReqStep" << " "  
+       G4cout << std::setw( 5) << "Step#" << " "
+	      << std::setw( 7) << "s-curve" << " "
+	      << std::setw( 9) << "X(mm)" << " "
+	      << std::setw( 9) << "Y(mm)" << " "  
+	      << std::setw( 9) << "Z(mm)" << " "
+	      << std::setw( 8) << " N_x " << " "
+	      << std::setw( 8) << " N_y " << " "
+	      << std::setw( 8) << " N_z " << " "
+	      << std::setw( 7) << " N^2-1 " << " "
+	      << std::setw(10) << " N(0).N " << " "
+	      << std::setw( 7) << "KinEner " << " "
+	      << std::setw(12) << "Track-l" << " "   // Add the Sub-step ??
+	      << std::setw(12) << "Step-len" << " " 
+	      << std::setw(12) << "Step-len" << " " 
+	      << std::setw( 9) << "ReqStep" << " "  
 	      << G4endl;
 
         PrintStat_Aux( StartFT,  requestStep, 0., 
@@ -753,9 +753,9 @@ void G4MagInt_Driver::PrintStat_Aux(
     const G4ThreeVector UnitVelocity=  aFieldTrack.GetMomentumDir();
  
     if( subStepNo >= 0)
-       G4cout << G4std::setw( 5) << subStepNo << " ";
+       G4cout << std::setw( 5) << subStepNo << " ";
     else
-       G4cout << G4std::setw( 5) << "Start" << " ";
+       G4cout << std::setw( 5) << "Start" << " ";
     G4double curveLen= aFieldTrack.GetCurveLength();
     G4cout << G4std::setw( 7) << curveLen;
     G4cout << G4std::setw( 9) << Position.x() << " "
