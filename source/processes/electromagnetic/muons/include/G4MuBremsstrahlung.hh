@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.1 1999-01-07 16:11:03 gunter Exp $
+// $Id: G4MuBremsstrahlung.hh,v 1.2 1999-03-15 13:35:32 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -28,9 +28,6 @@
 #include "G4MuEnergyLoss.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
-#include "G4Gamma.hh"
-#include "G4MuonMinus.hh"
-#include "G4MuonPlus.hh"
 #include "G4OrderedTable.hh" 
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
@@ -110,22 +107,9 @@ class G4MuBremsstrahlung : public G4MuEnergyLoss
      G4double HighestKineticEnergy;  
      G4int TotBin;  
 
-     G4double CutInRange;
-
-     const G4Gamma* theGamma; 
-     const G4MuonMinus* theMuonMinus;
-     const G4MuonPlus* theMuonPlus;
-
      const G4double* GammaCutInKineticEnergy;
-     const G4double* MuonMinusCutInKineticEnergy;
-     const G4double* MuonPlusCutInKineticEnergy;
-     const G4double* ParticleCutInKineticEnergy;
-
 
      G4double GammaCutInKineticEnergyNow;
-     G4double MuonMinusCutInKineticEnergyNow;
-     G4double MuonPlusCutInKineticEnergyNow;
-     G4double ParticleCutInKineticEnergyNow;
 
      // tables for sampling ..............
      static G4int nzdat,ntdat,NBIN ;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.icc,v 1.1 1999-01-07 16:11:03 gunter Exp $
+// $Id: G4MuBremsstrahlung.icc,v 1.2 1999-03-15 13:35:33 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -32,7 +32,6 @@ inline G4double G4MuBremsstrahlung::GetMeanFreePath(const G4Track& trackData,
 
    aDynamicParticle = trackData.GetDynamicParticle();
    aMaterial = trackData.GetMaterial();
-
    G4double KineticEnergy = aDynamicParticle->GetKineticEnergy();
 
    if (KineticEnergy <  LowestKineticEnergy)
