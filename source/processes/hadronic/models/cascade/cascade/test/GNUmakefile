@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 1999-11-26 14:03:32 miheikki Exp $
+# $Id: GNUmakefile,v 1.5 1999-12-07 16:45:43 miheikki Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -14,31 +14,6 @@ endif
 G4EXEC_BUILD = true
 
 include $(G4INSTALL)/config/architecture.gmk
-
-ifeq ($(G4TARGET),G4HadronAtRestTest)
-  LDSTUBS :=  $(G4TMP)/$(G4SYSTEM)/$(G4TARGET)/G4HadronAtRestTestStub.o
-  EXTRALIBDIR := -L/cern/pro/lib
-  EXTRALIBS := -lpacklib $(FCLIBS) $(LDSTUBS)
-  LFLAGS += $(EXTRALIBDIR)
-  LOADLIBS += $(EXTRALIBS)
-endif
-
-ifeq ($(G4TARGET),G4PiMinusAbsorptionAtRestTest)
-  EXTRALIBDIR := -L/cern/pro/lib
-  EXTRALIBS := -lpacklib $(FCLIBS) 
-    ifeq ($(G4SYSTEM),SUN-CC)
-      EXTRALIBS := -lpacklib -lw -lgen -lsocket -lnsl -lintl $(FCLIBS) 
-    endif
-  LDFLAGS += $(EXTRALIBDIR)
-  LOADLIBS += $(EXTRALIBS) 
-endif
-
-ifeq ($(G4TARGET),G4KaonMinusAbsorptionAtRestTest)
-  EXTRALIBDIR := -L/cern/pro/lib
-  EXTRALIBS := -lpacklib $(FCLIBS) 
-  LDFLAGS += $(EXTRALIBDIR)
-  LOADLIBS += $(EXTRALIBS) 
-endif
 
 # Override some variables for binmake.gmk.
 #
@@ -93,11 +68,10 @@ LDLIBS   := \
             -lG4track \
             -lG4partman \
             -lG4intercoms \
-            -lG4materials \
-            -lG4global
+            -lG4materials
 
 # Spesific for cascade test
-LDLIBS   := \
+LDLIBS   += \
 	-lG4globman \
 	-lG4hadronic_mgt \
 	-lG4hadronic_stop \
@@ -119,7 +93,7 @@ LDLIBS   := \
 	-lG4hadronic_cascade_bertini \
 	-lG4hadronic_cascade_evaporation \
 
-#include $(G4INSTALL)/config/binmake.gmk
+include $(G4INSTALL)/config/binmake.gmk
 
 
 
@@ -134,5 +108,7 @@ clean:
 clean_libs:
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean_libs); done
 
+clean_test:
+	rm core main *.*~
 
 
