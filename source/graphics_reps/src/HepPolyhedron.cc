@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.10 2002-11-07 16:19:27 evc Exp $
+// $Id: HepPolyhedron.cc,v 1.11 2002-11-12 15:51:19 evc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -244,9 +244,9 @@ void HepPolyhedron::CreatePrism()
   pF[6] = G4Facet(5,FRONT, 6,RIGHT, 7,BACK,   8,LEFT);
 }
 
-void HepPolyhedron::RotateEdge(int k1, int k2, HepDouble r1, HepDouble r2,
+void HepPolyhedron::RotateEdge(int k1, int k2, double r1, double r2,
 			      int v1, int v2, int vEdge,
-                              HepBoolean ifWholeCircle, int ns, int &kface)
+                              bool ifWholeCircle, int ns, int &kface)
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedron::RotateEdge                   Date:    05.12.96 *
@@ -307,8 +307,8 @@ void HepPolyhedron::RotateEdge(int k1, int k2, HepDouble r1, HepDouble r2,
 }
 
 void HepPolyhedron::SetSideFacets(int ii[4], int vv[4],
-				 int *kk, HepDouble *r,
-                                 HepDouble dphi, int ns, int &kface)
+				 int *kk, double *r,
+                                 double dphi, int ns, int &kface)
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedron::SetSideFacets                Date:    20.05.97 *
@@ -328,7 +328,7 @@ void HepPolyhedron::SetSideFacets(int ii[4], int vv[4],
 {
   int k1, k2, k3, k4;
   
-  if (abs((HepDouble)(dphi-M_PI)) < perMillion) {          // half a circle
+  if (abs((double)(dphi-M_PI)) < perMillion) {          // half a circle
     for (int i=0; i<4; i++) {
       k1 = ii[i];
       k2 = (i == 3) ? ii[0] : ii[i+1];
@@ -377,9 +377,9 @@ void HepPolyhedron::SetSideFacets(int ii[4], int vv[4],
   }
 }
 
-void HepPolyhedron::RotateAroundZ(int nstep, HepDouble phi, HepDouble dphi,
+void HepPolyhedron::RotateAroundZ(int nstep, double phi, double dphi,
                                  int np1, int np2,
-				 const HepDouble *z, HepDouble *r,
+				 const double *z, double *r,
 				 int nodeVis, int edgeVis)
 /***********************************************************************
  *                                                                     *
@@ -403,18 +403,17 @@ void HepPolyhedron::RotateAroundZ(int nstep, HepDouble phi, HepDouble dphi,
  *                                                                     *
  ***********************************************************************/
 {
-  static HepDouble wholeCircle   = 2*M_PI;
+  static double wholeCircle   = 2*M_PI;
     
   //   S E T   R O T A T I O N   P A R A M E T E R S
 
-  HepBoolean ifWholeCircle = (abs(dphi-wholeCircle) < perMillion) ?
-    true : false;
-  HepDouble   delPhi  = ifWholeCircle ? wholeCircle : dphi;  
+  bool ifWholeCircle = (abs(dphi-wholeCircle) < perMillion) ? true : false;
+  double   delPhi  = ifWholeCircle ? wholeCircle : dphi;  
   int        nSphi    = (nstep > 0) ?
     nstep : int(delPhi*GetNumberOfRotationSteps()/wholeCircle+.5);
   if (nSphi == 0) nSphi = 1;
   int        nVphi    = ifWholeCircle ? nSphi : nSphi+1;
-  HepBoolean ifClosed = np1 > 0 ? false : true;
+  bool ifClosed = np1 > 0 ? false : true;
   
   //   C O U N T   V E R T E C E S
 
@@ -435,8 +434,8 @@ void HepPolyhedron::RotateAroundZ(int nstep, HepDouble phi, HepDouble dphi,
     j += (r[i] == 0.) ? 1 : nVphi;
   }
 
-  HepBoolean ifSide1 = false;                           // internal nodes
-  HepBoolean ifSide2 = false;
+  bool ifSide1 = false;                           // internal nodes
+  bool ifSide2 = false;
 
   if (r[i2beg] != r[i1beg] || z[i2beg] != z[i1beg]) {
     j += (r[i2beg] == 0.) ? 1 : nVphi;
@@ -513,7 +512,7 @@ void HepPolyhedron::RotateAroundZ(int nstep, HepDouble phi, HepDouble dphi,
     }
   }
 
-  HepDouble cosPhi, sinPhi;
+  double cosPhi, sinPhi;
 
   for(j=0; j<nVphi; j++) {
     cosPhi = cos(phi+j*delPhi/nSphi);
@@ -809,7 +808,7 @@ HepPolyhedron & HepPolyhedron::Transform(const HepTransform3D &t)
   return *this;
 }
 
-HepBoolean HepPolyhedron::GetNextVertexIndex(int &index, int &edgeFlag) const
+bool HepPolyhedron::GetNextVertexIndex(int &index, int &edgeFlag) const
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedron::GetNextVertexIndex          Date:    03.09.96  *
@@ -855,7 +854,7 @@ HepPoint3D HepPolyhedron::GetVertex(int index) const
   return pV[index];
 }
 
-HepBoolean
+bool
 HepPolyhedron::GetNextVertex(HepPoint3D &vertex, int &edgeFlag) const
 /***********************************************************************
  *                                                                     *
@@ -869,12 +868,12 @@ HepPolyhedron::GetNextVertex(HepPoint3D &vertex, int &edgeFlag) const
  ***********************************************************************/
 {
   int index;
-  HepBoolean rep = GetNextVertexIndex(index, edgeFlag);
+  bool rep = GetNextVertexIndex(index, edgeFlag);
   vertex = pV[index];
   return rep;
 }
 
-HepBoolean HepPolyhedron::GetNextVertex(HepPoint3D &vertex, int &edgeFlag,
+bool HepPolyhedron::GetNextVertex(HepPoint3D &vertex, int &edgeFlag,
 				       HepNormal3D &normal) const
 /***********************************************************************
  *                                                                     *
@@ -906,7 +905,7 @@ HepBoolean HepPolyhedron::GetNextVertex(HepPoint3D &vertex, int &edgeFlag,
   }
 }
 
-HepBoolean HepPolyhedron::GetNextEdgeIndeces(int &i1, int &i2, int &edgeFlag,
+bool HepPolyhedron::GetNextEdgeIndeces(int &i1, int &i2, int &edgeFlag,
 					    int &iface1, int &iface2) const
 /***********************************************************************
  *                                                                     *
@@ -958,7 +957,7 @@ HepBoolean HepPolyhedron::GetNextEdgeIndeces(int &i1, int &i2, int &edgeFlag,
   }
 }
 
-HepBoolean
+bool
 HepPolyhedron::GetNextEdgeIndeces(int &i1, int &i2, int &edgeFlag) const
 /***********************************************************************
  *                                                                     *
@@ -974,7 +973,7 @@ HepPolyhedron::GetNextEdgeIndeces(int &i1, int &i2, int &edgeFlag) const
   return GetNextEdgeIndeces(i1, i2, edgeFlag, kface1, kface2);
 }
 
-HepBoolean
+bool
 HepPolyhedron::GetNextEdge(HepPoint3D &p1,
 			   HepPoint3D &p2,
 			   int &edgeFlag) const
@@ -989,13 +988,13 @@ HepPolyhedron::GetNextEdge(HepPoint3D &p1,
  ***********************************************************************/
 {
   int i1,i2;
-  HepBoolean rep = GetNextEdgeIndeces(i1,i2,edgeFlag);
+  bool rep = GetNextEdgeIndeces(i1,i2,edgeFlag);
   p1 = pV[i1];
   p2 = pV[i2];
   return rep;
 }
 
-HepBoolean
+bool
 HepPolyhedron::GetNextEdge(HepPoint3D &p1, HepPoint3D &p2,
 			  int &edgeFlag, int &iface1, int &iface2) const
 /***********************************************************************
@@ -1010,7 +1009,7 @@ HepPolyhedron::GetNextEdge(HepPoint3D &p1, HepPoint3D &p2,
  ***********************************************************************/
 {
   int i1,i2;
-  HepBoolean rep = GetNextEdgeIndeces(i1,i2,edgeFlag,iface1,iface2);
+  bool rep = GetNextEdgeIndeces(i1,i2,edgeFlag,iface1,iface2);
   p1 = pV[i1];
   p2 = pV[i2];
   return rep;
@@ -1064,14 +1063,14 @@ void HepPolyhedron::GetFacet(int index, int &n, HepPoint3D *nodes,
   int iNodes[4];
   GetFacet(index, n, iNodes, edgeFlags);
   if (n != 0) {
-    for (int i=0; i<4; i++) {
+    for (int i=0; i<n; i++) {
       nodes[i] = pV[iNodes[i]];
       if (normals != 0) normals[i] = FindNodeNormal(index,iNodes[i]);
     }
   }
 }
 
-HepBoolean
+bool
 HepPolyhedron::GetNextFacet(int &n, HepPoint3D *nodes,
 			   int *edgeFlags, HepNormal3D *normals) const
 /***********************************************************************
@@ -1152,7 +1151,7 @@ HepNormal3D HepPolyhedron::GetUnitNormal(int iFace) const
   return ((pV[i2] - pV[i0]).cross(pV[i3] - pV[i1])).unit();
 }
 
-HepBoolean HepPolyhedron::GetNextNormal(HepNormal3D &normal) const
+bool HepPolyhedron::GetNextNormal(HepNormal3D &normal) const
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedron::GetNextNormal               Date:    22.07.96  *
@@ -1173,7 +1172,7 @@ HepBoolean HepPolyhedron::GetNextNormal(HepNormal3D &normal) const
   }
 }
 
-HepBoolean HepPolyhedron::GetNextUnitNormal(HepNormal3D &normal) const
+bool HepPolyhedron::GetNextUnitNormal(HepNormal3D &normal) const
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedron::GetNextUnitNormal           Date:    16.09.96  *
@@ -1184,7 +1183,7 @@ HepBoolean HepPolyhedron::GetNextUnitNormal(HepNormal3D &normal) const
  *                                                                     *
  ***********************************************************************/
 {
-  HepBoolean rep = GetNextNormal(normal);
+  bool rep = GetNextNormal(normal);
   normal = normal.unit();
   return rep;
 }
@@ -1339,9 +1338,9 @@ HepPolyhedron::createPolyhedron(int Nnodes, int Nfaces,
   return 0;
 }
 
-HepPolyhedronTrd2::HepPolyhedronTrd2(HepDouble Dx1, HepDouble Dx2,
-				     HepDouble Dy1, HepDouble Dy2,
-				     HepDouble Dz)
+HepPolyhedronTrd2::HepPolyhedronTrd2(double Dx1, double Dx2,
+				     double Dy1, double Dy2,
+				     double Dz)
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedronTrd2                           Date:    22.07.96 *
@@ -1373,28 +1372,28 @@ HepPolyhedronTrd2::HepPolyhedronTrd2(HepDouble Dx1, HepDouble Dx2,
 
 HepPolyhedronTrd2::~HepPolyhedronTrd2() {}
 
-HepPolyhedronTrd1::HepPolyhedronTrd1(HepDouble Dx1, HepDouble Dx2,
-				     HepDouble Dy, HepDouble Dz)
+HepPolyhedronTrd1::HepPolyhedronTrd1(double Dx1, double Dx2,
+				     double Dy, double Dz)
   : HepPolyhedronTrd2(Dx1, Dx2, Dy, Dy, Dz) {}
 
 HepPolyhedronTrd1::~HepPolyhedronTrd1() {}
 
-HepPolyhedronBox::HepPolyhedronBox(HepDouble Dx, HepDouble Dy, HepDouble Dz)
+HepPolyhedronBox::HepPolyhedronBox(double Dx, double Dy, double Dz)
   : HepPolyhedronTrd2(Dx, Dx, Dy, Dy, Dz) {}
 
 HepPolyhedronBox::~HepPolyhedronBox() {}
 
-HepPolyhedronTrap::HepPolyhedronTrap(HepDouble Dz,
-				     HepDouble Theta,
-				     HepDouble Phi,
-				     HepDouble Dy1,
-				     HepDouble Dx1,
-				     HepDouble Dx2,
-				     HepDouble Alp1,
-				     HepDouble Dy2,
-				     HepDouble Dx3,
-				     HepDouble Dx4,
-				     HepDouble Alp2)
+HepPolyhedronTrap::HepPolyhedronTrap(double Dz,
+				     double Theta,
+				     double Phi,
+				     double Dy1,
+				     double Dx1,
+				     double Dx2,
+				     double Alp1,
+				     double Dy2,
+				     double Dx3,
+				     double Dx4,
+				     double Alp2)
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedronTrap                           Date:    20.11.96 *
@@ -1418,10 +1417,10 @@ HepPolyhedronTrap::HepPolyhedronTrap(HepDouble Dz,
  *                                                                     *
  ***********************************************************************/
 {
-  HepDouble DzTthetaCphi = Dz*tan(Theta)*cos(Phi);
-  HepDouble DzTthetaSphi = Dz*tan(Theta)*sin(Phi);
-  HepDouble Dy1Talp1 = Dy1*tan(Alp1);
-  HepDouble Dy2Talp2 = Dy2*tan(Alp2);
+  double DzTthetaCphi = Dz*tan(Theta)*cos(Phi);
+  double DzTthetaSphi = Dz*tan(Theta)*sin(Phi);
+  double Dy1Talp1 = Dy1*tan(Alp1);
+  double Dy2Talp2 = Dy2*tan(Alp2);
   
   AllocateMemory(8,6);
 
@@ -1439,20 +1438,20 @@ HepPolyhedronTrap::HepPolyhedronTrap(HepDouble Dz,
 
 HepPolyhedronTrap::~HepPolyhedronTrap() {}
 
-HepPolyhedronPara::HepPolyhedronPara(HepDouble Dx, HepDouble Dy, HepDouble Dz,
-				     HepDouble Alpha, HepDouble Theta,
-				     HepDouble Phi)
+HepPolyhedronPara::HepPolyhedronPara(double Dx, double Dy, double Dz,
+				     double Alpha, double Theta,
+				     double Phi)
   : HepPolyhedronTrap(Dz, Theta, Phi, Dy, Dx, Dx, Alpha, Dy, Dx, Dx, Alpha) {}
 
 HepPolyhedronPara::~HepPolyhedronPara() {}
 
-HepPolyhedronCons::HepPolyhedronCons(HepDouble Rmn1,
-				     HepDouble Rmx1,
-				     HepDouble Rmn2,
-				     HepDouble Rmx2, 
-				     HepDouble Dz,
-				     HepDouble Phi1,
-				     HepDouble Dphi) 
+HepPolyhedronCons::HepPolyhedronCons(double Rmn1,
+				     double Rmx1,
+				     double Rmn2,
+				     double Rmx2, 
+				     double Dz,
+				     double Phi1,
+				     double Dphi) 
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedronCons::HepPolyhedronCons        Date:    15.12.96 *
@@ -1468,7 +1467,7 @@ HepPolyhedronCons::HepPolyhedronCons(HepDouble Rmn1,
  *                                                                     *
  ***********************************************************************/
 {
-  static HepDouble wholeCircle=2*M_PI;
+  static double wholeCircle=2*M_PI;
 
   //   C H E C K   I N P U T   P A R A M E T E R S
 
@@ -1479,7 +1478,7 @@ HepPolyhedronCons::HepPolyhedronCons(HepDouble Rmn1,
 
   if (Dz <= 0.) k += 2;
  
-  HepDouble phi1, phi2, dphi;
+  double phi1, phi2, dphi;
   if (Dphi < 0.) {
     phi2 = Phi1; phi1 = phi2 - Dphi;
   }else if (Dphi == 0.) {
@@ -1506,7 +1505,7 @@ HepPolyhedronCons::HepPolyhedronCons(HepDouble Rmn1,
   
   //   P R E P A R E   T W O   P O L Y L I N E S
 
-  HepDouble zz[4], rr[4];
+  double zz[4], rr[4];
   zz[0] =  Dz; 
   zz[1] = -Dz; 
   zz[2] =  Dz; 
@@ -1524,33 +1523,33 @@ HepPolyhedronCons::HepPolyhedronCons(HepDouble Rmn1,
 
 HepPolyhedronCons::~HepPolyhedronCons() {}
 
-HepPolyhedronCone::HepPolyhedronCone(HepDouble Rmn1, HepDouble Rmx1, 
-				     HepDouble Rmn2, HepDouble Rmx2,
-				     HepDouble Dz) :
+HepPolyhedronCone::HepPolyhedronCone(double Rmn1, double Rmx1, 
+				     double Rmn2, double Rmx2,
+				     double Dz) :
   HepPolyhedronCons(Rmn1, Rmx1, Rmn2, Rmx2, Dz, 0*deg, 360*deg) {}
 
 HepPolyhedronCone::~HepPolyhedronCone() {}
 
-HepPolyhedronTubs::HepPolyhedronTubs(HepDouble Rmin, HepDouble Rmax,
-				     HepDouble Dz, 
-				     HepDouble Phi1, HepDouble Dphi)
+HepPolyhedronTubs::HepPolyhedronTubs(double Rmin, double Rmax,
+				     double Dz, 
+				     double Phi1, double Dphi)
   :   HepPolyhedronCons(Rmin, Rmax, Rmin, Rmax, Dz, Phi1, Dphi) {}
 
 HepPolyhedronTubs::~HepPolyhedronTubs() {}
 
-HepPolyhedronTube::HepPolyhedronTube (HepDouble Rmin, HepDouble Rmax,
-				      HepDouble Dz)
+HepPolyhedronTube::HepPolyhedronTube (double Rmin, double Rmax,
+				      double Dz)
   : HepPolyhedronCons(Rmin, Rmax, Rmin, Rmax, Dz, 0*deg, 360*deg) {}
 
 HepPolyhedronTube::~HepPolyhedronTube () {}
 
-HepPolyhedronPgon::HepPolyhedronPgon(HepDouble phi,
-				     HepDouble dphi,
+HepPolyhedronPgon::HepPolyhedronPgon(double phi,
+				     double dphi,
 				     int    npdv,
 				     int    nz,
-				     const HepDouble *z,
-				     const HepDouble *rmin,
-				     const HepDouble *rmax)
+				     const double *z,
+				     const double *rmin,
+				     const double *rmax)
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedronPgon                           Date:    09.12.96 *
@@ -1604,9 +1603,9 @@ HepPolyhedronPgon::HepPolyhedronPgon(HepDouble phi,
 
   //   P R E P A R E   T W O   P O L Y L I N E S
 
-  HepDouble *zz, *rr;
-  zz = new HepDouble[2*nz];
-  rr = new HepDouble[2*nz];
+  double *zz, *rr;
+  zz = new double[2*nz];
+  rr = new double[2*nz];
 
   if (z[0] > z[nz-1]) {
     for (i=0; i<nz; i++) {
@@ -1635,17 +1634,17 @@ HepPolyhedronPgon::HepPolyhedronPgon(HepDouble phi,
 
 HepPolyhedronPgon::~HepPolyhedronPgon() {}
 
-HepPolyhedronPcon::HepPolyhedronPcon(HepDouble phi, HepDouble dphi, int nz,
-				     const HepDouble *z,
-				     const HepDouble *rmin,
-				     const HepDouble *rmax)
+HepPolyhedronPcon::HepPolyhedronPcon(double phi, double dphi, int nz,
+				     const double *z,
+				     const double *rmin,
+				     const double *rmax)
   : HepPolyhedronPgon(phi, dphi, 0, nz, z, rmin, rmax) {}
 
 HepPolyhedronPcon::~HepPolyhedronPcon() {}
 
-HepPolyhedronSphere::HepPolyhedronSphere(HepDouble rmin, HepDouble rmax,
-				       HepDouble phi, HepDouble dphi,
-				       HepDouble the, HepDouble dthe)
+HepPolyhedronSphere::HepPolyhedronSphere(double rmin, double rmax,
+				       double phi, double dphi,
+				       double the, double dthe)
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedronSphere                         Date:    11.12.96 *
@@ -1708,12 +1707,12 @@ HepPolyhedronSphere::HepPolyhedronSphere(HepDouble rmin, HepDouble rmax,
   if (np1 <= 1) np1 = 2;
   int np2 = rmin < perMillion ? 1 : np1;
 
-  HepDouble *zz, *rr;
-  zz = new HepDouble[np1+np2];
-  rr = new HepDouble[np1+np2];
+  double *zz, *rr;
+  zz = new double[np1+np2];
+  rr = new double[np1+np2];
 
-  HepDouble a = dthe/(np1-1);
-  HepDouble cosa, sina;
+  double a = dthe/(np1-1);
+  double cosa, sina;
   for (int i=0; i<np1; i++) {
     cosa  = cos(the+i*a);
     sina  = sin(the+i*a);
@@ -1740,11 +1739,11 @@ HepPolyhedronSphere::HepPolyhedronSphere(HepDouble rmin, HepDouble rmax,
 
 HepPolyhedronSphere::~HepPolyhedronSphere() {}
 
-HepPolyhedronTorus::HepPolyhedronTorus(HepDouble rmin,
-				       HepDouble rmax,
-				       HepDouble rtor,
-				       HepDouble phi,
-				       HepDouble dphi)
+HepPolyhedronTorus::HepPolyhedronTorus(double rmin,
+				       double rmax,
+				       double rtor,
+				       double phi,
+				       double dphi)
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedronTorus                          Date:    11.12.96 *
@@ -1782,12 +1781,12 @@ HepPolyhedronTorus::HepPolyhedronTorus(HepDouble rmin,
   int np1 = GetNumberOfRotationSteps();
   int np2 = rmin < perMillion ? 1 : np1;
 
-  HepDouble *zz, *rr;
-  zz = new HepDouble[np1+np2];
-  rr = new HepDouble[np1+np2];
+  double *zz, *rr;
+  zz = new double[np1+np2];
+  rr = new double[np1+np2];
 
-  HepDouble a = 2*M_PI/np1;
-  HepDouble cosa, sina;
+  double a = 2*M_PI/np1;
+  double cosa, sina;
   for (int i=0; i<np1; i++) {
     cosa  = cos(i*a);
     sina  = sin(i*a);
