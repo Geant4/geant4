@@ -27,6 +27,8 @@ Finished reading file.
 
 
 ### The InstMgr says there are 873 instantiated objects
+
+Creating assembly of G4 solids ...
 Tst05PhysicsList::SetCuts:CutLength : 1 (mm)
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
@@ -87,12 +89,13 @@ MuPairProd:  theoretical cross sections
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
 #
-# Run 1 event
+# Run 3 events
 #
-/run/beamOn 1
+/run/beamOn 3
 /event/Verbose 1
 /tracking/Verbose 1
 #
 # Termination
 #
 exit
+
