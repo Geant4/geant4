@@ -34,7 +34,7 @@ int main()
 						      100.0               ,
 						      1000.0               );
   
-  cout << "\n\nCylinder created ! ";
+  G4cout << "\n\nCylinder created ! ";
   
   // -> Check methods :
   //  - Inside
@@ -72,13 +72,13 @@ int main()
       G4cout <<" is inside"<<G4endl;
 
       dist[a][1] = myCyl->DistanceToOut(Pt[a]);
-      cout<<"\nDistance to out is :"<<dist[a][1]<<G4endl;
+      G4cout<<"\nDistance to out is :"<<dist[a][1]<<G4endl;
 
-      cout << "\nDir   : x=" << Dir[a].x() 
+      G4cout << "\nDir   : x=" << Dir[a].x() 
 	   << " y=" << Dir[a].y() 
 	   << " z=" << Dir[a].z()<<G4endl;
       dist[a][2] = myCyl->DistanceToOut(Pt[a], Dir[a]);
-      cout<<"Distance to out is :"<<dist[a][2]<<G4endl;
+      G4cout<<"Distance to out is :"<<dist[a][2]<<G4endl;
 
     }
     else
@@ -86,15 +86,15 @@ int main()
       G4cout <<" is outside"<<G4endl;
 
       dist[a][1] = myCyl->DistanceToIn(Pt[a]);
-      cout<<"\nDistance to in is :"<<dist[a][1]<<G4endl;
+      G4cout<<"\nDistance to in is :"<<dist[a][1]<<G4endl;
 
-      cout << "\nDir   : x=" << Dir[a].x() 
+      G4cout << "\nDir   : x=" << Dir[a].x() 
 	   << " y=" << Dir[a].y() 
 	   << " z=" << Dir[a].z()<<G4endl;
       dist[a][2] = myCyl->DistanceToIn(Pt[a], Dir[a]);
-      cout<<"Distance to in is :"<<dist[a][2];
+      G4cout<<"Distance to in is :"<<dist[a][2];
     }
-    cout<<G4endl;
+    G4cout<<G4endl;
   }
 
 

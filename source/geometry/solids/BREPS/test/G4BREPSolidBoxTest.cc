@@ -27,7 +27,7 @@ int main()
   G4ThreeVector pt2(100000,0,50);
   double d1, d2, d3, d4 ;
 
-cout << "\n ============   Box test   ================"; 
+G4cout << "\n ============   Box test   ================"; 
 
   G4BREPSolidBox *myCalBox = new G4BREPSolidBox 
     ( "MyBox",
@@ -40,7 +40,7 @@ cout << "\n ============   Box test   ================";
       G4Point3D( 1500,  1500,  1000),
       G4Point3D( 1500,  1500, -1000) );
 
-  cout << "\n\nBox created ! ";
+  G4cout << "\n\nBox created ! ";
   
   // -> Check methods :
   //  - Inside
@@ -78,13 +78,13 @@ cout << "\n ============   Box test   ================";
       G4cout <<" is inside"<<G4endl;
 
       dist[a][1] = myCalBox->DistanceToOut(Pt[a]);
-      cout<<"\nDistance to out is :"<<dist[a][1]<<G4endl;
+      G4cout<<"\nDistance to out is :"<<dist[a][1]<<G4endl;
 
-      cout << "\nDir   : x=" << Dir[a].x() 
+      G4cout << "\nDir   : x=" << Dir[a].x() 
 	   << " y=" << Dir[a].y() 
 	   << " z=" << Dir[a].z()<<G4endl;
       dist[a][2] = myCalBox->DistanceToOut(Pt[a], Dir[a]);
-      cout<<"Distance to out is :"<<dist[a][2]<<G4endl;
+      G4cout<<"Distance to out is :"<<dist[a][2]<<G4endl;
 
     }
     else
@@ -92,15 +92,15 @@ cout << "\n ============   Box test   ================";
       G4cout <<" is outside"<<G4endl;
 
       dist[a][1] = myCalBox->DistanceToIn(Pt[a]);
-      cout<<"\nDistance to in is :"<<dist[a][1]<<G4endl;
+      G4cout<<"\nDistance to in is :"<<dist[a][1]<<G4endl;
 
-      cout << "\nDir   : x=" << Dir[a].x() 
+      G4cout << "\nDir   : x=" << Dir[a].x() 
 	   << " y=" << Dir[a].y() 
 	   << " z=" << Dir[a].z()<<G4endl;
       dist[a][2] = myCalBox->DistanceToIn(Pt[a], Dir[a]);
-      cout<<"Distance to in is :"<<dist[a][2];
+      G4cout<<"Distance to in is :"<<dist[a][2];
     }
-    cout<<G4endl;
+    G4cout<<G4endl;
   }
 
   return EXIT_SUCCESS;
