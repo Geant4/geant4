@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.4 1999-01-19 13:18:16 broglia Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.5 1999-01-20 07:36:01 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4BREPSolidPCone.hh"
@@ -355,12 +355,8 @@ void G4BREPSolidPCone::Initialize()
 
 EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
 {
-  // Check if point lies between end planes of PCone
-  G4double dist1 = SurfaceVec[nb_of_surfaces-1]->ClosestDistanceToPoint(Pt);
-  G4double dist2 = SurfaceVec[nb_of_surfaces-2]->ClosestDistanceToPoint(Pt);
-
-  if((dist1 < -kCarTolerance && dist2 <-kCarTolerance)||
-     (dist1 > kCarTolerance && dist2 >kCarTolerance)    )
+  // Check if point is inside the PCone bounding box
+  if( !GetBBox()->Inside(Pt) )
     return kOutside;
 
   // Set the surfaces to active again
@@ -371,7 +367,9 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(v);
   G4Ray r(Pttmp, Vtmp);
-  //TestSurfaceBBoxes(r);
+  
+  TestSurfaceBBoxes(r);
+  
   G4int hits=0, samehit=0;
 
   for(G4int a=0; a < nb_of_surfaces; a++)
@@ -428,36 +426,6 @@ G4ThreeVector G4BREPSolidPCone::SurfaceNormal(const G4ThreeVector& Pt) const
   n = G4ThreeVector ( norm.x(), norm.y(), norm.z());
   n = n.unit();
 
-/*
-  if ( SurfaceVec[innerSurface]->WithinBoundary(Ptv) == 1 ) 
-  {
-    norm =  SurfaceVec[ innersurface ]->SurfaceNormal(Pt);
-  }
-  else  if ( SurfaceVec[outerSurface]->WithinBoundary(Ptv) == 1 ) 
-  {
-    norm =  SurfaceVec[ outerSurface]->SurfaceNormal(Pt);
-  } 
-
-  // Check if it is on one of the top/bottom planes
-  //
-  if ( fabs(zCoord - original_parameters.Z_values[0]) < kCarTolerance ) 
-  {
-    //    n = G4ThreeVector (0., 0., sign( original_parameters.Z_values[0]
-    // 				    -original_parameters.Z_values[1]) );
-    
-    n = G4ThreeVector (0., 0., original_parameters.Z_values[0]
-		       -original_parameters.Z_values[1] );
-    n = n.unit();
-  }
-  else if (fabs(zCoord - original_parameters.Z_values[num_z_planes-1]) < 
-	   kCarTolerance) 
-    {
-    n = G4ThreeVector(0., 0., original_parameters.Z_values[num_z_planes]
-		      -original_parameters.Z_values[num_z_planes-1] ); 
-    n = n.unit();
-  }
-*/
-
   return n;
 }
 
@@ -498,7 +466,8 @@ G4double G4BREPSolidPCone::DistanceToIn(register const G4ThreeVector& Pt,
   G4Vector3D Vtmp(V);   
   
   G4Ray r(Pttmp, Vtmp);
-  //TestSurfaceBBoxes(r);
+  TestSurfaceBBoxes(r);
+  
   ShortestDistance = kInfinity;
   
   for(a=0; a< nb_of_surfaces;a++)
@@ -560,7 +529,8 @@ G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt,
   
   // G4double kInfinity = 10e20;
   G4Ray r(Pttmp, Vtmp);
-  //TestSurfaceBBoxes(r);
+  TestSurfaceBBoxes(r);
+  
   ShortestDistance = kInfinity;
   
   for(a=0; a< nb_of_surfaces;a++)

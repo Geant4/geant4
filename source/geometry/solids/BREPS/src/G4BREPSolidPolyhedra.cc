@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.3 1999-01-19 13:18:16 broglia Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.4 1999-01-20 07:36:02 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -284,12 +284,8 @@ EInside G4BREPSolidPolyhedra::Inside(register const G4ThreeVector& Pt) const
   // L. Broglia
   // copy of EInside G4BREPSolidPCone::Inside
 
-  // Check if point lies between end planes of PCone
-  G4double dist1 = SurfaceVec[nb_of_surfaces-1]->ClosestDistanceToPoint(Pt);
-  G4double dist2 = SurfaceVec[nb_of_surfaces-2]->ClosestDistanceToPoint(Pt);
-
-  if((dist1 < -kCarTolerance && dist2 <-kCarTolerance)||
-     (dist1 > kCarTolerance && dist2 >kCarTolerance)    )
+  // Check if point is inside the PCone bounding box
+  if( !GetBBox()->Inside(Pt) )
     return kOutside;
 
   // Set the surfaces to active again
@@ -299,8 +295,10 @@ EInside G4BREPSolidPolyhedra::Inside(register const G4ThreeVector& Pt) const
   G4double halfTolerance = kCarTolerance*0.5;
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(v);
+  
   G4Ray r(Pttmp, Vtmp);
-  //TestSurfaceBBoxes(r);
+  TestSurfaceBBoxes(r);
+  
   G4int hits=0, samehit=0;
 
   for(G4int a=0; a < nb_of_surfaces; a++)
@@ -397,7 +395,8 @@ G4double G4BREPSolidPolyhedra::DistanceToIn(register const G4ThreeVector& Pt,
   G4Vector3D Vtmp(V);   
   
   G4Ray r(Pttmp, Vtmp);
-  //TestSurfaceBBoxes(r);
+  TestSurfaceBBoxes(r);
+  
   ShortestDistance = kInfinity;
   
   for(a=0; a< nb_of_surfaces;a++)
@@ -457,16 +456,16 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(register const G4ThreeVector& Pt,
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(V);   
   
-  // G4double kInfinity = 10e20;
   G4Ray r(Pttmp, Vtmp);
-  //TestSurfaceBBoxes(r);
+  TestSurfaceBBoxes(r);
+  
   ShortestDistance = kInfinity;
   
   for(a=0; a< nb_of_surfaces;a++)
     if(SurfaceVec[a]->Active()) 
       if(SurfaceVec[a]->Intersect( r ))
-	if(ShortestDistance > SurfaceVec[a]->Distance()&&
-	   SurfaceVec[a]->Distance()> halfTolerance) 	
+	if( ShortestDistance > SurfaceVec[a]->Distance() &&
+	    SurfaceVec[a]->Distance() > halfTolerance       ) 	
 	  ShortestDistance = SurfaceVec[a]->Distance();
 
   if(ShortestDistance != kInfinity)
