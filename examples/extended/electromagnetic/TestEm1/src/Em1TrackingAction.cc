@@ -6,7 +6,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1TrackingAction.cc,v 1.2 1999-12-15 14:48:57 gunter Exp $
+// $Id: Em1TrackingAction.cc,v 1.3 2000-01-21 12:29:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,8 +18,10 @@
 #include "Em1RunAction.hh"
 
 #include "G4Track.hh"
-
-#include "CLHEP/Hist/HBookFile.h"
+ 
+#ifndef G4NOHIST
+ #include "CLHEP/Hist/HBookFile.h"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -40,8 +42,10 @@ void Em1TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   if (aTrack->GetDefinition()->GetPDGCharge() == 0.)
        {runAction->CountTraks0(1); runAction->CountSteps0(nbSteps);}
   else {runAction->CountTraks1(1); runAction->CountSteps1(nbSteps);
+#ifndef G4NOHIST  
         runAction->GetHisto(0)->accumulate(Trleng);
         runAction->GetHisto(1)->accumulate((float)nbSteps);
+#endif	
   }    
 }
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-10-11 13:14:31 maire Exp $
+$Id: History,v 1.3 2000-01-21 12:29:24 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+21-01-00  cppflag G4NOHIST to protect hbook histograms.
+          
 11-10-99  moved from: source/processes/electromagnetic/test
           to: examples/extended/electromagnetic
      

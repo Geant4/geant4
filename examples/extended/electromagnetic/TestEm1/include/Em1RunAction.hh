@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1RunAction.hh,v 1.2 1999-12-15 14:48:56 gunter Exp $
+// $Id: Em1RunAction.hh,v 1.3 2000-01-21 12:29:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,8 +24,11 @@
 
 class G4Run;
 class Em1RunActionMessenger;
-class HepTupleManager;
-class HepHistogram;
+
+#ifndef G4NOHIST
+ class HepTupleManager;
+ class HepHistogram;
+#endif
 
 class Em1RunAction : public G4UserRunAction
 {
@@ -43,12 +46,14 @@ class Em1RunAction : public G4UserRunAction
     void CountSteps1(G4int ns) { NbOfSteps1 += ns;}
     void CountProcesses(G4String);
     
-  public:  
-    HepHistogram* GetHisto(G4int id) {return histo[id];}
-    
+  public:
     void  SetRndmFreq(G4int val) {saveRndm = val;}
-    G4int GetRndmFreq()          {return saveRndm;}    
-       
+    G4int GetRndmFreq()          {return saveRndm;}
+        
+#ifndef G4NOHIST   
+    HepHistogram* GetHisto(G4int id) {return histo[id];}
+#endif
+           
   private:  
     void bookHisto();
     void cleanHisto();
@@ -57,12 +62,14 @@ class Em1RunAction : public G4UserRunAction
     G4int NbOfTraks0, NbOfTraks1;
     G4int NbOfSteps0, NbOfSteps1;
     ProcessesCount*   ProcCounter;
+
+    Em1RunActionMessenger* runMessenger;    
+    G4int saveRndm;
     
+#ifndef G4NOHIST       
     HepTupleManager* hbookManager;
     HepHistogram* histo[3];
-    
-    Em1RunActionMessenger* runMessenger;    
-    G4int saveRndm;             
+#endif                     
 };
 
 #endif
