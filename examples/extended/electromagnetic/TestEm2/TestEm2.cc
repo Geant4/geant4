@@ -5,17 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm2.cc,v 1.3 1999-12-15 14:48:57 gunter Exp $
+// $Id: TestEm2.cc,v 1.4 2000-12-06 14:12:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Comments
-//
-// 
-// --------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
@@ -30,6 +29,8 @@
 #include "Em2TrackingAction.hh"
 #include "Em2SteppingAction.hh"
 #include "Em2SteppingVerbose.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 int main(int argc,char** argv) {
  
@@ -71,7 +72,12 @@ int main(int argc,char** argv) {
 
   if (argc==1)   // Define UI terminal for interactive mode.
     {
-      G4UIsession * session = new G4UIterminal;
+      G4UIsession * session = 0;
+#ifdef G4UI_USE_TCSH
+      session = new G4UIterminal(new G4UItcsh);      
+#else
+      session = new G4UIterminal();
+#endif           
       UI->ApplyCommand("/control/execute init.mac");    
       session->SessionStart();
       delete session;
@@ -91,4 +97,6 @@ int main(int argc,char** argv) {
 
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
 
