@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.44 2004-11-09 11:11:17 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.45 2004-12-09 11:09:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -212,8 +212,8 @@ G4int G4QPDGCode::MakePDGCode(const G4int& QCode)
   static const G4int modi = 122; // Q Codes for more than quarta-baryon nuclei "Lept/Hyper"
   static G4int qC[modi] = { 11,   12,   13,   14,   15,   16,   22,   23,   24,   25, // 10
                             37,  110,  220,  330,  111,  211,  221,  311,  321,  331, // 20
-						  2112, 2212, 3122, 3112, 3212, 3222, 3312, 3322,  113,  213, // 30
-						   223,  313,  323,  333, 1114, 2114, 2214, 2224, 3124, 3114, // 40
+						                    2112, 2212, 3122, 3112, 3212, 3222, 3312, 3322,  113,  213, // 30
+						                     223,  313,  323,  333, 1114, 2114, 2214, 2224, 3124, 3114, // 40
                           3214, 3224, 3314, 3324, 3334,  115,  215,  225,  315,  325, // 50
                            335, 2116, 2216, 3126, 3116, 3216, 3226, 3316, 3326,  117, // 60
                            217,  227,  317,  327,  337, 1118, 2118, 2218, 2228, 3128, // 70
@@ -270,27 +270,27 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
     G4cout<<"***G4QPDGCode::Z="<<z<<",N="<<n<<",S="<<s<<G4endl;
 #endif
     if(b<0)                                        // ---> Baryons & Fragments
-	{
-	  b=-b;
+	   {
+	     b=-b;
       n=-n;
       z=-z;
       s=-s;
       PDGC=90000000+s*1000000+z*1000+n;            // New PDGC for anti-baryons
     }
     else if(!b)                                    // --> Mesons
-	{
+	   {
       //G4bool anti=false;                           // For the PDG conversion
       if(z<0)                                      // --> Mesons conversion
-	  {
+	     {
         n=-n;
         z=-z;
         s=-s;
         //anti=true;                                 // For the PDG conversion
       }
       if(!z)
-	  {
+	     {
         if(s>0)
-	    {
+	       {
           n=-n;
           s=-s;
           //anti=true;                               // For the PDG conversion
@@ -300,7 +300,7 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
         else           return -2;                  // Not supported by Q Code
       }
       else                                         // --> z>0
-	  {
+	     {
         if(z==1)
         {
           if   (s==-1) return 18;                  // K+
@@ -311,11 +311,11 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
       }
     } // End of meson case
     if(b>0)                                        // --> Baryon case
-	{
+	   {
       if(b==1)
-	  {
+	     {
         if(!s)                                     // --> Baryons
-		{
+		      {
           if(z==-1)    return 34;                  // Delta-
           else if(!z)  return 91;                  // neutron
           else if(z==1)return 91;                  // proton
@@ -324,7 +324,7 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
           else         return -2;                  // Not supported by Q Code
         }
         else if(s==1)                              // --> Hyperons
-		{
+		      {
           if(z==-1)    return 93;                  // Sigma-
           else if(!z)  return 92;                  // Lambda (@@ 24->Sigma0)
           else if(z==1)return 94;                  // Sigma+
@@ -332,21 +332,21 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
           else         return -2;                  // Not supported by Q Code
         }
         else if(s==2)                              // --> Xi Hyperons
-		{
+		      {
           if(z==-1)    return 95;                  // Xi-
           else if(!z)  return 96;                  // Xi0
           else if(z==1||z==-2)return -1;           // Xi+pi Chipolino
           else         return -2;                  // Not supported by Q Code
         }
         else if(s==3)                              // --> Xi Hyperons
-		{
+		      {
           if(z==-1)    return 97;                  // Omega-
           else if(!z||z==-2)  return -1;           // Omega+pi Chipolino
           else         return -2;                  // Not supported by Q Code
         }
       }
       else
-	  {
+	     {
         if(b==2)
         {
           if     (PDGC==90002999) return 82;       // p DEL++
@@ -404,7 +404,7 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
     else if(r==8) Q=64;
     else if(r==9) Q=75;
     if(r%2)                 // Mesons are all the same
-	{
+	   {
       if     (p==11) return Q+=1;
       else if(p==21) return Q+=2;
       else if(p==22) return Q+=3;
@@ -418,12 +418,12 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
 #endif
         return -2;
       }
-	}
+	   }
     else                    // Baryons
-	{
+	   {
       G4int s=r/2;
       if(s%2)               // N Family
-	  {
+	     {
         if     (p==211) return Q+=1;
         else if(p==221) return Q+=2;
         else if(p==312) return Q+=3;
@@ -439,9 +439,9 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
 #endif
           return -2;
         }
-	  }
-	  else                  // Delta Family
-	  {
+	     }
+	     else                  // Delta Family
+	     {
         if     (p==111) return Q+= 1;
         else if(p==211) return Q+= 2;
         else if(p==221) return Q+= 3;
@@ -460,8 +460,8 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
 #endif
           return -2;
         }
-	  }
-	}
+	     }
+	   }
   }
   else                        // Nuclear Fragments
   {
@@ -474,9 +474,9 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
       G4cout<<"***G4QPDGCode::MakeQCode: Unknown PDGCode="<<PDGCode<<", t="<<t<<G4endl;
 #endif
       return -2;
-	}
+	   }
     else
-	{
+	   {
       G4int b=t/3;            // baryon number
       if(b==1)                // baryons
       {
@@ -551,7 +551,7 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
         }
       }
       else
-	  {
+	     {
         if     (s==0&&u==-1&&d== 1) return Q+=1;
         else if(s==0&&u== 0&&d== 0) return Q+=2;
         else if(s==0&&u== 1&&d==-1) return Q+=3;
@@ -567,8 +567,8 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
 #endif
           return -2;
         }
-	  }
-	}
+	     }
+	   }
   }
 #ifdef pdebug
   G4cout<<"***G4QPDGCode::MakeQCode: () Unknown in Q-System code: "<<PDGCode<<G4endl;
@@ -582,15 +582,15 @@ G4double G4QPDGCode::GetMass()
   //static const int nM = 72;
   //static const int nM = 80; // "Isobars"
   static const int nM = 90; // "Leptons/Hyperons"
-  static G4double m[nM]={.511, 0., 105.658, 0., 1777.03, 0.,     0., 91.188, 80.423, 140.00
-    ,120.000,    980.,     780.,    1500.,  134.98,  139.57,  547.3, 497.67, 493.68, 957.78
-    ,939.566, 938.272, 1115.684,  1197.44, 1192.55, 1189.37, 1321.3, 1314.9,   770.,   770.
-    , 781.94,   896.1,   891.66, 1019.413,   1232.,   1232.,  1232.,  1232., 1519.5, 1387.2
-    , 1383.7,  1382.8,    1535.,   1531.8, 1672.45,  1318.1, 1318.1,  1275., 1432.4, 1425.6
+  static G4double m[nM]={.511,0.,105.65837,0.,1777.,     0.,     0., 91.188, 80.425, 140.00
+    ,120.000,    800.,     985.,    1507.,  134.98,  139.57, 547.75, 497.65, 493.68, 957.78
+    ,939.5654,938.272, 1115.683,  1197.45, 1192.64, 1189.37, 1321.3, 1314.8,  775.8,  775.8
+    ,  782.6,   896.1,   891.66, 1019.456,   1232.,   1232.,  1232.,  1232., 1519.5, 1387.2
+    , 1383.7,  1382.8,    1535.,   1531.8, 1672.45,  1318.3, 1318.3, 1275.4, 1432.4, 1425.6
     ,  1525.,   1680.,    1680.,    1820.,   1915.,   1915.,  1915.,  2025.,  2025.,  1691.
     ,  1691.,   1667.,    1776.,    1776.,   1854.,   1950.,  1950.,  1950.,  1950.,  2100.
     ,  2030.,   2030.,    2030.,    2127.,   2127.,   2252.,  2020.,  2020.,  2044.,  2045.
-	, 2045., 2297., 2170.272, 2171.565, 2464., 2464., 3108.544, 3111.13, 3402.272, 3403.565
+	   , 2045., 2297., 2170.272, 2171.565, 2464., 2464., 3108.544, 3111.13, 3402.272, 3403.565
     };
   //old//static G4int dn[15]={-1, 0, 1,-1, 0,-2,-1, 0, 0, 1,-1, 0, 1,-1, 0}; 
   //old//static G4int dz[15]={ 1, 0,-1, 0,-1, 0,-1,-2, 1, 0, 1, 0,-1, 0,-1};
@@ -650,7 +650,7 @@ G4double G4QPDGCode::GetWidth()
     ,  76., 130., 130.,  80., 120., 120., 120.,   20.,  20., 160.
     , 160., 168., 159., 159.,  87., 300., 300.,  300., 300., 200.
     , 180., 180., 180.,  99.,  99.,  55., 387.,  387., 208., 198.
-	, 198., 149., 120., 120., 170., 170., 120.,  120., 170., 170.};
+	   , 198., 149., 120., 120., 170., 170., 120.,  120., 170., 170.};
   G4int ab=abs(theQCode);
   if(ab<nW) return width[ab];
   return 0.;             // @@ May be real width should be implemented for nuclei e.g. pp
@@ -780,13 +780,13 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     else if(N==1&&S==-1||N==-1&&S==1) return mK0; // Simple decision
     else if(S==1&&Z==-1||S==-1&&Z==1) return mK;  // Simple decision
     else if(S>0)                                  // General decision
-	{
+	   {
       if     (-Z>S) return S*mK-(S+Z)*mPi+eps;
       else if(Z>=0) return S*mK0+Z*mPi+eps;
       else          return (S+Z)*mK0-Z*mK+eps;
     }
     else if(S<0)                                  // General decision
-	{
+	   {
       if     (Z>-S) return -S*mK+(S+Z)*mPi+eps;
       else if(Z<=0) return -S*mK0-Z*mPi+eps;
       else          return -(S+Z)*mK0+Z*mK+eps;
@@ -805,22 +805,22 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     else if(!S&&Z<0) return mN-mPi*Z+eps;         // Negative Isonuclei
     else if(!S&&N<0) return mP-mPi*N+eps;         // Positive Isonuclei
     else if(S==1)                                 // --> General decision
-	{
+	   {
       if     (N>1)   return mSm+(N-1)*mPi+eps;    // (Sigma-)+(n*PI-)
       else if(Z>1)   return mSp+(Z-1)*mPi+eps;    // (Sigma+)+(n*PI+)
     }
     else if(S==2)                                 // --> General decision
-	{
+	   {
       if     (N>0)   return mXm+N*mPi+eps;        // (Xi-)+(n*PI-)
       else if(Z>0)   return mXz+Z*mPi+eps;        // (Xi0)+(n*PI+)
     }
     else if(S==3)                                 // --> General decision
-	{
+	   {
       if     (N>-1)  return mOm+(N+1)*mPi+eps;    // (Omega-)+(n*PI-)
       else if(Z>-1)  return mOm+(Z+1)*mPi+eps;    // (Omega-)+(n*PI+)
     }
     else if(S>3)                                  // --> General Omega- decision
-	{
+	   {
       if   (-Z>S-2)  return mOm+(S-3)*mK +(2-Z-S)*mPi+eps;
       else if(Z>-1)  return mOm+(S-3)*mK0+(Z+1)+mPi+eps;
       else           return mOm+(S+Z-2)*mK0-(Z+1)*mK+eps;
@@ -843,31 +843,31 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     else if(!S&&Z<0) return dmN-mPi*Z+eps;        // Negative Isonuclei
     else if(!S&&N<0) return dmP-mPi*N+eps;        // Positive Isonuclei
     else if(S==1)                                 // --> General decision
-	{
+	   {
       if     (N>2)   return dSP+(N-2)*mPi+eps;    // (nSigma-)+(n*PI-)
       else if(Z>2)   return dSN+(Z-1)*mPi+eps;    // (pSigma+)+(n*PI+)
     }
     else if(S==2)                                 // --> General decision
-	{
+	   {
       if     (N>1)   return dXN+(N-1)*mPi+eps;    // (nXi-)+(n*PI-)
       else if(Z>1)   return dXP+(Z-1)*mPi+eps;    // (pXi0)+(n*PI+)
     }
     else if(S==3)                                 // --> General decision
-	{
+	   {
       if     (N>0)   return dON+N*mPi+eps;        // (nOmega-)+(n*PI-)
       else if(Z>0)   return dOP+Z*mPi+eps;        // (pOmega-)+(n*PI+)
     }
     else if(S>3)                                  // --> General Omega- decision
-	{
+	   {
       if   (-Z>S-2)  return dON+(S-3)*mK +(2-Z-S)*mPi+eps;
       else if(Z>0)   return dOP+(S-3)*mK0+Z+mPi+eps;
       else           return dOP+(S+Z-3)*mK0-Z*mK+eps;
     }
     //else if(S>0)                                // @@ Implement General Decision
     //{
-	//  //#ifdef debug
-	//  G4cout<<"***G4QPDGCode::GetNuclMass:B=2, Z="<<Z<<",N="<<N<<",S="<<S<<G4endl;
-	//  //#endif
+	   //  //#ifdef debug
+	   //  G4cout<<"***G4QPDGCode::GetNuclMass:B=2, Z="<<Z<<",N="<<N<<",S="<<S<<G4endl;
+	   //  //#endif
     //  return bigM;                              // Exotic dibaryons (?)
     //}
   }
@@ -882,12 +882,12 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   if(S<0&&Bn>0)                       // NEW: the free mass minimum
   {
     if(Zm>=-S)                        // Enough charge for K+'s
-	{
+	   {
       km=-S*mK;                       // Anti-Lambdas are compensated by protons
-	  Zm+=S;
+	     Zm+=S;
     }
     else if(Zm>0)
-	{
+	   {
       km=Zm*mK-(S+Zm)*mK0;            // Anti-Lambdas are partially compensated by neutrons
       Zm=0;
       Nm+=S+Zm;
@@ -901,9 +901,9 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     G4int sH=(-S)/2;                  // SmallHalfS || The algorithm must be the same
     G4int bH=-S-sH;                   // BigHalhS   || as in G4QE::DecayAntiStrange
     if(Z>0 && Z>N)
-	{
+	   {
       if(Z>=bH)                       // => "Enough protons in nucleus" case
-	  {
+	     {
         if(N>=sH)
         {
           k=bH*mK+sH*mK0;
@@ -945,17 +945,17 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
             }
           }
         }
-	  }
+	     }
       else // Must not be here
-	  {
+	     {
 #ifdef debug
         G4cout<<"***G4QPDGC::GetNuclMass:Antimatter? Z="<<Z<<",N="<<N<<",S="<<S<<G4endl;
 #endif
         return 0.;            // @@ Antiparticles aren't implemented @@
-	  }
-	}
+	     }
+	   }
     else if(N>=bH)
-	{
+	   {
       if(Z>=sH)
       {
         k=sH*mK+bH*mK0;
@@ -997,14 +997,14 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
           }
         }
       }
-	}
+	   }
     else // Must not be here
-	{
+	   {
       return 0.;                   // @@ Antiparticles aren't implemented @@
 #ifdef debug
         G4cout<<"***G4QPDGC::GetNuclMass:Antimatter? N="<<N<<",Z="<<Z<<",S="<<S<<G4endl;
 #endif
-	}
+	   }
     S=0;
   }
   if(N<0)
@@ -1125,9 +1125,9 @@ G4QContent G4QPDGCode::GetQuarkContent() const
   else if(ab<99)
   {
 #ifdef debug
-    if     (ab==22) G4cout<<"-W-G4QPDGCode::GetQuarkContent: For the Photon? - Return 0"<<G4endl;
-    else if(ab==10) G4cout<<"-W-G4QPDGCode::GetQuarkContent: For the Chipolino? - Return 0"<<G4endl;
-	else G4cout<<"-W-G4QPDGCode::GetQuarkContent: For PDG="<<thePDGCode<<" Return 0"<<G4endl;
+    if     (ab==22) G4cout<<"-W-G4QPDGC::GetQuarkCont: For the Photon? - Return 0"<<G4endl;
+    else if(ab==10) G4cout<<"-W-G4QPDGC::GetQuarkCont: For Chipolino? - Return 0"<<G4endl;
+	   else G4cout<<"-W-G4QPDGCode::GetQuarkCont: For PDG="<<thePDGCode<<" Return 0"<<G4endl;
 #endif
     return G4QContent(0,0,0,0,0,0); // Photon, bosons, leptons
   }
@@ -1138,73 +1138,73 @@ G4QContent G4QPDGCode::GetQuarkContent() const
     G4int v=c/10;      // (2,3) temporary(B) or (2) final(M) (high quarks, high quark)
     G4int t=0;         // (3)prototype of highest quark (B)
 #ifdef sdebug
-	G4cout<<"G4QPDGCode::GetQuarkContent: ab="<<ab<<", c="<<c<<", f="<<f<<", v="<<v<<G4endl;
+	   G4cout<<"G4QPDGCode::GetQuarkContent: a="<<ab<<", c="<<c<<", f="<<f<<", v="<<v<<G4endl;
 #endif
     if(v>10)           // Baryons
-	{
+	   {
       t=v/10;          // (3) highest quark
       v%=10;           // (2) high quark
       if     (f==1)
-	  {
+	     {
         if(a) ad++;
         else   d++;
-	  }
+	     }
       else if(f==2)
-	  {
+	     {
         if(a) au++;
         else   u++;
-	  }
+	     }
       else if(f==3)
-	  {
+	     {
         if(a) as++;
         else   s++;
-	  }
+	     }
       else G4cerr<<"***G4QPDGCode::GetQContent:1 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<G4endl;
       if     (v==1)
-	  {
+	     {
         if(a) ad++;
         else   d++;
-	  }
+	     }
       else if(v==2)
-	  {
+	     {
         if(a) au++;
         else   u++;
-	  }
+	     }
       else if(v==3)
-	  {
+	     {
         if(a) as++;
         else   s++;
-	  }
+	     }
       else G4cerr<<"***G4QPDGCode::GetQContent:2 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<G4endl;
       if     (t==1)
-	  {
+	     {
         if(a) ad++;
         else   d++;
-	  }
+	     }
       else if(t==2)
-	  {
+	     {
         if(a) au++;
         else   u++;
-	  }
+	     }
       else if(t==3)
-	  {
+	     {
         if(a) as++;
         else   s++;
-	  }
+	     }
       else G4cerr<<"***G4QPDGCode::GetQCont:3 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<G4endl;
       return G4QContent(d,u,s,ad,au,as);
-	}
+	   }
     else        // Mesons
-	{
+	   {
       if(f==v)
-	  {
+	     {
         if     (f==1) return G4QContent(1,0,0,1,0,0);
         else if(f==2) return G4QContent(0,1,0,0,1,0);
         else if(f==3) return G4QContent(0,0,1,0,0,1);
         else G4cerr<<"***G4QPDGCode::GetQCont:4 PDG="<<thePDGCode<<",i="<<f<<","<<v<<","<<t<<G4endl;
-	  }
+	     }
       else
-	  {
+	     {
         if     (f==1 && v==2)
         {
           if(a)return G4QContent(1,0,0,0,1,0);
@@ -1221,8 +1221,8 @@ G4QContent G4QPDGCode::GetQuarkContent() const
           else return G4QContent(0,1,0,0,0,1);
         }
         else G4cerr<<"***G4QPDGCode::GetQCont:5 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<G4endl;
-	  }
-	}
+	     }
+	   }
   }
   else                    
   {
@@ -1416,12 +1416,12 @@ void G4QPDGCode::ConvertPDGToZNS(G4int nucPDG, G4int& z, G4int& n, G4int& s)
   {
     G4int r=nucPDG-90000000;
     if(!r)
-	{
+	   {
       z=0;
       n=0;
       s=0;
       return;
-	}
+	   }
     // Antinucleus extraction
     if(r<-200000)                                  // Negative -> anLambdas              
     {
@@ -1458,8 +1458,3 @@ void G4QPDGCode::ConvertPDGToZNS(G4int nucPDG, G4int& z, G4int& n, G4int& s)
   }
   return;
 }
-
-
-
-
-
