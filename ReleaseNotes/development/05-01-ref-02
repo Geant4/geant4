@@ -201,6 +201,7 @@ examples                                examples-V05-01-00
 tests                                   tests-V05-01-00
 -----
 - Updated reference outputs.
+- Archived test23.
 - test14 (test14-V05-01-01)
   test20 (test20-V05-01-01)
   o Corrected deletion of volumes/solids when geometry is updated.
