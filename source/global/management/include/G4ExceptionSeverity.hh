@@ -21,43 +21,45 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExceptionSeverity.hh,v 1.1 2002-08-19 18:20:11 asaim Exp $
+// $Id: G4ExceptionSeverity.hh,v 1.2 2002-08-26 14:56:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
-#ifndef G4ExceptionSeverity_H
-#define G4ExceptionSeverity_H 1
-
 // Class Description:
 //
 // Specifies the severity of G4Exception
 //
 //  FatalException
-//   Error is so sevire or it happens at the initialization time.
-//   Program should be aborted and core dump is to be generated.
+//   Error is severe or it happens at the initialization time.
+//   Program should be aborted and core dump will be generated.
 //
 //  FatalErrorInArgument
-//   Fatal error caused by most likely the miss-use of the toolkit
+//   Fatal error caused by most likely the mis-use of interfaces
 //   by the user's code. Program should be aborted and core dump 
-//   is to be generated.
+//   will be generated.
 //
 //  RunMustBeAborted
-//   Error happens at the initialization of a run, i.e. at the 
-//   moment of closing geometry. Or some unpleasant situation
+//   Error happens at initialization of a run (ex. at the 
+//   moment of closing geometry), or some unpleasant situation
 //   occurs during the event loop. Current run will be aborted
-//   and program goes back to Idle state.
+//   and the application returns to "Idle" state.
 //
 //  EventMustBeAborted
-//   Error happens during tracking a particle. Currently processing
-//   event should be aborted, but remaining event could be processed.
+//   Error happens during tracking a particle. The event currently
+//   being processed should be aborted, run will not be aborted.
 //
 //  JustWarning
 //   Just display messages.
 //
 
+#ifndef G4ExceptionSeverity_H
+#define G4ExceptionSeverity_H 1
+
 enum G4ExceptionSeverity 
-  {FatalException, FatalErrorInArgument, RunMustBeAborted,
-                                 EventMustBeAborted, JustWarning};
+  { FatalException,
+    FatalErrorInArgument,
+    RunMustBeAborted,
+    EventMustBeAborted,
+    JustWarning };
 
 #endif
 
