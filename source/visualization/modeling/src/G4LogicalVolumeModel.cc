@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolumeModel.cc,v 1.4 2000-01-17 10:34:48 johna Exp $
+// $Id: G4LogicalVolumeModel.cc,v 1.5 2000-04-12 13:02:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ void G4LogicalVolumeModel::DescribeYourselfTo
   G4PhysicalVolumeModel::DescribeYourselfTo (sceneHandler);
   fpMP = tpMP;
 
-  if (fpTopPV -> GetLogicalVolume () -> GetVoxelHeader ()) {
+  if (fpTopPV->GetLogicalVolume()->GetVoxelHeader()) {
     // Add Voxels.
     G4DrawVoxels dv;
     G4PlacedPolyhedronList* pPPL =
@@ -80,4 +80,32 @@ void G4LogicalVolumeModel::DescribeYourselfTo
     }
     delete pPPL;
   }
+}
+
+// This called from G4PhysicalVolumeModel::DescribeAndDescend by the
+// virtual function mechanism.
+void G4LogicalVolumeModel::DescribeSolid
+(const G4Transform3D& theAT,
+ G4VSolid* pSol,
+ const G4VisAttributes* pVisAttribs,
+ G4VGraphicsScene& sceneHandler) {
+  // Look for "constituents".  Could be a Boolean solid.
+  G4VSolid* pSol0 = pSol -> GetConstituentSolid (0);
+  if (pSol0) {  // Composite solid...
+    G4VSolid* pSol1 = pSol -> GetConstituentSolid (1);
+    if (!pSol1) {
+      G4Exception
+	("G4PhysicalVolumeModel::DescribeSolid:"
+	 " 2nd component solid is missing.");
+    }
+    // Draw these constituents white and "forced wireframe"...
+    G4VisAttributes constituentAttributes;
+    constituentAttributes.SetForceWireframe(true);
+    DescribeSolid (theAT, pSol0, &constituentAttributes, sceneHandler);
+    DescribeSolid (theAT, pSol1, &constituentAttributes, sceneHandler);
+  }
+  // In any case draw the original/resultant solid...
+  sceneHandler.PreAddThis (theAT, *pVisAttribs);
+  pSol -> DescribeYourselfTo (sceneHandler);
+  sceneHandler.PostAddThis ();
 }
