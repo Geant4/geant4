@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.hh,v 1.14 2002-05-20 16:30:06 grichine Exp $
+// $Id: G4PAIonisation.hh,v 1.15 2002-10-14 17:31:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -127,17 +127,9 @@ class G4PAIonisation : public G4VPAIenergyLoss
     G4double GetLossWithFluct(G4double Step,
                               const G4DynamicParticle *aParticle,
                               G4Material *aMaterial) ;
-    G4double GetAlongStepDelta(G4double Step,
-                              const G4DynamicParticle *aParticle,
-                              G4Material *aMaterial) ;
 
     G4double GetRandomEnergyTransfer( G4double scaledTkin ) ;
-    G4double GetPostStepTransfer( G4double scaledTkin ) ;
-
     G4double GetEnergyTransfer( G4int iPlace, G4double position, G4int iTransfer  ) ;
-    G4double GetdNdxCut( G4int iPlace, G4double cutTransfer) ;
-
-
 
   //    static                                   
 
@@ -159,7 +151,7 @@ class G4PAIonisation : public G4VPAIenergyLoss
     //  private data members 
 
     size_t fMatIndex ;  // index of material, where dE/dx is calculated
-    G4Material* fMaterial;
+
     G4PhysicsTable* theMeanFreePathTable;
 
     // LowestKineticEnergy = lower limit of particle kinetic energy
@@ -171,9 +163,6 @@ class G4PAIonisation : public G4VPAIenergyLoss
     static const G4double HighestKineticEnergy;
     static G4int TotBin;
     static G4PhysicsLogVector* fProtonEnergyVector ;
-    G4PhysicsLogVector* fLambdaVector ;
-    G4PhysicsLogVector* fdNdxCutVector ;
-    G4PhysicsLogVector* fdEdxVector ;
 
     // cut in range
 
