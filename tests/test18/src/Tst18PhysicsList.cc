@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst18PhysicsList.cc,v 1.5 2000-06-14 17:48:13 flei Exp $
+// $Id: Tst18PhysicsList.cc,v 1.6 2000-06-27 16:14:07 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -676,7 +676,7 @@ void Tst18PhysicsList::ConstructGeneral()
       if (particleName == "GenericIon")
 	{
 	  G4ProcessManager* pmanager = theIonTable->GetParticle(i)->GetProcessManager();
-	  pmanager->SetVerboseLevel(3);
+	  pmanager->SetVerboseLevel(0);
 	  pmanager ->AddProcess(theRadioactiveDecay);
 	  pmanager ->SetProcessOrdering(theRadioactiveDecay, idxPostStep);
 	  pmanager ->SetProcessOrdering(theRadioactiveDecay, idxAtRest);

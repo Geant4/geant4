@@ -33,16 +33,14 @@ void Tst18SteppingAction::UserSteppingAction(const G4Step* fStep)
   G4int StepNo = fTrack->GetCurrentStepNumber();
   if(StepNo >= 10000) fTrack->SetTrackStatus(fStopAndKill);
   
-  //  cout << fTrack->GetGlobalTime()/s <<"  "<< fTrack->GetLocalTime()/s << " " <<fTrack->GetProperTime()/s << endl;
-  //cout << fStep->GetPreStepPoint()->GetGlobalTime() /s << endl; 
-
   if (StepNo == 1) {
-    Particles.push_back ( fTrack->GetDefinition()->GetParticleName() );
-    Energies.push_back ( fStep->GetPreStepPoint()->GetKineticEnergy()/keV );
-    Weights.push_back ( fStep->GetPreStepPoint()->GetWeight() );
-    Times.push_back((fStep->GetPreStepPoint()->GetGlobalTime() - fStep->GetPreStepPoint()->GetLocalTime()) / s );
-    drawEvent = true;
-    
+    if (Particles.size() < 100) {
+      Particles.push_back ( fTrack->GetDefinition()->GetParticleName() );
+      Energies.push_back ( fStep->GetPreStepPoint()->GetKineticEnergy()/keV );
+      Weights.push_back ( fStep->GetPreStepPoint()->GetWeight() );
+      Times.push_back((fStep->GetPreStepPoint()->GetGlobalTime() - fStep->GetPreStepPoint()->GetLocalTime()) / s );
+      drawEvent = true;
+    }
   }
   
   

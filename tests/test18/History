@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-06-27 15:29:30 stesting Exp $
+$Id: History,v 1.6 2000-06-27 16:14:06 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+27th June 2000  Fan Lei  (test18-V01-01-08)
+- limits the output of the decay particles to the first 
+  100 entries only
+- changed default process/verbose to 0 for radiative_decay
 
 27th June 2000  John Allison  (test18-V01-01-07)
 - Added /control/verbose 2 to *.in.
