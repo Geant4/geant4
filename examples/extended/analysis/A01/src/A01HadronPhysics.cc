@@ -20,10 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01HadronPhysics.cc,v 1.5 2003-10-11 03:00:00 tkoi Exp $
+// $Id: A01HadronPhysics.cc,v 1.6 2003-10-13 02:13:38 tkoi Exp $
 // --------------------------------------------------------------
 //
-// 09-Oct-2003 Pi+- and K+- Processes are changed by T. Koi
+// 09-Oct-2003 Hadron Physics List with Parameterization Model by T. Koi
+// 12-Oct-2003 Bug Fixed (KaonMinus) by T. Koi
 
 #include "A01HadronPhysics.hh"
 
@@ -187,8 +188,8 @@ void A01HadronPhysics::ConstructProcess()
 
    G4LEKaonMinusInelastic* theKaonMinusLEPModel = new G4LEKaonMinusInelastic();
    G4HEKaonMinusInelastic* theKaonMinusHEPModel = new G4HEKaonMinusInelastic();
-   thePionMinusInelasticProcess->RegisterMe(theKaonMinusLEPModel);
-   thePionMinusInelasticProcess->RegisterMe(theKaonMinusHEPModel);
+   theKaonMinusInelasticProcess->RegisterMe(theKaonMinusLEPModel);
+   theKaonMinusInelasticProcess->RegisterMe(theKaonMinusHEPModel);
    pManager->AddDiscreteProcess(theKaonMinusInelasticProcess);
 
    G4VProcess* thekmMultipleScattering = new G4MultipleScattering();
