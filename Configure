@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.62 2004-12-06 05:24:33 stesting Exp $
+# $Id: Configure,v 1.63 2004-12-06 05:47:53 stesting Exp $
 #
-# Generated on Mon Dec  6 06:05:32 CET 2004 [metaconfig 3.0 PL70]
+# Generated on Mon Dec  6 06:44:42 CET 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!

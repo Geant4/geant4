@@ -374,6 +374,16 @@ if [ X$g4includes_flag = Xy ] ; then
 $g4make includes
 fi
 
+# Move libraries
+mkdir -p $g4final_install/lib/geant4
+cd $g4install/lib
+tar cvf - $g4system |(cd $g4final_install/lib/geant4; tar xf -)
+
+# Move part of source
+mkdir -p $g4final_install/src/geant4
+cd $g4install/
+tar cvf - config/ electromagnetic_lists/ hadronic_lists/ environments/ examples/ |(cd $g4final_install/src/geant4; tar xf -)
+
 !GROK!THIS!
 
 : In the following dollars and backticks do not need the extra backslash.
