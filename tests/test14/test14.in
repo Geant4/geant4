@@ -9,7 +9,7 @@
 #
 /run/initialize
 #
-/calor/setAbsMat Silicon   
+/calor/setAbsMat Aluminium
 /calor/setAbsThick 92.600 mm  
 /calor/setAbsRad 100.0 mm
 /calor/update
