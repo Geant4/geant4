@@ -97,7 +97,7 @@ int main(int argc, char **argv)
 
   G4cout<<"\n\n==================================================";
   G4Point3D  start( 0, 0, -30);
-  G4Vector3D dir(1, 1, 0);
+  G4Vector3D dir(1./sqrt(2.), 1./sqrt(2.), 0);
   G4double   d;
   
   G4cout<<"\nPdep is (0, 0, z)";
