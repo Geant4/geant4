@@ -1,53 +1,92 @@
-%\documentclass[epsf,twoside,fleqn,espcrc2]{article}
-%,a4paper,12pt,twoside 
-\documentstyle[epsf,twoside,fleqn,espcrc2,epsfig,graphics,html]{article}
-%\usepackage[dvips]{epsfig}
-%eps-printing when clipping is needed -> use graphics-package 
-%\usepackage{graphics}
-%\usepackage{html}
-%\def \AATOS {/afs/cern.ch/user/m/miheikki/public/html/}
-\def \AATOS {/home/miheikki/public/html/}
-\def \PIC {/afs/cern.ch/user/m/miheikki/public/html/inucl/doc/}
-\def \PIC {/home/miheikki/public/html/inucl/doc/}
-% put your own definitions here:
-%   \newcommand{\cZ}{\cal{Z}}
-%   \newtheorem{def}{Definition}[section]
-%   ...
-\newcommand{\ttbs}{\char'134}
-\newcommand{\AmS}{{\protect\the\textfont2
-  A\kern-.1667em\lower.5ex\hbox{M}\kern-.125emS}}
-
-
-% declarations for front matter
-\title{HETC/INUCL++ manual - System for Modelling Hadronic Intranuclear Processes}
-
-\author{Aatos Heikkinen, Nikita Stepanov 
-\address{ Helsinki Institute of Physics,
-P.O.Box 9,\\
-FIN-00014 University of Helsinki, Finland }
-	}
-  
+% ::: Settings
+\documentstyle[palatino, epsf,twoside,fleqn,epsfig,graphics,html,url, makeidx]{article} 
+%\def \SYSTEM {/home/miheikki/public/html/system/}
+\def \SYSTEM {/afs/cern.ch/user/m/miheikki/public/html/system/}
+%\input{\SYSTEM definitions} 
+%\def \PIC {/afs/cern.ch/user/m/miheikki/public/html/inucl/doc/}
+%\def \PIC {/home/miheikki/public/html/inucl/doc/}
+%\def \PIC {/home/miheikki/public/html/geant4/geant4/source/processes/hadronic/models/cascade/doc/pictures}
+\def \PIC {pictures}
+% ::: Frontpage
 \begin{document}
 
-\begin{abstract}
-HETC/INUCL is a simulation package and a model of intermediate energy nuclear
-reactions.
-INUCL consists of cascade, fission models, pre-equilibrium, and evaporation
-This manual describes the models used in INUCL++. 
-This documet works as an manual, status report and working document for INUCL project. In accordance with this, we represent results acieved with INUCL. Comparison with measurement is made. 
-We also descripe staus of Geant4 installation on INUCL software \cite{titarenko99a}.
-\end{abstract}
-\maketitle
-% uncomment main sections when needed
+% ::: Title
+\vspace{-1.5truecm}
+\begin{center}
+\Large
+{\bf {\sc Geant4} homepage}
+\large
 
-%\input{manIntro} % to be done
-%\input{manHetc}
+Aatos Heikkinen \sf{(aatos.heikkinen@cern.ch)}, \normalsize
+Helsinki Institute of Physics
+\end{center}
+
+%\end{titlepage}
+
+\thispagestyle{empty}
+
+% ::: Start with web page 
+\input{manHTML}
+
+
+
+\begin{latexonly}
+% ::: General intro
+\tableofcontents
+\newpage
+\end{latexonly}
+
+
+\input{manStatus}
+\begin{latexonly}
+\newpage
+\end{latexonly}
+
+
+% ::: Results
+\input{manResults}
+
+\input{manAbstract}
+\input{manIntro} 
+\input{manG4Intro}
+
+% ::: Models
+\input{manHetc}
 \input{manInucl}
-%\input{manWorkbook} % to be done
-%\input{manStatusReport} % to be done
 
+% ::: Conclusion (current performance, project status, plans)
+\input{manConclusion}
+
+% ::: Thanks
+\input{manAcknowledgements}
+
+% ::: References
+\bibliographystyle{unsrt}  % Options plain, unsrt, alpha, abbrv
+\bibstyle{plain}
+%\begin{thebibliography}{99}
+\bibliography{\SYSTEM /references/references.bib} 
+%\end{thebibliography}
+
+% ::: Indexing
+\input{manTables}
+
+
+\begin{appendix} % ::: appendix starts
+
+% ::: Report
+\input{manReport}
+
+% ::: Manual
+\input{manManual}
+
+% ::: Data for validation and comparison
+\input{manExperiment} 
+
+% ::: practical guidance
+\input{manGuide}
+
+% ::: Notes
+\input{manNotes} 
+
+\end{appendix} % ::: appendix ends
 \end{document}
-
-% end of file
-
-
