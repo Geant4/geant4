@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.51 2003-10-17 09:30:45 gbarrand Exp $
+// $Id: G4VisManager.cc,v 1.52 2003-11-06 15:12:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1001,30 +1001,38 @@ void G4VisManager::BeginOfEvent () {
 
 void G4VisManager::EndOfEvent () {
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
+  const std::vector<G4VModel*>& EOEModelList =
+    fpScene -> GetEndOfEventModelList ();
+  size_t nModels = EOEModelList.size();
   if (GetConcreteInstance() && IsValidView ()) {
     ClearTransientStoreIfMarked();
-    fVisManagerModelingParameters
-      = *(fpSceneHandler -> CreateModelingParameters ());
-    const std::vector<G4VModel*>& EOEModelList =
-      fpScene -> GetEndOfEventModelList ();
-    for (size_t i = 0; i < EOEModelList.size (); i++) {
-      G4VModel* pModel = EOEModelList [i];
-      pModel -> SetModelingParameters (&fVisManagerModelingParameters);
-      fpSceneHandler -> SetModel (pModel);
-      pModel -> DescribeYourselfTo (*fpSceneHandler);
+    if (nModels) {
+      fVisManagerModelingParameters
+	= *(fpSceneHandler -> CreateModelingParameters ());
+      for (size_t i = 0; i < nModels; i++) {
+	G4VModel* pModel = EOEModelList [i];
+	pModel -> SetModelingParameters (&fVisManagerModelingParameters);
+	fpSceneHandler -> SetModel (pModel);
+	pModel -> DescribeYourselfTo (*fpSceneHandler);
+      }
+      fpSceneHandler -> SetModel (0);  // Flags invalid model.
     }
     if (fpScene->GetRefreshAtEndOfEvent()) {
       fpViewer->ShowView();  // ...for systems needing post processing.
       fpSceneHandler->SetMarkForClearingTransientStore(true);
     }
-    fpSceneHandler -> SetModel (0);  // Flags invalid model.
   }
 }
 
 void G4VisManager::EndOfRun () {
   //G4cout << "G4VisManager::EndOfRun" << G4endl;
   if (GetConcreteInstance() && IsValidView ()) {
-    fpSceneHandler->SetMarkForClearingTransientStore(true);
+    // Let the behaviour regarding the refreshing of transinet store
+    // at end of run be the same as at end of event...
+    if (fpScene->GetRefreshAtEndOfEvent()) {
+      fpViewer->ShowView();  // ...for systems needing post processing.
+      fpSceneHandler->SetMarkForClearingTransientStore(true);
+    }
   }
 }
 
