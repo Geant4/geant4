@@ -1,0 +1,38 @@
+$Id: History,v 1.1 2000-04-07 11:08:23 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Sub-Category History file
+                      -------------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all directory-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+05-Apr-2000, G.Cosmo   (geom-solids-specific-V01-01-00)
+--------------------
+- Restructured solids/CSG domain, by moving to "specific" the following
+  classes: G4ClippablePolygon, G4EnclosingCylinder, G4Hype, G4PolyPhiFace,
+  G4Polycone, G4PolyconeSide, G4Polyhedra, G4PolyhedraSide, G4ReduciblePolygon,
+  G4IntersectingCone, G4SolidExtentList, G4VCSGface, G4VCSGfaceted.
+  The new module's library for "specific" is now called 'G4specsolids'.
+- Created specific/test directory and moved testG4Hype.cc and testG4Polycone,cc
+  from CSG/test.
+
+29-Mar-2000, D.Williams
+-----------------------
+- Added first implementation of G4EllipticalTube.
+  It defines a simple elliptical tube, as in geant3 "ELTU".
+  Files introduced: G4EllipticalTube[.hh.cc].
+
+25-Mar-2000, G.Cosmo
+--------------------
+- History file created.
