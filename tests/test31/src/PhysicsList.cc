@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.1 2004-01-07 11:30:02 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.2 2004-05-04 09:52:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,6 +40,7 @@
 #include "PhysListBinaryCascade.hh"
 #include "PhysListIonBinaryCascade.hh"
 #include "PhysListGN.hh"
+#include "G4EmProcessOptions.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -102,6 +103,10 @@ void PhysicsList::ConstructProcess()
     hadronPhys[i]->ConstructProcess();
   }
   AddStepMax();
+  G4EmProcessOptions emOptions;
+  emOptions.SetMaxEnergy(10.*GeV);
+  emOptions.SetDEDXBinning(1000);
+  emOptions.SetLambdaBinning(100);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
