@@ -129,7 +129,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=26s Real=28s Sys=0.68s
+  User=26s Real=27s Sys=0.58s
 #
 # electron 500 MeV in Air
 #
@@ -244,7 +244,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.1s Real=2s Sys=0.03s
+  User=0.95s Real=0.96s Sys=0.01s
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
