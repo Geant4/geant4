@@ -54,69 +54,88 @@ help /vis/sceneHandler/create
 #
 /vis/scene/notifyHandlers
 /vis/draw/axes     0 0 0 500
-#/vis/draw/text     0 0 0 mm 50 -120 -200   exampleN03
-/vis/viewer/update
+/vis/draw/text     0 0 0 mm 50 -120 -200   exampleN03
+/vis/viewer/show
 #
 # Test logical volume model...
-#/vis/scene/create
-#/vis/scene/add/logicalVolume expHall_L
-#/vis/sceneHandler/create OGLSX
-#/vis/viewer/create
-#/vis/camera/viewpoint 35 35
+/vis/scene/create
+/vis/scene/add/logicalVolume expHall_L
+/vis/sceneHandler/create OGLSX
+/vis/viewer/create
+/vis/camera/viewpoint 35 35
 #/vis/scene/notifyHandlers
-#/vis/viewer/update
+#/vis/viewer/show
 #
 # for drawing the tracks
+/tracking/storeTrajectory 1
 # if too many tracks cause core dump =storeTrajectory 0
 /vis/scene/create
 /vis/scene/add/volume
 /vis/scene/include/trajectories
-/vis/sceneHandler/create OGLSX
+/vis/sceneHandler/create OGLSXm
 /vis/viewer/create
 /vis/camera/viewpoint 35 35
 /vis/scene/notifyHandlers
-/tracking/storeTrajectory 1
 /run/beamOn 1
-/vis/viewer/update
+/vis/viewer/show
+#
+# Boolean solid.
+/vis/camera/reset
+/vis/camera/viewpoint 0 0
+#/vis/viewer/panTo 200 -50 cm
+/vis/camera/pan 1250 -1750
+/vis/camera/zoom 5
+/vis/viewer/refresh
+/gun/position 100 -40 0 cm
+/gun/direction 1 0 0
+/run/beamOn
+/vis/viewer/show
 #
 # To view replicas...
 # Investigating BaBar problem...
 # G4SmartVoxelHeader::BuildNodes - PANIC! Daughter physical volume
 # name = EB20 is entirely outside mother logical volume name = EBMX
+/vis/camera/reset
 /vis/camera/viewpoint 0 0
-/vis/camera/pan -2000 0 0
+#/vis/viewer/panTo -200 0 cm
+/vis/camera/pan -2750 -1250
 /vis/camera/zoom 7
 /vis/viewer/refresh
 /gun/direction 0 1 0
+# The following just crash with replicas...
 /gun/position -200 -100 0 cm
 /run/beamOn
-# The following just crash with replicas...
-#.../gun/position -195 -100 0 cm
-#.../run/beamOn
-#.../gun/position -190 -100 0 cm
-#.../run/beamOn
-#.../gun/position -185 -100 0 cm
-#.../run/beamOn
-#.../gun/position -180 -100 0 cm
-#.../run/beamOn
+/gun/position -195 -100 0 cm
+/run/beamOn
+/gun/position -190 -100 0 cm
+/run/beamOn
+/gun/position -185 -100 0 cm
+/run/beamOn
+/gun/position -180 -100 0 cm
+/run/beamOn
+/gun/position -160 -100 0 cm
+/run/beamOn
 #...end
 /gun/position -200 0 0 cm
 # The following just crash with replicas...
-#.../gun/direction 1 1 0
-#.../run/beamOn
-#.../gun/direction 0 1 0
-#.../run/beamOn
-#.../gun/direction 1 .2 0
-#.../run/beamOn
-#.../gun/direction -1 1 0
-#.../run/beamOn
-#.../gun/direction -1 -1 0
-#.../run/beamOn
-#.../gun/direction 0 -1 0
-#.../run/beamOn
-#.../gun/direction 1 -1 0
-#.../run/beamOn
+/gun/direction 1 1 0
+/run/beamOn
+/gun/direction 0 1 0
+/run/beamOn
+/gun/direction 1 .2 0
+/run/beamOn
+/gun/direction -1 1 0
+/run/beamOn
+/gun/direction -1 -1 0
+/run/beamOn
+/gun/direction 0 -1 0
+/run/beamOn
+/gun/direction 1 -1 0
+/run/beamOn
 #...end
-/vis/viewer/update
-
+# For spheres...
+/gun/direction 0 1 0
+/gun/position 205 0 150 cm
+/run/beamOn
+/vis/viewer/show
 

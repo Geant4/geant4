@@ -1,7 +1,10 @@
-$Id: History,v 1.2 1999-12-16 14:22:14 johna Exp $
+$Id: History,v 1.3 2000-01-11 15:50:14 johna Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+11th January 2000  John Allison
+- Added Sphere and test of displaced solids.
 
 16th December 1999  John Allison
 - MyDetectorConstruction.cc: added replica volumes.

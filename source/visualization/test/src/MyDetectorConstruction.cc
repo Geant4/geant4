@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyDetectorConstruction.cc,v 1.5 1999-12-16 14:12:34 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.6 2000-01-11 15:50:21 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,6 +25,7 @@
 #include "G4ElementTable.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
+#include "G4Sphere.hh"
 #include "G4UnionSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4RotationMatrix.hh"
@@ -97,13 +98,13 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   //------------------------------------------------------ volumes
 
   //------------------------------ experimental hall
-  G4Box * experimantalHall_box
+  G4Box * experimentalHall_box
     = new G4Box("expHall_b",expHall_x,expHall_y,expHall_z);
-  G4LogicalVolume * experimantalHall_log
-    = new G4LogicalVolume(experimantalHall_box,Air,"expHall_L",0,0,0);
-  G4VPhysicalVolume * experimantalHall_phys
+  G4LogicalVolume * experimentalHall_log
+    = new G4LogicalVolume(experimentalHall_box,Air,"expHall_L",0,0,0);
+  G4VPhysicalVolume * experimentalHall_phys
     = new G4PVPlacement(0,G4ThreeVector(),"expHall_P",
-                        experimantalHall_log,0,false,0);
+                        experimentalHall_log,0,false,0);
 
   //------------------------------ calorimeter boxes
   G4Box * calorimeter_box
@@ -124,7 +125,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
     G4RotationMatrix rm;
     rm.rotateZ(i*rotAngle);
     new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(0.*cm,i*calPos,0.*cm)),
-                      "calo_phys",calorimeter_log,experimantalHall_phys,
+                      "calo_phys",calorimeter_log,experimentalHall_phys,
                       false,i);
   }
 
@@ -135,7 +136,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   G4LogicalVolume * tracker_log
     = new G4LogicalVolume(tracker_tube,Ar,"tracker_L",0,0,0);
   new G4PVPlacement(0,G4ThreeVector(0.*cm,trackerPos,0.*cm),
-                    "tracker_phys",tracker_log,experimantalHall_phys,
+                    "tracker_phys",tracker_log,experimentalHall_phys,
                     false,0);
 
   //-------------------------------------------- Boolean solids
@@ -157,7 +158,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   G4LogicalVolume * union_log
     = new G4LogicalVolume(cyl1Ubox1Ubox2,Ar,"union_L",0,0,0);
   new G4PVPlacement(0,G4ThreeVector(200.*cm,-50*cm,0.*cm),
-                    "union_phys",union_log,experimantalHall_phys,
+                    "union_phys",union_log,experimentalHall_phys,
                     false,0);
 
   //----------- Tubes, replicas(!?) and daughter boxes
@@ -170,7 +171,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   G4LogicalVolume * tube_log
     = new G4LogicalVolume(tube,Ar,"tube_L",0,0,0);
   new G4PVPlacement(0,G4ThreeVector(-200.*cm,0.,0.*cm),
-                    "tube_phys",tube_log,experimantalHall_phys,
+                    "tube_phys",tube_log,experimentalHall_phys,
                     false,0);
 
   G4Tubs* divided_tube = new G4Tubs
@@ -207,7 +208,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   /************ 
   new G4PVReplica("sub_divided_tube_phys",
   		  sub_divided_tube_log,divided_tube_inset_log,
-		  kPhi,4,M_PI/12.-alp);
+		  kPhi,4,M_PI/12.-alp,2.*alp);
   ************/
   for (iCopy = 0; iCopy < 4; iCopy++) {
     new G4PVPlacement
@@ -251,13 +252,44 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   SDman->AddNewDetector( myTrackerSD );
   tracker_log->SetSensitiveDetector( myTrackerSD );
 
+  //-------------------------------------------- Sphere
+
+  G4Sphere* PD_vol_crystal
+      = new G4Sphere("Test",
+                     100.*cm,           // inner radius
+                     200.*cm,           // outer radius
+                     0.,                // start phi
+                     90.*degree,         // delta phi
+                     0.,                // start theta
+                     90.*degree          // delta theta
+                     );
+
+
+  G4cout << "-> "
+         << PD_vol_crystal->GetInsideRadius()/cm << ", "
+         << PD_vol_crystal->GetOuterRadius()/cm << ", "
+         << PD_vol_crystal->GetStartPhiAngle()/degree << ", "
+         << PD_vol_crystal->GetDeltaPhiAngle()/degree << ", "
+         << PD_vol_crystal->GetStartThetaAngle()/degree << ", "
+         << PD_vol_crystal->GetDeltaThetaAngle()/degree << endl;
+
+  G4LogicalVolume* PD_log_crystal
+    = new G4LogicalVolume(PD_vol_crystal,Ar,"Test");
+
+  G4RotationMatrix rm;
+
+  G4PVPlacement* PD_physical
+    = new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(200.*cm,200.*cm,0)),
+                        "PD_physical", PD_log_crystal,
+                        experimentalHall_phys,false,0);
+
   //-------------------------------------------- visualization attributes
 
-  //  G4VisAttributes * experimantalHallVisAtt
+  //  G4VisAttributes * experimentalHallVisAtt
   //      = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  //  experimantalHallVisAtt->SetForceWireframe(true);
-  //  experimantalHall_log->SetVisAttributes(experimantalHallVisAtt);
-  experimantalHall_log -> SetVisAttributes (G4VisAttributes::Invisible);
+  //  experimentalHallVisAtt->SetForceWireframe(true);
+  //  experimentalHall_log->SetVisAttributes(experimentalHallVisAtt);
+  experimentalHall_log -> SetVisAttributes (G4VisAttributes::Invisible);
 
   G4VisAttributes * calorimeterVisAtt
       = new G4VisAttributes(G4Colour(0.,0.,1.));
@@ -271,6 +303,6 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
   //------------------------------------------------------------------
 
-  return experimantalHall_phys;
+  return experimentalHall_phys;
 }
 
