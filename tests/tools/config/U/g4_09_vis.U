@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE:g4vis_build_dawn_driver g4vis_use_dawn g4vis_build_dawnfile_driver g4vis_use_dawnfile g4vis_build_opacs_driver g4vis_use_opacs g4vis_build_openglx_driver g4vis_use_openglx g4vis_build_openglxm_driver g4vis_use_openglxm g4vis_build_oix_driver g4vis_use_oix g4vis_build_raytracer_driver g4vis_use_raytracer g4vis_build_vrml_driver g4vis_use_vrml g4vis_build_vrmlfile_driver g4vis_use_vrmlfile g4vis_build_asciitree_driver g4vis_use_asciitree g4vis_build_openglwin32_driver g4vis_use_openglwin32 g4vis_build_oiwin32_driver g4vis_use_oiwin32 g4vis_oglhome:\
+?MAKE:g4vis_build_dawn_driver g4vis_use_dawn g4vis_build_dawnfile_driver g4vis_use_dawnfile g4vis_build_openglx_driver g4vis_use_openglx g4vis_build_openglxm_driver g4vis_use_openglxm g4vis_build_oix_driver g4vis_use_oix g4vis_build_raytracer_driver g4vis_use_raytracer g4vis_build_vrml_driver g4vis_use_vrml g4vis_build_vrmlfile_driver g4vis_use_vrmlfile g4vis_build_asciitree_driver g4vis_use_asciitree g4vis_build_openglwin32_driver g4vis_use_openglwin32 g4vis_build_oiwin32_driver g4vis_use_oiwin32 g4vis_oglhome:\
 	g4ui_build_terminal_session Myread Getfile cat rm test
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
@@ -62,18 +62,6 @@ esac
 case "$g4vis_use_dawnfile" in
 '')
 	g4vis_use_dawnfile=y
-	;;
-esac
-
-case "$g4vis_build_opacs_driver" in
-'')
-	g4vis_build_opacs_driver=n
-	;;
-esac
-
-case "$g4vis_use_opacs" in
-'')
-	g4vis_use_opacs=n
 	;;
 esac
 
@@ -414,34 +402,6 @@ gans=y
 	y*|Y*) 
 		g4vis_build_dawnfile_driver=y
 		g4vis_use_dawnfile=y
-		;;
-	esac
-
-g4message=`cat << EOM
-
-  G4VIS_BUILD_OPACS_DRIVER
-  G4VIS_USE_OPACS
-
-OPACS is a visualization environment based on X windows and OpenGL. 
-It is written in ANSI C and is highly portable (UNIX, NT/X11, VMS). 
-The OPACS tool is required to activate and build this driver.
-
-EOM`
-
-dflt=$g4vis_use_opacs
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4vis_build_opacs_driver=n
-		g4vis_use_opacs=n
-		;;
-	y*|Y*) 
-		g4vis_build_opacs_driver=y
-		g4vis_use_opacs=y
 		;;
 	esac
 

@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE:g4ui_build_terminal_session g4ui_use_terminal g4ui_build_gag_session g4ui_use_gag g4ui_build_xm_session g4ui_use_xm g4ui_build_xaw_session g4ui_use_xaw g4ui_build_win32_session g4ui_use_win32 g4ui_use_tcsh g4_build_wo_session g4ui_use_wo:\
+?MAKE:g4ui_build_terminal_session g4ui_use_terminal g4ui_build_gag_session g4ui_use_gag g4ui_build_xm_session g4ui_use_xm g4ui_build_xaw_session g4ui_use_xaw g4ui_build_win32_session g4ui_use_win32 g4ui_use_tcsh:\
 	g4lib_build_shared Myread Getfile cat rm test
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
@@ -64,18 +64,6 @@ esac
 case "$g4ui_use_xaw" in
 '')
 	g4ui_use_xaw=n
-	;;
-esac
-
-case "$g4ui_build_wo_session" in
-'')
-	g4ui_build_wo_session=n
-	;;
-esac
-
-case "$g4ui_use_wo" in
-'')
-	g4ui_use_wo=n
 	;;
 esac
 
@@ -278,38 +266,6 @@ gans=$ans
 	esac
 
 fi # if WIN
-
-if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
-
-g4message=`cat << EOM
-
-  G4UI_BUILD_WO_SESSION
-  G4UI_USE_WO
-
-  Specifies to include in kernel library and use the OPACS WO terminal
-  interface for the OPACS system. The OPACS tool must be installed
-  to activate and build this driver !
-
-EOM`
-
-dflt=$g4ui_use_wo
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4ui_build_wo_session=n
-		g4ui_use_wo=n
-		;;
-	y*|Y*) 
-		g4ui_build_wo_session=y
-		g4ui_use_wo=y
-		;;
-	esac
-
-fi #if !WIN
 
 g4message=`cat << EOM
 
