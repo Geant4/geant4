@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_UsualEqRhs.hh,v 1.4 2001-07-11 09:59:09 gunter Exp $
+// $Id: G4Mag_UsualEqRhs.hh,v 1.5 2002-04-29 16:54:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,6 +57,15 @@ class G4Mag_UsualEqRhs : public G4Mag_EqRhs
 				   G4double dydx[] ) const;
        // Given the value of the magnetic field B, this function 
        // calculates the value of the derivative dydx.
+
+     virtual void SetChargeMomentumMass( G4double particleCharge, // in e+ units
+			                 G4double MomentumXc,
+			                 G4double mass);
+     
+private:  // without description
+    G4double  fInvCurrentMomentumXc;   // This extra state enables us 
+                                    // to save a square root in a
+                                    // critical method.
 };
 
 #endif /* G4MAG_USUAL_EQRHS */
