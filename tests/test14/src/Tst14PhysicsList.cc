@@ -20,44 +20,39 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst14PhysicsList.cc,v 1.17 2003-02-23 14:36:31 pia Exp $
+// $Id: Tst14PhysicsList.cc,v 1.18 2003-02-23 16:25:30 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 22 Feb 2003 MGP          Redisegned for modular Physics List
+// 22 Feb 2003 MGP          Re-designed for modular Physics List
 //
 // -------------------------------------------------------------------
 
 #include "Tst14PhysicsList.hh"
 #include "Tst14PhysicsListMessenger.hh"
-#include "Tst14DetectorConstruction.hh"
+#include "Tst14PhotonStandard.hh".
+#include "Tst14PhotonEPDL.hh".
+#include "Tst14PhotonPenelope.hh".
+#include "Tst14PhotonPolarised.hh".
+#include "Tst14ElectronStandard.hh".
+#include "Tst14ElectronEPDL.hh".
+#include "Tst14ElectronPenelope.hh".
+#include "Tst14PositronStandard.hh".
 
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
-#include "G4ProcessManager.hh"
-
-#include "G4ParticleTable.hh"
-#include "G4ios.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include "G4LowEnergyPolarizedCompton.hh"
-#include "G4LowEnergyCompton.hh"
-#include "G4LowEnergyGammaConversion.hh"
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyRayleigh.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
+#include "G4VProcess.hh"
+#include " G4LowEnergyPhotoElectric.hh"
+#include " G4LowEnergyIonisation.hh"
+#include " G4LowEnergyBremsstrahlung.hh"
 
-// e+
-#include "G4MultipleScattering.hh"
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
-
-#include "G4LowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
 
 Tst14PhysicsList::Tst14PhysicsList(): G4VModularPhysicsList(),
 				      electronIsRegistered(false), 
@@ -76,6 +71,9 @@ Tst14PhysicsList::Tst14PhysicsList(): G4VModularPhysicsList(),
   // Particles
   RegisterPhysics( new Tst14Particles("particles") );
 
+  // Transportation
+  AddTransportation();
+
   // General chunk of PhysicsList (transportation,...)
   RegisterPhysics( new Tst14GeneralProcesses("general") );
 }
@@ -86,60 +84,135 @@ Tst14PhysicsList::~Tst14PhysicsList()
   delete physicsListMessenger;
 }
 
-void Tst14PhysicsList::ConstructProcess()
+
+void Tst14PhysicsList::AddPhysicsList(const G4String& name)
 {
-  AddTransportation();
-  ConstructEM();
+  // Register standard processes for photons
+  if (name == "photon-standard") 
+    {
+      if (photonIsRegistered) 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+		 << " cannot be registered ---- photon List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
+	  RegisterPhysics( new Tst14PhotonStandard(name) );
+	  photonIsRegistered = true;
+	}
+    }
+  // Register LowE-EPDL processes for photons
+  else if (name == "photon-epdl") 
+    {
+      if (photonIsRegistered) 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+		 << " cannot be registered ---- photon List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
+	  RegisterPhysics( new Tst14PhotonEPDL(name) );
+	  photonIsRegistered = true;
+	}
+   } 
+  // Register processes a' la Penelope for photons
+  else if (name == "photon-penelope")
+    {
+     if (photonIsRegistered) 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+		 << " cannot be registered ---- photon List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
+	  RegisterPhysics( new Tst14PhotonPenelope(name) );
+	  photonIsRegistered = true;
+	}
+    }
+  // Register polarised processes for photons
+  else if (name == "photon-polarised")
+    {
+      if (photonIsRegistered) 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+		 << " cannot be registered ---- photon List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
+	  RegisterPhysics( new Tst14PhotonPolarised(name) );
+	  photonIsRegistered = true;
+	}
+    }
+  // Register standard processes for electrons
+  if (name == "electron-standard") 
+    {
+      if (electronIsRegistered) 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+		 << " cannot be registered ---- electron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
+	  RegisterPhysics( new Tst14ElectronStandard(name) );	  electronIsRegistered = true;
+	}
+    }
+  // Register LowE-EEDL processes for electrons
+  else if (name == "electron-epdl") 
+    {
+      if (electronIsRegistered) 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+		 << " cannot be registered ---- electron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
+	  RegisterPhysics( new Tst14ElectronEEDL(name) );
+	  electronIsRegistered = true;
+	}
+   } 
+  // Register processes a' la Penelope for electrons
+  else if (name == "electron-penelope")
+    {
+     if (electronIsRegistered) 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+		 << " cannot be registered ---- electron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
+	  RegisterPhysics( new Tst14ElectronPenelope(name) );
+	  electronIsRegistered = true;
+	}
+    }
+  // Register standard processes for positrons
+  if (name == "positron-standard") 
+    {
+      if (positronIsRegistered) 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name  
+		 << " cannot be registered ---- positron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << G4endl;
+	  RegisterPhysics( new Tst14PositronStandard(name) );
+	  electronIsRegistered = true;
+	}
+    }
+  // Invalid List name
+  else 
+    {
+      G4cout << "Tst14PhysicsList::AddPhysicsList: <" << name << " is not defined" << G4endl;
+    }
 }
 
-void Tst14PhysicsList::ConstructEM()
-{
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
-     
-    if (particleName == "gamma") {
-
-      // gamma    
-      if (comptonLowEPolarised)
-	{
-	  G4std::cout << "Loading Polarised Compton" << G4std::endl;
-	  pmanager->AddDiscreteProcess(new G4LowEnergyPolarizedCompton);
-	}
-      else
-	{
-	  G4std::cout << "Loading LowEnergy Compton" << G4std::endl;
-	  pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
-	}
-      pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
-
-      LePeprocess = new G4LowEnergyPhotoElectric();
-      pmanager->AddDiscreteProcess(LePeprocess);
-
-      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
-      
-    } else if (particleName == "e-") {
-      //electron
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-
-      LeIoprocess = new G4LowEnergyIonisation();
-      pmanager->AddProcess(LeIoprocess, -1,  2, 2);
-
-      LeBrprocess = new G4LowEnergyBremsstrahlung();
-      pmanager->AddProcess(LeBrprocess, -1, -1, 3);
-
-    } else if (particleName == "e+") {
-      //positron
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,      -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
-      
-    } 
-  }
-}
 
 void Tst14PhysicsList::SetGELowLimit(G4double cut)
 {
@@ -152,6 +225,7 @@ void Tst14PhysicsList::SetGELowLimit(G4double cut)
   G4Electron::SetEnergyRange(cut,1e5);
   G4Positron::SetEnergyRange(cut,1e5);
 }
+
 
 void Tst14PhysicsList::SetGammaLowLimit(G4double cut)
 {
@@ -185,6 +259,7 @@ void Tst14PhysicsList::SetElectronCut(G4double value)
   ResetCuts();
   cutForElectron = value;
 }
+
 
 void Tst14PhysicsList::SetCuts()
 {
@@ -270,6 +345,7 @@ void Tst14PhysicsList::SetLowEnSecPhotCut(G4double cut)
     }
 }
 
+
 void Tst14PhysicsList::SetLowEnSecElecCut(G4double cut)
 {  
   // This m.f. is pertinent to LowEnergy EPDL/EEDL processes only
@@ -328,6 +404,7 @@ void Tst14PhysicsList::SetLowEnSecElecCut(G4double cut)
 	}
     }
 }
+
 
 void Tst14PhysicsList::ActivateAuger(G4bool value)
 {  

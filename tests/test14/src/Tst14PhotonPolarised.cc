@@ -20,50 +20,51 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: Tst14GeneralProcesses.hh,v 1.1 2003-02-23 10:42:43 pia Exp $
+// $Id: Tst14PhotonPolarised.cc,v 1.1 2003-02-23 16:25:30 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+// Author: Maria.Grazia.Pia@cern.ch
 //
 // History:
 // -----------
-// 22 Feb 2003 MGP          Created
+// 22 Feb 2003 MGP          Designed for modular Physics List
 //
 // -------------------------------------------------------------------
 
-// Class description:
-// System test for e/gamma, general processes for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+#include "Tst14PhotonPolarised.hh"
 
-// -------------------------------------------------------------------
+#include "G4ProcessManager.hh"
+#include "G4Gamma.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4LowEnergyPolarizedCompton.hh"
+#include "G4LowEnergyGammaConversion.hh"
+#include "G4LowEnergyPhotoElectric.hh"
+#include "G4LowEnergyRayleigh.hh"
 
-#ifndef TST14GENERALPROCESSES_HH
-#define TST14GENERALPROCESSES_HH 1
+Tst14PhotonPolarised::Tst14PhotonPolarised(const G4String& name): G4VPhysicsConstructor(name)
+{ }
 
-#include "G4VPhysicsConstructor.hh"
-#include "globals.hh"
+Tst14PhotonPolarised::~Tst14PhotonPolarised()
+{ }
 
-class Tst14GeneralProcesses : public G4VPhysicsConstructor {
-
-public: 
-
-  Tst14GeneralProcesses(const G4String& name = "general");
+void Tst14PhotonPolarised::ConstructProcess()
+{
+  // Add polarised processes for photons
   
-  virtual ~Tst14GeneralProcesses();
-  
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();
-};
+  theParticleIterator->reset();
 
-#endif
-
-
-
-
-
-
-
-
+  while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* manager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
+     
+      if (particleName == "gamma") 
+	{
+	  manager->AddDiscreteProcess(new G4LowEnergyPhotoElectric);
+	  manager->AddDiscreteProcess(new G4LowEnergyPolarisedCompton);
+	  manager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
+	  manager->AddDiscreteProcess(new G4LowEnergyRayleigh);
+	}   
+    }
+}
