@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.19 2003-01-22 18:47:29 vnivanch Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.20 2003-02-11 19:19:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,17 +39,18 @@
 // 22/05/01  V.Ivanchenko Update range calculation
 // 23/11/01  V.Ivanchenko Move static member-functions from header to source
 // 22/01/03  V.Ivanchenko Cut per region
+// 11/02/03  V.Ivanchenko Add limits to fluctuations
 //
 // --------------------------------------------------------------
 
 #include "G4VeLowEnergyLoss.hh"
 #include "G4ProductionCutsTable.hh"
 
-G4double     G4VeLowEnergyLoss::ParticleMass ;                
-G4double     G4VeLowEnergyLoss::taulow       ;                
-G4double     G4VeLowEnergyLoss::tauhigh      ;                
-G4double     G4VeLowEnergyLoss::ltaulow       ;                
-G4double     G4VeLowEnergyLoss::ltauhigh      ;                
+G4double     G4VeLowEnergyLoss::ParticleMass ;
+G4double     G4VeLowEnergyLoss::taulow       ;
+G4double     G4VeLowEnergyLoss::tauhigh      ;
+G4double     G4VeLowEnergyLoss::ltaulow       ;
+G4double     G4VeLowEnergyLoss::ltauhigh      ;
 
 
 G4bool       G4VeLowEnergyLoss::rndmStepFlag   = false;
@@ -869,60 +870,52 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 
   // G4cout << "MGP Particle mass " << ParticleMass/MeV << " Tm " << Tm << G4endl;
 
-  if (Tm <= ipotFluct) Tm = ipotFluct ;
-  
   if(Tm > threshold) Tm = threshold;
   beta2 = tau2/(tau1*tau1);
 
   // Gaussian fluctuation ?
-  if(MeanLoss >= kappa*Tm)
+  if(MeanLoss >= kappa*Tm || MeanLoss <= kappa*ipotFluct)
   {
     G4double electronDensity = aMaterial->GetElectronDensity() ;
     siga = sqrt(Tm*(1.0-0.5*beta2)*step*
                 factor*electronDensity/beta2) ;
-    loss = G4RandGauss::shoot(MeanLoss,siga) ;
-    if(loss < 0.) loss = 0. ;
+    do {
+      loss = G4RandGauss::shoot(MeanLoss,siga) ;
+    } while (loss < 0. || loss > 2.0*MeanLoss);
     return loss ;
   }
 
   w1 = Tm/ipotFluct;
   w2 = log(2.*electron_mass_c2*tau2);
-  
+
   C = MeanLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
-  
+
   a1 = C*f1Fluct*(w2-e1LogFluct-beta2)/e1Fluct;
   a2 = C*f2Fluct*(w2-e2LogFluct-beta2)/e2Fluct;
-  if(Tm > ipotFluct)
-    a3 = rateFluct*MeanLoss*(Tm-ipotFluct)/(ipotFluct*Tm*log(w1));
-  else
-    {
-      a1 /= 1.-rateFluct ;
-      a2 /= 1.-rateFluct ;
-      a3  = 0. ;
-    } 
-  
+  a3 = rateFluct*MeanLoss*(Tm-ipotFluct)/(ipotFluct*Tm*log(w1));
+
   suma = a1+a2+a3;
-  
+
   loss = 0. ;
-  
+
   if(suma < sumaLim)             // very small Step
     {
       e0 = aMaterial->GetIonisation()->GetEnergy0fluct();
       // G4cout << "MGP e0 = " << e0/keV << G4endl;
-      
+
       if(Tm == ipotFluct)
 	{
 	  a3 = MeanLoss/e0;
-	  
+
 	  if(a3>alim)
 	    {
 	      siga=sqrt(a3) ;
 	      p3 = G4std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
 	    }
 	  else p3 = G4Poisson(a3);
-	  
+
 	  loss = p3*e0 ;
-	  
+
 	  if(p3 > 0) loss += (1.-2.*G4UniformRand())*e0 ;
 	  // G4cout << "MGP very small step " << loss/keV << G4endl;
 	}
@@ -932,8 +925,8 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 	  Tm = Tm-ipotFluct+e0 ;
 
 	  // MGP ---- workaround to avoid log argument<0, TO BE CHECKED
-	  if (Tm <= 0.) 
-	    { 
+	  if (Tm <= 0.)
+	    {
 	      loss = MeanLoss;
 	      p3 = 0;
 	      // G4cout << "MGP correction loss = MeanLoss " << loss/keV << G4endl;
@@ -974,7 +967,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 	    }        
 	}
     }
-    
+
   else                              // not so small Step
     {
       // excitation type 1
