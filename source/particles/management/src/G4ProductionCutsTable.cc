@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.2 2002-12-16 11:15:45 gcosmo Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.3 2003-01-04 18:14:56 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,6 +32,8 @@
 
 #include "G4ProductionCutsTable.hh"
 #include "G4ProductionCuts.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4LogicalVolume.hh"
@@ -91,13 +93,20 @@ void G4ProductionCutsTable::UpdateCoupleTable()
 {
   if(firstUse)
   {
-    converters[0] = new G4RToEConvForGamma();
-    converters[1] = new G4RToEConvForElectron();
-    converters[2] = new G4RToEConvForPositron();
-    converters[3] = new G4RToEConvForProton();
-    converters[4] = new G4RToEConvForAntiProton();
-    converters[5] = new G4RToEConvForNeutron();
-    converters[6] = new G4RToEConvForAntiNeutron();
+    if(G4ParticleTable::GetParticleTable()->FindParticle("gamma"))
+    { converters[0] = new G4RToEConvForGamma(); }
+    if(G4ParticleTable::GetParticleTable()->FindParticle("e-"))
+    { converters[1] = new G4RToEConvForElectron(); }
+    if(G4ParticleTable::GetParticleTable()->FindParticle("e+"))
+    { converters[2] = new G4RToEConvForPositron(); }
+    if(G4ParticleTable::GetParticleTable()->FindParticle("proton"))
+    { converters[3] = new G4RToEConvForProton(); }
+    if(G4ParticleTable::GetParticleTable()->FindParticle("anti_proton"))
+    { converters[4] = new G4RToEConvForAntiProton(); }
+    if(G4ParticleTable::GetParticleTable()->FindParticle("neutron"))
+    { converters[5] = new G4RToEConvForNeutron(); }
+    if(G4ParticleTable::GetParticleTable()->FindParticle("anti_neutron"))
+    { converters[6] = new G4RToEConvForAntiNeutron(); }
     firstUse = false;
   }
 
@@ -241,10 +250,13 @@ void G4ProductionCutsTable::UpdateCutsValues()
     {
       for(size_t ptcl=0;ptcl< NumberOfG4CutIndex;ptcl++)
       {
-        G4double rCut = aCut->GetProductionCut(ptcl);
-        G4double eCut = converters[ptcl]->Convert(rCut,aMat);
-        (*(rangeCutTable[ptcl]))[idx] = rCut;
-        (*(energyCutTable[ptcl]))[idx] = eCut;
+        if(converters[ptcl])
+        {
+          G4double rCut = aCut->GetProductionCut(ptcl);
+          G4double eCut = converters[ptcl]->Convert(rCut,aMat);
+          (*(rangeCutTable[ptcl]))[idx] = rCut;
+          (*(energyCutTable[ptcl]))[idx] = eCut;
+        }
       }
     }
     idx++;  
