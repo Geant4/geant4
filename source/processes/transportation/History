@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2000-06-19 16:23:46 japost Exp $
+$Id: History,v 1.5 2000-10-04 10:05:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,131 +16,120 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Jun  19, 2000   J. Apostolakis  transport-V01-01-02
 
-G4Transportation.cc: Set the True Step Length in G4Transportation.cc
+Sep  22, 2000   V. Grichine	(transport-V02-00-00)  [recorded by G.Cosmo]
+---------------------------
+- G4Transportation.cc:
+  o added formula for Tkin corresponding directly to
+    relativistic definition of Tkin = Etot - mc^2 = mc^2(gamma -1),
+    where gamma is a particle Lorentz factor.
+  o general cosmetics.
 
-(Cosmetic:  updated other files to the head - as there were no differences from it.)
+Jun  19, 2000   J. Apostolakis  (transport-V01-01-02)
+------------------------------
+- G4Transportation.cc: Set the True Step Length in G4Transportation.cc
+- Cosmetic:  updated other files to the head, as there were no differences
+  from it (CVS headers).
 
+May  15, 2000   J. Apostolakis	(transport-V01-01-01)
+------------------------------
+- G4Transportation.cc:  Set the material in materialChange, in order to get
+  correct behaviour for volumes that parameterise the material.
+  (Fix is dependant on changes to particleChangeForTransport and StepPoint)
+- Modified setting of touchable change, in order to preserve const-ness where
+  it exists.
 
-May  15, 2000   J. Apostolakis	transport-V01-01-01
+Nov  25, 1999   J. Apostolakis  (transport-V00-01-01)
+------------------------------
+- G4Transportation.cc: Added protection for the case of a zero step (when
+  there is a field)
+- G4UserSpecialCuts: protection to use min range and min kinE only for
+  charged particles.
 
-G4Transportation.cc:  Set the material in materialChange, in order to get correct 
-                      behaviour for volumes that parameterise the material.
-   (Fix is dependant on changes to particleChangeForTransport and StepPoint)
+June  9, 1999   J. Apostolakis  (transport-01-00-02)
+------------------------------
+- Added a protection so that full relocation is not used for very small moves.
 
-Modified setting of touchable change, in order to preserve const-ness where it exists.
-
-
-Nov  25, 1999   J. Apostolakis  transport-V00-01-01
-
-  transportation.cc: Added protection for the case of a zero step (when there is a field)
-
-  UserSpecialCuts:  Protection to use min range and min kinE only for charged particles
-
-
-June  9, 1999   J. Apostolakis  transport-01-00-02
-
-  Added a protection so that full relocation is not used for very small moves.
-
-
-Dec   4, 1998   J. Apostolakis  transport-00-04-01
-
-  The Velocity Vector for Transport in a magnetic field is now set correctly.
-    --> previously the scalar velocity was automatically promoted to a 3-vector
+Dec   4, 1998   J. Apostolakis  (transport-00-04-01)
+------------------------------
+- The Velocity Vector for Transport in a magnetic field is now set correctly.
+  (previously the scalar velocity was automatically promoted to a 3-vector)
 
 Nov  25, 1998  J. Apostolakis   
+-----------------------------
+- Added the direction to  LocateGlobalPointAndUpdateTouchable.
 
-  Added the direction to  LocateGlobalPointAndUpdateTouchable.
-
-Nov  19, 1998   J. Apostolakis  transport-00-03-04
-  Fixes:
-
+Nov  19, 1998   J. Apostolakis  (transport-00-03-04)
+------------------------------
+- Fixes:
   1) The final energy is set equal to the initial energy, because
      the PropagatorInField does not calculate it correctly yet.  NEEDS Fix
-
   2) If the requested step size is zero and safety is zero,  the
      step is now considered geometry limited.  (This can happen
      if a discrete process tries to take a  step that is very small
      compared to the mean free path.)  Problem observed by Laszlo in EM tests.
-
   3) PostStepGetInteractionLength now returns DBL_MAX, not kInfinity.
 
+Nov  11, 1998   J. Apostolakis  (transport-00-03-03)
+------------------------------
+- Changes to accomodate new interface of Field: 
+  G4PropagatorInField and G4FieldTrack.
 
-Nov  11, 1998   J. Apostolakis  transport-00-03-03
+Oct  30, 1998  J. Apostolakis   (transport-00-03-02)
+-----------------------------
+- In the case of magnetic field, a flag that determines whether the
+  geometry limited the step was not set.
 
- Changes to accomodate new interface of Field: 
-         (G4PropagatorInField and G4FieldTrack. )
-
-Oct  30, 1998  J. Apostolakis   transport-00-03-02
-
-   In the case of magnetic field, a flag that determines whether the
- geometry limited the step was not set.
-
----------------------------- next two entries recorded Nov 25th : 
-
-Sep  16, 1998  J. Apostolakis   transport-00-03-01
-
-  Checks whether the particle is out of the world volume
-      If so it has exited and must be killed.
-
+Sep  16, 1998  J. Apostolakis   (transport-00-03-01)
+-----------------------------
+- Checks whether the particle is out of the world volume,
+  if so it has exited and must be killed.
 
 Aug  28, 1998  J. Apostolakis 
-
-  The PostStepGetPhysicalInteractionLength has fixed (to return kInf)
+-----------------------------
+- The PostStepGetPhysicalInteractionLength has fixed (to return kInf)
   The boolean flags for touchables are now initialised. & Other small fixes ?
   Test code for non-relocating case added (for debugging).
 
-
-
-==================================================================================
-
 June 08, 1998   J. Apostolakis  (trans-06-04)
-
-   Corrected Safety computation for the case of the field (adding endpoint
-distance instead of curve length.) 
-
-   Added PostStepDoIt method that tries to relocate the particle using
-G4ParticleChangeForTransport
-
-   Transportation is no longer a G4ContinuousProcess. 
-
+------------------------------
+- Corrected Safety computation for the case of the field (adding endpoint
+  distance instead of curve length.) 
+- Added PostStepDoIt method that tries to relocate the particle using
+  G4ParticleChangeForTransport
+- Transportation is no longer a G4ContinuousProcess. 
 
 June 08, 1998   J. Apostolakis  (trans-06-03)
-
-    Modified it to recomputate Safety at the start of a step.  To do this
-it uses the previous step's  calculated safety and endpoint.
-
+------------------------------
+- Modified it to recomputate Safety at the start of a step.  To do this
+  it uses the previous step's  calculated safety and endpoint.
 
 June 08, 1998   J. Apostolakis  (trans-06-02)
-
-    Modified it to add re-computation of Safety at the endpoint of a step,
-when the safety would become negative.  This is done to allow processes
-to benefit from a realistic (geometrical) value of the safety.  The
-request to do this was from EM physics
-
+------------------------------
+- Modified it to add re-computation of Safety at the endpoint of a step,
+  when the safety would become negative.  This is done to allow processes
+  to benefit from a realistic (geometrical) value of the safety.  The
+  request to do this was from EM physics
 
 June 03, 1998   J. Apostolakis  (trans-06-01)
+------------------------------
+- The safety we is now generalised to mean the limit of assumption of all
+  processes. The AlongStepGPIL input value is not the remainder from the
+  previous step's geometrical safety.
+  So the transportation must recalculate the starting point's safety here.
+  As a zeroeth order approximation we set it to zero.
 
-  The safety we is now generalised to mean the limit of assumption of all
-processes. The AlongStepGPIL input value is not the remainder from the
-previous step's geometrical safety.
+April 17, 1998  M. Maire      [recorded by John Apostolakis]
+------------------------
+- A new process, G4UserSpecialCuts, was added to allow the
+  user an alternative method to set some user cuts.
 
- So the transportation must recalculate the starting point's safety here.
-As a zeroeth order approximation we set it to zero.
+April 15, 1998  H. Kurasige   [recorded by John Apostolakis]
+---------------------------
+- The transportation does the absolute minimum required to conform to 
+  the new scheme for ParticleChange: G4VParticleChange is used in signature. 
+  [ But default G4ParticleChange is still used ]. 
 
-
-April 17, 1998  M. Maire      (recorded by John Apostolakis )
-
-A new process, G4UserSpecialCuts, was added to allow the
-user an alternative method to set some user cuts.
-
-
-April 15, 1998  H. Kurasige   (recorded by John Apostolakis )
-
-The transportation does the absolute minimum required to conform to 
-the new scheme for ParticleChange: G4VParticleChange is used in signature. 
-[ But default G4ParticleChange is still used ]. 
-
-April 14, 1998  John Apostolakis (recorded April 20th).
-History file Created
+April 14, 1998  John Apostolakis
+--------------------------------
+- History file Created

@@ -5,23 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Transportation.cc,v 1.12 2000-09-22 09:01:47 grichine Exp $
+// $Id: G4Transportation.cc,v 1.13 2000-10-04 10:05:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-
-//
 // 
 // ------------------------------------------------------------
 //	GEANT 4  include file implementation
 //
 //	For information related to this code contact:
-//	CERN, IT Division (formely CN), ASD group
+//	CERN, IT Division
 // ------------------------------------------------------------
 //
-//   This class is a process responsible for the transportation of 
+// This class is a process responsible for the transportation of 
 // a particle, ie the geometrical propagation that encounters the 
 // geometrical sub-volumes of the detectors.
 //
-//   It is also tasked with part of updating the "safety".
+// It is also tasked with part of updating the "safety".
 //
 // =======================================================================
 // Created:   19 March 1997, J. Apostolakis
@@ -273,12 +271,12 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
      fTransportEndMomentumDir = aFieldTrack.GetMomentumDir() ;
 
      // fTransportEndKineticEnergy= aFieldTrack.GetEnergy() ; // Energy is wrong
-#if 1
+
      G4ThreeVector endVelocity   = aFieldTrack.GetVelocity() ;
      G4double  veloc_sq          = endVelocity.mag2() ;
      G4double gamma              = 1.0/sqrt( 1 - veloc_sq/c_squared ) ;
      fTransportEndKineticEnergy  = restMass*( gamma - 1.0 ) ;   // Lorentz correction
-#endif
+
      //   fTransportEndKineticEnergy = track.GetKineticEnergy() ;
      // fTransportEndPolarization= aFieldTrack.GetSpin() ; // Not yet possible
 
