@@ -336,12 +336,12 @@ export G4VIS_USE_OPACS
 echo "On this machine the G4VIS_USE_OPACS=\$G4VIS_USE_OPACS"
 fi 
 
-#?
-if [ X$g4vis_use_opengl = Xy ] ; then
-G4VIS_USE_OPENGL=1
-else
-G4VIS_USE_OPENGL=""
-fi 
+# Will be set by GNUmakefile if need!
+#if [ X$g4vis_use_opengl = Xy ] ; then
+#G4VIS_USE_OPENGL=1
+#else
+#G4VIS_USE_OPENGL=""
+#fi 
 
 #+
 if [ X$g4vis_use_OPENGLX = Xy ] ; then
