@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassGCellFinder.hh,v 1.1 2002-10-16 16:27:41 dressel Exp $
+// $Id: G4MassGCellFinder.hh,v 1.2 2003-11-26 14:51:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,17 +29,14 @@
 //
 // Class description:
 //
-// Find a G4GeometryCell in the mass geometry.
-// 
+// Finds a G4GeometryCell in the mass geometry.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-
 #ifndef G4MassGCellFinder_hh
 #define G4MassGCellFinder_hh G4MassGCellFinder_hh
 
-#include "globals.hh"
-
+#include "G4Types.hh"
 #include "G4VGCellFinder.hh"
 
 class  G4MassGCellFinder : public G4VGCellFinder 

@@ -21,13 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScoreConfigurator.cc,v 1.6 2003-08-27 07:32:51 dressel Exp $
+// $Id: G4PScoreConfigurator.cc,v 1.7 2003-11-26 14:51:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4PScoreConfigurator
 //
-
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 
@@ -38,33 +37,38 @@
 
 G4PScoreConfigurator::
 G4PScoreConfigurator(const G4String &particlename,
-		       G4VParallelStepper &pstepper,
-		       G4VScorer &scorer) 
-  :
-  fPlacer(particlename),
-  fPStepper(pstepper),
-  fScorer(scorer),
-  fPScoreProcess(0)
-{}
+                           G4VParallelStepper &pstepper,
+                           G4VScorer &scorer) 
+  : fPlacer(particlename),
+    fPStepper(pstepper),
+    fScorer(scorer),
+    fPScoreProcess(0)
+{
+}
 
-G4PScoreConfigurator::~G4PScoreConfigurator(){
-  if (fPScoreProcess) {
+G4PScoreConfigurator::~G4PScoreConfigurator()
+{
+  if (fPScoreProcess)
+  {
     fPlacer.RemoveProcess(fPScoreProcess);
     delete fPScoreProcess;
   }
 }
  
-void G4PScoreConfigurator::Configure(G4VSamplerConfigurator *){
+void G4PScoreConfigurator::Configure(G4VSamplerConfigurator *)
+{
   fPScoreProcess = new G4PScoreProcess(fPStepper, fScorer);
-  if (!fPScoreProcess) {
-    G4Exception("ERROR:G4PScoreConfigurator::Configure: new failed to create G4PScoreProcess!");
+  if (!fPScoreProcess)
+  {
+    G4Exception("G4PScoreConfigurator::Configure()", "FatalError",
+                FatalException, "Failed to allocate G4PScoreProcess !");
   }
   fPlacer.AddProcessAsSecondDoIt(fPScoreProcess);
 }
 
-
-const G4VTrackTerminator *G4PScoreConfigurator:: 
-GetTrackTerminator() const {
+const G4VTrackTerminator *
+G4PScoreConfigurator::GetTrackTerminator() const
+{
   return fPScoreProcess;
 }
   

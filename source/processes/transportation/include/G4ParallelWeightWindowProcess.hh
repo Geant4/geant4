@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWeightWindowProcess.hh,v 1.8 2003-08-19 16:37:23 dressel Exp $
+// $Id: G4ParallelWeightWindowProcess.hh,v 1.9 2003-11-26 14:51:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -31,10 +31,9 @@
 //
 // Used internally by weight window technique in a "parallel" geometry.
 // This process is a forced post step process. It will apply
-// weight window biasing on collisions  or on collisions and
+// weight window biasing on collisions or on collisions and
 // boundaries according to the G4PlaceOfAction argument. 
-// It is not used in the case where it ww should apply only on boundaries.
-
+// It is not used in the case where it should apply only on boundaries.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -45,33 +44,33 @@
 #include "G4VTrackTerminator.hh"
 #include "G4PlaceOfAction.hh"
 
-class G4SplittingAndRussianRouletePostStepDoIt;
+class G4SamplingPostStepAction;
 class G4VWeightWindowExaminer;
 class G4Nsplit_Weight;
 class G4VParallelStepper;
 class G4VParallelStepper;
 
-
-class G4ParallelWeightWindowProcess : public G4VProcess, public G4VTrackTerminator
+class G4ParallelWeightWindowProcess : public G4VProcess,\
+                                      public G4VTrackTerminator
 {
 
 public:  // with description
 
   G4ParallelWeightWindowProcess(const G4VWeightWindowExaminer 
-				&aWeightWindowExaminer,
-				G4VParallelStepper &aStepper,
-				const G4VTrackTerminator *TrackTerminator,
-				G4PlaceOfAction placeOfAction,
-				const G4String &aName = 
-				"ParallelWeightWindowProcess");  
+                                &aWeightWindowExaminer,
+                                G4VParallelStepper &aStepper,
+                                const G4VTrackTerminator *TrackTerminator,
+                                G4PlaceOfAction placeOfAction,
+                                const G4String &aName = 
+                                "ParallelWeightWindowProcess");  
     // initialise G4ParallelTransport and members
 
   virtual ~G4ParallelWeightWindowProcess();
 
   virtual G4double 
   PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-				       G4double   previousStepSize,
-				       G4ForceCondition* condition);
+                                       G4double   previousStepSize,
+                                       G4ForceCondition* condition);
     // make process beeing forced
   virtual G4VParticleChange *PostStepDoIt(const G4Track&, const G4Step&);
     // apply weight window sampliing
@@ -88,13 +87,13 @@ public:  // without description
 
   virtual G4double 
   AlongStepGetPhysicalInteractionLength(const G4Track&,
-					G4double  ,
-					G4double  ,
-					G4double& ,
-					G4GPILSelection*);
+                                        G4double  ,
+                                        G4double  ,
+                                        G4double& ,
+                                        G4GPILSelection*);
   virtual G4double 
   AtRestGetPhysicalInteractionLength(const G4Track& ,
-				     G4ForceCondition*);
+                                     G4ForceCondition*);
   
   virtual G4VParticleChange* 
   AtRestDoIt(const G4Track&, const G4Step&);
@@ -113,18 +112,11 @@ private:
 
 private:
 
-
-private:
-
   G4ParticleChange *fParticleChange;
   const G4VWeightWindowExaminer &fWeightWindowExaminer;
   G4VParallelStepper &fStepper;
-  G4SplittingAndRussianRouletePostStepDoIt *fSplittingAndRussianRouletePostStepDoIt;
+  G4SamplingPostStepAction *fPostStepAction;
   G4PlaceOfAction fPlaceOfAction;
 };
 
 #endif
-
-
-
-

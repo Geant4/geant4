@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWWnTransportProcess.hh,v 1.3 2003-08-19 16:37:23 dressel Exp $
+// $Id: G4ParallelWWnTransportProcess.hh,v 1.4 2003-11-26 14:51:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,30 +42,30 @@
 #include "G4ParallelTransport.hh"
 #include "G4VTrackTerminator.hh"
 
-class G4SplittingAndRussianRouletePostStepDoIt;
+class G4SamplingPostStepAction;
 class G4VWeightWindowExaminer;
 class G4Nsplit_Weight;
 
-
-class G4ParallelWWnTransportProcess : public G4ParallelTransport, public G4VTrackTerminator
+class G4ParallelWWnTransportProcess : public G4ParallelTransport,
+                                      public G4VTrackTerminator
 {
 
 public:  // with description
 
   G4ParallelWWnTransportProcess(const G4VWeightWindowExaminer 
-				&aWeightWindowExaminer,
-				G4VPGeoDriver &pgeodriver, 
-				G4VParallelStepper &aStepper,
-				const G4VTrackTerminator *TrackTerminator,
-				const G4String &aName = 
-				"ParallelWWnTransportProcess");  
+                                &aWeightWindowExaminer,
+                                G4VPGeoDriver &pgeodriver, 
+                                G4VParallelStepper &aStepper,
+                                const G4VTrackTerminator *TrackTerminator,
+                                const G4String &aName = 
+                                "ParallelWWnTransportProcess");  
     // initialise G4ParallelTransport and members
 
   virtual ~G4ParallelWWnTransportProcess();
 
 
   virtual G4VParticleChange *PostStepDoIt(const G4Track&,
-					  const G4Step&);
+                                          const G4Step&);
     // do the "parallel transport" and weight window sampling
 
   virtual void KillTrack() const;
@@ -85,11 +85,7 @@ private:
 
   G4ParticleChange *fParticleChange;
   const G4VWeightWindowExaminer &fWeightWindowExaminer;  
-  G4SplittingAndRussianRouletePostStepDoIt *fSplittingAndRussianRouletePostStepDoIt;
+  G4SamplingPostStepAction *fPostStepAction;
 };
 
 #endif
-
-
-
-

@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4PWeightWindowConfigurator.hh,v 1.3 2003-08-27 07:32:50 dressel Exp $
+// $Id: G4PWeightWindowConfigurator.hh,v 1.4 2003-11-26 14:51:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4PWeightWindowConfigurator
 //
 // Class description:
-// Configure weight window processes for the paralle geometry.
+// Configures the weight window processes for the parallel geometry.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@
 #ifndef G4PWeightWindowConfigurator_hh
 #define G4PWeightWindowConfigurator_hh G4PWeightWindowConfigurator_hh
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4ProcessPlacer.hh"
 #include "G4VSamplerConfigurator.hh"
 #include "G4PlaceOfAction.hh"
@@ -47,19 +47,23 @@ class G4VWeightWindowAlgorithm;
 class G4ParallelWorld;
 class G4ParallelWeightWindowProcess;
 
-class G4PWeightWindowConfigurator : public G4VSamplerConfigurator{
-public:
+class G4PWeightWindowConfigurator : public G4VSamplerConfigurator
+{
+
+public:  // with description
+
   G4PWeightWindowConfigurator(const G4String &particlename,
-			      G4ParallelWorld &parallelWorld,
-			      G4VWeightWindowStore &wwstore,
-			      const G4VWeightWindowAlgorithm *wwAlg,
-			      G4PlaceOfAction placeOfAction);
+                              G4ParallelWorld &parallelWorld,
+                              G4VWeightWindowStore &wwstore,
+                              const G4VWeightWindowAlgorithm *wwAlg,
+                              G4PlaceOfAction placeOfAction);
 
   virtual ~G4PWeightWindowConfigurator();
   virtual void Configure(G4VSamplerConfigurator *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const;
 
 private:
+
   G4PWeightWindowConfigurator(const G4PWeightWindowConfigurator &);
   G4PWeightWindowConfigurator &
   operator=(const G4PWeightWindowConfigurator &);
@@ -73,6 +77,5 @@ private:
   G4PlaceOfAction fPlaceOfAction;
   G4VTrackTerminator *fTrackTerminator;
 };
-
 
 #endif

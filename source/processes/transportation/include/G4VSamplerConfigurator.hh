@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSamplerConfigurator.hh,v 1.5 2003-08-27 07:32:50 dressel Exp $
+// $Id: G4VSamplerConfigurator.hh,v 1.6 2003-11-26 14:51:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,36 +29,39 @@
 //
 // Class description:
 //
-// This is an interface for configurators seeting up processes
+// This is an interface for configurators setting up processes
 // needed for importance sampling and scoring. 
 // The Configurator may be given a pointer to another Configurator.
 // If a configurator will be given a pointer to another configurator
 // it may obtain a G4VTrackTerminator from the given Configurator.
 // This way it is possible to delegate the killing of a track.
-// 
+
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-
 #ifndef G4VSamplerConfigurator_hh
 #define G4VSamplerConfigurator_hh G4VSamplerConfigurator_hh
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include <vector>
+
 class G4VTrackTerminator;
 
+class G4VSamplerConfigurator
+{
 
-class G4VSamplerConfigurator{
-public:
+public:  // with description
+
   G4VSamplerConfigurator();
   virtual ~G4VSamplerConfigurator();
+
   virtual void Configure(G4VSamplerConfigurator *preConf) = 0;
-    // do the configuration, if preConf is given a
-    //  G4VTrackTerminator may be obtained from it
+    // Do the configuration, if preConf is given a
+    // G4VTrackTerminator may be obtained from it.
+
   virtual const G4VTrackTerminator *GetTrackTerminator() const = 0;
-    // return a G4VTrackTerminator or 0
+    // Return a G4VTrackTerminator or 0.
 };
 
 typedef std::vector<G4VSamplerConfigurator *> G4Configurators;
-
 
 #endif

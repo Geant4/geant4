@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSpecialCuts.cc,v 1.10 2003-09-19 10:16:06 vnivanch Exp $
+// $Id: G4UserSpecialCuts.cc,v 1.11 2003-11-26 14:51:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -54,13 +54,15 @@ G4UserSpecialCuts::G4UserSpecialCuts(const G4String& aName)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4UserSpecialCuts::~G4UserSpecialCuts()
-{}
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4UserSpecialCuts::G4UserSpecialCuts(G4UserSpecialCuts& right)
   : G4VProcess(right)
-{}
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  

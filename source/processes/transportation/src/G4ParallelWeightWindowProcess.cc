@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWeightWindowProcess.cc,v 1.9 2003-08-19 16:37:23 dressel Exp $
+// $Id: G4ParallelWeightWindowProcess.cc,v 1.10 2003-11-26 14:51:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,30 +36,29 @@
 #include "G4ParallelWeightWindowProcess.hh"
 #include "G4VWeightWindowExaminer.hh"
 #include "G4VTrackTerminator.hh"
-#include "G4SplittingAndRussianRouletePostStepDoIt.hh"
+#include "G4SamplingPostStepAction.hh"
 #include "G4VParallelStepper.hh"
 
-G4ParallelWeightWindowProcess::
-G4ParallelWeightWindowProcess(const G4VWeightWindowExaminer 
-			      &aWeightWindowExaminer,
-			      G4VParallelStepper &aStepper,
-			      const G4VTrackTerminator *TrackTerminator,
-			      G4PlaceOfAction placeOfAction,
-			      const G4String &aName) 
-  : 
-  G4VProcess(aName),
-  fParticleChange(new G4ParticleChange),
-  fWeightWindowExaminer(aWeightWindowExaminer),
-  fStepper(aStepper),
-  fSplittingAndRussianRouletePostStepDoIt(0),
-  fPlaceOfAction(placeOfAction)
-  
+G4ParallelWeightWindowProcess::G4ParallelWeightWindowProcess(
+                         const G4VWeightWindowExaminer &aWeightWindowExaminer,
+                               G4VParallelStepper &aStepper,
+                         const G4VTrackTerminator *TrackTerminator,
+                               G4PlaceOfAction placeOfAction,
+                         const G4String &aName) 
+  : G4VProcess(aName),
+    fParticleChange(new G4ParticleChange),
+    fWeightWindowExaminer(aWeightWindowExaminer),
+    fStepper(aStepper),
+    fPostStepAction(0),
+    fPlaceOfAction(placeOfAction)
 {
-  if (TrackTerminator) {
-    fSplittingAndRussianRouletePostStepDoIt = new G4SplittingAndRussianRouletePostStepDoIt(*TrackTerminator);
+  if (TrackTerminator)
+  {
+    fPostStepAction = new G4SamplingPostStepAction(*TrackTerminator);
   }
-  else {
-    fSplittingAndRussianRouletePostStepDoIt = new G4SplittingAndRussianRouletePostStepDoIt(*this);
+  else
+  {
+    fPostStepAction = new G4SamplingPostStepAction(*this);
   }
 
 }
@@ -67,74 +66,75 @@ G4ParallelWeightWindowProcess(const G4VWeightWindowExaminer
 G4ParallelWeightWindowProcess::~G4ParallelWeightWindowProcess()
 {
   delete fParticleChange;
-  delete fSplittingAndRussianRouletePostStepDoIt;
+  delete fPostStepAction;
 }
 
 G4double G4ParallelWeightWindowProcess::
 PostStepGetPhysicalInteractionLength(const G4Track& ,
-				     G4double  ,
-				     G4ForceCondition* condition){
+                                     G4double  ,
+                                     G4ForceCondition* condition)
+{
   *condition = Forced;
   return kInfinity;
 }
 
-
-G4VParticleChange *G4ParallelWeightWindowProcess::
-PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
+G4VParticleChange *
+G4ParallelWeightWindowProcess::PostStepDoIt(const G4Track& aTrack,
+                                            const G4Step &aStep)
 {
-  if (aTrack.GetTrackStatus()==fStopAndKill) {
-    G4cout << "G4ParallelWeightWindowProcess::PostStepDoIt StopAndKill" << G4endl;
+  if (aTrack.GetTrackStatus()==fStopAndKill)
+  {
+    G4cout << "WARNING - G4ParallelWeightWindowProcess::PostStepDoIt()"
+           << "          StopAndKill track !" << G4endl;
   }
   
   fParticleChange->Initialize(aTrack);
   
-  if (aStep.GetPostStepPoint()->GetStepStatus() != fGeomBoundary) {
-
-    if (! (fStepper.GetPStep().GetCrossBoundary() &&
-	   fPlaceOfAction == onCollision) ) {
+  if (aStep.GetPostStepPoint()->GetStepStatus() != fGeomBoundary)
+  {
+    if (!( fStepper.GetPStep().GetCrossBoundary()
+        && (fPlaceOfAction == onCollision) ) )
+    {
       // get new weight and number of clones
       G4Nsplit_Weight nw(fWeightWindowExaminer.
-			 Examine(aTrack.GetWeight(),
-				 aTrack.
-				 GetKineticEnergy()));
-      
-      fSplittingAndRussianRouletePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
+                         Examine(aTrack.GetWeight(),
+                                 aTrack.
+                                 GetKineticEnergy()));
+      fPostStepAction->DoIt(aTrack, fParticleChange, nw);
     }
-
   }
-  
   return fParticleChange;
 }
   
 void G4ParallelWeightWindowProcess::Error(const G4String &m)
 {
-  G4cout << "ERROR - G4WeightWindowProcess::" << m << G4endl;
-  G4Exception("Program aborted.");
+  G4Exception("G4ParallelWeightWindowProcess::Error()",
+              "ProgramError", FatalException, m);
 }
 
-
-
-void G4ParallelWeightWindowProcess::KillTrack() const{
+void G4ParallelWeightWindowProcess::KillTrack() const
+{
   fParticleChange->SetStatusChange(fStopAndKill);
 }
 
-
-const G4String &G4ParallelWeightWindowProcess::GetName() const {
+const G4String &G4ParallelWeightWindowProcess::GetName() const
+{
   return theProcessName;
 }
 
 G4double G4ParallelWeightWindowProcess::
 AlongStepGetPhysicalInteractionLength(const G4Track&,
-				      G4double  ,
-				      G4double  ,
-				      G4double& ,
-				      G4GPILSelection*) {
+                                      G4double  ,
+                                      G4double  ,
+                                      G4double& ,
+                                      G4GPILSelection*)
+{
   return -1.0;
 }
 
 G4double G4ParallelWeightWindowProcess::
 AtRestGetPhysicalInteractionLength(const G4Track& ,
-				   G4ForceCondition*) 
+                                   G4ForceCondition*) 
 {
   return -1.0;
 }
@@ -146,7 +146,7 @@ AtRestDoIt(const G4Track&, const G4Step&)
 }
 
 G4VParticleChange* G4ParallelWeightWindowProcess::
-AlongStepDoIt(const G4Track&, const G4Step&) {
+AlongStepDoIt(const G4Track&, const G4Step&)
+{
   return 0;
 }
-

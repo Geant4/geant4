@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.43 2003-11-14 12:32:17 gcosmo Exp $
+// $Id: G4Transportation.cc,v 1.44 2003-11-26 14:51:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -334,31 +334,49 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         G4double  startEnergy= track.GetKineticEnergy();
         G4double  endEnergy= fTransportEndKineticEnergy; 
 
-	static G4int no_inexact_steps=0, no_large_ediff;
-	G4double absEdiff = fabs(startEnergy- endEnergy);
-	if( absEdiff > perMillion * endEnergy ){
-	  no_inexact_steps++;
-	  // Possible statistics keeping here ...
-	}
-	if( fVerboseLevel > 1 ){
-	  if( fabs(startEnergy- endEnergy) > perThousand * endEnergy ){
-  	    static G4int no_warnings= 0, warnModulo=1,  moduloFactor= 10; 
+        static G4int no_inexact_steps=0, no_large_ediff;
+        G4double absEdiff = fabs(startEnergy- endEnergy);
+        if( absEdiff > perMillion * endEnergy )
+        {
+          no_inexact_steps++;
+          // Possible statistics keeping here ...
+        }
+        if( fVerboseLevel > 1 )
+        {
+          if( fabs(startEnergy- endEnergy) > perThousand * endEnergy )
+          {
+            static G4int no_warnings= 0, warnModulo=1,  moduloFactor= 10; 
             no_large_ediff ++;
-	    if( (no_large_ediff% warnModulo) == 0 ){
-	       no_warnings++;
-	       G4cout << "G4Transport: Energy changed in Step, more than per Mille: "
-		      << " Start= " << startEnergy
-		      << " End= "   << endEnergy
-		      << " Relative change= " << (startEnergy-endEnergy)/startEnergy
-		      << G4endl;
-	       G4cout << "G4Transport: Energy corrected -- but review field propagation parameters for accuracy." << G4endl;
-	       G4cerr << "G4Transport: Bad 'endpoint' Energy change detected and corrected,  occurred already " << no_large_ediff << " times." << G4endl;
-	       if( no_large_ediff == warnModulo * moduloFactor ){
-		  warnModulo *= moduloFactor;
-	       }
-	    }
-	  }
-	}  // end of if (fVerboseLevel)
+            if( (no_large_ediff% warnModulo) == 0 )
+            {
+               no_warnings++;
+               G4cout << "WARNING - G4Transportation::AlongStepGetPIL()"
+                      << G4endl
+	              << "          Energy changed in Step, more than 1/1000: "
+                      << G4endl
+                      << "          Start= " << startEnergy
+                      << G4endl
+                      << "          End= "   << endEnergy
+                      << G4endl
+                      << "          Relative change= "
+                      << (startEnergy-endEnergy)/startEnergy << G4endl;
+               G4cout << " Energy has been corrected -- however, review"
+                      << " field propagation parameters for accuracy."
+                      << G4endl;
+               G4cerr << "ERROR - G4Transportation::AlongStepGetPIL()"
+                      << G4endl
+	              << "        Bad 'endpoint'. Energy change detected"
+                      << " and corrected,"
+                      << G4endl
+                      << "        occurred already "
+                      << no_large_ediff << " times." << G4endl;
+               if( no_large_ediff == warnModulo * moduloFactor )
+               {
+                  warnModulo *= moduloFactor;
+               }
+            }
+          }
+        }  // end of if (fVerboseLevel)
 
         // Correct the energy for fields that conserve it
         //  This - hides the integration error

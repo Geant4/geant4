@@ -21,13 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4MWeightWindowConfigurator.cc,v 1.3 2003-08-27 07:32:51 dressel Exp $
+// $Id: G4MWeightWindowConfigurator.cc,v 1.4 2003-11-26 14:51:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4MWeightWindowConfigurator
 //
-
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 
@@ -37,48 +36,51 @@
 
 G4MWeightWindowConfigurator::
 G4MWeightWindowConfigurator(const G4String &particlename,
-			    G4VWeightWindowStore &wwstore,
-			    const G4VWeightWindowAlgorithm *wwAlg,
-			    G4PlaceOfAction placeOfAction) :
-  fPlacer(particlename),
-  fWeightWindowStore(wwstore),
-  fDeleteWWalg( ( ! wwAlg) ),
-  fWWalgorithm(( (fDeleteWWalg) ? 
-		 new G4WeightWindowAlgorithm(5,3,5) : wwAlg)),
-  fMassWeightWindowProcess(0),
-  fPlaceOfAction(placeOfAction)
-{}
+                            G4VWeightWindowStore &wwstore,
+                            const G4VWeightWindowAlgorithm *wwAlg,
+                            G4PlaceOfAction placeOfAction)
+  : fPlacer(particlename),
+    fWeightWindowStore(wwstore),
+    fDeleteWWalg( ( ! wwAlg) ),
+    fWWalgorithm(( (fDeleteWWalg) ? 
+                   new G4WeightWindowAlgorithm(5,3,5) : wwAlg)),
+    fMassWeightWindowProcess(0),
+    fPlaceOfAction(placeOfAction)
+{
+}
 
-G4MWeightWindowConfigurator::
-~G4MWeightWindowConfigurator()
+G4MWeightWindowConfigurator::~G4MWeightWindowConfigurator()
 {  
-  if (fMassWeightWindowProcess) {
+  if (fMassWeightWindowProcess)
+  {
     fPlacer.RemoveProcess(fMassWeightWindowProcess);
     delete fMassWeightWindowProcess;
   }
-  if (fDeleteWWalg) {
+  if (fDeleteWWalg)
+  {
     delete fWWalgorithm;
   }
 }
 
-void G4MWeightWindowConfigurator::
-Configure(G4VSamplerConfigurator *preConf)
+void
+G4MWeightWindowConfigurator::Configure(G4VSamplerConfigurator *preConf)
 {
   const G4VTrackTerminator *terminator = 0;
-  if (preConf) {
+  if (preConf)
+  {
     terminator = preConf->GetTrackTerminator();
   };
 
   fMassWeightWindowProcess = 
     new G4MassWeightWindowProcess(*fWWalgorithm, 
-				  fWeightWindowStore, 
-				  terminator,
-				  fPlaceOfAction);
+                                  fWeightWindowStore, 
+                                  terminator,
+                                  fPlaceOfAction);
   fPlacer.AddProcessAsSecondDoIt(fMassWeightWindowProcess);
 }
 
-const G4VTrackTerminator *G4MWeightWindowConfigurator::
-GetTrackTerminator() const 
+const G4VTrackTerminator *
+G4MWeightWindowConfigurator::GetTrackTerminator() const 
 {
   return fMassWeightWindowProcess;
 }

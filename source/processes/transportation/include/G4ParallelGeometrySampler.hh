@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGeometrySampler.hh,v 1.6 2003-08-19 15:17:40 dressel Exp $
+// $Id: G4ParallelGeometrySampler.hh,v 1.7 2003-11-26 14:51:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -31,21 +31,17 @@
 //
 // Class description:
 // This class inherits from G4VSampler. It is used for scoring and 
-// importance smpling in a parallel geometry.
-// See also the description in G4VSampler.hh.
-//
+// importance sampling in a parallel geometry.
+// See also the description in G4VSampler.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4ParallelGeometrySampler_hh
 #define G4ParallelGeometrySampler_hh G4ParallelGeometrySampler_hh
 
+#include "G4Types.hh"
 #include "G4VSampler.hh"
-
-#include "globals.hh"
-
 #include "G4ParallelWorld.hh"
-
 #include "G4VSamplerConfigurator.hh"
 
 class G4ParallelTransportConfigurator;
@@ -56,26 +52,26 @@ class G4VGCellFinder;
 class G4PWeightWindowConfigurator;
 class G4WeightWindowStore;
 
-class G4ParallelGeometrySampler : public G4VSampler{
+class G4ParallelGeometrySampler : public G4VSampler
+{
 
-public: 
-
+public:  // with description
  
   G4ParallelGeometrySampler(G4VPhysicalVolume &worldvolume,
-			    const G4String &particlename);
+                            const G4String &particlename);
   virtual ~G4ParallelGeometrySampler();
 
   virtual void PrepareScoring(G4VScorer *Scorer);
   virtual void PrepareImportanceSampling(G4VIStore *istore,
-				 const G4VImportanceAlgorithm 
-				 *ialg);
+                                 const G4VImportanceAlgorithm 
+                                 *ialg);
   virtual void PrepareWeightRoulett(G4double wsurvive, 
-			    G4double wlimit,
-			    G4double isource);
+                            G4double wlimit,
+                            G4double isource);
   
   virtual void PrepareWeightWindow(G4VWeightWindowStore *wwstore,
-				   G4VWeightWindowAlgorithm *wwAlg,
-				   G4PlaceOfAction placeOfAction);
+                                   G4VWeightWindowAlgorithm *wwAlg,
+                                   G4PlaceOfAction placeOfAction);
 
 
   virtual void Configure();
@@ -90,6 +86,7 @@ private:
   operator=(const G4ParallelGeometrySampler &);
 
 private:
+
   G4String fParticleName;
   G4ParallelWorld fParallelWorld;
   G4ParallelTransportConfigurator *fParallelTransportConfigurator;
@@ -105,4 +102,3 @@ private:
 };
   
 #endif
-

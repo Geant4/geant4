@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.icc,v 1.6 2003-07-24 09:15:33 japost Exp $
+// $Id: G4Transportation.icc,v 1.7 2003-11-26 14:51:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,7 +34,8 @@
 // =======================================================================
 //
 
-inline void G4Transportation::SetPropagatorInField( G4PropagatorInField* pFieldPropagator)
+inline void
+G4Transportation::SetPropagatorInField( G4PropagatorInField* pFieldPropagator)
 {
    fFieldPropagator= pFieldPropagator;
 }

@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4MImportanceConfigurator.hh,v 1.4 2003-08-27 07:32:50 dressel Exp $
+// $Id: G4MImportanceConfigurator.hh,v 1.5 2003-11-26 14:51:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4MImportanceConfigurator
 //
 // Class description:
-// This class builds and places  the G4ImportanceProcess.
+// This class builds and places the G4ImportanceProcess.
 // If the object is deleted the process is removed from the 
 // process list.
 
@@ -38,7 +38,7 @@
 #ifndef G4MImportanceConfigurator_hh
 #define G4MImportanceConfigurator_hh G4MImportanceConfigurator_hh
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4ProcessPlacer.hh"
 #include "G4VSamplerConfigurator.hh"
 
@@ -46,17 +46,21 @@ class G4MassImportanceProcess;
 class G4VImportanceAlgorithm;
 class G4VIStore;
 
-class G4MImportanceConfigurator : public G4VSamplerConfigurator{
-public:
+class G4MImportanceConfigurator : public G4VSamplerConfigurator
+{
+
+public:  // with description
+
   G4MImportanceConfigurator(const G4String &particlename,
-			    G4VIStore &istore,
-			    const G4VImportanceAlgorithm *ialg);
+                            G4VIStore &istore,
+                            const G4VImportanceAlgorithm *ialg);
 
   virtual ~G4MImportanceConfigurator();
   virtual void Configure(G4VSamplerConfigurator *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const;
 
 private:
+
   G4MImportanceConfigurator(const G4MImportanceConfigurator &);
   G4MImportanceConfigurator &
   operator=(const G4MImportanceConfigurator &);

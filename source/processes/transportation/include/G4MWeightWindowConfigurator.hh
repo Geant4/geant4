@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MWeightWindowConfigurator.hh,v 1.4 2003-08-27 07:32:50 dressel Exp $
+// $Id: G4MWeightWindowConfigurator.hh,v 1.5 2003-11-26 14:51:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@
 #ifndef G4MWeightWindowConfigurator_hh
 #define G4MWeightWindowConfigurator_hh G4MWeightWindowConfigurator_hh
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4ProcessPlacer.hh"
 #include "G4VSamplerConfigurator.hh"
 #include "G4PlaceOfAction.hh"
@@ -45,18 +45,22 @@ class G4VWeightWindowStore;
 class G4VWeightWindowAlgorithm;
 class G4MassWeightWindowProcess;
 
-class G4MWeightWindowConfigurator : public G4VSamplerConfigurator{
-public:
+class G4MWeightWindowConfigurator : public G4VSamplerConfigurator
+{
+
+public:  // with description
+
   G4MWeightWindowConfigurator(const G4String &particlename,
-			      G4VWeightWindowStore &wwstore,
-			      const G4VWeightWindowAlgorithm *wwAlg,
-			      G4PlaceOfAction placeOfAction);
+                              G4VWeightWindowStore &wwstore,
+                              const G4VWeightWindowAlgorithm *wwAlg,
+                              G4PlaceOfAction placeOfAction);
 
   virtual ~G4MWeightWindowConfigurator();
   virtual void Configure(G4VSamplerConfigurator *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const;
 
 private:
+
   G4MWeightWindowConfigurator(const G4MWeightWindowConfigurator &);
   G4MWeightWindowConfigurator &
   operator=(const G4MWeightWindowConfigurator &);
@@ -68,6 +72,5 @@ private:
   G4MassWeightWindowProcess *fMassWeightWindowProcess;
   G4PlaceOfAction fPlaceOfAction;
 };
-
 
 #endif

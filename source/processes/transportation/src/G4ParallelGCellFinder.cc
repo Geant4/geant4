@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGCellFinder.cc,v 1.2 2003-04-02 16:59:17 dressel Exp $
+// $Id: G4ParallelGCellFinder.cc,v 1.3 2003-11-26 14:51:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -34,23 +34,26 @@
 #include "G4ParallelGCellFinder.hh"
 #include "G4VParallelStepper.hh"
 
-
 G4ParallelGCellFinder::
-G4ParallelGCellFinder(const G4VParallelStepper &astepper):
-  fPStepper(astepper)
-{}
+G4ParallelGCellFinder(const G4VParallelStepper &astepper)
+  : fPStepper(astepper)
+{
+}
 
 G4ParallelGCellFinder::~G4ParallelGCellFinder()
-{}
+{
+}
 
-G4GeometryCell G4ParallelGCellFinder::
-GetPreGeometryCell(const G4Step &) const {
+G4GeometryCell
+G4ParallelGCellFinder::GetPreGeometryCell(const G4Step &) const
+{
   G4GeometryCell g(fPStepper.GetPStep().GetPreGeometryCell());
   return g;
 }
 
-G4GeometryCell G4ParallelGCellFinder::
-GetPostGeometryCell(const G4Step &) const {
+G4GeometryCell
+G4ParallelGCellFinder::GetPostGeometryCell(const G4Step &) const
+{
   G4GeometryCell g(fPStepper.GetPStep().GetPostGeometryCell());
   return g;
 }

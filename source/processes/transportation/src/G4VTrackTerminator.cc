@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrackTerminator.cc,v 1.2 2003-04-02 16:59:26 dressel Exp $
+// $Id: G4VTrackTerminator.cc,v 1.3 2003-11-26 14:51:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -31,10 +31,10 @@
 //
 // ----------------------------------------------------------------------
 
-
 #include "G4VTrackTerminator.hh"
 
 G4VTrackTerminator::G4VTrackTerminator()
 {}
+
 G4VTrackTerminator::~G4VTrackTerminator()
 {}

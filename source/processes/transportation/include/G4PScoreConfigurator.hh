@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScoreConfigurator.hh,v 1.4 2003-08-27 07:32:50 dressel Exp $
+// $Id: G4PScoreConfigurator.hh,v 1.5 2003-11-26 14:51:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4PScoreConfigurator
 //
 // Class description:
-// This class builds and places  the G4PScoreProcess
+// This class builds and places the G4PScoreProcess.
 // If the object is deleted the process is removed from the 
 // process list.
 
@@ -38,9 +38,8 @@
 #ifndef G4PScoreConfigurator_hh
 #define G4PScoreConfigurator_hh G4PScoreConfigurator_hh
 
+#include "G4Types.hh"
 #include "G4VSamplerConfigurator.hh"
-
-#include "globals.hh"
 #include "G4ProcessPlacer.hh"
 
 class G4VParallelStepper;
@@ -48,17 +47,21 @@ class G4VScorer;
 class G4VTrackTerminator;
 class G4PScoreProcess;
 
-class G4PScoreConfigurator : public G4VSamplerConfigurator{
-public:
+class G4PScoreConfigurator : public G4VSamplerConfigurator
+{
+
+public:  // with description
+
   G4PScoreConfigurator(const G4String &particlename,
-		       G4VParallelStepper &pstepper,
-		       G4VScorer &scorer);
+                       G4VParallelStepper &pstepper,
+                       G4VScorer &scorer);
   virtual ~G4PScoreConfigurator();
 
   virtual void Configure(G4VSamplerConfigurator *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const;  
   
 private:
+
   G4PScoreConfigurator(const G4PScoreConfigurator &);
   G4PScoreConfigurator &operator=(const G4PScoreConfigurator &);
   G4ProcessPlacer fPlacer;

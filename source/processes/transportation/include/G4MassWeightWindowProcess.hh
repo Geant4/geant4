@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassWeightWindowProcess.hh,v 1.3 2003-08-19 16:37:22 dressel Exp $
+// $Id: G4MassWeightWindowProcess.hh,v 1.4 2003-11-26 14:51:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,10 +43,9 @@
 #include "G4VTrackTerminator.hh"
 #include "G4PlaceOfAction.hh"
 
-class G4SplittingAndRussianRouletePostStepDoIt;
+class G4SamplingPostStepAction;
 class G4VWeightWindowAlgorithm;
 class G4VWeightWindowStore;
-
 
 class G4MassWeightWindowProcess : public G4VProcess, public G4VTrackTerminator
 {
@@ -54,12 +53,12 @@ class G4MassWeightWindowProcess : public G4VProcess, public G4VTrackTerminator
 public:  // with description
 
   G4MassWeightWindowProcess(const G4VWeightWindowAlgorithm &
-			     aWeightWindowAlgorithm,
-			     const G4VWeightWindowStore &aWWStore,
-			     const G4VTrackTerminator *TrackTerminator,
-			     G4PlaceOfAction placeOfAction,
-			     const G4String &aName = 
-			     "MassWeightWindowProcess");
+                             aWeightWindowAlgorithm,
+                             const G4VWeightWindowStore &aWWStore,
+                             const G4VTrackTerminator *TrackTerminator,
+                             G4PlaceOfAction placeOfAction,
+                             const G4String &aName = 
+                             "MassWeightWindowProcess");
     // creates a G4ParticleChange
 
   virtual ~G4MassWeightWindowProcess();
@@ -67,8 +66,8 @@ public:  // with description
 
   virtual G4double 
   PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-				       G4double   previousStepSize,
-				       G4ForceCondition* condition);
+                                       G4double   previousStepSize,
+                                       G4ForceCondition* condition);
     // make process beeing forced
   virtual G4VParticleChange *PostStepDoIt(const G4Track&, const G4Step&);
     // aply weight window sampling
@@ -85,13 +84,13 @@ public:  // without description
 
   virtual G4double 
   AlongStepGetPhysicalInteractionLength(const G4Track&,
-					G4double  ,
-					G4double  ,
-					G4double& ,
-					G4GPILSelection*);
+                                        G4double  ,
+                                        G4double  ,
+                                        G4double& ,
+                                        G4GPILSelection*);
   virtual G4double 
   AtRestGetPhysicalInteractionLength(const G4Track& ,
-				     G4ForceCondition*);
+                                     G4ForceCondition*);
   
   virtual G4VParticleChange* 
   AtRestDoIt(const G4Track&, const G4Step&);
@@ -110,7 +109,7 @@ private:
   G4ParticleChange *fParticleChange;
   const G4VWeightWindowAlgorithm &fWeightWindowAlgorithm;
   const G4VWeightWindowStore &fWeightWindowStore;
-  G4SplittingAndRussianRouletePostStepDoIt *fSplittingAndRussianRouletePostStepDoIt;
+  G4SamplingPostStepAction *fPostStepAction;
   G4PlaceOfAction fPlaceOfAction;
 
 };
