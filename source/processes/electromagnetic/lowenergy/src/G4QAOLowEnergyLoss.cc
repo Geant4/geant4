@@ -20,17 +20,16 @@
 //                 Introduced sizes of L0, L1, L2 arrays
 // 23/05/2000 MGP  Made compliant to design
 // 02/08/2000 V.Ivanchenko Clean up according new design
-// 16/09/2000 S. Chauvie   Oscillator for all materials
+// 16/09/2000 S. Chauvie  Oscillator for all materials
 // 03/10/2000 V.Ivanchenko CodeWizard clean up
 // 05/11/2000 V.Ivanchenko "Aluminum" - correct name, end of cycle
 //            over shells, and two bugs from previous edition
 // 10/05/2001 V.Ivanchenko Clean up againist Linux compilation with -Wall
-// 13/05/2001 S. Chauvie   corrected bugs
+// 13/05/2001 S. Chauvie corrected bugs
 // 01/06/2001 V.Ivanchenko replace names by Z, change the validity range
 //                         from 50 keV to 5 KeV and change sign of the
 //                         Barkas term
-// 04/06/2001 S. Chauvie   Corrected small bugs
-// 07/06/2001 V.Ivanchenko In IsInCharge only 6 pure materials return true now
+// 4/06/2001 S. Chauvie  Corrected small bugs
 //
 // ************************************************************
 // It is the Quantal Harmonic Oscillator Model for energy loss
@@ -110,12 +109,7 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(
 
   G4bool hasMaterial = false;
 
-  if(material->GetNumberOfElements() == 1) {
-    G4int Z = (G4int)(material->GetZ());
-    for(G4int i=0; i<numberOfMaterials; i++) {
-      if(materialAvailable[i] == Z) hasMaterial = true;
-    }
-  }
+  if (material->GetNumberOfElements() == 1) hasMaterial = true;
   
   if ((particle->GetDefinition()) == (G4AntiProton::AntiProtonDefinition())
                && hasMaterial) isInCharge = true;
@@ -134,12 +128,8 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(
   
   G4bool hasMaterial = false;
   
-  if(material->GetNumberOfElements() == 1) {
-    G4int Z = (G4int)(material->GetZ());
-    for(G4int i=0; i<numberOfMaterials; i++) {
-      if(materialAvailable[i] == Z) hasMaterial = true;
-    }
-  }
+  if (material->GetNumberOfElements() == 1) hasMaterial = true;
+  
 
   if (aParticle == (G4AntiProton::AntiProtonDefinition())
                 && hasMaterial) isInCharge = true;
@@ -189,10 +179,13 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
   //else if(iz > 100) iz = 100;
   //G4int nbOfShell = fNumberOfShells[iz];
   
-  //  G4cout << " E(MeV)= " << kineticEnergy/MeV << " n= " 
-  //       << nbOfShell 
-  //       << " for " << material->GetZ() << G4endl; 
-
+  /*
+  if(material->GetName()=="Graphite"){
+  G4cout << " E(MeV)= " << kineticEnergy/MeV << " n= " 
+         << nbOfShell 
+         << " for " << material->GetZ() << G4endl; 
+  }
+  */
   G4double dedx=0;
 
   G4double v = c_light * sqrt( 2.0 * kineticEnergy / proton_mass_c2 );
@@ -229,16 +222,19 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
     l2Term += shStrength * l2; 
 
     /*
+    if(material->GetName()=="Graphite"){
     G4cout << nos << ". "
            << " E(MeV)= " << kineticEnergy/MeV 
            << " normE= "  << NormalizedEnergy
+           << " sh en= "  << GetShellEnergy(material,nos)
            << " str= "  << shStrength
            << " v0/v= " << fBetheVelocity
            << " l0= " << l0Term
            << " l1= " << l1Term
            << " l2= " << l2Term
            << G4endl;
-	   */
+	   }
+     */   
   }
        
   dedx = coeff * zParticle * zParticle * (l0Term
@@ -263,15 +259,14 @@ G4int G4QAOLowEnergyLoss::GetNumberOfShell(const G4Material* material) const
   // Set return value if in material available from Aahrus
   for(G4int i=0; i<numberOfMaterials; i++) {
 
-    if(materialAvailable[i] == Z) {
+    if(materialAvailable[i] == Z){
     	nShell = nbofShellForMaterial[i];
 	break;
     }
+    else nShell = fNumberOfShells[Z];
   }
-
-  if(0 == nShell) nShell = fNumberOfShells[Z];
   
-  return nShell;
+   return nShell;
 }
 
 
@@ -309,19 +304,32 @@ G4double G4QAOLowEnergyLoss::GetOscillatorEnergy(const G4Material* material,
   
   G4int Z = (G4int)(element->GetZ());
     
-  G4double squaredPlasmonEnergy = 28.16 * 28.16 * 1e-6  
-                                * (material->GetDensity()) * (cm3/g)
-			        *  Z / (element->GetN()) ;
+G4double squaredPlasmonEnergy = 28.816 * 28.816  * 1e-6 
+				* material->GetDensity()/g/cm3
+				* (Z/element->GetN()) ;
+//G4double squaredPlasmonEnergy = 28.16 * 28.16 * 1e-6  
+//                                * (material->GetDensity()) * (cm3/g)
+//			        *  Z / (element->GetN()) ;
   
   G4double plasmonTerm = 0.66667 * GetOccupationNumber(Z,nbOfTheShell)  
                        * squaredPlasmonEnergy / (Z*Z) ; 
-
+  
   G4double ionTerm = exp(0.5) * (element->GetAtomicShell(nbOfTheShell)) ;
 
   ionTerm = ionTerm*ionTerm ;
    
   G4double oscShellEnergy = sqrt( ionTerm + plasmonTerm );
  
+/*  if(material->GetName()=="Graphite"){
+    G4cout << "\t" << Z 
+     	   << "\t" << nbOfTheShell
+           << "\t" << squaredPlasmonEnergy
+	   << "\t" << plasmonTerm
+	   << "\t" << ionTerm
+	   << "\t" << GetOccupationNumber(Z,nbOfTheShell)
+	   << "\t" << element->GetAtomicShell(nbOfTheShell)
+	   << "\t" << oscShellEnergy << G4endl;}
+*/
   return  oscShellEnergy;
 }
 
