@@ -14,6 +14,22 @@ case "$g4global" in
 	;;
 esac
 
+echo " "
+# By default it's 'grabular'!
+case "$g4granular" in
+'')
+	g4granular=y
+	;;
+esac
+
+echo " "
+# Will be set (if needed) in GNUmakefile!
+case "$g4lib_use_granular" in
+'')
+	g4lib_use_granular=n
+	;;
+esac
+
 #
 # Ask about g4global - default "(empty)". 
 #
@@ -35,10 +51,14 @@ gans=$ans
 	
 	n*|N*) 
 		g4global=n
+		g4granular=y
+		g4lib_use_granular=n
 		break
 		;;
 	y*|Y*) 
 		g4global=y
+		g4granular=n
+		g4lib_use_granular=n
 		break
 		;;
 #	[eE]) 
@@ -50,13 +70,6 @@ gans=$ans
 #		;;
 	esac
 done
-
-echo " "
-case "$g4granular" in
-'')
-	g4granular=n
-	;;
-esac
 
 if [ X$g4global = Xy ] ; then
 #
@@ -96,14 +109,6 @@ gans=$ans
 #		;;
 	esac
 done
-fi
-
-echo " "
-case "$g4lib_use_granular" in
-'')
-	g4lib_use_granular=n
-	;;
-esac
 
 if [ X$g4granular = Xy ] ; then
 #
@@ -143,4 +148,5 @@ gans=$ans
 #		;;
 	esac
 done
+fi
 fi
