@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEInelastic.cc,v 1.2 1999-06-16 04:35:57 kurasige Exp $
+// $Id: G4HEInelastic.cc,v 1.3 1999-06-17 11:41:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1319,7 +1319,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
         pv[i].Lor( pv[i], pvmx[1] );
         if(verboseLevel > 1) pv[i].Print(i);
       }
-   targ = max( 1, targ );
+   if ( targ <1) targ = 1;
 
    G4bool dum;
    if( lead ) 
@@ -2490,7 +2490,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
         if( pv[i].getType() == baryonType )targ++;
         pv[i].Lor( pv[i], pvmx[2] );
       }
-   targ = max( 1, targ );
+   if (targ<1) targ = 1;
 
    if(verboseLevel > 1)
      {
@@ -3539,6 +3539,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                pvmx[5].Add( pvmx[5], pv[i] );
              }
          }
+       delete [] tempV; 
      }
    if( vecLen <= 2 ) 
      {
@@ -4389,8 +4390,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
         if( pv[i].getType() == baryonType )targ++;
         pv[i].Lor( pv[i], pvmx[2] );
       }
-
-   targ = max( 1, targ );
+   if (targ <1) targ =1;
 
    if(verboseLevel > 1)
      {
