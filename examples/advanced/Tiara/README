@@ -17,9 +17,9 @@ If the following conditions:
 - access to afs exists 
 - shell = tcsh
 - Geant4 is compiled using G4LIB_BUILD_SHARED 1
-are fullfilled the example may be build as follows:
+are fulfilled the example may be build as follows:
 
-1) setup the environment by typing: source simEnviron.csh 
+1) setup the environment by typing: source simEnvironAFS.csh 
 2) type gmake
 
 
@@ -34,26 +34,28 @@ The Anaphe package comes with SWIG and Python versions used to build
 Anaphe itself. These Swig and Python versions should also be used with 
 this example.
 
-The file simEnviron.csh provides an example for ho to set the 
+The file simEnvironAFS.csh provides an example for how to set the 
 environment which works under the above listed conditions. 
+The file simEnviron.csh is an example for a local installation
+of Anaphe and AIDA.
 
 Cleaning up
 -----------
 To remove the directories related to this example under 
 $G4WORKDIR/tmp/$G4SYSTEM/ use "gmake tiaraClean".
-To remove the files created by swig ( *_wrap.cc, the coresponding 
+To remove the files created by swig ( *_wrap.cc, the corresponding 
 .py files) use "gmake swigClean.
 
 
-Runniong the example:
+Running the example:
 =====================
 
 Change to the sub directory "run" and execute "runSim.py".
 "runSim.py" runs an example configuration which nay be
 changed by the user. The results of the simulation are stored in 
 the directory "simData". 
-The script "runSim.py" periodicaly prints scoring information to the 
-screeen. 
+The script "runSim.py" periodically prints scoring information to the 
+screen. 
 It also prints out the relative path of a ".shelve" file.
 This file can be used to access results of the simulation.
 
@@ -71,7 +73,7 @@ calculated results have large errors. If you want to see a better result
 do the following changes in "naSim.py".
 Extend the total run time to 30 minutes by setting:
 "totalTime = 30 * myUtils.min", 
-set the print out periode to 10 minutes by setting:
+set the print out period to 10 minutes by setting:
 "timeForOneRun = 10 * myUtils.min".
 
 
@@ -85,13 +87,13 @@ set the print out periode to 10 minutes by setting:
 Content of the directory:
 =========================
 
-simEnviron.csh - file to be sourced for setting upthe 
+simEnviron.csh - file to be sourced for setting up the 
                  environment specific for this example
 
 buildit.csh - file to be executed to build the example
 
 
-data / - directory containing expeimental data
+data / - directory containing experimental data
 
       expDataOrig - experimental data taken from 
                     http://idsun1.kek.jp/nakao/research/tiara/tiara.htm
@@ -108,7 +110,7 @@ source / - directory containing the source code
         tiaraPhysicsLists - C++ source code of physics lists
 
         tiaraPhysicsPackaging - C++ source cod with common 
-                                classes for the physics l;ists
+                                classes for the physics lists
 
         CLHEPWrapper - wrapper classes for usage in python
                      \include\CLHEP.i - specification file for swig
