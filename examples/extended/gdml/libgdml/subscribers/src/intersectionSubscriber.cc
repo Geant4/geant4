@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: intersectionSubscriber.cc,v 1.2 2002-06-03 12:09:35 radoone Exp $
+// $Id: intersectionSubscriber.cc,v 1.3 2002-06-05 11:54:33 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,7 @@
 
 #include "boolean_intersection.hh"
 
-#include "G4UnionSolid.hh"
+#include "G4IntersectionSolid.hh"
 
 class intersectionSubscriber : public BooleanSolidTypeSubscriber
 {
@@ -73,9 +73,9 @@ public:
 
     if( useTransform ) {    
       G4Transform3D transform( transrot, translat );
-      solid_intersection = new G4UnionSolid( bi->get_name(), m_first, m_second, transform );
+      solid_intersection = new G4IntersectionSolid( bi->get_name(), m_first, m_second, transform );
     } else {      
-      solid_intersection = new G4UnionSolid( bi->get_name(), m_first, m_second );
+      solid_intersection = new G4IntersectionSolid( bi->get_name(), m_first, m_second );
     }
     
     GDMLProcessor::GetInstance()->AddSolid( bi->get_name(), solid_intersection );
