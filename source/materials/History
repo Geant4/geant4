@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2001-01-08 13:44:52 vnivanch Exp $
+$Id: History,v 1.9 2001-01-16 16:13:06 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 27, 00 V.Ivanchenko - materials-?
+Nov     27, 00 V.Ivanchenko - materials-?
                ionisation potential is tabulated according to 
                ICRU Report #37.
-
-November 09, 00 V.Grichine - materials-V02-00-01
+	       
+Jan     16, 01 L.Urban  - materials-V03-00-00
+               bug fixed in IonisParamMat.cc : E100eV instead of E100keV
+	       
+Nov     09, 00 V.Grichine - materials-V02-00-01
                included test/ directory which was not tagged.
 
 August  04, 00 V.Grichine - materials-V02-00-00
