@@ -3,25 +3,22 @@
 #set verbose = 0
 
 if (${?PI_BASE_DIR} == 1) then
-   setenv PI_VERSION 1_2_1
-   setenv PI_VER 1.2.1
-   setenv PLATF rh73_gcc32
-   setenv PATH ${PATH}:${PI_BASE_DIR}/${PI_VER}/app/releases/PI/PI_${PI_VER}/${PLATF}/bin
-   setenv PATH ${PI_BASE_DIR}/Linux-g++/bin:$PATH
+   setenv PI_VER 1.2.6-lite
+   setenv PLATF slc3_gcc323 
+   setenv PI_DIR ${PI_BASE_DIR}/${PI_VER}/${PLATF}
+   setenv PATH ${PI_DIR}/bin:${PATH}
    eval `aida-config -r csh`
 #
 # python from PI
 #
-  setenv PYTHONVERSION 2.2
-  setenv PYTHON_INCLUDE_DIR ${PI_BASE_DIR}/${PI_VER}/external/Python/2.2.2/${PLATF}/include/python${PYTHONVERSION}
-  setenv PYTHON_LIB_DIR ${PI_BASE_DIR}/${PI_VER}/external/Python/2.2.2/${PLATF}/lib/python${PYTHONVERSION}/config
+  setenv PYTHON_LIB_DIR ${PI_DIR}/lib
 #
 # python for PI
 if (${?PYTHONPATH} == 0) then
   setenv PYTHONPATH
 endif
-  setenv PYTHONPATH ${PI_BASE_DIR}/Linux-g++/python:$PYTHONPATH
-  setenv PYTHONPATH ${PI_BASE_DIR}/${PI_VER}/app/releases/SEAL/SEAL_1_3_4/${PLATF}/lib:$PYTHONPATH
+  setenv PYTHONPATH ${PI_DIR}/python:$PYTHONPATH
+  setenv PYTHONPATH ${PI_DIR}/lib:$PYTHONPATH
 #
 #
 else   # not using PI
@@ -54,11 +51,9 @@ endif
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}}/exampleB02
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${PYTHON_LIB_DIR}
-setenv LD_LIBRARY_PATH ${PI_BASE_DIR}/${PI_VER}/app/releases/SEAL/SEAL_1_3_4/rh73_gcc32/lib:$LD_LIBRARY_PATH
-setenv LD_LIBRARY_PATH /afs/cern.ch/sw/lcg/external/Python/2.2.2/rh73_gcc32/lib:$LD_LIBRARY_PATH
-setenv LD_LIBRARY_PATH ${PI_BASE_DIR}/${PI_VER}/external/Boost/1.30.2/rh73_gcc32/lib:$LD_LIBRARY_PATH
+setenv LD_LIBRARY_PATH ${PI_DIR}/lib:$LD_LIBRARY_PATH
 
 if (${?PYTHONPATH} == 0) then
   setenv PYTHONPATH
 endif
-setenv PYTHONPATH ${PYTHONPATH}:${LD_LIBRARY_PATH}
+#setenv PYTHONPATH ${PYTHONPATH}:${LD_LIBRARY_PATH}
