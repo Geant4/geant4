@@ -3,13 +3,13 @@
                                 (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
-Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
+Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev2/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
 /run/verbose 1
 /tracking/verbose 1
 /tracking/storeTrajectory 1
 /run/initialize
 Instantiated unit rotation matrix irot=0
-Reading the call List file /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
+Reading the call List file /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
 G4ggclos: setting top-level VolTableEntry
 Dump of VTD - 26 entries:
 Instantiated 26 volume table entries 
@@ -55,6 +55,93 @@ Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visib
 
 phot:  Total cross sections from Sandia parametrisation. 
 G3toG4PhysicsList::SetCuts:CutLength : 2 mm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : Yes
+ Material : HYDROGEN            
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 1     used in the geometry : No      recalculation needed : Yes
+ Material : DEUTERIUM           
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 2     used in the geometry : No      recalculation needed : Yes
+ Material : HELIUM              
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 3     used in the geometry : No      recalculation needed : Yes
+ Material : LITHIUM             
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 4     used in the geometry : No      recalculation needed : Yes
+ Material : BERILLIUM           
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 5     used in the geometry : No      recalculation needed : Yes
+ Material : CARBON              
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 6     used in the geometry : No      recalculation needed : Yes
+ Material : NITROGEN            
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 7     used in the geometry : No      recalculation needed : Yes
+ Material : NEON                
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 8     used in the geometry : No      recalculation needed : Yes
+ Material : ALUMINIUM           
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 9     used in the geometry : No      recalculation needed : Yes
+ Material : IRON                
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 10     used in the geometry : No      recalculation needed : Yes
+ Material : COPPER              
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 11     used in the geometry : No      recalculation needed : Yes
+ Material : TUNGSTEN            
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 12     used in the geometry : No      recalculation needed : Yes
+ Material : LEAD                
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 13     used in the geometry : No      recalculation needed : Yes
+ Material : URANIUM             
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 14     used in the geometry : No      recalculation needed : Yes
+ Material : AIR
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+
+Index : 15     used in the geometry : Yes     recalculation needed : Yes
+ Material : VACUUM              
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -110,52 +197,222 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-============= The cut Energy ==============================
-                            gamma              e-    
-Cut in range       
- HYDROGEN                       2 mm            2 mm 
- DEUTERIUM                      2 mm            2 mm 
- HELIUM                         2 mm            2 mm 
- LITHIUM                        2 mm            2 mm 
- BERILLIUM                      2 mm            2 mm 
- CARBON                         2 mm            2 mm 
- NITROGEN                       2 mm            2 mm 
- NEON                           2 mm            2 mm 
- ALUMINIUM                      2 mm            2 mm 
- IRON                           2 mm            2 mm 
- COPPER                         2 mm            2 mm 
- TUNGSTEN                       2 mm            2 mm 
- LEAD                           2 mm            2 mm 
- URANIUM                        2 mm            2 mm 
-                AIR           2 mm            2 mm 
- VACUUM                         2 mm            2 mm 
-Cut in energy
- HYDROGEN                     990 eV          162 keV
- DEUTERIUM                    990 eV          271 keV
- HELIUM                       990 eV          145 keV
- LITHIUM                     1.33 keV         322 keV
- BERILLIUM                    2.4 keV         782 keV
- CARBON                       4.3 keV         976 keV
- NITROGEN                    3.34 keV         444 keV
- NEON                        5.38 keV         568 keV
- ALUMINIUM                   9.56 keV        1.03 MeV
- IRON                        29.5 keV        2.43 MeV
- COPPER                      35.7 keV        2.68 MeV
- TUNGSTEN                     133 keV        4.66 MeV
- LEAD                         121 keV        2.61 MeV
- URANIUM                      169 keV        4.28 MeV
-                AIR         990 eV          990 eV 
- VACUUM                       990 eV          990 eV 
-===================================================
-/control/execute /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/tests/test602/test602.in
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                                    gamma              e-              e+    
+Threshold in range            2 mm            2 mm            2 mm 
+ VACUUM                       990 eV          990 eV          990 eV 
+=======================================================================
+
+/control/execute /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/tests/test602/test602.in
 /control/verbose 1
 /tracking/verbose 1
 /run/initialize
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : HYDROGEN            
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 161.818 keV    e+ 159.839 keV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : DEUTERIUM           
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 271.378 keV    e+ 268.058 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : HELIUM              
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 144.847 keV    e+ 143.075 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : LITHIUM             
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 1.32832 keV    e- 322.421 keV    e+ 314.58 keV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : BERILLIUM           
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 2.39933 keV    e- 782.279 keV    e+ 744.691 keV
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : CARBON              
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 4.29862 keV    e- 976.329 keV    e+ 929.417 keV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : NITROGEN            
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 3.33976 keV    e- 444.047 keV    e+ 427.947 keV
+
+Index : 7     used in the geometry : No      recalculation needed : No 
+ Material : NEON                
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 5.37889 keV    e- 568.011 keV    e+ 547.416 keV
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : ALUMINIUM           
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 9.56197 keV    e- 1.02561 MeV    e+ 976.329 keV
+
+Index : 9     used in the geometry : No      recalculation needed : No 
+ Material : IRON                
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 29.4862 keV    e- 2.42788 MeV    e+ 2.25501 MeV
+
+Index : 10     used in the geometry : No      recalculation needed : No 
+ Material : COPPER              
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 35.7105 keV    e- 2.67915 MeV    e+ 2.4884 MeV
+
+Index : 11     used in the geometry : No      recalculation needed : No 
+ Material : TUNGSTEN            
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 133.135 keV    e- 4.66212 MeV    e+ 4.2772 MeV
+
+Index : 12     used in the geometry : No      recalculation needed : No 
+ Material : LEAD                
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 120.589 keV    e- 2.614 MeV    e+ 2.42788 MeV
+
+Index : 13     used in the geometry : No      recalculation needed : No 
+ Material : URANIUM             
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 168.917 keV    e- 4.2772 MeV    e+ 3.97266 MeV
+
+Index : 14     used in the geometry : No      recalculation needed : No 
+ Material : AIR
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 15     used in the geometry : Yes     recalculation needed : No 
+ Material : VACUUM              
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                                    gamma              e-              e+    
+Threshold in range            2 mm            2 mm            2 mm 
+ VACUUM                       990 eV          990 eV          990 eV 
+=======================================================================
+
 /gun/position   0. -1.5 0.
 /gun/direction  0.  1.   0.
 /gun/energy 1 GeV
 /gun/particle chargedgeantino
 /run/beamOn 10
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : HYDROGEN            
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 161.818 keV    e+ 159.839 keV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : DEUTERIUM           
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 271.378 keV    e+ 268.058 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : HELIUM              
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 144.847 keV    e+ 143.075 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : LITHIUM             
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 1.32832 keV    e- 322.421 keV    e+ 314.58 keV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : BERILLIUM           
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 2.39933 keV    e- 782.279 keV    e+ 744.691 keV
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : CARBON              
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 4.29862 keV    e- 976.329 keV    e+ 929.417 keV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : NITROGEN            
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 3.33976 keV    e- 444.047 keV    e+ 427.947 keV
+
+Index : 7     used in the geometry : No      recalculation needed : No 
+ Material : NEON                
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 5.37889 keV    e- 568.011 keV    e+ 547.416 keV
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : ALUMINIUM           
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 9.56197 keV    e- 1.02561 MeV    e+ 976.329 keV
+
+Index : 9     used in the geometry : No      recalculation needed : No 
+ Material : IRON                
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 29.4862 keV    e- 2.42788 MeV    e+ 2.25501 MeV
+
+Index : 10     used in the geometry : No      recalculation needed : No 
+ Material : COPPER              
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 35.7105 keV    e- 2.67915 MeV    e+ 2.4884 MeV
+
+Index : 11     used in the geometry : No      recalculation needed : No 
+ Material : TUNGSTEN            
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 133.135 keV    e- 4.66212 MeV    e+ 4.2772 MeV
+
+Index : 12     used in the geometry : No      recalculation needed : No 
+ Material : LEAD                
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 120.589 keV    e- 2.614 MeV    e+ 2.42788 MeV
+
+Index : 13     used in the geometry : No      recalculation needed : No 
+ Material : URANIUM             
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 168.917 keV    e- 4.2772 MeV    e+ 3.97266 MeV
+
+Index : 14     used in the geometry : No      recalculation needed : No 
+ Material : AIR
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 15     used in the geometry : Yes     recalculation needed : No 
+ Material : VACUUM              
+ Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                                    gamma              e-              e+    
+Threshold in range            2 mm            2 mm            2 mm 
+ VACUUM                       990 eV          990 eV          990 eV 
+=======================================================================
+
 ### Run 0 start.
 Start Run processing.
 >>>>>>>> Primary direction: (0,1,0)
@@ -251,5 +508,5 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0.03s Sys=0.02s
+  User=0s Real=0.02s Sys=0.02s
 G4 kernel has come to Quit state.

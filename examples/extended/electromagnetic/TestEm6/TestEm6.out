@@ -20,10 +20,13 @@ Current available graphics systems are:
 #
 /run/initialize
 
-***** Table : Nb of materials = 2 *****
+***** Table : Nb of materials = 3 *****
 
  Material: Beryllium     density:  1.848 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.276 cm 
    --->  Element: Beryllium      Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:   Carbon     density:  2.265 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.851 cm 
+   --->  Element:   Carbon      Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
    --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -32,29 +35,58 @@ Current available graphics systems are:
 
  The Box is 500 m   of Iron
 PhysicsList::SetCuts:CutLength : 1 km 
-******** SetCuts for gamma ********************
-The maximal meaningful cut is 2756.84 mm.
-All the gammawill be killed !
-in the material Beryllium.
-Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
-******** ConvertCutToKineticEnergy for gamma ********************
-The cut energy is set 1.79769e+305GeV 
-******** SetCuts for gamma ********************
-The maximal meaningful cut is 213.663 mm.
-All the gammawill be killed !
-in the material Iron.
-Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
-******** ConvertCutToKineticEnergy for gamma ********************
-The cut energy is set 1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [1e+06 (mm)]   is too big  
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e-
+The cut in range [1e+06 (mm)]   is too big  
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
+The cut in range [1e+06 (mm)]   is too big  
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [1e+06 (mm)]   is too big  
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e-
+The cut in range [1e+06 (mm)]   is too big  
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
+The cut in range [1e+06 (mm)]   is too big  
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
+The cut in range [1e+06 (mm)]   is too big  
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e-
+The cut in range [1e+06 (mm)]   is too big  
+The cut in energy is set1.79769e+305GeV 
+G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
+The cut in range [1e+06 (mm)]   is too big  
+The cut in energy is set1.79769e+305GeV 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : Yes
+ Material : Beryllium
+ Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
+ Energy thresholds :  is not ready to print
+
+Index : 1     used in the geometry : No      recalculation needed : Yes
+ Material : Carbon
+ Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
+ Energy thresholds :  is not ready to print
+
+Index : 2     used in the geometry : Yes     recalculation needed : Yes
+ Material : Iron
+ Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 
 GammaToMuPair:  gamma->mu+mu- Bethe Heitler process.
         good cross section parametrization from 422.634 MeV to 1e+12 GeV for all Z.
-Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
-******** ConvertCutToKineticEnergy for e- ********************
-The cut energy is set 1.79769e+305GeV 
-Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
-******** ConvertCutToKineticEnergy for e- ********************
-The cut energy is set 1.79769e+305GeV 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -70,16 +102,9 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
-******** ConvertCutToKineticEnergy for e+ ********************
-The cut energy is set 1.79769e+305GeV 
-Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
-******** ConvertCutToKineticEnergy for e+ ********************
-The cut energy is set 1.79769e+305GeV 
 
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+AnnihiToMuPair:  e+e->mu+mu- annihilation, atomic e- at rest.
+        threshold at 43.6931 GeV good description up to 1000 TeV for all Z.
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -98,15 +123,17 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-============= The cut Energy ==============================
-                            gamma              e-    
-Cut in range       
-          Beryllium           1 km            1 km 
-               Iron           1 km            1 km 
-Cut in energy
-          Beryllium   2.88e+295 J     2.88e+295 J  
-               Iron   2.88e+295 J     2.88e+295 J  
-===================================================
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                                    gamma              e-              e+    
+Threshold in range            1 km            1 km            1 km 
+                Iron   2.88e+295 J     2.88e+295 J     2.88e+295 J  
+=======================================================================
+
 #
 /testem/det/setMat Iron
 /testem/det/setSize 500 m
@@ -121,6 +148,39 @@ Cut in energy
 /tracking/verbose 1
 #
 /run/beamOn 5
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Beryllium
+ Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Carbon
+ Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Iron
+ Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                                    gamma              e-              e+    
+Threshold in range            1 km            1 km            1 km 
+                Iron   2.88e+295 J     2.88e+295 J     2.88e+295 J  
+=======================================================================
+
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -141,88 +201,126 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1    250 m       0 fm      0 fm    100 TeV     0 eV    500 m     500 m  OutOfWorld  Transportation
+    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m       0 fm      0 fm    100 TeV     0 eV    500 m     500 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1   31.9 m       0 fm      0 fm      0 eV      0 eV    282 m     282 m   Container  GammaToMuPair
+    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   31.9 m       0 fm      0 fm      0 eV      0 eV    282 m     282 m          Iron  GammaToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   31.9 m       0 fm      0 fm   29.8 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1    191 m    9.23 mm  -4.03 mm   12.1 TeV  17.7 TeV   159 m     159 m   Container      MuIoni
-    2    250 m    7.26 mm   -2.2 mm   8.65 TeV  3.43 TeV  59.2 m     218 m  OutOfWorld  Transportation
+    0   31.9 m       0 fm      0 fm   29.8 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m   -65.2 mum -53.1 mum  14.3 TeV  15.5 TeV   218 m     218 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   31.9 m       0 fm      0 fm   70.2 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1    218 m    6.03 mm   1.31 mm   21.6 TeV  48.6 TeV   186 m     186 m   Container      MuIoni
-    2    250 m     9.1 mm    112 mum  17.7 TeV  3.96 TeV  31.7 m     218 m  OutOfWorld  Transportation
+    0   31.9 m       0 fm      0 fm   70.2 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m    27.6 mum  22.6 mum  32.1 TeV  38.1 TeV   218 m     218 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1    250 m       0 fm      0 fm    100 TeV     0 eV    500 m     500 m  OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1    250 m       0 fm      0 fm    100 TeV     0 eV    500 m     500 m  OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1   -240 m       0 fm      0 fm      0 eV      0 eV   10.4 m    10.4 m   Container  GammaToMuPair
+    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -145 m       0 fm      0 fm      0 eV      0 eV    105 m     105 m          Iron  GammaToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -240 m       0 fm      0 fm   57.6 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1  -59.6 m    5.87 mm   2.83 mm   21.3 TeV  36.4 TeV   180 m     180 m   Container      MuIoni
-    2   88.5 m    9.72 mm   2.44 cm   7.68 TeV  13.6 TeV   148 m     328 m   Container      MuIoni
-    3    204 m    3.18 cm  -2.12 mm    3.6 TeV  4.08 TeV   116 m     444 m   Container      MuIoni
-    4    250 m    3.73 cm  -3.33 mm   2.83 TeV   768 GeV  45.9 m     490 m  OutOfWorld  Transportation
+    0   -145 m       0 fm      0 fm   14.8 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   53.3 m   -1.63 cm   2.15 cm   7.91 TeV  6.89 TeV   198 m     198 m          Iron      MuIoni
+    2    218 m   -7.83 mm  -1.89 cm    4.5 TeV  3.41 TeV   165 m     363 m          Iron      MuIoni
+    3    250 m     294 mum -2.45 cm   3.97 TeV   533 GeV  31.8 m     395 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -240 m       0 fm      0 fm   42.4 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1  -69.5 m   -2.27 mm  -7.57 mm   17.9 TeV  24.5 TeV   170 m     170 m   Container      MuIoni
-    2   73.1 m    -5.9 mm  -3.61 cm   7.59 TeV  10.3 TeV   143 m     313 m   Container      MuIoni
-    3    188 m    2.15 cm  -4.54 cm   4.08 TeV   3.5 TeV   115 m     428 m   Container      MuIoni
-    4    250 m    2.49 cm  -5.49 cm   2.85 TeV  1.23 TeV  61.6 m     490 m  OutOfWorld  Transportation
+    0   -145 m       0 fm      0 fm   85.2 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    149 m   -8.55 mm   2.42 mm   32.9 TeV  52.3 TeV   294 m     294 m          Iron      MuIoni
+    2    250 m   -6.08 mm  -2.61 mm   24.4 TeV  8.51 TeV   101 m     395 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1  -99.2 m       0 fm      0 fm      0 eV      0 eV    151 m     151 m          Iron  GammaToMuPair
+
+*********************************************************************************************************
+* G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -99.2 m       0 fm      0 fm   1.63 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1  -12.1 m   -5.71 cm   1.32 cm    793 GeV   837 GeV  87.1 m    87.1 m          Iron      MuIoni
+    2   45.8 m   -7.32 cm   -2.7 cm    592 GeV   201 GeV  57.9 m     145 m          Iron      MuIoni
+    3   93.7 m   -4.59 cm   -4.7 mm    425 GeV   166 GeV  47.9 m     193 m          Iron      MuIoni
+    4    132 m   -4.64 cm  -3.13 cm    321 GeV   104 GeV    38 m     231 m          Iron      MuIoni
+    5    163 m   -9.29 cm  -12.6 cm    243 GeV  78.6 GeV  30.8 m     262 m          Iron      MuIoni
+    6    187 m   -10.1 cm  -24.5 cm    191 GeV  51.9 GeV  24.7 m     287 m          Iron      MuIoni
+    7    208 m   -9.38 cm  -21.6 cm    148 GeV  43.1 GeV  20.3 m     307 m          Iron      MuIoni
+    8    224 m    1.87 cm  -16.5 cm    117 GeV    31 GeV  16.4 m     323 m          Iron      MuIoni
+    9    237 m    4.49 cm  -18.8 cm   94.1 GeV  22.6 GeV  13.4 m     337 m          Iron      MuIoni
+   10    248 m    5.66 cm  -20.5 cm   74.7 GeV  19.5 GeV  11.1 m     348 m          Iron      MuIoni
+   11    250 m    4.66 cm  -19.7 cm   72.2 GeV  2.44 GeV  1.52 m     349 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -99.2 m       0 fm      0 fm   98.4 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    202 m    3.79 mm  -7.83 mm   39.5 TeV  58.8 TeV   301 m     301 m          Iron      MuIoni
+    2    250 m     3.3 mm  -9.62 mm   33.3 TeV  6.24 TeV  47.7 m     349 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   73.4 m       0 fm      0 fm      0 eV      0 eV    323 m     323 m          Iron  GammaToMuPair
+
+*********************************************************************************************************
+* G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   73.4 m       0 fm      0 fm   86.9 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m     116 mum  71.5 mum  51.4 TeV  35.4 TeV   177 m     177 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   73.4 m       0 fm      0 fm   13.1 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m    -771 mum  -479 mum  7.32 TeV  5.81 TeV   177 m     177 m    OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.02s Real=0.1s Sys=0.01s
+  User=0.01s Real=0.13s Sys=0.03s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1083370621, 1385159183
+ Current couple of seeds = 1072622580, 227325780
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

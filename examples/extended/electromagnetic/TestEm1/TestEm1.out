@@ -67,6 +67,68 @@ Current available graphics systems are:
 phot:  Total cross sections from Sandia parametrisation. 
 Em1PhysicsList::SetCuts:CutLength : 1 mm 
 
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : Yes
+ Material : Air
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  is not ready to print
+
+Index : 1     used in the geometry : No      recalculation needed : Yes
+ Material : H2liquid
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  is not ready to print
+
+Index : 2     used in the geometry : No      recalculation needed : Yes
+ Material : Water
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  is not ready to print
+
+Index : 3     used in the geometry : No      recalculation needed : Yes
+ Material : liquidArgon
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  is not ready to print
+
+Index : 4     used in the geometry : Yes     recalculation needed : Yes
+ Material : Aluminium
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 5     used in the geometry : No      recalculation needed : Yes
+ Material : Silicon
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  is not ready to print
+
+Index : 6     used in the geometry : No      recalculation needed : Yes
+ Material : Germanium
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  is not ready to print
+
+Index : 7     used in the geometry : No      recalculation needed : Yes
+ Material : Iron
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  is not ready to print
+
+Index : 8     used in the geometry : No      recalculation needed : Yes
+ Material : Tungsten
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  is not ready to print
+
+Index : 9     used in the geometry : No      recalculation needed : Yes
+ Material : Lead
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  is not ready to print
+
+Index : 10     used in the geometry : No      recalculation needed : Yes
+ Material : Uranium
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  is not ready to print
+
+====================================================================
+
+
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 1 keV to 100 GeV in 80 bins. 
@@ -121,33 +183,17 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-============= The cut Energy ==============================
-                            gamma              e-    
-Cut in range       
-                Air         2.2 mm         6.05 mum
-           H2liquid         2.2 mm         6.05 mum
-              Water         2.2 mm         6.05 mum
-        liquidArgon         2.2 mm         6.05 mum
-          Aluminium         2.2 mm         6.05 mum
-            Silicon         2.2 mm         6.05 mum
-          Germanium         2.2 mm         6.05 mum
-               Iron         2.2 mm         6.05 mum
-           Tungsten         2.2 mm         6.05 mum
-               Lead         2.2 mm         6.05 mum
-            Uranium         2.2 mm         6.05 mum
-Cut in energy
-                Air         990 eV          990 eV 
-           H2liquid         990 eV          990 eV 
-              Water        4.06 keV        3.27 keV
-        liquidArgon        9.08 keV        3.98 keV
-          Aluminium        9.99 keV        9.97 keV
-            Silicon          10 keV        8.45 keV
-          Germanium        31.6 keV        32.7 keV
-               Iron        31.1 keV        43.3 keV
-           Tungsten         139 keV        59.7 keV
-               Lead         124 keV        42.8 keV
-            Uranium         188 keV        56.1 keV
-===================================================
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                                    gamma              e-              e+    
+Threshold in range          2.2 mm         6.05 mum        6.05 mum
+           Aluminium        9.99 keV        9.97 keV        9.97 keV
+=======================================================================
+
 #
 /process/eLoss/StepFunction 0.183 170 micrometer
 #
@@ -156,6 +202,79 @@ Cut in energy
 /gun/particle e-
 /gun/energy 100 MeV
 /run/beamOn 100
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : H2liquid
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  gamma 4.05579 keV    e- 3.27334 keV    e+ 3.23329 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  gamma 9.07554 keV    e- 3.97618 keV    e+ 3.92753 keV
+
+Index : 4     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  gamma 9.98636 keV    e- 9.96618 keV    e+ 9.96618 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  gamma 10.0347 keV    e- 8.44545 keV    e+ 8.44545 keV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  gamma 31.6328 keV    e- 32.6589 keV    e+ 32.2593 keV
+
+Index : 7     used in the geometry : No      recalculation needed : No 
+ Material : Iron
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  gamma 31.105 keV    e- 43.3478 keV    e+ 42.8175 keV
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : Tungsten
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  gamma 138.512 keV    e- 59.6998 keV    e+ 58.9694 keV
+
+Index : 9     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  gamma 124.469 keV    e- 42.8175 keV    e+ 41.7761 keV
+
+Index : 10     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  gamma 188.067 keV    e- 56.1359 keV    e+ 55.4491 keV
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                                    gamma              e-              e+    
+Threshold in range          2.2 mm         6.05 mum        6.05 mum
+           Aluminium        9.99 keV        9.97 keV        9.97 keV
+=======================================================================
+
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -173,7 +292,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=11s Real=15s Sys=2.3s
+  User=12s Real=37s Sys=2.2s
 
  nb tracks/event   neutral:    27.8100   charged:   700.3100
  nb  steps/event   neutral:   151.8700   charged:  1338.0800
