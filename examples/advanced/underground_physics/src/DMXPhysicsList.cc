@@ -371,40 +371,25 @@ void DMXPhysicsList::ConstructEM() {
 
 void DMXPhysicsList::ConstructOp() 
 {
-  // ATTENTION!!!!:
-  // Number of scintillation photons generated is wrong (!=correct yield)
-  // this is due to a mis-implementation within G4 Tracking and the 
-  // scintillation process (to be corrected soon)
-
   // default scintillation process
   G4Scintillation* theScintProcessDef = new G4Scintillation("Scintillation");
   // theScintProcessDef->DumpPhysicsTable();
   theScintProcessDef->SetTrackSecondariesFirst(true);
-  theScintProcessDef->SetScintillationYield(15300./MeV); // including QE 23%
-  // and 15eV creation energy for photons - may be 13eV?
-  // Fano factor assumed 1; should be much less for Xe ~ 0.13
-  // but the Fano factor is already partially included in the correlated 
-  // electron production - therefore not the absolute Fano factor here:
-  theScintProcessDef->SetResolutionScale(1.0);
-  theScintProcessDef->SetScintillationTime(45.*ns);
+  theScintProcessDef->SetScintillationYieldFactor(1.0); //
   theScintProcessDef->SetVerboseLevel(OpVerbLevel);
 
   // scintillation process for alpha:
   G4Scintillation* theScintProcessAlpha = new G4Scintillation("Scintillation");
   // theScintProcessNuc->DumpPhysicsTable();
   theScintProcessAlpha->SetTrackSecondariesFirst(true);
-  theScintProcessAlpha->SetScintillationYield(12000./MeV); // including QE 20%
-  theScintProcessAlpha->SetResolutionScale(1.0);
-  theScintProcessAlpha->SetScintillationTime(20.*ns);
+  theScintProcessAlpha->SetScintillationYieldFactor(1.1);
   theScintProcessAlpha->SetVerboseLevel(OpVerbLevel);
 
   // scintillation process for heavy nuclei
   G4Scintillation* theScintProcessNuc = new G4Scintillation("Scintillation");
   // theScintProcessNuc->DumpPhysicsTable();
   theScintProcessNuc->SetTrackSecondariesFirst(true);
-  theScintProcessNuc->SetScintillationYield(1000./MeV); // including QE 20%
-  theScintProcessNuc->SetResolutionScale(1.);
-  theScintProcessNuc->SetScintillationTime(20.*ns);
+  theScintProcessNuc->SetScintillationYieldFactor(0.2);
   theScintProcessNuc->SetVerboseLevel(OpVerbLevel);
 
   // optical processes
