@@ -101,13 +101,13 @@ public:
     return protonNumberCurrent; 
   };
 
-  G4bool empty() const { /// See if there is no nucleon.
+  G4bool empty() const { /*!< See if there is no nucleon. */
   /// @return TRUE if no current nucleons.
 
     return neutronNumberCurrent < 1.0 && protonNumberCurrent < 1.0; 
   };
 
-  G4bool stillInside(const G4CascadParticle& cparticle) { /// Check if the cascade particle is still inside the nuclei.
+  G4bool stillInside(const G4CascadParticle& cparticle) { /*!< Check if the cascade particle is still inside the nuclei. */
   /// @return TRUE if no current nucleons.
     return cparticle.getCurrentZone() < number_of_zones;
   };
@@ -121,7 +121,7 @@ public:
     return G4std::pair<G4int, G4int>(current_nucl1, current_nucl2);
   };
 
-  G4bool worthToPropagate(const G4CascadParticle& cparticle) const; /// Check if cascade particle will continue.
+  G4bool worthToPropagate(const G4CascadParticle& cparticle) const; /*!< Check if cascade particle will continue. */
     
 private: 
   G4int verboseLevel;  /*!< Each cascade class has a verbosity level of its own. */
@@ -156,7 +156,7 @@ private:
   G4std::vector<G4double> zone_radii;
   G4std::vector<G4double> binding_energies;
   G4double nuclei_radius;
-  G4int number_of_zones; /// Usually = 3, but number of zones is free parameter. 
+  G4int number_of_zones; /*!< Usually = 3, but number of zones is free parameter. */
   G4double A; 
   G4double Z;
   G4double neutronNumber;
