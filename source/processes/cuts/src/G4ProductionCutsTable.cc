@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.6 2004-03-31 08:47:05 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.7 2004-09-26 01:18:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -113,6 +113,7 @@ void G4ProductionCutsTable::UpdateCoupleTable()
     G4ProductionCuts* fProductionCut = (*rItr)->GetProductionCuts();
     std::vector<G4Material*>::const_iterator mItr = (*rItr)->GetMaterialIterator();
     size_t nMaterial = (*rItr)->GetNumberOfMaterials();
+    (*rItr)->ClearMap();
 
     for(size_t iMate=0;iMate<nMaterial;iMate++){
       //check if this material cut couple has already been made
@@ -132,6 +133,9 @@ void G4ProductionCutsTable::UpdateCoupleTable()
         coupleTable.push_back(aCouple);
         aCouple->SetIndex(coupleTable.size()-1);
       }
+
+      //Registor this couple to the region
+      (*rItr)->RegisterMateralCouplePair((*mItr),aCouple);
 
       //Set the couple to the proper logical volumes in that region
       aCouple->SetUseFlag();

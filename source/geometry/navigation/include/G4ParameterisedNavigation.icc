@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.icc,v 1.2 2003-11-03 17:15:20 gcosmo Exp $
+// $Id: G4ParameterisedNavigation.icc,v 1.3 2004-09-26 01:18:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -152,7 +152,7 @@ G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
         //
         G4LogicalVolume *pLogical = pPhysical->GetLogicalVolume();
         pLogical->SetSolid(pSolid);
-        pLogical->SetMaterial(pParam->ComputeMaterial(replicaNo, pPhysical));
+        pLogical->UpdateMaterial(pParam->ComputeMaterial(replicaNo, pPhysical));
 
         return true;
       }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.14 2004-09-13 09:20:52 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.15 2004-09-26 01:18:18 asaim Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -198,7 +198,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
               G4LogicalVolume *pLogical;
               pLogical = fBlockedPhysicalVolume->GetLogicalVolume();
               pLogical->SetSolid( pSolid );
-              pLogical->SetMaterial(pParam->ComputeMaterial(fBlockedReplicaNo, 
+              pLogical->UpdateMaterial(pParam->ComputeMaterial(fBlockedReplicaNo, 
                                                       fBlockedPhysicalVolume));
               break;
           }
@@ -988,7 +988,7 @@ void G4Navigator::SetupHierarchy()
         //
         G4LogicalVolume *pLogical = current->GetLogicalVolume();
         pLogical->SetSolid( pSolid );
-        pLogical->SetMaterial( pParam->ComputeMaterial(replicaNo, current));
+        pLogical->UpdateMaterial( pParam->ComputeMaterial(replicaNo, current));
         break;
     }
     mother = current;
