@@ -98,6 +98,10 @@
       currentParticle = *vec[0];
       targetParticle = *vec[1];
       for( i=0; i<(vecLen-2); ++i )*vec[i] = *vec[i+2];
+      G4ReactionProduct *temp = vec[vecLen-1];
+      delete temp;
+      temp = vec[vecLen-2];
+      delete temp;
       vecLen -= 2;
       currentMass = currentParticle.GetMass()/GeV;
       incidentHasChanged = true;
@@ -1199,7 +1203,7 @@
       G4double spall = numberofFinalStateNucleons;
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       AddBlackTrackParticles( epnb, npnb, edta, ndta, sprob, kineticMinimum, kineticFactor,
-                              modifiedOriginal, spall, targetNucleus,
+                             modifiedOriginal, spall, targetNucleus,
                               vec, vecLen );
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     }
@@ -1471,6 +1475,8 @@
       }           // breaks go down to here
       if( secondaryDeleted )
       {      
+        G4ReactionProduct *temp = vec[vecLen-1];
+        delete temp;
         --vecLen;
         // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       }
@@ -1502,6 +1508,8 @@
         }
         if( secondaryDeleted )
         {
+          G4ReactionProduct *temp = vec[vecLen-1];
+          delete temp;
           --vecLen;
           // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
         }
@@ -1529,6 +1537,8 @@
           }
           if( secondaryDeleted )
           {
+            G4ReactionProduct *temp = vec[vecLen-1];
+            delete temp;
             --vecLen;
             // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
           }
@@ -3077,7 +3087,11 @@
         else
           p2->SetDefinition( anAlpha );
         spall += p2->GetMass()/GeV * sp1;
-        if( spall > atomicWeight )break;
+        if( spall > atomicWeight )
+	{
+	  delete p2;
+	  break;
+	}
         vec.SetElement( vecLen, p2 );
         vec[vecLen]->SetNewlyAdded( true );
         vec[vecLen]->SetKineticEnergy( kinetic*GeV );
@@ -3486,6 +3500,8 @@
       if( energyCheck < 0.0 )      // chop off the secondary List
       {
         vecLen = G4std::max( 0, --i ); // looks like a memory leak @@@@@@@@@@@@
+	G4int j;
+	for(j=i; j<vecLen; j++) delete vec[j];
         break;
       }
     }
@@ -3763,6 +3779,8 @@
       else
         v[2]->SetMomentum( v[2]->GetMomentum() * (p/pp) );
     }
+    G4int del;
+    for(del=0; del<vecLen; del++) delete vec[del];
     vecLen = 0;
     if( particleIsDefined )
     {
