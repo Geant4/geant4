@@ -27,6 +27,16 @@
 ./source/processes/optical		op-V03-00-05
 ./source/processes/photolepton_hadron		photolepton_hadron-V03-00-00
 ./source/tracking		tracking-V03-00-02
+./tests/test01          test01-V03-00-01
+./tests/test02          test02-V03-00-02
+./tests/test05          test05-V03-00-00
+./tests/test07          test07-V03-00-00
+./tests/test09          test09-V03-00-00
+./tests/test11          test11-V03-00-00
+./tests/test12          test12-V03-00-00
+./tests/test13          test13-V03-00-00
+./tests/test14          test14-V03-00-00
+./tests/test15          test15-V03-00-00
 .		geant4-03-00-ref-00
 .		examples-V03-00-00
 ./config		config-V03-00-00
