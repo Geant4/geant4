@@ -1,0 +1,41 @@
+$Id: History,v 1.1 1999-05-29 14:12:01 stesting Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example N02 History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+20th  July 1998  Michel Maire
+storeTrajectory command move to prerun.mac     
+
+16th July 1998  John Allison
+- Changed /vis~/Draw... to /vis~/draw.
+
+9th July 1998  John Allison
+- Added G4VIS_USE_DAWNFILE and G4VIS_USE_OPENGLWIN32 to N02VisManager.cc.
+
+8th July 1998  G.Cosmo
+- Protected visualization code with G4VIS_USE.
+
+6th July 1998  John Allison
+- Simplified N02VisManager.
+
+16th June 1998  Michel Maire
+- Added G4_SOLVE_VIS_TEMPLATES to exampleN02.cc
+
+10th June 1998  John Allison
+- Added template instantiation requests to exampleN02.cc for GNU_GCC.
+
+April 09, 98 G. Cosmo
+
+- Created.
