@@ -1,4 +1,4 @@
-$Id: History,v 1.71 2005-03-01 16:55:32 gcosmo Exp $
+$Id: History,v 1.72 2005-03-15 19:19:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 03, 2005  J.Allison                  geom-csg-V07-00-01
+- Changed AddThis() with AddSolid() for all solids in DescribeYourselfTo()
+  implementation.
 
 Dec 02, 2004  V.Grichine                 geom-csg-V07-00-00
 - New alternative implementation of SurfaceNormal(p) with edges/vertices
