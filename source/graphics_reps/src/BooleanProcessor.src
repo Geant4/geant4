@@ -8,6 +8,8 @@
  *                                                                     *
  ***********************************************************************/
 
+#include <CLHEP/Geometry/Plane3D.h>
+
 #define INITIAL_SIZE 200
 #define CRAZY_POINT  HepPoint3D(-10.e+6, -10.e+6, -10.e+6)
 #define GRANULARITY  10.e+5;
