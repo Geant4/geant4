@@ -204,7 +204,7 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
   G4double beta = -1.0*daughtermomentum[0]/energy2;
   G4double costhetan = 2.*G4UniformRand()-1.0;
   G4double sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
-  G4double phin  = 2.0*M_PI*G4UniformRand()*rad;
+  G4double phin  = twopi*G4UniformRand()*rad;
   G4double sinphin = std::sin(phin);
   G4double cosphin = std::cos(phin);
 

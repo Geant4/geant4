@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DalitzDecayChannel.cc,v 1.6 2004-12-02 07:46:08 kurasige Exp $
+// $Id: G4DalitzDecayChannel.cc,v 1.7 2004-12-10 18:02:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,7 +115,7 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
       G4PhaseSpaceDecayChannel::Pmx(parentmass, 0.0, std::sqrt(t)); 
   G4double costheta = 2.*G4UniformRand()-1.0;
   G4double sintheta = std::sqrt((1.0 - costheta)*(1.0 + costheta));
-  G4double phi  = 2.0*M_PI*G4UniformRand()*rad;
+  G4double phi  = twopi*G4UniformRand()*rad;
   G4ThreeVector gdirection(sintheta*std::cos(phi),sintheta*std::sin(phi),costheta);
 
   //create G4DynamicParticle for gamma 
@@ -131,7 +131,7 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
   G4double Elepton = std::sqrt(Plepton*Plepton + leptonmass*leptonmass );
   costheta = 2.*G4UniformRand()-1.0;
   sintheta = std::sqrt((1.0 - costheta)*(1.0 + costheta));
-  phi  = 2.0*M_PI*G4UniformRand()*rad;
+  phi  = twopi*G4UniformRand()*rad;
   G4ThreeVector ldirection(sintheta*std::cos(phi),sintheta*std::sin(phi),costheta);
   //create G4DynamicParticle for leptons  in the rest frame of (l+ l-)system
   G4DynamicParticle * leptonparticle 

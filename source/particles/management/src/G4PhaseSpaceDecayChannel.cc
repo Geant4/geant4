@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.cc,v 1.8 2004-12-02 08:09:00 kurasige Exp $
+// $Id: G4PhaseSpaceDecayChannel.cc,v 1.9 2004-12-10 18:02:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -168,7 +168,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
   daughtermomentum = Pmx(parentmass,daughtermass[0],daughtermass[1]);
   G4double costheta = 2.*G4UniformRand()-1.0;
   G4double sintheta = std::sqrt((1.0 - costheta)*(1.0 + costheta));
-  G4double phi  = 2.0*M_PI*G4UniformRand()*rad;
+  G4double phi  = twopi*G4UniformRand()*rad;
   G4ThreeVector direction(sintheta*std::cos(phi),sintheta*std::sin(phi),costheta);
 
   //create daughter G4DynamicParticle 
@@ -258,7 +258,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
   G4double costhetan, sinthetan, phin, sinphin, cosphin; 
   costheta = 2.*G4UniformRand()-1.0;
   sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
-  phi  = 2.0*M_PI*G4UniformRand()*rad;
+  phi  = twopi*G4UniformRand()*rad;
   sinphi = std::sin(phi);
   cosphi = std::cos(phi);
   G4ThreeVector direction0(sintheta*cosphi,sintheta*sinphi,costheta);
@@ -268,7 +268,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
 
   costhetan = (daughtermomentum[1]*daughtermomentum[1]-daughtermomentum[2]*daughtermomentum[2]-daughtermomentum[0]*daughtermomentum[0])/(2.0*daughtermomentum[2]*daughtermomentum[0]);
   sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
-  phin  = 2.0*M_PI*G4UniformRand()*rad;
+  phin  = twopi*G4UniformRand()*rad;
   sinphin = std::sin(phin);
   cosphin = std::cos(phin);
   G4ThreeVector direction2;
@@ -432,7 +432,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
   index = numberOfDaughters -2;
   costheta = 2.*G4UniformRand()-1.0;
   sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
-  phi  = 2.0*M_PI*G4UniformRand()*rad;
+  phi  = twopi*G4UniformRand()*rad;
   direction.setZ(costheta);
   direction.setY(sintheta*std::sin(phi));
   direction.setX(sintheta*std::cos(phi));
@@ -443,7 +443,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
     //calculate momentum direction
     costheta = 2.*G4UniformRand()-1.0;
     sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
-    phi  = 2.0*M_PI*G4UniformRand()*rad;
+    phi  = twopi*G4UniformRand()*rad;
     direction.setZ(costheta);
     direction.setY(sintheta*std::sin(phi));
     direction.setX(sintheta*std::cos(phi));

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonDecayChannel.cc,v 1.10 2004-12-02 07:46:08 kurasige Exp $
+// $Id: G4MuonDecayChannel.cc,v 1.11 2004-12-10 18:02:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -127,7 +127,7 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
   G4double costheta, sintheta, phi, sinphi, cosphi; 
   costheta = 2.*G4UniformRand()-1.0;
   sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
-  phi  = 2.0*M_PI*G4UniformRand()*rad;
+  phi  = twopi*G4UniformRand()*rad;
   sinphi = std::sin(phi);
   cosphi = std::cos(phi);
   G4ThreeVector direction0(sintheta*cosphi,sintheta*sinphi,costheta);
@@ -142,7 +142,7 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
   G4double beta = -1.0*daughtermomentum[0]/energy2;
   G4double costhetan = 2.*G4UniformRand()-1.0;
   G4double sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
-  G4double phin  = 2.0*M_PI*G4UniformRand()*rad;
+  G4double phin  = twopi*G4UniformRand()*rad;
   G4double sinphin = std::sin(phin);
   G4double cosphin = std::cos(phin);
 

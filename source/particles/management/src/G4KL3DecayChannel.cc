@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KL3DecayChannel.cc,v 1.6 2004-12-02 07:46:08 kurasige Exp $
+// $Id: G4KL3DecayChannel.cc,v 1.7 2004-12-10 18:02:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -153,7 +153,7 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
   // pion
   costheta = 2.*G4UniformRand()-1.0;
   sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
-  phi  = 2.0*M_PI*G4UniformRand()*rad;
+  phi  = twopi*G4UniformRand()*rad;
   sinphi = std::sin(phi);
   cosphi = std::cos(phi);
   direction = new G4ThreeVector(sintheta*cosphi,sintheta*sinphi,costheta);
@@ -165,7 +165,7 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
   // neutrino
   costhetan = (daughterP[1]*daughterP[1]-daughterP[2]*daughterP[2]-daughterP[0]*daughterP[0])/(2.0*daughterP[2]*daughterP[0]);
   sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
-  phin  = 2.0*M_PI*G4UniformRand()*rad;
+  phin  = twopi*G4UniformRand()*rad;
   sinphin = std::sin(phin);
   cosphin = std::cos(phin);
   direction->setX( sinthetan*cosphin*costheta*cosphi - sinthetan*sinphin*sinphi + costhetan*sintheta*cosphi); 

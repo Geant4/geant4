@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronBetaDecayChannel.cc,v 1.5 2004-12-02 08:08:59 kurasige Exp $
+// $Id: G4NeutronBetaDecayChannel.cc,v 1.6 2004-12-10 18:02:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -127,7 +127,7 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   // rotation materix to lab frame
   G4double costheta = 2.*G4UniformRand()-1.0;
   G4double theta = std::acos(costheta)*rad;
-  G4double phi  = 2.0*M_PI*G4UniformRand()*rad;
+  G4double phi  = twopi*G4UniformRand()*rad;
   G4RotationMatrix rm;
   rm.rotateY(theta);
   rm.rotateZ(phi);
