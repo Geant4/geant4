@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.2 2004-02-03 09:16:44 guatelli Exp $
+// $Id: remsim.cc,v 1.3 2004-03-12 09:17:45 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,10 @@
 #endif
 #ifdef G4ANALYSIS_USE
 #include "RemSimAnalysisManager.hh"
-#endif  
+#endif 
+
+#include "QGSP.hh"
+#include "QGSC.hh" 
 int main(int argc,char** argv)
 {
   // Construct the default run manager
@@ -62,13 +65,14 @@ int main(int argc,char** argv)
   // set mandatory user action class
   RemSimPrimaryGeneratorAction* primary = new RemSimPrimaryGeneratorAction();
   runManager->SetUserAction(primary);
-
-  runManager->SetUserAction(new RemSimEventAction);
+ 
+  RemSimEventAction* event = new RemSimEventAction();
+  runManager->SetUserAction(event);
 
   RemSimRunAction* run = new RemSimRunAction();
   runManager->SetUserAction(run);
 
-  runManager->SetUserAction(new RemSimSteppingAction(primary,run,detector));
+  runManager->SetUserAction(new RemSimSteppingAction(primary,event,detector));
 
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!
@@ -98,7 +102,7 @@ if(argc==1)
       session = new G4UIterminal();
 #endif    
 
-      // UI->ApplyCommand("/control/execute test.mac");    
+    UI->ApplyCommand("/control/execute vis1.mac");    
     session->SessionStart();
     delete session;
   }
