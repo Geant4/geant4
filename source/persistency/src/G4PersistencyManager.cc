@@ -1,4 +1,4 @@
-// $Id: G4PersistencyManager.cc,v 1.6 2002-12-04 11:54:05 gcosmo Exp $
+// $Id: G4PersistencyManager.cc,v 1.7 2002-12-04 12:07:26 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyManager.cc
@@ -78,6 +78,8 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
     G4cout << "G4PersistencyManager::Store() is called for event# "
            << evt->GetEventID() << "." << G4endl;
   }
+
+  if ( TransactionManager() == 0 ) return true;
 
   G4bool is_store = f_pc->CurrentStoreMode("HepMC")   != kOff ||
                     f_pc->CurrentStoreMode("MCTruth") != kOff ||
@@ -259,6 +261,8 @@ G4bool G4PersistencyManager::Retrieve(G4Event*& evt)
            << G4endl;
   }
 
+  if ( TransactionManager() == 0 ) return true;
+
   if ( f_pc->CurrentRetrieveMode("HepMC")   == false &&
        f_pc->CurrentRetrieveMode("MCTruth") == false &&
        f_pc->CurrentRetrieveMode("Hits")    == false &&
@@ -330,6 +334,8 @@ G4bool G4PersistencyManager::Retrieve(HepMC::GenEvent*& evt, int id)
     G4cout << "G4PersistencyManager::Retrieve(HepMC::GenEvent*&) is called."
            << G4endl;
   }
+
+  if ( TransactionManager() == 0 ) return true;
 
   // Call package dependent Initialize()
   //
