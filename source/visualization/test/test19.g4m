@@ -51,6 +51,9 @@ help /vis/sceneHandler/create
 /vis/scene/add/axes 0 0 0 2 m
 /vis/scene/add/text 0 0 0 mm 50 -120 -200   exampleN03
 #
+# Add logo
+/vis/scene/add/logo
+#
 # Add scale
 /vis/scene/add/scale
 #
