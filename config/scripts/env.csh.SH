@@ -281,7 +281,7 @@ endif
 if ( X$g4vis_oglhome != X )  then
 setenv OGLHOME "$g4vis_oglhome"
 echo "On this machine the OGLHOME=\$OGLHOME"
-fi 
+endif 
 
 #+
 #

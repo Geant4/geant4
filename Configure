@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.28 2002-06-28 15:37:59 stesting Exp $
+# $Id: Configure,v 1.29 2002-07-01 10:45:04 stesting Exp $
 #
-# Generated on Fri Jun 28 17:36:41 CEST 2002 [metaconfig 3.0 PL70]
+# Generated on Mon Jul  1 12:23:24 CEST 2002 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2190,9 +2190,9 @@ esac
 case "$g4install" in
 '')
 	if [ X$HOME = X/ ] ; then
-	G4HOME=""
+	HOME=""
 	fi
-	g4install=$G4HOME/geant4
+	g4install=$HOME/geant4
 	;;
 esac
 
@@ -2210,7 +2210,8 @@ esac
 
 case "$g4include" in
 '')
-	g4include=$g4install/include
+#	g4include=$g4install/include
+	g4include=''
 	;;
 esac
 
