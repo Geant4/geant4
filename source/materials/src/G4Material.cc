@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.cc,v 1.8 2001-03-12 17:48:49 maire Exp $
+// $Id: G4Material.cc,v 1.9 2001-05-03 13:55:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -33,6 +33,7 @@
 // 16-01-01, Nuclear interaction length, M.Maire
 // 12-03-01, G4bool fImplicitElement;
 //           copy constructor and assignement operator revised (mma)
+// 03-05-01, flux.precision(prec) at begin/end of operator<<
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -555,6 +556,7 @@ G4int G4Material::operator!=(const G4Material& right) const
 G4std::ostream& operator<<(G4std::ostream& flux, G4Material* material)
 {
   long mode = flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
+  long prec = flux.precision(3);
   
   flux
     << " Material: "      << G4std::setw(8) <<  material->fName
@@ -577,7 +579,8 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4Material* material)
                           << 100*(material->VecNbOfAtomsPerVolume[i])/
                                  (material->TotNbOfAtomsPerVolume)
                           << " %";
-    
+
+  flux.precision(prec);    
   flux.setf(mode,G4std::ios::floatfield);
             
   return flux;

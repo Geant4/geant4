@@ -5,11 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Isotope.cc,v 1.3 2001-03-12 17:48:49 maire Exp $
+// $Id: G4Isotope.cc,v 1.4 2001-05-03 13:55:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
+// 03-05-01, flux.precision(prec) at begin/end of operator<<
 // 29-01-97: Forbidden to create Isotope with Z<1 or N<Z, M.Maire
 // 26-06-96: Code uses operators (+=, *=, ++, -> etc.) correctly, P. Urban
 
@@ -85,14 +86,16 @@ G4int G4Isotope::operator!=(const G4Isotope &right) const
 G4std::ostream& operator<<(G4std::ostream& flux, G4Isotope* isotope)
 {
   long mode = flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
-  
+  long prec = flux.precision(3);
+    
   flux
     << " Isotope: " << G4std::setw(5) << isotope->fName 
     << "   Z = " << G4std::setw(2) <<  isotope->fZ 
     << "   N = " << G4std::setw(3) <<  isotope->fN
     << "   A = " << G4std::setw(6) << G4std::setprecision(2) 
     << (isotope->fA)/(g/mole) << " g/mole";
-    
+
+  flux.precision(prec);       
   flux.setf(mode,G4std::ios::floatfield);       
   return flux;
 }

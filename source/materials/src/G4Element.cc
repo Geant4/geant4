@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Element.cc,v 1.5 2001-05-02 11:14:14 maire Exp $
+// $Id: G4Element.cc,v 1.6 2001-05-03 13:55:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -24,6 +24,7 @@
 // 16-11-98: name Subshell -> Shell; GetBindingEnergy() (mma)
 // 09-03-01: assignement operator revised (mma)
 // 02-05-01: check identical Z in AddIsotope (marc)
+// 03-05-01, flux.precision(prec) at begin/end of operator<<
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -292,6 +293,7 @@ G4int G4Element::operator!=(const G4Element& right) const
 G4std::ostream& operator<<(G4std::ostream& flux, G4Element* element)
 { 
   long mode = flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
+  long prec = flux.precision(3);
   
   flux
     << " Element: " << G4std::setw(8) << element->fName << G4std::setw(3) << element->fSymbol
@@ -306,6 +308,7 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4Element* element)
     << "   abundance: " << G4std::setw(6) << G4std::setprecision(2) 
     << (element->fRelativeAbundanceVector[i])/perCent << " %";
     
+  flux.precision(prec);        
   flux.setf(mode,G4std::ios::floatfield);         
   return flux;
 }
