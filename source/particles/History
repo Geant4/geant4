@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2002-02-12 01:15:40 kurasige Exp $
+$Id: History,v 1.66 2002-03-08 08:50:25 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Mar 08, 2002     
+- Added G4TauLeptonicDecayChannel for tau leptonic decay
+
 - Feb 12, 2002     H.Kurashige (particles-V04-00-00)
 - Fixed bugs in the decay table for G4KaonMinus (hadrons-V04-00-00)
 
