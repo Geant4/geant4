@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.13 1999-12-15 15:39:05 stesting Exp $
+# $Id: GNUmakefile,v 1.14 1999-12-16 14:01:19 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -55,8 +55,11 @@ HADEXERDIRS = test02 test11 test12 test13 test15 test16
 .PHONY : all examples_links clean clean_libs clean_examples_links
 
 all:
-	@$(ECHO) Making links to examples...
-	@$(MAKE) examples_links
+# Making links can be a problem if more than one jobs try to do it at the
+# same time.  So disable and always do by hand with:
+#   gmake examples_links
+#	@$(ECHO) Making links to examples...
+#	@$(MAKE) examples_links
 	@$(ECHO) Making examples...
 	@for nn in $(EXAMPLES); do \
 	  (cd test1$$nn; $(MAKE)); \
@@ -67,7 +70,7 @@ ifdef G4USE_HEPODBMS
 	done;:
 endif
 	@$(ECHO) Making libG4TestTool.a for System Tests...
-	@cd tools/lib; $(MAKE)
+	@cd tools/lib; $(MAKE);:
 	@$(ECHO) Making hadronic exercisers for System Tests...
 	@for dir in $(HADEXERDIRS); \
 	  do (cd $$dir; $(MAKE) -f GNUmakefile.hadronic.exerciser); done;:
