@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999-01-08 11:23:53 gunter Exp $
+# $Id: GNUmakefile,v 1.3 1999-05-31 17:35:13 stesting Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -8,6 +8,7 @@ name := G4processes
 SUBDIRS  = management optical decay transportation parameterisation
 SUBDIRS += electromagnetic/muons electromagnetic/standard
 SUBDIRS += electromagnetic/utils electromagnetic/xrays
+SUBDIRS += electromagnetic/lowenergy
 SUBDIRS += hadronic/management hadronic/util hadronic/processes 
 SUBDIRS += hadronic/cross_sections hadronic/stopping
 SUBDIRS += hadronic/models/low_energy hadronic/models/high_energy
@@ -26,6 +27,7 @@ SUBDIRS += hadronic/models/generator/util
 
 SUBLIBS  = G4procman G4optical G4decay G4transportation G4parameterisation
 SUBLIBS += G4muons G4emstandard G4emutils G4xrays
+SUBLIBS += G4emlowenergy
 SUBLIBS += G4hadronic_mgt G4hadronic_util G4hadronic_proc
 SUBLIBS += G4hadronic_xsect G4hadronic_stop G4hadronic_LE G4hadronic_HE
 SUBLIBS += G4hadronic_neu

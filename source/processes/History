@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-01-08 11:23:53 gunter Exp $
+$Id: History,v 1.3 1999-05-31 17:35:13 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 29, 1999: John Allison
+- Added electromagnetic/lowenergy to GNUmakefile.
+
 Dec 09: J.P.Wellisch
 -hadronics tagged.
+
 Sep 25: H.Kurashige.
 - procman-00-02-05 has tagged 
     Added deleteion of all processes  in the destructor of G4ProcessTable
