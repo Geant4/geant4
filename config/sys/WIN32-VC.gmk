@@ -13,12 +13,6 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   CXXFLAGS += -MD -GR -GX -Zm200 -nologo -DWIN32 -D_CONSOLE 
   CXXFLAGS += -D_WIN32 -DOS
   CPPFLAGS += -DWIN32
-  #
-  # Use ISO standard version.
-  #
-  G4USE_STD_NAMESPACE := yes 
-  CPPFLAGS += -DG4USE_STD_NAMESPACE
-
   LDFLAGS  += -FORCE /NODEFAULTLIB:MSVCRT.dll
 
   #

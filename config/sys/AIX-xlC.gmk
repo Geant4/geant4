@@ -28,8 +28,6 @@ ifeq ($(G4SYSTEM),AIX-xlC)
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
-  G4USE_STD_NAMESPACE := yes
-  CPPFLAGS += -DG4USE_STD_NAMESPACE
 
   define build-granular-shared-lib
     @echo "Shared Libraries not supported on $(G4SYSTEM)

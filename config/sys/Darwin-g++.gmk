@@ -57,8 +57,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
   OIVFLAGS  += -I$(OIHOME)/include 
-  G4USE_STD_NAMESPACE := yes
-  CPPFLAGS += -DG4USE_STD_NAMESPACE
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \

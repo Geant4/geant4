@@ -44,8 +44,6 @@ ifeq ($(G4SYSTEM),SUN-CC)
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
   LOADLIBS += -lsocket -lnsl
   CPPFLAGS += -DG4NOT_ISO_DELETES -DG4NO_ISO_VECDIST
-  G4USE_STD_NAMESPACE := yes
-  CPPFLAGS += -DG4USE_STD_NAMESPACE
 
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
