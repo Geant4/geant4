@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.22 2004-06-14 15:44:22 kurasige Exp $
+// $Id: G4ParticleDefinition.hh,v 1.23 2004-07-26 08:14:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,6 @@
 class G4ProcessManager;
 class G4DecayTable;
 class G4ParticleTable;
-class G4Material;
 class G4ParticlePropertyTable;
 
 class G4ParticleDefinition 

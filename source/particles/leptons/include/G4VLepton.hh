@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLepton.hh,v 1.4 2003-03-11 05:49:40 kurasige Exp $
+// $Id: G4VLepton.hh,v 1.5 2004-07-26 08:16:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,9 +39,7 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4Material.hh"
 
-#include "G4PhysicsLogVector.hh"
 #include "G4ParticleDefinition.hh"
 
 class G4VLepton : public G4ParticleDefinition
