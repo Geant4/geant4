@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysicsListMessenger.hh,v 1.4 2002-10-14 15:56:11 vnivanch Exp $
+// $Id: Em2PhysicsListMessenger.hh,v 1.5 2002-12-16 11:29:22 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

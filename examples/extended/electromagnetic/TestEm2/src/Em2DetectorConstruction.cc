@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorConstruction.cc,v 1.9 2002-10-29 19:10:40 vnivanch Exp $
+// $Id: Em2DetectorConstruction.cc,v 1.10 2002-12-16 11:29:23 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

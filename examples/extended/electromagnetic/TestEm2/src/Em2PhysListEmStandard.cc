@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysListEmStandard.cc,v 1.1 2002-10-31 14:12:43 maire Exp $
+// $Id: Em2PhysListEmStandard.cc,v 1.2 2002-12-16 11:29:23 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

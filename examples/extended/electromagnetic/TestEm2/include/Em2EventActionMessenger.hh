@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2EventActionMessenger.hh,v 1.4 2001-10-25 15:12:06 maire Exp $
+// $Id: Em2EventActionMessenger.hh,v 1.5 2002-12-16 11:29:22 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
