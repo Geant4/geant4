@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.hh,v 1.14 2003-10-08 14:48:21 hpw Exp $
+// $Id: G4QChipolino.hh,v 1.15 2003-11-10 16:54:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QChipolino ----------------
@@ -33,7 +33,6 @@
 #define G4QChipolino_h 1
 
 #include "globals.hh"
-//#include "G4QContent.hh"
 #include "G4QPDGCode.hh"
 
 class G4QChipolino

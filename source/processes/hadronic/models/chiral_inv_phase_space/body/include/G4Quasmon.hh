@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.26 2003-10-24 08:26:31 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.27 2003-11-10 16:54:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -76,7 +76,7 @@ public:
   G4int             GetStatus()    const;
 
   //Modifiers
-  G4QHadronVector*  Fragment(G4QNucleus& nucEnviron, G4int nQ); // Pub-wrapper for "HadronizeQuasmon(,)"
+  G4QHadronVector*  Fragment(G4QNucleus& nucEnviron, G4int nQ=0); // Pub-wrapper for "HadronizeQuasmon(,)"
   G4QHadronVector*  DecayQuasmon();                   // Decay Quasmon if it is a Resonance or Chipolino
   void              ClearOutput();                    // Clear but not destroy the output
   void              InitQuasmon(const G4QContent& qQCont, const G4LorentzVector& q4M);
@@ -85,7 +85,7 @@ public:
   void              KillQuasmon();                    // Kill Quasmon (status=0)
 
 private:  
-  G4QHadronVector  HadronizeQuasmon(G4QNucleus& qEnv, G4int nQ); // Return new neuclear environment
+  G4QHadronVector  HadronizeQuasmon(G4QNucleus& qEnv, G4int nQ=0); // Return new neuclear environment
   G4double         GetRandomMass(G4int PDGCode, G4double maxM);
   void             ModifyInMatterCandidates();
   void             InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.35 2003-11-03 17:49:00 hpw Exp $
+// $Id: G4QPDGCode.cc,v 1.36 2003-11-10 16:54:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -850,7 +850,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   {
 #ifdef debug
     G4cerr<<"***G4QPDGCode::GetNuclMass: A="<<A<<"<1 || Z="<<Z<<"<0 || N="<<N<<"<0"<<G4endl;
-    //@@throw G4HadronicException(__FILE__, __LINE__, "***G4QPDGCode::GetNuclMass: Impossible nucleus");
+    //@@throw G4QException("***G4QPDGCode::GetNuclMass: Impossible nucleus");
 #endif
     return 0.;                       // @@ Temporary
   }
@@ -859,8 +859,9 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   else if(N<=9&&Z<=9) m+=1.433e-5*pow(double(Z),2.39)-Z*me+c[N-1][Z-1];
   else 
   {
+    G4double fA=A;
     if(G4NucleiPropertiesTable::IsInTable(Z,A)) m=k+G4NucleiProperties::GetNuclearMass(A,Z);
-    else m+=-sh[Z]-sh[N]+b1*D*D*pow(A,b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(A,b9)+b6/A);
+    else m+=-sh[Z]-sh[N]+b1*D*D*pow(fA,b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(fA,b9)+b6/fA);
   }
   G4double maxM= k+Z*mP+N*mN+S*mL+eps;       // @@ eps -- Wings of the Mass parabola
   if(m>maxM) m=maxM;
@@ -894,8 +895,9 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     else if(Nm<=9&&Zm<=9) mm+=1.433e-5*pow(double(Zm),2.39)-Zm*me+c[Nm-1][Zm-1];
     else 
     {
+      G4double fA=Am;
       if(G4NucleiPropertiesTable::IsInTable(Zm,Am)) mm=km+G4NucleiProperties::GetNuclearMass(Am,Zm);
-      else mm+=-sh[Zm]-sh[Nm]+b1*Dm*Dm*pow(Am,b2)+b3*(1.-2./(1.+exp(b4*Dm)))+Zm*Zm*(b5*pow(Am,b9)+b6/Am);
+      else mm+=-sh[Zm]-sh[Nm]+b1*Dm*Dm*pow(fA,b2)+b3*(1.-2./(1.+exp(b4*Dm)))+Zm*Zm*(b5*pow(fA,b9)+b6/Am);
     }
     G4double mM= km+Zm*mP+Nm*mN+eps;
     if(mm>mM) mm=mM;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.cc,v 1.21 2003-11-03 17:49:00 hpw Exp $
+// $Id: G4QChipolino.cc,v 1.22 2003-11-10 16:54:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QChipolino ----------------
@@ -33,7 +33,6 @@
 //#define pdebug
 
 #include "G4QChipolino.hh"
-#include "G4HadronicException.hh"
 
 G4QChipolino::G4QChipolino(G4QContent& QCont)
 {
@@ -62,7 +61,6 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
   if      (!tot)              // Should not be here, just in case     (strange input)
   {
     G4cerr<<"***G4QChipolino: shouldn't be here 1 QC="<<rQC<<G4endl;
-    throw G4HadronicException(__FILE__, __LINE__, "G4QChipolino cannot be constructed as n_tot=0");
   }
   else if (tot==2 || tot==3)  // Should not be here (basic octet/singlet states)
   {
@@ -75,7 +73,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
   {
     G4QContent bQC=rQC.IndQ();
 #ifdef debug
-    cout<<"G4QChipolino: tot=4,rQC="<<rQC<<",bQC="<<bQC<<G4endl;
+    G4cout<<"G4QChipolino: tot=4,rQC="<<rQC<<",bQC="<<bQC<<G4endl;
 #endif
     for(int j=0; j<2; j++)
     {
@@ -212,12 +210,12 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
 	if((fl&&kS>1)||(!fl&&mS>1))
     {
       G4cerr<<"***G4QChipolino: ***Overfowed by strange quarks*** rQC="<<rQC<<G4endl;
-	  throw G4HadronicException(__FILE__, __LINE__, "G4QChipolino: Nuclear Fragment-Chipolino is overflowed by strange quarks");
+	  //throw G4QException("G4QChipolino: NuclearFragment is overflowed by the strange quarks");
     }
     else if(fl)                // ===> Anti-fragment
 	{
       //G4cerr<<"***G4QChipolino: ***Anti-nuclear fragments*** rQC="<<rQC<<G4endl;
-	  //throw G4HadronicException(__FILE__, __LINE__, "G4QChipolino: Antinuclear fragments are not yet supported");
+	  //throw G4QException("G4QChipolino: Antinuclear fragments are not yet supported");
       if(!mS)                                                           // No strange quarks
 	  {
         G4int nI=mU-mD;                                                 // Isotopic shift
@@ -253,7 +251,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
           else
 		  {
             G4cerr<<"***G4QChipolino: **A**Isotopic asymmetry (without S)*** rQC="<<rQC<<G4endl;
-	        throw G4HadronicException(__FILE__, __LINE__, "G4QChipolino: Exotic Isotopic asymmety of AntiMultyBaryon Quasmon");
+	        //throw G4QException("G4QChipolino: IsotopicAsymmety of AntiMultyBaryon Quasmon");
 		  }
         }
         else if(kS<2)                                                   // NucFrag+K is possible
@@ -274,7 +272,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
         else
 	    {
           G4cerr<<"***G4QChipolino: ***Too many kaons are needed*** rQC="<<rQC<<G4endl;
-	      throw G4HadronicException(__FILE__, __LINE__, "G4QChipolino: Too much Kaons are needed together with AntiNuclearFragm");
+	      //throw G4QException("G4QChipolino: Too many Kaons are needed for the AntiNucFragm");
 		}
 	  }
       else                     // Fragment with strangeness
@@ -312,7 +310,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
           else
 		  {
             G4cerr<<"***G4QChipolino: **A**Isotopic assimetry (with S)*** rQC="<<rQC<<G4endl;
-	        throw G4HadronicException(__FILE__, __LINE__, "G4QChipolino:Exotic Isotopics of Strange AntiMultyBaryon Quasmon");
+	        //throw G4QException("G4QChipolino: Isotopics of Strange AntiMultyBaryon Quasmon");
 		  }
 		}
         else                                                            // Excess of s-quarks
@@ -325,7 +323,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
           if(lD+lU+lS!=3||lD<0||lU<0||lS<0)
 		  {
             G4cerr<<"***G4QChipolino:*AntiFragm* rQC="<<rQC<<",s="<<lS<<",u="<<lU<<",d"<<lD<<G4endl;
-	        throw G4HadronicException(__FILE__, __LINE__, "G4QChipolino: Exotic superstrange AntiMultyBaryon");
+	        //throw G4QException("G4QChipolino: Exotic superstrange AntiMultyBaryon");
 		  }
           if     ( !lD && lU==2) theQPDG2=G4QPDGCode(-3222);            // Anti-Sigma+
           else if( !lU && lD==2) theQPDG2=G4QPDGCode(-3112);            // Anti-Sigma-
@@ -375,7 +373,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
           else
 		  {
             G4cerr<<"***G4QChipolino: ***Isotopic assimetry (without S)*** rQC="<<rQC<<G4endl;
-	        throw G4HadronicException(__FILE__, __LINE__, "G4QChipolino: Exotic Isotopic assimety of MultyBaryon Quasmon");
+	        //throw G4QException("G4QChipolino: Exotic Isotopic assimety of MultyBaryon Quasmon");
 		  }
         }
         else if(mS<2)                                                   // NucFrag+K is possible
@@ -396,7 +394,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
         else
 	    {
           G4cerr<<"***G4QChipolino: ***Too many kaons are needed*** rQC="<<rQC<<G4endl;
-	      throw G4HadronicException(__FILE__, __LINE__, "G4QChipolino: More than one Kaon is needed together with Nuclear Fragm");
+	      //throw G4QException("G4QChipolino: More than one Kaon is needed for the NuclFragm");
 		}
 	  }
       else                     // Fragment with strangeness
@@ -434,7 +432,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
           else
 		  {
             G4cerr<<"***G4QChipolino: ***Isotopic assimetry (with S)*** rQC="<<rQC<<G4endl;
-	        throw G4HadronicException(__FILE__, __LINE__, "G4QChipolino:Exotic Isotopic Assimety of Strange MultyBaryon Quasmon");
+	        //throw G4QException("G4QChipolino: IsotopicAssimety of StrangeMultyBaryon Quasmon");
 		  }
 		}
         else                                                            // Excess of s-quarks
@@ -446,8 +444,8 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
           G4int lS=kS-lam;                                              // Residual s-quarks
           if(lD+lU+lS!=3||lD<0||lU<0||lS<0)
 		  {
-            G4cerr<<"***G4QChipolino: *Fragment* rQC="<<rQC<<",s="<<lS<<",u="<<lU<<",d"<<lD<<G4endl;
-	        throw G4HadronicException(__FILE__, __LINE__, "G4QChipolino: Exotic superstrange Multy Baryon");
+            G4cerr<<"***G4QChipolino:*Fragment*rQC="<<rQC<<",s="<<lS<<",u="<<lU<<",d"<<lD<<G4endl;
+	        //throw G4QException("G4QChipolino: Exotic superstrange Multy Baryon");
 		  }
           if     ( !lD && lU==2) theQPDG2=G4QPDGCode(3222);             // Sigma+
           else if( !lU && lD==2) theQPDG2=G4QPDGCode(3112);             // Sigma-
@@ -464,7 +462,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
   else
   {
     G4cerr<<"***G4QChipolino: ***Exotics*** rQC="<<rQC<<G4endl;
-	throw G4HadronicException(__FILE__, __LINE__, "G4QChipolino: can not be constructed for the exotic baryon or meson");
+	//throw G4QException("G4QChipolino: can not be constructed for the exotic baryon or meson");
   }
 }
 

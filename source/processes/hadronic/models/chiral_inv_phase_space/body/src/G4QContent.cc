@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.28 2003-11-03 17:49:00 hpw Exp $
+// $Id: G4QContent.cc,v 1.29 2003-11-10 16:54:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -45,7 +45,7 @@ G4QContent::G4QContent(G4int d, G4int u, G4int s, G4int ad, G4int au, G4int as):
   {
 #ifdef erdebug
     G4cerr<<"***G4QContent:"<<d<<","<<u<<","<<s<<","<<ad<<","<<au<<","<<as<<G4endl;
-    //throw G4HadronicException(__FILE__, __LINE__, "***G4QContent::Constructor: Negative Quark Content");
+    //throw G4QException("***G4QContent::Constructor: Negative Quark Content");
 #endif
     if(d<0) ad-=d;
     if(u<0) au-=u;
@@ -732,7 +732,7 @@ G4QContent G4QContent::IndQ (G4int index)
   else if(index<nD+nU+nS) return G4QContent(0,0,1,0,0,0);
   //#ifdef erdebug
   else G4cerr<<"***G4QC::IndQ:index="<<index<<" for the QuarkContent="<<GetThis()<<G4endl;
-  //throw G4HadronicException(__FILE__, __LINE__, "***G4QC::IndQ: Index exceeds the total number of quarks");
+  //throw G4QException("***G4QC::IndQ: Index exceeds the total number of quarks");
   //#endif
   return G4QContent(0,0,0,0,0,0);
 }
@@ -748,7 +748,7 @@ G4QContent G4QContent::IndAQ (G4int index)
   else if(index<nAD+nAU+nAS) return G4QContent(0,0,0,0,0,1);
   //#ifdef erdebug
   else G4cerr<<"***G4QC::IndAQ:index="<<index<<" for the QuarkContent="<<GetThis()<<G4endl;
-  //throw G4HadronicException(__FILE__, __LINE__, "***G4QC::IndAQ: Index exceeds the total number of antiquarks");
+  //throw G4QException("***G4QC::IndAQ: Index exceeds the total number of antiquarks");
   //#endif
   return G4QContent(0,0,0,0,0,0);
 }
@@ -1395,14 +1395,3 @@ G4int G4QContent::NOfCombinations(const G4QContent& rhs) const
   
   return c;
 } 
-
-
-
-
-
-
-
-
-
-
-
