@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.cc,v 1.29 2003-09-09 09:26:38 vnivanch Exp $
+// $Id: G4EnergyLossTables.cc,v 1.30 2003-11-14 12:31:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -763,7 +763,8 @@ G4double G4EnergyLossTables::GetRange(
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
   if (!rangeTable) {
     if(check) return G4LossTableManager::Instance()->GetRange(aParticle,KineticEnergy,couple);
-    else      ParticleHaveNoLoss(aParticle,"Range");
+    else      return DBL_MAX;      
+      //ParticleHaveNoLoss(aParticle,"Range");
   }
 
   G4int materialIndex = couple->GetIndex();
