@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTD.cc,v 1.17 2003-04-26 11:37:54 vnivanch Exp $
+// $Id: G4MultipleScatteringSTD.cc,v 1.18 2003-04-28 15:31:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -487,7 +487,7 @@ G4double G4MultipleScatteringSTD::GetContinuousStepLimit(
   blam    = 1.+alam/lambda0 ;
   zm      = 1.;
   // special treatment near boundaries ?
-  if (boundary)
+  if (boundary && range >= currentMinimumStep)
   {
     // step limitation at boundary ?
     stepno = track.GetCurrentStepNumber() ;
@@ -538,7 +538,7 @@ G4double G4MultipleScatteringSTD::GetContinuousStepLimit(
   //G4cout << "StepLimit: tpl= " << tPathLength << " lambda0= " << lambda0
   //       << " range= " << range << " currentMinStep= " << currentMinimumStep << G4endl;
 
-  if(tau < tausmall) zPathLength = tPathLength;
+  if(tau < tausmall || range < currentMinimumStep ) zPathLength = tPathLength;
   else
   {
     if(tPathLength/range < dtrl) zmean = lambda0*(1.-exp(-tau));

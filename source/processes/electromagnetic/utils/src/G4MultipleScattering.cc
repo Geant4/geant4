@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.38 2003-04-26 11:37:53 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.39 2003-04-28 15:31:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -480,7 +480,6 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
 
   range = G4EnergyLossTables::GetRange(aParticle->GetDefinition(),
                                        T0,couple);
-
   //VI Initialisation at the beginning of the step
   cthm = 1.;
   lambda1 = -1.;
@@ -488,8 +487,9 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
   alam    = range;
   blam    = 1.+alam/lambda0 ;
   zm      = 1.;
+
   // special treatment near boundaries ?
-  if (boundary)
+  if (boundary && range >= currentMinimumStep)
   {
     // step limitation at boundary ?
     stepno = track.GetCurrentStepNumber() ;
@@ -537,7 +537,7 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
 
   tau   = tPathLength/lambda0 ;
 
-  if(tau < tausmall) zPathLength = tPathLength;
+  if (tau < tausmall || range < currentMinimumStep) zPathLength = tPathLength;
   else
   {
     if(tPathLength/range < dtrl) zmean = lambda0*(1.-exp(-tau));
