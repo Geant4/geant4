@@ -1,4 +1,4 @@
-$Id: History,v 1.17 1999-05-28 23:03:16 lockman Exp $
+$Id: History,v 1.18 1999-05-28 23:34:49 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
@@ -10,6 +10,7 @@ g3tog4-01-00-06 28-May-1999 Lockman
 - G3VolTable: changed PutVTE to take a VolTableEntry*; added ListVTE method
 - G3toG4MakeSolid: added G4bool* OKAxis
 - VolTableEntry: added _OKAxis[3] to store which axes may be divided;
+  added AddMother(VolTableEntry*), GetMother(), _Mother.
 - G3toG4MakeSolid: set OKAxis
 - G3toG4EventAction: BeginOfEventAction, EndOfEventAction signature mods
 - G3toG4RunAction: BeginOfRunAction, EndOfRunAction signature mods
