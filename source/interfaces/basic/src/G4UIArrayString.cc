@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIArrayString.cc,v 1.5 2001-11-26 19:15:08 asaim Exp $
+// $Id: G4UIArrayString.cc,v 1.6 2002-10-17 02:40:24 murakami Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,11 +46,12 @@ G4UIArrayString::G4UIArrayString(const G4String& stream)
     G4int jc= astream.index(" ", indx);
     nElement++;
     if(jc == G4int(G4String::npos)) break;
-    for(G4int i=1; jc+i< G4int(astream.length()); i++ ) {  // skip continuing spaces
-      if(astream[(size_t)(jc+i)]==' ') jc++;
+    jc++; // fix a tiny mistake...
+    for(; jc< G4int(astream.length()); ) {  // skip continuing spaces
+      if(astream[(size_t)(jc)]==' ') jc++;
       else break;
     }
-    indx= jc+1;
+    indx= jc;
   }
 
   // allocate string array
@@ -181,7 +182,8 @@ void G4UIArrayString::Show(G4int ncol)
       if(!colorWord.empty()) G4cout << colorWord << G4std::flush;
 
       G4cout << G4std::setiosflags(G4std::ios::left) << G4std::setw(GetNField(ix)) 
-             << word << G4std::flush;
+             << word.c_str() << G4std::flush; 
+                // against problem w/ g++ iostream
       if(ix != nc) G4cout << "  " << G4std::flush;
       else G4cout << G4endl;      
     }
