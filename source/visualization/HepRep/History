@@ -1,4 +1,4 @@
-.$Id: History,v 1.55 2003-12-05 23:53:19 perl Exp $
+.$Id: History,v 1.56 2003-12-11 21:55:54 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+11 December 2003 Mark Donszelmann
+- Removed the HepRep2 driver from FreeHEP, so the HepRep2 sources now live
+  in this directory. Modified the copyfreehep scripts, and the READMEs.
+  Re-added the cvs expand keywords to show revision and tagname.
 
 05 December 2003 Joseph Perl (vis-HepRep-V05-02-09)
 - Fix bug with CalHits by moving faces to separate HepRepType

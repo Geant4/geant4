@@ -21,10 +21,8 @@ mv src/zipinputstream.cpp			    src/zipinputstream.cc
 mv src/zipinputstreambuf.cpp			    src/zipinputstreambuf.cc
 mv src/zipoutputstream.cpp			    src/zipoutputstream.cc
 mv src/zipoutputstreambuf.cpp			    src/zipoutputstreambuf.cc
-cp $HEPREP/geant4/include/*.hh                      include
 cp $HEPREP/c++/include/*.h                          include/ref
 cp $HEPREP/include/HEPREP/*.h                       include/HEPREP
-cp $HEPREP/geant4/*.cc                              src
 cp $HEPREP/c++/*.cc                                 src
 rm src/MultiWriteTest.cc
 rm src/HepRepTest.cc

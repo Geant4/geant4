@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4HepRep.hh,v 1.16 2003-12-11 21:55:54 duns Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 /**
