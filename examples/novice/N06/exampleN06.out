@@ -1752,37 +1752,15 @@ Track (trackID 1, parentID 0) is processed with stopping code 4
 No Absorbtion length specified
 Track (trackID 151, parentID 1) is processed with stopping code 2
 ### pop requested out of 1 stacked tracks.
-
- Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 2
-Track (trackID 1, parentID 0) is processed with stopping code 4
-### pop requested out of 3 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (-0.301554,0.773839,-0.556991)
- Old Polarization:       (0.480759,0.627893,0.612062)
- New Momentum Direction: (-0.407098,0.518518,-0.751938)
- New Polarization:       (-0.164774,-0.851428,-0.497915)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 153, parentID 1) is processed with stopping code 2
-### pop requested out of 2 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (-0.205126,0.742178,-0.63804)
- Old Polarization:       (0.745156,0.541084,0.389834)
- New Momentum Direction: (-0.27692,0.425893,-0.861354)
- New Polarization:       (0.308746,-0.809439,-0.499484)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 152, parentID 1) is processed with stopping code 2
-### pop requested out of 1 stacked tracks.
 Track (trackID 1, parentID 0) is processed with stopping code 2
 ### pop requested out of 2 stacked tracks.
-Track (trackID 155, parentID 1) is processed with stopping code 2
+Track (trackID 153, parentID 1) is processed with stopping code 2
 ### pop requested out of 1 stacked tracks.
-Track (trackID 154, parentID 1) is processed with stopping code 2
+Track (trackID 152, parentID 1) is processed with stopping code 2
 ### pop requested out of 0 stacked tracks.
 ### 0 waiting tracks are re-classified to
      0 urgent tracks and 0 waiting tracks.
 NULL returned from G4StackManager.
 Terminate current event processing.
-number of event = 1 User=0.56s Real=0.65s Sys=0.07s
+number of event = 1 User=0.59s Real=0.65s Sys=0.04s
 Idle> 
