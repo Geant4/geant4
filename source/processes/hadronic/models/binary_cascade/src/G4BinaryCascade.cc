@@ -1161,7 +1161,6 @@ void G4BinaryCascade::StepParticlesOut()
 {
   G4int counter=0;
   G4int countreset=0;
-  G4double steplength=1.0 * fermi;
   //G4cout << " nucl. Radius " << radius << G4endl;
   // G4cerr <<"pre-while- theSecondaryList "<<G4endl;
   while( theSecondaryList.size() > 0 )
