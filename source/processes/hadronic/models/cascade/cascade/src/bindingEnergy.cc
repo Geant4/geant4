@@ -4,7 +4,7 @@ G4double G4InuclSpecialFunctions::bindingEnergy(G4double A, G4double Z) {
 
 
   G4int verboseLevel = 2;
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4InuclSpecialFunctions::bindingEnergy" << G4endl;
   }
 

@@ -1,18 +1,16 @@
 #include "G4LorentzConvertor.hh"
 
+G4LorentzConvertor::G4LorentzConvertor() 
+  : verboseLevel(2), degenerated(false) {
 
-
-  G4LorentzConvertor::G4LorentzConvertor() 
-    : verboseLevel(2), degenerated(false) {
-
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4LorentzConvertor::G4LorentzConvertor" << G4endl;
   }
-  };
+};
 
 void G4LorentzConvertor::toTheCenterOfMass() {
    
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4LorentzConvertor::toTheCenterOfMass" << G4endl;
   }
 
@@ -22,7 +20,7 @@ if (verboseLevel > 3) {
 
   G4double pv = 0.0;
 
-  G4double e_sum = target_mom[0] + bullet_mom[0];
+   G4double e_sum = target_mom[0] + bullet_mom[0];
 
   velocity.resize(4);
   for(G4int i = 1; i < 4; i++) {
@@ -78,7 +76,7 @@ if (verboseLevel > 3) {
 
 vector<G4double> G4LorentzConvertor::rotate(const vector<G4double> mom) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4LorentzConvertor::rotate(vector<G4double>)" << G4endl;
   }
 
@@ -116,7 +114,7 @@ if (verboseLevel > 3) {
 vector<G4double> G4LorentzConvertor::rotate(const vector<G4double> mom1, 
 					    const vector<G4double> mom) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4LorentzConvertor::rotate(vector<G4double>,vector<G4double>)" << G4endl;
   }
 
@@ -162,7 +160,7 @@ if (verboseLevel > 3) {
 
 void G4LorentzConvertor::toTheTargetRestFrame() {
    
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4LorentzConvertor::toTheTargetRestFrame" << G4endl;
   }
 
@@ -173,7 +171,7 @@ if (verboseLevel > 3) {
 
   G4double pv = 0.0;
 
-  G4double e_sum = target_mom[0] + bullet_mom[0];
+  //  G4double e_sum = target_mom[0] + bullet_mom[0];
 
   velocity.resize(4);
   for(G4int i = 1; i < 4; i++) {
@@ -217,7 +215,7 @@ if (verboseLevel > 3) {
 
 vector<G4double> G4LorentzConvertor::backToTheLab(const vector<G4double>& mom) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4LorentzConvertor::backToTheLab" << G4endl;
   }
 
@@ -252,7 +250,7 @@ if (verboseLevel > 3) {
 
 G4bool G4LorentzConvertor::reflectionNeeded() const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4LorentzConvertor::reflectionNeeded" << G4endl;
   }
 
@@ -261,14 +259,9 @@ if (verboseLevel > 3) {
   if(v2 < small) {
     return false;
   }  else {   
-    if(degenerated) return scm_momentum[3] < 0.0;
+    if(degenerated) return (scm_momentum[3] < 0.0);
   };
 }
-
-
-
-
-
 
 
 

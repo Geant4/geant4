@@ -10,7 +10,7 @@ typedef vector<G4InuclNuclei>::iterator nucleiIterator;
 G4InuclCollider::G4InuclCollider()
   : verboseLevel(2) {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4InuclCollider::G4InuclCollider" << G4endl;
   }
 }
@@ -19,7 +19,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 					   G4InuclParticle* target) {
 
   verboseLevel = 2;
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4InuclCollider::collide" << G4endl;
   }
 
@@ -52,9 +52,9 @@ if (verboseLevel > 3) {
       convertToTargetRestFrame.setTarget(ntarget->getMomentum(),
 					 ntarget->getMass());
 
-      G4int btype;
-      G4double ab;
-      G4double zb;
+      G4int btype = 0;
+      G4double ab = 0.0;
+      G4double zb = 0.0;
       G4double at = ntarget->getA();
       G4double zt = ntarget->getZ();
        
@@ -142,7 +142,7 @@ if (verboseLevel > 3) {
 	    output.printCollisionOutput();
 
 	    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++++++++ " << 
-                       G4endl;
+	      G4endl;
 	  }
 	  
 	  // the rest, if any
@@ -150,7 +150,7 @@ if (verboseLevel > 3) {
 
 	  if(output.numberOfNucleiFragments() == 1) { // there is smth. after
 	    
-G4cout << "::::::::::::::" << G4endl;
+	    G4cout << "::::::::::::::" << G4endl;
 	    
 	    G4InuclNuclei cascad_rec_nuclei = output.getNucleiFragments()[0];
 
@@ -274,7 +274,7 @@ G4bool G4InuclCollider::inelasticInteractionPossible(G4InuclParticle* bullet,
 						     G4InuclParticle* target, 
 						     G4double ekin) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4InuclCollider::inelasticInteractionPossible" << G4endl;
   }
 
@@ -331,7 +331,7 @@ if (verboseLevel > 3) {
 G4InteractionCase G4InuclCollider::bulletTargetSetter(G4InuclParticle* bullet,
 						      G4InuclParticle* target) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4InuclCollider::bulletTargetSetter" << G4endl;
   }
 
@@ -367,7 +367,7 @@ if (verboseLevel > 3) {
 
 G4bool G4InuclCollider::explosion(G4InuclNuclei* target) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4InuclCollider::explosion" << G4endl;
   }
 

@@ -9,7 +9,7 @@ typedef vector<G4InuclElementaryParticle>::iterator particleIterator;
 G4NucleiModel::G4NucleiModel()
   : verboseLevel(2) {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::G4NucleiModel" << G4endl;
   }
 };
@@ -19,7 +19,7 @@ void G4NucleiModel::generateModel(G4double a,
 
   verboseLevel = 2;
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::generateModel" << G4endl;
   }
 
@@ -47,7 +47,7 @@ if (verboseLevel > 3) {
 
   const G4double alfa3[3] = { 0.7, 0.3, 0.01 };
 
-  const G4double alfa6[6] = { 0.9, 0.6, 0.4, 0.2, 0.1, 0.05 };
+  //  const G4double alfa6[6] = { 0.9, 0.6, 0.4, 0.2, 0.1, 0.05 };
 
   A = a;
   Z = z;
@@ -69,7 +69,7 @@ if (verboseLevel > 3) {
 
   G4double D = exp(-D1);
 
-  G4double CU2; 
+  G4double CU2 = 0.0; 
 
   if(a > 3.5) { // a > 3
 
@@ -230,7 +230,7 @@ G4double G4NucleiModel::volNumInt(G4double r1,
 				  G4double cu,
 				  G4double d1) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::volNumInt" << G4endl;
   }
 
@@ -292,7 +292,7 @@ if (verboseLevel > 3) {
 G4double G4NucleiModel::volNumInt1(G4double r1, 
 				   G4double r2, 
 				   G4double cu2) const {
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::volNumInt1" << G4endl;
   }
 
@@ -336,7 +336,7 @@ if (verboseLevel > 3) {
 
 void G4NucleiModel::printModel() const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::printModel" << G4endl;
   }
 
@@ -358,9 +358,9 @@ if (verboseLevel > 3) {
 }; 
 
 G4InuclElementaryParticle G4NucleiModel::generateNucleon(G4int type, 
-						       G4int zone) const {
+							 G4int zone) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::generateNucleon" << G4endl;
   }
 
@@ -389,7 +389,7 @@ G4InuclElementaryParticle G4NucleiModel::generateQuasiDeutron(G4int type1,
 							      G4int type2,
 							      G4int zone) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::generateQuasiDeutron" << G4endl;
   }
 
@@ -401,7 +401,7 @@ if (verboseLevel > 3) {
 
   for(G4int i = 1; i < 4; i++) dmom[i] = mom[i] + mom1[i]; 
 
-  G4int dtype;
+  G4int dtype = 0;
 
   if(type1 * type2 == 1) {
     dtype = 111;
@@ -416,7 +416,7 @@ if (verboseLevel > 3) {
 
 partners G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::generateInteractionPartners" << G4endl;
   }
 
@@ -655,8 +655,8 @@ if (verboseLevel > 3) {
     }
   
     if(thePartners.size() > 1) { // sort partners
-      for(G4int i = 0; i < thePartners.size() - 1; i++) {
-	for(G4int j = i + 1; j < thePartners.size(); j++) {
+      for(G4int i = 0; i < G4int(thePartners.size()) - 1; i++) {
+	for(G4int j = i + 1; j < G4int(thePartners.size()); j++) {
 	  if(thePartners[i].second > thePartners[j].second) {
 
 	    G4InuclElementaryParticle particle = thePartners[i].first;
@@ -681,7 +681,7 @@ if (verboseLevel > 3) {
 vector<G4CascadParticle> G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
 							     G4ElementaryParticleCollider* theElementaryParticleCollider) {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::generateParticleFate" << G4endl;
   }
 
@@ -744,9 +744,9 @@ if (verboseLevel > 3) {
 
 	  vector<G4double> new_position = cparticle.getPosition();
 
-	  for(G4int ip = 0; ip < outgoing_particles.size(); ip++) 
+	  for(G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) 
 	    outgouing_cparticles.push_back(G4CascadParticle(outgoing_particles[ip],
-							  new_position, zone, 0.0));
+							    new_position, zone, 0.0));
 	  no_interaction = false;
 	  current_nucl1 = 0;
 	  current_nucl2 = 0;
@@ -807,11 +807,11 @@ if (verboseLevel > 3) {
 
 G4bool G4NucleiModel::passFermi(const vector<G4InuclElementaryParticle>& particles, 
 				G4int zone) {
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::passFermi" << G4endl;
   }
 
-  for(G4int i = 0; i < particles.size(); i++) {
+  for(G4int i = 0; i < G4int(particles.size()); i++) {
     if(particles[i].nucleon()) {
 
       if(verboseLevel > 1){
@@ -835,7 +835,7 @@ if (verboseLevel > 3) {
 
 void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::boundaryTransition" << G4endl;
   }
 
@@ -894,7 +894,7 @@ if (verboseLevel > 3) {
 
 G4bool G4NucleiModel::worthToPropagate(const G4CascadParticle& cparticle) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::worthToPropagate" << G4endl;
   }
 
@@ -917,7 +917,7 @@ if (verboseLevel > 3) {
 
 G4double G4NucleiModel::getRatio(G4int ip) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::getRatio" << G4endl;
   }
 
@@ -943,7 +943,7 @@ if (verboseLevel > 3) {
 
 G4CascadParticle G4NucleiModel::initializeCascad(G4InuclElementaryParticle* particle) {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::initializeCascad(G4InuclElementaryParticle* particle)" << G4endl;
   }
 
@@ -972,9 +972,9 @@ if (verboseLevel > 3) {
 
 pair<vector<G4CascadParticle>, vector<G4InuclElementaryParticle> >
 G4NucleiModel::initializeCascad(G4InuclNuclei* bullet, 
-			      G4InuclNuclei* target) {
+				G4InuclNuclei* target) {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target)" << G4endl;
   }
 
@@ -1054,7 +1054,7 @@ if (verboseLevel > 3) {
 	  for(int i = 0; i < 3; i++) coord1[i] *= -1;
 	  coordinates.push_back(coord1);
         
-	  G4double p;
+	  G4double p = 0.0;
 
 	  G4bool bad = true;
 
@@ -1152,7 +1152,7 @@ if (verboseLevel > 3) {
 		};
 	      };
 	      for(i = 0; i < 3; i++) coord1[i] = - coordinates[0][i] -
-					     coordinates[1][i]; 
+				       coordinates[1][i]; 
 
 	      if (verboseLevel > 1) {
 		G4cout << " 3  r " << sqrt(coord1[0] * coord1[0] +
@@ -1297,7 +1297,7 @@ if (verboseLevel > 3) {
 
 	    vector<G4double> mom(4);
 
-	    G4bool badp = true;
+	    //	    G4bool badp = True;
 
 	    for(G4int i = 0; i < ia - 1; i++) {
 
@@ -1345,7 +1345,7 @@ if (verboseLevel > 3) {
 
 	G4double rb = 0.0;
 
-	for(G4int i = 0; i < coordinates.size(); i++) {
+	for(G4int i = 0; i < G4int(coordinates.size()); i++) {
       
 	  G4double rp = sqrt(coordinates[i][0] * coordinates[i][0] +
 			     coordinates[i][1] * coordinates[i][1] +
@@ -1366,7 +1366,7 @@ if (verboseLevel > 3) {
 	global_pos[1] = rz * sin(phi);
 	global_pos[2] = -(nuclei_radius + rb) * sqrt(1.0 - s1 * s1);
 	cout <<"+++++> 2" << endl;
-	for(i = 0; i < coordinates.size(); i++) {
+	for(i = 0; i < G4int(coordinates.size()); i++) {
 	  coordinates[i][0] += global_pos[0];
 	  coordinates[i][1] += global_pos[1];
 	  coordinates[i][2] += global_pos[2];
@@ -1404,7 +1404,7 @@ if (verboseLevel > 3) {
 	  ipart->setMomentum(mom); 
 	};
 	//  fill cascad particles and outgoing particles
-	for(G4int ip = 0; ip < raw_particles.size(); ip++) {
+	for(G4int ip = 0; ip < G4int(raw_particles.size()); ip++) {
 
 	  vector<G4double> mom = raw_particles[ip].getMomentum();
 
@@ -1448,7 +1448,7 @@ if (verboseLevel > 3) {
 	    coordinates[ip][2] += mom[3] * tr / pmod;
 	    casparticles.push_back(
 				   G4CascadParticle(raw_particles[ip], coordinates[ip], 
-						  number_of_zones, large));
+						    number_of_zones, large));
 	  } else {
 	    particles.push_back(raw_particles[ip]); 
 	  }; 
@@ -1457,18 +1457,17 @@ if (verboseLevel > 3) {
       if(casparticles.size() == 0) {
 	particles.resize(0);
 
-	G4cout << " can not generate proper distribution for " << itry_max << "
-                     steps " << G4endl;
+	G4cout << " can not generate proper distribution for " << itry_max << " steps " << G4endl;
       };    
     };
   };
 
   if(verboseLevel > 1){
     G4cout << " cascad particles: " << casparticles.size() << G4endl;
-    for(G4int ip = 0; ip < casparticles.size(); ip++)
+    for(G4int ip = 0; ip < G4int(casparticles.size()); ip++)
       casparticles[ip].print();
     G4cout << " outgoing particles: " << particles.size() << G4endl;
-    for(ip = 0; ip < particles.size(); ip++)
+    for(ip = 0; ip < G4int(particles.size()); ip++)
       particles[ip].printParticle();
   }
 

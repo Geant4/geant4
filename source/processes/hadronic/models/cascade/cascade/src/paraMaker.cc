@@ -27,13 +27,13 @@ if (verboseLevel > 3) {
   AK[0] = 0.0;
   CPA[0] = 0.0;
 
-  G4double AK2;
+  G4double AK2 = 0.0;
 
-  G4double CP2;
+  G4double CP2 = 0.0;
  
-  G4double AK6; 
+  G4double AK6 = 0.0; 
 
-  G4double CP6;
+  G4double CP6 = 0.0;
 
   if(Z < 10.0) {
     AK2=0.42;

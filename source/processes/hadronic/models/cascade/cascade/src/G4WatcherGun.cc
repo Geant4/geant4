@@ -5,14 +5,14 @@
 G4WatcherGun::G4WatcherGun()
   : verboseLevel(2) {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4WatcherGun::G4WatcherGun" << G4endl;
   }
 }
 
 void G4WatcherGun::setWatchers() {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4WatcherGun::setWatchers" << G4endl;
   }
 
@@ -20,9 +20,9 @@ if (verboseLevel > 3) {
   vector<G4double> cs;
   vector<G4double> errs;
 
-// specific stuff to monitor the difference with fortran
-// particle type
-// Z = 0
+  // specific stuff to monitor the difference with fortran
+  // particle type
+  // Z = 0
   as.push_back(1.0);
   cs.push_back(33520.0);
   errs.push_back(12.4);
@@ -31,7 +31,7 @@ if (verboseLevel > 3) {
   errs.push_back(1.22);
   watchers.push_back(G4NuclWatcher(0.0, as, cs, errs, false, false));
 
-// Z = 1
+  // Z = 1
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -49,7 +49,7 @@ if (verboseLevel > 3) {
   errs.push_back(3.1);
   watchers.push_back(G4NuclWatcher(1.0, as, cs, errs, false, false));
 
-// Z = 1
+  // Z = 1
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -61,7 +61,7 @@ if (verboseLevel > 3) {
   errs.push_back(3.1);
   watchers.push_back(G4NuclWatcher(1.0, as, cs, errs, false, true));
   
-// Z = -1
+  // Z = -1
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -70,7 +70,7 @@ if (verboseLevel > 3) {
   errs.push_back(1.0);
   watchers.push_back(G4NuclWatcher(-1.0, as, cs, errs, false, false));
 
-// Z = 2
+  // Z = 2
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -83,8 +83,8 @@ if (verboseLevel > 3) {
   watchers.push_back(G4NuclWatcher(2.0, as, cs, errs, false, true));
 
 #ifdef PB
-// Z = 22
-// watchers for pb208 + 1 GeV p
+  // Z = 22
+  // watchers for pb208 + 1 GeV p
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -108,7 +108,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.023);
   watchers.push_back(G4NuclWatcher(22.0, as, cs, errs, false, true));
 
-// Z = 23
+  // Z = 23
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -135,7 +135,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.012);
   watchers.push_back(G4NuclWatcher(23.0, as, cs, errs, false, true));
 
-// Z = 24
+  // Z = 24
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -162,7 +162,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.011);
   watchers.push_back(G4NuclWatcher(24.0, as, cs, errs, true, true));
 
-// Z = 25
+  // Z = 25
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -192,7 +192,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.015);
   watchers.push_back(G4NuclWatcher(25.0, as, cs, errs, false, true));
 
-// Z = 26
+  // Z = 26
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -222,7 +222,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.014);
   watchers.push_back(G4NuclWatcher(26.0, as, cs, errs, false, true));
 
-// Z = 27
+  // Z = 27
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -255,7 +255,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.046);
   watchers.push_back(G4NuclWatcher(27.0, as, cs, errs, false, true));
 
-// Z = 28
+  // Z = 28
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -291,7 +291,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.036);
   watchers.push_back(G4NuclWatcher(28.0, as, cs, errs, true, true));
 
-// Z = 29
+  // Z = 29
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -330,7 +330,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.024);
   watchers.push_back(G4NuclWatcher(29.0, as, cs, errs, false, true));
 
-// Z = 30
+  // Z = 30
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -366,7 +366,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.034);
   watchers.push_back(G4NuclWatcher(30.0, as, cs, errs, false, true));
 
-// Z = 31
+  // Z = 31
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -405,7 +405,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.014);
   watchers.push_back(G4NuclWatcher(31.0, as, cs, errs, true, true));
 
-// Z = 32
+  // Z = 32
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -447,7 +447,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.018);
   watchers.push_back(G4NuclWatcher(32.0, as, cs, errs, false, true));
 
-// Z = 33
+  // Z = 33
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -489,7 +489,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.01);
   watchers.push_back(G4NuclWatcher(33.0, as, cs, errs, false, true));
 
-// Z = 34
+  // Z = 34
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -531,7 +531,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.012);
   watchers.push_back(G4NuclWatcher(34.0, as, cs, errs, false, true));
 
-// Z = 35
+  // Z = 35
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -576,8 +576,8 @@ if (verboseLevel > 3) {
   errs.push_back(0.02);
   watchers.push_back(G4NuclWatcher(35.0, as, cs, errs, false, true));
 
-// spallation part
-// Z = 61
+  // spallation part
+  // Z = 61
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -625,7 +625,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.016);
   watchers.push_back(G4NuclWatcher(61.0, as, cs, errs, true, true));
 
-// Z = 69
+  // Z = 69
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -685,7 +685,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.01);
   watchers.push_back(G4NuclWatcher(69.0, as, cs, errs, true, true));
 
-// Z = 73
+  // Z = 73
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -760,7 +760,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.009);
   watchers.push_back(G4NuclWatcher(73.0, as, cs, errs, true, true));
 
-// Z = 77
+  // Z = 77
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -847,7 +847,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.019);
   watchers.push_back(G4NuclWatcher(77.0, as, cs, errs, true, true));
 
-// Z = 81
+  // Z = 81
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -925,7 +925,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.526);
   watchers.push_back(G4NuclWatcher(81.0, as, cs, errs, true, true));
 
-// Z = 82
+  // Z = 82
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -996,8 +996,8 @@ if (verboseLevel > 3) {
 
 #else
 
-// watchers for Au197 + P, 800 MeV
-// Z = 80
+  // watchers for Au197 + P, 800 MeV
+  // Z = 80
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -1057,7 +1057,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.001);
   watchers.push_back(G4NuclWatcher(80.0, as, cs, errs, true, true));
 
-// Z = 77
+  // Z = 77
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -1132,7 +1132,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.45);
   watchers.push_back(G4NuclWatcher(77.0, as, cs, errs, true, true));
 
-// Z = 73
+  // Z = 73
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -1201,7 +1201,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.008);
   watchers.push_back(G4NuclWatcher(73.0, as, cs, errs, true, true));
 
-// Z = 61
+  // Z = 61
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -1243,7 +1243,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.003);
   watchers.push_back(G4NuclWatcher(61.0, as, cs, errs, true, true));
 
-// Z = 79
+  // Z = 79
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -1312,7 +1312,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.05);
   watchers.push_back(G4NuclWatcher(79.0, as, cs, errs, true, true));
 
-// Z = 78
+  // Z = 78
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -1384,7 +1384,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.7);
   watchers.push_back(G4NuclWatcher(78.0, as, cs, errs, true, true));
 
-// Z = 72
+  // Z = 72
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -1444,7 +1444,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.02);
   watchers.push_back(G4NuclWatcher(72.0, as, cs, errs, true, true));
 
-// Z = 66
+  // Z = 66
   as.resize(0);
   cs.resize(0);
   errs.resize(0);
@@ -1483,7 +1483,7 @@ if (verboseLevel > 3) {
   errs.push_back(0.1);
   watchers.push_back(G4NuclWatcher(66.0, as, cs, errs, true, true));
 
-// Z = 65
+  // Z = 65
   as.resize(0);
   cs.resize(0);
   errs.resize(0);

@@ -14,7 +14,7 @@ typedef vector<G4InuclElementaryParticle>::iterator particleIterator;
 G4IntraNucleiCascader::G4IntraNucleiCascader()
   : verboseLevel(2) {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4IntraNucleiCascader::G4IntraNucleiCascader" << G4endl;
   }
 }
@@ -23,13 +23,13 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 						 G4InuclParticle* target) {
 
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4IntraNucleiCascader::collide" << G4endl;
   }
 
   const G4int itry_max = 1000;
   const G4int reflection_cut = 500;
-  const G4double eexs_cut = 0.0001;
+  //  const G4double eexs_cut = 0.0001;
 
   if (verboseLevel > 1) {
     bullet->printParticle();
@@ -87,7 +87,7 @@ if (verboseLevel > 3) {
 	all_particles = model.initializeCascad(bnuclei, tnuclei);
 
       cascad_particles = all_particles.first;
-      for(G4int ip = 0; ip < all_particles.second.size(); ip++) 
+      for(G4int ip = 0; ip < G4int(all_particles.second.size()); ip++) 
 	output_particles.push_back(all_particles.second[ip]);
       if(cascad_particles.size() == 0) { // compound nuclei
 
@@ -166,7 +166,7 @@ if (verboseLevel > 3) {
       }
       else { // interaction 
 	cascad_particles.pop_back();
-	for(G4int i = 0; i < new_cascad_particles.size(); i++) 
+	for(G4int i = 0; i < G4int(new_cascad_particles.size()); i++) 
 	  cascad_particles.push_back(new_cascad_particles[i]);
 
 	pair<G4int, G4int> holes = model.getTypesOfNucleonsInvolved();
@@ -298,7 +298,7 @@ G4bool G4IntraNucleiCascader::goodCase(G4double a,
 				       G4double eexs, 
 				       G4double ein) const {
 
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4IntraNucleiCascader::goodCase" << G4endl;
   }
 

@@ -6,7 +6,7 @@ G4double G4InuclSpecialFunctions::bindingEnergyExact(G4double A,
 						     G4double Z) {
 
   G4int verboseLevel = 2;
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4InuclSpecialFunctions::bindingEnergyExact" << G4endl;
   }
 
@@ -72,7 +72,7 @@ if (verboseLevel > 3) {
 			   341.534, 351.631, 359.165, 368.798, 376.092, 
 			   384.97, 391.857, 400.207}; 
 
-  const G4double DCA[3] = {296.23, 313.098, 326.43};
+  //  const G4double DCA[3] = {296.23, 313.098, 326.43};
 
   const G4double DSC = 326.957;                               
 

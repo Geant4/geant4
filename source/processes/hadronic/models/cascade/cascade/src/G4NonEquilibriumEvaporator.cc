@@ -88,13 +88,10 @@ if (verboseLevel > 3) {
 
     G4double EFP = FermiEnergy(A, Z, 1);
 
-    G4double SNN1 = csNN(EFP);
-
-    G4double SNN2 = csNN(EFN);
-
-    G4double SPN1 = csPN(EFP);
-
-    G4double SPN2 = csPN(EFN);
+    //   G4double SNN1 = csNN(EFP);
+    //    G4double SNN2 = csNN(EFN);
+    //    G4double SPN1 = csPN(EFP);
+    //    G4double SPN2 = csPN(EFN);
 
     G4double AR = A - QP;
 
@@ -151,7 +148,7 @@ if (verboseLevel > 3) {
 
 	  G4double EMP = EEXS - BP - VP * A / (A - 1.0);
 
-	  G4double ESP;
+	  G4double ESP = 0.0;
 	
 	  if(EMN > eexs_cut) { // ok
           
@@ -225,11 +222,11 @@ if (verboseLevel > 3) {
 	    if(try_again) {
 	      if(icase > 0) { // N -> N - 1 with particle escape
 	     
-		G4double V;
+		G4double V = 0.0;
 
-		G4int ptype;
+		G4int ptype = 0;
 
-		G4double B;
+		G4double B = 0.0;
 
 		if(A < 3.0) try_again = false;
 		if(try_again) { 
@@ -266,7 +263,7 @@ if (verboseLevel > 3) {
 
 		      G4double EEXS_new = -1.;
 
-		      G4double EPART;
+		      G4double EPART = 0.0;
 
 		      G4int itry1 = 0;
 
@@ -517,7 +514,7 @@ if (verboseLevel > 3) {
     G4cout << " >>> G4NonEquilibriumEvaporator::getParLev" << G4endl;
   }
 
-  const G4double par = 0.125;
+//  const G4double par = 0.125;
 
   G4double pl = 0.125 * A;
 

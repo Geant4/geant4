@@ -1,5 +1,3 @@
-//#define DEBUG
-
 #include "G4InuclSpecialFunctions.hh"
 
 
@@ -63,15 +61,14 @@ if (verboseLevel > 3) {
 
   const G4double UCB = 753.3;
 
-  const G4double ALD = 15.4941;
+  //  const G4double ALD = 15.4941;
+  // const G4double ALD1 = 17.9439;
 
-  const G4double ALD1 = 17.9439;
+  // const G4double C3 = 0.7059;
 
-  const G4double C3 = 0.7059;
+  //const G4double C4 = 1.21129;
 
-  const G4double C4 = 1.21129;
-
-  const G4double PKLD = 1.7826;
+  //  const G4double PKLD = 1.7826;
 
   const G4double DMU = 3.132902e4;
         
@@ -79,11 +76,9 @@ if (verboseLevel > 3) {
 
   G4double AN = A - Z;
 
-  G4int INS;
-
-  G4double ANE;
-
-  G4double HNE;
+  G4int INS = 0;
+  G4double ANE = 0.0;
+  G4double HNE = 0.0;
 
   for(G4int i = 1; i < 6; i++) {
     if(AN <= ASH[i]) {
@@ -95,11 +90,11 @@ if (verboseLevel > 3) {
     };
   };
  
-  G4int IPS;
+  G4int IPS = 0;
 
-  G4double APR;
+  G4double APR = 0.0;
 
-  G4double HPR;
+  G4double HPR = 0.0;
 
   for(i = 1; i < 6; i++) {
     if(Z <= ASH[i]) {
@@ -240,7 +235,7 @@ if (verboseLevel > 3) {
 
       G4double X7 = sqrt(X6);
 
-      G4double ALM = AL0 * (X7 + 0.143 * AL0 * X5 / X3);
+      //     G4double ALM = AL0 * (X7 + 0.143 * AL0 * X5 / X3);
       TDEF = -X4 * (X6 + 1.0) + DNZ + 0.038 * X2 * pow(AL0 * X7, 3.0) * X5;
     };
   };
