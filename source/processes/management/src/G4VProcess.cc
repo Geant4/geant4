@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VProcess.cc,v 1.4 1999-12-15 14:53:44 gunter Exp $
+// $Id: G4VProcess.cc,v 1.5 2000-11-03 07:09:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,7 @@ G4VProcess::G4VProcess(const G4String& aName, G4ProcessType   aType )
 		    pParticleChange(0),
                     theNumberOfInteractionLengthLeft(-1.0),
                     currentInteractionLength(-1.0),
+                    thePILfactor(1.0),
                     verboseLevel(0)
 {
   pParticleChange = &aParticleChange;
@@ -48,6 +49,7 @@ G4VProcess::G4VProcess(G4VProcess& right):
             theProcessName(right.theProcessName),
             theProcessType(right.theProcessType),
             theNumberOfInteractionLengthLeft(-1.0),
+            thePILfactor(1.0),
             currentInteractionLength(-1.0)
 {
 }
