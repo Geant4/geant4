@@ -21,11 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc,v 1.3 2002-05-06 09:32:41 maire Exp $
+// $Id: G4GammaConversionToMuons.cc,v 1.4 2002-08-07 10:53:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
+//
+//
+// 07-08-02: missprint in OR condition in DoIt : f1<0 || f1>f1_max ..etc ...
 // ---------------------------------------------------------------------------
 
 #include "G4GammaConversionToMuons.hh"
@@ -78,7 +81,6 @@ G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
 // It gives a good description at any energy (from 0 to 10**21 eV)
 { static const G4double Mmuon=G4MuonPlus::MuonPlus()->GetPDGMass();
   static const G4double Mele=electron_mass_c2;
-  static const G4double GammaEnergyLimit=4* Mmuon;
   static const G4double Rc=elm_coupling/Mmuon; // classical particle radius
   static const G4double sqrte=sqrt(exp(1.));
   static const G4double PowSat=-0.88;
@@ -209,7 +211,7 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     do
     { t=G4UniformRand();
       f1=(1.-2.*xPM+4.*xPM*t*(1.-t)) / (1.+C1/(t*t));
-      if(f1<0 | f1> f1_max) // should never happend
+      if(f1<0 || f1> f1_max) // should never happend
       { G4cout << "outside allowed range f1=" << f1 << G4endl;
         exit(1);
       }
@@ -223,7 +225,7 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     do
     { psi=2.*pi*G4UniformRand();
       f2=1.-2.*xPM+4.*xPM*t*(1.-t)*(1.+cos(2.*psi));
-      if(f2<0 | f2> f2_max) // should never happend
+      if(f2<0 || f2> f2_max) // should never happend
       { G4cout << "outside allowed range f2=" << f2 << G4endl;
         exit(1);
       }
@@ -245,7 +247,7 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     thetaPlus =GammaMuonInv*(u+xiHalf)/xPlus;
     thetaMinus=GammaMuonInv*(u-xiHalf)/xMinus;
 
-  } while ( abs(thetaPlus)>pi | abs(thetaMinus) >pi);
+  } while ( abs(thetaPlus)>pi || abs(thetaMinus) >pi);
 
   // now construct the vectors
   // azimuthal symmetry, take phi0 at random between 0 and 2 pi

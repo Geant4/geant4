@@ -1,4 +1,4 @@
-$Id: History,v 1.62 2002-08-07 10:53:24 maire Exp $
+$Id: History,v 1.63 2002-08-07 10:55:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -76,7 +76,6 @@ committal in the CVS repository !
 - gammaConversion::ComputeCrossSection(): correction of extrapolation below 
   EnergyLimit
         
->>>>>>> 1.49
 10 jan 02: mma 
 - photoEffect: rearrangement in the inlined functions
      
