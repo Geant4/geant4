@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ParametrisedBox.cc,v 1.4 2003-09-02 14:18:43 johna Exp $
+// $Id: ParametrisedBox.cc,v 1.5 2004-09-13 21:13:35 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,11 +31,23 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4Box.hh"
 
+ParametrisedBox::ParametrisedBox (G4Material* a, G4Material* b):
+  fpMaterialA (a),
+  fpMaterialB (b) {}
+
 void ParametrisedBox::ComputeTransformation
 (const G4int n,
  G4VPhysicalVolume* pRep) const
 {
   pRep->SetTranslation (G4ThreeVector (0, n * 2 * m, 0));
+}
+
+G4Material* ParametrisedBox::ComputeMaterial
+(const G4int n,
+ G4VPhysicalVolume* pVPV)
+{
+  if (n % 2) return fpMaterialB;
+  else return fpMaterialA;
 }
 
 void ParametrisedBox::ComputeDimensions

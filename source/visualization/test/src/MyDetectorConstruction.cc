@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.19 2004-07-28 15:46:53 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.20 2004-09-13 21:13:33 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,7 +65,7 @@ MyDetectorConstruction::MyDetectorConstruction()
   expHall_y = 600.*cm;
   expHall_z = 600.*cm;
 
-  calBox_x = 50.*cm;
+  calBox_x = 100.*cm;
   calBox_y = 50.*cm;
   calBox_z = 50.*cm;
   rotAngle = 30.*deg;
@@ -131,6 +131,11 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
     = new G4Box("expHall_b",expHall_x,expHall_y,expHall_z);
   G4LogicalVolume * experimentalHall_log
     = new G4LogicalVolume(experimentalHall_box,Air,"expHall_L",0,0,0);
+  //  G4VisAttributes * experimentalHallVisAtt
+  //      = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  //  experimentalHallVisAtt->SetForceWireframe(true);
+  //  experimentalHall_log->SetVisAttributes(experimentalHallVisAtt);
+  experimentalHall_log -> SetVisAttributes (G4VisAttributes::Invisible);
   G4VPhysicalVolume * experimentalHall_phys
     = new G4PVPlacement(0,G4ThreeVector(),"expHall_P",
                         experimentalHall_log,0,false,0);
@@ -149,6 +154,10 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   { calMat = Air; }
   G4LogicalVolume * calorimeter_log
     = new G4LogicalVolume(calorimeter_box,calMat,"calo_L",0,0,0);
+  G4VisAttributes * calorimeterVisAtt
+      = new G4VisAttributes(G4Colour(0.,0.,1.));
+  //  calorimeterVisAtt->SetForceWireframe(true);
+  calorimeter_log->SetVisAttributes(calorimeterVisAtt);
   for(G4int i=0;i<3;i++)
   {
     G4RotationMatrix rm;
@@ -164,7 +173,16 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
                  0.*deg,360.*deg);
   G4LogicalVolume * tracker_log
     = new G4LogicalVolume(tracker_tube,Ar,"tracker_L",0,0,0);
-  new G4PVPlacement(0,G4ThreeVector(0.*cm,trackerPos,0.*cm),
+  G4VisAttributes * trackerVisAtt
+    = new G4VisAttributes(G4Colour(0.,0.,1.));
+  //  trackerVisAtt->SetForceWireframe(true);
+  tracker_log->SetVisAttributes(trackerVisAtt);
+  //////////////............
+  G4RotationMatrix* tracker_rm = new G4RotationMatrix;
+  tracker_rm->rotateY(-30.*deg);
+  new G4PVPlacement(tracker_rm,G4ThreeVector(0.*cm,trackerPos,200.*cm),
+  //////////////............
+  //new G4PVPlacement(0,G4ThreeVector(0.*cm,trackerPos,0.*cm),
                     "tracker_phys",tracker_log,experimentalHall_phys,
                     false,0);
 
@@ -448,28 +466,6 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   new G4PVPlacement(G4Translate3D(G4ThreeVector(-200.*cm,-200.*cm,0)),
 		    "e-tube-phys", eTubeLog,
 		    experimentalHall_phys,false,0);
-
-  //-------------------------------------------- visualization attributes
-
-  //  G4VisAttributes * experimentalHallVisAtt
-  //      = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  //  experimentalHallVisAtt->SetForceWireframe(true);
-  //  experimentalHall_log->SetVisAttributes(experimentalHallVisAtt);
-  experimentalHall_log -> SetVisAttributes (G4VisAttributes::Invisible);
-
-  G4VisAttributes * calorimeterVisAtt
-      = new G4VisAttributes(G4Colour(0.,0.,1.));
-  //  calorimeterVisAtt->SetForceWireframe(true);
-  calorimeter_log->SetVisAttributes(calorimeterVisAtt);
-
-  G4VisAttributes * trackerVisAtt
-    = new G4VisAttributes(G4Colour(0.,0.,1.));
-  //  trackerVisAtt->SetForceWireframe(true);
-  tracker_log->SetVisAttributes(trackerVisAtt);
-
-  // Vis attributes for Tubes, replicas(!?) and daughter boxes done above.
-
-  //------------------------------------------------------------------
 
   return experimentalHall_phys;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildParametrised.cc,v 1.5 2001-11-12 18:22:14 johna Exp $
+// $Id: BuildParametrised.cc,v 1.6 2004-09-13 21:13:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,12 +41,16 @@
 
 G4VPhysicalVolume* BuildParametrised ()
 {
+  G4Material* theAir=new G4Material("N2-air", 14.0, 28.0 * g / mole,
+				     0.0001 *g/cm3);
+  G4Material * theCopper =
+    new G4Material("Quaterhard-Cu",25.0, 63.0 * g / mole,
+		   6.8*g/cm3);
+
   G4RotationMatrix* theNull = new G4RotationMatrix ();
   G4ThreeVector* theCenter = new G4ThreeVector(0,0,0);
 
   // The Pit.
-  G4Material* theAir=new G4Material("N2-air", 14.0, 28.0 * g / mole,
-				     0.0001 *g/cm3);
   G4Box* aBox = new G4Box("aBox",10*m, 10*m, 10*m);
   G4LogicalVolume*  theLogicalPit =
     new G4LogicalVolume(aBox, theAir,
@@ -61,35 +65,56 @@ G4VPhysicalVolume* BuildParametrised ()
 
   // The Mother of Parametrised.
   G4VSolid * anotherBox = new G4Box("aBox",5*m, 5*m, 5*m);
-  G4LogicalVolume*  theLogicalMother =
+  G4LogicalVolume*  theLogicalMother1 =
     new G4LogicalVolume(anotherBox, theAir,
-			"aTest", 0, 0,
+			"aTest1", 0, 0,
 			0);
-  G4PVPlacement* theMother =
+  G4PVPlacement* theMother1 =
     new G4PVPlacement(    0, G4ThreeVector (-4 * m, 0 , 0),
-			  "theMother",
-			  theLogicalMother,    
+			  "theMother1",
+			  theLogicalMother1,    
 			  thePit, 0, 0);
 
   // Parametrized volume.
-  G4Material * theCopper =
-    new G4Material("Quaterhard-Cu",25.0, 63.0 * g / mole,
-		   6.8*g/cm3);
   G4Box * theBox = new G4Box("aBox",1,1,1);
-  G4LogicalVolume*  theLogicalBox =
+  G4LogicalVolume*  theLogicalBox1 =
     new G4LogicalVolume(theBox, theCopper,
-			"aTest", 0, 0,
+			"aTest1", 0, 0,
 			0);
-  G4VisAttributes * logicalPAttributes;
-  logicalPAttributes = new G4VisAttributes(G4Colour(1.,0.,0.));
-  theLogicalBox->SetVisAttributes(logicalPAttributes);
-  ParametrisedBox* thePar = new ParametrisedBox;
-  new G4PVParameterised("theParametrizedtest",
-			theLogicalBox,
-			theMother,
+  G4VisAttributes * logicalPAttributes1;
+  logicalPAttributes1 = new G4VisAttributes(G4Colour(1.,0.,0.));
+  theLogicalBox1->SetVisAttributes(logicalPAttributes1);
+  ParametrisedBox* thePar1 = new ParametrisedBox(theCopper,theAir);
+  new G4PVParameterised("theParametrizedtest1",
+			theLogicalBox1,
+			theMother1,
 			kYAxis,
 			2,
-			thePar);
+			thePar1);
+  //  A second parameterised volume for test purposes...
+  G4LogicalVolume*  theLogicalMother2 =
+    new G4LogicalVolume(anotherBox, theAir,
+			"aTest2", 0, 0,
+			0);
+  G4PVPlacement* theMother2 =
+    new G4PVPlacement(    0, G4ThreeVector (0, -4 * m, 0),
+			  "theMother2",
+			  theLogicalMother2,    
+			  thePit, 0, 0);
+  G4LogicalVolume*  theLogicalBox2 =
+    new G4LogicalVolume(theBox, theCopper,
+			"aTest2", 0, 0,
+			0);
+  G4VisAttributes * logicalPAttributes2;
+  logicalPAttributes2 = new G4VisAttributes(G4Colour(0.,1.,0.));
+  theLogicalBox2->SetVisAttributes(logicalPAttributes2);
+  ParametrisedBox* thePar2 = new ParametrisedBox(theAir,theCopper);
+  new G4PVParameterised("theParametrizedtest2",
+			theLogicalBox2,
+			theMother2,
+			kYAxis,
+			5,
+			thePar2);
 
   // The Mother of Replica.
   G4VSolid * box3 = new G4Box("aBox", 1 * m, 2 * m, 3 * m);

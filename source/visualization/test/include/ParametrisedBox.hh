@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ParametrisedBox.hh,v 1.3 2001-07-11 10:09:26 gunter Exp $
+// $Id: ParametrisedBox.hh,v 1.4 2004-09-13 21:13:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,12 +36,15 @@
 
 class G4VPhysicalVolume;
 class G4Box;
+class G4Material;
 
 class ParametrisedBox: public G4VPVParameterisation
 {
 public:
+  ParametrisedBox (G4Material* a, G4Material* b);
   void ComputeTransformation(const G4int n,
 			     G4VPhysicalVolume* pRep) const;
+  G4Material* ComputeMaterial(const G4int n, G4VPhysicalVolume*);
   void ComputeDimensions(G4Box& box,
 			 const G4int n,
 			 const G4VPhysicalVolume* pRep) const;
@@ -84,7 +87,10 @@ public:
 			 const G4int n,
 			 const G4VPhysicalVolume* pV) const {
     G4VPVParameterisation::ComputeDimensions(shape,n,pV);
-  }	
+  }
+private:
+  G4Material* fpMaterialA;
+  G4Material* fpMaterialB;
 };
 
 #endif
