@@ -45,6 +45,7 @@
 
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
+#include "StepMax.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -62,6 +63,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   stepMaxProcess  = 0;
 
   pMessenger = new PhysicsListMessenger(this);
+  stepMaxProcess = new StepMax();
 
   SetVerboseLevel(1);
 
@@ -72,7 +74,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   generalPhysicsList = new PhysListGeneral("general");
 
   // EM physics
-  emName = G4String("standard");
+  emName = G4String("model");
   emPhysicsList = new PhysListEmStandard(emName);
 
 }
@@ -84,6 +86,7 @@ PhysicsList::~PhysicsList()
   delete pMessenger;
   delete generalPhysicsList;
   delete emPhysicsList;
+  delete stepMaxProcess;
   for(size_t i=0; i<hadronPhys.size(); i++) {
     delete hadronPhys[i];
   }
@@ -156,8 +159,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "StepMax.hh"
-
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
@@ -167,7 +168,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
-  stepMaxProcess = new StepMax();
 
   theParticleIterator->reset();
   while ((*theParticleIterator)()){
