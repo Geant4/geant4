@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:07:23 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-04-15 12:23:38 johna Exp $
 # ------------------------------------------------------------
 # GNUmakefile for BREPS library.  Gabriele Cosmo, 15/11/96.
 # ------------------------------------------------------------
@@ -17,7 +17,7 @@ CPPFLAGS  += \
              -I$(G4BASE)/geometry/volumes/include \
              -I$(G4BASE)/global/management/include \
              -I$(G4BASE)/global/HEPGeometry/include \
-             -I$(G4BASE)/graphics_reps/include
+             -I$(G4BASE)/graphics_reps/include \
+             -I$(G4BASE)/intercoms/include
 
 include $(G4INSTALL)/config/common.gmk
-
