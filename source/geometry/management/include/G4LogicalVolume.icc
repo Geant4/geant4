@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc,v 1.6 2001-07-11 09:59:17 gunter Exp $
+// $Id: G4LogicalVolume.icc,v 1.7 2002-05-17 17:58:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,224 +32,350 @@
 // 09.11.98 - J. Apostolakis:  Changed MagneticField to FieldManager
 // 12.02.99 - S.Giani: Added set/get methods for voxelization quality
 // 18.04.01 - G.Cosmo: Migrated to STL vector
+// 17.05.02 - G.Cosmo: Added IsToOptimise() method
+// ********************************************************************
 
+// ********************************************************************
+// GetName
+// ********************************************************************
+//
 inline
 G4String G4LogicalVolume::GetName() const
-    {
-	return fName;
-    }
+{
+  return fName;
+}
     
+// ********************************************************************
+// SetName
+// ********************************************************************
+//
 inline
 void G4LogicalVolume::SetName(const G4String& pName)
-    {
-	fName=pName;
-    }
+{
+  fName = pName;
+}
 
+// ********************************************************************
+// GetFieldManager
+// ********************************************************************
+//
 inline
 G4FieldManager* G4LogicalVolume::GetFieldManager() const
-    {
-	return fFieldManager;
-    }
+{
+  return fFieldManager;
+}
 
+// ********************************************************************
+// GetNoDaughters
+// ********************************************************************
+//
 inline
 G4int G4LogicalVolume::GetNoDaughters() const
-    {
-	return fDaughters.size();
-    }
+{
+  return fDaughters.size();
+}
 
+// ********************************************************************
+// GetDaughter
+// ********************************************************************
+//
 inline
 G4VPhysicalVolume* G4LogicalVolume::GetDaughter(const G4int i) const
-    {
-	return fDaughters[i];
-    }
+{
+  return fDaughters[i];
+}
 
+// ********************************************************************
+// GetFastSimulationManager
+// ********************************************************************
+//
 inline
 G4FastSimulationManager* G4LogicalVolume::GetFastSimulationManager () const 
-    {
-	return fFastSimulationManager;
-    }
+{
+  return fFastSimulationManager;
+}
 
+// ********************************************************************
+// AddDaughter
+// ********************************************************************
+//
 inline
 void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
 {
-      fDaughters.push_back(pNewDaughter);
+  fDaughters.push_back(pNewDaughter);
 
   // Propagates the mother's FastSimulationManager pointer. If we are in
   // the World logical volume, propagates only if pointer != 0.
-  // (perhaps someone would like to parametrize all the World volume 
-  // for a particle type, why not ?).
+  // (one could also parameterise all the World volume for a particle type!)
 
-      G4VPhysicalVolume *myPhysical= pNewDaughter->GetMother();
-      G4VPhysicalVolume *pMotherPhys;
-      G4LogicalVolume *pDaughterLogical;
+  G4VPhysicalVolume* myPhysical = pNewDaughter->GetMother();
+  G4VPhysicalVolume* pMotherPhys;
+  G4LogicalVolume* pDaughterLogical;
 
-      if( myPhysical !=0 ){
-         pMotherPhys= myPhysical->GetMother();
-         pDaughterLogical = pNewDaughter->GetLogicalVolume();
+  if( myPhysical !=0 )
+  {
+    pMotherPhys = myPhysical->GetMother();
+    pDaughterLogical = pNewDaughter->GetLogicalVolume();
 
-	 if( (pMotherPhys!=0) ||
-	    ( pMotherPhys==0) && (fFastSimulationManager!=0)) 
-	 {
-	   if(pDaughterLogical->GetFastSimulationManager() != fFastSimulationManager)
-	     pDaughterLogical->SetFastSimulationManager(fFastSimulationManager,
-	                                                FALSE);
-	 }
-	 else
-         {
-	   pDaughterLogical->SetFastSimulationManager(NULL,FALSE);
-	 }
-      }
-      
+    if( (pMotherPhys!=0) || ( pMotherPhys==0) && (fFastSimulationManager!=0) ) 
+    {
+     if( pDaughterLogical->GetFastSimulationManager()!=fFastSimulationManager )
+       pDaughterLogical->SetFastSimulationManager(fFastSimulationManager,false);
+    }
+    else
+    {
+      pDaughterLogical->SetFastSimulationManager(0, false);
+    }
+  }
 
   // Propagate the Field Manager, if the daughter has no field Manager.
+  //
+  pDaughterLogical = pNewDaughter->GetLogicalVolume();
+  G4FieldManager* pDaughterFieldManager = pDaughterLogical->GetFieldManager();
 
-      pDaughterLogical = pNewDaughter->GetLogicalVolume();
-      G4FieldManager* pDaughterFieldManager =
-                      pDaughterLogical->GetFieldManager();
+  if( pDaughterFieldManager == 0 )
+  {
+    pDaughterLogical->SetFieldManager(fFieldManager, true);
+  }
+}
 
-      if( pDaughterFieldManager == 0 )
-      {
- 	 pDaughterLogical->SetFieldManager(fFieldManager, true);
-      }
+// ********************************************************************
+// IsDaughter
+// ********************************************************************
+//
+inline
+G4bool G4LogicalVolume::IsDaughter(const G4VPhysicalVolume* p) const
+{
+  G4PhysicalVolumeList::const_iterator i;
+  for ( i=fDaughters.begin(); i!=fDaughters.end(); ++i )
+  {
+    if (**i==*p) return true;
+  }
+  return false;
+}
+
+// ********************************************************************
+// RemoveDaughter
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::RemoveDaughter(const G4VPhysicalVolume* p)
+{
+  G4PhysicalVolumeList::iterator i;
+  for ( i=fDaughters.begin(); i!=fDaughters.end(); ++i )
+  {
+    if (**i==*p)
+    {
+      fDaughters.erase(i);
+      break;
+    }
+  }
+}
+
+// ********************************************************************
+// GetSolid
+// ********************************************************************
+//
+inline
+G4VSolid* G4LogicalVolume::GetSolid() const
+{
+  return fSolid;
+}
+
+// ********************************************************************
+// SetSolid
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::SetSolid(G4VSolid *pSolid)
+{
+  assert(pSolid != 0);
+  fSolid=pSolid;
+}
+
+// ********************************************************************
+// GetMaterial
+// ********************************************************************
+//
+inline
+G4Material* G4LogicalVolume::GetMaterial() const
+{
+  return fMaterial;
+}
+
+// ********************************************************************
+// SetMaterial
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::SetMaterial(G4Material *pMaterial)
+{
+  fMaterial=pMaterial;
+}
+
+// ********************************************************************
+// GetSensitiveDetector
+// ********************************************************************
+//
+inline
+G4VSensitiveDetector* G4LogicalVolume::GetSensitiveDetector() const
+{
+  return fSensitiveDetector;
+}
+
+// ********************************************************************
+// SetSensitiveDetector
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::SetSensitiveDetector(G4VSensitiveDetector* pSDetector)
+{
+  fSensitiveDetector = pSDetector;
+}
+
+// ********************************************************************
+// GetUserLimits
+// ********************************************************************
+//
+inline
+G4UserLimits* G4LogicalVolume::GetUserLimits() const
+{
+  return fUserLimits;
+}
+
+// ********************************************************************
+// SetUserLimits
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::SetUserLimits(G4UserLimits* pULimits)
+{
+  fUserLimits = pULimits;
+}
+
+// ********************************************************************
+// GetVoxelHeader
+// ********************************************************************
+//
+inline
+G4SmartVoxelHeader* G4LogicalVolume::GetVoxelHeader() const
+{
+  return fVoxel;
+}
+
+// ********************************************************************
+// SetVoxelHeader
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::SetVoxelHeader(G4SmartVoxelHeader* pVoxel)
+{
+  fVoxel = pVoxel;
+}
+
+// ********************************************************************
+// GetSmartless
+// ********************************************************************
+//
+inline
+G4double G4LogicalVolume::GetSmartless() const
+{
+  return fSmartless;
+}
+
+// ********************************************************************
+// SetSmartless
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::SetSmartless(G4double s)
+{
+  fSmartless = s;
+}
+
+// ********************************************************************
+// IsToOptimise
+// ********************************************************************
+//
+inline
+G4bool G4LogicalVolume::IsToOptimise() const
+{
+  return fOptimise;
+}
+
+// ********************************************************************
+// SetOptimisation
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::SetOptimisation(G4bool optim)
+{
+  fOptimise = optim;
+}
+
+// ********************************************************************
+// Operator ==
+// ********************************************************************
+//
+inline
+G4bool G4LogicalVolume::operator == ( const G4LogicalVolume& lv) const
+{
+  return (this==&lv) ? true : false;
+}
+
+// ********************************************************************
+// GetVisAttributes
+// ********************************************************************
+//
+inline
+const G4VisAttributes* G4LogicalVolume::GetVisAttributes () const
+{
+  return fVisAttributes;
+}
+
+// ********************************************************************
+// SetVisAttributes
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::SetVisAttributes (const G4VisAttributes* pVA)
+{
+  fVisAttributes = pVA;
 }
 
 inline
-G4bool G4LogicalVolume::IsDaughter(const G4VPhysicalVolume* p) const
-    {
-	G4PhysicalVolumeList::const_iterator i;
-        for (i=fDaughters.begin(); i!=fDaughters.end(); ++i)
-        {
-          if (**i==*p) return true;
-        }
-        return false;
-    }
-
-inline
-void G4LogicalVolume::RemoveDaughter(const G4VPhysicalVolume* p)
-    {
-	G4PhysicalVolumeList::iterator i;
-	for (i=fDaughters.begin(); i!=fDaughters.end(); ++i)
-	{
-	   if (**i==*p)
-	   {
-	      fDaughters.erase(i);
-	      break;
-	   }
-	}
-    }
-
-inline
-G4VSolid* G4LogicalVolume::GetSolid() const
-    {
-	return fSolid;
-    }
-
-inline
-void G4LogicalVolume::SetSolid(G4VSolid *pSolid)
-    {
-        assert(pSolid != 0);
-	fSolid=pSolid;
-    }
-
-inline
-G4Material* G4LogicalVolume::GetMaterial() const
-    {
-	return fMaterial;
-    }
-
-inline
-void G4LogicalVolume::SetMaterial(G4Material *pMaterial)
-    {
-      //        assert(pMaterial != 0);
-        fMaterial=pMaterial;
-    }
-
-inline
-G4VSensitiveDetector* G4LogicalVolume::GetSensitiveDetector() const
-    {
-	return fSensitiveDetector;
-    }
-
-inline
-void G4LogicalVolume::SetSensitiveDetector(G4VSensitiveDetector *pSDetector)
-    {
-	fSensitiveDetector=pSDetector;
-    }
-
-inline
-G4UserLimits* G4LogicalVolume::GetUserLimits() const
-    {
-	return fUserLimits;
-    }
-
-inline
-void G4LogicalVolume::SetUserLimits(G4UserLimits *pULimits)
-    {
-	fUserLimits=pULimits;
-    }
-
-inline
-G4SmartVoxelHeader* G4LogicalVolume::GetVoxelHeader() const
-    {
-	return fVoxel;
-    }
-
-inline
-void G4LogicalVolume::SetVoxelHeader(G4SmartVoxelHeader *pVoxel)
-    {
-	fVoxel=pVoxel;
-    }
-
-inline
-G4double G4LogicalVolume::GetSmartless()
-    {
-        return fSmartless;
-    }
-
-inline
-void G4LogicalVolume::SetSmartless(G4double s)
-    {
-        fSmartless=s;
-    }
-    
-inline
-G4bool G4LogicalVolume::operator == ( const G4LogicalVolume& lv) const
-    {
-	return (this==&lv) ? true : false;
-    }
-
-inline
-const G4VisAttributes* G4LogicalVolume::GetVisAttributes () const
-    {
-        return fVisAttributes;
-    }
-
-inline
-void G4LogicalVolume::SetVisAttributes (const G4VisAttributes* pVA)
-    {
-        fVisAttributes = pVA;
-    }
-
-inline
 void G4LogicalVolume::SetVisAttributes (const G4VisAttributes& VA)
-    {
-        fVisAttributes = &VA;
-    }
+{
+  fVisAttributes = &VA;
+}
 
-inline void 
+// ********************************************************************
+// BecomeEnvelopeForFastSimulation
+// ********************************************************************
+//
+inline
+void 
 G4LogicalVolume::BecomeEnvelopeForFastSimulation(G4FastSimulationManager* pPA)
-    {
-        SetFastSimulationManager(pPA,TRUE);
-    }
+{
+  SetFastSimulationManager(pPA, true);
+}
 
+// ********************************************************************
+// SetBiasWeight
+// ********************************************************************
+//
 inline
 void G4LogicalVolume::SetBiasWeight(G4double w)
-    {
-        fBiasWeight = w;
-    }
+{
+  fBiasWeight = w;
+}
 
+// ********************************************************************
+// GetBiasWeight
+// ********************************************************************
+//
 inline
 G4double G4LogicalVolume::GetBiasWeight() const
-    {
-        return fBiasWeight;
-    }
+{
+  return fBiasWeight;
+}
