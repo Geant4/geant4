@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.8 2001-08-14 18:19:14 johna Exp $
+// $Id: G4VGraphicsScene.hh,v 1.9 2002-10-24 14:11:04 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison  19th July 1996
 //
@@ -47,6 +47,8 @@ class G4Torus;
 class G4PhysicalVolumeModel;
 class G4Polycone;
 class G4Polyhedra;
+class G4VTrajectory;
+class G4VHit;
 class G4Polyline;
 class G4Scale;
 class G4Text;
@@ -88,6 +90,8 @@ public: // With description
   virtual void AddThis (const G4Polycone&)  = 0;
   virtual void AddThis (const G4Polyhedra&) = 0;
   virtual void AddThis (const G4VSolid&)    = 0;  // For solids not above.
+  virtual void AddThis (const G4VTrajectory&) = 0;
+  virtual void AddThis (const G4VHit&)        = 0;
 
   ///////////////////////////////////////////////////////////////////
   // Functions for adding graphics primitives to the scene handler.

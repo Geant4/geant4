@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2002-06-07 17:37:43 asaim Exp $
+$Id: History,v 1.44 2002-10-24 14:10:17 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 17, 2002, J.Allison (intercoms-V04-01-00 with vis-V04-01-02)
+- Added two new pure virtual functions to G4VGraphicsScene:
+    AddThis(const G4VTrajectory&)
+    AddThis(const G4VHit&)
+
 Jun 7, 2002, M.Asai (intercoms-V04-00-04)
 - Fix for a warning message in G4UIbatch.
 
