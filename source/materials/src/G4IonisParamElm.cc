@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.cc,v 1.10 2004-09-06 15:50:47 vnivanch Exp $
+// $Id: G4IonisParamElm.cc,v 1.11 2004-12-07 08:50:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,9 +48,9 @@ G4IonisParamElm::G4IonisParamElm(G4double Z)
     
     // some basic functions of the atomic number
     fZ = Z;
-    fZ3  = pow(fZ, 1./3.);
-    fZZ3 = pow(fZ*(fZ+1.), 1./3.);
-    flogZ3 = log(fZ)/3.;
+    fZ3  = std::pow(fZ, 1./3.);
+    fZZ3 = std::pow(fZ*(fZ+1.), 1./3.);
+    flogZ3 = std::log(fZ)/3.;
    
      // Parameters for energy loss by ionisation   
 
@@ -81,13 +81,13 @@ G4IonisParamElm::G4IonisParamElm(G4double Z)
     // compute the Bethe-Bloch formula for energy = fTaul*particle mass
     G4double rate = fMeanExcitationEnergy/electron_mass_c2 ;
     G4double w = fTaul*(fTaul+2.) ;
-    fBetheBlochLow = (fTaul+1.)*(fTaul+1.)*log(2.*w/rate)/w - 1. ;
+    fBetheBlochLow = (fTaul+1.)*(fTaul+1.)*std::log(2.*w/rate)/w - 1. ;
     fBetheBlochLow = 2.*fZ*twopi_mc2_rcl2*fBetheBlochLow ; 
   
-    fClow = sqrt(fTaul)*fBetheBlochLow;
+    fClow = std::sqrt(fTaul)*fBetheBlochLow;
     fAlow = 6.458040 * fClow/fTau0;
     G4double Taum = 0.035*fZ3*MeV/proton_mass_c2;
-    fBlow =-3.229020*fClow/(fTau0*sqrt(Taum));
+    fBlow =-3.229020*fClow/(fTau0*std::sqrt(Taum));
 
     // Shell correction factors
     fShellCorrectionVector = new G4double[3];

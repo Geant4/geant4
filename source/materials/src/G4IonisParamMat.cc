@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.12 2004-09-06 15:50:47 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.13 2004-12-07 08:50:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,12 +64,12 @@ void G4IonisParamMat::ComputeMeanParameters()
   for (size_t i=0; i < fMaterial->GetNumberOfElements(); i++) {
     fLogMeanExcEnergy += (fMaterial->GetVecNbOfAtomsPerVolume())[i]
                        *((*(fMaterial->GetElementVector()))[i]->GetZ())
-                       *log((*(fMaterial->GetElementVector()))[i]->GetIonisation()
+                       *std::log((*(fMaterial->GetElementVector()))[i]->GetIonisation()
                       ->GetMeanExcitationEnergy());
   }
 
   fLogMeanExcEnergy /= fMaterial->GetTotNbOfElectPerVolume();
-  fMeanExcitationEnergy = exp(fLogMeanExcEnergy);
+  fMeanExcitationEnergy = std::exp(fLogMeanExcEnergy);
 
   fShellCorrectionVector = new G4double[3];
 
@@ -94,11 +94,11 @@ void G4IonisParamMat::ComputeDensityEffect()
   // The parametrization is from R.M. Sternheimer, Phys. Rev.B,3:3681 (1971)
 
   const G4double Cd2 = 4*pi*hbarc_squared*classic_electr_radius;
-  const G4double twoln10 = 2.*log(10.);
+  const G4double twoln10 = 2.*std::log(10.);
 
   G4int icase;
   
-  fCdensity = 1. + log(fMeanExcitationEnergy*fMeanExcitationEnergy
+  fCdensity = 1. + std::log(fMeanExcitationEnergy*fMeanExcitationEnergy
               /(Cd2*fMaterial->GetTotNbOfElectPerVolume()));
 
   //
@@ -160,7 +160,7 @@ void G4IonisParamMat::ComputeDensityEffect()
       
       G4double DensitySTP = Density*STP_Pressure*Temp/(Pressure*STP_Temperature);
 
-      G4double ParCorr = log(Density/DensitySTP);
+      G4double ParCorr = std::log(Density/DensitySTP);
   
       fCdensity  -= ParCorr;
       fX0density -= ParCorr/twoln10;
@@ -169,7 +169,7 @@ void G4IonisParamMat::ComputeDensityEffect()
 
   G4double Xa = fCdensity/twoln10;
   fAdensity = twoln10*(Xa-fX0density)
-              /pow((fX1density-fX0density),fMdensity);
+              /std::pow((fX1density-fX0density),fMdensity);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -189,10 +189,10 @@ void G4IonisParamMat::ComputeFluctModel()
 
   fF1fluct         = 1. - fF2fluct;
   fEnergy2fluct    = 10.*Zeff*Zeff*eV;
-  fLogEnergy2fluct = log(fEnergy2fluct);
+  fLogEnergy2fluct = std::log(fEnergy2fluct);
   fLogEnergy1fluct = (fLogMeanExcEnergy - fF2fluct*fLogEnergy2fluct)
                      /fF1fluct;
-  fEnergy1fluct    = exp(fLogEnergy1fluct);
+  fEnergy1fluct    = std::exp(fLogEnergy1fluct);
   fEnergy0fluct    = 10.*eV;
   fRateionexcfluct = 0.4;
 }
@@ -212,7 +212,7 @@ void G4IonisParamMat::SetMeanExcitationEnergy(G4double value)
   }  
   
   fMeanExcitationEnergy = value;
-  fLogMeanExcEnergy = log(value);
+  fLogMeanExcEnergy = std::log(value);
   ComputeDensityEffect();
   ComputeFluctModel();
  
