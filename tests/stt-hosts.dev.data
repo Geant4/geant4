@@ -1,3 +1,4 @@
+dcosf01  dev   opt_ISO    geant4-01-00-ref-02-tags2-dcosf01  all all all all  1
 dxplus01 dev   deb_ISO    geant4-01-00-ref-02-tags2  all all all all  1
 dxplus02 dev   opt_ISO    geant4-01-00-ref-02-tags2  all all all all  1
 dxplus03 dev   deb_NONISO geant4-01-00-ref-02-tags2  all all all all  1
@@ -8,7 +9,9 @@ hpplus02 dev   opt        geant4-01-00-ref-02-tags2  all all all all  1
 # rsplus06 dev opt        geant4-01-00-ref-02-tags2  all all all all  1
 # sgmedia dev  deb        geant4-01-00-ref-02-tags2  all all all all  1
 # sgmedia dev  opt        geant4-01-00-ref-02-tags2  all all all all  1
-sungeant dev   deb        geant4-01-00-ref-02-tags2  all all all all  1
-sungeant dev   opt        geant4-01-00-ref-02-tags2  all all all all  1
-pcg4speed dev  deb        geant4-01-00-ref-02-tags2  all all all all  1
-pcg4speed dev  opt        geant4-01-00-ref-02-tags2  all all all all  1
+sungeant dev   deb_ISO    geant4-01-00-ref-02-tags2  all all all all  1
+sungeant dev   opt_ISO    geant4-01-00-ref-02-tags2  all all all all  1
+sungeant dev   deb_NONISO geant4-01-00-ref-02-tags2  all all all all  1
+sungeant dev   opt_NONISO geant4-01-00-ref-02-tags2  all all all all  1
+pcgeant  dev   deb        geant4-01-00-ref-02-tags2  all all all all  1
+pcgeant  dev   opt        geant4-01-00-ref-02-tags2  all all all all  1

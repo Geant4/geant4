@@ -90,9 +90,18 @@ if [ `uname -n | grep suncmsb` ]; then
 fi
 
 if [ `uname -n | grep sungeant` ]; then
-  export G4USE_OSPACE=1
+  if [ $G4STTNONISO ]; then
+    export G4SYSTEM=SUN-CC
+    export DEBOPT=${DEBOPT}_NONISO
+    export G4USE_OSPACE=1
+    export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
+  else
+    export G4SYSTEM=SUN-CC5
+    export DEBOPT=${DEBOPT}_ISO
+    unset G4USE_OSPACE
+    export PATH=`echo $PATH | sed s/SUNWspro/SUNWspro50/`
+  fi
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
-  export G4SYSTEM=SUN-CC
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
@@ -156,14 +165,18 @@ if [ `uname -n | grep axcnsi` ]; then
   export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 
-if [ `uname -n | grep dxplus` ]; then
+if [ X`uname -n | grep dxplus` != X  -o "$UNAMEN" = "dcosf01" ]; then
   if [ $G4STTNONISO ]; then
     export DEBOPT=${DEBOPT}_NONISO
     export G4USE_OSPACE=1
     export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/pro
   else
     export DEBOPT=${DEBOPT}_ISO
+    unset G4USE_OSPACE
     export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
+  fi
+  if [ "$UNAMEN" = "dcosf01" ]; then
+    export CLHEP_LIB=CLHEP-cxx62
   fi
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=DEC-cxx

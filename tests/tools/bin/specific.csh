@@ -47,7 +47,8 @@ if ( `uname -n | grep rsplus` != "" ) then
   setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 
-if ( `uname -n | grep dxplus` != "" ) then
+if ( `uname -n | grep dxplus` != "" || \
+     `uname -n | grep dcosf01` != "" ) then
   if ( $?G4STTNONISO ) then
     setenv DEBOPT ${DEBOPT}_NONISO
     setenv G4USE_OSPACE 1
@@ -55,6 +56,9 @@ if ( `uname -n | grep dxplus` != "" ) then
   else
     setenv DEBOPT ${DEBOPT}_ISO
     setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
+  endif
+  if ( `uname -n | grep dcosf01` != "" ) then
+    setenv CLHEP_LIB CLHEP-cxx62
   endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM DEC-cxx
@@ -123,9 +127,18 @@ if ( `uname -n | grep sgmedia` != "" ) then
 endif
 
 if ( `uname -n | grep sun` != "" ) then
-  setenv G4USE_OSPACE 1
+  if ( $?G4STTNONISO ) then
+    setenv G4SYSTEM SUN-CC
+    setenv DEBOPT ${DEBOPT}_NONISO
+    setenv G4USE_OSPACE 1
+    setenv PATH `echo $PATH | sed s/SUNWspro50/SUNWspro/`
+  else
+    setenv G4SYSTEM SUN-CC5
+    setenv DEBOPT ${DEBOPT}_ISO
+    unsetenv G4USE_OSPACE
+    setenv PATH `echo $PATH | sed s/SUNWspro/SUNWspro50/`
+  endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
-  setenv G4SYSTEM SUN-CC
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
