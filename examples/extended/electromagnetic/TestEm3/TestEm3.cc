@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: TestEm3.cc,v 1.12 2004-06-15 11:39:55 maire Exp $
+// $Id: TestEm3.cc,v 1.13 2004-07-19 16:10:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,10 +72,7 @@ int main(int argc,char** argv) {
   visManager->Initialize();
 #endif
 
-  HistoManager* histo = 0;
-#ifdef G4ANALYSIS_USE
-  histo = new HistoManager();
-#endif
+  HistoManager* histo = new HistoManager();
     
   // set user action classes
   RunAction*      runAct = new RunAction(detector,primary,histo);
@@ -110,13 +106,12 @@ int main(int argc,char** argv) {
     }
 
   // job termination
-#ifdef G4ANALYSIS_USE
-  delete histo;
-#endif      
+     
 #ifdef G4VIS_USE
   delete visManager;
 #endif
 
+  delete histo;
   delete runManager;
 
   return 0;

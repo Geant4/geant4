@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.8 2004-06-21 10:52:55 maire Exp $
+// $Id: EventAction.cc,v 1.9 2004-07-19 16:10:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,10 +36,6 @@
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
-
-#ifdef USE_AIDA
- #include "AIDA/IHistogram1D.h"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -83,12 +79,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
      runAct->fillPerEvent(k,energyDeposit[k],trackLengthCh[k],
                        energyLeaving[k]/(G4double)(detector->GetNbOfLayers()));
 		       
-#ifdef USE_AIDA
-      if (histoManager->GetHisto(k)) {
-	G4double unit = histoManager->GetHistoUnit(k); 
-	histoManager->GetHisto(k)->fill(energyDeposit[k]/unit);
-      }  
-#endif
+     histoManager->FillHisto(k, energyDeposit[k]);
   }
 
   if (G4VVisManager::GetConcreteInstance())

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.5 2004-04-28 17:40:48 maire Exp $
+// $Id: PhysicsList.cc,v 1.6 2004-07-19 16:10:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,8 +109,6 @@ PhysicsList::~PhysicsList()
 #include "G4He3.hh"
 #include "G4GenericIon.hh"
 
-#include "IonC12.hh"
-
 void PhysicsList::ConstructParticle()
 {
 // pseudo-particles
@@ -159,7 +157,6 @@ void PhysicsList::ConstructParticle()
   G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
-  IonC12::IonDefinition();    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

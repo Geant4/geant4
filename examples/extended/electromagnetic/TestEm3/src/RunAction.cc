@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.19 2004-06-16 16:25:12 maire Exp $
+// $Id: RunAction.cc,v 1.20 2004-07-19 16:10:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,9 +80,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   
   //histograms
   //
-#ifdef G4ANALYSIS_USE
-  histoManager->SetFactory();
-#endif 
+  histoManager->book();
    
   //example of print dEdx tables
   //
@@ -180,9 +178,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   //save histograms and delete factory
   //
-#ifdef G4ANALYSIS_USE
-  histoManager->SaveFactory();
-#endif
+  histoManager->save();
 
   // show Rndm status
   HepRandom::showEngineStatus();

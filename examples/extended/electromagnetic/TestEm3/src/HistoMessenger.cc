@@ -20,13 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoMessenger.cc,v 1.2 2004-06-16 10:35:43 maire Exp $
+// $Id: HistoMessenger.cc,v 1.3 2004-07-19 16:10:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#ifdef G4ANALYSIS_USE
 
 #include "HistoMessenger.hh"
 
@@ -47,6 +45,9 @@ HistoMessenger::HistoMessenger(HistoManager* manager)
 
   factoryCmd = new G4UIcmdWithAString("/testem/histo/setFileName",this);
   factoryCmd->SetGuidance("set name for the histograms file");
+
+  typeCmd = new G4UIcmdWithAString("/testem/histo/setFileType",this);
+  typeCmd->SetGuidance("set histograms file type");
    
   histoCmd = new G4UIcommand("/testem/histo/setHisto",this);
   histoCmd->SetGuidance("Set bining of the histo number ih :");
@@ -87,6 +88,7 @@ HistoMessenger::~HistoMessenger()
 {
   delete rmhistoCmd;
   delete histoCmd;
+  delete typeCmd;    
   delete factoryCmd;
   delete histoDir;  
 }
@@ -97,6 +99,9 @@ void HistoMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
   if (command == factoryCmd)
     histoManager->SetFileName(newValues);
+
+  if (command == typeCmd)
+    histoManager->SetFileType(newValues);
     
   if (command == histoCmd)
    { G4int ih,nbBins; G4double vmin,vmax; char unts[30];
@@ -115,4 +120,3 @@ void HistoMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif      
