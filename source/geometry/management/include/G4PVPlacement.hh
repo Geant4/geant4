@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PVPlacement.hh,v 1.4 2000-11-01 15:39:33 gcosmo Exp $
+// $Id: G4PVPlacement.hh,v 1.5 2001-03-07 17:34:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,9 +42,8 @@ class G4PVPlacement : public G4VPhysicalVolume
 		  G4bool pMany,
 		  G4int pCopyNo);
       // Initialise a single volume, positioned in a frame which is rotated by
-      // *pFrameRot, relative to the coordinate system of the mother volume
-      // pMother. The center of the object is then placed at volumeCenterCrd
-      // in the new coordinates. 
+      // *pRot and traslated by tlate, relative to the coordinate system of the
+      // mother volume pMother.
       // If pRot=0 the volume is unrotated with respect to its mother.
       // The physical volume is added to the mother's logical volume.
       //   (The above are exactly the arguments of G4VPhysicalVolume)
@@ -63,12 +62,12 @@ class G4PVPlacement : public G4VPhysicalVolume
       // the direct rotation and translation of the solid (NOT of the frame).  
       // The G4Transform3D argument should be constructed by:
       //  i) First rotating it to align the solid to the system of 
-      //      reference of its mother volume *pMother, and 
+      //     reference of its mother volume *pMother, and 
       // ii) Then placing the solid at the location Transform3D.getTranslation(),
-      //      with respect to the origin of the system of coordinates of the
-      //      mother volume.  
+      //     with respect to the origin of the system of coordinates of the
+      //     mother volume.  
       // [ This is useful for the people who prefer to think in terms 
-      // of moving objects in a given reference frame. ]
+      //   of moving objects in a given reference frame. ]
       // All other arguments are the same as for the previous constructor.
 
     G4PVPlacement(G4RotationMatrix *pRot,
