@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIXm.hh,v 1.6 1999-11-02 21:15:54 barrand Exp $
+// $Id: G4UIXm.hh,v 1.7 1999-11-10 15:01:15 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIXm_h
@@ -73,7 +73,7 @@ private:
   void ExitHelp();
 private:
   Widget form,shell,command,menuBar,text;
-  G4std::map<Widget,G4String> commands;
+  G4std::map<Widget,G4String,less<Widget> > commands;
   static void commandEnteredCallback(Widget,XtPointer,XtPointer);
   static void keyHandler(Widget,XtPointer,XEvent*,Boolean*);
   G4bool fHelp;

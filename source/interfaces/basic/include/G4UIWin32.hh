@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIWin32.hh,v 1.5 1999-11-02 21:15:20 barrand Exp $
+// $Id: G4UIWin32.hh,v 1.6 1999-11-10 15:01:13 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIWin32_h
@@ -78,7 +78,7 @@ private:
   HWND mainWindow;
   HWND textWindow,editWindow;
   HMENU menuBar,defaultMenu;
-  G4std::map<int,G4String> commands;
+  G4std::map<int,G4String,less<int> > commands;
   void* textBuffer;
   int textRows,textCols;
   static LRESULT CALLBACK MainWindowProc(HWND,UINT,WPARAM,LPARAM);
