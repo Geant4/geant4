@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01FieldSetup.cc,v 1.2 2003-12-01 15:48:49 japost Exp $
+// $Id: F01FieldSetup.cc,v 1.3 2004-03-23 11:21:52 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   User Field setup class implementation.
@@ -58,6 +58,8 @@ F01FieldSetup::F01FieldSetup(G4ThreeVector fieldVector)
 {
   fMagneticField = new G4UniformMagField( fieldVector ); 
     // G4ThreeVector(3.3*tesla, 0.0, 0.0 ));
+  G4cout << " F01FieldSetup: magnetic field set to Uniform( "
+	 << fieldVector << " ) " << G4endl;
   InitialiseAll();
 }
 
@@ -65,6 +67,7 @@ F01FieldSetup::F01FieldSetup()
   : fChordFinder(0), fStepper(0)
 {
   fMagneticField = new G4UniformMagField( G4ThreeVector(0.0, 0.0, 0.0 ) );
+  G4cout << " F01FieldSetup: magnetic field set to Uniform( 0.0, 0, 0 ) " << G4endl;
   InitialiseAll();
 }
 
@@ -179,9 +182,18 @@ void F01FieldSetup::SetStepper()
 
 void F01FieldSetup::SetFieldValue(G4double fieldValue)
 {
+  G4cout << "Setting Field Value to " << fieldValue << G4endl;
+  G4cout << " fMagneticField was    " << fMagneticField << G4endl; 
+
   if(fMagneticField) delete fMagneticField;
   fMagneticField = new  G4UniformMagField(G4ThreeVector(0,0,fieldValue));
+  G4cout << " fMagneticField is now " << fMagneticField << G4endl; 
+
+  // Must now notify equation of new field
+  fEquation->SetFieldObj( fMagneticField ); 
+
   //  CreateStepperAndChordFinder();
+  G4cout << " --> set done. " << G4endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
