@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>System Testing report on large-N tests</title>
-<!-- Changed by: Serguei SADILOV,  8-Dec-2001 -->
+<!-- Changed by: Serguei SADILOV, 17-Dec-2001 -->
 </head>
 
 <body>
@@ -16,8 +16,8 @@ Report on Errors and Warnings arising from system testing on the
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
       for all platforms. 
 <pre>
-              +         +         +          +           testing   +          +          +           +       testing    +          testing
-              ^         ^         ^          ^           ^         ^          ^          ^           ^       ^          ^          ^
+              +         +         +          +           +         +          testing    +          testing  testing    testing    testing
+              ^         ^         ^          ^           ^         ^          ^          ^          ^        ^          ^          ^
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
            | SUN-CC  | SUN-CC  |Linux-egcs|Linux-egcs|Linux-g++ |Linux-g++ | HP-aCC   | HP-aCC   | DEC-cxx | DEC-cxx | DEC-cxx | DEC-cxx |
            |optim_ISO|debug_ISO|egcs.optim|egcs.debug|opt.NEWGCC|deb.NEWGCC| optim    | debug    |optim_ISO|debug_ISO|optim_NON|debug_NON|
@@ -33,22 +33,22 @@ test09     |         |         |          |          |          |          |    
 test10     |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test11     |         |         |          |          |          |          |          |          | abend   | testing | abend   |         |
-test12     |         |         |          |          |          |          |          |          | abend   |         | abend   | W7 W3   |
-test13     | W6(?)   |         |          |          |          | W6(?)    |          |          | abend   | W6      | abend   |         |
+test12     |         |         |          | W7       |          |          |          | W3       | abend   |         | abend   | W7 W3   |
+test13     |         |         |          |          |          |          |          |          | abend   | W6      | abend   |         |
 test14     |         |         |          |          |          |          |          |          |         |         |         |         |
 test15     | link    |         |          |          |          |          |          |          | abend   | testing | abend   |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test16     |         |         |          |          |          |          |          |          | abend   |         | abend   |         |
+test16     |         |         |          |          |          |          | W3       | W3       | abend   |         | abend   |         |
 test17     |         |         |          |          |          |          |          |          |         |         |         |         |
-test18     |         |         |          |          |          | abend(!) |          |          |         |         |         |         |
+test18     |         |         |          |          |          |          |          |          |         |         |         |         |
 test20     |         |         |          |          |          |          |          |          |         |         |         |         |
-test21     |         |         |          | W4 W5(?) |          |          |          | testing  | abend   | abend   | abend   | abend   |
+test21     |         |         |          |          |          |          | abend(?) |          | abend   | abend   | abend   | abend   |
 test22     |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test103    |........ |         |          |          |          |          |          |          |         |         |         |         |
-test104    |........ |         |          |          |          |          |          |          | OK!     | abend   | OK!     | abend   |
-test104.Em | Perf    | Perf    | Perf     | Perf     |          |          |          |          |         |         |         |         |
-test502    | Err8    | Err8    | Err  8   | Err  8   | Err  8   | Err  8   |  Err8    | Err8     |         |         |         |         |
+test104    |........ |         |          |          |          |          |          |          | abend(?)| abend   | abend(?)| abend   |
+test104.Em |         |         |          |          |          |          |          |          |         |         |         |         |
+test502    |         |         |          |          |          |          |          |          |         |         |         |         |
 test508    |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 
@@ -58,61 +58,16 @@ test508    |         |         |          |          |          |          |    
  testing - under testing now
  ? - last time was!
 
- Errors 2,4 and 5 require some debugging work.
- Error  1         requires changes to the test so it may complete in a reasonable time.
  Error  3         has not been reproduced.
-
- Err  2  NaN  test508 results
- Err  6  Error in G4HEInelastic::GenerateNBodyEvent
-
 
  It would be really nice to get rid of these warnings, particularly for the Large_N tests.
 
  Warn 3  G4CameronTruranHilfShellCorrections: out of table
 ===============================================================================================
 
-G4Err  2
---------
-
- end of Run TotNbofEvents = 10000
-    mean charged track length   in absorber=74.7733 +- 0.326843  mm
-
-            mean energy deposit in absorber=NaN +- 0  MeV
-
-
-G4 Err 8
---------
-To be "permanent"...[under investigation]
-It crashes in unpredictable way in printing stat:
-
-Start closing geometry.
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
-
-    Total memory consumed for geometry optimisation:   35 kByte
-    Total CPU time elapsed for geometry optimisation: 0.07 seconds
-
-    Voxelisation: top CPU users:
-    Percent   Total CPU    System CPU       Memory  Volume
-    -------   ----------   ----------     --------  ----------
-
-
-
-
 G4Warn 3 
 --------
 G4CameronTruranHilfShellCorrections: out of table for Z = 1
-
-
-G4Warn 4 
---------
-boostVector computed for a non-timelike LorentzVector
-at line 185 in file LorentzVector.cc
-
-
-G4Warn 5 
---------
-***G4Quasmon::HadronizeQ: (2) rPDG=22, dm=0
-
 
 G4 Warn 6
 ---------
@@ -126,17 +81,6 @@ G4 Warn 7
 ---------
 Warning: eliminating target particle
 
-
-Perf
-----
-                                exampleN04.EM                   test13
-                        Linux-egcs      SUN-CC          HP-aCC          SUN-CC
-                        d       o       d       o       d       o       d    o
-
-w/o (touch+cut_per_mat) 120     161     240     120     240     240     60   30
-touch                   289     -       600     240     240     240     240 120
-cut                     293     93      600     240     >3600   >3600   240 120
-(touch+cut_per_mat)     3000    87      720     240     >3600   >3600   240 120
 
 </pre>
 
