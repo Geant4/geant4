@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.12 2001-07-24 22:04:47 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.13 2001-08-17 22:58:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -241,7 +241,7 @@ recreate the display lists.  The down side is that the markers
 rotate.  The only way to avoid this is to play with the modelview
 and projection matrices of OpenGL - which I need to think about.
 For future reference, here is the code to draw in window
-coordinates; it's down side is tha markers do not follow global
+coordinates; its down side is that markers do not follow global
 transformations.  Some clever stuff is needed.
 
   ...
