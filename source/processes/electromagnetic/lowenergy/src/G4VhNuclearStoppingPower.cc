@@ -36,7 +36,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VhNuclearStoppingPower::G4VhNuclearStoppingPower()
+G4VhNuclearStoppingPower::G4VhNuclearStoppingPower() :
+  lossFlucFlag(true)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

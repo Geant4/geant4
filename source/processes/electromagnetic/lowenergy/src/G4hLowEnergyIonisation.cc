@@ -38,6 +38,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 #include "G4hLowEnergyIonisation.hh"
 #include "globals.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
 #include "G4Poisson.hh"
 #include "G4UnitsTable.hh"
 #include "G4EnergyLossTables.hh"
@@ -622,14 +624,10 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   if(finalT > MinKineticEnergy) {
     
     //  now the electron loss with fluctuation
-    if((EnlossFlucFlag) && (finalT < kineticEnergy)  
-                        && (kineticEnergy > LowestKineticEnergy)) {
+    if((EnlossFlucFlag) && (0.0 < eloss) ) {
       
       eloss = ElectronicLossFluctuation(particle, material, 
                                         chargeSquare, eloss) ;
-      if(nStopping) {
-        nloss = NuclearLossFluctuation(particle, material, nloss) ;
-      }
       finalT = kineticEnergy - eloss - nloss ;
     }    
   }
@@ -1070,7 +1068,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 //      lastMaterial = material;
 
   G4int    imat        = material->GetIndex(); 
-  G4double excEnergy   = material->GetIonisation()->GetMeanExcitationEnergy();
+//G4double excEnergy   = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double f1Fluct     = material->GetIonisation()->GetF1fluct();
   G4double f2Fluct     = material->GetIonisation()->GetF2fluct();
   G4double e1Fluct     = material->GetIonisation()->GetEnergy1fluct();
@@ -1090,18 +1088,18 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
   G4double dp1,dp3;
   G4double siga ;
 
-  // shortcut for very very small loss 
-  if(MeanLoss < minLoss) return MeanLoss ;
-
   // get particle data
   G4double Tkin   = particle->GetKineticEnergy();
   G4double ParticleMass = particle->GetMass() ;
   G4double DeltaCutInKineticEnergyNow = 
            deltaCutInKineticEnergy[material->GetIndex()];
-  G4double MeanLoss = meanLoss/ChargeSquare;
+  G4double MeanLoss = meanLoss/chargeSquare;
+
+  // shortcut for very very small loss 
+  if(MeanLoss < minLoss) return MeanLoss ;
 
   // Validity range for delta electron cross section
-  threshold = G4std::max(DeltaCutInKineticEnergyNow,excEnergy);
+  threshold = G4std::max(DeltaCutInKineticEnergyNow,ipotFluct);
 
   G4double rmass = electron_mass_c2/ParticleMass;
   G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
@@ -1112,15 +1110,17 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
   if(Tm > threshold) Tm = threshold;
   beta2 = tau2/(tau1*tau1);
 
-  // Gaussian fluctuation ?
+  // Gaussian fluctuation 
   if(MeanLoss >= kappa*Tm)
   {
     siga = sqrt(MeanLoss*Tm*(1.-0.5*beta2)) ;
     loss = G4RandGauss::shoot(MeanLoss,siga) ;
     if(loss < 0.) loss = 0. ;
+    loss *= chargeSquare ;
     return loss ;
   }
 
+  // Non Gaussian fluctuation 
   w1 = Tm/ipotFluct;
   w2 = log(2.*electron_mass_c2*tau2);
 
@@ -1247,7 +1247,8 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
           na         = G4RandGauss::shoot(namean,sa);
           if (na > 0.)
           {
-            alfa   = w1*G4float(nmaxCont2+p3)/(w1*G4float(nmaxCont2)+G4float(p3));
+            alfa   = w1*G4float(nmaxCont2+p3)/
+                    (w1*G4float(nmaxCont2)+G4float(p3));
             alfa1  = alfa*log(alfa)/(alfa-1.);
             ea     = na*ipotFluct*alfa1;
             sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
@@ -1266,20 +1267,9 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       loss += lossc;  
      }
     } 
-  loss *= ChargeSquare;
+  loss *= chargeSquare;
 
   return loss ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
-G4double G4hLowEnergyIonisation::NuclearLossFluctuation(
-                const G4DynamicParticle* particle,
-                const G4Material* material,
-                      G4double nuclearEnergyLoss) const
-{
-  G4double x = nuclearEnergyLoss ;
-  return x ;
 }
         
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

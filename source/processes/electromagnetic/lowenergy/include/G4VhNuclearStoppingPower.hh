@@ -44,10 +44,16 @@ public:
 
   ~G4VhNuclearStoppingPower();
 
+  void SetNuclearStoppingFluctuationsOn() {lossFlucFlag = true;}; 
+
+  void SetNuclearStoppingFluctuationsOff() {lossFlucFlag = false;}; 
+
   virtual G4double NuclearStoppingPower(G4double kineticEnergy,
                                         G4double z1, G4double z2, 
                                         G4double m1, G4double m2) const=0;
 protected:
+
+  G4bool lossFlucFlag;
  
 private:
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.hh,v 1.3 2000-08-02 16:23:00 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.hh,v 1.4 2000-08-04 14:28:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -284,8 +284,8 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
    
     G4double MinKineticEnergy ;
 
-    G4double fdEdx;      // computed in GetContraints
-    G4double fRangeNow ; // computed in GetContraints
+  //    G4double fdEdx;      // computed in GetContraints
+  //    G4double fRangeNow ; // computed in GetContraints
 
     static G4double finalRange ;  // last step before stop
     static G4double c1lim,c2lim,c3lim ; // coeffs for computing steplimit

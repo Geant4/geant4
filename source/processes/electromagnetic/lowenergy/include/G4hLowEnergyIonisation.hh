@@ -36,8 +36,6 @@
 #ifndef G4hLowEnergyIonisation_h
 #define G4hLowEnergyIonisation_h 1
  
-#include "G4ios.hh"
-#include "Randomize.hh"
 #include "G4hLowEnergyLoss.hh"
 #include "G4VLowEnergyModel.hh"
 #include "G4Track.hh"
@@ -171,11 +169,6 @@ private:
                                            G4double chargeSquare,
                                            G4double meanLoss) const;
   // Function to sample electronic losses
-
-  G4double NuclearLossFluctuation(const G4DynamicParticle* particle,
-		                  const G4Material* material,
-                                        G4double nuclearEnergyLoss) const;
-  // Function to sample nuclear losses
 		    
   // hide assignment operator 
   G4hLowEnergyIonisation & operator=(const G4hLowEnergyIonisation &right);
@@ -215,6 +208,9 @@ private:
   const G4Electron* theElectron;
   const G4Proton* theProton;
   const G4AntiProton* theAntiProton;
+
+  G4double fdEdx;      // computed in GetContraints
+  G4double fRangeNow ; // computed in GetContraints
  
 protected:
 

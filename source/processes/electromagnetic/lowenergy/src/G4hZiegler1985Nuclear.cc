@@ -37,6 +37,7 @@
 #include "G4hZiegler1985Nuclear.hh"
 #include "G4UnitsTable.hh"
 #include "globals.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -63,15 +64,27 @@ G4double G4hZiegler1985Nuclear::NuclearStoppingPower(G4double kineticEnergy,
   
   if ( er <= 30 ) {
     ionloss = 0.5*log(1+1.1383*er)/
-              (er+0.01312*pow(er,0.21226)+0.19593*pow(er,0.5)) ; 
+             (er+0.01312*pow(er,0.21226)+0.19593*sqrt(er)) ; 
     
   } else {
     ionloss = 0.5*log(er)/er ; 
   }
   
+  // Stragling
+  if(lossFlucFlag) {
+    G4double sig = 4.0 * m1 * m2 / ((m1 + m2)*(m1 + m2)*
+                  (4.0 + 0.197*pow(er,-1.6991)+6.584*pow(er,-1.0494))) ;
+    ionloss = G4RandGauss::shoot(ionloss,sig) ;
+  }
+
   ionloss *= 8.462 * z1 * z2 * m1 / rm ; // Return to [ev/(10^15 atoms/cm^2]
 
   if ( ionloss < 0.0) ionloss = 0.0 ;
   
   return ionloss;
 }
+
+
+
+
+

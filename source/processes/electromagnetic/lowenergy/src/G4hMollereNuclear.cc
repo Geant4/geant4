@@ -38,6 +38,7 @@
 #include "G4hMollereNuclear.hh"
 #include "G4UnitsTable.hh"
 #include "globals.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -177,7 +178,14 @@ G4double G4hMollereNuclear::NuclearStoppingPower(G4double kineticEnergy,
 	break;
       }
     }
-  
+
+  // Stragling
+  if(lossFlucFlag) {
+    G4double sig = 4.0 * m1 * m2 / ((m1 + m2)*(m1 + m2)*
+                  (4.0 + 0.197*pow(er,-1.6991)+6.584*pow(er,-1.0494))) ;
+    ionloss = G4RandGauss::shoot(ionloss,sig) ;
+  }  
+
   ionloss *= 8.462 * z1 * z2 * m1 / rm ; // Return to [ev/(10^15 atoms/cm^2]
 
   if ( ionloss < 0.0) ionloss = 0.0 ;
