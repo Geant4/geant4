@@ -1,4 +1,4 @@
-$Id: History,v 1.246 2004-06-07 14:44:59 gcosmo Exp $
+$Id: History,v 1.247 2004-06-08 08:47:45 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8th June 2004 Gabriele Cosmo (config-V06-01-06)
+- binmake.gmk: restored global lib for interfaces which was missing
+  from linking list.
+- WIN32-VC.gmk: added targets for DLLs build.
 
 7th June 2004 Gabriele Cosmo (config-V06-01-05)
 - Corrected setup for WIN32-VC7 for building of DLLs.
