@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.20 2001-11-07 16:48:24 radoone Exp $
+// $Id: G4SteppingManager.cc,v 1.21 2001-11-27 10:43:13 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -265,12 +265,12 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
 // Set Touchable to track and a private attribute of G4SteppingManager
   fNavigator->LocateGlobalPointAndSetup( fTrack->GetPosition() );
 
-  fTouchableHandle = fNavigator->CreateTouchableHistory();
+  if ( ! fTrack->GetTouchableHandle() ) {
+     fTouchableHandle = fNavigator->CreateTouchableHistory();
 
-
-  fTrack->SetTouchableHandle( fTouchableHandle );
-  fTrack->SetNextTouchableHandle( fTouchableHandle );
-
+     fTrack->SetTouchableHandle( fTouchableHandle );
+     fTrack->SetNextTouchableHandle( fTouchableHandle );
+  }
 // Set vertex information of G4Track at here
    if ( fTrack->GetCurrentStepNumber() == 0 ) {
      fTrack->SetVertexPosition( fTrack->GetPosition() );
