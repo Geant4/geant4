@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.cc,v 1.7 2001-09-17 07:39:44 stanaka Exp $
+// $Id: G4FukuiRendererSceneHandler.cc,v 1.8 2001-12-01 20:52:06 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,8 +79,8 @@ const char  FR_ENV_MULTI_WINDOW[]            = "G4DAWN_MULTI_WINDOW" ;
 	//----- G4FukuiRendererSceneHandler, constructor
 G4FukuiRendererSceneHandler::G4FukuiRendererSceneHandler (G4FukuiRenderer& system,
 					    const G4String& name):
-fSystem   (system)                  ,
 G4VSceneHandler  (system, fSceneIdCount++, name) ,
+fSystem   (system)                  ,
 fPrimDest (system.GetPrimDest() )   ,
 FRflag_in_modeling     (false)      ,
 flag_saving_g4_prim    (false)      ,

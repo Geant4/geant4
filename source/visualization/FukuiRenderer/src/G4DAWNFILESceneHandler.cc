@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.cc,v 1.10 2001-09-18 06:43:51 stanaka Exp $
+// $Id: G4DAWNFILESceneHandler.cc,v 1.11 2001-12-01 20:52:06 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -81,8 +81,8 @@ const char  DEFAULT_G4PRIM_FILE_NAME[] = "g4_00.prim";
 
 	//----- G4DAWNFILESceneHandler, constructor
 G4DAWNFILESceneHandler::G4DAWNFILESceneHandler (G4DAWNFILE& system, const G4String& name):
-fSystem   (system)                        ,
 G4VSceneHandler  (system, fSceneIdCount++, name) ,
+fSystem   (system)                        ,
 fPrimDest ()                              ,
 FRflag_in_modeling     (false)            ,
 flag_saving_g4_prim    (false)            ,

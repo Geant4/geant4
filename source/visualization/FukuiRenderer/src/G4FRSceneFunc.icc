@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRSceneFunc.icc,v 1.15 2001-09-17 07:39:43 stanaka Exp $
+// $Id: G4FRSceneFunc.icc,v 1.16 2001-12-01 20:52:06 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -608,11 +608,11 @@ void G4FRSCENEHANDLER::AddThis ( const G4Sphere& sphere )
 	}
 
 		//----- parameters
-	const G4double  rmin    = sphere.GetRmin();
+//	const G4double  rmin    = sphere.GetRmin();
 	const G4double  rmax    = sphere.GetRmax();
-  	const G4double  sphi    = sphere.GetSPhi();
+//  	const G4double  sphi    = sphere.GetSPhi();
   	const G4double  dphi    = sphere.GetDPhi();
-	const G4double  stheta  = sphere.GetSTheta();
+//	const G4double  stheta  = sphere.GetSTheta();
 	const G4double  dtheta  = sphere.GetDTheta();
 
 		//----- send coordinates to Fukui Renderer
@@ -1094,7 +1094,7 @@ void G4FRSCENEHANDLER::SendStrDouble(	const char*	char_string ,
 	G4int	num_char ;
 	char*	command = new char [ COMMAND_BUF_SIZE ];
 
-	num_char  = sprintf( command, "%s  %lg", char_string , dval ) ; 
+	num_char  = sprintf( command, "%s  %g", char_string , dval ) ; 
 	if( num_char < 0 ) { 
 		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble(), 1\n" ;
 	}
@@ -1114,7 +1114,7 @@ G4FRSCENEHANDLER::SendStrDouble2(	const char*	char_string ,
 	G4int	num_char ;
 	char*	command = new char [ COMMAND_BUF_SIZE ];
 
-	num_char  = sprintf( command, "%s  %lg  %lg", char_string , dval1, dval2 ) ; 
+	num_char  = sprintf( command, "%s  %g  %g", char_string , dval1, dval2 ) ; 
 	if( num_char < 0 ) { 
 		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble2(), 1\n" ;
 	}
@@ -1135,7 +1135,7 @@ G4FRSCENEHANDLER::SendStrDouble3(	const char*	char_string ,
 	G4int	num_char ;
 	char*	command = new char [ COMMAND_BUF_SIZE ];
 
-	num_char  = sprintf( command, "%s  %lg  %lg  %lg", char_string , dval1, dval2, dval3 ) ; 
+	num_char  = sprintf( command, "%s  %g  %g  %g", char_string , dval1, dval2, dval3 ) ; 
 	if( num_char < 0 ) { 
 		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble3(), 1\n" ;
 	}
@@ -1157,7 +1157,7 @@ G4FRSCENEHANDLER::SendStrDouble4(	const char*	char_string ,
 	G4int	num_char ;
 	char*	command = new char [ COMMAND_BUF_SIZE ];
 
-	num_char  = sprintf( command, "%s  %lg  %lg  %lg  %lg", \
+	num_char  = sprintf( command, "%s  %g  %g  %g  %g", \
                                        char_string , dval1, dval2, dval3, dval4) ; 
 	if( num_char < 0 ) { 
 		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble4(), 1\n" ;
@@ -1181,7 +1181,7 @@ G4FRSCENEHANDLER::SendStrDouble5(	const char*	char_string ,
 	G4int	num_char ;
 	char*	command = new char [ COMMAND_BUF_SIZE ];
 
-	num_char  = sprintf( command, "%s  %lg  %lg  %lg  %lg  %lg", \
+	num_char  = sprintf( command, "%s  %g  %g  %g  %g  %g", \
                                        char_string , dval1, dval2, dval3, dval4, dval5 ) ; 
 	if( num_char < 0 ) { 
 		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble5(), 1\n" ;
@@ -1206,7 +1206,7 @@ G4FRSCENEHANDLER::SendStrDouble6(	const char*	char_string ,
 	G4int	num_char ;
 	char*	command = new char [ COMMAND_BUF_SIZE ];
 
-	num_char  = sprintf( command, "%s  %lg  %lg  %lg  %lg  %lg  %lg", \
+	num_char  = sprintf( command, "%s  %g  %g  %g  %g  %g  %g", \
                                        char_string , dval1, dval2, dval3, dval4, dval5, dval6 ) ; 
 	if( num_char < 0 ) { 
 		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble6(), 1\n" ;
@@ -1232,7 +1232,7 @@ G4FRSCENEHANDLER::SendStrDouble7(	const char*	char_string ,
 	G4int	num_char ;
 	char*	command = new char [ COMMAND_BUF_SIZE ];
 
-	num_char  = sprintf( command, "%s  %lg %lg %lg %lg %lg %lg %lg", \
+	num_char  = sprintf( command, "%s  %g %g %g %g %g %g %g", \
                              char_string , dval1, dval2, dval3, dval4, dval5, dval6, dval7 ) ; 
 	if( num_char < 0 ) { 
 		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrDouble7(), 1\n" ;
@@ -1262,7 +1262,7 @@ G4FRSCENEHANDLER::SendStrDouble11(	const char*	char_string ,
 	G4int	num_char ;
 	char*	command = new char [ COMMAND_BUF_SIZE ];
 
-	num_char  = sprintf( command, "%s  %lg %lg %lg %lg %lg %lg %lg %lg %lg %lg %lg", \
+	num_char  = sprintf( command, "%s  %g %g %g %g %g %g %g %g %g %g %g", \
                              char_string ,	dval1, dval2, dval3, dval4, dval5, \
 					dval6, dval7, dval8, dval9, dval10, dval11 ) ; 
 	if( num_char < 0 ) { 
@@ -1285,7 +1285,7 @@ G4FRSCENEHANDLER::SendIntDouble3(	G4int		ival   ,
 	G4int	num_char ;
 	char*	command = new char [ COMMAND_BUF_SIZE ];
 
-	num_char  = sprintf( command, "%d  %lg  %lg  %lg", \
+	num_char  = sprintf( command, "%d  %g  %g  %g", \
                                        ival , dval1, dval2, dval3 ) ; 
 	if( num_char < 0 ) { 
 		G4cerr << "ERROR G4FRSCENEHANDLER::SendIntDouble3(),1\n" ;
@@ -1350,7 +1350,7 @@ G4FRSCENEHANDLER::SendStrDouble6Str(	const char*	char_string1 ,
 	G4int	num_char ;
 	char*	command = new char [ COMMAND_BUF_SIZE ];
 
-	num_char  = sprintf(	command, "%s  %lg %lg %lg %lg %lg %lg %s", \
+	num_char  = sprintf(	command, "%s  %g %g %g %g %g %g %s", \
 				char_string1, dval1, dval2   , dval3, dval4, \
 				dval5  , dval6, char_string2                   );
 	if( num_char < 0 ) { 
@@ -1385,7 +1385,7 @@ void G4FRSCENEHANDLER::SendDouble( G4double	val    )
 	G4int	num_char ;
 	char*	command = new char [ COMMAND_BUF_SIZE ];
 
-	num_char  = sprintf( command, "%lg", val ) ; 
+	num_char  = sprintf( command, "%g", val ) ; 
 	if( num_char < 0 ) { 
 		G4cerr << "ERROR G4FRSCENEHANDLER::SendStrInt(), 1\n" ;
 	}
