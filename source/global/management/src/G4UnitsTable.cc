@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.cc,v 1.7 1999-11-23 15:00:05 gcosmo Exp $
+// $Id: G4UnitsTable.cc,v 1.8 2000-01-18 17:42:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -340,9 +340,32 @@ G4BestUnit::G4BestUnit(G4double value,G4String category)
        }  
   //
     IndexOfCategory = i;
-    Value = value;        
+    nbOfVals = 1;
+    Value[0] = value; Value[1] = 0.; Value[2] = 0.;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+       
+G4BestUnit::G4BestUnit(G4ThreeVector value,G4String category)
+{
+ // find the category
+    G4UnitsTable& theUnitsTable = G4UnitDefinition::GetUnitsTable();
+    size_t nbCat = theUnitsTable.entries();
+    size_t i = 0;
+    while
+     ((i<nbCat)&&(theUnitsTable[i]->GetName()!=category)) i++;
+    if (i == nbCat) 
+       { G4cout << " G4BestUnit: the category " << category 
+              << " does not exist; --> G4Exception" << G4endl;
+         G4Exception(" ");
+       }  
+  //
+    IndexOfCategory = i;
+    nbOfVals = 3;
+    Value[0] = value.x();
+    Value[1] = value.y();
+    Value[2] = value.z();
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4BestUnit::~G4BestUnit()
@@ -360,8 +383,9 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4BestUnit a)
   G4int    ksup(-1), kinf(-1);
   G4double umax(0.), umin(DBL_MAX);
   G4double rsup(DBL_MAX), rinf(0.);
-   
-  G4double value =fabs(a.Value);
+
+  //for a ThreeVector, choose the best unit for the biggest value 
+  G4double value =max(max(fabs(a.Value[0]),fabs(a.Value[1])),fabs(a.Value[2]));
 
   for (G4int k=0; k<List.entries(); k++)
      {
@@ -376,10 +400,11 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4BestUnit a)
      }
 	 
   G4int index=ksup; if(index==-1) index=kinf; if(index==-1) index=0;
-   
-  flux << a.Value/(List[index]->GetValue());
+  
+  for (G4int j=0; j<a.nbOfVals; j++) 
+     {flux << a.Value[j]/(List[index]->GetValue()) << " ";}
   G4long oldform = G4cout.setf(G4std::ios::left,G4std::ios::adjustfield);
-  flux << " " << G4std::setw(len) << List[index]->GetSymbol();       
+  flux << G4std::setw(len) << List[index]->GetSymbol();       
   G4cout.setf(oldform,G4std::ios::adjustfield);     
   
   return flux;

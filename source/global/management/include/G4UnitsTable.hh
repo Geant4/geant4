@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.hh,v 1.7 1999-11-23 15:00:04 gcosmo Exp $
+// $Id: G4UnitsTable.hh,v 1.8 2000-01-18 17:42:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,6 +16,7 @@
 //
 // 17-05-98: first version, M.Maire
 // 13-10-98: Units and symbols printed in fixed length
+// 18-01-00: BestUnit for three vector
 
 // Class description:
 //
@@ -35,6 +36,7 @@
 
 #include "globals.hh"
 #include "g4rw/tpordvec.h"
+#include "G4ThreeVector.hh"
 
 class G4UnitsCategory;
 typedef G4RWTPtrOrderedVector<G4UnitsCategory> G4UnitsTable;
@@ -132,8 +134,9 @@ class G4BestUnit
 {
 public:  // with description
 
-    G4BestUnit(G4double internalValue, G4String category);
-    // This constructor converts a physical quantity from its internalValue
+    G4BestUnit(G4double      internalValue, G4String category);
+    G4BestUnit(G4ThreeVector internalValue, G4String category);    
+    // These constructors convert a physical quantity from its internalValue
     // into the most appropriate unit of the same category.
     // In practice it builds an object VU = (newValue, newUnit)
     
@@ -141,9 +144,9 @@ public:  // with description
    
 public:  // without description
 
-    G4double  GetValue()           {return Value;};
-    G4String  GetCategory()        {return Category;};
-    size_t    GetIndexOfCategory() {return IndexOfCategory;};
+    G4double*  GetValue()           {return Value;};
+    G4String   GetCategory()        {return Category;};
+    size_t     GetIndexOfCategory() {return IndexOfCategory;};
     
 public:  // with description 
    
@@ -153,9 +156,10 @@ public:  // with description
 
 private:
 
-    G4double   Value;        // value in the internal system of units
-    G4String   Category;     // dimensional family: Length,Volume,Energy ...
-    size_t IndexOfCategory;  // position of Category in UnitsTable
+    G4double   Value[3];        // value in the internal system of units
+    G4int      nbOfVals;        // G4double=1; G4ThreeVector=3
+    G4String   Category;        // dimensional family: Length,Volume,Energy ...
+    size_t IndexOfCategory;     // position of Category in UnitsTable
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
