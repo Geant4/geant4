@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.18 2001-11-07 13:02:07 radoone Exp $
+// $Id: G4SteppingManager.hh,v 1.19 2001-12-13 14:18:40 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
@@ -76,9 +76,7 @@ class G4VSensitiveDetector;
 #include "G4TouchableHandle.hh"            // Include from 'geometry'
 #include "G4TouchableHistoryHandle.hh"      // Include from 'geometry'
 
-//  must be changed in elegant way
-static const size_t SizeOfSelectedDoItVector=100;
-// RogueWave Tools.h++
+// 
    typedef G4std::vector<G4int> 
              G4SelectedAtRestDoItVector;
    typedef G4std::vector<G4int> 
@@ -90,6 +88,7 @@ static const size_t SizeOfSelectedDoItVector=100;
 class G4SteppingManager 
 ///////////////////////
 {
+
 //--------
 public: //without description
 //--------
@@ -199,6 +198,8 @@ public: //without description
       // Return the estimated safety value at the PostStepPoint
 
 // Member data 
+//  must be changed in elegant way
+   static const size_t SizeOfSelectedDoItVector=100;
    
    G4UserSteppingAction* fUserSteppingAction;
 
