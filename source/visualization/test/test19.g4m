@@ -55,6 +55,7 @@ help /vis/sceneHandler/create
 # Create a viewer.
 /vis/viewer/create
 #
+/vis/set/sides 100
 /vis/viewer/refresh
 /vis/draw/axes     0 0 0 500
 /vis/draw/text     0 0 0 mm 50 -120 -200   exampleN03
@@ -392,7 +393,8 @@ help /vis/sceneHandler/create
 /vis/viewer/refresh
 /vis/viewer/update
 #
-#/vis/rayTracer/column 1000
-#/vis/rayTracer/row 1000
-#/vis/viewer/refresh
-#/vis/viewer/update
+/vis/camera/projection_style 1 30
+/vis/rayTracer/column 400
+/vis/rayTracer/row 400
+/vis/viewer/refresh
+/vis/viewer/update

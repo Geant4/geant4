@@ -1,7 +1,10 @@
-$Id: History,v 1.8 2001-01-16 18:22:16 johna Exp $
+$Id: History,v 1.9 2001-02-01 17:25:32 johna Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+1st February 2001  John Allison (vis-V03-00-01)
+- Added /vis/set/sides 100 to test19.g4m and changed rayTracer to 400x400.
 
 16th January 2001  John Allison
 - Changed screen units to pixels in MySteppingAction.cc.
