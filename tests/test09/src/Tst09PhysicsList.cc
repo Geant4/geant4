@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst09PhysicsList.cc,v 1.2 1999-04-08 14:18:35 urban Exp $
+// $Id: Tst09PhysicsList.cc,v 1.3 1999-04-17 07:47:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,10 +36,6 @@ Tst09PhysicsList::Tst09PhysicsList()
 : G4VUserPhysicsList()
 {
   defaultCutValue = 1.*mm;
-  cutForGamma = defaultCutValue;
-  cutForElectron = defaultCutValue;
-  cutForProton = defaultCutValue;
-
   SetVerboseLevel(1);
 }
 
@@ -222,27 +218,20 @@ void Tst09PhysicsList::ConstructGeneral()
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Tst09PhysicsList::SetCuts(G4double cut)
+void Tst09PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
     G4cout << "Tst09PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
+    G4cout << "Default CutLength : " << defaultCutValue/mm << " (mm)" << endl;
   }  
 
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForElectron, "e+");
-  
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-  SetCutValue(cutForProton, "proton");
-  SetCutValue(cutForProton, "anti_proton");
-   
-  SetCutValueForOthers(cut);
-  
-  if (verboseLevel>1) DumpCutValuesTable();
+ //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+  SetCutsWithDefault();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+

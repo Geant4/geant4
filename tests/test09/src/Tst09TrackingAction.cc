@@ -6,10 +6,9 @@
 #include "G4Gamma.hh"
 #include "globals.hh"
 
-void Tst09TrackingAction::PreUserTrackingAction()
+void Tst09TrackingAction::PreUserTrackingAction(const G4Track* aTrack )
 {
-  G4TrackingManager* trackingManager = GetOmnipotentTrackingManager();
-  G4Track* aTrack = trackingManager->GetTrack();
+  G4TrackingManager* trackingManager = fpTrackingManager;
   const G4DynamicParticle* aParticle = aTrack->GetDynamicParticle(); 
 
   // Add polarization only for gamma

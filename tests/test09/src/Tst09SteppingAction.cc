@@ -18,10 +18,9 @@ Tst09SteppingAction::Tst09SteppingAction()
 Tst09SteppingAction::~Tst09SteppingAction()
 {;}
 
-void Tst09SteppingAction::UserSteppingAction()
+void Tst09SteppingAction::UserSteppingAction(const G4Step * theStep)
 {
-  G4SteppingManager * SM = GetOmnipotentSteppingManager();
-  G4Step * theStep = SM->GetStep();
+  G4SteppingManager * SM = fpSteppingManager;
   G4Track * theTrack = theStep->GetTrack();
 
   // check if it is alive

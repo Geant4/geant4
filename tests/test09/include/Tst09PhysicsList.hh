@@ -16,7 +16,7 @@ protected:
   virtual void ConstructProcess();
   
   // 
-  virtual void SetCuts(G4double aCut);
+  virtual void SetCuts();
   
 protected:
   // these methods Construct particles 
@@ -31,10 +31,6 @@ protected:
   virtual void ConstructGeneral();
   virtual void ConstructEM();
 
-  G4double defaultCutValue;
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForProton;
 };
 
 #endif

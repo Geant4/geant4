@@ -9,9 +9,9 @@ class Tst09TrackingAction : public G4UserTrackingAction {
 
   public:
     Tst09TrackingAction(){};
-    ~Tst09TrackingAction(){};
+    virtual ~Tst09TrackingAction(){};
    
-    void PreUserTrackingAction();
+    virtual void PreUserTrackingAction(const G4Track* aTrack);
 
 };
 

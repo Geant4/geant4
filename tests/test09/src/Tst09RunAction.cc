@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst09RunAction.cc,v 1.1 1999-01-08 16:35:25 gunter Exp $
+// $Id: Tst09RunAction.cc,v 1.2 1999-04-17 07:47:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -24,12 +24,12 @@ Tst09RunAction::~Tst09RunAction()
 {
 }
 
-void Tst09RunAction::BeginOfRunAction(G4Run* aRun)
+void Tst09RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  aRun->SetRunID(runIDcounter++);
+  ((G4Run*)(aRun))->SetRunID(runIDcounter++);
 }
 
-void Tst09RunAction::EndOfRunAction(G4Run* aRun)
+void Tst09RunAction::EndOfRunAction(const G4Run* )
 {
 }
 
