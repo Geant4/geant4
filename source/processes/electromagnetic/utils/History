@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2001-01-16 18:08:32 maire Exp $
+$Id: History,v 1.8 2001-01-24 14:55:04 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
      
 16 jan 01: mma (utils-V03-00-00)
 - bug fixed in MultipleScattering.cc L.Urban 11-01-01 
+  there was an error in computation of the transport
+  cross section, the cross section was too small for
+  low energy (below few MeV for electrons)
     
 09 nov 00: mma (utils-V02-00-04)
 - G4EnergyLossMessenger : subdirectory /process/eLoss created 

@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2001-01-16 17:17:02 maire Exp $
+$Id: History,v 1.11 2001-01-24 14:54:51 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ Jan     16, 01 V.Ivanchenko - materials-V03-00-01
 	       
 Jan     16, 01 L.Urban  - materials-V03-00-00
                bug fixed in IonisParamMat.cc : E100eV instead of E100keV
+               This bug affected the values of the density correction
+               parameters in the energy loss (dE/dx) computation,
+               its effect was quite big (~ 3-5 % error in dE/dx
+               in the energy range 1 MeV - 50 MeV !!!)
 	       
 Nov     09, 00 V.Grichine - materials-V02-00-01
                included test/ directory which was not tagged.
