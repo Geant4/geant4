@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ASCIITree.cc,v 1.2 2001-05-18 10:03:12 johna Exp $
+// $Id: G4ASCIITree.cc,v 1.3 2001-05-25 10:38:44 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,7 +22,9 @@ G4ASCIITree::G4ASCIITree ():
 	   "ATree",
 	   "A graphics system to dump geometry hierarchy"
 	   "\n  to standard output as an ASCII stream.",
-	   G4VGraphicsSystem::nonEuclidian) {
+	   G4VGraphicsSystem::nonEuclidian),
+  fVerbosity(0)
+{
   fpMessenger = new G4ASCIITreeMessenger(this);
 }
 
