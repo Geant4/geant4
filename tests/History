@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2003-12-08 18:24:06 gcosmo Exp $
+$Id: History,v 1.33 2004-01-30 18:39:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+tests-V06-00-00 30th January 2004  Gabriele Cosmo
+- Updated reference outputs according to candidate tag geant4-06-00-ref-01. (STT)
+- Added test40 and updated GNUmakefile, README and list of responsibles.
 
 tests-V05-02-06 8th December 2003  Sergei Sadilov
 - Updated reference outputs according to candidate tag geant4-06-00-cand-03.
