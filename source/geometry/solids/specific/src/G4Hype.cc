@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hype.cc,v 1.5 2000-11-20 18:18:58 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.6 2001-01-04 18:30:50 davidw Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -842,9 +842,9 @@ G4double G4Hype::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
 	}
 
 	//
-	// Nope. Get distance.
+	// Nope. Get distance. Beware of zero vz.
 	//
-	sBest = (halfLenZ - pz)/vz;
+	sBest = (vz > DBL_MIN) ? (halfLenZ - pz)/vz : kInfinity;
 	vBest = true;
 	
 	//
