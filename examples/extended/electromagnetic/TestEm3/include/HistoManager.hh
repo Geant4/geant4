@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.3 2004-07-19 16:10:48 maire Exp $
+// $Id: HistoManager.hh,v 1.4 2004-10-20 14:32:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +34,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 namespace AIDA {
+ class IAnalysisFactory;
  class ITree;
  class IHistogramFactory;
  class IHistogram1D;
@@ -68,7 +69,8 @@ class HistoManager
   private:
   
     G4String                 fileName;
-    G4String                 fileType;    
+    G4String                 fileType;
+    AIDA::IAnalysisFactory*  af;        
     AIDA::ITree*             tree;
     AIDA::IHistogramFactory* hf;    
     AIDA::IHistogram1D*      histo[MaxHisto];    

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.20 2004-07-19 16:10:50 maire Exp $
+// $Id: RunAction.cc,v 1.21 2004-10-20 14:32:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -123,7 +123,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	 << std::setw(27) << "sqrt(E0(GeV))*rmsE/Emean"
 	 << std::setw(23) << "total tracklen \n \n";
 
-  for (G4int k=0; k<Detector->GetNbOfAbsor(); k++)
+  for (G4int k=1; k<=Detector->GetNbOfAbsor(); k++)
     {
      MeanEAbs  = sumEAbs[k]*norm;
      MeanEAbs2 = sum2EAbs[k]*norm;
@@ -158,7 +158,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   // Acceptance
   EmAcceptance acc;
   G4bool isStarted = false;
-  for (G4int j=0; j<Detector->GetNbOfAbsor(); j++) {
+  for (G4int j=1; j<=Detector->GetNbOfAbsor(); j++) {
     if (limittrue[j] < DBL_MAX) {
       if (!isStarted) {
         acc.BeginOfAcceptance("Sampling Calorimeter",NbOfEvents);

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.9 2004-07-19 16:10:49 maire Exp $
+// $Id: EventAction.cc,v 1.10 2004-10-20 14:32:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,7 +75,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
 void EventAction::EndOfEventAction(const G4Event* evt)
 {
-  for (G4int k=0; k<detector->GetNbOfAbsor(); k++) {
+  for (G4int k=1; k<=detector->GetNbOfAbsor(); k++) {
      runAct->fillPerEvent(k,energyDeposit[k],trackLengthCh[k],
                        energyLeaving[k]/(G4double)(detector->GetNbOfLayers()));
 		       

@@ -20,11 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: DetectorConstruction.hh,v 1.9 2004-06-09 14:18:45 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.10 2004-10-20 14:32:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -42,7 +40,7 @@ class G4UniformMagField;
 class G4UserLimits;
 class DetectorMessenger;
 
-     const G4int MaxAbsor = 10;
+     const G4int MaxAbsor = 10;			// 0 + 9  
      
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

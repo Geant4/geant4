@@ -30,7 +30,7 @@
         CALL GEVKEV (rmsEdep,Edrms ,unitdr)
         CALL GEVKEV (aveElea,Elmean,unitlm)
         CALL GEVKEV (rmsElea,Elrms ,unitlr)	
-        PRINT 752,k-1,matnam,Edmean,unitdm,Edrms,unitdr,aveTrck,rmsTrck
+        PRINT 752,k,matnam,Edmean,unitdm,Edrms,unitdr,aveTrck,rmsTrck
      +                      ,Elmean,unitlm,Elrms,unitlr
       enddo
       PRINT 749

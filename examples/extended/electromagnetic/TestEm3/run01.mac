@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.12 2004-06-16 10:35:41 maire Exp $
+# $Id: run01.mac,v 1.13 2004-10-20 14:32:28 maire Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -19,8 +19,8 @@
 /gun/energy 1 GeV
 #
 /testem/histo/setFileName run01.paw
-/testem/histo/setHisto 0 100 700. 1000. MeV
-/testem/histo/setHisto 1 100   0.  300. MeV
+/testem/histo/setHisto 1 100 700. 1000. MeV
+/testem/histo/setHisto 2 100   0.  300. MeV
 #
 /testem/event/printModulo 50
 #

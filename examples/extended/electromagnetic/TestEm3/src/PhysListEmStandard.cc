@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhysListEmStandard.cc,v 1.5 2004-04-28 16:58:49 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.6 2004-10-20 14:32:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

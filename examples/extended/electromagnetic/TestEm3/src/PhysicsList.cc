@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhysicsList.cc,v 1.6 2004-07-19 16:10:50 maire Exp $
+// $Id: PhysicsList.cc,v 1.7 2004-10-20 14:32:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-$Id: README,v 1.18 2004-06-23 11:30:39 maire Exp $
+$Id: README,v 1.19 2004-10-20 14:32:27 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,7 +13,7 @@ $Id: README,v 1.18 2004-06-23 11:30:39 maire Exp $
  1- GEOMETRY DEFINITION
  
  	The calorimeter is a box made of a given number of layers.
-	A layer consists of a sequence of various absorbers (maximum 10).
+	A layer consists of a sequence of various absorbers (maximum 9).
 	The layer is replicated.
  	
  	Parameters defining the calorimeter :
@@ -40,7 +40,7 @@ $Id: README,v 1.18 2004-06-23 11:30:39 maire Exp $
     1. "particles" - particle definitions  
     2. "general" - decays and transportation  
     3. "standard" (alternative) - standard EM physics
-    4. "model"    (alternative) - standard EM physics using model approach
+    4. "g4v52"    (alternative) - standard EM physics version G4 5.2
     
     Notice that there is an example of definition of a static ion : IonC12
     (see PhysListParticle.cc) and an example of use : ionC12.mac
@@ -110,8 +110,8 @@ $Id: README,v 1.18 2004-06-23 11:30:39 maire Exp $
  7- HISTOGRAMS
  
  Testem3 produces histograms : 
-  histo 1 : energy deposit in absorber 0
-  histo 2 : energy deposit in absorber 1
+  histo 1 : energy deposit in absorber 1
+  histo 2 : energy deposit in absorber 2
   ...etc...........
   
  One can control the binning of the histo with the command:
@@ -120,7 +120,7 @@ $Id: README,v 1.18 2004-06-23 11:30:39 maire Exp $
   where unit is the desired energy unit for that histo (see TestEm3.in).
 
  One can control the name of the histograms file with the command:
- /testem/histo/setFileName  name  (default testem3.paw)
+ /testem/histo/setFileName  name  (default testem3.aida)
  
  Note that, by default, histograms are disabled. To activate them, uncomment
  the flag G4ANALYSIS_USE in GNUmakefile.

@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: EventAction.hh,v 1.7 2004-06-15 11:39:57 maire Exp $
+// $Id: EventAction.hh,v 1.8 2004-10-20 14:32:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: DetectorMessenger.hh,v 1.5 2004-06-09 14:18:45 maire Exp $
+// $Id: DetectorMessenger.hh,v 1.6 2004-10-20 14:32:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,7 +53,8 @@ class DetectorMessenger: public G4UImessenger
     DetectorConstruction* Detector;
 
     G4UIdirectory*             testemDir;
-
+    G4UIdirectory*             detDir;
+    
     G4UIcmdWithADoubleAndUnit* SizeYZCmd;
     G4UIcmdWithAnInteger*      NbLayersCmd;
     G4UIcmdWithAnInteger*      NbAbsorCmd;

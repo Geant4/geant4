@@ -20,10 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: SteppingAction.hh,v 1.3 2004-03-16 18:25:29 maire Exp $
+// $Id: SteppingAction.hh,v 1.4 2004-10-20 14:32:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

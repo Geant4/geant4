@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: SteppingVerbose.cc,v 1.2 2003-11-27 18:20:18 vnivanch Exp $
+// $Id: SteppingVerbose.cc,v 1.3 2004-10-20 14:32:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
