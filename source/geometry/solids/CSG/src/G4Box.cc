@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Box.cc,v 1.9 2000-11-20 17:57:58 gcosmo Exp $
+// $Id: G4Box.cc,v 1.10 2000-11-20 18:05:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,10 +17,7 @@
 //  07.05.00 - V.Grichine: d= DistanceToIn(p,v), if d<e/2, d=0
 //  09.06.00 - V.Grichine: safety in DistanceToIn(p) against Inside(p)=kOutside
 //             and information before exception in DistanceToOut(p,v,...)
-//  15.11.00 - D.Williams, V.Grichine: bug fixed in CalculateExtent - change
-//                                     algorithm for rotated vertices
-// 
-//
+
 
 
 #include "G4Box.hh"
@@ -192,70 +189,39 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
     ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax) ;
     ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax) ;
     ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax) ;
-
-    if (pVoxelLimit.IsLimited(pAxis) == false) 
-    {	
-      if ( pMin != kInfinity || pMax != -kInfinity ) 
-      {
-          existsAfterClip = true ;
-
+	    
+    if ( pMin != kInfinity || pMax != -kInfinity )
+    {
+      existsAfterClip = true ;
+		    
 // Add 2*tolerance to avoid precision troubles
 
-          pMin           -= kCarTolerance;
-	  pMax           += kCarTolerance;
-      }
-    }	    
+      pMin -= kCarTolerance ;
+      pMax += kCarTolerance ;		    
+    }
     else
     {
-      G4ThreeVector clipCentre(
-		( pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-		( pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-		( pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
-
-      if ( pMin != kInfinity || pMax != -kInfinity )
-      {
-        existsAfterClip = true ;
-	
-
-        // Check to see if endpoints are in the solid
-
-	clipCentre(pAxis) = pVoxelLimit.GetMinExtent(pAxis);
-
-	if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
-        {
-      	  pMin = pVoxelLimit.GetMinExtent(pAxis);
-        }
-	else
-        {
-      	  pMin -= kCarTolerance;
-        }
-	clipCentre(pAxis) = pVoxelLimit.GetMaxExtent(pAxis);
-
-	if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
-        {
-	  pMax = pVoxelLimit.GetMaxExtent(pAxis);
-        }
-	else
-        {
-          pMax += kCarTolerance;
-        }
-      }
 // Check for case where completely enveloping clipping volume
 // If point inside then we are confident that the solid completely
 // envelopes the clipping volume. Hence set min/max extents according
 // to clipping volume extents along the specified axis.
+
+      G4ThreeVector clipCentre(
+	     ( pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
+	     ( pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
+	     ( pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
 		    
-      else if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
+      if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
       {
-         existsAfterClip = true ;
-         pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
-         pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
+        existsAfterClip = true ;
+        pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
+        pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
       }
-    } 
+    }
     delete vertices;
     return existsAfterClip;
-  } 
-} 
+  }
+}
 
 /////////////////////////////////////////////////////////////////////////
 //
