@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.hh,v 1.20 2004-05-07 16:05:38 vnivanch Exp $
+// $Id: G4MuIonisation.hh,v 1.21 2004-05-07 16:47:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,7 +82,7 @@ class G4MuIonisation : public G4VEnergyLossProcess
 
 public:
 
-  G4MuIonisation(const G4String& name = "muIoni");
+  G4MuIonisation(const G4String& name = "MuIoni");
 
   ~G4MuIonisation();
 
