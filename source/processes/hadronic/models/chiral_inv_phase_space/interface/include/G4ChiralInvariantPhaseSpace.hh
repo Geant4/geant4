@@ -63,24 +63,25 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
 //	 << 1./MeV*targ4Mom << " "
 //	 << nop << G4endl;
   G4Quasmon* pan= new G4Quasmon(projectilePDGCode, targetPDGCode, 1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
-  G4QHadronVector output = pan->HadronizeQuasmon();
+  G4QHadronVector * output = pan->Fragment();
   delete pan;
   
   // Fill the particle change.
   theResult.Initialize(aTrack);
   theResult.SetStatusChange(fStopAndKill);
-  theResult.SetNumberOfSecondaries(output.length());
+  theResult.SetNumberOfSecondaries(output->length());
   G4DynamicParticle * theSec;
   G4cout << "NEW EVENT"<<endl;
-  for(G4int particle = 0; particle < output.length(); particle++)
+  G4int particle;
+  for( particle = 0; particle < output->length(); particle++)
   {
-    if(output[particle]->GetNFragments() != 0) 
+    if(output->at(particle)->GetNFragments() != 0) 
     {
-      delete output[particle];
+      delete output->at(particle);
       continue;
     }
     theSec = new G4DynamicParticle;  
-    G4int pdgCode = output[particle]->GetPDGCode();
+    G4int pdgCode = output->at(particle)->GetPDGCode();
     G4ParticleDefinition * theDefinition;
     // Note that I still have to take care of strange nuclei
     // For this I need the mass calculation, and a changed interface
@@ -96,14 +97,15 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
     }
     else
     {
-      theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(output[particle]->GetPDGCode());
+      theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(output->at(particle)->GetPDGCode());
     }
     G4cout << "Particle code produced = "<< pdgCode <<endl;
     theSec->SetDefinition(theDefinition);
-    theSec->SetMomentum(output[particle]->Get4Momentum().vect());
+    theSec->SetMomentum(output->at(particle)->Get4Momentum().vect());
     theResult.AddSecondary(theSec); 
-    delete output[particle];
+    delete output->at(particle);
   }
+  delete output;
   return & theResult;
 }
 

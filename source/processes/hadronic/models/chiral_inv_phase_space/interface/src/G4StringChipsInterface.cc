@@ -103,7 +103,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     if(!aNucleon->AreYouHit())
     {
       resA++;
-      resZ+=aNucleon->GetDefinition()->GetPDGCharge();
+      resZ+=G4int (aNucleon->GetDefinition()->GetPDGCharge());
     }
     else
     {
@@ -135,7 +135,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4Quasmon* pan= new G4Quasmon(theProjectiles, targetPDGCode, 1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
 
   // now call chips with this info in place
-  G4QHadronVector output = pan->HadronizeQuasmon();
+  G4QHadronVector * output = pan->Fragment();
   delete pan;
    
   // Fill the result.
@@ -153,15 +153,15 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     theResult->insert(theSec);
   }
   // now the quasmon output
-  for(G4int particle = 0; particle < output.length(); particle++)
+  for(G4int particle = 0; particle < output->length(); particle++)
   {
-    if(output[particle]->GetNFragments() != 0) 
+    if(output->at(particle)->GetNFragments() != 0) 
     {
-      delete output[particle];
+      delete output->at(particle);
       continue;
     }
     theSec = new G4ReactionProduct;  
-    G4int pdgCode = output[particle]->GetPDGCode();
+    G4int pdgCode = output->at(particle)->GetPDGCode();
     G4ParticleDefinition * theDefinition;
     // Note that I still have to take care of strange nuclei
     // For this I need the mass calculation, and a changed interface
@@ -177,14 +177,15 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     }
     else
     {
-      theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(output[particle]->GetPDGCode());
+      theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(output->at(particle)->GetPDGCode());
     }
     G4cout << "Particle code produced = "<< pdgCode <<endl;
     theSec = new G4ReactionProduct(current->second->GetDefinition());
-    theSec->SetTotalEnergy(output[particle]->Get4Momentum().t());
-    theSec->SetMomentum(output[particle]->Get4Momentum().vect());
+    theSec->SetTotalEnergy(output->at(particle)->Get4Momentum().t());
+    theSec->SetMomentum(output->at(particle)->Get4Momentum().vect());
     theResult->insert(theSec);
-    delete output[particle];
+    delete output->at(particle);
   }
+  delete output;
   return theResult;
 } 
