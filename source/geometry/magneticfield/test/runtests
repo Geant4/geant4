@@ -17,3 +17,22 @@ do
   $ECHO  " "
 
 done 
+
+#exit
+
+for i in *Spin.cc testProElectroMagField.cc
+do
+  target=`basename $i .cc`
+  echo  "Executing $target ..."
+  $G4WORKDIR/bin/$G4SYSTEM/$target > $target.newout \
+                                  2> $target.newerr
+  echo  ".. difference from expected output: "
+  diff -wb $target.out $target.newout
+  sleep 1;
+  echo  ".. difference from expected error: "
+  diff -wb $target.err $target.newerr
+  sleep 1;
+  echo  " "
+done
+
+exit

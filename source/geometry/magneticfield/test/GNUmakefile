@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999-07-06 20:25:41 japost Exp $
+# $Id: GNUmakefile,v 1.3 2000-11-21 13:00:04 gcosmo Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable TESTTARGET.
 # ----------------------------------------------------------------
@@ -26,12 +26,23 @@ INCFLAGS := -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/graphics_reps/include
 
-OLD_LDLIBS   := -lG4geometry  \
-            -lG4graphics_reps \
-            -lG4global
+OLD_LDLIBS := -lG4geometry  \
+              -lG4graphics_reps \
+              -lG4global
 
 LDLIBS   := -lG4csg -lG4volumes -lG4geometrymng -lG4magneticfield \
             -lG4graphics_reps \
             -lG4globman 
 
 include $(G4INSTALL)/config/binmake.gmk
+
+.PHONY: clean_all
+
+clean_all:
+	@for i in testPro*.cc; do \
+	(target=`basename $$i .cc`; \
+	echo  "Removing $$target ... "; \
+	$(MAKE) clean G4SKIP_DEPEND=1 G4TARGET=$$target); done
+	@echo  "Wiping output files ... "
+	@$(RM) -rf *.newout*
+	@$(RM) -rf *.newerr*
