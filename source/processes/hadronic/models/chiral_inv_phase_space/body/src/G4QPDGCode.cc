@@ -1,32 +1,18 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
 //
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
 //
-//
-// $Id: G4QPDGCode.cc,v 1.11 2001-08-01 17:03:47 hpw Exp $
+// $Id: G4QPDGCode.cc,v 1.12 2001-09-13 14:05:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
 //      ---------------- G4QPDGCode ----------------
 //             by Mikhail Kossov, Sept 1999.
 //      class for Hadron definitions in CHIPS Model
@@ -248,7 +234,7 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
     else if(r==6) Q=40;
     else if(r==7) Q=48;
     else if(r==8) Q=54;
-    else if(r==9) Q=66;     // @@ Not yet implemented family of mesons with spin 4
+    else if(r==9) Q=65;     // @@ Not yet implemented family of mesons with spin 4
     if(r%2)                 // Mesons are all the same
 	{
       if     (p==11) return Q+=1;
@@ -464,7 +450,8 @@ G4double G4QPDGCode::GetMass()
   if(abs(thePDGCode)>80000000)             // Nuclear coding
   {
     G4int szn=thePDGCode-90000000;
-    if(szn==0) return m[4];                // mPi0
+    //if(szn==0) return m[4];                // mPi0   %%???? MK ????
+    if(szn==0) return 0.;
     G4int ds=0;
     G4int dz=0;
     G4int dn=0;
@@ -610,19 +597,19 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   static const G4double b8=10.5;       // (Lambda binding energy exponent)
   static const G4double b9=-1./3.;
   static const G4double a2=0.13;       // Lambda binding energy for the deutron+Lambda system (MeV)
-  static const G4double a3=2.2;        // Lambda binding energy for the (t or He3)+Lambda system (MeV)
+  static const G4double a3=2.2;        // Lambda binding energy for (t or He3)+Lambda system (MeV)
   static const G4double um=931.49432;  // Umified atomic mass unit (MeV)
-  static const G4double me =0.511;     // electron mass (MeV)
-  static G4double c[9][9]={
-                   {13.136,14.931,25.320,38.000,45.000,55.000,65.000,75.000,85.000},
-				   {14.950, 2.425,11.680,18.374,27.870,35.094,48.000,60.000,72.000},
-				   {25.930,11.390,14.086,15.770,22.921,28.914,39.700,49.000,60.000},
-				   {36.830,17.594,14.908, 4.942,12.416,15.699,24.960,32.048,45.000},
-				   {41.860,26.110,20.946,11.348,12.051,10.650,17.338,23.111,33.610},
-				   {45.000,31.598,24.954,12.607, 8.668, 0.000, 5.345, 8.006,16.780},
-				   {50.000,40.820,33.050,20.174,13.369, 3.125, 2.863, 2.855,10.680},
-				   {55.000,48.810,40.796,25.076,16.562, 3.020, 0.101,-4.737,1.9520},
-				   {60.000,55.000,50.100,33.660,23.664, 9.873, 5.683,-0.809,0.8730}};
+  static const G4double me =0.511;     // electron mass (MeV) :: n:8.071, p:7.289
+  static G4double c[9][9]={// z=1     =2     =3     =4     =5     =6     =7     =8     =9
+                            {13.136,14.931,25.320,38.000,45.000,55.000,65.000,75.000,85.000},  //n=1
+				            {14.950, 2.425,11.680,18.374,27.870,35.094,48.000,60.000,72.000},  //n=2
+				            {25.930,11.390,14.086,15.770,22.921,28.914,39.700,49.000,60.000},  //n=3
+				            {36.830,17.594,14.908, 4.942,12.416,15.699,24.960,32.048,45.000},  //n=4
+				            {41.860,26.110,20.946,11.348,12.051,10.650,17.338,23.111,33.610},  //n=5
+				            {45.000,31.598,24.954,12.607, 8.668, 0.000, 5.345, 8.006,16.780},  //n=6
+				            {50.000,40.820,33.050,20.174,13.369, 3.125, 2.863, 2.855,10.680},  //n=7
+				            {55.000,48.810,40.796,25.076,16.562, 3.020, 0.101,-4.737,1.9520},  //n=8
+				            {60.000,55.000,50.100,33.660,23.664, 9.873, 5.683,-0.809,0.8730}}; //n=9
 #ifdef debug
   G4cout<<"G4QPDGCode::GetNuclMass called with Z="<<Z<<",N="<<N<<", S="<<S<<G4endl;
 #endif
@@ -631,7 +618,8 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
 #ifdef debug
     G4cout<<"G4QPDGCode::GetNuclMass(0,0,0)="<<mPi0<<"#0"<<G4endl;
 #endif
-    return mPi0;
+    //return mPi0;
+    return 0.;
   }
   G4int A=Z+N;
   G4int Bn=A+S;
@@ -725,11 +713,14 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
 #endif
     return 0.;                        // @@ Temporary
   }
-  if     (!Z) return k+N*mN+S*mL+(N+S)*.001;  // @@ n+LAMBDA states are not implemented
-  else if(!N) return k+Z*mP+S*mL+(Z+S)*.001;  // @@ p+LAMBDA states are not implemented
+  if     (!Z) return k+N*(mN+.1)+S*(mL+.1);  // @@ n+LAMBDA states are not implemented
+  else if(!N) return k+Z*(mP+1.)+S*(mL+.1);  // @@ p+LAMBDA states are not implemented
   else if(N<=9&&Z<=9) m+=1.433e-5*pow(double(Z),2.39)-Z*me+c[N-1][Z-1];
-  else m+=-sh[Z]-sh[N]+b1*D*D*pow(A,b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(A,b9)+b6/A);
-  //else m=G4NucleiProperties::GetNuclearMass(Z+N,Z);
+  else 
+  {
+    if(G4NucleiPropertiesTable::IsInTable(Z,A)) m=G4NucleiProperties::GetNuclearMass(A,Z);
+    else m+=-sh[Z]-sh[N]+b1*D*D*pow(A,b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(A,b9)+b6/A);
+  }
   G4double maxM= k+Z*mP+N*mN+S*mL+.001;       // @@ .001 ?? Wings of the Mass parabola
   if(m>maxM) m=maxM;
   if(S>0)
@@ -788,7 +779,7 @@ G4QContent G4QPDGCode::GetQuarkContent() const
         if(a) as++;
         else   s++;
 	  }
-      else cerr<<"*G4PDGCode::GetQuarkContent:1 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<endl;
+      else G4cerr<<"***G4QPDGCode::GetQContent:1 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<G4endl;
       if     (v==1)
 	  {
         if(a) ad++;
@@ -804,7 +795,7 @@ G4QContent G4QPDGCode::GetQuarkContent() const
         if(a) as++;
         else   s++;
 	  }
-      else cerr<<"*G4PDGCode::GetQuarkContent:2 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<endl;
+      else G4cerr<<"***G4QPDGCode::GetQContent:2 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<G4endl;
       if     (t==1)
 	  {
         if(a) ad++;
@@ -820,7 +811,7 @@ G4QContent G4QPDGCode::GetQuarkContent() const
         if(a) as++;
         else   s++;
 	  }
-      else cerr<<"*G4PDGCode::GetQuarkContent:3 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<endl;
+      else G4cerr<<"***G4QPDGCode::GetQCont:3 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<G4endl;
       return G4QContent(d,u,s,ad,au,as);
 	}
     else        // Mesons
@@ -830,7 +821,7 @@ G4QContent G4QPDGCode::GetQuarkContent() const
         if     (f==1) return G4QContent(1,0,0,1,0,0);
         else if(f==2) return G4QContent(0,1,0,0,1,0);
         else if(f==3) return G4QContent(0,0,1,0,0,1);
-        else cerr<<"*G4PDGCode::GetQuarkContent:4 P="<<thePDGCode<<","<<f<<","<<v<<","<<t<<endl;
+        else G4cerr<<"***G4QPDGCode::GetQCont:4 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<G4endl;
 	  }
       else
 	  {
@@ -849,7 +840,7 @@ G4QContent G4QPDGCode::GetQuarkContent() const
           if(a)return G4QContent(0,0,1,0,1,0);
           else return G4QContent(0,1,0,0,0,1);
         }
-        else cerr<<"*G4PDGCode::GetQuarkContent:5 P="<<thePDGCode<<","<<f<<","<<v<<","<<t<<endl;
+        else G4cerr<<"***G4QPDGCode::GetQCont:5 PDG="<<thePDGCode<<","<<f<<","<<v<<","<<t<<G4endl;
 	  }
 	}
   }
@@ -1027,9 +1018,9 @@ G4int G4QPDGCode::GetRelCrossIndex(G4int i, G4int o)  const
       else           return m21[rel];
     }
     else if(o==2) return 0;
-    else cerr<<"***G4QPDGCode::RelGetCrossIndex: strange exiting quark (i=0) o="<<o<<endl;
+    else G4cerr<<"***G4QPDGCode::RelGetCrossIndex: strange exiting quark (i=0) o="<<o<<G4endl;
   }
-  else cerr<<"***G4QPDGCode::RelGetCrossIndex: strange entering quark i="<<i<<endl;
+  else G4cerr<<"***G4QPDGCode::RelGetCrossIndex: strange entering quark i="<<i<<G4endl;
 }
 
 // Get number of Combinations for q_i->q_o

@@ -1,27 +1,11 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
 //
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
 //
-//
-// $Id: G4Quasmon.hh,v 1.13 2001-08-01 17:03:39 hpw Exp $
+// $Id: G4Quasmon.hh,v 1.14 2001-09-13 14:05:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,6 +16,8 @@
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.
 //      class for a Quasmon used by the CHIPS Model
@@ -47,8 +33,7 @@
 #include "G4QCHIPSWorld.hh"
 #include "G4QChipolino.hh"
 #include "G4QHadronVector.hh"
-#include "G4QCandidateVector.hh"
-//#include "G4QParentClusterVector.hh"
+#include "G4QNucleus.hh"
 
 class G4Quasmon 
 {
@@ -82,27 +67,26 @@ public:
   G4int             GetStatus()    const;
 
   //Modifiers
-  G4QHadronVector*  Fragment(G4QNucleus& nucEnviron); // Pub-wrapper for HadronizeQuasmon()
+  G4QHadronVector*  Fragment(G4QNucleus& nucEnviron, G4int nQ); // Pub-wrapper for "HadronizeQuasmon(,)"
   void              ClearOutput();                    // Clear but not destroy the output
   void              InitQuasmon(const G4QContent& qQCont, const G4LorentzVector& q4M);
   void              IncreaseBy(const G4Quasmon* pQuasm); // as operator+= but by pointer
   void              KillQuasmon();                    // Kill Quasmon (status=0)
 
 private:  
-  G4QHadronVector    HadronizeQuasmon(G4QNucleus& qEnv); // Return new neuclear environment (!)
-  G4double           GetRandomMass(G4int PDGCode, G4double maxM);
-  G4double           CoulombBarrier(const G4double& tZ, const G4double& tA, const G4double& cZ,
-                                    const G4double& cA);
-  void               ModifyInMatterCandidates();
-  void               InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust);
-  void               CalculateNumberOfQPartons(G4double qMass);
-  void               PrepareClusters();
-  void               PrepareCandidates(G4int j);
-  void               CalculateHadronizationProbabilities(G4double kQ, G4double kLS, G4int j);
-  void               FillHadronVector(G4QHadron* qHadron);
-  G4int              RandomPoisson(G4double meanValue);
-  G4double           GetQPartonMomentum(G4double mMinResidual2, G4double mCandidate2);
-  G4bool             DecayOutHadron(G4QHadron* qHadron);
+  G4QHadronVector  HadronizeQuasmon(G4QNucleus& qEnv, G4int nQ); // Return new neuclear environment
+  G4double         GetRandomMass(G4int PDGCode, G4double maxM);
+  void             ModifyInMatterCandidates();
+  void             InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust);
+  void             CalculateNumberOfQPartons(G4double qMass);
+  void             CalculateHadronizationProbabilities(G4double excE, G4double kQ, G4double kLS,
+                                                       G4bool piF, G4bool gaF);
+  void             FillHadronVector(G4QHadron* qHadron);
+  G4int            RandomPoisson(G4double meanValue);
+  G4double         GetQPartonMomentum(G4double mMinResidual2, G4double mCandidate2);
+  G4bool           DecayOutHadron(G4QHadron* qHadron, G4int DFlag=0);
+  G4bool           CheckGroundState(G4bool corFlag = false); // Forbid correction by default
+  void             KillEnvironment(); // Kill Environment (Z,N,S=0,LV=0)
 
 // Body
 private:
@@ -112,20 +96,25 @@ private:
   static G4double    EtaEtaprime;     // Part of eta-prime in all etas
   // Hadronic input
   G4LorentzVector    q4Mom;           // 4-momentum of the Quasmon +++++
-  G4QContent         valQ;            // Quark Content of Quasmon  +++++
-  G4QNucleus         theEnvironment;  // Nuclear (or Vacuum) Environment for the Quasmon
+  G4QContent         valQ;            // Quark Content of the Quasmon  +++++
+  G4QNucleus         theEnvironment;  // Nuclear (or Vacuum) Environment around the Quasmon
   // Output
-  G4int              status;          // Status of Quasmon (0-Done,1-FilledSomething,2-DidNothing)
+  G4int status; // -1-Panic,0-Done,1-FilledSomething,2-DidNothing,3-StopedByCB,4-JustBorn
   G4QHadronVector    theQHadrons;     // Vector of generated secondary hadrons +++++
-  // Internal working parameters
-  G4QCHIPSWorld      theWorld;        // The CHIPS World
+  // Internal working objects (@@ it is possible to sacrifice some of them in future)
+  G4QCHIPSWorld      theWorld;        // Pointer to the CHIPS World
   G4LorentzVector    phot4M;          // Gamma 4-momentum for interaction with a quark-parton
-  G4int              nBarClust;       // Maximum barion number of clusters @@ ??
-  G4int              nOfQ;            // number of quark-partons just to accelerate +++++
-  G4QCandidateVector theQCandidates;  // Vector of possible secondary hadrons (***delete***) @@ ??
-  G4double           f2all;           // Ratio of free nucleons to free+dense nucleons @@ ??
+  G4int              nBarClust;       // Maximum barion number of clusters in the Environment @@ ??
+  G4int              nOfQ;            // number of quark-partons in the Quasmon (just to accelerate)
+  G4QCandidateVector theQCandidates;  // Vector of possible secondary hadrons/clusters (**delete!**)
+  G4double           f2all;           // Ratio of free nucleons to free+freeInDense nucleons @@ ??
   G4double           rEP;             // E+p for the Residual Coloured Quasmon im LS +++++
   G4double           rMo;             // p for the Residual Coloured Quasmon im LS +++++
+  G4double           totMass;         // Mass of total compound system curQuasmon+curEnvironment
+  G4int              bEn;             // BaryoNumber of the Limit Active Nuclear Environment
+  G4double           mbEn;            // Mass of the LimActNucEnv
+  G4LorentzVector    bEn4M;           // 4-momentum of the LimitActiveNuclearEnviron
+  G4QContent         bEnQC;           // QuarkContent of the LimitActiveNuclEnv
 };
 
 inline int G4Quasmon::operator==(const G4Quasmon &right) const {return this == &right;}
@@ -138,6 +127,8 @@ inline G4QContent      G4Quasmon::GetQC()        const {return valQ;}
 inline G4QPDGCode      G4Quasmon::GetQPDG()      const {return G4QPDGCode(valQ);}
 inline G4int           G4Quasmon::GetStatus()    const {return status;}
 inline void            G4Quasmon::ClearOutput()        {theQHadrons.clearAndDestroy();}
+inline void            G4Quasmon::KillEnvironment()
+                                    {theEnvironment=G4QNucleus(0,0,0,G4LorentzVector(0.,0.,0.,0.));}
 inline G4double        G4Quasmon::GetRandomMass(G4int PDG, G4double maxM)
 {
   G4QParticle* part = theWorld.GetQParticle(PDG);
@@ -162,6 +153,7 @@ inline void G4Quasmon::KillQuasmon()
 {
   static const G4QContent zeroQC(0,0,0,0,0,0);
   static const G4LorentzVector nothing(0.,0.,0.,0.);
+  phot4M= nothing;
   valQ  = zeroQC;
   q4Mom = nothing;
   status= 0;

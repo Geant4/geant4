@@ -1,27 +1,11 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
 //
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
 //
-//
-// $Id: G4QNucleus.hh,v 1.7 2001-08-01 17:03:36 hpw Exp $
+// $Id: G4QNucleus.hh,v 1.8 2001-09-13 14:05:30 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,13 +15,14 @@
 // ----------------------------------------------------------------------
 //      GEANT 4 class header file
 //
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.
 //  class header for Quasmon initiated Candidates used by the CHIPS Model
 // ----------------------------------------------------------------------
 
-#include "G4QHadron.hh"
-#include "G4QNucleus.hh"
+#include "G4QCandidateVector.hh"
 
 class G4QNucleus : public G4QHadron
 {
@@ -74,6 +59,8 @@ public:
 
   // Specific Modifiers
   G4bool     EvaporateBaryon(G4QHadron* h1,G4QHadron* h2); // Evaporate one Baryon from Nucleus
+  G4bool     SplitBaryon();                                // Is it possible to split a baryon/alpha
+  G4bool     Split2Baryons();                              // Is it possible to split two baryons?
   void       InitByPDG(G4int newPDG);                      // Init existing nucleus by new PDG
   void       InitByQC(G4QContent newQC);                   // Init existing nucleus by new QCont
   void       IncProbability(G4int bn);                     // Add one cluster to probability
@@ -81,19 +68,24 @@ public:
   void       Increase(G4QContent QC, G4LorentzVector LV = G4LorentzVector(0.,0.,0.,0.));
   void       Reduce(G4int PDG);                            // Reduce Nucleus by PDG fragment
   void       CalculateMass();                              // Recalculate (calculate) the mass
-  void       SetMaxClust(G4int maxC);                      // Get Max BarNum of Clusters
-  void       SetZNSQC(G4int z, G4int n, G4int s);          // Set QC, using Z,N,S
+  void       SetMaxClust(G4int maxC);                      // Set Max BarNum of Clusters
+  void       PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool piF, G4bool gaF);
+  G4int      UpdateClusters(G4bool din);                   // Return a#of clusters & calc. probab's
   G4QNucleus operator+=(const G4QNucleus& rhs);            // Add a cluster to the  nucleus
   G4QNucleus operator-=(const G4QNucleus& rhs);            // Subtract a cluster from a nucleus
   G4QNucleus operator*=(const G4int& rhs);                 // Multiplication of the Nucleus
   // Static functions
   static void SetParameters(G4double fN, G4double fD, G4double cP, G4double mR=1.);
   // Specific General Functions
-  void  UpdateClusters(G4int maxCls=0);                    // Calculate a#of b-clusters (prob.)
+  G4int RandomizeBinom(G4double p,G4int N);                // Randomize according to Binomial Law
+  G4double CoulombBarrier(const G4double& cZ, const G4double& cA, G4double dZ=0., G4double dA=0.);
+  G4double BindingEnergy(const G4double& cZ, const G4double& cA, G4double dZ=0., G4double dA=0.);
+  G4double CoulBarPenProb(const G4double& CB, const G4double& E, const G4int& C, const G4int& B);
 
 private:  
   // Specific Encapsulated Functions
-  G4QNucleus        GetThis() const;
+  void       SetZNSQC(G4int z, G4int n, G4int s);          // Set QC, using Z,N,S
+  G4QNucleus GetThis() const;                              // @@ Check for memory leak
 
 // Body
 private:

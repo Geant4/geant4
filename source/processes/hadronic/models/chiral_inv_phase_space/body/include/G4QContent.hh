@@ -1,27 +1,11 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
 //
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
 //
-//
-// $Id: G4QContent.hh,v 1.9 2001-08-01 17:03:32 hpw Exp $
+// $Id: G4QContent.hh,v 1.10 2001-09-13 14:05:29 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,6 +15,8 @@
 // ----------------------------------------------------------------------
 //      GEANT 4 class header file
 //
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.
 //  class header for Quasmon initiated Contents used by the CHIPS Model
@@ -69,7 +55,7 @@ public:
   G4int             NOfCombinations(const G4QContent& rhs) const; //@@ can be an "operator/"
   G4int             GetQ() const;
   G4int             GetAQ() const;
-  G4int             GetTot() const;
+  G4int             GetTot() const; 
   G4bool            CheckNegative() const;
 
   G4int GetP() const;       // A#of protons
@@ -85,6 +71,13 @@ public:
   G4int GetAD() const;      // A#of anti-d-quarks
   G4int GetAU() const;      // A#of anti-u-quarks
   G4int GetAS() const;      // A#of anti-s-quarks
+
+  G4int GetNetD() const;    // A net#of d-quarks
+  G4int GetNetU() const;    // A net#of u-quarks
+  G4int GetNetS() const;    // A net#of s-quarks
+  G4int GetNetAD() const;   // A net#of anti-d-quarks
+  G4int GetNetAU() const;   // A net#of anti-u-quarks
+  G4int GetNetAS() const;   // A net#of anti-s-quarks
 
   G4int GetDD() const;      // A#of dd-di-quarks
   G4int GetUU() const;      // A#of uu-di-quarks
@@ -172,6 +165,13 @@ inline G4int G4QContent::GetAU() const{return nAU;}
 inline G4int G4QContent::GetAD() const{return nAD;}
 inline G4int G4QContent::GetAS() const{return nAS;}
 
+inline G4int G4QContent::GetNetU() const{return nU-nAU;}
+inline G4int G4QContent::GetNetD() const{return nD-nAD;}
+inline G4int G4QContent::GetNetS() const{return nS-nAS;}
+inline G4int G4QContent::GetNetAU() const{return nAU-nU;}
+inline G4int G4QContent::GetNetAD() const{return nAD-nD;}
+inline G4int G4QContent::GetNetAS() const{return nAS-nS;}
+
 inline G4int G4QContent::GetUU() const{return nU*(nU-1)/2;}
 inline G4int G4QContent::GetDD() const{return nD*(nD-1)/2;}
 inline G4int G4QContent::GetSS() const{return nS*(nS-1)/2;}
@@ -252,134 +252,6 @@ inline G4QContent G4QContent::operator+=(G4QContent& rhs)
   nAD+= rhs.nAD;
   nAU+= rhs.nAU;
   nAS+= rhs.nAS;
-  return *this;
-} 
-
-// Subtract Quark Content
-inline G4QContent G4QContent::operator-=(const G4QContent& rhs)
-//     =======================================================
-{
-  G4int rD=rhs.nD;
-  G4int rU=rhs.nU;
-  G4int rS=rhs.nS;
-  G4int rAD=rhs.nAD;
-  G4int rAU=rhs.nAU;
-  G4int rAS=rhs.nAS;
-  if(rS==1 && rAS==1 && (nS<1 || nAS<1))  // Eta case, switch quark pairs (?)
-  {
-    rS =0;
-    rAS=0;
-    if(nU>rU&&nAU>rAU)
-    {
-      rU +=1;
-      rAU+=1;
-	}
-    else
-    {
-      rD +=1;
-      rAD+=1;
-	}
-  }
-  nD -= rD;
-  if (nD<0)
-  {
-    nAD -= nD;
-    nD   = 0;
-  }
-  nU -= rU;
-  if (nU<0)
-  {
-    nAU -= nU;
-    nU   = 0;
-  }
-  nS -= rS;
-  if (nS<0)
-  {
-    nAS -= nS;
-    nS   = 0;
-  }
-  nAD -= rAD;
-  if (nAD<0)
-  {
-    nD -= nAD;
-    nAD = 0;
-  }
-  nAU -= rAU;
-  if (nAU<0)
-  {
-    nU -= nAU;
-    nAU = 0;
-  }
-  nAS -= rAS;
-  if (nAS<0)
-  {
-    nS -= nAS;
-    nAS = 0;
-  }
-  return *this;
-} 
-
-// Subtract Quark Content
-inline G4QContent G4QContent::operator-=(G4QContent& rhs)
-//     ==================================================
-{
-  G4int rD=rhs.nD;
-  G4int rU=rhs.nU;
-  G4int rS=rhs.nS;
-  G4int rAD=rhs.nAD;
-  G4int rAU=rhs.nAU;
-  G4int rAS=rhs.nAS;
-  if(rS==1 && rAS==1 && (nS<1 || nAS<1))  // Eta case, switch quark pairs
-  {
-    rS =0;
-    rAS=0;
-    if(nU>rU&&nAU>rAU)
-    {
-      rU +=1;
-      rAU+=1;
-	}
-    else
-    {
-      rD +=1;
-      rAD+=1;
-	}
-  }
-  nD -= rD;
-  if (nD<0)
-  {
-    nAD -= nD;
-    nD   = 0;
-  }
-  nU -= rU;
-  if (nU<0)
-  {
-    nAU -= nU;
-    nU   = 0;
-  }
-  nS -= rS;
-  if (nS<0)
-  {
-    nAS -= nS;
-    nS   = 0;
-  }
-  nAD -= rAD;
-  if (nAD<0)
-  {
-    nD -= nAD;
-    nAD = 0;
-  }
-  nAU -= rAU;
-  if (nAU<0)
-  {
-    nU -= nAU;
-    nAU = 0;
-  }
-  nAS -= rAS;
-  if (nAS<0)
-  {
-    nS -= nAS;
-    nAS = 0;
-  }
   return *this;
 } 
 

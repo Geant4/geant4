@@ -1,27 +1,11 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
 //
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
 //
-//
-// $Id: G4QParentCluster.hh,v 1.5 2001-08-01 17:03:37 hpw Exp $
+// $Id: G4QParentCluster.hh,v 1.6 2001-09-13 14:05:30 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,6 +15,8 @@
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
 //      ---------------- G4QParentCluster ----------------
 //             by Mikhail Kossov, Sept 1999.
 //  class header for a Parent nuclear cluster in the CHIPS Model
@@ -63,8 +49,10 @@ public:
   G4QContent GetTransQC()      const;   // Get QuarkCont of a Pseudo Exchange Meson
   G4double   GetLow()          const;   // Get a low limit for randomization
   G4double   GetHigh()         const;   // Get a high limit for randomization
-  G4double   GetMass()         const;   // Get a bounded mass of the parent cluster
-  G4double   GetBind()         const;   // Get binding energy of the parent cluster
+  G4double   GetEBMass()       const;   // Get a Nuclear Bounded mass of the parent cluster
+  G4double   GetEBind()        const;   // Get Environment Binding energy for the parent cluster
+  G4double   GetNBMass()       const;   // Get an Environmental bounded mass of the parent cluster
+  G4double   GetNBind()        const;   // Get Total Nucleus Binding energy for the parent cluster
 
   // Modifiers
   void  SetPDGCode(G4int newPDGCode);                // Set PDG code of the Parent Cluster
@@ -73,8 +61,10 @@ public:
   void  SetTransQC(G4QContent newTrans);             // Set QuarkCont of a Pseudo Exchange Meson
   void  SetLow(G4double loLim);                      // Set a low limit for hadronization
   void  SetHigh(G4double hiLim);                     // Set a high limit for hadronization
-  void  SetMass(G4double bMass);                     // Set a bounded mass of the parent cluster
-  void  SetBind(G4double bEn);                       // Set binding energy of the parent cluster
+  void  SetEBMass(G4double bMass);                   // Set a bounded mass of the parent cluster in E
+  void  SetEBind(G4double bEn);                      // Set binding energy of the parent cluster in E
+  void  SetNBMass(G4double bMass);                   // Set a bounded mass of the parent cluster in N
+  void  SetNBind(G4double bEn);                      // Set binding energy of the parent cluster in N
 
   // General
 
@@ -90,8 +80,10 @@ private:
   G4QContent          transQC;                         // Quark Content of pseudo exchange meson
   G4double            lowLimit;
   G4double            highLimit;
-  G4double            theBoundedMass;
-  G4double            theBindingEnergy;
+  G4double            theEnvBoundedMass;
+  G4double            theEnvBindingEnergy;
+  G4double            theNucBoundedMass;
+  G4double            theNucBindingEnergy;
 };
 
 // Not member operators
@@ -107,8 +99,10 @@ inline G4int      G4QParentCluster::GetNQPart2()     const {return nQPart2;}
 inline G4QContent G4QParentCluster::GetTransQC()     const {return transQC;}
 inline G4double   G4QParentCluster::GetHigh()        const {return highLimit;}
 inline G4double   G4QParentCluster::GetLow()         const {return lowLimit;}
-inline G4double   G4QParentCluster::GetMass()        const {return theBoundedMass;}
-inline G4double   G4QParentCluster::GetBind()        const {return theBindingEnergy;}
+inline G4double   G4QParentCluster::GetEBMass()      const {return theEnvBoundedMass;}
+inline G4double   G4QParentCluster::GetEBind()       const {return theEnvBindingEnergy;}
+inline G4double   G4QParentCluster::GetNBMass()      const {return theNucBoundedMass;}
+inline G4double   G4QParentCluster::GetNBind()       const {return theNucBindingEnergy;}
 
 inline void  G4QParentCluster::SetPDGCode(G4int newPDGCode)    {thePDGCode      = newPDGCode;}
 inline void  G4QParentCluster::SetProbability(G4double prob)   {theProbability  = prob;}
@@ -116,8 +110,10 @@ inline void  G4QParentCluster::SetNQPart2(G4int nm2)           {nQPart2         
 inline void  G4QParentCluster::SetTransQC(G4QContent newTrans) {transQC=newTrans;}
 inline void  G4QParentCluster::SetHigh(G4double hiLim)         {highLimit       = hiLim;}
 inline void  G4QParentCluster::SetLow(G4double loLim)          {lowLimit        = loLim;}
-inline void  G4QParentCluster::SetMass(G4double bMass)         {theBoundedMass  = bMass;}
-inline void  G4QParentCluster::SetBind(G4double bEn)           {theBindingEnergy= bEn;}
+inline void  G4QParentCluster::SetEBMass(G4double bMass)       {theEnvBoundedMass  = bMass;}
+inline void  G4QParentCluster::SetNBMass(G4double bMass)       {theNucBoundedMass  = bMass;}
+inline void  G4QParentCluster::SetEBind(G4double bEn)          {theEnvBindingEnergy= bEn;}
+inline void  G4QParentCluster::SetNBind(G4double bEn)          {theNucBindingEnergy= bEn;}
 
 #endif
 

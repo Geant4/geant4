@@ -1,32 +1,18 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
 //
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
 //
-//
-// $Id: G4QContent.cc,v 1.10 2001-08-01 17:03:43 hpw Exp $
+// $Id: G4QContent.cc,v 1.11 2001-09-13 14:05:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.
 //      class for Quasmon initiated Contents used by CHIPS Model
@@ -46,7 +32,13 @@ G4QContent::G4QContent(G4int d, G4int u, G4int s, G4int ad, G4int au, G4int as):
   if(d<0||u<0||s<0||ad<0||au<0||as<0)
   {
     G4cerr<<"***G4QContent:"<<d<<","<<u<<","<<s<<","<<ad<<","<<au<<","<<as<<G4endl;
-    G4Exception("***G4QCont::IndQ: Negative Quark Content");
+    //G4Exception("***G4QContent::Constructor: Negative Quark Content");
+    if(d<0) ad-=d;
+    if(u<0) au-=u;
+    if(s<0) as-=s;
+    if(ad<0) d-=ad;
+    if(au<0) u-=au;
+    if(as<0) s-=as;
   }
 }
 
@@ -98,6 +90,249 @@ ostream& operator<<(ostream& lhs, const G4QContent& rhs)
       << rhs.GetAD() << "," << rhs.GetAU() << "," << rhs.GetAS() << "}";
   return lhs;
 }
+
+// Subtract Quark Content
+G4QContent G4QContent::operator-=(const G4QContent& rhs)
+//         =============================================
+{
+#ifdef debug
+  G4cout<<"G4QC::-=(const): is called:"<<G4endl;
+#endif
+  G4int rD=rhs.nD;
+  G4int rU=rhs.nU;
+  G4int rS=rhs.nS;
+  G4int rAD=rhs.nAD;
+  G4int rAU=rhs.nAU;
+  G4int rAS=rhs.nAS;
+  G4int rQ =rD+rU+rS;
+  G4int rAQ=rAD+rAU+rAS;
+  G4int nQ =nD+nU+nS;
+  G4int nAQ=nAD+nAU+nAS;
+  if(nU<rU||nAU<rAU||nD<rD||nAD<rAD)
+  {
+    G4int dU=rU-nU;
+    G4int dAU=rAU-nAU;
+    if(dU>0||dAU>0)
+	{
+      G4int kU=dU;
+      if(kU<dAU) kU=dAU;                  // Get biggest difference
+      G4int mU=rU;
+      if(rAU<mU) mU=rAU;                  // Get a#of possible SS pairs
+      if(kU<=mU)                          // Total compensation
+	  {
+        rU-=kU;
+        rAU-=kU;
+        rD+=kU;
+        rAD+=kU;
+      }
+      else                                // Partial compensation
+      {
+        rU-=mU;
+        rAU-=mU;
+        rD+=mU;
+        rAD+=mU;
+      }
+    }
+    G4int dD=rD-nD;
+    G4int dAD=rAD-nAD;
+    if(dD>0||dAD>0)
+	{
+      G4int kD=dD;
+      if(kD<dAD) kD=dAD;                  // Get biggest difference
+      G4int mD=rD;
+      if(rAD<mD) mD=rAD;                  // Get a#of possible SS pairs
+      if(kD<=mD)                          // Total compensation
+	  {
+        rD-=kD;
+        rAD-=kD;
+        rU+=kD;
+        rAU+=kD;
+      }
+      else                                // Partial compensation
+      {
+        rD-=mD;
+        rAD-=mD;
+        rU+=mD;
+        rAU+=mD;
+      }
+    }
+  }
+#ifdef debug
+  G4cout<<"G4QC::-=:comp: "<<rD<<","<<rU<<","<<rS<<","<<rAD<<","<<rAU<<","<<rAS<<G4endl;
+#endif
+  if(rS==1 && rAS==1 && (nS<1 || nAS<1))  // Eta case, switch quark pairs (?)
+  {
+    rS =0;
+    rAS=0;
+    if(nU>rU&&nAU>rAU)
+    {
+      rU +=1;
+      rAU+=1;
+	}
+    else
+    {
+      rD +=1;
+      rAD+=1;
+	}
+  }
+  nD -= rD;
+  if (nD<0)
+  {
+    nAD -= nD;
+    nD   = 0;
+  }
+  nU -= rU;
+  if (nU<0)
+  {
+    nAU -= nU;
+    nU   = 0;
+  }
+  nS -= rS;
+  if (nS<0)
+  {
+    nAS -= nS;
+    nS   = 0;
+  }
+  nAD -= rAD;
+  if (nAD<0)
+  {
+    nD -= nAD;
+    nAD = 0;
+  }
+  nAU -= rAU;
+  if (nAU<0)
+  {
+    nU -= nAU;
+    nAU = 0;
+  }
+  nAS -= rAS;
+  if (nAS<0)
+  {
+    nS -= nAS;
+    nAS = 0;
+  }
+  return *this;
+} 
+
+// Subtract Quark Content
+G4QContent G4QContent::operator-=(G4QContent& rhs)
+//         =======================================
+{
+#ifdef debug
+  G4cout<<"G4QC::-=: is called:"<<G4endl;
+#endif
+  G4int rD=rhs.nD;
+  G4int rU=rhs.nU;
+  G4int rS=rhs.nS;
+  G4int rAD=rhs.nAD;
+  G4int rAU=rhs.nAU;
+  G4int rAS=rhs.nAS;
+  G4int rQ =rD+rU+rS;
+  G4int rAQ=rAD+rAU+rAS;
+  G4int nQ =nD+nU+nS;
+  G4int nAQ=nAD+nAU+nAS;
+  if(nQ<rQ||nAQ<rAQ)
+  {
+    G4int dU=rU-nU;
+    G4int dAU=rAU-nAU;
+    if(dU>0||dAU>0)
+	{
+      G4int kU=dU;
+      if(kU<dAU) kU=dAU;                  // Get biggest difference
+      G4int mU=rU;
+      if(rAU<mU) mU=rAU;                  // Get a#of possible SS pairs
+      if(kU<=mU)                          // Total compensation
+	  {
+        rU-=kU;
+        rAU-=kU;
+        rD+=kU;
+        rAD+=kU;
+      }
+      else                                // Partial compensation
+      {
+        rU-=mU;
+        rAU-=mU;
+        rD+=mU;
+        rAD+=mU;
+      }
+    }
+    G4int dD=rD-nD;
+    G4int dAD=rAD-nAD;
+    if(dD>0||dAD>0)
+	{
+      G4int kD=dD;
+      if(kD<dAD) kD=dAD;                  // Get biggest difference
+      G4int mD=rD;
+      if(rAD<mD) mD=rAD;                  // Get a#of possible SS pairs
+      if(kD<=mD)                          // Total compensation
+	  {
+        rD-=kD;
+        rAD-=kD;
+        rU+=kD;
+        rAU+=kD;
+      }
+      else                                // Partial compensation
+      {
+        rD-=mD;
+        rAD-=mD;
+        rU+=mD;
+        rAU+=mD;
+      }
+    }
+  }
+  if(rS==1 && rAS==1 && (nS<1 || nAS<1))  // Eta case, switch quark pairs (?)
+  {
+    rS =0;
+    rAS=0;
+    if(nU>rU&&nAU>rAU)
+    {
+      rU +=1;
+      rAU+=1;
+	}
+    else
+    {
+      rD +=1;
+      rAD+=1;
+	}
+  }
+  nD -= rD;
+  if (nD<0)
+  {
+    nAD -= nD;
+    nD   = 0;
+  }
+  nU -= rU;
+  if (nU<0)
+  {
+    nAU -= nU;
+    nU   = 0;
+  }
+  nS -= rS;
+  if (nS<0)
+  {
+    nAS -= nS;
+    nS   = 0;
+  }
+  nAD -= rAD;
+  if (nAD<0)
+  {
+    nD -= nAD;
+    nAD = 0;
+  }
+  nAU -= rAU;
+  if (nAU<0)
+  {
+    nU -= nAU;
+    nAU = 0;
+  }
+  nAS -= rAS;
+  if (nAS<0)
+  {
+    nS -= nAS;
+    nAS = 0;
+  }
+  return *this;
+} 
 
 // Overloading of QC addition
 G4QContent operator+(const G4QContent& lhs, const G4QContent& rhs)
@@ -482,7 +717,7 @@ G4QContent G4QContent::IndAQ (G4int index)
 // Reduce a fixet number (if nQAQ<0: all) of valence Q-Qbar pairs, returns a#of pairs to reduce more
 G4int G4QContent::DecQAQ(const G4int& nQAQ)
 {//   =====================================
-#ifdef ppdebug
+#ifdef pdebug
   G4cout<<"G4QCont::DecQC: n="<<nQAQ<<","<<GetThis()<<G4endl;
 #endif
   G4int ban = GetBaryonNumber();
@@ -507,7 +742,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
   if (nQAQ<0)              // === Limited reduction case @@ not tuned for baryons !!
   {
     G4int res=tot+nQAQ;
-#ifdef ppdebug
+#ifdef pdebug
 	G4cout<<"G4QC::DecQC: tot="<<tot<<", nTP="<<nTotP<<", res="<<res<<G4endl;
 #endif
     if(res<0)
@@ -529,7 +764,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
 
   if (!nReal) return nRet; // Now nothing to be done
   // ---------- Decrimenting by nReal pairs
-#ifdef ppdebug
+#ifdef pdebug
   G4cout<<"G4QC::DecQC: demanded "<<nQAQ<<" pairs, executed "<<nReal<<" pairs"<<G4endl;
 #endif
   G4int nt = tot - nTotP - nTotP;
@@ -540,7 +775,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
     G4int j = static_cast<int>(base*G4UniformRand());            // Random integer "SortOfQuark"
     if (nUP && j<nUP && (nRet>2 || nUP>1 || (nD<2 && nS<2)))     // --- U-Ubar pair
 	{
-#ifdef ppdebug
+#ifdef pdebug
       G4cout<<"G4QC::DecQC: decrementing UAU pair UP="<<nUP<<", QC="<<GetThis()<<G4endl;
 #endif
       nU--;
@@ -551,7 +786,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
 	} 
     else if (nDP && j<nLP && (nRet>2 || nDP>1 || (nU<2 && nS<2)))// --- D-Ubar pair
 	{
-#ifdef ppdebug
+#ifdef pdebug
       G4cout<<"G4QC::DecQC: decrementing DAD pair DP="<<nDP<<", QC="<<GetThis()<<G4endl;
 #endif
       nD--;
@@ -562,7 +797,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
 	} 
     else if (nSP&& (nRet>2 || nSP>1 || (nU<2 && nD<2)))          // --- S-Sbar pair
 	{
-#ifdef ppdebug
+#ifdef pdebug
       G4cout<<"G4QC::DecQC: decrementing SAS pair SP="<<nSP<<", QC="<<GetThis()<<G4endl;
 #endif
       nS--;
@@ -572,7 +807,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
 	}
     else if (nUP)                                  // --- U-Ubar pair cancelation (final)
 	{
-#ifdef ppdebug
+#ifdef pdebug
       G4cout<<"G4QC::DecQC: decrementing UAU pair (final) UP="<<nUP<<", QC="<<GetThis()<<G4endl;
 #endif
       nU--;
@@ -583,7 +818,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
 	} 
     else if (nDP)                                 // --- D-Ubar pair cancelation (final)
 	{
-#ifdef ppdebug
+#ifdef pdebug
       G4cout<<"G4QC::DecQC: decrementing DAD pair (final) DP="<<nDP<<", QC="<<GetThis()<<G4endl;
 #endif
       nD--;
@@ -594,7 +829,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
 	} 
     else if (nSP)                                 // --- S-Sbar pair cancelation (final)
 	{
-#ifdef ppdebug
+#ifdef pdebug
       G4cout<<"G4QC::DecQC: decrementing SAS pair SP="<<nSP<<", QC="<<GetThis()<<G4endl;
 #endif
       nS--;
@@ -605,7 +840,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
     else G4cout<<"***G4QC::DecQC:i="<<i<<",j="<<j<<",D="<<nDP<<",U="<<nUP<<",S="<<nSP
                <<",T="<<nTotP<<",nRet="<<nRet<<", QC="<<GetThis()<<G4endl;
   }
-#ifdef ppdebug
+#ifdef pdebug
   G4cout<<"G4QC::DecQC: >>>OUT<<< nRet="<<nRet<<", QC="<<GetThis()<<G4endl;
 #endif
   return nRet;
@@ -813,27 +1048,6 @@ G4int G4QContent::GetSPDGCode() const
     n-=nS+nS;
   }
   // ---------------------- Cancelation of q-qbar pairs in case of an equality
-  if (nAU==nU  &&  nU>0)
-  {
-    G4int dU=nU+nU;
-    if(n>dU)
-	{
-      mU=0;
-      n-=dU;
-	}
-    else if (n==dU)
- 	{
-      mU=2;
-      n=2;
-	}
-    else
-    {
-#ifdef pdebug
-      G4cout<<"***G4QC::SPDG: CancelationU U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<G4endl;
-#endif
-      return 0;
-    }
-  }
   if (nAD==nD  &&  nD>0)
   {
     G4int dD=nD+nD;
@@ -851,6 +1065,27 @@ G4int G4QContent::GetSPDGCode() const
     {
 #ifdef pdebug
       G4cout<<"***G4QC::SPDG: CancelationD U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<G4endl;
+#endif
+      return 0;
+    }
+  }
+  if (nAU==nU  &&  nU>0)
+  {
+    G4int dU=nU+nU;
+    if(n>dU)
+	{
+      mU=0;
+      n-=dU;
+	}
+    else if (n==dU)
+ 	{
+      mU=2;
+      n=2;
+	}
+    else
+    {
+#ifdef pdebug
+      G4cout<<"***G4QC::SPDG: CancelationU U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<G4endl;
 #endif
       return 0;
     }
@@ -881,7 +1116,7 @@ G4int G4QContent::GetSPDGCode() const
   G4int c=GetCharge();
   G4int s=GetStrangeness();
 #ifdef pdebug
-  cout<<"G4QContent::SPDGC: before b="<<b<<",n="<<n<<",c="<<c<<",s="<<s<<",Q="<<GetThis()<<endl;
+  G4cout<<"G4QContent::SPDGC: before b="<<b<<",n="<<n<<",c="<<c<<",s="<<s<<",Q="<<GetThis()<<G4endl;
 #endif
   if (b)                                         // ==================== Baryon case
   {
@@ -995,8 +1230,9 @@ G4int G4QContent::GetSPDGCode() const
       p=301;
       if      (mS==2)
       {
-        if (G4UniformRand()<0.333) p=221;        // eta
-        else                       p+=30;        // eta'
+        //if (G4UniformRand()<0.333) p=221;        // eta
+        //else                       p+=30;        // eta'
+        p=221;
       }
       else if (mU==1 && mD==0) p+=20;
       else if (mU==0 && mD==1) p+=10;
@@ -1014,9 +1250,10 @@ G4int G4QContent::GetSPDGCode() const
       if      (mU==2 && mD==0)
       {
         G4double rn=G4UniformRand();
-        if     (rn<0.500) p=111;
+        //if     (rn<0.500) p=111;
         //else if(rn<0.667) p=331;
-        else              p=221;
+        //else
+          p=221;
       }
       else if (mU==1 && mD==1) p+=10;
       else
@@ -1030,9 +1267,10 @@ G4int G4QContent::GetSPDGCode() const
     else if (mD==2)
     {
       G4double rn=G4UniformRand();
-      if     (rn<0.500) p=111;
+      //if     (rn<0.500) p=221;
       //else if(rn<0.667) p=331;
-      else              p=221;
+      //else
+        p=111;
     }
     else
     {
@@ -1044,7 +1282,7 @@ G4int G4QContent::GetSPDGCode() const
     if (c<0 || (c==0 && mS>0 && s>0)) p=-p;
   }
 #ifdef debug
-  cout<<"G4QContent::GetSPDG: output SPDGcode="<<p<<" for the QuarkContent="<<GetThis()<<endl;
+  G4cout<<"G4QContent::GetSPDG: output SPDGcode="<<p<<" for the QuarkContent="<<GetThis()<<G4endl;
 #endif
   return p;
 }
@@ -1053,78 +1291,80 @@ G4int G4QContent::GetSPDGCode() const
 G4int G4QContent::NOfCombinations(const G4QContent& rhs) const
 {//   ========================================================
   G4int c=1; // Default number of combinations?
-
+#ifdef ppdebug
+  G4cout<<"G4QContent::NOfComb: This="<<GetThis()<<", selectQC="<<rhs<<G4endl;
+#endif
   G4int mD=rhs.GetD();
+  G4int mU=rhs.GetU();
+  G4int mS=rhs.GetS();
+  G4int mAD=rhs.GetAD();
+  G4int mAU=rhs.GetAU();
+  G4int mAS=rhs.GetAS();
+  G4int mN=mD+mU+mS-mAD-mAU-mAS;
+  G4int PDG=abs(GetSPDGCode());
+  //if((nD<mD||nU<mU||nS<mS||nAD<mAD||nAU<mAU||nAS<mAS)&&!mN&&(PDG==1114||PDG==2224)) return 1;
+  if(((nD<mD||nAD<mAD)&&!(mD-mAD)||(nU<mU||nAU<mAU)&&!(mU-mAU)||(nS<mS||nAS<mAS)&&!(mS-mAS))&&!mN)
+    return 1;
   if(mD>0)
   {
     int j=nD;
     if (j<=0) return 0;
-    for (int i=1; i<=mD; i++)
+    if(mD>1||j>1) for (int i=1; i<=mD; i++)
 	{
       if(!j) return 0;
       c*=j/i;
       j--;
     }
   };
-
-  G4int mU=rhs.GetU();
   if(mU>0)
   {
     int j=nU;
     if (j<=0) return 0;
-    for (int i=1; i<=mU; i++)
+    if(mU>1||j>1) for (int i=1; i<=mU; i++)
 	{
       if(!j) return 0;
       c*=j/i;
       j--;
     }
   };
-
-  G4int mS=rhs.GetS();
   if(mS>0)
   {
     int j=nS;
     if (j<=0) return 0;
-    for (int i=1; i<=mS; i++)
+    if(mS>1||j>1) for (int i=1; i<=mS; i++)
 	{
       if(!j) return 0;
       c*=j/i;
       j--;
     }
   };
-
-  G4int mAD=rhs.GetAD();
   if(mAD>0)
   {
     int j=nAD;
     if (j<=0) return 0;
-    for (int i=1; i<=mAD; i++)
+    if(mAD>1||j>1) for (int i=1; i<=mAD; i++)
 	{
       if(!j) return 0;
       c*=j/i;
       j--;
     }
   };
-
-  G4int mAU=rhs.GetAU();
   if(mAU>0)
   {
     int j=nAU;
     if (j<=0) return 0;
-    for (int i=1; i<=mAU; i++)
+    if(mAU>1||j>1) for (int i=1; i<=mAU; i++)
 	{
       if(!j) return 0;
       c*=j/i;
       j--;
     }
   };
-
-  G4int mAS=rhs.GetAS();
   if(mAS>0)
   {
     int j=nAS;
     if (j<=0) return 0;
-    for (int i=1; i<=mAS; i++)
+    if(mAS>1||j>1) for (int i=1; i<=mAS; i++)
 	{
       if(!j) return 0;
       c*=j/i;

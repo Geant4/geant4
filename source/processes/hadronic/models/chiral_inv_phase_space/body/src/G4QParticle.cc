@@ -1,32 +1,18 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
 //
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
 //
-//
-// $Id: G4QParticle.cc,v 1.4 2001-08-01 17:03:49 hpw Exp $
+// $Id: G4QParticle.cc,v 1.5 2001-09-13 14:05:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
 //      ---------------- G4QParticle ----------------
 //             by Mikhail Kossov, Sept 1999.
 //      class for Particles in the CHIPS Model
@@ -149,7 +135,7 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
       DecayDB[  3].insert(new G4QDecayChan(.800,211,-211));
       DecayDB[  3].insert(new G4QDecayChan(1.00,111, 111));
 	}
-    //if(limit<=  4 && nQ>=  4)DecayDB[  4].insert(new G4QDecayChan(1.00, 22,  22));//Pi 0 @@!@@
+    //if(limit<=  4 && nQ>=  4)DecayDB[  4].insert(new G4QDecayChan(1.00, 22,  22));//Pi 0
     //if(limit<=  5 && nQ>=  5)DecayDB[  5] = NULL;    // Pi +
     if(limit<=  6 && nQ>=  6)    // eta
 	{
@@ -158,7 +144,7 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
       DecayDB[  6].insert(new G4QDecayChan(.603,211,-211, 22));
       DecayDB[  6].insert(new G4QDecayChan(1.00, 22,  22));
 	}
-    //if(limit<=  7 && nQ>=  7)    // K 0 (K_short - probab 1/2)
+    //if(limit<=  7 && nQ>=  7)    // K 0 (K_short - probab 1/2) @@@@@@@@@@@@
 	//{
     //  DecayDB[  7].insert(new G4QDecayChan(.6861,211,-211));
     //  DecayDB[  7].insert(new G4QDecayChan(1.00, 111, 111));
@@ -299,15 +285,14 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
 	}
     if(limit<= 37 && nQ>= 37)    // f_2 0
 	{
-      DecayDB[ 37].insert(new G4QDecayChan(.004, 221, 221));
-      DecayDB[ 37].insert(new G4QDecayChan(.027, 311,-311));
-      DecayDB[ 37].insert(new G4QDecayChan(.050, 321,-321));
-      DecayDB[ 37].insert(new G4QDecayChan(.122, 111, 113));
-      DecayDB[ 37].insert(new G4QDecayChan(.125, 111, 221));
-      DecayDB[ 37].insert(new G4QDecayChan(.153, 211,-211,113));
-      DecayDB[ 37].insert(new G4QDecayChan(.717, 211,-211));
-      DecayDB[ 37].insert(new G4QDecayChan(.999, 111, 111));
-      DecayDB[ 37].insert(new G4QDecayChan(1.00,  22,  22));
+      DecayDB[ 37].insert(new G4QDecayChan(.005, 221, 221));
+      DecayDB[ 37].insert(new G4QDecayChan(.028, 311,-311));
+      DecayDB[ 37].insert(new G4QDecayChan(.051, 321,-321));
+      DecayDB[ 37].insert(new G4QDecayChan(.123, 111, 113));
+      DecayDB[ 37].insert(new G4QDecayChan(.126, 111, 221));
+      DecayDB[ 37].insert(new G4QDecayChan(.154, 211,-211,113));
+      DecayDB[ 37].insert(new G4QDecayChan(.718, 211,-211));
+      DecayDB[ 37].insert(new G4QDecayChan(1.00, 111, 111));
 	}
     if(limit<= 38 && nQ>= 38)    // K_2 0
 	{
@@ -514,18 +499,18 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
       DecayDB[ 58].insert(new G4QDecayChan(.200, 2212, 213 ));
       DecayDB[ 58].insert(new G4QDecayChan(.320, 211 , 2214));
       DecayDB[ 58].insert(new G4QDecayChan(.500, 111 , 2224));
-      DecayDB[ 58].insert(new G4QDecayChan(1.00, 2112, 211 ));
+      DecayDB[ 58].insert(new G4QDecayChan(1.00, 2212, 211 ));
 	}
     if(limit<= 59 && nQ>= 59)     // LAMBDA_7/2
 	{
       DecayDB[ 59].insert(new G4QDecayChan(.160, 3122, 223 ));
-      DecayDB[ 59].insert(new G4QDecayChan(.260, 2112, 313 ));
-      DecayDB[ 59].insert(new G4QDecayChan(.360, 2212, 323 ));
+      DecayDB[ 59].insert(new G4QDecayChan(.260, 2112,-313 ));
+      DecayDB[ 59].insert(new G4QDecayChan(.360, 2212,-323 ));
       DecayDB[ 59].insert(new G4QDecayChan(.400, 3312, 321 ));
       DecayDB[ 59].insert(new G4QDecayChan(.440, 3322, 311 ));
       DecayDB[ 59].insert(new G4QDecayChan(.480, 3122, 221 ));
-      DecayDB[ 59].insert(new G4QDecayChan(.520, 2112, 311 ));
-      DecayDB[ 59].insert(new G4QDecayChan(.560, 2212, 321 ));
+      DecayDB[ 59].insert(new G4QDecayChan(.520, 2112,-311 ));
+      DecayDB[ 59].insert(new G4QDecayChan(.560, 2212,-321 ));
       DecayDB[ 59].insert(new G4QDecayChan(.600, 3112, 211 ));
       DecayDB[ 59].insert(new G4QDecayChan(.800, 3222,-211 ));
       DecayDB[ 59].insert(new G4QDecayChan(1.00, 3212, 111 ));
@@ -589,10 +574,10 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
 	}
     if(limit<= 65 && nQ>= 65)    // OMEGA_7/2 -
 	{
-      DecayDB[ 65].insert(new G4QDecayChan(.250, 311 ,-3314));
-      DecayDB[ 65].insert(new G4QDecayChan(.500, 321 ,-3324));
-      DecayDB[ 65].insert(new G4QDecayChan(.750,-3312, 313 ));
-      DecayDB[ 65].insert(new G4QDecayChan(1.00,-3322, 323 ));
+      DecayDB[ 65].insert(new G4QDecayChan(.250,-311 , 3314));
+      DecayDB[ 65].insert(new G4QDecayChan(.500,-321 , 3324));
+      DecayDB[ 65].insert(new G4QDecayChan(.750, 3312,-313 ));
+      DecayDB[ 65].insert(new G4QDecayChan(1.00, 3322,-323 ));
 	}
     if(limit<= 66 && nQ>= 66)    // a_4 0
 	{

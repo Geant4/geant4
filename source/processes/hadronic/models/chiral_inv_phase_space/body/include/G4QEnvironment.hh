@@ -1,27 +1,11 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
 //
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
 //
-//
-// $Id: G4QEnvironment.hh,v 1.4 2001-08-01 17:03:34 hpw Exp $
+// $Id: G4QEnvironment.hh,v 1.5 2001-09-13 14:05:30 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,6 +16,8 @@
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.
 //      header for Multy Quasmon Environment in the CHIPS Model
@@ -56,22 +42,29 @@ public:
   //Selectors
   G4QNucleus       GetEnvironment() const;
   G4QuasmonVector* GetQuasmons();
-  G4QHadronVector* Fragment();                   // GetQHadrons
+  G4QHadronVector* GetQHadrons();
+  G4QHadronVector* Fragment();                        // Unresp. wrapper for HadronizeQEnvironment()
 
   // Static functions
-  static void SetParameters( G4double solAn, G4bool efFlag=false, G4double piThresh=141.4,
+  static void SetParameters( G4double solAn=0.4, G4bool efFlag=false, G4double piThresh=141.4,
                             G4double mpisq=20000., G4double dinum=1880.);
+  // General functions
+  G4ThreeVector    RndmDir();                         // Randomize 3D direction (@@subst by libFunc)
+
 private:  
-  G4QHadronVector  HadronizeQEnvironment();
+  G4QHadronVector  HadronizeQEnvironment();           // Main HadronizationFunction used in Fragment
   void             CreateQuasmon(const G4QContent& projQC, const G4LorentzVector& proj4M);
-  void             InitClustersVector(G4int maxClust);
-  void             PrepareClusters();            // Prepare nuclear clusters for interaction
-  void             CleanUp();                    // Nulefies theEnvironment & kills Quasmons
-  void             PrepareInteractionProbabilities(const G4QContent& projQC);
-  void             EvaporateResidual(G4QHadron* evap);
-  void             DecayDibaryon(G4QHadron* dB);
-  G4bool           DecayOutHadron(G4QHadron* qHadron);
-  G4ThreeVector    RndmDir();
+  void             InitClustersVector(G4int maxC, G4int maxA); // Init.NucCclusters for 1st interact
+  void             CleanUp();                         // Makes theEnvironment=vacuum & kill Quasmons
+  void             PrepareInteractionProbabilities(const G4QContent& projQC, G4double AP);
+  void             EvaporateResidual(G4QHadron* evap, G4bool corFlag = false);// Final Evaporation
+  void             DecayDibaryon(G4QHadron* dB);      // Decay of any di-baryon (deuteron is kept)
+  void             DecayThreeBaryon(G4QHadron* dB);   // Decay of ppp or nnn states
+  void             DecayAlphaBar(G4QHadron* dB);      // Decay of alpha+p or alpha+n states
+  void             DecayAlphaDiN(G4QHadron* dB);      // Decay of alpha+p+p states
+  void             DecayAlphaAlpha(G4QHadron* dB);    // Decay of alpha+alpha state
+  G4bool           CheckGroundState(G4Quasmon* quasm, G4bool corFlag = false);// as G4Q for TotHadrV
+  G4bool           DecayInEnvQ(G4Quasmon* quasm);     // Use befor evaporation in PANIC case
 
 // Body
 private:
@@ -90,6 +83,7 @@ private:
   G4QuasmonVector    theQuasmons;     // Intermediate vector of Quasmons before fragmentation (***delete***)
   G4QCandidateVector theQCandidates;  // Vector of possible candidates to clusters (***delete***)
   G4QNucleus         theEnvironment;  // Initial Nucleus & later Residual Nuclear Environment
+  G4LorentzVector    tot4Mom;         // Total 4-momentum in the reaction
 };
 
 inline int G4QEnvironment::operator==(const G4QEnvironment &right) const {return this == &right;}

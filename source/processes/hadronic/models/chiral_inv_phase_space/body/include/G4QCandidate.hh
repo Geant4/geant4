@@ -1,27 +1,11 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
 //
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
 //
-//
-// $Id: G4QCandidate.hh,v 1.7 2001-08-01 17:03:30 hpw Exp $
+// $Id: G4QCandidate.hh,v 1.8 2001-09-13 14:05:29 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,12 +15,14 @@
 // ----------------------------------------------------------------------
 //      GEANT 4 class header file
 //
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
 //      ---------------- G4QCandidate ----------------
 //             by Mikhail Kossov, Sept 1999.
 //  class header for Quasmon initiated Candidates used by the CHIPS Model
 // ----------------------------------------------------------------------
 
-#include "G4QNucleus.hh"
+#include "G4QHadron.hh"
 #include "G4QParentClusterVector.hh"
 
 class G4QCandidate : public G4QHadron
@@ -57,6 +43,8 @@ public:
   G4bool   GetPossibility()      const;     // Get possibility(true)/forbiding(false) to be a hadr./fragm.
   G4bool   GetParPossibility()   const;     // Get possibility(true)/forbiding(false) to be a parent
   G4double GetKMin()             const;     // Get k-minimal for the candidate
+  G4double GetEBMass()           const;     // Get bound mass in respect to Environment 
+  G4double GetNBMass()           const;     // Get bound mass in respect to TotalNucleus 
   G4double GetDenseProbability() const;     // Get dense-probability for the candidate 
   G4double GetPreProbability()   const;     // Get pre-probability for the candidate 
   G4double GetRelProbability()   const;     // Get the relative probility of hadronization
@@ -75,7 +63,8 @@ public:
   void SetIntegProbability(G4double intP);  // Set integrated probability for randomization
   void SetSecondRelProb(G4double relP);     // Set 2nd relative probility of hadronization
   void SetSecondIntProb(G4double intP);     // Set 2nd integr. probability for randomization
-  void SetMass(G4double newMass);           // Set 4Momentum at rest with the new Mass
+  void SetEBMass(G4double newMass);         // Set mass bounded to Environment
+  void SetNBMass(G4double newMass);         // Set mass bounded to Total Nucleus
 
 // Body  								   
 private:
@@ -89,6 +78,8 @@ private:
   G4double secondRelProbability;            // spare relative probability of hadronization
   G4double secondIntProbability;            // spare integrated probability of randomization
   G4QParentClusterVector thePClusters;      // vector of parent clusters for candid.-fragment
+  G4double EBMass;                          // Bound Mass of the cluster in the Environment
+  G4double NBMass;                          // Bound Mass of the cluster in the Total Nucleus
 };
 
 inline G4int G4QCandidate::operator==(const G4QCandidate &right) const  {return this==&right;}
@@ -99,6 +90,8 @@ inline G4int    G4QCandidate::GetPClustEntries()          const {return thePClus
 inline G4bool   G4QCandidate::GetPossibility()            const {return possible;}
 inline G4bool   G4QCandidate::GetParPossibility()         const {return parPossible;}
 inline G4double G4QCandidate::GetKMin()                   const {return kMin;}
+inline G4double G4QCandidate::GetEBMass()                 const {return EBMass;}
+inline G4double G4QCandidate::GetNBMass()                 const {return NBMass;}
 inline G4double G4QCandidate::GetDenseProbability()       const {return denseProbability;}
 inline G4double G4QCandidate::GetPreProbability()         const {return preProbability;}
 inline G4double G4QCandidate::GetRelProbability()         const {return relativeProbability;}
@@ -106,7 +99,7 @@ inline G4double G4QCandidate::GetIntegProbability()       const {return integral
 inline G4double G4QCandidate::GetSecondRelProb()          const {return secondRelProbability;}
 inline G4double G4QCandidate::GetSecondIntProb()          const {return secondIntProbability;}
 
-inline void G4QCandidate::ClearParClustVector()             {thePClusters.clearAndDestroy();}
+inline void G4QCandidate::ClearParClustVector()                 {thePClusters.clearAndDestroy();}
 inline void G4QCandidate::FillPClustVec(G4QParentCluster* pCl)
 {
   G4QParentCluster* npCl = new G4QParentCluster(pCl);
@@ -121,6 +114,7 @@ inline void G4QCandidate::SetRelProbability(G4double relP)      {relativeProbabi
 inline void G4QCandidate::SetIntegProbability(G4double intP)    {integralProbability=intP;}
 inline void G4QCandidate::SetSecondRelProb(G4double relP)       {secondRelProbability=relP;}
 inline void G4QCandidate::SetSecondIntProb(G4double intP)       {secondIntProbability=intP;}
-inline void G4QCandidate::SetMass(G4double newM)  {Set4Momentum(G4LorentzVector(0,0,0,newM));}
+inline void G4QCandidate::SetEBMass(G4double newM)              {EBMass=newM;}
+inline void G4QCandidate::SetNBMass(G4double newM)              {NBMass=newM;}
 
 #endif
