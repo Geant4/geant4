@@ -1,45 +1,17 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 //  G4ElasticHadrNucleusHE.cc
-
+//  19.05.04 Variant for G4 6.1: The 'ApplayYourself' was changed
 #include  "G4ElasticHadrNucleusHE.hh"
 #include  "Randomize.hh"
-#include  "G4ParticleChange.hh"
-#include  "G4Track.hh"
-#include  "G4Nucleus.hh"
-#include  "G4IonTable.hh"
-#include  "globals.hh"
-#include  "G4ParticleTable.hh"
-#include  "G4NucleiProperties.hh"
-#include  <strstream>
-#include  <iostream>
-#include  <fstream>
+#include  "strstream"
+#include  "iostream"
+#include  "fstream"
+#include  "G4ios.hh"
 
 //  +++++++++++++++++  The constructor 1 ++++++++++++++++++
      G4ElasticHadrNucleusHE::
         G4ElasticHadrNucleusHE(const G4DynamicParticle * aHadron,
                                      G4Nucleus         * aNucleus) : 
-               G4DiffElasticHadrNucleus(),  G4HadronicInteraction()
+               G4DiffElasticHadrNucleus() ,  G4HadronicInteraction()
     {  
 //  -------------  here all variables are in MeV  ---------------
         iKindWork      = 0;
@@ -52,9 +24,9 @@
           Factorials1[ii] = Factorial1(ii);
           }
 
-       G4int  iNnucl = (int) aNucleus->GetN();
+       G4int  iNnucl = (G4int) aNucleus->GetN();
 
-  if(iNnucl<11)
+  if(iNnucl<4)
          {
   G4Exception(" This nucleus is very light for this model !!!");
          }
@@ -66,7 +38,7 @@
 
        G4double  dHdrEnergy = aHadron->GetTotalEnergy()/1000;
 
-  if(dHdrEnergy < 2) 
+  if(dHdrEnergy < 1.5) 
   G4Exception(" The hadron energy is very low for this model !!!");
 
         CreationArray (aHadron, aNucleus);
@@ -82,7 +54,7 @@
                                      G4double             dEend,
                                      G4int                iNpoE,
                                      G4String          sNameFile) :
-          G4DiffElasticHadrNucleus(),   G4HadronicInteraction()
+          G4DiffElasticHadrNucleus() //,   G4HadronicInteraction()
   {  
 //  -------------  here all variables are in MeV  ---------------
 
@@ -92,9 +64,9 @@
              MyIonTable  = new G4IonTable();
              iPoE        = iNpoE;
 
-       G4int  iNnucl = static_cast<G4int>(aNucleus->GetN()+.01);
+       G4int  iNnucl = (G4int) aNucleus->GetN();
 
-  if(iNnucl<11)
+  if(iNnucl<4)
          {
   G4Exception(" This nucleus is very light for this model !!!");
          }
@@ -106,7 +78,7 @@
 
        G4double  dHdrEnergy = aHadron->GetTotalEnergy()/1000;
 
-  if(dHdrEnergy < 2) 
+  if(dHdrEnergy < 1.5) 
   G4Exception(" The hadron energy is very low for this model !!!");
 
         Factorials1[0] = 1;
@@ -144,7 +116,7 @@
 
 
 //   G4cout<<" kk iInt Pointer "<<kk<<" "<<iIntgr[kk]<<
-//        " "<< * (pTableCrSec+ii*ONQ2+kk)<<endl;
+//        " "<< * (pTableCrSec+ii*ONQ2+kk)<<G4endl;
                         }  //   kk step Q2
                  }         //   ii   step Ei
 
@@ -155,7 +127,7 @@
                            std::ios::floatfield);
              TestFile.precision(9);
 
-     TestFile << dEbeg<<" "<<dEend<<"  "<<iNpoE<<endl;
+     TestFile << dEbeg<<" "<<dEend<<"  "<<iNpoE<<G4endl;
 
     for(ii=0; ii<ONQ2; ii++)
       {
@@ -164,7 +136,7 @@
             TestFile << *(pTableCrSec+kk*ONQ2+ii)<<" ";
 
           }    //   kk
-       TestFile << endl;
+       TestFile << G4endl;
 
       }        //   ii
       TestFile.close();
@@ -176,7 +148,7 @@
          G4ElasticHadrNucleusHE(const G4DynamicParticle * aHadron,
                                       G4Nucleus         * aNucleus,
                                       G4String           sNameFile) :
-        G4DiffElasticHadrNucleus(),   G4HadronicInteraction()
+        G4DiffElasticHadrNucleus()  //,   G4HadronicInteraction()
    {
         MyIonTable  = new G4IonTable();
         G4int ii, kk;
@@ -185,7 +157,7 @@
 
         G4double aNuc  = aNucleus->GetN();
 
-  if(aNuc<10.5)
+  if(aNuc<4)
          {
   G4Exception(" This nucleus is very light for this model !!!");
          }
@@ -197,11 +169,11 @@
 
        G4double  dHdrEnergy = aHadron->GetTotalEnergy()/1000;
 
-  if(dHdrEnergy < 2) 
+  if(dHdrEnergy < 1.5) 
   G4Exception(" The hadron energy is very low for this model !!!");
 
         std::ifstream TestFile(sNameFile);
-        TestFile.setf(ios::scientific);
+        TestFile.setf(std::ios::scientific);
 
         TestFile >> dEbeg1 >> dEend1 >> iPoE;
 
@@ -235,9 +207,9 @@
         G4ElasticHadrNucleusHE(const G4DynamicParticle * aHadron,
                                      G4Nucleus         * aNucleus,
                                      G4double             dEbeg,
-                                     G4double             dEend,
+                                     G4double             /*dEend*/,
                                      G4int                iNpoE) :
-        G4DiffElasticHadrNucleus(),   G4HadronicInteraction()
+        G4DiffElasticHadrNucleus()   //,   G4HadronicInteraction()
   {  
 //  -------------  here all variables are in MeV  ---------------
 
@@ -251,8 +223,9 @@
 
        G4String sNameHdr    = GetHadronName(aHadron);
        G4int    iNnucl      = (int) aNucleus->GetN();
+       G4double      Energies[5] = {1.5, 2.0, 4.0, 6.0, 10.0};
 
-  if(iNnucl<11)
+  if(iNnucl<4)
          {
   G4Exception(" This nucleus is very light for this model !!!");
          }
@@ -264,7 +237,7 @@
 
        G4double  dHdrEnergy = aHadron->GetTotalEnergy()/1000;
 
-  if(dHdrEnergy < 2) 
+  if(dHdrEnergy < 1.5) 
   G4Exception(" The hadron energy is very low for this model !!!");
 
                 MyIonTable  = new G4IonTable();
@@ -287,13 +260,14 @@
 
           innerHadron->SetDefinition(aHadron->GetDefinition());
 
-          G4double    dPower; 
+          G4double    dPower=1000.0; 
 
            for( ik = 0; ik<AreaNumb; ik++) 
              {
-               dPower = pow(10,ik);
+//               dPower = pow(10,ik);
                for( ii = 0; ii<iNpoE; ii++)
                  {  curE         = (dEbeg+ii*dE)*dPower;         //  MeV
+                    curE         = Energies[ii]*dPower;
                     curP         = sqrt(curE*curE-mHadr*mHadr);  //  MeV
                   * (pTableE+ii+ik*iNpoE) = curE;
 
@@ -308,8 +282,10 @@
                          * (pTableCrSec+ii*ONQ2+kk+ik*ONQ2XE) =
                                                       iIntgr[kk];
 
-                        }  //   kk   step Q2
+                        }  //   kk   step Q2         
+     G4cout<<" Energy:  "<<curE<<" Power:  "<<dPower<<G4endl;
                  }         //   ii   step Ei
+                  dPower *= 10.0; 
              }             //   ik   step power
 
   G4cout<<" The array for elastic scattering of the "<<sNameHdr<<G4endl;
@@ -318,29 +294,49 @@
 
 //  ---------   The writing of array into sName File  ---------
 
+  G4String   sPath;
+
+  if(getenv("G4ELASTICDATA")) 
+   {
+        sPath =  getenv("G4ELASTICDATA");
+        sPath =  sPath+"/Elastic/";
+   }
+  else  sPath =       "./Elastic/";
+
+//  G4cout<<" Path : "<<sPath<<G4endl;
+
        std::ostrstream sNameFile;
-       sNameFile<<"Elastic//"<<sNameHdr<<"_"<<iNnucl<<".dat"<<ends;
+       sNameFile<<sPath<<sNameHdr<<"_"<<iNnucl<<".dat"<<std::ends;
+
+//       sNameFile<<"Elastic//"<<sNameHdr<<"_"<<iNnucl<<".dat"<<ends;
 
        std::ofstream TestFile(sNameFile.str(), std::ios::out);
              TestFile.setf(std::ios::scientific, 
                            std::ios::floatfield);
              TestFile.precision(9);
 
-       TestFile << dEbeg<<" "<<dEend<<"  "<<iNpoE<<G4endl;
+///       TestFile << dEbeg<<" "<<dEend<<"  "<<iNpoE<<G4endl;
+       TestFile <<iNpoE<<G4endl;
 
-  for(ik=0; ik<AreaNumb; ik++)
+  G4int Mult;
+  dPower = 1000.0;
+  for( ik=0; ik<AreaNumb; ik++)
   {
+        for(kk=0; kk<iPoE; kk++) 
+           {
+           Mult = static_cast<G4int>(Energies[kk]*dPower);
+           TestFile<<"      "<<Mult<<"   ";
+           }
+             TestFile<<G4endl;
+
     for(ii=0; ii<ONQ2; ii++)
       {
-
-        for(kk=0; kk<iPoE; kk++) 
-          {
-            TestFile << *(pTableCrSec+kk*ONQ2+ii+ik*ONQ2XE)<<" ";
-
-          }    //   kk
+       for(kk=0; kk<iPoE; kk++) 
+           TestFile << *(pTableCrSec+kk*ONQ2+ii+ik*ONQ2XE)<<" ";
        TestFile << G4endl;
-
       }        //   ii
+       TestFile<<G4endl;
+       dPower *= 10.0;
    }           //   ik
 
       TestFile.close();
@@ -357,14 +353,14 @@
          G4ElasticHadrNucleusHE(const G4DynamicParticle * aHadron,
                                       G4Nucleus         * aNucleus,
                                       G4int                 iNpoE) :
-        G4DiffElasticHadrNucleus(),   G4HadronicInteraction()
+        G4DiffElasticHadrNucleus()  //,   G4HadronicInteraction()
    {
         G4int       ii, kk, ik;
 
         G4String sNameHdr  = GetHadronName(aHadron);
         G4int    iNnucl    = (int) aNucleus->GetN();
 
-  if(iNnucl<11)
+  if(iNnucl<4)
          {
   G4Exception(" This nucleus is very light for this model !!!");
          }
@@ -376,11 +372,25 @@
 
        G4double  dHdrEnergy = aHadron->GetTotalEnergy()/1000;
 
-  if(dHdrEnergy < 2) 
-  G4Exception(" The hadron energy is very low for this model !!!");
+  if(dHdrEnergy < 1.5) 
+         {
+  G4cout<<" The hadron Energy is "<<dHdrEnergy<<G4endl;
+  G4Exception(" This hadron energy  is very low for this model !!!");
+         }
 
-        std::ostrstream sNameFile;
-        sNameFile<<"Elastic//"<<sNameHdr<<"_"<<iNnucl<<".dat"<<ends;
+  G4String sPath;
+
+  if(getenv("G4ELASTICDATA")) 
+   {
+        sPath =  getenv("G4ELASTICDATA");
+        sPath =  sPath+"/Elastic/";
+   }
+  else  sPath =       "./Elastic/";
+
+//  G4cout<<" Path : "<<sPath<<G4endl;
+
+       std::ostrstream sNameFile;
+       sNameFile<<sPath<<sNameHdr<<"_"<<iNnucl<<".dat"<<std::ends;
 
   G4cout <<" In constr. 5. Hadron - "<<sNameHdr
          <<".  Nucleus - "<<iNnucl<<G4endl;
@@ -398,14 +408,15 @@
         pTableCrSec    = new G4double[ONQ2XE*AreaNumb]; //  pointer
         pTableE        = new G4double[iNpoE*AreaNumb];  //  pointer
 
-        // G4double aNuc  = aNucleus->GetN();
+//////        G4double aNuc  = aNucleus->GetN();
 
         std::ifstream TestFile(sNameFile.str(), std::ios::in);
              TestFile.setf(std::ios::scientific);
 
-        TestFile >> dEbeg1 >> dEend1 >> iPoE;
+////        TestFile >> dEbeg1 >> dEend1 >> iPoE;
+        TestFile  >> iPoE;
 
-        G4double dE    = (dEend1-dEbeg1)/(iPoE-1);
+////        G4double dE    = (dEend1-dEbeg1)/(iPoE-1);
 
           G4double  dPower;
 
@@ -415,7 +426,10 @@
 
      for(kk=0; kk<iPoE; kk++) 
         {               
-            *(pTableE + kk + ik*iPoE) = (dEbeg1+kk*dE)*dPower; 
+////            *(pTableE + kk + ik*iPoE) = (dEbeg1+kk*dE)*dPower; 
+
+           TestFile >> *(pTableE+kk+ik*iPoE);
+  G4cout<<" Energy: "<<*(pTableE+kk+ik*iPoE)<<G4endl;
 
         }    //  kk
 
@@ -464,6 +478,20 @@
 
        G4String sHadron;
 
+ G4cout<<" Name "<<dHadron->GetParticleName()<<G4endl;
+
+         sHadron = dHadron->GetParticleName();
+
+         if(sHadron == "proton" || sHadron == "neutron")
+                                       sHadron="Nucleon";
+
+    else if(sHadron == "anti_proton" || sHadron == "anti_neutron")          
+                                       sHadron="antiNucleon";
+
+         if(dHadron == G4Proton::Proton()|| 
+            dHadron == G4Neutron::Neutron())
+                                       sHadron="Nucleon";
+
          if(dHadron == G4Proton::Proton()||
             dHadron == G4Neutron::Neutron())         
                                        sHadron="Nucleon";
@@ -484,59 +512,139 @@
    else  if(dHadron == G4KaonMinus::KaonMinus())     
                                        sHadron="KaonMinus";
 
+   else  if(dHadron == G4Lambda::Lambda())
+                                       sHadron="Lambda";
+
+   else  if(dHadron == G4AntiLambda::AntiLambda())
+                                       sHadron="AntiLambda";
+
+   else  if(dHadron == G4SigmaPlus::SigmaPlus())
+                                       sHadron="SigmaPlus";
+
+   else  if(dHadron == G4SigmaMinus::SigmaMinus())
+                                       sHadron="SigmaMinus";
+
+   else  if(dHadron == G4SigmaZero::SigmaZero())
+                                       sHadron="SigmaZero";
+
+   else  if(dHadron == G4AntiSigmaPlus::AntiSigmaPlus())
+                                       sHadron="AntiSigmaPlus";
+   
+   else  if(dHadron == G4AntiSigmaMinus::AntiSigmaMinus())  
+                                       sHadron="AntiSigmaMinus"; 
+                                       
+   else  if(dHadron == G4AntiSigmaZero::AntiSigmaZero())
+                                       sHadron="AntiSigmaZero";
+
+   else  if(dHadron == G4XiMinus::XiMinus())
+                                       sHadron="XiMinus";
+
+   else  if(dHadron == G4XiZero::XiZero())
+                                       sHadron="XiZero";
+
+   else  if(dHadron == G4AntiXiMinus::AntiXiMinus())
+                                       sHadron="AntiXiMinus";
+   
+   else  if(dHadron == G4AntiXiZero::AntiXiZero())
+                                       sHadron="AntiXiZero";
+
+   else  if(dHadron == G4OmegaMinus::OmegaMinus())
+                                       sHadron="OmegaMinus";
+
+   else  if(dHadron == G4AntiOmegaMinus::AntiOmegaMinus())
+                                       sHadron="AntiOmegaMinus";
+
    else {
          G4cout << " There is not method for the hadron " <<
-                  dHadron->GetParticleName() << endl;
+                  dHadron->GetParticleName() << G4endl;
         }
     return sHadron;
    }
 
+//  ========================================================
 //  ++++++++++++++++++  ApplayYourself  ++++++++++++++++++++
+//    G4VParticleChange *
+//    G4ElasticHadrNucleusHE::ApplyYourself(
+//                          const  G4Track    &aTrack,
+//                                 G4Nucleus  &aNucleus)
     G4HadFinalState *
     G4ElasticHadrNucleusHE::ApplyYourself(
-                          const  G4HadProjectile    &aTrack,
-                                 G4Nucleus  &aNucleus)
+                          const  G4HadProjectile  &aHadron,
+                                 G4Nucleus        &aNucleus)
  {
               G4int    nN, nZ;
+//  ----------------------------------------------------------
+///        const G4DynamicParticle * aParticle = aTrack.GetDynamicParticle();
+//  ----------------------------------------------------------
+//   G4LorentzVector EnergyMomentum;
 
-        const G4HadProjectile * aParticle = &aTrack;
-              G4Nucleus *         aNucl     = &aNucleus;
+       iContr = 135;
+    if(iContr==137)
+  G4cout<<G4endl<<"----------- Begin Applay ------------"<<G4endl;
 
-        G4double   aNuclZ     = aNucl->GetZ();    
-                  aNucleon    = aNucl->GetN();
+        G4Nucleus * aNucl      = &aNucleus;
 
-                         nN   = static_cast<G4int>(aNucleon+.1);
-                         nZ   = static_cast<G4int>(aNuclZ+.1);
+	G4double    hadrMass; // unused variable: , nuclMass;
+        G4String    hadrName;
 
+        theParticleChange.Clear();
+
+//  -------------------------------------------
+        G4DynamicParticle *   aParticle  = new G4DynamicParticle();
+
+        hadrMass = aHadron.GetDefinition()->GetPDGMass();
+        hadrName = aHadron.GetDefinition()->GetParticleName();
+
+    if(iContr==137)
+  G4cout<<" In Apply: HadMass HadName "<<hadrMass
+        <<"  "<<hadrName<<G4endl;
+
+        G4ParticleDefinition * hadrDef = new G4ParticleDefinition(
+              hadrName, hadrMass,0,0,0,0,0,0,0,0,' ',0,0,0,0,0,0,0);
+
+        G4ThreeVector  hadrMomentum = aHadron.Get4Momentum().vect();
+
+        aParticle->SetDefinition(hadrDef);
+        aParticle->SetMomentum(hadrMomentum);
+
+        G4double   inLabMom  = aHadron.GetTotalMomentum(); // MeV
+        G4double   inEnHadr  = aHadron.GetTotalEnergy();   // MeV
+
+  if(iContr==137)
+ G4cout<<" Hadr: Energy TotMom  "<<inLabMom<<"  "<<inEnHadr<<G4endl;
+//  -------------------------------------------
+        nN   = static_cast<G4int>(aNucl->GetN() );
+        nZ   = static_cast<G4int>(aNucl->GetZ() );
         G4ParticleDefinition * secNuclDef;
-
         secNuclDef  =   MyIonTable->GetIon(  nZ,  nN,  0,  nZ);
 
         G4DynamicParticle *   secNuclDyn = new G4DynamicParticle();
-
         secNuclDyn->SetDefinition(secNuclDef);
+//  -------------------------------------------
+ if(iContr==137)
+   G4cout<<" HadrName "
+         <<aParticle->GetDefinition()->GetParticleName()<<G4endl;
+//  ----------------  Hadron kinematics ----------------
+    G4int NumbPart;
 
-        G4ThreeVector      NuclPos;
-
-        //G4Track      secNuclTrack = G4Track(secNuclDyn,
-        //                                  0.0, NuclPos);
-
-        G4double   ranQ2;       //      ranQ2   -  MeV^2
+ if(iContr==137)
+ {
+ G4cout<<" Applay: hadron "<<hadrName<<"  "<<hadrMass
+       <<"  hadr mom. "<<hadrMomentum<<G4endl;
+ G4cout<<"  Nucleus:"
+       <<secNuclDyn->GetDefinition()->GetParticleName()<<G4endl;
+ }
+        G4ThreeVector  NuclPos;
+        G4double       ranQ2;   //      ranQ2   -  MeV^2
 
 //  ____________ Randomization of Q2 as dSis/dt ______________
-
         if(iKindWork == 0)  ranQ2 = RandomElastic0(aParticle, aNucl);
         else                ranQ2 = RandomElastic1(aParticle, aNucl);
 
-        G4double   inLabMom  = aParticle->GetTotalMomentum(); // MeV
-        G4double   inEnHadr  = aParticle->GetTotalEnergy();   // MeV
-        G4double   MassHadr  = aParticle->GetDefinition()->GetPDGMass();          // MeV
-        G4double   MassNucl  = aNucleus.GetN()*938;           // MeV
+        G4double   MassHadr  = aParticle->GetMass();          // MeV
+        G4double   MassNucl  = aNucleus.GetN()*938.27;        // MeV
         G4double   sqrMass   = MassNucl*MassNucl+MassHadr*MassHadr;
-
-
 // ---------------    For final state of hadron    ------------------
-
         G4double   invS      = sqrMass+2*inEnHadr*MassNucl;   // MeV^2
         G4double   invU      = 2*sqrMass-invS+ranQ2;          // MeV^2
         G4double   outEnHadr = (sqrMass-invU)/2/MassNucl;     // MeV
@@ -545,48 +653,37 @@
         G4double   cosHadr   = (-ranQ2-2*MassHadr*MassHadr+
                                2*inEnHadr*outEnHadr)/2
                                /inLabMom/outMomHdr;        
-
 //----------------     For final state of nucleus   -----------------
-
         G4double   outEnNucl = (2*MassNucl*MassNucl+ranQ2)/2/MassNucl;
-
         G4double   outMomNcl = sqrt(outEnNucl*outEnNucl-  //  MeV
                                     MassNucl*MassNucl);
         G4double   cosNucl   = (invU-sqrMass+2*inEnHadr*outEnNucl)
                                 /2/inLabMom/outMomNcl;   
-
         G4double   ranFi     = 6.2832*G4UniformRand();
-
 // ------ The transformation from Hadron frame to absolute one -------
-
              G4double   RotMatrix[3][3];
              G4double   NewMomHdrSys[3];
              G4double   NewMomOldSys[3];
              G4double   NucMomHdrSys[3];
              G4double   NucMomOldSys[3];
-
 //   ------------ The hadron angles in its own system ------------
              G4double   sinHadr   = sqrt(1-cosHadr*cosHadr);
              G4double   sinFiHadr = sin(ranFi);
              G4double   cosFiHadr = cos(ranFi);
-
 //   ---- The unit vector of a hadron momentum in its own system ---
                    NewMomHdrSys[0] = sinHadr*cosFiHadr; 
                    NewMomHdrSys[1] = sinHadr*sinFiHadr;
                    NewMomHdrSys[2] = cosHadr;          
         G4double   sinNucl         = sqrt(1-cosNucl*cosNucl);
-
 //   -----------  The unit vector of  a nucleus momentum  -----------
                    NucMomHdrSys[0] = -sinNucl*cosFiHadr;
                    NucMomHdrSys[1] = -sinNucl*sinFiHadr;
                    NucMomHdrSys[2] =  cosNucl;
-
 //  __________ The angles of unit vector in absolute system ----------
-        G4double   cosTet  = aParticle->Get4Momentum().vect().unit().z();
+        G4double   cosTet  = aParticle->GetMomentumDirection().z();
         G4double   sinTet;
         G4double   sinFi;
         G4double   cosFi;
-
                 if(cosTet>0.99999 || cosTet<-0.99999) 
                      {
                       sinTet = 0;
@@ -596,12 +693,11 @@
                  else
                      {
                sinTet  = sqrt(1-cosTet*cosTet);
-               sinFi   = aParticle->Get4Momentum().vect().unit().y()/
+               sinFi   = aParticle->GetMomentumDirection().y()/
                          sinTet;
-               cosFi   = aParticle->Get4Momentum().vect().unit().x()/
+               cosFi   = aParticle->GetMomentumDirection().x()/
                          sinTet;
                      }
-
 //  -----------------  The rotation matrix  ---------------
                         RotMatrix[0][0]   =  cosFi*cosTet;
                         RotMatrix[0][1]   =  sinFi;
@@ -616,7 +712,7 @@
 if(iContr == 137 )
   {
  G4cout<<" Angles CosTet SinTet CosFi SinFi "<<cosTet<<" "<<sinTet
-       <<" "<<cosFi<<" "<<sinFi<<endl;
+       <<" "<<cosFi<<" "<<sinFi<<G4endl;
  G4cout<<" RotMatr "<< RotMatrix[0][0]<<" "
        << RotMatrix[0][1]<<" "<<RotMatrix[0][2]<<G4endl;
  G4cout<<"         "<< RotMatrix[1][0]<<" "<<RotMatrix[1][1]<<" "
@@ -624,35 +720,40 @@ if(iContr == 137 )
  G4cout<<"         "<< RotMatrix[2][0]<<" "<<RotMatrix[2][1]<<" "
        << RotMatrix[2][2]<<G4endl;
   }
-
+//  --------------  Rotation of momenta  ----------------
                    for(G4int ii=0; ii<3; ii++)
                      {
                        NewMomOldSys[ii] = 0;                        
                        NucMomOldSys[ii] = 0;                        
                          for(G4int ll=0; ll<3; ll++)
                           {
+//  --------------  Rotation of Hadron  ------------------
                          NewMomOldSys[ii] = NewMomOldSys[ii]+
                                RotMatrix[ii][ll]*NewMomHdrSys[ll];
+//  --------------  Rotation of Nucleus ------------------
                          NucMomOldSys[ii] = NucMomOldSys[ii]+
                                RotMatrix[ii][ll]*NucMomHdrSys[ll];
                           }
                      }
+//  --------------  The Nucleus Momentum  -------------
+              G4ThreeVector  aNuclMom( NucMomOldSys[0]*outMomNcl,
+                                       NucMomOldSys[1]*outMomNcl,
+                                       NucMomOldSys[2]*outMomNcl);
 
-              G4ThreeVector  aNuclMom( NucMomOldSys[0],     // in MeV
-                                       NucMomOldSys[1],     //    MeV
-                                       NucMomOldSys[2]);    //    MeV
+                secNuclDyn->SetMomentum(aNuclMom);
 
-             //   secNuclDyn->SetMomentum(aNuclMom);
-             //   secNuclTrack.SetKineticEnergy(outEnNucl-MassNucl);
-
-             //   secNuclTrack.SetMomentumDirection(aNuclMom);
-
+  if(iContr==137)
+  G4cout<<" NuclMom "<<secNuclDyn->GetMomentum()<<G4endl;
+//  --------------  The Direction of Hadron Momentum  ---------------
                 G4double pxnew = NewMomOldSys[0];    //  In  MeV
                 G4double pynew = NewMomOldSys[1];    //      Mev
                 G4double pznew = NewMomOldSys[2];    //      Mev
 
      if(iContr == 137)
 {
+  G4cout<<" HadrEn from Mom. "<<sqrt(hadrMass*hadrMass+pxnew*pxnew+
+    pynew*pynew+pznew*pznew)<<G4endl;
+
 G4cout<<G4endl<<" Q2 "<< ranQ2<<" Hdr Mom Tet "<<outMomHdr
       <<" "<< acos(cosHadr)*180/3.1416
       <<" Nucl Mom Tet "<<sqrt(pow(NucMomOldSys[0],2)+
@@ -660,26 +761,60 @@ G4cout<<G4endl<<" Q2 "<< ranQ2<<" Hdr Mom Tet "<<outMomHdr
                                pow(NucMomOldSys[2],2))
                               *outMomNcl<<"  "
       <<acos(cosNucl)*180/3.1416<<G4endl<<G4endl;
-G4cout<<" Rotation: old UnitVec "
-      <<NewMomHdrSys[0]<<" "<<NewMomHdrSys[1]<<" "
-<<NewMomHdrSys[2]<<" Fi "<<ranFi<<G4endl;
-G4cout<<"           new UnitVec "<<pxnew<<" "<<pynew<<" "
-      <<pznew<<G4endl<<G4endl;
+ G4cout<<" HadronEn "<<outEnHadr<<G4endl;
+ G4cout<<" Rotation: old UnitVec "
+       <<NewMomHdrSys[0]<<" "<<NewMomHdrSys[1]<<" "
+       <<NewMomHdrSys[2]<<" Fi "<<ranFi<<G4endl;
+ G4cout<<"           new UnitVec "<<pxnew<<" "<<pynew<<" "
+       <<pznew<<G4endl<<G4endl;
 }
+///  ---------------------------------------------
+///     if(iKindWork>0)
+///              theParticleChange.AddSecondary( &secNuclTrack);
+//   ---------------------------------------------
+
+    NumbPart = theParticleChange.GetNumberOfSecondaries();
+  if(iContr==137)
+  G4cout << " NumbPart (thePartCh.) before "<< NumbPart <<G4endl;
 
      if(iKindWork>0)
-              theParticleChange.AddSecondary( secNuclDyn);
+       theParticleChange.AddSecondary(secNuclDyn);
 
        theParticleChange.SetEnergyChange(outEnHadr);
        theParticleChange.SetMomentumChange(pxnew, pynew, pznew);
 
+    NumbPart = theParticleChange.GetNumberOfSecondaries();
+  if(iContr==137)
+  G4cout << " NumbPart (thePartCh.) after "<< NumbPart <<G4endl;
+
+//  ----------------  Hadron kinematics ----------------
+  if(iContr==137)
+  G4cout<<"  Hadr E, P "<<theParticleChange.GetEnergyChange()<<"  "
+        <<theParticleChange.GetMomentumChange()<<G4endl;
+//  ----------------------------------------------------
+  if(iContr==137)
+  {
+   G4HadSecondary    * NuclSecond = theParticleChange.GetSecondary(0);
+ G4cout<<" Before GetParticle "<<G4endl;
+   G4DynamicParticle * SecPartNuc = NuclSecond->GetParticle();
+ G4cout<<" NucleusName "
+       <<SecPartNuc->GetDefinition()->GetParticleName()<<G4endl;
+   G4ThreeVector outVectorN =  SecPartNuc->GetMomentum();
+   // G4double        outENucl =  SecPartNuc->GetTotalEnergy();
+   //G4double        outPNucl =  sqrt(outENucl*outENucl-
+   //                     938.27*938.27*MassNucl*MassNucl);
+   // G4double   secEnergyNucl =  SecPartNuc->GetKineticEnergy();
+
+    G4cout<<"----------- End Applay ------------"<<G4endl<<G4endl;
+  }
+/////       return &theParticleChange;
        return &theParticleChange;
   }
-
-// +++++++  The randomization of one dimensional array +++++++
+//  ==========================================================
+//  +++++++  The randomization of one dimensional array ++++++
     G4double G4ElasticHadrNucleusHE::RandomElastic0(
-                           const G4HadProjectile * aHadron,
-                                 G4Nucleus         * aNucleus)
+                           const G4DynamicParticle * /*aHadron*/,
+                                 G4Nucleus         * /*aNucleus*/)
          {
 
          G4double ranQ2;
@@ -722,8 +857,8 @@ G4cout<<"           new UnitVec "<<pxnew<<" "<<pynew<<" "
 
 // +++++++++ The randomization of two dimensoinal array   ++++++++
     G4double G4ElasticHadrNucleusHE::RandomElastic1(
-                           const G4HadProjectile *  aHadron,
-                                 G4Nucleus         *  aNucleus)
+                           const G4DynamicParticle *  aHadron,
+                                 G4Nucleus         *  /*aNucleus*/)
      {
          G4double forQ2[3];
          G4double curE = aHadron->GetTotalEnergy();   //  in  MeV
@@ -758,14 +893,14 @@ G4cout<<"           new UnitVec "<<pxnew<<" "<<pynew<<" "
              {
 
 //  G4cout<<"find kk  ranUni Tab "<<kk<<" " <<ranUni<< "  "<<
-//           *(pTableCrSec+iiE*ONQ2+mm*ONQ2+kk-ONQ2)<<endl;
+//           *(pTableCrSec+iiE*ONQ2+mm*ONQ2+kk-ONQ2)<<G4endl;
 
                kk ++;
                k[mm]=kk;
              }     //   while   
 
 ///   G4cout<<" ranUni kk iIntgr[kk] "<<ranUni<<" "<<
-///      kk<<" "<< *(pTableCrSec+iiE*ONQ2+mm*ONQ2+kk-ONQ2)<<endl;
+///      kk<<" "<< *(pTableCrSec+iiE*ONQ2+mm*ONQ2+kk-ONQ2)<<G4endl;
 
 //           if(kk == 1 ) kk = 2;
               X1 = *(pTableCrSec+iiE*ONQ2+mm*ONQ2+kk-ONQ2-1);
@@ -777,11 +912,11 @@ G4cout<<"           new UnitVec "<<pxnew<<" "<<pynew<<" "
 
        forQ2[mm] = InterPol(X1, X2, X3, Y1, Y2, Y3, ranUni);
 
-/// G4cout<<endl;
-/// G4cout<<" a   mm X1 X2 X3 "<<mm<<" "<<X1<<" "<<X2<<" "<<X3<<endl;
+/// G4cout<<G4endl;
+/// G4cout<<" a   mm X1 X2 X3 "<<mm<<" "<<X1<<" "<<X2<<" "<<X3<<G4endl;
 /// G4cout<<" a Y1 Y2 Y3  " <<Y1<< "  " <<Y2<< "  " <<Y3<< " forQ2 "
-///                      <<forQ2[mm]<<endl;  
-/// G4cout<<endl;
+///                      <<forQ2[mm]<<G4endl;  
+/// G4cout<<G4endl;
 
            }     //  mm
 
@@ -792,70 +927,6 @@ G4cout<<"           new UnitVec "<<pxnew<<" "<<pynew<<" "
               Y2 = forQ2[1];
               Y3 = forQ2[2];
            ranQ2 = InterPol(X1, X2, X3, Y1, Y2, Y3, curE);
-
-/*
-  if(ranQ2<0||ranQ2>250000)
-   {
-    G4int l=k[0];
-  G4cout<<" mm=0 Q2 -1 0 +1 "<<iQ2[l-1]<<"  "<<iQ2[l]<<"  "
-        <<iQ2[l+1]<<G4endl;
-          l=k[1];
-  G4cout<<" mm=1 Q2 -1 0 +1 "<<iQ2[l-1]<<"  "<<iQ2[l]<<"  "
-        <<iQ2[l+1]<<G4endl;
-          l=k[2];
-  G4cout<<" mm=2 Q2 -1 0 +1 "<<iQ2[l-1]<<"  "<<iQ2[l]<<"  "
-        <<iQ2[l+1]<<G4endl;
- 
-  G4cout<<" forQ2 : "<<forQ2[0]<<" "<<forQ2[1]<<" "
-        <<forQ2[2]<<G4endl;
-  
-  G4cout<<" 1-ranUni : "<<1-ranUni<<G4endl;
-  G4cout<<" Differ 0 : "<<1-
-          *(pTableCrSec+iiE*ONQ2+0*ONQ2+k[0]-1-ONQ2)
-        <<" "<<1-
-          *(pTableCrSec+iiE*ONQ2+0*ONQ2+k[0]-ONQ2)
-        <<" "<<1-
-          *(pTableCrSec+iiE*ONQ2+0*ONQ2+k[0]+1-ONQ2)<<endl;
-  G4cout<<" Differ 1 : "<<1-
-          *(pTableCrSec+iiE*ONQ2+0*ONQ2+k[1]-1-ONQ2)
-        <<" "<<1-
-          *(pTableCrSec+iiE*ONQ2+0*ONQ2+k[1]-ONQ2)
-        <<" "<<1-
-          *(pTableCrSec+iiE*ONQ2+0*ONQ2+k[1]+1-ONQ2)<<endl;
-  G4cout<<" Differ 2 : "<<1-
-          *(pTableCrSec+iiE*ONQ2+0*ONQ2+k[2]-1-ONQ2)
-        <<" "<<1-
-          *(pTableCrSec+iiE*ONQ2+0*ONQ2+k[2]-ONQ2)
-        <<" "<<1-
-          *(pTableCrSec+iiE*ONQ2+0*ONQ2+k[2]+1-ONQ2)<<endl;
-
-  G4cout<<"find kk  ranUni Tab mm=0 "<<kk<<" " <<ranUni<< "  "<<
-           *(pTableCrSec+iiE*ONQ2+0*ONQ2+k[0]-1-ONQ2)<<endl;
-  G4cout<<"find kk  ranUni Tab mm=0 "<<kk<<" " <<ranUni<< "  "<<
-           *(pTableCrSec+iiE*ONQ2+0*ONQ2+k[0]-ONQ2)<<endl;
-  G4cout<<"find kk  ranUni Tab mm=0 "<<kk<<" " <<ranUni<< "  "<<
-           *(pTableCrSec+iiE*ONQ2+0*ONQ2+k[0]+1-ONQ2)<<endl;
-  G4cout<<"find kk  ranUni Tab mm=1 "<<kk<<" " <<ranUni<< "  "<<
-           *(pTableCrSec+iiE*ONQ2+1*ONQ2+k[1]-1-ONQ2)<<endl;
-  G4cout<<"find kk  ranUni Tab mm=1 "<<kk<<" " <<ranUni<< "  "<<
-           *(pTableCrSec+iiE*ONQ2+1*ONQ2+k[1]-ONQ2)<<endl;
-  G4cout<<"find kk  ranUni Tab mm=1 "<<kk<<" " <<ranUni<< "  "<<
-           *(pTableCrSec+iiE*ONQ2+1*ONQ2+k[1]+1-ONQ2)<<endl;
-  G4cout<<"find kk  ranUni Tab mm=2 "<<kk<<" " <<ranUni<< "  "<<
-           *(pTableCrSec+iiE*ONQ2+2*ONQ2+k[2]-1-ONQ2)<<endl;
-  G4cout<<"find kk  ranUni Tab mm=2 "<<kk<<" " <<ranUni<< "  "<<
-           *(pTableCrSec+iiE*ONQ2+2*ONQ2+k[2]-ONQ2)<<endl;
-  G4cout<<"find kk  ranUni Tab mm=2 "<<kk<<" " <<ranUni<< "  "<<
-           *(pTableCrSec+iiE*ONQ2+2*ONQ2+k[2]+1-ONQ2)<<endl;
-
- G4cout<<" kk "<<k[0]<<" "<<k[1]<<" "
-       <<k[2]<<" ranUni "<<ranUni<<G4endl;
- G4cout<<" X1 X2 X3 "<<X1<<" "<<X2<<" "<<X3;
- G4cout<<" Y1 Y2 Y3 "<<Y1<<" "<<Y2<<" "<<Y3<<" ranQ2 "<<ranQ2<<endl;
- G4cout<<endl;
-
-   }            //  if
-*/
 
         return ranQ2;          //   MeV^2
  }
@@ -884,13 +955,13 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
 
        GetNucleusParameters(aNucleus);
 
-       G4double aNuc  = aNucleus->GetN();
+//////       G4double aNuc  = aNucleus->GetN();
        G4double intgrS, intgStep;
+       G4int    ii;
 
                iIntgr[0] = 0;
 
-             G4int ii;
-	     for( ii=0; ii<Nstep-1; ii++) 
+             for( ii=0; ii<Nstep-1; ii++) 
               {
 
 // ----------------  The integration  -------------
@@ -924,7 +995,7 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
               }   //  ii
 
 //  -------------------  The normalization  ----------------
-	    for(ii=0; ii<Nstep; ii++)
+            for( ii=0; ii<Nstep; ii++)
              {
                iIntgr[ii] = iIntgr[ii]/iIntgr[Nstep-1];
               }   //  ii
@@ -938,15 +1009,15 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
      {
 // -------------- !!! Here the main unit is GeV !!!  ---------------
        G4HadronValues::GetHadronValues(aHadron);
-       G4double Ehad     = aHadron->GetTotalEnergy()/1000;  //  GeV
+///       G4double Ehad     = aHadron->GetTotalEnergy()/1000;  //  GeV
 
        G4double aNuc     = aNucleus->GetN();
-       G4int    Nucleus  = aNuc;
-       G4double intgrS;
+       G4int    Nucleus  = (G4int) aNuc;
+/////       G4double intgrS;
 
              GetNucleusParameters(aNucleus);
 
-       G4double PnuclP   = 0.001;
+///       G4double PnuclP   = 0.001;
 
                 maxQ2    = GetQ2limit(R1)/1000/1000;        //  GeV^2
 
@@ -963,42 +1034,44 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
       G4double    R22      = R2*R2;
       G4double    R12B     = R12+2*Bhad;
       G4double    R22B     = R22+2*Bhad;
-      G4double    R12Bp    = R12+20;
-      G4double    R22Bp    = R22+20;
-      G4double    R13Bp    = R12*R1/R12Bp;
-      G4double    R23Bp    = R22*R2/R22Bp;
-      G4double    R12Ap    = R12+20;
-      G4double    R22Ap    = R22+20;
-      G4double    R13Ap    = R12*R1/R12Ap;
-      G4double    R23Ap    = R22*R2/R22Ap*PnuclP;
-      G4double    R23dR13  = R23Ap/R13Ap;
-      G4double    R12Apd   = 2/R12Ap;
-      G4double    R22Apd   = 2/R22Ap;
+///      G4double    R12Bp    = R12+20;
+///      G4double    R22Bp    = R22+20;
+///      G4double    R13Bp    = R12*R1/R12Bp;
+///      G4double    R23Bp    = R22*R2/R22Bp;
+///      G4double    R12Ap    = R12+20;
+///      G4double    R22Ap    = R22+20;
+///      G4double    R13Ap    = R12*R1/R12Ap;
+///      G4double    R23Ap    = R22*R2/R22Ap*PnuclP;
+///      G4double    R23dR13  = R23Ap/R13Ap;
+///      G4double    R12Apd   = 2/R12Ap;
+///      G4double    R22Apd   = 2/R22Ap;
 
       G4double    Norm     = R12*R1-Pnucl*R22*R2;
-      G4double    NormP    = R12*R1-PnuclP*R22*R2;
+///      G4double    NormP    = R12*R1-PnuclP*R22*R2;
       G4double    R13      = R12*R1/R12B;
       G4double    R23      = Pnucl*R22*R2/R22B;
       G4double    Unucl    = Stot/2/Pi1/Norm*R13;
-      G4double    Unclprod = Stot/2/Pi1/NormP*R13Ap;
+////      G4double    Unclprod = Stot/2/Pi1/NormP*R13Ap;
       G4double    FiH      = asin(HadrReIm/Rho2);
       G4double    NN2      = R23/R13;
 
-      G4double    DDSec1p  = (DDSect2+
-                    DDSect3*log(1.06*2*Ehad/R1/4));
+///      G4double    DDSec1p  = (DDSect2+
+///                    DDSect3*log(1.06*2*Ehad/R1/4));
 
-      G4double    DDSec2p  = (DDSect2+
-                    DDSect3*log(1.06*2*Ehad/sqrt((R12+R22)/2)/4));
+///      G4double    DDSec2p  = (DDSect2+
+///                    DDSect3*log(1.06*2*Ehad/sqrt((R12+R22)/2)/4));
 
-      G4double    DDSec3p  = (DDSect2+
-                    DDSect3*log(1.06*2*Ehad/R2/4));
+///      G4double    DDSec3p  = (DDSect2+
+///                    DDSect3*log(1.06*2*Ehad/R2/4));
 
-      G4double    R12ApdR22Ap = 0.5*(R12Apd+R22Apd);
+///      G4double    R12ApdR22Ap = 0.5*(R12Apd+R22Apd);
 
                  iIntgr[0] = 0;
 
-             for(G4int ii=0; ii<Nstep-1; ii++) 
-              {
+      G4int ii;
+
+      for(ii=0; ii<Nstep-1; ii++) 
+      {
 
       G4double    Q2       = iQ2[ii+1]/1000/1000;// internal in GeV^2
 
@@ -1060,7 +1133,7 @@ void G4ElasticHadrNucleusHE::ArrayForHeavy(
              Prod0        = Prod0*Pi1/2.568/4;  //  This is in mb
              iIntgr[ii+1] = Prod0;  //iIntgr[ii-1]+Prod0;
 
-              }                                            //   ii (Q2)
+         }                                            //   ii (Q2)
 
           for(ii = 0; ii<Nstep; ii++)
                    {  
@@ -1092,9 +1165,9 @@ G4double G4ElasticHadrNucleusHE::InterPol(
                   }   //  ii
 
           else    {
-             G4double DA = Y1*X2+Y3*X1+Y2*X3-Y3*X2-Y1*X3-Y2*X1;
-             G4double DB = Y2*F12+Y1*F32+Y3*F22-Y2*F32-Y3*F12-Y1*F22;
-             G4double DC = Y3*X2*F12+Y2*X1*F32+Y1*X3*F22
+             G4double DA =  Y1*X2    +Y3*X1    +Y2*X3 -Y3*X2 -Y1*X3 -Y2*X1;
+             G4double DB =  Y2*F12   +Y1*F32   +Y3*F22-Y2*F32-Y3*F12-Y1*F22;
+             G4double DC =  Y3*X2*F12+Y2*X1*F32+Y1*X3*F22
                            -Y1*X2*F32-Y2*X3*F12-Y3*X1*F22;
                    ranQ2 = (DA*X*X+DB*X+DC)/D0;           //   MeV^2
                   }

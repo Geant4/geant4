@@ -1,45 +1,22 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 // G4ElasticHadrNucleusHe.hh
 
 #ifndef G4ElasticHadrNucleusHE_h
 #define G4ElasticHadrNucleusHE_h 1
 
-#include "Randomize.hh"
-#include "G4Nucleus.hh"
-#include "G4HadProjectile.hh"
-#include "G4HadFinalState.hh"
-#include "G4IonTable.hh"
-#include "G4DiffElasticHadrNucleus.hh"
-#include "G4IntegrHadrNucleus.hh"
-#include "G4HadronicInteraction.hh"
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
-#include "iostream.h"
-#include "fstream.h"
+#include "G4ParticleChange.hh"
+#include "G4Track.hh"
+#include "Randomize.hh"
+#include "G4Nucleus.hh"
+#include "G4IonTable.hh"
+
+#include "G4DiffElasticHadrNucleus.hh"
+#include "G4IntegrHadrNucleus.hh"
+#include "G4HadronicInteraction.hh"
 
 #define   ONQ2     150      //  The number of steps on Q2
 #define   ONE      5        //  The number of steps on E
@@ -50,7 +27,8 @@
                             //  one
 
    class G4ElasticHadrNucleusHE : public G4DiffElasticHadrNucleus,
-                                         G4HadronicInteraction 
+                                         G4HadronicInteraction
+//                                        ,G4IntegrHadrNucleus 
    {
 
  public:
@@ -79,14 +57,18 @@
                                       G4int                 iNpoE);  
 
         ~G4ElasticHadrNucleusHE() {;}
+//  ----------------------------------------------------------
+////         G4VParticleChange * ApplyYourself( const G4Track   &aTrack,
+////                                                  G4Nucleus &aNucleus);
+//  ----------------------------------------------------------
 
-        G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-                                        G4Nucleus &targetNucleus );
+         G4HadFinalState * ApplyYourself( const G4HadProjectile  &aTrack,
+                                                G4Nucleus        &aNucleus);
 
-         G4double RandomElastic0( const G4HadProjectile *   aHadron,
+         G4double RandomElastic0( const G4DynamicParticle *   aHadron,
                                         G4Nucleus *           aNucleus);
 
-         G4double RandomElastic1( const G4HadProjectile *   aHadron,
+         G4double RandomElastic1( const G4DynamicParticle *   aHadron,
                                         G4Nucleus *           aNucleus);
  private:
          G4String GetHadronName(const G4DynamicParticle * aHadron);
@@ -125,7 +107,8 @@
 //     ++++++++++++++++++++++++++++++++++++++++++++++++++
          G4IonTable                * MyIonTable;
          G4DiffElasticHadrNucleus    aDiffElHadNcls;
- 
+//         G4HadFinalState  FinState; 
+
          G4int     Nstep,         // The number of steps on Q2
                    iKindWork,     // 
                    iContr,        //
