@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN03.cc,v 1.5 1999-05-31 12:30:34 johna Exp $
+// $Id: exampleN03.cc,v 1.6 1999-05-31 14:48:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,6 +51,18 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new ExN03PhysicsList);
   
+ G4UIsession* session(NULL);
+  
+  if (argc==1)   // Define UI session for interactive mode.
+    {
+      // G4UIterminal is a (dumb) terminal.
+#ifdef G4UI_USE_XM
+      session = new G4UIXm(argc,argv);
+#else
+      session = new G4UIterminal;
+#endif
+    }
+  
 #ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new ExN03VisManager;
@@ -69,14 +81,9 @@ int main(int argc,char** argv) {
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
-  if (argc==1)   // Define UI session for interactive mode.
+  if (session)   // Define UI session for interactive mode.
     {
       // G4UIterminal is a (dumb) terminal.
-#ifdef G4UI_USE_XM
-      G4UIsession* session = new G4UIXm(argc,argv);
-#else
-      G4UIsession* session = new G4UIterminal;
-#endif
       UI->ApplyCommand("/control/execute prerunN03.mac");    
       session->SessionStart();
       delete session;

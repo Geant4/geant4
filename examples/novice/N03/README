@@ -1,4 +1,4 @@
-$Id: README,v 1.1 1999-01-07 16:05:51 gunter Exp $
+$Id: README,v 1.2 1999-05-31 14:48:07 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -75,7 +75,7 @@ $Id: README,v 1.1 1999-01-07 16:05:51 gunter Exp $
  
  	The Visualization Manager is set in the main().
  	The initialisation of the drawing is done via the command
- 	/vis~/create_view in the macro prerunN03.mac. This macro is
+ 	a set of /vis commands in the macro prerunN03.mac. This macro is
  	automatically read from the main in case of interactive running mode.
  	
  	The detector has a default view which is a longitudinal view of the 
@@ -84,6 +84,11 @@ $Id: README,v 1.1 1999-01-07 16:05:51 gunter Exp $
  	The tracks are drawn at the end of event, and erased at the end of run.
  	Optionaly one can choose to draw all particles, only the charged one,
  	or none. This command is defined in EventActionMessenger class.
+	
+	NB: the visualization (with OpenGL) assumes two things:
+	    1- the visualisation & interfaces categories have been compiled
+	       with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
+	    2- exampleN03.cc has been compiled with G4VIS_USE_OPENGLX.   
  	
  5- PHYSICS DEMO
  
@@ -97,8 +102,18 @@ $Id: README,v 1.1 1999-01-07 16:05:51 gunter Exp $
  
  	As a homework try to visualize a gamma conversion alone, 
  	or the effect of the multiple scattering.
- 	
- 6- HOW TO START ?
+	
+ 6- USER INTERFACES
+  
+        The default command interface, called G4UIterminal, is done via
+	standart cin/G4cout.
+	
+	On can use a Motif driven command interface (called G4UIXm) if:
+	  1- interfaces category has been compiled with G4UI_BUILD_XM_SESSION
+	  2- exampleN03.cc has been compiled with G4UI_USE_XM. 
+ 
+      	
+ 7- HOW TO START ?
  
  	- compile and link to generate an executable
  		% cd N03

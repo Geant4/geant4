@@ -1,4 +1,4 @@
-$Id: History,v 1.3 1999-04-16 11:55:01 kurasige Exp $
+$Id: History,v 1.4 1999-05-31 14:48:07 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+31-05-99 Guy Barrand, Michel Maire
+- introduce a command interface based on Motif: G4UIXm   
+     
 16th April 1999 H.Kurashige
 - modify ExN03SteppingAction::UserSteppingAction
 - modify ExN03EventAction
