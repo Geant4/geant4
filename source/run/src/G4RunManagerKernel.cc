@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.17 2004-08-10 23:57:17 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.18 2004-08-31 20:04:04 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,6 +37,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VUserPhysicsList.hh"
+#include "G4ParticleTable.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4ProductionCuts.hh"
@@ -195,6 +196,7 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 {
   physicsList = uPhys;
+  G4ParticleTable::GetParticleTable()->SetReadiness();
   if(verboseLevel>1) G4cout << "physicsList->ConstructParticle() start." << G4endl;
   physicsList->ConstructParticle();
 }
