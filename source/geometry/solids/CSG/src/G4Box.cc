@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Box.cc,v 1.11 2000-11-20 18:12:49 gcosmo Exp $
+// $Id: G4Box.cc,v 1.12 2001-01-31 17:30:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,7 @@
 G4Box::G4Box(const G4String& pName, G4double pX,
 	  G4double pY, G4double pZ) : G4CSGSolid(pName)
 {
-  if ( pX > 0 && pY > 0 && pZ > 0 )
+  if ( pX > 2*kCarTolerance && pY > 2*kCarTolerance&& pZ > 2*kCarTolerance)
   {
     fDx = pX ;
     fDy = pY ; 
@@ -51,7 +51,7 @@ G4Box::G4Box(const G4String& pName, G4double pX,
   }
   else
   {
-    G4Exception("Error in G4Box::Box - negative parameters");
+    G4Exception("Error in G4Box::Box - invalid (<2*kCarTolerance) parameters");
   }	
 
 }
@@ -64,6 +64,28 @@ G4Box::~G4Box()
 {
   ;
 }
+
+//////////////////////////////////////////////////////////////////////////////
+
+void G4Box::SetXHalfLength(G4double dx)
+{
+  if(dx > 2*kCarTolerance) fDx = dx ;
+  else G4Exception("G4Box::SetXHalfLength - invalid (<2*kCarTolerance) parameters");
+} 
+
+void G4Box::SetYHalfLength(G4double dy) 
+{
+  if(dy > 2*kCarTolerance) fDy = dy ;
+  else G4Exception("G4Box::SetYHalfLength - invalid (<2*kCarTolerance) parameters");
+} 
+
+void G4Box::SetZHalfLength(G4double dz) 
+{
+  if(dz > 2*kCarTolerance) fDz = dz ;
+  else G4Exception("G4Box::SetZHalfLength - invalid (<2*kCarTolerance) parameters");
+} 
+    
+
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -680,8 +702,8 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
- // G4Exception("Invalid call in G4Box::DistanceToOut(p),  point p is outside") ;
-     G4cout<<"G4Box::DistanceToOut(p),point p is outside ?!" << G4endl ;
+  G4Exception("Invalid call in G4Box::DistanceToOut(p),  point p is outside") ;
+     //    G4cout<<"G4Box::DistanceToOut(p),point p is outside ?!" << G4endl ;
   }
   safx1 = fDx - p.x() ;
   safx2 = fDx + p.x() ;

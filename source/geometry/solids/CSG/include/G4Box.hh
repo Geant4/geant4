@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Box.hh,v 1.5 2000-11-02 17:06:38 gcosmo Exp $
+// $Id: G4Box.hh,v 1.6 2001-01-31 17:30:42 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -85,11 +85,11 @@ class G4Box : public G4CSGSolid
     
     G4double GetZHalfLength() const { return fDz; }
 
-    void SetXHalfLength(G4double dx) { fDx=dx; }
+    void SetXHalfLength(G4double dx) ;
 
-    void SetYHalfLength(G4double dy) { fDy=dy; }
+    void SetYHalfLength(G4double dy) ;
 
-    void SetZHalfLength(G4double dz) { fDz=dz; }
+    void SetZHalfLength(G4double dz) ;
     
     EInside Inside(const G4ThreeVector& p) const;
 
