@@ -1,5 +1,9 @@
 /run/verbose 2
 /vis/scene/create
+/vis/open VRML1FILE
+/vis/sceneHandler/create VRML1FILE
+/vis/sceneHandler/attach
+/vis/viewer/create ! ! 600
 /vis/drawVolume
 /vis/scene/create
 /vis/scene/add/volume world
@@ -8,19 +12,13 @@
 /vis/viewer/update
 /tracking/storeTrajectory 1
 /lowenergy/lowlimGE 250 eV
-/lowenergy/cutG 1. mum
-/run/cutoffModified
-/lowenergy/cutE 1. mum
-/run/cutoffModified
-/gun/particle
-/gun/energy 3.5 keV
-/gun/particle gamma
-/run/beamOn 1000000
-/lowenergy/lowlimGE 250 eV
 /lowenergy/cutG 0.1 mum
 /run/cutoffModified
 /lowenergy/cutE 0.1 mum
 /run/cutoffModified
+/gun/randomVert on
 /gun/particle gamma
 /gun/energy 3.5 keV
-/run/beamOn 1000000
+/run/beamOn 10
+/vis/scene/notifyHandlers
+/vis/viewer/update

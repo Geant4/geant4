@@ -17,7 +17,7 @@
 #
 #/vis/open OGLIX
 
-#/vis/open VRML1FILE
+/vis/open VRML1FILE
 
 #/vis/open VRML2FILE
 #/vis/open DAWNFILE

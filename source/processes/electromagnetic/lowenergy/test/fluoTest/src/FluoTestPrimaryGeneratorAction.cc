@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FluoTestPrimaryGeneratorAction.cc,v 1.6 2001-10-15 14:29:52 guardi Exp $
+// $Id: FluoTestPrimaryGeneratorAction.cc,v 1.7 2001-10-16 08:16:04 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,6 +71,38 @@ void FluoTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       x0 = (FluoTestDetector->GetSampleSizeXY())*(G4UniformRand()-0.5);
      } 
   particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+
+ //randomize particles
+
+  G4double random = G4UniformRand();
+  if (rndmPart == "on")
+    {  
+      G4String particleName;
+      G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+      G4ParticleDefinition* particle;
+      G4double electronAbundance = 0.5;
+      G4double photonAbundance = 0.5;
+      if ( random < electronAbundance)
+	{
+	  particle = particleTable->FindParticle(particleName="e-");
+	}
+      else{
+	particle = particleTable->FindParticle(particleName="gamma");
+      }
+      particleGun->SetParticleDefinition(particle);
+      
+    }
+  //randomize starting point
+  if (beam == "on")
+    {
+      G4double radius = 0.5 * mm;
+      G4double rho = radius*sqrt(G4UniformRand());
+      G4double theta = 2*pi*G4UniformRand()*rad;
+      G4double position = -0.5*(FluoTestDetector->GetWorldSizeZ());
+      G4double y = rho * sin(theta);
+      G4double x = rho * cos(theta);
+      particleGun->SetParticlePosition(G4ThreeVector(x,y,position));
+    } 
 
   particleGun->GeneratePrimaryVertex(anEvent);
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FluoTestPrimaryGeneratorAction.hh,v 1.7 2001-10-15 09:21:07 guardi Exp $
+// $Id: FluoTestPrimaryGeneratorAction.hh,v 1.8 2001-10-16 08:16:01 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,13 +35,19 @@ class FluoTestPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   public:
     void GeneratePrimaries(G4Event*);
     void SetRndmFlag(G4String val) { rndmFlag = val;}
+  void SetRndmPart (G4String val) { rndmPart = val;}
+  void SetRndmVert (G4String val) { beam = val;}
 
   private:
     G4ParticleGun*                particleGun;	  //pointer a to G4 service class
     FluoTestDetectorConstruction*    FluoTestDetector;  //pointer to the geometry
     
     FluoTestPrimaryGeneratorMessenger* gunMessenger; //messenger of this class
-    G4String                      rndmFlag;	  //flag for a random impact point       
+    G4String                      rndmFlag;	  //flag for a random impact point  
+ G4String                      rndmPart;//flag for a random particle shot
+  G4String                      beam;
+
+     
 };
 
 #endif
