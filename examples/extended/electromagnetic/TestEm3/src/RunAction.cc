@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.8 2004-01-16 08:20:09 vnivanch Exp $
+// $Id: RunAction.cc,v 1.9 2004-01-16 10:13:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -228,6 +228,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   // show Rndm status
   HepRandom::showEngineStatus();
+#ifdef G4ANALYSIS_USE
+  tree->commit();       // Writing the histograms to the file
+  tree->close();        // and closing the tree (and the file)
+  G4cout << "Histograms are saved" << G4endl;
+  delete hf;
+  delete tree;
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
