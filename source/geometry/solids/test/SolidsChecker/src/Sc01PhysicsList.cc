@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01PhysicsList.cc,v 1.1 2004-01-27 14:11:42 grichine Exp $
+// $Id: Sc01PhysicsList.cc,v 1.2 2004-11-10 07:43:14 grichine Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -95,7 +95,7 @@ void Sc01PhysicsList::ConstructEM()
      
     if (particleName == "opticalphoton") 
     {
-    //opticalphoton
+    // opticalphoton
     // Construct processes for opticalphoton
     //  pmanager->AddDiscreteProcess(new G4OpBoundaryProcess());
  
@@ -108,18 +108,23 @@ void Sc01PhysicsList::ConstructGeneral()
 {
   G4Decay* theDecayProcess = new G4Decay();
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
+
+  while( (*theParticleIterator)() )
+  {
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (theDecayProcess->IsApplicable(*particle)) { 
+
+    if (theDecayProcess->IsApplicable(*particle)) 
+    { 
       pmanager->AddProcess(theDecayProcess, INT_MAX, -1, INT_MAX); 
-   }
+    }
   }
 }
 
 void Sc01PhysicsList::SetCuts()
 {
-  if (verboseLevel >0){
+  if (verboseLevel >0)
+  {
     G4cout << "Sc01PhysicsList::SetCuts:";
     G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }

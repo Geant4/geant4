@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01EventAction.cc,v 1.1 2004-01-27 14:11:42 grichine Exp $
+// $Id: Sc01EventAction.cc,v 1.2 2004-11-10 07:43:14 grichine Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -45,6 +45,7 @@
 #include <iostream>
 
 Sc01EventAction::Sc01EventAction()
+  : fDrawFlag("all")
 {
   eventMessenger = new Sc01EventActionMessenger(this);
 }
@@ -71,14 +72,33 @@ void Sc01EventAction::EndOfEventAction(const G4Event* evt)
 
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;
-  if(trajectoryContainer)
-  { n_trajectories = trajectoryContainer->entries(); }
+  if(trajectoryContainer) n_trajectories = trajectoryContainer->entries(); 
 
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager) {
-    for(G4int i=0; i<n_trajectories; i++)
-    { (*(evt->GetTrajectoryContainer()))[i]->DrawTrajectory(50); }
-	}		 
+  G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
+
+  if(pVisManager) 
+  {
+    G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
+    G4int n_trajectories = 0;
+
+    if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+
+    for (G4int i=0; i<n_trajectories; i++)
+    { 
+      G4VTrajectory* trj = ((*(evt->GetTrajectoryContainer()))[i]);
+
+      // if ( fDrawFlag == "all" )        
+      trj->DrawTrajectory(50); 
+                                  //     pVisManager->Draw(*trj,1000);
+      /*
+      else if ( (fDrawFlag == "charged")&&
+                (trj->GetCharge() != 0.) )  pVisManager->Draw(*trj,1000);
+
+      else if ((fDrawFlag == "neutral")&&
+               (trj->GetCharge() == 0.))    pVisManager->Draw(*trj,1000);
+      */
+    }
+  }		 
 }
 
 

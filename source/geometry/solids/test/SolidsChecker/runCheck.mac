@@ -3,21 +3,34 @@
 # for Optical photons geometry test
 #
 /run/initialize
+#
 #/geometry/test/recursive_test
+#/geometry/navigator/check_mode true
 /particle/list
+/run/initialize
+#
 #/tracking/verbose 1
 #
 #/mydet/SelectDetector Cone
 #
-/mydet/SelectDetector Sphere
+#/mydet/SelectDetector Trd
+#
+#/mydet/SelectDetector Torus
+#
+#/mydet/SelectDetector Sphere
+#
+#/mydet/SelectDetector b1Sb2
+#
 #
 /event/printModulo 100000
 /run/beamOn 1000000
-/event/printModulo 10000
+#/event/printModulo 1
 #/tracking/verbose 3
-/run/beamOn 100000
+#/run/beamOn 1
 #
-#/run/beamOn 353561 Torus
+#/run/beamOn 353561 old Torus
+#/tracking/verbose 3
+#/run/beamOn 1
 #/run/beamOn 6236 Cone
 #
 #/event/printModulo 10000

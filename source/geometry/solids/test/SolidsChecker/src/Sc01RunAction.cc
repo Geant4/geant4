@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01RunAction.cc,v 1.1 2004-01-27 14:11:42 grichine Exp $
+// $Id: Sc01RunAction.cc,v 1.2 2004-11-10 07:43:14 grichine Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -33,6 +33,7 @@
 
 #include "G4Run.hh"
 #include "G4UImanager.hh"
+#include "G4VVisManager.hh"
 #include "G4ios.hh"
 
 Sc01RunAction::Sc01RunAction()
@@ -41,13 +42,25 @@ Sc01RunAction::Sc01RunAction()
 
 Sc01RunAction::~Sc01RunAction()
 {
+
 }
 
 void Sc01RunAction::BeginOfRunAction(const G4Run* )
 {
+  // G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+
+  if (G4VVisManager::GetConcreteInstance())
+    {
+      G4UImanager* UI = G4UImanager::GetUIpointer();
+      UI->ApplyCommand("/vis/scene/notifyHandlers");
+    }
 }
 
 void Sc01RunAction::EndOfRunAction(const G4Run* )
 {
+  if (G4VVisManager::GetConcreteInstance())
+    {
+     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+    }
 }
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01EventAction.hh,v 1.1 2004-01-27 14:11:41 grichine Exp $
+// $Id: Sc01EventAction.hh,v 1.2 2004-11-10 07:43:14 grichine Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -53,7 +53,7 @@ class Sc01EventAction : public G4UserEventAction
     virtual void EndOfEventAction(const G4Event*);
 
 private:
-
+  G4String fDrawFlag;
   G4int    printModulo;
   Sc01EventActionMessenger*  eventMessenger;
 };

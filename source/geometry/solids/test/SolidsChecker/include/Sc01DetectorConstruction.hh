@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01DetectorConstruction.hh,v 1.1 2004-01-27 14:11:41 grichine Exp $
+// $Id: Sc01DetectorConstruction.hh,v 1.2 2004-11-10 07:43:14 grichine Exp $
 // ------------------------------------------------------------
 //  GEANT 4 class header file 
 //
@@ -29,6 +29,7 @@
 //
 //  History
 //        first version              09 Sept. 1998 by S.Magni
+//        modified for geometry test  11.02.04 V. Grichine 
 // ------------------------------------------------------------
 
 #ifndef Sc01DetectorConstruction_h
@@ -38,6 +39,7 @@
 #include "G4VSolid.hh"
 #include "G4Material.hh"
 #include "G4OpticalSurface.hh"
+#include "G4LogicalVolume.hh"
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
@@ -54,7 +56,11 @@ class Sc01DetectorConstruction : public G4VUserDetectorConstruction
      void               SwitchDetector();
      void               SetMaterial();
      G4double           GetHallSize(){return fHallSize;};
+
+     G4LogicalVolume* GetConePolycone();
+
   private:
+
      Sc01DetectorMessenger* detectorMessenger;
      G4VSolid* aVolume;
      G4VPhysicalVolume* PhysicalVolume;

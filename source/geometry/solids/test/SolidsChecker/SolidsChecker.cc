@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SolidsChecker.cc,v 1.1 2004-01-27 14:11:40 grichine Exp $
+// $Id: SolidsChecker.cc,v 1.2 2004-11-10 07:43:14 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,7 @@
 #include "Sc01DetectorConstruction.hh"
 #include "Sc01RunAction.hh"
 #include "Sc01EventAction.hh"
+#include "SteppingAction.hh"
 #include "Sc01PrimaryGeneratorAction.hh"
 #include "Sc01PhysicsList.hh"
 #include "Sc01VisManager.hh"
@@ -43,6 +44,7 @@
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4RunManager.hh"
+#include "G4UItcsh.hh"
 
 #include "G4ios.hh"
 
@@ -63,6 +65,7 @@ int main(int argc,char** argv) {
   // UserAction classes
   runManager->SetUserAction(new Sc01RunAction);
   runManager->SetUserAction(new Sc01EventAction);
+  runManager->SetUserAction(new SteppingAction);
   runManager->SetUserAction(new Sc01PrimaryGeneratorAction(detector));
 
 #ifdef G4VIS_USE
@@ -71,19 +74,29 @@ int main(int argc,char** argv) {
   visManager -> Initialize ();
 #endif
 
+
+
   // User interactions
   // Define (G)UI for interactive mode
-  if(argc==1)
+
+  G4UImanager * UI = G4UImanager::GetUIpointer();
+
+  if( argc == 1 )
   { 
     // G4UIterminal is a (dumb) terminal.
-    G4UIsession * session = new G4UIterminal;
+    G4UIsession * session = 0;
+#ifdef G4UI_USE_TCSH
+      session = new G4UIterminal(new G4UItcsh);      
+#else
+      session = new G4UIterminal();
+#endif    
+    UI->ApplyCommand("/control/execute vis.mac");
     session->SessionStart();
     delete session;
   }
   else
   // Batch mode
   { 
-    G4UImanager * UI = G4UImanager::GetUIpointer();
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UI->ApplyCommand(command+fileName);

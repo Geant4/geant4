@@ -43,10 +43,10 @@ Sc01DetectorMessenger::Sc01DetectorMessenger(Sc01DetectorConstruction * myDC)
   selDetCmd->SetGuidance("  Choice : Detector type ");
   selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("Sphere");
-  selDetCmd->SetCandidates("Sphere Orb Box Cone Tube Hype Torus Para Trd");
+ selDetCmd->SetCandidates("Sphere Orb Box Cone Tube Hype Torus Para Trd b1Ib2 b1Ub2 b1Sb2 b1Ub1 b1Ib1 b1Sb1");
   selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  myDetector->SelectDetector(defParam="Sphere");
+    myDetector->SelectDetector(defParam="Sphere");
 }
 
 void Sc01DetectorMessenger::SetNewValue(G4UIcommand * command,
