@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2003-10-03 15:02:35 gcosmo Exp $
+$Id: History,v 1.24 2003-11-03 17:09:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+3rd November 2003  Gabriele Cosmo  (vis-V05-02-02)
+- Added inclusion of G4VSolid.hh in G4LogicalVolumeModel.cc to make it self
+  consistent after header review in geometry category.
 
 4th October 2003  Gabriele Cosmo  (vis-V05-02-01)
 - GNUmakefile:
