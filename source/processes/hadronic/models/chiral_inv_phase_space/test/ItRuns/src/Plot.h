@@ -24,15 +24,21 @@ class ANAPlot : public TVANAPlot<DataPointType>
       return aPDG==thePDG;
     }
     
-    void DumpInfo(ostream & aOStream)
+    void DumpInfo(ostream & aOStream, G4String aPreFix)
     {
       G4cout <<" Dumping info for PDG = "<<thePDG<<G4endl;
-      G4String it = theOutputFile+theFilter->GetName();
+      G4String dot = ".";
+      G4String it = theOutputFile+theFilter->GetName()+dot+aPreFix;
+      G4cout<< it<<G4endl;
       ofstream theOutput(it);
+      G4double aWeight = theTotalXsec/theFilter->RelativeGeometricalAcceptance();
       for(G4int i=0; i<theDataPoints.size(); i++)
       {
 //        theDataPoints[i].DumpInfo(aOStream);
-        if(theOutputFile!="") theDataPoints[i].DumpInfo(theOutput);
+        if(theOutputFile!="") 
+	{
+	  theDataPoints[i].DumpInfo(theOutput, aWeight);
+	}
       }
     }
     

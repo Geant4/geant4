@@ -22,13 +22,15 @@ class ANAParticle
     G4double GetPz() {return pz;}
     G4double GetMomentum()
     {
-      return sqrt(max(G4double(0), px*px+py*py+pz*pz));
+      G4double result = sqrt(max(G4double(0), px*px+py*py+pz*pz));
+      return result;
     }
     G4double GetCosTheta() { return pz/GetMomentum(); }
     
     G4double GetWeight() 
     {
-      return 1./(4.*3.14159265*GetMomentum());
+      G4double result = 1./(4.*3.14159265*GetMomentum());
+      return result;
     }
     
   private:

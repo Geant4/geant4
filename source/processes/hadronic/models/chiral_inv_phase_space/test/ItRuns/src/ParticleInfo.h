@@ -23,7 +23,7 @@ class ANAParticleInfo
   public:
     ANAParticleInfo(G4double xSec, G4String aFileName);
     ~ANAParticleInfo() {} // Needs to clean up memory.
-    void Analyse();
+    void Analyse(G4String aPreFix);
     
   private:
     G4std::vector<ANAParticle> theParicles;
@@ -44,8 +44,8 @@ ANAParticleInfo::ANAParticleInfo(G4double xSec, G4String aFileName)
     
   DoubleBandFilter * bin1 = new DoubleBandFilter(0.25,  0.4, ".70degree"); // cos(th)
   DoubleBandFilter * bin2 = new DoubleBandFilter(-0.25, 0.25, ".90degree"); // cos(th)
-  DoubleBandFilter * bin3 = new DoubleBandFilter(-0.25, -0.7, ".118degree"); // cos(th)
-  DoubleBandFilter * bin4 = new DoubleBandFilter(-0.7,  -1.0, ".160degree"); // cos(th)
+  DoubleBandFilter * bin3 = new DoubleBandFilter(-0.7, -0.25, ".118degree"); // cos(th)
+  DoubleBandFilter * bin4 = new DoubleBandFilter(-1.0,  -0.7, ".160degree"); // cos(th)
   
   ANAPlot<ANADataPoint, TVANAFilter<G4double> > * aNewPlot = 0;
 // ANAPlot<ANADataPoint> ::ANAPlot<DataPoint> (G4int aPDG, G4double aMass, G4double aTotalXsec, G4String fn)
@@ -169,7 +169,7 @@ ANAParticleInfo::ANAParticleInfo(G4double xSec, G4String aFileName)
 }
 
 inline
-void ANAParticleInfo::Analyse()
+void ANAParticleInfo::Analyse(G4String aPreFix)
 {
   G4int aParticle;
   G4int aPlot;
@@ -189,7 +189,7 @@ void ANAParticleInfo::Analyse()
   for(aPlot = 0; aPlot<thePlots.size(); aPlot++)
   {
     G4cout << "New plot:"<<G4endl;
-    thePlots[aPlot]->DumpInfo(G4cout);
+    thePlots[aPlot]->DumpInfo(G4cout, aPreFix);
   }
 }
 
