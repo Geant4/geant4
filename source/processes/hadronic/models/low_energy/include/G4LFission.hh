@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LFission.hh,v 1.2 1999-11-11 15:37:41 gunter Exp $
+// $Id: G4LFission.hh,v 1.3 1999-11-16 16:30:05 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -22,7 +22,6 @@
 #ifndef G4LFission_h
 #define G4LFission_h 1
  
-#include "g4rw/tphdict.h"
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4Element.hh"
