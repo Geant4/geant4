@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN03.cc,v 1.3 1999-03-10 16:15:35 maire Exp $
+// $Id: exampleN03.cc,v 1.4 1999-05-19 09:12:09 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,15 +36,6 @@
 #include "ExN03EventAction.hh"
 #include "ExN03SteppingAction.hh"
 #include "Randomize.hh"
-
-
-#ifdef GNU_GCC
-#include <rw/tpordvec.h>
-#include "ExN03CalorHit.hh"
-template class RWTPtrOrderedVector <ExN03CalorHit>;
-template class RWTPtrVector <ExN03CalorHit>;
-template class G4Allocator <ExN03CalorHit>;
-#endif
 
 int main(int argc,char** argv) {
 
