@@ -219,7 +219,7 @@
       G4ThreeVector tempVector;
       tempVector.setX(cos(theta)*sin(cms_theta)*cos(cms_phi)
                       +sin(theta)*cos(phi)*cos(cms_theta)*cos(cms_phi)
-                      -sin(theta)*sin(phi)*sin(vcms_phi)  );
+                      -sin(theta)*sin(phi)*sin(cms_phi)  );
       tempVector.setY(cos(theta)*sin(cms_theta)*sin(cms_phi)
                       +sin(theta)*cos(phi)*cos(cms_theta)*sin(cms_phi)
                       +sin(theta)*sin(phi)*cos(cms_phi)  );
