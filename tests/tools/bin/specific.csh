@@ -466,34 +466,39 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
   setenv CLHEP_BASE_DIR /lal/CLHEP/1.7.0.0/Linux-gxx
   setenv LD_LIBRARY_PATH ${G4INSTALL}/lib/${G4SYSTEM}
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$CLHEP_BASE_DIR/lib
+  setenv NeutronHPCrossSections $G4INSTALL/data/G4NDL3.5
+  setenv G4LEVELGAMMADATA $G4INSTALL/data/PhotonEvaporation
+  setenv G4RADIOACTIVEDATA $G4INSTALL/data/RadiativeDecay
+  setenv G4LEDATA $G4INSTALL/data/G4EMLOW0.3
+#
 # OpenGL driver :
-  setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
-  setenv G4VIS_BUILD_OPENGLX_DRIVER 1
-  setenv G4VIS_USE_OPENGLXM 1
-  setenv G4VIS_USE_OPENGLX 1
+#  setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
+#  setenv G4VIS_BUILD_OPENGLX_DRIVER 1
+#  setenv G4VIS_USE_OPENGLXM 1
+#  setenv G4VIS_USE_OPENGLX 1
   setenv OGLHOME /lal/Mesa/3.2/Linux
 # Inventor driver :
   source /lal/CMT/v1r10/mgr/setup.csh
   source /projects/HEPVis/v5r2p1/cmt/cleanup.csh
   source /projects/HEPVis/v5r2p1/cmt/setup.csh
-  setenv G4VIS_BUILD_OIX_DRIVER 1
-  setenv G4VIS_USE_OIX 1
+#  setenv G4VIS_BUILD_OIX_DRIVER 1
+#  setenv G4VIS_USE_OIX 1
   setenv TTFLIBS "-L/lal/freetype/1.3.1/Linux/lib -lttf"
   setenv OIVFLAGS "-I$HEPVISROOT/include -I$SOFREEROOT/include -I$SOFREEXTROOT/include"
   setenv OIVLIBS "-L$SOFREEXTROOT/$SOFREEXTCONFIG -lSoFreeXt -L$HEPVISROOT/$HEPVISCONFIG -lHEPVisXt -lHEPVis ${TTFLIBS} -L$SOFREEROOT/$SOFREECONFIG -lSoFree"
 # UI Xm :
-  setenv G4UI_BUILD_XM_SESSION 1
-  setenv G4UI_USE_XM 1
+#  setenv G4UI_BUILD_XM_SESSION 1
+#  setenv G4UI_USE_XM 1
   setenv XENVIRONMENT $G4INSTALL/examples/novice/N03/visTutor/g4Xt.xrm
 # AIDA :
-#  setenv G4ANALYSIS_USE 1
+  setenv G4ANALYSIS_USE 1
 # Falsetto implementation :
 #  source /projects/Falsetto/v1/cmt/setup.csh
 # Lab implementation :
-#  source /projects/Lab/v6/cmt/cleanup.csh
-#  source /projects/Lab/v6/cmt/setup.csh
-#  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
-#  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
+  source /projects/Lab/v6/cmt/cleanup.csh
+  source /projects/Lab/v6/cmt/setup.csh
+  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
+  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
 # Else :
 #  setenv G4VIS_BUILD_DAWN_DRIVER     1
 #  setenv G4VIS_BUILD_VRML_DRIVER     1
