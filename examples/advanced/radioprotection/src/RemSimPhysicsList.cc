@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPhysicsList.cc,v 1.5 2004-05-14 12:29:34 guatelli Exp $
+// $Id: RemSimPhysicsList.cc,v 1.6 2004-05-27 13:32:46 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli
@@ -32,6 +32,7 @@
 #include "RemSimElectronEEDL.hh"
 #include "RemSimPositronStandard.hh"
 #include "RemSimIonICRU.hh"
+#include "RemSimIonStandard.hh"
 #include "RemSimMuonStandard.hh"
 #include "RemSimDecay.hh"
 #include "RemSimHadronicPhysics.hh"
@@ -138,6 +139,24 @@ void RemSimPhysicsList::AddPhysicsList(const G4String& name)
 	  ionIsRegistered = true;
 	}
     }
+
+ if (name == "ion-standard") 
+    {
+      if (ionIsRegistered) 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ----ion e.m. List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new RemSimIonStandard(name) );
+	  ionIsRegistered = true;
+	}
+    }
+
 
   // Register hadronic process for p and alpha particle
   if (name == "hadronic") 

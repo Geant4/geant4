@@ -20,21 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#include "RemSimIonICRU.hh"
+#include "RemSimIonStandard.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MultipleScattering.hh"
-#include "G4hLowEnergyIonisation.hh"
 #include "G4hIonisation.hh"
-#include "G4hLowEnergyLoss.hh"
 
-RemSimIonICRU::RemSimIonICRU(const G4String& name): G4VPhysicsConstructor(name)
+RemSimIonStandard::RemSimIonStandard(const G4String& name): G4VPhysicsConstructor(name)
 { }
 
-RemSimIonICRU::~RemSimIonICRU()
+RemSimIonStandard::~RemSimIonStandard()
 { }
 
-void RemSimIonICRU::ConstructProcess()
+void RemSimIonStandard::ConstructProcess()
 {
   theParticleIterator -> reset();
 
@@ -48,7 +46,7 @@ void RemSimIonICRU::ConstructProcess()
       if (particleName == "proton" || particleName == "alpha"
           || particleName == "GenericIon")
 	    {
-             G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
+             G4hIonisation* ionisation = new G4hIonisation();
 	     G4VProcess*  multipleScattering = new G4MultipleScattering(); 
              manager -> AddProcess(multipleScattering, -1,1,1);   
 	     manager -> AddProcess(ionisation, -1,2,2);
@@ -61,7 +59,7 @@ void RemSimIonICRU::ConstructProcess()
              if((!particle -> IsShortLived()) &&
 		 (particle -> GetParticleName() != "chargedgeantino"))
 	       { 
-	      G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
+	      G4hIonisation* ionisation = new G4hIonisation();
 	      G4VProcess*  multipleScattering = new G4MultipleScattering(); 
               manager -> AddProcess(multipleScattering, -1,1,1);  
 	      manager -> AddProcess(ionisation, -1,2,2);
