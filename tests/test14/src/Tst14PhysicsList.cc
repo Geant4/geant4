@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst14PhysicsList.cc,v 1.5 1999-06-21 16:15:15 aforti Exp $
+// $Id: Tst14PhysicsList.cc,v 1.6 1999-07-05 14:50:28 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -154,8 +154,8 @@ void Tst14PhysicsList::SetGELowLimit(G4double lowcut)
     G4cout << "Gamma and Electron cut in energy: " << lowcut*MeV << " (MeV)" << endl;
   }  
 
-  G4Gamma::SetEnergyRange(lowcut*MeV,1e5*MeV);
-  G4Electron::SetEnergyRange(lowcut*MeV,1e5*MeV);
+  G4Gamma::SetEnergyRange(lowcut,1e5);
+  G4Electron::SetEnergyRange(lowcut,1e5);
 
 }
 
@@ -166,7 +166,7 @@ void Tst14PhysicsList::SetGammaLowLimit(G4double lowcut)
     G4cout << "Gamma cut in energy: " << lowcut*MeV << " (MeV)" << endl;
   }  
 
-  G4Gamma::SetEnergyRange(lowcut*MeV,1e5*MeV);
+  G4Gamma::SetEnergyRange(lowcut,1e5);
 
 }
 
@@ -179,7 +179,7 @@ void Tst14PhysicsList::SetElectronLowLimit(G4double lowcut)
 
   }  
 
-  G4Electron::SetEnergyRange(lowcut*MeV,1e5*MeV);
+  G4Electron::SetEnergyRange(lowcut,1e5);
 
 }
 void Tst14PhysicsList::SetGammaCut(G4double val)
