@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2002-10-31 21:09:27 japost Exp $
+$Id: History,v 1.65 2002-11-09 03:34:09 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,34 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov  9th, 2002     J. Apostolakis - field-V04-01-02
+---------------------------------
+Fixes to address use of uninitialised variable in seting values of FieldTrack
+(this was done by design, but was neither ideal or always well-behaved:
+
+* G4MagIntegratorDriver
+  - Added instance variables for number of Integration, State variables
+  - Initialise all State variables of Output with values from initial variables.
+  - Only the Integration variables will be integrated
+
+* G4ClassicalRK4 and G4MagErrorStepper
+  - Copy the initial time to intermediate and output C-vectors, 
+     in order to provide a zero-eth estimate value.
+  Note1: Should clean-up this fix, making it similar to Driver (above)
+  Note2: Should *not* be used for time varying field unless created 
+           with at least 8 integration variables
+---------------------------------  
+G4ChordFinder.cc
+  - Correction from zero dChord
+      which is does not update the Unconstrained step estimate (state)
+  - Added instance variables to store number of calls and chord-trials
+      and new print method for 'debugging'
+
+G4Mag_UsualEqRhs.cc
+  - Attempted approximations for speedup  *overwritten* by full inverse sqrt.
+
+
 Oct  29th, 2002   J. Apostolakis - test-V04-01-02
 --------------------------------
 - Changed output of tests for small output change (GeV->MeV)
