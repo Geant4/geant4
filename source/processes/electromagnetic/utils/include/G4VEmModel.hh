@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.19 2004-04-29 18:40:52 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.20 2004-07-26 11:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,6 +60,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
+#include "G4Material.hh"
 #include "G4DataVector.hh"
 
 class G4PhysicsTable;
