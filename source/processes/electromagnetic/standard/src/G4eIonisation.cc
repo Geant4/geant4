@@ -21,41 +21,37 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.cc,v 1.12 2001-07-11 10:03:31 gunter Exp $
+// $Id: G4eIonisation.cc,v 1.13 2001-08-06 11:48:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// -------------------------------------------------------------
-//      GEANT 4 class implementation file 
-//
-//      History: based on object model of
-//      2nd December 1995, G.Cosmo
 //      ---------- G4eIonisation physics process -----------
 //                by Laszlo Urban, 20 March 1997 
-// **************************************************************
-// It is the first implementation of the NEW IONISATION PROCESS.
-// It calculates the ionisation of e+/e-.
-// **************************************************************
+// -------------------------------------------------------------
 //
-// 07-04-98: remove 'tracking cut' of the ionizing particle, MMa 
+// 07-04-98: remove 'tracking cut' of the ionizing particle, mma 
 // 04-09-98: new methods SetBining() PrintInfo()
 // 07-09-98: Cleanup
 // 02/02/99: correction inDoIt , L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // 28/05/01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // --------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 #include "G4eIonisation.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
-G4double G4eIonisation::LowerBoundLambda = 1.*keV ;
-G4double G4eIonisation::UpperBoundLambda = 100.*TeV ;
-G4int    G4eIonisation::NbinLambda = 100 ;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-// constructor and destructor
- 
+G4double G4eIonisation::LowerBoundLambda = 1.*keV;
+G4double G4eIonisation::UpperBoundLambda = 100.*TeV;
+G4int    G4eIonisation::NbinLambda = 100;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4eIonisation::G4eIonisation(const G4String& processName)
    : G4VeEnergyLoss(processName),
      theMeanFreePathTable(NULL)

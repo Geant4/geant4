@@ -21,25 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.icc,v 1.5 2001-07-11 10:03:29 gunter Exp $
+// $Id: G4eIonisation.icc,v 1.6 2001-08-06 11:48:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// ---------------------------------------------------------------
-//      GEANT 4 class inlined methods file 
-//
 //      ------------ G4eIonisation physics process ------------
 //                  by Laszlo Urban, 20 March 1997
-// ***************************************************************
-// It is the first implementation of the NEW IONISATION PROCESS.               
-// It calculates the ionisation of e+/e-.
-// ***************************************************************
+// ---------------------------------------------------------------
 //
 // 24-11-97: correction on MeanFreePath for KinEnergy > HighestLimit
 // 28-05-01: V.Ivanchenko minor changes to provide ANSI -wall compilation 
 //
 // ---------------------------------------------------------------
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4bool G4eIonisation::IsApplicable(
@@ -89,3 +84,4 @@ inline G4double G4eIonisation::GetLambda(
   return lambda;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

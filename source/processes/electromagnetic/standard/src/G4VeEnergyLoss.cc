@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.13 2001-07-11 10:03:31 gunter Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.14 2001-08-06 11:48:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 
@@ -43,6 +43,7 @@
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 // Initialisation of static data members
