@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VBasicShell.cc,v 1.3 1999-04-16 10:06:08 barrand Exp $
+// $Id: G4VBasicShell.cc,v 1.4 1999-05-19 17:40:56 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -109,6 +109,10 @@ G4UIcommand* G4VBasicShell::FindCommand(const char* commandName)
 G4String G4VBasicShell::ModifyPath(G4String tempPath)
 {
   G4String newPath = currentDirectory;
+
+  if( tempPath.length()>0 )
+  {
+
   if( tempPath(0) == '/' )   // full path is given
   { newPath = tempPath; }
   else if( tempPath(0) != '.' ) // add current prefix
@@ -137,6 +141,9 @@ G4String G4VBasicShell::ModifyPath(G4String tempPath)
       }
     }
   }
+
+  }
+
   return newPath;
 }
 ////////////////////////////////////////////
