@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh,v 1.5 2001-07-11 10:03:42 gunter Exp $
+// $Id: G4Scintillation.hh,v 1.6 2002-05-09 19:33:17 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,7 +100,8 @@ public: // Without description
 public: // With description
 
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
-        // Returns true -> 'is applicable', for any particle type.
+        // Returns true -> 'is applicable', for any particle type except
+        // for an 'opticalphoton' 
 
 	G4double GetMeanFreePath(const G4Track& aTrack,
 				       G4double ,
@@ -178,7 +179,11 @@ private:
 inline 
 G4bool G4Scintillation::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-        return true;
+        if (aParticleType.GetParticleName() == "opticalphoton"){
+           return false;
+        } else {
+           return true;
+        }
 }
 
 inline 
