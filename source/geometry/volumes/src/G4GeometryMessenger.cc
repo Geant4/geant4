@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.cc,v 1.9 2003-02-06 16:53:26 gcosmo Exp $
+// $Id: G4GeometryMessenger.cc,v 1.10 2003-03-17 13:46:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -46,6 +46,7 @@
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
 #include "G4GeomTestStreamLogger.hh"
@@ -72,6 +73,19 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   resCmd->SetGuidance( "NOTE: must be called only after kernel has been" );
   resCmd->SetGuidance( "      initialized once through the run manager!" );
   resCmd->AvailableForStates(G4State_Idle);
+
+  verbCmd = new G4UIcmdWithAnInteger( "/geometry/navigator/verbose", this );
+  verbCmd->SetGuidance( "Set run-time verbosity for the navigator." );
+  verbCmd->SetGuidance(" 0 : Silent (default)");
+  verbCmd->SetGuidance(" 1 : Display positioning and relative states");
+  verbCmd->SetGuidance(" 2 : Display step/safety info on point location");
+  verbCmd->SetGuidance(" 3 : Display state at -every- step!");
+  verbCmd->SetGuidance(" 4 : Maximum verbosity (very detailed!)");
+  verbCmd->SetGuidance( "NOTE: this command has effect -only- if Geant4 has" );
+  verbCmd->SetGuidance( "      been installed with the G4VERBOSE flag set!" );
+  verbCmd->SetParameterName("level",true);
+  verbCmd->SetDefaultValue(0);
+  verbCmd->SetRange("level >=0 && level <=4");
 
   //
   // Geometry verification test commands
@@ -142,6 +156,7 @@ G4GeometryMessenger::~G4GeometryMessenger()
   delete cylCmd;
   delete runCmd;
   delete resCmd;
+  delete verbCmd;
   delete tolCmd;
   delete geodir;
   delete navdir;
@@ -183,6 +198,9 @@ G4GeometryMessenger::SetNewValue( G4UIcommand* command, G4String newValues )
 {
   if (command == resCmd) {
     ResetNavigator();
+  }
+  else if (command == verbCmd) {
+    SetVerbosity(newValues);
   }
   else if (command == posCmd) {
     x = posCmd->GetNew3VectorValue( newValues );
@@ -263,6 +281,17 @@ G4GeometryMessenger::ResetNavigator()
   //
   G4ThreeVector pt(0,0,0);
   tmanager->GetNavigatorForTracking()->LocateGlobalPointAndSetup(pt,0,false);
+}
+
+//
+// Set navigator verbosity
+//
+void
+G4GeometryMessenger::SetVerbosity(G4String input)
+{
+  G4int level = verbCmd->GetNewIntValue(input);
+  G4Navigator* navigator = tmanager->GetNavigatorForTracking();
+  navigator->SetVerboseLevel(level);
 }
 
 //

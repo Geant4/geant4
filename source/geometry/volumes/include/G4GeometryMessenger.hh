@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.hh,v 1.5 2003-02-06 15:37:20 gcosmo Exp $
+// $Id: G4GeometryMessenger.hh,v 1.6 2003-03-17 13:46:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -49,6 +49,7 @@ class G4UIcommand;
 class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWith3Vector;
 class G4UIcmdWithoutParameter;
+class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4TransportationManager;
 class G4GeomTestStreamLogger;
@@ -70,6 +71,7 @@ class G4GeometryMessenger : public G4UImessenger
     void Init();
     void CheckGeometry();
     void ResetNavigator();
+    void SetVerbosity(G4String newValue);
     void LineTest();
     void GridTest();
     void RecursiveGridTest();
@@ -80,6 +82,7 @@ class G4GeometryMessenger : public G4UImessenger
     G4UIcmdWithoutParameter   *linCmd, *grdCmd, *recCmd,
                               *cylCmd, *runCmd, *resCmd;
     G4UIcmdWithADoubleAndUnit *tolCmd;
+    G4UIcmdWithAnInteger      *verbCmd;
   
     G4ThreeVector x, p;
     G4bool        newtol;
