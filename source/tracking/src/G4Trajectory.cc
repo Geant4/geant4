@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.cc,v 1.3 1999-04-15 08:47:23 asaim Exp $
+// $Id: G4Trajectory.cc,v 1.4 1999-05-25 21:04:36 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,6 +33,19 @@
 #include "G4VVisManager.hh"
 
 G4Allocator<G4Trajectory> aTrajectoryAllocator;
+
+///////////////////////////////////////////
+G4Trajectory::G4Trajectory()
+///////////////////////////////////////////
+{
+   G4ParticleDefinition * fpParticleDefinition = 0;
+   ParticleName = "";
+   PDGCharge = 0;
+   PDGEncoding = 0;
+   fTrackID = 0;
+   fParentID = 0;
+   positionRecord = 0;
+}
 
 ///////////////////////////////////////////
 G4Trajectory::G4Trajectory(const G4Track* aTrack)
