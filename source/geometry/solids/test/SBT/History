@@ -9,6 +9,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov 18, 2003 - J.Apostolakis
+----------------------------
+- Attempted to update to changes in G4VisManager which require
+  the objectTransformation (a G4Transform3D) for all Draw methods.
 
 Jan 08, 2002 - G.Cosmo
 ----------------------
