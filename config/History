@@ -1,4 +1,4 @@
-$Id: History,v 1.32 1999-05-27 20:06:16 gcosmo Exp $
+$Id: History,v 1.33 1999-05-31 17:28:13 stesting Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31st May 1999  John Allison
+- Added -I$(G4BASE)/processes/electromagnetic/lowenergy/include.
 
 27th May 1999  Gabriele Cosmo (config-01-00-06)
 - architecture.gmk: set default $G4INSTALL path to $HOME/geant4 (was still referring
