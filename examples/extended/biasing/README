@@ -122,3 +122,33 @@ The idea is to have the simulation performing somewhat like a
 transportation Monte Carlo that only knows about neutrons and gammas and 
 is only used in a limited energy range.
 
+
+IV. Example for weight window sampling
+-------------------------------------
+
+
+IV.1 Example B08 
+----------------
+This is an example using importance sampling and weight window biasing 
+together with scoring in a parallel geometry. Only the sampler
+for importance, weight window sampling and scoring in a parallel geometry
+exists at the moment.
+The example setup:
+A 180 cm long concrete shield is divided into 18 cells of 10 cm each.
+The cells are created in a parallel geometry. Importance values
+can be applied via an init.mac file. Scoring is done according to the
+cells for neutrons and gammas. 
+Since this example intents to show the weight window sampling 
+the primary neutrons are created with the relatively high
+energy of 300 MeV. Neutrons with this energy
+penetrate the concrete (according to the chosen physics list)
+relatively easy. So no importance sampling would be necessary.
+The high energy is selected to show the effect of the weight window 
+sampling. High energetic secondaries which are not importance sampled 
+may create neutrons which have a weight different from the inverse of 
+the importance in the cell. If a finite weight window is chosen this 
+results in relative average weights of the tracks in a given cell not 
+equal to one.
+If the upper and lower limit of the weight window is set to 1 
+the relative weights are 1.
+
