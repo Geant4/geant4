@@ -21,49 +21,37 @@
 // ********************************************************************
 //
 //
+// $Id: PhysListEmG4v52.hh,v 1.1 2003-11-24 17:53:42 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-// Class Description:
-//      This class is an derived class of G4VPhysicsConstructor
-//      It is provide PhysicsList for hadron eleastic process
-//
-// ------------------------------------------------------------ 
-//	History
-//        Created:       14.10.02  V.Ivanchenko
-//
-//        Modified:
-// 
-// ------------------------------------------------------------
-//
-#ifndef PhysListHadronElastic_h
-#define PhysListHadronElastic_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#ifndef PhysListEmG4v52_h
+#define PhysListEmG4v52_h 1
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4HadronElasticProcess.hh"
 #include "globals.hh"
 
-class PhysListHadronElastic : public G4VPhysicsConstructor
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class PhysListEmG4v52 : public G4VPhysicsConstructor
 {
-  public: 
-    PhysListHadronElastic(const G4String& name = "elastic");
-    virtual ~PhysListHadronElastic();
+public: 
+  PhysListEmG4v52(const G4String& name = "g4v52");
+  ~PhysListEmG4v52();
 
-  public: 
-    // This method will be invoked in the Construct() method. 
-    // each particle type will be instantiated
-    void ConstructParticle() {};
+public: 
+  // This method is dummy for physics. 
+  void ConstructParticle() {};
  
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
-    void ConstructProcess();
-
-  private:
-    // Elastic Process
-    G4HadronElasticProcess theElasticProcess;
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  void ConstructProcess();
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

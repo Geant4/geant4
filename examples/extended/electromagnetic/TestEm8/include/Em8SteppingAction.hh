@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8SteppingAction.hh,v 1.3 2001-07-11 09:57:54 gunter Exp $
+// $Id: Em8SteppingAction.hh,v 1.4 2003-11-24 17:52:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,7 +58,6 @@ class Em8SteppingAction : public G4UserSteppingAction
     Em8DetectorConstruction* detector;
     Em8EventAction*          eventaction;
     Em8RunAction*            runaction;
-    Em8SteppingMessenger*    steppingMessenger;
 
     G4int IDnow,IDold;
     G4int evnoold ;

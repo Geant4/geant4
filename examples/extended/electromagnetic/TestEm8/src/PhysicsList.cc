@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.1 2003-10-27 15:24:10 grichine Exp $
+// $Id: PhysicsList.cc,v 1.2 2003-11-24 17:52:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,9 +34,8 @@
 #include "PhysListParticles.hh"
 #include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
-#include "PhysListEmModel.hh"
-#include "PhysListHadronElastic.hh"
-#include "PhysListBinaryCascade.hh"
+#include "PhysListEmModelP.hh"
+#include "PhysListEmG4v52.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -117,19 +116,17 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
 
-  } else if (name == "model") {
+  } else if (name == "g4v52") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmModel(name);
+    emPhysicsList = new PhysListEmG4v52(name);
 
-  } else if (name == "elastic") {
+  } else if (name == "modelPAI") {
 
-    hadronPhys.push_back( new PhysListHadronElastic(name));
-
-  } else if (name == "binary") {
-
-    hadronPhys.push_back( new PhysListBinaryCascade(name));
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmModelP(name);
 
   } else {
 

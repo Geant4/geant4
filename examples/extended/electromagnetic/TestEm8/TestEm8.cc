@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm8.cc,v 1.3 2003-10-27 15:25:59 grichine Exp $
+// $Id: TestEm8.cc,v 1.4 2003-11-24 17:52:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,8 +45,6 @@
 
 #include "Em8DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "Em8PhysicsList.hh"
-#include "Em8PhysicsListModel.hh"
 #include "Em8PrimaryGeneratorAction.hh"
 #include "Em8RunAction.hh"
 #include "Em8EventAction.hh"
@@ -74,8 +72,6 @@ int main(int argc,char** argv)
   detector = new Em8DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList);
-  //  runManager->SetUserInitialization(new Em8PhysicsList(detector));
-  // runManager->SetUserInitialization(new Em8PhysicsListModel(detector));
   
 #ifdef G4VIS_USE
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8SteppingAction.cc,v 1.6 2003-11-24 16:34:10 grichine Exp $
+// $Id: Em8SteppingAction.cc,v 1.7 2003-11-24 17:52:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,6 @@
 #include "Em8RunAction.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
-#include "Em8SteppingMessenger.hh"
 #include "G4ios.hh"
 #include <iomanip>
 #include "G4UImanager.hh"
@@ -49,18 +48,14 @@
 Em8SteppingAction::Em8SteppingAction(Em8DetectorConstruction* DET,
                                      Em8EventAction* EA,
                                      Em8RunAction* RA)
-:detector (DET),eventaction (EA),runaction (RA),steppingMessenger(NULL),
+:detector (DET),eventaction (EA),runaction (RA),
  IDold(-1) ,evnoold(-1)
-{
-  steppingMessenger = new Em8SteppingMessenger(this);
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em8SteppingAction::~Em8SteppingAction()
-{
-  delete steppingMessenger ;
- }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

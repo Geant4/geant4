@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.1 2003-10-27 15:24:10 grichine Exp $
+// $Id: PhysListEmStandard.cc,v 1.2 2003-11-24 17:52:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,8 +93,8 @@ void PhysListEmStandard::ConstructProcess()
 
       G4eIonisation* eion = new G4eIonisation();
 
-      //    G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
-      // eion->AddEmModel(0,pai,pai,gas);
+      G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      eion->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddProcess(eion,        -1, 2,2);
 
@@ -113,8 +113,8 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
 
       G4MuIonisation* muion = new G4MuIonisation();
-      //  G4PAIModel*     pai   = new G4PAIModel(particle,"PAIModel");
-      // muion->AddEmModel(0,pai,pai,gas);
+      G4PAIModel*     pai   = new G4PAIModel(particle,"PAIModel");
+      muion->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddProcess(muion,      -1, 2,-2);
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
