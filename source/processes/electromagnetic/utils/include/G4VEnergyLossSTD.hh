@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.hh,v 1.30 2003-08-06 15:21:43 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.hh,v 1.31 2003-08-27 11:51:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,6 +68,7 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4Track.hh"
 #include "G4EmModelManager.hh"
+#include "G4UnitsTable.hh"
 
 class G4Step;
 class G4ParticleDefinition;
@@ -235,6 +236,7 @@ public:
   void SetMinSubRange(G4double val) {minSubRange = val;};
 
   void SetStepLimits(G4double v1, G4double v2);
+  void SetStepFunction(G4double v1, G4double v2);
 
   G4bool TablesAreBuilt() const {return  tablesAreBuilt;};
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.47 2003-08-06 15:21:46 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.48 2003-08-27 11:51:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -986,6 +986,17 @@ G4double G4VEnergyLossSTD::ContinuousStepLimit(const G4Track& track,
 
 void G4VEnergyLossSTD::SetStepLimits(G4double v1, G4double v2)
 {
+  dRoverRange = v1;
+  finalRange = v2;
+  if (dRoverRange > 0.999) dRoverRange = 1.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossSTD::SetStepFunction(G4double v1, G4double v2)
+{
+  G4cout << "Warning! SetStepFunction is obsolete. Please, use SetStepLimits"
+         << G4endl;
   dRoverRange = v1;
   finalRange = v2;
   if (dRoverRange > 0.999) dRoverRange = 1.0;
