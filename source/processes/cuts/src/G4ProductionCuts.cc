@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.cc,v 1.2 2003-09-19 14:45:27 gcosmo Exp $
+// $Id: G4ProductionCuts.cc,v 1.3 2004-02-03 08:29:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
