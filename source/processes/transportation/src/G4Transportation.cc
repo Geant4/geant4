@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Transportation.cc,v 1.14 2001-02-20 14:41:35 japost Exp $
+// $Id: G4Transportation.cc,v 1.15 2001-04-13 01:07:26 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -22,7 +22,8 @@
 // It is also tasked with part of updating the "safety".
 //
 // =======================================================================
-// Modified:   
+// Modified:
+//            11 Aprl 2001, P. Gumplinger: correction for spin tracking   
 //            20 Febr 2001, J. Apostolakis:  update for new FieldTrack
 //            22 Sept 2000, V. Grichine:     update of Kinetic Energy
 //             9 June 1999, J. Apostolakis & S.Giani: protect full relocation
@@ -289,7 +290,8 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
      fTransportEndKineticEnergy  = aFieldTrack.GetKineticEnergy() ; 
 
      //   fTransportEndKineticEnergy = track.GetKineticEnergy() ;
-     // fTransportEndPolarization= aFieldTrack.GetSpin() ; // Not yet possible
+
+     fTransportEndSpin = aFieldTrack.GetSpin();
 
      fParticleIsLooping = fFieldPropagator->IsParticleLooping() ;
      endpointDistance   = (fTransportEndPosition - startPosition).mag() ;
@@ -352,6 +354,8 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   fParticleChange.SetMomentumChange(fTransportEndMomentumDir) ;
   fParticleChange.SetEnergyChange(fTransportEndKineticEnergy) ;
   fParticleChange.SetMomentumChanged(fMomentumChanged) ;
+
+  fParticleChange.SetPolarizationChange(fTransportEndSpin);
 
   G4double deltaTime = 0.0 ;
 
