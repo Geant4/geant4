@@ -11,6 +11,7 @@ G4ElementaryParticleCollider::G4ElementaryParticleCollider()
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider::G4ElementaryParticleCollider" << G4endl;
   }
+
 };
 
 G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
@@ -23,11 +24,10 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
   G4std::vector<G4double> totscm(4, 0.0); //::: fix
   G4std::vector<G4double> totlab(4, 0.0);
 
+  // generate nucleon or pion collission with NUCLEON 
+  // or pion with quasideutron
 
-  //  generate nucleon or pion collission with NUCLEON 
-  //  or pion with quasideutron
-
-  if(verboseLevel > 2){
+  if (verboseLevel > 2){
     G4cout << " here " << G4endl;
   }
 
@@ -37,11 +37,13 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
   G4InuclElementaryParticle* particle2 =	
     dynamic_cast<G4InuclElementaryParticle*>(target);
 	     
-  if(particle1 && particle2) { // particle / particle 
-    if(!particle1->photon() && !particle2->photon()) { // ok
-      if(particle1->nucleon() || particle2->nucleon()) { // ok
+  if (particle1 && particle2) { // particle / particle 
 
-	if(verboseLevel > 2){
+    if (!particle1->photon() && !particle2->photon()) { // ok
+
+      if (particle1->nucleon() || particle2->nucleon()) { // ok
+
+	if (verboseLevel > 2){
 	  G4cout << " here1 " << G4endl;
 	  particle1->printParticle();
 	  particle2->printParticle();
@@ -52,17 +54,21 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	  for(G4int i = 0; i < 4; i++) momb[i] += momt[i];
 	  G4cout << " total input: px " << momb[1] << " py " << momb[2] 
 		 << " pz " << momb[3] << " e " << momb[0] << endl;
+
 	}
+
 	G4LorentzConvertor convertToSCM;
 
 	if(particle2->nucleon()) {
           convertToSCM.setBullet(particle1->getMomentum(), particle1->getMass());
           convertToSCM.setTarget(particle2->getMomentum(), particle2->getMass());
-	}
-	else {
+
+	} else {
+
           convertToSCM.setBullet(particle2->getMomentum(), particle2->getMass());
           convertToSCM.setTarget(particle1->getMomentum(), particle1->getMass());
 	};  
+
         convertToSCM.toTheCenterOfMass();
  
         G4double ekin = convertToSCM.getKinEnergyInTheTRS();
@@ -73,19 +79,24 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	  G4cout << " ekin " << ekin << " etot_scm " << etot_scm << " pscm " <<
 	    pscm << G4endl;
 	}
+
         G4std::vector<G4InuclElementaryParticle> particles = 	    
 	  generateSCMfinalState(ekin, etot_scm, pscm, particle1, particle2, &convertToSCM);
 
 	if(verboseLevel > 2){
 	  G4cout << " particles " << particles.size() << G4endl;
+
 	  for(G4int i = 0; i < G4int(particles.size()); i++) 
 	    particles[i].printParticle();
+
 	}
 
 	if(!particles.empty()) { // convert back to Lab
 
 	  particleIterator ipart;
+
 	  for(ipart = particles.begin(); ipart != particles.end(); ipart++) {	
+
 	    if(verboseLevel > 2){
 	      G4std::vector<G4double> mom_scm = ipart->getMomentum();
 	      cout << mom_scm[0] << " " <<  mom_scm[1] << " " <<  mom_scm[2] << " " <<  mom_scm[3] << endl;
@@ -94,7 +105,9 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 		totscm[i] += mom_scm[i];
 		cout << "8" << "/" << i << endl;
 	      }
+
 	    }
+
 	    G4std::vector<G4double> mom = 
 	      convertToSCM.backToTheLab(ipart->getMomentum());
 	
@@ -118,21 +131,24 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	};
 	
 	output.addOutgoingParticles(particles);
-      }
-      else {
-        if(particle1->quasi_deutron() || particle2->quasi_deutron()) {
-	  if(particle1->pion() || particle2->pion()) {
 
+      } else {
+
+        if(particle1->quasi_deutron() || particle2->quasi_deutron()) {
+
+	  if(particle1->pion() || particle2->pion()) {
 	    G4LorentzConvertor convertToSCM;
 
             if(particle1->pion()) {
               convertToSCM.setBullet(particle1->getMomentum(), particle1->getMass());
               convertToSCM.setTarget(particle2->getMomentum(), particle2->getMass());
-	    }
-	    else {
+
+	    } else {
+
               convertToSCM.setBullet(particle2->getMomentum(), particle2->getMass());
               convertToSCM.setTarget(particle1->getMomentum(), particle1->getMass());
 	    }; 
+
             convertToSCM.toTheCenterOfMass(); 
 
             G4double etot_scm = convertToSCM.getTotalSCMEnergy();
@@ -140,6 +156,7 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	    if(verboseLevel > 2){
 	      G4cout << " etot_scm " << etot_scm << G4endl;
 	    }
+
             G4std::vector<G4InuclElementaryParticle> particles = 
 	      generateSCMpionAbsorption(etot_scm, particle1, particle2);
 
@@ -148,18 +165,19 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 
 	      for(G4int i = 0; i < G4int(particles.size()); i++) 
 		particles[i].printParticle();
-	    }
-	    if(!particles.empty()) { // convert back to Lab
 
+	    }
+
+	    if(!particles.empty()) { // convert back to Lab
 	      particleIterator ipart;
 
 	      for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
 
 		if(verboseLevel > 2){
-
 		  G4std::vector<G4double> mom_scm = ipart->getMomentum();
 
 		  for(G4int i = 0; i < 4; i++) totscm[i] += mom_scm[i];
+
 		}
 
 	        G4std::vector<G4double> mom = 
@@ -167,6 +185,7 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 
 	        ipart->setMomentum(mom); 
 	      };
+
 	      sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
 
 	      if(verboseLevel > 2){
@@ -177,21 +196,25 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	
  	      output.addOutgoingParticles(particles);
             };
-	  }
-	  else {
+
+	  } else {
+
 	    G4cout << " ElementaryParticleCollider -> can collide just pions with deutron at the moment " << G4endl;
-	  }; 
-	}
-	else {
+	  };
+ 
+	} else {
+
 	  G4cout << " ElementaryParticleCollider -> can collide just smth. with nucleon or deutron at the moment " << G4endl;
         };
       };  
-    }
-    else {
+
+    } else {
+
       G4cout << " ElementaryParticleCollider -> can not collide photons at the moment " << G4endl;
     }; 
-  }
-  else {
+
+  } else {
+
     G4cout << " ElementaryParticleCollider -> can collide only particle with particle " << G4endl;
   }; 	 	 
 
@@ -309,40 +332,46 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
   G4double sk = iksk.second;
   G4int l = is;
 
-  if(l == 4) l = 1; 
-  if(l == 10) l = 3; 
-  if(l == 5 || l == 6) l = 4; 
+  if (l == 4) l = 1; 
+  if (l == 10) l = 3; 
+  if (l == 5 || l == 6) l = 4; 
 
   G4std::vector<G4double> sigm(5);
   G4double stot = 0.0;
 
-  if(l == 7 || l == 14) { // pi0 P or pi0 N
-    for(G4int j = 0; j < 5; j++) {
+  if (l == 7 || l == 14) { // pi0 P or pi0 N
+
+    for (G4int j = 0; j < 5; j++) {
       sigm[j] = fabs(0.5 * (asig[2][j][ik - 1] + asig[3][j][ik - 1] +
 			    sk * (asig[2][j][ik] + asig[3][j][ik] - 
 				  asig[2][j][ik - 1] - asig[3][j][ik - 1])));
       stot += sigm[j];
     };
-  }
-  else {
-    for(G4int j = 0; j < 5; j++) {
+
+  } else {
+
+    for (G4int j = 0; j < 5; j++) {
       sigm[j] = fabs(asig[l - 1][j][ik - 1] + sk * (asig[l - 1][j][ik] 
 						    - asig[l - 1][j][ik - 1]));
       stot += sigm[j];
     };
   };
+
   G4double sl = inuclRndm();
   G4double ptot = 0.0;
   G4int mul = 0;
 
-  for(G4int i = 0; i < 5; i++) {
+  for (G4int i = 0; i < 5; i++) {
     ptot += sigm[i] / stot;
-    if(sl <= ptot) {
+
+    if (sl <= ptot) {
       mul = i;
 
       break;
-    };  
+    }; 
+ 
   };
+
   if(ekin > large_cut && mul == 1) mul = 2;
 
   if(verboseLevel > 3){
@@ -381,47 +410,55 @@ generateSCMfinalState(G4double ekin,
   G4int multiplicity = 0;
   G4bool generate = true;
    
-  while(generate) {      
+  while (generate) {      
+
     if(multiplicity == 0) {
       multiplicity = generateMultiplicity(is, ekin);
-    }
-    else {
+
+    } else {
+
       multiplicity = generateMultiplicity(is, ekin);
       particle_kinds.resize(0);
     };
-    if(multiplicity == 2) { // 2 -> 2
 
+    if(multiplicity == 2) { // 2 -> 2
       G4int kw;
 
       if(reChargering(ekin, is)) { // rechargering
 	kw = 2;
+
 	switch (is) {
+
 	case 6: // pi+ N -> pi0 P
 	  particle_kinds.push_back(7);
 	  particle_kinds.push_back(1);
 	  break;    
+
 	case 5: // pi- P -> pi0 N
 	  particle_kinds.push_back(7);
 	  particle_kinds.push_back(2);
 	  break;    
+
 	case 7: // pi0 P -> pi+ N
 	  particle_kinds.push_back(3);
 	  particle_kinds.push_back(2);
 	  break;    
+
 	case 14: // pi0 N -> pi- P
 	  particle_kinds.push_back(5);
 	  particle_kinds.push_back(1);
 	  break;    
-	default: 
 
+	default: 
 	  G4cout << " strange recharge: " << is << G4endl;
 
 	  particle_kinds.push_back(type1);
 	  particle_kinds.push_back(type2);
 	  kw = 1;
 	};
-      }
-      else { // just elastic
+
+      } else { // just elastic
+
 	kw = 1;
 	particle_kinds.push_back(type1);
 	particle_kinds.push_back(type2);       
@@ -429,43 +466,41 @@ generateSCMfinalState(G4double ekin,
 
       G4std::vector<G4double> mom;
 
-      if(kw == 2) { // need to rescale momentum
-
+      if (kw == 2) { // need to rescale momentum
 	G4double m1 = dummy.getParticleMass(particle_kinds[0]);
-
 	m1 *= m1;
-
 	G4double m2 = dummy.getParticleMass(particle_kinds[1]);
-
 	m2 *= m2;	 
-
 	G4double a = 0.5 * (etot_scm * etot_scm - m1 - m2);
 	G4double np = sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
-
 	mom = particleSCMmomentumFor2to2(is, kw, ekin, np);
-      }
-      else {
+
+      } else {
+
 	mom = particleSCMmomentumFor2to2(is, kw, ekin, pscm);
       };
 
-      if(verboseLevel > 3){
+      if (verboseLevel > 3){
 	G4cout << " before rotation px " << mom[1] << " py " << mom[2] <<
 	  " pz " << mom[3] << G4endl;
       }
 
       mom = toSCM->rotate(mom); 
 
-      if(verboseLevel > 3){
+      if (verboseLevel > 3){
 	G4cout << " after rotation px " << mom[1] << " py " << mom[2] <<
 	  " pz " << mom[3] << G4endl;
       }
       G4std::vector<G4double> mom1(4);
 
-      for(G4int i = 1; i < 4; i++) mom1[i] = -mom[i];
+      for (G4int i = 1; i < 4; i++) mom1[i] = -mom[i];
+
       particles.push_back(G4InuclElementaryParticle(mom, particle_kinds[0]));
       particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[1]));
       generate = false;
+
     } else { // 2 -> many
+
       particle_kinds = generateOutgoingKindsFor2toMany(is, multiplicity, ekin);
 
       G4int itry = 0;
@@ -473,29 +508,34 @@ generateSCMfinalState(G4double ekin,
       G4int knd_last = particle_kinds[multiplicity - 1];
       G4double mass_last = dummy.getParticleMass(knd_last);
 
-      if(verboseLevel > 3){
+      if (verboseLevel > 3){
 	G4cout << " knd_last " << knd_last << " mass " << mass_last << G4endl;
       }
 
-      while(bad && itry < itry_max) {
+      while (bad && itry < itry_max) {
 	itry++;
 
-	if(verboseLevel > 3){
+	if (verboseLevel > 3){
 	  G4cout << " itry in while " << itry << G4endl;
 	}
 
 	G4std::vector<G4double> modules = 
 	  generateMomModules(particle_kinds, multiplicity, is, ekin, etot_scm);
-	if(G4int(modules.size()) == multiplicity) {
-	  if(multiplicity == 3) { 
+
+	if (G4int(modules.size()) == multiplicity) {
+
+	  if (multiplicity == 3) { 
 	    G4std::vector<G4double> mom3 = 
 	      particleSCMmomentumFor2to3(is, knd_last, ekin, modules[2]);
+
 	    mom3 = toSCM->rotate(mom3);
+
 	    // generate the momentum of first
 	    G4double ct = -0.5 * (modules[2] * modules[2] + 
 				  modules[0] * modules[0] - 
 				  modules[1] * modules[1]) /
 	      modules[2] / modules[0];   
+
 	    if(fabs(ct) < ang_cut) {
 
 	      if(verboseLevel > 2){
@@ -509,29 +549,30 @@ generateSCMfinalState(G4double ekin,
 	      G4std::vector<G4double> mom2(4);
 
 	      for(G4int i = 1; i < 4; i++) mom2[i] = - (mom3[i] + mom1[i]);
+
 	      bad = false;
 	      generate = false;
+
 	      particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[0]));
 	      particles.push_back(G4InuclElementaryParticle(mom2, particle_kinds[1]));
 	      particles.push_back(G4InuclElementaryParticle(mom3, particle_kinds[2]));
 	    };
-	  }
-	  else { // multiplicity > 3
+
+	  } else { // multiplicity > 3
+
 	    // generate first mult - 2 momentums
 	    G4std::vector<G4std::vector<G4double> > scm_momentums;
 	    G4std::vector<G4double> tot_mom(4);
 
-	    for(G4int i = 0; i < multiplicity - 2; i++) {
-
+	    for (G4int i = 0; i < multiplicity - 2; i++) {
 	      G4double p0 = particle_kinds[i] < 3 ? 0.36 : 0.25;
 	      G4double alf = 1.0 / p0 / (p0 - (modules[i] + p0) *
 					 exp(-modules[i] / p0));
 	      G4double st = 2.0;
 	      G4int itry1 = 0;
 
-	      while(fabs(st) > ang_cut && itry1 < itry_max) {
+	      while (fabs(st) > ang_cut && itry1 < itry_max) {
 		itry1++;
-
 		G4double s1 = modules[i] * inuclRndm();
 		G4double s2 = alf * difr_const * p0 * inuclRndm();
 
@@ -541,11 +582,13 @@ generateSCMfinalState(G4double ekin,
 		}
 
 		if(s1 * alf * exp(-s1 / p0) > s2) st = s1 / modules[i];
+
 	      }; 
 
 	      if(verboseLevel > 3){
 		G4cout << " itry1 " << itry1 << " i " << i << " st " << st << G4endl;
 	      }
+
 	      if(itry1 == itry_max) {
 
 		if(verboseLevel > 2){
@@ -561,14 +604,18 @@ generateSCMfinalState(G4double ekin,
 
 	      G4double pt = modules[i]*st;
 	      G4double phi = randomPHI();
+
 	      G4std::vector<G4double> mom(4);
 
 	      mom[1] = pt * cos(phi);
 	      mom[2] = pt * sin(phi);
 	      mom[3] = modules[i] * ct;
+
 	      for(G4int i = 1; i < 4; i++) tot_mom[i] += mom[i];		 
+
 	      scm_momentums.push_back(mom);
 	    }; 
+
 	    // handle last two
 	    G4double tot_mod = sqrt(tot_mom[1] * tot_mom[1] + 
 				    tot_mom[2] * tot_mom[2] + tot_mom[3] * tot_mom[3]); 
@@ -577,13 +624,15 @@ generateSCMfinalState(G4double ekin,
 				  modules[multiplicity - 1] * modules[multiplicity - 1]) / tot_mod /
 	      modules[multiplicity - 2];  
 
-	    if(verboseLevel > 2){
+	    if (verboseLevel > 2){
 	      G4cout << " ct last " << ct << G4endl;
 	    }            
 
-	    if(fabs(ct) < ang_cut) {
-	      for(G4int i = 0; i < multiplicity - 2; i++) 
+	    if (fabs(ct) < ang_cut) {
+
+	      for (G4int i = 0; i < multiplicity - 2; i++) 
 		scm_momentums[i] = toSCM->rotate(scm_momentums[i]);
+
 	      tot_mom = toSCM->rotate(tot_mom);  
 
 	      G4std::vector<G4double> mom = 
@@ -591,19 +640,21 @@ generateSCMfinalState(G4double ekin,
 
 	      mom = toSCM->rotate(tot_mom, mom);
 	      scm_momentums.push_back(mom);
+
 	      // and the last one
 	      G4std::vector<G4double> mom1(4);
 
-	      for(i = 1; i < 4; i++) mom1[i] = -mom[i] - tot_mom[i];
+	      for (i = 1; i < 4; i++) mom1[i] = -mom[i] - tot_mom[i];
+
 	      scm_momentums.push_back(mom1);  
 	      bad = false;
 	      generate = false;
 
-	      if(verboseLevel > 2){
+	      if (verboseLevel > 2){
 		G4cout << " ok for mult " << multiplicity << G4endl;
 	      }
 
-	      for(i = 0; i < multiplicity; i++) {
+	      for (i = 0; i < multiplicity; i++) {
 		particles.push_back(G4InuclElementaryParticle(
 							      scm_momentums[i], particle_kinds[i]));
 	      };
@@ -611,9 +662,10 @@ generateSCMfinalState(G4double ekin,
 	  }; 
 	};
       };
-      if(itry == itry_max) {
 
-	if(verboseLevel > 2){
+      if (itry == itry_max) {
+
+	if (verboseLevel > 2){
 	  G4cout << " cannot generate the distr. for mult " << multiplicity  <<
 	    G4endl << " and set it to " << multiplicity - 1 << G4endl;
 	}
@@ -641,7 +693,7 @@ generateMomModules(
     G4cout << " >>> G4ElementaryParticleCollider::generateMomModules" << G4endl;
   }
 
-  if(verboseLevel > 2){
+  if (verboseLevel > 2){
     G4cout << " mult " << mult << " is " << is << " ekin " << ekin << " etot_cm " <<
       etot_cm << G4endl;
   }
@@ -654,14 +706,14 @@ generateMomModules(
   G4std::vector<G4double> modules(mult);
   G4std::vector<G4double> masses2(mult);
 
-  for(G4int i = 0; i < mult; i++) {
+  for (G4int i = 0; i < mult; i++) {
     G4double mass = dummy.getParticleMass(kinds[i]);
     masses2[i] = mass * mass;
   };
 
   G4double mass_last = sqrt(masses2[mult - 1]);
 
-  if(verboseLevel > 3){
+  if (verboseLevel > 3){
     G4cout << " knd_last " << kinds[mult - 1] << " mlast " << mass_last << G4endl;
   }
 
@@ -674,42 +726,44 @@ generateMomModules(
     G4int ilast = -1;
     G4double eleft = etot_cm;
 
-    for(G4int i = 0; i < mult - 1; i++) {
+    for (G4int i = 0; i < mult - 1; i++) {
 
       G4double pmod = 
 	getMomModuleFor2toMany(is, mult, kinds[i], ekin);
 
-      if(pmod < small) break;
+      if (pmod < small) break;
       eleft -= sqrt(pmod * pmod + masses2[i]);
 
-      if(verboseLevel > 3){
+      if (verboseLevel > 3){
 	G4cout << " kp " << kinds[i] << " pmod " << pmod << " mass2 " << masses2[i] << G4endl;
 	G4cout << " x1 " << eleft - mass_last << G4endl;
       }
 
-      if(eleft <= mass_last) break;
+      if (eleft <= mass_last) break;
       ilast++;
       modules[i] = pmod;
     };
 
-    if(ilast == mult - 2) {
+    if (ilast == mult - 2) {
 
       G4double plast = eleft * eleft - masses2[mult - 1];
 
-      if(verboseLevel > 2){
+      if (verboseLevel > 2){
 	G4cout << " plast ** 2 " << plast << G4endl;
       }
 
-      if(plast > small) {
+      if (plast > small) {
 	plast = sqrt(plast);
 	modules[mult - 1] = plast;      
-	if(mult == 3) { 
+
+	if (mult == 3) { 
+
 	  if(satisfyTriangle(modules)) {
 
 	    return modules;
 	  }
-	}
-	else {
+
+	} else {
 
 	  return modules;
 	}; 	 
@@ -732,12 +786,14 @@ G4bool G4ElementaryParticleCollider::satisfyTriangle(
   G4bool good = true;
 
   if(modules.size() == 3) {
+
     if(fabs(modules[1] - modules[2]) > modules[0] || 
        modules[0] > modules[1] + modules[2] ||
        fabs(modules[0] - modules[2]) > modules[1] ||
        modules[1] > modules[0] + modules[2] ||
        fabs(modules[0] - modules[1]) > modules[2] ||
        modules[2] > modules[1] + modules[0]) good = false;
+
   };
 
   return good;
@@ -760,11 +816,12 @@ G4int G4ElementaryParticleCollider::getIL(G4int is,
 
   if(l == 14) {
     l = 5;
-  }
-  else if(l == 7) {
+
+  } else if(l == 7) {
     l = 6;
-  }
-  else if(l == 10) {
+
+  } else if(l == 10) {
+
     l = 7;
   };
 
@@ -1010,9 +1067,13 @@ generateOutgoingKindsFor2toMany(
 
   if(l == 10) {
     l = 3;
-  } else if(l == 4) {
+  
+} else if(l == 4) {
+
     l = 1;
+
   } else if(l == 6 || l == 5) {
+
     l = 4;
   };
 
@@ -1023,18 +1084,23 @@ generateOutgoingKindsFor2toMany(
   G4int n;      
 
   switch(mult) {
+
   case 3:
     n = 0;
     break;
+
   case 4:
     n = 3;
     break;
+
   case 5:
     n = 7;
     break;
+
   case 6:
     n = 13;
     break;
+
   default:
     G4cout << " generateOutgoingKindsFor2toMany: mult " << mult << G4endl;
     n = 13;
@@ -1044,19 +1110,22 @@ generateOutgoingKindsFor2toMany(
   G4double stot = 0.0;
 
   if(l == 7 || l == 14) {
+
     for(G4int j = 0; j < il; j++) {
       sig.push_back(0.5 * (bsig[2][n + j][ik - 1] + bsig[3][n + j][ik - 1] + 
 			   sk * (bsig[2][n + j][ik] - bsig[2][n + j][ik - 1] +
 				 bsig[3][n + j][ik] - bsig[3][n + j][ik - 1])));
       stot += sig[j];
     };
-  }
-  else {
+
+  } else {
+
     for(G4int j = 0; j < il; j++) { 
       sig.push_back(bsig[l - 1][n + j][ik - 1] + 
 		    sk*(bsig[l - 1][n + j][ik] - bsig[l - 1][n + j][ik - 1]));
       stot += sig[j];
     };
+
   };
 
   G4double sl = inuclRndm();
@@ -1068,42 +1137,53 @@ generateOutgoingKindsFor2toMany(
 
   for(G4int i = 0; i < il; i++) {
     ptot += sig[i];
+
     if(sl <= ptot) {
       ml = i;
+
       break;
     };  
+
   }; 
 
   l = is;
   if(l == 14) {
     l = 5;
-  }
-  else if(l == 7) {
-    l = 6;  
-  }
-  else if(is == 10) {
+
+  } else if(l == 7) {
+
+    l = 6;
+  
+  } else if(is == 10) {
     l = 7;
+
   };
 
   G4int ks;      
 
   switch(mult) {
+
   case 3:
     ks = 0;
     break;
+
   case 4:
     ks = 3;
     break;
+
   case 5:
     ks = 7;
     break;
+
   case 6:
     ks = 12;
     break;
+
   default:
     G4cout << " generateOutgoingKindsFor2toMany: mult " << mult << G4endl;
     ks = 12;
   };      
+
   for(i = 0; i < mult; i++)  
     kinds.push_back(ifkn[l - 1][ml][i + ks]);
 
@@ -1174,18 +1254,22 @@ G4double G4ElementaryParticleCollider::getMomModuleFor2toMany(
   G4int IM = 3;
 
   if(is == 1 || is == 2 || is == 4) KM = 1;
-  if(mult == 3) { IM = 0; IL = 0; };
-  if(knd == 1 || knd == 2) JK = 0;
-  for(G4int i = 0; i < 4; i++) {
 
+  if(mult == 3) { IM = 0; IL = 0; };
+
+  if(knd == 1 || knd == 2) JK = 0;
+
+  for(G4int i = 0; i < 4; i++) {
     G4double V = 0.0;
 
     for(G4int k = 0; k < 4; k++) V += rmn[k + JK][i + IL][KM - 1] * pow(ekin, k);
+
     PR += V * pow(S, i);
     PQ += V;
   };  
 
   if(knd == 1 || knd == 2) JM = 1;
+
   for(G4int m = 0; m < 3; m++) PS += rmn[8 + IM + m][7 + JM][KM - 1] * pow(ekin, m);
 
   G4double PRA = PS * sqrt(S) * (PR + (1 - PQ) * pow(S, 4));
@@ -1221,29 +1305,30 @@ particleSCMmomentumFor2to3(
   G4int J = 1;
 
   if(is == 1 || is == 2 || is == 4) K = 1;
+
   if(knd == 1 || knd == 2) J = 0;
 
   G4int itry = 0;
 
   while(fabs(ct) > 1.0 && itry < itry_max) {
     itry++;
-
     G4double S = inuclRndm();
     G4double U = 0.0;
     G4double W = 0.0;
 
     for(G4int l = 0; l < 4; l++) {
-
       G4double V = 0.0;
 
       for(G4int m = 0; m < 4; m++) {
 	V += abn[m][l][K + J - 1] * pow(ekin, m);
       };
+
       U += V;
       W += V * pow(S, l);
     };  
     ct = 2.0 * sqrt(S) * (W + (1.0 - U) * pow(S, 4)) - 1.0;
   };
+
   if(itry == itry_max) {
 
     if(verboseLevel > 2){
@@ -1378,7 +1463,7 @@ G4bool G4ElementaryParticleCollider::reChargering(G4double ekin,
 
   G4bool rech = false;
 
-  if(is == 6 || is == 5 || is == 7 || is == 14) {
+  if (is == 6 || is == 5 || is == 7 || is == 14) {
     pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
     G4int ik = iksk.first;
     G4double sk = iksk.second;
@@ -1386,8 +1471,9 @@ G4bool G4ElementaryParticleCollider::reChargering(G4double ekin,
 
     if(ik == 30 && sk == 1.0) {
       chrg = 1.0;    
-    }
-    else {
+
+    } else {
+
       chrg = 1.0 - (ali[ik - 1] + sk * (ali[ik] - ali[ik - 1])) /
 	(asig[3][0][ik - 1] + sk * (asig[3][0][ik] - asig[3][0][ik - 1]));
     }; 
@@ -1413,47 +1499,48 @@ adjustIntervalForElastic(
 
   const G4int itry_max = 100;
   const G4double small = 1.0e-4;
-
   G4double a = 1.0;
   G4double b = 0.0;
   G4int adj_type = 0;
   G4double s1 = 0.0;
   G4double s2 = 0.0;
 
-  if(k == 1) {
+  if (k == 1) {
     adj_type = 1;
     s1 = 0.0;
     s2 = 0.5;
-  }
-  else if(k == 2) {
+  } else if(k == 2) {
+
     if(l != 2) {
-      //      adj_type == 0;
-    }
-    else { 
+      // adj_type == 0;
+
+    } else { 
+
       adj_type = 1;
       s1 = 0.0;
       s2 = 0.67;
-    };        
-  }
-  else {
+    };
+        
+  } else {
+
     if(ekin < 0.32) {
-      //   adj_type == 0;
-    }
-    else {
+      // adj_type == 0;
+
+    } else {
+
       adj_type = 2;
       s1 = 0.1813;
       s2 = 1.0;
     };     
+
   };
 
   if(adj_type > 0) {
-
     G4int itry = 0;
     G4double su;
     G4double ct;
   
     if(adj_type == 1) {
-
       G4double s2_old = s2;
       G4double s1c = s1;
       G4double s2_new;
@@ -1462,44 +1549,55 @@ adjustIntervalForElastic(
 	itry++;
 	s2_new = 0.5 * (s2_old + s1c);
 	su = 0.0;      
+
 	for(G4int i = 0; i < 4; i++) su += ssv[i] * pow(s2_new, i);
+
 	ct = ak * sqrt(s2_new) * (su + (1.0 - st) * pow(s2_new, 4)) + ae;
+
 	if(ct > 1.0) {
 	  s2_old = s2_new;
-	}
-	else {
+
+	} else {
+
 	  if(1.0 - ct < small) {
+
 	    break;
-	  }
-	  else {
+
+	  } else {
+
 	    s1c = s2_new;
 	  };   
 	}; 
       };
+
       a = s2_new - s1;
       b = s1;
-    }
-    else {
+
+    } else {
 
       G4double s1_old = s1;
       G4double s2c = s2;
       G4double s1_new = 0.0;
 
-      while(itry < itry_max) {
+      while (itry < itry_max) {
 	itry++;
 	s1_new = 0.5 * (s1_old + s2c);
-	su = 0.0;      
-	for(G4int i = 0; i < 4; i++) su += ssv[i] * pow(s1_new, i);
+	su = 0.0;
+      
+	for (G4int i = 0; i < 4; i++) su += ssv[i] * pow(s1_new, i);
 	ct = ak * sqrt(s1_new) * (su + (1.0 - st) * pow(s1_new, 4)) + ae;
+
 	if(ct < -1.0) {
 	  s1_old = s1_new;
-	}
-	else {
-	  if(1.0 + ct < small) {
+
+	} else {
+
+	  if (1.0 + ct < small) {
 
 	    break;
-	  }
-	  else {
+
+	  } else {
+
 	    s2c = s1_new;
 	  };   
 	}; 
@@ -1507,9 +1605,10 @@ adjustIntervalForElastic(
       a = s2 - s1_new;
       b = s1_new;
     }; 
-    if(itry == itry_max) {
 
-      if(verboseLevel > 2){
+    if (itry == itry_max) {
+
+      if (verboseLevel > 2){
 	G4cout << " in adjustIntervalForElastic: " << itry_max << G4endl;
 	G4cout << " e " << ekin << " ak " << ak << " ae " << ae << G4endl << " k " << k
 	       << " is " << l << " adj_type " << adj_type << G4endl; 
@@ -1560,10 +1659,14 @@ particleSCMmomentumFor2to2(
   G4double ae = -1.0;
   G4double ak = 2.0;
 
-  if(k == 1) { 
+  if(k == 1) {
+ 
     if(is != 2) { ak = 1.0; ae = 0.0;};
+
   } else if(k == 2) {
+
     if(is != 2) { ak = 0.5; ae = 0.0; };
+
   };    
 
   G4double ct = 2.0;
@@ -1579,26 +1682,29 @@ particleSCMmomentumFor2to2(
     ad = 2.0 * ac;
     if(ad < -huge) {
       ad = exp(ad);
-    }
-    else {
+
+    } else {
+
       ad = exp(-huge);
     };   
+
     while(fabs(ct) > ct_cut && itry < itry_max) {
       itry++;
       ct = 1.0 - log(inuclRndm() * (1.0 - ad) + ad) / ac;
     };      
-  }
-  else if(k == 0) {
+
+  } else if(k == 0) {
+
     ct = 2.0 * inuclRndm() - 1;
-  }
-  else { 
+
+  } else { 
+
     G4int k1 = k - 1;
     // first set all coefficients
     G4std::vector<G4double> ssv(4);
     G4double st = 0.0;
 
     for(G4int i = 0; i < 4; i++) {
-
       G4double ss = 0.0;
 
       for(G4int m = 0; m < 4; m++) ss += ang[m][i][k1] * pow(ekin, m);
@@ -1615,6 +1721,7 @@ particleSCMmomentumFor2to2(
       a = ab.first;
       b = ab.second;
     };
+
     while(fabs(ct) > ct_cut && itry < itry_max) {
       itry++;
       G4double mrand = a * inuclRndm() + b;
@@ -1622,6 +1729,7 @@ particleSCMmomentumFor2to2(
       G4double su = 0.0;
 
       for(G4int i = 0; i < 4; i++) su += ssv[i] * pow(mrand, i);
+
       ct = ak * sqrt(mrand) * (su + (1.0 - st) * pow(mrand, 4)) + ae;
     }; 
   };
@@ -1659,50 +1767,76 @@ G4int G4ElementaryParticleCollider::getElasticCase(G4int is,
 
   if(l == 4) {
     l = 1;
-  } 
-  else if(l == 10 || l == 7 || l == 14) {
+
+  } else if(l == 10 || l == 7 || l == 14) {
+
     l = 3;
-  }
-  else if(l == 5 || l == 6) {
+  
+} else if(l == 5 || l == 6) {
+
     l = 4;
   };
+
   if(l < 3) { // nucleon nucleon
+
     if(ekin > 2.8) {
       k = 2;
+
       if(ekin > 10.0) k = 14;
-    }
-    else {    
+
+    } else {
+    
       if(l == 1) { // PP or NN
+
         if(ekin > 0.46) k = 1;
-      }
-      else {
+
+      } else {
+
         k = 3;
+
 	if(ekin >= 0.97) k = 1;
+
       }; 
-    };  	 
-  }
-  else { // pi nucleon
+    };
+  	 
+  } else { // pi nucleon
+
     if(l == 3) { // pi+ P, pi- N, pi0 P, pi0 N
       k = 8;
+
       if(ekin > 0.08) k = 9;
+
       if(ekin > 0.3) k = 10;
+
       if(ekin > 1.0) k = 11;
+
       if(ekin > 2.4) k = 14;
-    }
-    else { // pi- P, pi+ N
+
+    } else { // pi- P, pi+ N
+
       if(kw == 1) {
         k = 4;
+ 
         if(ekin > 0.08) k = 5;
+
         if(ekin > 0.3) k = 6;
+
         if(ekin > 1.0) k = 7;
-        if(ekin > 2.4) k = 14;
-      }
-      else {
+
+        if (ekin > 2.4) k = 14;
+
+      } else {
+
         k = 12;
-	if(ekin > 0.08) k = 13;
-        if(ekin > 0.3) k = 6;
-        if(ekin > 1.0) k = 7;
-        if(ekin > 2.4) k = 14;
+
+	if (ekin > 0.08) k = 13;
+
+        if (ekin > 0.3) k = 6;
+
+        if (ekin > 1.0) k = 7;
+
+        if (ekin > 2.4) k = 14;
+
       }; 
     };   
   };     
@@ -1729,8 +1863,10 @@ generateSCMpionAbsorption(G4double etot_scm,
   G4int type2 = particle2->type();
 
   // generate kinds
-  if(type1 == 3) {
-    if(type2 == 111) { // pi+ + PP -> ? 
+
+  if (type1 == 3) {
+
+    if (type2 == 111) { // pi+ + PP -> ? 
 
       G4cout << " pion absorption: pi+ + PP -> ? " << G4endl;
 
