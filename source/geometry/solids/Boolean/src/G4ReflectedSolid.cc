@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.13 2003-11-03 17:48:46 gcosmo Exp $
+// $Id: G4ReflectedSolid.cc,v 1.14 2003-12-01 09:32:05 gcosmo Exp $
 //
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -75,8 +75,13 @@ G4ReflectedSolid::~G4ReflectedSolid()
 {
   if(fPtrTransform)
   {
-   delete fPtrTransform ;
-   delete fDirectTransform;
+    delete fPtrTransform; fPtrTransform=0;
+    delete fDirectTransform; fDirectTransform=0;
+  }
+  if(fPtrTransform3D)
+  {
+    delete fPtrTransform3D; fPtrTransform3D=0;
+    delete fDirectTransform3D; fDirectTransform3D=0;
   }
 }
 
