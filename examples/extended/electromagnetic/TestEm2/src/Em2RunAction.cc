@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2RunAction.cc,v 1.9 2001-03-08 14:28:14 maire Exp $
+// $Id: Em2RunAction.cc,v 1.10 2001-03-27 08:58:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -82,7 +82,7 @@ Em2RunAction::~Em2RunAction()
 void Em2RunAction::bookHisto()
 {
 #ifndef G4NOHIST
-  hbookManager = new HBookFile("TestEm2.histo", 68);
+  hbookManager = new HBookFile("TestEm2.paw", 68);
   assert (hbookManager != 0);
   
   G4double Ekin = Em2Kin->GetParticleGun()->GetParticleEnergy();
@@ -133,6 +133,9 @@ void Em2RunAction::bookHisto()
 void Em2RunAction::cleanHisto()
 {
 #ifndef G4NOHIST
+  // Write histogram file 
+  hbookManager->write();
+
   delete histo1; delete histo2; delete histo3;
   delete histo4; delete histo5; delete histo6;
   delete histo7; delete histo8; delete histo9;
@@ -402,12 +405,7 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
   if (saveRndm > 0)
     { HepRandom::showEngineStatus();
       HepRandom::saveEngineStatus("endOfRun.rndm");
-    }
-    
-#ifndef G4NOHIST   
-  // Write histogram file 
-  hbookManager->write();
-#endif                              
+    }                           
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
