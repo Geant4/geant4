@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2001-10-29 09:43:25 maire Exp $
+$Id: History,v 1.37 2001-11-07 16:06:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07 nov 01: mma (utils-V03-02-10)
+- bug fixe in G4MultipleScattering::PostStepDoIt()
+     
 29 oct 01: mma (utils-V03-02-09)
 - static functions no more inlined
      
