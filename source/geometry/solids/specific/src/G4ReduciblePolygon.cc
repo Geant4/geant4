@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReduciblePolygon.cc,v 1.6 2002-10-30 13:52:23 gcosmo Exp $
+// $Id: G4ReduciblePolygon.cc,v 1.7 2003-10-28 17:15:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,7 +102,8 @@ void G4ReduciblePolygon::Create( const G4double a[],
                                  const G4double b[], G4int n )
 {
   if (n<3)
-   G4Exception("G4ReduciblePolygon::Create() - less than 3 vertices specified");
+   G4Exception("G4ReduciblePolygon::Create()", "WrongArgumentValue",
+               FatalException, "Less than 3 vertices specified.");
   
   const G4double *anext = a, *bnext = b;
   ABVertex *prev = 0;

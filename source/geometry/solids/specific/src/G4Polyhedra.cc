@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.10 2003-10-20 13:58:51 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.11 2003-10-28 17:15:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,13 +78,11 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
 {
   if (theNumSide <= 0)
   {
-    G4cout << "ERROR - G4Polyhedra::G4Polyhedra(): " << GetName() << G4endl
-           << "        No sides specified !"
-           << G4endl;
     G4cerr << "ERROR - G4Polyhedra::G4Polyhedra(): " << GetName() << G4endl
            << "        No sides specified !"
            << G4endl;
-    G4Exception("G4Polyhedra::G4Polyhedra() - must have at least one side");
+    G4Exception("G4Polyhedra::G4Polyhedra()", "InvalidSetup",
+                FatalException, "Solid must have at least one side.");
   }
 
   //
@@ -171,13 +169,11 @@ void G4Polyhedra::Create( G4double phiStart,
   //
   if (rz->Amin() < 0.0)
   {
-    G4cout << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
-           << "        All R values must be >= 0 !"
-           << G4endl;
     G4cerr << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
            << "        All R values must be >= 0 !"
            << G4endl;
-    G4Exception("G4Polyhedra::Create() - Illegal input parameters");
+    G4Exception("G4Polyhedra::Create()", "InvalidSetup",
+                FatalException, "Illegal input parameters.");
   }
 
   G4double rzArea = rz->Area();
@@ -186,36 +182,30 @@ void G4Polyhedra::Create( G4double phiStart,
 
   else if (rzArea < -kCarTolerance)
   {
-    G4cout << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
-           << "        R/Z cross section is zero or near zero: "
-           << rzArea << G4endl;
     G4cerr << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
            << "        R/Z cross section is zero or near zero: "
            << rzArea << G4endl;
-    G4Exception("G4Polyhedra::Create() - Illegal input parameters");
+    G4Exception("G4Polyhedra::Create()", "InvalidSetup",
+                FatalException, "Illegal input parameters.");
   }
     
   if ( (!rz->RemoveDuplicateVertices( kCarTolerance ))
     || (!rz->RemoveRedundantVertices( kCarTolerance )) ) 
   {
-    G4cout << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
-           << "        Too few unique R/Z values !"
-           << G4endl;
     G4cerr << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
            << "        Too few unique R/Z values !"
            << G4endl;
-    G4Exception("G4Polyhedra::Create() - Illegal input parameters");
+    G4Exception("G4Polyhedra::Create()", "InvalidSetup",
+                FatalException, "Illegal input parameters.");
   }
 
   if (rz->CrossesItself( 1/kInfinity )) 
   {
-    G4cout << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
-           << "        R/Z segments cross !"
-           << G4endl;
     G4cerr << "ERROR - G4Polyhedra::Create() " << GetName() << G4endl
            << "        R/Z segments cross !"
            << G4endl;
-    G4Exception("G4Polyhedra::Create() - Illegal input parameters");
+    G4Exception("G4Polyhedra::Create()", "InvalidSetup",
+                FatalException, "Illegal input parameters.");
   }
 
   numCorner = rz->NumVertices();

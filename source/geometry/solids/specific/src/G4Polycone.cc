@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.12 2003-10-20 13:58:51 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.13 2003-10-28 17:15:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -128,13 +128,11 @@ void G4Polycone::Create( G4double phiStart,
   //
   if (rz->Amin() < 0.0)
   {
-    G4cout << "ERROR - G4Polycone::Create(): " << GetName() << G4endl
-           << "        All R values must be >= 0 !"
-           << G4endl;
     G4cerr << "ERROR - G4Polycone::Create(): " << GetName() << G4endl
            << "        All R values must be >= 0 !"
            << G4endl;
-    G4Exception("G4Polycone::Create() - Illegal input parameters");
+    G4Exception("G4Polycone::Create()", "InvalidSetup", FatalException,
+                "Illegal input parameters.");
   }
     
   G4double rzArea = rz->Area();
@@ -143,36 +141,30 @@ void G4Polycone::Create( G4double phiStart,
 
   else if (rzArea < -kCarTolerance)
   {
-    G4cout << "ERROR - G4Polycone::Create(): " << GetName() << G4endl
-           << "        R/Z cross section is zero or near zero: "
-           << rzArea << G4endl;
     G4cerr << "ERROR - G4Polycone::Create(): " << GetName() << G4endl
            << "        R/Z cross section is zero or near zero: "
            << rzArea << G4endl;
-    G4Exception("G4Polycone::Create() - Illegal input parameters");
+    G4Exception("G4Polycone::Create()", "InvalidSetup", FatalException,
+                "Illegal input parameters.");
   }
     
   if ( (!rz->RemoveDuplicateVertices( kCarTolerance ))
     || (!rz->RemoveRedundantVertices( kCarTolerance ))     ) 
   {
-    G4cout << "ERROR - G4Polycone::Create(): " << GetName() << G4endl
-           << "        Too few unique R/Z values !"
-           << G4endl;
     G4cerr << "ERROR - G4Polycone::Create(): " << GetName() << G4endl
            << "        Too few unique R/Z values !"
            << G4endl;
-    G4Exception("G4Polycone::Create() - Illegal input parameters");
+    G4Exception("G4Polycone::Create()", "InvalidSetup", FatalException,
+                "Illegal input parameters.");
   }
 
   if (rz->CrossesItself(1/kInfinity)) 
   {
-    G4cout << "ERROR - G4Polycone::Create(): " << GetName() << G4endl
-           << "        R/Z segments cross !"
-           << G4endl;
     G4cerr << "ERROR - G4Polycone::Create(): " << GetName() << G4endl
            << "        R/Z segments cross !"
            << G4endl;
-    G4Exception("G4Polycone::Create() - Illegal input parameters");
+    G4Exception("G4Polycone::Create()", "InvalidSetup", FatalException,
+                "Illegal input parameters.");
   }
 
   numCorner = rz->NumVertices();
@@ -380,10 +372,10 @@ G4bool G4Polycone::Reset()
 {
   if (!original_parameters)
   {
-    G4Exception("G4Polycone::Reset()", "NotApplicableConstruct",
-                JustWarning, "Parameters NOT resetted.");
     G4cerr << "Solid " << GetName() << " built using generic construct."
            << G4endl << "Specify original parameters first !" << G4endl;
+    G4Exception("G4Polycone::Reset()", "NotApplicableConstruct",
+                JustWarning, "Parameters NOT resetted.");
     return 1;
   }
 
