@@ -1,4 +1,4 @@
-$Id: History,v 1.96 2001-01-18 12:24:45 johna Exp $
+$Id: History,v 1.97 2001-01-25 12:11:30 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,19 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+25th January 2001  John Allison  (opengl-V03-00-00)
+- Implemented running re-calculation of up-vector in the case of "object
+  rotation" (lights move with camera) to prevent "flipping" of view when
+  camera passes through up-vector.  Note that the default is "camera
+  rotation" (lights do not move with camera, i.e., remain fixed relative
+  to object) so the default is that this "flipping" can happen.  To set
+  "object rotation" (lights move with camera) use
+  /vis/lights/move_with_camera true (soon to be
+  /vis/viewer/set/lights move-with-camera) or click "Object" radio button
+  on Rotation Panel in OpenGLXm mode.
+- Changed some objects to references for efficiency.  E.g.:
+  const G4Vector3D& vp = pView->fVP.GetViewpointDirection ().unit ();
 
 18th January 2001  John Allison
 - Corrected G4PhysicalVolumeModel.  This corrects a bug whereby the
