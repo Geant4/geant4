@@ -28,7 +28,6 @@
 ./source/processes/photolepton_hadron		photolepton_hadron-V03-00-00
 ./source/tracking		tracking-V03-00-02
 ./tests/test01          test01-V03-00-01
-./tests/test02          test02-V03-00-02
 ./tests/test05          test05-V03-00-00
 ./tests/test07          test07-V03-00-00
 ./tests/test09          test09-V03-00-00
