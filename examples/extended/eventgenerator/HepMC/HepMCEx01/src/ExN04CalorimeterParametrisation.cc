@@ -38,7 +38,7 @@ ExN04CalorimeterParametrisation::~ExN04CalorimeterParametrisation()
 {;}
 
 void ExN04CalorimeterParametrisation::ComputeTransformation
-(const G4int copyNo,G4VPhysicalVolume *physVol) const
+(const G4int,G4VPhysicalVolume *physVol) const
 {
   G4ThreeVector origin;
   physVol->SetTranslation(origin);
@@ -46,7 +46,7 @@ void ExN04CalorimeterParametrisation::ComputeTransformation
 
 void ExN04CalorimeterParametrisation::ComputeDimensions
 (G4Tubs & calorimeterLayer, const G4int copyNo,
- const G4VPhysicalVolume * physVol) const
+ const G4VPhysicalVolume *) const
 {
   G4double innerRad = caloTubs_rmin
               + copyNo*(absorber_thick+scinti_thick);
