@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.55 2002-12-16 11:33:19 gcosmo Exp $
+// $Id: G4RunManager.cc,v 1.56 2003-01-06 21:31:46 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -414,8 +414,8 @@ void G4RunManager::InitializeCutOff()
     if(G4ProductionCutsTable::GetProductionCutsTable()->IsModified())
     {
       G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
-      physicsList->BuildPhysicsTable();
       G4ProductionCutsTable::GetProductionCutsTable()->UpdateCutsValues();
+      physicsList->BuildPhysicsTable();
       G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
       physicsList->DumpCutValuesTable();
     }
