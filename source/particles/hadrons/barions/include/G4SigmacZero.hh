@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SigmacZero.hh,v 1.1 1999-01-07 16:09:56 gunter Exp $
+// $Id: G4SigmacZero.hh,v 1.2 1999-04-13 08:28:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,12 +57,14 @@ class G4SigmacZero : public G4VBarion
    );
 
  public:
+   virtual ~G4SigmacZero(){}
+ 
    static G4SigmacZero* SigmacZeroDefinition();
    static G4SigmacZero* SigmacZero();
    static G4double GetCuts() {return theSigmacZeroLengthCut;}   
    static G4double* GetCutsInEnergy() {return theSigmacZeroKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiProton.hh,v 1.1 1999-01-07 16:09:51 gunter Exp $
+// $Id: G4AntiProton.hh,v 1.2 1999-04-13 08:31:50 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,12 +59,14 @@ class G4AntiProton : public G4VBarion
    );
 
  public:
+   virtual ~G4AntiProton(){}
+  
    static G4AntiProton* AntiProtonDefinition();
    static G4AntiProton* AntiProton();
    static G4double GetCuts() {return theAntiProtonLengthCut;}   
    static G4double* GetCutsInEnergy() {return theAntiProtonKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 inline void G4AntiProton::SetCuts(G4double aCut)

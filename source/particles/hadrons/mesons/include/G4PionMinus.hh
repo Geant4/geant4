@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PionMinus.hh,v 1.1 1999-01-07 16:10:12 gunter Exp $
+// $Id: G4PionMinus.hh,v 1.2 1999-04-13 08:34:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,12 +58,13 @@ class G4PionMinus : public G4VMeson
    );
 
  public:
+  virtual      ~G4PionMinus(){}
    static      G4PionMinus* PionMinusDefinition();
    static      G4PionMinus* PionMinus(){return &thePionMinus;}
    static G4double GetCuts() {return thePionMinusLengthCut;}   
    static G4double* GetCutsInEnergy() {return thePionMinusKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 inline void G4PionMinus::SetCuts(G4double aCut)

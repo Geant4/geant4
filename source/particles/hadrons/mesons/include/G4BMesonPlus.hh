@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BMesonPlus.hh,v 1.1 1999-01-07 16:10:09 gunter Exp $
+// $Id: G4BMesonPlus.hh,v 1.2 1999-04-13 08:37:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,12 +56,14 @@ class G4BMesonPlus : public G4VMeson
    );
 
  public:
+   virtual ~G4BMesonPlus(){}
+
    static G4BMesonPlus* BMesonPlusDefinition();
    static G4BMesonPlus* BMesonPlus();
    static G4double GetCuts() {return theBMesonPlusLengthCut;}   
    static G4double* GetCutsInEnergy() {return theBMesonPlusKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 inline void G4BMesonPlus::SetCuts(G4double aCut)
