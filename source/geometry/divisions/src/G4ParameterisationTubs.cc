@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTubs.cc,v 1.6 2004-05-13 14:57:14 gcosmo Exp $
+// $Id: G4ParameterisationTubs.cc,v 1.7 2004-05-17 07:20:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTubs Implementation file
@@ -55,6 +55,7 @@ G4VParameterisationTubs( EAxis axis, G4int nDiv, G4double width,
        = ((G4ReflectedSolid*)msolid)->GetConstituentMovedSolid();
     msol = (G4Tubs*)(mConstituentSolid);
     fmotherSolid = msol;
+    fReflectedSolid = true;
   }    
 }
 
@@ -333,7 +334,7 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
 {
   //----- set translation: along Z axis
   G4Tubs* motherTubs = (G4Tubs*)(fmotherSolid);
-  G4double posi = - motherTubs->GetZHalfLength() + foffset
+  G4double posi = - motherTubs->GetZHalfLength() + OffsetZ() 
                   + fwidth/2 + copyNo*fwidth;
   G4ThreeVector origin(0.,0.,posi); 
   physVol->SetTranslation( origin );

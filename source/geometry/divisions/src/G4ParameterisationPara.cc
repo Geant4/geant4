@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPara.cc,v 1.7 2004-05-13 14:57:13 gcosmo Exp $
+// $Id: G4ParameterisationPara.cc,v 1.8 2004-05-17 07:20:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPara Implementation file
@@ -69,6 +69,7 @@ G4VParameterisationPara( EAxis axis, G4int nDiv, G4double width,
    
     msol = newSolid;
     fmotherSolid = newSolid;
+    fReflectedSolid = true;
     fDeleteSolid = true;
   }    
 }
@@ -332,7 +333,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
   G4double mdz = msol->GetZHalfLength( );
 
   //----- translation 
-  G4double posi = -mdz + foffset + (copyNo+0.5)*fwidth;
+  G4double posi = -mdz + OffsetZ() + (copyNo+0.5)*fwidth;
   G4ThreeVector symAxis = msol->GetSymAxis();
   G4ThreeVector origin( symAxis * posi / symAxis.z() ); 
   

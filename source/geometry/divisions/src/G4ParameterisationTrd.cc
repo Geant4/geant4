@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.cc,v 1.9 2004-05-13 14:57:14 gcosmo Exp $
+// $Id: G4ParameterisationTrd.cc,v 1.10 2004-05-17 07:20:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTrd Implementation file
@@ -64,6 +64,7 @@ G4VParameterisationTrd( EAxis axis, G4int nDiv, G4double width,
                   msol->GetZHalfLength());
     msol = newSolid;
     fmotherSolid = newSolid;
+    fReflectedSolid = true;
     fDeleteSolid = true;
   }    
 }
@@ -386,7 +387,7 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
 
   //----- translation 
   G4ThreeVector origin(0.,0.,0.); 
-  G4double posi = -mdz + foffset + (copyNo+0.5)*fwidth;
+  G4double posi = -mdz + OffsetZ() + (copyNo+0.5)*fwidth;
   if( faxis == kZAxis )
   {
     origin.setZ( posi ); 
@@ -428,10 +429,10 @@ ComputeDimensions(G4Trd& trd, const G4int copyNo,
   G4double pDz = fwidth/2.;
   G4double zLength = 2*msol->GetZHalfLength();
  
-  trd.SetAllParameters ( pDx1+DDx*(foffset+copyNo*fwidth)/zLength,
-                         pDx1+DDx*(foffset+(copyNo+1)*fwidth)/zLength, 
-                         pDy1+DDy*(foffset+copyNo*fwidth)/zLength,
-                         pDy1+DDy*(foffset+(copyNo+1)*fwidth)/zLength, pDz );
+  trd.SetAllParameters( pDx1+DDx*(OffsetZ()+copyNo*fwidth)/zLength,
+                        pDx1+DDx*(OffsetZ()+(copyNo+1)*fwidth)/zLength, 
+                        pDy1+DDy*(OffsetZ()+copyNo*fwidth)/zLength,
+                        pDy1+DDy*(OffsetZ()+(copyNo+1)*fwidth)/zLength, pDz );
 
 #ifdef G4DIVDEBUG
   if( verbose >= 1 )

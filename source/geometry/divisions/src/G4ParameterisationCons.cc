@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationCons.cc,v 1.7 2004-05-13 14:57:13 gcosmo Exp $
+// $Id: G4ParameterisationCons.cc,v 1.8 2004-05-17 07:20:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationCons Implementation file
@@ -64,6 +64,7 @@ G4VParameterisationCons( EAxis axis, G4int nDiv, G4double width,
                    msol->GetStartPhiAngle(), msol->GetDeltaPhiAngle());
     msol = newSolid;
     fmotherSolid = newSolid;
+    fReflectedSolid = true;
     fDeleteSolid = true;
   }    
 }
@@ -362,7 +363,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
 {
   //----- set translation: along Z axis
   G4Cons* motherCons = (G4Cons*)(GetMotherSolid());
-  G4double posi = - motherCons->GetZHalfLength() + foffset
+  G4double posi = - motherCons->GetZHalfLength() + OffsetZ()
                   + fwidth/2 + copyNo*fwidth;
   G4ThreeVector origin(0.,0.,posi); 
   physVol->SetTranslation( origin );
@@ -400,8 +401,8 @@ ComputeDimensions( G4Cons& cons, const G4int copyNo,
                    - msol->GetOuterRadiusMinusZ()) / (2*mHalfLength);
   G4double bROuter = (msol->GetOuterRadiusPlusZ()
                    + msol->GetOuterRadiusMinusZ()) / 2;
-  G4double xMinusZ = -mHalfLength + foffset + fwidth*copyNo;
-  G4double xPlusZ  = -mHalfLength + foffset + fwidth*(copyNo+1);
+  G4double xMinusZ = -mHalfLength + OffsetZ() + fwidth*copyNo;
+  G4double xPlusZ  = -mHalfLength + OffsetZ() + fwidth*(copyNo+1);
   cons.SetInnerRadiusMinusZ( aRInner * xMinusZ + bRInner );
   cons.SetOuterRadiusMinusZ( aROuter * xMinusZ + bROuter );
   cons.SetInnerRadiusPlusZ( aRInner * xPlusZ + bRInner );

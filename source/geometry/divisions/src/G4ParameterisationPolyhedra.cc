@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc,v 1.7 2004-05-13 14:57:14 gcosmo Exp $
+// $Id: G4ParameterisationPolyhedra.cc,v 1.8 2004-05-17 07:20:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolyhedra Implementation file
@@ -87,6 +87,7 @@ G4VParameterisationPolyhedra( EAxis axis, G4int nDiv, G4double width,
 
     msol = newSolid;
     fmotherSolid = newSolid;
+    fReflectedSolid = true;
     fDeleteSolid = true;
   }    
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.hh,v 1.7 2004-05-13 14:57:13 gcosmo Exp $
+// $Id: G4VDivisionParameterisation.hh,v 1.8 2004-05-17 07:20:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation
@@ -86,6 +86,7 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
     void CheckOffset( G4double maxPar );
     void CheckNDivAndWidth( G4double maxPar );
     virtual G4double GetMaxParameter() const = 0;
+    G4double OffsetZ() const;
 
   protected:
   
@@ -96,6 +97,7 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
     G4double foffset;
     DivisionType fDivisionType;
     G4VSolid* fmotherSolid;
+    G4bool fReflectedSolid;
     G4bool fDeleteSolid;
   
     static G4int verbose;

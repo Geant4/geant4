@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationBox.cc,v 1.6 2004-05-13 14:57:13 gcosmo Exp $
+// $Id: G4ParameterisationBox.cc,v 1.7 2004-05-17 07:20:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationBox Implementation file
@@ -55,6 +55,7 @@ G4VParameterisationBox( EAxis axis, G4int nDiv, G4double width,
        = ((G4ReflectedSolid*)msolid)->GetConstituentMovedSolid();
     msol = (G4Box*)(mConstituentSolid);
     fmotherSolid = msol;
+    fReflectedSolid = true;
   }    
 }
 
@@ -323,7 +324,8 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
 
    //----- translation 
   G4ThreeVector origin(0.,0.,0.); 
-  G4double posi = -mdz + foffset + (copyNo+0.5)*fwidth;
+  G4double posi = -mdz + OffsetZ() + (copyNo+0.5)*fwidth;
+
   if( faxis == kZAxis )
   {
     origin.setZ( posi ); 
