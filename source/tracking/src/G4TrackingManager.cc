@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.cc,v 1.9 2001-07-11 10:08:42 gunter Exp $
+// $Id: G4TrackingManager.cc,v 1.10 2001-11-07 12:39:11 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,8 +43,8 @@
 //////////////////////////////////////
 G4TrackingManager::G4TrackingManager()
 //////////////////////////////////////
-  : verboseLevel(0),StoreTrajectory(false),
-    fpTrajectory(NULL), fpUserTrackingAction(NULL) 
+  : fpUserTrackingAction(NULL), fpTrajectory(NULL),
+    StoreTrajectory(false), verboseLevel(0)  
 {
   fpSteppingManager = new G4SteppingManager();
   messenger = new G4TrackingMessenger(this);
@@ -71,7 +71,7 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   // Clear 2ndary particle vector
   //  GimmeSecondaries()->clearAndDestroy();    
   //  G4std::vector<G4Track*>::iterator itr;
-  G4int itr;
+  size_t itr;
   //  for(itr=GimmeSecondaries()->begin();itr=GimmeSecondaries()->end();itr++){ 
   for(itr=0;itr<GimmeSecondaries()->size();itr++){ 
      delete (*GimmeSecondaries())[itr];
