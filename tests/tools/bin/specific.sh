@@ -42,22 +42,7 @@ export G4VIS_BUILD_RAYTRACER_DRIVER=1
 export G4VIS_BUILD_ASCIITREE_DRIVER=1
 
 UNAMEN=`uname -n `
-ANS=`uname -n | grep rsplus`
-if [ X`uname -n | grep rsplus` != X  -o "$UNAMEN" = "shift51" ]; then
-  export G4USE_OSPACE=1
-  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
-  export G4SYSTEM=AIX-xlC
-  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
-  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
-  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
-  export G4LIB=$G4WORKDIR/lib
-  # G4 build flags :
-  #####export G4UI_BUILD_XM_SESSION=1
-  #####export G4VIS_BUILD_OPENGLXM_DRIVER=1
-  export G4VIS_BUILD_OPENGLX_DRIVER=1
-  export OGLHOME=/afs/cern.ch/sw/geant4/dev/Mesa/Mesa-2.5
-  #####export G4VIS_BUILD_OIX_DRIVER=1
-fi
+echo UNAMEN $UNAMEN
 
 if [ `uname -n | grep sunasd1` ]; then
   export G4USE_OSPACE=1
@@ -113,7 +98,8 @@ if [ `uname -n | grep refsol7` ]; then
   #######export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
-if [ `uname -n | grep sundev` ]; then
+# BLOCKed!
+if [ `uname -n | grep sundevAAA` ]; then
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
@@ -216,86 +202,53 @@ if [ `uname -n | grep sungeant` ]; then
   #######export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
-
-if [ `uname -n | grep hpplus` ]; then
-#  export G4USE_OSPACE=1
+# refsol8 -> sundev008
+if [ `uname -n | grep sundev008` ]; then
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
-  export G4SYSTEM=HP-aCC
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
-  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
-  export G4TMP=/afs/cern.ch/user/s/stesting/$REF/$DEBOPT/tmp
-  export G4LIB=$G4WORKDIR/lib
-  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/HP-aCC/$CLHEP_VERSION
-  # G4 build flags :
-  ######export G4UI_BUILD_XM_SESSION=1
-#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
-#  export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export G4VIS_BUILD_OIX_DRIVER=1
-fi
-
-if [ `uname -n | grep axcnsi` ]; then
-  export G4USE_OSPACE=1
-  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
-  export G4SYSTEM=DEC-cxx
-  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
-  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
-  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
-  export G4LIB=$G4WORKDIR/lib
-  # G4 build flags :
-  ######export G4UI_BUILD_XM_SESSION=1
-#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
-#  export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export G4VIS_BUILD_OIX_DRIVER=1
-fi
-
-if [ X`uname -n | grep dxplus` != X  -o "$UNAMEN" = "dcosf01" ]; then
   if [ $G4STTNONISO ]; then
+    export G4SYSTEM=SUN-CC4
     export DEBOPT=${DEBOPT}_NONISO
     export G4USE_OSPACE=1
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/noiso
+    export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
+###TEMPORARY!
+    unset G4USE_HEPODBMS
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC4/$CLHEP_VERSION
+    # Persistency...
+    if [ X$G4USE_HEPODBMS = Xaaa ]; then
+       . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
+       export G4EXAMPLE_FDID=207
+    fi
   else
+    export G4SYSTEM=SUN-CC
     export DEBOPT=${DEBOPT}_ISO
     unset G4USE_OSPACE
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/$CLHEP_VERSION
+    export PATH=`echo $PATH | sed s/SUNWspro/SUNWspro50/`
+    export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
+    # No Persistency...
+    unset G4USE_HEPODBMS
+    # Persistency...
+#   if [ X$G4USE_HEPODBMS = Xaaa ]; then
+    if [ X$G4USE_HEPODBMS = Xaaa ]; then
+       . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
+       export G4EXAMPLE_FDID=207
+    fi
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/$CLHEP_VERSION
   fi
-  if [ "$UNAMEN" = "dcosf01" ]; then
-    export CLHEP_LIB=CLHEP-cxx62
-  fi
-  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
-  export G4SYSTEM=DEC-cxx
-  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
-  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
-  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
-  export G4LIB=$G4WORKDIR/lib
-  export G4TMP=/tmp/g4stt$REF
-  if [ ! -d $G4TMP ]; then
-    mkdir $G4TMP
-  fi
-  # G4 build flags :
-  ######export G4UI_BUILD_XM_SESSION=1
-#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
-#  export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export G4VIS_BUILD_OIX_DRIVER=1
-fi
-
-if [ `uname -n | grep pcitasd04` ]; then
-  export G4USE_STL=1
-  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
-  export G4SYSTEM=Linux-g++
-  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
-  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
-  ######export G4UI_BUILD_XM_SESSION=1
-#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
-#  export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export G4VIS_BUILD_OIX_DRIVER=1
+  #######export G4UI_BUILD_XM_SESSION=1
+  #######export G4VIS_BUILD_OPENGLXM_DRIVER=1
+  export G4VIS_BUILD_OPENGLX_DRIVER=1
+  export OGLHOME=/usr/local
+  export OGLFLAGS="-I$OGLHOME/include"
+  export OGLLIBS="-L$OGLHOME/lib -lMesaGLU -lMesaGL"
+  #######export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
-UNAMEN=`uname -n `
-echo UNAMEN $UNAMEN
+
 if [ $UNAMEN = pcgeant ]; then
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-egcs
@@ -317,8 +270,6 @@ if [ $UNAMEN = pcgeant ]; then
 #  export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
-UNAMEN=`uname -n `
-echo UNAMEN $UNAMEN
 if [ $UNAMEN = pcg4speed ]; then
   export DEBOPT=${DEBOPT}_NEWGCC
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
@@ -383,7 +334,7 @@ if [ $UNAMEN = pcgeant4 ]; then
 fi
 
 if [ $UNAMEN = pcgeant2 ]; then
-  export DEBOPT=${DEBOPT}_NEWGCC
+  export DEBOPT=${DEBOPT}_7.2_2.95.2
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-g++
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
