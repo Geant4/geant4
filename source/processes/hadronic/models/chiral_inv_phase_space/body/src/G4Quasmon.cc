@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.41 2002-12-09 07:10:09 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.42 2002-12-09 13:02:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -753,6 +753,11 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
         cost = 1.-rnc-rnc;
 	  }
       G4double cQM2=qM2-(kMom+kMom)*quasM;
+      if(cQM2<0.)
+	  {
+        if(cQM2<-.0001) G4cerr<<"**G4Q::HQ:(PhBack) cQM2="<<cQM2<<" < 0"<<G4endl;
+        cQM2=0.;
+	  }
       G4double cQM=sqrt(cQM2);                       // Mass of the coloured residual Quasmom
       k4Mom=zeroLV;
       cr4Mom=G4LorentzVector(0.,0.,0.,cQM);
