@@ -3,7 +3,7 @@
                                 (30-Jun-2000)
              Copyright : Geant4 Collaboration
 **********************************************
-PreInit> PreInit> /run/initialize
+/run/initialize
  Equal 
  Equal 
  Equal 
@@ -20,7 +20,7 @@ PreInit> PreInit> /run/initialize
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
@@ -30,8 +30,8 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-Air           0.99
-Water         81.507
+                 Air           0.99
+               Water         81.507
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -46,14 +46,14 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
  hIoni    Minimum Delta cut in range=0.1  mm.
 
            material        min.delta energy(keV) 
 
-Air           0.99
-Water         81.507
+                 Air           0.99
+               Water         81.507
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -63,7 +63,7 @@ hIoni:    Knock-on electron cross sections .
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
@@ -77,7 +77,7 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-Idle> /run/beamOn 1
+/run/beamOn 1
 /event/verbose 1
 ### Run 0 start.
 =====================================
@@ -14997,5 +14997,5 @@ Track (trackID 1747, parentID 1) is processed with stopping code 2
      0 urgent tracks and 0 waiting tracks.
 NULL returned from G4StackManager.
 Terminate current event processing.
-number of event = 1 User=0.69s Real=0.78s Sys=0.1s
-Idle> 
+number of event = 1 User=4.21s Real=4.82s Sys=0.55s
+exit
