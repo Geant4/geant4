@@ -101,7 +101,6 @@ msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
         PhysicsTables from 100 eV to 100 TeV in 100 bins. 
-G4eIonisation: loop over materials 13
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
@@ -113,7 +112,6 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 G4VUserPhysicsList::SetCutValue       :Set cuts for e+
-G4eIonisation: loop over materials 13
 
 annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
         gamma energies sampled according Heitler
