@@ -16,10 +16,12 @@ public:
   G4bool isValid() const;
 
   G4UppTrackChange* perform(const G4UppTrackVector& allTracks) const;
+  
+  void G4UppActionDecay::dump() const;
 
 private:
 
-  const G4UppTrack* particlePtr;
+  G4UppTrack* particlePtr;
 
 };
 

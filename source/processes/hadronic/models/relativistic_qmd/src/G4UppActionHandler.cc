@@ -3,6 +3,7 @@
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
 #include "G4UppActionCollision.hh"
+#include "G4UppActionDecay.hh"
 
 
 G4UppActionHandler::G4UppActionHandler(const G4UppTrackVector& allTracks)
@@ -25,8 +26,8 @@ void G4UppActionHandler::cleanUp()
   for (queuetype::iterator i=q.begin(); i!=q.end(); i++) {
     // (*i)->dump();
     if (!( (*i)->isValid() )) {
-      G4cout << "(debug) removing: ";
-      (*i)->dump();
+      // G4cout << "(debug) removing: ";
+      // (*i)->dump();
       delete *i;
       q.erase(i--);
       count++;
@@ -41,32 +42,54 @@ void G4UppActionHandler::updateActions()
 {
   const G4double cutOff = 8.0*fermi;
   G4int count=0;
-  G4cout << "(debug) update..." << G4endl;
-  for (int i=0; i<allTracksPtr->size()-1; i++) {
-    for (int j=i+1; j<allTracksPtr->size(); j++) {
-      G4UppTrack* trk1 = (*allTracksPtr)[i];
+  // G4cout << "(debug) update..." << G4endl;
+
+  for (G4int i=0; i<allTracksPtr->size(); i++) {
+    
+    G4UppTrack* trk1 = (*allTracksPtr)[i];
+    
+    if ( (trk1->hasChanged()) && 
+	 (trk1->GetDefinition()->IsShortLived()) ) {
+      
+      // get lifetime and transform to computational frame
+      G4double gamma = trk1->Get4Momentum().e() / trk1->GetActualMass();
+      G4double lifeTime = trk1->SampleResidualLifetime() * gamma;
+      G4double decayTime = allTracksPtr->getGlobalTime() + lifeTime;
+      G4cout << "Decay : " << lifeTime*c_light/fermi << " g: " << gamma << endl;
+      G4VUppAction* actionPtr = new G4UppActionDecay(decayTime, *trk1);
+      actionPtr->dump();
+      q.push_back(actionPtr);
+      count++;
+    }
+
+    for (G4int j=i+1; j<allTracksPtr->size(); j++) {
+
       G4UppTrack* trk2 = (*allTracksPtr)[j];
-      // cout << i << "  " << j << endl;
+      
       if ( (trk1->hasChanged()) || (trk2->hasChanged()) ) {
 	if ( (i!=j) 
 	     && ( !lastPartners(*trk1,*trk2) ) 
 	     && ( !sameGroup(*trk1,*trk2) ) ) {
-	  G4double minDist = minimumDistance(*trk1,*trk2);
-	  if ( (minDist > 0.0) && (minDist < cutOff) ) {
-	    G4double collTime = collisionTime(*trk1,*trk2);
-	    if (collTime>0.0) {
-	      G4UppTrackVector collidingParticles;
-	      collidingParticles.push_back(trk1);
-	      collidingParticles.push_back(trk2);
-	      G4VUppAction* actionPtr = new G4UppActionCollision(collTime + allTracksPtr->getGlobalTime(),
-								 *allTracksPtr,
-								 collidingParticles,
-								 aScatterer);
-	      G4cout << "(debug)  new ";
-	      actionPtr->dump();
-	      q.push_back(actionPtr);
-	      count++;
-	    }
+	  
+	  // if ( (minDist > 0.0) && (minDist < cutOff) ) {
+	  
+	  G4double collTime=aScatterer.GetTimeToInteraction(*trk1,*trk2);
+	  if (collTime != DBL_MAX) {
+
+	  // G4double collTime = collisionTime(*trk1,*trk2);
+	  // cout << " My bet: " << collTime/fermi << endl;
+	  // if (collTime>0.0) {
+	    G4UppTrackVector collidingParticles;
+	    collidingParticles.push_back(trk1);
+	    collidingParticles.push_back(trk2);
+	    G4VUppAction* actionPtr = 
+	      new G4UppActionCollision(collTime+allTracksPtr->getGlobalTime(),
+				       *allTracksPtr,
+				       collidingParticles,
+				       aScatterer);
+	    // actionPtr->dump();
+	    q.push_back(actionPtr);
+	    count++;
 	  }
 	}
       }
@@ -137,6 +160,7 @@ G4double G4UppActionHandler::minimumDistance(const G4UppTrack& i,
   // cout << "k " << qj << endl;
   // cout << "k " << pj << endl;
   G4ThreeVector Beta = - (pi.vect() + pj.vect()) * (1.0 / (pi.e() + pj.e()));
+  // cout << "beta " << Beta << endl;
   G4LorentzVector pij = (pi-pj);
   pij.boost(Beta);
   G4LorentzVector qij = (qi-qj);
@@ -158,7 +182,8 @@ G4double G4UppActionHandler::collisionTime(const G4UppTrack& i,
   G4ThreeVector beta_i = pi.vect() * (1.0/pi.e());
   G4ThreeVector beta_j = pj.vect() * (1.0/pj.e());
   G4double time = - (qi-qj)*(beta_i-beta_j)/((beta_i-beta_j)*(beta_i-beta_j));
-  // cout << "time : " << time << endl;
+  cout << " q " << (qi-qj) << " v " << (beta_i-beta_j) << endl;
+  cout << "time : " << time << endl;
   return time;
 }
 

@@ -14,7 +14,7 @@ public:
   G4UppActionCollision(const G4double collisionTime, 
 		       const G4UppTrackVector& allTracks,
 		       const G4UppTrackVector& collidingParticles,
-		       const G4VScatterer& aScatterer);
+		       G4VScatterer& aScatterer);
 
   G4bool isValid() const;
 
@@ -26,7 +26,7 @@ private:
 
   const G4UppTrackVector* allTracksPtr;
   G4UppTrackVector collPart;
-  const G4VScatterer* scattererPtr;
+  G4VScatterer* scattererPtr;
 
 };
 

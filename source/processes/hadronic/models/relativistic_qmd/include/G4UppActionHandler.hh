@@ -41,7 +41,7 @@ private:
 
   queuetype q;
   const G4UppTrackVector* allTracksPtr;
-  const G4Scatterer aScatterer;
+  G4Scatterer aScatterer;
 
 
   G4double collisionTime(const G4UppTrack& i, 

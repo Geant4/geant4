@@ -45,13 +45,13 @@ G4int G4UppModel::propagate(const G4VUppFieldtransport& aTransport)
   do {
     // get the first action to be done
     actualActionPtr = myHandler.getFirstAction();
-    cout << "(debug) get action:";
+    // cout << "(debug) get action:";
     actualActionPtr->dump();
 
     G4double dTime = actualActionPtr->getActionTime() - allTracks.getGlobalTime();
     if (dTime < 0) {
       cout << "(warning) action already gone!" << endl;
-      cout << "(warning)  GlobalTime: " << allTracks.getGlobalTime()/fermi << endl;
+      cout << "(warning)  GlobalTime: " << allTracks.getGlobalTime()*c_light/fermi << endl;
       cout << "(warning)  removing action..." << endl;
     } else {
       // propagate the whole system to the time of the action
@@ -59,9 +59,10 @@ G4int G4UppModel::propagate(const G4VUppFieldtransport& aTransport)
     
       // now perform the action
       if (aTrackChangePtr = actualActionPtr->perform(allTracks)) {
+	// cout << "(info) Updating AllTracks" << endl;
 	G4UppTrackChange undoBackupChange = allTracks.update(*aTrackChangePtr);
-	if (allTracks.isPauliBlocked(aTrackChangePtr->newParticles))
-	  allTracks.update(undoBackupChange);
+	//if (allTracks.isPauliBlocked(aTrackChangePtr->newParticles))
+	// allTracks.update(undoBackupChange);
       }
     }
     myHandler.deleteFirstAction();

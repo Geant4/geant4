@@ -20,10 +20,11 @@ public:
 
   G4UppTrack(const G4KineticTrack& aTrack) 
     : G4KineticTrack(aTrack), numberOfCollisions(0), 
-      changedFlag(true), nonInteractionGroup(0) {};
+      changedFlag(true), nonInteractionGroup(0), localTime(0) {};
 
   G4UppTrack(const G4Nucleon& aNucleon, const G4int g=0) :
-    numberOfCollisions(0), changedFlag(true), nonInteractionGroup(g)
+    numberOfCollisions(0), changedFlag(true), 
+    nonInteractionGroup(g), localTime(0)
     { SetDefinition(aNucleon.GetDefinition());
       SetPosition(aNucleon.GetPosition());
       Set4Momentum(aNucleon.Get4Momentum());  };
@@ -53,6 +54,7 @@ public:
      { return G4LorentzVector(GetPosition(),localTime); }
   void Set4Position(G4LorentzVector& a4Pos) 
      { SetPosition(a4Pos.vect()); localTime = a4Pos.t(); }
+  void setLocalTime(const G4double newLocalTime) { localTime = newLocalTime; }
 
   void dump() const;
 

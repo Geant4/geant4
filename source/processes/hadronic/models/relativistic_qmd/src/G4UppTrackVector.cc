@@ -16,7 +16,11 @@ void G4UppTrackVector::add(const G4KineticTrackVector& v)
 void G4UppTrackVector::add(const G4RWTPtrOrderedVector<G4Nucleon>& v, const G4int g)
 {
   for (G4int i=0; i<v.length(); i++) {
-    this->push_back(new G4UppTrack(*v[i],g));
+    G4UppTrack* newTrack = new G4UppTrack(*v[i],g);
+    // cout << "got nuc: " << newTrack->GetDefinition()->GetParticleName() << ":";
+    // cout << newTrack->Get4Momentum().e() << ":";
+    // cout << newTrack->GetActualMass()<< endl;
+    this->push_back(newTrack);
   }
   if (uppdebug) cout << "(debug) " << v.length() << " Nucleons added." << endl;
   if (uppdebug) cout << "(debug) nonCollisionGroup: " << g << endl;
@@ -45,15 +49,21 @@ void G4UppTrackVector::dump() const
 G4UppTrackChange G4UppTrackVector::update(const G4UppTrackChange& aChange)
 {
   G4UppTrackChange backup;
+  
+  // aChange.dump();
 
   for (G4int i=0; i<aChange.oldParticles.size(); i++) {
-    backup.newParticles.push_back(*aChange.oldParticles[i]);
-    this->erase(aChange.oldParticles[i]);
+    backup.newParticles.push_back(aChange.oldParticles[i]);
+    G4int Index = getIndex(aChange.oldParticles[i]);
+    // cout << "Erase " << Index << endl;
+    this->erase(this->begin()+Index);
   }  
 
   for (G4int j=0; j<aChange.newParticles.size(); j++) {
+    cout << "(info) adding " << aChange.newParticles[j]->GetDefinition()->GetParticleName() << endl;
     this->push_back(aChange.newParticles[j]);
-    backup.oldParticles.push_back(this->end());
+    this->back()->setChanged(true);
+    backup.oldParticles.push_back(this->back());
   }
   return backup;
 }
@@ -117,10 +127,10 @@ G4bool G4UppTrackVector::isPauliBlocked(const G4UppTrack* aTrack) const
 
   //  rhob = rhob*(2.0*gw/pi)**1.5/rho0;
   // Baryonendichte in Einheiten von rho0
-  G4cout << "paulib: f" << f;
-  G4cout << "rho " << rho;
-  G4cout << "rhob " << rhob;
-  G4cout << "blocking " << isBlocked << G4endl;
+  G4cout << "paulib: f " << f;
+  G4cout << " rho " << rho;
+  G4cout << " rhob " << rhob;
+  G4cout << " blocking " << isBlocked << G4endl;
   
   return isBlocked;
 }

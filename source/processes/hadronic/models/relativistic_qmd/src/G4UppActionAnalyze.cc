@@ -22,7 +22,7 @@ G4UppTrackChange* G4UppActionAnalyze::perform(const G4UppTrackVector& allTracks)
 void G4UppActionAnalyze::dump() const
 {
   G4cout << "Action: ANALYSE (" << analyzerPtr->getName();
-  G4cout << ") at " << getActionTime()/fermi << " fm/c" << G4endl;
+  G4cout << ") at " << getActionTime()*c_light/fermi << " fm/c" << G4endl;
 }
 
 

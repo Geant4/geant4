@@ -11,8 +11,10 @@ struct G4UppTrackChange
 {
 public:
 
-  G4std::vector<G4UppTrackVector::iterator> oldParticles;
+  G4UppTrackVector oldParticles;
   G4UppTrackVector newParticles;
+
+  void dump() const;
 
 };
 

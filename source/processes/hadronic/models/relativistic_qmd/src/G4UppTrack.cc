@@ -4,8 +4,10 @@
 
 void G4UppTrack::dump() const
 {
-  G4cout << GetDefinition()->GetParticleName();
-  G4cout << "  nColl=" << numberOfCollisions << G4endl;
+  cout << "Name: " << GetDefinition()->GetParticleName() << endl;
+  cout << "  at " << Get4Position() << endl;
+  cout << "  p= " << Get4Momentum() << endl;
+  cout << "  nColl=" << numberOfCollisions << G4endl;
 }
 
 
