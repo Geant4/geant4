@@ -49,6 +49,7 @@
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 // 15-02-03 Add control on delta pointer (V.Ivanchenko)
 // 23-05-03 Add fluctuation model as a member function (V.Ivanchenko)
+// 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -126,6 +127,8 @@ private:
   G4VEmFluctuationModel*      flucModel;
 
   G4bool                      subCutoff;
+  G4bool                      isInitialised;
+  G4bool                      integrl;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

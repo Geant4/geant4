@@ -49,6 +49,8 @@
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 // 23-05-03 Add fluctuation model as a member function (V.Ivanchenko)
+// 03-06-03 Add SetIntegral method to choose fluctuation model (V.Ivanchenko)
+// 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -100,6 +102,8 @@ public:
 
   void SetSubCutoff(G4bool val);
 
+  void SetIntegral(G4bool val);
+
   void PrintInfoDefinition();
   // Print out of the class parameters
 
@@ -125,6 +129,8 @@ private:
   G4VEmFluctuationModel*      flucModel;
 
   G4bool                 subCutoff;
+  G4bool                 isInitialised;
+  G4bool                 integrl;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

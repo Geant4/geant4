@@ -45,6 +45,7 @@
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 // 23-05-03 Add fluctuation model as a member function (V.Ivanchenko)
+// 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -121,7 +122,7 @@ private:
   G4bool subCutoff;
   G4bool isElectron;
   G4bool isInitialised;
-
+  G4bool integrl;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

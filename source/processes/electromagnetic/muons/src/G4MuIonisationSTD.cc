@@ -52,6 +52,8 @@
 // 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 // 23-05-03 Define default integral + BohrFluctuations (V.Ivanchenko)
+// 03-06-03 Add SetIntegral method to choose fluctuation model (V.Ivanchenko)
+// 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -75,10 +77,10 @@ G4MuIonisationSTD::G4MuIonisationSTD(const G4String& name)
   : G4VEnergyLossSTD(name),
     theParticle(0),
     theBaseParticle(0),
-    subCutoff(false)
-{
-  InitialiseProcess();
-}
+    subCutoff(false),
+    isInitialised(false),
+    integrl(true)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -90,14 +92,15 @@ G4MuIonisationSTD::~G4MuIonisationSTD()
 void G4MuIonisationSTD::InitialiseProcess()
 {
   SetSecondaryParticle(G4Electron::Electron());
-  SetIntegral(true);
+  G4VEnergyLossSTD::SetIntegral(integrl);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
 
-  flucModel = new G4BohrFluctuations();
+  if(integrl) flucModel = new G4BohrFluctuations();
+  else        flucModel = new G4UniversalFluctuation();
 
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
@@ -115,6 +118,7 @@ void G4MuIonisationSTD::InitialiseProcess()
   mass = (G4MuonPlus::MuonPlus())->GetPDGMass();
   ratio = electron_mass_c2/mass;
   SetVerboseLevel(0);
+  isInitialised = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -123,12 +127,13 @@ const G4ParticleDefinition* G4MuIonisationSTD::DefineBaseParticle(
                       const G4ParticleDefinition* p)
 {
   if(!theParticle) theParticle = p;
+  if(!isInitialised) InitialiseProcess();
   return theBaseParticle;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuIonisationSTD::PrintInfoDefinition() 
+void G4MuIonisationSTD::PrintInfoDefinition()
 {
   G4VEnergyLossSTD::PrintInfoDefinition();
 
@@ -145,6 +150,14 @@ void G4MuIonisationSTD::SetSubCutoff(G4bool val)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4MuIonisationSTD::SetIntegral(G4bool val)
+{
+  integrl = val;
+  G4VEnergyLossSTD::SetIntegral(val);
+}
+
+///....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 

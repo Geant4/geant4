@@ -59,6 +59,7 @@
 // 12-05-03 Update range calculations + lowKinEnergy (V.Ivanchenko)
 // 13-05-03 Add calculation of precise range (V.Ivanchenko)
 // 23-05-03 Remove tracking cuts (V.Ivanchenko)
+// 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -293,7 +294,8 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   // Are particle defined?
   if( !particle ) particle = &part;
-  if( !baseParticle ) baseParticle = DefineBaseParticle(particle);
+  //if( !baseParticle )
+  baseParticle = DefineBaseParticle(particle);
 
   G4bool cutsWasModified = false;
   const G4ProductionCutsTable* theCoupleTable=

@@ -60,6 +60,7 @@
 // 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 // 23-05-03 Define default integral + BohrFluctuations (V.Ivanchenko)
+// 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -82,10 +83,10 @@ G4hIonisationSTD::G4hIonisationSTD(const G4String& name)
   : G4VEnergyLossSTD(name),
     theParticle(0),
     theBaseParticle(0),
-    subCutoff(false)
-{
-  InitialiseProcess();
-}
+    subCutoff(false),
+    isInitialised(false),
+    integrl(true)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -97,7 +98,7 @@ G4hIonisationSTD::~G4hIonisationSTD()
 void G4hIonisationSTD::InitialiseProcess()
 {
   SetSecondaryParticle(G4Electron::Electron());
-  SetIntegral(true);
+  G4VEnergyLossSTD::SetIntegral(integrl);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);
@@ -108,7 +109,8 @@ void G4hIonisationSTD::InitialiseProcess()
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(2.0*MeV);
 
-  flucModel = new G4BohrFluctuations();
+  if(integrl) flucModel = new G4BohrFluctuations();
+  else        flucModel = new G4UniversalFluctuation();
 
   AddEmModel(1, em, flucModel);
   G4VEmModel* em1 = new G4BetheBlochModel();
@@ -119,6 +121,7 @@ void G4hIonisationSTD::InitialiseProcess()
   mass = 0.0;
   ratio = 0.0;
   SetVerboseLevel(0);
+  isInitialised = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -128,6 +131,7 @@ const G4ParticleDefinition* G4hIonisationSTD::DefineBaseParticle(
 {
   if(!theParticle) theParticle = p;
   if(!theBaseParticle && p != G4Proton::Proton()) theBaseParticle = G4Proton::Proton();
+  if(!isInitialised) InitialiseProcess();
   mass  = p->GetPDGMass();
   ratio = electron_mass_c2/mass;
   return theBaseParticle;
@@ -135,7 +139,7 @@ const G4ParticleDefinition* G4hIonisationSTD::DefineBaseParticle(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4hIonisationSTD::PrintInfoDefinition() 
+void G4hIonisationSTD::PrintInfoDefinition()
 {
   G4VEnergyLossSTD::PrintInfoDefinition();
 
@@ -154,15 +158,9 @@ void G4hIonisationSTD::SetSubCutoff(G4bool val)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hIonisationSTD::SetIntegral(G4bool val)
-{ 
-  // Fluctuation model can be changed only before BuildPhysicsTable
-  if (!theParticle) {
-    delete  flucModel;
-    if(val) flucModel = new G4BohrFluctuations();
-    else    flucModel = new G4UniversalFluctuation();
-  }
-
-  G4VEnergyLossSTD::SetIntegral(val); 
+{
+  integrl = val;
+  G4VEnergyLossSTD::SetIntegral(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
