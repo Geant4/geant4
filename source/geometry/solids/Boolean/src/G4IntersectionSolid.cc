@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.23 2005-03-01 17:11:04 gcosmo Exp $
+// $Id: G4IntersectionSolid.cc,v 1.24 2005-03-03 16:04:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -468,7 +468,7 @@ G4GeometryType G4IntersectionSolid::GetEntityType() const
 void 
 G4IntersectionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 ////////////////////////////////////////////////////
@@ -478,11 +478,9 @@ G4IntersectionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 G4Polyhedron* 
 G4IntersectionSolid::CreatePolyhedron () const 
 {
-  G4Polyhedron* pA = fPtrSolidA->CreatePolyhedron();
-  G4Polyhedron* pB = fPtrSolidB->CreatePolyhedron();
+  G4Polyhedron* pA = fPtrSolidA->GetPolyhedron();
+  G4Polyhedron* pB = fPtrSolidB->GetPolyhedron();
   G4Polyhedron* resultant = new G4Polyhedron (pA->intersect(*pB));
-  delete pB;
-  delete pA;
   return resultant;
 }
 

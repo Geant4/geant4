@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.21 2004-02-27 08:38:09 grichine Exp $
+// $Id: G4SubtractionSolid.cc,v 1.22 2005-03-03 16:04:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -432,7 +432,7 @@ G4SubtractionSolid::ComputeDimensions(       G4VPVParameterisation*,
 void 
 G4SubtractionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 ////////////////////////////////////////////////////
@@ -442,11 +442,9 @@ G4SubtractionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 G4Polyhedron* 
 G4SubtractionSolid::CreatePolyhedron () const 
 {
-  G4Polyhedron* pA = fPtrSolidA->CreatePolyhedron();
-  G4Polyhedron* pB = fPtrSolidB->CreatePolyhedron();
+  G4Polyhedron* pA = fPtrSolidA->GetPolyhedron();
+  G4Polyhedron* pB = fPtrSolidB->GetPolyhedron();
   G4Polyhedron* resultant = new G4Polyhedron (pA->subtract(*pB));
-  delete pB;
-  delete pA;
   return resultant;
 }
 
