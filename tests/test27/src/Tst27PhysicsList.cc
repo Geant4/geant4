@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst27PhysicsList.cc,v 1.2 2003-11-17 15:54:10 jwellisc Exp $
+// $Id: Tst27PhysicsList.cc,v 1.3 2003-11-17 16:41:20 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -593,6 +593,7 @@ void Tst27PhysicsList::ConstructHad()
                             new G4AlphaInelasticProcess("inelastic");
          G4LEAlphaInelastic* theInelasticModel = 
                                  new G4LEAlphaInelastic;
+	   theInelasticModel->SetMaxEnergy(100*MeV);
 	 theInelasticProcess->AddDataSet(TripathiCrossSection);
 	 theInelasticProcess->AddDataSet(aShen);
          theInelasticProcess->RegisterMe(theInelasticModel);

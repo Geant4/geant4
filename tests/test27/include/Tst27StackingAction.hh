@@ -39,7 +39,7 @@ class Tst27StackingAction : public G4UserStackingAction
 	  {
 	    result = fKill;
 	  }
-	  if(aTrack->GetKineticEnergy()<1*GeV)
+	  if(aTrack->GetKineticEnergy()<30*MeV)
 	  {
 	    result = fKill;
 	  }
