@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2002-01-28 16:17:55 radoone Exp $
+# $Id: GNUmakefile,v 1.8 2002-01-29 08:12:45 gcosmo Exp $
 # ------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ------------------------------------------------------
@@ -36,8 +36,7 @@ LDLIBS   := \
           -lG4step \
           -lG4csg \
           -lG4geometrymng \
-          -lG4intercoms -lG4UIbasic -lG4UIcommon \
-          -lG4graphics_reps -L /usr/X11R6/lib/ -lX11 -lXt \
+          -lG4graphics_reps \
           -lG4globman
 
 include $(G4INSTALL)/config/binmake.gmk
