@@ -1,0 +1,41 @@
+//---------------------------------------
+//        Macro file for test30
+//         examine PostStepDoIt 
+//        for hadronic physics
+//      Created: 13.03.2002 V.Ivanchenko
+//--------------------------------------- 
+#verbose
+0
+#events
+10000
+//--------Proton_processes
+#particle
+proton
+//--------
+#material
+Al
+#energy(MeV)
+22.4
+//--------
+#generator
+LEparametrisation
+#paw
+p_al_22_par.paw
+#run
+#generator
+preCompound
+#paw
+p_al_22_prec.paw
+#run
+#generator
+CHIPS
+#paw
+p_al_22_chips.paw
+#run
+#generator
+kinetic
+#paw
+p_al_22_kin.paw
+#run
+//--------Exit
+#exit
