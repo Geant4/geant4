@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst09DetectorConstruction.cc,v 1.3 2001-07-11 10:09:46 gunter Exp $
+// $Id: Tst09DetectorConstruction.cc,v 1.4 2004-03-16 15:16:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,7 +41,7 @@
 #include "G4ios.hh"
 
 Tst09DetectorConstruction::Tst09DetectorConstruction()
-:simpleBoxLog(NULL),selectedMaterial(NULL),Air(NULL),Al(NULL),Pb(NULL)
+:simpleBoxLog(0),selectedMaterial(0),Air(0),Al(0),Pb(0)
 {
   detectorMessenger = new Tst09DetectorMessenger(this);
   materialChoice = "Pb";

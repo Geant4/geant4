@@ -32,6 +32,6 @@ class Tst09TrackingAction : public G4UserTrackingAction
     virtual ~Tst09TrackingAction(){}
 
     virtual void PreUserTrackingAction(const G4Track* aTrack);
-}
+};
 
 #endif
