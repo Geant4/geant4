@@ -133,8 +133,8 @@ void G4NucleiModel::generateModel(G4double a,
  
       v.push_back(v0);
       tot_vol += v0;
-      v0 = (i == 0 ? pow(zone_radii[i], 3) : pow(zone_radii[i], 3) -
-	    pow(zone_radii[i - 1], 3));
+      v0 = (i == 0 ? pow(zone_radii[i], G4double(3)) : pow(zone_radii[i], G4double(3)) -
+	    pow(zone_radii[i - 1], G4double(3)));
       v1.push_back(v0);
     };
 
@@ -181,7 +181,7 @@ void G4NucleiModel::generateModel(G4double a,
   } else { // a < 4
     number_of_zones = 1;
     zone_radii.push_back(radForSmall);
-    G4double vol = 1.0 / piTimes4thirds / pow(zone_radii[0], 3);
+    G4double vol = 1.0 / piTimes4thirds / pow(zone_radii[0], G4double(3));
     std::vector<G4double> rod;
     std::vector<G4double> pf;
     std::vector<G4double> vz;
@@ -327,7 +327,7 @@ G4double G4NucleiModel::volNumInt1(G4double r1,
     if (itry == itry_max) G4cout << " volNumInt1-> n iter " << itry_max << G4endl;
   }
 
-  return pow(cu2, 3) * fun;
+  return pow(cu2, G4double(3)) * fun;
 }
 
 void G4NucleiModel::printModel() const {
@@ -523,9 +523,9 @@ partners G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle)
 
       G4double tot_abs_csec = 0.0;
       G4double abs_sec;
-      G4double vol = pow(zone_radii[zone], 3);
+      G4double vol = pow(zone_radii[zone], G4double(3));
 
-      if (zone > 0) vol -= pow(zone_radii[zone - 1], 3);
+      if (zone > 0) vol -= pow(zone_radii[zone - 1], G4double(3));
       vol *= pi4by3; 
 
       G4double rat  = getRatio(1); 
@@ -1128,9 +1128,9 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 	      for (i = 0; i < 2; i++) {
 		for (G4int j = i+1; j < 3; j++) {
-		  G4double r2 = pow(coordinates[i][0] - coordinates[j][0], 2) +
-		    pow(coordinates[i][1] - coordinates[j][1], 2) +
-		    pow(coordinates[i][2] - coordinates[j][2], 2);
+		  G4double r2 = pow(coordinates[i][0] - coordinates[j][0], G4double(2)) +
+		    pow(coordinates[i][1] - coordinates[j][1], G4double(2)) +
+		    pow(coordinates[i][2] - coordinates[j][2], G4double(2));
 
 		  if (verboseLevel > 2) {
 		    G4cout << " i " << i << " j " << j << " r2 " << r2 << G4endl;
@@ -1220,10 +1220,10 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	      for (i = 0; i < ia-1; i++) {
 		for (G4int j = i+1; j < ia; j++) {
 	     
-		  G4double r2 = pow(coordinates[i][0] - coordinates[j][0], 2) +
+		  G4double r2 = pow(coordinates[i][0] - coordinates[j][0], G4double(2)) +
 		   
-		    pow(coordinates[i][1]-coordinates[j][1], 2) +
-		    pow(coordinates[i][2] - coordinates[j][2], 2);
+		    pow(coordinates[i][1]-coordinates[j][1], G4double(2)) +
+		    pow(coordinates[i][2] - coordinates[j][2], G4double(2));
 
 		  if (verboseLevel > 2){
 		    G4cout << " i " << i << " j " << j << " r2 " << r2 << G4endl;

@@ -35,13 +35,13 @@ G4RegionModel::G4RegionModel(const G4int numberOfLayers, const G4int A, const G4
   if(numberOfLayers==1){ 
     radius.push_back(r);
 
-    G4double rho = G4double(A) / (4.0/3.0*pi*pow(r,3));
+    G4double rho = G4double(A) / (4.0/3.0*pi*pow(r,G4double(3)));
     density.push_back(rho);
 
     G4double protonMass = G4Proton::Proton()->GetPDGMass();
     G4double neutronMass = G4Neutron::Neutron()->GetPDGMass();
-    G4double protonDensity = G4double(Z) / (4.0/3.0*pi*pow(r,3));
-    G4double neutronDensity = G4double(A-Z) / (4.0/3.0*pi*pow(r,3));
+    G4double protonDensity = G4double(Z) / (4.0/3.0*pi*pow(r,G4double(3)));
+    G4double neutronDensity = G4double(A-Z) / (4.0/3.0*pi*pow(r,G4double(3)));
 
     protonFermiEnergy.push_back(GetFermiEnergy(protonDensity, protonMass));
     neutronFermiEnergy.push_back(GetFermiEnergy(neutronDensity, neutronMass));
