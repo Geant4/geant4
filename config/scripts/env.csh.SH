@@ -310,7 +310,7 @@ else
 if ( "X$G4SYSTEM" == "XWIN32-VC" || "X$G4SYSTEM" == "XWIN32-VC7" ) then
 
 echo "G4WORKDIR will be set to c:/geant4 (in "native" Windows syntax)."
-setenv G4WORKDIR ${G4WORKDIR}
+setenv G4WORKDIR "c:/geant4"
 
 else # if Unix
 

@@ -440,7 +440,8 @@ if [ X$g4non_display = X ] ; then
 if test "X$G4SYSTEM" = "XWIN32-VC" -o "X$G4SYSTEM" = "XWIN32-VC7"; then
 
 echo "G4WORKDIR will be set to c:/geant4 (in "native" Windows syntax)"
-export G4WORKDIR=${G4WORKDIR}
+G4WORKDIR="c:/geant4"
+export G4WORKDIR
 
 else # if Unix
 
