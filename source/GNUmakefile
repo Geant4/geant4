@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 1999-06-02 18:30:22 gcosmo Exp $
+# $Id: GNUmakefile,v 1.9 1999-06-09 11:50:49 gunter Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -66,7 +66,7 @@ libmap: $(G4BINDIR)/liblist
 	@echo "Making libname.map..."
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ]; then mkdir $(G4TMP)/$(G4SYSTEM);fi
 	@rm -f $(G4TMP)/$(G4SYSTEM)/libname.map;
-	$(G4BINDIR)/liblist -l \
+	export G4TMP=$(G4TMP); $(G4BINDIR)/liblist -l \
 	  -d $(G4TMP)/$(G4SYSTEM) \
 	  < /tmp/G4libname.map.starter.$(unique) \
 	  > $(G4TMP)/$(G4SYSTEM)/libname.map
