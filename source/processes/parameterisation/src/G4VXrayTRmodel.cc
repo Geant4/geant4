@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VXrayTRmodel.cc,v 1.4 2000-07-14 16:01:18 grichine Exp $
+// $Id: G4VXrayTRmodel.cc,v 1.5 2000-08-03 09:01:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -247,7 +247,7 @@ void G4VXrayTRmodel::DoIt( const G4FastTrack& fastTrack ,
 
         sumEnergyTR += energyTR ;
 
-        theta = abs(RandGauss::shoot(0.0,pi/gamma)) ;
+        theta = abs(G4RandGauss::shoot(0.0,pi/gamma)) ;
 
         if( theta >= 0.1 ) theta = 0.1 ;
 

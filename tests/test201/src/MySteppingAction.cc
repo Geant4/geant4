@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MySteppingAction.cc,v 1.5 1999-12-15 14:55:02 gunter Exp $
+// $Id: MySteppingAction.cc,v 1.6 2000-08-03 09:12:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,11 +31,11 @@ void MySteppingAction::UserSteppingAction(const G4Step*) {
   OHistogram h2 = MyRunAction::Get2d();
 
   HepRandom::setTheEngine (&theJamesEngine);
-  double     james = RandGauss::shoot(0.3,0.1);
+  double     james = G4RandGauss::shoot(0.3,0.1);
   OHistogramFillOneDimensional(h1,james,0.01);
 
   HepRandom::setTheEngine(&theDRand48Engine);
-  double     d48 = RandGauss::shoot(0.7,0.1);
+  double     d48 = G4RandGauss::shoot(0.7,0.1);
   OHistogramFillTwoDimensional(h2,james,d48,0.01);   
 #endif
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05PionShowerModel.cc,v 1.2 1999-12-15 14:49:31 gunter Exp $
+// $Id: ExN05PionShowerModel.cc,v 1.3 2000-08-03 09:09:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05PionShowerModel.hh"
@@ -115,8 +115,8 @@ void ExN05PionShowerModel::Explode(const G4FastTrack& fastTrack)
   G4double z, r, phi;
   for (int i = 0; i < nSpot; i++)
     {
-      z   = RandGauss::shoot(0,20*cm);
-      r   = RandGauss::shoot(0,10*cm);
+      z   = G4RandGauss::shoot(0,20*cm);
+      r   = G4RandGauss::shoot(0,10*cm);
       phi = RandFlat::shoot()*twopi;
       ePoint = showerCenter +
 	z*zShower +

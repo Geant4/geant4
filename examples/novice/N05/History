@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2000-07-28 10:17:26 gcosmo Exp $
+$Id: History,v 1.8 2000-08-03 09:11:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 03, 2000  Gabriele Cosmo (exampleN05-V02-00-01r)
+- Changed RandGauss to G4RandGauss in ExN05PionShowerModel.cc to fix problem
+  of events' reproducibility.
 
 July 28, 2000  Gabriele Cosmo (exampleN05-V02-00-01)
 - Includes also new ExN05VisManager class.

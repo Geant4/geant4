@@ -1,7 +1,11 @@
-$Id: History,v 1.1 1999-01-08 16:35:47 gunter Exp $
+$Id: History,v 1.2 2000-08-03 09:15:06 gcosmo Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+03 August, 2000 Gabriele Cosmo (test201-V02-00-00r)
+- changed RandGauss to G4RandGauss in MySteppingAction.cc to fix
+  events' reproducibility problem.
 
 29th October Guy Barrand
 - create from visualization/test/test19
