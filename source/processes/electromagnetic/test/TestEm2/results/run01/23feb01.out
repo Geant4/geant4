@@ -1,0 +1,255 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (15-Dec-2000)
+             Copyright : Geant4 Collaboration
+**********************************************
+Constructing Visualization Manager....
+Initialising Visualization Manager....
+Registering graphics systems....
+
+***** Table : Nb of materials = 9 *****
+
+ Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material:      lAr     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
+   --->  Element:      lAr      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:       Al     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
+   --->  Element:       Al      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:       Fe     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
+   --->  Element:       Fe      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:      BGO     density:  7.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm 
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.41 %  Abundance  63.16 %
+   --->  Element: Germanium Ge   Z = 32.0   N =  72.6   A =  72.59 g/mole  fractionMass:  17.48 %  Abundance  15.79 %
+   --->  Element:  Bismuth Bi   Z = 83.0   N = 209.0   A = 208.98 g/mole  fractionMass:  67.10 %  Abundance  21.05 %
+
+ Material:    PbWO4     density:  8.280 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.924 mm 
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  14.07 %  Abundance  66.67 %
+   --->  Element:     Lead Pb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass:  45.53 %  Abundance  16.67 %
+   --->  Element: Tungsten  W   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  40.40 %  Abundance  16.67 %
+
+ Material: Tungsten     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
+   --->  Element: Tungsten  W   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
+   --->  Element:     Lead Pb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+
+Absorber is 18 cm  of PbWO4
+Em2PhysicsList::SetCuts:CutLength : 1 mm 
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+ eIoni   Minimum Delta cut in range=0.1  mm.
+
+           material       min.delta energy(keV) 
+
+                 Air           0.99
+               Water         81.851
+                 lAr         79.954
+                  Al         125.02
+                  Fe         225.11
+                 BGO         187.26
+               PbWO4         201.19
+            Tungsten         336.44
+                Lead         228.53
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+ hIoni    Minimum Delta cut in range=0.1  mm.
+
+           material        min.delta energy(keV) 
+
+                 Air           0.99
+               Water         81.851
+                 lAr         79.954
+                  Al         125.02
+                  Fe         225.11
+                 BGO         187.26
+               PbWO4         201.19
+            Tungsten         336.44
+                Lead         228.53
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+============= The cut Energy ==============================
+                            gamma              e-    
+Cut in range                  1 mm            1 mm 
+Cut in energy
+                Air         990 eV          990 eV 
+              Water         2.9 keV         347 keV
+                lAr        6.18 keV         343 keV
+                 Al        6.89 keV         597 keV
+                 Fe        20.8 keV        1.28 MeV
+                BGO        77.7 keV        1.03 MeV
+              PbWO4        84.8 keV        1.13 MeV
+           Tungsten         105 keV        2.31 MeV
+               Lead         101 keV        1.38 MeV
+===================================================
+# $Id: 23feb01.out,v 1.1 2001-02-23 13:43:13 maire Exp $
+#
+# Macro file for "TestEm2.cc" 
+# (can be run in batch, without graphic)
+#
+# PbWO4 L = 20 radl  R = 5 radl; electron 5 GeV
+#
+#
+#/run/particle/setCut 1.0 mm
+#/run/initialize
+#
+/run/verbose 2
+/event/drawTracks none
+/event/printModulo 10
+#
+/gun/particle e-
+/gun/energy 5 GeV
+/run/beamOn 500
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
+Start closing geometry.
+Start Run processing.
+
+Run terminated.
+Run Summary
+  Number of events processed : 500
+  User=1002.7s Real=1239.3s Sys=228.55s  (dxplus)
+  
+                 LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
+
+        bin              Mean         rms                 bin            Mean      rms 
+
+    0.00-> 1.00 radl:    0.69%       0.39%             0-> 1.00 radl:    0.69%     0.39% 
+    1.00-> 2.00 radl:    2.68%       1.42%             0-> 2.00 radl:    3.38%     1.70% 
+    2.00-> 3.00 radl:    5.80%       2.38%             0-> 3.00 radl:    9.17%     3.83% 
+    3.00-> 4.00 radl:    8.78%       2.88%             0-> 4.00 radl:   17.96%     6.26% 
+    4.00-> 5.00 radl:   10.83%       2.85%             0-> 5.00 radl:   28.78%     8.34% 
+    5.00-> 6.00 radl:   11.38%       2.45%             0-> 6.00 radl:   40.16%     9.59% 
+    6.00-> 7.00 radl:   10.78%       2.17%             0-> 7.00 radl:   50.94%    10.01% 
+    7.00-> 8.00 radl:    9.58%       2.00%             0-> 8.00 radl:   60.52%     9.70% 
+    8.00-> 9.00 radl:    8.02%       1.79%             0-> 9.00 radl:   68.55%     8.93% 
+    9.00->10.00 radl:    6.52%       1.77%             0->10.00 radl:   75.07%     7.82% 
+   10.00->11.00 radl:    5.13%       1.64%             0->11.00 radl:   80.21%     6.67% 
+   11.00->12.00 radl:    3.91%       1.43%             0->12.00 radl:   84.12%     5.57% 
+   12.00->13.00 radl:    3.04%       1.31%             0->13.00 radl:   87.16%     4.52% 
+   13.00->14.00 radl:    2.31%       1.22%             0->14.00 radl:   89.47%     3.54% 
+   14.00->15.00 radl:    1.65%       0.92%             0->15.00 radl:   91.13%     2.83% 
+   15.00->16.00 radl:    1.24%       0.74%             0->16.00 radl:   92.37%     2.30% 
+   16.00->17.00 radl:    0.88%       0.57%             0->17.00 radl:   93.24%     1.92% 
+   17.00->18.00 radl:    0.65%       0.47%             0->18.00 radl:   93.90%     1.58% 
+   18.00->19.00 radl:    0.46%       0.40%             0->19.00 radl:   94.36%     1.30% 
+   19.00->20.00 radl:    0.33%       0.35%             0->20.00 radl:   94.69%     1.07% 
+
+
+
+                  RADIAL PROFILE                         CUMULATIVE  RADIAL PROFILE
+
+        bin              Mean         rms                 bin            Mean      rms 
+
+    0.00-> 0.25 radl:   34.49%       2.43%             0-> 0.25 radl:   34.49%     2.43% 
+    0.25-> 0.50 radl:   18.42%       1.44%             0-> 0.50 radl:   52.91%     2.41% 
+    0.50-> 0.75 radl:   10.73%       1.12%             0-> 0.75 radl:   63.64%     2.16% 
+    0.75-> 1.00 radl:    6.85%       0.88%             0-> 1.00 radl:   70.50%     1.97% 
+    1.00-> 1.25 radl:    4.80%       0.69%             0-> 1.25 radl:   75.29%     1.79% 
+    1.25-> 1.50 radl:    3.53%       0.55%             0-> 1.50 radl:   78.83%     1.65% 
+    1.50-> 1.75 radl:    2.78%       0.48%             0-> 1.75 radl:   81.61%     1.56% 
+    1.75-> 2.00 radl:    2.25%       0.39%             0-> 2.00 radl:   83.86%     1.47% 
+    2.00-> 2.25 radl:    1.84%       0.35%             0-> 2.25 radl:   85.70%     1.40% 
+    2.25-> 2.50 radl:    1.54%       0.33%             0-> 2.50 radl:   87.25%     1.32% 
+    2.50-> 2.75 radl:    1.30%       0.27%             0-> 2.75 radl:   88.55%     1.29% 
+    2.75-> 3.00 radl:    1.14%       0.24%             0-> 3.00 radl:   89.68%     1.25% 
+    3.00-> 3.25 radl:    0.98%       0.24%             0-> 3.25 radl:   90.67%     1.22% 
+    3.25-> 3.50 radl:    0.84%       0.22%             0-> 3.50 radl:   91.51%     1.21% 
+    3.50-> 3.75 radl:    0.73%       0.20%             0-> 3.75 radl:   92.24%     1.18% 
+    3.75-> 4.00 radl:    0.65%       0.19%             0-> 4.00 radl:   92.88%     1.15% 
+    4.00-> 4.25 radl:    0.55%       0.16%             0-> 4.25 radl:   93.43%     1.13% 
+    4.25-> 4.50 radl:    0.49%       0.17%             0-> 4.50 radl:   93.92%     1.11% 
+    4.50-> 4.75 radl:    0.42%       0.14%             0-> 4.75 radl:   94.34%     1.09% 
+    4.75-> 5.00 radl:    0.35%       0.14%             0-> 5.00 radl:   94.69%     1.07% 
+
+                              SUMMARY
+                         energy deposit :   94.69 % E0 +-    1.07 % E0
+                         charged traklen:  445.37 radl +-    5.47 radl
+                         neutral traklen: 4517.17 radl +-  122.40 radl
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1202146468, 354763791
+----------------------------------------
+
+
+Graphics systems deleted.
+VisManager deleting.
+G4 kernel has come to Quit state.
+Deletion of G4 kernel class start.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManager is deleting.
