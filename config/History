@@ -1,4 +1,4 @@
-$Id: History,v 1.46 1999-06-29 20:27:45 gcosmo Exp $
+$Id: History,v 1.47 1999-07-02 12:27:37 stesting Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+2nd July 1999  John Allison (config-01-00-08)
+- Protected liblist against duplicate library names.
 
 29th June 1999  Gabriele Cosmo (config-01-00-07)
 - architecture.gmk: fixed bug in SUN-CC setup concerning XMLIBS and XMFLAGS.

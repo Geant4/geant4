@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.6 1999-06-09 11:43:51 gunter Exp $ */
+/* $Id: liblist.c,v 1.7 1999-07-02 12:27:38 stesting Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -170,7 +170,7 @@ int main (int argc, char** argv) {
 	}
       else
 	{
-	  fprintf(stderr,"  If you specify a directory don't also specify files\n");
+	  fprintf(stderr,"  ERROR: If you specify a directory don't also specify files\n");
 	  exit(-1);
 	}
     }
@@ -181,6 +181,22 @@ int main (int argc, char** argv) {
       /* Get library name... */
       gets(buffer);
       if(feof(stdin)) break;
+      ptr=strtok(buffer,":\n");
+
+      /* Check for duplicate names... */
+      for(libmapPtr1=libmap;libmapPtr1;libmapPtr1=libmapPtr1->next)
+	{
+	  if(strcmp(libmapPtr1->lib,ptr)==0)
+	    {
+	      fprintf(stderr,"  ERROR: Duplicate library name: %s\n",ptr);
+	      fprintf(stderr,
+		      "  Perhaps a duplicate subdirectory with"
+		      " a GNUmakefile with the same library name.\n"
+		      );
+	      exit(1);
+	    }
+	}
+
       if(libmap)
 	{
 	  libmapPtr->next=(struct libmap_*) malloc(sizeof(struct libmap_));
@@ -191,11 +207,10 @@ int main (int argc, char** argv) {
 	  libmap=(struct libmap_*) malloc(sizeof(struct libmap_));
 	  libmapPtr=libmap;
 	}
-      ptr=strtok(buffer,":\n");
+      libmapPtr->next=0;      
       libmapPtr->lib=strdup(ptr);
       libmapPtr->used=0;
       libmapPtr->uses=(char**)calloc(NLIBMAX,sizeof(char*));
-      libmapPtr->next=0;
 
       /* If option -l not specified, fill uses list... */
       if(!optl)
@@ -218,14 +233,14 @@ int main (int argc, char** argv) {
       ptr=strtok(buffer,"/");
       if(!ptr)
 	{
-	  fprintf(stderr,"  \"/\" before \"source\" expected.\n");
+	  fprintf(stderr,"  ERROR: \"/\" before \"source\" expected.\n");
 	  exit(1);
 	}
       while(ptr&&strcmp (ptr,"source"))ptr=strtok(NULL,"/");
       ptr=strtok(NULL,"/");
       if(!ptr)
 	{
-	  fprintf(stderr,"  \"source\" expected.\n");
+	  fprintf(stderr,"  ERROR: \"source\" expected.\n");
 	  exit(1);
 	}
       libmapPtr->trigger=(char*)malloc(TRIGSIZE);
@@ -239,7 +254,7 @@ int main (int argc, char** argv) {
 	}
       if(!ptr)
 	{
-	  fprintf(stderr,"  \"source/<unique-sub-path>/GNUmakefile\" expected.\n");
+	  fprintf(stderr,"  ERROR: \"source/<unique-sub-path>/GNUmakefile\" expected.\n");
 	  exit(1);
 	}
     }
@@ -250,7 +265,7 @@ int main (int argc, char** argv) {
       ntg4tmp=getenv("G4TMP");
       if ( ! ntg4tmp ) 
         {
-           fprintf(stderr," Cannot find environment variable G4TMP\n");
+           fprintf(stderr,"  ERROR: Cannot find environment variable G4TMP\n");
            exit(1);
         }
       ntg4tmp1=strdup(ntg4tmp);
