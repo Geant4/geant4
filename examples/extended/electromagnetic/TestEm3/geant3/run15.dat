@@ -6,15 +6,9 @@ CALOR  2 (nbAbs) 20 (nbLay)  30. (calorYZ) 0. (field)
 MATE   7 (iron)    14 (Sc)
 THICK  1.4(cm)    0.3 (cm)
 C
-TRIG   20000
-KINE   5 (Itype) 20. (Ekine) 1000. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
-DEBUG  10  5 1000
-SWIT   0 (draw) 1 (save)
-C
-ABAN   0
 LOSS   1
 HADR   0
-TIME   2=1.
+ABAN   0
 C
 CUTS  10.0e-6 (cutgam) 10.0e-6 (cutele)  3*10.e-3 (cutn/h/mu)
 C
@@ -39,5 +33,11 @@ C 100 cm
 C CUTPR  1. (tmed)   10.0e+3 (bcute/m)  161.0e+0 (dcute/m)  161.0e+0 (ppcutm)
 C        2. (tmed)  842.0e-6 (bcute/m)  318.0e-3 (dcute/m)  318.0e-3 (ppcutm)       
 C       
-*HISTO 1 (idh) 100 (nbin) 0. (Emin/Ebeam) 1.e-1 (Emax/Ebeam)
-*HISTO 2 (idh) 100 (nbin) 0. (Emin/Ebeam) 5.e-3 (Emax/Ebeam)
+KINE   5 (muon) 20. (GeV) 1000. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
+C
+*HISTO 1 (idh) 100 (nbin) 0. (Emin)   2. (Emax) 1.    (GeV)
+*HISTO 2 (idh) 100 (nbin) 0. (Emin) 100. (Emax) 1.e-3 (MeV)
+C
+SWIT   0 (draw)
+DEBUG  10  5 1000
+TRIG   20000

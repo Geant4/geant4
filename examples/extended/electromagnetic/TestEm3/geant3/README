@@ -26,7 +26,7 @@
   histo 2 : energy deposit in absorber 2 (edep/Ebeam)
   ...etc...........
   
- One can control the binning of the histo with the data cards:
+ One can control the binning of the histograms with the data card:
   *HISTO  id1  nbin  vmin  vmax 
   *HISTO  id2  nbin  vmin  vmax
   ...etc...........
