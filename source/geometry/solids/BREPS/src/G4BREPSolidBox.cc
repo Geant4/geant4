@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidBox.cc,v 1.5 2001-07-11 09:59:41 gunter Exp $
+// $Id: G4BREPSolidBox.cc,v 1.6 2001-07-20 12:47:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -98,10 +98,10 @@ EInside G4BREPSolidBox::Inside(register const G4ThreeVector& Pt) const
 
   // Get the bounding box extent
   G4Point3D min = bbox->GetBoxMin();
-  min = min + -(0.5*kCarTolerance);
+  min += G4Point3D(-0.5*kCarTolerance,-0.5*kCarTolerance,-0.5*kCarTolerance);
 
   G4Point3D max = bbox->GetBoxMax();
-  max = max + (0.5*kCarTolerance);
+  max += G4Point3D(0.5*kCarTolerance,0.5*kCarTolerance,0.5*kCarTolerance);
 
   if( (Point.x() < min.x() || Point.x() > max.x()) ||
       (Point.y() < min.y() || Point.y() > max.y()) ||
