@@ -24,7 +24,8 @@
 // 03/10/2000 V.Ivanchenko CodeWizard clean up
 // 05/11/2000 V.Ivanchenko "Aluminum" - correct name, end of cycle
 //            over shells, and two bugs from previous edition
-// 10/05/2001  V.Ivanchenko Clean up againist Linux compilation with -Wall
+// 10/05/2001 V.Ivanchenko Clean up againist Linux compilation with -Wall
+// 13/05/2001 S. Chauvie corrected bugs
 //
 // ************************************************************
 // It is the Quantal Harmonic Oscillator Model for energy loss
@@ -102,44 +103,33 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(
 
   G4bool hasMaterial = false;
 
-  for (G4int m = 0; m < numberOfMaterials; m++)
-    {
-      G4String matName = material->GetName();
-      if (matName == materialAvailable[m]){ 
-	hasMaterial = true;
-	break;}
-    }
+  if (material->GetNumberOfElements() == 1) hasMaterial = true;
   
   if ((particle->GetDefinition()) == (G4AntiProton::AntiProtonDefinition())
                && hasMaterial) isInCharge = true;
   
   return isInCharge;
-      
+
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4QAOLowEnergyLoss::IsInCharge(
-			    const G4ParticleDefinition* aParticle,
-			    const G4Material* material) const
+				      const G4ParticleDefinition* aParticle,
+				      const G4Material* material) const
 {
-  G4bool isInCharge = false;
-
-  G4bool hasMaterial = false;
-
-  for (G4int m = 0; m < numberOfMaterials; m++)
-    {
-      G4String matName = material->GetName();
-      if (matName == materialAvailable[m] && 
-          material->GetNumberOfElements() == 1){ 
-	hasMaterial = true;
-	break;}
-    }
   
+  G4bool isInCharge = false;
+  
+  G4bool hasMaterial = false;
+  
+  if (material->GetNumberOfElements() == 1) hasMaterial = true;
+  
+
   if (aParticle == (G4AntiProton::AntiProtonDefinition())
                 && hasMaterial) isInCharge = true;
   
   return isInCharge;
-      
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -176,7 +166,6 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
                                               G4double zParticle) const 
 {
   G4int nbOfShell = GetNumberOfShell(material);
-  //G4double ionisationEnergy = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double dedx=0;
   G4double v = c_light * sqrt( 2.0 * kineticEnergy / proton_mass_c2 );
   G4double coeff = twopi * proton_mass_c2 * 
@@ -217,22 +206,20 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
 
 G4int G4QAOLowEnergyLoss::GetNumberOfShell(const G4Material* material) const
 {
-  // Set default return value
-  G4int nShell = nbofShellForMaterial[0];
+  // Set return value from table
+  G4int Z = (G4int)(material->GetZ());
+  G4int nShell = 0;
 
+  // Set return value if in material available from Aahrus
   for(G4int i=0; i<numberOfMaterials; i++) {
 
-    if(materialAvailable[i] == material->GetName()) {
-      nShell =  nbofShellForMaterial[i];
-      return nShell;
-    }
+    if(materialAvailable[i] == material->GetName()){
+    	nShell = nbofShellForMaterial[i];
+	break;}
+    else nShell = fNumberOfShells[Z];
   }
-
-  G4cout << "WARNING - G4QAOLowEnergyLoss::GetNumberOfShell - "
-         << "The model is not available for "
-         << material->GetName() << G4endl;
-
-  return nShell;
+  
+   return nShell;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -317,7 +304,7 @@ G4double G4QAOLowEnergyLoss::GetOccupationNumber(G4int Z, G4int ShellNb) const
   G4int indice = ShellNb ;
   for (G4int z = 1 ; z < Z ; z++) {indice += fNumberOfShells[z];}
 
-  return nbOfElectronPerSubShell[indice];
+  return nbOfElectronPerSubShell[indice+1];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
