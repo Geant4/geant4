@@ -128,7 +128,7 @@ G4bool G4Epdl89File::FindOneElemProc(G4int& subsh){
 
   return tableFound;
 }
-void G4Epdl89File::GetDataValues(G4DataVector& valList){
+void G4Epdl89File::GetDataValues(G4Data& valList){
   
   char* token = 0;
   G4int i = 0;

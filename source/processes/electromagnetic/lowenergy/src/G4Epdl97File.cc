@@ -130,7 +130,7 @@ G4bool G4Epdl97File::FindOneElemProc(G4int& subsh){
 
 G4int* G4Epdl97File::GetTheProcFlags(){ return _flags; }
 
-void G4Epdl97File::GetDataValues(G4DataVector& valList){
+void G4Epdl97File::GetDataValues(G4Data& valList){
 
   char* token = 0;
   G4int i = 0;

@@ -46,6 +46,7 @@ G4EpdlTables::G4EpdlTables(G4VDataFile& DFile):
   theDataTable1 = 0;
   theDataTable2 = 0;
   theDataTable3 = 0;
+  //  allElementList = 0;
 }
 
 // Destructor  
@@ -64,7 +65,7 @@ void G4EpdlTables::FillDataTable() {
   G4bool lineMatch = FALSE;
 
   // list of data vectors to be filled
-  RWTPtrSlist<G4DataVector> vecList; 
+  G4FirstLevel vecList; 
 
   G4int numBin = 100;
 
@@ -121,7 +122,7 @@ void G4EpdlTables::FillDataTable() {
       if(lineMatch == TRUE){
 
 	 //list of values in one line
-	G4DataVector values; 
+	G4Data values; 
 	
 	datfile.GetDataValues(values); 
 	lvl = values.length(); 
@@ -130,7 +131,7 @@ void G4EpdlTables::FillDataTable() {
 	  
 	  for(G4int k = 0; k < lvl; k++){
 	  
-	    vecList.insert(new G4DataVector);
+	    vecList.insert(new G4Data);
 	  }
 	}
 
@@ -189,12 +190,12 @@ void G4EpdlTables::FillDataTable() {
 } // end FillDataTable
 
 
-RWTPtrSlist< RWTPtrSlist<G4DataVector> >* G4EpdlTables::GetGlobalList(){
+//G4SecondLevel* G4EpdlTables::GetGlobalList(){
   
-  return new RWTPtrSlist< RWTPtrSlist<G4DataVector> >(allElementList);
-}
+//return new G4SecondLevel((*allElementList));
+//////}
 
-void G4EpdlTables::FillTheTable(G4int numEl) {
+G4SecondLevel* G4EpdlTables::FillTheTable(G4int numEl) {
 
   // line counters
   G4int numTable = 0;
@@ -203,7 +204,14 @@ void G4EpdlTables::FillTheTable(G4int numEl) {
   G4bool lineMatch = FALSE;
 
   // list of data vectors to be filled
-  RWTPtrSlist<G4DataVector> vecList; 
+  G4FirstLevel* vecList = new G4FirstLevel();
+
+  //  if(allElementList){ 
+    
+  //delete allElementList;
+  //}
+
+  G4SecondLevel* allElementList = new G4SecondLevel();
 
   //open input file
   datfile.OpenFile();
@@ -260,30 +268,30 @@ void G4EpdlTables::FillTheTable(G4int numEl) {
       if(lineMatch == TRUE){
 
 	 //list of values in one line
-	G4DataVector values; 
+	G4Data values; 
 	
 	datfile.GetDataValues(values); 
 
 	lvl = values.length(); 
 
-	if(!vecList.entries()){
+	if(!vecList->entries()){
 
 	  for(G4int k = 0; k < lvl; k++){
 	
-	    vecList.insert(new G4DataVector);
+	    vecList->insert(new G4Data);
 	    if(subSh){
-	      vecList[k]->append(subSh);
+	      (*vecList)[k]->append(subSh);
 	    }
 	    else{
 
-	      vecList[k]->append(numAtom);
+	      (*vecList)[k]->append(numAtom);
 	    }
 	  }
 	}
 
 	for(G4int h = 0; h < lvl; h++){
 
-	  vecList[h]->append(values[h]);
+	  (*vecList)[h]->insert(values[h]);
 	}
 	// Clear the temporary list
 	values.clear();
@@ -295,8 +303,7 @@ void G4EpdlTables::FillTheTable(G4int numEl) {
       // build the G4PhysicsTables
       if(lineMatch == TRUE){
 
-	allElementList.append(new RWTPtrSlist<G4DataVector>(vecList));
-	vecList.clear();
+	allElementList->insert(vecList);
 	numTable++;
 	lineMatch = FALSE;
 	if(numTable == 99){
@@ -305,7 +312,7 @@ void G4EpdlTables::FillTheTable(G4int numEl) {
       }
     }
   }// end for(;;)
-
+  return allElementList;
 } // end FillDataTable
 
 
