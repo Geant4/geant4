@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProPerpSpin.cc,v 1.10 2002-11-29 23:18:20 japost Exp $
+// $Id: testProPerpSpin.cc,v 1.11 2003-02-05 15:31:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -49,7 +49,6 @@
 
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
-#include "CLHEP/Units/SystemOfUnits.h"
 
 #include "G4UniformMagField.hh"
 

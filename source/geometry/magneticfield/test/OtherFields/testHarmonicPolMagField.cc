@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testHarmonicPolMagField.cc,v 1.3 2002-03-28 17:58:58 japost Exp $
+// $Id: testHarmonicPolMagField.cc,v 1.4 2003-02-05 15:31:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -49,7 +49,6 @@
 
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
-#include "CLHEP/Units/SystemOfUnits.h"
 
 #include "G4UniformMagField.hh"
 #include "G4DELPHIMagField.hh"

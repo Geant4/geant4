@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProElectroMagField.cc,v 1.8 2002-11-01 21:11:11 japost Exp $
+// $Id: testProElectroMagField.cc,v 1.9 2003-02-05 15:31:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -49,7 +49,6 @@
 
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
-#include "CLHEP/Units/SystemOfUnits.h"
 
 // #include "G4UniformMagField.hh"
 #include "G4UniformElectricField.hh"

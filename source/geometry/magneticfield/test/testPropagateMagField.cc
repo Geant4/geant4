@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.16 2002-10-29 18:04:52 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.17 2003-02-05 15:31:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -49,7 +49,6 @@
 
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
-#include "CLHEP/Units/SystemOfUnits.h"
 
 #include "G4UniformMagField.hh"
 
