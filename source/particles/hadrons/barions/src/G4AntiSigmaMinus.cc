@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmaMinus.cc,v 1.8 2001-10-16 08:15:56 kurasige Exp $
+// $Id: G4AntiSigmaMinus.cc,v 1.9 2002-06-14 05:55:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,7 +76,7 @@ G4AntiSigmaMinus::G4AntiSigmaMinus(
 
   SetDecayTable(table);
 
-};
+}
 
 // ......................................................................
 // ...                 static member definitions                      ...
