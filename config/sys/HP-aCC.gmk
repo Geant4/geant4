@@ -1,6 +1,6 @@
 #
-# -------- HP ---------
-#
+# -------- HP ---------      !!! not supported !!!
+#                          HP-UX B.10.20 - aCC A.01.23
 ifeq ($(G4SYSTEM),HP-aCC)
   CXX       := aCC
   ifdef G4OPTIMISE
