@@ -1,46 +1,54 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 #include "IonPhysics.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
+
+// Nuclei
+#include "G4IonConstructor.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <iomanip>   
-
 
 IonPhysics::IonPhysics(const G4String& name)
-                 :  G4VPhysicsConstructor(name)
+                 :  G4VPhysicsConstructor(name), wasActivated(false)
 {
 }
 
 IonPhysics::~IonPhysics()
 {
+  if(wasActivated)
+  {
+  G4ProcessManager * pManager = 0;
+  
+  pManager = G4GenericIon::GenericIon()->GetProcessManager();
+  if(pManager) pManager->RemoveProcess(&theIonElasticProcess);
+  if(pManager) pManager->RemoveProcess(&fIonIonisation);
+  // if(pManager) pManager->RemoveProcess(&fIonMultipleScattering);
+
+  pManager = G4Deuteron::Deuteron()->GetProcessManager();
+  if(pManager) pManager->RemoveProcess(&theDElasticProcess);
+  if(pManager) pManager->RemoveProcess(&fDeuteronProcess);
+  if(pManager) pManager->RemoveProcess(&fDeuteronIonisation);
+  if(pManager) pManager->RemoveProcess(&fDeuteronMultipleScattering);
+ 
+  pManager = G4Triton::Triton()->GetProcessManager();
+  if(pManager) pManager->RemoveProcess(&theTElasticProcess);
+  if(pManager) pManager->RemoveProcess(&fTritonProcess);
+  if(pManager) pManager->RemoveProcess(&fTritonIonisation);
+  if(pManager) pManager->RemoveProcess(&fTritonMultipleScattering);
+ 
+  pManager = G4Alpha::Alpha()->GetProcessManager();
+  if(pManager) pManager->RemoveProcess(&theAElasticProcess);
+  if(pManager) pManager->RemoveProcess(&fAlphaProcess);
+  if(pManager) pManager->RemoveProcess(&fAlphaIonisation);
+  if(pManager) pManager->RemoveProcess(&fAlphaMultipleScattering);
+ 
+  pManager = G4He3::He3()->GetProcessManager();
+  if(pManager) pManager->RemoveProcess(&theHe3ElasticProcess);
+  if(pManager) pManager->RemoveProcess(&fHe3Ionisation);
+  if(pManager) pManager->RemoveProcess(&fHe3MultipleScattering);
+  }
 }
-
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-
-// Nuclei
-#include "G4IonConstructor.hh"
 
 void IonPhysics::ConstructParticle()
 {
@@ -48,10 +56,6 @@ void IonPhysics::ConstructParticle()
   G4IonConstructor pConstructor;
   pConstructor.ConstructParticle();  
 }
-
-
-#include "G4ProcessManager.hh"
-
 
 void IonPhysics::ConstructProcess()
 {
@@ -132,6 +136,7 @@ void IonPhysics::ConstructProcess()
   pManager->SetProcessOrdering(&fHe3MultipleScattering, idxAlongStep,  1);
   pManager->SetProcessOrdering(&fHe3MultipleScattering, idxPostStep,  1);
    
+  wasActivated = true;
 }
 
 

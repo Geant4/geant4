@@ -1,38 +1,65 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 #include "G4MiscLHEPBuilder.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
-G4MiscLHEPBuilder::G4MiscLHEPBuilder() {}
-G4MiscLHEPBuilder::~G4MiscLHEPBuilder() {}
+G4MiscLHEPBuilder::G4MiscLHEPBuilder(): wasActivated(false) {}
+G4MiscLHEPBuilder::~G4MiscLHEPBuilder()
+{
+  if(wasActivated)
+  {
+  G4ProcessManager * aProcMan = 0;
+  aProcMan = G4AntiProton::AntiProton()->GetProcessManager();
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiProtonInelastic);
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiProtonElasticProcess);
+  aProcMan = G4AntiNeutron::AntiNeutron()->GetProcessManager();
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiNeutronInelastic);
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiNeutronElasticProcess);
+  aProcMan = G4Lambda::Lambda()->GetProcessManager();
+  if(aProcMan) aProcMan->RemoveProcess(&theLambdaInelastic);
+  if(aProcMan) aProcMan->RemoveProcess(&theLambdaElasticProcess);
+  aProcMan = G4AntiLambda::AntiLambda()->GetProcessManager();
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiLambdaInelastic);
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiLambdaElasticProcess);
+  aProcMan = G4SigmaMinus::SigmaMinus()->GetProcessManager();
+  if(aProcMan) aProcMan->RemoveProcess(&theSigmaMinusInelastic);
+  if(aProcMan) aProcMan->RemoveProcess(&theSigmaMinusElasticProcess);
+  aProcMan = G4AntiSigmaMinus::AntiSigmaMinus()->GetProcessManager();
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiSigmaMinusInelastic);
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiSigmaMinusElasticProcess);
+  aProcMan = G4SigmaPlus::SigmaPlus()->GetProcessManager();
+  if(aProcMan) aProcMan->RemoveProcess(&theSigmaPlusInelastic);
+  if(aProcMan) aProcMan->RemoveProcess(&theSigmaPlusElasticProcess);
+  aProcMan = G4AntiSigmaPlus::AntiSigmaPlus()->GetProcessManager();
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiSigmaPlusInelastic);
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiSigmaPlusElasticProcess);
+  aProcMan = G4XiMinus::XiMinus()->GetProcessManager();
+  if(aProcMan) aProcMan->RemoveProcess(&theXiMinusInelastic);
+  if(aProcMan) aProcMan->RemoveProcess(&theXiMinusElasticProcess);
+  aProcMan = G4AntiXiMinus::AntiXiMinus()->GetProcessManager();
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiXiMinusInelastic);
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiXiMinusElasticProcess);
+  aProcMan = G4XiZero::XiZero()->GetProcessManager();
+  if(aProcMan) aProcMan->RemoveProcess(&theXiZeroInelastic);
+  if(aProcMan) aProcMan->RemoveProcess(&theXiZeroElasticProcess);
+  aProcMan = G4AntiXiZero::AntiXiZero()->GetProcessManager();
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiXiZeroInelastic);
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiXiZeroElasticProcess);
+  aProcMan = G4OmegaMinus::OmegaMinus()->GetProcessManager();
+  if(aProcMan) aProcMan->RemoveProcess(&theOmegaMinusInelastic);
+  if(aProcMan) aProcMan->RemoveProcess(&theOmegaMinusElasticProcess);
+  aProcMan = G4AntiOmegaMinus::AntiOmegaMinus()->GetProcessManager();
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiOmegaMinusInelastic);
+  if(aProcMan) aProcMan->RemoveProcess(&theAntiOmegaMinusElasticProcess);
+  }
+}
 
 void G4MiscLHEPBuilder::Build()
 {
   G4ProcessManager * aProcMan = 0;
   theElasticModel = new G4LElastic;
+  wasActivated = true;
   
   // anti-Proton
   aProcMan = G4AntiProton::AntiProton()->GetProcessManager();

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.17 2003-11-13 15:25:00 johna Exp $
+$Id: History,v 1.18 2003-11-25 08:16:46 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.17 2003-11-13 15:25:00 johna Exp $
 
                       Example History file
                       ---------------------
+
+25.11.03 - A.Ribon (ccal-V05-02-04)
+- Changes in the Physics Lists to be compatible with the latest
+  hadronic changes in geant4-06-00-cand-02.
 
 13.11.03 - John Allison
 - Brought Vis Manager up to date.

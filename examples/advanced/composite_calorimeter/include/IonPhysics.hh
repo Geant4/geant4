@@ -1,25 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 //========================
 // taken from example N04 of G4 distribution
 //========================
@@ -43,7 +21,6 @@
 #include "G4AlphaInelasticProcess.hh"
 #include "G4LEAlphaInelastic.hh"
 
-#include "G4ionIonisation.hh"
 #include "G4hIonisation.hh"
 #include "G4MultipleScattering.hh"
 
@@ -65,12 +42,12 @@ class IonPhysics : public G4VPhysicsConstructor
 
   protected:
    // Elastic Process
-   G4LElastic*                 theElasticModel;
+   G4LElastic*            theElasticModel;
 
    // Generic Ion physics
-   G4HadronElasticProcess      theIonElasticProcess;
-   G4MultipleScattering        fIonMultipleScattering;
-   G4ionIonisation             fIonIonisation;
+   G4HadronElasticProcess theIonElasticProcess;
+   G4MultipleScattering   fIonMultipleScattering;
+   G4hIonisation          fIonIonisation;
 
    // Deuteron physics
    G4HadronElasticProcess      theDElasticProcess;
@@ -98,6 +75,7 @@ class IonPhysics : public G4VPhysicsConstructor
    G4MultipleScattering        fHe3MultipleScattering;
    G4hIonisation               fHe3Ionisation;
 
+   G4bool wasActivated;
 };
 
 // 2002 by J.P. Wellisch

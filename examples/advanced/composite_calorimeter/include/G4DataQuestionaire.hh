@@ -1,25 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 #ifndef G4DataQuestionaire_h
 #define G4DataQuestionaire_h 1
 
@@ -29,8 +7,6 @@
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VPiKBuilder.hh"
 
-#include <vector>
-
 enum G4DataType {no, photon, neutron, radioactive, lowenergy};
 class G4DataQuestionaire
 {
@@ -38,8 +14,9 @@ class G4DataQuestionaire
     G4DataQuestionaire(G4DataType t1=no, G4DataType t2=no, G4DataType t3=no, G4DataType t4=no) 
     {
       G4cout <<G4endl<<G4endl;
-      G4cout << "You are using the simulation engine reuse library: PACK 2.0"<<G4endl;
+      G4cout << "You are using the simulation engine reuse library: PACK 2.3"<<G4endl;
       G4cout <<G4endl<<G4endl;
+      // G4cout << "##### the input "<<t1<<" "<<t2<<" "<<t3<<" "<<t4<<G4endl;
       for(G4int i=0; i<4; i++)
       {
 	G4DataType t(no);
@@ -57,8 +34,8 @@ class G4DataQuestionaire
 	      G4cout << "to point to your PhotonEvaporation directory."<<G4endl;
 	      G4cout << "Data are available from the geant4 download page."<<G4endl;
 	      G4Exception("Fatal error: Missing mandatory data for this simulation engine");
-	      break;
 	    }
+	    break;
           case neutron:
 	    if(!getenv("NeutronHPCrossSections") )
 	    {
@@ -68,8 +45,8 @@ class G4DataQuestionaire
 	      G4cout << "Data are available from http://cmsdoc.cern.ch/~hpw/G4NDL3.7.tar.gz "<<G4endl;
 	      G4cout << "of the geant4 download page."<<G4endl;
 	      G4Exception("Fatal error: Missing mandatory data for this simulation engine");
-	      break;
 	    }
+	    break;
           case radioactive:
 	    if(!getenv("G4RADIOACTIVEDATA") )
 	    {
@@ -78,8 +55,8 @@ class G4DataQuestionaire
 	      G4cout << "to point to your RadiativeDecay directory."<<G4endl;
 	      G4cout << "Data are available from the geant4 download page."<<G4endl;
 	      G4Exception("Fatal error: Missing mandatory data for this simulation engine");
-	      break;
 	    }
+	    break;
           case lowenergy:
 	    if(!getenv("G4LEDATA") )
 	    {
@@ -88,12 +65,13 @@ class G4DataQuestionaire
 	      G4cout << "to point to your G4EMLOW directory."<<G4endl;
 	      G4cout << "Data are available from the geant4 download page."<<G4endl;
 	      G4Exception("Fatal error: Missing mandatory data for this simulation engine");
-	      break;
 	    }
+	    break;
 	  case no:
 	    // all ok
-          default:
-            if(t1!=no) G4Exception("data type requested is not known to the system");
+            break;
+	  default:
+            if(t!=no) G4Exception("data type requested is not known to the system");
 	}
      }
    }
