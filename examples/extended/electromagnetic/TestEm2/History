@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2002-10-29 19:10:39 vnivanch Exp $
+$Id: History,v 1.22 2002-12-05 16:50:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,14 +15,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-12-02 G.Cosmo (testem2-V04-01-01)
+- Fixes to runAction for porting on gcc-3.2.
+
 29-10-02 V.Ivanchenko (testem2-V04-01-00)
--Modular PhysicsList + model approach for energy loss processes
+- Modular PhysicsList + model approach for energy loss processes
      
 05-06-02 mma (testem2-V04-00-01)
--do not delete histos in runAction destructor
+- do not delete histos in runAction destructor
 
 31-05-02 mma (testem2-V04-00-00)
--old histograming package clhep/hist replaced by AIDA 2.2/anaphe. See README 
+- old histograming package clhep/hist replaced by AIDA 2.2/anaphe. See README 
 
 11-12-01  gcosmo (testem2-V03-02-04)
 - SteppingAction: added check on history depth also for rings!

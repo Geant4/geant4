@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.cc,v 1.16 2002-10-14 15:56:27 vnivanch Exp $
+// $Id: Em2RunAction.cc,v 1.17 2002-12-05 16:50:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -361,8 +361,13 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
   //print
   // 
 
-  G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
-  G4int  oldprec = G4cout.precision(2);
+#ifdef G4USE_STD_NAMESPACE
+  G4std::ios::fmtflags mode = G4cout.flags();
+  G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#else 
+  G4long mode = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#endif
+  G4int  prec = G4cout.precision(2);
   
   G4cout << "                 LATERAL PROFILE                   "
          << "      CUMULATIVE LATERAL PROFILE" << G4endl << G4endl;  
@@ -417,8 +422,8 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
          << G4std::setw(7)  << MeanNeutrTrLength << " radl +- "
          << G4std::setw(7)  <<  rmsNeutrTrLength << " radl" << G4endl;
                  
-  G4cout.setf(oldform,G4std::ios::floatfield);
-  G4cout.precision(oldprec);
+  G4cout.setf(mode,G4std::ios::floatfield);
+  G4cout.precision(prec);
 
   // show Rndm status
   HepRandom::showEngineStatus();
