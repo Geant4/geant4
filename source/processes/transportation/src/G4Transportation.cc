@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Transportation.cc,v 1.9 2000-05-12 10:43:57 japost Exp $
+// $Id: G4Transportation.cc,v 1.10 2000-05-15 17:35:59 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -371,7 +371,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
 			     const G4Step&  stepData
 			    )
 {
-  G4VTouchable* retCurrentTouchable;   // The one to return
+  const G4VTouchable* retCurrentTouchable;   // The one to return
 
   //   Initialize ParticleChange  (by setting all its members equal
   //                               to corresponding members in G4Track)
@@ -403,6 +403,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
        fParticleChange.SetStatusChange( fStopAndKill ) ;
     }
     retCurrentTouchable= fCurrentTouchable;
+    fParticleChange.SetTouchableChange( fCurrentTouchable );
   }
   else{                    // fGeometryLimitedStep  is false
 #ifdef G4DEBUG
@@ -457,11 +458,11 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
 
        assert( fCurrentTouchable->GetVolume()->GetName() == 
                track.GetVolume()->GetName() );
-       // retCurrentTouchable = fCurrentTouchable; 
+       retCurrentTouchable = fCurrentTouchable; 
        fParticleChange.SetTouchableChange( fCurrentTouchable );
        
     }else{
-       // retCurrentTouchable = track.GetTouchable();
+       retCurrentTouchable = track.GetTouchable();
        fParticleChange.SetTouchableChange( track.GetTouchable() );
     }
     //  This must be done in the above if ( AtSur ) fails
@@ -480,13 +481,20 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
     //  Although in general this is fCurrentTouchable, at the start of
     //   a step it could be different ... ??
     fParticleChange.SetTouchableChange( track.GetTouchable() );
-    // retCurrentTouchable = track.GetTouchable();
+    retCurrentTouchable = track.GetTouchable();
 #endif
 
   }                   // endif ( fGeometryLimitedStep ) 
 
-  G4Material *pMaterial = retCurrentTouchable->GetVolume()->GetLogicalVolume()->GetMaterial(); 
-  fParticleChange.SetMaterialChange( pMaterial );
+  const G4VPhysicalVolume *pNewVol = retCurrentTouchable->GetVolume();
+  const G4Material *pNewMaterial=0; 
+  if( pNewVol != 0 ) pNewMaterial= pNewVol->GetLogicalVolume()->GetMaterial(); 
+
+  // ( <const_cast> pNewMaterial );
+  fParticleChange.SetMaterialChange( (G4Material *) pNewMaterial );
+  //    temporarily until Get/Set Material of ParticleChange, 
+  //    and StepPoint can be made const. 
+
 
   // Set the touchable in ParticleChange
   //   this must always be done because the particle change always
