@@ -104,29 +104,29 @@ Stage 1->2 : 1 isolated muon found.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 6
-     23 hits are stored in ExN04TrackerHitsCollection.
-     4 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.258006 (GeV)
+     57 hits are stored in ExN04TrackerHitsCollection.
+     5 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.482608 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 7
-     19 hits are stored in ExN04TrackerHitsCollection.
+     15 hits are stored in ExN04TrackerHitsCollection.
      4 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.263667 (GeV)
+     Total energy deposition in calorimeter : 0.272837 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 8
-     27 hits are stored in ExN04TrackerHitsCollection.
+     5 hits are stored in ExN04TrackerHitsCollection.
      4 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.2954 (GeV)
+     Total energy deposition in calorimeter : 0.279602 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 9
-     11 hits are stored in ExN04TrackerHitsCollection.
-     5 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.279685 (GeV)
+     17 hits are stored in ExN04TrackerHitsCollection.
+     4 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.259092 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Idle> 
