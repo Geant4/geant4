@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ClippablePolygon.cc,v 1.4 2000-11-13 08:11:39 gcosmo Exp $
+// $Id: G4ClippablePolygon.cc,v 1.5 2001-04-20 19:11:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@ G4ClippablePolygon::~G4ClippablePolygon()
 //
 void G4ClippablePolygon::AddVertexInOrder( const G4ThreeVector vertex )
 {
-	vertices.append( vertex );
+	vertices.push_back( vertex );
 }
 
 
@@ -67,7 +67,7 @@ G4bool G4ClippablePolygon::Clip( const G4VoxelLimits &voxelLimit )
 		ClipAlongOneAxis( voxelLimit, kZAxis );
 	}
 	
-	return (vertices.entries() > 0);
+	return (vertices.size() > 0);
 }
 
 
@@ -84,7 +84,7 @@ G4bool G4ClippablePolygon::PartialClip( const G4VoxelLimits &voxelLimit, const E
 		if (IgnoreMe != kZAxis) ClipAlongOneAxis( voxelLimit, kZAxis );
 	}
 	
-	return (vertices.entries() > 0);
+	return (vertices.size() > 0);
 }
 
 
@@ -97,7 +97,7 @@ G4bool G4ClippablePolygon::GetExtent( const EAxis axis,
 	//
 	// Okay, how many entries do we have?
 	//
-	G4int noLeft = vertices.entries();
+	G4int noLeft = vertices.size();
 	
 	//
 	// Return false if nothing is left
@@ -107,14 +107,14 @@ G4bool G4ClippablePolygon::GetExtent( const EAxis axis,
 	//
 	// Initialize min and max to our first vertex
 	//
-	min = max = vertices(0).operator()( axis );
+	min = max = vertices[0].operator()( axis );
 	
 	//
 	// Compare to the rest
 	//
 	G4int i;
 	for( i=1; i<noLeft; i++ ) {
-		G4double component = vertices(i).operator()( axis );
+		G4double component = vertices[i].operator()( axis );
 		if (component < min )
 			min = component;
 		else if (component > max )
@@ -133,7 +133,7 @@ G4bool G4ClippablePolygon::GetExtent( const EAxis axis,
 //
 const G4ThreeVector *G4ClippablePolygon::GetMinPoint( const EAxis axis ) const
 {
-	G4int noLeft = vertices.entries();
+	G4int noLeft = vertices.size();
 	if (noLeft==0) G4Exception( "G4ClippablePolygon::GetMinPoint -- empty polygon" );
 	
 	const G4ThreeVector *answer = &(vertices[0]);
@@ -141,7 +141,7 @@ const G4ThreeVector *G4ClippablePolygon::GetMinPoint( const EAxis axis ) const
 
 	G4int i;
 	for( i=1; i<noLeft; i++ ) {
-		G4double component = vertices(i).operator()( axis );
+		G4double component = vertices[i].operator()( axis );
 		if (component < min) {
 			answer = &(vertices[i]);
 			min = component;
@@ -160,7 +160,7 @@ const G4ThreeVector *G4ClippablePolygon::GetMinPoint( const EAxis axis ) const
 //
 const G4ThreeVector *G4ClippablePolygon::GetMaxPoint( const EAxis axis ) const
 {
-	G4int noLeft = vertices.entries();
+	G4int noLeft = vertices.size();
 	if (noLeft==0) G4Exception( "G4ClippablePolygon::GetMaxPoint -- empty polygon" );
 	
 	const G4ThreeVector *answer = &(vertices[0]);
@@ -168,7 +168,7 @@ const G4ThreeVector *G4ClippablePolygon::GetMaxPoint( const EAxis axis ) const
 
 	G4int i;
 	for( i=1; i<noLeft; i++ ) {
-		G4double component = vertices(i).operator()( axis );
+		G4double component = vertices[i].operator()( axis );
 		if (component > max) {
 			answer = &(vertices[i]);
 			max = component;
@@ -200,7 +200,7 @@ G4bool G4ClippablePolygon::InFrontOf( const G4ClippablePolygon &other, EAxis axi
 	//
 	// If things are empty, do something semi-sensible
 	//
-	G4int noLeft = vertices.entries();
+	G4int noLeft = vertices.size();
 	if (noLeft==0) return false;
 	
 	if (other.Empty()) return true;
@@ -260,7 +260,7 @@ G4bool G4ClippablePolygon::BehindOf( const G4ClippablePolygon &other, EAxis axis
 	//
 	// If things are empty, do something semi-sensible
 	//
-	G4int noLeft = vertices.entries();
+	G4int noLeft = vertices.size();
 	if (noLeft==0) return false;
 	
 	if (other.Empty()) return true;
@@ -322,7 +322,7 @@ G4bool G4ClippablePolygon::GetPlanerExtent( const G4ThreeVector &pointOnPlane,
 	//
 	// Okay, how many entries do we have?
 	//
-	G4int noLeft = vertices.entries();
+	G4int noLeft = vertices.size();
 	
 	//
 	// Return false if nothing is left
@@ -332,14 +332,14 @@ G4bool G4ClippablePolygon::GetPlanerExtent( const G4ThreeVector &pointOnPlane,
 	//
 	// Initialize min and max to our first vertex
 	//
-	min = max = planeNormal.dot(vertices(0)-pointOnPlane);
+	min = max = planeNormal.dot(vertices[0]-pointOnPlane);
 	
 	//
 	// Compare to the rest
 	//
 	G4int i;
 	for( i=1; i<noLeft; i++ ) {
-		G4double component = planeNormal.dot(vertices(i) - pointOnPlane);
+		G4double component = planeNormal.dot(vertices[i] - pointOnPlane);
 		if (component < min )
 			min = component;
 		else if (component > max )
@@ -372,7 +372,7 @@ void G4ClippablePolygon::ClipAlongOneAxis( const G4VoxelLimits &voxelLimit, cons
 	// If nothing is left from the above clip, we might as well return now
 	// (but with an empty vertices)
 	//
-	if (tempPolygon.entries() == 0) {
+	if (tempPolygon.size() == 0) {
 		vertices.clear();
 		return;
 	}
@@ -388,7 +388,7 @@ void G4ClippablePolygon::ClipAlongOneAxis( const G4VoxelLimits &voxelLimit, cons
 	//
 	// If nothing is left, return now
 	//
-	if (vertices.entries() == 0) return;
+	if (vertices.size() == 0) return;
 }
 
 
@@ -403,21 +403,21 @@ void G4ClippablePolygon::ClipToSimpleLimits( G4ThreeVectorList& pPolygon,
 				             const G4VoxelLimits& pVoxelLimit   )
 {
     G4int i;
-    G4int noVertices=pPolygon.entries();
+    G4int noVertices=pPolygon.size();
     G4ThreeVector vEnd,vStart;
     
     outputPolygon.clear();
     
     for (i=0;i<noVertices;i++)
 	{
-	    vStart=pPolygon(i);
+	    vStart=pPolygon[i];
 	    if (i==noVertices-1)
 		{
-		    vEnd=pPolygon(0);
+		    vEnd=pPolygon[0];
 		}
 	    else
 		{
-		    vEnd=pPolygon(i+1);
+		    vEnd=pPolygon[i+1];
 		}
 
 	    if (pVoxelLimit.Inside(vStart))
@@ -425,13 +425,13 @@ void G4ClippablePolygon::ClipToSimpleLimits( G4ThreeVectorList& pPolygon,
 		    if (pVoxelLimit.Inside(vEnd))
 			{
 // vStart and vEnd inside -> output end point
-			    outputPolygon.insert(vEnd);
+			    outputPolygon.push_back(vEnd);
 			}
 		    else
 			{
 // vStart inside, vEnd outside -> output crossing point
 			    pVoxelLimit.ClipToLimits(vStart,vEnd);
-			    outputPolygon.insert(vEnd);
+			    outputPolygon.push_back(vEnd);
 			}
 		    
 		}
@@ -441,8 +441,8 @@ void G4ClippablePolygon::ClipToSimpleLimits( G4ThreeVectorList& pPolygon,
 			{
 // vStart outside, vEnd inside -> output inside section
 			    pVoxelLimit.ClipToLimits(vStart,vEnd);
-			    outputPolygon.insert(vStart);
-			    outputPolygon.insert(vEnd);
+			    outputPolygon.push_back(vStart);
+			    outputPolygon.push_back(vEnd);
 			}
 		    else
 // Both point outside -> no output

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ClippablePolygon.hh,v 1.4 2000-11-02 16:54:48 gcosmo Exp $
+// $Id: G4ClippablePolygon.hh,v 1.5 2001-04-20 19:11:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -26,6 +26,8 @@
 #ifndef G4ClippablePolygon_hh
 #define G4ClippablePolygon_hh
 
+#include "g4std/vector"
+
 #include "globals.hh"
 #include "geomdefs.hh"
 #include "G4ThreeVector.hh"
@@ -36,11 +38,10 @@ class G4AffineTransform;
 class G4AffineTransform;
 class G4VoxelLimits;
 
-#include "g4rw/tvordvec.h"
-typedef G4RWTValOrderedVector<G4ThreeVector> G4ThreeVectorList;
-
 class G4ClippablePolygon
 {
+  typedef G4std::vector<G4ThreeVector> G4ThreeVectorList;
+
   public:  // with description
 
 	G4ClippablePolygon();
