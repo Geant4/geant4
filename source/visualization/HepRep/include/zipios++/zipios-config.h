@@ -36,8 +36,8 @@
 /* define if the compiler has std compliant iostream library */
 #define HAVE_STD_IOSTREAM 1
 
-#undef  S_ISSOCK
-#define S_ISSOCK(mode)	0
+//#undef  S_ISSOCK
+//#define S_ISSOCK(mode)	0
 
 #ifdef WIN32
 #  ifdef _MSC_VER
@@ -50,8 +50,8 @@
 #   define S_ISDIR(mode)	(((mode) & _S_IFDIR) == _S_IFDIR)
 #   define S_ISCHR(mode)	(((mode) & _S_IFCHR) == _S_IFCHR)
 #   define S_ISBLK(mode)	0
+#   define S_ISSOCK(mode)	0
 #   define S_ISFIFO(mode)	(((mode) & _S_IFIFO) == _S_IFIFO)
-
 #endif
 
 #include <assert.h>
