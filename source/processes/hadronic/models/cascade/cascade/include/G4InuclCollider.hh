@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4INUCL_COLLIDER_HH
+#define G4INUCL_COLLIDER_HH
+ 
 #include "G4Collider.hh"
 #include "G4IntraNucleiCascader.hh"
 #include "G4NonEquilibriumEvaporator.hh"

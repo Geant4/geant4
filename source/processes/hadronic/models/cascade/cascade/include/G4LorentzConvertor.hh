@@ -19,6 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4LORENTZ_CONVERTOR_HH
+#define G4LORENTZ_CONVERTOR_HH
 
 #ifndef GLOB
 #include "globals.hh"

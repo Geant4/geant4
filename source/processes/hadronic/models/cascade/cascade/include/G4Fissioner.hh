@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4FISSIONER_HH
+#define G4FISSIONER_HH
+
 #include "G4Collider.hh"
 #include "G4InuclSpecialFunctions.hh"
 

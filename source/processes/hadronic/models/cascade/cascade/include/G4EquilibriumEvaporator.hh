@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4EQUILIBRIUM_EVAPORATOR_HH
+#define G4EQUILIBRIUM_EVAPORATOR_HH
+
 #include "G4Collider.hh"
 #include "G4Fissioner.hh"
 #include "G4BigBanger.hh"

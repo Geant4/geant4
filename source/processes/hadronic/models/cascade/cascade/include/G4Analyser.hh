@@ -19,7 +19,10 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4ANALYSER_HH
 #define G4ANALYSER_HH
+
+#define WITH_NUCLEI
 
 #include "G4CollisionOutput.hh"
 //#include "G4InuclParticle.hh"

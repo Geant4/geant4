@@ -19,6 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
+#define G4INUCL_ELEMENTARY_PARTICLE_HH
 
 #include "globals.hh"
 

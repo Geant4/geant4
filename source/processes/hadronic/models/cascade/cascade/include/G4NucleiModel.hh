@@ -19,6 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4NUCLEI_MODEL_HH
+#define G4NUCLEI_MODEL_HH
 
 //#include "G4InuclNuclei.hh"
 

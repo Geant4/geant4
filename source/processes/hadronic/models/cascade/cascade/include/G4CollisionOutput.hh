@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4COLLISION_OUTPUT_HH
+#define G4COLLISION_OUTPUT_HH
+
 #include "g4std/iostream"
 
 #include "G4InuclElementaryParticle.hh"

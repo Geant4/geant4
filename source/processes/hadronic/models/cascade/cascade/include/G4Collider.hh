@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4COLLIDER_HH
+#define G4COLLIDER_HH
+
 //#ifndef G4INUCL_PARTICLE_HH
 #include "G4InuclParticle.hh"
 //#endif
