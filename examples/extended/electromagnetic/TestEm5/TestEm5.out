@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (17-December-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -227,7 +227,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=45.14s Real=852.11s Sys=90s
+  User=43.93s Real=922.95s Sys=89.32s
 
  ======================== run summary ======================
 
@@ -239,7 +239,7 @@ Run Summary
  (from Table = 2.803 MeV/cm)	 (from Table    = 1.203 MeV*cm2/g)
 
  Total track length (charged) in absorber per event = 20.97 mum +- 15.49 nm 
- Total track length (neutral) in absorber per event = 6172 fm  +- 4626 fm 
+ Total track length (neutral) in absorber per event = 6173 fm  +- 4626 fm 
 
  Number of steps (charged) in absorber per event = 1.081 +- 1.245e-05
  Number of steps (neutral) in absorber per event = 2e-05 +- 1.245e-05

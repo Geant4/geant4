@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (17-December-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -177,7 +177,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   31.9 m       0 fm      0 fm   29.8 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m   -65.2 mum -53.1 mum  29.4 TeV   441 GeV   218 m     218 m    OutOfWorld  Transportation
+    1    250 m   -65.2 mum -53.1 mum  18.1 TeV  11.7 TeV   218 m     218 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
@@ -185,7 +185,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   31.9 m       0 fm      0 fm   70.2 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m    27.6 mum  22.6 mum  69.7 TeV   474 GeV   218 m     218 m    OutOfWorld  Transportation
+    1    250 m    27.6 mum  22.6 mum  40.5 TeV  29.7 TeV   218 m     218 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -217,7 +217,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0  -84.8 m       0 fm      0 fm     92 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m     623 mum -1.81 mm   91.3 TeV   670 GeV   335 m     335 m    OutOfWorld  Transportation
+    1    250 m     623 mum -1.81 mm     50 TeV    42 TeV   335 m     335 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
@@ -225,15 +225,17 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0  -84.8 m       0 fm      0 fm   8.02 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m   -7.58 mm   2.16 cm   6.79 TeV  1.23 TeV   335 m     335 m    OutOfWorld  Transportation
+    1    119 m   -3.42 mm   8.94 cm   2.06 TeV  5.96 TeV   204 m     204 m          Iron      muIoni
+    2    232 m   -9.56 cm   18.7 cm   1.39 TeV   666 GeV   112 m     316 m          Iron      muIoni
+    3    250 m   -9.31 cm   18.1 cm   1.31 TeV  83.5 GeV  18.4 m     335 m    OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0s Real=1.77s Sys=0.01s
+  User=0s Real=1.16s Sys=0.02s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 402616482, 405070230
+ Current couple of seeds = 1362242984, 2014133420
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
