@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2000-04-07 11:08:23 gcosmo Exp $
+$Id: History,v 1.2 2000-04-07 13:02:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -26,6 +26,8 @@ committal in the CVS repository !
   The new module's library for "specific" is now called 'G4specsolids'.
 - Created specific/test directory and moved testG4Hype.cc and testG4Polycone,cc
   from CSG/test.
+- Organised class description comments for the Software Reference Manual
+  and added CVS headers to files.
 
 29-Mar-2000, D.Williams
 -----------------------
