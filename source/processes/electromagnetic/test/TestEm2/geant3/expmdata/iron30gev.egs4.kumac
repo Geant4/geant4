@@ -46,7 +46,7 @@ put/contents 9 vect1
 
 * save histo
 *
-* h/file 1 ../results/iron30gev.egs4.paw ! n
-* hrout 0
+h/file 1 ../results/run04.egs4dat.paw ! n
+hrout 0
  
 return 	     

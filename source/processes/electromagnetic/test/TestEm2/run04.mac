@@ -1,0 +1,29 @@
+# $Id: run04.mac,v 1.1 1999-03-18 17:47:28 maire Exp $
+#
+# Macro file for "TestEm2.cc" 
+# (can be run in batch, without graphic)
+#
+# Fe L = 20 radl  R = 5 radl; electron 30 GeV
+#
+# EGS4 simulation: Particle Data Group - Phys.Rev.D 50-3 - August94
+#
+/control/verbose 2
+#
+/calor/setMat Fe
+/calor/setLbin 40 0.5
+/calor/setRbin 20 0.25
+/calor/update
+#
+/run/particle/setCut 0.8 mm
+/run/initialize
+#
+/run/verbose 2
+/event/drawTracks none
+/event/printModulo 10
+/run/save on
+#
+/gun/particle electron
+/gun/energy 30 GeV
+/run/beamOn 100
+
+
