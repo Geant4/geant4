@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2000-05-21 17:11:48 chauvie Exp $
+# $Id: GNUmakefile,v 1.2 2000-05-23 18:53:25 pia Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # G4NOHIST variable is checked.  Vladimir Ivanchenko, 2000/01/18
@@ -9,7 +9,7 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../..
+  G4INSTALL = ../../../../../..
 endif
 
 .PHONY: all
