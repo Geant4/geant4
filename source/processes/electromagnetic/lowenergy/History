@@ -1,4 +1,4 @@
-$Id: History,v 1.109 2001-10-10 17:53:28 pia Exp $
+$Id: History,v 1.110 2001-10-11 14:55:48 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11.10.2001 - MGP, tag emlowen-V03-02-27
+             Further revision of the new code in the previous tag
+             Restored G4LowEnergyIonisation and G4LowEnergyBremsstrahlung 
+             as in emlowen-V03-02-25; new versions as in emlowen-V03-02-26
+             renamed temporarily to allow for parallel development
+             Removed references to Rogue Wave and STL interface from
+             test/LowEnTest/ and test/fluoTest/
 
 10.10.2001 - MGP, tag emlowen-V03-02-26
              Code for implementation of design iteration for electrons 
