@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01VisManager.cc,v 1.5 2002-11-13 20:59:45 duns Exp $
+// $Id: AnaEx01VisManager.cc,v 1.6 2003-06-20 14:55:45 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01SteppingVerbose.cc,v 1.5 2003-06-16 16:47:07 gunter Exp $
+// $Id: AnaEx01SteppingVerbose.cc,v 1.6 2003-06-20 14:55:45 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -116,7 +116,7 @@ void AnaEx01SteppingVerbose::StepInfo()
 	       << G4endl;
 
 	for(G4int lp1=(*fSecondary).size()-tN2ndariesTot; 
-                        lp1<(*fSecondary).size(); lp1++){
+                        lp1<(int)(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length")

@@ -28,56 +28,85 @@
 #
 #/////////////////////////////////////////////////////////////////////////////
 
-# Hook the current plotter :
-plotter = Plotter('')
+from Lab import *
 
-plotter.createRegions(1,2)
-plotter.setParameter('pageTitle','AnaEx01 analysis')
+# Get some AIDA factories :
+plotterFactory = aida.createPlotterFactory()
+treeFactory = aida.createTreeFactory()
+histogramFactory = aida.createHistogramFactory(memoryTree)
+functionFactory = aida.createFunctionFactory(memoryTree)
 
-rootTree = RootTree('AnaEx01.root','READ')
-rootTree.ls()
+# Attach the current plotter :
+plotter = plotterFactory.create('')
+
+plotter.createRegions(1,2,0)
+plotter.setParameter('title','AnaEx01 analysis')
+
+# If already loaded close (not delete) the file :
+fileName='AnaEx01.root'
+session.destroyManager(fileName)
+
+rioTree = treeFactory.create(fileName,'ROOT',1,0)
+rioTree.ls()
 
 #/////////////////////////////////////////////////////////////////////////////
 # In first region, get and plot the EAbs histo :
 #/////////////////////////////////////////////////////////////////////////////
 
-rootTree.cd('histograms')
-rootTree.ls()
+rioTree.cd('histograms')
+rioTree.ls()
 
 #  Get some histograms with the H1Get 
 # builtin Python procedure (defined in Lab/scripts/Python/Lab_init.py).
 
-EAbs = H1D_get(rootTree,'EAbs')
-
-# Plot the histo :
-plotter.plot(EAbs)
+EAbs = IManagedObject_to_IHistogram1D(rioTree.find('EAbs'))
+if EAbs == None:
+ print 'EAbs not found or is not an AIDA::IHistogram1D.'
+else :
+ # Plot the histo :
+ region = plotter.currentRegion()
+ region.plot(EAbs)
 
 #/////////////////////////////////////////////////////////////////////////////
 # In second region plot the EAbs histo built from the tuple :
 #/////////////////////////////////////////////////////////////////////////////
 
-rootTree.cd('..')
-rootTree.cd('tuples')
-rootTree.ls()
+rioTree.cd('..')
+rioTree.cd('tuples')
+rioTree.ls()
 
-tuple = Tuple("AnaEx01","AnaEx01","",rootTree)
+rioTupleFactory = aida.createTupleFactory(rioTree)
+# Get a tuple from the rioTree :
+tuple = rioTupleFactory.create('AnaEx01','AnaEx01','')
 
 # Create an histo in the default memory tree :
-tuple_EAbs = H1D('tuple_EAbs','AnaEx01/EAbs',100,0,100)
+tuple_EAbs = histogramFactory.createHistogram1D('tuple_EAbs','AnaEx01/EAbs',100,0,100)
 
 # Create an Evaluator and a Filter object :
-evaluator = Evaluator(tuple,'EAbs')
-filter = Filter(tuple,'')
+evaluator = rioTupleFactory.createEvaluator('EAbs')
+evaluator.initialize(tuple)
+filter = rioTupleFactory.createFilter('')
+filter.initialize(tuple)
 
 # Project tuple AnaEx01/EAbs column on the tuple_EAbs histo :
 tuple.project(tuple_EAbs,evaluator,filter)
 
 plotter.next()
-plotter.plot(tuple_EAbs)
-plotter.setParameter('histogramContext','color red modeling solid')
+region = plotter.currentRegion()
+region.plot(tuple_EAbs)
+region.setParameter('histogramContext','color red modeling solid')
 
-# Evaluators and Filters are not managed, delete them explicitly :
-delete_IEvaluator(evaluator)
-delete_IFilter(filter)
+del evaluator
+del filter
 
-echo('The two histos must give the same information !')
+print 'The two histos must give the same information !'
+
+del rioTupleFactory
+
+del rioTree
+del plotter
+del region
+del plotterFactory
+del treeFactory
+del histogramFactory
+del functionFactory
