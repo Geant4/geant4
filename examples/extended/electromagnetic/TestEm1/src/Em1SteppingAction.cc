@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1SteppingAction.cc,v 1.4 2000-12-07 11:43:04 maire Exp $
+// $Id: Em1SteppingAction.cc,v 1.5 2001-02-21 14:00:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,6 +18,10 @@
 #include "Em1EventAction.hh"
 #include "G4SteppingManager.hh"
 #include "G4VProcess.hh"
+
+#ifndef G4NOHIST
+ #include "CLHEP/Hist/HBookFile.h"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -41,7 +45,11 @@ void Em1SteppingAction::UserSteppingAction(const G4Step* aStep)
  if (process) runAction->CountProcesses(process->GetProcessName());
  
  G4double charge  = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
- G4double steplen = aStep->GetStepLength();                 
+ G4double steplen = aStep->GetStepLength();
+ 
+#ifndef G4NOHIST 
+ if (charge != 0.) runAction->GetHisto(2)->accumulate(steplen);
+#endif                    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
