@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DigiManager.cc,v 1.3 1999-12-15 14:53:52 gunter Exp $
+// $Id: G4DigiManager.cc,v 1.4 2001-02-08 06:07:21 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,7 +44,10 @@ G4DigiManager::G4DigiManager():verboseLevel(0)
 
 G4DigiManager::~G4DigiManager()
 {
-  DMtable.clearAndDestroy();
+  //DMtable.clearAndDestroy();
+  for(G4int i=0;i<DMtable.size();i++)
+  { delete DMtable[i]; }
+  DMtable.clear();
   delete DCtable;
   delete theMessenger;
 }
@@ -52,17 +55,20 @@ G4DigiManager::~G4DigiManager()
 void G4DigiManager::AddNewModule(G4VDigitizerModule* DM)
 {
   G4String DMname = DM->GetName();
-  if(DMtable.index(DM) != G4std::string::npos)
-  { 
-    G4cout << "<" << DMname << "> has already been registored." << G4endl; 
-    return;
+  for(int j=0;j<DMtable.size();j++)
+  {
+    if(DMtable[j]==DM)
+    { 
+      G4cout << "<" << DMname << "> has already been registored." << G4endl; 
+      return;
+    }
   }
-  else if( verboseLevel > 0 )
+  if( verboseLevel > 0 )
   {
     G4cout << "New DigitizerModule <" << DMname
          << "> is registored." << G4endl;
   }
-  DMtable.insert(DM);
+  DMtable.push_back(DM);
 
   G4int numberOfCollections = DM->GetNumberOfCollections();
   for(int i=0;i<numberOfCollections;i++)
@@ -95,7 +101,7 @@ void G4DigiManager::Digitize(G4String mName)
 
 G4VDigitizerModule* G4DigiManager::FindDigitizerModule(G4String mName)
 {
-  for(G4int i=0;i<DMtable.entries();i++)
+  for(G4int i=0;i<DMtable.size();i++)
   {
     if(DMtable[i]->GetName() == mName) return DMtable[i];
   }
@@ -177,13 +183,13 @@ void G4DigiManager::SetDigiCollection(G4int DCID,G4VDigiCollection* aDC)
 void G4DigiManager::SetVerboseLevel(G4int val)
 {
   verboseLevel = val;
-  for(G4int i=0;i<DMtable.entries();i++)
+  for(G4int i=0;i<DMtable.size();i++)
   { DMtable[i]->SetVerboseLevel(val); }
 }
 
 void G4DigiManager::List() const
 {
-  for(G4int i=0;i<DMtable.entries();i++)
+  for(G4int i=0;i<DMtable.size();i++)
   { G4cout << "   " << i << " : " << DMtable[i]->GetName() << G4endl; }
 }
 

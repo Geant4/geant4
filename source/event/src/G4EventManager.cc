@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EventManager.cc,v 1.5 2000-01-26 06:42:15 asaim Exp $
+// $Id: G4EventManager.cc,v 1.6 2001-02-08 06:07:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -184,7 +184,13 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
         G4cout << "Illeagal TrackStatus returned from G4TrackingManager!"
              << G4endl;
       case fKillTrackAndSecondaries:
-        if( secondaries ) secondaries->clearAndDestroy();
+        //if( secondaries ) secondaries->clearAndDestroy();
+        if( secondaries )
+        {
+          for(G4int i=0;i<secondaries->size();i++)
+          { delete (*secondaries)[i]; }
+          secondaries->clear();
+        }
         delete track;
         break;
     }
@@ -217,7 +223,7 @@ void G4EventManager::StackTracks(G4TrackVector *trackVector)
   if( trackVector )
   {
 
-    size_t n_passedTrack = trackVector->entries();
+    size_t n_passedTrack = trackVector->size();
     if( n_passedTrack == 0 ) return;
     for( size_t i = 0; i < n_passedTrack; i++ )
     {

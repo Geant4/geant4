@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDigitizerModule.hh,v 1.4 1999-12-15 14:53:51 gunter Exp $
+// $Id: G4VDigitizerModule.hh,v 1.5 2001-02-08 06:07:21 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -15,7 +15,8 @@
 class G4DigiManager;
 class G4VDigiCollection;
 #include "globals.hh"
-#include "g4rw/tvordvec.h"
+//#include "g4rw/tvordvec.h"
+#include "g4std/vector"
 
 // class description:
 //
@@ -52,12 +53,12 @@ class G4VDigitizerModule
   protected:
     G4DigiManager* DigiManager;
     G4String moduleName;
-    G4RWTValOrderedVector<G4String> collectionName;
+    G4std::vector<G4String> collectionName;
     G4int verboseLevel;
 
   public:
     inline G4int GetNumberOfCollections() const
-    { return collectionName.entries(); }
+    { return collectionName.size(); }
     inline G4String GetCollectionName(G4int i) const
     { return collectionName[i]; }
     inline G4String GetName() const

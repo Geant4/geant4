@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.hh,v 1.14 2001-02-07 09:22:45 asaim Exp $
+// $Id: G4RunManager.hh,v 1.15 2001-02-08 06:07:22 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

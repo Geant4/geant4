@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommandTree.hh,v 1.5 2000-02-14 12:24:41 asaim Exp $
+// $Id: G4UIcommandTree.hh,v 1.6 2001-02-08 06:07:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -15,7 +15,8 @@
 
 #include "G4UIcommand.hh"
 #include "globals.hh"
-#include "g4rw/tpordvec.h"
+//#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 // class description:
 //
@@ -42,8 +43,8 @@ class G4UIcommandTree
       void ListCurrentWithNum();
 
   private:
-      G4RWTPtrOrderedVector<G4UIcommand> command;
-      G4RWTPtrOrderedVector<G4UIcommandTree> tree;
+      G4std::vector<G4UIcommand*> command;
+      G4std::vector<G4UIcommandTree*> tree;
       G4UIcommand *guidance;
       G4String pathName;
 
@@ -53,14 +54,14 @@ class G4UIcommandTree
       inline const G4String GetPathName() const
       { return pathName; };
       inline G4int GetTreeEntry() const
-      { return tree.entries(); };
+      { return tree.size(); };
       inline G4int GetCommandEntry() const
-      { return command.entries(); };
+      { return command.size(); };
       inline G4UIcommandTree * GetTree(int i)
       { return tree[i-1]; };
       inline G4UIcommandTree * GetTree(G4String comName)
       { 
-        for( int i=0; i < tree.entries(); i++)
+        for( int i=0; i < tree.size(); i++)
         {
           if( comName == tree[i]->GetPathName() )
           { return tree[i]; }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImanager.hh,v 1.6 2000-07-22 10:49:37 asaim Exp $
+// $Id: G4UImanager.hh,v 1.7 2001-02-08 06:07:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -14,7 +14,8 @@
 
 #include "globals.hh"
 #include "g4rw/ctoken.h"
-#include "g4rw/tvordvec.h"
+//#include "g4rw/tvordvec.h"
+#include "g4std/vector"
 #include "g4std/fstream"
 #include "G4VStateDependent.hh"
 class G4UIcommandTree;
@@ -105,7 +106,7 @@ class G4UImanager : public G4VStateDependent
       G4int verboseLevel;
       G4std::ofstream historyFile;
       G4bool saveHistory;
-      G4RWTValOrderedVector<G4String> histVec;
+      G4std::vector<G4String> histVec;
       
       G4bool pauseAtBeginOfEvent;
       G4bool pauseAtEndOfEvent;
@@ -167,11 +168,11 @@ class G4UImanager : public G4VStateDependent
       inline G4int GetVerboseLevel() const
       { return verboseLevel; };
       inline G4int GetNumberOfHistory() const
-      { return histVec.entries(); };
+      { return histVec.size(); };
       inline G4String GetPreviousCommand(G4int i) const
       { 
         G4String st;
-        if(i>=0 && i<histVec.entries())
+        if(i>=0 && i<histVec.size())
         { st = histVec[i]; }
         return st;
       }

@@ -30,6 +30,7 @@
 //           { posphi = acos(tx/sin(posthe)); }
 //          else 
 //           { posphi = 0.0;}
+//          endif
 //
 // 10-Nov-2000, F. Lei
 //    some bug fixing:

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommand.hh,v 1.5 1999-12-15 14:50:39 gunter Exp $
+// $Id: G4UIcommand.hh,v 1.6 2001-02-08 06:07:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,8 +17,9 @@
 class G4UImessenger;
 #include "globals.hh"
 #include "G4ApplicationState.hh"
-#include "g4rw/tpordvec.h"
-#include "g4rw/tvordvec.h"
+//#include "g4rw/tpordvec.h"
+//#include "g4rw/tvordvec.h"
+#include "g4std/vector"
 #include "G4UItokenNum.hh"
 
 // class description:
@@ -74,9 +75,9 @@ class G4UIcommand
       G4String commandPath;
       G4String commandName;
       G4String rangeString;
-      G4RWTPtrOrderedVector<G4UIparameter> parameter;
-      G4RWTValOrderedVector<G4String> commandGuidance;
-      G4RWTValOrderedVector<G4ApplicationState> availabelStateList;
+      G4std::vector<G4UIparameter*> parameter;
+      G4std::vector<G4String> commandGuidance;
+      G4std::vector<G4ApplicationState> availabelStateList;
 
   public: // with description
       inline void SetRange(const char* rs)
@@ -90,7 +91,7 @@ class G4UIcommand
       inline const G4String GetRange() const
       { return rangeString; };
       inline G4int GetGuidanceEntries() const
-      { return commandGuidance.entries(); }
+      { return commandGuidance.size(); }
       inline const G4String GetGuidanceLine(int i) const
       { return commandGuidance[i]; }
       inline const G4String GetCommandPath() const
@@ -98,14 +99,14 @@ class G4UIcommand
       inline const G4String GetCommandName() const
       { return commandName; }
       inline G4int GetParameterEntries() const
-      { return parameter.entries(); }
+      { return parameter.size(); }
       inline G4UIparameter * GetParameter(int i) const
       { return parameter[i]; }
   public: // with description
       inline void SetParameter(G4UIparameter *const newParameter)
       {
-	parameter.insert( newParameter );
-	newVal.resize( parameter.entries() );
+	parameter.push_back( newParameter );
+	newVal.resize( parameter.size() );
       }
       //  Defines a parameter. This method is used by the derived command classes
       // but the user can directly use this command when he/she defines a command
@@ -114,7 +115,7 @@ class G4UIcommand
       inline void SetGuidance(const char * aGuidance)
       { 
         G4String * theGuidance = new G4String( aGuidance );
-        commandGuidance.insert( *theGuidance ); 
+        commandGuidance.push_back( *theGuidance ); 
       }
       //  Adds a guidance line. Unlimitted number of invokation of this method is
       // allowed. The given lines of guidance will appear for the help. The first
@@ -123,10 +124,10 @@ class G4UIcommand
   public:
       inline const G4String GetTitle() const
       {
-	    if(commandGuidance.entries() == 0)
+	    if(commandGuidance.size() == 0)
 	    { return G4String("...Title not available..."); }
  	    else
-	    { return commandGuidance(0); }
+	    { return commandGuidance[0]; }
       }
 
   protected:
@@ -168,7 +169,7 @@ class G4UIcommand
     int bp;                      // buffer pointer for rangeBuf
     tokenNum token;
     yystype yylval;
-    G4RWTValOrderedVector<yystype>  newVal;
+    G4std::vector<yystype>  newVal;
     int paramERR;
 };
 

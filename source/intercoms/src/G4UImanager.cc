@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImanager.cc,v 1.6 2000-07-22 10:49:38 asaim Exp $
+// $Id: G4UImanager.cc,v 1.7 2001-02-08 06:07:20 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -233,7 +233,7 @@ int G4UImanager::ApplyCommand(G4String aCommand)
   { return fIllegalApplicationState; }
  
   if(saveHistory) historyFile << aCommand << G4endl; 
-  histVec.insert(aCommand);
+  histVec.push_back(aCommand);
   return targetCommand->DoIt( commandParameter );
 }
 

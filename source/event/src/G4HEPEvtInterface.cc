@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEPEvtInterface.cc,v 1.3 1999-12-15 14:49:40 gunter Exp $
+// $Id: G4HEPEvtInterface.cc,v 1.4 2001-02-08 06:07:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,28 +75,28 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
       = new G4HEPEvtParticle( particle, ISTHEP, JDAHEP1, JDAHEP2 );
 
     // Store
-    HPlist.insert( hepParticle );
+    HPlist.push_back( hepParticle );
   }
 
   // check if there is at least one particle
-  if( HPlist.entries() == 0 ) return; 
+  if( HPlist.size() == 0 ) return; 
 
   // make connection between daughter particles decayed from 
   // the same mother
-  for( int i=0; i<HPlist.entries(); i++ )
+  for( int i=0; i<HPlist.size(); i++ )
   {
-    if( HPlist(i)->GetJDAHEP1() > 0 ) //  it has daughters
+    if( HPlist[i]->GetJDAHEP1() > 0 ) //  it has daughters
     {
-      int jda1 = HPlist(i)->GetJDAHEP1()-1; // FORTRAN index starts from 1
-      int jda2 = HPlist(i)->GetJDAHEP2()-1; // but C++ starts from 0.
-      G4PrimaryParticle* mother = HPlist(i)->GetTheParticle();
+      int jda1 = HPlist[i]->GetJDAHEP1()-1; // FORTRAN index starts from 1
+      int jda2 = HPlist[i]->GetJDAHEP2()-1; // but C++ starts from 0.
+      G4PrimaryParticle* mother = HPlist[i]->GetTheParticle();
       for( int j=jda1; j<=jda2; j++ )
       {
-        G4PrimaryParticle* daughter = HPlist(j)->GetTheParticle();
-        if(HPlist(j)->GetISTHEP()>0)
+        G4PrimaryParticle* daughter = HPlist[j]->GetTheParticle();
+        if(HPlist[j]->GetISTHEP()>0)
         {
           mother->SetDaughter( daughter );
-          HPlist(j)->Done();
+          HPlist[j]->Done();
         }
       }
     }
@@ -110,18 +110,21 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
   G4PrimaryVertex* vertex = new G4PrimaryVertex(x0,y0,z0,t0);
 
   // put initial particles to the vertex
-  for( int ii=0; ii<HPlist.entries(); ii++ )
+  for( int ii=0; ii<HPlist.size(); ii++ )
   {
-    if( HPlist(ii)->GetISTHEP() > 0 ) // ISTHEP of daughters had been 
+    if( HPlist[ii]->GetISTHEP() > 0 ) // ISTHEP of daughters had been 
                                        // set to negative
     {
-      G4PrimaryParticle* initialParticle = HPlist(ii)->GetTheParticle();
+      G4PrimaryParticle* initialParticle = HPlist[ii]->GetTheParticle();
       vertex->SetPrimary( initialParticle );
     }
   }
 
   // clear G4HEPEvtParticles
-  HPlist.clearAndDestroy();
+  //HPlist.clearAndDestroy();
+  for(G4int iii=0;iii<HPlist.size();iii++)
+  { delete HPlist[iii]; }
+  HPlist.clear();
 
   // Put the vertex to G4Event object
   evt->AddPrimaryVertex( vertex );

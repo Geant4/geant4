@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryParticle.hh,v 1.7 2001-02-07 08:20:42 asaim Exp $
+// $Id: G4PrimaryParticle.hh,v 1.8 2001-02-08 06:07:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryTransformer.cc,v 1.6 2001-02-07 08:20:43 asaim Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.7 2001-02-08 06:07:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,7 +30,10 @@ G4PrimaryTransformer::~G4PrimaryTransformer()
     
 G4TrackVector* G4PrimaryTransformer::GimmePrimaries(G4Event* anEvent)
 {
-  TV.clearAndDestroy();
+  //TV.clearAndDestroy();
+  for(G4int i=0; i<TV.size();i++)
+  { delete TV[i]; }
+  TV.clear();
   G4int n_vertex = anEvent->GetNumberOfPrimaryVertex();
   if(n_vertex==0) return NULL; 
   for( int i=0; i<n_vertex; i++ )
@@ -120,7 +123,7 @@ void G4PrimaryTransformer::GenerateSingleTrack
     // Set weight ( vertex weight * particle weight )
     track->SetWeight(wv*(primaryParticle->GetWeight()));
     // Store it to G4TrackVector
-    TV.insert( track );
+    TV.push_back( track );
   }
 }
 

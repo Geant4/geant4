@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEPEvtInterface.hh,v 1.4 1999-12-15 14:49:38 gunter Exp $
+// $Id: G4HEPEvtInterface.hh,v 1.5 2001-02-08 06:07:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -13,7 +13,7 @@
 #define G4HEPEvtInterface_h 1
 
 #include "g4std/fstream"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 #include "globals.hh"
 #include "G4VPrimaryGenerator.hh"
 #include "G4HEPEvtParticle.hh"
@@ -70,7 +70,7 @@ class G4HEPEvtInterface:public G4VPrimaryGenerator
   private:
     G4String fileName;
     G4std::ifstream inputFile;
-    G4RWTPtrOrderedVector<G4HEPEvtParticle> HPlist;
+    G4std::vector<G4HEPEvtParticle*> HPlist;
 };
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommand.cc,v 1.5 1999-12-15 14:50:41 gunter Exp $
+// $Id: G4UIcommand.cc,v 1.6 2001-02-08 06:07:19 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,11 +39,11 @@ G4UIcommand::G4UIcommand(const char * theCommandPath,
   G4UIcommandCommonConstructorCode (comStr);
   G4String nullString;
   availabelStateList.clear();
-  availabelStateList.insert(PreInit);
-  availabelStateList.insert(Init);
-  availabelStateList.insert(Idle);
-  availabelStateList.insert(GeomClosed);
-  availabelStateList.insert(EventProc);
+  availabelStateList.push_back(PreInit);
+  availabelStateList.push_back(Init);
+  availabelStateList.push_back(Idle);
+  availabelStateList.push_back(GeomClosed);
+  availabelStateList.push_back(EventProc);
 }
 
 void G4UIcommand::G4UIcommandCommonConstructorCode
@@ -62,9 +62,10 @@ G4UIcommand::~G4UIcommand()
   G4UImanager* fUImanager = G4UImanager::GetUIpointer();
   if(fUImanager) fUImanager->RemoveCommand(this);
   
-  int n_parameterEntry = parameter.entries();
+  int n_parameterEntry = parameter.size();
   for( int i_thParameter=0; i_thParameter < n_parameterEntry; i_thParameter++ )
   { delete parameter[i_thParameter]; }
+  parameter.clear();
 }
 
 int G4UIcommand::operator==(const G4UIcommand &right) const
@@ -80,7 +81,7 @@ int G4UIcommand::operator!=(const G4UIcommand &right) const
 G4int G4UIcommand::DoIt(G4String parameterList)
 {
   G4String correctParameters;
-  int n_parameterEntry = parameter.entries();
+  int n_parameterEntry = parameter.size();
   if( n_parameterEntry != 0 )
   {
     G4String aToken;
@@ -160,15 +161,15 @@ G4String G4UIcommand::GetCurrentValue()
 void G4UIcommand::AvailableForStates(G4ApplicationState s1)
 {
   availabelStateList.clear();
-  availabelStateList.insert(s1);
+  availabelStateList.push_back(s1);
 }
 
 void G4UIcommand::AvailableForStates(G4ApplicationState s1,
                                      G4ApplicationState s2)
 {
   availabelStateList.clear();
-  availabelStateList.insert(s1);
-  availabelStateList.insert(s2);
+  availabelStateList.push_back(s1);
+  availabelStateList.push_back(s2);
 }
 
 void G4UIcommand::AvailableForStates(G4ApplicationState s1,
@@ -176,9 +177,9 @@ void G4UIcommand::AvailableForStates(G4ApplicationState s1,
                                      G4ApplicationState s3)
 {
   availabelStateList.clear();
-  availabelStateList.insert(s1);
-  availabelStateList.insert(s2);
-  availabelStateList.insert(s3);
+  availabelStateList.push_back(s1);
+  availabelStateList.push_back(s2);
+  availabelStateList.push_back(s3);
 }
 
 void G4UIcommand::AvailableForStates(G4ApplicationState s1,
@@ -187,10 +188,10 @@ void G4UIcommand::AvailableForStates(G4ApplicationState s1,
                                      G4ApplicationState s4)
 {
   availabelStateList.clear();
-  availabelStateList.insert(s1);
-  availabelStateList.insert(s2);
-  availabelStateList.insert(s3);
-  availabelStateList.insert(s4);
+  availabelStateList.push_back(s1);
+  availabelStateList.push_back(s2);
+  availabelStateList.push_back(s3);
+  availabelStateList.push_back(s4);
 }
 
 void G4UIcommand::AvailableForStates(G4ApplicationState s1,
@@ -200,11 +201,11 @@ void G4UIcommand::AvailableForStates(G4ApplicationState s1,
                                      G4ApplicationState s5)
 {
   availabelStateList.clear();
-  availabelStateList.insert(s1);
-  availabelStateList.insert(s2);
-  availabelStateList.insert(s3);
-  availabelStateList.insert(s4);
-  availabelStateList.insert(s5);
+  availabelStateList.push_back(s1);
+  availabelStateList.push_back(s2);
+  availabelStateList.push_back(s3);
+  availabelStateList.push_back(s4);
+  availabelStateList.push_back(s5);
 }
 
 G4bool G4UIcommand::IsAvailable()
@@ -213,7 +214,7 @@ G4bool G4UIcommand::IsAvailable()
   G4ApplicationState currentState 
    = G4StateManager::GetStateManager()->GetCurrentState();
    
-  int nState = availabelStateList.entries();
+  int nState = availabelStateList.size();
   for(int i=0;i<nState;i++)
   {
   	if(availabelStateList[i]==currentState)
@@ -273,12 +274,12 @@ void G4UIcommand::List()
   if(commandPath(commandPath.length()-1)!='/')
   { G4cout << "Command " << commandPath << G4endl; }
   G4cout << "Guidance :" << G4endl;
-  int n_guidanceEntry = commandGuidance.entries();
+  int n_guidanceEntry = commandGuidance.size();
   for( int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ )
   { G4cout << commandGuidance[i_thGuidance] << G4endl; }
   if( ! rangeString.isNull() )
   { G4cout << " Range of parameters : " << rangeString << G4endl; }
-  int n_parameterEntry = parameter.entries();
+  int n_parameterEntry = parameter.size();
   if( n_parameterEntry > 0 )
   {
     for( int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ )
@@ -315,9 +316,9 @@ TypeCheck(G4String newValues)
     char type;
     const char* t = newValues;
     G4std::istrstream is((char*)t);
-    for (unsigned i=0; i< parameter.entries(); i++) {
+    for (unsigned i=0; i< parameter.size(); i++) {
         is >> aNewValue;
-        type = toupper(parameter(i)->GetParameterType());
+        type = toupper(parameter[i]->GetParameterType());
         switch ( type ) {
             case 'D':
                 if( IsDouble(aNewValue)==0 ){
@@ -450,11 +451,11 @@ RangeCheck(G4String newValue) {
     bp = 0;                 // reset buffer pointer for G4UIpGetc()
     const char* t = newValue;
     G4std::istrstream is((char*)t);
-    for (unsigned i=0; i< parameter.entries(); i++) {
-        type= toupper(parameter(i)->GetParameterType());
+    for (unsigned i=0; i< parameter.size(); i++) {
+        type= toupper(parameter[i]->GetParameterType());
         switch ( type ) {
-            case 'D':  is >> newVal(i).D;  break;
-            case 'I':  is >> newVal(i).I;  break;
+            case 'D':  is >> newVal[i].D;  break;
+            case 'I':  is >> newVal[i].I;  break;
             case 'S':
             case 'B':
             default:  ;
@@ -728,11 +729,11 @@ Eval2(yystype arg1, int op, yystype arg2)
 
     if( arg1.type == IDENTIFIER) {
         unsigned i = IndexOf( arg1.S );
-        newValtype = toupper(parameter(i)->GetParameterType());
+        newValtype = toupper(parameter[i]->GetParameterType());
         switch ( newValtype ) {
             case 'I': 
                 if( arg2.type == CONSTINT ) {
-                    return CompareInt( newVal(i).I, op, arg2.I );
+                    return CompareInt( newVal[i].I, op, arg2.I );
                 } else {
                     G4cerr << "integer operand expected for "
                          <<  rangeString 
@@ -740,21 +741,21 @@ Eval2(yystype arg1, int op, yystype arg2)
                 } break;
             case 'D':
                 if( arg2.type == CONSTDOUBLE ) {
-                    return CompareDouble( newVal(i).D, op, arg2.D );
+                    return CompareDouble( newVal[i].D, op, arg2.D );
                 } else
                 if ( arg2.type == CONSTINT ) {  // integral promotion
-                    return CompareDouble( newVal(i).D, op, arg2.I );
+                    return CompareDouble( newVal[i].D, op, arg2.I );
                 } break;
             default: ;
         }
     }
     if( arg2.type == IDENTIFIER) {
         unsigned i = IndexOf( arg2.S );
-        newValtype = toupper(parameter(i)->GetParameterType());
+        newValtype = toupper(parameter[i]->GetParameterType());
         switch ( newValtype ) {
             case 'I': 
                 if( arg1.type == CONSTINT ) {
-                    return CompareInt( arg1.I, op, newVal(i).I );
+                    return CompareInt( arg1.I, op, newVal[i].I );
                 } else {
                     G4cerr << "integer operand expected for "
                          <<  rangeString
@@ -762,10 +763,10 @@ Eval2(yystype arg1, int op, yystype arg2)
                 } break;
             case 'D':
                 if( arg1.type == CONSTDOUBLE ) {
-                    return CompareDouble( arg1.D, op, newVal(i).D );
+                    return CompareDouble( arg1.D, op, newVal[i].D );
                 } else
                 if ( arg1.type == CONSTINT ) {  // integral promotion
-                    return CompareDouble( arg1.I, op, newVal(i).D );
+                    return CompareDouble( arg1.I, op, newVal[i].D );
                 } break;
             default: ;
         }
@@ -829,9 +830,9 @@ IndexOf( G4String nam)
 {
     unsigned i;
     G4String pname;
-    for( i=0;  i<parameter.entries(); i++)
+    for( i=0;  i<parameter.size(); i++)
     {
-        pname = parameter(i)-> GetParameterName();
+        pname = parameter[i]-> GetParameterName();
         if( pname == nam ) {
             return i;
         }
@@ -846,9 +847,9 @@ unsigned G4UIcommand::
 IsParameter(G4String nam)
 {
     G4String pname;
-    for(unsigned i=0;  i<parameter.entries(); i++)  
+    for(unsigned i=0;  i<parameter.size(); i++)  
     {
-        pname = parameter(i)-> GetParameterName();
+        pname = parameter[i]-> GetParameterName();
         if( pname == nam ) return 1;
     }
     return 0;
