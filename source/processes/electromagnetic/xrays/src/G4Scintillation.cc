@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.11 2002-11-08 01:33:32 gum Exp $
+// $Id: G4Scintillation.cc,v 1.12 2002-11-14 16:55:32 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -170,8 +170,8 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	G4double MeanNumPhotons = ScintillationYield * TotalEnergyDeposit;
 
-	G4int NumPhotons = (G4int) MeanNumPhotons +
-            int( ResolutionScale * G4RandGauss::shoot(0.0,sqrt(MeanNumPhotons)));
+	G4int NumPhotons = G4int (0.5 + MeanNumPhotons +
+            ResolutionScale * G4RandGauss::shoot(0.0,sqrt(MeanNumPhotons)));
 
 	if (NumPhotons <= 0) {
 
