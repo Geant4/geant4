@@ -96,7 +96,6 @@ void Histo::clear()
 #ifdef G4ANALYSIS_USE
   for(G4int i=0; i<m_Histo; i++) {
     m_histo[i]  = 0;
-    m_active[i] = false;
   }
   G4int nt = m_ntup.size();
   for(G4int j=0; j<nt; j++) {
@@ -213,6 +212,7 @@ void Histo::setHisto1D(G4int i, G4int nb, G4double x1, G4double x2, G4double u)
     m_xmin[i] = x1;
     m_xmax[i] = x2;
     m_unit[i] = uu;
+    m_active[i] = true;
   } else {
     G4cout << "Histo::setHisto1D: WARNING! wrong histogram index " << i << G4endl;
   }
@@ -241,7 +241,7 @@ void Histo::fill(G4int i, G4double x, G4double w)
   }
 #ifdef G4ANALYSIS_USE  
   if(i>=0 && i<m_Histo) {
-    if(m_active[i]) m_histo[i]->fill(x/m_unit[i], w);
+    if(m_histo[i]) m_histo[i]->fill(x/m_unit[i], w);
   } else {
     G4cout << "Histo::fill: WARNING! wrong histogram ID " << i << G4endl;
   }
@@ -257,7 +257,7 @@ void Histo::scale(G4int i, G4double x)
   }
 #ifdef G4ANALYSIS_USE  
   if(i>=0 && i<m_Histo) {
-    if(m_active[i]) m_histo[i]->scale(x);
+    if(m_histo[i]) m_histo[i]->scale(x);
   } else {
     G4cout << "Histo::scale: WARNING! wrong histogram ID " << i << G4endl;
   }
