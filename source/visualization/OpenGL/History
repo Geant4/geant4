@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2003-06-25 09:01:32 gcosmo Exp $
+$Id: History,v 1.28 2003-09-22 10:37:49 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+22nd September 2003  John Allison  (vis-V05-02-00, greps-V05-02-00)
+- Cosmetic change to regularise names:
+  o changed _Feedback3Dcolo to G4OpenGLXViewerFeedback3Dcolor.
+  o changed _DepthIndex to G4OpenGLXViewerDepthIndex.
 
 23rd June 2003  Guy Barrand  (opengl-V05-01-02)
 - Commit a first implementation of G4OpenGLWin32Viewer.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.18 2002-11-11 18:12:03 johna Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.19 2003-09-22 10:37:50 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -730,7 +730,7 @@ G4float* G4OpenGLXViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
   return loc;
 }
 
-typedef struct _DepthIndex {
+typedef struct G4OpenGLXViewerDepthIndex {
   GLfloat *ptr;
   GLfloat depth;
 } DepthIndex;

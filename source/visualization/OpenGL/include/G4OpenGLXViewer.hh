@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.17 2003-06-10 17:13:32 gcosmo Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.18 2003-09-22 10:37:50 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,7 +125,7 @@ private:
   G4OpenGLXViewer& operator = (const G4OpenGLXViewer&);
 };
 
-typedef struct _Feedback3Dcolor {
+typedef struct G4OpenGLXViewerFeedback3Dcolor {
   GLfloat x;
   GLfloat y;
   GLfloat z;
