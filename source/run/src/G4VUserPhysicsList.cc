@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.cc,v 1.9 2000-10-19 13:30:23 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.10 2000-11-08 10:02:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,11 @@
 
 
 G4VUserPhysicsList::G4VUserPhysicsList()
-                   :verboseLevel(1)
+                   :verboseLevel(1), 
+		    numberOfMaterial(0),
+		    fRetrievePhysicsTable(false),
+                    directoryPhysicsTable("."),
+		    fIsCheckedForRetrievePhysicsTable(false)
 {
   // default cut value  (1.0mm) 
   defaultCutValue = 1.0*mm;
@@ -484,56 +488,74 @@ void G4VUserPhysicsList::ReCalcCutValueForOthers()
 
 void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 {
+  if (fRetrievePhysicsTable) {
+#ifdef G4VERBOSE  
+    if (verboseLevel>2){
+      G4cout << "G4VUserPhysicsList::BuildPhysicsTable  ";
+      G4cout << " Retrieve Physics Table for ";
+      G4cout << particle->GetParticleName() << G4endl;
+    }
+#endif
+    if (CheckForRetrievePhysicsTable(directoryPhysicsTable)) {
+      //  Retrieve PhysicsTable from files for proccesses
+      RetrievePhysicsTable(particle);
+      return;
+    } else {
+#ifdef G4VERBOSE  
+      if (verboseLevel>2){
+	G4cout << "CheckForRetrievePhysicsTable failed " << G4endl;
+      }
+#endif
+      fRetrievePhysicsTable = false;
+    }
+  }
+
+#ifdef G4VERBOSE  
+    if (verboseLevel>2){
+      G4cout << "G4VUserPhysicsList::BuildPhysicsTable  ";
+      G4cout << " for " << particle->GetParticleName() << G4endl;
+    }
+#endif
   G4int j;
-  
   // Rebuild the physics tables for every process for this particle type
   G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
   for ( j=0; j < pVector->entries(); ++j) {
     (*pVector)[j]->BuildPhysicsTable(*particle);
   }
-
   for ( j=0; j < pVector->entries(); ++j) {
-
-    //*********************************************************************
-    // temporary addition to make the integral schema of electromagnetic
-    // processes work.
-    //
-    if((*pVector)[j]->GetProcessName() == "Imsc")
-      {
-	(*pVector)[j]->BuildPhysicsTable(*particle);
-      }
-    if((*pVector)[j]->GetProcessName() == "IeIoni")
-      {
-	(*pVector)[j]->BuildPhysicsTable(*particle);
-      }
-    if((*pVector)[j]->GetProcessName() == "IeBrems")
-      {
-	(*pVector)[j]->BuildPhysicsTable(*particle);
-      }
-    if((*pVector)[j]->GetProcessName() == "Iannihil")
-      {
-        (*pVector)[j]->BuildPhysicsTable(*particle);
-      }
-    if((*pVector)[j]->GetProcessName() == "IhIoni")
-      {
-        (*pVector)[j]->BuildPhysicsTable(*particle);
-      }
-    if((*pVector)[j]->GetProcessName() == "IMuIoni")
-      {
-        (*pVector)[j]->BuildPhysicsTable(*particle);
-      }
-    if((*pVector)[j]->GetProcessName() == "IMuBrems")
-      {
-        (*pVector)[j]->BuildPhysicsTable(*particle);
-      }
-    if((*pVector)[j]->GetProcessName() == "IMuPairProd")
-      {
-        (*pVector)[j]->BuildPhysicsTable(*particle);
-      }
-    //*********************************************************************
-
+    // temporary addition to make the integral schema
+    BuildIntegralPhysicsTable((*pVector)[j], particle); 
   }
 }
+
+void  G4VUserPhysicsList::BuildIntegralPhysicsTable(G4VProcess* process,
+						    G4ParticleDefinition* particle) 
+{
+  //*********************************************************************
+  // temporary addition to make the integral schema of electromagnetic
+  // processes work.
+  //
+
+  if ( (process->GetProcessName() == "Imsc") ||
+       (process->GetProcessName() == "IeIoni") ||
+       (process->GetProcessName() == "IeBrems") ||
+       (process->GetProcessName() == "Iannihil") ||
+       (process->GetProcessName() == "IhIoni") ||
+       (process->GetProcessName() == "IMuIoni") ||
+       (process->GetProcessName() == "IMuBrems") ||
+       (process->GetProcessName() == "IMuPairProd")  ) {
+#ifdef G4VERBOSE  
+    if (verboseLevel>2){
+      G4cout << "G4VUserPhysicsList::BuildIntegralPhysicsTable  ";
+      G4cout << " BuildPhysicsTable is invoked for ";
+      G4cout << process->GetProcessName();
+      G4cout << "(" << particle->GetParticleName() << ")" << G4endl;
+    }
+#endif
+    process->BuildPhysicsTable(*particle);
+  }
+}
+
 void G4VUserPhysicsList::DumpList() const
 {
   theParticleIterator->reset();
@@ -675,15 +697,400 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
   G4cout.precision(prec);
 }
 
+G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
+{
+  G4String dir = directory;
+  if (dir.isNull()) dir = directoryPhysicsTable;  
+  if (!StoreMaterialInfo(dir)) return false;
+  if (!StoreCutValues(dir)) return false;
+#ifdef G4VERBOSE  
+  if (verboseLevel>2){
+    G4cout << "G4VUserPhysicsList::StorePhysicsTable   ";
+    G4cout << " Store material and cu values successfully" << G4endl;
+  }
+#endif
 
+  return true;
+}
 
+G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory)
+{
+  const G4String fileName = directory + "/" + "material.dat";
+  const G4String key = "MATERIAL";
+  G4std::ofstream fOut;  
 
+  // open output file //
+  fOut.open(fileName,ios::out);
 
+  // check if the file has been opened successfully 
+  if (!fOut) {
+#ifdef G4VERBOSE  
+    G4cerr << "G4VUserPhysicsList::StoreMaterialInfo  ";
+    G4cerr << " Can not open file " << fileName << G4endl;
+#endif
+    return false;
+  }
 
+  // key word
+  fOut << key << G4endl;
+ 
+  const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
 
+  // number of materials in the table
+  numberOfMaterial = matTable->entries();
+  fOut << numberOfMaterial << G4endl;
 
+  fOut.setf(ios::scientific);
 
+  // material name and density
+  for (G4int idx=0; idx<matTable->entries(); ++idx){
+    fOut << setw(20) << ((*matTable)[idx])->GetName();
+    fOut << setw(20) << ((*matTable)[idx])->GetDensity()/(g/cm3) << G4endl;
+  }
 
+  fOut.unsetf(ios::scientific);
 
+  fOut.close();
+  return true;
+}
+
+G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory)
+{
+  const G4String fileName = directory + "/" + "cut_value.dat";
+  const G4String key = "CUT_VALUE";
+  G4std::ofstream fOut;  
+
+  // open output file //
+  fOut.open(fileName,ios::out);
+
+  // check if the file has been opened successfully 
+  if (!fOut) {
+#ifdef G4VERBOSE  
+    G4cerr << "G4VUserPhysicsList::StoreCutValues  ";
+    G4cerr << " Can not open file " << fileName << G4endl;
+#endif
+    return false;
+  }
+
+  // key word
+  fOut << key << G4endl;
+ 
+  fOut.setf(ios::scientific);
+  // default cut value
+  fOut << "Default " <<  setw(20) << defaultCutValue/mm  << G4endl;
+
+ // loop over all particles in G4ParticleTable 
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    if ( (particle->GetParticleName() == "gamma" ) ||
+	 (particle->GetParticleName() == "e-"    ) ||
+	 (particle->GetParticleName() == "e+"    ) ||
+	 (particle->GetParticleName() == "mu-"   ) ||
+	 (particle->GetParticleName() == "mu+"   ) ||
+	 (particle->GetParticleName() == "proton" ) ||
+	 (particle->GetParticleName() == "anti_proton" ) ||
+	 (particle->GetPDGCharge() ==0.0)               ) {
+ 
+      // particle name and cut in length
+      fOut << setw(40) << particle->GetParticleName();
+      fOut << setw(20) << particle->GetLengthCuts()/mm  << G4endl;
+      G4double*  cutArray =  particle->GetEnergyCuts(); 
+      // cut energy for each material
+      G4int jj =0;
+      for(G4int idx=0; idx<numberOfMaterial; ++idx, ++jj) {
+	if (jj==4) {
+	  fOut << G4endl;
+	  jj =0;
+	}
+	fOut << setw(20) << cutArray[idx]/keV;
+      }
+      fOut << G4endl;
+    }
+  }
+  fOut.unsetf(ios::scientific);
+
+  fOut.close();
+  return true;
+}
+
+void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle)
+{
+  G4int  j;
+  G4bool success[100];  
+  // Retrieve physics tables for every process for this particle type
+  G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
+  for ( j=0; j < pVector->entries(); ++j) {
+    success[j] = 
+       (*pVector)[j]->RetrievePhysicsTable(directoryPhysicsTable);
+
+    if (!success[j]) {
+#ifdef G4VERBOSE  
+      if (verboseLevel>2){
+	G4cout << "G4VUserPhysicsList::RetrievePhysicsTable   ";
+	G4cout << " Fail to retrieve for ";
+        G4cout << (*pVector)[j]->GetProcessName();
+        G4cout << "(" << particle->GetParticleName() <<")" << G4endl;
+      }
+#endif
+      (*pVector)[j]->BuildPhysicsTable(*particle);
+    }
+  }
+  for ( j=0; j < pVector->entries(); ++j) {
+    // temporary addition to make the integral schema
+    if (!success[j]) BuildIntegralPhysicsTable((*pVector)[j], particle); 
+  }
+}
+
+G4bool  G4VUserPhysicsList::CheckForRetrievePhysicsTable(const G4String& directory)
+{
+  if (!fIsCheckedForRetrievePhysicsTable) {
+    if (CheckMaterialInfo(directory)) {
+      if (CheckCutValues(directory)) {
+	fIsCheckedForRetrievePhysicsTable = true;
+      } 
+    }
+  }
+  return fIsCheckedForRetrievePhysicsTable;
+}
+
+G4bool G4VUserPhysicsList::CheckMaterialInfo(const G4String& directory)
+{
+  const G4String fileName = directory + "/" + "material.dat";
+  const G4String key = "MATERIAL";
+  G4std::ifstream fIn;  
+
+  // open input file //
+  fIn.open(fileName,ios::in);
+
+  // check if the file has been opened successfully 
+  if (!fIn) {
+#ifdef G4VERBOSE  
+    G4cerr << "G4VUserPhysicsList::CheckMaterialInfo  ";
+    G4cerr << " Can not open file " << fileName << G4endl;
+#endif
+    return false;
+  }
+  
+  // key word
+  G4String keyword;    
+  fIn >> keyword;
+  if (key!=keyword) {
+#ifdef G4VERBOSE  
+    if (verboseLevel>0){
+      G4cout << "G4VUserPhysicsList::CheckMaterialInfo  ";
+      G4cout << " Can not find key word " << keyword << G4endl;
+    }
+#endif
+    return false;
+  }
+    
+  const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
+  numberOfMaterial = matTable->entries();
+  // number of materials in the table
+  G4int nmat;
+  fIn >> nmat;
+  if (nmat!=numberOfMaterial) {
+#ifdef G4VERBOSE  
+    if (verboseLevel>0){
+      G4cout << "G4VUserPhysicsList::CheckMaterialInfo  ";
+      G4cout << "Number of material is inconsistent "<< G4endl;
+    }
+#endif
+    return false;
+  }
+  
+  // list of material
+  for (G4int idx=0; idx<matTable->entries(); ++idx){
+    // check eof
+    if(fIn.eof()) {
+#ifdef G4VERBOSE  
+     if (verboseLevel>0){
+       G4cout << "G4VUserPhysicsList::CheckMaterialInfo  ";
+       G4cout << " encountered End of File" << G4endl;
+     }
+#endif   
+      fIn.close();
+      return false;
+    }
+
+    // check material name and density
+    char name[40];
+    double density;
+    fIn >> name >> density;
+    if (fIn.fail()) {
+#ifdef G4VERBOSE  
+     if (verboseLevel>0){
+       G4cout << "G4VUserPhysicsList::CheckMaterialInfo  ";
+       G4cout << " Bad data format " << G4endl;
+     }
+#endif   
+      fIn.close();
+      return false;
+    }
+    G4double ratio = abs( (density*g/cm3)/((*matTable)[idx])->GetDensity() );
+    if ( (name != ((*matTable)[idx])->GetName()) || (0.999>ratio) || (ratio>1.001) ){
+#ifdef G4VERBOSE  
+      if (verboseLevel>0){
+	G4cout << "G4VUserPhysicsList::CheckMaterialInfo  ";
+	G4cout << " Inconsistent material name or density" << G4endl;;
+	G4cout << setw(40) << name;
+	G4cout << setw(20) << setiosflags(ios::scientific) << density << G4endl;
+ 	G4cout << resetiosflags(ios::scientific);
+     }
+#endif   
+      fIn.close();
+      return false;
+    }
+  }
+  fIn.close();
+  return true;
+}
+
+G4bool G4VUserPhysicsList::CheckCutValues(const G4String& directory)
+{
+  const G4String fileName = directory + "/" + "cut_value.dat";
+  const G4String key = "CUT_VALUE";
+  G4std::ifstream fIn;  
+
+  // open output file //
+  fIn.open(fileName,ios::in);
+
+  // check if the file has been opened successfully 
+  if (!fIn) {
+#ifdef G4VERBOSE  
+    G4cerr << "G4VUserPhysicsList::CheckCutValues  ";
+    G4cerr << " Can not open file " << fileName << G4endl;
+#endif
+    return false;
+  }
+
+  // key word
+  G4String keyword;    
+  fIn >> keyword;
+  if (key!=keyword) {
+#ifdef G4VERBOSE  
+    if (verboseLevel>0){
+      G4cout << "G4VUserPhysicsList::CheckCutValues ";
+      G4cout << " Can not find key word " << keyword << G4endl;
+    }
+#endif
+  }
+
+  // default cut value
+  G4double defaultCut;
+  fIn >> keyword >> defaultCut;
+  if (fIn.fail()) {
+#ifdef G4VERBOSE  
+    if (verboseLevel>0){
+      G4cout << "G4VUserPhysicsList::CheckCutValues  ";
+      G4cout << " Bad data format " << G4endl;
+    }
+#endif   
+    fIn.close();
+    return false;
+  } 
+#ifdef G4VERBOSE  
+    if (verboseLevel>2){
+      G4cout.setf(ios::scientific);
+      G4cout << "Default " <<  setw(20) << defaultCutValue/mm  << G4endl;
+      G4cout.unsetf(ios::scientific);
+    }
+#endif
+
+  // check default value
+  G4double ratio =   abs(defaultCut / (defaultCutValue/mm) );
+  if ((keyword != "Default")|| (ratio<0.999) ||(ratio>1.001) ){
+#ifdef G4VERBOSE  
+    if (verboseLevel>0){
+      G4cout << "G4VUserPhysicsList::CheckCutValues ";
+      G4cout << " Inconsistent default cut values" << G4endl;;
+    }
+#endif   
+    fIn.close();
+    return false;
+  }
+
+  // loop over all particles 
+  while(!fIn.eof()){
+    // read in particle name and cut in length
+    G4String name;
+    G4double cutLength;
+    fIn >> name >> cutLength; 
+    if (fIn.eof()) break;
+    if (fIn.fail()) {
+#ifdef G4VERBOSE  
+      if (verboseLevel>0){
+	G4cout << "G4VUserPhysicsList::CheckCutValues  ";
+	G4cout << " Bad data format " << G4endl;
+      }
+#endif
+      fIn.close();
+      return false;
+    }
+#ifdef G4VERBOSE  
+    if (verboseLevel>2){
+      G4cout.setf(ios::scientific);
+      G4cout << name << setw(20) << cutLength << G4endl;
+      G4cout.unsetf(ios::scientific);
+    }
+#endif
+
+    // Search particle
+    G4ParticleDefinition* particle = theParticleTable->FindParticle(name);
+    if (particle==0) {
+#ifdef G4VERBOSE  
+      if (verboseLevel>0){
+	G4cout << "G4VUserPhysicsList::CheckCutValues  ";
+	G4cout << " Particle " << name <<" is not found "<< G4endl;
+      } 
+      fIn.close();
+      return false;
+#endif     
+    } 
+
+    // check cut in length
+    ratio = abs(cutLength/ (particle->GetLengthCuts()/mm) );
+    if ((ratio<0.999) ||(ratio>1.001) ){
+#ifdef G4VERBOSE  
+      if (verboseLevel>0){
+	G4cout << "G4VUserPhysicsList::CheckCutValues ";
+	G4cout << " Inconsistent cut values for " << name << G4endl;;
+      }
+#endif   
+      fIn.close();
+      return false;
+    }
+
+    // read in energy cut for all materials (not used)
+    G4int jj; 
+    for(G4int idx=0; idx<numberOfMaterial; ++idx) {
+#ifdef G4VERBOSE  
+      if (verboseLevel>2){
+	if(jj==4) G4cout << endl; 
+      }
+#endif
+      G4double value;
+      fIn >> value;
+#ifdef G4VERBOSE  
+      if (verboseLevel>2){
+	G4cout.setf(ios::scientific);
+	G4cout << setw(20) << value;
+	G4cout.unsetf(ios::scientific);
+	++jj;
+      }
+#endif
+    }
+#ifdef G4VERBOSE  
+    if (verboseLevel>2){
+      G4cout << endl; 
+    }
+#endif
+  } 
+  
+  fIn.close();
+  return true;
+}
+  
 
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.hh,v 1.6 1999-12-15 14:53:52 gunter Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.7 2000-11-08 10:01:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,8 @@
 //          change BuildPhysicsTable as public
 //          removed ConstructAllParticles() and related methods  
 //          changed SetCuts method argument
+//       modified                           08, Nov 2000 by H.Kurashige
+//          added   Retrieve/StorePhysicsTable and related methods
 // ------------------------------------------------------------
 #ifndef G4VUserPhysicsList_h
 #define G4VUserPhysicsList_h 1
@@ -52,6 +54,7 @@
 #include "G4ParticleDefinition.hh" 
 
 class G4UserPhysicsListMessenger;
+class G4VProcess;
 
 class G4VUserPhysicsList
 {
@@ -94,9 +97,53 @@ class G4VUserPhysicsList
    void SetCutsWithDefault();   
 
   public: // with description
-    // 
+    // Invoke BuildPhysicsTable for all processes for each particle
+    // In case of "Retrieve" flag is ON, PhysicsTable will be
+    // retrieved from files
     void BuildPhysicsTable(G4ParticleDefinition* );    
  
+    // Store PhysicsTable together with both material and cut value 
+    // information in files under the specified directory.
+    //  (return true if files are sucessfully created)
+    G4bool  StorePhysicsTable(const G4String& directory = ".");
+
+    // Return true if "Retrieve" flag is ON. 
+    // (i.e. PhysicsTable will be retrieved from files)
+    G4bool  IsPhysicsTableRetrieved() const;
+    // Get directory path for physics table files.
+    const G4String& GetPhysicsTableDirectory() const;
+
+    // Set "Retrieve" flag
+    // Directory path can be set together.
+    // Null string (default) means directory is not changed 
+    // from the current value 
+    void    SetPhysicsTableRetrieved(const G4String& directory = "");
+   
+    // Reset "Retrieve" flag
+    void    ResetPhysicsTableRetrieved();
+  
+  protected:  // with description
+    // do BuildPhysicsTable for make the integral schema
+    void BuildIntegralPhysicsTable(G4VProcess* ,G4ParticleDefinition*  );   
+
+  protected: // with description
+    // Retrieve PhysicsTable from files for proccess belongng the particle.
+    // Normal BuildPhysics procedure of processes will be invoked, 
+    // if it fails (in case of Process's RetrievePhysicsTable returns false)
+    virtual void  RetrievePhysicsTable(G4ParticleDefinition* );
+
+    // Store material information in files under the specified directory.
+    virtual G4bool  StoreMaterialInfo(const G4String& directory);
+    // Store cut values information in files under the specified directory.
+    virtual G4bool  StoreCutValues(const G4String& directory);
+
+    // check stored material and cut values
+    virtual G4bool CheckForRetrievePhysicsTable(const G4String& directory);
+    // check stored material is consistent with the current detector setup. 
+    virtual G4bool  CheckMaterialInfo(const G4String& directory);
+    // check stored cuvalue is consistent with the current detector setup. 
+    virtual G4bool  CheckCutValues(const G4String& directory);
+
   protected: // with description
     // Following are utility methods for SetCuts/reCalcCuts  
 
@@ -189,6 +236,18 @@ class G4VUserPhysicsList
  protected:
    G4int verboseLevel;
 
+ protected:
+   // flag to determine physics table will be build from file or not
+   G4bool fRetrievePhysicsTable;  
+ 
+   G4bool fIsCheckedForRetrievePhysicsTable;
+   
+   // directory name for physics table files 
+   G4String directoryPhysicsTable;   
+
+   // number of materials in G4MaterialTable
+   // (this member is used by store/restore physics table)
+   G4int numberOfMaterial;   
 };
 
 
@@ -224,4 +283,39 @@ inline  G4int G4VUserPhysicsList::GetVerboseLevel() const
   return  verboseLevel;
 }
 
+inline  
+ G4bool  G4VUserPhysicsList::IsPhysicsTableRetrieved() const
+{
+  return fRetrievePhysicsTable;  
+}
+
+inline 
+  const G4String& G4VUserPhysicsList::GetPhysicsTableDirectory() const
+{
+  return directoryPhysicsTable;  
+}
+
+inline 
+void  G4VUserPhysicsList::SetPhysicsTableRetrieved(const G4String& directory)
+{
+  fRetrievePhysicsTable = true;
+  if(!directory.isNull()) {
+    directoryPhysicsTable = directory;
+  }
+  fIsCheckedForRetrievePhysicsTable=false;
+}
+   
+inline 
+ void  G4VUserPhysicsList::ResetPhysicsTableRetrieved()
+{
+  fRetrievePhysicsTable = false;
+  fIsCheckedForRetrievePhysicsTable=false;
+}
 #endif
+
+
+
+
+
+
+

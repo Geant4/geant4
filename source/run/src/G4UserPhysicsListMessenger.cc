@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.3 1999-12-15 14:53:54 gunter Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.4 2000-11-08 10:02:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   verboseCmd->SetGuidance(" 2 : Display more");
   verboseCmd->SetParameterName("level",true);
   verboseCmd->SetDefaultValue(0);
-  verboseCmd->SetRange("level >=0 && level <=2");
+  verboseCmd->SetRange("level >=0 && level <=3");
 
   // /run/particle/setCut command
   setCutCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setCut",this);
@@ -81,6 +81,22 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   buildPTCmd->SetParameterName("particleType", true);
   buildPTCmd->SetDefaultValue("");
   buildPTCmd->AvailableForStates(Init,Idle,GeomClosed,EventProc);
+
+  // /run/particle/storePhysicsTable command
+  storeCmd = new G4UIcmdWithAString("/run/particle/store",this);
+  storeCmd->SetGuidance("Store Physics Table");
+  storeCmd->SetGuidance("  Enter directory name");
+  storeCmd->SetParameterName("dirName",true);
+  storeCmd->SetDefaultValue("");
+  storeCmd->AvailableForStates(Idle);
+
+  //  /run/particle/retrievePhysicsTable command
+  retrieveCmd = new G4UIcmdWithAString("/run/particle/retrieve",this);
+  retrieveCmd->SetGuidance("Retrieve Physics Table");
+  retrieveCmd->SetGuidance("  Enter directory name or OFF to switch off");
+  retrieveCmd->SetParameterName("dirName",true);
+  retrieveCmd->SetDefaultValue("");
+  retrieveCmd->AvailableForStates(PreInit,Idle);
 }
 
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
@@ -91,7 +107,9 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
   delete dumpCutValuesCmd;
   delete addProcManCmd;
   delete buildPTCmd;
-  delete theDirectory;
+  delete storeCmd;  
+  delete retrieveCmd;
+  delete theDirectory;  
 }
 
 void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
@@ -123,8 +141,18 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
     G4ParticleDefinition* particle = (G4ParticleTable::GetParticleTable())->FindParticle(newValue);
     if (particle == NULL) return;
     thePhysicsList->BuildPhysicsTable(particle);
+    
+  } else if ( command == storeCmd ){
+    thePhysicsList->StorePhysicsTable(newValue);
+  
+  } else if( command == retrieveCmd ) {
+    if ((newValue == "OFF") || (newValue == "off") ){
+      thePhysicsList->ResetPhysicsTableRetrieved();
+    } else {
+      thePhysicsList->SetPhysicsTableRetrieved(newValue);
+    }
   }
-}
+} 
 
 G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand * command)
 {
@@ -137,7 +165,7 @@ G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand * command)
     
   } else if( command==verboseCmd ){
     cv = verboseCmd->ConvertToString(thePhysicsList->GetVerboseLevel());
-
+    
   }  else if( command== addProcManCmd ){
     // set candidate list
     piter -> reset();
@@ -147,7 +175,7 @@ G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand * command)
     }
     addProcManCmd->SetCandidates(candidates);   
     cv = "";
-
+    
   }  else if( command== buildPTCmd ){
     // set candidate list
     piter -> reset();
@@ -157,6 +185,16 @@ G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand * command)
     }
     addProcManCmd->SetCandidates(candidates);   
     cv = "";
+    
+  } else if ( command == storeCmd ){
+    cv = thePhysicsList->GetPhysicsTableDirectory();
+
+  }else if( command == retrieveCmd ) {
+    if (thePhysicsList->IsPhysicsTableRetrieved()) {
+      cv = thePhysicsList->GetPhysicsTableDirectory();
+    } else {
+      cv = "OFF";
+    }
   }
    
   return cv;
