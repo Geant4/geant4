@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.13 2002-01-10 15:42:26 gcosmo Exp $
+// $Id: G4Trap.cc,v 1.14 2002-05-15 09:37:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -34,7 +34,7 @@
 //  1.11.96 V.Grichine Costructor for Right Angular Wedge from STEP & G4Trd/Para
 //  8.12.97 J.Allison: Added "nominal" constructor and method SetAllParameters.
 //  4.06.99 S.Giani: Fixed CalculateExtent in rotated case. 
-// 19.11.99 V.Grichine, kUndefined was added to Eside enum
+// 19.11.99 V.Grichine, kUndef was added to Eside enum
 // 13.12.99 V.Grichine, bug fixed in DistanceToIn(p,v)
 
 #include "G4Trap.hh"
@@ -58,7 +58,7 @@ const G4double kCoplanar_Tolerance = 1E-4 ;
 //
 // Private enum: Not for external use 
   	
-enum Eside {kUndefined,ks0,ks1,ks2,ks3,kPZ,kMZ};
+enum Eside {kUndef,ks0,ks1,ks2,ks3,kPZ,kMZ};
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1091,7 +1091,7 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 			       const G4bool calcNorm,
 			       G4bool *validNorm,G4ThreeVector *n) const
 {
-    Eside side = kUndefined ;
+    Eside side = kUndef;
     G4double snxt;		// snxt = return value
     G4double pdist,Comp,vdist,max;
 //

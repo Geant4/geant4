@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.10 2002-02-14 16:54:34 grichine Exp $
+// $Id: G4Para.cc,v 1.11 2002-05-15 09:37:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -31,7 +31,7 @@
 // History:
 // 21.03.95 P.Kent Modified for `tolerant' geom
 // 31.10.96 V.Grichine Modifications according G4Box/Tubs before to commit
-// 18.11.99 V. Grichine , kIndefined was added to ESide
+// 18.11.99 V. Grichine , kUndef was added to ESide
 // 14.02.02 V. Grichine , bug fixed in Inside according to proposal of D. Wright
 
 #include "G4Para.hh"
@@ -47,7 +47,7 @@
 
 // Private enum: Not for external use 
   	
-enum ESide {kUndefined,kPX,kMX,kPY,kMY,kPZ,kMZ};
+enum ESide {kUndef,kPX,kMX,kPY,kMY,kPZ,kMZ};
 
 // used internally for normal routine
 
@@ -720,7 +720,7 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 			       const G4bool calcNorm,
 			       G4bool *validNorm,G4ThreeVector *n) const
 {
-    ESide side = kUndefined ;
+    ESide side = kUndef;
     G4double snxt;		// snxt = return value
     G4double max,tmax;
     G4double yt,vy,xt,vx;
