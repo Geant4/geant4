@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2000-05-10 13:14:39 gcosmo Exp $
+$Id: History,v 1.25 2000-05-11 09:51:28 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,11 +16,27 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May      9th, 2000   J. Apostolakis - geomvol-V01-01-00
 
-May 8th, 2000   J. Apostolakis - geomvol-V01-01-00
+Improvements in G4PropagatorInField  incorporating include file fixes
+in geometry-V01-01-02
+[ ie: Introduced kCarTolerance for check over taken step length and
+TruePathLength in G4PropagatorInField::ComputeStep(). ]
 
-Introduced kCarTolerance for check over taken step length and
-TruePathLength in G4PropagatorInField::ComputeStep().
+
+May      8th, 2000   J. Apostolakis - geomvol-fieldImprove1
+
+Internal tag for version that improves the behavior of the field.
+[ it does not include the changes of geometry-V01-01-02 ] 
+
+May      5th, 2000   J. Apostolakis 
+
+G4PropagatorInField improvements modifying:
+ i) the comparison for detecting probable loop condition
+      - to accomodate solids that (wrongly) return small finite answer instead
+        of zero for Distance on surface.  [ can probably be reversed eventually]
+ii) the condition for exit from while (sufficient path length) to
+    avoid making a very small final step :  used the tolerance.
 
 April 25th, 2000   G. Cosmo
 
