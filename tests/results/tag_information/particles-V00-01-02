@@ -1,0 +1,7 @@
+- Implemented STL map version of G4ParticleTable 
+- Fixed bugs in G4DynamicParticle::RemoveElectrons (bug report #30)
+- Fixed particle name for G4RhoPlus (bug report #26)
+- Modified top-level GNUmakefile to fix G4barions to G4baryons for the "gmake
+global" target.
+ 
+  In addition, many comments are added for "Software Reference Manual"
