@@ -69,13 +69,13 @@ int main(int argc, char** argv)
   }
 
   ofstream* fout_a = new ofstream();
-  string fname1 = "dsde.dat";
+  string fname1 = "dsde_1.dat";
   fout_a->open(fname1.c_str(), std::ios::out|std::ios::trunc);
   ofstream* fout_b = new ofstream();
-  string fname2 = "dsdtet.dat";
+  string fname2 = "dsdtet_1.dat";
   fout_b->open(fname2.c_str(), std::ios::out|std::ios::trunc);
   ofstream* fout_c = new ofstream();
-  string fname3 = "dsdedtet.dat";
+  string fname3 = "dsdedtet_1.dat";
   fout_c->open(fname3.c_str(), std::ios::out|std::ios::trunc);
 
   //there can't be lines longer than nmax characters
@@ -85,12 +85,12 @@ int main(int argc, char** argv)
   G4bool end = true;
 
   G4DataVector* energy = new G4DataVector();
-  int nbin = 92;
+  int nbin = 100;
   int ibin, inum;
   int counter = 0;
-  double bin0 = 2.0*MeV;
+  double bin0 = 1.0*MeV;
   double bin = 10.0*MeV;
-  double elim= 20.0*MeV;
+  double elim= 30.0*MeV;
   double x, an, e1, e2, y1, y2, ct1, ct2, xs, de;
   double e0 = 0.0;
 
@@ -139,6 +139,7 @@ int main(int argc, char** argv)
 
       do {
         (*fin) >> an >> e1 >> e2 >> x >> xs;
+        x *= 1000.;
         an *= degree;      
         if(1 < verbose) {
           cout << "an= " << an/degree << " e1= " << e1 
@@ -152,18 +153,26 @@ int main(int argc, char** argv)
           end = false;
     	  }
 
-        if((xs == 0.0 && an/degree > 10.) || !enddata) {
+        if((xs == 0.0 && an/degree > 31.) || !enddata) {
+
+          // fill the rest by zero cross section
+          for(int j=ibin; j<nbin; j++) {
+            cross->push_back(0.0);
+          }
           cs.push_back(cross);
           if(0 < verbose) {
+            cout      << "Save data vector for  "
+                      << " Angle(degree)= " << (*angle)[angle->size()-1]/degree
+                      << G4endl;
             (*fout_c) << "#####..Result.of.parcing..####### "
                       << " Angle(degree)= " << (*angle)[angle->size()-1]/degree
                       << G4endl;
             for(i=0; i<nbin; i++) {
                (*fout_c) << "e(MeV)= " << 0.5*((*energy)[i] + (*energy)[i+1]) 
                          << " cross(mb/MeV/sr)= " << (*cross)[i] << endl;
-	          }
+	    }
           }  
-	      }
+	}
 
 	// new data
         if(xs == 0.0) {
@@ -177,9 +186,12 @@ int main(int argc, char** argv)
 
           for(int j=ibin; j<nbin; j++) {
             e0 = (*energy)[j];
-            de = bin;
-            if (e0 < elim) de = bin0;
-            if (e1 >= e0 && e2 <= e0 + de) break;
+            de = 0.5*bin;
+            if (e0 < elim) de = 0.5*bin0;
+            if(1 < verbose) {
+              cout << "e0= " << e0 << " e1= " << e1 << " de= " << de << endl;
+	    }
+            if (abs(e1 - e0) <= de) break;
             if(inum) (*cross)[j] /= (double)inum;
             inum = 0;
             cross->push_back(0.0);
@@ -227,6 +239,10 @@ int main(int argc, char** argv)
             x  += 0.5*(y1 + y2)*(ct1 - ct2);  
           }        
           x *= twopi;
+          if(verbose > 1) {
+            cout << "e(MeV)= " << 0.5*((*energy)[i] + (*energy)[i+1]) 
+                 << " cross(mb/MeV)= " << x << endl;
+	  }
           (*fout_a) << "e(MeV)= " << 0.5*((*energy)[i] + (*energy)[i+1]) 
                     << " cross(mb/MeV)= " << x << endl;
         }
