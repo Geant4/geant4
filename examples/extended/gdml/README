@@ -1,6 +1,16 @@
-The GDML (Geometry Description Markup Language) example demonstrates the usage
-of the GDML reader and writer. It allows the users to export their geometry
-descriptions in an application independent format (GDML).
+$Id: README,v 1.6 2004-12-06 18:24:29 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                          GDML read/write
+                          ---------------
+
+This example demonstrates the usage of the GDML reader and writer. It allows
+the users to export their geometry descriptions in an application independent
+format (GDML, Geometry Description Markup Language).
 The GDML files can be then used to interchange geometries between different
 applications and users.
 
@@ -13,3 +23,24 @@ Once the Geant4 geometry is loaded in the memory, the G4GDMLWriter class is
 instantiated (in the 'main') to demonstrate the exporting of the GDML file.
 The call to DumpGeometryInfo method causes the GDML writer to scan the Geant4
 geometry tree and write it out in the form of a GDML file.
+
+HOW TO BUILD THE EXAMPLE ?
+
+- Install the GDML package with Geant4 extensions and Xerces.
+  See: http://cern.ch/gdml.
+
+- Set the environment variable GDML_BASE to point to the area where
+  GDML is installed. Specify the system architecture with SCRAM_ARCH.
+  Set XERCESCROOT to point to place where Xerces is installed.
+  You can also edit the GNUmakefile provided with the example and
+  customise it for your specific setup.
+
+- Customise the 'test.gdml' schema file, specifying in the top line the
+  right path where to retrieve the main GDML schema file (step that will
+  become automatic in future).
+
+- Compile and link to generate an executable:
+ 	      % gmake
+ 		
+- Execute the application:
+ 	      % g4_gdml_read_write
