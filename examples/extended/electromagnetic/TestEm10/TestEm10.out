@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Apr-2003)
+                                (19-May-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -225,7 +225,7 @@ Regular X-ray TR  radiator EM process is called
 48	fGamma = 8.085e+04	sumE = 4.344
 49	fGamma = 9.283e+04	sumE = 4.343
 
-total time for build X-ray TR energy loss tables = 74.17 s
+total time for build X-ray TR energy loss tables = 75.76 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em10PhysicsList::SetCuts:CutLength : 1 mm 
@@ -239,8 +239,15 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+PAI mat name  = Ar7CH4
+PAI mat index = 28
 
-eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+PAI matcuts name  = Ar7CH4
+PAI matcuts index = 3
+
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
+
+e-:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins.
         Step function: finalRange(mm)= 1,  dRoverRange= 0.2
@@ -250,12 +257,47 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+PAI mat name  = Ar7CH4
+PAI mat index = 28
 
-hIoni:    Knock-on electron cross sections . 
+PAI matcuts name  = Ar7CH4
+PAI matcuts index = 3
+
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
+
+proton:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
         Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+PAI mat name  = Ar7CH4
+PAI mat index = 28
+
+PAI matcuts name  = Ar7CH4
+PAI matcuts index = 3
+
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
+PAI mat name  = Ar7CH4
+PAI mat index = 28
+
+PAI matcuts name  = Ar7CH4
+PAI matcuts index = 3
+
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
+PAI mat name  = Ar7CH4
+PAI mat index = 28
+
+PAI matcuts name  = Ar7CH4
+PAI matcuts index = 3
+
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
+PAI mat name  = Ar7CH4
+PAI mat index = 28
+
+PAI matcuts name  = Ar7CH4
+PAI matcuts index = 3
+
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
 
 ========= Table of registered couples ==============================
 
@@ -299,25 +341,25 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.4199 +- 0.978724  mm  
+    mean charged track length   in absorber=22.8187 +- 0.916834  mm  
 
-            mean energy deposit in absorber=0.0066657 +- 0.000200206  MeV 
+            mean energy deposit in absorber=0.0051801 +- 0.000131446  MeV 
 
- mean number of steps in absorber (charged) =1.227 +- 0.0164156      
- mean number of steps in absorber (neutral) =1.981 +- 0.0448847      
+ mean number of steps in absorber (charged) =1.225 +- 0.0153745      
+ mean number of steps in absorber (neutral) =2.026 +- 0.0468329      
 
-   mean number of charged secondaries = 0.203 +- 0.0142755
+   mean number of charged secondaries = 0.207 +- 0.0137168
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.203  and e+s =0
+   mean number of e-s =0.207  and e+s =0
 
-(number) transmission coeff=0.16  reflection coeff=0.006
+(number) transmission coeff=0.173  reflection coeff=0.001
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1545544388, 618057029
+ Current couple of seeds = 2059128695, 1984589788
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

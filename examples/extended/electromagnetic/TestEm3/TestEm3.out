@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Apr-2003)
+                                (19-May-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
@@ -124,6 +124,7 @@ userDetector->Construct() start.
  	        Lead:    2.3 mm 
  	 liquidArgon:    5.7 mm 
 -------------------------------------------------------------
+World is registered to the default region.
 physicsList->Construct() start.
 
 phot:  Total cross sections from Sandia parametrisation. 
@@ -249,19 +250,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=40.4s Real=81.35s Sys=7.73s
+  User=39.51s Real=51.73s Sys=7.72s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (        Lead) : 814.21 MeV +- 14.84 MeV       56.35 cm  +-  1.16 cm 
- Absorber1 ( liquidArgon) : 173.44 MeV +- 12.26 MeV       85.79 cm  +-  6.20 cm 
+ Absorber0 (        Lead) : 811.00 MeV +- 37.53 MeV       56.07 cm  +-  2.61 cm 
+ Absorber1 ( liquidArgon) : 174.06 MeV +- 13.45 MeV       86.05 cm  +-  6.85 cm 
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1971361462, 1401170872
+ Current couple of seeds = 101412830, 1192091677
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
