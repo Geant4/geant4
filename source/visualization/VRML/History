@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2003-10-03 15:18:22 gcosmo Exp $
+$Id: History,v 1.9 2003-10-03 15:22:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-History file for visualization/VRML sub-category (a template graphics system)
------------------------------------------------------------------------------
+History file for visualization/VRML sub-category
+------------------------------------------------
 
 4th October 2003  Gabriele Cosmo (vis-V05-02-01)
 - Simplified GNUmakefile.
