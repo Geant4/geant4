@@ -39,7 +39,7 @@ void DefaultHepRep::removeTypeTree(HepRepTypeTree*) {
     cerr << "DefaultHepRep::removeTypeTree(HepRepTypeTree*) not implemented." << endl;
 }
 
-HepRepTypeTree* DefaultHepRep::getTypeTree(string name, string version) {
+HepRepTypeTree* DefaultHepRep::getTypeTree(string, string) {
     cerr << "DefaultHepRep::getTypeTree(string, string) not implemented." << endl;
     return NULL;
 }
@@ -58,7 +58,7 @@ bool DefaultHepRep::addInstanceTree(HepRepInstanceTree* instanceTree) {
     return true;
 }
 
-void DefaultHepRep::overlayInstanceTree(HepRepInstanceTree * instanceTree) {
+void DefaultHepRep::overlayInstanceTree(HepRepInstanceTree *) {
     cerr << "DefaultHepRep::overlayInstanceTree(HepRepInstanceTree * instanceTree) not implemented." << endl;
 }
 
