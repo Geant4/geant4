@@ -103,10 +103,11 @@ void XrayTelSteppingAction::UserSteppingAction(const G4Step* step)
       XrayTelRunAction* runAction = (XrayTelRunAction*) runManager->GetUserRunAction();
       runAction->Update(track->GetKineticEnergy());
     }
-
+#ifdef G4ANALYSIS_USE
   // Do the analysis related to this step
   XrayTelAnalysis* analysis = XrayTelAnalysis::getInstance();
   analysis->analyseStepping(*track,entering);
+#endif
 }
 
 
